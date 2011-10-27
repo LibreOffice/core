@@ -38,6 +38,7 @@
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/sheet/XFormulaTokens.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -69,7 +70,7 @@ private:
     ScNamedRangesObj*       mpParent;
     ScDocShell*             pDocShell;
     String                  aName;
-    ScTableSheetObj*        mpSheet;
+    com::sun::star::uno::Reference< com::sun::star::container::XNamed > mxSheet;
 
 private:
     ScRangeData*            GetRangeData_Impl();
@@ -80,7 +81,8 @@ private:
     SCTAB                   GetTab_Impl();
 
 public:
-                            ScNamedRangeObj(ScNamedRangesObj* pParent, ScDocShell* pDocSh, const String& rNm, ScTableSheetObj* pSheet = NULL);
+                            ScNamedRangeObj(ScNamedRangesObj* pParent, ScDocShell* pDocSh, const String& rNm,
+                                    com::sun::star::uno::Reference< com::sun::star::container::XNamed > xSheet = com::sun::star::uno::Reference< com::sun::star::container::XNamed > ());
     virtual                 ~ScNamedRangeObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -337,9 +339,9 @@ private:
     virtual ScRangeName*    GetRangeName_Impl();
     virtual SCTAB           GetTab_Impl();
 
-    ScTableSheetObj* mpSheet;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > mxSheet;
 public:
-                            ScLocalNamedRangesObj(ScDocShell* pDocSh, ScTableSheetObj* pSheet);
+                            ScLocalNamedRangesObj(ScDocShell* pDocSh, ::com::sun::star::uno::Reference< com::sun::star::container::XNamed > xNamed );
     virtual                 ~ScLocalNamedRangesObj();
 };
 

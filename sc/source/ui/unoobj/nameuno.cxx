@@ -99,11 +99,11 @@ bool lcl_UserVisibleName(const ScRangeData& rData)
     return !rData.HasType(RT_DATABASE) && !rData.HasType(RT_SHARED);
 }
 
-ScNamedRangeObj::ScNamedRangeObj(ScNamedRangesObj* pParent, ScDocShell* pDocSh, const String& rNm, ScTableSheetObj* pSheet) :
+ScNamedRangeObj::ScNamedRangeObj(ScNamedRangesObj* pParent, ScDocShell* pDocSh, const String& rNm, Reference<container::XNamed> xSheet):
     mpParent(pParent),
     pDocShell( pDocSh ),
     aName( rNm ),
-    mpSheet( pSheet )
+    mxSheet( xSheet )
 {
     pDocShell->GetDocument()->AddUnoObject(*this);
 }
@@ -147,13 +147,14 @@ ScRangeData* ScNamedRangeObj::GetRangeData_Impl()
 
 SCTAB ScNamedRangeObj::GetTab_Impl()
 {
-    if (mpSheet)
+    if (mxSheet.is())
     {
         if (!pDocShell)
             return -2;
         ScDocument* pDoc = pDocShell->GetDocument();
         SCTAB nTab;
-        pDoc->GetTable(mpSheet->getName(), nTab);
+        rtl::OUString sName = mxSheet->getName();
+        pDoc->GetTable(sName, nTab);
         return nTab;
     }
     else
@@ -922,9 +923,9 @@ SCTAB ScGlobalNamedRangesObj::GetTab_Impl()
 
 //------------------------------------------------------------------------
 
-ScLocalNamedRangesObj::ScLocalNamedRangesObj( ScDocShell* pDocSh, ScTableSheetObj* pSheet )
+ScLocalNamedRangesObj::ScLocalNamedRangesObj( ScDocShell* pDocSh, uno::Reference<container::XNamed> xSheet )
     : ScNamedRangesObj(pDocSh),
-    mpSheet(pSheet)
+    mxSheet(xSheet)
 {
 
 }
@@ -937,7 +938,7 @@ ScLocalNamedRangesObj::~ScLocalNamedRangesObj()
 ScNamedRangeObj* ScLocalNamedRangesObj::GetObjectByName_Impl(const ::rtl::OUString& aName)
 {
     if ( pDocShell && hasByName( aName ) )
-        return new ScNamedRangeObj( this, pDocShell, String(aName), mpSheet);
+        return new ScNamedRangeObj( this, pDocShell, String(aName), mxSheet);
     return NULL;
 
 }
@@ -947,7 +948,7 @@ ScNamedRangeObj* ScLocalNamedRangesObj::GetObjectByIndex_Impl( sal_uInt16 nIndex
     if (!pDocShell)
         return NULL;
 
-    rtl::OUString aName = mpSheet->getName();
+    rtl::OUString aName = mxSheet->getName();
     ScDocument* pDoc = pDocShell->GetDocument();
     SCTAB nTab;
     pDoc->GetTable( aName, nTab );
@@ -963,7 +964,7 @@ ScNamedRangeObj* ScLocalNamedRangesObj::GetObjectByIndex_Impl( sal_uInt16 nIndex
         if (lcl_UserVisibleName(*itr))
         {
             if (nPos == nIndex)
-                return new ScNamedRangeObj(this, pDocShell, itr->GetName(), mpSheet);
+                return new ScNamedRangeObj(this, pDocShell, itr->GetName(), mxSheet);
         }
         ++nPos;
     }
@@ -979,7 +980,7 @@ ScRangeName* ScLocalNamedRangesObj::GetRangeName_Impl()
 SCTAB ScLocalNamedRangesObj::GetTab_Impl()
 {
     SCTAB nTab;
-    pDocShell->GetDocument()->GetTable(mpSheet->getName(), nTab);
+    pDocShell->GetDocument()->GetTable(mxSheet->getName(), nTab);
     return nTab;
 }
 
