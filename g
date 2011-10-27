@@ -246,7 +246,7 @@ for REPO in $DIRS ; do
     elif [ -d "$DIR" -a "z$SET_LAST_WORKING" != "z" ]; then
        echo "fetching notes for $REPO ..."
        (cd $DIR && git fetch origin 'refs/notes/*:refs/notes/*')
-       (cd $DIR && git note add -m 'win32 working build')
+       (cd $DIR && git notes add -m 'win32 working build')
     elif [ -d "$DIR" -a "z$PUSH_NOTES" != "z" ]; then
        echo "pushing notes for $REPO ..."
        (cd $DIR && git push origin 'refs/notes/*:refs/notes/*')
