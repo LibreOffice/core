@@ -210,7 +210,7 @@ sub generate_version_file($$$)
     # FIXME: crazy hacks to copy libreoffice-build without too big and useless subdirectories and to show a progress
     open (VERFILE, ">$dir/$piece.ver") || die "Can't open $dir/lo-$piece.ver: $!\n";
 
-    print VERFILE "lo_bootstrap_ver=$release_version\n";
+    print VERFILE "lo_core_ver=$release_version\n";
 
     close VERFILE;
 }
@@ -375,8 +375,8 @@ sub prepare_lo_piece_tarball($$$$$)
 
     my $temp_dir = copy_lo_piece_to_tempdir($piece_dir, $piece, $piece_tarball_name);
     generate_lo_piece_changelog($piece_dir, "$temp_dir/$piece_tarball_name", $piece);
-    run_autoreconf("$temp_dir/$piece_tarball_name", $piece) if ($piece eq 'bootstrap');
-    generate_version_file("$temp_dir/$piece_tarball_name", $piece, $release_version) if ($piece eq 'bootstrap');
+    run_autoreconf("$temp_dir/$piece_tarball_name", $piece) if ($piece eq 'core');
+    generate_version_file("$temp_dir/$piece_tarball_name", $piece, $release_version) if ($piece eq 'core');
     release_lo_piece($temp_dir, $piece_tarball_name);
     generate_md5($temp_dir, $piece_tarball_name, ".tar.bz2") if (defined $md5);
 
@@ -403,7 +403,7 @@ sub generate_tarballs($$$$$$$$$)
     my ($source_dir, $releases_archive_dir, $release_version, $md5, $lo_build_tarball_name, $p_piece_tarball_name, $pack_lo_build, $pack_lo_pieces, $is_lo_build_dir) = @_;
 
     if ($pack_lo_build) {
-        my $temp_dir=prepare_lo_piece_tarball($source_dir, $release_version, $md5, "bootstrap", $lo_build_tarball_name);
+        my $temp_dir=prepare_lo_piece_tarball($source_dir, $release_version, $md5, "core", $lo_build_tarball_name);
         move_tarball_to_final_location($temp_dir, $releases_archive_dir, $md5, "$lo_build_tarball_name.tar.bz2");
     }
 
@@ -466,10 +466,7 @@ my $lo_build_tempdir;
 my $force;
 my $verbose=1;
 my $is_lo_build_dir=0;
-my @pieces=("artwork", "base", "calc", "components",
-            "extensions", "extras", "filters", "help", "impress",
-            "libs-core", "libs-extern", "libs-extern-sys", "libs-gui",
-            "postprocess", "sdk", "testing", "translations", "ure", "writer");
+my @pieces=("binfilter", "dictionaries", "help", "translations");
 my %piece_tarball_name;
 
 ###################
@@ -523,12 +520,12 @@ unless ( -d "$source_dir" ) {
     die "Error: is not a directory: $source_dir\n";
 }
 
-# check if it is a valid libreoffice-bootstrap directory
+# check if it is a valid libreoffice-core directory
 $is_lo_build_dir=1 if (-f "$source_dir/autogen.sh" && -f "$source_dir/set_soenv.in");
 
-# all tarballs are generated from the libreoffice-bootstrap directory
+# all tarballs are generated from the libreoffice-core directory
 if (@pieces > 1 && $is_lo_build_dir == 0 ) {
-    die "Error: \"$source_dir\" is not a valid libreoffice-bootstrap directory\n";
+    die "Error: \"$source_dir\" is not a valid libreoffice-core directory\n";
 }
 
 # just a single piece tarball can be generated from piece directory; version must be explicitely set in this case
@@ -567,9 +564,13 @@ if ($is_lo_build_dir) {
 }
 
 # define tarball names
-$lo_build_tarball_name = "libreoffice-bootstrap-$release_version";
+$lo_build_tarball_name = "libreoffice-core-$release_version";
 foreach my $piece (@pieces) {
-    $piece_tarball_name{$piece} = "libreoffice-$piece-$release_version";
+    if (-d "$source_dir/clone/$piece") {
+        $piece_tarball_name{$piece} = "libreoffice-$piece-$release_version";
+    } else {
+        print "Warning: $piece sources are not available -> skipping\n";
+    }
 }
 
 print "Default version   : $config_version\n" if ($verbose && defined $config_version);
