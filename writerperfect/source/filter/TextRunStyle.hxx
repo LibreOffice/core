@@ -80,7 +80,7 @@ public:
     /* create a new style if it does not exists. In all case, returns the name of the style
 
     Note: using S%i as new name*/
-    WPXString findOrAdd(WPXPropertyList const &xPropList, WPXPropertyListVector const &tabStops);
+    WPXString findOrAdd(const WPXPropertyList &xPropList, const WPXPropertyListVector &tabStops);
 
     virtual void clean();
     virtual void write(OdfDocumentHandler *) const;

@@ -200,21 +200,23 @@ void ParagraphStyleManager::write(OdfDocumentHandler *pHandler) const
     }
 }
 
-WPXString ParagraphStyleManager::getKey(const WPXPropertyList &xPropList, const WPXPropertyListVector &tabStops) const
+WPXString ParagraphStyleManager::getKey(WPXPropertyList const &xPropList, WPXPropertyListVector const &tabStops) const
 {
     WPXString sKey = propListToStyleKey(xPropList);
 
     WPXString sTabStops;
     sTabStops.sprintf("[num-tab-stops:%i]", tabStops.count());
     WPXPropertyListVector::Iter i(tabStops);
-    for (i.rewind(); i.next(); )
+    for (i.rewind(); i.next();)
+    {
         sTabStops.append(propListToStyleKey(i()));
+    }
     sKey.append(sTabStops);
 
     return sKey;
 }
 
-WPXString ParagraphStyleManager::findOrAdd (const WPXPropertyList &propList, const WPXPropertyListVector &tabStops)
+WPXString ParagraphStyleManager::findOrAdd(WPXPropertyList const &propList, WPXPropertyListVector const &tabStops)
 {
     WPXString hashKey = getKey(propList, tabStops);
     std::map<WPXString, ParagraphStyle *, ltstr>::const_iterator iter = mHash.find(hashKey);
@@ -226,7 +228,8 @@ WPXString ParagraphStyleManager::findOrAdd (const WPXPropertyList &propList, con
 
     WPXString sName;
     sName.sprintf("S%i", mHash.size());
-    ParagraphStyle *pStyle = new ParagraphStyle(propList, tabStops, sName);
+    ParagraphStyle *pStyle =
+        new ParagraphStyle(propList, tabStops, sName);
     mHash[hashKey] = pStyle;
     return sName;
 }
@@ -235,7 +238,9 @@ void SpanStyleManager::clean()
 {
     for (std::map<WPXString, SpanStyle *, ltstr>::iterator iter = mHash.begin();
             iter != mHash.end(); ++iter)
+    {
         delete(iter->second);
+    }
     mHash.clear();
 }
 
@@ -243,10 +248,12 @@ void SpanStyleManager::write(OdfDocumentHandler *pHandler) const
 {
     for (std::map<WPXString, SpanStyle *, ltstr>::const_iterator iter = mHash.begin();
             iter != mHash.end(); ++iter)
-        iter->second->write(pHandler);
+    {
+        (iter->second)->write(pHandler);
+    }
 }
 
-WPXString SpanStyleManager::findOrAdd(const WPXPropertyList &propList)
+WPXString SpanStyleManager::findOrAdd(WPXPropertyList const &propList)
 {
     WPXString hashKey = propListToStyleKey(propList);
     std::map<WPXString, SpanStyle *, ltstr>::const_iterator iter = mHash.find(hashKey);

@@ -33,7 +33,7 @@ InternalHandler::InternalHandler(std::vector<DocumentElement *> *elements):
 
 void InternalHandler::startElement(const char *psName, const WPXPropertyList &xPropList)
 {
-    TagOpenElement    *element = new TagOpenElement(psName);
+    TagOpenElement *element = new TagOpenElement(psName);
     WPXPropertyList::Iter i(xPropList);
     for (i.rewind(); i.next(); )
     {

@@ -561,10 +561,16 @@ void OdtGenerator::openSection(const WPXPropertyList &propList, const WPXPropert
     int iNumColumns = columns.count();
     double fSectionMarginLeft = 0.0;
     double fSectionMarginRight = 0.0;
+    double fSectionSpaceAfter = 0.0;
     if (propList["fo:margin-left"])
         fSectionMarginLeft = propList["fo:margin-left"]->getDouble();
     if (propList["fo:margin-right"])
         fSectionMarginRight = propList["fo:margin-right"]->getDouble();
+    if (propList["fo:margin-bottom"])
+        fSectionSpaceAfter = propList["fo:margin-bottom"]->getDouble();
+    else if (propList["libwpd:margin-bottom"])
+        fSectionSpaceAfter =  propList["libwpd:margin-bottom"]->getDouble();
+
 
     if (iNumColumns > 1 || fSectionMarginLeft != 0 || fSectionMarginRight != 0)
     {

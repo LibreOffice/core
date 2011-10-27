@@ -88,5 +88,4 @@ WPXString FontStyleManager::findOrAdd(const char *psFontFamily)
     return psFontFamily;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
