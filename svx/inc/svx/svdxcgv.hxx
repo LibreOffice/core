@@ -57,7 +57,6 @@ protected:
     void                ImpGetPasteObjList(Point& rPos, SdrObjList*& rpLst);
     void                ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Point& rCenter, const Size& rSiz, const MapMode& rMap, sal_uInt32 nOptions);
     sal_Bool                ImpGetPasteLayer(const SdrObjList* pObjList, SdrLayerID& rLayer) const;
-    Point               GetPastePos(SdrObjList* pLst, OutputDevice* pOut=NULL);
 
     // liefert True, wenn rPt geaendert wurde
     sal_Bool                ImpLimitToWorkArea(Point& rPt) const;
@@ -132,16 +131,8 @@ public:
     // View angezeigt wird.
     // Gueltige Werte fuer nOptions sind SDRINSERT_DONTMARK und
     // SDRINSERT_ADDMARK (siehe svdedtv.hxx).
-    sal_Bool            Paste(const GDIMetaFile& rMtf, SdrObjList* pLst=NULL, OutputDevice* pOut=NULL, sal_uInt32 nOptions=0) { return Paste(rMtf,GetPastePos(pLst,pOut),pLst,nOptions); }
-    sal_Bool            Paste(const GDIMetaFile& rMtf, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
-    sal_Bool            Paste(const Bitmap& rBmp, SdrObjList* pLst=NULL, OutputDevice* pOut=NULL, sal_uInt32 nOptions=0) { return Paste(rBmp,GetPastePos(pLst,pOut),pLst,nOptions); }
-    sal_Bool            Paste(const Bitmap& rBmp, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
-    sal_Bool            Paste(const SdrModel& rMod, SdrObjList* pLst=NULL, OutputDevice* pOut=NULL, sal_uInt32 nOptions=0) { return Paste(rMod,GetPastePos(pLst,pOut),pLst,nOptions); }
     virtual sal_Bool    Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
-    sal_Bool            Paste(const String& rStr, SdrObjList* pLst=NULL, OutputDevice* pOut=NULL, sal_uInt32 nOptions=0) { return Paste(rStr,GetPastePos(pLst,pOut),pLst,nOptions); }
     sal_Bool            Paste(const String& rStr, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
-    // der sal_uInt16 eFormat nimmt Werte des enum EETextFormat entgegen
-    sal_Bool            Paste(SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat, SdrObjList* pLst=NULL, OutputDevice* pOut=NULL, sal_uInt32 nOptions=0) { return Paste(rInput,rBaseURL,eFormat,GetPastePos(pLst,pOut),pLst,nOptions); }
     sal_Bool            Paste(SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
 
     sal_Bool            Cut( sal_uIntPtr nFormat = SDR_ANYFORMAT );

@@ -571,16 +571,11 @@ ScrollableWindow::ScrollableWindow(Window*, ResId const&, unsigned short)
 ScrollableWindow::SetLineSize(unsigned long, unsigned long)
 ScrollableWindow::SetVisibleSize(Size const&)
 SdFilterDetect::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
-SdrCreateView::ImpDelCreateAttr()
 SdrCustomShapeDataItem::SdrCustomShapeDataItem(String const&)
 SdrCustomShapeEngineItem::SdrCustomShapeEngineItem(String const&)
 SdrCustomShapeGeometryItem::ClearPropertyValue(rtl::OUString const&, rtl::OUString const&)
 SdrCustomShapeReplacementURLItem::SdrCustomShapeReplacementURLItem(String const&)
 SdrEditView::MoveLayer(String const&, unsigned short)
-SdrEngineDefaults::LanguageHasChanged()
-SdrExchangeView::GetPastePos(SdrObjList*, OutputDevice*)
-SdrExchangeView::Paste(Bitmap const&, Point const&, SdrObjList*, unsigned int)
-SdrExchangeView::Paste(GDIMetaFile const&, Point const&, SdrObjList*, unsigned int)
 SdrGlobalData::GetCharClass()
 SdrGlobalData::~SdrGlobalData()
 SdrGluePoint::Draw(OutputDevice&, SdrObject const*) const
@@ -608,11 +603,6 @@ SdrModel::CheckConsistence() const
 SdrModel::GetNumberFormatter() const
 SdrModel::HasTransparentObjects(bool) const
 SdrModel::IsAllowShapePropertyChangeListener() const
-SdrObjEditView::AddTextEditOfs(MouseEvent&) const
-SdrObjEditView::Cut(unsigned long)
-SdrObjEditView::IsTextEditFrame() const
-SdrObjEditView::Paste(Window*, unsigned long)
-SdrObjEditView::Yank(unsigned long)
 SdrObjFactory::MakeNewObjUserData(unsigned int, unsigned short, SdrObject*)
 SdrObject::ClearObjectItem(unsigned short)
 SdrObject::FreeGlobalDrawObjectItemPool()

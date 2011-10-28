@@ -487,17 +487,6 @@ SdrEngineDefaults& SdrEngineDefaults::GetDefaults()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrEngineDefaults::LanguageHasChanged()
-{
-    SdrGlobalData& rGlobalData=GetSdrGlobalData();
-    if (rGlobalData.pResMgr!=NULL) {
-        delete rGlobalData.pResMgr;
-        rGlobalData.pResMgr=NULL;
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 SdrOutliner* SdrMakeOutliner( sal_uInt16 nOutlinerMode, SdrModel* pModel )
 {
     //SdrEngineDefaults& rDefaults = SdrEngineDefaults::GetDefaults();

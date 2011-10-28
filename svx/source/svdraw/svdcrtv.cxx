@@ -246,10 +246,6 @@ SdrCreateView::~SdrCreateView()
     SdrObject::Free( pAktCreate );
 }
 
-void SdrCreateView::ImpDelCreateAttr()
-{
-}
-
 sal_Bool SdrCreateView::IsAction() const
 {
     return SdrDragView::IsAction() || pAktCreate!=NULL;
