@@ -275,7 +275,7 @@ void ScBaseCell::Delete()
             delete (ScNoteCell*) this;
             break;
         default:
-            OSL_FAIL("Unbekannter Zellentyp");
+            OSL_FAIL("Attempt to Delete() an unknown CELLTYPE");
             break;
     }
 }
