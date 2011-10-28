@@ -59,6 +59,9 @@
 using namespace ::com::sun::star;
 
 
+SwPageFrm const*
+lcl_getPage(SwRootFrm const& rLayout, sal_Int32 const nPage); // vprint.cxx
+
 SwPagePreviewLayout* ViewShell::PagePreviewLayout()
 {
     return Imp()->PagePreviewLayout();
@@ -125,18 +128,13 @@ void ViewShell::PrintProspect(
 
     const SwPageFrm *pStPage    = 0;
     const SwPageFrm *pNxtPage   = 0;
-    const SwRenderData::ValidStartFramesMap_t &rFrms = rPrintData.GetRenderData().GetValidStartFrames();
     if (rPagesToPrint.first > 0)
     {
-        SwRenderData::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( rPagesToPrint.first ) );
-        OSL_ENSURE( aIt != rFrms.end(), "failed to find start frame" );
-        pStPage = aIt->second;
+        pStPage = lcl_getPage(*aShell.GetLayout(), rPagesToPrint.first);
     }
     if (rPagesToPrint.second > 0)
     {
-        SwRenderData::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( rPagesToPrint.second ) );
-        OSL_ENSURE( aIt != rFrms.end(), "failed to find start frame" );
-        pNxtPage = aIt->second;
+        pNxtPage = lcl_getPage(*aShell.GetLayout(), rPagesToPrint.second);
     }
 
     //#i14016# - consider empty pages on calculation of page size, used for calculation of scaling.

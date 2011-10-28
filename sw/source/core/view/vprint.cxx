@@ -437,6 +437,24 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     return pPrtDoc;
 }
 
+// TODO: there is already a GetPageByPageNum, but it checks some physical page
+// number; unsure if we want that here, should find out what that is...
+SwPageFrm const*
+lcl_getPage(SwRootFrm const& rLayout, sal_Int32 const nPage)
+{
+    // yes this is O(n^2) but at least it does not crash...
+    SwPageFrm const* pPage = dynamic_cast<const SwPageFrm*>(rLayout.Lower());
+    for (sal_Int32 i = nPage; pPage && (i > 0); --i)
+    {
+        if (1 == i) { // note: nPage is 1-based, i.e. 0 is invalid!
+            return pPage;
+        }
+        pPage = dynamic_cast<SwPageFrm const*>(pPage->GetNext());
+    }
+    OSL_ENSURE(pPage, "ERROR: SwPageFrm expected");
+    OSL_FAIL("non-existent page requested");
+    return 0;
+}
 
 sal_Bool ViewShell::PrintOrPDFExport(
     OutputDevice *pOutDev,
@@ -483,30 +501,23 @@ sal_Bool ViewShell::PrintOrPDFExport(
         pShell->PrepareForPrint( rPrintData );
 
         const sal_Int32 nPage = rPrintData.GetRenderData().GetPagesToPrint()[ nRenderer ];
-#if OSL_DEBUG_LEVEL > 1
-        OSL_ENSURE( nPage == 0 || rPrintData.GetRenderData().GetValidPagesSet().count( nPage ) == 1, "nPage not valid" );
-#endif
-        const SwPageFrm *pStPage = 0;
-        if (nPage > 0)  // a 'regular' page, not one from the post-it document
-        {
-            const SwRenderData::ValidStartFramesMap_t &rFrms = rPrintData.GetRenderData().GetValidStartFrames();
-            SwRenderData::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( nPage ) );
-            OSL_ENSURE( aIt != rFrms.end(), "failed to find start frame" );
-            if (aIt == rFrms.end())
-                return sal_False;
-            pStPage = aIt->second;
-        }
-        else    // a page from the post-its document ...
-        {
-            OSL_ENSURE( nPage == 0, "unexpected page number. 0 for post-it pages expected" );
-            pStPage = rPrintData.GetRenderData().GetPostItStartFrames()[ nRenderer ];
-        }
+        OSL_ENSURE( nPage < 0 ||
+            rPrintData.GetRenderData().GetValidPagesSet().count( nPage ) == 1,
+            "ViewShell::PrintOrPDFExport: nPage not valid" );
+        ViewShell *const pViewSh2 = (nPage < 0)
+                ? rPrintData.GetRenderData().m_pPostItShell // post-it page
+                : pShell; // a 'regular' page, not one from the post-it doc
+
+        SwPageFrm const*const pStPage =
+            lcl_getPage(*pViewSh2->GetLayout(), abs(nPage));
         OSL_ENSURE( pStPage, "failed to get start page" );
+        if (!pStPage)
+        {
+            return sal_False;
+        }
 
         //!! applying view options and formatting the dcoument should now only be done in getRendererCount!
 
-        ViewShell *pViewSh2 = nPage == 0 ? /* post-it page? */
-                rPrintData.GetRenderData().m_pPostItShell : pShell;
         ::SetSwVisArea( pViewSh2, pStPage->Frm() );
 
 // FIXME disabled because rPrintData.aOffset is always (0,0)
@@ -523,8 +534,6 @@ sal_Bool ViewShell::PrintOrPDFExport(
 
         pShell->InitPrt( pOutDev );
 
-        pViewSh2 = nPage == 0 ? /* post-it page? */
-                rPrintData.GetRenderData().m_pPostItShell : pShell;
         ::SetSwVisArea( pViewSh2, pStPage->Frm() );
 
         pStPage->GetUpper()->Paint( pStPage->Frm(), &rPrintData );

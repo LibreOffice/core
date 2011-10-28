@@ -38,7 +38,6 @@
 #include <vector>
 #include <utility>
 
-class SwPageFrm;
 class SwDoc;
 class SwDocShell;
 class ViewShell;
@@ -226,19 +225,16 @@ public:
 class SwRenderData
 {
     // pages valid for printing (according to the current settings)
-    // and their respective start frames (see getRendererCount in unotxdoc.cxx)
     // This set of pages does NOT depend on the 'PageRange' that is used as a printing option!
     std::set< sal_Int32 >                       m_aValidPages;          // the set of possible pages (see StringRangeEnumerator::getRangesFromString )
-    std::map< sal_Int32, const SwPageFrm * >    m_aValidStartFrames;    // the map of start frames for those pages
 
     // printer paper tray to use for each of the m_aValidPages above
     std::map< sal_Int32, sal_Int32 >            m_aPrinterPaperTrays;
 
     // vector of pages and their order to be printed (duplicates and any order allowed!)
     // (see 'render' in unotxdoc.cxx)
+    // negative entry indicates the page to be printed is from the post-it doc
     std::vector< sal_Int32 >                    m_aPagesToPrint;
-
-    std::vector< const SwPageFrm * >            m_aPostItStartFrames;
 
     // for prospect printing: the pairs of pages to be printed together on a single prospect page.
     // -1 indicates a half page to be left empty.
@@ -281,13 +277,10 @@ public:
             const SwPrintUIOptions *pOpt, const SwRenderData *pData, bool bIsPDFExport );
 
 
-    typedef std::map< sal_Int32, const SwPageFrm * >            ValidStartFramesMap_t;
     typedef std::vector< std::pair< sal_Int32, sal_Int32 > >    PagePairsVec_t;
 
     std::set< sal_Int32 > &             GetValidPagesSet()          { return m_aValidPages; }
     const std::set< sal_Int32 > &       GetValidPagesSet() const    { return m_aValidPages; }
-    ValidStartFramesMap_t &             GetValidStartFrames()       { return m_aValidStartFrames; }
-    const ValidStartFramesMap_t &       GetValidStartFrames() const { return m_aValidStartFrames; }
 
     // a map for printer paper tray numbers to use for each document page
     // a value of -1 for the tray means that there is no specific tray defined
@@ -299,16 +292,6 @@ public:
     // from the post-it document. (See also GetPostItStartFrame below)
     std::vector< sal_Int32 > &          GetPagesToPrint()           { return m_aPagesToPrint; }
     const std::vector< sal_Int32 > &    GetPagesToPrint() const     { return m_aPagesToPrint; }
-
-    // used for 'normal' printing with post-its
-    // - if the map entry will be NULL then the respective page to be printed is from
-    // the document. In that case use the value from GetPagesToPrint at the same index to
-    // get the phys. page number to be printed, and then retrieve the start frame to use
-    // from GetValidStartFrms.
-    // - If the entry is not NULL it is the start frame of the page from the post-it document
-    // that is to be printed
-    std::vector< const SwPageFrm * > &          GetPostItStartFrames()          { return m_aPostItStartFrames; }
-    const std::vector< const SwPageFrm * > &    GetPostItStartFrames() const    { return m_aPostItStartFrames; }
 
     // used for prospect printing only
     PagePairsVec_t &                    GetPagePairsForProspectPrinting()           { return m_aPagePairs; }
