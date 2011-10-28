@@ -30,7 +30,10 @@
 #include "precompiled_xmlsecurity.hxx"
 
 //todo before commit:  nssrenam.h is not delivered!!!
-#include "nssrenam.h"
+#ifndef __nssrenam_h_
+#define CERT_NewTempCertificate __CERT_NewTempCertificate
+#endif /* __nssrenam_h_ */
+
 #include "cert.h"
 #include "secerr.h"
 #include "ocsp.h"

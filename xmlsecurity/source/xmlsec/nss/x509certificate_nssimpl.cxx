@@ -29,8 +29,10 @@
 #include "precompiled_xmlsecurity.hxx"
 
 
+#ifndef __nssrenam_h_
+#define CERT_DecodeDERCertificate __CERT_DecodeDERCertificate
+#endif  /* __nssrenam_h_ */
 
-#include "nssrenam.h"
 #include "nspr.h"
 #include "nss.h"
 #include "secder.h"
