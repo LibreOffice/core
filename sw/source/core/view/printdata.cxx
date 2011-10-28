@@ -58,15 +58,11 @@ using ::rtl::OUString;
 
 SwRenderData::SwRenderData()
 {
-    m_pViewOptionAdjust = 0;
-    m_pPrtOptions       = 0;
 }
 
 
 SwRenderData::~SwRenderData()
 {
-    delete m_pViewOptionAdjust;     m_pViewOptionAdjust = 0;
-    delete m_pPrtOptions;           m_pPrtOptions = 0;
     OSL_ENSURE( !m_pPostItShell, "m_pPostItShell should already have been deleted" );
     OSL_ENSURE( !m_pPostItDoc, "m_pPostItDoc should already have been deleted" );
     OSL_ENSURE( !m_pPostItFields, " should already have been deleted" );
@@ -113,7 +109,8 @@ void SwRenderData::ViewOptionAdjustStart( ViewShell &rSh, const SwViewOption &rV
     {
         OSL_FAIL("error: there should be no ViewOptionAdjust active when calling this function" );
     }
-    m_pViewOptionAdjust = new SwViewOptionAdjust_Impl( rSh, rViewOptions, bIsTmpSelection );
+    m_pViewOptionAdjust.reset(
+            new SwViewOptionAdjust_Impl( rSh, rViewOptions, bIsTmpSelection ));
 }
 
 
@@ -125,23 +122,20 @@ void SwRenderData::ViewOptionAdjust(SwPrintData const*const pPrtOptions)
 
 void SwRenderData::ViewOptionAdjustStop()
 {
-    if (m_pViewOptionAdjust)
-    {
-        delete m_pViewOptionAdjust;
-        m_pViewOptionAdjust = 0;
-    }
+    m_pViewOptionAdjust.reset();
 }
 
 
 void SwRenderData::MakeSwPrtOptions(
-    SwPrintData & rOptions,
-    const SwDocShell *pDocShell,
-    const SwPrintUIOptions *pOpt,
-    const SwRenderData *pData,
-    bool bIsPDFExport )
+    SwDocShell const*const pDocShell,
+    SwPrintUIOptions const*const pOpt,
+    bool const bIsPDFExport)
 {
-    if (!pDocShell || !pOpt || !pData)
+    if (!pDocShell || !pOpt)
         return;
+
+    m_pPrtOptions.reset(new SwPrintData);
+    SwPrintData & rOptions(*m_pPrtOptions);
 
     // get default print options
     const TypeId aSwWebDocShellTypeId = TYPE(SwWebDocShell);
@@ -172,7 +166,7 @@ void SwRenderData::MakeSwPrtOptions(
     //! needs to be set after MakeOptions since the assignment operation in that
     //! function will destroy the pointers
     rOptions.SetPrintUIOptions( pOpt );
-    rOptions.SetRenderData( pData );
+    rOptions.SetRenderData( this );
 }
 
 

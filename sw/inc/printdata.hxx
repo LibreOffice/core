@@ -245,9 +245,9 @@ class SwRenderData
     rtl::OUString               m_aPageRange;
 
     // the view options to be applied for printing
-    SwViewOptionAdjust_Impl *   m_pViewOptionAdjust;
+    ::boost::scoped_ptr<SwViewOptionAdjust_Impl> m_pViewOptionAdjust;
 
-    SwPrintData *               m_pPrtOptions;
+    ::boost::scoped_ptr<SwPrintData>    m_pPrtOptions;
 
 public:
 
@@ -273,11 +273,9 @@ public:
     void ViewOptionAdjustStop();
 
     bool HasSwPrtOptions() const    { return m_pPrtOptions != 0; }
-    void SetSwPrtOptions(SwPrintData *const pOpt)   { m_pPrtOptions = pOpt; }
-    SwPrintData const*  GetSwPrtOptions() const     { return m_pPrtOptions; }
-    SwPrintData &       GetSwPrtOptionsRef()        { return *m_pPrtOptions; }
-    void MakeSwPrtOptions( SwPrintData & rOptions, const SwDocShell *pDocShell,
-            const SwPrintUIOptions *pOpt, const SwRenderData *pData, bool bIsPDFExport );
+    SwPrintData const*  GetSwPrtOptions() const { return m_pPrtOptions.get(); }
+    void MakeSwPrtOptions( SwDocShell const*const pDocShell,
+            SwPrintUIOptions const*const pOpt, bool const bIsPDFExport );
 
 
     typedef std::vector< std::pair< sal_Int32, sal_Int32 > >    PagePairsVec_t;

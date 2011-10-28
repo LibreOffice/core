@@ -2547,9 +2547,8 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
                     m_pRenderData->ViewOptionAdjustStart( *pViewShell, *pViewShell->GetViewOptions(), rSelection.hasValue() );
             }
 
-            m_pRenderData->SetSwPrtOptions( new SwPrintData );
-            m_pRenderData->MakeSwPrtOptions( m_pRenderData->GetSwPrtOptionsRef(), pRenderDocShell,
-                    m_pPrintUIOptions, m_pRenderData, bIsPDFExport );
+            m_pRenderData->MakeSwPrtOptions( pRenderDocShell,
+                    m_pPrintUIOptions, bIsPDFExport );
 
             if (pSwView)
             {
