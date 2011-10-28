@@ -139,6 +139,42 @@ ScAnchorType ScDrawView::GetAnchorType() const
     return SCA_DONTKNOW;
 }
 
+namespace {
+
+/**
+ * Updated the anchors of any non-note object that is cell anchored which
+ * has been moved since the last anchors for its position was calculated.
+ */
+void adjustAnchoredPosition(const SdrHint& rHint, const ScDocument& rDoc, SCTAB nTab)
+{
+    if (rHint.GetKind() != HINT_OBJCHG && rHint.GetKind() != HINT_OBJINSERTED)
+        return;
+
+    SdrObject* pObj = const_cast<SdrObject*>(rHint.GetObject());
+    if (!pObj)
+        return;
+
+    ScDrawObjData *pAnchor = ScDrawLayer::GetObjData(pObj);
+    if (!pAnchor)
+        return;
+
+    if (pAnchor->mbNote)
+        return;
+
+    if (pAnchor->maLastRect == pObj->GetLogicRect())
+        return;
+
+    if (pAnchor->maStart.Tab() != nTab)
+        // The object is not anchored on the current sheet.  Skip it.
+        // TODO: In the future, we may want to adjust objects that are
+        // anchored on all selected sheets.
+        return;
+
+    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, rDoc, pAnchor->maStart.Tab());
+}
+
+}
+
 void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if (rHint.ISA(ScTabDeletedHint))                        // Tabelle geloescht
@@ -159,15 +195,7 @@ void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     else if ( rHint.ISA( SdrHint ) )
     {
         if (const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint ))
-        {
-            //Update the anchors of any non note object that is cell anchored which has
-            //been moved since the last anchors for its position was calculated
-            if (pSdrHint->GetKind() == HINT_OBJCHG || pSdrHint->GetKind() == HINT_OBJINSERTED)
-                if (SdrObject* pObj = const_cast<SdrObject*>(pSdrHint->GetObject()))
-                    if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjData(pObj))
-                        if (!pAnchor->mbNote && pAnchor->maLastRect != pObj->GetLogicRect())
-                            ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *pDoc, nTab);
-        }
+            adjustAnchoredPosition(*pSdrHint, *pDoc, nTab);
         FmFormView::Notify( rBC,rHint );
     }
     else
