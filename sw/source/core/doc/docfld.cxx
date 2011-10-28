@@ -52,7 +52,7 @@
 #include <fmtfld.hxx>
 #include <tox.hxx>
 #include <txttxmrk.hxx>
-#include <docfld.hxx>   // fuer Expression-Felder
+#include <docfld.hxx>   // for expression fields
 #include <docufld.hxx>
 #include <ddefld.hxx>
 #include <usrfld.hxx>
@@ -69,7 +69,7 @@
 #include <authfld.hxx>
 #include <txtinet.hxx>
 #include <fmtcntnt.hxx>
-#include <poolfmt.hrc>      // fuer InitFldTypes
+#include <poolfmt.hrc>      // for InitFldTypes
 
 #include <SwUndoField.hxx>
 #include "switerator.hxx"
@@ -82,12 +82,11 @@ extern sal_Bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
 SV_IMPL_OP_PTRARR_SORT( _SetGetExpFlds, _SetGetExpFldPtr )
 
 /*--------------------------------------------------------------------
-    Beschreibung: Feldtypen einfuegen
+    Description: Insert field types
  --------------------------------------------------------------------*/
 /*
- *  Implementierung der Feldfunktionen am Doc
- *  Return immer einen gueltigen Pointer auf den Typ. Wenn er also neu
- *  zugefuegt oder schon vorhanden ist.
+ *  Implementation of field methods at the Doc
+ *  Always returns a pointer to the type, if it's new or already added.
  */
 SwFieldType* SwDoc::InsertFldType(const SwFieldType &rFldTyp)
 {
@@ -99,14 +98,13 @@ SwFieldType* SwDoc::InsertFldType(const SwFieldType &rFldTyp)
     switch( nFldWhich )
     {
     case RES_SETEXPFLD:
-            //JP 29.01.96: SequenceFelder beginnen aber bei INIT_FLDTYPES - 3!!
-            //             Sonst gibt es doppelte Nummernkreise!!
-            //MIB 14.03.95: Ab sofort verlaesst sich auch der SW3-Reader
-            //beim Aufbau der String-Pools und beim Einlesen von SetExp-Feldern
-            //hierauf
+            //JP 29.01.96: SequenceFields start at INIT_FLDTYPES - 3!!
+            //             Or we get doubble number circles!!
+            //MIB 14.03.95: From now on also the SW3-Reader relies on this, when
+            //constructing string pools and when reading SetExp fields
             if( nsSwGetSetExpType::GSE_SEQ & ((SwSetExpFieldType&)rFldTyp).GetType() )
                 i -= INIT_SEQ_FLDTYPES;
-        // kein break;
+        // no break;
     case RES_DBFLD:
     case RES_USERFLD:
     case RES_DDEFLD:
@@ -149,7 +147,7 @@ SwFieldType* SwDoc::InsertFldType(const SwFieldType &rFldTyp)
     case RES_USERFLD:
     case RES_SETEXPFLD:
         ((SwValueFieldType*)pNew)->SetDoc( this );
-        // JP 29.07.96: opt. FeldListe fuer den Calculator vorbereiten:
+        // JP 29.07.96: Optionally prepare FieldList for Calculator:
         pUpdtFlds->InsertFldType( *pNew );
         break;
     case RES_AUTHORITY :
@@ -165,18 +163,17 @@ SwFieldType* SwDoc::InsertFldType(const SwFieldType &rFldTyp)
 
 void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
 {
-    // der FeldTyp wurde als geloescht gekennzeichnet und aus dem
-    // Array entfernt. Nun muss man nach diesem wieder suchen.
-    // - Ist der nicht vorhanden, dann kann er eingefuegt werden.
-    // - Wird genau der gleiche Typ gefunden, dann muss der geloeschte
-    //   einen anderen Namen erhalten.
+    // The FldType was marked as deleted and removed from the array.
+    // One has to look this up again, now.
+    // - If it's not present, it can be re-inserted.
+    // - If the same type is found, the deleted one has to be renamed.
 
     sal_uInt16 nSize = pFldTypes->Count(), nFldWhich = rFldTyp.Which();
     sal_uInt16 i = INIT_FLDTYPES;
 
     OSL_ENSURE( RES_SETEXPFLD == nFldWhich ||
             RES_USERFLD == nFldWhich ||
-            RES_DDEFLD == nFldWhich, "Falscher FeldTyp" );
+            RES_DDEFLD == nFldWhich, "Wrong FldType" );
 
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
     const String& rFldNm = rFldTyp.GetName();
@@ -186,7 +183,7 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
         if( nFldWhich == (pFnd = (*pFldTypes)[i])->Which() &&
             rSCmp.isEqual( rFldNm, pFnd->GetName() ) )
         {
-            // neuen Namen suchen
+            // find new name
             sal_uInt16 nNum = 1;
             do {
                 String sSrch( rFldNm );
@@ -196,17 +193,17 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
                         rSCmp.isEqual( sSrch, pFnd->GetName() ) )
                         break;
 
-                if( i >= nSize )        // nicht gefunden
+                if( i >= nSize )        // not found
                 {
                     ((String&)rFldNm) = sSrch;
-                    break;      // raus aus der While-Schleife
+                    break;      // exit while loop
                 }
                 ++nNum;
             } while( sal_True );
             break;
         }
 
-    // nicht gefunden, also eintragen und Flag loeschen
+    // not found, so insert and delete flag
     pFldTypes->Insert( &rFldTyp, nSize );
     switch( nFldWhich )
     {
@@ -223,27 +220,27 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Feldtypen loeschen
+    Description: Remove field type
  --------------------------------------------------------------------*/
 void SwDoc::RemoveFldType(sal_uInt16 nFld)
 {
-    OSL_ENSURE( INIT_FLDTYPES <= nFld,  "keine InitFields loeschen" );
+    OSL_ENSURE( INIT_FLDTYPES <= nFld,  "don't remove InitFlds" );
     /*
-     * Abheangige Felder vorhanden -> ErrRaise
+     * Dependent fields present -> ErrRaise
      */
     sal_uInt16 nSize = pFldTypes->Count();
     if(nFld < nSize)
     {
         SwFieldType* pTmp = (*pFldTypes)[nFld];
 
-        // JP 29.07.96: opt. FeldListe fuer den Calculator vorbereiten:
+        // JP 29.07.96: Optionally prepare FldLst for Calculator
         sal_uInt16 nWhich = pTmp->Which();
         switch( nWhich )
         {
         case RES_SETEXPFLD:
         case RES_USERFLD:
             pUpdtFlds->RemoveFldType( *pTmp );
-            // kein break;
+            // no break;
         case RES_DDEFLD:
             if( pTmp->GetDepends() && !IsUsed( *pTmp ) )
             {
@@ -260,8 +257,8 @@ void SwDoc::RemoveFldType(sal_uInt16 nFld)
 
         if( nWhich )
         {
-            OSL_ENSURE( !pTmp->GetDepends(), "Abhaengige vorh.!" );
-            // Feldtype loschen
+            OSL_ENSURE( !pTmp->GetDepends(), "Dependent fields present!" );
+            // delete field type
             delete pTmp;
         }
         pFldTypes->Remove( nFld );
@@ -275,7 +272,7 @@ const SwFldTypes* SwDoc::GetFldTypes() const
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Den ersten Typen mit ResId und Namen finden
+    Description: Find first type with ResId and name
  --------------------------------------------------------------------*/
 SwFieldType* SwDoc::GetFldType( sal_uInt16 nResId, const String& rName,
          bool bDbFieldMatching // used in some UNO calls for RES_DBFLD
@@ -289,11 +286,10 @@ SwFieldType* SwDoc::GetFldType( sal_uInt16 nResId, const String& rName,
     switch( nResId )
     {
     case RES_SETEXPFLD:
-            //JP 29.01.96: SequenceFelder beginnen aber bei INIT_FLDTYPES - 3!!
-            //             Sonst gibt es doppelte Nummernkreise!!
-            //MIB 14.03.95: Ab sofort verlaesst sich auch der SW3-Reader
-            //beim Aufbau der String-Pools und beim Einlesen von SetExp-Feldern
-            //hierauf
+            //JP 29.01.96: SequenceFields start at INIT_FLDTYPES - 3!!
+            //             Or we get doubble number circles!!
+            //MIB 14.03.95: From now on also the SW3-Reader relies on this, when
+            //constructing string pools and when reading SetExp fields
         i = INIT_FLDTYPES - INIT_SEQ_FLDTYPES;
         break;
 
@@ -325,28 +321,28 @@ SwFieldType* SwDoc::GetFldType( sal_uInt16 nResId, const String& rName,
 }
 
 /*************************************************************************
-|*                SwDoc::UpdateFlds()
-|*    Beschreibung      Felder updaten
+|*    SwDoc::UpdateFlds()
+|*    Description: Update fields
 *************************************************************************/
 /*
- *    Alle sollen neu evaluiert werden.
+ *    All have to be re-evaluated.
  */
 void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
 {
-    // Modify() fuer jeden Feldtypen rufen,
-    // abhaengige SwTxtFld werden benachrichtigt ...
+    // Call modify() for every field type,
+    // dependent SwTxtFld get notified ...
 
     for( sal_uInt16 i=0; i < pFldTypes->Count(); ++i)
     {
         switch( (*pFldTypes)[i]->Which() )
         {
-            // Tabellen-Felder als vorletztes Updaten
-            // Referenzen als letztes Updaten
+            // Update table fields second to last
+            // Update references at last
         case RES_GETREFFLD:
         case RES_TABLEFLD:
         case RES_DBFLD:
         case RES_JUMPEDITFLD:
-        case RES_REFPAGESETFLD:     // werden nie expandiert!
+        case RES_REFPAGESETFLD:     // are never expanded!
             break;
 
         case RES_DDEFLD:
@@ -364,7 +360,7 @@ void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
         case RES_SETEXPFLD:
         case RES_HIDDENTXTFLD:
         case RES_HIDDENPARAFLD:
-            // Expression-Felder werden gesondert behandelt
+            // Expression fields are treated seperately
             if( !pNewHt )
                 break;
         default:
@@ -373,18 +369,18 @@ void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
     }
 
     if( !IsExpFldsLocked() )
-        UpdateExpFlds( 0, sal_False );      // Expression-Felder Updaten
+        UpdateExpFlds( 0, sal_False );      // update expression fields
 
-    // Tabellen
+    // Tables
     UpdateTblFlds(pNewHt);
 
-    // Referenzen
+    // References
     UpdateRefFlds(pNewHt);
 
     if( bCloseDB )
         GetNewDBMgr()->CloseAll();
 
-    // Nur bei KomplettUpdate evaluieren
+    // Only evaluate on CompleteUpdate
     SetModified();
 }
 
@@ -411,7 +407,7 @@ void SwDoc::UpdateUsrFlds()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Referenzfelder und TableFelder erneuern
+    Description: Update reference and table fields
  --------------------------------------------------------------------*/
 void SwDoc::UpdateRefFlds( SfxPoolItem* pHt )
 {
@@ -424,7 +420,7 @@ void SwDoc::UpdateRefFlds( SfxPoolItem* pHt )
 void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
 {
     OSL_ENSURE( !pHt || RES_TABLEFML_UPDATE  == pHt->Which(),
-            "Was ist das fuer ein MessageItem?" );
+            "What MessageItem is this?" );
 
     SwFieldType* pFldType(0);
 
@@ -445,7 +441,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
 
                     if( pUpdtFld )
                     {
-                        // bestimme Tabelle, in der das Feld steht
+                        // table where this field is located
                         const SwTableNode* pTblNd;
                         const SwTxtNode& rTxtNd = pFmtFld->GetTxtFld()->GetTxtNode();
                         if( !rTxtNd.GetNodes().IsDocNodes() ||
@@ -455,30 +451,30 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                         switch( pUpdtFld->eFlags )
                         {
                         case TBL_CALC:
-                            // setze das Value-Flag zurueck
-                            // JP 17.06.96: interne Darstellung auf alle Formeln
-                            //              (Referenzen auf andere Tabellen!!!)
+                            // re-set the value flag
+                            // JP 17.06.96: internal representation of all formulas
+                            //              (reference to other table!!!)
                             if( nsSwExtendedSubType::SUB_CMD & pFld->GetSubType() )
                                 pFld->PtrToBoxNm( pUpdtFld->pTbl );
                             else
                                 pFld->ChgValid( sal_False );
                             break;
                         case TBL_BOXNAME:
-                            // ist es die gesuchte Tabelle ??
+                            // is this the wanted table?
                             if( &pTblNd->GetTable() == pUpdtFld->pTbl )
-                                // zur externen Darstellung
+                                // to the external representation
                                 pFld->PtrToBoxNm( pUpdtFld->pTbl );
                             break;
                         case TBL_BOXPTR:
-                            // zur internen Darstellung
-                            // JP 17.06.96: interne Darstellung auf alle Formeln
-                            //              (Referenzen auf andere Tabellen!!!)
+                            // to the internal representation
+                            // JP 17.06.96: internal representation on all formulas
+                            //              (reference to other table!!!)
                             pFld->BoxNmToPtr( pUpdtFld->pTbl );
                             break;
                         case TBL_RELBOXNAME:
-                            // ist es die gesuchte Tabelle ??
+                            // is this the wanted table?
                             if( &pTblNd->GetTable() == pUpdtFld->pTbl )
-                                // zur relativen Darstellung
+                                // to the relative representation
                                 pFld->ToRelBoxNm( pUpdtFld->pTbl );
                             break;
                         default:
@@ -486,7 +482,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                         }
                     }
                     else
-                        // setze bei allen das Value-Flag zurueck
+                        // reset the value flag for all
                         pFld->ChgValid( sal_False );
                 }
             }
@@ -496,7 +492,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
         pFldType = 0;
     }
 
-    // und dann noch alle Tabellen Box Formeln abklappern
+    // process all table box formuals
     const SfxPoolItem* pItem;
     sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_BOXATR_FORMULA );
     for (sal_uInt32 i = 0; i < nMaxItems; ++i)
@@ -509,7 +505,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
     }
 
 
-    // alle Felder/Boxen sind jetzt invalide, also kann das Rechnen anfangen
+    // all fields/boxes are now invalid, so we can start to calculate
     if( pHt && ( RES_TABLEFML_UPDATE != pHt->Which() ||
                 TBL_CALC != ((SwTableFmlUpdate*)pHt)->eFlags ))
         return ;
@@ -530,10 +526,10 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     (pFld = (SwTblField*)pFmtFld->GetFld())->GetSubType() ))
                     continue;
 
-                // muss neu berechnet werden (und ist keine textuelle Anzeige)
+                // needs to be recalculated (and is no textual note)
                 if( !pFld->IsValid() )
                 {
-                    // bestimme Tabelle, in der das Feld steht
+                    // table where this field is located
                     const SwTxtNode& rTxtNd = pFmtFld->GetTxtFld()->GetTxtNode();
                     if( !rTxtNd.GetNodes().IsDocNodes() )
                         continue;
@@ -541,8 +537,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     if( !pTblNd )
                         continue;
 
-                    // falls dieses Feld nicht in der zu updatenden
-                    // Tabelle steht, ueberspringen !!
+                    // if this field is not in the to-be-updated table, skip it
                     if( pHt && &pTblNd->GetTable() !=
                                             ((SwTableFmlUpdate*)pHt)->pTbl )
                         continue;
@@ -550,13 +545,13 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     if( !pCalc )
                         pCalc = new SwCalc( *this );
 
-                    // bestimme die Werte aller SetExpresion Felder, die
-                    // bis zur Tabelle gueltig sind
+                    // get the values of all SetExpresion fields, that are valid
+                    // until the table
                     SwFrm* pFrm = 0;
                     if( pTblNd->GetIndex() < GetNodes().GetEndOfExtras().GetIndex() )
                     {
-                        // steht im Sonderbereich, wird teuer !!
-                        Point aPt;      // den im Layout 1. Frame returnen - Tab.Kopfzeile !!
+                        // is in the special section, that's expensive!
+                        Point aPt;      // return the first frame of the layout - Tab.Headline!!
                         pFrm = rTxtNd.getLayoutFrm( GetCurrentLayout(), &aPt );
                         if( pFrm )
                         {
@@ -571,7 +566,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     }
                     if( !pFrm )
                     {
-                        // einen Index fuers bestimmen vom TextNode anlegen
+                        // create index to determine the TextNode
                         SwNodeIndex aIdx( rTxtNd );
                         FldsToCalc( *pCalc,
                             _SetGetExpFld( aIdx, pFmtFld->GetTxtFld() ));
@@ -586,8 +581,8 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
 #if OSL_DEBUG_LEVEL > 1
                         else
                         {
-                            // mind. ein ASSERT
-                            OSL_ENSURE( !this, "die Kettenformel konnte nicht errechnet werden" );
+                            // at least one ASSERT
+                            OSL_ENSURE( !this, "the chained formula could no be calculated" );
                         }
 #endif
                     }
@@ -597,7 +592,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
         }
     }
 
-    // dann berechene noch die Formeln an den Boxen
+    // calculate the formula at the boxes
     for (sal_uInt32 i = 0; i < nMaxItems; ++i )
     {
         if( 0 != (pItem = GetAttrPool().GetItem2( RES_BOXATR_FORMULA, i ) ) &&
@@ -617,13 +612,13 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     if( !pCalc )
                         pCalc = new SwCalc( *this );
 
-                    // bestimme die Werte aller SetExpresion Felder, die
-                    // bis zur Tabelle gueltig sind
+                    // get the values of all SetExpresion fields, that are valid
+                    // until the table
                     SwFrm* pFrm = 0;
                     if( pTblNd->GetIndex() < GetNodes().GetEndOfExtras().GetIndex() )
                     {
-                        // steht im Sonderbereich, wird teuer !!
-                        Point aPt;      // den im Layout 1. Frame returnen - Tab.Kopfzeile !!
+                        // is in the special section, that's expensive!
+                        Point aPt;      // return the first frame of the layout - Tab.Headline!!
                         SwNodeIndex aCNdIdx( *pTblNd, +2 );
                         SwCntntNode* pCNd = aCNdIdx.GetNode().GetCntntNode();
                         if( !pCNd )
@@ -640,7 +635,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     }
                     if( !pFrm )
                     {
-                        // einen Index fuers bestimmen vom TextNode anlegen
+                        // create index to determine the TextNode
                         SwNodeIndex aIdx( *pTblNd );
                         FldsToCalc( *pCalc, _SetGetExpFld( aIdx ));
                     }
@@ -655,8 +650,8 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
 #if OSL_DEBUG_LEVEL > 1
                         else
                         {
-                            // mind. ein ASSERT
-                            OSL_ENSURE( !this, "die Kettenformel konnte nicht errechnet werden" );
+                            // at least one ASSERT
+                            OSL_ENSURE( !this, "the chained formula could no be calculated" );
                         }
 #endif
                     }
@@ -701,7 +696,7 @@ void SwDoc::UpdatePageFlds( SfxPoolItem* pMsgHnt )
     SetNewFldLst(true);
 }
 
-// ---- Loesche alle nicht referenzierten FeldTypen eines Dokumentes --
+// ---- Remove all unreferenced field types of a document --
 void SwDoc::GCFieldTypes()
 {
     for( sal_uInt16 n = pFldTypes->Count(); n > INIT_FLDTYPES; )
@@ -740,8 +735,8 @@ void SwDoc::SetNewFldLst(bool bFlag)
     mbNewFldLst = bFlag;
 }
 
-// der StartIndex kann optional mit angegeben werden (z.B. wenn dieser
-// zuvor schon mal erfragt wurde - ist sonst eine virtuelle Methode !!)
+// the StartIndex can be supplied optionally (e.g. if it was queried before - is a virtual
+// method otherwise!)
 _SetGetExpFld::_SetGetExpFld( const SwNodeIndex& rNdIdx, const SwTxtFld* pFld,
                             const SwIndex* pIdx )
 {
@@ -768,9 +763,9 @@ _SetGetExpFld::_SetGetExpFld( const SwNodeIndex& rNdIdx,
         nCntnt = *rINet.GetStart();
 }
 
-// Erweiterung fuer Sections:
-// diese haben immer als Content-Position 0xffff !!
-// Auf dieser steht nie ein Feld, maximal bis STRING_MAXLEN moeglich
+// Extension for Sections:
+// these always have content position 0xffff!
+// There is never a field on this, only up to STRING_MAXLEN possible
 _SetGetExpFld::_SetGetExpFld( const SwSectionNode& rSectNd,
                                 const SwPosition* pPos )
 {
@@ -884,7 +879,7 @@ void _SetGetExpFld::SetBodyPos( const SwCntntFrm& rFrm )
         SwDoc& rDoc = *aIdx.GetNodes().GetDoc();
         SwPosition aPos( aIdx );
 #if OSL_DEBUG_LEVEL > 1
-        OSL_ENSURE( ::GetBodyTxtNode( rDoc, aPos, rFrm ), "wo steht das Feld" );
+        OSL_ENSURE( ::GetBodyTxtNode( rDoc, aPos, rFrm ), "Where is the field?" );
 #else
         ::GetBodyTxtNode( rDoc, aPos, rFrm );
 #endif
@@ -903,14 +898,14 @@ sal_Bool _SetGetExpFld::operator<( const _SetGetExpFld& rFld ) const
     const SwNode *pFirst = GetNodeFromCntnt(),
                  *pNext = rFld.GetNodeFromCntnt();
 
-    // Position gleich: nur weiter wenn beide FeldPointer besetzt sind !!
+    // Position is the same: continue only if both field pointers are set!
     if( !pFirst || !pNext )
         return sal_False;
 
-    // gleiche Section ??
+    // same Section?
     if( pFirst->StartOfSectionNode() != pNext->StartOfSectionNode() )
     {
-        // sollte einer in der Tabelle stehen ?
+        // is one in the table?
         const SwNode *pFirstStt, *pNextStt;
         const SwTableNode* pTblNd = pFirst->FindTableNode();
         if( pTblNd )
@@ -935,11 +930,11 @@ sal_Bool _SetGetExpFld::operator<( const _SetGetExpFld& rFld ) const
         }
     }
 
-    // ist gleiche Section, dann Feld im gleichen Node ?
+    // if it is the same section, then the field is in the same Node
     if( pFirst != pNext )
         return pFirst->GetIndex() < pNext->GetIndex();
 
-    // gleicher Node in der Section, dann Position im Node
+    // same Node in the Section, then Position in the Node
     return GetCntPosFromCntnt() < rFld.GetCntPosFromCntnt();
 }
 
@@ -1014,8 +1009,7 @@ _HashStr::_HashStr( const String& rName, const String& rText,
     pNext = pNxt;
 }
 
-// suche nach dem Namen, ist er vorhanden, returne seinen String, sonst
-// einen LeerString
+// Look up the Name, if it is present, return it's String, otherwise return an empty String
 void LookString( SwHash** ppTbl, sal_uInt16 nSize, const String& rName,
                     String& rRet, sal_uInt16* pPos )
 {
@@ -1062,10 +1056,10 @@ void lcl_CalcFld( SwDoc& rDoc, SwCalc& rCalc, const _SetGetExpFld& rSGEFld,
         if( nsSwGetSetExpType::GSE_EXPR & pFld->GetSubType() )
             aValue.PutDouble( ((SwSetExpField*)pFld)->GetValue() );
         else
-            // Erweiterung fuers Rechnen mit Strings
+            // Extension to calculate with Strings
             aValue.PutString( ((SwSetExpField*)pFld)->GetExpStr() );
 
-        // setze im Calculator den neuen Wert
+        // set the new value in Calculator
         rCalc.VarChange( pFld->GetTyp()->GetName(), aValue );
     }
     else if( pMgr )
@@ -1105,7 +1099,7 @@ void lcl_CalcFld( SwDoc& rDoc, SwCalc& rCalc, const _SetGetExpFld& rSGEFld,
 
 void SwDoc::FldsToCalc( SwCalc& rCalc, const _SetGetExpFld& rToThisFld )
 {
-    // erzeuge die Sortierteliste aller SetFelder
+    // create the sorted list of all SetFields
     pUpdtFlds->MakeFldList( *this, mbNewFldLst, GETFLD_CALC );
     mbNewFldLst = sal_False;
 
@@ -1129,7 +1123,7 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, const _SetGetExpFld& rToThisFld )
 
 void SwDoc::FldsToCalc( SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt )
 {
-    // erzeuge die Sortierteliste aller SetFelder
+    // create the sorted list of all SetFields
     pUpdtFlds->MakeFldList( *this, mbNewFldLst, GETFLD_CALC );
     mbNewFldLst = sal_False;
 
@@ -1152,12 +1146,12 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt )
 void SwDoc::FldsToExpand( SwHash**& ppHashTbl, sal_uInt16& rTblSize,
                             const _SetGetExpFld& rToThisFld )
 {
-    // erzeuge die Sortierteliste aller SetFelder
+    // create the sorted list of all SetFields
     pUpdtFlds->MakeFldList( *this, mbNewFldLst, GETFLD_EXPAND );
     mbNewFldLst = sal_False;
 
-    // HashTabelle fuer alle String Ersetzungen, wird "one the fly" gefuellt
-    // (versuche eine "ungerade"-Zahl zu erzeugen)
+    // Hash table for all string replacements is filled on-the-fly.
+    // Try to fabricate an uneven number.
     rTblSize = (( pUpdtFlds->GetSortLst()->Count() / 7 ) + 1 ) * 7;
     ppHashTbl = new SwHash*[ rTblSize ];
     memset( ppHashTbl, 0, sizeof( _HashStr* ) * rTblSize );
@@ -1185,27 +1179,27 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, sal_uInt16& rTblSize,
         case RES_SETEXPFLD:
             if( nsSwGetSetExpType::GSE_STRING & pFld->GetSubType() )
             {
-                // setze in der HashTabelle den neuen Wert
-                // ist die "Formel" ein Feld ??
+                // set the new value in the hash table
+                // is the formula a field?
                 SwSetExpField* pSFld = (SwSetExpField*)pFld;
                 LookString( ppHashTbl, rTblSize, pSFld->GetFormula(), aNew );
 
-                if( !aNew.Len() )               // nichts gefunden, dann ist
-                    aNew = pSFld->GetFormula(); // die Formel der neue Wert
+                if( !aNew.Len() )               // nothing found, then the formula is
+                    aNew = pSFld->GetFormula(); // the new value
 
                 // #i3141# - update expression of field as in method
                 // <SwDoc::UpdateExpFlds(..)> for string/text fields
                 pSFld->ChgExpStr( aNew );
 
-                // suche den Namen vom Feld
+                // look up the field's name
                 aNew = ((SwSetExpFieldType*)pSFld->GetTyp())->GetSetRefName();
-                // Eintrag vorhanden ?
+                // Entry present?
                 pFnd = Find( aNew, ppHashTbl, rTblSize, &nPos );
                 if( pFnd )
-                    // Eintrag in der HashTabelle aendern
+                    // modify entry in the hash table
                     ((_HashStr*)pFnd)->aSetStr = pSFld->GetExpStr();
                 else
-                    // neuen Eintrag einfuegen
+                    // insert the new entry
                     *(ppHashTbl + nPos ) = new _HashStr( aNew,
                             pSFld->GetExpStr(), (_HashStr*)*(ppHashTbl + nPos) );
             }
@@ -1214,18 +1208,18 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, sal_uInt16& rTblSize,
             {
                 const String& rName = pFld->GetTyp()->GetName();
 
-                // Eintrag in den HashTable eintragen
-                // Eintrag vorhanden ?
+                // Insert entry in the hash table
+                // Entry present?
                 pFnd = Find( rName, ppHashTbl, rTblSize, &nPos );
                 String const value(pFld->ExpandField(IsClipBoard()));
                 if( pFnd )
                 {
-                    // Eintrag in der HashTabelle aendern
+                    // modify entry in the hash table
                     static_cast<_HashStr*>(pFnd)->aSetStr = value;
                 }
                 else
                 {
-                    // neuen Eintrag einfuegen
+                    // insert the new entry
                     *(ppHashTbl + nPos ) = new _HashStr( rName,
                         value, static_cast<_HashStr *>(*(ppHashTbl + nPos)));
                 }
@@ -1258,30 +1252,30 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
 
     sal_uInt16 nWhich, n;
 
-    // HashTabelle fuer alle String Ersetzungen, wird "one the fly" gefuellt
-    // (versuche eine "ungerade"-Zahl zu erzeugen)
+    // Hash table for all string replacements is filled on-the-fly.
+    // Try to fabricate an uneven number.
     sal_uInt16 nStrFmtCnt = (( pFldTypes->Count() / 7 ) + 1 ) * 7;
     SwHash** pHashStrTbl = new SwHash*[ nStrFmtCnt ];
     memset( pHashStrTbl, 0, sizeof( _HashStr* ) * nStrFmtCnt );
 
     {
         const SwFieldType* pFldType;
-        // gesondert behandeln:
+        // process seperately:
         for( n = pFldTypes->Count(); n; )
             switch( ( pFldType = (*pFldTypes)[ --n ] )->Which() )
             {
             case RES_USERFLD:
                 {
-                    // Eintrag vorhanden ?
+                    // Entry present?
                     sal_uInt16 nPos;
                     const String& rNm = pFldType->GetName();
                     String sExpand(((SwUserFieldType*)pFldType)->Expand(nsSwGetSetExpType::GSE_STRING, 0, 0));
                     SwHash* pFnd = Find( rNm, pHashStrTbl, nStrFmtCnt, &nPos );
                     if( pFnd )
-                        // Eintrag in der HashTabelle aendern ??
+                        // modify entry in the hash table
                         ((_HashStr*)pFnd)->aSetStr = sExpand;
                     else
-                        // neuen Eintrag einfuegen
+                        // insert the new entry
                         *(pHashStrTbl + nPos ) = new _HashStr( rNm, sExpand,
                                                 (_HashStr*)*(pHashStrTbl + nPos) );
                 }
@@ -1292,12 +1286,12 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
             }
     }
 
-    // Ok, das Array ist soweit mit allen Feldern gefuellt, dann rechne mal
+    // The array is filled with all fields; start calculation.
     SwCalc aCalc( *this );
 
     String sDBNumNm( SwFieldType::GetTypeStr( TYP_DBSETNUMBERFLD ) );
 
-    // aktuelle Datensatznummer schon vorher einstellen
+    // already set the current record number
     SwNewDBMgr* pMgr = GetNewDBMgr();
     pMgr->CloseAll(sal_False);
 
@@ -1319,7 +1313,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         SwTxtFld* pTxtFld = (SwTxtFld*)(*ppSortLst)->GetFld();
         if( !pTxtFld )
         {
-            OSL_ENSURE( !this, "was ist es denn nun" );
+            OSL_ENSURE( !this, "what's wrong now'" );
             continue;
         }
 
@@ -1336,7 +1330,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
             if(!aValue.IsVoidValue())
             {
                 pHFld->SetValue( bValue );
-                // Feld Evaluieren
+                // evaluate field
                 pHFld->Evaluate(this);
             }
         }
@@ -1362,7 +1356,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         break;
         case RES_DBFLD:
         {
-            // Feld Evaluieren
+            // evaluate field
             ((SwDBField*)pFld)->Evaluate();
 
             SwDBData aTmpDBData(((SwDBField*)pFld)->GetDBData());
@@ -1372,25 +1366,25 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
 
             const String& rName = pFld->GetTyp()->GetName();
 
-            // Wert fuer den Calculator setzen
-//JP 10.02.96: GetValue macht hier doch keinen Sinn
+            // Set value for Calculator
+//JP 10.02.96: GetValue doesn't make sense here
 //          ((SwDBField*)pFld)->GetValue();
 
 //!OK           aCalc.VarChange(aName, ((SwDBField*)pFld)->GetValue(aCalc));
 
-            // Eintrag in den HashTable eintragen
-            // Eintrag vorhanden ?
+            // Add entry to hash table
+            // Entry present?
             sal_uInt16 nPos;
             SwHash* pFnd = Find( rName, pHashStrTbl, nStrFmtCnt, &nPos );
             String const value(pFld->ExpandField(IsClipBoard()));
             if( pFnd )
             {
-                // Eintrag in der HashTabelle aendern
+                // Modify entry in the hash table
                 static_cast<_HashStr*>(pFnd)->aSetStr = value;
             }
             else
             {
-                // neuen Eintrag einfuegen
+                // insert new entry
                 *(pHashStrTbl + nPos ) = new _HashStr( rName,
                     value, static_cast<_HashStr *>(*(pHashStrTbl + nPos)));
             }
@@ -1399,7 +1393,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         case RES_GETEXPFLD:
         case RES_SETEXPFLD:
         {
-            if( nsSwGetSetExpType::GSE_STRING & pFld->GetSubType() )        // String Ersetzung
+            if( nsSwGetSetExpType::GSE_STRING & pFld->GetSubType() )        // replace String
             {
                 if( RES_GETEXPFLD == nWhich )
                 {
@@ -1416,38 +1410,38 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
                 else
                 {
                     SwSetExpField* pSFld = (SwSetExpField*)pFld;
-                    // ist die "Formel" ein Feld ??
+                    // is the "formula" a field?
                     LookString( pHashStrTbl, nStrFmtCnt,
                                 pSFld->GetFormula(), aNew );
 
-                    if( !aNew.Len() )               // nichts gefunden, dann ist die
-                        aNew = pSFld->GetFormula();     // Formel der neue Wert
+                    if( !aNew.Len() )               // nothing found then the formula is the new value
+                        aNew = pSFld->GetFormula();
 
-                    // nur ein spezielles FeldUpdaten ?
+                    // only update one field
                     if( !pUpdtFld || pUpdtFld == pTxtFld )
                         pSFld->ChgExpStr( aNew );
 
-                    // suche den Namen vom Feld
+                    // lookup the field's name
                     aNew = ((SwSetExpFieldType*)pSFld->GetTyp())->GetSetRefName();
-                    // Eintrag vorhanden ?
+                    // Entry present?
                     sal_uInt16 nPos;
                     SwHash* pFnd = Find( aNew, pHashStrTbl, nStrFmtCnt, &nPos );
                     if( pFnd )
-                        // Eintrag in der HashTabelle aendern
+                        // Modify entry in the hash table
                         ((_HashStr*)pFnd)->aSetStr = pSFld->GetExpStr();
                     else
-                        // neuen Eintrag einfuegen
+                        // insert new entry
                         *(pHashStrTbl + nPos ) = pFnd = new _HashStr( aNew,
                                         pSFld->GetExpStr(),
                                         (_HashStr*)*(pHashStrTbl + nPos) );
 
-                    // Erweiterung fuers Rechnen mit Strings
+                    // Extension for calculation with Strings
                     SwSbxValue aValue;
                     aValue.PutString( ((_HashStr*)pFnd)->aSetStr );
                     aCalc.VarChange( aNew, aValue );
                 }
             }
-            else            // Formel neu berechnen
+            else            // recalculate formula
             {
                 if( RES_GETEXPFLD == nWhich )
                 {
@@ -1475,7 +1469,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
                         const sal_uInt8 nLvl = pSFldTyp->GetOutlineLvl();
                         if( MAXLEVEL > nLvl )
                         {
-                            // dann teste, ob die Nummer neu aufsetzen muss
+                            // test if the Number needs to be updated
                             pSeqNd = GetNodes()[ (*ppSortLst)->GetNode() ];
 
                             const SwTxtNode* pOutlNd = pSeqNd->
@@ -1493,7 +1487,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
 
                     SwSbxValue aValue = aCalc.Calculate( aNew );
                     double nErg = aValue.GetDouble();
-                    // nur ein spezielles Feld updaten ?
+                    // only update one field
                     if( !aValue.IsVoidValue() && (!pUpdtFld || pUpdtFld == pTxtFld) )
                     {
                         pSFld->SetValue( nErg );
@@ -1506,23 +1500,23 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         }
         } // switch
 
-        pFmtFld->ModifyNotification( 0, 0 );        // Formatierung anstossen
+        pFmtFld->ModifyNotification( 0, 0 );        // trigger formatting
 
-        if( pUpdtFld == pTxtFld )       // sollte nur dieses geupdatet werden
+        if( pUpdtFld == pTxtFld )       // if only this one is updated
         {
-            if( RES_GETEXPFLD == nWhich ||      // nur GetFeld oder
+            if( RES_GETEXPFLD == nWhich ||      // only GetField or
                 RES_HIDDENTXTFLD == nWhich ||   // HiddenTxt?
                 RES_HIDDENPARAFLD == nWhich)    // HiddenParaFld?
-                break;                          // beenden
-            pUpdtFld = 0;                       // ab jetzt alle Updaten
+                break;                          // quit
+            pUpdtFld = 0;                       // update all from here on
         }
     }
 
     pMgr->CloseAll(sal_False);
-    // HashTabelle wieder loeschen
+    // delete hash table
     ::DeleteHashTable( pHashStrTbl, nStrFmtCnt );
 
-    // Referenzfelder updaten
+    // update reference fields
     if( bUpdRefFlds )
         UpdateRefFlds(NULL);
 
@@ -1545,7 +1539,7 @@ void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
 
     if( rDBFld.GetRealDBData().sDataSource.getLength() )
     {
-        // Eine bestimmte Datenbank bearbeiten
+        // Edit a certain database
         if( RES_DBNEXTSETFLD == nFldType )
             ((SwDBNextSetField&)rDBFld).Evaluate(this);
         else
@@ -1563,9 +1557,9 @@ void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
     }
 }
 
-void SwDoc::_InitFieldTypes()       // wird vom CTOR gerufen!!
+void SwDoc::_InitFieldTypes()       // is being called by the CTOR
 {
-    // Feldtypen
+    // Field types
     sal_uInt16 nFldType = 0;
     pFldTypes->Insert( new SwDateTimeFieldType(this), nFldType++ );
     pFldTypes->Insert( new SwChapterFieldType, nFldType++ );
@@ -1596,10 +1590,10 @@ void SwDoc::_InitFieldTypes()       // wird vom CTOR gerufen!!
     pFldTypes->Insert( new SwCombinedCharFieldType, nFldType++ );
     pFldTypes->Insert( new SwDropDownFieldType, nFldType++ );
 
-    // Types muessen am Ende stehen !!
-    // Im InsertFldType wird davon ausgegangen !!!!
-    // MIB 14.04.95: Im Sw3StringPool::Setup (sw3imp.cxx) und
-    //               lcl_sw3io_InSetExpField (sw3field.cxx) jetzt auch
+    // Types have to be at the end!
+    // We expect this in the InsertFldType!
+    // MIB 14.04.95: In Sw3StringPool::Setup (sw3imp.cxx) and
+    //               lcl_sw3io_InSetExpField (sw3field.cxx) now also
     pFldTypes->Insert( new SwSetExpFieldType(this,
                 SW_RESSTR(STR_POOLCOLL_LABEL_ABB), nsSwGetSetExpType::GSE_SEQ), nFldType++);
     pFldTypes->Insert( new SwSetExpFieldType(this,
@@ -1672,7 +1666,7 @@ void SwDoc::SetInitDBFields( sal_Bool b )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Alle von Feldern verwendete Datenbanken herausfinden
+    Description: Get all databases that are used by fields
  --------------------------------------------------------------------*/
 String lcl_DBDataToString(const SwDBData& rData)
 {
@@ -1740,7 +1734,7 @@ void SwDoc::GetAllUsedDB( SvStringsDtor& rDBNameList,
             case RES_DBNEXTSETFLD:
                 AddUsedDBToList( rDBNameList,
                                 lcl_DBDataToString(((SwDBNameInfField*)pFld)->GetRealDBData() ));
-                // kein break  // JP: ist das so richtig ??
+                // no break  // JP: is that right like that?
 
             case RES_HIDDENTXTFLD:
             case RES_HIDDENPARAFLD:
@@ -1794,7 +1788,7 @@ SvStringsDtor& SwDoc::FindUsedDBs( const SvStringsDtor& rAllDBNames,
             sFormel.GetChar( nPos + pStr->Len() ) == '.' &&
             (!nPos || !rCC.isLetterNumeric( sFormel, nPos - 1 )))
         {
-            // Tabellenname suchen
+            // Look up table name
             xub_StrLen nEndPos;
             nPos += pStr->Len() + 1;
             if( STRING_NOTFOUND != (nEndPos = sFormel.Search('.', nPos)) )
@@ -1918,7 +1912,7 @@ void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
                     ((SwDBNameInfField*)pFld)->SetDBData(aNewDBData);
                     bExpand = sal_True;
                 }
-                // kein break;
+                // no break;
             case RES_HIDDENTXTFLD:
             case RES_HIDDENPARAFLD:
                 sFormel = pFld->GetPar1();
@@ -2020,7 +2014,7 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
         /*1*/   RES_AUTHORFLD,
         /*2*/   RES_EXTUSERFLD,
         /*3*/   RES_FILENAMEFLD,
-        /*4*/   RES_DATETIMEFLD };  // MUSS am Ende stehen!!
+        /*4*/   RES_DATETIMEFLD };  // MUST be at the end!
 
     sal_uInt16 nStt = bOnlyTimeDate ? 4 : 0;
 
@@ -2094,7 +2088,7 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
                     break;
                 }
 
-                // Formatierung anstossen
+                // Trigger formatting
                 if( bChgd )
                     pFld->ModifyNotification( 0, 0 );
             }
@@ -2107,11 +2101,11 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
 
 bool SwDoc::SetFieldsDirty( bool b, const SwNode* pChk, sal_uLong nLen )
 {
-    // teste ggfs. mal, ob die angegbenen Nodes ueberhaupt Felder beinhalten.
-    // wenn nicht, braucht das Flag nicht veraendert werden.
+    // See if the supplied nodes actually contain fields.
+    // If they don't, the flag doesn't need to be changed.
     sal_Bool bFldsFnd = sal_False;
     if( b && pChk && !GetUpdtFlds().IsFieldsDirty() && !IsInDtor()
-        // ?? was ist mit Undo, da will man es doch auch haben !!
+        // ?? what's up with Undo, this is also wanted there!
         /*&& &pChk->GetNodes() == &GetNodes()*/ )
     {
         b = sal_False;
@@ -2125,7 +2119,7 @@ bool SwDoc::SetFieldsDirty( bool b, const SwNode* pChk, sal_uLong nLen )
             if( pTNd )
             {
                 if( pTNd->GetAttrOutlineLevel() != 0 )
-                    // Kapitelfelder aktualisieren
+                    // update chapter fields
                     b = sal_True;
                 else if( pTNd->GetpSwpHints() && pTNd->GetSwpHints().Count() )
                     for( sal_uInt16 n = 0, nEnd = pTNd->GetSwpHints().Count();
@@ -2179,7 +2173,7 @@ void SwDocUpdtFld::InsDelFldInFldLst( sal_Bool bIns, const SwTxtFld& rFld )
     case RES_DBNEXTSETFLD:
     case RES_DBSETNUMBERFLD:
     case RES_GETEXPFLD:
-        break;          // diese muessen ein-/ausgetragen werden!
+        break;          // these have to be added/removed!
 
     default:
         return;
@@ -2188,22 +2182,21 @@ void SwDocUpdtFld::InsDelFldInFldLst( sal_Bool bIns, const SwTxtFld& rFld )
     SetFieldsDirty( sal_True );
     if( !pFldSortLst )
     {
-        if( !bIns )             // keine Liste vorhanden und loeschen
-            return;             // dann nichts tun
+        if( !bIns )             // if list is present and deleted
+            return;             // don't do a thing
         pFldSortLst = new _SetGetExpFlds( 64, 16 );
     }
 
-    if( bIns )      // neu einfuegen:
+    if( bIns )      // insert anew:
         GetBodyNode( rFld, nWhich );
     else
     {
-        // ueber den pTxtFld Pointer suchen. Ist zwar eine Sortierte
-        // Liste, aber nach Node-Positionen sortiert. Bis dieser
-        // bestimmt ist, ist das Suchen nach dem Pointer schon fertig
+        // look up via the pTxtFld pointer. It is a sorted list, but it's sorted by node
+        // position. Until this is found, the search for the pointer is already done.
         for( sal_uInt16 n = 0; n < pFldSortLst->Count(); ++n )
             if( &rFld == (*pFldSortLst)[ n ]->GetPointer() )
                 pFldSortLst->DeleteAndDestroy( n--, 1 );
-                // ein Feld kann mehrfach vorhanden sein!
+                // one field can occur multiple times
     }
 }
 
@@ -2216,7 +2209,7 @@ void SwDocUpdtFld::MakeFldList( SwDoc& rDoc, int bAll, int eGetMode )
 
 void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
 {
-    // neue Version: gehe ueber alle Felder vom Attribut-Pool
+    // new version: walk all fields of the attribute pool
     if( pFldSortLst )
         delete pFldSortLst;
     pFldSortLst = new _SetGetExpFlds( 64, 16 );
@@ -2234,12 +2227,11 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
     ///         have to be known in order to insert the hide condition as a new
     ///         expression field into the sorted field list (<pFldSortLst>).
     if ( eGetMode == GETFLD_ALL )
-    // zuerst die Bereiche einsammeln. Alle die ueber Bedingung
-    // gehiddet sind, wieder mit Frames versorgen, damit die darin
-    // enthaltenen Felder richtig einsortiert werden!!!
+    // Collect the ranges first. Supply all with frames, which are hidden by condition,
+    // so that the contained fields are not sorted.
     {
-        // damit die Frames richtig angelegt werden, muessen sie in der
-        // Reihenfolgen von oben nach unten expandiert werden
+        // In order for the frames to be created the right way, they have to be expanded
+        // from top to bottom
         std::vector<sal_uLong> aTmpArr;
         SwSectionFmts& rArr = rDoc.GetSections();
         SwSectionNode* pSectNd;
@@ -2260,23 +2252,22 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         }
         std::sort(aTmpArr.begin(), aTmpArr.end());
 
-        // erst alle anzeigen, damit die Frames vorhanden sind. Mit deren
-        // Position wird das BodyAnchor ermittelt.
-        // Dafuer erst den ContentBereich, dann die Sonderbereiche!!!
+        // Display all first so that we have frames. The BodyAnchor is defined by that.
+        // First the ContentArea, then the special areas!
         for (sal_uInt16 n = nArrStt; n < aTmpArr.size(); ++n)
         {
             pSectNd = rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode();
-            OSL_ENSURE( pSectNd, "Wo ist mein SectionNode" );
+            OSL_ENSURE( pSectNd, "Where is my SectionNode" );
             pSectNd->GetSection().SetCondHidden( sal_False );
         }
         for (sal_uInt16 n = 0; n < nArrStt; ++n)
         {
             pSectNd = rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode();
-            OSL_ENSURE( pSectNd, "Wo ist mein SectionNode" );
+            OSL_ENSURE( pSectNd, "Where is my SectionNode" );
             pSectNd->GetSection().SetCondHidden( sal_False );
         }
 
-        // so, erst jetzt alle sortiert in die Liste eintragen
+        // add all to the list so that they are sorted
         for (sal_uInt16 n = 0; n < aTmpArr.size(); ++n)
         {
             GetBodyNode( *rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode() );
@@ -2337,7 +2328,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                         break;
 
                     pFormel = 0;
-                    // Formatierung anstossen
+                    // trigger formatting
                     ((SwFmtFld*)pFmtFld)->ModifyNotification( 0, 0 );
                 }
                 break;
@@ -2355,9 +2346,9 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
 
                     pFormel = 0;
 
-                    // Feld Evaluieren
+                    // evaluate field
                     ((SwHiddenTxtField*)pFld)->Evaluate(&rDoc);
-                    // Formatierung anstossen
+                    // trigger formatting
                     ((SwFmtFld*)pFmtFld)->ModifyNotification( 0, 0 );
                 }
                 break;
@@ -2405,7 +2396,7 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, sal_uInt16 nFldWhich )
     const SwTxtNode& rTxtNd = rTFld.GetTxtNode();
     const SwDoc& rDoc = *rTxtNd.GetDoc();
 
-    // immer den ersten !! (in Tab-Headline, Kopf-/Fuss )
+    // always the first! (in tab headline, header-/footer)
     Point aPt;
     const SwCntntFrm* pFrm = rTxtNd.getLayoutFrm( rDoc.GetCurrentLayout(), &aPt, 0, sal_False );
 
@@ -2414,7 +2405,7 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, sal_uInt16 nFldWhich )
 
     if( !pFrm || pFrm->IsInDocBody() )
     {
-        // einen Index fuers bestimmen vom TextNode anlegen
+        // create index to determine the TextNode
         SwNodeIndex aIdx( rTxtNd );
         bIsInBody = rDoc.GetNodes().GetEndOfExtras().GetIndex() < aIdx.GetIndex();
 
@@ -2427,7 +2418,7 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, sal_uInt16 nFldWhich )
     }
     else
     {
-        // einen Index fuers bestimmen vom TextNode anlegen
+        // create index to determine the TextNode
         SwPosition aPos( rDoc.GetNodes().GetEndOfPostIts() );
 #if OSL_DEBUG_LEVEL > 1
         OSL_ENSURE( GetBodyTxtNode( rDoc, aPos, *pFrm ), "wo steht das Feld" );
@@ -2437,7 +2428,7 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, sal_uInt16 nFldWhich )
         pNew = new _SetGetExpFld( aPos.nNode, &rTFld, &aPos.nContent );
     }
 
-    // bei GetExp.-/DB.-Felder immer das BodyTxtFlag setzen
+    // always set the BodyTxtFlag in GetExp or DB fields
     if( RES_GETEXPFLD == nFldWhich )
     {
         SwGetExpField* pGetFld = (SwGetExpField*)rTFld.GetFld().GetFld();
@@ -2463,15 +2454,15 @@ void SwDocUpdtFld::GetBodyNode( const SwSectionNode& rSectNd )
     {
         do {            // middle check loop
 
-            // dann muessen wir uns mal den Anker besorgen!
-            // einen Index fuers bestimmen vom TextNode anlegen
+            // we need to get the anchor first
+            // create index to determine the TextNode
             SwPosition aPos( rSectNd );
-            SwCntntNode* pCNd = rDoc.GetNodes().GoNext( &aPos.nNode ); // zum naechsten ContentNode
+            SwCntntNode* pCNd = rDoc.GetNodes().GoNext( &aPos.nNode ); // to the next ContentNode
 
             if( !pCNd || !pCNd->IsTxtNode() )
                 break;
 
-            // immer den ersten !! (in Tab-Headline, Kopf-/Fuss )
+            // always the first! (in tab headline, header-/footer)
             Point aPt;
             const SwCntntFrm* pFrm = pCNd->getLayoutFrm( rDoc.GetCurrentLayout(), &aPt, 0, sal_False );
             if( !pFrm )
@@ -2512,7 +2503,7 @@ void SwDocUpdtFld::InsertFldType( const SwFieldType& rType )
     if( sFldName.Len() )
     {
         SetFieldsDirty( sal_True );
-        // suchen und aus der HashTabelle entfernen
+        // look up and remove from the hash table
         GetAppCharClass().toLower( sFldName );
         sal_uInt16 n;
 
@@ -2543,7 +2534,7 @@ void SwDocUpdtFld::RemoveFldType( const SwFieldType& rType )
     if( sFldName.Len() )
     {
         SetFieldsDirty( sal_True );
-        // suchen und aus der HashTabelle entfernen
+        // look up and remove from the hash table
         GetAppCharClass().toLower( sFldName );
         sal_uInt16 n;
 
@@ -2654,9 +2645,8 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
 
         case RES_DBFLD:
             {
-                // JP 10.02.96: ChgValue aufrufen, damit
-                //die Format- aenderung den ContentString
-                //richtig setzt
+                // JP 10.02.96: call ChgValue, so that the style change sets the
+                // ContentString correctly
                 SwDBField* pDBFld = (SwDBField*)pNewFld;
                 if (pDBFld->IsInitialized())
                     pDBFld->ChgValue( pDBFld->GetValue(), sal_True );
@@ -2664,14 +2654,13 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
                 pDBFld->ClearInitialized();
                 pDBFld->InitContent();
             }
-            // kein break;
+            // no break;
 
         default:
             pDstFmtFld->ModifyNotification( 0, pMsgHnt );
         }
 
-        // Die Felder die wir berechnen koennen werden hier expli.
-        // zum Update angestossen.
+        // The fields we can calculate here are being triggered for an update here explicitily.
         if( nFldWhich == RES_USERFLD )
             UpdateUsrFlds();
     }
