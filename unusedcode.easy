@@ -696,7 +696,6 @@ SfxMedium::GetHdl()
 SfxMedium::GetReferer() const
 SfxModuleArr_Impl::DeleteAndDestroy(unsigned short, unsigned short)
 SfxNavigatorWrapper::GetChildWindowId()
-SfxObjectVerbsControl::RegisterControl(unsigned short, SfxModule*)
 SfxOleDateProperty::SfxOleDateProperty(int, com::sun::star::util::Date const&)
 SfxOleString16Property::SfxOleString16Property(int, String const&)
 SfxOrganizeDlg_Impl::OkHdl(Button*)
