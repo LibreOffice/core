@@ -673,53 +673,53 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
     {
         nCurrentTable = sal::static_int_cast<sal_uInt16>(nTable);
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xIndex->getByIndex(nTable), uno::UNO_QUERY);
-        if (xDrawPageSupplier.is())
+        if (!xDrawPageSupplier.is())
+            continue;
+
+        uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage());
+        ScMyDrawPage aDrawPage;
+        aDrawPage.bHasForms = false;
+        aDrawPage.xDrawPage.set(xDrawPage);
+        pSharedData->AddDrawPage(aDrawPage, nTable);
+        uno::Reference<container::XIndexAccess> xShapesIndex(xDrawPage, uno::UNO_QUERY);
+        if (!xShapesIndex.is())
+            continue;
+
+        sal_Int32 nShapes = xShapesIndex->getCount();
+        for (sal_Int32 nShape = 0; nShape < nShapes; ++nShape)
         {
-            uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage());
-            ScMyDrawPage aDrawPage;
-            aDrawPage.bHasForms = false;
-            aDrawPage.xDrawPage.set(xDrawPage);
-            pSharedData->AddDrawPage(aDrawPage, nTable);
-            uno::Reference<container::XIndexAccess> xShapesIndex(xDrawPage, uno::UNO_QUERY);
-            if (xShapesIndex.is())
+            uno::Reference<drawing::XShape> xShape(xShapesIndex->getByIndex(nShape), uno::UNO_QUERY);
+            if (xShape.is())
             {
-                sal_Int32 nShapes = xShapesIndex->getCount();
-                for (sal_Int32 nShape = 0; nShape < nShapes; ++nShape)
+                uno::Reference<beans::XPropertySet> xShapeProp(xShape, uno::UNO_QUERY);
+                if( xShapeProp.is() )
                 {
-                    uno::Reference<drawing::XShape> xShape(xShapesIndex->getByIndex(nShape), uno::UNO_QUERY);
-                    if (xShape.is())
+                    sal_Int16 nLayerID = 0;
+                    if( xShapeProp->getPropertyValue(sLayerID) >>= nLayerID )
                     {
-                        uno::Reference<beans::XPropertySet> xShapeProp(xShape, uno::UNO_QUERY);
-                        if( xShapeProp.is() )
+                        if( (nLayerID == SC_LAYER_INTERN) || (nLayerID == SC_LAYER_HIDDEN) )
+                            CollectInternalShape(xShape);
+                        else
                         {
-                            sal_Int16 nLayerID = 0;
-                            if( xShapeProp->getPropertyValue(sLayerID) >>= nLayerID )
+                            ++nShapesCount;
+                            if (SvxShape* pShapeImp = SvxShape::getImplementation(xShape))
                             {
-                                if( (nLayerID == SC_LAYER_INTERN) || (nLayerID == SC_LAYER_HIDDEN) )
-                                    CollectInternalShape(xShape);
-                                else
+                                if (SdrObject *pSdrObj = pShapeImp->GetSdrObject())
                                 {
-                                    ++nShapesCount;
-                                    if (SvxShape* pShapeImp = SvxShape::getImplementation(xShape))
+                                    if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjData( pSdrObj ))
                                     {
-                                        if (SdrObject *pSdrObj = pShapeImp->GetSdrObject())
-                                        {
-                                            if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjData( pSdrObj ))
-                                            {
-                                                ScMyShape aMyShape;
-                                                aMyShape.aAddress = pAnchor->maStart;
-                                                aMyShape.aEndAddress = pAnchor->maEnd;
-                                                aMyShape.nEndX = pAnchor->maEndOffset.X();
-                                                aMyShape.nEndY = pAnchor->maEndOffset.Y();
-                                                aMyShape.xShape = xShape;
-                                                pSharedData->AddNewShape(aMyShape);
-                                                pSharedData->SetLastColumn(nTable, pAnchor->maStart.Col());
-                                                pSharedData->SetLastRow(nTable, pAnchor->maStart.Row());
-                                            }
-                                            else
-                                                pSharedData->AddTableShape(nTable, xShape);
-                                        }
+                                        ScMyShape aMyShape;
+                                        aMyShape.aAddress = pAnchor->maStart;
+                                        aMyShape.aEndAddress = pAnchor->maEnd;
+                                        aMyShape.nEndX = pAnchor->maEndOffset.X();
+                                        aMyShape.nEndY = pAnchor->maEndOffset.Y();
+                                        aMyShape.xShape = xShape;
+                                        pSharedData->AddNewShape(aMyShape);
+                                        pSharedData->SetLastColumn(nTable, pAnchor->maStart.Col());
+                                        pSharedData->SetLastRow(nTable, pAnchor->maStart.Row());
                                     }
+                                    else
+                                        pSharedData->AddTableShape(nTable, xShape);
                                 }
                             }
                         }
