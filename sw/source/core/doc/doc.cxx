@@ -1395,7 +1395,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
     const sal_uInt16 nPostItCount = rData.HasPostItData() ? rData.m_pPostItFields->Count() : 0;
     if (nPostItMode != POSTITS_NONE && nPostItCount > 0)
     {
-        SET_CURR_SHELL( rData.m_pPostItShell );
+        SET_CURR_SHELL( rData.m_pPostItShell.get() );
 
         // clear document and move to end of it
         SwPaM aPam( rData.m_pPostItDoc->GetNodes().GetEndOfContent() );

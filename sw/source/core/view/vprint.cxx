@@ -505,7 +505,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
             rPrintData.GetRenderData().GetValidPagesSet().count( nPage ) == 1,
             "ViewShell::PrintOrPDFExport: nPage not valid" );
         ViewShell *const pViewSh2 = (nPage < 0)
-                ? rPrintData.GetRenderData().m_pPostItShell // post-it page
+                ? rPrintData.GetRenderData().m_pPostItShell.get()// post-it page
                 : pShell; // a 'regular' page, not one from the post-it doc
 
         SwPageFrm const*const pStPage =

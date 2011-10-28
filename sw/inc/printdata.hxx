@@ -33,6 +33,8 @@
 #include <rtl/ustring.hxx>
 #include <vcl/print.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 #include <set>
 #include <map>
 #include <vector>
@@ -250,9 +252,10 @@ class SwRenderData
 public:
 
     // PostIt relevant data
-    _SetGetExpFlds *    m_pPostItFields;    // an array of "_SetGetExpFld *" sorted by page and line numbers
-    SwDoc *             m_pPostItDoc;
-    ViewShell *         m_pPostItShell;
+    /// an array of "_SetGetExpFld *" sorted by page and line numbers
+    ::boost::scoped_ptr<_SetGetExpFlds> m_pPostItFields;
+    ::boost::scoped_ptr<SwDoc>          m_pPostItDoc;
+    ::boost::scoped_ptr<ViewShell>      m_pPostItShell;
 
 public:
     SwRenderData();
