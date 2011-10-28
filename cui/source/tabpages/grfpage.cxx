@@ -42,6 +42,7 @@
 #include <svx/dialogs.hrc> // for RID_SVXPAGE_GRFCROP
 
 #define CM_1_TO_TWIP        567
+#define TWIP_TO_INCH        1440
 
 
 inline long lcl_GetValue( MetricField& rMetric, FieldUnit eUnit )
@@ -214,8 +215,13 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, sal_False, &pItem ) )
     {
         const Graphic* pGrf = ((SvxBrushItem*)pItem)->GetGraphic();
-        if( pGrf )
+        if( pGrf ) {
             aOrigSize = GetGrfOrigSize( *pGrf );
+            if (pGrf->GetType() == GRAPHIC_BITMAP && aOrigSize.Width() && aOrigSize.Height()) {
+                Bitmap aBitmap = pGrf->GetBitmap();
+                aOrigPixelSize = aBitmap.GetSizePixel();
+            }
+        }
 
         if( aOrigSize.Width() && aOrigSize.Height() )
         {
@@ -360,6 +366,10 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
         {
             aExampleWN.SetGraphic( *pGrf );
             aOrigSize = GetGrfOrigSize( *pGrf );
+            if (pGrf->GetType() == GRAPHIC_BITMAP && aOrigSize.Width() > 1 && aOrigSize.Height() > 1) {
+                Bitmap aBitmap = pGrf->GetBitmap();
+                aOrigPixelSize = aBitmap.GetSizePixel();
+            }
             aExampleWN.SetFrameSize(aOrigSize);
             GraphicHasChanged( aOrigSize.Width() && aOrigSize.Height() );
             CalcMinMaxBorder();
@@ -664,9 +674,25 @@ void SvxGrfCropPage::GraphicHasChanged( sal_Bool bFound )
         aFld.SetValue( aFld.Normalize( aOrigSize.Width() ), eUnit );
         String sTemp = aFld.GetText();
         aFld.SetValue( aFld.Normalize( aOrigSize.Height() ), eUnit );
-        sTemp += UniString::CreateFromAscii(" x ");
+        // multiplication sign (U+00D7)
+        sTemp += UniString("\xc3\x97", RTL_TEXTENCODING_UTF8);
         sTemp += aFld.GetText();
-        aOrigSizeFT.SetText(sTemp);
+
+        if ( aOrigPixelSize.Width() && aOrigPixelSize.Height() ) {
+             int ax = int(floor((float)aOrigPixelSize.Width() /
+                        ((float)aOrigSize.Width()/TWIP_TO_INCH)+0.5));
+             int ay = int(floor((float)aOrigPixelSize.Height() /
+                        ((float)aOrigSize.Height()/TWIP_TO_INCH)+0.5));
+             sTemp += UniString::CreateFromAscii(" ");
+             sTemp += CUI_RESSTR( STR_PPI );
+             String sPPI = UniString::CreateFromInt32(ax);
+             if (abs(ax - ay) > 1) {
+                sPPI += UniString("\xc3\x97", RTL_TEXTENCODING_UTF8);
+                sPPI += UniString::CreateFromInt32(ay);
+             }
+             sTemp.SearchAndReplaceAscii("%1", sPPI);
+        }
+        aOrigSizeFT.SetText( sTemp );
     }
     aLeftFT         .Enable(bFound);
     aLeftMF         .Enable(bFound);

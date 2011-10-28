@@ -304,40 +304,8 @@ TabPage RID_SVXPAGE_GRFCROP
     };
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+String STR_PPI
+{
+    Text [ x-comment ] = "PPI is pixel per inch, %1 is a number" ;
+    Text [ en-US ] = "(%1 PPI)" ;
+};

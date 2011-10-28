@@ -97,6 +97,7 @@ class SvxGrfCropPage : public SfxTabPage
     Timer           aTimer;
     String          aGraphicName;
     Size            aOrigSize;
+    Size            aOrigPixelSize;
     Size            aPageSize;
     const MetricField*  pLastCropField;
     long            nOldWidth;

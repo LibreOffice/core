@@ -49,5 +49,4 @@
 #define RB_SIZECONST        23
 #define RB_ZOOMCONST        24
 #define WN_BSP              25
-
-
+#define STR_PPI             2600
