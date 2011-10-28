@@ -25,12 +25,11 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "libwriterperfect_filter.hxx"
+#include "FilterInternal.hxx"
 
 #include "OdgGenerator.hxx"
 #include "DocumentElement.hxx"
 #include "OdfDocumentHandler.hxx"
-#include "FilterInternal.hxx"
 #include "TextRunStyle.hxx"
 #include "FontStyle.hxx"
 #include <locale.h>

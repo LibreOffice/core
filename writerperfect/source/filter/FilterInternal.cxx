@@ -1,5 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/* libwriterperfect_filter.hxx: define basic functions for libwriterperfect/fileter
+/* FilterInternal.hxx: define basic functions for libwriterperfect/fileter
  *
  * Copyright (C) 2002-2004 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2004 Net Integration Technologies, Inc. (http://www.net-itech.com)
@@ -29,7 +28,7 @@
 
 #include <libwpd/WPXPropertyList.h>
 
-#include "libwriterperfect_filter.hxx"
+#include "FilterInternal.hxx"
 
 WPXString propListToStyleKey(const WPXPropertyList &xPropList)
 {
@@ -44,5 +43,3 @@ WPXString propListToStyleKey(const WPXPropertyList &xPropList)
 
     return sKey;
 }
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,7 +29,7 @@
 #ifndef _STYLE_H
 #define _STYLE_H
 #include <libwpd/libwpd.h>
-#include "libwriterperfect_filter.hxx"
+
 #include "DocumentElement.hxx"
 
 class TopLevelElementStyle

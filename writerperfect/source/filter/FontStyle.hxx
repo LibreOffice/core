@@ -31,8 +31,9 @@
 
 #include <libwpd/libwpd.h>
 
+#include "FilterInternal.hxx"
+
 #include "Style.hxx"
-#include "WriterProperties.hxx"
 
 class FontStyle : public Style
 {
@@ -53,7 +54,7 @@ private:
 class FontStyleManager : public StyleManager
 {
 public:
-    FontStyleManager() : mHash() {}
+    FontStyleManager() : mStyleHash() {}
     virtual ~FontStyleManager()
     {
         FontStyleManager::clean();
@@ -71,7 +72,8 @@ public:
 
 
 protected:
-    std::map<WPXString, FontStyle *, ltstr> mHash;
+    // style name -> SpanStyle
+    std::map<WPXString, shared_ptr<FontStyle>, ltstr> mStyleHash;
 };
 
 #endif

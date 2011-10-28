@@ -35,6 +35,8 @@
 
 #include <libwpd/libwpd.h>
 
+#include "FilterInternal.hxx"
+
 #include "Style.hxx"
 
 class TagOpenElement;
@@ -71,7 +73,7 @@ private:
 class ParagraphStyleManager : public StyleManager
 {
 public:
-    ParagraphStyleManager() : mHash() {}
+    ParagraphStyleManager() : mNameHash(), mStyleHash() {}
     virtual ~ParagraphStyleManager()
     {
         ParagraphStyleManager::clean();
@@ -82,22 +84,27 @@ public:
     Note: using S%i as new name*/
     WPXString findOrAdd(const WPXPropertyList &xPropList, const WPXPropertyListVector &tabStops);
 
+    /* returns the style corresponding to a given name ( if it exists ) */
+    shared_ptr<ParagraphStyle> const get(const WPXString &name) const;
+
     virtual void clean();
     virtual void write(OdfDocumentHandler *) const;
 
 
 protected:
     // return a unique key
-    WPXString getKey(WPXPropertyList const &xPropList, WPXPropertyListVector const &tabStops) const;
+    WPXString getKey(const WPXPropertyList &xPropList, const WPXPropertyListVector &tabStops) const;
 
-    // paragraph styles
-    std::map<WPXString, ParagraphStyle *, ltstr> mHash;
+    // hash key -> name
+    std::map<WPXString, WPXString, ltstr> mNameHash;
+    // style name -> paragraph style
+    std::map<WPXString, shared_ptr<ParagraphStyle>, ltstr> mStyleHash;
 };
 
 class SpanStyleManager : public StyleManager
 {
 public:
-    SpanStyleManager() : mHash() {}
+    SpanStyleManager() : mNameHash(), mStyleHash() {}
     virtual ~SpanStyleManager()
     {
         SpanStyleManager::clean();
@@ -106,15 +113,19 @@ public:
     /* create a new style if it does not exists. In all case, returns the name of the style
 
     Note: using Span%i as new name*/
-    WPXString findOrAdd(WPXPropertyList const &xPropList);
+    WPXString findOrAdd(const WPXPropertyList &xPropList);
 
+    /* returns the style corresponding to a given name ( if it exists ) */
+    shared_ptr<SpanStyle> const get(const WPXString &name) const;
 
     virtual void clean();
     virtual void write(OdfDocumentHandler *) const;
 
 protected:
-    // span styles
-    std::map<WPXString, SpanStyle *, ltstr> mHash;
+    // hash key -> style name
+    std::map<WPXString, WPXString, ltstr> mNameHash;
+    // style name -> SpanStyle
+    std::map<WPXString, shared_ptr<SpanStyle>, ltstr> mStyleHash;
 };
 #endif
 

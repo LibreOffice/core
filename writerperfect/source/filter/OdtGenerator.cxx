@@ -35,7 +35,6 @@
 #include <stack>
 #include <string>
 
-#include "libwriterperfect_filter.hxx"
 #include "OdtGenerator.hxx"
 #include "DocumentElement.hxx"
 #include "TextRunStyle.hxx"
@@ -45,7 +44,6 @@
 #include "SectionStyle.hxx"
 #include "TableStyle.hxx"
 #include "FilterInternal.hxx"
-#include "WriterProperties.hxx"
 #include "InternalHandler.hxx"
 
 // the state we use for writing the final document
@@ -122,7 +120,6 @@ public:
 
     OdfEmbeddedObject _findEmbeddedObjectHandler(const WPXString &mimeType);
 
-    WPXInputStream *mpInput;
     OdfDocumentHandler *mpHandler;
     bool mbUsed; // whether or not it has been before (you can only use me once!)
 
@@ -185,7 +182,6 @@ public:
 };
 
 OdtGeneratorPrivate::OdtGeneratorPrivate(OdfDocumentHandler *pHandler, const OdfStreamType streamType) :
-    mpInput(0),
     mpHandler(pHandler),
     mbUsed(false),
     mWriterDocumentStates(),
@@ -966,28 +962,27 @@ void OdtGenerator::openTable(const WPXPropertyList &propList, const WPXPropertyL
 
 void OdtGenerator::openTableRow(const WPXPropertyList &propList)
 {
+    if (mpImpl->mWriterDocumentStates.top().mbInNote)
+        return;
     if (!mpImpl->mpCurrentTableStyle)
     {
         WRITER_DEBUG_MSG(("OdtGenerator::openTableRow called with no table\n"));
         return;
     }
-    if (!mpImpl->mWriterDocumentStates.top().mbInNote)
+    if (propList["libwpd:is-header-row"] && (propList["libwpd:is-header-row"]->getInt()))
     {
-        if (propList["libwpd:is-header-row"] && (propList["libwpd:is-header-row"]->getInt()))
-        {
-            mpImpl->mpCurrentContentElements->push_back(new TagOpenElement("table:table-header-rows"));
-            mpImpl->mWriterDocumentStates.top().mbHeaderRow = true;
-        }
-
-        WPXString sTableRowStyleName;
-        sTableRowStyleName.sprintf("%s.Row%i", mpImpl->mpCurrentTableStyle->getName().cstr(), mpImpl->mpCurrentTableStyle->getNumTableRowStyles());
-        TableRowStyle *pTableRowStyle = new TableRowStyle(propList, sTableRowStyleName.cstr());
-        mpImpl->mpCurrentTableStyle->addTableRowStyle(pTableRowStyle);
-
-        TagOpenElement *pTableRowOpenElement = new TagOpenElement("table:table-row");
-        pTableRowOpenElement->addAttribute("table:style-name", sTableRowStyleName);
-        mpImpl->mpCurrentContentElements->push_back(pTableRowOpenElement);
+        mpImpl->mpCurrentContentElements->push_back(new TagOpenElement("table:table-header-rows"));
+        mpImpl->mWriterDocumentStates.top().mbHeaderRow = true;
     }
+
+    WPXString sTableRowStyleName;
+    sTableRowStyleName.sprintf("%s.Row%i", mpImpl->mpCurrentTableStyle->getName().cstr(), mpImpl->mpCurrentTableStyle->getNumTableRowStyles());
+    TableRowStyle *pTableRowStyle = new TableRowStyle(propList, sTableRowStyleName.cstr());
+    mpImpl->mpCurrentTableStyle->addTableRowStyle(pTableRowStyle);
+
+    TagOpenElement *pTableRowOpenElement = new TagOpenElement("table:table-row");
+    pTableRowOpenElement->addAttribute("table:style-name", sTableRowStyleName);
+    mpImpl->mpCurrentContentElements->push_back(pTableRowOpenElement);
 }
 
 void OdtGenerator::closeTableRow()
@@ -1005,31 +1000,31 @@ void OdtGenerator::closeTableRow()
 
 void OdtGenerator::openTableCell(const WPXPropertyList &propList)
 {
+    if (mpImpl->mWriterDocumentStates.top().mbInNote)
+        return;
     if (!mpImpl->mpCurrentTableStyle)
     {
         WRITER_DEBUG_MSG(("OdtGenerator::openTableCell called with no table\n"));
         return;
     }
-    if (!mpImpl->mWriterDocumentStates.top().mbInNote)
-    {
-        WPXString sTableCellStyleName;
-        sTableCellStyleName.sprintf( "%s.Cell%i", mpImpl->mpCurrentTableStyle->getName().cstr(), mpImpl->mpCurrentTableStyle->getNumTableCellStyles());
-        TableCellStyle *pTableCellStyle = new TableCellStyle(propList, sTableCellStyleName.cstr());
-        mpImpl->mpCurrentTableStyle->addTableCellStyle(pTableCellStyle);
 
-        TagOpenElement *pTableCellOpenElement = new TagOpenElement("table:table-cell");
-        pTableCellOpenElement->addAttribute("table:style-name", sTableCellStyleName);
-        if (propList["table:number-columns-spanned"])
-            pTableCellOpenElement->addAttribute("table:number-columns-spanned",
-                                                propList["table:number-columns-spanned"]->getStr().cstr());
-        if (propList["table:number-rows-spanned"])
-            pTableCellOpenElement->addAttribute("table:number-rows-spanned",
-                                                propList["table:number-rows-spanned"]->getStr().cstr());
-        // pTableCellOpenElement->addAttribute("table:value-type", "string");
-        mpImpl->mpCurrentContentElements->push_back(pTableCellOpenElement);
+    WPXString sTableCellStyleName;
+    sTableCellStyleName.sprintf( "%s.Cell%i", mpImpl->mpCurrentTableStyle->getName().cstr(), mpImpl->mpCurrentTableStyle->getNumTableCellStyles());
+    TableCellStyle *pTableCellStyle = new TableCellStyle(propList, sTableCellStyleName.cstr());
+    mpImpl->mpCurrentTableStyle->addTableCellStyle(pTableCellStyle);
 
-        mpImpl->mWriterDocumentStates.top().mbTableCellOpened = true;
-    }
+    TagOpenElement *pTableCellOpenElement = new TagOpenElement("table:table-cell");
+    pTableCellOpenElement->addAttribute("table:style-name", sTableCellStyleName);
+    if (propList["table:number-columns-spanned"])
+        pTableCellOpenElement->addAttribute("table:number-columns-spanned",
+                                            propList["table:number-columns-spanned"]->getStr().cstr());
+    if (propList["table:number-rows-spanned"])
+        pTableCellOpenElement->addAttribute("table:number-rows-spanned",
+                                            propList["table:number-rows-spanned"]->getStr().cstr());
+    // pTableCellOpenElement->addAttribute("table:value-type", "string");
+    mpImpl->mpCurrentContentElements->push_back(pTableCellOpenElement);
+
+    mpImpl->mWriterDocumentStates.top().mbTableCellOpened = true;
 }
 
 void OdtGenerator::closeTableCell()

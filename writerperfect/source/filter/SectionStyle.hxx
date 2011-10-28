@@ -31,7 +31,6 @@
 #include <libwpd/WPXPropertyListVector.h>
 
 #include "Style.hxx"
-#include "WriterProperties.hxx"
 
 
 class SectionStyle : public Style

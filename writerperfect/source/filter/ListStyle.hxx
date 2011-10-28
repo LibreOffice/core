@@ -32,7 +32,6 @@
 #define WP6_NUM_LIST_LEVELS 8 // see WP6FileStructure.h (we shouldn't need to reference this)
 
 #include "Style.hxx"
-#include "WriterProperties.hxx"
 
 class DocumentElement;
 

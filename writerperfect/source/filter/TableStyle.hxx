@@ -32,7 +32,6 @@
 #include <vector>
 
 #include "Style.hxx"
-#include "WriterProperties.hxx"
 
 class DocumentElement;
 class OdfDocumentHandler;

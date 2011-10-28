@@ -25,8 +25,11 @@
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
+
+#include "FilterInternal.hxx"
+
 #include "FontStyle.hxx"
-#include "WriterProperties.hxx"
+
 #include "DocumentElement.hxx"
 
 FontStyle::FontStyle(const char *psName, const char *psFontFamily) : Style(psName),
@@ -51,19 +54,14 @@ void FontStyle::write(OdfDocumentHandler *pHandler) const
 
 void FontStyleManager::clean()
 {
-    for (std::map<WPXString, FontStyle *, ltstr>::iterator iter = mHash.begin();
-            iter != mHash.end(); ++iter)
-    {
-        delete(iter->second);
-    }
-    mHash.clear();
+    mStyleHash.clear();
 }
 
 void FontStyleManager::writeFontsDeclaration(OdfDocumentHandler *pHandler) const
 {
     TagOpenElement("office:font-face-decls").write(pHandler);
-    for (std::map<WPXString, FontStyle *, ltstr>::const_iterator iter = mHash.begin();
-            iter != mHash.end(); ++iter)
+    std::map<WPXString, shared_ptr<FontStyle>, ltstr>::const_iterator iter;
+    for (iter = mStyleHash.begin(); iter != mStyleHash.end(); iter++)
     {
         (iter->second)->write(pHandler);
     }
@@ -80,11 +78,13 @@ void FontStyleManager::writeFontsDeclaration(OdfDocumentHandler *pHandler) const
 
 WPXString FontStyleManager::findOrAdd(const char *psFontFamily)
 {
-    std::map<WPXString, FontStyle *, ltstr>::const_iterator iter = mHash.find(psFontFamily);
-    if (iter!=mHash.end()) return iter->second->getName();
+    std::map<WPXString, shared_ptr<FontStyle>, ltstr>::const_iterator iter =
+        mStyleHash.find(psFontFamily);
+    if (iter!=mStyleHash.end()) return psFontFamily;
 
     // ok create a new font
-    mHash[psFontFamily] = new FontStyle(psFontFamily, psFontFamily);
+    shared_ptr<FontStyle> font(new FontStyle(psFontFamily, psFontFamily));
+    mStyleHash[psFontFamily] = font;
     return psFontFamily;
 }
 
