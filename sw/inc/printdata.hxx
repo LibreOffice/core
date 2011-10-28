@@ -254,7 +254,7 @@ public:
     // PostIt relevant data
     /// an array of "_SetGetExpFld *" sorted by page and line numbers
     ::boost::scoped_ptr<_SetGetExpFlds> m_pPostItFields;
-    ::boost::scoped_ptr<SwDoc>          m_pPostItDoc;
+    /// this contains a SwDoc with the post-it content
     ::boost::scoped_ptr<ViewShell>      m_pPostItShell;
 
 public:
@@ -262,7 +262,7 @@ public:
     ~SwRenderData();
 
 
-    bool HasPostItData() const  { return m_pPostItShell != 0 && m_pPostItDoc != 0; }
+    bool HasPostItData() const  { return m_pPostItShell != 0; }
     void CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev );
     void DeletePostItData();
 

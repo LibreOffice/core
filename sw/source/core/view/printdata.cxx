@@ -64,7 +64,6 @@ SwRenderData::SwRenderData()
 SwRenderData::~SwRenderData()
 {
     OSL_ENSURE( !m_pPostItShell, "m_pPostItShell should already have been deleted" );
-    OSL_ENSURE( !m_pPostItDoc, "m_pPostItDoc should already have been deleted" );
     OSL_ENSURE( !m_pPostItFields, " should already have been deleted" );
 }
 
@@ -74,7 +73,6 @@ void SwRenderData::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, 
     DeletePostItData();
     m_pPostItFields.reset(new _SetGetExpFlds);
     lcl_GetPostIts( pDoc, m_pPostItFields.get() );
-    m_pPostItDoc.reset(new SwDoc);
 
     //!! Disable spell and grammar checking in the temporary document.
     //!! Otherwise the grammar checker might process it and crash if we later on
@@ -82,7 +80,7 @@ void SwRenderData::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, 
     SwViewOption  aViewOpt( *pViewOpt );
     aViewOpt.SetOnlineSpell( sal_False );
 
-    m_pPostItShell.reset(new ViewShell(*m_pPostItDoc, 0, &aViewOpt, pOutDev));
+    m_pPostItShell.reset(new ViewShell(*new SwDoc, 0, &aViewOpt, pOutDev));
 }
 
 
@@ -90,10 +88,10 @@ void SwRenderData::DeletePostItData()
 {
     if (HasPostItData())
     {
-        m_pPostItDoc->setPrinter( 0, false, false ); // So that the printer remains at the real DOC
+        // So that the printer remains at the real DOC
+        m_pPostItShell->GetDoc()->setPrinter( 0, false, false );
         m_pPostItShell.reset();
         m_pPostItFields.reset();
-        m_pPostItDoc.reset();
     }
 }
 

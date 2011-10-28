@@ -1398,11 +1398,12 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
         SET_CURR_SHELL( rData.m_pPostItShell.get() );
 
         // clear document and move to end of it
-        SwPaM aPam( rData.m_pPostItDoc->GetNodes().GetEndOfContent() );
+        SwDoc & rPostItDoc(*rData.m_pPostItShell->GetDoc());
+        SwPaM aPam(rPostItDoc.GetNodes().GetEndOfContent());
         aPam.Move( fnMoveBackward, fnGoDoc );
         aPam.SetMark();
         aPam.Move( fnMoveForward, fnGoDoc );
-        rData.m_pPostItDoc->DeleteRange( aPam );
+        rPostItDoc.DeleteRange( aPam );
 
         const StringRangeEnumerator aRangeEnum( rData.GetPageRange(), 1, nDocPageCount, 0 );
 
