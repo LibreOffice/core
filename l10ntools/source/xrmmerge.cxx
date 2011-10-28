@@ -532,15 +532,16 @@ void XRMResExport::WorkOnDesc(
     ByteString sDescFileName( aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
     sDescFileName.SearchAndReplaceAll( "description.xml", "" );
     sDescFileName += GetAttribute( rOpenTag, "xlink:href" );
-    ifstream::pos_type size;
+    int size;
     char * memblock;
     ifstream file (sDescFileName.GetBuffer(), ios::in|ios::binary|ios::ate);
     if (file.is_open()) {
-        size = file.tellg();
-        memblock = new char [size];
+        size = static_cast<int>(file.tellg());
+        memblock = new char [size+1];
         file.seekg (0, ios::beg);
         file.read (memblock, size);
         file.close();
+        memblock[size] = '\0';
         rText = ByteString(memblock);
         rText.SearchAndReplaceAll( "\n", "\\n" );
         delete[] memblock;
