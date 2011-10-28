@@ -320,9 +320,9 @@ public:
                   const ::com::sun::star::uno::Sequence<
                     const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
 
-    SC_DLLPUBLIC void Format( rtl::OUString&, sal_uInt16 = 0, ScDocument* = NULL,
+    SC_DLLPUBLIC void Format( rtl::OUString&, sal_uInt16 = 0, const ScDocument* = NULL,
                  const Details& rDetails = detailsOOOa1) const;
-    SC_DLLPUBLIC void Format( String&, sal_uInt16 = 0, ScDocument* = NULL,
+    SC_DLLPUBLIC void Format( String&, sal_uInt16 = 0, const ScDocument* = NULL,
                  const Details& rDetails = detailsOOOa1) const;
 
     // The document for the maximum defined sheet number
@@ -517,10 +517,10 @@ public:
             const ::com::sun::star::uno::Sequence<
                 const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
 
-    SC_DLLPUBLIC void Format( String&, sal_uInt16 = 0, ScDocument* = NULL,
+    SC_DLLPUBLIC void Format( String&, sal_uInt16 = 0, const ScDocument* = NULL,
                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 ) const;
 
-    SC_DLLPUBLIC void Format( rtl::OUString&, sal_uInt16 = 0, ScDocument* = NULL,
+    SC_DLLPUBLIC void Format( rtl::OUString&, sal_uInt16 = 0, const ScDocument* = NULL,
                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 ) const;
 
     inline void GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,

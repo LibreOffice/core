@@ -1633,7 +1633,7 @@ getFileNameFromDoc( const ScDocument* pDoc )
     return sFileName;
 }
 
-void ScAddress::Format( OUString& r, sal_uInt16 nFlags, ScDocument* pDoc,
+void ScAddress::Format( OUString& r, sal_uInt16 nFlags, const ScDocument* pDoc,
                         const Details& rDetails) const
 {
     String aStr;
@@ -1641,7 +1641,7 @@ void ScAddress::Format( OUString& r, sal_uInt16 nFlags, ScDocument* pDoc,
     r = aStr;
 }
 
-void ScAddress::Format( String& r, sal_uInt16 nFlags, ScDocument* pDoc,
+void ScAddress::Format( String& r, sal_uInt16 nFlags, const ScDocument* pDoc,
                         const Details& rDetails) const
 {
     r.Erase();
@@ -1762,7 +1762,7 @@ lcl_Split_DocTab( const ScDocument* pDoc,  SCTAB nTab,
 
 static void
 lcl_ScRange_Format_XL_Header( String& r, const ScRange& rRange,
-                              sal_uInt16 nFlags, ScDocument* pDoc,
+                              sal_uInt16 nFlags, const ScDocument* pDoc,
                               const ScAddress::Details& rDetails )
 {
     if( nFlags & SCA_TAB_3D )
@@ -1789,7 +1789,7 @@ lcl_ScRange_Format_XL_Header( String& r, const ScRange& rRange,
     }
 }
 
-void ScRange::Format( String& r, sal_uInt16 nFlags, ScDocument* pDoc,
+void ScRange::Format( String& r, sal_uInt16 nFlags, const ScDocument* pDoc,
                       const ScAddress::Details& rDetails ) const
 {
     r.Erase();
@@ -1893,7 +1893,7 @@ void ScRange::Format( String& r, sal_uInt16 nFlags, ScDocument* pDoc,
 #undef  absrel_differ
 }
 
-void ScRange::Format( OUString& r, sal_uInt16 nFlags, ScDocument* pDoc,
+void ScRange::Format( OUString& r, sal_uInt16 nFlags, const ScDocument* pDoc,
                       const ScAddress::Details& rDetails ) const
 {
     String aStr;
