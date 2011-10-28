@@ -812,7 +812,8 @@ SvXMLImportContext * XMLTableTemplateContext::CreateChildContext( sal_uInt16 nPr
             {
                 OUString sAttrName;
                 sal_uInt16 nAttrPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( i ), &sAttrName );
-                if( (nAttrPrefix == XML_NAMESPACE_TEXT) && IsXMLToken( sAttrName, XML_STYLE_NAME ) )
+                if( (nAttrPrefix == XML_NAMESPACE_TEXT || nAttrPrefix == XML_NAMESPACE_TABLE) &&
+                    IsXMLToken( sAttrName, XML_STYLE_NAME ) )
                 {
                     maTableTemplate[pElements->msStyleName] = xAttrList->getValueByIndex( i );
                     break;
