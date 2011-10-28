@@ -1033,7 +1033,6 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
 
     if(mxStyle["draw:fill"] && mxStyle["draw:fill"]->getStr() == "gradient")
     {
-        bUseOpacityGradient = true;
         TagOpenElement *pDrawGradientElement = new TagOpenElement("draw:gradient");
         TagOpenElement *pDrawOpacityElement = new TagOpenElement("draw:opacity");
         if (mxStyle["draw:style"])
@@ -1127,14 +1126,10 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
 
             // Work around a mess in LibreOffice where both opacities of 100% are interpreted as complete transparency
             // Nevertheless, when one is different, immediately, they are interpreted correctly
-            if (!(mxStyle["libwpg:start-opacity"] && mxStyle["libwpg:end-opacity"])
-                    || (mxStyle["libwpg:start-opacity"]->getDouble() == 1.0 && mxStyle["libwpg:end-opacity"]->getDouble() == 1.0))
+            if (mxStyle["libwpg:start-opacity"] && mxStyle["libwpg:end-opacity"]
+                    && (mxStyle["libwpg:start-opacity"]->getDouble() != 1.0 || mxStyle["libwpg:end-opacity"]->getDouble() != 1.0))
             {
-                delete pDrawOpacityElement;
-                bUseOpacityGradient = false;
-            }
-            else
-            {
+                bUseOpacityGradient = true;
                 mGraphicsGradientStyles.push_back(pDrawOpacityElement);
                 mGraphicsGradientStyles.push_back(new TagCloseElement("draw:opacity"));
             }
@@ -1162,6 +1157,9 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
             mGraphicsGradientStyles.push_back(pDrawGradientElement);
             mGraphicsGradientStyles.push_back(new TagCloseElement("draw:gradient"));
         }
+
+        if(!bUseOpacityGradient)
+            delete pDrawOpacityElement;
     }
 
     TagOpenElement *pStyleStyleElement = new TagOpenElement("style:style");
