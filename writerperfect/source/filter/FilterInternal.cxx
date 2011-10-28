@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* FilterInternal.hxx: define basic functions for libwriterperfect/fileter
  *
  * Copyright (C) 2002-2004 William Lachance (wrlach@gmail.com)
@@ -43,3 +44,5 @@ WPXString propListToStyleKey(const WPXPropertyList &xPropList)
 
     return sKey;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
