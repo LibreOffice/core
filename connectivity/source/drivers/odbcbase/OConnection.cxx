@@ -82,17 +82,10 @@ OConnection::~OConnection()
         SQLRETURN rc;
 
         rc = N3SQLDisconnect( m_aConnectionHandle );
-        if ( SQL_SUCCESS           != rc &&
-             SQL_SUCCESS_WITH_INFO != rc )
-            OSL_TRACE( "Failure from SQLDisconnect, %s:%i"
-                     , __FILE__, __LINE__
-                     );
+        OSL_ENSURE( rc == SQL_SUCCESS || rc == SQL_SUCCESS_WITH_INFO, "Failure from SQLDisconnect" );
 
         rc = N3SQLFreeHandle( SQL_HANDLE_DBC, m_aConnectionHandle );
-        if ( SQL_SUCCESS != rc )
-            OSL_TRACE( "Failure from SQLFreeHandle for connection, %s:%i"
-                     , __FILE__, __LINE__
-                     );
+        OSL_ENSURE( rc == SQL_SUCCESS , "Failure from SQLFreeHandle for connection");
 
         m_aConnectionHandle = SQL_NULL_HANDLE;
     }
