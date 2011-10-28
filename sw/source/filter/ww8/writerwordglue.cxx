@@ -356,6 +356,9 @@ namespace myImplHelpers
             { UnicodeScript_kHebrew, UnicodeScript_kHebrew, RTL_TEXTENCODING_MS_1255},
             { UnicodeScript_kArabic, UnicodeScript_kArabic, RTL_TEXTENCODING_MS_1256},
             { UnicodeScript_kThai, UnicodeScript_kThai, RTL_TEXTENCODING_MS_1258},
+            { UnicodeScript_kHangulJamo, UnicodeScript_kHangulJamo, RTL_TEXTENCODING_MS_949},
+            { UnicodeScript_kHangulCompatibilityJamo, UnicodeScript_kHangulCompatibilityJamo, RTL_TEXTENCODING_MS_949},
+            { UnicodeScript_kHangulSyllable, UnicodeScript_kHangulSyllable, RTL_TEXTENCODING_MS_949},
             { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount, RTL_TEXTENCODING_MS_1252}
         };
 
