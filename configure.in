@@ -2499,7 +2499,7 @@ dnl ===================================================================
    elif test "$_os" = "OS2"; then
       DEFAULT_TO_STLPORT="yes" 
    elif test "$_os" = "FreeBSD"; then
-      DEFAULT_TO_STLPORT="yes"
+      DEFAULT_TO_STLPORT="no"
    fi
    if test "$DEFAULT_TO_STLPORT" = "yes"; then
       AC_MSG_RESULT([stlport])
@@ -6979,7 +6979,7 @@ dnl        this should be unified into using only one version for both
 
 AC_MSG_CHECKING([whether to build own version of libjpeg])
 
-if test "$SYSTEM_JPEG" == "YES"; then
+if test "$SYSTEM_JPEG" = "YES"; then
 SYSTEM_LIBJPEG=YES
 else
 case "$_os" in
@@ -6998,7 +6998,7 @@ case "$_os" in
 esac
 fi
 
-if test "$SYSTEM_LIBJPEG" == "YES"; then
+if test "$SYSTEM_LIBJPEG" = "YES"; then
    AC_MSG_RESULT([no])
 else
    AC_MSG_RESULT([yes])
@@ -7199,7 +7199,7 @@ rm -f conftest* core core.* *.core
 OOO_JUNIT_JAR=
 if test "$SOLAR_JAVA" != "" && test "$with_junit" != "no"; then
     AC_MSG_CHECKING([for JUnit 4])
-    if test "$with_junit" == "yes"; then
+    if test "$with_junit" = "yes"; then
         if test -e /usr/share/java/junit4.jar; then
             OOO_JUNIT_JAR=/usr/share/java/junit4.jar
         else
