@@ -5,7 +5,7 @@
             <node oor:name="com.sun.star.comp.framework.addon.complextoolbarcontrols" oor:op="replace">
                 <node oor:name="m1" oor:op="replace">
                     <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.demo.complextoolbarcontrols.demoaddon:Command1</value>
+                        <value>vnd.demo.complextoolbarcontrols.demoaddon:ImageButtonCmd</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
                         <value xml:lang="en-US">Image Button</value>
@@ -22,7 +22,7 @@
                 </node>
                 <node oor:name="m2" oor:op="replace">
                     <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.demo.complextoolbarcontrols.demoaddon:Command2</value>
+                        <value>vnd.demo.complextoolbarcontrols.demoaddon:ComboboxCmd</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
                         <value xml:lang="en-US">ComboBox</value>
@@ -47,7 +47,7 @@
                 </node>
                 <node oor:name="m4" oor:op="replace">
                     <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.demo.complextoolbarcontrols.demoaddon:Command5</value>
+                        <value>vnd.demo.complextoolbarcontrols.demoaddon:SpinfieldCmd</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
                         <value xml:lang="en-US">Spinfield</value>
@@ -72,7 +72,7 @@
                 </node>
                 <node oor:name="m6" oor:op="replace">
                     <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.demo.complextoolbarcontrols.demoaddon:Command6</value>
+                        <value>vnd.demo.complextoolbarcontrols.demoaddon:EditfieldCmd</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
                         <value xml:lang="en-US">Editfield</value>
@@ -97,7 +97,7 @@
                 </node>
                 <node oor:name="m8" oor:op="replace">
                     <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.demo.complextoolbarcontrols.demoaddon:Command7</value>
+                        <value>vnd.demo.complextoolbarcontrols.demoaddon:DropdownboxCmd</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
                         <value xml:lang="en-US">Dropdownbox</value>
@@ -117,7 +117,7 @@
                 </node>
                 <node oor:name="m9" oor:op="replace">
                     <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.demo.complextoolbarcontrols.demoaddon:Command3</value>
+                        <value>vnd.demo.complextoolbarcontrols.demoaddon:ToggleDropdownButtonCmd</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
                         <value xml:lang="en-US">Toggle Dropdown Button</value>
@@ -134,7 +134,7 @@
                 </node>
                 <node oor:name="m10" oor:op="replace">
                     <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.demo.complextoolbarcontrols.demoaddon:Command4</value>
+                        <value>vnd.demo.complextoolbarcontrols.demoaddon:DropdownButtonCmd</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
                         <value xml:lang="en-US">Dropdown Button</value>
@@ -154,7 +154,7 @@
         <node oor:name="Images">
             <node oor:name="vnd.demo.complextoolbarcontrols.image1" oor:op="replace">
                 <prop oor:name="URL">
-                    <value>vnd.demo.complextoolbarcontrols.demoaddon:Command1</value>
+                    <value>vnd.demo.complextoolbarcontrols.demoaddon:ImageButtonCmd</value>
                 </prop>
                 <node oor:name="UserDefinedImages">
                     <prop oor:name="ImageSmallURL" oor:type="xs:string">

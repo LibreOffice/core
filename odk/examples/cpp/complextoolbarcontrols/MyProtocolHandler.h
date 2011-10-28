@@ -1,16 +1,14 @@
 #ifndef _MyProtocolHandler_HXX
 #define _MyProtocolHandler_HXX
 
+#include <com/sun/star/awt/XToolkit.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XControlNotificationListener.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <cppuhelper/implbase3.hxx>
-#ifndef _CPPUHELPER_IMPLBASE2_HXX
 #include <cppuhelper/implbase2.hxx>
-#endif
-#include <com/sun/star/awt/XToolkit.hpp>
+#include <cppuhelper/implbase3.hxx>
 
 #define MYPROTOCOLHANDLER_IMPLEMENTATIONNAME   "vnd.demo.Impl.ProtocolHandler"
 #define MYPROTOCOLHANDLER_SERVICENAME          "vnd.demo.ProtocolHandler"

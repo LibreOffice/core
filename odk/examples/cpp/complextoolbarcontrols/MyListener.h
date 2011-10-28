@@ -1,7 +1,6 @@
 #ifndef _MyListener_HXX
 #define _MyListener_HXX
 
-#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
@@ -24,7 +23,7 @@ namespace css = ::com::sun::star;
  * @see WriterListener
  */
 class MyListener : public cppu::WeakImplHelper2< css::task::XJob         ,
-                                                      css::lang::XServiceInfo >
+                                                 css::lang::XServiceInfo >
 {
     private:
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
@@ -58,7 +57,6 @@ class CalcListener : public cppu::WeakImplHelper1< css::document::XEventListener
 {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
-
 
     public:
         CalcListener(const css::uno::Reference< css::lang::XMultiServiceFactory > &rxMSF)

@@ -1,39 +1,20 @@
 #include <vector>
 #include <hash_map>
+
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-struct hashObjectName_Impl
-{
-    size_t operator()(const ::rtl::OUString Str) const
-    {
-        return (size_t)Str.hashCode();
-    }
-};
-
-struct eqObjectName_Impl
-{
-    sal_Bool operator()(const ::rtl::OUString Str1, const ::rtl::OUString Str2) const
-    {
-        return ( Str1 == Str2 );
-    }
-};
 
 typedef std::vector < com::sun::star::uno::Reference < com::sun::star::frame::XStatusListener > > StatusListeners;
 
-typedef std::hash_map
-<
-    ::rtl::OUString,
-    StatusListeners,
-    hashObjectName_Impl,
-    eqObjectName_Impl
->
-ListenerMap;
+typedef std::hash_map < rtl::OUString,
+                        StatusListeners,
+                        rtl::OUStringHash,
+                        std::equal_to< rtl::OUString > > ListenerMap;
 
 // For every frame there is *one* Dispatch object for all possible commands
 // this struct contains an array of listeners for every supported command

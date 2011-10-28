@@ -25,11 +25,8 @@
  *
  ************************************************************************/
 
-
-#ifndef _MyJob_HXX
 #include "MyJob.h"
-#endif
-#include <osl/diagnose.h>
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
@@ -50,9 +47,10 @@ using com::sun::star::document::XEventBroadcaster;
 Any SAL_CALL MyJob::execute( const Sequence< NamedValue >& aArguments )
     throw ( IllegalArgumentException, Exception, RuntimeException )
 {
-    Reference < XEventBroadcaster > xBrd( mxMSF->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster") ), UNO_QUERY );
+    Reference < XEventBroadcaster > xBrd( mxMSF->createInstance(
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.GlobalEventBroadcaster" ) ) ), UNO_QUERY );
     Reference < com::sun::star::document::XEventListener > xLstner( mxMSF->createInstance(
-        ::rtl::OUString::createFromAscii("com.sun.star.comp.Office.MyListener" ) ), UNO_QUERY );
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Office.MyListener" ) ) ), UNO_QUERY );
     if ( xBrd.is() )
         xBrd->addEventListener( xLstner );
     return Any();
@@ -61,7 +59,7 @@ Any SAL_CALL MyJob::execute( const Sequence< NamedValue >& aArguments )
 OUString MyJob_getImplementationName ()
     throw (RuntimeException)
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Office.MyJob" ) );
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Office.MyJob" ) );
 }
 
 #define SERVICE_NAME "com.sun.star.task.Job"
@@ -69,7 +67,7 @@ OUString MyJob_getImplementationName ()
 sal_Bool SAL_CALL MyJob_supportsService( const OUString& ServiceName )
     throw (RuntimeException)
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME ) );
+    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SERVICE_NAME ) );
 }
 
 Sequence< OUString > SAL_CALL MyJob_getSupportedServiceNames(  )
@@ -77,7 +75,7 @@ Sequence< OUString > SAL_CALL MyJob_getSupportedServiceNames(  )
 {
     Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    pArray[0] =  OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
     return aRet;
 }
 
