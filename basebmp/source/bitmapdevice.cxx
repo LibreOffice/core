@@ -1343,10 +1343,6 @@ namespace
         if( aLocalSourceArea.isEmpty() )
             return false;
 
-        // isEmpty is not what we want I think ...
-        if( aLocalSourceArea.getWidth() <= 0 || aLocalSourceArea.getHeight() <= 0 )
-            return false;
-
         // calc relative new source area points (relative to orig
         // source area)
         const ::basegfx::B2IVector aUpperLeftOffset(
@@ -1361,10 +1357,6 @@ namespace
         aLocalDestArea.intersect( rDestBounds );
 
         if( aLocalDestArea.isEmpty() )
-            return false;
-
-        // isEmpty is not what we want I think ...
-        if( aLocalDestArea.getWidth() <= 0 || aLocalDestArea.getHeight() <= 0 )
             return false;
 
         // calc relative new dest area points (relative to orig
@@ -1406,10 +1398,6 @@ namespace
         if( aLocalSourceArea.isEmpty() )
             return false;
 
-         // sadly isEmpty is not what we want I think ...
-        if( aLocalSourceArea.getWidth() <= 0 || aLocalSourceArea.getHeight() <= 0 )
-            return false;
-
         // calc relative new source area points (relative to orig
         // source area)
         const ::basegfx::B2IVector aUpperLeftOffset(
@@ -1426,10 +1414,6 @@ namespace
         aLocalDestArea.intersect( rDestBounds );
 
         if( aLocalDestArea.isEmpty() )
-            return false;
-
-        // isEmpty is not what we want I think ...
-        if( aLocalDestArea.getWidth() <= 0 || aLocalDestArea.getHeight() <= 0 )
             return false;
 
         // calc relative new dest area points (relative to orig
