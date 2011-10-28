@@ -288,8 +288,8 @@ sal_Bool SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
                 aLRULst.Insert( pNew, 0 );
             else
             {
-                // der letzte muss entfernt werden
-                // damit der neue vorne Platz hat
+                // the last one needs to be removed
+                // so that there is space for the first one
                 String* pDel = (String*)aLRULst[ nMaxCount - 1 ];
 
                 void** ppData = (void**)aLRULst.GetData();
@@ -303,15 +303,15 @@ sal_Bool SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
         else
         {
             delete (SwAutoCompleteString*)pNew;
-            // dann aber auf jedenfall nach "oben" moven
+            // then move "up"
             pNew = aWordLst[ nInsPos ];
 
-            //add the document to the already inserted string
+            // add the document to the already inserted string
             SwAutoCompleteString* pCurrent = (SwAutoCompleteString*)pNew;
             pCurrent->AddDocument(rDoc);
 
             nInsPos = aLRULst.GetPos( (void*)pNew );
-            OSL_ENSURE( USHRT_MAX != nInsPos, "String nicht gefunden" );
+            OSL_ENSURE( USHRT_MAX != nInsPos, "String not found" );
             if( nInsPos )
             {
                 void** ppData = (void**)aLRULst.GetData();
@@ -327,12 +327,12 @@ void SwAutoCompleteWord::SetMaxCount( sal_uInt16 nNewMax )
 {
     if( nNewMax < nMaxCount && aLRULst.Count() > nNewMax )
     {
-        // dann die unten ueberhaengenden entfernen
+        // remove the trailing ones
         sal_uInt16 nLRUIndex = nNewMax-1;
         while( nNewMax < aWordLst.Count() && nLRUIndex < aLRULst.Count())
         {
             sal_uInt16 nPos = aWordLst.GetPos( (String*)aLRULst[ nLRUIndex++ ] );
-            OSL_ENSURE( USHRT_MAX != nPos, "String nicht gefunden" );
+            OSL_ENSURE( USHRT_MAX != nPos, "String not found" );
             void * pDel = aWordLst[nPos];
             aWordLst.Remove(nPos);
             delete (SwAutoCompleteString*)pDel;
@@ -344,11 +344,7 @@ void SwAutoCompleteWord::SetMaxCount( sal_uInt16 nNewMax )
 
 void SwAutoCompleteWord::SetMinWordLen( sal_uInt16 n )
 {
-    // will man wirklich alle Worte, die kleiner als die neue Min Laenge
-    // sind entfernen?
-    // JP 02.02.99 - erstmal nicht.
-
-    // JP 11.03.99 - mal testhalber eingebaut
+    // Do you really want to remove all words that are less than the minWrdLen?
     if( n < nMinWrdLen )
     {
         for( sal_uInt16 nPos = 0; nPos < aWordLst.Count(); ++nPos  )
@@ -358,7 +354,7 @@ void SwAutoCompleteWord::SetMinWordLen( sal_uInt16 n )
                 aWordLst.Remove(nPos);
 
                 sal_uInt16 nDelPos = aLRULst.GetPos( pDel );
-                OSL_ENSURE( USHRT_MAX != nDelPos, "String nicht gefunden" );
+                OSL_ENSURE( USHRT_MAX != nDelPos, "String not found" );
                 aLRULst.Remove( nDelPos );
                 --nPos;
                 delete (SwAutoCompleteString*)pDel;
@@ -396,26 +392,26 @@ void SwAutoCompleteWord::CheckChangedList( const SvStringsISortDtor& rNewLst )
             aWordLst.Remove(nMyPos);
 
             sal_uInt16 nPos = aLRULst.GetPos( pDel );
-            OSL_ENSURE( USHRT_MAX != nPos, "String nicht gefunden" );
+            OSL_ENSURE( USHRT_MAX != nPos, "String not found" );
             aLRULst.Remove( nPos );
             delete (SwAutoCompleteString*)pDel;
             if( nMyPos >= --nMyLen )
                 break;
         }
     }
-    //remove the elements at the end of the array
+    // remove the elements at the end of the array
     if( nMyPos < nMyLen )
     {
-        //clear LRU array first then delete the string object
+        // clear LRU array first then delete the string object
         for( ; nNewPos < nMyLen; ++nNewPos )
         {
             void* pDel = aWordLst[ nNewPos ];
             sal_uInt16 nPos = aLRULst.GetPos( pDel );
-            OSL_ENSURE( USHRT_MAX != nPos, "String nicht gefunden" );
+            OSL_ENSURE( USHRT_MAX != nPos, "String not found" );
             aLRULst.Remove( nPos );
             delete (SwAutoCompleteString*)pDel;
         }
-        //remove from array
+        // remove from array
         aWordLst.Remove( nMyPos, nMyLen - nMyPos );
     }
 }
