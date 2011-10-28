@@ -689,43 +689,48 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
         for (sal_Int32 nShape = 0; nShape < nShapes; ++nShape)
         {
             uno::Reference<drawing::XShape> xShape(xShapesIndex->getByIndex(nShape), uno::UNO_QUERY);
-            if (xShape.is())
+            if (!xShape.is())
+                continue;
+
+            uno::Reference<beans::XPropertySet> xShapeProp(xShape, uno::UNO_QUERY);
+            if (!xShapeProp.is())
+                continue;
+
+            sal_Int16 nLayerID = 0;
+            bool bExtracted = xShapeProp->getPropertyValue(sLayerID) >>= nLayerID;
+            if (!bExtracted)
+                continue;
+
+            if ((nLayerID == SC_LAYER_INTERN) || (nLayerID == SC_LAYER_HIDDEN))
             {
-                uno::Reference<beans::XPropertySet> xShapeProp(xShape, uno::UNO_QUERY);
-                if( xShapeProp.is() )
-                {
-                    sal_Int16 nLayerID = 0;
-                    if( xShapeProp->getPropertyValue(sLayerID) >>= nLayerID )
-                    {
-                        if( (nLayerID == SC_LAYER_INTERN) || (nLayerID == SC_LAYER_HIDDEN) )
-                            CollectInternalShape(xShape);
-                        else
-                        {
-                            ++nShapesCount;
-                            if (SvxShape* pShapeImp = SvxShape::getImplementation(xShape))
-                            {
-                                if (SdrObject *pSdrObj = pShapeImp->GetSdrObject())
-                                {
-                                    if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjData( pSdrObj ))
-                                    {
-                                        ScMyShape aMyShape;
-                                        aMyShape.aAddress = pAnchor->maStart;
-                                        aMyShape.aEndAddress = pAnchor->maEnd;
-                                        aMyShape.nEndX = pAnchor->maEndOffset.X();
-                                        aMyShape.nEndY = pAnchor->maEndOffset.Y();
-                                        aMyShape.xShape = xShape;
-                                        pSharedData->AddNewShape(aMyShape);
-                                        pSharedData->SetLastColumn(nTable, pAnchor->maStart.Col());
-                                        pSharedData->SetLastRow(nTable, pAnchor->maStart.Row());
-                                    }
-                                    else
-                                        pSharedData->AddTableShape(nTable, xShape);
-                                }
-                            }
-                        }
-                    }
-                }
+                CollectInternalShape(xShape);
+                continue;
             }
+
+            ++nShapesCount;
+
+            SvxShape* pShapeImp = SvxShape::getImplementation(xShape);
+            if (!pShapeImp)
+                continue;
+
+            SdrObject* pSdrObj = pShapeImp->GetSdrObject();
+            if (!pSdrObj)
+                continue;
+
+            if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjData(pSdrObj))
+            {
+                ScMyShape aMyShape;
+                aMyShape.aAddress = pAnchor->maStart;
+                aMyShape.aEndAddress = pAnchor->maEnd;
+                aMyShape.nEndX = pAnchor->maEndOffset.X();
+                aMyShape.nEndY = pAnchor->maEndOffset.Y();
+                aMyShape.xShape = xShape;
+                pSharedData->AddNewShape(aMyShape);
+                pSharedData->SetLastColumn(nTable, pAnchor->maStart.Col());
+                pSharedData->SetLastRow(nTable, pAnchor->maStart.Row());
+            }
+            else
+                pSharedData->AddTableShape(nTable, xShape);
         }
     }
 }
