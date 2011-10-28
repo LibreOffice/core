@@ -1989,7 +1989,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     if (pSprm)
     {
         m_bNeedPap = true;
-        *pSprm = TWIP_TO_MM100(nParam);
+        // Don't try to support text frames inside tables for now.
+        if (m_pCurrentBuffer != &m_aTableBuffer)
+            *pSprm = TWIP_TO_MM100(nParam);
         return 0;
     }
 
