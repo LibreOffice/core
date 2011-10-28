@@ -685,7 +685,7 @@ AC_ARG_WITH(external-thes-dir,
 AC_ARG_WITH(system-libs,
     AS_HELP_STRING([--with-system-libs],
         [Use libraries already on system -- enables all --with-system-* flags except
-         mozilla, libvisio, libexttextcat and translate-toolkit.]),
+         mozilla and translate-toolkit.]),
 ,)
 
 AC_ARG_WITH(system-headers,
