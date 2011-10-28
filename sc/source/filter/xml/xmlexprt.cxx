@@ -612,77 +612,112 @@ bool ScXMLExport::HasDrawPages(uno::Reference <sheet::XSpreadsheetDocument>& xDo
     return (xDocProps.is() && ::cppu::any2bool( xDocProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_HASDRAWPAGES))) ));
 }
 
+namespace {
+
+/**
+ * Update the progress bar state when an instance of this class goes out of
+ * scope.
+ */
+class ProgressBarUpdater
+{
+    ProgressBarHelper& mrHelper;
+    const sal_Int32& mrTableCount;
+    const sal_Int32& mrShapesCount;
+    const sal_Int32 mnCellCount;
+public:
+    ProgressBarUpdater(ProgressBarHelper& rHelper,
+                       const sal_Int32& rTableCount, const sal_Int32& rShapesCount,
+                       const sal_Int32 nCellCount) :
+        mrHelper(rHelper),
+        mrTableCount(rTableCount),
+        mrShapesCount(rShapesCount),
+        mnCellCount(nCellCount) {}
+
+    ~ProgressBarUpdater()
+    {
+        sal_Int32 nRef = mnCellCount + (2 * mrTableCount) + (2 * mrShapesCount);
+        mrHelper.SetReference(nRef);
+        mrHelper.SetValue(0);
+    }
+};
+
+}
+
 void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCount, const sal_Int32 nCellCount)
 {
-    if (GetModel().is())
+    ProgressBarUpdater(*GetProgressBarHelper(), nTableCount, nShapesCount, nCellCount);
+
+    if (!GetModel().is())
+        return;
+
+    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc(GetModel(), uno::UNO_QUERY);
+    if (!xSpreadDoc.is())
+        return;
+
+    uno::Reference<container::XIndexAccess> xIndex(xSpreadDoc->getSheets(), uno::UNO_QUERY);
+    if (!xIndex.is())
+        return;
+
+    nTableCount = xIndex->getCount();
+    if (!pSharedData)
+        CreateSharedData(nTableCount);
+
+    pCellStyles->AddNewTable(nTableCount - 1);
+    pDoc->InitializeAllNoteCaptions(true);
+    if (!HasDrawPages(xSpreadDoc))
+        return;
+
+    rtl::OUString sCaptionPoint(RTL_CONSTASCII_USTRINGPARAM("CaptionPoint"));
+
+    for (SCTAB nTable = 0; nTable < nTableCount; ++nTable)
     {
-        uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetModel(), uno::UNO_QUERY );
-        if ( xSpreadDoc.is())
+        nCurrentTable = sal::static_int_cast<sal_uInt16>(nTable);
+        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xIndex->getByIndex(nTable), uno::UNO_QUERY);
+        if (xDrawPageSupplier.is())
         {
-            uno::Reference<container::XIndexAccess> xIndex( xSpreadDoc->getSheets(), uno::UNO_QUERY );
-            if ( xIndex.is() )
+            uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage());
+            ScMyDrawPage aDrawPage;
+            aDrawPage.bHasForms = false;
+            aDrawPage.xDrawPage.set(xDrawPage);
+            pSharedData->AddDrawPage(aDrawPage, nTable);
+            uno::Reference<container::XIndexAccess> xShapesIndex(xDrawPage, uno::UNO_QUERY);
+            if (xShapesIndex.is())
             {
-                nTableCount = xIndex->getCount();
-                if (!pSharedData)
-                    CreateSharedData(nTableCount);
-                pCellStyles->AddNewTable(nTableCount - 1);
-                pDoc->InitializeAllNoteCaptions( true );
-                if (HasDrawPages(xSpreadDoc))
+                sal_Int32 nShapes = xShapesIndex->getCount();
+                for (sal_Int32 nShape = 0; nShape < nShapes; ++nShape)
                 {
-                    rtl::OUString sCaptionPoint( RTL_CONSTASCII_USTRINGPARAM( "CaptionPoint" ));
-                    for (SCTAB nTable = 0; nTable < nTableCount; ++nTable)
+                    uno::Reference<drawing::XShape> xShape(xShapesIndex->getByIndex(nShape), uno::UNO_QUERY);
+                    if (xShape.is())
                     {
-                        nCurrentTable = sal::static_int_cast<sal_uInt16>( nTable );
-                        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xIndex->getByIndex(nTable), uno::UNO_QUERY);
-                        if (xDrawPageSupplier.is())
+                        uno::Reference<beans::XPropertySet> xShapeProp(xShape, uno::UNO_QUERY);
+                        if( xShapeProp.is() )
                         {
-                            uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage());
-                            ScMyDrawPage aDrawPage;
-                            aDrawPage.bHasForms = false;
-                            aDrawPage.xDrawPage.set(xDrawPage);
-                            pSharedData->AddDrawPage(aDrawPage, nTable);
-                            uno::Reference<container::XIndexAccess> xShapesIndex (xDrawPage, uno::UNO_QUERY);
-                            if (xShapesIndex.is())
+                            sal_Int16 nLayerID = 0;
+                            if( xShapeProp->getPropertyValue(sLayerID) >>= nLayerID )
                             {
-                                sal_Int32 nShapes(xShapesIndex->getCount());
-                                for (sal_Int32 nShape = 0; nShape < nShapes; ++nShape)
+                                if( (nLayerID == SC_LAYER_INTERN) || (nLayerID == SC_LAYER_HIDDEN) )
+                                    CollectInternalShape(xShape);
+                                else
                                 {
-                                    uno::Reference<drawing::XShape> xShape(xShapesIndex->getByIndex(nShape), uno::UNO_QUERY);
-                                    if (xShape.is())
+                                    ++nShapesCount;
+                                    if (SvxShape* pShapeImp = SvxShape::getImplementation(xShape))
                                     {
-                                        uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
-                                        if( xShapeProp.is() )
+                                        if (SdrObject *pSdrObj = pShapeImp->GetSdrObject())
                                         {
-                                            sal_Int16 nLayerID = 0;
-                                            if( xShapeProp->getPropertyValue(sLayerID) >>= nLayerID )
+                                            if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjData( pSdrObj ))
                                             {
-                                                if( (nLayerID == SC_LAYER_INTERN) || (nLayerID == SC_LAYER_HIDDEN) )
-                                                    CollectInternalShape( xShape );
-                                                else
-                                                {
-                                                    ++nShapesCount;
-                                                    if (SvxShape* pShapeImp = SvxShape::getImplementation(xShape))
-                                                    {
-                                                        if (SdrObject *pSdrObj = pShapeImp->GetSdrObject())
-                                                        {
-                                                            if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjData( pSdrObj ))
-                                                            {
-                                                                ScMyShape aMyShape;
-                                                                aMyShape.aAddress = pAnchor->maStart;
-                                                                aMyShape.aEndAddress = pAnchor->maEnd;
-                                                                aMyShape.nEndX = pAnchor->maEndOffset.X();
-                                                                aMyShape.nEndY = pAnchor->maEndOffset.Y();
-                                                                aMyShape.xShape = xShape;
-                                                                pSharedData->AddNewShape(aMyShape);
-                                                                pSharedData->SetLastColumn(nTable, pAnchor->maStart.Col());
-                                                                pSharedData->SetLastRow(nTable, pAnchor->maStart.Row());
-                                                            }
-                                                            else
-                                                                pSharedData->AddTableShape(nTable, xShape);
-                                                        }
-                                                    }
-                                                }
+                                                ScMyShape aMyShape;
+                                                aMyShape.aAddress = pAnchor->maStart;
+                                                aMyShape.aEndAddress = pAnchor->maEnd;
+                                                aMyShape.nEndX = pAnchor->maEndOffset.X();
+                                                aMyShape.nEndY = pAnchor->maEndOffset.Y();
+                                                aMyShape.xShape = xShape;
+                                                pSharedData->AddNewShape(aMyShape);
+                                                pSharedData->SetLastColumn(nTable, pAnchor->maStart.Col());
+                                                pSharedData->SetLastRow(nTable, pAnchor->maStart.Row());
                                             }
+                                            else
+                                                pSharedData->AddTableShape(nTable, xShape);
                                         }
                                     }
                                 }
@@ -693,9 +728,6 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
             }
         }
     }
-    sal_Int32 nRef(nCellCount + (2 * nTableCount) + (2 * nShapesCount));
-    GetProgressBarHelper()->SetReference(nRef);
-    GetProgressBarHelper()->SetValue(0);
 }
 
 void ScXMLExport::CollectShapesAutoStyles(const sal_Int32 nTableCount)
