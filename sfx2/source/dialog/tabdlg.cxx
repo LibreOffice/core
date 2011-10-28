@@ -738,7 +738,7 @@ void SfxTabDialog::Start_Impl()
     if ( aDlgOpt.Exists() )
     {
 #if !ENABLE_LAYOUT_SFX_TABDIALOG
-        SetWindowState( ByteString( aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
+        SetWindowState(rtl::OUStringToOString(aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US));
 #endif /* !ENABLE_LAYOUT_SFX_TABDIALOG */
 
         // initial TabPage from Program/Help/config

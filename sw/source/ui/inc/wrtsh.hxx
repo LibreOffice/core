@@ -400,9 +400,9 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     void    MoveCrsr( sal_Bool bWithSelect = sal_False );
 
     // update input fields
-    sal_Bool    StartInputFldDlg(SwField*, sal_Bool bNextButton, Window* pParentWin = 0, ByteString* pWindowState = 0);
+    sal_Bool    StartInputFldDlg(SwField*, sal_Bool bNextButton, Window* pParentWin = 0, rtl::OString* pWindowState = 0);
     // update DropDown fields
-    sal_Bool    StartDropDownFldDlg(SwField*, sal_Bool bNextButton, ByteString* pWindowState = 0);
+    sal_Bool    StartDropDownFldDlg(SwField*, sal_Bool bNextButton, rtl::OString* pWindowState = 0);
 
     //"Handler" for changes at DrawView - for controls.
     virtual void DrawSelChanged( );

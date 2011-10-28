@@ -244,12 +244,12 @@ void AbstractSwInsertDBColAutoPilot_Impl::DataToDoc( const uno::Sequence< uno::A
     pDlg->DataToDoc(rSelection, rxSource, xConnection, xResultSet);
 }
 
-ByteString      AbstractDropDownFieldDialog_Impl::GetWindowState( sal_uLong nMask  ) const
+rtl::OString AbstractDropDownFieldDialog_Impl::GetWindowState( sal_uLong nMask  ) const
 {
     return pDlg->GetWindowState(nMask);
 }
 
-void       AbstractDropDownFieldDialog_Impl::SetWindowState( const ByteString& rStr )
+void AbstractDropDownFieldDialog_Impl::SetWindowState( const rtl::OString& rStr )
 {
     pDlg->SetWindowState(rStr);
 }
@@ -400,12 +400,12 @@ String AbstractGlossaryDlg_Impl::GetCurrShortName() const
     return pDlg->GetCurrShortName();
 }
 
-void AbstractFldInputDlg_Impl::SetWindowState( const ByteString& rStr )
+void AbstractFldInputDlg_Impl::SetWindowState( const rtl::OString& rStr )
 {
     pDlg->SetWindowState( rStr );
 }
 
-ByteString AbstractFldInputDlg_Impl::GetWindowState( sal_uLong nMask ) const
+rtl::OString AbstractFldInputDlg_Impl::GetWindowState( sal_uLong nMask ) const
 {
     return pDlg->GetWindowState( nMask );
 }

@@ -175,8 +175,8 @@ class AbstractSwInsertDBColAutoPilot_Impl :  public AbstractSwInsertDBColAutoPil
 class AbstractDropDownFieldDialog_Impl : public AbstractDropDownFieldDialog //add for DropDownFieldDialog
 {
     DECL_ABSTDLG_BASE(AbstractDropDownFieldDialog_Impl, sw::DropDownFieldDialog)
-    virtual ByteString      GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const; //this method inherit from SystemWindow
-    virtual void            SetWindowState( const ByteString& rStr );//this method inherit from SystemWindow
+    virtual rtl::OString GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const; //this method inherit from SystemWindow
+    virtual void         SetWindowState( const rtl::OString& rStr );//this method inherit from SystemWindow
 };
 //add for DropDownFieldDialog end
 
@@ -269,8 +269,8 @@ class AbstractFldInputDlg_Impl : public AbstractFldInputDlg
 {
     DECL_ABSTDLG_BASE(AbstractFldInputDlg_Impl,SwFldInputDlg)
     //from class SalFrame
-    virtual void            SetWindowState( const ByteString& rStr ) ;
-    virtual ByteString      GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const ;
+    virtual void         SetWindowState( const rtl::OString & rStr ) ;
+    virtual rtl::OString GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const ;
 };
 //for SwFldInputDlg end
 

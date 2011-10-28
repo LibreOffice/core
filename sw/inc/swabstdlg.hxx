@@ -114,8 +114,8 @@ class AbstractFldInputDlg : public VclAbstractDialog  //add for SwFldInputDlg
 {
 public:
     //from class SalFrame
-    virtual void            SetWindowState( const ByteString& rStr ) = 0;
-    virtual ByteString      GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const = 0;
+    virtual void         SetWindowState( const rtl::OString & rStr ) = 0;
+    virtual rtl::OString GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const = 0;
 };
 
 class AbstractInsFootNoteDlg : public VclAbstractDialog  //add for SwInsFootNoteDlg
@@ -256,8 +256,8 @@ public:
 class AbstractDropDownFieldDialog : public VclAbstractDialog //add for DropDownFieldDialog
 {
 public:
-     virtual ByteString      GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const = 0; //this method inherit from SystemWindow
-     virtual void            SetWindowState( const ByteString& rStr ) =0;//this method inherit from SystemWindow
+     virtual rtl::OString GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const = 0; //this method inherit from SystemWindow
+     virtual void         SetWindowState( const rtl::OString & rStr ) =0;//this method inherit from SystemWindow
 };
 
 class AbstractSwLabDlg  : public SfxAbstractTabDialog //add for SwLabDlg
