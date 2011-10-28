@@ -254,15 +254,12 @@ void ScMacrosTest::testVba()
     TestMacroInfo testInfo[] = {
         {
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TestAddress.")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.Sheet1.test?language=Basic&location=document"))
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
         },
-/*
-        vba.xls is still throwing up a basic error :-/
         {
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vba.")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.Modul1.Modul1?language=Basic&location=document")),
         }
-*/
     };
 
     rtl::OUString aFileExtension(aFileFormats[1].pName, strlen(aFileFormats[1].pName), RTL_TEXTENCODING_UTF8 );
