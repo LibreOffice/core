@@ -556,7 +556,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
             {
                 MetaCommentAction* pCommentAct = static_cast<MetaCommentAction*>(pAction);
                 if( pAction->GetType() == META_COMMENT_ACTION &&
-                    pCommentAct->GetComment().Equals("DELEGATE_PLUGGABLE_RENDERER") )
+                    pCommentAct->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("DELEGATE_PLUGGABLE_RENDERER")) )
                 {
                     ImplDelegate2PluggableRenderer(pCommentAct, pOut);
                 }
@@ -658,7 +658,7 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
 
 void GDIMetaFile::ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct, OutputDevice* pOut )
 {
-    OSL_ASSERT( pAct->GetComment().Equals("DELEGATE_PLUGGABLE_RENDERER") );
+    OSL_ASSERT( pAct->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("DELEGATE_PLUGGABLE_RENDERER")) );
 
     // read payload - string of service name, followed by raw render input
     const sal_uInt8* pData = pAct->GetData();
@@ -1534,7 +1534,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 case( META_COMMENT_ACTION ):
                 {
                     MetaCommentAction* pCommentAct = (MetaCommentAction*) pAction;
-                    if( pCommentAct->GetComment().Equals( "XGRAD_SEQ_BEGIN" ) )
+                    if( pCommentAct->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_BEGIN")) )
                     {
                         int nBeginComments( 1 );
                         pAction = NextAction();
@@ -1555,7 +1555,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                             else if( META_COMMENT_ACTION == nType)
                             {
                                 MetaCommentAction* pAct = (MetaCommentAction*) pAction;
-                                if( pAct->GetComment().Equals( "XGRAD_SEQ_END" ) )
+                                if( pAct->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_END")) )
                                 {
                                     // handle nested blocks
                                     --nBeginComments;
@@ -1564,7 +1564,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                                     if( !nBeginComments )
                                         break;
                                 }
-                                else if( pAct->GetComment().Equals( "XGRAD_SEQ_BEGIN" ) )
+                                else if( pAct->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_BEGIN")) )
                                 {
                                     // handle nested blocks
                                     ++nBeginComments;
@@ -1577,8 +1577,8 @@ void GDIMetaFile::Rotate( long nAngle10 )
                     }
                     else
                     {
-                        sal_Bool bPathStroke = pCommentAct->GetComment().Equals( "XPATHSTROKE_SEQ_BEGIN" );
-                        if ( bPathStroke || pCommentAct->GetComment().Equals( "XPATHFILL_SEQ_BEGIN" ) )
+                        sal_Bool bPathStroke = pCommentAct->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_BEGIN"));
+                        if ( bPathStroke || pCommentAct->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_BEGIN")) )
                         {
                             if ( pCommentAct->GetDataSize() )
                             {
@@ -1608,8 +1608,8 @@ void GDIMetaFile::Rotate( long nAngle10 )
                                 }
                             }
                         }
-                        else if ( pCommentAct->GetComment().Equals( "XPATHSTROKE_SEQ_END" )
-                               || pCommentAct->GetComment().Equals( "XPATHFILL_SEQ_END" ) )
+                        else if ( pCommentAct->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_END"))
+                               || pCommentAct->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_END")) )
                         {
                             pAction->Execute( &aMapVDev );
                             pAction->Duplicate();

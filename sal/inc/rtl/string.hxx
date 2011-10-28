@@ -397,6 +397,34 @@ public:
     }
 
     /**
+      Perform a ASCII lowercase comparison of two strings.
+
+      The result is true if and only if second string
+      represents the same sequence of characters as the first string,
+      ignoring the case.
+      Character values between 65 and 90 (ASCII A-Z) are interpreted as
+      values between 97 and 122 (ASCII a-z).
+      Since this method is optimized for performance, the ASCII character
+      values are not converted in any way. The caller has to make sure that
+      all ASCII characters are in the allowed range between 0 and
+      127. The ASCII string must be greater or equal in length as asciiStrLength.
+      This function can't be used for language specific comparison.
+
+      @param    asciiStr        the 8-Bit ASCII character string to be compared.
+      @param    asciiStrLength  the length of the ascii string
+      @return   sal_True if the strings are equal;
+                sal_False, otherwise.
+    */
+    sal_Bool equalsIgnoreAsciiCaseAsciiL( const sal_Char * asciiStr, sal_Int32 asciiStrLength ) const SAL_THROW(())
+    {
+        if ( pData->length != asciiStrLength )
+            return sal_False;
+
+        return rtl_str_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length,
+                                                          asciiStr, asciiStrLength ) == 0;
+    }
+
+    /**
       Match against a substring appearing in this string.
 
       The result is true if and only if the second string appears as a substring
