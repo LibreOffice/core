@@ -66,7 +66,7 @@ public:
         {}
 
     /**
-       Folowing the rule, the first virtual method impies the virtual destructor.
+       Following the rule, the first virtual method implies a virtual destructor.
      */
     virtual ~IPropertyArrayHelper();
 
