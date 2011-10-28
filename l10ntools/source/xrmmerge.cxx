@@ -685,9 +685,8 @@ void XRMResMerge::WorkOnDesc(
                     sSearch = ByteString("xlink:href=\"");
                     sReplace = sSearch;
 
-                    ByteString sLocDescFilename = sCur;
-                    sLocDescFilename += ByteString("-");
-                    sLocDescFilename += sDescFilename;
+                    ByteString sLocDescFilename = sDescFilename;
+                    sLocDescFilename.SearchAndReplace( "en-US", sCur );
 
                     sSearch += sDescFilename;
                     sReplace += sLocDescFilename;
@@ -697,8 +696,9 @@ void XRMResMerge::WorkOnDesc(
 
                     DirEntry aEntry( String( sOutputFile, RTL_TEXTENCODING_ASCII_US ));
                     aEntry.ToAbs();
-                    ByteString sOutputDescFile( aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
-                    sOutputDescFile.SearchAndReplaceAll( "description.xml", "" );
+                    ByteString sOutputDescFile( aEntry.GetPath().GetFull(), RTL_TEXTENCODING_ASCII_US );
+                    ByteString sDel( DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US );
+                    sOutputDescFile += sDel;
                     sOutputDescFile += sLocDescFilename;
                     sText.SearchAndReplaceAll( "\\n", "\n" );
                     ofstream file ( sOutputDescFile.GetBuffer() );
