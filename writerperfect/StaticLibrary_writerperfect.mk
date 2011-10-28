@@ -46,6 +46,7 @@ $(eval $(call gb_StaticLibrary_add_api,writerperfect,\
 $(eval $(call gb_StaticLibrary_add_exception_objects,writerperfect,\
 	writerperfect/source/filter/DocumentElement \
 	writerperfect/source/filter/DocumentHandler \
+	writerperfect/source/filter/FilterInternal \
 	writerperfect/source/filter/FontStyle \
 	writerperfect/source/filter/InternalHandler \
 	writerperfect/source/filter/ListStyle \
@@ -55,7 +56,6 @@ $(eval $(call gb_StaticLibrary_add_exception_objects,writerperfect,\
 	writerperfect/source/filter/SectionStyle \
 	writerperfect/source/filter/TableStyle \
 	writerperfect/source/filter/TextRunStyle \
-	writerperfect/source/filter/libwriterperfect_filter \
 	writerperfect/source/stream/WPXSvStream \
 ))
 
