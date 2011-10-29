@@ -803,105 +803,103 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
                 // and the function is different to count
                 clearEntryFunctionField(_sFieldName,aSelEntry,_bListAction,nColumnId);
             }
+            // do we have a aggregate function and only a function?
+            else if ( SQL_ISRULE(pColumnRef,general_set_fct) )
+            {
+                String sLocalizedFunctionName;
+                if ( GetFunctionName(pColumnRef->getChild(0)->getTokenID(),sLocalizedFunctionName) )
+                {
+                    String sOldLocalizedFunctionName = aSelEntry->GetFunction();
+                    aSelEntry->SetFunction(sLocalizedFunctionName);
+                    sal_uInt32 nFunCount = pColumnRef->count() - 1;
+                    sal_Int32 nFunctionType = FKT_AGGREGATE;
+                    sal_Bool bQuote = sal_False;
+                    // may be there exists only one parameter which is a column, fill all information into our fields
+                    if ( nFunCount == 4 && SQL_ISRULE(pColumnRef->getChild(3),column_ref) )
+                        bError = fillColumnRef( pColumnRef->getChild(3), xConnection, aSelEntry, _bListAction );
+                    else if ( nFunCount == 3 ) // we have a COUNT(*) here, so take the first table
+                        bError = fillColumnRef( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")), ::rtl::OUString(), xMetaData, aSelEntry, _bListAction );
+                    else
+                    {
+                        nFunctionType |= FKT_NUMERIC;
+                        bQuote = sal_True;
+                        aSelEntry->SetDataType(DataType::DOUBLE);
+                        aSelEntry->SetFieldType(TAB_NORMAL_FIELD);
+                    }
+
+                    // now parse the parameters
+                    ::rtl::OUString sParameters;
+                    for(sal_uInt32 function = 2; function < nFunCount; ++function) // we only want to parse the parameters of the function
+                        pColumnRef->getChild(function)->parseNodeToStr( sParameters, xConnection, &rParser.getContext(), sal_True, bQuote );
+
+                    aSelEntry->SetFunctionType(nFunctionType);
+                    aSelEntry->SetField(sParameters);
+                    if ( aSelEntry->IsGroupBy() )
+                    {
+                        sOldLocalizedFunctionName = m_aFunctionStrings.GetToken(m_aFunctionStrings.GetTokenCount()-1);
+                        aSelEntry->SetGroupBy(sal_False);
+                    }
+
+                    // append undo action
+                    notifyFunctionFieldChanged(sOldLocalizedFunctionName,sLocalizedFunctionName,_bListAction, nColumnId);
+                }
+                else
+                    OSL_FAIL("Unsupported function inserted!");
+
+            }
             else
             {
-                // first check if we have a aggregate function and only a function
-                if ( SQL_ISRULE(pColumnRef,general_set_fct) )
+                // so we first clear the function field
+                clearEntryFunctionField(_sFieldName,aSelEntry,_bListAction,nColumnId);
+                ::rtl::OUString sFunction;
+                pColumnRef->parseNodeToStr( sFunction,
+                                            xConnection,
+                                            &rController.getParser().getContext(),
+                                            sal_True,
+                                            sal_True); // quote is to true because we need quoted elements inside the function
+
+                getDesignView()->fillFunctionInfo(pColumnRef,sFunction,aSelEntry);
+
+                if( SQL_ISRULEOR2(pColumnRef,position_exp,extract_exp) ||
+                    SQL_ISRULEOR2(pColumnRef,fold,char_substring_fct)  ||
+                    SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct) )
+                    // a calculation has been found ( can be calc and function )
                 {
-                    String sLocalizedFunctionName;
-                    if ( GetFunctionName(pColumnRef->getChild(0)->getTokenID(),sLocalizedFunctionName) )
-                    {
-                        String sOldLocalizedFunctionName = aSelEntry->GetFunction();
-                        aSelEntry->SetFunction(sLocalizedFunctionName);
-                        sal_uInt32 nFunCount = pColumnRef->count() - 1;
-                        sal_Int32 nFunctionType = FKT_AGGREGATE;
-                        sal_Bool bQuote = sal_False;
-                        // may be there exists only one parameter which is a column, fill all information into our fields
-                        if ( nFunCount == 4 && SQL_ISRULE(pColumnRef->getChild(3),column_ref) )
-                            bError = fillColumnRef( pColumnRef->getChild(3), xConnection, aSelEntry, _bListAction );
-                        else if ( nFunCount == 3 ) // we have a COUNT(*) here, so take the first table
-                            bError = fillColumnRef( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")), ::rtl::OUString(), xMetaData, aSelEntry, _bListAction );
-                        else
-                        {
-                            nFunctionType |= FKT_NUMERIC;
-                            bQuote = sal_True;
-                            aSelEntry->SetDataType(DataType::DOUBLE);
-                            aSelEntry->SetFieldType(TAB_NORMAL_FIELD);
-                        }
+                    // now parse the whole statement
+                    sal_uInt32 nFunCount = pColumnRef->count();
+                    ::rtl::OUString sParameters;
+                    for(sal_uInt32 function = 0; function < nFunCount; ++function)
+                        pColumnRef->getChild(function)->parseNodeToStr( sParameters, xConnection, &rParser.getContext(), sal_True, sal_True );
 
-                        // now parse the parameters
-                        ::rtl::OUString sParameters;
-                        for(sal_uInt32 function = 2; function < nFunCount; ++function) // we only want to parse the parameters of the function
-                            pColumnRef->getChild(function)->parseNodeToStr( sParameters, xConnection, &rParser.getContext(), sal_True, bQuote );
-
-                        aSelEntry->SetFunctionType(nFunctionType);
-                        aSelEntry->SetField(sParameters);
-                        if ( aSelEntry->IsGroupBy() )
-                        {
-                            sOldLocalizedFunctionName = m_aFunctionStrings.GetToken(m_aFunctionStrings.GetTokenCount()-1);
-                            aSelEntry->SetGroupBy(sal_False);
-                        }
-
-                        // append undo action
-                        notifyFunctionFieldChanged(sOldLocalizedFunctionName,sLocalizedFunctionName,_bListAction, nColumnId);
-                    }
-                    else
-                        OSL_FAIL("Unsupported function inserted!");
-
+                    sOldAlias = aSelEntry->GetAlias();
+                    sal_Int32 nNewFunctionType = aSelEntry->GetFunctionType() | FKT_NUMERIC | FKT_OTHER;
+                    aSelEntry->SetFunctionType(nNewFunctionType);
+                    aSelEntry->SetField(sParameters);
                 }
                 else
                 {
-                    // so we first clear the function field
-                    clearEntryFunctionField(_sFieldName,aSelEntry,_bListAction,nColumnId);
-                    ::rtl::OUString sFunction;
-                    pColumnRef->parseNodeToStr( sFunction,
-                                                xConnection,
-                                                &rController.getParser().getContext(),
-                                                sal_True,
-                                                sal_True); // quote is to true because we need quoted elements inside the function
-
-                    getDesignView()->fillFunctionInfo(pColumnRef,sFunction,aSelEntry);
-
-                    if( SQL_ISRULEOR2(pColumnRef,position_exp,extract_exp) ||
-                        SQL_ISRULEOR2(pColumnRef,fold,char_substring_fct)  ||
-                        SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct) )
-                            // a calculation has been found ( can be calc and function )
-                    {
-                        // now parse the whole statement
-                        sal_uInt32 nFunCount = pColumnRef->count();
-                        ::rtl::OUString sParameters;
-                        for(sal_uInt32 function = 0; function < nFunCount; ++function)
-                            pColumnRef->getChild(function)->parseNodeToStr( sParameters, xConnection, &rParser.getContext(), sal_True, sal_True );
-
-                        sOldAlias = aSelEntry->GetAlias();
-                        sal_Int32 nNewFunctionType = aSelEntry->GetFunctionType() | FKT_NUMERIC | FKT_OTHER;
-                        aSelEntry->SetFunctionType(nNewFunctionType);
-                        aSelEntry->SetField(sParameters);
-                    }
+                    aSelEntry->SetFieldAlias(sColumnAlias);
+                    if ( SQL_ISRULE(pColumnRef,set_fct_spec) )
+                        aSelEntry->SetFunctionType(/*FKT_NUMERIC | */FKT_OTHER);
                     else
                     {
-                        aSelEntry->SetFieldAlias(sColumnAlias);
-                        if ( SQL_ISRULE(pColumnRef,set_fct_spec) )
-                            aSelEntry->SetFunctionType(/*FKT_NUMERIC | */FKT_OTHER);
+                        if ( SQL_ISRULEOR2(pColumnRef,num_value_exp,term) || SQL_ISRULE(pColumnRef,factor) )
+                            aSelEntry->SetDataType(DataType::DOUBLE);
+                        else if ( SQL_ISRULE(pColumnRef,value_exp) )
+                            aSelEntry->SetDataType(DataType::TIMESTAMP);
                         else
-                        {
-                            if ( SQL_ISRULEOR2(pColumnRef,num_value_exp,term) || SQL_ISRULE(pColumnRef,factor) )
-                                aSelEntry->SetDataType(DataType::DOUBLE);
-                            else if ( SQL_ISRULE(pColumnRef,value_exp) )
-                                aSelEntry->SetDataType(DataType::TIMESTAMP);
-                            else
-                                aSelEntry->SetDataType(DataType::VARCHAR);
-                            aSelEntry->SetFunctionType(FKT_NUMERIC | FKT_OTHER);
-                        }
-                    }
+                            aSelEntry->SetDataType(DataType::VARCHAR);
 
-                    aSelEntry->SetAlias(::rtl::OUString());
-                    notifyTableFieldChanged(sOldAlias,aSelEntry->GetAlias(),_bListAction, nColumnId);
+                        aSelEntry->SetFunctionType(FKT_NUMERIC | FKT_OTHER);
+                    }
                 }
 
+                aSelEntry->SetAlias(::rtl::OUString());
+                notifyTableFieldChanged(sOldAlias,aSelEntry->GetAlias(),_bListAction, nColumnId);
             }
+
             if ( i > 0 && !InsertField(aSelEntry,BROWSER_INVALIDID,sal_True,sal_False).is() ) // may we have to append more than one field
-            { // the field could not be isnerted
+            { // the field could not be inserted
                 String sErrorMessage( ModuleRes( RID_STR_FIELD_DOESNT_EXIST ) );
                 sErrorMessage.SearchAndReplaceAscii("$name$",aSelEntry->GetField());
                 OSQLWarningBox( this, sErrorMessage ).Execute();
