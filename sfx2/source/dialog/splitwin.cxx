@@ -79,9 +79,9 @@ class SfxEmptySplitWin_Impl : public SplitWindow
 {
 /*  [Beschreibung]
 
-    Das SfxEmptySplitWin_Impldow ist ein leeres SplitWindow, das das SfxSplitWindow
-    im AutoHide-Modus ersetzt. Es dient nur als Platzhalter, um MouseMoves
-    zu empfangen und ggf. das eigentlichte SplitWindow einzublenden
+    SfxEmptySplitWin_Impldow is an empty split window replacing the SfxSplitWindow
+    in AutoHide mode. Itworks as a placeholder to receive mouse MouseMoves.
+    the actual light split window display
 */
 friend class SfxSplitWindow;
 
@@ -438,13 +438,13 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
 
 /*  [Beschreibung]
 
-    Zum Einf"ugen von SfxDockingWindows kann auch keine Position "ubergeben
-    werden. Das SfxSplitWindow sucht dann die zuletzt gemerkte zu dem
-    "ubergebenen SfxDockingWindow heraus oder h"angt es als letztes neu an.
+    To insert SfxDockingWindows with no position can also be transfered.
+    The SfxSplitWindow then searches out the noted recently transfered
+    to the newly SfxDockingWindow or it depends on the last.
 
 */
 {
-    short nLine = -1;       // damit erstes Fenster nLine auf 0 hochsetzen kann
+    short nLine = -1;       // so first window can be set to 0 nLine high
     sal_uInt16 nL;
     sal_uInt16 nPos = 0;
     sal_Bool bNewLine = sal_True;
@@ -456,33 +456,33 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
         SfxDock_Impl *pDock = (*pDockArr)[n];
         if ( pDock->bNewLine )
         {
-            // Das Fenster er"offnet eine neue Zeile
+            // The window opens a new line
             if ( pFoundDock )
-                // Aber hinter dem gerade eingef"ugten Fenster
+                // But behind the window just inserted
                 break;
 
-            // Neue Zeile
+            // new line
             nPos = 0;
             bNewLine = sal_True;
         }
 
         if ( pDock->pWin )
         {
-            // Es gibt an dieser Stelle gerade ein Fenster
+            // It is at this point just a window
             if ( bNewLine && !pFoundDock )
             {
-                // Bisher ist nicht bekannt, in welcher realen Zeile es liegt
+                // It is not known, in which real line is the one
                 GetWindowPos( pDock->pWin, nL, nPos );
                 nLine = (short) nL;
             }
 
             if ( !pFoundDock )
             {
-                // Fenster liegt vor dem eingef"ugten
+                // before the window is attached
                 nPos++;
             }
 
-            // Zeile ist schon er"offnet
+            // Line is now open
             bNewLine = sal_False;
             if ( pFoundDock )
                 break;
@@ -490,16 +490,16 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
 
         if ( pDock->nType == pDockWin->GetType() )
         {
-            DBG_ASSERT( !pFoundDock && !pDock->pWin, "Fenster ist schon vorhanden!");
+            DBG_ASSERT( !pFoundDock && !pDock->pWin, "Window is already available!");
             pFoundDock = pDock;
             if ( !bNewLine )
                 break;
             else
             {
-                // Es wurde zuletzt eine neue Reihe gestartet, aber noch kein
-                // darin liegendes Fenster gefunden; daher weitersuchen, ob noch
-                // ein Fenster in dieser Zeile folgt, um bNewLine korrekt zu setzen.
-                // Dabei darf aber nLine oder nPos nicht mehr ver"andert werden!
+                // It was most recently a new series started, but not found a
+                // window above it, so keep looking if nochein window follows
+                // this line to bNewLine to set correctly. But it must be nLine
+                // or nPos shouldn't be changed.
                 nLine++;
             }
         }
@@ -532,7 +532,7 @@ void SfxSplitWindow::ReleaseWindow_Impl(SfxDockingWindow *pDockWin, sal_Bool bSa
 
 /*  [Beschreibung]
 
-    Das DockingWindow wird nicht mehr in den internen Daten gespeichert.
+    The DockinWindow is no longer stored in the  internal data.
 */
 
 {
