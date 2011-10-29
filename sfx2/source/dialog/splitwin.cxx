@@ -611,13 +611,13 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
     pDock->bNewLine = bNewLine;
     pDock->pWin = pDockWin;
 
-    DBG_ASSERT( nPos==0 || !bNewLine, "Falsche Paramenter!");
+    DBG_ASSERT( nPos==0 || !bNewLine, "Wrong Parameter!");
     if ( bNewLine )
         nPos = 0;
 
     // Das Fenster mu\s vor dem ersten Fenster eingef"ugt werden, das die
     // gleiche oder eine gr"o\sere Position hat als pDockWin.
-    sal_uInt16 nCount = pDockArr->Count();
+    sal_uInt16 nLastWindowIdx(0);
 
     // Wenn gar kein Fenster gefunden wird, wird als erstes eingef"ugt
     sal_uInt16 nInsertPos = 0;
@@ -631,25 +631,30 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
             // Wenn kein geeignetes Fenster hinter der gew"unschten Einf"ugeposition
             // gefunden wird, wird am Ende eingef"ugt
             nInsertPos = nCount;
+            nLastWindowIdx = n;
             sal_uInt16 nL=0, nP=0;
             GetWindowPos( pD->pWin, nL, nP );
 
             if ( (nL == nLine && nP == nPos) || nL > nLine )
             {
-                DBG_ASSERT( nL == nLine || bNewLine || nPos > 0, "Falsche Parameter!" );
+                DBG_ASSERT( nL == nLine || bNewLine || nPos > 0, "Wrong Parameter!" );
                 if ( nL == nLine && nPos == 0 && !bNewLine )
                 {
-                    DBG_ASSERT(pD->bNewLine, "Keine neue Zeile?");
+                    DBG_ASSERT(pD->bNewLine, "No new line?");
 
                     // Das Fenster wird auf nPos==0 eingeschoben
                     pD->bNewLine = sal_False;
                     pDock->bNewLine = sal_True;
                 }
 
-                nInsertPos = n;
+                nInsertPos = n != 0 ? nLastWindowIdx + 1 : 0;    // ignore all non-windows after the last window
                 break;
             }
         }
+    }
+    if (nInsertPos == nCount && nLastWindowIdx != nCount - 1)
+    {
+        nInsertPos = nLastWindowIdx + 1;    // ignore all non-windows after the last window
     }
 
     pDockArr->Insert(pDock, nInsertPos);
