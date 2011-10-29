@@ -481,19 +481,21 @@ bool getRectanglesFromScrollMtf( ::basegfx::B2DRectangle&       o_rScrollRect,
             MetaCommentAction * pAct =
                 static_cast<MetaCommentAction *>(pCurrAct);
             // skip comment if not a special XTEXT comment
-            if (pAct->GetComment().CompareIgnoreCaseToAscii(
-                    RTL_CONSTASCII_STRINGPARAM("XTEXT") ) == COMPARE_EQUAL)
+            if (pAct->GetComment().equalsIgnoreAsciiCaseAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM("XTEXT") ))
             {
-                if (pAct->GetComment().CompareIgnoreCaseToAscii(
-                        "XTEXT_SCROLLRECT" ) == COMPARE_EQUAL) {
+                if (pAct->GetComment().equalsIgnoreAsciiCaseAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("XTEXT_SCROLLRECT") ))
+                {
                     o_rScrollRect = ::vcl::unotools::b2DRectangleFromRectangle(
                         *reinterpret_cast<Rectangle const *>(
                             pAct->GetData() ) );
 
                     bScrollRectSet = true;
                 }
-                else if (pAct->GetComment().CompareIgnoreCaseToAscii(
-                             "XTEXT_PAINTRECT" ) == COMPARE_EQUAL) {
+                else if (pAct->GetComment().equalsIgnoreAsciiCaseAsciiL(
+                             RTL_CONSTASCII_STRINGPARAM("XTEXT_PAINTRECT")) )
+                {
                     o_rPaintRect = ::vcl::unotools::b2DRectangleFromRectangle(
                         *reinterpret_cast<Rectangle const *>(
                             pAct->GetData() ) );

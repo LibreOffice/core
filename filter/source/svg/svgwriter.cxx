@@ -1627,7 +1627,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 const MetaCommentAction*    pA = (const MetaCommentAction*) pAction;
                 String                      aSkipComment;
 
-                if( ( pA->GetComment().CompareIgnoreCaseToAscii( "XGRAD_SEQ_BEGIN" ) == COMPARE_EQUAL ) &&
+                if( ( pA->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_BEGIN")) ) &&
                     ( nWriteFlags & SVGWRITER_WRITE_FILL ) )
                 {
                     const MetaGradientExAction* pGradAction = NULL;
@@ -1641,7 +1641,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                             pGradAction = (const MetaGradientExAction*) pAction;
                         else if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
                                  ( ( (const MetaCommentAction*) pAction )->GetComment().
-                                        CompareIgnoreCaseToAscii( "XGRAD_SEQ_END" ) == COMPARE_EQUAL ) )
+                                        equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_END")) ) )
                         {
                             bDone = sal_True;
                         }
@@ -1650,7 +1650,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     if( pGradAction )
                         ImplWriteGradientEx( pGradAction->GetPolyPolygon(), pGradAction->GetGradient(), nWriteFlags );
                 }
-                else if( ( pA->GetComment().CompareIgnoreCaseToAscii( "XPATHFILL_SEQ_BEGIN" ) == COMPARE_EQUAL ) &&
+                else if( ( pA->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_BEGIN")) ) &&
                          ( nWriteFlags & SVGWRITER_WRITE_FILL ) && !( nWriteFlags & SVGWRITER_NO_SHAPE_COMMENTS ) &&
                          pA->GetDataSize() )
                 {
@@ -1697,7 +1697,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                                     if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
                                         ( ( (const MetaCommentAction*) pAction )->GetComment().
-                                        CompareIgnoreCaseToAscii( "XPATHFILL_SEQ_END" ) == COMPARE_EQUAL ) )
+                                        equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_END")) ) )
                                     {
                                         bSkip = sal_False;
                                     }
@@ -1725,13 +1725,13 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                         if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
                                     ( ( (const MetaCommentAction*) pAction )->GetComment().
-                                    CompareIgnoreCaseToAscii( "XPATHFILL_SEQ_END" ) == COMPARE_EQUAL ) )
+                                    equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_END")) ) )
                         {
                             bSkip = sal_False;
                         }
                     }
                 }
-                else if( ( pA->GetComment().CompareIgnoreCaseToAscii( "XPATHSTROKE_SEQ_BEGIN" ) == COMPARE_EQUAL ) &&
+                else if( ( pA->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_BEGIN")) ) &&
                          ( nWriteFlags & SVGWRITER_WRITE_FILL ) && !( nWriteFlags & SVGWRITER_NO_SHAPE_COMMENTS ) &&
                          pA->GetDataSize() )
                 {
@@ -1781,7 +1781,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                         if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
                                     ( ( (const MetaCommentAction*) pAction )->GetComment().
-                                    CompareIgnoreCaseToAscii( "XPATHSTROKE_SEQ_END" ) == COMPARE_EQUAL ) )
+                                    equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_END")) ) )
                         {
                             bSkip = sal_False;
                         }

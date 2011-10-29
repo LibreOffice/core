@@ -1658,7 +1658,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                 const sal_uInt8*                pData = pA->GetData();
                 String                      aSkipComment;
 
-                if( pA->GetComment().CompareIgnoreCaseToAscii( "XGRAD_SEQ_BEGIN" ) == COMPARE_EQUAL )
+                if( pA->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_BEGIN")) )
                 {
                     const MetaGradientExAction* pGradAction = NULL;
                     sal_Bool                    bDone = sal_False;
@@ -1670,7 +1670,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                         if( pAction->GetType() == META_GRADIENTEX_ACTION )
                             pGradAction = (const MetaGradientExAction*) pAction;
                         else if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
-                                 ( ( (const MetaCommentAction*) pAction )->GetComment().CompareIgnoreCaseToAscii( "XGRAD_SEQ_END" ) == COMPARE_EQUAL ) )
+                                 ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_END")) ) )
                         {
                             bDone = sal_True;
                         }
@@ -1679,7 +1679,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                     if( pGradAction )
                         Impl_writeGradientEx( pGradAction->GetPolyPolygon(), pGradAction->GetGradient());
                 }
-                else if( pA->GetComment().CompareIgnoreCaseToAscii( "XPATHFILL_SEQ_BEGIN" ) == COMPARE_EQUAL &&
+                else if( pA->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_BEGIN")) &&
                          pData )
                 {
 
@@ -1703,14 +1703,14 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                             pAction = rMtf.GetAction( i );
 
                             if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
-                                     ( ( (const MetaCommentAction*) pAction )->GetComment().CompareIgnoreCaseToAscii( "XPATHFILL_SEQ_END" ) == COMPARE_EQUAL ) )
+                                     ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_END")) ) )
                             {
                                 bDone = sal_True;
                             }
                         }
                     }
                 }
-                else if( pA->GetComment().CompareIgnoreCaseToAscii( "XPATHSTROKE_SEQ_BEGIN" ) == COMPARE_EQUAL &&
+                else if( pA->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_BEGIN")) &&
                          pData )
                 {
 
@@ -1734,37 +1734,13 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                             pAction = rMtf.GetAction( i );
 
                             if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
-                                     ( ( (const MetaCommentAction*) pAction )->GetComment().CompareIgnoreCaseToAscii( "XPATHSTROKE_SEQ_END" ) == COMPARE_EQUAL ) )
+                                     ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_END")) ) )
                             {
                                 bDone = sal_True;
                             }
                         }
                     }
                 }
-#if 0
-                else if( pA->GetComment().CompareIgnoreCaseToAscii( "FIELD_SEQ_BEGIN;PageField" ) == COMPARE_EQUAL )
-                {
-                    bool bDone = sal_False;
-
-                    while( !bDone && ( ++i < nCount ) )
-                    {
-                        pAction = rMtf.GetAction( i );
-
-                        if( pAction->GetType() == META_TEXTARRAY_ACTION )
-                        {
-                            const MetaTextArrayAction* pA = (const MetaTextArrayAction*) pAction;
-                            Rectangle aRect( pA->GetPoint(), Size( 100, 100 ) );
-                            Impl_writePageField( aRect );
-                        }
-
-                        if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
-                                 ( ( (const MetaCommentAction*) pAction )->GetComment().CompareIgnoreCaseToAscii( "FIELD_SEQ_END" ) == COMPARE_EQUAL ) )
-                        {
-                            bDone = sal_True;
-                        }
-                    }
-                }
-#endif
             }
             break;
 

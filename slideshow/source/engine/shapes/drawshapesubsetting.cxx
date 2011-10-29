@@ -91,14 +91,14 @@ namespace slideshow
                         MetaCommentAction* pAct = static_cast<MetaCommentAction*>(pCurrAct);
 
                         // skip comment if not a special XTEXT comment
-                        if( pAct->GetComment().CompareIgnoreCaseToAscii( "XTEXT", 5 ) == COMPARE_EQUAL )
+                        if( pAct->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XTEXT")) )
                         {
                             // fill classification vector with NOOPs,
                             // then insert corresponding classes at
                             // the given index
                             maActionClassVector.resize( nActionIndex+1, CLASS_NOOP );
 
-                            if( pAct->GetComment().CompareIgnoreCaseToAscii( "XTEXT_EOC" ) == COMPARE_EQUAL )
+                            if( pAct->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOC")) )
                             {
                                 // special, because can happen
                                 // in-between of portions - set
@@ -112,7 +112,7 @@ namespace slideshow
 
                                 maActionClassVector[ nIndex ] = CLASS_CHARACTER_CELL_END;
                             }
-                            else if( pAct->GetComment().CompareIgnoreCaseToAscii( "XTEXT_EOW" ) == COMPARE_EQUAL )
+                            else if( pAct->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOW")) )
                             {
                                 // special, because can happen
                                 // in-between of portions - set
@@ -126,7 +126,7 @@ namespace slideshow
 
                                 maActionClassVector[ nIndex ] = CLASS_WORD_END;
                             }
-                            else if( pAct->GetComment().CompareIgnoreCaseToAscii( "XTEXT_EOS" ) == COMPARE_EQUAL )
+                            else if( pAct->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM( "XTEXT_EOS" )) )
                             {
                                 // special, because can happen
                                 // in-between of portions - set
@@ -140,19 +140,19 @@ namespace slideshow
 
                                 maActionClassVector[ nIndex ] = CLASS_SENTENCE_END;
                             }
-                            else if( pAct->GetComment().CompareIgnoreCaseToAscii( "XTEXT_EOL" ) == COMPARE_EQUAL )
+                            else if( pAct->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOL")) )
                             {
                                 maActionClassVector[ nActionIndex ] = CLASS_LINE_END;
                             }
-                            else if( pAct->GetComment().CompareIgnoreCaseToAscii( "XTEXT_EOP" ) == COMPARE_EQUAL )
+                            else if( pAct->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOP")) )
                             {
                                 maActionClassVector[ nActionIndex ] = CLASS_PARAGRAPH_END;
                             }
-                            else if( pAct->GetComment().CompareIgnoreCaseToAscii( "XTEXT_PAINTSHAPE_END" ) == COMPARE_EQUAL )
+                            else if( pAct->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XTEXT_PAINTSHAPE_END")) )
                             {
                                 maActionClassVector[ nActionIndex ] = CLASS_SHAPE_END;
                             }
-                            else if( pAct->GetComment().CompareIgnoreCaseToAscii( "XTEXT_PAINTSHAPE_BEGIN" ) == COMPARE_EQUAL )
+                            else if( pAct->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XTEXT_PAINTSHAPE_BEGIN")) )
                             {
                                 maActionClassVector[ nActionIndex ] = CLASS_SHAPE_START;
                             }
