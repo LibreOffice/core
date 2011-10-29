@@ -615,11 +615,11 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
     if ( bNewLine )
         nPos = 0;
 
-    // Das Fenster mu\s vor dem ersten Fenster eingef"ugt werden, das die
-    // gleiche oder eine gr"o\sere Position hat als pDockWin.
+    // The window introduced before the first window are suffices that the
+    // body or a greater position as the pDockWin.
     sal_uInt16 nLastWindowIdx(0);
 
-    // Wenn gar kein Fenster gefunden wird, wird als erstes eingef"ugt
+    // If window not found, is inserted as the first
     sal_uInt16 nInsertPos = 0;
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
