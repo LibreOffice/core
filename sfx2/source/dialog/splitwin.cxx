@@ -65,9 +65,9 @@ using namespace ::rtl;
 struct SfxDock_Impl
 {
     sal_uInt16              nType;
-    SfxDockingWindow*   pWin;           // SplitWindow hat dieses Fenster
+    SfxDockingWindow*   pWin;           // This window has SplitWindow
     sal_Bool                bNewLine;
-    sal_Bool                bHide;          // SplitWindow hatte dieses Fenster
+    sal_Bool                bHide;          // SplitWindow had this window
     long                nSize;
 };
 
@@ -80,7 +80,7 @@ class SfxEmptySplitWin_Impl : public SplitWindow
 /*  [Beschreibung]
 
     SfxEmptySplitWin_Impldow is an empty split window replacing the SfxSplitWindow
-    in AutoHide mode. Itworks as a placeholder to receive mouse MouseMoves.
+    in AutoHide mode. It works as a placeholder to receive mouse MouseMoves.
     the actual light split window display
 */
 friend class SfxSplitWindow;
@@ -158,9 +158,9 @@ void SfxEmptySplitWin_Impl::FadeIn()
     pOwner->Show_Impl();
     if ( bAutoHide )
     {
-        // Timer zum Schlie\sen aufsetzen; der Aufrufer mu\s selbst sicherstellen,
-        // da\s das Window nicht gleich wieder zu geht ( z.B. durch Setzen des
-        // Focus oder einen modal mode )
+        // Put timer to close; the caller must make sure it is,
+        // that the window does not stay or leave ( z.B. by setting the
+        // Focus mode or modal )
         aLastPos = GetPointerPosPixel();
         aTimer.Start();
     }
