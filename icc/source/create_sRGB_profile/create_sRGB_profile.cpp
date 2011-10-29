@@ -93,11 +93,11 @@ const char* const copyright = "The Contents of this file are made available subj
 
 // the creation date is fixed, corresponds to the last time this file has been changed
 // NOTE: change this date values whenever the data inside the profile are changed.
-const int  data_last_changed_year =     2007;
-const int  data_last_changed_month =    12;
-const int  data_last_day =              12;
+const int  data_last_changed_year =     2011;
+const int  data_last_changed_month =    10;
+const int  data_last_day =              16;
 const int  data_last_changed_hour =     18;
-const int  data_last_changed_minute =   32;
+const int  data_last_changed_minute =   55;
 
 // the following string array it's the standard OOo header format
 const char * const TheHeader1[] =
@@ -200,7 +200,6 @@ void dumpTag(FILE *outfile, CIccProfile *pIcc, icTagSignature sig)
 void dumpProfile(FILE *outfile, const char * profileName)
 {
     CIccProfile *pIcc;
-    std::string sReport;
     icValidateStatus nStatus;
 
     pIcc = OpenIccProfile(profileName);
