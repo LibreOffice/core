@@ -126,6 +126,7 @@ public:
     void testStarBasic();
     void testVba();
     CPPUNIT_TEST_SUITE(ScMacrosTest);
+#if 0
 #ifndef MACOSX
     //enable this test if you want to play with star basic macros in unit tests
     //works but does nothing useful yet
@@ -133,6 +134,7 @@ public:
     //enable if you want to hack vba support for unit tests
     //does not work, still problems during loading
     CPPUNIT_TEST(testVba);
+#endif
 #endif
 
     CPPUNIT_TEST_SUITE_END();
