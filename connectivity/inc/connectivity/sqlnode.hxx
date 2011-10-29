@@ -289,7 +289,7 @@ namespace connectivity
         /** parses the node to a string which can be passed to a driver's connection for execution
 
             Any particles of the parse tree which represent application-level features - such
-            as queries appearing in the FROM part - are subsituted, so that the resulting statement can
+            as queries appearing in the FROM part - are substituted, so that the resulting statement can
             be executed at an SDBC-level connection.
 
             @param  _out_rString
