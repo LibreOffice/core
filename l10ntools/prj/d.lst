@@ -24,12 +24,9 @@ mkdir: %_DEST%\bin\help\com\sun\star\help
 ..\%__SRC%\bin\ulfex %_DEST%\bin\ulfex
 ..\%__SRC%\bin\txtconv.exe %_DEST%\bin\txtconv.exe
 ..\%__SRC%\bin\txtconv %_DEST%\bin\txtconv
-..\%__SRC%\bin\tralay.exe %_DEST%\bin\tralay.exe
-..\%__SRC%\bin\tralay %_DEST%\bin\tralay
 ..\%__SRC%\bin\ulfconv %_DEST%\bin\ulfconv
 ..\%__SRC%\class\FCFGMerge.jar %_DEST%\bin\FCFGMerge.jar
 ..\%__SRC%\class\HelpIndexerTool.jar %_DEST%\bin\HelpIndexerTool.jar
-..\%__SRC%\class\jpropex\jpropex.jar %_DEST%\bin\jpropex.jar
 ..\%__SRC%\bin\HelpLinker %_DEST%\bin\HelpLinker
 ..\%__SRC%\bin\HelpCompiler %_DEST%\bin\HelpCompiler
 ..\%__SRC%\bin\HelpCompiler.exe %_DEST%\bin\HelpCompiler.exe
