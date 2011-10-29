@@ -164,7 +164,7 @@ struct SfxDispatcher_Impl
     sal_uInt16           nFilterCount;  // Number of SIDs in pFilterSIDs
     const sal_uInt16*    pFilterSIDs;   // sorted Array of SIDs
     sal_uInt16           nStandardMode; // ExecuteMode from PlugInDispatcher
-    SvUShorts*           pDisableList;
+    std::vector<sal_uInt16>* pDisableList;
     sal_uInt32           nDisableFlags;
 };
 
@@ -2498,8 +2498,8 @@ sal_Bool SfxDispatcher::IsAllowed
     }
 
     // BinSearch in the disable list
-    SvUShorts& rList = *pImp->pDisableList;
-    sal_uInt16 nCount = rList.Count();
+    std::vector<sal_uInt16>& rList = *pImp->pDisableList;
+    sal_uInt16 nCount = rList.size();
     sal_uInt16 nLow = 0, nMid = 0, nHigh;
     sal_Bool bFound = sal_False;
     nHigh = nCount - 1;

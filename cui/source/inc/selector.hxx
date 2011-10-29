@@ -39,9 +39,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 
-#define _SVSTDARR_USHORTS
-#define _SVSTDARR_STRINGSDTOR
-#include <svl/svstdarr.hxx>     // SvUShorts
 #include <sfx2/minarray.hxx>
 
 #define SVX_CFGGROUP_FUNCTION 1

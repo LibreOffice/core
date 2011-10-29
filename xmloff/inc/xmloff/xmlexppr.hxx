@@ -39,7 +39,6 @@ namespace rtl { class OUString; }
 class SvXMLUnitConverter;
 class SvXMLAttributeList;
 class SvXMLNamespaceMap;
-class SvUShorts;
 class FilterPropertiesInfos_Impl;
 class SvXMLExport;
 
@@ -85,7 +84,7 @@ protected:
                      const SvXMLUnitConverter& rUnitConverter,
                      const SvXMLNamespaceMap& rNamespaceMap,
                      sal_uInt16 nFlags,
-                     SvUShorts* pIndexArray,
+                     std::vector<sal_uInt16>* pIndexArray,
                        sal_Int32 nPropMapStartIdx, sal_Int32 nPropMapEndIdx ) const;
 
     void _exportXML( SvXMLAttributeList& rAttrList,
@@ -100,7 +99,7 @@ protected:
             SvXMLExport& rExport,
             const ::std::vector< XMLPropertyState >& rProperties,
             sal_uInt16 nFlags,
-            const SvUShorts& rIndexArray ) const;
+            const std::vector<sal_uInt16>& rIndexArray ) const;
 
 public:
 

@@ -782,15 +782,15 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const String& rBaseURL, sal_uI
     aItemIds.nLanguageCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_LANGUAGE, sal_False );
     aItemIds.nDirection = rPool.GetTrueWhich( SID_ATTR_FRAMEDIRECTION, sal_False );
 
-    aWhichMap.Insert( (sal_uInt16)0, (sal_uInt16)0 );
+    aWhichMap.insert( aWhichMap.begin(), 0 );
     SvParser::BuildWhichTbl( aWhichMap, (sal_uInt16 *)&aItemIds,
                              sizeof(aItemIds) / sizeof(sal_uInt16) );
     if( pWhichIds && nWhichIds )
         SvParser::BuildWhichTbl( aWhichMap, pWhichIds, nWhichIds );
 
-    pSheetItemSet = new SfxItemSet( rPool, aWhichMap.GetData() );
+    pSheetItemSet = new SfxItemSet( rPool, &aWhichMap[0] );
     pSheetPropInfo = new SvxCSS1PropertyInfo;
-    pSearchEntry = new SvxCSS1MapEntry( rPool, aWhichMap.GetData() );
+    pSearchEntry = new SvxCSS1MapEntry( rPool, &aWhichMap[0] );
 }
 
 SvxCSS1Parser::~SvxCSS1Parser()

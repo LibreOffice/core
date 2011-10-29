@@ -2796,7 +2796,7 @@ void SfxTemplateCatalog_Impl::CheckItem(sal_uInt16 nMesId, sal_Bool /*bCheck*/)
     if ( nMesId > SFX_STYLE_FAMILY_PSEUDO || nMesId < SFX_STYLE_FAMILY_CHAR )
         return;
     sal_uInt16 i;
-    for ( i = 0; i < aFamIds.Count() && aFamIds[i] != nMesId; i++ ) ;
+    for ( i = 0; i < aFamIds.size() && aFamIds[i] != nMesId; i++ ) ;
     aFamList.SelectEntryPos(i);
 }
 
@@ -2807,7 +2807,7 @@ sal_Bool SfxTemplateCatalog_Impl::IsCheckedItem(sal_uInt16 nMesId)
     if ( nMesId > SFX_STYLE_FAMILY_PSEUDO || nMesId < SFX_STYLE_FAMILY_CHAR )
         return sal_False;
     sal_uInt16 i;
-    for ( i = 0; i < aFamIds.Count() && aFamIds[i] != nMesId; i++ )
+    for ( i = 0; i < aFamIds.size() && aFamIds[i] != nMesId; i++ )
         ;
     return aFamList.IsEntrySelected( String::CreateFromInt32(i) );
 }
@@ -2818,10 +2818,10 @@ sal_Bool SfxTemplateCatalog_Impl::IsCheckedItem(sal_uInt16 nMesId)
 void SfxTemplateCatalog_Impl::EnableFamilyItem( sal_uInt16 nId, sal_Bool bEnable )
 {
     if ( !bEnable )
-        for ( sal_uInt16 nPos = aFamIds.Count(); nPos--; )
+        for ( sal_uInt16 nPos = aFamIds.size(); nPos--; )
             if ( aFamIds[ nPos ] == nId )
             {
-                aFamIds.Remove( nPos );
+                aFamIds.erase( aFamIds.begin() + nPos );
                 aFamList.RemoveEntry( nPos );
             }
 }
@@ -2831,13 +2831,13 @@ void SfxTemplateCatalog_Impl::InsertFamilyItem( sal_uInt16 nId, const SfxStyleFa
     if ( nId > SFX_STYLE_FAMILY_PSEUDO || nId < SFX_STYLE_FAMILY_CHAR )
         return;
     aFamList.InsertEntry( pItem->GetText(), 0 );
-    aFamIds.Insert( nId, 0 );
+    aFamIds.insert( aFamIds.begin(), nId );
 }
 
 void SfxTemplateCatalog_Impl::ClearFamilyList()
 {
     aFamList.Clear();
-    aFamIds.Remove( 0, aFamIds.Count() );
+    aFamIds.clear();
 }
 
 void SfxTemplateCatalog_Impl::PrepareDeleteAction()

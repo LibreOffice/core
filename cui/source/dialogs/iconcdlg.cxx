@@ -30,8 +30,6 @@
 #include <tools/rc.h>
 #include <tools/shl.hxx>
 
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>
 #include <dialmgr.hxx>
 
 #include "iconcdlg.hxx"
@@ -44,11 +42,6 @@
 #include <vcl/i18nhelp.hxx>
 
 using ::std::vector;
-
-int SAL_CALL IconcDlgCmpUS_Impl( const void* p1, const void* p2 )
-{
-    return *(sal_uInt16*)p1 - *(sal_uInt16*)p2;
-}
 
 // some stuff for easier changes for SvtViewOptions
 static const sal_Char*      pViewOptDataName = "dialog data";
@@ -962,7 +955,7 @@ const sal_uInt16* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
 
     if ( pRanges )
         return pRanges;
-    SvUShorts aUS( 16, 16 );
+    std::vector<sal_uInt16> aUS;
 
     size_t nCount = maPageList.size();
     for ( size_t i = 0; i < nCount; ++i )
@@ -976,32 +969,26 @@ const sal_uInt16* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
             sal_uInt16 nLen;
             for( nLen = 0; *pIter; ++nLen, ++pIter )
                 ;
-            aUS.Insert( pTmpRanges, nLen, aUS.Count() );
+            aUS.insert( aUS.end(), pTmpRanges, pTmpRanges + nLen );
         }
     }
 
     // remove double Id's
     {
-        nCount = aUS.Count();
+        nCount = aUS.size();
         for ( size_t i = 0; i < nCount; ++i )
             aUS[i] = rPool.GetWhich( aUS[i] );
     }
 
     // sortieren
-    if ( aUS.Count() > 1 )
+    if ( aUS.size() > 1 )
     {
-#if defined __SUNPRO_CC
-#pragma disable_warn
-#endif
-        qsort( (void*)aUS.GetData(), aUS.Count(), sizeof(sal_uInt16), IconcDlgCmpUS_Impl );
-#if defined __SUNPRO_CC
-#pragma enable_warn
-#endif
+        std::sort( aUS.begin(), aUS.end() );
     }
 
-    pRanges = new sal_uInt16[aUS.Count() + 1];
-    memcpy(pRanges, aUS.GetData(), sizeof(sal_uInt16) * aUS.Count());
-    pRanges[aUS.Count()] = 0;
+    pRanges = new sal_uInt16[aUS.size() + 1];
+    std::copy( aUS.begin(), aUS.end(), pRanges );
+    pRanges[aUS.size()] = 0;
 
     return pRanges;
 }

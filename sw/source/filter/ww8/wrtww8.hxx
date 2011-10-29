@@ -1373,7 +1373,7 @@ private:
     const SfxItemPool* pEditPool;
     EECharAttribArray aTxtAtrArr;
     SvPtrarr aChrTxtAtrArr;
-    SvUShorts aChrSetArr;
+    std::vector<sal_uInt16> aChrSetArr;
     sal_uInt16 nPara;
     xub_StrLen nAktSwPos;
     xub_StrLen nTmpSwPos;                   // for HasItem()

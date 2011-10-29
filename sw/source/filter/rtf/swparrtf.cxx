@@ -2762,7 +2762,7 @@ void SwRTFParser::MakeStyleTab()
 }
 
 sal_Bool lcl_SetFmtCol( SwFmt& rFmt, sal_uInt16 nCols, sal_uInt16 nColSpace,
-                    const SvUShorts& rColumns )
+                    const std::vector<sal_uInt16>& rColumns )
 {
     sal_Bool bSet = sal_False;
     if( nCols && USHRT_MAX != nCols )
@@ -2772,11 +2772,11 @@ sal_Bool lcl_SetFmtCol( SwFmt& rFmt, sal_uInt16 nCols, sal_uInt16 nColSpace,
             nColSpace = 720;
 
         aCol.Init( nCols, nColSpace, USHRT_MAX );
-        if( nCols == ( rColumns.Count() / 2 ) )
+        if( nCols == ( rColumns.size() / 2 ) )
         {
             aCol._SetOrtho( sal_False );
             sal_uInt16 nWishWidth = 0, nHalfPrev = 0;
-            for( sal_uInt16 n = 0, i = 0; n < rColumns.Count(); n += 2, ++i )
+            for( sal_uInt16 n = 0, i = 0; n < rColumns.size(); n += 2, ++i )
             {
                 SwColumn* pCol = aCol.GetColumns()[ i ];
                 pCol->SetLeft( nHalfPrev );
@@ -3262,7 +3262,7 @@ void SwRTFParser::ReadPageDescTbl()
     SvxFrameDirectionItem aFrmDir(FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR);
 
     sal_uInt16 nCols = USHRT_MAX, nColSpace = USHRT_MAX, nAktCol = 0;
-    SvUShorts aColumns;
+    std::vector<sal_uInt16> aColumns;
 
     while( nNumOpenBrakets && IsParserWorking() )
     {
@@ -3422,10 +3422,10 @@ void SwRTFParser::ReadPageDescTbl()
                 else
                     SkipToken( -1 );        // wieder zurueck
 
-                if( --nAktCol == ( aColumns.Count() / 2 ) )
+                if( --nAktCol == ( aColumns.size() / 2 ) )
                 {
-                    aColumns.Insert( nWidth, aColumns.Count() );
-                    aColumns.Insert( nSpace, aColumns.Count() );
+                    aColumns.push_back( nWidth );
+                    aColumns.push_back( nSpace );
                 }
             }
             break;

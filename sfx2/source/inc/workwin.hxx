@@ -38,8 +38,6 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/propshlp.hxx>
 
-#define _SVSTDARR_sal_uInt16S
-#include <svl/svstdarr.hxx>     // SvUShorts
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 
@@ -234,7 +232,7 @@ class SfxWorkWindow
     friend class LayoutManagerListener;
 
 protected:
-    SvUShorts               aSortedList;
+    std::vector<sal_uInt16> aSortedList;
     SfxStatBar_Impl         aStatBar;
     std::vector< SfxObjectBar_Impl > aObjBarList;
     Rectangle               aClientArea;

@@ -572,7 +572,7 @@ void SvParser::Continue( int )
 {
 }
 
-void SvParser::BuildWhichTbl( SvUShorts &rWhichMap,
+void SvParser::BuildWhichTbl( std::vector<sal_uInt16> &rWhichMap,
                               sal_uInt16 *pWhichIds,
                               sal_uInt16 nWhichIds )
 {
@@ -590,7 +590,7 @@ void SvParser::BuildWhichTbl( SvUShorts &rWhichMap,
                 if( *pWhichIds < rWhichMap[nOfs] - 1 )
                 {
                     // neuen Range davor
-                    rWhichMap.Insert( aNewRange, 2, nOfs );
+                    rWhichMap.insert( rWhichMap.begin() + nOfs, aNewRange, aNewRange + 2 );
                     bIns = sal_False;
                     break;
                 }
@@ -607,7 +607,8 @@ void SvParser::BuildWhichTbl( SvUShorts &rWhichMap,
                     {
                         // mit dem naechsten Bereich mergen
                         rWhichMap[nOfs+1] = rWhichMap[nOfs+3];
-                        rWhichMap.Remove( nOfs+2, 2 );
+                        rWhichMap.erase( rWhichMap.begin() + nOfs + 2,
+                                rWhichMap.begin() + nOfs + 4 );
                     }
                     else
                         // diesen Range nach oben erweitern
@@ -619,7 +620,10 @@ void SvParser::BuildWhichTbl( SvUShorts &rWhichMap,
 
             // einen Range hinten anhaengen
             if( bIns )
-                rWhichMap.Insert( aNewRange, 2, rWhichMap.Count()-1 );
+            {
+                rWhichMap.insert( rWhichMap.begin() + rWhichMap.size() - 1,
+                        aNewRange, aNewRange + 2 );
+            }
         }
 }
 

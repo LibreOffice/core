@@ -170,10 +170,10 @@ SfxProgress* SfxApplication::GetProgress() const
 
 //------------------------------------------------------------------------
 
-SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
+std::vector<sal_uInt16>* SfxApplication::GetDisabledSlotList_Impl()
 {
     sal_Bool bError = sal_False;
-    SvUShorts* pList = pAppData_Impl->pDisabledSlotList;
+    std::vector<sal_uInt16>* pList = pAppData_Impl->pDisabledSlotList;
     if ( !pList )
     {
         // Is there a slot file?
@@ -200,13 +200,13 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
                 sal_uInt16 nCount;
                 (*pStream) >> nCount;
                 pList = pAppData_Impl->pDisabledSlotList =
-                        new SvUShorts( nCount < 255 ? (sal_Int8) nCount : 255, 255 );
+                        new std::vector<sal_uInt16>;
 
                 sal_uInt16 nSlot;
                 for ( sal_uInt16 n=0; n<nCount; n++ )
                 {
                     (*pStream) >> nSlot;
-                    pList->Insert( nSlot, n );
+                    pList->push_back( nSlot );
                 }
 
                 pStream->ReadByteString(aTitle);
@@ -231,13 +231,13 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
 
         delete pStream;
     }
-    else if ( pList == (SvUShorts*) -1L )
+    else if ( pList == (std::vector<sal_uInt16>*) -1L )
     {
         return NULL;
     }
 
     if ( !pList )
-        pAppData_Impl->pDisabledSlotList = (SvUShorts*) -1L;
+        pAppData_Impl->pDisabledSlotList = (std::vector<sal_uInt16>*) -1L;
 
     if ( bError )
     {

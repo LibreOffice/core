@@ -49,11 +49,6 @@
 #include <xmloff/PropertySetInfoHash.hxx>
 #include <comphelper/stl_types.hxx>
 
-#ifndef _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>
-#endif
-
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
@@ -830,7 +825,7 @@ void SvXMLExportPropertyMapper::exportXML(
         sal_uInt16 nPropType = aPropTokens[i].nType;
         if( 0==i || (nPropTypeFlags & (1 << nPropType)) != 0 )
         {
-            SvUShorts aIndexArray;
+            std::vector<sal_uInt16> aIndexArray;
 
             _exportXML( nPropType, nPropTypeFlags,
                         rExport.GetAttrList(), rProperties,
@@ -841,7 +836,7 @@ void SvXMLExportPropertyMapper::exportXML(
 
             if( rExport.GetAttrList().getLength() > 0L ||
                 (nFlags & XML_EXPORT_FLAG_EMPTY) != 0 ||
-                aIndexArray.Count() != 0 )
+                !aIndexArray.empty() )
             {
                 SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE,
                                   aPropTokens[i].eToken,
@@ -898,7 +893,7 @@ void SvXMLExportPropertyMapper::_exportXML(
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
         sal_uInt16 nFlags,
-        SvUShorts* pIndexArray,
+        std::vector<sal_uInt16>* pIndexArray,
         sal_Int32 nPropMapStartIdx, sal_Int32 nPropMapEndIdx ) const
 {
     const sal_uInt32 nCount = rProperties.size();
@@ -928,7 +923,9 @@ void SvXMLExportPropertyMapper::_exportXML(
                     // element items do not add any properties,
                     // we export it later
                     if( pIndexArray )
-                        pIndexArray->Insert( (sal_uInt16)nIndex, pIndexArray->Count() );
+                    {
+                        pIndexArray->push_back( (sal_uInt16)nIndex );
+                    }
                 }
                 else
                 {
@@ -1092,15 +1089,15 @@ void SvXMLExportPropertyMapper::exportElementItems(
         SvXMLExport& rExport,
         const ::std::vector< XMLPropertyState >& rProperties,
         sal_uInt16 nFlags,
-        const SvUShorts& rIndexArray ) const
+        const std::vector<sal_uInt16>& rIndexArray ) const
 {
-    const sal_uInt16 nCount = rIndexArray.Count();
+    const sal_uInt16 nCount = rIndexArray.size();
 
     sal_Bool bItemsExported = sal_False;
     OUString sWS( GetXMLToken(XML_WS) );
     for( sal_uInt16 nIndex = 0; nIndex < nCount; nIndex++ )
     {
-        const sal_uInt16 nElement = rIndexArray.GetObject( nIndex );
+        const sal_uInt16 nElement = rIndexArray[nIndex];
 
         OSL_ENSURE( 0 != ( maPropMapper->GetEntryFlags(
                 rProperties[nElement].mnIndex ) & MID_FLAG_ELEMENT_ITEM_EXPORT),

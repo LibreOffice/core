@@ -381,7 +381,7 @@ void ErrorDelete_Impl(Window *pParent, const String &rName, sal_Bool bFolder = s
 
 struct ImpPath_Impl
 {
-    SvUShorts   aUS;
+    std::vector<sal_uInt16> aUS;
     sal_uInt16      nRef;
 
     ImpPath_Impl();
@@ -390,7 +390,7 @@ struct ImpPath_Impl
 
 //-------------------------------------------------------------------------
 
-ImpPath_Impl::ImpPath_Impl() : aUS(5), nRef(1)
+ImpPath_Impl::ImpPath_Impl() : nRef(1)
 {
 }
 
@@ -398,14 +398,9 @@ ImpPath_Impl::ImpPath_Impl() : aUS(5), nRef(1)
 
 ImpPath_Impl::ImpPath_Impl( const ImpPath_Impl& rCopy ) :
 
-    aUS ( (sal_uInt8)rCopy.aUS.Count() ),
-    nRef( 1 )
+    aUS(rCopy.aUS), nRef( 1 )
 
 {
-    const sal_uInt16 nCount = rCopy.aUS.Count();
-
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
-        aUS.Insert( rCopy.aUS[i], i );
 }
 
 //==========================================================================
@@ -442,7 +437,7 @@ public:
         if(!--pData->nRef)
             delete pData;
     }
-    sal_uInt16 Count() const { return pData->aUS.Count(); }
+    sal_uInt16 Count() const { return pData->aUS.size(); }
     sal_uInt16 operator[]( sal_uInt16 i ) const
     {
         return i < Count()? pData->aUS[i]: INDEX_IGNORE;
@@ -459,7 +454,8 @@ Path::Path(SvLBox *pBox, SvLBoxEntry *pEntry) :
         return;
     SvLBoxEntry *pParent = pBox->GetParent(pEntry);
     do {
-        pData->aUS.Insert((sal_uInt16)pBox->GetModel()->GetRelPos(pEntry), 0);
+        pData->aUS.insert(pData->aUS.begin(),
+                (sal_uInt16)pBox->GetModel()->GetRelPos(pEntry));
         if(0 == pParent)
             break;
         pEntry = pParent;

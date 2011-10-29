@@ -31,11 +31,9 @@
 
 #include <limits.h>
 #include <stdlib.h>
+#include <algorithm>
 #include <vcl/msgbox.hxx>
 #include <unotools/viewoptions.hxx>
-
-#define _SVSTDARR_sal_uInt16S
-#include <svl/svstdarr.hxx>
 
 #include "appdata.hxx"
 #include "sfxtypes.hxx"
@@ -1453,19 +1451,6 @@ IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
 
 // -----------------------------------------------------------------------
 
-extern "C" int SAL_CALL TabDlgCmpUS_Impl( const void* p1, const void* p2 )
-
-/*  [Description]
-
-    Comparison function for qsort
-*/
-
-{
-    return *(sal_uInt16*)p1 - *(sal_uInt16*)p2;
-}
-
-// -----------------------------------------------------------------------
-
 void SfxTabDialog::ShowPage( sal_uInt16 nId )
 
 /*  [Description]
@@ -1509,7 +1494,7 @@ const sal_uInt16* SfxTabDialog::GetInputRanges( const SfxItemPool& rPool )
 
     if ( pRanges )
         return pRanges;
-    SvUShorts aUS( 16, 16 );
+    std::vector<sal_uInt16> aUS;
     sal_uInt16 nCount = pImpl->pData->Count();
 
     sal_uInt16 i;
@@ -1525,26 +1510,27 @@ const sal_uInt16* SfxTabDialog::GetInputRanges( const SfxItemPool& rPool )
             sal_uInt16 nLen;
             for( nLen = 0; *pIter; ++nLen, ++pIter )
                 ;
-            aUS.Insert( pTmpRanges, nLen, aUS.Count() );
+            aUS.insert( aUS.end(), pTmpRanges, pTmpRanges + nLen );
         }
     }
 
     //! Remove duplicated Ids?
     {
-        nCount = aUS.Count();
+        nCount = aUS.size();
 
         for ( i = 0; i < nCount; ++i )
             aUS[i] = rPool.GetWhich( aUS[i] );
     }
 
     // sort
-    if ( aUS.Count() > 1 )
-        qsort( (void*)aUS.GetData(),
-               aUS.Count(), sizeof(sal_uInt16), TabDlgCmpUS_Impl );
+    if ( aUS.size() > 1 )
+    {
+        std::sort( aUS.begin(), aUS.end() );
+    }
 
-    pRanges = new sal_uInt16[aUS.Count() + 1];
-    memcpy(pRanges, aUS.GetData(), sizeof(sal_uInt16) * aUS.Count());
-    pRanges[aUS.Count()] = 0;
+    pRanges = new sal_uInt16[aUS.size() + 1];
+    std::copy( aUS.begin(), aUS.end(), pRanges );
+    pRanges[aUS.size()] = 0;
     return pRanges;
 }
 

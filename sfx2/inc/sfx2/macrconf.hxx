@@ -32,8 +32,6 @@
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
 #include <tools/errcode.hxx>
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>     // SvUShorts
 #include <sfx2/evntconf.hxx>
 
 class SfxMacroInfo;
@@ -106,7 +104,7 @@ friend class SfxEventConfiguration;
     SAL_DLLPRIVATE static SfxMacroConfig* pMacroConfig;
 
     SfxMacroConfig_Impl*    pImp;
-    SvUShorts               aIdArray;
+    std::vector<sal_uInt16> aIdArray;
 
 public:
                             SfxMacroConfig();

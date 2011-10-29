@@ -94,13 +94,13 @@ SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
 
     {
         RTFPlainAttrMapIds aTmp( rPool );
-        aPlainMap.Insert( (sal_uInt16*)&aTmp,
-                    sizeof( RTFPlainAttrMapIds ) / sizeof(sal_uInt16), 0 );
+        aPlainMap.insert( aPlainMap.begin(), (sal_uInt16*)&aTmp,
+                (sal_uInt16*)&aTmp + (sizeof( RTFPlainAttrMapIds ) / sizeof(sal_uInt16)) );
     }
     {
         RTFPardAttrMapIds aTmp( rPool );
-        aPardMap.Insert( (sal_uInt16*)&aTmp,
-                    sizeof( RTFPardAttrMapIds ) / sizeof(sal_uInt16), 0 );
+        aPardMap.insert( aPardMap.begin(), (sal_uInt16*)&aTmp,
+                (sal_uInt16*)&aTmp + (sizeof( RTFPardAttrMapIds ) / sizeof(sal_uInt16)) );
     }
     pDfltFont = new Font;
     pDfltColor = new Color;
@@ -340,7 +340,7 @@ void SvxRTFParser::ReadStyleTable()
     int nToken, bSaveChkStyleAttr = bChkStyleAttr;
     short nStyleNo = 0;
     int _nOpenBrakets = 1;      // the first was already detected earlier!!
-    SvxRTFStyleType* pStyle = new SvxRTFStyleType( *pAttrPool, aWhichMap.GetData() );
+    SvxRTFStyleType* pStyle = new SvxRTFStyleType( *pAttrPool, &aWhichMap[0] );
     pStyle->aAttrSet.Put( GetRTFDefaults() );
 
     bIsInReadStyleTab = sal_True;
@@ -396,7 +396,7 @@ void SvxRTFParser::ReadStyleTable()
                 }
                 // All data from the font is available, so off to the table
                 aStyleTbl.Insert( nStyleNo, pStyle );
-                pStyle = new SvxRTFStyleType( *pAttrPool, aWhichMap.GetData() );
+                pStyle = new SvxRTFStyleType( *pAttrPool, &aWhichMap[0] );
                 pStyle->aAttrSet.Put( GetRTFDefaults() );
                 nStyleNo = 0;
             }
@@ -841,7 +841,7 @@ const Font& SvxRTFParser::GetFont( sal_uInt16 nId )
     {
         const SvxFontItem& rDfltFont = (const SvxFontItem&)
                         pAttrPool->GetDefaultItem(
-                    ((RTFPlainAttrMapIds*)aPlainMap.GetData())->nFont );
+                    ((RTFPlainAttrMapIds*)&aPlainMap[0])->nFont );
         pDfltFont->SetName( rDfltFont.GetStyleName() );
         pDfltFont->SetFamily( rDfltFont.GetFamily() );
         pFont = pDfltFont;
@@ -856,7 +856,7 @@ SvxRTFItemStackType* SvxRTFParser::_GetAttrSet( int bCopyAttr )
     if( pAkt )
         pNew = new SvxRTFItemStackType( *pAkt, *pInsPos, bCopyAttr );
     else
-        pNew = new SvxRTFItemStackType( *pAttrPool, aWhichMap.GetData(),
+        pNew = new SvxRTFItemStackType( *pAttrPool, &aWhichMap[0],
                                         *pInsPos );
     pNew->SetRTFDefaults( GetRTFDefaults() );
 
@@ -982,7 +982,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                         pNew->aAttrSet.SetParent( pOld->aAttrSet.GetParent() );
 
                         // Delete all paragraph attributes from pNew
-                        for( sal_uInt16 n = 0; n < aPardMap.Count() &&
+                        for( sal_uInt16 n = 0; n < aPardMap.size() &&
                                             pNew->aAttrSet.Count(); ++n )
                             if( aPardMap[n] )
                                 pNew->aAttrSet.ClearItem( aPardMap[n] );
@@ -1132,24 +1132,23 @@ void SvxRTFParser::SetAttrInDoc( SvxRTFItemStackType & )
 
 void SvxRTFParser::BuildWhichTbl()
 {
-    if( aWhichMap.Count() )
-        aWhichMap.Remove( 0, aWhichMap.Count() );
-    aWhichMap.Insert( (sal_uInt16)0, (sal_uInt16)0 );
+    aWhichMap.clear();
+    aWhichMap.push_back( 0 );
 
     // Building a Which-Map 'rWhichMap' from an Array of
     // 'pWhichIds' frm Which-Ids. It has the long 'nWhichIds'.
     // The Which-Map is not going to be deleted.
-    SvParser::BuildWhichTbl( aWhichMap, (sal_uInt16*)aPardMap.GetData(), aPardMap.Count() );
-    SvParser::BuildWhichTbl( aWhichMap, (sal_uInt16*)aPlainMap.GetData(), aPlainMap.Count() );
+    SvParser::BuildWhichTbl( aWhichMap, (sal_uInt16*)&aPardMap[0], aPardMap.size() );
+    SvParser::BuildWhichTbl( aWhichMap, (sal_uInt16*)&aPlainMap[0], aPlainMap.size() );
 }
 
 const SfxItemSet& SvxRTFParser::GetRTFDefaults()
 {
     if( !pRTFDefaults )
     {
-        pRTFDefaults = new SfxItemSet( *pAttrPool, aWhichMap.GetData() );
+        pRTFDefaults = new SfxItemSet( *pAttrPool, &aWhichMap[0] );
         sal_uInt16 nId;
-        if( 0 != ( nId = ((RTFPardAttrMapIds*)aPardMap.GetData())->nScriptSpace ))
+        if( 0 != ( nId = ((RTFPardAttrMapIds*)&aPardMap[0])->nScriptSpace ))
         {
             SvxScriptSpaceItem aItem( sal_False, nId );
             if( bNewDoc )

@@ -208,7 +208,7 @@ class SwHTMLForm_Impl
     String                      sText;
     SvStringsDtor               aStringList;
     SvStringsDtor               aValueList;
-    SvUShorts                   aSelectedList;
+    std::vector<sal_uInt16>     aSelectedList;
 
 public:
 
@@ -269,10 +269,10 @@ public:
         aValueList.DeleteAndDestroy( 0, aValueList.Count() );
     }
 
-    SvUShorts& GetSelectedList() { return aSelectedList; }
+    std::vector<sal_uInt16>& GetSelectedList() { return aSelectedList; }
     void EraseSelectedList()
     {
-        aSelectedList.Remove( 0, aSelectedList.Count() );
+        aSelectedList.clear();
     }
 
     SvKeyValueIterator *GetHeaderAttrs() const { return pHeaderAttrs; }
@@ -2544,12 +2544,12 @@ void SwHTMLParser::EndSelect()
         rPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("ListSource")),
                                     aAny );
 
-        sal_uInt16 nSelCnt = pFormImpl->GetSelectedList().Count();
+        size_t nSelCnt = pFormImpl->GetSelectedList().size();
         if( !nSelCnt && 1 == nSelectEntryCnt && nEntryCnt )
         {
             // In einer DropDown-Listbox sollte immer ein Eintrag selektiert
             // sein.
-            pFormImpl->GetSelectedList().Insert( (sal_uInt16)0, (sal_uInt16)0 );
+            pFormImpl->GetSelectedList().insert( pFormImpl->GetSelectedList().begin(), 0 );
             nSelCnt = 1;
         }
         Sequence<sal_Int16> aSelList( (sal_Int32)nSelCnt );
@@ -2624,8 +2624,9 @@ void SwHTMLParser::InsertSelectOption()
     pFormImpl->GetStringList().Insert( new String( aEmptyStr ), nEntryCnt );
     pFormImpl->GetValueList().Insert( new String( aValue ), nEntryCnt );
     if( bLBEntrySelected )
-        pFormImpl->GetSelectedList().Insert( nEntryCnt,
-                                pFormImpl->GetSelectedList().Count() );
+    {
+        pFormImpl->GetSelectedList().push_back( nEntryCnt );
+    }
 }
 
 void SwHTMLParser::InsertSelectText()

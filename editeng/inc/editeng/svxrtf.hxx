@@ -34,8 +34,6 @@
 #include <svl/itemset.hxx>
 #include <svtools/parrtf.hxx>
 
-#define _SVSTDARR_sal_uInt16S
-#include <svl/svstdarr.hxx>
 #include <editeng/editengdllapi.h>
 
 #include <deque>
@@ -231,9 +229,9 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     SvxRTFItemStack aAttrStack;
     SvxRTFItemStackList aAttrSetList;
 
-    SvUShorts aPlainMap;
-    SvUShorts aPardMap;
-    SvUShorts aWhichMap;
+    std::vector<sal_uInt16> aPlainMap;
+    std::vector<sal_uInt16> aPardMap;
+    std::vector<sal_uInt16> aWhichMap;
     String  sBaseURL;
 
     SvxPosition* pInsPos;
@@ -360,8 +358,8 @@ protected:
 
     // Query/Set the mapping IDs for the Pard/Plain attributes
     //(Set: It is noted in the pointers, which thus does not create a copy)
-    void AddPardAttr( sal_uInt16 nWhich ) { aPardMap.Insert( nWhich, aPardMap.Count() ); }
-    void AddPlainAttr( sal_uInt16 nWhich ) { aPlainMap.Insert( nWhich, aPlainMap.Count() ); }
+    void AddPardAttr( sal_uInt16 nWhich ) { aPardMap.push_back( nWhich ); }
+    void AddPlainAttr( sal_uInt16 nWhich ) { aPlainMap.push_back( nWhich ); }
 
     SvxRTFStyleTbl& GetStyleTbl()               { return aStyleTbl; }
     SvxRTFItemStack& GetAttrStack()             { return aAttrStack; }
@@ -393,9 +391,9 @@ public:
     void SetAttrPool( SfxItemPool* pNewPool )   { pAttrPool = pNewPool; }
     // to set different WhichIds for a different pool.
     RTFPardAttrMapIds& GetPardMap()
-                        { return (RTFPardAttrMapIds&)*aPardMap.GetData(); }
+                        { return (RTFPardAttrMapIds&)*aPardMap.begin(); }
     RTFPlainAttrMapIds& GetPlainMap()
-                        { return (RTFPlainAttrMapIds&)*aPlainMap.GetData(); }
+                        { return (RTFPlainAttrMapIds&)*aPlainMap.begin(); }
     // to be able to assign them from the outside as for example table cells
     void ReadBorderAttr( int nToken, SfxItemSet& rSet, int bTableDef=sal_False );
     void ReadBackgroundAttr( int nToken, SfxItemSet& rSet, int bTableDef=sal_False  );
