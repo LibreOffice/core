@@ -315,7 +315,7 @@ namespace connectivity
 
                 Currently, there's only one condition how this method can fail: If it contains a nested
                 query which causes a cycle. E.g., consider a statement <code>SELECT * from "foo"</code>,
-                where <code>bar </code> is a query defined as <code>SELECT * FROM "bar"</code>, where
+                where <code>foo</code> is a query defined as <code>SELECT * FROM "bar"</code>, where
                 <code>bar</code> is defined as <code>SELECT * FROM "foo"</code>. This statement obviously
                 cannot be parsed to an executable statement.
 
