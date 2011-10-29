@@ -580,8 +580,8 @@ void ShutdownIcon::terminateDesktop()
         return;
 
     // always remove ourselves as listener
-    xDesktop->removeTerminateListener( pInst );
     pInst->m_bListenForTermination = true;
+    xDesktop->removeTerminateListener( pInst );
 
     // terminate desktop only if no tasks exist
     Reference< XFramesSupplier > xSupplier( xDesktop, UNO_QUERY );
