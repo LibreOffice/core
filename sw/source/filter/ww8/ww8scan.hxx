@@ -1463,11 +1463,13 @@ protected:
     sal_uInt16  istdMaxFixedWhenSaved;     // How many fixed-index istds are there?
     sal_uInt16  nVerBuiltInNamesWhenSaved; // Current version of built-in stylenames
     // ftc used by StandardChpStsh for this document
-    sal_uInt16  ftcStandardChpStsh;
+    sal_uInt16  ftcAsci;
     // CJK ftc used by StandardChpStsh for this document
-    sal_uInt16  ftcStandardChpCJKStsh;
+    sal_uInt16  ftcFE;
+    // CTL/Other ftc used by StandardChpStsh for this document
+    sal_uInt16  ftcOther;
     // CTL ftc used by StandardChpStsh for this document
-    sal_uInt16  ftcStandardChpCTLStsh;
+    sal_uInt16  ftcBi;
 
     //No copying
     WW8Style(const WW8Style&);
