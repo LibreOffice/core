@@ -306,10 +306,9 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
     // try to get the dialog selection
     if ( pFilterConfigItem )
     {
-        ByteString  aResMgrName( "eps" );
         ResMgr*     pResMgr;
 
-        pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
+        pResMgr = ResMgr::CreateResMgr( "eps", Application::GetSettings().GetUILocale() );
 
         if( pResMgr )
         {
@@ -454,9 +453,8 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
 
     if ( mbStatus && mnLevelWarning && pFilterConfigItem )
     {
-        ByteString  aResMgrName( "eps" );
         ResMgr* pResMgr;
-        pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
+        pResMgr = ResMgr::CreateResMgr( "eps", Application::GetSettings().GetUILocale() );
         if( pResMgr )
         {
             InfoBox aInfoBox( NULL, String( ResId( KEY_VERSION_CHECK, *pResMgr ) ) );
