@@ -2225,8 +2225,8 @@ namespace
                         {
                             if ( pParamRef && pParamRef->getTokenValue().toChar() == '*' )
                             {
-                                OJoinTableView::OTableWindowMap::iterator aIter = pTabList->begin();
-                                OJoinTableView::OTableWindowMap::iterator aEnd  = pTabList->end();
+                                OJoinTableView::OTableWindowMap::iterator             aIter = pTabList->begin();
+                                const OJoinTableView::OTableWindowMap::const_iterator aEnd  = pTabList->end();
                                 for(;aIter != aEnd;++aIter)
                                 {
                                     OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second);
