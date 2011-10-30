@@ -239,7 +239,7 @@ namespace connectivity
             between_predicate_part_2,
             cast_spec,
             rule_count,             // last value
-            UNKNOWN_RULE            // ID indicating that a node is no rule with a matching Rule-enum value (see getKnownRuleID)
+            UNKNOWN_RULE = -1       // ID indicating that a node is no rule with a matching Rule-enum value (see getKnownRuleID)
         };
 
         // must be ascii encoding for the value
