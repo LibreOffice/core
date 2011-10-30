@@ -214,11 +214,7 @@ COMPONENT_IMAGES= \
 
 # ........ component description ........
 # one file for each WITH_LANG token
-DESC_LANGS=$(WITH_LANG)
-.IF "$(DESC_LANGS)" == ""
-    DESC_LANGS=en-US
-.ENDIF
-COMPONENT_DESCRIPTIONS=$/$(foreach,lang,$(DESC_LANGS) description-$(lang).txt)
+COMPONENT_DESCRIPTIONS=$/$(foreach,lang,$(alllangiso) description-$(lang).txt)
 COMPONENT_DESCRIPTIONS_PACKDEP= \
     $(foreach,i,$(COMPONENT_DESCRIPTIONS) $(EXTENSIONDIR)$/$i)
 
@@ -249,12 +245,18 @@ $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/DataAccess$/Drivers.xc
     @@-$(MKDIRHIER) $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/DataAccess
     @$(COPY) $< $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/DataAccess$/Drivers.xcu > $(NULLDEV)
 
+$(COMPONENT_DESCRIPTIONS_PACKDEP) : $(DESCRIPTION)
+
 $(DESCRIPTION_SRC): description.xml
     +-$(RM) $@
+.IF "$(WITH_LANG)" != ""
     $(XRMEX) -p $(PRJNAME) -i $< -o $@ -m $(LOCALIZESDF) -l all
     $(SED) "s/#VERSION#/$(EXTENSION_VERSION)/" < $@ > $@.new
     mv $@.new $@
     @$(COPY) $(@:d)/description-*.txt $(EXTENSIONDIR)
+.ELSE
+    $(SED) "s/#VERSION#/$(EXTENSION_VERSION)/" < $< > $@
+.ENDIF
     @$(COPY) description-en-US.txt $(EXTENSIONDIR)
 
 .IF "$(SYSTEM_MYSQL)" != "YES" 
