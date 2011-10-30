@@ -76,10 +76,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
-#define SQL_ISRULEOR2(pParseNode, e1,e2)    ((pParseNode)->isRule() && (\
-                                            (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::e1) || \
-                                            (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::e2)))
-
 // here we define our functions used in the anonymous namespace to get our header file smaller
 // please look at the book LargeScale C++ to know why
 namespace
@@ -1432,10 +1428,9 @@ namespace
                     _pSelectionBrw->AddCondition(aDragLeft, aCondition, nLevel,bAddOrOnOneLine);
                 }
             }
-            else if(SQL_ISRULEOR2(pValueExp,general_set_fct ,set_fct_spec)          ||
-                            SQL_ISRULEOR2(pValueExp,position_exp,extract_exp)   ||
-                            SQL_ISRULEOR2(pValueExp,fold,char_substring_fct)    ||
-                            SQL_ISRULEOR2(pValueExp,length_exp,char_value_fct))
+            else if(SQL_ISRULEOR3(pValueExp, general_set_fct, set_fct_spec, position_exp)  ||
+                      SQL_ISRULEOR3(pValueExp, extract_exp, fold, char_substring_fct)       ||
+                      SQL_ISRULEOR2(pValueExp, length_exp, char_value_fct))
             {
                 AddFunctionCondition(   _pView,
                                         _pSelectionBrw,
@@ -1528,10 +1523,10 @@ namespace
 
         OSQLParseNode* pFunction = pCondition->getChild(0);
 
-        OSL_ENSURE(SQL_ISRULEOR2(pFunction,general_set_fct ,set_fct_spec)           ||
-                            SQL_ISRULEOR2(pFunction,position_exp,extract_exp)   ||
-                            SQL_ISRULEOR2(pFunction,fold,char_substring_fct)    ||
-                            SQL_ISRULEOR2(pFunction,length_exp,char_value_fct),"Illegal call!");
+        OSL_ENSURE(SQL_ISRULEOR3(pFunction, general_set_fct, set_fct_spec, position_exp)  ||
+                     SQL_ISRULEOR3(pFunction, extract_exp, fold, char_substring_fct)      ||
+                     SQL_ISRULEOR2(pFunction,length_exp,char_value_fct),
+                   "Illegal call!");
         ::rtl::OUString aCondition;
         OTableFieldDescRef aDragLeft = new OTableFieldDesc();
 
@@ -2196,10 +2191,9 @@ namespace
                         eErrorCode = _pView->InsertField(aInfo, sal_True, bFirstField);
                         bFirstField = sal_False;
                     }
-                    else if(SQL_ISRULEOR2(pColumnRef,general_set_fct ,set_fct_spec) ||
-                            SQL_ISRULEOR2(pColumnRef,position_exp,extract_exp)      ||
-                            SQL_ISRULEOR2(pColumnRef,fold,char_substring_fct)       ||
-                            SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct))
+                    else if(SQL_ISRULEOR3(pColumnRef, general_set_fct, set_fct_spec, position_exp)  ||
+                              SQL_ISRULEOR3(pColumnRef, extract_exp, fold, char_substring_fct)      ||
+                              SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct))
                     {
                         ::rtl::OUString aColumns;
                         pColumnRef->parseNodeToPredicateStr(aColumns,

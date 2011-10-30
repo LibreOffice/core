@@ -71,11 +71,6 @@ const String g_strZero = String::CreateFromAscii("0");
 #define HANDLE_ID            0
 #define HANDLE_COLUMN_WITDH 70
 
-#define SQL_ISRULEOR2(pParseNode, e1,e2)    ((pParseNode)->isRule() && (\
-                                            (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::e1) || \
-                                            (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::e2)))
-
-
 // -----------------------------------------------------------------------------
 namespace
 {
@@ -860,9 +855,8 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
 
                 getDesignView()->fillFunctionInfo(pColumnRef,sFunction,aSelEntry);
 
-                if( SQL_ISRULEOR2(pColumnRef,position_exp,extract_exp) ||
-                    SQL_ISRULEOR2(pColumnRef,fold,char_substring_fct)  ||
-                    SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct) )
+                if( SQL_ISRULEOR3(pColumnRef, position_exp, extract_exp, fold) ||
+                    SQL_ISRULEOR3(pColumnRef, char_substring_fct, length_exp, char_value_fct) )
                     // a calculation has been found ( can be calc and function )
                 {
                     // now parse the whole statement
