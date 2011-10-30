@@ -342,9 +342,9 @@ OutputDevice::PixelToLogic(basegfx::B2DPolyPolygon const&) const
 OutputDevice::PixelToLogic(basegfx::B2DPolygon const&) const
 PageSpan::getMarginLeft() const
 PageSpan::getMarginRight() const
-ParaPortion::DbgCheckTextPortions()
 ParaPortionList::DbgCheck(EditDoc&)
 ParagraphObj::ParagraphObj(ParagraphObj&)
+ParagraphStyleManager::get(WPXString const&) const
 PathDialog::SetPath(Edit const&)
 PatternBox::GetString(unsigned short) const
 PatternBox::GetStringPos(String const&) const
@@ -743,6 +743,7 @@ SotFactory::TestInvariant()
 SotObject::RemoveOwnerLock()
 SotStorage::GetProperty(String const&, String const&, com::sun::star::uno::Any&)
 SourceTreeIterator::EndExecute()
+SpanStyleManager::get(WPXString const&) const
 SpinButton::SpinButton(Window*, ResId const&)
 SplitWindow::CalcWindowSizePixel(Size const&, WindowAlign, long, unsigned char)
 SplitWindow::GetItemWindow(unsigned short) const

@@ -627,8 +627,9 @@ public:
     short               GetInvalidDiff() const      { return nInvalidDiff; }
 
     void                CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormattedLine );
-
+#if OSL_DEBUG_LEVEL > 2
     sal_Bool                DbgCheckTextPortions();
+#endif
 };
 
 typedef ParaPortion* ParaPortionPtr;
