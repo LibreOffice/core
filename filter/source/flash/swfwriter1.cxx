@@ -1658,7 +1658,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                 const sal_uInt8*                pData = pA->GetData();
                 String                      aSkipComment;
 
-                if( pA->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_BEGIN")) )
+                if( pA->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_BEGIN")) )
                 {
                     const MetaGradientExAction* pGradAction = NULL;
                     sal_Bool                    bDone = sal_False;
@@ -1670,7 +1670,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                         if( pAction->GetType() == META_GRADIENTEX_ACTION )
                             pGradAction = (const MetaGradientExAction*) pAction;
                         else if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
-                                 ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_END")) ) )
+                                 ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_END")) ) )
                         {
                             bDone = sal_True;
                         }
@@ -1679,7 +1679,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                     if( pGradAction )
                         Impl_writeGradientEx( pGradAction->GetPolyPolygon(), pGradAction->GetGradient());
                 }
-                else if( pA->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_BEGIN")) &&
+                else if( pA->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_BEGIN")) &&
                          pData )
                 {
 
@@ -1703,14 +1703,14 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                             pAction = rMtf.GetAction( i );
 
                             if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
-                                     ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_END")) ) )
+                                     ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_END")) ) )
                             {
                                 bDone = sal_True;
                             }
                         }
                     }
                 }
-                else if( pA->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_BEGIN")) &&
+                else if( pA->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_BEGIN")) &&
                          pData )
                 {
 
@@ -1734,7 +1734,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                             pAction = rMtf.GetAction( i );
 
                             if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
-                                     ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_END")) ) )
+                                     ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_END")) ) )
                             {
                                 bDone = sal_True;
                             }

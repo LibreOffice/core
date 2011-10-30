@@ -414,10 +414,9 @@ public:
       @return   sal_True if the strings are equal;
                 sal_False, otherwise.
     */
-    sal_Bool equalsIgnoreAsciiCaseAscii( const sal_Char * asciiStr ) const SAL_THROW(())
+    sal_Bool equalsIgnoreAsciiCase( const sal_Char * asciiStr ) const SAL_THROW(())
     {
-        return rtl_str_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length,
-                                                          asciiStr, rtl_str_getLength(asciiStr) ) == 0;
+        return rtl_str_compareIgnoreAsciiCase( pData->buffer, asciiStr ) == 0;
     }
 
     /**
@@ -439,7 +438,7 @@ public:
       @return   sal_True if the strings are equal;
                 sal_False, otherwise.
     */
-    sal_Bool equalsIgnoreAsciiCaseAsciiL( const sal_Char * asciiStr, sal_Int32 asciiStrLength ) const SAL_THROW(())
+    sal_Bool equalsIgnoreAsciiCaseL( const sal_Char * asciiStr, sal_Int32 asciiStrLength ) const SAL_THROW(())
     {
         if ( pData->length != asciiStrLength )
             return sal_False;

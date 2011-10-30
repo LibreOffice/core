@@ -516,7 +516,7 @@ namespace cppcanvas
                 ++io_rCurrActionIndex;
 
                 if( pCurrAct->GetType() == META_COMMENT_ACTION &&
-                    static_cast<MetaCommentAction*>(pCurrAct)->GetComment().equalsIgnoreAsciiCaseAscii(
+                    static_cast<MetaCommentAction*>(pCurrAct)->GetComment().equalsIgnoreAsciiCase(
                         pCommentString) )
                 {
                     // requested comment found, done
@@ -551,7 +551,7 @@ namespace cppcanvas
                 }
 
                 if( pCurrAct->GetType() == META_COMMENT_ACTION &&
-                    static_cast<MetaCommentAction*>(pCurrAct)->GetComment().equalsIgnoreAsciiCaseAscii(
+                    static_cast<MetaCommentAction*>(pCurrAct)->GetComment().equalsIgnoreAsciiCase(
                         pCommentString) )
                 {
                     // delimiting end comment found, done
@@ -1686,7 +1686,7 @@ namespace cppcanvas
                         MetaCommentAction* pAct = static_cast<MetaCommentAction*>(pCurrAct);
 
                         // Handle gradients
-                        if (pAct->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_BEGIN")))
+                        if (pAct->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_BEGIN")))
                         {
                             MetaGradientExAction* pGradAction = NULL;
                             bool bDone( false );
@@ -1702,7 +1702,7 @@ namespace cppcanvas
 
                                     // skip broken-down rendering, output gradient when sequence is ended
                                     case META_COMMENT_ACTION:
-                                        if( static_cast<MetaCommentAction*>(pCurrAct)->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_END")) )
+                                        if( static_cast<MetaCommentAction*>(pCurrAct)->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_END")) )
                                         {
                                             bDone = true;
 

@@ -3107,7 +3107,7 @@ namespace
                     // and makes the code less dependent from those Metafile Add-Ons
                     const MetaCommentAction* pA = (const MetaCommentAction*)pAction;
 
-                    if (pA->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_BEGIN")))
+                    if (pA->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_BEGIN")))
                     {
                         // XGRAD_SEQ_BEGIN, XGRAD_SEQ_END should be supported since the
                         // pure recorded paint of the gradients uses the XOR paint functionality
@@ -3127,7 +3127,7 @@ namespace
                             }
                             else if(META_COMMENT_ACTION == pAction->GetType())
                             {
-                                if (((const MetaCommentAction*)pAction)->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_END")))
+                                if (((const MetaCommentAction*)pAction)->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_END")))
                                 {
                                     bDone = true;
                                 }

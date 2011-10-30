@@ -1090,7 +1090,7 @@ namespace slideshow
                     MetaCommentAction * pAct =
                         static_cast<MetaCommentAction *>(pCurrAct);
                     // skip comment if not a special XTEXT comment
-                    if (pAct->GetComment().equalsIgnoreAsciiCaseAsciiL(
+                    if (pAct->GetComment().equalsIgnoreAsciiCaseL(
                             RTL_CONSTASCII_STRINGPARAM("FIELD_SEQ_BEGIN") ) &&
                         // e.g. date field doesn't have data!
                         // currently assuming that only url field, this is
@@ -1116,7 +1116,7 @@ namespace slideshow
                                     pAct->GetDataSize() / sizeof(sal_Unicode) )
                                 ) );
                     }
-                    else if (pAct->GetComment().equalsIgnoreAsciiCaseAsciiL(
+                    else if (pAct->GetComment().equalsIgnoreAsciiCaseL(
                                  RTL_CONSTASCII_STRINGPARAM("FIELD_SEQ_END")) &&
                              // pending end is expected:
                              !maHyperlinkIndices.empty() &&

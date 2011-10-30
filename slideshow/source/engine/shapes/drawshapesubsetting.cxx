@@ -91,14 +91,14 @@ namespace slideshow
                         MetaCommentAction* pAct = static_cast<MetaCommentAction*>(pCurrAct);
 
                         // skip comment if not a special XTEXT comment
-                        if( pAct->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XTEXT")) )
+                        if( pAct->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XTEXT")) )
                         {
                             // fill classification vector with NOOPs,
                             // then insert corresponding classes at
                             // the given index
                             maActionClassVector.resize( nActionIndex+1, CLASS_NOOP );
 
-                            if( pAct->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOC")) )
+                            if( pAct->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOC")) )
                             {
                                 // special, because can happen
                                 // in-between of portions - set
@@ -112,7 +112,7 @@ namespace slideshow
 
                                 maActionClassVector[ nIndex ] = CLASS_CHARACTER_CELL_END;
                             }
-                            else if( pAct->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOW")) )
+                            else if( pAct->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOW")) )
                             {
                                 // special, because can happen
                                 // in-between of portions - set
@@ -126,7 +126,7 @@ namespace slideshow
 
                                 maActionClassVector[ nIndex ] = CLASS_WORD_END;
                             }
-                            else if( pAct->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM( "XTEXT_EOS" )) )
+                            else if( pAct->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM( "XTEXT_EOS" )) )
                             {
                                 // special, because can happen
                                 // in-between of portions - set
@@ -140,19 +140,19 @@ namespace slideshow
 
                                 maActionClassVector[ nIndex ] = CLASS_SENTENCE_END;
                             }
-                            else if( pAct->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOL")) )
+                            else if( pAct->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOL")) )
                             {
                                 maActionClassVector[ nActionIndex ] = CLASS_LINE_END;
                             }
-                            else if( pAct->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOP")) )
+                            else if( pAct->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOP")) )
                             {
                                 maActionClassVector[ nActionIndex ] = CLASS_PARAGRAPH_END;
                             }
-                            else if( pAct->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XTEXT_PAINTSHAPE_END")) )
+                            else if( pAct->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XTEXT_PAINTSHAPE_END")) )
                             {
                                 maActionClassVector[ nActionIndex ] = CLASS_SHAPE_END;
                             }
-                            else if( pAct->GetComment().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("XTEXT_PAINTSHAPE_BEGIN")) )
+                            else if( pAct->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XTEXT_PAINTSHAPE_BEGIN")) )
                             {
                                 maActionClassVector[ nActionIndex ] = CLASS_SHAPE_START;
                             }
