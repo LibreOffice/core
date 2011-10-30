@@ -886,8 +886,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
                 if ( mxStatusIndicator.is() )
                 {
-                    ByteString aResMgrName( "pdffilter" );
-                    ResMgr* pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
+                    ResMgr* pResMgr = ResMgr::CreateResMgr( "pdffilter", Application::GetSettings().GetUILocale() );
                     if ( pResMgr )
                     {
                         sal_Int32 nTotalPageCount = aRangeEnum.size();
