@@ -225,7 +225,7 @@ private:
     void                ImplText( const String& rUniString, const Point& rPos, const sal_Int32* pDXArry, sal_Int32 nWidth, VirtualDevice& rVDev );
     void                ImplSetAttrForText( const Point & rPoint );
     void                ImplWriteCharacter( sal_Char );
-    void                ImplWriteString( const ByteString&, VirtualDevice& rVDev, const sal_Int32* pDXArry = NULL, sal_Bool bStretch = sal_False );
+    void                ImplWriteString( const rtl::OString&, VirtualDevice& rVDev, const sal_Int32* pDXArry = NULL, sal_Bool bStretch = sal_False );
     void                ImplDefineFont( const char*, const char* );
 
     void                ImplClosePathDraw( sal_uLong nMode = PS_RET );
@@ -1274,11 +1274,11 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                     {
                         SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );
                         sal_Bool        bSkipSequence = sal_False;
-                        ByteString      sSeqEnd;
+                        rtl::OString sSeqEnd;
 
                         if( pA->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM( "XPATHSTROKE_SEQ_BEGIN" )) )
                         {
-                            sSeqEnd = ByteString( "XPATHSTROKE_SEQ_END" );
+                            sSeqEnd = rtl::OString(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_END"));
                             SvtGraphicStroke aStroke;
                             aMemStm >> aStroke;
 
@@ -1314,7 +1314,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                         }
                         else if (pA->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_BEGIN")))
                         {
-                            sSeqEnd = ByteString( "XPATHFILL_SEQ_END" );
+                            sSeqEnd = rtl::OString(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_END"));
                             SvtGraphicFill aFill;
                             aMemStm >> aFill;
                             switch( aFill.getFillType() )
@@ -1425,8 +1425,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                                 pMA = rMtf.GetAction( nCurAction );
                                 if ( pMA->GetType() == META_COMMENT_ACTION )
                                 {
-                                    ByteString sComment( ((MetaCommentAction*)pMA)->GetComment() );
-                                    if ( sComment.Equals( sSeqEnd ) )
+                                    rtl::OString sComment( ((MetaCommentAction*)pMA)->GetComment() );
+                                    if ( sComment.equals( sSeqEnd ) )
                                         break;
                                 }
                             }
@@ -2042,32 +2042,31 @@ void PSWriter::ImplWriteCharacter( sal_Char nChar )
 
 //---------------------------------------------------------------------------------
 
-void PSWriter::ImplWriteString( const ByteString& rString, VirtualDevice& rVDev, const sal_Int32* pDXArry, sal_Bool bStretch )
+void PSWriter::ImplWriteString( const rtl::OString& rString, VirtualDevice& rVDev, const sal_Int32* pDXArry, sal_Bool bStretch )
 {
-    sal_uInt16 nLen = rString.Len();
+    sal_Int32 nLen = rString.getLength();
     if ( nLen )
     {
-        sal_uInt16 i;
         if ( pDXArry )
         {
             double nx = 0;
 
-            for( i = 0; i < nLen; i++ )
+            for (sal_Int32 i = 0; i < nLen; ++i)
             {
                 if ( i > 0 )
                     nx = pDXArry[ i - 1 ];
-                ImplWriteDouble( ( bStretch ) ? nx : rVDev.GetTextWidth( rString.GetChar( i ) ) );
+                ImplWriteDouble( ( bStretch ) ? nx : rVDev.GetTextWidth( rString[i] ) );
                 ImplWriteDouble( nx );
                 ImplWriteLine( "(", PS_NONE );
-                ImplWriteCharacter( rString.GetChar( i ) );
+                ImplWriteCharacter( rString[i] );
                 ImplWriteLine( ") bs" );
             }
         }
         else
         {
             ImplWriteByte( '(', PS_NONE );
-            for ( i = 0; i < nLen; i++ )
-                ImplWriteCharacter( rString.GetChar( i ) );
+            for (sal_Int32 i = 0; i < nLen; ++i)
+                ImplWriteCharacter( rString[i] );
             ImplWriteLine( ") sw" );
         }
     }
@@ -2128,7 +2127,8 @@ void PSWriter::ImplText( const String& rUniString, const Point& rPos, const sal_
         if ( mnTextMode == 2 )  // forcing output one complete text packet, by
             pDXArry = NULL;     // ignoring the kerning array
         ImplSetAttrForText( rPos );
-        ByteString aStr( rUniString, maFont.GetCharSet() );
+        rtl::OString aStr(rtl::OUStringToOString(rUniString,
+            maFont.GetCharSet()));
         ImplWriteString( aStr, rVDev, pDXArry, nWidth != 0 );
         if ( maFont.GetOrientation() )
             ImplWriteLine( "gr" );
