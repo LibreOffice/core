@@ -58,8 +58,8 @@
 #define WIN_REPEAT_HEADER   40
 #define FL_HEADLINE     41
 #define FL_PROPERTIES       42
-#define FT_TEXTDIRECTION    43
-#define LB_TEXTDIRECTION    44
+#define FT_TEXTORIENTATION    43
+#define LB_TEXTORIENTATION    44
 
 #define BT_OK           100
 #define BT_CANCEL       101

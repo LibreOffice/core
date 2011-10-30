@@ -106,8 +106,8 @@ SwFormatTablePage::SwFormatTablePage( Window* pParent, const SfxItemSet& rSet ) 
     aBottomMF(this,     SW_RES( ED_BOTTOM_DIST )),
 
     aPropertiesFL(this,     SW_RES( FL_PROPERTIES    )),
-    aTextDirectionFT(this,  SW_RES( FT_TEXTDIRECTION )),
-    aTextDirectionLB(this,  SW_RES( LB_TEXTDIRECTION )),
+    aTextDirectionFT(this,  SW_RES( FT_TEXTORIENTATION )),
+    aTextDirectionLB(this,  SW_RES( LB_TEXTORIENTATION )),
 
     pTblData(0),
     nSaveWidth(0),
@@ -1343,8 +1343,8 @@ SwTextFlowPage::SwTextFlowPage( Window* pParent,
     aRepeatHeaderNF         (this, SW_RES(NF_REPEAT_HEADER  )),
     aRepeatHeaderAfterFT    (this),
     aRepeatHeaderCombo      (this, SW_RES(WIN_REPEAT_HEADER), aRepeatHeaderNF, aRepeatHeaderBeforeFT, aRepeatHeaderAfterFT),
-    aTextDirectionFT(this, SW_RES(FT_TEXTDIRECTION  )),
-    aTextDirectionLB(this, SW_RES(LB_TEXTDIRECTION  )),
+    aTextDirectionFT(this, SW_RES(FT_TEXTORIENTATION  )),
+    aTextDirectionLB(this, SW_RES(LB_TEXTORIENTATION  )),
 
     aVertOrientFL   (this, SW_RES(FL_VERT_ORIENT    )),
     aVertOrientFT(this,  SW_RES(FT_VERTORIENT       )),
@@ -1503,7 +1503,7 @@ sal_Bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
           bModified |= 0 != rSet.Put(
                     SvxFrameDirectionItem(
                         (SvxFrameDirection)(sal_uLong)aTextDirectionLB.GetEntryData(aTextDirectionLB.GetSelectEntryPos())
-                        , FN_TABLE_BOX_TEXTDIRECTION));
+                        , FN_TABLE_BOX_TEXTORIENTATION));
     }
 
     if(aVertOrientLB.GetSelectEntryPos() != aVertOrientLB.GetSavedValue())
@@ -1675,9 +1675,9 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
         aRepeatHeaderNF.SetValue( nRep );
         aRepeatHeaderNF.SaveValue();
     }
-    if ( rSet.GetItemState(FN_TABLE_BOX_TEXTDIRECTION) > SFX_ITEM_AVAILABLE )
+    if ( rSet.GetItemState(FN_TABLE_BOX_TEXTORIENTATION) > SFX_ITEM_AVAILABLE )
     {
-        sal_uLong nDirection = ((const SvxFrameDirectionItem&)rSet.Get(FN_TABLE_BOX_TEXTDIRECTION)).GetValue();
+        sal_uLong nDirection = ((const SvxFrameDirectionItem&)rSet.Get(FN_TABLE_BOX_TEXTORIENTATION)).GetValue();
         aTextDirectionLB.SelectEntryPos(aTextDirectionLB.GetEntryPos( (const void*)nDirection ));
     }
 
