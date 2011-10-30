@@ -882,16 +882,7 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
                     if ( SQL_ISRULE(pColumnRef,set_fct_spec) )
                         aSelEntry->SetFunctionType(/*FKT_NUMERIC | */FKT_OTHER);
                     else
-                    {
-                        if ( SQL_ISRULEOR2(pColumnRef,num_value_exp,term) || SQL_ISRULE(pColumnRef,factor) )
-                            aSelEntry->SetDataType(DataType::DOUBLE);
-                        else if ( SQL_ISRULE(pColumnRef,value_exp) )
-                            aSelEntry->SetDataType(DataType::TIMESTAMP);
-                        else
-                            aSelEntry->SetDataType(DataType::VARCHAR);
-
                         aSelEntry->SetFunctionType(FKT_NUMERIC | FKT_OTHER);
-                    }
                 }
 
                 aSelEntry->SetAlias(::rtl::OUString());

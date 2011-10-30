@@ -3204,40 +3204,385 @@ bool OQueryDesignView::initByParseIterator( ::dbtools::SQLExceptionInfo* _pError
     }
     return eErrorCode == eOk;
 }
+
+// Utility function for fillFunctionInfo
+namespace {
+    sal_Int32 char_datatype(const::connectivity::OSQLParseNode* pDataType, const unsigned int offset) {
+        int cnt = pDataType->count() - offset;
+        if ( cnt < 0 )
+        {
+            OSL_FAIL("internal error in decoding character datatype specification");
+            return DataType::VARCHAR;
+        }
+        else if ( cnt == 0 )
+        {
+            if ( offset == 0 )
+            {
+                // The datatype is the node itself
+                if ( SQL_ISTOKENOR2 (pDataType, CHARACTER, CHAR) )
+                    return DataType::CHAR;
+                else if ( SQL_ISTOKEN (pDataType, VARCHAR) )
+                    return DataType::VARCHAR;
+                else if ( SQL_ISTOKEN (pDataType, CLOB) )
+                    return DataType::CLOB;
+                else
+                {
+                    OSL_FAIL("unknown/unexpected token in decoding character datatype specification");
+                    return DataType::VARCHAR;
+                }
+            }
+            else
+            {
+                // No child left to read!
+                OSL_FAIL("incomplete datatype in decoding character datatype specification");
+                return DataType::VARCHAR;
+            }
+        }
+
+        if ( SQL_ISTOKEN(pDataType->getChild(offset), NATIONAL) )
+            return char_datatype(pDataType, offset+1);
+        else if ( SQL_ISTOKENOR3(pDataType->getChild(offset), CHARACTER, CHAR, NCHAR) )
+        {
+            if ( cnt > 2 && SQL_ISTOKEN(pDataType->getChild(offset+1), LARGE) && SQL_ISTOKEN(pDataType->getChild(offset+2), OBJECT) )
+                return DataType::CLOB;
+            else if ( cnt > 1 && SQL_ISTOKEN(pDataType->getChild(offset+1), VARYING) )
+                return DataType::VARCHAR;
+            else
+                return DataType::CHAR;
+        }
+        else if ( SQL_ISTOKEN (pDataType->getChild(offset), VARCHAR) )
+            return DataType::VARCHAR;
+        else if ( SQL_ISTOKENOR2 (pDataType->getChild(offset), CLOB, NCLOB) )
+            return DataType::CLOB;
+
+        OSL_FAIL("unrecognised character datatype");
+        return DataType::VARCHAR;
+    }
+}
+
 //------------------------------------------------------------------------------
+// Try to guess the type of an expression in simple cases.
+// Originally meant to be called only on a function call (hence the misnomer),
+// but now tries to do the best it can also in other cases.
+// Don't completely rely on fillFunctionInfo,
+// it won't look at the function's arguments to find the return type
+// (in particular, in the case of general_set_fct,
+//  the return type is the type of the argument;
+//  if that is (as is typical) a column reference,
+//  it is the type of the column).
+// TODO: There is similar "guess the expression's type" code in several places:
+//       SelectionBrowseBox.cxx: OSelectionBrowseBox::saveField
+//       QueryDesignView.cxx: InstallFields, GetOrderCriteria, GetGroupCriteria
+//       If possible, they should be factorised into this function
+//       (which should then be renamed...)
+
 void OQueryDesignView::fillFunctionInfo(  const ::connectivity::OSQLParseNode* pNode
                                         ,const ::rtl::OUString& sFunctionTerm
                                         ,OTableFieldDescRef& aInfo)
 {
-    // get the type out of the funtion name
+    // get the type of the expression, as far as easily possible
     OQueryController& rController = static_cast<OQueryController&>(getController());
     sal_Int32 nDataType = DataType::DOUBLE;
     ::rtl::OUString sFieldName = sFunctionTerm;
-    const OSQLParseNode* pFunctionName;
-    // Fix fdo#38286 : crash when constant in the query
-    // TODO : is it possible to have a child or children in the pNode ?
-    // if not this part could be simplified
-    if (pNode->count()) 
+    switch(pNode->getNodeType())
     {
-        pFunctionName = pNode->getChild(0);
-    }
-    else
-    {
-        pFunctionName = pNode;
-    }
-    if ( !SQL_ISPUNCTUATION(pFunctionName,"{") )
-    {
-        if ( SQL_ISRULEOR2(pNode,length_exp,char_value_fct) )
-            pFunctionName = pFunctionName->getChild(0);
+    case SQL_NODE_CONCAT:
+    case SQL_NODE_STRING:
+        nDataType = DataType::VARCHAR;
+        break;
+    case SQL_NODE_INTNUM:
+        nDataType = DataType::INTEGER;
+        break;
+    case SQL_NODE_APPROXNUM:
+        nDataType = DataType::DOUBLE;
+        break;
+    case SQL_NODE_DATE:
+    case SQL_NODE_ACCESS_DATE:
+        nDataType = DataType::TIMESTAMP;
+        break;
+    case SQL_NODE_COMPARISON:
+    case SQL_NODE_EQUAL:
+    case SQL_NODE_LESS:
+    case SQL_NODE_GREAT:
+    case SQL_NODE_LESSEQ:
+    case SQL_NODE_GREATEQ:
+    case SQL_NODE_NOTEQUAL:
+        nDataType = DataType::BOOLEAN;
+        break;
+    case SQL_NODE_NAME:
+    case SQL_NODE_LISTRULE:
+    case SQL_NODE_COMMALISTRULE:
+    case SQL_NODE_KEYWORD:
+    case SQL_NODE_AMMSC: //??
+    case SQL_NODE_PUNCTUATION:
+        OSL_FAIL("Unexpected SQL Node Type");
+        break;
+    case SQL_NODE_RULE:
+        switch(pNode->getKnownRuleID())
+        {
+        case OSQLParseNode::select_statement:
+        case OSQLParseNode::table_exp:
+        case OSQLParseNode::table_ref_commalist:
+        case OSQLParseNode::table_ref:
+        case OSQLParseNode::catalog_name:
+        case OSQLParseNode::schema_name:
+        case OSQLParseNode::table_name:
+        case OSQLParseNode::opt_column_commalist:
+        case OSQLParseNode::column_commalist:
+        case OSQLParseNode::column_ref_commalist:
+        case OSQLParseNode::column_ref:
+        case OSQLParseNode::opt_order_by_clause:
+        case OSQLParseNode::ordering_spec_commalist:
+        case OSQLParseNode::ordering_spec:
+        case OSQLParseNode::opt_asc_desc:
+        case OSQLParseNode::where_clause:
+        case OSQLParseNode::opt_where_clause:
+        case OSQLParseNode::opt_escape:
+        case OSQLParseNode::scalar_exp_commalist:
+        case OSQLParseNode::scalar_exp: // Seems to never be generated?
+        case OSQLParseNode::parameter_ref:
+        case OSQLParseNode::parameter:
+        case OSQLParseNode::range_variable:
+        case OSQLParseNode::delete_statement_positioned:
+        case OSQLParseNode::delete_statement_searched:
+        case OSQLParseNode::update_statement_positioned:
+        case OSQLParseNode::update_statement_searched:
+        case OSQLParseNode::assignment_commalist:
+        case OSQLParseNode::assignment:
+        case OSQLParseNode::insert_statement:
+        case OSQLParseNode::insert_atom_commalist:
+        case OSQLParseNode::insert_atom:
+        case OSQLParseNode::from_clause:
+        case OSQLParseNode::qualified_join:
+        case OSQLParseNode::cross_union:
+        case OSQLParseNode::select_sublist:
+        case OSQLParseNode::join_type:
+        case OSQLParseNode::named_columns_join:
+        case OSQLParseNode::joined_table:
+        case OSQLParseNode::sql_not:
+        case OSQLParseNode::manipulative_statement:
+        case OSQLParseNode::value_exp_commalist:
+        case OSQLParseNode::union_statement:
+        case OSQLParseNode::outer_join_type:
+        case OSQLParseNode::selection:
+        case OSQLParseNode::base_table_def:
+        case OSQLParseNode::base_table_element_commalist:
+        case OSQLParseNode::data_type:
+        case OSQLParseNode::column_def:
+        case OSQLParseNode::table_node:
+        case OSQLParseNode::as:  // Seems to never be generated?
+        case OSQLParseNode::op_column_commalist:
+        case OSQLParseNode::table_primary_as_range_column:
+        case OSQLParseNode::character_string_type:
+            OSL_FAIL("Unexpected SQL RuleID");
+            break;
+        case OSQLParseNode::column:
+        case OSQLParseNode::column_val:
+            OSL_FAIL("Cannot guess column type");
+            break;
+        case OSQLParseNode::values_or_query_spec:
+            OSL_FAIL("Cannot guess VALUES type");
+            break;
+        case OSQLParseNode::derived_column:
+            OSL_FAIL("Cannot guess computed column type");
+            break;
+        case OSQLParseNode::subquery:
+            OSL_FAIL("Cannot guess subquery return type");
+            break;
+        case OSQLParseNode::search_condition:
+        case OSQLParseNode::comparison_predicate:
+        case OSQLParseNode::between_predicate:
+        case OSQLParseNode::like_predicate:
+        case OSQLParseNode::test_for_null:
+        case OSQLParseNode::predicate_check: // Seems to never be generated?
+        case OSQLParseNode::boolean_term:
+        case OSQLParseNode::boolean_primary:
+        case OSQLParseNode::in_predicate:
+        case OSQLParseNode::existence_test:
+        case OSQLParseNode::unique_test:
+        case OSQLParseNode::all_or_any_predicate:
+        case OSQLParseNode::join_condition:
+        case OSQLParseNode::boolean_factor:
+        case OSQLParseNode::boolean_test:
+        case OSQLParseNode::comparison_predicate_part_2:
+        case OSQLParseNode::parenthesized_boolean_value_expression:
+        case OSQLParseNode::other_like_predicate_part_2:
+        case OSQLParseNode::between_predicate_part_2:
+            nDataType = DataType::BOOLEAN;
+            break;
+        case OSQLParseNode::num_value_exp:
+        case OSQLParseNode::extract_exp:
+        case OSQLParseNode::term:
+        case OSQLParseNode::factor:
+            // Might by an integer or a float; take the most generic
+            nDataType = DataType::DOUBLE;
+            break;
+        case OSQLParseNode::value_exp_primary:
+        case OSQLParseNode::value_exp:
+        case OSQLParseNode::odbc_call_spec:
+            // Really, we don't know. Let the default.
+            break;
+        case OSQLParseNode::position_exp:
+        case OSQLParseNode::length_exp:
+            nDataType = DataType::INTEGER;
+            break;
+        case OSQLParseNode::char_value_exp:
+        case OSQLParseNode::char_value_fct:
+        case OSQLParseNode::fold:
+        case OSQLParseNode::char_substring_fct:
+        case OSQLParseNode::char_factor:
+        case OSQLParseNode::concatenation:
+            nDataType = DataType::VARCHAR;
+            break;
+        case OSQLParseNode::datetime_primary:
+            nDataType = DataType::TIMESTAMP;
+            break;
+        case OSQLParseNode::bit_value_fct:
+            nDataType = DataType::BINARY;
+            break;
+        case OSQLParseNode::general_set_fct: // May depend on argument; ignore that for now
+        case OSQLParseNode::set_fct_spec:
+        {
+            if (pNode->count() == 0)
+            {
+                // This is not a function call, no sense to continue with a function return type lookup
+                OSL_FAIL("Got leaf SQL node where non-leaf expected");
+                break;
+            }
+            const OSQLParseNode* pFunctionName = pNode->getChild(0);
+            if ( SQL_ISPUNCTUATION(pFunctionName,"{") )
+            {
+                if ( pNode->count() == 3 )
+                    return fillFunctionInfo( pNode->getChild(1), sFunctionTerm, aInfo );
+                else
+                    OSL_FAIL("ODBC escape not in recognised form");
+                break;
+            }
+            else
+            {
+                if ( SQL_ISRULEOR2(pNode,length_exp,char_value_fct) )
+                    pFunctionName = pFunctionName->getChild(0);
 
-        ::rtl::OUString sFunctionName = pFunctionName->getTokenValue();
-        if ( !sFunctionName.getLength() )
-            sFunctionName = ::rtl::OStringToOUString(OSQLParser::TokenIDToStr(pFunctionName->getTokenID()),RTL_TEXTENCODING_UTF8);
+                ::rtl::OUString sFunctionName = pFunctionName->getTokenValue();
+                if ( !sFunctionName.getLength() )
+                    sFunctionName = ::rtl::OStringToOUString(OSQLParser::TokenIDToStr(pFunctionName->getTokenID()),RTL_TEXTENCODING_UTF8);
 
-        nDataType = OSQLParser::getFunctionReturnType(
-                            sFunctionName
-                            ,&rController.getParser().getContext());
+                nDataType = OSQLParser::getFunctionReturnType(
+                    sFunctionName
+                    ,&rController.getParser().getContext());
+            }
+            break;
+        }
+        case OSQLParseNode::odbc_fct_spec:
+        {
+            if (pNode->count() != 2)
+            {
+                OSL_FAIL("interior of ODBC escape not in recognised shape");
+                break;
+            }
+
+            const OSQLParseNode* const pEscapeType = pNode->getChild(0);
+            if (SQL_ISTOKEN(pEscapeType, TS))
+                nDataType = DataType::TIMESTAMP;
+            else if (SQL_ISTOKEN(pEscapeType, D))
+                nDataType = DataType::DATE;
+            else if (SQL_ISTOKEN(pEscapeType, T))
+                nDataType = DataType::TIME;
+            else if (SQL_ISTOKEN(pEscapeType, FN))
+                return fillFunctionInfo( pNode->getChild(1), sFunctionTerm, aInfo );
+            else
+                OSL_FAIL("Unknown ODBC escape");
+            break;
+        }
+        case OSQLParseNode::cast_spec:
+        {
+            if ( pNode->count() != 6 || !SQL_ISTOKEN(pNode->getChild(3), AS) )
+            {
+                OSL_FAIL("CAST not in recognised shape");
+                break;
+            }
+            const OSQLParseNode *pCastTarget = pNode->getChild(4);
+            if ( SQL_ISTOKENOR2(pCastTarget, INTEGER, INT) )
+                nDataType = DataType::INTEGER;
+            else if ( SQL_ISTOKEN(pCastTarget, SMALLINT) )
+                nDataType = DataType::SMALLINT;
+            else if ( SQL_ISTOKEN(pCastTarget, BIGINT) )
+                nDataType = DataType::BIGINT;
+            else if ( SQL_ISTOKEN(pCastTarget, FLOAT) )
+                nDataType = DataType::FLOAT;
+            else if ( SQL_ISTOKEN(pCastTarget, REAL) )
+                nDataType = DataType::REAL;
+           else if ( SQL_ISTOKEN(pCastTarget, DOUBLE) )
+                nDataType = DataType::DOUBLE;
+            else if ( SQL_ISTOKEN(pCastTarget, BOOLEAN) )
+                nDataType = DataType::BOOLEAN;
+            else if ( SQL_ISTOKEN(pCastTarget, DATE) )
+                nDataType = DataType::DATE;
+            else if ( pCastTarget->count() > 0 )
+            {
+                const OSQLParseNode *pDataType = pCastTarget->getChild(0);
+                while (pDataType->count() > 0)
+                {
+                    pCastTarget = pDataType;
+                    pDataType = pDataType->getChild(0);
+                }
+                if ( SQL_ISTOKEN (pDataType, TIME) )
+                    nDataType = DataType::TIME;
+                else if ( SQL_ISTOKEN (pDataType, TIMESTAMP) )
+                    nDataType = DataType::TIMESTAMP;
+                else if ( SQL_ISTOKENOR3 (pDataType, CHARACTER, CHAR, NCHAR) )
+                    nDataType = char_datatype(pCastTarget, 0);
+                else if ( SQL_ISTOKEN (pDataType, VARCHAR) )
+                    nDataType = DataType::VARCHAR;
+                else if ( SQL_ISTOKEN (pDataType, CLOB) )
+                    nDataType = DataType::CLOB;
+                else if ( SQL_ISTOKEN (pDataType, NATIONAL) )
+                    nDataType = char_datatype(pCastTarget, 1);
+                else if ( SQL_ISTOKEN (pDataType, BINARY) )
+                {
+                    if ( pCastTarget->count() > 2 && SQL_ISTOKEN(pCastTarget->getChild(1), LARGE) && SQL_ISTOKEN(pCastTarget->getChild(2), OBJECT) )
+                        nDataType = DataType::BLOB;
+                    else if ( pCastTarget->count() > 1 && SQL_ISTOKEN(pCastTarget->getChild(1), VARYING) )
+                        nDataType = DataType::VARBINARY;
+                    else
+                        nDataType = DataType::BINARY;
+                }
+                else if ( SQL_ISTOKEN (pDataType, VARBINARY) )
+                    nDataType = DataType::VARBINARY;
+                else if ( SQL_ISTOKEN (pDataType, BLOB) )
+                    nDataType = DataType::BLOB;
+                else if ( SQL_ISTOKEN (pDataType, NUMERIC) )
+                    nDataType = DataType::NUMERIC;
+                else if ( SQL_ISTOKENOR2 (pDataType, DECIMAL, DEC) )
+                    nDataType = DataType::DECIMAL;
+                else if ( SQL_ISTOKEN (pDataType, FLOAT) )
+                    nDataType = DataType::FLOAT;
+                else if ( SQL_ISTOKEN (pDataType, DOUBLE) )
+                    nDataType = DataType::DOUBLE;
+                else if ( SQL_ISTOKEN (pDataType, TIME) )
+                    nDataType = DataType::TIME;
+                else if ( SQL_ISTOKEN (pDataType, TIMESTAMP) )
+                    nDataType = DataType::TIMESTAMP;
+                else if ( SQL_ISTOKEN (pDataType, INTERVAL) )
+                    // Not in DataType published constant (because not in JDBC...)
+                    nDataType = DataType::VARCHAR;
+                else
+                    OSL_FAIL("Failed to decode CAST target");
+            }
+            else
+                OSL_FAIL("Could not decipher CAST target");
+            break;
+        }
+        default:
+            OSL_FAIL("Unknown SQL RuleID");
+            break;
+        }
+        break;
+    default:
+        OSL_FAIL("Unknown SQL Node Type");
+        break;
     }
+
     aInfo->SetDataType(nDataType);
     aInfo->SetFieldType(TAB_NORMAL_FIELD);
     aInfo->SetField(sFieldName);
