@@ -598,7 +598,7 @@ sal_Int32 mapEnumToToken(IParseContext::InternationalKeyCode _eKeyCode )
 }
 /*
  * Read SQL Name literal
- * Valid Names or internatioanl keywords:
+ * Valid Names or international keywords:
  *	As we have international keywords, we test first on them  
  */
 sal_Int32 gatherName(const sal_Char* text)
