@@ -559,7 +559,7 @@ void SwXMLTextBlocks::GeneratePackageName ( const String& rShort, String& rPacka
     rPackageName = rShort;
     xub_StrLen nPos = 0;
     sal_Unicode pDelims[] = { '!', '/', ':', '.', '\\', 0 };
-    ByteString sByte ( rPackageName, RTL_TEXTENCODING_UTF7);
+    rtl::OString sByte(rtl::OUStringToOString(rPackageName, RTL_TEXTENCODING_UTF7));
     rPackageName = String (sByte, RTL_TEXTENCODING_ASCII_US);
     while( STRING_NOTFOUND != ( nPos = rPackageName.SearchChar( pDelims, nPos )))
     {
