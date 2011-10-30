@@ -1,1 +1,0 @@
-The PDF Import Extension allows you to import and modify PDF documents. Best results with 100% layout accuracy can be achieved with the "PDF/ODF hybrid file" format, which this extension also enables. A hybrid PDF/ODF file is a PDF file that contains an embedded ODF source file. Hybrid PDF/ODF files will be opened in OpenOffice.org as an ODF file without any layout changes.

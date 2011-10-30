@@ -103,11 +103,15 @@ COMPONENT_IMAGES=\
 # rather freestyle or common to all?
 COMPONENT_HELP= \
     $(EXTENSIONDIR)$/help$/help_de.odt \
-    $(EXTENSIONDIR)$/help$/help_en-US.odt \
-    $(EXTENSIONDIR)$/help$/component.txt
+    $(EXTENSIONDIR)$/help$/help_en-US.odt
+
+DESCRIPTION_SRC:=$(MISC)/$(EXTENSIONNAME)_in/description.xml
+
+COMPONENT_DESCRIPTION= \
+    $(foreach,lang,$(alllangiso) $(EXTENSIONDIR)$/description-$(lang).txt)
 
 # make sure to add your custom files here
-EXTENSION_PACKDEPS=$(COMPONENT_BITMAPS) $(COMPONENT_IMAGES) $(COMPONENT_HELP)
+EXTENSION_PACKDEPS=$(COMPONENT_BITMAPS) $(COMPONENT_IMAGES) $(COMPONENT_HELP) $(COMPONENT_DESCRIPTION)
 
 ZIP2TARGET=     presentation_minimizer_develop
 .IF "$(WITH_LANG)"!=""
@@ -143,4 +147,12 @@ $(COMPONENT_HELP) : help$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
+$(DESCRIPTION_SRC) : description.xml
+    @@-$(MKDIRHIER) $(@:d)
+    $(COMMAND_ECHO)$(XRMEX) -p $(PRJNAME) -i $< -o $@ -m $(LOCALIZESDF) -l all
+
+$(COMPONENT_DESCRIPTION) : $(DESCRIPTION)
+    $(COPY) description-en-US.txt $(EXTENSIONDIR)
+    $(COPY) $(MISC)/$(EXTENSIONNAME)_in/description-*.txt $(EXTENSIONDIR)
+	 
 .ENDIF # L10N_framework
