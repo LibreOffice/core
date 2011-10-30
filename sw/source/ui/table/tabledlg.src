@@ -737,7 +737,7 @@ TabPage TP_TABLE_TEXTFLOW
     {
         Pos = MAP_APPFONT ( 12 , 132 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ en-US ] = "Text ~direction" ;
+        Text [ en-US ] = "Text ~orientation" ;
     };
     ListBox LB_TEXTDIRECTION
     {
@@ -748,8 +748,8 @@ TabPage TP_TABLE_TEXTFLOW
         Border = TRUE;
         StringList [ en-US ] =
         {
-             < "Left-to-right" ; 0; > ;
-             < "Right-to-left (vertical)" ; 2; > ;
+             < "horizontal" ; 0; > ;
+             < "vertical" ; 2; > ;
              < "Use superordinate object settings" ; 4; > ;
         };
     };
