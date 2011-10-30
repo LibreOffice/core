@@ -75,7 +75,7 @@ const NSTimeInterval HOLD_RECOGNITION_TIME_INTERVAL = 0.4;
 }
 - (void) setClickCountingEnabled: (BOOL) value {
 	if (value) {
-		[self setClickCountEnabledButtons: kRemoteButtonPlus | kRemoteButtonMinus | kRemoteButtonPlay | kRemoteButtonLeft | kRemoteButtonRight | kRemoteButtonMenu];
+		[self setClickCountEnabledButtons: kRemoteButtonPlus | kRemoteButtonMinus | kRemoteButtonPlay | kRemoteButtonLeft | kRemoteButtonRight | kRemoteButtonMenu | kMetallicRemote2009ButtonPlay | kMetallicRemote2009ButtonMiddlePlay];
 	} else {
 		[self setClickCountEnabledButtons: 0];
 	}
