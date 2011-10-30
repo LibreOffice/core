@@ -1894,21 +1894,17 @@ private:
         ::std::vector<sal_uInt16> aPageIndices;
         sal_uInt16 nPrinterPageIndex = 0;
         StringRangeEnumerator::Iterator it = aRangeEnum.begin(), itEnd = aRangeEnum.end();
-        bool bLastLoop = false;
+        bool bLastLoop = (it == itEnd);
         while (!bLastLoop)
         {
-            if (it != itEnd)
-            {
-                sal_Int32 nPageIndex = *it;
-                ++it;
-                if (GetFilteredPage(nPageIndex, PK_STANDARD) == NULL)
-                    continue;
+            sal_Int32 nPageIndex = *it;
+            ++it;
+            bLastLoop = (it == itEnd);
+
+            if (GetFilteredPage(nPageIndex, PK_STANDARD))
                 aPageIndices.push_back(nPageIndex);
-            }
-            else
-            {
-                bLastLoop = true;
-            }
+            else if (!bLastLoop)
+                continue;
 
             // Create a printer page when we have found one page for each
             // placeholder or when this is the last (and special) loop.
