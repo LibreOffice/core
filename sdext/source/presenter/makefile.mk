@@ -247,10 +247,8 @@ COMPONENT_LIBRARY= 								\
 PLATFORMID:=$(RTL_OS:l)_$(RTL_ARCH:l)
 
 COMPONENT_HELP= 								\
+    $(ZIP1DIR)$/help/component.txt				\
     $(foreach,l,$(alllangiso) $(ZIP1DIR)$/help$/$l$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp)
-
-COMPONENT_DESCRIPTION= \
-    $(foreach,lang,$(alllangiso) $(ZIP1DIR)$/description-$(lang).txt)
 
 ZIP1DEPS=					\
     $(DESCRIPTION)			\
@@ -259,7 +257,6 @@ ZIP1DEPS=					\
     $(COMPONENT_BITMAPS)	\
     $(COMPONENT_IMAGES)    	\
     $(COMPONENT_LIBRARY)	\
-    $(COMPONENT_DESCRIPTION)	\
     $(COMPONENT_HELP)
 
 LINKNAME:=help
@@ -286,6 +283,10 @@ $(INCCOM)$/PresenterExtensionIdentifier.hxx : PresenterExtensionIdentifier.txx
 $(COMPONENT_MANIFEST) : $$(@:f)
     @-$(MKDIRHIER) $(@:d)
     +$(TYPE) $< | $(SED) "s/SHARED_EXTENSION/$(DLLPOST)/" > $@
+
+$(ZIP1DIR)$/help$/component.txt : help$/$$(@:f)
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
 
 $(ZIP1DIR)$/help$/%$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp : $(COMMONMISC)$/%$/com.sun.PresenterScreen$/presenter.xhp
     @echo creating $@
@@ -350,7 +351,7 @@ $(COMPONENT_LIBRARY) : $(DLLDEST)$/$$(@:f)
  .ENDIF	#"$(COM)"=="GCC"
 .ENDIF #"$(OS)$(CPU)"=="WNTI" && "$(WITH_EXTENSION_INTEGRATION)"!="YES"
 
-$(COMPONENT_DESCRIPTION) : $(DESCRIPTION)
+
 
 $(ZIP1DIR)/%.xcu : %.xcu
     @@-$(MKDIRHIER) $(@:d)
@@ -367,10 +368,7 @@ PHONYDESC=.PHONY
 $(DESCRIPTION) $(PHONYDESC) : $$(@:f)
     @-$(MKDIRHIER) $(@:d)
     @echo LAST_WITH_LANG=$(WITH_LANG) > $(ZIP1DIR)_lang_track.mk
-    $(GNUCOPY) description-en-US.txt $(ZIP1DIR)/description-en-US.txt
-    $(XRMEX) -p $(PRJNAME) -i description.xml -o $@ -m $(LOCALIZESDF) -l all
-    $(TYPE) $@ | sed s/UPDATED_PLATFORM/$(PLATFORMID)/ > $@.new
-    mv $@.new $@
+    $(TYPE) description.xml | sed s/UPDATED_PLATFORM/$(PLATFORMID)/ > $@
 
 ALLTAR: $(MISC)/../bin/presenter-screen.oxt
 # hotfix to missing localizations
