@@ -4743,7 +4743,7 @@ sal_uInt32 OSQLParser::StrToRuleID(const ::rtl::OString & rValue)
 	}
 
 	// Not found
-	return OParseNode::UNKNOWN_RULE;
+	return OSQLParseNode::UNKNOWN_RULE;
 }
 
 //-----------------------------------------------------------------------------
