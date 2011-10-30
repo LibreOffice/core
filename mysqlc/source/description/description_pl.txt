@@ -1,1 +1,0 @@
-Laczy witryne OpenOffice.org bezposrednio z systemem MySQL Servers
