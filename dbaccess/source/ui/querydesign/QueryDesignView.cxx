@@ -3283,7 +3283,6 @@ void OQueryDesignView::fillFunctionInfo(  const ::connectivity::OSQLParseNode* p
     // get the type of the expression, as far as easily possible
     OQueryController& rController = static_cast<OQueryController&>(getController());
     sal_Int32 nDataType = DataType::DOUBLE;
-    ::rtl::OUString sFieldName = sFunctionTerm;
     switch(pNode->getNodeType())
     {
     case SQL_NODE_CONCAT:
@@ -3585,7 +3584,7 @@ void OQueryDesignView::fillFunctionInfo(  const ::connectivity::OSQLParseNode* p
 
     aInfo->SetDataType(nDataType);
     aInfo->SetFieldType(TAB_NORMAL_FIELD);
-    aInfo->SetField(sFieldName);
+    aInfo->SetField(sFunctionTerm);
     aInfo->SetTabWindow(NULL);
 }
 // -----------------------------------------------------------------------------
