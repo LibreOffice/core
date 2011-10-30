@@ -278,30 +278,40 @@ cleanup:
 		[previousRemainingCookieString release], previousRemainingCookieString=nil;							
 	}*/
 	if (cookieString == nil || [cookieString length] == 0) return;
-		
+
 	NSNumber* buttonId = [[self cookieToButtonMapping] objectForKey: cookieString];
 	if (buttonId != nil) {
-		[self sendRemoteButtonEvent: [buttonId intValue] pressedDown: (sumOfValues>0)];
+	    switch ( (int)buttonId )
+	    {
+		case kMetallicRemote2009ButtonPlay:
+		case kMetallicRemote2009ButtonMiddlePlay:
+		    buttonId = [NSNumber numberWithInt:kRemoteButtonPlay];
+		    break;
+		default:
+		    break;
+	    }
+	    [self sendRemoteButtonEvent: [buttonId intValue] pressedDown: (sumOfValues>0)];
+
 	} else {
-		// let's see if a number of events are stored in the cookie string. this does
-		// happen when the main thread is too busy to handle all incoming events in time.
-		NSString* subCookieString;
-		NSString* lastSubCookieString=nil;
-		while( (subCookieString = [self validCookieSubstring: cookieString]) ) {
-			cookieString = [cookieString substringFromIndex: [subCookieString length]];
-			lastSubCookieString = subCookieString;
-			if (processesBacklog) [self handleEventWithCookieString: subCookieString sumOfValues:sumOfValues];
-		}
-		if (processesBacklog == NO && lastSubCookieString != nil) {
-			// process the last event of the backlog and assume that the button is not pressed down any longer.
-			// The events in the backlog do not seem to be in order and therefore (in rare cases) the last event might be 
-			// a button pressed down event while in reality the user has released it. 
-			// NSLog(@"processing last event of backlog");
-			[self handleEventWithCookieString: lastSubCookieString sumOfValues:0];
-		}
-		if ([cookieString length] > 0) {
-			NSLog(@"Unknown button for cookiestring %@", cookieString);
-		}		
+	    // let's see if a number of events are stored in the cookie string. this does
+	    // happen when the main thread is too busy to handle all incoming events in time.
+	    NSString* subCookieString;
+	    NSString* lastSubCookieString=nil;
+	    while( (subCookieString = [self validCookieSubstring: cookieString]) ) {
+		cookieString = [cookieString substringFromIndex: [subCookieString length]];
+		lastSubCookieString = subCookieString;
+		if (processesBacklog) [self handleEventWithCookieString: subCookieString sumOfValues:sumOfValues];
+	    }
+	    if (processesBacklog == NO && lastSubCookieString != nil) {
+		// process the last event of the backlog and assume that the button is not pressed down any longer.
+		// The events in the backlog do not seem to be in order and therefore (in rare cases) the last event might be 
+		// a button pressed down event while in reality the user has released it. 
+		// NSLog(@"processing last event of backlog");
+		[self handleEventWithCookieString: lastSubCookieString sumOfValues:0];
+	    }
+	    if ([cookieString length] > 0) {
+		NSLog(@"Unknown button for cookiestring %@", cookieString);
+	    }		
 	}
 }
 
