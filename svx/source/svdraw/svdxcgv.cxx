@@ -72,26 +72,6 @@ SdrExchangeView::SdrExchangeView(SdrModel* pModel1, OutputDevice* pOut):
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-Point SdrExchangeView::GetViewCenter(const OutputDevice* pOut) const
-{
-    Point aCenter;
-    if (pOut==NULL)
-    {
-        pOut = GetFirstOutputDevice();
-    }
-    if (pOut!=NULL) {
-        Point aOfs=pOut->GetMapMode().GetOrigin();
-        Size aOutSiz=pOut->GetOutputSize();
-        aOutSiz.Width()/=2;
-        aOutSiz.Height()/=2;
-        aCenter.X()=aOutSiz.Width() -aOfs.X();
-        aCenter.Y()=aOutSiz.Height()-aOfs.Y();
-    }
-    return aCenter;
-}
-
 sal_Bool SdrExchangeView::ImpLimitToWorkArea(Point& rPt) const
 {
     sal_Bool bRet(sal_False);

@@ -111,9 +111,6 @@ public:
      */
     static Graphic  GetObjGraphic( const SdrModel* pModel, const SdrObject* pObj );
 
-    // Bestimmung des View-Mittelpunktes, z.B. zum Pasten
-    Point           GetViewCenter(const OutputDevice* pOut=NULL) const;
-
     // Bei allen Paste-Methoden werden die neuen Draw-Objekte markiert.
     // Wird der Parameter bAddMark auf sal_True gesetzt, so werden die neuen
     // DrawObjekte zu einer bereits bestehenden Selektion "hinzumarkiert".
