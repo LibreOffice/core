@@ -49,7 +49,6 @@ sal_Int32   getHexValueOf (sal_Int32 nValue, sal_Char* pBuffer);
 sal_Int32   getAlignedHexValueOf (sal_Int32 nValue, sal_Char* pBuffer);
 sal_Int32   getValueOf    (sal_Int32 nValue, sal_Char* pBuffer);
 sal_Int32   appendStr     (const sal_Char* pSrc, sal_Char* pDst);
-sal_Int32   appendStr     (const sal_Char* pSrc, sal_Char* pDst, sal_Int32 nBytes);
 
 sal_Bool    WritePS (osl::File* pFile, const sal_Char* pString);
 sal_Bool    WritePS (osl::File* pFile, const sal_Char* pString, sal_uInt64 nInLength);
