@@ -63,15 +63,6 @@
 #endif
         }
 
-        if ( [container instantiateAndAddRemoteControlDeviceWithClass: [KeyspanFrontRowControl class]] != 0 ) {
-#ifdef DEBUG
-            NSLog(@"[container instantiateAndAddRemoteControlDeviceWithClass: [KeyspanFrontRowControl class]] successfull");
-        }
-        else {
-            NSLog(@"[container instantiateAndAddRemoteControlDeviceWithClass: [KeyspanFrontRowControl class]] failed");
-#endif
-        }
-
         if ( [container instantiateAndAddRemoteControlDeviceWithClass: [GlobalKeyboardDevice class]] != 0 ) {
 #ifdef DEBUG
             NSLog(@"[container instantiateAndAddRemoteControlDeviceWithClass: [GlobalKeyboardDevice class]] successfull");
