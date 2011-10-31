@@ -1207,8 +1207,8 @@ static rtlCipherError rtl_cipherARCFOUR_update_Impl (
     const sal_uInt8     *pData,   sal_Size nDatLen,
     sal_uInt8           *pBuffer, sal_Size nBufLen)
 {
-    register unsigned int *S;
-    register unsigned int  x, y, t;
+    unsigned int *S;
+    unsigned int  x, y, t;
     sal_Size               k;
 
     /* Check arguments. */

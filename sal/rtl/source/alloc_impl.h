@@ -98,7 +98,7 @@ extern "C" {
 static RTL_MEMORY_INLINE int
 highbit(sal_Size n)
 {
-  register int k = 1;
+  int k = 1;
 
   if (n == 0)
     return (0);
@@ -131,7 +131,7 @@ highbit(sal_Size n)
 static RTL_MEMORY_INLINE int
 lowbit(sal_Size n)
 {
-  register int k = 1;
+  int k = 1;
 
   if (n == 0)
     return (0);

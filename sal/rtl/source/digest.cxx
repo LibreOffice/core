@@ -83,8 +83,8 @@ struct Digest_Impl
  */
 static void __rtl_digest_swapLong (sal_uInt32 *pData, sal_uInt32 nDatLen)
 {
-    register sal_uInt32 *X;
-    register int         i, n;
+    sal_uInt32 *X;
+    int         i, n;
 
     X = pData;
     n = nDatLen;
@@ -308,9 +308,9 @@ static void __rtl_digest_initMD2 (DigestContextMD2 *ctx)
  */
 static void __rtl_digest_updateMD2 (DigestContextMD2 *ctx)
 {
-    register sal_uInt8  *X;
-    register sal_uInt32 *sp1, *sp2;
-    register sal_uInt32  i, k, t;
+    sal_uInt8  *X;
+    sal_uInt32 *sp1, *sp2;
+    sal_uInt32  i, k, t;
 
     sal_uInt32 state[48];
 
@@ -353,8 +353,8 @@ static void __rtl_digest_updateMD2 (DigestContextMD2 *ctx)
  */
 static void __rtl_digest_endMD2 (DigestContextMD2 *ctx)
 {
-    register sal_uInt8  *X;
-    register sal_uInt32 *C;
+    sal_uInt8  *X;
+    sal_uInt32 *C;
     sal_uInt32           i, n;
 
     X = ctx->m_pData;
@@ -599,8 +599,8 @@ static void __rtl_digest_initMD5 (DigestContextMD5 *ctx)
  */
 static void __rtl_digest_updateMD5 (DigestContextMD5 *ctx)
 {
-    register sal_uInt32  A, B, C, D;
-    register sal_uInt32 *X;
+    sal_uInt32  A, B, C, D;
+    sal_uInt32 *X;
 
     A = ctx->m_nA;
     B = ctx->m_nB;
@@ -691,10 +691,10 @@ static void __rtl_digest_endMD5 (DigestContextMD5 *ctx)
     {
         0x80, 0x00, 0x00, 0x00
     };
-    register const sal_uInt8 *p = end;
+    const sal_uInt8 *p = end;
 
-    register sal_uInt32 *X;
-    register int         i;
+    sal_uInt32 *X;
+    int         i;
 
     X = ctx->m_pData;
     i = (ctx->m_nDatLen >> 2);
@@ -1029,10 +1029,10 @@ static void __rtl_digest_initSHA (
  */
 static void __rtl_digest_updateSHA (DigestContextSHA *ctx)
 {
-    register sal_uInt32  A, B, C, D, E, T;
-    register sal_uInt32 *X;
+    sal_uInt32  A, B, C, D, E, T;
+    sal_uInt32 *X;
 
-    register DigestSHA_update_t *U;
+    DigestSHA_update_t *U;
     U = ctx->m_update;
 
     A = ctx->m_nA;
@@ -1142,10 +1142,10 @@ static void __rtl_digest_endSHA (DigestContextSHA *ctx)
     {
         0x80, 0x00, 0x00, 0x00
     };
-    register const sal_uInt8 *p = end;
+    const sal_uInt8 *p = end;
 
-    register sal_uInt32 *X;
-    register int         i;
+    sal_uInt32 *X;
+    int         i;
 
     X = ctx->m_pData;
     i = (ctx->m_nDatLen >> 2);
@@ -1625,7 +1625,7 @@ static void __rtl_digest_initHMAC_MD5 (ContextHMAC_MD5 * ctx)
  */
 static void __rtl_digest_ipadHMAC_MD5 (ContextHMAC_MD5 * ctx)
 {
-    register sal_uInt32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < DIGEST_CBLOCK_HMAC_MD5; i++)
         ctx->m_opad[i] ^= 0x36;
@@ -1640,7 +1640,7 @@ static void __rtl_digest_ipadHMAC_MD5 (ContextHMAC_MD5 * ctx)
  */
 static void __rtl_digest_opadHMAC_MD5 (ContextHMAC_MD5 * ctx)
 {
-    register sal_uInt32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < DIGEST_CBLOCK_HMAC_MD5; i++)
         ctx->m_opad[i] ^= 0x5c;
@@ -1857,7 +1857,7 @@ static void __rtl_digest_initHMAC_SHA1 (ContextHMAC_SHA1 * ctx)
  */
 static void __rtl_digest_ipadHMAC_SHA1 (ContextHMAC_SHA1 * ctx)
 {
-    register sal_uInt32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < DIGEST_CBLOCK_HMAC_SHA1; i++)
         ctx->m_opad[i] ^= 0x36;
@@ -1872,7 +1872,7 @@ static void __rtl_digest_ipadHMAC_SHA1 (ContextHMAC_SHA1 * ctx)
  */
 static void __rtl_digest_opadHMAC_SHA1 (ContextHMAC_SHA1 * ctx)
 {
-    register sal_uInt32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < DIGEST_CBLOCK_HMAC_SHA1; i++)
         ctx->m_opad[i] ^= 0x5c;
@@ -2053,7 +2053,7 @@ static void __rtl_digest_updatePBKDF2 (
 {
     /* T_i = F (P, S, c, i) */
     sal_uInt8 U[DIGEST_CBLOCK_PBKDF2];
-    register  sal_uInt32 i, k;
+    sal_uInt32 i, k;
 
     /* U_(1) = PRF (P, S || INDEX) */
     rtl_digest_updateHMAC_SHA1 (hDigest, pSaltData, nSaltLen);

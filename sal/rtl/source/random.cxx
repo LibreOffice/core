@@ -105,7 +105,7 @@ static void __rtl_random_readPool (
  */
 static double __rtl_random_data (RandomData_Impl *pImpl)
 {
-    register double random;
+    double random;
 
     RTL_RANDOM_RNG (pImpl->m_nX, pImpl->m_nY, pImpl->m_nZ);
     random = (((double)(pImpl->m_nX) / 30328.0) +
