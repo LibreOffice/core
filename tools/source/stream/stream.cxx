@@ -1308,10 +1308,8 @@ SvStream& SvStream::operator>>(double& r)
 #if defined UNX
         if (bSwap)
           SwapDouble(n);
-        r = n;
-#else
-    (void) r;
 #endif
+        r = n;
     }
     return *this;
 }
