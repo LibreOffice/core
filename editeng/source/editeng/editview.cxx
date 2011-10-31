@@ -746,22 +746,6 @@ void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::d
     PIMPEE->FormatAndUpdate( this );
 }
 
-sal_Bool EditView::Drop( const DropEvent& )
-{
-    return sal_False;
-}
-
-ESelection EditView::GetDropPos()
-{
-    OSL_FAIL( "GetDropPos - Why?!" );
-    return ESelection();
-}
-
-sal_Bool EditView::QueryDrop( DropEvent& )
-{
-    return sal_False;
-}
-
 void EditView::SetEditEngineUpdateMode( sal_Bool bUpdate )
 {
     DBG_CHKTHIS( EditView, 0 );
