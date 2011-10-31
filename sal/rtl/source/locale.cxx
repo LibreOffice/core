@@ -32,27 +32,26 @@
 #include "rtl/alloc.h"
 
 #include "internal/once.h"
+#include "internal/rtl_locale_init.h"
 
 static sal_Int32 RTL_HASHTABLE_SIZE[] =
 {
     7, 31, 127, 251, 509, 1021, 2039, 4093
 };
 
-typedef struct rtl_hashentry RTL_HASHENTRY;
-
-struct rtl_hashentry
+struct RTL_HASHENTRY
 {
     rtl_Locale* Entry;
     RTL_HASHENTRY* Next;
 };
 
-typedef struct rtl_hashtable
+struct RTL_HASHTABLE
 {
     sal_Int8        iSize;
     sal_Int32       Size;
     sal_Int32       Elements;
     RTL_HASHENTRY** Table;
-} RTL_HASHTABLE;
+};
 
 static RTL_HASHTABLE* g_pLocaleTable = NULL;
 
@@ -60,7 +59,7 @@ static rtl_Locale* g_pDefaultLocale = NULL;
 
 /*************************************************************************
  */
-void rtl_hashentry_destroy(RTL_HASHENTRY* entry)
+extern "C" void rtl_hashentry_destroy(RTL_HASHENTRY* entry)
 {
     rtl_uString_release(entry->Entry->Language);
     rtl_uString_release(entry->Entry->Country);
@@ -72,7 +71,7 @@ void rtl_hashentry_destroy(RTL_HASHENTRY* entry)
     rtl_freeMemory(entry);
 }
 
-void rtl_hashtable_destroy(RTL_HASHTABLE* table)
+extern "C" void rtl_hashtable_destroy(RTL_HASHTABLE* table)
 {
     sal_Int32 size = 0;
 
@@ -92,7 +91,7 @@ void rtl_hashtable_destroy(RTL_HASHTABLE* table)
     rtl_freeMemory(table);
 }
 
-void rtl_hashtable_init(RTL_HASHTABLE** table, sal_Int8 sizeIndex)
+extern "C" void rtl_hashtable_init(RTL_HASHTABLE** table, sal_Int8 sizeIndex)
 {
     sal_Int32 nSize = RTL_HASHTABLE_SIZE[sizeIndex];
 
@@ -113,14 +112,14 @@ void rtl_hashtable_init(RTL_HASHTABLE** table, sal_Int8 sizeIndex)
     }
 }
 
-sal_Int32 rtl_hashfunc(RTL_HASHTABLE* table, sal_Int32 key)
+extern "C" sal_Int32 rtl_hashfunc(RTL_HASHTABLE* table, sal_Int32 key)
 {
     return ( (sal_uInt32) key % table->Size);
 }
 
-sal_Bool rtl_hashtable_grow(RTL_HASHTABLE** table);
+extern "C" sal_Bool rtl_hashtable_grow(RTL_HASHTABLE** table);
 
-rtl_Locale* rtl_hashtable_add(RTL_HASHTABLE** table, rtl_Locale* value)
+extern "C" rtl_Locale* rtl_hashtable_add(RTL_HASHTABLE** table, rtl_Locale* value)
 {
     sal_Int32 key = 0;
 
@@ -201,7 +200,7 @@ sal_Bool rtl_hashtable_grow(RTL_HASHTABLE** table)
     return sal_True;
 }
 
-sal_Bool rtl_hashtable_find(RTL_HASHTABLE * table, sal_Int32 key, sal_Int32 hashCode, rtl_Locale** pValue)
+extern "C" sal_Bool rtl_hashtable_find(RTL_HASHTABLE * table, sal_Int32 key, sal_Int32 hashCode, rtl_Locale** pValue)
 {
     if (!table)
         return sal_False;
@@ -226,7 +225,7 @@ sal_Bool rtl_hashtable_find(RTL_HASHTABLE * table, sal_Int32 key, sal_Int32 hash
 /*************************************************************************
  *  rtl_locale_init
  */
-void rtl_locale_init (void)
+void rtl_locale_init()
 {
   OSL_ASSERT(g_pLocaleTable == 0);
   rtl_hashtable_init(&g_pLocaleTable, 1);
@@ -235,7 +234,7 @@ void rtl_locale_init (void)
 /*************************************************************************
  *  rtl_locale_fini
  */
-void rtl_locale_fini (void)
+void rtl_locale_fini()
 {
   if (g_pLocaleTable != 0)
   {
@@ -243,8 +242,6 @@ void rtl_locale_fini (void)
     g_pLocaleTable = 0;
   }
 }
-
-extern void ensureLocaleSingleton();
 
 /*************************************************************************
  *  rtl_locale_register

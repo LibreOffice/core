@@ -58,12 +58,12 @@
 
 /** RandomData_Impl.
  */
-typedef struct random_data_impl_st
+struct RandomData_Impl
 {
     sal_Int16 m_nX;
     sal_Int16 m_nY;
     sal_Int16 m_nZ;
-} RandomData_Impl;
+};
 
 /** __rtl_random_data.
  */
@@ -75,7 +75,7 @@ static double __rtl_random_data (RandomData_Impl *pImpl);
 #define RTL_RANDOM_SIZE_DIGEST RTL_DIGEST_LENGTH_MD5
 #define RTL_RANDOM_SIZE_POOL   1023
 
-typedef struct random_pool_impl_st
+struct RandomPool_Impl
 {
     rtlDigest  m_hDigest;
     sal_uInt8  m_pDigest[RTL_RANDOM_SIZE_DIGEST];
@@ -83,7 +83,7 @@ typedef struct random_pool_impl_st
     sal_uInt32 m_nData;
     sal_uInt32 m_nIndex;
     sal_uInt32 m_nCount;
-} RandomPool_Impl;
+};
 
 /** __rtl_random_initPool.
  */
@@ -277,7 +277,7 @@ static void __rtl_random_readPool (
 /*
  * rtl_random_createPool.
  */
-rtlRandomPool SAL_CALL rtl_random_createPool (void)
+rtlRandomPool SAL_CALL rtl_random_createPool() SAL_THROW_EXTERN_C()
 {
     RandomPool_Impl *pImpl = (RandomPool_Impl*)NULL;
     pImpl = (RandomPool_Impl*)rtl_allocateZeroMemory (sizeof(RandomPool_Impl));
@@ -295,7 +295,7 @@ rtlRandomPool SAL_CALL rtl_random_createPool (void)
 /*
  * rtl_random_destroyPool.
  */
-void SAL_CALL rtl_random_destroyPool (rtlRandomPool Pool)
+void SAL_CALL rtl_random_destroyPool (rtlRandomPool Pool) SAL_THROW_EXTERN_C()
 {
     RandomPool_Impl *pImpl = (RandomPool_Impl *)Pool;
     if (pImpl)
@@ -309,7 +309,7 @@ void SAL_CALL rtl_random_destroyPool (rtlRandomPool Pool)
  * rtl_random_addBytes.
  */
 rtlRandomError SAL_CALL rtl_random_addBytes (
-    rtlRandomPool Pool, const void *Buffer, sal_Size Bytes)
+    rtlRandomPool Pool, const void *Buffer, sal_Size Bytes) SAL_THROW_EXTERN_C()
 {
     RandomPool_Impl *pImpl   = (RandomPool_Impl *)Pool;
     const sal_uInt8 *pBuffer = (const sal_uInt8 *)Buffer;
@@ -325,7 +325,7 @@ rtlRandomError SAL_CALL rtl_random_addBytes (
  * rtl_random_getBytes.
  */
 rtlRandomError SAL_CALL rtl_random_getBytes (
-    rtlRandomPool Pool, void *Buffer, sal_Size Bytes)
+    rtlRandomPool Pool, void *Buffer, sal_Size Bytes) SAL_THROW_EXTERN_C()
 {
     RandomPool_Impl *pImpl   = (RandomPool_Impl *)Pool;
     sal_uInt8       *pBuffer = (sal_uInt8 *)Buffer;

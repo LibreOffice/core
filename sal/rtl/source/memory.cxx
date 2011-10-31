@@ -57,7 +57,7 @@ sal_Int32 SAL_CALL rtl_compareMemory(const void *MemA, const void *MemB, sal_Siz
 
 void* SAL_CALL rtl_findInMemory(const void *MemA, sal_uInt8 ch, sal_Size Bytes)
 {
-    return memchr(MemA, ch, Bytes);
+    return const_cast< void * >(memchr(MemA, ch, Bytes));
 }
 
 

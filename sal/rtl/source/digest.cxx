@@ -67,7 +67,7 @@ typedef rtlDigestError (SAL_CALL Digest_update_t) (
 typedef rtlDigestError (SAL_CALL Digest_get_t) (
     void *ctx, sal_uInt8 *Buffer, sal_uInt32 BufLen);
 
-typedef struct digest_impl_st
+struct Digest_Impl
 {
     rtlDigestAlgorithm  m_algorithm;
     sal_uInt32          m_length;
@@ -76,7 +76,7 @@ typedef struct digest_impl_st
     Digest_delete_t    *m_delete;
     Digest_update_t    *m_update;
     Digest_get_t       *m_get;
-} Digest_Impl;
+};
 
 /*
  * __rtl_digest_swapLong.
@@ -102,6 +102,7 @@ static void __rtl_digest_swapLong (sal_uInt32 *pData, sal_uInt32 nDatLen)
  * rtl_digest_create.
  */
 rtlDigest SAL_CALL rtl_digest_create (rtlDigestAlgorithm Algorithm)
+    SAL_THROW_EXTERN_C()
 {
     rtlDigest Digest = (rtlDigest)NULL;
     switch (Algorithm)
@@ -140,6 +141,7 @@ rtlDigest SAL_CALL rtl_digest_create (rtlDigestAlgorithm Algorithm)
  * rtl_digest_queryAlgorithm.
  */
 rtlDigestAlgorithm SAL_CALL rtl_digest_queryAlgorithm (rtlDigest Digest)
+    SAL_THROW_EXTERN_C()
 {
     Digest_Impl *pImpl = (Digest_Impl *)Digest;
     if (pImpl)
@@ -152,6 +154,7 @@ rtlDigestAlgorithm SAL_CALL rtl_digest_queryAlgorithm (rtlDigest Digest)
  * rtl_digest_queryLength.
  */
 sal_uInt32 SAL_CALL rtl_digest_queryLength (rtlDigest Digest)
+    SAL_THROW_EXTERN_C()
 {
     Digest_Impl *pImpl = (Digest_Impl *)Digest;
     if (pImpl)
@@ -165,6 +168,7 @@ sal_uInt32 SAL_CALL rtl_digest_queryLength (rtlDigest Digest)
  */
 rtlDigestError SAL_CALL rtl_digest_init (
     rtlDigest Digest, const sal_uInt8 *pData, sal_uInt32 nDatLen)
+    SAL_THROW_EXTERN_C()
 {
     Digest_Impl *pImpl = (Digest_Impl *)Digest;
     if (pImpl)
@@ -182,6 +186,7 @@ rtlDigestError SAL_CALL rtl_digest_init (
  */
 rtlDigestError SAL_CALL rtl_digest_update (
     rtlDigest Digest, const void *pData, sal_uInt32 nDatLen)
+    SAL_THROW_EXTERN_C()
 {
     Digest_Impl *pImpl = (Digest_Impl *)Digest;
     if (pImpl && pImpl->m_update)
@@ -195,6 +200,7 @@ rtlDigestError SAL_CALL rtl_digest_update (
  */
 rtlDigestError SAL_CALL rtl_digest_get (
     rtlDigest Digest, sal_uInt8 *pBuffer, sal_uInt32 nBufLen)
+    SAL_THROW_EXTERN_C()
 {
     Digest_Impl *pImpl = (Digest_Impl *)Digest;
     if (pImpl && pImpl->m_get)
@@ -206,7 +212,7 @@ rtlDigestError SAL_CALL rtl_digest_get (
 /*
  * rtl_digest_destroy.
  */
-void SAL_CALL rtl_digest_destroy (rtlDigest Digest)
+void SAL_CALL rtl_digest_destroy (rtlDigest Digest) SAL_THROW_EXTERN_C()
 {
     Digest_Impl *pImpl = (Digest_Impl *)Digest;
     if (pImpl && pImpl->m_delete)
@@ -221,19 +227,19 @@ void SAL_CALL rtl_digest_destroy (rtlDigest Digest)
 #define DIGEST_CBLOCK_MD2 16
 #define DIGEST_LBLOCK_MD2 16
 
-typedef struct digestMD2_context_st
+struct DigestContextMD2
 {
     sal_uInt32 m_nDatLen;
     sal_uInt8  m_pData[DIGEST_CBLOCK_MD2];
     sal_uInt32 m_state[DIGEST_LBLOCK_MD2];
     sal_uInt32 m_chksum[DIGEST_LBLOCK_MD2];
-} DigestContextMD2;
+};
 
-typedef struct digestMD2_impl_st
+struct DigestMD2_Impl
 {
     Digest_Impl      m_digest;
     DigestContextMD2 m_context;
-} DigestMD2_Impl;
+};
 
 static void __rtl_digest_initMD2   (DigestContextMD2 *ctx);
 static void __rtl_digest_updateMD2 (DigestContextMD2 *ctx);
@@ -374,7 +380,7 @@ static void __rtl_digest_endMD2 (DigestContextMD2 *ctx)
  */
 rtlDigestError SAL_CALL rtl_digest_MD2 (
     const void *pData,   sal_uInt32 nDatLen,
-    sal_uInt8  *pBuffer, sal_uInt32 nBufLen)
+    sal_uInt8  *pBuffer, sal_uInt32 nBufLen) SAL_THROW_EXTERN_C()
 {
     DigestMD2_Impl digest;
     rtlDigestError result;
@@ -393,7 +399,7 @@ rtlDigestError SAL_CALL rtl_digest_MD2 (
 /*
  * rtl_digest_createMD2.
  */
-rtlDigest SAL_CALL rtl_digest_createMD2 (void)
+rtlDigest SAL_CALL rtl_digest_createMD2() SAL_THROW_EXTERN_C()
 {
     DigestMD2_Impl *pImpl = (DigestMD2_Impl*)NULL;
     pImpl = RTL_DIGEST_CREATE(DigestMD2_Impl);
@@ -410,6 +416,7 @@ rtlDigest SAL_CALL rtl_digest_createMD2 (void)
  */
 rtlDigestError SAL_CALL rtl_digest_updateMD2 (
     rtlDigest Digest, const void *pData, sal_uInt32 nDatLen)
+    SAL_THROW_EXTERN_C()
 {
     DigestMD2_Impl   *pImpl = (DigestMD2_Impl *)Digest;
     const sal_uInt8  *d     = (const sal_uInt8 *)pData;
@@ -468,6 +475,7 @@ rtlDigestError SAL_CALL rtl_digest_updateMD2 (
  */
 rtlDigestError SAL_CALL rtl_digest_getMD2 (
     rtlDigest Digest, sal_uInt8 *pBuffer, sal_uInt32 nBufLen)
+    SAL_THROW_EXTERN_C()
 {
     DigestMD2_Impl   *pImpl = (DigestMD2_Impl *)Digest;
     sal_uInt32        i;
@@ -496,7 +504,7 @@ rtlDigestError SAL_CALL rtl_digest_getMD2 (
 /*
  * rtl_digest_destroyMD2.
  */
-void SAL_CALL rtl_digest_destroyMD2 (rtlDigest Digest)
+void SAL_CALL rtl_digest_destroyMD2 (rtlDigest Digest) SAL_THROW_EXTERN_C()
 {
     DigestMD2_Impl *pImpl = (DigestMD2_Impl *)Digest;
     if (pImpl)
@@ -516,19 +524,19 @@ void SAL_CALL rtl_digest_destroyMD2 (rtlDigest Digest)
 #define DIGEST_CBLOCK_MD5 64
 #define DIGEST_LBLOCK_MD5 16
 
-typedef struct digestMD5_context_st
+struct DigestContextMD5
 {
     sal_uInt32 m_nDatLen;
     sal_uInt32 m_pData[DIGEST_LBLOCK_MD5];
     sal_uInt32 m_nA, m_nB, m_nC, m_nD;
     sal_uInt32 m_nL, m_nH;
-} DigestContextMD5;
+};
 
-typedef struct digestMD5_impl_st
+struct DigestMD5_Impl
 {
     Digest_Impl      m_digest;
     DigestContextMD5 m_context;
-} DigestMD5_Impl;
+};
 
 static void __rtl_digest_initMD5   (DigestContextMD5 *ctx);
 static void __rtl_digest_updateMD5 (DigestContextMD5 *ctx);
@@ -739,7 +747,7 @@ static void __rtl_digest_endMD5 (DigestContextMD5 *ctx)
  */
 rtlDigestError SAL_CALL rtl_digest_MD5 (
     const void *pData,   sal_uInt32 nDatLen,
-    sal_uInt8  *pBuffer, sal_uInt32 nBufLen)
+    sal_uInt8  *pBuffer, sal_uInt32 nBufLen) SAL_THROW_EXTERN_C()
 {
     DigestMD5_Impl digest;
     rtlDigestError result;
@@ -758,7 +766,7 @@ rtlDigestError SAL_CALL rtl_digest_MD5 (
 /*
  * rtl_digest_createMD5.
  */
-rtlDigest SAL_CALL rtl_digest_createMD5 (void)
+rtlDigest SAL_CALL rtl_digest_createMD5() SAL_THROW_EXTERN_C()
 {
     DigestMD5_Impl *pImpl = (DigestMD5_Impl*)NULL;
     pImpl = RTL_DIGEST_CREATE(DigestMD5_Impl);
@@ -775,6 +783,7 @@ rtlDigest SAL_CALL rtl_digest_createMD5 (void)
  */
 rtlDigestError SAL_CALL rtl_digest_updateMD5 (
     rtlDigest Digest, const void *pData, sal_uInt32 nDatLen)
+    SAL_THROW_EXTERN_C()
 {
     DigestMD5_Impl   *pImpl = (DigestMD5_Impl *)Digest;
     const sal_uInt8  *d     = (const sal_uInt8 *)pData;
@@ -847,6 +856,7 @@ rtlDigestError SAL_CALL rtl_digest_updateMD5 (
  */
 rtlDigestError SAL_CALL rtl_digest_getMD5 (
     rtlDigest Digest, sal_uInt8 *pBuffer, sal_uInt32 nBufLen)
+    SAL_THROW_EXTERN_C()
 {
     DigestMD5_Impl   *pImpl = (DigestMD5_Impl *)Digest;
     sal_uInt8        *p     = pBuffer;
@@ -879,6 +889,7 @@ rtlDigestError SAL_CALL rtl_digest_getMD5 (
  */
 rtlDigestError SAL_CALL rtl_digest_rawMD5 (
     rtlDigest Digest, sal_uInt8 *pBuffer, sal_uInt32 nBufLen)
+    SAL_THROW_EXTERN_C()
 {
     DigestMD5_Impl   *pImpl = (DigestMD5_Impl *)Digest;
     sal_uInt8        *p     = pBuffer;
@@ -909,7 +920,7 @@ rtlDigestError SAL_CALL rtl_digest_rawMD5 (
 /*
  * rtl_digest_destroyMD5.
  */
-void SAL_CALL rtl_digest_destroyMD5 (rtlDigest Digest)
+void SAL_CALL rtl_digest_destroyMD5 (rtlDigest Digest) SAL_THROW_EXTERN_C()
 {
     DigestMD5_Impl *pImpl = (DigestMD5_Impl *)Digest;
     if (pImpl)
@@ -934,20 +945,20 @@ typedef sal_uInt32 DigestSHA_update_t (sal_uInt32 x);
 static sal_uInt32 __rtl_digest_updateSHA_0 (sal_uInt32 x);
 static sal_uInt32 __rtl_digest_updateSHA_1 (sal_uInt32 x);
 
-typedef struct digestSHA_context_st
+struct DigestContextSHA
 {
     DigestSHA_update_t *m_update;
     sal_uInt32          m_nDatLen;
     sal_uInt32          m_pData[DIGEST_LBLOCK_SHA];
     sal_uInt32          m_nA, m_nB, m_nC, m_nD, m_nE;
     sal_uInt32          m_nL, m_nH;
-} DigestContextSHA;
+};
 
-typedef struct digestSHA_impl_st
+struct DigestSHA_Impl
 {
     Digest_Impl      m_digest;
     DigestContextSHA m_context;
-} DigestSHA_Impl;
+};
 
 static void __rtl_digest_initSHA (
     DigestContextSHA *ctx, DigestSHA_update_t *fct);
@@ -1216,7 +1227,7 @@ static sal_uInt32 __rtl_digest_updateSHA_0 (sal_uInt32 x)
  */
 rtlDigestError SAL_CALL rtl_digest_SHA (
     const void *pData,   sal_uInt32 nDatLen,
-    sal_uInt8  *pBuffer, sal_uInt32 nBufLen)
+    sal_uInt8  *pBuffer, sal_uInt32 nBufLen) SAL_THROW_EXTERN_C()
 {
     DigestSHA_Impl digest;
     rtlDigestError result;
@@ -1235,7 +1246,7 @@ rtlDigestError SAL_CALL rtl_digest_SHA (
 /*
  * rtl_digest_createSHA.
  */
-rtlDigest SAL_CALL rtl_digest_createSHA (void)
+rtlDigest SAL_CALL rtl_digest_createSHA() SAL_THROW_EXTERN_C()
 {
     DigestSHA_Impl *pImpl = (DigestSHA_Impl*)NULL;
     pImpl = RTL_DIGEST_CREATE(DigestSHA_Impl);
@@ -1252,6 +1263,7 @@ rtlDigest SAL_CALL rtl_digest_createSHA (void)
  */
 rtlDigestError SAL_CALL rtl_digest_updateSHA (
     rtlDigest Digest, const void *pData, sal_uInt32 nDatLen)
+    SAL_THROW_EXTERN_C()
 {
     DigestSHA_Impl   *pImpl = (DigestSHA_Impl *)Digest;
     const sal_uInt8  *d     = (const sal_uInt8 *)pData;
@@ -1324,6 +1336,7 @@ rtlDigestError SAL_CALL rtl_digest_updateSHA (
  */
 rtlDigestError SAL_CALL rtl_digest_getSHA (
     rtlDigest Digest, sal_uInt8 *pBuffer, sal_uInt32 nBufLen)
+    SAL_THROW_EXTERN_C()
 {
     DigestSHA_Impl   *pImpl = (DigestSHA_Impl *)Digest;
     sal_uInt8        *p     = pBuffer;
@@ -1355,7 +1368,7 @@ rtlDigestError SAL_CALL rtl_digest_getSHA (
 /*
  * rtl_digest_destroySHA.
  */
-void SAL_CALL rtl_digest_destroySHA (rtlDigest Digest)
+void SAL_CALL rtl_digest_destroySHA (rtlDigest Digest) SAL_THROW_EXTERN_C()
 {
     DigestSHA_Impl *pImpl = (DigestSHA_Impl *)Digest;
     if (pImpl)
@@ -1404,7 +1417,7 @@ static sal_uInt32 __rtl_digest_updateSHA_1 (sal_uInt32 x)
  */
 rtlDigestError SAL_CALL rtl_digest_SHA1 (
     const void *pData,   sal_uInt32 nDatLen,
-    sal_uInt8  *pBuffer, sal_uInt32 nBufLen)
+    sal_uInt8  *pBuffer, sal_uInt32 nBufLen) SAL_THROW_EXTERN_C()
 {
     DigestSHA_Impl digest;
     rtlDigestError result;
@@ -1423,7 +1436,7 @@ rtlDigestError SAL_CALL rtl_digest_SHA1 (
 /*
  * rtl_digest_createSHA1.
  */
-rtlDigest SAL_CALL rtl_digest_createSHA1 (void)
+rtlDigest SAL_CALL rtl_digest_createSHA1() SAL_THROW_EXTERN_C()
 {
     DigestSHA_Impl *pImpl = (DigestSHA_Impl*)NULL;
     pImpl = RTL_DIGEST_CREATE(DigestSHA_Impl);
@@ -1440,6 +1453,7 @@ rtlDigest SAL_CALL rtl_digest_createSHA1 (void)
  */
 rtlDigestError SAL_CALL rtl_digest_updateSHA1 (
     rtlDigest Digest, const void *pData, sal_uInt32 nDatLen)
+    SAL_THROW_EXTERN_C()
 {
     DigestSHA_Impl   *pImpl = (DigestSHA_Impl *)Digest;
     const sal_uInt8  *d     = (const sal_uInt8 *)pData;
@@ -1512,6 +1526,7 @@ rtlDigestError SAL_CALL rtl_digest_updateSHA1 (
  */
 rtlDigestError SAL_CALL rtl_digest_getSHA1 (
     rtlDigest Digest, sal_uInt8 *pBuffer, sal_uInt32 nBufLen)
+    SAL_THROW_EXTERN_C()
 {
     DigestSHA_Impl   *pImpl = (DigestSHA_Impl *)Digest;
     sal_uInt8        *p     = pBuffer;
@@ -1543,7 +1558,7 @@ rtlDigestError SAL_CALL rtl_digest_getSHA1 (
 /*
  * rtl_digest_destroySHA1.
  */
-void SAL_CALL rtl_digest_destroySHA1 (rtlDigest Digest)
+void SAL_CALL rtl_digest_destroySHA1 (rtlDigest Digest) SAL_THROW_EXTERN_C()
 {
     DigestSHA_Impl *pImpl = (DigestSHA_Impl *)Digest;
     if (pImpl)
@@ -1562,17 +1577,17 @@ void SAL_CALL rtl_digest_destroySHA1 (rtlDigest Digest)
  *======================================================================*/
 #define DIGEST_CBLOCK_HMAC_MD5 64
 
-typedef struct _contextHMAC_MD5_st
+struct ContextHMAC_MD5
 {
     DigestMD5_Impl m_hash;
     sal_uInt8      m_opad[DIGEST_CBLOCK_HMAC_MD5];
-} ContextHMAC_MD5;
+};
 
-typedef struct _digestHMAC_MD5_impl_st
+struct DigestHMAC_MD5_Impl
 {
     Digest_Impl     m_digest;
     ContextHMAC_MD5 m_context;
-} DigestHMAC_MD5_Impl;
+};
 
 static void __rtl_digest_initHMAC_MD5 (ContextHMAC_MD5 * ctx);
 static void __rtl_digest_ipadHMAC_MD5 (ContextHMAC_MD5 * ctx);
@@ -1642,7 +1657,7 @@ static void __rtl_digest_opadHMAC_MD5 (ContextHMAC_MD5 * ctx)
 rtlDigestError SAL_CALL rtl_digest_HMAC_MD5 (
     const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen,
     const void      *pData,    sal_uInt32 nDatLen,
-    sal_uInt8       *pBuffer,  sal_uInt32 nBufLen)
+    sal_uInt8       *pBuffer,  sal_uInt32 nBufLen) SAL_THROW_EXTERN_C()
 {
     DigestHMAC_MD5_Impl digest;
     rtlDigestError      result;
@@ -1664,7 +1679,7 @@ rtlDigestError SAL_CALL rtl_digest_HMAC_MD5 (
 /*
  * rtl_digest_createHMAC_MD5.
  */
-rtlDigest SAL_CALL rtl_digest_createHMAC_MD5 (void)
+rtlDigest SAL_CALL rtl_digest_createHMAC_MD5() SAL_THROW_EXTERN_C()
 {
     DigestHMAC_MD5_Impl *pImpl = (DigestHMAC_MD5_Impl*)NULL;
     pImpl = RTL_DIGEST_CREATE(DigestHMAC_MD5_Impl);
@@ -1681,6 +1696,7 @@ rtlDigest SAL_CALL rtl_digest_createHMAC_MD5 (void)
  */
 rtlDigestError SAL_CALL rtl_digest_initHMAC_MD5 (
     rtlDigest Digest, const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen)
+    SAL_THROW_EXTERN_C()
 {
     DigestHMAC_MD5_Impl *pImpl = (DigestHMAC_MD5_Impl*)Digest;
     ContextHMAC_MD5     *ctx;
@@ -1719,6 +1735,7 @@ rtlDigestError SAL_CALL rtl_digest_initHMAC_MD5 (
  */
 rtlDigestError SAL_CALL rtl_digest_updateHMAC_MD5 (
     rtlDigest Digest, const void *pData, sal_uInt32 nDatLen)
+    SAL_THROW_EXTERN_C()
 {
     DigestHMAC_MD5_Impl *pImpl = (DigestHMAC_MD5_Impl*)Digest;
     ContextHMAC_MD5     *ctx;
@@ -1740,6 +1757,7 @@ rtlDigestError SAL_CALL rtl_digest_updateHMAC_MD5 (
  */
 rtlDigestError SAL_CALL rtl_digest_getHMAC_MD5 (
     rtlDigest Digest, sal_uInt8 *pBuffer, sal_uInt32 nBufLen)
+    SAL_THROW_EXTERN_C()
 {
     DigestHMAC_MD5_Impl *pImpl = (DigestHMAC_MD5_Impl*)Digest;
     ContextHMAC_MD5     *ctx;
@@ -1772,7 +1790,7 @@ rtlDigestError SAL_CALL rtl_digest_getHMAC_MD5 (
 /*
  * rtl_digest_destroyHMAC_MD5.
  */
-void SAL_CALL rtl_digest_destroyHMAC_MD5 (rtlDigest Digest)
+void SAL_CALL rtl_digest_destroyHMAC_MD5 (rtlDigest Digest) SAL_THROW_EXTERN_C()
 {
     DigestHMAC_MD5_Impl *pImpl = (DigestHMAC_MD5_Impl*)Digest;
     if (pImpl)
@@ -1791,17 +1809,17 @@ void SAL_CALL rtl_digest_destroyHMAC_MD5 (rtlDigest Digest)
  *======================================================================*/
 #define DIGEST_CBLOCK_HMAC_SHA1 64
 
-typedef struct _contextHMAC_SHA1_st
+struct ContextHMAC_SHA1
 {
     DigestSHA_Impl m_hash;
     sal_uInt8      m_opad[DIGEST_CBLOCK_HMAC_SHA1];
-} ContextHMAC_SHA1;
+};
 
-typedef struct _digestHMAC_SHA1_impl_st
+struct DigestHMAC_SHA1_Impl
 {
     Digest_Impl      m_digest;
     ContextHMAC_SHA1 m_context;
-} DigestHMAC_SHA1_Impl;
+};
 
 static void __rtl_digest_initHMAC_SHA1 (ContextHMAC_SHA1 * ctx);
 static void __rtl_digest_ipadHMAC_SHA1 (ContextHMAC_SHA1 * ctx);
@@ -1871,7 +1889,7 @@ static void __rtl_digest_opadHMAC_SHA1 (ContextHMAC_SHA1 * ctx)
 rtlDigestError SAL_CALL rtl_digest_HMAC_SHA1 (
     const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen,
     const void      *pData,    sal_uInt32 nDatLen,
-    sal_uInt8       *pBuffer,  sal_uInt32 nBufLen)
+    sal_uInt8       *pBuffer,  sal_uInt32 nBufLen) SAL_THROW_EXTERN_C()
 {
     DigestHMAC_SHA1_Impl digest;
     rtlDigestError       result;
@@ -1893,7 +1911,7 @@ rtlDigestError SAL_CALL rtl_digest_HMAC_SHA1 (
 /*
  * rtl_digest_createHMAC_SHA1.
  */
-rtlDigest SAL_CALL rtl_digest_createHMAC_SHA1 (void)
+rtlDigest SAL_CALL rtl_digest_createHMAC_SHA1() SAL_THROW_EXTERN_C()
 {
     DigestHMAC_SHA1_Impl *pImpl = (DigestHMAC_SHA1_Impl*)NULL;
     pImpl = RTL_DIGEST_CREATE(DigestHMAC_SHA1_Impl);
@@ -1910,6 +1928,7 @@ rtlDigest SAL_CALL rtl_digest_createHMAC_SHA1 (void)
  */
 rtlDigestError SAL_CALL rtl_digest_initHMAC_SHA1 (
     rtlDigest Digest, const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen)
+    SAL_THROW_EXTERN_C()
 {
     DigestHMAC_SHA1_Impl *pImpl = (DigestHMAC_SHA1_Impl*)Digest;
     ContextHMAC_SHA1     *ctx;
@@ -1948,6 +1967,7 @@ rtlDigestError SAL_CALL rtl_digest_initHMAC_SHA1 (
  */
 rtlDigestError SAL_CALL rtl_digest_updateHMAC_SHA1 (
     rtlDigest Digest, const void *pData, sal_uInt32 nDatLen)
+    SAL_THROW_EXTERN_C()
 {
     DigestHMAC_SHA1_Impl *pImpl = (DigestHMAC_SHA1_Impl*)Digest;
     ContextHMAC_SHA1     *ctx;
@@ -1969,6 +1989,7 @@ rtlDigestError SAL_CALL rtl_digest_updateHMAC_SHA1 (
  */
 rtlDigestError SAL_CALL rtl_digest_getHMAC_SHA1 (
     rtlDigest Digest, sal_uInt8 *pBuffer, sal_uInt32 nBufLen)
+    SAL_THROW_EXTERN_C()
 {
     DigestHMAC_SHA1_Impl *pImpl = (DigestHMAC_SHA1_Impl*)Digest;
     ContextHMAC_SHA1     *ctx;
@@ -2002,6 +2023,7 @@ rtlDigestError SAL_CALL rtl_digest_getHMAC_SHA1 (
  * rtl_digest_destroyHMAC_SHA1.
  */
 void SAL_CALL rtl_digest_destroyHMAC_SHA1 (rtlDigest Digest)
+    SAL_THROW_EXTERN_C()
 {
     DigestHMAC_SHA1_Impl *pImpl = (DigestHMAC_SHA1_Impl*)Digest;
     if (pImpl)
@@ -2067,7 +2089,7 @@ rtlDigestError SAL_CALL rtl_digest_PBKDF2 (
     sal_uInt8       *pKeyData , sal_uInt32 nKeyLen,
     const sal_uInt8 *pPassData, sal_uInt32 nPassLen,
     const sal_uInt8 *pSaltData, sal_uInt32 nSaltLen,
-    sal_uInt32       nCount)
+    sal_uInt32       nCount) SAL_THROW_EXTERN_C()
 {
     DigestHMAC_SHA1_Impl digest;
     sal_uInt32           i = 1;

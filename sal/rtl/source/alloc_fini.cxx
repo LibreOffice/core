@@ -28,8 +28,10 @@
 
 #include <rtl/instance.hxx>
 
-extern "C" void rtl_memory_fini (void);
-extern "C" void rtl_memory_init (void);
+#include "internal/rtl_locale_init.h"
+
+extern "C" void rtl_memory_fini();
+extern "C" void rtl_memory_init();
 namespace
 {
     struct rtlMemorySingleton
@@ -51,8 +53,8 @@ extern "C" void ensureMemorySingleton()
     theMemorySingleton::get();
 }
 
-extern "C" void rtl_cache_fini (void);
-extern "C" void rtl_cache_init (void);
+extern "C" void rtl_cache_fini();
+extern "C" void rtl_cache_init();
 namespace
 {
     struct rtlCacheSingleton
@@ -74,8 +76,8 @@ extern "C" void ensureCacheSingleton()
     theCacheSingleton::get();
 }
 
-extern "C" void rtl_arena_fini (void);
-extern "C" void rtl_arena_init (void);
+extern "C" void rtl_arena_fini();
+extern "C" void rtl_arena_init();
 namespace
 {
     struct rtlArenaSingleton
@@ -97,8 +99,6 @@ extern "C" void ensureArenaSingleton()
     theArenaSingleton::get();
 }
 
-extern "C" void rtl_locale_fini (void);
-extern "C" void rtl_locale_init (void);
 namespace
 {
     struct rtlLocaleSingleton
@@ -115,7 +115,8 @@ namespace
     class theLocaleSingleton
         : public rtl::Static<rtlLocaleSingleton, theLocaleSingleton>{};
 }
-extern "C" void ensureLocaleSingleton()
+
+void ensureLocaleSingleton()
 {
     theLocaleSingleton::get();
 }

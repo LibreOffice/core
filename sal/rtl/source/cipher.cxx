@@ -98,7 +98,7 @@ typedef void (SAL_CALL cipher_delete_t) (rtlCipher Cipher);
 
 /** Cipher_Impl.
  */
-typedef struct cipher_impl_st
+struct Cipher_Impl
 {
     rtlCipherAlgorithm  m_algorithm;
     rtlCipherDirection  m_direction;
@@ -108,7 +108,7 @@ typedef struct cipher_impl_st
     cipher_update_t    *m_encode;
     cipher_update_t    *m_decode;
     cipher_delete_t    *m_delete;
-} Cipher_Impl;
+};
 
 /*========================================================================
  *
@@ -120,7 +120,7 @@ typedef struct cipher_impl_st
  */
 rtlCipher SAL_CALL rtl_cipher_create (
     rtlCipherAlgorithm Algorithm,
-    rtlCipherMode      Mode)
+    rtlCipherMode      Mode) SAL_THROW_EXTERN_C()
 {
     rtlCipher Cipher = (rtlCipher)NULL;
     switch (Algorithm)
@@ -146,7 +146,7 @@ rtlCipherError SAL_CALL rtl_cipher_init (
     rtlCipher          Cipher,
     rtlCipherDirection Direction,
     const sal_uInt8 *pKeyData, sal_Size nKeyLen,
-    const sal_uInt8 *pArgData, sal_Size nArgLen)
+    const sal_uInt8 *pArgData, sal_Size nArgLen) SAL_THROW_EXTERN_C()
 {
     Cipher_Impl *pImpl = (Cipher_Impl*)Cipher;
     if (pImpl == NULL)
@@ -164,7 +164,7 @@ rtlCipherError SAL_CALL rtl_cipher_init (
 rtlCipherError SAL_CALL rtl_cipher_encode (
     rtlCipher   Cipher,
     const void *pData,   sal_Size nDatLen,
-    sal_uInt8  *pBuffer, sal_Size nBufLen)
+    sal_uInt8  *pBuffer, sal_Size nBufLen) SAL_THROW_EXTERN_C()
 {
     Cipher_Impl *pImpl = (Cipher_Impl*)Cipher;
     if (pImpl == NULL)
@@ -181,7 +181,7 @@ rtlCipherError SAL_CALL rtl_cipher_encode (
 rtlCipherError SAL_CALL rtl_cipher_decode (
     rtlCipher   Cipher,
     const void *pData,   sal_Size nDatLen,
-    sal_uInt8  *pBuffer, sal_Size nBufLen)
+    sal_uInt8  *pBuffer, sal_Size nBufLen) SAL_THROW_EXTERN_C()
 {
     Cipher_Impl *pImpl = (Cipher_Impl*)Cipher;
     if (pImpl == NULL)
@@ -195,7 +195,7 @@ rtlCipherError SAL_CALL rtl_cipher_decode (
 /*
  * rtl_cipher_destroy.
  */
-void SAL_CALL rtl_cipher_destroy (rtlCipher Cipher)
+void SAL_CALL rtl_cipher_destroy (rtlCipher Cipher) SAL_THROW_EXTERN_C()
 {
     Cipher_Impl *pImpl = (Cipher_Impl*)Cipher;
     if (pImpl && pImpl->m_delete)
@@ -209,13 +209,13 @@ void SAL_CALL rtl_cipher_destroy (rtlCipher Cipher)
  *======================================================================*/
 #define CIPHER_ROUNDS_BF 16
 
-typedef struct cipherBF_key_st
+struct CipherKeyBF
 {
     sal_uInt32 m_S[4][256];
     sal_uInt32 m_P[CIPHER_ROUNDS_BF + 2];
-} CipherKeyBF;
+};
 
-typedef struct cipherBF_context_st
+struct CipherContextBF
 {
     CipherKeyBF    m_key;
     union
@@ -224,13 +224,13 @@ typedef struct cipherBF_context_st
         sal_uInt8  m_byte[8];
     } m_iv;
     sal_uInt32     m_offset;
-} CipherContextBF;
+};
 
-typedef struct cipherBF_impl_st
+struct CipherBF_Impl
 {
     Cipher_Impl     m_cipher;
     CipherContextBF m_context;
-} CipherBF_Impl;
+};
 
 /** __rtl_cipherBF_init.
  */
@@ -1017,7 +1017,7 @@ static sal_uInt32 __rtl_cipherBF (CipherKeyBF *key, sal_uInt32 x)
 /*
  * rtl_cipher_createBF.
  */
-rtlCipher SAL_CALL rtl_cipher_createBF (rtlCipherMode Mode)
+rtlCipher SAL_CALL rtl_cipher_createBF (rtlCipherMode Mode) SAL_THROW_EXTERN_C()
 {
     CipherBF_Impl *pImpl = (CipherBF_Impl*)NULL;
 
@@ -1046,7 +1046,7 @@ rtlCipherError SAL_CALL rtl_cipher_initBF (
     rtlCipher          Cipher,
     rtlCipherDirection Direction,
     const sal_uInt8 *pKeyData, sal_Size nKeyLen,
-    const sal_uInt8 *pArgData, sal_Size nArgLen)
+    const sal_uInt8 *pArgData, sal_Size nArgLen) SAL_THROW_EXTERN_C()
 {
     CipherBF_Impl *pImpl = (CipherBF_Impl*)Cipher;
 
@@ -1072,7 +1072,7 @@ rtlCipherError SAL_CALL rtl_cipher_initBF (
 rtlCipherError SAL_CALL rtl_cipher_encodeBF (
     rtlCipher   Cipher,
     const void *pData,   sal_Size nDatLen,
-    sal_uInt8  *pBuffer, sal_Size nBufLen)
+    sal_uInt8  *pBuffer, sal_Size nBufLen) SAL_THROW_EXTERN_C()
 {
     CipherBF_Impl *pImpl = (CipherBF_Impl*)Cipher;
     if (pImpl == NULL)
@@ -1098,7 +1098,7 @@ rtlCipherError SAL_CALL rtl_cipher_encodeBF (
 rtlCipherError SAL_CALL rtl_cipher_decodeBF (
     rtlCipher   Cipher,
     const void *pData,   sal_Size nDatLen,
-    sal_uInt8  *pBuffer, sal_Size nBufLen)
+    sal_uInt8  *pBuffer, sal_Size nBufLen) SAL_THROW_EXTERN_C()
 {
     CipherBF_Impl *pImpl = (CipherBF_Impl*)Cipher;
     if (pImpl == NULL)
@@ -1121,7 +1121,7 @@ rtlCipherError SAL_CALL rtl_cipher_decodeBF (
 /*
  * rtl_cipher_destroyBF.
  */
-void SAL_CALL rtl_cipher_destroyBF (rtlCipher Cipher)
+void SAL_CALL rtl_cipher_destroyBF (rtlCipher Cipher) SAL_THROW_EXTERN_C()
 {
     CipherBF_Impl *pImpl = (CipherBF_Impl*)Cipher;
     if (pImpl)
@@ -1140,17 +1140,17 @@ void SAL_CALL rtl_cipher_destroyBF (rtlCipher Cipher)
  *======================================================================*/
 #define CIPHER_CBLOCK_ARCFOUR 256
 
-typedef struct cipherARCFOUR_context_st
+struct ContextARCFOUR_Impl
 {
     unsigned int m_S[CIPHER_CBLOCK_ARCFOUR];
     unsigned int m_X, m_Y;
-} ContextARCFOUR_Impl;
+};
 
-typedef struct cipherARCFOUR_impl_st
+struct CipherARCFOUR_Impl
 {
     Cipher_Impl         m_cipher;
     ContextARCFOUR_Impl m_context;
-} CipherARCFOUR_Impl;
+};
 
 /** rtl_cipherARCFOUR_update_Impl.
  */
@@ -1253,6 +1253,7 @@ static rtlCipherError rtl_cipherARCFOUR_update_Impl (
  * rtl_cipher_createARCFOUR.
  */
 rtlCipher SAL_CALL rtl_cipher_createARCFOUR (rtlCipherMode Mode)
+    SAL_THROW_EXTERN_C()
 {
     CipherARCFOUR_Impl *pImpl = (CipherARCFOUR_Impl*)NULL;
 
@@ -1281,11 +1282,9 @@ rtlCipherError SAL_CALL rtl_cipher_initARCFOUR (
     rtlCipher          Cipher,
     rtlCipherDirection Direction,
     const sal_uInt8 *pKeyData, sal_Size nKeyLen,
-    const sal_uInt8 *pArgData, sal_Size nArgLen)
+    const sal_uInt8 *, sal_Size) SAL_THROW_EXTERN_C()
 {
     CipherARCFOUR_Impl *pImpl = (CipherARCFOUR_Impl*)Cipher;
-    (void) pArgData; // avoid warning
-    (void) nArgLen; // avoid warning
 
     if ((pImpl == NULL) || (pKeyData == NULL))
         return rtl_Cipher_E_Argument;
@@ -1307,7 +1306,7 @@ rtlCipherError SAL_CALL rtl_cipher_initARCFOUR (
 rtlCipherError SAL_CALL rtl_cipher_encodeARCFOUR (
     rtlCipher   Cipher,
     const void *pData,   sal_Size nDatLen,
-    sal_uInt8  *pBuffer, sal_Size nBufLen)
+    sal_uInt8  *pBuffer, sal_Size nBufLen) SAL_THROW_EXTERN_C()
 {
     CipherARCFOUR_Impl *pImpl = (CipherARCFOUR_Impl*)Cipher;
     if (pImpl == NULL)
@@ -1330,7 +1329,7 @@ rtlCipherError SAL_CALL rtl_cipher_encodeARCFOUR (
 rtlCipherError SAL_CALL rtl_cipher_decodeARCFOUR (
     rtlCipher   Cipher,
     const void *pData,   sal_Size nDatLen,
-    sal_uInt8  *pBuffer, sal_Size nBufLen)
+    sal_uInt8  *pBuffer, sal_Size nBufLen) SAL_THROW_EXTERN_C()
 {
     CipherARCFOUR_Impl *pImpl = (CipherARCFOUR_Impl*)Cipher;
     if (pImpl == NULL)
@@ -1350,7 +1349,7 @@ rtlCipherError SAL_CALL rtl_cipher_decodeARCFOUR (
 /*
  * rtl_cipher_destroyARCFOUR.
  */
-void SAL_CALL rtl_cipher_destroyARCFOUR (rtlCipher Cipher)
+void SAL_CALL rtl_cipher_destroyARCFOUR (rtlCipher Cipher) SAL_THROW_EXTERN_C()
 {
     CipherARCFOUR_Impl *pImpl = (CipherARCFOUR_Impl*)Cipher;
     if (pImpl)
