@@ -934,7 +934,10 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount( const uno::Any& aSelection,
 {
     SolarMutexGuard aGuard;
     if (!pDocShell)
-        throw uno::RuntimeException();
+    {
+        throw lang::DisposedException( ::rtl::OUString(),
+                static_cast< sheet::XSpreadsheetDocument* >(this) );
+    }
 
     ScMarkData aMark;
     ScPrintSelectionStatus aStatus;
@@ -982,7 +985,10 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
 {
     SolarMutexGuard aGuard;
     if (!pDocShell)
-        throw uno::RuntimeException();
+    {
+        throw lang::DisposedException( ::rtl::OUString(),
+                static_cast< sheet::XSpreadsheetDocument* >(this) );
+    }
 
     ScMarkData aMark;
     ScPrintSelectionStatus aStatus;
@@ -1089,7 +1095,10 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
 {
     SolarMutexGuard aGuard;
     if (!pDocShell)
-        throw uno::RuntimeException();
+    {
+        throw lang::DisposedException( ::rtl::OUString(),
+                static_cast< sheet::XSpreadsheetDocument* >(this) );
+    }
 
     ScMarkData aMark;
     ScPrintSelectionStatus aStatus;

@@ -2469,7 +2469,10 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+    {
+        throw DisposedException( ::rtl::OUString(),
+                static_cast< XTextDocument* >(this) );
+    }
 
     const bool bIsPDFExport = !lcl_SeqHasProperty( rxOptions, "IsPrinter" );
     bool bIsSwSrcView = false;
@@ -2633,7 +2636,10 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+    {
+        throw DisposedException( ::rtl::OUString(),
+                static_cast< XTextDocument* >(this) );
+    }
 
     const bool bIsPDFExport = !lcl_SeqHasProperty( rxOptions, "IsPrinter" );
     bool bIsSwSrcView = false;
@@ -2840,7 +2846,10 @@ void SAL_CALL SwXTextDocument::render(
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+    {
+        throw DisposedException( ::rtl::OUString(),
+                static_cast< XTextDocument* >(this) );
+    }
 
     // due to #110067# (document page count changes sometimes during
     // PDF export/printing) we can not check for the upper bound properly.

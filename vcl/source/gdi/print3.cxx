@@ -626,6 +626,10 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
                             if( i_pController->isProgressCanceled() )
                             {
                                 i_pController->abortJob();
+                            }
+                            if (i_pController->getJobState() ==
+                                    view::PrintableState_JOB_ABORTED)
+                            {
                                 bAborted = true;
                             }
                         }
@@ -865,6 +869,11 @@ PrinterController::PageSize PrinterController::getPageFile( int i_nUnfilteredPag
     Sequence< PropertyValue > aPageParm( getPageParametersProtected( i_nUnfilteredPage ) );
     const MapMode aMapMode( MAP_100TH_MM );
 
+    if (mpImplData->meJobState != view::PrintableState_JOB_STARTED)
+    {   // rhbz#657394: check that we are still printing...
+        return PrinterController::PageSize();
+    }
+
     mpImplData->mpPrinter->Push();
     mpImplData->mpPrinter->SetMapMode( aMapMode );
 
@@ -951,6 +960,10 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
         rMPS.nTopMargin == 0 && rMPS.nBottomMargin == 0 )
     {
         PrinterController::PageSize aPageSize = getPageFile( i_nFilteredPage, o_rMtf, i_bMayUseCache );
+        if (mpImplData->meJobState != view::PrintableState_JOB_STARTED)
+        {   // rhbz#657394: check that we are still printing...
+            return PrinterController::PageSize();
+        }
         Size aPaperSize = mpImplData->getRealPaperSize( aPageSize.aSize, true );
         mpImplData->mpPrinter->SetMapMode( MapMode( MAP_100TH_MM ) );
         mpImplData->mpPrinter->SetPaperSizeUser( aPaperSize, ! mpImplData->isFixedPageSize() );
@@ -996,6 +1009,10 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
     o_rMtf.AddAction( new MetaMapModeAction( MapMode( MAP_100TH_MM ) ) );
 
     int nDocPages = getPageCountProtected();
+    if (mpImplData->meJobState != view::PrintableState_JOB_STARTED)
+    {   // rhbz#657394: check that we are still printing...
+        return PrinterController::PageSize();
+    }
     for( int nSubPage = 0; nSubPage < nSubPages; nSubPage++ )
     {
         // map current sub page to real page
@@ -1142,6 +1159,11 @@ void PrinterController::printFilteredPage( int i_nPage )
 
     GDIMetaFile aPageFile;
     PrinterController::PageSize aPageSize = getFilteredPageFile( i_nPage, aPageFile );
+
+    if (mpImplData->meJobState != view::PrintableState_JOB_STARTED)
+    {   // rhbz#657394: check that we are still printing...
+        return;
+    }
 
     if( mpImplData->mpProgress )
     {

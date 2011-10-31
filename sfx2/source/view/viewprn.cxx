@@ -238,7 +238,16 @@ int SfxPrinterController::getPageCount() const
     if( mxRenderable.is() && pPrinter )
     {
         Sequence< beans::PropertyValue > aJobOptions( getMergedOptions() );
-        nPages = mxRenderable->getRendererCount( getSelectionObject(), aJobOptions );
+        try
+        {
+            nPages = mxRenderable->getRendererCount( getSelectionObject(), aJobOptions );
+        }
+        catch (lang::DisposedException &)
+        {
+            OSL_TRACE("SfxPrinterController: document disposed while printing");
+            const_cast<SfxPrinterController*>(this)->setJobState(
+                    view::PrintableState_JOB_ABORTED);
+        }
     }
     return nPages;
 }
@@ -258,6 +267,12 @@ Sequence< beans::PropertyValue > SfxPrinterController::getPageParameters( int i_
         catch( lang::IllegalArgumentException& )
         {
         }
+        catch (lang::DisposedException &)
+        {
+            OSL_TRACE("SfxPrinterController: document disposed while printing");
+            const_cast<SfxPrinterController*>(this)->setJobState(
+                    view::PrintableState_JOB_ABORTED);
+        }
     }
     return aResult;
 }
@@ -276,6 +291,12 @@ void SfxPrinterController::printPage( int i_nPage ) const
         {
             // don't care enough about nonexistant page here
             // to provoke a crash
+        }
+        catch (lang::DisposedException &)
+        {
+            OSL_TRACE("SfxPrinterController: document disposed while printing");
+            const_cast<SfxPrinterController*>(this)->setJobState(
+                    view::PrintableState_JOB_ABORTED);
         }
     }
 }
