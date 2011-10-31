@@ -2782,8 +2782,7 @@ public:
         if ( nUnoType & sheet::NamedRangeFlag::COLUMN_HEADER )      nNewType |= RT_COLHEADER;
         if ( nUnoType & sheet::NamedRangeFlag::ROW_HEADER )         nNewType |= RT_ROWHEADER;
 
-
-        if (mpDoc && !mrRangeName.findByName(r.sName))
+        if (mpDoc)
         {
             // Insert a new name.
             ScAddress aPos;

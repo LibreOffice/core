@@ -401,6 +401,17 @@ void ScDocument::CreateValidTabNames(std::vector<rtl::OUString>& aNames, SCTAB n
     }
 }
 
+void ScDocument::AppendTabOnLoad(const rtl::OUString& rName)
+{
+    SCTAB nTabCount = static_cast<SCTAB>(maTabs.size());
+
+    if (ValidTab(nTabCount) && ValidNewTabName(rName))
+    {
+        maTabs.push_back( new ScTable(this, nTabCount, rName) );
+        maTabs[nTabCount]->SetCodeName( rName );
+    }
+}
+
 
 sal_Bool ScDocument::InsertTab( SCTAB nPos, const String& rName,
             sal_Bool bExternalDocument )

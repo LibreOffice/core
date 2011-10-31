@@ -575,6 +575,9 @@ public:
     SC_DLLPUBLIC void           CreateValidTabName(String& rName) const;
     SC_DLLPUBLIC void           CreateValidTabName(rtl::OUString& rName) const;
     SC_DLLPUBLIC void           CreateValidTabNames(std::vector<rtl::OUString>& aNames, SCTAB nCount) const;
+
+    void AppendTabOnLoad(const rtl::OUString& rName);
+
     SC_DLLPUBLIC sal_Bool           InsertTab( SCTAB nPos, const String& rName,
                                 sal_Bool bExternalDocument = false );
     SC_DLLPUBLIC bool           InsertTabs( SCTAB nPos, const std::vector<rtl::OUString>& rNames,

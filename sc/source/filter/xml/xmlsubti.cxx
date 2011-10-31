@@ -192,22 +192,8 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
             {
                 if (nCurrentSheet > 0)
                 {
-                    try
-                    {
-                        xSheets->insertNewByName(sTableName, nCurrentSheet);
-                    }
-                    catch ( uno::RuntimeException& )
-                    {
-                        ScDocument *pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
-                        if (pDoc)
-                        {
-                            ScXMLImport::MutexGuard aGuard(rImport);
-                            String sTabName(String::CreateFromAscii("Table"));
-                            pDoc->CreateValidTabName(sTabName);
-                            rtl::OUString sOUTabName(sTabName);
-                            xSheets->insertNewByName(sOUTabName, nCurrentSheet);
-                        }
-                    }
+                    ScDocument *pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
+                    pDoc->AppendTabOnLoad(sTableName);
                 }
                 uno::Reference <container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
                 if ( xIndex.is() )
