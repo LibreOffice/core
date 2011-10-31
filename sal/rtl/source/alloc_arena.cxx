@@ -27,10 +27,11 @@
  ************************************************************************/
 
 #define _BSD_SOURCE /* sys/mman.h: MAP_ANON */
-#include "alloc_arena.h"
+#include "alloc_arena.hxx"
 
-#include "alloc_impl.h"
+#include "alloc_impl.hxx"
 #include "internal/once.h"
+#include "internal/rtllifecycle.h"
 #include "sal/macros.h"
 #include "osl/diagnose.h"
 
@@ -54,7 +55,7 @@ struct rtl_arena_list_st
     rtl_arena_type       m_arena_head;
 };
 
-static struct rtl_arena_list_st g_arena_list;
+static rtl_arena_list_st g_arena_list;
 
 
 /** gp_arena_arena
@@ -89,7 +90,7 @@ SAL_CALL rtl_machdep_free (
 );
 
 static sal_Size
-rtl_machdep_pagesize (void);
+rtl_machdep_pagesize();
 
 
 /** gp_default_arena
@@ -142,7 +143,8 @@ rtl_arena_segment_populate (
     rtl_arena_segment_type *span;
     sal_Size                size = rtl_machdep_pagesize();
 
-    span = rtl_machdep_alloc(gp_machdep_arena, &size);
+    span = static_cast< rtl_arena_segment_type * >(
+        rtl_machdep_alloc(gp_machdep_arena, &size));
     if (span != 0)
     {
         rtl_arena_segment_type *first, *last, *head;
@@ -473,7 +475,7 @@ rtl_arena_segment_alloc (
     if (!RTL_MEMORY_ISP2(size))
     {
         int msb = highbit(size);
-        if (RTL_ARENA_FREELIST_SIZE == SAL_INT_CAST(size_t, msb))
+        if (RTL_ARENA_FREELIST_SIZE == sal::static_int_cast< size_t >(msb))
         {
             /* highest possible freelist: fall back to first fit */
             rtl_arena_segment_type *head, *segment;
@@ -708,7 +710,7 @@ rtl_arena_destructor (void * obj)
     OSL_ASSERT(arena->m_hash_size  == RTL_ARENA_HASH_SIZE);
     OSL_ASSERT(
         arena->m_hash_shift ==
-        SAL_INT_CAST(unsigned, highbit(arena->m_hash_size) - 1));
+        sal::static_int_cast< unsigned >(highbit(arena->m_hash_size) - 1));
 }
 
 /* ================================================================= */
@@ -748,7 +750,7 @@ rtl_arena_activate (
 
         if (arena->m_qcache_max > 0)
         {
-            char name[RTL_ARENA_NAME_LENGTH + 1];
+            char namebuf[RTL_ARENA_NAME_LENGTH + 1];
             int  i, n = (arena->m_qcache_max >> arena->m_quantum_shift);
 
             sal_Size size = n * sizeof(rtl_cache_type*);
@@ -761,8 +763,8 @@ rtl_arena_activate (
             for (i = 1; i <= n; i++)
             {
                 size = i * arena->m_quantum;
-                (void) snprintf (name, sizeof(name), "%s_%lu", arena->m_name, size);
-                arena->m_qcache_ptr[i - 1] = rtl_cache_create(name, size, 0, NULL, NULL, NULL, NULL, arena, RTL_CACHE_FLAG_QUANTUMCACHE);
+                (void) snprintf (namebuf, sizeof(namebuf), "%s_%lu", arena->m_name, size);
+                arena->m_qcache_ptr[i - 1] = rtl_cache_create(namebuf, size, 0, NULL, NULL, NULL, NULL, arena, RTL_CACHE_FLAG_QUANTUMCACHE);
             }
         }
 
@@ -909,8 +911,6 @@ rtl_arena_deactivate (
  *
  * ================================================================= */
 
-extern void ensureArenaSingleton();
-
 /** rtl_arena_create()
  */
 rtl_arena_type *
@@ -921,13 +921,11 @@ SAL_CALL rtl_arena_create (
     rtl_arena_type *   source_arena,
     void * (SAL_CALL * source_alloc)(rtl_arena_type *, sal_Size *),
     void   (SAL_CALL * source_free) (rtl_arena_type *, void *, sal_Size),
-    int                flags
+    int
 ) SAL_THROW_EXTERN_C()
 {
     rtl_arena_type * result = 0;
     sal_Size         size   = sizeof(rtl_arena_type);
-
-    (void) flags; /* unused */
 
 try_alloc:
     result = (rtl_arena_type*)rtl_arena_alloc (gp_arena_arena, &size);
@@ -978,7 +976,7 @@ try_alloc:
 void
 SAL_CALL rtl_arena_destroy (
     rtl_arena_type * arena
-)
+) SAL_THROW_EXTERN_C()
 {
     if (arena != 0)
     {
@@ -1243,7 +1241,7 @@ SAL_CALL rtl_machdep_free (
 /** rtl_machdep_pagesize()
  */
 static sal_Size
-rtl_machdep_pagesize (void)
+rtl_machdep_pagesize()
 {
 #if defined(SAL_UNX)
 #if defined(FREEBSD) || defined(NETBSD) || defined(DRAGONFLY)
@@ -1265,7 +1263,7 @@ rtl_machdep_pagesize (void)
  * ================================================================= */
 
 void
-rtl_arena_init (void)
+rtl_arena_init()
 {
     {
         /* list of arenas */
@@ -1333,7 +1331,7 @@ rtl_arena_init (void)
 /* ================================================================= */
 
 void
-rtl_arena_fini (void)
+rtl_arena_fini()
 {
     if (gp_arena_arena != 0)
     {

@@ -32,7 +32,7 @@
 #include "rtl/alloc.h"
 
 #include "internal/once.h"
-#include "internal/rtl_locale_init.h"
+#include "internal/rtllifecycle.h"
 
 static sal_Int32 RTL_HASHTABLE_SIZE[] =
 {

@@ -26,10 +26,11 @@
  *
  ************************************************************************/
 
-#include "alloc_cache.h"
-#include "alloc_impl.h"
-#include "alloc_arena.h"
+#include "alloc_cache.hxx"
+#include "alloc_impl.hxx"
+#include "alloc_arena.hxx"
 #include "internal/once.h"
+#include "internal/rtllifecycle.h"
 #include "sal/macros.h"
 #include "osl/diagnose.h"
 
@@ -67,7 +68,7 @@ struct rtl_cache_list_st
     int                  m_update_done;
 };
 
-static struct rtl_cache_list_st g_cache_list;
+static rtl_cache_list_st g_cache_list;
 
 
 /** gp_cache_arena
@@ -257,11 +258,9 @@ rtl_cache_hash_remove (
 /** rtl_cache_slab_constructor()
  */
 static int
-rtl_cache_slab_constructor (void * obj, void * arg)
+rtl_cache_slab_constructor (void * obj, void *)
 {
     rtl_cache_slab_type * slab = (rtl_cache_slab_type*)(obj);
-
-    (void) arg; /* unused */
 
     QUEUE_START_NAMED(slab, slab_);
     slab->m_ntypes = 0;
@@ -273,7 +272,7 @@ rtl_cache_slab_constructor (void * obj, void * arg)
 /** rtl_cache_slab_destructor()
  */
 static void
-rtl_cache_slab_destructor (void * obj, void * arg)
+rtl_cache_slab_destructor (void * obj, void *)
 {
 #if OSL_DEBUG_LEVEL == 0
     (void) obj; /* unused */
@@ -286,8 +285,6 @@ rtl_cache_slab_destructor (void * obj, void * arg)
     /* assure no longer referenced */
     OSL_ASSERT(slab->m_ntypes == 0);
 #endif /* OSL_DEBUG_LEVEL */
-
-    (void) arg; /* unused */
 }
 
 
@@ -587,12 +584,10 @@ rtl_cache_slab_free (
 /** rtl_cache_magazine_constructor()
  */
 static int
-rtl_cache_magazine_constructor (void * obj, void * arg)
+rtl_cache_magazine_constructor (void * obj, void *)
 {
     rtl_cache_magazine_type * mag = (rtl_cache_magazine_type*)(obj);
     /* @@@ sal_Size size = (sal_Size)(arg); @@@ */
-
-    (void) arg; /* unused */
 
     mag->m_mag_next = 0;
     mag->m_mag_size = RTL_CACHE_MAGAZINE_SIZE;
@@ -605,7 +600,7 @@ rtl_cache_magazine_constructor (void * obj, void * arg)
 /** rtl_cache_magazine_destructor()
  */
 static void
-rtl_cache_magazine_destructor (void * obj, void * arg)
+rtl_cache_magazine_destructor (void * obj, void *)
 {
 #if OSL_DEBUG_LEVEL == 0
     (void) obj; /* unused */
@@ -618,8 +613,6 @@ rtl_cache_magazine_destructor (void * obj, void * arg)
     /* assure no longer referenced */
     OSL_ASSERT(mag->m_mag_used == 0);
 #endif /* OSL_DEBUG_LEVEL */
-
-    (void) arg; /* unused */
 }
 
 
@@ -1110,8 +1103,6 @@ rtl_cache_deactivate (
  *
  * ================================================================= */
 
-extern void ensureCacheSingleton();
-
 /** rtl_cache_create()
  */
 rtl_cache_type *
@@ -1379,7 +1370,7 @@ SAL_CALL rtl_cache_free (
  *  @precond g_cache_list.m_lock initialized
  */
 static void
-rtl_cache_wsupdate_init (void);
+rtl_cache_wsupdate_init();
 
 
 /** rtl_cache_wsupdate_wait()
@@ -1395,7 +1386,7 @@ rtl_cache_wsupdate_wait (
  *
  */
 static void
-rtl_cache_wsupdate_fini (void);
+rtl_cache_wsupdate_fini();
 
 /* ================================================================= */
 
@@ -1407,7 +1398,7 @@ static void *
 rtl_cache_wsupdate_all (void * arg);
 
 static void
-rtl_cache_wsupdate_init (void)
+rtl_cache_wsupdate_init()
 {
     RTL_MEMORY_LOCK_ACQUIRE(&(g_cache_list.m_lock));
     g_cache_list.m_update_done = 0;
@@ -1426,8 +1417,8 @@ rtl_cache_wsupdate_wait (unsigned int seconds)
 {
     if (seconds > 0)
     {
-        struct timeval  now;
-        struct timespec wakeup;
+        timeval  now;
+        timespec wakeup;
 
         gettimeofday(&now, 0);
         wakeup.tv_sec  = now.tv_sec + (seconds);
@@ -1441,7 +1432,7 @@ rtl_cache_wsupdate_wait (unsigned int seconds)
 }
 
 static void
-rtl_cache_wsupdate_fini (void)
+rtl_cache_wsupdate_fini()
 {
     RTL_MEMORY_LOCK_ACQUIRE(&(g_cache_list.m_lock));
     g_cache_list.m_update_done = 1;
@@ -1460,7 +1451,7 @@ static DWORD WINAPI
 rtl_cache_wsupdate_all (void * arg);
 
 static void
-rtl_cache_wsupdate_init (void)
+rtl_cache_wsupdate_init()
 {
     DWORD dwThreadId;
 
@@ -1485,7 +1476,7 @@ rtl_cache_wsupdate_wait (unsigned int seconds)
 }
 
 static void
-rtl_cache_wsupdate_fini (void)
+rtl_cache_wsupdate_fini()
 {
     RTL_MEMORY_LOCK_ACQUIRE(&(g_cache_list.m_lock));
     g_cache_list.m_update_done = 1;
@@ -1572,7 +1563,8 @@ static DWORD WINAPI
 #endif /* SAL_UNX || SAL_W32 */
 rtl_cache_wsupdate_all (void * arg)
 {
-    unsigned int seconds = (unsigned int)SAL_INT_CAST(sal_uIntPtr, arg);
+    unsigned int seconds = sal::static_int_cast< unsigned int >(
+        reinterpret_cast< sal_uIntPtr >(arg));
 
     RTL_MEMORY_LOCK_ACQUIRE(&(g_cache_list.m_lock));
     while (!g_cache_list.m_update_done)
@@ -1603,7 +1595,7 @@ rtl_cache_wsupdate_all (void * arg)
  * ================================================================= */
 
 void
-rtl_cache_init (void)
+rtl_cache_init()
 {
     {
         /* list of caches */
@@ -1705,7 +1697,7 @@ rtl_cache_init (void)
 /* ================================================================= */
 
 void
-rtl_cache_fini (void)
+rtl_cache_fini()
 {
     if (gp_cache_arena != 0)
     {

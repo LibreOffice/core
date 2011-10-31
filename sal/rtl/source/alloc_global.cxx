@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#include "alloc_impl.h"
+#include "alloc_impl.hxx"
 #include "rtl/alloc.h"
 #include <sal/macros.h>
 #include <osl/diagnose.h>
@@ -34,10 +34,12 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "internal/rtllifecycle.h"
+
 AllocMode alloc_mode = AMode_UNSET;
 
 #if !defined(FORCE_SYSALLOC)
-static void determine_alloc_mode(void)
+static void determine_alloc_mode()
 {
     OSL_ASSERT(alloc_mode == AMode_UNSET);
     alloc_mode = (getenv("G_SLICE") == NULL ? AMode_CUSTOM : AMode_SYSTEM);
@@ -91,8 +93,6 @@ static rtl_cache_type * g_alloc_table[RTL_MEMORY_CACHED_LIMIT >> RTL_MEMALIGN_SH
 };
 
 static rtl_arena_type * gp_alloc_arena = 0;
-
-extern void ensureMemorySingleton();
 
 /* ================================================================= *
  *
@@ -194,7 +194,7 @@ void * SAL_CALL rtl_reallocateMemory_CUSTOM (void * p, sal_Size n) SAL_THROW_EXT
  *
  * ================================================================= */
 
-void rtl_memory_init (void)
+void rtl_memory_init()
 {
 #if !defined(FORCE_SYSALLOC)
     {
@@ -239,7 +239,7 @@ void rtl_memory_init (void)
 
 /* ================================================================= */
 
-void rtl_memory_fini (void)
+void rtl_memory_fini()
 {
 #if !defined(FORCE_SYSALLOC)
     int i, n;

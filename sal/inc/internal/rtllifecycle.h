@@ -27,12 +27,30 @@
  * instead of those above.
  */
 
-#ifndef INCLUDED_SAL_INTERNAL_RTL_LOCALE_INIT_H
-#define INCLUDED_SAL_INTERNAL_RTL_LOCALE_INIT_H
+#ifndef INCLUDED_SAL_INTERNAL_RTLLIFECYCLE_H
+#define INCLUDED_SAL_INTERNAL_RTLLIFECYCLE_H
 
 #if defined __cplusplus
 extern "C" {
 #endif
+
+void rtl_arena_init();
+
+void rtl_arena_fini();
+
+void ensureArenaSingleton();
+
+void rtl_cache_init();
+
+void rtl_cache_fini();
+
+void ensureCacheSingleton();
+
+void rtl_memory_init();
+
+void rtl_memory_fini();
+
+void ensureMemorySingleton();
 
 void rtl_locale_init();
 

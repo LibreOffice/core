@@ -44,7 +44,7 @@
 #include <osl/mutex.h>
 #include <sal/types.h>
 
-#include "internal/rtl_locale_init.h"
+#include "internal/rtllifecycle.h"
 
 //------------------------------------------------------------------------------
 // externals
@@ -55,10 +55,6 @@ extern void SAL_CALL    _osl_callThreadKeyCallbackOnThreadDetach(void);
 extern CRITICAL_SECTION g_ThreadKeyListCS;
 extern oslMutex         g_Mutex;
 extern oslMutex         g_CurrentDirectoryMutex;
-
-extern void rtl_memory_fini (void);
-extern void rtl_cache_fini (void);
-extern void rtl_arena_fini (void);
 
 #ifdef __MINGW32__
 

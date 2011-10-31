@@ -28,10 +28,8 @@
 
 #include <rtl/instance.hxx>
 
-#include "internal/rtl_locale_init.h"
+#include "internal/rtllifecycle.h"
 
-extern "C" void rtl_memory_fini();
-extern "C" void rtl_memory_init();
 namespace
 {
     struct rtlMemorySingleton
@@ -48,13 +46,12 @@ namespace
     class theMemorySingleton
         : public rtl::Static<rtlMemorySingleton, theMemorySingleton>{};
 }
-extern "C" void ensureMemorySingleton()
+
+void ensureMemorySingleton()
 {
     theMemorySingleton::get();
 }
 
-extern "C" void rtl_cache_fini();
-extern "C" void rtl_cache_init();
 namespace
 {
     struct rtlCacheSingleton
@@ -71,13 +68,12 @@ namespace
     class theCacheSingleton
         : public rtl::Static<rtlCacheSingleton, theCacheSingleton>{};
 }
-extern "C" void ensureCacheSingleton()
+
+void ensureCacheSingleton()
 {
     theCacheSingleton::get();
 }
 
-extern "C" void rtl_arena_fini();
-extern "C" void rtl_arena_init();
 namespace
 {
     struct rtlArenaSingleton
@@ -94,7 +90,8 @@ namespace
     class theArenaSingleton
         : public rtl::Static<rtlArenaSingleton, theArenaSingleton>{};
 }
-extern "C" void ensureArenaSingleton()
+
+void ensureArenaSingleton()
 {
     theArenaSingleton::get();
 }

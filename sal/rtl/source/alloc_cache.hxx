@@ -26,22 +26,17 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_RTL_ALLOC_CACHE_H
-#define INCLUDED_RTL_ALLOC_CACHE_H
+#ifndef INCLUDED_RTL_ALLOC_CACHE_HXX
+#define INCLUDED_RTL_ALLOC_CACHE_HXX
 
 #include "sal/types.h"
 #include "rtl/alloc.h"
-#include "alloc_impl.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include "alloc_impl.hxx"
 
 /** rtl_cache_stat_type
  *  @internal
  */
-typedef struct rtl_cache_stat_st rtl_cache_stat_type;
-struct rtl_cache_stat_st
+struct rtl_cache_stat_type
 {
     sal_uInt64 m_alloc;
     sal_uInt64 m_free;
@@ -54,8 +49,7 @@ struct rtl_cache_stat_st
 /** rtl_cache_bufctl_type
  *  @internal
  */
-typedef struct rtl_cache_bufctl_st rtl_cache_bufctl_type;
-struct rtl_cache_bufctl_st
+struct rtl_cache_bufctl_type
 {
     rtl_cache_bufctl_type * m_next; /* linkage */
 
@@ -67,8 +61,7 @@ struct rtl_cache_bufctl_st
 /** rtl_cache_slab_type
  *  @internal
  */
-typedef struct rtl_cache_slab_st rtl_cache_slab_type;
-struct rtl_cache_slab_st
+struct rtl_cache_slab_type
 {
     rtl_cache_slab_type *   m_slab_next; /* slab linkage */
     rtl_cache_slab_type *   m_slab_prev; /* slab linkage */
@@ -86,8 +79,7 @@ struct rtl_cache_slab_st
  */
 #define RTL_CACHE_MAGAZINE_SIZE 61
 
-typedef struct rtl_cache_magazine_st rtl_cache_magazine_type;
-struct rtl_cache_magazine_st
+struct rtl_cache_magazine_type
 {
     rtl_cache_magazine_type * m_mag_next; /* depot linkage */
 
@@ -101,8 +93,7 @@ struct rtl_cache_magazine_st
 /** rtl_cache_depot_type
  *  @internal
  */
-typedef struct rtl_cache_depot_st rtl_cache_depot_type;
-struct rtl_cache_depot_st
+struct rtl_cache_depot_type
 {
     /* magazine list */
     rtl_cache_magazine_type * m_mag_next;  /* linkage */
@@ -175,11 +166,6 @@ struct rtl_cache_st
     rtl_cache_stat_type       m_cpu_stats;
 };
 
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif /* INCLUDED_RTL_ALLOC_CACHE_H */
+#endif /* INCLUDED_RTL_ALLOC_CACHE_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

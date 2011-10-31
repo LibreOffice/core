@@ -26,22 +26,17 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_RTL_ALLOC_ARENA_H
-#define INCLUDED_RTL_ALLOC_ARENA_H
+#ifndef INCLUDED_RTL_ALLOC_ARENA_HXX
+#define INCLUDED_RTL_ALLOC_ARENA_HXX
 
 #include "sal/types.h"
 #include "rtl/alloc.h"
-#include "alloc_impl.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include "alloc_impl.hxx"
 
 /** rtl_arena_stat_type
  *  @internal
  */
-typedef struct rtl_arena_stat_st rtl_arena_stat_type;
-struct rtl_arena_stat_st
+struct rtl_arena_stat_type
 {
     sal_uInt64 m_alloc;
     sal_uInt64 m_free;
@@ -59,8 +54,7 @@ struct rtl_arena_stat_st
 #define RTL_ARENA_SEGMENT_TYPE_FREE ((sal_Size)(0x04))
 #define RTL_ARENA_SEGMENT_TYPE_USED ((sal_Size)(0x08))
 
-typedef struct rtl_arena_segment_st rtl_arena_segment_type;
-struct rtl_arena_segment_st
+struct rtl_arena_segment_type
 {
     /* segment list linkage */
     rtl_arena_segment_type * m_snext;
@@ -130,11 +124,6 @@ struct rtl_arena_st
  */
 extern rtl_arena_type * gp_default_arena;
 
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif /* INCLUDED_RTL_ALLOC_ARENA_H */
+#endif /* INCLUDED_RTL_ALLOC_ARENA_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

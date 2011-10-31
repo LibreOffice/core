@@ -26,15 +26,10 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_RTL_ALLOC_IMPL_H
-#define INCLUDED_RTL_ALLOC_IMPL_H
+#ifndef INCLUDED_RTL_ALLOC_IMPL_HXX
+#define INCLUDED_RTL_ALLOC_IMPL_HXX
 
 #include "sal/types.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 
 /** Alignment macros
  */
@@ -275,10 +270,6 @@ typedef enum { AMode_CUSTOM, AMode_SYSTEM, AMode_UNSET } AllocMode;
 
 extern AllocMode alloc_mode;
 
-#ifdef __cplusplus
-}
-#endif
-
-#endif /* INCLUDED_RTL_ALLOC_IMPL_H */
+#endif /* INCLUDED_RTL_ALLOC_IMPL_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
