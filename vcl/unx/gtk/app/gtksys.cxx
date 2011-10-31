@@ -118,7 +118,7 @@ static int _fallback_get_primary_monitor (GdkScreen *pScreen)
     for (int i = 0; i < max && ret < 0; i++)
     {
         char *name = gdk_screen_get_monitor_plug_name (pScreen, i);
-        if (!g_ascii_strncasecmp (name, "LVDS", 4))
+        if (name && !g_ascii_strncasecmp (name, "LVDS", 4))
             ret = i;
         g_free (name);
     }
