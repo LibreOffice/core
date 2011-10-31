@@ -25,27 +25,39 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <string.h>
-#include <osl/mutex.h>
-#include <rtl/uuid.h>
 
-/* rtl_getCommandArg, rtl_getCommandArgCount see cmdargs.cxx  */
+#include "precompiled_sal.hxx"
+#include "sal/config.h"
 
-void SAL_CALL rtl_getGlobalProcessId( sal_uInt8 *pTargetUUID )
-{
-    static sal_uInt8 *pUuid = 0;
-    if( ! pUuid )
-    {
-        osl_acquireMutex( * osl_getGlobalMutex() );
-        if( ! pUuid )
-        {
-            static sal_uInt8 aUuid[16];
-            rtl_createUuid( aUuid , 0 , sal_False );
-            pUuid = aUuid;
-        }
-        osl_releaseMutex( * osl_getGlobalMutex() );
-    }
-    memcpy( pTargetUUID , pUuid , 16 );
+#include <cstring>
+
+#include "boost/noncopyable.hpp"
+#include "rtl/instance.hxx"
+#include "rtl/process.h"
+#include "rtl/uuid.h"
+#include "sal/types.h"
+
+namespace {
+
+class Id: private boost::noncopyable {
+public:
+    Id() { rtl_createUuid(uuid_, 0, false); }
+
+    void copy(sal_uInt8 * target) const
+    { std::memcpy(target, uuid_, UUID_SIZE); }
+
+private:
+    enum { UUID_SIZE = 16 };
+
+    sal_uInt8 uuid_[UUID_SIZE];
+};
+
+struct theId: public rtl::Static< Id, theId > {};
+
+}
+
+void rtl_getGlobalProcessId(sal_uInt8 * pTargetUUID) {
+    theId::get().copy(pTargetUUID);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
