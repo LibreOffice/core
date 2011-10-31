@@ -148,6 +148,7 @@ void SAL_CALL rtl_uStringbuffer_insert( rtl_uString ** This,
 
 void rtl_uStringbuffer_insertUtf32(
     rtl_uString ** pThis, sal_Int32 * capacity, sal_Int32 offset, sal_uInt32 c)
+    SAL_THROW_EXTERN_C()
 {
     sal_Unicode buf[2];
     sal_Int32 len;

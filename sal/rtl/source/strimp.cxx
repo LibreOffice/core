@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#include "strimp.h"
+#include "strimp.hxx"
 
 sal_Int16 rtl_ImplGetDigit( sal_Unicode ch, sal_Int16 nRadix )
 {

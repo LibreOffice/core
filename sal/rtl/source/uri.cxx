@@ -31,7 +31,7 @@
 
 #include "rtl/uri.h"
 
-#include "surrogates.h"
+#include "surrogates.hxx"
 
 #include "osl/diagnose.h"
 #include "rtl/strbuf.hxx"

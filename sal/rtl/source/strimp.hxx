@@ -26,28 +26,34 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_SAL_RTL_SOURCE_SURROGATES_H
-#define INCLUDED_SAL_RTL_SOURCE_SURROGATES_H
+#ifndef INCLUDED_RTL_SOURCE_STRIMP_HXX
+#define INCLUDED_RTL_SOURCE_STRIMP_HXX
 
-#include "sal/config.h"
+#include <osl/interlck.h>
 
-#define SAL_RTL_FIRST_HIGH_SURROGATE 0xD800
-#define SAL_RTL_LAST_HIGH_SURROGATE 0xDBFF
-#define SAL_RTL_FIRST_LOW_SURROGATE 0xDC00
-#define SAL_RTL_LAST_LOW_SURROGATE 0xDFFF
+#include "sal/types.h"
 
-#define SAL_RTL_IS_HIGH_SURROGATE(utf16) \
-    ((utf16) >= SAL_RTL_FIRST_HIGH_SURROGATE && \
-     (utf16) <= SAL_RTL_LAST_HIGH_SURROGATE)
+/* ======================================================================= */
+/* Help functions for String and UString                                   */
+/* ======================================================================= */
 
-#define SAL_RTL_IS_LOW_SURROGATE(utf16) \
-    ((utf16) >= SAL_RTL_FIRST_LOW_SURROGATE && \
-     (utf16) <= SAL_RTL_LAST_LOW_SURROGATE)
+/*
+ * refCount is opaqueincludes 2 bit-fields;
+ * MSB:   'interned' - is stored in the intern hash
+ * MSB-1: 'static'   - is a const / static string,
+ *                     do no ref counting
+ */
+#define SAL_STRING_INTERN_FLAG 0x80000000
+#define SAL_STRING_STATIC_FLAG 0x40000000
+#define SAL_STRING_REFCOUNT(a) ((a) & 0x3fffffff)
 
-#define SAL_RTL_COMBINE_SURROGATES(high, low) \
-    ((((high) - SAL_RTL_FIRST_HIGH_SURROGATE) << 10) + \
-     ((low) - SAL_RTL_FIRST_LOW_SURROGATE) + 0x10000)
+#define SAL_STRING_IS_INTERN(a) ((a)->refCount & SAL_STRING_INTERN_FLAG)
+#define SAL_STRING_IS_STATIC(a) ((a)->refCount & SAL_STRING_STATIC_FLAG)
 
-#endif
+sal_Int16 rtl_ImplGetDigit( sal_Unicode ch, sal_Int16 nRadix );
+
+sal_Bool rtl_ImplIsWhitespace( sal_Unicode c );
+
+#endif /* INCLUDED_RTL_SOURCE_STRIMP_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

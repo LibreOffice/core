@@ -67,6 +67,7 @@ inline void rtl_str_ImplCopy( IMPL_RTL_STRCODE* pDest,
 /* ======================================================================= */
 
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( getLength )( const IMPL_RTL_STRCODE* pStr )
+    SAL_THROW_EXTERN_C()
 {
     const IMPL_RTL_STRCODE* pTempStr = pStr;
     while( *pTempStr )
@@ -78,6 +79,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( getLength )( const IMPL_RTL_STRCODE* pStr )
 
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compare )( const IMPL_RTL_STRCODE* pStr1,
                                                 const IMPL_RTL_STRCODE* pStr2 )
+    SAL_THROW_EXTERN_C()
 {
     sal_Int32 nRet;
     while ( ((nRet = ((sal_Int32)(IMPL_RTL_USTRCODE(*pStr1)))-
@@ -97,6 +99,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compare_WithLength )( const IMPL_RTL_STRCOD
                                                            sal_Int32 nStr1Len,
                                                            const IMPL_RTL_STRCODE* pStr2,
                                                            sal_Int32 nStr2Len )
+    SAL_THROW_EXTERN_C()
 {
     sal_Int32 nRet = nStr1Len - nStr2Len;
     int nCount = (nRet <= 0) ? nStr1Len : nStr2Len;
@@ -119,6 +122,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( shortenedCompare_WithLength )( const IMPL_R
                                                                     const IMPL_RTL_STRCODE* pStr2,
                                                                     sal_Int32 nStr2Len,
                                                                     sal_Int32 nShortenedLength )
+    SAL_THROW_EXTERN_C()
 {
     const IMPL_RTL_STRCODE* pStr1End = pStr1 + nStr1Len;
     const IMPL_RTL_STRCODE* pStr2End = pStr2 + nStr2Len;
@@ -147,6 +151,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( reverseCompare_WithLength )( const IMPL_RTL
                                                                   sal_Int32 nStr1Len,
                                                                   const IMPL_RTL_STRCODE* pStr2,
                                                                   sal_Int32 nStr2Len )
+    SAL_THROW_EXTERN_C()
 {
     const IMPL_RTL_STRCODE* pStr1Run = pStr1+nStr1Len;
     const IMPL_RTL_STRCODE* pStr2Run = pStr2+nStr2Len;
@@ -168,6 +173,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( reverseCompare_WithLength )( const IMPL_RTL
 
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compareIgnoreAsciiCase )( const IMPL_RTL_STRCODE* pStr1,
                                                                const IMPL_RTL_STRCODE* pStr2 )
+    SAL_THROW_EXTERN_C()
 {
     sal_Int32   nRet;
     sal_Int32   c1;
@@ -199,6 +205,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compareIgnoreAsciiCase_WithLength )( const 
                                                                           sal_Int32 nStr1Len,
                                                                           const IMPL_RTL_STRCODE* pStr2,
                                                                           sal_Int32 nStr2Len )
+    SAL_THROW_EXTERN_C()
 {
     const IMPL_RTL_STRCODE* pStr1End = pStr1 + nStr1Len;
     const IMPL_RTL_STRCODE* pStr2End = pStr2 + nStr2Len;
@@ -232,6 +239,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( shortenedCompareIgnoreAsciiCase_WithLength 
                                                                                    const IMPL_RTL_STRCODE* pStr2,
                                                                                    sal_Int32 nStr2Len,
                                                                                    sal_Int32 nShortenedLength )
+    SAL_THROW_EXTERN_C()
 {
     const IMPL_RTL_STRCODE* pStr1End = pStr1 + nStr1Len;
     const IMPL_RTL_STRCODE* pStr2End = pStr2 + nStr2Len;
@@ -265,6 +273,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( shortenedCompareIgnoreAsciiCase_WithLength 
 /* ----------------------------------------------------------------------- */
 
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( hashCode )( const IMPL_RTL_STRCODE* pStr )
+    SAL_THROW_EXTERN_C()
 {
     return IMPL_RTL_STRNAME( hashCode_WithLength )( pStr, IMPL_RTL_STRNAME( getLength )( pStr ) );
 }
@@ -273,6 +282,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( hashCode )( const IMPL_RTL_STRCODE* pStr )
 
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( hashCode_WithLength )( const IMPL_RTL_STRCODE* pStr,
                                                             sal_Int32 nLen )
+    SAL_THROW_EXTERN_C()
 {
     sal_Int32 h = nLen;
 
@@ -329,6 +339,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( hashCode_WithLength )( const IMPL_RTL_STRCO
 
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfChar )( const IMPL_RTL_STRCODE* pStr,
                                                     IMPL_RTL_STRCODE c )
+    SAL_THROW_EXTERN_C()
 {
     const IMPL_RTL_STRCODE* pTempStr = pStr;
     while ( *pTempStr )
@@ -347,6 +358,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfChar )( const IMPL_RTL_STRCODE* pStr
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfChar_WithLength )( const IMPL_RTL_STRCODE* pStr,
                                                                sal_Int32 nLen,
                                                                IMPL_RTL_STRCODE c )
+    SAL_THROW_EXTERN_C()
 {
     const IMPL_RTL_STRCODE* pTempStr = pStr;
     while ( nLen > 0 )
@@ -365,6 +377,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfChar_WithLength )( const IMPL_RTL_ST
 
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfChar )( const IMPL_RTL_STRCODE* pStr,
                                                         IMPL_RTL_STRCODE c )
+    SAL_THROW_EXTERN_C()
 {
     return IMPL_RTL_STRNAME( lastIndexOfChar_WithLength )( pStr, IMPL_RTL_STRNAME( getLength )( pStr ), c );
 }
@@ -374,6 +387,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfChar )( const IMPL_RTL_STRCODE* 
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfChar_WithLength )( const IMPL_RTL_STRCODE* pStr,
                                                                    sal_Int32 nLen,
                                                                    IMPL_RTL_STRCODE c )
+    SAL_THROW_EXTERN_C()
 {
     pStr += nLen;
     while ( nLen > 0 )
@@ -392,6 +406,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfChar_WithLength )( const IMPL_RT
 
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfStr )( const IMPL_RTL_STRCODE* pStr,
                                                    const IMPL_RTL_STRCODE* pSubStr )
+    SAL_THROW_EXTERN_C()
 {
     return IMPL_RTL_STRNAME( indexOfStr_WithLength )( pStr, IMPL_RTL_STRNAME( getLength )( pStr ),
                                                       pSubStr, IMPL_RTL_STRNAME( getLength )( pSubStr ) );
@@ -403,6 +418,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfStr_WithLength )( const IMPL_RTL_STR
                                                               sal_Int32 nStrLen,
                                                               const  IMPL_RTL_STRCODE* pSubStr,
                                                               sal_Int32 nSubLen )
+    SAL_THROW_EXTERN_C()
 {
     /* faster search for a single character */
     if ( nSubLen < 2 )
@@ -464,6 +480,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfStr_WithLength )( const IMPL_RTL_STR
 
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfStr )( const IMPL_RTL_STRCODE* pStr,
                                                        const IMPL_RTL_STRCODE* pSubStr )
+    SAL_THROW_EXTERN_C()
 {
     return IMPL_RTL_STRNAME( lastIndexOfStr_WithLength )( pStr, IMPL_RTL_STRNAME( getLength )( pStr ),
                                                           pSubStr, IMPL_RTL_STRNAME( getLength )( pSubStr ) );
@@ -475,6 +492,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfStr_WithLength )( const IMPL_RTL
                                                                   sal_Int32 nStrLen,
                                                                   const IMPL_RTL_STRCODE* pSubStr,
                                                                   sal_Int32 nSubLen )
+    SAL_THROW_EXTERN_C()
 {
     /* faster search for a single character */
     if ( nSubLen < 2 )
@@ -530,6 +548,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfStr_WithLength )( const IMPL_RTL
 void SAL_CALL IMPL_RTL_STRNAME( replaceChar )( IMPL_RTL_STRCODE* pStr,
                                                IMPL_RTL_STRCODE cOld,
                                                IMPL_RTL_STRCODE cNew )
+    SAL_THROW_EXTERN_C()
 {
     while ( *pStr )
     {
@@ -546,6 +565,7 @@ void SAL_CALL IMPL_RTL_STRNAME( replaceChar_WithLength )( IMPL_RTL_STRCODE* pStr
                                                           sal_Int32 nLen,
                                                           IMPL_RTL_STRCODE cOld,
                                                           IMPL_RTL_STRCODE cNew )
+    SAL_THROW_EXTERN_C()
 {
     while ( nLen > 0 )
     {
@@ -560,6 +580,7 @@ void SAL_CALL IMPL_RTL_STRNAME( replaceChar_WithLength )( IMPL_RTL_STRCODE* pStr
 /* ----------------------------------------------------------------------- */
 
 void SAL_CALL IMPL_RTL_STRNAME( toAsciiLowerCase )( IMPL_RTL_STRCODE* pStr )
+    SAL_THROW_EXTERN_C()
 {
     while ( *pStr )
     {
@@ -575,6 +596,7 @@ void SAL_CALL IMPL_RTL_STRNAME( toAsciiLowerCase )( IMPL_RTL_STRCODE* pStr )
 
 void SAL_CALL IMPL_RTL_STRNAME( toAsciiLowerCase_WithLength )( IMPL_RTL_STRCODE* pStr,
                                                                sal_Int32 nLen )
+    SAL_THROW_EXTERN_C()
 {
     while ( nLen > 0 )
     {
@@ -590,6 +612,7 @@ void SAL_CALL IMPL_RTL_STRNAME( toAsciiLowerCase_WithLength )( IMPL_RTL_STRCODE*
 /* ----------------------------------------------------------------------- */
 
 void SAL_CALL IMPL_RTL_STRNAME( toAsciiUpperCase )( IMPL_RTL_STRCODE* pStr )
+    SAL_THROW_EXTERN_C()
 {
     while ( *pStr )
     {
@@ -605,6 +628,7 @@ void SAL_CALL IMPL_RTL_STRNAME( toAsciiUpperCase )( IMPL_RTL_STRCODE* pStr )
 
 void SAL_CALL IMPL_RTL_STRNAME( toAsciiUpperCase_WithLength )( IMPL_RTL_STRCODE* pStr,
                                                                sal_Int32 nLen )
+    SAL_THROW_EXTERN_C()
 {
     while ( nLen > 0 )
     {
@@ -620,6 +644,7 @@ void SAL_CALL IMPL_RTL_STRNAME( toAsciiUpperCase_WithLength )( IMPL_RTL_STRCODE*
 /* ----------------------------------------------------------------------- */
 
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( trim )( IMPL_RTL_STRCODE* pStr )
+    SAL_THROW_EXTERN_C()
 {
     return IMPL_RTL_STRNAME( trim_WithLength )( pStr, IMPL_RTL_STRNAME( getLength )( pStr ) );
 }
@@ -627,6 +652,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( trim )( IMPL_RTL_STRCODE* pStr )
 /* ----------------------------------------------------------------------- */
 
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( trim_WithLength )( IMPL_RTL_STRCODE* pStr, sal_Int32 nLen )
+    SAL_THROW_EXTERN_C()
 {
     sal_Int32 nPreSpaces    = 0;
     sal_Int32 nPostSpaces   = 0;
@@ -670,6 +696,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( trim_WithLength )( IMPL_RTL_STRCODE* pStr, 
 /* ----------------------------------------------------------------------- */
 
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfBoolean )( IMPL_RTL_STRCODE* pStr, sal_Bool b )
+    SAL_THROW_EXTERN_C()
 {
     if ( b )
     {
@@ -705,6 +732,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfBoolean )( IMPL_RTL_STRCODE* pStr, s
 
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfChar )( IMPL_RTL_STRCODE* pStr,
                                                     IMPL_RTL_STRCODE c )
+    SAL_THROW_EXTERN_C()
 {
     *pStr++ = c;
     *pStr = 0;
@@ -716,6 +744,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfChar )( IMPL_RTL_STRCODE* pStr,
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt32 )( IMPL_RTL_STRCODE* pStr,
                                                      sal_Int32 n,
                                                      sal_Int16 nRadix )
+    SAL_THROW_EXTERN_C()
 {
     sal_Char    aBuf[RTL_STR_MAX_VALUEOFINT32];
     sal_Char*   pBuf = aBuf;
@@ -770,6 +799,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt32 )( IMPL_RTL_STRCODE* pStr,
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt64 )( IMPL_RTL_STRCODE* pStr,
                                                      sal_Int64 n,
                                                      sal_Int16 nRadix )
+    SAL_THROW_EXTERN_C()
 {
     sal_Char    aBuf[RTL_STR_MAX_VALUEOFINT64];
     sal_Char*   pBuf = aBuf;
@@ -823,6 +853,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt64 )( IMPL_RTL_STRCODE* pStr,
 /* ----------------------------------------------------------------------- */
 
 sal_Bool SAL_CALL IMPL_RTL_STRNAME( toBoolean )( const IMPL_RTL_STRCODE* pStr )
+    SAL_THROW_EXTERN_C()
 {
     if ( *pStr == '1' )
         return sal_True;
@@ -849,6 +880,7 @@ sal_Bool SAL_CALL IMPL_RTL_STRNAME( toBoolean )( const IMPL_RTL_STRCODE* pStr )
 
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( toInt32 )( const IMPL_RTL_STRCODE* pStr,
                                                 sal_Int16 nRadix )
+    SAL_THROW_EXTERN_C()
 {
     sal_Bool    bNeg;
     sal_Int16   nDigit;
@@ -895,6 +927,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( toInt32 )( const IMPL_RTL_STRCODE* pStr,
 
 sal_Int64 SAL_CALL IMPL_RTL_STRNAME( toInt64 )( const IMPL_RTL_STRCODE* pStr,
                                                 sal_Int16 nRadix )
+    SAL_THROW_EXTERN_C()
 {
     sal_Bool    bNeg;
     sal_Int16   nDigit;
@@ -944,7 +977,7 @@ sal_Int64 SAL_CALL IMPL_RTL_STRNAME( toInt64 )( const IMPL_RTL_STRCODE* pStr,
 static IMPL_RTL_STRINGDATA* IMPL_RTL_STRINGNAME( ImplAlloc )( sal_Int32 nLen )
 {
     IMPL_RTL_STRINGDATA * pData
-        = (SAL_INT_CAST(sal_uInt32, nLen)
+        = (sal::static_int_cast< sal_uInt32 >(nLen)
            <= ((SAL_MAX_UINT32 - sizeof (IMPL_RTL_STRINGDATA))
                / sizeof (IMPL_RTL_STRCODE)))
         ? (IMPL_RTL_STRINGDATA *) rtl_allocateMemory(
@@ -996,6 +1029,7 @@ static IMPL_RTL_STRCODE* IMPL_RTL_STRINGNAME( ImplNewCopy )( IMPL_RTL_STRINGDATA
 /* ----------------------------------------------------------------------- */
 
 void SAL_CALL IMPL_RTL_STRINGNAME( acquire )( IMPL_RTL_STRINGDATA* pThis )
+    SAL_THROW_EXTERN_C()
 {
     IMPL_RTL_AQUIRE( pThis );
 }
@@ -1003,6 +1037,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( acquire )( IMPL_RTL_STRINGDATA* pThis )
 /* ----------------------------------------------------------------------- */
 
 void SAL_CALL IMPL_RTL_STRINGNAME( release )( IMPL_RTL_STRINGDATA* pThis )
+    SAL_THROW_EXTERN_C()
 {
     if (SAL_STRING_IS_STATIC (pThis))
         return;
@@ -1026,6 +1061,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( release )( IMPL_RTL_STRINGDATA* pThis )
 /* ----------------------------------------------------------------------- */
 
 void SAL_CALL IMPL_RTL_STRINGNAME( new )( IMPL_RTL_STRINGDATA** ppThis )
+    SAL_THROW_EXTERN_C()
 {
     if ( *ppThis)
         IMPL_RTL_STRINGNAME( release )( *ppThis );
@@ -1037,6 +1073,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( new )( IMPL_RTL_STRINGDATA** ppThis )
 /* ----------------------------------------------------------------------- */
 
 void SAL_CALL IMPL_RTL_STRINGNAME( new_WithLength )( IMPL_RTL_STRINGDATA** ppThis, sal_Int32 nLen )
+    SAL_THROW_EXTERN_C()
 {
     if ( nLen <= 0 )
         IMPL_RTL_STRINGNAME( new )( ppThis );
@@ -1060,6 +1097,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( new_WithLength )( IMPL_RTL_STRINGDATA** ppThi
 
 void SAL_CALL IMPL_RTL_STRINGNAME( newFromString )( IMPL_RTL_STRINGDATA** ppThis,
                                                     const IMPL_RTL_STRINGDATA* pStr )
+    SAL_THROW_EXTERN_C()
 {
     IMPL_RTL_STRINGDATA* pOrg;
 
@@ -1083,6 +1121,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromString )( IMPL_RTL_STRINGDATA** ppThis
 
 void SAL_CALL IMPL_RTL_STRINGNAME( newFromStr )( IMPL_RTL_STRINGDATA** ppThis,
                                                  const IMPL_RTL_STRCODE* pCharStr )
+    SAL_THROW_EXTERN_C()
 {
     IMPL_RTL_STRCODE*       pBuffer;
     IMPL_RTL_STRINGDATA*    pOrg;
@@ -1126,6 +1165,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromStr )( IMPL_RTL_STRINGDATA** ppThis,
 void SAL_CALL IMPL_RTL_STRINGNAME( newFromStr_WithLength )( IMPL_RTL_STRINGDATA** ppThis,
                                                             const IMPL_RTL_STRCODE* pCharStr,
                                                             sal_Int32 nLen )
+    SAL_THROW_EXTERN_C()
 {
     IMPL_RTL_STRINGDATA* pOrg;
 
@@ -1149,6 +1189,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromStr_WithLength )( IMPL_RTL_STRINGDATA*
 
 void SAL_CALL IMPL_RTL_STRINGNAME( assign )( IMPL_RTL_STRINGDATA** ppThis,
                                              IMPL_RTL_STRINGDATA* pStr )
+    SAL_THROW_EXTERN_C()
 {
     /* must be done at first, if pStr == *ppThis */
     IMPL_RTL_AQUIRE( pStr );
@@ -1162,6 +1203,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( assign )( IMPL_RTL_STRINGDATA** ppThis,
 /* ----------------------------------------------------------------------- */
 
 sal_Int32 SAL_CALL IMPL_RTL_STRINGNAME( getLength )( const IMPL_RTL_STRINGDATA* pThis )
+    SAL_THROW_EXTERN_C()
 {
     return pThis->length;
 }
@@ -1169,6 +1211,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRINGNAME( getLength )( const IMPL_RTL_STRINGDATA* 
 /* ----------------------------------------------------------------------- */
 
 IMPL_RTL_STRCODE* SAL_CALL IMPL_RTL_STRINGNAME( getStr )( IMPL_RTL_STRINGDATA * pThis )
+    SAL_THROW_EXTERN_C()
 {
     return pThis->buffer;
 }
@@ -1178,6 +1221,7 @@ IMPL_RTL_STRCODE* SAL_CALL IMPL_RTL_STRINGNAME( getStr )( IMPL_RTL_STRINGDATA * 
 void SAL_CALL IMPL_RTL_STRINGNAME( newConcat )( IMPL_RTL_STRINGDATA** ppThis,
                                                 IMPL_RTL_STRINGDATA* pLeft,
                                                 IMPL_RTL_STRINGDATA* pRight )
+    SAL_THROW_EXTERN_C()
 {
     IMPL_RTL_STRINGDATA* pOrg = *ppThis;
 
@@ -1213,6 +1257,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newReplaceStrAt )( IMPL_RTL_STRINGDATA** ppTh
                                                       sal_Int32 nIndex,
                                                       sal_Int32 nCount,
                                                       IMPL_RTL_STRINGDATA* pNewSubStr )
+    SAL_THROW_EXTERN_C()
 {
     /* Append? */
     if ( nIndex >= pStr->length )
@@ -1290,6 +1335,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newReplace )( IMPL_RTL_STRINGDATA** ppThis,
                                                  IMPL_RTL_STRINGDATA* pStr,
                                                  IMPL_RTL_STRCODE cOld,
                                                  IMPL_RTL_STRCODE cNew )
+    SAL_THROW_EXTERN_C()
 {
     IMPL_RTL_STRINGDATA*    pOrg        = *ppThis;
     int                     bChanged    = 0;
@@ -1347,6 +1393,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newReplace )( IMPL_RTL_STRINGDATA** ppThis,
 
 void SAL_CALL IMPL_RTL_STRINGNAME( newToAsciiLowerCase )( IMPL_RTL_STRINGDATA** ppThis,
                                                           IMPL_RTL_STRINGDATA* pStr )
+    SAL_THROW_EXTERN_C()
 {
     IMPL_RTL_STRINGDATA*    pOrg        = *ppThis;
     int                     bChanged    = 0;
@@ -1407,6 +1454,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newToAsciiLowerCase )( IMPL_RTL_STRINGDATA** 
 
 void SAL_CALL IMPL_RTL_STRINGNAME( newToAsciiUpperCase )( IMPL_RTL_STRINGDATA** ppThis,
                                                           IMPL_RTL_STRINGDATA* pStr )
+    SAL_THROW_EXTERN_C()
 {
     IMPL_RTL_STRINGDATA*    pOrg        = *ppThis;
     int                     bChanged    = 0;
@@ -1467,6 +1515,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newToAsciiUpperCase )( IMPL_RTL_STRINGDATA** 
 
 void SAL_CALL IMPL_RTL_STRINGNAME( newTrim )( IMPL_RTL_STRINGDATA** ppThis,
                                               IMPL_RTL_STRINGDATA* pStr )
+    SAL_THROW_EXTERN_C()
 {
     IMPL_RTL_STRINGDATA*    pOrg        = *ppThis;
     const IMPL_RTL_STRCODE* pCharStr    = pStr->buffer;
@@ -1510,6 +1559,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRINGNAME( getToken )( IMPL_RTL_STRINGDATA** ppThis
                                                     sal_Int32 nToken,
                                                     IMPL_RTL_STRCODE cTok,
                                                     sal_Int32 nIndex )
+    SAL_THROW_EXTERN_C()
 {
     const IMPL_RTL_STRCODE* pCharStr        = pStr->buffer;
     const IMPL_RTL_STRCODE* pCharStrStart;

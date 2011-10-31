@@ -29,8 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#include "hash.h"
-#include "strimp.h"
+#include "hash.hxx"
+#include "strimp.hxx"
 #include <osl/diagnose.h>
 #include <sal/macros.h>
 

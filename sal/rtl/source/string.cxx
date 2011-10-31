@@ -35,8 +35,8 @@
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 
-#include "strimp.h"
-#include "surrogates.h"
+#include "strimp.hxx"
+#include "surrogates.hxx"
 #include <rtl/string.h>
 
 #include "rtl/math.h"
@@ -69,9 +69,10 @@ static rtl_String const aImplEmpty_rtl_String =
 
 /* Include String/UString template code */
 
-#include "strtmpl.c"
+#include "strtmpl.cxx"
 
 sal_Int32 SAL_CALL rtl_str_valueOfFloat(sal_Char * pStr, float f)
+    SAL_THROW_EXTERN_C()
 {
     rtl_String * pResult = NULL;
     sal_Int32 nLen;
@@ -87,6 +88,7 @@ sal_Int32 SAL_CALL rtl_str_valueOfFloat(sal_Char * pStr, float f)
 }
 
 sal_Int32 SAL_CALL rtl_str_valueOfDouble(sal_Char * pStr, double d)
+    SAL_THROW_EXTERN_C()
 {
     rtl_String * pResult = NULL;
     sal_Int32 nLen;
@@ -101,13 +103,13 @@ sal_Int32 SAL_CALL rtl_str_valueOfDouble(sal_Char * pStr, double d)
     return nLen;
 }
 
-float SAL_CALL rtl_str_toFloat(sal_Char const * pStr)
+float SAL_CALL rtl_str_toFloat(sal_Char const * pStr) SAL_THROW_EXTERN_C()
 {
     return (float) rtl_math_stringToDouble(pStr, pStr + rtl_str_getLength(pStr),
                                            '.', 0, 0, 0);
 }
 
-double SAL_CALL rtl_str_toDouble(sal_Char const * pStr)
+double SAL_CALL rtl_str_toDouble(sal_Char const * pStr) SAL_THROW_EXTERN_C()
 {
     return rtl_math_stringToDouble(pStr, pStr + rtl_str_getLength(pStr), '.', 0,
                                    0, 0);
@@ -305,6 +307,7 @@ void SAL_CALL rtl_uString2String( rtl_String** ppThis,
                                   sal_Int32 nULen,
                                   rtl_TextEncoding eTextEncoding,
                                   sal_uInt32 nCvtFlags )
+    SAL_THROW_EXTERN_C()
 {
     rtl_impl_convertUStringToString(ppThis, pUStr, nULen, eTextEncoding,
                                     nCvtFlags, sal_False);
@@ -315,6 +318,7 @@ sal_Bool SAL_CALL rtl_convertUStringToString(rtl_String ** pTarget,
                                              sal_Int32 nLength,
                                              rtl_TextEncoding nEncoding,
                                              sal_uInt32 nFlags)
+    SAL_THROW_EXTERN_C()
 {
     return rtl_impl_convertUStringToString(pTarget, pSource, nLength, nEncoding,
                                            nFlags, sal_True);
