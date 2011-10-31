@@ -81,8 +81,8 @@ COMPONENT_HTMLFILES = $(EXTENSIONDIR)$/THIRDPARTYREADMELICENSE.html \
 COMPONENT_JARFILES = \
     $(EXTENSIONDIR)$/sun-report-builder.jar
 
-COMPONENT_HELP= \
-    $(EXTENSIONDIR)$/component.txt
+COMPONENT_DESCRIPTION= \
+    $(foreach,lang,$(alllangiso) $(EXTENSIONDIR)$/description-$(lang).txt)
 
 # .jar files from solver
 COMPONENT_EXTJARFILES = \
@@ -114,7 +114,7 @@ COMPONENT_MANIFEST_GENERIC:=TRUE
 COMPONENT_MANIFEST_SEARCHDIR:=registry
 
 # make sure to add your custom files here
-EXTENSION_PACKDEPS=$(COMPONENT_EXTJARFILES) $(MISC)/$(TARGET).copied $(COMPONENT_HTMLFILES) $(COMPONENT_OTR_FILES) $(COMPONENT_HELP) $(COMPONENT_IMAGES)
+EXTENSION_PACKDEPS=$(COMPONENT_EXTJARFILES) $(MISC)/$(TARGET).copied $(COMPONENT_HTMLFILES) $(COMPONENT_OTR_FILES) $(COMPONENT_DESCRIPTION) $(COMPONENT_IMAGES)
 .ENDIF
 # --- Targets ----------------------------------
 
@@ -138,13 +138,20 @@ $(EXTENSIONDIR)$/THIRDPARTYREADMELICENSE.html : $(PRJ)$/license$/THIRDPARTYREADM
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
     
-$(COMPONENT_HELP) : $$(@:f)
-    @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
+$(COMPONENT_DESCRIPTION) : $(DESCRIPTION)
+    
 
 $(DESCRIPTION_SRC): description.xml
     +-$(RM) $@
-    $(TYPE) description.xml | $(SED) "s/#VERSION#/$(EXTENSION_VERSION)/" > $@
+    $(COPY) description-en-US.txt $(EXTENSIONDIR)/description-en-US.txt
+.IF "$(WITH_LANG)" != ""
+    $(XRMEX) -p $(PRJNAME) -i description.xml -o $@ -m $(LOCALIZESDF) -l all
+    $(SED) "s/#VERSION#/$(EXTENSION_VERSION)/" < $@ > $@.new
+    mv $@.new $@
+    @$(COPY) $(@:d)/description-*.txt $(EXTENSIONDIR)
+.ELSE
+    $(SED) "s/#VERSION#/$(EXTENSION_VERSION)/" < $< > $@
+.ENDIF
 
 $(MISC)/$(TARGET).copied: $(COMPONENT_EXTJARFILES_COPY)
     @@-$(MKDIRHIER) $(EXTENSIONDIR)

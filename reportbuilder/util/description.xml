@@ -17,7 +17,7 @@
     <default xlink:href="images/extension_32.png" />
   </icon>
   <extension-description>
-    <src xlink:href="component.txt" lang="en-US" />
+    <src xlink:href="description-en-US.txt" lang="en-US" />
   </extension-description>
 </description>
 
