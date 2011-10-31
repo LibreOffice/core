@@ -242,7 +242,13 @@ for REPO in $DIRS ; do
     elif [ -d "$DIR" -a "z$LAST_WORKING" != "z" ]; then
        echo "fetching notes for $REPO ..."
        (cd $DIR && git fetch origin 'refs/notes/*:refs/notes/*')
-       # FIXME: we need to grep the git log for a known good note name...
+       hash=`(cd $DIR && git log --pretty='%H %N' | grep 'win32 working build' | head -n1 | sed 's/ win32.*//')`
+       if test "z$hash" != "z"; then
+	   echo "update to $hash"
+	   (cd $DIR && git checkout $hash)
+       else
+	   echo "Warning: missing known working note on repo $REPO"
+       fi
     elif [ -d "$DIR" -a "z$SET_LAST_WORKING" != "z" ]; then
        echo "fetching notes for $REPO ..."
        (cd $DIR && git fetch origin 'refs/notes/*:refs/notes/*')
