@@ -927,6 +927,18 @@ ProfileItem gid_Brand_Profileitem_Soffice_Startlang
 End
 #endif
 
+ProfileItem gid_Brand_Profileitem_Soffice_ConfigurationLayers
+    ProfileID = gid_Brand_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Key = "CONFIGURATION_LAYERS";
+    Value = "xcsxcu:${BRAND_BASE_DIR}/share/registry module:${BRAND_BASE_DIR}/share/registry/modules res:${BRAND_BASE_DIR}/share/registry bundledext:${${BRAND_BASE_DIR}/program/" PROFILENAME(uno) ":BUNDLED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini sharedext:${${BRAND_BASE_DIR}/program/" PROFILENAME(uno) ":SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini xcsxcu:${${BRAND_BASE_DIR}/program/" PROFILENAME(uno) ":UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/registry userext:${${BRAND_BASE_DIR}/program/" PROFILENAME(uno) ":UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini user:${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/registrymodifications.xcu";
+        // "xcsxcu:${${BRAND_BASE_DIR}/program/"PROFILENAME(uno)
+        // ":UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment."
+        // "configuration.PackageRegistryBackend/registry" can be dropped once
+        // old UserInstallation format can no longer exist (probably OOo 4)
+End
+
 ProfileItem gid_Brand_Profileitem_Version_Buildid
     ProfileID = gid_Brand_Profile_Version_Ini;
     ModuleID = gid_Module_Root_Brand;
