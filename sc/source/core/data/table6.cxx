@@ -78,7 +78,6 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
     if ( bDoSearch && ((pCell = aCol[nCol].GetCell( nRow )) != NULL) )
     {
         bool bMultiLine = false;
-        ScAddress cellPos( nCol, nRow, nTab );
         CellType eCellType = pCell->GetCellType();
         switch (rSearchItem.GetCellType())
         {
@@ -103,7 +102,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 break;
             case SVX_SEARCHIN_NOTE:
                 {
-                    if (const ScPostIt* pNote = pDocument->GetNote( cellPos ))
+                    if(const ScPostIt* pNote = pCell->GetNote())
                     {
                         aString = pNote->GetText();
                         bMultiLine = pNote->HasMultiLineText();
@@ -157,8 +156,9 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 rUndoStr = aString;
             else if (pUndoDoc)
             {
-                ScBaseCell* pUndoCell = pCell->Clone( *pUndoDoc );
-                pUndoDoc->PutCell( cellPos, pUndoCell);
+                ScAddress aAdr( nCol, nRow, nTab );
+                ScBaseCell* pUndoCell = pCell->CloneWithoutNote( *pUndoDoc );
+                pUndoDoc->PutCell( aAdr, pUndoCell);
             }
             bool bRepeat = !rSearchItem.GetWordOnly();
             do
@@ -219,8 +219,8 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             {
                 // NB: rich text format is lost.
                 // This is also true of Cells.
-                if ( ScPostIt* pNote = pDocument->GetNote( cellPos ) )
-                    pNote->SetText( cellPos, aString );
+                if( ScPostIt* pNote = pCell->GetNote() )
+                    pNote->SetText( ScAddress( nCol, nRow, nTab ), aString );
             }
             else if ( cMatrixFlag != MM_NONE )
             {   // Matrix nicht zerreissen
@@ -231,7 +231,8 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                     if ( aString.GetChar(0) == '{' )
                         aString.Erase( 0, 1 );
                 }
-                ScFormulaCell* pFCell = new ScFormulaCell( pDocument, cellPos,
+                ScAddress aAdr( nCol, nRow, nTab );
+                ScFormulaCell* pFCell = new ScFormulaCell( pDocument, aAdr,
                     aString,formula::FormulaGrammar::GRAM_NATIVE_UI, cMatrixFlag );
                 SCCOL nMatCols;
                 SCROW nMatRows;
@@ -829,7 +830,7 @@ bool lcl_maybeReplaceCellString(
     ScColumn& rColObj, SCCOL& rCol, SCROW& rRow, rtl::OUString& rUndoStr, SCCOL nCol, SCROW nRow, const SvxSearchItem& rSearchItem)
 {
     ScBaseCell* pCell = rColObj.GetCell(nRow);
-    if (!pCell || CELLTYPE_EMPTY == pCell->GetCellType() )
+    if (!pCell || pCell->GetCellType() == CELLTYPE_NOTE)
     {
         // empty cell found.
         rCol = nCol;
@@ -1024,7 +1025,7 @@ bool ScTable::SearchRangeForAllEmptyCells(
                         pUndoDoc->PutCell(nCol, nRow, nTab, new ScStringCell(String()));
                 }
             }
-            else if ( CELLTYPE_EMPTY == pCell->GetCellType() )
+            else if (pCell->GetCellType() == CELLTYPE_NOTE)
             {
                 rMatchedRanges.Join(ScRange(nCol, nRow, nTab));
                 bFound = true;
@@ -1033,15 +1034,8 @@ bool ScTable::SearchRangeForAllEmptyCells(
                 {
                     if (pUndoDoc)
                     {
-                        ScAddress aPos(nCol, nRow, nTab);
-                        ScBaseCell* pNewCell = pCell->Clone(*pUndoDoc, aPos);
-
-                        ScPostIt* pNewNote = pDocument->GetNote( aPos );
-                        pNewNote = new ScPostIt( *pUndoDoc, aPos, *pNewNote );
-
-                        pUndoDoc->PutCell(nCol, nRow, nTab, pNewCell);
-                        if ( ! pUndoDoc->SetNote(aPos, pNewNote) )
-                            DELETEZ( pNewNote ); // don't leak mem on failure
+                        ScAddress aCellPos(nCol, nRow, nTab);
+                        pUndoDoc->PutCell(nCol, nRow, nTab, pCell->CloneWithNote(aCellPos, *pUndoDoc, aCellPos));
                     }
                     aCol[nCol].SetString(nRow, nTab, rSearchItem.GetReplaceString());
                 }

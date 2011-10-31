@@ -270,7 +270,7 @@ sal_uInt16 ScDocShell::GetHiddenInformationState( sal_uInt16 nStates )
         {
             ScCellIterator aCellIter( &aDocument, 0,0, nTable, MAXCOL,MAXROW, nTable );
             for( ScBaseCell* pCell = aCellIter.GetFirst(); pCell && !bFound; pCell = aCellIter.GetNext() )
-                if (aDocument.GetNote( aCellIter.GetPos() ))
+                if (pCell->HasNote())
                     bFound = sal_True;
             nTable++;
         }
@@ -1798,7 +1798,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
         sal_Bool bString;
         switch ( eType )
         {
-            case CELLTYPE_EMPTY:
+            case CELLTYPE_NOTE:
             case CELLTYPE_NONE:
                 aString.Erase();
                 bString = false;

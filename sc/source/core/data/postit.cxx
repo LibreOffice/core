@@ -855,14 +855,13 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
     aNoteData.mpCaption = &rCaption;
     ScPostIt* pNote = new ScPostIt( rDoc, rPos, aNoteData, false );
     pNote->AutoStamp();
-
-    if ( rDoc.SetNote( rPos, pNote ) )
-        // ScNoteCaptionCreator c'tor updates the caption object to be part
-        // of a note
+    rDoc.TakeNote( rPos, pNote );
+    // if pNote still points to the note after TakeNote(), insertion was successful
+    if( pNote )
+    {
+        // ScNoteCaptionCreator c'tor updates the caption object to be part of a note
         ScNoteCaptionCreator aCreator( rDoc, rPos, rCaption, bShown );
-    else
-        DELETEZ( pNote );  // SetNote was apparently not successful.
-
+    }
     return pNote;
 }
 
@@ -893,9 +892,8 @@ ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
         visible, the caption object will be created automatically. */
     ScPostIt* pNote = new ScPostIt( rDoc, rPos, aNoteData, bAlwaysCreateCaption );
     pNote->AutoStamp();
-    if ( ! rDoc.SetNote( rPos, pNote ) )
-        DELETEZ( pNote );  // SetNote was apparently not successful
-
+    rDoc.TakeNote( rPos, pNote );
+    // if pNote still points to the note after TakeNote(), insertion was successful
     return pNote;
 }
 
@@ -916,8 +914,8 @@ ScPostIt* ScNoteUtil::CreateNoteFromString(
             visible, the caption object will be created automatically. */
         pNote = new ScPostIt( rDoc, rPos, aNoteData, bAlwaysCreateCaption );
         pNote->AutoStamp();
-        if ( ! rDoc.SetNote( rPos, pNote ) )
-            DELETEZ( pNote );  // SetNote was apparently not successful
+        rDoc.TakeNote( rPos, pNote );
+        // if pNote still points to the note after TakeNote(), insertion was successful
     }
     return pNote;
 }

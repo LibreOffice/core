@@ -387,13 +387,13 @@ short ScTable::CompareCell( sal_uInt16 nSort,
     if (pCell1)
     {
         eType1 = pCell1->GetCellType();
-        if ( CELLTYPE_EMPTY == eType1)
+        if (eType1 == CELLTYPE_NOTE)
             pCell1 = NULL;
     }
     if (pCell2)
     {
         eType2 = pCell2->GetCellType();
-        if ( CELLTYPE_EMPTY == eType2 )
+        if (eType2 == CELLTYPE_NOTE)
             pCell2 = NULL;
     }
 
@@ -1202,7 +1202,7 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                 bMatchWholeCell = false;
             if ( pCell )
             {
-                if (pCell->GetCellType() != CELLTYPE_EMPTY)
+                if (pCell->GetCellType() != CELLTYPE_NOTE)
                 {
                     sal_uLong nFormat = GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
                     ScCellFormat::GetInputString( pCell, nFormat, aCellStr, *(pDocument->GetFormatTable()) );
@@ -1451,9 +1451,8 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                 ScSortInfo** ppInfo = pArray->GetFirstArray();
                 SCSIZE nValidCount = nCount;
                 // keine Note-/Leerzellen zaehlen, sind ans Ende sortiert
-                while (   nValidCount > 0
-                       && (   NULL           == ppInfo[nValidCount-1]->pCell
-                           || CELLTYPE_EMPTY == ppInfo[nValidCount-1]->pCell->GetCellType() ) )
+                while ( nValidCount > 0 && ( ppInfo[nValidCount-1]->pCell == NULL ||
+                                             ppInfo[nValidCount-1]->pCell->GetCellType() == CELLTYPE_NOTE ) )
                     nValidCount--;
                 // keine Strings zaehlen, sind zwischen Value und Leer
                 while ( nValidCount > 0

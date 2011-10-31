@@ -136,7 +136,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
 
                 if( mpUndoDoc && pCell )
                 {
-                    ScBaseCell* pUndoCell = pCell->Clone( *mpUndoDoc );
+                    ScBaseCell* pUndoCell = pCell->CloneWithoutNote( *mpUndoDoc );
                     mpUndoDoc->PutCell( aPos, pUndoCell );
                 }
 
@@ -157,7 +157,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
 
                 if( mpRedoDoc && pCell )
                 {
-                    ScBaseCell* pRedoCell = pCell->Clone( *mpRedoDoc );
+                    ScBaseCell* pRedoCell = pCell->CloneWithoutNote( *mpRedoDoc );
                     mpRedoDoc->PutCell( aPos, pRedoCell );
                 }
 

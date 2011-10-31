@@ -76,12 +76,12 @@ sal_Bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
         CellType eFType, eVType;
         GetCellType(nFCol, nFRow, nFTab, eFType);
         GetCellType(nVCol, nVRow, nVTab, eVType);
-        // CELLTYPE_EMPTY: no value, but referenced by formula
+        // CELLTYPE_NOTE: no value, but referenced by formula
         // #i108005# convert target value to number using default format,
         // as previously done in ScInterpreter::GetDouble
         double nTargetVal = 0.0;
         sal_uInt32 nFIndex = 0;
-        if (CELLTYPE_FORMULA == eFType && (CELLTYPE_VALUE == eVType || CELLTYPE_EMPTY == eVType) &&
+        if (eFType == CELLTYPE_FORMULA && (eVType == CELLTYPE_VALUE || eVType == CELLTYPE_NOTE) &&
             GetFormatTable()->IsNumberFormat(sValStr, nFIndex, nTargetVal))
         {
             ScSingleRefData aRefData;
@@ -172,7 +172,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
             if (*itr == nTab1)
                 maTabs[*itr]->PutCell(nCol1, nRow1, pCell);
             else
-                maTabs[*itr]->PutCell(nCol1, nRow1, pCell->Clone(*this, ScAddress( nCol1, nRow1, *itr), SC_CLONECELL_STARTLISTENING));
+                maTabs[*itr]->PutCell(nCol1, nRow1, pCell->CloneWithoutNote(*this, ScAddress( nCol1, nRow1, *itr), SC_CLONECELL_STARTLISTENING));
         }
     }
 
@@ -308,7 +308,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
                 itr = rMark.begin();
                 for (; itr != itrEnd && *itr < nMax; ++itr)
                 if( maTabs[*itr] )
-                    maTabs[*itr]->PutCell( j, k, aRefCell.Clone( *this, ScAddress( j, k, *itr ), SC_CLONECELL_STARTLISTENING ) );
+                    maTabs[*itr]->PutCell( j, k, aRefCell.CloneWithoutNote( *this, ScAddress( j, k, *itr ), SC_CLONECELL_STARTLISTENING ) );
             }
 }
 
@@ -836,8 +836,8 @@ sal_uInt16 ScDocument::RowDifferences( SCROW nThisRow, SCTAB nThisTab,
                     nDif += 4;      // Inhalt <-> leer zaehlt mehr
             }
 
-            if ( (pThisCell  && pThisCell->GetCellType()  != CELLTYPE_EMPTY) ||
-                 (pOtherCell && pOtherCell->GetCellType() != CELLTYPE_EMPTY) )
+            if ( ( pThisCell  && pThisCell->GetCellType()!=CELLTYPE_NOTE ) ||
+                 ( pOtherCell && pOtherCell->GetCellType()!=CELLTYPE_NOTE ) )
                 ++nUsed;
         }
     }
@@ -877,8 +877,8 @@ sal_uInt16 ScDocument::ColDifferences( SCCOL nThisCol, SCTAB nThisTab,
                     nDif += 4;      // Inhalt <-> leer zaehlt mehr
             }
 
-            if ( (pThisCell  && pThisCell->GetCellType()  != CELLTYPE_EMPTY) ||
-                 (pOtherCell && pOtherCell->GetCellType() != CELLTYPE_EMPTY) )
+            if ( ( pThisCell  && pThisCell->GetCellType()!=CELLTYPE_NOTE ) ||
+                 ( pOtherCell && pOtherCell->GetCellType()!=CELLTYPE_NOTE ) )
                 ++nUsed;
         }
     }

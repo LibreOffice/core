@@ -393,7 +393,7 @@ FltError ExportWK1::Write()
                     WKString( nCol, nRow, ( ScFormulaCell * ) pCell, *pPatAttr );
                 }
                     break;
-                case CELLTYPE_EMPTY:
+                case CELLTYPE_NOTE:
                 case CELLTYPE_NONE:
                     break;
                 default:

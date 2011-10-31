@@ -1276,7 +1276,7 @@ String lcl_GetInputString( ScDocument* pDoc, const ScAddress& rPosition, sal_Boo
     if ( pDoc )
     {
         ScBaseCell* pCell = pDoc->GetCell( rPosition );
-        if ( pCell && pCell->GetCellType() != CELLTYPE_EMPTY )
+        if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE )
         {
             CellType eType = pCell->GetCellType();
             if ( eType == CELLTYPE_FORMULA )
@@ -3446,9 +3446,10 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryEmptyCel
             while (pCell)
             {
                 //  Notizen zaehlen als nicht-leer
-                ScAddress aPos( aIter.GetPos() );
-                if ( !pCell->IsBlank() || pDoc->GetNote( aPos ) )
-                    aMarkData.SetMultiMarkArea( ScRange( aPos ), false );
+                if ( !pCell->IsBlank() )
+                    aMarkData.SetMultiMarkArea(
+                            ScRange( aIter.GetCol(), aIter.GetRow(), aIter.GetTab() ),
+                            false );
 
                 pCell = aIter.GetNext();
             }
@@ -3486,8 +3487,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentC
             while (pCell)
             {
                 sal_Bool bAdd = false;
-                if (   pDoc->GetNote( aIter.GetPos() )
-                    && ( nContentFlags & sheet::CellFlags::ANNOTATION ) )
+                if ( pCell->HasNote() && ( nContentFlags & sheet::CellFlags::ANNOTATION ) )
                     bAdd = sal_True;
                 else
                     switch ( pCell->GetCellType() )
@@ -3639,7 +3639,7 @@ uno::Reference<sheet::XSheetCellRanges> ScCellRangesBase::QueryDifferences_Impl(
         ScBaseCell* pCmpCell = aCmpIter.GetFirst();
         while (pCmpCell)
         {
-            if (pCmpCell->GetCellType() != CELLTYPE_EMPTY)
+            if (pCmpCell->GetCellType() != CELLTYPE_NOTE)
             {
                 SCCOLROW nCellPos = bColumnDiff ? static_cast<SCCOLROW>(aCmpIter.GetCol()) : static_cast<SCCOLROW>(aCmpIter.GetRow());
                 if (bColumnDiff)
@@ -6174,7 +6174,7 @@ String ScCellObj::GetOutputString_Impl(ScDocument* pDoc, const ScAddress& aCellP
     if ( pDoc )
     {
         ScBaseCell* pCell = pDoc->GetCell( aCellPos );
-        if ( pCell && pCell->GetCellType() != CELLTYPE_EMPTY )
+        if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE )
         {
             if ( pCell->GetCellType() == CELLTYPE_EDIT )
             {
@@ -9201,7 +9201,7 @@ void ScCellsEnumeration::CheckPos_Impl()
         sal_Bool bFound = false;
         ScDocument* pDoc = pDocShell->GetDocument();
         ScBaseCell* pCell = pDoc->GetCell(aPos);
-        if ( pCell && pCell->GetCellType() != CELLTYPE_EMPTY )
+        if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE )
         {
             if (!pMark)
             {

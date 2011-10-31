@@ -3397,11 +3397,11 @@ bool ScAnnotationsObj::GetAddressByIndex_Impl( sal_Int32 nIndex, ScAddress& rPos
         ScCellIterator aCellIter( pDoc, 0,0, nTab, MAXCOL,MAXROW, nTab );
         for( ScBaseCell* pCell = aCellIter.GetFirst(); pCell; pCell = aCellIter.GetNext() )
         {
-            if ( pDoc->GetNote( aCellIter.GetPos() ) )
+            if (pCell->HasNote())
             {
                 if (nFound == nIndex)
                 {
-                    rPos = aCellIter.GetPos();
+                    rPos = ScAddress( aCellIter.GetCol(), aCellIter.GetRow(), aCellIter.GetTab() );
                     return true;
                 }
                 ++nFound;
@@ -3476,10 +3476,9 @@ sal_Int32 SAL_CALL ScAnnotationsObj::getCount() throw(uno::RuntimeException)
     sal_uLong nCount = 0;
     if (pDocShell)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScCellIterator aCellIter( pDoc, 0,0, nTab, MAXCOL,MAXROW, nTab );
+        ScCellIterator aCellIter( pDocShell->GetDocument(), 0,0, nTab, MAXCOL,MAXROW, nTab );
         for( ScBaseCell* pCell = aCellIter.GetFirst(); pCell; pCell = aCellIter.GetNext() )
-            if ( pDoc->GetNote( aCellIter.GetPos() ) )
+            if (pCell->HasNote())
                 ++nCount;
     }
     return nCount;

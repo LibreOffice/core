@@ -2451,7 +2451,7 @@ void ScChart2DataSequence::BuildDataCache()
 #endif
                             case CELLTYPE_EDIT:
                             case CELLTYPE_NONE:
-                            case CELLTYPE_EMPTY:
+                            case CELLTYPE_NOTE:
                             case CELLTYPE_STRING:
                             case CELLTYPE_SYMBOLS:
                             default:

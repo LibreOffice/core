@@ -1762,7 +1762,7 @@ void ScInterpreter::ScIsEmpty()
             // ScCountEmptyCells().
             // if (HasCellEmptyData( GetCell( aAdr)))
             CellType eCellType = GetCellType( GetCell( aAdr ) );
-            if ( (CELLTYPE_NONE == eCellType) || (CELLTYPE_EMPTY == eCellType) )
+            if((eCellType == CELLTYPE_NONE) || (eCellType == CELLTYPE_NOTE))
                 nRes = 1;
         }
         break;
@@ -1926,7 +1926,7 @@ void ScInterpreter::ScType()
                 switch ( GetCellType( pCell ) )
                 {
                     // NOTE: this is Xcl nonsense!
-                    case CELLTYPE_EMPTY :
+                    case CELLTYPE_NOTE :
                         nType = 1;      // empty cell is value (0)
                         break;
                     case CELLTYPE_STRING :
@@ -3492,7 +3492,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     if( eFunc == ifCOUNT2 )
                     {
                         CellType eCellType = pCell->GetCellType();
-                        if (eCellType != CELLTYPE_NONE && eCellType != CELLTYPE_EMPTY)
+                        if (eCellType != CELLTYPE_NONE && eCellType != CELLTYPE_NOTE)
                             nCount++;
                         if ( nGlobalError )
                             nGlobalError = 0;
@@ -3555,7 +3555,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                         do
                         {
                             CellType eType = pCell->GetCellType();
-                            if( eType != CELLTYPE_NONE && eType != CELLTYPE_EMPTY )
+                            if( eType != CELLTYPE_NONE && eType != CELLTYPE_NOTE )
                                 nCount++;
                         }
                         while ( (pCell = aIter.GetNext()) != NULL );
@@ -4704,7 +4704,7 @@ void ScInterpreter::ScCountEmptyCells()
                 ScAddress aAdr;
                 PopSingleRef( aAdr );
                 eCellType = GetCellType( GetCell( aAdr ) );
-                if (eCellType != CELLTYPE_NONE && eCellType != CELLTYPE_EMPTY)
+                if (eCellType != CELLTYPE_NONE && eCellType != CELLTYPE_NOTE)
                     nCount = 1;
             }
             break;
@@ -4728,7 +4728,7 @@ void ScInterpreter::ScCountEmptyCells()
                         do
                         {
                             if ((eCellType = pCell->GetCellType()) != CELLTYPE_NONE
-                                    && eCellType != CELLTYPE_EMPTY)
+                                    && eCellType != CELLTYPE_NOTE)
                                 nCount++;
                         } while ( (pCell = aDocIter.GetNext()) != NULL );
                     }
@@ -6170,7 +6170,7 @@ bool ScInterpreter::FillEntry(ScQueryEntry& rEntry)
             }
             else
             {
-                if ( CELLTYPE_EMPTY == GetCellType( pCell ) )
+                if ( GetCellType( pCell ) == CELLTYPE_NOTE )
                 {
                     rEntry.bQueryByString = false;
                     rEntry.nVal = 0.0;

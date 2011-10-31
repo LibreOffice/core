@@ -630,15 +630,9 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 else                            // kopieren
                 {
                     ScAddress aOwnPos( nCol, nRow, nTab );
-                    ScPostIt* pNewNote = pDocument->GetNote(aOwnPos);
-                    if ( pNewNote )
-                        pNewNote = new ScPostIt( *pDestDoc, aDestPos, *pNewNote);
-                    if ( ! pDestDoc->SetNote( aDestPos, pNewNote ) )
-                        DELETEZ( pNewNote ); // if unsuccessful, don't leak mem
-
                     if (pCell->GetCellType() == CELLTYPE_FORMULA)
                     {
-                        pNew = pCell->Clone( *pDestDoc, aDestPos, SC_CLONECELL_STARTLISTENING );
+                        pNew = pCell->CloneWithNote( aOwnPos, *pDestDoc, aDestPos, SC_CLONECELL_STARTLISTENING );
 
                         //  Referenzen drehen
                         //  bei Cut werden Referenzen spaeter per UpdateTranspose angepasst
@@ -648,7 +642,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     }
                     else
                     {
-                        pNew = pCell->Clone( *pDestDoc, aDestPos );
+                        pNew = pCell->CloneWithNote( aOwnPos, *pDestDoc, aDestPos );
                     }
                 }
                 pTransClip->PutCell( static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1), pNew );
@@ -1098,15 +1092,50 @@ void ScTable::GetFormula( SCCOL nCol, SCROW nRow, String& rFormula )
 }
 
 
+ScPostIt* ScTable::GetNote( SCCOL nCol, SCROW nRow )
+{
+    return ValidColRow( nCol, nRow ) ? aCol[ nCol ].GetNote( nRow ) : 0;
+}
+
+
+void ScTable::TakeNote( SCCOL nCol, SCROW nRow, ScPostIt*& rpNote )
+{
+    if( ValidColRow( nCol, nRow ) )
+    {
+        aCol[ nCol ].TakeNote( nRow, rpNote );
+        if( rpNote && rpNote->GetNoteData().mxInitData.get() )
+        {
+            if( !mxUninitNotes.get() )
+                mxUninitNotes.reset( new ScAddress2DVec );
+            mxUninitNotes->push_back( ScAddress2D( nCol, nRow ) );
+        }
+        InvalidateTableArea();
+    }
+    else
+        DELETEZ( rpNote );
+}
+
+
+ScPostIt* ScTable::ReleaseNote( SCCOL nCol, SCROW nRow )
+{
+    return ValidColRow( nCol, nRow ) ? aCol[ nCol ].ReleaseNote( nRow ) : 0;
+}
+
+
+void ScTable::DeleteNote( SCCOL nCol, SCROW nRow )
+{
+    if( ValidColRow( nCol, nRow ) )
+        aCol[ nCol ].DeleteNote( nRow );
+}
+
+
 void ScTable::InitializeNoteCaptions( bool bForced )
 {
     if( mxUninitNotes.get() && (bForced || pDocument->IsUndoEnabled()) )
     {
-        for( ScAddress2DVec::iterator aIt = mxUninitNotes->begin(), aEnd = mxUninitNotes->end(); aIt != aEnd; ++aIt ) {
-            ScAddress aPos( aIt->first, aIt->second, nTab );
-            if( ScPostIt* pNote = pDocument->GetNote( aPos ) )
-                pNote->GetOrCreateCaption( aPos );
-        }
+        for( ScAddress2DVec::iterator aIt = mxUninitNotes->begin(), aEnd = mxUninitNotes->end(); aIt != aEnd; ++aIt )
+            if( ScPostIt* pNote = GetNote( aIt->first, aIt->second ) )
+                pNote->GetOrCreateCaption( ScAddress( aIt->first, aIt->second, nTab ) );
         mxUninitNotes.reset();
     }
 }
@@ -2941,7 +2970,7 @@ void ScTable::CopyData( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW n
             ScBaseCell* pCell = GetCell( nCol, nRow );
             if (pCell)
             {
-                pCell = pCell->Clone( *pDocument );
+                pCell = pCell->CloneWithoutNote( *pDocument );
                 if (pCell->GetCellType() == CELLTYPE_FORMULA)
                 {
                     ((ScFormulaCell*)pCell)->UpdateReference( URM_COPY, aRange,

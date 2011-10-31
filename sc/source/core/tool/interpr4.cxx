@@ -493,7 +493,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCel
             }
             break;
             case CELLTYPE_NONE:
-            case CELLTYPE_EMPTY:
+            case CELLTYPE_NOTE:
                 fValue = 0.0;       // empty or broadcaster cell
             break;
             case CELLTYPE_SYMBOLS:
@@ -2677,7 +2677,7 @@ void ScInterpreter::ScExternal()
     }
     else if ( ( aUnoName = ScGlobal::GetAddInCollection()->FindFunction(aFuncName, false) ).Len()  )
     {
-        //  bLocalFirst=false in FindFunction, cFunc should be the stored
+        //  bLocalFirst=false in FindFunction, cFunc should be the stored 
         //  internal name
 
         ScUnoAddInCall aCall( *ScGlobal::GetAddInCollection(), aUnoName, nParamCount );

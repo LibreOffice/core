@@ -973,7 +973,7 @@ sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet
                         {
                             ScBaseCell* pCell;
                             aDocument.GetCell( nDocCol, nDocRow, nTab, pCell );
-                            if ( pCell && pCell->GetCellType() != CELLTYPE_EMPTY )
+                            if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE )
                             {
                                 if ( pCell->GetCellType() == CELLTYPE_EDIT )
                                 {   // Paragraphs erhalten
@@ -1090,7 +1090,7 @@ sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet
                 {
                     case sdbc::DataType::LONGVARCHAR:
                         {
-                            if ( pCell->GetCellType() != CELLTYPE_EMPTY )
+                            if ( pCell->GetCellType() != CELLTYPE_NOTE )
                             {
                                 if ( pCell->GetCellType() == CELLTYPE_EDIT )
                                     lcl_getLongVarCharEditString( aString,

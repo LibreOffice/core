@@ -1181,7 +1181,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         Color* pColor;
         switch ( pCell->GetCellType() )
         {
-            case CELLTYPE_EMPTY :
+            case CELLTYPE_NOTE :
                 // nothing
             break;
             case CELLTYPE_EDIT :

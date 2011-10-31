@@ -72,20 +72,20 @@ const sal_uInt16 MAXRECURSION = 400;
 
 #ifdef USE_MEMPOOL
 // MemPools auf 4k Boundaries  - 64 Bytes ausrichten
-const sal_uInt16 nMemPoolEmptyCell   = (0x8000 - 64) / sizeof(ScEmptyCell);
-const sal_uInt16 nMemPoolValueCell   = (0x8000 - 64) / sizeof(ScValueCell);
+const sal_uInt16 nMemPoolValueCell = (0x8000 - 64) / sizeof(ScValueCell);
 const sal_uInt16 nMemPoolFormulaCell = (0x8000 - 64) / sizeof(ScFormulaCell);
-const sal_uInt16 nMemPoolStringCell  = (0x4000 - 64) / sizeof(ScStringCell);
-
-IMPL_FIXEDMEMPOOL_NEWDEL( ScEmptyCell,   nMemPoolEmptyCell,   nMemPoolEmptyCell )
-IMPL_FIXEDMEMPOOL_NEWDEL( ScValueCell,   nMemPoolValueCell,   nMemPoolValueCell )
+const sal_uInt16 nMemPoolStringCell = (0x4000 - 64) / sizeof(ScStringCell);
+const sal_uInt16 nMemPoolNoteCell = (0x1000 - 64) / sizeof(ScNoteCell);
+IMPL_FIXEDMEMPOOL_NEWDEL( ScValueCell,   nMemPoolValueCell, nMemPoolValueCell )
 IMPL_FIXEDMEMPOOL_NEWDEL( ScFormulaCell, nMemPoolFormulaCell, nMemPoolFormulaCell )
-IMPL_FIXEDMEMPOOL_NEWDEL( ScStringCell,  nMemPoolStringCell,  nMemPoolStringCell )
+IMPL_FIXEDMEMPOOL_NEWDEL( ScStringCell,  nMemPoolStringCell, nMemPoolStringCell )
+IMPL_FIXEDMEMPOOL_NEWDEL( ScNoteCell,    nMemPoolNoteCell, nMemPoolNoteCell )
 #endif
 
 // ============================================================================
 
 ScBaseCell::ScBaseCell( CellType eNewType ) :
+    mpNote( 0 ),
     mpBroadcaster( 0 ),
     nTextWidth( TEXTWIDTH_DIRTY ),
     eCellType( sal::static_int_cast<sal_uInt8>(eNewType) ),
@@ -94,6 +94,7 @@ ScBaseCell::ScBaseCell( CellType eNewType ) :
 }
 
 ScBaseCell::ScBaseCell( const ScBaseCell& rCell ) :
+    mpNote( 0 ),
     mpBroadcaster( 0 ),
     nTextWidth( rCell.nTextWidth ),
     eCellType( rCell.eCellType ),
@@ -103,6 +104,7 @@ ScBaseCell::ScBaseCell( const ScBaseCell& rCell ) :
 
 ScBaseCell::~ScBaseCell()
 {
+    delete mpNote;
     delete mpBroadcaster;
     OSL_ENSURE( eCellType == CELLTYPE_DESTROYED, "BaseCell Destructor" );
 }
@@ -121,9 +123,9 @@ ScBaseCell* lclCloneCell( const ScBaseCell& rSrcCell, ScDocument& rDestDoc, cons
             return new ScEditCell( static_cast< const ScEditCell& >( rSrcCell ), rDestDoc );
         case CELLTYPE_FORMULA:
             return new ScFormulaCell( static_cast< const ScFormulaCell& >( rSrcCell ), rDestDoc, rDestPos, nCloneFlags );
-        case CELLTYPE_EMPTY:
-            return new ScEmptyCell;
-         default:;
+        case CELLTYPE_NOTE:
+            return new ScNoteCell;
+        default:;
     }
     OSL_FAIL( "lclCloneCell - unknown cell type" );
     return 0;
@@ -225,7 +227,7 @@ void adjustDBRange(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldD
 
 } // namespace
 
-ScBaseCell* ScBaseCell::Clone( ScDocument& rDestDoc, int nCloneFlags ) const
+ScBaseCell* ScBaseCell::CloneWithoutNote( ScDocument& rDestDoc, int nCloneFlags ) const
 {
     // notes will not be cloned -> cell address only needed for formula cells
     ScAddress aDestPos;
@@ -234,14 +236,27 @@ ScBaseCell* ScBaseCell::Clone( ScDocument& rDestDoc, int nCloneFlags ) const
     return lclCloneCell( *this, rDestDoc, aDestPos, nCloneFlags );
 }
 
-ScBaseCell* ScBaseCell::Clone( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags ) const
+ScBaseCell* ScBaseCell::CloneWithoutNote( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags ) const
 {
     return lclCloneCell( *this, rDestDoc, rDestPos, nCloneFlags );
 }
 
+ScBaseCell* ScBaseCell::CloneWithNote( const ScAddress& rOwnPos, ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags ) const
+{
+    ScBaseCell* pNewCell = lclCloneCell( *this, rDestDoc, rDestPos, nCloneFlags );
+    if( mpNote )
+    {
+        if( !pNewCell )
+            pNewCell = new ScNoteCell;
+        bool bCloneCaption = (nCloneFlags & SC_CLONECELL_NOCAPTION) == 0;
+        pNewCell->TakeNote( mpNote->Clone( rOwnPos, rDestDoc, rDestPos, bCloneCaption ) );
+    }
+    return pNewCell;
+}
 
 void ScBaseCell::Delete()
 {
+    DeleteNote();
     switch (eCellType)
     {
         case CELLTYPE_VALUE:
@@ -256,8 +271,8 @@ void ScBaseCell::Delete()
         case CELLTYPE_FORMULA:
             delete (ScFormulaCell*) this;
             break;
-        case CELLTYPE_EMPTY:
-            delete (ScEmptyCell*) this;
+        case CELLTYPE_NOTE:
+            delete (ScNoteCell*) this;
             break;
         default:
             OSL_FAIL("Attempt to Delete() an unknown CELLTYPE");
@@ -265,12 +280,28 @@ void ScBaseCell::Delete()
     }
 }
 
-
-bool ScBaseCell::IsBlank( ) const
+bool ScBaseCell::IsBlank( bool bIgnoreNotes ) const
 {
-    return (CELLTYPE_EMPTY == eCellType);
+    return (eCellType == CELLTYPE_NOTE) && (bIgnoreNotes || !mpNote);
 }
 
+void ScBaseCell::TakeNote( ScPostIt* pNote )
+{
+    delete mpNote;
+    mpNote = pNote;
+}
+
+ScPostIt* ScBaseCell::ReleaseNote()
+{
+    ScPostIt* pNote = mpNote;
+    mpNote = 0;
+    return pNote;
+}
+
+void ScBaseCell::DeleteNote()
+{
+    DELETEZ( mpNote );
+}
 
 void ScBaseCell::TakeBroadcaster( SvtBroadcaster* pBroadcaster )
 {
@@ -487,7 +518,7 @@ bool ScBaseCell::HasEmptyData() const
 {
     switch ( eCellType )
     {
-        case CELLTYPE_EMPTY :
+        case CELLTYPE_NOTE :
             return true;
         case CELLTYPE_FORMULA :
             return ((ScFormulaCell*)this)->IsEmpty();
@@ -550,17 +581,17 @@ bool ScBaseCell::CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 )
     if ( pCell1 )
     {
         eType1 = pCell1->GetCellType();
-        if (CELLTYPE_EDIT == eType1)
+        if (eType1 == CELLTYPE_EDIT)
             eType1 = CELLTYPE_STRING;
-        else if (CELLTYPE_EMPTY == eType1)
+        else if (eType1 == CELLTYPE_NOTE)
             eType1 = CELLTYPE_NONE;
     }
     if ( pCell2 )
     {
         eType2 = pCell2->GetCellType();
-        if (CELLTYPE_EDIT == eType2)
+        if (eType2 == CELLTYPE_EDIT)
             eType2 = CELLTYPE_STRING;
-        else if (CELLTYPE_EMPTY == eType2)
+        else if (eType2 == CELLTYPE_NOTE)
             eType2 = CELLTYPE_NONE;
     }
     if ( eType1 != eType2 )
@@ -623,20 +654,25 @@ bool ScBaseCell::CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 )
 
 // ============================================================================
 
-ScEmptyCell::ScEmptyCell( SvtBroadcaster* pBC ) :
-    ScBaseCell( CELLTYPE_EMPTY )
+ScNoteCell::ScNoteCell( SvtBroadcaster* pBC ) :
+    ScBaseCell( CELLTYPE_NOTE )
 {
     TakeBroadcaster( pBC );
 }
 
+ScNoteCell::ScNoteCell( ScPostIt* pNote, SvtBroadcaster* pBC ) :
+    ScBaseCell( CELLTYPE_NOTE )
+{
+    TakeNote( pNote );
+    TakeBroadcaster( pBC );
+}
 
 #if OSL_DEBUG_LEVEL > 0
-ScEmptyCell::~ScEmptyCell()
+ScNoteCell::~ScNoteCell()
 {
     eCellType = CELLTYPE_DESTROYED;
 }
 #endif
-
 
 // ============================================================================
 

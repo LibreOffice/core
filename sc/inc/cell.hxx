@@ -65,7 +65,7 @@ class ScPatternAttr;
 // ============================================================================
 
 /** Default cell clone flags: do not start listening, do not adjust 3D refs to
-    old position. Note: Notes must be cloned separately, through ScDocument.*/
+    old position, clone note captions of cell notes. */
 const int SC_CLONECELL_DEFAULT          = 0x0000;
 
 /** If set, cloned formula cells will start to listen to the document. */
@@ -92,29 +92,27 @@ public:
     /** Base copy constructor. Does NOT clone cell note or broadcaster! */
                     ScBaseCell( const ScBaseCell& rCell );
 
-    /** Returns a clone of this cell at the same position; cell broadcaster
-        will not be cloned. */
-    ScBaseCell*     Clone( ScDocument& rDestDoc,
-                          int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
+    /** Returns a clone of this cell at the same position, cell note and
+        broadcaster will not be cloned. */
+    ScBaseCell*     CloneWithoutNote( ScDocument& rDestDoc, int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
 
     /** Returns a clone of this cell for the passed document position, cell
-        broadcaster will not be cloned. */
-    ScBaseCell*     Clone( ScDocument& rDestDoc, const ScAddress& rDestPos,
-                          int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
+        note and broadcaster will not be cloned. */
+    ScBaseCell*     CloneWithoutNote( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
+
+    /** Returns a clone of this cell, clones cell note and caption object too
+        (unless SC_CLONECELL_NOCAPTION flag is set). Broadcaster will not be cloned. */
+    ScBaseCell*     CloneWithNote( const ScAddress& rOwnPos, ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
 
     /** Due to the fact that ScBaseCell does not have a vtable, this function
-        deletes the cell by calling the appropriate d'tor of the derived class.
-    */
+        deletes the cell by calling the appropriate d'tor of the derived class. */
     void            Delete();
 
     inline CellType GetCellType() const { return (CellType)eCellType; }
 
-    /** Returns true, if the cell is empty (neither value nor formula).
-        Returns false for formula cells returning nothing; use HasEmptyData()
-          for that.
-        Does *not* check for notes; use ScDocument.GetNote() for that.
-    */
-    bool            IsBlank( ) const;
+    /** Returns true, if the cell is empty (neither value nor formula nor cell note).
+        Returns false for formula cells returning nothing, use HasEmptyData() for that. */
+    bool            IsBlank( bool bIgnoreNotes = false ) const;
 
 // for idle-calculations
     inline sal_uInt16   GetTextWidth() const { return nTextWidth; }
@@ -123,6 +121,18 @@ public:
     inline sal_uInt8     GetScriptType() const { return nScriptType; }
     inline void     SetScriptType( sal_uInt8 nNew ) { nScriptType = nNew; }
 
+    /** Returns true, if the cell contains a note. */
+    inline bool     HasNote() const { return mpNote != 0; }
+    /** Returns the pointer to a cell note object (read-only). */
+    inline const ScPostIt* GetNote() const { return mpNote; }
+    /** Returns the pointer to a cell note object. */
+    inline ScPostIt* GetNote() { return mpNote; }
+    /** Takes ownership of the passed cell note object. */
+    void            TakeNote( ScPostIt* pNote );
+    /** Returns and forgets the own cell note object. Caller takes ownership! */
+    ScPostIt*       ReleaseNote();
+    /** Deletes the own cell note object. */
+    void            DeleteNote();
 
     /** Returns true, if the cell contains a broadcaster. */
     inline bool     HasBroadcaster() const { return mpBroadcaster != 0; }
@@ -146,13 +156,12 @@ public:
 
     /** Error code if ScFormulaCell, else 0. */
     sal_uInt16          GetErrorCode() const;
-
-    /** ScFormulaCell with formula::svEmptyCell result, or ScEmptyCell */
+    /** ScFormulaCell with formula::svEmptyCell result, or ScNoteCell (may have been
+        created due to reference to empty cell). */
     bool            HasEmptyData() const;
     bool            HasValueData() const;
     bool            HasStringData() const;
     String          GetStringData() const;          // only real strings
-
 
     static bool     CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 );
 
@@ -160,6 +169,7 @@ private:
     ScBaseCell&     operator=( const ScBaseCell& );
 
 private:
+    ScPostIt*       mpNote;         /// The cell note. Cell takes ownership!
     SvtBroadcaster* mpBroadcaster;  /// Broadcaster for changed values. Cell takes ownership!
 
 protected:
@@ -170,23 +180,25 @@ protected:
 
 // ============================================================================
 
-
-// Empty cell to take broadcaster
-class SC_DLLPUBLIC ScEmptyCell : public ScBaseCell
+class SC_DLLPUBLIC ScNoteCell : public ScBaseCell
 {
 public:
 #ifdef USE_MEMPOOL
-    DECL_FIXEDMEMPOOL_NEWDEL( ScEmptyCell )
+    DECL_FIXEDMEMPOOL_NEWDEL( ScNoteCell )
 #endif
 
     /** Cell takes ownership of the passed broadcaster. */
-    explicit        ScEmptyCell( SvtBroadcaster* pBC = 0 );
+    explicit        ScNoteCell( SvtBroadcaster* pBC = 0 );
+    /** Cell takes ownership of the passed note and broadcaster. */
+    explicit        ScNoteCell( ScPostIt* pNote, SvtBroadcaster* pBC = 0 );
 
 #if OSL_DEBUG_LEVEL > 0
-                    ~ScEmptyCell();
+                    ~ScNoteCell();
 #endif
-};
 
+private:
+                    ScNoteCell( const ScNoteCell& );
+};
 
 class SC_DLLPUBLIC ScValueCell : public ScBaseCell
 {

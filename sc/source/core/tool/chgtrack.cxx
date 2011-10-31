@@ -1686,7 +1686,7 @@ void ScChangeActionContent::SetValue( String& rStr, ScBaseCell*& pCell,
         pCell->Delete();
     if ( ScChangeActionContent::GetContentCellType( pOrgCell ) )
     {
-        pCell = pOrgCell->Clone( *pToDoc );
+        pCell = pOrgCell->CloneWithoutNote( *pToDoc );
         switch ( pOrgCell->GetCellType() )
         {
             case CELLTYPE_VALUE :
@@ -1846,7 +1846,7 @@ void ScChangeActionContent::PutValueToDoc( ScBaseCell* pCell,
                             // nothing
                         break;
                         default:
-                            pDoc->PutCell( aPos, pCell->Clone( *pDoc ) );
+                            pDoc->PutCell( aPos, pCell->CloneWithoutNote( *pDoc ) );
                     }
             }
         }
@@ -4399,7 +4399,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
         const ScBaseCell* pNewCell = pContent->GetNewCell();
         if ( pNewCell )
         {
-            ScBaseCell* pClonedNewCell = pNewCell->Clone( *pDocument );
+            ScBaseCell* pClonedNewCell = pNewCell->CloneWithoutNote( *pDocument );
             String aNewValue;
             pContent->GetNewString( aNewValue );
             pClonedTrack->nGeneratedMin = pGenerated->GetActionNumber() + 1;
@@ -4483,7 +4483,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
                     const ScChangeActionContent* pContent = dynamic_cast< const ScChangeActionContent* >( pAction );
                     OSL_ENSURE( pContent, "ScChangeTrack::Clone: pContent is null!" );
                     const ScBaseCell* pOldCell = pContent->GetOldCell();
-                    ScBaseCell* pClonedOldCell = pOldCell ? pOldCell->Clone( *pDocument ) : 0;
+                    ScBaseCell* pClonedOldCell = pOldCell ? pOldCell->CloneWithoutNote( *pDocument ) : 0;
                     String aOldValue;
                     pContent->GetOldString( aOldValue );
 
@@ -4502,7 +4502,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
                     const ScBaseCell* pNewCell = pContent->GetNewCell();
                     if ( pNewCell )
                     {
-                        ScBaseCell* pClonedNewCell = pNewCell->Clone( *pDocument );
+                        ScBaseCell* pClonedNewCell = pNewCell->CloneWithoutNote( *pDocument );
                         pClonedContent->SetNewValue( pClonedNewCell, pDocument );
                     }
 

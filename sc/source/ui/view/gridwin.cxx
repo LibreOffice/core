@@ -387,7 +387,7 @@ sal_Bool lcl_GetHyperlinkCell(ScDocument* pDoc, SCCOL& rPosX, SCROW& rPosY, SCTA
     do
     {
         pDoc->GetCell( rPosX, rPosY, nTab, rpCell );
-        if ( !rpCell || CELLTYPE_EMPTY == rpCell->GetCellType() )
+        if ( !rpCell || rpCell->GetCellType() == CELLTYPE_NOTE )
         {
             if ( rPosX <= 0 )
                 return false;                           // alles leer bis links

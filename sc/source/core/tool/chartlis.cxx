@@ -483,7 +483,7 @@ ScChartListenerCollection::~ScChartListenerCollection()
 {
     //  remove ChartListener objects before aTimer dtor is called, because
     //  ScChartListener::EndListeningTo may cause ScChartListenerCollection::StartTimer
-    //  to be called if an empty ScEmptyCell is deleted
+    //  to be called if an empty ScNoteCell is deleted
 
     if (GetCount())
         FreeAll();

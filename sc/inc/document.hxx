@@ -273,7 +273,6 @@ private:
     ::std::auto_ptr<ScExternalRefManager> pExternalRefMgr;
     ::std::auto_ptr<ScMacroManager> mpMacroMgr;
 
-    std::map< const ScAddress, ScPostIt* > pNotes;
 
     // mutable for lazy construction
     mutable ::std::auto_ptr< ScFormulaParserPool >
@@ -803,16 +802,16 @@ public:
     /** Returns true, if there is any data to create a selection list for rPos. */
     sal_Bool            HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 
-    /* Note management API
-    */
-    SC_DLLPUBLIC ScPostIt* GetNote( ScAddress const & );
+    /** Returns the pointer to a cell note object at the passed cell address. */
+    SC_DLLPUBLIC ScPostIt*       GetNote( const ScAddress& rPos );
+    /** Sets the passed note at the cell with the passed cell address. */
+    void            TakeNote( const ScAddress& rPos, ScPostIt*& rpNote );
+    /** Returns and forgets the cell note object at the passed cell address. */
+    ScPostIt*       ReleaseNote( const ScAddress& rPos );
+    /** Returns the pointer to an existing or created cell note object at the passed cell address. */
     SC_DLLPUBLIC ScPostIt* GetOrCreateNote( const ScAddress& rPos );
-    bool                   SetNote( ScAddress const &, ScPostIt* );
-    bool                   MoveNote( ScAddress const & from, ScAddress const & to );
-    bool                   SwapNotes( ScAddress const &, ScAddress const & );
-    ScPostIt*              ReleaseNote( ScAddress const & );
-    void                   DeleteNote( ScAddress const & );
-
+    /** Deletes the note at the passed cell address. */
+    void            DeleteNote( const ScAddress& rPos );
     /** Creates the captions of all uninitialized cell notes in the specified sheet.
         @param bForced  True = always create all captions, false = skip when Undo is disabled. */
     void            InitializeNoteCaptions( SCTAB nTab, bool bForced = false );

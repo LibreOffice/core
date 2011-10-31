@@ -340,6 +340,14 @@ public:
     void        GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const;
     void        GetLastDataPos(SCCOL& rCol, SCROW& rRow) const;
 
+    /** Returns the pointer to a cell note object at the passed cell address. */
+    ScPostIt*   GetNote( SCCOL nCol, SCROW nRow );
+    /** Sets the passed cell note object at the passed cell address. Takes ownership! */
+    void        TakeNote( SCCOL nCol, SCROW nRow, ScPostIt*& rpNote );
+    /** Returns and forgets the cell note object at the passed cell address. */
+    ScPostIt*   ReleaseNote( SCCOL nCol, SCROW nRow );
+    /** Deletes the note at the passed cell address. */
+    void        DeleteNote( SCCOL nCol, SCROW nRow );
     /** Creates the captions of all uninitialized cell notes.
         @param bForced  True = always create all captions, false = skip when Undo is disabled. */
     void        InitializeNoteCaptions( bool bForced = false );

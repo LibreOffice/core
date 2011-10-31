@@ -2329,7 +2329,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
                 OSL_FAIL( "XclExpCellTable::XclExpCellTable - unknown cell type" );
                 // run-through!
             case CELLTYPE_NONE:
-            case CELLTYPE_EMPTY:
+            case CELLTYPE_NOTE:
             {
                 xCell.reset( new XclExpBlankCell(
                     GetRoot(), aXclPos, nLastXclCol, pPattern, nMergeBaseXFId ) );
@@ -2342,7 +2342,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
             maRowBfr.AppendCell( xCell, bIsMergedBase );
 
         // notes
-        const ScPostIt* pScNote = rDoc.GetNote(aScPos);
+        const ScPostIt* pScNote = pScCell ? pScCell->GetNote() : 0;
         if( pScNote || (aAddNoteText.Len() > 0) )
             mxNoteList->AppendNewRecord( new XclExpNote( GetRoot(), aScPos, pScNote, aAddNoteText ) );
 

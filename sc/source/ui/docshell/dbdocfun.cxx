@@ -1178,10 +1178,9 @@ sal_Bool lcl_EmptyExcept( ScDocument* pDoc, const ScRange& rRange, const ScRange
     ScBaseCell* pCell = aIter.GetFirst();
     while (pCell)
     {
-        ScAddress aPos( aIter.GetPos() );
-        if ( !pCell->IsBlank() || pDoc->GetNote( aPos ) ) // real content?
+        if ( !pCell->IsBlank() )      // real content?
         {
-            if ( !rExcept.In( aPos ) )
+            if ( !rExcept.In( ScAddress( aIter.GetCol(), aIter.GetRow(), aIter.GetTab() ) ) )
                 return false;       // cell found
         }
         pCell = aIter.GetNext();

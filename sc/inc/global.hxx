@@ -273,7 +273,7 @@ enum CellType
         CELLTYPE_VALUE,
         CELLTYPE_STRING,
         CELLTYPE_FORMULA,
-        CELLTYPE_EMPTY,
+        CELLTYPE_NOTE,
         CELLTYPE_EDIT,
         CELLTYPE_SYMBOLS        // for load/save
 #if OSL_DEBUG_LEVEL > 0

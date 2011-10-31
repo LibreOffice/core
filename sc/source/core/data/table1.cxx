@@ -1239,7 +1239,7 @@ bool ScTable::GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMa
                 ScBaseCell* pCell = NULL;
                 while ( aColIter.Next( nCellRow, pCell ) )
                 {
-                    if ( pCell && pCell->GetCellType() != CELLTYPE_EMPTY )
+                    if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE )
                     {
                         rRow = nCellRow;
                         return true;            // Zelle gefunden
@@ -1655,7 +1655,7 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
     while (nMissing > 0 && nNewCol < MAXCOL)
     {
         ScBaseCell* pNextCell = aCol[nNewCol+1].GetCell(nRow);
-        if (pNextCell && pNextCell->GetCellType() != CELLTYPE_EMPTY)
+        if (pNextCell && pNextCell->GetCellType() != CELLTYPE_NOTE)
             // Cell content in a next column ends display of this string.
             nMissing = 0;
         else

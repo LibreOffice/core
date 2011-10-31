@@ -479,8 +479,6 @@ private:
     ScHorizontalCellIterator    aCellIter;
     ScHorizontalAttrIterator    aAttrIter;
 
-    ScDocument *            pDoc;
-    const SCTAB             nTable;
     SCCOL                   nNextCol;
     SCROW                   nNextRow;
 

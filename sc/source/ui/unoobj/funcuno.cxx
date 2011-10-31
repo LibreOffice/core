@@ -193,7 +193,7 @@ sal_Bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
     {
         if (pCell->GetCellType() == CELLTYPE_FORMULA)
         {
-            ScAddress aCellPos( aIter.GetPos() );
+            ScAddress aCellPos = aIter.GetPos();
             sal_uInt32 nFormat = pClipDoc->GetNumberFormat(aCellPos);
             if ( (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
             {

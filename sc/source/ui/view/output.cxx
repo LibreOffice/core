@@ -2096,7 +2096,6 @@ void ScOutputData::DrawNoteMarks()
             {
                 CellInfo* pInfo = &pThisRowInfo->pCellInfo[nX+1];
                 ScBaseCell* pCell = pInfo->pCell;
-                ScAddress aPos( nX, pThisRowInfo->nRowNo, nTab );
                 sal_Bool bIsMerged = false;
 
                 if ( nX==nX1 && pInfo->bHOverlapped && !pInfo->bVOverlapped )
@@ -2107,17 +2106,12 @@ void ScOutputData::DrawNoteMarks()
                     SCCOL nMergeX = nX;
                     SCROW nMergeY = nY;
                     pDoc->ExtendOverlapped( nMergeX, nMergeY, nX, nY, nTab );
-                    aPos.SetCol( nMergeX );
-                    aPos.SetRow( nMergeY );
-                    pCell = pDoc->GetCell( aPos );
+                    pCell = pDoc->GetCell( ScAddress(nMergeX,nMergeY,nTab) );
                     // use origin's pCell for NotePtr test below
                 }
 
-                if (   pCell
-                    && pDoc->GetNote( aPos )
-                    && (   bIsMerged
-                        || ( !pInfo->bHOverlapped && !pInfo->bVOverlapped ) )
-                   )
+                if ( pCell && pCell->HasNote() && ( bIsMerged ||
+                        ( !pInfo->bHOverlapped && !pInfo->bVOverlapped ) ) )
                 {
                     if (bFirst)
                     {
@@ -2184,24 +2178,18 @@ void ScOutputData::AddPDFNotes()
                 SCROW nY = pRowInfo[nArrY].nRowNo;
                 SCCOL nMergeX = nX;
                 SCROW nMergeY = nY;
-                ScAddress aPos( nX, nY, nTab );
 
                 if ( nX==nX1 && pInfo->bHOverlapped && !pInfo->bVOverlapped )
                 {
                     // find start of merged cell
                     bIsMerged = sal_True;
                     pDoc->ExtendOverlapped( nMergeX, nMergeY, nX, nY, nTab );
-                    aPos.SetCol( nMergeX );
-                    aPos.SetRow( nMergeY );
-                    pCell = pDoc->GetCell( aPos );
+                    pCell = pDoc->GetCell( ScAddress(nMergeX,nMergeY,nTab) );
                     // use origin's pCell for NotePtr test below
                 }
 
-                const ScPostIt* pNote = pDoc->GetNote( aPos );
-                if (    pCell && pNote
-                     && ( bIsMerged
-                         || ( !pInfo->bHOverlapped && !pInfo->bVOverlapped ) )
-                   )
+                if ( pCell && pCell->HasNote() && ( bIsMerged ||
+                        ( !pInfo->bHOverlapped && !pInfo->bVOverlapped ) ) )
                 {
                     long nNoteWidth = (long)( SC_CLIPMARK_SIZE * nPPTX );
                     long nNoteHeight = (long)( SC_CLIPMARK_SIZE * nPPTY );
@@ -2220,10 +2208,11 @@ void ScOutputData::AddPDFNotes()
                     if ( bLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < nScrX+nScrW ) )
                     {
                         Rectangle aNoteRect( nMarkX, nPosY, nMarkX+nNoteWidth*nLayoutSign, nPosY+nNoteHeight );
+                        const ScPostIt* pNote = pCell->GetNote();
 
                         // Note title is the cell address (as on printed note pages)
                         String aTitle;
-                        ScAddress aAddress( aPos );
+                        ScAddress aAddress( nMergeX, nMergeY, nTab );
                         aAddress.Format( aTitle, SCA_VALID, pDoc, pDoc->GetAddressConvention() );
 
                         // Content has to be a simple string without line breaks
