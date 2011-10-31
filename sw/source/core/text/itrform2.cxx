@@ -738,6 +738,9 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
     // 3260, 3860: Fly auf jeden Fall loeschen!
     ClearFly( rInf );
+
+    // Reinit the tab overflow flag after the line
+    rInf.SetTabOverflow( sal_False );
 }
 
 /*************************************************************************

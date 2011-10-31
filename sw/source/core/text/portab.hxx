@@ -38,17 +38,19 @@ class SwTabPortion : public SwFixPortion
 {
     const KSHORT nTabPos;
     const xub_Unicode cFill;
+    const bool bAutoTabStop;
 
     // Das Format() verzweigt entweder in Pre- oder PostFormat()
     sal_Bool PreFormat( SwTxtFormatInfo &rInf );
 public:
-    SwTabPortion( const KSHORT nTabPos, const xub_Unicode cFill = '\0' );
+    SwTabPortion( const KSHORT nTabPos, const xub_Unicode cFill = '\0', const bool bAutoTab = true );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     virtual void FormatEOL( SwTxtFormatInfo &rInf );
     sal_Bool PostFormat( SwTxtFormatInfo &rInf );
     inline  sal_Bool IsFilled() const { return 0 != cFill; }
     inline  KSHORT GetTabPos() const { return nTabPos; }
+    inline  sal_Bool IsAutoTabStop() const { return bAutoTabStop; }
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const;
@@ -63,8 +65,8 @@ public:
 class SwTabLeftPortion : public SwTabPortion
 {
 public:
-    inline SwTabLeftPortion( const KSHORT nTabPosVal, const xub_Unicode cFillChar='\0' )
-         : SwTabPortion( nTabPosVal, cFillChar )
+    inline SwTabLeftPortion( const KSHORT nTabPosVal, const xub_Unicode cFillChar='\0', bool bAutoTab = true )
+         : SwTabPortion( nTabPosVal, cFillChar, bAutoTab )
     { SetWhichPor( POR_TABLEFT ); }
     OUTPUT_OPERATOR
 };

@@ -1191,6 +1191,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     aSet.insert(String("PrinterIndependentLayout", RTL_TEXTENCODING_ASCII_US));
     aSet.insert(String("PrintEmptyPages", RTL_TEXTENCODING_ASCII_US));
     aSet.insert(String("SmallCapsPercentage66", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("TabOverflow", RTL_TEXTENCODING_ASCII_US));
 
     sal_Int32 nCount = aConfigProps.getLength();
     const PropertyValue* pValues = aConfigProps.getConstArray();
@@ -1220,6 +1221,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bUnixForceZeroExtLeading = false;
     bool bUseOldPrinterMetrics = false;
     bool bSmallCapsPercentage66 = false;
+    bool bTabOverflow = false;
 
     OUString sRedlineProtectionKey( RTL_CONSTASCII_USTRINGPARAM( "RedlineProtectionKey" ) );
 
@@ -1289,6 +1291,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     bUseOldPrinterMetrics = true;
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SmallCapsPercentage66")) )
                     bSmallCapsPercentage66 = true;
+                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TabOverflow")) )
+                    bTabOverflow = true;
             }
             catch( Exception& )
             {
@@ -1440,6 +1444,12 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("SmallCapsPercentage66") ), makeAny( true ) );
+    }
+
+    if ( !bTabOverflow )
+    {
+        xProps->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("TabOverflow") ), makeAny( false ) );
     }
 
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );

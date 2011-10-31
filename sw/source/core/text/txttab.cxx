@@ -94,6 +94,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
     SvxTabAdjust eAdj;
 
     KSHORT nNewTabPos;
+    bool bAutoTabStop = true;
     {
         const bool bRTL = pFrm->IsRightToLeft();
         // #i24363# tab stops relative to indent
@@ -177,6 +178,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
                 //calculate default tab position of default tabs in negative indent
                 nNextPos = ( nSearchPos / nNextPos ) * nNextPos;
             }
+            bAutoTabStop = false;
         }
         else
         {
@@ -312,7 +314,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             {
                    OSL_ENSURE( SVX_TAB_ADJUST_LEFT == eAdj || SVX_TAB_ADJUST_DEFAULT == eAdj,
                         "+SwTxtFormatter::NewTabPortion: unknown adjustment" );
-                pTabPor = new SwTabLeftPortion( nNewTabPos, cFill );
+                pTabPor = new SwTabLeftPortion( nNewTabPos, cFill, bAutoTabStop );
                 break;
             }
         }
@@ -333,8 +335,8 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
 // Die Basisklasse wird erstmal ohne alles initialisiert.
 
 
-SwTabPortion::SwTabPortion( const KSHORT nTabPosition, const xub_Unicode cFillChar )
-    : SwFixPortion( 0, 0 ), nTabPos(nTabPosition), cFill(cFillChar)
+SwTabPortion::SwTabPortion( const KSHORT nTabPosition, const xub_Unicode cFillChar, const bool bAutoTab )
+    : SwFixPortion( 0, 0 ), nTabPos(nTabPosition), cFill(cFillChar), bAutoTabStop( bAutoTab )
 {
     nLineLength = 1;
 #if OSL_DEBUG_LEVEL > 1
@@ -388,6 +390,7 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
     Fix( static_cast<sal_uInt16>(rInf.X()) );
 
     const bool bTabCompat = rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT);
+    const bool bTabOverflow = rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_OVERFLOW);
 
     // Die Mindestbreite eines Tabs ist immer mindestens ein Blank
     // #i37686# In compatibility mode, the minimum width
@@ -419,7 +422,7 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
     // 1. Minmal width does not fit to line anymore.
     // 2. An underflow event was called for the tab portion.
     sal_Bool bFull = ( bTabCompat && rInf.IsUnderFlow() ) ||
-                       rInf.Width() <= rInf.X() + PrtWidth();
+                     ( rInf.Width() <= rInf.X() + PrtWidth() && rInf.X() <= rInf.Width() ) ;
 
     // #95477# Rotated tab stops get the width of one blank
     const sal_uInt16 nDir = rInf.GetFont()->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
@@ -447,10 +450,15 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
                 // In tabulator compatibility mode, we reset the bFull flag
                 // if the tabulator is at the end of the paragraph and the
                 // tab stop position is outside the frame:
+                bool bAtParaEnd = rInf.GetIdx() + GetLen() == rInf.GetTxt().Len();
                 if ( bFull && bTabCompat &&
-                     rInf.GetIdx() + GetLen() == rInf.GetTxt().Len() &&
+                     ( bTabOverflow && ( rInf.IsTabOverflow() || !IsAutoTabStop() ) || bAtParaEnd ) &&
                      GetTabPos() >= rInf.GetTxtFrm()->Frm().Width() )
+                {
                     bFull = sal_False;
+                    if ( bTabOverflow && !IsAutoTabStop() )
+                        rInf.SetTabOverflow( sal_True );
+                }
 
                 break;
             }

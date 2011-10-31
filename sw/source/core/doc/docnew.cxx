@@ -357,6 +357,7 @@ SwDoc::SwDoc()
     mbInvertBorderSpacing                   = false;        // hidden
     mbCollapseEmptyCellPara                 = true;        // hidden
     mbSmallCapsPercentage66                 = false;        // hidden
+    mbTabOverflow                           = true;
 
     //
     // COMPATIBILITY FLAGS END

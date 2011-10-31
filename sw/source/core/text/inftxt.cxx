@@ -1459,7 +1459,7 @@ void SwTxtFormatInfo::Init()
     // Nicht initialisieren: pRest, nLeft, nRight, nFirst, nRealWidth
     X(0);
     bArrowDone = bFull = bFtnDone = bErgoDone = bNumDone = bNoEndHyph =
-        bNoMidHyph = bStop = bNewLine = bUnderFlow = sal_False;
+        bNoMidHyph = bStop = bNewLine = bUnderFlow = bTabOverflow = sal_False;
 
     // generally we do not allow number portions in follows, except...
     if ( GetTxtFrm()->IsFollow() )
@@ -1501,7 +1501,8 @@ void SwTxtFormatInfo::Init()
  * --------------------------------------------------*/
 
 SwTxtFormatInfo::SwTxtFormatInfo( const SwTxtFormatInfo& rInf,
-    SwLineLayout& rLay, SwTwips nActWidth ) : SwTxtPaintInfo( rInf )
+    SwLineLayout& rLay, SwTwips nActWidth ) : SwTxtPaintInfo( rInf ),
+    bTabOverflow( sal_False )
 {
     pRoot = &rLay;
     pLast = &rLay;
