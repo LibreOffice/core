@@ -103,67 +103,6 @@ End
 
 #endif
 
-ProfileItem gid_Profileitem_Soffice_Logo
-    ProfileID = gid_Profile_Soffice_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 1;
-    Key = "Logo";
-    Value = "1";
-End
-
-ProfileItem gid_Profileitem_Soffice_ProgressBarColor
-    ProfileID = gid_Profile_Soffice_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 2;
-    Key = "ProgressBarColor";
-    Value = "0,0,128";
-End
-
-ProfileItem gid_Profileitem_Soffice_ProgressSize
-    ProfileID = gid_Profile_Soffice_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 3;
-    Key = "ProgressSize";
-    Value = "-1,6";
-End
-
-ProfileItem gid_Profileitem_Soffice_ProgressPosition
-    ProfileID = gid_Profile_Soffice_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 4;
-    Key = "ProgressPosition";
-    Value = "-1,-1";
-End
-
-ProfileItem gid_Profileitem_Soffice_NativeProgress
-    ProfileID = gid_Profile_Soffice_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 6;
-    Key = "NativeProgress";
-    Value = "true";
-End
-
-#ifdef WNT
-
-ProfileItem gid_Profileitem_Soffice_Hideeula
-    ProfileID = gid_Profile_Soffice_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 8;
-    Key = "HideEula";
-    Value = "[HIDEEULA]";
-    Inifiletablekey = "HideEula";
-    Inifiletableaction = "1";
-    Styles = (INIFILETABLE);
-End
-
-#endif
-
 ProfileItem gid_Profileitem_Uno_Uno_Bundled_Extensions
     ProfileID = gid_Profile_Uno_Ini;
     ModuleID = gid_Module_Root;
