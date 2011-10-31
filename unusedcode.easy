@@ -84,7 +84,6 @@ CommunicationLinkList::Insert(CommunicationLink const**, unsigned short)
 CommunicationLinkList::Insert(CommunicationLinkList const*, unsigned short, unsigned short)
 CommunicationLinkList::Remove(CommunicationLink const*&, unsigned short)
 Control::GetLineCount() const
-ControlItem::ControlItem(ControlData*)
 CurrencyBox::CurrencyBox(Window*, ResId const&)
 CurrencyBox::GetValue(unsigned short) const
 CurrencyBox::GetValuePos(long) const
