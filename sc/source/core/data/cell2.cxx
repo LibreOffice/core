@@ -61,7 +61,7 @@ using namespace formula;
 // STATIC DATA -----------------------------------------------------------
 
 #ifdef USE_MEMPOOL
-const sal_uInt16 nMemPoolEditCell = (0x1000 - 64) / sizeof(ScNoteCell);
+const sal_uInt16 nMemPoolEditCell = (0x1000 - 64) / sizeof(ScEmptyCell);
 IMPL_FIXEDMEMPOOL_NEWDEL( ScEditCell, nMemPoolEditCell, nMemPoolEditCell )
 #endif
 

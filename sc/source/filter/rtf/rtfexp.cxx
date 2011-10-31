@@ -195,7 +195,7 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
     {
         switch ( pCell->GetCellType() )
         {
-            case CELLTYPE_NOTE :
+            case CELLTYPE_EMPTY :
                 bValueData = false;
             break;      // nix
             case CELLTYPE_EDIT :

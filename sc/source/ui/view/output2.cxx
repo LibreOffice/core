@@ -1088,7 +1088,7 @@ sal_Bool ScOutputData::IsAvailable( SCCOL nX, SCROW nY )
     //  where a note is empty as well as a cell that's hidden by protection settings
 
     const ScBaseCell* pCell = pDoc->GetCell( ScAddress( nX, nY, nTab ) );
-    if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE && !IsEmptyCellText( NULL, nX, nY ) )
+    if ( pCell && pCell->GetCellType() != CELLTYPE_EMPTY && !IsEmptyCellText( NULL, nX, nY ) )
     {
         return false;
     }

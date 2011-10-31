@@ -1160,7 +1160,7 @@ ScBaseCell* ScQueryCellIterator::GetThis()
                 (nRow = pCol->pItems[nColRow].nRow) <= aParam.nRow2 )
         {
             ScBaseCell* pCell = pCol->pItems[nColRow].pCell;
-            if ( pCell->GetCellType() == CELLTYPE_NOTE )
+            if ( pCell->GetCellType() == CELLTYPE_EMPTY )
                 ++nRow;
             else if (bAllStringIgnore && pCell->HasStringData())
                 ++nRow;
@@ -1472,7 +1472,7 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
     {
         SCSIZE nMid = (nLo+nHi)/2;
         SCSIZE i = nMid;
-        while (i <= nHi && pItems[i].pCell->GetCellType() == CELLTYPE_NOTE)
+        while (i <= nHi && pItems[i].pCell->GetCellType() == CELLTYPE_EMPTY)
             ++i;
         if (i > nHi)
         {
@@ -1920,10 +1920,12 @@ inline sal_Bool IsGreater( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
     return ( nRow1 > nRow2 ) || ( nRow1 == nRow2 && nCol1 > nCol2 );
 }
 
-ScUsedAreaIterator::ScUsedAreaIterator( ScDocument* pDocument, SCTAB nTable,
+ScUsedAreaIterator::ScUsedAreaIterator( ScDocument* pDocument, SCTAB nTab,
                             SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) :
-    aCellIter( pDocument, nTable, nCol1, nRow1, nCol2, nRow2 ),
-    aAttrIter( pDocument, nTable, nCol1, nRow1, nCol2, nRow2 ),
+    aCellIter( pDocument, nTab, nCol1, nRow1, nCol2, nRow2 ),
+    aAttrIter( pDocument, nTab, nCol1, nRow1, nCol2, nRow2 ),
+    pDoc( pDocument ),
+    nTable( nTab ),
     nNextCol( nCol1 ),
     nNextRow( nRow1 )
 {
@@ -1942,7 +1944,11 @@ sal_Bool ScUsedAreaIterator::GetNext()
     if ( pCell && IsGreater( nNextCol, nNextRow, nCellCol, nCellRow ) )
         pCell = aCellIter.GetNext( nCellCol, nCellRow );
 
-    while ( pCell && pCell->IsBlank() )
+    while (   pCell
+           && (   pCell->IsBlank()
+               && (0 == pDoc->GetNote( ScAddress(nCellCol, nCellRow, nTable)))
+              )
+          )
         pCell = aCellIter.GetNext( nCellCol, nCellRow );
 
     if ( pPattern && IsGreater( nNextCol, nNextRow, nAttrCol2, nAttrRow ) )

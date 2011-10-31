@@ -761,7 +761,7 @@ bool lcl_IsEmptyOrNote( ScDocument* pDoc, const table::CellAddress& rCurrentPos 
     ScAddress aScAddress;
     ScUnoConversion::FillScAddress( aScAddress, rCurrentPos );
     ScBaseCell* pCell = pDoc->GetCell( aScAddress );
-    return ( !pCell || pCell->GetCellType() == CELLTYPE_NOTE );
+    return ( !pCell || CELLTYPE_EMPTY == pCell->GetCellType() );
 }
 
 void ScXMLTableRowCellContext::EndElement()

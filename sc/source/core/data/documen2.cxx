@@ -124,7 +124,6 @@ private:
 };
 
 // STATIC DATA -----------------------------------------------------------
-
 ScDocument::ScDocument( ScDocumentMode  eMode,
                         SfxObjectShell* pDocShell ) :
         xServiceManager( ::comphelper::getProcessServiceFactory() ),

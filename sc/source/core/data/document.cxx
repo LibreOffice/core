@@ -1895,8 +1895,9 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
         i = nTab;
         nEndTab = nTab;
     }
-    else
+    else {
         pClipDoc->ResetClip(this, pMarks);
+    }
 
     if ( bUseRangeForVBA )
         CopyRangeNamesToClip(pClipDoc, aClipRange, nTab );
@@ -3261,45 +3262,192 @@ sal_Bool ScDocument::HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) cons
 }
 
 
-ScPostIt* ScDocument::GetNote( const ScAddress& rPos )
+/** ScPostIt* ScDocument::GetNote( ScAddress const & aPos )
+
+Returns the ScPostIt object pointer associated with the document address aPos.
+If the specific cell does not have a note, returns the NULL pointer.
+
+Notes:
+
+- If an ScPostIt* exists for the specified address, but the cell is no
+  longer addressable (e.g. if the sheet was deleted, but the note was not
+  properly removed), this function will remove the note before returning NULL.
+*/
+ScPostIt* ScDocument::GetNote( ScAddress const & aPos )
 {
-    ScTable* pTable = ValidTab( rPos.Tab() ) && rPos.Tab() < static_cast<SCTAB>(maTabs.size()) ? maTabs[ rPos.Tab() ] : 0;
-    return pTable ? pTable->GetNote( rPos.Col(), rPos.Row() ) : 0;
+    std::map< const ScAddress, ScPostIt* >::iterator it;
+    it = pNotes.find( aPos );
+
+    if ( pNotes.end() == it )
+       return( 0 );
+
+    if (! ( ValidTab( aPos.Tab() )
+         && aPos.Tab() < static_cast<SCTAB>(maTabs.size()) )
+       )
+    {
+        DELETEZ( it->second );
+        pNotes.erase(it);
+        return( 0 );
+    }
+
+    return( it->second );
 }
 
 
-void ScDocument::TakeNote( const ScAddress& rPos, ScPostIt*& rpNote )
+/** bool ScDocument::SetNote( ScAddress const & aPos, ScPostIt* pNote )
+
+Set the ScPostIt for the cell at aPos to pNote.
+
+Returns true on success, or false if unable to set pNote for aPos.
+
+Notes:
+- If a note already exists at 'aPos', it will first be deleted, before putting
+  pNote as the new ScPostIt for 'aPos'.
+*/
+bool ScDocument::SetNote( ScAddress const & aPos, ScPostIt* pNote )
 {
-    if( ValidTab( rPos.Tab() ) && rPos.Tab() < static_cast<SCTAB>(maTabs.size()) && maTabs[ rPos.Tab() ] )
-        maTabs[ rPos.Tab() ]->TakeNote( rPos.Col(), rPos.Row(), rpNote );
+    std::map< const ScAddress, ScPostIt* >::iterator it;
+    it = pNotes.find( aPos );
+
+    if ( pNotes.end() != it ) {
+        // if the note is the same as what's already there, do nothing ...
+        if ( it->second == pNote )
+            return true;
+
+        // ... otherwise, remove old note, before ...
+        DELETEZ( it->second );
+        pNotes.erase( it );
+    }
+
+    if ( ! ( ValidTab( aPos.Tab() )
+         && aPos.Tab() < static_cast<SCTAB>(maTabs.size()) )
+       )
+        return false;
+
+    if ( pNote ) // no sense adding an empty pointer
+        pNotes[ aPos ] = pNote;
+
+    return true;
+}
+
+
+/** ScPostIt* ScDocument::ReleaseNote( ScAddress const & aPos )
+
+Returns a pointer to the ScPostIt assigned to the document position aPos,
+removing it from cell address aPos.
+
+Notes:
+- When this function completes, the document will have no ScPostIt*
+  assigned to aPos.  Thus, the caller must dispose of, or otherwise deal with,
+  the returned *ScPostIt object.
+*/
+ScPostIt* ScDocument::ReleaseNote( ScAddress const & aPos )
+{
+    ScPostIt* pNote = 0;
+    std::map< const ScAddress, ScPostIt* >::iterator it;
+
+    it = pNotes.find( aPos );
+
+    if ( pNotes.end() != it )
+    {
+        pNote = it->second;
+        pNotes.erase( it );
+    }
+
+    return( pNote );
+}
+
+
+/** void ScDocument::DeleteNote( ScAddress const & aPos )
+
+Removes the ScPostIt object, if any, assigned to the document address aPos.
+*/
+void ScDocument::DeleteNote( ScAddress const & aPos )
+{
+    ScPostIt* pNote = ReleaseNote( aPos );
+    DELETEZ( pNote );
+}
+
+
+/** bool ScDocument::MoveNote( ScAddress const & aFrom, ScAddress const & aTo )
+
+Moves the ScPostIt object associated with aFrom to aTo.
+
+Returns true on success, false on failure.
+
+Notes:
+- Any ScPostIt object that exists at aTo is properly removed before insertion.
+- Not transactional.  If the function fails, there is no guarantee that any
+  ScPostIt at aTo or aFrom will still exist, although they will be properly
+  cleaned up if they don't.
+*/
+bool ScDocument::MoveNote( ScAddress const & aFrom, ScAddress const & aTo )
+{
+    ScPostIt* pFromNote = ReleaseNote( aFrom );
+    if ( SetNote( aTo, pFromNote ) )
+        return true;
+
+    // Doh!  An error occurred.  Attempt to not lose note, or at least
+    // don't leak the memory
+    if ( ! SetNote( aFrom, pFromNote ) )
+        DELETEZ( pFromNote );
+
+    return false;
+}
+
+
+/** bool ScDocument::SwapNotes( ScAddress const & aOne, ScAddress const & aTwo )
+
+Swap the notes assigned to positions aOne and aTwo.
+
+Returns true on success, false on failure.
+
+Notes:
+- Not transactional.  If a failure occurs, the ScPostIt objects at aOne or aTwo
+  may (not) be set.  Any ScPostIt that is not set, however, will be properly
+  cleaned up.
+*/
+bool ScDocument::SwapNotes( ScAddress const & aOne, ScAddress const & aTwo )
+{
+    ScPostIt* pNoteA = ReleaseNote( aOne );
+    ScPostIt* pNoteB = ReleaseNote( aTwo );
+
+    if ( ! SetNote( aTwo, pNoteA ) ) {
+        DELETEZ( pNoteA );
+        if ( ! SetNote( aOne, pNoteB ) )
+            DELETEZ( pNoteB );
+        return false;
+    }
     else
-        DELETEZ( rpNote );
+    {
+        if ( ! SetNote( aOne, pNoteB ) ) {
+            DELETEZ( pNoteB );
+            return false;
+        }
+    }
+
+    return true;
 }
 
 
-ScPostIt* ScDocument::ReleaseNote( const ScAddress& rPos )
-{
-    ScTable* pTable = ValidTab( rPos.Tab() ) && rPos.Tab() < static_cast<SCTAB>(maTabs.size())? maTabs[ rPos.Tab() ] : 0;
-    return pTable ? pTable->ReleaseNote( rPos.Col(), rPos.Row() ) : 0;
-}
+/** ScPostIt* ScDocument::GetOrCreateNote( const ScAddress& rPos )
 
+Returns the pointer to the ScPostIt at rPos.
 
+If no ScPostIt exists at rPos, create a new one for rPos and return pointer
+ to newly created ScPostIt.
+*/
 ScPostIt* ScDocument::GetOrCreateNote( const ScAddress& rPos )
 {
     ScPostIt* pNote = GetNote( rPos );
     if( !pNote )
     {
         pNote = new ScPostIt( *this, rPos, false );
-        TakeNote( rPos, pNote );
+        if ( ! SetNote( rPos, pNote ) )
+            DELETEZ( pNote ); //apparently unsuccessful; don't leak memory
     }
+
     return pNote;
-}
-
-
-void ScDocument::DeleteNote( const ScAddress& rPos )
-{
-    if( ValidTab( rPos.Tab() ) && rPos.Tab() < static_cast<SCTAB>(maTabs.size()) && maTabs[ rPos.Tab() ] )
-        maTabs[ rPos.Tab() ]->DeleteNote( rPos.Col(), rPos.Row() );
 }
 
 

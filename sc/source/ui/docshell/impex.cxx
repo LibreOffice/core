@@ -1362,7 +1362,7 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
     const sal_Unicode cBlank = ' ';
     if (!ScGlobal::UnicodeStrChr( pSeps, cBlank))
     {
-        // Cope with broken generators that put leading blanks before a quoted 
+        // Cope with broken generators that put leading blanks before a quoted
         // field, like "field1", "field2", "..."
         // NOTE: this is not in conformance with http://tools.ietf.org/html/rfc4180
         const sal_Unicode* pb = p;
@@ -1495,7 +1495,7 @@ sal_Bool ScImportExport::Doc2Text( SvStream& rStrm )
                         lcl_WriteSimpleString( rStrm, aCell );
                     }
                     break;
-                    case CELLTYPE_NOTE:
+                    case CELLTYPE_EMPTY:
                     case CELLTYPE_NONE:
                     break;
                     default:

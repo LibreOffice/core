@@ -946,7 +946,7 @@ void ScColumn::RemoveAutoSpellObj()
                 String aText = ScEditUtil::GetSpaceDelimitedString( *pEngine );
                 ScBaseCell* pNewCell = new ScStringCell( aText );
                 pNewCell->TakeBroadcaster( pOldCell->ReleaseBroadcaster() );
-                pNewCell->TakeNote( pOldCell->ReleaseNote() );
+
                 pItems[i].pCell = pNewCell;
                 delete pOldCell;
             }
@@ -1018,7 +1018,7 @@ void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
                 String aText = ScEditUtil::GetSpaceDelimitedString( *pEngine );
                 ScBaseCell* pNewCell = new ScStringCell( aText );
                 pNewCell->TakeBroadcaster( pOldCell->ReleaseBroadcaster() );
-                pNewCell->TakeNote( pOldCell->ReleaseNote() );
+
                 pItems[i].pCell = pNewCell;
                 delete pOldCell;
             }
@@ -1150,7 +1150,11 @@ bool ScColumn::IsEmptyVisData(bool bNotes) const
         for (i=0; i<nCount && !bVisData; i++)
         {
             ScBaseCell* pCell = pItems[i].pCell;
-            if ( pCell->GetCellType() != CELLTYPE_NOTE || (bNotes && pCell->HasNote()) )
+            ScPostIt *note = pDocument->GetNote(
+              ScAddress( nCol, pItems[i].nRow, nTab )
+            );
+
+            if (pCell->GetCellType() != CELLTYPE_EMPTY || (bNotes && 0 != note))
                 bVisData = true;
         }
         return !bVisData;
@@ -1167,7 +1171,7 @@ SCSIZE ScColumn::VisibleCount( SCROW nStartRow, SCROW nEndRow ) const
     while ( nIndex < nCount && pItems[nIndex].nRow <= nEndRow )
     {
         if ( pItems[nIndex].nRow >= nStartRow &&
-             pItems[nIndex].pCell->GetCellType() != CELLTYPE_NOTE )
+             pItems[nIndex].pCell->GetCellType() != CELLTYPE_EMPTY )
         {
             ++nVisCount;
         }
@@ -1187,7 +1191,9 @@ SCROW ScColumn::GetLastVisDataPos(bool bNotes) const
         {
             --i;
             ScBaseCell* pCell = pItems[i].pCell;
-            if ( pCell->GetCellType() != CELLTYPE_NOTE || (bNotes && pCell->HasNote()) )
+            ScPostIt *note = pDocument->GetNote( ScAddress(nCol, pItems[i].nRow, nTab) );
+
+            if (pCell->GetCellType() != CELLTYPE_EMPTY || (bNotes && 0 != note))
             {
                 bFound = true;
                 nRet = pItems[i].nRow;
@@ -1207,7 +1213,9 @@ SCROW ScColumn::GetFirstVisDataPos(bool bNotes) const
         for (i=0; i<nCount && !bFound; i++)
         {
             ScBaseCell* pCell = pItems[i].pCell;
-            if ( pCell->GetCellType() != CELLTYPE_NOTE || (bNotes && pCell->HasNote()) )
+            ScPostIt *note = pDocument->GetNote( ScAddress(nCol, pItems[i].nRow, nTab) );
+
+            if (pCell->GetCellType() != CELLTYPE_EMPTY || (bNotes && 0 != note))
             {
                 bFound = true;
                 nRet = pItems[i].nRow;
@@ -1220,9 +1228,11 @@ SCROW ScColumn::GetFirstVisDataPos(bool bNotes) const
 bool ScColumn::HasVisibleDataAt(SCROW nRow) const
 {
     SCSIZE nIndex;
-    if (Search(nRow, nIndex))
-        if (!pItems[nIndex].pCell->IsBlank())
+    if (Search(nRow, nIndex)) {
+        ScAddress aPos( nCol, nRow, nTab );
+        if (!pItems[nIndex].pCell->IsBlank() || pDocument->GetNote(aPos))
             return true;
+    }
 
     return false;
 }
@@ -1249,8 +1259,10 @@ bool ScColumn::IsEmptyBlock(SCROW nStartRow, SCROW nEndRow, bool bIgnoreNotes) c
     Search( nStartRow, nIndex );
     while ( nIndex < nCount && pItems[nIndex].nRow <= nEndRow )
     {
-        if ( !pItems[nIndex].pCell->IsBlank( bIgnoreNotes ) )   // found a cell
-            return false;                           // not empty
+        if (   ( ! pItems[nIndex].pCell->IsBlank() )
+            || ( ! bIgnoreNotes && pDocument->GetNote( ScAddress( nCol, pItems[nIndex].nRow, nTab )))
+           )
+            return false;  // not empty if even one cell is not blank or has a note
         ++nIndex;
     }
     return true;                                    // no cell found
@@ -1263,6 +1275,7 @@ SCSIZE ScColumn::GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirecti
     SCSIZE i;
     if (pItems && (nCount > 0))
     {
+        ScAddress aPos( nCol, 0, nTab );
         if (eDir == DIR_BOTTOM)
         {
             i = nCount;
@@ -1271,7 +1284,9 @@ SCSIZE ScColumn::GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirecti
                 i--;
                 if ( pItems[i].nRow < nStartRow )
                     break;
-                bFound = pItems[i].nRow <= nEndRow && !pItems[i].pCell->IsBlank();
+                aPos.SetRow( pItems[i].nRow );
+                ScPostIt* aNote = pDocument->GetNote( aPos );
+                bFound = pItems[i].nRow <= nEndRow && (!pItems[i].pCell->IsBlank() || aNote );
             }
             if (bFound)
                 nLines = static_cast<SCSIZE>(nEndRow - pItems[i].nRow);
@@ -1285,7 +1300,9 @@ SCSIZE ScColumn::GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirecti
             {
                 if ( pItems[i].nRow > nEndRow )
                     break;
-                bFound = pItems[i].nRow >= nStartRow && !pItems[i].pCell->IsBlank();
+                aPos.SetRow( pItems[i].nRow );
+                ScPostIt* aNote = pDocument->GetNote( aPos );
+                bFound = pItems[i].nRow >= nStartRow && (!pItems[i].pCell->IsBlank() || aNote );
                 i++;
             }
             if (bFound)
@@ -1348,8 +1365,14 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
 
     SCSIZE nIndex;
     bool bThere = Search(rRow, nIndex);
-    if (bThere && pItems[nIndex].pCell->IsBlank())
-        bThere = false;
+    ScAddress aPos( nCol, 0, nTab );
+    if (bThere) {
+        aPos.SetRow(pItems[nIndex].nRow);
+        if (    pItems[nIndex].pCell->IsBlank()
+            && (0 == pDocument->GetNote( aPos ) )
+           )
+            bThere = false;
+    }
 
     if (bThere)
     {
@@ -1360,14 +1383,22 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
             if (nIndex<nCount-1)
             {
                 ++nIndex;
-                while (nIndex<nCount-1 && pItems[nIndex].nRow==nLast+1
-                                        && !pItems[nIndex].pCell->IsBlank())
+                aPos.SetRow( pItems[nIndex].nRow );
+                while (   nIndex < nCount -1
+                       && pItems[nIndex].nRow == nLast +1
+                       && (   ! pItems[nIndex].pCell->IsBlank()
+                           || pDocument->GetNote( aPos ) )
+                      )
                 {
                     ++nIndex;
                     ++nLast;
+                    aPos.SetRow( pItems[nIndex].nRow );
                 }
-                if (nIndex==nCount-1)
-                    if (pItems[nIndex].nRow==nLast+1 && !pItems[nIndex].pCell->IsBlank())
+                if ( nIndex == nCount -1 )
+                    if (    pItems[nIndex].nRow == nLast +1
+                        && (   ! pItems[nIndex].pCell->IsBlank()
+                            || pDocument->GetNote( aPos ) )
+                       )
                         ++nLast;
             }
         }
@@ -1376,14 +1407,22 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
             if (nIndex>0)
             {
                 --nIndex;
-                while (nIndex>0 && pItems[nIndex].nRow+1==nLast
-                                        && !pItems[nIndex].pCell->IsBlank())
+                aPos.SetRow( pItems[nIndex].nRow );
+                while (   nIndex > 0
+                       && pItems[nIndex].nRow +1 == nLast
+                       && (   ! pItems[nIndex].pCell->IsBlank()
+                           || pDocument->GetNote( aPos ) )
+                      )
                 {
                     --nIndex;
                     --nLast;
+                    aPos.SetRow( pItems[nIndex].nRow );
                 }
-                if (nIndex==0)
-                    if (pItems[nIndex].nRow+1==nLast && !pItems[nIndex].pCell->IsBlank())
+                if ( 0 == nIndex )
+                    if (   pItems[nIndex].nRow +1 == nLast
+                        && (   ! pItems[nIndex].pCell->IsBlank()
+                            || pDocument->GetNote( aPos ) )
+                       )
                         --nLast;
             }
         }
@@ -1398,10 +1437,17 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
 
     if (!bThere)
     {
+        aPos.SetRow( pItems[nIndex].nRow );
         if (bForward)
         {
-            while (nIndex<nCount && pItems[nIndex].pCell->IsBlank())
+            while (   nIndex < nCount
+                   && (  pItems[nIndex].pCell->IsBlank()
+                       && (0 == pDocument->GetNote( aPos )) )
+                  )
+            {
                 ++nIndex;
+                aPos.SetRow( pItems[nIndex].nRow );
+            }
             if (nIndex<nCount)
                 rRow = pItems[nIndex].nRow;
             else
@@ -1409,8 +1455,14 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
         }
         else
         {
-            while (nIndex>0 && pItems[nIndex-1].pCell->IsBlank())
+            while (   nIndex > 0
+                   && (   pItems[nIndex-1].pCell->IsBlank()
+                       && (0 == pDocument->GetNote( aPos )) )
+                  )
+            {
                 --nIndex;
+                aPos.SetRow( pItems[nIndex].nRow );
+            }
             if (nIndex>0)
                 rRow = pItems[nIndex-1].nRow;
             else
@@ -1426,7 +1478,9 @@ bool ScColumn::HasDataAt(SCROW nRow) const
 
     SCSIZE nIndex;
     if (Search(nRow, nIndex))
-        if (!pItems[nIndex].pCell->IsBlank())
+        if (   ! pItems[nIndex].pCell->IsBlank()
+            || pDocument->GetNote( ScAddress( nCol, nRow, nTab ))
+           )
             return true;
 
     return false;
@@ -1503,7 +1557,7 @@ void ScColumn::StartListening( SvtListener& rLst, SCROW nRow )
     }
     else
     {
-        pCell = new ScNoteCell;
+        pCell = new ScEmptyCell;
         Insert(nRow, pCell);
     }
 
@@ -1528,7 +1582,7 @@ void ScColumn::MoveListeners( SvtBroadcaster& rSource, SCROW nDestRow )
     }
     else
     {
-        pCell = new ScNoteCell;
+        pCell = new ScEmptyCell;
         Insert(nDestRow, pCell);
     }
 
@@ -1562,7 +1616,7 @@ void ScColumn::EndListening( SvtListener& rLst, SCROW nRow )
 
             if (!pBC->HasListeners())
             {
-                if (pCell->IsBlank())
+                if (pCell->IsBlank() && (0 == pDocument->GetNote(ScAddress(nCol, nRow, nTab))) )
                     DeleteAtIndex(nIndex);
                 else
                     pCell->DeleteBroadcaster();
@@ -1645,7 +1699,7 @@ void lcl_UpdateSubTotal( ScFunctionData& rData, ScBaseCell* pCell )
                 }
             }
             break;
-        case CELLTYPE_NOTE:
+        case CELLTYPE_EMPTY:
             bCell = false;
             break;
         // bei Strings nichts

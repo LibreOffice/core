@@ -265,15 +265,6 @@ public:
     bool    HasValueData( SCROW nRow ) const;
     bool    HasStringCells( SCROW nStartRow, SCROW nEndRow ) const;
 
-    /** Returns the pointer to a cell note object at the passed row. */
-    ScPostIt*   GetNote( SCROW nRow );
-    /** Sets the passed cell note object at the passed row. Takes ownership! */
-    void        TakeNote( SCROW nRow, ScPostIt* pNote );
-    /** Returns and forgets a cell note object at the passed row. */
-    ScPostIt*   ReleaseNote( SCROW nRow );
-    /** Deletes the note at the passed row. */
-    void        DeleteNote( SCROW nRow );
-
     void        SetDirty();
     void        SetDirty( const ScRange& );
     void        SetDirtyVar();

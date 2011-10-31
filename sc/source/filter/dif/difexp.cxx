@@ -175,7 +175,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                 switch( pAkt->GetCellType() )
                 {
                     case CELLTYPE_NONE:
-                    case CELLTYPE_NOTE:
+                    case CELLTYPE_EMPTY:
                         aOS.AssignAscii( pEmptyData );
                         break;
                     case CELLTYPE_VALUE:

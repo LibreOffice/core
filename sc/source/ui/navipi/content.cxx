@@ -878,7 +878,7 @@ void ScContentTree::GetNoteStrings()
     {
         ScCellIterator aIter( pDoc, 0,0,nTab, MAXCOL,MAXROW,nTab );
         for( ScBaseCell* pCell = aIter.GetFirst(); pCell; pCell = aIter.GetNext() )
-            if( const ScPostIt* pNote = pCell->GetNote() )
+            if ( const ScPostIt* pNote = pDoc->GetNote( aIter.GetPos() ) )
                 InsertContent( SC_CONTENT_NOTE, lcl_NoteString( *pNote ) );
     }
 }
@@ -897,10 +897,10 @@ ScAddress ScContentTree::GetNotePos( sal_uLong nIndex )
         ScBaseCell* pCell = aIter.GetFirst();
         while (pCell)
         {
-            if( pCell->HasNote() )
+            if( pDoc->GetNote( aIter.GetPos() ) )
             {
                 if (nFound == nIndex)
-                    return ScAddress( aIter.GetCol(), aIter.GetRow(), nTab );   // gefunden
+                    return aIter.GetPos();
                 ++nFound;
             }
             pCell = aIter.GetNext();
@@ -931,7 +931,7 @@ sal_Bool ScContentTree::NoteStringsChanged()
         ScBaseCell* pCell = aIter.GetFirst();
         while (pCell && bEqual)
         {
-            if( const ScPostIt* pNote = pCell->GetNote() )
+            if ( const ScPostIt* pNote = pDoc->GetNote( aIter.GetPos() ) )
             {
                 if ( !pEntry )
                     bEqual = false;

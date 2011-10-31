@@ -840,7 +840,7 @@ void lclTakeBroadcaster( ScBaseCell*& rpCell, SvtBroadcaster* pBC )
         if( rpCell )
             rpCell->TakeBroadcaster( pBC );
         else
-            rpCell = new ScNoteCell( pBC );
+            rpCell = new ScEmptyCell( pBC );
     }
 }
 
@@ -908,11 +908,10 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
         }
         else
         {
-            ScNoteCell* pDummyCell = pBC1 ? new ScNoteCell( pBC1 ) : 0;
-            if ( pDummyCell )
+            if ( pBC1 )
             {
                 // insert dummy note cell (without note) containing old broadcaster
-                pItems[nIndex1].pCell = pDummyCell;
+                pItems[nIndex1].pCell = new ScEmptyCell( pBC1 );
             }
             else
             {
@@ -962,9 +961,8 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
             // do not swap formula cells with equal formulas, but swap notes
             if (bEqual)
             {
-                ScPostIt* pNote1 = pCell1->ReleaseNote();
-                pCell1->TakeNote( pCell2->ReleaseNote() );
-                pCell2->TakeNote( pNote1 );
+                pDocument->SwapNotes( aPos1, aPos2 );
+
                 return;
             }
         }
@@ -973,17 +971,14 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
     /*  Create clone of pCell1 at position of pCell2 (pCell1 exists always, see
         variable swapping above). Do not clone the note, but move pointer of
         old note to new cell. */
-    ScBaseCell* pNew2 = pCell1->CloneWithoutNote( *pDocument, aPos2, SC_CLONECELL_ADJUST3DREL );
-    pNew2->TakeNote( pCell1->ReleaseNote() );
+    ScBaseCell* pNew2 = pCell1->Clone( *pDocument, aPos2, SC_CLONECELL_ADJUST3DREL );
 
-    /*  Create clone of pCell2 at position of pCell1. Do not clone the note,
-        but move pointer of old note to new cell. */
     ScBaseCell* pNew1 = 0;
     if ( pCell2 )
     {
-        pNew1 = pCell2->CloneWithoutNote( *pDocument, aPos1, SC_CLONECELL_ADJUST3DREL );
-        pNew1->TakeNote( pCell2->ReleaseNote() );
+        pNew1 = pCell2->Clone( *pDocument, aPos1, SC_CLONECELL_ADJUST3DREL );
     }
+    pDocument->SwapNotes( aPos1, aPos2 );
 
     // move old broadcasters new cells at the same old position
     SvtBroadcaster* pBC1 = pCell1->ReleaseBroadcaster();
@@ -1079,10 +1074,17 @@ bool ScColumn::TestInsertCol( SCROW nStartRow, SCROW nEndRow) const
     if (!IsEmpty())
     {
         bool bTest = true;
-        if (pItems)
-            for (SCSIZE i=0; (i<nCount) && bTest; i++)
-                bTest = (pItems[i].nRow < nStartRow) || (pItems[i].nRow > nEndRow)
-                        || pItems[i].pCell->IsBlank();
+        if (pItems) {
+            ScAddress pos( nCol, 0, nTab );
+            for (SCSIZE i=0; (i<nCount) && bTest; i++) {
+                pos.SetRow( pItems[i].nRow );
+                bTest = (
+                    ((nStartRow < pItems[i].nRow) && (pItems[i].nRow < nEndRow))
+                 || (pItems[i].pCell->IsBlank())
+                 || (0 == pDocument->GetNote( pos ))
+                );
+            }
+        }
 
         //  AttrArray testet nur zusammengefasste
 
@@ -1199,6 +1201,9 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
         for (i = 0; i < nDelCount; i++)
         {
             ScBaseCell* pCell = ppDelCells[i];
+            // Oct, 2011: Perhaps need to update IsBlank call in ENSURE to check
+            // for notes (via ScDocument.GetNote), but I'm not sure the current
+            // code (above and below this comment) is even correct.
             OSL_ENSURE( pCell->IsBlank(), "sichtbare Zelle weggeschoben" );
             SvtBroadcaster* pBC = pCell->GetBroadcaster();
             if (pBC)
@@ -1247,6 +1252,8 @@ void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKee
     if (nBlockCount)
     {
         int nCloneFlags = bCloneNoteCaptions ? SC_CLONECELL_DEFAULT : SC_CLONECELL_NOCAPTION;
+        ScDocument * rDestDoc = rColumn.pDocument;
+
         rColumn.Resize( rColumn.GetCellCount() + nBlockCount );
         ScAddress aOwnPos( nCol, 0, nTab );
         ScAddress aDestPos( rColumn.nCol, 0, rColumn.nTab );
@@ -1254,7 +1261,15 @@ void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKee
         {
             aOwnPos.SetRow( pItems[i].nRow );
             aDestPos.SetRow( pItems[i].nRow );
-            ScBaseCell* pNewCell = pItems[i].pCell->CloneWithNote( aOwnPos, *rColumn.pDocument, aDestPos, nCloneFlags );
+            ScBaseCell* pNewCell = pItems[i].pCell->Clone(
+               *rDestDoc, aDestPos, nCloneFlags
+            );
+            ScPostIt* pNewNote = pDocument->GetNote( aOwnPos );
+            if (pNewNote)
+                pNewNote = new ScPostIt( *rDestDoc, aDestPos, *pNewNote );
+            if ( ! rDestDoc->SetNote( aDestPos, pNewNote ) )
+                DELETEZ( pNewNote ); // apparently unsuccessful; don't leak
+
             rColumn.Append( aDestPos.Row(), pNewCell );
         }
     }
@@ -1383,7 +1398,12 @@ void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
         SCSIZE nThisIndex;
         if ( Search( aDestPos.Row(), nThisIndex ) )
         {
-            ScBaseCell* pNew = pItems[nThisIndex].pCell->CloneWithNote( aOwnPos, rDestDoc, aDestPos );
+            ScBaseCell* pNew = pItems[nThisIndex].pCell->Clone( rDestDoc, aDestPos );
+            ScPostIt* pNewNote = pDocument->GetNote( aOwnPos );
+            pNewNote = new ScPostIt( rDestDoc, aDestPos, pNewNote );
+            if ( ! rDestDoc.SetNote( aDestPos, pNewNote ) )
+                DELETEZ( pNewNote ); // apparently unsuccessful; don't leak
+
             rDestCol.Insert( aDestPos.Row(), pNew );
         }
     }
@@ -1591,7 +1611,7 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
             ScAddress aAdr( nCol, 0, nTab );
             ScHint aHint( SC_HINT_DYING, aAdr, NULL );  // areas only
             ScAddress& rAddress = aHint.GetAddress();
-            ScNoteCell* pNoteCell = new ScNoteCell;     // Dummy like in DeleteRange
+            ScEmptyCell* pEmptyCell = new ScEmptyCell;  // Dummy like in DeleteRange
 
             // must iterate backwards, because indexes of following cells become invalid
             for (EntryPosPairs::reverse_iterator it( aEntries.rbegin());
@@ -1600,7 +1620,7 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
                 nStartPos = (*it).first;
                 nStopPos = (*it).second;
                 for (i=nStartPos; i<nStopPos; ++i)
-                    pItems[i].pCell = pNoteCell;
+                    pItems[i].pCell = pEmptyCell;
                 for (i=nStartPos; i<nStopPos; ++i)
                 {
                     rAddress.SetRow( pItems[i].nRow );
@@ -1610,7 +1630,7 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
                 memmove( &pItems[nStartPos], &pItems[nStopPos],
                         (nCount - nStartPos) * sizeof(ColEntry) );
             }
-            pNoteCell->Delete();
+            pEmptyCell->Delete();
             pItems[nCount].nRow = 0;
             pItems[nCount].pCell = NULL;
         }
@@ -1786,7 +1806,7 @@ void ScColumn::UpdateDeleteTab( SCTAB nTable, bool bIsMove, ScColumn* pRefUndo, 
 
                 /*  Do not copy cell note to the undo document. Undo will copy
                     back the formula cell while keeping the original note. */
-                ScBaseCell* pSave = pRefUndo ? pOld->CloneWithoutNote( *pDocument ) : 0;
+                ScBaseCell* pSave = pRefUndo ? pOld->Clone( *pDocument ) : 0;
 
                 bool bChanged = pOld->UpdateDeleteTab(nTable, bIsMove, nSheets);
                 if ( nRow != pItems[i].nRow )

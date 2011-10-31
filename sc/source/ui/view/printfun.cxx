@@ -1924,8 +1924,7 @@ long ScPrintFunc::DoNotes( long nNoteStart, sal_Bool bDoPrint, ScPreviewLocation
         {
             ScAddress &rPos = aNotePosList[ nNoteStart + nCount ];
 
-            ScBaseCell* pCell = pDoc->GetCell( rPos);
-            if( const ScPostIt* pNote = pCell->GetNote() )
+            if( const ScPostIt* pNote = pDoc->GetNote( rPos ) )
             {
                 if(const EditTextObject *pEditText = pNote->GetEditTextObject())
                     pEditEngine->SetText(*pEditText);
@@ -2565,9 +2564,10 @@ long ScPrintFunc::CountNotePages()
             ScBaseCell* pCell = aIter.GetNext( nCol, nRow );
             while (pCell)
             {
-                if (pCell->HasNote())
+                ScAddress aPos( nCol, nRow, nPrintTab );
+                if ( pDoc->GetNote( aPos ) )
                 {
-                    aNotePosList.push_back( ScAddress( nCol,nRow,nPrintTab ) );
+                    aNotePosList.push_back( aPos );
                     ++nCount;
                 }
 

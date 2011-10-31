@@ -1607,8 +1607,8 @@ void ScInterpreter::ScBackSolver()
         if (nGlobalError == 0)
         {
             ScBaseCell* pVCell = GetCell( aValueAdr );
-            // CELLTYPE_NOTE: kein Value aber von Formel referiert
-            bool bTempCell = (!pVCell || pVCell->GetCellType() == CELLTYPE_NOTE);
+            // CELLTYPE_EMPTY: kein Value aber von Formel referiert
+            bool bTempCell = (!pVCell || CELLTYPE_EMPTY == pVCell->GetCellType() );
             ScBaseCell* pFCell = GetCell( aFormulaAdr );
 
             if ( ((pVCell && pVCell->GetCellType() == CELLTYPE_VALUE) || bTempCell)
@@ -1620,7 +1620,7 @@ void ScInterpreter::ScBackSolver()
 
                 if ( bTempCell )
                 {
-                    pNote = pVCell ? pVCell->ReleaseNote() : 0;
+                    pNote = pDok->GetNote( aValueAdr );
                     fSaveVal = 0.0;
                     pVCell = new ScValueCell( fSaveVal );
                     pDok->PutCell( aValueAdr, pVCell );
@@ -1769,7 +1769,12 @@ void ScInterpreter::ScBackSolver()
                 }
                 if ( bTempCell )
                 {
-                    pVCell = pNote ? new ScNoteCell( pNote ) : 0;
+                    pVCell = 0;
+                    if ( pNote ) {
+                        pVCell = new ScEmptyCell();
+                        if ( ! pDok->SetNote( aValueAdr, pNote ) )
+                            DELETEZ( pNote );
+                    }
                     pDok->PutCell( aValueAdr, pVCell );
                 }
                 else

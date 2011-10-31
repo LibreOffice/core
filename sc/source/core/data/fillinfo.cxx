@@ -406,7 +406,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
                         CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
                         pInfo->pCell = pThisCol->pItems[nUIndex].pCell;
-                        if (pInfo->pCell->GetCellType() != CELLTYPE_NOTE)
+                        if (pInfo->pCell->GetCellType() != CELLTYPE_EMPTY)
                         {
                             pThisRowInfo->bEmptyText = false;                   // Zeile nicht leer
                             pInfo->bEmptyCellText = false;                      // Zelle nicht leer
