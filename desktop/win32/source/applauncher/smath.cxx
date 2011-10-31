@@ -32,6 +32,6 @@
 
 #include "launcher.hxx"
 
-_TCHAR APPLICATION_SWITCH[] = _T( "-math" );
+_TCHAR APPLICATION_SWITCH[] = _T( "--math" );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

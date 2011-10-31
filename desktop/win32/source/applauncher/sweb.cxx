@@ -32,6 +32,6 @@
 
 #include "launcher.hxx"
 
-_TCHAR APPLICATION_SWITCH[] = _T( "-web" );
+_TCHAR APPLICATION_SWITCH[] = _T( "--web" );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

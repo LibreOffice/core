@@ -30,6 +30,6 @@
 
 #include "launcher.hxx"
 
-_TCHAR APPLICATION_SWITCH[] = _T( "-writer" );
+_TCHAR APPLICATION_SWITCH[] = _T( "--writer" );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

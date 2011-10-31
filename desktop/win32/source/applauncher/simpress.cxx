@@ -32,6 +32,6 @@
 
 #include "launcher.hxx"
 
-_TCHAR APPLICATION_SWITCH[] = _T( "-impress" );
+_TCHAR APPLICATION_SWITCH[] = _T( "--impress" );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
