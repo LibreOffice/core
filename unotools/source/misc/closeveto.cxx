@@ -25,9 +25,9 @@
  *
  ************************************************************************/
 
-#include "precompiled_dbaccess.hxx"
+#include "precompiled_unotools.hxx"
 
-#include "closeveto.hxx"
+#include <unotools/closeveto.hxx>
 
 /** === begin UNO includes === **/
 #include <com/sun/star/util/XCloseable.hpp>
@@ -38,7 +38,7 @@
 #include <tools/diagnose_ex.h>
 
 //......................................................................................................................
-namespace dbaui
+namespace utl
 {
 //......................................................................................................................
 
@@ -65,7 +65,7 @@ namespace dbaui
     //==================================================================================================================
     typedef ::cppu::WeakImplHelper1 <   XCloseListener
                                     >   CloseListener_Base;
-    class DBACCESS_DLLPRIVATE CloseListener_Impl : public CloseListener_Base
+    class SAL_DLLPRIVATE CloseListener_Impl : public CloseListener_Base
     {
     public:
         CloseListener_Impl()
@@ -117,7 +117,7 @@ namespace dbaui
     //==================================================================================================================
     //= CloseVeto_Data
     //==================================================================================================================
-    struct DBACCESS_DLLPRIVATE CloseVeto_Data
+    struct SAL_DLLPRIVATE CloseVeto_Data
     {
         Reference< XCloseable >                 xCloseable;
         ::rtl::Reference< CloseListener_Impl >  pListener;
@@ -177,7 +177,7 @@ namespace dbaui
     }
 
 //......................................................................................................................
-} // namespace dbaui
+} // namespace utl
 //......................................................................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

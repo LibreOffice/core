@@ -37,6 +37,7 @@ $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/cacheoptions.hxx,uno
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/calendarwrapper.hxx,unotools/calendarwrapper.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/caserotate.hxx,unotools/caserotate.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/charclass.hxx,unotools/charclass.hxx))
+$(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/closeveto.hxx,unotools/closeveto.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/cmdoptions.hxx,unotools/cmdoptions.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/collatorwrapper.hxx,unotools/collatorwrapper.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/compatibility.hxx,unotools/compatibility.hxx))

@@ -25,10 +25,10 @@
  *
  ************************************************************************/
 
-#ifndef DBACCESS_CLOSEVETO_HXX
-#define DBACCESS_CLOSEVETO_HXX
+#ifndef UNOTOOLS_CLOSEVETO_HXX
+#define UNOTOOLS_CLOSEVETO_HXX
 
-#include "dbaccessdllapi.h"
+#include "unotools/unotoolsdllapi.h"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/uno/XInterface.hpp>
@@ -37,7 +37,7 @@
 #include <boost/scoped_ptr.hpp>
 
 //......................................................................................................................
-namespace dbaui
+namespace utl
 {
 //......................................................................................................................
 
@@ -51,7 +51,7 @@ namespace dbaui
         If closing has been requested and vetoed while the <code>CloseVeto</code> instance is alive, and the ownership
         went to the <code>CloseVeto</code> instance, then it will close the component in its dtor.
     */
-    class DBACCESS_DLLPRIVATE CloseVeto
+    class UNOTOOLS_DLLPUBLIC CloseVeto
     {
     public:
         CloseVeto( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& i_closeable );
@@ -65,6 +65,6 @@ namespace dbaui
 } // namespace dbaui
 //......................................................................................................................
 
-#endif // DBACCESS_CLOSEVETO_HXX
+#endif // UNOTOOLS_CLOSEVETO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

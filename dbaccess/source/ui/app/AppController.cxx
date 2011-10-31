@@ -33,7 +33,6 @@
 #include "dbustrings.hrc"
 #include "advancedsettingsdlg.hxx"
 #include "subcomponentmanager.hxx"
-#include "closeveto.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -104,6 +103,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/lstbox.hxx>
 
+#include <unotools/closeveto.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/internaloptions.hxx>
@@ -1962,7 +1962,7 @@ IMPL_LINK( OApplicationController, OnCreateWithPilot, void*, _pType )
 // -----------------------------------------------------------------------------
 void OApplicationController::newElementWithPilot( ElementType _eType )
 {
-    CloseVeto aKeepDoc( getFrame() );
+    utl::CloseVeto aKeepDoc( getFrame() );
         // prevent the document being closed while the wizard is open
 
     OSL_ENSURE( getContainer(), "OApplicationController::newElementWithPilot: without a view?" );

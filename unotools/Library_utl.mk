@@ -131,6 +131,7 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/i18n/textsearch \
     unotools/source/i18n/transliterationwrapper \
     unotools/source/misc/atom \
+    unotools/source/misc/closeveto \
     unotools/source/misc/componentresmodule \
     unotools/source/misc/datetime \
     unotools/source/misc/desktopterminationobserver \
