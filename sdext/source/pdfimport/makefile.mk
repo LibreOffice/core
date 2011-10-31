@@ -97,7 +97,7 @@ DEF1NAME=$(SHL1TARGET)
 
 # --- Extension packaging ------------------------------------------
 
-DESCRIPTION_SRC:=config$/description.xml
+DESCRIPTION_SRC:=$(MISC)/$(EXTENSIONNAME)_in/description.xml
 MANIFEST_SRC:=config$/manifest.xml
 COMPONENT_CONFIGDIR:=config
 COMPONENT_CONFIGDEST:=.
@@ -117,8 +117,8 @@ COMPONENT_DIALOGS= \
     $(EXTENSIONDIR)$/basic$/writer.png \
     $(EXTENSIONDIR)$/xpdfimport_err.pdf
 
-COMPONENT_HELP= \
-    $(EXTENSIONDIR)$/component.txt
+COMPONENT_DESCRIPTION= \
+    $(foreach,lang,$(alllangiso) $(EXTENSIONDIR)$/description-$(lang).txt)
 
 # native libraries
 COMPONENT_LIBRARIES= \
@@ -127,13 +127,21 @@ COMPONENT_LIBRARIES= \
 COMPONENT_IMAGES=\
     $(EXTENSIONDIR)$/images$/extension_32.png
 
-EXTENSION_PACKDEPS=$(CONVERTER_FILE) $(COMPONENT_DIALOGS) $(COMPONENT_HELP) $(COMPONENT_IMAGES) makefile.mk
+EXTENSION_PACKDEPS=$(CONVERTER_FILE) $(COMPONENT_DIALOGS) $(COMPONENT_DESCRIPTION) $(COMPONENT_IMAGES) makefile.mk
 
 .INCLUDE : extension_pre.mk
 .ENDIF # L10N_framework
 .INCLUDE : target.mk
 .IF "$(L10N_framework)"==""
 .INCLUDE : extension_post.mk
+
+$(DESCRIPTION_SRC) : description.xml
+    @@-$(MKDIRHIER) $(@:d)
+.IF "$(WITH_LANG)" != ""
+    $(COMMAND_ECHO)$(XRMEX) -p $(PRJNAME) -i $< -o $@ -m $(LOCALIZESDF) -l all
+.ELSE
+    $(COPY) $< $@
+.ENDIF
 
 $(CONVERTER_FILE) : $(BIN)$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
@@ -143,9 +151,11 @@ $(COMPONENT_DIALOGS) : dialogs$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
-$(COMPONENT_HELP) : config$/$$(@:f)
-    @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
+$(COMPONENT_DESCRIPTION) : $(DESCRIPTION)
+    $(COPY) description-en-US.txt $(EXTENSIONDIR)
+.IF "$(WITH_LANG)" != ""
+    $(COPY) $(MISC)/$(EXTENSIONNAME)_in/description-*.txt $(EXTENSIONDIR)
+.ENDIF
 
 $(COMPONENT_IMAGES) :  $(SOLARSRC)$/$(RSCDEFIMG)$/desktop$/res$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
