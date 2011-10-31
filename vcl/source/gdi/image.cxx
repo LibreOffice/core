@@ -824,23 +824,6 @@ sal_uInt16 ImageList::GetImageId( sal_uInt16 nPos ) const
 
 // -----------------------------------------------------------------------
 
-void ImageList::GetImageIds( ::std::vector< sal_uInt16 >& rIds ) const
-{
-    RTL_LOGFILE_CONTEXT( aLog, "vcl: ImageList::GetImageIds" );
-
-    DBG_CHKTHIS( ImageList, NULL );
-
-    rIds = ::std::vector< sal_uInt16 >();
-
-    if( mpImplData )
-    {
-        for( sal_uInt32 i = 0; i < mpImplData->maImages.size(); i++ )
-            rIds.push_back( mpImplData->maImages[i]->mnId );
-    }
-}
-
-// -----------------------------------------------------------------------
-
 ::rtl::OUString ImageList::GetImageName( sal_uInt16 nPos ) const
 {
     DBG_CHKTHIS( ImageList, NULL );

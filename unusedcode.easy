@@ -212,7 +212,6 @@ IconChoiceDialog::RemoveResetButton()
 IconChoiceDialog::RemoveTabPage(unsigned short)
 ImageButton::ImageButton(unsigned short)
 ImageList::Clear()
-ImageList::GetImageIds(std::__debug::vector<unsigned short, std::allocator<unsigned short> >&) const
 ImageList::RemoveImage(rtl::OUString const&)
 ImageList::ReplaceImage(rtl::OUString const&, rtl::OUString const&)
 ImageList::ReplaceImage(unsigned short, Image const&)
