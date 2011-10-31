@@ -617,6 +617,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
 
     // The window introduced before the first window are suffices that the
     // body or a greater position as the pDockWin.
+    sal_uInt16 nCount = pDockArr->Count();
     sal_uInt16 nLastWindowIdx(0);
 
     // If window not found, is inserted as the first
