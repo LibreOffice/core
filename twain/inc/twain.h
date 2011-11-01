@@ -181,9 +181,9 @@
 
 
 /* Set the packing: this occurs before any structures are defined */
-#ifdef defined(TWH_CMP_MING32)
+#if defined(TWH_CMP_MING32)
     #pragma pack (push, 2)
-#elif TWH_CMP_MSC
+#elif defined(TWH_CMP_MSC)
     #pragma pack (push, before_twain)
     #pragma pack (2)
 #elif defined(TWH_CMP_GNU)
@@ -2184,9 +2184,9 @@ typedef struct {
 } TW_ENTRYPOINT, FAR * pTW_ENTRYPOINT;
 
 /* Restore the previous packing alignment: this occurs after all structures are defined */
-#ifdef defined(TWH_CMP_MING32)
+#if defined(TWH_CMP_MING32)
     #pragma pack (pop)
-#elif TWH_CMP_MSC
+#elif defined(TWH_CMP_MSC)
     #pragma pack (pop, before_twain)
 #elif defined(TWH_CMP_GNU)
     #pragma pack (pop, before_twain)
