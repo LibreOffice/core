@@ -1309,7 +1309,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         my $found_epm = 0;
 
         # shuffle array to reduce parallel packaging process in pool
-        installer::worker::shuffle_array($packages);
+        installer::worker::shuffle_array($packages)
+            unless $installer::globals::simple;
 
         # iterating over all packages
         for ( my $k = 0; $k <= $#{$packages}; $k++ )
