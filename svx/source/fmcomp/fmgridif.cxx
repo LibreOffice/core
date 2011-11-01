@@ -1541,7 +1541,7 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt) throw( RuntimeE
         }
         else if (evt.PropertyName == FM_PROP_ALIGN)
         {
-            // it design mode it doesn't matter
+            // in design mode it doesn't matter
             if (!isDesignMode())
             {
                 DbGridColumn* pCol = pGrid->GetColumns().at( i );
