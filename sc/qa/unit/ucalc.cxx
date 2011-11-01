@@ -640,6 +640,24 @@ void Test::testMatrix()
                                pMat->And() && pMat->Or());
     }
 
+    // Test the AND and OR evaluations.
+    for (int i = 0; i < 2; ++i)
+    {
+        pMat = new ScMatrix(2, 2, eDT[i]);
+
+        // Only some of the elements are non-zero.
+        pMat->PutBoolean(true, 0, 0);
+        pMat->PutDouble(1.0, 1, 1);
+        CPPUNIT_ASSERT_MESSAGE("incorrect OR result", pMat->Or());
+        CPPUNIT_ASSERT_MESSAGE("incorrect AND result", !pMat->And());
+
+        // All of the elements are non-zero.
+        pMat->PutBoolean(true, 0, 1);
+        pMat->PutDouble(2.3, 1, 0);
+        CPPUNIT_ASSERT_MESSAGE("incorrect OR result", pMat->Or());
+        CPPUNIT_ASSERT_MESSAGE("incorrect AND result", pMat->And());
+    }
+
     // Now test the emtpy matrix types.
     eDT[0] = ScMatrix::FILLED_EMPTY;
     eDT[1] = ScMatrix::SPARSE_EMPTY;
