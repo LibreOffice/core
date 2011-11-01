@@ -39,7 +39,7 @@ the TWAIN Working Group. More information about TWAIN is
 available here:
     http://www.twain.org/
 
-The conectivity module uses code developed by the HSQL
+The connectivity module uses code developed by the HSQL
 Development Group under a BSD-style license. More
 information about HSQL is available here:
     http://hsqldb.org/
