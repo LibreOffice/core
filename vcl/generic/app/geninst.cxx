@@ -65,6 +65,7 @@ void SalYieldMutex::acquire()
 
 void SalYieldMutex::release()
 {
+    OSL_ENSURE(mnCount > 0, "SalYieldMutex::release() called with zero count");
     if ( mnThreadId == osl::Thread::getCurrentIdentifier() )
     {
         if ( mnCount == 1 )
