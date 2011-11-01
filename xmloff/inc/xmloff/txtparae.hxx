@@ -673,8 +673,6 @@ public:
 
     SinglePropertySetInfoCache& GetCharStyleNamesPropInfoCache() { return aCharStyleNamesPropInfoCache; }
 
-    sal_Int32 GetHeadingLevel( const ::rtl::OUString& rStyleName );
-
     void PushNewTextListsHelper();
 
     void PopTextListsHelper();

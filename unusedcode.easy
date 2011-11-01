@@ -1354,7 +1354,6 @@ XMLTextListAutoStylePoolNames_Impl::Remove(rtl::OUString*)
 XMLTextListAutoStylePool_Impl::GetPos(XMLTextListAutoStylePoolEntry_Impl const*) const
 XMLTextListAutoStylePool_Impl::Remove(XMLTextListAutoStylePoolEntry_Impl*)
 XMLTextParagraphExport::FindTextStyle(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&, unsigned char&) const
-XMLTextParagraphExport::GetHeadingLevel(rtl::OUString const&)
 XMLVisAreaContext::XMLVisAreaContext(SvXMLImport&, unsigned short, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList> const&, Rectangle&, short)
 XPropertyList::Clear()
 XSecController::collectToSign(int, rtl::OUString const&)
@@ -1982,7 +1981,6 @@ codemaker::cpp::typeToPrefix(TypeManager const&, rtl::OString const&)
 comphelper::AccessibleEventNotifier::getEventListeners(unsigned int)
 comphelper::AttributeList::AppendAttributeList(com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList> const&)
 comphelper::AttributeList::Clear()
-comphelper::EmbeddedObjectContainer::CopyEmbeddedObject(comphelper::EmbeddedObjectContainer&, com::sun::star::uno::Reference<com::sun::star::embed::XEmbeddedObject> const&, rtl::OUString&)
 comphelper::EventLogger::addLogHandler(com::sun::star::uno::Reference<com::sun::star::logging::XLogHandler> const&)
 comphelper::EventLogger::getLogLevel() const
 comphelper::EventLogger::getName() const
@@ -1991,7 +1989,6 @@ comphelper::EventLogger::setLogLevel(int) const
 comphelper::FastPropertySetInfo::FastPropertySetInfo()
 comphelper::FastPropertySetInfo::addProperty(com::sun::star::beans::Property const&)
 comphelper::MimeConfigurationHelper::AddFilterNameCheckOwnFile(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>&)
-comphelper::MimeConfigurationHelper::GetSequenceClassIDFromObjectName(rtl::OUString const&)
 comphelper::OAccessibleImplementationAccess::setForeignControlledState(com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleContext> const&, short, unsigned char)
 comphelper::OAccessibleSelectionHelper::OAccessibleSelectionHelper()
 comphelper::OAccessibleTextHelper::OAccessibleTextHelper()

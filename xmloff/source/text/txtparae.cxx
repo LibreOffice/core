@@ -3695,22 +3695,6 @@ void XMLTextParagraphExport::PreventExportOfControlsInMuteSections(
         // else: no control shape -> nothing to do
     }
 }
-sal_Int32 XMLTextParagraphExport::GetHeadingLevel( const OUString& rStyleName )
-{
-    if( !pHeadingStyles )
-    {
-        pHeadingStyles = new XMLStringVector;
-        SvxXMLNumRuleExport::GetOutlineStyles( *pHeadingStyles,
-                                               GetExport().GetModel() );
-    }
-    for( XMLStringVector::size_type i=0; i < pHeadingStyles->size(); ++i )
-    {
-        if( (*pHeadingStyles)[i] == rStyleName )
-            return static_cast < sal_Int32 >( i );
-    }
-
-    return -1;
-}
 
 void XMLTextParagraphExport::PushNewTextListsHelper()
 {

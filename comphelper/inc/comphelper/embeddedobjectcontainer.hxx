@@ -124,9 +124,6 @@ public:
     ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >
                         InsertEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >&, ::rtl::OUString& );
 
-    // copy an embedded object into the storage
-    sal_Bool CopyEmbeddedObject( EmbeddedObjectContainer& rSrc, const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, ::rtl::OUString& );
-
     // copy an embedded object into the storage, open the new copy and return it
     ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject > CopyAndGetEmbeddedObject( EmbeddedObjectContainer& rSrc, const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj, /* TODO const ::rtl::OUString& aOrigName,*/ ::rtl::OUString& rName );
 

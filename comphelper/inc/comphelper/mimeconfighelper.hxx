@@ -138,9 +138,6 @@ public:
     static ::com::sun::star::uno::Sequence< sal_Int8 > GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
                                                 sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
                                                 sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 );
-
-    ::com::sun::star::uno::Sequence<sal_Int8> GetSequenceClassIDFromObjectName(const ::rtl::OUString& _sObjectName) ;
-
 };
 
 }
