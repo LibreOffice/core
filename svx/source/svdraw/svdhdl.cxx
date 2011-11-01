@@ -664,7 +664,7 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
         eKindOfMarker = GetNextBigger(eKindOfMarker);
     }
 
-    // #97016# II This handle has the focus, visualize it
+    // This handle has the focus, visualize it
     if(IsFocusHdl() && pHdlList && pHdlList->GetFocusHdl() == this)
     {
         // create animated handle
@@ -705,12 +705,12 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
 
         if(eKindOfMarker == Anchor || eKindOfMarker == AnchorPressed)
         {
-            // #98388# when anchor is used take upper left as reference point inside the handle
+            // when anchor is used take upper left as reference point inside the handle
             pRetval = new ::sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime);
         }
         else if(eKindOfMarker == AnchorTR || eKindOfMarker == AnchorPressedTR)
         {
-            // #101688# AnchorTR for SW, take top right as (0,0)
+            // AnchorTR for SW, take top right as (0,0)
             pRetval = new ::sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime,
                 (sal_uInt16)(aBmpEx1.GetSizePixel().Width() - 1), 0,
                 (sal_uInt16)(aBmpEx2.GetSizePixel().Width() - 1), 0);
@@ -727,18 +727,17 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
     }
     else
     {
-        // create normal handle
-        // #101928# use ImpGetBitmapEx(...) now
+        // create normal handle: use ImpGetBitmapEx(...) now
         BitmapEx aBmpEx = ImpGetBitmapEx(eKindOfMarker, (sal_uInt16)eColIndex, bIsFineHdl );
 
         if(eKindOfMarker == Anchor || eKindOfMarker == AnchorPressed)
         {
-            // #98388# upper left as reference point inside the handle for AnchorPressed, too
+            // upper left as reference point inside the handle for AnchorPressed, too
             pRetval = new ::sdr::overlay::OverlayBitmapEx(rPos, aBmpEx);
         }
         else if(eKindOfMarker == AnchorTR || eKindOfMarker == AnchorPressedTR)
         {
-            // #101688# AnchorTR for SW, take top right as (0,0)
+            // AnchorTR for SW, take top right as (0,0)
             pRetval = new ::sdr::overlay::OverlayBitmapEx(rPos, aBmpEx,
                 (sal_uInt16)(aBmpEx.GetSizePixel().Width() - 1), 0);
         }
