@@ -732,7 +732,7 @@ bool EvalMatrix(const MatrixImplType& rMat)
         for (size_t j = 0; j < nCols; ++j)
         {
             matrix_element_t eType = rMat.get_type(i, j);
-            if (eType != mdds::element_numeric && eType == mdds::element_boolean)
+            if (eType != mdds::element_numeric && eType != mdds::element_boolean)
                 // assuming a CompareMat this is an error
                 return CreateDoubleError(errIllegalArgument);
 
