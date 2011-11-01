@@ -101,18 +101,10 @@ public:
 #define INDIVIDUAL_COUNT    (4)
 
 SdrHdlBitmapSet::SdrHdlBitmapSet(sal_uInt16 nResId)
-:   maMarkersBitmap(),
+    :   maMarkersBitmap(ResId(nResId, *ImpGetResMgr())),
     // 14 kinds (BitmapMarkerKind) use index [0..5], 4 extra
-    maRealMarkers((KIND_COUNT * INDEX_COUNT) + INDIVIDUAL_COUNT)
+        maRealMarkers((KIND_COUNT * INDEX_COUNT) + INDIVIDUAL_COUNT)
 {
-    // #101928# change color used for transparent parts to 0x00ff00ff (ImageList standard)
-    const Color aColTransparent(0x00ff00ff);
-    const Bitmap aBitmap(ResId(nResId, *ImpGetResMgr()));
-    const Bitmap aMask(aBitmap.CreateMask(aColTransparent));
-
-    // create a real BitmapEx with an AlphaMask
-    maMarkersBitmap = BitmapEx(aBitmap, aMask);
-    // maMarkersBitmap = BitmapEx(aBitmap, aColTransparent);
 }
 
 SdrHdlBitmapSet::~SdrHdlBitmapSet()
