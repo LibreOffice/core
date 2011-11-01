@@ -527,8 +527,8 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
     if (!getPeer().is())
     {
         mbCreatingPeer = sal_True;
-            // mbCreatingPeer is virtually the same as m_nPeerCreationLevel, but it's the base class' method
-            // to prevent recursion.
+        // mbCreatingPeer is virtually the same as m_nPeerCreationLevel, but it's the base class' method
+        // to prevent recursion.
 
         Window* pParentWin = NULL;
         if (rParentPeer.is())
@@ -542,19 +542,17 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
         DBG_ASSERT(pPeer != NULL, "FmXGridControl::createPeer : imp_CreatePeer didn't return a peer !");
         setPeer( pPeer );
 
-        // lesen der properties aus dem model
+        // reading the properties from the model
 //      ++m_nPeerCreationLevel;
         updateFromModel();
 
-        // folgendes unschoene Szenario : updateFromModel fuehrt zu einem propertiesChanged am Control,
-        // das stellt fest, dass sich eine 'kritische' Property geaendert hat (zum Beispiel "Border") und
-        // legt daraufhin eine neue Peer an, was wieder hier im createPeer landet, wir legen also eine
-        // zweite FmXGridPeer an und initialisieren die. Dann kommen wir in der ersten Inkarnation aus
-        // dem updsateFromModel raus und arbeiten dort weiter mit dem pPeer, das jetzt eigentlich schon
-        // veraltet ist (da ja in der zweiten Inkarnation eine andere Peer angelegt wurde).
-        // Deswegen also der Aufwand mit dem PeerCreationLevel, das stellt sicher, dass wir die in dem
-        // tiefsten Level angelegte Peer wirklich verwenden, sie aber erst im top-level
-        // initialisieren.
+        // consider the following ugly scenario: updateFromModel leads to a propertiesChanges on the Control,
+        // which determines, dat a "critical" property has changed (e.g. "Border") and therefore starts a new
+        // Peer, which lands again here in createPeerm we also start a second FmXGridPeer and initialise it.
+        // Then we exit from the first incarnation's updateFromModel and continue working with the pPeer,
+        // that is in fact now already obsolete (as another peer is being started in the second incarnation).
+        // Therefore the effort with the PeerCreationLevel, which ensures that we really use the Peer
+        // created at the deepest level, but first initialise it in the top-level.
 //      if (--m_nPeerCreationLevel == 0)
         {
             DBG_ASSERT(getPeer().is(), "FmXGridControl::createPeer : something went wrong ... no top level peer !");
@@ -601,9 +599,9 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
 
             // forward the design mode
             sal_Bool bForceAlivePeer = m_bInDraw && !maComponentInfos.bVisible;
-                // (we force a alive-mode peer if we're in "draw", cause in this case the peer will be used for drawing in
-                // foreign devices. We ensure this with the visibility check as an living peer is assumed to be noncritical
-                // only if invisible)
+            // (we force an alive-mode peer if we're in "draw", cause in this case the peer will be used for drawing in
+            // foreign devices. We ensure this with the visibility check as an living peer is assumed to be noncritical
+            // only if invisible)
             Any aOldCursorBookmark;
             if (!mbDesignMode || bForceAlivePeer)
             {
@@ -1145,7 +1143,7 @@ FmXGridPeer::FmXGridPeer(const Reference< XMultiServiceFactory >& _rxFactory)
             ,m_pGridListener(NULL)
             ,m_xServiceFactory(_rxFactory)
 {
-    // nach diesem Constructor muss Create gerufen werden !
+    // Create must be called after this constructure
     m_pGridListener = new GridListenerDelegator( this );
 }
 
@@ -1167,7 +1165,7 @@ void FmXGridPeer::Create(Window* pParent, WinBits nStyle)
     // want to hear about row selections
     pWin->setGridListener( m_pGridListener );
 
-    // Init muß immer aufgerufen werden
+    // Init must always be called
     pWin->Init();
     pWin->SetComponentInterface(this);
 
@@ -1392,7 +1390,7 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
     DbGridRowRef xPaintRow = pGrid->GetPaintRow();
     ENSURE_OR_THROW( xPaintRow.Is(), "invalid paint row" );
 
-    // die Columns des Controls brauche ich fuer GetFieldText
+    // I need the columns of the control for GetFieldText
     DbGridColumns aColumns = pGrid->GetColumns();
 
     // und durch alle Spalten durch
@@ -1428,14 +1426,14 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
         {
             switch (xType.getTypeClass())
             {
-                // Strings werden direkt ueber das GetFieldText abgehandelt
+                // Strings are dealt with directly by the GetFieldText
                 case TypeClass_STRING           :
                 {
                     String sText = aColumns[ nModelPos ]->GetCellText( xPaintRow, pGrid->getNumberFormatter() );
                     pReturnArray[i] <<= ::rtl::OUString(sText);
                 }
                 break;
-                // alles andere wird an der DatabaseVariant erfragt
+                // everything else is requested in the DatabaseVariant
                 case TypeClass_FLOAT            : pReturnArray[i] <<= xFieldContent->getFloat(); break;
                 case TypeClass_DOUBLE           : pReturnArray[i] <<= xFieldContent->getDouble(); break;
                 case TypeClass_SHORT            : pReturnArray[i] <<= (sal_Int16)xFieldContent->getShort(); break;
@@ -1474,13 +1472,13 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt) throw( RuntimeE
     if (!pGrid)
         return;
 
-    // DatenbankEvent
+    // Database event
     Reference< XRowSet >  xCursor(evt.Source, UNO_QUERY);
     if (evt.PropertyName == FM_PROP_VALUE || m_xCursor == evt.Source)
         pGrid->propertyChange(evt);
     else if (pGrid && m_xColumns.is() && m_xColumns->hasElements())
     {
-        // zunaechst raussuchen welche Column sich geaendert hat
+        // next find which column has changed
         ::comphelper::InterfaceRef xCurrent;
         sal_Int32 i;
 
@@ -2085,8 +2083,8 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
         sal_Bool bValue( sal_True );
         OSL_VERIFY( Value >>= bValue );
 
-        // Im DesignModus nur das Datenfenster disablen
-        // Sonst kann das Control nicht mehr konfiguriert werden
+        // In design mode, disable only the data window.
+        // Else the control cannot be configured anymore.
         if (isDesignMode())
             pGrid->GetDataWindow().Enable( bValue );
         else
@@ -2231,7 +2229,7 @@ void FmXGridPeer::startCursorListening()
         if (xReset.is())
             xReset->addResetListener(this);
 
-        // alle Listener anmelden
+        // register all listeners
         Reference< XPropertySet >  xSet(m_xCursor, UNO_QUERY);
         if (xSet.is())
         {
@@ -2284,7 +2282,7 @@ void FmXGridPeer::setRowSet(const Reference< XRowSet >& _rDatabaseCursor) throw(
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
     if (!pGrid || !m_xColumns.is() || !m_xColumns->getCount())
         return;
-    // alle Listener abmelden
+    // unregister all listeners
     if (m_xCursor.is())
     {
         Reference< XLoadable >  xLoadable(m_xCursor, UNO_QUERY);
@@ -2370,14 +2368,15 @@ void FmXGridPeer::selectionChanged(const EventObject& evt) throw( RuntimeExcepti
                     break;
                 }
             }
-            // fuer das VCL-Control muessen die Columns 1-basiert sein
-            // die Selektion an das VCL-Control weiterreichen, wenn noetig
+            // The columns have to be 1-based for the VCL control.
+            // If necessary, pass on the selection to the VCL control
             if ( i != pGrid->GetSelectedColumn() )
             {   // (wenn das nicht greift, wurde das selectionChanged implizit von dem Control selber ausgeloest
+                // if this does not ?hold?catch?, the selectionChanged is cleared by the Control itself
                 if ( i < nColCount )
                 {
                     pGrid->SelectColumnPos(pGrid->GetViewColumnPos(pGrid->GetColumnIdFromModelPos( (sal_uInt16)i )) + 1, sal_True);
-                    // SelectColumnPos hat wieder zu einem impliziten ActivateCell gefuehrt
+                    // SelectColumnPos has led to an implicit ActivateCell again
                     if (pGrid->IsEditing())
                         pGrid->DeactivateCell();
                 }
@@ -2551,8 +2550,8 @@ Reference< ::com::sun::star::frame::XDispatch >  FmXGridPeer::queryDispatch(cons
     if (m_xFirstDispatchInterceptor.is() && !m_bInterceptingDispatch)
     {
         m_bInterceptingDispatch = sal_True;
-            // safety against recursion : as we are master of the first chain element and slave of the last one we would
-            // have an infinite loop without this if no dispatcher can fullfill the rewuest)
+        // safety against recursion : as we are master of the first chain element and slave of the last one we would
+        // have an infinite loop without this if no dispatcher can fullfill the request
         xResult = m_xFirstDispatchInterceptor->queryDispatch(aURL, aTargetFrameName, nSearchFlags);
         m_bInterceptingDispatch = sal_False;
     }
