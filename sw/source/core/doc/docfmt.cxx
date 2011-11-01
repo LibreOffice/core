@@ -569,28 +569,30 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
     {
         SfxItemIter aIter( rChgSet );
         const SfxPoolItem* pItem = aIter.FirstItem();
-        const sal_uInt16 nWhich = pItem->Which();
 
-        if ( isCHRATR(nWhich) ||
-             (RES_TXTATR_CHARFMT == nWhich) ||
-             (RES_TXTATR_INETFMT == nWhich) ||
-             (RES_TXTATR_AUTOFMT == nWhich) ||
-             (RES_TXTATR_UNKNOWN_CONTAINER == nWhich) )
+        if (!IsInvalidItem(pItem))
         {
-            pCharSet  = &rChgSet;
-            bCharAttr = true;
-        }
+            const sal_uInt16 nWhich = pItem->Which();
 
-        if (    isPARATR(nWhich)
-             // --> OD 2008-02-25 #refactorlists#
-             || isPARATR_LIST(nWhich)
-             // <--
-             || isFRMATR(nWhich)
-             || isGRFATR(nWhich)
-             || isUNKNOWNATR(nWhich) )
-        {
-            pOtherSet = &rChgSet;
-            bOtherAttr = true;
+            if ( isCHRATR(nWhich) ||
+                 (RES_TXTATR_CHARFMT == nWhich) ||
+                 (RES_TXTATR_INETFMT == nWhich) ||
+                 (RES_TXTATR_AUTOFMT == nWhich) ||
+                 (RES_TXTATR_UNKNOWN_CONTAINER == nWhich) )
+            {
+                pCharSet  = &rChgSet;
+                bCharAttr = true;
+            }
+
+            if (    isPARATR(nWhich)
+                    || isPARATR_LIST(nWhich)
+                    || isFRMATR(nWhich)
+                    || isGRFATR(nWhich)
+                    || isUNKNOWNATR(nWhich) )
+            {
+                pOtherSet = &rChgSet;
+                bOtherAttr = true;
+            }
         }
     }
 
