@@ -299,6 +299,14 @@ void SvXMLMetaDocumentContext::setBuildId(::rtl::OUString const& i_rBuildId, con
             sBuildId = OUString::createFromAscii( "680$9134" ); // fake NeoOffice as OpenOffice.org 2.2 release
         }
     }
+    else
+    {
+        if ((i_rBuildId.compareToAscii( RTL_CONSTASCII_STRINGPARAM("LibreOffice/3") ) == 0) )
+        {
+            // #118558# fake LibreOffice3 as OpenOffice.org 3.3 release
+            sBuildId = OUString::createFromAscii( "330$9567" );
+        }
+    }
 
     if ( sBuildId.getLength() ) try
     {
