@@ -280,32 +280,6 @@ sal_Bool  SfxApplication::IsDowning() const { return pAppData_Impl->bDowning; }
 SfxDispatcher* SfxApplication::GetAppDispatcher_Impl() { return pAppData_Impl->pAppDispat; }
 SfxSlotPool& SfxApplication::GetAppSlotPool_Impl() const { return *pAppData_Impl->pSlotPool; }
 
-static bool impl_loadBitmap(
-    const rtl::OUString &rPath, const rtl::OUString &rBmpFileName,
-    Image &rLogo )
-{
-    rtl::OUString uri( rPath );
-    rtl::Bootstrap::expandMacros( uri );
-    INetURLObject aObj( uri );
-    aObj.insertName( rBmpFileName );
-    SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
-    if ( !aStrm.GetError() )
-    {
-        // Use graphic class to also support more graphic formats (bmp,png,...)
-        Graphic aGraphic;
-
-        GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
-        rGF.ImportGraphic( aGraphic, String(), aStrm, GRFILTER_FORMAT_DONTKNOW );
-
-        // Default case, we load the intro bitmap from a seperate file
-        // (e.g. staroffice_intro.bmp or starsuite_intro.bmp)
-        BitmapEx aBmp = aGraphic.GetBitmapEx();
-        rLogo = Image( aBmp );
-        return true;
-    }
-    return false;
-}
-
 /** loads the application logo as used in the about dialog and impress slideshow pause screen */
 Image SfxApplication::GetApplicationLogo()
 {
