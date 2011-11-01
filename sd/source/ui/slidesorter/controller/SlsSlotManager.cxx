@@ -1156,8 +1156,8 @@ void SlotManager::DuplicateSelectedSlides (SfxRequest& rRequest)
         aPagesToSelect.end(),
         ::boost::bind(
             static_cast<void (PageSelector::*)(const SdPage*)>(&PageSelector::SelectPage),
-        rSelector,
-        _1));
+            ::boost::ref(rSelector),
+            _1));
 }
 
 IMPL_LINK(SlotManager, UserEventCallback, void*, EMPTYARG)
