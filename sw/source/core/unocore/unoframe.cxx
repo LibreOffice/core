@@ -1115,8 +1115,9 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 else if( sTmp.EqualsAscii( sGraphicObjectProtocol,
                                            0, sizeof(sGraphicObjectProtocol)-1 ) )
                 {
-                    ByteString sId( sTmp.Copy(sizeof(sGraphicObjectProtocol)-1),
-                                    RTL_TEXTENCODING_ASCII_US );
+                    rtl::OString sId(rtl::OUStringToOString(
+                        sTmp.Copy(sizeof(sGraphicObjectProtocol)-1),
+                        RTL_TEXTENCODING_ASCII_US));
                     pGrfObj = new GraphicObject( sId );
                     sGrfName.Erase();
                 }
@@ -1184,7 +1185,9 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 ::rtl::OUString aGraphicProtocol( RTL_CONSTASCII_USTRINGPARAM( sGraphicObjectProtocol ) );
                 if( aGrfUrl.compareTo( aGraphicProtocol, aGraphicProtocol.getLength() ) == 0 )
                 {
-                    ByteString sId( aGrfUrl.copy(sizeof(sGraphicObjectProtocol)-1).getStr(), RTL_TEXTENCODING_ASCII_US );
+                    rtl::OString sId(rtl::OUStringToOString(
+                        aGrfUrl.copy(sizeof(sGraphicObjectProtocol)-1),
+                        RTL_TEXTENCODING_ASCII_US));
                     pGrfObj = new GraphicObject( sId );
                     aGraphic = pGrfObj->GetGraphic();
                     bApply = true;
@@ -2137,8 +2140,9 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 else if( sGraphicURL.EqualsAscii( sGraphicObjectProtocol,
                                        0, sizeof(sGraphicObjectProtocol)-1 ) )
                 {
-                    ByteString sId( sGraphicURL.Copy( sizeof(sGraphicObjectProtocol)-1 ),
-                                    RTL_TEXTENCODING_ASCII_US );
+                    rtl::OString sId(rtl::OUStringToOString(
+                        sGraphicURL.Copy( sizeof(sGraphicObjectProtocol)-1 ),
+                        RTL_TEXTENCODING_ASCII_US));
                     pGrfObj = new GraphicObject( sId );
                     sGraphicURL.Erase();
                 }
