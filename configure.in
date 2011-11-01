@@ -6956,7 +6956,7 @@ AC_MSG_CHECKING([whether to enable GConf support])
 if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gconf" = "yes"; then
     ENABLE_GCONF="TRUE"
     AC_MSG_RESULT([yes])
-    PKG_CHECK_MODULES( GCONF, gconf-2.0 )
+    PKG_CHECK_MODULES( GCONF, gconf-2.0 orbit-2.0 )
 else
     AC_MSG_RESULT([no])
 fi
@@ -6968,13 +6968,10 @@ dnl ===================================================================
 
 ENABLE_GNOMEVFS=""
 AC_MSG_CHECKING([whether to enable GNOME VFS support])
-if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gnome_vfs" = "yes"; then
+if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gnome_vfs" = "yes" -a "$enable_gconf" = "yes"; then
     ENABLE_GNOMEVFS="TRUE"
     AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES( GNOMEVFS, gnome-vfs-2.0 >= 2.6.0 )
-    if test "$ENABLE_GCONF" != "TRUE"; then
-        PKG_CHECK_MODULES( GCONF, gconf-2.0 )
-    fi
 else
     AC_MSG_RESULT([no])
 fi
