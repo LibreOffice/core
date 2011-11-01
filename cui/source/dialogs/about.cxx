@@ -65,14 +65,6 @@ using namespace ::com::sun::star;
 #define SPACE_OFFSET    5
 #define SCROLL_TIMER    30
 
-/** loads the application logo as used in the about dialog and impress slideshow pause screen */
-Image SfxApplication::GetApplicationLogo()
-{
-    BitmapEx aBitmap;
-    Application::LoadBrandBitmap ("about", aBitmap);
-    return Image( aBitmap );
-}
-
 /* get good version information */
 static String
 GetBuildId()

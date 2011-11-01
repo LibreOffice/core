@@ -309,43 +309,9 @@ static bool impl_loadBitmap(
 /** loads the application logo as used in the about dialog and impress slideshow pause screen */
 Image SfxApplication::GetApplicationLogo()
 {
-    Image aAppLogo;
-
-    rtl::OUString aAbouts;
-    bool bLoaded = false;
-    sal_Int32 nIndex = 0;
-    do
-    {
-        bLoaded = impl_loadBitmap(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program")),
-            aAbouts.getToken( 0, ',', nIndex ), aAppLogo );
-    }
-    while ( !bLoaded && ( nIndex >= 0 ) );
-
-    // fallback to "about.bmp"
-    if ( !bLoaded )
-    {
-        bLoaded = impl_loadBitmap(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/edition")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("about.png")), aAppLogo );
-        if ( !bLoaded )
-            bLoaded = impl_loadBitmap(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/edition")),
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("about.bmp")), aAppLogo );
-    }
-
-    if ( !bLoaded )
-    {
-        bLoaded = impl_loadBitmap(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("about.png")), aAppLogo );
-        if ( !bLoaded )
-            bLoaded = impl_loadBitmap(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program")),
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("about.bmp")), aAppLogo );
-    }
-
-    return aAppLogo;
+    BitmapEx aBitmap;
+    Application::LoadBrandBitmap ("about", aBitmap);
+    return Image( aBitmap );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
