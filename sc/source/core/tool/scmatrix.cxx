@@ -591,8 +591,10 @@ bool ScMatrixImpl::IsEmpty( SCSIZE nC, SCSIZE nR ) const
 bool ScMatrixImpl::IsEmptyPath( SCSIZE nC, SCSIZE nR ) const
 {
     // 'Empty path' is empty plus non-zero flag.
-    ValidColRowReplicated( nC, nR );
-    return maMat.get_type(nR, nC) == ::mdds::element_empty && maMat.get_flag(nR, nC) != 0;
+    if (ValidColRowReplicated( nC, nR ))
+        return maMat.get_type(nR, nC) == ::mdds::element_empty && maMat.get_flag(nR, nC) != 0;
+    else
+        return true;
 }
 
 bool ScMatrixImpl::IsValue( SCSIZE nIndex ) const
