@@ -33,6 +33,8 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <vector>
 #include <memory>
+#include <boost/noncopyable.hpp>
+
 
 class SdPage;
 
@@ -62,7 +64,7 @@ class SlideSorterController;
     Indices of pages relate allways to the number of all pages in the model
     (as returned by GetPageCount()) not just the selected pages.
 */
-class PageSelector
+class PageSelector : private ::boost::noncopyable
 {
 public:
     PageSelector (SlideSorter& rSlideSorter);
