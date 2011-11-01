@@ -1438,8 +1438,7 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                     else if ( nCalcPos >= mnCols ) // we can go up
                     {
                         if ( nCalcPos >= ( nLineCount * mnCols ) )
-                            nItemPos = sal::static_int_cast< sal_uInt16 >(
-                                nCalcPos - ( nLineCount * mnCols ));
+                            nItemPos = nCalcPos - ( nLineCount * mnCols );
                         else
                             // Go to the first line. This can only happen for KEY_PAGEUP
                             nItemPos = nCalcPos % mnCols;
@@ -1482,8 +1481,7 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                     else if ( nCalcPos + mnCols <= nLastItem ) // we can go down
                     {
                         if ( nCalcPos + ( nLineCount * mnCols ) <= nLastItem )
-                            nItemPos = sal::static_int_cast< sal_uInt16 >(
-                                nCalcPos + ( nLineCount * mnCols ));
+                            nItemPos = nCalcPos + ( nLineCount * mnCols );
                         else
                             // Go to the last line. This can only happen for KEY_PAGEDOWN
                             nItemPos = lcl_gotoLastLine(nLastItem, mnCols, nCalcPos);
