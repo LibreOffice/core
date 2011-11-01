@@ -143,6 +143,7 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                     catch( beans::UnknownPropertyException &ex )
                     {
                         delete pItem;
+                        (void)ex;
                         OSL_FAIL(
                                     ::rtl::OUStringToOString(
                                         ex.Message +
@@ -152,6 +153,7 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                     }
                     catch( uno::Exception &ex )
                     {
+                        (void)ex;
                         ASSERT_EXCEPTION( ex );
                     }
                 }
@@ -214,6 +216,7 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
                 }
                 catch( beans::UnknownPropertyException &ex )
                 {
+                    (void)ex;
                     OSL_FAIL(
                                 ::rtl::OUStringToOString(
                                     ex.Message +
@@ -223,6 +226,7 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
                 }
                 catch( uno::Exception &ex )
                 {
+                    (void)ex;
                     OSL_FAIL( ::rtl::OUStringToOString(
                                     ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
                 }

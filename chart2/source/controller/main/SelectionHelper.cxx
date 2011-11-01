@@ -329,7 +329,6 @@ bool Selection::isResizeableObjectSelected()
         default:
             return false;
     }
-    return false;
 }
 
 bool Selection::isRotateableObjectSelected( const uno::Reference< frame::XModel >& xChartModel )

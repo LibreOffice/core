@@ -277,11 +277,11 @@ sal_Bool SAXParser::Parse( ParseAction aAct )
         {
             xParser->parseStream ( sSource );
         }
-        catch( class SAXParseException & rPEx)
+        catch( class SAXParseException & )
         {
             // TODO
         }
-        catch( class Exception & rEx)
+        catch( class Exception & )
         {
             // TODO
         }
