@@ -58,12 +58,6 @@ namespace basegfx
         {
         }
 
-        BasicRange(const BasicRange& rRange) :
-            mnMinimum(rRange.mnMinimum),
-            mnMaximum(rRange.mnMaximum)
-        {
-        }
-
         void reset()
         {
             mnMinimum = Traits::maxVal();
@@ -156,13 +150,6 @@ namespace basegfx
         bool operator!=( const BasicRange& rRange ) const
         {
             return (mnMinimum != rRange.mnMinimum || mnMaximum != rRange.mnMaximum);
-        }
-
-        BasicRange& operator=(const BasicRange& rRange)
-        {
-            mnMinimum = rRange.mnMinimum;
-            mnMaximum = rRange.mnMaximum;
-            return *this;
         }
 
         bool equal(const BasicRange& rRange) const

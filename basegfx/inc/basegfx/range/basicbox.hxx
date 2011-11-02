@@ -35,12 +35,11 @@
 
 namespace basegfx
 {
-    /** Specialization of BasicRange, handling the inside predicates
+    /** Explicitely different from BasicRange, handling the inside predicates
         differently.
 
-        This template considers the rightmost and bottommost border as
-        <em>outside</em> of the range, in contrast to BasicRange,
-        which considers them inside.
+        This is modelled after how polygon fill algorithms set pixel -
+        typically excluding rightmost and bottommost ones.
      */
     class BASEGFX_DLLPUBLIC BasicBox : public BasicRange< sal_Int32, Int32Traits >
     {
@@ -56,9 +55,9 @@ namespace basegfx
         {
         }
 
-        BasicBox(const BasicBox& rBox) :
-            Base( rBox )
+        bool isEmpty() const
         {
+            return mnMinimum >= mnMaximum;
         }
 
         double getCenter() const

@@ -45,6 +45,11 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/b2irange.hxx>
+#include <basegfx/range/b2ibox.hxx>
+#include <basegfx/range/b1drange.hxx>
+#include <basegfx/range/b1irange.hxx>
+#include <basegfx/range/b1ibox.hxx>
 #include <basegfx/range/b2dpolyrange.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/color/bcolor.hxx>
@@ -1219,7 +1224,7 @@ public:
 }; // class b2dquadraticbezier
 
 
-class b2drange : public CppUnit::TestFixture
+class b1Xrange : public CppUnit::TestFixture
 {
 public:
     // initialise your test code values here.
@@ -1231,19 +1236,109 @@ public:
     {
     }
 
-    // insert your test code here.
-    void EmptyMethod()
+    template<class Type> void implCheck()
     {
+        // test interval axioms
+        // (http://en.wikipedia.org/wiki/Interval_%28mathematics%29)
+        Type aRange;
+        CPPUNIT_ASSERT_MESSAGE("default ctor - empty range", aRange.isEmpty());
+        CPPUNIT_ASSERT_MESSAGE("center - get cop-out value since range is empty", aRange.getCenter()==0);
+
+        // degenerate interval
+        aRange.expand(1);
+        CPPUNIT_ASSERT_MESSAGE("degenerate range - still, not empty!", !aRange.isEmpty());
+        CPPUNIT_ASSERT_MESSAGE("degenerate range - size of 0", aRange.getRange() == 0);
+        CPPUNIT_ASSERT_MESSAGE("same value as degenerate range - is inside range", aRange.isInside(1));
+        CPPUNIT_ASSERT_MESSAGE("center - must be the single range value", aRange.getCenter()==1);
+
+        // proper interval
+        aRange.expand(2);
+        CPPUNIT_ASSERT_MESSAGE("proper range - size of 1", aRange.getRange() == 1);
+        CPPUNIT_ASSERT_MESSAGE("smaller value of range - is inside *closed* range", aRange.isInside(1));
+        CPPUNIT_ASSERT_MESSAGE("larger value of range - is inside *closed* range", aRange.isInside(2));
+
+        // center for proper interval that works for ints, too
+        aRange.expand(3);
+        CPPUNIT_ASSERT_MESSAGE("center - must be half of the range", aRange.getCenter()==2);
+
+        // check overlap
+        Type aRange2(0,1);
+        CPPUNIT_ASSERT_MESSAGE("box overlapping *includes* upper bound", aRange.overlaps(aRange2));
+        CPPUNIT_ASSERT_MESSAGE("box overlapping *includes* upper bound, but only barely", !aRange.overlapsMore(aRange2));
+
+        Type aRange3(0,2);
+        CPPUNIT_ASSERT_MESSAGE("box overlapping is fully overlapping now", aRange.overlapsMore(aRange3));
+    }
+
+    void check()
+    {
+        implCheck<B1DRange>();
+        implCheck<B1IRange>();
     }
 
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    SAL_CPPUNIT_TEST_SUITE(b2drange);
-    CPPUNIT_TEST(EmptyMethod);
+    SAL_CPPUNIT_TEST_SUITE(b1Xrange);
+    CPPUNIT_TEST(check);
     SAL_CPPUNIT_TEST_SUITE_END();
-}; // class b2drange
+}; // class b1Xrange
+
+
+class b1ibox : public CppUnit::TestFixture
+{
+public:
+    // initialise your test code values here.
+    void setUp()
+    {
+    }
+
+    void tearDown()
+    {
+    }
+
+    void TestBox()
+    {
+        // test axioms - markedly different from proper mathematical
+        // intervals (behaviour modelled after how polygon fill
+        // algorithms fill pixels)
+        B1IBox aBox;
+        CPPUNIT_ASSERT_MESSAGE("default ctor - empty range", aBox.isEmpty());
+
+        // degenerate box
+        aBox.expand(1);
+        CPPUNIT_ASSERT_MESSAGE("degenerate box - still empty!", aBox.isEmpty());
+        CPPUNIT_ASSERT_MESSAGE("degenerate box - size of 0", aBox.getRange() == 0);
+        CPPUNIT_ASSERT_MESSAGE("same value as degenerate box - is outside (since empty)", !aBox.isInside(1));
+        CPPUNIT_ASSERT_MESSAGE("center - get cop-out value since box is empty", aBox.getCenter()==0);
+
+        // proper box
+        aBox.expand(2);
+        CPPUNIT_ASSERT_MESSAGE("proper box - size of 1", aBox.getRange() == 1);
+        CPPUNIT_ASSERT_MESSAGE("smaller value of box", aBox.isInside(1));
+        CPPUNIT_ASSERT_MESSAGE("larger value of box - must be outside", !aBox.isInside(2));
+
+        // center for proper box that works for ints, too
+        aBox.expand(4);
+        CPPUNIT_ASSERT_MESSAGE("center - must be center pixel of the box", aBox.getCenter()==2);
+
+        // check overlap, which is markedly different from Range
+        B1IBox aBox2(0,1);
+        CPPUNIT_ASSERT_MESSAGE("box overlapping *excludes* upper bound", !aBox.overlaps(aBox2));
+
+        B1IBox aBox3(0,2);
+        CPPUNIT_ASSERT_MESSAGE("box overlapping then includes upper bound-1", aBox.overlaps(aBox3));
+    }
+
+    // Change the following lines only, if you add, remove or rename
+    // member functions of the current class,
+    // because these macros are need by auto register mechanism.
+
+    SAL_CPPUNIT_TEST_SUITE(b1ibox);
+    CPPUNIT_TEST(TestBox);
+    SAL_CPPUNIT_TEST_SUITE_END();
+}; // class b1ibox
 
 
 class b2dtuple : public CppUnit::TestFixture
@@ -1487,7 +1582,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dpolygon);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dpolygontools);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dpolypolygon);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dquadraticbezier);
-CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2drange);
+CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b1Xrange);
+CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b1ibox);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dtuple);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dvector);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::bcolor);

@@ -121,6 +121,11 @@ namespace basegfx
             return maRange.overlaps(rRange.maRange);
         }
 
+        bool overlapsMore(const B1IRange& rRange) const
+        {
+            return maRange.overlapsMore(rRange.maRange);
+        }
+
         void expand(sal_Int32 nValue)
         {
             maRange.expand(nValue);
