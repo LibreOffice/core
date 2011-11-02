@@ -148,12 +148,11 @@ $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 
 endif # ifeq ($(GUI),WNT)
 
-ifeq ($(SYSTEM_MOZILLA),YES)
+ifeq ($(SYSTEM_NSS),YES)
 
 $(eval $(call gb_Library_set_include,xsec_xmlsec,\
 	$$(INCLUDE) \
-	$(MOZ_NSPR_CFLAGS) \
-	$(MOZ_NSS_CFLAGS) \
+	$(NSS_CFLAGS) \
 ))
 
 $(eval $(call gb_Library_add_defs,xsec_xmlsec,\
@@ -161,9 +160,7 @@ $(eval $(call gb_Library_add_defs,xsec_xmlsec,\
 ))
 
 $(eval $(call gb_Library_add_libs,xsec_xmlsec,\
-	$(NSPR_LIB) \
-	$(NSS_LIB) \
-	$(MOZ_NSS_LIBS) \
+	$(NSS_LIBS) \
 ))
 
 else
@@ -179,7 +176,7 @@ $(eval $(call gb_Library_add_linked_libs,xsec_xmlsec,\
 	nss3 \
 ))
 
-endif # ifeq ($(SYSTEM_MOZILLA),YES)
+endif # ifeq ($(SYSTEM_NSS),YES)
 
 ifeq ($(OS),SOLARIS)
 $(eval $(call gb_Library_add_linked_libs,xsec_xmlsec,\

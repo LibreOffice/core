@@ -988,7 +988,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
                 {
                     aResult = xTypeCFG->getByName( sType );
                 }
-                catch( ::com::sun::star::container::NoSuchElementException& )
+                catch (const ::com::sun::star::container::NoSuchElementException&)
                 {
                     aResult = ::com::sun::star::uno::Any();
                 }
@@ -1156,7 +1156,7 @@ void SfxFilterContainer::ReadFilters_Impl( sal_Bool bUpdate )
             }
         }
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch(const ::com::sun::star::uno::Exception&)
     {
         DBG_ASSERT( sal_False, "SfxFilterContainer::ReadFilter()\nException detected. Possible not all filters could be cached.\n" );
     }

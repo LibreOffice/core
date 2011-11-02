@@ -385,14 +385,14 @@ void SwEditShell::ApplyAutoMark()
 
         while( !rStrm.GetError() && !rStrm.IsEof() )
         {
-            ByteString aRdLine;
+            rtl::OString aRdLine;
             rStrm.ReadLine( aRdLine );
 
             // # -> comment
             // ; -> delimiter between entries ->
             // Format: TextToSearchFor;AlternativeString;PrimaryKey;SecondaryKey;CaseSensitive;WordOnly
             // Leading and trailing blanks are ignored
-            if( aRdLine.Len() && '#' != aRdLine.GetChar(0) )
+            if( aRdLine.getLength() && '#' != aRdLine[0] )
             {
                 String sLine( aRdLine, eChrSet );
 

@@ -30,8 +30,6 @@
 #include "precompiled_sw.hxx"
 
 
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>
 #include <com/sun/star/text/ReferenceFieldPart.hpp>
 #include <com/sun/star/text/ReferenceFieldSource.hpp>
 #include <unotools/localedatawrapper.hxx>
@@ -80,7 +78,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::lang;
 using ::rtl::OUString;
 
-extern void InsertSort( SvUShorts& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos = 0 );
+extern void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos = 0 );
 
 void lcl_GetLayTree( const SwFrm* pFrm, SvPtrarr& rArr )
 {

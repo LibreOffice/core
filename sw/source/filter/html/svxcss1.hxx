@@ -245,7 +245,7 @@ class SvxCSS1Parser : public CSS1Parser
     void ParseProperty( const String& rProperty,
                         const CSS1Expression *pExpr );
 
-    SvUShorts aWhichMap;        // Which-Map des Parser
+    std::vector<sal_uInt16> aWhichMap;        // Which-Map des Parser
 
     using CSS1Parser::ParseStyleOption;
 
@@ -310,7 +310,7 @@ public:
 
     virtual const FontList *GetFontList() const;
 
-    const sal_uInt16 *GetWhichMap() const { return aWhichMap.GetData(); }
+    const sal_uInt16 *GetWhichMap() const { return &aWhichMap[0]; }
 
     void InsertMapEntry( const String& rKey, const SfxItemSet& rItemSet,
                          const SvxCSS1PropertyInfo& rProp, CSS1Map& rMap );

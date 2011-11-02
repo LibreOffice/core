@@ -1775,7 +1775,7 @@ SwTestTabPage::SwTestTabPage( Window* pParent,
     lcl_SetPosSize(aTest9CBox  ,    Point(116, 53), Size(74 , 10));
     lcl_SetPosSize(aTest10CBox  ,   Point(116, 66), Size(74 , 10));
 
-    aTestFL.SetText( String(ByteString("Einstellungen nur f\xFCr Testzwecke" ), RTL_TEXTENCODING_MS_1252));
+    aTestFL.SetText(rtl::OUString(RTL_CONSTASCII_STRINGPARAM("Settings only for testpurposes", RTL_TEXTENCODING_ASCII_US));
     aTest1CBox .SetText( C2S("unused"));
     aTest2CBox .SetText( C2S("dynamic"));
     aTest3CBox .SetText( C2S("No calm"               ));

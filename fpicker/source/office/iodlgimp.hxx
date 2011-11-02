@@ -45,7 +45,6 @@ class Accelerator;
 class CheckBox;
 class SvtFileDialog;
 class SvStringsDtor;
-class SvUShorts;
 
 //*****************************************************************************
 

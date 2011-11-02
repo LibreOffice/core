@@ -836,13 +836,9 @@ extern "C" {
         GTimeVal aTimeNow;
         g_source_get_current_time( pSource, &aTimeNow );
 
-        if( pTSource->aFireTime.tv_sec > aTimeNow.tv_sec )
-            return FALSE;
-        if( pTSource->aFireTime.tv_sec < aTimeNow.tv_sec )
-            return TRUE;
-        if( pTSource->aFireTime.tv_usec < aTimeNow.tv_usec )
-            return FALSE;
-        return TRUE;
+        return ( pTSource->aFireTime.tv_sec < aTimeNow.tv_sec ||
+                 ( pTSource->aFireTime.tv_sec == aTimeNow.tv_sec &&
+                   pTSource->aFireTime.tv_usec < aTimeNow.tv_usec ) );
     }
 
     static gboolean sal_gtk_timeout_dispatch( GSource *pSource, GSourceFunc, gpointer )
@@ -921,7 +917,7 @@ bool GtkSalTimer::Expired()
 void GtkSalTimer::Start( sal_uLong nMS )
 {
     m_nTimeoutMS = nMS; // for restarting
-    Stop();
+    Stop(); // FIXME: ideally re-use an existing m_pTimeout
     m_pTimeout = create_sal_gtk_timeout( this );
 }
 

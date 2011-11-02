@@ -38,6 +38,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 
 #include "bitset.hxx"
+#include <vector>
 
 class SfxApplication;
 class SvStrings;
@@ -50,7 +51,6 @@ class SfxMacroConfig;
 class SfxItemPool;
 class SfxInitLinkList;
 class SfxFilterMatcher;
-class SvUShorts;
 class ISfxTemplateCommon;
 class SfxFilterMatcher;
 class SfxStatusDispatcher;
@@ -124,7 +124,7 @@ public:
 
     // global pointers
     SfxItemPool*                        pPool;
-    SvUShorts*                          pDisabledSlotList;
+    std::vector<sal_uInt16>*            pDisabledSlotList;
     SvStrings*                          pSecureURLs;
     SvtSaveOptions*                     pSaveOptions;
     SvtUndoOptions*                     pUndoOptions;

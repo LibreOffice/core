@@ -99,9 +99,9 @@ $(eval $(call gb_CppunitTest_add_service_rdbs,sc_macros_test,\
 $(eval $(call gb_CppunitTest_set_args,sc_macros_test,\
     --headless \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
-    -env:OOO_CONFIG_REGISTRY_DIR=$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry) \
-    -env:OOO_CONFIG_REGISTRY_EXTRA_DIR=$(call gb_CppunitTarget__make_url,$(OUTDIR)/unittest/user) \
+    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry) module:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry/spool) xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/unittest/user)" \
 ))
+    # .../spool is required for the (somewhat strange) filter configuration
 
 # we need to
 # a) explicitly depend on library msword because it is not implied by a link

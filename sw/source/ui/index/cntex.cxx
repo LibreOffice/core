@@ -463,7 +463,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                 sPropName += String::CreateFromInt32( i );
                 lcl_SetProp(xInfo,
                     xIdxProps,
-                    ByteString(sPropName, RTL_TEXTENCODING_ASCII_US).GetBuffer(),
+                    rtl::OUStringToOString(sPropName, RTL_TEXTENCODING_ASCII_US).getStr(),
                     pForm->GetTemplate(i + nOffset));
             }
         }

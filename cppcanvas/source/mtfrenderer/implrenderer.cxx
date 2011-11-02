@@ -516,8 +516,8 @@ namespace cppcanvas
                 ++io_rCurrActionIndex;
 
                 if( pCurrAct->GetType() == META_COMMENT_ACTION &&
-                    static_cast<MetaCommentAction*>(pCurrAct)->GetComment().CompareIgnoreCaseToAscii(
-                        pCommentString ) == COMPARE_EQUAL )
+                    static_cast<MetaCommentAction*>(pCurrAct)->GetComment().equalsIgnoreAsciiCase(
+                        pCommentString) )
                 {
                     // requested comment found, done
                     return;
@@ -551,8 +551,8 @@ namespace cppcanvas
                 }
 
                 if( pCurrAct->GetType() == META_COMMENT_ACTION &&
-                    static_cast<MetaCommentAction*>(pCurrAct)->GetComment().CompareIgnoreCaseToAscii(
-                        pCommentString ) == COMPARE_EQUAL )
+                    static_cast<MetaCommentAction*>(pCurrAct)->GetComment().equalsIgnoreAsciiCase(
+                        pCommentString) )
                 {
                     // delimiting end comment found, done
                     bRet = false; // not yet found
@@ -1686,7 +1686,7 @@ namespace cppcanvas
                         MetaCommentAction* pAct = static_cast<MetaCommentAction*>(pCurrAct);
 
                         // Handle gradients
-                        if ( pAct->GetComment().CompareIgnoreCaseToAscii( "XGRAD_SEQ_BEGIN" ) == COMPARE_EQUAL )
+                        if (pAct->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_BEGIN")))
                         {
                             MetaGradientExAction* pGradAction = NULL;
                             bool bDone( false );
@@ -1702,7 +1702,7 @@ namespace cppcanvas
 
                                     // skip broken-down rendering, output gradient when sequence is ended
                                     case META_COMMENT_ACTION:
-                                        if( static_cast<MetaCommentAction*>(pCurrAct)->GetComment().CompareIgnoreCaseToAscii( "XGRAD_SEQ_END" ) == COMPARE_EQUAL )
+                                        if( static_cast<MetaCommentAction*>(pCurrAct)->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_END")) )
                                         {
                                             bDone = true;
 
@@ -1723,7 +1723,7 @@ namespace cppcanvas
                         // XPATHSTROKE_SEQ_BEGIN comment
 
                         // Handle drawing layer fills
-                        else if( pAct->GetComment().Equals( "XPATHFILL_SEQ_BEGIN" ) )
+                        else if( pAct->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_BEGIN")) )
                         {
                             const sal_uInt8* pData = pAct->GetData();
                             if ( pData )
@@ -1839,7 +1839,7 @@ namespace cppcanvas
                             }
                         }
                         // Handle drawing layer fills
-                        else if( pAct->GetComment().Equals( "EMF_PLUS" ) ) {
+                        else if( pAct->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("EMF_PLUS")) ) {
                             static int count = -1, limit = 0x7fffffff;
                             if (count == -1) {
                                 count = 0;
@@ -1852,7 +1852,7 @@ namespace cppcanvas
                             if (count < limit)
                             processEMFPlus( pAct, rFactoryParms, getState( rStates ), rCanvas );
                             count ++;
-                        } else if( pAct->GetComment().Equals( "EMF_PLUS_HEADER_INFO" ) ) {
+                        } else if( pAct->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("EMF_PLUS_HEADER_INFO")) ) {
                             EMFP_DEBUG (printf ("EMF+ passed to canvas mtf renderer - header info, size: %u\n", (unsigned int)pAct->GetDataSize ()));
 
                             SvMemoryStream rMF ((void*) pAct->GetData (), pAct->GetDataSize (), STREAM_READ);

@@ -127,6 +127,7 @@ public:
     void testSheetCopy();
     void testSheetMove();
     void testExternalRef();
+    void testExternalRefFunctions();
     void testDataArea();
     void testAutofilter();
     void testCopyPaste();
@@ -169,6 +170,7 @@ public:
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testSheetMove);
     CPPUNIT_TEST(testExternalRef);
+    CPPUNIT_TEST(testExternalRefFunctions);
     CPPUNIT_TEST(testDataArea);
     CPPUNIT_TEST(testGraphicsInGroup);
     CPPUNIT_TEST(testStreamValid);
@@ -636,6 +638,24 @@ void Test::testMatrix()
         pMat->FillDouble(5.0, 0, 0, nC-1, nR-1);
         CPPUNIT_ASSERT_MESSAGE("fully non-zero matrix should evaluate true both on 'and' and 'or",
                                pMat->And() && pMat->Or());
+    }
+
+    // Test the AND and OR evaluations.
+    for (int i = 0; i < 2; ++i)
+    {
+        pMat = new ScMatrix(2, 2, eDT[i]);
+
+        // Only some of the elements are non-zero.
+        pMat->PutBoolean(true, 0, 0);
+        pMat->PutDouble(1.0, 1, 1);
+        CPPUNIT_ASSERT_MESSAGE("incorrect OR result", pMat->Or());
+        CPPUNIT_ASSERT_MESSAGE("incorrect AND result", !pMat->And());
+
+        // All of the elements are non-zero.
+        pMat->PutBoolean(true, 0, 1);
+        pMat->PutDouble(2.3, 1, 0);
+        CPPUNIT_ASSERT_MESSAGE("incorrect OR result", pMat->Or());
+        CPPUNIT_ASSERT_MESSAGE("incorrect AND result", pMat->And());
     }
 
     // Now test the emtpy matrix types.
@@ -1489,6 +1509,60 @@ void Test::testExternalRef()
     CPPUNIT_ASSERT_MESSAGE("Unexpected cached data range.",
                            aCachedRange.aStart.Col() == 0 && aCachedRange.aEnd.Col() == 1 &&
                            aCachedRange.aStart.Row() == 0 && aCachedRange.aEnd.Row() == 3);
+
+    // Unload the external document shell.
+    xExtDocSh->DoClose();
+    CPPUNIT_ASSERT_MESSAGE("external document instance should have been unloaded.",
+                           findLoadedDocShellByName(aExtDocName) == NULL);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testExternalRefFunctions()
+{
+    ScDocShellRef xExtDocSh = new ScDocShell;
+    OUString aExtDocName(RTL_CONSTASCII_USTRINGPARAM("file:///extdata.fake"));
+    SfxMedium* pMed = new SfxMedium(aExtDocName, STREAM_STD_READWRITE);
+    xExtDocSh->DoInitNew(pMed);
+    CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
+                           findLoadedDocShellByName(aExtDocName) != NULL);
+
+    // Populate the external source document.
+    ScDocument* pExtDoc = xExtDocSh->GetDocument();
+    pExtDoc->InsertTab(0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
+    double val = 1;
+    pExtDoc->SetValue(0, 0, 0, val);
+    // leave cell B1 empty.
+    val = 2;
+    pExtDoc->SetValue(0, 1, 0, val);
+    pExtDoc->SetValue(1, 1, 0, val);
+    val = 3;
+    pExtDoc->SetValue(0, 2, 0, val);
+    pExtDoc->SetValue(1, 2, 0, val);
+    val = 4;
+    pExtDoc->SetValue(0, 3, 0, val);
+    pExtDoc->SetValue(1, 3, 0, val);
+
+    m_pDoc->InsertTab(0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Test")));
+
+    struct {
+        const char* pFormula; double fResult;
+    } aChecks[] = {
+        { "=SUM('file:///extdata.fake'#Data.A1:A4)",     10 },
+        { "=SUM('file:///extdata.fake'#Data.B1:B4)",     9 },
+        { "=AVERAGE('file:///extdata.fake'#Data.A1:A4)", 2.5 },
+        { "=AVERAGE('file:///extdata.fake'#Data.B1:B4)", 3 },
+        { "=COUNT('file:///extdata.fake'#Data.A1:A4)",   4 },
+        { "=COUNT('file:///extdata.fake'#Data.B1:B4)",   3 }
+    };
+
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+    {
+        m_pDoc->SetString(0, 0, 0, rtl::OUString::createFromAscii(aChecks[i].pFormula));
+        m_pDoc->CalcAll();
+        m_pDoc->GetValue(0, 0, 0, val);
+        CPPUNIT_ASSERT_MESSAGE("unexpected result involving external ranges.", val == aChecks[i].fResult);
+    }
 
     // Unload the external document shell.
     xExtDocSh->DoClose();

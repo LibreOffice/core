@@ -53,10 +53,6 @@ $(call gb_UnoApiOutTarget_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_cl
 gb_UnoApiTarget_HPPFILES_$(1) :=
 gb_UnoApiTarget_IDLFILES_$(1) :=
 
-.DELETE_ON_ERROR : \
-    $(call gb_UnoApiTarget_get_clean_target,$(1)) \
-    $(call gb_UnoApiTarget_get_target,$(1))
-
 endef
 
 define gb_UnoApiTarget_add_idlfiles

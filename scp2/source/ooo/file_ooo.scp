@@ -629,14 +629,14 @@ End
 
 File gid_File_Rdb_Offapi
     TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
+    Dir = gid_Brand_Dir_Program_Types;
     Styles = (PACKED);
     Name = "offapi.rdb";
 End
 
 File gid_File_Rdb_TypesVba
     TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
+    Dir = gid_Brand_Dir_Program_Types;
     Styles = (PACKED, OVERWRITE);
     Name = "oovbaapi.rdb";
 End
@@ -1142,7 +1142,7 @@ End
 File gid_Starregistry_Services_Rdb
     TXT_FILE_BODY;
     Name = "services.rdb";
-    Dir = gid_Brand_Dir_Program;
+    Dir = gid_Brand_Dir_Program_Services;
     Styles = (PACKED);
 End
 

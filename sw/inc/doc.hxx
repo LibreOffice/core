@@ -579,6 +579,7 @@ private:
     bool mbCollapseEmptyCellPara                    : 1;
     bool mbTabAtLeftIndentForParagraphsInList;             // #i89181# - see above
     bool mbSmallCapsPercentage66;
+    bool mbTabOverflow;
 
     bool mbLastBrowseMode                           : 1;
 

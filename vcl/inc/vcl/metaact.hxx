@@ -1489,10 +1489,10 @@ class VCL_DLLPUBLIC MetaCommentAction : public MetaAction
 {
 private:
 
-    ByteString          maComment;
+    rtl::OString        maComment;
     sal_Int32           mnValue;
     sal_uInt32          mnDataSize;
-    sal_uInt8*              mpData;
+    sal_uInt8*          mpData;
 
     SAL_DLLPRIVATE void ImplInitDynamicData( const sal_uInt8* pData, sal_uInt32 nDataSize );
     virtual sal_Bool    Compare( const MetaAction& ) const;
@@ -1503,7 +1503,7 @@ protected:
 public:
                         MetaCommentAction( sal_Int32 nValue = 0L );
                         MetaCommentAction( const MetaCommentAction& rAct );
-                        MetaCommentAction( const ByteString& rComment, sal_Int32 nValue = 0L, const sal_uInt8* pData = NULL, sal_uInt32 nDataSize = 0UL );
+                        MetaCommentAction( const rtl::OString& rComment, sal_Int32 nValue = 0L, const sal_uInt8* pData = NULL, sal_uInt32 nDataSize = 0UL );
                         MetaCommentAction( const sal_uInt8* pData, sal_uInt32 nDataSize );
 
     virtual void        Move( long nHorzMove, long nVertMove );
@@ -1514,7 +1514,7 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData );
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData );
 
-    const ByteString&   GetComment() const { return maComment; }
+    const rtl::OString& GetComment() const { return maComment; }
     sal_Int32           GetValue() const { return mnValue; }
     sal_uInt32          GetDataSize() const { return mnDataSize; }
     const sal_uInt8*        GetData() const { return mpData; }

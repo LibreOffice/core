@@ -1248,7 +1248,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
                     OSL_FAIL("no output file created?");
                     continue;
                 }
-                ByteString sLine;
+                rtl::OString sLine;
                 sal_Bool bDone = pInStream->ReadLine( sLine );
                 while ( bDone )
                 {

@@ -101,9 +101,7 @@ Reference< XInterface > SAL_CALL SWFDialog_createInstance( const Reference< XMul
 SWFDialog::SWFDialog( const Reference< XMultiServiceFactory > &rxMSF ) :
     OGenericUnoDialog( rxMSF )
 {
-    ByteString aResMgrName( "flash" );
-
-    mpResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
+    mpResMgr = ResMgr::CreateResMgr( "flash", Application::GetSettings().GetUILocale() );
 }
 
 // -----------------------------------------------------------------------------

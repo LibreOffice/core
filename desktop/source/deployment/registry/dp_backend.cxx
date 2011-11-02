@@ -677,8 +677,13 @@ void Package::processPackage_impl(
                                  xCmdEnv );
             }
         }
-        catch (RuntimeException &) {
-            OSL_FAIL( "### unexpected RuntimeException!" );
+        catch (RuntimeException &e) {
+            (void) e; // avoid warnings
+            OSL_FAIL(
+                OSL_FORMAT(
+                    "unexpected RuntimeException \"%s\"",
+                    (rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).
+                     getStr())));
             throw;
         }
         catch (CommandFailedException &) {

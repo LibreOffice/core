@@ -103,7 +103,7 @@ oslProcessError SAL_CALL rtl_getAppCommandArg (
     return (result);
 }
 
-sal_uInt32 SAL_CALL rtl_getAppCommandArgCount (void)
+sal_uInt32 SAL_CALL rtl_getAppCommandArgCount()
 {
     init();
     return g_nCommandArgCount;

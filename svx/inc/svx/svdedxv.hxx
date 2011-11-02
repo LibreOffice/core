@@ -195,11 +195,6 @@ public:
     virtual SdrEndTextEditKind SdrEndTextEdit(sal_Bool bDontDeleteReally = sal_False);
     virtual bool IsTextEdit() const;
 
-    // sal_True=Es wird ein Textrahmen (OBJ_TEXT,OBJ_OUTLINETEXT,...) editiert
-    // ansonsten handelt es sich um ein beschriftetes Zeichenobjekt, an dem
-    // der Text ja bekanntlich hor. und vert. zentriert wird.
-    sal_Bool IsTextEditFrame() const;
-
     // Diese Methode liefert sal_True, wenn der Punkt rHit innerhalb der
     // des Objektbereichs oder der OutlinerView liegt.
     sal_Bool IsTextEditHit(const Point& rHit, short nTol) const;
@@ -212,10 +207,6 @@ public:
     // Bei aktiver Selektion, also zwischen MouseButtonDown und
     // MouseButtonUp liefert diese Methode immer TRUE.
     sal_Bool IsTextEditInSelectionMode() const;
-
-    // Folgende Methode addiert einen passenden Offset zum MouseEvent
-    // um diesen an den Outliner weiterzureichen.
-    void AddTextEditOfs(MouseEvent& rMEvt) const;
 
     // Wer das z.Zt. im TextEdit befindliche Objekt braucht:
     SdrObject* GetTextEditObject() const { return mxTextEditObj.get(); }
@@ -240,9 +231,6 @@ public:
     virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt, Window* pWin);
     virtual sal_Bool MouseMove(const MouseEvent& rMEvt, Window* pWin);
     virtual sal_Bool Command(const CommandEvent& rCEvt, Window* pWin);
-    sal_Bool Cut(sal_uIntPtr nFormat=SDR_ANYFORMAT);
-    sal_Bool Yank(sal_uIntPtr nFormat=SDR_ANYFORMAT);
-    sal_Bool Paste(Window* pWin=NULL, sal_uIntPtr nFormat=SDR_ANYFORMAT);
 
     // #97766# make virtual to change implementation e.g. for SdOutlineView
     virtual sal_uInt16 GetScriptType() const;

@@ -83,6 +83,21 @@ const SwFrameControlsManager& SwFrameControlsManager::operator=( const SwFrameCo
     return *this;
 }
 
+SwFrameControlPtr SwFrameControlsManager::GetControl( FrameControlType eType, const SwFrm* pFrm )
+{
+    SwFrameControlPtr pControl;
+
+    vector< SwFrameControlPtr >& aControls = m_aControls[eType];
+
+    vector< SwFrameControlPtr >::iterator pIt = find_if(
+            aControls.begin(), aControls.end( ), FramePredicate( pFrm ) );
+
+    if ( pIt != aControls.end() )
+        pControl = *pIt;
+
+    return pControl;
+}
+
 std::vector< SwFrameControlPtr >& SwFrameControlsManager::GetControls( FrameControlType eType )
 {
     return m_aControls[eType];

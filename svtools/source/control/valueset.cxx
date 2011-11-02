@@ -1318,6 +1318,20 @@ void ValueSet::Tracking( const TrackingEvent& rTEvt )
 
 // -----------------------------------------------------------------------
 
+namespace
+{
+
+size_t
+lcl_gotoLastLine(size_t const nLastPos, size_t const nCols, size_t const nCurPos)
+{
+    size_t nItemPos = ((((nLastPos+1)/nCols)-1)*nCols)+(nCurPos%nCols);
+    if ( nItemPos+nCols <= nLastPos )
+        nItemPos = nItemPos + nCols;
+    return nItemPos;
+}
+
+}
+
 void ValueSet::KeyInput( const KeyEvent& rKEvt )
 {
     size_t nLastItem = mpImpl->mpItemList->size();
@@ -1419,16 +1433,17 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                         if ( nLastItem+1 <= mnCols )
                             nItemPos = mnCurCol;
                         else
-                        {
-                            nItemPos = ((((nLastItem+1)/mnCols)-1)*mnCols)+(mnCurCol%mnCols);
-                            if ( nItemPos+mnCols <= nLastItem )
-                                nItemPos = nItemPos + mnCols;
-                        }
+                            nItemPos = lcl_gotoLastLine(nLastItem, mnCols, mnCurCol);
                     }
-                    else if ( nCalcPos >= ( nLineCount * mnCols ) )
-                        nItemPos = sal::static_int_cast< sal_uInt16 >(
-                            nCalcPos - ( nLineCount * mnCols ));
-                    else
+                    else if ( nCalcPos >= mnCols ) // we can go up
+                    {
+                        if ( nCalcPos >= ( nLineCount * mnCols ) )
+                            nItemPos = nCalcPos - ( nLineCount * mnCols );
+                        else
+                            // Go to the first line. This can only happen for KEY_PAGEUP
+                            nItemPos = nCalcPos % mnCols;
+                    }
+                    else // wrap around
                     {
                         if ( mpNoneItem )
                         {
@@ -1440,11 +1455,7 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                             if ( nLastItem+1 <= mnCols )
                                 nItemPos = nCalcPos;
                             else
-                            {
-                                nItemPos = ((((nLastItem+1)/mnCols)-1)*mnCols)+(nCalcPos%mnCols);
-                                if ( nItemPos+mnCols <= nLastItem )
-                                    nItemPos = nItemPos + mnCols;
-                            }
+                                nItemPos = lcl_gotoLastLine(nLastItem, mnCols, nCalcPos);
                         }
                     }
                     nCalcPos = nItemPos;
@@ -1467,10 +1478,15 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                 {
                     if ( nCalcPos == VALUESET_ITEM_NONEITEM )
                         nItemPos = mnCurCol;
-                    else if ( nCalcPos + ( nLineCount * mnCols ) <= nLastItem )
-                        nItemPos = sal::static_int_cast< sal_uInt16 >(
-                            nCalcPos + ( nLineCount * mnCols ));
-                    else
+                    else if ( nCalcPos + mnCols <= nLastItem ) // we can go down
+                    {
+                        if ( nCalcPos + ( nLineCount * mnCols ) <= nLastItem )
+                            nItemPos = nCalcPos + ( nLineCount * mnCols );
+                        else
+                            // Go to the last line. This can only happen for KEY_PAGEDOWN
+                            nItemPos = lcl_gotoLastLine(nLastItem, mnCols, nCalcPos);
+                    }
+                    else // wrap around
                     {
                         {
                             if ( mpNoneItem )

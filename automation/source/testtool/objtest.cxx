@@ -128,12 +128,6 @@ DBG_CTOR(ControlItem,0);
     pData->aUId = aUIdP;
 }
 
-ControlItem::ControlItem( ControlData *pDataP )
-{
-DBG_CTOR(ControlItem,0);
-    pData = pDataP;
-}
-
 ControlSon::~ControlSon()
 {
     if (pSons)

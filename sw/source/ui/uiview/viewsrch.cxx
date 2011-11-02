@@ -374,21 +374,22 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                 RES_CHRATR_CTL_FONT,    RES_CHRATR_CTL_WEIGHT
             };
 
-            SvUShorts aArr( 0, 16 );
-            aArr.Insert(    aNormalAttr,
-                            SAL_N_ELEMENTS( aNormalAttr ),
-                            0 );
+            std::vector<sal_uInt16> aArr;
+            aArr.insert( aArr.begin(), aNormalAttr,
+                    aNormalAttr + SAL_N_ELEMENTS( aNormalAttr ));
             if( SW_MOD()->GetCTLOptions().IsCTLFontEnabled() )
-                aArr.Insert(    aCTLAttr,
-                                SAL_N_ELEMENTS( aCTLAttr ),
-                                14 );
+            {
+                aArr.insert( aArr.begin() + 14, aCTLAttr,
+                        aCTLAttr + SAL_N_ELEMENTS( aCTLAttr ));
+            }
             SvtCJKOptions aCJKOpt;
             if( aCJKOpt.IsAnyEnabled() )
-                aArr.Insert(    aCJKAttr,
-                                SAL_N_ELEMENTS( aCJKAttr ),
-                                14 );
+            {
+                aArr.insert( aArr.begin() + 14, aCJKAttr,
+                        aCJKAttr + SAL_N_ELEMENTS( aCJKAttr ));
+            }
 
-            SfxItemSet aSet( pWrtShell->GetAttrPool(), aArr.GetData() );
+            SfxItemSet aSet( pWrtShell->GetAttrPool(), &aArr[0] );
             sal_uInt16 nWhich = SID_SEARCH_SEARCHSET;
 
             if ( FID_SEARCH_REPLACESET == nSlot )

@@ -657,6 +657,7 @@ public:
                       const ResId &aLoad, const ResId &aSave,
                       const ResId &aEmbed, const ResId &aTableName,
                       XPropertyListType t, XOutdevItemPool* mpXPool );
+    virtual ~SvxLoadSaveEmbed() {};
     XPropertyListRef GetList();
     void HideLoadSaveEmbed();
     bool GetEmbed();

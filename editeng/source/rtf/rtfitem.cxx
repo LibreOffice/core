@@ -109,14 +109,14 @@ inline const SvxLRSpaceItem& GetLRSpace(const SfxItemSet& rSet,sal_uInt16 nId,sa
 inline const SvxULSpaceItem& GetULSpace(const SfxItemSet& rSet,sal_uInt16 nId,sal_Bool bInP=sal_True)
     { return (const SvxULSpaceItem&)rSet.Get( nId,bInP); }
 
-#define PARDID      ((RTFPardAttrMapIds*)aPardMap.GetData())
-#define PLAINID     ((RTFPlainAttrMapIds*)aPlainMap.GetData())
+#define PARDID      ((RTFPardAttrMapIds*)&aPardMap[0])
+#define PLAINID     ((RTFPlainAttrMapIds*)&aPlainMap[0])
 
 void SvxRTFParser::SetScriptAttr( RTF_CharTypeDef eType, SfxItemSet& rSet,
                                     SfxPoolItem& rItem )
 {
     const sal_uInt16 *pNormal = 0, *pCJK = 0, *pCTL = 0;
-    const RTFPlainAttrMapIds* pIds = (RTFPlainAttrMapIds*)aPlainMap.GetData();
+    const RTFPlainAttrMapIds* pIds = (RTFPlainAttrMapIds*)&aPlainMap[0];
     switch( rItem.Which() )
     {
     case SID_ATTR_CHAR_FONT:
@@ -1761,13 +1761,13 @@ void SvxRTFParser::RTFPardPlain( int bPard, SfxItemSet** ppSet )
             if( bPard )
             {
                 pAkt->nStyleNo = 0;
-                pPtr = aPardMap.GetData();
-                nCnt = aPardMap.Count();
+                pPtr = &aPardMap[0];
+                nCnt = aPardMap.size();
             }
             else
             {
-                pPtr = aPlainMap.GetData();
-                nCnt = aPlainMap.Count();
+                pPtr = &aPlainMap[0];
+                nCnt = aPlainMap.size();
             }
 
             for( sal_uInt16 n = 0; n < nCnt; ++n, ++pPtr )
@@ -1827,7 +1827,7 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
     if( !bNewDoc )
         return;
 
-    SfxItemSet aTmp( *pAttrPool, aWhichMap.GetData() );
+    SfxItemSet aTmp( *pAttrPool, &aWhichMap[0] );
     sal_Bool bOldFlag = bIsLeftToRightDef;
     bIsLeftToRightDef = sal_True;
     switch( nToken )

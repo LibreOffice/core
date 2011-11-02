@@ -38,9 +38,6 @@
 #include "rtl/string.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/uri.hxx"
-#if OSL_DEBUG_LEVEL > 0
-#include "rtl/strbuf.hxx"
-#endif
 #include "osl/diagnose.h"
 #include "osl/file.hxx"
 #include "osl/module.hxx"
@@ -77,6 +74,8 @@ using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+
+namespace css = com::sun::star;
 
 namespace cppu
 {
@@ -150,7 +149,7 @@ inline beans::PropertyValue createPropertyValue(
         name, -1, makeAny( value ), beans::PropertyState_DIRECT_VALUE );
 }
 
-OUString findBoostrapArgument(
+OUString findBootstrapArgument(
     const Bootstrap & bootstrap,
     const OUString & arg_name,
     sal_Bool * pFallenBack )
@@ -180,36 +179,124 @@ OUString findBoostrapArgument(
         result_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(".rdb") );
         result = result_buf.makeStringAndClear();
 
-#if OSL_DEBUG_LEVEL > 1
-        OString result_dbg =
-            OUStringToOString(result, RTL_TEXTENCODING_ASCII_US);
-        OString arg_name_dbg =
-            OUStringToOString(arg_name, RTL_TEXTENCODING_ASCII_US);
         OSL_TRACE(
-            "cppuhelper::findBoostrapArgument - "
-            "setting %s relative to executable: %s\n",
-            arg_name_dbg.getStr(),
-            result_dbg.getStr() );
-#endif
+            (OSL_LOG_PREFIX "findBootstrapArgument, setting \"%s\" relative to"
+             " executable \"%s\""),
+            OUStringToOString(arg_name, RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(result, RTL_TEXTENCODING_UTF8).getStr());
     }
     else
     {
         if(pFallenBack)
             *pFallenBack = sal_False;
 
-#if OSL_DEBUG_LEVEL > 1
-        OString prefixed_arg_name_dbg = OUStringToOString(
-            prefixed_arg_name, RTL_TEXTENCODING_ASCII_US );
-        OString result_dbg = OUStringToOString(
-            result, RTL_TEXTENCODING_ASCII_US );
         OSL_TRACE(
-            "cppuhelper::findBoostrapArgument - found %s in env: %s",
-            prefixed_arg_name_dbg.getStr(),
-            result_dbg.getStr() );
-#endif
+            OSL_LOG_PREFIX "findBootstrapArgument, found \"%s\" in env \"%s\"",
+            (OUStringToOString(prefixed_arg_name, RTL_TEXTENCODING_UTF8).
+             getStr()),
+            OUStringToOString(result, RTL_TEXTENCODING_UTF8).getStr());
     }
 
     return result;
+}
+
+css::uno::Reference< css::registry::XSimpleRegistry > readRdbFile(
+    rtl::OUString const & url, bool fatalErrors,
+    css::uno::Reference< css::registry::XSimpleRegistry > const & lastRegistry,
+    css::uno::Reference< css::lang::XSingleServiceFactory > const &
+        simpleRegistryFactory,
+    css::uno::Reference< css::lang::XSingleServiceFactory > const &
+        nestedRegistryFactory)
+{
+    OSL_ASSERT(simpleRegistryFactory.is() && nestedRegistryFactory.is());
+    try {
+        css::uno::Reference< css::registry::XSimpleRegistry > simple(
+            simpleRegistryFactory->createInstance(), css::uno::UNO_QUERY_THROW);
+        simple->open(url, true, false);
+        if (lastRegistry.is()) {
+            css::uno::Reference< css::registry::XSimpleRegistry > nested(
+                nestedRegistryFactory->createInstance(),
+                css::uno::UNO_QUERY_THROW);
+            css::uno::Sequence< css::uno::Any > args(2);
+            args[0] <<= lastRegistry;
+            args[1] <<= simple;
+            css::uno::Reference< css::lang::XInitialization >(
+                nested, css::uno::UNO_QUERY_THROW)->
+                initialize(args);
+            return nested;
+        } else {
+            return simple;
+        }
+    } catch (css::registry::InvalidRegistryException & e) {
+        (void) e; // avoid warnings
+        OSL_TRACE(
+            OSL_LOG_PREFIX "warning, could not open \"%s\": \"%s\"",
+            rtl::OUStringToOString(url, RTL_TEXTENCODING_UTF8).getStr(),
+            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        if (fatalErrors) {
+            throw;
+        }
+        return lastRegistry;
+    }
+}
+
+Reference< registry::XSimpleRegistry > readRdbDirectory(
+    rtl::OUString const & url, bool fatalErrors,
+    css::uno::Reference< css::registry::XSimpleRegistry > const & lastRegistry,
+    css::uno::Reference< css::lang::XSingleServiceFactory > const &
+        simpleRegistryFactory,
+    css::uno::Reference< css::lang::XSingleServiceFactory > const &
+        nestedRegistryFactory)
+{
+    OSL_ASSERT(simpleRegistryFactory.is() && nestedRegistryFactory.is());
+    osl::Directory dir(url);
+    switch (dir.open()) {
+    case osl::FileBase::E_None:
+        break;
+    case osl::FileBase::E_NOENT:
+        if (!fatalErrors) {
+            return lastRegistry;
+        }
+        // fall through
+    default:
+        throw css::uno::RuntimeException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("cannot open directory ")) +
+             url),
+            css::uno::Reference< css::uno::XInterface >());
+    }
+    for (css::uno::Reference< css::registry::XSimpleRegistry > last(
+             lastRegistry);;)
+    {
+        osl::DirectoryItem i;
+        switch (dir.getNextItem(i, SAL_MAX_UINT32)) {
+        case osl::FileBase::E_None:
+            break;
+        case osl::FileBase::E_NOENT:
+            return last;
+        default:
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("cannot iterate directory ")) +
+                 url),
+                css::uno::Reference< css::uno::XInterface >());
+        }
+        osl::FileStatus stat(
+            osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName |
+            osl_FileStatus_Mask_FileURL);
+        if (i.getFileStatus(stat) != osl::FileBase::E_None) {
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("cannot stat in directory ")) +
+                 url),
+                css::uno::Reference< css::uno::XInterface >());
+        }
+        if (stat.getFileType() != osl::FileStatus::Directory) { //TODO: symlinks
+            last = readRdbFile(
+                stat.getFileURL(), fatalErrors, last, simpleRegistryFactory,
+                nestedRegistryFactory);
+        }
+    }
 }
 
 Reference< registry::XSimpleRegistry > nestRegistries(
@@ -233,18 +320,13 @@ Reference< registry::XSimpleRegistry > nestRegistries(
         {
             lastRegistry->open(write_rdb, sal_False, forceWrite_rdb);
         }
-        catch (registry::InvalidRegistryException & invalidRegistryException)
+        catch (registry::InvalidRegistryException & e)
         {
-            (void) invalidRegistryException;
-#if OSL_DEBUG_LEVEL > 1
-            OString rdb_name_tmp = OUStringToOString(
-                write_rdb, RTL_TEXTENCODING_ASCII_US);
-            OString message_dbg = OUStringToOString(
-                invalidRegistryException.Message, RTL_TEXTENCODING_ASCII_US);
+            (void) e; // avoid warnings
             OSL_TRACE(
-                "warning: couldn't open %s cause of %s",
-                rdb_name_tmp.getStr(), message_dbg.getStr() );
-#endif
+                OSL_LOG_PREFIX "warning, could not open \"%s\": \"%s\"",
+                OUStringToOString(write_rdb, RTL_TEXTENCODING_UTF8).getStr(),
+                OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
         }
 
         if(!lastRegistry->isValid())
@@ -257,59 +339,30 @@ Reference< registry::XSimpleRegistry > nestRegistries(
         OUString rdb_name = (index == -1) ? csl_rdbs : csl_rdbs.copy(0, index);
         csl_rdbs = (index == -1) ? OUString() : csl_rdbs.copy(index + 1);
 
-        if (! rdb_name.getLength())
+        if (rdb_name.isEmpty()) {
             continue;
-
-        bool optional = ('?' == rdb_name[ 0 ]);
-        if (optional)
-            rdb_name = rdb_name.copy( 1 );
-
-        try
-        {
-            Reference<registry::XSimpleRegistry> simpleRegistry(
-                xSimRegFac->createInstance(), UNO_QUERY_THROW );
-
-            osl::FileBase::getAbsoluteFileURL(baseDir, rdb_name, rdb_name);
-            simpleRegistry->open(rdb_name, sal_True, sal_False);
-
-            if(lastRegistry.is())
-            {
-                Reference< registry::XSimpleRegistry > nestedRegistry(
-                    xNesRegFac->createInstance(), UNO_QUERY );
-                Reference< lang::XInitialization > nestedRegistry_xInit(
-                    nestedRegistry, UNO_QUERY );
-
-                Sequence<Any> aArgs(2);
-                aArgs[0] <<= lastRegistry;
-                aArgs[1] <<= simpleRegistry;
-
-                nestedRegistry_xInit->initialize(aArgs);
-
-                lastRegistry = nestedRegistry;
-            }
-            else
-                lastRegistry = simpleRegistry;
         }
-        catch(registry::InvalidRegistryException & invalidRegistryException)
-        {
-#if OSL_DEBUG_LEVEL > 1
-            OString rdb_name_tmp = OUStringToOString(
-                rdb_name, RTL_TEXTENCODING_ASCII_US );
-            OString message_dbg = OUStringToOString(
-                invalidRegistryException.Message, RTL_TEXTENCODING_ASCII_US );
-            OSL_TRACE(
-                "warning: couldn't open %s cause of %s",
-                rdb_name_tmp.getStr(), message_dbg.getStr() );
-#endif
-            if (! optional)
-            {
-                // if a registry was explicitly given, the exception shall fly
-                if( ! bFallenBack )
-                    throw;
-            }
 
-            (void) invalidRegistryException;
+        bool fatalErrors = !bFallenBack;
+        if (rdb_name[0] == '?') {
+            rdb_name = rdb_name.copy(1);
+            fatalErrors = false;
         }
+
+        bool directory = rdb_name.getLength() >= 3 && rdb_name[0] == '<' &&
+            rdb_name[rdb_name.getLength() - 2] == '>' &&
+            rdb_name[rdb_name.getLength() -1] == '*';
+        if (directory) {
+            rdb_name = rdb_name.copy(1, rdb_name.getLength() - 3);
+        }
+
+        osl::FileBase::getAbsoluteFileURL(baseDir, rdb_name, rdb_name);
+
+        lastRegistry = directory
+            ? readRdbDirectory(
+                rdb_name, fatalErrors, lastRegistry, xSimRegFac, xNesRegFac)
+            : readRdbFile(
+                rdb_name, fatalErrors, lastRegistry, xSimRegFac, xNesRegFac);
     }
     while(index != -1 && csl_rdbs.getLength()); // are there more rdbs in list?
 
@@ -356,7 +409,7 @@ SAL_CALL defaultBootstrap_InitialComponentContext(
 
     sal_Bool bFallenback_types;
     OUString cls_uno_types =
-        findBoostrapArgument( bootstrap, OUSTR("TYPES"), &bFallenback_types );
+        findBootstrapArgument( bootstrap, OUSTR("TYPES"), &bFallenback_types );
 
     Reference<registry::XSimpleRegistry> types_xRegistry =
         nestRegistries(
@@ -366,11 +419,11 @@ SAL_CALL defaultBootstrap_InitialComponentContext(
     // ==== bootstrap from services registry ====
 
     sal_Bool bFallenback_services;
-    OUString cls_uno_services = findBoostrapArgument(
+    OUString cls_uno_services = findBootstrapArgument(
         bootstrap, OUSTR("SERVICES"), &bFallenback_services );
 
     sal_Bool fallenBackWriteRegistry;
-    OUString write_rdb = findBoostrapArgument(
+    OUString write_rdb = findBootstrapArgument(
         bootstrap, OUSTR("WRITERDB"), &fallenBackWriteRegistry );
     if (fallenBackWriteRegistry)
     {

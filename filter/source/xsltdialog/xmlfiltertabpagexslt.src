@@ -179,7 +179,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 5 * ROW_HEIGHT + 5 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
-        Text [ en-US ]  = "XSLT Tranformation Service";
+        Text [ en-US ]  = "XSLT Transformation Service";
     };
 
     Edit ED_XML_TRANSFORM_SERVICE

@@ -36,7 +36,7 @@
 ModelessDialog RID_SVXDLG_SPELLCHECK
 {
     HelpId = HID_SPELLCHECK ;
-    Size = MAP_APPFONT( 270, 188 );
+    Size = MAP_APPFONT( 270, 208 );
     OutputSize = TRUE;
     Closeable = TRUE ;
     SVLook = TRUE;
@@ -44,13 +44,6 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
     Text [ en-US ] = "Spellcheck: " ;
 
     Moveable = TRUE ;
-
-    FixedImage IMG_VENDOR
-    {
-        Pos = MAP_APPFONT ( 0, 0 ) ;
-        Size = MAP_APPFONT ( 270, 21  ) ;
-        Hide = TRUE;
-    };
 
     FixedText FT_LANGUAGE
     {
@@ -67,9 +60,23 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
         Sort = TRUE;
         DropDown = TRUE;
     };
+    FixedText FT_EXPLAIN
+    {
+        Pos = MAP_APPFONT( 1, 18 );
+        Size = MAP_APPFONT( 239, 20 );
+        VCenter = TRUE ;
+    };
+    FixedText LINK_EXPLAIN
+    {
+        Pos = MAP_APPFONT( 240, 18 );
+        Size = MAP_APPFONT( 29, 20 );
+        Text [ en-US ] = "More..." ;
+        Right = TRUE ;
+        VCenter = TRUE ;
+    };
     FixedText FT_NOTINDICT
     {
-        Pos = MAP_APPFONT(  6, 26 );
+        Pos = MAP_APPFONT(  6, 46 );
         Size = MAP_APPFONT( 120, 8 );
         Text [ en-US ] = "~Not in dictionary" ;
     };
@@ -77,7 +84,7 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
     MultiLineEdit ED_NEWWORD
     {
         HelpID = "cui:MultiLineEdit:RID_SVXDLG_SPELLCHECK:ED_NEWWORD";
-        Pos = MAP_APPFONT( 6, 37 );
+        Pos = MAP_APPFONT( 6, 57 );
         Size = MAP_APPFONT( 197, 48 );
         Border = TRUE;
         VScroll = TRUE;
@@ -86,14 +93,14 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
 
     FixedText FT_SUGGESTION
     {
-        Pos = MAP_APPFONT( 6, 88 );
+        Pos = MAP_APPFONT( 6, 108 );
         Size = MAP_APPFONT( 120, 8 );
         Text [ en-US ] = "~Suggestions" ;
     };
     ListBox LB_SUGGESTION
     {
         HelpID = "cui:ListBox:RID_SVXDLG_SPELLCHECK:LB_SUGGESTION";
-        Pos = MAP_APPFONT( 6, 99 );
+        Pos = MAP_APPFONT( 6, 119 );
         Size = MAP_APPFONT( 197, 48 );
         Border = TRUE;
     };
@@ -101,7 +108,7 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
     CheckBox CB_CHECK_GRAMMAR
     {
         HelpID = "cui:CheckBox:RID_SVXDLG_SPELLCHECK:CB_CHECK_GRAMMAR";
-        Pos = MAP_APPFONT(  6, 153 );
+        Pos = MAP_APPFONT(  6, 173 );
         Size = MAP_APPFONT( 100, 10 );
         Text [ en-US ] = "Check ~grammar" ;
         Hide = TRUE;
@@ -110,7 +117,7 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
     PushButton PB_IGNORE
     {
         HelpID = "cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_IGNORE";
-        Pos = MAP_APPFONT( 209, 37 );
+        Pos = MAP_APPFONT( 209, 57 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "~Ignore Once" ;
     };
@@ -118,14 +125,14 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
     PushButton PB_IGNOREALL
     {
         HelpID = "cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_IGNOREALL";
-        Pos = MAP_APPFONT( 209, 54 );
+        Pos = MAP_APPFONT( 209, 74 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "I~gnore All" ;
     };
     PushButton PB_IGNORERULE
     {
         HelpID = "cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_IGNORERULE";
-        Pos = MAP_APPFONT( 209, 54 );
+        Pos = MAP_APPFONT( 209, 74 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "I~gnore Rule" ;
         Hide = TRUE;
@@ -133,7 +140,7 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
     MenuButton MB_ADDTODICT
     {
         HelpID = "cui:MenuButton:RID_SVXDLG_SPELLCHECK:MB_ADDTODICT";
-        Pos = MAP_APPFONT( 209, 71 );
+        Pos = MAP_APPFONT( 209, 91 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "~Add" ;
     };
@@ -141,7 +148,7 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
     PushButton PB_CHANGE
     {
         HelpID = "cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_CHANGE";
-        Pos = MAP_APPFONT( 209, 99 );
+        Pos = MAP_APPFONT( 209, 119 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "~Change" ;
         DefButton = TRUE ;
@@ -150,48 +157,40 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
     PushButton PB_CHANGEALL
     {
         HelpID = "cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_CHANGEALL";
-        Pos = MAP_APPFONT( 209, 117 );
+        Pos = MAP_APPFONT( 209, 137 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "Change A~ll" ;
-    };
-    PushButton PB_EXPLAIN
-    {
-        HelpID = "cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_EXPLAIN";
-        Pos = MAP_APPFONT( 209, 117 );
-        Size = MAP_APPFONT( 55, 14 );
-        Hide = TRUE;
-        Text [ en-US ] = "~Explain..." ;
     };
     PushButton PB_AUTOCORR
     {
         HelpID = "cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_AUTOCORR";
-        Pos = MAP_APPFONT( 209, 134 );
+        Pos = MAP_APPFONT( 209, 154 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "AutoCor~rect" ;
     };
     GroupBox GB_BACKGROUND
     {
-        Pos = MAP_APPFONT( 1, 21 );
+        Pos = MAP_APPFONT( 1, 41 );
         Size = MAP_APPFONT( 268, 146 );
         Hide=TRUE;
     };
 
     HelpButton PB_HELP
     {
-        Pos = MAP_APPFONT( 6, 170 );
+        Pos = MAP_APPFONT( 6, 191 );
         Size = MAP_APPFONT( 55, 14 );
     };
     PushButton PB_OPTIONS
     {
         HelpID = "cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_OPTIONS";
-        Pos = MAP_APPFONT( 87, 170 );
+        Pos = MAP_APPFONT( 87, 191 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "O~ptions..." ;
     };
     PushButton PB_UNDO
     {
         HelpID = "cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_UNDO";
-        Pos = MAP_APPFONT( 148, 170 );
+        Pos = MAP_APPFONT( 148, 191 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "~Undo" ;
     };
@@ -199,7 +198,7 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
     PushButton PB_CLOSE
     {
         HelpID = "cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_CLOSE";
-        Pos = MAP_APPFONT ( 209 , 170 ) ;
+        Pos = MAP_APPFONT ( 209 , 191 ) ;
         Size = MAP_APPFONT ( 55 , 14 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Cl~ose" ;
@@ -223,10 +222,6 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
     String ST_SPELLING_AND_GRAMMAR_VENDORNAME
     {
         Text[ en-US ] = "Spelling and Grammar: $LANGUAGE ($LOCATION) [$VendorName]";
-    };
-    Image IMG_DEFAULT_VENDOR
-    {
-        ImageBitmap = Bitmap { File = "vendor01.png"; };
     };
 };
  // ********************************************************************** EOF

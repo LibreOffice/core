@@ -925,19 +925,4 @@ uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassID( sal_uInt3
     return aResult;
 }
 
-//-------------------------------------------------------------------------
-uno::Sequence<sal_Int8> MimeConfigurationHelper::GetSequenceClassIDFromObjectName(const ::rtl::OUString& _sObjectName)
-{
-    uno::Sequence<sal_Int8> aClassId;
-    uno::Reference< container::XNameAccess > xObjectNames = GetConfigurationByPath(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Embedding/ObjectNames")));
-    uno::Reference< container::XNameAccess > xProps;
-    if ( xObjectNames.is() && (xObjectNames->getByName(_sObjectName) >>= xProps) && xProps.is() )
-    {
-         ::rtl::OUString sValue;
-         xProps->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ClassID"))) >>= sValue;
-         aClassId = GetSequenceClassIDRepresentation(sValue);
-    }
-    return aClassId;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

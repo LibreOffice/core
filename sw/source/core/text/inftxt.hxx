@@ -565,6 +565,7 @@ class SwTxtFormatInfo : public SwTxtPaintInfo
     sal_Bool bFakeLineStart: 1; // String has been replaced by field portion
                                 // info structure only pretends that we are at
                                 // the beginning of a line
+    sal_Bool bTabOverflow;      // Tabs are expanding after the end margin
 
     xub_Unicode   cTabDecimal;  // das _aktuelle_ Dezimalzeichen
     xub_Unicode   cHookChar;    // fuer Tabs in Feldern etc.
@@ -734,6 +735,9 @@ public:
 
 //  friend ostream &operator<<( ostream &rOS, const SwTxtFormatInfo &rInf );
     friend SvStream &operator<<( SvStream &rOS, const SwTxtFormatInfo &rInf );
+
+    inline void SetTabOverflow( sal_Bool bOverflow ) { bTabOverflow = bOverflow; }
+    inline sal_Bool IsTabOverflow( ) { return bTabOverflow; }
 };
 
 /*************************************************************************

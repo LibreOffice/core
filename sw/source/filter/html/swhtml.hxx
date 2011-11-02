@@ -33,9 +33,6 @@
 #ifndef _SVSTDARR_XUB_STRLEN_DECL
 #define _SVSTDARR_XUB_STRLEN
 #endif
-#ifndef _SVSTDARR_USHORTS_DECL
-#define _SVSTDARR_USHORTS
-#endif
 #ifndef _SVSTDARR_STRINGSDTOR_DECL
 #define _SVSTDARR_STRINGSDTOR
 #endif
@@ -394,9 +391,9 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     String      aBulletGrfs[MAXLEVEL];
     String      sJmpMark;
 
-    SvUShorts   aBaseFontStack; // Stack fuer <BASEFONT>
+    std::vector<sal_uInt16>   aBaseFontStack; // Stack fuer <BASEFONT>
                                 // Bit 0-2: Fontgroesse (1-7)
-    SvUShorts   aFontStack;     // Stack fuer <FONT>, <BIG>, <SMALL>
+    std::vector<sal_uInt16>   aFontStack;     // Stack fuer <FONT>, <BIG>, <SMALL>
                                 // Bit 0-2: Fontgroesse (1-7)
                                 // Bit 15: Fontfarbe wurde gesetzt
 

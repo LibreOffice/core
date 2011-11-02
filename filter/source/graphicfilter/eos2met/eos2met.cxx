@@ -492,11 +492,12 @@ void METWriter::WriteChrSets()
         *pMET << (sal_uInt8)0x03 << (sal_uInt8)0x52;
 
         *pMET << (sal_uInt8)0x24 << (sal_uInt8)0x02 << (sal_uInt8)0x08 << (sal_uInt8)0x00;
-        ByteString n(pCS->aName, gsl_getSystemTextEncoding());
+        rtl::OString n(rtl::OUStringToOString(pCS->aName,
+            osl_getThreadTextEncoding()));
         for (i=0; i<32; i++)
         {
             if ( i == 0 || c != 0 )
-                c = n.GetChar( i );
+                c = n[i];
             *pMET << c;
         }
     }
@@ -1384,14 +1385,14 @@ void METWriter::METPartialArcAtCurPos(Point aCenter, double fMultiplier,
 
 void METWriter::METChrStr( Point aPt, String aUniStr )
 {
-    sal_uInt16 nLen,i;
-    ByteString aStr( aUniStr, gsl_getSystemTextEncoding() );
-    nLen = aStr.Len();
+    rtl::OString aStr(rtl::OUStringToOString(aUniStr,
+        osl_getThreadTextEncoding()));
+    sal_uInt16 nLen = aStr.getLength();
     WillWriteOrder( 11 + nLen );
     *pMET << (sal_uInt8)0xc3 << (sal_uInt8)( 9 + nLen );
     WritePoint(aPt);
-    for ( i = 0; i < nLen; i++ )
-        *pMET << aStr.GetChar( i );
+    for (sal_uInt16 i = 0; i < nLen; ++i)
+        *pMET << aStr[i];
     *pMET << (sal_uInt8)0;
 }
 

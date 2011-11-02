@@ -170,10 +170,10 @@ SfxProgress* SfxApplication::GetProgress() const
 
 //------------------------------------------------------------------------
 
-SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
+std::vector<sal_uInt16>* SfxApplication::GetDisabledSlotList_Impl()
 {
     sal_Bool bError = sal_False;
-    SvUShorts* pList = pAppData_Impl->pDisabledSlotList;
+    std::vector<sal_uInt16>* pList = pAppData_Impl->pDisabledSlotList;
     if ( !pList )
     {
         // Is there a slot file?
@@ -200,13 +200,13 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
                 sal_uInt16 nCount;
                 (*pStream) >> nCount;
                 pList = pAppData_Impl->pDisabledSlotList =
-                        new SvUShorts( nCount < 255 ? (sal_Int8) nCount : 255, 255 );
+                        new std::vector<sal_uInt16>;
 
                 sal_uInt16 nSlot;
                 for ( sal_uInt16 n=0; n<nCount; n++ )
                 {
                     (*pStream) >> nSlot;
-                    pList->Insert( nSlot, n );
+                    pList->push_back( nSlot );
                 }
 
                 pStream->ReadByteString(aTitle);
@@ -231,13 +231,13 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
 
         delete pStream;
     }
-    else if ( pList == (SvUShorts*) -1L )
+    else if ( pList == (std::vector<sal_uInt16>*) -1L )
     {
         return NULL;
     }
 
     if ( !pList )
-        pAppData_Impl->pDisabledSlotList = (SvUShorts*) -1L;
+        pAppData_Impl->pDisabledSlotList = (std::vector<sal_uInt16>*) -1L;
 
     if ( bError )
     {
@@ -280,72 +280,12 @@ sal_Bool  SfxApplication::IsDowning() const { return pAppData_Impl->bDowning; }
 SfxDispatcher* SfxApplication::GetAppDispatcher_Impl() { return pAppData_Impl->pAppDispat; }
 SfxSlotPool& SfxApplication::GetAppSlotPool_Impl() const { return *pAppData_Impl->pSlotPool; }
 
-static bool impl_loadBitmap(
-    const rtl::OUString &rPath, const rtl::OUString &rBmpFileName,
-    Image &rLogo )
-{
-    rtl::OUString uri( rPath );
-    rtl::Bootstrap::expandMacros( uri );
-    INetURLObject aObj( uri );
-    aObj.insertName( rBmpFileName );
-    SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
-    if ( !aStrm.GetError() )
-    {
-        // Use graphic class to also support more graphic formats (bmp,png,...)
-        Graphic aGraphic;
-
-        GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
-        rGF.ImportGraphic( aGraphic, String(), aStrm, GRFILTER_FORMAT_DONTKNOW );
-
-        // Default case, we load the intro bitmap from a seperate file
-        // (e.g. staroffice_intro.bmp or starsuite_intro.bmp)
-        BitmapEx aBmp = aGraphic.GetBitmapEx();
-        rLogo = Image( aBmp );
-        return true;
-    }
-    return false;
-}
-
 /** loads the application logo as used in the about dialog and impress slideshow pause screen */
 Image SfxApplication::GetApplicationLogo()
 {
-    Image aAppLogo;
-
-    rtl::OUString aAbouts;
-    bool bLoaded = false;
-    sal_Int32 nIndex = 0;
-    do
-    {
-        bLoaded = impl_loadBitmap(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program")),
-            aAbouts.getToken( 0, ',', nIndex ), aAppLogo );
-    }
-    while ( !bLoaded && ( nIndex >= 0 ) );
-
-    // fallback to "about.bmp"
-    if ( !bLoaded )
-    {
-        bLoaded = impl_loadBitmap(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/edition")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("about.png")), aAppLogo );
-        if ( !bLoaded )
-            bLoaded = impl_loadBitmap(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/edition")),
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("about.bmp")), aAppLogo );
-    }
-
-    if ( !bLoaded )
-    {
-        bLoaded = impl_loadBitmap(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("about.png")), aAppLogo );
-        if ( !bLoaded )
-            bLoaded = impl_loadBitmap(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program")),
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("about.bmp")), aAppLogo );
-    }
-
-    return aAppLogo;
+    BitmapEx aBitmap;
+    Application::LoadBrandBitmap ("about", aBitmap);
+    return Image( aBitmap );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

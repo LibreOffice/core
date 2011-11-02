@@ -1435,3 +1435,13 @@ Directory gid_Dir_Template_Common_Presnt
     ParentID = gid_Dir_Template_Common;
     DosName = "presnt";
 End
+
+Directory gid_Brand_Dir_Program_Services
+    ParentID = gid_Brand_Dir_Program;
+    DosName = "services";
+End
+
+Directory gid_Brand_Dir_Program_Types
+    ParentID = gid_Brand_Dir_Program;
+    DosName = "types";
+End

@@ -150,7 +150,7 @@ MOZILLA_CONFIGURE_FLAGS +=  --disable-tests \
                 --disable-pango \
                 --enable-extensions="pref"
 
-.IF "$(ENABLE_NSS_MODULE)"=="YES"
+.IF "$(SYSTEM_NSS)"=="NO"
 
 MOZILLA_CONFIGURE_FLAGS += \
                 --with-nss-prefix=$(OUTDIR) \

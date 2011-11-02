@@ -557,8 +557,8 @@ sal_uInt16 SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rFld )
     if( !GetDepends() || !(nsSwGetSetExpType::GSE_SEQ & nType) )
         return USHRT_MAX;
 
-extern void InsertSort( SvUShorts& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos = 0 );
-    SvUShorts aArr( 64 );
+extern void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos = 0 );
+    std::vector<sal_uInt16> aArr;
 
     sal_uInt16 n;
 
@@ -577,18 +577,18 @@ extern void InsertSort( SvUShorts& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos = 
     sal_uInt16 nNum = rFld.GetSeqNumber();
     if( USHRT_MAX != nNum )
     {
-        for( n = 0; n < aArr.Count(); ++n )
+        for( n = 0; n < aArr.size(); ++n )
             if( aArr[ n ] > nNum )
                 return nNum;            // nicht vorhanden -> also benutzen
             else if( aArr[ n ] == nNum )
                 break;                  // schon vorhanden -> neue erzeugen
 
-        if( n == aArr.Count() )
+        if( n == aArr.size() )
             return nNum;            // nicht vorhanden -> also benutzen
     }
 
     // alle Nummern entsprechend geflag, also bestimme die richtige Nummer
-    for( n = 0; n < aArr.Count(); ++n )
+    for( n = 0; n < aArr.size(); ++n )
         if( n != aArr[ n ] )
             break;
 

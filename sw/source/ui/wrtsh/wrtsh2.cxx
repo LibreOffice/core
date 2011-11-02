@@ -119,7 +119,7 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst, sal_Bool bOnlyInSel )
         pTmp->PushCrsr();
 
         sal_Bool bCancel = sal_False;
-        ByteString aDlgPos;
+        rtl::OString aDlgPos;
         for( sal_uInt16 i = 0; i < nCnt && !bCancel; ++i )
         {
             pTmp->GotoFieldPos( i );
@@ -147,7 +147,7 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst, sal_Bool bOnlyInSel )
 
 
 sal_Bool SwWrtShell::StartInputFldDlg( SwField* pFld, sal_Bool bNextButton,
-                                    Window* pParentWin, ByteString* pWindowState )
+                                    Window* pParentWin, rtl::OString* pWindowState )
 {
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -155,7 +155,7 @@ sal_Bool SwWrtShell::StartInputFldDlg( SwField* pFld, sal_Bool bNextButton,
     AbstractFldInputDlg* pDlg = pFact->CreateFldInputDlg( DLG_FLD_INPUT,
                                                         pParentWin, *this, pFld, bNextButton);
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
-    if(pWindowState && pWindowState->Len())
+    if(pWindowState && pWindowState->getLength())
         pDlg->SetWindowState(*pWindowState);
     sal_Bool bRet = RET_CANCEL == pDlg->Execute();
     if(pWindowState)
@@ -166,14 +166,14 @@ sal_Bool SwWrtShell::StartInputFldDlg( SwField* pFld, sal_Bool bNextButton,
     return bRet;
 }
 
-sal_Bool SwWrtShell::StartDropDownFldDlg(SwField* pFld, sal_Bool bNextButton, ByteString* pWindowState)
+sal_Bool SwWrtShell::StartDropDownFldDlg(SwField* pFld, sal_Bool bNextButton, rtl::OString* pWindowState)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     AbstractDropDownFieldDialog* pDlg = pFact->CreateDropDownFieldDialog( NULL, *this, pFld, DLG_FLD_DROPDOWN ,bNextButton );
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
-    if(pWindowState && pWindowState->Len())
+    if(pWindowState && pWindowState->getLength())
         pDlg->SetWindowState(*pWindowState);
     sal_uInt16 nRet = pDlg->Execute();
     if(pWindowState)

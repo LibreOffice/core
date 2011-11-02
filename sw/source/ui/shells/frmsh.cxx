@@ -95,6 +95,8 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/uno/Any.h>
 
+#include <wordcountdialog.hxx>
+
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -418,22 +420,16 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         break;
         case FN_WORDCOUNT_DIALOG:
         {
-            SwDocStat aCurr;
-            SwDocStat aDocStat;
+            SfxViewFrame* pVFrame = GetView().GetViewFrame();
+            if (pVFrame != NULL)
             {
-                SwWait aWait( *GetView().GetDocShell(), sal_True );
-                rSh.StartAction();
-                rSh.CountWords( aCurr );
-                aDocStat = rSh.GetUpdatedDocStat();
-                rSh.EndAction();
-            }
+                pVFrame->ToggleChildWindow(FN_WORDCOUNT_DIALOG);
+                Invalidate(rReq.GetSlot());
 
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "Dialogdiet fail!");
-            AbstractSwWordCountDialog* pDialog = pFact->CreateSwWordCountDialog( GetView().GetWindow() );
-            pDialog->SetValues(aCurr, aDocStat );
-            pDialog->Execute();
-            delete pDialog;
+                SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)pVFrame->GetChildWindow(SwWordCountWrapper::GetChildWindowId());
+                if (pWrdCnt)
+                    pWrdCnt->UpdateCounts();
+            }
         }
         break;
         default: bMore = sal_True;

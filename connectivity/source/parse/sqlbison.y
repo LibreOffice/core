@@ -4733,8 +4733,8 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 //-----------------------------------------------------------------------------
 sal_uInt32 OSQLParser::StrToRuleID(const ::rtl::OString & rValue)
 {
-	// In yysvar nach dem angegebenen Namen suchen, den Index zurueckliefern
-	// (oder 0, wenn nicht gefunden)
+	// Search for the given name in yytname and return the index
+	// (or UNKNOWN_RULE, if not found)
 	static sal_uInt32 nLen = SAL_N_ELEMENTS(yytname);
 	for (sal_uInt32 i = YYTRANSLATE(SQL_TOKEN_INVALIDSYMBOL); i < (nLen-1); i++)
 	{
@@ -4742,8 +4742,8 @@ sal_uInt32 OSQLParser::StrToRuleID(const ::rtl::OString & rValue)
 			return i;
 	}
 
-	// Nicht gefunden
-	return 0;
+	// Not found
+	return OSQLParseNode::UNKNOWN_RULE;
 }
 
 //-----------------------------------------------------------------------------

@@ -87,7 +87,6 @@ SLOFILES=   \
             $(SLO)$/cmdargs.obj		\
             $(SLO)$/unload.obj		\
             $(SLO)$/logfile.obj     \
-            $(SLO)$/tres.obj        \
             $(SLO)$/debugprint.obj  \
             $(SLO)$/math.obj        \
             $(SLO)$/alloc_global.obj\
@@ -116,7 +115,6 @@ OBJFILES=   \
             $(OBJ)$/cmdargs.obj		\
             $(OBJ)$/unload.obj		\
             $(OBJ)$/logfile.obj     \
-            $(OBJ)$/tres.obj        \
             $(OBJ)$/math.obj \
             $(OBJ)$/alloc_global.obj\
             $(OBJ)$/alloc_cache.obj \

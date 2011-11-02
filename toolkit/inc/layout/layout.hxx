@@ -38,13 +38,11 @@
 #include <tools/link.hxx>
 #include <tools/string.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/combobox.h>
 #include <tools/fldunit.hxx>
 #include <vcl/lstbox.h>
 #include <tools/wintypes.hxx>
 
 class Button;
-class ComboBox;
 class Color;
 class Control;
 class Dialog;
@@ -53,16 +51,12 @@ class Font;
 class Image;
 class ListBox;
 class MapMode;
-class MultiListBox;
-class NotifyEvent;
 class Pointer;
 class PushButton;
-class RadioButton;
 class ResId;
 struct SfxChildWinInfo;
 class TabControl;
 class TabPage;
-class VCLXRadioButton;
 class VCLXWindow;
 class Window;
 
@@ -89,8 +83,6 @@ public:
     Context( char const* pPath );
     virtual ~Context();
     PeerHandle GetPeerHandle( char const* id, sal_uInt32 nId = 0 ) const;
-    void setToplevel( PeerHandle xToplevel );
-    PeerHandle getToplevel();
     PeerHandle getRoot();
 };
 
@@ -195,28 +187,16 @@ class TOOLKIT_DLLPUBLIC Control : public Window
 public:
     ~Control ();
     void SetGetFocusHdl (Link const& link);
-    Link& GetGetFocusHdl ();
     void SetLoseFocusHdl (Link const& link);
-    Link& GetLoseFocusHdl ();
-};
-
-class FixedLineImpl;
-class TOOLKIT_DLLPUBLIC FixedLine : public Control
-{
-    DECL_GET_IMPL( FixedLine );
-    DECL_CONSTRUCTORS( FixedLine, Control, WB_HORZ );
-
-public:
-    bool IsEnabled() const;
 };
 
 class FixedTextImpl;
 class TOOLKIT_DLLPUBLIC FixedText : public Control
 {
     DECL_GET_IMPL( FixedText );
-    DECL_CONSTRUCTORS( FixedText, Control, 0 );
 
 public:
+    FixedText( Context *context, char const* id, sal_uInt32 nId = 0 );
     ~FixedText ();
     void SetText( rtl::OUString const& rStr );
 };
@@ -225,16 +205,9 @@ class FixedImageImpl;
 class TOOLKIT_DLLPUBLIC FixedImage : public Control
 {
     DECL_GET_IMPL( FixedImage );
-    DECL_CONSTRUCTORS( FixedImage, Control, 0 );
-public:
-    void setImage( ::Image const& );
-};
 
-class FixedInfoImpl;
-class TOOLKIT_DLLPUBLIC FixedInfo : public FixedText
-{
-    DECL_GET_IMPL( FixedInfo );
-    DECL_CONSTRUCTORS( FixedInfo, FixedText, 0 );
+public:
+    FixedImage( Context *context, char const* id, sal_uInt32 nId = 0 );
 };
 
 class ImageImpl;
@@ -242,8 +215,6 @@ class TOOLKIT_DLLPUBLIC Image
 {
     ImageImpl *pImpl;
 public:
-    Image( char const* pName );
-    ~Image();
     ImageImpl &getImpl() const { return *pImpl; }
 };
 
@@ -258,133 +229,55 @@ public:
     ~Button ();
     static String GetStandardText (sal_uInt16 button_type);
     void SetText( rtl::OUString const& rStr );
-    bool SetModeImage (Image const& image);
-    bool SetModeImage (::Image const& image);
-    void SetImageAlign( ImageAlign eAlign );
 
-    void SetClickHdl( Link const& rLink );
     virtual void Click() /* pure virtual? */;
-    Link& GetClickHdl ();
 };
 
 class PushButtonImpl;
 class TOOLKIT_DLLPUBLIC PushButton : public Button
 {
     DECL_GET_IMPL( PushButton );
-    DECL_CONSTRUCTORS( PushButton, Button, 0 );
     DECL_GET_WINDOW (PushButton);
+
+protected:
+    explicit PushButton( WindowImpl *pImpl ) : Button( pImpl ) {}
 
 public:
     ~PushButton ();
     void Check( bool bCheck=true );
-    bool IsChecked() const;
 
-    void Toggle();
     void SetToggleHdl( Link const& rLink );
 };
 
-class TOOLKIT_DLLPUBLIC OKButton : public PushButton
-{
-    DECL_CONSTRUCTORS( OKButton, PushButton, WB_DEFBUTTON );
-};
 class TOOLKIT_DLLPUBLIC CancelButton : public PushButton
 {
-    DECL_CONSTRUCTORS( CancelButton, PushButton, 0 );
+public:
+    CancelButton( Context *context, char const* id, sal_uInt32 nId = 0 );
 };
 class TOOLKIT_DLLPUBLIC YesButton : public PushButton
 {
-    DECL_CONSTRUCTORS( YesButton, PushButton, WB_DEFBUTTON );
+public:
+    YesButton( Context *context, char const* id, sal_uInt32 nId = 0 );
 };
 class TOOLKIT_DLLPUBLIC NoButton : public PushButton
 {
-    DECL_CONSTRUCTORS( NoButton, PushButton, 0 );
+public:
+    NoButton( Context *context, char const* id, sal_uInt32 nId = 0 );
 };
 class TOOLKIT_DLLPUBLIC RetryButton : public PushButton
 {
-    DECL_CONSTRUCTORS( RetryButton, PushButton, 0 );
+public:
+    RetryButton( Context *context, char const* id, sal_uInt32 nId = 0 );
 };
 class TOOLKIT_DLLPUBLIC IgnoreButton : public PushButton
 {
-    DECL_CONSTRUCTORS( IgnoreButton, PushButton, 0 );
-};
-class TOOLKIT_DLLPUBLIC ResetButton : public PushButton
-{
-    DECL_CONSTRUCTORS( ResetButton, PushButton, 0 );
-};
-class TOOLKIT_DLLPUBLIC ApplyButton : public PushButton
-{
-    DECL_CONSTRUCTORS( ApplyButton, PushButton, 0 );
+public:
+    IgnoreButton( Context *context, char const* id, sal_uInt32 nId = 0 );
 };
 class TOOLKIT_DLLPUBLIC HelpButton : public PushButton
 {
-    DECL_CONSTRUCTORS( HelpButton, PushButton, 0 );
-};
-class TOOLKIT_DLLPUBLIC ImageButton : public PushButton
-{
-    DECL_CONSTRUCTORS( ImageButton, PushButton, 0 );
-};
-
-class AdvancedButtonImpl;
-class TOOLKIT_DLLPUBLIC AdvancedButton : public PushButton
-{
-    DECL_CONSTRUCTORS( AdvancedButton, PushButton, 0 );
-    DECL_GET_IMPL( AdvancedButton );
-
-    void AddAdvanced( Window* w );
-    void AddSimple( Window* w );
-    void RemoveAdvanced( Window* w );
-    void RemoveSimple( Window* w );
-
-    void SetAdvancedText (rtl::OUString const& text);
-    void SetSimpleText (rtl::OUString const& text);
-    rtl::OUString GetAdvancedText () const;
-    rtl::OUString GetSimpleText () const;
-    void SetDelta (int);
-};
-
-class MoreButtonImpl;
-class TOOLKIT_DLLPUBLIC MoreButton : public AdvancedButton
-{
-    DECL_CONSTRUCTORS( MoreButton, AdvancedButton, 0 );
-    DECL_GET_IMPL( MoreButton );
-    void AddWindow( Window* w );
-    void RemoveWindow( Window* w );
-
-    void SetMoreText (rtl::OUString const& text);
-    void SetLessText (rtl::OUString const& text);
-    rtl::OUString GetMoreText () const;
-    rtl::OUString GetLessText () const;
-};
-
-class RadioButtonImpl;
-class TOOLKIT_DLLPUBLIC RadioButton : public Button
-{
-    DECL_GET_IMPL( RadioButton );
-    DECL_CONSTRUCTORS( RadioButton, Button, 0 );
-    DECL_GET_WINDOW( RadioButton );
-    DECL_GET_VCLXWINDOW( RadioButton );
 public:
-    ~RadioButton ();
-    void Check( bool bCheck=true );
-    bool IsChecked() const;
-
-    void Toggle();
-    void SetToggleHdl( Link const& rLink );
-};
-
-class CheckBoxImpl;
-class TOOLKIT_DLLPUBLIC CheckBox : public Button
-{
-    DECL_GET_IMPL( CheckBox );
-    DECL_CONSTRUCTORS( CheckBox, Button, 0 );
-
-public:
-    ~CheckBox ();
-    void Check( bool bCheck=true );
-    bool IsChecked() const;
-
-    void Toggle();
-    void SetToggleHdl( Link const& rLink );
+    HelpButton( Context *context, char const* id, sal_uInt32 nId = 0 );
 };
 
 class EditImpl;
@@ -396,24 +289,7 @@ class TOOLKIT_DLLPUBLIC Edit : public Control
 
 public:
     ~Edit ();
-    void SetText( rtl::OUString const& rStr );
-    String GetText() const;
     void SetModifyHdl( Link const& rLink );
-    void SetSelection( Selection const& rSelection );
-};
-
-class MultiLineEditImpl;
-class TOOLKIT_DLLPUBLIC MultiLineEdit : public Edit
-{
-    DECL_GET_IMPL( MultiLineEdit );
-    DECL_CONSTRUCTORS( MultiLineEdit, Edit, WB_LEFT|WB_BORDER );
-};
-
-class SpinFieldImpl;
-class TOOLKIT_DLLPUBLIC SpinField : public Edit
-{
-    DECL_GET_IMPL( SpinField );
-    DECL_CONSTRUCTORS( SpinField, Edit, 0 );
 };
 
 class FormatterBaseImpl;
@@ -430,24 +306,6 @@ class TOOLKIT_DLLPUBLIC NumericFormatter : public FormatterBase
 protected:
     explicit NumericFormatter( FormatterBaseImpl *pImpl );
     NumericFormatterImpl &getFormatImpl() const;
-public:
-    void SetMin( sal_Int64 nNewMin );
-    void SetMax( sal_Int64 nNewMax );
-    void SetFirst( sal_Int64 nNewFirst );
-    void SetLast( sal_Int64 nNewLast );
-    void SetSpinSize( sal_Int64 nNewSize );
-
-    void SetValue( sal_Int64 nNewValue );
-    sal_Int64 GetValue() const;
-};
-
-class NumericFieldImpl;
-class TOOLKIT_DLLPUBLIC NumericField : public SpinField, public NumericFormatter
-{
-    DECL_GET_IMPL( NumericField );
-public:
-    NumericField( Context *context, char const* id, sal_uInt32 nId=0 );
-    NumericField( Window *parent, WinBits nStyle );
 };
 
 class MetricFormatterImpl;
@@ -457,47 +315,6 @@ class TOOLKIT_DLLPUBLIC MetricFormatter : public FormatterBase
   protected:
     explicit MetricFormatter( FormatterBaseImpl *pImpl );
     MetricFormatterImpl &getFormatImpl() const;
-public:
-    void SetMin( sal_Int64 nNewMin, FieldUnit nUnit=FUNIT_NONE );
-    void SetMax( sal_Int64 nNewMax, FieldUnit nUnit=FUNIT_NONE );
-    void SetFirst( sal_Int64 nNewFirst, FieldUnit nUnit=FUNIT_NONE );
-    void SetLast( sal_Int64 nNewLast, FieldUnit nUnit=FUNIT_NONE );
-    void SetValue( sal_Int64 nNewValue, FieldUnit nUnit=FUNIT_NONE );
-    sal_Int64 GetValue( FieldUnit nUnit=FUNIT_NONE ) const;
-
-    void SetSpinSize( sal_Int64 nNewSize );
-};
-
-class MetricFieldImpl;
-class TOOLKIT_DLLPUBLIC MetricField : public SpinField, public MetricFormatter
-{
-    DECL_GET_IMPL( MetricField );
-public:
-    MetricField( Context *context, char const* id, sal_uInt32 nId=0 );
-    MetricField( Window *parent, WinBits nStyle );
-};
-
-class ComboBoxImpl;
-class TOOLKIT_DLLPUBLIC ComboBox : public Edit
-{
-    DECL_GET_IMPL( ComboBox );
-    DECL_GET_WINDOW (ComboBox );
-    DECL_CONSTRUCTORS( ComboBox, Edit, 0 );
-
-public:
-    ~ComboBox ();
-    sal_uInt16 InsertEntry( String const& rStr, sal_uInt16 nPos=COMBOBOX_APPEND );
-    void RemoveEntry( String const& rStr );
-    void RemoveEntry( sal_uInt16 nPos );
-    void Clear();
-
-    sal_uInt16 GetEntryPos( String const& rStr ) const;
-    String GetEntry( sal_uInt16 nPos ) const;
-    sal_uInt16 GetEntryCount() const;
-
-    void SetClickHdl( Link const& rLink );
-    void SetSelectHdl( Link const& rLink );
-    void EnableAutocomplete (bool enable, bool matchCase=false );
 };
 
 class ListBoxImpl;
@@ -509,44 +326,15 @@ class TOOLKIT_DLLPUBLIC ListBox : public Control
 
 public:
     ~ListBox ();
-    sal_uInt16 InsertEntry( String const& rStr, sal_uInt16 nPos=LISTBOX_APPEND );
-
-    void RemoveEntry( String const& rStr );
-    void RemoveEntry( sal_uInt16 nPos );
-    void Clear();
 
     sal_uInt16 GetEntryPos( String const& rStr ) const;
     String GetEntry( sal_uInt16 nPos ) const;
-    sal_uInt16 GetEntryCount() const;
 
-    void SelectEntry( String const& rStr, bool bSelect=true );
     void SelectEntryPos( sal_uInt16 nPos, bool bSelect=true );
 
-    sal_uInt16 GetSelectEntryCount() const;
-    String GetSelectEntry( sal_uInt16 nSelIndex=0 ) const;
     sal_uInt16 GetSelectEntryPos( sal_uInt16 nSelIndex=0 ) const;
 
-    void SetSelectHdl (Link const& link);
-    Link& GetSelectHdl ();
-
-    void SetClickHdl (Link const& link);
-    Link& GetClickHdl ();
-
-    void SetDoubleClickHdl (Link const& link);
-    Link& GetDoubleClickHdl ();
-
-    void SetEntryData (sal_uInt16 pos, void* data);
-    void* GetEntryData (sal_uInt16 pos) const;
-
     virtual void SetNoSelection ();
-};
-
-class MultiListBoxImpl;
-class TOOLKIT_DLLPUBLIC MultiListBox : public ListBox
-{
-    DECL_GET_IMPL( MultiListBox );
-    DECL_CONSTRUCTORS( MultiListBox, ListBox, 0 );
-    DECL_GET_WINDOW( MultiListBox );
 };
 
 class DialogImpl;
@@ -556,19 +344,14 @@ class TOOLKIT_DLLPUBLIC Dialog : public Context, public Window
 
 public:
     DECL_GET_IMPL (Dialog);
-    Dialog( Window *parent, char const* xml_file, char const* id, sal_uInt32 nId=0 );
     Dialog( ::Window *parent, char const* xml_file, char const* id, sal_uInt32 nId=0 );
     ~Dialog ();
     virtual short Execute();
     void EndDialog( long nResult=0 );
-    void SetText( rtl::OUString const& rStr );
     void SetTitle (rtl::OUString const& rStr );
-    bool Close ();
-    long Notify (NotifyEvent & event);
 
     // Sxf*Dialog
     bool bConstruct;
-    void Initialize (SfxChildWinInfo*);
 };
 
 #define DECL_MESSAGE_BOX_CTORS(Name)\
@@ -624,8 +407,6 @@ protected:
 typedef MessageBox MessBox;
 CLASS_MESSAGE_BOX (Error);
 CLASS_MESSAGE_BOX (Info);
-CLASS_MESSAGE_BOX (Query);
-CLASS_MESSAGE_BOX (Warning);
 
 #undef CLASS_MESSAGE_BOX
 
@@ -639,27 +420,13 @@ class TOOLKIT_DLLPUBLIC TabControl : public Control
 //#endif /* !TAB_APPEND */
 
     DECL_GET_IMPL (TabControl);
-    DECL_CONSTRUCTORS (TabControl, Control, 0);
     DECL_GET_WINDOW (TabControl);
-    DECL_GET_LAYOUT_VCLXWINDOW (TabControl);
 
 public:
     ~TabControl ();
-    void InsertPage (sal_uInt16 id, rtl::OUString const& title, sal_uInt16 pos=TAB_APPEND);
-    void RemovePage (sal_uInt16 id);
-    sal_uInt16 GetPageCount () const;
-    sal_uInt16 GetPageId (sal_uInt16 pos) const;
-    sal_uInt16 GetPagePos (sal_uInt16 id) const;
     void SetCurPageId (sal_uInt16 id);
-    sal_uInt16 GetCurPageId () const;
-    void SetTabPage (sal_uInt16 id, ::TabPage* page);
-    ::TabPage* GetTabPage (sal_uInt16 id) const;
     void SetActivatePageHdl (Link const& link);
-    Link& GetActivatePageHdl () const;
     void SetDeactivatePageHdl (Link const& link);
-    Link& GetDeactivatePageHdl () const;
-    void SetTabPageSizePixel (Size const& size);
-    Size GetTabPageSizePixel () const;
 };
 
 class TabPageImpl;
@@ -670,25 +437,10 @@ public:
     static ::Window* global_parent;
     static TabControl* global_tabcontrol;
 
-    TabPage( Window *parent, char const* xml_file, char const* id, sal_uInt32 nId=0 );
-    TabPage( ::Window *parent, char const* xml_file, char const* id, sal_uInt32 nId=0 );
     ~TabPage();
     DECL_GET_WINDOW( TabPage );
     virtual void ActivatePage();
     virtual void DeactivatePage();
-};
-
-class ProgressBarImpl;
-class TOOLKIT_DLLPUBLIC ProgressBar : public Control
-{
-    DECL_GET_IMPL( ProgressBar );
-    DECL_CONSTRUCTORS( ProgressBar, Control, WB_BORDER );
-public:
-    void SetForegroundColor( css::util::Color color );
-    void SetBackgroundColor( css::util::Color color );
-    void SetValue( sal_Int32 i );
-    void SetRange( sal_Int32 min, sal_Int32 max );
-    sal_Int32 GetValue();
 };
 
 // -----------------------------------------------------------------
@@ -703,18 +455,10 @@ protected:
 public:
     Container( Context const* context, char const* id );
 
-    void Add( Window *pWindow );
-    void Add( Container *pContainer );
-
-    void Remove( Window *pWindow );
-    void Remove( Container *pContainer );
-    void Clear();
     // we can't really do a GetChildren() as they don't have a common class,
     // besides we would need to keep track of children, uh
 
     void ShowAll( bool bVisible );
-    void Show();
-    void Hide();
 
     css::uno::Reference< css::awt::XLayoutContainer > getImpl()
     { return mxContainer; }
@@ -722,16 +466,6 @@ public:
 
 class TOOLKIT_DLLPUBLIC Table : public Container
 {
-protected:
-    Table( sal_Int32 nBorder, sal_Int32 nColumns );
-public:
-    Table( Context const* context, char const* id );
-    void Add( Window *pWindow, bool bXExpand, bool bYExpand,
-              sal_Int32 nXSpan=1, sal_Int32 nYSpan=1 );
-    void Add( Container *pContainer, bool bXExpand, bool bYExpand,
-              sal_Int32 nXSpan=1, sal_Int32 nYSpan=1 );
-
-private:
     void setProps( css::uno::Reference< css::awt::XLayoutConstrains > xChild,
                    bool bXExpand, bool bYExpand, sal_Int32 nXSpan, sal_Int32 nYSpan );
 };
@@ -742,54 +476,10 @@ protected:
     Box( rtl::OUString const& rName, sal_Int32 nBorder, bool bHomogeneous );
 public:
     Box( Context const* context, char const* id );
-    void Add( Window *pWindow, bool bExpand, bool bFill, sal_Int32 nPadding);
-    void Add( Container *pContainer, bool bExpand, bool bFill, sal_Int32 nPadding);
 
 private:
     void setProps( css::uno::Reference< css::awt::XLayoutConstrains > xChild,
                    bool bXExpand, bool bYExpand, sal_Int32 nPadding );
-};
-
-class TOOLKIT_DLLPUBLIC HBox : public Box
-{
-public:
-    HBox( Context const* context, char const* id );
-    HBox( sal_Int32 nBorder, bool bHomogeneous );
-};
-class TOOLKIT_DLLPUBLIC VBox : public Box
-{
-public:
-    VBox( Context const* context, char const* id );
-    VBox( sal_Int32 nBorder, bool bHomogeneous );
-};
-
-class PluginImpl;
-class TOOLKIT_DLLPUBLIC Plugin : public Control
-{
-    DECL_GET_IMPL( Plugin );
-public:
-    ::Control *mpPlugin;
-    Plugin( Context *context, char const* id, ::Control *plugin );
-};
-
-class LocalizedStringImpl;
-class TOOLKIT_DLLPUBLIC LocalizedString : public Window
-{
-    DECL_GET_IMPL( LocalizedString );
-
-public:
-    LocalizedString( Context *context, char const* id );
-
-    rtl::OUString operator= (rtl::OUString const&);
-    rtl::OUString operator+= (sal_Unicode );
-    rtl::OUString operator+= (rtl::OUString const&);
-
-    operator rtl::OUString ();
-    operator rtl::OUString const& ();
-    operator String();
-    String getString ();
-    rtl::OUString getOUString ();
-    String GetToken (sal_uInt16 i, sal_Char c);
 };
 
 class InPlugImpl;
@@ -798,8 +488,6 @@ class TOOLKIT_DLLPUBLIC InPlug : public Context, public Window
     DECL_GET_IMPL (InPlug);
 
 public:
-    InPlug ( Window *parent, char const* xml_file, char const* id, sal_uInt32 nId=0);
-    InPlug ( ::Window *parent, char const* xml_file, char const* id, sal_uInt32 nId=0);
 
     void ParentSet (Window *window);
 };

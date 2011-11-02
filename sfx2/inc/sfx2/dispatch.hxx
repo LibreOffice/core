@@ -34,9 +34,6 @@
 
 #include <stdarg.h>
 
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>     // SvUShorts
-
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 

@@ -69,13 +69,25 @@ $(eval $(call gb_Executable_add_noexception_objects,$(sofficebin),\
     desktop/win32/source/extendloaderenvironment \
 ))
 
-# the resulting executable is called soffice_bin.exe, copy it to soffice.bin
-$(eval $(call gb_Package_Package,$(sofficebin),$(OUTDIR)/bin))
-$(eval $(call gb_Package_add_file,$(sofficebin),bin/soffice.bin,$(sofficebin).exe))
+$(call gb_Executable_get_target,$(sofficebin)) : $(OUTDIR)/bin/soffice.bin
+$(call gb_Executable_get_clean_target,$(sofficebin)) : $(WORKDIR)/Clean/OutDir/bin/soffice.bin
+$(OUTDIR)/bin/soffice.bin : $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktargetname,$(sofficebin)))
+	$(call gb_Deliver_deliver,$<,$@)
+
+.PHONY : $(WORKDIR)/Clean/OutDir/bin/soffice.bin
+$(WORKDIR)/Clean/OutDir/bin/soffice.bin :
+	rm $(OUTDIR)/bin/soffice.bin
 
 ifeq ($(COM),MSC)
-# also copy the manifest
-$(eval $(call gb_Package_add_file,$(sofficebin),bin/soffice.bin.manifest,$(sofficebin).exe.manifest))
+$(call gb_Executable_get_target,$(sofficebin)) : $(OUTDIR)/bin/soffice.bin.manifest
+$(call gb_Executable_get_clean_target,$(sofficebin)) : $(WORKDIR)/Clean/OutDir/bin/soffice.bin.manifest
+$(OUTDIR)/bin/soffice.bin.manifest : $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktargetname,$(sofficebin))).manifest $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktargetname,$(sofficebin)))
+	$(call gb_Deliver_deliver,$<,$@)
+	
+.PHONY : $(WORKDIR)/Clean/OutDir/bin/soffice.bin.manifest
+$(WORKDIR)/Clean/OutDir/bin/soffice.bin.manifest :
+	rm $(OUTDIR)/bin/soffice.bin.manifest
+
 endif
 
 endif

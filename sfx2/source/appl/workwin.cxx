@@ -516,18 +516,18 @@ sal_uInt16 ChildTravelValue( SfxChildAlignment eAlign )
 
 void SfxWorkWindow::Sort_Impl()
 {
-    aSortedList.Remove(0, aSortedList.Count());
+    aSortedList.clear();
     for (sal_uInt16 i=0; i<pChilds->Count(); i++)
     {
         SfxChild_Impl *pCli = (*pChilds)[i];
         if (pCli)
         {
             sal_uInt16 k;
-            for (k=0; k<aSortedList.Count(); k++)
+            for (k=0; k<aSortedList.size(); k++)
                 if (ChildAlignValue((*pChilds)[aSortedList[k]]->eAlign) >
                     ChildAlignValue(pCli->eAlign))
                     break;
-            aSortedList.Insert (i,k);
+            aSortedList.insert( aSortedList.begin() + k, i );
         }
     }
 
@@ -825,7 +825,7 @@ SvBorder SfxWorkWindow::Arrange_Impl()
     Size aSize;
     Rectangle aTmp( aClientArea );
 
-    for ( sal_uInt16 n=0; n<aSortedList.Count(); ++n )
+    for ( sal_uInt16 n=0; n<aSortedList.size(); ++n )
     {
         SfxChild_Impl* pCli = (*pChilds)[aSortedList[n]];
         if ( !pCli->pWin )
@@ -1786,7 +1786,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 
     SfxChild_Impl *pChild = 0;
     sal_uInt16 n;
-    for ( n=0; n<aSortedList.Count(); ++n )
+    for ( n=0; n<aSortedList.size(); ++n )
     {
         pChild = (*pChilds)[aSortedList[n]];
         if ( pChild )
@@ -1794,7 +1794,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             break;
     }
 
-    if ( n < aSortedList.Count() )
+    if ( n < aSortedList.size() )
         // sometimes called while toggeling float mode
         nPos = aSortedList[n];
 
@@ -1812,7 +1812,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 
             // The current affected window is included in the calculation of
             // the inner rectangle!
-            for ( sal_uInt16 m=0; m<aSortedList.Count(); ++m )
+            for ( sal_uInt16 m=0; m<aSortedList.size(); ++m )
             {
                 sal_uInt16 i=aSortedList[m];
                 SfxChild_Impl* pCli = (*pChilds)[i];
@@ -2542,7 +2542,7 @@ void SfxWorkWindow::MakeChildsVisible_Impl( sal_Bool bVis )
     {
         if ( !bSorted )
             Sort_Impl();
-        for ( sal_uInt16 n=0; n<aSortedList.Count(); ++n )
+        for ( sal_uInt16 n=0; n<aSortedList.size(); ++n )
         {
             SfxChild_Impl* pCli = (*pChilds)[aSortedList[n]];
             if ( (pCli->eAlign == SFX_ALIGN_NOALIGNMENT) || (IsDockingAllowed() && bInternalDockingAllowed) )
@@ -2553,7 +2553,7 @@ void SfxWorkWindow::MakeChildsVisible_Impl( sal_Bool bVis )
     {
         if ( !bSorted )
             Sort_Impl();
-        for ( sal_uInt16 n=0; n<aSortedList.Count(); ++n )
+        for ( sal_uInt16 n=0; n<aSortedList.size(); ++n )
         {
             SfxChild_Impl* pCli = (*pChilds)[aSortedList[n]];
             pCli->nVisible &= ~CHILD_ACTIVE;
@@ -2761,37 +2761,37 @@ void SfxWorkWindow::SetActiveChild_Impl( Window *pChild )
 sal_Bool SfxWorkWindow::ActivateNextChild_Impl( sal_Bool bForward )
 {
     // Sort all children under list
-    SvUShorts aList;
+    std::vector<sal_uInt16> aList;
     for ( sal_uInt16 i=SFX_OBJECTBAR_MAX; i<pChilds->Count(); i++)
     {
         SfxChild_Impl *pCli = (*pChilds)[i];
         if ( pCli && pCli->bCanGetFocus && pCli->pWin )
         {
             sal_uInt16 k;
-            for (k=0; k<aList.Count(); k++)
+            for (k=0; k<aList.size(); k++)
                 if ( ChildTravelValue((*pChilds)[aList[k]]->eAlign) > ChildTravelValue(pCli->eAlign) )
                     break;
-            aList.Insert(i,k);
+            aList.insert( aList.begin() + k, i );
         }
     }
 
-    if ( aList.Count() == 0 )
+    if ( aList.empty() )
         return sal_False;
 
     sal_uInt16 nTopValue  = ChildTravelValue( SFX_ALIGN_LOWESTTOP );
-    for ( sal_uInt16 i=0; i<aList.Count(); i++ )
+    for ( sal_uInt16 i=0; i<aList.size(); i++ )
     {
         SfxChild_Impl* pCli = (*pChilds)[aList[i]];
         if ( pCli->pWin && ChildTravelValue( pCli->eAlign ) > nTopValue )
             break;
     }
 
-    sal_uInt16 n = bForward ? 0 : aList.Count()-1;
+    sal_uInt16 n = bForward ? 0 : aList.size()-1;
     SfxChild_Impl *pAct=NULL;
     if ( pActiveChild )
     {
         // Look for the active window
-        for ( n=0; n<aList.Count(); n++ )
+        for ( n=0; n<aList.size(); n++ )
         {
             SfxChild_Impl* pCli = (*pChilds)[aList[n]];
             if ( pCli && pCli->pWin && ( pCli->pWin == pActiveChild || !pActiveChild ) )
@@ -2803,8 +2803,8 @@ sal_Bool SfxWorkWindow::ActivateNextChild_Impl( sal_Bool bForward )
     }
 
     // dummy entries for the container window
-    aList.Insert( 0xFFFF, 0 );
-    aList.Insert( 0xFFFF, aList.Count() );
+    aList.insert( aList.begin(), 0xFFFF );
+    aList.push_back( 0xFFFF );
     n = n + 1;
     if ( pAct )
     {
@@ -2827,7 +2827,7 @@ sal_Bool SfxWorkWindow::ActivateNextChild_Impl( sal_Bool bForward )
         else
             n = n-1;
 
-        if ( n == 0 || n == aList.Count()-1 )
+        if ( n == 0 || n == aList.size()-1 )
             return sal_False;
     }
 
@@ -2865,7 +2865,7 @@ sal_Bool SfxWorkWindow::ActivateNextChild_Impl( sal_Bool bForward )
         else
             n = n-1;
 
-        if ( n == 0 || n == aList.Count()-1 )
+        if ( n == 0 || n == aList.size()-1 )
             break;
     }
 

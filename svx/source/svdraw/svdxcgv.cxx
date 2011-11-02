@@ -72,39 +72,6 @@ SdrExchangeView::SdrExchangeView(SdrModel* pModel1, OutputDevice* pOut):
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-Point SdrExchangeView::GetViewCenter(const OutputDevice* pOut) const
-{
-    Point aCenter;
-    if (pOut==NULL)
-    {
-        pOut = GetFirstOutputDevice();
-    }
-    if (pOut!=NULL) {
-        Point aOfs=pOut->GetMapMode().GetOrigin();
-        Size aOutSiz=pOut->GetOutputSize();
-        aOutSiz.Width()/=2;
-        aOutSiz.Height()/=2;
-        aCenter.X()=aOutSiz.Width() -aOfs.X();
-        aCenter.Y()=aOutSiz.Height()-aOfs.Y();
-    }
-    return aCenter;
-}
-
-Point SdrExchangeView::GetPastePos(SdrObjList* pLst, OutputDevice* pOut)
-{
-    Point aP(GetViewCenter(pOut));
-    SdrPage* pPg=NULL;
-    if (pLst!=NULL) pPg=pLst->GetPage();
-    if (pPg!=NULL) {
-        Size aSiz(pPg->GetSize());
-        aP.X()=aSiz.Width()/2;
-        aP.Y()=aSiz.Height()/2;
-    }
-    return aP;
-}
-
 sal_Bool SdrExchangeView::ImpLimitToWorkArea(Point& rPt) const
 {
     sal_Bool bRet(sal_False);
@@ -166,40 +133,6 @@ sal_Bool SdrExchangeView::ImpGetPasteLayer(const SdrObjList* pObjList, SdrLayerI
         }
     }
     return bRet;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-sal_Bool SdrExchangeView::Paste(const GDIMetaFile& rMtf, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
-{
-    Point aPos(rPos);
-    ImpGetPasteObjList(aPos,pLst);
-    ImpLimitToWorkArea( aPos );
-    if (pLst==NULL) return sal_False;
-    SdrLayerID nLayer;
-    if (!ImpGetPasteLayer(pLst,nLayer)) return sal_False;
-    sal_Bool bUnmark=(nOptions&(SDRINSERT_DONTMARK|SDRINSERT_ADDMARK))==0 && !IsTextEdit();
-    if (bUnmark) UnmarkAllObj();
-    SdrGrafObj* pObj=new SdrGrafObj(Graphic(rMtf));
-    pObj->SetLayer(nLayer);
-    ImpPasteObject(pObj,*pLst,aPos,rMtf.GetPrefSize(),rMtf.GetPrefMapMode(),nOptions);
-    return sal_True;
-}
-
-sal_Bool SdrExchangeView::Paste(const Bitmap& rBmp, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
-{
-    Point aPos(rPos);
-    ImpGetPasteObjList(aPos,pLst);
-    ImpLimitToWorkArea( aPos );
-    if (pLst==NULL) return sal_False;
-    SdrLayerID nLayer;
-    if (!ImpGetPasteLayer(pLst,nLayer)) return sal_False;
-    sal_Bool bUnmark=(nOptions&(SDRINSERT_DONTMARK|SDRINSERT_ADDMARK))==0 && !IsTextEdit();
-    if (bUnmark) UnmarkAllObj();
-    SdrGrafObj* pObj=new SdrGrafObj(Graphic(rBmp));
-    pObj->SetLayer(nLayer);
-    ImpPasteObject(pObj,*pLst,aPos,rBmp.GetSizePixel(),MapMode(MAP_PIXEL),nOptions);
-    return sal_True;
 }
 
 sal_Bool SdrExchangeView::Paste(const XubString& rStr, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)

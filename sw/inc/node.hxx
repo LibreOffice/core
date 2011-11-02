@@ -47,7 +47,6 @@
 // forward declarations
 // ---------------------
 
-class SvUShorts;
 class SwCntntFrm;
 class SwCntntNode;
 class SwDoc;

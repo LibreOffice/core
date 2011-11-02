@@ -523,7 +523,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                     const MetaCommentAction*    pA = (const MetaCommentAction*) pAction;
                     String                      aSkipComment;
 
-                    if( pA->GetComment().CompareIgnoreCaseToAscii( "XGRAD_SEQ_BEGIN" ) == COMPARE_EQUAL )
+                    if( pA->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_BEGIN")))
                     {
                         const MetaGradientExAction* pGradAction = NULL;
                         sal_Bool                    bDone = sal_False;
@@ -535,7 +535,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                             if( pAction->GetType() == META_GRADIENTEX_ACTION )
                                 pGradAction = (const MetaGradientExAction*) pAction;
                             else if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
-                                    ( ( (const MetaCommentAction*) pAction )->GetComment().CompareIgnoreCaseToAscii( "XGRAD_SEQ_END" ) == COMPARE_EQUAL ) )
+                                    ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_END"))) )
                             {
                                 bDone = sal_True;
                             }
@@ -559,7 +559,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                             sal_Bool        bSkipSequence = sal_False;
                             rtl::OString sSeqEnd;
 
-                            if( pA->GetComment().Equals( "XPATHSTROKE_SEQ_BEGIN" ) )
+                            if( pA->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_BEGIN")) )
                             {
                                 sSeqEnd = rtl::OString(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_END"));
                                 SvtGraphicStroke aStroke;
@@ -644,7 +644,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                     }
                                 }
                             }
-                            else if ( pA->GetComment().Equals( "XPATHFILL_SEQ_BEGIN" ) )
+                            else if ( pA->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_BEGIN")) )
                             {
                                 sSeqEnd = rtl::OString(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_END"));
                                 SvtGraphicFill aFill;

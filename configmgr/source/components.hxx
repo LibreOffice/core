@@ -155,9 +155,9 @@ private:
 
     void parseResLayer(int layer, rtl::OUString const & url);
 
-    rtl::OUString getModificationFileUrl() const;
+    void parseModificationLayer(rtl::OUString const & url);
 
-    void parseModificationLayer();
+    int getExtensionLayer(bool shared);
 
     typedef std::set< RootAccess * > WeakRootSet;
 
@@ -176,6 +176,9 @@ private:
     WeakRootSet roots_;
     ExternalServices externalServices_;
     rtl::Reference< WriteThread > writeThread_;
+    int sharedExtensionLayer_;
+    int userExtensionLayer_;
+    rtl::OUString modificationFileUrl_;
     boost::shared_ptr<osl::Mutex> lock_;
 };
 

@@ -711,30 +711,6 @@ sal_Bool EmbeddedObjectContainer::TryToCopyGraphReplacement( EmbeddedObjectConta
     return bResult;
 }
 
-sal_Bool EmbeddedObjectContainer::CopyEmbeddedObject( EmbeddedObjectContainer& rSrc, const uno::Reference < embed::XEmbeddedObject >& xObj, ::rtl::OUString& rName )
-{
-    RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::CopyEmbeddedObject" );
-
-    OSL_FAIL( "This method is depricated! Use EmbeddedObjectContainer::CopyAndGetEmbeddedObject() to copy object!\n" );
-
-    // get the object name before(!) it is assigned to a new storage
-    ::rtl::OUString aOrigName;
-    uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
-    if ( xPersist.is() )
-        aOrigName = xPersist->getEntryName();
-
-    if ( !rName.getLength() )
-        rName = CreateUniqueObjectName();
-
-    if ( StoreEmbeddedObject( xObj, rName, sal_True ) )
-    {
-        TryToCopyGraphReplacement( rSrc, aOrigName, rName );
-        return sal_True;
-    }
-
-    return sal_False;
-}
-
 uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmbeddedObject( EmbeddedObjectContainer& rSrc, const uno::Reference < embed::XEmbeddedObject >& xObj, ::rtl::OUString& rName )
 {
     RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::CopyAndGetEmbeddedObject" );

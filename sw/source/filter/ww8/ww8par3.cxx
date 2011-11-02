@@ -906,7 +906,10 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     {
         rNumFmt.SetIndentAt( aLVL.nDxaLeft );
         rNumFmt.SetFirstLineIndent(aLVL.nDxaLeft1);
-        rNumFmt.SetListtabPos( nTabPos );
+        if ( !aLVL.bV6 )
+            rNumFmt.SetListtabPos( nTabPos );
+        else
+            rNumFmt.SetListtabPos( aLVL.nV6Indent );
         SvxNumberFormat::SvxNumLabelFollowedBy eNumLabelFollowedBy = SvxNumberFormat::LISTTAB;
         switch ( ixchFollow )
         {

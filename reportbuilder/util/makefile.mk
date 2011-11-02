@@ -81,17 +81,18 @@ COMPONENT_HTMLFILES = $(EXTENSIONDIR)$/THIRDPARTYREADMELICENSE.html \
 COMPONENT_JARFILES = \
     $(EXTENSIONDIR)$/sun-report-builder.jar
 
-COMPONENT_HELP= \
-    $(EXTENSIONDIR)$/component.txt
+COMPONENT_DESCRIPTION= \
+    $(foreach,lang,$(alllangiso) $(EXTENSIONDIR)$/description-$(lang).txt)
 
 # .jar files from solver
 COMPONENT_EXTJARFILES = \
-    $(EXTENSIONDIR)$/sun-report-builder.jar 					\
+    $(EXTENSIONDIR)$/sun-report-builder.jar
+COMPONENT_EXTJARFILES_COPY = \
     $(OUTDIR)$/bin$/reportbuilderwizard.jar
 
 .IF "$(SYSTEM_JFREEREPORT)" != "YES"
 .INCLUDE :  $(OUTDIR)/bin/jfreereport_version.mk
-COMPONENT_EXTJARFILES += \
+COMPONENT_EXTJARFILES_COPY += \
     $(OUTDIR)$/bin$/flute-$(FLUTE_VERSION).jar				            \
     $(OUTDIR)$/bin$/libserializer-$(LIBSERIALIZER_VERSION).jar			\
     $(OUTDIR)$/bin$/libbase-$(LIBBASE_VERSION).jar                     \
@@ -105,7 +106,7 @@ COMPONENT_EXTJARFILES += \
     $(OUTDIR)$/bin$/sac.jar
 .ENDIF
 .IF "$(SYSTEM_APACHE_COMMONS)" != "YES"
-COMPONENT_EXTJARFILES += \
+COMPONENT_EXTJARFILES_COPY += \
     $(OUTDIR)$/bin$/commons-logging-1.1.1.jar
 .ENDIF
 
@@ -113,7 +114,7 @@ COMPONENT_MANIFEST_GENERIC:=TRUE
 COMPONENT_MANIFEST_SEARCHDIR:=registry
 
 # make sure to add your custom files here
-EXTENSION_PACKDEPS=$(COMPONENT_EXTJARFILES) $(COMPONENT_HTMLFILES) $(COMPONENT_OTR_FILES) $(COMPONENT_HELP) $(COMPONENT_IMAGES)
+EXTENSION_PACKDEPS=$(COMPONENT_EXTJARFILES) $(MISC)/$(TARGET).copied $(COMPONENT_HTMLFILES) $(COMPONENT_OTR_FILES) $(COMPONENT_DESCRIPTION) $(COMPONENT_IMAGES)
 .ENDIF
 # --- Targets ----------------------------------
 
@@ -137,13 +138,25 @@ $(EXTENSIONDIR)$/THIRDPARTYREADMELICENSE.html : $(PRJ)$/license$/THIRDPARTYREADM
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
     
-$(COMPONENT_HELP) : $$(@:f)
-    @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
+$(COMPONENT_DESCRIPTION) : $(DESCRIPTION)
+    
 
 $(DESCRIPTION_SRC): description.xml
     +-$(RM) $@
-    $(TYPE) description.xml | $(SED) "s/#VERSION#/$(EXTENSION_VERSION)/" > $@
+    $(COPY) description-en-US.txt $(EXTENSIONDIR)/description-en-US.txt
+.IF "$(WITH_LANG)" != ""
+    $(XRMEX) -p $(PRJNAME) -i description.xml -o $@ -m $(LOCALIZESDF) -l all
+    $(SED) "s/#VERSION#/$(EXTENSION_VERSION)/" < $@ > $@.new
+    mv $@.new $@
+    @$(COPY) $(@:d)/description-*.txt $(EXTENSIONDIR)
+.ELSE
+    $(SED) "s/#VERSION#/$(EXTENSION_VERSION)/" < $< > $@
+.ENDIF
+
+$(MISC)/$(TARGET).copied: $(COMPONENT_EXTJARFILES_COPY)
+    @@-$(MKDIRHIER) $(EXTENSIONDIR)
+    : $(foreach,i,$(COMPONENT_EXTJARFILES_COPY) && $(COPY) $i $(EXTENSIONDIR)/)
+    $(TOUCH) $@
 .ENDIF
 .ELSE			# "$(SOLAR_JAVA)"!=""
 .INCLUDE : target.mk

@@ -166,9 +166,10 @@ endef
 gb_Jar_COMPONENTPREFIXES := \
     OOO:vnd.sun.star.expand:\dBRAND_BASE_DIR/program/classes/ \
     URE:vnd.sun.star.expand:\dURE_INTERNAL_JAVA_DIR/ \
+    OXT:./ \
     INTERN:vnd.sun.star.expand:\dOOO_INBUILD_JAVA_DIR/
 
-# get component prefix from layer name ("OOO", "URE", "INTERN")
+# get component prefix from layer name ("OOO", "URE", "OXT", "INTERN")
 gb_Jar__get_componentprefix = \
     $(patsubst $(1):%,%,$(or \
         $(filter $(1):%,$(gb_Jar_COMPONENTPREFIXES)), \

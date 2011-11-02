@@ -35,7 +35,7 @@ INCLUDE_DIR=$(INCCOM)
 
 
 #If we build the NSS module then we do not need the old nss libs from here
-.IF "$(ENABLE_NSS_MODULE)"=="YES"
+.IF "$(SYSTEM_NSS)"=="NO"
 
 
 .IF "$(OS)" == "SOLARIS" 
@@ -95,7 +95,7 @@ BIN_RUNTIMELIST=	\
     softokn3	\
     smime3 \
     $(FREEBL_LIB)
-.ENDIF #  "$(ENABLE_NSS_MODULE)"=="YES"
+.ENDIF #  "$(SYSTEM_NSS)"=="NO"
 
 .IF "$(GUI)"=="WNT"
 BIN_RUNTIMELIST+=	\
@@ -164,7 +164,7 @@ DEFAULTS_RUNTIMELIST=	\
     greprefs$/all.js	\
     greprefs$/security-prefs.js
 
-.IF "$(ENABLE_NSS_MODULE)"=="YES"
+.IF "$(SYSTEM_NSS)"=="NO"
 #These headers come from the separate NSS module if enabled
 NSS_INCLUDE_LIST=
 
@@ -205,7 +205,7 @@ LIBLIST=        \
 
 .ENDIF
 
-.ELSE # .IF"$(ENABLE_NSS_MODULE)"=="YES"
+.ELSE # .IF"$(SYSTEM_NSS)"=="NO"
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -258,7 +258,7 @@ LIBLIST=	\
     libsmime3$(DLLPOST)
 
 .ENDIF
-.ENDIF # .IF "$(ENABLE_NSS_MODULE)"=="YES"
+.ENDIF # .IF "$(SYSTEM_NSS)"=="NO"
 
 INCLUDE_PATH=$(MOZ_DIST_DIR)$/include$/
 PUBLIC_PATH=$(MOZ_DIST_DIR)$/public$/
@@ -301,14 +301,14 @@ $(MISC)$/build$/so_moz_runtime_files: 	$(OUT)$/bin$/mozruntime.zip
     $(foreach,file,$(BIN_RUNTIMELIST) $(COPY) $(MOZ_BIN_DIR)$/$(DLLPRE)$(file)$(DLLPOST) \
     $(LIB_DIR)$/$(DLLPRE)$(file)$(DLLPOST) &&) \
     echo >& $(NULLDEV)
-.IF "$(ENABLE_NSS_MODULE)" == "YES"
+.IF "$(SYSTEM_NSS)" == "NO"
 # We add the libraries from the separate nss module
     $(foreach,file,$(NSS_MODULE_RUNTIME_LIST) $(COPY) $(SOLARLIBDIR)$/$(file:d:d)/$(DLLPRE)$(file:f)$(DLLPOST) \
     $(RUNTIME_DIR)$/$(DLLPRE)$(file:f)$(DLLPOST) &&) \
     echo >& $(NULLDEV)
 .ENDIF
 .ELSE # .IF "$(GUI)" == "UNX"
-.IF "$(ENABLE_NSS_MODULE)" == "YES"
+.IF "$(SYSTEM_NSS)" == "NO"
 # We add the libraries from the separate nss module
     $(foreach,file,$(NSS_MODULE_RUNTIME_LIST) $(COPY) $(SOLARBINDIR)$/$(DLLPRE)$(file)$(DLLPOST) \
     $(RUNTIME_DIR)$/$(DLLPRE)$(file)$(DLLPOST) &&) \
@@ -407,7 +407,7 @@ $(MISC)$/build$/so_moz_include_files: $(INCCOM)$/nsBuildID.h
     chmod -R 775 $(INCCOM)
 .ENDIF
     $(TOUCH) $@
-.IF "$(ENABLE_NSS_MODULE)"=="YES"
+.IF "$(SYSTEM_NSS)"=="NO"
     +$(foreach,dir,$(NSS_INCLUDE_LIST) $(RENAME:s/+//) $(INCLUDE_DIR)$/$(dir) $(INCLUDE_DIR)$/$(dir)_remove_me &&) echo >& $(NULLDEV)
     $(foreach,dir,$(NSS_INCLUDE_LIST) rm -rf $(INCLUDE_DIR)$/$(dir)_remove_me &&) echo >& $(NULLDEV)
     -$(MKDIR)	$(OUT)$/inc.nss
@@ -463,6 +463,6 @@ $(MISC)$/CREATETARBALL:	extract_mozab_files
 .ENDIF
     cd $(LB) && zip -r ..$/zipped$/$(MOZTARGET)lib.zip *
     cd $(INCCOM) && zip -r ..$/zipped$/$(MOZTARGET)inc.zip *
-.IF "$(ENABLE_NSS_MODULE)"=="YES"
+.IF "$(SYSTEM_NSS)"=="NO"
     cd $(OUT)$/inc.nss && zip -r ..$/zipped$/$(MOZTARGET)inc.zip *
 .ENDIF

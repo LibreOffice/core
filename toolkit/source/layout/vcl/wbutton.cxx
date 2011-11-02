@@ -31,8 +31,6 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XActionListener.hpp>
 #include <com/sun/star/awt/XButton.hpp>
-#include <com/sun/star/awt/XCheckBox.hpp>
-#include <com/sun/star/awt/XRadioButton.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
@@ -68,16 +66,6 @@ class ImageImpl
         }
     }
 };
-
-Image::Image( const char *pName )
-    : pImpl( new ImageImpl( pName ) )
-{
-}
-
-Image::~Image()
-{
-    delete pImpl;
-}
 
 class ButtonImpl : public ControlImpl
                  , public ::cppu::WeakImplHelper1< awt::XActionListener >
@@ -150,38 +138,11 @@ void Button::SetText( OUString const& rStr )
     getImpl().mxButton->setLabel( rStr );
 }
 
-void Button::SetClickHdl( const Link& link )
-{
-    if (&getImpl () && getImpl().mxButton.is ())
-        getImpl().SetClickHdl( link );
-}
-
-Link& Button::GetClickHdl ()
-{
-    return getImpl().GetClickHdl ();
-}
-
-bool Button::SetModeImage (Image const& image)
-{
-    return getImpl().SetModeImage (image.getImpl().mxGraphic);
-}
-
-bool Button::SetModeImage (::Image const& image)
-{
-    return GetButton ()->SetModeImage (image);
-}
-
-void Button::SetImageAlign( ImageAlign eAlign )
-{
-    getImpl().setProperty( "ImageAlign", uno::Any( (sal_Int16) eAlign ) );
-}
-
 void Button::Click()
 {
 }
 
 IMPL_GET_IMPL( Button );
-IMPL_CONSTRUCTORS( Button, Control, "button" );
 IMPL_GET_WINDOW (Button);
 
 class PushButtonImpl : public ButtonImpl
@@ -239,16 +200,6 @@ void PushButton::Check( bool bCheck )
     getImpl().fireToggle();
 }
 
-bool PushButton::IsChecked() const
-{
-    return !!( getImpl().getProperty( "State" ).get< sal_Int16 >() );
-}
-
-void PushButton::Toggle()
-{
-    Check( true );
-}
-
 void PushButton::SetToggleHdl( const Link& link )
 {
     if (&getImpl () && getImpl().mxButton.is ())
@@ -256,172 +207,7 @@ void PushButton::SetToggleHdl( const Link& link )
 }
 
 IMPL_GET_IMPL( PushButton );
-IMPL_CONSTRUCTORS( PushButton, Button, "pushbutton" );
 IMPL_GET_WINDOW (PushButton);
-
-class RadioButtonImpl : public ButtonImpl
-                      , public ::cppu::WeakImplHelper1< awt::XItemListener >
-{
-    Link maToggleHdl;
-public:
-    uno::Reference< awt::XRadioButton > mxRadioButton;
-    RadioButtonImpl( Context *context, const PeerHandle &peer, Window *window )
-        : ButtonImpl( context, peer, window )
-        , mxRadioButton( peer, uno::UNO_QUERY )
-    {
-    }
-
-    void Check( bool bCheck )
-    {
-        if ( !mxRadioButton.is() )
-            return;
-
-        // Have setState fire item event for
-        // RadioGroups::RadioGroup::itemStateChanged ()
-        ::RadioButton *r = static_cast<RadioButton*>(mpWindow)->GetRadioButton ();
-        bool state = r->IsRadioCheckEnabled ();
-        r->EnableRadioCheck();
-        mxRadioButton->setState( !!bCheck );
-        r->EnableRadioCheck (state);
-        fireToggle();
-    }
-
-    bool IsChecked()
-    {
-        if ( !mxRadioButton.is() )
-            return false;
-        return mxRadioButton->getState();
-    }
-
-    void SetToggleHdl( const Link& link )
-    {
-        if (!link && !!maToggleHdl)
-            mxRadioButton->removeItemListener( this );
-        else if (!!link && !maToggleHdl)
-            mxRadioButton->addItemListener( this );
-        maToggleHdl = link;
-    }
-
-    inline void fireToggle()
-    {
-        maToggleHdl.Call(  static_cast<Window *>( mpWindow ) );
-    }
-
-    virtual void SetClickHdl( const Link& link )
-    {
-        // Keep RadioGroups::RadioGroup's actionListener at HEAD
-        // of list.  This way, it can handle RadioGroup's button
-        // states before all other callbacks and make sure the
-        // client code has the right state.
-
-        // IWBN to add an XRadioButton2 and layout::VCLXRadioButton
-        // with {get,set}RadioGroup() (and a "radiogroup" property
-        // even) and handle the grouping here in RadioButtonImpl.
-        uno::Reference< uno::XInterface > x = static_cast<VCLXRadioButton*> (mpWindow->GetVCLXWindow ())->getFirstActionListener ();
-        uno::Reference< awt::XActionListener > a = uno::Reference< awt::XActionListener> (x ,uno::UNO_QUERY );
-        mxButton->removeActionListener (a);
-        ButtonImpl::SetClickHdl (link);
-        mxButton->addActionListener (a);
-    }
-
-    void SAL_CALL disposing( lang::EventObject const& e )
-        throw (uno::RuntimeException)
-    {
-        ButtonImpl::disposing (e);
-    }
-
-    virtual void SAL_CALL itemStateChanged( const awt::ItemEvent& )
-        throw (uno::RuntimeException)
-    {
-        maToggleHdl.Call( static_cast<Window *>( mpWindow ) );
-    }
-};
-
-RadioButton::~RadioButton ()
-{
-    SetToggleHdl (Link ());
-}
-
-void RadioButton::Check( bool bCheck )
-{
-    getImpl().Check( bCheck );
-}
-
-bool RadioButton::IsChecked() const
-{
-    return getImpl().IsChecked();
-}
-
-void RadioButton::SetToggleHdl( const Link& link )
-{
-    if (&getImpl () && getImpl().mxRadioButton.is ())
-        getImpl().SetToggleHdl( link );
-}
-
-IMPL_GET_IMPL( RadioButton );
-IMPL_GET_WINDOW( RadioButton );
-IMPL_GET_VCLXWINDOW( RadioButton );
-IMPL_CONSTRUCTORS( RadioButton, Button, "radiobutton" );
-
-class CheckBoxImpl : public ButtonImpl
-                 , public ::cppu::WeakImplHelper1< awt::XItemListener >
-{
-    Link maToggleHdl;
-  public:
-    uno::Reference< awt::XCheckBox > mxCheckBox;
-    CheckBoxImpl( Context *context, const PeerHandle &peer, Window *window )
-        : ButtonImpl( context, peer, window )
-        , mxCheckBox( peer, uno::UNO_QUERY )
-    {
-    }
-
-    void SetToggleHdl( const Link& link )
-    {
-        if (!link && !!maToggleHdl)
-            mxCheckBox->removeItemListener( this );
-        else if (!!link && !maToggleHdl)
-            mxCheckBox->addItemListener( this );
-        maToggleHdl = link;
-    }
-    void SAL_CALL disposing( lang::EventObject const& e )
-        throw (uno::RuntimeException)
-    {
-        ButtonImpl::disposing (e);
-    }
-    virtual void SAL_CALL itemStateChanged( const awt::ItemEvent& )
-        throw (uno::RuntimeException)
-    {
-        maToggleHdl.Call( static_cast<Window *>( mpWindow ) );
-    }
-};
-
-CheckBox::~CheckBox ()
-{
-    SetToggleHdl (Link ());
-}
-
-void CheckBox::Check( bool bCheck )
-{
-    if ( !getImpl().mxCheckBox.is() )
-        return;
-    getImpl().mxCheckBox->setState( !!bCheck );
-}
-
-bool CheckBox::IsChecked() const
-{
-    if ( !getImpl().mxCheckBox.is() )
-        return false;
-    return getImpl().mxCheckBox->getState() != 0;
-}
-
-void CheckBox::SetToggleHdl( const Link& link )
-{
-    if (&getImpl () && getImpl().mxCheckBox.is ())
-        getImpl().SetToggleHdl( link );
-}
-
-IMPL_GET_IMPL( CheckBox );
-IMPL_CONSTRUCTORS( CheckBox, Button, "checkbox" );
 
 #define BUTTON_IMPL(t, parent, response) \
     class t##Impl : public parent##Impl \
@@ -447,232 +233,59 @@ IMPL_CONSTRUCTORS( CheckBox, Button, "checkbox" );
 #define BUTTONID_RESET RET_RESET
 #define BUTTONID_APPLY RET_APPLY
 
-BUTTON_IMPL( OKButton, PushButton, BUTTONID_OK );
 BUTTON_IMPL( CancelButton, PushButton, BUTTONID_CANCEL );
 BUTTON_IMPL( YesButton, PushButton, BUTTONID_YES );
 BUTTON_IMPL( NoButton, PushButton, BUTTONID_NO );
 BUTTON_IMPL( RetryButton, PushButton, BUTTONID_RETRY );
 BUTTON_IMPL( IgnoreButton, PushButton, BUTTONID_IGNORE );
-BUTTON_IMPL( ResetButton, PushButton, BUTTONID_RESET );
-BUTTON_IMPL( ApplyButton, PushButton, BUTTONID_APPLY ); /* Deprecated? */
 BUTTON_IMPL( HelpButton, PushButton, BUTTONID_HELP );
 
-IMPL_CONSTRUCTORS( OKButton, PushButton, "okbutton" );
-IMPL_CONSTRUCTORS( CancelButton, PushButton, "cancelbutton" );
-IMPL_CONSTRUCTORS( YesButton, PushButton, "yesbutton" );
-IMPL_CONSTRUCTORS( NoButton, PushButton, "nobutton" );
-IMPL_CONSTRUCTORS( RetryButton, PushButton, "retrybutton" );
-IMPL_CONSTRUCTORS( IgnoreButton, PushButton, "ignorebutton" );
-IMPL_CONSTRUCTORS( ResetButton, PushButton, "resetbutton" );
-IMPL_CONSTRUCTORS( ApplyButton, PushButton, "applybutton" );  /* Deprecated? */
-IMPL_CONSTRUCTORS( HelpButton, PushButton, "helpbutton" );
-
-IMPL_IMPL (ImageButton, PushButton)
-
-
-IMPL_CONSTRUCTORS( ImageButton, PushButton, "imagebutton" );
-
-class AdvancedButtonImpl : public PushButtonImpl
+CancelButton::CancelButton ( Context *context, char const* pId, sal_uInt32 nId )
+    : PushButton( new CancelButtonImpl( context, context->GetPeerHandle( pId, nId ), this ) )
 {
-protected:
-    bool bAdvancedMode;
-    std::list< Window*> maAdvanced;
-    std::list< Window*> maSimple;
-
-public:
-    rtl::OUString mAdvancedLabel;
-    rtl::OUString mSimpleLabel;
-
-protected:
-    Window* Remove( std::list< Window*> lst, Window* w )
-    {
-        for ( std::list< Window*>::iterator it = maAdvanced.begin();
-              it != maAdvanced.end(); ++it )
-            if ( *it == w )
-            {
-                it = lst.erase( it );
-                return *it;
-            }
-        return 0;
-    }
-
-public:
-    AdvancedButtonImpl( Context *context, PeerHandle const& peer, Window *window )
-        : PushButtonImpl( context, peer, window )
-        , bAdvancedMode( false )
-          // TODO: i18n
-          // Button::GetStandardText( BUTTON_ADVANCED );
-          // Button::GetStandardText( BUTTON_SIMPLE );
-        , mAdvancedLabel( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Advanced...")) )
-        , mSimpleLabel( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Simple...")) )
-    {
-    }
-    void Click()
-    {
-        bAdvancedMode = !bAdvancedMode;
-        if ( bAdvancedMode )
-            advancedMode();
-        else
-            simpleMode();
-    }
-    void setAlign ()
-    {
-        ::PushButton *b = static_cast<PushButton*> (mpWindow)->GetPushButton ();
-        b->SetSymbolAlign (SYMBOLALIGN_RIGHT);
-        b->SetSmallSymbol ();
-        //mpWindow->SetStyle (mpWindow->GetStyle() | WB_CENTER);
-    }
-    void advancedMode()
-    {
-        ::PushButton *b = static_cast<PushButton*> (mpWindow)->GetPushButton ();
-        b->SetSymbol (SYMBOL_PAGEUP);
-        setAlign ();
-        if (mSimpleLabel.getLength ())
-            b->SetText (mSimpleLabel);
-        for ( std::list< Window*>::iterator it = maAdvanced.begin();
-              it != maAdvanced.end(); ++it )
-            ( *it )->Show();
-        for ( std::list< Window*>::iterator it = maSimple.begin();
-              it != maSimple.end(); ++it )
-            ( *it )->Hide();
-
-        redraw ();
-    }
-    void simpleMode()
-    {
-        //mxButton->setLabel( mSimpleLabel );
-        ::PushButton *b = static_cast<PushButton*> (mpWindow)->GetPushButton ();
-        b->SetSymbol (SYMBOL_PAGEDOWN);
-        if (mAdvancedLabel.getLength ())
-            b->SetText (mAdvancedLabel);
-        setAlign ();
-        for ( std::list< Window*>::iterator it = maAdvanced.begin();
-              it != maAdvanced.end(); ++it )
-            ( *it )->Hide();
-        for ( std::list< Window*>::iterator it = maSimple.begin();
-              it != maSimple.end(); ++it )
-            ( *it )->Show();
-
-        redraw (true);
-    }
-    void AddAdvanced( Window* w )
-    {
-        maAdvanced.push_back( w );
-        if ( !bAdvancedMode )
-            w->Hide();
-    }
-    void AddSimple( Window* w )
-    {
-        maSimple.push_back( w );
-        if ( bAdvancedMode )
-            w->Hide();
-    }
-    void RemoveAdvanced( Window* w )
-    {
-        Remove( maAdvanced, w );
-    }
-    void RemoveSimple( Window* w )
-    {
-        Remove( maSimple, w );
-    }
-};
-
-void AdvancedButton::AddAdvanced( Window* w )
-{
-    getImpl().AddAdvanced( w );
+    Window *parent = dynamic_cast<Window*> (context);
+    if (parent)
+        SetParent (parent);
 }
 
-void AdvancedButton::AddSimple( Window* w )
+YesButton::YesButton ( Context *context, char const* pId, sal_uInt32 nId )
+    : PushButton( new YesButtonImpl( context, context->GetPeerHandle( pId, nId ), this ) )
 {
-    getImpl().AddSimple( w );
+    Window *parent = dynamic_cast<Window*> (context);
+    if (parent)
+        SetParent (parent);
 }
 
-void AdvancedButton::RemoveAdvanced( Window* w )
+NoButton::NoButton ( Context *context, char const* pId, sal_uInt32 nId )
+    : PushButton( new NoButtonImpl( context, context->GetPeerHandle( pId, nId ), this ) )
 {
-    getImpl().RemoveAdvanced( w );
+    Window *parent = dynamic_cast<Window*> (context);
+    if (parent)
+        SetParent (parent);
 }
 
-void AdvancedButton::RemoveSimple( Window* w )
+RetryButton::RetryButton ( Context *context, char const* pId, sal_uInt32 nId )
+    : PushButton( new RetryButtonImpl( context, context->GetPeerHandle( pId, nId ), this ) )
 {
-    getImpl().RemoveSimple( w );
+    Window *parent = dynamic_cast<Window*> (context);
+    if (parent)
+        SetParent (parent);
 }
 
-void AdvancedButton::SetAdvancedText (rtl::OUString const& text)
+IgnoreButton::IgnoreButton ( Context *context, char const* pId, sal_uInt32 nId )
+    : PushButton( new IgnoreButtonImpl( context, context->GetPeerHandle( pId, nId ), this ) )
 {
-    if (text.getLength ())
-        getImpl ().mAdvancedLabel = text;
+    Window *parent = dynamic_cast<Window*> (context);
+    if (parent)
+        SetParent (parent);
 }
 
-void AdvancedButton::SetSimpleText (rtl::OUString const& text)
+HelpButton::HelpButton ( Context *context, char const* pId, sal_uInt32 nId )
+    : PushButton( new HelpButtonImpl( context, context->GetPeerHandle( pId, nId ), this ) )
 {
-    if (text.getLength ())
-        getImpl ().mSimpleLabel = text;
-}
-
-rtl::OUString AdvancedButton::GetAdvancedText () const
-{
-    return getImpl ().mAdvancedLabel;
-}
-
-rtl::OUString AdvancedButton::GetSimpleText () const
-{
-    return getImpl ().mSimpleLabel;
-}
-
-void AdvancedButton::SetDelta (int)
-{
-}
-
-IMPL_CONSTRUCTORS_BODY( AdvancedButton, PushButton, "advancedbutton", getImpl().simpleMode () );
-IMPL_GET_IMPL( AdvancedButton );
-
-
-class MoreButtonImpl : public AdvancedButtonImpl
-{
-public:
-    MoreButtonImpl( Context *context, PeerHandle const& peer, Window *window )
-        : AdvancedButtonImpl( context, peer, window)
-    {
-        mSimpleLabel = Button::GetStandardText( BUTTON_MORE );
-        mAdvancedLabel = Button::GetStandardText( BUTTON_LESS );
-    }
-    void AddWindow( Window* w ) { AddAdvanced( w ); }
-    void RemoveWindow( Window* w ) { RemoveAdvanced( w ); }
-};
-
-// TODO
-//BUTTON_IMPL( MoreButton, PushButton, 0 );
-IMPL_CONSTRUCTORS_BODY( MoreButton, AdvancedButton, "morebutton", getImpl().simpleMode () );
-IMPL_GET_IMPL( MoreButton );
-
-void MoreButton::AddWindow( Window* w )
-{
-    getImpl().AddWindow( w );
-}
-
-void MoreButton::RemoveWindow( Window* w )
-{
-    getImpl().RemoveWindow( w );
-}
-
-void MoreButton::SetMoreText (rtl::OUString const& text)
-{
-    SetAdvancedText (text);
-}
-
-void MoreButton::SetLessText (rtl::OUString const& text)
-{
-    SetSimpleText (text);
-}
-
-rtl::OUString MoreButton::GetMoreText () const
-{
-    return GetAdvancedText ();
-}
-
-rtl::OUString MoreButton::GetLessText () const
-{
-    return GetSimpleText ();
+    Window *parent = dynamic_cast<Window*> (context);
+    if (parent)
+        SetParent (parent);
 }
 
 } // namespace layout

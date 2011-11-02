@@ -88,7 +88,6 @@ class SfxViewShellArr_Impl;
 class StarBASIC;
 class SfxWorkWindow;
 class SfxFilterMatcher;
-class SvUShorts;
 class SfxModule;
 class SfxModuleArr_Impl;
 class Window;
@@ -269,7 +268,7 @@ public:
     SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl(const SfxViewFrame *pFrame=0) const;
 
     // TODO/CLEANUP: still needed?
-    SAL_DLLPRIVATE SvUShorts*   GetDisabledSlotList_Impl();
+    SAL_DLLPRIVATE std::vector<sal_uInt16>* GetDisabledSlotList_Impl();
     SAL_DLLPRIVATE SfxSlotPool& GetAppSlotPool_Impl() const;
     SAL_DLLPRIVATE SfxModule*   GetModule_Impl();
     SAL_DLLPRIVATE ResMgr*      GetOffResManager_Impl();

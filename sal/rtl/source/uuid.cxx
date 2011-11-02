@@ -67,7 +67,7 @@
                      ( (  (sal_uInt32)p[3]) & 0xff);\
                }
 
-typedef struct _UUID
+struct UUID
 {
       sal_uInt32          time_low;
       sal_uInt16          time_mid;
@@ -75,7 +75,7 @@ typedef struct _UUID
       sal_uInt8           clock_seq_hi_and_reserved;
       sal_uInt8           clock_seq_low;
       sal_uInt8           node[6];
-} UUID;
+};
 
 static  void write_v3( sal_uInt8 *pUuid  )
 {

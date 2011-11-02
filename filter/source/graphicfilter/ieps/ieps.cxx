@@ -380,7 +380,7 @@ static bool RenderAsPNG(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
 void CreateMtfReplacementAction( GDIMetaFile& rMtf, SvStream& rStrm, sal_uInt32 nOrigPos, sal_uInt32 nPSSize,
                                 sal_uInt32 nPosWMF, sal_uInt32 nSizeWMF, sal_uInt32 nPosTIFF, sal_uInt32 nSizeTIFF )
 {
-    ByteString aComment( (const sal_Char*)"EPSReplacementGraphic" );
+    rtl::OString aComment(RTL_CONSTASCII_STRINGPARAM("EPSReplacementGraphic"));
     if ( nSizeWMF || nSizeTIFF )
     {
         SvMemoryStream aReplacement( nSizeWMF + nSizeTIFF + 28 );

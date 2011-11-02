@@ -34,11 +34,11 @@
 #include <tools/ref.hxx>
 #include <rtl/textenc.h>
 #include <boost/utility.hpp>
+#include <vector>
 
 
 struct SvParser_Impl;
 class SvStream;
-class SvUShorts;
 
 enum SvParserState
 {
@@ -174,7 +174,7 @@ public:
     // Aufbau einer Which-Map 'rWhichMap' aus einem Array von
     // 'pWhichIds' von Which-Ids. Es hat die Lange 'nWhichIds'.
     // Die Which-Map wird nicht geloescht.
-    static void BuildWhichTbl( SvUShorts &rWhichMap,
+    static void BuildWhichTbl( std::vector<sal_uInt16> &rWhichMap,
                                sal_uInt16 *pWhichIds,
                                sal_uInt16 nWhichIds );
 };

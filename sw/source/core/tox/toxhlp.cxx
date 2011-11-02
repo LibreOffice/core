@@ -63,9 +63,9 @@ IndexEntrySupplierWrapper::IndexEntrySupplierWrapper()
         )
     {
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aMsg( "IndexEntrySupplierWrapper: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        OSL_FAIL( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("IndexEntrySupplierWrapper: Exception caught\n"));
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        OSL_FAIL( aMsg.getStr() );
 #endif
     }
 }
@@ -89,9 +89,9 @@ String IndexEntrySupplierWrapper::GetIndexKey( const String& rTxt,
         )
     {
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aMsg( "getIndexKey: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        OSL_FAIL( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("getIndexKey: Exception caught\n"));
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        OSL_FAIL( aMsg.getStr() );
 #endif
     }
     return sRet;
@@ -110,9 +110,9 @@ String IndexEntrySupplierWrapper::GetFollowingText( sal_Bool bMorePages ) const
         )
     {
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aMsg( "getIndexFollowPageWord: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        OSL_FAIL( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("getIndexFollowPageWord: Exception caught\n"));
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        OSL_FAIL( aMsg.getStr() );
 #endif
     }
     return sRet;
@@ -133,9 +133,9 @@ IndexEntrySupplierWrapper::GetAlgorithmList( const STAR_NMSPC::lang::Locale& rLc
         )
     {
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aMsg( "getAlgorithmList: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        OSL_FAIL( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("getAlgorithmList: Exception caught\n"));
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        OSL_FAIL( aMsg.getStr() );
 #endif
     }
     return sRet;
@@ -156,9 +156,9 @@ sal_Bool IndexEntrySupplierWrapper::LoadAlgorithm(
         )
     {
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aMsg( "loadAlgorithm: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        OSL_FAIL( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("loadAlgorithm: Exception caught\n"));
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        OSL_FAIL( aMsg.getStr() );
 #endif
     }
     return bRet;
@@ -182,9 +182,9 @@ sal_Int16 IndexEntrySupplierWrapper::CompareIndexEntry(
         )
     {
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aMsg( "compareIndexEntry: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        OSL_FAIL( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("compareIndexEntry: Exception caught\n"));
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        OSL_FAIL( aMsg.getStr() );
 #endif
     }
     return nRet;

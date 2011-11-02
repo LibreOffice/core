@@ -225,7 +225,6 @@ public:
     std::vector< SvtLinguConfigDictionaryEntry > GetActiveDictionariesByFormat( const rtl::OUString &rFormatName );
 
     // functions returning file URLs to the respective images (if found) and empty string otherwise
-    ::rtl::OUString     GetSpellAndGrammarDialogImage( const ::rtl::OUString &rServiceImplName ) const;
     ::rtl::OUString     GetSpellAndGrammarContextSuggestionImage( const ::rtl::OUString &rServiceImplName ) const;
     ::rtl::OUString     GetSpellAndGrammarContextDictionaryImage( const ::rtl::OUString &rServiceImplName ) const;
     ::rtl::OUString     GetThesaurusDialogImage( const ::rtl::OUString &rServiceImplName ) const;

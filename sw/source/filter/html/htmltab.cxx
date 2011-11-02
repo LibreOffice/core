@@ -398,7 +398,7 @@ class HTMLTable
     String aDir;
 
     SdrObjects *pResizeDrawObjs;// SDR objects
-    SvUShorts *pDrawObjPrcWidths;   // column of draw object and its rel. width
+    std::vector<sal_uInt16> *pDrawObjPrcWidths;   // column of draw object and its rel. width
 
     HTMLTableRows *pRows;           // table rows
     HTMLTableColumns *pColumns;     // table columns
@@ -2810,10 +2810,10 @@ void HTMLTable::RegisterDrawObject( SdrObject *pObj, sal_uInt8 nPrcWidth )
     pResizeDrawObjs->C40_INSERT( SdrObject, pObj, pResizeDrawObjs->Count() );
 
     if( !pDrawObjPrcWidths )
-        pDrawObjPrcWidths = new SvUShorts;
-    pDrawObjPrcWidths->Insert( nCurRow, pDrawObjPrcWidths->Count() );
-    pDrawObjPrcWidths->Insert( nCurCol, pDrawObjPrcWidths->Count() );
-    pDrawObjPrcWidths->Insert( (sal_uInt16)nPrcWidth, pDrawObjPrcWidths->Count() );
+        pDrawObjPrcWidths = new std::vector<sal_uInt16>;
+    pDrawObjPrcWidths->push_back( nCurRow );
+    pDrawObjPrcWidths->push_back( nCurCol );
+    pDrawObjPrcWidths->push_back( (sal_uInt16)nPrcWidth );
 }
 
 void HTMLTable::MakeParentContents()
@@ -3081,11 +3081,11 @@ _SectionSaveStruct::_SectionSaveStruct( SwHTMLParser& rParser ) :
 {
     // Font-Stacks einfrieren
     nBaseFontStMinSave = rParser.nBaseFontStMin;
-    rParser.nBaseFontStMin = rParser.aBaseFontStack.Count();
+    rParser.nBaseFontStMin = rParser.aBaseFontStack.size();
 
     nFontStMinSave = rParser.nFontStMin;
     nFontStHeadStartSave = rParser.nFontStHeadStart;
-    rParser.nFontStMin = rParser.aFontStack.Count();
+    rParser.nFontStMin = rParser.aFontStack.size();
 
     // Kontext-Stack einfrieren
     nContextStMinSave = rParser.nContextStMin;
@@ -3105,16 +3105,16 @@ void _SectionSaveStruct::Restore( SwHTMLParser& rParser )
 {
     // Font-Stacks wieder auftauen
     sal_uInt16 nMin = rParser.nBaseFontStMin;
-    if( rParser.aBaseFontStack.Count() > nMin )
-        rParser.aBaseFontStack.Remove( nMin,
-                                rParser.aBaseFontStack.Count() - nMin );
+    if( rParser.aBaseFontStack.size() > nMin )
+        rParser.aBaseFontStack.erase( rParser.aBaseFontStack.begin() + nMin,
+                rParser.aBaseFontStack.end() );
     rParser.nBaseFontStMin = nBaseFontStMinSave;
 
 
     nMin = rParser.nFontStMin;
-    if( rParser.aFontStack.Count() > nMin )
-        rParser.aFontStack.Remove( nMin,
-                            rParser.aFontStack.Count() - nMin );
+    if( rParser.aFontStack.size() > nMin )
+        rParser.aFontStack.erase( rParser.aFontStack.begin() + nMin,
+                rParser.aFontStack.end() );
     rParser.nFontStMin = nFontStMinSave;
     rParser.nFontStHeadStart = nFontStHeadStartSave;
 

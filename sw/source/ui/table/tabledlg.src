@@ -307,16 +307,16 @@ TabPage TP_FORMAT_TABLE
         Hide = TRUE ;
         Text [ en-US ] = "Properties";
     };
-    FixedText   FT_TEXTDIRECTION
+    FixedText   FT_TEXTORIENTATION
     {
         Pos = MAP_APPFONT ( 12 , 138 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
         Hide = TRUE ;
         Text [ en-US ] = "Text ~direction";
     };
-    ListBox     LB_TEXTDIRECTION
+    ListBox     LB_TEXTORIENTATION
     {
-        HelpID = "sw:ListBox:TP_FORMAT_TABLE:LB_TEXTDIRECTION";
+        HelpID = "sw:ListBox:TP_FORMAT_TABLE:LB_TEXTORIENTATION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 75 , 136 ) ;
         Size = MAP_APPFONT ( 176 , 50 ) ;
@@ -733,23 +733,23 @@ TabPage TP_TABLE_TEXTFLOW
         Pos = MAP_APPFONT ( 21 , 113 ) ;
         Size = MAP_APPFONT ( 2 , 1 ) ;
     };
-    FixedText FT_TEXTDIRECTION
+    FixedText FT_TEXTORIENTATION
     {
         Pos = MAP_APPFONT ( 12 , 132 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ en-US ] = "Text ~direction" ;
+        Text [ en-US ] = "Text ~orientation" ;
     };
-    ListBox LB_TEXTDIRECTION
+    ListBox LB_TEXTORIENTATION
     {
-        HelpID = "sw:ListBox:TP_TABLE_TEXTFLOW:LB_TEXTDIRECTION";
+        HelpID = "sw:ListBox:TP_TABLE_TEXTFLOW:LB_TEXTORIENTATION";
         Pos = MAP_APPFONT ( 85 , 130 ) ;
         Size = MAP_APPFONT ( 163 , 50 ) ;
         DropDown = TRUE;
         Border = TRUE;
         StringList [ en-US ] =
         {
-             < "Left-to-right" ; 0; > ;
-             < "Right-to-left (vertical)" ; 2; > ;
+             < "horizontal" ; 0; > ;
+             < "vertical" ; 2; > ;
              < "Use superordinate object settings" ; 4; > ;
         };
     };

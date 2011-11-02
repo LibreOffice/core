@@ -112,7 +112,7 @@
 
 using namespace ::com::sun::star;
 
-IMPL_ABSTDLG_BASE(AbstractSwWordCountDialog_Impl);
+IMPL_ABSTDLG_BASE(AbstractSwWordCountFloatDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwInsertAbstractDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSfxDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwAsciiFilterDlg_Impl);
@@ -173,11 +173,6 @@ void AbstractTabDialog_Impl::SetText( const XubString& rStr )
 String AbstractTabDialog_Impl::GetText() const
 {
     return pDlg->GetText();
-}
-
-void    AbstractSwWordCountDialog_Impl::SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc)
-{
-    pDlg->SetValues(rCurrent, rDoc);
 }
 
 sal_uInt8 AbstractSwInsertAbstractDlg_Impl::GetLevel() const
@@ -244,12 +239,12 @@ void AbstractSwInsertDBColAutoPilot_Impl::DataToDoc( const uno::Sequence< uno::A
     pDlg->DataToDoc(rSelection, rxSource, xConnection, xResultSet);
 }
 
-ByteString      AbstractDropDownFieldDialog_Impl::GetWindowState( sal_uLong nMask  ) const
+rtl::OString AbstractDropDownFieldDialog_Impl::GetWindowState( sal_uLong nMask  ) const
 {
     return pDlg->GetWindowState(nMask);
 }
 
-void       AbstractDropDownFieldDialog_Impl::SetWindowState( const ByteString& rStr )
+void AbstractDropDownFieldDialog_Impl::SetWindowState( const rtl::OString& rStr )
 {
     pDlg->SetWindowState(rStr);
 }
@@ -400,12 +395,12 @@ String AbstractGlossaryDlg_Impl::GetCurrShortName() const
     return pDlg->GetCurrShortName();
 }
 
-void AbstractFldInputDlg_Impl::SetWindowState( const ByteString& rStr )
+void AbstractFldInputDlg_Impl::SetWindowState( const rtl::OString& rStr )
 {
     pDlg->SetWindowState( rStr );
 }
 
-ByteString AbstractFldInputDlg_Impl::GetWindowState( sal_uLong nMask ) const
+rtl::OString AbstractFldInputDlg_Impl::GetWindowState( sal_uLong nMask ) const
 {
     return pDlg->GetWindowState( nMask );
 }
@@ -572,6 +567,18 @@ Window* AbstractAuthMarkFloatDlg_Impl::GetWindow()
     return (Window*)pDlg;
 }
 
+
+Window* AbstractSwWordCountFloatDlg_Impl::GetWindow()
+{
+    return (Window*)pDlg;
+}
+
+void AbstractSwWordCountFloatDlg_Impl::UpdateCounts()
+{
+    pDlg->UpdateCounts();
+}
+
+
 AbstractMailMergeWizard_Impl::~AbstractMailMergeWizard_Impl()
 {
     delete pDlg;
@@ -622,12 +629,6 @@ sal_Bool AbstractMailMergeWizard_Impl::ShowPage( sal_uInt16 nLevel )
 sal_uInt16 AbstractMailMergeWizard_Impl::GetRestartPage() const
 {
     return pDlg->GetRestartPage();
-}
-
-AbstractSwWordCountDialog* SwAbstractDialogFactory_Impl::CreateSwWordCountDialog(Window* pParent)
-{
-    SwWordCountDialog* pDlg = new SwWordCountDialog( pParent );
-    return new AbstractSwWordCountDialog_Impl( pDlg );
 }
 
 AbstractSwInsertAbstractDlg * SwAbstractDialogFactory_Impl::CreateSwInsertAbstractDlg( Window* pParent,
@@ -1543,6 +1544,26 @@ AbstractMarkFloatDlg * SwAbstractDialogFactory_Impl::CreateAuthMarkFloatDlg( int
     }
     if ( pDlg )
         return new AbstractAuthMarkFloatDlg_Impl( pDlg );
+    return 0;
+}
+
+AbstractSwWordCountFloatDlg * SwAbstractDialogFactory_Impl::CreateSwWordCountDialog( int nResId,
+                                                                              SfxBindings* pBindings,
+                                                                              SfxChildWindow* pChild,
+                                                                              Window *pParent,
+                                                                              SfxChildWinInfo* pInfo )
+{
+    SwWordCountFloatDlg* pDlg=NULL;
+    switch ( nResId )
+    {
+        case DLG_WORDCOUNT :
+            pDlg = new SwWordCountFloatDlg( pBindings, pChild, pParent, pInfo );
+            break;
+        default:
+            break;
+    }
+    if ( pDlg )
+        return new AbstractSwWordCountFloatDlg_Impl( pDlg );
     return 0;
 }
 

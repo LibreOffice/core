@@ -148,7 +148,6 @@ public:
     sal_uInt16          GetImagePos( const ::rtl::OUString& rImageName ) const;
 
     sal_uInt16          GetImageId( sal_uInt16 nPos ) const;
-    void            GetImageIds( ::std::vector< sal_uInt16 >& rIds ) const;
 
     ::rtl::OUString GetImageName( sal_uInt16 nPos ) const;
     void            GetImageNames( ::std::vector< ::rtl::OUString >& rNames ) const;

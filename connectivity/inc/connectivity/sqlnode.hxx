@@ -239,7 +239,7 @@ namespace connectivity
             between_predicate_part_2,
             cast_spec,
             rule_count,             // last value
-            UNKNOWN_RULE            // ID indicating that a node is no rule with a matching Rule-enum value (see getKnownRuleID)
+            UNKNOWN_RULE = -1       // ID indicating that a node is no rule with a matching Rule-enum value (see getKnownRuleID)
         };
 
         // must be ascii encoding for the value
@@ -289,7 +289,7 @@ namespace connectivity
         /** parses the node to a string which can be passed to a driver's connection for execution
 
             Any particles of the parse tree which represent application-level features - such
-            as queries appearing in the FROM part - are subsituted, so that the resulting statement can
+            as queries appearing in the FROM part - are substituted, so that the resulting statement can
             be executed at an SDBC-level connection.
 
             @param  _out_rString
@@ -315,7 +315,7 @@ namespace connectivity
 
                 Currently, there's only one condition how this method can fail: If it contains a nested
                 query which causes a cycle. E.g., consider a statement <code>SELECT * from "foo"</code>,
-                where <code>bar </code> is a query defined as <code>SELECT * FROM "bar"</code>, where
+                where <code>foo</code> is a query defined as <code>SELECT * FROM "bar"</code>, where
                 <code>bar</code> is defined as <code>SELECT * FROM "foo"</code>. This statement obviously
                 cannot be parsed to an executable statement.
 
@@ -333,7 +333,7 @@ namespace connectivity
                             sal_Bool _bIntl = sal_False,
                             sal_Bool _bQuote= sal_True) const;
 
-        // quoted und internationalisert
+        // quoted and internationalised
         void parseNodeToPredicateStr(::rtl::OUString& rString,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
@@ -352,14 +352,14 @@ namespace connectivity
         OSQLParseNode* getByRule(OSQLParseNode::Rule eRule) const;
 
 #if OSL_DEBUG_LEVEL > 0
-            // shows the ParseTree with tabs and linefeeds
+        // shows the ParseTree with tabs and linefeeds
         void showParseTree( ::rtl::OUString& rString ) const;
         void showParseTree( ::rtl::OUStringBuffer& _inout_rBuf, sal_uInt32 nLevel ) const;
 #endif
 
         SQLNodeType getNodeType() const {return m_eNodeType;};
 
-            // RuleId returns the RuleID of the node's rule (only if IsRule())
+        // RuleId returns the RuleID of the node's rule (only if IsRule())
         sal_uInt32 getRuleID() const {return m_nNodeID;}
 
         /** returns the ID of the rule represented by the node
@@ -392,17 +392,17 @@ namespace connectivity
         // e.q. (a or b) and (c or d) <=> a and c or a and d or b and c or b and d
         static void disjunctiveNormalForm(OSQLParseNode*& pSearchCondition);
 
-        //   Simplies logic expressions
-        // a * a        = a
-        // a + a        = a
-        // a * ( a + b) = a
-        // a + a * b    = a
+        //   Simplifies logic expressions
+        // a and a        = a
+        // a or a         = a
+        // a and ( a + b) = a
+        // a or a and b   = a
         static void absorptions(OSQLParseNode*& pSearchCondition);
 
-        // erase not nessary braces
+        // erase unnecessary braces
         static void eraseBraces(OSQLParseNode*& pSearchCondition);
 
-        // makes the logic formula a little more smaller
+        // makes the logic formula a little smaller
         static void compress(OSQLParseNode*& pSearchCondition);
         // return the catalog, schema and tablename form this node
         // _pTableNode must be a rule of that above or a SQL_TOKEN_NAME
@@ -412,7 +412,7 @@ namespace connectivity
                                             ::rtl::OUString &_rTable
                                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData);
 
-        // susbtitute all occurrences of :var or [name] into the dynamic parameter ?
+        // substitute all occurrences of :var or [name] into the dynamic parameter ?
         // _pNode will be modified if parameters exists
         static void substituteParameterNames(OSQLParseNode* _pNode);
 
@@ -421,7 +421,7 @@ namespace connectivity
         static ::rtl::OUString getTableRange(const OSQLParseNode* _pTableRef);
 
     protected:
-        // ParseNodeToStr konkateniert alle Token (leaves) des ParseNodes
+        // ParseNodeToStr concatenates all Tokens (leaves) of the ParseNodes.
         void parseNodeToStr(::rtl::OUString& rString,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
@@ -462,9 +462,18 @@ namespace connectivity
         return m_aChildren.at(nPos);
     }
 
-    // Utility-Methoden zum Abfragen auf bestimmte Rules, Token oder Punctuation:
+    // utilities to query for a specific rule, token or punctuation
     #define SQL_ISRULE(pParseNode, eRule)   ((pParseNode)->isRule() && (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::eRule))
+    #define SQL_ISRULEOR2(pParseNode, e1, e2)  ((pParseNode)->isRule() && ( \
+                                                  (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::e1) || \
+                                                  (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::e2)))
+    #define SQL_ISRULEOR3(pParseNode, e1, e2, e3)  ((pParseNode)->isRule() && ( \
+                                                      (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::e1) || \
+                                                      (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::e2) || \
+                                                      (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::e3)))
     #define SQL_ISTOKEN(pParseNode, token) ((pParseNode)->isToken() && (pParseNode)->getTokenID() == SQL_TOKEN_##token)
+    #define SQL_ISTOKENOR2(pParseNode, tok0, tok1) ((pParseNode)->isToken() &&  ( (pParseNode)->getTokenID() == SQL_TOKEN_##tok0 || (pParseNode)->getTokenID() == SQL_TOKEN_##tok1 ))
+    #define SQL_ISTOKENOR3(pParseNode, tok0, tok1, tok2) ((pParseNode)->isToken() && ( (pParseNode)->getTokenID() == SQL_TOKEN_##tok0 || (pParseNode)->getTokenID() == SQL_TOKEN_##tok1 || (pParseNode)->getTokenID() == SQL_TOKEN_##tok2 ))
     #define SQL_ISPUNCTUATION(pParseNode, aString) ((pParseNode)->getNodeType() == SQL_NODE_PUNCTUATION && !(pParseNode)->getTokenValue().compareToAscii(aString))
 }
 

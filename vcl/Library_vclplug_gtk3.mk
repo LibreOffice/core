@@ -51,19 +51,6 @@ $(eval $(call gb_Library_add_api,vclplug_gtk3,\
     udkapi \
 ))
 
-ifneq ($(ENABLE_DBUS),)
-$(eval $(call gb_Library_set_include,vclplug_gtk3,\
-	$$(INCLUDE) \
-	$(filter -I%,$(shell pkg-config --cflags dbus-glib-1)) \
-))
-$(eval $(call gb_Library_add_defs,vclplug_gtk3,\
-    -DENABLE_DBUS \
-))
-$(eval $(call gb_Library_add_libs,vclplug_gtk3,\
-    $(shell pkg-config --libs dbus-glib-1)\
-))
-endif
-
 $(eval $(call gb_Library_add_libs,vclplug_gtk3,\
     $$(GTK3_LIBS) \
     $$(GTHREAD_LIBS) \
@@ -90,6 +77,10 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_gtk3,\
     SM \
     ICE \
     $(gb_STDLIBS) \
+))
+
+$(eval $(call gb_Library_use_externals,vclplug_gtk,\
+	dbus \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3,\

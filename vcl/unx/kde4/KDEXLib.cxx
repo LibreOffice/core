@@ -57,7 +57,7 @@
 
 #include <stdio.h>
 
-#if QT_VERSION >= QT_VERSION_CHECK( 4, 8, 1 )
+#if QT_VERSION >= QT_VERSION_CHECK( 4, 9, 0 )
 #define QT_UNIX_EVENT_LOOP_SUPPORT
 #ifdef KDE_HAVE_GLIB
 #define GLIB_EVENT_LOOP_SUPPORT

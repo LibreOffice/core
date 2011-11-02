@@ -51,10 +51,6 @@
 #include "diagnose_ex.h"
 #include <rtl/logfile.hxx>
 
-#define SQL_ISRULEOR2(pParseNode, e1,e2)    ((pParseNode)->isRule() && (\
-                                            (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::e1) || \
-                                            (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::e2)))
-
 using namespace ::comphelper;
 using namespace ::connectivity;
 using namespace ::connectivity::sdbcx;

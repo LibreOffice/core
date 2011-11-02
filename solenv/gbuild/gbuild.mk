@@ -46,6 +46,8 @@
 # SYSTEM_JPEG (Linux)
 # SYSTEM_LIBXML (Linux)
 
+.DELETE_ON_ERROR:
+
 SHELL := /bin/sh
 MAKEFLAGS+=-r
 true := T
@@ -307,6 +309,7 @@ include $(SOLARENV)/inc/minor.mk
 
 include $(foreach class, \
 	ComponentTarget \
+	ComponentsTarget \
 	AllLangResTarget \
 	WinResTarget \
 	LinkTarget \

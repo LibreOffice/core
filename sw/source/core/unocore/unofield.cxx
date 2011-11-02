@@ -96,6 +96,7 @@
 #include <docsh.hxx>
 #include <fmtmeta.hxx> // MetaFieldManager
 #include <switerator.hxx>
+#include <rtl/strbuf.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -444,10 +445,10 @@ sal_Bool SwXFieldMaster::supportsService(const OUString& rServiceName) throw( un
         }
         if( pEntry )
         {
-            ByteString aTmp( RTL_CONSTASCII_STRINGPARAM(
-                            "com.sun.star.text.fieldmaster."));
-            aTmp.Append( pEntry );
-            bRet = rServiceName.equalsAsciiL(aTmp.GetBuffer(), aTmp.Len());
+            rtl::OString aTmp = rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM(
+                "com.sun.star.text.fieldmaster.")).append(pEntry).
+                makeStringAndClear();
+            bRet = rServiceName.equalsAsciiL(aTmp.getStr(), aTmp.getLength());
         }
     }
     return bRet;

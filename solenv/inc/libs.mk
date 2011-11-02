@@ -308,7 +308,7 @@ PYUNOLIB=-lpyuno
 LPSOLVELIB=-llpsolve55
 SOFFICELIB=-lsofficeapp
 UNOPKGAPPLIB=-lunopkgapp
-TESTLIB=-lunotest
+TESTLIB=-ltest
 UNOTESTLIB=-lunotest
 XMLREADERLIB=-lxmlreader
 

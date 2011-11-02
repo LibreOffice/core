@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cli_ure.hxx"
-
 #include <sal/alloca.h>
 #include "rtl/ustrbuf.hxx"
 #include "cli_base.h"

@@ -4,7 +4,7 @@ nss containes the security libraries which are also part of moz. However nss is
 meant to be more current, that is it to be updated more often. This should be
 easier than doing this with moz. 
 
-If nss is build depends on an environment variable (ENABLE_NSS_MODULE=YES) which
+If nss is build depends on an environment variable (SYSTEM_NSS=NO) which
 is per default set to YES. In this case nss is build before moz. The nss
 libraries/lib files/headers built in moz are then not delivered. Otherwise they
 would overwrite those from nss. That is, the nss libraries build in moz are

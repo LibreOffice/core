@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cli_ure.hxx"
-
 #pragma warning(push, 1)
 #include "windows.h"
 #pragma warning(pop)

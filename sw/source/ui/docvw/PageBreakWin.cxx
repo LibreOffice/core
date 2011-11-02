@@ -183,7 +183,8 @@ SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm )
     m_pPopupMenu( NULL ),
     m_pLine( NULL ),
     m_bIsAppearing( false ),
-    m_nFadeRate( 100 )
+    m_nFadeRate( 100 ),
+    m_bDestroyed( false )
 {
     // Use pixels for the rest of the drawing
     SetMapMode( MapMode ( MAP_PIXEL ) );
@@ -202,6 +203,9 @@ SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm )
 
 SwPageBreakWin::~SwPageBreakWin( )
 {
+    m_bDestroyed = true;
+    m_aFadeTimer.Stop();
+
     delete m_pPopupMenu;
     delete m_pLine;
 }
@@ -290,6 +294,8 @@ void SwPageBreakWin::Paint( const Rectangle& )
 
 void SwPageBreakWin::Select( )
 {
+    SwFrameControlPtr pThis = GetEditWin()->GetFrameControlsManager( ).GetControl( PageBreak, GetFrame() );
+
     switch( GetCurItemId( ) )
     {
         case FN_PAGEBREAK_EDIT:
@@ -298,25 +304,27 @@ void SwPageBreakWin::Select( )
                 while ( pBodyFrm && !pBodyFrm->IsBodyFrm() )
                     pBodyFrm = static_cast< const SwLayoutFrm* >( pBodyFrm->GetNext() );
 
+                SwEditWin* pEditWin = GetEditWin();
+
                 if ( pBodyFrm )
                 {
+                    SwWrtShell& rSh = pEditWin->GetView().GetWrtShell();
+                    sal_Bool bOldLock = rSh.IsViewLocked();
+                    rSh.LockView( sal_True );
+
                     if ( pBodyFrm->Lower()->IsTabFrm() )
                     {
-                        SwWrtShell& rSh = GetEditWin()->GetView().GetWrtShell();
                         rSh.Push( );
                         rSh.ClearMark();
-                        sal_Bool bOldLock = rSh.IsViewLocked();
-                        rSh.LockView( sal_True );
 
                         SwCntntFrm *pCnt = const_cast< SwCntntFrm* >( pBodyFrm->ContainsCntnt() );
                         SwCntntNode* pNd = pCnt->GetNode();
                         rSh.SetSelection( *pNd );
 
-                        SfxUInt16Item aItem( GetEditWin()->GetView().GetPool( ).GetWhich( FN_FORMAT_TABLE_DLG ), TP_TABLE_TEXTFLOW );
-                        GetEditWin()->GetView().GetViewFrame()->GetDispatcher()->Execute(
+                        SfxUInt16Item aItem( pEditWin->GetView().GetPool( ).GetWhich( FN_FORMAT_TABLE_DLG ), TP_TABLE_TEXTFLOW );
+                        pEditWin->GetView().GetViewFrame()->GetDispatcher()->Execute(
                                 FN_FORMAT_TABLE_DLG, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aItem, NULL );
 
-                        rSh.LockView( bOldLock );
                         rSh.Pop( sal_False );
                     }
                     else
@@ -325,12 +333,13 @@ void SwPageBreakWin::Select( )
                         SwCntntNode* pNd = pCnt->GetNode();
 
                         SwPaM aPaM( *pNd );
-                        SwPaMItem aPaMItem( GetEditWin()->GetView().GetPool( ).GetWhich( FN_PARAM_PAM ), &aPaM );
-                        SfxUInt16Item aItem( GetEditWin()->GetView().GetPool( ).GetWhich( SID_PARA_DLG ), TP_PARA_EXT );
-                        GetEditWin()->GetView().GetViewFrame()->GetDispatcher()->Execute(
+                        SwPaMItem aPaMItem( pEditWin->GetView().GetPool( ).GetWhich( FN_PARAM_PAM ), &aPaM );
+                        SfxUInt16Item aItem( pEditWin->GetView().GetPool( ).GetWhich( SID_PARA_DLG ), TP_PARA_EXT );
+                        pEditWin->GetView().GetViewFrame()->GetDispatcher()->Execute(
                                 SID_PARA_DLG, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aItem, &aPaMItem, NULL );
                     }
-                    GetEditWin()->GrabFocus( );
+                    rSh.LockView( bOldLock );
+                    pEditWin->GrabFocus( );
                 }
             }
             break;
@@ -343,7 +352,6 @@ void SwPageBreakWin::Select( )
                 if ( pBodyFrm )
                 {
                     SwCntntFrm *pCnt = const_cast< SwCntntFrm* >( pBodyFrm->ContainsCntnt() );
-                    //sal_uInt16 nWhich = pCnt->GetAttrSet()->GetPool()->GetWhich( SID_ATTR_PARA_PAGEBREAK );
                     SwCntntNode* pNd = pCnt->GetNode();
 
                     pNd->GetDoc()->GetIDocumentUndoRedo( ).StartUndo( UNDO_UI_DELETE_PAGE_BREAK, NULL );
@@ -363,7 +371,11 @@ void SwPageBreakWin::Select( )
             }
             break;
     }
-    Fade( false );
+
+    // Only fade if there is more than this temporary shared pointer:
+    // The main reference has been deleted due to a page break removal
+    if ( pThis.use_count() > 1 )
+        Fade( false );
 }
 
 void SwPageBreakWin::MouseMove( const MouseEvent& rMEvt )
@@ -480,9 +492,10 @@ void SwPageBreakWin::Fade( bool bFadeIn )
     if ( !PopupMenu::IsInExecute() )
     {
         m_bIsAppearing = bFadeIn;
-        if ( m_aFadeTimer.IsActive( ) )
+        if ( !m_bDestroyed && m_aFadeTimer.IsActive( ) )
             m_aFadeTimer.Stop();
-        m_aFadeTimer.Start( );
+        if ( !m_bDestroyed )
+            m_aFadeTimer.Start( );
     }
 }
 

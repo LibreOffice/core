@@ -94,7 +94,6 @@ public:
     void                EnableTextDisplay( sal_Bool bEnable );
 
     void                SetFocusRect( const Rectangle& rFocusRect );
-    void SetSmallSymbol (bool bSmall=true);
     bool IsSmallSymbol () const;
 };
 

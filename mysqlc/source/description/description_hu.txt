@@ -1,1 +1,0 @@
-Közvetlen kapcsolatot teremt az OpenOffice.org és a MySQL-kiszolgálók között.

@@ -487,6 +487,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
         InfoBox(0, String( RTL_CONSTASCII_USTRINGPARAM( "D:\\DEBUG.LOG !" ) ) ).Execute();
 }
 
+#if OSL_DEBUG_LEVEL > 2
 sal_Bool ParaPortion::DbgCheckTextPortions()
 {
     // check, if Portion length ok:
@@ -495,6 +496,7 @@ sal_Bool ParaPortion::DbgCheckTextPortions()
         nXLen = nXLen + aTextPortionList[nPortion]->GetLen();
     return nXLen == pNode->Len() ? sal_True : sal_False;
 }
+#endif
 
 sal_Bool CheckOrderedList( CharAttribArray& rAttribs, sal_Bool bStart )
 {

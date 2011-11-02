@@ -35,8 +35,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>     // SvUShorts
 #include <sfx2/event.hxx>
 
 #include <sfx2/sfxsids.hrc>

@@ -48,13 +48,7 @@ EXTENSION_VERSION_BASE=$(MYSQLC_VERSION_MAJOR).$(MYSQLC_VERSION_MINOR).$(MYSQLC_
     EXTENSION_VERSION=$(EXTENSION_VERSION_BASE)
 
 #---- extension title package name
-.IF "$(MYSQLC_STATUS)" == "final"
-    EXTENSION_TITLE:=$(MYSQLC_TITLE)
-    EXTENSION_ZIPNAME:=$(EXTENSIONNAME)
-.ELSE
-    EXTENSION_TITLE:=$(MYSQLC_TITLE) ($(MYSQLC_STATUS))
-    EXTENSION_ZIPNAME:=$(EXTENSIONNAME)
-.ENDIF
+EXTENSION_ZIPNAME:=$(EXTENSIONNAME)
 
 #-------------------------------------------------------------------
 
@@ -220,25 +214,9 @@ COMPONENT_IMAGES= \
 
 # ........ component description ........
 # one file for each WITH_LANG token
-DESC_LANGS=$(WITH_LANG)
-.IF "$(DESC_LANGS)" == ""
-    DESC_LANGS=en-US
-.ENDIF
-COMPONENT_DESCRIPTIONS=$/$(foreach,lang,$(DESC_LANGS) description$/description_$(lang).txt)
+COMPONENT_DESCRIPTIONS=$/$(foreach,lang,$(alllangiso) description-$(lang).txt)
 COMPONENT_DESCRIPTIONS_PACKDEP= \
     $(foreach,i,$(COMPONENT_DESCRIPTIONS) $(EXTENSIONDIR)$/$i)
-
-# WITH_LANG might contain languages which we actually do not have a description for (yet)
-# Find those, and treat the specially
-
-# first, find those locales which we actually have a description file for
-EXISTING_DESCRIPTIONS=$(foreach,i,$(shell $(FIND) .$/description -name "description_*.txt") $(i:f))
-EXISTING_LANGS=$(foreach,i,$(EXISTING_DESCRIPTIONS) $(i:s,description_,,:s,.txt,,))
-
-# then, create a version of WITH_LANG where we stripped all those locales
-EXISTING_LANGS_NORMALIZED=$(strip $(EXISTING_LANGS))
-EXISTING_LANGS_NORMALIZED:=+$(EXISTING_LANGS_NORMALIZED:s/ /+/)+
-MISSING_LANGS=$(foreach,lang,$(WITH_LANG) $(eq,$(EXISTING_LANGS_NORMALIZED:s/+$(lang)+//),$(EXISTING_LANGS_NORMALIZED) $(lang)  ))
 
 # ........ dependencies for packaging the extension ........
 EXTENSION_PACKDEPS=makefile.mk $(COMPONENT_IMAGES) $(COMPONENT_DESCRIPTIONS_PACKDEP) $(COMPONENT_MERGED_XCU)
@@ -260,11 +238,6 @@ $(COMPONENT_IMAGES) : $(SOLARSRC)$/$(RSCDEFIMG)$/desktop$/res$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
-# existing descriptions: just copy
-$(EXTENSIONDIR)$/description$/%.txt: .$/description$/%.txt
-    @@-$(MKDIRHIER) $(@:d)
-    @$(COPY) $< $@ > $(NULLDEV)
-
 # xcu files: copy
 # the following is a hack for now - need to find out the generic mechanism later
 
@@ -272,17 +245,19 @@ $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/DataAccess$/Drivers.xc
     @@-$(MKDIRHIER) $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/DataAccess
     @$(COPY) $< $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/DataAccess$/Drivers.xcu > $(NULLDEV)
 
-# non-existing descriptions: copy from the English version
-.IF "$(strip $(MISSING_LANGS))" != ""
-$(foreach,i,$(MISSING_LANGS) $(EXTENSIONDIR)$/description$/description_$i.txt): .$/description$/description_en-US.txt
-    @echo ------ WARNING: .$/description$/$(@:f) not found, falling back to English description
-    @@-$(MKDIRHIER) $(@:d)
-    @$(COPY) $< $@ > $(NULLDEV)
-.ENDIF
+$(COMPONENT_DESCRIPTIONS_PACKDEP) : $(DESCRIPTION)
 
 $(DESCRIPTION_SRC): description.xml
     +-$(RM) $@
-    $(TYPE) description.xml | $(SED) "s/#VERSION#/$(EXTENSION_VERSION)/" | $(SED) "s,#TITLE#,$(EXTENSION_TITLE)," > $@
+.IF "$(WITH_LANG)" != ""
+    $(XRMEX) -p $(PRJNAME) -i $< -o $@ -m $(LOCALIZESDF) -l all
+    $(SED) "s/#VERSION#/$(EXTENSION_VERSION)/" < $@ > $@.new
+    mv $@.new $@
+    @$(COPY) $(@:d)/description-*.txt $(EXTENSIONDIR)
+.ELSE
+    $(SED) "s/#VERSION#/$(EXTENSION_VERSION)/" < $< > $@
+.ENDIF
+    @$(COPY) description-en-US.txt $(EXTENSIONDIR)
 
 .IF "$(SYSTEM_MYSQL)" != "YES" 
 # --- the MySQL client lib needs to be copied

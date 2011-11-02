@@ -191,7 +191,7 @@ public:
     void CreateNew( SwTable& rTbl, SwTableLine& rParent, _SaveTable& rSTbl );
 };
 
-void InsertSort( SvUShorts& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos = 0 );
+void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos = 0 );
 
 #if OSL_DEBUG_LEVEL > 1
 #include "shellio.hxx"
@@ -3175,21 +3175,21 @@ void SwUndoMergeTbl::SaveFormula( SwHistory& rHistory )
 
 //////////////////////////////////////////////////////////////////////////
 
-void InsertSort( SvUShorts& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos )
+void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos )
 {
-    sal_uInt16 nO   = rArr.Count(), nM, nU = 0;
+    sal_uInt16 nO   = rArr.size(), nM, nU = 0;
     if( nO > 0 )
     {
         nO--;
         while( nU <= nO )
         {
             nM = nU + ( nO - nU ) / 2;
-            if( *(rArr.GetData() + nM) == nIdx )
+            if ( rArr[nM] == nIdx )
             {
                 OSL_FAIL( "Index already exists. This should never happen." );
                 return;
             }
-            if( *(rArr.GetData() + nM) < nIdx )
+            if( rArr[nM] < nIdx )
                 nU = nM + 1;
             else if( nM == 0 )
                 break;
@@ -3197,7 +3197,7 @@ void InsertSort( SvUShorts& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos )
                 nO = nM - 1;
         }
     }
-    rArr.Insert( nIdx, nU );
+    rArr.insert( rArr.begin() + nU, nIdx );
     if( pInsPos )
         *pInsPos = nU;
 }

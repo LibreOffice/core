@@ -620,12 +620,6 @@ void Button::EnableTextDisplay( sal_Bool bEnable )
         mpButtonData->mnButtonState |= BUTTON_DRAW_NOTEXT;
 }
 
-// -----------------------------------------------------------------------
-void Button::SetSmallSymbol (bool small)
-{
-    ImplSetSmallSymbol (small);
-}
-
 bool Button::IsSmallSymbol () const
 {
     return mpButtonData->mbSmallSymbol;

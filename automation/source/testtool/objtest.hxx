@@ -120,7 +120,6 @@ public:
 
     ControlItem( const char *Name, rtl::OString aUIdP );
     ControlItem( const String &Name, rtl::OString aUIdP );
-    ControlItem( ControlData *pDataP );
     virtual ~ControlItem() {
 DBG_DTOR(ControlItem,0);
         delete pData;

@@ -3558,7 +3558,7 @@ void SwHTMLParser::NewBasefontAttr()
     PushContext( pCntxt );
 
     // die Font-Size merken
-    aBaseFontStack.Insert( nSize, aBaseFontStack.Count() );
+    aBaseFontStack.push_back( nSize );
 }
 
 void SwHTMLParser::EndBasefontAttr()
@@ -3566,19 +3566,19 @@ void SwHTMLParser::EndBasefontAttr()
     EndTag( HTML_BASEFONT_ON );
 
     // Stack-Unterlauf in Tabellen vermeiden
-    if( aBaseFontStack.Count() > nBaseFontStMin )
-        aBaseFontStack.Remove( aBaseFontStack.Count()-1, 1 );
+    if( aBaseFontStack.size() > nBaseFontStMin )
+        aBaseFontStack.erase( aBaseFontStack.begin() + aBaseFontStack.size() - 1 );
 }
 
 void SwHTMLParser::NewFontAttr( int nToken )
 {
     sal_uInt16 nBaseSize =
-        ( aBaseFontStack.Count() > nBaseFontStMin
-            ? (aBaseFontStack[aBaseFontStack.Count()-1] & FONTSIZE_MASK)
+        ( aBaseFontStack.size() > nBaseFontStMin
+            ? (aBaseFontStack[aBaseFontStack.size()-1] & FONTSIZE_MASK)
             : 3 );
     sal_uInt16 nFontSize =
-        ( aFontStack.Count() > nFontStMin
-            ? (aFontStack[aFontStack.Count()-1] & FONTSIZE_MASK)
+        ( aFontStack.size() > nFontStMin
+            ? (aFontStack[aFontStack.size()-1] & FONTSIZE_MASK)
             : nBaseSize );
 
     String aFace, aId, aStyle, aClass, aLang, aDir;
@@ -3653,7 +3653,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
         {
             // wenn die Schriftgroesse in der Ueberschrift noch
             // nicht veraendert ist, die aus der Vorlage nehmen
-            if( nFontStHeadStart==aFontStack.Count() )
+            if( nFontStHeadStart==aFontStack.size() )
                 nFontSize = static_cast< sal_uInt16 >(6 - (nPoolId - RES_POOLCOLL_HEADLINE1));
         }
         else
@@ -3786,7 +3786,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
     // den Kontext merken
     PushContext( pCntxt );
 
-    aFontStack.Insert( nSize, aFontStack.Count() );
+    aFontStack.push_back( nSize );
 }
 
 void SwHTMLParser::EndFontAttr( int nToken )
@@ -3794,8 +3794,8 @@ void SwHTMLParser::EndFontAttr( int nToken )
     EndTag( nToken );
 
     // Stack-Unterlauf in Tabellen vermeiden
-    if( aFontStack.Count() > nFontStMin )
-        aFontStack.Remove( aFontStack.Count()-1, 1 );
+    if( aFontStack.size() > nFontStMin )
+        aFontStack.erase( aFontStack.begin() + aFontStack.size() - 1 );
 }
 
 
@@ -4002,7 +4002,7 @@ void SwHTMLParser::NewHeading( int nToken )
     // und die Vorlage oder deren Attribute setzen
     SetTxtCollAttrs( pCntxt );
 
-    nFontStHeadStart = aFontStack.Count();
+    nFontStHeadStart = aFontStack.size();
 
     // Laufbalkenanzeige
     ShowStatline();

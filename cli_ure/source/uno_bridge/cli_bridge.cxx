@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cli_ure.hxx"
-
 #include <vcclr.h>
 //ToDo: remove when build with .NET 2
 #pragma warning(push, 1)

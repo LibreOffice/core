@@ -874,7 +874,7 @@ void MSWord_SdrAttrIter::NextPara( sal_uInt16 nPar )
     // wird, dass am Absatzanfang sowieso die Attribute neu ausgegeben
     // werden.
     aChrTxtAtrArr.Remove( 0, aChrTxtAtrArr.Count() );
-    aChrSetArr.Remove( 0, aChrSetArr.Count() );
+    aChrSetArr.clear();
     nAktSwPos = nTmpSwPos = 0;
 
     SfxItemSet aSet( pEditObj->GetParaAttribs( nPara ));
@@ -892,8 +892,8 @@ void MSWord_SdrAttrIter::NextPara( sal_uInt16 nPar )
 
 rtl_TextEncoding MSWord_SdrAttrIter::GetNextCharSet() const
 {
-    if( aChrSetArr.Count() )
-        return (rtl_TextEncoding)aChrSetArr[ aChrSetArr.Count() - 1 ];
+    if( aChrSetArr.size() )
+        return (rtl_TextEncoding)aChrSetArr[ aChrSetArr.size() - 1 ];
     return eNdChrSet;
 }
 
@@ -945,14 +945,14 @@ void MSWord_SdrAttrIter::SetCharSet(const EECharAttrib& rAttr, bool bStart)
         sal_uInt16 nPos;
         if( bStart )
         {
-            nPos = aChrSetArr.Count();
-            aChrSetArr.Insert( eChrSet, nPos );
+            nPos = aChrSetArr.size();
+            aChrSetArr.push_back( eChrSet );
             aChrTxtAtrArr.Insert( p, nPos );
         }
         else if( USHRT_MAX != ( nPos = aChrTxtAtrArr.GetPos( p )) )
         {
             aChrTxtAtrArr.Remove( nPos );
-            aChrSetArr.Remove( nPos );
+            aChrSetArr.erase( aChrSetArr.begin() + nPos );
         }
     }
 }

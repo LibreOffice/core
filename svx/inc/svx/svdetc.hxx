@@ -106,12 +106,6 @@ public:
     // Default MapFraction ist 1/1.
     static void       SetMapFraction(const Fraction& rMap) { GetDefaults().aMapFraction=rMap; }
     static Fraction   GetMapFraction()                     { return GetDefaults().aMapFraction; }
-    // Der Aufruf der folgenden Methode veranlasst die Engine
-    // ihre sprachabhaengigen Resourcen neu zu initiallisieren.
-    // Bereits bestehende Undotexte, etc. bleiben jedoch in der
-    // sprache erhalten, in der sie erzeugt wurden.
-    static void       LanguageHasChanged();
-
 
     // Einen Outliner mit den engineglobalen
     // Defaulteinstellungen auf dem Heap erzeugen.

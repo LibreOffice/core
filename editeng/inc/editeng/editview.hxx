@@ -148,10 +148,6 @@ public:
     sal_Bool            MouseMove( const MouseEvent& rMouseEvent );
     void            Command( const CommandEvent& rCEvt );
 
-    sal_Bool            Drop( const DropEvent& rEvt );
-    sal_Bool            QueryDrop( DropEvent& rEvt );
-    ESelection      GetDropPos();
-
     void            Cut();
     void            Copy();
     void            Paste();

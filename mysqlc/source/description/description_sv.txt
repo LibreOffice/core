@@ -1,1 +1,0 @@
-Ansluter OpenOffice.org direkt till MySQL-servrarna

@@ -37,9 +37,6 @@ class SfxTemplateControllerItem;
 #include <svtools/svtreebx.hxx>
 #include <svl/eitem.hxx>
 
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>     // SvUShorts
-
 #include <rsc/rscsfx.hxx>
 #include <tools/rtti.hxx>
 
@@ -344,7 +341,7 @@ private:
     HelpButton              aHelpBtn;
 
     SfxTemplateCatalog*     pReal;
-    SvUShorts               aFamIds;
+    std::vector<sal_uInt16> aFamIds;
     SfxModalDefParentHelper aHelper;
 
 protected:

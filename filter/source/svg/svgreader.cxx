@@ -2433,7 +2433,7 @@ struct ShapeRenderingVisitor
 
                 if( !maCurrState.maFontStyle.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("normal")) )
                     aFont.SetItalic(ITALIC_NORMAL); // TODO: discriminate
-                if( !maCurrState.mnFontWeight != 400.0 )
+                if( maCurrState.mnFontWeight != 400.0 )
                     aFont.SetWeight(WEIGHT_BOLD); // TODO: discriminate
 
                 // extract basic transformations out of CTM

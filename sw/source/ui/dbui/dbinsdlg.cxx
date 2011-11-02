@@ -1179,7 +1179,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 catch (const Exception& rExcept)
                 {
 #if OSL_DEBUG_LEVEL > 1
-                    OSL_FAIL(ByteString(String(rExcept.Message), gsl_getSystemTextEncoding()).GetBuffer());
+                    OSL_FAIL(rtl::OUStringToOString(rExcept.Message, osl_getThreadTextEncoding()).getStr());
 #else
                     (void)rExcept;
 #endif

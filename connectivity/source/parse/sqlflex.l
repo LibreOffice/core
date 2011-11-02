@@ -435,10 +435,10 @@ ZONE				{SQL_NEW_KEYWORD(SQL_TOKEN_ZONE);  }
 
 <SQL>[A-Za-z\200-\277\300-\337\340-\357\360-\367\370-\373\374-\375][A-Za-z\200-\277\300-\337\340-\357\360-\367\370-\373\374-\375_0-9]*		{return gatherName( SQLyytext);}
 
-<SQL>([0-9]+) | 
-<SQL>([0-9]+"."[0-9]*) | 
-<SQL>("."[0-9]*)					{SQL_NEW_INTNUM; }
+<SQL>([0-9]+)					{SQL_NEW_INTNUM; }
 
+<SQL>("."[0-9]*) |
+<SQL>([0-9]+"."[0-9]*) | 
 <SQL>[0-9]+[eE][+-]?[0-9]+   |
 <SQL>[0-9]+"."[0-9]*[eE][+-]?[0-9]+ |
 <SQL>"."[0-9]*[eE][+-]?[0-9]+		{SQL_NEW_APPROXNUM;  }
@@ -598,7 +598,7 @@ sal_Int32 mapEnumToToken(IParseContext::InternationalKeyCode _eKeyCode )
 }
 /*
  * Read SQL Name literal
- * Valid Names or internatioanl keywords:
+ * Valid Names or international keywords:
  *	As we have international keywords, we test first on them  
  */
 sal_Int32 gatherName(const sal_Char* text)

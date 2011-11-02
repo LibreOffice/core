@@ -461,12 +461,6 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(Window* pWin, sal_Bool /*bNoPa
     return pOutlView;
 }
 
-sal_Bool SdrObjEditView::IsTextEditFrame() const
-{
-    SdrTextObj* pText = dynamic_cast< SdrTextObj* >( mxTextEditObj.get() );
-    return pText!=NULL && pText->IsTextFrame();
-}
-
 IMPL_LINK(SdrObjEditView,ImpOutlinerStatusEventHdl,EditStatus*,pEditStat)
 {
     if(pTextEditOutliner )
@@ -1124,24 +1118,6 @@ sal_Bool SdrObjEditView::IsTextEditFrameHit(const Point& rHit) const
     return bOk;
 }
 
-void SdrObjEditView::AddTextEditOfs(MouseEvent& rMEvt) const
-{
-    if(mxTextEditObj.is())
-    {
-        Point aPvOfs;
-        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mxTextEditObj.get() );
-
-        if( pTextObj )
-        {
-            // #108784#
-            aPvOfs += pTextObj->GetTextEditOffset();
-        }
-
-        Point aObjOfs(mxTextEditObj->GetLogicRect().TopLeft());
-        (Point&)(rMEvt.GetPosPixel())+=aPvOfs+aObjOfs;
-    }
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 sal_Bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
@@ -1315,51 +1291,6 @@ sal_Bool SdrObjEditView::Command(const CommandEvent& rCEvt, Window* pWin)
         }
     }
     return SdrGlueEditView::Command(rCEvt,pWin);
-}
-
-sal_Bool SdrObjEditView::Cut(sal_uIntPtr nFormat)
-{
-    if (pTextEditOutliner!=NULL) {
-        pTextEditOutlinerView->Cut();
-#ifdef DBG_UTIL
-        if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
-#endif
-        ImpMakeTextCursorAreaVisible();
-        return sal_True;
-    } else {
-        return SdrGlueEditView::Cut(nFormat);
-    }
-}
-
-sal_Bool SdrObjEditView::Yank(sal_uIntPtr nFormat)
-{
-    if (pTextEditOutliner!=NULL) {
-        pTextEditOutlinerView->Copy();
-        return sal_True;
-    } else {
-        return SdrGlueEditView::Yank(nFormat);
-    }
-}
-
-sal_Bool SdrObjEditView::Paste(Window* pWin, sal_uIntPtr nFormat)
-{
-    if (pTextEditOutliner!=NULL) {
-        if (pWin!=NULL) {
-            OutlinerView* pNewView=ImpFindOutlinerView(pWin);
-            if (pNewView!=NULL) {
-                pNewView->Paste();
-            }
-        } else {
-            pTextEditOutlinerView->Paste();
-        }
-#ifdef DBG_UTIL
-        if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
-#endif
-        ImpMakeTextCursorAreaVisible();
-        return sal_True;
-    } else {
-        return SdrGlueEditView::Paste(pWin,nFormat);
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

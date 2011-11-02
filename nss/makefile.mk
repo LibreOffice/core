@@ -36,9 +36,9 @@ TARGET=nss
 
 # --- Files --------------------------------------------------------
 
-.IF "$(ENABLE_NSS_MODULE)"!="YES"
+.IF "$(SYSTEM_NSS)"=="YES"
 all:
-    @echo "NSS will not be built. ENABLE_NSS_MODULE is '$(ENABLE_NSS_MODULE)'"
+    @echo "NSS will not be built. Using system one instead."
 .ENDIF	
 
 VER_MAJOR=3

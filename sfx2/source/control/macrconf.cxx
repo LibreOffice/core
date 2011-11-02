@@ -447,7 +447,7 @@ sal_uInt16 SfxMacroConfig::GetSlotId(SfxMacroInfoPtr pInfo)
     if (i == nCount)
     {
         // Macro still unknown
-        nCount = aIdArray.Count();
+        nCount = aIdArray.size();
         sal_uInt16 n;
         for (n=0; n<nCount; n++) // Seearch for free SlotId
             if (aIdArray[n] > SID_MACRO_START + n)
@@ -456,7 +456,7 @@ sal_uInt16 SfxMacroConfig::GetSlotId(SfxMacroInfoPtr pInfo)
         sal_uInt16 nNewSlotId = SID_MACRO_START + n;
         if ( nNewSlotId > SID_MACRO_END )
             return 0;
-        aIdArray.Insert( SID_MACRO_START + n, n );
+        aIdArray.insert( aIdArray.begin() + n, SID_MACRO_START + n );
 
         SfxSlot *pNewSlot = new SfxSlot;
         pNewSlot->nSlotId = SID_MACRO_START + n;
@@ -531,12 +531,12 @@ void SfxMacroConfig::ReleaseSlotId(sal_uInt16 nId)
                 pImp->aArr.Remove(i);
 
                 // Release SlotId again
-                sal_uInt16 nIdCount = aIdArray.Count();
+                sal_uInt16 nIdCount = aIdArray.size();
                 for (sal_uInt16 n=0; n<nIdCount; n++)
                 {
                     if (aIdArray[n] == nId)
                     {
-                        aIdArray.Remove(n);
+                        aIdArray.erase( aIdArray.begin() + n );
                         break;
                     }
                 }

@@ -1301,7 +1301,7 @@ sal_uInt16 lcl_CalcCellFit( const SwLayoutFrm *pCell )
  *dieser erhalten, kleinere Wuensche werden ueberschrieben.
  */
 
-void lcl_CalcSubColValues( SvUShorts &rToFill, const SwTabCols &rCols,
+void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols &rCols,
                               const SwLayoutFrm *pCell, const SwLayoutFrm *pTab,
                               sal_Bool bWishValues )
 {
@@ -1361,7 +1361,7 @@ void lcl_CalcSubColValues( SvUShorts &rToFill, const SwTabCols &rCols,
  *                      schneidet wird der Minimalwert ermittelt.
  */
 
-void lcl_CalcColValues( SvUShorts &rToFill, const SwTabCols &rCols,
+void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols &rCols,
                            const SwLayoutFrm *pStart, const SwLayoutFrm *pEnd,
                            sal_Bool bWishValues )
 {
@@ -1471,14 +1471,14 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, sal_Bool bBalance )
         return;
 
     const sal_uInt8 nTmp = (sal_uInt8)Max( sal_uInt16(255), sal_uInt16(aTabCols.Count() + 1) );
-    SvUShorts aWish( nTmp, nTmp ),
+    std::vector<sal_uInt16> aWish( nTmp, nTmp ),
               aMins( nTmp, nTmp );
     sal_uInt16 i;
 
     for ( i = 0; i <= aTabCols.Count(); ++i )
     {
-        aWish.Insert( sal_uInt16(0), aWish.Count() );
-        aMins.Insert( sal_uInt16(0), aMins.Count() );
+        aWish.push_back( 0 );
+        aMins.push_back( 0 );
     }
     ::lcl_CalcColValues( aWish, aTabCols, pStart, pEnd, sal_True  );
 
@@ -1511,7 +1511,7 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, sal_Bool bBalance )
             }
         }
         nWish = nWish / nCnt;
-        for ( i = 0; i < aWish.Count(); ++i )
+        for ( i = 0; i < aWish.size(); ++i )
             if ( aWish[i] )
                 aWish[i] = nWish;
     }

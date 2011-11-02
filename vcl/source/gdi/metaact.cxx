@@ -4019,7 +4019,7 @@ MetaCommentAction::MetaCommentAction( const MetaCommentAction& rAct ) :
 
 // ------------------------------------------------------------------------
 
-MetaCommentAction::MetaCommentAction( const ByteString& rComment, sal_Int32 nValue, const sal_uInt8* pData, sal_uInt32 nDataSize ) :
+MetaCommentAction::MetaCommentAction( const rtl::OString& rComment, sal_Int32 nValue, const sal_uInt8* pData, sal_uInt32 nDataSize ) :
     MetaAction  ( META_COMMENT_ACTION ),
     maComment   ( rComment ),
     mnValue     ( nValue )
@@ -4086,8 +4086,8 @@ void MetaCommentAction::Move( long nXMove, long nYMove )
     {
         if ( mnDataSize && mpData )
         {
-            sal_Bool bPathStroke = maComment.Equals( "XPATHSTROKE_SEQ_BEGIN" );
-            if ( bPathStroke || maComment.Equals( "XPATHFILL_SEQ_BEGIN" ) )
+            sal_Bool bPathStroke = maComment.equalsL(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_BEGIN"));
+            if ( bPathStroke || maComment.equalsL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_BEGIN")) )
             {
                 SvMemoryStream  aMemStm( (void*)mpData, mnDataSize, STREAM_READ );
                 SvMemoryStream  aDest;
@@ -4129,8 +4129,8 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
     {
         if ( mnDataSize && mpData )
         {
-            sal_Bool bPathStroke = maComment.Equals( "XPATHSTROKE_SEQ_BEGIN" );
-            if ( bPathStroke || maComment.Equals( "XPATHFILL_SEQ_BEGIN" ) )
+            sal_Bool bPathStroke = maComment.equalsL(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_BEGIN"));
+            if ( bPathStroke || maComment.equalsL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_BEGIN")) )
             {
                 SvMemoryStream  aMemStm( (void*)mpData, mnDataSize, STREAM_READ );
                 SvMemoryStream  aDest;
@@ -4156,7 +4156,7 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
                 }
                 delete[] mpData;
                 ImplInitDynamicData( static_cast<const sal_uInt8*>( aDest.GetData() ), aDest.Tell() );
-            } else if( maComment.Equals( "EMF_PLUS_HEADER_INFO" ) ) {
+            } else if( maComment.equalsL(RTL_CONSTASCII_STRINGPARAM("EMF_PLUS_HEADER_INFO")) ){
                 SvMemoryStream  aMemStm( (void*)mpData, mnDataSize, STREAM_READ );
                 SvMemoryStream  aDest;
 
@@ -4213,7 +4213,10 @@ void MetaCommentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    rIStm >> maComment >> mnValue >> mnDataSize;
+    ByteString sTmp;
+    rIStm >> sTmp;
+    maComment = sTmp;
+    rIStm >> mnValue >> mnDataSize;
 
     if( mpData )
         delete[] mpData;

@@ -559,7 +559,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
     SvxFrameDirectionItem aFrmDir( FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR );
 
     sal_uInt16 nCols = USHRT_MAX, nColSpace = USHRT_MAX, nAktCol = 0;
-    SvUShorts aColumns;
+    std::vector<sal_uInt16> aColumns;
 
     sal_Bool bChkDropCap = 0 == pSet;
     sal_uInt16 nDropCapLines = 0, nDropCapAnchor = 0;
@@ -740,10 +740,10 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                 else
                     SkipToken( -1 );        // wieder zurueck
 
-                if( --nAktCol == ( aColumns.Count() / 2 ) )
+                if( --nAktCol == ( aColumns.size() / 2 ) )
                 {
-                    aColumns.Insert( nWidth + nSpace, aColumns.Count() );
-                    aColumns.Insert( nSpace, aColumns.Count() );
+                    aColumns.push_back( nWidth + nSpace );
+                    aColumns.push_back( nSpace );
                 }
             }
             break;
@@ -858,10 +858,10 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                             else
                                 SkipToken( -1 );        // wieder zurueck
 
-                            if( --nAktCol == ( aColumns.Count() / 2 ) )
+                            if( --nAktCol == ( aColumns.size() / 2 ) )
                             {
-                                aColumns.Insert( nWidth + nSpace, aColumns.Count() );
-                                aColumns.Insert( nSpace, aColumns.Count() );
+                                aColumns.push_back( nWidth + nSpace );
+                                aColumns.push_back( nSpace );
                             }
                         }
                         break;
@@ -961,9 +961,9 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
 
         sal_uLong nWidth = USHRT_MAX;
         aCol.Init( nCols, nColSpace, sal_uInt16( nWidth ) );
-        if( nCols == ( aColumns.Count() / 2 ) )
+        if( nCols == ( aColumns.size() / 2 ) )
         {
-            for( sal_uInt16 n = 0, i = 0; n < aColumns.Count(); n += 2, ++i )
+            for( sal_uInt16 n = 0, i = 0; n < aColumns.size(); n += 2, ++i )
             {
                 SwColumn* pCol = aCol.GetColumns()[ i ];
                 sal_uLong nTmp = aColumns[ n ];

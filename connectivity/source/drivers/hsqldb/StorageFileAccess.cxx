@@ -84,6 +84,9 @@ SAL_DLLPUBLIC_EXPORT jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Storag
             catch(const NoSuchElementException&)
             {
             }
+            catch(const IllegalArgumentException&)
+            {
+            }
             return aStoragePair.first.first->isStreamElement(StorageContainer::removeURLPrefix(sName,aStoragePair.first.second));
         }
         catch(const NoSuchElementException&)

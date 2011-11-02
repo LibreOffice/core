@@ -32,7 +32,6 @@
 *   (die defines setzen sich aus "_SVSTDARR_" und dem Namen des Array
 *    ohne "Sv" zusammen)
 *
-*   VarArr:     SvUShorts
 *   PtrArr:     SvStrings, SvStringsDtor
 *   SortArr:    SvStringsSort, SvStringsSortDtor,
 *               SvStringsISort, SvStringsISortDtor,
@@ -41,11 +40,6 @@
 #include "svl/svldllapi.h"
 #include <svl/svarray.hxx>
 #include <deque>
-
-#ifndef _SVSTDARR_USHORTS_DECL
-SV_DECL_VARARR_VISIBILITY( SvUShorts, sal_uInt16, 1, 1, SVL_DLLPUBLIC )
-#define _SVSTDARR_USHORTS_DECL
-#endif
 
 #include <tools/string.hxx>
 

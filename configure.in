@@ -361,10 +361,10 @@ AC_ARG_ENABLE(build-mozilla,
          the Mozilla source code but take precompiled zips.]),
 ,)
 
-AC_ARG_ENABLE(nss-module,
-    AS_HELP_STRING([--disable-nss-module],
-        [Whether to use provided NSS module.]),
-,enable_nss_module=yes)
+AC_ARG_ENABLE(xmlsec,
+    AS_HELP_STRING([--disable-xmlsec],
+        [Whether to enable XMLsec for open document signing.]),
+)
 
 AC_ARG_ENABLE(kde,
     AS_HELP_STRING([--enable-kde],
@@ -641,6 +641,11 @@ AC_ARG_WITH(system-stdlibs,
 AC_ARG_WITH(system-cairo,
     AS_HELP_STRING([--with-system-cairo],
         [Use Cairo libraries already on system.]),
+,)
+
+AC_ARG_WITH(system-nss,
+    AS_HELP_STRING([--with-system-nss],
+        [Use NSS/nspr libraries already on system.]),
 ,)
 
 AC_ARG_WITH(mozilla-version,
@@ -2004,14 +2009,14 @@ if test "$_os" = "Darwin" ; then
         ;;
     esac
 
-    AC_MSG_CHECKING([that macosx-verion-min-required is coherent with macosx-version-max-allowed])
+    AC_MSG_CHECKING([that macosx-version-min-required is coherent with macosx-version-max-allowed])
     if test $MAC_OS_X_VERSION_MIN_REQUIRED -gt $MAC_OS_X_VERSION_MAX_ALLOWED ; then
         AC_MSG_ERROR([the version minimumn required must be inferior or equal to the version maximum allowed])
     else
         AC_MSG_RESULT([ok])
     fi
 
-    AC_MSG_CHECKING([that macosx-verion-max-allowed is coherent macos-with-sdk])
+    AC_MSG_CHECKING([that macosx-version-max-allowed is coherent macos-with-sdk])
     if test $MAC_OS_X_VERSION_MAX_ALLOWED -gt $macosx_sdk_value ; then
         AC_MSG_ERROR([the version maximum allowed cannot be greater thatn the sdk level])
     else
@@ -5723,11 +5728,14 @@ else
 fi
 
 AC_MSG_CHECKING([whether to build XML Security support])
-if test "$enable_nss_module" = "no"; then
-    AC_MSG_RESULT([no, NSS disabled])
+if test "$enable_xmlsec" = "no"; then
+    AC_MSG_RESULT([no])
+    ENABLE_XMLSEC=no
 else
+    ENABLE_XMLSEC=yes
     AC_MSG_RESULT([yes])
 fi
+AC_SUBST(ENABLE_XMLSEC)
 
 AC_MSG_CHECKING([whether to build LDAP configuration backend])
 if test -z "$enable_ldap" || test "$enable_ldap" = "yes"; then
@@ -5776,8 +5784,6 @@ AC_MSG_CHECKING([which Mozilla to use])
 if test -n "$with_system_mozilla" && test "$with_system_mozilla" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_MOZILLA=YES
-    ENABLE_NSS_MODULE=NO
-    enable_nss_module=no
     AC_MSG_CHECKING([which Mozilla flavour to use])
     if test -n "$with_system_mozilla" && test "$with_system_mozilla" = "libxul"; then
         MOZ_FLAVOUR=libxul
@@ -5794,22 +5800,6 @@ if test -n "$with_system_mozilla" && test "$with_system_mozilla" != "no"; then
     fi
     tmp=`echo $MOZ_FLAVOUR | $PERL -e 'print ucfirst(<STDIN>);'`
     AC_MSG_RESULT($tmp)
-
-    PKG_CHECK_MODULES( MOZ_NSS, nss, STANDALONENSS="TRUE", STANDALONENSS="" )
-    if test -z "$STANDALONENSS"; then
-        PKG_CHECK_MODULES( MOZ_NSS, $MOZ_FLAVOUR-nss )
-    else
-        NSS_LIB="-L`$PKG_CONFIG --variable=libdir nss`"
-        AC_SUBST(NSS_LIB)
-    fi
-
-    if $PKG_CONFIG --exists nspr ; then
-        PKG_CHECK_MODULES( MOZ_NSPR, nspr )
-        NSPR_LIB="-L`$PKG_CONFIG --variable=libdir nspr`"
-        AC_SUBST(NSPR_LIB)
-    else
-        PKG_CHECK_MODULES( MOZ_NSPR, $MOZ_FLAVOUR-nspr )
-    fi
 
     if test "$MOZ_FLAVOUR" != "libxul"; then
         PKG_CHECK_MODULES( MOZILLAXPCOM, $MOZ_FLAVOUR-xpcom, HASXPCOM="TRUE", HASXPCOM="" )
@@ -5828,19 +5818,6 @@ if test -n "$with_system_mozilla" && test "$with_system_mozilla" != "no"; then
             fi
         fi
     fi
-
-    save_CPPFLAGS="$CPPFLAGS"
-    save_LDFLAGS="$LDFLAGS"
-    save_LIBS="$LIBS"
-    CPPFLAGS="$CPPFLAGS $MOZ_NSS_CFLAGS"
-    LDFLAGS="$LDFLAGS $MOZ_NSS_LIBS"
-    AC_CHECK_LIB(nss3, PK11_GetCertFromPrivateKey, [],
-      [AC_MSG_ERROR(PK11_GetCertFromPrivateKey missing but needed.
-See https://bugzilla.mozilla.org/show_bug.cgi?id=262274.
-Fixed since nss 3.9.3 (contained by e.g. mozilla >= 1.7.5))], [])
-    LDFLAGS="$save_LDFLAGS"
-    CPPFLAGS="$save_CPPFLAGS"
-    LIBS="$save_LIBS"
 
     MOZ_LIB_XPCOM=$MOZILLAXPCOM_LIBS
     if test "$WITH_LDAP" != "NO" && test "$WITH_OPENLDAP" != "YES"; then
@@ -6001,18 +5978,22 @@ AC_SUBST(MOZ_FLAVOUR)
 AC_SUBST(MOZ_INC)
 AC_SUBST(MOZ_LIB)
 AC_SUBST(MOZ_LIB_XPCOM)
-AC_SUBST(MOZ_NSPR_CFLAGS)
-AC_SUBST(MOZ_NSS_CFLAGS)
 AC_SUBST(MOZ_LDAP_CFLAGS)
 
 dnl ===================================================================
-dnl Check for system NSS
+dnl Check for system NSS only with xmlsec or mozilla build enabled
 dnl ===================================================================
-AC_MSG_CHECKING([whether to build provided NSS module])
-if test "$enable_nss_module" != "no"; then
-    ENABLE_NSS_MODULE="YES"
+if test "x$enable_xmlsec" != "xno" -o "x$enable_mozilla" = "xyes"; then
+AC_MSG_CHECKING([which NSS to use])
+if test -n "$with_system_nss" -o -n "$with_system_headers" && \
+        test "$with_system_nss" != "no"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_NSS="YES"
+    PKG_CHECK_MODULES(NSS, nss >= 3.9.3 nspr >= 4.8)
+else
+    SYSTEM_NSS="NO"
     BUILD_TYPE="$BUILD_TYPE NSS"
-    AC_MSG_RESULT([yes])
+    AC_MSG_RESULT([internal])
     if test "$build_os" = "cygwin"; then
         AC_MSG_CHECKING([for Mozilla build tooling])
         if test -z "$MOZILLABUILD" ; then
@@ -6036,11 +6017,11 @@ from http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32])
             fi
         fi
     fi
-else
-    ENABLE_NSS_MODULE="NO"
-    AC_MSG_RESULT([no])
 fi
-AC_SUBST(ENABLE_NSS_MODULE)
+fi
+AC_SUBST(SYSTEM_NSS)
+AC_SUBST(NSS_CFLAGS)
+AC_SUBST(NSS_LIBS)
 
 dnl ===================================================================
 dnl Check for system sane
@@ -6956,7 +6937,7 @@ AC_MSG_CHECKING([whether to enable GConf support])
 if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gconf" = "yes"; then
     ENABLE_GCONF="TRUE"
     AC_MSG_RESULT([yes])
-    PKG_CHECK_MODULES( GCONF, gconf-2.0 )
+    PKG_CHECK_MODULES( GCONF, gconf-2.0 ORBit-2.0 )
 else
     AC_MSG_RESULT([no])
 fi
@@ -6968,13 +6949,10 @@ dnl ===================================================================
 
 ENABLE_GNOMEVFS=""
 AC_MSG_CHECKING([whether to enable GNOME VFS support])
-if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gnome_vfs" = "yes"; then
+if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gnome_vfs" = "yes" -a "$enable_gconf" = "yes"; then
     ENABLE_GNOMEVFS="TRUE"
     AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES( GNOMEVFS, gnome-vfs-2.0 >= 2.6.0 )
-    if test "$ENABLE_GCONF" != "TRUE"; then
-        PKG_CHECK_MODULES( GCONF, gconf-2.0 )
-    fi
 else
     AC_MSG_RESULT([no])
 fi
@@ -6988,6 +6966,8 @@ GTK_CFLAGS=""
 GTK_LIBS=""
 ENABLE_SYSTRAY_GTK=""
 ENABLE_DBUS=""
+DBUS_CFLAGS=""
+DBUS_LIBS=""
 if test  "$test_gtk" = "yes"; then
 
     if test "$ENABLE_GTK" = "TRUE" ; then
@@ -7030,6 +7010,8 @@ AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 AC_SUBST(GTHREAD_CFLAGS)
 AC_SUBST(GTHREAD_LIBS)
+AC_SUBST(DBUS_CFLAGS)
+AC_SUBST(DBUS_LIBS)
 
 PKG_CHECK_MODULES( LIBPNG, libpng, ENABLE_QUICKSTART_LIBPNG="TRUE", ENABLE_QUICKSTART_LIBPNG="" )
 AC_SUBST(LIBPNG_LIBS)

@@ -304,12 +304,12 @@ bool Components::hasModifications() const
 
 void Components::writeModifications() {
 
-    if (!hasModifications())
+    if (!hasModifications() || modificationFileUrl_.isEmpty())
         return;
 
     if (!writeThread_.is()) {
         writeThread_ = new WriteThread(
-            &writeThread_, *this, getModificationFileUrl(), data_);
+            &writeThread_, *this, modificationFileUrl_, data_);
         writeThread_->create();
     }
 }
@@ -329,8 +329,9 @@ void Components::flushModifications() {
 void Components::insertExtensionXcsFile(
     bool shared, rtl::OUString const & fileUri)
 {
+    int layer = getExtensionLayer(shared);
     try {
-        parseXcsFile(fileUri, shared ? 9 : 13, data_, 0, 0, 0);
+        parseXcsFile(fileUri, layer, data_, 0, 0, 0);
     } catch (css::container::NoSuchElementException & e) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
@@ -345,7 +346,7 @@ void Components::insertExtensionXcuFile(
     bool shared, rtl::OUString const & fileUri, Modifications * modifications)
 {
     OSL_ASSERT(modifications != 0);
-    int layer = shared ? 10 : 14;
+    int layer = getExtensionLayer(shared) + 1;
     Additions * adds = data_.addExtensionXcuAdditions(fileUri, layer);
     try {
         parseXcuFile(fileUri, layer, data_, 0, modifications, adds);
@@ -506,96 +507,108 @@ css::beans::Optional< css::uno::Any > Components::getExternalValue(
 
 Components::Components(
     css::uno::Reference< css::uno::XComponentContext > const & context):
-    context_(context)
+    context_(context), sharedExtensionLayer_(-1), userExtensionLayer_(-1)
 {
-    lock_ = lock();
-
     OSL_ASSERT(context.is());
-
-    // Check if we are being used for in-tree unit tests ...
-    rtl::OUString aUnitTestDir;
-    if (rtl::Bootstrap::get( rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("OOO_CONFIG_REGISTRY_DIR") ), aUnitTestDir))
-    {
-        parseXcsXcuLayer( 0, aUnitTestDir );
-        // next is required for the (somewhat strange) filter configuration
-        parseModuleLayer( 2, aUnitTestDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/spool")));
-        // allow a directory to be specified to allow extra configuration to be stored
-        // for example to place a registrymodifications.xcu to override some configuration
-        rtl::OUString extra;
-        if (rtl::Bootstrap::get(
+    lock_ = lock();
+    rtl::OUString conf(
+        expand(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("${CONFIGURATION_LAYERS}"))));
+    RTL_LOGFILE_TRACE("configmgr : begin parsing");
+    int layer = 0;
+    for (sal_Int32 i = 0;;) {
+        while (i != conf.getLength() && conf[i] == ' ') {
+            ++i;
+        }
+        if (i == conf.getLength()) {
+            break;
+        }
+        if (!modificationFileUrl_.isEmpty()) {
+            throw css::uno::RuntimeException(
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
-                        "OOO_CONFIG_REGISTRY_EXTRA_DIR")),
-                extra))
-        {
-            parseXcsXcuLayer(3, extra);
+                        "CONFIGURATION_LAYERS: \"user\" followed by further"
+                        " layers")),
+                css::uno::Reference< css::uno::XInterface >());
         }
-        return;
+        sal_Int32 c = i;
+        for (;; ++c) {
+            if (c == conf.getLength() || conf[c] == ' ') {
+                throw css::uno::RuntimeException(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "CONFIGURATION_LAYERS: missing \":\"")),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
+            if (conf[c] == ':') {
+                break;
+            }
+        }
+        sal_Int32 n = conf.indexOf(' ', c + 1);
+        if (n == -1) {
+            n = conf.getLength();
+        }
+        rtl::OUString type(conf.copy(i, c - i));
+        rtl::OUString url(expand(conf.copy(c + 1, n - c - 1)));
+        if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("xcsxcu"))) {
+            parseXcsXcuLayer(layer, url);
+            layer += 2; //TODO: overflow
+        } else if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("bundledext")))
+        {
+            parseXcsXcuIniLayer(layer, url, false);
+            layer += 2; //TODO: overflow
+        } else if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sharedext"))) {
+            if (sharedExtensionLayer_ != -1) {
+                throw css::uno::RuntimeException(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "CONFIGURATION_LAYERS: multiple \"sharedext\""
+                            " layers")),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
+            sharedExtensionLayer_ = layer;
+            parseXcsXcuIniLayer(layer, url, true);
+            layer += 2; //TODO: overflow
+        } else if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("userext"))) {
+            if (userExtensionLayer_ != -1) {
+                throw css::uno::RuntimeException(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "CONFIGURATION_LAYERS: multiple \"userext\""
+                            " layers")),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
+            userExtensionLayer_ = layer;
+            parseXcsXcuIniLayer(layer, url, true);
+            layer += 2; //TODO: overflow
+        } else if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("module"))) {
+            parseModuleLayer(layer, url);
+            ++layer; //TODO: overflow
+        } else if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("res"))) {
+            parseResLayer(layer, url);
+            ++layer; //TODO: overflow
+        } else if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("user"))) {
+            if (url.isEmpty()) {
+                throw css::uno::RuntimeException(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "CONFIGURATION_LAYERS: empty \"user\" URL")),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
+            modificationFileUrl_ = url;
+            parseModificationLayer(url);
+        } else {
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "CONFIGURATION_LAYERS: unknown layer type \"")) +
+                 type +
+                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""))),
+                css::uno::Reference< css::uno::XInterface >());
+        }
+        i = n;
     }
-
-    RTL_LOGFILE_TRACE("configmgr : begin parsing");
-
-    parseXcsXcuLayer(
-        0,
-        expand(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "$BRAND_BASE_DIR/share/registry"))));
-    parseModuleLayer(
-        2,
-        expand(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "$BRAND_BASE_DIR/share/registry/modules"))));
-    parseResLayer(
-        3,
-        expand(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "$BRAND_BASE_DIR/share/registry"))));
-    parseXcsXcuIniLayer(
-        4,
-        expand(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("uno")
-                    ":BUNDLED_EXTENSIONS_USER}/registry/"
-                    "com.sun.star.comp.deployment.configuration."
-                    "PackageRegistryBackend/configmgr.ini"))),
-        false);
-    parseXcsXcuIniLayer(
-        6,
-        expand(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("uno")
-                    ":SHARED_EXTENSIONS_USER}/registry/"
-                    "com.sun.star.comp.deployment.configuration."
-                    "PackageRegistryBackend/configmgr.ini"))),
-        true);
-    parseXcsXcuLayer(
-        8,
-        expand(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("uno")
-                    ":UNO_USER_PACKAGES_CACHE}/registry/"
-                    "com.sun.star.comp.deployment.configuration."
-                    "PackageRegistryBackend/registry"))));
-        // can be dropped once old UserInstallation format can no longer exist
-        // (probably OOo 4)
-    parseXcsXcuIniLayer(
-        10,
-        expand(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("uno")
-                    ":UNO_USER_PACKAGES_CACHE}/registry/"
-                    "com.sun.star.comp.deployment.configuration."
-                    "PackageRegistryBackend/configmgr.ini"))),
-        true);
-    parseModificationLayer();
     RTL_LOGFILE_TRACE("configmgr : end parsing");
 }
 
@@ -858,19 +871,9 @@ void Components::parseResLayer(int layer, rtl::OUString const & url) {
         &parseXcuFile, resUrl, false);
 }
 
-rtl::OUString Components::getModificationFileUrl() const {
-    return expand(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap")
-                ":UserInstallation}/user/registrymodifications.xcu")));
-}
-
-void Components::parseModificationLayer() {
+void Components::parseModificationLayer(rtl::OUString const & url) {
     try {
-        parseFileLeniently(
-            &parseXcuFile, getModificationFileUrl(), Data::NO_LAYER, data_, 0,
-            0, 0);
+        parseFileLeniently(&parseXcuFile, url, Data::NO_LAYER, data_, 0, 0, 0);
     } catch (css::container::NoSuchElementException &) {
         OSL_TRACE(
             "configmgr user registrymodifications.xcu does not (yet) exist");
@@ -887,6 +890,18 @@ void Components::parseModificationLayer() {
                         ":UserInstallation}/user/registry/data"))),
             false);
     }
+}
+
+int Components::getExtensionLayer(bool shared) {
+    int layer = shared ? sharedExtensionLayer_ : userExtensionLayer_;
+    if (layer == -1) {
+        throw css::uno::RuntimeException(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "insert extension xcs/xcu file into undefined layer")),
+            css::uno::Reference< css::uno::XInterface >());
+    }
+    return layer;
 }
 
 }

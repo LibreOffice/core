@@ -2006,9 +2006,10 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             else
             {
-                RTFValue::Pointer_t pValue(new RTFValue(std::find(m_aFontIndexes.begin(), m_aFontIndexes.end(), nParam) - m_aFontIndexes.begin()));
+                int nFontIndex = std::find(m_aFontIndexes.begin(), m_aFontIndexes.end(), nParam) - m_aFontIndexes.begin();
+                RTFValue::Pointer_t pValue(new RTFValue(nFontIndex));
                 m_aStates.top().aCharacterSprms->push_back(make_pair(NS_sprm::LN_CRgFtc0, pValue));
-                m_aStates.top().nCurrentEncoding = getEncodingTable(nParam);
+                m_aStates.top().nCurrentEncoding = getEncodingTable(nFontIndex);
             }
             break;
         case RTF_RED:

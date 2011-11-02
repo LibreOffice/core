@@ -34,10 +34,16 @@
 #include <swtypes.hxx>
 #include <wordcountdialog.hxx>
 #include <docstat.hxx>
-
 #include <dialog.hrc>
 #include <layout/layout-pre.hxx>
 #include <wordcountdialog.hrc>
+#include <cmdid.h>
+#include "vcl/msgbox.hxx" // RET_CANCEL
+#include <swmodule.hxx>
+#include <wview.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <swwait.hxx>
+#include <wrtsh.hxx>
 
 #if ENABLE_LAYOUT
 #undef SW_RES
@@ -49,7 +55,7 @@
 #endif /* ENABLE_LAYOUT */
 
 SwWordCountDialog::SwWordCountDialog(Window* pParent) :
-    SfxModalDialog(pParent, SW_RES(DLG_WORDCOUNT)),
+    Window(pParent, SW_RES(WINDOW_DLG)),
 #if defined _MSC_VER
 #pragma warning (disable : 4355)
 #endif
@@ -79,10 +85,23 @@ SwWordCountDialog::SwWordCountDialog(Window* pParent) :
     SetHelpId (HID_DLG_WORDCOUNT);
 #endif /* ENABLE_LAYOUT */
     FreeResource();
+
+    aOK.SetClickHdl(LINK(this,SwWordCountDialog,        OkHdl));
+}
+
+IMPL_LINK( SwWordCountDialog, OkHdl, void*, EMPTYARG )
+{   
+    SfxViewFrame* pVFrame = ::GetActiveView()->GetViewFrame();
+    if (pVFrame != NULL)
+    {
+        pVFrame->ToggleChildWindow(FN_WORDCOUNT_DIALOG);
+    }
+    return 0;
 }
 
 SwWordCountDialog::~SwWordCountDialog()
 {
+    ViewShell::SetCareWin( 0 );
 }
 
 void  SwWordCountDialog::SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc)
@@ -93,6 +112,39 @@ void  SwWordCountDialog::SetValues(const SwDocStat& rCurrent, const SwDocStat& r
     aDocWordFI.SetText(         String::CreateFromInt32(rDoc.nWord ));
     aDocCharacterFI.SetText(    String::CreateFromInt32(rDoc.nChar ));
     aDocCharacterExcludingSpacesFI.SetText(    String::CreateFromInt32(rDoc.nCharExcludingSpaces ));
+}
+
+
+SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
+                                         SfxChildWindow* pChild,
+                                         Window *pParent,
+                                         SfxChildWinInfo* pInfo)
+    : SfxModelessDialog(_pBindings, pChild, pParent, SW_RES(DLG_WORDCOUNT)),
+      aDlg(this)
+{
+    FreeResource();
+    Initialize(pInfo);
+}
+
+void SwWordCountFloatDlg::Activate()
+{
+    SfxModelessDialog::Activate();
+    aDlg.Activate();
+}
+
+void SwWordCountFloatDlg::UpdateCounts()
+{
+    SwWrtShell &rSh = ::GetActiveView()->GetWrtShell();
+    SwDocStat aCurrCnt;
+    SwDocStat aDocStat;
+    {
+        SwWait aWait( *::GetActiveView()->GetDocShell(), sal_True );
+        rSh.StartAction();
+        rSh.CountWords( aCurrCnt );
+        aDocStat = rSh.GetUpdatedDocStat();
+        rSh.EndAction();
+    }
+    aDlg.SetValues(aCurrCnt, aDocStat);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

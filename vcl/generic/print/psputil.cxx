@@ -142,14 +142,6 @@ appendStr (const sal_Char* pSrc, sal_Char* pDst)
     return nBytes;
 }
 
-sal_Int32
-appendStr (const sal_Char* pSrc, sal_Char* pDst, sal_Int32 nBytes)
-{
-    strncpy (pDst, pSrc, nBytes);
-    pDst [nBytes] = '\0';
-    return nBytes;
-}
-
 /*
  * copy strings to file
  */

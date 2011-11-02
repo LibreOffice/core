@@ -1412,8 +1412,8 @@ static ScTokenArray* lcl_convertToTokenArray(const ScDocument* pSrcDoc, ScRange&
             pUsedRange.reset(new ScRange(nDataCol1, nDataRow1, 0, nDataCol2, nDataRow2, 0));
 
         ScMatrixRef xMat = new ScMatrix(
-            static_cast<SCSIZE>(nDataCol2-nDataCol1+1),
-            static_cast<SCSIZE>(nDataRow2-nDataRow1+1));
+            static_cast<SCSIZE>(nCol2-nCol1+1),
+            static_cast<SCSIZE>(nRow2-nRow1+1), ScMatrix::SPARSE_EMPTY);
 
         for (SCCOL nCol = nDataCol1; nCol <= nDataCol2; ++nCol)
         {
@@ -1423,53 +1423,52 @@ static ScTokenArray* lcl_convertToTokenArray(const ScDocument* pSrcDoc, ScRange&
                 ScBaseCell* pCell;
                 pSrcDoc->GetCell(nCol, nRow, nTab, pCell);
                 if (!pCell || pCell->HasEmptyData())
-                    xMat->PutEmpty(nC, nR);
-                else
+                    // Skip empty cells.  Matrix's default values are empty elements.
+                    continue;
+
+                switch (pCell->GetCellType())
                 {
-                    switch (pCell->GetCellType())
+                    case CELLTYPE_EDIT:
                     {
-                        case CELLTYPE_EDIT:
+                        String aStr;
+                        static_cast<ScEditCell*>(pCell)->GetString(aStr);
+                        xMat->PutString(aStr, nC, nR);
+                    }
+                    break;
+                    case CELLTYPE_STRING:
+                    {
+                        String aStr;
+                        static_cast<ScStringCell*>(pCell)->GetString(aStr);
+                        xMat->PutString(aStr, nC, nR);
+                    }
+                    break;
+                    case CELLTYPE_VALUE:
+                    {
+                        double fVal = static_cast<ScValueCell*>(pCell)->GetValue();
+                        xMat->PutDouble(fVal, nC, nR);
+                    }
+                    break;
+                    case CELLTYPE_FORMULA:
+                    {
+                        ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
+                        sal_uInt16 nError = pFCell->GetErrCode();
+                        if (nError)
+                            xMat->PutDouble( CreateDoubleError( nError), nC, nR);
+                        else if (pFCell->IsValue())
                         {
-                            String aStr;
-                            static_cast<ScEditCell*>(pCell)->GetString(aStr);
-                            xMat->PutString(aStr, nC, nR);
-                        }
-                        break;
-                        case CELLTYPE_STRING:
-                        {
-                            String aStr;
-                            static_cast<ScStringCell*>(pCell)->GetString(aStr);
-                            xMat->PutString(aStr, nC, nR);
-                        }
-                        break;
-                        case CELLTYPE_VALUE:
-                        {
-                            double fVal = static_cast<ScValueCell*>(pCell)->GetValue();
+                            double fVal = pFCell->GetValue();
                             xMat->PutDouble(fVal, nC, nR);
                         }
-                        break;
-                        case CELLTYPE_FORMULA:
+                        else
                         {
-                            ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
-                            sal_uInt16 nError = pFCell->GetErrCode();
-                            if (nError)
-                                xMat->PutDouble( CreateDoubleError( nError), nC, nR);
-                            else if (pFCell->IsValue())
-                            {
-                                double fVal = pFCell->GetValue();
-                                xMat->PutDouble(fVal, nC, nR);
-                            }
-                            else
-                            {
-                                String aStr;
-                                pFCell->GetString(aStr);
-                                xMat->PutString(aStr, nC, nR);
-                            }
+                            String aStr;
+                            pFCell->GetString(aStr);
+                            xMat->PutString(aStr, nC, nR);
                         }
-                        break;
-                        default:
-                            OSL_FAIL("attempted to convert an unknown cell type.");
                     }
+                    break;
+                    default:
+                        OSL_FAIL("attempted to convert an unknown cell type.");
                 }
             }
         }
