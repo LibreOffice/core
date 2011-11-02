@@ -196,7 +196,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         PropertySet aPropSet( rxDataSeries->getDataPointByIndex( mrModel.mnIndex ) );
         lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, false );
 
-        if( !mrModel.mxLayout->mbAutoLayout )
+        if( mrModel.mxLayout && !mrModel.mxLayout->mbAutoLayout )
         {
             // bnc#694340 - nasty hack - chart2 cannot individually
             // place data labels, let's try to find a useful
