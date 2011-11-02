@@ -165,7 +165,7 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
         HideCursor();
         mpFilterButton->draw();
         ShowCursor();
-        DoAutoFilterMenue(nCol, nRow, false);
+        LaunchAutoFilterMenu(nCol, nRow);
         return true;
     }
 

@@ -426,6 +426,7 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
             pNoteMarker( NULL ),
             pFilterBox( NULL ),
             pFilterFloat( NULL ),
+            mpAutoFilterPopup(NULL),
             mpDPFieldPopup(NULL),
             mpFilterButton(NULL),
             nCursorHideCount( 0 ),
@@ -582,6 +583,22 @@ void ScGridWindow::ExecPageFieldSelect( SCCOL nCol, SCROW nRow, sal_Bool bHasSel
             }
         }
     }
+}
+
+void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
+{
+    mpAutoFilterPopup.reset(new ScCheckListMenuWindow(this, pViewData->GetDocument()));
+    Point aPos = pViewData->GetScrPos(nCol, nRow, eWhich);
+    long nSizeX  = 0;
+    long nSizeY  = 0;
+    pViewData->GetMergeSizePixel(nCol, nRow, nSizeX, nSizeY);
+    Rectangle aCellRect(OutputToScreenPixel(aPos), Size(nSizeX, nSizeY));
+
+    // Populate the check box list.
+
+
+    mpAutoFilterPopup->SetPopupModeEndHdl( LINK(this, ScGridWindow, PopupModeEndHdl) );
+    mpAutoFilterPopup->StartPopupMode(aCellRect, (FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_GRABFOCUS));
 }
 
 void ScGridWindow::LaunchPageFieldMenu( SCCOL nCol, SCROW nRow )
@@ -880,7 +897,13 @@ void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
     CaptureMouse();
 }
 
-void ScGridWindow::DoAutoFilterMenue( SCCOL nCol, SCROW nRow, bool bDataSelect )
+namespace {
+
+
+
+}
+
+void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelect )
 {
     delete pFilterBox;
     delete pFilterFloat;
@@ -1690,7 +1713,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt )
             Rectangle aButtonRect = GetListValButtonRect( aListValPos );
             if ( aButtonRect.IsInside( aPos ) )
             {
-                DoAutoFilterMenue( aListValPos.Col(), aListValPos.Row(), sal_True );
+                LaunchDataSelectMenu( aListValPos.Col(), aListValPos.Row(), true );
 
                 nMouseStatus = SC_GM_FILTER;    // not set in DoAutoFilterMenue for bDataSelect
                 CaptureMouse();

@@ -144,6 +144,7 @@ private:
 
     ScFilterListBox*        pFilterBox;
     FloatingWindow*         pFilterFloat;
+    boost::scoped_ptr<ScCheckListMenuWindow> mpAutoFilterPopup;
     boost::scoped_ptr<ScCheckListMenuWindow> mpDPFieldPopup;
     boost::scoped_ptr<ScDPFieldButton>       mpFilterButton;
 
@@ -338,9 +339,10 @@ public:
 
     void            UpdateFormulas();
 
-    void            DoAutoFilterMenue( SCCOL nCol, SCROW nRow, bool bDataSelect );
+    void            LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelect );
     void            DoScenarioMenue( const ScRange& rScenRange );
 
+    void            LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow);
     void            LaunchPageFieldMenu( SCCOL nCol, SCROW nRow );
     void            LaunchDPFieldMenu( SCCOL nCol, SCROW nRow );
 
