@@ -33,9 +33,6 @@
 #include <unx/svunx.h>
 #include <unx/salstd.hxx>
 
-// -=-= #defines -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#define capacityof(a)   (sizeof(a)/sizeof(*a))
-
 // -=-= inlines =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline long Divide( long nDividend, long nDivisor )
 { return (nDividend + nDivisor/2) / nDivisor; }
