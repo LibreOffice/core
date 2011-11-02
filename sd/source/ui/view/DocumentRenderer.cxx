@@ -1198,13 +1198,14 @@ class DocumentRenderer::Implementation
 {
 public:
     Implementation (ViewShellBase& rBase)
-        : mrBase(rBase),
-          mbIsDisposed(false),
-          mpPrinter(NULL),
-          mpOptions(),
-          maPrinterPages(),
-          mpPrintView(),
-          mbHasOrientationWarningBeenShown(false)
+        : mxObjectShell(rBase.GetDocShell())
+        , mrBase(rBase)
+        , mbIsDisposed(false)
+        , mpPrinter(NULL)
+        , mpOptions()
+        , maPrinterPages()
+        , mpPrintView()
+        , mbHasOrientationWarningBeenShown(false)
     {
         DialogCreator aCreator( mrBase.GetDocShell()->GetDocumentType() == DOCUMENT_TYPE_IMPRESS );
         m_aUIProperties = aCreator.GetDialogControls();
@@ -1400,6 +1401,8 @@ public:
 
 
 private:
+    // rhbz#657394: keep the document alive: prevents crash when
+    SfxObjectShellRef mxObjectShell; // destroying mpPrintView
     ViewShellBase& mrBase;
     bool mbIsDisposed;
     Printer* mpPrinter;
