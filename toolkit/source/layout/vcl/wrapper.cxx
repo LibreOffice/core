@@ -115,10 +115,6 @@ public:
     {
         mxTopLevel = xToplevel;
     }
-    PeerHandle getRoot()
-    {
-        return mxRoot;
-    }
 };
 
 Context::Context( const char *pPath )
@@ -129,20 +125,6 @@ Context::~Context()
 {
     delete pImpl;
     pImpl = NULL;
-}
-
-void Context::setToplevel( PeerHandle xToplevel )
-{
-    pImpl->setTopLevel( xToplevel );
-}
-
-PeerHandle Context::getToplevel()
-{
-    return pImpl->getTopLevel();
-}
-PeerHandle Context::getRoot()
-{
-    return pImpl->getRoot();
 }
 
 PeerHandle Context::GetPeerHandle( const char *id, sal_uInt32 nId ) const
@@ -558,20 +540,10 @@ void SAL_CALL ControlImpl::focusLost (awt::FocusEvent const&)
     mLoseFocusHdl.Call (mpWindow);
 }
 
-Link& Control::GetGetFocusHdl ()
-{
-    return getImpl ().GetGetFocusHdl ();
-}
-
 void Control::SetGetFocusHdl (Link const& link)
 {
     if (&getImpl () && getImpl().mxWindow.is ())
         getImpl ().SetGetFocusHdl (link);
-}
-
-Link& Control::GetLoseFocusHdl ()
-{
-    return getImpl ().GetLoseFocusHdl ();
 }
 
 void Control::SetLoseFocusHdl (Link const& link)
@@ -591,15 +563,6 @@ DialogImpl::DialogImpl( Context *context, const PeerHandle &peer, Window *window
     : WindowImpl( context, peer, window )
     , mxDialog( peer, uno::UNO_QUERY )
 {
-}
-
-Dialog::Dialog( Window *parent, const char *xml_file, const char *id, sal_uInt32 nId )
-    : Context( xml_file )
-    , Window( new DialogImpl( this, Context::GetPeerHandle( id, nId ), this ) )
-    , bConstruct (true)
-{
-    if ( parent )
-        SetParent( parent );
 }
 
 Dialog::Dialog( ::Window *parent, const char *xml_file, const char *id, sal_uInt32 nId )
@@ -631,29 +594,9 @@ void Dialog::EndDialog( long result )
     MX_DIALOG->endDialog (result);
 }
 
-void Dialog::SetText( OUString const& str )
-{
-    SetTitle (str);
-}
-
 void Dialog::SetTitle( OUString const& str )
 {
     MX_DIALOG->setTitle (str);
-}
-
-bool Dialog::Close ()
-{
-    EndDialog (false);
-    return true;
-}
-
-long Dialog::Notify (NotifyEvent& event)
-{
-    return GetDialog ()->Notify (event);
-}
-
-void Dialog::Initialize (SfxChildWinInfo*)
-{
 }
 
 #define MESSAGE_BOX_MEMBER_INIT\
@@ -809,8 +752,6 @@ void MessageBox::init (OUString const& message, OUString const& yes, OUString co
 
 MESSAGE_BOX_IMPL (Error);
 MESSAGE_BOX_IMPL (Info);
-MESSAGE_BOX_IMPL (Query);
-MESSAGE_BOX_IMPL (Warning);
 
 class TabControlImpl
     : public ControlImpl
@@ -834,21 +775,11 @@ public:
         mxTabControl.clear ();
     }
 
-    Link& GetActivatePageHdl ()
-    {
-        return mActivatePageHdl;
-    }
-
     void SetActivatePageHdl (Link const& link)
     {
         if (!mDeactivatePageHdl || !link)
             UpdateListening (link);
         mActivatePageHdl = link;
-    }
-
-    Link& GetDeactivatePageHdl ()
-    {
-        return mDeactivatePageHdl;
     }
 
     void SetDeactivatePageHdl (Link const& link)
@@ -895,7 +826,6 @@ public:
 };
 
 IMPL_GET_WINDOW (TabControl);
-IMPL_GET_LAYOUT_VCLXWINDOW (TabControl);
 
 #define MX_TABCONTROL if (getImpl ().mxTabControl.is ()) getImpl ().mxTabControl
 #define RETURN_MX_TABCONTROL if (getImpl ().mxTabControl.is ()) return getImpl ().mxTabControl
@@ -906,92 +836,22 @@ TabControl::~TabControl ()
     SetDeactivatePageHdl (Link ());
 }
 
-void TabControl::InsertPage (sal_uInt16 id, OUString const& title, sal_uInt16 pos)
-{
-    (void) pos;
-
-    MX_TABCONTROL->insertTab ();
-    SetCurPageId (id);
-
-#if 1 // colour me loc productive -- NOT
-#define ADD_PROP( seq, i, name, val )\
-    { \
-        beans::NamedValue value; \
-        value.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( name ) ); \
-        value.Value = uno::makeAny( val ); \
-        seq[i] = value; \
-    }
-
-    uno::Sequence< beans::NamedValue > seq (1);
-    ADD_PROP ( seq, 0, "Title", OUString (title) );
-    MX_TABCONTROL->setTabProps (id, seq);
-#else
-    GetTabPage (id)->SetText (title);
-#endif
-}
-void TabControl::RemovePage (sal_uInt16 id)
-{
-    GetTabControl ()->RemovePage (id);
-}
-sal_uInt16 TabControl::GetPageCount () const
-{
-    return GetTabControl ()->GetPageCount ();
-}
-sal_uInt16 TabControl::GetPageId (sal_uInt16 pos) const
-{
-    return GetTabControl ()->GetPageId (pos);
-}
-sal_uInt16 TabControl::GetPagePos (sal_uInt16 id) const
-{
-    getImpl ().redraw ();
-    return GetTabControl ()->GetPagePos (id);
-}
 void TabControl::SetCurPageId (sal_uInt16 id)
 {
     getImpl ().redraw ();
     GetTabControl ()->SetCurPageId (id);
-}
-sal_uInt16 TabControl::GetCurPageId () const
-{
-    return GetTabControl ()->GetCurPageId ();
-}
-void TabControl::SetTabPage (sal_uInt16 id, ::TabPage* page)
-{
-    GetTabControl ()->SetTabPage (id, page);
-    getImpl ().redraw ();
-}
-::TabPage* TabControl::GetTabPage (sal_uInt16 id) const
-{
-    return GetTabControl ()->GetTabPage (id);
 }
 void TabControl::SetActivatePageHdl (Link const& link)
 {
     if (&getImpl () && getImpl().mxTabControl.is ())
         getImpl ().SetActivatePageHdl (link);
 }
-Link& TabControl::GetActivatePageHdl () const
-{
-    return getImpl ().GetActivatePageHdl ();
-}
 void TabControl::SetDeactivatePageHdl (Link const& link)
 {
     if (&getImpl () && getImpl().mxTabControl.is ())
         getImpl ().SetDeactivatePageHdl (link);
 }
-Link& TabControl::GetDeactivatePageHdl () const
-{
-    return getImpl ().GetDeactivatePageHdl ();
-}
-void TabControl::SetTabPageSizePixel (Size const& size)
-{
-    GetTabControl ()->SetTabPageSizePixel (size);
-}
-Size TabControl::GetTabPageSizePixel () const
-{
-    return GetTabControl ()->GetTabPageSizePixel ();
-}
 
-IMPL_CONSTRUCTORS (TabControl, Control, "tabcontrol");
 IMPL_GET_IMPL (TabControl);
 
 class TabPageImpl : public WindowImpl
@@ -1010,22 +870,6 @@ TabControl* TabPage::global_tabcontrol = 0;
 
 IMPL_GET_IMPL( TabPage );
 
-TabPage::TabPage( Window *parent, const char *xml_file, const char *id, sal_uInt32 nId)
-    : Context( xml_file )
-    , Window( new TabPageImpl( this, Context::GetPeerHandle( id, nId ), this ) )
-{
-    if ( parent )
-        SetParent( parent );
-}
-
-TabPage::TabPage( ::Window *parent, const char *xml_file, const char *id, sal_uInt32 nId)
-    : Context( xml_file )
-    , Window( new TabPageImpl( this, Context::GetPeerHandle( id, nId ), this ) )
-{
-    if ( parent )
-        SetParent( parent );
-}
-
 TabPage::~TabPage()
 {
     delete GetTabPage();
@@ -1039,24 +883,6 @@ void TabPage::ActivatePage()
 
 void TabPage::DeactivatePage()
 {
-}
-
-class FixedLineImpl : public ControlImpl
-{
-public:
-    FixedLineImpl( Context *context, const PeerHandle &peer, Window *window )
-        : ControlImpl( context, peer, window )
-    {
-    }
-};
-
-IMPL_CONSTRUCTORS( FixedLine, Control, "hfixedline" );
-IMPL_GET_IMPL( FixedLine );
-
-bool FixedLine::IsEnabled() const
-{
-    //FIXME
-    return true;
 }
 
 class FixedTextImpl : public ControlImpl
@@ -1086,11 +912,18 @@ void SAL_CALL FixedTextImpl::disposing( lang::EventObject const& e )
     mxFixedText.clear ();
 }
 
+FixedText::FixedText ( Context *context, char const* pId, sal_uInt32 nId )
+    : Control( new FixedTextImpl( context, context->GetPeerHandle( pId, nId ), this ) )
+{
+    Window *parent = dynamic_cast<Window*> (context);
+    if (parent)
+        SetParent (parent);
+}
+
 FixedText::~FixedText ()
 {
 }
 
-IMPL_CONSTRUCTORS( FixedText, Control, "fixedtext" );
 IMPL_GET_IMPL( FixedText );
 
 void FixedText::SetText( OUString const& rStr )
@@ -1099,18 +932,6 @@ void FixedText::SetText( OUString const& rStr )
         return;
     getImpl().mxFixedText->setText( rStr );
 }
-
-class FixedInfoImpl : public FixedTextImpl
-{
-public:
-    FixedInfoImpl( Context *context, const PeerHandle &peer, Window *window )
-        : FixedTextImpl( context, peer, window )
-    {
-    }
-};
-
-IMPL_CONSTRUCTORS( FixedInfo, FixedText, "fixedinfo" );
-IMPL_GET_IMPL( FixedInfo );
 
 class ProgressBarImpl : public ControlImpl
 {
@@ -1146,217 +967,15 @@ public:
     }
 };
 
-IMPL_CONSTRUCTORS( FixedImage, Control, "fixedimage" );
-IMPL_GET_IMPL( FixedImage )
-
-void FixedImage::setImage( ::Image const& i )
+FixedImage::FixedImage ( Context *context, char const* pId, sal_uInt32 nId )
+    : Control( new FixedImageImpl( context, context->GetPeerHandle( pId, nId ), this ) )
 {
-    (void) i;
-    if ( !getImpl().mxGraphic.is() )
-        return;
-    //FIXME: hack moved to proplist
-    //getImpl().mxGraphic =
-}
-
-
-IMPL_CONSTRUCTORS( ProgressBar, Control, "ProgressBar" );
-IMPL_GET_IMPL( ProgressBar );
-
-void ProgressBar::SetForegroundColor( util::Color color )
-{
-    if ( !getImpl().mxProgressBar.is() )
-        return;
-    getImpl().mxProgressBar->setForegroundColor( color );
-}
-
-void ProgressBar::SetBackgroundColor( util::Color color )
-{
-    if ( !getImpl().mxProgressBar.is() )
-        return;
-    getImpl().mxProgressBar->setBackgroundColor( color );
-}
-
-void ProgressBar::SetValue( sal_Int32 i )
-{
-    if ( !getImpl().mxProgressBar.is() )
-        return;
-    getImpl().mxProgressBar->setValue( i );
-}
-
-void ProgressBar::SetRange( sal_Int32 min, sal_Int32 max )
-{
-    if ( !getImpl().mxProgressBar.is() )
-        return;
-    getImpl().mxProgressBar->setRange( min, max );
-}
-
-sal_Int32 ProgressBar::GetValue()
-{
-    if ( !getImpl().mxProgressBar.is() )
-        return 0;
-    return getImpl().mxProgressBar->getValue();
-}
-
-class PluginImpl: public ControlImpl
-{
-public:
-    ::Control *mpPlugin;
-
-    PluginImpl( Context *context, const PeerHandle &peer, Window *window, :: Control *plugin )
-        : ControlImpl( context, peer, window )
-        , mpPlugin( plugin )
-    {
-        uno::Reference <awt::XWindow> ref( mxWindow, uno::UNO_QUERY );
-        layoutimpl::VCLXPlugin *vcl
-            = static_cast<layoutimpl::VCLXPlugin*>( VCLXWindow::GetImplementation( ref ) );
-        ::Window *parent = vcl->mpWindow->GetParent();
-        vcl->SetWindow( plugin );
-        vcl->SetPlugin( mpPlugin );
-        plugin->SetParent( parent );
-        plugin->SetStyle( vcl->mStyle );
-        plugin->SetCreatedWithToolkit( true );
-        plugin->SetComponentInterface( vcl );
-        plugin->Show();
-    }
-};
-
-Plugin::Plugin( Context *context, char const *id, ::Control *plugin )
-    : Control( new PluginImpl( context, context->GetPeerHandle( id, 0 ), this, plugin ) )
-    , mpPlugin( plugin )
-{
-}
-
-IMPL_GET_IMPL( Plugin );
-
-class LocalizedStringImpl : public WindowImpl
-{
-public:
-    layoutimpl::LocalizedString *mpString;
-    OUString maString;
-    LocalizedStringImpl( Context *context, const PeerHandle &peer, Window *window )
-        : WindowImpl( context, peer, window )
-        , mpString( static_cast<layoutimpl::LocalizedString*>( VCLXWindow::GetImplementation( uno::Reference <awt::XWindow> ( mxWindow, uno::UNO_QUERY ) ) ) )
-        , maString ()
-    {
-    }
-    OUString getText()
-    {
-        if (mpString)
-            maString = mpString->getText ();
-        return maString;
-    }
-    void setText( OUString const& s )
-    {
-        if (mpString)
-            mpString->setText( s );
-    }
-};
-
-IMPL_GET_IMPL( LocalizedString );
-
-LocalizedString::LocalizedString( Context *context, char const* id )
-    : Window( new LocalizedStringImpl( context, context->GetPeerHandle( id, 0 ), this ) )
-{
-}
-
-String LocalizedString::getString ()
-{
-    return getImpl ().getText ();
-}
-
-OUString LocalizedString::getOUString ()
-{
-    return getImpl ().getText ();
-}
-
-LocalizedString::operator OUString ()
-{
-    return getOUString ();
-}
-
-LocalizedString::operator OUString const& ()
-{
-    getOUString ();
-    return getImpl ().maString;
-}
-
-LocalizedString::operator String()
-{
-    getOUString ();
-    return getImpl ().maString;
-}
-
-String LocalizedString::GetToken (sal_uInt16 i, sal_Char c)
-{
-    return getString ().GetToken (i, c);
-}
-
-OUString LocalizedString::operator= (OUString const& s)
-{
-    getImpl().setText( s );
-    return getImpl().getText();
-}
-
-OUString LocalizedString::operator+= (OUString const& b)
-{
-    OUString a = getImpl ().getText ();
-    a += b;
-    getImpl ().setText (a);
-    return getImpl ().getText ();
-}
-
-OUString LocalizedString::operator+= (sal_Unicode const b)
-{
-    String a = getImpl ().getText ();
-    a += b;
-    getImpl ().setText (a);
-    return getImpl ().getText ();
-}
-
-class InPlugImpl : public WindowImpl
-{
-public:
-    InPlugImpl (Context *context, const PeerHandle &peer, Window *window)
-        : WindowImpl (context, peer, window)
-    {
-    }
-};
-
-IMPL_GET_IMPL (InPlug);
-
-static char const *FIXME_set_parent (::Window *parent, char const *xml_file)
-{
-    layout::TabPage::global_parent = parent;
-    return xml_file;
-}
-
-InPlug::InPlug (Window *parent, char const* xml_file, char const* id, sal_uInt32 nId)
-    : Context (FIXME_set_parent (parent ? parent->GetWindow () : 0, xml_file))
-    , layout::Window (new InPlugImpl (this, Context::GetPeerHandle (id, nId), this))
-{
+    Window *parent = dynamic_cast<Window*> (context);
     if (parent)
         SetParent (parent);
-    if (::Window *w = dynamic_cast< ::Window* > (this))
-        w->SetComponentInterface (GetVCLXWindow ());
 }
 
-InPlug::InPlug (::Window *parent, char const* xml_file, char const* id, sal_uInt32 nId)
-    : Context (FIXME_set_parent (parent, xml_file))
-    , layout::Window (new InPlugImpl (this, Context::GetPeerHandle (id, nId), this))
-{
-    if (parent)
-        layout::Window::SetParent (parent);
-    if (::Window *w = dynamic_cast< ::Window* > (this))
-        w->SetComponentInterface (GetVCLXWindow ());
-}
-
-void InPlug::ParentSet (Window *window)
-{
-    window->SetParent (dynamic_cast< ::Window* > (this));
-
-    /// FIXME: for standalone run of layout::SfxTabDialog
-    SetParent (window->GetParent ());
-}
+IMPL_GET_IMPL( FixedImage )
 
 } // namespace layout
 

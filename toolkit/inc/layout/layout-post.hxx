@@ -35,45 +35,24 @@
 #undef _LAYOUT_PRE_HXX
 
 
-#undef AdvancedButton
-#undef ApplyButton
 #undef Box
 #undef Button
 #undef CancelButton
-#undef CheckBox
-#undef ComboBox
 #undef Container
 #undef Control
 #undef Dialog
 #undef Edit
-#undef ErrorBox
 #undef FixedImage
-#undef FixedInfo
-#undef FixedLine
 #undef FixedText
-#undef HBox
 #undef HelpButton
 #undef IgnoreButton
-#undef ImageButton
-#undef InfoBox
 #undef ListBox
 #undef MessBox
 #undef MessageBox
-#undef MetricField
 #undef MetricFormatter
-#undef MoreButton
-#undef MultiLineEdit
-#undef MultiListBox
 #undef NoButton
-#undef NumericField
 #undef NumericFormatter
-#undef OKButton
-#undef Plugin
-#undef ProgressBar
 #undef PushButton
-#undef QueryBox
-#undef RadioButton
-#undef ResetButton
 #undef RetryButton
 #undef SfxTabDialog
 #undef SfxTabPage
@@ -84,8 +63,6 @@
 #undef TabControl
 #undef TabPage
 #undef Table
-#undef VBox
-#undef WarningBox
 #undef YesButton
 
 #undef SvxFontListBox

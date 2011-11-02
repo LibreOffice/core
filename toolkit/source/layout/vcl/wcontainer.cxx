@@ -57,50 +57,6 @@ Container::Container( rtl::OUString const& rName, sal_Int32 nBorder )
                               uno::Any( nBorder ) );
 }
 
-void Container::Add( Window *pChild )
-{
-    if ( pChild )
-    {
-        uno::Reference< awt::XLayoutConstrains > xChild( pChild->GetPeer(), uno::UNO_QUERY );
-        mxContainer->addChild( xChild );
-    }
-}
-
-void Container::Add( Container *pChild )
-{
-    if ( pChild )
-    {
-        uno::Reference< awt::XLayoutConstrains > xChild( pChild->getImpl(), uno::UNO_QUERY );
-        mxContainer->addChild( xChild );
-    }
-}
-
-void Container::Remove( Window *pChild )
-{
-    if ( pChild )
-    {
-        uno::Reference< awt::XLayoutConstrains > xChild( pChild->GetPeer(), uno::UNO_QUERY );
-        mxContainer->removeChild( xChild );
-    }
-}
-
-void Container::Remove( Container *pChild )
-{
-    if ( pChild )
-    {
-        uno::Reference< awt::XLayoutConstrains > xChild( pChild->getImpl(), uno::UNO_QUERY );
-        mxContainer->removeChild( xChild );
-    }
-}
-
-void Container::Clear()
-{
-    css::uno::Sequence< css::uno::Reference < css::awt::XLayoutConstrains > > children;
-    children = mxContainer->getChildren();
-    for (int i = 0; i < children.getLength(); i++)
-        mxContainer->removeChild( children[i] );
-}
-
 void Container::ShowAll( bool bShow )
 {
     struct inner
@@ -131,47 +87,6 @@ void Container::ShowAll( bool bShow )
     inner::setChildrenVisible( mxContainer, bShow );
 }
 
-void Container::Show()
-{
-    ShowAll( true );
-}
-
-void Container::Hide()
-{
-    ShowAll( false );
-}
-
-Table::Table( sal_Int32 nBorder, sal_Int32 nColumns )
-    : Container( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "table" ) ), nBorder )
-{
-    uno::Reference< beans::XPropertySet > xProps( mxContainer, uno::UNO_QUERY_THROW );
-    xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Columns" ) ),
-                              uno::Any( nColumns ) );
-}
-
-void Table::Add( Window *window, bool bXExpand, bool bYExpand,
-                 sal_Int32 nXSpan, sal_Int32 nYSpan )
-{
-    if ( !window )
-        return;
-    WindowImpl &rImpl = window->getImpl();
-    uno::Reference< awt::XLayoutConstrains > xChild( rImpl.mxWindow,
-                                                     uno::UNO_QUERY );
-    mxContainer->addChild( xChild );
-    setProps( xChild, bXExpand, bYExpand, nXSpan, nYSpan );
-}
-
-void Table::Add( Container *pContainer, bool bXExpand, bool bYExpand,
-                 sal_Int32 nXSpan, sal_Int32 nYSpan )
-{
-    if ( !pContainer )
-        return;
-    uno::Reference< awt::XLayoutConstrains > xChild( pContainer->getImpl(),
-                                                     uno::UNO_QUERY );
-    mxContainer->addChild( xChild );
-    setProps( xChild, bXExpand, bYExpand, nXSpan, nYSpan );
-}
-
 void Table::setProps( uno::Reference< awt::XLayoutConstrains > xChild,
                       bool bXExpand, bool bYExpand, sal_Int32 nXSpan, sal_Int32 nYSpan )
 {
@@ -195,29 +110,6 @@ Box::Box( rtl::OUString const& rName, sal_Int32 nBorder, bool bHomogeneous )
                               uno::Any( bHomogeneous ) );
 }
 
-void Box::Add( Window *window, bool bExpand, bool bFill, sal_Int32 nPadding)
-{
-    if ( !window )
-        return;
-    WindowImpl &rImpl = window->getImpl();
-    uno::Reference< awt::XLayoutConstrains > xChild( rImpl.mxWindow,
-                                                     uno::UNO_QUERY );
-
-    mxContainer->addChild( xChild );
-    setProps( xChild, bExpand, bFill, nPadding );
-}
-
-void Box::Add( Container *pContainer, bool bExpand, bool bFill, sal_Int32 nPadding)
-{
-    if ( !pContainer )
-        return;
-
-    uno::Reference< awt::XLayoutConstrains > xChild( pContainer->getImpl(),
-                                                     uno::UNO_QUERY );
-    mxContainer->addChild( xChild );
-    setProps( xChild, bExpand, bFill, nPadding );
-}
-
 void Box::setProps( uno::Reference< awt::XLayoutConstrains > xChild,
                     bool bExpand, bool bFill, sal_Int32 nPadding )
 {
@@ -232,35 +124,8 @@ void Box::setProps( uno::Reference< awt::XLayoutConstrains > xChild,
                               uno::Any( nPadding ) );
 }
 
-Table::Table( Context const* context, char const* pId )
-    : Container( context, pId )
-{
-}
-
 Box::Box( Context const* context, char const* pId )
     : Container( context, pId )
-{
-}
-
-HBox::HBox( sal_Int32 nBorder, bool bHomogeneous )
-    : Box( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hbox" ) ),
-           nBorder, bHomogeneous )
-{
-}
-
-HBox::HBox( Context const* context, char const* pId )
-    : Box( context, pId )
-{
-}
-
-VBox::VBox( sal_Int32 nBorder, bool bHomogeneous )
-    : Box( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vbox" ) ),
-           nBorder, bHomogeneous )
-{
-}
-
-VBox::VBox( Context const* context, char const* pId )
-    : Box( context, pId )
 {
 }
 
