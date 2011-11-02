@@ -110,6 +110,8 @@ protected:
 
     codemaker::cpp::IdentifierTranslationMode isGlobal() const;
 
+    virtual void dumpDeclaration(FileStream & out) throw (CannotDumpException);
+
     virtual void addSpecialDependencies() {}
 
     virtual bool dumpFiles(CppuOptions * options, rtl::OString const & outPath);
@@ -139,6 +141,9 @@ protected:
     void dumpInitializer(
         FileStream & out, bool parameterized, rtl::OUString const & type) const;
 
+    void dumpHFileContent(
+        FileStream & out, codemaker::cppumaker::Includes & includes);
+
 protected:
     sal_uInt32          m_inheritedMemberCount;
 
@@ -165,7 +170,7 @@ public:
 
     virtual ~InterfaceType();
 
-    sal_Bool    dumpDeclaration(FileStream& o) throw( CannotDumpException );
+    virtual void dumpDeclaration(FileStream& o) throw( CannotDumpException );
     sal_Bool    dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
     sal_Bool    dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
 
@@ -227,7 +232,7 @@ public:
 
     virtual sal_Bool    dump(CppuOptions* pOptions) throw( CannotDumpException );
 
-    sal_Bool            dumpDeclaration(FileStream& o) throw( CannotDumpException );
+    virtual void dumpDeclaration(FileStream& o) throw( CannotDumpException );
     sal_Bool            dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
     sal_Bool            dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
     sal_Bool            hasConstants();
@@ -255,7 +260,7 @@ public:
 
     virtual ~StructureType();
 
-    sal_Bool    dumpDeclaration(FileStream& o) throw( CannotDumpException );
+    virtual void dumpDeclaration(FileStream& o) throw( CannotDumpException );
     sal_Bool    dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
     sal_Bool    dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
 
@@ -293,7 +298,7 @@ public:
 
     virtual ~ExceptionType();
 
-    sal_Bool    dumpDeclaration(FileStream& o) throw( CannotDumpException );
+    virtual void dumpDeclaration(FileStream& o) throw( CannotDumpException );
     sal_Bool    dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
     sal_Bool    dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
 
@@ -309,7 +314,7 @@ public:
 
     virtual ~EnumType();
 
-    sal_Bool    dumpDeclaration(FileStream& o) throw( CannotDumpException );
+    virtual void dumpDeclaration(FileStream& o) throw( CannotDumpException );
     sal_Bool    dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
     sal_Bool    dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
 
@@ -326,7 +331,7 @@ public:
 
     virtual ~TypeDefType();
 
-    sal_Bool    dumpDeclaration(FileStream& o) throw( CannotDumpException );
+    virtual void dumpDeclaration(FileStream& o) throw( CannotDumpException );
     sal_Bool    dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
     sal_Bool    dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
 };

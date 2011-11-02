@@ -125,6 +125,10 @@ void CppuType::addGetCppuTypeIncludes(codemaker::cppumaker::Includes & includes)
     }
 }
 
+void CppuType::dumpDeclaration(FileStream &) throw (CannotDumpException) {
+    OSL_ASSERT(false);
+}
+
 bool CppuType::dumpFiles(CppuOptions * options, rtl::OString const & outPath) {
     return dumpFile(options, ".hdl", m_typeName, outPath)
         && dumpFile(options, ".hpp", m_typeName, outPath);
@@ -431,6 +435,42 @@ void CppuType::dumpInitializer(
         }
     }
     out << ")";
+}
+
+void CppuType::dumpHFileContent(
+    FileStream & out, codemaker::cppumaker::Includes & includes)
+{
+    addDefaultHIncludes(includes);
+    dumpHeaderDefine(out, "HDL");
+    out << "\n";
+    includes.dump(out, 0);
+    out << ("\nnamespace com { namespace sun { namespace star { namespace uno"
+            " { class Type; } } } }\n\n");
+    if (codemaker::cppumaker::dumpNamespaceOpen(out, m_typeName, false)) {
+        out << "\n";
+    }
+    dumpDeclaration(out);
+    if (!(m_typeName.equalsL(
+              RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/XInterface")) ||
+          m_typeName.equalsL(
+              RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Exception")) ||
+          isPolymorphic()))
+    {
+        out << "\n" << indent()
+            << ("inline ::com::sun::star::uno::Type const &"
+                " cppu_detail_getUnoType(");
+        dumpType(out, m_typeName, false, false, true);
+        out << " const *);\n";
+    }
+    if (codemaker::cppumaker::dumpNamespaceClose(out, m_typeName, false)) {
+        out << "\n";
+    }
+    out << "\n";
+    dumpTemplateHead(out);
+    out << "inline ::com::sun::star::uno::Type const & SAL_CALL getCppuType(";
+    dumpType(out, m_typeName, true);
+    dumpTemplateParameters(out);
+    out << " *) SAL_THROW(());\n\n#endif\n";
 }
 
 void CppuType::dumpGetCppuType(FileStream & out) {
@@ -1268,34 +1308,14 @@ sal_Bool InterfaceType::dumpHFile(
     FileStream& o, codemaker::cppumaker::Includes & includes)
     throw( CannotDumpException )
 {
-    OString headerDefine(dumpHeaderDefine(o, "HDL"));
-    o << "\n";
-
-    addDefaultHIncludes(includes);
     if (m_reader.getMethodCount() != 0) {
         includes.add("com/sun/star/uno/RuntimeException");
     }
-    includes.dump(o, 0);
-    o << ("\nnamespace com { namespace sun { namespace star { namespace uno {\n"
-          "class Type;\n} } } }\n\n");
-
-    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false)) {
-        o << "\n";
-    }
-    dumpDeclaration(o);
-    if (codemaker::cppumaker::dumpNamespaceClose(o, m_typeName, false)) {
-        o << "\n";
-    }
-
-    o << "\ninline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
-    dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* ) SAL_THROW( () );\n\n";
-
-    o << "#endif // "<< headerDefine << "\n";
+    dumpHFileContent(o, includes);
     return sal_True;
 }
 
-sal_Bool InterfaceType::dumpDeclaration(FileStream& o)
+void InterfaceType::dumpDeclaration(FileStream& o)
     throw( CannotDumpException )
 {
 //     rtl::OString cppName(translateUnoToCppIdentifier(
@@ -1323,8 +1343,6 @@ sal_Bool InterfaceType::dumpDeclaration(FileStream& o)
 
     dec();
     o << "};\n\n";
-
-    return sal_True;
 }
 
 sal_Bool InterfaceType::dumpHxxFile(
@@ -2283,7 +2301,7 @@ sal_Bool ConstantsType::dumpHFile(
     return sal_True;
 }
 
-sal_Bool ConstantsType::dumpDeclaration(FileStream& o)
+void ConstantsType::dumpDeclaration(FileStream& o)
     throw( CannotDumpException )
 {
     sal_uInt16      fieldCount = m_reader.getFieldCount();
@@ -2302,8 +2320,6 @@ sal_Bool ConstantsType::dumpDeclaration(FileStream& o)
         dumpConstantValue(o, i);
         o << ";\n";
     }
-
-    return sal_True;
 }
 
 sal_Bool ConstantsType::hasConstants()
@@ -2395,38 +2411,11 @@ sal_Bool StructureType::dumpHFile(
     FileStream& o, codemaker::cppumaker::Includes & includes)
     throw( CannotDumpException )
 {
-    OString headerDefine(dumpHeaderDefine(o, "HDL"));
-    o << "\n";
-
-    addDefaultHIncludes(includes);
-    includes.dump(o, 0);
-    o << "\n";
-
-    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false)) {
-        o << "\n";
-    }
-
-    dumpDeclaration(o);
-
-    if (codemaker::cppumaker::dumpNamespaceClose(o, m_typeName, false)) {
-        o << "\n";
-    }
-
-    o << "\nnamespace com { namespace sun { namespace star { namespace uno {\n"
-      << "class Type;\n} } } }\n\n";
-
-    dumpTemplateHead(o);
-    o << "inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
-    dumpType(o, m_typeName, sal_True, sal_False);
-    dumpTemplateParameters(o);
-    o << "* );\n\n";
-
-    o << "#endif // "<< headerDefine << "\n";
-
+    dumpHFileContent(o, includes);
     return sal_True;
 }
 
-sal_Bool StructureType::dumpDeclaration(FileStream& o)
+void StructureType::dumpDeclaration(FileStream& o)
     throw( CannotDumpException )
 {
     o << "\n#ifdef SAL_W32\n"
@@ -2508,8 +2497,6 @@ sal_Bool StructureType::dumpDeclaration(FileStream& o)
     o << "#ifdef SAL_W32\n"
       << "#   pragma pack(pop)\n"
       << "#endif\n\n";
-
-    return sal_True;
 }
 
 sal_Bool StructureType::dumpHxxFile(
@@ -3177,36 +3164,11 @@ sal_Bool ExceptionType::dumpHFile(
     FileStream& o, codemaker::cppumaker::Includes & includes)
     throw( CannotDumpException )
 {
-    OString headerDefine(dumpHeaderDefine(o, "HDL"));
-    o << "\n";
-
-    addDefaultHIncludes(includes);
-    includes.dump(o, 0);
-    o << "\n";
-
-    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false)) {
-        o << "\n";
-    }
-
-    dumpDeclaration(o);
-
-    if (codemaker::cppumaker::dumpNamespaceClose(o, m_typeName, false)) {
-        o << "\n";
-    }
-
-    o << "\nnamespace com { namespace sun { namespace star { namespace uno {\n"
-      << "class Type;\n} } } }\n\n";
-
-    o << "inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
-    dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* ) SAL_THROW( () );\n\n";
-
-    o << "#endif // "<< headerDefine << "\n";
-
+    dumpHFileContent(o, includes);
     return sal_True;
 }
 
-sal_Bool ExceptionType::dumpDeclaration(FileStream& o)
+void ExceptionType::dumpDeclaration(FileStream& o)
     throw( CannotDumpException )
 {
     o << "\nclass CPPU_GCC_DLLPUBLIC_EXPORT " << m_name;
@@ -3291,8 +3253,6 @@ sal_Bool ExceptionType::dumpDeclaration(FileStream& o)
 
     dec();
     o << "};\n\n";
-
-    return sal_True;
 }
 
 sal_Bool ExceptionType::dumpHxxFile(
@@ -3558,36 +3518,11 @@ sal_Bool EnumType::dumpHFile(
     FileStream& o, codemaker::cppumaker::Includes & includes)
     throw( CannotDumpException )
 {
-    OString headerDefine(dumpHeaderDefine(o, "HDL"));
-    o << "\n";
-
-    addDefaultHIncludes(includes);
-    includes.dump(o, 0);
-    o << "\n";
-
-    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false)) {
-        o << "\n";
-    }
-
-    dumpDeclaration(o);
-
-    if (codemaker::cppumaker::dumpNamespaceClose(o, m_typeName, false)) {
-        o << "\n";
-    }
-
-    o << "\nnamespace com { namespace sun { namespace star { namespace uno {\n"
-      << "class Type;\n} } } }\n\n";
-
-    o << "inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
-    dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* ) SAL_THROW( () );\n\n";
-
-    o << "#endif // "<< headerDefine << "\n";
-
+    dumpHFileContent(o, includes);
     return sal_True;
 }
 
-sal_Bool EnumType::dumpDeclaration(FileStream& o)
+void EnumType::dumpDeclaration(FileStream& o)
     throw( CannotDumpException )
 {
     o << "\nenum " << m_name << "\n{\n";
@@ -3621,8 +3556,6 @@ sal_Bool EnumType::dumpDeclaration(FileStream& o)
 
     dec();
     o << "};\n\n";
-
-    return sal_True;
 }
 
 sal_Bool EnumType::dumpHxxFile(
@@ -3800,7 +3733,7 @@ sal_Bool TypeDefType::dumpHFile(
     return sal_True;
 }
 
-sal_Bool TypeDefType::dumpDeclaration(FileStream& o)
+void TypeDefType::dumpDeclaration(FileStream& o)
     throw( CannotDumpException )
 {
     o << "\ntypedef ";
@@ -3809,8 +3742,6 @@ sal_Bool TypeDefType::dumpDeclaration(FileStream& o)
         rtl::OUStringToOString(
             m_reader.getSuperTypeName(0), RTL_TEXTENCODING_UTF8));
     o << " " << m_name << ";\n\n";
-
-    return sal_True;
 }
 
 sal_Bool TypeDefType::dumpHxxFile(
