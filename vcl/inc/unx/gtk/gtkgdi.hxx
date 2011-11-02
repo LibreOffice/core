@@ -72,10 +72,21 @@ private:
     static GtkStyleContext *mpToolbarStyle;
     static GtkStyleContext *mpToolButtonStyle;
     static GtkStyleContext *mpCheckButtonStyle;
-    void renderAreaToPix( cairo_t* cr, cairo_rectangle_t* rect );
-    void drawStyleContext( GtkStyleContext* style, GtkStateFlags flags,
-            const Rectangle& rControlRegion, bool render_background = true );
+    static GtkStyleContext *mpMenuBarStyle;
+    static GtkStyleContext *mpMenuBarItemStyle;
+    static GtkStyleContext *mpMenuStyle;
+    static GtkStyleContext *mpMenuItemStyle;
+    static GtkStyleContext *mpTooltipStyle;
+
+    void renderAreaToPix( cairo_t* cr, cairo_rectangle_int_t *region );
     void getStyleContext( GtkStyleContext** style, GtkWidget* widget );
+    Rectangle NWGetScrollButtonRect( ControlPart nPart, Rectangle aAreaRect );
+    void PaintScrollbar(GtkStyleContext *context,
+                        cairo_t *cr,
+                        const Rectangle& rControlRectangle,
+                        ControlPart nPart,
+                        const ImplControlValue& aValue );
+
     static bool style_loaded;
 };
 
