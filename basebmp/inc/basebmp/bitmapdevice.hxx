@@ -55,15 +55,18 @@ namespace basebmp
 
 // Temporary. Use like the tools color object
 class Color;
-typedef boost::shared_ptr< class BitmapDevice >         BitmapDeviceSharedPtr;
-typedef boost::shared_array< sal_uInt8 >                RawMemorySharedArray;
-typedef boost::shared_ptr< const std::vector<Color> >   PaletteMemorySharedVector;
+typedef boost::shared_ptr< class BitmapDevice >                BitmapDeviceSharedPtr;
+typedef boost::shared_ptr< class IBitmapDeviceDamageTracker >  IBitmapDeviceDamageTrackerSharedPtr;
+typedef boost::shared_array< sal_uInt8 >                       RawMemorySharedArray;
+typedef boost::shared_ptr< const std::vector<Color> >          PaletteMemorySharedVector;
 
 struct ImplBitmapDevice;
 
-class BitmapDeviceDamageTracker {
-  public:
-    virtual void damaged (const basegfx::B2IRange& rDamageRect) = 0;
+/// Interface for getting damage tracking events
+struct IBitmapDeviceDamageTracker
+{
+    /// gets called when said region is clobbered
+    virtual void damaged(const basegfx::B2IRange& rDamageRect) const = 0;
 };
 
 /** Definition of BitmapDevice interface
@@ -114,7 +117,17 @@ public:
      */
     RawMemorySharedArray getBuffer() const;
 
-    BitmapDeviceDamageTracker *getDamageTracker() const;
+    /// Query current damage tracking object (if any)
+    IBitmapDeviceDamageTrackerSharedPtr getDamageTracker() const;
+
+    /** Set new damage tracking object
+
+        @param rDamage
+        Object implementing the IBitmapDeviceDamageTracker interface -
+        everytime some area of the surface gets clobbered, that object
+        gets notified.
+     */
+    void  setDamageTracker( const IBitmapDeviceDamageTrackerSharedPtr& rDamage );
 
     /** Get pointer to palette
 
@@ -544,13 +557,12 @@ public:
                            const BitmapDeviceSharedPtr& rClip );
 
 protected:
-    BitmapDevice( const basegfx::B2IRange&         rBounds,
-                  sal_Int32                        nScanlineFormat,
-                  sal_Int32                        nScanlineStride,
-                  sal_uInt8*                       pFirstScanline,
-                  const RawMemorySharedArray&      rMem,
-                  const PaletteMemorySharedVector& rPalette,
-                  BitmapDeviceDamageTracker*       pDamage = NULL );
+    BitmapDevice( const basegfx::B2IRange&                   rBounds,
+                  sal_Int32                                  nScanlineFormat,
+                  sal_Int32                                  nScanlineStride,
+                  sal_uInt8*                                 pFirstScanline,
+                  const RawMemorySharedArray&                rMem,
+                  const PaletteMemorySharedVector&           rPalette );
 
     virtual ~BitmapDevice();
 
@@ -641,6 +653,9 @@ private:
                                      DrawMode                     drawMode,
                                      const BitmapDeviceSharedPtr& rClip ) = 0;
 
+    virtual IBitmapDeviceDamageTrackerSharedPtr getDamageTracker_i() const = 0;
+    virtual void setDamageTracker_i( const IBitmapDeviceDamageTrackerSharedPtr& rDamage ) = 0;
+
     BitmapDeviceSharedPtr getGenericRenderer() const;
 
     boost::scoped_ptr< ImplBitmapDevice > mpImpl;
@@ -650,8 +665,7 @@ private:
  */
 BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector& rSize,
                                           bool                      bTopDown,
-                                          sal_Int32                 nScanlineFormat,
-                                          BitmapDeviceDamageTracker* pDamage = NULL );
+                                          sal_Int32                 nScanlineFormat );
 
 /** Factory method to create a BitmapDevice for given scanline format
     with the given palette

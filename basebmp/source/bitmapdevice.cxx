@@ -273,7 +273,7 @@ namespace
 
         dest_iterator_type                      maBegin;
         typename accessor_traits::color_lookup  maColorLookup;
-        BitmapDeviceDamageTracker              *mpDamage;
+        IBitmapDeviceDamageTrackerSharedPtr     mpDamage;
         to_uint32_functor                       maToUInt32Converter;
         dest_accessor_type                      maAccessor;
         colorblend_accessor_type                maColorBlendAccessor;
@@ -292,22 +292,21 @@ namespace
 
         // -------------------------------------------------------
 
-        BitmapRenderer( const basegfx::B2IRange&         rBounds,
-                        sal_Int32                        nScanlineFormat,
-                        sal_Int32                        nScanlineStride,
-                        sal_uInt8*                       pFirstScanline,
-                        dest_iterator_type               begin,
-                        raw_accessor_type                rawAccessor,
-                        dest_accessor_type               accessor,
-                        const RawMemorySharedArray&      rMem,
-                        const PaletteMemorySharedVector& rPalette,
-                        BitmapDeviceDamageTracker*       pDamage ) :
+        BitmapRenderer( const basegfx::B2IRange&                   rBounds,
+                        sal_Int32                                  nScanlineFormat,
+                        sal_Int32                                  nScanlineStride,
+                        sal_uInt8*                                 pFirstScanline,
+                        dest_iterator_type                         begin,
+                        raw_accessor_type                          rawAccessor,
+                        dest_accessor_type                         accessor,
+                        const RawMemorySharedArray&                rMem,
+                        const PaletteMemorySharedVector&           rPalette,
+                        const IBitmapDeviceDamageTrackerSharedPtr& rDamage ) :
             BitmapDevice( rBounds, nScanlineFormat,
-                          nScanlineStride, pFirstScanline, rMem, rPalette,
-                          pDamage ),
+                          nScanlineStride, pFirstScanline, rMem, rPalette ),
             maBegin( begin ),
             maColorLookup(),
-            mpDamage( pDamage ),
+            mpDamage(rDamage),
             maToUInt32Converter(),
             maAccessor( accessor ),
             maColorBlendAccessor( accessor ),
@@ -477,7 +476,7 @@ namespace
                                col,
                                begin,
                                rawAcc );
-            // FIXME: perhaps this needs pushing up the stack a bit
+            // TODO(P2): perhaps this needs pushing up the stack a bit
             // to make more complex polygons more efficient ...
             damaged( basegfx::B2IRange( rPt1, rPt2 ) );
         }
@@ -1023,6 +1022,15 @@ namespace
             }
             damaged( rDstRect );
         }
+
+        IBitmapDeviceDamageTrackerSharedPtr getDamageTracker_i() const
+        {
+            return mpDamage;
+        }
+        void setDamageTracker_i( const IBitmapDeviceDamageTrackerSharedPtr& rDamage )
+        {
+            mpDamage = rDamage;
+        }
     };
 } // namespace
 
@@ -1033,8 +1041,6 @@ struct ImplBitmapDevice
         Always points to the start of the mem
      */
     RawMemorySharedArray      mpMem;
-
-    BitmapDeviceDamageTracker *mpDamage;
 
     /// Palette memory plus deleter (might be NULL)
     PaletteMemorySharedVector mpPalette;
@@ -1092,12 +1098,10 @@ BitmapDevice::BitmapDevice( const basegfx::B2IRange&         rBounds,
                             sal_Int32                        nScanlineStride,
                             sal_uInt8*                       pFirstScanline,
                             const RawMemorySharedArray&      rMem,
-                            const PaletteMemorySharedVector& rPalette,
-                            BitmapDeviceDamageTracker*       pDamage ) :
+                            const PaletteMemorySharedVector& rPalette ) :
     mpImpl( new ImplBitmapDevice )
 {
     mpImpl->mpMem = rMem;
-    mpImpl->mpDamage = pDamage;
     mpImpl->mpPalette = rPalette;
     mpImpl->maBounds = rBounds;
     mpImpl->maLineClipRect = basegfx::B2IRange( rBounds.getMinX(),
@@ -1142,14 +1146,19 @@ RawMemorySharedArray BitmapDevice::getBuffer() const
     return mpImpl->mpMem;
 }
 
+IBitmapDeviceDamageTrackerSharedPtr BitmapDevice::getDamageTracker() const
+{
+    return getDamageTracker_i();
+}
+
+void BitmapDevice::setDamageTracker( const IBitmapDeviceDamageTrackerSharedPtr& rDamage )
+{
+    setDamageTracker_i(rDamage);
+}
+
 PaletteMemorySharedVector BitmapDevice::getPalette() const
 {
     return mpImpl->mpPalette;
-}
-
-BitmapDeviceDamageTracker *BitmapDevice::getDamageTracker() const
-{
-    return mpImpl->mpDamage;
 }
 
 sal_Int32 BitmapDevice::getPaletteEntryCount() const
@@ -1703,7 +1712,7 @@ BitmapDeviceSharedPtr createRenderer(
           typename FormatTraits::raw_accessor_type>::type const& rAccessor,
     boost::shared_array< sal_uInt8 >                             pMem,
     const PaletteMemorySharedVector&                             pPal,
-    BitmapDeviceDamageTracker*                                   pDamage )
+    const IBitmapDeviceDamageTrackerSharedPtr&                   pDamage )
 #else
 
 template< class FormatTraits, class MaskTraits, class Accessor >
@@ -1716,7 +1725,7 @@ BitmapDeviceSharedPtr createRenderer(
     Accessor const&                                              rAccessor,
     boost::shared_array< sal_uInt8 >                             pMem,
     const PaletteMemorySharedVector&                             pPal,
-    BitmapDeviceDamageTracker*                                   pDamage )
+    const IBitmapDeviceDamageTrackerSharedPtr&                   pDamage )
 
 #endif
 {
@@ -1765,13 +1774,13 @@ PaletteMemorySharedVector createStandardPalette(
 
 template< class FormatTraits, class MaskTraits >
 BitmapDeviceSharedPtr createRenderer(
-    const basegfx::B2IRange&                rBounds,
-    sal_Int32                               nScanlineFormat,
-    sal_Int32                               nScanlineStride,
-    sal_uInt8*                              pFirstScanline,
-    boost::shared_array< sal_uInt8 >        pMem,
-    const PaletteMemorySharedVector&        pPal,
-    BitmapDeviceDamageTracker*              pDamage )
+    const basegfx::B2IRange&                   rBounds,
+    sal_Int32                                  nScanlineFormat,
+    sal_Int32                                  nScanlineStride,
+    sal_uInt8*                                 pFirstScanline,
+    boost::shared_array< sal_uInt8 >           pMem,
+    const PaletteMemorySharedVector&           pPal,
+    const IBitmapDeviceDamageTrackerSharedPtr& pDamage )
 {
     return createRenderer<FormatTraits,
                           MaskTraits>(rBounds,
@@ -1789,14 +1798,14 @@ BitmapDeviceSharedPtr createRenderer(
 
 template< class FormatTraits, class MaskTraits >
 BitmapDeviceSharedPtr createRenderer(
-    const basegfx::B2IRange&                rBounds,
-    sal_Int32                               nScanlineFormat,
-    sal_Int32                               nScanlineStride,
-    sal_uInt8*                              pFirstScanline,
-    boost::shared_array< sal_uInt8 >        pMem,
-    PaletteMemorySharedVector               pPal,
-    int                                     nBitsPerPixel,
-    BitmapDeviceDamageTracker*              pDamage )
+    const basegfx::B2IRange&                   rBounds,
+    sal_Int32                                  nScanlineFormat,
+    sal_Int32                                  nScanlineStride,
+    sal_uInt8*                                 pFirstScanline,
+    boost::shared_array< sal_uInt8 >           pMem,
+    PaletteMemorySharedVector                  pPal,
+    int                                        nBitsPerPixel,
+    const IBitmapDeviceDamageTrackerSharedPtr& pDamage )
 {
     pPal = createStandardPalette(pPal,
                                  1UL << nBitsPerPixel);
@@ -1846,13 +1855,13 @@ inline sal_uInt32 nextPow2( sal_uInt32 x )
 
 namespace
 {
-BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&        rSize,
-                                              bool                             bTopDown,
-                                              sal_Int32                        nScanlineFormat,
-                                              boost::shared_array< sal_uInt8 > pMem,
-                                              PaletteMemorySharedVector        pPal,
-                                              const basegfx::B2IRange*         pSubset,
-                                              BitmapDeviceDamageTracker*       pDamage )
+BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&                  rSize,
+                                              bool                                       bTopDown,
+                                              sal_Int32                                  nScanlineFormat,
+                                              boost::shared_array< sal_uInt8 >           pMem,
+                                              PaletteMemorySharedVector                  pPal,
+                                              const basegfx::B2IRange*                   pSubset,
+                                              const IBitmapDeviceDamageTrackerSharedPtr& rDamage )
 {
     if( nScanlineFormat <= Format::NONE ||
         nScanlineFormat >  Format::MAX )
@@ -1920,24 +1929,24 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&        r
         case Format::ONE_BIT_MSB_GREY:
             return createRenderer<PixelFormatTraits_GREY1_MSB,StdMasks>(
                 aBounds, nScanlineFormat, nScanlineStride,
-                pFirstScanline, pMem, pPal, pDamage );
+                pFirstScanline, pMem, pPal, rDamage );
 
         case Format::ONE_BIT_LSB_GREY:
             return createRenderer<PixelFormatTraits_GREY1_LSB,StdMasks>(
                 aBounds, nScanlineFormat, nScanlineStride,
-                pFirstScanline, pMem, pPal, pDamage );
+                pFirstScanline, pMem, pPal, rDamage );
 
         case Format::ONE_BIT_MSB_PAL:
             return createRenderer<PixelFormatTraits_PAL1_MSB,StdMasks>(
                 aBounds, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal,
-                bitsPerPixel[nScanlineFormat], pDamage );
+                bitsPerPixel[nScanlineFormat], rDamage );
 
         case Format::ONE_BIT_LSB_PAL:
             return createRenderer<PixelFormatTraits_PAL1_LSB,StdMasks>(
                 aBounds, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal,
-                bitsPerPixel[nScanlineFormat], pDamage );
+                bitsPerPixel[nScanlineFormat], rDamage );
 
 
         // ----------------------------------------------------------------------
@@ -1946,24 +1955,24 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&        r
         case Format::FOUR_BIT_MSB_GREY:
             return createRenderer<PixelFormatTraits_GREY4_MSB,StdMasks>(
                 aBounds, nScanlineFormat, nScanlineStride,
-                pFirstScanline, pMem, pPal, pDamage );
+                pFirstScanline, pMem, pPal, rDamage );
 
         case Format::FOUR_BIT_LSB_GREY:
             return createRenderer<PixelFormatTraits_GREY4_LSB,StdMasks>(
                 aBounds, nScanlineFormat, nScanlineStride,
-                pFirstScanline, pMem, pPal, pDamage );
+                pFirstScanline, pMem, pPal, rDamage );
 
         case Format::FOUR_BIT_MSB_PAL:
             return createRenderer<PixelFormatTraits_PAL4_MSB,StdMasks>(
                 aBounds, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal,
-                bitsPerPixel[nScanlineFormat], pDamage );
+                bitsPerPixel[nScanlineFormat], rDamage );
 
         case Format::FOUR_BIT_LSB_PAL:
             return createRenderer<PixelFormatTraits_PAL4_LSB,StdMasks>(
                 aBounds, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal,
-                bitsPerPixel[nScanlineFormat], pDamage );
+                bitsPerPixel[nScanlineFormat], rDamage );
 
 
         // ----------------------------------------------------------------------
@@ -1972,13 +1981,13 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&        r
         case Format::EIGHT_BIT_GREY:
             return createRenderer<PixelFormatTraits_GREY8,StdMasks>(
                 aBounds, nScanlineFormat, nScanlineStride,
-                pFirstScanline, pMem, pPal, pDamage );
+                pFirstScanline, pMem, pPal, rDamage );
 
         case Format::EIGHT_BIT_PAL:
             return createRenderer<PixelFormatTraits_PAL8,StdMasks>(
                 aBounds, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal,
-                bitsPerPixel[nScanlineFormat], pDamage );
+                bitsPerPixel[nScanlineFormat], rDamage );
 
 
         // ----------------------------------------------------------------------
@@ -1987,12 +1996,12 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&        r
         case Format::SIXTEEN_BIT_LSB_TC_MASK:
             return createRenderer<PixelFormatTraits_RGB16_565_LSB,StdMasks>(
                 aBounds, nScanlineFormat, nScanlineStride,
-                pFirstScanline, pMem, pPal, pDamage );
+                pFirstScanline, pMem, pPal, rDamage );
 
         case Format::SIXTEEN_BIT_MSB_TC_MASK:
             return createRenderer<PixelFormatTraits_RGB16_565_MSB,StdMasks>(
                 aBounds, nScanlineFormat, nScanlineStride,
-                pFirstScanline, pMem, pPal, pDamage );
+                pFirstScanline, pMem, pPal, rDamage );
 
 
         // ----------------------------------------------------------------------
@@ -2000,7 +2009,7 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&        r
         case Format::TWENTYFOUR_BIT_TC_MASK:
             return createRenderer<PixelFormatTraits_BGR24,StdMasks>(
                 aBounds, nScanlineFormat, nScanlineStride,
-                pFirstScanline, pMem, pPal, pDamage );
+                pFirstScanline, pMem, pPal, rDamage );
 
 
         // ----------------------------------------------------------------------
@@ -2009,12 +2018,12 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&        r
         case Format::THIRTYTWO_BIT_TC_MASK:
             return createRenderer<PixelFormatTraits_RGB32_888,StdMasks>(
                 aBounds, nScanlineFormat, nScanlineStride,
-                pFirstScanline, pMem, pPal, pDamage );
+                pFirstScanline, pMem, pPal, rDamage );
 
         case Format::THIRTYTWO_BIT_TC_MASK_ARGB:
             return createRenderer<PixelFormatTraits_BGR32_888,StdMasks>(
                 aBounds, nScanlineFormat, nScanlineStride,
-                pFirstScanline, pMem, pPal, pDamage );
+                pFirstScanline, pMem, pPal, rDamage );
     }
 
     // TODO(F3): other formats not yet implemented
@@ -2025,8 +2034,7 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&        r
 
 BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector& rSize,
                                           bool                      bTopDown,
-                                          sal_Int32                 nScanlineFormat,
-                                          BitmapDeviceDamageTracker* pDamage )
+                                          sal_Int32                 nScanlineFormat )
 {
     return createBitmapDeviceImpl( rSize,
                                    bTopDown,
@@ -2034,7 +2042,7 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector& rSize,
                                    boost::shared_array< sal_uInt8 >(),
                                    PaletteMemorySharedVector(),
                                    NULL,
-                                   pDamage );
+                                   IBitmapDeviceDamageTrackerSharedPtr() );
 }
 
 BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize,
@@ -2048,7 +2056,7 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize
                                    boost::shared_array< sal_uInt8 >(),
                                    rPalette,
                                    NULL,
-                                   NULL );
+                                   IBitmapDeviceDamageTrackerSharedPtr() );
 }
 
 BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize,
@@ -2063,7 +2071,7 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize
                                    rMem,
                                    rPalette,
                                    NULL,
-                                   NULL );
+                                   IBitmapDeviceDamageTrackerSharedPtr() );
 }
 
 BitmapDeviceSharedPtr subsetBitmapDevice( const BitmapDeviceSharedPtr&     rProto,

@@ -346,6 +346,19 @@ GetAlternateKeyCode( const sal_uInt16 nKeyCode )
 #if GTK_CHECK_VERSION(3,0,0)
 static int debugQueuePureRedraw = 0;
 static int debugRedboxRedraws = 0;
+
+/// Decouple SalFrame lifetime from damagetracker lifetime
+struct DamageTracker : public basebmp::IBitmapDeviceDamageTracker
+{
+    DamageTracker(GtkSalFrame& rFrame) : m_rFrame(rFrame)
+    {}
+    virtual void damaged(const basegfx::B2IRange& rDamageRect) const
+    {
+        m_rFrame.damaged(rDamageRect);
+    }
+
+    GtkSalFrame& m_rFrame;
+};
 #endif
 
 void GtkSalFrame::doKeyCallback( guint state,
@@ -1567,9 +1580,9 @@ void GtkSalFrame::AllocateFrame()
         if( aFrameSize.getY() == 0 )
             aFrameSize.setY( 1 );
         m_aFrame = basebmp::createBitmapDevice( aFrameSize, true,
-                                                basebmp::Format::TWENTYFOUR_BIT_TC_MASK,
-                                                this );
-//                                              basebmp::Format::THIRTYTWO_BIT_TC_MASK_ARGB );
+                                                basebmp::Format::TWENTYFOUR_BIT_TC_MASK );
+        m_aFrame->setDamageTracker(
+            basebmp::IBitmapDeviceDamageTrackerSharedPtr(new DamageTracker(*this)) );
         fprintf( stderr, "allocated m_aFrame size of %dx%d \n",
                  (int)maGeometry.nWidth, (int)maGeometry.nHeight );
 
