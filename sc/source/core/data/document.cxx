@@ -408,7 +408,6 @@ void ScDocument::AppendTabOnLoad(const rtl::OUString& rName)
     if (ValidTab(nTabCount) && ValidNewTabName(rName))
     {
         maTabs.push_back( new ScTable(this, nTabCount, rName) );
-        maTabs[nTabCount]->SetCodeName( rName );
     }
 }
 
@@ -425,7 +424,6 @@ sal_Bool ScDocument::InsertTab( SCTAB nPos, const String& rName,
         if (nPos == SC_TAB_APPEND || nPos >= nTabCount)
         {
             maTabs.push_back( new ScTable(this, nTabCount, rName) );
-            maTabs[nTabCount]->SetCodeName( rName );
             if ( bExternalDocument )
                 maTabs[nTabCount]->SetVisible( false );
         }
@@ -461,7 +459,6 @@ sal_Bool ScDocument::InsertTab( SCTAB nPos, const String& rName,
                 }
 
                 maTabs[nPos] = new ScTable(this, nPos, rName);
-                maTabs[nPos]->SetCodeName( rName );
 
                 // UpdateBroadcastAreas must be called between UpdateInsertTab,
                 // which ends listening, and StartAllListeners, to not modify
@@ -514,7 +511,6 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<rtl::OUString>& rName
             for ( SCTAB i = 0; i < nNewSheets; ++i )
             {
                 maTabs.push_back( new ScTable(this, nTabCount + i, rNames.at(i)) );
-                maTabs[nTabCount+i]->SetCodeName( rNames.at(i) );
                 if ( bExternalDocument )
                     maTabs[nTabCount+i]->SetVisible( false );
             }
@@ -548,7 +544,6 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<rtl::OUString>& rName
                 for (SCTAB i = 0; i < nNewSheets; ++i)
                 {
                     maTabs[nPos + i] = new ScTable(this, nPos + i, rNames.at(i));
-                    maTabs[nPos + i]->SetCodeName( rNames.at(i) );
                 }
 
                 // UpdateBroadcastAreas must be called between UpdateInsertTab,
