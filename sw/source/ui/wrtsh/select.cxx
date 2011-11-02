@@ -50,6 +50,7 @@
 #include <swevent.hxx>
 #include <swdtflvr.hxx>
 #include <crsskip.hxx>
+#include <wordcountdialog.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <pam.hxx>
@@ -70,6 +71,9 @@ void SwWrtShell::Invalidate()
     // to avoid making the slot volatile, invalidate it everytime if something could have been changed
     // this is still much cheaper than asking for the state every 200 ms (and avoid background processing)
     GetView().GetViewFrame()->GetBindings().Invalidate( FN_STAT_SELMODE );
+    SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)GetView().GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId());
+    if (pWrdCnt)
+        pWrdCnt->UpdateCounts();
 }
 
 sal_Bool SwWrtShell::SelNearestWrd()
@@ -419,14 +423,19 @@ void SwWrtShell::SttSelect()
 
 void SwWrtShell::EndSelect()
 {
-    if(!bInSelect || bExtMode)
-        return;
-    bInSelect = sal_False;
-    (this->*fnLeaveSelect)(0,sal_False);
-    if(!bAddMode) {
-        fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
-        fnKillSel = &SwWrtShell::ResetSelect;
+    if(bInSelect && !bExtMode)
+    {
+        bInSelect = sal_False;
+        (this->*fnLeaveSelect)(0,sal_False);
+        if(!bAddMode)
+        {
+            fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+            fnKillSel = &SwWrtShell::ResetSelect;
+        }
     }
+    SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)GetView().GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId());
+    if (pWrdCnt)
+        pWrdCnt->UpdateCounts();
 }
 /* Methode, um eine bestehende wortweise oder zeilenweise Selektion
  * zu erweitern.
