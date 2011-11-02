@@ -56,6 +56,15 @@ inline GdkWindow * widget_get_window(GtkWidget *widget)
 #endif
 }
 
+inline XLIB_Window widget_get_xid(GtkWidget *widget)
+{
+#if GTK_CHECK_VERSION(3,0,0)
+    return GDK_WINDOW_XID(gtk_widget_get_window(widget));
+#else
+    return GDK_WINDOW_XWINDOW(widget->window);
+#endif
+}
+
 inline void widget_set_can_focus(GtkWidget *widget, gboolean can_focus)
 {
 #if GTK_CHECK_VERSION(3,0,0)
