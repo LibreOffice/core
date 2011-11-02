@@ -487,6 +487,8 @@ ScInputBarGroup::LinkStubImpl_ScrollHdl(void*, void*)
 ScJobSetup::ScJobSetup(SfxPrinter*)
 ScLeftFooterEditPage::GetRanges()
 ScLeftHeaderEditPage::GetRanges()
+ScMacrosTest::testStarBasic()
+ScMacrosTest::testVba()
 ScMatrix::CalcOffset(unsigned long, unsigned long) const
 ScMultiTextWnd::GetLineCount()
 ScMyCellInfo::ScMyCellInfo()
@@ -804,10 +806,6 @@ SvStringsSortDtor::Insert(SvStringsSortDtor const*, unsigned short, unsigned sho
 SvStringsSortDtor::Remove(String* const&, unsigned short)
 SvStringsSortDtor::Remove(unsigned short, unsigned short)
 SvTabListBox::GetTabJustify(unsigned short) const
-SvUShorts::Insert(SvUShorts const*, unsigned short, unsigned short, unsigned short)
-SvUShorts::Replace(unsigned short const&, unsigned short)
-SvUShorts::Replace(unsigned short const*, unsigned short, unsigned short)
-SvUShorts::_ForEach(unsigned short, unsigned short, unsigned char (*)(unsigned short const&, void*), void*)
 SvUnoAttributeContainer::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
 SvXMLAutoStylePoolNamesP_Impl::GetPos(rtl::OUString const*) const
 SvXMLAutoStylePoolNamesP_Impl::Remove(rtl::OUString*)

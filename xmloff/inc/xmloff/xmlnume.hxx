@@ -98,11 +98,6 @@ public:
             const ::rtl::OUString& rName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::container::XIndexReplace > & xNumRule );
-
-    static sal_Bool GetOutlineStyles( XMLStringVector& rStyleNames,
-               const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::frame::XModel > & rModel );
-
 };
 
 #endif  //  _XMLOFF_XMLNUME_HXX

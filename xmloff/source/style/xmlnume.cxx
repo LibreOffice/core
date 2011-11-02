@@ -871,46 +871,4 @@ void SvxXMLNumRuleExport::exportStyles( sal_Bool bUsed,
     }
 }
 
-sal_Bool SvxXMLNumRuleExport::GetOutlineStyles( XMLStringVector& rStyleNames,
-   const ::com::sun::star::uno::Reference<
-                   ::com::sun::star::frame::XModel > & rModel   )
-{
-    Reference< XChapterNumberingSupplier > xCNSupplier( rModel,
-                                                        UNO_QUERY );
-    sal_Int32 nLevels = 0;
-    Reference< XIndexReplace > xNumRule;
-    if( xCNSupplier.is() )
-    {
-        xNumRule = xCNSupplier->getChapterNumberingRules();
-        if( xNumRule.is() )
-            nLevels = xNumRule->getCount();
-    }
-
-    rStyleNames.resize( nLevels );
-    for( sal_Int32 i=0; i<nLevels; i++ )
-    {
-        uno::Any aEntry( xNumRule->getByIndex( i ) );
-        uno::Sequence<beans::PropertyValue> aSeq;
-        if( aEntry >>= aSeq )
-        {
-            const sal_Int32 nCount = aSeq.getLength();
-            const beans::PropertyValue* pPropArray = aSeq.getConstArray();
-            for( sal_Int32 j=0; j<nCount; j++ )
-            {
-                const beans::PropertyValue& rProp = pPropArray[j];
-
-                if( rProp.Name.equalsAsciiL(
-                            XML_UNO_NAME_NRULE_HEADING_STYLE_NAME,
-                            sizeof(XML_UNO_NAME_NRULE_HEADING_STYLE_NAME)-1 ) )
-                {
-                    rProp.Value >>= rStyleNames[i];
-                    break;
-                }
-            }
-        }
-    }
-
-    return nLevels != 0;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
