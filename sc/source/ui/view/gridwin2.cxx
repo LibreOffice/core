@@ -186,7 +186,7 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
         long nField = pDPObj->GetHeaderDim( aPos, nOrient );
         if ( nField >= 0 )
         {
-            bDPMouse   = sal_True;
+            bDPMouse   = true;
             nDPField   = nField;
             pDragDPObj = pDPObj;
 

@@ -334,7 +334,7 @@ void ScGridWindow::Paint( const Rectangle& rRect )
         }
         else
         {
-            bNeedsRepaint = sal_True;
+            bNeedsRepaint = true;
             aRepaintPixel = LogicToPixel(rRect);    // nur betroffenen Bereich
         }
         return;
@@ -343,7 +343,7 @@ void ScGridWindow::Paint( const Rectangle& rRect )
     if (bIsInPaint)
         return;
 
-    bIsInPaint = sal_True;
+    bIsInPaint = true;
 
     Rectangle aPixRect = LogicToPixel( rRect );
 

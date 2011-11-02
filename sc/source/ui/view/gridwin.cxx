@@ -429,28 +429,28 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
             mpDPFieldPopup(NULL),
             mpFilterButton(NULL),
             nCursorHideCount( 0 ),
-            bMarking( false ),
             nButtonDown( 0 ),
-            bEEMouse( false ),
             nMouseStatus( SC_GM_NONE ),
             nNestedButtonState( SC_NESTEDBUTTON_NONE ),
-            bDPMouse( false ),
-            bRFMouse( false ),
             nPagebreakMouse( SC_PD_NONE ),
-            bPagebreakDrawn( false ),
             nPageScript( 0 ),
-            bDragRect( false ),
             nDragStartX( -1 ),
             nDragStartY( -1 ),
             nDragEndX( -1 ),
             nDragEndY( -1 ),
             meDragInsertMode( INS_NONE ),
             nCurrentPointer( 0 ),
-            bIsInScroll( false ),
-            bIsInPaint( false ),
             aComboButton( this ),
             aCurMousePos( 0,0 ),
             nPaintCount( 0 ),
+            bEEMouse( false ),
+            bDPMouse( false ),
+            bRFMouse( false ),
+            bRFSize( false ),
+            bPagebreakDrawn( false ),
+            bDragRect( false ),
+            bIsInScroll( false ),
+            bIsInPaint( false ),
             bNeedsRepaint( false ),
             bAutoMarkVisible( false ),
             bListValButton( false )
@@ -1589,7 +1589,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt )
                 GrabFocus();
 
             pScMod->SetInputMode( SC_INPUT_TABLE );
-            bEEMouse = sal_True;
+            bEEMouse = true;
             bEditMode = pEditView->MouseButtonDown( rMEvt );
             return;
         }
@@ -1608,9 +1608,12 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt )
     // Reihenfolge passend zum angezeigten Cursor:
     //  RangeFinder, AutoFill, PageBreak, Drawing
 
-    if ( HitRangeFinder( rMEvt.GetPosPixel(), bRFSize, &nRFIndex, &nRFAddX, &nRFAddY ) )
+    bool bCorner;
+    bool bFound = HitRangeFinder(rMEvt.GetPosPixel(), bCorner, &nRFIndex, &nRFAddX, &nRFAddY);
+    bRFSize = bCorner;
+    if (bFound)
     {
-        bRFMouse = sal_True;        // die anderen Variablen sind oben initialisiert
+        bRFMouse = true;        // die anderen Variablen sind oben initialisiert
 
         if ( pViewData->GetActivePart() != eWhich )
             pViewData->GetView()->ActivatePart( eWhich );   //! schon oben immer ???
@@ -2344,7 +2347,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
 
         //  Range-Finder
 
-        sal_Bool bCorner;
+        bool bCorner;
         if ( HitRangeFinder( rMEvt.GetPosPixel(), bCorner ) )
         {
             if (bCorner)
@@ -2514,7 +2517,7 @@ void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
             }
             if (bRFMouse)
             {
-                RFMouseMove( rMEvt, sal_True );     // richtig abbrechen geht dabei nicht...
+                RFMouseMove( rMEvt, true );     // richtig abbrechen geht dabei nicht...
                 bRFMouse = false;
             }
             if (nPagebreakMouse)
@@ -3451,7 +3454,7 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
             nDragStartY = nNewDragY;
             nDragEndX = nDragStartX+nSizeX-1;
             nDragEndY = nDragStartY+nSizeY-1;
-            bDragRect = sal_True;
+            bDragRect = true;
             meDragInsertMode = eDragInsertMode;
 
             UpdateDragRectOverlay();
@@ -4352,7 +4355,7 @@ void ScGridWindow::UpdateFormulas()
         //  nicht anfangen, verschachtelt zu painten
         //  (dann wuerde zumindest der MapMode nicht mehr stimmen)
 
-        bNeedsRepaint = sal_True;           // -> am Ende vom Paint nochmal Invalidate auf alles
+        bNeedsRepaint = true;           // -> am Ende vom Paint nochmal Invalidate auf alles
         aRepaintPixel = Rectangle();    // alles
         return;
     }
@@ -4414,7 +4417,7 @@ void ScGridWindow::UpdateFormulas()
     CheckNeedsRepaint();    // #i90362# used to be called via Draw() - still needed here
 }
 
-void ScGridWindow::UpdateAutoFillMark(sal_Bool bMarked, const ScRange& rMarkRange)
+void ScGridWindow::UpdateAutoFillMark(bool bMarked, const ScRange& rMarkRange)
 {
     if ( bMarked != bAutoMarkVisible || ( bMarked && rMarkRange.aEnd != aAutoMarkPos ) )
     {
@@ -4430,7 +4433,7 @@ void ScGridWindow::UpdateAutoFillMark(sal_Bool bMarked, const ScRange& rMarkRang
 
 void ScGridWindow::UpdateListValPos( sal_Bool bVisible, const ScAddress& rPos )
 {
-    sal_Bool bOldButton = bListValButton;
+    bool bOldButton = bListValButton;
     ScAddress aOldPos = aListValPos;
 
     bListValButton = bVisible;
@@ -4502,10 +4505,10 @@ Point ScGridWindow::GetMousePosPixel() const  { return aCurMousePos; }
 
 //------------------------------------------------------------------------
 
-sal_Bool ScGridWindow::HitRangeFinder( const Point& rMouse, sal_Bool& rCorner,
+bool ScGridWindow::HitRangeFinder( const Point& rMouse, bool& rCorner,
                                 sal_uInt16* pIndex, SCsCOL* pAddX, SCsROW* pAddY )
 {
-    sal_Bool bFound = false;
+    bool bFound = false;
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl( pViewData->GetViewShell() );
     if (pHdl)
     {
@@ -4531,13 +4534,13 @@ sal_Bool ScGridWindow::HitRangeFinder( const Point& rMouse, sal_Bool& rCorner,
             aNext.X() += nSizeXPix * nLayoutSign;
             aNext.Y() += nSizeYPix;
 
-            sal_Bool bCornerHor;
+            bool bCornerHor;
             if ( bLayoutRTL )
                 bCornerHor = ( rMouse.X() >= aNext.X() && rMouse.X() <= aNext.X() + 8 );
             else
                 bCornerHor = ( rMouse.X() >= aNext.X() - 8 && rMouse.X() <= aNext.X() );
 
-            sal_Bool bCellCorner = ( bCornerHor &&
+            bool bCellCorner = ( bCornerHor &&
                                  rMouse.Y() >= aNext.Y() - 8 && rMouse.Y() <= aNext.Y() );
             //  corner is hit only if the mouse is within the cell
 
