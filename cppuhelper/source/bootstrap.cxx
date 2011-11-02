@@ -38,9 +38,6 @@
 #include "rtl/string.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/uri.hxx"
-#if OSL_DEBUG_LEVEL > 0
-#include "rtl/strbuf.hxx"
-#endif
 #include "osl/diagnose.h"
 #include "osl/file.hxx"
 #include "osl/module.hxx"
@@ -150,7 +147,7 @@ inline beans::PropertyValue createPropertyValue(
         name, -1, makeAny( value ), beans::PropertyState_DIRECT_VALUE );
 }
 
-OUString findBoostrapArgument(
+OUString findBootstrapArgument(
     const Bootstrap & bootstrap,
     const OUString & arg_name,
     sal_Bool * pFallenBack )
@@ -180,33 +177,22 @@ OUString findBoostrapArgument(
         result_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(".rdb") );
         result = result_buf.makeStringAndClear();
 
-#if OSL_DEBUG_LEVEL > 1
-        OString result_dbg =
-            OUStringToOString(result, RTL_TEXTENCODING_ASCII_US);
-        OString arg_name_dbg =
-            OUStringToOString(arg_name, RTL_TEXTENCODING_ASCII_US);
         OSL_TRACE(
-            "cppuhelper::findBoostrapArgument - "
-            "setting %s relative to executable: %s\n",
-            arg_name_dbg.getStr(),
-            result_dbg.getStr() );
-#endif
+            (OSL_LOG_PREFIX "findBootstrapArgument, setting \"%s\" relative to"
+             " executable \"%s\""),
+            OUStringToOString(arg_name, RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(result, RTL_TEXTENCODING_UTF8).getStr());
     }
     else
     {
         if(pFallenBack)
             *pFallenBack = sal_False;
 
-#if OSL_DEBUG_LEVEL > 1
-        OString prefixed_arg_name_dbg = OUStringToOString(
-            prefixed_arg_name, RTL_TEXTENCODING_ASCII_US );
-        OString result_dbg = OUStringToOString(
-            result, RTL_TEXTENCODING_ASCII_US );
         OSL_TRACE(
-            "cppuhelper::findBoostrapArgument - found %s in env: %s",
-            prefixed_arg_name_dbg.getStr(),
-            result_dbg.getStr() );
-#endif
+            OSL_LOG_PREFIX "findBootstrapArgument, found \"%s\" in env \"%s\"",
+            (OUStringToOString(prefixed_arg_name, RTL_TEXTENCODING_UTF8).
+             getStr()),
+            OUStringToOString(result, RTL_TEXTENCODING_UTF8).getStr());
     }
 
     return result;
@@ -233,18 +219,13 @@ Reference< registry::XSimpleRegistry > nestRegistries(
         {
             lastRegistry->open(write_rdb, sal_False, forceWrite_rdb);
         }
-        catch (registry::InvalidRegistryException & invalidRegistryException)
+        catch (registry::InvalidRegistryException & e)
         {
-            (void) invalidRegistryException;
-#if OSL_DEBUG_LEVEL > 1
-            OString rdb_name_tmp = OUStringToOString(
-                write_rdb, RTL_TEXTENCODING_ASCII_US);
-            OString message_dbg = OUStringToOString(
-                invalidRegistryException.Message, RTL_TEXTENCODING_ASCII_US);
+            (void) e; // avoid warnings
             OSL_TRACE(
-                "warning: couldn't open %s cause of %s",
-                rdb_name_tmp.getStr(), message_dbg.getStr() );
-#endif
+                OSL_LOG_PREFIX "warning, could not open \"%s\": \"%s\"",
+                OUStringToOString(write_rdb, RTL_TEXTENCODING_UTF8).getStr(),
+                OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
         }
 
         if(!lastRegistry->isValid())
@@ -290,17 +271,13 @@ Reference< registry::XSimpleRegistry > nestRegistries(
             else
                 lastRegistry = simpleRegistry;
         }
-        catch(registry::InvalidRegistryException & invalidRegistryException)
+        catch(registry::InvalidRegistryException & e)
         {
-#if OSL_DEBUG_LEVEL > 1
-            OString rdb_name_tmp = OUStringToOString(
-                rdb_name, RTL_TEXTENCODING_ASCII_US );
-            OString message_dbg = OUStringToOString(
-                invalidRegistryException.Message, RTL_TEXTENCODING_ASCII_US );
+            (void) e; // avoid warnings
             OSL_TRACE(
-                "warning: couldn't open %s cause of %s",
-                rdb_name_tmp.getStr(), message_dbg.getStr() );
-#endif
+                OSL_LOG_PREFIX "warning, could not open \"%s\": \"%s\"",
+                OUStringToOString(rdb_name, RTL_TEXTENCODING_UTF8).getStr(),
+                OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
             if (! optional)
             {
                 // if a registry was explicitly given, the exception shall fly
@@ -308,7 +285,6 @@ Reference< registry::XSimpleRegistry > nestRegistries(
                     throw;
             }
 
-            (void) invalidRegistryException;
         }
     }
     while(index != -1 && csl_rdbs.getLength()); // are there more rdbs in list?
@@ -356,7 +332,7 @@ SAL_CALL defaultBootstrap_InitialComponentContext(
 
     sal_Bool bFallenback_types;
     OUString cls_uno_types =
-        findBoostrapArgument( bootstrap, OUSTR("TYPES"), &bFallenback_types );
+        findBootstrapArgument( bootstrap, OUSTR("TYPES"), &bFallenback_types );
 
     Reference<registry::XSimpleRegistry> types_xRegistry =
         nestRegistries(
@@ -366,11 +342,11 @@ SAL_CALL defaultBootstrap_InitialComponentContext(
     // ==== bootstrap from services registry ====
 
     sal_Bool bFallenback_services;
-    OUString cls_uno_services = findBoostrapArgument(
+    OUString cls_uno_services = findBootstrapArgument(
         bootstrap, OUSTR("SERVICES"), &bFallenback_services );
 
     sal_Bool fallenBackWriteRegistry;
-    OUString write_rdb = findBoostrapArgument(
+    OUString write_rdb = findBootstrapArgument(
         bootstrap, OUSTR("WRITERDB"), &fallenBackWriteRegistry );
     if (fallenBackWriteRegistry)
     {
