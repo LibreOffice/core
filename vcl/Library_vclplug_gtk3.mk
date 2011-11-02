@@ -79,7 +79,7 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_gtk3,\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_use_externals,vclplug_gtk,\
+$(eval $(call gb_Library_use_externals,vclplug_gtk3,\
 	dbus \
 ))
 
