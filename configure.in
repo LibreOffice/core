@@ -1654,11 +1654,11 @@ fi
 AC_SUBST(GNUMAKE)
 
 dnl ===================================================================
-dnl Search all the common names for GNU tar
+dnl Search all the common names for GNU or BSD tar
 dnl ===================================================================
-AC_MSG_CHECKING([for GNU tar])
-for a in $GNUTAR gtar gnutar tar; do
-      $a --version 2> /dev/null | grep GNU  2>&1 > /dev/null
+AC_MSG_CHECKING([for GNU or BSD compatible tar])
+for a in $GNUTAR gtar gnutar bsdtar tar; do
+      $a --version 2> /dev/null | egrep "GNU|libarchive"  2>&1 > /dev/null
       if test $? -eq 0;  then
            GNUTAR=$a
            break
