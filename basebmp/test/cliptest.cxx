@@ -38,7 +38,7 @@
 #include <basegfx/vector/b2isize.hxx>
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <basegfx/range/b2irange.hxx>
+#include <basegfx/range/b2ibox.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -155,8 +155,8 @@ private:
 
         rDevice->clear(aCol1);
         rDevice->drawBitmap(pBmp,
-                            basegfx::B2IRange(0,0,3,3),
-                            basegfx::B2IRange(-1,-1,4,4),
+                            basegfx::B2IBox(0,0,3,3),
+                            basegfx::B2IBox(-1,-1,4,4),
                             DrawMode_PAINT,
                             mpClipMask);
 
@@ -183,7 +183,7 @@ private:
             aCol,
             basebmp::DrawMode_PAINT );
 
-        const basegfx::B2IRange aSourceRect(0,0,10,10);
+        const basegfx::B2IBox aSourceRect(0,0,10,10);
         const basegfx::B2IPoint aDestLeftTop(0,0);
         const Color aCol2(0xF0F0F0F0);
         rDevice->drawMaskedColor(

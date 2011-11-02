@@ -45,7 +45,7 @@ namespace basegfx
     class B2IPoint;
     class B2DPoint;
     class B2IVector;
-    class B2IRange;
+    class B2IBox;
     class B2DPolygon;
     class B2DPolyPolygon;
 }
@@ -66,7 +66,7 @@ struct ImplBitmapDevice;
 struct IBitmapDeviceDamageTracker
 {
     /// gets called when said region is clobbered
-    virtual void damaged(const basegfx::B2IRange& rDamageRect) const = 0;
+    virtual void damaged(const basegfx::B2IBox& rDamageRect) const = 0;
 };
 
 /** Definition of BitmapDevice interface
@@ -82,7 +82,7 @@ struct IBitmapDeviceDamageTracker
     is accepted, but potentially slow.
  */
 class BASEBMP_DLLPUBLIC BitmapDevice : public boost::enable_shared_from_this<BitmapDevice>,
-                     private boost::noncopyable
+                                       private boost::noncopyable
 {
 public:
     /** Query size of device in pixel
@@ -362,8 +362,8 @@ public:
         Draw mode to use when changing pixel values
      */
     void drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
-                     const basegfx::B2IRange&     rSrcRect,
-                     const basegfx::B2IRange&     rDstRect,
+                     const basegfx::B2IBox&       rSrcRect,
+                     const basegfx::B2IBox&       rDstRect,
                      DrawMode                     drawMode );
 
     /** Draw another bitmap into this device
@@ -395,8 +395,8 @@ public:
         pixel is 1 will not be modified.
      */
     void drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
-                     const basegfx::B2IRange&     rSrcRect,
-                     const basegfx::B2IRange&     rDstRect,
+                     const basegfx::B2IBox&       rSrcRect,
+                     const basegfx::B2IBox&       rDstRect,
                      DrawMode                     drawMode,
                      const BitmapDeviceSharedPtr& rClip );
 
@@ -429,7 +429,7 @@ public:
      */
     void drawMaskedColor( Color                        aSrcColor,
                           const BitmapDeviceSharedPtr& rAlphaMask,
-                          const basegfx::B2IRange&     rSrcRect,
+                          const basegfx::B2IBox&       rSrcRect,
                           const basegfx::B2IPoint&     rDstPoint );
 
     /** Draw a color with an alpha-modulation bitmap into this device
@@ -465,7 +465,7 @@ public:
      */
     void drawMaskedColor( Color                        aSrcColor,
                           const BitmapDeviceSharedPtr& rAlphaMask,
-                          const basegfx::B2IRange&     rSrcRect,
+                          const basegfx::B2IBox&       rSrcRect,
                           const basegfx::B2IPoint&     rDstPoint,
                           const BitmapDeviceSharedPtr& rClip );
 
@@ -506,8 +506,8 @@ public:
      */
     void drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                            const BitmapDeviceSharedPtr& rMask,
-                           const basegfx::B2IRange&     rSrcRect,
-                           const basegfx::B2IRange&     rDstRect,
+                           const basegfx::B2IBox&       rSrcRect,
+                           const basegfx::B2IBox&       rDstRect,
                            DrawMode                     drawMode );
 
     /** Draw another bitmap through a mask into this device
@@ -551,18 +551,18 @@ public:
      */
     void drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
                            const BitmapDeviceSharedPtr& rMask,
-                           const basegfx::B2IRange&     rSrcRect,
-                           const basegfx::B2IRange&     rDstRect,
+                           const basegfx::B2IBox&       rSrcRect,
+                           const basegfx::B2IBox&       rDstRect,
                            DrawMode                     drawMode,
                            const BitmapDeviceSharedPtr& rClip );
 
 protected:
-    BitmapDevice( const basegfx::B2IRange&                   rBounds,
-                  sal_Int32                                  nScanlineFormat,
-                  sal_Int32                                  nScanlineStride,
-                  sal_uInt8*                                 pFirstScanline,
-                  const RawMemorySharedArray&                rMem,
-                  const PaletteMemorySharedVector&           rPalette );
+    BitmapDevice( const basegfx::B2IBox&           rBounds,
+                  sal_Int32                        nScanlineFormat,
+                  sal_Int32                        nScanlineStride,
+                  sal_uInt8*                       pFirstScanline,
+                  const RawMemorySharedArray&      rMem,
+                  const PaletteMemorySharedVector& rPalette );
 
     virtual ~BitmapDevice();
 
@@ -571,8 +571,8 @@ private:
     virtual bool isCompatibleClipMask( const BitmapDeviceSharedPtr& bmp ) const = 0;
     virtual bool isCompatibleAlphaMask( const BitmapDeviceSharedPtr& bmp ) const = 0;
 
-    virtual void clear_i( Color                     fillColor,
-                          const basegfx::B2IRange&  rBounds ) = 0;
+    virtual void clear_i( Color                  fillColor,
+                          const basegfx::B2IBox& rBounds ) = 0;
 
     virtual void setPixel_i( const basegfx::B2IPoint& rPt,
                              Color                    lineColor,
@@ -588,22 +588,22 @@ private:
 
     virtual void drawLine_i( const basegfx::B2IPoint& rPt1,
                              const basegfx::B2IPoint& rPt2,
-                             const basegfx::B2IRange& rBounds,
+                             const basegfx::B2IBox&   rBounds,
                              Color                    lineColor,
                              DrawMode                 drawMode ) = 0;
     virtual void drawLine_i( const basegfx::B2IPoint&     rPt1,
                              const basegfx::B2IPoint&     rPt2,
-                             const basegfx::B2IRange&     rBounds,
+                             const basegfx::B2IBox&       rBounds,
                              Color                        lineColor,
                              DrawMode                     drawMode,
                              const BitmapDeviceSharedPtr& rClip ) = 0;
 
     virtual void drawPolygon_i( const basegfx::B2DPolygon& rPoly,
-                                const basegfx::B2IRange&   rBounds,
+                                const basegfx::B2IBox&     rBounds,
                                 Color                      lineColor,
                                 DrawMode                   drawMode ) = 0;
     virtual void drawPolygon_i( const basegfx::B2DPolygon&   rPoly,
-                                const basegfx::B2IRange&     rBounds,
+                                const basegfx::B2IBox&       rBounds,
                                 Color                        lineColor,
                                 DrawMode                     drawMode,
                                 const BitmapDeviceSharedPtr& rClip ) = 0;
@@ -611,45 +611,45 @@ private:
     virtual void fillPolyPolygon_i( const basegfx::B2DPolyPolygon& rPoly,
                                     Color                          fillColor,
                                     DrawMode                       drawMode,
-                                    const basegfx::B2IRange&       rBounds ) = 0;
+                                    const basegfx::B2IBox&         rBounds ) = 0;
     virtual void fillPolyPolygon_i( const basegfx::B2DPolyPolygon& rPoly,
                                     Color                          fillColor,
                                     DrawMode                       drawMode,
-                                    const basegfx::B2IRange&       rBounds,
+                                    const basegfx::B2IBox&         rBounds,
                                     const BitmapDeviceSharedPtr&   rClip ) = 0;
 
     // must work with *this == rSrcBitmap!
     virtual void drawBitmap_i( const BitmapDeviceSharedPtr& rSrcBitmap,
-                               const basegfx::B2IRange&     rSrcRect,
-                               const basegfx::B2IRange&     rDstRect,
+                               const basegfx::B2IBox&       rSrcRect,
+                               const basegfx::B2IBox&       rDstRect,
                                DrawMode                     drawMode ) = 0;
     virtual void drawBitmap_i( const BitmapDeviceSharedPtr& rSrcBitmap,
-                               const basegfx::B2IRange&     rSrcRect,
-                               const basegfx::B2IRange&     rDstRect,
+                               const basegfx::B2IBox&       rSrcRect,
+                               const basegfx::B2IBox&       rDstRect,
                                DrawMode                     drawMode,
                                const BitmapDeviceSharedPtr& rClip ) = 0;
 
     // must work with *this == rSrcBitmap!
     virtual void drawMaskedColor_i( Color                        rSrcColor,
                                     const BitmapDeviceSharedPtr& rAlphaMask,
-                                    const basegfx::B2IRange&     rSrcRect,
+                                    const basegfx::B2IBox&       rSrcRect,
                                     const basegfx::B2IPoint&     rDstPoint ) = 0;
     virtual void drawMaskedColor_i( Color                        rSrcColor,
                                     const BitmapDeviceSharedPtr& rAlphaMask,
-                                    const basegfx::B2IRange&     rSrcRect,
+                                    const basegfx::B2IBox&       rSrcRect,
                                     const basegfx::B2IPoint&     rDstPoint,
                                     const BitmapDeviceSharedPtr& rClip ) = 0;
 
     // must work with *this == rSrcBitmap!
     virtual void drawMaskedBitmap_i( const BitmapDeviceSharedPtr& rSrcBitmap,
                                      const BitmapDeviceSharedPtr& rMask,
-                                     const basegfx::B2IRange&     rSrcRect,
-                                     const basegfx::B2IRange&     rDstRect,
+                                     const basegfx::B2IBox&       rSrcRect,
+                                     const basegfx::B2IBox&       rDstRect,
                                      DrawMode                     drawMode ) = 0;
     virtual void drawMaskedBitmap_i( const BitmapDeviceSharedPtr& rSrcBitmap,
                                      const BitmapDeviceSharedPtr& rMask,
-                                     const basegfx::B2IRange&     rSrcRect,
-                                     const basegfx::B2IRange&     rDstRect,
+                                     const basegfx::B2IBox&       rSrcRect,
+                                     const basegfx::B2IBox&       rDstRect,
                                      DrawMode                     drawMode,
                                      const BitmapDeviceSharedPtr& rClip ) = 0;
 
@@ -700,8 +700,8 @@ BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVe
     area. Useful to implement rectangular clips (usually faster than
     setting up a 1bpp clip mask).
  */
-BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr subsetBitmapDevice( const BitmapDeviceSharedPtr&     rProto,
-                                          const basegfx::B2IRange&         rSubset );
+BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr subsetBitmapDevice( const BitmapDeviceSharedPtr& rProto,
+                                                            const basegfx::B2IBox&       rSubset );
 
 /** Factory method to clone a BitmapDevice from a given prototype.
 

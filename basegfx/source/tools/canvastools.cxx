@@ -55,6 +55,7 @@
 #include <basegfx/vector/b2isize.hxx>
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/range/b2irectangle.hxx>
+#include <basegfx/range/b2ibox.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/tools/canvastools.hxx>
@@ -595,6 +596,14 @@ namespace basegfx
                                         rRect.Y,
                                         rRect.X + rRect.Width,
                                         rRect.Y + rRect.Height );
+        }
+
+        ::basegfx::B2IBox b2ISurroundingBoxFromB2DRange( const ::basegfx::B2DRange& rRange )
+        {
+            return ::basegfx::B2IBox( static_cast<sal_Int32>( floor(rRange.getMinX()) ),
+                                      static_cast<sal_Int32>( floor(rRange.getMinY()) ),
+                                      static_cast<sal_Int32>( ceil(rRange.getMaxX()) ),
+                                      static_cast<sal_Int32>( ceil(rRange.getMaxY()) ) );
         }
 
         ::basegfx::B2IRange b2ISurroundingRangeFromB2DRange( const ::basegfx::B2DRange& rRange )

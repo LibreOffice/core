@@ -31,7 +31,7 @@
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <basegfx/range/b2irange.hxx>
+#include <basegfx/range/b2ibox.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygonfillrule.hxx>
@@ -147,7 +147,7 @@ namespace basebmp
     void renderClippedPolyPolygon( DestIterator                   begin,
                                    DestAccessor                   ad,
                                    T                              fillColor,
-                                   const basegfx::B2IRange&       rClipRect,
+                                   const basegfx::B2IBox&       rClipRect,
                                    basegfx::B2DPolyPolygon const& rPoly,
                                    basegfx::FillRule              eFillRule )
     {

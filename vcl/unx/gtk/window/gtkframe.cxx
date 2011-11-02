@@ -56,7 +56,7 @@
 #include <svids.hrc>
 #include <sal/macros.h>
 
-#include <basegfx/range/b2irange.hxx>
+#include <basegfx/range/b2ibox.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 
 #include <algorithm>
@@ -352,7 +352,7 @@ struct DamageTracker : public basebmp::IBitmapDeviceDamageTracker
 {
     DamageTracker(GtkSalFrame& rFrame) : m_rFrame(rFrame)
     {}
-    virtual void damaged(const basegfx::B2IRange& rDamageRect) const
+    virtual void damaged(const basegfx::B2IBox& rDamageRect) const
     {
         m_rFrame.damaged(rDamageRect);
     }
@@ -3014,7 +3014,7 @@ void GtkSalFrame::popIgnoreDamage()
 #endif
 }
 
-void GtkSalFrame::damaged (const basegfx::B2IRange& rDamageRect)
+void GtkSalFrame::damaged (const basegfx::B2IBox& rDamageRect)
 {
 #if !GTK_CHECK_VERSION(3,0,0)
     (void)rDamageRect;

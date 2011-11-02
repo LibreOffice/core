@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #include <basegfx/range/b2drange.hxx>
-#include <basegfx/range/b2irange.hxx>
+#include <basegfx/range/b2ibox.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include <basebmp/scanlineformats.hxx>
@@ -532,8 +532,8 @@ void SvpSalGraphics::DrawServerFontLayout( const ServerFontLayout& rSalLayout )
             continue;
 
         // blend text color into target using the glyph's mask
-        const B2IRange aSrcRect( B2ITuple(0,0), aAlphaMask->getSize() );
-        const B2IRange aClipRect( aDstPoint, aAlphaMask->getSize() );
+        const B2IBox aSrcRect( B2ITuple(0,0), aAlphaMask->getSize() );
+        const B2IBox aClipRect( aDstPoint, aAlphaMask->getSize() );
 
         SvpSalGraphics::ClipUndoHandle aUndo( this );
         if( !isClippedSetup( aClipRect, aUndo ) )

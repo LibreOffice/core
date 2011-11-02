@@ -36,7 +36,7 @@
 #include "cppunit/extensions/HelperMacros.h"
 
 #include <basegfx/vector/b2isize.hxx>
-#include <basegfx/range/b2irange.hxx>
+#include <basegfx/range/b2ibox.hxx>
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -66,11 +66,11 @@ private:
         rDevice->clear(Color(0));
         const Color aCol(0xFFFFFFFF);
 
-        const basegfx::B2IRange aSourceRect(0,0,10,10);
-        const basegfx::B2IRange aDestLeftTop(0,0,4,4);
-        const basegfx::B2IRange aDestRightTop(6,0,10,4);
-        const basegfx::B2IRange aDestLeftBottom(0,6,4,10);
-        const basegfx::B2IRange aDestRightBottom(6,6,10,10);
+        const basegfx::B2IBox aSourceRect(0,0,10,10);
+        const basegfx::B2IBox aDestLeftTop(0,0,4,4);
+        const basegfx::B2IBox aDestRightTop(6,0,10,4);
+        const basegfx::B2IBox aDestLeftBottom(0,6,4,10);
+        const basegfx::B2IBox aDestRightBottom(6,6,10,10);
 
         rDevice->drawBitmap(
             rBmp,
@@ -111,11 +111,11 @@ private:
         rDevice->clear(Color(0));
         const Color aCol(0xFFFFFFFF);
 
-        const basegfx::B2IRange aSourceRect(0,0,10,10);
-        const basegfx::B2IRange aDestLeftTop(-2,-2,2,2);
-        const basegfx::B2IRange aDestRightTop(8,-2,12,2);
-        const basegfx::B2IRange aDestLeftBottom(-2,8,2,12);
-        const basegfx::B2IRange aDestRightBottom(8,8,12,12);
+        const basegfx::B2IBox aSourceRect(0,0,10,10);
+        const basegfx::B2IBox aDestLeftTop(-2,-2,2,2);
+        const basegfx::B2IBox aDestRightTop(8,-2,12,2);
+        const basegfx::B2IBox aDestLeftBottom(-2,8,2,12);
+        const basegfx::B2IBox aDestRightBottom(8,8,12,12);
 
         rDevice->drawBitmap(
             rBmp,

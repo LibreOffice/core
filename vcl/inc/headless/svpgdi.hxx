@@ -66,7 +66,7 @@ private:
         ClipUndoHandle( SvpSalGraphics *pGfx ) : m_rGfx( *pGfx ) {}
         ~ClipUndoHandle();
     };
-    bool isClippedSetup( const basegfx::B2IRange &aRange, ClipUndoHandle &rUndo );
+    bool isClippedSetup( const basegfx::B2IBox &aRange, ClipUndoHandle &rUndo );
     void ensureClip();
 
 protected:

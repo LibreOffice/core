@@ -56,7 +56,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/numeric/ftools.hxx>
-#include <basegfx/range/b2irange.hxx>
+#include <basegfx/range/b2ibox.hxx>
 #include <basegfx/vector/b2isize.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/point/b2ipoint.hxx>
@@ -1109,7 +1109,7 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
 
         basebmp::BitmapDeviceSharedPtr pSubsetDevice =
             basebmp::subsetBitmapDevice( pDevice,
-                                         basegfx::B2IRange(3,3,7,7) );
+                                         basegfx::B2IBox(3,3,7,7) );
 
         const basegfx::B2IPoint aPt1(0,0);
         const basegfx::B2IPoint aPt2(1,9);

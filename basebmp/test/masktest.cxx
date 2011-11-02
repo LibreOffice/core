@@ -36,7 +36,7 @@
 #include "cppunit/extensions/HelperMacros.h"
 
 #include <basegfx/vector/b2isize.hxx>
-#include <basegfx/range/b2irange.hxx>
+#include <basegfx/range/b2ibox.hxx>
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -65,7 +65,7 @@ private:
         const Color aCol(0);
         const Color aCol2(0xF0F0F0F0);
 
-        const basegfx::B2IRange aSourceRect(0,0,10,10);
+        const basegfx::B2IBox aSourceRect(0,0,10,10);
         const basegfx::B2IPoint aDestLeftTop(0,0);
         const basegfx::B2IPoint aDestRightTop(5,0);
         const basegfx::B2IPoint aDestLeftBottom(0,5);

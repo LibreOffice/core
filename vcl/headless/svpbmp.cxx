@@ -29,7 +29,7 @@
 #include "headless/svpbmp.hxx"
 
 #include <basegfx/vector/b2ivector.hxx>
-#include <basegfx/range/b2irange.hxx>
+#include <basegfx/range/b2ibox.hxx>
 #include <basebmp/scanlineformats.hxx>
 #include <basebmp/color.hxx>
 
@@ -96,7 +96,7 @@ bool SvpSalBitmap::Create( const SalBitmap& rSalBmp )
     {
         B2IVector aSize = rSrcBmp->getSize();
         m_aBitmap = cloneBitmapDevice( aSize, rSrcBmp );
-        B2IRange aRect( 0, 0, aSize.getX(), aSize.getY() );
+        B2IBox aRect( 0, 0, aSize.getX(), aSize.getY() );
         m_aBitmap->drawBitmap( rSrcBmp, aRect, aRect, DrawMode_PAINT );
     }
     else

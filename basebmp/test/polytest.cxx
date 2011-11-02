@@ -36,7 +36,7 @@
 #include "cppunit/extensions/HelperMacros.h"
 
 #include <basegfx/vector/b2isize.hxx>
-#include <basegfx/range/b2irange.hxx>
+#include <basegfx/range/b2ibox.hxx>
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -191,7 +191,7 @@ private:
 
         BitmapDeviceSharedPtr pClippedDevice(
             subsetBitmapDevice( rDevice,
-                                basegfx::B2IRange(3,3,5,8) ));
+                                basegfx::B2IBox(3,3,5,8) ));
 
         rDevice->clear(aBgCol);
         pClippedDevice->fillPolyPolygon(

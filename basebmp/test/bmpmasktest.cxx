@@ -36,7 +36,7 @@
 #include "cppunit/extensions/HelperMacros.h"
 
 #include <basegfx/vector/b2isize.hxx>
-#include <basegfx/range/b2irange.hxx>
+#include <basegfx/range/b2ibox.hxx>
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -67,8 +67,8 @@ private:
         rDevice->clear(Color(0));
         const Color aCol(0xFFFFFFFF);
 
-        const basegfx::B2IRange aSourceRect(0,0,10,10);
-        const basegfx::B2IRange aDestAll(0,0,10,10);
+        const basegfx::B2IBox aSourceRect(0,0,10,10);
+        const basegfx::B2IBox aDestAll(0,0,10,10);
 
         rDevice->drawMaskedBitmap(
             rBmp,
@@ -86,8 +86,8 @@ private:
         rDevice->clear(Color(0));
         const Color aCol(0xFFFFFFFF);
 
-        const basegfx::B2IRange aSourceRect(0,0,10,10);
-        const basegfx::B2IRange aDestLeftTop(0,0,6,6);
+        const basegfx::B2IBox aSourceRect(0,0,10,10);
+        const basegfx::B2IBox aDestLeftTop(0,0,6,6);
 
         rDevice->drawMaskedBitmap(
             rBmp,

@@ -70,6 +70,7 @@ namespace basegfx
     class B2DPoint;
     class B2DRange;
     class B3DRange;
+    class B2IBox;
     class B2IVector;
     class B2IPoint;
     class B2IRange;
@@ -205,6 +206,19 @@ namespace basegfx
             contains rRange.
          */
         BASEGFX_DLLPUBLIC ::basegfx::B2IRange   b2ISurroundingRangeFromB2DRange( const ::basegfx::B2DRange& rRange );
+
+        /** Return smalltest integer box, which completely contains
+            given floating point range.
+
+            @param rRange
+            Input range. Values must be within the representable
+            bounds of sal_Int32
+
+            @return the closest integer box, which completely contains
+            rRange. Note that this box will contain all pixel affected
+            by a polygon fill operation over the input range.
+         */
+        BASEGFX_DLLPUBLIC ::basegfx::B2IBox     b2ISurroundingBoxFromB2DRange( const ::basegfx::B2DRange& rRange );
 
         /** Return smalltest B2DRange with integer values, which
             completely contains given floating point range.
