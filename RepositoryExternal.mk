@@ -646,6 +646,34 @@ $(call gb_LinkTarget_add_libs,$(1),$(GTHREAD_LIBS))
 
 endef
 
+
+ifeq ($(ENABLE_DBUS),YES)
+
+define gb_LinkTarget__use_dbus
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(DBUS_CFLAGS) \
+)
+
+$(call gb_Library_add_defs,$(1),\
+    -DENABLE_DBUS \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(DBUS_LIBS) \
+)
+
+endef
+
+else # ENABLE_DBUS
+
+define gb_LinkTarget__use_dbus
+
+endef
+
+endif # ENABLE_DBUS
+
+
 define gb_LinkTarget__use_dbusmenugtk
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \

@@ -1530,6 +1530,8 @@ ToFile( "COMMONS_LOGGING_JAR","@COMMONS_LOGGING_JAR@","e" );
 ToFile( "SYSTEM_SERVLETAPI", "@SYSTEM_SERVLETAPI@", "e" );
 ToFile( "SERVLETAPI_JAR",    "@SERVLETAPI_JAR@",   "e" );
 ToFile( "ENABLE_DBUS",       "@ENABLE_DBUS@",      "e" );
+ToFile( "DBUS_CFLAGS",       "@DBUS_CFLAGS@",      "e" );
+ToFile( "DBUS_LIBS",         "@DBUS_LIBS@",        "e" );
 ToFile( "ENABLE_GCONF",      "@ENABLE_GCONF@",     "e" );
 ToFile( "ENABLE_GNOMEVFS",   "@ENABLE_GNOMEVFS@",  "e" );
 ToFile( "ENABLE_GSTREAMER",  "@ENABLE_GSTREAMER@", "e" );
