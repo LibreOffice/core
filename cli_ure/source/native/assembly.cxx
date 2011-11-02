@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cli_ure.hxx"
 #using <mscorlib.dll>
 
 [assembly:System::Reflection::AssemblyProduct( "CLI-UNO Language Binding" )];
