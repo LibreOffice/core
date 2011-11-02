@@ -230,26 +230,6 @@ const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
 
 // ------------------------------------------------------------------
 
-bool BitmapPalette::IsGreyPalette() const
-{
-    // TODO: add an IsGreyPalette flag to BitmapPalette
-    // TODO: unless this causes problems binary compatibility
-    const int nEntryCount = GetEntryCount();
-    if( !nEntryCount ) // NOTE: an empty palette means 1:1 mapping
-        return true;
-    // see above: only certain entry values will result in a valid call to GetGreyPalette
-    if( nEntryCount == 2 || nEntryCount == 4 || nEntryCount == 16 || nEntryCount == 256 )
-    {
-        const BitmapPalette& rGreyPalette = Bitmap::GetGreyPalette( nEntryCount );
-        if( rGreyPalette == *this )
-            return true;
-    }
-    // TODO: is it worth to compare the entries?
-    return false;
-}
-
-// ------------------------------------------------------------------
-
 Bitmap& Bitmap::operator=( const Bitmap& rBitmap )
 {
     maPrefSize = rBitmap.maPrefSize;

@@ -4,57 +4,11 @@ AtomDocument::AtomDocument(AtomPubSession*, std::basic_string<char, std::char_tr
 AtomFolder::AtomFolder(AtomPubSession*, std::basic_string<char, std::char_traits<char>, std::allocator<char> >)
 AtomPubSession::getCollectionUrl(Collection::Type)
 AtomPubSession::~AtomPubSession()
-BitmapPalette::IsGreyPalette() const
 BufferNode::childAt(int) const
 ByteString::Assign(char const*, unsigned short)
 ByteString::Assign(char)
 CAT::Inverse() const
 CAT::makeChromaticAdaptationTag() const
-CIccCmm::FromInternalEncoding(icColorSpaceSignature, unsigned char*, float const*)
-CIccCmm::FromInternalEncoding(icColorSpaceSignature, unsigned short*, float const*)
-CIccCmm::GetFloatColorEncoding(char const*)
-CIccCmm::GetFloatColorEncoding(icFloatColorEncoding)
-CIccCmm::IsInGamut(float*)
-CIccCmm::ToInternalEncoding(icColorSpaceSignature, float*, unsigned char const*)
-CIccCmm::ToInternalEncoding(icColorSpaceSignature, float*, unsigned short const*)
-CIccFormulaCurveSegment::SetFunction(unsigned short, unsigned char, float*)
-CIccIO::ReadLine(void*, int)
-CIccInfo::GetSpotShapeName(icSpotShape)
-CIccMBB::NewCLUT(unsigned char*, unsigned char)
-CIccMemIO::Alloc(unsigned int, bool)
-CIccMpeCLUT::SetCLUT(CIccCLUT*)
-CIccMpeCreator::DoGetElementSigName(std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, icElemTypeSignature)
-CIccMpeCurveSet::SetCurve(int, CIccCurveSetCurve*)
-CIccMruCmm::Attach(CIccCmm*, unsigned char)
-CIccNamedColorCmm::CIccNamedColorCmm(icColorSpaceSignature, icColorSpaceSignature, bool)
-CIccNamedColorCmm::SetLastXformDest(icColorSpaceSignature)
-CIccProfile::DeleteTag(unsigned int)
-CIccProfile::GetSpaceSamples() const
-CIccProfileIdDesc::CIccProfileIdDesc(CIccProfile&)
-CIccProfileIdDesc::CIccProfileIdDesc(icProfileID, CIccTagMultiLocalizedUnicode)
-CIccSegmentedCurve::Insert(CIccCurveSegment*)
-CIccTagCurve::SetGamma(float)
-CIccTagFixedNum<int, (icTagTypeSignature)1936077618>::GetSize() const
-CIccTagFixedNum<unsigned int, (icTagTypeSignature)1969632050>::GetSize() const
-CIccTagMultiLocalizedUnicode::SetText(unsigned short const*, unsigned short, unsigned short)
-CIccTagMultiProcessElement::GetElement(int)
-CIccTagNamedColor2::FindRootColor(char const*)
-CIccTagNamedColor2::Lab4ToLab2(float*, float const*)
-CIccTagNamedColor2::NegClip(float)
-CIccTagNum<unsigned char, (icTagTypeSignature)1969827896>::GetSize() const
-CIccTagNum<unsigned int, (icTagTypeSignature)1969828658>::GetSize() const
-CIccTagNum<unsigned long, (icTagTypeSignature)1969829428>::GetSize() const
-CIccTagNum<unsigned short, (icTagTypeSignature)1969828150>::GetSize() const
-CIccTagProfileSequenceId::AddProfileDescription(CIccProfileIdDesc const&)
-CIccTagProfileSequenceId::GetFirst()
-CIccTagProfileSequenceId::GetLast()
-CIccTagProfileSequenceId::ParseMem(unsigned char*, unsigned int)
-CIccTagResponseCurveSet16::GetFirstCurves()
-CIccTagResponseCurveSet16::GetNextCurves()
-CIccTagResponseCurveSet16::NewResponseCurves(icMeasurementUnitSig)
-CIccTagResponseCurveSet16::SetNumChannels(unsigned short)
-CIccXform::Create(CIccProfile&, bool, icRenderingIntent, icXformInterp, icXformLutType, bool)
-CIccXformMpe::Create(CIccProfile*, bool, icRenderingIntent, icXformInterp, icXformLutType)
 CLUT::Iterate(IIccCLUTExec*)
 CLUT::adaptedXYZToMeasuredXYZ(float*, float const*, float const*, float, CAT const*)
 CLUT::makeAToBxTag(unsigned int, float const*, float const*, float const*, CAT const*, float, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, float const*, bool)
