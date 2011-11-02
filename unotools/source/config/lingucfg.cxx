@@ -1253,21 +1253,6 @@ rtl::OUString SvtLinguConfig::GetVendorImageUrl_Impl(
 }
 
 
-rtl::OUString SvtLinguConfig::GetSpellAndGrammarDialogImage(
-    const rtl::OUString &rServiceImplName
-) const
-{
-    rtl::OUString   aRes;
-    if (rServiceImplName.getLength() > 0)
-    {
-        rtl::OUString aImageName( A2OU( "SpellAndGrammarDialogImage" ));
-        rtl::OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );
-        aRes = aPath;
-    }
-    return aRes;
-}
-
-
 rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextSuggestionImage(
     const rtl::OUString &rServiceImplName
 ) const
