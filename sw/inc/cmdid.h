@@ -614,7 +614,7 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_TABLE_MODE_FIX           (FN_FORMAT + 189)  /* table mode */
 #define FN_TABLE_MODE_FIX_PROP      (FN_FORMAT + 190)  /*  -"-  */
 #define FN_TABLE_MODE_VARIABLE      (FN_FORMAT + 191)  /*  -"-  */
-#define FN_TABLE_BOX_TEXTDIRECTION  (FN_FORMAT + 192)  /*  text direction of table cells */
+#define FN_TABLE_BOX_TEXTORIENTATION (FN_FORMAT + 192)  /* text orientation of table cells */
 
 #define FN_TABLE_AUTOSUM            (FN_FORMAT + 195)  /* */
 #define FN_SET_CONTROL_HANDLER      (FN_FORMAT + 199)  /* set macro */

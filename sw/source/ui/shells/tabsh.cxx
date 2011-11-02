@@ -140,7 +140,7 @@ const sal_uInt16 aUITableAttrRange[] =
     FN_TABLE_SET_VERT_ALIGN,        FN_TABLE_SET_VERT_ALIGN,
     RES_FRAMEDIR,                   RES_FRAMEDIR,
     RES_ROW_SPLIT,                  RES_ROW_SPLIT,
-    FN_TABLE_BOX_TEXTDIRECTION,     FN_TABLE_BOX_TEXTDIRECTION,
+    FN_TABLE_BOX_TEXTORIENTATION,   FN_TABLE_BOX_TEXTORIENTATION,
 // #i29550#
     RES_COLLAPSING_BORDERS,         RES_COLLAPSING_BORDERS,
 // <-- collapsing borders
@@ -188,7 +188,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     // text direction in boxes
     SvxFrameDirectionItem aBoxDirection( FRMDIR_ENVIRONMENT, RES_FRAMEDIR );
     if(rSh.GetBoxDirection( aBoxDirection ))
-        rSet.Put(aBoxDirection, FN_TABLE_BOX_TEXTDIRECTION);
+        rSet.Put(aBoxDirection, FN_TABLE_BOX_TEXTORIENTATION);
 
     sal_Bool bTableSel = rSh.IsTableMode();
     if(!bTableSel)
@@ -309,7 +309,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
     const SfxPoolItem* pSplit = 0;
     sal_Bool bRowSplit = SFX_ITEM_SET == rSet.GetItemState( RES_ROW_SPLIT, sal_False, &pSplit );
     const SfxPoolItem* pBoxDirection = 0;
-    sal_Bool bBoxDirection = SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_BOX_TEXTDIRECTION, sal_False, &pBoxDirection );
+    sal_Bool bBoxDirection = SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_BOX_TEXTORIENTATION, sal_False, &pBoxDirection );
     if( bBackground || bBorder || bRowSplit || bBoxDirection)
     {
         /*

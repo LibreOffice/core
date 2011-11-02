@@ -117,7 +117,7 @@ SfxItemSet* lcl_CreateEmptyItemSet( int nSelectionType, SfxItemPool& rPool
                         RES_KEEP,               RES_KEEP,
                         RES_FRAMEDIR,           RES_FRAMEDIR,
                         FN_PARAM_TABLE_HEADLINE, FN_PARAM_TABLE_HEADLINE,
-                        FN_TABLE_BOX_TEXTDIRECTION, FN_TABLE_BOX_TEXTDIRECTION,
+                        FN_TABLE_BOX_TEXTORIENTATION, FN_TABLE_BOX_TEXTORIENTATION,
                         FN_TABLE_SET_VERT_ALIGN, FN_TABLE_SET_VERT_ALIGN,
                         0);
     }
@@ -158,7 +158,7 @@ void lcl_getTableAttributes( SfxItemSet& rSet, SwWrtShell &rSh )
 
     SvxFrameDirectionItem aBoxDirection( FRMDIR_ENVIRONMENT, RES_FRAMEDIR );
     if(rSh.GetBoxDirection( aBoxDirection ))
-        rSet.Put(aBoxDirection, FN_TABLE_BOX_TEXTDIRECTION);
+        rSet.Put(aBoxDirection, FN_TABLE_BOX_TEXTORIENTATION);
 
     rSet.Put(SfxUInt16Item(FN_TABLE_SET_VERT_ALIGN, rSh.GetBoxAlign()));
 
@@ -255,7 +255,7 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
             pFrmFmt->SetFmtAttr( *pItem );
     }
 
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_BOX_TEXTDIRECTION, sal_False, &pItem) )
+    if( SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_BOX_TEXTORIENTATION, sal_False, &pItem) )
     {
         SvxFrameDirectionItem aDirection( FRMDIR_ENVIRONMENT, RES_FRAMEDIR );
         aDirection.SetValue(static_cast< const SvxFrameDirectionItem* >(pItem)->GetValue());
