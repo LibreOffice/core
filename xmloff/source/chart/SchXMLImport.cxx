@@ -367,23 +367,6 @@ const SvXMLTokenMap& SchXMLImportHelper::GetPlotAreaAttrTokenMap()
     return *mpPlotAreaAttrTokenMap;
 }
 
-const SvXMLTokenMap& SchXMLImportHelper::GetAutoStyleAttrTokenMap()
-{
-    if( ! mpAutoStyleAttrTokenMap )
-    {
-        static SvXMLTokenMapEntry aAutoStyleAttrTokenMap[] =
-{
-    { XML_NAMESPACE_STYLE,  XML_FAMILY,                 XML_TOK_AS_FAMILY           },
-    { XML_NAMESPACE_STYLE,  XML_NAME,                   XML_TOK_AS_NAME             },
-    XML_TOKEN_MAP_END
-};
-
-        mpAutoStyleAttrTokenMap = new SvXMLTokenMap( aAutoStyleAttrTokenMap );
-    } // if( ! mpAutoStyleAttrTokenMap )
-
-    return *mpAutoStyleAttrTokenMap;
-}
-
 const SvXMLTokenMap& SchXMLImportHelper::GetCellAttrTokenMap()
 {
     if( ! mpCellAttrTokenMap )
@@ -575,16 +558,6 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
     return xResult;
 }
 
-// static
-Reference< chart2::data::XLabeledDataSequence > SchXMLImportHelper::GetNewLabeledDataSequence()
-{
-    // @todo: remove this asap
-    OSL_FAIL( "Do not call this method" );
-    Reference< chart2::data::XLabeledDataSequence >  xResult;
-    // DO NOT USED -- DEPRECATED. Use SchXMLTools::GetNewLabeledDataSequence() instead
-    return xResult;
-}
-
 // ========================================
 
 // #110680#
@@ -597,43 +570,6 @@ SchXMLImport::SchXMLImport(
     GetNamespaceMap().Add( GetXMLToken(XML_NP_CHART_EXT), GetXMLToken(XML_N_CHART_EXT), XML_NAMESPACE_CHART_EXT);
 
     mbIsGraphicLoadOnDemandSupported = false;
-}
-
-// #110680#
-SchXMLImport::SchXMLImport(
-    const Reference< lang::XMultiServiceFactory >& xServiceFactory,
-    Reference< frame::XModel > xModel,
-    Reference< document::XGraphicObjectResolver >& rGrfContainer,
-    sal_Bool /*bLoadDoc*/, sal_Bool bShowProgress )
-:   SvXMLImport( xServiceFactory, xModel, rGrfContainer )
-{
-    GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
-    GetNamespaceMap().Add( GetXMLToken(XML_NP_CHART_EXT), GetXMLToken(XML_N_CHART_EXT), XML_NAMESPACE_CHART_EXT);
-
-    // get status indicator (if requested)
-    if( bShowProgress )
-    {
-        Reference< frame::XController > xController( xModel->getCurrentController());
-        if( xController.is())
-        {
-            Reference< frame::XFrame > xFrame( xController->getFrame());
-            if( xFrame.is())
-            {
-                Reference< task::XStatusIndicatorSupplier > xFactory( xFrame, uno::UNO_QUERY );
-                if( xFactory.is())
-                {
-                    mxStatusIndicator = xFactory->getStatusIndicator();
-                }
-            }
-        }
-    }
-
-    // add progress view
-    if( mxStatusIndicator.is())
-    {
-        const OUString aText( RTL_CONSTASCII_USTRINGPARAM( "XML Import" ));
-        mxStatusIndicator->start( aText, 100 );     // use percentage as values
-    }
 }
 
 SchXMLImport::~SchXMLImport() throw ()

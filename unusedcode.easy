@@ -474,16 +474,9 @@ ScVbaShapes::AddShape(rtl::OUString const&, rtl::OUString const&, int, int, int,
 ScVbaWindows::ScVbaWindows(com::sun::star::uno::Reference<ooo::vba::XHelperInterface> const&, com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> const&)
 ScVbaWorksheet::ScVbaWorksheet(com::sun::star::uno::Reference<ooo::vba::XHelperInterface> const&, com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 ScXMLExportDDELinks::CellsEqual(bool, bool, String const&, double const&, bool, bool, String const&, double const&) const
-ScXMLExportDatabaseRanges::WriteFilterDescriptor(com::sun::star::uno::Reference<com::sun::star::sheet::XSheetFilterDescriptor2> const&, rtl::OUString)
-ScXMLExportDatabaseRanges::WriteImportDescriptor(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>)
-ScXMLExportDatabaseRanges::WriteSortDescriptor(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>)
-ScXMLExportDatabaseRanges::WriteSubTotalDescriptor(com::sun::star::uno::Reference<com::sun::star::sheet::XSubTotalDescriptor>, rtl::OUString)
 ScaList::Insert(void*, unsigned int)
 SchXMLExport::SetProgress(int)
 SchXMLExportHelper_Impl::getCellAddress(int, int)
-SchXMLImport::SchXMLImport(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, com::sun::star::uno::Reference<com::sun::star::frame::XModel>, com::sun::star::uno::Reference<com::sun::star::document::XGraphicObjectResolver>&, unsigned char, unsigned char)
-SchXMLImportHelper::GetAutoStyleAttrTokenMap()
-SchXMLImportHelper::GetNewLabeledDataSequence()
 SchXMLPositonAttributesHelper::getPosition() const
 SchXMLPositonAttributesHelper::getSize() const
 SchXMLSeriesHelper::getFirstCandleStickSeries(com::sun::star::uno::Reference<com::sun::star::chart2::XDiagram> const&)

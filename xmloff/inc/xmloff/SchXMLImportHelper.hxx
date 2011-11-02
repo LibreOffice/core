@@ -124,7 +124,6 @@ public:
 
     const SvXMLTokenMap& GetChartAttrTokenMap();
     const SvXMLTokenMap& GetPlotAreaAttrTokenMap();
-    const SvXMLTokenMap& GetAutoStyleAttrTokenMap();
     const SvXMLTokenMap& GetCellAttrTokenMap();
     const SvXMLTokenMap& GetSeriesAttrTokenMap();
     const SvXMLTokenMap& GetRegEquationAttrTokenMap();
@@ -156,9 +155,6 @@ public:
                         ::com::sun::star::chart2::XDataSeries >& xSeries,
                     const ::com::sun::star::uno::Reference<
                         ::com::sun::star::chart2::XChartDocument > & xDoc );
-
-    static ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XLabeledDataSequence > GetNewLabeledDataSequence();
 };
 
 #endif  // _XMLOFF_SCH_XMLIMPORTHELPER_HXX_

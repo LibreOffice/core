@@ -177,13 +177,6 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         sal_uInt16 nImportFlags = IMPORT_ALL );
 
-    // #110680#
-    SchXMLImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-        com::sun::star::uno::Reference< com::sun::star::frame::XModel > xModel,
-        com::sun::star::uno::Reference< com::sun::star::document::XGraphicObjectResolver > &,
-        sal_Bool bLoadDoc, sal_Bool bShowProgress );
-
     virtual ~SchXMLImport() throw ();
 
     // XServiceInfo ( : SvXMLExport )
