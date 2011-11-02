@@ -28,12 +28,12 @@ void CustomShapeProperties::initializePresetsMap1()
     }
     {
         Sequence< OUString > aStringSequence (24);
-        aStringSequence[0] = CREATE_OUSTRING ("min(width,height)");
+        aStringSequence[0] = CREATE_OUSTRING ("min(logwidth,logheight)");
         aStringSequence[1] = CREATE_OUSTRING ("?0 *3/8");
-        aStringSequence[2] = CREATE_OUSTRING ("height/2");
+        aStringSequence[2] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[3] = CREATE_OUSTRING ("?2 +0-?1 ");
         aStringSequence[4] = CREATE_OUSTRING ("?2 +?1 -0");
-        aStringSequence[5] = CREATE_OUSTRING ("width/2");
+        aStringSequence[5] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[6] = CREATE_OUSTRING ("?5 +0-?1 ");
         aStringSequence[7] = CREATE_OUSTRING ("?5 +?1 -0");
         aStringSequence[8] = CREATE_OUSTRING ("?0 *3/4");
@@ -50,8 +50,8 @@ void CustomShapeProperties::initializePresetsMap1()
         aStringSequence[19] = CREATE_OUSTRING ("?6 +?10 -0");
         aStringSequence[20] = CREATE_OUSTRING ("?6 +?11 -0");
         aStringSequence[21] = CREATE_OUSTRING ("?6 +?13 -0");
-        aStringSequence[22] = CREATE_OUSTRING ("width");
-        aStringSequence[23] = CREATE_OUSTRING ("height");
+        aStringSequence[22] = CREATE_OUSTRING ("logwidth");
+        aStringSequence[23] = CREATE_OUSTRING ("logheight");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -845,14 +845,14 @@ void CustomShapeProperties::initializePresetsMap1()
     }
     {
         Sequence< OUString > aStringSequence (8);
-        aStringSequence[0] = CREATE_OUSTRING ("height*$0 /100000");
-        aStringSequence[1] = CREATE_OUSTRING ("width*$1 /100000");
-        aStringSequence[2] = CREATE_OUSTRING ("height*$2 /100000");
-        aStringSequence[3] = CREATE_OUSTRING ("width*$3 /100000");
-        aStringSequence[4] = CREATE_OUSTRING ("width");
-        aStringSequence[5] = CREATE_OUSTRING ("height/2");
-        aStringSequence[6] = CREATE_OUSTRING ("width/2");
-        aStringSequence[7] = CREATE_OUSTRING ("height");
+        aStringSequence[0] = CREATE_OUSTRING ("logheight*$0 /100000");
+        aStringSequence[1] = CREATE_OUSTRING ("logwidth*$1 /100000");
+        aStringSequence[2] = CREATE_OUSTRING ("logheight*$2 /100000");
+        aStringSequence[3] = CREATE_OUSTRING ("logwidth*$3 /100000");
+        aStringSequence[4] = CREATE_OUSTRING ("logwidth");
+        aStringSequence[5] = CREATE_OUSTRING ("logheight/2");
+        aStringSequence[6] = CREATE_OUSTRING ("logwidth/2");
+        aStringSequence[7] = CREATE_OUSTRING ("logheight");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -1178,12 +1178,12 @@ void CustomShapeProperties::initializePresetsMap1()
     }
     {
         Sequence< OUString > aStringSequence (14);
-        aStringSequence[0] = CREATE_OUSTRING ("sqrt(width*width+height*height+0*0)");
+        aStringSequence[0] = CREATE_OUSTRING ("sqrt(logwidth*logwidth+logheight*logheight+0*0)");
         aStringSequence[1] = CREATE_OUSTRING ("1*?0 /20");
-        aStringSequence[2] = CREATE_OUSTRING ("0+height-?1 ");
-        aStringSequence[3] = CREATE_OUSTRING ("0+width-?1 ");
-        aStringSequence[4] = CREATE_OUSTRING ("height");
-        aStringSequence[5] = CREATE_OUSTRING ("width");
+        aStringSequence[2] = CREATE_OUSTRING ("0+logheight-?1 ");
+        aStringSequence[3] = CREATE_OUSTRING ("0+logwidth-?1 ");
+        aStringSequence[4] = CREATE_OUSTRING ("logheight");
+        aStringSequence[5] = CREATE_OUSTRING ("logwidth");
         aStringSequence[6] = CREATE_OUSTRING ("(0)/60000.0");
         aStringSequence[7] = CREATE_OUSTRING ("(5400000)/60000.0");
         aStringSequence[8] = CREATE_OUSTRING ("(16200000)/60000.0");
@@ -1651,30 +1651,30 @@ void CustomShapeProperties::initializePresetsMap1()
     }
     {
         Sequence< OUString > aStringSequence (61);
-        aStringSequence[0] = CREATE_OUSTRING ("min(width,height)");
-        aStringSequence[1] = CREATE_OUSTRING ("50000*height/?0 ");
+        aStringSequence[0] = CREATE_OUSTRING ("min(logwidth,logheight)");
+        aStringSequence[1] = CREATE_OUSTRING ("50000*logheight/?0 ");
         aStringSequence[2] = CREATE_OUSTRING ("if(0-$1 ,0,if(?1 -$1 ,$1 ,?1 ))");
         aStringSequence[3] = CREATE_OUSTRING ("if(0-$0 ,0,if(?2 -$0 ,$0 ,?2 ))");
         aStringSequence[4] = CREATE_OUSTRING ("?0 *?3 /100000");
         aStringSequence[5] = CREATE_OUSTRING ("?0 *?2 /100000");
         aStringSequence[6] = CREATE_OUSTRING ("(?4 +?5 )/4");
-        aStringSequence[7] = CREATE_OUSTRING ("height/2");
+        aStringSequence[7] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[8] = CREATE_OUSTRING ("?7 +0-?6 ");
         aStringSequence[9] = CREATE_OUSTRING ("?8 *2/1");
         aStringSequence[10] = CREATE_OUSTRING ("?9 *?9 /1");
         aStringSequence[11] = CREATE_OUSTRING ("?4 *?4 /1");
         aStringSequence[12] = CREATE_OUSTRING ("?10 +0-?11 ");
         aStringSequence[13] = CREATE_OUSTRING ("sqrt(?12 )");
-        aStringSequence[14] = CREATE_OUSTRING ("?13 *width/?9 ");
+        aStringSequence[14] = CREATE_OUSTRING ("?13 *logwidth/?9 ");
         aStringSequence[15] = CREATE_OUSTRING ("100000*?14 /?0 ");
         aStringSequence[16] = CREATE_OUSTRING ("if(0-$2 ,0,if(?15 -$2 ,$2 ,?15 ))");
         aStringSequence[17] = CREATE_OUSTRING ("?0 *?16 /100000");
         aStringSequence[18] = CREATE_OUSTRING ("?8 +?4 -0");
-        aStringSequence[19] = CREATE_OUSTRING ("width*width/1");
+        aStringSequence[19] = CREATE_OUSTRING ("logwidth*logwidth/1");
         aStringSequence[20] = CREATE_OUSTRING ("?17 *?17 /1");
         aStringSequence[21] = CREATE_OUSTRING ("?19 +0-?20 ");
         aStringSequence[22] = CREATE_OUSTRING ("sqrt(?21 )");
-        aStringSequence[23] = CREATE_OUSTRING ("?22 *?8 /width");
+        aStringSequence[23] = CREATE_OUSTRING ("?22 *?8 /logwidth");
         aStringSequence[24] = CREATE_OUSTRING ("?8 +?23 -0");
         aStringSequence[25] = CREATE_OUSTRING ("?18 +?23 -0");
         aStringSequence[26] = CREATE_OUSTRING ("?5 +0-?4 ");
@@ -1682,7 +1682,7 @@ void CustomShapeProperties::initializePresetsMap1()
         aStringSequence[28] = CREATE_OUSTRING ("?24 +0-?27 ");
         aStringSequence[29] = CREATE_OUSTRING ("?25 +?27 -0");
         aStringSequence[30] = CREATE_OUSTRING ("?5 *1/2");
-        aStringSequence[31] = CREATE_OUSTRING ("height+0-?30 ");
+        aStringSequence[31] = CREATE_OUSTRING ("logheight+0-?30 ");
         aStringSequence[32] = CREATE_OUSTRING ("0+?17 -0");
         aStringSequence[33] = CREATE_OUSTRING ("(10800000*atan2(?23 ,?17 ))/pi");
         aStringSequence[34] = CREATE_OUSTRING ("0+0-?33 ");
@@ -1693,9 +1693,9 @@ void CustomShapeProperties::initializePresetsMap1()
         aStringSequence[39] = CREATE_OUSTRING ("?38 +0-?33 ");
         aStringSequence[40] = CREATE_OUSTRING ("?33 +?38 -0");
         aStringSequence[41] = CREATE_OUSTRING ("0+0-?38 ");
-        aStringSequence[42] = CREATE_OUSTRING ("width");
-        aStringSequence[43] = CREATE_OUSTRING ("height");
-        aStringSequence[44] = CREATE_OUSTRING ("width");
+        aStringSequence[42] = CREATE_OUSTRING ("logwidth");
+        aStringSequence[43] = CREATE_OUSTRING ("logheight");
+        aStringSequence[44] = CREATE_OUSTRING ("logwidth");
         aStringSequence[45] = CREATE_OUSTRING ("(?33 )/60000.0");
         aStringSequence[46] = CREATE_OUSTRING ("(?39 )/60000.0");
         aStringSequence[47] = CREATE_OUSTRING ("(?41 )/60000.0");
@@ -2542,15 +2542,15 @@ void CustomShapeProperties::initializePresetsMap1()
     {
         Sequence< OUString > aStringSequence (10);
         aStringSequence[0] = CREATE_OUSTRING ("if(0-$0 ,0,if(50000-$0 ,$0 ,50000))");
-        aStringSequence[1] = CREATE_OUSTRING ("min(width,height)");
+        aStringSequence[1] = CREATE_OUSTRING ("min(logwidth,logheight)");
         aStringSequence[2] = CREATE_OUSTRING ("?1 *?0 /100000");
-        aStringSequence[3] = CREATE_OUSTRING ("width+0-?2 ");
-        aStringSequence[4] = CREATE_OUSTRING ("height+0-?2 ");
+        aStringSequence[3] = CREATE_OUSTRING ("logwidth+0-?2 ");
+        aStringSequence[4] = CREATE_OUSTRING ("logheight+0-?2 ");
         aStringSequence[5] = CREATE_OUSTRING ("?2 *1/2");
-        aStringSequence[6] = CREATE_OUSTRING ("width+0-?5 ");
-        aStringSequence[7] = CREATE_OUSTRING ("height+0-?5 ");
-        aStringSequence[8] = CREATE_OUSTRING ("width");
-        aStringSequence[9] = CREATE_OUSTRING ("height");
+        aStringSequence[6] = CREATE_OUSTRING ("logwidth+0-?5 ");
+        aStringSequence[7] = CREATE_OUSTRING ("logheight+0-?5 ");
+        aStringSequence[8] = CREATE_OUSTRING ("logwidth");
+        aStringSequence[9] = CREATE_OUSTRING ("logheight");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -2817,33 +2817,33 @@ void CustomShapeProperties::initializePresetsMap1()
         aStringSequence[0] = CREATE_OUSTRING ("if(0-$2 ,0,if(33333-$2 ,$2 ,33333))");
         aStringSequence[1] = CREATE_OUSTRING ("100000+0-?0 ");
         aStringSequence[2] = CREATE_OUSTRING ("if(0-$0 ,0,if(?1 -$0 ,$0 ,?1 ))");
-        aStringSequence[3] = CREATE_OUSTRING ("width/2");
-        aStringSequence[4] = CREATE_OUSTRING ("width/32");
+        aStringSequence[3] = CREATE_OUSTRING ("logwidth/2");
+        aStringSequence[4] = CREATE_OUSTRING ("logwidth/32");
         aStringSequence[5] = CREATE_OUSTRING ("?3 +0-?4 ");
-        aStringSequence[6] = CREATE_OUSTRING ("min(width,height)");
+        aStringSequence[6] = CREATE_OUSTRING ("min(logwidth,logheight)");
         aStringSequence[7] = CREATE_OUSTRING ("100000*?5 /?6 ");
         aStringSequence[8] = CREATE_OUSTRING ("if(0-$1 ,0,if(?7 -$1 ,$1 ,?7 ))");
         aStringSequence[9] = CREATE_OUSTRING ("?6 *?8 /100000");
-        aStringSequence[10] = CREATE_OUSTRING ("width+0-?9 ");
-        aStringSequence[11] = CREATE_OUSTRING ("height*?2 /200000");
-        aStringSequence[12] = CREATE_OUSTRING ("height*?0 /-200000");
-        aStringSequence[13] = CREATE_OUSTRING ("height/2");
+        aStringSequence[10] = CREATE_OUSTRING ("logwidth+0-?9 ");
+        aStringSequence[11] = CREATE_OUSTRING ("logheight*?2 /200000");
+        aStringSequence[12] = CREATE_OUSTRING ("logheight*?0 /-200000");
+        aStringSequence[13] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[14] = CREATE_OUSTRING ("?13 +?12 -?11 ");
         aStringSequence[15] = CREATE_OUSTRING ("?13 +?11 -?12 ");
         aStringSequence[16] = CREATE_OUSTRING ("?14 +?11 -0");
-        aStringSequence[17] = CREATE_OUSTRING ("height+0-?16 ");
+        aStringSequence[17] = CREATE_OUSTRING ("logheight+0-?16 ");
         aStringSequence[18] = CREATE_OUSTRING ("?16 *2/1");
-        aStringSequence[19] = CREATE_OUSTRING ("height+0-?18 ");
+        aStringSequence[19] = CREATE_OUSTRING ("logheight+0-?18 ");
         aStringSequence[20] = CREATE_OUSTRING ("?18 +0-?14 ");
-        aStringSequence[21] = CREATE_OUSTRING ("height+0-?20 ");
+        aStringSequence[21] = CREATE_OUSTRING ("logheight+0-?20 ");
         aStringSequence[22] = CREATE_OUSTRING ("?0 *?6 /400000");
-        aStringSequence[23] = CREATE_OUSTRING ("width/2");
+        aStringSequence[23] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[24] = CREATE_OUSTRING ("?23 +0-?4 ");
         aStringSequence[25] = CREATE_OUSTRING ("?23 +?4 -0");
         aStringSequence[26] = CREATE_OUSTRING ("?14 +?22 -0");
         aStringSequence[27] = CREATE_OUSTRING ("?21 +0-?22 ");
-        aStringSequence[28] = CREATE_OUSTRING ("width");
-        aStringSequence[29] = CREATE_OUSTRING ("height");
+        aStringSequence[28] = CREATE_OUSTRING ("logwidth");
+        aStringSequence[29] = CREATE_OUSTRING ("logheight");
         aStringSequence[30] = CREATE_OUSTRING ("(16200000)/60000.0");
         aStringSequence[31] = CREATE_OUSTRING ("(10800000)/60000.0");
         aStringSequence[32] = CREATE_OUSTRING ("(16200000)/60000.0");
@@ -4051,11 +4051,11 @@ void CustomShapeProperties::initializePresetsMap1()
     }
     {
         Sequence< OUString > aStringSequence (39);
-        aStringSequence[0] = CREATE_OUSTRING ("min(width,height)");
+        aStringSequence[0] = CREATE_OUSTRING ("min(logwidth,logheight)");
         aStringSequence[1] = CREATE_OUSTRING ("?0 *3/8");
-        aStringSequence[2] = CREATE_OUSTRING ("height/2");
+        aStringSequence[2] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[3] = CREATE_OUSTRING ("?2 +0-?1 ");
-        aStringSequence[4] = CREATE_OUSTRING ("width/2");
+        aStringSequence[4] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[5] = CREATE_OUSTRING ("?4 +0-?1 ");
         aStringSequence[6] = CREATE_OUSTRING ("?0 *3/4");
         aStringSequence[7] = CREATE_OUSTRING ("?6 *1/32");
@@ -4076,8 +4076,8 @@ void CustomShapeProperties::initializePresetsMap1()
         aStringSequence[22] = CREATE_OUSTRING ("?5 +?11 -0");
         aStringSequence[23] = CREATE_OUSTRING ("?5 +?12 -0");
         aStringSequence[24] = CREATE_OUSTRING ("?6 *3/32");
-        aStringSequence[25] = CREATE_OUSTRING ("width");
-        aStringSequence[26] = CREATE_OUSTRING ("height");
+        aStringSequence[25] = CREATE_OUSTRING ("logwidth");
+        aStringSequence[26] = CREATE_OUSTRING ("logheight");
         aStringSequence[27] = CREATE_OUSTRING ("(16200000)/60000.0");
         aStringSequence[28] = CREATE_OUSTRING ("(21600000)/60000.0");
         aStringSequence[29] = CREATE_OUSTRING ("(16200000)/60000.0");
@@ -5371,14 +5371,14 @@ void CustomShapeProperties::initializePresetsMap1()
     }
     {
         Sequence< OUString > aStringSequence (8);
-        aStringSequence[0] = CREATE_OUSTRING ("width*$0 /100000");
-        aStringSequence[1] = CREATE_OUSTRING ("width*$2 /100000");
+        aStringSequence[0] = CREATE_OUSTRING ("logwidth*$0 /100000");
+        aStringSequence[1] = CREATE_OUSTRING ("logwidth*$2 /100000");
         aStringSequence[2] = CREATE_OUSTRING ("(?0 +?1 )/2");
-        aStringSequence[3] = CREATE_OUSTRING ("height*$1 /100000");
+        aStringSequence[3] = CREATE_OUSTRING ("logheight*$1 /100000");
         aStringSequence[4] = CREATE_OUSTRING ("(0+?3 )/2");
-        aStringSequence[5] = CREATE_OUSTRING ("(height+?3 )/2");
-        aStringSequence[6] = CREATE_OUSTRING ("width");
-        aStringSequence[7] = CREATE_OUSTRING ("height");
+        aStringSequence[5] = CREATE_OUSTRING ("(logheight+?3 )/2");
+        aStringSequence[6] = CREATE_OUSTRING ("logwidth");
+        aStringSequence[7] = CREATE_OUSTRING ("logheight");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -5707,13 +5707,13 @@ void CustomShapeProperties::initializePresetsMap1()
         aStringSequence[2] = CREATE_OUSTRING ("if(0-$0 ,0,if(?1 -$0 ,$0 ,?1 ))");
         aStringSequence[3] = CREATE_OUSTRING ("if(1-$2 ,1,if(21599999-$2 ,$2 ,21599999))");
         aStringSequence[4] = CREATE_OUSTRING ("if(0-$3 ,0,if(21599999-$3 ,$3 ,21599999))");
-        aStringSequence[5] = CREATE_OUSTRING ("min(width,height)");
+        aStringSequence[5] = CREATE_OUSTRING ("min(logwidth,logheight)");
         aStringSequence[6] = CREATE_OUSTRING ("?5 *?2 /100000");
         aStringSequence[7] = CREATE_OUSTRING ("?5 *?0 /100000");
         aStringSequence[8] = CREATE_OUSTRING ("?6 *1/2");
-        aStringSequence[9] = CREATE_OUSTRING ("width/2");
+        aStringSequence[9] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[10] = CREATE_OUSTRING ("?9 +?8 -?7 ");
-        aStringSequence[11] = CREATE_OUSTRING ("height/2");
+        aStringSequence[11] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[12] = CREATE_OUSTRING ("?11 +?8 -?7 ");
         aStringSequence[13] = CREATE_OUSTRING ("?10 +0-?6 ");
         aStringSequence[14] = CREATE_OUSTRING ("?12 +0-?6 ");
@@ -5723,9 +5723,9 @@ void CustomShapeProperties::initializePresetsMap1()
         aStringSequence[18] = CREATE_OUSTRING ("?16 *cos(pi*(?3 )/10800000)");
         aStringSequence[19] = CREATE_OUSTRING ("?15 *(cos(atan2(?17 ,?18 )))");
         aStringSequence[20] = CREATE_OUSTRING ("?16 *(sin(atan2(?17 ,?18 )))");
-        aStringSequence[21] = CREATE_OUSTRING ("width/2");
+        aStringSequence[21] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[22] = CREATE_OUSTRING ("?21 +?19 -0");
-        aStringSequence[23] = CREATE_OUSTRING ("height/2");
+        aStringSequence[23] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[24] = CREATE_OUSTRING ("?23 +?20 -0");
         aStringSequence[25] = CREATE_OUSTRING ("min(?13 ,?14 )");
         aStringSequence[26] = CREATE_OUSTRING ("?19 *?19 /1");
@@ -6280,29 +6280,29 @@ void CustomShapeProperties::initializePresetsMap1()
     }
     {
         Sequence< OUString > aStringSequence (23);
-        aStringSequence[0] = CREATE_OUSTRING ("min(width,height)");
-        aStringSequence[1] = CREATE_OUSTRING ("50000*width/?0 ");
+        aStringSequence[0] = CREATE_OUSTRING ("min(logwidth,logheight)");
+        aStringSequence[1] = CREATE_OUSTRING ("50000*logwidth/?0 ");
         aStringSequence[2] = CREATE_OUSTRING ("if(0-$1 ,0,if(?1 -$1 ,$1 ,?1 ))");
         aStringSequence[3] = CREATE_OUSTRING ("?2 *2/1");
         aStringSequence[4] = CREATE_OUSTRING ("if(0-$0 ,0,if(?3 -$0 ,$0 ,?3 ))");
-        aStringSequence[5] = CREATE_OUSTRING ("100000*height/?0 ");
+        aStringSequence[5] = CREATE_OUSTRING ("100000*logheight/?0 ");
         aStringSequence[6] = CREATE_OUSTRING ("if(0-$2 ,0,if(?5 -$2 ,$2 ,?5 ))");
-        aStringSequence[7] = CREATE_OUSTRING ("?6 *?0 /height");
+        aStringSequence[7] = CREATE_OUSTRING ("?6 *?0 /logheight");
         aStringSequence[8] = CREATE_OUSTRING ("100000+0-?7 ");
         aStringSequence[9] = CREATE_OUSTRING ("if(0-$3 ,0,if(?8 -$3 ,$3 ,?8 ))");
         aStringSequence[10] = CREATE_OUSTRING ("?0 *?2 /100000");
         aStringSequence[11] = CREATE_OUSTRING ("?0 *?4 /200000");
-        aStringSequence[12] = CREATE_OUSTRING ("width/2");
+        aStringSequence[12] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[13] = CREATE_OUSTRING ("?12 +0-?10 ");
         aStringSequence[14] = CREATE_OUSTRING ("?12 +0-?11 ");
         aStringSequence[15] = CREATE_OUSTRING ("?12 +?11 -0");
         aStringSequence[16] = CREATE_OUSTRING ("?12 +?10 -0");
         aStringSequence[17] = CREATE_OUSTRING ("?0 *?6 /100000");
-        aStringSequence[18] = CREATE_OUSTRING ("height+0-?17 ");
-        aStringSequence[19] = CREATE_OUSTRING ("height*?9 /100000");
+        aStringSequence[18] = CREATE_OUSTRING ("logheight+0-?17 ");
+        aStringSequence[19] = CREATE_OUSTRING ("logheight*?9 /100000");
         aStringSequence[20] = CREATE_OUSTRING ("?19 *1/2");
-        aStringSequence[21] = CREATE_OUSTRING ("height");
-        aStringSequence[22] = CREATE_OUSTRING ("width");
+        aStringSequence[21] = CREATE_OUSTRING ("logheight");
+        aStringSequence[22] = CREATE_OUSTRING ("logwidth");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -6745,12 +6745,12 @@ void CustomShapeProperties::initializePresetsMap1()
     {
         Sequence< OUString > aStringSequence (9);
         aStringSequence[0] = CREATE_OUSTRING ("if(0-$0 ,0,if(100000-$0 ,$0 ,100000))");
-        aStringSequence[1] = CREATE_OUSTRING ("height*?0 /200000");
-        aStringSequence[2] = CREATE_OUSTRING ("width*73490/200000");
-        aStringSequence[3] = CREATE_OUSTRING ("height/2");
+        aStringSequence[1] = CREATE_OUSTRING ("logheight*?0 /200000");
+        aStringSequence[2] = CREATE_OUSTRING ("logwidth*73490/200000");
+        aStringSequence[3] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[4] = CREATE_OUSTRING ("?3 +0-?1 ");
         aStringSequence[5] = CREATE_OUSTRING ("?3 +?1 -0");
-        aStringSequence[6] = CREATE_OUSTRING ("width/2");
+        aStringSequence[6] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[7] = CREATE_OUSTRING ("?6 +0-?2 ");
         aStringSequence[8] = CREATE_OUSTRING ("?6 +?2 -0");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
@@ -6942,15 +6942,15 @@ void CustomShapeProperties::initializePresetsMap1()
         Sequence< OUString > aStringSequence (265);
         aStringSequence[0] = CREATE_OUSTRING ("if(0-$0 ,0,if(20000-$0 ,$0 ,20000))");
         aStringSequence[1] = CREATE_OUSTRING ("if(0-$1 ,0,if(2679-$1 ,$1 ,2679))");
-        aStringSequence[2] = CREATE_OUSTRING ("min(width,height)");
+        aStringSequence[2] = CREATE_OUSTRING ("min(logwidth,logheight)");
         aStringSequence[3] = CREATE_OUSTRING ("?2 *?0 /100000");
         aStringSequence[4] = CREATE_OUSTRING ("?2 *?1 /100000");
         aStringSequence[5] = CREATE_OUSTRING ("?3 *1/2");
         aStringSequence[6] = CREATE_OUSTRING ("?4 *1/2");
         aStringSequence[7] = CREATE_OUSTRING ("?5 +?6 -0");
-        aStringSequence[8] = CREATE_OUSTRING ("height/2");
+        aStringSequence[8] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[9] = CREATE_OUSTRING ("?8 +0-?3 ");
-        aStringSequence[10] = CREATE_OUSTRING ("width/2");
+        aStringSequence[10] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[11] = CREATE_OUSTRING ("?10 +0-?3 ");
         aStringSequence[12] = CREATE_OUSTRING ("?11 +0-?9 ");
         aStringSequence[13] = CREATE_OUSTRING ("if(?12 ,?9 ,?11 )");
@@ -6966,9 +6966,9 @@ void CustomShapeProperties::initializePresetsMap1()
         aStringSequence[23] = CREATE_OUSTRING ("?11 *?9 /?22 ");
         aStringSequence[24] = CREATE_OUSTRING ("?23 *cos(pi*(?19 )/10800000)");
         aStringSequence[25] = CREATE_OUSTRING ("?23 *sin(pi*(?19 )/10800000)");
-        aStringSequence[26] = CREATE_OUSTRING ("width/2");
+        aStringSequence[26] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[27] = CREATE_OUSTRING ("?26 +?24 -0");
-        aStringSequence[28] = CREATE_OUSTRING ("height/2");
+        aStringSequence[28] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[29] = CREATE_OUSTRING ("?28 +?25 -0");
         aStringSequence[30] = CREATE_OUSTRING ("?11 *cos(pi*(?16 )/10800000)");
         aStringSequence[31] = CREATE_OUSTRING ("?9 *sin(pi*(?16 )/10800000)");
@@ -7128,32 +7128,32 @@ void CustomShapeProperties::initializePresetsMap1()
         aStringSequence[185] = CREATE_OUSTRING ("?11 *cos(pi*(?181 )/10800000)");
         aStringSequence[186] = CREATE_OUSTRING ("?9 *sin(pi*(?181 )/10800000)");
         aStringSequence[187] = CREATE_OUSTRING ("(10800000*atan2(?186 ,?185 ))/pi");
-        aStringSequence[188] = CREATE_OUSTRING ("width+0-?150 ");
-        aStringSequence[189] = CREATE_OUSTRING ("width+0-?178 ");
-        aStringSequence[190] = CREATE_OUSTRING ("width+0-?176 ");
+        aStringSequence[188] = CREATE_OUSTRING ("logwidth+0-?150 ");
+        aStringSequence[189] = CREATE_OUSTRING ("logwidth+0-?178 ");
+        aStringSequence[190] = CREATE_OUSTRING ("logwidth+0-?176 ");
         aStringSequence[191] = CREATE_OUSTRING ("?184 +0-?154 ");
         aStringSequence[192] = CREATE_OUSTRING ("9000000+?14 -0");
         aStringSequence[193] = CREATE_OUSTRING ("?11 *cos(pi*(?192 )/10800000)");
         aStringSequence[194] = CREATE_OUSTRING ("?9 *sin(pi*(?192 )/10800000)");
         aStringSequence[195] = CREATE_OUSTRING ("(10800000*atan2(?194 ,?193 ))/pi");
-        aStringSequence[196] = CREATE_OUSTRING ("width+0-?109 ");
-        aStringSequence[197] = CREATE_OUSTRING ("width+0-?137 ");
-        aStringSequence[198] = CREATE_OUSTRING ("width+0-?135 ");
+        aStringSequence[196] = CREATE_OUSTRING ("logwidth+0-?109 ");
+        aStringSequence[197] = CREATE_OUSTRING ("logwidth+0-?137 ");
+        aStringSequence[198] = CREATE_OUSTRING ("logwidth+0-?135 ");
         aStringSequence[199] = CREATE_OUSTRING ("11400000+?14 -0");
         aStringSequence[200] = CREATE_OUSTRING ("?11 *cos(pi*(?199 )/10800000)");
         aStringSequence[201] = CREATE_OUSTRING ("?9 *sin(pi*(?199 )/10800000)");
         aStringSequence[202] = CREATE_OUSTRING ("(10800000*atan2(?201 ,?200 ))/pi");
-        aStringSequence[203] = CREATE_OUSTRING ("width+0-?68 ");
-        aStringSequence[204] = CREATE_OUSTRING ("width+0-?96 ");
-        aStringSequence[205] = CREATE_OUSTRING ("width+0-?94 ");
+        aStringSequence[203] = CREATE_OUSTRING ("logwidth+0-?68 ");
+        aStringSequence[204] = CREATE_OUSTRING ("logwidth+0-?96 ");
+        aStringSequence[205] = CREATE_OUSTRING ("logwidth+0-?94 ");
         aStringSequence[206] = CREATE_OUSTRING ("13800000+?14 -0");
         aStringSequence[207] = CREATE_OUSTRING ("?11 *cos(pi*(?206 )/10800000)");
         aStringSequence[208] = CREATE_OUSTRING ("?9 *sin(pi*(?206 )/10800000)");
         aStringSequence[209] = CREATE_OUSTRING ("(10800000*atan2(?208 ,?207 ))/pi");
-        aStringSequence[210] = CREATE_OUSTRING ("width+0-?39 ");
-        aStringSequence[211] = CREATE_OUSTRING ("width+0-?27 ");
-        aStringSequence[212] = CREATE_OUSTRING ("width+0-?56 ");
-        aStringSequence[213] = CREATE_OUSTRING ("width+0-?54 ");
+        aStringSequence[210] = CREATE_OUSTRING ("logwidth+0-?39 ");
+        aStringSequence[211] = CREATE_OUSTRING ("logwidth+0-?27 ");
+        aStringSequence[212] = CREATE_OUSTRING ("logwidth+0-?56 ");
+        aStringSequence[213] = CREATE_OUSTRING ("logwidth+0-?54 ");
         aStringSequence[214] = CREATE_OUSTRING ("16200000+0-?14 ");
         aStringSequence[215] = CREATE_OUSTRING ("16200000+?14 -0");
         aStringSequence[216] = CREATE_OUSTRING ("?11 *cos(pi*(?215 )/10800000)");
@@ -7183,10 +7183,10 @@ void CustomShapeProperties::initializePresetsMap1()
         aStringSequence[240] = CREATE_OUSTRING ("(?136 +?134 )/2");
         aStringSequence[241] = CREATE_OUSTRING ("(?178 +?176 )/2");
         aStringSequence[242] = CREATE_OUSTRING ("(?177 +?175 )/2");
-        aStringSequence[243] = CREATE_OUSTRING ("(width+0)/?241 ");
-        aStringSequence[244] = CREATE_OUSTRING ("(width+0)/?239 ");
-        aStringSequence[245] = CREATE_OUSTRING ("(width+0)/?237 ");
-        aStringSequence[246] = CREATE_OUSTRING ("(width+0)/?235 ");
+        aStringSequence[243] = CREATE_OUSTRING ("(logwidth+0)/?241 ");
+        aStringSequence[244] = CREATE_OUSTRING ("(logwidth+0)/?239 ");
+        aStringSequence[245] = CREATE_OUSTRING ("(logwidth+0)/?237 ");
+        aStringSequence[246] = CREATE_OUSTRING ("(logwidth+0)/?235 ");
         aStringSequence[247] = CREATE_OUSTRING ("(?32 )/60000.0");
         aStringSequence[248] = CREATE_OUSTRING ("(?97 )/60000.0");
         aStringSequence[249] = CREATE_OUSTRING ("(?72 )/60000.0");
@@ -8291,15 +8291,15 @@ void CustomShapeProperties::initializePresetsMap1()
     {
         Sequence< OUString > aStringSequence (12);
         aStringSequence[0] = CREATE_OUSTRING ("if(0-$0 ,0,if(50000-$0 ,$0 ,50000))");
-        aStringSequence[1] = CREATE_OUSTRING ("min(width,height)");
+        aStringSequence[1] = CREATE_OUSTRING ("min(logwidth,logheight)");
         aStringSequence[2] = CREATE_OUSTRING ("?1 *?0 /100000");
-        aStringSequence[3] = CREATE_OUSTRING ("width+0-?2 ");
+        aStringSequence[3] = CREATE_OUSTRING ("logwidth+0-?2 ");
         aStringSequence[4] = CREATE_OUSTRING ("?2 *29289/100000");
-        aStringSequence[5] = CREATE_OUSTRING ("width+0-?4 ");
-        aStringSequence[6] = CREATE_OUSTRING ("width/2");
-        aStringSequence[7] = CREATE_OUSTRING ("height/2");
-        aStringSequence[8] = CREATE_OUSTRING ("height");
-        aStringSequence[9] = CREATE_OUSTRING ("width");
+        aStringSequence[5] = CREATE_OUSTRING ("logwidth+0-?4 ");
+        aStringSequence[6] = CREATE_OUSTRING ("logwidth/2");
+        aStringSequence[7] = CREATE_OUSTRING ("logheight/2");
+        aStringSequence[8] = CREATE_OUSTRING ("logheight");
+        aStringSequence[9] = CREATE_OUSTRING ("logwidth");
         aStringSequence[10] = CREATE_OUSTRING ("(16200000)/60000.0");
         aStringSequence[11] = CREATE_OUSTRING ("(5400000)/60000.0");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
@@ -8553,37 +8553,37 @@ void CustomShapeProperties::initializePresetsMap1()
         aStringSequence[17] = CREATE_OUSTRING ("100000+0-?13 ");
         aStringSequence[18] = CREATE_OUSTRING ("100000+0-?14 ");
         aStringSequence[19] = CREATE_OUSTRING ("100000+0-?15 ");
-        aStringSequence[20] = CREATE_OUSTRING ("width*18436/21600");
-        aStringSequence[21] = CREATE_OUSTRING ("height*3163/21600");
-        aStringSequence[22] = CREATE_OUSTRING ("width*3163/21600");
-        aStringSequence[23] = CREATE_OUSTRING ("height*18436/21600");
-        aStringSequence[24] = CREATE_OUSTRING ("width*?9 /100000");
-        aStringSequence[25] = CREATE_OUSTRING ("width*?10 /100000");
-        aStringSequence[26] = CREATE_OUSTRING ("width*?11 /100000");
-        aStringSequence[27] = CREATE_OUSTRING ("width*?13 /100000");
-        aStringSequence[28] = CREATE_OUSTRING ("width*?14 /100000");
-        aStringSequence[29] = CREATE_OUSTRING ("width*?15 /100000");
-        aStringSequence[30] = CREATE_OUSTRING ("width*?16 /100000");
-        aStringSequence[31] = CREATE_OUSTRING ("width*?17 /100000");
-        aStringSequence[32] = CREATE_OUSTRING ("width*?18 /100000");
-        aStringSequence[33] = CREATE_OUSTRING ("width*?19 /100000");
-        aStringSequence[34] = CREATE_OUSTRING ("width*?0 /100000");
-        aStringSequence[35] = CREATE_OUSTRING ("width*?1 /100000");
-        aStringSequence[36] = CREATE_OUSTRING ("height*?1 /100000");
-        aStringSequence[37] = CREATE_OUSTRING ("height*?9 /100000");
-        aStringSequence[38] = CREATE_OUSTRING ("height*?10 /100000");
-        aStringSequence[39] = CREATE_OUSTRING ("height*?11 /100000");
-        aStringSequence[40] = CREATE_OUSTRING ("height*?13 /100000");
-        aStringSequence[41] = CREATE_OUSTRING ("height*?14 /100000");
-        aStringSequence[42] = CREATE_OUSTRING ("height*?15 /100000");
-        aStringSequence[43] = CREATE_OUSTRING ("height*?16 /100000");
-        aStringSequence[44] = CREATE_OUSTRING ("height*?17 /100000");
-        aStringSequence[45] = CREATE_OUSTRING ("height*?18 /100000");
-        aStringSequence[46] = CREATE_OUSTRING ("height*?19 /100000");
-        aStringSequence[47] = CREATE_OUSTRING ("height/2");
-        aStringSequence[48] = CREATE_OUSTRING ("width/2");
-        aStringSequence[49] = CREATE_OUSTRING ("height");
-        aStringSequence[50] = CREATE_OUSTRING ("width");
+        aStringSequence[20] = CREATE_OUSTRING ("logwidth*18436/21600");
+        aStringSequence[21] = CREATE_OUSTRING ("logheight*3163/21600");
+        aStringSequence[22] = CREATE_OUSTRING ("logwidth*3163/21600");
+        aStringSequence[23] = CREATE_OUSTRING ("logheight*18436/21600");
+        aStringSequence[24] = CREATE_OUSTRING ("logwidth*?9 /100000");
+        aStringSequence[25] = CREATE_OUSTRING ("logwidth*?10 /100000");
+        aStringSequence[26] = CREATE_OUSTRING ("logwidth*?11 /100000");
+        aStringSequence[27] = CREATE_OUSTRING ("logwidth*?13 /100000");
+        aStringSequence[28] = CREATE_OUSTRING ("logwidth*?14 /100000");
+        aStringSequence[29] = CREATE_OUSTRING ("logwidth*?15 /100000");
+        aStringSequence[30] = CREATE_OUSTRING ("logwidth*?16 /100000");
+        aStringSequence[31] = CREATE_OUSTRING ("logwidth*?17 /100000");
+        aStringSequence[32] = CREATE_OUSTRING ("logwidth*?18 /100000");
+        aStringSequence[33] = CREATE_OUSTRING ("logwidth*?19 /100000");
+        aStringSequence[34] = CREATE_OUSTRING ("logwidth*?0 /100000");
+        aStringSequence[35] = CREATE_OUSTRING ("logwidth*?1 /100000");
+        aStringSequence[36] = CREATE_OUSTRING ("logheight*?1 /100000");
+        aStringSequence[37] = CREATE_OUSTRING ("logheight*?9 /100000");
+        aStringSequence[38] = CREATE_OUSTRING ("logheight*?10 /100000");
+        aStringSequence[39] = CREATE_OUSTRING ("logheight*?11 /100000");
+        aStringSequence[40] = CREATE_OUSTRING ("logheight*?13 /100000");
+        aStringSequence[41] = CREATE_OUSTRING ("logheight*?14 /100000");
+        aStringSequence[42] = CREATE_OUSTRING ("logheight*?15 /100000");
+        aStringSequence[43] = CREATE_OUSTRING ("logheight*?16 /100000");
+        aStringSequence[44] = CREATE_OUSTRING ("logheight*?17 /100000");
+        aStringSequence[45] = CREATE_OUSTRING ("logheight*?18 /100000");
+        aStringSequence[46] = CREATE_OUSTRING ("logheight*?19 /100000");
+        aStringSequence[47] = CREATE_OUSTRING ("logheight/2");
+        aStringSequence[48] = CREATE_OUSTRING ("logwidth/2");
+        aStringSequence[49] = CREATE_OUSTRING ("logheight");
+        aStringSequence[50] = CREATE_OUSTRING ("logwidth");
         aStringSequence[51] = CREATE_OUSTRING ("(10800000)/60000.0");
         aStringSequence[52] = CREATE_OUSTRING ("(21600000)/60000.0");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
@@ -9328,17 +9328,17 @@ void CustomShapeProperties::initializePresetsMap1()
     {
         Sequence< OUString > aStringSequence (20);
         aStringSequence[0] = CREATE_OUSTRING ("if(0-$0 ,0,if(50000-$0 ,$0 ,50000))");
-        aStringSequence[1] = CREATE_OUSTRING ("min(width,height)");
+        aStringSequence[1] = CREATE_OUSTRING ("min(logwidth,logheight)");
         aStringSequence[2] = CREATE_OUSTRING ("?1 *?0 /100000");
-        aStringSequence[3] = CREATE_OUSTRING ("width+0-?2 ");
-        aStringSequence[4] = CREATE_OUSTRING ("height+0-?2 ");
+        aStringSequence[3] = CREATE_OUSTRING ("logwidth+0-?2 ");
+        aStringSequence[4] = CREATE_OUSTRING ("logheight+0-?2 ");
         aStringSequence[5] = CREATE_OUSTRING ("?2 *70711/100000");
-        aStringSequence[6] = CREATE_OUSTRING ("width+0-?5 ");
-        aStringSequence[7] = CREATE_OUSTRING ("height+0-?5 ");
-        aStringSequence[8] = CREATE_OUSTRING ("width/2");
-        aStringSequence[9] = CREATE_OUSTRING ("height/2");
-        aStringSequence[10] = CREATE_OUSTRING ("height");
-        aStringSequence[11] = CREATE_OUSTRING ("width");
+        aStringSequence[6] = CREATE_OUSTRING ("logwidth+0-?5 ");
+        aStringSequence[7] = CREATE_OUSTRING ("logheight+0-?5 ");
+        aStringSequence[8] = CREATE_OUSTRING ("logwidth/2");
+        aStringSequence[9] = CREATE_OUSTRING ("logheight/2");
+        aStringSequence[10] = CREATE_OUSTRING ("logheight");
+        aStringSequence[11] = CREATE_OUSTRING ("logwidth");
         aStringSequence[12] = CREATE_OUSTRING ("(5400000)/60000.0");
         aStringSequence[13] = CREATE_OUSTRING ("(-5400000)/60000.0");
         aStringSequence[14] = CREATE_OUSTRING ("(10800000)/60000.0");
@@ -9710,18 +9710,18 @@ void CustomShapeProperties::initializePresetsMap1()
     }
     {
         Sequence< OUString > aStringSequence (12);
-        aStringSequence[0] = CREATE_OUSTRING ("min(width,height)");
-        aStringSequence[1] = CREATE_OUSTRING ("100000*width/?0 ");
+        aStringSequence[0] = CREATE_OUSTRING ("min(logwidth,logheight)");
+        aStringSequence[1] = CREATE_OUSTRING ("100000*logwidth/?0 ");
         aStringSequence[2] = CREATE_OUSTRING ("if(0-$0 ,0,if(?1 -$0 ,$0 ,?1 ))");
         aStringSequence[3] = CREATE_OUSTRING ("?0 *?2 /100000");
-        aStringSequence[4] = CREATE_OUSTRING ("width+0-?3 ");
+        aStringSequence[4] = CREATE_OUSTRING ("logwidth+0-?3 ");
         aStringSequence[5] = CREATE_OUSTRING ("?4 *1/2");
         aStringSequence[6] = CREATE_OUSTRING ("?4 +0-?3 ");
         aStringSequence[7] = CREATE_OUSTRING ("if(?6 ,?3 ,0)");
-        aStringSequence[8] = CREATE_OUSTRING ("if(?6 ,?4 ,width)");
-        aStringSequence[9] = CREATE_OUSTRING ("height/2");
-        aStringSequence[10] = CREATE_OUSTRING ("height");
-        aStringSequence[11] = CREATE_OUSTRING ("width");
+        aStringSequence[8] = CREATE_OUSTRING ("if(?6 ,?4 ,logwidth)");
+        aStringSequence[9] = CREATE_OUSTRING ("logheight/2");
+        aStringSequence[10] = CREATE_OUSTRING ("logheight");
+        aStringSequence[11] = CREATE_OUSTRING ("logwidth");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -9937,12 +9937,12 @@ void CustomShapeProperties::initializePresetsMap1()
     }
     {
         Sequence< OUString > aStringSequence (6);
-        aStringSequence[0] = CREATE_OUSTRING ("width*4/5");
-        aStringSequence[1] = CREATE_OUSTRING ("width/2");
-        aStringSequence[2] = CREATE_OUSTRING ("height/2");
-        aStringSequence[3] = CREATE_OUSTRING ("height");
-        aStringSequence[4] = CREATE_OUSTRING ("width");
-        aStringSequence[5] = CREATE_OUSTRING ("width/5");
+        aStringSequence[0] = CREATE_OUSTRING ("logwidth*4/5");
+        aStringSequence[1] = CREATE_OUSTRING ("logwidth/2");
+        aStringSequence[2] = CREATE_OUSTRING ("logheight/2");
+        aStringSequence[3] = CREATE_OUSTRING ("logheight");
+        aStringSequence[4] = CREATE_OUSTRING ("logwidth");
+        aStringSequence[5] = CREATE_OUSTRING ("logwidth/5");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -10119,16 +10119,16 @@ void CustomShapeProperties::initializePresetsMap1()
     {
         Sequence< OUString > aStringSequence (11);
         aStringSequence[0] = CREATE_OUSTRING ("if(0-$0 ,0,if(100000-$0 ,$0 ,100000))");
-        aStringSequence[1] = CREATE_OUSTRING ("width*?0 /100000");
+        aStringSequence[1] = CREATE_OUSTRING ("logwidth*?0 /100000");
         aStringSequence[2] = CREATE_OUSTRING ("?1 *1/2");
-        aStringSequence[3] = CREATE_OUSTRING ("(?1 +width)/2");
-        aStringSequence[4] = CREATE_OUSTRING ("height*?0 /100000");
+        aStringSequence[3] = CREATE_OUSTRING ("(?1 +logwidth)/2");
+        aStringSequence[4] = CREATE_OUSTRING ("logheight*?0 /100000");
         aStringSequence[5] = CREATE_OUSTRING ("?4 *1/2");
-        aStringSequence[6] = CREATE_OUSTRING ("(?4 +height)/2");
-        aStringSequence[7] = CREATE_OUSTRING ("width/2");
-        aStringSequence[8] = CREATE_OUSTRING ("height/2");
-        aStringSequence[9] = CREATE_OUSTRING ("width");
-        aStringSequence[10] = CREATE_OUSTRING ("height");
+        aStringSequence[6] = CREATE_OUSTRING ("(?4 +logheight)/2");
+        aStringSequence[7] = CREATE_OUSTRING ("logwidth/2");
+        aStringSequence[8] = CREATE_OUSTRING ("logheight/2");
+        aStringSequence[9] = CREATE_OUSTRING ("logwidth");
+        aStringSequence[10] = CREATE_OUSTRING ("logheight");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -10316,17 +10316,17 @@ void CustomShapeProperties::initializePresetsMap1()
     }
     {
         Sequence< OUString > aStringSequence (19);
-        aStringSequence[0] = CREATE_OUSTRING ("width/2");
+        aStringSequence[0] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[1] = CREATE_OUSTRING ("?0 *$0 /100000");
-        aStringSequence[2] = CREATE_OUSTRING ("height/2");
+        aStringSequence[2] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[3] = CREATE_OUSTRING ("?2 *$1 /100000");
-        aStringSequence[4] = CREATE_OUSTRING ("height/2");
+        aStringSequence[4] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[5] = CREATE_OUSTRING ("?4 *$1 /100000");
         aStringSequence[6] = CREATE_OUSTRING ("?1 *cos(pi*(1080000)/10800000)");
         aStringSequence[7] = CREATE_OUSTRING ("?1 *cos(pi*(18360000)/10800000)");
         aStringSequence[8] = CREATE_OUSTRING ("?3 *sin(pi*(1080000)/10800000)");
         aStringSequence[9] = CREATE_OUSTRING ("?3 *sin(pi*(18360000)/10800000)");
-        aStringSequence[10] = CREATE_OUSTRING ("width/2");
+        aStringSequence[10] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[11] = CREATE_OUSTRING ("?10 +0-?6 ");
         aStringSequence[12] = CREATE_OUSTRING ("?10 +0-?7 ");
         aStringSequence[13] = CREATE_OUSTRING ("?10 +?7 -0");
@@ -10334,7 +10334,7 @@ void CustomShapeProperties::initializePresetsMap1()
         aStringSequence[15] = CREATE_OUSTRING ("?5 +0-?8 ");
         aStringSequence[16] = CREATE_OUSTRING ("?5 +0-?9 ");
         aStringSequence[17] = CREATE_OUSTRING ("?15 *?7 /?6 ");
-        aStringSequence[18] = CREATE_OUSTRING ("height");
+        aStringSequence[18] = CREATE_OUSTRING ("logheight");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -10488,11 +10488,11 @@ void CustomShapeProperties::initializePresetsMap1()
     }
     {
         Sequence< OUString > aStringSequence (43);
-        aStringSequence[0] = CREATE_OUSTRING ("min(width,height)");
+        aStringSequence[0] = CREATE_OUSTRING ("min(logwidth,logheight)");
         aStringSequence[1] = CREATE_OUSTRING ("?0 *1/20");
-        aStringSequence[2] = CREATE_OUSTRING ("width/2");
+        aStringSequence[2] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[3] = CREATE_OUSTRING ("?2 +0-?1 ");
-        aStringSequence[4] = CREATE_OUSTRING ("height/4");
+        aStringSequence[4] = CREATE_OUSTRING ("logheight/4");
         aStringSequence[5] = CREATE_OUSTRING ("?4 +0-?1 ");
         aStringSequence[6] = CREATE_OUSTRING ("?2 *cos(pi*(480000)/10800000)");
         aStringSequence[7] = CREATE_OUSTRING ("?4 *sin(pi*(480000)/10800000)");
@@ -10509,7 +10509,7 @@ void CustomShapeProperties::initializePresetsMap1()
         aStringSequence[18] = CREATE_OUSTRING ("?2 *?4 /?17 ");
         aStringSequence[19] = CREATE_OUSTRING ("?18 *cos(pi*(?10 )/10800000)");
         aStringSequence[20] = CREATE_OUSTRING ("?18 *sin(pi*(?10 )/10800000)");
-        aStringSequence[21] = CREATE_OUSTRING ("width/2");
+        aStringSequence[21] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[22] = CREATE_OUSTRING ("?21 +?19 -0");
         aStringSequence[23] = CREATE_OUSTRING ("?4 +?20 -0");
         aStringSequence[24] = CREATE_OUSTRING ("?14 *cos(pi*(?8 )/10800000)");
@@ -10519,12 +10519,12 @@ void CustomShapeProperties::initializePresetsMap1()
         aStringSequence[28] = CREATE_OUSTRING ("?27 *cos(pi*(?8 )/10800000)");
         aStringSequence[29] = CREATE_OUSTRING ("?27 *sin(pi*(?8 )/10800000)");
         aStringSequence[30] = CREATE_OUSTRING ("?21 +?28 -0");
-        aStringSequence[31] = CREATE_OUSTRING ("height+0-?14 ");
+        aStringSequence[31] = CREATE_OUSTRING ("logheight+0-?14 ");
         aStringSequence[32] = CREATE_OUSTRING ("?31 +?29 -0");
         aStringSequence[33] = CREATE_OUSTRING ("?2 +0-?3 ");
         aStringSequence[34] = CREATE_OUSTRING ("10800000*2/1");
-        aStringSequence[35] = CREATE_OUSTRING ("width");
-        aStringSequence[36] = CREATE_OUSTRING ("height");
+        aStringSequence[35] = CREATE_OUSTRING ("logwidth");
+        aStringSequence[36] = CREATE_OUSTRING ("logheight");
         aStringSequence[37] = CREATE_OUSTRING ("(?10 )/60000.0");
         aStringSequence[38] = CREATE_OUSTRING ("(?11 )/60000.0");
         aStringSequence[39] = CREATE_OUSTRING ("(?8 )/60000.0");
@@ -11093,14 +11093,14 @@ void CustomShapeProperties::initializePresetsMap1()
     }
     {
         Sequence< OUString > aStringSequence (8);
-        aStringSequence[0] = CREATE_OUSTRING ("height*$0 /100000");
-        aStringSequence[1] = CREATE_OUSTRING ("width*$1 /100000");
-        aStringSequence[2] = CREATE_OUSTRING ("height*$2 /100000");
-        aStringSequence[3] = CREATE_OUSTRING ("width*$3 /100000");
-        aStringSequence[4] = CREATE_OUSTRING ("width");
-        aStringSequence[5] = CREATE_OUSTRING ("height/2");
-        aStringSequence[6] = CREATE_OUSTRING ("width/2");
-        aStringSequence[7] = CREATE_OUSTRING ("height");
+        aStringSequence[0] = CREATE_OUSTRING ("logheight*$0 /100000");
+        aStringSequence[1] = CREATE_OUSTRING ("logwidth*$1 /100000");
+        aStringSequence[2] = CREATE_OUSTRING ("logheight*$2 /100000");
+        aStringSequence[3] = CREATE_OUSTRING ("logwidth*$3 /100000");
+        aStringSequence[4] = CREATE_OUSTRING ("logwidth");
+        aStringSequence[5] = CREATE_OUSTRING ("logheight/2");
+        aStringSequence[6] = CREATE_OUSTRING ("logwidth/2");
+        aStringSequence[7] = CREATE_OUSTRING ("logheight");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -11500,21 +11500,21 @@ void CustomShapeProperties::initializePresetsMap1()
     }
     {
         Sequence< OUString > aStringSequence (15);
-        aStringSequence[0] = CREATE_OUSTRING ("min(width,height)");
-        aStringSequence[1] = CREATE_OUSTRING ("100000*width/?0 ");
+        aStringSequence[0] = CREATE_OUSTRING ("min(logwidth,logheight)");
+        aStringSequence[1] = CREATE_OUSTRING ("100000*logwidth/?0 ");
         aStringSequence[2] = CREATE_OUSTRING ("if(0-$0 ,0,if(100000-$0 ,$0 ,100000))");
         aStringSequence[3] = CREATE_OUSTRING ("if(0-$1 ,0,if(?1 -$1 ,$1 ,?1 ))");
         aStringSequence[4] = CREATE_OUSTRING ("?0 *?3 /100000");
-        aStringSequence[5] = CREATE_OUSTRING ("width+0-?4 ");
-        aStringSequence[6] = CREATE_OUSTRING ("height*?2 /200000");
-        aStringSequence[7] = CREATE_OUSTRING ("height/2");
+        aStringSequence[5] = CREATE_OUSTRING ("logwidth+0-?4 ");
+        aStringSequence[6] = CREATE_OUSTRING ("logheight*?2 /200000");
+        aStringSequence[7] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[8] = CREATE_OUSTRING ("?7 +0-?6 ");
         aStringSequence[9] = CREATE_OUSTRING ("?7 +?6 -0");
-        aStringSequence[10] = CREATE_OUSTRING ("height/2");
+        aStringSequence[10] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[11] = CREATE_OUSTRING ("?6 *?4 /?10 ");
-        aStringSequence[12] = CREATE_OUSTRING ("width+0-?11 ");
-        aStringSequence[13] = CREATE_OUSTRING ("width");
-        aStringSequence[14] = CREATE_OUSTRING ("height");
+        aStringSequence[12] = CREATE_OUSTRING ("logwidth+0-?11 ");
+        aStringSequence[13] = CREATE_OUSTRING ("logwidth");
+        aStringSequence[14] = CREATE_OUSTRING ("logheight");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -11814,20 +11814,20 @@ void CustomShapeProperties::initializePresetsMap1()
     }
     {
         Sequence< OUString > aStringSequence (22);
-        aStringSequence[0] = CREATE_OUSTRING ("min(width,height)");
-        aStringSequence[1] = CREATE_OUSTRING ("50000*height/?0 ");
+        aStringSequence[0] = CREATE_OUSTRING ("min(logwidth,logheight)");
+        aStringSequence[1] = CREATE_OUSTRING ("50000*logheight/?0 ");
         aStringSequence[2] = CREATE_OUSTRING ("if(0-$0 ,0,if(?1 -$0 ,$0 ,?1 ))");
         aStringSequence[3] = CREATE_OUSTRING ("?0 *?2 /100000");
-        aStringSequence[4] = CREATE_OUSTRING ("height+0-?3 ");
-        aStringSequence[5] = CREATE_OUSTRING ("width*cos(pi*(2700000)/10800000)");
+        aStringSequence[4] = CREATE_OUSTRING ("logheight+0-?3 ");
+        aStringSequence[5] = CREATE_OUSTRING ("logwidth*cos(pi*(2700000)/10800000)");
         aStringSequence[6] = CREATE_OUSTRING ("?3 *sin(pi*(2700000)/10800000)");
         aStringSequence[7] = CREATE_OUSTRING ("0+?5 -0");
         aStringSequence[8] = CREATE_OUSTRING ("?3 +0-?6 ");
-        aStringSequence[9] = CREATE_OUSTRING ("height+?6 -?3 ");
-        aStringSequence[10] = CREATE_OUSTRING ("width");
-        aStringSequence[11] = CREATE_OUSTRING ("height");
-        aStringSequence[12] = CREATE_OUSTRING ("height/2");
-        aStringSequence[13] = CREATE_OUSTRING ("width");
+        aStringSequence[9] = CREATE_OUSTRING ("logheight+?6 -?3 ");
+        aStringSequence[10] = CREATE_OUSTRING ("logwidth");
+        aStringSequence[11] = CREATE_OUSTRING ("logheight");
+        aStringSequence[12] = CREATE_OUSTRING ("logheight/2");
+        aStringSequence[13] = CREATE_OUSTRING ("logwidth");
         aStringSequence[14] = CREATE_OUSTRING ("(16200000)/60000.0");
         aStringSequence[15] = CREATE_OUSTRING ("(5400000)/60000.0");
         aStringSequence[16] = CREATE_OUSTRING ("(0)/60000.0");
@@ -12207,11 +12207,11 @@ void CustomShapeProperties::initializePresetsMap1()
     }
     {
         Sequence< OUString > aStringSequence (5);
-        aStringSequence[0] = CREATE_OUSTRING ("height*4/5");
-        aStringSequence[1] = CREATE_OUSTRING ("width/2");
-        aStringSequence[2] = CREATE_OUSTRING ("height/2");
-        aStringSequence[3] = CREATE_OUSTRING ("height");
-        aStringSequence[4] = CREATE_OUSTRING ("width");
+        aStringSequence[0] = CREATE_OUSTRING ("logheight*4/5");
+        aStringSequence[1] = CREATE_OUSTRING ("logwidth/2");
+        aStringSequence[2] = CREATE_OUSTRING ("logheight/2");
+        aStringSequence[3] = CREATE_OUSTRING ("logheight");
+        aStringSequence[4] = CREATE_OUSTRING ("logwidth");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -12373,22 +12373,22 @@ void CustomShapeProperties::initializePresetsMap1()
     }
     {
         Sequence< OUString > aStringSequence (16);
-        aStringSequence[0] = CREATE_OUSTRING ("min(width,height)");
-        aStringSequence[1] = CREATE_OUSTRING ("50000*width/?0 ");
+        aStringSequence[0] = CREATE_OUSTRING ("min(logwidth,logheight)");
+        aStringSequence[1] = CREATE_OUSTRING ("50000*logwidth/?0 ");
         aStringSequence[2] = CREATE_OUSTRING ("if(0-$0 ,0,if(100000-$0 ,$0 ,100000))");
         aStringSequence[3] = CREATE_OUSTRING ("if(0-$1 ,0,if(?1 -$1 ,$1 ,?1 ))");
         aStringSequence[4] = CREATE_OUSTRING ("?0 *?3 /100000");
-        aStringSequence[5] = CREATE_OUSTRING ("width+0-?4 ");
-        aStringSequence[6] = CREATE_OUSTRING ("height*?2 /200000");
-        aStringSequence[7] = CREATE_OUSTRING ("height/2");
+        aStringSequence[5] = CREATE_OUSTRING ("logwidth+0-?4 ");
+        aStringSequence[6] = CREATE_OUSTRING ("logheight*?2 /200000");
+        aStringSequence[7] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[8] = CREATE_OUSTRING ("?7 +0-?6 ");
         aStringSequence[9] = CREATE_OUSTRING ("?7 +?6 -0");
-        aStringSequence[10] = CREATE_OUSTRING ("height/2");
+        aStringSequence[10] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[11] = CREATE_OUSTRING ("?8 *?4 /?10 ");
         aStringSequence[12] = CREATE_OUSTRING ("?4 +0-?11 ");
         aStringSequence[13] = CREATE_OUSTRING ("?5 +?11 -0");
-        aStringSequence[14] = CREATE_OUSTRING ("width");
-        aStringSequence[15] = CREATE_OUSTRING ("height");
+        aStringSequence[14] = CREATE_OUSTRING ("logwidth");
+        aStringSequence[15] = CREATE_OUSTRING ("logheight");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -12724,24 +12724,24 @@ void CustomShapeProperties::initializePresetsMap1()
     }
     {
         Sequence< OUString > aStringSequence (18);
-        aStringSequence[0] = CREATE_OUSTRING ("height/2");
+        aStringSequence[0] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[1] = CREATE_OUSTRING ("?0 *$0 /100000");
-        aStringSequence[2] = CREATE_OUSTRING ("width/2");
+        aStringSequence[2] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[3] = CREATE_OUSTRING ("?2 *cos(pi*(2160000)/10800000)");
         aStringSequence[4] = CREATE_OUSTRING ("?2 *cos(pi*(4320000)/10800000)");
-        aStringSequence[5] = CREATE_OUSTRING ("width/2");
+        aStringSequence[5] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[6] = CREATE_OUSTRING ("?5 +0-?3 ");
         aStringSequence[7] = CREATE_OUSTRING ("?5 +0-?4 ");
         aStringSequence[8] = CREATE_OUSTRING ("?5 +?4 -0");
         aStringSequence[9] = CREATE_OUSTRING ("?5 +?3 -0");
         aStringSequence[10] = CREATE_OUSTRING ("?1 *sin(pi*(4320000)/10800000)");
         aStringSequence[11] = CREATE_OUSTRING ("?1 *sin(pi*(2160000)/10800000)");
-        aStringSequence[12] = CREATE_OUSTRING ("height/2");
+        aStringSequence[12] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[13] = CREATE_OUSTRING ("?12 +0-?10 ");
         aStringSequence[14] = CREATE_OUSTRING ("?12 +0-?11 ");
         aStringSequence[15] = CREATE_OUSTRING ("?12 +?11 -0");
         aStringSequence[16] = CREATE_OUSTRING ("?12 +?10 -0");
-        aStringSequence[17] = CREATE_OUSTRING ("width");
+        aStringSequence[17] = CREATE_OUSTRING ("logwidth");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -12985,11 +12985,11 @@ void CustomShapeProperties::initializePresetsMap1()
     }
     {
         Sequence< OUString > aStringSequence (68);
-        aStringSequence[0] = CREATE_OUSTRING ("min(width,height)");
+        aStringSequence[0] = CREATE_OUSTRING ("min(logwidth,logheight)");
         aStringSequence[1] = CREATE_OUSTRING ("?0 *3/8");
-        aStringSequence[2] = CREATE_OUSTRING ("height/2");
+        aStringSequence[2] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[3] = CREATE_OUSTRING ("?2 +0-?1 ");
-        aStringSequence[4] = CREATE_OUSTRING ("width/2");
+        aStringSequence[4] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[5] = CREATE_OUSTRING ("?4 +0-?1 ");
         aStringSequence[6] = CREATE_OUSTRING ("?0 *3/4");
         aStringSequence[7] = CREATE_OUSTRING ("?6 *1/7");
@@ -13009,8 +13009,8 @@ void CustomShapeProperties::initializePresetsMap1()
         aStringSequence[21] = CREATE_OUSTRING ("?5 +?11 -0");
         aStringSequence[22] = CREATE_OUSTRING ("?6 *1/14");
         aStringSequence[23] = CREATE_OUSTRING ("?6 *3/28");
-        aStringSequence[24] = CREATE_OUSTRING ("width");
-        aStringSequence[25] = CREATE_OUSTRING ("height");
+        aStringSequence[24] = CREATE_OUSTRING ("logwidth");
+        aStringSequence[25] = CREATE_OUSTRING ("logheight");
         aStringSequence[26] = CREATE_OUSTRING ("(10800000)/60000.0");
         aStringSequence[27] = CREATE_OUSTRING ("(10800000)/60000.0");
         aStringSequence[28] = CREATE_OUSTRING ("(0)/60000.0");
@@ -14483,21 +14483,21 @@ void CustomShapeProperties::initializePresetsMap1()
     {
         Sequence< OUString > aStringSequence (85);
         aStringSequence[0] = CREATE_OUSTRING ("if(0-$0 ,0,if(50000-$0 ,$0 ,50000))");
-        aStringSequence[1] = CREATE_OUSTRING ("width/2");
+        aStringSequence[1] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[2] = CREATE_OUSTRING ("?1 *cos(pi*(900000)/10800000)");
         aStringSequence[3] = CREATE_OUSTRING ("?1 *cos(pi*(1800000)/10800000)");
         aStringSequence[4] = CREATE_OUSTRING ("?1 *cos(pi*(2700000)/10800000)");
-        aStringSequence[5] = CREATE_OUSTRING ("width/4");
+        aStringSequence[5] = CREATE_OUSTRING ("logwidth/4");
         aStringSequence[6] = CREATE_OUSTRING ("?5 ");
         aStringSequence[7] = CREATE_OUSTRING ("?1 *cos(pi*(4500000)/10800000)");
-        aStringSequence[8] = CREATE_OUSTRING ("height/2");
+        aStringSequence[8] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[9] = CREATE_OUSTRING ("?8 *sin(pi*(4500000)/10800000)");
         aStringSequence[10] = CREATE_OUSTRING ("?8 *sin(pi*(3600000)/10800000)");
         aStringSequence[11] = CREATE_OUSTRING ("?8 *sin(pi*(2700000)/10800000)");
-        aStringSequence[12] = CREATE_OUSTRING ("height/4");
+        aStringSequence[12] = CREATE_OUSTRING ("logheight/4");
         aStringSequence[13] = CREATE_OUSTRING ("?12 ");
         aStringSequence[14] = CREATE_OUSTRING ("?8 *sin(pi*(900000)/10800000)");
-        aStringSequence[15] = CREATE_OUSTRING ("width/2");
+        aStringSequence[15] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[16] = CREATE_OUSTRING ("?15 +0-?2 ");
         aStringSequence[17] = CREATE_OUSTRING ("?15 +0-?3 ");
         aStringSequence[18] = CREATE_OUSTRING ("?15 +0-?4 ");
@@ -14508,7 +14508,7 @@ void CustomShapeProperties::initializePresetsMap1()
         aStringSequence[23] = CREATE_OUSTRING ("?15 +?4 -0");
         aStringSequence[24] = CREATE_OUSTRING ("?15 +?3 -0");
         aStringSequence[25] = CREATE_OUSTRING ("?15 +?2 -0");
-        aStringSequence[26] = CREATE_OUSTRING ("height/2");
+        aStringSequence[26] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[27] = CREATE_OUSTRING ("?26 +0-?9 ");
         aStringSequence[28] = CREATE_OUSTRING ("?26 +0-?10 ");
         aStringSequence[29] = CREATE_OUSTRING ("?26 +0-?11 ");
@@ -14564,9 +14564,9 @@ void CustomShapeProperties::initializePresetsMap1()
         aStringSequence[79] = CREATE_OUSTRING ("?15 +?75 -0");
         aStringSequence[80] = CREATE_OUSTRING ("?26 +?76 -0");
         aStringSequence[81] = CREATE_OUSTRING ("?26 +0-?38 ");
-        aStringSequence[82] = CREATE_OUSTRING ("min(width,height)/50");
-        aStringSequence[83] = CREATE_OUSTRING ("height");
-        aStringSequence[84] = CREATE_OUSTRING ("width");
+        aStringSequence[82] = CREATE_OUSTRING ("min(logwidth,logheight)/50");
+        aStringSequence[83] = CREATE_OUSTRING ("logheight");
+        aStringSequence[84] = CREATE_OUSTRING ("logwidth");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -15553,28 +15553,28 @@ void CustomShapeProperties::initializePresetsMap1()
         aStringSequence[0] = CREATE_OUSTRING ("if(1000-$0 ,1000,if(36745-$0 ,$0 ,36745))");
         aStringSequence[1] = CREATE_OUSTRING ("0+0-?0 ");
         aStringSequence[2] = CREATE_OUSTRING ("(73490+?1 )/4");
-        aStringSequence[3] = CREATE_OUSTRING ("36745*width/height");
+        aStringSequence[3] = CREATE_OUSTRING ("36745*logwidth/logheight");
         aStringSequence[4] = CREATE_OUSTRING ("min(?2 ,?3 )");
         aStringSequence[5] = CREATE_OUSTRING ("if(1000-$2 ,1000,if(?4 -$2 ,$2 ,?4 ))");
         aStringSequence[6] = CREATE_OUSTRING ("-4*?5 /1");
         aStringSequence[7] = CREATE_OUSTRING ("73490+?6 -?0 ");
         aStringSequence[8] = CREATE_OUSTRING ("if(0-$1 ,0,if(?7 -$1 ,$1 ,?7 ))");
-        aStringSequence[9] = CREATE_OUSTRING ("height*?0 /200000");
-        aStringSequence[10] = CREATE_OUSTRING ("height*?8 /100000");
-        aStringSequence[11] = CREATE_OUSTRING ("height*?5 /100000");
-        aStringSequence[12] = CREATE_OUSTRING ("width*73490/200000");
-        aStringSequence[13] = CREATE_OUSTRING ("height/2");
+        aStringSequence[9] = CREATE_OUSTRING ("logheight*?0 /200000");
+        aStringSequence[10] = CREATE_OUSTRING ("logheight*?8 /100000");
+        aStringSequence[11] = CREATE_OUSTRING ("logheight*?5 /100000");
+        aStringSequence[12] = CREATE_OUSTRING ("logwidth*73490/200000");
+        aStringSequence[13] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[14] = CREATE_OUSTRING ("?13 +0-?9 ");
         aStringSequence[15] = CREATE_OUSTRING ("?13 +?9 -0");
         aStringSequence[16] = CREATE_OUSTRING ("?10 +?11 -0");
         aStringSequence[17] = CREATE_OUSTRING ("?14 +0-?16 ");
         aStringSequence[18] = CREATE_OUSTRING ("?17 +0-?11 ");
-        aStringSequence[19] = CREATE_OUSTRING ("height+0-?18 ");
-        aStringSequence[20] = CREATE_OUSTRING ("width/2");
+        aStringSequence[19] = CREATE_OUSTRING ("logheight+0-?18 ");
+        aStringSequence[20] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[21] = CREATE_OUSTRING ("?20 +0-?12 ");
         aStringSequence[22] = CREATE_OUSTRING ("?20 +?12 -0");
         aStringSequence[23] = CREATE_OUSTRING ("?20 +0-?11 ");
-        aStringSequence[24] = CREATE_OUSTRING ("width");
+        aStringSequence[24] = CREATE_OUSTRING ("logwidth");
         aStringSequence[25] = CREATE_OUSTRING ("(16200000)/60000.0");
         aStringSequence[26] = CREATE_OUSTRING ("(21600000)/60000.0");
         aStringSequence[27] = CREATE_OUSTRING ("(5400000)/60000.0");
@@ -15998,18 +15998,18 @@ void CustomShapeProperties::initializePresetsMap1()
     }
     {
         Sequence< OUString > aStringSequence (12);
-        aStringSequence[0] = CREATE_OUSTRING ("width*$0 /100000");
+        aStringSequence[0] = CREATE_OUSTRING ("logwidth*$0 /100000");
         aStringSequence[1] = CREATE_OUSTRING ("(0+?0 )/2");
-        aStringSequence[2] = CREATE_OUSTRING ("(width+?0 )/2");
+        aStringSequence[2] = CREATE_OUSTRING ("(logwidth+?0 )/2");
         aStringSequence[3] = CREATE_OUSTRING ("(?0 +?2 )/2");
-        aStringSequence[4] = CREATE_OUSTRING ("(?2 +width)/2");
-        aStringSequence[5] = CREATE_OUSTRING ("height*$1 /100000");
+        aStringSequence[4] = CREATE_OUSTRING ("(?2 +logwidth)/2");
+        aStringSequence[5] = CREATE_OUSTRING ("logheight*$1 /100000");
         aStringSequence[6] = CREATE_OUSTRING ("(0+?5 )/2");
         aStringSequence[7] = CREATE_OUSTRING ("(0+?6 )/2");
         aStringSequence[8] = CREATE_OUSTRING ("(?6 +?5 )/2");
-        aStringSequence[9] = CREATE_OUSTRING ("(height+?5 )/2");
-        aStringSequence[10] = CREATE_OUSTRING ("width");
-        aStringSequence[11] = CREATE_OUSTRING ("height");
+        aStringSequence[9] = CREATE_OUSTRING ("(logheight+?5 )/2");
+        aStringSequence[10] = CREATE_OUSTRING ("logwidth");
+        aStringSequence[11] = CREATE_OUSTRING ("logheight");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -16341,18 +16341,18 @@ void CustomShapeProperties::initializePresetsMap1()
     }
     {
         Sequence< OUString > aStringSequence (28);
-        aStringSequence[0] = CREATE_OUSTRING ("width/2");
+        aStringSequence[0] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[1] = CREATE_OUSTRING ("?0 *cos(pi*(2700000)/10800000)");
-        aStringSequence[2] = CREATE_OUSTRING ("height/2");
+        aStringSequence[2] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[3] = CREATE_OUSTRING ("?2 *sin(pi*(2700000)/10800000)");
-        aStringSequence[4] = CREATE_OUSTRING ("width/2");
+        aStringSequence[4] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[5] = CREATE_OUSTRING ("?4 +0-?1 ");
         aStringSequence[6] = CREATE_OUSTRING ("?4 +?1 -0");
-        aStringSequence[7] = CREATE_OUSTRING ("height/2");
+        aStringSequence[7] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[8] = CREATE_OUSTRING ("?7 +0-?3 ");
         aStringSequence[9] = CREATE_OUSTRING ("?7 +?3 -0");
-        aStringSequence[10] = CREATE_OUSTRING ("height");
-        aStringSequence[11] = CREATE_OUSTRING ("width");
+        aStringSequence[10] = CREATE_OUSTRING ("logheight");
+        aStringSequence[11] = CREATE_OUSTRING ("logwidth");
         aStringSequence[12] = CREATE_OUSTRING ("(10800000)/60000.0");
         aStringSequence[13] = CREATE_OUSTRING ("(5400000)/60000.0");
         aStringSequence[14] = CREATE_OUSTRING ("(16200000)/60000.0");
@@ -16926,18 +16926,18 @@ void CustomShapeProperties::initializePresetsMap1()
     }
     {
         Sequence< OUString > aStringSequence (12);
-        aStringSequence[0] = CREATE_OUSTRING ("height*$0 /100000");
-        aStringSequence[1] = CREATE_OUSTRING ("width*$1 /100000");
-        aStringSequence[2] = CREATE_OUSTRING ("height*$2 /100000");
-        aStringSequence[3] = CREATE_OUSTRING ("width*$3 /100000");
-        aStringSequence[4] = CREATE_OUSTRING ("height*$4 /100000");
-        aStringSequence[5] = CREATE_OUSTRING ("width*$5 /100000");
-        aStringSequence[6] = CREATE_OUSTRING ("height*$6 /100000");
-        aStringSequence[7] = CREATE_OUSTRING ("width*$7 /100000");
-        aStringSequence[8] = CREATE_OUSTRING ("width");
-        aStringSequence[9] = CREATE_OUSTRING ("height/2");
-        aStringSequence[10] = CREATE_OUSTRING ("width/2");
-        aStringSequence[11] = CREATE_OUSTRING ("height");
+        aStringSequence[0] = CREATE_OUSTRING ("logheight*$0 /100000");
+        aStringSequence[1] = CREATE_OUSTRING ("logwidth*$1 /100000");
+        aStringSequence[2] = CREATE_OUSTRING ("logheight*$2 /100000");
+        aStringSequence[3] = CREATE_OUSTRING ("logwidth*$3 /100000");
+        aStringSequence[4] = CREATE_OUSTRING ("logheight*$4 /100000");
+        aStringSequence[5] = CREATE_OUSTRING ("logwidth*$5 /100000");
+        aStringSequence[6] = CREATE_OUSTRING ("logheight*$6 /100000");
+        aStringSequence[7] = CREATE_OUSTRING ("logwidth*$7 /100000");
+        aStringSequence[8] = CREATE_OUSTRING ("logwidth");
+        aStringSequence[9] = CREATE_OUSTRING ("logheight/2");
+        aStringSequence[10] = CREATE_OUSTRING ("logwidth/2");
+        aStringSequence[11] = CREATE_OUSTRING ("logheight");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -17445,32 +17445,32 @@ void CustomShapeProperties::initializePresetsMap1()
     }
     {
         Sequence< OUString > aStringSequence (26);
-        aStringSequence[0] = CREATE_OUSTRING ("min(width,height)");
-        aStringSequence[1] = CREATE_OUSTRING ("50000*width/?0 ");
+        aStringSequence[0] = CREATE_OUSTRING ("min(logwidth,logheight)");
+        aStringSequence[1] = CREATE_OUSTRING ("50000*logwidth/?0 ");
         aStringSequence[2] = CREATE_OUSTRING ("if(0-$1 ,0,if(?1 -$1 ,$1 ,?1 ))");
         aStringSequence[3] = CREATE_OUSTRING ("?2 *2/1");
         aStringSequence[4] = CREATE_OUSTRING ("if(0-$0 ,0,if(?3 -$0 ,$0 ,?3 ))");
-        aStringSequence[5] = CREATE_OUSTRING ("50000*height/?0 ");
+        aStringSequence[5] = CREATE_OUSTRING ("50000*logheight/?0 ");
         aStringSequence[6] = CREATE_OUSTRING ("if(0-$2 ,0,if(?5 -$2 ,$2 ,?5 ))");
-        aStringSequence[7] = CREATE_OUSTRING ("height/2");
+        aStringSequence[7] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[8] = CREATE_OUSTRING ("?6 *?0 /?7 ");
         aStringSequence[9] = CREATE_OUSTRING ("100000+0-?8 ");
         aStringSequence[10] = CREATE_OUSTRING ("if(0-$3 ,0,if(?9 -$3 ,$3 ,?9 ))");
         aStringSequence[11] = CREATE_OUSTRING ("?0 *?2 /100000");
         aStringSequence[12] = CREATE_OUSTRING ("?0 *?4 /200000");
-        aStringSequence[13] = CREATE_OUSTRING ("width/2");
+        aStringSequence[13] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[14] = CREATE_OUSTRING ("?13 +0-?11 ");
         aStringSequence[15] = CREATE_OUSTRING ("?13 +0-?12 ");
         aStringSequence[16] = CREATE_OUSTRING ("?13 +?12 -0");
         aStringSequence[17] = CREATE_OUSTRING ("?13 +?11 -0");
         aStringSequence[18] = CREATE_OUSTRING ("?0 *?6 /100000");
-        aStringSequence[19] = CREATE_OUSTRING ("height+0-?18 ");
-        aStringSequence[20] = CREATE_OUSTRING ("height*?10 /200000");
-        aStringSequence[21] = CREATE_OUSTRING ("height/2");
+        aStringSequence[19] = CREATE_OUSTRING ("logheight+0-?18 ");
+        aStringSequence[20] = CREATE_OUSTRING ("logheight*?10 /200000");
+        aStringSequence[21] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[22] = CREATE_OUSTRING ("?21 +0-?20 ");
         aStringSequence[23] = CREATE_OUSTRING ("?21 +?20 -0");
-        aStringSequence[24] = CREATE_OUSTRING ("width");
-        aStringSequence[25] = CREATE_OUSTRING ("height");
+        aStringSequence[24] = CREATE_OUSTRING ("logwidth");
+        aStringSequence[25] = CREATE_OUSTRING ("logheight");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -18034,14 +18034,14 @@ void CustomShapeProperties::initializePresetsMap1()
     }
     {
         Sequence< OUString > aStringSequence (8);
-        aStringSequence[0] = CREATE_OUSTRING ("width*3/4");
-        aStringSequence[1] = CREATE_OUSTRING ("height*3/4");
-        aStringSequence[2] = CREATE_OUSTRING ("width/2");
-        aStringSequence[3] = CREATE_OUSTRING ("height/2");
-        aStringSequence[4] = CREATE_OUSTRING ("height");
-        aStringSequence[5] = CREATE_OUSTRING ("width");
-        aStringSequence[6] = CREATE_OUSTRING ("width/4");
-        aStringSequence[7] = CREATE_OUSTRING ("height/4");
+        aStringSequence[0] = CREATE_OUSTRING ("logwidth*3/4");
+        aStringSequence[1] = CREATE_OUSTRING ("logheight*3/4");
+        aStringSequence[2] = CREATE_OUSTRING ("logwidth/2");
+        aStringSequence[3] = CREATE_OUSTRING ("logheight/2");
+        aStringSequence[4] = CREATE_OUSTRING ("logheight");
+        aStringSequence[5] = CREATE_OUSTRING ("logwidth");
+        aStringSequence[6] = CREATE_OUSTRING ("logwidth/4");
+        aStringSequence[7] = CREATE_OUSTRING ("logheight/4");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {

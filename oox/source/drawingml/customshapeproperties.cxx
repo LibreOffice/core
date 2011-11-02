@@ -113,6 +113,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
             OSL_TRACE("found property map for preset: %s (%d)", USS(getShapePresetTypeName()), mnShapePresetType);
 
             aPropertyMap = maPresetsMap[ mnShapePresetType ];
+            aPropertyMap.dump();
         }
         else
         {
@@ -171,7 +172,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
                     }
                     else if ( aGeoPropSeq[ i ].Name.equals( sType ) )
                     {
-                        aGeoPropSeq[ i ].Value <<= getShapePresetTypeName();
+                        aGeoPropSeq[ i ].Value <<= CREATE_OUSTRING( "ooxml-CustomShape" );
                     }
                 }
             }

@@ -261,13 +261,13 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
                 {
                     CustomShapeGuide aGuide;
                     aGuide.maName = rValue;
-                    aGuide.maFormula = CREATE_OUSTRING( "height" );
+                    aGuide.maFormula = CREATE_OUSTRING( "logheight" );
 
                     aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                     aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
                 }
                 else
-                    aRet.Type = EnhancedCustomShapeParameterType::HEIGHT;   // TODO: HEIGHT needs to be implemented
+                    aRet.Type = EnhancedCustomShapeParameterType::LOGHEIGHT;   // TODO: HEIGHT needs to be implemented
             }
             break;
 
@@ -291,7 +291,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
 
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
-                aGuide.maFormula = CREATE_OUSTRING( "height/" ) + rtl::OUString::valueOf( nIntVal );
+                aGuide.maFormula = CREATE_OUSTRING( "logheight/" ) + rtl::OUString::valueOf( nIntVal );
 
                 aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -310,7 +310,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
             {
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
-                aGuide.maFormula = CREATE_OUSTRING( "max(width,height)" );
+                aGuide.maFormula = CREATE_OUSTRING( "max(logwidth,logheight)" );
 
                 aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -320,7 +320,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
             {
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
-                aGuide.maFormula = CREATE_OUSTRING( "min(width,height)" );
+                aGuide.maFormula = CREATE_OUSTRING( "min(logwidth,logheight)" );
 
                 aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -342,7 +342,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
 
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
-                aGuide.maFormula = CREATE_OUSTRING( "min(width,height)/" ) + rtl::OUString::valueOf( nIntVal );
+                aGuide.maFormula = CREATE_OUSTRING( "min(logwidth,logheight)/" ) + rtl::OUString::valueOf( nIntVal );
 
                 aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -356,13 +356,13 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
                 {
                     CustomShapeGuide aGuide;
                     aGuide.maName = rValue;
-                    aGuide.maFormula = CREATE_OUSTRING( "width" );
+                    aGuide.maFormula = CREATE_OUSTRING( "logwidth" );
 
                     aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                     aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
                 }
                 else
-                    aRet.Type = EnhancedCustomShapeParameterType::WIDTH;
+                    aRet.Type = EnhancedCustomShapeParameterType::LOGWIDTH;
             }
             break;
 
@@ -389,7 +389,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
 
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
-                aGuide.maFormula = CREATE_OUSTRING( "width/" ) + rtl::OUString::valueOf( nIntVal );
+                aGuide.maFormula = CREATE_OUSTRING( "logwidth/" ) + rtl::OUString::valueOf( nIntVal );
 
                 aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
