@@ -35,9 +35,9 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 .INCLUDE :	settings.mk
 
-.IF "$(ENABLE_NSS_MODULE)" == "NO" && "$(SYSTEM_MOZILLA)" != "YES"
+.IF "$(ENABLE_XMLSEC)" == "NO"
 @all:
-    @echo "NSS module disabled => no libxmlsec...."
+    @echo "XMLSec module disabled"
 .ENDIF
 
 # --- Files --------------------------------------------------------
@@ -100,7 +100,7 @@ CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
 CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --with-mozilla_ver=1.7.5 --enable-mscrypto --disable-crypto-dl --build=i586-pc-mingw32 --host=i586-pc-mingw32 CC="$(xmlsec_CC)" LDFLAGS="-no-undefined -L$(ILIB:s/;/ -L/)" LIBS="$(xmlsec_LIBS)" LIBXML2LIB=$(LIBXML2LIB) ZLIB3RDLIB=$(ZLIB3RDLIB) OBJDUMP="$(WRAPCMD) objdump"
 
-.IF "$(SYSTEM_MOZILLA)" != "YES"
+.IF "$(SYSTEM_NSS)" != "YES"
 CONFIGURE_FLAGS+=--enable-pkgconfig=no
 .ENDIF
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
@@ -160,7 +160,7 @@ CONFIGURE_FLAGS=--with-pic --disable-shared --disable-crypto-dl --with-libxslt=n
 # --with-nss or parse -pkg-config --libs / cflags mozilla-nss since
 # the lib may a) be in /usr/lib (Debian) and be not in $with_nss/include
 # $with_nss/lib.
-.IF "$(SYSTEM_MOZILLA)" != "YES"
+.IF "$(SYSTEM_NSS)" != "YES"
 CONFIGURE_FLAGS+=--enable-pkgconfig=no
 .ENDIF
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
