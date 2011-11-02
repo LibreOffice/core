@@ -134,6 +134,9 @@
 #include "formatclipboard.hxx"
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <docstat.hxx>
+#include <wordcountdialog.hxx>
+#include <swwait.hxx>
 
 #include <IMark.hxx>
 #include <doc.hxx>
@@ -2602,6 +2605,12 @@ KEYINPUT_CHECKTABLE_INSDEL:
             ShowAutoTextCorrectQuickHelp(sWord, pACfg, pACorr);
         }
     }
+
+    // get the word count dialog to update itself
+    SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)GetView().GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId());
+    if (pWrdCnt)
+        pWrdCnt->UpdateCounts();
+
 }
 
 /*--------------------------------------------------------------------
@@ -3668,6 +3677,13 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 }
                 return;
             }
+
+            {
+            SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)GetView().GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId());
+            if (pWrdCnt)
+                pWrdCnt->UpdateCounts();
+            }
+
         case MOUSE_LEFT + KEY_SHIFT:
         case MOUSE_LEFT + KEY_SHIFT + KEY_MOD1:
             if ( !bMBPressed )

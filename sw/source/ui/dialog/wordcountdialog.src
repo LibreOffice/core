@@ -27,7 +27,7 @@
 #include <helpid.h>
 #include <dialog.hrc>
 #include <wordcountdialog.hrc>
-ModalDialog DLG_WORDCOUNT
+ModelessDialog DLG_WORDCOUNT
 {
     HelpID = HID_DLG_WORDCOUNT ;
     OutputSize = TRUE ;
@@ -35,6 +35,15 @@ ModalDialog DLG_WORDCOUNT
     Size = MAP_APPFONT ( 170 , 132 ) ;
     Text [ en-US ] = "Word Count" ;
     Moveable = TRUE ;
+
+    Closeable = TRUE;
+    Sizeable = FALSE ;
+    Hide = TRUE ;
+
+  Window WINDOW_DLG
+  {
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 170 , 132 ) ;
 
     FixedLine  FL_CURRENT
     {
@@ -136,4 +145,5 @@ ModalDialog DLG_WORDCOUNT
         Pos = MAP_APPFONT ( 114 , 112 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
+  };
 };

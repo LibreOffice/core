@@ -33,7 +33,12 @@
 #include <layout/layout.hxx>
 #include <layout/layout-pre.hxx>
 struct SwDocStat;
-class SwWordCountDialog : public SfxModalDialog
+#include <sfx2/childwin.hxx>
+#include "swabstdlg.hxx"
+
+class SwWrtShell;
+
+class SwWordCountDialog : public Window
 {
     FixedLine       aCurrentFL;
     FixedText       aCurrentWordFT;
@@ -56,11 +61,42 @@ class SwWordCountDialog : public SfxModalDialog
     OKButton        aOK;
     HelpButton      aHelp;
 
+    void InitControls();
+
 public:
     SwWordCountDialog(Window* pParent);
     ~SwWordCountDialog();
 
     void    SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc);
+
+    SW_DLLPRIVATE DECL_LINK( OkHdl,     void* );
+};
+
+class SwWordCountFloatDlg : public SfxModelessDialog
+{
+    SwWordCountDialog   aDlg;
+    virtual void    Activate();
+    public:
+    SwWordCountFloatDlg(     SfxBindings* pBindings,
+                             SfxChildWindow* pChild,
+                             Window *pParent,
+                             SfxChildWinInfo* pInfo);
+    void    UpdateCounts();
+};
+
+class SwWordCountWrapper : public SfxChildWindow
+{
+    AbstractSwWordCountFloatDlg*   pAbstDlg;
+protected:
+    SwWordCountWrapper(    Window *pParentWindow,
+                            sal_uInt16 nId,
+                            SfxBindings* pBindings,
+                            SfxChildWinInfo* pInfo );
+
+    SFX_DECL_CHILDWINDOW(SwWordCountWrapper);
+
+public:
+    void    UpdateCounts();
 };
 
 #include <layout/layout-post.hxx>

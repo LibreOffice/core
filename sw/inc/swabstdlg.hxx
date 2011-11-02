@@ -200,10 +200,11 @@ public:
     virtual void     SetSectionData(SwSectionData const& rSect) = 0;
 };
 
-class AbstractSwWordCountDialog : public VclAbstractDialog
+class AbstractSwWordCountFloatDlg : public VclAbstractDialog
 {
 public:
-    virtual void    SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc) = 0;
+    virtual void        UpdateCounts() = 0;
+    virtual Window *    GetWindow() = 0; //this method is added for return a Window type pointer
 };
 
 class AbstractSwInsertAbstractDlg : public VclAbstractDialog    // add for SwInsertAbstractDlg
@@ -353,7 +354,12 @@ public:
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame,
                                                                         sal_uInt32 nResId
                                                                         ) = 0;
-    virtual AbstractSwWordCountDialog* CreateSwWordCountDialog( Window* pWindow ) = 0;
+    virtual AbstractSwWordCountFloatDlg* CreateSwWordCountDialog(int nResId,
+                                                    SfxBindings* pBindings,
+                                                       SfxChildWindow* pChild,
+                                                       Window *pParent,
+                                                    SfxChildWinInfo* pInfo) = 0;
+
     virtual AbstractSwInsertAbstractDlg * CreateSwInsertAbstractDlg ( Window* pParent, int nResId) = 0; // add for SwInsertAbstractDlg
     virtual AbstractSwAsciiFilterDlg*  CreateSwAsciiFilterDlg ( Window* pParent, SwDocShell& rDocSh,
                                                                 SvStream* pStream, int nResId ) = 0;// add for SwAsciiFilterDlg

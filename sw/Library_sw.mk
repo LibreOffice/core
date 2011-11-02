@@ -615,6 +615,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/frmdlg/frmmgr \
     sw/source/ui/globdoc/globdoc \
     sw/source/ui/index/idxmrk \
+    sw/source/ui/dialog/wordcountwrapper \
     sw/source/ui/index/toxmgr \
     sw/source/ui/lingu/hhcwrp \
     sw/source/ui/lingu/hyp \

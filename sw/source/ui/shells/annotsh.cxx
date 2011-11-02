@@ -410,23 +410,16 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         break;
         case FN_WORDCOUNT_DIALOG:
         {
-            SwWrtShell &rSh = rView.GetWrtShell();
-            SwDocStat aCurr;
-            SwDocStat aDocStat;
+            SfxViewFrame* pVFrame = GetView().GetViewFrame();
+            if (pVFrame != NULL)
             {
-                SwWait aWait( *rView.GetDocShell(), sal_True );
-                rSh.StartAction();
-                rSh.CountWords( aCurr );
-                aDocStat = rSh.GetUpdatedDocStat();
-                rSh.EndAction();
-            }
+                pVFrame->ToggleChildWindow(FN_WORDCOUNT_DIALOG);
+                Invalidate(rReq.GetSlot());
 
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "Dialogdiet fail!");
-            AbstractSwWordCountDialog* pDialog = pFact->CreateSwWordCountDialog( rView.GetWindow() );
-            pDialog->SetValues(aCurr, aDocStat );
-            pDialog->Execute();
-            delete pDialog;
+                SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)pVFrame->GetChildWindow(SwWordCountWrapper::GetChildWindowId());
+                if (pWrdCnt)
+                    pWrdCnt->UpdateCounts();
+            }
         }
         break;
         case SID_CHAR_DLG:

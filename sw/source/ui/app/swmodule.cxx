@@ -122,6 +122,7 @@
 #include <sfx2/appuno.hxx>
 #include <swatrset.hxx>
 #include <idxmrk.hxx>
+#include <wordcountdialog.hxx>
 #include <dlelstnr.hxx>
 #include <barcfg.hxx>
 #include <svx/rubydialog.hxx>
@@ -397,6 +398,7 @@ void SwDLL::RegisterControls()
     SwMailMergeChildWindow::RegisterChildWindow( sal_False, pMod );
     SwInsertIdxMarkWrapper::RegisterChildWindow( sal_False, pMod );
     SwInsertAuthMarkWrapper::RegisterChildWindow( sal_False, pMod );
+    SwWordCountWrapper::RegisterChildWindow( sal_False, pMod );
     SvxRubyChildWindow::RegisterChildWindow( sal_False, pMod);
     SwSpellDialogChildWindow::RegisterChildWindow(sal_False, pMod);
 

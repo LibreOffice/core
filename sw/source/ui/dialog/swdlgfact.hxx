@@ -76,11 +76,12 @@ short Class::Execute()                             \
     return pDlg->Execute();                         \
 }
 
-
-class AbstractSwWordCountDialog_Impl : public AbstractSwWordCountDialog
+class SwWordCountFloatDlg;
+class AbstractSwWordCountFloatDlg_Impl : public AbstractSwWordCountFloatDlg
 {
-    DECL_ABSTDLG_BASE(AbstractSwWordCountDialog_Impl,SwWordCountDialog)
-    void    SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc);
+    DECL_ABSTDLG_BASE(AbstractSwWordCountFloatDlg_Impl,SwWordCountFloatDlg)
+    virtual void                UpdateCounts();
+    virtual Window *            GetWindow(); //this method is added for return a Window type pointer
 };
 
 //add for SwInsertAbstractDlg begin
@@ -437,7 +438,11 @@ public:
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame,
                                                                         sal_uInt32 nResId
                                                                         );
-    virtual AbstractSwWordCountDialog* CreateSwWordCountDialog(Window* pParent);
+    virtual AbstractSwWordCountFloatDlg* CreateSwWordCountDialog(int nResId,
+                                                    SfxBindings* pBindings,
+                                                       SfxChildWindow* pChild,
+                                                       Window *pParent,
+                                                    SfxChildWinInfo* pInfo);
     virtual AbstractSwInsertAbstractDlg * CreateSwInsertAbstractDlg( Window* pParent,int nResId );
     virtual AbstractSwAsciiFilterDlg*  CreateSwAsciiFilterDlg ( Window* pParent, SwDocShell& rDocSh,
                                                                 SvStream* pStream, int nResId ); //add for SwAsciiFilterDlg
