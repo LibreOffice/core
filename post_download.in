@@ -50,7 +50,7 @@ dnl Windows builds need gdiplus.dll in external/gdiplus/
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
    AC_MSG_CHECKING([for gdiplus.dll])
-   if test -x ./external/gdiplus/gdiplus.dll; then
+   if test -f ./external/gdiplus/gdiplus.dll; then
       AC_MSG_RESULT([found])
    else
       AC_MSG_ERROR([gdiplus.dll is missing in external/gdiplus/.
