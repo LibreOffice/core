@@ -599,7 +599,11 @@ void ScFiltersTest::testBugFixesODS()
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.ods", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
+
+    rtl::OUString aCSVFileName;
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bugFix_Sheet2.")), aCSVFileName);
+    testFile(aCSVFileName, pDoc, 1);
+
     xDocSh->DoClose();
 }
 
