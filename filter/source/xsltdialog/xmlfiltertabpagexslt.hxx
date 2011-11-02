@@ -49,6 +49,7 @@ public:
     void SetInfo(const filter_info_impl* pInfo);
 
     DECL_LINK( ClickBrowseHdl_Impl, PushButton * );
+    DECL_LINK( ToggleXSLTImplHdl, void* );
 
     FixedText       maFTDocType;
     Edit            maEDDocType;
@@ -70,7 +71,8 @@ public:
     PushButton      maPBImportTemplate;
 
     FixedText       maFTTransformationService;
-    Edit            maEDTransformationService;
+    RadioButton		maRBTransformationServiceLibXSLT;
+    RadioButton		maRBTransformationServiceSaxonJ;
 
 private:
     void SetURL( SvtURLBox& rURLBox, const rtl::OUString& rURL );

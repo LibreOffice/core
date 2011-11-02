@@ -67,7 +67,8 @@ XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr, co
     maPBImportTemplate( this, ResId( PB_XML_IMPORT_TEMPLATE_BROWSE, rResMgr ) ),
 
     maFTTransformationService( this, ResId (FT_XML_TRANSFORM_SERVICE, rResMgr ) ),
-    maEDTransformationService( this, ResId (ED_XML_TRANSFORM_SERVICE, rResMgr ) ),
+    maRBTransformationServiceLibXSLT( this, ResId (RB_XML_TRANSFORM_SERVICE_LIBXSLT, rResMgr ) ),
+    maRBTransformationServiceSaxonJ( this, ResId (RB_XML_TRANSFORM_SERVICE_SAXON_J, rResMgr ) ),
 
     sHTTPSchema( RTL_CONSTASCII_USTRINGPARAM( "http://" ) ),
     sSHTTPSchema( RTL_CONSTASCII_USTRINGPARAM( "shttp://" ) ),
@@ -97,7 +98,8 @@ XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr, co
     maEDExportXSLT.SetHelpId( HID_XML_FILTER_EXPORT_XSLT );
     maEDImportXSLT.SetHelpId( HID_XML_FILTER_IMPORT_XSLT );
     maEDImportTemplate.SetHelpId( HID_XML_FILTER_IMPORT_TEMPLATE );
-    maEDTransformationService.SetHelpId( HID_XML_FILTER_TRANSFORM_SERVICE );
+    maRBTransformationServiceLibXSLT.SetHelpId( HID_XML_FILTER_TRANSFORM_SERVICE_LIBXSLT );
+    maRBTransformationServiceSaxonJ.SetHelpId( HID_XML_FILTER_TRANSFORM_SERVICE_SAXON_J );
 }
 
 XMLFilterTabPageXSLT::~XMLFilterTabPageXSLT()
@@ -113,7 +115,10 @@ bool XMLFilterTabPageXSLT::FillInfo( filter_info_impl* pInfo )
         pInfo->maExportXSLT = GetURL( maEDExportXSLT );
         pInfo->maImportXSLT = GetURL( maEDImportXSLT );
         pInfo->maImportTemplate = GetURL( maEDImportTemplate );
-        pInfo->maXSLTTransformerImpl = maEDTransformationService.GetText();
+        pInfo->maXSLTTransformerImpl
+                = maRBTransformationServiceSaxonJ.IsChecked() ? OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.JAXTHelper" ))
+                        : OUString(RTL_CONSTASCII_USTRINGPARAM( "" ));
     }
 
     return true;
@@ -129,8 +134,12 @@ void XMLFilterTabPageXSLT::SetInfo(const filter_info_impl* pInfo)
         SetURL( maEDExportXSLT, pInfo->maExportXSLT );
         SetURL( maEDImportXSLT, pInfo->maImportXSLT );
         SetURL( maEDImportTemplate, pInfo->maImportTemplate );
-
-        maEDTransformationService.SetText( pInfo->maXSLTTransformerImpl );
+        if (pInfo->maXSLTTransformerImpl.equals(OUString(
+                RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.JAXTHelper" )))) {
+            maRBTransformationServiceSaxonJ.Check();
+        } else {
+            maRBTransformationServiceLibXSLT.Check();
+        }
     }
 }
 
@@ -186,6 +195,10 @@ OUString XMLFilterTabPageXSLT::GetURL( SvtURLBox& rURLBox )
     }
 
     return aURL;
+}
+
+IMPL_LINK ( XMLFilterTabPageXSLT, ToggleXSLTImplHdl, void *, EMPTYARG) {
+    return (0L);
 }
 
 IMPL_LINK ( XMLFilterTabPageXSLT, ClickBrowseHdl_Impl, PushButton *, pButton )

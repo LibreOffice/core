@@ -182,12 +182,20 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text [ en-US ]  = "XSLT Transformation Service";
     };
 
-    Edit ED_XML_TRANSFORM_SERVICE
+    RadioButton RB_XML_TRANSFORM_SERVICE_LIBXSLT
     {
+        HelpID = HID_XML_FILTER_TRANSFORM_SERVICE_LIBXSLT;
         Pos                 = MAP_APPFONT ( SECOND_ROW_X , SECOND_ROW_Y + 5 * ROW_HEIGHT + 5 * SPACING + EDIT_OFFSET ) ;
         Size                = MAP_APPFONT ( SECOND_ROW_WIDTH - SPACING - BROWSE_WIDTH, 12 ) ;
-        HelpId              = HID_XML_FILTER_TRANSFORM_SERVICE;
-        Border              = TRUE;
+        Text[ en-US ] = "~Builtin (LibXSLT)";
+    };
+
+    RadioButton RB_XML_TRANSFORM_SERVICE_SAXON_J
+    {
+        HelpID = HID_XML_FILTER_TRANSFORM_SERVICE_SAXON_J;
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X , SECOND_ROW_Y + 6 * ROW_HEIGHT + 6 * SPACING + EDIT_OFFSET ) ;
+        Size                = MAP_APPFONT ( SECOND_ROW_WIDTH - SPACING - BROWSE_WIDTH, 12 ) ;
+        Text[ en-US ] = "~Saxon/J";
     };
 
 };
