@@ -108,7 +108,7 @@ class SalGtkFilePicker :
         virtual void SAL_CALL setTitle( const ::rtl::OUString& aTitle )
             throw( ::com::sun::star::uno::RuntimeException );
 
-        virtual sal_Int16 SAL_CALL execute(  )
+        virtual sal_Int16 SAL_CALL execute()
             throw( ::com::sun::star::uno::RuntimeException );
 
         //------------------------------------------------------------------------------------

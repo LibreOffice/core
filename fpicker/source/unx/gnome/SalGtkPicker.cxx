@@ -118,18 +118,17 @@ rtl::OString SalGtkPicker::unicodetouri(const rtl::OUString &rURL)
     return sURL;
 }
 
-gboolean canceldialog(RunDialog *pDialog)
-{
-    GdkThreadLock lock;
-
-    pDialog->cancel();
-    return false;
-}
-
 extern "C"
 {
     struct Display;
     extern GdkDisplay* gdk_x11_lookup_xdisplay (void*xdisplay);
+
+    static gboolean canceldialog(RunDialog *pDialog)
+    {
+        GdkThreadLock lock;
+        pDialog->cancel();
+        return false;
+    }
 }
 
 RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit >& rToolkit,
@@ -176,9 +175,9 @@ RunDialog::~RunDialog()
     SolarMutexGuard g;
 
     if (mpCreatedParent)
-    {
         gdk_window_destroy (mpCreatedParent);
-    }
+
+    g_source_remove_by_user_data (this);
 }
 
 void SAL_CALL RunDialog::windowOpened( const ::com::sun::star::lang::EventObject& )
