@@ -58,7 +58,7 @@
 
 using namespace std;
 
-static ByteString aDbgOutResult;
+static rtl::OString aDbgOutResult;
 bool bDbgOutStdErr = false;
 bool bDbgOutPrintAttrSet = false;
 
@@ -103,7 +103,7 @@ SW_DLLPUBLIC const char * dbg_out(const void * pVoid)
 
 SW_DLLPUBLIC const char * dbg_out(const String & aStr)
 {
-    aDbgOutResult = ByteString(aStr, RTL_TEXTENCODING_ASCII_US);
+    aDbgOutResult = rtl::OUStringToOString(aStr, RTL_TEXTENCODING_ASCII_US);
 
     if (bDbgOutStdErr)
         fprintf(stderr, "%s", aDbgOutResult.GetBuffer());
@@ -113,7 +113,7 @@ SW_DLLPUBLIC const char * dbg_out(const String & aStr)
 
 SW_DLLPUBLIC const char * dbg_out(const ::rtl::OUString & aStr)
 {
-    aDbgOutResult = ByteString( rtl::OUStringToOString( aStr, RTL_TEXTENCODING_ASCII_US ) );
+    aDbgOutResult = rtl::OUStringToOString(aStr, RTL_TEXTENCODING_ASCII_US);
     return aDbgOutResult.GetBuffer();
 }
 

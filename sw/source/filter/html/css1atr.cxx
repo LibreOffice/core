@@ -701,12 +701,13 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
 
 // wenn pPseudo gesetzt ist werden Styles-Sheets ausgegeben,
 // sonst wird nur nach Token und Class fuer ein Format gesucht
-sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
+sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, rtl::OString& rToken,
                                       String& rClass, sal_uInt16& rRefPoolId,
                                       String *pPseudo )
 {
     sal_uInt16 nDeep = 0;
-    rToken.Erase(); rClass.Erase();
+    rToken = rtl::OString();
+    rClass.Erase();
     rRefPoolId = 0;
     if( pPseudo )
         pPseudo->Erase();
@@ -737,7 +738,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
             case 'B':   if( !bChrFmt && rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_blockquote) )
                         {
                             rRefPoolId = RES_POOLCOLL_HTML_BLOCKQUOTE;
-                            rToken.Assign( OOO_STRING_SVTOOLS_HTML_blockquote );
+                            rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_blockquote);
                         }
                         break;
             case 'C':   if( bChrFmt )
@@ -745,19 +746,19 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
                             if( rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_citiation) )
                             {
                                 rRefPoolId = RES_POOLCHR_HTML_CITIATION;
-                                rToken.Assign( OOO_STRING_SVTOOLS_HTML_citiation );
+                                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_citiation);
                             }
                             else if( rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_code) )
                             {
                                 rRefPoolId = RES_POOLCHR_HTML_CODE;
-                                rToken.Assign( OOO_STRING_SVTOOLS_HTML_code );
+                                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_code);
                             }
                         }
                         break;
             case 'D':   if( bChrFmt && rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_definstance) )
                         {
                             rRefPoolId = RES_POOLCHR_HTML_DEFINSTANCE;
-                            rToken.Assign( OOO_STRING_SVTOOLS_HTML_definstance);
+                            rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_definstance);
                         }
                         else if( !bChrFmt )
                         {
@@ -775,12 +776,12 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
                                 else if( nDefListLvl & HTML_DLCOLL_DD )
                                 {
                                     rRefPoolId = RES_POOLCOLL_HTML_DD;
-                                    rToken.Assign( OOO_STRING_SVTOOLS_HTML_dd );
+                                    rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_dd);
                                 }
                                 else
                                 {
                                     rRefPoolId = RES_POOLCOLL_HTML_DT;
-                                    rToken.Assign( OOO_STRING_SVTOOLS_HTML_dt );
+                                    rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_dt);
                                 }
                             }
                         }
@@ -788,7 +789,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
             case 'E':   if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_emphasis ) )
                         {
                             rRefPoolId = RES_POOLCHR_HTML_EMPHASIS;
-                            rToken.Assign( OOO_STRING_SVTOOLS_HTML_emphasis );
+                            rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_emphasis);
                         }
                         break;
             case 'H':   if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_horzrule ) )
@@ -798,14 +799,14 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
             case 'K':   if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_keyboard ) )
                         {
                             rRefPoolId = RES_POOLCHR_HTML_KEYBOARD;
-                            rToken.Assign( OOO_STRING_SVTOOLS_HTML_keyboard );
+                            rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_keyboard);
                         }
                         break;
             case 'L':   if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_listing ) )
                         {
                             // Listing als PRE exportieren bzw. von
                             // PRE abgeleitete Vorlage exportieren
-                            rToken.Assign( OOO_STRING_SVTOOLS_HTML_preformtxt );
+                            rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_preformtxt);
                             rRefPoolId = RES_POOLCOLL_HTML_PRE;
                             nDeep = CSS1_FMT_CMPREF;
                         }
@@ -813,7 +814,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
             case 'P':   if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_preformtxt ) )
                         {
                             rRefPoolId = RES_POOLCOLL_HTML_PRE;
-                            rToken.Assign( OOO_STRING_SVTOOLS_HTML_preformtxt );
+                            rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_preformtxt);
                         }
                         break;
             case 'S':   if( bChrFmt )
@@ -821,32 +822,32 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
                             if( rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_sample ) )
                             {
                                 rRefPoolId = RES_POOLCHR_HTML_SAMPLE;
-                                rToken.Assign( OOO_STRING_SVTOOLS_HTML_sample );
+                                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_sample);
                             }
                             else if( rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_strong ) )
                             {
                                 rRefPoolId = RES_POOLCHR_HTML_STRONG;
-                                rToken.Assign( OOO_STRING_SVTOOLS_HTML_strong );
+                                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_strong);
                             }
                         }
                         break;
             case 'T':   if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_teletype ) )
                         {
                             rRefPoolId = RES_POOLCHR_HTML_TELETYPE;
-                            rToken.Assign( OOO_STRING_SVTOOLS_HTML_teletype );
+                            rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_teletype);
                         }
                         break;
             case 'V':   if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_variable ) )
                         {
                             rRefPoolId = RES_POOLCHR_HTML_VARIABLE;
-                            rToken.Assign( OOO_STRING_SVTOOLS_HTML_variable );
+                            rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_variable);
                         }
                         break;
             case 'X':   if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_xmp ) )
                         {
                             // XMP als PRE exportieren (aber nicht die
                             // Vorlage als Style)
-                            rToken.Assign( OOO_STRING_SVTOOLS_HTML_preformtxt );
+                            rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_preformtxt);
                             rRefPoolId = RES_POOLCOLL_HTML_PRE;
                             nDeep = CSS1_FMT_CMPREF;
                         }
@@ -855,7 +856,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
 
             // Wenn eine PoolId gesetzt ist, entspricht der Name der
             // Vorlage dem szugehoerigen Token
-            OSL_ENSURE( (rRefPoolId != 0) == (rToken.Len() > 0),
+            OSL_ENSURE( (rRefPoolId != 0) == (rToken.getLength() > 0),
                     "Token missing" );
         }
         else
@@ -870,41 +871,41 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
                 bStop = (nDeep==0);
                 break;
             case RES_POOLCOLL_TEXT:
-                rToken.Assign( OOO_STRING_SVTOOLS_HTML_parabreak );
+                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_parabreak);
                 break;
             case RES_POOLCOLL_HEADLINE1:
-                rToken.Assign( OOO_STRING_SVTOOLS_HTML_head1 );
+                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_head1);
                 break;
             case RES_POOLCOLL_HEADLINE2:
-                rToken.Assign( OOO_STRING_SVTOOLS_HTML_head2 );
+                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_head2);
                 break;
             case RES_POOLCOLL_HEADLINE3:
-                rToken.Assign( OOO_STRING_SVTOOLS_HTML_head3 );
+                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_head3);
                 break;
             case RES_POOLCOLL_HEADLINE4:
-                rToken.Assign( OOO_STRING_SVTOOLS_HTML_head4 );
+                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_head4);
                 break;
             case RES_POOLCOLL_HEADLINE5:
-                rToken.Assign( OOO_STRING_SVTOOLS_HTML_head5 );
+                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_head5);
                 break;
             case RES_POOLCOLL_HEADLINE6:
-                rToken.Assign( OOO_STRING_SVTOOLS_HTML_head6 );
+                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_head6);
                 break;
             case RES_POOLCOLL_SENDADRESS:
-                rToken.Assign( OOO_STRING_SVTOOLS_HTML_address );
+                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_address);
                 break;
             case RES_POOLCOLL_HTML_BLOCKQUOTE:
-                rToken.Assign( OOO_STRING_SVTOOLS_HTML_blockquote );
+                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_blockquote);
                 break;
             case RES_POOLCOLL_HTML_PRE:
-                rToken.Assign( OOO_STRING_SVTOOLS_HTML_preformtxt );
+                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_preformtxt);
                 break;
 
             case RES_POOLCOLL_HTML_DD:
-                rToken.Assign( OOO_STRING_SVTOOLS_HTML_dd );
+                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_dd);
                 break;
             case RES_POOLCOLL_HTML_DT:
-                rToken.Assign( OOO_STRING_SVTOOLS_HTML_dt );
+                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_dt);
                 break;
 
             case RES_POOLCOLL_TABLE:
@@ -917,7 +918,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
                         .makeStringAndClear();
                 }
                 else
-                    rToken.Assign( OOO_STRING_SVTOOLS_HTML_parabreak );
+                    rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_parabreak);
                 break;
             case RES_POOLCOLL_TABLE_HDLN:
                 if( pPseudo )
@@ -929,7 +930,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
                         .makeStringAndClear();
                 }
                 else
-                    rToken.Assign( OOO_STRING_SVTOOLS_HTML_parabreak );
+                    rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_parabreak);
                 break;
             case RES_POOLCOLL_HTML_HR:
                 // HR nicht ausgeben!
@@ -938,7 +939,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
             case RES_POOLCOLL_FOOTNOTE:
                 if( !nDeep )
                 {
-                    rToken.Assign( OOO_STRING_SVTOOLS_HTML_parabreak );
+                    rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_parabreak);
                     rClass.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote );
                     rRefPoolId = RES_POOLCOLL_TEXT;
                     nDeep = CSS1_FMT_CMPREF;
@@ -947,7 +948,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
             case RES_POOLCOLL_ENDNOTE:
                 if( !nDeep )
                 {
-                    rToken.Assign( OOO_STRING_SVTOOLS_HTML_parabreak );
+                    rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_parabreak);
                     rClass.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdendnote );
                     rRefPoolId = RES_POOLCOLL_TEXT;
                     nDeep = CSS1_FMT_CMPREF;
@@ -956,44 +957,44 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
 
             // Zeichen-Vorlagen
             case RES_POOLCHR_HTML_EMPHASIS:
-                rToken.Assign( OOO_STRING_SVTOOLS_HTML_emphasis );
+                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_emphasis);
                 break;
             case RES_POOLCHR_HTML_CITIATION:
-                rToken.Assign( OOO_STRING_SVTOOLS_HTML_citiation );
+                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_citiation);
                 break;
             case RES_POOLCHR_HTML_STRONG:
-                rToken.Assign( OOO_STRING_SVTOOLS_HTML_strong );
+                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_strong);
                 break;
             case RES_POOLCHR_HTML_CODE:
-                rToken.Assign( OOO_STRING_SVTOOLS_HTML_code );
+                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_code);
                 break;
             case RES_POOLCHR_HTML_SAMPLE:
-                rToken.Assign( OOO_STRING_SVTOOLS_HTML_sample );
+                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_sample);
                 break;
             case RES_POOLCHR_HTML_KEYBOARD:
-                rToken.Assign( OOO_STRING_SVTOOLS_HTML_keyboard );
+                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_keyboard);
                 break;
             case RES_POOLCHR_HTML_VARIABLE:
-                rToken.Assign( OOO_STRING_SVTOOLS_HTML_variable );
+                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_variable);
                 break;
             case RES_POOLCHR_HTML_DEFINSTANCE:
-                rToken.Assign( OOO_STRING_SVTOOLS_HTML_definstance );
+                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_definstance);
                 break;
             case RES_POOLCHR_HTML_TELETYPE:
-                rToken.Assign( OOO_STRING_SVTOOLS_HTML_teletype );
+                rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_teletype);
                 break;
 
             case RES_POOLCHR_INET_NORMAL:
                 if( pPseudo )
                 {
-                    rToken.Assign( OOO_STRING_SVTOOLS_HTML_anchor );
+                    rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_anchor);
                     pPseudo->AssignAscii( sCSS1_link );
                 }
                 break;
             case RES_POOLCHR_INET_VISIT:
                 if( pPseudo )
                 {
-                    rToken.Assign( OOO_STRING_SVTOOLS_HTML_anchor );
+                    rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_anchor);
                     pPseudo->AssignAscii( sCSS1_visited );
                 }
                 break;
@@ -1001,11 +1002,11 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
 
             // Wenn ein Token gesetzt ist, enthaelt nPoolId die dazugehoerige
             // Vorlage
-            if( rToken.Len() && !rRefPoolId )
+            if( rToken.getLength() && !rRefPoolId )
                 rRefPoolId = nPoolId;
         }
 
-        if( rToken.Len() || bStop )
+        if( rToken.getLength() || bStop )
         {
             // Anhalten wenn eine HTML-Tag-Vorlage gefunden wurde
             break;
@@ -1018,7 +1019,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
         }
     }
 
-    if( rToken.Len() )
+    if( rToken.getLength() )
     {
         // Es ist eine HTML-Tag-Vorlage
         if( !nDeep )
@@ -1057,7 +1058,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
 static sal_uInt16 GetCSS1Selector( const SwFmt *pFmt, String& rSelector,
                                sal_uInt16& rRefPoolId )
 {
-    ByteString aToken;
+    rtl::OString aToken;
     String aClass;
     String aPseudo;
 
@@ -1065,7 +1066,7 @@ static sal_uInt16 GetCSS1Selector( const SwFmt *pFmt, String& rSelector,
                                                   rRefPoolId, &aPseudo );
     if( nDeep )
     {
-        if( aToken.Len() )
+        if( aToken.getLength() )
             rSelector = String( aToken, RTL_TEXTENCODING_ASCII_US );
         else
             rSelector.Erase();

@@ -92,7 +92,7 @@ class SwCache : public SwCacheObjArr
     void DeleteObj( SwCacheObj *pObj );
 
 #if OSL_DEBUG_LEVEL > 1
-    ByteString aName;
+    rtl::OString aName;
     long nAppend;           //Anzahl der Eintragungen durch Erweiterung.
     long nInsertFree;       //Anzahl der Eintragungen auf freie Plaetze.
     long nReplace;          //Anzahl der Ersetzungen durch ein neues Objekt
@@ -115,7 +115,7 @@ public:
     //nur sal_uInt8 hineinstecken!!!
 #if OSL_DEBUG_LEVEL > 1
     SwCache( const sal_uInt16 nInitSize, const sal_uInt16 nGrowSize,
-            const ByteString &rNm );
+            const rtl::OString &rNm );
     ~SwCache();
 #else
     SwCache( const sal_uInt16 nInitSize, const sal_uInt16 nGrowSize );

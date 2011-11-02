@@ -94,7 +94,7 @@ void SwCache::Check()
 
 SwCache::SwCache( const sal_uInt16 nInitSize, const sal_uInt16 nGrowSize
 #if OSL_DEBUG_LEVEL > 1
-    , const ByteString &rNm
+    , const rtl::OString &rNm
 #endif
     ) :
     SwCacheObjArr( (sal_uInt8)nInitSize, (sal_uInt8)nGrowSize ),

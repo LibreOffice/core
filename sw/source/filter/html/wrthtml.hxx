@@ -381,8 +381,6 @@ public:
     inline void OutCSS1_PropertyAscii( const sal_Char *pProp,
                                        const sal_Char *pVal );
     inline void OutCSS1_PropertyAscii( const sal_Char *pProp,
-                                       const ByteString& rVal );
-    inline void OutCSS1_PropertyAscii( const sal_Char *pProp,
                                        const rtl::OString& rVal );
     inline void OutCSS1_Property( const sal_Char *pProp, const String& rVal );
     void OutCSS1_Property( const sal_Char *pProp, const sal_Char *pVal,
@@ -458,7 +456,7 @@ public:
 
     static const SdrObject *GetHTMLControl( const SwDrawFrmFmt& rFmt );
     static const SdrObject *GetMarqueeTextObj( const SwDrawFrmFmt& rFmt );
-    static sal_uInt16 GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
+    static sal_uInt16 GetCSS1Selector( const SwFmt *pFmt, rtl::OString& rToken,
                                    String& rClass, sal_uInt16& rRefPoolId,
                                    String *pPseudo=0 );
 
@@ -509,12 +507,6 @@ inline void SwHTMLWriter::OutCSS1_PropertyAscii( const sal_Char *pProp,
                                                  const sal_Char *pVal )
 {
     OutCSS1_Property( pProp, pVal, 0 );
-}
-
-inline void SwHTMLWriter::OutCSS1_PropertyAscii( const sal_Char *pProp,
-                                                 const ByteString& rVal )
-{
-    OutCSS1_Property( pProp, rVal.GetBuffer(), 0 );
 }
 
 inline void SwHTMLWriter::OutCSS1_PropertyAscii( const sal_Char *pProp,

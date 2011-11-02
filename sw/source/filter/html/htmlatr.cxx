@@ -272,7 +272,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1ScriptForScriptType( sal_uInt16 nScriptType )
 
 struct SwHTMLTxtCollOutputInfo
 {
-    ByteString aToken;              // auszugendens End-Token
+    rtl::OString aToken;        // auszugendens End-Token
     SfxItemSet *pItemSet;       // harte Attributierung
 
     sal_Bool bInNumBulList;         // in einer Aufzaehlungs-Liste;
@@ -290,7 +290,7 @@ struct SwHTMLTxtCollOutputInfo
 
     ~SwHTMLTxtCollOutputInfo();
 
-    sal_Bool HasParaToken() const { return aToken.Len()==1 && aToken.GetChar(0)=='P'; }
+    sal_Bool HasParaToken() const { return aToken.getLength()==1 && aToken[0]=='P'; }
     sal_Bool ShouldOutputToken() const { return bOutPara || !HasParaToken(); }
 };
 
@@ -304,7 +304,7 @@ struct SwHTMLFmtInfo
     const SwFmt *pFmt;      // das Format selbst
     const SwFmt *pRefFmt;   // das Vergleichs-Format
 
-    ByteString aToken;          // das auszugebende Token
+    rtl::OString aToken;          // das auszugebende Token
     String aClass;          // die auszugebende Klasse
 
     SfxItemSet *pItemSet;   // der auszugebende Attribut-Set
@@ -357,7 +357,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
     // Den Selektor des Formats holen
     sal_uInt16 nDeep = SwHTMLWriter::GetCSS1Selector( pFmt, aToken, aClass,
                                                   nRefPoolId );
-    OSL_ENSURE( nDeep ? aToken.Len()>0 : aToken.Len()==0,
+    OSL_ENSURE( nDeep ? aToken.getLength()>0 : aToken.getLength()==0,
             "Hier stimmt doch was mit dem Token nicht!" );
     OSL_ENSURE( nDeep ? nRefPoolId : !nRefPoolId,
             "Hier stimmt doch was mit der Vergleichs-Vorlage nicht!" );
@@ -658,34 +658,34 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     // Jetzt wird festgelegt, was aufgrund des Tokens so moeglich ist
     sal_uInt16 nToken = 0;          // Token fuer Tag-Wechsel
     sal_Bool bOutNewLine = sal_False;   // nur ein LF ausgeben?
-    if( pFmtInfo->aToken.Len() )
+    if( pFmtInfo->aToken.getLength() )
     {
         // Es ist eine HTML-Tag-Vorlage oder die Vorlage ist von einer
         // solchen abgeleitet
         rInfo.aToken = pFmtInfo->aToken;
 
         // der erste Buchstabe reicht meistens
-        switch( rInfo.aToken.GetChar( 0 ) )
+        switch( rInfo.aToken[0] )
         {
-        case 'A': OSL_ENSURE( rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_address),
+        case 'A': OSL_ENSURE( rInfo.aToken.equalsL(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_address)),
                             "Doch kein ADDRESS?" );
                     rInfo.bParaPossible = sal_True;
                     rHWrt.bNoAlign = sal_True;
                     break;
 
-        case 'B': OSL_ENSURE( rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_blockquote),
+        case 'B': OSL_ENSURE( rInfo.aToken.equalsL(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_blockquote)),
                             "Doch kein BLOCKQUOTE?" );
                     rInfo.bParaPossible = sal_True;
                     rHWrt.bNoAlign = sal_True;
                     break;
 
-        case 'P':   if( rInfo.aToken.Len() == 1 )
+        case 'P':   if( rInfo.aToken.getLength() == 1 )
                     {
                         bPara = sal_True;
                     }
                     else
                     {
-                        OSL_ENSURE( rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_preformtxt),
+                        OSL_ENSURE( rInfo.aToken.equalsL(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_preformtxt)),
                                 "Doch kein PRE?" );
                         if( HTML_PREFORMTXT_ON == rHWrt.nLastParaToken )
                         {
@@ -700,10 +700,10 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
                     }
                     break;
 
-        case 'D': OSL_ENSURE( rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_dt) ||
-                            rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_dd),
+        case 'D': OSL_ENSURE( rInfo.aToken.equalsL(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_dt)) ||
+                            rInfo.aToken.equalsL(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_dd)),
                             "Doch kein DD/DT?" );
-                    bDT = rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_dt);
+                    bDT = rInfo.aToken.equalsL(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_dt));
                     rInfo.bParaPossible = !bDT;
                     rHWrt.bNoAlign = sal_True;
                     bForceDL = sal_True;
@@ -768,7 +768,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     {
         // nur einen Zeilen-Umbruch (ohne Einrueckung) am Absatz-Anfang
         // ausgeben
-        rInfo.aToken.Erase();   // kein End-Tag ausgeben
+        rInfo.aToken = rtl::OString();   // kein End-Tag ausgeben
         rWrt.Strm() << SwHTMLWriter::sNewLine;
 
         return;
@@ -969,7 +969,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     if( !rHWrt.bCfgOutStyles && rInfo.bParaPossible && !bPara &&
         (bHasParSpace || pAdjItem) )
     {
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rInfo.aToken.GetBuffer() );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rInfo.aToken.getStr() );
         aToken = OOO_STRING_SVTOOLS_HTML_parabreak;
         bPara = sal_True;
         rHWrt.bNoAlign = sal_False;
@@ -1090,7 +1090,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
         // wenn kein End-Tag geschrieben werden soll, es loeschen
         if( bNoEndTag )
-            rInfo.aToken.Erase();
+            rInfo.aToken = rtl::OString();
     }
 
     // ??? Warum nicht ueber den Hint-Mechanismus ???
@@ -1133,7 +1133,7 @@ void OutHTML_SwFmtOff( Writer& rWrt, const SwHTMLTxtCollOutputInfo& rInfo )
     SwHTMLWriter & rHWrt = (SwHTMLWriter&)rWrt;
 
     // wenn es kein Token gibt haben wir auch nichts auszugeben
-    if( !rInfo.aToken.Len() )
+    if( !rInfo.aToken.getLength() )
     {
         rHWrt.FillNextNumInfo();
         const SwHTMLNumRuleInfo& rNextInfo = *rHWrt.GetNextNumInfo();
@@ -1166,11 +1166,12 @@ void OutHTML_SwFmtOff( Writer& rWrt, const SwHTMLTxtCollOutputInfo& rInfo )
         if( rInfo.bParaPossible && rInfo.bOutPara )
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_parabreak, sal_False );
 
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rInfo.aToken.GetBuffer(),
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rInfo.aToken.getStr(),
                                     sal_False );
-        rHWrt.bLFPossible = !rInfo.aToken.Equals( OOO_STRING_SVTOOLS_HTML_dt ) &&
-                            !rInfo.aToken.Equals( OOO_STRING_SVTOOLS_HTML_dd ) &&
-                            !rInfo.aToken.Equals( OOO_STRING_SVTOOLS_HTML_li );
+        rHWrt.bLFPossible =
+            !rInfo.aToken.equalsL(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_dt)) &&
+            !rInfo.aToken.equalsL(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_dd)) &&
+            !rInfo.aToken.equalsL(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_li));
     }
     if( rInfo.bOutDiv )
     {
@@ -1852,7 +1853,7 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
                 const SwCharFmt* pFmt = rChrFmt.GetCharFmt();
 
                 const SwHTMLFmtInfo *pFmtInfo = GetFmtInfo( *pFmt, rFmtInfos );
-                if( pFmtInfo->aToken.Len() )
+                if( pFmtInfo->aToken.getLength() )
                 {
                     // das Zeichenvorlagen-Tag muss vor den harten
                     // Attributen ausgegeben werden
@@ -3245,7 +3246,7 @@ static Writer& OutHTML_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
     {
         rtl::OStringBuffer sOut;
         sOut.append('<');
-        if( pFmtInfo->aToken.Len() > 0 )
+        if( pFmtInfo->aToken.getLength() > 0 )
             sOut.append(pFmtInfo->aToken);
         else
             sOut.append(OOO_STRING_SVTOOLS_HTML_span);
@@ -3283,7 +3284,7 @@ static Writer& OutHTML_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
     else
     {
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(),
-                pFmtInfo->aToken.Len() ? pFmtInfo->aToken.GetBuffer()
+                pFmtInfo->aToken.getLength() ? pFmtInfo->aToken.getStr()
                                        : OOO_STRING_SVTOOLS_HTML_span,
                 sal_False );
     }
