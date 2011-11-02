@@ -1944,24 +1944,28 @@ void GtkSalFrame::updateWMClass()
     rtl::OString aResClass = rtl::OUStringToOString(m_sWMClass, RTL_TEXTENCODING_ASCII_US);
     const char *pResClass = aResClass.getLength() ? aResClass.getStr() :
                                                     SalGenericSystem::getFrameClassName();
+    Display *display;
 
-#if !GTK_CHECK_VERSION(3,0,0)
+    if (!getDisplay()->IsX11Display())
+        return;
+
+#if GTK_CHECK_VERSION(3,0,0)
+    display = GDK_DISPLAY_XDISPLAY(getGdkDisplay());
+#else
+    display = getDisplay()->GetDisplay();
+#endif
+
     if( IS_WIDGET_REALIZED( m_pWindow ) )
     {
         XClassHint* pClass = XAllocClassHint();
         rtl::OString aResName = SalGenericSystem::getFrameResName( m_nExtStyle );
         pClass->res_name  = const_cast<char*>(aResName.getStr());
         pClass->res_class = const_cast<char*>(pResClass);
-        XSetClassHint( getDisplay()->GetDisplay(),
-                       GDK_WINDOW_XWINDOW(widget_get_window(m_pWindow)),
+        XSetClassHint( display,
+                       widget_get_xid(m_pWindow),
                        pClass );
         XFree( pClass );
     }
-    else
-#endif
-        gtk_window_set_wmclass( GTK_WINDOW(m_pWindow),
-                                SalGenericSystem::getFrameResName( m_nExtStyle ).getStr(),
-                                pResClass );
 }
 
 void GtkSalFrame::SetApplicationID( const rtl::OUString &rWMClass )
