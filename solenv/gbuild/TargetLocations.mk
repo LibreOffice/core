@@ -72,6 +72,7 @@ gb_CObject_get_target = $(WORKDIR)/CObject/$(1).o
 gb_GenCObject_get_target = $(WORKDIR)/GenCObject/$(1).o
 gb_ComponentTarget_get_target = $(WORKDIR)/ComponentTarget/$(1).component
 gb_ComponentTarget_get_inbuild_target = $(WORKDIR)/ComponentTarget/$(1).inbuild.component
+gb_ComponentsTarget_get_target = $(WORKDIR)/ComponentsTarget/$(1).components
 gb_CppunitTest_get_target = $(WORKDIR)/CppunitTest/$(1).test
 gb_CustomTarget_get_repo_target = $(WORKDIR)/CustomTarget/$(2)_$(1).done
 gb_CustomTarget_get_target = $(WORKDIR)/CustomTarget/$(1).done
@@ -155,6 +156,7 @@ endef
 $(eval $(call gb_Helper_make_clean_targets,\
 	AllLangResTarget \
 	ComponentTarget \
+	ComponentsTarget \
 	Extension \
 	JavaClassSet \
 	Jar \
