@@ -92,8 +92,12 @@ class EnhancedCustomShape2d : public SfxItemSet
 
         double                      fXScale;
         double                      fYScale;
+        double                      fXScaleOOXML;
+        double                      fYScaleOOXML;
         double                      fXRatio;
         double                      fYRatio;
+
+        sal_Bool                    bOOXMLShape;
 
         sal_Int32                   nXRef;
         sal_Int32                   nYRef;
@@ -132,7 +136,7 @@ class EnhancedCustomShape2d : public SfxItemSet
         void                        AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rCustomShapeSet,
                                                   sal_uInt32& nColorIndex, sal_uInt32 nColorCount);
         sal_Bool                    GetParameter( double& rParameterReturnValue,  const com::sun::star::drawing::EnhancedCustomShapeParameter&,
-                                                    const sal_Bool bReplaceGeoWidth, const sal_Bool bReplaceGeoHeight ) const;
+                                                  const sal_Bool bReplaceGeoWidth, const sal_Bool bReplaceGeoHeight, sal_Bool& bNormal ) const;
         Point                       GetPoint( const com::sun::star::drawing::EnhancedCustomShapeParameterPair&,
                                                     const sal_Bool bScale = sal_True, const sal_Bool bReplaceGeoSize = sal_False ) const;
 

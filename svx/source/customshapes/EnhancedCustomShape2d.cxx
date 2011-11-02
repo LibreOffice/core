@@ -735,8 +735,11 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     rtl::OUString sShapeType;
     SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)(const SdrCustomShapeGeometryItem&)pCustomShapeObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
     Any* pAny = rGeometryItem.GetPropertyValueByName( sType );
-    if ( pAny )
+    if ( pAny ) {
         *pAny >>= sShapeType;
+        bOOXMLShape = ( sShapeType.compareToAscii( "ooxml-", 6 ) == 0 );
+        OSL_TRACE("shape type: %s %d", OUStringToOString( sShapeType, RTL_TEXTENCODING_ASCII_US ).getStr(), bOOXMLShape);
+    }
     eSpType = EnhancedCustomShapeTypeNames::Get( sShapeType );
 
     pAny = rGeometryItem.GetPropertyValueByName( sMirroredX );
@@ -795,9 +798,18 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
         default:
             break;
     }
-     fXScale = nCoordWidth == 0 ? 0.0 : (double)aLogicRect.GetWidth() / (double)nCoordWidth;
-     fYScale = nCoordHeight == 0 ? 0.0 : (double)aLogicRect.GetHeight() / (double)nCoordHeight;
-     if ( (sal_uInt32)nXRef != 0x80000000 && aLogicRect.GetHeight() )
+    fXScale = nCoordWidth == 0 ? 0.0 : (double)aLogicRect.GetWidth() / (double)nCoordWidth;
+    fYScale = nCoordHeight == 0 ? 0.0 : (double)aLogicRect.GetHeight() / (double)nCoordHeight;
+    if ( bOOXMLShape ) {
+        fXScaleOOXML = fXScale;
+        fYScaleOOXML = fYScale;
+        fXScale = 1;
+        fYScale = 1;
+    } else {
+        fXScaleOOXML = 1;
+        fYScaleOOXML = 1;
+    }
+    if ( (sal_uInt32)nXRef != 0x80000000 && aLogicRect.GetHeight() )
     {
         fXRatio = (double)aLogicRect.GetWidth() / (double)aLogicRect.GetHeight();
         if ( fXRatio > 1 )
@@ -959,6 +971,7 @@ Point EnhancedCustomShape2d::GetPoint( const com::sun::star::drawing::EnhancedCu
 {
     Point       aRetValue;
     sal_Bool    bExchange = ( nFlags & DFF_CUSTOMSHAPE_EXCH ) != 0; // x <-> y
+    sal_Bool    bNormal;
     sal_uInt32  nPass = 0;
     do
     {
@@ -971,11 +984,13 @@ Point EnhancedCustomShape2d::GetPoint( const com::sun::star::drawing::EnhancedCu
         const EnhancedCustomShapeParameter& rParameter = nIndex ? rPair.Second : rPair.First;
         if ( nPass )    // height
         {
-            GetParameter( fVal, rParameter, sal_False, bReplaceGeoSize );
+            GetParameter( fVal, rParameter, sal_False, bReplaceGeoSize, bNormal );
             fVal -= nCoordTop;
             if ( bScale )
             {
                 fVal *= fYScale;
+                if (bNormal)
+                    fVal *= fYScaleOOXML;
 
                 if ( nFlags & DFF_CUSTOMSHAPE_FLIP_V )
                     fVal = aLogicRect.GetHeight() - fVal;
@@ -984,11 +999,13 @@ Point EnhancedCustomShape2d::GetPoint( const com::sun::star::drawing::EnhancedCu
         }
         else            // width
         {
-            GetParameter( fVal, rParameter, bReplaceGeoSize, sal_False );
+            GetParameter( fVal, rParameter, bReplaceGeoSize, sal_False, bNormal );
             fVal -= nCoordLeft;
             if ( bScale )
             {
                 fVal *= fXScale;
+                if ( bNormal )
+                    fVal *= fXScaleOOXML;
 
                 if ( nFlags & DFF_CUSTOMSHAPE_FLIP_H )
                     fVal = aLogicRect.GetWidth() - fVal;
@@ -1001,10 +1018,11 @@ Point EnhancedCustomShape2d::GetPoint( const com::sun::star::drawing::EnhancedCu
 }
 
 sal_Bool EnhancedCustomShape2d::GetParameter( double& rRetValue, const EnhancedCustomShapeParameter& rParameter,
-                                                const sal_Bool bReplaceGeoWidth, const sal_Bool bReplaceGeoHeight ) const
+                                              const sal_Bool bReplaceGeoWidth, const sal_Bool bReplaceGeoHeight, sal_Bool& bNormal ) const
 {
     rRetValue = 0.0;
     sal_Bool bRetValue = sal_False;
+    bNormal = sal_False;
     switch ( rParameter.Type )
     {
         case EnhancedCustomShapeParameterType::ADJUSTMENT :
@@ -1051,6 +1069,7 @@ sal_Bool EnhancedCustomShape2d::GetParameter( double& rRetValue, const EnhancedC
                         rRetValue *= fYRatio;
                 }
             }
+            bNormal = sal_True;
         }
         break;
         case EnhancedCustomShapeParameterType::LEFT :
@@ -1174,8 +1193,9 @@ sal_Bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Poin
 
                 double      fAngle;
                 double      fRadius;
-                GetParameter( fRadius, aHandle.aPosition.First, sal_False, sal_False );
-                GetParameter( fAngle,  aHandle.aPosition.Second, sal_False, sal_False );
+                sal_Bool    bNormal;
+                GetParameter( fRadius, aHandle.aPosition.First, sal_False, sal_False, bNormal );
+                GetParameter( fAngle,  aHandle.aPosition.Second, sal_False, sal_False, bNormal );
 
                 double a = ( 360.0 - fAngle ) * F_PI180;
                 double dx = fRadius * fXScale;
@@ -1278,11 +1298,12 @@ sal_Bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nI
             if ( aHandle.aPosition.Second.Type == EnhancedCustomShapeParameterType::ADJUSTMENT )
                 aHandle.aPosition.Second.Value>>= nSecondAdjustmentValue;
 
+            sal_Bool bNormal;
             if ( aHandle.nFlags & HANDLE_FLAGS_POLAR )
             {
                 double fXRef, fYRef, fAngle;
-                GetParameter( fXRef, aHandle.aPolar.First, sal_False, sal_False );
-                GetParameter( fYRef, aHandle.aPolar.Second, sal_False, sal_False );
+                GetParameter( fXRef, aHandle.aPolar.First, sal_False, sal_False, bNormal );
+                GetParameter( fYRef, aHandle.aPolar.Second, sal_False, sal_False, bNormal );
                 const double fDX = fPos1 - fXRef;
                 fAngle = -( atan2( -fPos2 + fYRef, ( ( fDX == 0.0L ) ? 0.000000001 : fDX ) ) / F_PI180 );
                 double fX = ( fPos1 - fXRef );
@@ -1291,14 +1312,14 @@ sal_Bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nI
                 if ( aHandle.nFlags & HANDLE_FLAGS_RADIUS_RANGE_MINIMUM )
                 {
                     double fMin;
-                    GetParameter( fMin,  aHandle.aRadiusRangeMinimum, sal_False, sal_False );
+                    GetParameter( fMin,  aHandle.aRadiusRangeMinimum, sal_False, sal_False, bNormal );
                     if ( fRadius < fMin )
                         fRadius = fMin;
                 }
                 if ( aHandle.nFlags & HANDLE_FLAGS_RADIUS_RANGE_MAXIMUM )
                 {
                     double fMax;
-                    GetParameter( fMax, aHandle.aRadiusRangeMaximum, sal_False, sal_False );
+                    GetParameter( fMax, aHandle.aRadiusRangeMaximum, sal_False, sal_False, bNormal );
                     if ( fRadius > fMax )
                         fRadius = fMax;
                 }
@@ -1326,14 +1347,14 @@ sal_Bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nI
                     if ( aHandle.nFlags & HANDLE_FLAGS_RANGE_X_MINIMUM )        // check if horizontal handle needs to be within a range
                     {
                         double fXMin;
-                        GetParameter( fXMin, aHandle.aXRangeMinimum, sal_False, sal_False );
+                        GetParameter( fXMin, aHandle.aXRangeMinimum, sal_False, sal_False, bNormal );
                         if ( fPos1 < fXMin )
                             fPos1 = fXMin;
                     }
                     if ( aHandle.nFlags & HANDLE_FLAGS_RANGE_X_MAXIMUM )        // check if horizontal handle needs to be within a range
                     {
                         double fXMax;
-                        GetParameter( fXMax, aHandle.aXRangeMaximum, sal_False, sal_False );
+                        GetParameter( fXMax, aHandle.aXRangeMaximum, sal_False, sal_False, bNormal );
                         if ( fPos1 > fXMax )
                             fPos1 = fXMax;
                     }
@@ -1344,14 +1365,14 @@ sal_Bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nI
                     if ( aHandle.nFlags & HANDLE_FLAGS_RANGE_Y_MINIMUM )        // check if vertical handle needs to be within a range
                     {
                         double fYMin;
-                        GetParameter( fYMin, aHandle.aYRangeMinimum, sal_False, sal_False );
+                        GetParameter( fYMin, aHandle.aYRangeMinimum, sal_False, sal_False, bNormal );
                         if ( fPos2 < fYMin )
                             fPos2 = fYMin;
                     }
                     if ( aHandle.nFlags & HANDLE_FLAGS_RANGE_Y_MAXIMUM )        // check if vertical handle needs to be within a range
                     {
                         double fYMax;
-                        GetParameter( fYMax, aHandle.aYRangeMaximum, sal_False, sal_False );
+                        GetParameter( fYMax, aHandle.aYRangeMaximum, sal_False, sal_False, bNormal );
                         if ( fPos2 > fYMax )
                             fPos2 = fYMax;
                     }
@@ -1541,13 +1562,14 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 }
                 case ANGLEELLIPSETO :
                 {
+                    sal_Bool bNormal;
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( ( rSrcPt + 2 ) < nCoordSize ); i++ )
                     {
                         // create a circle
                         Point _aCenter( GetPoint( seqCoordinates[ rSrcPt ], sal_True, sal_True ) );
                         double fWidth, fHeight;
-                        GetParameter( fWidth,  seqCoordinates[ rSrcPt + 1 ].First, sal_True, sal_False  );
-                        GetParameter( fHeight,  seqCoordinates[ rSrcPt + 1 ].Second, sal_False, sal_True );
+                        GetParameter( fWidth,  seqCoordinates[ rSrcPt + 1 ].First, sal_True, sal_False, bNormal );
+                        GetParameter( fHeight,  seqCoordinates[ rSrcPt + 1 ].Second, sal_False, sal_True, bNormal );
                         fWidth *= fXScale;
                         fHeight*= fYScale;
                         Point aP( (sal_Int32)( _aCenter.X() - fWidth ), (sal_Int32)( _aCenter.Y() - fHeight ) );
@@ -1556,8 +1578,8 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                         if ( aRect.GetWidth() && aRect.GetHeight() )
                         {
                             double fStartAngle, fEndAngle;
-                            GetParameter( fStartAngle, seqCoordinates[ rSrcPt + 2 ].First,  sal_False, sal_False );
-                            GetParameter( fEndAngle  , seqCoordinates[ rSrcPt + 2 ].Second, sal_False, sal_False );
+                            GetParameter( fStartAngle, seqCoordinates[ rSrcPt + 2 ].First,  sal_False, sal_False, bNormal );
+                            GetParameter( fEndAngle  , seqCoordinates[ rSrcPt + 2 ].Second, sal_False, sal_False, bNormal );
 
                             if ( ((sal_Int32)fStartAngle % 360) != ((sal_Int32)fEndAngle % 360) )
                             {
@@ -1683,14 +1705,19 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 case ARCANGLETO :
                 {
                     double fWR, fHR, fStartAngle, fSwingAngle;
+                    sal_Bool bNormal;
 
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( rSrcPt + 1 < nCoordSize ); i++ )
                     {
-                        GetParameter ( fWR, seqCoordinates[ (sal_uInt16)( rSrcPt ) ].First, sal_True, sal_False );
-                        GetParameter ( fHR, seqCoordinates[ (sal_uInt16)( rSrcPt ) ].Second, sal_False, sal_True );
+                        GetParameter ( fWR, seqCoordinates[ (sal_uInt16)( rSrcPt ) ].First, sal_True, sal_False, bNormal );
+                        if ( bNormal )
+                            fWR *= fXScaleOOXML;
+                        GetParameter ( fHR, seqCoordinates[ (sal_uInt16)( rSrcPt ) ].Second, sal_False, sal_True, bNormal );
+                        if ( bNormal )
+                            fHR *= fYScaleOOXML;
 
-                        GetParameter ( fStartAngle, seqCoordinates[ (sal_uInt16)( rSrcPt + 1) ].First, sal_False, sal_False );
-                        GetParameter ( fSwingAngle, seqCoordinates[ (sal_uInt16)( rSrcPt + 1 ) ].Second, sal_False, sal_False );
+                        GetParameter ( fStartAngle, seqCoordinates[ (sal_uInt16)( rSrcPt + 1) ].First, sal_False, sal_False, bNormal );
+                        GetParameter ( fSwingAngle, seqCoordinates[ (sal_uInt16)( rSrcPt + 1 ) ].Second, sal_False, sal_False, bNormal );
 
                         fWR *= fXScale;
                         fHR *= fYScale;
