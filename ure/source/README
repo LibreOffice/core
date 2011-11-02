@@ -273,6 +273,11 @@ types.rdb and services.rdb files.  That is, you cannot store additional
 types.rdb and services.rdb files in a Documents and Settings\All
 Users\Application Data\URE directory.
 
+URE_MORE_TYPES and URE_MORE_SERVICES each contain zero or more space-separated
+URI descriptors.  A URI descriptor is either a URI (denoting an individual file)
+or a URI embeded in "<" and ">*" (denoting all the files contained non-
+recursively within the directory denoted by the given URI).
+
 The Java UNO environment needs type information in the form of Java class files
 instead of rdb files.  Additional types are searched for in any URLs listed in
 the public deployment variable URE_MORE_JAVA_TYPES.
