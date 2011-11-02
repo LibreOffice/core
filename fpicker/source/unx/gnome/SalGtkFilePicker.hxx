@@ -241,10 +241,6 @@ class SalGtkFilePicker :
         // FilePicker Event functions
         //------------------------------------------------------------------------------------
 
-        void SAL_CALL fileSelectionChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
-        void SAL_CALL directoryChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
-        void SAL_CALL controlStateChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
-
     private:
         // prevent copy and assignment
         SalGtkFilePicker( const SalGtkFilePicker& );
@@ -257,6 +253,11 @@ class SalGtkFilePicker :
 
         // to instanciate own services
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;
+
+        void impl_fileSelectionChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
+        void impl_directoryChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
+        void impl_controlStateChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
+
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >

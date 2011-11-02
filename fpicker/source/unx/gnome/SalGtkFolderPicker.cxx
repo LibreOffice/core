@@ -47,6 +47,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <FPServiceInfo.hxx>
 #include <osl/mutex.hxx>
+#include <vcl/svapp.hxx>
 #include "SalGtkFolderPicker.hxx"
 #include "resourceprovider.hxx"
 
@@ -87,8 +88,6 @@ SalGtkFolderPicker::SalGtkFolderPicker( const uno::Reference<lang::XMultiService
 {
     CResourceProvider aResProvider;
 
-    GdkThreadLock aLock;
-
     m_pDialog = gtk_file_chooser_dialog_new(
         OUStringToOString( aResProvider.getResString( FOLDERPICKER_TITLE ), RTL_TEXTENCODING_UTF8 ).getStr(),
         NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -111,6 +110,8 @@ void SAL_CALL SalGtkFolderPicker::disposing( const lang::EventObject& )
 void SAL_CALL SalGtkFolderPicker::setDisplayDirectory( const rtl::OUString& aDirectory )
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
+    SolarMutexGuard g;
+
     OSL_ASSERT( m_pDialog != NULL );
 
     OString aTxt = unicodetouri( aDirectory );
@@ -120,17 +121,15 @@ void SAL_CALL SalGtkFolderPicker::setDisplayDirectory( const rtl::OUString& aDir
 
     OSL_TRACE( "setting path to %s", aTxt.getStr() );
 
-    GdkThreadLock aLock;
-
     gtk_file_chooser_set_current_folder_uri( GTK_FILE_CHOOSER( m_pDialog ),
         aTxt.getStr() );
 }
 
 rtl::OUString SAL_CALL SalGtkFolderPicker::getDisplayDirectory() throw( uno::RuntimeException )
 {
-    OSL_ASSERT( m_pDialog != NULL );
+    SolarMutexGuard g;
 
-    GdkThreadLock aLock;
+    OSL_ASSERT( m_pDialog != NULL );
 
     gchar* pCurrentFolder =
         gtk_file_chooser_get_current_folder_uri( GTK_FILE_CHOOSER( m_pDialog ) );
@@ -159,16 +158,19 @@ void SAL_CALL SalGtkFolderPicker::setDescription( const rtl::OUString& rDescript
 
 void SAL_CALL SalGtkFolderPicker::setTitle( const rtl::OUString& aTitle ) throw( uno::RuntimeException )
 {
+    SolarMutexGuard g;
+
     OSL_ASSERT( m_pDialog != NULL );
 
     ::rtl::OString aWindowTitle = OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 );
 
-    GdkThreadLock aLock;
     gtk_window_set_title( GTK_WINDOW( m_pDialog ), aWindowTitle.getStr() );
 }
 
 sal_Int16 SAL_CALL SalGtkFolderPicker::execute() throw( uno::RuntimeException )
 {
+    SolarMutexGuard g;
+
     OSL_TRACE( "1: HERE WE ARE");
     OSL_ASSERT( m_pDialog != NULL );
 
@@ -205,6 +207,8 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute() throw( uno::RuntimeException )
 
 void SAL_CALL SalGtkFolderPicker::cancel() throw( uno::RuntimeException )
 {
+    SolarMutexGuard g;
+
     OSL_ASSERT( m_pDialog != NULL );
 
     // TODO m_pImpl->cancel();
