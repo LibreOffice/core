@@ -547,7 +547,7 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
     typedef boost::unordered_map<OUString, OUString, OUStringHash> MemNameMapType;
     typedef boost::unordered_map<OUString, bool, OUStringHash> MemVisibilityType;
 
-    if (!mpDPFieldPopup.get())
+    if (!mpDPFieldPopup)
         return;
 
     DPFieldPopupData* pDPData = static_cast<DPFieldPopupData*>(mpDPFieldPopup->getExtendedData());

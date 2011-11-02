@@ -522,7 +522,7 @@ void ScGridWindow::ClickExtern()
     }
     while (false);
 
-    if (mpDPFieldPopup.get())
+    if (mpDPFieldPopup)
     {
         mpDPFieldPopup->close(false);
         mpDPFieldPopup.reset();
@@ -1805,7 +1805,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     {
         if ( pFilterBox && pFilterBox->GetMode() == SC_FILTERBOX_FILTER )
         {
-            if (mpFilterButton.get())
+            if (mpFilterButton)
             {
                 bool bFilterActive = IsAutoFilterActive(
                     pFilterBox->GetCol(), pFilterBox->GetRow(), pViewData->GetTabNo() );
@@ -2258,7 +2258,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
             nMouseStatus = SC_GM_NONE;
             if ( pFilterBox->GetMode() == SC_FILTERBOX_FILTER )
             {
-                if (mpFilterButton.get())
+                if (mpFilterButton)
                 {
                     mpFilterButton->setHasHiddenMember(false);
                     mpFilterButton->setPopupPressed(false);

@@ -40,7 +40,7 @@
 
 #include <vector>
 #include <memory>
-#include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 
 // ---------------------------------------------------------------------------
 
@@ -115,7 +115,7 @@ private:
     ::sdr::overlay::OverlayObjectList*              mpOOHeader;
     ::sdr::overlay::OverlayObjectList*              mpOOShrink;
 
-    ::boost::shared_ptr<Rectangle> mpAutoFillRect;
+    boost::scoped_ptr<Rectangle> mpAutoFillRect;
 
     /**
      * Stores current visible column and row ranges, used to avoid expensive
@@ -144,8 +144,8 @@ private:
 
     ScFilterListBox*        pFilterBox;
     FloatingWindow*         pFilterFloat;
-    ::std::auto_ptr<ScCheckListMenuWindow> mpDPFieldPopup;
-    ::std::auto_ptr<ScDPFieldButton>      mpFilterButton;
+    boost::scoped_ptr<ScCheckListMenuWindow> mpDPFieldPopup;
+    boost::scoped_ptr<ScDPFieldButton>       mpFilterButton;
 
     sal_uInt16              nCursorHideCount;
 
