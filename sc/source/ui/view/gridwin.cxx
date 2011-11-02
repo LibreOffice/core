@@ -880,7 +880,7 @@ void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
     CaptureMouse();
 }
 
-void ScGridWindow::DoAutoFilterMenue( SCCOL nCol, SCROW nRow, sal_Bool bDataSelect )
+void ScGridWindow::DoAutoFilterMenue( SCCOL nCol, SCROW nRow, bool bDataSelect )
 {
     delete pFilterBox;
     delete pFilterFloat;
@@ -1352,7 +1352,7 @@ void ScGridWindow::MoveMouseStatus( ScGridWindow& rDestWin )
     }
 }
 
-sal_Bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, sal_Bool bAction )
+bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
 {
     //  MouseEvent buttons must only be checked if bAction==TRUE
     //  to allow changing the mouse pointer in MouseMove,
@@ -1362,16 +1362,16 @@ sal_Bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, sal_Bool bAction )
     if ( bAction && !rMEvt.IsLeft() )
         return false;
 
-    sal_Bool bNewPointer = false;
+    bool bNewPointer = false;
 
     SfxInPlaceClient* pClient = pViewData->GetViewShell()->GetIPClient();
-    sal_Bool bOleActive = ( pClient && pClient->IsObjectInPlaceActive() );
+    bool bOleActive = ( pClient && pClient->IsObjectInPlaceActive() );
 
     if ( pViewData->IsActive() && !bOleActive )
     {
         ScDocument* pDoc = pViewData->GetDocument();
         SCTAB nTab = pViewData->GetTabNo();
-        sal_Bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+        bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
         //  Auto-Fill
 
@@ -1400,7 +1400,7 @@ sal_Bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, sal_Bool bAction )
                         //  where the Marking flag is set and MarkToSimple won't work anymore.
                         pViewData->GetMarkData().MarkToSimple();
                     }
-                    bNewPointer = sal_True;
+                    bNewPointer = true;
                 }
             }
         }
@@ -1421,9 +1421,9 @@ sal_Bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, sal_Bool bAction )
                     aStartPos.X() += 2;
                     aEndPos.X()   += 2;
                 }
-                sal_Bool bTop = ( aMousePos.X() >= aStartPos.X()-3 && aMousePos.X() <= aStartPos.X()+1 &&
+                bool bTop = ( aMousePos.X() >= aStartPos.X()-3 && aMousePos.X() <= aStartPos.X()+1 &&
                               aMousePos.Y() >= aStartPos.Y()-3 && aMousePos.Y() <= aStartPos.Y()+1 );
-                sal_Bool bBottom = ( aMousePos.X() >= aEndPos.X()-3 && aMousePos.X() <= aEndPos.X()+1 &&
+                bool bBottom = ( aMousePos.X() >= aEndPos.X()-3 && aMousePos.X() <= aEndPos.X()+1 &&
                                  aMousePos.Y() >= aEndPos.Y()-3 && aMousePos.Y() <= aEndPos.Y()+1 );
                 if ( bTop || bBottom )
                 {
@@ -1435,7 +1435,7 @@ sal_Bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, sal_Bool bAction )
                                     aRange.aStart.Col(), aRange.aStart.Row(),
                                     aRange.aEnd.Col(), aRange.aEnd.Row(), nMode );
                     }
-                    bNewPointer = sal_True;
+                    bNewPointer = true;
                 }
             }
         }
@@ -3159,7 +3159,7 @@ void ScGridWindow::UpdateInputContext()
                                 // sensitiver Bereich (Pixel)
 #define SCROLL_SENSITIVE 20
 
-sal_Bool ScGridWindow::DropScroll( const Point& rMousePos )
+bool ScGridWindow::DropScroll( const Point& rMousePos )
 {
     SCsCOL nDx = 0;
     SCsROW nDy = 0;
@@ -4431,7 +4431,7 @@ void ScGridWindow::UpdateAutoFillMark(bool bMarked, const ScRange& rMarkRange)
     }
 }
 
-void ScGridWindow::UpdateListValPos( sal_Bool bVisible, const ScAddress& rPos )
+void ScGridWindow::UpdateListValPos( bool bVisible, const ScAddress& rPos )
 {
     bool bOldButton = bListValButton;
     ScAddress aOldPos = aListValPos;
@@ -4831,13 +4831,13 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, sal_Bool bUp )
 
 //------------------------------------------------------------------------
 
-sal_Bool ScGridWindow::GetEditUrl( const Point& rPos,
-                                String* pName, String* pUrl, String* pTarget )
+bool ScGridWindow::GetEditUrl( const Point& rPos,
+                               String* pName, String* pUrl, String* pTarget )
 {
     return GetEditUrlOrError( false, rPos, pName, pUrl, pTarget );
 }
 
-sal_Bool ScGridWindow::GetEditUrlOrError( sal_Bool bSpellErr, const Point& rPos,
+bool ScGridWindow::GetEditUrlOrError( bool bSpellErr, const Point& rPos,
                                 String* pName, String* pUrl, String* pTarget )
 {
     //! nPosX/Y mit uebergeben?
@@ -5014,14 +5014,14 @@ sal_Bool ScGridWindow::GetEditUrlOrError( sal_Bool bSpellErr, const Point& rPos,
     return false;
 }
 
-sal_Bool ScGridWindow::HasScenarioButton( const Point& rPosPixel, ScRange& rScenRange )
+bool ScGridWindow::HasScenarioButton( const Point& rPosPixel, ScRange& rScenRange )
 {
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
     SCTAB nTabCount = pDoc->GetTableCount();
     if ( nTab+1<nTabCount && pDoc->IsScenario(nTab+1) && !pDoc->IsScenario(nTab) )
     {
-        sal_Bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+        bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
         Size aButSize = pViewData->GetScenButSize();
         long nBWidth  = aButSize.Width();
@@ -5047,7 +5047,7 @@ sal_Bool ScGridWindow::HasScenarioButton( const Point& rPosPixel, ScRange& rScen
             //  dadurch keine neuen nicht-ueberdeckten Zellen mit umrandet werden
             pDoc->ExtendTotalMerge( aRange );
 
-            sal_Bool bTextBelow = ( aRange.aStart.Row() == 0 );
+            bool bTextBelow = ( aRange.aStart.Row() == 0 );
 
             Point aButtonPos;
             if ( bTextBelow )
@@ -5070,7 +5070,7 @@ sal_Bool ScGridWindow::HasScenarioButton( const Point& rPosPixel, ScRange& rScen
             if ( aButRect.IsInside( rPosPixel ) )
             {
                 rScenRange = aRange;
-                return sal_True;
+                return true;
             }
         }
     }

@@ -118,12 +118,12 @@ DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW
 }
 
 // private method for mouse button handling
-sal_Bool ScGridWindow::DoPageFieldSelection( SCCOL nCol, SCROW nRow )
+bool ScGridWindow::DoPageFieldSelection( SCCOL nCol, SCROW nRow )
 {
     if (GetDPFieldOrientation( nCol, nRow ) == sheet::DataPilotFieldOrientation_PAGE)
     {
         LaunchPageFieldMenu( nCol, nRow );
-        return sal_True;
+        return true;
     }
     return false;
 }
@@ -627,7 +627,7 @@ void ScGridWindow::DPMouseButtonUp( const MouseEvent& rMEvt )
 
 // -----------------------------------------------------------------------
 
-void ScGridWindow::UpdateDragRect( sal_Bool bShowRange, const Rectangle& rPosRect )
+void ScGridWindow::UpdateDragRect( bool bShowRange, const Rectangle& rPosRect )
 {
     SCCOL nStartX = ( rPosRect.Left()   >= 0 ) ? static_cast<SCCOL>(rPosRect.Left())   : SCCOL_MAX;
     SCROW nStartY = ( rPosRect.Top()    >= 0 ) ? static_cast<SCROW>(rPosRect.Top())    : SCROW_MAX;

@@ -1308,7 +1308,7 @@ Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos )
     return Rectangle( aPos, aBtnSize );
 }
 
-sal_Bool ScGridWindow::IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab )
+bool ScGridWindow::IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     ScDocument*     pDoc    = pViewData->GetDocument();
     ScDBData*       pDBData = pDoc->GetDBAtCursor( nCol, nRow, nTab );
@@ -1321,8 +1321,8 @@ sal_Bool ScGridWindow::IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab )
         OSL_FAIL("Auto-Filter-Button ohne DBData");
     }
 
-    sal_Bool    bSimpleQuery = sal_True;
-    sal_Bool    bColumnFound = false;
+    bool    bSimpleQuery = true;
+    bool    bColumnFound = false;
     SCSIZE  nQuery;
 
     if ( !aQueryParam.bInplace )
@@ -1342,179 +1342,6 @@ sal_Bool ScGridWindow::IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab )
         }
 
     return ( bSimpleQuery && bColumnFound );
-}
-
-void ScGridWindow::InvertSimple( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
-                                    sal_Bool bTestMerge, sal_Bool bRepeat )
-{
-    //! if INVERT_HIGHLIGHT swaps foreground and background (like on Mac),
-    //! use INVERT_HIGHLIGHT only for cells that have no background color set
-    //! (here and in ScOutputData::DrawMark)
-
-    PutInOrder( nX1, nX2 );
-    PutInOrder( nY1, nY2 );
-
-    ScMarkData& rMark = pViewData->GetMarkData();
-    ScDocument* pDoc = pViewData->GetDocument();
-    SCTAB nTab = pViewData->GetTabNo();
-
-    sal_Bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
-    long nLayoutSign = bLayoutRTL ? -1 : 1;
-
-    SCCOL nTestX2 = nX2;
-    SCROW nTestY2 = nY2;
-    if (bTestMerge)
-        pDoc->ExtendMerge( nX1,nY1, nTestX2,nTestY2, nTab );
-
-    SCCOL nPosX = pViewData->GetPosX( eHWhich );
-    SCROW nPosY = pViewData->GetPosY( eVWhich );
-    if (nTestX2 < nPosX || nTestY2 < nPosY)
-        return;                                         // unsichtbar
-    SCCOL nRealX1 = nX1;
-    if (nX1 < nPosX)
-        nX1 = nPosX;
-    if (nY1 < nPosY)
-        nY1 = nPosY;
-
-    SCCOL nXRight = nPosX + pViewData->VisibleCellsX(eHWhich);
-    if (nXRight > MAXCOL) nXRight = MAXCOL;
-    SCROW nYBottom = nPosY + pViewData->VisibleCellsY(eVWhich);
-    if (nYBottom > MAXROW) nYBottom = MAXROW;
-
-    if (nX1 > nXRight || nY1 > nYBottom)
-        return;                                         // unsichtbar
-    if (nX2 > nXRight) nX2 = nXRight;
-    if (nY2 > nYBottom) nY2 = nYBottom;
-
-    MapMode aOld = GetMapMode(); SetMapMode(MAP_PIXEL);     // erst nach den return's !!!
-
-    double nPPTX = pViewData->GetPPTX();
-    double nPPTY = pViewData->GetPPTY();
-
-    ScInvertMerger aInvert( this );
-
-    Point aScrPos = pViewData->GetScrPos( nX1, nY1, eWhich );
-    long nScrY = aScrPos.Y();
-    sal_Bool bWasHidden = false;
-    for (SCROW nY=nY1; nY<=nY2; nY++)
-    {
-        sal_Bool bFirstRow = ( nY == nPosY );                       // first visible row?
-        sal_Bool bDoHidden = false;                                 // versteckte nachholen ?
-        sal_uInt16 nHeightTwips = pDoc->GetRowHeight( nY,nTab );
-        sal_Bool bDoRow = ( nHeightTwips != 0 );
-        if (bDoRow)
-        {
-            if (bTestMerge)
-                if (bWasHidden)                 // auf versteckte zusammengefasste testen
-                {
-                    bDoHidden = true;
-                    bDoRow = true;
-                }
-
-            bWasHidden = false;
-        }
-        else
-        {
-            bWasHidden = sal_True;
-            if (bTestMerge)
-                if (nY==nY2)
-                    bDoRow = sal_True;              // letzte Zeile aus Block
-        }
-
-        if ( bDoRow )
-        {
-            SCCOL nLoopEndX = nX2;
-            if (nX2 < nX1)                      // Rest von zusammengefasst
-            {
-                SCCOL nStartX = nX1;
-                while ( ((const ScMergeFlagAttr*)pDoc->
-                            GetAttr(nStartX,nY,nTab,ATTR_MERGE_FLAG))->IsHorOverlapped() )
-                    --nStartX;
-                if (nStartX <= nX2)
-                    nLoopEndX = nX1;
-            }
-
-            long nEndY = nScrY + ScViewData::ToPixel( nHeightTwips, nPPTY ) - 1;
-            long nScrX = aScrPos.X();
-            for (SCCOL nX=nX1; nX<=nLoopEndX; nX++)
-            {
-                long nWidth = ScViewData::ToPixel( pDoc->GetColWidth( nX,nTab ), nPPTX );
-                if ( nWidth > 0 )
-                {
-                    long nEndX = nScrX + ( nWidth - 1 ) * nLayoutSign;
-                    if (bTestMerge)
-                    {
-                        SCROW nThisY = nY;
-                        const ScPatternAttr* pPattern = pDoc->GetPattern( nX, nY, nTab );
-                        const ScMergeFlagAttr* pMergeFlag = (const ScMergeFlagAttr*) &pPattern->
-                                                                        GetItem(ATTR_MERGE_FLAG);
-                        if ( pMergeFlag->IsVerOverlapped() && ( bDoHidden || bFirstRow ) )
-                        {
-                            while ( pMergeFlag->IsVerOverlapped() && nThisY > 0 &&
-                                    (pDoc->RowHidden(nThisY-1, nTab) || bFirstRow) )
-                            {
-                                --nThisY;
-                                pPattern = pDoc->GetPattern( nX, nThisY, nTab );
-                                pMergeFlag = (const ScMergeFlagAttr*) &pPattern->GetItem(ATTR_MERGE_FLAG);
-                            }
-                        }
-
-                        // nur Rest von zusammengefasster zu sehen ?
-                        SCCOL nThisX = nX;
-                        if ( pMergeFlag->IsHorOverlapped() && nX == nPosX && nX > nRealX1 )
-                        {
-                            while ( pMergeFlag->IsHorOverlapped() )
-                            {
-                                --nThisX;
-                                pPattern = pDoc->GetPattern( nThisX, nThisY, nTab );
-                                pMergeFlag = (const ScMergeFlagAttr*) &pPattern->GetItem(ATTR_MERGE_FLAG);
-                            }
-                        }
-
-                        if ( rMark.IsCellMarked( nThisX, nThisY, sal_True ) == bRepeat )
-                        {
-                            if ( !pMergeFlag->IsOverlapped() )
-                            {
-                                ScMergeAttr* pMerge = (ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
-                                if (pMerge->GetColMerge() > 0 || pMerge->GetRowMerge() > 0)
-                                {
-                                    Point aEndPos = pViewData->GetScrPos(
-                                            nThisX + pMerge->GetColMerge(),
-                                            nThisY + pMerge->GetRowMerge(), eWhich );
-                                    if ( aEndPos.X() * nLayoutSign > nScrX * nLayoutSign && aEndPos.Y() > nScrY )
-                                    {
-                                        aInvert.AddRect( Rectangle( nScrX,nScrY,
-                                                    aEndPos.X()-nLayoutSign,aEndPos.Y()-1 ) );
-                                    }
-                                }
-                                else if ( nEndX * nLayoutSign >= nScrX * nLayoutSign && nEndY >= nScrY )
-                                {
-                                    aInvert.AddRect( Rectangle( nScrX,nScrY,nEndX,nEndY ) );
-                                }
-                            }
-                        }
-                    }
-                    else        // !bTestMerge
-                    {
-                        if ( rMark.IsCellMarked( nX, nY, sal_True ) == bRepeat &&
-                                                nEndX * nLayoutSign >= nScrX * nLayoutSign && nEndY >= nScrY )
-                        {
-                            aInvert.AddRect( Rectangle( nScrX,nScrY,nEndX,nEndY ) );
-                        }
-                    }
-
-                    nScrX = nEndX + nLayoutSign;
-                }
-            }
-            nScrY = nEndY + 1;
-        }
-    }
-
-    aInvert.Flush();        // before restoring MapMode
-
-    SetMapMode(aOld);
-
-    CheckInverted();
 }
 
 void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
