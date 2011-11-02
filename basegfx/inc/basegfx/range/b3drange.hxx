@@ -41,7 +41,7 @@ namespace basegfx
     class B3IRange;
     class B3DHomMatrix;
 
-    class BASEGFX_DLLPUBLIC B3DRange
+    class B3DRange
     {
         typedef ::basegfx::BasicRange< double, DoubleTraits >   MyBasicRange;
 
@@ -50,9 +50,7 @@ namespace basegfx
         MyBasicRange            maRangeZ;
 
     public:
-        B3DRange()
-        {
-        }
+        B3DRange() {}
 
         explicit B3DRange(const B3DTuple& rTuple)
         :   maRangeX(rTuple.getX()),
@@ -85,14 +83,7 @@ namespace basegfx
             expand(rTuple2);
         }
 
-        B3DRange(const B3DRange& rRange)
-        :   maRangeX(rRange.maRangeX),
-            maRangeY(rRange.maRangeY),
-            maRangeZ(rRange.maRangeZ)
-        {
-        }
-
-        explicit B3DRange(const B3IRange& rRange);
+         BASEGFX_DLLPUBLIC explicit B3DRange(const B3IRange& rRange);
 
         bool isEmpty() const
         {
@@ -122,14 +113,6 @@ namespace basegfx
             return (maRangeX != rRange.maRangeX
                 || maRangeY != rRange.maRangeY
                 || maRangeZ != rRange.maRangeZ);
-        }
-
-        B3DRange& operator=(const B3DRange& rRange)
-        {
-            maRangeX = rRange.maRangeX;
-            maRangeY = rRange.maRangeY;
-            maRangeZ = rRange.maRangeZ;
-            return *this;
         }
 
         bool equal(const B3DRange& rRange) const
@@ -290,7 +273,7 @@ namespace basegfx
             maRangeZ.grow(fValue);
         }
 
-        void transform(const B3DHomMatrix& rMatrix);
+         BASEGFX_DLLPUBLIC void transform(const B3DHomMatrix& rMatrix);
     };
 
     /** Round double to nearest integer for 3D range
@@ -298,6 +281,7 @@ namespace basegfx
         @return the nearest integer for this range
     */
     BASEGFX_DLLPUBLIC B3IRange fround(const B3DRange& rRange);
+
 } // end of namespace basegfx
 
 

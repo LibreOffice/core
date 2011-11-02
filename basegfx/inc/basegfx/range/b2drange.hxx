@@ -43,22 +43,38 @@ namespace basegfx
     class B2IRange;
     class B2DHomMatrix;
 
+    /** A two-dimensional interval over doubles
+
+        This is a set of real numbers, bounded by a lower and an upper
+        pair. All inbetween values are included in the set (see also
+        http://en.wikipedia.org/wiki/Interval_%28mathematics%29).
+
+        The set is closed, i.e. the upper and the lower bound are
+        included (if you're used to the notation - we're talking about
+        [a,b] here, compared to half-open [a,b) or open intervals
+        (a,b)).
+
+        That means, isInside(val) will return true also for values of
+        val=a or val=b.
+
+        @see B1DRange
+     */
     class B2DRange
     {
     public:
         typedef double          ValueType;
         typedef DoubleTraits    TraitsType;
 
-        B2DRange()
-        {
-        }
+        B2DRange() {}
 
+        /// Create degenerate interval consisting of a single point
         explicit B2DRange(const B2DTuple& rTuple)
         :   maRangeX(rTuple.getX()),
             maRangeY(rTuple.getY())
         {
         }
 
+        /// Create proper interval between the two given double pairs
         B2DRange(double x1,
                  double y1,
                  double x2,
@@ -70,6 +86,7 @@ namespace basegfx
             maRangeY.expand(y2);
         }
 
+        /// Create proper interval between the two given points
         B2DRange(const B2DTuple& rTuple1,
                  const B2DTuple& rTuple2)
         :   maRangeX(rTuple1.getX()),
@@ -78,14 +95,13 @@ namespace basegfx
             expand( rTuple2 );
         }
 
-        B2DRange(const B2DRange& rRange)
-        :   maRangeX(rRange.maRangeX),
-            maRangeY(rRange.maRangeY)
-        {
-        }
-
         BASEGFX_DLLPUBLIC explicit B2DRange(const B2IRange& rRange);
 
+        /** Check if the interval set is empty
+
+            @return false, if no value is in this set - having a
+            single point included will already return true.
+         */
         bool isEmpty() const
         {
             return (
@@ -94,6 +110,7 @@ namespace basegfx
                 );
         }
 
+        /// reset the object to empty state again, clearing all values
         void reset()
         {
             maRangeX.reset();
@@ -112,49 +129,49 @@ namespace basegfx
                 || maRangeY != rRange.maRangeY);
         }
 
-        B2DRange& operator=(const B2DRange& rRange)
-        {
-            maRangeX = rRange.maRangeX;
-            maRangeY = rRange.maRangeY;
-            return *this;
-        }
-
         bool equal(const B2DRange& rRange) const
         {
             return (maRangeX.equal(rRange.maRangeX)
                     && maRangeY.equal(rRange.maRangeY));
         }
 
+        /// get lower bound of the set. returns arbitrary values for empty sets.
         double getMinX() const
         {
             return maRangeX.getMinimum();
         }
 
+        /// get lower bound of the set. returns arbitrary values for empty sets.
         double getMinY() const
         {
             return maRangeY.getMinimum();
         }
 
+        /// get upper bound of the set. returns arbitrary values for empty sets.
         double getMaxX() const
         {
             return maRangeX.getMaximum();
         }
 
+        /// get upper bound of the set. returns arbitrary values for empty sets.
         double getMaxY() const
         {
             return maRangeY.getMaximum();
         }
 
+        /// return difference between upper and lower X value. returns 0 for empty sets.
         double getWidth() const
         {
             return maRangeX.getRange();
         }
 
+        /// return difference between upper and lower Y value. returns 0 for empty sets.
         double getHeight() const
         {
             return maRangeY.getRange();
         }
 
+        /// get lower bound of the set. returns arbitrary values for empty sets.
         B2DPoint getMinimum() const
         {
             return B2DPoint(
@@ -163,6 +180,7 @@ namespace basegfx
                 );
         }
 
+        /// get upper bound of the set. returns arbitrary values for empty sets.
         B2DPoint getMaximum() const
         {
             return B2DPoint(
@@ -171,6 +189,7 @@ namespace basegfx
                 );
         }
 
+        /// return difference between upper and lower point. returns (0,0) for empty sets.
         B2DVector getRange() const
         {
             return B2DVector(
@@ -179,6 +198,7 @@ namespace basegfx
                 );
         }
 
+        /// return center point of set. returns (0,0) for empty sets.
         B2DPoint getCenter() const
         {
             return B2DPoint(
@@ -187,16 +207,19 @@ namespace basegfx
                 );
         }
 
+        /// return center X value of set. returns 0 for empty sets.
         double getCenterX() const
         {
             return maRangeX.getCenter();
         }
 
+        /// return center Y value of set. returns 0 for empty sets.
         double getCenterY() const
         {
             return maRangeY.getCenter();
         }
 
+        /// yields true if given point is contained in set
         bool isInside(const B2DTuple& rTuple) const
         {
             return (
@@ -205,6 +228,7 @@ namespace basegfx
                 );
         }
 
+        /// yields true if rRange is inside, or equal to set
         bool isInside(const B2DRange& rRange) const
         {
             return (
@@ -213,6 +237,7 @@ namespace basegfx
                 );
         }
 
+        /// yields true if rRange at least partly inside set
         bool overlaps(const B2DRange& rRange) const
         {
             return (
@@ -221,6 +246,7 @@ namespace basegfx
                 );
         }
 
+        /// yields true if overlaps(rRange) does, and the overlap is larger than infinitesimal
         bool overlapsMore(const B2DRange& rRange) const
         {
             return (
@@ -229,24 +255,28 @@ namespace basegfx
                 );
         }
 
+        /// add point to the set, expanding as necessary
         void expand(const B2DTuple& rTuple)
         {
             maRangeX.expand(rTuple.getX());
             maRangeY.expand(rTuple.getY());
         }
 
+        /// add rRange to the set, expanding as necessary
         void expand(const B2DRange& rRange)
         {
             maRangeX.expand(rRange.maRangeX);
             maRangeY.expand(rRange.maRangeY);
         }
 
+        /// calc set intersection
         void intersect(const B2DRange& rRange)
         {
             maRangeX.intersect(rRange.maRangeX);
             maRangeY.intersect(rRange.maRangeY);
         }
 
+        /// grow set by fValue on all sides
         void grow(double fValue)
         {
             maRangeX.grow(fValue);

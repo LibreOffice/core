@@ -41,14 +41,11 @@ namespace basegfx
         This is modelled after how polygon fill algorithms set pixel -
         typically excluding rightmost and bottommost ones.
      */
-    class BASEGFX_DLLPUBLIC BasicBox : public BasicRange< sal_Int32, Int32Traits >
+    class BasicBox : public BasicRange< sal_Int32, Int32Traits >
     {
         typedef BasicRange< sal_Int32, Int32Traits > Base;
     public:
-        BasicBox() :
-            Base()
-        {
-        }
+        BasicBox() {}
 
         BasicBox( sal_Int32 nValue ) :
             Base( nValue )

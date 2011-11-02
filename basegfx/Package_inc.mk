@@ -52,7 +52,6 @@ $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/basicbox.hxx,bas
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/b2dconnectedranges.hxx,basegfx/range/b2dconnectedranges.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/b3drange.hxx,basegfx/range/b3drange.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/b2drange.hxx,basegfx/range/b2drange.hxx))
-$(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/rangeexpander.hxx,basegfx/range/rangeexpander.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/b2irange.hxx,basegfx/range/b2irange.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/b1ibox.hxx,basegfx/range/b1ibox.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/b2dpolyrange.hxx,basegfx/range/b2dpolyrange.hxx))

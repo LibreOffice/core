@@ -1268,6 +1268,10 @@ public:
 
         Type aRange3(0,2);
         CPPUNIT_ASSERT_MESSAGE("box overlapping is fully overlapping now", aRange.overlapsMore(aRange3));
+
+        // just so that this compiles -
+        Type aRange4( aRange );
+        (void)aRange4;
     }
 
     void check()

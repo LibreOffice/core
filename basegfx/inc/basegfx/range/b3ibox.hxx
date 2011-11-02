@@ -38,16 +38,14 @@
 
 namespace basegfx
 {
-    class BASEGFX_DLLPUBLIC B3IBox
+    class B3IBox
     {
         BasicBox            maRangeX;
         BasicBox            maRangeY;
         BasicBox            maRangeZ;
 
     public:
-        B3IBox()
-        {
-        }
+        B3IBox() {}
 
         explicit B3IBox(const B3ITuple& rTuple) :
             maRangeX(rTuple.getX()),

@@ -38,7 +38,7 @@
 
 namespace basegfx
 {
-    class BASEGFX_DLLPUBLIC B3IRange
+    class B3IRange
     {
         typedef ::basegfx::BasicRange< sal_Int32, Int32Traits > MyBasicRange;
 
@@ -47,9 +47,7 @@ namespace basegfx
         MyBasicRange            maRangeZ;
 
     public:
-        B3IRange()
-        {
-        }
+        B3IRange() {}
 
         explicit B3IRange(const B3ITuple& rTuple)
         :   maRangeX(rTuple.getX()),
@@ -82,13 +80,6 @@ namespace basegfx
             expand(rTuple2);
         }
 
-        B3IRange(const B3IRange& rRange)
-        :   maRangeX(rRange.maRangeX),
-            maRangeY(rRange.maRangeY),
-            maRangeZ(rRange.maRangeZ)
-        {
-        }
-
         bool isEmpty() const
         {
             return maRangeX.isEmpty() || maRangeY.isEmpty() || maRangeZ.isEmpty();
@@ -113,14 +104,6 @@ namespace basegfx
             return (maRangeX != rRange.maRangeX
                 || maRangeY != rRange.maRangeY
                 || maRangeZ != rRange.maRangeZ);
-        }
-
-        B3IRange& operator=(const B3IRange& rRange)
-        {
-            maRangeX = rRange.maRangeX;
-            maRangeY = rRange.maRangeY;
-            maRangeZ = rRange.maRangeZ;
-            return *this;
         }
 
         sal_Int32 getMinX() const
