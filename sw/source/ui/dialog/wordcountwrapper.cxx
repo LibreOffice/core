@@ -32,7 +32,6 @@
 #include <dialog.hrc>
 #include <layout/layout-pre.hxx>
 #include <wordcountdialog.hrc>
-#include <wordcountwrapper.hxx>
 #include <cmdid.h>
 
 SFX_IMPL_CHILDWINDOW(SwWordCountWrapper, FN_WORDCOUNT_DIALOG)

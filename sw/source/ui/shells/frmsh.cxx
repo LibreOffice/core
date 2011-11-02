@@ -95,6 +95,8 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/uno/Any.h>
 
+#include <wordcountdialog.hxx>
+
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

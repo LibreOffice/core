@@ -70,6 +70,7 @@
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
 #include "swabstdlg.hxx"
+#include <wordcountdialog.hxx>
 #include "misc.hrc"
 
 using namespace ::com::sun::star;

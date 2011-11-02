@@ -101,6 +101,7 @@
 #include <viewopt.hxx>
 #include <wrtsh.hxx>
 #include <wview.hxx>
+#include <wordcountdialog.hxx>
 
 #include "swabstdlg.hxx"
 #include "chrdlg.hrc"

@@ -131,6 +131,8 @@
 
 #include <langhelper.hxx>
 
+#include <wordcountdialog.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -410,7 +412,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         break;
         case FN_WORDCOUNT_DIALOG:
         {
-            SfxViewFrame* pVFrame = GetView().GetViewFrame();
+            SfxViewFrame* pVFrame = rView.GetViewFrame();
             if (pVFrame != NULL)
             {
                 pVFrame->ToggleChildWindow(FN_WORDCOUNT_DIALOG);
