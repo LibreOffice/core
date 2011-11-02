@@ -118,16 +118,17 @@ rtl::OString SalGtkPicker::unicodetouri(const rtl::OUString &rURL)
     return sURL;
 }
 
-gboolean canceldialog(RunDialog *pDialog)
-{
-    pDialog->cancel();
-    return false;
-}
-
 extern "C"
 {
     struct Display;
     extern GdkDisplay* gdk_x11_lookup_xdisplay (void*xdisplay);
+
+    static gboolean canceldialog(RunDialog *pDialog)
+    {
+        GdkThreadLock lock;
+        pDialog->cancel();
+        return false;
+    }
 }
 
 RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit >& rToolkit,
@@ -157,8 +158,6 @@ RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit 
         }
     }
 
-    GdkThreadLock aLock;
-
     GdkDisplay *pDisplay = aWindowHandle.DisplayPointer ? gdk_x11_lookup_xdisplay(reinterpret_cast<void*>(static_cast<sal_IntPtr>(aWindowHandle.DisplayPointer))) : NULL;
     GdkWindow* pParent = pDisplay ? gdk_window_lookup_for_display(pDisplay, aWindowHandle.WindowHandle) : NULL;
     if (!pParent && pDisplay)
@@ -173,17 +172,19 @@ RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit 
 
 RunDialog::~RunDialog()
 {
+    SolarMutexGuard g;
+
     if (mpCreatedParent)
-    {
-        GdkThreadLock aLock;
         gdk_window_destroy (mpCreatedParent);
-    }
+
+    g_source_remove_by_user_data (this);
 }
 
 void SAL_CALL RunDialog::windowOpened( const ::com::sun::star::lang::EventObject& )
     throw (::com::sun::star::uno::RuntimeException)
 {
-    GdkThreadLock aLock;
+    SolarMutexGuard g;
+
     g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, (GSourceFunc)canceldialog, this, NULL);
 }
 
@@ -195,13 +196,13 @@ void SAL_CALL RunDialog::queryTermination( const ::com::sun::star::lang::EventOb
 void SAL_CALL RunDialog::notifyTermination( const ::com::sun::star::lang::EventObject& )
         throw(::com::sun::star::uno::RuntimeException)
 {
-    GdkThreadLock aLock;
+    SolarMutexGuard g;
+
     g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, (GSourceFunc)canceldialog, this, NULL);
 }
 
 void RunDialog::cancel()
 {
-    GdkThreadLock aLock;
     gtk_dialog_response( GTK_DIALOG( mpDialog ), GTK_RESPONSE_CANCEL );
     gtk_widget_hide( mpDialog );
 }
@@ -211,7 +212,6 @@ gint RunDialog::run()
     if (mxToolkit.is())
         mxToolkit->addTopWindowListener(this);
 
-    GdkThreadLock aLock;
     gint nStatus = gtk_dialog_run( GTK_DIALOG( mpDialog ) );
 
     if (mxToolkit.is())
@@ -265,9 +265,10 @@ SalGtkPicker::SalGtkPicker(const uno::Reference<lang::XMultiServiceFactory>& xSe
 
 SalGtkPicker::~SalGtkPicker()
 {
+    SolarMutexGuard g;
+
     if (m_pDialog)
     {
-        GdkThreadLock aLock;
         gtk_widget_destroy(m_pDialog);
     }
 }
@@ -284,7 +285,6 @@ void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const rtl::OUString& aDirec
 
     OSL_TRACE( "setting path to %s", aTxt.getStr() );
 
-    GdkThreadLock aLock;
     gtk_file_chooser_set_current_folder_uri( GTK_FILE_CHOOSER( m_pDialog ),
         aTxt.getStr() );
 }
@@ -292,8 +292,6 @@ void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const rtl::OUString& aDirec
 rtl::OUString SAL_CALL SalGtkPicker::implgetDisplayDirectory() throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-
-    GdkThreadLock aLock;
 
     gchar* pCurrentFolder =
         gtk_file_chooser_get_current_folder_uri( GTK_FILE_CHOOSER( m_pDialog ) );
@@ -309,7 +307,6 @@ void SAL_CALL SalGtkPicker::implsetTitle( const rtl::OUString& aTitle ) throw( u
 
     ::rtl::OString aWindowTitle = OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 );
 
-    GdkThreadLock aLock;
     gtk_window_set_title( GTK_WINDOW( m_pDialog ), aWindowTitle.getStr() );
 }
 

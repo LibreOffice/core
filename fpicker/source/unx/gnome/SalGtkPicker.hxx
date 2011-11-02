@@ -128,9 +128,9 @@ public:
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XExtendedToolkit > &rToolkit,
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop > &rDesktop
         );
+    virtual ~RunDialog();
     gint run();
     void cancel();
-    ~RunDialog();
 };
 
 #endif

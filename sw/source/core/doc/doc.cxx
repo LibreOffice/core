@@ -1253,92 +1253,27 @@ void SwDoc::CalculatePagesForPrinting(
     // #i103700# printing selections should not allow for automatic inserting empty pages
     bool bPrintEmptyPages   = bPrintSelection ? false : rOptions.IsPrintEmptyPages( bIsPDFExport );
 
-    Range aPages( 1, nDocPageCount );
+    std::map< sal_Int32, sal_Int32 > &rPrinterPaperTrays = rData.GetPrinterPaperTrays();
+    std::set< sal_Int32 > &rValidPages = rData.GetValidPagesSet();
+    rValidPages.clear();
 
-    MultiSelection aMulti( aPages );
-    aMulti.SetTotalRange( Range( 0, RANGE_MAX ) );
-    aMulti.Select( aPages );
-
-    const SwPageFrm *pStPage  = dynamic_cast<const SwPageFrm*>( rLayout.Lower() );
-    const SwFrm     *pEndPage = pStPage;
-
-    sal_uInt16 nFirstPageNo = 0;
-    sal_uInt16 nLastPageNo  = 0;
-
-    for( sal_uInt16 i = 1; i <= (sal_uInt16)aPages.Max(); ++i )
+    sal_Int32 nPageNum = 1;
+    const SwPageFrm *pStPage = dynamic_cast<const SwPageFrm*>( rLayout.Lower() );
+    while (pStPage && nPageNum <= nDocPageCount)
     {
-        if( i < (sal_uInt16)aPages.Min() )
-        {
-            if( !pStPage->GetNext() )
-                break;
-            pStPage = (SwPageFrm*)pStPage->GetNext();
-            pEndPage= pStPage;
-        }
-        else if( i == (sal_uInt16)aPages.Min() )
-        {
-            nFirstPageNo = i;
-            nLastPageNo = nFirstPageNo;
-            if( !pStPage->GetNext() || (i == (sal_uInt16)aPages.Max()) )
-                break;
-            pEndPage = pStPage->GetNext();
-        }
-        else if( i > (sal_uInt16)aPages.Min() )
-        {
-            nLastPageNo = i;
-            if( !pEndPage->GetNext() || (i == (sal_uInt16)aPages.Max()) )
-                break;
-            pEndPage = pEndPage->GetNext();
-        }
-    }
+        const bool bPrintThisPage =
+            ( (bPrintRightPages && pStPage->OnRightPage()) ||
+              (bPrintLeftPages && !pStPage->OnRightPage()) ) &&
+            ( bPrintEmptyPages || pStPage->Frm().Height() );
 
-    OSL_ENSURE( nFirstPageNo, "first page not found!  Should not happen!" );
-    if (nFirstPageNo)
-    {
-// HACK: Hier muss von der MultiSelection noch eine akzeptable Moeglichkeit
-// geschaffen werden, alle Seiten von Seite x an zu deselektieren.
-// Z.B. durch SetTotalRange ....
-
-//              aMulti.Select( Range( nLastPageNo+1, SELECTION_MAX ), sal_False );
-        MultiSelection aTmpMulti( Range( 1, nLastPageNo ) );
-        long nTmpIdx = aMulti.FirstSelected();
-        static long nEndOfSelection = SFX_ENDOFSELECTION;
-        while ( nEndOfSelection != nTmpIdx && nTmpIdx <= long(nLastPageNo) )
+        if (bPrintThisPage)
         {
-            aTmpMulti.Select( nTmpIdx );
-            nTmpIdx = aMulti.NextSelected();
+            rValidPages.insert( nPageNum );
+            rPrinterPaperTrays[ nPageNum ] = lcl_GetPaperBin( pStPage );
         }
-        aMulti = aTmpMulti;
-// Ende des HACKs
 
-        sal_uInt16 nPageNo = nFirstPageNo;
-
-        std::map< sal_Int32, sal_Int32 > &rPrinterPaperTrays = rData.GetPrinterPaperTrays();
-        std::set< sal_Int32 > &rValidPages = rData.GetValidPagesSet();
-        rValidPages.clear();
-        while ( pStPage )
-        {
-            const sal_Bool bRightPg = pStPage->OnRightPage();
-            if ( aMulti.IsSelected( nPageNo ) &&
-                ( (bRightPg && bPrintRightPages) ||
-                    (!bRightPg && bPrintLeftPages) ) )
-            {
-                // Feature - Print empty pages
-                if ( bPrintEmptyPages || pStPage->Frm().Height() )
-                {
-                    rValidPages.insert( nPageNo );
-                    rPrinterPaperTrays[ nPageNo ] = lcl_GetPaperBin( pStPage );
-                }
-            }
-
-            if ( pStPage == pEndPage )
-            {
-                pStPage = 0;
-            }
-            else
-            {   ++nPageNo;
-                pStPage = (SwPageFrm*)pStPage->GetNext();
-            }
-        }
+        ++nPageNum;
+        pStPage = (SwPageFrm*)pStPage->GetNext();
     }
 
 

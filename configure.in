@@ -690,7 +690,7 @@ AC_ARG_WITH(external-thes-dir,
 AC_ARG_WITH(system-libs,
     AS_HELP_STRING([--with-system-libs],
         [Use libraries already on system -- enables all --with-system-* flags except
-         mozilla and translate-toolkit.]),
+         mozilla.]),
 ,)
 
 AC_ARG_WITH(system-headers,
@@ -756,10 +756,6 @@ AC_ARG_WITH(system-libxml,
     AS_HELP_STRING([--with-system-libxml],
         [Use libxml already on system.]),
 ,)
-
-AC_ARG_WITH(system-translate-toolkit,
-    AS_HELP_STRING([--with-system-translate-toolkit],
-        [Use translate-toolkit already on system.]))
 
 AC_ARG_WITH(system-icu,
     AS_HELP_STRING([--with-system-icu],
@@ -5051,35 +5047,6 @@ esac
 AC_SUBST(SYSTEM_PYTHON)
 AC_SUBST(PYTHON_CFLAGS)
 AC_SUBST(PYTHON_LIBS)
-
-dnl ===================================================================
-dnl Check for system translate-toolkit
-dnl ===================================================================
-AC_MSG_CHECKING([which translate-toolkit to use])
-if test "$with_system_translate_toolkit" = "yes" ; then
-    AC_MSG_RESULT([system])
-    SYSTEM_TRANSLATE_TOOLKIT=YES
-
-    AC_PATH_PROGS(OO2PO, oo2po)
-    if test -z "$OO2PO"; then
-        AC_MSG_ERROR([install translate-toolkit or use --without-system-translate-toolkit])
-    fi
-
-    AC_PATH_PROGS(PO2OO, po2oo)
-    if test -z "$PO2OO"; then
-        AC_MSG_ERROR([install translate-toolkit or use --without-system-translate-toolkit])
-    fi
-
-    $PO2OO --help | grep -q '\-\-skipsource'
-    if test $? -ne 0 ;  then
-        AC_MSG_ERROR([$PO2OO does not support --skipsource; use translate-toolkit >= 1.9 or use --without-system-translate-toolkit])
-    fi
-else
-    AC_MSG_RESULT([internal])
-    SYSTEM_TRANSLATE_TOOLKIT=NO
-    BUILD_TYPE="$BUILD_TYPE TRANSLATE_TOOLKIT"
-fi
-AC_SUBST(SYSTEM_TRANSLATE_TOOLKIT)
 
 dnl ===================================================================
 dnl Check for system Berkeley db

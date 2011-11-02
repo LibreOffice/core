@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 if [ x${SOLARENV}x = xx ]; then
     echo No environment found, please use 'setsolar'
 exit 1

@@ -828,16 +828,16 @@ $(call gb_LinkTarget_add_libs,$(1), \
 
 endef
 
-ifeq ($(SYSTEM_MOZILLA),YES)
+ifeq ($(SYSTEM_NSS),YES)
 
 define gb_LinkTarget__use_plc4
 $(call gb_LinkTarget_set_include,$(1),\
     $$(INCLUDE) \
-    $(MOZ_NSS_CFLAGS) \
+    $(NSS_CFLAGS) \
 )
 
 $(call gb_LinkTarget_add_libs,$(1),\
-    $(MOZ_NSS_LIBS) \
+    $(NSS_LIBS) \
 )
 
 endef

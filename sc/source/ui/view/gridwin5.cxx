@@ -92,16 +92,16 @@ ScHideTextCursor::~ScHideTextCursor()
 
 // -----------------------------------------------------------------------
 
-sal_Bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, sal_Bool bKeyboard )
+bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
 {
-    sal_Bool bDone = false;
+    bool bDone = false;
 
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB       nTab = pViewData->GetTabNo();
     ScAddress   aCellPos( nPosX, nPosY, nTab );
 
     String aTrackText;
-    sal_Bool bLeftEdge = false;
+    bool bLeftEdge = false;
 
     //  Change-Tracking
 
@@ -175,7 +175,7 @@ sal_Bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, sal_Bool bKey
 
             //  bei geloeschten Spalten: Pfeil auf die linke Seite der Zelle
             if ( pFound->GetType() == SC_CAT_DELETE_COLS )
-                bLeftEdge = sal_True;
+                bLeftEdge = true;
 
             DateTime aDT = pFound->GetDateTime();
             aTrackText  = pFound->GetUser();
@@ -202,14 +202,14 @@ sal_Bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, sal_Bool bKey
     const ScPostIt* pNote = pDoc->GetNote( aCellPos );
     if ( (aTrackText.Len() > 0) || (pNote && !pNote->IsCaptionShown()) )
     {
-        sal_Bool bNew = sal_True;
-        sal_Bool bFast = false;
+        bool bNew = true;
+        bool bFast = false;
         if ( pNoteMarker )          // schon eine Notiz angezeigt
         {
             if ( pNoteMarker->GetDocPos() == aCellPos ) // dieselbe
                 bNew = false;                           // dann stehenlassen
             else
-                bFast = sal_True;                           // sonst sofort
+                bFast = true;                           // sonst sofort
 
             //  marker which was shown for ctrl-F1 isn't removed by mouse events
             if ( pNoteMarker->IsByKeyboard() && !bKeyboard )
@@ -218,7 +218,7 @@ sal_Bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, sal_Bool bKey
         if ( bNew )
         {
             if ( bKeyboard )
-                bFast = sal_True;           // keyboard also shows the marker immediately
+                bFast = true;           // keyboard also shows the marker immediately
 
             delete pNoteMarker;
 
@@ -233,7 +233,7 @@ sal_Bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, sal_Bool bKey
 
             /*  If caption is shown from right or bottom windows, adjust
                 mapmode to include size of top-left window. */
-            MapMode aMapMode = GetDrawMapMode( sal_True );
+            MapMode aMapMode = GetDrawMapMode( true );
             Size aLeftSize = pLeft->PixelToLogic( pLeft->GetOutputSizePixel(), aMapMode );
             Point aOrigin = aMapMode.GetOrigin();
             if( (this == pRight) || (this == pDiagonal) )
@@ -247,7 +247,7 @@ sal_Bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, sal_Bool bKey
                                             aMapMode, bLeftEdge, bFast, bKeyboard );
         }
 
-        bDone = sal_True;       // something is shown (old or new)
+        bDone = true;       // something is shown (old or new)
     }
 
     return bDone;
@@ -412,7 +412,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
         Window::RequestHelp( rHEvt );
 }
 
-sal_Bool ScGridWindow::IsMyModel(SdrEditView* pSdrView)
+bool ScGridWindow::IsMyModel(SdrEditView* pSdrView)
 {
     return pSdrView &&
             pSdrView->GetModel() == pViewData->GetDocument()->GetDrawLayer();
