@@ -30,17 +30,15 @@ $(eval $(call gb_Module_Module,scripting))
 
 $(eval $(call gb_Module_add_targets,scripting,\
 	$(if $(SOLAR_JAVA),\
-		$(if $(filter $(ENABLE_SCRIPTING_JAVASCRIPT),YES),\
-			Extension_ScriptProviderForJavaScript) \
-		$(if $(filter $(ENABLE_SCRIPTING_BEANSHELL),YES),\
-			Extension_ScriptProviderForBeanShell) \
 		Jar_HelloWorld \
 		Jar_Highlight \
 		Jar_MemoryUsage \
 		Jar_ScriptFramework \
-		Jar_ScriptProviderForBeanShell \
+        $(if $(filter $(ENABLE_SCRIPTING_BEANSHELL),YES),\
+            Jar_ScriptProviderForBeanShell) \
 		Jar_ScriptProviderForJava \
-		Jar_ScriptProviderForJavaScript \
+        $(if $(filter $(ENABLE_SCRIPTING_JAVASCRIPT),YES),\
+            Jar_ScriptProviderForJavaScript) \
 		Zip_ScriptsJava \
 	) \
 	$(if $(filter $(ENABLE_SCRIPTING_PYTHON),YES),\

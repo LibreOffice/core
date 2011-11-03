@@ -37,6 +37,13 @@ $(eval $(call gb_Jar_add_jars,ScriptProviderForJavaScript,\
 	$(OUTDIR)/bin/js.jar \
 ))
 
+$(eval $(call gb_Jar_set_manifest,ScriptProviderForJavaScript,$(SRCDIR)/scripting/java/com/sun/star/script/framework/provider/javascript/MANIFEST.MF))
+
+$(eval $(call gb_Jar_set_jarclasspath,ScriptProviderForJavaScript, \
+    unoil.jar ScriptFramework.jar js.jar))
+
+$(eval $(call gb_Jar_set_componentfile,ScriptProviderForJavaScript,scripting/java/ScriptProviderForJavaScript,OOO))
+
 $(eval $(call gb_Jar_set_packageroot,ScriptProviderForJavaScript,com))
 
 $(eval $(call gb_Jar_add_sourcefiles,ScriptProviderForJavaScript,\

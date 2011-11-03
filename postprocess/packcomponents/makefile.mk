@@ -368,7 +368,10 @@ my_components += component/avmedia/source/gstreamer/avmediagstreamer
 
 .INCLUDE: target.mk
 
-ALLTAR : $(MISC)/services.rdb
+ALLTAR : \
+    $(MISC)/services.rdb \
+    $(MISC)/scriptproviderforbeanshell.rdb \
+    $(MISC)/scriptproviderforjavascript.rdb
 
 $(MISC)/services.rdb .ERRREMOVE : $(SOLARENV)/bin/packcomponents.xslt \
         $(MISC)/services.input $(my_components:^"$(SOLARXMLDIR)/":+".component")
@@ -378,4 +381,30 @@ $(MISC)/services.rdb .ERRREMOVE : $(SOLARENV)/bin/packcomponents.xslt \
 $(MISC)/services.input : makefile.mk
     echo \
         '<list>$(my_components:^"<filename>":+".component</filename>")</list>' \
+        > $@
+
+$(MISC)/scriptproviderforbeanshell.rdb .ERRREMOVE : \
+        $(SOLARENV)/bin/packcomponents.xslt \
+        $(MISC)/scriptproviderforbeanshell.input \
+        $(SOLARXMLDIR)/component/scripting/java/ScriptProviderForBeanShell.component
+    $(XSLTPROC) --nonet --stringparam prefix $(SOLARXMLDIR)/ -o $@ \
+        $(SOLARENV)/bin/packcomponents.xslt \
+        $(MISC)/scriptproviderforbeanshell.input
+
+$(MISC)/scriptproviderforbeanshell.input : makefile.mk
+    echo \
+        '<list><filename>component/scripting/java/ScriptProviderForBeanShell.component</filename></list>' \
+        > $@
+
+$(MISC)/scriptproviderforjavascript.rdb .ERRREMOVE : \
+        $(SOLARENV)/bin/packcomponents.xslt \
+        $(MISC)/scriptproviderforjavascript.input \
+        $(SOLARXMLDIR)/component/scripting/java/ScriptProviderForJavaScript.component
+    $(XSLTPROC) --nonet --stringparam prefix $(SOLARXMLDIR)/ -o $@ \
+        $(SOLARENV)/bin/packcomponents.xslt \
+        $(MISC)/scriptproviderforjavascript.input
+
+$(MISC)/scriptproviderforjavascript.input : makefile.mk
+    echo \
+        '<list><filename>component/scripting/java/ScriptProviderForJavaScript.component</filename></list>' \
         > $@

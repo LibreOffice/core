@@ -1209,14 +1209,11 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Java_Classpath_Urls
     Section = "Bootstrap";
     Key = "URE_MORE_JAVA_CLASSPATH_URLS";
     Value = "";
-#ifdef SYSTEM_BSH
-    ValueList1 = BSH_JAR;
-#endif
 #ifdef SYSTEM_HSQLDB
-    ValueList2 = HSQLDB_JAR;
+    ValueList1 = HSQLDB_JAR;
 #endif
 #ifdef SYSTEM_SAXON
-    ValueList3 = SAXON_JAR;
+    ValueList2 = SAXON_JAR;
 #endif
 End
 

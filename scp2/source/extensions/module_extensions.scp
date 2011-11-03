@@ -339,14 +339,16 @@ End
 
 /* ** Script provider for BeanShell ** */
 
-#ifndef WITHOUT_EXTENSION_SCRIPTING_BEANSHELL
+#if defined SOLAR_JAVA && !defined WITHOUT_EXTENSION_SCRIPTING_BEANSHELL
 
 Module gid_Module_Optional_Extensions_Script_Provider_For_Beanshell
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_BEANSHELL);
     ParentID = gid_Module_Optional_Extensions;
     Files = (
-        gid_File_Oxt_Script_Provider_For_Beanshell );
+        gid_File_Jar_Bsh,
+        gid_File_Jar_Scriptproviderforbeanshell,
+        gid_File_Rdb_Scriptproviderforbeanshell );
     Minimal = NO;
     Default = YES;
     Styles = ( );
@@ -356,14 +358,16 @@ End
 
 /* ** Script provider for JavaScript ** */
 
-#ifndef WITHOUT_EXTENSION_SCRIPTING_JAVASCRIPT
+#if defined SOLAR_JAVA && !defined WITHOUT_EXTENSION_SCRIPTING_JAVASCRIPT
 
 Module gid_Module_Optional_Extensions_Script_Provider_For_Javascript
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_JAVASCRIPT);
     ParentID = gid_Module_Optional_Extensions;
     Files = (
-        gid_File_Oxt_Script_Provider_For_Javascript );
+        gid_File_Jar_Js,
+        gid_File_Jar_Scriptproviderforjavascript,
+        gid_File_Rdb_Scriptproviderforjavascript );
     Minimal = NO;
     Default = YES;
     Styles = ( );

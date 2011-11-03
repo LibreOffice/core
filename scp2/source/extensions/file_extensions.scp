@@ -302,26 +302,36 @@ End
 
 /* ** Script provider for BeanShell ** */
 
-#ifndef WITHOUT_EXTENSION_SCRIPTING_BEANSHELL
+#if defined SOLAR_JAVA && !defined WITHOUT_EXTENSION_SCRIPTING_BEANSHELL
 
-File gid_File_Oxt_Script_Provider_For_Beanshell
+#if !defined SYSTEM_BSH
+STD_JAR_FILE( gid_File_Jar_Bsh, bsh )
+#endif
+
+STD_JAR_FILE( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShell )
+
+File gid_File_Rdb_Scriptproviderforbeanshell
     TXT_FILE_BODY;
-    Styles = (PACKED, ARCHIVE);
-    Dir = gid_Brand_Dir_Share_Extensions_Script_Provider_For_Beanshell;
-    Name = "script-provider-for-beanshell.oxt";
+    Name = "scriptproviderforbeanshell.rdb";
+    Dir = gid_Brand_Dir_Program_Services;
+    Styles = (PACKED);
 End
 
 #endif
 
 /* ** Script provider for JavaScript ** */
 
-#ifndef WITHOUT_EXTENSION_SCRIPTING_JAVASCRIPT
+#if defined SOLAR_JAVA && !defined WITHOUT_EXTENSION_SCRIPTING_JAVASCRIPT
 
-File gid_File_Oxt_Script_Provider_For_Javascript
+STD_JAR_FILE( gid_File_Jar_Js, js )
+
+STD_JAR_FILE( gid_File_Jar_Scriptproviderforjavascript, ScriptProviderForJavaScript )
+
+File gid_File_Rdb_Scriptproviderforjavascript
     TXT_FILE_BODY;
-    Styles = (PACKED, ARCHIVE);
-    Dir = gid_Brand_Dir_Share_Extensions_Script_Provider_For_Javascript;
-    Name = "script-provider-for-javascript.oxt";
+    Name = "scriptproviderforjavascript.rdb";
+    Dir = gid_Brand_Dir_Program_Services;
+    Styles = (PACKED);
 End
 
 #endif

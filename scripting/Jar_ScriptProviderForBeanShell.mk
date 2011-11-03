@@ -39,11 +39,19 @@ $(eval $(call gb_Jar_add_jars,ScriptProviderForBeanShell,\
 $(eval $(call gb_Jar_use_externals,ScriptProviderForBeanShell,\
 	bsh \
 ))
+
+$(eval $(call gb_Jar_set_manifest,ScriptProviderForBeanShell,$(SRCDIR)/scripting/java/com/sun/star/script/framework/provider/beanshell/MANIFEST.MF))
+
+#TODO: Ensure "file://$(BSH_JAR)" is a proper file URL:
 ifeq ($(SYSTEM_BSH),YES)
-$(eval $(call gb_Jar_set_jarclasspath,ScriptProviderForBeanShell,\
-        $(BSH_JAR) \
-))
+$(eval $(call gb_Jar_set_jarclasspath,ScriptProviderForBeanShell, \
+    unoil.jar ScriptFramework.jar file://$(BSH_JAR)))
+else
+$(eval $(call gb_Jar_set_jarclasspath,ScriptProviderForBeanShell, \
+    unoil.jar ScriptFramework.jar bsh.jar))
 endif
+
+$(eval $(call gb_Jar_set_componentfile,ScriptProviderForBeanShell,scripting/java/ScriptProviderForBeanShell,OOO))
 
 $(eval $(call gb_Jar_set_packageroot,ScriptProviderForBeanShell,com))
 
