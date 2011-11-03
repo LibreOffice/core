@@ -314,7 +314,7 @@
     const rtl::OUString aFile( GetOUString( pFile ) );
     if( ! AquaSalInstance::isOnCommandLine( aFile ) )
     {
-        const ApplicationEvent* pAppEvent = new ApplicationEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(APPEVENT_OPEN_STRING)), aFile);
+        const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::TYPE_OPEN, aFile);
         AquaSalInstance::aAppEventList.push_back( pAppEvent );
     }
     return YES;
@@ -344,7 +344,7 @@
         // we have no back channel here, we have to assume success, in which case
         // replyToOpenOrPrint does not need to be called according to documentation
         // [app replyToOpenOrPrint: NSApplicationDelegateReplySuccess];
-        const ApplicationEvent* pAppEvent = new ApplicationEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(APPEVENT_OPEN_STRING)), aFileList.makeStringAndClear());
+        const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::TYPE_OPEN, aFileList.makeStringAndClear());
         AquaSalInstance::aAppEventList.push_back( pAppEvent );
     }
 }
@@ -353,7 +353,7 @@
 {
     (void)app;
     const rtl::OUString aFile( GetOUString( pFile ) );
-	const ApplicationEvent* pAppEvent = new ApplicationEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(APPEVENT_PRINT_STRING)), aFile);
+	const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::TYPE_PRINT, aFile);
 	AquaSalInstance::aAppEventList.push_back( pAppEvent );
     return YES;
 }
@@ -374,7 +374,7 @@
             aFileList.append('\n');
         aFileList.append( GetOUString( pFile ) );
     }
-	const ApplicationEvent* pAppEvent = new ApplicationEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(APPEVENT_PRINT_STRING)), aFileList.makeStringAndClear());
+	const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::TYPE_PRINT, aFileList.makeStringAndClear());
 	AquaSalInstance::aAppEventList.push_back( pAppEvent );
     // we have no back channel here, we have to assume success
     // correct handling would be NSPrintingReplyLater and then send [app replyToOpenOrPrint]
@@ -398,7 +398,7 @@
         
         if( aReply == NSTerminateNow )
         {
-            ApplicationEvent aEv(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PRIVATE:DOSHUTDOWN")));
+            ApplicationEvent aEv(ApplicationEvent::TYPE_PRIVATE_DOSHUTDOWN);
             GetpApp()->AppEvent( aEv );
             ImplImageTreeSingletonRef()->shutDown();
             // DeInitVCL should be called in ImplSVMain - unless someon _exits first which

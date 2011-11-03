@@ -245,7 +245,8 @@ SV_IMPL_PTRARR( SfxDdeDocTopics_Impl, SfxDdeDocTopic_Impl *)
 //========================================================================
 
 sal_Bool SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
-                       const String &rCmd, const String &rEvent )
+                           const String &rCmd, const String &rEvent,
+                           ApplicationEvent::Type eType )
 
 /*  [Description]
 
@@ -291,7 +292,7 @@ sal_Bool SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
                 }
             }
 
-            rAppEvent = ApplicationEvent(rEvent, aData.makeStringAndClear());
+            rAppEvent = ApplicationEvent(eType, aData.makeStringAndClear());
             return sal_True;
         }
     }
@@ -318,8 +319,8 @@ long SfxApplication::DdeExecute
 {
     // Print or Open-Event?
     ApplicationEvent aAppEvent;
-    if ( SfxAppEvent_Impl( aAppEvent, rCmd, DEFINE_CONST_UNICODE("Print") ) ||
-         SfxAppEvent_Impl( aAppEvent, rCmd, DEFINE_CONST_UNICODE("Open") ) )
+    if ( SfxAppEvent_Impl( aAppEvent, rCmd, DEFINE_CONST_UNICODE("Print"), ApplicationEvent::TYPE_PRINT ) ||
+         SfxAppEvent_Impl( aAppEvent, rCmd, DEFINE_CONST_UNICODE("Open"), ApplicationEvent::TYPE_OPEN ) )
         GetpApp()->AppEvent( aAppEvent );
     else
     {

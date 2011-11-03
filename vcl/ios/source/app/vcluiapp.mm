@@ -79,7 +79,7 @@
         // we have no back channel here, we have to assume success, in which case
         // replyToOpenOrPrint does not need to be called according to documentation
         // [app replyToOpenOrPrint: NSApplicationDelegateReplySuccess];
-        const ApplicationEvent* pAppEvent = new ApplicationEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(APPEVENT_OPEN_STRING)), aFileList.makeStringAndClear());
+        const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::TYPE_OPEN, aFileList.makeStringAndClear());
         IosSalInstance::aAppEventList.push_back( pAppEvent );
     }
 }

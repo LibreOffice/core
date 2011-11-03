@@ -695,7 +695,6 @@ void SAL_CALL OfficeIPCThread::run()
             // is this a termination message ? if so, terminate
             if(( aArguments.CompareTo( sc_aTerminationSequence, sc_nTSeqLength ) == COMPARE_EQUAL ) ||
                     mbDowning ) return;
-            String           aEmpty;
             std::auto_ptr< CommandLineArgs > aCmdLineArgs;
             try
             {
@@ -715,22 +714,22 @@ void SAL_CALL OfficeIPCThread::run()
             {
                 // we have to use application event, because we have to start quickstart service in main thread!!
                 ApplicationEvent* pAppEvent =
-                    new ApplicationEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("QUICKSTART")));
+                    new ApplicationEvent(ApplicationEvent::TYPE_QUICKSTART);
                 ImplPostForeignAppEvent( pAppEvent );
             }
 
             // handle request for acceptor
             OUString aAcceptString;
             if ( aCmdLineArgs->GetAcceptString(aAcceptString) ) {
-                ApplicationEvent* pAppEvent =
-                    new ApplicationEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ACCEPT")), aAcceptString);
+                ApplicationEvent* pAppEvent = new ApplicationEvent(
+                    ApplicationEvent::TYPE_ACCEPT, aAcceptString);
                 ImplPostForeignAppEvent( pAppEvent );
             }
             // handle acceptor removal
             OUString aUnAcceptString;
             if ( aCmdLineArgs->GetUnAcceptString(aUnAcceptString) ) {
-                ApplicationEvent* pAppEvent =
-                    new ApplicationEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UNACCEPT")), aUnAcceptString);
+                ApplicationEvent* pAppEvent = new ApplicationEvent(
+                    ApplicationEvent::TYPE_UNACCEPT, aUnAcceptString);
                 ImplPostForeignAppEvent( pAppEvent );
             }
 
@@ -739,7 +738,7 @@ void SAL_CALL OfficeIPCThread::run()
             // in a running instance in order to display  the command line help
             if ( aCmdLineArgs->IsHelp() ) {
                 ApplicationEvent* pAppEvent =
-                    new ApplicationEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HELP")));
+                    new ApplicationEvent(ApplicationEvent::TYPE_HELP);
                 ImplPostForeignAppEvent( pAppEvent );
             }
 #endif
@@ -837,8 +836,9 @@ void SAL_CALL OfficeIPCThread::run()
 #elif defined WNT
                     aHelpURLBuffer.appendAscii("&System=WIN");
 #endif
-                    ApplicationEvent* pAppEvent =
-                        new ApplicationEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OPENHELPURL")), aHelpURLBuffer.makeStringAndClear());
+                    ApplicationEvent* pAppEvent = new ApplicationEvent(
+                        ApplicationEvent::TYPE_OPENHELPURL,
+                        aHelpURLBuffer.makeStringAndClear());
                     ImplPostForeignAppEvent( pAppEvent );
                 }
             }
@@ -876,7 +876,7 @@ void SAL_CALL OfficeIPCThread::run()
             {
                 // no document was sent, just bring Office to front
                 ApplicationEvent* pAppEvent =
-                        new ApplicationEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("APPEAR")));
+                    new ApplicationEvent(ApplicationEvent::TYPE_APPEAR);
                 ImplPostForeignAppEvent( pAppEvent );
             }
 

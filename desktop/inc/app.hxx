@@ -190,7 +190,6 @@ class Desktop : public Application
         void                    DoFirstRunInitializations();
 
         static sal_Bool         SaveTasks();
-        static sal_Bool         _bTasksSaved;
 
         static void             retrieveCrashReporterState();
         static sal_Bool         isUIOnSessionShutdownAllowed();

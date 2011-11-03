@@ -399,8 +399,8 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
 
 void CommandLineArgs::AddStringListParam_Impl( StringParam eParam, const rtl::OUString& aParam )
 {
-    ::rtl::OUStringBuffer aParamBuf(m_aStrParams[eParam]);
     OSL_ASSERT( eParam >= 0 && eParam < CMD_STRINGPARAM_COUNT );
+    ::rtl::OUStringBuffer aParamBuf(m_aStrParams[eParam]);
     if ( aParamBuf.getLength() )
         aParamBuf.append('\n');
     aParamBuf.append(aParam);

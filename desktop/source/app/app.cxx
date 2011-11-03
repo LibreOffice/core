@@ -1346,8 +1346,6 @@ sal_Bool impl_callRecoveryUI(sal_Bool bEmergencySave     ,
  *
  */
 
-sal_Bool Desktop::_bTasksSaved = sal_False;
-
 sal_Bool Desktop::SaveTasks()
 {
     return impl_callRecoveryUI(
@@ -2990,138 +2988,139 @@ String GetURL_Impl(
 
 void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 {
-    if ( rAppEvent.GetEvent() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("APPEAR")) && !GetCommandLineArgs().IsInvisible() )
+    switch ( rAppEvent.GetEvent() )
     {
-        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
-
-        // find active task - the active task is always a visible task
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFramesSupplier >
-                xDesktop( xSMGR->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
-                ::com::sun::star::uno::UNO_QUERY );
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xTask = xDesktop->getActiveFrame();
-        if ( !xTask.is() )
-        {
-            // get any task if there is no active one
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > xList( xDesktop->getFrames(), ::com::sun::star::uno::UNO_QUERY );
-            if ( xList->getCount()>0 )
-                xList->getByIndex(0) >>= xTask;
-        }
-
-        if ( xTask.is() )
-        {
-            Reference< com::sun::star::awt::XTopWindow > xTop( xTask->getContainerWindow(), UNO_QUERY );
-            xTop->toFront();
-        }
-        else
-        {
-            // no visible task that could be activated found
-            Reference< XFrame > xBackingFrame;
-            Reference< ::com::sun::star::awt::XWindow > xContainerWindow;
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xDesktopFrame( xDesktop, UNO_QUERY );
-
-            xBackingFrame = xDesktopFrame->findFrame(OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" )), 0);
-            if (xBackingFrame.is())
-                xContainerWindow = xBackingFrame->getContainerWindow();
-            if (xContainerWindow.is())
-            {
-                Sequence< Any > lArgs(1);
-                lArgs[0] <<= xContainerWindow;
-                Reference< XController > xBackingComp(
-                    xSMGR->createInstanceWithArguments(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.StartModule") ), lArgs),
-                    UNO_QUERY);
-                if (xBackingComp.is())
-                {
-                    Reference< ::com::sun::star::awt::XWindow > xBackingWin(xBackingComp, UNO_QUERY);
-                    // Attention: You MUST(!) call setComponent() before you call attachFrame().
-                    // Because the backing component set the property "IsBackingMode" of the frame
-                    // to true inside attachFrame(). But setComponent() reset this state everytimes ...
-                    xBackingFrame->setComponent(xBackingWin, xBackingComp);
-                    xBackingComp->attachFrame(xBackingFrame);
-                    xContainerWindow->setVisible(sal_True);
-
-                    Window* pCompWindow = VCLUnoHelper::GetWindow(xBackingFrame->getComponentWindow());
-                    if (pCompWindow)
-                        pCompWindow->Update();
-                }
-            }
-        }
-    }
-    else if ( rAppEvent.GetEvent() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("QUICKSTART")) && !GetCommandLineArgs().IsInvisible()  )
-    {
-        // If the office has been started the second time its command line arguments are sent through a pipe
-        // connection to the first office. We want to reuse the quickstart option for the first office.
-        // NOTICE: The quickstart service must be initialized inside the "main thread", so we use the
-        // application events to do this (they are executed inside main thread)!!!
-        // Don't start quickstart service if the user specified "-invisible" on the command line!
-        sal_Bool bQuickstart( sal_True );
-        Sequence< Any > aSeq( 1 );
-        aSeq[0] <<= bQuickstart;
-
-        Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
-                                            DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" )),
-                                            UNO_QUERY );
-        if ( xQuickstart.is() )
-            xQuickstart->initialize( aSeq );
-    }
-    else if ( rAppEvent.GetEvent() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ACCEPT")) )
-    {
+    case ApplicationEvent::TYPE_ACCEPT:
         // every time an accept parameter is used we create an acceptor
         // with the corresponding accept-string
         createAcceptor(rAppEvent.GetData());
-    }
-    else if ( rAppEvent.GetEvent() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UNACCEPT")) )
-    {
-        // try to remove corresponding acceptor
-        destroyAcceptor(rAppEvent.GetData());
-    }
-    else if ( rAppEvent.GetEvent() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SaveDocuments")) )
-    {
-        Desktop::_bTasksSaved = sal_False;
-        Desktop::_bTasksSaved = SaveTasks();
-    }
-    else if ( rAppEvent.GetEvent() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OPENHELPURL")) )
-    {
-        // start help for a specific URL
-        Help *pHelp = Application::GetHelp();
-        pHelp->Start(rAppEvent.GetData(), NULL);
-    }
-    else if ( rAppEvent.GetEvent() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(APPEVENT_OPEN_STRING)) )
-    {
-        const CommandLineArgs& rCmdLine = GetCommandLineArgs();
-        if ( !rCmdLine.IsInvisible() && !rCmdLine.IsTerminateAfterInit() )
+        break;
+    case ApplicationEvent::TYPE_APPEAR:
+        if ( !GetCommandLineArgs().IsInvisible() )
         {
-            ProcessDocumentsRequest* pDocsRequest = new ProcessDocumentsRequest(
-                rCmdLine.getCwdUrl());
-            pDocsRequest->aOpenList = rAppEvent.GetData();
-            pDocsRequest->pcProcessed = NULL;
+            css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
 
-            OfficeIPCThread::ExecuteCmdLineRequests( *pDocsRequest );
-            delete pDocsRequest;
-        }
-    }
-    else if ( rAppEvent.GetEvent() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(APPEVENT_PRINT_STRING)) )
-    {
-        const CommandLineArgs& rCmdLine = GetCommandLineArgs();
-        if ( !rCmdLine.IsInvisible() && !rCmdLine.IsTerminateAfterInit() )
-        {
-            ProcessDocumentsRequest* pDocsRequest = new ProcessDocumentsRequest(
-                rCmdLine.getCwdUrl());
-            pDocsRequest->aPrintList = rAppEvent.GetData();
-            pDocsRequest->pcProcessed = NULL;
+            // find active task - the active task is always a visible task
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFramesSupplier >
+                  xDesktop( xSMGR->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                            ::com::sun::star::uno::UNO_QUERY );
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xTask = xDesktop->getActiveFrame();
+            if ( !xTask.is() )
+            {
+                // get any task if there is no active one
+                ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > xList( xDesktop->getFrames(), ::com::sun::star::uno::UNO_QUERY );
+                if ( xList->getCount()>0 )
+                    xList->getByIndex(0) >>= xTask;
+            }
 
-            OfficeIPCThread::ExecuteCmdLineRequests( *pDocsRequest );
-            delete pDocsRequest;
+            if ( xTask.is() )
+            {
+                Reference< com::sun::star::awt::XTopWindow > xTop( xTask->getContainerWindow(), UNO_QUERY );
+                xTop->toFront();
+            }
+            else
+            {
+                // no visible task that could be activated found
+                Reference< XFrame > xBackingFrame;
+                Reference< ::com::sun::star::awt::XWindow > xContainerWindow;
+                ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xDesktopFrame( xDesktop, UNO_QUERY );
+
+                xBackingFrame = xDesktopFrame->findFrame(OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" )), 0);
+                if (xBackingFrame.is())
+                    xContainerWindow = xBackingFrame->getContainerWindow();
+                if (xContainerWindow.is())
+                {
+                    Sequence< Any > lArgs(1);
+                    lArgs[0] <<= xContainerWindow;
+                    Reference< XController > xBackingComp(
+                        xSMGR->createInstanceWithArguments(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.StartModule") ), lArgs),
+                        UNO_QUERY);
+                    if (xBackingComp.is())
+                    {
+                        Reference< ::com::sun::star::awt::XWindow > xBackingWin(xBackingComp, UNO_QUERY);
+                        // Attention: You MUST(!) call setComponent() before you call attachFrame().
+                        // Because the backing component set the property "IsBackingMode" of the frame
+                        // to true inside attachFrame(). But setComponent() reset this state everytimes ...
+                        xBackingFrame->setComponent(xBackingWin, xBackingComp);
+                        xBackingComp->attachFrame(xBackingFrame);
+                        xContainerWindow->setVisible(sal_True);
+
+                        Window* pCompWindow = VCLUnoHelper::GetWindow(xBackingFrame->getComponentWindow());
+                        if (pCompWindow)
+                            pCompWindow->Update();
+                    }
+                }
+            }
         }
-    }
+        break;
+    case ApplicationEvent::TYPE_HELP:
 #ifndef UNX
-    else if ( rAppEvent.GetEvent() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HELP")) )
-    {
         // in non unix version allow showing of cmdline help window
         displayCmdlineHelp();
-    }
 #endif
-    else if ( rAppEvent.GetEvent() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SHOWDIALOG")) )
-    {
+        break;
+    case ApplicationEvent::TYPE_OPEN:
+        {
+            const CommandLineArgs& rCmdLine = GetCommandLineArgs();
+            if ( !rCmdLine.IsInvisible() && !rCmdLine.IsTerminateAfterInit() )
+            {
+                ProcessDocumentsRequest* pDocsRequest = new ProcessDocumentsRequest(
+                    rCmdLine.getCwdUrl());
+                pDocsRequest->aOpenList = rAppEvent.GetData();
+                pDocsRequest->pcProcessed = NULL;
+
+                OfficeIPCThread::ExecuteCmdLineRequests( *pDocsRequest );
+                delete pDocsRequest;
+            }
+        }
+        break;
+    case ApplicationEvent::TYPE_OPENHELPURL:
+        // start help for a specific URL
+        Application::GetHelp()->Start(rAppEvent.GetData(), NULL);
+        break;
+    case ApplicationEvent::TYPE_PRINT:
+        {
+            const CommandLineArgs& rCmdLine = GetCommandLineArgs();
+            if ( !rCmdLine.IsInvisible() && !rCmdLine.IsTerminateAfterInit() )
+            {
+                ProcessDocumentsRequest* pDocsRequest = new ProcessDocumentsRequest(
+                    rCmdLine.getCwdUrl());
+                pDocsRequest->aPrintList = rAppEvent.GetData();
+                pDocsRequest->pcProcessed = NULL;
+
+                OfficeIPCThread::ExecuteCmdLineRequests( *pDocsRequest );
+                delete pDocsRequest;
+            }
+        }
+        break;
+    case ApplicationEvent::TYPE_PRIVATE_DOSHUTDOWN:
+        {
+            Desktop* pD = dynamic_cast<Desktop*>(GetpApp());
+            OSL_ENSURE( pD, "no desktop ?!?" );
+            if( pD )
+                pD->doShutdown();
+        }
+        break;
+    case ApplicationEvent::TYPE_QUICKSTART:
+        if ( !GetCommandLineArgs().IsInvisible()  )
+        {
+            // If the office has been started the second time its command line arguments are sent through a pipe
+            // connection to the first office. We want to reuse the quickstart option for the first office.
+            // NOTICE: The quickstart service must be initialized inside the "main thread", so we use the
+            // application events to do this (they are executed inside main thread)!!!
+            // Don't start quickstart service if the user specified "-invisible" on the command line!
+            sal_Bool bQuickstart( sal_True );
+            Sequence< Any > aSeq( 1 );
+            aSeq[0] <<= bQuickstart;
+
+            Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
+                                                           DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" )),
+                                                       UNO_QUERY );
+            if ( xQuickstart.is() )
+                xQuickstart->initialize( aSeq );
+        }
+        break;
+    case ApplicationEvent::TYPE_SHOWDIALOG:
         // ignore all errors here. It's clicking a menu entry only ...
         // The user will try it again, in case nothing happens .-)
         try
@@ -3153,13 +3152,14 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         }
         catch(const css::uno::Exception&)
         {}
-    }
-    else if( rAppEvent.GetEvent() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PRIVATE:DOSHUTDOWN")) )
-    {
-        Desktop* pD = dynamic_cast<Desktop*>(GetpApp());
-        OSL_ENSURE( pD, "no desktop ?!?" );
-        if( pD )
-            pD->doShutdown();
+        break;
+    case ApplicationEvent::TYPE_UNACCEPT:
+        // try to remove corresponding acceptor
+        destroyAcceptor(rAppEvent.GetData());
+        break;
+    default:
+        OSL_FAIL("this cannot happen");
+        break;
     }
 }
 

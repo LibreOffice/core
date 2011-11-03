@@ -97,36 +97,27 @@ typedef long (*VCLEventHookProc)( NotifyEvent& rEvt, void* pData );
 enum Service { SERVICE_OLE, SERVICE_APPEVENT, SERVICE_IPC };
 #endif
 
-#define APPEVENT_OPEN_STRING            "Open"
-#define APPEVENT_PRINT_STRING           "Print"
-
 class VCL_DLLPUBLIC ApplicationEvent
 {
-    rtl::OUString aEvent;
-    rtl::OUString aData;
-    std::vector<rtl::OUString> aParams;
-
-    ApplicationEvent();
 public:
-    ApplicationEvent(const rtl::OUString& rEvent,
+    enum Type {
+        TYPE_ACCEPT, TYPE_APPEAR, TYPE_HELP, TYPE_OPEN, TYPE_OPENHELPURL,
+        TYPE_PRINT, TYPE_PRIVATE_DOSHUTDOWN, TYPE_QUICKSTART, TYPE_SHOWDIALOG,
+        TYPE_UNACCEPT
+    };
+
+    ApplicationEvent(Type rEvent,
                      const rtl::OUString& rData = rtl::OUString()):
         aEvent(rEvent),
         aData(rData)
-    {
-        sal_Int32 start = 0;
-        for(sal_Int32 i = 0; i < rData.getLength(); ++i)
-        {
-            if(rData[i] == '\n')
-            {
-                aParams.push_back(rData.copy(start, i - start));
-                start = ++i;
-            }
-        }
-    }
+    {}
 
-    const rtl::OUString& GetEvent() const { return aEvent; }
+    Type GetEvent() const { return aEvent; }
     const rtl::OUString& GetData() const { return aData; }
-    const std::vector<rtl::OUString>& GetParams() const { return aParams; }
+
+private:
+    Type aEvent;
+    rtl::OUString aData;
 };
 
 class VCL_DLLPUBLIC PropertyHandler
