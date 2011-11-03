@@ -1047,22 +1047,10 @@ struct ImplBitmapDevice
 
         maBounds.getWidth()/getHeight() yield the true size of the
         device (i.e. the rectangle given by maBounds covers the device
-        area under the excluding-bottommost-and-rightmost-pixels fill
-        rule)
+        area under the including-the-bottommost-and-rightmost-pixels
+        fill rule)
      */
     basegfx::B2IBox           maBounds;
-
-    /** Bounds of the device.
-
-        maBounds.getWidth()/getHeight() yield the true size of the
-        device minus 1 (i.e. the rectangle given by maBounds covers
-        the device area under the
-        including-the-bottommost-and-rightmost-pixels fill rule).
-
-        The member is used to clip line stroking against the device
-        bounds.
-     */
-    basegfx::B2IBox           maLineClipRect;
 
     /// Scanline format, as provided at the constructor
     sal_Int32                 mnScanlineFormat;
@@ -1102,7 +1090,6 @@ BitmapDevice::BitmapDevice( const basegfx::B2IBox&           rBounds,
     mpImpl->mpMem = rMem;
     mpImpl->mpPalette = rPalette;
     mpImpl->maBounds = rBounds;
-    mpImpl->maLineClipRect = rBounds;
     mpImpl->mnScanlineFormat = nScanlineFormat;
     mpImpl->mnScanlineStride = nScanlineStride;
     mpImpl->mpFirstScanline  = pFirstScanline;
@@ -1170,7 +1157,7 @@ void BitmapDevice::setPixel( const basegfx::B2IPoint& rPt,
                              Color                    lineColor,
                              DrawMode                 drawMode )
 {
-    if( mpImpl->maLineClipRect.isInside(rPt) )
+    if( mpImpl->maBounds.isInside(rPt) )
         setPixel_i(rPt,lineColor,drawMode);
 }
 
@@ -1185,7 +1172,7 @@ void BitmapDevice::setPixel( const basegfx::B2IPoint&     rPt,
         return;
     }
 
-    if( mpImpl->maLineClipRect.isInside(rPt) )
+    if( mpImpl->maBounds.isInside(rPt) )
     {
         if( isCompatibleClipMask( rClip ) )
             setPixel_i(rPt,lineColor,drawMode,rClip);
@@ -1196,7 +1183,7 @@ void BitmapDevice::setPixel( const basegfx::B2IPoint&     rPt,
 
 Color BitmapDevice::getPixel( const basegfx::B2IPoint& rPt )
 {
-    if( mpImpl->maLineClipRect.isInside(rPt) )
+    if( mpImpl->maBounds.isInside(rPt) )
         return getPixel_i(rPt);
 
     return Color();
@@ -1204,7 +1191,7 @@ Color BitmapDevice::getPixel( const basegfx::B2IPoint& rPt )
 
 sal_uInt32 BitmapDevice::getPixelData( const basegfx::B2IPoint& rPt )
 {
-    if( mpImpl->maLineClipRect.isInside(rPt) )
+    if( mpImpl->maBounds.isInside(rPt) )
         return getPixelData_i(rPt);
 
     return 0;
@@ -1217,7 +1204,7 @@ void BitmapDevice::drawLine( const basegfx::B2IPoint& rPt1,
 {
     drawLine_i( rPt1,
                 rPt2,
-                mpImpl->maLineClipRect,
+                mpImpl->maBounds,
                 lineColor,
                 drawMode );
 }
@@ -1237,7 +1224,7 @@ void BitmapDevice::drawLine( const basegfx::B2IPoint&     rPt1,
     if( isCompatibleClipMask( rClip ) )
         drawLine_i( rPt1,
                     rPt2,
-                    mpImpl->maLineClipRect,
+                    mpImpl->maBounds,
                     lineColor,
                     drawMode,
                     rClip );
@@ -1253,7 +1240,7 @@ void BitmapDevice::drawPolygon( const basegfx::B2DPolygon& rPoly,
     const sal_uInt32 numVertices( rPoly.count() );
     if( numVertices )
         drawPolygon_i( rPoly,
-                       mpImpl->maLineClipRect,
+                       mpImpl->maBounds,
                        lineColor, drawMode );
 }
 
@@ -1273,7 +1260,7 @@ void BitmapDevice::drawPolygon( const basegfx::B2DPolygon&   rPoly,
     {
         if( isCompatibleClipMask( rClip ) )
             drawPolygon_i( rPoly,
-                           mpImpl->maLineClipRect,
+                           mpImpl->maBounds,
                            lineColor, drawMode, rClip );
         else
             getGenericRenderer()->drawPolygon( rPoly, lineColor,
@@ -1858,6 +1845,8 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&         
                                               const basegfx::B2IBox*                     pSubset,
                                               const IBitmapDeviceDamageTrackerSharedPtr& rDamage )
 {
+    OSL_ASSERT(rSize.getX() > 0 && rSize.getY() > 0);
+
     if( nScanlineFormat <= Format::NONE ||
         nScanlineFormat >  Format::MAX )
         return BitmapDeviceSharedPtr();

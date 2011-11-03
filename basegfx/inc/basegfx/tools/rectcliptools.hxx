@@ -30,6 +30,7 @@
 #define _BGFX_TOOLS_RECTCLIPTOOLS_HXX
 
 #include <sal/types.h>
+#include <basegfx/range/b2ibox.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -62,6 +63,19 @@ namespace basegfx
                        clip |= (rP.getX() > rR.getMaxX()) << 1;
                        clip |= (rP.getY() < rR.getMinY()) << 2;
                        clip |= (rP.getY() > rR.getMaxY()) << 3;
+            return clip;
+        }
+
+        /// Cohen-Sutherland mask calculation - overload for boxes.
+        template< class Point > inline
+           sal_uInt32 getCohenSutherlandClipFlags( const Point&  rP,
+                                                   const B2IBox& rB )
+        {
+            // maxY | minY | maxX | minX
+            sal_uInt32 clip  = (rP.getX() <  rB.getMinX()) << 0;
+                       clip |= (rP.getX() >= rB.getMaxX()) << 1;
+                       clip |= (rP.getY() <  rB.getMinY()) << 2;
+                       clip |= (rP.getY() >= rB.getMaxY()) << 3;
             return clip;
         }
 

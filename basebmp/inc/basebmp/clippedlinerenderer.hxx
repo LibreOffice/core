@@ -200,7 +200,7 @@ inline bool prepareClip( sal_Int32  a1,
 template< class Iterator, class Accessor >
 void renderClippedLine( basegfx::B2IPoint             aPt1,
                         basegfx::B2IPoint             aPt2,
-                        const basegfx::B2IBox&      rClipRect,
+                        const basegfx::B2IBox&        rClipRect,
                         typename Accessor::value_type color,
                         Iterator                      begin,
                         Accessor                      acc,

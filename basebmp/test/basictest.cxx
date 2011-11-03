@@ -116,6 +116,21 @@ public:
                                (*pDevice->getPalette())[1] == Color(0xFFFFFFFF) );
     }
 
+    void testClone()
+    {
+        const basegfx::B2ISize aSize(101,101);
+        basegfx::B2ISize       aSize2(3,3);
+        BitmapDeviceSharedPtr  pDevice( createBitmapDevice( aSize,
+                                                            true,
+                                                            Format::ONE_BIT_MSB_PAL ));
+
+        BitmapDeviceSharedPtr  pClone( cloneBitmapDevice(
+                                           aSize2,
+                                           pDevice ));
+        CPPUNIT_ASSERT_MESSAGE("right size",
+                               pClone->getSize() == aSize2 );
+    }
+
     void testPixelFuncs()
     {
         // 1bpp
@@ -288,6 +303,7 @@ public:
     CPPUNIT_TEST_SUITE(BasicTest);
     CPPUNIT_TEST(colorTest);
     CPPUNIT_TEST(testConstruction);
+    CPPUNIT_TEST(testClone);
     CPPUNIT_TEST(testPixelFuncs);
     CPPUNIT_TEST_SUITE_END();
 };

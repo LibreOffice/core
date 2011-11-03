@@ -192,6 +192,8 @@ private:
         BitmapDeviceSharedPtr pClippedDevice(
             subsetBitmapDevice( rDevice,
                                 basegfx::B2IBox(3,3,5,8) ));
+        CPPUNIT_ASSERT_MESSAGE("size of subsetted device is not (2,5)",
+                               pClippedDevice->getSize() == basegfx::B2IVector(2,5));
 
         rDevice->clear(aBgCol);
         pClippedDevice->fillPolyPolygon(

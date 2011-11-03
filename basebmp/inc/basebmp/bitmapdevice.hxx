@@ -664,8 +664,8 @@ private:
 /** Factory method to create a BitmapDevice for given scanline format
  */
 BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector& rSize,
-                                          bool                      bTopDown,
-                                          sal_Int32                 nScanlineFormat );
+                                                            bool                      bTopDown,
+                                                            sal_Int32                 nScanlineFormat );
 
 /** Factory method to create a BitmapDevice for given scanline format
     with the given palette
@@ -675,9 +675,9 @@ BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVe
     format.
  */
 BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize,
-                                          bool                             bTopDown,
-                                          sal_Int32                        nScanlineFormat,
-                                          const PaletteMemorySharedVector& rPalette );
+                                                            bool                             bTopDown,
+                                                            sal_Int32                        nScanlineFormat,
+                                                            const PaletteMemorySharedVector& rPalette );
 
 /** Factory method to create a BitmapDevice for given scanline format
     from the given piece of raw memory and palette
@@ -686,10 +686,10 @@ BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVe
     image of the specified area and format.
  */
 BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize,
-                                          bool                             bTopDown,
-                                          sal_Int32                        nScanlineFormat,
-                                          const RawMemorySharedArray&      rMem,
-                                          const PaletteMemorySharedVector& rPalette );
+                                                            bool                             bTopDown,
+                                                            sal_Int32                        nScanlineFormat,
+                                                            const RawMemorySharedArray&      rMem,
+                                                            const PaletteMemorySharedVector& rPalette );
 
 
 /** Factory method to retrieve a subsetted BitmapDevice to the same
@@ -709,8 +709,8 @@ BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr subsetBitmapDevice( const BitmapDeviceSh
     copied, only the size can be varied. Note that the prototype's
     bitmap content is <em>not</em> copied, only a palette (if any).
  */
-BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr cloneBitmapDevice( const basegfx::B2IVector&        rSize,
-                                         const BitmapDeviceSharedPtr&     rProto );
+BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr cloneBitmapDevice( const basegfx::B2IVector&    rSize,
+                                                           const BitmapDeviceSharedPtr& rProto );
 
 }
 

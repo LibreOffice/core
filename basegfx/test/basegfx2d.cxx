@@ -56,6 +56,7 @@
 #include <basegfx/color/bcolortools.hxx>
 
 #include <basegfx/tools/debugplotter.hxx>
+#include <basegfx/tools/rectcliptools.hxx>
 
 #include <iostream>
 #include <fstream>
@@ -1263,15 +1264,24 @@ public:
 
         // check overlap
         Type aRange2(0,1);
-        CPPUNIT_ASSERT_MESSAGE("box overlapping *includes* upper bound", aRange.overlaps(aRange2));
-        CPPUNIT_ASSERT_MESSAGE("box overlapping *includes* upper bound, but only barely", !aRange.overlapsMore(aRange2));
+        CPPUNIT_ASSERT_MESSAGE("range overlapping *includes* upper bound", aRange.overlaps(aRange2));
+        CPPUNIT_ASSERT_MESSAGE("range overlapping *includes* upper bound, but only barely", !aRange.overlapsMore(aRange2));
 
         Type aRange3(0,2);
-        CPPUNIT_ASSERT_MESSAGE("box overlapping is fully overlapping now", aRange.overlapsMore(aRange3));
+        CPPUNIT_ASSERT_MESSAGE("range overlapping is fully overlapping now", aRange.overlapsMore(aRange3));
+
+        // check intersect
+        Type aRange4(3,4);
+        aRange.intersect(aRange4);
+        CPPUNIT_ASSERT_MESSAGE("range intersection is yielding empty range!", !aRange.isEmpty());
+
+        Type aRange5(5,6);
+        aRange.intersect(aRange5);
+        CPPUNIT_ASSERT_MESSAGE("range intersection is yielding nonempty range!", aRange.isEmpty());
 
         // just so that this compiles -
-        Type aRange4( aRange );
-        (void)aRange4;
+        Type aRange6( aRange );
+        (void)aRange6;
     }
 
     void check()
@@ -1333,6 +1343,19 @@ public:
 
         B1IBox aBox3(0,2);
         CPPUNIT_ASSERT_MESSAGE("box overlapping then includes upper bound-1", aBox.overlaps(aBox3));
+
+        // check intersect
+        B1IBox aBox4(4,5);
+        aBox.intersect(aBox4);
+        CPPUNIT_ASSERT_MESSAGE("box intersection is yielding nonempty box!", aBox.isEmpty());
+
+        B1IBox aBox5(2,5);
+        aBox5.intersect(aBox4);
+        CPPUNIT_ASSERT_MESSAGE("box intersection is yielding empty box!", !aBox5.isEmpty());
+
+        // just so that this compiles -
+        B1IBox aBox6( aBox );
+        (void)aBox6;
     }
 
     // Change the following lines only, if you add, remove or rename
@@ -1343,6 +1366,97 @@ public:
     CPPUNIT_TEST(TestBox);
     SAL_CPPUNIT_TEST_SUITE_END();
 }; // class b1ibox
+
+
+class b2Xrange : public CppUnit::TestFixture
+{
+public:
+    // initialise your test code values here.
+    void setUp()
+    {
+    }
+
+    void tearDown()
+    {
+    }
+
+    template<class Type> void implCheck()
+    {
+        // cohen sutherland clipping
+        Type aRange(0,0,10,10);
+
+        CPPUNIT_ASSERT_MESSAGE("(0,0) is outside range!",
+                               tools::getCohenSutherlandClipFlags(B2IPoint(0,0),aRange) == 0);
+        CPPUNIT_ASSERT_MESSAGE("(-1,-1) is inside range!",
+                               tools::getCohenSutherlandClipFlags(B2IPoint(-1,-1),aRange) ==
+                               (tools::RectClipFlags::LEFT|tools::RectClipFlags::TOP));
+        CPPUNIT_ASSERT_MESSAGE("(10,10) is outside range!",
+                               tools::getCohenSutherlandClipFlags(B2IPoint(10,10),aRange) == 0);
+        CPPUNIT_ASSERT_MESSAGE("(11,11) is inside range!",
+                               tools::getCohenSutherlandClipFlags(B2IPoint(11,11),aRange) ==
+                               (tools::RectClipFlags::RIGHT|tools::RectClipFlags::BOTTOM));
+
+        // just so that this compiles -
+        Type aRange1( aRange );
+        (void)aRange1;
+    }
+
+    void check()
+    {
+        implCheck<B2DRange>();
+        implCheck<B2IRange>();
+    }
+
+    // Change the following lines only, if you add, remove or rename
+    // member functions of the current class,
+    // because these macros are need by auto register mechanism.
+
+    SAL_CPPUNIT_TEST_SUITE(b2Xrange);
+    CPPUNIT_TEST(check);
+    SAL_CPPUNIT_TEST_SUITE_END();
+}; // class b2Xrange
+
+
+class b2ibox : public CppUnit::TestFixture
+{
+public:
+    // initialise your test code values here.
+    void setUp()
+    {
+    }
+
+    void tearDown()
+    {
+    }
+
+    void TestBox()
+    {
+        // cohen sutherland clipping
+        B2IBox aBox(0,0,10,10);
+
+        CPPUNIT_ASSERT_MESSAGE("(0,0) is outside range!",
+                               tools::getCohenSutherlandClipFlags(B2IPoint(0,0),aBox) == 0);
+        CPPUNIT_ASSERT_MESSAGE("(-1,-1) is inside range!",
+                               tools::getCohenSutherlandClipFlags(B2IPoint(-1,-1),aBox) ==
+                               (tools::RectClipFlags::LEFT|tools::RectClipFlags::TOP));
+        CPPUNIT_ASSERT_MESSAGE("(9,9) is outside range!",
+                               tools::getCohenSutherlandClipFlags(B2IPoint(9,9),aBox) == 0);
+        CPPUNIT_ASSERT_MESSAGE("(10,10) is inside range!",
+                               tools::getCohenSutherlandClipFlags(B2IPoint(10,10),aBox) ==
+                               (tools::RectClipFlags::RIGHT|tools::RectClipFlags::BOTTOM));
+
+        // just so that this compiles -
+        B2IBox aBox1( aBox );
+        (void)aBox1;
+    }
+
+    // Change the following lines only, if you add, remove or rename
+    // member functions of the current class,
+    // because these macros are need by auto register mechanism.
+    SAL_CPPUNIT_TEST_SUITE(b2ibox);
+    CPPUNIT_TEST(TestBox);
+    SAL_CPPUNIT_TEST_SUITE_END();
+}; // class b2ibox
 
 
 class b2dtuple : public CppUnit::TestFixture
@@ -1588,6 +1702,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dpolypolygon);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dquadraticbezier);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b1Xrange);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b1ibox);
+CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2Xrange);
+CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2ibox);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dtuple);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dvector);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::bcolor);
