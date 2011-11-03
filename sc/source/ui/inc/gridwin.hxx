@@ -379,6 +379,7 @@ public:
 
     void            CheckNeedsRepaint();
 
+    void            UpdateAutoFilterFromMenu();
     void            UpdateDPFromFieldPopupMenu();
     void            UpdateVisibleRange();
 

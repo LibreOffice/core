@@ -208,6 +208,8 @@ private:
 class ScCheckListMenuWindow : public ScMenuFloatingWindow
 {
 public:
+    typedef boost::unordered_map<rtl::OUString, bool, rtl::OUStringHash> ResultType;
+
     /**
      * Extended data that the client code may need to store.  Create a
      * sub-class of this and store data there.
@@ -229,7 +231,7 @@ public:
 
     const Size& getWindowSize() const;
 
-    void getResult(::boost::unordered_map< ::rtl::OUString, bool, ::rtl::OUStringHash>& rResult);
+    void getResult(ResultType& rResult);
     void launch(const Rectangle& rRect);
     void close(bool bOK);
 

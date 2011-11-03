@@ -1178,15 +1178,14 @@ const Size& ScCheckListMenuWindow::getWindowSize() const
     return maWndSize;
 }
 
-void ScCheckListMenuWindow::getResult(boost::unordered_map<OUString, bool, OUStringHash>& rResult)
+void ScCheckListMenuWindow::getResult(ResultType& rResult)
 {
-    typedef boost::unordered_map<OUString, bool, OUStringHash> ResultMap;
-    ResultMap aResult;
+    ResultType aResult;
     size_t n = maMembers.size();
     for (size_t i = 0; i < n; ++i)
     {
         bool bState = maChecks.IsChecked(static_cast< sal_uInt16 >( i ));
-        aResult.insert(ResultMap::value_type(maMembers[i].maName, bState));
+        aResult.insert(ResultType::value_type(maMembers[i].maName, bState));
     }
     rResult.swap(aResult);
 }

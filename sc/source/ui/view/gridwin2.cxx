@@ -545,7 +545,6 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
 void ScGridWindow::UpdateDPFromFieldPopupMenu()
 {
     typedef boost::unordered_map<OUString, OUString, OUStringHash> MemNameMapType;
-    typedef boost::unordered_map<OUString, bool, OUStringHash> MemVisibilityType;
 
     if (!mpDPFieldPopup)
         return;
@@ -573,20 +572,27 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
         aMemNameMap.insert(MemNameMapType::value_type(itr->maLayoutName, itr->maName));
 
     // The raw result may contain a mixture of layout names and original names.
-    MemVisibilityType aRawResult;
+    ScCheckListMenuWindow::ResultType aRawResult;
     mpDPFieldPopup->getResult(aRawResult);
 
-    MemVisibilityType aResult;
-    for (MemVisibilityType::const_iterator itr = aRawResult.begin(), itrEnd = aRawResult.end(); itr != itrEnd; ++itr)
+    ScCheckListMenuWindow::ResultType aResult;
+    ScCheckListMenuWindow::ResultType::const_iterator itr = aRawResult.begin(), itrEnd = aRawResult.end();
+    for (; itr != itrEnd; ++itr)
     {
         MemNameMapType::const_iterator itrNameMap = aMemNameMap.find(itr->first);
         if (itrNameMap == aMemNameMap.end())
+        {
             // This is an original member name.  Use it as-is.
-            aResult.insert(MemVisibilityType::value_type(itr->first, itr->second));
+            aResult.insert(
+                ScCheckListMenuWindow::ResultType::value_type(
+                    itr->first, itr->second));
+        }
         else
         {
             // This is a layout name.  Get the original member name and use it.
-            aResult.insert(MemVisibilityType::value_type(itrNameMap->second, itr->second));
+            aResult.insert(
+                ScCheckListMenuWindow::ResultType::value_type(
+                    itrNameMap->second, itr->second));
         }
     }
     pDim->UpdateMemberVisibility(aResult);

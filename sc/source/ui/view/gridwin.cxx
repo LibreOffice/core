@@ -595,14 +595,37 @@ public:
     }
 };
 
+struct AutoFilterData : public ScCheckListMenuWindow::ExtendedData
+{
+    ScAddress maPos;
+};
+
+class AutoFilterOKAction : public ScMenuFloatingWindow::Action
+{
+    ScGridWindow* mpWindow;
+public:
+    AutoFilterOKAction(ScGridWindow* p) : mpWindow(p) {}
+
+    virtual void execute()
+    {
+        mpWindow->UpdateAutoFilterFromMenu();
+    }
+};
+
 
 }
 
 void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 {
-    mpAutoFilterPopup.reset(new ScCheckListMenuWindow(this, pViewData->GetDocument()));
-    Point aPos = pViewData->GetScrPos(nCol, nRow, eWhich);
     SCTAB nTab = pViewData->GetTabNo();
+
+    mpAutoFilterPopup.reset(new ScCheckListMenuWindow(this, pViewData->GetDocument()));
+    mpAutoFilterPopup->setOKAction(new AutoFilterOKAction(this));
+    std::auto_ptr<AutoFilterData> pData(new AutoFilterData);
+    pData->maPos = ScAddress(nCol, nRow, nTab);
+    mpAutoFilterPopup->setExtendedData(pData.release());
+
+    Point aPos = pViewData->GetScrPos(nCol, nRow, eWhich);
     ScDocument* pDoc = pViewData->GetDocument();
     long nSizeX  = 0;
     long nSizeY  = 0;
@@ -621,7 +644,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     mpAutoFilterPopup->initMembers();
 
     // Populate the menu.
-    mpAutoFilterPopup->addMenuItem(ScResId::toString(ScResId(SCSTR_ALLFILTER)), true, new PopupAction);
+//  mpAutoFilterPopup->addMenuItem(ScResId::toString(ScResId(SCSTR_ALLFILTER)), true, new PopupAction);
     mpAutoFilterPopup->addMenuItem(ScResId::toString(ScResId(SCSTR_TOP10FILTER)), true, new PopupAction);
     mpAutoFilterPopup->addMenuItem(ScResId::toString(ScResId(SCSTR_STDFILTER)), true, new PopupAction);
     mpAutoFilterPopup->addMenuItem(ScResId::toString(ScResId(SCSTR_EMPTY)), true, new PopupAction);
@@ -629,6 +652,53 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 
     mpAutoFilterPopup->SetPopupModeEndHdl( LINK(this, ScGridWindow, PopupModeEndHdl) );
     mpAutoFilterPopup->launch(aCellRect);
+}
+
+void ScGridWindow::UpdateAutoFilterFromMenu()
+{
+    ScCheckListMenuWindow::ResultType aResult;
+    mpAutoFilterPopup->getResult(aResult);
+    size_t nCount = aResult.size();
+    std::vector<rtl::OUString> aSelected;
+    ScCheckListMenuWindow::ResultType::const_iterator itr = aResult.begin(), itrEnd = aResult.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        if (itr->second)
+            aSelected.push_back(itr->first);
+    }
+
+    ScDocument* pDoc = pViewData->GetDocument();
+    const AutoFilterData* pData =
+        static_cast<const AutoFilterData*>(mpAutoFilterPopup->getExtendedData());
+
+    if (!pData)
+        return;
+
+    const ScAddress& rPos = pData->maPos;
+    ScDBData* pDBData = pDoc->GetDBAtCursor(rPos.Col(), rPos.Row(), rPos.Tab());
+    if (!pDBData)
+        return;
+
+    ScQueryParam aParam;
+    pDBData->GetQueryParam(aParam);
+
+    SCSIZE n = aParam.GetEntryCount();
+    for (SCSIZE i = 0; i < n; ++i)
+    {
+        ScQueryEntry& rEntry = aParam.GetEntry(i);
+        rEntry.Clear();
+    }
+
+    if (aSelected.empty())
+        return;
+
+    ScQueryEntry& rEntry = aParam.GetEntry(0);
+    rEntry.bDoQuery = true;
+    rEntry.bQueryByString = true;
+    rEntry.pStr = new String(aSelected[0]);
+
+    pViewData->GetView()->Query(aParam, NULL, true);
+    pDBData->SetQueryParam(aParam);
 }
 
 void ScGridWindow::LaunchPageFieldMenu( SCCOL nCol, SCROW nRow )
