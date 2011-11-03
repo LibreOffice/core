@@ -4862,12 +4862,11 @@ if test -n "$with_system_libxml" -o -n "$with_system_libs" -o \
     else
         PKG_CHECK_MODULES(LIBXML, libxml-2.0 >= 2.0)
     fi
-    BUILD_TYPE="$BUILD_TYPE LIBXMLSEC"
     MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS zlib1.dll libxml2-2.dll"
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBXML=NO
-    BUILD_TYPE="$BUILD_TYPE LIBXML2 LIBXMLSEC"
+    BUILD_TYPE="$BUILD_TYPE LIBXML2"
 fi
 AC_SUBST(SYSTEM_LIBXML)
 AC_SUBST(LIBXML_CFLAGS)
@@ -5697,9 +5696,10 @@ fi
 AC_MSG_CHECKING([whether to build XML Security support])
 if test "$enable_xmlsec" = "no"; then
     AC_MSG_RESULT([no])
-    ENABLE_XMLSEC=no
+    ENABLE_XMLSEC=
 else
-    ENABLE_XMLSEC=yes
+    ENABLE_XMLSEC="YES"
+    BUILD_TYPE="$BUILD_TYPE LIBXMLSEC"
     AC_MSG_RESULT([yes])
 fi
 AC_SUBST(ENABLE_XMLSEC)

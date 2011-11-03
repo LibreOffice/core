@@ -35,7 +35,7 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 .INCLUDE :	settings.mk
 
-.IF "$(ENABLE_XMLSEC)" == "NO"
+.IF "$(ENABLE_XMLSEC)" != "YES"
 @all:
     @echo "XMLSec module disabled"
 .ENDIF
