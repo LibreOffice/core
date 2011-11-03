@@ -69,32 +69,41 @@ void ParagraphStyle::write(OdfDocumentHandler *pHandler) const
         if (strcmp(i.key(), "style:list-style-name") == 0)
             propList.insert("style:list-style-name", i()->getStr());
 #endif
-        if (strcmp(i.key(), "fo:margin-left") == 0)
-            propList.insert("fo:margin-left", i()->getStr());
-        if (strcmp(i.key(), "fo:margin-right") == 0)
-            propList.insert("fo:margin-right", i()->getStr());
-        if (strcmp(i.key(), "fo:text-indent") == 0)
-            propList.insert("fo:text-indent", i()->getStr());
-        if (strcmp(i.key(), "fo:margin-top") == 0)
-            propList.insert("fo:margin-top", i()->getStr());
-        if (strcmp(i.key(), "fo:margin-bottom") == 0)
+        if (strncmp(i.key(), "fo:margin-",10) == 0)
         {
-            if (i()->getDouble() > 0.0)
-                propList.insert("fo:margin-bottom", i()->getStr());
-            else
-                propList.insert("fo:margin-bottom", 0.0);
+            if (strcmp(i.key(), "fo:margin-left") == 0 ||
+                    strcmp(i.key(), "fo:margin-right") == 0 ||
+                    strcmp(i.key(), "fo:margin-top") == 0)
+                propList.insert(i.key(), i()->getStr());
+            else if (strcmp(i.key(), "fo:margin-bottom") == 0)
+            {
+                if (i()->getDouble() > 0.0)
+                    propList.insert("fo:margin-bottom", i()->getStr());
+                else
+                    propList.insert("fo:margin-bottom", 0.0);
+            }
         }
-        if (strcmp(i.key(), "fo:line-height") == 0)
+        else if (strcmp(i.key(), "fo:text-indent") == 0)
+            propList.insert("fo:text-indent", i()->getStr());
+        else if (strcmp(i.key(), "fo:line-height") == 0)
             propList.insert("fo:line-height", i()->getStr());
-        if (strcmp(i.key(), "fo:break-before") == 0)
+        else if (strcmp(i.key(), "fo:break-before") == 0)
             propList.insert("fo:break-before", i()->getStr());
-        if (strcmp(i.key(), "fo:text-align") == 0)
+        else if (strcmp(i.key(), "fo:text-align") == 0)
             propList.insert("fo:text-align", i()->getStr());
-        if (strcmp(i.key(), "fo:text-align-last") == 0)
+        else if (strcmp(i.key(), "fo:text-align-last") == 0)
             propList.insert("fo:text-align-last", i()->getStr());
-        if (strcmp(i.key(), "style:page-number") == 0)
+        else if (strcmp(i.key(), "style:page-number") == 0)
             propList.insert("style:page-number", i()->getStr());
-
+        else if (strncmp(i.key(), "fo:border", 9) == 0)
+        {
+            if (strcmp(i.key(), "fo:border") == 0 ||
+                    strcmp(i.key(), "fo:border-left") == 0 ||
+                    strcmp(i.key(), "fo:border-right") == 0 ||
+                    strcmp(i.key(), "fo:border-top") == 0 ||
+                    strcmp(i.key(), "fo:border-bottom") == 0)
+                propList.insert(i.key(), i()->getStr());
+        }
     }
 
     propList.insert("style:justify-single-word", "false");
