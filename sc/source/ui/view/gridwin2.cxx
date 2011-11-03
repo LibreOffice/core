@@ -539,7 +539,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
         aCellRect.SetPos(Point(rScrPos.X() + nXOffset, rScrPos.Y()));
     }
     mpDPFieldPopup->SetPopupModeEndHdl( LINK(this, ScGridWindow, PopupModeEndHdl) );
-    mpDPFieldPopup->StartPopupMode(aCellRect, (FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_GRABFOCUS));
+    mpDPFieldPopup->launch(aCellRect);
 }
 
 void ScGridWindow::UpdateDPFromFieldPopupMenu()

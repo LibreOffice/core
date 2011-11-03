@@ -261,6 +261,25 @@ ScMenuFloatingWindow* ScMenuFloatingWindow::addSubMenuItem(const OUString& rText
     return aItem.mpSubMenuWin.get();
 }
 
+Size ScMenuFloatingWindow::getMenuSize() const
+{
+    if (maMenuItems.empty())
+        return Size();
+
+    vector<MenuItemData>::const_iterator itr = maMenuItems.begin(), itrEnd = maMenuItems.end();
+    long nTextWidth = 0;
+    for (; itr != itrEnd; ++itr)
+        nTextWidth = ::std::max(GetTextWidth(itr->maText), nTextWidth);
+
+    size_t nLastPos = maMenuItems.size()-1;
+    Point aPos;
+    Size aSize;
+    getMenuItemPosSize(nLastPos, aPos, aSize);
+    aPos.X() += nTextWidth + 15;
+    aPos.Y() += aSize.Height() + 5;
+    return Size(aPos.X(), aPos.Y());
+}
+
 void ScMenuFloatingWindow::drawMenuItem(size_t nPos)
 {
     if (nPos >= maMenuItems.size())
@@ -471,21 +490,7 @@ ScDocument* ScMenuFloatingWindow::getDoc()
 
 void ScMenuFloatingWindow::resizeToFitMenuItems()
 {
-    if (maMenuItems.empty())
-        return;
-
-    vector<MenuItemData>::const_iterator itr = maMenuItems.begin(), itrEnd = maMenuItems.end();
-    long nTextWidth = 0;
-    for (; itr != itrEnd; ++itr)
-        nTextWidth = ::std::max(GetTextWidth(itr->maText), nTextWidth);
-
-    size_t nLastPos = maMenuItems.size()-1;
-    Point aPos;
-    Size aSize;
-    getMenuItemPosSize(nLastPos, aPos, aSize);
-    aPos.X() += nTextWidth + 15;
-    aPos.Y() += aSize.Height() + 5;
-    SetOutputSizePixel(Size(aPos.X(), aPos.Y()));
+    SetOutputSizePixel(getMenuSize());
 }
 
 void ScMenuFloatingWindow::selectMenuItem(size_t nPos, bool bSelected, bool bSubMenuTimer)
@@ -768,7 +773,7 @@ ScCheckListMenuWindow::ScCheckListMenuWindow(Window* pParent, ScDocument* pDoc) 
     mnCurTabStop(0),
     mpExtendedData(NULL),
     mpOKAction(NULL),
-    maWndSize(240, 330),
+    maWndSize(200, 330),
     mePrevToggleAllState(STATE_DONTKNOW)
 {
     maTabStopCtrls.reserve(7);
@@ -779,6 +784,123 @@ ScCheckListMenuWindow::ScCheckListMenuWindow(Window* pParent, ScDocument* pDoc) 
     maTabStopCtrls.push_back(&maBtnUnselectSingle);
     maTabStopCtrls.push_back(&maBtnOk);
     maTabStopCtrls.push_back(&maBtnCancel);
+}
+
+ScCheckListMenuWindow::~ScCheckListMenuWindow()
+{
+}
+
+void ScCheckListMenuWindow::getSectionPosSize(
+    Point& rPos, Size& rSize, SectionType eType) const
+{
+    // constant parameters.
+    const long nListBoxMargin = 5;            // horizontal distance from the side of the dialog to the listbox border.
+    const long nListBoxInnerPadding = 5;
+    const long nTopMargin = 5;
+    const long nMenuHeight = maMenuSize.getHeight();
+    const long nSingleItemBtnAreaHeight = 32; // height of the middle area below the list box where the single-action buttons are.
+    const long nBottomBtnAreaHeight = 50;     // height of the bottom area where the OK and Cancel buttons are.
+    const long nBtnWidth = 90;
+    const long nLabelHeight = getLabelFont().GetHeight();
+    const long nBtnHeight = nLabelHeight*2;
+    const long nBottomMargin = 10;
+    const long nMenuListMargin = 5;
+
+    // parameters calculated from constants.
+    const long nListBoxWidth = maWndSize.Width() - nListBoxMargin*2;
+    const long nListBoxHeight = maWndSize.Height() - nTopMargin - nMenuHeight -
+        nMenuListMargin - nSingleItemBtnAreaHeight - nBottomBtnAreaHeight;
+
+    const long nSingleBtnAreaY = nTopMargin + nMenuHeight + nListBoxHeight + nMenuListMargin - 1;
+
+    switch (eType)
+    {
+        case WHOLE:
+        {
+            rPos  = Point(0, 0);
+            rSize = maWndSize;
+        }
+        break;
+        case LISTBOX_AREA_OUTER:
+        {
+            rPos = Point(nListBoxMargin, nTopMargin + nMenuHeight + nMenuListMargin);
+            rSize = Size(nListBoxWidth, nListBoxHeight);
+        }
+        break;
+        case LISTBOX_AREA_INNER:
+        {
+            rPos = Point(nListBoxMargin, nTopMargin + nMenuHeight + nMenuListMargin);
+            rPos.X() += nListBoxInnerPadding;
+            rPos.Y() += nListBoxInnerPadding;
+
+            rSize = Size(nListBoxWidth, nListBoxHeight);
+            rSize.Width()  -= nListBoxInnerPadding*2;
+            rSize.Height() -= nListBoxInnerPadding*2;
+        }
+        break;
+        case SINGLE_BTN_AREA:
+        {
+            rPos = Point(nListBoxMargin, nSingleBtnAreaY);
+            rSize = Size(nListBoxWidth, nSingleItemBtnAreaHeight);
+        }
+        break;
+        case CHECK_TOGGLE_ALL:
+        {
+            long h = nLabelHeight*3/2; // check box height is heuristically 150% of the text height.
+            rPos = Point(nListBoxMargin, nSingleBtnAreaY);
+            rPos.X() += 5;
+            rPos.Y() += (nSingleItemBtnAreaHeight - h)/2;
+            rSize = Size(70, h);
+        }
+        break;
+        case BTN_SINGLE_SELECT:
+        {
+            long h = 26;
+            rPos = Point(nListBoxMargin, nSingleBtnAreaY);
+            rPos.X() += nListBoxWidth - h - 10 - h - 10;
+            rPos.Y() += (nSingleItemBtnAreaHeight - h)/2;
+            rSize = Size(h, h);
+        }
+        break;
+        case BTN_SINGLE_UNSELECT:
+        {
+            long h = 26;
+            rPos = Point(nListBoxMargin, nSingleBtnAreaY);
+            rPos.X() += nListBoxWidth - h - 10;
+            rPos.Y() += (nSingleItemBtnAreaHeight - h)/2;
+            rSize = Size(h, h);
+        }
+        break;
+        case BTN_OK:
+        {
+            long x = (maWndSize.Width() - nBtnWidth*2)/3;
+            long y = maWndSize.Height() - nBottomMargin - nBtnHeight;
+            rPos = Point(x, y);
+            rSize = Size(nBtnWidth, nBtnHeight);
+        }
+        break;
+        case BTN_CANCEL:
+        {
+            long x = (maWndSize.Width() - nBtnWidth*2)/3*2 + nBtnWidth;
+            long y = maWndSize.Height() - nBottomMargin - nBtnHeight;
+            rPos = Point(x, y);
+            rSize = Size(nBtnWidth, nBtnHeight);
+        }
+        break;
+        default:
+            ;
+    }
+}
+
+void ScCheckListMenuWindow::packWindow()
+{
+    maMenuSize = getMenuSize();
+
+    if (maWndSize.Width() < maMenuSize.Width())
+        // Widen the window to fit the menu items.
+        maWndSize.Width() = maMenuSize.Width();
+
+    SetOutputSizePixel(maWndSize);
 
     const StyleSettings& rStyle = GetSettings().GetStyleSettings();
 
@@ -826,111 +948,6 @@ ScCheckListMenuWindow::ScCheckListMenuWindow(Window* pParent, ScDocument* pDoc) 
     maBtnUnselectSingle.SetModeImage(Image(ScResId(RID_IMG_UNSELECT_CURRENT)));
     maBtnUnselectSingle.SetClickHdl( LINK(this, ScCheckListMenuWindow, ButtonHdl) );
     maBtnUnselectSingle.Show();
-}
-
-ScCheckListMenuWindow::~ScCheckListMenuWindow()
-{
-}
-
-void ScCheckListMenuWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionType eType) const
-{
-    // constant parameters.
-    const sal_uInt16 nListBoxMargin = 5;            // horizontal distance from the side of the dialog to the listbox border.
-    const sal_uInt16 nListBoxInnerPadding = 5;
-    const sal_uInt16 nTopMargin = 5;
-    const sal_uInt16 nMenuHeight = 60;
-    const sal_uInt16 nSingleItemBtnAreaHeight = 32; // height of the middle area below the list box where the single-action buttons are.
-    const sal_uInt16 nBottomBtnAreaHeight = 50;     // height of the bottom area where the OK and Cancel buttons are.
-    const sal_uInt16 nBtnWidth = 90;
-    const sal_uInt16 nLabelHeight = static_cast< sal_uInt16 >( getLabelFont().GetHeight() );
-    const sal_uInt16 nBtnHeight = nLabelHeight*2;
-    const sal_uInt16 nBottomMargin = 10;
-    const sal_uInt16 nMenuListMargin = 20;
-
-    // parameters calculated from constants.
-    const sal_uInt16 nListBoxWidth = static_cast< sal_uInt16 >( maWndSize.Width() - nListBoxMargin*2 );
-    const sal_uInt16 nListBoxHeight = static_cast< sal_uInt16 >( maWndSize.Height() - nTopMargin - nMenuHeight -
-        nMenuListMargin - nSingleItemBtnAreaHeight - nBottomBtnAreaHeight );
-
-    const sal_uInt16 nSingleBtnAreaY = nTopMargin + nMenuHeight + nListBoxHeight + nMenuListMargin - 1;
-
-    switch (eType)
-    {
-        case WHOLE:
-        {
-            rPos  = Point(0, 0);
-            rSize = maWndSize;
-        }
-        break;
-        case LISTBOX_AREA_OUTER:
-        {
-            rPos = Point(nListBoxMargin, nTopMargin + nMenuHeight + nMenuListMargin);
-            rSize = Size(nListBoxWidth, nListBoxHeight);
-        }
-        break;
-        case LISTBOX_AREA_INNER:
-        {
-            rPos = Point(nListBoxMargin, nTopMargin + nMenuHeight + nMenuListMargin);
-            rPos.X() += nListBoxInnerPadding;
-            rPos.Y() += nListBoxInnerPadding;
-
-            rSize = Size(nListBoxWidth, nListBoxHeight);
-            rSize.Width()  -= nListBoxInnerPadding*2;
-            rSize.Height() -= nListBoxInnerPadding*2;
-        }
-        break;
-        case SINGLE_BTN_AREA:
-        {
-            rPos = Point(nListBoxMargin, nSingleBtnAreaY);
-            rSize = Size(nListBoxWidth, nSingleItemBtnAreaHeight);
-        }
-        break;
-        case CHECK_TOGGLE_ALL:
-        {
-            long h = nLabelHeight*3/2; // check box height is heuristically 150% of the text height.
-            rPos = Point(nListBoxMargin, nSingleBtnAreaY);
-            rPos.X() += 5;
-            rPos.Y() += (nSingleItemBtnAreaHeight - h)/2;
-            rSize = Size(70, h);
-        }
-        break;
-        case BTN_SINGLE_SELECT:
-        {
-            long h = 26;
-            rPos = Point(nListBoxMargin, nSingleBtnAreaY);
-            rPos.X() += 150;
-            rPos.Y() += (nSingleItemBtnAreaHeight - h)/2;
-            rSize = Size(h, h);
-        }
-        break;
-        case BTN_SINGLE_UNSELECT:
-        {
-            long h = 26;
-            rPos = Point(nListBoxMargin, nSingleBtnAreaY);
-            rPos.X() += 150 + h + 10;
-            rPos.Y() += (nSingleItemBtnAreaHeight - h)/2;
-            rSize = Size(h, h);
-        }
-        break;
-        case BTN_OK:
-        {
-            long x = (maWndSize.Width() - nBtnWidth*2)/3;
-            long y = maWndSize.Height() - nBottomMargin - nBtnHeight;
-            rPos = Point(x, y);
-            rSize = Size(nBtnWidth, nBtnHeight);
-        }
-        break;
-        case BTN_CANCEL:
-        {
-            long x = (maWndSize.Width() - nBtnWidth*2)/3*2 + nBtnWidth;
-            long y = maWndSize.Height() - nBottomMargin - nBtnHeight;
-            rPos = Point(x, y);
-            rSize = Size(nBtnWidth, nBtnHeight);
-        }
-        break;
-        default:
-            ;
-    }
 }
 
 void ScCheckListMenuWindow::setAllMemberState(bool bSet)
@@ -1172,6 +1189,12 @@ void ScCheckListMenuWindow::getResult(boost::unordered_map<OUString, bool, OUStr
         aResult.insert(ResultMap::value_type(maMembers[i].maName, bState));
     }
     rResult.swap(aResult);
+}
+
+void ScCheckListMenuWindow::launch(const Rectangle& rRect)
+{
+    packWindow();
+    StartPopupMode(rRect, (FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_GRABFOCUS));
 }
 
 void ScCheckListMenuWindow::close(bool bOK)

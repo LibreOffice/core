@@ -628,7 +628,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     mpAutoFilterPopup->addMenuItem(ScResId::toString(ScResId(SCSTR_NOTEMPTY)), true, new PopupAction);
 
     mpAutoFilterPopup->SetPopupModeEndHdl( LINK(this, ScGridWindow, PopupModeEndHdl) );
-    mpAutoFilterPopup->StartPopupMode(aCellRect, (FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_GRABFOCUS));
+    mpAutoFilterPopup->launch(aCellRect);
 }
 
 void ScGridWindow::LaunchPageFieldMenu( SCCOL nCol, SCROW nRow )

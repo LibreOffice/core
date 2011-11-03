@@ -91,6 +91,7 @@ public:
 
 protected:
 
+    Size getMenuSize() const;
     void drawMenuItem(size_t nPos);
     void drawAllMenuItems();
     const Font& getLabelFont() const;
@@ -229,6 +230,7 @@ public:
     const Size& getWindowSize() const;
 
     void getResult(::boost::unordered_map< ::rtl::OUString, bool, ::rtl::OUStringHash>& rResult);
+    void launch(const Rectangle& rRect);
     void close(bool bOK);
 
     /**
@@ -278,6 +280,11 @@ private:
     };
     void getSectionPosSize(Point& rPos, Size& rSize, SectionType eType) const;
 
+    /**
+     * Calculate the appropriate window size, the position and size of each
+     * control based on the menu items.
+     */
+    void packWindow();
     void setAllMemberState(bool bSet);
     void selectCurrentMemberOnly(bool bSet);
     void cycleFocus(bool bReverse = false);
@@ -303,7 +310,8 @@ private:
     ::std::auto_ptr<ExtendedData>   mpExtendedData;
     ::std::auto_ptr<Action>         mpOKAction;
 
-    const Size      maWndSize;  /// hard-coded window size.
+    Size maWndSize;  /// whole window size.
+    Size maMenuSize; /// size of all menu items combined.
     TriState mePrevToggleAllState;
 };
 
