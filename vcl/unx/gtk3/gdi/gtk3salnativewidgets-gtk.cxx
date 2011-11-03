@@ -44,6 +44,7 @@ GtkStyleContext* GtkSalGraphics::mpMenuBarStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpMenuBarItemStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpMenuStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpMenuItemStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpSpinStyle = NULL;
 
 bool GtkSalGraphics::style_loaded = false;
 /************************************************************************
@@ -82,6 +83,7 @@ enum {
     RENDER_ARROW = 5,
     RENDER_RADIO = 6,
     RENDER_SCROLLBAR = 7,
+    RENDER_SPINBUTTON = 8,
 };
 
 static void NWCalcArrowRect( const Rectangle& rButton, Rectangle& rArrow )
@@ -94,6 +96,50 @@ static void NWCalcArrowRect( const Rectangle& rButton, Rectangle& rArrow )
         rButton.Left() + ( rButton.GetWidth()  - rArrow.GetWidth()  ) / 2,
         rButton.Top() + ( rButton.GetHeight() - rArrow.GetHeight() ) / 2
         ) );
+}
+
+#define MIN_SPIN_ARROW_WIDTH 6
+
+Rectangle GtkSalGraphics::NWGetSpinButtonRect( ControlPart nPart, Rectangle aAreaRect)
+{
+    gint            buttonSize;
+    Rectangle        buttonRect;
+    const PangoFontDescription *fontDesc;
+    GtkBorder padding;
+
+    gtk_style_context_save(mpSpinStyle);
+    gtk_style_context_add_class(mpSpinStyle, GTK_STYLE_CLASS_BUTTON);
+
+    fontDesc = gtk_style_context_get_font( mpSpinStyle, GTK_STATE_FLAG_NORMAL);
+    gtk_style_context_get_padding(mpSpinStyle, GTK_STATE_FLAG_NORMAL, &padding);
+
+    buttonSize = MAX( PANGO_PIXELS(pango_font_description_get_size(fontDesc) ),
+                      MIN_SPIN_ARROW_WIDTH );
+    buttonSize -= buttonSize % 2 - 1; /* force odd */
+    buttonRect.SetSize( Size( buttonSize + padding.left + padding.right,
+                              buttonRect.GetHeight() ) );
+    buttonRect.setX( aAreaRect.Left() + (aAreaRect.GetWidth() - buttonRect.GetWidth()) );
+    if ( nPart == PART_BUTTON_UP )
+    {
+        buttonRect.setY( aAreaRect.Top() );
+        buttonRect.Bottom() = buttonRect.Top() + (aAreaRect.GetHeight() / 2);
+    }
+    else if( nPart == PART_BUTTON_DOWN )
+    {
+        buttonRect.setY( aAreaRect.Top() + (aAreaRect.GetHeight() / 2) );
+        buttonRect.Bottom() = aAreaRect.Bottom(); // cover area completely
+    }
+    else
+    {
+        buttonRect.Right()  = buttonRect.Left()-1;
+        buttonRect.Left()   = aAreaRect.Left();
+        buttonRect.Top()    = aAreaRect.Top();
+        buttonRect.Bottom() = aAreaRect.Bottom();
+    }
+
+    gtk_style_context_restore(mpSpinStyle);
+
+    return( buttonRect );
 }
 
 Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, Rectangle aAreaRect )
@@ -461,6 +507,107 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     }
 }
 
+void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
+                                         cairo_t *cr,
+                                         ControlPart nPart,
+                                         Rectangle aAreaRect,
+                                         ControlState nState )
+{
+    Rectangle            buttonRect;
+    GtkStateFlags        stateFlags;
+    GtkShadowType        shadowType;
+    Rectangle            arrowRect;
+    gint                 arrowSize;
+    GtkBorder            padding;
+
+    NWConvertVCLStateToGTKState( nState, &stateFlags,  &shadowType );
+    buttonRect = NWGetSpinButtonRect( nPart, aAreaRect );
+
+    gtk_style_context_save(context);
+    gtk_style_context_set_state(context, stateFlags);
+    gtk_style_context_add_class(context, GTK_STYLE_CLASS_BUTTON);
+
+    gtk_render_background(context, cr,
+                          (buttonRect.Left() - aAreaRect.Left()), (buttonRect.Top() - aAreaRect.Top()),
+                          buttonRect.GetWidth(), buttonRect.GetHeight() );
+    gtk_render_frame(context, cr,
+                     (buttonRect.Left() - aAreaRect.Left()), (buttonRect.Top() - aAreaRect.Top()),
+                     buttonRect.GetWidth(), buttonRect.GetHeight() );
+
+    arrowSize = (gint) floor((buttonRect.GetWidth() - padding.left - padding.right) * 0.45);
+    arrowSize -= arrowSize % 2 - 1; /* force odd */
+    arrowRect.SetSize( Size( arrowSize, arrowSize ) );
+    arrowRect.setX( buttonRect.Left() + (buttonRect.GetWidth() - arrowRect.GetWidth()) / 2 );
+    if ( nPart == PART_BUTTON_UP )
+        arrowRect.setY( buttonRect.Top() + (buttonRect.GetHeight() - arrowRect.GetHeight()) / 2 + 1);
+    else
+        arrowRect.setY( buttonRect.Top() + (buttonRect.GetHeight() - arrowRect.GetHeight()) / 2 - 1);
+
+    gtk_render_arrow(context, cr,
+                     (nPart == PART_BUTTON_UP) ? 0 : G_PI,
+                     1 + (arrowRect.Left() - aAreaRect.Left()), 1 + (arrowRect.Top() - aAreaRect.Top()),
+                     arrowSize);
+
+    gtk_style_context_restore(context);
+}
+
+void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
+                                     cairo_t *cr,
+                                     const Rectangle& rControlRectangle,
+                                     ControlType nType,
+                                     const ImplControlValue& aValue )
+{
+    Rectangle            areaRect;
+    GtkShadowType        shadowType;
+    const SpinbuttonValue *    pSpinVal = (aValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue *>(&aValue) : NULL;
+    Rectangle            upBtnRect;
+    ControlPart        upBtnPart = PART_BUTTON_UP;
+    ControlState        upBtnState = CTRL_STATE_ENABLED;
+    Rectangle            downBtnRect;
+    ControlPart        downBtnPart = PART_BUTTON_DOWN;
+    ControlState        downBtnState = CTRL_STATE_ENABLED;
+
+    if ( pSpinVal )
+    {
+        upBtnPart = pSpinVal->mnUpperPart;
+        upBtnState = pSpinVal->mnUpperState;
+
+        downBtnPart = pSpinVal->mnLowerPart;
+        downBtnState = pSpinVal->mnLowerState;
+    }
+
+    // CTRL_SPINBUTTONS pass their area in pSpinVal, not in rControlRectangle
+    if ( nType == CTRL_SPINBUTTONS )
+    {
+        if ( !pSpinVal )
+        {
+            std::fprintf( stderr, "Tried to draw CTRL_SPINBUTTONS, but the SpinButtons data structure didn't exist!\n" );
+            return;
+        }
+        areaRect = pSpinVal->maUpperRect;
+        areaRect.Union( pSpinVal->maLowerRect );
+    }
+    else
+        areaRect = rControlRectangle;
+
+    gtk_style_context_get_style( context,
+                                 "shadow-type", &shadowType,
+                                 NULL );
+
+    if ( shadowType != GTK_SHADOW_NONE )
+    {
+        gtk_render_background(context, cr,
+                              1, 1,
+                              areaRect.GetWidth(), areaRect.GetHeight() );
+        gtk_render_frame(context, cr,
+                         1, 1,
+                         areaRect.GetWidth(), areaRect.GetHeight() );
+   }
+
+    PaintOneSpinButton(context, cr, upBtnPart, areaRect, upBtnState );
+    PaintOneSpinButton(context, cr, downBtnPart, areaRect, downBtnState );
+}
+
 sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                             ControlState nState, const ImplControlValue& aValue,
                                             const rtl::OUString& )
@@ -475,10 +622,17 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
 
     NWConvertVCLStateToGTKState(nState, &flags, &shadow);
 
-    printf("Draw native for Type: %d, Part %d\n", nType, nPart);
-
     switch(nType)
     {
+    case CTRL_SPINBOX:
+        switch (nPart)
+        {
+        case PART_ENTIRE_CONTROL:
+            context = mpSpinStyle;
+            renderType = RENDER_SPINBUTTON;
+            break;
+        }
+        break;
     case CTRL_EDITBOX:
         context = mpEntryStyle;
         break;
@@ -624,6 +778,9 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
     case RENDER_SCROLLBAR:
         PaintScrollbar(context, cr, rControlRegion, nPart, aValue);
         break;
+    case RENDER_SPINBUTTON:
+        PaintSpinButton(context, cr, rControlRegion, nType, aValue);
+        break;
     default:
         break;
     }
@@ -758,7 +915,14 @@ sal_Bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart 
                (nPart==PART_BUTTON_UP) || (nPart==PART_BUTTON_DOWN)  ) )
     {
         aEditRect = NWGetScrollButtonRect( nPart, rControlRegion );
-    } else {
+    } 
+    else if ( (nType==CTRL_SPINBOX) && 
+              ((nPart==PART_BUTTON_UP) || (nPart==PART_BUTTON_DOWN) ||
+               (nPart==PART_SUB_EDIT)) )
+    {
+        aEditRect = NWGetSpinButtonRect( nPart, rControlRegion );
+    }
+    else {
         return sal_False;
     }
 
@@ -1073,10 +1237,15 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
 sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
 {
+    printf("Is native supported for Type: %d, Part %d\n", nType, nPart);
     if(
        (nType == CTRL_PUSHBUTTON && nPart == PART_ENTIRE_CONTROL) ||
        (nType == CTRL_CHECKBOX && nPart == PART_ENTIRE_CONTROL) ||
        (nType == CTRL_RADIOBUTTON && nPart == PART_ENTIRE_CONTROL) ||
+        ((nType==CTRL_SPINBOX) &&
+         ((nPart==PART_ENTIRE_CONTROL)
+          || (nPart==PART_ALL_BUTTONS)
+          || (nPart==HAS_BACKGROUND_TEXTURE))) ||
        ((nType==CTRL_SCROLLBAR) &&
         ( (nPart==PART_DRAW_BACKGROUND_HORZ)
           || (nPart==PART_DRAW_BACKGROUND_VERT)
@@ -1171,6 +1340,9 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     mpMenuBarItemStyle = gtk_style_context_new();
     gtk_style_context_set_path(mpMenuBarItemStyle, path);
     gtk_widget_path_free(path);
+
+    /* Spinbutton */
+    getStyleContext(&mpSpinStyle, gtk_spin_button_new(NULL, 0, 0));
 }
 
 static void print_cairo_region (cairo_region_t *region, const char *msg)
