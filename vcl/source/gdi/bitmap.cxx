@@ -177,6 +177,7 @@ const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
                 aGreyPalette2.SetEntryCount( 2 );
                 aGreyPalette2[ 0 ] = BitmapColor( 0, 0, 0 );
                 aGreyPalette2[ 1 ] = BitmapColor( 255, 255, 255 );
+                aGreyPalette2.SetGreyPalette( true );
             }
 
             return aGreyPalette2;
@@ -190,6 +191,7 @@ const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
                 aGreyPalette4[ 1 ] = BitmapColor( 85, 85, 85 );
                 aGreyPalette4[ 2 ] = BitmapColor( 170, 170, 170 );
                 aGreyPalette4[ 3 ] = BitmapColor( 255, 255, 255 );
+                aGreyPalette4.SetGreyPalette( true );
             }
 
             return aGreyPalette4;
@@ -204,6 +206,7 @@ const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
 
                 for( sal_uInt16 i = 0; i < 16; i++, cGrey = sal::static_int_cast<sal_uInt8>(cGrey + cGreyInc) )
                     aGreyPalette16[ i ] = BitmapColor( cGrey, cGrey, cGrey );
+                aGreyPalette16.SetGreyPalette( true );
             }
 
             return aGreyPalette16;
@@ -216,6 +219,7 @@ const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
 
                 for( sal_uInt16 i = 0; i < 256; i++ )
                     aGreyPalette256[ i ] = BitmapColor( (sal_uInt8) i, (sal_uInt8) i, (sal_uInt8) i );
+                aGreyPalette256.SetGreyPalette( true );
             }
 
             return aGreyPalette256;
@@ -224,7 +228,7 @@ const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
     else
     {
         OSL_FAIL( "Bitmap::GetGreyPalette: invalid entry count (2/4/16/256 allowed)" );
-        return aGreyPalette2;
+        return GetGreyPalette( 2 );
     }
 }
 
@@ -301,12 +305,9 @@ sal_Bool Bitmap::HasGreyPalette() const
         {
             const BitmapColor& rCol0( pRAcc->GetPaletteColor( 0 ) );
             const BitmapColor& rCol1( pRAcc->GetPaletteColor( 1 ) );
-            if( rCol0.GetRed() == rCol0.GetGreen() && rCol0.GetRed() == rCol0.GetBlue() &&
-                rCol1.GetRed() == rCol1.GetGreen() && rCol1.GetRed() == rCol1.GetBlue() )
-            {
-                bRet = sal_True;
-            }
-             ( (Bitmap*) this )->ReleaseAccess( pRAcc );
+            bRet = rCol0.GetRed() == rCol0.GetGreen() && rCol0.GetRed() == rCol0.GetBlue() &&
+                   rCol1.GetRed() == rCol1.GetGreen() && rCol1.GetRed() == rCol1.GetBlue();
+            ( (Bitmap*) this )->ReleaseAccess( pRAcc );
         }
         else
             bRet = sal_True;
@@ -317,10 +318,8 @@ sal_Bool Bitmap::HasGreyPalette() const
 
         if( pRAcc )
         {
-            if( pRAcc->HasPalette() && ( (BitmapPalette&) pRAcc->GetPalette() == GetGreyPalette( 1 << nBitCount ) ) )
-                bRet = sal_True;
-
-             ( (Bitmap*) this )->ReleaseAccess( pRAcc );
+            bRet = pRAcc->HasPalette() && pRAcc->GetPalette().IsGreyPalette();
+            ( (Bitmap*) this )->ReleaseAccess( pRAcc );
         }
     }
 

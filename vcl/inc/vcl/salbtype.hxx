@@ -180,8 +180,8 @@ class VCL_DLLPUBLIC BitmapPalette
 private:
 
     BitmapColor*                mpBitmapColor;
-    sal_uInt16                      mnCount;
-
+    sal_uInt16                  mnCount;
+    bool                        mbIsGrey;
 
 public:
 
@@ -196,18 +196,19 @@ public:
     inline                      ~BitmapPalette();
 
     inline BitmapPalette&       operator=( const BitmapPalette& rBitmapPalette );
-    inline sal_Bool                 operator==( const BitmapPalette& rBitmapPalette ) const;
-    inline sal_Bool                 operator!=( const BitmapPalette& rBitmapPalette ) const;
-    inline sal_Bool                 operator!();
+    inline sal_Bool             operator==( const BitmapPalette& rBitmapPalette ) const;
+    inline sal_Bool             operator!=( const BitmapPalette& rBitmapPalette ) const;
+    inline sal_Bool             operator!();
 
-    inline sal_uInt16               GetEntryCount() const;
+    inline sal_uInt16           GetEntryCount() const;
     inline void                 SetEntryCount( sal_uInt16 nCount );
 
     inline const BitmapColor&   operator[]( sal_uInt16 nIndex ) const;
     inline BitmapColor&         operator[]( sal_uInt16 nIndex );
 
-    inline sal_uInt16               GetBestIndex( const BitmapColor& rCol ) const;
-    bool                        IsGreyPalette() const;
+    inline sal_uInt16           GetBestIndex( const BitmapColor& rCol ) const;
+    bool                        IsGreyPalette() const { return mbIsGrey; }
+    void                        SetGreyPalette( bool bGrey ) { mbIsGrey = bGrey; }
 };
 
 // ---------------
