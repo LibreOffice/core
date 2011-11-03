@@ -486,10 +486,6 @@ class InPlugImpl;
 class TOOLKIT_DLLPUBLIC InPlug : public Context, public Window
 {
     DECL_GET_IMPL (InPlug);
-
-public:
-
-    void ParentSet (Window *window);
 };
 
 } // end namespace layout
