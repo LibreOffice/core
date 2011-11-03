@@ -368,10 +368,7 @@ my_components += component/avmedia/source/gstreamer/avmediagstreamer
 
 .INCLUDE: target.mk
 
-ALLTAR : \
-    $(MISC)/services.rdb \
-    $(MISC)/scriptproviderforbeanshell.rdb \
-    $(MISC)/scriptproviderforjavascript.rdb
+ALLTAR : $(MISC)/services.rdb
 
 $(MISC)/services.rdb .ERRREMOVE : $(SOLARENV)/bin/packcomponents.xslt \
         $(MISC)/services.input $(my_components:^"$(SOLARXMLDIR)/":+".component")
@@ -384,6 +381,8 @@ $(MISC)/services.input : makefile.mk
         > $@
 
 .IF "$(ENABLE_SCRIPTING_BEANSHELL)" == "YES"
+ALLTAR : $(MISC)/scriptproviderforbeanshell.rdb
+
 $(MISC)/scriptproviderforbeanshell.rdb .ERRREMOVE : \
         $(SOLARENV)/bin/packcomponents.xslt \
         $(MISC)/scriptproviderforbeanshell.input \
@@ -399,6 +398,8 @@ $(MISC)/scriptproviderforbeanshell.input : makefile.mk
 .END
 
 .IF "$(ENABLE_SCRIPTING_JAVASCRIPT)" == "YES"
+ALLTAR : $(MISC)/scriptproviderforjavascript.rdb
+
 $(MISC)/scriptproviderforjavascript.rdb .ERRREMOVE : \
         $(SOLARENV)/bin/packcomponents.xslt \
         $(MISC)/scriptproviderforjavascript.input \
