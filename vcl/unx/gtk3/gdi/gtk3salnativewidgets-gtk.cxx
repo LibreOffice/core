@@ -109,7 +109,7 @@ static void PrepareComboboxStyle( GtkStyleContext *context,
         gtk_widget_path_append_with_siblings(path, siblingsPath, 1);
         gtk_widget_path_append_with_siblings(path, siblingsPath, 0);
     }
-    else 
+    else
     {
         gtk_widget_path_append_with_siblings(path, siblingsPath, 0);
         gtk_widget_path_append_with_siblings(path, siblingsPath, 1);
