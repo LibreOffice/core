@@ -55,6 +55,9 @@ $(eval $(call gb_RdbTarget_add_components,sc_filters_test,\
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
+    xmlsecurity/util/xsec_xmlsec \
+    xmlsecurity/util/xsec_fw \
+    xmlsecurity/util/xmlsecurity \
 ))
 
 $(eval $(call gb_RdbTarget_add_old_components,sc_filters_test,\
