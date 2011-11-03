@@ -34,54 +34,54 @@ refresh_hooks()
 {
     repo=$1
     case "$repo" in
-	core)
-	    pushd $COREDIR > /dev/null
-	    for hook_name in $(ls -1 $COREDIR/git-hooks) ; do
-            hook=".git/hooks/$hook_name"
-            if [ ! -x "$hook" ] ; then
-                rm -f "$hook"
-                ln -sf "$COREDIR/git-hooks/$hook_name" "$hook"
+        core)
+            pushd $COREDIR > /dev/null
+            for hook_name in $(ls -1 $COREDIR/git-hooks) ; do
+                hook=".git/hooks/$hook_name"
+                if [ ! -x "$hook" ] ; then
+                    rm -f "$hook"
+                    ln -sf "$COREDIR/git-hooks/$hook_name" "$hook"
+                fi
+            done
+            popd > /dev/null
+            ;;
+        translations)
+            if [ -d $COREDIR/clone/translations ] ; then
+                pushd $COREDIR/clone/translations > /dev/null
+                for hook_name in $(ls -1 $COREDIR/clone/translations/git-hooks); do
+                    hook=".git/hooks/$hook_name"
+                    if [ ! -x "$hook" ] ; then
+                        rm -f "$hook"
+                        ln -sf "$COREDIR/clone/translations/git-hooks/$hook_name" "$hook"
+                    fi
+                done
+                # .gitattribute should be per-repo, avoid entangling repos
+                if [ -L .gitattributes ] ; then
+                    rm -f .gitattributes
+                fi
+                popd > /dev/null
             fi
-	    done
-	    popd > /dev/null
-	    ;;
-	translations)
-	    if [ -d $COREDIR/clone/translations ] ; then
-		pushd $COREDIR/clone/translations > /dev/null
-		for hook_name in $(ls -1 $COREDIR/clone/translations/git-hooks) ; do
-		    hook=".git/hooks/$hook_name"
-            if [ ! -x "$hook" ] ; then
-                rm -f "$hook"
-                ln -sf "$COREDIR/clone/translations/git-hooks/$hook_name" "$hook"
+            ;;
+        binfilter|help|dictionaries)
+            if [ -d $COREDIR/clone/$repo ] ; then
+                pushd $COREDIR/clone/$repo > /dev/null
+                # fixme: we should really keep these per-repo to
+                # keep the repos independant. since these two
+                # are realy not independant yet, we keep using core's hooks
+                for hook_name in $(ls -1 $COREDIR/git-hooks) ; do
+                    hook=".git/hooks/$hook_name"
+                    if [ ! -x "$hook" ] ; then
+                        rm -f "$hook"
+                        ln -sf "$COREDIR/git-hooks/$hook_name" "$hook"
+                    fi
+                done
+                # .gitattribute should be per-repo, avoid entangling repos
+                if [ -L .gitattributes ] ; then
+                    rm -f .gitattributes
+                fi
+                popd > /dev/null
             fi
-		done
-		# .gitattribute should be per-repo, avoid entangling repos
-		if [ -L .gitattributes ] ; then
-		    rm -f .gitattributes
-		fi
-		popd > /dev/null
-	    fi
-	    ;;
-	binfilter|help|dictionaries)
-	    if [ -d $COREDIR/clone/$repo ] ; then
-		pushd $COREDIR/clone/$repo > /dev/null
-		# fixme: we should really keep these per-repo to
-		# keep the repos independant. since these two
-		# are realy not independant yet, we keep using core's hooks
-		for hook_name in $(ls -1 $COREDIR/git-hooks) ; do
-		    hook=".git/hooks/$hook_name"
-            if [ ! -x "$hook" ] ; then
-                rm -f "$hook"
-                ln -sf "$COREDIR/git-hooks/$hook_name" "$hook"
-            fi
-		done
-		# .gitattribute should be per-repo, avoid entangling repos
-		if [ -L .gitattributes ] ; then
-		    rm -f .gitattributes
-		fi
-		popd > /dev/null
-	    fi
-	    ;;
+            ;;
     esac
 }
 
@@ -89,7 +89,7 @@ refresh_all_hooks()
 {
     repos="core $(cat "$COREDIR/bin/repo-list")"
     for repo in $repos ; do
-	refresh_hooks $repo
+        refresh_hooks $repo
     done
 }
 
@@ -97,7 +97,7 @@ postprocess()
 {
     rc=$1
     if $DO_HOOK_REFRESH ; then
-	refresh_all_hooks
+        refresh_all_hooks
     fi
 
     exit $rc;
@@ -128,22 +128,22 @@ while [ "${COMMAND:0:1}" = "-" ] ; do
             ;;
         -s) REPORT_REPOS=0
             ;;
-	-1) REPORT_COMPACT=1
+        -1) REPORT_COMPACT=1
             ;;
-	--set-push-user)
-	    shift
-	    PUSH_USER="$1"
-	    ;;
-	--last-working) LAST_WORKING=1
-	    ;;
-	--set-last-working) SET_LAST_WORKING=1
-	    ;;
-	--push-notes) PUSH_NOTES=1
-	    ;;
-	-z)
-	    DO_HOOK_REFRESH=true
-	    postprocess 0
-	    ;;
+        --set-push-user)
+            shift
+            PUSH_USER="$1"
+            ;;
+        --last-working) LAST_WORKING=1
+            ;;
+        --set-last-working) SET_LAST_WORKING=1
+            ;;
+        --push-notes) PUSH_NOTES=1
+            ;;
+        -z)
+            DO_HOOK_REFRESH=true
+            postprocess 0
+            ;;
     esac
     shift
     COMMAND="$1"
@@ -155,8 +155,8 @@ case "$COMMAND" in
         RELATIVIZE=0
         ;;
     clone|fetch|pull)
-	DO_HOOK_REFRESH=true
-	;;
+        DO_HOOK_REFRESH=true
+        ;;
     diff)
         PAGER='--no-pager'
         REPORT_REPOS=0
@@ -242,16 +242,16 @@ for REPO in $DIRS ; do
 
     if [ -d "$DIR" -a "z$PUSH_USER" != "z" ]; then
        echo "setting up push url for $DIR"
-	   (cd $DIR && git config remote.origin.pushurl "ssh://${PUSH_USER}@git.freedesktop.org/git/libreoffice/${REPO}")
+       (cd $DIR && git config remote.origin.pushurl "ssh://${PUSH_USER}@git.freedesktop.org/git/libreoffice/${REPO}")
     elif [ -d "$DIR" -a "z$LAST_WORKING" != "z" ]; then
        echo "fetching notes for $REPO ..."
        (cd $DIR && git fetch origin 'refs/notes/*:refs/notes/*')
        hash=`(cd $DIR && git log --pretty='%H %N' | grep 'win32 working build' | head -n1 | sed 's/ win32.*//')`
        if test "z$hash" != "z"; then
-	   echo "update to $hash"
-	   (cd $DIR && git checkout $hash)
+       echo "update to $hash"
+       (cd $DIR && git checkout $hash)
        else
-	   echo "Warning: missing known working note on repo $REPO"
+       echo "Warning: missing known working note on repo $REPO"
        fi
     elif [ -d "$DIR" -a "z$SET_LAST_WORKING" != "z" ]; then
        echo "fetching notes for $REPO ..."
@@ -323,7 +323,7 @@ for REPO in $DIRS ; do
                     ;;
                 clone)
                     EXTRA="$(git config remote.origin.url)"
-		    EXTRA=${EXTRA/core/${REPO}}
+            EXTRA=${EXTRA/core/${REPO}}
                     ;;
             esac
 
@@ -348,18 +348,18 @@ for REPO in $DIRS ; do
             case "$COMMAND" in
                 pull|clone)
                     # update links
-		    if [ "$DIR" != "$COREDIR" ]; then
-			for link in $(ls) ; do
-			    if [ ! -e "$COREDIR/$link" ] ; then
-			        if test -h "$COREDIR/$link"; then
-				    rm "$COREDIR/$link"
-				    echo -n "re-"
-			        fi
+                    if [ "$DIR" != "$COREDIR" ]; then
+                        for link in $(ls) ; do
+                            if [ ! -e "$COREDIR/$link" ] ; then
+                                if test -h "$COREDIR/$link"; then
+                                    rm "$COREDIR/$link"
+                                    echo -n "re-"
+                                fi
                                 echo "creating missing link $link"
                                 ln -s "$DIR/$link" "$COREDIR/$link"
                             fi
                         done
-		    fi
+                    fi
                     ;;
                 status)
                     # git status returns error in some versions, clear that
