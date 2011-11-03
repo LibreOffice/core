@@ -146,6 +146,15 @@ CONFIGURE_FLAGS=--disable-static
 .ENDIF
 # do not enable grddl parser (#i93768#)
 CONFIGURE_FLAGS+= --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
+
+.IF "$(SYSTEM_LIBXML)" != "YES"
+CONFIGURE_FLAGS+=--with-xml2-config=$(SOLARVER)/$(INPATH)/bin/xml2-config
+.ENDIF
+
+.IF "$(SYSTEM_LIBXSLT)" != "YES"
+CONFIGURE_FLAGS+=--with-xslt-config=$(SOLARVER)/$(INPATH)/bin/xslt-config
+.ENDIF
+
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
