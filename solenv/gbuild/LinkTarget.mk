@@ -27,9 +27,11 @@
 #*************************************************************************
 
 #the following user-defined variables are supported:
+# YACCFLAGS
 # CPPFLAGS
 # CFLAGS
 # CXXFLAGS
+# OBJCFLAGS
 # OBJCXXFLAGS
 # LDFLAGS
 

@@ -433,8 +433,13 @@ INTERACTIVE VARIABLES:
                               extremely verbose). Levels > 2 are not used very much.
 
        ENABLE_PCH      If not empty, use precompiled headers (Windows only).
-       CFLAGS          Add as compiler flags for plain c compilation.
-       CXXFLAGS        Add as compiler flags for c++ compilation.
+       YACCFLAGS       Add as flags for YACC parser generator invocation.
+       CPPFLAGS        Add as preprocessor flags for C/C++/ObjC/ObjC++ compilation.
+       CFLAGS          Add as compiler flags for plain C compilation.
+       CXXFLAGS        Add as compiler flags for C++ compilation.
+       OBJCFLAGS       Add as compiler flags for Objective C compilation.
+       OBJCXXFLAGS     Add as compiler flags for Objective C++ compilation.
+       LDFLAGS         Add as linker flags.
        gb_FULLDEPS     Generate and use dependencies (on by default, handle with care).
        gb_COLOR        Use ASCII color output.
        gb_TITLES       Show progress in terminal title.
