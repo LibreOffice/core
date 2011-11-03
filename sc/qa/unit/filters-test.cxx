@@ -38,6 +38,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 
 #include <editeng/brshitem.hxx>
 #include <editeng/justifyitem.hxx>
@@ -174,6 +175,9 @@ public:
     void testBugFixesXLS();
     void testBugFixesXLSX();
 
+    //misc tests unrelated to the import filters
+    void testPassword();
+
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST(testRangeName);
@@ -185,6 +189,7 @@ public:
     CPPUNIT_TEST(testBugFixesODS);
     CPPUNIT_TEST(testBugFixesXLS);
     CPPUNIT_TEST(testBugFixesXLSX);
+    //CPPUNIT_TEST(testPassword);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -607,6 +612,41 @@ void ScFiltersTest::testBugFixesXLSX()
     ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[2].nFormatType);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.xlsx", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testPassword()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("password."));
+    rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
+    rtl::OUString aFilterName(aFileFormats[0].pFilterName, strlen(aFileFormats[0].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    rtl::OUString aFileName;
+    createFileURL(aFileNameBase, aFileExtension, aFileName);
+    rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
+    std::cout << aFileFormats[0].pName << " Test" << std::endl;
+
+    sal_uInt32 nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
+    SfxFilter* aFilter = new SfxFilter(
+        aFilterName,
+        rtl::OUString(), aFileFormats[0].nFormatType, nFormat, aFilterType, 0, rtl::OUString(),
+        rtl::OUString(), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc*")) );
+    aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+
+    ScDocShellRef xDocSh = new ScDocShell;
+    SfxMedium* pMedium = new SfxMedium(aFileName, STREAM_STD_READWRITE, true);
+    SfxItemSet* pSet = pMedium->GetItemSet();
+    pSet->Put(SfxStringItem(SID_PASSWORD, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test"))));
+    pMedium->SetFilter(aFilter);
+    if (!xDocSh->DoLoad(pMedium))
+    {
+        xDocSh->DoClose();
+        // load failed.
+        xDocSh.Clear();
+    }
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load password.ods", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
     xDocSh->DoClose();
