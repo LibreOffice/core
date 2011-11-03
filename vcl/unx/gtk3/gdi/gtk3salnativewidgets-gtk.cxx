@@ -257,6 +257,7 @@ Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, Rectangle aA
 void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                                     cairo_t *cr,
                                     const Rectangle& rControlRectangle,
+                                    ControlType nType,
                                     ControlPart nPart,
                                     const ImplControlValue& aValue )
 {
@@ -542,6 +543,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
 
 void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
                                          cairo_t *cr,
+                                         ControlType nType,
                                          ControlPart nPart,
                                          Rectangle aAreaRect,
                                          ControlState nState )
@@ -588,6 +590,7 @@ void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
                                      cairo_t *cr,
                                      const Rectangle& rControlRectangle,
                                      ControlType nType,
+                                     ControlPart nPart,
                                      const ImplControlValue& aValue )
 {
     Rectangle            areaRect;
@@ -637,8 +640,8 @@ void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
                          areaRect.GetWidth(), areaRect.GetHeight() );
    }
 
-    PaintOneSpinButton(context, cr, upBtnPart, areaRect, upBtnState );
-    PaintOneSpinButton(context, cr, downBtnPart, areaRect, downBtnState );
+    PaintOneSpinButton(context, cr, nType, upBtnPart, areaRect, upBtnState );
+    PaintOneSpinButton(context, cr, nType, downBtnPart, areaRect, downBtnState );
 }
 
 #define ARROW_SIZE 11 * 0.85
@@ -913,10 +916,10 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
                          MIN(rControlRegion.GetWidth(), 1 + rControlRegion.GetHeight()));
         break;
     case RENDER_SCROLLBAR:
-        PaintScrollbar(context, cr, rControlRegion, nPart, aValue);
+        PaintScrollbar(context, cr, rControlRegion, nType, nPart, aValue);
         break;
     case RENDER_SPINBUTTON:
-        PaintSpinButton(context, cr, rControlRegion, nType, aValue);
+        PaintSpinButton(context, cr, rControlRegion, nType, nPart, aValue);
         break;
     case RENDER_COMBOBOX:
         PaintCombobox(context, cr, rControlRegion, nType, nPart, aValue);

@@ -88,10 +88,12 @@ private:
     void PaintScrollbar(GtkStyleContext *context,
                         cairo_t *cr,
                         const Rectangle& rControlRectangle,
+                        ControlType nType,
                         ControlPart nPart,
                         const ImplControlValue& aValue );
     void PaintOneSpinButton( GtkStyleContext *context,
                              cairo_t *cr,
+                             ControlType nType,
                              ControlPart nPart,
                              Rectangle aAreaRect,
                              ControlState nState );
@@ -99,6 +101,7 @@ private:
                          cairo_t *cr,
                          const Rectangle& rControlRectangle,
                          ControlType nType,
+                         ControlPart nPart,
                          const ImplControlValue& aValue );
     void PaintCombobox( GtkStyleContext *context,
                         cairo_t *cr,
