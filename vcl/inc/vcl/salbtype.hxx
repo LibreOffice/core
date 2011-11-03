@@ -587,6 +587,7 @@ inline BitmapPalette& BitmapPalette::operator=( const BitmapPalette& rBitmapPale
 {
     delete[] (sal_uInt8*) mpBitmapColor;
     mnCount = rBitmapPalette.mnCount;
+    mbIsGrey = rBitmapPalette.mbIsGrey;
 
     if( mnCount )
     {
