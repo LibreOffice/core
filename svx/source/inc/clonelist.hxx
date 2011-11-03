@@ -46,7 +46,6 @@ class CloneList
 public:
 
     void AddPair(const SdrObject* pOriginal, SdrObject* pClone);
-    sal_uInt32 Count() const;
 
     const SdrObject* GetOriginal(sal_uInt32 nIndex) const;
     SdrObject* GetClone(sal_uInt32 nIndex) const;

@@ -116,21 +116,6 @@ sal_Bool CharClass::isAsciiAlpha( const String& rStr )
 }
 
 
-// static
-sal_Bool CharClass::isAsciiAlphaNumeric( const String& rStr )
-{
-    if ( !rStr.Len() )
-        return sal_False;
-    register const sal_Unicode* p = rStr.GetBuffer();
-    register const sal_Unicode* const pStop = p + rStr.Len();
-    do
-    {
-        if ( !isAsciiAlphaNumeric( *p ) )
-            return sal_False;
-    } while ( ++p < pStop );
-    return sal_True;
-}
-
 
 sal_Bool CharClass::isAlpha( const String& rStr, xub_StrLen nPos ) const
 {
@@ -153,22 +138,6 @@ sal_Bool CharClass::isAlpha( const String& rStr, xub_StrLen nPos ) const
     }
 }
 
-
-sal_Bool CharClass::isAlpha( const String& rStr ) const
-{
-    try
-    {
-        if ( xCC.is() )
-            return isAlphaType( xCC->getStringType( rStr, 0, rStr.Len(), getLocale() ) );
-        else
-            return sal_False;
-    }
-    catch ( const Exception& )
-    {
-        DBG_ERRORFILE( "isAlpha: Exception caught!" );
-        return sal_False;
-    }
-}
 
 
 sal_Bool CharClass::isLetter( const String& rStr, xub_StrLen nPos ) const
@@ -271,23 +240,6 @@ sal_Bool CharClass::isAlphaNumeric( const String& rStr, xub_StrLen nPos ) const
 }
 
 
-sal_Bool CharClass::isAlphaNumeric( const String& rStr ) const
-{
-    try
-    {
-        if ( xCC.is() )
-            return isAlphaNumericType( xCC->getStringType( rStr, 0, rStr.Len(), getLocale() ) );
-        else
-            return sal_False;
-    }
-    catch ( const Exception& )
-    {
-        DBG_ERRORFILE( "isAlphaNumeric: Exception caught!" );
-        return sal_False;
-    }
-}
-
-
 sal_Bool CharClass::isLetterNumeric( const String& rStr, xub_StrLen nPos ) const
 {
     sal_Unicode c = rStr.GetChar( nPos );
@@ -334,11 +286,6 @@ void CharClass::toUpper( rtl::OUString& rStr ) const
 String CharClass::toUpper( const String& rStr, xub_StrLen nPos, xub_StrLen nCount ) const
 {
     return toUpper_rtl(rStr, nPos, nCount);
-}
-
-void CharClass::toLower( rtl::OUString& rStr ) const
-{
-    rStr = toLower_rtl(rStr, 0, rStr.getLength());
 }
 
 String CharClass::toLower( const String& rStr, xub_StrLen nPos, xub_StrLen nCount ) const

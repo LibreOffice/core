@@ -68,11 +68,6 @@ void CloneList::AddPair(const SdrObject* pOriginal, SdrObject* pClone)
     }
 }
 
-sal_uInt32 CloneList::Count() const
-{
-    return maOriginalList.size();
-}
-
 const SdrObject* CloneList::GetOriginal(sal_uInt32 nIndex) const
 {
     return maOriginalList[nIndex];
