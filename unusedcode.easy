@@ -741,11 +741,8 @@ SvXMLEmbeddedElementArr::Remove(unsigned short, unsigned short)
 SvXMLExport::GetErrors()
 SvXMLExport::SvXMLExport(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XDocumentHandler> const&, com::sun::star::uno::Reference<com::sun::star::frame::XModel> const&, com::sun::star::uno::Reference<com::sun::star::document::XGraphicObjectResolver> const&, short)
 SvXMLExportPropertyMapper::exportXML(SvXMLAttributeList&, XMLPropertyState const&, SvXMLUnitConverter const&, SvXMLNamespaceMap const&, unsigned short) const
-SvXMLImport::GetErrors()
 SvXMLImport::SetError(int, rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
 SvXMLImport::SetError(int, rtl::OUString const&, rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
-SvXMLImport::SvXMLImport(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, com::sun::star::uno::Reference<com::sun::star::frame::XModel> const&)
-SvXMLImport::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
 SvXMLImportContexts_Impl::DeleteAndDestroy(unsigned short, unsigned short)
 SvXMLImportPropertyMapper::importXML(std::__debug::vector<XMLPropertyState, std::allocator<XMLPropertyState> >&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>, SvXMLUnitConverter const&, SvXMLNamespaceMap const&, unsigned int) const
 SvXMLNamespaceMap::AddAtIndex(unsigned short, char const*, char const*, unsigned short)
@@ -761,7 +758,6 @@ SvXMLTokenMap_Impl::Remove(unsigned short, unsigned short)
 SvXMLUnitConverter::GetCoreMeasureUnit() const
 SvXMLUnitConverter::convertEnum(rtl::OUStringBuffer&, unsigned short, SvXMLEnumStringMapEntry const*, char*)
 SvXMLUnitConverter::convertMeasureToXML(rtl::OUStringBuffer&, int, short) const
-SvXMLUnitConverter::setNullDate(com::sun::star::util::Date const&)
 SvpSalInstance::CancelEvent(SalFrame const*, void*, unsigned short)
 SvtAcceleratorConfiguration::GetCommand(com::sun::star::awt::KeyEvent const&)
 SvtAcceleratorConfiguration::GetItems()

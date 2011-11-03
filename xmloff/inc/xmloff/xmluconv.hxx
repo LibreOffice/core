@@ -189,9 +189,6 @@ public:
     sal_Bool setNullDate (
         const com::sun::star::uno::Reference <com::sun::star::frame::XModel>& xModel);
 
-    /** Set the Null Date of the UnitConverter */
-    void setNullDate ( const com::sun::star::util::Date& aTempNullDate );
-
     /** convert double to ISO Date Time String */
     void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
                                 const double& fDateTime,

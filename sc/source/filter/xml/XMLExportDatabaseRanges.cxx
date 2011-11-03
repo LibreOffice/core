@@ -190,24 +190,6 @@ rtl::OUString ScXMLExportDatabaseRanges::getOperatorXML(const long aFilterOperat
     return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
 }
 
-void ScXMLExportDatabaseRanges::WriteCondition(const sheet::TableFilterField2& aFilterField, bool bIsCaseSensitive, bool bUseRegularExpressions)
-{
-    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, rtl::OUString::valueOf(aFilterField.Field));
-    if (bIsCaseSensitive)
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
-    if (aFilterField.IsNumeric)
-    {
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
-        rtl::OUStringBuffer sBuffer;
-        ::sax::Converter::convertDouble(sBuffer, aFilterField.NumericValue);
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, sBuffer.makeStringAndClear());
-    }
-    else
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, aFilterField.StringValue);
-    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, getOperatorXML(aFilterField.Operator, bUseRegularExpressions));
-    SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_FILTER_CONDITION, true, true);
-}
-
 namespace {
 
 class WriteDatabaseRange : public ::std::unary_function<ScDBData, void>

@@ -47,7 +47,6 @@ class ScXMLExportDatabaseRanges
     ScDocument*     pDoc;
 
     rtl::OUString getOperatorXML(const long aFilterOperator, const bool bUseRegularExpressions) const;
-    void WriteCondition(const com::sun::star::sheet::TableFilterField2& aFilterField, bool bIsCaseSensitive, bool bUseRegularExpressions);
 public:
     ScXMLExportDatabaseRanges(ScXMLExport& rExport);
     ~ScXMLExportDatabaseRanges();

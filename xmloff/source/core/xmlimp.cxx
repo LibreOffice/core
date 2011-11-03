@@ -374,63 +374,6 @@ SvXMLImport::SvXMLImport(
     _InitCtor();
 }
 
-// #110680#
-SvXMLImport::SvXMLImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-    const Reference< XModel > & rModel ) throw ()
-:   mxModel( rModel ),
-    mxNumberFormatsSupplier (rModel, uno::UNO_QUERY),
-    mpImpl( new SvXMLImport_Impl() ),
-    mpNamespaceMap( new SvXMLNamespaceMap ),
-    mpUnitConv( new SvXMLUnitConverter(xServiceFactory,
-                util::MeasureUnit::MM_100TH, util::MeasureUnit::MM_100TH) ),
-    mpContexts( new SvXMLImportContexts_Impl ),
-    mpNumImport( NULL ),
-    mpProgressBarHelper( NULL ),
-    mpEventImportHelper( NULL ),
-    mpXMLErrors( NULL ),
-    mpStyleMap(0),
-    mnImportFlags( IMPORT_ALL ),
-    mnErrorFlags(0),
-    // #110680#
-    mxServiceFactory(xServiceFactory),
-    mbIsFormsSupported( sal_True ),
-    mbIsTableShapeSupported( false ),
-    mbIsGraphicLoadOnDemandSupported( true )
-{
-    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
-    _InitCtor();
-}
-
-// #110680#
-SvXMLImport::SvXMLImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-    const Reference< XModel > & rModel,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > & rGraphicObjects ) throw ()
-:   mxModel( rModel ),
-    mxNumberFormatsSupplier (rModel, uno::UNO_QUERY),
-    mxGraphicResolver( rGraphicObjects ),
-    mpImpl( new SvXMLImport_Impl() ),
-    mpNamespaceMap( new SvXMLNamespaceMap ),
-    mpUnitConv( new SvXMLUnitConverter(xServiceFactory,
-                util::MeasureUnit::MM_100TH, util::MeasureUnit::MM_100TH) ),
-    mpContexts( new SvXMLImportContexts_Impl ),
-    mpNumImport( NULL ),
-    mpProgressBarHelper( NULL ),
-    mpEventImportHelper( NULL ),
-    mpXMLErrors( NULL ),
-    mpStyleMap(0),
-    mnImportFlags( IMPORT_ALL ),
-    mnErrorFlags(0),
-    // #110680#
-    mxServiceFactory(xServiceFactory),
-    mbIsFormsSupported( sal_True ),
-    mbIsGraphicLoadOnDemandSupported( true )
-{
-    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
-    _InitCtor();
-}
-
 SvXMLImport::~SvXMLImport() throw ()
 {
     delete mpXMLErrors;
@@ -476,20 +419,6 @@ namespace
 const uno::Sequence< sal_Int8 > & SvXMLImport::getUnoTunnelId() throw()
 {
     return theSvXMLImportUnoTunnelId::get().getSeq();
-}
-
-SvXMLImport* SvXMLImport::getImplementation( uno::Reference< uno::XInterface > xInt ) throw()
-{
-    uno::Reference< lang::XUnoTunnel > xUT( xInt, uno::UNO_QUERY );
-    if( xUT.is() )
-    {
-        return
-            reinterpret_cast<SvXMLImport*>(
-                sal::static_int_cast<sal_IntPtr>(
-                    xUT->getSomething( SvXMLImport::getUnoTunnelId())));
-    }
-    else
-        return NULL;
 }
 
 // XUnoTunnel
@@ -1818,11 +1747,6 @@ void SvXMLImport::SetError(
     pSeq[2] = rMsg3;
     pSeq[3] = rMsg4;
     SetError( nId, aSeq );
-}
-
-XMLErrors* SvXMLImport::GetErrors()
-{
-    return mpXMLErrors;
 }
 
 void SvXMLImport::DisposingModel()

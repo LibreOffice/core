@@ -197,26 +197,9 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         sal_uInt16 nImportFlags = IMPORT_ALL ) throw();
 
-    // #110680#
-    //SvXMLImport( const ::com::sun::star::uno::Reference<
-    //      ::com::sun::star::frame::XModel > & ) throw();
-    SvXMLImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & ) throw();
-
-    // #110680#
-    //SvXMLImport( const ::com::sun::star::uno::Reference<
-    //      ::com::sun::star::frame::XModel > &,
-    //      const ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > & ) throw();
-    SvXMLImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > & ) throw();
-
     virtual ~SvXMLImport() throw();
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
-    static SvXMLImport* getImplementation( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ) throw();
 
     // ::com::sun::star::xml::sax::XDocumentHandler
     virtual void SAL_CALL startDocument(void)
@@ -395,9 +378,6 @@ public:
                                   const rtl::OUString& rMsg2,
                                   const rtl::OUString& rMsg3,
                                   const rtl::OUString& rMsg4 );
-
-    /** return list of errors */
-    XMLErrors* GetErrors();
 
     /** return current error flags */
     sal_uInt16 GetErrorFlags()  { return mnErrorFlags; }

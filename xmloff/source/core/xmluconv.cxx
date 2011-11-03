@@ -362,9 +362,6 @@ sal_Bool SvXMLUnitConverter::setNullDate(const com::sun::star::uno::Reference <c
     return sal_False;
 }
 
-void SvXMLUnitConverter::setNullDate(const util::Date& aTempNullDate)
-    { m_pImpl->m_aNullDate = aTempNullDate; }
-
 /** convert double to ISO Date Time String */
 void SvXMLUnitConverter::convertDateTime(::rtl::OUStringBuffer& rBuffer,
                      const double& fDateTime, bool const bAddTimeIf0AM)
