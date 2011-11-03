@@ -704,7 +704,8 @@ sub is_unstripped {
 }
 
 sub initialize_strip {
-    if ((!defined $ENV{DISABLE_STRIP}) || ($ENV{DISABLE_STRIP} eq "")) {
+    if (((!defined $ENV{CROSS_COMPILING}) || ($ENV{CROSS_COMPILING} ne 'YES')) &&
+        ((!defined $ENV{DISABLE_STRIP}) || ($ENV{DISABLE_STRIP} eq ""))) {
         $strip .= 'guw ' if ($^O eq 'cygwin');
         $strip .= 'strip';
         $strip .= " -x" if ($ENV{OS} eq 'MACOSX');
