@@ -468,33 +468,6 @@ void ScFiltersTest::testFormats()
         CPPUNIT_ASSERT_MESSAGE("Failed to load formats.*", xDocSh.Is());
         ScDocument* pDoc = xDocSh->GetDocument();
 
-        SheetPrinter StringPrinter( 8, 3);
-        SheetPrinter ValuePrinter( 8, 3);
-        for (SCROW nRow = 0; nRow < 8; ++nRow)
-        {
-            for (SCCOL nCol = 0; nCol < 3; ++nCol)
-            {
-                String aString;
-                double aVal;
-                pDoc->GetValue(nCol, nRow, 0, aVal);
-                pDoc->GetString(nCol, nRow, 0, aString);
-                ValuePrinter.set(nRow, nCol, rtl::OUString::valueOf(aVal));
-                StringPrinter.set(nRow, nCol, aString);
-            }
-        }
-        ValuePrinter.print("Data sheet content: Value");
-        ValuePrinter.clear();
-        StringPrinter.print("Data sheet content: String");
-        StringPrinter.clear();
-
-
-        //output this just for debugging, should make it easier to see which local the numberformatter really used
-        //it helps to understand why some windows build fails in this test
-        LanguageType aLang, aCjkLang, aCtlLang;
-        pDoc->GetLanguage(aLang, aCjkLang, aCtlLang);
-        std::cout << "Language Settings in ScDocument: normal: " << aLang << " Cjk: " << aCjkLang << " Ctl: " << aCtlLang << std::endl;
-        std::cout << "Language for NumberFormatter: " << pDoc->GetFormatTable()->GetLanguage() << std::endl;
-
         //test Sheet1 with csv file
         rtl::OUString aCSVFileName;
         createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("numberFormat.")), aCSVFileName);
@@ -553,7 +526,6 @@ void ScFiltersTest::testFormats()
         if ( i == ODS )
         {
             rtl::OUString aCondString = getConditionalFormatString(pDoc, 3,0,2);
-            std::cerr << rtl::OUStringToOString(aCondString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
             createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("conditionalFormatting.")), aCSVFileName);
             testCondFile(aCSVFileName, pDoc, 2);
         }
@@ -576,7 +548,6 @@ void ScFiltersTest::testMatrix()
 
         CPPUNIT_ASSERT_MESSAGE("Failed to load matrix.*", xDocSh.Is());
         ScDocument* pDoc = xDocSh->GetDocument();
-
 
         rtl::OUString aCSVFileName;
         createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("matrix.")), aCSVFileName);
