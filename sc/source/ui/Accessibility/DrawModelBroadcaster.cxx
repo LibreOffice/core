@@ -80,7 +80,7 @@ void ScDrawModelBroadcaster::Notify( SfxBroadcaster&,
         {
             xListener->notifyEvent( aEvent );
         }
-        catch( uno::RuntimeException& r )
+        catch( const uno::RuntimeException& r )
         {
             (void) r;
 #if OSL_DEBUG_LEVEL > 1

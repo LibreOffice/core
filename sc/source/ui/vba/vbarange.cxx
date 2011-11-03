@@ -1654,7 +1654,7 @@ ScVbaRange::setValue( const uno::Any& aValue, ValueSetter& valueSetter, bool bFi
                 visitArray( setter );
             }
         }
-        catch ( uno::Exception& e )
+        catch ( const uno::Exception& e )
         {
             OSL_TRACE("Bahhh, caught exception %s",
                 rtl::OUStringToOString( e.Message,
@@ -3129,7 +3129,7 @@ ScVbaRange::getHidden() throw (uno::RuntimeException)
         if ( !( xProps->getPropertyValue( ISVISIBLE ) >>= bIsVisible ) )
             throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Failed to get IsVisible property")), uno::Reference< uno::XInterface >() );
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         throw uno::RuntimeException( e.Message, uno::Reference< uno::XInterface >() );
     }
@@ -3156,7 +3156,7 @@ ScVbaRange::setHidden( const uno::Any& _hidden ) throw (uno::RuntimeException)
         uno::Reference< beans::XPropertySet > xProps = getRowOrColumnProps( mxRange, mbIsRows );
         xProps->setPropertyValue( ISVISIBLE, uno::Any( !bHidden ) );
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         throw uno::RuntimeException( e.Message, uno::Reference< uno::XInterface >() );
     }

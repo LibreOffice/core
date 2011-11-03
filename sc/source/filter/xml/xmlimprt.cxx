@@ -2323,7 +2323,7 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUStri
                     }
                 }
             }
-            catch ( util::MalformedNumberFormatException& rException )
+            catch ( const util::MalformedNumberFormatException& rException )
             {
                 rtl::OUString sErrorMessage(RTL_CONSTASCII_USTRINGPARAM("Fehler im Formatstring "));
                 sErrorMessage += sFormatString;

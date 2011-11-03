@@ -366,7 +366,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                             aFilterName = pFilter->GetName();
                         aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsOwnTemplateFormat() : false, &aFilterName );
                     }
-                    catch( lang::WrappedTargetException& aWrap )
+                    catch( const lang::WrappedTargetException& aWrap )
                     {
                         packages::zip::ZipIOException aZipException;
 

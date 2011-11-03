@@ -101,7 +101,7 @@ ScVbaAxis::getAxisTitle(  ) throw (script::BasicErrorException, uno::RuntimeExce
             }
         }
     }
-    catch (uno::Exception& e)
+    catch (const uno::Exception& e)
     {
         DebugHelper::exception(e);
     }
@@ -198,7 +198,7 @@ ScVbaAxis::setCrossesAt( double _fCrossesAt ) throw (script::BasicErrorException
         setMinimumScaleIsAuto( false );
         mxPropertySet->setPropertyValue(ORIGIN, uno::makeAny(_fCrossesAt));
     }
-    catch (uno::Exception& e)
+    catch (const uno::Exception& e)
     {
         DebugHelper::exception(e);
     }
@@ -251,7 +251,7 @@ ScVbaAxis::setHasTitle( ::sal_Bool _bHasTitle ) throw (script::BasicErrorExcepti
         }
 
     }
-    catch (uno::Exception& e)
+    catch (const uno::Exception& e)
     {
         DebugHelper::exception(e);
     }
@@ -277,7 +277,7 @@ ScVbaAxis::getHasTitle(  ) throw (script::BasicErrorException, uno::RuntimeExcep
                 pChart->mxDiagramPropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HasYAxisTitle")) ) >>= bHasTitle;
         }
     }
-    catch (uno::Exception& e)
+    catch (const uno::Exception& e)
     {
         DebugHelper::exception(e);
     }
@@ -515,7 +515,7 @@ ScVbaAxis::getMinimumScale(  ) throw (script::BasicErrorException, uno::RuntimeE
         if (isValueAxis())
             mxPropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Min") )) >>= fMin;
     }
-    catch (uno::Exception& e)
+    catch (const uno::Exception& e)
     {
         DebugHelper::exception(e);
     }

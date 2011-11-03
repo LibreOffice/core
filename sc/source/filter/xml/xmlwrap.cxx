@@ -245,7 +245,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
             }
         }
     }
-    catch( xml::sax::SAXException& r )
+    catch( const xml::sax::SAXException& r )
     {
         packages::zip::ZipIOException aBrokenPackage;
         if ( r.WrappedException >>= aBrokenPackage )
@@ -265,7 +265,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
             nReturn = SCERR_IMPORT_FORMAT;
         }
     }
-    catch( packages::zip::ZipIOException& r )
+    catch( const packages::zip::ZipIOException& r )
     {
 #if OSL_DEBUG_LEVEL > 0
         ByteString aError( "Zip exception catched while importing:\n" );
@@ -276,7 +276,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
 
         nReturn = ERRCODE_IO_BROKENPACKAGE;
     }
-    catch( io::IOException& r )
+    catch( const io::IOException& r )
     {
 #if OSL_DEBUG_LEVEL > 0
         ByteString aError( "IO exception catched while importing:\n" );
@@ -287,7 +287,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
 
         nReturn = SCERR_IMPORT_OPEN;
     }
-    catch( uno::Exception& r )
+    catch( const uno::Exception& r )
     {
 #if OSL_DEBUG_LEVEL > 0
         ByteString aError( "uno exception catched while importing:\n" );

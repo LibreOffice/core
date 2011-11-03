@@ -2524,7 +2524,7 @@ const ScDPCache* ScDPCollection::DBCaches::getCache(sal_Int32 nSdbType, const OU
                 xRowSet->execute();
         }
     }
-    catch ( sdbc::SQLException& rError )
+    catch ( const sdbc::SQLException& rError )
     {
         //! store error message
         InfoBox aInfoBox( 0, String(rError.Message) );

@@ -1556,7 +1556,7 @@ void ScUnoAddInCall::ExecuteCallWithArgs(uno::Sequence<uno::Any>& rCallArgs)
             nErrCode = errIllegalArgument;
         }
 
-        catch(reflection::InvocationTargetException& rWrapped)
+        catch(const reflection::InvocationTargetException& rWrapped)
         {
             if ( rWrapped.TargetException.getValueType().equals(
                     getCppuType( (lang::IllegalArgumentException*)0 ) ) )

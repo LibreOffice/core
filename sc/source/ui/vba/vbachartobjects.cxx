@@ -134,7 +134,7 @@ ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight 
         xChartObject->getChart()->setChartType(excel::XlChartType::xlColumnClustered);
         return uno::makeAny( xChartObject );
     }
-    catch ( uno::Exception& ex)
+    catch (const uno::Exception& ex)
     {
         OSL_TRACE("AddItem caught exception ->%s", rtl::OUStringToOString( ex.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
     }

@@ -1060,7 +1060,7 @@ sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet
         comphelper::disposeComponent( xRowSet );
         comphelper::disposeComponent( xConnection );
     }
-    catch ( sdbc::SQLException& aException )
+    catch ( const sdbc::SQLException& aException )
     {
         sal_Int32 nError = aException.ErrorCode;
 #if OSL_DEBUG_LEVEL > 1

@@ -450,7 +450,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                 ::comphelper::disposeComponent( xRowSet );
         }
     }
-    catch ( sdbc::SQLException& rError )
+    catch ( const sdbc::SQLException& rError )
     {
         aErrorMessage = rError.Message;
     }
