@@ -132,64 +132,6 @@ ScMyEmptyDatabaseRangesContainer ScXMLExportDatabaseRanges::GetEmptyDatabaseRang
     return aSkipRanges;
 }
 
-rtl::OUString ScXMLExportDatabaseRanges::getOperatorXML(const long aFilterOperator, const bool bUseRegularExpressions) const
-{
-    switch (aFilterOperator)
-    {
-        case sheet::FilterOperator2::EQUAL :
-        {
-            if (bUseRegularExpressions)
-                return GetXMLToken(XML_MATCH);
-            else
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
-        }
-        case sheet::FilterOperator2::NOT_EQUAL :
-        {
-            if (bUseRegularExpressions)
-                return GetXMLToken(XML_NOMATCH);
-            else
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("!="));
-        }
-        case sheet::FilterOperator2::BOTTOM_PERCENT :
-            return GetXMLToken(XML_BOTTOM_PERCENT);
-        case sheet::FilterOperator2::BOTTOM_VALUES :
-            return GetXMLToken(XML_BOTTOM_VALUES);
-        case sheet::FilterOperator2::EMPTY :
-            return GetXMLToken(XML_EMPTY);
-        case sheet::FilterOperator2::GREATER :
-            return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
-        case sheet::FilterOperator2::GREATER_EQUAL :
-            return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">="));
-        case sheet::FilterOperator2::LESS :
-            return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<"));
-        case sheet::FilterOperator2::LESS_EQUAL :
-            return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<="));
-        case sheet::FilterOperator2::NOT_EMPTY :
-            return GetXMLToken(XML_NOEMPTY);
-        case sheet::FilterOperator2::TOP_PERCENT :
-            return GetXMLToken(XML_TOP_PERCENT);
-        case sheet::FilterOperator2::TOP_VALUES :
-            return GetXMLToken(XML_TOP_VALUES);
-        case sheet::FilterOperator2::CONTAINS :
-            return GetXMLToken(XML_CONTAINS);
-        case sheet::FilterOperator2::DOES_NOT_CONTAIN :
-            return GetXMLToken(XML_DOES_NOT_CONTAIN);
-        case sheet::FilterOperator2::BEGINS_WITH :
-            return GetXMLToken(XML_BEGINS_WITH);
-        case sheet::FilterOperator2::DOES_NOT_BEGIN_WITH :
-            return GetXMLToken(XML_DOES_NOT_BEGIN_WITH);
-        case sheet::FilterOperator2::ENDS_WITH :
-            return GetXMLToken(XML_ENDS_WITH);
-        case sheet::FilterOperator2::DOES_NOT_END_WITH :
-            return GetXMLToken(XML_DOES_NOT_END_WITH);
-        default:
-        {
-            // added to avoid warnings
-        }
-    }
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
-}
-
 namespace {
 
 class WriteDatabaseRange : public ::std::unary_function<ScDBData, void>

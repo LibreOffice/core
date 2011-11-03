@@ -46,7 +46,6 @@ class ScXMLExportDatabaseRanges
     ScXMLExport&    rExport;
     ScDocument*     pDoc;
 
-    rtl::OUString getOperatorXML(const long aFilterOperator, const bool bUseRegularExpressions) const;
 public:
     ScXMLExportDatabaseRanges(ScXMLExport& rExport);
     ~ScXMLExportDatabaseRanges();
