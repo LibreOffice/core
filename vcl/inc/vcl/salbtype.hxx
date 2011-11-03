@@ -535,16 +535,18 @@ inline sal_uLong BitmapColor::GetColorError( const BitmapColor& rBitmapColor ) c
 
 // ------------------------------------------------------------------
 
-inline BitmapPalette::BitmapPalette() :
-            mpBitmapColor   ( NULL ),
-            mnCount         ( 0 )
+inline BitmapPalette::BitmapPalette()
+    : mpBitmapColor(NULL)
+    , mnCount(0)
+    , mbIsGrey(false)
 {
 }
 
 // ------------------------------------------------------------------
 
-inline BitmapPalette::BitmapPalette( const BitmapPalette& rBitmapPalette ) :
-            mnCount( rBitmapPalette.mnCount )
+inline BitmapPalette::BitmapPalette( const BitmapPalette& rBitmapPalette )
+    : mnCount(rBitmapPalette.mnCount)
+    , mbIsGrey(rBitmapPalette.mbIsGrey)
 {
     if( mnCount )
     {
@@ -558,8 +560,9 @@ inline BitmapPalette::BitmapPalette( const BitmapPalette& rBitmapPalette ) :
 
 // ------------------------------------------------------------------
 
-inline BitmapPalette::BitmapPalette( sal_uInt16 nCount ) :
-            mnCount( nCount )
+inline BitmapPalette::BitmapPalette( sal_uInt16 nCount )
+    : mnCount(nCount)
+    , mbIsGrey(false)
 {
     if( mnCount )
     {
