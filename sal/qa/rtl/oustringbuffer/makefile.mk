@@ -46,6 +46,7 @@ CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 SHL1TARGET := $(TARGET)
 SHL1OBJS := \
+    $(SLO)$/test_oustringbuffer_appendchar.obj \
     $(SLO)$/test_oustringbuffer_utf32.obj \
     $(SLO)$/test_oustringbuffer_tostring.obj \
     $(SLO)$/test_oustringbuffer_noadditional.obj

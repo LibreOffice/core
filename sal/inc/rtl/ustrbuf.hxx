@@ -421,6 +421,24 @@ public:
     }
 
     /**
+        Appends the string representation of the ASCII <code>char</code>
+        argument to this string buffer.
+
+        The argument is appended to the contents of this string buffer.
+        The length of this string buffer increases by <code>1</code>.
+
+        @param   ch   an ASCII <code>char</code>.
+        @return  this string buffer.
+
+        @since LibreOffice 3.5
+     */
+    OUStringBuffer & append(char c)
+    {
+        OSL_ASSERT(static_cast< unsigned char >(c) <= 0x7F);
+        return append(sal_Unicode(c));
+    }
+
+    /**
         Appends the string representation of the <code>char</code>
         argument to this string buffer.
 
