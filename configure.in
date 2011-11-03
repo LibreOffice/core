@@ -2443,10 +2443,6 @@ fi
 AC_SUBST(DO_FETCH_TARBALLS)
 
 
-dnl git-new-workdir
-dnl ===================================================================
-AC_SUBST(GIT_LINK_SRC)
-
 dnl Disable legacy binary file formats filters
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable filters for legacy binary file formats (StarOffice 5.2)])
@@ -9090,6 +9086,17 @@ AC_SUBST(ALL_LANGS)
 AC_SUBST(WITH_LANG)
 AC_SUBST(WITH_LANG_LIST)
 AC_SUBST(GIT_REPO_NAMES)
+
+dnl git-new-workdir
+dnl ===================================================================
+if test -n "${GIT_LINK_SRC}"; then
+    for repo in ${GIT_REPO_NAMES}; do
+        if ! test -d "${GIT_LINK_SRC}"/${repo}; then
+            AC_MSG_ERROR([linked git: required repository does not exist: ${GIT_LINK_SRC}/${repo}])
+        fi
+    done
+fi
+AC_SUBST(GIT_LINK_SRC)
 
 AC_MSG_CHECKING([for another 'intro' bitmap])
 INTRO_BITMAP=
