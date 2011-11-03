@@ -37,11 +37,11 @@ refresh_hooks()
 	core)
 	    pushd $COREDIR > /dev/null
 	    for hook_name in $(ls -1 $COREDIR/git-hooks) ; do
-		hook=".git/hooks/$hook_name"
-		if [ ! -x "$hook" -a ! -L "$hook" ] ; then
-		    rm -f "$hook"
-		    ln -s "git-hooks/$hook_name" "$hook"
-		fi
+            hook=".git/hooks/$hook_name"
+            if [ ! -x "$hook" ] ; then
+                rm -f "$hook"
+                ln -sf "$COREDIR/git-hooks/$hook_name" "$hook"
+            fi
 	    done
 	    popd > /dev/null
 	    ;;
@@ -50,8 +50,10 @@ refresh_hooks()
 		pushd $COREDIR/clone/translations > /dev/null
 		for hook_name in $(ls -1 $COREDIR/clone/translations/git-hooks) ; do
 		    hook=".git/hooks/$hook_name"
-		    rm -f "$hook"
-		    ln -sf "git-hooks/$hook_name" "$hook"
+            if [ ! -x "$hook" ] ; then
+                rm -f "$hook"
+                ln -sf "$COREDIR/clone/translations/git-hooks/$hook_name" "$hook"
+            fi
 		done
 		# .gitattribute should be per-repo, avoid entangling repos
 		if [ -L .gitattributes ] ; then
@@ -60,7 +62,7 @@ refresh_hooks()
 		popd > /dev/null
 	    fi
 	    ;;
-	help|dictionaries)
+	binfilter|help|dictionaries)
 	    if [ -d $COREDIR/clone/$repo ] ; then
 		pushd $COREDIR/clone/$repo > /dev/null
 		# fixme: we should really keep these per-repo to
@@ -68,8 +70,10 @@ refresh_hooks()
 		# are realy not independant yet, we keep using core's hooks
 		for hook_name in $(ls -1 $COREDIR/git-hooks) ; do
 		    hook=".git/hooks/$hook_name"
-		    rm -f "$hook"
-		    ln -sf "$COREDIR/git-hooks/$hook_name" "$hook"
+            if [ ! -x "$hook" ] ; then
+                rm -f "$hook"
+                ln -sf "$COREDIR/git-hooks/$hook_name" "$hook"
+            fi
 		done
 		# .gitattribute should be per-repo, avoid entangling repos
 		if [ -L .gitattributes ] ; then
