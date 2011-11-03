@@ -585,17 +585,47 @@ void ScGridWindow::ExecPageFieldSelect( SCCOL nCol, SCROW nRow, sal_Bool bHasSel
     }
 }
 
+namespace {
+
+class PopupAction : public ScMenuFloatingWindow::Action
+{
+public:
+    virtual void execute()
+    {
+    }
+};
+
+
+}
+
 void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 {
     mpAutoFilterPopup.reset(new ScCheckListMenuWindow(this, pViewData->GetDocument()));
     Point aPos = pViewData->GetScrPos(nCol, nRow, eWhich);
+    SCTAB nTab = pViewData->GetTabNo();
+    ScDocument* pDoc = pViewData->GetDocument();
     long nSizeX  = 0;
     long nSizeY  = 0;
     pViewData->GetMergeSizePixel(nCol, nRow, nSizeX, nSizeY);
     Rectangle aCellRect(OutputToScreenPixel(aPos), Size(nSizeX, nSizeY));
 
     // Populate the check box list.
+    bool bHasDates = false;
+    TypedScStrCollection aStrings(128, 128);
+    pDoc->GetFilterEntries(nCol, nRow, nTab, true, aStrings, bHasDates);
 
+    sal_uInt16 nCount = aStrings.GetCount();
+    mpAutoFilterPopup->setMemberSize(nCount);
+    for (sal_uInt16 i = 0; i < nCount; ++i)
+        mpAutoFilterPopup->addMember(aStrings[i]->GetString(), true);
+    mpAutoFilterPopup->initMembers();
+
+    // Populate the menu.
+    mpAutoFilterPopup->addMenuItem(ScResId::toString(ScResId(SCSTR_ALLFILTER)), true, new PopupAction);
+    mpAutoFilterPopup->addMenuItem(ScResId::toString(ScResId(SCSTR_TOP10FILTER)), true, new PopupAction);
+    mpAutoFilterPopup->addMenuItem(ScResId::toString(ScResId(SCSTR_STDFILTER)), true, new PopupAction);
+    mpAutoFilterPopup->addMenuItem(ScResId::toString(ScResId(SCSTR_EMPTY)), true, new PopupAction);
+    mpAutoFilterPopup->addMenuItem(ScResId::toString(ScResId(SCSTR_NOTEMPTY)), true, new PopupAction);
 
     mpAutoFilterPopup->SetPopupModeEndHdl( LINK(this, ScGridWindow, PopupModeEndHdl) );
     mpAutoFilterPopup->StartPopupMode(aCellRect, (FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_GRABFOCUS));
