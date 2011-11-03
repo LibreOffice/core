@@ -265,23 +265,33 @@ sal_Bool SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
     aEvent += '(';
     if ( rCmd.CompareIgnoreCaseToAscii( aEvent, aEvent.Len() ) == COMPARE_EQUAL )
     {
-        String aData( rCmd );
-        aData.Erase( 0, aEvent.Len() );
-        if ( aData.Len() > 2 )
+        ::rtl::OUStringBuffer aData( rCmd );
+        aData.remove( 0, aEvent.Len() );
+        if ( aData.getLength() > 2 )
         {
             // Transform into the ApplicationEvent Format
-            aData.Erase( aData.Len()-1, 1 );
-            for ( sal_uInt16 n = 0; n < aData.Len(); ++n )
+            aData.remove( aData.getLength() - 1, 1 );
+            for ( sal_Int32 n = 0; n < aData.getLength(); )
             {
-                if ( aData.GetChar(n) == 0x0022 ) // " = 22h
-                    for ( ; aData.GetChar(++n) != 0x0022 ; )
-                        /* empty loop */ ;
-                else if ( aData.GetChar(n) == 0x0020 ) // SPACE = 20h
-                    aData.SetChar(n, '\n');
+                switch ( aData[n] == '"' )
+                {
+                case '"':
+                    aData.remove( n, 1 );
+                    while ( n < aData.getLength() && aData[n] != '"' )
+                        ++n;
+                    if ( n < aData.getLength() )
+                        aData.remove( n, 1 );
+                    break;
+                case ' ':
+                    aData[n++] = '\n';
+                    break;
+                default:
+                    ++n;
+                    break;
+                }
             }
-            aData.EraseAllChars( 0x0022 );
-            ApplicationAddress aAddr;
-            rAppEvent = ApplicationEvent( String(), aAddr, U2S(rEvent), aData );
+
+            rAppEvent = ApplicationEvent(rEvent, aData.makeStringAndClear());
             return sal_True;
         }
     }

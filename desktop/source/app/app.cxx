@@ -2990,7 +2990,7 @@ String GetURL_Impl(
 
 void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 {
-    if ( rAppEvent.GetEvent() == "APPEAR" && !GetCommandLineArgs().IsInvisible() )
+    if ( rAppEvent.GetEvent() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("APPEAR")) && !GetCommandLineArgs().IsInvisible() )
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
 
@@ -3046,7 +3046,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             }
         }
     }
-    else if ( rAppEvent.GetEvent() == "QUICKSTART" && !GetCommandLineArgs().IsInvisible()  )
+    else if ( rAppEvent.GetEvent() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("QUICKSTART")) && !GetCommandLineArgs().IsInvisible()  )
     {
         // If the office has been started the second time its command line arguments are sent through a pipe
         // connection to the first office. We want to reuse the quickstart option for the first office.
@@ -3063,57 +3063,50 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         if ( xQuickstart.is() )
             xQuickstart->initialize( aSeq );
     }
-    else if ( rAppEvent.GetEvent() == "ACCEPT" )
+    else if ( rAppEvent.GetEvent() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ACCEPT")) )
     {
         // every time an accept parameter is used we create an acceptor
         // with the corresponding accept-string
-        OUString aAcceptString(rAppEvent.GetData().GetBuffer());
-        createAcceptor(aAcceptString);
+        createAcceptor(rAppEvent.GetData());
     }
-    else if ( rAppEvent.GetEvent() == "UNACCEPT" )
+    else if ( rAppEvent.GetEvent() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UNACCEPT")) )
     {
         // try to remove corresponding acceptor
-        OUString aUnAcceptString(rAppEvent.GetData().GetBuffer());
-        destroyAcceptor(aUnAcceptString);
+        destroyAcceptor(rAppEvent.GetData());
     }
-    else if ( rAppEvent.GetEvent() == "SaveDocuments" )
+    else if ( rAppEvent.GetEvent() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SaveDocuments")) )
     {
         Desktop::_bTasksSaved = sal_False;
         Desktop::_bTasksSaved = SaveTasks();
     }
-    else if ( rAppEvent.GetEvent() == "OPENHELPURL" )
+    else if ( rAppEvent.GetEvent() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OPENHELPURL")) )
     {
         // start help for a specific URL
-        OUString aHelpURL(rAppEvent.GetData().GetBuffer());
         Help *pHelp = Application::GetHelp();
-        pHelp->Start(aHelpURL, NULL);
+        pHelp->Start(rAppEvent.GetData(), NULL);
     }
-    else if ( rAppEvent.GetEvent() == APPEVENT_OPEN_STRING )
+    else if ( rAppEvent.GetEvent() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(APPEVENT_OPEN_STRING)) )
     {
-        OUString aOpenURL(rAppEvent.GetData().GetBuffer());
-
         const CommandLineArgs& rCmdLine = GetCommandLineArgs();
         if ( !rCmdLine.IsInvisible() && !rCmdLine.IsTerminateAfterInit() )
         {
             ProcessDocumentsRequest* pDocsRequest = new ProcessDocumentsRequest(
                 rCmdLine.getCwdUrl());
-            pDocsRequest->aOpenList = aOpenURL;
+            pDocsRequest->aOpenList = rAppEvent.GetData();
             pDocsRequest->pcProcessed = NULL;
 
             OfficeIPCThread::ExecuteCmdLineRequests( *pDocsRequest );
             delete pDocsRequest;
         }
     }
-    else if ( rAppEvent.GetEvent() == APPEVENT_PRINT_STRING )
+    else if ( rAppEvent.GetEvent() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(APPEVENT_PRINT_STRING)) )
     {
-        OUString aPrintURL(rAppEvent.GetData().GetBuffer());
-
         const CommandLineArgs& rCmdLine = GetCommandLineArgs();
         if ( !rCmdLine.IsInvisible() && !rCmdLine.IsTerminateAfterInit() )
         {
             ProcessDocumentsRequest* pDocsRequest = new ProcessDocumentsRequest(
                 rCmdLine.getCwdUrl());
-            pDocsRequest->aPrintList = aPrintURL;
+            pDocsRequest->aPrintList = rAppEvent.GetData();
             pDocsRequest->pcProcessed = NULL;
 
             OfficeIPCThread::ExecuteCmdLineRequests( *pDocsRequest );
@@ -3121,13 +3114,13 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         }
     }
 #ifndef UNX
-    else if ( rAppEvent.GetEvent() == "HELP" )
+    else if ( rAppEvent.GetEvent() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HELP")) )
     {
         // in non unix version allow showing of cmdline help window
         displayCmdlineHelp();
     }
 #endif
-    else if ( rAppEvent.GetEvent() == "SHOWDIALOG" )
+    else if ( rAppEvent.GetEvent() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SHOWDIALOG")) )
     {
         // ignore all errors here. It's clicking a menu entry only ...
         // The user will try it again, in case nothing happens .-)
@@ -3145,9 +3138,9 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 
             css::uno::Reference< css::util::XURLTransformer > xParser(xSMGR->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), css::uno::UNO_QUERY_THROW);
             css::util::URL aCommand;
-            if( rAppEvent.GetData().EqualsAscii( "PREFERENCES" ) )
+            if( rAppEvent.GetData() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PREFERENCES")) )
                 aCommand.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:OptionsTreeDialog" ) );
-            else if( rAppEvent.GetData().EqualsAscii( "ABOUT" ) )
+            else if( rAppEvent.GetData() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ABOUT")) )
                 aCommand.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:About" ) );
             if( aCommand.Complete.getLength() )
             {
@@ -3161,7 +3154,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         catch(const css::uno::Exception&)
         {}
     }
-    else if( rAppEvent.GetEvent() == "PRIVATE:DOSHUTDOWN" )
+    else if( rAppEvent.GetEvent() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PRIVATE:DOSHUTDOWN")) )
     {
         Desktop* pD = dynamic_cast<Desktop*>(GetpApp());
         OSL_ENSURE( pD, "no desktop ?!?" );

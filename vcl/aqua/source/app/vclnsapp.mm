@@ -314,8 +314,7 @@
     const rtl::OUString aFile( GetOUString( pFile ) );
     if( ! AquaSalInstance::isOnCommandLine( aFile ) )
     {
-        const ApplicationEvent* pAppEvent = new ApplicationEvent( String(), ApplicationAddress(),
-                                                    APPEVENT_OPEN_STRING, aFile );
+        const ApplicationEvent* pAppEvent = new ApplicationEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(APPEVENT_OPEN_STRING)), aFile);
         AquaSalInstance::aAppEventList.push_back( pAppEvent );
     }
     return YES;
@@ -335,7 +334,7 @@
         if( ! AquaSalInstance::isOnCommandLine( aFile ) )
         {
             if( aFileList.getLength() > 0 )
-                aFileList.append( sal_Unicode( APPEVENT_PARAM_DELIMITER ) );
+                aFileList.append('\n');
             aFileList.append( aFile );
         }
     }
@@ -345,8 +344,7 @@
         // we have no back channel here, we have to assume success, in which case
         // replyToOpenOrPrint does not need to be called according to documentation
         // [app replyToOpenOrPrint: NSApplicationDelegateReplySuccess];
-        const ApplicationEvent* pAppEvent = new ApplicationEvent( String(), ApplicationAddress(),
-                                                    APPEVENT_OPEN_STRING, aFileList.makeStringAndClear() );
+        const ApplicationEvent* pAppEvent = new ApplicationEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(APPEVENT_OPEN_STRING)), aFileList.makeStringAndClear());
         AquaSalInstance::aAppEventList.push_back( pAppEvent );
     }
 }
@@ -355,8 +353,7 @@
 {
     (void)app;
     const rtl::OUString aFile( GetOUString( pFile ) );
-	const ApplicationEvent* pAppEvent = new ApplicationEvent( String(), ApplicationAddress(),
-                                                APPEVENT_PRINT_STRING, aFile );
+	const ApplicationEvent* pAppEvent = new ApplicationEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(APPEVENT_PRINT_STRING)), aFile);
 	AquaSalInstance::aAppEventList.push_back( pAppEvent );
     return YES;
 }
@@ -374,11 +371,10 @@
     while( (pFile = [it nextObject]) != nil )
     {
         if( aFileList.getLength() > 0 )
-            aFileList.append( sal_Unicode( APPEVENT_PARAM_DELIMITER ) );
+            aFileList.append('\n');
         aFileList.append( GetOUString( pFile ) );
     }
-	const ApplicationEvent* pAppEvent = new ApplicationEvent( String(), ApplicationAddress(),
-                                                APPEVENT_PRINT_STRING, aFileList.makeStringAndClear() );
+	const ApplicationEvent* pAppEvent = new ApplicationEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(APPEVENT_PRINT_STRING)), aFileList.makeStringAndClear());
 	AquaSalInstance::aAppEventList.push_back( pAppEvent );
     // we have no back channel here, we have to assume success
     // correct handling would be NSPrintingReplyLater and then send [app replyToOpenOrPrint]
@@ -402,7 +398,7 @@
         
         if( aReply == NSTerminateNow )
         {
-            ApplicationEvent aEv( String(), ApplicationAddress(), ByteString( "PRIVATE:DOSHUTDOWN" ), String() );
+            ApplicationEvent aEv(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PRIVATE:DOSHUTDOWN")));
             GetpApp()->AppEvent( aEv );
             ImplImageTreeSingletonRef()->shutDown();
             // DeInitVCL should be called in ImplSVMain - unless someon _exits first which

@@ -97,105 +97,37 @@ typedef long (*VCLEventHookProc)( NotifyEvent& rEvt, void* pData );
 enum Service { SERVICE_OLE, SERVICE_APPEVENT, SERVICE_IPC };
 #endif
 
-class VCL_DLLPUBLIC ApplicationAddress
-{
-friend class Application;
-protected:
-    UniString           aHostName;
-    UniString           aDisplayName;
-    UniString           aDomainName;
-    int                 nPID;
-
-public:
-                        ApplicationAddress();
-                        ApplicationAddress( const UniString& rDomain );
-                        ApplicationAddress( const UniString& rHost,
-                                            const UniString& rDisp,
-                                            const UniString& rDomain );
-                        ApplicationAddress( const UniString& rHost, int nPID );
-
-    const UniString&    GetHost() const     { return aHostName; }
-    const UniString&    GetDisplay() const  { return aDisplayName; }
-    const UniString&    GetDomain() const   { return aDomainName; }
-    int                 GetPID() const      { return nPID; }
-
-    sal_Bool                IsConnectToSame( const ApplicationAddress& rAdr ) const;
-};
-
-inline ApplicationAddress::ApplicationAddress()
-{
-    nPID = 0;
-}
-
-inline ApplicationAddress::ApplicationAddress( const UniString& rDomain )
-{
-    aDomainName     = rDomain;
-    nPID            = 0;
-}
-
-inline ApplicationAddress::ApplicationAddress( const UniString& rHost,
-                                               const UniString& rDisp,
-                                               const UniString& rDomain )
-{
-    aHostName       = rHost;
-    aDisplayName    = rDisp;
-    aDomainName     = rDomain;
-    nPID            = 0;
-}
-
-inline ApplicationAddress::ApplicationAddress( const UniString& rHost, int nPIDPar )
-{
-    aHostName       = rHost;
-    nPID            = nPIDPar;
-}
-
-inline sal_Bool ApplicationAddress::IsConnectToSame( const ApplicationAddress& rAdr ) const
-{
-    if ( nPID && ((nPID == rAdr.nPID) && (aHostName.Equals( rAdr.aHostName))) )
-        return sal_True;
-    else
-        return sal_False;
-}
-
-#define APPEVENT_PARAM_DELIMITER        '\n'
-
 #define APPEVENT_OPEN_STRING            "Open"
 #define APPEVENT_PRINT_STRING           "Print"
 
 class VCL_DLLPUBLIC ApplicationEvent
 {
-private:
-    UniString           aSenderAppName; // Absender Applikationsname
-    rtl::OString        m_aEvent;       // Event
-    UniString           aData;          // Uebertragene Daten
-    ApplicationAddress  aAppAddr;       // Absender Addresse
+    rtl::OUString aEvent;
+    rtl::OUString aData;
+    std::vector<rtl::OUString> aParams;
 
+    ApplicationEvent();
 public:
-                        ApplicationEvent() {}
-                        ApplicationEvent( const UniString& rSenderAppName,
-                                          const ApplicationAddress& rAppAddr,
-                                          const rtl::OString& rEvent,
-                                          const UniString& rData );
+    ApplicationEvent(const rtl::OUString& rEvent,
+                     const rtl::OUString& rData = rtl::OUString()):
+        aEvent(rEvent),
+        aData(rData)
+    {
+        sal_Int32 start = 0;
+        for(sal_Int32 i = 0; i < rData.getLength(); ++i)
+        {
+            if(rData[i] == '\n')
+            {
+                aParams.push_back(rData.copy(start, i - start));
+                start = ++i;
+            }
+        }
+    }
 
-    const UniString&    GetSenderAppName() const { return aSenderAppName; }
-    const rtl::OString& GetEvent() const { return m_aEvent; }
-    const UniString&    GetData() const { return aData; }
-    const ApplicationAddress& GetAppAddress() const { return aAppAddr; }
-
-    sal_uInt16              GetParamCount() const { return aData.GetTokenCount( APPEVENT_PARAM_DELIMITER ); }
-    UniString           GetParam( sal_uInt16 nParam ) const { return aData.GetToken( nParam, APPEVENT_PARAM_DELIMITER ); }
+    const rtl::OUString& GetEvent() const { return aEvent; }
+    const rtl::OUString& GetData() const { return aData; }
+    const std::vector<rtl::OUString>& GetParams() const { return aParams; }
 };
-
-inline ApplicationEvent::ApplicationEvent( const UniString& rSenderAppName,
-                                           const ApplicationAddress& rAppAddr,
-                                           const rtl::OString& rEvent,
-                                           const UniString& rData ) :
-    aSenderAppName( rSenderAppName ),
-    m_aEvent( rEvent ),
-    aData( rData ),
-    aAppAddr( rAppAddr )
-{
-}
 
 class VCL_DLLPUBLIC PropertyHandler
 {

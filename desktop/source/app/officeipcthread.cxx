@@ -634,9 +634,11 @@ OfficeIPCThread::~OfficeIPCThread()
 
 static void AddURLToStringList( const rtl::OUString& aURL, rtl::OUString& aStringList )
 {
-    if ( aStringList.getLength() )
-        aStringList += ::rtl::OUString::valueOf( (sal_Unicode)APPEVENT_PARAM_DELIMITER );
-    aStringList += aURL;
+    ::rtl::OUStringBuffer aStringListBuf(aStringList);
+    if ( aStringListBuf.getLength() )
+        aStringListBuf.append('\n');
+    aStringListBuf.append(aURL);
+    aStringList = aStringListBuf.makeStringAndClear();
 }
 
 void OfficeIPCThread::SetReady(OfficeIPCThread* pThread)
@@ -713,8 +715,7 @@ void SAL_CALL OfficeIPCThread::run()
             {
                 // we have to use application event, because we have to start quickstart service in main thread!!
                 ApplicationEvent* pAppEvent =
-                    new ApplicationEvent( aEmpty, aEmpty,
-                                            "QUICKSTART", aEmpty );
+                    new ApplicationEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("QUICKSTART")));
                 ImplPostForeignAppEvent( pAppEvent );
             }
 
@@ -722,16 +723,14 @@ void SAL_CALL OfficeIPCThread::run()
             OUString aAcceptString;
             if ( aCmdLineArgs->GetAcceptString(aAcceptString) ) {
                 ApplicationEvent* pAppEvent =
-                    new ApplicationEvent( aEmpty, aEmpty,
-                                          "ACCEPT", aAcceptString );
+                    new ApplicationEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ACCEPT")), aAcceptString);
                 ImplPostForeignAppEvent( pAppEvent );
             }
             // handle acceptor removal
             OUString aUnAcceptString;
             if ( aCmdLineArgs->GetUnAcceptString(aUnAcceptString) ) {
                 ApplicationEvent* pAppEvent =
-                    new ApplicationEvent( aEmpty, aEmpty,
-                                         "UNACCEPT", aUnAcceptString );
+                    new ApplicationEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UNACCEPT")), aUnAcceptString);
                 ImplPostForeignAppEvent( pAppEvent );
             }
 
@@ -740,7 +739,7 @@ void SAL_CALL OfficeIPCThread::run()
             // in a running instance in order to display  the command line help
             if ( aCmdLineArgs->IsHelp() ) {
                 ApplicationEvent* pAppEvent =
-                    new ApplicationEvent( aEmpty, aEmpty, "HELP", aEmpty );
+                    new ApplicationEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HELP")));
                 ImplPostForeignAppEvent( pAppEvent );
             }
 #endif
@@ -839,8 +838,7 @@ void SAL_CALL OfficeIPCThread::run()
                     aHelpURLBuffer.appendAscii("&System=WIN");
 #endif
                     ApplicationEvent* pAppEvent =
-                        new ApplicationEvent( aEmpty, aEmpty,
-                                              "OPENHELPURL", aHelpURLBuffer.makeStringAndClear());
+                        new ApplicationEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OPENHELPURL")), aHelpURLBuffer.makeStringAndClear());
                     ImplPostForeignAppEvent( pAppEvent );
                 }
             }
@@ -878,7 +876,7 @@ void SAL_CALL OfficeIPCThread::run()
             {
                 // no document was sent, just bring Office to front
                 ApplicationEvent* pAppEvent =
-                        new ApplicationEvent( aEmpty, aEmpty, "APPEAR", aEmpty );
+                        new ApplicationEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("APPEAR")));
                 ImplPostForeignAppEvent( pAppEvent );
             }
 
@@ -919,7 +917,7 @@ static void AddToDispatchList(
         sal_Int32 nIndex = 0;
         do
         {
-            OUString aToken = aRequestList.getToken( 0, APPEVENT_PARAM_DELIMITER, nIndex );
+            OUString aToken = aRequestList.getToken( 0, '\n', nIndex );
             if ( aToken.getLength() > 0 )
                 rDispatchList.push_back(
                     DispatchWatcher::DispatchRequest( nType, aToken, cwdUrl, aParam, aFactory ));
@@ -974,7 +972,7 @@ static void AddConversionsToDispatchList(
         sal_Int32 nIndex = 0;
         do
         {
-            OUString aToken = rRequestList.getToken( 0, APPEVENT_PARAM_DELIMITER, nIndex );
+            OUString aToken = rRequestList.getToken( 0, '\n', nIndex );
             if ( aToken.getLength() > 0 )
                 rDispatchList.push_back(
                     DispatchWatcher::DispatchRequest( nType, aToken, cwdUrl, aParam, rFactory ));

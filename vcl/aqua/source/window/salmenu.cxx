@@ -69,15 +69,13 @@ const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = NULL;
     }
     else
     {
-        String aDialog;
+        rtl::OUString aDialog;
         if( nDialog == SHOWDIALOG_ID_ABOUT )
-            aDialog = String( RTL_CONSTASCII_USTRINGPARAM( "ABOUT" ) );
+            aDialog = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ABOUT"));
         else if( nDialog == SHOWDIALOG_ID_PREFERENCES )
-            aDialog = String( RTL_CONSTASCII_USTRINGPARAM( "PREFERENCES" ) );
-        const ApplicationEvent* pAppEvent = new ApplicationEvent( String(),
-                                                                  ApplicationAddress(),
-                                                                  ByteString( "SHOWDIALOG" ),
-                                                                  aDialog );
+            aDialog = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PREFERENCES"));
+        const ApplicationEvent* pAppEvent = new ApplicationEvent(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SHOWDIALOG")), aDialog);
         AquaSalInstance::aAppEventList.push_back( pAppEvent );
     }
 }

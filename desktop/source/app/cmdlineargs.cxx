@@ -399,10 +399,12 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
 
 void CommandLineArgs::AddStringListParam_Impl( StringParam eParam, const rtl::OUString& aParam )
 {
+    ::rtl::OUStringBuffer aParamBuf(m_aStrParams[eParam]);
     OSL_ASSERT( eParam >= 0 && eParam < CMD_STRINGPARAM_COUNT );
-    if ( m_aStrParams[eParam].getLength() )
-        m_aStrParams[eParam] += ::rtl::OUString::valueOf( (sal_Unicode)APPEVENT_PARAM_DELIMITER );
-    m_aStrParams[eParam] += aParam;
+    if ( aParamBuf.getLength() )
+        aParamBuf.append('\n');
+    aParamBuf.append(aParam);
+    m_aStrParams[eParam] = aParamBuf.makeStringAndClear();
     m_aStrSetParams[eParam] = sal_True;
 }
 
