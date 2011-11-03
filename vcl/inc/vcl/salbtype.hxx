@@ -181,7 +181,6 @@ private:
 
     BitmapColor*                mpBitmapColor;
     sal_uInt16                  mnCount;
-    bool                        mbIsGrey;
 
 public:
 
@@ -207,8 +206,7 @@ public:
     inline BitmapColor&         operator[]( sal_uInt16 nIndex );
 
     inline sal_uInt16           GetBestIndex( const BitmapColor& rCol ) const;
-    bool                        IsGreyPalette() const { return !GetEntryCount() || mbIsGrey; }
-    void                        SetGreyPalette( bool bGrey ) { mbIsGrey = bGrey; }
+    bool                        IsGreyPalette() const;
 };
 
 // ---------------
@@ -535,18 +533,16 @@ inline sal_uLong BitmapColor::GetColorError( const BitmapColor& rBitmapColor ) c
 
 // ------------------------------------------------------------------
 
-inline BitmapPalette::BitmapPalette()
-    : mpBitmapColor(NULL)
-    , mnCount(0)
-    , mbIsGrey(false)
+inline BitmapPalette::BitmapPalette() :
+            mpBitmapColor   ( NULL ),
+            mnCount         ( 0 )
 {
 }
 
 // ------------------------------------------------------------------
 
-inline BitmapPalette::BitmapPalette( const BitmapPalette& rBitmapPalette )
-    : mnCount(rBitmapPalette.mnCount)
-    , mbIsGrey(rBitmapPalette.mbIsGrey)
+inline BitmapPalette::BitmapPalette( const BitmapPalette& rBitmapPalette ) :
+            mnCount( rBitmapPalette.mnCount )
 {
     if( mnCount )
     {
@@ -560,9 +556,8 @@ inline BitmapPalette::BitmapPalette( const BitmapPalette& rBitmapPalette )
 
 // ------------------------------------------------------------------
 
-inline BitmapPalette::BitmapPalette( sal_uInt16 nCount )
-    : mnCount(nCount)
-    , mbIsGrey(false)
+inline BitmapPalette::BitmapPalette( sal_uInt16 nCount ) :
+            mnCount( nCount )
 {
     if( mnCount )
     {
@@ -587,7 +582,6 @@ inline BitmapPalette& BitmapPalette::operator=( const BitmapPalette& rBitmapPale
 {
     delete[] (sal_uInt8*) mpBitmapColor;
     mnCount = rBitmapPalette.mnCount;
-    mbIsGrey = rBitmapPalette.mbIsGrey;
 
     if( mnCount )
     {
@@ -607,7 +601,7 @@ inline sal_Bool BitmapPalette::operator==( const BitmapPalette& rBitmapPalette )
 {
     sal_Bool bRet = sal_False;
 
-    if( rBitmapPalette.mnCount == mnCount && rBitmapPalette.mbIsGrey == mbIsGrey )
+    if( rBitmapPalette.mnCount == mnCount )
     {
         bRet = sal_True;
 
