@@ -751,7 +751,7 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
     else if( ! bBeforeRealize )
     {
         Display* pDisplay = GetGtkSalData()->GetGtkDisplay()->GetDisplay();
-        XLIB_Window aWindow = widget_get_xid(m_pWindow);
+        XLIB_Window aWindow = widget_get_xid(GTK_WIDGET(pWindow));
         XWMHints* pHints = XGetWMHints( pDisplay, aWindow );
         if( ! pHints )
         {
@@ -814,14 +814,14 @@ static void lcl_set_user_time( GtkWindow* i_pWindow, guint32 i_nTime )
         p_gdk_x11_window_set_user_time = (setUserTimeFn)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gdk_x11_window_set_user_time" );
     }
     if( p_gdk_x11_window_set_user_time )
-        p_gdk_x11_window_set_user_time( widget_get_window(i_pWindow), i_nTime );
+        p_gdk_x11_window_set_user_time( widget_get_window(GTK_WIDGET(i_pWindow)), i_nTime );
     else
     {
         Display* pDisplay = GetGtkSalData()->GetGtkDisplay()->GetDisplay();
         Atom nUserTime = XInternAtom( pDisplay, "_NET_WM_USER_TIME", True );
         if( nUserTime )
         {
-            XChangeProperty( pDisplay, widget_get_xid(i_pWindow),
+            XChangeProperty( pDisplay, widget_get_xid(GTK_WIDGET(i_pWindow)),
                              nUserTime, XA_CARDINAL, 32,
                              PropModeReplace, (unsigned char*)&i_nTime, 1 );
         }
@@ -3251,7 +3251,7 @@ gboolean implDelayedFullScreenHdl (void *pWindow)
 }
 }
 
-gboolean GtkSalFrame::signalMap( GtkWidget*, GdkEvent*, gpointer frame )
+gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
@@ -3280,7 +3280,7 @@ gboolean GtkSalFrame::signalMap( GtkWidget*, GdkEvent*, gpointer frame )
     if( bSetFocus )
     {
         XSetInputFocus( pThis->getDisplay()->GetDisplay(),
-                        widget_get_xid(m_pWindow),
+                        widget_get_xid(pWidget),
                         RevertToParent, CurrentTime );
     }
 #else
