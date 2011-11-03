@@ -81,6 +81,7 @@ public:
     CPPUNIT_TEST(randomTest);
     CPPUNIT_TEST(testPageDescName);
     CPPUNIT_TEST(testFileNameFields);
+    CPPUNIT_TEST(testDocStat);
     CPPUNIT_TEST(testSwScanner);
     CPPUNIT_TEST(testUserPerceivedCharCount);
     CPPUNIT_TEST(testGraphicAnchorDeletion);
