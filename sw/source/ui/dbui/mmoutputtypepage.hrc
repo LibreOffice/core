@@ -37,7 +37,6 @@
 #define ST_MAILHINTHEADER           8
 #define ST_LETTERHINT               9
 #define ST_MAILHINT                 10
-#define FT_NOMAILHINT               11
 
 #endif
 

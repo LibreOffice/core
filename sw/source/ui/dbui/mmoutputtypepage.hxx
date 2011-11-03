@@ -46,7 +46,6 @@ class SwMailMergeOutputTypePage : public svt::OWizardPage
 
     SwBoldFixedInfo m_aHintHeaderFI;
     FixedInfo       m_aHintFI;
-    FixedInfo       m_aNoMailHintFI;
 
     String          m_sLetterHintHeader;
     String          m_sMailHintHeader;

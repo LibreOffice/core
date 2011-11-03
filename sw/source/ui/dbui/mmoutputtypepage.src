@@ -87,14 +87,6 @@ TabPage DLG_MM_OUTPUTTYPE_PAGE
     {
         Text[ en-US ] = "Send e-mail messages to a group of recipients. The e-mail messages can contain a salutation. The e-mail messages can be personalized for each recipient.";
     };
-    FixedText FT_NOMAILHINT
-    {
-        Pos = MAP_APPFONT ( 12 , 113 ) ;
-        Size = MAP_APPFONT ( 242 , 42 ) ;
-        WordBreak = TRUE;
-        Hide = TRUE;
-        Text[ en-US ] = "%PRODUCTNAME was unable to find a Java Mail connection. In order to send e-mail with %PRODUCTNAME, you need to install the latest version of Java Mail. You can find further information about Java Mail on the internet at 'http://java.sun.com/products/javamail/'.";
-    };
 };
 
 

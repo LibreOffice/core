@@ -58,7 +58,6 @@ SwMailMergeOutputTypePage::SwMailMergeOutputTypePage( SwMailMergeWizard* _pParen
     m_aMailRB(      this, SW_RES( RB_MAIL    )),
     m_aHintHeaderFI(this, SW_RES( FI_HINTHEADER)),
     m_aHintFI(      this, SW_RES( FI_HINT)),
-    m_aNoMailHintFI(this, SW_RES( FT_NOMAILHINT)),
 #ifdef MSC
 #pragma warning (default : 4355)
 #endif
@@ -74,19 +73,10 @@ SwMailMergeOutputTypePage::SwMailMergeOutputTypePage( SwMailMergeWizard* _pParen
     m_aMailRB.SetClickHdl(aLink);
 
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
-    m_pWizard->EnterWait();
-    bool bMailAvailable = rConfigItem.IsMailAvailable();
-    m_pWizard->LeaveWait();
     if(rConfigItem.IsOutputToLetter())
         m_aLetterRB.Check();
     else
         m_aMailRB.Check();
-    if(!bMailAvailable)
-    {
-        m_aNoMailHintFI.Show();
-        m_aMailRB.Enable(sal_False);
-        m_aLetterRB.Check();
-    }
     TypeHdl_Impl(&m_aLetterRB);
 
 }
