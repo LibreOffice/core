@@ -207,7 +207,7 @@ void SwDocTest::testUserPerceivedCharCount()
     CPPUNIT_ASSERT_MESSAGE("Grapheme Count should be 1", nGraphemeCount == 1);
 
     //Surrogate pair example, one single unicode code-point (U+1D11E)
-    //represented as two code units in UTF-8
+    //represented as two code units in UTF-16
     const sal_Unicode GCLEF[] = { 0xD834, 0xDD1E };
     ::rtl::OUString sGCLEF(GCLEF, SAL_N_ELEMENTS(GCLEF));
     sal_Int32 nCount = pBreakIter->getGraphemeCount(sGCLEF);
