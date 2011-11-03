@@ -45,6 +45,7 @@ GtkStyleContext* GtkSalGraphics::mpMenuBarItemStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpMenuStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpMenuItemStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpSpinStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpComboboxStyle = NULL;
 
 bool GtkSalGraphics::style_loaded = false;
 /************************************************************************
@@ -84,7 +85,39 @@ enum {
     RENDER_RADIO = 6,
     RENDER_SCROLLBAR = 7,
     RENDER_SPINBUTTON = 8,
+    RENDER_COMBOBOX = 9,
 };
+
+static void PrepareComboboxStyle( GtkStyleContext *context,
+                                  gboolean forEntry)
+{
+    GtkWidgetPath *path, *siblingsPath;
+
+    path = gtk_widget_path_new();
+    siblingsPath = gtk_widget_path_new();
+    gtk_widget_path_append_type(path, GTK_TYPE_COMBO_BOX);
+    gtk_widget_path_iter_add_class(path, 0, GTK_STYLE_CLASS_COMBOBOX_ENTRY);
+
+    gtk_widget_path_append_type(siblingsPath, GTK_TYPE_ENTRY);
+    gtk_widget_path_append_type(siblingsPath, GTK_TYPE_BUTTON);
+    gtk_widget_path_iter_add_class(siblingsPath, 0, GTK_STYLE_CLASS_ENTRY);
+    gtk_widget_path_iter_add_class(siblingsPath, 1, GTK_STYLE_CLASS_BUTTON);
+
+    if (forEntry)
+    {
+        gtk_widget_path_append_with_siblings(path, siblingsPath, 1);
+        gtk_widget_path_append_with_siblings(path, siblingsPath, 0);
+    }
+    else 
+    {
+        gtk_widget_path_append_with_siblings(path, siblingsPath, 0);
+        gtk_widget_path_append_with_siblings(path, siblingsPath, 1);
+    }
+
+    gtk_style_context_set_path(context, path);
+    gtk_widget_path_free(path);
+    gtk_widget_path_free(siblingsPath);
+}
 
 static void NWCalcArrowRect( const Rectangle& rButton, Rectangle& rArrow )
 {
@@ -608,6 +641,106 @@ void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
     PaintOneSpinButton(context, cr, downBtnPart, areaRect, downBtnState );
 }
 
+#define ARROW_SIZE 11 * 0.85
+Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlPart nPart,
+                                                   Rectangle aAreaRect )
+{
+    Rectangle    aButtonRect;
+    gint        nArrowWidth;
+    gint        nButtonWidth;
+    gint        nFocusWidth;
+    gint        nFocusPad;
+    GtkBorder   padding;
+
+    // Grab some button style attributes
+    gtk_style_context_get_style( mpButtonStyle,
+                                 "focus-line-width", &nFocusWidth,
+                                 "focus-padding", &nFocusPad,
+                                 NULL );
+    gtk_style_context_get_padding( mpButtonStyle, GTK_STATE_FLAG_NORMAL, &padding);
+
+    nArrowWidth = ARROW_SIZE;
+    nButtonWidth = nArrowWidth + padding.left + padding.right + (2 * (nFocusWidth+nFocusPad));
+    if( nPart == PART_BUTTON_DOWN )
+    {
+        aButtonRect.SetSize( Size( nButtonWidth, aAreaRect.GetHeight() ) );
+        aButtonRect.SetPos( Point( aAreaRect.Left() + aAreaRect.GetWidth() - nButtonWidth,
+                                   aAreaRect.Top() ) );
+    }
+    else if( nPart == PART_SUB_EDIT )
+    {
+        gint adjust_x = (gint) ((padding.left + padding.right) / 2) + nFocusWidth + nFocusPad;
+        gint adjust_y = (gint) ((padding.top + padding.bottom) / 2) + nFocusWidth + nFocusPad;
+
+        aButtonRect.SetSize( Size( aAreaRect.GetWidth() - nButtonWidth - 2 * adjust_x,
+                                   aAreaRect.GetHeight() - 2 * adjust_y ) );
+        Point aEditPos = aAreaRect.TopLeft();
+        aEditPos.X() += adjust_x;
+        aEditPos.Y() += adjust_y;
+        aButtonRect.SetPos( aEditPos );
+    }
+
+    return( aButtonRect );
+}
+
+void GtkSalGraphics::PaintCombobox( GtkStyleContext *context,
+                                    cairo_t *cr,
+                                    const Rectangle& rControlRectangle,
+                                    ControlType nType,
+                                    ControlPart nPart,
+                                    const ImplControlValue& aValue )
+{
+    Rectangle        areaRect;
+    Rectangle        buttonRect;
+    Rectangle        arrowRect;
+    gint            x,y;
+
+    // Find the overall bounding rect of the buttons's drawing area,
+    // plus its actual draw rect excluding adornment
+    areaRect = rControlRectangle;
+    x = 1;
+    y = 1;
+
+    buttonRect = NWGetComboBoxButtonRect( PART_BUTTON_DOWN, areaRect );
+    if( nPart == PART_BUTTON_DOWN )
+        buttonRect.Left() += 1;
+
+    Rectangle        aEditBoxRect( areaRect );
+    aEditBoxRect.SetSize( Size( areaRect.GetWidth() - buttonRect.GetWidth(), aEditBoxRect.GetHeight() ) );
+
+    if( nPart == PART_ENTIRE_CONTROL )
+     {
+         PrepareComboboxStyle(context, true);
+         gtk_render_background(context, cr,
+                               x, y,
+                               aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight() );
+         gtk_render_frame(context, cr,
+                          x, y,
+                          aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight() );
+     }
+
+    arrowRect.SetSize( Size( (gint)(ARROW_SIZE),
+                             (gint)(ARROW_SIZE) ) );
+    arrowRect.SetPos( Point( buttonRect.Left() + (gint)((buttonRect.GetWidth() - arrowRect.GetWidth()) / 2),
+                             buttonRect.Top() + (gint)((buttonRect.GetHeight() - arrowRect.GetHeight()) / 2) ) );
+
+    PrepareComboboxStyle(context, false);
+
+    gtk_render_background(context, cr,
+                          x+(buttonRect.Left() - areaRect.Left()),
+                          y+(buttonRect.Top() - areaRect.Top()),
+                          buttonRect.GetWidth(), buttonRect.GetHeight() );
+    gtk_render_frame(context, cr,
+                     x+(buttonRect.Left() - areaRect.Left()),
+                     y+(buttonRect.Top() - areaRect.Top()),
+                     buttonRect.GetWidth(), buttonRect.GetHeight() );
+
+    gtk_render_arrow(context, cr,
+                     G_PI,
+                     x+(arrowRect.Left() - areaRect.Left()), y+(arrowRect.Top() - areaRect.Top()),
+                     arrowRect.GetWidth() );
+}
+
 sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                             ControlState nState, const ImplControlValue& aValue,
                                             const rtl::OUString& )
@@ -635,6 +768,10 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
         break;
     case CTRL_EDITBOX:
         context = mpEntryStyle;
+        break;
+    case CTRL_COMBOBOX:
+        context = mpComboboxStyle;
+        renderType = RENDER_COMBOBOX;
         break;
     case CTRL_MENU_POPUP:
         /* FIXME: missing ENTIRE_CONTROL, as it doesn't seem to work */
@@ -781,6 +918,9 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
     case RENDER_SPINBUTTON:
         PaintSpinButton(context, cr, rControlRegion, nType, aValue);
         break;
+    case RENDER_COMBOBOX:
+        PaintCombobox(context, cr, rControlRegion, nType, nPart, aValue);
+        break;
     default:
         break;
     }
@@ -922,6 +1062,12 @@ sal_Bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart 
     {
         aEditRect = NWGetSpinButtonRect( nPart, rControlRegion );
     }
+    else if ( (nType==CTRL_COMBOBOX) && 
+              ((nPart==PART_BUTTON_DOWN) || (nPart==PART_SUB_EDIT)) )
+    {
+        aEditRect = NWGetComboBoxButtonRect( nPart, rControlRegion );
+    }
+
     else {
         return sal_False;
     }
@@ -1239,27 +1385,24 @@ sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
 {
     printf("Is native supported for Type: %d, Part %d\n", nType, nPart);
     if(
+       (nType == CTRL_EDITBOX) ||
        (nType == CTRL_PUSHBUTTON && nPart == PART_ENTIRE_CONTROL) ||
        (nType == CTRL_CHECKBOX && nPart == PART_ENTIRE_CONTROL) ||
-       (nType == CTRL_RADIOBUTTON && nPart == PART_ENTIRE_CONTROL) ||
-        ((nType==CTRL_SPINBOX) &&
-         ((nPart==PART_ENTIRE_CONTROL)
-          || (nPart==PART_ALL_BUTTONS)
-          || (nPart==HAS_BACKGROUND_TEXTURE))) ||
-       ((nType==CTRL_SCROLLBAR) &&
-        ( (nPart==PART_DRAW_BACKGROUND_HORZ)
-          || (nPart==PART_DRAW_BACKGROUND_VERT)
-          || (nPart==PART_ENTIRE_CONTROL)
-          || (nPart==HAS_THREE_BUTTONS))) ||
-       (nType == CTRL_EDITBOX) ||
-       (nType == CTRL_MENU_POPUP &&
-        (nPart == PART_MENU_ITEM_CHECK_MARK || 
-         nPart == PART_MENU_ITEM_RADIO_MARK || 
-         nPart == PART_MENU_SEPARATOR || 
-         nPart == PART_MENU_SUBMENU_ARROW)) ||
+       (nType == CTRL_RADIOBUTTON && nPart == PART_ENTIRE_CONTROL) |
        (nType == CTRL_TOOLBAR && 
-        (nPart == PART_BUTTON ||
-         nPart == PART_ENTIRE_CONTROL)))
+        (nPart == PART_BUTTON || nPart == PART_ENTIRE_CONTROL)) ||
+        ((nType == CTRL_SPINBOX) &&
+         ((nPart == PART_ENTIRE_CONTROL) || (nPart == PART_ALL_BUTTONS) ||
+          (nPart == HAS_BACKGROUND_TEXTURE))) ||
+        ((nType == CTRL_COMBOBOX) &&
+         ((nPart == PART_ENTIRE_CONTROL) || (nPart == PART_ALL_BUTTONS) ||
+          (nPart == HAS_BACKGROUND_TEXTURE))) ||
+       ((nType == CTRL_SCROLLBAR) &&
+        ( (nPart == PART_DRAW_BACKGROUND_HORZ) || (nPart == PART_DRAW_BACKGROUND_VERT) ||
+          (nPart == PART_ENTIRE_CONTROL) || (nPart == HAS_THREE_BUTTONS))) ||
+       (nType == CTRL_MENU_POPUP &&
+        ((nPart == PART_MENU_ITEM_CHECK_MARK) || (nPart == PART_MENU_ITEM_RADIO_MARK) || 
+         (nPart == PART_MENU_SEPARATOR) || (nPart == PART_MENU_SUBMENU_ARROW))))
         return sal_True;
 
     return sal_False;
@@ -1343,6 +1486,11 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
 
     /* Spinbutton */
     getStyleContext(&mpSpinStyle, gtk_spin_button_new(NULL, 0, 0));
+
+    /* Combobox */
+    mpComboboxStyle = gtk_style_context_new();
+    PrepareComboboxStyle(mpComboboxStyle, true);
+
 }
 
 static void print_cairo_region (cairo_region_t *region, const char *msg)
