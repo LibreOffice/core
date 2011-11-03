@@ -113,7 +113,9 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
             OSL_TRACE("found property map for preset: %s (%d)", USS(getShapePresetTypeName()), mnShapePresetType);
 
             aPropertyMap = maPresetsMap[ mnShapePresetType ];
+#ifdef DEBUG
             aPropertyMap.dump();
+#endif
         }
         else
         {
@@ -182,7 +184,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
     {
         sal_uInt32 i;
         PropertyMap aPropertyMap;
-        aPropertyMap[ PROP_Type ] <<= CREATE_OUSTRING( "non-primitive" );
+        aPropertyMap[ PROP_Type ] <<= CREATE_OUSTRING( "ooxml-non-primitive" );
         aPropertyMap[ PROP_MirroredX ] <<= Any( mbMirroredX );
         aPropertyMap[ PROP_MirroredY ] <<= Any( mbMirroredY );
         awt::Size aSize( xShape->getSize() );
@@ -207,11 +209,6 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         }
         aPropertyMap[ PROP_AdjustmentValues ] <<= aAdjustmentValues;
 
-        Sequence< rtl::OUString > aEquations( maGuideList.size() );
-        for ( i = 0; i < maGuideList.size(); i++ )
-            aEquations[ i ] = maGuideList[ i ].maFormula;
-        aPropertyMap[ PROP_Equations ] <<= aEquations;
-
         PropertyMap aPath;
         Sequence< EnhancedCustomShapeSegment > aSegments( maSegments.size() );
         for ( i = 0; i < maSegments.size(); i++ )
@@ -227,6 +224,11 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         aPath[ PROP_Coordinates ] <<= aParameterPairs;
         Sequence< PropertyValue > aPathSequence = aPath.makePropertyValueSequence();
         aPropertyMap[ PROP_Path ] <<= aPathSequence;
+
+        Sequence< rtl::OUString > aEquations( maGuideList.size() );
+        for ( i = 0; i < maGuideList.size(); i++ )
+            aEquations[ i ] = maGuideList[ i ].maFormula;
+        aPropertyMap[ PROP_Equations ] <<= aEquations;
 
         Sequence< PropertyValues > aHandles( maAdjustHandleList.size() );
         for ( i = 0; i < maAdjustHandleList.size(); i++ )
