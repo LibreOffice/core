@@ -222,24 +222,6 @@ namespace canvas
             SpriteRedrawManager::SpriteConnectedRanges&         mrUpdater;
             const SpriteRedrawManager::VectorOfChangeRecords&   mrChangeContainer;
         };
-
-        class RangeExpander
-        {
-            private:
-                basegfx::B2DRange& mrBounds;
-
-            public:
-                typedef void        result_type;
-
-                RangeExpander( basegfx::B2DRange& rBounds ) : mrBounds( rBounds )
-                {
-                }
-
-                void operator()( const basegfx::B2DRange& rBounds )
-                {
-                    mrBounds.expand( rBounds );
-                }
-        };
     }
 
     void SpriteRedrawManager::setupUpdateAreas( SpriteConnectedRanges& rUpdateAreas ) const
@@ -441,7 +423,9 @@ namespace canvas
         ::basegfx::B2DRange aTrueArea( aBegin->second.getUpdateArea() );
         ::std::for_each( aBegin,
                          aEnd,
-                         ::boost::bind( RangeExpander(aTrueArea),
+                         ::boost::bind( (void (basegfx::B2DRange::*)(const basegfx::B2DRange&))(
+                                            &basegfx::B2DRange::expand),
+                                        aTrueArea,
                                         ::boost::bind( &SpriteInfo::getUpdateArea,
                                                        ::boost::bind( ::o3tl::select2nd<AreaComponent>(),
                                                                       _1 ) ) ) );
