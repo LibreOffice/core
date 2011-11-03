@@ -207,7 +207,7 @@ public:
     inline BitmapColor&         operator[]( sal_uInt16 nIndex );
 
     inline sal_uInt16           GetBestIndex( const BitmapColor& rCol ) const;
-    bool                        IsGreyPalette() const { return mbIsGrey; }
+    bool                        IsGreyPalette() const { return !GetEntryCount() || mbIsGrey; }
     void                        SetGreyPalette( bool bGrey ) { mbIsGrey = bGrey; }
 };
 
