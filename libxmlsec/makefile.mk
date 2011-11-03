@@ -68,7 +68,8 @@ PATCH_FILES=\
    xmlsec1-mingw32.patch \
    xmlsec1-mingw-keymgr-mscrypto.patch \
    xmlsec1-vc10.patch \
-   xmlsec1-1.2.14_fix_extern_c.patch
+   xmlsec1-1.2.14_fix_extern_c.patch \
+   xmlsec1-android.patch
 
 ADDITIONAL_FILES= \
     include$/xmlsec$/mscrypto$/akmngr.h \
@@ -151,6 +152,11 @@ LDFLAGS:=$(xmlsec_LDFLAGS)
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure ADDCFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
 CONFIGURE_FLAGS=--with-pic --disable-shared --disable-crypto-dl --with-libxslt=no --with-openssl=no --with-gnutls=no LIBXML2LIB="$(LIBXML2LIB)"
+
+.IF "$(OS)" == "ANDROID"
+CONFIGURE_FLAGS+=--with-openssl=$(SOLARVER)/$(INPATH)
+.ENDIF
+
 # system-mozilla needs pkgconfig to get the information about nss
 # FIXME: This also will enable pkg-config usage for libxml2. It *seems*
 # that the internal headers still are used when they are there but....
@@ -178,6 +184,8 @@ OUT2BIN+=src$/.libs$/libxmlsec1.dll src$/nss$/.libs$/libxmlsec1-nss.dll src$/msc
 OUT2LIB+=win32$/binaries$/*.lib
 OUT2BIN+=win32$/binaries$/*.dll
 .ENDIF
+.ELIF "$(OS)" == "ANDROID"
+OUT2LIB+=src$/.libs$/libxmlsec1.a src$/openssl/.libs$/libxmlsec1-openssl.a
 .ELSE
 OUT2LIB+=src$/.libs$/libxmlsec1.a src$/nss$/.libs$/libxmlsec1-nss.a
 .ENDIF
