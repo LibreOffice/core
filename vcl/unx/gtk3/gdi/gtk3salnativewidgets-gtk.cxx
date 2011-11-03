@@ -46,6 +46,7 @@ GtkStyleContext* GtkSalGraphics::mpMenuStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpMenuItemStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpSpinStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpComboboxStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpListboxStyle = NULL;
 
 bool GtkSalGraphics::style_loaded = false;
 /************************************************************************
@@ -644,7 +645,8 @@ void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
 }
 
 #define ARROW_SIZE 11 * 0.85
-Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlPart nPart,
+Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlType nType,
+                                                   ControlPart nPart,
                                                    Rectangle aAreaRect )
 {
     Rectangle    aButtonRect;
@@ -700,40 +702,60 @@ void GtkSalGraphics::PaintCombobox( GtkStyleContext *context,
     // plus its actual draw rect excluding adornment
     areaRect = rControlRectangle;
 
-    buttonRect = NWGetComboBoxButtonRect( PART_BUTTON_DOWN, areaRect );
+    buttonRect = NWGetComboBoxButtonRect( nType, PART_BUTTON_DOWN, areaRect );
     if( nPart == PART_BUTTON_DOWN )
         buttonRect.Left() += 1;
 
     Rectangle        aEditBoxRect( areaRect );
     aEditBoxRect.SetSize( Size( areaRect.GetWidth() - buttonRect.GetWidth(), aEditBoxRect.GetHeight() ) );
 
-    if( nPart == PART_ENTIRE_CONTROL )
-     {
-         PrepareComboboxStyle(context, true);
-         gtk_render_background(context, cr,
-                               0, 0,
-                               aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight() );
-         gtk_render_frame(context, cr,
-                          0, 0,
-                          aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight() );
-     }
+    if ( nType == CTRL_COMBOBOX )
+    {
+        if( nPart == PART_ENTIRE_CONTROL )
+        {
+            PrepareComboboxStyle(context, true);
+            gtk_render_background(context, cr,
+                                  0, 0,
+                                  aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight() );
+            gtk_render_frame(context, cr,
+                             0, 0,
+                             aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight() );
+        }
+
+        PrepareComboboxStyle(context, false);
+        gtk_render_background(context, cr,
+                              (buttonRect.Left() - areaRect.Left()),
+                              (buttonRect.Top() - areaRect.Top()),
+                              buttonRect.GetWidth(), buttonRect.GetHeight() );
+        gtk_render_frame(context, cr,
+                         (buttonRect.Left() - areaRect.Left()),
+                         (buttonRect.Top() - areaRect.Top()),
+                         buttonRect.GetWidth(), buttonRect.GetHeight() );
+    }
+    else if (nType == CTRL_LISTBOX)
+    {
+        if( nPart == PART_WINDOW )
+        {
+            /* render the popup window with the menu style */
+            gtk_render_frame(mpMenuStyle, cr,
+                             0, 0,
+                             areaRect.GetWidth(), areaRect.GetHeight());
+        }
+        else
+        {
+            gtk_render_background(context, cr,
+                                  0, 0,
+                                  areaRect.GetWidth(), areaRect.GetHeight());
+            gtk_render_frame(context, cr,
+                             0, 0,
+                             areaRect.GetWidth(), areaRect.GetHeight());
+        }
+    }
 
     arrowRect.SetSize( Size( (gint)(ARROW_SIZE),
                              (gint)(ARROW_SIZE) ) );
     arrowRect.SetPos( Point( buttonRect.Left() + (gint)((buttonRect.GetWidth() - arrowRect.GetWidth()) / 2),
                              buttonRect.Top() + (gint)((buttonRect.GetHeight() - arrowRect.GetHeight()) / 2) ) );
-
-    PrepareComboboxStyle(context, false);
-
-    gtk_render_background(context, cr,
-                          (buttonRect.Left() - areaRect.Left()),
-                          (buttonRect.Top() - areaRect.Top()),
-                          buttonRect.GetWidth(), buttonRect.GetHeight() );
-    gtk_render_frame(context, cr,
-                     (buttonRect.Left() - areaRect.Left()),
-                     (buttonRect.Top() - areaRect.Top()),
-                     buttonRect.GetWidth(), buttonRect.GetHeight() );
-
     gtk_render_arrow(context, cr,
                      G_PI,
                      (arrowRect.Left() - areaRect.Left()), (arrowRect.Top() - areaRect.Top()),
@@ -771,6 +793,17 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
     case CTRL_COMBOBOX:
         context = mpComboboxStyle;
         renderType = RENDER_COMBOBOX;
+        break;
+    case CTRL_LISTBOX:
+        switch (nPart)
+        {
+        case PART_ENTIRE_CONTROL:
+            context = mpListboxStyle;
+            renderType = RENDER_COMBOBOX;
+            break;
+        default:
+            return sal_False;
+        }
         break;
     case CTRL_MENU_POPUP:
         /* FIXME: missing ENTIRE_CONTROL, as it doesn't seem to work */
@@ -1066,10 +1099,15 @@ sal_Bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart 
     else if ( (nType==CTRL_COMBOBOX) && 
               ((nPart==PART_BUTTON_DOWN) || (nPart==PART_SUB_EDIT)) )
     {
-        aEditRect = NWGetComboBoxButtonRect( nPart, rControlRegion );
+        aEditRect = NWGetComboBoxButtonRect( nType, nPart, rControlRegion );
     }
-
-    else {
+    else if ( (nType==CTRL_LISTBOX) && 
+              ((nPart==PART_BUTTON_DOWN) || (nPart==PART_SUB_EDIT)) )
+    {
+        aEditRect = NWGetComboBoxButtonRect( nType, nPart, rControlRegion );
+    }
+    else
+    {
         return sal_False;
     }
 
@@ -1384,7 +1422,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
 sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
 {
-    printf("Is native supported for Type: %d, Part %d\n", nType, nPart);
     if(
        (nType == CTRL_EDITBOX) ||
        (nType == CTRL_PUSHBUTTON && nPart == PART_ENTIRE_CONTROL) ||
@@ -1398,6 +1435,9 @@ sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
         ((nType == CTRL_COMBOBOX) &&
          ((nPart == PART_ENTIRE_CONTROL) || (nPart == PART_ALL_BUTTONS) ||
           (nPart == HAS_BACKGROUND_TEXTURE))) ||
+        ((nType==CTRL_LISTBOX) &&
+         ((nPart==PART_ENTIRE_CONTROL) || (nPart == PART_WINDOW) || (nPart == PART_BUTTON_DOWN) ||
+          (nPart==HAS_BACKGROUND_TEXTURE))) ||
        ((nType == CTRL_SCROLLBAR) &&
         ( (nPart == PART_DRAW_BACKGROUND_HORZ) || (nPart == PART_DRAW_BACKGROUND_VERT) ||
           (nPart == PART_ENTIRE_CONTROL) || (nPart == HAS_THREE_BUTTONS))) ||
@@ -1405,6 +1445,8 @@ sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
         ((nPart == PART_MENU_ITEM_CHECK_MARK) || (nPart == PART_MENU_ITEM_RADIO_MARK) || 
          (nPart == PART_MENU_SEPARATOR) || (nPart == PART_MENU_SUBMENU_ARROW))))
         return sal_True;
+
+    printf("Unhandled is native supported for Type: %d, Part %d\n", nType, nPart);
 
     return sal_False;
 }
@@ -1492,6 +1534,14 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     mpComboboxStyle = gtk_style_context_new();
     PrepareComboboxStyle(mpComboboxStyle, true);
 
+    /* Listbox */
+    mpListboxStyle = gtk_style_context_new();
+    path = gtk_widget_path_new();
+    gtk_widget_path_append_type(path, GTK_TYPE_COMBO_BOX);
+    gtk_widget_path_append_type(path, GTK_TYPE_BUTTON);
+    gtk_widget_path_iter_add_class(path, 1, GTK_STYLE_CLASS_BUTTON);
+    gtk_style_context_set_path(mpListboxStyle, path);
+    gtk_widget_path_free(path);
 }
 
 static void print_cairo_region (cairo_region_t *region, const char *msg)

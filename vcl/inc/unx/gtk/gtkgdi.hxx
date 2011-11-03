@@ -78,12 +78,13 @@ private:
     static GtkStyleContext *mpMenuItemStyle;
     static GtkStyleContext *mpSpinStyle;
     static GtkStyleContext *mpComboboxStyle;
+    static GtkStyleContext *mpListboxStyle;
 
     void renderAreaToPix( cairo_t* cr, cairo_rectangle_int_t *region );
     void getStyleContext( GtkStyleContext** style, GtkWidget* widget );
     Rectangle NWGetScrollButtonRect( ControlPart nPart, Rectangle aAreaRect );
     Rectangle NWGetSpinButtonRect( ControlPart nPart, Rectangle aAreaRect);
-    Rectangle NWGetComboBoxButtonRect( ControlPart nPart, Rectangle aAreaRect );
+    Rectangle NWGetComboBoxButtonRect( ControlType nType, ControlPart nPart, Rectangle aAreaRect );
 
     void PaintScrollbar(GtkStyleContext *context,
                         cairo_t *cr,
