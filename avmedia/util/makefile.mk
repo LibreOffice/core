@@ -49,7 +49,7 @@ LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1FILES=\
     $(SLB)$/viewer.lib		\
     $(SLB)$/framework.lib	
-                
+
 # ==========================================================================
 
 SHL1TARGET=$(TARGET)$(DLLPOSTFIX)

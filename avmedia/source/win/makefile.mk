@@ -49,7 +49,7 @@ SLOFILES= \
         $(SLO)$/window.obj      \
         $(SLO)$/player.obj      \
         $(SLO)$/framegrabber.obj    
-        
+
 
 EXCEPTIONSFILES= \
         $(SLO)$/winuno.obj      \
@@ -67,13 +67,11 @@ DEF1EXPORTFILE=exports.dxp
 SHL1STDLIBS += $(OLE32LIB)
 SHL1STDLIBS += $(OLEAUT32LIB)
 SHL1STDLIBS += $(GDI32LIB)
-SHL1STDLIBS += $(DDRAWLIB)
 
 .IF "$(COM)"=="GCC"
 SHL1STDLIBS += $(PSDK_HOME)$/lib$/strmiids.lib
 .ELSE
 SHL1STDLIBS += strmiids.lib
-SHL1STDLIBS += dxguid.lib
 .ENDIF
 
 .ENDIF

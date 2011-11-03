@@ -1348,6 +1348,7 @@ AC_SUBST(WITH_BINFILTER)
 
 if test "$_os" = "WINNT"; then
    AC_MSG_CHECKING([whether to use DirectX])
+   ENABLE_DIRECT_DRAW=""
    if test "$enable_directx" = "yes" -o "$enable_directx" = "TRUE" -o "$enable_directx" = ""; then
       ENABLE_DIRECTX="TRUE"
       AC_MSG_RESULT([yes])
@@ -5453,10 +5454,16 @@ if test \( "$_os" = "WINNT" \) ; then
     DIRECTXSDK_HOME=`echo $DIRECTXSDK_HOME | $SED 's/\/$//'`
 
     if test -f "$DIRECTXSDK_HOME/Include/ddraw.h" ; then
+        HAVE_DIRECTDRAW_H="yes"
+    else
+        HAVE_DIRECTDRAW_H="no"
+    fi
+    if test -f "$DIRECTXSDK_HOME/Include/d3d9.h" ; then
         HAVE_DIRECTXSDK_H="yes"
     else
         HAVE_DIRECTXSDK_H="no"
     fi
+
     # MS changed the location of the libraries with dec 2004 directx sdk
     if test -d "$DIRECTXSDK_HOME/lib/x86" ; then
         DIRECTXSDK_LIB="$DIRECTXSDK_HOME/lib/x86"
@@ -5464,12 +5471,27 @@ if test \( "$_os" = "WINNT" \) ; then
         DIRECTXSDK_LIB="$DIRECTXSDK_HOME/lib"
     fi
     if test -f "$DIRECTXSDK_LIB/ddraw.lib" ; then
+        HAVE_DIRECTDRAW_LIB="yes"
+    else
+        HAVE_DIRECTDRAW_LIB="no"
+    fi
+    if test -f "$DIRECTXSDK_LIB/d3d9.lib" ; then
         HAVE_DIRECTXSDK_LIB="yes"
     else
         HAVE_DIRECTXSDK_LIB="no"
     fi
+
+    if test "$HAVE_DIRECTDRAW_H" = "yes" -a "$HAVE_DIRECTDRAW_LIB" = "yes" ; then
+       ENABLE_DIRECT_DRAW="TRUE"
+    fi
+    if test "$HAVE_DIRECTXSDK_H" = "yes" -a "$HAVE_DIRECTXSDK_LIB" = "yes" ; then
+       HAVE_DIRECTXSDK="yes"
+    else
+       HAVE_DIRECTXSDK="no"
+    fi
+
     if test -n "$ENABLE_DIRECTX"; then
-	    if test "$HAVE_DIRECTXSDK_H" = "yes" -a "$HAVE_DIRECTXSDK_LIB" = "yes"; then
+	    if test "$HAVE_DIRECTDRAW" = "yes" -o "$HAVE_DIRECTXSDK" = "yes" ; then
 		    AC_MSG_RESULT([found])
 	    else
 		    AC_MSG_ERROR([DirectX SDK files not found, please use --with-directx-home or --disable-directx.])
@@ -5479,6 +5501,7 @@ if test \( "$_os" = "WINNT" \) ; then
 		AC_MSG_RESULT([disabled])
     fi
 fi
+AC_SUBST(ENABLE_DIRECT_DRAW)
 AC_SUBST(DIRECTXSDK_HOME)
 AC_SUBST(DIRECTXSDK_LIB)
 

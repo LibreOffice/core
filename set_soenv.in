@@ -1078,12 +1078,15 @@ if ($platform =~ m/cygwin|os2/)
                         $wps.$FRAME_HOME.$LIB.
                         $wps.$COMPATH.$LIB;
       if ( '@ENABLE_DIRECTX@' ne "" ) {
-          $ILIB   .= $wps.$DIRECTXSDK_LIB;
-          if ( '@COMEX@' eq "10" ) {
-              # .NET2003 provides and compiles against DirectX 5 libraries and is
-              # hereby still Win9x compatible.
-              $ILIB .= $wps.'$COMPATH'.$ds.'PlatformSDK'.$LIB;
-              $USE_DIRECTX5 = "YES";
+          # We may have DirectX but not DirectDraw
+          if ( '@ENABLE_DIRECT_DRAW@' ne "") {
+              $ILIB   .= $wps.$DIRECTXSDK_LIB;
+              if ( '@COMEX@' eq "10" ) {
+                  # .NET2003 provides and compiles against DirectX 5 libraries and is
+                  # hereby still Win9x compatible.
+                  $ILIB .= $wps.'$COMPATH'.$ds.'PlatformSDK'.$LIB;
+                  $USE_DIRECTX5 = "YES";
+              }
           }
       }
       # ILIB needs to use '\' directory seperators;
@@ -1821,6 +1824,7 @@ ToFile( "ENABLE_CUPS",       "@ENABLE_CUPS@",       "e" );
 ToFile( "ENABLE_RANDR",      "@ENABLE_RANDR@",      "e" );
 ToFile( "ENABLE_FONTCONFIG", "@ENABLE_FONTCONFIG@", "e" );
 ToFile( "ENABLE_DIRECTX",    "@ENABLE_DIRECTX@",    "e" );
+ToFile( "ENABLE_DIRECT_DRAW","@ENABLE_DIRECT_DRAW@","e" );
 ToFile( "ENABLE_LAYOUT",     "@ENABLE_LAYOUT@",     "e" );
 ToFile( "ENABLE_PCH",        "@ENABLE_PCH@",       "e" );
 ToFile( "ENABLE_GRAPHITE",   "@ENABLE_GRAPHITE@",   "e");
