@@ -153,6 +153,10 @@ CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure ADDCFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
 CONFIGURE_FLAGS=--with-pic --disable-shared --disable-crypto-dl --with-libxslt=no --with-openssl=no --with-gnutls=no LIBXML2LIB="$(LIBXML2LIB)"
 
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
+
 .IF "$(OS)" == "ANDROID"
 CONFIGURE_FLAGS+=--with-openssl=$(SOLARVER)/$(INPATH)
 .ENDIF
