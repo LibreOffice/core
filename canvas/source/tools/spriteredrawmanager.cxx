@@ -36,7 +36,6 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/vector/b2dsize.hxx>
-#include <basegfx/range/rangeexpander.hxx>
 
 #include <algorithm>
 #include <o3tl/compat_functional.hxx>
@@ -222,6 +221,24 @@ namespace canvas
         private:
             SpriteRedrawManager::SpriteConnectedRanges&         mrUpdater;
             const SpriteRedrawManager::VectorOfChangeRecords&   mrChangeContainer;
+        };
+
+        class RangeExpander
+        {
+            private:
+                basegfx::B2DRange& mrBounds;
+
+            public:
+                typedef void        result_type;
+
+                RangeExpander( basegfx::B2DRange& rBounds ) : mrBounds( rBounds )
+                {
+                }
+
+                void operator()( const basegfx::B2DRange& rBounds )
+                {
+                    mrBounds.expand( rBounds );
+                }
         };
     }
 
@@ -424,7 +441,7 @@ namespace canvas
         ::basegfx::B2DRange aTrueArea( aBegin->second.getUpdateArea() );
         ::std::for_each( aBegin,
                          aEnd,
-                         ::boost::bind( ::basegfx::B2DRangeExpander(aTrueArea),
+                         ::boost::bind( RangeExpander(aTrueArea),
                                         ::boost::bind( &SpriteInfo::getUpdateArea,
                                                        ::boost::bind( ::o3tl::select2nd<AreaComponent>(),
                                                                       _1 ) ) ) );

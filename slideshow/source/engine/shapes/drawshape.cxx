@@ -47,7 +47,6 @@
 #include <vcl/wrkwin.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
-#include <basegfx/range/rangeexpander.hxx>
 
 #include <rtl/math.hxx>
 
