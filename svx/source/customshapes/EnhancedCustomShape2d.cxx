@@ -800,35 +800,46 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     }
     fXScale = nCoordWidth == 0 ? 0.0 : (double)aLogicRect.GetWidth() / (double)nCoordWidth;
     fYScale = nCoordHeight == 0 ? 0.0 : (double)aLogicRect.GetHeight() / (double)nCoordHeight;
-    if ( bOOXMLShape ) {
-        fXScaleOOXML = fXScale;
-        fYScaleOOXML = fYScale;
-        fXScale = 1;
-        fYScale = 1;
+    if ( bOOXMLShape )
+    {
+        fXScaleOOXML = 1; //fXScale;
+        fYScaleOOXML = 1; //fYScale;
+        fXScale = 1.0/(double)nCoordWidth;
+        fYScale = 1.0/(double)nCoordHeight;
+
+        // if ( nXRef != (sal_uInt32)nXRef != 0x80000000 && nXRef != 0 )
+        // {
+        //     fXScale *= (double)aLogicRect.GetWidth() / (double) nXRef;
+        // }
+        // if ( nYRef != (sal_uInt32)nYRef != 0x80000000 && nYRef != 0 )
+        // {
+        //     fYScale *= (double)aLogicRect.GetHeight() / (double) nYRef;
+        // }
     } else {
         fXScaleOOXML = 1;
         fYScaleOOXML = 1;
-    }
-    if ( (sal_uInt32)nXRef != 0x80000000 && aLogicRect.GetHeight() )
-    {
-        fXRatio = (double)aLogicRect.GetWidth() / (double)aLogicRect.GetHeight();
-        if ( fXRatio > 1 )
-            fXScale /= fXRatio;
+
+        if ( (sal_uInt32)nXRef != 0x80000000 && aLogicRect.GetHeight() )
+        {
+            fXRatio = (double)aLogicRect.GetWidth() / (double)aLogicRect.GetHeight();
+            if ( fXRatio > 1 )
+                fXScale /= fXRatio;
+            else
+                fXRatio = 1.0;
+        }
         else
             fXRatio = 1.0;
-    }
-    else
-        fXRatio = 1.0;
-    if ( (sal_uInt32)nYRef != 0x80000000 && aLogicRect.GetWidth() )
-    {
-        fYRatio = (double)aLogicRect.GetHeight() / (double)aLogicRect.GetWidth();
-        if ( fYRatio > 1 )
-            fYScale /= fYRatio;
+        if ( (sal_uInt32)nYRef != 0x80000000 && aLogicRect.GetWidth() )
+        {
+            fYRatio = (double)aLogicRect.GetHeight() / (double)aLogicRect.GetWidth();
+            if ( fYRatio > 1 )
+                fYScale /= fYRatio;
+            else
+                fYRatio = 1.0;
+        }
         else
             fYRatio = 1.0;
     }
-    else
-        fYRatio = 1.0;
 
     sal_Int32 i, nLength = seqEquations.getLength();
 
