@@ -408,7 +408,6 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
 
     sal_Bool has_slider = ( thumbRect.GetWidth() > 0 && thumbRect.GetHeight() > 0 );
     x = y = 0;
-
     w = scrollbarRect.GetWidth();
     h = scrollbarRect.GetHeight();
 
@@ -580,7 +579,7 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
 
     gtk_render_arrow(context, cr,
                      (nPart == PART_BUTTON_UP) ? 0 : G_PI,
-                     1 + (arrowRect.Left() - aAreaRect.Left()), 1 + (arrowRect.Top() - aAreaRect.Top()),
+                     (arrowRect.Left() - aAreaRect.Left()), (arrowRect.Top() - aAreaRect.Top()),
                      arrowSize);
 
     gtk_style_context_restore(context);
@@ -633,10 +632,10 @@ void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
     if ( shadowType != GTK_SHADOW_NONE )
     {
         gtk_render_background(context, cr,
-                              1, 1,
+                              0, 0,
                               areaRect.GetWidth(), areaRect.GetHeight() );
         gtk_render_frame(context, cr,
-                         1, 1,
+                         0, 0,
                          areaRect.GetWidth(), areaRect.GetHeight() );
    }
 
@@ -696,13 +695,10 @@ void GtkSalGraphics::PaintCombobox( GtkStyleContext *context,
     Rectangle        areaRect;
     Rectangle        buttonRect;
     Rectangle        arrowRect;
-    gint            x,y;
 
     // Find the overall bounding rect of the buttons's drawing area,
     // plus its actual draw rect excluding adornment
     areaRect = rControlRectangle;
-    x = 1;
-    y = 1;
 
     buttonRect = NWGetComboBoxButtonRect( PART_BUTTON_DOWN, areaRect );
     if( nPart == PART_BUTTON_DOWN )
@@ -715,10 +711,10 @@ void GtkSalGraphics::PaintCombobox( GtkStyleContext *context,
      {
          PrepareComboboxStyle(context, true);
          gtk_render_background(context, cr,
-                               x, y,
+                               0, 0,
                                aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight() );
          gtk_render_frame(context, cr,
-                          x, y,
+                          0, 0,
                           aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight() );
      }
 
@@ -730,17 +726,17 @@ void GtkSalGraphics::PaintCombobox( GtkStyleContext *context,
     PrepareComboboxStyle(context, false);
 
     gtk_render_background(context, cr,
-                          x+(buttonRect.Left() - areaRect.Left()),
-                          y+(buttonRect.Top() - areaRect.Top()),
+                          (buttonRect.Left() - areaRect.Left()),
+                          (buttonRect.Top() - areaRect.Top()),
                           buttonRect.GetWidth(), buttonRect.GetHeight() );
     gtk_render_frame(context, cr,
-                     x+(buttonRect.Left() - areaRect.Left()),
-                     y+(buttonRect.Top() - areaRect.Top()),
+                     (buttonRect.Left() - areaRect.Left()),
+                     (buttonRect.Top() - areaRect.Top()),
                      buttonRect.GetWidth(), buttonRect.GetHeight() );
 
     gtk_render_arrow(context, cr,
                      G_PI,
-                     x+(arrowRect.Left() - areaRect.Left()), y+(arrowRect.Top() - areaRect.Top()),
+                     (arrowRect.Left() - areaRect.Left()), (arrowRect.Top() - areaRect.Top()),
                      arrowRect.GetWidth() );
 }
 
@@ -883,36 +879,38 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
     if (styleClass)
         gtk_style_context_add_class(context, styleClass);
 
+    cairo_translate(cr, 1, 1);
+
     switch(renderType)
     {
     case RENDER_BACKGROUND:
     case RENDER_BACKGROUND_AND_FRAME:
         gtk_render_background(context, cr,
-                              1, 1,
+                              0, 0,
                               rControlRegion.GetWidth(), rControlRegion.GetHeight());
         if (renderType == RENDER_BACKGROUND_AND_FRAME)
             gtk_render_frame(context, cr,
-                             1, 1,
+                             0, 0,
                              rControlRegion.GetWidth(), rControlRegion.GetHeight());
         break;
     case RENDER_CHECK:
         gtk_render_check(context, cr,
-                         1, 1,
+                         0, 0,
                          rControlRegion.GetWidth(), rControlRegion.GetHeight());
         break;
     case RENDER_RADIO:
         gtk_render_option(context, cr,
-                          1, 1,
+                          0, 0,
                           rControlRegion.GetWidth(), rControlRegion.GetHeight());
         break;
     case RENDER_LINE:
         gtk_render_line(context, cr,
-                        4, 1 + rControlRegion.GetHeight() / 2,
-                        rControlRegion.GetWidth() - 6, 1 + rControlRegion.GetHeight() / 2);
+                        3, rControlRegion.GetHeight() / 2,
+                        rControlRegion.GetWidth() - 3, rControlRegion.GetHeight() / 2);
         break;
     case RENDER_ARROW:
         gtk_render_arrow(context, cr,
-                         G_PI / 2, 1, 1,
+                         G_PI / 2, 0, 0,
                          MIN(rControlRegion.GetWidth(), 1 + rControlRegion.GetHeight()));
         break;
     case RENDER_SCROLLBAR:
