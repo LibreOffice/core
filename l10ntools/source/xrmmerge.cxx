@@ -672,7 +672,7 @@ void XRMResMerge::WorkOnDesc(
                     ( sContent != "-" ) && ( sContent.Len()))
                 {
                     ByteString sText( sContent );
-                    ByteString sAdditionalLine( "\n" );
+                    ByteString sAdditionalLine( "\n        " );
                     sAdditionalLine += rOpenTag;
                     ByteString sSearch = sLangAttribute;
                     sSearch += "=\"";
@@ -778,7 +778,7 @@ void XRMResMerge::EndOfText(
                     ( sContent != "-" ) && ( sContent.Len()))
                 {
                     ByteString sText( sContent );
-                    ByteString sAdditionalLine( "\n" );
+                    ByteString sAdditionalLine( "\n        " );
                     sAdditionalLine += rOpenTag;
                     ByteString sSearch = sLangAttribute;
                     sSearch += "=\"";
