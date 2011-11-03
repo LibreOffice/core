@@ -620,6 +620,21 @@ sub use_langpack_copy_scpaction
 }
 
 ################################################################################
+# Using different HostName for dev builds
+################################################################################
+
+sub use_devversion_copy_scpaction
+{
+    my ($scpactionsref) = @_;
+
+    for ( my $i = 0; $i <= $#{$scpactionsref}; $i++ )
+    {
+        my $onescpaction = ${$scpactionsref}[$i];
+        if (( $onescpaction->{'DevVersionCopy'} ) && ( $onescpaction->{'DevVersionCopy'} ne "" )) { $onescpaction->{'Copy'} = $onescpaction->{'DevVersionCopy'}; }
+    }
+}
+
+################################################################################
 # Using different HostName for language packs
 ################################################################################
 
