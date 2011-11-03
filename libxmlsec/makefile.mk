@@ -151,7 +151,7 @@ LDFLAGS:=$(xmlsec_LDFLAGS)
 .ENDIF
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure ADDCFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
-CONFIGURE_FLAGS=--with-pic --disable-shared --disable-crypto-dl --with-libxslt=no --with-openssl=no --with-gnutls=no LIBXML2LIB="$(LIBXML2LIB)"
+CONFIGURE_FLAGS=--with-pic --disable-shared --disable-crypto-dl --with-libxslt=no --with-gnutls=no LIBXML2LIB="$(LIBXML2LIB)"
 
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
@@ -159,6 +159,8 @@ CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 
 .IF "$(OS)" == "ANDROID"
 CONFIGURE_FLAGS+=--with-openssl=$(SOLARVER)/$(INPATH)
+.ELSE
+CONFIGURE_FLAGS+=--with-openssl=no
 .ENDIF
 
 # system-mozilla needs pkgconfig to get the information about nss
