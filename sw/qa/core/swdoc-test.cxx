@@ -41,19 +41,20 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 
-#include "init.hxx"
-#include "swtypes.hxx"
-#include "docstat.hxx"
+#include "breakit.hxx"
 #include "doc.hxx"
-#include "ndtxt.hxx"
 #include "docsh.hxx"
-#include "shellres.hxx"
+#include "docstat.hxx"
 #include "docufld.hxx"
 #include "fmtanchr.hxx"
-#include "swscanner.hxx"
-#include "swcrsr.hxx"
-#include "swmodule.hxx"
+#include "init.hxx"
+#include "ndtxt.hxx"
 #include "shellio.hxx"
+#include "shellres.hxx"
+#include "swcrsr.hxx"
+#include "swscanner.hxx"
+#include "swmodule.hxx"
+#include "swtypes.hxx"
 
 SO2_DECL_REF(SwDocShell)
 SO2_IMPL_REF(SwDocShell)
@@ -73,14 +74,15 @@ public:
     void testFileNameFields();
     void testDocStat();
     void testSwScanner();
+    void testUserPerceivedCharCount();
     void testGraphicAnchorDeletion();
 
     CPPUNIT_TEST_SUITE(SwDocTest);
     CPPUNIT_TEST(randomTest);
     CPPUNIT_TEST(testPageDescName);
     CPPUNIT_TEST(testFileNameFields);
-    CPPUNIT_TEST(testDocStat);
     CPPUNIT_TEST(testSwScanner);
+    CPPUNIT_TEST(testUserPerceivedCharCount);
     CPPUNIT_TEST(testGraphicAnchorDeletion);
     CPPUNIT_TEST_SUITE_END();
 
@@ -187,6 +189,28 @@ void SwDocTest::testDocStat()
     CPPUNIT_ASSERT_MESSAGE("Should now have updated count", aDocStat.nChar == nLen);
 
     CPPUNIT_ASSERT_MESSAGE("And cache is updated too", m_pDoc->GetDocStat().nChar == nLen);
+}
+
+//For UI character counts we should follow UAX#29 and display the user
+//perceived characters, not the number of codepoints, nor the number of code
+//units http://unicode.org/reports/tr29/
+void SwDocTest::testUserPerceivedCharCount()
+{
+    SwBreakIt *pBreakIter = SwBreakIt::Get();
+
+    //Grapheme example, two different unicode code-points perceived by the user as a single
+    //glyph
+    const sal_Unicode ALEF_QAMATS [] = { 0x05D0, 0x05B8 };
+    ::rtl::OUString sALEF_QAMATS(ALEF_QAMATS, SAL_N_ELEMENTS(ALEF_QAMATS));
+    sal_Int32 nGraphemeCount = pBreakIter->getGraphemeCount(sALEF_QAMATS);
+    CPPUNIT_ASSERT_MESSAGE("Grapheme Count should be 1", nGraphemeCount == 1);
+
+    //Surrogate pair example, one single unicode code-point (U+1D11E)
+    //represented as two code units in UTF-8
+    const sal_Unicode GCLEF[] = { 0xD834, 0xDD1E };
+    ::rtl::OUString sGCLEF(GCLEF, SAL_N_ELEMENTS(GCLEF));
+    sal_Int32 nCount = pBreakIter->getGraphemeCount(sGCLEF);
+    CPPUNIT_ASSERT_MESSAGE("Surrogate Pair should be counted as single character", nCount == 1);
 }
 
 //See https://bugs.freedesktop.org/show_bug.cgi?id=40449 for motivation

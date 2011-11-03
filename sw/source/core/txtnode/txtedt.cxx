@@ -1862,12 +1862,13 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
             if( 1 != aExpandText.match(aBreakWord, aScanner.GetBegin() ))
             {
                 ++nTmpWords;
-                nTmpCharsExcludingSpaces += aScanner.GetLen();
+                nTmpCharsExcludingSpaces += pBreakIt->getGraphemeCount(aScanner.GetWord());
             }
         }
     }
 
-    nTmpChars = nExpandEnd - nExpandBegin - nNumOfMaskedChars;
+    nTmpChars = pBreakIt->getGraphemeCount(aExpandText.copy(nExpandBegin, nExpandEnd - nExpandBegin));
+    nTmpChars -= nNumOfMaskedChars;
 
     // no nTmpCharsExcludingSpaces adjust needed neither for blanked out MaskedChars
     // nor for mid-word selection - set scanner bClip = true at creation
@@ -1889,10 +1890,10 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
             while ( aScanner.NextWord() )
             {
                 ++nTmpWords;
-                nTmpCharsExcludingSpaces += aScanner.GetLen();
+                nTmpCharsExcludingSpaces += pBreakIt->getGraphemeCount(aScanner.GetWord());
             }
 
-            nTmpChars += nNumStringLen;
+            nTmpChars = pBreakIt->getGraphemeCount(aNumString);
         }
         else if ( HasBullet() )
         {

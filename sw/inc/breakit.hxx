@@ -110,7 +110,9 @@ public:
     }
 
     sal_uInt16 GetRealScriptOfText( const String& rTxt, xub_StrLen nPos ) const;
-       sal_uInt16 GetAllScriptsOfText( const String& rTxt ) const;
+    sal_uInt16 GetAllScriptsOfText( const String& rTxt ) const;
+
+    sal_Int32 getGraphemeCount(const rtl::OUString& rStr) const;
 };
 
 #define SW_BREAKITER()  SwBreakIt::Get()

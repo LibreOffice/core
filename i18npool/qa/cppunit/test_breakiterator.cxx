@@ -151,6 +151,24 @@ void TestBreakIterator::testGraphemeIteration()
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
         CPPUNIT_ASSERT_MESSAGE("Should skip full grapheme", nPos == 0);
     }
+
+    {
+        const sal_Unicode ALEF_QAMATS [] = { 0x05D0, 0x05B8 };
+        ::rtl::OUString aText(ALEF_QAMATS, SAL_N_ELEMENTS(ALEF_QAMATS));
+
+        sal_Int32 nGraphemeCount = 0;
+
+        sal_Int32 nCurPos = 0;
+        while (nCurPos < aText.getLength())
+        {
+            sal_Int32 nCount2 = 1;
+            nCurPos = m_xBreak->nextCharacters(aText, nCurPos, lang::Locale(),
+                i18n::CharacterIteratorMode::SKIPCELL, nCount2, nCount2);
+            ++nGraphemeCount;
+        }
+
+        CPPUNIT_ASSERT_MESSAGE("Should be considered 1 grapheme", nGraphemeCount == 1);
+    }
 }
 
 //A test to ensure that certain ranges and codepoints that are categorized as
