@@ -367,6 +367,7 @@ void SpellDialog::UpdateBoxes_Impl()
     else
         SetTitle_Impl( nAltLanguage );
     SetSelectedLang_Impl( nAltLanguage );
+    InitUserDicts();
 
     // Alternativen eintragen
     const ::rtl::OUString *pNewWords = aNewWords.getConstArray();
