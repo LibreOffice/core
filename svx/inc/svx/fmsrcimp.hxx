@@ -50,7 +50,7 @@
 #include <deque>
 
 // ===================================================================================================
-// = class FmSearchThread - wie der Name schon sagt
+// = class FmSearchThread
 // ===================================================================================================
 
 class FmSearchEngine;
@@ -68,44 +68,44 @@ public:
 };
 
 // ===================================================================================================
-// = struct FmSearchProgress - diese Struktur bekommt der Owner der SearchEngine fuer Status-Updates
-// = (und am Ende der Suche)
+// = struct FmSearchProgress - the owner of SearchEngine receives this structure for status updates
+// = (at the end of the search)
 // ===================================================================================================
 
 struct FmSearchProgress
 {
     enum STATE { STATE_PROGRESS, STATE_PROGRESS_COUNTING, STATE_CANCELED, STATE_SUCCESSFULL, STATE_NOTHINGFOUND, STATE_ERROR };
-        // (Bewegung auf neuen Datensatz; Fortschritt beim Zaehlen von Datensaetzen; abgebrochen; Datensatz gefunden;
-        // nichts gefunden, irgendein nicht zu handelnder Fehler)
+        // (move to new record; progress during counting of records; cancelled; record found; nothing found;
+        // any non-processable error)
     STATE   aSearchState;
 
-    // aktueller Datensatz - immer gueltig (ist zum Beispiel bei Abbrechen auch fuer das Weitersuchen interesant)
+    // current record - always valid (e.g. of interest for continuing search in case of cancellation)
     sal_uInt32  nCurrentRecord;
-    // Ueberlauf - nur gueltig bei STATE_PROGRESS
+    // Overflow - only valid in case of STATE_PROGRESS
     sal_Bool    bOverflow;
 
-    // die Position des Such-Cursors - bei STATE_SUCCESSFULL, STATE_CANCELED und STATE_NOTHING_FOUND gueltig
+    // the position of the search cursor - valid in case of STATE_SUCCESSFULL, STATE_CANCELED and STATE_NOTHING_FOUND
     ::com::sun::star::uno::Any  aBookmark;
-    // das Feld, in dem der Text gefunden wurde - bei STATE_SUCCESSFULL gueltig
+    // the field, in which the text was found - valid in case of STATE_SUCCESSFULL
     sal_Int32   nFieldIndex;
 };
 
 // ===================================================================================================
-// = class FmRecordCountListener - Hilfsklasse fuer FmSearchEngine, lauscht an einem Cursor und teilt
-// =                                Aenderungem im RecordCount mit
+// = class FmRecordCountListener - utility class for FmSearchEngine, listens at a certain cursor and provides
+// =                                the differences in RecordCount
 // ===================================================================================================
 
 class FmRecordCountListener : public ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>
 {
-// Atribute
+// attribute
     Link            m_lnkWhoWantsToKnow;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xListening;
 
-// Attribut-Zugriff
+// attribute access
 public:
     Link SetPropChangeHandler(const Link& lnk);
 
-// Oprationen
+// methods
 public:
     FmRecordCountListener(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& dbcCursor);
         // the set has to support the sdb::ResultSet service
@@ -128,7 +128,7 @@ private:
 };
 
 // ===================================================================================================
-// = class FmSearchEngine - Impl-Klasse fuer FmSearchDialog
+// = class FmSearchEngine - Impl class for FmSearchDialog
 // ===================================================================================================
 
 namespace svxform {
@@ -181,20 +181,19 @@ class SVX_DLLPUBLIC FmSearchEngine
     enum SEARCH_RESULT { SR_FOUND, SR_NOTFOUND, SR_ERROR, SR_CANCELED };
     enum SEARCHFOR_TYPE { SEARCHFOR_STRING, SEARCHFOR_NULL, SEARCHFOR_NOTNULL };
 
-    // zugrundeliegende Daten
     CursorWrapper                   m_xSearchCursor;
     std::deque<sal_Int32>           m_arrFieldMapping;
-        // da der Iterator durchaus mehr Spalten haben kann, als ich eigentlich verwalte (in meiner Feld-Listbox),
-        // muss ich mir hier ein Mapping dieser ::com::sun::star::form-Schluessel auf die Indizies der entsprechenden Spalten im Iterator halten
+        // since the iterator could have more columns, as managed here (in this field listbox),
+        // a mapping of this ::com::sun::star::form keys on the indices of the respective columns is kept in the iterator
 
-    // der Formatter
+    // the formatter
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xFormatSupplier;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >        m_xFormatter;
 
     CharClass               m_aCharacterClassficator;
     CollatorWrapper         m_aStringCompare;
 
-    // die Sammlung aller interesanten Felder (bzw. ihre ::com::sun::star::data::XDatabaseVariant-Interfaces und ihre FormatKeys)
+    // the collection of all interesting fields (or their ::com::sun::star::data::XDatabaseVariant interfaces and FormatKeys)
     struct FieldInfo
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >          xContents;
@@ -204,7 +203,7 @@ class SVX_DLLPUBLIC FmSearchEngine
 
     DECLARE_STL_VECTOR(FieldInfo, FieldCollection);
     FieldCollection             m_arrUsedFields;
-    sal_Int32                   m_nCurrentFieldIndex;   // der letzte Parameter von RebuildUsedFields, ermoeglicht mir Checks in FormatField
+    sal_Int32                   m_nCurrentFieldIndex;   // the last parameter of RebuildUsedFields, it allows checks in FormatField
 
     DECLARE_STL_VECTOR(svxform::ControlTextWrapper*, ControlTextSuppliers);
     ControlTextSuppliers    m_aControlTexts;
@@ -213,51 +212,50 @@ class SVX_DLLPUBLIC FmSearchEngine
     CursorWrapper           m_xOriginalIterator;
     CursorWrapper           m_xClonedIterator;
 
-    // Daten fuer Entscheidung, in welchem Feld ich ein "Found" akzeptiere
-    ::com::sun::star::uno::Any  m_aPreviousLocBookmark;             // Position, an der ich zuletzt fuendig war
-    FieldCollectionIterator     m_iterPreviousLocField;             // dito Feld
+    // data for the decision in which field a "Found" is accepted
+    ::com::sun::star::uno::Any  m_aPreviousLocBookmark;             // position of the last finding
+    FieldCollectionIterator     m_iterPreviousLocField;             // field of the last finding
 
     // Kommunikation mit dem Thread, der die eigentliche Suche durchfuehrt
-    ::rtl::OUString             m_strSearchExpression;              // Hinrichtung
-    SEARCHFOR_TYPE      m_eSearchForType;                   // dito
-    SEARCH_RESULT       m_srResult;                         // Rueckrichtung
+    ::rtl::OUString             m_strSearchExpression;              // forward direction
+    SEARCHFOR_TYPE      m_eSearchForType;                   // ditto
+    SEARCH_RESULT       m_srResult;                         // backward direction
 
     // der Link, dem ich Fortschritte und Ergebnisse mitteile
     Link                m_aProgressHandler;
-    sal_Bool            m_bSearchingCurrently : 1;      // laeuft gerade eine (asynchrone) Suche ?
-    sal_Bool            m_bCancelAsynchRequest : 1;     // soll abgebrochen werden ?
-    ::osl::Mutex        m_aCancelAsynchAccess;          // Zugriff auf m_bCancelAsynchRequest (eigentlich nur bei
-                                                        // m_eMode == SM_USETHREAD interesant)
-    FMSEARCH_MODE   m_eMode;                            // der aktuelle Modus
-    // der aktuelle Modus
+    sal_Bool            m_bSearchingCurrently : 1;      // is an (asynchronous) search running?
+    sal_Bool            m_bCancelAsynchRequest : 1;     // should be cancelled ?
+    ::osl::Mutex        m_aCancelAsynchAccess;          // access to_bCancelAsynchRequest (technically only
+                                                        // relevant for m_eMode == SM_USETHREAD)
+    FMSEARCH_MODE   m_eMode;                            // current mode
 
-    // Parameter fuer die Suche
-    sal_Bool    m_bFormatter : 1;       // Feldformatierung benutzen
-    sal_Bool    m_bForward : 1;         // Richtung
-    sal_Bool    m_bWildcard : 1;        // Platzhalter-Suche ?
-    sal_Bool    m_bRegular : 1;         // regulaerer Ausdruck
-    sal_Bool    m_bLevenshtein : 1;     // Levenshtein-Suche
-    sal_Bool    m_bTransliteration : 1; // Levenshtein-Suche
+    // parameters for the search
+    sal_Bool    m_bFormatter : 1;       // use field formatting
+    sal_Bool    m_bForward : 1;         // direction
+    sal_Bool    m_bWildcard : 1;        // wildcard search
+    sal_Bool    m_bRegular : 1;         // regular expression
+    sal_Bool    m_bLevenshtein : 1;     // Levenshtein search
+    sal_Bool    m_bTransliteration : 1; // Levenshtein search
 
-    sal_Bool    m_bLevRelaxed : 1;      // Parameter fuer Levenshtein-Suche
+    sal_Bool    m_bLevRelaxed : 1;      // parameters for Levenshtein search
     sal_uInt16  m_nLevOther;
     sal_uInt16  m_nLevShorter;
     sal_uInt16  m_nLevLonger;
 
-    sal_uInt16  m_nPosition;            // wenn nicht regulaer oder lev, dann einer der MATCHING_...-Werte
+    sal_uInt16  m_nPosition;            // if not regular or levenshtein, then one of the MATCHING_... values
 
     sal_Int32   m_nTransliterationFlags;
 
 // -------------
-// Memberzugriff
+// member access
 private:
-    SVX_DLLPRIVATE sal_Bool CancelRequested();      // liefert eine durch m_aCancelAsynchAccess gesicherte Auswertung von m_bCancelAsynchRequest
+    SVX_DLLPRIVATE sal_Bool CancelRequested();      // provides a through m_aCancelAsynchAccess backed interpretation of m_bCancelAsynchRequest
 
 public:
     void        SetCaseSensitive(sal_Bool bSet);
     sal_Bool    GetCaseSensitive() const;
 
-    void        SetFormatterUsing(sal_Bool bSet);   // das ist etwas umfangreicher, deshalb kein hier inline ....
+    void        SetFormatterUsing(sal_Bool bSet);   // this is somewhat more extensive, so no inline ... here
     sal_Bool    GetFormatterUsing() const           { return m_bFormatter; }
 
     void        SetDirection(sal_Bool bForward)     { m_bForward = bForward; }
@@ -286,25 +284,25 @@ public:
     sal_uInt16  GetLevShorter() const               { return m_nLevShorter; }
     void        SetLevLonger(sal_uInt16 nHowMuch)   { m_nLevLonger = nHowMuch; }
     sal_uInt16  GetLevLonger() const                { return m_nLevLonger; }
-        // die ganzen Lev-Werte werden nur bei  m_bLevenshtein==sal_True beachtet
+        // all Lev. values will only be considered in case of m_bLevenshtein==sal_True
 
     void        SetTransliterationFlags(sal_Int32 _nFlags)  { m_nTransliterationFlags = _nFlags; }
     sal_Int32   GetTransliterationFlags() const             { return m_nTransliterationFlags; }
 
     void    SetPosition(sal_uInt16 nValue)      { m_nPosition = nValue; }
     sal_uInt16  GetPosition() const             { return m_nPosition; }
-        // Position wird bei m_bWildCard==sal_True nicht beachtet
+        // position will be ignored in case of m_bWildCard==sal_True
 
     FMSEARCH_MODE GetSearchMode() const { return m_eMode; }
 
 public:
-    /** zwei Constructoren, beide analog zu denen des FmSearchDialog, Erklaerung siehe also dort ....
-        xCursor muss jeweils den ::com::sun::star::data::DatabaseCursor-Service implementieren.
-        wenn eMode == SM_USETHREAD, sollte ein ProgressHandler gesetzt sein, da dann die Ergebnisuebermittlung ueber diesen
-        Handler erfolgt.
-        Ist eMode != SM_USETHREAD, kehren SearchNext und StarOver nicht zurueck, bevor die Suche (erfolgreich oder nicht) beendet
-        wurde, dann kann man das Ergebnis danach abfragen. Ist zusaetzlich der ProgressHandler gesetzt, wird dieser fuer jeden neuen
-        Datensatz sowie am Ende der Suche aufgerufen.
+    /** two constructs, both analogical to FmSearchDialog, therefore look this up for explanations ....
+        xCursor has to implement ::com::sun::star::data::DatabaseCursor service  each time.
+        If eMode == SM_USETHREAD, a ProgressHandler should be set, because in this case the result forwarding will be done
+        by this handler.
+        If eMode != SM_USETHREAD, SearchNext and StarOver won't return, until the search has finished (independently of its
+        success), only then the result can be requested. If additionally the ProgressHandler is set, it will be called for
+        every record as well as at the end of the search.
     */
     FmSearchEngine(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
@@ -321,35 +319,35 @@ public:
 
     virtual ~FmSearchEngine();
 
-    /** der Link wird fuer jeden Datensatz und nach Beendigung der Suche aufgerufen, Parameter ist ein Zeiger auf
-        eine FmSearchProgress-Struktur
-        der Handler sollte auf jeden Fall Thread-sicher sein
+    /** the link will be called on every record and after the completion of the search, the parameter is a pointer to
+        a FmSearchProgress structure
+        the handler should be in any case thread-safe
     */
     void SetProgressHandler(Link aHdl) { m_aProgressHandler = aHdl; }
 
-    /// das naechste Vorkommen suchen (Werte fuer nDirection siehe DIRECTION_*-defines)
+    /// search for the next appearance (for nDirection values check DIRECTION_*-defines)
     void SearchNext(const ::rtl::OUString& strExpression);
     /// analogous, search for "NULL" (_bSearchForNull==sal_True) or "not NULL"
     void SearchNextSpecial(sal_Bool _bSearchForNull);
-    /// das naechste Vorkommen suchen, abhaengig von nDirection wird dabei am Anfang oder am Ende neu begonnen
+    /// search for the next appearance, dependent on nDirection from the start or end
     void StartOver(const ::rtl::OUString& strExpression);
     /// analogous, search for "NULL" (_bSearchForNull==sal_True) or "not NULL"
     void StartOverSpecial(sal_Bool _bSearchForNull);
-    /// die Angaben ueber letzte Fundstelle invalidieren
+    /// invalidate previous search reference
     void InvalidatePreviousLoc();
 
-    /** baut m_arrUsedFields neu auf (nFieldIndex==-1 bedeutet alle Felder, ansonsten gibt es den Feldindex an)
-        wenn bForce nicht gesetzt ist, passiert bei nFieldIndex == m_nCurrentFieldIndex nichts
-        (ruft InvalidatePreviousLoc auf)
+    /** rebuilds m_arrUsedFields (nFieldIndex==-1 means all fields, otherwise it specifies the field index)
+        if bForce is not set, nothing will happen in case of nFieldIndex == m_nCurrentFieldIndex
+        (calls InvalidatePreviousLoc)
     */
     void RebuildUsedFields(sal_Int32 nFieldIndex, sal_Bool bForce = sal_False);
     ::rtl::OUString FormatField(sal_Int32 nWhich);
 
-    /// kehrt sofort zurueck; nachdem wirklich abgebrochen wurde, wird der ProgressHandler mit STATE_CANCELED aufgerufen
+    /// returns directly; once it was really aborted, ProgressHandler is called with STATE_CANCELED
     void CancelSearch();
 
-    /** nur gueltig, wenn nicht gerade eine (asynchrone) Suche laeuft, die naechste Suche wird dann auf dem neuen Iterator
-        mit den neuen Parametern durchgefuehrt
+    /** only valid, if not an (asynchronous) search is running, the next search will then be executed
+        on top of the new iterator with the new parameter
     */
     sal_Bool SwitchToContext(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xCursor, const ::rtl::OUString& strVisibleFields, const InterfaceArray& arrFields,
         sal_Int32 nFieldIndex);
@@ -358,7 +356,7 @@ protected:
     void Init(const ::rtl::OUString& strVisibleFields);
 
     void SearchNextImpl();
-        // diese Impl-Methode laeuft im SearchThread
+        // this Impl method is running in SearchThread
 
     // start a thread-search (or call SearchNextImpl directly, depending on the search mode)
     void ImplStartNextSearch();
@@ -378,23 +376,23 @@ private:
         const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd);
 
     SVX_DLLPRIVATE void PropagateProgress(sal_Bool _bDontPropagateOverflow);
-        // ruft den ProgressHandler mit STATE_PROGRESS und der aktuellen Position des SearchIterators auf
+        // call the ProgressHandler with STATE_PROGRESS and the current position of the search iterator
 
-    // helpers, die ich mehrmals brauche
+    // helpers, that are needed several times
     SVX_DLLPRIVATE sal_Bool MoveCursor();
-        // bewegt m_xSearchIterator unter Beachtung von Richtung/Ueberlauf Cursor
+        // moves m_xSearchIterator with respect to direction/overflow cursor
     SVX_DLLPRIVATE sal_Bool MoveField(sal_Int32& nPos, FieldCollectionIterator& iter, const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd);
-        // bewegt den Iterator unter Beachtung von Richtung/Ueberlauf Iterator/Ueberlauf Cursor
+        // moves the iterator with respect to the direction/overflow iterator/overflow cursor
     SVX_DLLPRIVATE void BuildAndInsertFieldInfo(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xAllFields, sal_Int32 nField);
-        // baut eine FieldInfo zum Feld Nummer nField (in xAllFields) auf und fuegt sie zu m_arrUsedFields hinzu
-        // xAllFields muss den DatabaseRecord-Service unterstuetzen
+        // builds a FieldInfo in relation to field number nField (in xAllFields) and adds it to m_arrUsedFields
+        // xAllFields needs to support the DatabaseRecord service
     SVX_DLLPRIVATE ::rtl::OUString FormatField(const FieldInfo& rField);
-        // formatiert das Feld mit dem NumberFormatter
+        // formats the field with the NumberFormatter
 
     SVX_DLLPRIVATE sal_Bool HasPreviousLoc() { return m_aPreviousLocBookmark.hasValue(); }
 
     DECL_LINK(OnSearchTerminated, FmSearchThread*);
-        // wird vom SuchThread benutzt, nach Rueckkehr aus diesem Handler loescht sich der Thread selber
+        // is used by SearchThread, after the return from this handler the thread removes itself
     DECL_LINK(OnNewRecordCount, void*);
 };
 

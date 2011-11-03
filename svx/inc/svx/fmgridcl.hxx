@@ -179,10 +179,10 @@ protected:
     virtual void EndCursorAction();
     virtual void Select();
 
-    // Initialisieren der Spalten
-    // a.) nur ueber Spaltenbeschreibung
+    // Initialize columns
+    // a.) only by column description
     virtual void InitColumnsByModels(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& xColumns);
-    // b.) im alivemode ueber Datenbankfelder
+    // b.) during alivemode by database fields
     virtual void InitColumnsByFields(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xFields);
 
             // some kind of impl version (for one single column) of our version of InitColumnsByFields

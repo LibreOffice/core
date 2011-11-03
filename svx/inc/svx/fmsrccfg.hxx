@@ -41,10 +41,10 @@
 #define MATCHING_END            2
 #define MATCHING_WHOLETEXT      3
 
-// diese Konstanten duerfen NICHT einfach geaendert werden, da der SearchDialog aus den Einstellungen seiner ListBox
-// keine Umrechnungen vornimmt, sondern die einfach in die entsprechenden Methoden der SearchEngine steckt
-// (wenn man also die Konstanten oder die Reihenfolge der Listbox-Eintraege im Dialog aendert, muss das jeweils andere
-// angepasst werden)
+// this constants should NOT be just changed, since the SearchDialog performs no conversion of the settings of
+// its ListBox, but instead just passes them along to the appropriate methods of SearchEngine
+// (so if you change the constants or the order of the listbox entries in the dialog, then the other has
+// to be adapted)
 
 
 //........................................................................
@@ -53,7 +53,7 @@ namespace svxform
 //........................................................................
 
     // ===================================================================================================
-    // = struct FmSearchParams - Parameter einer Suche
+    // = struct FmSearchParams - parameters of a search
     // ===================================================================================================
 
     struct SVX_DLLPUBLIC FmSearchParams
@@ -98,7 +98,7 @@ namespace svxform
     };
 
     // ===================================================================================================
-    // = class FmSearchConfigItem - ein ConfigItem, dass sich Suchparameter merkt
+    // = class FmSearchConfigItem - a ConfigItem, that remembers search parameters
     // ===================================================================================================
 
     class SVX_DLLPUBLIC FmSearchConfigItem

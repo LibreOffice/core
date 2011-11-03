@@ -34,7 +34,7 @@
 
 /*************************************************************************
 |*
-|* 3D-Extrusionsobjekt aus uebergebenem 2D-Polygon erzeugen
+|* 3D extrusion object created from the provided 2D polygon
 |*
 \************************************************************************/
 
@@ -44,7 +44,7 @@ private:
     // to allow sdr::properties::E3dExtrudeProperties access to SetGeometryValid()
     friend class sdr::properties::E3dExtrudeProperties;
 
-    // Geometrie, die dieses Objekt bestimmt
+    // geometry, which determines the object
     basegfx::B2DPolyPolygon         maExtrudePolygon;
 
 protected:
