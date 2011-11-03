@@ -134,6 +134,9 @@ CONFIGURE_ACTION=.$/configure
 # and we want it to find our dummy one that prints the LIBXML_CFLAGS and LIBXML_LIBS that
 # the configure script found out.
 CONFIGURE_FLAGS=--disable-shared --with-libxml-prefix=$(SRC_ROOT)/$(PRJNAME)/dummy
+.ELIF "$(SYSTEM_LIBXML)"!="YES"
+# Use the xml2-config from our own libxml2 copy
+CONFIGURE_FLAGS=--disable-static --with-libxml-prefix=$(SOLARVER)/$(INPATH)
 .ELSE
 CONFIGURE_FLAGS=--disable-static
 .ENDIF
