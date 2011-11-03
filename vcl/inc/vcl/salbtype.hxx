@@ -607,7 +607,7 @@ inline sal_Bool BitmapPalette::operator==( const BitmapPalette& rBitmapPalette )
 {
     sal_Bool bRet = sal_False;
 
-    if( rBitmapPalette.mnCount == mnCount )
+    if( rBitmapPalette.mnCount == mnCount && rBitmapPalette.mbIsGrey == mbIsGrey )
     {
         bRet = sal_True;
 
