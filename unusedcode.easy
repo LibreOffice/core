@@ -113,31 +113,6 @@ EECharAttribArray::Insert(EECharAttribArray const*, unsigned short, unsigned sho
 EECharAttribArray::Replace(EECharAttrib const&, unsigned short)
 EECharAttribArray::Replace(EECharAttrib const*, unsigned short, unsigned short)
 EECharAttribArray::_ForEach(unsigned short, unsigned short, unsigned char (*)(EECharAttrib const&, void*), void*)
-EditEngine::EnablePasteSpecial(unsigned char)
-EditEngine::EndSpelling()
-EditEngine::GetAsianCompressionMode() const
-EditEngine::GetAvailableSearchOptions()
-EditEngine::GetBigTextObjectStart() const
-EditEngine::GetDefTab() const
-EditEngine::GetFirstLineOffset(unsigned short)
-EditEngine::GetForbiddenCharsTable() const
-EditEngine::GetGroupChars() const
-EditEngine::GetHyphenator() const
-EditEngine::GetPolygon()
-EditEngine::IsAddExtLeading() const
-EditEngine::IsAutoColorEnabled() const
-EditEngine::IsFirstWordCapitalization() const
-EditEngine::IsFixedCellHeight() const
-EditEngine::IsKernAsianPunctuation() const
-EditEngine::IsParagraphVisible(unsigned short)
-EditEngine::IsPasteSpecialEnabled() const
-EditEngine::RegisterClipboardFormatName()
-EditEngine::SelectSentence(ESelection const&) const
-EditEngine::SetActiveView(EditView*)
-EditEngine::SetBigTextObjectStart(unsigned short)
-EditEngine::SetGroupChars(String const&)
-EditEngine::SetText(unsigned short, EditTextObject const&)
-EditEngine::StopSelectionMode()
 EditView::GetSelectionMode() const
 EditView::MatchGroup()
 EditView::SetCursor(Cursor const&)

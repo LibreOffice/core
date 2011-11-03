@@ -135,7 +135,6 @@ public:
     const SfxItemSet&   GetEmptyItemSet();
 
     void            SetDefTab( sal_uInt16 nDefTab );
-    sal_uInt16          GetDefTab() const;
 
     void            SetRefDevice( OutputDevice* pRefDef );
     OutputDevice*   GetRefDevice() const;
@@ -150,7 +149,6 @@ public:
     Color           GetBackgroundColor() const;
     Color           GetAutoColor() const;
     void            EnableAutoColor( sal_Bool b );
-    sal_Bool            IsAutoColorEnabled() const;
     void            ForceAutoColor( sal_Bool b );
     sal_Bool            IsForceAutoColor() const;
 
@@ -161,7 +159,6 @@ public:
     sal_uInt16          GetViewCount() const;
     sal_Bool            HasView( EditView* pView ) const;
     EditView*       GetActiveView() const;
-    void            SetActiveView( EditView* pView );
 
     void            SetPaperSize( const Size& rSize );
     const Size&     GetPaperSize() const;
@@ -170,7 +167,6 @@ public:
     sal_Bool            IsVertical() const;
 
     void            SetFixedCellHeight( sal_Bool bUseFixedCellHeight );
-    sal_Bool            IsFixedCellHeight() const;
 
     void                        SetDefaultHorizontalTextDirection( EEHorizontalTextDirection eHTextDir );
     EEHorizontalTextDirection   GetDefaultHorizontalTextDirection() const;
@@ -181,18 +177,14 @@ public:
     void            TransliterateText( const ESelection& rSelection, sal_Int32 nTransliterationMode );
 
     void            SetAsianCompressionMode( sal_uInt16 nCompression );
-    sal_uInt16          GetAsianCompressionMode() const;
 
     void            SetKernAsianPunctuation( sal_Bool bEnabled );
-    sal_Bool            IsKernAsianPunctuation() const;
 
     void            SetAddExtLeading( sal_Bool b );
-    sal_Bool            IsAddExtLeading() const;
 
     void                SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon );
     void                SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon);
     void                ClearPolygon();
-    const PolyPolygon*  GetPolygon();
 
     const Size&     GetMinAutoPaperSize() const;
     void            SetMinAutoPaperSize( const Size& rSz );
@@ -218,7 +210,6 @@ public:
     void            GetLineBoundaries( /*out*/sal_uInt16 &rStart, /*out*/sal_uInt16 &rEnd, sal_uInt16 nParagraph, sal_uInt16 nLine ) const;
     sal_uInt16          GetLineNumberAtIndex( sal_uInt16 nPara, sal_uInt16 nIndex ) const;
     sal_uInt32      GetLineHeight( sal_uInt16 nParagraph, sal_uInt16 nLine = 0 );
-    sal_uInt16          GetFirstLineOffset( sal_uInt16 nParagraph );
     ParagraphInfos  GetParagraphInfos( sal_uInt16 nPara );
     sal_uInt16          FindParagraph( long nDocPosY );
     EPosition       FindDocPosition( const Point& rDocPos ) const;
@@ -227,7 +218,6 @@ public:
     String          GetWord( sal_uInt16 nPara, xub_StrLen nIndex );
 
     ESelection      GetWord( const ESelection& rSelection, sal_uInt16 nWordType ) const;
-    ESelection      SelectSentence( const ESelection& rCurSel ) const;
 
     void            Clear();
     void            SetText( const String& rStr );
@@ -241,7 +231,6 @@ public:
     void            InsertParagraph( sal_uInt16 nPara, const EditTextObject& rTxtObj );
     void            InsertParagraph( sal_uInt16 nPara, const String& rText);
 
-    void            SetText( sal_uInt16 nPara, const EditTextObject& rTxtObj );
     void            SetText( sal_uInt16 nPara, const String& rText);
 
     virtual void                SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet );
@@ -261,7 +250,6 @@ public:
     void            RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich );
 
     void            ShowParagraph( sal_uInt16 nParagraph, sal_Bool bShow = sal_True );
-    sal_Bool            IsParagraphVisible( sal_uInt16 nParagraph );
 
     ::svl::IUndoManager&
                     GetUndoManager();
@@ -285,7 +273,6 @@ public:
     Link            GetModifyHdl() const;
 
     sal_Bool            IsInSelectionMode() const;
-    void            StopSelectionMode();
 
     void            StripPortions();
     void            GetPortions( sal_uInt16 nPara, std::vector<sal_uInt16>& rList );
@@ -347,12 +334,6 @@ public:
     void            SetWordDelimiters( const String& rDelimiters );
     String          GetWordDelimiters() const;
 
-    void            SetGroupChars( const String& rChars );
-    String          GetGroupChars() const;
-
-    void            EnablePasteSpecial( sal_Bool bEnable );
-    sal_Bool            IsPasteSpecialEnabled() const;
-
     void            EraseVirtualDevice();
 
     void            SetSpeller( ::com::sun::star::uno::Reference<
@@ -360,14 +341,10 @@ public:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 >
                     GetSpeller();
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenator >
-                    GetHyphenator() const;
     void            SetHyphenator( ::com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XHyphenator >& xHyph );
 
     void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
-    rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable() const;
 
     void            SetDefaultLanguage( LanguageType eLang );
     LanguageType    GetDefaultLanguage() const;
@@ -375,8 +352,6 @@ public:
     sal_Bool            HasOnlineSpellErrors() const;
     void            CompleteOnlineSpelling();
 
-    void            SetBigTextObjectStart( sal_uInt16 nStartAtPortionCount );
-    sal_uInt16          GetBigTextObjectStart() const;
     sal_Bool            ShouldCreateBigTextObject() const;
 
     // For fast Pre-Test without view:
@@ -391,8 +366,6 @@ public:
     void            PutSpellingToSentenceStart( EditView& rEditView );
     //applies a changed sentence
     void            ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bRecheck );
-    //deinitialize sentence spelling
-    void            EndSpelling();
 
     // for text conversion (see also HasSpellErrors)
     sal_Bool        HasConvertibleTextPortion( LanguageType nLang );
@@ -456,11 +429,9 @@ public:
 
     static SfxItemPool* CreatePool( sal_Bool bLoadRefCounts = sal_True );
     static SfxItemPool& GetGlobalItemPool();
-    static sal_uInt32   RegisterClipboardFormatName();
     static sal_Bool     DoesKeyChangeText( const KeyEvent& rKeyEvent );
     static sal_Bool     DoesKeyMoveCursor( const KeyEvent& rKeyEvent );
     static sal_Bool     IsSimpleCharInput( const KeyEvent& rKeyEvent );
-    static sal_uInt16   GetAvailableSearchOptions();
     static void     SetFontInfoInItemSet( SfxItemSet& rItemSet, const Font& rFont );
     static void     SetFontInfoInItemSet( SfxItemSet& rItemSet, const SvxFont& rFont );
     static Font     CreateFontFromItemSet( const SfxItemSet& rItemSet, sal_uInt16 nScriptType );
@@ -478,7 +449,6 @@ public:
 
     /// specifies if auto-correction should capitalize the first word or not (default is on)
     void            SetFirstWordCapitalization( sal_Bool bCapitalize );
-    sal_Bool            IsFirstWordCapitalization() const;
 };
 
 #endif // _MyEDITENG_HXX

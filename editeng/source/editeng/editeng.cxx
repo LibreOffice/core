@@ -220,12 +220,6 @@ void EditEngine::EnableAutoColor( sal_Bool b )
     pImpEditEngine->EnableAutoColor( b );
 }
 
-sal_Bool EditEngine::IsAutoColorEnabled() const
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->IsAutoColorEnabled();
-}
-
 void EditEngine::ForceAutoColor( sal_Bool b )
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -419,16 +413,6 @@ EditView* EditEngine::GetActiveView() const
     return pImpEditEngine->GetActiveView();
 }
 
-void EditEngine::SetActiveView( EditView* pView )
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    if ( pView )
-    {
-        DBG_CHKOBJ( pView, EditView, 0 );
-    }
-    pImpEditEngine->SetActiveView( pView );
-}
-
 void EditEngine::SetDefTab( sal_uInt16 nDefTab )
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -438,12 +422,6 @@ void EditEngine::SetDefTab( sal_uInt16 nDefTab )
         pImpEditEngine->FormatFullDoc();
         pImpEditEngine->UpdateViews( (EditView*) 0 );
     }
-}
-
-sal_uInt16 EditEngine::GetDefTab() const
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->GetEditDoc().GetDefTab();
 }
 
 void EditEngine::SetPaperSize( const Size& rNewSize )
@@ -509,12 +487,6 @@ void EditEngine::SetFixedCellHeight( sal_Bool bUseFixedCellHeight )
     pImpEditEngine->SetFixedCellHeight( bUseFixedCellHeight );
 }
 
-sal_Bool EditEngine::IsFixedCellHeight() const
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->IsFixedCellHeight();
-}
-
 void EditEngine::SetDefaultHorizontalTextDirection( EEHorizontalTextDirection eHTextDir )
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -555,34 +527,16 @@ void EditEngine::SetAsianCompressionMode( sal_uInt16 n )
     pImpEditEngine->SetAsianCompressionMode( n );
 }
 
-sal_uInt16 EditEngine::GetAsianCompressionMode() const
-{
-    DBG_CHKTHIS( EditView, 0 );
-    return pImpEditEngine->GetAsianCompressionMode();
-}
-
 void EditEngine::SetKernAsianPunctuation( sal_Bool b )
 {
     DBG_CHKTHIS( EditView, 0 );
     pImpEditEngine->SetKernAsianPunctuation( b );
 }
 
-sal_Bool EditEngine::IsKernAsianPunctuation() const
-{
-    DBG_CHKTHIS( EditView, 0 );
-    return pImpEditEngine->IsKernAsianPunctuation();
-}
-
 void EditEngine::SetAddExtLeading( sal_Bool b )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     pImpEditEngine->SetAddExtLeading( b );
-}
-
-sal_Bool EditEngine::IsAddExtLeading() const
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->IsAddExtLeading();
 }
 
 void EditEngine::SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon )
@@ -614,13 +568,6 @@ void EditEngine::ClearPolygon()
 {
     DBG_CHKTHIS( EditEngine, 0 );
     pImpEditEngine->SetTextRanger( 0 );
-}
-
-const PolyPolygon* EditEngine::GetPolygon()
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->GetTextRanger() ?
-        &pImpEditEngine->GetTextRanger()->GetPolyPolygon() : NULL;
 }
 
 const Size& EditEngine::GetMinAutoPaperSize() const
@@ -713,15 +660,6 @@ sal_uInt32 EditEngine::GetLineHeight( sal_uInt16 nParagraph, sal_uInt16 nLine )
     return pImpEditEngine->GetLineHeight( nParagraph, nLine );
 }
 
-sal_uInt16 EditEngine::GetFirstLineOffset( sal_uInt16 nParagraph )
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    if ( !pImpEditEngine->IsFormatted() )
-        pImpEditEngine->FormatDoc();
-    ParaPortion* pPortion = pImpEditEngine->GetParaPortions().SaveGetObject( nParagraph );
-    return ( pPortion ? pPortion->GetFirstLineOffset() : 0 );
-}
-
 sal_uInt32 EditEngine::GetTextHeight( sal_uInt16 nParagraph ) const
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -749,14 +687,6 @@ ESelection EditEngine::GetWord( const ESelection& rSelection, sal_uInt16 nWordTy
     EditSelection aSel( pE->pImpEditEngine->CreateSel( rSelection ) );
     aSel = pE->pImpEditEngine->SelectWord( aSel, nWordType );
     return pE->pImpEditEngine->CreateESel( aSel );
-}
-
-ESelection EditEngine::SelectSentence( const ESelection& rCurSel ) const
-{
-    EditEngine* pE = (EditEngine*)this;
-    EditSelection aCurSel( pE->pImpEditEngine->CreateSel( rCurSel ) );
-    EditSelection aSentenceSel( pE->pImpEditEngine->SelectSentence( aCurSel ) );
-    return pE->pImpEditEngine->CreateESel( aSentenceSel );
 }
 
 sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, Window* pFrameWin )
@@ -1331,12 +1261,6 @@ void EditEngine::ShowParagraph( sal_uInt16 nParagraph, sal_Bool bShow )
     pImpEditEngine->ShowParagraph( nParagraph, bShow );
 }
 
-sal_Bool EditEngine::IsParagraphVisible( sal_uInt16 nParagraph )
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->IsParagraphVisible( nParagraph );
-}
-
 void EditEngine::SetNotifyHdl( const Link& rLink )
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -1496,12 +1420,6 @@ sal_Bool EditEngine::IsInSelectionMode() const
                 pImpEditEngine->GetSelEngine().IsInSelection() );
 }
 
-void EditEngine::StopSelectionMode()
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    pImpEditEngine->StopSelectionMode();
-}
-
 void EditEngine::InsertParagraph( sal_uInt16 nPara, const EditTextObject& rTxtObj )
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -1542,20 +1460,6 @@ void EditEngine::InsertParagraph( sal_uInt16 nPara, const XubString& rTxt )
     pImpEditEngine->UndoActionEnd( EDITUNDO_INSERT );
     pImpEditEngine->ImpInsertText( EditSelection( aPaM, aPaM ), rTxt );
     pImpEditEngine->FormatAndUpdate();
-}
-
-void EditEngine::SetText( sal_uInt16 nPara, const EditTextObject& rTxtObj )
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    EditSelection* pSel = pImpEditEngine->SelectParagraph( nPara );
-    if ( pSel )
-    {
-        pImpEditEngine->UndoActionStart( EDITUNDO_INSERT );
-        pImpEditEngine->InsertText( rTxtObj, *pSel );
-        pImpEditEngine->UndoActionEnd( EDITUNDO_INSERT );
-        pImpEditEngine->FormatAndUpdate();
-        delete pSel;
-    }
 }
 
 void EditEngine::SetText( sal_uInt16 nPara, const XubString& rTxt )
@@ -2015,34 +1919,6 @@ XubString EditEngine::GetWordDelimiters() const
     return pImpEditEngine->aWordDelimiters;
 }
 
-void EditEngine::SetGroupChars( const XubString& rChars )
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    DBG_ASSERT( ( rChars.Len() % 2 ) == 0, "SetGroupChars: Odd number!" );
-    pImpEditEngine->aGroupChars = rChars;
-}
-
-XubString EditEngine::GetGroupChars() const
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->aGroupChars;
-}
-
-void EditEngine::EnablePasteSpecial( sal_Bool bEnable )
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    if ( bEnable )
-        pImpEditEngine->GetStatus().TurnOnFlags( EE_CNTRL_PASTESPECIAL );
-    else
-        pImpEditEngine->GetStatus().TurnOffFlags( EE_CNTRL_PASTESPECIAL );
-}
-
-sal_Bool EditEngine::IsPasteSpecialEnabled() const
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->GetStatus().AllowPasteSpecial();
-}
-
 void EditEngine::EraseVirtualDevice()
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -2054,15 +1930,11 @@ void EditEngine::SetSpeller( Reference< XSpellChecker1 >  &xSpeller )
     DBG_CHKTHIS( EditEngine, 0 );
     pImpEditEngine->SetSpeller( xSpeller );
 }
+
 Reference< XSpellChecker1 >  EditEngine::GetSpeller()
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return pImpEditEngine->GetSpeller();
-}
-Reference< XHyphenator >  EditEngine::GetHyphenator() const
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->GetHyphenator();
 }
 
 void EditEngine::SetHyphenator( Reference< XHyphenator > & xHyph )
@@ -2076,13 +1948,6 @@ void EditEngine::SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTa
     DBG_CHKTHIS( EditEngine, 0 );
     pImpEditEngine->SetForbiddenCharsTable( xForbiddenChars );
 }
-
-rtl::Reference<SvxForbiddenCharactersTable> EditEngine::GetForbiddenCharsTable() const
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->GetForbiddenCharsTable( sal_False );
-}
-
 
 void EditEngine::SetDefaultLanguage( LanguageType eLang )
 {
@@ -2115,12 +1980,6 @@ void EditEngine::StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc)
 {
     DBG_CHKTHIS( EditEngine, 0 );
     pImpEditEngine->StartSpelling(rEditView, bMultipleDoc);
-}
-
-void EditEngine::EndSpelling()
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    pImpEditEngine->EndSpelling();
 }
 
 bool EditEngine::SpellSentence(EditView& rView, ::svx::SpellPortions& rToFill, bool bIsGrammarChecking )
@@ -2175,18 +2034,6 @@ void EditEngine::DoStretchChars( sal_uInt16 nX, sal_uInt16 nY )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     pImpEditEngine->DoStretchChars( nX, nY );
-}
-
-void EditEngine::SetBigTextObjectStart( sal_uInt16 nStartAtPortionCount )
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    pImpEditEngine->SetBigTextObjectStart( nStartAtPortionCount );
-}
-
-sal_uInt16 EditEngine::GetBigTextObjectStart() const
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->GetBigTextObjectStart();
 }
 
 sal_Bool EditEngine::ShouldCreateBigTextObject() const
@@ -2561,22 +2408,6 @@ SfxItemPool& EditEngine::GetGlobalItemPool()
     return *pGlobalPool;
 }
 
-sal_uInt32 EditEngine::RegisterClipboardFormatName()
-{
-    static sal_uInt32 nFormat = 0;
-    if ( !nFormat )
-        nFormat = SotExchange::RegisterFormatName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EditEngineFormat")) );
-    return nFormat;
-}
-
-sal_uInt16 EditEngine::GetAvailableSearchOptions()
-{
-    return SEARCH_OPTIONS_SEARCH | SEARCH_OPTIONS_REPLACE |
-            SEARCH_OPTIONS_REPLACE_ALL | SEARCH_OPTIONS_WHOLE_WORDS |
-            SEARCH_OPTIONS_BACKWARDS | SEARCH_OPTIONS_REG_EXP |
-            SEARCH_OPTIONS_EXACT | SEARCH_OPTIONS_SELECTION;
-}
-
 void EditEngine::SetFontInfoInItemSet( SfxItemSet& rSet, const Font& rFont )
 {
     SvxFont aSvxFont( rFont );
@@ -2735,11 +2566,6 @@ Link EditEngine::GetEndDropHdl() const
 void EditEngine::SetFirstWordCapitalization( sal_Bool bCapitalize )
 {
     pImpEditEngine->SetFirstWordCapitalization( bCapitalize );
-}
-
-sal_Bool EditEngine::IsFirstWordCapitalization() const
-{
-    return pImpEditEngine->IsFirstWordCapitalization();
 }
 
 
