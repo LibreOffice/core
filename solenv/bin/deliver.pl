@@ -815,7 +815,7 @@ sub copy_if_newer
         }
         if ( $success ) {
             # handle special packaging of *.dylib files for Mac OS X
-            if ( $^O eq 'darwin' )
+            if ( $ENV{OS} eq 'MACOSX' )
             {
                 system("macosx-create-bundle", "$to=$from.app") if ( -d "$from.app" );
                 system("ranlib", "$to" ) if ( $to =~ /\.a/ );
