@@ -1794,7 +1794,9 @@ void SwXText::Impl::ConvertCell(
 {
     if (rCell.getLength() != 2)
     {
-        throw lang::IllegalArgumentException();
+        throw lang::IllegalArgumentException(
+                rtl::OUString::createFromAscii( "rCell needs to contain 2 elements" ),
+                uno::Reference< text::XTextCopy >( &m_rThis ), sal_Int16( 2 ) );
     }
     const uno::Reference<text::XTextRange> xStartRange = rCell[0];
     const uno::Reference<text::XTextRange> xEndRange = rCell[1];
@@ -1807,7 +1809,9 @@ void SwXText::Impl::ConvertCell(
     if (!::sw::XTextRangeToSwPaM(aStartCellPam, xStartRange) ||
         !::sw::XTextRangeToSwPaM(aEndCellPam, xEndRange))
     {
-        throw lang::IllegalArgumentException();
+        throw lang::IllegalArgumentException(
+                rtl::OUString::createFromAscii( "Start or End range cannot be resolved to a SwPaM" ),
+                uno::Reference< text::XTextCopy >( &m_rThis ), sal_Int16( 2 ) );
     }
 
     SwNodeRange aTmpRange(aStartCellPam.Start()->nNode,
