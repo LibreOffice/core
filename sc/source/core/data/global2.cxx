@@ -203,7 +203,7 @@ void ScQueryEntry::Clear()
     pSearchText     = NULL;
 }
 
-sal_Bool ScQueryEntry::operator==( const ScQueryEntry& r ) const
+bool ScQueryEntry::operator==( const ScQueryEntry& r ) const
 {
     return bDoQuery         == r.bDoQuery
         && bQueryByString   == r.bQueryByString
@@ -216,7 +216,7 @@ sal_Bool ScQueryEntry::operator==( const ScQueryEntry& r ) const
     //! pSearchParam und pSearchText nicht vergleichen
 }
 
-utl::TextSearch* ScQueryEntry::GetSearchTextPtr( sal_Bool bCaseSens )
+utl::TextSearch* ScQueryEntry::GetSearchTextPtr( bool bCaseSens )
 {
     if ( !pSearchParam )
     {

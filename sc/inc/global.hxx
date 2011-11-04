@@ -759,8 +759,8 @@ namespace utl
 
 struct ScQueryEntry
 {
-    sal_Bool            bDoQuery;
-    sal_Bool            bQueryByString;
+    bool            bDoQuery;
+    bool            bQueryByString;
     bool            bQueryByDate;
     SCCOLROW        nField;
     ScQueryOp       eOp;
@@ -775,11 +775,11 @@ struct ScQueryEntry
     ~ScQueryEntry();
 
     // creates pSearchParam and pSearchText if necessary, always RegExp!
-    utl::TextSearch*    GetSearchTextPtr( sal_Bool bCaseSens );
+    utl::TextSearch*    GetSearchTextPtr( bool bCaseSens );
 
     void            Clear();
     ScQueryEntry&   operator=( const ScQueryEntry& r );
-    sal_Bool            operator==( const ScQueryEntry& r ) const;
+    bool            operator==( const ScQueryEntry& r ) const;
 };
 
 class ScArea;
