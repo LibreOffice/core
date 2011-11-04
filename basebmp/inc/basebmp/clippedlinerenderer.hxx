@@ -263,9 +263,9 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
             prepareClip(x1, x2, y1, adx, ady, xs, ys, sx, sy,
                         rem, n, clipCode1, clipCount1, clipCode2, clipCount2,
                         rClipRect.getMinX(), basegfx::tools::RectClipFlags::LEFT,
-                        rClipRect.getMaxX(), basegfx::tools::RectClipFlags::RIGHT,
+                        rClipRect.getMaxX()-1, basegfx::tools::RectClipFlags::RIGHT,
                         rClipRect.getMinY(), basegfx::tools::RectClipFlags::TOP,
-                        rClipRect.getMaxY(), basegfx::tools::RectClipFlags::BOTTOM,
+                        rClipRect.getMaxY()-1, basegfx::tools::RectClipFlags::BOTTOM,
                         bRoundTowardsPt2 ));
 
         Iterator currIter( begin + vigra::Diff2D(0,ys) );
@@ -339,9 +339,9 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
             prepareClip(y1, y2, x1, ady, adx, ys, xs, sy, sx,
                         rem, n, clipCode1, clipCount1, clipCode2, clipCount2,
                         rClipRect.getMinY(), basegfx::tools::RectClipFlags::TOP,
-                        rClipRect.getMaxY(), basegfx::tools::RectClipFlags::BOTTOM,
+                        rClipRect.getMaxY()-1, basegfx::tools::RectClipFlags::BOTTOM,
                         rClipRect.getMinX(), basegfx::tools::RectClipFlags::LEFT,
-                        rClipRect.getMaxX(), basegfx::tools::RectClipFlags::RIGHT,
+                        rClipRect.getMaxX()-1, basegfx::tools::RectClipFlags::RIGHT,
                         bRoundTowardsPt2 ));
 
         Iterator currIter( begin + vigra::Diff2D(xs,0) );
