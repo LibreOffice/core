@@ -31,3 +31,20 @@ CDEFAULTOPT=-Os
 .INCLUDE : unxgcc.mk
 CDEFS+=-DARM32
 CFLAGS+=-fno-omit-frame-pointer
+
+# Override some macros set by unxgcc.mk
+
+# We don't build any "tool" style programs for non-desktop OSes like
+# Android. Just unit tests and GUI programs. (Well, that is in
+# theory. In reality any actual "app" with a GUI for Android would be
+# written and built in a totally Android-specific way, of course.)
+
+# Thus for Android we never build executable programs, just shared
+# libraries that the NativeActivity Java code will load.
+
+LINKFLAGSAPPGUI=-shared
+LINKFLAGSAPPCUI=-shared
+
+STDLIBGUIMT+=-llog -landroid
+STDLIBCUIMT+=-llog -landroid
+
