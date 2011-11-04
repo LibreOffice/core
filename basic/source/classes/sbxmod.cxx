@@ -2157,7 +2157,7 @@ ErrCode SbMethod::Call( SbxValue* pRet, SbxVariable* pCaller )
 // #100883 Own Broadcast for SbMethod
 void SbMethod::Broadcast( sal_uIntPtr nHintId )
 {
-    if( pCst && !IsSet( SBX_NO_BROADCAST ) && StaticIsEnabledBroadcasting() )
+    if( pCst && !IsSet( SBX_NO_BROADCAST ) )
     {
         // Because the method could be called from outside, test here once again
         // the authorisation

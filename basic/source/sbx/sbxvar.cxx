@@ -174,7 +174,7 @@ SbxObject* SbxVariable::GetParent()
 
 void SbxVariable::Broadcast( sal_uIntPtr nHintId )
 {
-    if( pCst && !IsSet( SBX_NO_BROADCAST ) && StaticIsEnabledBroadcasting() )
+    if( pCst && !IsSet( SBX_NO_BROADCAST ) )
     {
         // Because the method could be called from outside, check the Da die Methode von aussen aufrufbar ist, hier noch einmal
         // rights here again
@@ -619,7 +619,7 @@ SbxAlias::~SbxAlias()
 
 void SbxAlias::Broadcast( sal_uIntPtr nHt )
 {
-    if( xAlias.Is() && StaticIsEnabledBroadcasting() )
+    if( xAlias.Is() )
     {
         xAlias->SetParameters( GetParameters() );
         if( nHt == SBX_HINT_DATAWANTED )
