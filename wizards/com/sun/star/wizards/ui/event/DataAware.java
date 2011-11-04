@@ -291,15 +291,12 @@ public abstract class DataAware {
          * @param obj the object which contains the property.
          * @return the get method reflection object.
          */
-        private static Class[] EMPTY_ARRAY = new Class[0];
-
         protected Method createGetMethod(String propName, Object obj)
         {
             Method m = null;
             try
             { //try to get a "get" method.
-
-                m = obj.getClass().getMethod("get" + propName, EMPTY_ARRAY);
+                m = obj.getClass().getMethod("get" + propName, (Class[]) null);
             }
             catch (NoSuchMethodException ex1)
             {
@@ -307,13 +304,13 @@ public abstract class DataAware {
             }
             return m;
         }
-        
+
         /* (non-Javadoc)
          * @see com.sun.star.wizards.ui.event.DataAware.Value#get(java.lang.Object)
          */
         public Object get(Object target) {
             try {
-                return getMethod.invoke(target, EMPTY_ARRAY);
+                return getMethod.invoke(target, (Object[]) null);
             } catch (IllegalAccessException ex1) {
                 ex1.printStackTrace();
             } catch (InvocationTargetException ex2) {
@@ -329,7 +326,7 @@ public abstract class DataAware {
                     return new short[0];
             }
             return null;
-        
+
         }
 
         protected Method createSetMethod(String propName, Object obj, Class paramClass) {
