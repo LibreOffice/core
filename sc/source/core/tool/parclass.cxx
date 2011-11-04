@@ -420,7 +420,7 @@ void ScParameterClassification::MergeArgumentsFromFunctionResource()
             aBuf.append("ScParameterClassification::Init: too many arguments in listed function: ");
             aBuf.append(rtl::OUStringToOString(*(pDesc->pFuncName), RTL_TEXTENCODING_UTF8));
             aBuf.append(": ");
-            aBuf.append(nArgs);
+            aBuf.append(sal_Int32(nArgs));
             OSL_FAIL( aBuf.getStr());
             nArgs = CommonData::nMaxParams;
             pRun->aData.bRepeatLast = true;
