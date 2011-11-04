@@ -719,9 +719,11 @@ void DomainMapperTableHandler::endTable()
                     m_xTableRange = xTable->getAnchor( );
             }
         }
-        catch (lang::IllegalArgumentException)
+        catch ( lang::IllegalArgumentException &e )
         {
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
+            fprintf( stderr, "Conversion to table error: %s\n",
+                    rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
             dmapper_logger->chars("failed to import table!");
 #endif
         }

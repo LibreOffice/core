@@ -31,6 +31,7 @@
 
 
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <vcl/window.hxx>
 #include <svx/svdmodel.hxx>

@@ -10,5 +10,7 @@ $(if $(filter-out 0 1,$(strip $(gb_DEBUGLEVEL))),\
     -DDEBUG_IMPORT \
     -DDEBUG_LOGGING \
     -DDEBUG_DMAPPER_PROPERTY_MAP \
+    -DDEBUG_DMAPPER_TABLE_HANDLER \
+    -DDEBUG_TABLE \
 )
 endef

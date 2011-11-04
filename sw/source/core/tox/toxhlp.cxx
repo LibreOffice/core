@@ -33,6 +33,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
+#include <rtl/strbuf.hxx>
 #include <tools/string.hxx>
 #include <toxwrap.hxx>
 
