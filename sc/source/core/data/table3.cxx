@@ -1120,6 +1120,40 @@ bool isPartialStringMatch(const ScQueryEntry& rEntry)
     return false;
 }
 
+bool isRealRegExp(const ScQueryParam& rParam, const ScQueryEntry& rEntry)
+{
+    if (!rParam.bRegExp)
+        return false;
+
+    switch (rEntry.eOp)
+    {
+        case SC_EQUAL:
+        case SC_NOT_EQUAL:
+        case SC_CONTAINS:
+        case SC_DOES_NOT_CONTAIN:
+        case SC_BEGINS_WITH:
+        case SC_ENDS_WITH:
+        case SC_DOES_NOT_BEGIN_WITH:
+        case SC_DOES_NOT_END_WITH:
+            return true;
+        default:
+            ;
+    }
+
+    return false;
+}
+
+bool isTestRegExp(const ScQueryParam& rParam, const ScQueryEntry& rEntry, bool* pbTestEqualCondition)
+{
+    if (!pbTestEqualCondition)
+        return false;
+
+    if (!rParam.bRegExp)
+        return false;
+
+    return (rEntry.eOp == SC_LESS_EQUAL || rEntry.eOp == SC_GREATER_EQUAL);
+}
+
 }
 
 bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
@@ -1255,14 +1289,9 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
             else
                 GetInputString( static_cast<SCCOL>(rEntry.nField), nRow, aCellStr );
 
-            bool bRealRegExp = (rParam.bRegExp && ((rEntry.eOp == SC_EQUAL)
-                || (rEntry.eOp == SC_NOT_EQUAL) || (rEntry.eOp == SC_CONTAINS)
-                || (rEntry.eOp == SC_DOES_NOT_CONTAIN) || (rEntry.eOp == SC_BEGINS_WITH)
-                || (rEntry.eOp == SC_ENDS_WITH) || (rEntry.eOp == SC_DOES_NOT_BEGIN_WITH)
-                || (rEntry.eOp == SC_DOES_NOT_END_WITH)));
-            bool bTestRegExp = (pbTestEqualCondition && rParam.bRegExp
-                && ((rEntry.eOp == SC_LESS_EQUAL)
-                    || (rEntry.eOp == SC_GREATER_EQUAL)));
+            bool bRealRegExp = isRealRegExp(rParam, rEntry);
+            bool bTestRegExp = isTestRegExp(rParam, rEntry, pbTestEqualCondition);
+
             if ( bRealRegExp || bTestRegExp )
             {
                 xub_StrLen nStart = 0;
