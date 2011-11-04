@@ -43,13 +43,13 @@ const SCSIZE MAXQUERY = 8;
 }
 
 ScQueryEntry::ScQueryEntry() :
+    pStr(new String),
     bDoQuery(false),
     bQueryByString(false),
     bQueryByDate(false),
     nField(0),
     eOp(SC_EQUAL),
     eConnect(SC_AND),
-    pStr(new String),
     nVal(0.0),
     pSearchParam(NULL),
     pSearchText(NULL)
@@ -57,13 +57,13 @@ ScQueryEntry::ScQueryEntry() :
 }
 
 ScQueryEntry::ScQueryEntry(const ScQueryEntry& r) :
+    pStr(new String(*r.pStr)),
     bDoQuery(r.bDoQuery),
     bQueryByString(r.bQueryByString),
     bQueryByDate(r.bQueryByDate),
     nField(r.nField),
     eOp(r.eOp),
     eConnect(r.eConnect),
-    pStr(new String(*r.pStr)),
     nVal(r.nVal),
     pSearchParam(NULL),
     pSearchText(NULL)
@@ -237,17 +237,17 @@ void ScQueryParamBase::FillInExcelSyntax(String& aCellStr, SCSIZE nIndex)
         {
             if (aCellStr.GetChar(1) == '>')
             {
-                *rEntry.pStr = aCellStr.Copy(2);
+                rEntry.SetQueryString(aCellStr.Copy(2));
                 rEntry.eOp   = SC_NOT_EQUAL;
             }
             else if (aCellStr.GetChar(1) == '=')
             {
-                *rEntry.pStr = aCellStr.Copy(2);
+                rEntry.SetQueryString(aCellStr.Copy(2));
                 rEntry.eOp   = SC_LESS_EQUAL;
             }
             else
             {
-                *rEntry.pStr = aCellStr.Copy(1);
+                rEntry.SetQueryString(aCellStr.Copy(1));
                 rEntry.eOp   = SC_LESS;
             }
         }
@@ -255,21 +255,21 @@ void ScQueryParamBase::FillInExcelSyntax(String& aCellStr, SCSIZE nIndex)
         {
             if (aCellStr.GetChar(1) == '=')
             {
-                *rEntry.pStr = aCellStr.Copy(2);
+                rEntry.SetQueryString(aCellStr.Copy(2));
                 rEntry.eOp   = SC_GREATER_EQUAL;
             }
             else
             {
-                *rEntry.pStr = aCellStr.Copy(1);
+                rEntry.SetQueryString(aCellStr.Copy(1));
                 rEntry.eOp   = SC_GREATER;
             }
         }
         else
         {
             if (aCellStr.GetChar(0) == '=')
-                *rEntry.pStr = aCellStr.Copy(1);
+                rEntry.SetQueryString(aCellStr.Copy(1));
             else
-                *rEntry.pStr = aCellStr;
+                rEntry.SetQueryString(aCellStr);
             rEntry.eOp = SC_EQUAL;
         }
     }

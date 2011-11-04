@@ -4317,10 +4317,6 @@ static sal_Int32 lcl_CompareMatrix2Query(
     if (!rEntry.bQueryByString)
         return 1;       // string always greater than numeric
 
-    if (!rEntry.pStr)
-        // this should not happen!
-        return 1;
-
     const rtl::OUString rStr1 = rMat.GetString(i);
     const rtl::OUString rStr2 = rEntry.GetQueryString();
 

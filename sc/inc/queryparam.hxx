@@ -52,13 +52,15 @@ namespace utl {
 
 struct ScQueryEntry
 {
+private:
+    String*         pStr;
+public:
     bool            bDoQuery;
     bool            bQueryByString;
     bool            bQueryByDate;
     SCCOLROW        nField;
     ScQueryOp       eOp;
     ScQueryConnect  eConnect;
-    String*         pStr;
     double          nVal;
     mutable utl::SearchParam* pSearchParam;       // if RegExp, not saved
     mutable utl::TextSearch*  pSearchText;        // if RegExp, not saved
