@@ -1131,8 +1131,8 @@ sal_Bool EscherPropertyContainer::CreateOLEGraphicProperties(
             if ( pGraphic )
             {
                 GraphicObject aGraphicObject( *pGraphic );
-                ByteString aUniqueId( aGraphicObject.GetUniqueID() );
-                if ( aUniqueId.Len() )
+                rtl::OString aUniqueId( aGraphicObject.GetUniqueID() );
+                if ( aUniqueId.getLength() )
                 {
                     AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
                     uno::Reference< beans::XPropertySet > aXPropSet( rXShape, uno::UNO_QUERY );
@@ -1164,9 +1164,9 @@ sal_Bool EscherPropertyContainer::CreateOLEGraphicProperties(
 }
 
 
-sal_Bool EscherPropertyContainer::ImplCreateEmbeddedBmp( const ByteString& rUniqueId )
+sal_Bool EscherPropertyContainer::ImplCreateEmbeddedBmp( const rtl::OString& rUniqueId )
 {
-    if( rUniqueId.Len() > 0 )
+    if( rUniqueId.getLength() > 0 )
     {
         EscherGraphicProvider aProvider;
         SvMemoryStream aMemStrm;
@@ -1198,7 +1198,7 @@ sal_Bool EscherPropertyContainer::CreateEmbeddedBitmapProperties(
         nIndex = nIndex + aVndUrl.Len();
         if( aBmpUrl.Len() > nIndex )
         {
-            ByteString aUniqueId( aBmpUrl.Copy(nIndex, aBmpUrl.Len() - nIndex), RTL_TEXTENCODING_UTF8 );
+            rtl::OString aUniqueId(rtl::OUStringToOString(aBmpUrl.Copy(nIndex, aBmpUrl.Len() - nIndex), RTL_TEXTENCODING_UTF8));
             bRetValue = ImplCreateEmbeddedBmp( aUniqueId );
             if( bRetValue )
             {
@@ -1242,7 +1242,7 @@ GraphicObject lclDrawHatch( const ::com::sun::star::drawing::Hatch& rHatch, cons
 sal_Bool EscherPropertyContainer::CreateEmbeddedHatchProperties( const ::com::sun::star::drawing::Hatch& rHatch, const Color& rBackColor, bool bFillBackground )
 {
     GraphicObject aGraphicObject = lclDrawHatch( rHatch, rBackColor, bFillBackground );
-    ByteString aUniqueId = aGraphicObject.GetUniqueID();
+    rtl::OString aUniqueId = aGraphicObject.GetUniqueID();
     sal_Bool bRetValue = ImplCreateEmbeddedBmp( aUniqueId );
     if ( bRetValue )
         AddOpt( ESCHER_Prop_fillType, ESCHER_FillTexture );
@@ -1263,7 +1263,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
     GraphicAttr*    pGraphicAttr = NULL;
     GraphicObject   aGraphicObject;
     String          aGraphicUrl;
-    ByteString      aUniqueId;
+    rtl::OString    aUniqueId;
     bool            bIsGraphicMtf(false);
 
     ::com::sun::star::drawing::BitmapMode   eBitmapMode( ::com::sun::star::drawing::BitmapMode_NO_REPEAT );
@@ -1367,7 +1367,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
             {
                 nIndex = nIndex + aVndUrl.Len();
                 if ( aGraphicUrl.Len() > nIndex  )
-                    aUniqueId = ByteString( aGraphicUrl.Copy(nIndex, aGraphicUrl.Len() - nIndex), RTL_TEXTENCODING_UTF8 );
+                    aUniqueId = rtl::OUStringToOString(aGraphicUrl.Copy(nIndex, aGraphicUrl.Len() - nIndex), RTL_TEXTENCODING_UTF8);
             }
             else
             {
@@ -1413,7 +1413,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
             }
         }
 
-        if ( aGraphicUrl.Len() || aUniqueId.Len() )
+        if ( aGraphicUrl.Len() || aUniqueId.getLength() )
         {
             if ( bMirrored || nAngle )
             {
@@ -1440,7 +1440,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
             else
                 AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
 
-            if ( aUniqueId.Len() )
+            if ( aUniqueId.getLength() )
             {
                 // write out embedded graphic
                 if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
@@ -3411,7 +3411,7 @@ sal_Bool EscherPropertyValueHelper::GetPropertyValue(
     return eRetValue;
 }
 
-EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject& rObject, const ByteString& rId,
+EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject& rObject, const rtl::OString& rId,
                                         const GraphicAttr* pGraphicAttr ) :
     mnPictureOffset ( nPictureOffset ),
     mnRefCount      ( 1 ),
@@ -3424,8 +3424,8 @@ EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject
     meBlibType = UNKNOWN;
     mnSize = 0;
 
-    sal_uInt32      nLen = rId.Len();
-    const sal_Char* pData = rId.GetBuffer();
+    sal_uInt32      nLen = static_cast<sal_uInt32>(rId.getLength());
+    const sal_Char* pData = rId.getStr();
     GraphicType     eType( rObject.GetType() );
     if ( nLen && pData && ( eType != GRAPHIC_NONE ) )
     {
@@ -3649,7 +3649,7 @@ sal_Bool EscherGraphicProvider::GetPrefSize( const sal_uInt32 nBlibId, Size& rPr
     return bInRange;
 }
 
-sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteString& rId,
+sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const rtl::OString& rId,
                                             const Rectangle& /* rBoundRect */, const com::sun::star::awt::Rectangle* pVisArea, const GraphicAttr* pGraphicAttr )
 {
     sal_uInt32          nBlibId = 0;
@@ -3729,8 +3729,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
                 {   // to store a animation, a gif has to be included into the msOG chunk of a png  #I5583#
                     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
                     SvMemoryStream  aGIFStream;
-                    ByteString      aVersion( "MSOFFICE9.0" );
-                    aGIFStream.Write( aVersion.GetBuffer(), aVersion.Len() );
+                    aGIFStream.Write(RTL_CONSTASCII_STRINGPARAM("MSOFFICE9.0"));
                     nErrCode = rFilter.ExportGraphic( aGraphic, String(), aGIFStream,
                         rFilter.GetExportFormatNumberForShortName( String( RTL_CONSTASCII_USTRINGPARAM( "GIF" ) ) ), NULL );
                     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aFilterData( 1 );

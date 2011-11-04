@@ -1061,7 +1061,7 @@ public:
                     EscherBlibEntry(
                         sal_uInt32 nPictureOffset,
                         const GraphicObject& rObj,
-                        const ByteString& rId,
+                        const rtl::OString& rId,
                         const GraphicAttr* pAttr = NULL
                     );
 
@@ -1190,7 +1190,7 @@ class MSFILTER_DLLPUBLIC EscherPropertyContainer
                     sal_uInt32 nBlibId,
                     sal_Bool bCreateCroppingAttributes
                 );
-    sal_Bool    ImplCreateEmbeddedBmp( const ByteString& rUniqueId );
+    sal_Bool    ImplCreateEmbeddedBmp( const rtl::OString& rUniqueId );
     void        ImplInit();
 
 public:
