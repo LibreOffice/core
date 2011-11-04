@@ -1,6 +1,7 @@
 # backup and temporary files
 *~
 .*.sw[op]
+\#*
 
 # python generated file
 *.pyc
@@ -58,6 +59,14 @@
 /bin/repo-list
 /src.downloaded
 /ooo.lst
+/intltool-extract.in
+/intltool-merge.in
+/intltool-update.in
+/NEWS
+/TODO
+/README
+/AUTHORS
+/MAINTAINERS
 
 # misc
 /file-lists
@@ -76,6 +85,7 @@
 /tags
 /docs
 /autogen.save
+TAGS
 
 /*/*.exe
 
@@ -106,5 +116,10 @@ test/user-template/user/psprint/pspfontcache
 # libxslt debug memdump
 .memdump
 
-#LibreOffice lock files
+# LibreOffice lock files
 .~lock.*#
+
+# Everyone loves patching
+*.patch
+*.orig
+*.rej
