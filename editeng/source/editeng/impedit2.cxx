@@ -3555,20 +3555,6 @@ EditSelection ImpEditEngine::MatchGroup( const EditSelection& rSel )
     return aMatchSel;
 }
 
-void ImpEditEngine::StopSelectionMode()
-{
-    if ( ( IsInSelectionMode() || aSelEngine.IsInSelection() ) && pActiveView )
-    {
-        pActiveView->pImpEditView->DrawSelection();
-        EditSelection aSel( pActiveView->pImpEditView->GetEditSelection() );
-        aSel.Min() = aSel.Max();
-        pActiveView->pImpEditView->SetEditSelection( aSel );
-        pActiveView->ShowCursor();
-        aSelEngine.Reset();
-        bInSelection = sal_False;
-    }
-}
-
 void ImpEditEngine::SetActiveView( EditView* pView )
 {
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

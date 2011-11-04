@@ -597,7 +597,6 @@ private:
     EditPaM             ConnectContents( sal_uInt16 nLeftNode, sal_Bool bBackward );
 
     void                ShowParagraph( sal_uInt16 nParagraph, sal_Bool bShow );
-    sal_Bool            IsParagraphVisible( sal_uInt16 nParagraph );
 
     EditPaM             PageUp( const EditPaM& rPaM, EditView* pView);
     EditPaM             PageDown( const EditPaM& rPaM, EditView* pView);
@@ -830,7 +829,6 @@ public:
 
 
     sal_Bool        IsInSelectionMode() { return bInSelection; }
-    void            StopSelectionMode();
 
     void            IndentBlock( EditView* pView, sal_Bool bRight );
 
@@ -952,8 +950,6 @@ public:
     void                PutSpellingToSentenceStart( EditView& rEditView );
     //applies a changed sentence
     void                ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bRecheck );
-    //deinitialize sentence spelling
-    void            EndSpelling();
     //adds one or more portions of text to the SpellPortions depending on language changes
     void            AddPortionIterated(
                         EditView& rEditView,

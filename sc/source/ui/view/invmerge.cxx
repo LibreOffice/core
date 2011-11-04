@@ -37,15 +37,7 @@
 
 //------------------------------------------------------------------
 
-ScInvertMerger::ScInvertMerger( Window* pWindow ) :
-    pWin( pWindow ),
-    pRects( NULL )
-{
-    //  both rectangles empty
-}
-
 ScInvertMerger::ScInvertMerger( ::std::vector< Rectangle >* pRectangles ) :
-    pWin( NULL ),
     pRects( pRectangles )
 {
     //  collect rectangles instead of inverting
@@ -112,9 +104,7 @@ void ScInvertMerger::FlushTotal()
     if( aTotalRect.IsEmpty() )
         return;                         // nothing to do
 
-    if ( pWin )
-        pWin->Invert( aTotalRect, INVERT_HIGHLIGHT );
-    else if ( pRects )
+    if ( pRects )
         pRects->push_back( aTotalRect );
 
     aTotalRect.SetEmpty();

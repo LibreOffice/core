@@ -402,8 +402,8 @@ ScDocument::IsLoadingMedium() const
 ScDocument::ValidNewTabName(std::__debug::vector<String, std::allocator<String> > const&) const
 ScExternalRefManager::setCacheTableReferencedPermanently(unsigned short, rtl::OUString const&, unsigned long)
 ScFilterDetect::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
+ScFiltersTest::testPassword()
 ScFormulaCell::ScFormulaCell()
-ScGridWindow::InvertSimple(short, int, short, int, unsigned char, unsigned char)
 ScHTMLColOffset::Insert(ScHTMLColOffset const*, unsigned short, unsigned short)
 ScHTMLColOffset::Insert(unsigned long const&, unsigned short&)
 ScHTMLColOffset::Insert(unsigned long const*, unsigned short)
@@ -1351,6 +1351,9 @@ _ZSortFlys_SAR::_ForEach(unsigned short, unsigned short, unsigned char (*)(_ZSor
 avmedia::priv::MediaWindowBaseImpl::getStopTime() const
 avmedia::priv::MediaWindowBaseImpl::setRate(double)
 avmedia::priv::MediaWindowBaseImpl::setStopTime(double)
+basebmp::BitmapDevice::getPaletteEntryCount() const
+basebmp::BitmapDevice::getPixelData(basegfx::B2IPoint const&)
+basebmp::BitmapDevice::setDamageTracker(boost::shared_ptr<basebmp::IBitmapDeviceDamageTracker> const&)
 basebmp::debugDump(boost::shared_ptr<basebmp::BitmapDevice> const&, std::basic_ostream<char, std::char_traits<char> >&)
 basegfx::B1DRange::B1DRange(basegfx::B1IRange const&)
 basegfx::B2DCubicBezier::B2DCubicBezier(basegfx::B2DPoint const&, basegfx::B2DPoint const&)
@@ -1432,6 +1435,7 @@ basegfx::average(basegfx::B2ITuple const&, basegfx::B2ITuple const&, basegfx::B2
 basegfx::computeSetDifference(std::__debug::vector<basegfx::B2IBox, std::allocator<basegfx::B2IBox> >&, basegfx::B2IBox const&, basegfx::B2IBox const&)
 basegfx::exportToSvg(basegfx::B2DHomMatrix const&)
 basegfx::fround(basegfx::B1DRange const&)
+basegfx::fround(basegfx::B2DRange const&)
 basegfx::fround(basegfx::B3DRange const&)
 basegfx::getContinuity(basegfx::B2IVector const&, basegfx::B2IVector const&)
 basegfx::getOrientation(basegfx::B2IVector const&, basegfx::B2IVector const&)

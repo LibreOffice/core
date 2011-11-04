@@ -38,7 +38,6 @@ class Window;
 class ScInvertMerger
 {
 private:
-    Window*     pWin;
     ::std::vector< Rectangle >* pRects;
     Rectangle   aTotalRect;
     Rectangle   aLineRect;
@@ -47,7 +46,6 @@ private:
     void        FlushTotal();
 
 public:
-                ScInvertMerger( Window* pWindow );
                 ScInvertMerger( ::std::vector< Rectangle >* pRectangles );
                 ~ScInvertMerger();
 

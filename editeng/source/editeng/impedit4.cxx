@@ -1869,11 +1869,6 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
     return xSpellAlt;
 }
 
-void ImpEditEngine::EndSpelling()
-{
-    DELETEZ(pSpellInfo);
-}
-
 void ImpEditEngine::StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc)
 {
     DBG_ASSERT(!pSpellInfo, "pSpellInfo already set?");

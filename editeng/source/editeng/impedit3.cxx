@@ -3806,15 +3806,6 @@ void ImpEditEngine::ShowParagraph( sal_uInt16 nParagraph, sal_Bool bShow )
     }
 }
 
-sal_Bool ImpEditEngine::IsParagraphVisible( sal_uInt16 nParagraph )
-{
-    ParaPortion* pPPortion = GetParaPortions().SaveGetObject( nParagraph );
-    DBG_ASSERT( pPPortion, "IsParagraphVisible: Paragraph does not exist! ");
-    if ( pPPortion )
-        return pPPortion->IsVisible();
-    return sal_False;
-}
-
 EditSelection ImpEditEngine::MoveParagraphs( Range aOldPositions, sal_uInt16 nNewPos, EditView* pCurView )
 {
     DBG_ASSERT( GetParaPortions().Count() != 0, "No paragraphs found: MoveParagraphs" );
