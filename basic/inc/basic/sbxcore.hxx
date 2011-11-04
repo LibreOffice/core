@@ -135,7 +135,6 @@ public:
     static SbxBase* Create( sal_uInt16, sal_uInt32=SBXCR_SBX );
     static SbxObject* CreateObject( const String& );
     // Sbx solution as replacement for SfxBroadcaster::Enable()
-    static void StaticEnableBroadcasting( sal_Bool bEnable );
     static sal_Bool StaticIsEnabledBroadcasting( void );
 };
 

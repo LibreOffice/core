@@ -529,12 +529,6 @@ public:
     void setAllCacheTableReferencedStati( bool bReferenced );
 
     /**
-     * Set a table as permanently referenced, to be called if not in
-     * mark-during-store-to-file cycle.
-     */
-    void setCacheTableReferencedPermanently( sal_uInt16 nFileId, const ::rtl::OUString& rTabName, size_t nSheets );
-
-    /**
      * @returns <TRUE/> if setAllCacheTableReferencedStati(false) was called,
      * <FALSE/> if setAllCacheTableReferencedStati(true) was called.
      */

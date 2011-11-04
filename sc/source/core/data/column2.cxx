@@ -524,32 +524,6 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
     return nValue;
 }
 
-long ScColumn::GetSimpleTextNeededSize( SCSIZE nIndex, OutputDevice* pDev,
-        bool bWidth )
-{
-    long nValue=0;
-    if ( nIndex < nCount )
-    {
-        SCROW nRow = pItems[nIndex].nRow;
-        const ScPatternAttr* pPattern = pAttrArray->GetPattern( nRow );
-        ScBaseCell* pCell = pItems[nIndex].pCell;
-        String aValStr;
-        Color* pColor;
-        SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
-        sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter );
-        ScCellFormat::GetString( pCell, nFormat, aValStr, &pColor,
-                                    *pFormatter, true, false, ftCheck );
-        if ( aValStr.Len() )
-        {
-            if ( bWidth )
-                nValue = pDev->GetTextWidth( aValStr );
-            else
-                nValue = pDev->GetTextHeight();
-        }
-    }
-    return nValue;
-}
-
 sal_uInt16 ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, double nPPTY,
                                      const Fraction& rZoomX, const Fraction& rZoomY,
                                      bool bFormula, sal_uInt16 nOldWidth,

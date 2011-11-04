@@ -1852,19 +1852,6 @@ void ScColumn::SetTabNo(SCTAB nNewTab)
         }
 }
 
-
-bool ScColumn::IsRangeNameInUse(SCROW nRow1, SCROW nRow2, sal_uInt16 nIndex) const
-{
-    bool bInUse = false;
-    if (pItems)
-        for (SCSIZE i = 0; !bInUse && (i < nCount); i++)
-            if ((pItems[i].nRow >= nRow1) &&
-                (pItems[i].nRow <= nRow2) &&
-                (pItems[i].pCell->GetCellType() == CELLTYPE_FORMULA))
-                    bInUse = ((ScFormulaCell*)pItems[i].pCell)->IsRangeNameInUse(nIndex);
-    return bInUse;
-}
-
 void ScColumn::FindRangeNamesInUse(SCROW nRow1, SCROW nRow2, std::set<sal_uInt16>& rIndexes) const
 {
     if (pItems)

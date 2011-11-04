@@ -300,7 +300,6 @@ public:
     void        UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
     void        SetTabNo(SCTAB nNewTab);
-    bool    IsRangeNameInUse(SCROW nRow1, SCROW nRow2, sal_uInt16 nIndex) const;
     void        FindRangeNamesInUse(SCROW nRow1, SCROW nRow2, std::set<sal_uInt16>& rIndexes) const;
     void        ReplaceRangeNamesInUse( SCROW nRow1, SCROW nRow2, const ScRangeData::IndexMap& rMap );
 
@@ -375,9 +374,6 @@ public:
                                     double nPPTX, double nPPTY,
                                     const Fraction& rZoomX, const Fraction& rZoomY,
                                     bool bShrink, sal_uInt16 nMinHeight, SCROW nMinStart );
-private:
-    long        GetSimpleTextNeededSize( SCSIZE nIndex, OutputDevice* pDev,
-                                    bool bWidth );
 public:
 
                 /// Including current, may return -1

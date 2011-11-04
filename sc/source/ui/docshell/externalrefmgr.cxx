@@ -1637,16 +1637,6 @@ bool ScExternalRefManager::setCacheTableReferenced( sal_uInt16 nFileId, const OU
     return maRefCache.setCacheTableReferenced( nFileId, rTabName, nSheets, false);
 }
 
-void ScExternalRefManager::setCacheTableReferencedPermanently( sal_uInt16 nFileId, const OUString& rTabName, size_t nSheets )
-{
-    if (isInReferenceMarking())
-        // Do all maintenance work.
-        maRefCache.setCacheTableReferenced( nFileId, rTabName, nSheets, true);
-    else
-        // Set only the permanent flag.
-        maRefCache.setCacheTableReferencedPermanently( nFileId, rTabName, nSheets);
-}
-
 void ScExternalRefManager::setAllCacheTableReferencedStati( bool bReferenced )
 {
     mbInReferenceMarking = !bReferenced;

@@ -248,17 +248,10 @@ SbxObject* SbxBase::CreateObject( const XubString& rClass )
 
 static sal_Bool bStaticEnableBroadcasting = sal_True;
 
-// Sbx-Solution in exchange for SfxBroadcaster::Enable()
-void SbxBase::StaticEnableBroadcasting( sal_Bool bEnable )
-{
-    bStaticEnableBroadcasting = bEnable;
-}
-
 sal_Bool SbxBase::StaticIsEnabledBroadcasting( void )
 {
     return bStaticEnableBroadcasting;
 }
-
 
 SbxBase* SbxBase::Load( SvStream& rStrm )
 {

@@ -4481,34 +4481,6 @@ bool ScDocFunc::ModifyRangeNames( const ScRangeName& rNewRanges, SCTAB nTab )
     return SetNewRangeNames( new ScRangeName(rNewRanges), true, nTab );
 }
 
-void ScDocFunc::ModifyAllRangeNames( const ScRangeName* pGlobal, const ScRangeName::TabNameCopyMap& rTabs )
-{
-    ScDocShellModificator aModificator(rDocShell);
-    ScDocument* pDoc = rDocShell.GetDocument();
-
-    if (pDoc->IsUndoEnabled())
-    {
-        ScRangeName* pOldGlobal = pDoc->GetRangeName();
-        ScRangeName::TabNameCopyMap aOldLocals;
-        pDoc->GetAllTabRangeNames(aOldLocals);
-        rDocShell.GetUndoManager()->AddUndoAction(
-            new ScUndoAllRangeNames(&rDocShell, pOldGlobal, pGlobal, aOldLocals, rTabs));
-    }
-
-    pDoc->CompileNameFormula(true);
-
-    // global names
-    pDoc->SetRangeName(new ScRangeName(*pGlobal));
-
-    // sheet-local names
-    pDoc->SetAllTabRangeNames(rTabs);
-
-    pDoc->CompileNameFormula(false);
-
-    aModificator.SetDocumentModified();
-    SFX_APP()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
-}
-
 bool ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc, SCTAB nTab )     // takes ownership of pNewRanges
 {
     ScDocShellModificator aModificator( rDocShell );

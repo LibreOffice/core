@@ -7,11 +7,51 @@ AtomPubSession::~AtomPubSession()
 BufferNode::childAt(int) const
 ByteString::Assign(char const*, unsigned short)
 ByteString::Assign(char)
+CAT::Apply(float*, float const*) const
 CAT::Inverse() const
 CAT::makeChromaticAdaptationTag() const
-CLUT::Iterate(IIccCLUTExec*)
-CLUT::adaptedXYZToMeasuredXYZ(float*, float const*, float const*, float, CAT const*)
-CLUT::makeAToBxTag(unsigned int, float const*, float const*, float const*, CAT const*, float, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, float const*, bool)
+CIccCLUT::Interp3dTetra(float*, float const*)
+CIccCLUT::Iterate(IIccCLUTExec*)
+CIccFormulaCurveSegment::SetFunction(unsigned short, unsigned char, float*)
+CIccIO::ReadLine(void*, int)
+CIccInfo::GetSpotShapeName(icSpotShape)
+CIccMBB::Init(unsigned char, unsigned char)
+CIccMBB::NewCLUT(unsigned char*, unsigned char)
+CIccMBB::NewCLUT(unsigned char, unsigned char)
+CIccMemIO::Alloc(unsigned int, bool)
+CIccMpeCLUT::SetCLUT(CIccCLUT*)
+CIccMpeCreator::DoGetElementSigName(std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, icElemTypeSignature)
+CIccMpeCurveSet::SetCurve(int, CIccCurveSetCurve*)
+CIccProfile::DeleteTag(unsigned int)
+CIccProfile::Detach()
+CIccProfile::GetSpaceSamples() const
+CIccProfileIdDesc::CIccProfileIdDesc(CIccProfile&)
+CIccProfileIdDesc::CIccProfileIdDesc(icProfileID, CIccTagMultiLocalizedUnicode)
+CIccSegmentedCurve::Insert(CIccCurveSegment*)
+CIccTagCurve::SetGamma(float)
+CIccTagFixedNum<int, (icTagTypeSignature)1936077618>::GetSize() const
+CIccTagFixedNum<unsigned int, (icTagTypeSignature)1969632050>::GetSize() const
+CIccTagMultiLocalizedUnicode::SetText(unsigned short const*, unsigned short, unsigned short)
+CIccTagMultiProcessElement::GetElement(int)
+CIccTagNamedColor2::FindColor(char const*)
+CIccTagNamedColor2::FindDeviceColor(float*)
+CIccTagNamedColor2::FindPCSColor(float*, float)
+CIccTagNamedColor2::FindRootColor(char const*)
+CIccTagNamedColor2::GetColorName(std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, int)
+CIccTagNamedColor2::Lab4ToLab2(float*, float const*)
+CIccTagNamedColor2::NegClip(float)
+CIccTagNum<unsigned char, (icTagTypeSignature)1969827896>::GetSize() const
+CIccTagNum<unsigned int, (icTagTypeSignature)1969828658>::GetSize() const
+CIccTagNum<unsigned long, (icTagTypeSignature)1969829428>::GetSize() const
+CIccTagNum<unsigned short, (icTagTypeSignature)1969828150>::GetSize() const
+CIccTagProfileSequenceId::AddProfileDescription(CIccProfileIdDesc const&)
+CIccTagProfileSequenceId::GetFirst()
+CIccTagProfileSequenceId::GetLast()
+CIccTagProfileSequenceId::ParseMem(unsigned char*, unsigned int)
+CIccTagResponseCurveSet16::GetFirstCurves()
+CIccTagResponseCurveSet16::GetNextCurves()
+CIccTagResponseCurveSet16::NewResponseCurves(icMeasurementUnitSig)
+CIccTagResponseCurveSet16::SetNumChannels(unsigned short)
 CNames::Insert(CNames const*, unsigned short, unsigned short)
 CNames::Insert(ControlItem const*&, unsigned short&)
 CNames::Insert(ControlItem const**, unsigned short)
@@ -364,7 +404,6 @@ ScAreaLinkSaveCollection::clear()
 ScAttrArray::HasLines(int, int, Rectangle&, unsigned char, unsigned char) const
 ScCellMergeOption::ScCellMergeOption()
 ScChangeActionContent::SetNewValue(String const&, ScDocument*)
-ScColumn::GetSimpleTextNeededSize(unsigned long, OutputDevice*, bool)
 ScCompressedArray<int, unsigned char>::GetEntryCount() const
 ScCompressedArray<int, unsigned short>::CopyFrom(ScCompressedArray<int, unsigned short> const&, int, int, long)
 ScCompressedArray<int, unsigned short>::GetValue(int) const
@@ -394,13 +433,8 @@ ScDPItemData::CreateTypeString()
 ScDPItemData::GetNumFormat() const
 ScDPSaveData::Refresh(com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier> const&)
 ScDdeLink::ResetValue()
-ScDocFunc::ModifyAllRangeNames(ScRangeName const*, std::__debug::map<short, ScRangeName const*, std::less<short>, std::allocator<std::pair<short const, ScRangeName const*> > > const&)
 ScDocRowHeightUpdater::TabRanges::TabRanges()
-ScDocument::HasControl(short, Rectangle const&)
-ScDocument::InvalidateControls(Window*, short, Rectangle const&)
-ScDocument::IsLoadingMedium() const
 ScDocument::ValidNewTabName(std::__debug::vector<String, std::allocator<String> > const&) const
-ScExternalRefManager::setCacheTableReferencedPermanently(unsigned short, rtl::OUString const&, unsigned long)
 ScFilterDetect::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 ScFiltersTest::testPassword()
 ScFormulaCell::ScFormulaCell()
@@ -1349,8 +1383,6 @@ _ZSortFlys_SAR::_ForEach(unsigned short, unsigned short, unsigned char (*)(_ZSor
 avmedia::priv::MediaWindowBaseImpl::getStopTime() const
 avmedia::priv::MediaWindowBaseImpl::setRate(double)
 avmedia::priv::MediaWindowBaseImpl::setStopTime(double)
-basebmp::BitmapDevice::getPaletteEntryCount() const
-basebmp::BitmapDevice::getPixelData(basegfx::B2IPoint const&)
 basebmp::BitmapDevice::setDamageTracker(boost::shared_ptr<basebmp::IBitmapDeviceDamageTracker> const&)
 basebmp::debugDump(boost::shared_ptr<basebmp::BitmapDevice> const&, std::basic_ostream<char, std::char_traits<char> >&)
 basegfx::B1DRange::B1DRange(basegfx::B1IRange const&)
