@@ -704,8 +704,7 @@ ooo_atk_util_get_toolkit_version (void)
      * Version is passed in as a -D flag when this file is
      * compiled.
      */
-
-    return VERSION;
+    return LIBO_VERSION;
 }
 
 /*****************************************************************************/

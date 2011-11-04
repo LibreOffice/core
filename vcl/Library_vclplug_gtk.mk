@@ -38,7 +38,7 @@ $(eval $(call gb_Library_set_include,vclplug_gtk,\
 
 $(eval $(call gb_Library_add_defs,vclplug_gtk,\
     -DVCLPLUG_GTK_IMPLEMENTATION \
-    -DVERSION=\"$(UPD)$(LAST_MINOR)\" \
+    -DLIBO_VERSION=\"$(UPD)$(LAST_MINOR)\" \
 ))
 
 $(eval $(call gb_Library_add_api,vclplug_gtk,\
