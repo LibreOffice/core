@@ -39,7 +39,6 @@
 #include <unx/gtk/atkbridge.hxx>
 #include <headless/svpvd.hxx>
 #include <headless/svpbmp.hxx>
-#include <headless/svppspgraphics.hxx>
 #include <vcl/apptypes.hxx>
 #include <generic/genpspgraphics.h>
 #include <rtl/strbuf.hxx>
@@ -604,19 +603,13 @@ bool GtkInstance::AnyInput( sal_uInt16 nType )
             bRet |= (nType & nShift) && m_nAnyInput[i] > 0;
             nShift <<= 1;
         }
-//        fprintf( stderr, "AnyInput 0x%x => %s\n",
-//                 nType, bRet ? "true" : "false" );
         return bRet;
     }
 }
 
 GenPspGraphics *GtkInstance::CreatePrintGraphics()
 {
-#if GTK_CHECK_VERSION(3,0,0)
-    return new SvpPspGraphics();
-#else
     return new GenPspGraphics();
-#endif
 }
 
 #if GTK_CHECK_VERSION(3,0,0)

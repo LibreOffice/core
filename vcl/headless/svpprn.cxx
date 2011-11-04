@@ -39,7 +39,6 @@
 #include "saldatabasic.hxx"
 
 #include "headless/svpprn.hxx"
-#include "headless/svppspgraphics.hxx"
 #include "headless/svpinst.hxx"
 
 using namespace psp;
@@ -292,7 +291,7 @@ void SvpSalInstance::PostPrintersChanged()
 
 GenPspGraphics *SvpSalInstance::CreatePrintGraphics()
 {
-    return new SvpPspGraphics();
+    return new GenPspGraphics();
 }
 
 sal_Bool SvpSalInfoPrinter::Setup( SalFrame*, ImplJobSetup* )

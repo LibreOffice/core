@@ -452,14 +452,6 @@ namespace
             return maAccessor(pixel);
         }
 
-        virtual sal_uInt32 getPixelData_i( const basegfx::B2IPoint& rPt )
-        {
-            const DestIterator pixel( maBegin +
-                                      vigra::Diff2D(rPt.getX(),
-                                                    rPt.getY()) );
-            return maToUInt32Converter(maRawAccessor(pixel));
-        }
-
         template< typename Iterator, typename Col, typename RawAcc >
         void implRenderLine2( const basegfx::B2IPoint& rPt1,
                               const basegfx::B2IPoint& rPt2,
@@ -1143,11 +1135,6 @@ PaletteMemorySharedVector BitmapDevice::getPalette() const
     return mpImpl->mpPalette;
 }
 
-sal_Int32 BitmapDevice::getPaletteEntryCount() const
-{
-    return mpImpl->mpPalette ? mpImpl->mpPalette->size() : 0;
-}
-
 void BitmapDevice::clear( Color fillColor )
 {
     clear_i( fillColor, mpImpl->maBounds );
@@ -1187,14 +1174,6 @@ Color BitmapDevice::getPixel( const basegfx::B2IPoint& rPt )
         return getPixel_i(rPt);
 
     return Color();
-}
-
-sal_uInt32 BitmapDevice::getPixelData( const basegfx::B2IPoint& rPt )
-{
-    if( mpImpl->maBounds.isInside(rPt) )
-        return getPixelData_i(rPt);
-
-    return 0;
 }
 
 void BitmapDevice::drawLine( const basegfx::B2IPoint& rPt1,

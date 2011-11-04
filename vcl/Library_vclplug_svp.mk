@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_svp,\
     vcl/headless/svpinst \
     vcl/headless/svpdata \
     vcl/headless/svpprn \
-    vcl/headless/svppspgraphics \
     vcl/headless/svptext \
     vcl/headless/svpvd \
 ))

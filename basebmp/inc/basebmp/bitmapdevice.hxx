@@ -140,12 +140,6 @@ public:
      */
     PaletteMemorySharedVector getPalette() const;
 
-    /** Query number of palette entries.
-
-        This is just a frontend for getPalette->size()
-     */
-    sal_Int32 getPaletteEntryCount() const;
-
     /** Clear whole device with given color
 
         This method works like a fill with the given color value,
@@ -191,14 +185,6 @@ public:
     /** Get color value at given pixel
      */
     Color getPixel( const basegfx::B2IPoint& rPt );
-
-    /** Get underlying pixel data value at given position
-
-        This method returns the raw pixel data. In the case of
-        paletted bitmaps, this is the palette index, not the final
-        color value.
-     */
-    sal_uInt32 getPixelData( const basegfx::B2IPoint& rPt );
 
     /** Draw a line
 
@@ -583,8 +569,6 @@ private:
                              const BitmapDeviceSharedPtr& rClip ) = 0;
 
     virtual Color getPixel_i( const basegfx::B2IPoint& rPt ) = 0;
-
-    virtual sal_uInt32 getPixelData_i( const basegfx::B2IPoint& rPt ) = 0;
 
     virtual void drawLine_i( const basegfx::B2IPoint& rPt1,
                              const basegfx::B2IPoint& rPt2,

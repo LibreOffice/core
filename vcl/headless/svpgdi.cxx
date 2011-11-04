@@ -46,7 +46,6 @@
 #include <sys/stat.h>
 #endif
 
-#include "headless/svppspgraphics.hxx"
 #include <region.h>
 #include <stdio.h>
 

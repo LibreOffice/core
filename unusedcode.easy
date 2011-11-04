@@ -1351,8 +1351,6 @@ _ZSortFlys_SAR::_ForEach(unsigned short, unsigned short, unsigned char (*)(_ZSor
 avmedia::priv::MediaWindowBaseImpl::getStopTime() const
 avmedia::priv::MediaWindowBaseImpl::setRate(double)
 avmedia::priv::MediaWindowBaseImpl::setStopTime(double)
-basebmp::BitmapDevice::getPaletteEntryCount() const
-basebmp::BitmapDevice::getPixelData(basegfx::B2IPoint const&)
 basebmp::debugDump(boost::shared_ptr<basebmp::BitmapDevice> const&, std::basic_ostream<char, std::char_traits<char> >&)
 basegfx::B1DRange::B1DRange(basegfx::B1IRange const&)
 basegfx::B2DCubicBezier::B2DCubicBezier(basegfx::B2DPoint const&, basegfx::B2DPoint const&)

@@ -45,7 +45,6 @@
 #include "generic/glyphcache.hxx"
 #include "headless/svpgdi.hxx"
 #include "headless/svpbmp.hxx"
-#include "headless/svppspgraphics.hxx"
 
 using namespace basegfx;
 using namespace basebmp;

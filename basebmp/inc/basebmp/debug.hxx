@@ -44,6 +44,8 @@ namespace basebmp
 
         @param rOutputStream
         Stream to write output to.
+
+        Used in vcl/headless/svpgdi.cxx when OSL_DEBUG_LEVEL > 2
     */
     void BASEBMP_DLLPUBLIC debugDump( const boost::shared_ptr< BitmapDevice >& rDevice,
                                       ::std::ostream&                          rOutputStream );

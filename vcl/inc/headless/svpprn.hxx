@@ -36,8 +36,6 @@
 
 #include "vclpluginapi.h"
 
-class SvpPspGraphics;
-
 class SvpSalInfoPrinter : public PspSalInfoPrinter
 {
 public:
