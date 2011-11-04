@@ -1119,14 +1119,13 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
     std::vector<bool> aTestEqual(nEntryCount, false);
 
     long    nPos = -1;
-    SCSIZE  i    = 0;
     bool    bMatchWholeCell = pDocument->GetDocOptions().IsMatchWholeCell();
     CollatorWrapper* pCollator = (rParam.bCaseSens ? ScGlobal::GetCaseCollator() :
         ScGlobal::GetCollator());
     ::utl::TransliterationWrapper* pTransliteration = (rParam.bCaseSens ?
         ScGlobal::GetCaseTransliteration() : ScGlobal::GetpTransliteration());
 
-    while ( (i < nEntryCount) && rParam.GetEntry(i).bDoQuery )
+    for (size_t i = 0; i < nEntryCount && rParam.GetEntry(i).bDoQuery; ++i)
     {
         const ScQueryEntry& rEntry = rParam.GetEntry(i);
         // we can only handle one single direct query
@@ -1432,7 +1431,6 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                 aTestEqual[nPos] = bTestEqual;
             }
         }
-        i++;
     }
 
     for ( long j=1; j <= nPos; j++ )
