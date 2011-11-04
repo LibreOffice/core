@@ -33,6 +33,7 @@
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtkgdi.hxx>
+#include <vcl/fontmanager.hxx>
 
 GtkStyleContext* GtkSalGraphics::mpButtonStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpEntryStyle = NULL;
@@ -1306,8 +1307,8 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     // match font to e.g. resolve "Sans"
     psp::PrintFontManager::get().matchFont( aInfo, rSettings.GetUILocale() );
     std::fprintf( stderr, "font match %s, name AFTER: \"%s\"\n",
-             aInfo.m_nID != 0 ? "succeeded" : "failed",
-             OUStringToOString( aInfo.m_aStyleName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+                  aInfo.m_nID != 0 ? "succeeded" : "failed",
+                  rtl::OUStringToOString( aInfo.m_aStyleName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 
     int nPointHeight = 0;
     /*sal_Int32 nDispDPIY = GetDisplay()->GetResolution().B();
