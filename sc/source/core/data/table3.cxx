@@ -1077,12 +1077,11 @@ bool isQueryByValue(const ScTable& rTable, const ScQueryEntry& rEntry, SCROW nRo
     return rTable.HasValueData(static_cast<SCCOL>(rEntry.nField), nRow);
 }
 
-bool isQueryByString(const ScTable& rTable, const ScQueryEntry& rEntry, SCROW nRow, const ScBaseCell* pCell)
+bool isTextMatchOnlyOp(const ScQueryEntry& rEntry)
 {
     switch (rEntry.eOp)
     {
-        case SC_EQUAL:
-        case SC_NOT_EQUAL:
+        // these operators can only be used with textural comparisons.
         case SC_CONTAINS:
         case SC_DOES_NOT_CONTAIN:
         case SC_BEGINS_WITH:
@@ -1093,6 +1092,30 @@ bool isQueryByString(const ScTable& rTable, const ScQueryEntry& rEntry, SCROW nR
         default:
             ;
     }
+    return false;
+}
+
+bool isTextMatchOp(const ScQueryEntry& rEntry)
+{
+    if (isTextMatchOnlyOp(rEntry))
+        return true;
+
+    switch (rEntry.eOp)
+    {
+        // these operators can be used for either textural or value comparison.
+        case SC_EQUAL:
+        case SC_NOT_EQUAL:
+            return true;
+        default:
+            ;
+    }
+    return false;
+}
+
+bool isQueryByString(const ScTable& rTable, const ScQueryEntry& rEntry, SCROW nRow, const ScBaseCell* pCell)
+{
+    if (isTextMatchOp(rEntry))
+        return true;
 
     if (!rEntry.bQueryByString)
         return false;
@@ -1103,44 +1126,12 @@ bool isQueryByString(const ScTable& rTable, const ScQueryEntry& rEntry, SCROW nR
     return rTable.HasStringData(static_cast<SCCOL>(rEntry.nField), nRow);
 }
 
-bool isPartialStringMatch(const ScQueryEntry& rEntry)
-{
-    switch (rEntry.eOp)
-    {
-        case SC_CONTAINS:
-        case SC_DOES_NOT_CONTAIN:
-        case SC_BEGINS_WITH:
-        case SC_ENDS_WITH:
-        case SC_DOES_NOT_BEGIN_WITH:
-        case SC_DOES_NOT_END_WITH:
-            return true;
-        default:
-            ;
-    }
-    return false;
-}
-
 bool isRealRegExp(const ScQueryParam& rParam, const ScQueryEntry& rEntry)
 {
     if (!rParam.bRegExp)
         return false;
 
-    switch (rEntry.eOp)
-    {
-        case SC_EQUAL:
-        case SC_NOT_EQUAL:
-        case SC_CONTAINS:
-        case SC_DOES_NOT_CONTAIN:
-        case SC_BEGINS_WITH:
-        case SC_ENDS_WITH:
-        case SC_DOES_NOT_BEGIN_WITH:
-        case SC_DOES_NOT_END_WITH:
-            return true;
-        default:
-            ;
-    }
-
-    return false;
+    return isTextMatchOp(rEntry);
 }
 
 bool isTestRegExp(const ScQueryParam& rParam, const ScQueryEntry& rEntry, bool* pbTestEqualCondition)
@@ -1275,7 +1266,7 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
         else if (isQueryByString(*this, rEntry, nRow, pCell))
         {
             String  aCellStr;
-            if (isPartialStringMatch(rEntry))
+            if (isTextMatchOnlyOp(rEntry))
                 bMatchWholeCell = false;
 
             if ( pCell )
@@ -1347,11 +1338,9 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
             }
             if ( !bRealRegExp )
             {
+                // Simple string matching.
                 rtl::OUString aQueryStr = rEntry.GetQueryString();
-                if ( rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL
-                    || rEntry.eOp == SC_CONTAINS || rEntry.eOp == SC_DOES_NOT_CONTAIN
-                    || rEntry.eOp == SC_BEGINS_WITH || rEntry.eOp == SC_ENDS_WITH
-                    || rEntry.eOp == SC_DOES_NOT_BEGIN_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH )
+                if (isTextMatchOp(rEntry))
                 {
                     if (!rEntry.bQueryByString && aQueryStr.isEmpty())
                     {
