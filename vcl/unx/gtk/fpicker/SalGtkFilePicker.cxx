@@ -59,8 +59,6 @@
 #include "gtk/fpicker/resourceprovider.hxx"
 #include "gtk/fpicker/SalGtkFilePicker.hxx"
 
-#if !GTK_CHECK_VERSION(3,0,0)
-
 //------------------------------------------------------------------------
 // namespace directives
 //------------------------------------------------------------------------
@@ -211,7 +209,14 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
 
         m_pAligns[i] = gtk_alignment_new(0, 0, 0, 1);
 
-        m_pLists[i] = gtk_combo_box_new_text();
+        m_pListStores[i] = gtk_list_store_new (1, G_TYPE_STRING);
+        m_pLists[i] = gtk_combo_box_new_with_model(GTK_TREE_MODEL(m_pListStores[i]));
+        g_object_unref (m_pListStores[i]); // owned by the widget.
+        GtkCellRenderer *pCell = gtk_cell_renderer_text_new ();
+        gtk_cell_layout_pack_start(
+                GTK_CELL_LAYOUT(m_pLists[i]), pCell, TRUE);
+        gtk_cell_layout_set_attributes(
+            GTK_CELL_LAYOUT (m_pLists[i]), pCell, "text", 0, NULL);
 
         m_pListLabels[i] = gtk_label_new( "" );
 
@@ -497,8 +502,16 @@ dialog_remove_buttons( GtkDialog *pDialog )
 {
     g_return_if_fail( GTK_IS_DIALOG( pDialog ) );
 
+    GtkWidget *pActionArea;
+
+#if GTK_CHECK_VERSION(3,0,0)
+    pActionArea = gtk_dialog_get_action_area( pDialog );
+#else
+    pActionArea = pDialog->action_area;
+#endif
+
     GList *pChildren =
-        gtk_container_get_children( GTK_CONTAINER( pDialog->action_area ) );
+        gtk_container_get_children( GTK_CONTAINER( pActionArea ) );
 
     for( GList *p = pChildren; p; p = p->next )
         gtk_widget_destroy( GTK_WIDGET( p->data ) );
@@ -1136,14 +1149,20 @@ GtkWidget *SalGtkFilePicker::getWidget( sal_Int16 nControlId, GType *pType )
 //------------------------------------------------------------------------------------
 // XFilePickerControlAccess functions
 //------------------------------------------------------------------------------------
-namespace
+static void HackWidthToFirst(GtkComboBox *pWidget)
 {
-    void HackWidthToFirst(GtkComboBox *pWidget)
-    {
-        GtkRequisition requisition;
-        gtk_widget_size_request(GTK_WIDGET(pWidget), &requisition);
-        gtk_widget_set_size_request(GTK_WIDGET(pWidget), requisition.width, -1);
-    }
+    GtkRequisition requisition;
+    gtk_widget_size_request(GTK_WIDGET(pWidget), &requisition);
+    gtk_widget_set_size_request(GTK_WIDGET(pWidget), requisition.width, -1);
+}
+
+static void ComboBoxAppendText(GtkComboBox *pCombo, const rtl::OUString &rStr)
+{
+  GtkTreeIter aIter;
+  GtkListStore *pStore = GTK_LIST_STORE(gtk_combo_box_get_model(pCombo));
+  rtl::OString aStr = rtl::OUStringToOString(rStr, RTL_TEXTENCODING_UTF8);
+  gtk_list_store_append(pStore, &aIter);
+  gtk_list_store_set(pStore, &aIter, 0, aStr.getStr(), -1);
 }
 
 void SalGtkFilePicker::HandleSetListValue(GtkComboBox *pWidget, sal_Int16 nControlAction, const uno::Any& rValue)
@@ -1154,7 +1173,7 @@ void SalGtkFilePicker::HandleSetListValue(GtkComboBox *pWidget, sal_Int16 nContr
             {
                 OUString sItem;
                 rValue >>= sItem;
-                gtk_combo_box_append_text(pWidget, rtl::OUStringToOString(sItem, RTL_TEXTENCODING_UTF8).getStr());
+                ComboBoxAppendText(pWidget, sItem);
                 if (!bVersionWidthUnset)
                 {
                     HackWidthToFirst(pWidget);
@@ -1169,8 +1188,7 @@ void SalGtkFilePicker::HandleSetListValue(GtkComboBox *pWidget, sal_Int16 nContr
                 sal_Int32 nItemCount = aStringList.getLength();
                 for (sal_Int32 i = 0; i < nItemCount; ++i)
                 {
-                    gtk_combo_box_append_text(pWidget,
-                        rtl::OUStringToOString(aStringList[i], RTL_TEXTENCODING_UTF8).getStr());
+                    ComboBoxAppendText(pWidget,aStringList[i]);
                     if (!bVersionWidthUnset)
                     {
                         HackWidthToFirst(pWidget);
@@ -1183,22 +1201,20 @@ void SalGtkFilePicker::HandleSetListValue(GtkComboBox *pWidget, sal_Int16 nContr
             {
                 sal_Int32 nPos=0;
                 rValue >>= nPos;
-                gtk_combo_box_remove_text(pWidget, nPos);
+
+                GtkTreeIter aIter;
+                GtkListStore *pStore = GTK_LIST_STORE(
+                        gtk_combo_box_get_model(GTK_COMBO_BOX(pWidget)));
+                if(gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(pStore), &aIter, NULL, nPos))
+                    gtk_list_store_remove(pStore, &aIter);
             }
             break;
         case ControlActions::DELETE_ITEMS:
             {
                 gtk_combo_box_set_active(pWidget, -1);
-                gint nItems = 0;
-                do
-                {
-                        nItems =
-                                gtk_tree_model_iter_n_children(
-                                  gtk_combo_box_get_model(pWidget), NULL);
-                        for (gint nI = 0; nI < nItems; ++nI)
-                            gtk_combo_box_remove_text(pWidget, nI);
-                }
-                while (nItems);
+                GtkListStore *pStore = GTK_LIST_STORE(
+                        gtk_combo_box_get_model(GTK_COMBO_BOX(pWidget)));
+                gtk_list_store_clear(pStore);
             }
             break;
         case ControlActions::SET_SELECT_ITEM:
@@ -1587,7 +1603,7 @@ sal_Bool SAL_CALL SalGtkFilePicker::setShowState( sal_Bool bShowState ) throw( u
         }
 
         // also emit the signal
-        g_signal_emit_by_name( GTK_OBJECT( m_pDialog ), "update-preview" );
+        g_signal_emit_by_name( G_OBJECT( m_pDialog ), "update-preview" );
 
         mbPreviewState = bShowState;
     }
@@ -2018,23 +2034,15 @@ SalGtkFilePicker::~SalGtkFilePicker()
     gtk_widget_destroy( m_pVBox );
 }
 
-#endif
-
 using namespace ::com::sun::star;
 
 uno::Reference< ui::dialogs::XFilePicker2 >
 GtkInstance::createFilePicker( const com::sun::star::uno::Reference<
                                         com::sun::star::uno::XComponentContext > &xMSF )
 {
-#if GTK_CHECK_VERSION(3,0,0)
-    fprintf( stderr, "Create dummy gtk file picker\n" );
-    (void)xMSF;
-    return uno::Reference< ui::dialogs::XFilePicker2 >();
-#else
     fprintf( stderr, "Create gtk file picker\n" );
     return uno::Reference< ui::dialogs::XFilePicker2 >(
                 new SalGtkFilePicker( xMSF ) );
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

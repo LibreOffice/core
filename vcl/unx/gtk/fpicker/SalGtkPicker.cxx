@@ -66,8 +66,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-#if !GTK_CHECK_VERSION(3,0,0)
-
 rtl::OUString SalGtkPicker::uritounicode(const gchar* pIn)
 {
     if (!pIn)
@@ -92,7 +90,7 @@ rtl::OUString SalGtkPicker::uritounicode(const gchar* pIn)
         }
         else
         {
-            OUString aNewURL = Reference<uri::XExternalUriReferenceTranslator>(Reference<XMultiComponentFactory>(comphelper::getProcessServiceFactory(), UNO_QUERY_THROW)->createInstanceWithContext(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uri.ExternalUriReferenceTranslator")), m_xContext), UNO_QUERY_THROW)->translateToInternal(sURL);
+            OUString aNewURL = uno::Reference<uri::XExternalUriReferenceTranslator>(uno::Reference<XMultiComponentFactory>(comphelper::getProcessServiceFactory(), UNO_QUERY_THROW)->createInstanceWithContext(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uri.ExternalUriReferenceTranslator")), m_xContext), UNO_QUERY_THROW)->translateToInternal(sURL);
             if( aNewURL.getLength() )
                 sURL = aNewURL;
         }
@@ -108,7 +106,7 @@ rtl::OString SalGtkPicker::unicodetouri(const rtl::OUString &rURL)
     INetURLObject aURL(rURL);
     if (INET_PROT_FILE == aURL.GetProtocol())
     {
-        OUString aNewURL = Reference<uri::XExternalUriReferenceTranslator>(Reference<XMultiComponentFactory>(comphelper::getProcessServiceFactory(), UNO_QUERY_THROW)->createInstanceWithContext(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uri.ExternalUriReferenceTranslator")), m_xContext ), UNO_QUERY_THROW)->translateToExternal( rURL );
+        OUString aNewURL = uno::Reference<uri::XExternalUriReferenceTranslator>(uno::Reference<XMultiComponentFactory>(comphelper::getProcessServiceFactory(), UNO_QUERY_THROW)->createInstanceWithContext(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uri.ExternalUriReferenceTranslator")), m_xContext ), UNO_QUERY_THROW)->translateToExternal( rURL );
 
         if( aNewURL.getLength() )
         {
@@ -289,7 +287,5 @@ uno::Reference< uno::XInterface > SalGtkPicker::createInstance( const rtl::OUStr
 {
     return m_xContext->getServiceManager()->createInstanceWithContext( rName, m_xContext );
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

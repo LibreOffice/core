@@ -50,18 +50,11 @@
 
 #include <string.h>
 
-
-//------------------------------------------------------------------------
-// namespace directives
-//------------------------------------------------------------------------
-
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-
-#if !GTK_CHECK_VERSION(3,0,0)
 
 //-----------------------------------------------------------------------------------------
 // constructor
@@ -133,8 +126,6 @@ void SAL_CALL SalGtkFolderPicker::setDescription( const rtl::OUString& rDescript
     ::rtl::OString aDescription = OUStringToOString( rDescription, RTL_TEXTENCODING_UTF8 );
 }
 
-
-
 //-----------------------------------------------------------------------------------------
 // XExecutableDialog functions
 //-----------------------------------------------------------------------------------------
@@ -186,7 +177,6 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute() throw( uno::RuntimeException )
     return retVal;
 }
 
-
 //------------------------------------------------------------------------------------
 // XCancellable
 //------------------------------------------------------------------------------------
@@ -199,19 +189,13 @@ void SAL_CALL SalGtkFolderPicker::cancel() throw( uno::RuntimeException )
 
     // TODO m_pImpl->cancel();
 }
-#endif
 
 uno::Reference< ui::dialogs::XFolderPicker >
 GtkInstance::createFolderPicker( const uno::Reference< uno::XComponentContext > &xMSF )
 {
     fprintf( stderr, "Create gtk folder picker\n" );
-#if GTK_CHECK_VERSION(3,0,0)
-    (void)xMSF;
-    return uno::Reference< ui::dialogs::XFolderPicker >();
-#else
     return uno::Reference< ui::dialogs::XFolderPicker >(
                 new SalGtkFolderPicker( xMSF ) );
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
