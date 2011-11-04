@@ -462,7 +462,7 @@ friend class SfxDockingWindow;
     sal_uInt16              nDockPos;
     sal_Bool                bNewLine;
     sal_Bool                bDockingPrevented;
-    ByteString          aWinState;
+    rtl::OString aWinState;
 
     SfxChildAlignment   GetLastAlignment() const
                         { return eLastAlignment; }
@@ -607,7 +607,7 @@ void SfxDockingWindow::ToggleFloatingMode()
     if (IsFloatingMode())
     {
         SetAlignment(SFX_ALIGN_NOALIGNMENT);
-        if ( pImp->aWinState.Len() )
+        if ( pImp->aWinState.getLength() )
             GetFloatingWindow()->SetWindowState( pImp->aWinState );
         else
             GetFloatingWindow()->SetOutputSizePixel( GetFloatingSize() );
@@ -1123,7 +1123,7 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
         SetFloatingMode( bFloatMode );
         if ( bFloatMode )
         {
-            if ( pImp->aWinState.Len() )
+            if ( pImp->aWinState.getLength() )
                 GetFloatingWindow()->SetWindowState( pImp->aWinState );
             else
                 GetFloatingWindow()->SetOutputSizePixel( GetFloatingSize() );
@@ -1202,7 +1202,7 @@ void SfxDockingWindow::Initialize_Impl()
     if ( pFloatWin )
     {
         // initialize floating window
-        if ( !pImp->aWinState.Len() )
+        if ( !pImp->aWinState.getLength() )
             // window state never set before, get if from defaults
             pImp->aWinState = pFloatWin->GetWindowState();
 

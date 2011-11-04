@@ -100,6 +100,7 @@
 #include "filedlgimpl.hxx"
 #include <helpid.hrc>
 #include <sfxlocal.hrc>
+#include <rtl/strbuf.hxx>
 
 //-----------------------------------------------------------------------------
 
@@ -279,7 +280,7 @@ OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEve
     OUString aHelpText;
     Help* pHelp = Application::GetHelp();
     if ( pHelp )
-        aHelpText = String( pHelp->GetHelpText( String( ByteString(sHelpId), RTL_TEXTENCODING_UTF8), NULL ) );
+        aHelpText = String( pHelp->GetHelpText( rtl::OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), NULL ) );
     return aHelpText;
 }
 
@@ -1796,9 +1797,9 @@ void FileDialogHelper_Impl::addFilter( const OUString& rFilterName,
     catch( const IllegalArgumentException& )
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "Could not append Filter" );
-        aMsg += ByteString( String( rFilterName ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("Could not append Filter"));
+        aMsg.append(rtl::OUStringToOString(rFilterName, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE( aMsg.getStr() );
 #endif
     }
 }

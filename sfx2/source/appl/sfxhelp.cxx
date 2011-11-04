@@ -81,6 +81,7 @@
 #include <sfx2/sfxuno.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/frame.hxx>
+#include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 
 using namespace ::com::sun::star::beans;
@@ -631,7 +632,7 @@ XubString SfxHelp::GetHelpText( const String& aCommandURL, const Window* pWindow
     String sModuleName = GetHelpModuleName_Impl();
     String sHelpText = pImp->GetHelpText( aCommandURL, sModuleName );
 
-    ByteString aNewHelpId;
+    rtl::OString aNewHelpId;
 
     if ( pWindow && !sHelpText.Len() )
     {
@@ -640,7 +641,7 @@ XubString SfxHelp::GetHelpText( const String& aCommandURL, const Window* pWindow
         while ( pParent )
         {
             aNewHelpId = pParent->GetHelpId();
-            sHelpText = pImp->GetHelpText( String( aNewHelpId, RTL_TEXTENCODING_UTF8 ), sModuleName );
+            sHelpText = pImp->GetHelpText( rtl::OStringToOUString(aNewHelpId, RTL_TEXTENCODING_UTF8), sModuleName );
             if ( sHelpText.Len() > 0 )
                 pParent = NULL;
             else
@@ -648,7 +649,7 @@ XubString SfxHelp::GetHelpText( const String& aCommandURL, const Window* pWindow
         }
 
         if ( bIsDebug && !sHelpText.Len() )
-            aNewHelpId.Erase();
+            aNewHelpId = rtl::OString();
     }
 
     // add some debug information?
@@ -658,10 +659,10 @@ XubString SfxHelp::GetHelpText( const String& aCommandURL, const Window* pWindow
         sHelpText += String( sModuleName );
         sHelpText += DEFINE_CONST_UNICODE(": ");
         sHelpText += aCommandURL;
-        if ( aNewHelpId.Len() )
+        if ( aNewHelpId.getLength() )
         {
             sHelpText += DEFINE_CONST_UNICODE(" - ");
-            sHelpText += String( aNewHelpId, RTL_TEXTENCODING_UTF8 );
+            sHelpText += String(rtl::OStringToOUString(aNewHelpId, RTL_TEXTENCODING_UTF8));
         }
     }
 
@@ -762,8 +763,8 @@ sal_Bool SfxHelp::Start_Impl( const String& rURL, const Window* pWindow, const S
                 Window* pParent = pWindow->GetParent();
                 while ( pParent )
                 {
-                    ByteString aHelpId = pParent->GetHelpId();
-                    aHelpURL = CreateHelpURL( String( aHelpId, RTL_TEXTENCODING_UTF8 ), aHelpModuleName );
+                    rtl::OString aHelpId = pParent->GetHelpId();
+                    aHelpURL = CreateHelpURL( rtl::OStringToOUString(aHelpId, RTL_TEXTENCODING_UTF8), aHelpModuleName );
                     if ( !SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
                         break;
                     else
@@ -813,9 +814,9 @@ sal_Bool SfxHelp::Start_Impl( const String& rURL, const Window* pWindow, const S
         return sal_False;
 
 #ifdef DBG_UTIL
-    ByteString aTmp("SfxHelp: HelpId = ");
-    aTmp += ByteString( aHelpURL, RTL_TEXTENCODING_UTF8 );
-    OSL_TRACE( aTmp.GetBuffer() );
+    rtl::OStringBuffer aTmp(RTL_CONSTASCII_STRINGPARAM("SfxHelp: HelpId = "));
+    aTmp.append(rtl::OUStringToOString(aHelpURL, RTL_TEXTENCODING_UTF8));
+    OSL_TRACE( aTmp.getStr() );
 #endif
 
     pHelpWindow->SetHelpURL( aHelpURL );
@@ -857,7 +858,7 @@ void SfxHelp::OpenHelpAgent( const rtl::OString& sHelpId )
             try
             {
                 URL aURL;
-                aURL.Complete = CreateHelpURL_Impl( String( ByteString(sHelpId), RTL_TEXTENCODING_UTF8 ), GetHelpModuleName_Impl() );
+                aURL.Complete = CreateHelpURL_Impl( rtl::OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), GetHelpModuleName_Impl() );
                 Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ), UNO_QUERY );
                 xTrans->parseStrict(aURL);

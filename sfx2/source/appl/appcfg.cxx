@@ -70,6 +70,7 @@
 #include <vcl/toolbox.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <sfx2/app.hxx>
@@ -152,9 +153,9 @@ IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pAsyncTimer)
 #ifdef DBG_UTIL
     if (!xRef.Is())
     {
-        ByteString aTmp( "SfxEvent: ");
-        aTmp += ByteString( String( aHint.GetEventName() ), RTL_TEXTENCODING_UTF8 );
-        OSL_TRACE( "%s", aTmp.GetBuffer() );
+        rtl::OStringBuffer aTmp(RTL_CONSTASCII_STRINGPARAM("SfxEvent: "));
+        aTmp.append(rtl::OUStringToOString(aHint.GetEventName(), RTL_TEXTENCODING_UTF8));
+        OSL_TRACE( "%s", aTmp.getStr() );
     }
 #endif
     SFX_APP()->Broadcast( aHint );
@@ -911,9 +912,9 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, bool bSynchron
 #ifdef DBG_UTIL
         if (!pDoc)
         {
-            ByteString aTmp( "SfxEvent: ");
-            aTmp += ByteString( String( rEventHint.GetEventName() ), RTL_TEXTENCODING_UTF8 );
-            OSL_TRACE( "%s", aTmp.GetBuffer() );
+            rtl::OStringBuffer aTmp(RTL_CONSTASCII_STRINGPARAM("SfxEvent: "));
+            aTmp.append(rtl::OUStringToOString(rEventHint.GetEventName(), RTL_TEXTENCODING_UTF8));
+            OSL_TRACE( "%s", aTmp.getStr() );
         }
 #endif
         Broadcast(rEventHint);

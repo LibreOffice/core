@@ -243,9 +243,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #ifdef DBG_UTIL
             else
             {
-                ByteString aStr( "Property not convertable: ");
-                aStr += pSlot->pUnoName;
-                OSL_FAIL( aStr.GetBuffer() );
+                rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Property not convertable: "));
+                aStr.append(pSlot->pUnoName);
+                OSL_FAIL( aStr.getStr() );
             }
 #endif
         }
@@ -253,9 +253,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
         else if ( nSubCount == 0 )
         {
             // for a simple property there can be only one parameter and its name *must* match
-            ByteString aStr( "Property name does not match: ");
-            aStr += ByteString( aName, RTL_TEXTENCODING_UTF8 );
-            OSL_FAIL( aStr.GetBuffer() );
+            rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Property name does not match: "));
+            aStr.append(rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8));
+            OSL_FAIL( aStr.getStr() );
         }
 #endif
         else
@@ -295,9 +295,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #ifdef DBG_UTIL
                         else
                         {
-                            ByteString aDbgStr( "Property not convertable: ");
-                            aDbgStr += pSlot->pUnoName;
-                            OSL_FAIL( aDbgStr.GetBuffer() );
+                            rtl::OStringBuffer aDbgStr(RTL_CONSTASCII_STRINGPARAM("Property not convertable: "));
+                            aDbgStr.append(pSlot->pUnoName);
+                            OSL_FAIL( aDbgStr.getStr() );
                         }
 #endif
                         break;
@@ -308,9 +308,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 if ( nSub >= nSubCount )
                 {
                     // there was a parameter with a name that didn't match to any of the members
-                    ByteString aStr( "Property name does not match: ");
-                    aStr += ByteString( String(rPropValue.Name), RTL_TEXTENCODING_UTF8 );
-                    OSL_FAIL( aStr.GetBuffer() );
+                    rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Property name does not match: "));
+                    aStr.append(rtl::OUStringToOString(rPropValue.Name, RTL_TEXTENCODING_UTF8));
+                    OSL_FAIL( aStr.getStr() );
                 }
 #endif
             }
@@ -336,9 +336,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             if ( !pItem )
             {
 #ifdef DBG_UTIL
-                ByteString aStr( "No creator method for argument: ");
-                aStr += rArg.pName;
-                OSL_FAIL( aStr.GetBuffer() );
+                rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("No creator method for argument: "));
+                aStr.append(rArg.pName);
+                OSL_FAIL( aStr.getStr() );
 #endif
                 return;
             }
@@ -366,9 +366,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #ifdef DBG_UTIL
                         else
                         {
-                            ByteString aStr( "Property not convertable: ");
-                            aStr += rArg.pName;
-                            OSL_FAIL( aStr.GetBuffer() );
+                            rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Property not convertable: "));
+                            aStr.append(rArg.pName);
+                            OSL_FAIL( aStr.getStr() );
                         }
 #endif
                         break;
@@ -395,9 +395,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #ifdef DBG_UTIL
                         else
                         {
-                            ByteString aStr( "Property not convertable: ");
-                            aStr += rArg.pName;
-                            OSL_FAIL( aStr.GetBuffer() );
+                            rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Property not convertable: "));
+                            aStr.append(rArg.pName);
+                            OSL_FAIL( aStr.getStr() );
                         }
 #endif
                     }
@@ -432,9 +432,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                                     // ... but it was not convertable
                                     bRet = sal_False;
 #ifdef DBG_UTIL
-                                    ByteString aDbgStr( "Property not convertable: ");
-                                    aDbgStr += rArg.pName;
-                                    OSL_FAIL( aDbgStr.GetBuffer() );
+                                    rtl::OStringBuffer aDbgStr(RTL_CONSTASCII_STRINGPARAM("Property not convertable: "));
+                                    aDbgStr.append(rArg.pName);
+                                    OSL_FAIL( aDbgStr.getStr() );
 #endif
                                 }
 
@@ -908,9 +908,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
         if ( nFoundArgs == nCount )
         {
             // except for the "special" slots: assure that every argument was convertable
-            ByteString aStr( "MacroPlayer: Some properties didn't match to any formal argument for slot: ");
-            aStr += pSlot->pUnoName;
-            DBG_WARNING( aStr.GetBuffer() );
+            rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("MacroPlayer: Some properties didn't match to any formal argument for slot: "));
+            aStr.append(pSlot->pUnoName);
+            DBG_WARNING( aStr.getStr() );
         }
 #endif
     }

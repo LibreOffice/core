@@ -61,7 +61,7 @@ using namespace ::rtl;
 class SfxModelessDialog_Impl : public SfxListener
 {
 public:
-    ByteString      aWinState;
+    rtl::OString aWinState;
     SfxChildWindow* pMgr;
     sal_Bool            bConstructed;
     void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -85,7 +85,7 @@ void SfxModelessDialog_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 class SfxFloatingWindow_Impl : public SfxListener
 {
 public:
-    ByteString      aWinState;
+    rtl::OString aWinState;
     SfxChildWindow* pMgr;
     sal_Bool            bConstructed;
     Timer           aMoveTimer;
@@ -239,7 +239,7 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == STATE_CHANGE_INITSHOW )
     {
-        if ( pImp->aWinState.Len() )
+        if ( pImp->aWinState.getLength() )
         {
             SetWindowState( pImp->aWinState );
         }
@@ -636,7 +636,7 @@ void SfxFloatingWindow::StateChanged( StateChangedType nStateChange )
     if ( nStateChange == STATE_CHANGE_INITSHOW )
     {
         // FloatingWindows are not centered by default
-        if ( pImp->aWinState.Len() )
+        if ( pImp->aWinState.getLength() )
             SetWindowState( pImp->aWinState );
         pImp->bConstructed = sal_True;
     }
