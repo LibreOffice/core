@@ -461,55 +461,52 @@ AC_ARG_WITH(servlet-api-jar,
 AC_ARG_ENABLE(report-builder,
 [  --enable-report-builder  enables the build of the Report Builder extension
 ],,)
-AC_ARG_WITH(system-jfreereport,
-[  --with-system-jfreereport      Use JFreeReport already on system
-],,)
 AC_ARG_WITH(sac-jar,
-[  --with-sac-jar=JARFILE   Specify path to jarfile manually ],
+[  --with-sac-jar=JARFILE   Specify path to jarfile manually (for Report Builder extension) ],
 [ SAC_JAR="$withval"
 ])
 AC_ARG_WITH(libxml-jar,
-[  --with-libxml-jar=JARFILE   Specify path to jarfile manually ],
+[  --with-libxml-jar=JARFILE   Specify path to jarfile manually (for Report Builder extension) ],
 [ LIBXML_JAR="$withval"
 ])
 AC_ARG_WITH(flute-jar,
-[  --with-flute-jar=JARFILE   Specify path to jarfile manually ],
+[  --with-flute-jar=JARFILE   Specify path to jarfile manually (for Report Builder extension) ],
 [ FLUTE_JAR="$withval"
 ])
 AC_ARG_WITH(jfreereport-jar,
-[  --with-jfreereport-jar=JARFILE   Specify path to jarfile manually ],
+[  --with-jfreereport-jar=JARFILE   Specify path to jarfile manually (for Report Builder extension) ],
 [ JFREEREPORT_JAR="$withval"
 ])
 AC_ARG_WITH(liblayout-jar,
-[  --with-liblayout-jar=JARFILE   Specify path to jarfile manually ],
+[  --with-liblayout-jar=JARFILE   Specify path to jarfile manually (for Report Builder extension) ],
 [ LIBLAYOUT_JAR="$withval"
 ])
 AC_ARG_WITH(libloader-jar,
-[  --with-libloader-jar=JARFILE   Specify path to jarfile manually ],
+[  --with-libloader-jar=JARFILE   Specify path to jarfile manually (for Report Builder extension) ],
 [ LIBLOADER_JAR="$withval"
 ])
 AC_ARG_WITH(libloader-jar,
-[  --with-libloader-jar=JARFILE   Specify path to jarfile manually ],
+[  --with-libloader-jar=JARFILE   Specify path to jarfile manually (for Report Builder extension) ],
 [ LIBLOADER_JAR="$withval"
 ])
 AC_ARG_WITH(libformula-jar,
-[  --with-libformula-jar=JARFILE   Specify path to jarfile manually ],
+[  --with-libformula-jar=JARFILE   Specify path to jarfile manually (for Report Builder extension) ],
 [ LIBFORMULA_JAR="$withval"
 ])
 AC_ARG_WITH(librepository-jar,
-[  --with-librepository-jar=JARFILE   Specify path to jarfile manually ],
+[  --with-librepository-jar=JARFILE   Specify path to jarfile manually (for Report Builder extension) ],
 [ LIBREPOSITORY_JAR="$withval"
 ])
 AC_ARG_WITH(libfonts-jar,
-[  --with-libfonts-jar=JARFILE   Specify path to jarfile manually ],
+[  --with-libfonts-jar=JARFILE   Specify path to jarfile manually (for Report Builder extension) ],
 [ LIBFONTS_JAR="$withval"
 ])
 AC_ARG_WITH(libserializer-jar,
-[  --with-libserializer-jar=JARFILE   Specify path to jarfile manually ],
+[  --with-libserializer-jar=JARFILE   Specify path to jarfile manually (for Report Builder extension) ],
 [ LIBSERIALIZER_JAR="$withval"
 ])
 AC_ARG_WITH(libbase-jar,
-[  --with-libbase-jar=JARFILE   Specify path to jarfile manually ],
+[  --with-libbase-jar=JARFILE   Specify path to jarfile manually (for Report Builder extension) ],
 [ LIBBASE_JAR="$withval"
 ])
 AC_ARG_WITH(system-saxon,
@@ -6137,186 +6134,170 @@ if test -n "$enable_report_builder" -a "$enable_report_builder" != "no" && test 
   else
     AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
   fi
-  AC_MSG_CHECKING([which jfreereport libs to use])
-  if test "$with_system_jfreereport" = "yes"; then
-      SYSTEM_JFREEREPORT=YES
-      AC_MSG_RESULT([external])
-      if test -z $SAC_JAR; then
-             SAC_JAR=/usr/share/java/sac.jar
-      fi
-      AC_CHECK_FILE($SAC_JAR, [],
-             [AC_MSG_ERROR(sac.jar not found.)], [])
+  AC_MSG_CHECKING([which jfreereport libs to use (for Report Builder extension)])
+  AC_MSG_RESULT([external])
+  if test -z $SAC_JAR; then
+         SAC_JAR=/usr/share/java/sac.jar
+  fi
+  AC_CHECK_FILE($SAC_JAR, [],
+         [AC_MSG_ERROR(sac.jar not found.)], [])
 
-      if test -z $LIBXML_JAR; then
-        AC_CHECK_FILE(/usr/share/java/libxml-1.0.0.jar, 
-          [ LIBXML_JAR=/usr/share/java/libxml-1.0.0.jar ],
-          [
-            AC_CHECK_FILE(/usr/share/java/libxml.jar, 
-              [ LIBXML_JAR=/usr/share/java/libxml.jar ],
-              [AC_MSG_ERROR(libxml.jar replacement not found.)]
-            )
-          ]
+  if test -z $LIBXML_JAR; then
+    AC_CHECK_FILE(/usr/share/java/libxml-1.0.0.jar, 
+      [ LIBXML_JAR=/usr/share/java/libxml-1.0.0.jar ],
+      [
+        AC_CHECK_FILE(/usr/share/java/libxml.jar, 
+          [ LIBXML_JAR=/usr/share/java/libxml.jar ],
+          [AC_MSG_ERROR(libxml.jar replacement not found.)]
         )
-      else
-        AC_CHECK_FILE($LIBXML_JAR, [],
-             [AC_MSG_ERROR(libxml.jar not found.)], [])
-      fi
-
-      if test -z $FLUTE_JAR; then
-        AC_CHECK_FILE(/usr/share/java/flute-1.3.0.jar, 
-          [ FLUTE_JAR=/usr/share/java/flute-1.3.0.jar ],
-          [
-            AC_CHECK_FILE(/usr/share/java/flute.jar, 
-              [ FLUTE_JAR=/usr/share/java/flute.jar ],
-              [ AC_MSG_ERROR(flute-1.3.0.jar replacement not found.)]
-            )
-          ]
-        )
-      else
-        AC_CHECK_FILE($FLUTE_JAR, [],
-             [AC_MSG_ERROR(flute-1.3.0.jar not found.)], [])
-      fi
-
-      if test -z $JFREEREPORT_JAR; then
-        AC_CHECK_FILE(/usr/share/java/flow-engine-0.9.2.jar, 
-          [ JFREEREPORT_JAR=/usr/share/java/flow-engine-0.9.2.jar ],
-          [
-            AC_CHECK_FILE(/usr/share/java/flow-engine.jar, 
-              [ JFREEREPORT_JAR=/usr/share/java/flow-engine.jar ],
-              [AC_MSG_ERROR(jfreereport.jar replacement not found.)]
-            )
-          ]
-        )
-      else
-        AC_CHECK_FILE($JFREEREPORT_JAR, [],
-             [AC_MSG_ERROR(jfreereport.jar not found.)], [])
-      fi
-
-      if test -z $LIBLAYOUT_JAR; then
-        AC_CHECK_FILE(/usr/share/java/liblayout-0.2.9.jar, 
-          [ LIBLAYOUT_JAR=/usr/share/java/liblayout-0.2.9.jar ],
-          [
-            AC_CHECK_FILE(/usr/share/java/liblayout.jar, 
-              [ LIBLAYOUT_JAR=/usr/share/java/liblayout.jar ],
-              [AC_MSG_ERROR(liblayout.jar replacement not found.)]
-            )
-          ]
-        )
-      else
-        AC_CHECK_FILE($LIBLAYOUT_JAR, [],
-             [AC_MSG_ERROR(liblayout.jar not found.)], [])
-      fi
-
-      if test -z $LIBLOADER_JAR; then
-        AC_CHECK_FILE(/usr/share/java/libloader-1.0.0.jar, 
-          [ LIBLOADER_JAR=/usr/share/java/libloader-1.0.0.jar ],
-          [
-            AC_CHECK_FILE(/usr/share/java/libloader.jar, 
-              [ LIBLOADER_JAR=/usr/share/java/libloader.jar ],
-              [AC_MSG_ERROR(libloader.jar replacement not found.)]
-            )
-          ]
-        )
-      else
-        AC_CHECK_FILE($LIBLOADER_JAR, [],
-             [AC_MSG_ERROR(libloader.jar not found.)], [])
-      fi
-
-      if test -z $LIBFORMULA_JAR; then
-        AC_CHECK_FILE(/usr/share/java/libformula-0.2.0.jar, 
-          [ LIBFORMULA_JAR=/usr/share/java/libformula-0.2.0.jar ],
-          [
-            AC_CHECK_FILE(/usr/share/java/libformula.jar, 
-              [ LIBFORMULA_JAR=/usr/share/java/libformula.jar ],
-              [AC_MSG_ERROR(libformula.jar replacement not found.)]
-            )
-          ]
-        )
-      else
-        AC_CHECK_FILE($LIBFORMULA_JAR, [],
-             [AC_MSG_ERROR(libformula.jar not found.)], [])
-      fi
-
-      if test -z $LIBREPOSITORY_JAR; then
-        AC_CHECK_FILE(/usr/share/java/librepository-1.0.0.jar, 
-          [ LIBREPOSITORY_JAR=/usr/share/java/librepository-1.0.0.jar ],
-          [
-            AC_CHECK_FILE(/usr/share/java/librepository.jar, 
-              [ LIBREPOSITORY_JAR=/usr/share/java/librepository.jar ],
-              [AC_MSG_ERROR(librepository.jar replacement not found.)]
-            )
-          ]
-        )
-      else
-        AC_CHECK_FILE($LIBREPOSITORY_JAR, [],
-             [AC_MSG_ERROR(librepository.jar not found.)], [])
-      fi
-
-      if test -z $LIBFONTS_JAR; then
-        AC_CHECK_FILE(/usr/share/java/libfonts-1.0.0.jar, 
-          [ LIBFONTS_JAR=/usr/share/java/libfonts-1.0.0.jar ],
-          [
-            AC_CHECK_FILE(/usr/share/java/libfonts.jar, 
-              [ LIBFONTS_JAR=/usr/share/java/libfonts.jar ],
-              [AC_MSG_ERROR(libfonts.jar replacement not found.)]
-            )
-          ]
-        )
-      else
-        AC_CHECK_FILE($LIBFONTS_JAR, [],
-             [AC_MSG_ERROR(libfonts.jar not found.)], [])
-      fi
-
-      if test -z $LIBSERIALIZER_JAR; then
-        AC_CHECK_FILE(/usr/share/java/libserializer-1.0.0.jar, 
-          [ LIBSERIALIZER_JAR=/usr/share/java/libserializer-1.0.0.jar ],
-          [
-            AC_CHECK_FILE(/usr/share/java/libserializer.jar, 
-              [ LIBSERIALIZER_JAR=/usr/share/java/libserializer.jar ],
-              [AC_MSG_ERROR(libserializer.jar replacement not found.)]
-            )
-          ]
-        )
-      else
-        AC_CHECK_FILE($LIBSERIALIZER_JAR, [],
-             [AC_MSG_ERROR(libserializer.jar not found.)], [])
-      fi
-
-
-      if test -z $LIBBASE_JAR; then
-        AC_CHECK_FILE(/usr/share/java/libbase-1.0.0.jar, 
-          [ LIBBASE_JAR=/usr/share/java/libbase-1.0.0.jar ],
-          [
-            AC_CHECK_FILE(/usr/share/java/libbase.jar, 
-              [ LIBBASE_JAR=/usr/share/java/libbase.jar ],
-              [AC_MSG_ERROR(libbase.jar replacement not found.)]
-            )
-          ]
-        )
-      else
-        AC_CHECK_FILE($LIBBASE_JAR, [],
-             [AC_MSG_ERROR(libbase.jar not found.)], [])
-      fi
-
+      ]
+    )
   else
-     AC_MSG_RESULT([internal])
-     AC_MSG_CHECKING([for jfreereport module])
-     if test -d ./jfreereport; then
-      AC_MSG_RESULT([OK]) 
-     else
-      AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
-     fi
-     SYSTEM_JFREEREPORT=NO
-     BUILD_TYPE="$BUILD_TYPE JFREEREPORT"
+    AC_CHECK_FILE($LIBXML_JAR, [],
+         [AC_MSG_ERROR(libxml.jar not found.)], [])
+  fi
+
+  if test -z $FLUTE_JAR; then
+    AC_CHECK_FILE(/usr/share/java/flute-1.3.0.jar, 
+      [ FLUTE_JAR=/usr/share/java/flute-1.3.0.jar ],
+      [
+        AC_CHECK_FILE(/usr/share/java/flute.jar, 
+          [ FLUTE_JAR=/usr/share/java/flute.jar ],
+          [ AC_MSG_ERROR(flute-1.3.0.jar replacement not found.)]
+        )
+      ]
+    )
+  else
+    AC_CHECK_FILE($FLUTE_JAR, [],
+         [AC_MSG_ERROR(flute-1.3.0.jar not found.)], [])
+  fi
+
+  if test -z $JFREEREPORT_JAR; then
+    AC_CHECK_FILE(/usr/share/java/flow-engine-0.9.2.jar, 
+      [ JFREEREPORT_JAR=/usr/share/java/flow-engine-0.9.2.jar ],
+      [
+        AC_CHECK_FILE(/usr/share/java/flow-engine.jar, 
+          [ JFREEREPORT_JAR=/usr/share/java/flow-engine.jar ],
+          [AC_MSG_ERROR(jfreereport.jar replacement not found.)]
+        )
+      ]
+    )
+  else
+    AC_CHECK_FILE($JFREEREPORT_JAR, [],
+         [AC_MSG_ERROR(jfreereport.jar not found.)], [])
+  fi
+
+  if test -z $LIBLAYOUT_JAR; then
+    AC_CHECK_FILE(/usr/share/java/liblayout-0.2.9.jar, 
+      [ LIBLAYOUT_JAR=/usr/share/java/liblayout-0.2.9.jar ],
+      [
+        AC_CHECK_FILE(/usr/share/java/liblayout.jar, 
+          [ LIBLAYOUT_JAR=/usr/share/java/liblayout.jar ],
+          [AC_MSG_ERROR(liblayout.jar replacement not found.)]
+        )
+      ]
+    )
+  else
+    AC_CHECK_FILE($LIBLAYOUT_JAR, [],
+         [AC_MSG_ERROR(liblayout.jar not found.)], [])
+  fi
+
+  if test -z $LIBLOADER_JAR; then
+    AC_CHECK_FILE(/usr/share/java/libloader-1.0.0.jar, 
+      [ LIBLOADER_JAR=/usr/share/java/libloader-1.0.0.jar ],
+      [
+        AC_CHECK_FILE(/usr/share/java/libloader.jar, 
+          [ LIBLOADER_JAR=/usr/share/java/libloader.jar ],
+          [AC_MSG_ERROR(libloader.jar replacement not found.)]
+        )
+      ]
+    )
+  else
+    AC_CHECK_FILE($LIBLOADER_JAR, [],
+         [AC_MSG_ERROR(libloader.jar not found.)], [])
+  fi
+
+  if test -z $LIBFORMULA_JAR; then
+    AC_CHECK_FILE(/usr/share/java/libformula-0.2.0.jar, 
+      [ LIBFORMULA_JAR=/usr/share/java/libformula-0.2.0.jar ],
+      [
+        AC_CHECK_FILE(/usr/share/java/libformula.jar, 
+          [ LIBFORMULA_JAR=/usr/share/java/libformula.jar ],
+          [AC_MSG_ERROR(libformula.jar replacement not found.)]
+        )
+      ]
+    )
+  else
+    AC_CHECK_FILE($LIBFORMULA_JAR, [],
+         [AC_MSG_ERROR(libformula.jar not found.)], [])
+  fi
+
+  if test -z $LIBREPOSITORY_JAR; then
+    AC_CHECK_FILE(/usr/share/java/librepository-1.0.0.jar, 
+      [ LIBREPOSITORY_JAR=/usr/share/java/librepository-1.0.0.jar ],
+      [
+        AC_CHECK_FILE(/usr/share/java/librepository.jar, 
+          [ LIBREPOSITORY_JAR=/usr/share/java/librepository.jar ],
+          [AC_MSG_ERROR(librepository.jar replacement not found.)]
+        )
+      ]
+    )
+  else
+    AC_CHECK_FILE($LIBREPOSITORY_JAR, [],
+         [AC_MSG_ERROR(librepository.jar not found.)], [])
+  fi
+
+  if test -z $LIBFONTS_JAR; then
+    AC_CHECK_FILE(/usr/share/java/libfonts-1.0.0.jar, 
+      [ LIBFONTS_JAR=/usr/share/java/libfonts-1.0.0.jar ],
+      [
+        AC_CHECK_FILE(/usr/share/java/libfonts.jar, 
+          [ LIBFONTS_JAR=/usr/share/java/libfonts.jar ],
+          [AC_MSG_ERROR(libfonts.jar replacement not found.)]
+        )
+      ]
+    )
+  else
+    AC_CHECK_FILE($LIBFONTS_JAR, [],
+         [AC_MSG_ERROR(libfonts.jar not found.)], [])
+  fi
+
+  if test -z $LIBSERIALIZER_JAR; then
+    AC_CHECK_FILE(/usr/share/java/libserializer-1.0.0.jar, 
+      [ LIBSERIALIZER_JAR=/usr/share/java/libserializer-1.0.0.jar ],
+      [
+        AC_CHECK_FILE(/usr/share/java/libserializer.jar, 
+          [ LIBSERIALIZER_JAR=/usr/share/java/libserializer.jar ],
+          [AC_MSG_ERROR(libserializer.jar replacement not found.)]
+        )
+      ]
+    )
+  else
+    AC_CHECK_FILE($LIBSERIALIZER_JAR, [],
+         [AC_MSG_ERROR(libserializer.jar not found.)], [])
+  fi
+
+
+  if test -z $LIBBASE_JAR; then
+    AC_CHECK_FILE(/usr/share/java/libbase-1.0.0.jar, 
+      [ LIBBASE_JAR=/usr/share/java/libbase-1.0.0.jar ],
+      [
+        AC_CHECK_FILE(/usr/share/java/libbase.jar, 
+          [ LIBBASE_JAR=/usr/share/java/libbase.jar ],
+          [AC_MSG_ERROR(libbase.jar replacement not found.)]
+        )
+      ]
+    )
+  else
+    AC_CHECK_FILE($LIBBASE_JAR, [],
+         [AC_MSG_ERROR(libbase.jar not found.)], [])
   fi
   BUILD_TYPE="$BUILD_TYPE REPORTBUILDER"
 else
   AC_MSG_RESULT([no])
   ENABLE_REPORTBUILDER=NO
-  SYSTEM_JFREEREPORT=NO
 fi
 AC_SUBST(ENABLE_REPORTBUILDER)
-AC_SUBST(SYSTEM_JFREEREPORT)
 AC_SUBST(SAC_JAR)
 AC_SUBST(LIBXML_JAR)
 AC_SUBST(FLUTE_JAR)

@@ -20,7 +20,6 @@ ca4870d899fd7e943ffc310a5421ad4d-liberation-fonts-ttf-1.06.0.20100721.tar.gz
 35c94d2df8893241173de1d16b6034c0-swingExSrc.zip
 35efabc239af896dfb79be7ebdd6e6b9-gentiumbasic-fonts-1.10.zip
 377a60170e5185eb63d3ed2fae98e621-README_silgraphite-2.3.1.txt
-39bb3fcea1514f1369fcfc87542390fd-sacjava-1.3.zip
 3ade8cfe7e59ca8e65052644fed9fca4-epm-3.7.tar.gz
 3c219630e4302863a9a83d0efde889db-commons-logging-1.1.1-src.tar.gz
 48470d662650c3c074e1c3fabbc67bbd-README_source-9.0.0.7-bj.txt
@@ -44,9 +43,7 @@ bc702168a2af16869201dbe91e46ae48-LICENSE_Python-2.6.1
 c441926f3a552ed3e5b274b62e86af16-STLport-4.0.tar.gz
 ca66e26082cab8bb817185a116db809b-redland-1.0.8.tar.gz
 cd5997284f4ba1e8dde5d1e5869fc342-libwpd-0.8.8.tar.gz
-d1a3205871c3c52e8a50c9f18510ae12-libformula.zip
 d35724900f6a4105550293686688bbb3-silgraphite-2.3.1.tar.gz
-d4c4d91ab3a8e52a2e69d48d34ef4df4-core.zip
 d70951c80dabecc2892c919ff5d07172-db-4.7.25.NC-custom.tar.gz
 e0707ff896045731ff99e99799606441-README_db-4.7.25.NC-custom.txt
 e81c2f0953aa60f8062c05a4673f2be0-Python-2.6.1.tar.bz2
@@ -62,16 +59,6 @@ fdb27bfe2dbe2e7b57ae194d9bf36bab-SampleICC-1.3.2.tar.gz
 831126a1ee5af269923cfab6050769fe-mysql-connector-cpp.zip
 067201ea8b126597670b5eff72e1f66c-mythes-1.2.0.tar.gz
 cf8a6967f7de535ae257fa411c98eb88-mdds_0.3.0.tar.bz2
-3404ab6b1792ae5f16bbd603bd1e1d03-libformula-1.1.7.zip
-3bdf40c0d199af31923e900d082ca2dd-libfonts-1.1.6.zip
-8ce2fcd72becf06c41f7201d15373ed9-librepository-1.1.6.zip
-97b2d4dba862397f446b217e2b623e71-libloader-1.1.6.zip
-ace6ab49184e329db254e454a010f56d-libxml-1.1.7.zip
-d8bd5eed178db6e2b18eeed243f85aa8-flute-1.1.6.zip
-db60e4fde8dd6d6807523deb71ee34dc-liblayout-0.2.10.zip
-eeb2c7ddf0d302fba4bfc6e97eac9624-libbase-1.1.6.zip
-f94d9870737518e3b597f9265f4e9803-libserializer-1.1.6.zip
-ba2930200c9f019c2d93a8c88c651a0f-flow-engine-0.9.4.zip
 ff369e69ef0f0143beb5626164e87ae2-neon-0.29.5.tar.gz
 3dd55b952826d2b32f51308f2f91aa89-gettext-0.18.1.1.tar.gz
 9f6e85e1e38490c3956f4415bcd33e6e-glib-2.28.1.tar.gz
