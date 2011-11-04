@@ -983,8 +983,14 @@ SbiExpression* SbiExprList::Get( short n )
 
 void SbiExprList::addExpression( SbiExpression* pExpr )
 {
+    if( !pFirst )
+    {
+        pFirst = pExpr;
+        return;
+    }
+
     SbiExpression* p = pFirst;
-    while( p && p->pNext )
+    while( p->pNext )
         p = p->pNext;
 
     p->pNext = pExpr;

@@ -1779,6 +1779,8 @@ sal_Bool SwNewDBMgr::GetColumnCnt(const String& rSourceName, const String& rTabl
         aData.nCommandType = -1;
         pFound = FindDSData(aData, sal_False);
     }
+    if (!pFound)
+        return sal_False;
     //check validity of supplied record Id
     if(pFound->aSelection.getLength())
     {
@@ -1795,7 +1797,7 @@ sal_Bool SwNewDBMgr::GetColumnCnt(const String& rSourceName, const String& rTabl
         if(!bFound)
             return sal_False;
     }
-    if(pFound && pFound->xResultSet.is() && !pFound->bAfterSelection)
+    if(pFound->xResultSet.is() && !pFound->bAfterSelection)
     {
         sal_Int32 nOldRow = 0;
         try

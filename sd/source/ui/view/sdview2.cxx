@@ -466,10 +466,10 @@ void View::DragFinished( sal_Int8 nDropAction )
             nm--;
             SdrMark* pM=mpDragSrcMarkList->GetMark(nm);
             SdrObject* pObj=pM->GetMarkedSdrObj();
-            sal_uInt32 nOrdNum=pObj->GetOrdNumDirect();
 
             if( pObj && pObj->GetPage() )
             {
+                sal_uInt32 nOrdNum=pObj->GetOrdNumDirect();
 #ifdef DBG_UTIL
                 SdrObject* pChkObj =
 #endif

@@ -152,10 +152,10 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
         SdrObject* pSO=rSrcList.GetObj(no);
 
         SdrObject* pDO = pSO->Clone();
-        pDO->SetModel(pModel);
-        pDO->SetPage(pPage);
 
         if (pDO!=NULL) {
+            pDO->SetModel(pModel);
+            pDO->SetPage(pPage);
             NbcInsertObject(pDO,CONTAINER_APPEND,&aReason);
         } else {
             nCloneErrCnt++;
@@ -425,11 +425,11 @@ SdrObject* SdrObjList::NbcRemoveObject(sal_uIntPtr nObjNum)
     SdrObject* pObj=maList[nObjNum];
     RemoveObjectFromContainer(nObjNum);
 
-    // flushViewObjectContacts() clears the VOC's and those invalidate
-    pObj->GetViewContact().flushViewObjectContacts(true);
-
     DBG_ASSERT(pObj!=NULL,"Object zum Removen nicht gefunden");
     if (pObj!=NULL) {
+        // flushViewObjectContacts() clears the VOC's and those invalidate
+        pObj->GetViewContact().flushViewObjectContacts(true);
+
         DBG_ASSERT(pObj->IsInserted(),"ZObjekt hat keinen Inserted-Status");
         pObj->SetInserted(sal_False); // Ruft u.a. den UserCall
         pObj->SetObjList(NULL);
