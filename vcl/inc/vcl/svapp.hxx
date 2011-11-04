@@ -106,8 +106,10 @@ public:
         TYPE_UNACCEPT
     };
 
-    ApplicationEvent(Type rEvent,
-                     const rtl::OUString& rData = rtl::OUString()):
+    ApplicationEvent() {}
+
+    explicit ApplicationEvent(
+        Type rEvent, const rtl::OUString& rData = rtl::OUString()):
         aEvent(rEvent),
         aData(rData)
     {}
