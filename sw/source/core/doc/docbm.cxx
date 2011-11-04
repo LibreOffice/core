@@ -578,7 +578,7 @@ namespace sw { namespace mark
     {
         vector<const_iterator_t> vMarksToDelete;
         bool isSortingNeeded = false;
-        // copy all bookmarks in the move area to a vector storing all position data as offset
+        // copy all bookmarks in the move area to a vector storing all position data as offsets
         // reassignment is performed after the move
         for(iterator_t ppMark = m_vMarks.begin();
             ppMark != m_vMarks.end();
@@ -899,19 +899,19 @@ namespace sw { namespace mark
 
 namespace
 {
-    // Aufbau vom Array: 2 longs,
-    //  1. Long enthaelt Type und Position im DocArray,
-    //  2. die ContentPosition
+    // Array structure: 2 longs,
+    //  1st long contains the type and position in the DocArray,
+    //  2nd long contains the ContentPosition
     //
     //  CntntType --
     //          0x8000 = Bookmark Pos1
     //          0x8001 = Bookmark Pos2
-    //          0x2000 = Absatzgebundener Rahmen
-    //          0x2001 = Auto-Absatzgebundener Rahmen, der umgehaengt werden soll
+    //          0x2000 = Paragraph bound frame
+    //          0x2001 = Auto paragraph bound frame, which should be attached
     //          0x1000 = Redline Mark
     //          0x1001 = Redline Point
-    //          0x0800 = Crsr aus der CrsrShell Mark
-    //          0x0801 = Crsr aus der CrsrShell Point
+    //          0x0800 = Crsr from the CrsrShell Mark
+    //          0x0801 = Crsr from the CrsrShell Point
     //          0x0400 = UnoCrsr Mark
     //          0x0401 = UnoCrsr Point
     //
@@ -997,7 +997,7 @@ namespace
                     const SwPaM& rPam, _SwSaveTypeCountContent& rSave,
                     sal_Bool bChkSelDirection )
     {
-        // SelektionsRichtung beachten
+        // Respect direction of selection
         bool bBound1IsStart = !bChkSelDirection ? sal_True :
                             ( *rPam.GetPoint() < *rPam.GetMark()
                                 ? rPam.GetPoint() == &rPam.GetBound()
@@ -1172,13 +1172,12 @@ void _DelBookmarks(
 
     pDoc->getIDocumentMarkAccess()->deleteMarks(rStt, rEnd, pSaveBkmk, pSttIdx, pEndIdx);
 
-    // kopiere alle Redlines, die im Move Bereich stehen in ein
-    // Array, das alle Angaben auf die Position als Offset speichert.
-    // Die neue Zuordung erfolgt nach dem Moven.
+    // Copy all red lines which are in the move area into an array, which holds all position information as offset.
+    // Assignement happens after moving.
     SwRedlineTbl& rTbl = (SwRedlineTbl&)pDoc->GetRedlineTbl();
     for(sal_uInt16 nCnt = 0; nCnt < rTbl.Count(); ++nCnt )
     {
-        // liegt auf der Position ??
+        // Is at position?
         SwRedline* pRedl = rTbl[ nCnt ];
 
         SwPosition *pRStt = &pRedl->GetBound(sal_True),
@@ -1314,7 +1313,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
         }
     }
 
-    // 4. Absatzgebundene Objekte
+    // 4. Paragraph bound objects
     {
         SwCntntNode *pNode = pDoc->GetNodes()[nNode]->GetCntntNode();
         if( pNode )
@@ -1326,7 +1325,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
             if( bViaDoc )
                 pFrm = NULL;
 #endif
-            if( pFrm ) // gibt es ein Layout? Dann ist etwas billiger...
+            if( pFrm ) // Do we have a layout? Then it's a bit cheaper ...
             {
                 if( pFrm->GetDrawObjs() )
                 {
@@ -1370,7 +1369,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
                     }
                 }
             }
-            else // Schade, kein Layout, dann ist es eben etwas teurer...
+            else // No layout, so it's a bit more expensive ...
             {
                 for( aSave.SetCount( pDoc->GetSpzFrmFmts()->Count() );
                         aSave.GetCount() ; )

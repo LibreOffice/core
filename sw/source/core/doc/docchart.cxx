@@ -72,30 +72,30 @@ sal_Bool SwTable::IsTblComplexForChart( const String& rSelection,
     const SwTableBox* pSttBox, *pEndBox;
     if( 2 < rSelection.Len() )
     {
-        // spitze Klammern am Anfang & Ende enfernen
+        // Remove brackets at the beginning and from the end
         String sBox( rSelection );
         if( '<' == sBox.GetChar( 0  ) ) sBox.Erase( 0, 1 );
         if( '>' == sBox.GetChar( sBox.Len()-1  ) ) sBox.Erase( sBox.Len()-1 );
 
-        xub_StrLen nTrenner = sBox.Search( ':' );
-        OSL_ENSURE( STRING_NOTFOUND != nTrenner, "keine gueltige Selektion" );
+        xub_StrLen nSeperator = sBox.Search( ':' );
+        OSL_ENSURE( STRING_NOTFOUND != nSeperator, "no valid selection" );
 
-        pSttBox = GetTblBox( sBox.Copy( 0, nTrenner ));
-        pEndBox = GetTblBox( sBox.Copy( nTrenner+1 ));
+        pSttBox = GetTblBox( sBox.Copy( 0, nSeperator ));
+        pEndBox = GetTblBox( sBox.Copy( nSeperator+1 ));
     }
     else
     {
         const SwTableLines* pLns = &GetTabLines();
         pSttBox = (*pLns)[ 0 ]->GetTabBoxes()[ 0 ];
         while( !pSttBox->GetSttNd() )
-            // bis zur Content Box!
+            // Until the Content Box!
             pSttBox = pSttBox->GetTabLines()[ 0 ]->GetTabBoxes()[ 0 ];
 
         const SwTableBoxes* pBoxes = &(*pLns)[ pLns->Count()-1 ]->GetTabBoxes();
         pEndBox = (*pBoxes)[ pBoxes->Count()-1 ];
         while( !pEndBox->GetSttNd() )
         {
-            // bis zur Content Box!
+            // Until the Content Box!
             pLns = &pEndBox->GetTabLines();
             pBoxes = &(*pLns)[ pLns->Count()-1 ]->GetTabBoxes();
             pEndBox = (*pBoxes)[ pBoxes->Count()-1 ];

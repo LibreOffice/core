@@ -45,7 +45,7 @@
 #include <hints.hxx>
 
 /*
- * MACROS um ueber alle CrsrShells zu iterieren
+ * Macros to iterate over all CrsrShells
  */
 #define PCURSH ((SwCrsrShell*)_pStartShell)
 #define FOREACHSHELL_START( pEShell ) \
@@ -327,7 +327,7 @@ void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
 {
     getIDocumentMarkAccess()->correctMarksRelative(rOldNode, rNewPos, nOffset);
 
-    { // dann die Redlines korrigieren
+    { // fix the Redlines
         SwRedlineTbl& rTbl = *pRedlineTbl;
         SwPosition aNewPos(rNewPos);
         for( sal_uInt16 n = 0; n < rTbl.Count(); ++n )
@@ -344,14 +344,14 @@ void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
 
 SwEditShell* SwDoc::GetEditShell( ViewShell** ppSh ) const
 {
-    // Layout und OLE-Shells sollten vorhanden sein!
+    // Layout and OLE shells should be available
     if( pCurrentView )
     {
         ViewShell *pSh = pCurrentView, *pVSh = pSh;
         if( ppSh )
             *ppSh = pSh;
 
-        // wir suchen uns eine EditShell, falls diese existiert
+        // look for an EditShell (if it exists)
         do {
             if( pSh->IsA( TYPE( SwEditShell ) ) )
                 return (SwEditShell*)pSh;

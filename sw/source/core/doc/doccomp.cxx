@@ -74,24 +74,21 @@ protected:
     vector< CompareLine* > aLines;
     sal_uLong nSttLineNum;
 
-    // Anfang und Ende beschneiden und alle anderen in das
-    // LinesArray setzen
+    // Truncate beginning and end and add all others to the LinesArray
     virtual void CheckRanges( CompareData& ) = 0;
 
 public:
     CompareData();
     virtual ~CompareData();
 
-    // gibt es unterschiede?
+    // Are there differences?
     sal_Bool HasDiffs( const CompareData& rData ) const;
 
-    // startet das Vergleichen und Erzeugen der Unterschiede zweier
-    // Dokumente
+    // Triggers the comparison and creation of two documents
     void CompareLines( CompareData& rData );
-    // lasse die Unterschiede anzeigen - ruft die beiden Methoden
-    // ShowInsert / ShowDelete. Diese bekommen die Start und EndLine-Nummer
-    // uebergeben. Die Abbildung auf den tatsaechline Inhalt muss die
-    // Ableitung uebernehmen!
+    // Display the differences - calls the methods ShowInsert and ShowDelete.
+    // These are passed the start and end line number.
+    // Displaying the actually content is to be handled by the subclass!
     sal_uLong ShowDiffs( const CompareData& rData );
 
     virtual void ShowInsert( sal_uLong nStt, sal_uLong nEnd );
@@ -101,13 +98,12 @@ public:
                                     sal_uLong& nStt, sal_uLong& nEnd,
                                     sal_uLong& nThisStt, sal_uLong& nThisEnd );
 
-    // Eindeutigen Index fuer eine Line setzen. Gleiche Lines haben den
-    // selben Index; auch in den anderen CompareData!
+    // Set non-ambiguous index for a line. Same lines have the same index, even in the other CompareData!
     void SetIndex( size_t nLine, size_t nIndex );
     size_t GetIndex( size_t nLine ) const
         { return nLine < aLines.size() ? pIndex[ nLine ] : 0; }
 
-    // setze/erfrage ob eine Zeile veraendert ist
+    // Set/get of a line has changed
     void SetChanged( size_t nLine, bool bFlag = true );
     bool GetChanged( size_t nLine ) const
         {
@@ -167,7 +163,7 @@ public:
     };
 
 private:
-    // Suche die verschobenen Lines
+    // Look for the moved lines
     class CompareSequence
     {
         CompareData &rData1, &rData2;
@@ -260,8 +256,8 @@ sal_uLong CompareData::ShowDiffs( const CompareData& rData )
             while( nStt1 < nLen1 && rData.GetChanged( nStt1 )) ++nStt1;
             while( nStt2 < nLen2 && GetChanged( nStt2 )) ++nStt2;
 
-            // rData ist das Original,
-            // this ist das, in das die Veraenderungen sollen
+            // rData is the original,
+            // this is what should go to the change
             if( nSav2 != nStt2 && nSav1 != nStt1 )
                 CheckForChangesInLine( rData, nSav1, nStt1, nSav2, nStt2 );
 
@@ -397,7 +393,7 @@ void Hash::CalcHashValue( CompareData& rData )
 Compare::Compare( sal_uLong nDiff, CompareData& rData1, CompareData& rData2 )
 {
     MovedData *pMD1, *pMD2;
-    // Suche die unterschiedlichen Lines
+    // Look for the differing lines
     {
         sal_Char* pDiscard1 = new sal_Char[ rData1.GetLineCount() ];
         sal_Char* pDiscard2 = new sal_Char[ rData2.GetLineCount() ];
@@ -407,17 +403,16 @@ Compare::Compare( sal_uLong nDiff, CompareData& rData1, CompareData& rData2 )
         memset( pCount1, 0, nDiff * sizeof( sal_uLong ));
         memset( pCount2, 0, nDiff * sizeof( sal_uLong ));
 
-        // stelle fest, welche Indizies in den CompareData mehrfach vergeben wurden
+        // find indices in CompareData which have been assigned multiple times
         CountDifference( rData1, pCount1 );
         CountDifference( rData2, pCount2 );
 
-        // alle die jetzt nur einmal vorhanden sind, sind eingefuegt oder
-        // geloescht worden. Alle die im anderen auch vorhanden sind, sind
-        // verschoben worden
+        // All which occur only once now have either been inserted or deleted.
+        // All which are also contained in the other one have been moved.
         SetDiscard( rData1, pDiscard1, pCount2 );
         SetDiscard( rData2, pDiscard2, pCount1 );
 
-        // die Arrays koennen wir wieder vergessen
+        // forget the arrays again
         delete [] pCount1; delete [] pCount2;
 
         CheckDiscard( rData1.GetLineCount(), pDiscard1 );
@@ -426,7 +421,7 @@ Compare::Compare( sal_uLong nDiff, CompareData& rData1, CompareData& rData2 )
         pMD1 = new MovedData( rData1, pDiscard1 );
         pMD2 = new MovedData( rData2, pDiscard2 );
 
-        // die Arrays koennen wir wieder vergessen
+        // forget the arrays again
         delete [] pDiscard1; delete [] pDiscard2;
     }
 
@@ -455,7 +450,7 @@ void Compare::SetDiscard( const CompareData& rData,
 {
     sal_uLong nLen = rData.GetLineCount();
 
-    // berechne Max in Abhanegigkeit zur LineAnzahl
+    // calculate Max with respect to the line count
     sal_uInt16 nMax = 5;
     sal_uLong n;
 
@@ -610,7 +605,7 @@ Compare::MovedData::~MovedData()
     delete [] pLineNum;
 }
 
-// Suche die verschobenen Lines
+// Find the differing lines
 Compare::CompareSequence::CompareSequence(
                             CompareData& rD1, CompareData& rD2,
                             const MovedData& rMD1, const MovedData& rMD2 )
@@ -841,7 +836,7 @@ public:
 
     const SwNode& GetEndNode() const;
 
-    // fuers Debugging!
+    // for debugging
     String GetText() const;
 };
 
@@ -910,7 +905,7 @@ sal_uLong SwCompareLine::GetHashValue() const
 
     case ND_GRFNODE:
     case ND_OLENODE:
-        // feste Id ? sollte aber nie auftauchen
+        // Fixed ID? Should never occur ...
         break;
     }
     return nRet;
@@ -1130,11 +1125,10 @@ sal_Bool SwCompareLine::CompareTxtNd( const SwTxtNode& rDstNd,
                                   const SwTxtNode& rSrcNd )
 {
     sal_Bool bRet = sal_False;
-    // erstmal ganz einfach!
+    // Very simple at first
     if( rDstNd.GetTxt() == rSrcNd.GetTxt() )
     {
-        // der Text ist gleich, aber sind die "Sonderattribute" (0xFF) auch
-        // dieselben??
+        // The text is the same, but are the "special attributes" (0xFF) also the same?
         bRet = sal_True;
     }
     return bRet;
@@ -1173,8 +1167,8 @@ sal_Bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
         if( nStt || !nDEnd || !nSEnd || nDEnd < rDestNd.GetTxt().Len() ||
             nSEnd < rSrcNd.GetTxt().Len() )
         {
-            // jetzt ist zwischen nStt bis nDEnd das neu eingefuegte
-            // und zwischen nStt und nSEnd das geloeschte
+            // The newly inserted is now between nStt and nDEnd
+            // and the deleted is between nStt and nSEnd
             SwDoc* pDoc = rDestNd.GetDoc();
             SwPaM aPam( rDestNd, nDEnd );
             if( nStt != nDEnd )
@@ -1493,7 +1487,7 @@ void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
         SwRedlineData aRedlnData( nsRedlineType_t::REDLINE_INSERT, nAuthor, aTimeStamp,
                                     aEmptyStr, 0, 0 );
 
-        // zusammenhaengende zusammenfassen
+        // combine consecutive
         if( pTmp->GetNext() != pInsRing )
         {
             const SwCntntNode* pCNd;
@@ -1509,7 +1503,7 @@ void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
                 {
                     if( pTmp->GetNext() == pInsRing )
                     {
-                        // liegen hintereinander also zusammen fassen
+                        // are consecutive, so combine
                         rEndStt = *pTmp->Start();
                         delete pTmp;
                         pTmp = pInsRing;
@@ -1537,7 +1531,7 @@ void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
     }
 }
 
-// returnt (?die Anzahl der Unterschiede?) ob etwas unterschiedlich ist
+// Returns (the difference count?) if something is different
 long SwDoc::CompareDoc( const SwDoc& rDoc )
 {
     if( &rDoc == this )
@@ -1606,7 +1600,7 @@ _SaveMergeRedlines::_SaveMergeRedlines( const SwNode& rDstNd,
 
     if( nsRedlineType_t::REDLINE_DELETE == pDestRedl->GetType() )
     {
-        // den Bereich als geloescht kennzeichnen
+        // mark the area as deleted
         const SwPosition* pEnd = pStt == rSrcRedl.GetPoint()
                                             ? rSrcRedl.GetMark()
                                             : rSrcRedl.GetPoint();
@@ -1626,7 +1620,7 @@ sal_uInt16 _SaveMergeRedlines::InsertRedline()
 
     if( nsRedlineType_t::REDLINE_INSERT == pDestRedl->GetType() )
     {
-        // der Teil wurde eingefuegt, also kopiere ihn aus dem SourceDoc
+        // the part was inserted so copy it from the SourceDoc
         ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
         SwNodeIndex aSaveNd( pDestRedl->GetPoint()->nNode, -1 );
@@ -1657,13 +1651,12 @@ sal_uInt16 _SaveMergeRedlines::InsertRedline()
     else
     {
         //JP 21.09.98: Bug 55909
-        // falls im Doc auf gleicher Pos aber schon ein geloeschter oder
-        // eingefuegter ist, dann muss dieser gesplittet werden!
+        // If there already is a deleted or inserted one at the same position, we have to split it!
         SwPosition* pDStt = pDestRedl->GetMark(),
                   * pDEnd = pDestRedl->GetPoint();
         sal_uInt16 n = 0;
 
-            // zur StartPos das erste Redline suchen
+            // find the first redline for StartPos
         if( !pDoc->GetRedline( *pDStt, &n ) && n )
             --n;
 
@@ -1687,7 +1680,7 @@ sal_uInt16 _SaveMergeRedlines::InsertRedline()
                 case POS_INSIDE:
                 case POS_EQUAL:
                     delete pDestRedl, pDestRedl = 0;
-                    // break; -> kein break !!!!
+                    // break; -> no break !!!!
 
                 case POS_COLLIDE_END:
                 case POS_BEFORE:
@@ -1715,7 +1708,7 @@ sal_uInt16 _SaveMergeRedlines::InsertRedline()
 
                         *pDStt = *pREnd;
 
-                        // dann solle man neu anfangen
+                        // we should start over now
                         n = USHRT_MAX;
                     }
                     break;
@@ -1756,7 +1749,7 @@ sal_uInt16 _SaveMergeRedlines::InsertRedline()
     return nIns;
 }
 
-// merge zweier Dokumente
+// Merge two documents
 long SwDoc::MergeDoc( const SwDoc& rDoc )
 {
     if( &rDoc == this )
@@ -1780,10 +1773,9 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
 
     if( !aD1.HasDiffs( aD0 ) )
     {
-        // jetzt wollen wir alle Redlines aus dem SourceDoc zu uns bekommen
+        // we want to get all redlines from the SourceDoc
 
-        // suche alle Insert - Redlines aus dem SourceDoc und bestimme
-        // deren Position im DestDoc
+        // look for all insert redlines from the SourceDoc and determine their position in the DestDoc
         _SaveMergeRedlines* pRing = 0;
         const SwRedlineTbl& rSrcRedlTbl = rSrcDoc.GetRedlineTbl();
         sal_uLong nEndOfExtra = rSrcDoc.GetNodes().GetEndOfExtras().GetIndex();
@@ -1799,8 +1791,8 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
                 const SwNode* pDstNd = GetNodes()[
                                         nMyEndOfExtra + nNd - nEndOfExtra ];
 
-                // Position gefunden. Dann muss im DestDoc auch
-                // in der Line das Redline eingefuegt werden
+                // Found the positon.
+                // Then we also have to insert the redline to the line in the DestDoc.
                 _SaveMergeRedlines* pTmp = new _SaveMergeRedlines(
                                                     *pDstNd, *pRedl, pRing );
                 if( !pRing )
@@ -1810,7 +1802,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
 
         if( pRing )
         {
-            // dann alle ins DestDoc ueber nehmen
+          // Carry over all into DestDoc
           rSrcDoc.SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE));
 
           SetRedlineMode((RedlineMode_t)(

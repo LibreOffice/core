@@ -101,7 +101,7 @@ sal_Bool SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs
 
             if( pRet && SbxNULL <  pRetValue->GetType() &&
                         SbxVOID != pRetValue->GetType() )
-                // gueltiger Wert, also setzen
+                // valid value, so set it
                 *pRet = pRetValue->GetString();
         }
         break;
@@ -147,7 +147,7 @@ sal_Bool SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs
 sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
                     sal_Bool bCheckPtr, SbxArray* pArgs, const Link* )
 {
-    if( !pDocShell )        // ohne DocShell geht das nicht!
+    if( !pDocShell )        // we can't do that without a DocShell!
         return 0;
 
     sal_uInt16 nRet = 0;
@@ -163,7 +163,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
                 if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_INETFMT, n ) )
                     && rCallEvent.PTR.pINetAttr == pItem )
                 {
-                    bCheckPtr = sal_False;      // als Flag missbrauchen
+                    bCheckPtr = sal_False;       // misuse as a flag
                     break;
                 }
         }
@@ -179,7 +179,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
             {
                 sal_uInt16 nPos = GetSpzFrmFmts()->GetPos( pFmt );
                 if( USHRT_MAX != nPos )
-                    bCheckPtr = sal_False;      // als Flag missbrauchen
+                    bCheckPtr = sal_False;      // misuse as a flag
             }
             if( !bCheckPtr )
                 pTbl = &pFmt->GetMacro().GetMacroTable();
@@ -200,7 +200,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
                     for( nPos = pIMap->GetIMapObjectCount(); nPos; )
                         if( pIMapObj == pIMap->GetIMapObject( --nPos ))
                         {
-                            bCheckPtr = sal_False;      // als Flag missbrauchen
+                            bCheckPtr = sal_False;      // misuse as a flag
                             break;
                         }
                 }
