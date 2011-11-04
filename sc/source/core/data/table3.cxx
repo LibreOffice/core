@@ -1274,12 +1274,13 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
             }
             if ( !bRealRegExp )
             {
+                rtl::OUString aQueryStr = rEntry.GetQueryString();
                 if ( rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL
                     || rEntry.eOp == SC_CONTAINS || rEntry.eOp == SC_DOES_NOT_CONTAIN
                     || rEntry.eOp == SC_BEGINS_WITH || rEntry.eOp == SC_ENDS_WITH
                     || rEntry.eOp == SC_DOES_NOT_BEGIN_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH )
                 {
-                    if ( !rEntry.bQueryByString && rEntry.pStr->Len() == 0 )
+                    if (!rEntry.bQueryByString && aQueryStr.isEmpty())
                     {
                         // #i18374# When used from functions (match, countif, sumif, vlookup, hlookup, lookup),
                         // the query value is assigned directly, and the string is empty. In that case,
@@ -1290,7 +1291,7 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                     }
                     else if ( bMatchWholeCell )
                     {
-                        bOk = pTransliteration->isEqual( aCellStr, *rEntry.pStr );
+                        bOk = pTransliteration->isEqual(aCellStr, aQueryStr);
                         if ( rEntry.eOp == SC_NOT_EQUAL )
                             bOk = !bOk;
                     }
@@ -1300,7 +1301,7 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                             aCellStr, ScGlobal::eLnge, 0, aCellStr.Len(),
                             NULL ) );
                         String aQuer( pTransliteration->transliterate(
-                            *rEntry.pStr, ScGlobal::eLnge, 0, rEntry.pStr->Len(),
+                            aQueryStr, ScGlobal::eLnge, 0, aQueryStr.getLength(),
                             NULL ) );
                         xub_StrLen nIndex = (rEntry.eOp == SC_ENDS_WITH
                             || rEntry.eOp == SC_DOES_NOT_END_WITH)? (aCell.Len()-aQuer.Len()):0;
@@ -1337,7 +1338,7 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                 else
                 {   // use collator here because data was probably sorted
                     sal_Int32 nCompare = pCollator->compareString(
-                        aCellStr, *rEntry.pStr );
+                        aCellStr, aQueryStr);
                     switch (rEntry.eOp)
                     {
                         case SC_LESS :
@@ -1559,7 +1560,7 @@ static void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPa
             {
                 sal_uInt32 nIndex = 0;
                 rEntry.bQueryByString = !( pDoc->GetFormatTable()->
-                    IsNumberFormat( *rEntry.pStr, nIndex, rEntry.nVal ) );
+                    IsNumberFormat(rEntry.GetQueryString(), nIndex, rEntry.nVal));
                 if (rEntry.bQueryByDate)
                 {
                     if (!rEntry.bQueryByString && ((nIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0))
@@ -1903,7 +1904,9 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
         // Vierte Spalte Wert
         if (bValid)
         {
-            GetString(nCol1 + 3, nRow, *rEntry.pStr);
+            String aStr;
+            GetString(nCol1 + 3, nRow, aStr);
+            rEntry.SetQueryString(aStr);
             rEntry.bDoQuery = true;
         }
         nIndex++;

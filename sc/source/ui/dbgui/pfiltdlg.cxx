@@ -215,8 +215,8 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
         {
             const ScQueryEntry& rEntry = theQueryData.GetEntry(i);
 
-            String  aValStr      = *rEntry.pStr;
-            if (!rEntry.bQueryByString && aValStr == EMPTY_STRING)
+            rtl::OUString aValStr = rEntry.GetQueryString();
+            if (!rEntry.bQueryByString && aValStr.isEmpty())
             {
                 if (rEntry.nVal == SC_EMPTYFIELDS)
                     aValStr = aStrEmpty;
@@ -230,7 +230,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
             aCondLbArr [i]->SelectEntryPos( nCondPos );
             UpdateValueList( static_cast<sal_uInt16>(i+1) );
             aValueEdArr[i]->SetText( aValStr );
-            if (aValStr == aStrEmpty || aValStr == aStrNotEmpty)
+            if (aValStr.equals(aStrEmpty) || aValStr.equals(aStrNotEmpty))
                 aCondLbArr[i]->Disable();
         }
         else
@@ -426,19 +426,19 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
              */
             if ( aStrVal == aStrEmpty )
             {
-                *rEntry.pStr    = EMPTY_STRING;
+                rEntry.SetQueryString(rtl::OUString());
                 rEntry.nVal     = SC_EMPTYFIELDS;
                 rEntry.bQueryByString = false;
             }
             else if ( aStrVal == aStrNotEmpty )
             {
-                *rEntry.pStr    = EMPTY_STRING;
+                rEntry.SetQueryString(rtl::OUString());
                 rEntry.nVal     = SC_NONEMPTYFIELDS;
                 rEntry.bQueryByString = false;
             }
             else
             {
-                *rEntry.pStr    = aStrVal;
+                rEntry.SetQueryString(aStrVal);
                 rEntry.nVal     = 0;
                 rEntry.bQueryByString = sal_True;
             }

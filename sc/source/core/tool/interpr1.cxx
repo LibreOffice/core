@@ -721,7 +721,7 @@ double ScInterpreter::CompareFunc( const ScCompare& rComp, ScCompareOptions* pOp
             // is/must be identical to *rEntry.pStr, which is essential for
             // regex to work through GetSearchTextPtr().
             ScQueryEntry& rEntry = pOptions->aQueryEntry;
-            OSL_ENSURE( *rComp.pVal[1] == *rEntry.pStr, "ScInterpreter::CompareFunc: broken options");
+            OSL_ENSURE(rEntry.GetQueryString().equals(*rComp.pVal[1]), "ScInterpreter::CompareFunc: broken options");
             if (pOptions->bRegEx)
             {
                 xub_StrLen nStart = 0;
@@ -999,7 +999,7 @@ ScMatrixRef ScInterpreter::QueryMat( const ScMatrixRef& pMat, ScCompareOptions& 
     short nSaveFuncFmtType = nFuncFmtType;
     PushMatrix( pMat);
     if (rOptions.aQueryEntry.bQueryByString)
-        PushString( *rOptions.aQueryEntry.pStr);
+        PushString(rOptions.aQueryEntry.GetQueryString());
     else
         PushDouble( rOptions.aQueryEntry.nVal);
     ScMatrixRef pResultMatrix = CompareMat( &rOptions);
@@ -4321,8 +4321,8 @@ static sal_Int32 lcl_CompareMatrix2Query(
         // this should not happen!
         return 1;
 
-    const String& rStr1 = rMat.GetString(i);
-    const String& rStr2 = *rEntry.pStr;
+    const rtl::OUString rStr1 = rMat.GetString(i);
+    const rtl::OUString rStr2 = rEntry.GetQueryString();
 
     return ScGlobal::GetCollator()->compareString( rStr1, rStr2); // case-insensitive
 }
@@ -4465,7 +4465,7 @@ void ScInterpreter::ScMatch()
                 {
                     sStr = GetString();
                     rEntry.bQueryByString = true;
-                    *rEntry.pStr = sStr;
+                    rEntry.SetQueryString(sStr);
                 }
                 break;
                 case svDoubleRef :
@@ -4488,7 +4488,7 @@ void ScInterpreter::ScMatch()
                     {
                         GetCellString(sStr, pCell);
                         rEntry.bQueryByString = true;
-                        *rEntry.pStr = sStr;
+                        rEntry.SetQueryString(sStr);
                     }
                 }
                 break;
@@ -4509,7 +4509,7 @@ void ScInterpreter::ScMatch()
                     else
                     {
                         rEntry.bQueryByString = true;
-                        *rEntry.pStr = pToken->GetString();
+                        rEntry.SetQueryString(pToken->GetString());
                     }
                 }
                 break;
@@ -4520,8 +4520,10 @@ void ScInterpreter::ScMatch()
                 break;
                 case svMatrix :
                 {
+                    String aStr;
                     ScMatValType nType = GetDoubleOrStringFromMatrix(
-                            rEntry.nVal, *rEntry.pStr);
+                            rEntry.nVal, aStr);
+                    rEntry.SetQueryString(aStr);
                     rEntry.bQueryByString = ScMatrix::IsNonValueType( nType);
                 }
                 break;
@@ -4541,7 +4543,7 @@ void ScInterpreter::ScMatch()
                 if ( bIsVBAMode )
                     rParam.bRegExp = false;
                 else
-                    rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
+                    rParam.bRegExp = MayBeRegExp(rEntry.GetQueryString(), pDok);
             }
 
             if (pMatSrc) // The source data is matrix array.
@@ -4887,9 +4889,9 @@ void ScInterpreter::ScCountIf()
                     sal_uInt32 nIndex = 0;
                     rEntry.bQueryByString =
                         !(pFormatter->IsNumberFormat(
-                                    *rEntry.pStr, nIndex, rEntry.nVal));
+                            rEntry.GetQueryString(), nIndex, rEntry.nVal));
                     if ( rEntry.bQueryByString )
-                        rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
+                        rParam.bRegExp = MayBeRegExp(rEntry.GetQueryString(), pDok);
                 }
                 rParam.nCol1  = nCol1;
                 rParam.nCol2  = nCol2;
@@ -5209,9 +5211,9 @@ void ScInterpreter::ScSumIf()
                 sal_uInt32 nIndex = 0;
                 rEntry.bQueryByString =
                     !(pFormatter->IsNumberFormat(
-                                *rEntry.pStr, nIndex, rEntry.nVal));
+                        rEntry.GetQueryString(), nIndex, rEntry.nVal));
                 if ( rEntry.bQueryByString )
-                    rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
+                    rParam.bRegExp = MayBeRegExp(rEntry.GetQueryString(), pDok);
             }
             ScAddress aAdr;
             aAdr.SetTab( nTab3 );
@@ -5528,7 +5530,7 @@ void ScInterpreter::ScLookup()
             if ( !rEntry.bQueryByString )
                 bFound = false;
             else
-                bFound = (ScGlobal::GetCollator()->compareString( aDataStr, *rEntry.pStr) <= 0);
+                bFound = (ScGlobal::GetCollator()->compareString(aDataStr, rEntry.GetQueryString()) <= 0);
         }
 
         if (!bFound)
@@ -5773,7 +5775,7 @@ void ScInterpreter::ScLookup()
     rEntry.eOp = SC_LESS_EQUAL;
     rEntry.nField = nCol1;
     if ( rEntry.bQueryByString )
-        aParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
+        aParam.bRegExp = MayBeRegExp(rEntry.GetQueryString(), pDok);
 
     ScQueryCellIterator aCellIter(pDok, nTab1, aParam, false);
     SCCOL nC;
@@ -5996,7 +5998,7 @@ void ScInterpreter::CalculateLookup(bool HLookup)
             if ( !FillEntry(rEntry) )
                 return;
             if ( rEntry.bQueryByString )
-                rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
+                rParam.bRegExp = MayBeRegExp(rEntry.GetQueryString(), pDok);
             if (pMat)
             {
                 SCSIZE nMatCount = HLookup ? nC : nR;
@@ -6006,7 +6008,7 @@ void ScInterpreter::CalculateLookup(bool HLookup)
         //!!!!!!!
         //! TODO: enable regex on matrix strings
         //!!!!!!!
-                    String aParamStr = *rEntry.pStr;
+                    rtl::OUString aParamStr = rEntry.GetQueryString();
                     if ( bSorted )
                     {
                         static CollatorWrapper* pCollator = ScGlobal::GetCollator();
@@ -6148,9 +6150,9 @@ bool ScInterpreter::FillEntry(ScQueryEntry& rEntry)
         break;
         case svString:
         {
-            const String sStr = GetString();
+            const String& sStr = GetString();
             rEntry.bQueryByString = true;
-            *rEntry.pStr = sStr;
+            rEntry.SetQueryString(sStr);
         }
         break;
         case svDoubleRef :
@@ -6180,14 +6182,16 @@ bool ScInterpreter::FillEntry(ScQueryEntry& rEntry)
                     String sStr;
                     GetCellString(sStr, pCell);
                     rEntry.bQueryByString = true;
-                    *rEntry.pStr = sStr;
+                    rEntry.SetQueryString(sStr);
                 }
             }
         }
         break;
         case svMatrix :
         {
-            const ScMatValType nType = GetDoubleOrStringFromMatrix(rEntry.nVal, *rEntry.pStr);
+            String aStr;
+            const ScMatValType nType = GetDoubleOrStringFromMatrix(rEntry.nVal, aStr);
+            rEntry.SetQueryString(aStr);
             rEntry.bQueryByString = ScMatrix::IsNonValueType( nType);
         }
         break;
@@ -6371,10 +6375,11 @@ ScDBQueryParamBase* ScInterpreter::GetDBParams( bool& rMissingField )
                 if ( rEntry.bDoQuery )
                 {
                     sal_uInt32 nIndex = 0;
+                    rtl::OUString aQueryStr = rEntry.GetQueryString();
                     rEntry.bQueryByString = !pFormatter->IsNumberFormat(
-                        *rEntry.pStr, nIndex, rEntry.nVal );
+                        aQueryStr, nIndex, rEntry.nVal );
                     if ( rEntry.bQueryByString && !pParam->bRegExp )
-                        pParam->bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
+                        pParam->bRegExp = MayBeRegExp(aQueryStr, pDok);
                 }
                 else
                     break;  // for

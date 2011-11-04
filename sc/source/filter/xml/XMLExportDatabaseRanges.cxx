@@ -405,7 +405,7 @@ private:
             case SC_ENDS_WITH:
                 return GetXMLToken(XML_ENDS_WITH);
             case SC_EQUAL:
-                if (!rEntry.bQueryByString && *rEntry.pStr == EMPTY_STRING)
+                if (!rEntry.bQueryByString && rEntry.GetQueryString().isEmpty())
                 {
                     if (rEntry.nVal == SC_EMPTYFIELDS)
                         return GetXMLToken(XML_EMPTY);
@@ -445,7 +445,7 @@ private:
         if (bCaseSens)
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
         if (rEntry.bQueryByString)
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, *rEntry.pStr);
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rEntry.GetQueryString());
         else
         {
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);

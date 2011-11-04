@@ -110,7 +110,7 @@ public:
                     DBG_ERRORFILE( "ScLookupCache::QueryCriteria not prepared for this ScQueryOp");
             }
             if (rEntry.bQueryByString)
-                setString( rEntry.pStr);
+                setString(rEntry.GetQueryString());
             else
                 setDouble( rEntry.nVal);
         }

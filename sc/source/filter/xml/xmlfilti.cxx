@@ -765,17 +765,17 @@ void ScXMLDPConditionContext::EndElement()
     if (IsXMLToken(sDataType, XML_NUMBER))
     {
         aFilterField.nVal = sConditionValue.toDouble();
-        *aFilterField.pStr = sConditionValue;
+        aFilterField.SetQueryString(sConditionValue);
         aFilterField.bQueryByString = false;
         if (dVal != 0.0)
         {
             aFilterField.nVal = dVal;
-            *aFilterField.pStr = EMPTY_STRING;
+            aFilterField.SetQueryString(rtl::OUString());
         }
     }
     else
     {
-        aFilterField.pStr = new String(sConditionValue);
+        aFilterField.SetQueryString(sConditionValue);
         aFilterField.bQueryByString = true;
         aFilterField.nVal = 0;
     }

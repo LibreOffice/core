@@ -695,7 +695,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu()
     ScQueryEntry& rEntry = aParam.GetEntry(0);
     rEntry.bDoQuery = true;
     rEntry.bQueryByString = true;
-    rEntry.pStr = new String(aSelected[0]);
+    rEntry.SetQueryString(aSelected[0]);
 
     pViewData->GetView()->Query(aParam, NULL, true);
     pDBData->SetQueryParam(aParam);
@@ -1169,16 +1169,15 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
                             bValid = false;
                     if (rEntry.nField == nCol)
                     {
+                        rtl::OUString aQueryStr = rEntry.GetQueryString();
                         if (rEntry.eOp == SC_EQUAL)
                         {
-                            String* pStr = rEntry.pStr;
-                            if (pStr)
+                            if (!aQueryStr.isEmpty())
                             {
-                                nSelPos = pFilterBox->GetEntryPos( *pStr );
+                                nSelPos = pFilterBox->GetEntryPos(aQueryStr);
                             }
                         }
-                        else if (rEntry.eOp == SC_TOPVAL && rEntry.pStr &&
-                                    rEntry.pStr->EqualsAscii("10"))
+                        else if (rEntry.eOp == SC_TOPVAL && aQueryStr.equalsAscii("10"))
                             nSelPos = SC_AUTOFILTER_TOP10;
                         else
                             nSelPos = SC_AUTOFILTER_CUSTOM;
@@ -1391,11 +1390,12 @@ void ScGridWindow::ExecFilter( sal_uLong nSel,
                     if ( nSel == SC_AUTOFILTER_TOP10 )
                     {
                         rNewEntry.eOp   = SC_TOPVAL;
-                        *rNewEntry.pStr = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("10"));
+                        rNewEntry.SetQueryString(
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("10")));
                     }
                     else if (nSel == SC_AUTOFILTER_EMPTY)
                     {
-                        rNewEntry.pStr->Erase();
+                        rNewEntry.SetQueryString(rtl::OUString());
                         rNewEntry.bQueryByString = false;
                         rNewEntry.eOp   = SC_EQUAL;
                         rNewEntry.nVal  = SC_EMPTYFIELDS;
@@ -1403,7 +1403,7 @@ void ScGridWindow::ExecFilter( sal_uLong nSel,
                     }
                     else if (nSel == SC_AUTOFILTER_NOTEMPTY)
                     {
-                        rNewEntry.pStr->Erase();
+                        rNewEntry.SetQueryString(rtl::OUString());
                         rNewEntry.bQueryByString = false;
                         rNewEntry.eOp   = SC_EQUAL;
                         rNewEntry.nVal  = SC_NONEMPTYFIELDS;
@@ -1411,7 +1411,7 @@ void ScGridWindow::ExecFilter( sal_uLong nSel,
                     else
                     {
                         rNewEntry.eOp   = SC_EQUAL;
-                        *rNewEntry.pStr = aValue;
+                        rNewEntry.SetQueryString(aValue);
                     }
                     if (nQueryPos > 0)
                         rNewEntry.eConnect   = SC_AND;

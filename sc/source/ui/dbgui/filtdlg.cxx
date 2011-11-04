@@ -311,18 +311,19 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         {
             nCondPos     = (sal_uInt16)rEntry.eOp;
             nFieldSelPos = GetFieldSelPos( static_cast<SCCOL>(rEntry.nField) );
-            if ( rEntry.nVal == SC_EMPTYFIELDS && !rEntry.bQueryByString && *rEntry.pStr == EMPTY_STRING )
+            bool bEmptyString = rEntry.GetQueryString().isEmpty();
+            if (rEntry.nVal == SC_EMPTYFIELDS && !rEntry.bQueryByString && bEmptyString)
             {
                 aValStr = aStrEmpty;
                 aCondLbArr[i]->Disable();
             }
-            else if ( rEntry.nVal == SC_NONEMPTYFIELDS && !rEntry.bQueryByString && *rEntry.pStr == EMPTY_STRING )
+            else if (rEntry.nVal == SC_NONEMPTYFIELDS && !rEntry.bQueryByString && bEmptyString)
             {
                 aValStr = aStrNotEmpty;
                 aCondLbArr[i]->Disable();
             }
             else
-                aValStr = *rEntry.pStr;
+                aValStr = rEntry.GetQueryString();
         }
         else if ( i == 0 )
         {
@@ -1145,19 +1146,19 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
         {
             if ( aStrEmpty.equals(aStrVal) )
             {
-                rEntry.pStr->Erase();
+                rEntry.SetQueryString(rtl::OUString());
                 rEntry.nVal = SC_EMPTYFIELDS;
                 rEntry.bQueryByString = false;
             }
             else if ( aStrNotEmpty.equals(aStrVal) )
             {
-                rEntry.pStr->Erase();
+                rEntry.SetQueryString(rtl::OUString());
                 rEntry.nVal = SC_NONEMPTYFIELDS;
                 rEntry.bQueryByString = false;
             }
             else
             {
-                *rEntry.pStr          = aStrVal;
+                rEntry.SetQueryString(aStrVal);
                 rEntry.nVal           = 0;
                 rEntry.bQueryByString = true;
             }
@@ -1217,19 +1218,20 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
             if(rEntry.bDoQuery)
                nFieldSelPos = GetFieldSelPos( static_cast<SCCOL>(rEntry.nField) );
 
-            if ( rEntry.nVal == SC_EMPTYFIELDS && !rEntry.bQueryByString && *rEntry.pStr == EMPTY_STRING )
+            rtl::OUString aQueryStr = rEntry.GetQueryString();
+            if ( rEntry.nVal == SC_EMPTYFIELDS && !rEntry.bQueryByString && aQueryStr.isEmpty())
             {
                 aValStr = aStrEmpty;
                 aCondLbArr[i]->Disable();
             }
-            else if ( rEntry.nVal == SC_NONEMPTYFIELDS && !rEntry.bQueryByString && *rEntry.pStr == EMPTY_STRING )
+            else if ( rEntry.nVal == SC_NONEMPTYFIELDS && !rEntry.bQueryByString && aQueryStr.isEmpty())
             {
                 aValStr = aStrNotEmpty;
                 aCondLbArr[i]->Disable();
             }
             else
             {
-                aValStr = *rEntry.pStr;
+                aValStr = aQueryStr;
                 aCondLbArr[i]->Enable();
             }
             aFieldLbArr[i]->Enable();

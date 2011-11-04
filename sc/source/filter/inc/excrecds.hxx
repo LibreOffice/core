@@ -420,7 +420,7 @@ public:
     inline sal_Bool             HasCondition() const    { return !aCond[ 0 ].IsEmpty(); }
     inline sal_Bool             HasTop10() const        { return ::get_flag( nFlags, EXC_AFFLAG_TOP10 ); }
 
-    sal_Bool                    AddEntry( const ScQueryEntry& rEntry );
+    bool                    AddEntry( const ScQueryEntry& rEntry );
 
     virtual void            SaveXml( XclExpXmlStream& rStrm );
 };

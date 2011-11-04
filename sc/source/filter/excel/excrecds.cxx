@@ -677,14 +677,14 @@ sal_Bool XclExpAutofilter::AddCondition( ScQueryConnect eConn, sal_uInt8 nType, 
     return sal_True;
 }
 
-sal_Bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
+bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
 {
-    sal_Bool    bConflict = false;
+    bool bConflict = false;
     String  sText;
-
-    if( rEntry.pStr )
+    rtl::OUString aQueryStr = rEntry.GetQueryString();
+    if (!aQueryStr.isEmpty())
     {
-        sText.Assign( *rEntry.pStr );
+        sText.Assign(aQueryStr);
         switch( rEntry.eOp )
         {
             case SC_CONTAINS:
@@ -709,19 +709,19 @@ sal_Bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
         }
     }
 
-    sal_Bool bLen = sText.Len() > 0;
+    bool bLen = sText.Len() > 0;
 
     // empty/nonempty fields
     if( !bLen && (rEntry.nVal == SC_EMPTYFIELDS) )
-        bConflict = !AddCondition( rEntry.eConnect, EXC_AFTYPE_EMPTY, EXC_AFOPER_NONE, 0.0, NULL, sal_True );
+        bConflict = !AddCondition( rEntry.eConnect, EXC_AFTYPE_EMPTY, EXC_AFOPER_NONE, 0.0, NULL, true );
     else if( !bLen && (rEntry.nVal == SC_NONEMPTYFIELDS) )
-        bConflict = !AddCondition( rEntry.eConnect, EXC_AFTYPE_NOTEMPTY, EXC_AFOPER_NONE, 0.0, NULL, sal_True );
+        bConflict = !AddCondition( rEntry.eConnect, EXC_AFTYPE_NOTEMPTY, EXC_AFOPER_NONE, 0.0, NULL, true );
     // other conditions
     else
     {
         double  fVal    = 0.0;
         sal_uInt32  nIndex  = 0;
-        sal_Bool    bIsNum  = bLen ? GetFormatter().IsNumberFormat( sText, nIndex, fVal ) : sal_True;
+        bool bIsNum  = bLen ? GetFormatter().IsNumberFormat( sText, nIndex, fVal ) : true;
         String* pText   = bIsNum ? NULL : &sText;
 
         // top10 flags
@@ -742,7 +742,7 @@ sal_Bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
             break;
             default:;
         }
-        sal_Bool bNewTop10 = ::get_flag( nNewFlags, EXC_AFFLAG_TOP10 );
+        bool bNewTop10 = ::get_flag( nNewFlags, EXC_AFFLAG_TOP10 );
 
         bConflict = HasTop10() && bNewTop10;
         if( !bConflict )

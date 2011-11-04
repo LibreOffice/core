@@ -134,17 +134,19 @@ void ScXMLExportDataPilot::WriteDPCondition(const ScQueryEntry& aQueryEntry, boo
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, rtl::OUString::valueOf(sal_Int32(aQueryEntry.nField)));
     if (bIsCaseSensitive)
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
+    rtl::OUString aQueryStr = aQueryEntry.GetQueryString();
     if (aQueryEntry.bQueryByString)
     {
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, *aQueryEntry.pStr);
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, aQueryStr);
     }
     else
     {
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rtl::OUString(*aQueryEntry.pStr));
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, aQueryStr);
     }
-    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, getDPOperatorXML(aQueryEntry.eOp, bUseRegularExpressions,
-        aQueryEntry.bQueryByString, aQueryEntry.nVal, *aQueryEntry.pStr));
+    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR,
+                         getDPOperatorXML(aQueryEntry.eOp, bUseRegularExpressions,
+                                          aQueryEntry.bQueryByString, aQueryEntry.nVal, aQueryStr));
     SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_FILTER_CONDITION, true, true);
 }
 
