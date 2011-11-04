@@ -44,7 +44,7 @@
 #include <editeng/justifyitem.hxx>
 #include <basic/sbxdef.hxx>
 
-#define CALC_DEBUG_OUTPUT 1
+#define CALC_DEBUG_OUTPUT 0
 
 #include "helper/csv_handler.hxx"
 #include "helper/debughelper.hxx"
@@ -218,11 +218,6 @@ ScDocShellRef ScFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUStr
         xDocShRef->DoClose();
         // load failed.
         xDocShRef.Clear();
-    }
-    else if (nFormatType)
-    {
-        pSrcMed->GetItemSet()->Put( SfxUInt16Item( SID_MACROEXECMODE, 4));
-        SfxObjectShell::SetCurrentComponent( xDocShRef->GetModel() );
     }
 
     return xDocShRef;
@@ -408,6 +403,9 @@ void ScFiltersTest::testFunctions()
     //test mathematical functions
     createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mathematical-functions.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 2, PureString);
+    //test informations functions
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("information-functions.")), aCSVFileName);
+    testFile(aCSVFileName, pDoc, 3);
 
     xDocSh->DoClose();
 }
