@@ -417,4 +417,7 @@ gb_CFGEXPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib
 # Python
 gb_PYTHON_PRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib PYTHONHOME=$(OUTDIR)/lib/python PYTHONPATH=$(OUTDIR)/lib/python:$(OUTDIR)/lib/python/lib-dynload
 
+# Extension
+gb_XRMEXPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib
+
 # vim: set noet sw=4:

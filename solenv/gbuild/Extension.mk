@@ -33,6 +33,12 @@ gb_Extension_LICENSEFILE := license.txt
 else
 gb_Extension_LICENSEFILE := LICENSE
 endif
+gb_Extension_XRMEXTARGET := $(call gb_Executable_get_target,xrmex)
+gb_Extension_XRMEXCOMMAND := \
+	$(gb_XRMEXPRECOMMAND) $(gb_Extension_XRMEXTARGET)
+gb_Extension_SDFLOCATION := $(SRCDIR)/translations/$(INPATH)/misc/sdf/
+# does not contain en-US because it is special cased in gb_Extension_Extension
+gb_Extension_LANGS := $(filter-out en-US,$(gb_WITH_LANG))
 
 # remove extension directory in workdir and oxt file in workdir and outdir
 $(call gb_Extension_get_clean_target,%) :
@@ -42,18 +48,41 @@ $(call gb_Extension_get_clean_target,%) :
 		rm -f $(call gb_Extension_get_target,$*) && \
 		rm -f $(call gb_Extension_get_outdir_target,$*))
 
+ifeq ($(strip $(gb_WITH_LANG)),)
+$(call gb_Extension_get_workdir,%)/description.xml :
+	$(call gb_Output_announce,$*/description.xml,$(true),CPY,3)
+	$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(call gb_Extension_get_workdir,$*) && \
+		cp -f $(LOCATION)/description.xml $@)
+else
+$(call gb_Extension_get_workdir,%)/description.xml : | \
+		$(gb_Extension_XRMEXTARGET)
+	$(call gb_Output_announce,$*/description.xml,$(true),XRM,3)
+	$(call gb_Helper_abbreviate_dirs_native,\
+		mkdir -p $(call gb_Extension_get_workdir,$*) && \
+		$(gb_Extension_XRMEXCOMMAND) \
+			-p $(PRJNAME) \
+			-i $(filter %.xml,$^) \
+			-o $@ \
+			-m $(SDF) \
+			-l all)
+endif
+
 # rule to create oxt package in workdir
 # --filesync makes sure that all files in the oxt package will be removed that no longer are in $(FILES)
-$(call gb_Extension_get_target,%) :
+$(call gb_Extension_get_target,%) : \
+		$(call gb_Extension_get_workdir,%)/description.xml
 	$(call gb_Output_announce,$*,$(true),OXT,3)
 	$(call gb_Helper_abbreviate_dirs_native,\
-		mkdir -p $(call gb_Extension_get_workdir,$*)/META-INF && \
-		mkdir -p $(call gb_Extension_get_workdir,$*)/registration && \
-		cp -f $(LOCATION)/description.xml $(call gb_Extension_get_workdir,$*) && \
+		mkdir -p $(call gb_Extension_get_workdir,$*)/META-INF \
+			$(call gb_Extension_get_workdir,$*)/registration && \
 		cp -f $(LOCATION)/manifest.xml $(call gb_Extension_get_workdir,$*)/META-INF && \
 		cp -f $(OUTDIR)/bin/osl/$(gb_Extension_LICENSEFILE) $(call gb_Extension_get_workdir,$*)/registration && \
 		cd $(call gb_Extension_get_workdir,$*) && \
-		$(gb_Extension_ZIPCOMMAND) -rX --filesync $(call gb_Extension_get_target,$*) $(FILES) )
+		$(gb_Extension_ZIPCOMMAND) -rX --filesync \
+			$(call gb_Extension_get_target,$*) \
+			$(FILES) \
+			$(foreach lang,$(gb_Extension_LANGS),description-$(lang).txt))
 
 # TODO: needs dependency on $(OUTDIR)/bin/osl/$(gb_Extension_LICENSEFILE) once readlicense_oo will be gbuildized
 # or just another simpler solution
@@ -65,6 +94,13 @@ $(call gb_Extension_get_target,%) :
 define gb_Extension_Extension
 $(call gb_Extension_get_target,$(1)) : FILES := META-INF description.xml registration
 $(call gb_Extension_get_target,$(1)) : LOCATION := $(SRCDIR)/$(2)
+$(call gb_Extension_get_target,$(1)) : PRJNAME := $(firstword $(subst /, ,$(2)))
+$(call gb_Extension_get_target,$(1)) : \
+	SDF := $(gb_Extension_SDFLOCATION)$(2)/localize.sdf
+$(call gb_Extension_get_workdir,$(1))/description.xml : \
+	$(SRCDIR)/$(2)/description.xml \
+	$(if $(gb_WITH_LANG),$(gb_Extension_SDFLOCATION)$(2)/localize.sdf)
+$(call gb_Extension_add_file,$(1),description-en-US.txt,$(SRCDIR)/$(2)/description-en-US.txt)
 $(eval $(call gb_Module_register_target,$(call gb_Extension_get_outdir_target,$(1)),$(call gb_Extension_get_clean_target,$(1))))
 $(call gb_Deliver_add_deliverable,$(call gb_Extension_get_outdir_target,$(1)),$(call gb_Extension_get_target,$(1)),$(1))
 $(call gb_Extension_get_outdir_target,$(1)) : $(call gb_Extension_get_target,$(1))

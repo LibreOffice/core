@@ -53,7 +53,6 @@ $(eval $(call gb_Extension_add_file,wiki-publisher,WikiEditor/script.xlb,$(WIKIS
 $(eval $(call gb_Extension_add_file,wiki-publisher,WikiEditor/dialog.xlb,$(WIKISRC)/dialogs/dialog.xlb))
 $(eval $(call gb_Extension_add_file,wiki-publisher,WikiEditor/SendToMediaWiki.xdl,$(WIKISRC)/dialogs/SendToMediaWiki.xdl))
 $(eval $(call gb_Extension_add_file,wiki-publisher,filter/odt2mediawiki.xsl,$(WIKISRC)/src/filter/odt2mediawiki.xsl))
-$(eval $(call gb_Extension_add_file,wiki-publisher,description-en-US.txt,$(WIKISRC)/src/description-en-US.txt))
 $(eval $(call gb_Extension_add_file,wiki-publisher,help/en-US/com.sun.wiki-publisher/wikisend.xhp,$(WIKISRC)/help/wikisend.xhp))
 $(eval $(call gb_Extension_add_file,wiki-publisher,help/en-US/com.sun.wiki-publisher/wikiformats.xhp,$(WIKISRC)/help/wikiformats.xhp))
 $(eval $(call gb_Extension_add_file,wiki-publisher,help/en-US/com.sun.wiki-publisher/wikiaccount.xhp,$(WIKISRC)/help/wikiaccount.xhp))

@@ -63,4 +63,7 @@ gb_UnoApiTarget_REGVIEWCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_
 # Configuration
 gb_CFGEXPRECOMMAND := $(gb_Helper_set_ld_path)
 
+# Extension
+gb_XRMEXPRECOMMAND := $(gb_Helper_set_ld_path)
+
 # vim: set noet sw=4:
