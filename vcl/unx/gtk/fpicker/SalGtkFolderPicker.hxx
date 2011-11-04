@@ -29,35 +29,23 @@
 #ifndef _SALGTKFOLDERPICKER_HXX_
 #define _SALGTKFOLDERPICKER_HXX_
 
-//_______________________________________________________________________________________________________________________
-//  includes of other projects
-//_______________________________________________________________________________________________________________________
-
+#include <list>
+#include <memory>
+#include <rtl/ustring.hxx>
 #include <cppuhelper/implbase3.hxx>
 
-#include "SalGtkPicker.hxx"
-
-#include <memory>
-
-#include <rtl/ustring.hxx>
-
-#include <list>
-
-//----------------------------------------------------------
-// class declaration
-//----------------------------------------------------------
+#include "gtk/fpicker/SalGtkPicker.hxx"
 
 class SalGtkFolderPicker :
         public SalGtkPicker,
-    public cppu::WeakImplHelper3<
-    ::com::sun::star::ui::dialogs::XFolderPicker,
-    ::com::sun::star::lang::XServiceInfo,
+    public cppu::WeakImplHelper2<
+        ::com::sun::star::ui::dialogs::XFolderPicker,
         ::com::sun::star::util::XCancellable >
 {
     public:
 
         // constructor
-        SalGtkFolderPicker( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceMgr );
+        SalGtkFolderPicker( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xServiceMgr );
 
         //------------------------------------------------------------------------------------
         // XExecutableDialog functions
@@ -85,20 +73,6 @@ class SalGtkFolderPicker :
         virtual void SAL_CALL setDescription( const rtl::OUString& rDescription )
             throw( com::sun::star::uno::RuntimeException );
 
-
-        //------------------------------------------------
-        // XServiceInfo
-        //------------------------------------------------
-
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  )
-            throw(::com::sun::star::uno::RuntimeException);
-
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
-            throw(::com::sun::star::uno::RuntimeException);
-
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
-            throw(::com::sun::star::uno::RuntimeException);
-
         //------------------------------------------------
         // XCancellable
         //------------------------------------------------
@@ -117,9 +91,6 @@ class SalGtkFolderPicker :
         // prevent copy and assignment
         SalGtkFolderPicker( const SalGtkFolderPicker& );
         SalGtkFolderPicker& operator=( const SalGtkFolderPicker& );
-    private:
-        // to instanciate own services
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;
 };
 
 #endif // _SALGTKFOLDERPICKER_HXX_

@@ -59,9 +59,7 @@ static OUString FilePicker_getSystemPickerServiceName()
 {
 #ifdef UNX
     OUString aDesktopEnvironment (Application::GetDesktopEnvironment());
-    if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("gnome"))
-        return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.GtkFilePicker"));
-    else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("kde"))
+    if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("kde"))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.KDEFilePicker"));
     else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("kde4"))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.KDE4FilePicker"));
@@ -82,37 +80,42 @@ static Reference< css::uno::XInterface > FilePicker_createInstance (
     Reference< css::uno::XComponentContext > const & rxContext)
 {
     Reference< css::uno::XInterface > xResult;
-    if (rxContext.is())
+
+    if (!rxContext.is())
+        return xResult;
+
+    Reference< css::lang::XMultiComponentFactory > xFactory (rxContext->getServiceManager());
+    if (xFactory.is())
     {
-        Reference< css::lang::XMultiComponentFactory > xFactory (rxContext->getServiceManager());
-        if (xFactory.is())
+        if (SvtMiscOptions().UseSystemFileDialog())
         {
-            if (SvtMiscOptions().UseSystemFileDialog())
+            try
             {
-                try
-                {
-                    xResult = xFactory->createInstanceWithContext (
+                xResult = xFactory->createInstanceWithContext (
                         FilePicker_getSystemPickerServiceName(),
                         rxContext);
-                }
-                catch (css::uno::Exception const &)
-                {
-                    // Handled below (see @ fallback).
-                }
             }
-            if (!xResult.is())
+            catch (css::uno::Exception const &)
             {
-                // Always fall back to OfficeFilePicker.
-                xResult = xFactory->createInstanceWithContext (
-                    OUString (RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.OfficeFilePicker")),
-                    rxContext);
-            }
-            if (xResult.is())
-            {
-                // Add to FilePicker history.
-                svt::addFilePicker (xResult);
+                // Handled below (see @ fallback).
             }
         }
+    }
+
+    if (!xResult.is())
+        xResult = Reference< css::uno::XInterface >( Application::createFilePicker( rxContext ) );
+
+    if (!xResult.is() && xFactory.is())
+    {
+        // Always fall back to OfficeFilePicker.
+        xResult = xFactory->createInstanceWithContext (
+                OUString (RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.OfficeFilePicker")),
+                rxContext);
+    }
+    if (xResult.is())
+    {
+        // Add to FilePicker history.
+        svt::addFilePicker (xResult);
     }
     return xResult;
 }
@@ -137,9 +140,7 @@ static OUString FolderPicker_getSystemPickerServiceName()
 {
     OUString aDesktopEnvironment (Application::GetDesktopEnvironment());
 #ifdef UNX
-    if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("gnome"))
-        return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.GtkFolderPicker"));
-    else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("kde"))
+    if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("kde"))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.KDEFolderPicker"));
     else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("macosx"))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.AquaFolderPicker"));
@@ -156,37 +157,40 @@ static Reference< css::uno::XInterface > FolderPicker_createInstance (
     Reference< css::uno::XComponentContext > const & rxContext)
 {
     Reference< css::uno::XInterface > xResult;
-    if (rxContext.is())
+
+    if (!rxContext.is())
+        return xResult;
+
+    Reference< css::lang::XMultiComponentFactory > xFactory (rxContext->getServiceManager());
+    if (xFactory.is())
     {
-        Reference< css::lang::XMultiComponentFactory > xFactory (rxContext->getServiceManager());
-        if (xFactory.is())
+        if (SvtMiscOptions().UseSystemFileDialog())
         {
-            if (SvtMiscOptions().UseSystemFileDialog())
+            try
             {
-                try
-                {
-                    xResult = xFactory->createInstanceWithContext (
-                        FolderPicker_getSystemPickerServiceName(),
-                        rxContext);
-                }
-                catch (css::uno::Exception const &)
-                {
-                    // Handled below (see @ fallback).
-                }
-            }
-            if (!xResult.is())
-            {
-                // Always fall back to OfficeFolderPicker.
                 xResult = xFactory->createInstanceWithContext (
-                    OUString (RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.OfficeFolderPicker")),
-                    rxContext);
+                                FolderPicker_getSystemPickerServiceName(),
+                                rxContext);
             }
-            if (xResult.is())
+            catch (css::uno::Exception const &)
             {
-                // Add to FolderPicker history.
-                svt::addFolderPicker (xResult);
+                // Handled below (see @ fallback).
             }
         }
+    }
+    if (!xResult.is())
+        xResult = Reference< css::uno::XInterface >( Application::createFolderPicker( rxContext ) );
+    if (!xResult.is() && xFactory.is() )
+    {
+        // Always fall back to OfficeFolderPicker.
+        xResult = xFactory->createInstanceWithContext (
+                OUString (RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.OfficeFolderPicker")),
+                rxContext);
+    }
+    if (xResult.is())
+    {
+        // Add to FolderPicker history.
+        svt::addFolderPicker (xResult);
     }
     return xResult;
 }

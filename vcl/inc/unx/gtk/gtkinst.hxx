@@ -109,6 +109,13 @@ public:
 
     virtual GenPspGraphics     *CreatePrintGraphics();
 
+    virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
+        createFilePicker( const com::sun::star::uno::Reference<
+                              com::sun::star::uno::XComponentContext >& );
+    virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFolderPicker >
+        createFolderPicker( const com::sun::star::uno::Reference<
+                                com::sun::star::uno::XComponentContext >& );
+
     void                        RemoveTimer (SalTimer *pTimer);
 
     // for managing a mirror of the in-flight un-dispatched gdk event queue

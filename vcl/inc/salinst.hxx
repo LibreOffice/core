@@ -30,6 +30,9 @@
 #define _SV_SALINST_HXX
 
 #include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/ui/dialogs/XFilePicker2.hpp"
+#include "com/sun/star/ui/dialogs/XFolderPicker.hpp"
 
 #include "vcl/sv.h"
 #include "vcl/displayconnectiondispatch.hxx"
@@ -166,6 +169,15 @@ public:
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDragSource();
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDropTarget();
     virtual void        AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType) = 0;
+
+    virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
+        createFilePicker( const com::sun::star::uno::Reference<
+                              com::sun::star::uno::XComponentContext >& )
+            { return com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >(); }
+    virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFolderPicker >
+        createFolderPicker( const com::sun::star::uno::Reference<
+                              com::sun::star::uno::XComponentContext >& )
+            { return com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFolderPicker >(); }
 
     // callbacks for printer updates
     virtual void updatePrinterUpdate() {}

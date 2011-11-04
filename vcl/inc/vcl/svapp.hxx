@@ -62,8 +62,14 @@ class MouseEvent;
 namespace com {
 namespace sun {
 namespace star {
-namespace lang {
-    class XMultiServiceFactory;
+namespace uno {
+    class XComponentContext;
+}
+namespace ui {
+    namespace dialogs {
+        class XFilePicker2;
+        class XFolderPicker;
+    }
 }
 namespace awt {
     class XToolkit;
@@ -366,6 +372,20 @@ public:
           will be used.
     */
     static void AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
+
+    /** Create a platform specific file picker, if one is available,
+        otherwise return an empty reference
+    */
+    static com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
+        createFilePicker( const com::sun::star::uno::Reference<
+                              com::sun::star::uno::XComponentContext >& rServiceManager );
+
+    /** Create a platform specific folder picker, if one is available,
+        otherwise return an empty reference
+    */
+    static com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFolderPicker >
+        createFolderPicker( const com::sun::star::uno::Reference<
+                              com::sun::star::uno::XComponentContext >& rServiceManager );
 
 private:
 

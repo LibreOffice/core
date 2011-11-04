@@ -664,6 +664,9 @@ void GtkSalFrame::InitCommon()
     m_aSystemData.nDepth		= pDisp->GetVisual( m_nScreen ).GetDepth();
     m_aSystemData.aColormap		= pDisp->GetColormap( m_nScreen ).GetXColormap();
     m_aSystemData.aWindow       = widget_get_xid(m_pWindow);
+#else
+    static int nWindow = 0;
+    m_aSystemData.aWindow       = nWindow++;
 #endif
     m_aSystemData.pSalFrame     = this;
     m_aSystemData.pWidget       = m_pWindow;
@@ -3284,6 +3287,7 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
                         RevertToParent, CurrentTime );
     }
 #else
+    (void)pWidget;
 #  warning FIXME no set input focus ...
 #endif
 

@@ -31,6 +31,7 @@ $(eval $(call gb_Library_Library,vclplug_gtk))
 $(eval $(call gb_Library_set_include,vclplug_gtk,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
+    -I$(SRCDIR)/vcl/unx \
     -I$(SRCDIR)/vcl/inc/pch \
     -I$(SRCDIR)/solenv/inc \
     -I$(OUTDIR)/inc \
@@ -101,6 +102,10 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk,\
     vcl/unx/gtk/gdi/salnativewidgets-gtk \
     vcl/unx/gtk/window/gtkframe \
     vcl/unx/gtk/window/gtkobject \
+	vcl/unx/gtk/fpicker/resourceprovider \
+	vcl/unx/gtk/fpicker/SalGtkPicker \
+	vcl/unx/gtk/fpicker/SalGtkFilePicker \
+	vcl/unx/gtk/fpicker/SalGtkFolderPicker \
 ))
 
 ifeq ($(OS),LINUX)

@@ -33,7 +33,7 @@
 //  includes of other projects
 //_______________________________________________________________________________________________________________________
 
-#include <cppuhelper/compbase10.hxx>
+#include <cppuhelper/compbase9.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
@@ -42,20 +42,14 @@
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 
-#include "SalGtkPicker.hxx"
-
+#include <list>
 #include <memory>
-
 #include <rtl/ustring.hxx>
 
-#include <list>
+#include "gtk/fpicker/SalGtkPicker.hxx"
 
 //----------------------------------------------------------
 // Implementation class for the XFilePicker Interface
-//----------------------------------------------------------
-
-//----------------------------------------------------------
-// forward declarations
 //----------------------------------------------------------
 
 using ::rtl::OUString;
@@ -75,22 +69,21 @@ typedef ::com::sun::star::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // c
 
 class SalGtkFilePicker :
         public SalGtkPicker,
-    public cppu::WeakComponentImplHelper10<
+    public cppu::WeakComponentImplHelper9<
         ::com::sun::star::ui::dialogs::XFilterManager,
         ::com::sun::star::ui::dialogs::XFilterGroupManager,
         ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
         ::com::sun::star::ui::dialogs::XFilePickerNotifier,
         ::com::sun::star::ui::dialogs::XFilePreview,
         ::com::sun::star::ui::dialogs::XFilePicker2,
-    ::com::sun::star::lang::XInitialization,
+        ::com::sun::star::lang::XInitialization,
         ::com::sun::star::util::XCancellable,
-    ::com::sun::star::lang::XEventListener,
-    ::com::sun::star::lang::XServiceInfo >
+        ::com::sun::star::lang::XEventListener >
 {
     public:
 
         // constructor
-        SalGtkFilePicker( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceMgr );
+        SalGtkFilePicker( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xServiceMgr );
 
         //------------------------------------------------------------------------------------
         // XFilePickerNotifier
@@ -224,19 +217,6 @@ class SalGtkFilePicker :
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent )
             throw(::com::sun::star::uno::RuntimeException);
 
-        //------------------------------------------------
-        // XServiceInfo
-        //------------------------------------------------
-
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  )
-            throw(::com::sun::star::uno::RuntimeException);
-
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
-            throw(::com::sun::star::uno::RuntimeException);
-
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
-            throw(::com::sun::star::uno::RuntimeException);
-
         //------------------------------------------------------------------------------------
         // FilePicker Event functions
         //------------------------------------------------------------------------------------
@@ -251,13 +231,9 @@ class SalGtkFilePicker :
 
         void ensureFilterList( const ::rtl::OUString& _rInitialCurrentFilter );
 
-        // to instanciate own services
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;
-
         void impl_fileSelectionChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
         void impl_directoryChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
         void impl_controlStateChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
-
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >
@@ -340,8 +316,8 @@ class SalGtkFilePicker :
         ::com::sun::star::uno::Any HandleGetListValue(GtkComboBox *pWidget, sal_Int16 nControlAction) const;
 
         static void expander_changed_cb( GtkExpander *expander, SalGtkFilePicker *pobjFP );
-        static void preview_toggled_cb (GtkObject *cb, SalGtkFilePicker *pobjFP);
-        static void filter_changed_cb (GtkFileChooser *file_chooser, GParamSpec *pspec, SalGtkFilePicker *pobjFP);
+        static void preview_toggled_cb( GObject *cb, SalGtkFilePicker *pobjFP );
+        static void filter_changed_cb( GtkFileChooser *file_chooser, GParamSpec *pspec, SalGtkFilePicker *pobjFP );
         static void type_changed_cb( GtkTreeSelection *selection, SalGtkFilePicker *pobjFP );
         static void folder_changed_cb (GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP);
         static void selection_changed_cb (GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP);

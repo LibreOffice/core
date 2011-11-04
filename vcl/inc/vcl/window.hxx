@@ -395,7 +395,7 @@ public:
     SAL_DLLPRIVATE void                ImplRemoveWindow( sal_Bool bRemoveFrameData );
     SAL_DLLPRIVATE Window*             ImplGetWindow();
     SAL_DLLPRIVATE ImplFrameData*      ImplGetFrameData();
-    SAL_DLLPRIVATE SalFrame*           ImplGetFrame() const;
+                   SalFrame*           ImplGetFrame() const;
     SAL_DLLPRIVATE ImplWinData*        ImplGetWinData() const;
     SAL_DLLPRIVATE SalGraphics*        ImplGetFrameGraphics() const;
     SAL_DLLPRIVATE void                ImplCallFocusChangeActivate( Window* pNewOverlapWindow, Window* pOldOverlapWindow );

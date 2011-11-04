@@ -82,6 +82,7 @@
 
 #include <utility>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 // keycodes handled internally by VCL
@@ -1892,6 +1893,20 @@ void Application::SetPropertyHandler( PropertyHandler* p )
 
 void Application::AppEvent( const ApplicationEvent& /*rAppEvent*/ )
 {
+}
+
+Reference< ui::dialogs::XFilePicker2 >
+Application::createFilePicker( const Reference< uno::XComponentContext >& xSM )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    return pSVData->mpDefInst->createFilePicker( xSM );
+}
+
+Reference< ui::dialogs::XFolderPicker >
+Application::createFolderPicker( const Reference< uno::XComponentContext >& xSM )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    return pSVData->mpDefInst->createFolderPicker( xSM );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

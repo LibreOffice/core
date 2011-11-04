@@ -220,7 +220,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
     # gnome subpackage
     test -f $DESTDIR/gid_Module_Optional_Gnome && cp $DESTDIR/gid_Module_Optional_Gnome gnome_list.txt || :
     mv_file_between_flists gnome_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/libevoab2.so
-    mv_file_between_flists gnome_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/fps_gnome.uno.so
     mv_file_between_flists gnome_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/libvclplug_gtk[0-9]*l..so
     mv_file_between_flists common_list.txt gnome_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/ucpgvfs1.uno.so
     add_used_directories gnome_list.txt common_list.txt
@@ -341,9 +340,7 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
 
         # Put gtk/gnome stuff into gnome package
         mv_file_between_flists gnome_list.txt core_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/gnome-open-url.bin
-        mv_file_between_flists gnome_list.txt core_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/fps_gnome.uno.so
         mv_file_between_flists gnome_list.txt core_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/ucpgvfs1.uno.so
-        mv_file_between_flists gnome_list.txt core_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/libeggtray680li.so
 
         # Ship ooqstart for gnome in gnome package
         mv_file_between_flists gnome_list.txt core_list.txt "$INSTALLDIR/program/libqstart_gtk680.*"

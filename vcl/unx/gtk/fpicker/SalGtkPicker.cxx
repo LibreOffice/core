@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_fpicker.hxx"
-
 #ifdef AIX
 #define _LINUX_SOURCE_COMPAT
 #include <sys/timer.h>
@@ -39,7 +36,7 @@
 // includes
 //------------------------------------------------------------------------
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
 #include <com/sun/star/lang/SystemDependent.hpp>
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
@@ -51,12 +48,14 @@
 #include <rtl/process.h>
 #include <osl/diagnose.h>
 #include <com/sun/star/uno/Any.hxx>
-#include <FPServiceInfo.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include "SalGtkPicker.hxx"
 #include <tools/urlobj.hxx>
 #include <stdio.h>
+
+#include "vcl/window.hxx"
+#include "unx/gtk/gtkframe.hxx"
+#include "gtk/fpicker/SalGtkPicker.hxx"
 
 //------------------------------------------------------------------------
 // namespace directives
@@ -66,6 +65,8 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+
+#if !GTK_CHECK_VERSION(3,0,0)
 
 rtl::OUString SalGtkPicker::uritounicode(const gchar* pIn)
 {
@@ -91,7 +92,7 @@ rtl::OUString SalGtkPicker::uritounicode(const gchar* pIn)
         }
         else
         {
-            OUString aNewURL = Reference<uri::XExternalUriReferenceTranslator>(Reference<XMultiServiceFactory>(comphelper::getProcessServiceFactory(), UNO_QUERY_THROW)->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uri.ExternalUriReferenceTranslator"))), UNO_QUERY_THROW)->translateToInternal(sURL);
+            OUString aNewURL = Reference<uri::XExternalUriReferenceTranslator>(Reference<XMultiComponentFactory>(comphelper::getProcessServiceFactory(), UNO_QUERY_THROW)->createInstanceWithContext(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uri.ExternalUriReferenceTranslator")), m_xContext), UNO_QUERY_THROW)->translateToInternal(sURL);
             if( aNewURL.getLength() )
                 sURL = aNewURL;
         }
@@ -107,7 +108,7 @@ rtl::OString SalGtkPicker::unicodetouri(const rtl::OUString &rURL)
     INetURLObject aURL(rURL);
     if (INET_PROT_FILE == aURL.GetProtocol())
     {
-        OUString aNewURL = Reference<uri::XExternalUriReferenceTranslator>(Reference<XMultiServiceFactory>(comphelper::getProcessServiceFactory(), UNO_QUERY_THROW)->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uri.ExternalUriReferenceTranslator"))), UNO_QUERY_THROW)->translateToExternal( rURL );
+        OUString aNewURL = Reference<uri::XExternalUriReferenceTranslator>(Reference<XMultiComponentFactory>(comphelper::getProcessServiceFactory(), UNO_QUERY_THROW)->createInstanceWithContext(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uri.ExternalUriReferenceTranslator")), m_xContext ), UNO_QUERY_THROW)->translateToExternal( rURL );
 
         if( aNewURL.getLength() )
         {
@@ -120,9 +121,6 @@ rtl::OString SalGtkPicker::unicodetouri(const rtl::OUString &rURL)
 
 extern "C"
 {
-    struct Display;
-    extern GdkDisplay* gdk_x11_lookup_xdisplay (void*xdisplay);
-
     static gboolean canceldialog(RunDialog *pDialog)
     {
         GdkThreadLock lock;
@@ -134,48 +132,24 @@ extern "C"
 RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit >& rToolkit,
     uno::Reference< frame::XDesktop >& rDesktop ) :
     cppu::WeakComponentImplHelper2< awt::XTopWindowListener, frame::XTerminateListener >( maLock ),
-    mpDialog(pDialog), mpCreatedParent(NULL), mxToolkit(rToolkit), mxDesktop(rDesktop)
+    mpDialog(pDialog), mxToolkit(rToolkit), mxDesktop(rDesktop)
 {
-    awt::SystemDependentXWindow aWindowHandle;
+    GtkWindow *pParent = NULL;
 
-    if (mxToolkit.is())
+    ::Window * pWindow = ::Application::GetActiveTopWindow();
+    if( pWindow )
     {
-        uno::Reference< awt::XTopWindow > xWindow(mxToolkit->getActiveTopWindow());
-        if (xWindow.is())
-        {
-            uno::Reference< awt::XSystemDependentWindowPeer > xSystemDepParent(xWindow, uno::UNO_QUERY);
-            if (xSystemDepParent.is())
-            {
-
-                sal_Int8 processID[16];
-
-                rtl_getGlobalProcessId( (sal_uInt8*)processID );
-                uno::Sequence<sal_Int8> processIdSeq(processID, 16);
-                uno::Any anyHandle = xSystemDepParent->getWindowHandle(processIdSeq, SystemDependent::SYSTEM_XWINDOW);
-
-                anyHandle >>= aWindowHandle;
-            }
-        }
+        GtkSalFrame *pFrame = dynamic_cast<GtkSalFrame *>( pWindow->ImplGetFrame() );
+        if( pFrame )
+            pParent = GTK_WINDOW( pFrame->getWindow() );
     }
-
-    GdkDisplay *pDisplay = aWindowHandle.DisplayPointer ? gdk_x11_lookup_xdisplay(reinterpret_cast<void*>(static_cast<sal_IntPtr>(aWindowHandle.DisplayPointer))) : NULL;
-    GdkWindow* pParent = pDisplay ? gdk_window_lookup_for_display(pDisplay, aWindowHandle.WindowHandle) : NULL;
-    if (!pParent && pDisplay)
-        pParent = mpCreatedParent = gdk_window_foreign_new_for_display( pDisplay, aWindowHandle.WindowHandle);
     if (pParent)
-    {
-        gtk_widget_realize(mpDialog);
-        gdk_window_set_transient_for(mpDialog->window, pParent);
-    }
+        gtk_window_set_transient_for( GTK_WINDOW( mpDialog ), pParent );
 }
-
 
 RunDialog::~RunDialog()
 {
     SolarMutexGuard g;
-
-    if (mpCreatedParent)
-        gdk_window_destroy (mpCreatedParent);
 
     g_source_remove_by_user_data (this);
 }
@@ -223,7 +197,9 @@ gint RunDialog::run()
     return nStatus;
 }
 
-static void lcl_setGTKLanguage(const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr)
+// FIXME: this is pretty nasty ... we try to tell gtk+'s
+// gettext the locale it should use via the environment
+void SalGtkPicker::setGtkLanguage()
 {
     static bool bSet = false;
     if (bSet)
@@ -232,18 +208,16 @@ static void lcl_setGTKLanguage(const uno::Reference<lang::XMultiServiceFactory>&
     OUString sUILocale;
     try
     {
-        uno::Reference<lang::XMultiServiceFactory> xConfigMgr =
-          uno::Reference<lang::XMultiServiceFactory>(xServiceMgr->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))),
-              UNO_QUERY_THROW );
+        uno::Reference<lang::XMultiComponentFactory> xConfigMgr(
+            createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))),
+            UNO_QUERY_THROW );
 
         Sequence< Any > theArgs(1);
         theArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Linguistic/General"));
 
         uno::Reference< container::XNameAccess > xNameAccess =
-          uno::Reference< container::XNameAccess >(xConfigMgr->createInstanceWithArguments(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")), theArgs ),
-              UNO_QUERY_THROW );
+          uno::Reference< container::XNameAccess >(xConfigMgr->createInstanceWithArgumentsAndContext(
+                                                                                                                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")), theArgs, m_xContext ), UNO_QUERY_THROW );
 
         if (xNameAccess.is())
             xNameAccess->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("UILocale"))) >>= sUILocale;
@@ -258,9 +232,10 @@ static void lcl_setGTKLanguage(const uno::Reference<lang::XMultiServiceFactory>&
     bSet = true;
 }
 
-SalGtkPicker::SalGtkPicker(const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr) : m_pDialog(0)
+SalGtkPicker::SalGtkPicker( const uno::Reference<uno::XComponentContext>& xContext )
+    : m_pDialog( 0 ), m_xContext( xContext )
 {
-    lcl_setGTKLanguage(xServiceMgr);
+    setGtkLanguage();
 }
 
 SalGtkPicker::~SalGtkPicker()
@@ -309,5 +284,12 @@ void SAL_CALL SalGtkPicker::implsetTitle( const rtl::OUString& aTitle ) throw( u
 
     gtk_window_set_title( GTK_WINDOW( m_pDialog ), aWindowTitle.getStr() );
 }
+
+uno::Reference< uno::XInterface > SalGtkPicker::createInstance( const rtl::OUString &rName )
+{
+    return m_xContext->getServiceManager()->createInstanceWithContext( rName, m_xContext );
+}
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

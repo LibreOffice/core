@@ -1447,7 +1447,8 @@ sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
          (nPart == PART_MENU_SEPARATOR) || (nPart == PART_MENU_SUBMENU_ARROW))))
         return sal_True;
 
-    printf("Unhandled is native supported for Type: %d, Part %d\n", nType, nPart);
+    printf( "Unhandled is native supported for Type: %d, Part %d\n",
+            (int)nType, (int)nPart );
 
     return sal_False;
 }

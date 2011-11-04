@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_fpicker.hxx"
-
 #ifdef AIX
 #define _LINUX_SOURCE_COMPAT
 #include <sys/timer.h>
@@ -38,7 +35,7 @@
 //------------------------------------------------------------------------
 // includes
 //------------------------------------------------------------------------
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
@@ -47,9 +44,8 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <FPServiceInfo.hxx>
 #include <osl/mutex.hxx>
-#include <SalGtkFilePicker.hxx>
+#include "unx/gtk/gtkinst.hxx"
 
 #include <vcl/svapp.hxx>
 
@@ -59,7 +55,11 @@
 #include <algorithm>
 #include <set>
 #include <string.h>
-#include "resourceprovider.hxx"
+
+#include "gtk/fpicker/resourceprovider.hxx"
+#include "gtk/fpicker/SalGtkFilePicker.hxx"
+
+#if !GTK_CHECK_VERSION(3,0,0)
 
 //------------------------------------------------------------------------
 // namespace directives
@@ -73,30 +73,6 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
-
-//------------------------------------------------------------------------
-// helper functions
-//------------------------------------------------------------------------
-
-namespace
-{
-    // controling event notifications
-    const bool STARTUP_SUSPENDED = true;
-    const bool STARTUP_ALIVE     = false;
-
-    uno::Sequence<rtl::OUString> SAL_CALL FilePicker_getSupportedServiceNames()
-    {
-        uno::Sequence<rtl::OUString> aRet(3);
-            aRet[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ));
-        aRet[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.SystemFilePicker" ));
-        aRet[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.GtkFilePicker" ));
-        return aRet;
-    }
-}
-
-//-----------------------------------------------------------------------------------------
-// constructor
-//-----------------------------------------------------------------------------------------
 
 static void expandexpanders(GtkContainer *pWidget)
 {
@@ -126,20 +102,18 @@ void SalGtkFilePicker::InitialMapping()
     gtk_widget_set_size_request (m_pPreview, -1, -1);
 }
 
-SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr ) :
-    SalGtkPicker(xServiceMgr),
-    cppu::WeakComponentImplHelper10<
+SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext >& xContext ) :
+    SalGtkPicker( xContext ),
+    cppu::WeakComponentImplHelper9<
         XFilterManager,
-            XFilterGroupManager,
-            XFilePickerControlAccess,
+        XFilterGroupManager,
+        XFilePickerControlAccess,
         XFilePickerNotifier,
-            XFilePreview,
-            XFilePicker2,
+        XFilePreview,
+        XFilePicker2,
         lang::XInitialization,
         util::XCancellable,
-        lang::XEventListener,
-        lang::XServiceInfo>( m_rbHelperMtx ),
-    m_xServiceMgr( xServiceMgr ),
+        lang::XEventListener>( m_rbHelperMtx ),
     m_pFilterList( NULL ),
     m_pVBox ( NULL ),
     mnHID_FolderChange( 0 ),
@@ -994,10 +968,12 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
     int btn = GTK_RESPONSE_NO;
 
     uno::Reference< awt::XExtendedToolkit > xToolkit(
-        m_xServiceMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Toolkit")) ), uno::UNO_QUERY);
+        createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Toolkit")) ),
+        UNO_QUERY_THROW );
 
     uno::Reference< frame::XDesktop > xDesktop(
-        m_xServiceMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), uno::UNO_QUERY);
+        createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Toolkit")) ),
+        UNO_QUERY_THROW );
 
     RunDialog* pRunDialog = new RunDialog(m_pDialog, xToolkit, xDesktop);
     uno::Reference < awt::XTopWindowListener > xLifeCycle(pRunDialog);
@@ -1788,7 +1764,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
     }
 }
 
-void SalGtkFilePicker::preview_toggled_cb( GtkObject *cb, SalGtkFilePicker* pobjFP )
+void SalGtkFilePicker::preview_toggled_cb( GObject *cb, SalGtkFilePicker* pobjFP )
 {
     if( pobjFP->mbToggleVisibility[PREVIEW] )
         pobjFP->setShowState( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( cb ) ) );
@@ -1806,43 +1782,6 @@ void SAL_CALL SalGtkFilePicker::cancel() throw( uno::RuntimeException )
 
     // TODO m_pImpl->cancel();
 }
-
-// -------------------------------------------------
-// XServiceInfo
-// -------------------------------------------------
-
-rtl::OUString SAL_CALL SalGtkFilePicker::getImplementationName()
-    throw( uno::RuntimeException )
-{
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( FILE_PICKER_IMPL_NAME ));
-}
-
-// -------------------------------------------------
-//  XServiceInfo
-// -------------------------------------------------
-
-sal_Bool SAL_CALL SalGtkFilePicker::supportsService( const rtl::OUString& ServiceName )
-    throw( uno::RuntimeException )
-{
-    uno::Sequence <rtl::OUString> SupportedServicesNames = FilePicker_getSupportedServiceNames();
-
-    for( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
-        if( SupportedServicesNames[n].compareTo( ServiceName ) == 0)
-            return sal_True;
-
-    return sal_False;
-}
-
-// -------------------------------------------------
-//  XServiceInfo
-// -------------------------------------------------
-
-uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getSupportedServiceNames()
-    throw( uno::RuntimeException )
-{
-    return FilePicker_getSupportedServiceNames();
-}
-
 
 //--------------------------------------------------
 // Misc
@@ -2077,6 +2016,25 @@ SalGtkFilePicker::~SalGtkFilePicker()
     delete m_pFilterList;
 
     gtk_widget_destroy( m_pVBox );
+}
+
+#endif
+
+using namespace ::com::sun::star;
+
+uno::Reference< ui::dialogs::XFilePicker2 >
+GtkInstance::createFilePicker( const com::sun::star::uno::Reference<
+                                        com::sun::star::uno::XComponentContext > &xMSF )
+{
+#if GTK_CHECK_VERSION(3,0,0)
+    fprintf( stderr, "Create dummy gtk file picker\n" );
+    (void)xMSF;
+    return uno::Reference< ui::dialogs::XFilePicker2 >();
+#else
+    fprintf( stderr, "Create gtk file picker\n" );
+    return uno::Reference< ui::dialogs::XFilePicker2 >(
+                new SalGtkFilePicker( xMSF ) );
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

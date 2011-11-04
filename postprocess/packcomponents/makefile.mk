@@ -31,13 +31,6 @@ TARGET = packcomponents
 
 .INCLUDE: settings.mk
 
-#TODO (copied from scp2/source/ooo/makefile.mk):
-.IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT" && "$(ENABLE_GTK)" != ""
-PKGCONFIG_MODULES=gtk+-2.0
-.INCLUDE: pkg_config.mk
-GTK_TWO_FOUR=$(shell @+-$(PKG_CONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo YES)
-.END
-
 my_components = \
     cached1 \
     calc \
@@ -346,10 +339,6 @@ my_components += component/canvas/source/directx/directx5canvas
 my_components += mozab
 .ELSE
 my_components += mozbootstrap
-.END
-
-.IF "$(GTK_TWO_FOUR)" != ""
-my_components += fps_gnome
 .END
 
 .IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT" && "$(ENABLE_KDE4)" != ""

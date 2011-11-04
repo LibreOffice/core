@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_fpicker.hxx"
-
 #ifdef AIX
 #define _LINUX_SOURCE_COMPAT
 #include <sys/timer.h>
@@ -38,20 +35,21 @@
 //------------------------------------------------------------------------
 // includes
 //------------------------------------------------------------------------
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <osl/diagnose.h>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <FPServiceInfo.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include "SalGtkFolderPicker.hxx"
-#include "resourceprovider.hxx"
+#include "unx/gtk/gtkinst.hxx"
+#include "gtk/fpicker/resourceprovider.hxx"
+#include "gtk/fpicker/SalGtkFolderPicker.hxx"
 
 #include <string.h>
+
 
 //------------------------------------------------------------------------
 // namespace directives
@@ -63,28 +61,13 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-//------------------------------------------------------------------------
-// helper functions
-//------------------------------------------------------------------------
-
-namespace
-{
-    // controling event notifications
-    uno::Sequence<rtl::OUString> SAL_CALL FolderPicker_getSupportedServiceNames()
-    {
-        uno::Sequence<rtl::OUString> aRet(2);
-        aRet[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.SystemFolderPicker" ));
-        aRet[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.GtkFolderPicker" ));
-        return aRet;
-    }
-}
+#if !GTK_CHECK_VERSION(3,0,0)
 
 //-----------------------------------------------------------------------------------------
 // constructor
 //-----------------------------------------------------------------------------------------
-SalGtkFolderPicker::SalGtkFolderPicker( const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr ) :
-    SalGtkPicker(xServiceMgr),
-    m_xServiceMgr(xServiceMgr)
+SalGtkFolderPicker::SalGtkFolderPicker( const uno::Reference< uno::XComponentContext >& xContext ) :
+    SalGtkPicker( xContext )
 {
     CResourceProvider aResProvider;
 
@@ -177,10 +160,12 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute() throw( uno::RuntimeException )
     sal_Int16 retVal = 0;
 
     uno::Reference< awt::XExtendedToolkit > xToolkit(
-        m_xServiceMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Toolkit")) ), uno::UNO_QUERY);
+        createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Toolkit"))),
+        uno::UNO_QUERY);
 
     uno::Reference< frame::XDesktop > xDesktop(
-        m_xServiceMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), uno::UNO_QUERY);
+        createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+        uno::UNO_QUERY);
 
     RunDialog* pRunDialog = new RunDialog(m_pDialog, xToolkit, xDesktop);
     uno::Reference < awt::XTopWindowListener > xLifeCycle(pRunDialog);
@@ -201,6 +186,7 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute() throw( uno::RuntimeException )
     return retVal;
 }
 
+
 //------------------------------------------------------------------------------------
 // XCancellable
 //------------------------------------------------------------------------------------
@@ -213,41 +199,18 @@ void SAL_CALL SalGtkFolderPicker::cancel() throw( uno::RuntimeException )
 
     // TODO m_pImpl->cancel();
 }
+#endif
 
-// -------------------------------------------------
-// XServiceInfo
-// -------------------------------------------------
-
-rtl::OUString SAL_CALL SalGtkFolderPicker::getImplementationName()
-    throw( uno::RuntimeException )
+uno::Reference< ui::dialogs::XFolderPicker >
+GtkInstance::createFolderPicker( const uno::Reference< uno::XComponentContext > &xMSF )
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_IMPL_NAME ));
-}
-
-// -------------------------------------------------
-//  XServiceInfo
-// -------------------------------------------------
-
-sal_Bool SAL_CALL SalGtkFolderPicker::supportsService( const rtl::OUString& ServiceName )
-    throw( uno::RuntimeException )
-{
-    uno::Sequence <rtl::OUString> SupportedServicesNames = FolderPicker_getSupportedServiceNames();
-
-    for( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
-        if( SupportedServicesNames[n].compareTo( ServiceName ) == 0)
-            return sal_True;
-
-    return sal_False;
-}
-
-// -------------------------------------------------
-//  XServiceInfo
-// -------------------------------------------------
-
-uno::Sequence<rtl::OUString> SAL_CALL SalGtkFolderPicker::getSupportedServiceNames()
-    throw( uno::RuntimeException )
-{
-    return FolderPicker_getSupportedServiceNames();
+    fprintf( stderr, "Create gtk folder picker\n" );
+#if GTK_CHECK_VERSION(3,0,0)
+    return uno::Reference< ui::dialogs::XFolderPicker >();
+#else
+    return uno::Reference< ui::dialogs::XFolderPicker >(
+                new SalGtkFolderPicker( xMSF ) );
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

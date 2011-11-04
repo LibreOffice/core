@@ -56,7 +56,7 @@
 class SalGtkPicker
 {
     public:
-        SalGtkPicker(const ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& xServiceMgr);
+                 SalGtkPicker( const ::com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext );
         virtual ~SalGtkPicker();
     protected:
         osl::Mutex m_rbHelperMtx;
@@ -70,8 +70,14 @@ class SalGtkPicker
 
         virtual rtl::OUString SAL_CALL implgetDisplayDirectory(  )
             throw( com::sun::star::uno::RuntimeException );
-        static rtl::OUString uritounicode(const gchar *pIn);
-        static rtl::OString unicodetouri(const rtl::OUString &rURL);
+        rtl::OUString uritounicode(const gchar *pIn);
+        rtl::OString unicodetouri(const rtl::OUString &rURL);
+
+        // to instanciate own services
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
+        ::com::sun::star::uno::Reference< com::sun::star::uno::XInterface > createInstance( const rtl::OUString &rName );
+    private:
+        void setGtkLanguage();
 };
 
 class GdkThreadLock
@@ -94,7 +100,6 @@ class RunDialog :
 private:
     osl::Mutex maLock;
     GtkWidget *mpDialog;
-    GdkWindow *mpCreatedParent;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XExtendedToolkit>  mxToolkit;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop >  mxDesktop;
 public:

@@ -47,6 +47,7 @@
 
 #include <basebmp/bitmapdevice.hxx>
 #include <basebmp/scanlineformats.hxx>
+#include <com/sun/star/awt/XTopWindow.hpp>
 
 #include <list>
 #include <vector>
@@ -358,7 +359,7 @@ public:
     virtual void                GetWorkArea( Rectangle& rRect );
     virtual SalFrame*           GetParent() const;
     virtual void                SetWindowState( const SalFrameState* pState );
-    virtual sal_Bool                GetWindowState( SalFrameState* pState );
+    virtual sal_Bool            GetWindowState( SalFrameState* pState );
     virtual void                ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay );
     // Enable/Disable ScreenSaver, SystemAgents, ...
     virtual void                StartPresentation( sal_Bool bStart );
@@ -430,7 +431,7 @@ public:
     // done setting up the clipregion
     virtual void                    EndSetClipRegion();
 
-    static GtkSalFrame         *getFromWindow( GtkWindow *pWindow );
+    static GtkSalFrame             *getFromWindow( GtkWindow *pWindow );
 
     virtual void damaged (const basegfx::B2IBox& rDamageRect);
 };
