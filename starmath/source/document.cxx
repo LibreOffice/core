@@ -111,11 +111,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 
-
-#define DOCUMENT_BUFFER_SIZE    (sal_uInt16)32768
-
-static const char pStarMathDoc[] = "StarMathDocument";
-
 #define SmDocShell
 #include "smslots.hxx"
 

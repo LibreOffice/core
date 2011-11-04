@@ -81,10 +81,6 @@
 
 using namespace ::com::sun::star;
 
-#define POOL_BUFFER_SIZE        (sal_uInt16)32768
-#define BASIC_BUFFER_SIZE       (sal_uInt16)8192
-#define DOCUMENT_BUFFER_SIZE    (sal_uInt16)32768
-
 /*************************************************************************
 |*
 |* Oeffnet ein Bookmark-Dokument

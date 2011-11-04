@@ -72,10 +72,6 @@ using namespace ::com::sun::star::uno;
 
 namespace sd {
 
-#define POOL_BUFFER_SIZE        (sal_uInt16)32768
-#define BASIC_BUFFER_SIZE       (sal_uInt16)8192
-#define DOCUMENT_BUFFER_SIZE    (sal_uInt16)32768
-
 /*************************************************************************
 |*
 |* SFX-Requests bearbeiten

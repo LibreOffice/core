@@ -75,8 +75,6 @@ SO2_DECL_REF(SvStorage)
 
 TYPEINIT1( FuPresentationLayout, FuPoor );
 
-#define POOL_BUFFER_SIZE        (sal_uInt16)32768
-#define DOCUMENT_BUFFER_SIZE    (sal_uInt16)32768
 #define DOCUMENT_TOKEN (sal_Unicode('#'))
 
 /*************************************************************************
