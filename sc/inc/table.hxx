@@ -435,9 +435,9 @@ public:
 
     void        LimitChartArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow );
 
-    bool        HasData( SCCOL nCol, SCROW nRow );
-    bool        HasStringData( SCCOL nCol, SCROW nRow );
-    bool        HasValueData( SCCOL nCol, SCROW nRow );
+    bool        HasData( SCCOL nCol, SCROW nRow ) const;
+    bool        HasStringData( SCCOL nCol, SCROW nRow ) const;
+    bool        HasValueData( SCCOL nCol, SCROW nRow ) const;
     bool        HasStringCells( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL nEndCol, SCROW nEndRow ) const;
 

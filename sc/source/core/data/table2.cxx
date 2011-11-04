@@ -1184,7 +1184,7 @@ void ScTable::GetLastDataPos(SCCOL& rCol, SCROW& rRow) const
 }
 
 
-bool ScTable::HasData( SCCOL nCol, SCROW nRow )
+bool ScTable::HasData( SCCOL nCol, SCROW nRow ) const
 {
     if (ValidColRow(nCol,nRow))
         return aCol[nCol].HasDataAt( nRow );
@@ -1193,7 +1193,7 @@ bool ScTable::HasData( SCCOL nCol, SCROW nRow )
 }
 
 
-bool ScTable::HasStringData( SCCOL nCol, SCROW nRow )
+bool ScTable::HasStringData( SCCOL nCol, SCROW nRow ) const
 {
     if (ValidColRow(nCol,nRow))
         return aCol[nCol].HasStringData( nRow );
@@ -1202,7 +1202,7 @@ bool ScTable::HasStringData( SCCOL nCol, SCROW nRow )
 }
 
 
-bool ScTable::HasValueData( SCCOL nCol, SCROW nRow )
+bool ScTable::HasValueData( SCCOL nCol, SCROW nRow ) const
 {
     if (ValidColRow(nCol,nRow))
         return aCol[nCol].HasValueData( nRow );

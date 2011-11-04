@@ -1064,6 +1064,46 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     return bSpaceLeft;
 }
 
+namespace {
+
+bool isQueryByValue(const ScTable& rTable, const ScQueryEntry& rEntry, SCROW nRow, const ScBaseCell* pCell)
+{
+    if (rEntry.bQueryByString)
+        return false;
+
+    if (pCell)
+        return pCell->HasValueData();
+
+    return rTable.HasValueData(static_cast<SCCOL>(rEntry.nField), nRow);
+}
+
+bool isQueryByString(const ScTable& rTable, const ScQueryEntry& rEntry, SCROW nRow, const ScBaseCell* pCell)
+{
+    switch (rEntry.eOp)
+    {
+        case SC_EQUAL:
+        case SC_NOT_EQUAL:
+        case SC_CONTAINS:
+        case SC_DOES_NOT_CONTAIN:
+        case SC_BEGINS_WITH:
+        case SC_ENDS_WITH:
+        case SC_DOES_NOT_BEGIN_WITH:
+        case SC_DOES_NOT_END_WITH:
+            return true;
+        default:
+            ;
+    }
+
+    if (!rEntry.bQueryByString)
+        return false;
+
+    if (pCell)
+        return pCell->HasStringData();
+
+    return rTable.HasStringData(static_cast<SCCOL>(rEntry.nField), nRow);
+}
+
+}
 
 bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
         bool* pSpecial /* =NULL */ , ScBaseCell* pCell /* =NULL */ ,
@@ -1103,9 +1143,8 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
             else // if (rEntry.nVal == SC_NONEMPTYFIELDS)
                 bOk = aCol[rEntry.nField].HasDataAt( nRow );
         }
-        else if ( !rEntry.bQueryByString && (pCell ? pCell->HasValueData() :
-                    HasValueData( static_cast<SCCOL>(rEntry.nField), nRow)))
-        {   // by Value
+        else if (isQueryByValue(*this, rEntry, nRow, pCell))
+        {
             double nCellVal;
             if ( pCell )
             {
@@ -1183,15 +1222,8 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                 }
             }
         }
-        else if ( (rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL) ||
-                  (rEntry.eOp == SC_CONTAINS || rEntry.eOp == SC_DOES_NOT_CONTAIN ||
-                   rEntry.eOp == SC_BEGINS_WITH || rEntry.eOp == SC_ENDS_WITH ||
-                   rEntry.eOp == SC_DOES_NOT_BEGIN_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH) ||
-                (rEntry.bQueryByString && (pCell ? pCell->HasStringData() :
-                                           HasStringData(
-                                               static_cast<SCCOL>(rEntry.nField),
-                                               nRow))))
-        {   // by String
+        else if (isQueryByString(*this, rEntry, nRow, pCell))
+        {
             String  aCellStr;
             if( rEntry.eOp == SC_CONTAINS || rEntry.eOp == SC_DOES_NOT_CONTAIN
                 || rEntry.eOp == SC_BEGINS_WITH || rEntry.eOp == SC_ENDS_WITH
