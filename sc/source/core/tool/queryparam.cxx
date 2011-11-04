@@ -73,11 +73,8 @@ ScQueryEntry::ScQueryEntry(const ScQueryEntry& r) :
 ScQueryEntry::~ScQueryEntry()
 {
     delete pStr;
-    if ( pSearchParam )
-    {
-        delete pSearchParam;
-        delete pSearchText;
-    }
+    delete pSearchParam;
+    delete pSearchText;
 }
 
 ScQueryEntry& ScQueryEntry::operator=( const ScQueryEntry& r )
@@ -90,11 +87,9 @@ ScQueryEntry& ScQueryEntry::operator=( const ScQueryEntry& r )
     nField          = r.nField;
     nVal            = r.nVal;
     *pStr           = *r.pStr;
-    if ( pSearchParam )
-    {
-        delete pSearchParam;
-        delete pSearchText;
-    }
+
+    delete pSearchParam;
+    delete pSearchText;
     pSearchParam    = NULL;
     pSearchText     = NULL;
 
@@ -111,11 +106,9 @@ void ScQueryEntry::Clear()
     nField          = 0;
     nVal            = 0.0;
     pStr->Erase();
-    if ( pSearchParam )
-    {
-        delete pSearchParam;
-        delete pSearchText;
-    }
+
+    delete pSearchParam;
+    delete pSearchText;
     pSearchParam    = NULL;
     pSearchText     = NULL;
 }
