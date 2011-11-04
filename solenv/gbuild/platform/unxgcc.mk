@@ -213,7 +213,17 @@ gb_COMPILERNOOPTFLAGS := -O0
 
 gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
 
-gb_Helper_set_ld_path := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
+ifeq ($(OS_FOR_BUILD),MACOSX)
+gb_Helper_LIBRARY_PATH_VAR := DYLD_LIBRARY_PATH
+else ifeq ($(OS_FOR_BUILD),WNT)
+# In theory possible if cross-compiling to some Unix from Windows,
+# in practice strongly discouraged to even try that
+gb_Helper_LIBRARY_PATH_VAR := PATH
+else
+gb_Helper_LIBRARY_PATH_VAR := LD_LIBRARY_PATH
+endif
+
+gb_Helper_set_ld_path := $(gb_Helper_LIBRARY_PATH_VAR)=$(OUTDIR_FOR_BUILD)/lib
 
 # convert parameters filesystem root to native notation
 # does some real work only on windows, make sure not to
@@ -461,7 +471,7 @@ endef
 
 # CppunitTest class
 
-gb_CppunitTest_CPPTESTPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
+gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path)
 gb_CppunitTest_SYSPRE := libtest_
 gb_CppunitTest_EXT := .so
 gb_CppunitTest_LIBDIR := $(gb_Helper_OUTDIRLIBDIR)
@@ -478,23 +488,23 @@ endef
 define gb_JunitTest_JunitTest_platform
 $(call gb_JunitTest_get_target,$(1)) : DEFS := \
 	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:$(OUTDIR)/installation/opt/program/soffice}" \
-	-Dorg.openoffice.test.arg.env=LD_LIBRARY_PATH \
+	-Dorg.openoffice.test.arg.env=$(gb_Helper_LIBRARY_PATH_VAR) \
 	-Dorg.openoffice.test.arg.user=file://$(call gb_JunitTest_get_userdir,$(1)) \
 
 endef
 
 # SdiTarget class
 
-gb_SdiTarget_SVIDLPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
+gb_SdiTarget_SVIDLPRECOMMAND := $(gb_Helper_set_ld_path)
 
 # SrsPartMergeTarget
 
-gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
+gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := $(gb_Helper_set_ld_path)
 
 # SrsPartTarget class
 
 gb_SrsPartTarget_RSCTARGET := $(OUTDIR_FOR_BUILD)/bin/rsc
-gb_SrsPartTarget_RSCCOMMAND := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(OUTDIR_FOR_BUILD)/bin/rsc
+gb_SrsPartTarget_RSCCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(OUTDIR_FOR_BUILD)/bin/rsc
 
 define gb_SrsPartTarget__command_dep
 $(call gb_Helper_abbreviate_dirs,\
@@ -510,25 +520,25 @@ endef
 
 # ComponentTarget
 
-gb_XSLTPROCPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
+gb_XSLTPROCPRECOMMAND := $(gb_Helper_set_ld_path)
 
 # UnoApiTarget
 
 gb_UnoApiTarget_IDLCTARGET := $(OUTDIR)/bin/idlc
-gb_UnoApiTarget_IDLCCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_IDLCTARGET)
+gb_UnoApiTarget_IDLCCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_IDLCTARGET)
 gb_UnoApiTarget_REGMERGETARGET := $(OUTDIR)/bin/regmerge
-gb_UnoApiTarget_REGMERGECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGMERGETARGET)
+gb_UnoApiTarget_REGMERGECOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGMERGETARGET)
 gb_UnoApiTarget_REGCOMPARETARGET := $(OUTDIR)/bin/regcompare
-gb_UnoApiTarget_REGCOMPARECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
+gb_UnoApiTarget_REGCOMPARECOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
 gb_UnoApiTarget_CPPUMAKERTARGET := $(OUTDIR)/bin/cppumaker
-gb_UnoApiTarget_CPPUMAKERCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_CPPUMAKERTARGET)
+gb_UnoApiTarget_CPPUMAKERCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_CPPUMAKERTARGET)
 gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR)/bin/regview
-gb_UnoApiTarget_REGVIEWCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
+gb_UnoApiTarget_REGVIEWCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
 
 # Configuration
-gb_CFGEXPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib
+gb_CFGEXPRECOMMAND := $(gb_Helper_set_ld_path)
 
 # Python
-gb_PYTHON_PRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib PYTHONHOME=$(OUTDIR)/lib/python PYTHONPATH=$(OUTDIR)/lib/python:$(OUTDIR)/lib/python/lib-dynload
+gb_PYTHON_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME=$(OUTDIR)/lib/python PYTHONPATH=$(OUTDIR)/lib/python:$(OUTDIR)/lib/python/lib-dynload
 
 # vim: set noet sw=4:
