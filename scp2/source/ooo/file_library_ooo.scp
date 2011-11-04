@@ -1406,7 +1406,6 @@ File gid_File_Lib_XSec_XMLSecurity
     Styles = (PACKED);
 End
 
-#if defined(ENABLE_NSS_MODULE) || defined(SYSTEM_MOZILLA)
 File gid_File_Lib_XSec_Framework
     TXT_FILE_BODY;
 	#ifdef UNX
@@ -1418,7 +1417,7 @@ File gid_File_Lib_XSec_Framework
     Styles = (PACKED);
 End
 
-#if defined(ENABLE_NSS_MODULE) || defined(SYSTEM_MOZILLA)
+#if defined(ENABLE_XMLSEC)
 File gid_File_Lib_XSec_XmlSec
     TXT_FILE_BODY;
     #ifdef UNX
@@ -1429,7 +1428,6 @@ File gid_File_Lib_XSec_XmlSec
     Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
-#endif
 
 #ifdef WNT
 File gid_File_Lib_LibXMLSec_xmlseccore
@@ -1454,8 +1452,6 @@ File gid_File_Lib_LibXMLSec_xmlsecmscrypto
     Styles = (PACKED);
 End
 #endif
-
-//i20156 - end
 #endif
 
 File gid_File_Lib_Migrationoo2

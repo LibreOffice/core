@@ -277,10 +277,13 @@ my_components += \
 my_components += ldapbe2
 .END
 
-.IF "$(ENABLE_NSS_MODULE)" == "YES" || "$(SYSTEM_MOZILLA)" == "YES"
-my_components += \
-    component/xmlsecurity/util/xsec_fw \
-    pl
+.IF "$(WITH_MOZILLA)" != "NO"
+my_components += pl
+.END
+
+my_components += component/xmlsecurity/util/xsec_fw
+
+.IF "$(ENABLE_XMLSEC)" == "YES"
 .IF "$(OS)" == "WNT"
 my_components += component/xmlsecurity/util/xsec_xmlsec.windows
 .ELSE
