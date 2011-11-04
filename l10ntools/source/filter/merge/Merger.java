@@ -297,7 +297,7 @@ public class Merger
     {
         if (lFragments.size()<1)
         {
-            m_aLog.setWarning("List of fragments is empty!? Will be ignored ...");
+//            m_aLog.setWarning("List of fragments is empty!? Will be ignored ...");
             return;
         }
 
