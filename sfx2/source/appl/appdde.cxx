@@ -274,7 +274,7 @@ sal_Bool SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
             aData.remove( aData.getLength() - 1, 1 );
             for ( sal_Int32 n = 0; n < aData.getLength(); )
             {
-                switch ( aData[n] == '"' )
+                switch ( aData[n] )
                 {
                 case '"':
                     aData.remove( n, 1 );
