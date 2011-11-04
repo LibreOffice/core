@@ -97,7 +97,7 @@ LIBLIST =
 BIN_RUNTIMELIST = 
 NSS_INCLUDE_LIST =
 NSS_MODULE_RUNTIME_LIST =
-.IF "$(ENABLE_NSS_MODULE)"=="YES"
+
 # The prebuilt moz files include all the old NSS stuff from moz and not the new
 # NSS libs, headers, etc, from the separate nss module. If we use the nss module
 # then we must take care not to deliver the old NSS stuff from the "prebuilts"
@@ -187,8 +187,6 @@ NSS_MODULE_RUNTIME_LIST:= \
     sqlite/sqlite3 \
     ssl3
 
-
-.ENDIF #.IF "$(ENABLE_NSS_MODULE)"=="YES"
 # Remove the nss libs build in moz and those build in the nss module
 $(MISC)$/replace_old_nss_libs : $(MISC)$/unpacked_$(TARGET)_lib \
 $(MISC)$/unpacked_$(TARGET)_inc $(BIN)$/mozruntime.zip
