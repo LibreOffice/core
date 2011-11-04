@@ -2664,17 +2664,6 @@ bool ScTable::IsDataFiltered() const
 }
 
 
-void ScTable::SetColFlags( SCCOL nCol, sal_uInt8 nNewFlags )
-{
-    if (VALIDCOL(nCol) && pColFlags)
-        pColFlags[nCol] = nNewFlags;
-    else
-    {
-        OSL_FAIL("Falsche Spaltennummer oder keine Flags");
-    }
-}
-
-
 void ScTable::SetRowFlags( SCROW nRow, sal_uInt8 nNewFlags )
 {
     if (VALIDROW(nRow) && pRowFlags)

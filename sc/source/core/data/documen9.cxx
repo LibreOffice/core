@@ -531,66 +531,6 @@ void ScDocument::Clear( sal_Bool bFromDestructor )
     }
 }
 
-sal_Bool ScDocument::HasControl( SCTAB nTab, const Rectangle& rMMRect )
-{
-    sal_Bool bFound = false;
-
-    if (pDrawLayer)
-    {
-        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-        OSL_ENSURE(pPage,"Page ?");
-        if (pPage)
-        {
-            SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
-            SdrObject* pObject = aIter.Next();
-            while (pObject && !bFound)
-            {
-                if (pObject->ISA(SdrUnoObj))
-                {
-                    Rectangle aObjRect = pObject->GetLogicRect();
-                    if ( aObjRect.IsOver( rMMRect ) )
-                        bFound = sal_True;
-                }
-
-                pObject = aIter.Next();
-            }
-        }
-    }
-
-    return bFound;
-}
-
-void ScDocument::InvalidateControls( Window* pWin, SCTAB nTab, const Rectangle& rMMRect )
-{
-    if (pDrawLayer)
-    {
-        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-        OSL_ENSURE(pPage,"Page ?");
-        if (pPage)
-        {
-            SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
-            SdrObject* pObject = aIter.Next();
-            while (pObject)
-            {
-                if (pObject->ISA(SdrUnoObj))
-                {
-                    Rectangle aObjRect = pObject->GetLogicRect();
-                    if ( aObjRect.IsOver( rMMRect ) )
-                    {
-                        //  Uno-Controls zeichnen sich immer komplett, ohne Ruecksicht
-                        //  auf ClippingRegions. Darum muss das ganze Objekt neu gepainted
-                        //  werden, damit die Selektion auf der Tabelle nicht uebermalt wird.
-
-                        pWin->Invalidate( aObjRect );
-                    }
-                }
-
-                pObject = aIter.Next();
-            }
-        }
-    }
-}
-
 sal_Bool ScDocument::HasDetectiveObjects(SCTAB nTab) const
 {
     //  looks for detective objects, annotations don't count
@@ -659,11 +599,6 @@ void ScDocument::UpdateFontCharSet()
             }
         }
     }
-}
-
-bool ScDocument::IsLoadingMedium() const
-{
-    return bLoadingMedium;
 }
 
 void ScDocument::SetLoadingMedium( bool bVal )

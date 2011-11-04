@@ -479,8 +479,6 @@ public:
     void        UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo, ScProgress* pProgress );
     void        UpdateCompile( bool bForceIfNameInUse = false );
     void        SetTabNo(SCTAB nNewTab);
-    bool        IsRangeNameInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                 sal_uInt16 nIndex) const;
     void        FindRangeNamesInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                  std::set<sal_uInt16>& rIndexes) const;
     void        ReplaceRangeNamesInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
@@ -673,7 +671,6 @@ public:
     void        ShowRows(SCROW nRow1, SCROW nRow2, bool bShow);
     void        DBShowRows(SCROW nRow1, SCROW nRow2, bool bShow);
 
-    void        SetColFlags( SCCOL nCol, sal_uInt8 nNewFlags );
     void        SetRowFlags( SCROW nRow, sal_uInt8 nNewFlags );
     void        SetRowFlags( SCROW nStartRow, SCROW nEndRow, sal_uInt8 nNewFlags );
 

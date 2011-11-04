@@ -720,9 +720,6 @@ public:
     void            SetChartRangeList( const String& rChartName,
                         const ScRangeListRef& rNewRangeListRef );
 
-    sal_Bool            HasControl( SCTAB nTab, const Rectangle& rMMRect );
-    void            InvalidateControls( Window* pWin, SCTAB nTab, const Rectangle& rMMRect );
-
     void            StartAnimations( SCTAB nTab, Window* pWin );
 
     sal_Bool            HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect );
@@ -1546,7 +1543,6 @@ public:
     sal_Bool            GetNoSetDirty() const { return bNoSetDirty; }
     void            SetInsertingFromOtherDoc( sal_Bool bVal ) { bInsertingFromOtherDoc = bVal; }
     sal_Bool            IsInsertingFromOtherDoc() const { return bInsertingFromOtherDoc; }
-    bool            IsLoadingMedium() const;
     void            SetLoadingMedium( bool bVal );
     void            SetImportingXML( bool bVal );
     bool            IsImportingXML() const { return bImportingXML; }

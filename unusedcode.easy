@@ -444,8 +444,6 @@ ScSubTotalDescriptorBase::PutData(ScSubTotalParam const&)
 ScTabPageSortFields::GetRanges()
 ScTabPageSortOptions::GetRanges()
 ScTabViewShell::LinkStubHtmlOptionsHdl(void*, void*)
-ScTable::IsRangeNameInUse(short, int, short, int, unsigned short) const
-ScTable::SetColFlags(short, unsigned char)
 ScTpCalcOptions::GetRanges()
 ScTpPrintOptions::GetRanges()
 ScTpSubTotalGroup::GetRanges()

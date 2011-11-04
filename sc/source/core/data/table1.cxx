@@ -1490,15 +1490,6 @@ void ScTable::SetTabNo(SCTAB nNewTab)
     for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].SetTabNo(nNewTab);
 }
 
-bool ScTable::IsRangeNameInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                               sal_uInt16 nIndex) const
-{
-    bool bInUse = false;
-    for (SCCOL i = nCol1; !bInUse && (i <= nCol2) && (ValidCol(i)); i++)
-        bInUse = aCol[i].IsRangeNameInUse(nRow1, nRow2, nIndex);
-    return bInUse;
-}
-
 void ScTable::FindRangeNamesInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                std::set<sal_uInt16>& rIndexes) const
 {
