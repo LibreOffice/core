@@ -42,6 +42,7 @@
 #include <impfont.hxx>
 #include <rtl/instance.hxx>
 
+#include "generic/genpspgraphics.h"
 #include "generic/glyphcache.hxx"
 #include "headless/svpgdi.hxx"
 #include "headless/svpbmp.hxx"
