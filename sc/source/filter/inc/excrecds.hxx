@@ -62,6 +62,7 @@ class SfxItemSet;
 class EditTextObject;
 class ScPageHFItem;
 class ScProgress;
+struct ScQueryEntry;
 
 class ExcTable;
 

@@ -34,7 +34,46 @@
 
 #include <vector>
 
+/*
+ * dialog returns the special field values "empty"/"not empty"
+ * as constants SC_EMPTYFIELDS and SC_NONEMPTYFIELDS respectively in nVal in
+ * conjuctions with the flag bQueryByString = FALSE.
+ */
+
+#define SC_EMPTYFIELDS      ((double)0x0042)
+#define SC_NONEMPTYFIELDS   ((double)0x0043)
+
 struct ScDBQueryParamInternal;
+
+namespace utl {
+    class SearchParam;
+    class TextSearch;
+}
+
+struct ScQueryEntry
+{
+    bool            bDoQuery;
+    bool            bQueryByString;
+    bool            bQueryByDate;
+    SCCOLROW        nField;
+    ScQueryOp       eOp;
+    ScQueryConnect  eConnect;
+    String*         pStr;
+    double          nVal;
+    mutable utl::SearchParam* pSearchParam;       // if RegExp, not saved
+    mutable utl::TextSearch*  pSearchText;        // if RegExp, not saved
+
+    ScQueryEntry();
+    ScQueryEntry(const ScQueryEntry& r);
+    ~ScQueryEntry();
+
+    // creates pSearchParam and pSearchText if necessary, always RegExp!
+    utl::TextSearch* GetSearchTextPtr( bool bCaseSens ) const;
+
+    void            Clear();
+    ScQueryEntry&   operator=( const ScQueryEntry& r );
+    bool            operator==( const ScQueryEntry& r ) const;
+};
 
 struct ScQueryParamBase
 {

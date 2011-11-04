@@ -31,6 +31,7 @@
 
 #include "address.hxx"
 #include "global.hxx"
+#include "queryparam.hxx"
 #include "formula/token.hxx"
 #include <svl/listener.hxx>
 #include <tools/string.hxx>

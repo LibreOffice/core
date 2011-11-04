@@ -33,7 +33,6 @@
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
-#include <unotools/textsearch.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <tools/urlobj.hxx>
@@ -120,111 +119,6 @@ bool ScImportParam::operator==( const ScImportParam& rOther ) const
             nType       == rOther.nType );
 
     //! nQuerySh und pConnection sind gleich ?
-}
-
-//------------------------------------------------------------------------
-// struct ScQueryParam:
-
-ScQueryEntry::ScQueryEntry() :
-    bDoQuery(false),
-    bQueryByString(false),
-    bQueryByDate(false),
-    nField(0),
-    eOp(SC_EQUAL),
-    eConnect(SC_AND),
-    pStr(new String),
-    nVal(0.0),
-    pSearchParam(NULL),
-    pSearchText(NULL)
-{
-}
-
-ScQueryEntry::ScQueryEntry(const ScQueryEntry& r) :
-    bDoQuery(r.bDoQuery),
-    bQueryByString(r.bQueryByString),
-    bQueryByDate(r.bQueryByDate),
-    nField(r.nField),
-    eOp(r.eOp),
-    eConnect(r.eConnect),
-    pStr(new String(*r.pStr)),
-    nVal(r.nVal),
-    pSearchParam(NULL),
-    pSearchText(NULL)
-{
-}
-
-ScQueryEntry::~ScQueryEntry()
-{
-    delete pStr;
-    if ( pSearchParam )
-    {
-        delete pSearchParam;
-        delete pSearchText;
-    }
-}
-
-ScQueryEntry& ScQueryEntry::operator=( const ScQueryEntry& r )
-{
-    bDoQuery        = r.bDoQuery;
-    bQueryByString  = r.bQueryByString;
-    bQueryByDate    = r.bQueryByDate;
-    eOp             = r.eOp;
-    eConnect        = r.eConnect;
-    nField          = r.nField;
-    nVal            = r.nVal;
-    *pStr           = *r.pStr;
-    if ( pSearchParam )
-    {
-        delete pSearchParam;
-        delete pSearchText;
-    }
-    pSearchParam    = NULL;
-    pSearchText     = NULL;
-
-    return *this;
-}
-
-void ScQueryEntry::Clear()
-{
-    bDoQuery        = false;
-    bQueryByString  = false;
-    bQueryByDate    = false;
-    eOp             = SC_EQUAL;
-    eConnect        = SC_AND;
-    nField          = 0;
-    nVal            = 0.0;
-    pStr->Erase();
-    if ( pSearchParam )
-    {
-        delete pSearchParam;
-        delete pSearchText;
-    }
-    pSearchParam    = NULL;
-    pSearchText     = NULL;
-}
-
-bool ScQueryEntry::operator==( const ScQueryEntry& r ) const
-{
-    return bDoQuery         == r.bDoQuery
-        && bQueryByString   == r.bQueryByString
-        && bQueryByDate     == r.bQueryByDate
-        && eOp              == r.eOp
-        && eConnect         == r.eConnect
-        && nField           == r.nField
-        && nVal             == r.nVal
-        && *pStr            == *r.pStr;
-    //! pSearchParam und pSearchText nicht vergleichen
-}
-
-utl::TextSearch* ScQueryEntry::GetSearchTextPtr( bool bCaseSens ) const
-{
-    if ( !pSearchParam )
-    {
-        pSearchParam = new utl::SearchParam( *pStr, utl::SearchParam::SRCH_REGEXP,
-            bCaseSens, false, false );
-        pSearchText = new utl::TextSearch( *pSearchParam, *ScGlobal::pCharClass );
-    }
-    return pSearchText;
 }
 
 //------------------------------------------------------------------------
