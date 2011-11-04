@@ -1074,12 +1074,9 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
 
     //---------------------------------------------------------------
 
-    const SCSIZE nFixedBools = 32;
-    bool aBool[nFixedBools];
-    bool aTest[nFixedBools];
     SCSIZE nEntryCount = rParam.GetEntryCount();
-    bool* pPasst = ( nEntryCount <= nFixedBools ? &aBool[0] : new bool[nEntryCount] );
-    bool* pTest = ( nEntryCount <= nFixedBools ? &aTest[0] : new bool[nEntryCount] );
+    std::vector<bool> aPassed(nEntryCount, false);
+    std::vector<bool> aTestEqual(nEntryCount, false);
 
     long    nPos = -1;
     SCSIZE  i    = 0;
@@ -1386,21 +1383,21 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
         if (nPos == -1)
         {
             nPos++;
-            pPasst[nPos] = bOk;
-            pTest[nPos] = bTestEqual;
+            aPassed[nPos] = bOk;
+            aTestEqual[nPos] = bTestEqual;
         }
         else
         {
             if (rEntry.eConnect == SC_AND)
             {
-                pPasst[nPos] = pPasst[nPos] && bOk;
-                pTest[nPos] = pTest[nPos] && bTestEqual;
+                aPassed[nPos] = aPassed[nPos] && bOk;
+                aTestEqual[nPos] = aTestEqual[nPos] && bTestEqual;
             }
             else
             {
                 nPos++;
-                pPasst[nPos] = bOk;
-                pTest[nPos] = bTestEqual;
+                aPassed[nPos] = bOk;
+                aTestEqual[nPos] = bTestEqual;
             }
         }
         i++;
@@ -1408,17 +1405,13 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
 
     for ( long j=1; j <= nPos; j++ )
     {
-        pPasst[0] = pPasst[0] || pPasst[j];
-        pTest[0] = pTest[0] || pTest[j];
+        aPassed[0] = aPassed[0] || aPassed[j];
+        aTestEqual[0] = aTestEqual[0] || aTestEqual[j];
     }
 
-    bool bRet = pPasst[0];
-    if ( pPasst != &aBool[0] )
-        delete [] pPasst;
+    bool bRet = aPassed[0];
     if ( pbTestEqualCondition )
-        *pbTestEqualCondition = pTest[0];
-    if ( pTest != &aTest[0] )
-        delete [] pTest;
+        *pbTestEqualCondition = aTestEqual[0];
 
     return bRet;
 }
