@@ -54,8 +54,10 @@ if [ -d .git ] ; then
         mkdir clone
         for i in $GIT_REPO_NAMES ; do
             bin/git-new-workdir $GIT_LINK_SRC/$i clone/$i
-            for i in clone/$i/* ; do
-                ln -sfn $i $(basename $i)
+            for d in clone/$i/* ; do
+                if [ "${d}" != "clone/$i/git-hooks" ]; then
+                    ln -sfn ${d} $(basename ${d})
+                fi
             done
         done
     fi
