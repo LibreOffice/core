@@ -213,7 +213,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
     {
         if ( theQueryData.GetEntry(i).bDoQuery )
         {
-            ScQueryEntry& rEntry = theQueryData.GetEntry(i);
+            const ScQueryEntry& rEntry = theQueryData.GetEntry(i);
 
             String  aValStr      = *rEntry.pStr;
             if (!rEntry.bQueryByString && aValStr == EMPTY_STRING)

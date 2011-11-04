@@ -1091,7 +1091,7 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
 
     while ( (i < nEntryCount) && rParam.GetEntry(i).bDoQuery )
     {
-        ScQueryEntry& rEntry = rParam.GetEntry(i);
+        const ScQueryEntry& rEntry = rParam.GetEntry(i);
         // we can only handle one single direct query
         if ( !pCell || i > 0 )
             pCell = GetCell( static_cast<SCCOL>(rEntry.nField), nRow );

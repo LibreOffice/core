@@ -766,15 +766,15 @@ struct ScQueryEntry
     ScQueryConnect  eConnect;
     String*         pStr;
     double          nVal;
-    utl::SearchParam*   pSearchParam;       // if RegExp, not saved
-    utl::TextSearch*    pSearchText;        // if RegExp, not saved
+    mutable utl::SearchParam* pSearchParam;       // if RegExp, not saved
+    mutable utl::TextSearch*  pSearchText;        // if RegExp, not saved
 
     ScQueryEntry();
     ScQueryEntry(const ScQueryEntry& r);
     ~ScQueryEntry();
 
     // creates pSearchParam and pSearchText if necessary, always RegExp!
-    utl::TextSearch*    GetSearchTextPtr( bool bCaseSens );
+    utl::TextSearch* GetSearchTextPtr( bool bCaseSens ) const;
 
     void            Clear();
     ScQueryEntry&   operator=( const ScQueryEntry& r );

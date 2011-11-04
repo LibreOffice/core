@@ -599,7 +599,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, bool *pSpeci
 
     while ((i < nEntryCount) && rParam.GetEntry(i).bDoQuery)
     {
-        ScQueryEntry& rEntry = rParam.GetEntry(i);
+        const ScQueryEntry& rEntry = rParam.GetEntry(i);
         // we can only handle one single direct query
         // #i115431# nField in QueryParam is the sheet column, not the field within the source range
         SCCOL nQueryCol = (SCCOL)rEntry.nField;

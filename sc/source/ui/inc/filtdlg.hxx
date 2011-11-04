@@ -125,7 +125,7 @@ private:
     ScFilterOptionsMgr* pOptionsMgr;
 
     const sal_uInt16        nWhichQuery;
-    const ScQueryParam  theQueryData;
+    ScQueryParam        theQueryData;
     ScQueryItem*        pOutItem;
     ScViewData*         pViewData;
     ScDocument*         pDoc;

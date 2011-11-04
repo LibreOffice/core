@@ -69,7 +69,12 @@ SCSIZE ScQueryParamBase::GetEntryCount() const
     return maEntries.size();
 }
 
-ScQueryEntry& ScQueryParamBase::GetEntry(SCSIZE n) const
+const ScQueryEntry& ScQueryParamBase::GetEntry(SCSIZE n) const
+{
+    return maEntries[n];
+}
+
+ScQueryEntry& ScQueryParamBase::GetEntry(SCSIZE n)
 {
     return maEntries[n];
 }
@@ -265,9 +270,9 @@ ScQueryParam& ScQueryParam::operator=( const ScQueryParam& r )
 
 //------------------------------------------------------------------------
 
-sal_Bool ScQueryParam::operator==( const ScQueryParam& rOther ) const
+bool ScQueryParam::operator==( const ScQueryParam& rOther ) const
 {
-    sal_Bool bEqual = false;
+    bool bEqual = false;
 
     // Anzahl der Queries gleich?
     SCSIZE nUsed      = 0;
@@ -297,7 +302,7 @@ sal_Bool ScQueryParam::operator==( const ScQueryParam& rOther ) const
         && (nDestCol    == rOther.nDestCol)
         && (nDestRow    == rOther.nDestRow) )
     {
-        bEqual = sal_True;
+        bEqual = true;
         for ( SCSIZE i=0; i<nUsed && bEqual; i++ )
             bEqual = maEntries[i] == rOther.maEntries[i];
     }

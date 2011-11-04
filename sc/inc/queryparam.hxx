@@ -51,7 +51,8 @@ struct ScQueryParamBase
     virtual bool IsValidFieldIndex() const;
 
     SC_DLLPUBLIC SCSIZE GetEntryCount() const;
-    SC_DLLPUBLIC ScQueryEntry& GetEntry(SCSIZE n) const;
+    SC_DLLPUBLIC const ScQueryEntry& GetEntry(SCSIZE n) const;
+    SC_DLLPUBLIC ScQueryEntry& GetEntry(SCSIZE n);
     void Resize(SCSIZE nNew);
     SC_DLLPUBLIC void DeleteQuery( SCSIZE nPos );
     void FillInExcelSyntax(String& aCellStr, SCSIZE nIndex);
@@ -60,7 +61,7 @@ protected:
     ScQueryParamBase();
     ScQueryParamBase(const ScQueryParamBase& r);
 
-    mutable std::vector<ScQueryEntry>  maEntries;
+    std::vector<ScQueryEntry> maEntries;
 };
 
 // ============================================================================
@@ -92,8 +93,8 @@ struct SC_DLLPUBLIC ScQueryParam : public ScQueryParamBase, public ScQueryParamT
     ScQueryParam( const ScDBQueryParamInternal& r );
     virtual ~ScQueryParam();
 
-    ScQueryParam&   operator=   ( const ScQueryParam& r );
-    sal_Bool            operator==  ( const ScQueryParam& rOther ) const;
+    ScQueryParam&   operator=  ( const ScQueryParam& r );
+    bool            operator== ( const ScQueryParam& rOther ) const;
     void            Clear();
     void            ClearDestParams();
     void            MoveToDest();

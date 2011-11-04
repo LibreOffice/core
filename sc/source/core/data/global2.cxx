@@ -216,7 +216,7 @@ bool ScQueryEntry::operator==( const ScQueryEntry& r ) const
     //! pSearchParam und pSearchText nicht vergleichen
 }
 
-utl::TextSearch* ScQueryEntry::GetSearchTextPtr( bool bCaseSens )
+utl::TextSearch* ScQueryEntry::GetSearchTextPtr( bool bCaseSens ) const
 {
     if ( !pSearchParam )
     {
