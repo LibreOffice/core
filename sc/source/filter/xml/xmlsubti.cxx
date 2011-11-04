@@ -184,17 +184,41 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
         ++nCurrentSheet;
 
         maProtectionData = rProtectData;
+        ScDocument *pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
+
+        if (nCurrentSheet > 0)
+        {
+            pDoc->AppendTabOnLoad(sTableName);
+        }
+
+        rImport.SetTableStyle(sStyleName);
+        SetTableStyle(sStyleName);
+    }
+
+    NewTable(1);
+}
+
+void ScMyTables::SetTableStyle(const rtl::OUString& sStyleName)
+{
+    //these uno calls are a bit difficult to remove, XMLTableStyleContext::FillPropertySet uses
+    //SvXMLImportPropertyMapper::FillPropertySet
+    if ( sStyleName.getLength() )
+    {
+        // #i57869# All table style properties for all sheets are now applied here,
+        // before importing the contents.
+        // This is needed for the background color.
+        // Sheet visibility has special handling in ScDocFunc::SetTableVisible to
+        // allow hiding the first sheet.
+        // RTL layout is only remembered, not actually applied, so the shapes can
+        // be loaded before mirroring.
+
         uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( rImport.GetModel(), uno::UNO_QUERY );
+
         if ( xSpreadDoc.is() )
         {
             uno::Reference <sheet::XSpreadsheets> xSheets(xSpreadDoc->getSheets());
-            if (xSheets.is())
+            if ( xSheets.is() )
             {
-                if (nCurrentSheet > 0)
-                {
-                    ScDocument *pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
-                    pDoc->AppendTabOnLoad(sTableName);
-                }
                 uno::Reference <container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
                 if ( xIndex.is() )
                 {
@@ -202,65 +226,28 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                     if ( xCurrentSheet.is() )
                     {
                         xCurrentCellRange.set(xCurrentSheet, uno::UNO_QUERY);
-                        if (!(nCurrentSheet > 0))
+                        uno::Reference <beans::XPropertySet> xProperties(xCurrentSheet, uno::UNO_QUERY);
+                        if ( xProperties.is() )
                         {
-                            uno::Reference < container::XNamed > xNamed(xCurrentSheet, uno::UNO_QUERY );
-                            if ( xNamed.is() )
-                                try
-                                {
-                                    xNamed->setName(sTableName);
-                                }
-                                catch ( uno::RuntimeException& )
-                                {
-                                    ScDocument *pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
-                                    if (pDoc)
-                                    {
-                                        ScXMLImport::MutexGuard aGuard(rImport);
-                                        String sTabName(String::CreateFromAscii("Table"));
-                                        pDoc->CreateValidTabName(sTabName);
-                                        rtl::OUString sOUTabName(sTabName);
-                                        xNamed->setName(sOUTabName);
-                                    }
-                                }
-                        }
-                        rImport.SetTableStyle(sStyleName);
-
-                        if ( sStyleName.getLength() )
-                        {
-                            // #i57869# All table style properties for all sheets are now applied here,
-                            // before importing the contents.
-                            // This is needed for the background color.
-                            // Sheet visibility has special handling in ScDocFunc::SetTableVisible to
-                            // allow hiding the first sheet.
-                            // RTL layout is only remembered, not actually applied, so the shapes can
-                            // be loaded before mirroring.
-
-                            uno::Reference <beans::XPropertySet> xProperties(xCurrentSheet, uno::UNO_QUERY);
-                            if (xProperties.is())
+                            XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rImport.GetAutoStyles();
+                            if ( pStyles )
                             {
-                                XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rImport.GetAutoStyles();
-                                if (pStyles)
-                                {
-                                    XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
+                                XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
                                         XML_STYLE_FAMILY_TABLE_TABLE, sStyleName, true);
-                                    if (pStyle)
-                                    {
-                                        pStyle->FillPropertySet(xProperties);
+                                if ( pStyle )
+                                {
+                                    pStyle->FillPropertySet(xProperties);
 
-                                        ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rImport.GetModel())->GetSheetSaveData();
-                                        pSheetData->AddTableStyle( sStyleName, ScAddress( 0, 0, nCurrentSheet ) );
-                                    }
+                                    ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rImport.GetModel())->GetSheetSaveData();
+                                    pSheetData->AddTableStyle( sStyleName, ScAddress( 0, 0, nCurrentSheet ) );
                                 }
                             }
                         }
                     }
-
                 }
             }
         }
     }
-
-    NewTable(1);
 }
 
 bool ScMyTables::IsMerged (const uno::Reference <table::XCellRange>& xCellRange, const sal_Int32 nCol, const sal_Int32 nRow,

@@ -154,6 +154,8 @@ private:
     void                                NewRow();
     void                                InsertColumn();
     void                                NewColumn(bool bIsCovered);
+
+    void                                SetTableStyle(const rtl::OUString& sStyleName);
 public:
                                         ScMyTables(ScXMLImport& rImport);
                                         ~ScMyTables();
