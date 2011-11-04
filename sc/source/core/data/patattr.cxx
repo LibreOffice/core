@@ -82,9 +82,8 @@ ScDocument* ScPatternAttr::pDoc = NULL;
 
 // -----------------------------------------------------------------------
 
-//! move to some header file
-inline long TwipsToHMM(long nTwips) { return (nTwips * 127 + 36) / 72; }
-inline long HMMToTwips(long nHMM)   { return (nHMM * 72 + 63) / 127; }
+using sc::HMMToTwips;
+using sc::TwipsToHMM;
 
 // -----------------------------------------------------------------------
 

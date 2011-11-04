@@ -102,12 +102,20 @@ const SCSIZE MAXQUERY           = 8;
                                         // Above this threshold are indices
                                         // for data base areas
 
+#define SC_USE_PS_POINTS    1       /**< use PostScript points (72ppi) instead of old TeX points (72.27ppi) */
+
 #define PIXEL_PER_INCH      96.0
 
 #define CM_PER_INCH         2.54
-#define POINTS_PER_INCH     72.27
+#define PS_POINTS_PER_INCH  72.0    /**< PostScript points per inch */
+#define TEX_POINTS_PER_INCH 72.27   /**< old printer points, or TeX points per inch */
+#if SC_USE_PS_POINTS
+#define POINTS_PER_INCH     PS_POINTS_PER_INCH  /**< the actual definition of points used */
+#else
+#define POINTS_PER_INCH     TEX_POINTS_PER_INCH
+#endif
 #define PIXEL_PER_POINT     (PIXEL_PER_INCH / POINTS_PER_INCH)
-#define INCHT_PER_CM        (1.0 / CM_PER_INCH)
+#define INCH_PER_CM         (1.0 / CM_PER_INCH)
 #define POINTS_PER_CM       (POINTS_PER_INCH / CM_PER_INCH)
 #define TWIPS_PER_POINT     20.0
 #define TWIPS_PER_INCH      (TWIPS_PER_POINT * POINTS_PER_INCH)
@@ -118,22 +126,35 @@ const SCSIZE MAXQUERY           = 8;
 #define PIXEL_PER_TWIPS     (PIXEL_PER_INCH / TWIPS_PER_INCH)
 #define HMM_PER_TWIPS       (CM_PER_TWIPS * 1000.0)
 
-#define STD_COL_WIDTH       1285
-#define STD_EXTRA_WIDTH     113     // 2mm extra for optimal width
-                                    // standard row height: text + margin - STD_ROWHEIGHT_DIFF
+#if SC_USE_PS_POINTS
+#define STD_COL_WIDTH       1280    /* 2.2577cm, 64.00pt PS */
+#else
+#define STD_COL_WIDTH       1285    /* 2.2581cm, 64.25pt TeX */
+#endif
+#define STD_EXTRA_WIDTH     113     /* 2mm extra for optimal width,
+                                     * 0.1986cm with TeX points,
+                                     * 0.1993cm with PS points. */
 
 
-#define MAX_EXTRA_WIDTH     23811   // 42cm in TWIPS
+#define MAX_EXTRA_WIDTH     23811   /* 42cm in TWIPS, 41.8430cm TeX, 41.9999cm PS */
 #define MAX_EXTRA_HEIGHT    23811
-#define MAX_COL_WIDTH       56693   // 1m in TWIPS
+#define MAX_COL_WIDTH       56693   /* 1m in TWIPS, 99.6266cm TeX, 100.0001cm PS */
 #define MAX_COL_HEIGHT      56693
 
+                                    /* standard row height: text + margin - STD_ROWHEIGHT_DIFF */
 #define STD_ROWHEIGHT_DIFF  23
-#define STD_FONT_HEIGHT     200     // equates 10 points
+#define STD_FONT_HEIGHT     200     /* equates 10 points */
 
-//!     use ScGlobal::nStdRowHeight instead of STD_ROW_HEIGHT !
+///     use ScGlobal::nStdRowHeight instead of STD_ROW_HEIGHT !
 
-#define STD_ROW_HEIGHT      (12.8 * TWIPS_PER_POINT)            // 256 Twips, 0.45 cm
+#define STD_ROW_HEIGHT      (12.8 * TWIPS_PER_POINT)    /* 256 Twips, 0.45 cm */
+
+namespace sc
+{
+    inline long TwipsToHMM( long nTwips )     { return (nTwips * 127 + 36) / 72; }
+    inline long HMMToTwips( long nHMM )       { return (nHMM * 72 + 63) / 127; }
+    inline long TwipsToEvenHMM( long nTwips ) { return ( (nTwips * 127 + 72) / 144 ) * 2; }
+}
 
                                     // standard size as OLE server (cells)
 #define OLE_STD_CELLS_X     4

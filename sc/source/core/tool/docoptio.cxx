@@ -61,11 +61,9 @@ TYPEINIT1(ScTpCalcItem, SfxPoolItem);
 
 //------------------------------------------------------------------------
 
-//! these functions should be moved to some header file
-inline long TwipsToHMM(long nTwips) { return (nTwips * 127 + 36) / 72; }
-inline long HMMToTwips(long nHMM)   { return (nHMM * 72 + 63) / 127; }
-
-inline long TwipsToEvenHMM(long nTwips) { return ( (nTwips * 127 + 72) / 144 ) * 2; }
+using sc::HMMToTwips;
+using sc::TwipsToHMM;
+using sc::TwipsToEvenHMM;
 
 //------------------------------------------------------------------------
 

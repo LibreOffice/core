@@ -82,12 +82,15 @@ double lclGetTwipsScale( MapUnit eMapUnit )
     /*  We cannot use OutputDevice::LogicToLogic() or the XclTools
         conversion functions to calculate drawing layer coordinates due to
         Calc's strange definition of a point (1 inch == 72.27 points, instead
-        of 72 points). */
+        of 72 points).
+        NOTE: Calc's definition changed from TeX points (72.27) to PS points
+        (72), so the MAP_TWIP case now actually also delivers a scale of 1.0
+    */
     double fScale = 1.0;
     switch( eMapUnit )
     {
-        case MAP_TWIP:      fScale = 72 / POINTS_PER_INCH;  break;  // Calc twips <-> real twips
-        case MAP_100TH_MM:  fScale = HMM_PER_TWIPS;         break;  // Calc twips <-> 1/100mm
+        case MAP_TWIP:      fScale = PS_POINTS_PER_INCH / POINTS_PER_INCH;  break;  // Calc twips <-> real twips
+        case MAP_100TH_MM:  fScale = HMM_PER_TWIPS;                         break;  // Calc twips <-> 1/100mm
         default:            OSL_FAIL( "lclGetTwipsScale - map unit not implemented" );
     }
     return fScale;

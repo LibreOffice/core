@@ -383,9 +383,8 @@ static sal_uInt16 aStyleFamilyTypes[SC_STYLE_FAMILY_COUNT] = { SFX_STYLE_FAMILY_
 
 //------------------------------------------------------------------------
 
-//! diese Funktionen in einen allgemeinen Header verschieben
-inline long TwipsToHMM(long nTwips) { return (nTwips * 127 + 36) / 72; }
-inline long HMMToTwips(long nHMM)   { return (nHMM * 72 + 63) / 127; }
+using sc::HMMToTwips;
+using sc::TwipsToHMM;
 
 //------------------------------------------------------------------------
 
