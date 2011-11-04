@@ -186,6 +186,14 @@ public:
      */
     Color getPixel( const basegfx::B2IPoint& rPt );
 
+    /** Get underlying pixel data value at given position
+
+        This method returns the raw pixel data. In the case of
+        paletted bitmaps, this is the palette index, not the final
+        color value.
+     */
+    sal_uInt32 getPixelData( const basegfx::B2IPoint& rPt );
+
     /** Draw a line
 
         @param rPt1
@@ -569,6 +577,8 @@ private:
                              const BitmapDeviceSharedPtr& rClip ) = 0;
 
     virtual Color getPixel_i( const basegfx::B2IPoint& rPt ) = 0;
+
+    virtual sal_uInt32 getPixelData_i( const basegfx::B2IPoint& rPt ) = 0;
 
     virtual void drawLine_i( const basegfx::B2IPoint& rPt1,
                              const basegfx::B2IPoint& rPt2,

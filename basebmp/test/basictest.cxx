@@ -140,10 +140,15 @@ public:
                                                            Format::ONE_BIT_MSB_PAL ));
 
         const basegfx::B2IPoint aPt(3,3);
+        CPPUNIT_ASSERT_MESSAGE("getPixelData for virgin device",
+                               pDevice->getPixelData(aPt) == 0);
+
         const Color aCol(0xFFFFFFFF);
         pDevice->setPixel( aPt, aCol, DrawMode_PAINT );
         CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #1",
                                pDevice->getPixel(aPt) == aCol);
+        CPPUNIT_ASSERT_MESSAGE("getPixelData for white pixel",
+                               pDevice->getPixelData(aPt) == 1);
 
         const basegfx::B2IPoint aPt2(0,0);
         const Color aCol2(0xFFFFFFFF);
