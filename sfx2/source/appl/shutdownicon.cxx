@@ -116,11 +116,14 @@ SFX_IMPL_ONEINSTANCEFACTORY( ShutdownIcon );
 bool ShutdownIcon::bModalMode = false;
 ShutdownIcon* ShutdownIcon::pShutdownIcon = NULL;
 
+#if !defined( ENABLE_QUICKSTART_APPLET ) || defined( UNX )
 // To remove conditionals
 extern "C" {
     static void disabled_initSystray() { }
     static void disabled_deInitSystray() { }
 }
+#endif
+
 #define DOSTRING( x )                       #x
 #define STRING( x )                         DOSTRING( x )
 
