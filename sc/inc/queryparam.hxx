@@ -70,6 +70,9 @@ struct ScQueryEntry
     // creates pSearchParam and pSearchText if necessary, always RegExp!
     utl::TextSearch* GetSearchTextPtr( bool bCaseSens ) const;
 
+    bool            MatchByString(const rtl::OUString& rStr) const;
+    SC_DLLPUBLIC void SetQueryString(const rtl::OUString& rStr);
+    SC_DLLPUBLIC rtl::OUString GetQueryString() const;
     void            Clear();
     ScQueryEntry&   operator=( const ScQueryEntry& r );
     bool            operator==( const ScQueryEntry& r ) const;

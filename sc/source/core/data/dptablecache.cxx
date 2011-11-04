@@ -681,9 +681,9 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, bool *pSpeci
                 {
                     if (bMatchWholeCell)
                     {
-                        bOk = pTransliteration->isEqual( aCellStr, *rEntry.pStr );
-                        String aStr = *rEntry.pStr;
-                        sal_Bool bHasStar = false;
+                        String aStr = rEntry.GetQueryString();
+                        bOk = pTransliteration->isEqual(aCellStr, aStr);
+                        bool bHasStar = false;
                         xub_StrLen nIndex;
                         if (( nIndex = aStr.Search('*') ) != STRING_NOTFOUND)
                             bHasStar = sal_True;
@@ -706,12 +706,10 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, bool *pSpeci
                     else
                     {
                         ::com::sun::star::uno::Sequence< sal_Int32 > xOff;
-                        String aCell( pTransliteration->transliterate(
-                                                                     aCellStr, ScGlobal::eLnge, 0, aCellStr.Len(),
-                                                                     &xOff ) );
-                        String aQuer( pTransliteration->transliterate(
-                                                                     *rEntry.pStr, ScGlobal::eLnge, 0, rEntry.pStr->Len(),
-                                                                     &xOff ) );
+                        String aCell = pTransliteration->transliterate(
+                            aCellStr, ScGlobal::eLnge, 0, aCellStr.Len(), &xOff);
+                        String aQuer = pTransliteration->transliterate(
+                            rEntry.GetQueryString(), ScGlobal::eLnge, 0, rEntry.GetQueryString().getLength(), &xOff);
                         bOk = (aCell.Search( aQuer ) != STRING_NOTFOUND);
                     }
                     if (rEntry.eOp == SC_NOT_EQUAL)
@@ -720,7 +718,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, bool *pSpeci
                 else
                 {   // use collator here because data was probably sorted
                     sal_Int32 nCompare = pCollator->compareString(
-                                                                 aCellStr, *rEntry.pStr );
+                        aCellStr, rEntry.GetQueryString());
                     switch (rEntry.eOp)
                     {
                         case SC_LESS :

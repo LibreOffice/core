@@ -107,7 +107,7 @@ private:
     sal_Bool                        bAutoOrAdvanced;
     ScRange                     aCriteriaRange;
 
-    void                        CreateFromDouble( String& rStr, double fVal );
+    void                        CreateFromDouble( rtl::OUString& rStr, double fVal );
     void                        SetCellAttribs();
     void                        InsertQueryParam();
     void                        AmendAFName(const sal_Bool bUseUnNamed);

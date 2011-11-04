@@ -96,6 +96,21 @@ ScQueryEntry& ScQueryEntry::operator=( const ScQueryEntry& r )
     return *this;
 }
 
+bool ScQueryEntry::MatchByString(const rtl::OUString& rStr) const
+{
+    return rStr.equals(*pStr);
+}
+
+void ScQueryEntry::SetQueryString(const rtl::OUString& rStr)
+{
+    *pStr = String(rStr);
+}
+
+rtl::OUString ScQueryEntry::GetQueryString() const
+{
+    return *pStr;
+}
+
 void ScQueryEntry::Clear()
 {
     bDoQuery        = false;

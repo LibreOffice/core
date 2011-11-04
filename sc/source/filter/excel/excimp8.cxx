@@ -499,11 +499,11 @@ XclImpAutoFilterData::XclImpAutoFilterData( RootData* pRoot, const ScRange& rRan
 
 }
 
-void XclImpAutoFilterData::CreateFromDouble( String& rStr, double fVal )
+void XclImpAutoFilterData::CreateFromDouble( rtl::OUString& rStr, double fVal )
 {
-    rStr += String( ::rtl::math::doubleToUString( fVal,
+    rStr += ::rtl::math::doubleToUString(fVal,
                 rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0), sal_True));
+                ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0), true);
 }
 
 void XclImpAutoFilterData::SetCellAttribs()
@@ -540,34 +540,34 @@ void XclImpAutoFilterData::InsertQueryParam()
 
 static void ExcelQueryToOooQuery( ScQueryEntry& rEntry )
 {
-    if( ( rEntry.eOp != SC_EQUAL && rEntry.eOp != SC_NOT_EQUAL ) || rEntry.pStr == NULL )
+    if (rEntry.eOp != SC_EQUAL && rEntry.eOp != SC_NOT_EQUAL)
         return;
-    else
+
+    String aStr = rEntry.GetQueryString();
+    xub_StrLen nLen = aStr.Len();
+    sal_Unicode nStart = aStr.GetChar( 0 );
+    sal_Unicode nEnd   = aStr.GetChar( nLen-1 );
+    if( nLen >2 && nStart == '*' && nEnd == '*' )
     {
-        xub_StrLen nLen = rEntry.pStr->Len();
-        sal_Unicode nStart = rEntry.pStr->GetChar( 0 );
-        sal_Unicode nEnd   = rEntry.pStr->GetChar( nLen-1 );
-        if( nLen >2 && nStart == '*' && nEnd == '*' )
-        {
-            rEntry.pStr->Erase( nLen-1, 1 );
-            rEntry.pStr->Erase( 0, 1 );
-            rEntry.eOp = ( rEntry.eOp == SC_EQUAL ) ? SC_CONTAINS : SC_DOES_NOT_CONTAIN;
-        }
-        else if( nLen > 1 && nStart == '*' && nEnd != '*' )
-        {
-            rEntry.pStr->Erase( 0, 1 );
-            rEntry.eOp = ( rEntry.eOp == SC_EQUAL ) ? SC_ENDS_WITH : SC_DOES_NOT_END_WITH;
-        }
-        else if( nLen > 1 && nStart != '*' && nEnd == '*' )
-        {
-            rEntry.pStr->Erase( nLen-1, 1 );
-            rEntry.eOp = ( rEntry.eOp == SC_EQUAL ) ? SC_BEGINS_WITH : SC_DOES_NOT_BEGIN_WITH;
-        }
-        else if( nLen == 2 && nStart == '*' && nEnd == '*' )
-        {
-            rEntry.pStr->Erase( 0, 1 );
-        }
+        aStr.Erase( nLen-1, 1 );
+        aStr.Erase( 0, 1 );
+        rEntry.eOp = ( rEntry.eOp == SC_EQUAL ) ? SC_CONTAINS : SC_DOES_NOT_CONTAIN;
     }
+    else if( nLen > 1 && nStart == '*' && nEnd != '*' )
+    {
+        aStr.Erase( 0, 1 );
+        rEntry.eOp = ( rEntry.eOp == SC_EQUAL ) ? SC_ENDS_WITH : SC_DOES_NOT_END_WITH;
+    }
+    else if( nLen > 1 && nStart != '*' && nEnd == '*' )
+    {
+        aStr.Erase( nLen-1, 1 );
+        rEntry.eOp = ( rEntry.eOp == SC_EQUAL ) ? SC_BEGINS_WITH : SC_DOES_NOT_BEGIN_WITH;
+    }
+    else if( nLen == 2 && nStart == '*' && nEnd == '*' )
+    {
+        aStr.Erase( 0, 1 );
+    }
+    rEntry.SetQueryString(aStr);
 }
 
 void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
@@ -593,7 +593,7 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
             aEntry.eOp = bTopOfTop10 ?
                 (bPercent ? SC_TOPPERC : SC_TOPVAL) : (bPercent ? SC_BOTPERC : SC_BOTVAL);
             aEntry.eConnect = SC_AND;
-            aEntry.pStr->Assign( String::CreateFromInt32( (sal_Int32) nCntOfTop10 ) );
+            aEntry.SetQueryString(rtl::OUString::valueOf(static_cast<sal_Int32>(nCntOfTop10)));
 
             rStrm.Ignore( 20 );
             nFirstEmpty++;
@@ -642,27 +642,33 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
                         aEntry.eOp = SC_EQUAL;
                 }
 
+                rtl::OUString aStr;
+
                 switch( nType )
                 {
                     case EXC_AFTYPE_RK:
                         rStrm >> nRK;
                         rStrm.Ignore( 4 );
-                        CreateFromDouble( *aEntry.pStr, XclTools::GetDoubleFromRK( nRK ) );
+                        aStr = aEntry.GetQueryString();
+                        CreateFromDouble(aStr, XclTools::GetDoubleFromRK(nRK));
+                        aEntry.SetQueryString(aStr);
                     break;
                     case EXC_AFTYPE_DOUBLE:
                         rStrm >> fVal;
-                        CreateFromDouble( *aEntry.pStr, fVal );
+                        aStr = aEntry.GetQueryString();
+                        CreateFromDouble(aStr, fVal);
+                        aEntry.SetQueryString(aStr);
                     break;
                     case EXC_AFTYPE_STRING:
                         rStrm.Ignore( 4 );
                         rStrm >> nStrLen[ nE ];
                         rStrm.Ignore( 3 );
-                        aEntry.pStr->Erase();
+                        aEntry.SetQueryString(rtl::OUString());
                     break;
                     case EXC_AFTYPE_BOOLERR:
                         rStrm >> nBoolErr >> nVal;
                         rStrm.Ignore( 6 );
-                        aEntry.pStr->Assign( String::CreateFromInt32( (sal_Int32) nVal ) );
+                        aEntry.SetQueryString(rtl::OUString::valueOf(static_cast<sal_Int32>(nVal)));
                         bIgnore = (sal_Bool) nBoolErr;
                     break;
                     case EXC_AFTYPE_EMPTY:
@@ -704,7 +710,7 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
         for( nE = 0; nE < 2; nE++ )
             if( nStrLen[ nE ] && pQueryEntries[ nE ] )
             {
-                pQueryEntries[ nE ]->pStr->Assign ( rStrm.ReadUniString( nStrLen[ nE ] ) );
+                pQueryEntries[nE]->SetQueryString(rStrm.ReadUniString(nStrLen[nE]));
                 ExcelQueryToOooQuery( *pQueryEntries[ nE ] );
             }
 

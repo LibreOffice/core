@@ -78,7 +78,7 @@ ScSheetDPData::ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, con
            pSpecial[j] = false;
             if (!rEntry.bQueryByString)
             {
-                if (*rEntry.pStr == EMPTY_STRING &&
+                if (rEntry.GetQueryString().isEmpty() &&
                    ((rEntry.nVal == SC_EMPTYFIELDS) || (rEntry.nVal == SC_NONEMPTYFIELDS)))
                     pSpecial[j] = true;
             }
@@ -86,8 +86,8 @@ ScSheetDPData::ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, con
             {
                 sal_uInt32 nIndex = 0;
                 rEntry.bQueryByString =
-                            !(pD->GetFormatTable()->
-                                IsNumberFormat(*rEntry.pStr, nIndex, rEntry.nVal));
+                    !(pD->GetFormatTable()->IsNumberFormat(
+                        rEntry.GetQueryString(), nIndex, rEntry.nVal));
             }
         }
     }

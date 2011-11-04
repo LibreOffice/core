@@ -141,8 +141,8 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
         if (bValid)
         {
             // Finally, the right-hand-side value in the 4th column.
-            *rEntry.pStr = pQueryRef->getString(3, nRow);
-            rEntry.bDoQuery = sal_True;
+            rEntry.SetQueryString(pQueryRef->getString(3, nRow));
+            rEntry.bDoQuery = true;
         }
         nIndex++;
         nRow++;
