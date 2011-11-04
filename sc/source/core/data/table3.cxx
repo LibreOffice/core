@@ -1077,7 +1077,7 @@ bool isQueryByValue(const ScTable& rTable, const ScQueryEntry& rEntry, SCROW nRo
     return rTable.HasValueData(static_cast<SCCOL>(rEntry.nField), nRow);
 }
 
-bool isTextMatchOnlyOp(const ScQueryEntry& rEntry)
+bool isPartialTextMatchOp(const ScQueryEntry& rEntry)
 {
     switch (rEntry.eOp)
     {
@@ -1097,7 +1097,7 @@ bool isTextMatchOnlyOp(const ScQueryEntry& rEntry)
 
 bool isTextMatchOp(const ScQueryEntry& rEntry)
 {
-    if (isTextMatchOnlyOp(rEntry))
+    if (isPartialTextMatchOp(rEntry))
         return true;
 
     switch (rEntry.eOp)
@@ -1266,7 +1266,8 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
         else if (isQueryByString(*this, rEntry, nRow, pCell))
         {
             String  aCellStr;
-            if (isTextMatchOnlyOp(rEntry))
+            if (isPartialTextMatchOp(rEntry))
+                // may have to do partial textural comparison.
                 bMatchWholeCell = false;
 
             if ( pCell )
@@ -1338,11 +1339,10 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
             }
             if ( !bRealRegExp )
             {
-                // Simple string matching.
-                rtl::OUString aQueryStr = rEntry.GetQueryString();
+                // Simple string matching i.e. no regexp match.
                 if (isTextMatchOp(rEntry))
                 {
-                    if (!rEntry.bQueryByString && aQueryStr.isEmpty())
+                    if (!rEntry.bQueryByString && rEntry.IsQueryStringEmpty())
                     {
                         // #i18374# When used from functions (match, countif, sumif, vlookup, hlookup, lookup),
                         // the query value is assigned directly, and the string is empty. In that case,
@@ -1353,12 +1353,13 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                     }
                     else if ( bMatchWholeCell )
                     {
-                        bOk = pTransliteration->isEqual(aCellStr, aQueryStr);
+                        bOk = rEntry.MatchByString(aCellStr, rParam.bCaseSens);
                         if ( rEntry.eOp == SC_NOT_EQUAL )
                             bOk = !bOk;
                     }
                     else
                     {
+                        rtl::OUString aQueryStr = rEntry.GetQueryString();
                         String aCell( pTransliteration->transliterate(
                             aCellStr, ScGlobal::eLnge, 0, aCellStr.Len(),
                             NULL ) );
@@ -1400,7 +1401,7 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                 else
                 {   // use collator here because data was probably sorted
                     sal_Int32 nCompare = pCollator->compareString(
-                        aCellStr, aQueryStr);
+                        aCellStr, rEntry.GetQueryString());
                     switch (rEntry.eOp)
                     {
                         case SC_LESS :

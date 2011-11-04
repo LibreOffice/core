@@ -33,6 +33,7 @@
 
 #include "queryparam.hxx"
 #include <unotools/textsearch.hxx>
+#include <unotools/transliterationwrapper.hxx>
 
 using ::std::vector;
 
@@ -96,9 +97,16 @@ ScQueryEntry& ScQueryEntry::operator=( const ScQueryEntry& r )
     return *this;
 }
 
-bool ScQueryEntry::MatchByString(const rtl::OUString& rStr) const
+bool ScQueryEntry::IsQueryStringEmpty() const
 {
-    return rStr.equals(*pStr);
+    return pStr->Len() == 0;
+}
+
+bool ScQueryEntry::MatchByString(const rtl::OUString& rStr, bool bCaseSens) const
+{
+    utl::TransliterationWrapper* pTransliteration = bCaseSens ?
+        ScGlobal::GetCaseTransliteration() : ScGlobal::GetpTransliteration();
+    return pTransliteration->isEqual(rStr, *pStr);
 }
 
 void ScQueryEntry::SetQueryString(const rtl::OUString& rStr)
