@@ -96,7 +96,7 @@ class MsgBox(unohelper.Base):
             self.ButtonSize = size
             self.ButtonSpace = self.ButtonSize/2
         else:
-            # boxsize i calculated form buttonsize
+            # boxsize is calculated from buttonsize
             self.boxSize = numberOfButtons * (self.ButtonSize +
                                             self.ButtonSpace) + self.ButtonSpace
 
