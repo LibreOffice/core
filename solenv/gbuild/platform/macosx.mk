@@ -48,6 +48,7 @@ endif
 ifneq ($(origin CXX),default)
 gb_CXX := $(CXX)
 endif
+gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- '{ print $$1*10000+$$2*100+$$3 }')
 
 gb_OSDEFS := \
 	-D$(OS) \

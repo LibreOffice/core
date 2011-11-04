@@ -39,6 +39,7 @@ gb_AWK := awk
 gb_CLASSPATHSEP := :
 gb_YACC := bison
 gb_RC := $(WINDRES)
+gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- '{ print $$1*10000+$$2*100+$$3 }')
 
 gb_OSDEFS := \
 	-DWINVER=0x0500 \
