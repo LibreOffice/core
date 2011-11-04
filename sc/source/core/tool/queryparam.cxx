@@ -35,13 +35,17 @@
 
 using ::std::vector;
 
+namespace {
+
+const SCSIZE MAXQUERY = 8;
+
+}
+
 // ============================================================================
 
-ScQueryParamBase::ScQueryParamBase()
+ScQueryParamBase::ScQueryParamBase() :
+    maEntries(MAXQUERY)
 {
-    Resize( MAXQUERY );
-    for (sal_uInt16 i=0; i<MAXQUERY; i++)
-        maEntries[i].Clear();
 }
 
 ScQueryParamBase::ScQueryParamBase(const ScQueryParamBase& r) :
@@ -219,9 +223,8 @@ void ScQueryParam::Clear()
     bHasHeader = bCaseSens = bRegExp = bMixedComparison = false;
     bInplace = bByRow = bDuplicate = sal_True;
 
-    Resize( MAXQUERY );
-    for (sal_uInt16 i=0; i<MAXQUERY; i++)
-        maEntries[i].Clear();
+    std::vector<ScQueryEntry> aNewEntries(MAXQUERY);
+    maEntries.swap(aNewEntries);
 
     ClearDestParams();
 }

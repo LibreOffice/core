@@ -60,7 +60,7 @@ protected:
     ScQueryParamBase();
     ScQueryParamBase(const ScQueryParamBase& r);
 
-    mutable ::std::vector<ScQueryEntry>  maEntries;
+    mutable std::vector<ScQueryEntry>  maEntries;
 };
 
 // ============================================================================

@@ -1157,7 +1157,8 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
             pDBData->GetQueryParam( aParam );       // kann nur MAXQUERY Eintraege ergeben
 
             sal_Bool bValid = sal_True;
-            for (SCSIZE j=0; j<MAXQUERY && bValid; j++)         // bisherige Filter-Einstellungen
+            SCSIZE nCount = aParam.GetEntryCount();
+            for (SCSIZE j = 0; j < nCount && bValid; ++j)         // bisherige Filter-Einstellungen
                 if (aParam.GetEntry(j).bDoQuery)
                 {
                     //!         Abfrage mit DrawButtons zusammenfassen!
@@ -1345,7 +1346,8 @@ void ScGridWindow::ExecFilter( sal_uLong nSel,
                 bDeleteOld = sal_True;
             if (aParam.bRegExp)
                 bDeleteOld = sal_True;
-            for (SCSIZE i=0; i<MAXQUERY && !bDeleteOld; i++)    // bisherige Filter-Einstellungen
+            SCSIZE nCount = aParam.GetEntryCount();
+            for (SCSIZE i = 0; i < nCount && !bDeleteOld; ++i)    // bisherige Filter-Einstellungen
                 if (aParam.GetEntry(i).bDoQuery)
                 {
                     //!         Abfrage mit DrawButtons zusammenfassen!
@@ -1376,7 +1378,7 @@ void ScGridWindow::ExecFilter( sal_uLong nSel,
                 aParam.bRegExp = false;
             }
 
-            if ( nQueryPos < MAXQUERY || SC_AUTOFILTER_ALL == nSel )    // loeschen geht immer
+            if ( nQueryPos < nCount || SC_AUTOFILTER_ALL == nSel )    // loeschen geht immer
             {
                 if (nSel)
                 {

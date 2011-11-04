@@ -408,16 +408,6 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
                                             rEnd.Row(),
                                             rStart.Tab(),
                                             theOutParam );
-
-                //  an der DB-Collection koennen nur MAXQUERY Filter-Eintraege
-                //  gespeichert werden
-
-                if ( bQueryOk && theOutParam.GetEntryCount() > MAXQUERY &&
-                     theOutParam.GetEntry(MAXQUERY).bDoQuery )
-                {
-                    bQueryOk = false;       // zu viele
-                                            //! andere Fehlermeldung ??
-                }
             }
         }
 

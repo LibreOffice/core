@@ -313,9 +313,8 @@ void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
         }
     }
 
-    if (maQueryParam.GetEntryCount() < MAXQUERY)
-        maQueryParam.Resize(MAXQUERY);
-    for (i=0; i<MAXQUERY; i++)
+    SCSIZE nCount = maQueryParam.GetEntryCount();
+    for (i = 0; i < nCount; ++i)
     {
         ScQueryEntry& rEntry = maQueryParam.GetEntry(i);
         rEntry.nField += nDifX;
@@ -369,10 +368,6 @@ void ScDBData::GetQueryParam( ScQueryParam& rQueryParam ) const
 
 void ScDBData::SetQueryParam(const ScQueryParam& rQueryParam)
 {
-    OSL_ENSURE( rQueryParam.GetEntryCount() <= MAXQUERY ||
-                !rQueryParam.GetEntry(MAXQUERY).bDoQuery,
-                "zuviele Eintraege bei ScDBData::SetQueryParam" );
-
     maQueryParam = rQueryParam;
 
     //  set bIsAdvanced to false for everything that is not from the

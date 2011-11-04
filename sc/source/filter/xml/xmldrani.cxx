@@ -358,7 +358,7 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
         // Convert from relative to absolute column IDs for the fields. Calc
         // core expects the field positions to be absolute column IDs.
         SCCOLROW nStartPos = aParam.bByRow ? aRange.aStart.Col() : aRange.aStart.Row();
-        for (size_t i = 0; i < MAXQUERY; ++i)
+        for (SCSIZE i = 0; i < aParam.GetEntryCount(); ++i)
         {
             ScQueryEntry& rEntry = aParam.GetEntry(i);
             if (!rEntry.bDoQuery)

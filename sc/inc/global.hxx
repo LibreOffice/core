@@ -96,7 +96,6 @@ const sal_Unicode CHAR_ZWNBSP   = 0x2060;
 #define MAXZOOM     400
 
 const SCSIZE MAXSUBTOTAL        = 3;
-const SCSIZE MAXQUERY           = 8;
 
 #define SC_START_INDEX_DB_COLL 50000
                                         // Above this threshold are indices

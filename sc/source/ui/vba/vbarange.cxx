@@ -4407,7 +4407,7 @@ void lcl_SetAllQueryForField( ScQueryParam& aParam, SCCOLROW nField )
 {
     bool bFound = false;
     SCSIZE i = 0;
-    for (; i<MAXQUERY && !bFound; i++)
+    for (; i < aParam.GetEntryCount() && !bFound; ++i)
     {
         ScQueryEntry& rEntry = aParam.GetEntry(i);
         if ( rEntry.nField == nField)
@@ -4764,8 +4764,7 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
         {
             // find the any field with the query and select all
             ScQueryParam aParam = lcl_GetQueryParam( pShell, nSheet );
-            SCSIZE i = 0;
-            for (; i<MAXQUERY; i++)
+            for (SCSIZE i = 0; i< aParam.GetEntryCount(); ++i)
             {
                 ScQueryEntry& rEntry = aParam.GetEntry(i);
                 if ( rEntry.bDoQuery )

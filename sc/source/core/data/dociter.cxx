@@ -1102,7 +1102,8 @@ ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, SCTAB nTable,
     SCSIZE i;
     if (bMod)                               // sonst schon eingetragen
     {
-        for (i=0; (i<MAXQUERY) && (aParam.GetEntry(i).bDoQuery); i++)
+        SCSIZE nCount = aParam.GetEntryCount();
+        for (i = 0; (i < nCount) && (aParam.GetEntry(i).bDoQuery); ++i)
         {
             ScQueryEntry& rEntry = aParam.GetEntry(i);
             sal_uInt32 nIndex = 0;

@@ -37,6 +37,7 @@
 #include "address.hxx"
 #include "anyrefdg.hxx"
 
+#include <deque>
 
 //----------------------------------------------------------------------------
 
@@ -61,8 +62,8 @@ public:
 
     virtual sal_Bool    Close();
     void            SliderMoved();
-    sal_uInt16          GetSliderPos();
-    void            RefreshEditRow( sal_uInt16 nOffset );
+    size_t          GetSliderPos();
+    void            RefreshEditRow( size_t nOffset );
 
 private:
     FixedLine       aFlCriteria;
@@ -134,8 +135,8 @@ private:
     ListBox*            aFieldLbArr[4];
     ListBox*            aCondLbArr[4];
     ListBox*            aConnLbArr[4];
-    bool                mbHasDates[MAXQUERY];
-    bool                bRefreshExceptQuery[MAXQUERY];
+    std::deque<bool>   maHasDates;
+    std::deque<bool>   maRefreshExceptQuery;
     sal_uInt16          nFieldCount;
     bool                bRefInputMode;
 

@@ -1065,8 +1065,6 @@ void ScFilterDescriptorBase::fillQueryParam(
     const uno::Sequence<sheet::TableFilterField2>& aFilterFields)
 {
     SCSIZE nCount = static_cast<SCSIZE>(aFilterFields.getLength());
-    OSL_ENSURE( nCount <= MAXQUERY, "setFilterFields: zu viele" );
-
     rParam.Resize( nCount );
 
     const sheet::TableFilterField2* pAry = aFilterFields.getConstArray();
@@ -1314,8 +1312,6 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields(
     GetData(aParam);
 
     SCSIZE nCount = static_cast<SCSIZE>(aFilterFields.getLength());
-    OSL_ENSURE( nCount <= MAXQUERY, "setFilterFields: zu viele" );
-
     aParam.Resize( nCount );
 
     const sheet::TableFilterField* pAry = aFilterFields.getConstArray();
@@ -1422,11 +1418,7 @@ void SAL_CALL ScFilterDescriptorBase::setPropertyValue(
         aParam.bCaseSens = ScUnoHelpFunctions::GetBoolFromAny( aValue );
     else if (aString.EqualsAscii( SC_UNONAME_MAXFLD ))
     {
-        sal_Int32 nVal = 0;
-        if ( (aValue >>= nVal) && nVal > sal::static_int_cast<sal_Int32>(MAXQUERY) )
-        {
-            throw lang::IllegalArgumentException();
-        }
+        // silently ignored
     }
     else if (aString.EqualsAscii( SC_UNONAME_ORIENT ))
     {
@@ -1473,7 +1465,7 @@ uno::Any SAL_CALL ScFilterDescriptorBase::getPropertyValue( const rtl::OUString&
     else if (aString.EqualsAscii( SC_UNONAME_ISCASE ))
         ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bCaseSens );
     else if (aString.EqualsAscii( SC_UNONAME_MAXFLD ))
-        aRet <<= (sal_Int32) MAXQUERY;
+        aRet <<= (sal_Int32) aParam.GetEntryCount();
     else if (aString.EqualsAscii( SC_UNONAME_ORIENT ))
     {
         table::TableOrientation eOrient = aParam.bByRow ? table::TableOrientation_ROWS :

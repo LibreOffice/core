@@ -1182,7 +1182,8 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2
                     sal_Bool bColumnFound = false;
                     if (!pQueryParam->bInplace)
                         bSimpleQuery = false;
-                    for (nQuery=0; nQuery<MAXQUERY && bSimpleQuery; nQuery++)
+                    SCSIZE nCount = pQueryParam->GetEntryCount();
+                    for (nQuery = 0; nQuery < nCount && bSimpleQuery; ++nQuery)
                         if (pQueryParam->GetEntry(nQuery).bDoQuery)
                         {
                             //  hier nicht auf EQUAL beschraenken
@@ -1330,7 +1331,8 @@ bool ScGridWindow::IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab )
 
     //  aQueryParam kann nur MAXQUERY Eintraege enthalten
 
-    for ( nQuery=0; nQuery<MAXQUERY && bSimpleQuery; nQuery++ )
+    SCSIZE nCount = aQueryParam.GetEntryCount();
+    for (nQuery = 0; nQuery < nCount && bSimpleQuery; ++nQuery)
         if ( aQueryParam.GetEntry(nQuery).bDoQuery )
         {
             if (aQueryParam.GetEntry(nQuery).nField == nCol)
