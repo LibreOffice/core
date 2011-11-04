@@ -842,20 +842,20 @@ ErrCode FileDialogHelper_Impl::getGraphic( Graphic& rGraphic ) const
 }
 
 // ------------------------------------------------------------------------
-sal_Bool lcl_isSystemFilePicker( const uno::Reference< XFilePicker >& _rxFP )
+static bool lcl_isSystemFilePicker( const uno::Reference< XFilePicker >& _rxFP )
 {
     try
     {
         uno::Reference< XServiceInfo > xSI( _rxFP, UNO_QUERY );
-        if ( xSI.is() && xSI->supportsService( DEFINE_CONST_OUSTRING( "com.sun.star.ui.dialogs.SystemFilePicker" ) ) )
-            return sal_True;
+        if ( !xSI.is() )
+            return true;
+        return xSI->supportsService( DEFINE_CONST_OUSTRING( "com.sun.star.ui.dialogs.SystemFilePicker" ) );
     }
     catch( const Exception& )
     {
     }
-    return sal_False;
+    return false;
 }
-
 
 // ------------------------------------------------------------------------
 // -----------      FileDialogHelper_Impl       ---------------------------

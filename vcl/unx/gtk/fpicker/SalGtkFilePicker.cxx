@@ -972,7 +972,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
         UNO_QUERY_THROW );
 
     uno::Reference< frame::XDesktop > xDesktop(
-        createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Toolkit")) ),
+        createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
         UNO_QUERY_THROW );
 
     RunDialog* pRunDialog = new RunDialog(m_pDialog, xToolkit, xDesktop);

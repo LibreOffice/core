@@ -1895,6 +1895,12 @@ void Application::AppEvent( const ApplicationEvent& /*rAppEvent*/ )
 {
 }
 
+bool Application::hasNativeFileSelection()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    return pSVData->mpDefInst->hasNativeFileSelection();
+}
+
 Reference< ui::dialogs::XFilePicker2 >
 Application::createFilePicker( const Reference< uno::XComponentContext >& xSM )
 {

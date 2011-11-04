@@ -170,6 +170,8 @@ public:
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDropTarget();
     virtual void        AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType) = 0;
 
+    virtual bool hasNativeFileSelection() const { return false; }
+
     virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
         createFilePicker( const com::sun::star::uno::Reference<
                               com::sun::star::uno::XComponentContext >& )

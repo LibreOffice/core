@@ -206,6 +206,7 @@ GtkInstance::createFolderPicker( const uno::Reference< uno::XComponentContext > 
 {
     fprintf( stderr, "Create gtk folder picker\n" );
 #if GTK_CHECK_VERSION(3,0,0)
+    (void)xMSF;
     return uno::Reference< ui::dialogs::XFolderPicker >();
 #else
     return uno::Reference< ui::dialogs::XFolderPicker >(

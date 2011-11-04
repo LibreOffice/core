@@ -124,20 +124,11 @@ int OfaMiscTabPage::DeactivatePage( SfxItemSet* pSet_ )
 
 namespace
 {
-        ::rtl::OUString impl_SystemFileOpenServiceName()
+        static ::rtl::OUString impl_SystemFileOpenServiceName()
         {
-            const ::rtl::OUString &rDesktopEnvironment =
-                Application::GetDesktopEnvironment();
+            const ::rtl::OUString &rDesktopEnvironment = Application::GetDesktopEnvironment();
 
-            if ( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "gnome" ) )
-            {
-                #ifdef ENABLE_GTK
-                return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.GtkFilePicker") );
-                #else
-                return rtl::OUString();
-                #endif
-            }
-            else if ( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "kde4" ) )
+            if ( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "kde4" ) )
             {
                 #ifdef ENABLE_KDE4
                 return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.KDE4FilePicker") );
@@ -162,10 +153,14 @@ namespace
             #endif
         }
 
-        sal_Bool lcl_HasSystemFilePicker()
+        static bool lcl_HasSystemFilePicker()
         {
+            if( Application::hasNativeFileSelection() )
+                return true;
+
+            // Otherwise fall-back on querying services
+            bool bRet = false;
             Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
-            sal_Bool bRet = sal_False;
 
             Reference< XContentEnumerationAccess > xEnumAccess( xFactory, UNO_QUERY );
             Reference< XSet > xSet( xFactory, UNO_QUERY );
@@ -178,7 +173,7 @@ namespace
                 ::rtl::OUString aFileService = impl_SystemFileOpenServiceName();
                 Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration( aFileService );
                 if ( xEnum.is() && xEnum->hasMoreElements() )
-                    bRet = sal_True;
+                    bRet = true;
             }
             catch (const IllegalArgumentException&)
             {

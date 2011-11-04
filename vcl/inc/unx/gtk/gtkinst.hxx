@@ -109,6 +109,8 @@ public:
 
     virtual GenPspGraphics     *CreatePrintGraphics();
 
+    virtual bool hasNativeFileSelection() const { return true; }
+
     virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
         createFilePicker( const com::sun::star::uno::Reference<
                               com::sun::star::uno::XComponentContext >& );

@@ -373,6 +373,10 @@ public:
     */
     static void AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
 
+    /** Do we have a native / system file selector available ?
+     */
+    static bool hasNativeFileSelection();
+
     /** Create a platform specific file picker, if one is available,
         otherwise return an empty reference
     */
