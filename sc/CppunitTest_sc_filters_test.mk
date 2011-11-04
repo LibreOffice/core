@@ -51,7 +51,6 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sc_filters_test, \
     sal \
     salhelper \
     sax \
-    sb \
     sc \
     sfx \
     sot \
@@ -65,7 +64,6 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sc_filters_test, \
     ucbhelper \
 	unotest \
     utl \
-    vbahelper \
     vcl \
     xo \
 	$(gb_STDLIBS) \
@@ -81,14 +79,12 @@ $(eval $(call gb_CppunitTest_set_include,sc_filters_test,\
 
 $(eval $(call gb_CppunitTest_add_api,sc_filters_test,\
     offapi \
-    oovbaapi \
     udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,sc_filters_test))
 
 $(eval $(call gb_CppunitTest_add_type_rdbs,sc_filters_test,\
-    oovbaapi \
     types \
 ))
 

@@ -37,12 +37,10 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
-#include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 
 #include <editeng/brshitem.hxx>
 #include <editeng/justifyitem.hxx>
-#include <basic/sbxdef.hxx>
 
 #define CALC_DEBUG_OUTPUT 0
 
