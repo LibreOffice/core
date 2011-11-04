@@ -2,9 +2,13 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
+#
+# $RCSfile: makefile.mk,v $
+#
+# $Revision: 1.21 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -25,41 +29,50 @@
 #
 #*************************************************************************
 
-PRJ=.
+PRJ=..$/..$/..$/..$/..$/..$/..
 
 PRJNAME=icc
-TARGET=icc
+TARGET=create_sRGB_profile
+LIBTARGET=NO
+TARGETTYPE=CUI
+
+ENABLE_EXCEPTIONS=TRUE
+
+EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
 
-# --- Files --------------------------------------------------------
+CFLAGS+=-I..$/..$/..$/IccProfLib -I..$/..$/ICC_utils
 
-TARFILE_NAME=SampleICC-1.3.2
-TARFILE_MD5=fdb27bfe2dbe2e7b57ae194d9bf36bab
-PATCH_FILES= \
-    SampleICC-makefiles.patch \
-    $(TARFILE_NAME).patch \
-    $(TARFILE_NAME)-fmtargs.patch
-
-CONVERTFILES= \
-    IccProfLib$/IccTagProfSeqId.h \
-    IccProfLib$/IccTagProfSeqId.cpp \
-    Contrib$/ICC_utils$/Stubs.h \
-    Contrib$/ICC_utils$/Vetters.cpp
-
-.IF "$(CROSS_COMPILING)"!="YES"
-CONFIGURE_ACTION= $(GNUCOPY) -r $(BACK_PATH)..$/source$/create_sRGB_profile Contrib$/CmdLine
-BUILD_ACTION=dmake &&  cd Contrib$/CmdLine$/create_sRGB_profile && $(AUGMENT_LIBRARY_PATH) .$/create_sRGB_profile
-.ELSE
-CONFIGURE_ACTION= 
-BUILD_ACTION = (cd $(BACK_PATH)../$(INPATH_FOR_BUILD)/misc/build/SampleICC* && tar cf - Contrib/CmdLine/create_sRGB_profile/sRGB*.hxx) | tar xvf -
+# This tool uses unaligned memory accesses which will lead
+# to SIGBUS on platforms who care, like Solaris LP64
+.IF "$(OS)$(CPU)"=="SOLARISU"
+LINKFLAGS+=-xmemalign=8i
 .ENDIF
 
+# --- Files --------------------------------------------------------
+
+OBJFILES= $(OBJ)$/create_sRGB_profile.obj
 
 # --- Targets ------------------------------------------------------
 
-.INCLUDE :	set_ext.mk
+# svdem
+APP1LIBSALCPPRT:=
+UWINAPILIB:=
+APP1NOSAL=		TRUE
+APP1TARGET= 	$(TARGET)
+APP1LIBS=\
+    $(SLB)$/proflib.lib \
+    $(SLB)$/icutil.lib
+APP1OBJS= $(OBJFILES)
+APP1STDLIBS=
+
 .INCLUDE :	target.mk
-.INCLUDE :	tg_ext.mk
+
+ALLTAR: $(TARGET)$(EXECPOST)
+
+$(TARGET)$(EXECPOST): $(BIN)$/$(TARGET)$(EXECPOST) makefile.mk
+    rm -f $@
+    $(GNUCOPY) $(BIN)$/$(TARGET)$(EXECPOST) $@
