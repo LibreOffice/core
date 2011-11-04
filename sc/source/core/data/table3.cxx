@@ -1103,6 +1103,23 @@ bool isQueryByString(const ScTable& rTable, const ScQueryEntry& rEntry, SCROW nR
     return rTable.HasStringData(static_cast<SCCOL>(rEntry.nField), nRow);
 }
 
+bool isPartialStringMatch(const ScQueryEntry& rEntry)
+{
+    switch (rEntry.eOp)
+    {
+        case SC_CONTAINS:
+        case SC_DOES_NOT_CONTAIN:
+        case SC_BEGINS_WITH:
+        case SC_ENDS_WITH:
+        case SC_DOES_NOT_BEGIN_WITH:
+        case SC_DOES_NOT_END_WITH:
+            return true;
+        default:
+            ;
+    }
+    return false;
+}
+
 }
 
 bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
@@ -1224,10 +1241,9 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
         else if (isQueryByString(*this, rEntry, nRow, pCell))
         {
             String  aCellStr;
-            if( rEntry.eOp == SC_CONTAINS || rEntry.eOp == SC_DOES_NOT_CONTAIN
-                || rEntry.eOp == SC_BEGINS_WITH || rEntry.eOp == SC_ENDS_WITH
-                || rEntry.eOp == SC_DOES_NOT_BEGIN_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH )
+            if (isPartialStringMatch(rEntry))
                 bMatchWholeCell = false;
+
             if ( pCell )
             {
                 if (pCell->GetCellType() != CELLTYPE_NOTE)
