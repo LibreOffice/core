@@ -132,6 +132,7 @@
 #include <sortedobjs.hxx> // #i28701#
 
 #include <rtl/strbuf.hxx>
+#include <comphelper/string.hxx>
 
 sal_uLong SwProtocol::nRecord = 0;
 SwImplProtocol* SwProtocol::pImpl = NULL;
@@ -162,7 +163,7 @@ class SwImplProtocol
                                 // innerhalb einer Testformatierung aufgezeichnet.
     void _Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAct, void* pParam );
     sal_Bool NewStream();
-    void CheckLine( ByteString& rLine );
+    void CheckLine( rtl::OString& rLine );
     void SectFunc( rtl::OStringBuffer& rOut, const SwFrm* pFrm, sal_uLong nAct, void* pParam );
 public:
     SwImplProtocol();
@@ -337,64 +338,66 @@ SwImplProtocol::~SwImplProtocol()
  * SwImplProtocol::CheckLine analysiert eine Zeile der INI-Datei
  * --------------------------------------------------*/
 
-void SwImplProtocol::CheckLine( ByteString& rLine )
+void SwImplProtocol::CheckLine( rtl::OString& rLine )
 {
-    rLine = rLine.ToLowerAscii(); // Gross/Kleinschreibung ist einerlei
-    rLine.SearchAndReplaceAll( '\t', ' ' );
-    if( '#' == rLine.GetChar(0) )   // Kommentarzeilen beginnen mit '#'
+    rLine = rLine.toAsciiLowerCase(); // Gross/Kleinschreibung ist einerlei
+    rLine = rLine.replace( '\t', ' ' );
+    if( '#' == rLine[0] )   // Kommentarzeilen beginnen mit '#'
         return;
-    if( '[' == rLine.GetChar(0) )   // Bereiche: FrmIds, Typen oder Funktionen
+    if( '[' == rLine[0] )   // Bereiche: FrmIds, Typen oder Funktionen
     {
-        ByteString aTmp = rLine.GetToken( 0, ']' );
-        if( "[frmid" == aTmp )      // Bereich FrmIds
+        rtl::OString aTmp = comphelper::string::getToken(rLine, 0, ']');
+        if (aTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("[frmid")))      // Bereich FrmIds
         {
             nInitFile = 1;
             pFrmIds->clear();
             delete pFrmIds;
             pFrmIds = NULL;         // Default: Alle Frames aufzeichnen
         }
-        else if( "[frmtype" == aTmp )// Bereich Typen
+        else if (aTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("[frmtype")))// Bereich Typen
         {
             nInitFile = 2;
             nTypes = USHRT_MAX;     // Default: Alle FrmaeTypen aufzeichnen
         }
-        else if( "[record" == aTmp )// Bereich Funktionen
+        else if (aTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("[record")))// Bereich Funktionen
         {
             nInitFile = 3;
             SwProtocol::SetRecord( 0 );// Default: Keine Funktion wird aufgezeichnet
         }
-        else if( "[test" == aTmp )// Bereich Funktionen
+        else if (aTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("[test")))// Bereich Funktionen
         {
             nInitFile = 4; // Default:
             nTestMode = 0; // Ausserhalb der Testformatierung wird aufgezeichnet
         }
-        else if( "[max" == aTmp )// maximale Zeilenzahl
+        else if (aTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("[max")))// maximale Zeilenzahl
         {
             nInitFile = 5; // Default:
             nMaxLines = USHRT_MAX;
         }
-        else if( "[var" == aTmp )// variables
+        else if (aTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("[var")))// variables
         {
             nInitFile = 6;
         }
         else
             nInitFile = 0;          // Nanu: Unbekannter Bereich?
-        rLine.Erase( 0, aTmp.Len() + 1 );
+        rLine = rLine.copy(aTmp.getLength() + 1);
     }
-    sal_uInt16 nToks = rLine.GetTokenCount( ' ' );  // Blanks (oder Tabs) sind die Trenner
-    for( sal_uInt16 i=0; i < nToks; ++i )
+
+    // Blanks (oder Tabs) sind die Trenner
+    sal_Int32 nIndex = 0;
+    do
     {
-        ByteString aTok = rLine.GetToken( i, ' ' );
+        rtl::OString aTok = rLine.getToken( 0, ' ', nIndex );
         sal_Bool bNo = sal_False;
-        if( '!' == aTok.GetChar(0) )
+        if( '!' == aTok[0] )
         {
             bNo = sal_True;                 // Diese(n) Funktion/Typ entfernen
-            aTok.Erase( 0, 1 );
+            aTok = aTok.copy(1);
         }
-        if( aTok.Len() )
+        if( aTok.getLength() )
         {
             sal_uLong nVal;
-            sscanf( aTok.GetBuffer(), "%li", &nVal );
+            sscanf( aTok.getStr(), "%li", &nVal );
             switch ( nInitFile )
             {
                 case 1: InsertFrm( sal_uInt16( nVal ) );    // FrmId aufnehmen
@@ -431,6 +434,7 @@ void SwImplProtocol::CheckLine( ByteString& rLine )
             }
         }
     }
+    while ( nIndex >= 0 );
 }
 
 /* --------------------------------------------------
@@ -443,24 +447,23 @@ void SwImplProtocol::FileInit()
     SvFileStream aStream( aName, STREAM_READ );
     if( aStream.IsOpen() )
     {
-        ByteString aLine;
+        rtl::OString aLine;
         nInitFile = 0;
-        while( !aStream.IsEof() )
+        while( aStream.good() )
         {
             sal_Char c;
             aStream >> c;
             if( '\n' == c || '\r' == c )    // Zeilenende
             {
-                aLine.EraseLeadingChars();
-                aLine.EraseTrailingChars();
-                if( aLine.Len() )
+                aLine = aLine.trim();
+                if( aLine.getLength() )
                     CheckLine( aLine );     // Zeile auswerten
-                aLine.Erase();
+                aLine = rtl::OString();
             }
             else
-                aLine += c;
+                aLine = rtl::OString(c);
         }
-        if( aLine.Len() )
+        if( aLine.getLength() )
             CheckLine( aLine );     // letzte Zeile auswerten
     }
     aStream.Close();
