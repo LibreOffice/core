@@ -223,7 +223,7 @@ $(call gb_XcuLangpackTarget_get_outdir_target,%) :
 
 gb_XcuMergeTarget_CFGEXTARGET := $(call gb_Executable_get_target,cfgex)
 gb_XcuMergeTarget_CFGEXCOMMAND := \
-	$(gb_CFGEXPRECOMMAND) $(gb_XcuMergeTarget_CFGEXTARGET)
+	$(gb_Helper_set_ld_path) $(gb_XcuMergeTarget_CFGEXTARGET)
 gb_XcuMergeTarget_SDFLOCATION := $(SRCDIR)/translations/$(INPATH)/misc/sdf/
 
 # PRJNAME is computed from the stem (parameter $(2))

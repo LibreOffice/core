@@ -352,7 +352,7 @@ gb_XSLTPROCTARGET :=
 gb_XSLTPROC := xsltproc
 else
 gb_XSLTPROCTARGET := $(call gb_Executable_get_target_for_build,xsltproc)
-gb_XSLTPROC := $(gb_XSLTPROCPRECOMMAND) $(gb_XSLTPROCTARGET)
+gb_XSLTPROC := $(gb_Helper_set_ld_path) $(gb_XSLTPROCTARGET)
 endif
 
 ifeq ($(SYSTEM_PYTHON),YES)

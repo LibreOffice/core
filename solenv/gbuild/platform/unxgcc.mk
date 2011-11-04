@@ -493,14 +493,6 @@ $(call gb_JunitTest_get_target,$(1)) : DEFS := \
 
 endef
 
-# SdiTarget class
-
-gb_SdiTarget_SVIDLPRECOMMAND := $(gb_Helper_set_ld_path)
-
-# SrsPartMergeTarget
-
-gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := $(gb_Helper_set_ld_path)
-
 # SrsPartTarget class
 
 gb_SrsPartTarget_RSCTARGET := $(OUTDIR_FOR_BUILD)/bin/rsc
@@ -517,11 +509,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		-o $(call gb_SrsPartTarget_get_dep_target,$(1)))
 endef
 
-
-# ComponentTarget
-
-gb_XSLTPROCPRECOMMAND := $(gb_Helper_set_ld_path)
-
 # UnoApiTarget
 
 gb_UnoApiTarget_IDLCTARGET := $(OUTDIR)/bin/idlc
@@ -535,13 +522,7 @@ gb_UnoApiTarget_CPPUMAKERCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDI
 gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR)/bin/regview
 gb_UnoApiTarget_REGVIEWCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
 
-# Configuration
-gb_CFGEXPRECOMMAND := $(gb_Helper_set_ld_path)
-
 # Python
 gb_PYTHON_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME=$(OUTDIR)/lib/python PYTHONPATH=$(OUTDIR)/lib/python:$(OUTDIR)/lib/python/lib-dynload
-
-# Extension
-gb_XRMEXPRECOMMAND := $(gb_Helper_set_ld_path)
 
 # vim: set noet sw=4:

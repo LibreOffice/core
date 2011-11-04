@@ -596,14 +596,6 @@ $(call gb_LinkTarget_set_auxtargets,$(2),\
 
 endef
 
-# SdiTarget class
-
-gb_SdiTarget_SVIDLPRECOMMAND := $(gb_Helper_set_ld_path)
-
-# SrsPartMergeTarget
-
-gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := $(gb_Helper_set_ld_path)
-
 # SrsPartTarget class
 
 gb_SrsPartTarget_RSCTARGET := $(OUTDIR_FOR_BUILD)/bin/rsc
@@ -669,10 +661,6 @@ else
 gb_WinResTarget__command_dep =
 endif
 
-# ComponentTarget
-
-gb_XSLTPROCPRECOMMAND := $(gb_Helper_set_ld_path)
-
 # UnoApiTarget
 
 gb_UnoApiTarget_IDLCTARGET := $(OUTDIR_FOR_BUILD)/bin/idlc
@@ -686,13 +674,7 @@ gb_UnoApiTarget_CPPUMAKERCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDI
 gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR_FOR_BUILD)/bin/regview
 gb_UnoApiTarget_REGVIEWCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
 
-# Configuration
-gb_CFGEXPRECOMMAND :=  PATH="$${PATH}:$(OUTDIR)/bin"
-
 # Python
 gb_PYTHON_PRECOMMAND :=  PATH="$${PATH}:$(OUTDIR)/bin" PYTHONHOME="$(OUTDIR)/lib/python" PYTHONPATH="$(OUTDIR)/lib/python;$(OUTDIR)/lib/python/lib-dynload"
-
-# Extension
-gb_XRMEXPRECOMMAND :=  PATH="$${PATH}:$(OUTDIR)/bin"
 
 # vim: set noet sw=4:

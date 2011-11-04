@@ -35,7 +35,7 @@ gb_Extension_LICENSEFILE := LICENSE
 endif
 gb_Extension_XRMEXTARGET := $(call gb_Executable_get_target,xrmex)
 gb_Extension_XRMEXCOMMAND := \
-	$(gb_XRMEXPRECOMMAND) $(gb_Extension_XRMEXTARGET)
+	$(gb_Helper_set_ld_path) $(gb_Extension_XRMEXTARGET)
 gb_Extension_SDFLOCATION := $(SRCDIR)/translations/$(INPATH)/misc/sdf/
 # does not contain en-US because it is special cased in gb_Extension_Extension
 gb_Extension_LANGS := $(filter-out en-US,$(gb_WITH_LANG))

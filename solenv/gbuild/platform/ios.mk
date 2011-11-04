@@ -401,14 +401,6 @@ $(call gb_JunitTest_get_target,$(1)) : DEFS := \
 
 endef
 
-# SdiTarget class
-
-gb_SdiTarget_SVIDLPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
-
-# SrsPartMergeTarget
-
-gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
-
 # SrsPartTarget class
 
 gb_SrsPartTarget_RSCTARGET := $(OUTDIR_FOR_BUILD)/bin/rsc
@@ -425,11 +417,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		-o $(call gb_SrsPartTarget_get_dep_target,$(1)))
 endef
 
-
-# ComponentTarget
-
-gb_XSLTPROCPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
-
 # UnoApiTarget
 
 gb_UnoApiTarget_IDLCTARGET := $(OUTDIR_FOR_BUILD)/bin/idlc
@@ -443,13 +430,7 @@ gb_UnoApiTarget_CPPUMAKERCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib SO
 gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR_FOR_BUILD)/bin/regview
 gb_UnoApiTarget_REGVIEWCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
 
-# Configuration
-gb_CFGEXPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
-
 # Python
 gb_PYTHON_PRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
-
-# Extension
-gb_XRMEXPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 
 # vim: set noet sw=4:

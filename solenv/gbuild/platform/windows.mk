@@ -688,16 +688,6 @@ $(call gb_JunitTest_get_target,$(1)) : DEFS := \
 endef
 
 
-# SdiTarget class
-
-# svidl.exe is in ${OUTDIR}/bin itself, so nothing special needed to have it find
-# DLLs in the same directory
-gb_SdiTarget_SVIDLPRECOMMAND :=
-
-# SrsPartMergeTarget
-# Ditto for transex3
-gb_SrsPartMergeTarget_TRANSEXPRECOMMAND :=
-
 # SrsPartTarget class
 
 gb_SrsPartTarget_RSCTARGET := $(OUTDIR)/bin/rsc.exe
@@ -763,11 +753,6 @@ else
 gb_WinResTarget__command_dep =
 endif
 
-# ComponentTarget
-
-# See comment for svidl.exe
-gb_XSLTPROCPRECOMMAND :=
-
 # UnoApiTarget
 
 gb_UnoApiTarget_IDLCTARGET := $(OUTDIR)/bin/idlc.exe
@@ -781,13 +766,7 @@ gb_UnoApiTarget_CPPUMAKERCOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_
 gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR)/bin/regview.exe
 gb_UnoApiTarget_REGVIEWCOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
 
-# Configuration
-gb_CFGEXPRECOMMAND :=  PATH="$${PATH}:$(OUTDIR)/bin"
-
 # Python
 gb_PYTHON_PRECOMMAND :=  PATH="$${PATH}:$(OUTDIR)/bin" PYTHONHOME="$(OUTDIR)/lib/python" PYTHONPATH="$(OUTDIR)/lib/python;$(OUTDIR)/lib/python/lib-dynload"
-
-# Extension
-gb_XRMEXPRECOMMAND :=  PATH="$${PATH}:$(OUTDIR)/bin"
 
 # vim: set noet sw=4:
