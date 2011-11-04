@@ -228,25 +228,6 @@ static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
 /* SignalHandlerFunction    */
 /*****************************************************************************/
 
-static BOOL WINAPI IsWin95A(void)
-{
-    OSVERSIONINFO   ovi;
-
-    ZeroMemory( &ovi, sizeof(ovi) );
-    ovi.dwOSVersionInfoSize = sizeof(ovi);
-
-    if ( GetVersionEx( &ovi ) )
-        /* See MSDN January 2000 documentation of GetVersionEx */
-        return  (ovi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) &&
-                (ovi.dwMajorVersion <= 4) &&
-                (ovi.dwMinorVersion == 0) &&
-                (ovi.dwBuildNumber == 0x040003B6);
-
-    /* Something wrent wrong. So assume we have an older operating prior Win95 */
-
-    return TRUE;
-}
-
 /* magic Microsoft C++ compiler exception constant */
 #define EXCEPTION_MSC_CPP_EXCEPTION 0xe06d7363
 
@@ -295,7 +276,7 @@ static long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
     {
         bNested = sal_True;
 
-        if ( bRaiseCrashReporter && ReportCrash( lpEP ) || IsWin95A() )
+        if ( bRaiseCrashReporter && ReportCrash( lpEP ) )
         {
             CallSignalHandler(&Info);
             Action = osl_Signal_ActKillApp;
