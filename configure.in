@@ -2841,7 +2841,7 @@ if test "$SOLAR_JAVA" != ""; then
       if test -x "$_java_path"; then
          JAVAINTERPRETER=$_java_path
       else
-         AC_MSG_ERROR([$_java_path not found, please use --with_jdk_home])
+         AC_MSG_ERROR([$_java_path not found, please use --with-jdk-home])
       fi
    fi
    if test "$_os" = "WINNT"; then
@@ -2992,7 +2992,7 @@ if test "$SOLAR_JAVA" != ""; then
         fi
     fi
     if test -z "$JAVACOMPILER"; then
-      AC_MSG_ERROR([$javacompiler not found, please use --with_jdk_home])
+      AC_MSG_ERROR([$javacompiler not found, please use --with-jdk-home])
     fi
     if test "$_os" = "WINNT"; then
        if test x`echo "$JAVACOMPILER" | grep -i '\.exe$'` = x; then
@@ -3049,7 +3049,7 @@ if test "$SOLAR_JAVA" != ""; then
         fi
     fi
     if test -z "$JAVADOC"; then
-      AC_MSG_ERROR([$_javadoc_path not found, please use --with_jdk_home])
+      AC_MSG_ERROR([$_javadoc_path not found, please use --with-jdk-home])
     fi
     if test "$_os" = "WINNT"; then
         if test x`echo "$JAVADOC" | grep -i '\.exe$'` = x; then
@@ -3234,7 +3234,7 @@ if test "$SOLAR_JAVA" != ""; then
         AC_PATH_PROG(JAVAAOTCOMPILER, $gcjaot)
      fi
      if test -z "$JAVAAOTCOMPILER"; then
-        AC_MSG_WARN([$gcjaot not found, please use --with_jdk_home])
+        AC_MSG_WARN([$gcjaot not found, please use --with-jdk-home])
      fi
   else
      AC_MSG_RESULT([no])
