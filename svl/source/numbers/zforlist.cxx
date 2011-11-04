@@ -1512,6 +1512,15 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
         ChangeStandardPrec(nOldPrec);
 }
 
+void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
+                                           sal_uInt32 nFIndex,
+                                           rtl::OUString& rOutString)
+{
+    String aTmp;
+    GetInputLineString(fOutNumber, nFIndex, aTmp);
+    rOutString = aTmp;
+}
+
 void SvNumberFormatter::GetOutputString(const double& fOutNumber,
                                         sal_uInt32 nFIndex,
                                         String& sOutString,

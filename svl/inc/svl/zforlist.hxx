@@ -502,7 +502,10 @@ public:
     /** Format a number according to the standard default format matching
         the given format index */
     void GetInputLineString( const double& fOutNumber,
-                            sal_uInt32 nFIndex, String& sOutString );
+                             sal_uInt32 nFIndex, String& sOutString );
+
+    void GetInputLineString( const double& fOutNumber,
+                             sal_uInt32 nFIndex, rtl::OUString& rOutString );
 
     /** Format a number according to a format code string to be scanned.
         @return
