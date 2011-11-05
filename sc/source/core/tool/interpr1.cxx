@@ -75,6 +75,7 @@
 #include <basic/sbstar.hxx>
 #include "doubleref.hxx"
 #include "queryparam.hxx"
+#include "queryentry.hxx"
 
 #define SC_DOUBLE_MAXVALUE  1.7e307
 
@@ -89,6 +90,36 @@ bool ScInterpreter::bGlobalStackInUse = false;
 using namespace formula;
 using ::std::auto_ptr;
 using ::rtl::OUString;
+
+struct ScCompare
+{
+    double  nVal[2];
+    String* pVal[2];
+    bool    bVal[2];
+    bool    bEmpty[2];
+        ScCompare( String* p1, String* p2 )
+        {
+            pVal[ 0 ] = p1;
+            pVal[ 1 ] = p2;
+            bEmpty[0] = false;
+            bEmpty[1] = false;
+        }
+};
+
+struct ScCompareOptions
+{
+    ScQueryEntry        aQueryEntry;
+    bool                bRegEx;
+    bool                bMatchWholeCell;
+    bool                bIgnoreCase;
+
+                        ScCompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry, bool bReg );
+private:
+                        // Not implemented, prevent usage.
+                        ScCompareOptions();
+                        ScCompareOptions( const ScCompareOptions & );
+     ScCompareOptions&  operator=( const ScCompareOptions & );
+};
 
 //-----------------------------------------------------------------------------
 // Functions

@@ -37,7 +37,6 @@
 #include "document.hxx"
 #include "scmatrix.hxx"
 #include "externalrefmgr.hxx"
-#include "queryentry.hxx"
 
 #include <math.h>
 #include <map>
@@ -52,35 +51,8 @@ struct MatrixDoubleOp;
 struct ScQueryParam;
 struct ScDBQueryParamBase;
 
-struct ScCompare
-{
-    double  nVal[2];
-    String* pVal[2];
-    bool    bVal[2];
-    bool    bEmpty[2];
-        ScCompare( String* p1, String* p2 )
-        {
-            pVal[ 0 ] = p1;
-            pVal[ 1 ] = p2;
-            bEmpty[0] = false;
-            bEmpty[1] = false;
-        }
-};
-
-struct ScCompareOptions
-{
-    ScQueryEntry        aQueryEntry;
-    bool                bRegEx;
-    bool                bMatchWholeCell;
-    bool                bIgnoreCase;
-
-                        ScCompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry, bool bReg );
-private:
-                        // Not implemented, prevent usage.
-                        ScCompareOptions();
-                        ScCompareOptions( const ScCompareOptions & );
-     ScCompareOptions&  operator=( const ScCompareOptions & );
-};
+struct ScCompare;
+struct ScCompareOptions;
 
 class ScToken;
 
