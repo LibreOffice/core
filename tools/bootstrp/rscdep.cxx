@@ -37,7 +37,6 @@
 #include <string.h>
 
 #include "bootstrp/prj.hxx"
-#include "sal/main.h"
 
 #include <tools/string.hxx>
 #include <tools/fsys.hxx>

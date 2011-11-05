@@ -33,7 +33,6 @@
 #include "unopkg_main.h"
 #include "unopkg_shared.h"
 #include "dp_identifier.hxx"
-#include "sal/main.h"
 #include "tools/extendapplicationenvironment.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/uri.hxx"

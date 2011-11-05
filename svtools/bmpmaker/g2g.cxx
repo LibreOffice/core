@@ -33,8 +33,6 @@
 #include <signal.h>
 #include <ctype.h>
 
-#include <sal/main.h>
-
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>

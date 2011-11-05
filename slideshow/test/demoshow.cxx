@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <sal/main.h>
 #include <rtl/ref.hxx>
 #include <rtl/bootstrap.hxx>
 
