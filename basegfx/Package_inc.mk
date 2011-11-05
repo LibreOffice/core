@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,6 @@ $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/tuple/b2ituple.hxx,bas
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/tuple/b2dtuple.hxx,basegfx/tuple/b2dtuple.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/b2drangeclipper.hxx,basegfx/range/b2drangeclipper.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/b3irange.hxx,basegfx/range/b3irange.hxx))
-$(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/b3dvolume.hxx,basegfx/range/b3dvolume.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/basicbox.hxx,basegfx/range/basicbox.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/b2dconnectedranges.hxx,basegfx/range/b2dconnectedranges.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/b3drange.hxx,basegfx/range/b3drange.hxx))
@@ -55,15 +54,12 @@ $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/b2drange.hxx,bas
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/b2irange.hxx,basegfx/range/b2irange.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/b1ibox.hxx,basegfx/range/b1ibox.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/b2dpolyrange.hxx,basegfx/range/b2dpolyrange.hxx))
-$(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/b3ivolume.hxx,basegfx/range/b3ivolume.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/b1irange.hxx,basegfx/range/b1irange.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/b2drectangle.hxx,basegfx/range/b2drectangle.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/b2irectangle.hxx,basegfx/range/b2irectangle.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/b1drange.hxx,basegfx/range/b1drange.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/b2ibox.hxx,basegfx/range/b2ibox.hxx))
-$(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/b3ibox.hxx,basegfx/range/b3ibox.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/range/basicrange.hxx,basegfx/range/basicrange.hxx))
-$(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/vector/b3dsize.hxx,basegfx/vector/b3dsize.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/vector/b2ivector.hxx,basegfx/vector/b2ivector.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/vector/b2dvector.hxx,basegfx/vector/b2dvector.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/vector/b3dvector.hxx,basegfx/vector/b3dvector.hxx))
@@ -71,7 +67,6 @@ $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/vector/b2dsize.hxx,bas
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/vector/b2isize.hxx,basegfx/vector/b2isize.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/vector/b2enums.hxx,basegfx/vector/b2enums.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/vector/b3ivector.hxx,basegfx/vector/b3ivector.hxx))
-$(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/vector/b3isize.hxx,basegfx/vector/b3isize.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/polygon/b2dtrapezoid.hxx,basegfx/polygon/b2dtrapezoid.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/polygon/b2dpolypolygoncutter.hxx,basegfx/polygon/b2dpolypolygoncutter.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/polygon/b2dpolypolygon.hxx,basegfx/polygon/b2dpolypolygon.hxx))
