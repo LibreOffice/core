@@ -52,9 +52,8 @@ namespace utl {
 
 struct ScQueryEntry
 {
-private:
-    String*         pStr;
-public:
+    typedef std::vector<rtl::OUString> QueryStringsType;
+
     bool            bDoQuery;
     bool            bQueryByString;
     bool            bQueryByDate;
@@ -74,11 +73,15 @@ public:
 
     bool            IsQueryStringEmpty() const;
     bool            MatchByString(const rtl::OUString& rStr, bool bCaseSens) const;
+    void            SwapQueryStrings(QueryStringsType& rStrings);
+    void            SortQueryStrings(bool bCaseSens);
     SC_DLLPUBLIC void SetQueryString(const rtl::OUString& rStr);
     SC_DLLPUBLIC rtl::OUString GetQueryString() const;
     void            Clear();
     ScQueryEntry&   operator=( const ScQueryEntry& r );
     bool            operator==( const ScQueryEntry& r ) const;
+private:
+    QueryStringsType maQueryStrings;
 };
 
 struct ScQueryParamBase

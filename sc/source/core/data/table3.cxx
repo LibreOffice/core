@@ -1614,6 +1614,8 @@ static void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPa
         ScQueryEntry& rEntry = rParam.GetEntry(i);
         if ( rEntry.bDoQuery )
         {
+            rEntry.SortQueryStrings(rParam.bCaseSens);
+
             if ( rEntry.bQueryByString )
             {
                 sal_uInt32 nIndex = 0;
