@@ -350,9 +350,7 @@ sal_Int16 SAL_CALL XMLFilterDialogComponent::execute(  ) throw(RuntimeException)
 
     if( NULL == mpResMgr )
     {
-        ByteString aResMgrName( "xsltdlg" );
-
-        mpResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
+        mpResMgr = ResMgr::CreateResMgr( "xsltdlg", Application::GetSettings().GetUILocale() );
     }
 
     if( NULL == mpDialog )
