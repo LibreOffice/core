@@ -132,6 +132,7 @@
 #include "drawview.hxx"
 #include "dragdata.hxx"
 #include "cliputil.hxx"
+#include "queryentry.hxx"
 
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>

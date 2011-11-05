@@ -32,6 +32,7 @@
 #include "address.hxx"
 #include "global.hxx"
 #include "queryparam.hxx"
+#include "queryentry.hxx"
 #include "formula/token.hxx"
 #include <svl/listener.hxx>
 #include <tools/string.hxx>
@@ -39,7 +40,6 @@
 #include <boost/unordered_map.hpp>
 
 class ScDocument;
-
 
 /** Lookup cache for one range used with interpreter functions such as VLOOKUP
     and MATCH. Caches query for a specific row and the resulting address looked

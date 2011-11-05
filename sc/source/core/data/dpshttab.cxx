@@ -45,6 +45,7 @@
 #include "globstr.hrc"
 #include "dpglobal.hxx"
 #include "rangenam.hxx"
+#include "queryentry.hxx"
 
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 

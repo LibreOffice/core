@@ -53,6 +53,8 @@
 #include "unonames.hxx"
 #include "dpglobal.hxx"
 #include "globstr.hrc"
+#include "queryentry.hxx"
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>

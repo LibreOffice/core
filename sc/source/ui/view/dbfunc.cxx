@@ -50,6 +50,7 @@
 #include "global.hxx"
 #include "dbdocfun.hxx"
 #include "editable.hxx"
+#include "queryentry.hxx"
 
 //==================================================================
 

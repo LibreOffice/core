@@ -32,6 +32,7 @@
 #include "dptablecache.hxx"
 #include "document.hxx"
 #include "cell.hxx"
+#include "queryentry.hxx"
 #include "globstr.hrc"
 
 #include <rtl/math.hxx>

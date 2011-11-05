@@ -43,6 +43,7 @@
 #include "clipparam.hxx"
 #include "refundo.hxx"
 #include "undoblk.hxx"
+#include "queryentry.hxx"
 
 #include "docsh.hxx"
 #include "docfunc.hxx"

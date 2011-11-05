@@ -75,6 +75,8 @@
 #include "scabstdlg.hxx"
 #include "impex.hxx"
 #include "asciiopt.hxx"
+#include "queryentry.hxx"
+
 using namespace com::sun::star;
 
 #define IS_AVAILABLE(WhichId,ppItem) \

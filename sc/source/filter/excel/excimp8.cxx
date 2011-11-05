@@ -105,6 +105,7 @@
 #include "stlsheet.hxx"
 #include "detfunc.hxx"
 #include "macromgr.hxx"
+#include "queryentry.hxx"
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>

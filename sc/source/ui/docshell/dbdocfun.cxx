@@ -59,6 +59,7 @@
 #include "drwlayer.hxx"
 #include "dpshttab.hxx"
 #include "hints.hxx"
+#include "queryentry.hxx"
 
 // -----------------------------------------------------------------
 

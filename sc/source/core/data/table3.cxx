@@ -60,6 +60,7 @@
 #include "cellform.hxx"
 #include "postit.hxx"
 #include "queryparam.hxx"
+#include "queryentry.hxx"
 #include "segmenttree.hxx"
 #include "subtotalparam.hxx"
 

@@ -69,6 +69,7 @@
 #include "fillinfo.hxx"
 #include "dpcontrol.hxx"
 #include "queryparam.hxx"
+#include "queryentry.hxx"
 #include "sc.hrc"
 #include <vcl/virdev.hxx>
 

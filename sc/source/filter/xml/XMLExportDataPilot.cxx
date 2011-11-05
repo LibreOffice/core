@@ -51,6 +51,7 @@
 #include "dpdimsave.hxx"
 #include "dpgroup.hxx"
 #include "rangeutl.hxx"
+#include "queryentry.hxx"
 #include <com/sun/star/sheet/DataImportMode.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>

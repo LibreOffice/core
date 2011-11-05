@@ -46,6 +46,7 @@
 #include "cellform.hxx"
 #include "segmenttree.hxx"
 #include "progress.hxx"
+#include "queryentry.hxx"
 #include "globstr.hrc"
 #include "tools/fract.hxx"
 

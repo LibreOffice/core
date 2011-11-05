@@ -123,6 +123,7 @@
 #include "rangeseq.hxx"
 #include "unowids.hxx"
 #include "paramisc.hxx"
+#include "queryentry.hxx"
 #include "formula/errorcodes.hxx"
 #include "unoreflist.hxx"
 #include "formula/grammar.hxx"

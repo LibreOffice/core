@@ -36,6 +36,7 @@
 #include "global.hxx"
 #include "document.hxx"
 #include "queryparam.hxx"
+#include "queryentry.hxx"
 #include "globstr.hrc"
 
 #include <memory>

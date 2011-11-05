@@ -87,6 +87,7 @@
 #include "stlpool.hxx"
 #include "editutil.hxx"
 #include "formula/errorcodes.hxx"
+#include "queryentry.hxx"
 
 #include "excdoc.hxx"
 #include "xeescher.hxx"

@@ -83,6 +83,7 @@
 #include "formulaparserpool.hxx"
 #include "clipparam.hxx"
 #include "sheetevents.hxx"
+#include "queryentry.hxx"
 
 #include <memory>
 

@@ -32,179 +32,18 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "queryparam.hxx"
-#include <unotools/textsearch.hxx>
-#include <unotools/transliterationwrapper.hxx>
-#include <unotools/collatorwrapper.hxx>
-
-using ::std::vector;
+#include "queryentry.hxx"
 
 namespace {
 
-const SCSIZE MAXQUERY = 8;
+const size_t MAXQUERY = 8;
 
 }
 
-ScQueryEntry::ScQueryEntry() :
-    bDoQuery(false),
-    bQueryByString(false),
-    bQueryByDate(false),
-    nField(0),
-    eOp(SC_EQUAL),
-    eConnect(SC_AND),
-    nVal(0.0),
-    pSearchParam(NULL),
-    pSearchText(NULL)
+ScQueryParamBase::ScQueryParamBase()
 {
-}
-
-ScQueryEntry::ScQueryEntry(const ScQueryEntry& r) :
-    bDoQuery(r.bDoQuery),
-    bQueryByString(r.bQueryByString),
-    bQueryByDate(r.bQueryByDate),
-    nField(r.nField),
-    eOp(r.eOp),
-    eConnect(r.eConnect),
-    nVal(r.nVal),
-    pSearchParam(NULL),
-    pSearchText(NULL),
-    maQueryStrings(r.maQueryStrings)
-{
-}
-
-ScQueryEntry::~ScQueryEntry()
-{
-    delete pSearchParam;
-    delete pSearchText;
-}
-
-ScQueryEntry& ScQueryEntry::operator=( const ScQueryEntry& r )
-{
-    bDoQuery        = r.bDoQuery;
-    bQueryByString  = r.bQueryByString;
-    bQueryByDate    = r.bQueryByDate;
-    eOp             = r.eOp;
-    eConnect        = r.eConnect;
-    nField          = r.nField;
-    nVal            = r.nVal;
-    maQueryStrings  = r.maQueryStrings;
-
-    delete pSearchParam;
-    delete pSearchText;
-    pSearchParam    = NULL;
-    pSearchText     = NULL;
-
-    return *this;
-}
-
-bool ScQueryEntry::IsQueryStringEmpty() const
-{
-    return maQueryStrings.empty();
-}
-
-namespace {
-
-class CompareString : std::binary_function<rtl::OUString, rtl::OUString, bool>
-{
-    CollatorWrapper* mpCollator;
-public:
-    CompareString(bool bCaseSens) :
-     mpCollator(
-         bCaseSens ? ScGlobal::GetCaseCollator() : ScGlobal::GetCollator())
-    {}
-
-    bool operator() (const rtl::OUString& rL, const rtl::OUString& rR) const
-    {
-        return mpCollator->compareString(rL, rR) < 0;
-    }
-};
-
-}
-
-bool ScQueryEntry::MatchByString(const rtl::OUString& rStr, bool bCaseSens) const
-{
-    QueryStringsType::const_iterator itr =
-        std::lower_bound(
-            maQueryStrings.begin(), maQueryStrings.end(), rStr, CompareString(bCaseSens));
-
-    if (itr == maQueryStrings.end())
-        return false;
-
-    utl::TransliterationWrapper* pTransliteration =
-        bCaseSens ? ScGlobal::GetCaseTransliteration() : ScGlobal::GetpTransliteration();
-    return pTransliteration->isEqual(rStr, *itr);
-}
-
-void ScQueryEntry::SwapQueryStrings(QueryStringsType& rStrings)
-{
-    maQueryStrings.swap(rStrings);
-}
-
-void ScQueryEntry::SortQueryStrings(bool bCaseSens)
-{
-    std::sort(maQueryStrings.begin(), maQueryStrings.end(), CompareString(bCaseSens));
-}
-
-void ScQueryEntry::SetQueryString(const rtl::OUString& rStr)
-{
-    maQueryStrings.clear();
-    if (!rStr.isEmpty())
-        maQueryStrings.push_back(rStr);
-}
-
-rtl::OUString ScQueryEntry::GetQueryString() const
-{
-    return maQueryStrings.empty() ? rtl::OUString() : maQueryStrings[0];
-}
-
-void ScQueryEntry::Clear()
-{
-    bDoQuery        = false;
-    bQueryByString  = false;
-    bQueryByDate    = false;
-    eOp             = SC_EQUAL;
-    eConnect        = SC_AND;
-    nField          = 0;
-    nVal            = 0.0;
-    maQueryStrings.clear();
-
-    delete pSearchParam;
-    delete pSearchText;
-    pSearchParam    = NULL;
-    pSearchText     = NULL;
-}
-
-bool ScQueryEntry::operator==( const ScQueryEntry& r ) const
-{
-    return bDoQuery         == r.bDoQuery
-        && bQueryByString   == r.bQueryByString
-        && bQueryByDate     == r.bQueryByDate
-        && eOp              == r.eOp
-        && eConnect         == r.eConnect
-        && nField           == r.nField
-        && nVal             == r.nVal
-        && maQueryStrings   == r.maQueryStrings;
-    //! pSearchParam und pSearchText nicht vergleichen
-}
-
-utl::TextSearch* ScQueryEntry::GetSearchTextPtr( bool bCaseSens ) const
-{
-    if ( !pSearchParam )
-    {
-        rtl::OUString aStr;
-        if (!maQueryStrings.empty())
-            aStr = maQueryStrings[0];
-        pSearchParam = new utl::SearchParam(
-            aStr, utl::SearchParam::SRCH_REGEXP, bCaseSens, false, false);
-        pSearchText = new utl::TextSearch( *pSearchParam, *ScGlobal::pCharClass );
-    }
-    return pSearchText;
-}
-
-// ============================================================================
-
-ScQueryParamBase::ScQueryParamBase() :
-    maEntries(MAXQUERY)
-{
+    for (size_t i = 0; i < MAXQUERY; ++i)
+        maEntries.push_back(new ScQueryEntry);
 }
 
 ScQueryParamBase::ScQueryParamBase(const ScQueryParamBase& r) :
@@ -238,36 +77,37 @@ ScQueryEntry& ScQueryParamBase::GetEntry(SCSIZE n)
     return maEntries[n];
 }
 
-void ScQueryParamBase::Resize(SCSIZE nNew)
+void ScQueryParamBase::Resize(size_t nNew)
 {
-    if ( nNew < MAXQUERY )
+    if (nNew < MAXQUERY)
         nNew = MAXQUERY;                // never less than MAXQUERY
 
-    vector<ScQueryEntry> aNewEntries(nNew);
-    SCSIZE nCopy = ::std::min(maEntries.size(), nNew);
-    for (SCSIZE i=0; i<nCopy; i++)
-        aNewEntries[i] = maEntries[i];
-
-    maEntries.swap(aNewEntries);
+    if (nNew < maEntries.size())
+    {
+        size_t n = maEntries.size() - nNew;
+        for (size_t i = 0; i < n; ++i)
+            maEntries.pop_back();
+    }
+    else if (nNew > maEntries.size())
+    {
+        size_t n = nNew - maEntries.size();
+        for (size_t i = 0; i < n; ++i)
+            maEntries.push_back(new ScQueryEntry);
+    }
 }
 
-void ScQueryParamBase::DeleteQuery( SCSIZE nPos )
+void ScQueryParamBase::DeleteQuery(size_t nPos)
 {
     if (nPos >= maEntries.size())
         return;
 
-    size_t n = maEntries.size();
-    vector<ScQueryEntry> aNewEntries;
-    aNewEntries.reserve(n);
-    for (size_t i = 0; i < n; ++i)
-        if (i != nPos)
-            aNewEntries.push_back(maEntries[i]);
+    boost::ptr_vector<ScQueryEntry>::iterator itr = maEntries.begin();
+    std::advance(itr, nPos);
+    maEntries.erase(itr);
 
     // Don't forget to append an empty entry to make up for the removed one.
     // The size of the entries is not supposed to change.
-    aNewEntries.push_back(ScQueryEntry());
-
-    maEntries.swap(aNewEntries);
+    maEntries.push_back(new ScQueryEntry);
 }
 
 void ScQueryParamBase::FillInExcelSyntax(String& aCellStr, SCSIZE nIndex)
@@ -387,7 +227,9 @@ void ScQueryParam::Clear()
     bHasHeader = bCaseSens = bRegExp = bMixedComparison = false;
     bInplace = bByRow = bDuplicate = sal_True;
 
-    std::vector<ScQueryEntry> aNewEntries(MAXQUERY);
+    boost::ptr_vector<ScQueryEntry> aNewEntries;
+    for (size_t i = 0; i < MAXQUERY; ++i)
+        aNewEntries.push_back(new ScQueryEntry);
     maEntries.swap(aNewEntries);
 
     ClearDestParams();

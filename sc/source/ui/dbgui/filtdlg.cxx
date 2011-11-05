@@ -45,6 +45,7 @@
 #include "document.hxx"
 #include "docsh.hxx"
 #include "scresid.hxx"
+#include "queryentry.hxx"
 
 #include "foptmgr.hxx"
 

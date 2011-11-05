@@ -177,6 +177,7 @@
 #include "patattr.hxx"
 #include "olinetab.hxx"
 #include "transobj.hxx"
+#include "queryentry.hxx"
 #include <comphelper/anytostring.hxx>
 
 #include <global.hxx>

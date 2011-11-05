@@ -32,7 +32,7 @@
 #include "global.hxx"
 #include "scmatrix.hxx"
 
-#include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 /*
  * dialog returns the special field values "empty"/"not empty"
@@ -44,45 +44,7 @@
 #define SC_NONEMPTYFIELDS   ((double)0x0043)
 
 struct ScDBQueryParamInternal;
-
-namespace utl {
-    class SearchParam;
-    class TextSearch;
-}
-
-struct ScQueryEntry
-{
-    typedef std::vector<rtl::OUString> QueryStringsType;
-
-    bool            bDoQuery;
-    bool            bQueryByString;
-    bool            bQueryByDate;
-    SCCOLROW        nField;
-    ScQueryOp       eOp;
-    ScQueryConnect  eConnect;
-    double          nVal;
-    mutable utl::SearchParam* pSearchParam;       // if RegExp, not saved
-    mutable utl::TextSearch*  pSearchText;        // if RegExp, not saved
-
-    ScQueryEntry();
-    ScQueryEntry(const ScQueryEntry& r);
-    ~ScQueryEntry();
-
-    // creates pSearchParam and pSearchText if necessary, always RegExp!
-    utl::TextSearch* GetSearchTextPtr( bool bCaseSens ) const;
-
-    bool            IsQueryStringEmpty() const;
-    bool            MatchByString(const rtl::OUString& rStr, bool bCaseSens) const;
-    void            SwapQueryStrings(QueryStringsType& rStrings);
-    void            SortQueryStrings(bool bCaseSens);
-    SC_DLLPUBLIC void SetQueryString(const rtl::OUString& rStr);
-    SC_DLLPUBLIC rtl::OUString GetQueryString() const;
-    void            Clear();
-    ScQueryEntry&   operator=( const ScQueryEntry& r );
-    bool            operator==( const ScQueryEntry& r ) const;
-private:
-    QueryStringsType maQueryStrings;
-};
+struct ScQueryEntry;
 
 struct ScQueryParamBase
 {
@@ -101,15 +63,15 @@ struct ScQueryParamBase
     SC_DLLPUBLIC SCSIZE GetEntryCount() const;
     SC_DLLPUBLIC const ScQueryEntry& GetEntry(SCSIZE n) const;
     SC_DLLPUBLIC ScQueryEntry& GetEntry(SCSIZE n);
-    void Resize(SCSIZE nNew);
-    SC_DLLPUBLIC void DeleteQuery( SCSIZE nPos );
+    void Resize(size_t nNew);
+    SC_DLLPUBLIC void DeleteQuery(size_t nPos);
     void FillInExcelSyntax(String& aCellStr, SCSIZE nIndex);
 
 protected:
     ScQueryParamBase();
     ScQueryParamBase(const ScQueryParamBase& r);
 
-    std::vector<ScQueryEntry> maEntries;
+    boost::ptr_vector<ScQueryEntry> maEntries;
 };
 
 // ============================================================================

@@ -37,6 +37,7 @@
 #include "document.hxx"
 #include "scmatrix.hxx"
 #include "externalrefmgr.hxx"
+#include "queryentry.hxx"
 
 #include <math.h>
 #include <map>

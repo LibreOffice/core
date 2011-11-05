@@ -38,6 +38,7 @@
 #include "convuno.hxx"
 #include "XMLConverter.hxx"
 #include "rangeutl.hxx"
+#include "queryentry.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>

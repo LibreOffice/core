@@ -49,6 +49,7 @@
 #include "rangeutl.hxx"
 #include "subtotalparam.hxx"
 #include "queryparam.hxx"
+#include "queryentry.hxx"
 
 #include "svx/dataaccessdescriptor.hxx"
 

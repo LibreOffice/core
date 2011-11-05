@@ -61,6 +61,8 @@
 #include "hints.hxx"
 #include "attrib.hxx"
 #include "dpshttab.hxx"
+#include "queryentry.hxx"
+
 #include <comphelper/extract.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <svx/dataaccessdescriptor.hxx>
