@@ -4946,7 +4946,7 @@ sal_Bool ScDocument::GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& 
 
 
 sal_Bool ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
-                                SCCOL nEndCol, SCROW nEndRow, SCTAB nTab )
+                                SCCOL nEndCol, SCROW nEndRow, SCTAB nTab ) const
 {
     bool bFound = false;
     if ( ValidColRow(rStartCol,rStartRow) && ValidColRow(nEndCol,nEndRow) && ValidTab(nTab) )
@@ -5080,14 +5080,15 @@ sal_Bool ScDocument::ExtendMerge( ScRange& rRange, sal_Bool bRefresh )
     return bFound;
 }
 
-sal_Bool ScDocument::ExtendTotalMerge( ScRange& rRange )
+sal_Bool ScDocument::ExtendTotalMerge( ScRange& rRange ) const
 {
     //  Bereich genau dann auf zusammengefasste Zellen erweitern, wenn
     //  dadurch keine neuen nicht-ueberdeckten Zellen getroffen werden
 
     bool bRet = false;
     ScRange aExt = rRange;
-    if (ExtendMerge(aExt))
+    // ExtendMerge() is non-const, but called withouth refresh.
+    if (const_cast<ScDocument*>(this)->ExtendMerge( aExt, false))
     {
         if ( aExt.aEnd.Row() > rRange.aEnd.Row() )
         {
@@ -5110,7 +5111,7 @@ sal_Bool ScDocument::ExtendTotalMerge( ScRange& rRange )
     return bRet;
 }
 
-sal_Bool ScDocument::ExtendOverlapped( ScRange& rRange )
+sal_Bool ScDocument::ExtendOverlapped( ScRange& rRange ) const
 {
     bool bFound = false;
     SCTAB nStartTab = rRange.aStart.Tab();

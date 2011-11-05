@@ -722,8 +722,8 @@ public:
 
     void            StartAnimations( SCTAB nTab, Window* pWin );
 
-    sal_Bool            HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect );
-    sal_Bool            HasAnyDraw( SCTAB nTab, const Rectangle& rMMRect );
+    sal_Bool            HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect ) const;
+    sal_Bool            HasAnyDraw( SCTAB nTab, const Rectangle& rMMRect ) const;
 
     const ScSheetEvents* GetSheetEvents( SCTAB nTab ) const;
     void            SetSheetEvents( SCTAB nTab, const ScSheetEvents* pNew );
@@ -828,10 +828,10 @@ public:
                                 SCCOL& rEndCol, SCROW& rEndRow, SCTAB nTab,
                                 sal_Bool bRefresh = false );
     sal_Bool            ExtendMerge( ScRange& rRange, sal_Bool bRefresh = false );
-    sal_Bool            ExtendTotalMerge( ScRange& rRange );
+    sal_Bool            ExtendTotalMerge( ScRange& rRange ) const;
     SC_DLLPUBLIC sal_Bool           ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
-                                SCCOL nEndCol, SCROW nEndRow, SCTAB nTab );
-    SC_DLLPUBLIC sal_Bool           ExtendOverlapped( ScRange& rRange );
+                                SCCOL nEndCol, SCROW nEndRow, SCTAB nTab ) const;
+    SC_DLLPUBLIC sal_Bool           ExtendOverlapped( ScRange& rRange ) const;
 
     sal_Bool            RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL nEndCol, SCROW nEndRow, SCTAB nTab );
@@ -951,7 +951,7 @@ public:
      */
     void            ExtendPrintArea( OutputDevice* pDev, SCTAB nTab,
                                     SCCOL nStartCol, SCROW nStartRow,
-                                    SCCOL& rEndCol, SCROW nEndRow );
+                                    SCCOL& rEndCol, SCROW nEndRow ) const;
     SC_DLLPUBLIC SCSIZE         GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
                                             SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab,
                                             ScDirection eDir );

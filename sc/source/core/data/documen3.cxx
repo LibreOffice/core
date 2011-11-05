@@ -2068,7 +2068,7 @@ void ScDocument::RemoveMerge( SCCOL nCol, SCROW nRow, SCTAB nTab )
 }
 
 void ScDocument::ExtendPrintArea( OutputDevice* pDev, SCTAB nTab,
-                    SCCOL nStartCol, SCROW nStartRow, SCCOL& rEndCol, SCROW nEndRow )
+                    SCCOL nStartCol, SCROW nStartRow, SCCOL& rEndCol, SCROW nEndRow ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         maTabs[nTab]->ExtendPrintArea( pDev, nStartCol, nStartRow, rEndCol, nEndRow );

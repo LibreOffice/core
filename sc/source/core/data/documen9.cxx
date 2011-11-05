@@ -352,7 +352,7 @@ void ScDocument::StartAnimations( SCTAB nTab, Window* pWin )
 }
 
 
-sal_Bool ScDocument::HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect )
+sal_Bool ScDocument::HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect ) const
 {
     //  Gibt es Objekte auf dem Hintergrund-Layer, die (teilweise) von rMMRect
     //  betroffen sind?
@@ -380,7 +380,7 @@ sal_Bool ScDocument::HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect )
     return bFound;
 }
 
-sal_Bool ScDocument::HasAnyDraw( SCTAB nTab, const Rectangle& rMMRect )
+sal_Bool ScDocument::HasAnyDraw( SCTAB nTab, const Rectangle& rMMRect ) const
 {
     //  Gibt es ueberhaupt Objekte, die (teilweise) von rMMRect
     //  betroffen sind?
@@ -463,8 +463,6 @@ sal_Bool ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
         // We want to print sheets with borders even if there is no cell content.
         return false;
 
-    ScDocument* pThis = (ScDocument*)this;  //! GetMMRect / HasAnyDraw etc. const !!!
-
     Rectangle aMMRect;
     if ( pLastRange && pLastMM && nTab == pLastRange->aStart.Tab() &&
             nStartRow == pLastRange->aStart.Row() && nEndRow == pLastRange->aEnd.Row() )
@@ -484,7 +482,7 @@ sal_Bool ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
         aMMRect.Right() = (long)(nRight * HMM_PER_TWIPS);
     }
     else
-        aMMRect = pThis->GetMMRect( nStartCol, nStartRow, nEndCol, nEndRow, nTab );
+        aMMRect = GetMMRect( nStartCol, nStartRow, nEndCol, nEndRow, nTab );
 
     if ( pLastRange && pLastMM )
     {
@@ -492,7 +490,7 @@ sal_Bool ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
         *pLastMM = aMMRect;
     }
 
-    if ( pThis->HasAnyDraw( nTab, aMMRect ))
+    if ( HasAnyDraw( nTab, aMMRect ))
         return false;
 
     if ( nStartCol > 0 && !bLeftIsEmpty )
@@ -503,12 +501,16 @@ sal_Bool ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
         SCCOL nExtendCol = nStartCol - 1;
         SCROW nTmpRow = nEndRow;
 
+        // ExtendMerge() is non-const, but called without refresh. GetPrinter()
+        // might create and assign a printer.
+        ScDocument* pThis = const_cast<ScDocument*>(this);
+
         pThis->ExtendMerge( 0,nStartRow, nExtendCol,nTmpRow, nTab,
                             false );      // kein Refresh, incl. Attrs
 
         OutputDevice* pDev = pThis->GetPrinter();
         pDev->SetMapMode( MAP_PIXEL );              // wichtig fuer GetNeededSize
-        pThis->ExtendPrintArea( pDev, nTab, 0, nStartRow, nExtendCol, nEndRow );
+        ExtendPrintArea( pDev, nTab, 0, nStartRow, nExtendCol, nEndRow );
         if ( nExtendCol >= nStartCol )
             return false;
     }
