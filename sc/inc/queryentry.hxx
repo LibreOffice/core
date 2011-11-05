@@ -39,6 +39,9 @@ namespace utl {
     class TextSearch;
 }
 
+/**
+ * Each instance of this struct represents a single filtering criteria.
+ */
 struct ScQueryEntry
 {
     typedef std::vector<rtl::OUString> QueryStringsType;
