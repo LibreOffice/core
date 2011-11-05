@@ -70,7 +70,7 @@ const uno::Reference< i18n::XBreakIterator >& ScDocument::GetBreakIterator()
     return pScriptTypeData->xBreakIter;
 }
 
-sal_Bool ScDocument::HasStringWeakCharacters( const String& rString )
+bool ScDocument::HasStringWeakCharacters( const String& rString )
 {
     if (rString.Len())
     {
@@ -85,7 +85,7 @@ sal_Bool ScDocument::HasStringWeakCharacters( const String& rString )
             {
                 sal_Int16 nType = xBreakIter->getScriptType( aText, nPos );
                 if ( nType == i18n::ScriptType::WEAK )
-                    return sal_True;                            // found
+                    return true;                            // found
 
                 nPos = xBreakIter->endOfScript( aText, nPos, nType );
             }

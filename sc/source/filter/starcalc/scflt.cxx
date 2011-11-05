@@ -1650,7 +1650,7 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
                     s[Len + 1] = 0;
                     ScFormulaCell* pCell = new ScFormulaCell( pDoc, ScAddress( Col, static_cast<SCROW> (Row), Tab ) );
                     pCell->SetHybridFormula( SC10TOSTRING( s ),formula::FormulaGrammar::GRAM_NATIVE );
-                    pDoc->PutCell( Col, static_cast<SCROW> (Row), Tab, pCell, (sal_Bool)sal_True );
+                    pDoc->PutCell( Col, static_cast<SCROW> (Row), Tab, pCell, true );
                     break;
                 }
                 case ctNote :

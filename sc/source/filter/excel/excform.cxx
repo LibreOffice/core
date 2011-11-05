@@ -140,7 +140,7 @@ void ImportExcel::Formula( const XclAddress& rXclPos,
         if( pErgebnis )
         {
             pZelle = new ScFormulaCell( pD, aScPos, pErgebnis );
-            pD->PutCell( aScPos.Col(), aScPos.Row(), aScPos.Tab(), pZelle, (sal_Bool)sal_True );
+            pD->PutCell( aScPos.Col(), aScPos.Row(), aScPos.Tab(), pZelle, true );
         }
         else
         {

@@ -69,7 +69,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
                 readString( aLabel, getLength() - 7 );
                 nStyle = nStyle >> 3;
                 pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
-                pDoc->PutCell( nCol, nRow, nTab, ScBaseCell::CreateTextCell( aLabel, pDoc ), (sal_Bool) sal_True );
+                pDoc->PutCell( nCol, nRow, nTab, ScBaseCell::CreateTextCell( aLabel, pDoc ), true );
                 }
                 break;
 
@@ -89,7 +89,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
                 ScValueCell* pInteger = new ScValueCell( ( double ) nValue );
                 nStyle = nStyle >> 3;
                 pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
-                pDoc->PutCell(nCol ,nRow, nTab ,pInteger,(sal_Bool) sal_True);
+                pDoc->PutCell(nCol ,nRow, nTab ,pInteger,true);
                 }
                 break;
 
@@ -99,7 +99,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
                 ScValueCell* pFloat = new ScValueCell( nValue );
                 nStyle = nStyle >> 3;
                 pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
-                pDoc->PutCell( nCol, nRow, nTab, pFloat, (sal_Bool) sal_True );
+                pDoc->PutCell( nCol, nRow, nTab, pFloat, true );
                 }
                 break;
 
@@ -118,7 +118,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
                     nStyle = nStyle >> 3;
                     pFormula->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
                     pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
-                    pDoc->PutCell( nCol, nRow, nTab, pFormula, ( sal_Bool ) sal_True );
+                    pDoc->PutCell( nCol, nRow, nTab, pFormula, true );
                 }
                 }
                 break;

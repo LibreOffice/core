@@ -1630,7 +1630,7 @@ sal_Bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                                 {
                                     pDoc->PutCell( nCol, nRow, aRange.aStart.Tab(),
                                             ScBaseCell::CreateTextCell( aText, pDoc),
-                                            (sal_Bool) sal_True);
+                                            true);
                                 }
                                 else
                                 {

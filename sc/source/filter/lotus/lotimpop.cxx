@@ -213,7 +213,7 @@ void ImportLotus::Errcell( void )
 
     Read( aA );
 
-    pD->PutCell( aA.Col(), aA.Row(), aA.Tab(), new ScStringCell( CREATE_STRING( "#ERR!" ) ), (sal_Bool)sal_True );
+    pD->PutCell( aA.Col(), aA.Row(), aA.Tab(), new ScStringCell( CREATE_STRING( "#ERR!" ) ), true );
 }
 
 
@@ -223,7 +223,7 @@ void ImportLotus::Nacell( void )
 
     Read( aA );
 
-    pD->PutCell( aA.Col(), aA.Row(), aA.Tab(), new ScStringCell( CREATE_STRING( "#NA!" ) ), (sal_Bool)sal_True );
+    pD->PutCell( aA.Col(), aA.Row(), aA.Tab(), new ScStringCell( CREATE_STRING( "#NA!" ) ), true );
 }
 
 
@@ -239,7 +239,7 @@ void ImportLotus::Labelcell( void )
 
 //  aLabel.Convert( pLotusRoot->eCharsetQ );
 
-    pD->PutCell( aA.Col(), aA.Row(), aA.Tab(), new ScStringCell( aLabel ), (sal_Bool)sal_True );
+    pD->PutCell( aA.Col(), aA.Row(), aA.Tab(), new ScStringCell( aLabel ), true );
 }
 
 
@@ -252,7 +252,7 @@ void ImportLotus::Numbercell( void )
     Read( fVal );
 
     pD->PutCell( aAddr.Col(), aAddr.Row(), aAddr.Tab(),
-        new ScValueCell( fVal ), (sal_Bool)sal_True );
+        new ScValueCell( fVal ), true );
     }
 
 
@@ -265,7 +265,7 @@ void ImportLotus::Smallnumcell( void )
     Read( nVal );
 
     pD->PutCell( aAddr.Col(), aAddr.Row(), aAddr.Tab(),
-        new ScValueCell( SnumToDouble( nVal ) ), ( sal_Bool ) sal_True );
+        new ScValueCell( SnumToDouble( nVal ) ), true );
     }
 
 
@@ -291,7 +291,7 @@ ScFormulaCell *ImportLotus::Formulacell( sal_uInt16 n )
 
     pZelle->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
 
-    pD->PutCell( aAddr.Col(), aAddr.Row(), aAddr.Tab(), pZelle, (sal_Bool)sal_True );
+    pD->PutCell( aAddr.Col(), aAddr.Row(), aAddr.Tab(), pZelle, true );
 
     return NULL;
     }

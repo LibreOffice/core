@@ -470,10 +470,10 @@ public:
                         TYPEINFO();
                         ScUndoChartData( ScDocShell* pNewDocShell,
                                 const String& rName, const ScRange& rNew,
-                                sal_Bool bColHdr, sal_Bool bRowHdr, sal_Bool bAdd );
+                                bool bColHdr, bool bRowHdr, bool bAdd );
                         ScUndoChartData( ScDocShell* pNewDocShell,
                                 const String& rName, const ScRangeListRef& rNew,
-                                sal_Bool bColHdr, sal_Bool bRowHdr, sal_Bool bAdd );
+                                bool bColHdr, bool bRowHdr, bool bAdd );
     virtual             ~ScUndoChartData();
 
     virtual void        Undo();
@@ -486,13 +486,13 @@ public:
 private:
     String              aChartName;
     ScRangeListRef      aOldRangeListRef;
-    sal_Bool                bOldColHeaders;
-    sal_Bool                bOldRowHeaders;
+    bool                bOldColHeaders;
+    bool                bOldRowHeaders;
 //  ScRange             aNewRange;
     ScRangeListRef      aNewRangeListRef;
-    sal_Bool                bNewColHeaders;
-    sal_Bool                bNewRowHeaders;
-    sal_Bool                bAddRange;
+    bool                bNewColHeaders;
+    bool                bNewRowHeaders;
+    bool                bAddRange;
 
     void                Init();
 };

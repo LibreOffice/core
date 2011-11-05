@@ -141,7 +141,7 @@ void ScAttrArray::Reset( const ScPatternAttr* pPattern, sal_Bool bAlloc )
         {
             // ensure that attributing changes text width of cell
             pOldPattern = pData[i].pPattern;
-            sal_Bool bNumFormatChanged;
+            bool bNumFormatChanged;
             if ( ScGlobal::CheckWidthInvalidate( bNumFormatChanged,
                     pPattern->GetItemSet(), pOldPattern->GetItemSet() ) )
             {
@@ -367,7 +367,7 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
                 const SfxItemSet& rNewSet = pPattern->GetItemSet();
                 const SfxItemSet& rOldSet = pData[nx].pPattern->GetItemSet();
 
-                sal_Bool bNumFormatChanged;
+                bool bNumFormatChanged;
                 if ( ScGlobal::CheckWidthInvalidate( bNumFormatChanged,
                         rNewSet, rOldSet ) )
                 {
@@ -548,7 +548,7 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* 
                 const SfxItemSet& rNewSet = pNewPattern->GetItemSet();
                 const SfxItemSet& rOldSet = pOldPattern->GetItemSet();
 
-                sal_Bool bNumFormatChanged;
+                bool bNumFormatChanged;
                 if ( ScGlobal::CheckWidthInvalidate( bNumFormatChanged,
                         rNewSet, rOldSet ) )
                 {
@@ -769,7 +769,7 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
                     const SfxItemSet& rNewSet = pNewPattern->GetItemSet();
                     const SfxItemSet& rOldSet = pOldPattern->GetItemSet();
 
-                    sal_Bool bNumFormatChanged;
+                    bool bNumFormatChanged;
                     if ( ScGlobal::CheckWidthInvalidate( bNumFormatChanged,
                             rNewSet, rOldSet ) )
                     {

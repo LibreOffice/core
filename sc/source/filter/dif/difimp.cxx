@@ -192,7 +192,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
                             pCell = new ScStringCell( aTmp );
                         }
 
-                        pDoc->PutCell( nColCnt, nRowCnt, nBaseTab, pCell, ( sal_Bool ) sal_True );
+                        pDoc->PutCell( nColCnt, nRowCnt, nBaseTab, pCell, true );
                     }
                     else
                         bOverflowWarn = sal_True;
@@ -208,7 +208,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
                         if( rData.Len() > 0 )
                         {
                             pDoc->PutCell( nColCnt, nRowCnt, nBaseTab,
-                                ScBaseCell::CreateTextCell( rData, pDoc ), ( sal_Bool ) sal_True );
+                                ScBaseCell::CreateTextCell( rData, pDoc ), true );
                         }
                     }
                     else

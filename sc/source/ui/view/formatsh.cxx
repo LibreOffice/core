@@ -808,7 +808,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         if ( SFX_STYLE_FAMILY_PARA == eFam )
                         {
                             SfxItemSet& rNewSet = pStyleSheet->GetItemSet();
-                            sal_Bool bNumFormatChanged;
+                            bool bNumFormatChanged;
                             if ( ScGlobal::CheckWidthInvalidate(
                                                 bNumFormatChanged, aOldSet, rNewSet ) )
                                 pDoc->InvalidateTextWidth( NULL, NULL, bNumFormatChanged );

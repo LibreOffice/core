@@ -123,7 +123,7 @@ void PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char* pString )
     {
         pDoc->ApplyAttr( nCol, nRow, nTab, *pJustify );
         ScStringCell*   pZelle = new ScStringCell( String( pString, pLotusRoot->eCharsetQ ) );
-        pDoc->PutCell( nCol, nRow, nTab, pZelle, ( sal_Bool ) sal_True );
+        pDoc->PutCell( nCol, nRow, nTab, pZelle, true );
     }
 }
 

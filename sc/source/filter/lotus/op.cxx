@@ -121,7 +121,7 @@ void OP_Integer( SvStream& r, sal_uInt16 /*n*/ )
     r >> nFormat >> nCol >> nRow >> nValue;
 
     ScValueCell*    pZelle = new ScValueCell( ( double ) nValue );
-    pDoc->PutCell( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, pZelle, ( sal_Bool ) sal_True );
+    pDoc->PutCell( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, pZelle, true );
 
     // 0 Stellen nach'm Komma!
     SetFormat( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, nFormat, 0 );
@@ -139,7 +139,7 @@ void OP_Number( SvStream& r, sal_uInt16 /*n*/ )
 
     fValue = ::rtl::math::round( fValue, 15 );
     ScValueCell*    pZelle = new ScValueCell( fValue );
-    pDoc->PutCell( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, pZelle, ( sal_Bool ) sal_True );
+    pDoc->PutCell( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, pZelle, true );
 
     SetFormat( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, nFormat, nDezFloat );
 }
@@ -190,7 +190,7 @@ void OP_Formula( SvStream& r, sal_uInt16 /*n*/ )
 
     pZelle->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
 
-    pDoc->PutCell( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, pZelle, ( sal_Bool ) sal_True );
+    pDoc->PutCell( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, pZelle, true );
 
     // nFormat = Standard -> Nachkommastellen wie Float
     SetFormat( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, nFormat, nDezFloat );
@@ -392,7 +392,7 @@ void OP_Number123( SvStream& r, sal_uInt16 /*n*/ )
     double fValue = Snum32ToDouble( nValue );
 
     ScValueCell *pCell = new ScValueCell( fValue );
-    pDoc->PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab), pCell, (sal_Bool) sal_True );
+    pDoc->PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab), pCell, true );
 }
 
 void OP_Formula123( SvStream& r, sal_uInt16 n )
@@ -415,7 +415,7 @@ void OP_Formula123( SvStream& r, sal_uInt16 n )
 
     pCell->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
 
-    pDoc->PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab), pCell, (sal_Bool) sal_True );
+    pDoc->PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab), pCell, true );
 }
 
 void OP_IEEENumber123( SvStream& r, sal_uInt16 /*n*/ )
@@ -427,7 +427,7 @@ void OP_IEEENumber123( SvStream& r, sal_uInt16 /*n*/ )
     r >> nRow >> nTab >> nCol >> dValue;
 
     ScValueCell *pCell = new ScValueCell(dValue);
-    pDoc->PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab), pCell, (sal_Bool) sal_True );
+    pDoc->PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab), pCell, true );
 }
 
 void OP_Note123( SvStream& r, sal_uInt16 n)

@@ -615,7 +615,7 @@ public:
     static String           GetLongErrorString(sal_uInt16 nErrNumber);
     static sal_Bool             EETextObjEqual( const EditTextObject* pObj1,
                                             const EditTextObject* pObj2 );
-    static sal_Bool             CheckWidthInvalidate( sal_Bool& bNumFormatChanged,
+    static sal_Bool             CheckWidthInvalidate( bool& bNumFormatChanged,
                                                   const SfxItemSet& rNewAttrs,
                                                   const SfxItemSet& rOldAttrs );
     static sal_Bool             HasAttrChanged( const SfxItemSet& rNewAttrs,

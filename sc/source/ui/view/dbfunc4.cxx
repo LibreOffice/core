@@ -74,12 +74,12 @@ sal_uInt16 ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, sa
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 && pDoc->IsChart( pObject ) )
             {
                 String aName = ((SdrOle2Obj*)pObject)->GetPersistName();
-                sal_Bool bHit = sal_True;
+                bool bHit = true;
                 if ( !bAllCharts )
                 {
                     ScRangeList aRanges;
-                    sal_Bool bColHeaders = false;
-                    sal_Bool bRowHeaders = false;
+                    bool bColHeaders = false;
+                    bool bRowHeaders = false;
                     pDoc->GetOldChartParameters( aName, aRanges, bColHeaders, bRowHeaders );
                     bHit = aRanges.In( rPos );
                 }

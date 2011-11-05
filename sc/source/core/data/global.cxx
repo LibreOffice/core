@@ -234,7 +234,7 @@ SvNumberFormatter* ScGlobal::GetEnglishFormatter()
 
 //------------------------------------------------------------------------
 
-sal_Bool ScGlobal::CheckWidthInvalidate( sal_Bool& bNumFormatChanged,
+sal_Bool ScGlobal::CheckWidthInvalidate( bool& bNumFormatChanged,
                                      const SfxItemSet& rNewAttrs,
                                      const SfxItemSet& rOldAttrs )
 {

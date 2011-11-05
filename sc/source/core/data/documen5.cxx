@@ -203,7 +203,7 @@ void ScDocument::UpdateAllCharts()
     pChartCollection->clear();
 }
 
-sal_Bool ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, String* pName )
+bool ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, String* pName )
 {
     if (pDrawLayer && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
     {
@@ -223,7 +223,7 @@ sal_Bool ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, String* pNa
                 {
                     if (pName)
                         *pName = ((SdrOle2Obj*)pObject)->GetPersistName();
-                    return sal_True;
+                    return true;
                 }
             }
             pObject = aIter.Next();
@@ -236,8 +236,8 @@ sal_Bool ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, String* pNa
 }
 
 void ScDocument::UpdateChartArea( const String& rChartName,
-            const ScRange& rNewArea, sal_Bool bColHeaders, sal_Bool bRowHeaders,
-            sal_Bool bAdd )
+            const ScRange& rNewArea, bool bColHeaders, bool bRowHeaders,
+            bool bAdd )
 {
     ScRangeListRef aRLR( new ScRangeList );
     aRLR->Append( rNewArea );
@@ -308,7 +308,7 @@ void ScDocument::SetChartRanges( const String& rChartName, const ::std::vector< 
 }
 
 void ScDocument::GetOldChartParameters( const String& rName,
-            ScRangeList& rRanges, sal_Bool& rColHeaders, sal_Bool& rRowHeaders )
+            ScRangeList& rRanges, bool& rColHeaders, bool& rRowHeaders )
 {
     // used for undo of changing chart source area
 
@@ -357,8 +357,8 @@ void ScDocument::GetOldChartParameters( const String& rName,
 }
 
 void ScDocument::UpdateChartArea( const String& rChartName,
-            const ScRangeListRef& rNewList, sal_Bool bColHeaders, sal_Bool bRowHeaders,
-            sal_Bool bAdd )
+            const ScRangeListRef& rNewList, bool bColHeaders, bool bRowHeaders,
+            bool bAdd )
 {
     if (!pDrawLayer)
         return;
@@ -386,7 +386,7 @@ void ScDocument::UpdateChartArea( const String& rChartName,
                     rtl::OUString aRangesStr;
                     lcl_GetChartParameters( xChartDoc, aRangesStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
 
-                    sal_Bool bInternalData = xChartDoc->hasInternalDataProvider();
+                    bool bInternalData = xChartDoc->hasInternalDataProvider();
 
                     if ( bAdd && !bInternalData )
                     {
@@ -452,7 +452,7 @@ void ScDocument::UpdateChart( const String& rChartName )
             uno::Reference< util::XModifiable > xModif( xChartDoc, uno::UNO_QUERY_THROW );
             if( apTemporaryChartLock.get() )
                 apTemporaryChartLock->AlsoLockThisChart( uno::Reference< frame::XModel >( xModif, uno::UNO_QUERY ) );
-            xModif->setModified( sal_True );
+            xModif->setModified( true );
         }
         catch ( uno::Exception& )
         {
@@ -512,8 +512,8 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
             (ScChartListener*) (pChartListenerCollection->At(nIndex));
         ScRangeListRef aRLR( pChartListener->GetRangeList() );
         ScRangeListRef aNewRLR( new ScRangeList );
-        sal_Bool bChanged = false;
-        sal_Bool bDataChanged = false;
+        bool bChanged = false;
+        bool bDataChanged = false;
         for ( size_t i = 0, nListSize = aRLR->size(); i < nListSize; ++i )
         {
             ScRange* pR = (*aRLR)[i];
@@ -531,7 +531,7 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
                 theCol2,theRow2,theTab2 );
             if ( eRes != UR_NOTHING )
             {
-                bChanged = sal_True;
+                bChanged = true;
                 aNewRLR->Append( ScRange(
                     theCol1, theRow1, theTab1,
                     theCol2, theRow2, theTab2 ));
@@ -545,7 +545,7 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
                     || (pR->aEnd.Tab() - pR->aStart.Tab()
                         != theTab2 - theTab1))) )
                 {
-                    bDataChanged = sal_True;
+                    bDataChanged = true;
                 }
             }
             else
@@ -636,7 +636,7 @@ void ScDocument::SetChartRangeList( const String& rChartName,
 }
 
 
-sal_Bool ScDocument::HasData( SCCOL nCol, SCROW nRow, SCTAB nTab )
+bool ScDocument::HasData( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->HasData( nCol, nRow );
@@ -680,7 +680,7 @@ uno::Reference< embed::XEmbeddedObject >
     return uno::Reference< embed::XEmbeddedObject >();
 }
 
-sal_Bool lcl_StringInCollection( const ScStrCollection* pColl, const String& rStr )
+bool lcl_StringInCollection( const ScStrCollection* pColl, const String& rStr )
 {
     if ( !pColl )
         return false;
@@ -722,7 +722,7 @@ void ScDocument::UpdateChartListenerCollection()
             if ( pChartListenerCollection->Search( &aCLSearcher, nIndex ) )
             {
                 ((ScChartListener*) (pChartListenerCollection->
-                    At( nIndex )))->SetUsed( sal_True );
+                    At( nIndex )))->SetUsed( true );
             }
             else if ( lcl_StringInCollection( pOtherObjects, aObjName ) )
             {

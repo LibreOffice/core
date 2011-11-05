@@ -52,7 +52,7 @@ namespace
 {
 
 
-sal_uInt16 lcl_DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, sal_Bool bAllCharts )
+sal_uInt16 lcl_DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, bool bAllCharts )
 {
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
@@ -73,12 +73,12 @@ sal_uInt16 lcl_DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, sal_Bool
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 && pDoc->IsChart( pObject ) )
             {
                 String aName = ((SdrOle2Obj*)pObject)->GetPersistName();
-                sal_Bool bHit = sal_True;
+                bool bHit = true;
                 if ( !bAllCharts )
                 {
                     ScRangeList aRanges;
-                    sal_Bool bColHeaders = false;
-                    sal_Bool bRowHeaders = false;
+                    bool bColHeaders = false;
+                    bool bRowHeaders = false;
                     pDoc->GetOldChartParameters( aName, aRanges, bColHeaders, bRowHeaders );
                     bHit = aRanges.In( rPos );
                 }
@@ -94,7 +94,7 @@ sal_uInt16 lcl_DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, sal_Bool
     return nFound;
 }
 
-sal_Bool lcl_AdjustRanges( ScRangeList& rRanges, SCTAB nSourceTab, SCTAB nDestTab, SCTAB nTabCount )
+bool lcl_AdjustRanges( ScRangeList& rRanges, SCTAB nSourceTab, SCTAB nDestTab, SCTAB nTabCount )
 {
     //! if multiple sheets are copied, update references into the other copied sheets?
 

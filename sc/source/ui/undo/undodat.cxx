@@ -1954,8 +1954,8 @@ void ScUndoChartData::Init()
 }
 
 ScUndoChartData::ScUndoChartData( ScDocShell* pNewDocShell, const String& rName,
-                                    const ScRange& rNew, sal_Bool bColHdr, sal_Bool bRowHdr,
-                                    sal_Bool bAdd ) :
+                                    const ScRange& rNew, bool bColHdr, bool bRowHdr,
+                                    bool bAdd ) :
     ScSimpleUndo( pNewDocShell ),
     aChartName( rName ),
     bNewColHeaders( bColHdr ),
@@ -1969,8 +1969,8 @@ ScUndoChartData::ScUndoChartData( ScDocShell* pNewDocShell, const String& rName,
 }
 
 ScUndoChartData::ScUndoChartData( ScDocShell* pNewDocShell, const String& rName,
-                                    const ScRangeListRef& rNew, sal_Bool bColHdr, sal_Bool bRowHdr,
-                                    sal_Bool bAdd ) :
+                                    const ScRangeListRef& rNew, bool bColHdr, bool bRowHdr,
+                                    bool bAdd ) :
     ScSimpleUndo( pNewDocShell ),
     aChartName( rName ),
     aNewRangeListRef( rNew ),
