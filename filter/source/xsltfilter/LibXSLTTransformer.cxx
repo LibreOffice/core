@@ -485,6 +485,7 @@ namespace XSLT
     LibXSLTTransformer::terminate() throw (RuntimeException)
     {
         m_Reader->terminate();
+        m_Reader->join();
         delete(m_Reader);
         m_parameters.clear();
     }
