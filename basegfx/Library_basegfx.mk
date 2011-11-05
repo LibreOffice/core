@@ -121,10 +121,7 @@ $(eval $(call gb_Library_add_exception_objects,basegfx,\
 	basegfx/source/curve/b2dcubicbezier \
 	basegfx/source/curve/b2dquadraticbezier \
 	basegfx/source/color/bcolormodifier \
-	basegfx/source/color/bcolor \
 	basegfx/source/color/bcolortools \
-	basegfx/source/raster/bpixelraster \
-	basegfx/source/raster/bzpixelraster \
 	basegfx/source/raster/rasterconvert3d \
 ))
 

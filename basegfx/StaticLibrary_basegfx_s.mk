@@ -126,10 +126,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,basegfx_s,\
 	CustomTarget/basegfx/source/curve/b2dcubicbezier \
 	CustomTarget/basegfx/source/curve/b2dquadraticbezier \
 	CustomTarget/basegfx/source/color/bcolormodifier \
-	CustomTarget/basegfx/source/color/bcolor \
 	CustomTarget/basegfx/source/color/bcolortools \
-	CustomTarget/basegfx/source/raster/bpixelraster \
-	CustomTarget/basegfx/source/raster/bzpixelraster \
 	CustomTarget/basegfx/source/raster/rasterconvert3d \
 ))
 
