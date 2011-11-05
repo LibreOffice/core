@@ -1098,7 +1098,7 @@ public:
     sal_Bool    bWritePictureOffset, sal_uInt32 nResize = 0);
     sal_uInt32  GetBlibID(
                     SvStream& rPicOutStream,
-                    const ByteString& rGraphicId,
+                    const rtl::OString& rGraphicId,
                     const Rectangle& rBoundRect,
                     const com::sun::star::awt::Rectangle* pVisArea = NULL,
                     const GraphicAttr* pGrafikAttr = NULL

@@ -326,18 +326,15 @@ void PictWriter::WriteRGBColor(const Color & rColor)
     *pPict << nR << nG << nB;
 }
 
-
 void PictWriter::WriteString( const String & rString )
 {
-    sal_uInt16 i,nLen;
-
-    ByteString aByteString( rString, gsl_getSystemTextEncoding() );
-    nLen = aByteString.Len();
+    rtl::OString aString(rtl::OUStringToOString(rString, osl_getThreadTextEncoding()));
+    sal_Int32 nLen = aString.getLength();
     if ( nLen > 255 )
         nLen = 255;
     *pPict << ( (sal_uInt8)nLen );
-    for ( i = 0; i < nLen; i++ )
-        *pPict << aByteString.GetChar( i );
+    for (sal_Int32 i = 0; i < nLen; ++i)
+        *pPict << aString[i];
 }
 
 Rectangle PictWriter::MapRectangle( const Rectangle& rRect )
@@ -716,8 +713,8 @@ void PictWriter::WriteOpcode_FontName(const Font & rFont)
 
     if (bDstFontNameValid==sal_False || nDstFontNameId!=nFontId || aDstFontName!=rFont.GetName())
     {
-        ByteString aByteString( rFont.GetName(), gsl_getSystemTextEncoding() );
-        sal_uInt16 nFontNameLen = aByteString.Len();
+        rtl::OString aString(rtl::OUStringToOString(rFont.GetName(), osl_getThreadTextEncoding()));
+        sal_uInt16 nFontNameLen = aString.getLength();
         if ( nFontNameLen )
         {
             nDataLen = 3 + nFontNameLen;
