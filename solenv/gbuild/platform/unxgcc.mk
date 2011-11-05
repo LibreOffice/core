@@ -29,24 +29,10 @@
 GUI := UNX
 COM := GCC
 
+include $(GBUILDDIR)/platform/com_GCC_defs.mk
+
 gb_MKTEMP := mktemp -t gbuild.XXXXXX
 
-gb_CC := gcc
-gb_CXX := g++
-gb_GCCP := gcc
-gb_AR := ar
-gb_AWK := awk
-gb_CLASSPATHSEP := :
-gb_YACC := bison
-
-# use CC/CXX if they are nondefaults
-ifneq ($(origin CC),default)
-gb_CC := $(CC)
-gb_GCCP := $(CC)
-endif
-ifneq ($(origin CXX),default)
-gb_CXX := $(CXX)
-endif
 ifneq ($(origin AR),default)
 gb_AR := $(AR)
 endif
@@ -62,34 +48,19 @@ ifeq ($(GXX_INCLUDE_PATH),)
 GXX_INCLUDE_PATH=$(COMPATH)/include/c++/$(shell gcc -dumpversion)
 endif
 
-gb_COMPILERDEFS := \
-	-D$(COM) \
-	-DCPPU_ENV=gcc3 \
-	-DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
-
 gb_CFLAGS := \
-	-Wall \
-	-Wdeclaration-after-statement \
-	-Wendif-labels \
-	-Wextra \
-	-Wshadow \
+	$(gb_CFLAGS_COMMON) \
 	-fPIC \
-	-fmessage-length=0 \
-	-fno-common \
-	-pipe \
+	-Wdeclaration-after-statement \
+	-Wshadow \
 
 gb_CXXFLAGS := \
-	-Wall \
-	-Wendif-labels \
-	-Wextra \
+	$(gb_CXXFLAGS_COMMON) \
+	-fPIC \
 	-Wshadow \
 	-Wsign-promo \
 	-Woverloaded-virtual \
 	-Wno-non-virtual-dtor \
-	-fPIC \
-	-fmessage-length=0 \
-	-fno-common \
-	-pipe \
 
 ifeq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
 gb_COMPILERDEFS += \
@@ -128,11 +99,6 @@ gb_CFLAGS += -fno-strict-aliasing
 gb_CXXFLAGS += -fno-strict-aliasing
 endif
 
-ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
-gb_CFLAGS_WERROR := -Werror -DLIBO_WERROR
-gb_CXXFLAGS_WERROR := -Werror -DLIBO_WERROR
-endif
-
 ifeq ($(HAVE_CXX0X),TRUE)
 #Currently, as well as for its own merits, c++11/c++0x mode allows use to use
 #a template for SAL_N_ELEMENTS to detect at compiler time its misuse
@@ -151,7 +117,6 @@ endif
 endif
 
 ifeq ($(ENABLE_LTO),TRUE)
-gb_Library_LTOFLAGS := -flto
 gb_LinkTarget_LDFLAGS += -fuse-linker-plugin $(gb_COMPILERDEFAULTOPTFLAGS)
 endif
 
@@ -161,14 +126,6 @@ gb_CFLAGS += --sysroot=$(SYSBASE)
 gb_LinkTarget_LDFLAGS += \
 	-Wl,--sysroot=$(SYSBASE)
 endif
-gb_LinkTarget_EXCEPTIONFLAGS := \
-	-DEXCEPTIONS_ON \
-	-fexceptions \
-	-fno-enforce-eh-specs \
-
-gb_LinkTarget_NOEXCEPTIONFLAGS := \
-	-DEXCEPTIONS_OFF \
-	-fno-exceptions \
 
 gb_LinkTarget_LDFLAGS += \
 	-Wl,-rpath-link,$(SYSBASE)/lib:$(SYSBASE)/usr/lib \
@@ -209,31 +166,6 @@ gb_DEBUG_CFLAGS := -ggdb3 -finline-limit=0 -fno-inline -fno-default-inline
 
 gb_COMPILERNOOPTFLAGS := -O0
 
-# Helper class
-
-gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
-
-ifeq ($(OS_FOR_BUILD),MACOSX)
-gb_Helper_LIBRARY_PATH_VAR := DYLD_LIBRARY_PATH
-else ifeq ($(OS_FOR_BUILD),WNT)
-# In theory possible if cross-compiling to some Unix from Windows,
-# in practice strongly discouraged to even try that
-gb_Helper_LIBRARY_PATH_VAR := PATH
-else
-gb_Helper_LIBRARY_PATH_VAR := LD_LIBRARY_PATH
-endif
-
-gb_Helper_set_ld_path := $(gb_Helper_LIBRARY_PATH_VAR)=$(OUTDIR_FOR_BUILD)/lib
-
-# convert parameters filesystem root to native notation
-# does some real work only on windows, make sure not to
-# break the dummy implementations on unx*
-define gb_Helper_convert_native
-$(1)
-endef
-
-gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/lib
-
 # YaccTarget class
 
 define gb_YaccTarget__command
@@ -242,45 +174,6 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(3)) && \
 	$(gb_YACC) $(T_YACCFLAGS) --defines=$(4) -o $(3) $(1) )
 
-endef
-
-# CObject class
-
-# $(call gb_CObject__command,object,relative-source,source,dep-file)
-define gb_CObject__command
-$(call gb_Output_announce,$(2),$(true),C  ,3)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) $(dir $(4)) && \
-	$(gb_CC) \
-		$(DEFS) \
-		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
-		$(T_CFLAGS) \
-		-c $(3) \
-		-o $(1) \
-		-MMD -MT $(1) \
-		-MP -MF $(4) \
-		-I$(dir $(3)) \
-		$(INCLUDE))
-endef
-
-
-# CxxObject class
-
-# $(call gb_CxxObject__command,object,relative-source,source,dep-file)
-define gb_CxxObject__command
-$(call gb_Output_announce,$(2),$(true),CXX,3)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) $(dir $(4)) && \
-	$(gb_CXX) \
-		$(DEFS) \
-		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
-		$(T_CXXFLAGS) \
-		-c $(3) \
-		-o $(1) \
-		-MMD -MT $(1) \
-		-MP -MF $(4) \
-		-I$(dir $(3)) \
-		$(INCLUDE_STL) $(INCLUDE))
 endef
 
 
@@ -326,9 +219,6 @@ ifeq ($(gb_SYMBOL),$(true))
 gb_LinkTarget_CXXFLAGS += -ggdb2
 gb_LinkTarget_CFLAGS += -ggdb2
 endif
-
-gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
-gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
 # note that `cat $(extraobjectlist)` is needed to build with older gcc versions, e.g. 4.1.2 on SLED10
 # we want to use @$(extraobjectlist) in the long run
@@ -524,5 +414,7 @@ gb_UnoApiTarget_REGVIEWCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR)
 
 # Python
 gb_PYTHON_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME=$(OUTDIR)/lib/python PYTHONPATH=$(OUTDIR)/lib/python:$(OUTDIR)/lib/python/lib-dynload
+
+include $(GBUILDDIR)/platform/com_GCC_class.mk
 
 # vim: set noet sw=4:

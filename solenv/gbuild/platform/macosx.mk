@@ -29,26 +29,22 @@
 GUI := UNX
 COM := GCC
 
+gb_SDKDIR := $(MACOSX_SDK_PATH)
+
+ifeq ($(CPUNAME),POWERPC)
+gb_CPUDEFS := -DPPC
+else
+gb_CPUDEFS := -DX86
+endif
+
+gb_COMPILERDEFAULTOPTFLAGS := -O2
+
+include $(GBUILDDIR)/platform/com_GCC_defs.mk
+
+
 # Darwin mktemp -t expects a prefix, not a pattern
 gb_MKTEMP ?= /usr/bin/mktemp -t gbuild.
 
-gb_CC := cc
-gb_CXX := g++
-gb_GCCP := gcc
-gb_AR := ar
-gb_AWK := awk
-gb_CLASSPATHSEP := :
-gb_YACC := bison
-
-# use CC/CXX if they are nondefaults
-ifneq ($(origin CC),default)
-gb_CC := $(CC)
-gb_GCCP := $(CC)
-endif
-ifneq ($(origin CXX),default)
-gb_CXX := $(CXX)
-endif
-gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- '{ print $$1*10000+$$2*100+$$3 }')
 
 gb_OSDEFS := \
 	-D$(OS) \
@@ -62,46 +58,28 @@ gb_OSDEFS := \
 	-DMAC_OS_X_VERSION_MAX_ALLOWED=$(MAC_OS_X_VERSION_MAX_ALLOWED) \
 	$(EXTRA_CDEFS) \
 
-gb_COMPILERDEFS := \
-	-D$(COM) \
+
+gb_COMPILERDEFS += \
 	-DHAVE_GCC_VISIBILITY_FEATURE \
-	-DCPPU_ENV=gcc3 \
-	-DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
 
-ifeq ($(CPUNAME),POWERPC)
-gb_CPUDEFS := -DPPC
-else
-gb_CPUDEFS := -DX86
-endif
 
-gb_SDKDIR := $(MACOSX_SDK_PATH)
 
 gb_CFLAGS := \
 	-isysroot $(gb_SDKDIR) \
-	-Wall \
-	-Wendif-labels \
-	-Wextra \
+	$(gb_CFLAGS_COMMON) \
 	-Wshadow \
 	-fPIC \
-	-fmessage-length=0 \
-	-fno-common \
 	-fno-strict-aliasing \
-	-pipe \
 
 gb_CXXFLAGS := \
 	-isysroot $(gb_SDKDIR) \
-	-Wall \
-	-Wendif-labels \
-	-Wextra \
+	$(gb_CXXFLAGS_COMMON) \
+	-fPIC \
 	-Wno-ctor-dtor-privacy \
 	-Wno-non-virtual-dtor \
-	-fPIC \
-	-fmessage-length=0 \
-	-fno-common \
 	-fno-strict-aliasing \
 	-fsigned-char \
 	-malign-natural \
-	-pipe \
 	#-Wshadow \ break in compiler headers already
 	#-fsigned-char \ might be removed?
 	#-malign-natural \ might be removed?
@@ -120,24 +98,6 @@ gb_OBJCXXFLAGS := -x objective-c++ -fobjc-exceptions
 
 gb_OBJCFLAGS := -x objective-c
 
-ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
-gb_CFLAGS_WERROR := -Werror -DLIBO_WERROR
-gb_CXXFLAGS_WERROR := -Werror -DLIBO_WERROR
-endif
-
-ifeq ($(ENABLE_LTO),TRUE)
-gb_Library_LTOFLAGS := -flto
-endif
-
-gb_LinkTarget_EXCEPTIONFLAGS := \
-	-DEXCEPTIONS_ON \
-	-fexceptions \
-	-fno-enforce-eh-specs \
-
-gb_LinkTarget_NOEXCEPTIONFLAGS := \
-	-DEXCEPTIONS_OFF \
-	-fno-exceptions \
-
 gb_LinkTarget_LDFLAGS := \
 	-Wl,-syslibroot,$(gb_SDKDIR) \
 	$(subst -L../lib , ,$(SOLARLIB)) \
@@ -152,21 +112,6 @@ gb_COMPILEROPTFLAGS := -O2
 endif
 
 gb_COMPILERNOOPTFLAGS := -O0
-
-# Helper class
-
-gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
-
-gb_Helper_set_ld_path := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
-
-# convert parameters filesystem root to native notation
-# does some real work only on windows, make sure not to
-# break the dummy implementations on unx*
-define gb_Helper_convert_native
-$(1)
-endef
-
-gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/lib
 
 # YaccTarget class
 
@@ -194,44 +139,6 @@ $(call gb_Helper_abbreviate_dirs,\
 
 endef
 endif
-# CObject class
-
-define gb_CObject__command
-$(call gb_Output_announce,$(2),$(true),C  ,3)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) $(dir $(4)) && \
-	$(gb_CC) \
-		$(DEFS) \
-		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
-		$(T_CFLAGS) \
-		-c $(3) \
-		-o $(1) \
-		-MMD -MT $(1) \
-		-MP -MF $(4) \
-		-I$(dir $(3)) \
-		$(INCLUDE))
-endef
-
-
-# CxxObject class
-
-# N.B: $(CXXFLAGS) may contain -x objective-c++, which must come before -c
-define gb_CxxObject__command
-$(call gb_Output_announce,$(2),$(true),CXX,3)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) $(dir $(4)) && \
-	$(gb_CXX) \
-		$(DEFS) \
-		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
-		$(T_CXXFLAGS) \
-		-c $(3) \
-		-o $(1) \
-		-MMD -MT $(1) \
-		-MP -MF $(4) \
-		-I$(dir $(3)) \
-		$(INCLUDE_STL) $(INCLUDE))
-endef
-
 
 # ObjCxxObject class
 
@@ -297,9 +204,6 @@ gb_LinkTarget_CXXFLAGS += -g
 gb_LinkTarget_OBJCFLAGS += -g
 gb_LinkTarget_OBJCXXFLAGS += -g
 endif
-
-gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
-gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
 # FIXME framework handling very hackish
 define gb_LinkTarget__get_liblinkflags
@@ -525,5 +429,7 @@ gb_UnoApiTarget_REGVIEWCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(
 
 # Python
 gb_PYTHON_PRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
+
+include $(GBUILDDIR)/platform/com_GCC_class.mk
 
 # vim: set noet sw=4:

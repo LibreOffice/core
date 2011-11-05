@@ -29,17 +29,15 @@
 GUI := WNT
 COM := GCC
 
+gb_COMPILERDEFAULTOPTFLAGS := -Os
+gb_CPUDEFS := -D_M_IX86
+
+include $(GBUILDDIR)/platform/com_GCC_defs.mk
+
 gb_TMPDIR:=$(if $(TMPDIR),$(TMPDIR),/tmp)
 gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) gbuild.XXXXXX
 
-gb_CC := $(CC)
-gb_CXX := $(CXX)
-gb_AR := $(shell $(CC) -print-prog-name=ar)
-gb_AWK := awk
-gb_CLASSPATHSEP := :
-gb_YACC := bison
 gb_RC := $(WINDRES)
-gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- '{ print $$1*10000+$$2*100+$$3 }')
 
 gb_OSDEFS := \
 	-DWINVER=0x0500 \
@@ -52,16 +50,11 @@ ifeq ($(GXX_INCLUDE_PATH),)
 GXX_INCLUDE_PATH=$(COMPATH)/include/c++/$(shell gcc -dumpversion)
 endif
 
-gb_COMPILERDEFS := \
-	-DGCC \
-	-DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
-	-DCPPU_ENV=gcc3 \
+gb_COMPILERDEFS += \
 	-D_MT \
 	-D_NATIVE_WCHAR_T_DEFINED \
 	-D_MSC_EXTENSIONS \
 	-D_FORCENAMELESSUNION \
-
-gb_CPUDEFS := -D_M_IX86
 
 gb_RCDEFS := \
 	 -DWINVER=0x0400 \
@@ -70,48 +63,31 @@ gb_RCDEFS := \
 gb_RCFLAGS := \
 	 -V
 
-gb_CFLAGS := \
-	-Wall \
+gb_CFLAGS += \
+	$(gb_CFLAGS_COMMON) \
 	-Wdeclaration-after-statement \
-	-Wendif-labels \
-	-Wextra \
-	-fmessage-length=0 \
 	-fno-strict-aliasing \
-	-pipe \
 
 gb_CXXFLAGS := \
-	-Wall \
-	-Wendif-labels \
-	-Wextra \
+	$(gb_CXXFLAGS_COMMON) \
 	-Wno-ctor-dtor-privacy \
 	-Wno-non-virtual-dtor \
 	-Wreturn-type \
 	-Wshadow \
 	-Wuninitialized \
-	-fmessage-length=0 \
 	-fno-strict-aliasing \
-	-pipe \
 
-ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
-gb_CFLAGS_WERROR := -Werror -DLIBO_WERROR
-gb_CXXFLAGS_WERROR := -Werror -DLIBO_WERROR
-endif
 
 ifneq ($(SYSBASE),)
 gb_CXXFLAGS += --sysroot=$(SYSBASE)
 gb_CFLAGS += --sysroot=$(SYSBASE)
 endif
-gb_LinkTarget_EXCEPTIONFLAGS := \
-	-DEXCEPTIONS_ON \
-	-fexceptions \
+
+gb_LinkTarget_EXCEPTIONFLAGS += \
 	-fno-enforce-eh-specs \
 
 gb_PrecompiledHeader_EXCEPTIONFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS)
 
-
-gb_LinkTarget_NOEXCEPTIONFLAGS := \
-	-DEXCEPTIONS_OFF \
-	-fno-exceptions \
 
 gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
 
@@ -126,14 +102,6 @@ gb_LinkTarget_LDFLAGS += -shared-libgcc
 endif
 
 gb_DEBUG_CFLAGS := -ggdb3 -finline-limit=0 -fno-inline -fno-default-inline
-ifneq ($(gb_DEBUGLEVEL),0)
-
-gb_COMPILEROPTFLAGS := -O0
-else
-gb_COMPILEROPTFLAGS := -Os
-endif
-
-gb_COMPILERNOOPTFLAGS := -O0
 
 gb_STDLIBS := \
 	mingwthrd \
@@ -152,24 +120,12 @@ gb_Helper_WORKDIR_NATIVE := $(WORKDIR)
 gb_Helper_OUTDIR_NATIVE := $(OUTDIR)
 gb_Helper_REPODIR_NATIVE := $(REPODIR)
 
-gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
-
-# Set the proper enirotment variable so that our BUILD platform
-# build-time shared libraries are found.
-ifeq ($(OS_FOR_BUILD),MACOSX)
-gb_Helper_set_ld_path := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
-else
-gb_Helper_set_ld_path := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
-endif
-
 # Convert parameters filesystem root to native notation
 # does some real work only on Windows, and this file is for
 # cross-compilation.
 define gb_Helper_convert_native
 $(1)
 endef
-
-gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/bin
 
 # YaccTarget class
 
@@ -180,47 +136,6 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_YACC) $(T_YACCFLAGS) --defines=$(4) -o $(3) $(1) )
 
 endef
-
-# CObject class
-
-# We (LibreOffice) support MinGW only for cross-compilation. This is identical to
-# gb_CObject__command in unxgcc.mk
-
-# $(call gb_CObject__command,object,relative-source,source,dep-file)
-define gb_CObject__command
-$(call gb_Output_announce,$(2),$(true),C  ,3)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) $(dir $(4)) && \
-	$(gb_CC) \
-		$(DEFS) \
-		$(T_CFLAGS) \
-		-c $(3) \
-		-o $(1) \
-		-MMD -MT $(1) \
-		-MP -MF $(4) \
-		-I$(dir $(3)) \
-		$(INCLUDE))
-endef
-
-
-# CxxObject class
-
-# $(call gb_CxxObject__command,object,relative-source,source,dep-file)
-define gb_CxxObject__command
-$(call gb_Output_announce,$(2),$(true),CXX,3)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) $(dir $(4)) && \
-	$(gb_CXX) \
-		$(DEFS) \
-		$(T_CXXFLAGS) \
-		-c $(3) \
-		-o $(1) \
-		-MMD -MT $(1) \
-		-MP -MF $(4) \
-		-I$(dir $(3)) \
-		$(INCLUDE_STL) $(INCLUDE))
-endef
-
 
 # PrecompiledHeader class
 
@@ -340,11 +255,8 @@ gb_LinkTarget_CXXFLAGS += -ggdb2
 gb_LinkTarget_CFLAGS += -ggdb2
 endif
 
-gb_LinkTarget_INCLUDE :=\
-	$(filter-out %/stl, $(subst -I. , ,$(SOLARINC))) \
+gb_LinkTarget_INCLUDE +=\
 	$(foreach inc,$(subst ;, ,$(JDKINC)),-I$(inc)) \
-
-gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
 define gb_LinkTarget__command_dynamiclinkexecutable
 $(call gb_Output_announce,$(2),$(true),LNK,4)
@@ -676,5 +588,7 @@ gb_UnoApiTarget_REGVIEWCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_
 
 # Python
 gb_PYTHON_PRECOMMAND :=  PATH="$${PATH}:$(OUTDIR)/bin" PYTHONHOME="$(OUTDIR)/lib/python" PYTHONPATH="$(OUTDIR)/lib/python;$(OUTDIR)/lib/python/lib-dynload"
+
+include $(GBUILDDIR)/platform/com_GCC_class.mk
 
 # vim: set noet sw=4:

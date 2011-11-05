@@ -29,8 +29,9 @@
 GUI := UNX
 COM := GCC
 
-# Darwin mktemp -t expects a prefix, not a pattern
-gb_MKTEMP := /usr/bin/mktemp -t gbuild.
+gb_CPUDEFS := -DARM32
+
+gb_COMPILERDEFAULTOPTFLAGS := -O2
 
 ifeq ($(CC),)
 $(error You must set CC in the environment. See README.cross for example.)
@@ -39,13 +40,10 @@ ifeq ($(CXX),)
 $(error You must set CXX in the environment. See README.cross for example.)
 endif
 
-gb_CC := $(CC)
-gb_CXX := $(CXX)
-gb_GCCP := $(CC)
-gb_AR := ar
-gb_AWK := awk
-gb_CLASSPATHSEP := :
-gb_YACC := bison
+include $(GBUILDDIR)/platform/com_GCC_defs.mk
+
+# Darwin mktemp -t expects a prefix, not a pattern
+gb_MKTEMP := /usr/bin/mktemp -t gbuild.
 
 gb_OSDEFS := \
 	-D$(OS) \
@@ -56,35 +54,18 @@ gb_OSDEFS := \
 	-DNO_PTHREAD_PRIORITY \
 	$(EXTRA_CDEFS) \
 
-gb_COMPILERDEFS := \
-	-D$(COM) \
-	-DCPPU_ENV=gcc3 \
-	-DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
-
-gb_CPUDEFS := -DARM32
-
 gb_CFLAGS := \
-	-Wall \
-	-Wendif-labels \
-	-Wextra \
+	$(gb_CFLAGS_COMMON) \
 	-Wshadow \
-	-fmessage-length=0 \
-	-fno-common \
 	-fno-strict-aliasing \
-	-pipe \
 
 gb_CXXFLAGS := \
-	-Wall \
-	-Wendif-labels \
-	-Wextra \
+	$(gb_CXXFLAGS_COMMON) \
 	-Wno-ctor-dtor-privacy \
 	-Wno-non-virtual-dtor \
-	-fmessage-length=0 \
-	-fno-common \
 	-fno-strict-aliasing \
 	-fsigned-char \
 	-malign-natural \
-	-pipe \
 	#-Wshadow \ break in compiler headers already
 	#-fsigned-char \ might be removed?
 	#-malign-natural \ might be removed?
@@ -96,46 +77,9 @@ gb_OBJCXXFLAGS := -x objective-c++ $(gb_OBJC_OBJCXX_COMMON_FLAGS)
 
 gb_OBJCFLAGS := -x objective-c $(gb_OBJC_OBJCXX_COMMON_FLAGS)
 
-ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
-gb_CFLAGS_WERROR := -Werror -DLIBO_WERROR
-gb_CXXFLAGS_WERROR := -Werror -DLIBO_WERROR
-endif
-
-gb_LinkTarget_EXCEPTIONFLAGS := \
-	-DEXCEPTIONS_ON \
-	-fexceptions \
-	-fno-enforce-eh-specs \
-
-gb_LinkTarget_NOEXCEPTIONFLAGS := \
-	-DEXCEPTIONS_OFF \
-	-fno-exceptions \
-
 gb_LinkTarget_LDFLAGS := \
 	$(subst -L../lib , ,$(SOLARLIB)) \
 #man ld says: obsolete	-Wl,-multiply_defined,suppress \
-
-ifneq ($(gb_DEBUGLEVEL),0)
-gb_COMPILEROPTFLAGS := -O0
-else
-gb_COMPILEROPTFLAGS := -O2
-endif
-
-gb_COMPILERNOOPTFLAGS := -O0
-
-# Helper class
-
-gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
-
-gb_Helper_set_ld_path := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
-
-# convert parameters filesystem root to native notation
-# does some real work only on windows, make sure not to
-# break the dummy implementations on unx*
-define gb_Helper_convert_native
-$(1)
-endef
-
-gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/lib
 
 # YaccTarget class
 
@@ -145,43 +89,6 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(3)) && \
 	$(gb_YACC) $(T_YACCFLAGS) --defines=$(4) -o $(3) $(1) )
 
-endef
-
-
-# CObject class
-
-define gb_CObject__command
-$(call gb_Output_announce,$(2),$(true),C  ,3)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) $(dir $(4)) && \
-	$(gb_CC) \
-		$(DEFS) \
-		$(T_CFLAGS) \
-		-c $(3) \
-		-o $(1) \
-		-MMD -MT $(1) \
-		-MP -MF $(4) \
-		-I$(dir $(3)) \
-		$(INCLUDE))
-endef
-
-
-# CxxObject class
-
-# N.B: $(T_CXXFLAGS) may contain -x objective-c++, which must come before -c
-define gb_CxxObject__command
-$(call gb_Output_announce,$(2),$(true),CXX,3)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) $(dir $(4)) && \
-	$(gb_CXX) \
-		$(DEFS) \
-		$(T_CXXFLAGS) \
-		-c $(3) \
-		-o $(1) \
-		-MMD -MT $(1) \
-		-MP -MF $(4) \
-		-I$(dir $(3)) \
-		$(INCLUDE_STL) $(INCLUDE))
 endef
 
 
@@ -233,9 +140,6 @@ gb_LinkTarget_CXXFLAGS += -g
 gb_LinkTarget_OBJCXXFLAGS += -g
 gb_LinkTarget_OBJCFLAGS += -g
 endif
-
-gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
-gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
 # FIXME framework handling very hackish
 define gb_LinkTarget__get_liblinkflags
@@ -432,5 +336,7 @@ gb_UnoApiTarget_REGVIEWCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib SOLA
 
 # Python
 gb_PYTHON_PRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
+
+include $(GBUILDDIR)/platform/com_GCC_class.mk
 
 # vim: set noet sw=4:
