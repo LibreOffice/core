@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,6 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,basegfx_s))
 
 $(eval $(call gb_StaticLibrary_add_package_headers,basegfx_s,basegfx_inc))
 
-$(eval $(call gb_StaticLibrary_add_precompiled_header,basegfx_s,$(SRCDIR)/basegfx/inc/pch/precompiled_basegfx))
-
 $(eval $(call gb_StaticLibrary_set_include,basegfx_s,\
 	-I$(realpath $(SRCDIR)/basegfx/inc) \
 	-I$(realpath $(SRCDIR)/basegfx/source/inc) \
@@ -40,7 +38,7 @@ $(eval $(call gb_StaticLibrary_set_include,basegfx_s,\
 	-I$(OUTDIR)/inc \
 ))
 
-# Work around gcc bug 41847 present at least in 
+# Work around gcc bug 41847 present at least in
 # the Android x-compiler 4.4.3.
 # -Warray-bounds appeared in 4.3
 ifeq ($(COM),GCC)

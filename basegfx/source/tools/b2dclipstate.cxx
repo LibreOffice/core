@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_basegfx.hxx"
 #include <basegfx/tools/b2dclipstate.hxx>
 
 #include <basegfx/range/b2drange.hxx>

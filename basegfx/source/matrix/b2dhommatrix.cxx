@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_basegfx.hxx"
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

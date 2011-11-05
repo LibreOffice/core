@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_basegfx.hxx"
 #include <basegfx/range/b3drange.hxx>
 #include <basegfx/range/b3irange.hxx>
 #include <basegfx/numeric/ftools.hxx>

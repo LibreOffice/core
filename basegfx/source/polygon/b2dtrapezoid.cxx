@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_basegfx.hxx"
 #include <basegfx/polygon/b2dtrapezoid.hxx>
 #include <basegfx/range/b1drange.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

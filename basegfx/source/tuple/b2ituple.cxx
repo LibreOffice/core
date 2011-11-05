@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_basegfx.hxx"
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <rtl/instance.hxx>

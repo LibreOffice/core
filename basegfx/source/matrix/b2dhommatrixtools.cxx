@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_basegfx.hxx"
-
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>

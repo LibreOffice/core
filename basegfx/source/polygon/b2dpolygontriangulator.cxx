@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_basegfx.hxx"
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <osl/diagnose.h>
 #include <basegfx/point/b2dpoint.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_basegfx.hxx"
 #include <osl/diagnose.h>
 
 #include <basegfx/curve/b2dcubicbezier.hxx>

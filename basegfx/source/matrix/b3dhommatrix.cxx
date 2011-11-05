@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_basegfx.hxx"
-
 #include <rtl/instance.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <hommatrixtemplate.hxx>
