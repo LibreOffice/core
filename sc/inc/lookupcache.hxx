@@ -32,7 +32,6 @@
 #include "address.hxx"
 #include "global.hxx"
 #include "queryparam.hxx"
-#include "queryentry.hxx"
 #include "formula/token.hxx"
 #include <svl/listener.hxx>
 #include <tools/string.hxx>
@@ -91,45 +90,9 @@ public:
 
     public:
 
-        explicit QueryCriteria( const ScQueryEntry & rEntry ) :
-            mfVal(0.0), mbAlloc(false), mbString(false)
-        {
-            switch (rEntry.eOp)
-            {
-                case SC_EQUAL :
-                    meOp = EQUAL;
-                    break;
-                case SC_LESS_EQUAL :
-                    meOp = LESS_EQUAL;
-                    break;
-                case SC_GREATER_EQUAL :
-                    meOp = GREATER_EQUAL;
-                    break;
-                default:
-                    meOp = UNKNOWN;
-                    DBG_ERRORFILE( "ScLookupCache::QueryCriteria not prepared for this ScQueryOp");
-            }
-            if (rEntry.bQueryByString)
-                setString(rEntry.GetQueryString());
-            else
-                setDouble( rEntry.nVal);
-        }
-        QueryCriteria( const QueryCriteria & r ) :
-            mfVal( r.mfVal),
-            mbAlloc( false),
-            mbString( false),
-            meOp( r.meOp)
-        {
-            if (r.mbString && r.mpStr)
-            {
-                mpStr = new String( *r.mpStr);
-                mbAlloc = mbString = true;
-            }
-        }
-        ~QueryCriteria()
-        {
-            deleteString();
-        }
+        explicit QueryCriteria( const ScQueryEntry & rEntry );
+        QueryCriteria( const QueryCriteria & r );
+        ~QueryCriteria();
 
         QueryOp getQueryOp() const { return meOp; }
 

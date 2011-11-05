@@ -31,6 +31,49 @@
 
 #include "lookupcache.hxx"
 #include "document.hxx"
+#include "queryentry.hxx"
+
+ScLookupCache::QueryCriteria::QueryCriteria( const ScQueryEntry& rEntry ) :
+    mfVal(0.0), mbAlloc(false), mbString(false)
+{
+    switch (rEntry.eOp)
+    {
+        case SC_EQUAL :
+            meOp = EQUAL;
+            break;
+        case SC_LESS_EQUAL :
+            meOp = LESS_EQUAL;
+            break;
+        case SC_GREATER_EQUAL :
+            meOp = GREATER_EQUAL;
+            break;
+        default:
+            meOp = UNKNOWN;
+            DBG_ERRORFILE( "ScLookupCache::QueryCriteria not prepared for this ScQueryOp");
+    }
+    if (rEntry.bQueryByString)
+        setString(rEntry.GetQueryString());
+    else
+        setDouble( rEntry.nVal);
+}
+
+ScLookupCache::QueryCriteria::QueryCriteria( const ScLookupCache::QueryCriteria & r ) :
+    mfVal( r.mfVal),
+    mbAlloc( false),
+    mbString( false),
+    meOp( r.meOp)
+{
+    if (r.mbString && r.mpStr)
+    {
+        mpStr = new String( *r.mpStr);
+        mbAlloc = mbString = true;
+    }
+}
+
+ScLookupCache::QueryCriteria::~QueryCriteria()
+{
+    deleteString();
+}
 
 ScLookupCache::ScLookupCache( ScDocument * pDoc, const ScRange & rRange ) :
     maRange( rRange),
