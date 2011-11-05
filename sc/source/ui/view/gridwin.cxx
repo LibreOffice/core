@@ -585,6 +585,7 @@ void ScGridWindow::ExecPageFieldSelect( SCCOL nCol, SCROW nRow, sal_Bool bHasSel
     }
 }
 
+#if USE_NEW_AUTOFILTER
 namespace {
 
 class PopupAction : public ScMenuFloatingWindow::Action
@@ -700,6 +701,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu()
     pViewData->GetView()->Query(aParam, NULL, true);
     pDBData->SetQueryParam(aParam);
 }
+#endif
 
 void ScGridWindow::LaunchPageFieldMenu( SCCOL nCol, SCROW nRow )
 {
