@@ -1011,12 +1011,10 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
             else
                 if( pPor->InNumberGrp() )
                     rInf.SetNumDone(sal_True);
-        if( pPor )
-        {
-            rInf.SetRest(0);
-            pCurr->SetRest( sal_True );
-            return pPor;
-        }
+
+        rInf.SetRest(0);
+        pCurr->SetRest( sal_True );
+        return pPor;
     }
 
     // ???? und ????: im Follow duerfen wir schon stehen,

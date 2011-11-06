@@ -1578,8 +1578,8 @@ IMPL_LINK( SvxScriptErrorDialog, ShowDialog, ::rtl::OUString*, pMessage )
     pBox->SetText( CUI_RES( RID_SVXSTR_ERROR_TITLE ) );
     pBox->Execute();
 
-    if ( pBox ) delete pBox;
-    if ( pMessage ) delete pMessage;
+    delete pBox;
+    delete pMessage;
 
     return 0;
 }

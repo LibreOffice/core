@@ -694,7 +694,7 @@ void SwShellTableCrsr::FillRects()
 
         while ( pFrm )
         {
-            if( pFrm && aReg.GetOrigin().IsOver( pFrm->Frm() ) )
+            if( aReg.GetOrigin().IsOver( pFrm->Frm() ) )
                 aReg -= pFrm->Frm();
 
             pFrm = pFrm->GetNextCellLeaf( MAKEPAGE_NONE );
