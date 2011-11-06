@@ -317,6 +317,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
 
 RTFDocumentImpl::~RTFDocumentImpl()
 {
+    delete m_pGraphicHelper;
 }
 
 SvStream& RTFDocumentImpl::Strm()
