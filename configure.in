@@ -1302,6 +1302,12 @@ AC_ARG_WITH(system-mozilla,
     WITH_SYSTEM_MOZILLA=$withval ,
 WITH_SYSTEM_MOZILLA=no)
 
+AC_ARG_WITH(system-mozilla-headers,
+   AS_HELP_STRING([--with-system-mozilla-headers],
+       [Use mozilla headers provided by system instead of bundled ones. Needed for
+        nsplugin])
+)
+
 AC_ARG_WITH(system-gettext,
     AS_HELP_STRING([--with-system-gettext],
         [Use gettext runtime library already on system.]),,
@@ -5697,41 +5703,29 @@ fi
 AC_SUBST(ENABLE_XMLSEC)
 
 AC_MSG_CHECKING([whether to build LDAP configuration backend])
-if test -z "$enable_ldap" || test "$enable_ldap" = "yes"; then
-    if test "$enable_mozilla" = "yes" || test "$with_openldap" = "yes"; then
-        AC_MSG_RESULT([yes])
+if test "$enable_ldap" != "no"; then
+    WITH_OPENLDAP=NO
+    WITH_LDAP=NO
+    if test "$with_openldap" = "yes"; then
         WITH_LDAP=YES
+        AC_MSG_RESULT([OpenLDAP])
+        WITH_OPENLDAP=YES
+        AC_CHECK_HEADERS(ldap.h, [],
+            [AC_MSG_ERROR(ldap.h not found. install openldap libs)], [])
+	AC_CHECK_LIB(ldap, ldap_simple_bind_s, [],
+	    [AC_MSG_ERROR(openldap lib not found or functional)], [])
+	AC_CHECK_LIB(ldap, ldap_set_option, [],
+	    [AC_MSG_ERROR(openldap lib not found or functional)], [])
+    elif test "$enable_mozilla" != "no"; then
+        AC_MSG_RESULT([Mozilla])
+        WITH_LDAP=YES
+        WITH_OPENLDAP=NO
     else
-        AC_MSG_RESULT([no. Either Mozilla or OpenLDAP needed])
-        WITH_LDAP=NO
+        AC_MSG_RESULT([no. Either Mozilla or OpenLDAP required])
     fi
 else
     AC_MSG_RESULT([no])
     WITH_LDAP=NO
-fi
-
-if test "$WITH_LDAP" = "YES"; then
-    dnl ===================================================================
-    dnl Test whether we want to use the Mozilla or the OpenLDAP LDAP SDK
-    dnl ===================================================================
-    AC_MSG_CHECKING([which LDAP SDK to use])
-    if test -n "$with_openldap" && test "$with_openldap" != "no"; then
-        AC_MSG_RESULT([OpenLDAP])
-        WITH_OPENLDAP=YES
-        AC_CHECK_HEADERS(ldap.h, [],
-           [AC_MSG_ERROR(ldap.h not found. install openldap libs)], [])
-        AC_CHECK_LIB(ldap, ldap_simple_bind_s, [],
-           [AC_MSG_ERROR(openldap lib not found or functional)], [])
-        # rumours say that OpenLDAP doesn't have that function. I looked and
-        # it has it. Test for it to be sure
-        AC_CHECK_LIB(ldap, ldap_set_option, [],
-                [AC_MSG_ERROR(openldap lib not found or functional)], [])
-    else
-        AC_MSG_RESULT([Netscape/Mozilla])
-        # TODO. Actually do a sanity check and check for
-        # LDAP_OPT_SIZELIMIT and LDAP_X_OPT_CONNECT_TIMEOUT
-        WITH_OPENLDAP=NO
-    fi
 fi
 AC_SUBST(WITH_LDAP)
 AC_SUBST(WITH_OPENLDAP)
@@ -5942,7 +5936,7 @@ AC_SUBST(MOZ_LDAP_CFLAGS)
 dnl ===================================================================
 dnl Check for system NSS only with xmlsec or mozilla build enabled
 dnl ===================================================================
-if test "x$enable_xmlsec" != "xno" -o "x$enable_mozilla" = "xyes"; then
+if test "x$enable_xmlsec" != "xno" -o "x$enable_mozilla" != "xno"; then
 AC_MSG_CHECKING([which NSS to use])
 if test "$with_system_nss" = "yes"; then
     AC_MSG_RESULT([external])
@@ -5975,11 +5969,36 @@ from http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32])
             fi
         fi
     fi
-fi
-fi
+fi # system nss
+fi # enable xmlsec || enable mozilla
 AC_SUBST(SYSTEM_NSS)
 AC_SUBST(NSS_CFLAGS)
 AC_SUBST(NSS_LIBS)
+
+dnl ===================================================================
+dnl Check for system mozilla headers
+dnl ===================================================================
+AC_MSG_CHECKING([which mozilla headers to use])
+if test -n "$with_system_mozilla_headers" -o -n "$with_system_headers" && \
+        test "x$with_system_mozilla_headers" != "xno"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_MOZILLA_HEADERS=YES
+    # First try npapi-sdk:
+    PKG_CHECK_MODULES(MOZILLA_HEADERS, npapi-sdk, [LOCATED=yes], [LOCATED=NO])
+    # Then go with libxul:
+    if test "x$LOCATED" != "xyes"; then
+        PKG_CHECK_MODULES(MOZILLA_HEADERS, libxul, [LOCATED=yes], [LOCATED=NO])
+    fi
+    # if still not found bail out
+    if test "x$LOCATED" != "xyes"; then
+        AC_MSG_ERROR([npapi.h header file not found])
+    fi
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_MOZILLA_HEADERS=NO
+fi
+AC_SUBST(MOZILLA_HEADERS_CFLAGS)
+AC_SUBST(SYSTEM_MOZILLA_HEADERS)
 
 dnl ===================================================================
 dnl Check for system sane

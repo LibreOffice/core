@@ -35,12 +35,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#ifndef _NPAPI_H_
 #include "npapi.h"
-#endif
-#ifndef _NPUPP_H_
 #include "npupp.h"
-#endif
 
 //\\// DEFINE
 #define NP_EXPORT
@@ -153,8 +149,7 @@ NP_Initialize(NPNetscapeFuncs* pFuncs)
     }
 #endif
 
-    // NPP_Initialize is a standard (cross-platform) initialize function.
-    return NPP_Initialize();
+    return NPERR_NO_ERROR;
 }
 
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\.
@@ -165,12 +160,10 @@ NP_Initialize(NPNetscapeFuncs* pFuncs)
 //  This functio shuold check for some ref count on the dll to see if it is
 //  unloadable or it needs to stay in memory.
 //
-NPError WINAPI NP_EXPORT
+void WINAPI NP_EXPORT
 NP_Shutdown()
 {
-    NPP_Shutdown();
     g_pNavigatorFuncs = NULL;
-    return NPERR_NO_ERROR;
 }
 
 char * NP_GetMIMEDescription()
@@ -230,7 +223,7 @@ NPError NPN_GetURL(NPP instance, const char *url, const char *target)
     return g_pNavigatorFuncs->geturl(instance, url, target);
 }
 
-NPError NPN_PostURLNotify(NPP instance, const char* url, const char* window, uint32 len, const char* buf, NPBool file, void* notifyData)
+NPError NPN_PostURLNotify(NPP instance, const char* url, const char* window, uint32_t len, const char* buf, NPBool file, void* notifyData)
 {
     int navMinorVers = g_pNavigatorFuncs->version & 0xFF;
     NPError err;
@@ -244,7 +237,7 @@ NPError NPN_PostURLNotify(NPP instance, const char* url, const char* window, uin
 }
 
 
-NPError NPN_PostURL(NPP instance, const char* url, const char* window, uint32 len, const char* buf, NPBool file)
+NPError NPN_PostURL(NPP instance, const char* url, const char* window, uint32_t len, const char* buf, NPBool file)
 {
     return g_pNavigatorFuncs->posturl(instance, url, window, len, buf, file);
 }
@@ -278,11 +271,11 @@ NPError NPN_NewStream(NPP instance, NPMIMEType type,
 
 /* Provides len bytes of data.
 */
-int32 NPN_Write(NPP instance, NPStream *stream,
-                int32 len, void *buffer)
+int32_t NPN_Write(NPP instance, NPStream *stream,
+                int32_t len, void *buffer)
 {
     int navMinorVersion = g_pNavigatorFuncs->version & 0xFF;
-    int32 result;
+    int32_t result;
 
     if( navMinorVersion >= NPVERS_HAS_STREAMOUTPUT ) {
         result = g_pNavigatorFuncs->write(instance, stream, len, buffer);
@@ -329,7 +322,7 @@ const char* NPN_UserAgent(NPP instance)
 */
 
 
-void* NPN_MemAlloc(uint32 size)
+void* NPN_MemAlloc(uint32_t size)
 {
     return g_pNavigatorFuncs->memalloc(size);
 }

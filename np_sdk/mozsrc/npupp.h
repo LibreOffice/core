@@ -131,8 +131,8 @@ enum {
     uppNPP_NewProcInfo = kThinkCStackBased
         | STACK_ROUTINE_PARAMETER(1, SIZE_CODE(sizeof(NPMIMEType)))
         | STACK_ROUTINE_PARAMETER(2, SIZE_CODE(sizeof(NPP)))
-        | STACK_ROUTINE_PARAMETER(3, SIZE_CODE(sizeof(uint16)))
-        | STACK_ROUTINE_PARAMETER(4, SIZE_CODE(sizeof(int16)))
+        | STACK_ROUTINE_PARAMETER(3, SIZE_CODE(sizeof(uint16_t)))
+        | STACK_ROUTINE_PARAMETER(4, SIZE_CODE(sizeof(int16_t)))
         | STACK_ROUTINE_PARAMETER(5, SIZE_CODE(sizeof(char **)))
         | STACK_ROUTINE_PARAMETER(6, SIZE_CODE(sizeof(char **)))
         | STACK_ROUTINE_PARAMETER(7, SIZE_CODE(sizeof(NPSavedData *)))
@@ -146,7 +146,7 @@ enum {
                                    (ARG1), (ARG2), (ARG3), (ARG4), (ARG5), (ARG6), (ARG7))
 #else
 
-typedef NPError (* NP_LOADDS NPP_NewUPP)(NPMIMEType pluginType, NPP instance, uint16 mode, int16 argc, char* argn[], char* argv[], NPSavedData* saved);
+typedef NPError (* NP_LOADDS NPP_NewUPP)(NPMIMEType pluginType, NPP instance, uint16_t mode, int16_t argc, char* argn[], char* argv[], NPSavedData* saved);
 #define NewNPP_NewProc(FUNC)        \
         ((NPP_NewUPP) (FUNC))
 #define CallNPP_NewProc(FUNC, ARG1, ARG2, ARG3, ARG4, ARG5, ARG6, ARG7)     \
@@ -219,7 +219,7 @@ enum {
         | STACK_ROUTINE_PARAMETER(2, SIZE_CODE(sizeof(NPMIMEType)))
         | STACK_ROUTINE_PARAMETER(3, SIZE_CODE(sizeof(NPStream *)))
         | STACK_ROUTINE_PARAMETER(4, SIZE_CODE(sizeof(NPBool)))
-        | STACK_ROUTINE_PARAMETER(5, SIZE_CODE(sizeof(uint16 *)))
+        | STACK_ROUTINE_PARAMETER(5, SIZE_CODE(sizeof(uint16_t *)))
         | RESULT_SIZE(SIZE_CODE(sizeof(NPError)))
 };
 #define NewNPP_NewStreamProc(FUNC)      \
@@ -228,7 +228,7 @@ enum {
         (NPError)CallUniversalProc((UniversalProcPtr)(FUNC), uppNPP_NewStreamProcInfo, (ARG1), (ARG2), (ARG3), (ARG4), (ARG5))
 #else
 
-typedef NPError (* NP_LOADDS NPP_NewStreamUPP)(NPP instance, NPMIMEType type, NPStream* stream, NPBool seekable, uint16* stype);
+typedef NPError (* NP_LOADDS NPP_NewStreamUPP)(NPP instance, NPMIMEType type, NPStream* stream, NPBool seekable, uint16_t* stype);
 #define NewNPP_NewStreamProc(FUNC)      \
         ((NPP_NewStreamUPP) (FUNC))
 #define CallNPP_NewStreamProc(FUNC, ARG1, ARG2, ARG3, ARG4, ARG5) \
@@ -273,16 +273,16 @@ enum {
     uppNPP_WriteReadyProcInfo = kThinkCStackBased
         | STACK_ROUTINE_PARAMETER(1, SIZE_CODE(sizeof(NPP)))
         | STACK_ROUTINE_PARAMETER(2, SIZE_CODE(sizeof(NPStream *)))
-        | RESULT_SIZE(SIZE_CODE(sizeof(int32)))
+        | RESULT_SIZE(SIZE_CODE(sizeof(int32_t)))
 };
 #define NewNPP_WriteReadyProc(FUNC)     \
         (NPP_WriteReadyUPP) NewRoutineDescriptor((ProcPtr)(FUNC), uppNPP_WriteReadyProcInfo, GetCurrentArchitecture())
 #define CallNPP_WriteReadyProc(FUNC,  NPParg, NPStreamPtr)      \
-        (int32)CallUniversalProc((UniversalProcPtr)(FUNC), uppNPP_WriteReadyProcInfo, (NPParg), (NPStreamPtr))
+        (int32_t)CallUniversalProc((UniversalProcPtr)(FUNC), uppNPP_WriteReadyProcInfo, (NPParg), (NPStreamPtr))
 
 #else
 
-typedef int32 (* NP_LOADDS NPP_WriteReadyUPP)(NPP instance, NPStream* stream);
+typedef int32_t (* NP_LOADDS NPP_WriteReadyUPP)(NPP instance, NPStream* stream);
 #define NewNPP_WriteReadyProc(FUNC)     \
         ((NPP_WriteReadyUPP) (FUNC))
 #define CallNPP_WriteReadyProc(FUNC,  NPParg, NPStreamPtr)      \
@@ -300,19 +300,19 @@ enum {
     uppNPP_WriteProcInfo = kThinkCStackBased
         | STACK_ROUTINE_PARAMETER(1, SIZE_CODE(sizeof(NPP)))
         | STACK_ROUTINE_PARAMETER(2, SIZE_CODE(sizeof(NPStream *)))
-        | STACK_ROUTINE_PARAMETER(3, SIZE_CODE(sizeof(int32)))
-        | STACK_ROUTINE_PARAMETER(4, SIZE_CODE(sizeof(int32)))
+        | STACK_ROUTINE_PARAMETER(3, SIZE_CODE(sizeof(int32_t)))
+        | STACK_ROUTINE_PARAMETER(4, SIZE_CODE(sizeof(int32_t)))
         | STACK_ROUTINE_PARAMETER(5, SIZE_CODE(sizeof(void*)))
-        | RESULT_SIZE(SIZE_CODE(sizeof(int32)))
+        | RESULT_SIZE(SIZE_CODE(sizeof(int32_t)))
 };
 #define NewNPP_WriteProc(FUNC)      \
         (NPP_WriteUPP) NewRoutineDescriptor((ProcPtr)(FUNC), uppNPP_WriteProcInfo, GetCurrentArchitecture())
 #define CallNPP_WriteProc(FUNC,  NPParg, NPStreamPtr, offsetArg, lenArg, bufferPtr)     \
-        (int32)CallUniversalProc((UniversalProcPtr)(FUNC), uppNPP_WriteProcInfo, (NPParg), (NPStreamPtr), (offsetArg), (lenArg), (bufferPtr))
+        (int32_t)CallUniversalProc((UniversalProcPtr)(FUNC), uppNPP_WriteProcInfo, (NPParg), (NPStreamPtr), (offsetArg), (lenArg), (bufferPtr))
 
 #else
 
-typedef int32 (* NP_LOADDS NPP_WriteUPP)(NPP instance, NPStream* stream, int32 offset, int32 len, void* buffer);
+typedef int32_t (* NP_LOADDS NPP_WriteUPP)(NPP instance, NPStream* stream, int32_t offset, int32_t len, void* buffer);
 #define NewNPP_WriteProc(FUNC)      \
         ((NPP_WriteUPP) (FUNC))
 #define CallNPP_WriteProc(FUNC,  NPParg, NPStreamPtr, offsetArg, lenArg, bufferPtr)     \
@@ -384,16 +384,16 @@ enum {
     uppNPP_HandleEventProcInfo = kThinkCStackBased
         | STACK_ROUTINE_PARAMETER(1, SIZE_CODE(sizeof(NPP)))
         | STACK_ROUTINE_PARAMETER(2, SIZE_CODE(sizeof(void *)))
-        | RESULT_SIZE(SIZE_CODE(sizeof(int16)))
+        | RESULT_SIZE(SIZE_CODE(sizeof(int16_t)))
 };
 #define NewNPP_HandleEventProc(FUNC)        \
         (NPP_HandleEventUPP) NewRoutineDescriptor((ProcPtr)(FUNC), uppNPP_HandleEventProcInfo, GetCurrentArchitecture())
 #define CallNPP_HandleEventProc(FUNC,  NPParg, voidPtr)     \
-        (int16)CallUniversalProc((UniversalProcPtr)(FUNC), uppNPP_HandleEventProcInfo, (NPParg), (voidPtr))
+        (int16_t)CallUniversalProc((UniversalProcPtr)(FUNC), uppNPP_HandleEventProcInfo, (NPParg), (voidPtr))
 
 #else
 
-typedef int16 (* NP_LOADDS NPP_HandleEventUPP)(NPP instance, void* event);
+typedef int16_t (* NP_LOADDS NPP_HandleEventUPP)(NPP instance, void* event);
 #define NewNPP_HandleEventProc(FUNC)        \
         ((NPP_HandleEventUPP) (FUNC))
 #define CallNPP_HandleEventProc(FUNC,  NPParg, voidPtr)     \
@@ -579,7 +579,7 @@ enum {
         | STACK_ROUTINE_PARAMETER(1, SIZE_CODE(sizeof(NPP)))
         | STACK_ROUTINE_PARAMETER(2, SIZE_CODE(sizeof(const char*)))
         | STACK_ROUTINE_PARAMETER(3, SIZE_CODE(sizeof(const char*)))
-        | STACK_ROUTINE_PARAMETER(4, SIZE_CODE(sizeof(uint32)))
+        | STACK_ROUTINE_PARAMETER(4, SIZE_CODE(sizeof(uint32_t)))
         | STACK_ROUTINE_PARAMETER(5, SIZE_CODE(sizeof(const char*)))
         | STACK_ROUTINE_PARAMETER(6, SIZE_CODE(sizeof(NPBool)))
         | STACK_ROUTINE_PARAMETER(7, SIZE_CODE(sizeof(void*)))
@@ -591,7 +591,7 @@ enum {
         (NPError)CallUniversalProc((UniversalProcPtr)(FUNC), uppNPN_PostURLNotifyProcInfo, (ARG1), (ARG2), (ARG3), (ARG4), (ARG5), (ARG6), (ARG7))
 #else
 
-typedef NPError (* NP_LOADDS NPN_PostURLNotifyUPP)(NPP instance, const char* url, const char* window, uint32 len, const char* buf, NPBool file, void* notifyData);
+typedef NPError (* NP_LOADDS NPN_PostURLNotifyUPP)(NPP instance, const char* url, const char* window, uint32_t len, const char* buf, NPBool file, void* notifyData);
 #define NewNPN_PostURLNotifyProc(FUNC)      \
         ((NPN_PostURLNotifyUPP) (FUNC))
 #define CallNPN_PostURLNotifyProc(FUNC, ARG1, ARG2, ARG3, ARG4, ARG5, ARG6, ARG7) \
@@ -635,7 +635,7 @@ enum {
         | STACK_ROUTINE_PARAMETER(1, SIZE_CODE(sizeof(NPP)))
         | STACK_ROUTINE_PARAMETER(2, SIZE_CODE(sizeof(const char*)))
         | STACK_ROUTINE_PARAMETER(3, SIZE_CODE(sizeof(const char*)))
-        | STACK_ROUTINE_PARAMETER(4, SIZE_CODE(sizeof(uint32)))
+        | STACK_ROUTINE_PARAMETER(4, SIZE_CODE(sizeof(uint32_t)))
         | STACK_ROUTINE_PARAMETER(5, SIZE_CODE(sizeof(const char*)))
         | STACK_ROUTINE_PARAMETER(6, SIZE_CODE(sizeof(NPBool)))
         | RESULT_SIZE(SIZE_CODE(sizeof(NPError)))
@@ -646,7 +646,7 @@ enum {
         (NPError)CallUniversalProc((UniversalProcPtr)(FUNC), uppNPN_PostURLProcInfo, (ARG1), (ARG2), (ARG3), (ARG4), (ARG5), (ARG6))
 #else
 
-typedef NPError (* NP_LOADDS NPN_PostURLUPP)(NPP instance, const char* url, const char* window, uint32 len, const char* buf, NPBool file);
+typedef NPError (* NP_LOADDS NPN_PostURLUPP)(NPP instance, const char* url, const char* window, uint32_t len, const char* buf, NPBool file);
 #define NewNPN_PostURLProc(FUNC)        \
         ((NPN_PostURLUPP) (FUNC))
 #define CallNPN_PostURLProc(FUNC, ARG1, ARG2, ARG3, ARG4, ARG5, ARG6) \
@@ -719,18 +719,18 @@ enum {
     uppNPN_WriteProcInfo = kThinkCStackBased
         | STACK_ROUTINE_PARAMETER(1, SIZE_CODE(sizeof(NPP)))
         | STACK_ROUTINE_PARAMETER(2, SIZE_CODE(sizeof(NPStream *)))
-        | STACK_ROUTINE_PARAMETER(3, SIZE_CODE(sizeof(int32)))
+        | STACK_ROUTINE_PARAMETER(3, SIZE_CODE(sizeof(int32_t)))
         | STACK_ROUTINE_PARAMETER(4, SIZE_CODE(sizeof(void*)))
-        | RESULT_SIZE(SIZE_CODE(sizeof(int32)))
+        | RESULT_SIZE(SIZE_CODE(sizeof(int32_t)))
 };
 #define NewNPN_WriteProc(FUNC)      \
         (NPN_WriteUPP) NewRoutineDescriptor((ProcPtr)(FUNC), uppNPN_WriteProcInfo, GetCurrentArchitecture())
 #define CallNPN_WriteProc(FUNC, npp, stream, len, buffer)       \
-        (int32)CallUniversalProc((UniversalProcPtr)(FUNC), uppNPN_WriteProcInfo, (npp), (stream), (len), (buffer))
+        (int32_t)CallUniversalProc((UniversalProcPtr)(FUNC), uppNPN_WriteProcInfo, (npp), (stream), (len), (buffer))
 
 #else
 
-typedef int32 (* NP_LOADDS NPN_WriteUPP)(NPP instance, NPStream* stream, int32 len, void* buffer);
+typedef int32_t (* NP_LOADDS NPN_WriteUPP)(NPP instance, NPStream* stream, int32_t len, void* buffer);
 #define NewNPN_WriteProc(FUNC)      \
         ((NPN_WriteUPP) (FUNC))
 #define CallNPN_WriteProc(FUNC, npp, stream, len, buffer)       \
@@ -826,7 +826,7 @@ typedef const char* (* NP_LOADDS NPN_UserAgentUPP)(NPP instance);
 typedef UniversalProcPtr NPN_MemAllocUPP;
 enum {
     uppNPN_MemAllocProcInfo = kThinkCStackBased
-        | STACK_ROUTINE_PARAMETER(1, SIZE_CODE(sizeof(uint32)))
+        | STACK_ROUTINE_PARAMETER(1, SIZE_CODE(sizeof(uint32_t)))
         | RESULT_SIZE(SIZE_CODE(sizeof(void *)))
 };
 
@@ -837,7 +837,7 @@ enum {
 
 #else
 
-typedef void* (* NP_LOADDS NPN_MemAllocUPP)(uint32 size);
+typedef void* (* NP_LOADDS NPN_MemAllocUPP)(uint32_t size);
 #define NewNPN_MemAllocProc(FUNC)       \
         ((NPN_MemAllocUPP) (FUNC))
 #define CallNPN_MemAllocProc(FUNC, ARG1)        \
@@ -879,18 +879,18 @@ typedef void (* NP_LOADDS NPN_MemFreeUPP)(void* ptr);
 typedef UniversalProcPtr NPN_MemFlushUPP;
 enum {
     uppNPN_MemFlushProcInfo = kThinkCStackBased
-        | STACK_ROUTINE_PARAMETER(1, SIZE_CODE(sizeof(uint32)))
-        | RESULT_SIZE(SIZE_CODE(sizeof(uint32)))
+        | STACK_ROUTINE_PARAMETER(1, SIZE_CODE(sizeof(uint32_t)))
+        | RESULT_SIZE(SIZE_CODE(sizeof(uint32_t)))
 };
 
 #define NewNPN_MemFlushProc(FUNC)       \
         (NPN_MemFlushUPP) NewRoutineDescriptor((ProcPtr)(FUNC), uppNPN_MemFlushProcInfo, GetCurrentArchitecture())
 #define CallNPN_MemFlushProc(FUNC, ARG1)        \
-        (uint32)CallUniversalProc((UniversalProcPtr)(FUNC), uppNPN_MemFlushProcInfo, (ARG1))
+        (uint32_t)CallUniversalProc((UniversalProcPtr)(FUNC), uppNPN_MemFlushProcInfo, (ARG1))
 
 #else
 
-typedef uint32 (* NP_LOADDS NPN_MemFlushUPP)(uint32 size);
+typedef uint32_t (* NP_LOADDS NPN_MemFlushUPP)(uint32_t size);
 #define NewNPN_MemFlushProc(FUNC)       \
         ((NPN_MemFlushUPP) (FUNC))
 #define CallNPN_MemFlushProc(FUNC, ARG1)        \
@@ -1072,8 +1072,8 @@ typedef void (* NP_LOADDS NPN_ForceRedrawUPP)(NPP instance);
 #endif
 
 typedef struct _NPPluginFuncs {
-    uint16 size;
-    uint16 version;
+    uint16_t size;
+    uint16_t version;
     NPP_NewUPP newp;
     NPP_DestroyUPP destroy;
     NPP_SetWindowUPP setwindow;
@@ -1091,8 +1091,8 @@ typedef struct _NPPluginFuncs {
 } NPPluginFuncs;
 
 typedef struct _NPNetscapeFuncs {
-    uint16 size;
-    uint16 version;
+    uint16_t size;
+    uint16_t version;
     NPN_GetURLUPP geturl;
     NPN_PostURLUPP posturl;
     NPN_RequestReadUPP requestread;
@@ -1230,11 +1230,11 @@ extern "C" {
 
 /* plugin meta member functions */
 
-NPError OSCALL NP_GetEntryPoints(NPPluginFuncs* pFuncs);
+NPError WINAPI NP_GetEntryPoints(NPPluginFuncs* pFuncs);
 
-NPError OSCALL NP_Initialize(NPNetscapeFuncs* pFuncs);
+NPError WINAPI NP_Initialize(NPNetscapeFuncs *aNPNFuncs);
 
-NPError OSCALL NP_Shutdown();
+void WINAPI NP_Shutdown();
 
 char*   NP_GetMIMEDescription();
 
@@ -1253,8 +1253,8 @@ extern "C" {
 /* plugin meta member functions */
 
 char*   NP_GetMIMEDescription(void);
-NPError NP_Initialize(NPNetscapeFuncs*, NPPluginFuncs*);
-NPError NP_Shutdown(void);
+NPError NP_Initialize(NPNetscapeFuncs *aNPNFuncs, NPPluginFuncs *aNPPFuncs);
+void NP_Shutdown(void);
 
 #ifdef __cplusplus
 }

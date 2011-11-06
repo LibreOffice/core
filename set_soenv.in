@@ -1477,6 +1477,8 @@ ToFile( "PREBUILD_MOZAB",    $PREBUILD_MOZAB,    "e" );
 ToFile( "MOZILLA_VERSION",   $MOZILLA_VERSION,   "e" );
 ToFile( "DEFAULT_MOZILLA_TOOLKIT", $MOZILLA_TOOLKIT, "e" );
 ToFile( "SYSTEM_NSS",  "@SYSTEM_NSS@", "e" );
+ToFile( "MOZILLA_HEADERS_CFLAGS",  "@MOZILLA_HEADERS_CFLAGS@", "e" );
+ToFile( "SYSTEM_MOZILLA_HEADERS",  "@SYSTEM_MOZILLA_HEADERS@", "e" );
 ToFile( "MOZILLABUILD",  "@MOZILLABUILD@", "e" );
 ToFile( "BUILD_VER_STRING",  "@BUILD_VER_STRING@", "e" );
 if ($platform =~ m/linux/ && $platform =~ m/powerpc/) {

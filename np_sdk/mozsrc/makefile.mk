@@ -39,6 +39,14 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 .IF "$(L10N_framework)"==""
 JDKINCS=
 
+.IF "$(SYSTEM_MOZILLA_HEADERS)" = "YES"
+CFLAGS+= $(MOZILLA_HEADERS_CFLAGS)
+CXXFLAGS+= $(MOZILLA_HEADERS_CFLAGS)
+.ELSE
+CFLAGS+= -I..$/inc
+CXXFLAGS+= -I..$/inc
+.ENDIF
+
 # --- Files --------------------------------------------------------
 
 .IF "$(GUI)" == "WNT"
