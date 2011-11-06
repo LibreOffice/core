@@ -31,6 +31,7 @@
 #include <svl/solar.hrc>
 #include <comphelper/sequence.hxx>
 #include <tools/debug.hxx>
+#include <rtl/strbuf.hxx>
 
 #define ENTER_MOD_METHOD()  \
     ::osl::MutexGuard aGuard(s_aMutex); \
@@ -56,7 +57,7 @@ namespace COMPMOD_NAMESPACE
     {
         ResMgr*     m_pRessources;
         sal_Bool    m_bInitialized;
-        ByteString  m_sFilePrefix;
+        rtl::OString m_sFilePrefix;
 
     public:
         /// ctor
@@ -88,15 +89,13 @@ namespace COMPMOD_NAMESPACE
         // note that this method is not threadsafe, which counts for the whole class !
         if (!m_pRessources && !m_bInitialized)
         {
-            DBG_ASSERT(m_sFilePrefix.Len(), "OModuleImpl::getResManager: no resource file prefix!");
+            DBG_ASSERT(m_sFilePrefix.getLength(), "OModuleImpl::getResManager: no resource file prefix!");
             // create a manager with a fixed prefix
-            ByteString aMgrName = m_sFilePrefix;
-
-            m_pRessources = ResMgr::CreateResMgr(aMgrName.GetBuffer());
+            m_pRessources = ResMgr::CreateResMgr(m_sFilePrefix.getStr());
             DBG_ASSERT(m_pRessources,
-                    (ByteString("OModuleImpl::getResManager: could not create the resource manager (file name: ")
-                +=  aMgrName
-                +=  ByteString(")!")).GetBuffer());
+                    rtl::OStringBuffer("OModuleImpl::getResManager: could not create the resource manager (file name: ")
+                .append(m_sFilePrefix)
+                .append(")!").getStr());
 
             m_bInitialized = sal_True;
         }
