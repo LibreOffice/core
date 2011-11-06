@@ -451,7 +451,7 @@ void DXF2GDIMetaFile::DrawTextEntity(const DXFTextEntity & rE, const DXFTransfor
     double fA;
     sal_uInt16 nHeight;
     short nAng;
-    ByteString  aStr( rE.sText );
+    rtl::OString aStr( rE.sText );
     DXFTransform aT( DXFTransform(rE.fXScale,rE.fHeight,1.0,rE.fRotAngle,rE.aP0), rTransform );
     aT.TransDir(DXFVector(0,1,0),aV);
     nHeight=(sal_uInt16)(aV.Abs()+0.5);
@@ -510,7 +510,7 @@ void DXF2GDIMetaFile::DrawAttribEntity(const DXFAttribEntity & rE, const DXFTran
         double fA;
         sal_uInt16 nHeight;
         short nAng;
-        ByteString aStr( rE.sText );
+        rtl::OString aStr( rE.sText );
         DXFTransform aT( DXFTransform( rE.fXScale, rE.fHeight, 1.0, rE.fRotAngle, rE.aP0 ), rTransform );
         aT.TransDir(DXFVector(0,1,0),aV);
         nHeight=(sal_uInt16)(aV.Abs()+0.5);
