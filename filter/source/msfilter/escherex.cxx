@@ -94,6 +94,7 @@
 #include <toolkit/unohlp.hxx>
 #include <vcl/virdev.hxx>
 #include <rtl/crc.h>
+#include <rtl/strbuf.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -3922,16 +3923,17 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( sal_Bool bFirst )
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         aXShape( ( bFirst ) ? mXConnectToA : mXConnectToB );
 
-    String aString( (::rtl::OUString)aXShape->getShapeType() );
-    ByteString aType( aString, RTL_TEXTENCODING_UTF8 );
-    aType.Erase( 0, 13 );   // removing "com.sun.star."
-    sal_uInt16 nPos = aType.Search( "Shape" );
-    aType.Erase( nPos, 5 );
+    rtl::OUString aString(aXShape->getShapeType());
+    rtl::OStringBuffer aBuf(rtl::OUStringToOString(aString, RTL_TEXTENCODING_UTF8));
+    aBuf.remove( 0, 13 );   // removing "com.sun.star."
+    sal_Int16 nPos = aBuf.toString().indexOf("Shape");
+    aBuf.remove(nPos, 5);
+    rtl::OString aType = aBuf.makeStringAndClear();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
         aPropertySet( aXShape, ::com::sun::star::uno::UNO_QUERY );
 
-    if ( aType == "drawing.PolyPolygon" || aType == "drawing.PolyLine" )
+    if (aType.equalsL(RTL_CONSTASCII_STRINGPARAM("drawing.PolyPolygon")) || aType.equalsL(RTL_CONSTASCII_STRINGPARAM("drawing.PolyLine")))
     {
         if ( aPropertySet.is() )
         {
@@ -3971,8 +3973,8 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( sal_Bool bFirst )
             }
         }
     }
-    else if ( ( aType == "drawing.OpenBezier" ) || ( aType == "drawing.OpenFreeHand" ) || ( aType == "drawing.PolyLinePath" )
-        || ( aType == "drawing.ClosedBezier" ) || ( aType == "drawing.ClosedFreeHand" ) || ( aType == "drawing.PolyPolygonPath" ) )
+    else if ( (aType.equalsL(RTL_CONSTASCII_STRINGPARAM("drawing.OpenBezier"))) || (aType.equalsL(RTL_CONSTASCII_STRINGPARAM("drawing.OpenFreeHand"))) || (aType.equalsL(RTL_CONSTASCII_STRINGPARAM("drawing.PolyLinePath")))
+        || (aType.equalsL(RTL_CONSTASCII_STRINGPARAM("drawing.ClosedBezier"))) || ( aType.equalsL(RTL_CONSTASCII_STRINGPARAM("drawing.ClosedFreeHand"))) || (aType.equalsL(RTL_CONSTASCII_STRINGPARAM("drawing.PolyPolygonPath"))) )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
             aPropertySet2( aXShape, ::com::sun::star::uno::UNO_QUERY );
@@ -4030,7 +4032,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( sal_Bool bFirst )
     {
         bool bRectangularConnection = true;
 
-        if ( aType == "drawing.Custom" )
+        if (aType.equalsL(RTL_CONSTASCII_STRINGPARAM("drawing.Custom")))
         {
             SdrObject* pCustoShape( GetSdrObjectFromXShape( aXShape ) );
             if ( pCustoShape && pCustoShape->ISA( SdrObjCustomShape ) )
@@ -4132,7 +4134,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( sal_Bool bFirst )
                 aPoly.Rotate( aRect.TopLeft(), (sal_uInt16)( ( nAngle + 5 ) / 10 ) );
             nRule = GetClosestPoint( aPoly, aRefPoint );
 
-            if ( aType == "drawing.Ellipse" )
+            if (aType.equalsL(RTL_CONSTASCII_STRINGPARAM("drawing.Ellipse")))
                 nRule <<= 1;    // In PPT hat eine Ellipse 8 M?glichkeiten sich zu connecten
         }
     }
