@@ -301,7 +301,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_bIsInShape(false)
 {
     OSL_ASSERT(xInputStream.is());
-    m_pInStream = utl::UcbStreamHelper::CreateStream(xInputStream, sal_True);
+    m_pInStream.reset(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
 
     m_xModelFactory.set(m_xDstDoc, uno::UNO_QUERY);
 
@@ -309,16 +309,14 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     if (xDocumentPropertiesSupplier.is())
         m_xDocumentProperties.set(xDocumentPropertiesSupplier->getDocumentProperties(), uno::UNO_QUERY);
 
-    m_pGraphicHelper = new oox::GraphicHelper(m_xContext, xFrame, m_xStorage);
+    m_pGraphicHelper.reset(new oox::GraphicHelper(m_xContext, xFrame, m_xStorage));
 
-    m_pTokenizer.reset(new RTFTokenizer(*this, m_pInStream));
+    m_pTokenizer.reset(new RTFTokenizer(*this, m_pInStream.get()));
     m_pSdrImport.reset(new RTFSdrImport(*this, m_xDstDoc));
 }
 
 RTFDocumentImpl::~RTFDocumentImpl()
 {
-    delete m_pGraphicHelper;
-    delete m_pInStream;
 }
 
 SvStream& RTFDocumentImpl::Strm()

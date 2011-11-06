@@ -351,7 +351,7 @@ namespace writerfilter {
                 uno::Reference<frame::XFrame> const& m_xFrame;
                 uno::Reference<lang::XMultiServiceFactory> m_xModelFactory;
                 uno::Reference<document::XDocumentProperties> m_xDocumentProperties;
-                SvStream* m_pInStream;
+                boost::shared_ptr<SvStream> m_pInStream;
                 Stream* m_pMapperStream;
                 boost::shared_ptr<RTFSdrImport> m_pSdrImport;
                 boost::shared_ptr<RTFTokenizer> m_pTokenizer;
@@ -382,7 +382,7 @@ namespace writerfilter {
                 RTFSprms m_aSettingsTableSprms;
 
                 oox::StorageRef m_xStorage;
-                oox::GraphicHelper* m_pGraphicHelper;
+                boost::shared_ptr<oox::GraphicHelper> m_pGraphicHelper;
 
                 /// Buffered table cells, till cell definitions are not reached.
                 RTFBuffer_t m_aTableBuffer;
