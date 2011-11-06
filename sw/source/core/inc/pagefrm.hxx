@@ -120,22 +120,6 @@ class SwPageFrm: public SwFtnBossFrm
                                      bool bPaintRightShadow,
                                      bool bRightSidebar );
 
-    /** adds the sidebar used for notes to right and left border
-        #i6193#
-
-        @param aRect
-        input parameter - current rect, we change borders if we want a sidebar
-
-        @param _pViewShell
-        input parameter - instance of the view shell, for which the rectangle
-        has to be generated.
-
-        @param bPx
-        input parameter - if set to true, we add in pixel
-    */
-    static void AddSidebarBorders( Rectangle& aRect, ViewShell* _pViewShell, bool bRight, bool bPx = false);
-    static void AddSidebarBorders(       SwRect& aRect, ViewShell* _pViewShell, bool bRight, bool bPx = false);
-
 protected:
     virtual void MakeAll();
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );

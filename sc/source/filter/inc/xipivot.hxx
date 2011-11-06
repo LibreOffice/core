@@ -225,8 +225,6 @@ public:
 
     /** Returns the internal name of the item or 0, if no name could be found. */
     const String*       GetItemName() const;
-    /** Returns the displayed name of the item or 0, if no name could be found. */
-    const String*       GetVisItemName() const;
 
     /** Reads an SXVI record containing data of this item. */
     void                ReadSxvi( XclImpStream& rStrm );

@@ -70,7 +70,6 @@ private:
     sal_uInt16      nLastTab;
     sal_Int32   nOldLinkMode;
 
-    DECL_LINK(CaptionHdl, PushButton*);
     DECL_LINK(MetricHdl, ListBox*);
 
 public:

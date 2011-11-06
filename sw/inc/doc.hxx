@@ -680,7 +680,7 @@ private:
     // Our own 'IdleTimer' calls the following method
     DECL_LINK( DoIdleJobs, Timer * );
     // CharTimer calls this method.
-    DECL_LINK( DoUpdateAllCharts, Timer * );
+    void DoUpdateAllCharts();
     DECL_LINK( DoUpdateModifiedOLE, Timer * );
 
      SwFmt *_MakeCharFmt(const String &, SwFmt *, sal_Bool, sal_Bool );
@@ -1679,7 +1679,7 @@ public:
     void UpdateCharts( const String &rName ) const;
 
     // Update all charts, for that exists any table.
-    void UpdateAllCharts()          { DoUpdateAllCharts( 0 ); }
+    void UpdateAllCharts()          { DoUpdateAllCharts(); }
 
     // Table is renamed and refreshes charts.
     void SetTableName( SwFrmFmt& rTblFmt, const String &rNewName );

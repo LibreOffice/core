@@ -332,14 +332,6 @@ IMPL_LINK(SwLoadOptPage, MetricHdl, ListBox*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(SwLoadOptPage, CaptionHdl, PushButton*, EMPTYARG)
-{
-    SwCaptionOptDlg aDlg(this, GetItemSet());
-    aDlg.Execute();
-
-    return 0;
-}
-
 SwCaptionOptDlg::SwCaptionOptDlg(Window* pParent, const SfxItemSet& rSet) :
     SfxSingleTabDialog(pParent, rSet, 0)
 {

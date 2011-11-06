@@ -5788,30 +5788,6 @@ SwRect SwPageFrm::GetBoundRect() const
     return aResult;
 }
 
-/*static*/ void SwPageFrm::AddSidebarBorders(SwRect &aRect, ViewShell* _pViewShell, bool bRightSidebar, bool bPx)
-{
-    const SwPostItMgr *pMgr = _pViewShell ? _pViewShell->GetPostItMgr() : 0;
-    if (pMgr && pMgr->ShowNotes() && pMgr->HasNotes())
-    {
-        if (!bRightSidebar)
-            aRect.SetLeftAndWidth(aRect.Left() - pMgr->GetSidebarWidth(bPx) - pMgr->GetSidebarBorderWidth(bPx), aRect.Width() + pMgr->GetSidebarWidth(bPx) + pMgr->GetSidebarBorderWidth(bPx));
-        else
-            aRect.AddRight(pMgr->GetSidebarWidth(bPx) + pMgr->GetSidebarBorderWidth(bPx));
-    }
-}
-
-/*static*/ void SwPageFrm::AddSidebarBorders(Rectangle &aRect, ViewShell* _pViewShell, bool bRightSidebar, bool bPx)
-{
-    const SwPostItMgr *pMgr = _pViewShell ? _pViewShell->GetPostItMgr() : 0;
-    if (pMgr && pMgr->ShowNotes() && pMgr->HasNotes())
-    {
-        if (!bRightSidebar)
-            aRect.Left() -= (pMgr->GetSidebarWidth(bPx) + pMgr->GetSidebarBorderWidth(bPx));
-        else
-            aRect.Right() += pMgr->GetSidebarWidth(bPx) + pMgr->GetSidebarBorderWidth(bPx);
-    }
-}
-
 /*static*/ SwTwips SwPageFrm::GetSidebarBorderWidth( const ViewShell* _pViewShell )
 {
     const SwPostItMgr* pPostItMgr = _pViewShell ? _pViewShell->GetPostItMgr() : 0;

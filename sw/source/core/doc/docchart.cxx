@@ -106,9 +106,7 @@ sal_Bool SwTable::IsTblComplexForChart( const String& rSelection,
                                         *pEndBox->GetSttNd(), pGetCLines );
 }
 
-
-
-IMPL_LINK( SwDoc, DoUpdateAllCharts, Timer *, EMPTYARG )
+void SwDoc::DoUpdateAllCharts()
 {
     ViewShell* pVSh;
     GetEditShell( &pVSh );
@@ -129,7 +127,6 @@ IMPL_LINK( SwDoc, DoUpdateAllCharts, Timer *, EMPTYARG )
             }
         }
     }
-    return 0;
 }
 
 void SwDoc::_UpdateCharts( const SwTable& rTbl, ViewShell& rVSh ) const

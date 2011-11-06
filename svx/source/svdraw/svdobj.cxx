@@ -526,17 +526,6 @@ SdrItemPool& SdrObject::GetGlobalDrawObjectItemPool()
     return *mpGlobalItemPool;
 }
 
-void SdrObject::FreeGlobalDrawObjectItemPool()
-{
-    // code for deletion of GlobalItemPool
-    if(mpGlobalItemPool)
-    {
-        SfxItemPool* pGlobalOutlPool = mpGlobalItemPool->GetSecondaryPool();
-        SfxItemPool::Free(mpGlobalItemPool);
-        SfxItemPool::Free(pGlobalOutlPool);
-    }
-}
-
 SdrItemPool* SdrObject::GetObjectItemPool() const
 {
     if(pModel)

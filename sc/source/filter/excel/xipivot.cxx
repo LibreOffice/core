@@ -907,11 +907,6 @@ const String* XclImpPTItem::GetItemName() const
     return 0;
 }
 
-const String* XclImpPTItem::GetVisItemName() const
-{
-    return maItemInfo.HasVisName() ? maItemInfo.GetVisName() : GetItemName();
-}
-
 void XclImpPTItem::ReadSxvi( XclImpStream& rStrm )
 {
     rStrm >> maItemInfo;

@@ -819,23 +819,6 @@ void EditView::TransliterateText( sal_Int32 nTransliterationMode )
     }
 }
 
-
-sal_Bool EditView::MatchGroup()
-{
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    EditSelection aNewSel( PIMPEE->MatchGroup( pImpEditView->GetEditSelection() ) );
-    if ( aNewSel.HasRange() )
-    {
-        pImpEditView->DrawSelection();
-        pImpEditView->SetEditSelection( aNewSel );
-        pImpEditView->DrawSelection();
-        ShowCursor();
-        return sal_True;
-    }
-    return sal_False;
-}
-
 void EditView::CompleteAutoCorrect( Window* pFrameWin )
 {
     DBG_CHKTHIS( EditView, 0 );

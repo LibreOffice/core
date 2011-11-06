@@ -507,9 +507,6 @@ private:
     static SdrItemPool*         mpGlobalItemPool;
 public:
     static SdrItemPool& GetGlobalDrawObjectItemPool();
-private:
-    SVX_DLLPRIVATE static void FreeGlobalDrawObjectItemPool();
-
 protected:
     void ImpDeleteUserData();
     SdrObjUserData* ImpGetMacroUserData() const;

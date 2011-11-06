@@ -192,8 +192,6 @@ public:
     void            SetAnchorMode( EVAnchorMode eMode );
     EVAnchorMode    GetAnchorMode() const;
 
-    sal_Bool            MatchGroup();
-
     void            CompleteAutoCorrect( Window* pFrameWin = NULL );
 
     EESpellState    StartSpeller( sal_Bool bMultipleDoc = sal_False );
