@@ -109,7 +109,6 @@ class SdrUndoAction;
 class VirtualDevice;
 class SfxPrinter;
 class SvNumberFormatter;
-class SvStringsSort;
 class SvxMacro;
 class SvxMacroTableDtor;
 class SwAutoCompleteWord;
@@ -1408,7 +1407,7 @@ public:
     void                SetDefaultTOXBase(const SwTOXBase& rBase);
 
     // Key for management of index.
-    sal_uInt16 GetTOIKeys( SwTOIKeyType eTyp, SvStringsSort& rArr ) const;
+    sal_uInt16 GetTOIKeys( SwTOIKeyType eTyp, std::vector<String>& rArr ) const;
 
     // Sort table text.
     sal_Bool SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions&);

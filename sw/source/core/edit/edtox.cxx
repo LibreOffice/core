@@ -62,7 +62,6 @@
 #include <statstr.hrc>
 #include <bookmrk.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
@@ -254,7 +253,7 @@ const SwTOXType* SwEditShell::GetTOXType(TOXTypes eTyp, sal_uInt16 nId) const
      Beschreibung: Schluessel fuer Stichwortverzeichnisse verwalten
  --------------------------------------------------------------------*/
 
-sal_uInt16 SwEditShell::GetTOIKeys( SwTOIKeyType eTyp, SvStringsSort& rArr ) const
+sal_uInt16 SwEditShell::GetTOIKeys( SwTOIKeyType eTyp, std::vector<String>& rArr ) const
 {
     return GetDoc()->GetTOIKeys( eTyp, rArr );
 }

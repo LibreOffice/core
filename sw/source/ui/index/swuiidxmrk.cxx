@@ -253,15 +253,19 @@ void SwIndexMarkDlg::InitControls()
         aTypeDCB.InsertEntry( pSh->GetTOXType(TOX_USER, i)->GetTypeName() );
 
     // read keywords primary
-    SvStringsSort aArr;
+    std::vector<String> aArr;
     nCount = pSh->GetTOIKeys( TOI_PRIMARY, aArr );
-    for(i=0; i < nCount; ++i)
-        aKeyDCB.InsertEntry( *aArr[ i ] );
+    std::sort(aArr.begin(), aArr.end());
+    for(typename std::vector<String>::iterator it = aArr.begin(); it != aArr.end(); ++it) {
+        aKeyDCB.InsertEntry( *it );
+    }
 
     // read keywords secondary
     nCount = pSh->GetTOIKeys( TOI_SECONDARY, aArr );
-    for(i=0; i < nCount; ++i)
-        aKey2DCB.InsertEntry( *aArr[ i ] );
+    std::sort(aArr.begin(), aArr.end());
+    for(typename std::vector<String>::iterator it = aArr.begin(); it != aArr.end(); ++it) {
+        aKey2DCB.InsertEntry( *it );
+    }
 
     UpdateLanguageDependenciesForPhoneticReading();
 

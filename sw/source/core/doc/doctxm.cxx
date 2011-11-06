@@ -104,10 +104,9 @@ typedef LinkStruct* LinkStructPtr;
 SV_DECL_PTRARR(LinkStructArr, LinkStructPtr, 0, 5 )
 SV_IMPL_PTRARR(LinkStructArr, LinkStructPtr)
 
-sal_uInt16 SwDoc::GetTOIKeys( SwTOIKeyType eTyp, SvStringsSort& rArr ) const
+sal_uInt16 SwDoc::GetTOIKeys( SwTOIKeyType eTyp, std::vector<String>& rArr ) const
 {
-    if( rArr.Count() )
-        rArr.Remove( sal_uInt16(0), rArr.Count() );
+    rArr.clear();
 
     // dann mal ueber den Pool und alle Primary oder Secondary heraussuchen
     const SwTxtTOXMark* pMark;
@@ -129,10 +128,10 @@ sal_uInt16 SwDoc::GetTOIKeys( SwTOIKeyType eTyp, SvStringsSort& rArr ) const
                 pStr = &((SwTOXMark*)pItem)->GetSecondaryKey();
 
             if( pStr->Len() )
-                rArr.Insert( (StringPtr)pStr );
+                rArr.push_back( *pStr );
         }
 
-    return rArr.Count();
+    return rArr.size();
 }
 
 /*--------------------------------------------------------------------

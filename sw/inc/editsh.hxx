@@ -66,7 +66,6 @@ class SwNewDBMgr;
 
 struct SwDocStat;
 class SvStringsDtor;
-class SvStringsSort;
 class SwAutoCompleteWord;
 
 class SwFmtRefMark;
@@ -416,7 +415,7 @@ public:
     void            ApplyAutoMark();
 
     // Key for managing index.
-    sal_uInt16 GetTOIKeys( SwTOIKeyType eTyp, SvStringsSort& rArr ) const;
+    sal_uInt16 GetTOIKeys( SwTOIKeyType eTyp, std::vector<String>& rArr ) const;
 
     void SetOutlineNumRule(const SwNumRule&);
     const SwNumRule* GetOutlineNumRule() const;

@@ -34,6 +34,8 @@
 #include <svl/inettype.hxx>
 #include <svl/svl.hrc>
 
+#include <boost/ptr_container/ptr_map.hpp>
+
 #include "getstringresource.hxx"
 
 #ifndef _SVSTDARR_STRINGSSORT_DECL
@@ -62,30 +64,33 @@ struct TypeIDMapEntry
 };
 
 //============================================================================
-struct TypeNameMapEntry: public UniString
+struct TypeNameMapEntry
 {
     UniString m_aExtension;
     INetContentType m_eTypeID;
 
-    TypeNameMapEntry(const UniString & rType):
-        UniString(rType), m_eTypeID(CONTENT_TYPE_UNKNOWN) {}
+    TypeNameMapEntry():
+        m_eTypeID(CONTENT_TYPE_UNKNOWN) {}
 };
 
 //============================================================================
-struct ExtensionMapEntry: public UniString
+struct ExtensionMapEntry
 {
     INetContentType m_eTypeID;
 
-    ExtensionMapEntry(const UniString & rExt):
-        UniString(rExt), m_eTypeID(CONTENT_TYPE_UNKNOWN) {}
+    ExtensionMapEntry():
+        m_eTypeID(CONTENT_TYPE_UNKNOWN) {}
 };
 
 //============================================================================
 class Registration
 {
+    typedef boost::ptr_map<UniString, TypeNameMapEntry>  TypeNameMap;
+    typedef boost::ptr_map<UniString, ExtensionMapEntry> ExtensionMap;
+
     Table m_aTypeIDMap; // map TypeID to TypeName, Presentation
-    SvStringsSort m_aTypeNameMap; // map TypeName to TypeID, Extension
-    SvStringsSort m_aExtensionMap; // map Extension to TypeID
+    TypeNameMap  m_aTypeNameMap;  // map TypeName to TypeID, Extension
+    ExtensionMap m_aExtensionMap; // map Extension to TypeID
     sal_uInt32 m_nNextDynamicID;
 
 public:
@@ -527,15 +532,6 @@ Registration::~Registration()
         delete static_cast< TypeIDMapEntry * >(m_aTypeIDMap.GetObject(i));
     }
     m_aTypeIDMap.Clear();
-    {for (sal_uInt16 i = 0; i < m_aTypeNameMap.Count(); ++i)
-        delete static_cast< TypeNameMapEntry * >(m_aTypeNameMap.GetObject(i));
-    }
-    m_aTypeNameMap.Remove(sal_uInt16(0), m_aTypeNameMap.Count());
-    {for (sal_uInt16 i = 0; i < m_aExtensionMap.Count(); ++i)
-        delete
-            static_cast< ExtensionMapEntry * >(m_aExtensionMap.GetObject(i));
-    }
-    m_aExtensionMap.Remove(sal_uInt16(0), m_aExtensionMap.Count());
 }
 
 //============================================================================
@@ -545,12 +541,10 @@ TypeNameMapEntry * Registration::getExtensionEntry(UniString const &
 {
     UniString aTheTypeName = rTypeName;
     aTheTypeName.ToLowerAscii();
-    sal_uInt16 nPos;
     Registration &rRegistration = theRegistration::get();
-    if (rRegistration.m_aTypeNameMap.Seek_Entry(&aTheTypeName, &nPos))
-        return static_cast< TypeNameMapEntry * >(rRegistration.
-                                                     m_aTypeNameMap.
-                                                         GetObject(nPos));
+    typename TypeNameMap::iterator it = rRegistration.m_aTypeNameMap.find(aTheTypeName);
+    if (it != rRegistration.m_aTypeNameMap.end())
+        return it->second;
     return 0;
 }
 
@@ -581,18 +575,17 @@ INetContentType Registration::RegisterContentType(UniString const & rTypeName,
         pTypeIDMapEntry->m_aSystemFileType = *pSystemFileType;
     rRegistration.m_aTypeIDMap.Insert(eTypeID, pTypeIDMapEntry);
 
-    TypeNameMapEntry * pTypeNameMapEntry = new TypeNameMapEntry(aTheTypeName);
+    std::auto_ptr<TypeNameMapEntry> pTypeNameMapEntry(new TypeNameMapEntry());
     if (pExtension)
         pTypeNameMapEntry->m_aExtension = *pExtension;
     pTypeNameMapEntry->m_eTypeID = eTypeID;
-    rRegistration.m_aTypeNameMap.Insert(pTypeNameMapEntry);
+    rRegistration.m_aTypeNameMap.insert(aTheTypeName, pTypeNameMapEntry);
 
     if (pExtension)
     {
-        ExtensionMapEntry * pExtensionMapEntry
-            = new ExtensionMapEntry(*pExtension);
+        std::auto_ptr<ExtensionMapEntry> pExtensionMapEntry(new ExtensionMapEntry());
         pExtensionMapEntry->m_eTypeID = eTypeID;
-        rRegistration.m_aExtensionMap.Insert(pExtensionMapEntry);
+        rRegistration.m_aExtensionMap.insert(*pExtension, pExtensionMapEntry);
     }
 
     return eTypeID;
@@ -606,13 +599,10 @@ INetContentType Registration::GetContentType(UniString const & rTypeName)
 
     UniString aTheTypeName = rTypeName;
     aTheTypeName.ToLowerAscii();
-    sal_uInt16 nPos;
-    return rRegistration.m_aTypeNameMap.Seek_Entry(&aTheTypeName, &nPos) ?
-               static_cast< TypeNameMapEntry * >(rRegistration.
-                                                     m_aTypeNameMap.
-                                                         GetObject(nPos))->
-                   m_eTypeID :
-               CONTENT_TYPE_UNKNOWN;
+    typename TypeNameMap::iterator it = rRegistration.m_aTypeNameMap.find(aTheTypeName);
+    return it != rRegistration.m_aTypeNameMap.end()
+        ? it->second->m_eTypeID
+        : CONTENT_TYPE_UNKNOWN;
 }
 
 //============================================================================
@@ -646,16 +636,10 @@ INetContentType Registration::GetContentType4Extension(UniString const &
 {
     Registration &rRegistration = theRegistration::get();
 
-    sal_uInt16 nPos;
-    return rRegistration.
-                   m_aExtensionMap.
-                       Seek_Entry(const_cast< UniString * >(&rExtension),
-                                  &nPos) ?
-               static_cast< ExtensionMapEntry * >(rRegistration.
-                                                      m_aExtensionMap.
-                                                          GetObject(nPos))->
-                   m_eTypeID :
-               CONTENT_TYPE_UNKNOWN;
+    typename ExtensionMap::iterator it = rRegistration.m_aExtensionMap.find(rExtension);
+    return it != rRegistration.m_aExtensionMap.end()
+        ? it->second->m_eTypeID
+        : CONTENT_TYPE_UNKNOWN;
 }
 
 //============================================================================
