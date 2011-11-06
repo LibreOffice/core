@@ -786,7 +786,7 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
     if ( nStyle & FRAME_DRAW_NODRAW )
     {
         sal_uInt16 nValueStyle = bMenuStyle ? nStyle | FRAME_DRAW_MENU : nStyle;
-        if( pWin->GetType() == WINDOW_BORDERWINDOW )
+        if( pWin && pWin->GetType() == WINDOW_BORDERWINDOW )
             nValueStyle |= FRAME_DRAW_BORDERWINDOWBORDER;
         ImplControlValue aControlValue( nValueStyle );
         Rectangle aBound, aContent;

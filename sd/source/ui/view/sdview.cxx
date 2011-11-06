@@ -623,7 +623,7 @@ sal_Bool View::IsPresObjSelected(sal_Bool bOnPage, sal_Bool bOnMasterPage, sal_B
         if ( pObj && ( bCheckPresObjListOnly || pObj->IsEmptyPresObj() || pObj->GetUserCall() ) )
         {
             pPage = (SdPage*) pObj->GetPage();
-            bMasterPage = pPage->IsMasterPage();
+            bMasterPage = pPage && pPage->IsMasterPage();
 
             if ( (bMasterPage && bOnMasterPage) || (!bMasterPage && bOnPage) )
             {

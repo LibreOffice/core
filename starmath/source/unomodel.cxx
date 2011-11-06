@@ -882,9 +882,9 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                 for (size_t i = 0; i < aSymbols.size(); ++i)
                 {
                     const SmSym * pSymbol = aSymbols[ i ];
-                    const bool bIsUsedSymbol = rUsedSymbols.find( pSymbol->GetName() ) != rUsedSymbols.end();
                     if (pSymbol && !pSymbol->IsPredefined() &&
-                        (!bUsedSymbolsOnly || bIsUsedSymbol))
+                        (!bUsedSymbolsOnly ||
+                         rUsedSymbols.find( pSymbol->GetName() ) != rUsedSymbols.end()))
                     {
                         aVector.push_back ( pSymbol );
                         nCount++;

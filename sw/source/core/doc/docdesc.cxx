@@ -611,8 +611,9 @@ void SwDoc::PrtDataChanged()
     if ( pTmpRoot )
     {
         ViewShell *pSh = GetCurrentViewShell();
-        if( !pSh->GetViewOptions()->getBrowseMode() ||
-            pSh->GetViewOptions()->IsPrtFormat() )
+        if( pSh &&
+            (!pSh->GetViewOptions()->getBrowseMode() ||
+             pSh->GetViewOptions()->IsPrtFormat()) )
         {
             if ( GetDocShell() )
                 pWait = new SwWait( *GetDocShell(), sal_True );
@@ -632,16 +633,12 @@ void SwDoc::PrtDataChanged()
             std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
             std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_SIZE));
 
-            if ( pSh )
+            do
             {
-                do
-                {
-                    pSh->InitPrt( pPrt );
-                    pSh = (ViewShell*)pSh->GetNext();
-                }
-                while ( pSh != GetCurrentViewShell() );
+                pSh->InitPrt( pPrt );
+                pSh = (ViewShell*)pSh->GetNext();
             }
-
+            while ( pSh != GetCurrentViewShell() );
         }
     }
     if ( bDraw && pDrawModel )
