@@ -372,16 +372,18 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
 void ScXMLTableContext::EndElement()
 {
     ScXMLImport::MutexGuard aMutexGuard(GetScImport());
-    GetScImport().GetStylesImportHelper()->EndTable();
-    ScDocument* pDoc(GetScImport().GetDocument());
+    ScXMLImport& rImport = GetScImport();
+    rImport.GetStylesImportHelper()->EndTable();
+    ScDocument* pDoc(rImport.GetDocument());
     if (!pDoc)
         return;
 
-    SCTAB nCurTab = GetScImport().GetTables().GetCurrentSheet();
+    ScMyTables& rTables = rImport.GetTables();
+    SCTAB nCurTab = rTables.GetCurrentSheet();
     if (sPrintRanges.getLength())
     {
         Reference< sheet::XPrintAreas > xPrintAreas(
-            GetScImport().GetTables().GetCurrentXSheet(), UNO_QUERY);
+            rTables.GetCurrentXSheet(), UNO_QUERY);
 
         if( xPrintAreas.is() )
         {
@@ -423,26 +425,26 @@ void ScXMLTableContext::EndElement()
             }
         }
     }
-    if (GetScImport().GetTables().HasDrawPage())
+    if (rTables.HasDrawPage())
     {
-        if (GetScImport().GetTables().HasXShapes())
+        if (rTables.HasXShapes())
         {
-            GetScImport().GetShapeImport()->popGroupAndSort();
-            uno::Reference < drawing::XShapes > xTempShapes(GetScImport().GetTables().GetCurrentXShapes());
-            GetScImport().GetShapeImport()->endPage(xTempShapes);
+            rImport.GetShapeImport()->popGroupAndSort();
+            uno::Reference < drawing::XShapes > xTempShapes(rTables.GetCurrentXShapes());
+            rImport.GetShapeImport()->endPage(xTempShapes);
         }
         if (bStartFormPage)
-            GetScImport().GetFormImport()->endPage();
+            rImport.GetFormImport()->endPage();
     }
 
-    GetScImport().GetTables().DeleteTable();
-    GetScImport().ProgressBarIncrement(false);
+    rTables.DeleteTable();
+    rImport.ProgressBarIncrement(false);
 
     // store stream positions
     if (!pExternalRefInfo.get() && nStartOffset >= 0 /* && nEndOffset >= 0 */)
     {
-        ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetScImport().GetModel())->GetSheetSaveData();
-        SCTAB nTab = GetScImport().GetTables().GetCurrentSheet();
+        ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rImport.GetModel())->GetSheetSaveData();
+        SCTAB nTab = rTables.GetCurrentSheet();
         // pSheetData->AddStreamPos( nTab, nStartOffset, nEndOffset );
         pSheetData->StartStreamPos( nTab, nStartOffset );
     }

@@ -523,7 +523,8 @@ void ScMyTables::NewTable(sal_Int32 nTempSpannedCols)
     maTables.push_back(new ScMyTableData(nCurrentSheet));
     pCurrentTab = & maTables.back();
 
-    if (maTables.size() > 1)
+    size_t nTables = maTables.size();
+    if (nTables > 1)
     {
         ScMyTableData& rFirstTab = maTables.front();
 
@@ -551,10 +552,9 @@ void ScMyTables::NewTable(sal_Int32 nTempSpannedCols)
 
     pCurrentTab->SetSpannedCols(nTempSpannedCols);
 
-    size_t n = maTables.size();
-    if (n > 1)
+    if (nTables > 1)
     {
-        maTables[n-2].SetSubTableSpanned(pCurrentTab->GetSpannedCols());
+        maTables[nTables-2].SetSubTableSpanned(pCurrentTab->GetSpannedCols());
         UnMerge();
     }
 }
@@ -615,7 +615,7 @@ void ScMyTables::DeleteTable()
             pCurrentTab = NULL;
     }
 
-    if (maTables.empty()) // only set the styles if all subtables are importet and the table is finished
+    if (maTables.empty()) // only set the styles if all subtables are imported and the table is finished
     {
         rImport.GetStylesImportHelper()->SetStylesToRanges();
         rImport.SetStylesToRangesFinished();
