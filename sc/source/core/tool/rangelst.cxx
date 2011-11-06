@@ -221,6 +221,21 @@ void ScRangeList::Format( String& rStr, sal_uInt16 nFlags, ScDocument* pDoc,
 }
 
 
+void ScRangeList::Format( rtl::OUString& rStr, sal_uInt16 nFlags, ScDocument* pDoc,
+                          formula::FormulaGrammar::AddressConvention eConv,
+                          sal_Unicode cDelimiter ) const
+{
+
+    if (!cDelimiter)
+        cDelimiter = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+
+    String aStr;
+    FormatString func(aStr, nFlags, pDoc, eConv, cDelimiter);
+    for_each(maRanges.begin(), maRanges.end(), func);
+    rStr = aStr;
+}
+
+
 void ScRangeList::Join( const ScRange& r, bool bIsInList )
 {
     if ( maRanges.empty() )

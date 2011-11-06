@@ -342,7 +342,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     }
     else if (eCellType == CELLTYPE_STRING || eCellType == CELLTYPE_EDIT)
     {
-        String aStr;
+        rtl::OUString aStr;
         GetString(nCol, nRow, aStr);
         rListData = (ScUserListData*)(ScGlobal::GetUserList()->GetData(aStr));
         if (rListData)
@@ -365,12 +365,16 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             //  -> longest number defines rMinDigits
 
             sal_Int32 nVal1;
-            short nFlag1 = lcl_DecompValueString( aStr, nVal1, &rMinDigits );
+            String aString = aStr;
+            short nFlag1 = lcl_DecompValueString( aString, nVal1, &rMinDigits );
+            aStr = aString;
             if ( nFlag1 )
             {
                 sal_Int32 nVal2;
                 GetString( nCol+nAddX, nRow+nAddY, aStr );
-                short nFlag2 = lcl_DecompValueString( aStr, nVal2, &rMinDigits );
+                aString = aStr;
+                short nFlag2 = lcl_DecompValueString( aString, nVal2, &rMinDigits );
+                aStr = aString;
                 if ( nFlag1 == nFlag2 )
                 {
                     rInc = (double)nVal2 - (double)nVal1;
@@ -387,7 +391,9 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 ((ScStringCell*)pCell)->GetString( aStr );
                             else
                                 ((ScEditCell*)pCell)->GetString( aStr );
-                            nFlag2 = lcl_DecompValueString( aStr, nVal2, &rMinDigits );
+                            aString = aStr;
+                            nFlag2 = lcl_DecompValueString( aString, nVal2, &rMinDigits );
+                            aStr = aString;
                             if ( nFlag1 == nFlag2 )
                             {
                                 double nDiff = (double)nVal2 - (double)nVal1;
@@ -412,7 +418,8 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         {
             //  call DecompValueString to set rMinDigits
             sal_Int32 nDummy;
-            lcl_DecompValueString( aStr, nDummy, &rMinDigits );
+            String aString = aStr;
+            lcl_DecompValueString( aString, nDummy, &rMinDigits );
         }
     }
 }

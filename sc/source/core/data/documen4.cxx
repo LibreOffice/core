@@ -64,7 +64,7 @@ using namespace formula;
 // Nach der Regula Falsi Methode
 bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
                         SCCOL nVCol, SCROW nVRow, SCTAB nVTab,
-                        const String& sValStr, double& nX)
+                        const rtl::OUString& sValStr, double& nX)
 {
     bool bRet = false;
     nX = 0.0;
@@ -127,7 +127,7 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
 void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                                      SCCOL nCol2, SCROW nRow2,
                                      const ScMarkData& rMark,
-                                     const String& rFormula,
+                                     const rtl::OUString& rFormula,
                                      const ScTokenArray* pArr,
                                      const formula::FormulaGrammar::Grammar eGram )
 {
@@ -251,20 +251,20 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
     }
 
     ScRefAddress aRef;
-    String aForString = '=';
-    aForString += ScCompiler::GetNativeSymbol(ocTableOp);
-    aForString += ScCompiler::GetNativeSymbol( ocOpen);
+    rtl::OUStringBuffer aForString('=');
+    aForString.append(ScCompiler::GetNativeSymbol(ocTableOp));
+    aForString.append(ScCompiler::GetNativeSymbol( ocOpen));
 
     const String& sSep = ScCompiler::GetNativeSymbol( ocSep);
     if (rParam.nMode == 0)                          // nur Spalte
     {
         aRef.Set( rParam.aRefFormulaCell.GetAddress(), true, false, false );
-        aForString += aRef.GetRefString(this, nTab1);
-        aForString += sSep;
-        aForString += rParam.aRefColCell.GetRefString(this, nTab1);
-        aForString += sSep;
+        aForString.append(aRef.GetRefString(this, nTab1));
+        aForString.append(sSep);
+        aForString.append(rParam.aRefColCell.GetRefString(this, nTab1));
+        aForString.append(sSep);
         aRef.Set( nCol1, nRow1, nTab1, false, true, true );
-        aForString += aRef.GetRefString(this, nTab1);
+        aForString.append(aRef.GetRefString(this, nTab1));
         nCol1++;
         nCol2 = Min( nCol2, (SCCOL)(rParam.aRefFormulaEnd.Col() -
                     rParam.aRefFormulaCell.Col() + nCol1 + 1));
@@ -272,34 +272,34 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
     else if (rParam.nMode == 1)                 // nur zeilenweise
     {
         aRef.Set( rParam.aRefFormulaCell.GetAddress(), false, true, false );
-        aForString += aRef.GetRefString(this, nTab1);
-        aForString += sSep;
-        aForString += rParam.aRefRowCell.GetRefString(this, nTab1);
-        aForString += sSep;
+        aForString.append(aRef.GetRefString(this, nTab1));
+        aForString.append(sSep);
+        aForString.append(rParam.aRefRowCell.GetRefString(this, nTab1));
+        aForString.append(sSep);
         aRef.Set( nCol1, nRow1, nTab1, true, false, true );
-        aForString += aRef.GetRefString(this, nTab1);
+        aForString.append(aRef.GetRefString(this, nTab1));
         nRow1++;
         nRow2 = Min( nRow2, (SCROW)(rParam.aRefFormulaEnd.Row() -
                     rParam.aRefFormulaCell.Row() + nRow1 + 1));
     }
     else                    // beides
     {
-        aForString += rParam.aRefFormulaCell.GetRefString(this, nTab1);
-        aForString += sSep;
-        aForString += rParam.aRefColCell.GetRefString(this, nTab1);
-        aForString += sSep;
+        aForString.append(rParam.aRefFormulaCell.GetRefString(this, nTab1));
+        aForString.append(sSep);
+        aForString.append(rParam.aRefColCell.GetRefString(this, nTab1));
+        aForString.append(sSep);
         aRef.Set( nCol1, nRow1 + 1, nTab1, false, true, true );
-        aForString += aRef.GetRefString(this, nTab1);
-        aForString += sSep;
-        aForString += rParam.aRefRowCell.GetRefString(this, nTab1);
-        aForString += sSep;
+        aForString.append(aRef.GetRefString(this, nTab1));
+        aForString.append(sSep);
+        aForString.append(rParam.aRefRowCell.GetRefString(this, nTab1));
+        aForString.append(sSep);
         aRef.Set( nCol1 + 1, nRow1, nTab1, true, false, true );
-        aForString += aRef.GetRefString(this, nTab1);
+        aForString.append(aRef.GetRefString(this, nTab1));
         nCol1++; nRow1++;
     }
-    aForString += ScCompiler::GetNativeSymbol( ocClose);
+    aForString.append(ScCompiler::GetNativeSymbol( ocClose ));
 
-    ScFormulaCell aRefCell( this, ScAddress( nCol1, nRow1, nTab1 ), aForString,
+    ScFormulaCell aRefCell( this, ScAddress( nCol1, nRow1, nTab1 ), aForString.makeStringAndClear(),
            formula::FormulaGrammar::GRAM_NATIVE, MM_NONE );
     for( j = nCol1; j <= nCol2; j++ )
         for( k = nRow1; k <= nRow2; k++ )
@@ -676,8 +676,8 @@ const SfxPoolItem* ScDocument::GetEffItem(
                 if ( pForm )
                 {
                     ScBaseCell* pCell = ((ScDocument*)this)->GetCell(ScAddress(nCol,nRow,nTab));
-                    String aStyle = pForm->GetCellStyle( pCell, ScAddress(nCol, nRow, nTab) );
-                    if (aStyle.Len())
+                    rtl::OUString aStyle = pForm->GetCellStyle( pCell, ScAddress(nCol, nRow, nTab) );
+                    if (!aStyle.isEmpty())
                     {
                         SfxStyleSheetBase* pStyleSheet = xPoolHelper->GetStylePool()->Find(
                                                                 aStyle, SFX_STYLE_FAMILY_PARA );
@@ -700,8 +700,8 @@ const SfxItemSet* ScDocument::GetCondResult( SCCOL nCol, SCROW nRow, SCTAB nTab 
     if ( pForm )
     {
         ScBaseCell* pCell = ((ScDocument*)this)->GetCell(ScAddress(nCol,nRow,nTab));
-        String aStyle = pForm->GetCellStyle( pCell, ScAddress(nCol, nRow, nTab) );
-        if (aStyle.Len())
+        rtl::OUString aStyle = pForm->GetCellStyle( pCell, ScAddress(nCol, nRow, nTab) );
+        if (!aStyle.isEmpty())
         {
             SfxStyleSheetBase* pStyleSheet = xPoolHelper->GetStylePool()->Find( aStyle, SFX_STYLE_FAMILY_PARA );
             if ( pStyleSheet )
@@ -1070,12 +1070,14 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             //! ein Progress ueber alle Tabellen ???
             rtl::OUString aTabName;
             GetName( nThisTab, aTabName );
-            String aTemplate = ScGlobal::GetRscString(STR_PROGRESS_COMPARING);
-            String aProText = aTemplate.GetToken( 0, '#' );
-            aProText.Append(String(aTabName));
-            aProText += aTemplate.GetToken( 1, '#' );
+            rtl::OUString aTemplate = ScGlobal::GetRscString(STR_PROGRESS_COMPARING);
+            sal_Int32 nIndex = 0;
+            rtl::OUStringBuffer aProText = aTemplate.getToken( 0, '#', nIndex );
+            aProText.append(aTabName);
+            nIndex = 0;
+            aProText.append(aTemplate.getToken( 1, '#', nIndex ));
             ScProgress aProgress( GetDocumentShell(),
-                                        aProText, 3*nThisEndRow );  // 2x FindOrder, 1x hier
+                                        aProText.makeStringAndClear(), 3*nThisEndRow );  // 2x FindOrder, 1x hier
             long nProgressStart = 2*nThisEndRow;                    // start fuer hier
 
             SCCOLROW* pTempRows = new SCCOLROW[nThisEndRow+1];

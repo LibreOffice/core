@@ -1548,7 +1548,7 @@ ScChangeTrack* XclExpChangeTrack::CreateTempChangeTrack()
 
     // adjust table count
     SCTAB nOrigCount = GetDoc().GetTableCount();
-    String sTabName;
+    rtl::OUString sTabName;
     for( sal_Int32 nIndex = 0; nIndex < nOrigCount; nIndex++ )
     {
         pTempDoc->CreateValidTabName( sTabName );

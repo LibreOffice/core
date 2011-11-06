@@ -94,8 +94,8 @@ private:
                                        bool bWithContent, bool bWithInteraction );
 
 public:
-                        ScDocumentLoader( const String& rFileName,
-                                          String& rFilterName, String& rOptions,
+                        ScDocumentLoader( const rtl::OUString& rFileName,
+                                          rtl::OUString& rFilterName, rtl::OUString& rOptions,
                                           sal_uInt32 nRekCnt = 0, bool bWithInteraction = false );
                         ~ScDocumentLoader();
     ScDocument*         GetDocument();

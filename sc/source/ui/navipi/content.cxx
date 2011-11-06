@@ -1204,8 +1204,9 @@ void ScContentTree::DoDrag()
                     ScDocShell* pSrcShell = NULL;
                     if ( bHiddenDoc )
                     {
-                        String aFilter, aOptions;
-                        pDocLoader = new ScDocumentLoader( aHiddenName, aFilter, aOptions );
+                        rtl::OUString aFilter, aOptions;
+                        rtl::OUString aURL = aHiddenName;
+                        pDocLoader = new ScDocumentLoader( aURL, aFilter, aOptions );
                         if (!pDocLoader->IsError())
                             pSrcShell = pDocLoader->GetDocShell();
                     }
@@ -1282,8 +1283,9 @@ sal_Bool ScContentTree::LoadFile( const String& rUrl )
         aDocName.Erase(nPos);           // nur der Name, ohne #...
 
     sal_Bool bReturn = false;
-    String aFilter, aOptions;
-    ScDocumentLoader aLoader( aDocName, aFilter, aOptions );
+    rtl::OUString aURL = aDocName;
+    rtl::OUString aFilter, aOptions;
+    ScDocumentLoader aLoader( aURL, aFilter, aOptions );
     if ( !aLoader.IsError() )
     {
         bHiddenDoc = sal_True;

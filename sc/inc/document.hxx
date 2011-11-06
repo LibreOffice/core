@@ -195,7 +195,7 @@ enum ScDocumentMode
 
 struct ScDocStat
 {
-    String  aDocName;
+    rtl::OUString  aDocName;
     SCTAB   nTableCount;
     sal_uLong   nCellCount;
     sal_uInt16  nPageCount;
@@ -278,8 +278,8 @@ private:
     mutable ::std::auto_ptr< ScFormulaParserPool >
                         mxFormulaParserPool;            /// Pool for all external formula parsers used by this document.
 
-    String              aDocName;                       // optional: name of document
-    String              aDocCodeName;                       // optional: name of document (twice?)
+    rtl::OUString              aDocName;                       // optional: name of document
+    rtl::OUString              aDocCodeName;                       // optional: name of document (twice?)
     ScRangePairListRef  xColNameRanges;
     ScRangePairListRef  xRowNameRanges;
 
@@ -426,10 +426,10 @@ public:
     inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                     GetServiceManager() const { return xServiceManager; }
 
-    SC_DLLPUBLIC const String&  GetName() const { return aDocName; }
-    void            SetName( const String& r ) { aDocName = r; }
-    const String&   GetCodeName() const { return aDocCodeName; }
-    void                SetCodeName( const String& r ) { aDocCodeName = r; }
+    SC_DLLPUBLIC const rtl::OUString&  GetName() const { return aDocName; }
+    void            SetName( const rtl::OUString& r ) { aDocName = r; }
+    const rtl::OUString&   GetCodeName() const { return aDocCodeName; }
+    void                SetCodeName( const rtl::OUString& r ) { aDocCodeName = r; }
 
     void            GetDocStat( ScDocStat& rDocStat );
 
@@ -489,7 +489,7 @@ public:
     const ScDBData* GetFilterDBAtTable(SCTAB nTab) const;
 
 
-    SC_DLLPUBLIC const ScRangeData* GetRangeAtBlock( const ScRange& rBlock, String* pName=NULL ) const;
+    SC_DLLPUBLIC const ScRangeData* GetRangeAtBlock( const ScRange& rBlock, rtl::OUString* pName=NULL ) const;
 
     SC_DLLPUBLIC ScDPCollection*        GetDPCollection();
     ScDPObject*         GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
@@ -502,22 +502,22 @@ public:
     void            EnsureGraphicNames();
 
     SdrObject*      GetObjectAtPoint( SCTAB nTab, const Point& rPos );
-    bool            HasChartAtPoint( SCTAB nTab, const Point& rPos, String* pName = NULL );
+    bool            HasChartAtPoint( SCTAB nTab, const Point& rPos, rtl::OUString& rName );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > GetChartByName( const String& rChartName );
-    SC_DLLPUBLIC void            GetChartRanges( const String& rChartName, ::std::vector< ScRangeList >& rRanges, ScDocument* pSheetNameDoc );
-    void            SetChartRanges( const String& rChartName, const ::std::vector< ScRangeList >& rRanges );
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > GetChartByName( const rtl::OUString& rChartName );
+    SC_DLLPUBLIC void            GetChartRanges( const rtl::OUString& rChartName, ::std::vector< ScRangeList >& rRanges, ScDocument* pSheetNameDoc );
+    void            SetChartRanges( const rtl::OUString& rChartName, const ::std::vector< ScRangeList >& rRanges );
 
-    void            UpdateChartArea( const String& rChartName, const ScRange& rNewArea,
+    void            UpdateChartArea( const rtl::OUString& rChartName, const ScRange& rNewArea,
                                         bool bColHeaders, bool bRowHeaders, bool bAdd );
-    void            UpdateChartArea( const String& rChartName,
+    void            UpdateChartArea( const rtl::OUString& rChartName,
                                     const ScRangeListRef& rNewList,
                                     bool bColHeaders, bool bRowHeaders, bool bAdd );
-    void            GetOldChartParameters( const String& rName,
+    void            GetOldChartParameters( const rtl::OUString& rName,
                                     ScRangeList& rRanges, bool& rColHeaders, bool& rRowHeaders );
     ::com::sun::star::uno::Reference<
             ::com::sun::star::embed::XEmbeddedObject >
-                    FindOleObjectByName( const String& rName );
+                    FindOleObjectByName( const rtl::OUString& rName );
 
     SC_DLLPUBLIC void           MakeTable( SCTAB nTab,bool _bNeedsNameCheck = true );
 
@@ -568,23 +568,22 @@ public:
     void            SetEmbedded( const Rectangle& rRect );          // from VisArea (1/100 mm)
     void            SnapVisArea( Rectangle& rRect ) const;          // 1/100 mm
 
-    static SC_DLLPUBLIC bool ValidTabName( const String& rName );
+    static SC_DLLPUBLIC bool ValidTabName( const rtl::OUString& rName );
 
-    SC_DLLPUBLIC bool           ValidNewTabName( const String& rName ) const;
-    SC_DLLPUBLIC bool               ValidNewTabName( const std::vector<String>& rName ) const;
-    SC_DLLPUBLIC void           CreateValidTabName(String& rName) const;
+    SC_DLLPUBLIC bool           ValidNewTabName( const rtl::OUString& rName ) const;
+    SC_DLLPUBLIC bool               ValidNewTabName( const std::vector<rtl::OUString>& rName ) const;
     SC_DLLPUBLIC void           CreateValidTabName(rtl::OUString& rName) const;
     SC_DLLPUBLIC void           CreateValidTabNames(std::vector<rtl::OUString>& aNames, SCTAB nCount) const;
 
     void AppendTabOnLoad(const rtl::OUString& rName);
 
-    SC_DLLPUBLIC bool           InsertTab( SCTAB nPos, const String& rName,
+    SC_DLLPUBLIC bool           InsertTab( SCTAB nPos, const rtl::OUString& rName,
                                         bool bExternalDocument = false );
     SC_DLLPUBLIC bool           InsertTabs( SCTAB nPos, const std::vector<rtl::OUString>& rNames,
                                 bool bExternalDocument = false, bool bNamesValid = false );
     SC_DLLPUBLIC bool           DeleteTabs( SCTAB nTab, SCTAB nSheets, ScDocument* pRefUndoDoc = NULL );
     SC_DLLPUBLIC bool           DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc = NULL );
-    SC_DLLPUBLIC bool           RenameTab( SCTAB nTab, const String& rName,
+    SC_DLLPUBLIC bool           RenameTab( SCTAB nTab, const rtl::OUString& rName,
                                 bool bUpdateRef = true,
                                 bool bExternalDocument = false );
     bool                        MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress = NULL );
@@ -609,7 +608,7 @@ public:
     SC_DLLPUBLIC bool           IsScenario( SCTAB nTab ) const;
     SC_DLLPUBLIC void GetScenarioData( SCTAB nTab, rtl::OUString& rComment,
                                        Color& rColor, sal_uInt16& rFlags ) const;
-    SC_DLLPUBLIC void           SetScenarioData( SCTAB nTab, const String& rComment,
+    SC_DLLPUBLIC void           SetScenarioData( SCTAB nTab, const rtl::OUString& rComment,
                                         const Color& rColor, sal_uInt16 nFlags );
     SC_DLLPUBLIC Color GetTabBgColor( SCTAB nTab ) const;
     SC_DLLPUBLIC void SetTabBgColor( SCTAB nTab, const Color& rColor );
@@ -622,19 +621,19 @@ public:
     void            SetGrammar( formula::FormulaGrammar::Grammar eGram );
     SC_DLLPUBLIC sal_uInt8          GetLinkMode( SCTAB nTab ) const;
     bool            IsLinked( SCTAB nTab ) const;
-    SC_DLLPUBLIC const String&  GetLinkDoc( SCTAB nTab ) const;
-    const String&   GetLinkFlt( SCTAB nTab ) const;
-    const String&   GetLinkOpt( SCTAB nTab ) const;
-    SC_DLLPUBLIC const String&  GetLinkTab( SCTAB nTab ) const;
-    sal_uLong           GetLinkRefreshDelay( SCTAB nTab ) const;
-    void            SetLink( SCTAB nTab, sal_uInt8 nMode, const String& rDoc,
-                            const String& rFilter, const String& rOptions,
-                            const String& rTabName, sal_uLong nRefreshDelay );
-    bool            HasLink( const String& rDoc,
-                            const String& rFilter, const String& rOptions ) const;
-    SC_DLLPUBLIC bool           LinkExternalTab( SCTAB& nTab, const String& aDocTab,
-                                    const String& aFileName,
-                                    const String& aTabName );
+    SC_DLLPUBLIC const rtl::OUString  GetLinkDoc( SCTAB nTab ) const;
+    const rtl::OUString   GetLinkFlt( SCTAB nTab ) const;
+    const rtl::OUString   GetLinkOpt( SCTAB nTab ) const;
+    SC_DLLPUBLIC const rtl::OUString  GetLinkTab( SCTAB nTab ) const;
+    sal_uLong       GetLinkRefreshDelay( SCTAB nTab ) const;
+    void            SetLink( SCTAB nTab, sal_uInt8 nMode, const rtl::OUString& rDoc,
+                            const rtl::OUString& rFilter, const rtl::OUString& rOptions,
+                            const rtl::OUString& rTabName, sal_uLong nRefreshDelay );
+    bool            HasLink( const rtl::OUString& rDoc,
+                            const rtl::OUString& rFilter, const rtl::OUString& rOptions ) const;
+    SC_DLLPUBLIC bool           LinkExternalTab( SCTAB& nTab, const rtl::OUString& aDocTab,
+                                    const rtl::OUString& aFileName,
+                                    const rtl::OUString& aTabName );
 
     bool            HasExternalRefManager() const { return pExternalRefMgr.get(); }
     SC_DLLPUBLIC ScExternalRefManager* GetExternalRefManager() const;
@@ -662,12 +661,12 @@ public:
 
                     // for StarOne Api:
     sal_uInt16          GetDdeLinkCount() const;
-    bool            UpdateDdeLink( const String& rAppl, const String& rTopic, const String& rItem );
+    bool            UpdateDdeLink( const rtl::OUString& rAppl, const rtl::OUString& rTopic, const rtl::OUString& rItem );
 
     /** Tries to find a DDE link with the specified connection data.
         @param rnDdePos  (out-param) Returns the index of the DDE link (does not include other links from link manager).
         @return  true = DDE link found, rnDdePos valid. */
-    SC_DLLPUBLIC bool            FindDdeLink( const String& rAppl, const String& rTopic, const String& rItem, sal_uInt8 nMode, sal_uInt16& rnDdePos );
+    SC_DLLPUBLIC bool            FindDdeLink( const rtl::OUString& rAppl, const rtl::OUString& rTopic, const rtl::OUString& rItem, sal_uInt8 nMode, sal_uInt16& rnDdePos );
 
     /** Returns the connection data of the specified DDE link.
         @param nDdePos  Index of the DDE link (does not include other links from link manager).
@@ -675,7 +674,7 @@ public:
         @param rTopic  (out-param) The DDE topic.
         @param rItem  (out-param) The DDE item.
         @return  true = DDE link found, out-parameters valid. */
-    bool            GetDdeLinkData( sal_uInt16 nDdePos, String& rAppl, String& rTopic, String& rItem ) const;
+    bool            GetDdeLinkData( sal_uInt16 nDdePos, rtl::OUString& rAppl, rtl::OUString& rTopic, rtl::OUString& rItem ) const;
     /** Returns the link mode of the specified DDE link.
         @param nDdePos  Index of the DDE link (does not include other links from link manager).
         @param rnMode  (out-param) The link mode of the specified DDE link.
@@ -689,7 +688,7 @@ public:
     /** Tries to find a DDE link or creates a new, if not extant.
         @param pResults  If not 0, sets the matrix as as DDE link result matrix (also for existing links).
         @return  true = DDE link found; false = Unpredictable error occurred, no DDE link created. */
-    SC_DLLPUBLIC bool            CreateDdeLink( const String& rAppl, const String& rTopic, const String& rItem, sal_uInt8 nMode, ScMatrixRef pResults );
+    SC_DLLPUBLIC bool            CreateDdeLink( const rtl::OUString& rAppl, const rtl::OUString& rTopic, const rtl::OUString& rItem, sal_uInt8 nMode, ScMatrixRef pResults );
     /** Sets a result matrix for the specified DDE link.
         @param nDdePos  Index of the DDE link (does not include other links from link manager).
         @param pResults  The array containing all results of the DDE link (intrusive-ref-counted, do not delete).
@@ -717,7 +716,7 @@ public:
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
                     //! only assigns the new RangeList, no ChartListener or the like
-    void            SetChartRangeList( const String& rChartName,
+    void            SetChartRangeList( const rtl::OUString& rChartName,
                         const ScRangeListRef& rNewRangeListRef );
 
     void            StartAnimations( SCTAB nTab, Window* pWin );
@@ -753,7 +752,7 @@ public:
                             sal_uLong nFormatIndex, bool bForceTab = false);
                     //  return TRUE = number format is set
     SC_DLLPUBLIC bool           SetString(
-        SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
+        SCCOL nCol, SCROW nRow, SCTAB nTab, const rtl::OUString& rString,
         ScSetStringParam* pParam = NULL );
     SC_DLLPUBLIC void           SetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rVal );
     void            SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const sal_uInt16 nError);
@@ -761,7 +760,7 @@ public:
     SC_DLLPUBLIC void           InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                                         SCCOL nCol2, SCROW nRow2,
                                         const ScMarkData& rMark,
-                                        const String& rFormula,
+                                        const rtl::OUString& rFormula,
                                         const ScTokenArray* p = NULL,
                                         const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT );
     SC_DLLPUBLIC void           InsertTableOp(const ScTabOpParam& rParam,   // multi-operation
@@ -1144,7 +1143,7 @@ public:
                             sal_uLong nFillCount, FillDir eFillDir = FILL_TO_BOTTOM,
                             FillCmd eFillCmd = FILL_LINEAR, FillDateCmd eFillDateCmd = FILL_DAY,
                             double nStepValue = 1.0, double nMaxValue = 1E307);
-    String          GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW nEndY );
+    rtl::OUString          GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW nEndY );
 
     bool            GetSelectionFunction( ScSubTotalFunc eFunc,
                                             const ScAddress& rCursor, const ScMarkData& rMark,
@@ -1161,8 +1160,8 @@ public:
     const SfxPoolItem*  GetEffItem( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich ) const;
 
     SC_DLLPUBLIC const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >& GetBreakIterator();
-    bool            HasStringWeakCharacters( const String& rString );
-    SC_DLLPUBLIC sal_uInt8          GetStringScriptType( const String& rString );
+    bool            HasStringWeakCharacters( const rtl::OUString& rString );
+    SC_DLLPUBLIC sal_uInt8          GetStringScriptType( const rtl::OUString& rString );
     SC_DLLPUBLIC sal_uInt8          GetCellScriptType( ScBaseCell* pCell, sal_uLong nNumberFormat );
     SC_DLLPUBLIC sal_uInt8          GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell = NULL );
 
@@ -1274,7 +1273,7 @@ public:
 
     bool            Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
                             SCCOL nVCol, SCROW nVRow, SCTAB nVTab,
-                            const String& sValStr, double& nX);
+                            const rtl::OUString& sValStr, double& nX);
 
     void            ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMarkData& rMark,
                                            ScEditDataArray* pDataArray = NULL );
@@ -1407,8 +1406,8 @@ public:
     SC_DLLPUBLIC ScStyleSheetPool*  GetStyleSheetPool() const;
 
     // PageStyle:
-    SC_DLLPUBLIC const String&  GetPageStyle( SCTAB nTab ) const;
-    SC_DLLPUBLIC void           SetPageStyle( SCTAB nTab, const String& rName );
+    SC_DLLPUBLIC const rtl::OUString  GetPageStyle( SCTAB nTab ) const;
+    SC_DLLPUBLIC void           SetPageStyle( SCTAB nTab, const rtl::OUString& rName );
     Size            GetPageSize( SCTAB nTab ) const;
     void            SetPageSize( SCTAB nTab, const Size& rSize );
     void            SetRepeatArea( SCTAB nTab, SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow );
@@ -1417,13 +1416,13 @@ public:
     void            RemoveManualBreaks( SCTAB nTab );
     bool            HasManualBreaks( SCTAB nTab ) const;
 
-    bool            IsPageStyleInUse( const String& rStrPageStyle, SCTAB* pInTab = NULL );
-    bool            RemovePageStyleInUse( const String& rStrPageStyle );
-    bool            RenamePageStyleInUse( const String& rOld, const String& rNew );
+    bool            IsPageStyleInUse( const rtl::OUString& rStrPageStyle, SCTAB* pInTab = NULL );
+    bool            RemovePageStyleInUse( const rtl::OUString& rStrPageStyle );
+    bool            RenamePageStyleInUse( const rtl::OUString& rOld, const rtl::OUString& rNew );
     void            ModifyStyleSheet( SfxStyleSheetBase& rPageStyle,
                                       const SfxItemSet&  rChanges );
 
-    void            PageStyleModified( SCTAB nTab, const String& rNewName );
+    void            PageStyleModified( SCTAB nTab, const rtl::OUString& rNewName );
 
     SC_DLLPUBLIC bool           NeedPageResetAfterTab( SCTAB nTab ) const;
 
@@ -1474,7 +1473,7 @@ public:
     SCSIZE          Query( SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeepSub );
     SC_DLLPUBLIC bool           CreateQueryParam( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                         SCTAB nTab, ScQueryParam& rQueryParam );
-    void            GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab, String& rStr);
+    void            GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rStr);
 
     bool            GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 bool bFilter, TypedScStrCollection& rStrings, bool& rHasDates);
@@ -1505,7 +1504,7 @@ public:
 
     void            DoColResize( SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCSIZE nAdd );
 
-    void            InvalidateTextWidth( const String& rStyleName );
+    void            InvalidateTextWidth( const rtl::OUString& rStyleName );
     void            InvalidateTextWidth( SCTAB nTab );
     void            InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* pAdrTo, bool bNumFormatChanged );
 
@@ -1558,14 +1557,14 @@ public:
                         { return pChartListenerCollection; }
     void            SetChartListenerCollection( ScChartListenerCollection*,
                         bool bSetChartRangeLists = false );
-    void            UpdateChart( const String& rName );
-    void            RestoreChartListener( const String& rName );
+    void            UpdateChart( const rtl::OUString& rName );
+    void            RestoreChartListener( const rtl::OUString& rName );
     SC_DLLPUBLIC void           UpdateChartListenerCollection();
     bool            IsChartListenerCollectionNeedsUpdate() const
                         { return bChartListenerCollectionNeedsUpdate; }
     void            SetChartListenerCollectionNeedsUpdate( bool bFlg )
                         { bChartListenerCollectionNeedsUpdate = bFlg; }
-    void            AddOLEObjectToCollection(const String& rName);
+    void            AddOLEObjectToCollection(const rtl::OUString& rName);
 
     ScChangeViewSettings* GetChangeViewSettings() const     { return pChangeViewSettings; }
     SC_DLLPUBLIC void               SetChangeViewSettings(const ScChangeViewSettings& rNew);

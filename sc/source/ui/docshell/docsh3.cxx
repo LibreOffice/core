@@ -1063,7 +1063,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                         break;
                         case SC_CAT_INSERT_TABS :
                         {
-                            String aName;
+                            rtl::OUString aName;
                             aDocument.CreateValidTabName( aName );
                             GetDocFunc().InsertTable( aSourceRange.aStart.Tab(), aName, sal_True, false );
                         }
@@ -1230,7 +1230,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
             ScDocument* pTmpDoc = new ScDocument;
             for ( sal_Int32 nIndex = 0; nIndex < aDocument.GetTableCount(); ++nIndex )
             {
-                String sTabName;
+                rtl::OUString sTabName;
                 pTmpDoc->CreateValidTabName( sTabName );
                 pTmpDoc->InsertTab( SC_TAB_APPEND, sTabName );
             }
@@ -1275,7 +1275,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
             pTmpDoc = new ScDocument;
             for ( sal_Int32 nIndex = 0; nIndex < aDocument.GetTableCount(); ++nIndex )
             {
-                String sTabName;
+                rtl::OUString sTabName;
                 pTmpDoc->CreateValidTabName( sTabName );
                 pTmpDoc->InsertTab( SC_TAB_APPEND, sTabName );
             }

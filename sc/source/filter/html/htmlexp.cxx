@@ -1174,7 +1174,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         TAG_ON(aStr.makeStringAndClear().getStr());
     }
 
-    String aStrOut;
+    rtl::OUString aStrOut;
     sal_Bool bFieldText = false;
     if ( pCell )
     {   // cell content
@@ -1195,13 +1195,14 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     }
     if ( !bFieldText )
     {
-        if ( !aStrOut.Len() )
+        if ( aStrOut.isEmpty() )
         {
             TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );        // keine komplett leere Zelle
         }
         else
         {
-            xub_StrLen nPos = aStrOut.Search( _LF );
+            String aStr = aStrOut;
+            xub_StrLen nPos = aStr.Search( _LF );
             if ( nPos == STRING_NOTFOUND )
             {
                 OUT_STR( aStrOut );
@@ -1211,13 +1212,13 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
                 xub_StrLen nStartPos = 0;
                 do
                 {
-                    String aSingleLine( aStrOut, nStartPos, nPos - nStartPos );
+                    String aSingleLine( aStr, nStartPos, nPos - nStartPos );
                     OUT_STR( aSingleLine );
                     TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );
                     nStartPos = nPos + 1;
                 }
-                while( ( nPos = aStrOut.Search( _LF, nStartPos ) ) != STRING_NOTFOUND );
-                String aSingleLine( aStrOut, nStartPos, aStrOut.Len() - nStartPos );
+                while( ( nPos = aStr.Search( _LF, nStartPos ) ) != STRING_NOTFOUND );
+                String aSingleLine( aStr, nStartPos, aStr.Len() - nStartPos );
                 OUT_STR( aSingleLine );
             }
         }

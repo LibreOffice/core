@@ -4912,7 +4912,7 @@ void ScInterpreter::ScCountIf()
                 }
                 else
                 {
-                    rParam.FillInExcelSyntax(rString, 0);
+                    rParam.FillInExcelSyntax(rtl::OUString(rString), 0);
                     sal_uInt32 nIndex = 0;
                     rEntry.bQueryByString =
                         !(pFormatter->IsNumberFormat(
@@ -5234,7 +5234,7 @@ void ScInterpreter::ScSumIf()
             }
             else
             {
-                rParam.FillInExcelSyntax(aString, 0);
+                rParam.FillInExcelSyntax(rtl::OUString(aString), 0);
                 sal_uInt32 nIndex = 0;
                 rEntry.bQueryByString =
                     !(pFormatter->IsNumberFormat(

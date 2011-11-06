@@ -55,6 +55,9 @@ public:
     void            Format( String&, sal_uInt16 nFlags = 0, ScDocument* = NULL,
                             formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
                             sal_Unicode cDelimiter = 0 ) const;
+    void            Format( rtl::OUString&, sal_uInt16 nFlags = 0, ScDocument* = NULL,
+                            formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
+                            sal_Unicode cDelimiter = 0 ) const;
 
     void            Join( const ScRange&, bool bIsInList = false );
 

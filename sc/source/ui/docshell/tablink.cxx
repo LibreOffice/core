@@ -547,20 +547,20 @@ void ScDocumentLoader::RemoveAppPrefix( rtl::OUString& rFilterName )
         rFilterName = rFilterName.copy(nPreLen);
 }
 
-ScDocumentLoader::ScDocumentLoader( const String& rFileName,
-                                    String& rFilterName, String& rOptions,
+ScDocumentLoader::ScDocumentLoader( const rtl::OUString& rFileName,
+                                    rtl::OUString& rFilterName, rtl::OUString& rOptions,
                                     sal_uInt32 nRekCnt, bool bWithInteraction ) :
         pDocShell(0),
         pMedium(0)
 {
-    if ( !rFilterName.Len() )
+    if ( rFilterName.isEmpty() )
         GetFilterName( rFileName, rFilterName, rOptions, true, bWithInteraction );
 
     const SfxFilter* pFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( rFilterName );
 
     //  ItemSet immer anlegen, damit die DocShell die Optionen setzen kann
     SfxItemSet* pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
-    if ( rOptions.Len() )
+    if ( !rOptions.isEmpty() )
         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, rOptions ) );
 
     pMedium = new SfxMedium( rFileName, STREAM_STD_READ, false, pFilter, pSet );
@@ -587,8 +587,8 @@ ScDocumentLoader::ScDocumentLoader( const String& rFileName,
 
     pDocShell->DoLoad( pMedium );
 
-    String aNew = GetOptions(*pMedium);         // Optionen werden beim Laden per Dialog gesetzt
-    if (aNew.Len() && aNew != rOptions)
+    rtl::OUString aNew = GetOptions(*pMedium);         // Optionen werden beim Laden per Dialog gesetzt
+    if (!aNew.isEmpty() && aNew != rOptions)
         rOptions = aNew;
 }
 

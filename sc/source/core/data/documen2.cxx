@@ -595,7 +595,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
             }
         }
         maTabs[nTab] = new ScTable(this, nTab,
-                            String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("baeh")));
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("baeh")));
         if (nTab < static_cast<SCTAB>(pSourceDoc->maTabs.size()) && pSourceDoc->maTabs[nTab])
             maTabs[nTab]->SetLayoutRTL( pSourceDoc->maTabs[nTab]->IsLayoutRTL() );
     }
@@ -626,7 +626,7 @@ void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 maTabs.resize( nTab + 1, NULL );
             }
             maTabs.at(nTab) = new ScTable(this, nTab,
-                                    String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("temp")),
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("temp")),
                                     bExtras, bExtras);
         }
 
@@ -919,7 +919,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
     return bValid;
 }
 
-void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String& sModuleSource );
+void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const rtl::OUString& sModuleName, const rtl::OUString& sModuleSource );
 
 sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                                 SCTAB nDestPos, bool bInsertNew,
@@ -1094,13 +1094,13 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
         SfxObjectShell* pSrcShell = pSrcDoc ? pSrcDoc->GetDocumentShell() : NULL;
         if ( pSrcShell )
         {
-            String aLibName(RTL_CONSTASCII_USTRINGPARAM("Standard"));
+            rtl::OUString aLibName(RTL_CONSTASCII_USTRINGPARAM("Standard"));
             const BasicManager *pBasicManager = pSrcShell->GetBasicManager();
             if (pBasicManager && pBasicManager->GetName().Len() > 0)
                 aLibName = pSrcShell->GetBasicManager()->GetName();
 
-            String sCodeName;
-            String sSource;
+            rtl::OUString sCodeName;
+            rtl::OUString sSource;
             uno::Reference< script::XLibraryContainer > xLibContainer = pSrcShell->GetBasicContainer();
             uno::Reference< container::XNameContainer > xLib;
             if( xLibContainer.is() )

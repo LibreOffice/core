@@ -137,7 +137,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
 
     if (!pDrawLayer)
     {
-        String aName;
+        rtl::OUString aName;
         if ( pShell && !pShell->IsLoading() )       // don't call GetTitle while loading
             aName = pShell->GetTitle();
         pDrawLayer = new ScDrawLayer( this, aName );

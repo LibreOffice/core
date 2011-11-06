@@ -243,14 +243,14 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
 
         if (!bEditEngine)                                   // direkte Ausgabe
         {
-            String aValStr;
+            rtl::OUString aValStr;
             Color* pColor;
             SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
             sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
             ScCellFormat::GetString( pCell, nFormat, aValStr, &pColor,
                                         *pFormatter,
                                         true, rOptions.bFormula, ftCheck );
-            if (aValStr.Len())
+            if (!aValStr.isEmpty())
             {
                 //  SetFont ist nach oben verschoben
 
@@ -408,11 +408,11 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                 Color* pColor;
                 SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
                 sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
-                String aString;
+                rtl::OUString aString;
                 ScCellFormat::GetString( pCell, nFormat, aString, &pColor,
                                             *pFormatter,
                                             true, rOptions.bFormula, ftCheck );
-                if (aString.Len())
+                if (!aString.isEmpty())
                     pEngine->SetTextNewDefaults(aString, pSet);
                 else
                     pEngine->SetDefaults(pSet);
@@ -524,6 +524,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
     return nValue;
 }
 
+
 sal_uInt16 ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, double nPPTY,
                                      const Fraction& rZoomX, const Fraction& rZoomY,
                                      bool bFormula, sal_uInt16 nOldWidth,
@@ -552,7 +553,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, doubl
         // Try to find the row that has the longest string, and measure the width of that string.
         SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
         sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter );
-        String aLongStr;
+        rtl::OUString aLongStr;
         Color* pColor;
         if (pParam->mnMaxTextRow >= 0)
         {
@@ -570,19 +571,19 @@ sal_uInt16 ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, doubl
                     break;
 
                 ScBaseCell* pCell = pItems[nIndex].pCell;
-                String aValStr;
+                rtl::OUString aValStr;
                 ScCellFormat::GetString(
                     pCell, nFormat, aValStr, &pColor, *pFormatter, true, false, ftCheck );
 
-                if (aValStr.Len() > nLongLen)
+                if (aValStr.getLength() > nLongLen)
                 {
-                    nLongLen = aValStr.Len();
+                    nLongLen = aValStr.getLength();
                     aLongStr = aValStr;
                 }
             }
         }
 
-        if (aLongStr.Len())
+        if (!aLongStr.isEmpty())
         {
             nWidth = pDev->GetTextWidth(aLongStr) + static_cast<sal_uInt16>(nMargin);
             bFound = true;

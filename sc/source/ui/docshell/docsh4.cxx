@@ -1334,8 +1334,8 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
         {
             ScDocShellModificator aModificator( *this );
 
-            String aNewName = pStyle->GetName();
-            String aOldName = aNewName;
+            rtl::OUString aNewName = pStyle->GetName();
+            rtl::OUString aOldName = aNewName;
             sal_Bool bExtended = rHint.ISA(SfxStyleSheetHintExtended);      // Name geaendert?
             if (bExtended)
                 aOldName = ((SfxStyleSheetHintExtended&)rHint).GetOldName();
@@ -1372,8 +1372,8 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
     {
         if ( nId == SFX_STYLESHEET_MODIFIED)
         {
-            String aNewName = pStyle->GetName();
-            String aOldName = aNewName;
+            rtl::OUString aNewName = pStyle->GetName();
+            rtl::OUString aOldName = aNewName;
             sal_Bool bExtended = rHint.ISA(SfxStyleSheetHintExtended);
             if (bExtended)
                 aOldName = ((SfxStyleSheetHintExtended&)rHint).GetOldName();
@@ -1504,7 +1504,7 @@ sal_Bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
     return bChange;
 }
 
-void ScDocShell::PageStyleModified( const String& rStyleName, sal_Bool bApi )
+void ScDocShell::PageStyleModified( const rtl::OUString& rStyleName, sal_Bool bApi )
 {
     ScDocShellModificator aModificator( *this );
 

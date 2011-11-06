@@ -262,7 +262,7 @@ void ImportExcel8::Boundsheet( void )
     aIn.EnableDecryption();
     aIn >> nGrbit >> nLen;
 
-    String aName( aIn.ReadUniString( nLen ) );
+    rtl::OUString aName( aIn.ReadUniString( nLen ) );
     GetTabInfo().AppendXclTabName( aName, nBdshtTab );
 
     SCTAB nScTab = static_cast< SCTAB >( nBdshtTab );

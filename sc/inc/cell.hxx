@@ -236,6 +236,7 @@ public:
 
     inline void     SetString( const String& rString ) { maString = rString; }
     inline void     GetString( String& rString ) const { rString = maString; }
+    inline void     GetString( rtl::OUString& rString ) const { rString = maString; }
     inline const String& GetString() const { return maString; }
 
 private:
@@ -393,6 +394,8 @@ public:
     ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, const ScAddress& rPos, int nCloneFlags = SC_CLONECELL_DEFAULT );
 
     void            GetFormula( String& rFormula,
+                                const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
+    void            GetFormula( rtl::OUString& rFormula,
                                 const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
     void            GetFormula( rtl::OUStringBuffer& rBuffer,
                                 const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;

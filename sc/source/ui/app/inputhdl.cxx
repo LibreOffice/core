@@ -3417,7 +3417,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
 
                     if ( pInputWin )                        // Bereichsanzeige
                     {
-                        String aPosStr;
+                        rtl::OUString aPosStr;
                         const ScAddress::Details aAddrDetails( pDoc, aCursorPos );
 
                         //  Ist der Bereich ein Name?
@@ -3427,7 +3427,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                             pActiveViewSh->GetViewData()->GetDocument()->
                                 GetRangeAtBlock( ScRange( rSPos, rEPos ), &aPosStr );
 
-                        if ( !aPosStr.Len() )           // kein Name -> formatieren
+                        if ( !aPosStr.getLength() )           // kein Name -> formatieren
                         {
                             sal_uInt16 nFlags = 0;
                             if( aAddrDetails.eConv == formula::FormulaGrammar::CONV_XL_R1C1 )

@@ -284,7 +284,7 @@ public:
 
     void            LoadStylesArgs( ScDocShell& rSource, sal_Bool bReplace, sal_Bool bCellStyles, sal_Bool bPageStyles );
 
-    void            PageStyleModified( const String& rStyleName, sal_Bool bApi );
+    void            PageStyleModified( const rtl::OUString& rStyleName, sal_Bool bApi );
 
     void            NotifyStyle( const SfxStyleSheetHint& rHint );
     void            DoAutoStyle( const ScRange& rRange, const String& rStyle );

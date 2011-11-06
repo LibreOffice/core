@@ -1019,6 +1019,13 @@ void ScFormulaCell::GetFormula( String& rFormula, const FormulaGrammar::Grammar 
     rFormula = rBuffer.makeStringAndClear();
 }
 
+void ScFormulaCell::GetFormula( rtl::OUString& rFormula, const FormulaGrammar::Grammar eGrammar ) const
+{
+    rtl::OUStringBuffer rBuffer( rFormula );
+    GetFormula( rBuffer, eGrammar );
+    rFormula = rBuffer.makeStringAndClear();
+}
+
 void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
 {
     MaybeInterpret();

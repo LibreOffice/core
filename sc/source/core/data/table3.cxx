@@ -411,8 +411,8 @@ short ScTable::CompareCell( sal_uInt16 nSort,
 
             if ( bStr1 && bStr2 )           // nur Strings untereinander als String vergleichen!
             {
-                String aStr1;
-                String aStr2;
+                rtl::OUString aStr1;
+                rtl::OUString aStr2;
                 if (eType1 == CELLTYPE_STRING)
                     ((ScStringCell*)pCell1)->GetString(aStr1);
                 else
@@ -845,7 +845,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     //  (frueher nur, wenn eine Spalte mehrfach vorkam)
     bool bTestPrevSub = ( nLevelCount > 1 );
 
-    String  aSubString;
+    rtl::OUString  aSubString;
     String  aOutString;
 
     bool bIgnoreCase = !rParam.bCaseSens;
@@ -900,7 +900,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                     bChanged = false;
                     if (!bTotal)
                     {
-                        String aString;
+                        rtl::OUString aString;
                         for (i=0; i<=aRowEntry.nGroupNo && !bChanged; i++)
                         {
                             GetString( nGroupCol[i], nRow, aString );
@@ -908,8 +908,8 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                                 ScGlobal::pCharClass->toUpper( aString );
                             //  wenn sortiert, ist "leer" eine eigene Gruppe
                             //  sonst sind leere Zellen unten erlaubt
-                            bChanged = ( ( aString.Len() || rParam.bDoSort ) &&
-                                            aString != *pCompString[i] );
+                            bChanged = ( ( !aString.isEmpty() || rParam.bDoSort ) &&
+                                            aString != rtl::OUString(*pCompString[i]) );
                         }
                         if ( bChanged && bTestPrevSub )
                         {
@@ -1266,7 +1266,7 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
         }
         else if (isQueryByString(*this, rEntry, nRow, pCell))
         {
-            String  aCellStr;
+            rtl::OUString  aCellStr;
             if (isPartialTextMatchOp(rEntry))
                 // may have to do partial textural comparison.
                 bMatchWholeCell = false;
@@ -1288,14 +1288,14 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
             if ( bRealRegExp || bTestRegExp )
             {
                 xub_StrLen nStart = 0;
-                xub_StrLen nEnd   = aCellStr.Len();
+                xub_StrLen nEnd   = aCellStr.getLength();
 
                 // from 614 on, nEnd is behind the found text
                 bool bMatch = false;
                 if ( rEntry.eOp == SC_ENDS_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH )
                 {
                     nEnd = 0;
-                    nStart = aCellStr.Len();
+                    nStart = aCellStr.getLength();
                     bMatch = (bool) rEntry.GetSearchTextPtr( rParam.bCaseSens )
                         ->SearchBkwrd( aCellStr, &nStart, &nEnd );
                 }
@@ -1305,7 +1305,7 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                         ->SearchFrwrd( aCellStr, &nStart, &nEnd );
                 }
                 if ( bMatch && bMatchWholeCell
-                        && (nStart != 0 || nEnd != aCellStr.Len()) )
+                        && (nStart != 0 || nEnd != aCellStr.getLength()) )
                     bMatch = false;    // RegExp must match entire cell string
                 if ( bRealRegExp )
                     switch (rEntry.eOp)
@@ -1325,10 +1325,10 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                         bOk = !( bMatch && (nStart == 0) );
                         break;
                     case SC_ENDS_WITH:
-                        bOk = ( bMatch && (nEnd == aCellStr.Len()) );
+                        bOk = ( bMatch && (nEnd == aCellStr.getLength()) );
                         break;
                     case SC_DOES_NOT_END_WITH:
-                        bOk = !( bMatch && (nEnd == aCellStr.Len()) );
+                        bOk = !( bMatch && (nEnd == aCellStr.getLength()) );
                         break;
                     default:
                         {
@@ -1362,7 +1362,7 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                     {
                         rtl::OUString aQueryStr = rEntry.GetQueryString();
                         String aCell( pTransliteration->transliterate(
-                            aCellStr, ScGlobal::eLnge, 0, aCellStr.Len(),
+                            aCellStr, ScGlobal::eLnge, 0, aCellStr.getLength(),
                             NULL ) );
                         String aQuer( pTransliteration->transliterate(
                             aQueryStr, ScGlobal::eLnge, 0, aQueryStr.getLength(),
@@ -1732,7 +1732,7 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, bool bKeepSub)
                 String aStr;
                 for (SCCOL k=aParam.nCol1; k <= aParam.nCol2; k++)
                 {
-                    String aCellStr;
+                    rtl::OUString aCellStr;
                     GetString(k, j, aCellStr);
                     aStr += aCellStr;
                     aStr += (sal_Unicode)1;
@@ -1793,7 +1793,7 @@ bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
 {
     bool    bValid = true;
     SCCOL* pFields = new SCCOL[nCol2-nCol1+1];
-    String  aCellStr;
+    rtl::OUString  aCellStr;
     SCCOL   nCol = nCol1;
     OSL_ENSURE( rQueryParam.nTab != SCTAB_MAX, "rQueryParam.nTab no value, not bad but no good" );
     SCTAB   nDBTab = (rQueryParam.nTab == SCTAB_MAX ? nTab : rQueryParam.nTab);
@@ -1802,7 +1802,7 @@ bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
     // Erste Zeile muessen Spaltenkoepfe sein
     while (bValid && (nCol <= nCol2))
     {
-        String aQueryStr;
+        rtl::OUString aQueryStr;
         GetUpperCellString(nCol, nRow1, aQueryStr);
         bool bFound = false;
         SCCOL i = rQueryParam.nCol1;
@@ -1845,7 +1845,7 @@ bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
             {
                 GetInputString( nCol, nRow, aCellStr );
                 ScGlobal::pCharClass->toUpper( aCellStr );
-                if (aCellStr.Len() > 0)
+                if (!aCellStr.isEmpty())
                 {
                     if (nIndex < nNewEntries)
                     {
@@ -1884,7 +1884,7 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
 
     bool bValid;
     bool bFound;
-    String aCellStr;
+    rtl::OUString aCellStr;
     SCSIZE nIndex = 0;
     SCROW nRow = nRow1;
     OSL_ENSURE( rQueryParam.nTab != SCTAB_MAX, "rQueryParam.nTab no value, not bad but no good" );
@@ -1904,12 +1904,12 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
         if (nIndex > 0)
         {
             GetUpperCellString(nCol1, nRow, aCellStr);
-            if ( aCellStr == ScGlobal::GetRscString(STR_TABLE_UND) )
+            if ( aCellStr == rtl::OUString(ScGlobal::GetRscString(STR_TABLE_UND)) )
             {
                 rEntry.eConnect = SC_AND;
                 bValid = true;
             }
-            else if ( aCellStr == ScGlobal::GetRscString(STR_TABLE_ODER) )
+            else if ( aCellStr == rtl::OUString(ScGlobal::GetRscString(STR_TABLE_ODER)) )
             {
                 rEntry.eConnect = SC_OR;
                 bValid = true;
@@ -1922,7 +1922,7 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
             GetUpperCellString(nCol1 + 1, nRow, aCellStr);
             for (SCCOL i=rQueryParam.nCol1; (i <= nDBCol2) && (!bFound); i++)
             {
-                String aFieldStr;
+                rtl::OUString aFieldStr;
                 if ( nTab == nDBTab )
                     GetUpperCellString(i, nDBRow1, aFieldStr);
                 else
@@ -1942,31 +1942,31 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
         {
             bFound = false;
             GetUpperCellString(nCol1 + 2, nRow, aCellStr);
-            if (aCellStr.GetChar(0) == '<')
+            if (aCellStr[0] == '<')
             {
-                if (aCellStr.GetChar(1) == '>')
+                if (aCellStr[1] == '>')
                     rEntry.eOp = SC_NOT_EQUAL;
-                else if (aCellStr.GetChar(1) == '=')
+                else if (aCellStr[1] == '=')
                     rEntry.eOp = SC_LESS_EQUAL;
                 else
                     rEntry.eOp = SC_LESS;
             }
-            else if (aCellStr.GetChar(0) == '>')
+            else if (aCellStr[0] == '>')
             {
-                if (aCellStr.GetChar(1) == '=')
+                if (aCellStr[1] == '=')
                     rEntry.eOp = SC_GREATER_EQUAL;
                 else
                     rEntry.eOp = SC_GREATER;
             }
-            else if (aCellStr.GetChar(0) == '=')
+            else if (aCellStr[0] == '=')
                 rEntry.eOp = SC_EQUAL;
 
         }
         // Vierte Spalte Wert
         if (bValid)
         {
-            String aStr;
-            GetString(nCol1 + 3, nRow, aStr);
+            rtl::OUString rStr;
+            GetString(nCol1 + 3, nRow, rStr);
             rEntry.SetQueryString(aStr);
             rEntry.bDoQuery = true;
         }

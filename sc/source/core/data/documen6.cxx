@@ -70,24 +70,23 @@ const uno::Reference< i18n::XBreakIterator >& ScDocument::GetBreakIterator()
     return pScriptTypeData->xBreakIter;
 }
 
-bool ScDocument::HasStringWeakCharacters( const String& rString )
+bool ScDocument::HasStringWeakCharacters( const rtl::OUString& rString )
 {
-    if (rString.Len())
+    if (!rString.isEmpty())
     {
         uno::Reference<i18n::XBreakIterator> xBreakIter = GetBreakIterator();
         if ( xBreakIter.is() )
         {
-            rtl::OUString aText = rString;
-            sal_Int32 nLen = aText.getLength();
+            sal_Int32 nLen = rString.getLength();
 
             sal_Int32 nPos = 0;
             do
             {
-                sal_Int16 nType = xBreakIter->getScriptType( aText, nPos );
+                sal_Int16 nType = xBreakIter->getScriptType( rString, nPos );
                 if ( nType == i18n::ScriptType::WEAK )
                     return true;                            // found
 
-                nPos = xBreakIter->endOfScript( aText, nPos, nType );
+                nPos = xBreakIter->endOfScript( rString, nPos, nType );
             }
             while ( nPos >= 0 && nPos < nLen );
         }
@@ -96,22 +95,21 @@ bool ScDocument::HasStringWeakCharacters( const String& rString )
     return false;       // none found
 }
 
-sal_uInt8 ScDocument::GetStringScriptType( const String& rString )
+sal_uInt8 ScDocument::GetStringScriptType( const rtl::OUString& rString )
 {
 
     sal_uInt8 nRet = 0;
-    if (rString.Len())
+    if (!rString.isEmpty())
     {
         uno::Reference<i18n::XBreakIterator> xBreakIter = GetBreakIterator();
         if ( xBreakIter.is() )
         {
-            rtl::OUString aText = rString;
-            sal_Int32 nLen = aText.getLength();
+            sal_Int32 nLen = rString.getLength();
 
             sal_Int32 nPos = 0;
             do
             {
-                sal_Int16 nType = xBreakIter->getScriptType( aText, nPos );
+                sal_Int16 nType = xBreakIter->getScriptType( rString, nPos );
                 switch ( nType )
                 {
                     case i18n::ScriptType::LATIN:
@@ -125,7 +123,7 @@ sal_uInt8 ScDocument::GetStringScriptType( const String& rString )
                         break;
                     // WEAK is ignored
                 }
-                nPos = xBreakIter->endOfScript( aText, nPos, nType );
+                nPos = xBreakIter->endOfScript( rString, nPos, nType );
             }
             while ( nPos >= 0 && nPos < nLen );
         }
@@ -142,7 +140,7 @@ sal_uInt8 ScDocument::GetCellScriptType( ScBaseCell* pCell, sal_uLong nNumberFor
     if ( nStored != SC_SCRIPTTYPE_UNKNOWN )         // stored value valid?
         return nStored;                             // use stored value
 
-    String aStr;
+    rtl::OUString aStr;
     Color* pColor;
     ScCellFormat::GetString( pCell, nNumberFormat, aStr, &pColor, *xPoolHelper->GetFormTable() );
 

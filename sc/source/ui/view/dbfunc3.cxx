@@ -2154,7 +2154,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
     String aUndo = ScGlobal::GetRscString( STR_UNDO_DOOUTLINE );
     pMgr->EnterListAction( aUndo, aUndo );
 
-    String aNewTabName;
+    rtl::OUString aNewTabName;
     pDoc->CreateValidTabName(aNewTabName);
     if ( InsertTable(aNewTabName, nNewTab) )
         PasteFromClip( IDF_ALL, pInsDoc.get() );

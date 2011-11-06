@@ -313,12 +313,12 @@ IMPL_LINK( ScMoveTableDlg, OkHdl, void *, EMPTYARG )
     {
         // Return an empty string when the new name is the same as the
         // automatic name assigned by the document.
-        String aCopyName = maDefaultName;
+        rtl::OUString aCopyName = maDefaultName;
         ScDocument* pDoc = GetSelectedDoc();
         if (pDoc)
             pDoc->CreateValidTabName(aCopyName);
-        if (aCopyName == aEdTabName.GetText())
-            aEdTabName.SetText( String() );
+        if (aCopyName == rtl::OUString(aEdTabName.GetText()))
+            aEdTabName.SetText( rtl::OUString() );
     }
     else
     {

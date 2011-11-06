@@ -1272,7 +1272,7 @@ sal_Bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
 //  used in ScCellRangeObj::getFormulaArray and ScCellObj::GetInputString_Impl
 String lcl_GetInputString( ScDocument* pDoc, const ScAddress& rPosition, sal_Bool bEnglish )
 {
-    String aVal;
+    rtl::OUString aVal;
     if ( pDoc )
     {
         ScBaseCell* pCell = pDoc->GetCell( rPosition );
@@ -1314,16 +1314,18 @@ String lcl_GetInputString( ScDocument* pDoc, const ScAddress& rPosition, sal_Boo
                 if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
                 {
                     double fDummy;
-                    sal_Bool bIsNumberFormat(pFormatter->IsNumberFormat(aVal, nNumFmt, fDummy));
+                    String aTempString = aVal;
+                    sal_Bool bIsNumberFormat(pFormatter->IsNumberFormat(aTempString, nNumFmt, fDummy));
                     if ( bIsNumberFormat )
-                        aVal.Insert('\'',0);
-                    else if ( aVal.Len() && aVal.GetChar(0) == '\'' )
+                        aTempString.Insert('\'',0);
+                    else if ( aTempString.Len() && aTempString.GetChar(0) == '\'' )
                     {
                         //  if the string starts with a "'", add another one because setFormula
                         //  strips one (like text input, except for "text" number formats)
                         if ( bEnglish || ( pFormatter->GetType(nNumFmt) != NUMBERFORMAT_TEXT ) )
-                            aVal.Insert('\'',0);
+                            aTempString.Insert('\'',0);
                     }
+                    aVal = aTempString;
                 }
             }
         }
@@ -6174,7 +6176,7 @@ String ScCellObj::GetInputString_Impl(sal_Bool bEnglish) const      // fuer getF
 
 String ScCellObj::GetOutputString_Impl(ScDocument* pDoc, const ScAddress& aCellPos)
 {
-    String aVal;
+    rtl::OUString aVal;
     if ( pDoc )
     {
         ScBaseCell* pCell = pDoc->GetCell( aCellPos );
@@ -8223,7 +8225,7 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             rtl::OUString aStrVal;
             aValue >>= aStrVal;
-            String aNewStr(ScStyleNameConversion::ProgrammaticToDisplayName(
+            rtl::OUString aNewStr(ScStyleNameConversion::ProgrammaticToDisplayName(
                                                 aStrVal, SFX_STYLE_FAMILY_PAGE ));
 
             //! Undo? (auch bei SID_STYLE_APPLY an der View)

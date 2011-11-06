@@ -1058,21 +1058,21 @@ void ScTable::SetValue( SCCOL nCol, SCROW nRow, const double& rVal )
 }
 
 
-void ScTable::GetString( SCCOL nCol, SCROW nRow, String& rString )
+void ScTable::GetString( SCCOL nCol, SCROW nRow, rtl::OUString& rString )
 {
     if (ValidColRow(nCol,nRow))
         aCol[nCol].GetString( nRow, rString );
     else
-        rString.Erase();
+        rString = rtl::OUString();
 }
 
 
-void ScTable::GetInputString( SCCOL nCol, SCROW nRow, String& rString )
+void ScTable::GetInputString( SCCOL nCol, SCROW nRow, rtl::OUString& rString )
 {
     if (ValidColRow(nCol,nRow))
         aCol[nCol].GetInputString( nRow, rString );
     else
-        rString.Erase();
+        rString = rtl::OUString();
 }
 
 
@@ -1084,12 +1084,12 @@ double ScTable::GetValue( SCCOL nCol, SCROW nRow )
 }
 
 
-void ScTable::GetFormula( SCCOL nCol, SCROW nRow, String& rFormula )
+void ScTable::GetFormula( SCCOL nCol, SCROW nRow, rtl::OUString& rFormula )
 {
     if (ValidColRow(nCol,nRow))
         aCol[nCol].GetFormula( nRow, rFormula );
     else
-        rFormula.Erase();
+        rFormula = rtl::OUString();
 }
 
 
@@ -3011,11 +3011,10 @@ bool ScTable::RefVisible(ScFormulaCell* pCell)
 }
 
 
-void ScTable::GetUpperCellString(SCCOL nCol, SCROW nRow, String& rStr)
+void ScTable::GetUpperCellString(SCCOL nCol, SCROW nRow, rtl::OUString& rStr)
 {
     GetInputString(nCol, nRow, rStr);
-    rStr.EraseTrailingChars();
-    rStr.EraseLeadingChars();
+    rStr = rStr.trim();
     ScGlobal::pCharClass->toUpper(rStr);
 }
 

@@ -75,7 +75,7 @@
 #include <vector>
 
 // defined in docfunc.cxx
-void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String& sModuleSource );
+void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const rtl::OUString& sModuleName, const rtl::OUString& sModuleSource );
 
 using com::sun::star::script::XLibraryContainer;
 using com::sun::star::script::vba::XVBACompatibility;
@@ -943,8 +943,8 @@ sal_Bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, sal_Bool bCopy, s
                 SCTAB nTabToUse = nDestTab;
                 if ( nDestTab == SC_TAB_APPEND )
                     nTabToUse = aDocument.GetMaxTableNumber() - 1;
-                String sCodeName;
-                String sSource;
+                rtl::OUString sCodeName;
+                rtl::OUString sSource;
                 Reference< XNameContainer > xLib;
                 if( xLibContainer.is() )
                 {
@@ -953,9 +953,7 @@ sal_Bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, sal_Bool bCopy, s
                 }
                 if( xLib.is() )
                 {
-                    rtl::OUString sRTLSource;
-                    xLib->getByName( sSrcCodeName ) >>= sRTLSource;
-                    sSource = sRTLSource;
+                    xLib->getByName( sSrcCodeName ) >>= sSource;
                 }
                 VBA_InsertModule( aDocument, nTabToUse, sCodeName, sSource );
             }

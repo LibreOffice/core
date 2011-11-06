@@ -78,7 +78,7 @@ XMLCodeNameProvider::~XMLCodeNameProvider()
     throw (uno::RuntimeException )
 {
     if( aName == msDocName )
-        return mpDoc->GetCodeName().Len() > 0;
+        return !mpDoc->GetCodeName().isEmpty();
 
     SCTAB nCount = mpDoc->GetTableCount();
     rtl::OUString sSheetName, sCodeName;
@@ -132,7 +132,7 @@ uno::Sequence< OUString > SAL_CALL XMLCodeNameProvider::getElementNames(  )
     uno::Sequence< OUString > aNames( nCount );
     sal_Int32 nRealCount = 0;
 
-    if( mpDoc->GetCodeName().Len() )
+    if( !mpDoc->GetCodeName().isEmpty() )
         aNames[nRealCount++] = msDocName;
 
     rtl::OUString sSheetName, sCodeName;
@@ -161,7 +161,7 @@ uno::Type SAL_CALL XMLCodeNameProvider::getElementType(  )
 ::sal_Bool SAL_CALL XMLCodeNameProvider::hasElements()
     throw (uno::RuntimeException )
 {
-    if( mpDoc->GetCodeName().Len() > 0 )
+    if( !mpDoc->GetCodeName().isEmpty() )
         return sal_True;
 
     SCTAB nCount = mpDoc->GetTableCount();

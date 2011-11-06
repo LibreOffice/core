@@ -65,7 +65,7 @@ struct ScQueryParamBase
     SC_DLLPUBLIC ScQueryEntry& GetEntry(SCSIZE n);
     void Resize(size_t nNew);
     SC_DLLPUBLIC void DeleteQuery(size_t nPos);
-    void FillInExcelSyntax(String& aCellStr, SCSIZE nIndex);
+    void FillInExcelSyntax(rtl::OUString& aCellStr, SCSIZE nIndex);
 
 protected:
     ScQueryParamBase();

@@ -632,7 +632,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
             if ( nToTable == pScDoc->GetTableCount() )
             {
                 // dann los...
-                String      aTabName;
+                rtl::OUString      aTabName;
                 SCTAB       nNewTab = pScDoc->GetTableCount();
 
                 pScDoc->CreateValidTabName( aTabName );

@@ -312,7 +312,7 @@ void ScSheetLinkObj::setFileName(const rtl::OUString& rNewName)
         ScDocument* pDoc = pDocShell->GetDocument();
         SCTAB nTabCount = pDoc->GetTableCount();
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-            if ( pDoc->IsLinked(nTab) && pDoc->GetLinkDoc(nTab) == aFileName )  // alte Datei
+            if ( pDoc->IsLinked(nTab) && pDoc->GetLinkDoc(nTab) == rtl::OUString(aFileName) )  // alte Datei
                 pDoc->SetLink( nTab, pDoc->GetLinkMode(nTab), aNewStr,
                                 pDoc->GetLinkFlt(nTab), pDoc->GetLinkOpt(nTab),
                                 pDoc->GetLinkTab(nTab),
@@ -1305,7 +1305,7 @@ ScDDELinkObj* ScDDELinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
 {
     if (pDocShell)
     {
-        String aAppl, aTopic, aItem;
+        rtl::OUString aAppl, aTopic, aItem;
         if ( nIndex <= USHRT_MAX &&
                 pDocShell->GetDocument()->GetDdeLinkData( (sal_uInt16)nIndex, aAppl, aTopic, aItem ) )
             return new ScDDELinkObj( pDocShell, aAppl, aTopic, aItem );
@@ -1318,7 +1318,7 @@ ScDDELinkObj* ScDDELinksObj::GetObjectByName_Impl(const rtl::OUString& aName)
     if (pDocShell)
     {
         String aNamStr(aName);
-        String aAppl, aTopic, aItem;
+        rtl::OUString aAppl, aTopic, aItem;
 
         ScDocument* pDoc = pDocShell->GetDocument();
         sal_uInt16 nCount = pDoc->GetDdeLinkCount();
@@ -1393,7 +1393,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScDDELinksObj::getElementNames() throw(uno
     SolarMutexGuard aGuard;
     if (pDocShell)
     {
-        String aAppl, aTopic, aItem;
+        rtl::OUString aAppl, aTopic, aItem;
 
         ScDocument* pDoc = pDocShell->GetDocument();
         sal_uInt16 nCount = pDoc->GetDdeLinkCount();
@@ -1417,7 +1417,7 @@ sal_Bool SAL_CALL ScDDELinksObj::hasByName( const rtl::OUString& aName )
     if (pDocShell)
     {
         String aNamStr(aName);
-        String aAppl, aTopic, aItem;
+        rtl::OUString aAppl, aTopic, aItem;
 
         ScDocument* pDoc = pDocShell->GetDocument();
         sal_uInt16 nCount = pDoc->GetDdeLinkCount();

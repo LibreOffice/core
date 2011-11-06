@@ -495,12 +495,14 @@ sal_Bool ScDrawStringsVars::SetText( ScBaseCell* pCell )
 
             Color* pColor;
             sal_uLong nFormat = GetValueFormat();
+            rtl::OUString aOUString = aString;
             ScCellFormat::GetString( pCell,
-                                     nFormat, aString, &pColor,
+                                     nFormat, aOUString, &pColor,
                                      *pOutput->pDoc->GetFormatTable(),
                                      pOutput->bShowNullValues,
                                      pOutput->bShowFormulas,
                                      ftCheck );
+            aString = aOUString;
 
             if (aString.Len() > DRAWTEXT_MAX)
                 aString.Erase(DRAWTEXT_MAX);
@@ -2167,7 +2169,7 @@ bool ScOutputData::DrawEditParam::readCellContent(
     {
         sal_uLong nFormat = mpPattern->GetNumberFormat(
                                     pDoc->GetFormatTable(), mpCondSet );
-        String aString;
+        rtl::OUString aString;
         Color* pColor;
         ScCellFormat::GetString( mpCell,
                                  nFormat,aString, &pColor,
@@ -4904,7 +4906,7 @@ void ScOutputData::DrawRotated(sal_Bool bPixelToLogic)
                                 {
                                     sal_uLong nFormat = pPattern->GetNumberFormat(
                                                                 pDoc->GetFormatTable(), pCondSet );
-                                    String aString;
+                                    rtl::OUString aString;
                                     Color* pColor;
                                     ScCellFormat::GetString( pCell,
                                                              nFormat,aString, &pColor,

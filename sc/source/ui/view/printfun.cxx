@@ -2440,7 +2440,7 @@ sal_Bool ScPrintFunc::UpdatePages()
             nZoom = ZOOM_MIN;
     }
 
-    String aName = pDoc->GetPageStyle( nPrintTab );
+    rtl::OUString aName = pDoc->GetPageStyle( nPrintTab );
     SCTAB nTabCount = pDoc->GetTableCount();
     for (SCTAB nTab=0; nTab<nTabCount; nTab++)
         if ( nTab==nPrintTab || pDoc->GetPageStyle(nTab)==aName )

@@ -1120,7 +1120,7 @@ ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const String& rDoc ) :
     {
         sal_uInt8 nMode = pDoc->GetLinkMode(i);
         if (nMode)
-            if (pDoc->GetLinkDoc(i) == aDocName)
+            if (pDoc->GetLinkDoc(i) == rtl::OUString(aDocName))
             {
                 if (!nCount)
                 {
@@ -1130,8 +1130,8 @@ ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const String& rDoc ) :
                 }
                 else
                 {
-                    OSL_ENSURE(aFltName == pDoc->GetLinkFlt(i) &&
-                               aOptions == pDoc->GetLinkOpt(i),
+                    OSL_ENSURE(rtl::OUString(aFltName) == pDoc->GetLinkFlt(i) &&
+                               rtl::OUString(aOptions) == pDoc->GetLinkOpt(i),
                                     "verschiedene Filter fuer ein Dokument?");
                 }
                 pTabs[nCount] = i;

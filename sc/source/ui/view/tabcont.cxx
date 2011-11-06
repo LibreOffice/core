@@ -185,7 +185,7 @@ void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
         ScDocument* pDoc = pViewData->GetDocument();
         if (!pDoc->IsDocEditable())
             return;
-        String aName;
+        rtl::OUString aName;
         pDoc->CreateValidTabName(aName);
         SCTAB nTabCount = pDoc->GetTableCount();
         pViewData->GetViewShell()->InsertTable(aName, nTabCount);

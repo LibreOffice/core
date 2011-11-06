@@ -107,15 +107,15 @@ private:
     rtl::OUString aCodeName;
     rtl::OUString aComment;
 
-    String          aLinkDoc;
-    String          aLinkFlt;
-    String          aLinkOpt;
-    String          aLinkTab;
+    rtl::OUString          aLinkDoc;
+    rtl::OUString          aLinkFlt;
+    rtl::OUString          aLinkOpt;
+    rtl::OUString          aLinkTab;
     sal_uLong           nLinkRefreshDelay;
     sal_uInt8           nLinkMode;
 
     // page style template
-    String          aPageStyle;
+    rtl::OUString   aPageStyle;
     Size            aPageSizeTwips;                 // size of the print-page
     SCCOL           nRepeatStartX;                  // repeating rows/columns
     SCCOL           nRepeatEndX;                    // REPEAT_NONE, if not used
@@ -255,10 +255,10 @@ public:
 
     sal_uInt8       GetLinkMode() const                         { return nLinkMode; }
     bool        IsLinked() const                            { return nLinkMode != SC_LINK_NONE; }
-    const String& GetLinkDoc() const                        { return aLinkDoc; }
-    const String& GetLinkFlt() const                        { return aLinkFlt; }
-    const String& GetLinkOpt() const                        { return aLinkOpt; }
-    const String& GetLinkTab() const                        { return aLinkTab; }
+    const rtl::OUString& GetLinkDoc() const                        { return aLinkDoc; }
+    const rtl::OUString& GetLinkFlt() const                        { return aLinkFlt; }
+    const rtl::OUString& GetLinkOpt() const                        { return aLinkOpt; }
+    const rtl::OUString& GetLinkTab() const                        { return aLinkTab; }
     sal_uLong       GetLinkRefreshDelay() const                 { return nLinkRefreshDelay; }
 
     void        SetLink( sal_uInt8 nMode, const String& rDoc, const String& rFlt,
@@ -275,8 +275,8 @@ public:
 
     const rtl::OUString& GetUpperName() const;
 
-    const String&   GetPageStyle() const                    { return aPageStyle; }
-    void            SetPageStyle( const String& rName );
+    const rtl::OUString&   GetPageStyle() const                    { return aPageStyle; }
+    void            SetPageStyle( const rtl::OUString& rName );
     void            PageStyleModified( const String& rNewName );
 
     bool            IsProtected() const;
@@ -311,8 +311,8 @@ public:
     void        SetValue( SCCOL nCol, SCROW nRow, const double& rVal );
     void        SetError( SCCOL nCol, SCROW nRow, sal_uInt16 nError);
 
-    void        GetString( SCCOL nCol, SCROW nRow, String& rString );
-    void        GetInputString( SCCOL nCol, SCROW nRow, String& rString );
+    void        GetString( SCCOL nCol, SCROW nRow, rtl::OUString& rString );
+    void        GetInputString( SCCOL nCol, SCROW nRow, rtl::OUString& rString );
     double      GetValue( const ScAddress& rPos ) const
                     {
                         return ValidColRow(rPos.Col(),rPos.Row()) ?
@@ -320,7 +320,7 @@ public:
                             0.0;
                     }
     double      GetValue( SCCOL nCol, SCROW nRow );
-    void        GetFormula( SCCOL nCol, SCROW nRow, String& rFormula );
+    void        GetFormula( SCCOL nCol, SCROW nRow, rtl::OUString& rFormula );
 
     CellType    GetCellType( const ScAddress& rPos ) const
                     {
@@ -863,7 +863,7 @@ private:
 
     bool        CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
     bool        CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
-    void        GetUpperCellString(SCCOL nCol, SCROW nRow, String& rStr);
+    void        GetUpperCellString(SCCOL nCol, SCROW nRow, rtl::OUString& rStr);
 
     bool        RefVisible(ScFormulaCell* pCell);
 

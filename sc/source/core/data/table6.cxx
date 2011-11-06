@@ -90,7 +90,11 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                     bMultiLine = lcl_GetTextWithBreaks(
                         *(const ScEditCell*)pCell, pDocument, aString );
                 else
-                    aCol[nCol].GetInputString( nRow, aString );
+                {
+                    rtl::OUString aOUString = aString;
+                    aCol[nCol].GetInputString( nRow, aOUString );
+                    aString = aOUString;
+                }
             }
             break;
             case SVX_SEARCHIN_VALUE:
@@ -98,7 +102,11 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                     bMultiLine = lcl_GetTextWithBreaks(
                         *(const ScEditCell*)pCell, pDocument, aString );
                 else
-                    aCol[nCol].GetInputString( nRow, aString );
+                {
+                    rtl::OUString aOUString = aString;
+                    aCol[nCol].GetInputString( nRow, aOUString );
+                    aString = aOUString;
+                }
                 break;
             case SVX_SEARCHIN_NOTE:
                 {

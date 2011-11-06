@@ -987,7 +987,7 @@ sal_Bool ScChangeActionDel::Reject( ScDocument* pDoc )
                 case SC_CAT_DELETE_TABS :
                 {
 //2do: Tabellennamen merken?
-                    String aName;
+                    rtl::OUString aName;
                     pDoc->CreateValidTabName( aName );
                     if ( ( bOk = pDoc->ValidNewTabName( aName ) ) != false )
                         bOk = pDoc->InsertTab( aRange.aStart.Tab(), aName );

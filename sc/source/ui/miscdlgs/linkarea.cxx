@@ -150,7 +150,7 @@ IMPL_LINK( ScLinkedAreaDlg, FileHdl, ComboBox*, EMPTYARG )
     return 0;
 }
 
-void ScLinkedAreaDlg::LoadDocument( const String& rFile, const String& rFilter, const String& rOptions )
+void ScLinkedAreaDlg::LoadDocument( const rtl::OUString& rFile, const String& rFilter, const String& rOptions )
 {
     if ( pSourceShell )
     {
@@ -160,12 +160,12 @@ void ScLinkedAreaDlg::LoadDocument( const String& rFile, const String& rFilter, 
         aSourceRef.Clear();
     }
 
-    if ( rFile.Len() )
+    if ( rFile.getLength() )
     {
         WaitObject aWait( this );
 
-        String aNewFilter = rFilter;
-        String aNewOptions = rOptions;
+        rtl::OUString aNewFilter = rFilter;
+        rtl::OUString aNewOptions = rOptions;
 
         SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, rFile );
 

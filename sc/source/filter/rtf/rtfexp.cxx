@@ -190,7 +190,7 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
     ScBaseCell* pCell;
     pDoc->GetCell( nCol, nRow, nTab, pCell );
     sal_Bool bValueData;
-    String aContent;
+    rtl::OUString aContent;
     if ( pCell )
     {
         switch ( pCell->GetCellType() )

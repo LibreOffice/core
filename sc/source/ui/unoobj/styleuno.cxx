@@ -689,8 +689,8 @@ void SAL_CALL ScStyleFamiliesObj::loadStylesFromURL( const rtl::OUString& aURL,
     //! use aOptions (like Writer)
     //! set flag to disable filter option dialogs when importing
 
-    String aFilter;     // empty - detect
-    String aFiltOpt;
+    rtl::OUString aFilter;     // empty - detect
+    rtl::OUString aFiltOpt;
     ScDocumentLoader aLoader( aURL, aFilter, aFiltOpt );
 
     ScDocShell* pSource = aLoader.GetDocShell();

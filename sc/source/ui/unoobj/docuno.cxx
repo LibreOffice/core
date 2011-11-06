@@ -2333,10 +2333,10 @@ uno::Reference<drawing::XDrawPage> SAL_CALL ScDrawPagesObj::insertNewByIndex( sa
     uno::Reference<drawing::XDrawPage> xRet;
     if (pDocShell)
     {
-        String aNewName;
+        rtl::OUString aNewName;
         pDocShell->GetDocument()->CreateValidTabName(aNewName);
         ScDocFunc aFunc(*pDocShell);
-        if ( aFunc.InsertTable( (SCTAB)nPos, aNewName, sal_True, sal_True ) )
+        if ( aFunc.InsertTable( static_cast<SCTAB>(nPos), aNewName, true, true ) )
             xRet.set(GetObjectByIndex_Impl( nPos ));
     }
     return xRet;

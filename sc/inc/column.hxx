@@ -251,10 +251,10 @@ public:
     void        SetValue( SCROW nRow, const double& rVal);
     void        SetError( SCROW nRow, const sal_uInt16 nError);
 
-    void        GetString( SCROW nRow, String& rString ) const;
-    void        GetInputString( SCROW nRow, String& rString ) const;
+    void        GetString( SCROW nRow, rtl::OUString& rString ) const;
+    void        GetInputString( SCROW nRow, rtl::OUString& rString ) const;
     double      GetValue( SCROW nRow ) const;
-    void        GetFormula( SCROW nRow, String& rFormula ) const;
+    void        GetFormula( SCROW nRow, rtl::OUString& rFormula ) const;
     CellType    GetCellType( SCROW nRow ) const;
     SCSIZE      GetCellCount() const { return nCount; }
     sal_uInt32 GetWeightedCount() const;

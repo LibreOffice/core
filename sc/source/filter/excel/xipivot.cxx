@@ -714,11 +714,12 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
 
         nScTab = rDoc.GetTableCount();
         rDoc.MakeTable( nScTab );
-        String aDummyName = CREATE_STRING( "DPCache" );
+        rtl::OUStringBuffer aDummyName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DPCache") ));
         if( maTabName.Len() > 0 )
-            aDummyName.Append( '_' ).Append( maTabName );
-        rDoc.CreateValidTabName( aDummyName );
-        rDoc.RenameTab( nScTab, aDummyName );
+            aDummyName.append( '_' ).append( maTabName );
+        rtl::OUString aName = aDummyName.makeStringAndClear();
+        rDoc.CreateValidTabName( aName );
+        rDoc.RenameTab( nScTab, aName );
         // set sheet index to source range
         maSrcRange.aStart.SetTab( nScTab );
         maSrcRange.aEnd.SetTab( nScTab );

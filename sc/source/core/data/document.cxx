@@ -141,8 +141,8 @@ void ScDocument::MakeTable( SCTAB nTab,bool _bNeedsNameCheck )
 {
     if ( ValidTab(nTab) && ( nTab >= static_cast<SCTAB>(maTabs.size()) ||!maTabs[nTab]) )
     {
-        String aString = ScGlobal::GetRscString(STR_TABLE_DEF); //"Table"
-        aString += String::CreateFromInt32(nTab+1);
+        rtl::OUString aString = ScGlobal::GetRscString(STR_TABLE_DEF); //"Table"
+        aString += rtl::OUString::valueOf(nTab+1);
         if ( _bNeedsNameCheck )
             CreateValidTabName( aString );  // no doubles
         if (nTab < static_cast<SCTAB>(maTabs.size()))
@@ -239,9 +239,9 @@ void ScDocument::SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData)
 }
 
 
-bool ScDocument::ValidTabName( const String& rName )
+bool ScDocument::ValidTabName( const rtl::OUString& rName )
 {
-    xub_StrLen nLen = rName.Len();
+    sal_Int32 nLen = rName.getLength();
     if (!nLen)
         return false;
 
@@ -251,9 +251,9 @@ bool ScDocument::ValidTabName( const String& rName )
      * Merely loading and calculating ODF documents using these characters in
      * sheet names is not affected by this, but all sheet name editing and
      * copying functionality is, maybe falling back to "Sheet4" or similar. */
-    for (xub_StrLen i = 0; i < nLen; ++i)
+    for (sal_Int32 i = 0; i < nLen; ++i)
     {
-        const sal_Unicode c = rName.GetChar(i);
+        const sal_Unicode c = rName[i];
         switch (c)
         {
             case ':':
@@ -279,7 +279,7 @@ bool ScDocument::ValidTabName( const String& rName )
 }
 
 
-bool ScDocument::ValidNewTabName( const String& rName ) const
+bool ScDocument::ValidNewTabName( const rtl::OUString& rName ) const
 {
     bool bValid = ValidTabName(rName);
     TableContainer::const_iterator it = maTabs.begin();
@@ -294,10 +294,10 @@ bool ScDocument::ValidNewTabName( const String& rName ) const
 }
 
 
-bool ScDocument::ValidNewTabName( const std::vector<String>& rNames ) const//TODO:FIXME what is if there are duplicates in rNames
+bool ScDocument::ValidNewTabName( const std::vector<rtl::OUString>& rNames ) const//TODO:FIXME what is if there are duplicates in rNames
 {
     bool bValid = true;
-    std::vector<String>::const_iterator nameIter = rNames.begin();
+    std::vector<rtl::OUString>::const_iterator nameIter = rNames.begin();
     for (;nameIter != rNames.end() && bValid; ++nameIter)
     {
         bValid = ValidTabName(*nameIter);
@@ -317,13 +317,13 @@ bool ScDocument::ValidNewTabName( const std::vector<String>& rNames ) const//TOD
 }
 
 
-void ScDocument::CreateValidTabName(String& rName) const
+void ScDocument::CreateValidTabName(rtl::OUString& rName) const
 {
     if ( !ValidTabName(rName) )
     {
         // Find new one
 
-        const String aStrTable( ScResId(SCSTR_TABLE) );
+        const rtl::OUString aStrTable( ResId::toString(ScResId(SCSTR_TABLE)) );
         bool         bOk   = false;
 
         // First test if the prefix is valid, if so only avoid doubles
@@ -334,7 +334,7 @@ void ScDocument::CreateValidTabName(String& rName) const
         for ( SCTAB i = static_cast<SCTAB>(maTabs.size())+1; !bOk ; i++ )
         {
             rName  = aStrTable;
-            rName += String::CreateFromInt32(i);
+            rName += rtl::OUString::valueOf(i);
             if (bPrefix)
                 bOk = ValidNewTabName( rName );
             else
@@ -349,33 +349,26 @@ void ScDocument::CreateValidTabName(String& rName) const
         if ( !ValidNewTabName(rName) )
         {
             SCTAB i = 1;
-            String aName;
+            rtl::OUStringBuffer aName;
             do
             {
                 i++;
                 aName = rName;
-                aName += '_';
-                aName += String::CreateFromInt32(static_cast<sal_Int32>(i));
+                aName.append('_');
+                aName.append(static_cast<sal_Int32>(i));
             }
-            while (!ValidNewTabName(aName) && (i < MAXTAB+1));
-            rName = aName;
+            while (!ValidNewTabName(aName.toString()) && (i < MAXTAB+1));
+            rName = aName.makeStringAndClear();
         }
     }
-}
-
-void ScDocument::CreateValidTabName(rtl::OUString& rName) const
-{
-    String aTmp = rName;
-    CreateValidTabName(aTmp);
-    rName = aTmp;
 }
 
 void ScDocument::CreateValidTabNames(std::vector<rtl::OUString>& aNames, SCTAB nCount) const
 {
     aNames.clear();//ensure that the vector is empty
 
-    const String aStrTable( ScResId(SCSTR_TABLE) );
-    String rName;
+    const rtl::OUString aStrTable( ResId::toString(ScResId(SCSTR_TABLE)) );
+    rtl::OUStringBuffer rName;
     bool         bOk   = false;
 
     // First test if the prefix is valid, if so only avoid doubles
@@ -390,14 +383,14 @@ void ScDocument::CreateValidTabNames(std::vector<rtl::OUString>& aNames, SCTAB n
         while(!bOk)
         {
             rName = aStrTable;
-            rName += String::CreateFromInt32(i);
+            rName.append(static_cast<sal_Int32>(i));
             if (bPrefix)
-                bOk = ValidNewTabName( rName );
+                bOk = ValidNewTabName( rName.toString() );
             else
-                bOk = !GetTable( rName, nDummy );
+                bOk = !GetTable( rName.toString(), nDummy );
             i++;
         }
-        aNames.push_back(rtl::OUString(rName));
+        aNames.push_back(rName.makeStringAndClear());
     }
 }
 
@@ -412,7 +405,7 @@ void ScDocument::AppendTabOnLoad(const rtl::OUString& rName)
 }
 
 
-bool ScDocument::InsertTab( SCTAB nPos, const String& rName,
+bool ScDocument::InsertTab( SCTAB nPos, const rtl::OUString& rName,
             bool bExternalDocument )
 {
     SCTAB   nTabCount = static_cast<SCTAB>(maTabs.size());
@@ -756,7 +749,7 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets, ScDocument* pRefUndoDoc 
 }
 
 
-bool ScDocument::RenameTab( SCTAB nTab, const String& rName, bool /* bUpdateRef */,
+bool ScDocument::RenameTab( SCTAB nTab, const rtl::OUString& rName, bool /* bUpdateRef */,
         bool bExternalDocument )
 {
     bool    bValid = false;
@@ -1670,7 +1663,7 @@ void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSe
 
         xPoolHelper = pSrcDoc->xPoolHelper;
 
-        String aString;
+        rtl::OUString aString;
         for (SCTAB nTab = 0; nTab <= rTabSelection.GetLastSelected(); nTab++)
             if ( rTabSelection.GetTableSelect( nTab ) )
             {
@@ -1704,7 +1697,7 @@ void ScDocument::InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
 
         xPoolHelper = pSrcDoc->xPoolHelper;
 
-        String aString;
+        rtl::OUString aString;
         if ( nTab2 >= static_cast<SCTAB>(maTabs.size()))
             maTabs.resize(nTab2 + 1, NULL);
         for (SCTAB nTab = nTab1; nTab <= nTab2; nTab++)
@@ -1724,7 +1717,7 @@ void ScDocument::AddUndoTab( SCTAB nTab1, SCTAB nTab2, bool bColInfo, bool bRowI
 {
     if (bIsUndo)
     {
-        String aString;
+        rtl::OUString aString;
         if (nTab2 >= static_cast<SCTAB>(maTabs.size()))
         {
             maTabs.resize(nTab2+1,NULL);
@@ -1774,7 +1767,7 @@ void ScDocument::CopyToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
     PutInOrder( nTab1, nTab2 );
-    if( !pDestDoc->aDocName.Len() )
+    if( pDestDoc->aDocName.isEmpty() )
         pDestDoc->aDocName = aDocName;
     if (VALIDTAB(nTab1) && VALIDTAB(nTab2))
     {
@@ -1829,7 +1822,7 @@ void ScDocument::CopyToDocument(const ScRange& rRange,
     ScRange aNewRange = rRange;
     aNewRange.Justify();
 
-    if( !pDestDoc->aDocName.Len() )
+    if( pDestDoc->aDocName.isEmpty() )
         pDestDoc->aDocName = aDocName;
     bool bOldAutoCalc = pDestDoc->GetAutoCalc();
     pDestDoc->SetAutoCalc( false );     // avoid multiple calculations
@@ -2993,7 +2986,7 @@ void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell,
             if (nTab >= static_cast<SCTAB>(maTabs.size()))
                 maTabs.resize(nTab + 1,NULL);
             maTabs[nTab] = new ScTable(this, nTab,
-                            String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("temp")),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("temp")),
                             bExtras, bExtras);
         }
 
@@ -3013,7 +3006,7 @@ void ScDocument::PutCell( const ScAddress& rPos, ScBaseCell* pCell, bool bForceT
         if (nTab >= static_cast<SCTAB>(maTabs.size()))
             maTabs.resize(nTab + 1,NULL);
         maTabs[nTab] = new ScTable(this, nTab,
-                        String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("temp")),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("temp")),
                         bExtras, bExtras);
     }
 
@@ -3022,7 +3015,7 @@ void ScDocument::PutCell( const ScAddress& rPos, ScBaseCell* pCell, bool bForceT
 }
 
 
-bool ScDocument::SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
+bool ScDocument::SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const rtl::OUString& rString,
                             ScSetStringParam* pParam )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
@@ -3040,34 +3033,34 @@ void ScDocument::SetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rVa
 }
 
 
-void ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString )
+void ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rString )
 {
     if ( VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         maTabs[nTab]->GetString( nCol, nRow, rString );
     else
-        rString.Erase();
+        rString = rtl::OUString();
 }
 
-void ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rString )
+void ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString )
 {
-    String aStr;
-    GetString(nCol, nRow, nTab, aStr);
-    rString = aStr;
-}
-
-void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString )
-{
-    if ( VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        maTabs[nTab]->GetInputString( nCol, nRow, rString );
-    else
-        rString.Erase();
+    rtl::OUString aString;
+    GetString( nCol, nRow, nTab, aString);
+    rString = aString;
 }
 
 void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rString )
 {
-    String aTmp;
-    GetInputString(nCol, nRow, nTab, aTmp);
-    rString = aTmp;
+    if ( VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+        maTabs[nTab]->GetInputString( nCol, nRow, rString );
+    else
+        rString = rtl::OUString();
+}
+
+void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString )
+{
+    rtl::OUString aString;
+    GetInputString( nCol, nRow, nTab, aString);
+    rString = aString;
 }
 
 void ScDocument::GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue )
@@ -3157,19 +3150,19 @@ void ScDocument::GetNumberFormatInfo( short& nType, sal_uLong& nIndex,
 }
 
 
-void ScDocument::GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rFormula ) const
+void ScDocument::GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rFormula ) const
 {
     if ( VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
             maTabs[nTab]->GetFormula( nCol, nRow, rFormula );
     else
-        rFormula.Erase();
+        rFormula = rtl::OUString();
 }
 
 
-void ScDocument::GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rFormula) const
+void ScDocument::GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rFormula ) const
 {
-    String aString;
-    GetFormula(nCol, nRow, nTab, aString);
+    rtl::OUString aString;
+    GetFormula( nCol, nRow, nTab, aString);
     rFormula = aString;
 }
 
@@ -5477,26 +5470,26 @@ sal_uLong ScDocument::GetCodeCount() const
 }
 
 
-void ScDocument::PageStyleModified( SCTAB nTab, const String& rNewName )
+void ScDocument::PageStyleModified( SCTAB nTab, const rtl::OUString& rNewName )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         maTabs[nTab]->PageStyleModified( rNewName );
 }
 
 
-void ScDocument::SetPageStyle( SCTAB nTab, const String& rName )
+void ScDocument::SetPageStyle( SCTAB nTab, const rtl::OUString& rName )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         maTabs[nTab]->SetPageStyle( rName );
 }
 
 
-const String& ScDocument::GetPageStyle( SCTAB nTab ) const
+const rtl::OUString ScDocument::GetPageStyle( SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetPageStyle();
 
-    return EMPTY_STRING;
+    return rtl::OUString();
 }
 
 
@@ -5676,7 +5669,7 @@ bool ScDocument::NeedPageResetAfterTab( SCTAB nTab ) const
 
     if ( nTab + 1 < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab+1] )
     {
-        String aNew = maTabs[nTab+1]->GetPageStyle();
+        rtl::OUString aNew = maTabs[nTab+1]->GetPageStyle();
         if ( aNew != maTabs[nTab]->GetPageStyle() )
         {
             SfxStyleSheetBase* pStyle = xPoolHelper->GetStylePool()->Find( aNew, SFX_STYLE_FAMILY_PAGE );

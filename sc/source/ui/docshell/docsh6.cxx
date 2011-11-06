@@ -425,9 +425,9 @@ void ScDocShell::UpdateLinks()
     for (SCTAB i=0; i<nTabCount; i++)
         if (aDocument.IsLinked(i))
         {
-            String aDocName = aDocument.GetLinkDoc(i);
-            String aFltName = aDocument.GetLinkFlt(i);
-            String aOptions = aDocument.GetLinkOpt(i);
+            rtl::OUString aDocName = aDocument.GetLinkDoc(i);
+            rtl::OUString aFltName = aDocument.GetLinkFlt(i);
+            rtl::OUString aOptions = aDocument.GetLinkOpt(i);
             sal_uLong nRefresh  = aDocument.GetLinkRefreshDelay(i);
             sal_Bool bThere = false;
             for (SCTAB j=0; j<i && !bThere; j++)                // im Dokument mehrfach?
@@ -453,7 +453,9 @@ void ScDocShell::UpdateLinks()
             {
                 ScTableLink* pLink = new ScTableLink( this, aDocName, aFltName, aOptions, nRefresh );
                 pLink->SetInCreate( sal_True );
-                pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aDocName, &aFltName );
+                String aStringDocName = aDocName;
+                String aStringFltName = aFltName;
+                pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aStringDocName, &aStringFltName );
                 pLink->Update();
                 pLink->SetInCreate( false );
             }

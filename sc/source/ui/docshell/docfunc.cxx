@@ -2631,7 +2631,7 @@ script::ModuleInfo lcl_InitModuleInfo( SfxObjectShell& rDocSh, String& sModule )
     return sModuleInfo;
 }
 
-void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String& sSource )
+void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const rtl::OUString& sModuleName, const rtl::OUString& sSource )
 {
     SfxObjectShell& rDocSh = *rDoc.GetDocumentShell();
     uno::Reference< script::XLibraryContainer > xLibContainer = rDocSh.GetBasicContainer();
@@ -2651,7 +2651,7 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String
         // if the Module with codename exists then find a new name
         sal_Int32 nNum = 0;
         String genModuleName;
-        if ( sModuleName.Len() )
+        if ( !sModuleName.isEmpty() )
             genModuleName = sModuleName;
         else
         {
@@ -2663,7 +2663,7 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String
 
         uno::Any aSourceAny;
         rtl::OUString sTmpSource = sSource;
-        if ( sTmpSource.getLength() == 0 )
+        if ( sTmpSource.isEmpty() )
             sTmpSource = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Rem Attribute VBA_ModuleType=VBADocumentModule\nOption VBASupport 1\n" ));
         aSourceAny <<= sTmpSource;
         uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
@@ -2735,7 +2735,6 @@ sal_Bool ScDocFunc::InsertTable( SCTAB nTab, const String& rName, sal_Bool bReco
 
     if (pDoc->InsertTab( nTab, rName ))
     {
-        String sCodeName;
         if (bRecord)
             rDocShell.GetUndoManager()->AddUndoAction(
                         new ScUndoInsertTab( &rDocShell, nTab, bAppend, rName));
@@ -2743,7 +2742,7 @@ sal_Bool ScDocFunc::InsertTable( SCTAB nTab, const String& rName, sal_Bool bReco
         // Only insert vba modules if vba mode ( and not currently importing XML )
         if( bInsertDocModule )
         {
-            String sSource;
+            rtl::OUString sSource, sCodeName;
             VBA_InsertModule( *pDoc, nTab, sCodeName, sSource );
         }
         rDocShell.Broadcast( ScTablesHint( SC_TAB_INSERTED, nTab ) );

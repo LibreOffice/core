@@ -76,7 +76,7 @@ private:
 
     void                UpdateSourceRanges();
     void                UpdateEnable();
-    void                LoadDocument( const String& rFile, const String& rFilter,
+    void                LoadDocument( const rtl::OUString& rFile, const String& rFilter,
                                         const String& rOptions );
 
 public:

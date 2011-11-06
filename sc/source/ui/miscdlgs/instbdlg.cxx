@@ -130,7 +130,7 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
 
     if(nTableCount==1)
     {
-        String aName;
+        rtl::OUString aName;
         rDoc.CreateValidTabName( aName );
         aEdName.SetText( aName );
     }
@@ -299,7 +299,7 @@ IMPL_LINK( ScInsertTableDlg, CountHdl_Impl, NumericField*, EMPTYARG )
     nTableCount = static_cast<SCTAB>(aNfCount.GetValue());
     if ( nTableCount==1)
     {
-        String aName;
+        rtl::OUString aName;
         rDoc.CreateValidTabName( aName );
         aEdName.SetText( aName );
         aFtName.Enable();

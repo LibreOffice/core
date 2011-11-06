@@ -110,8 +110,9 @@ void ScQueryParamBase::DeleteQuery(size_t nPos)
     maEntries.push_back(new ScQueryEntry);
 }
 
-void ScQueryParamBase::FillInExcelSyntax(String& aCellStr, SCSIZE nIndex)
+void ScQueryParamBase::FillInExcelSyntax(const rtl::OUString& rStr, SCSIZE nIndex)
 {
+    const String aCellStr = rStr;
     if (aCellStr.Len() > 0)
     {
         if ( nIndex >= maEntries.size() )

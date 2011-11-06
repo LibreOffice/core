@@ -389,7 +389,7 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
     else
     {
         maRbMax.Check();
-        String aCursorStr;
+        rtl::OUString aCursorStr;
         if ( !mpDoc->GetRangeAtBlock( ScRange(rCursorPos), &aCursorStr ) )
             rCursorPos.Format( aCursorStr, SCA_ABS, NULL, mpDoc->GetAddressConvention() );
         maEdObjectiveCell.SetRefString( aCursorStr );
@@ -503,7 +503,7 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         if ( bSingle )
             aNewRef.aEnd = aAdr;
 
-        String aName;
+        rtl::OUString aName;
         if ( pDocP->GetRangeAtBlock( aNewRef, &aName ) )            // named range: show name
             aStr = aName;
         else                                                        // format cell/range reference

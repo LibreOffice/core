@@ -2299,9 +2299,10 @@ void ScViewFunc::InsertTableLink( const String& rFile,
                                     const String& rFilter, const String& rOptions,
                                     const String& rTabName )
 {
-    String aFilterName = rFilter;
-    String aOpt = rOptions;
-    ScDocumentLoader aLoader( rFile, aFilterName, aOpt );
+    rtl::OUString aFilterName = rFilter;
+    rtl::OUString aOpt = rOptions;
+    rtl::OUString aURL = rFile;
+    ScDocumentLoader aLoader( aURL, aFilterName, aOpt );
     if (!aLoader.IsError())
     {
         ScDocShell* pSrcSh = aLoader.GetDocShell();
@@ -2754,7 +2755,7 @@ void ScViewFunc::MoveTable(
             for (size_t j = 0; j < n; ++j)
             {
                 SCTAB nRenameTab = (*pDestTabs)[j];
-                String aTabName = *pNewTabName;
+                rtl::OUString aTabName = *pNewTabName;
                 pDoc->CreateValidTabName( aTabName );
                 pDestNames->push_back(aTabName);
                 pDoc->RenameTab(nRenameTab, aTabName);

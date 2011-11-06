@@ -49,13 +49,13 @@ enum ScForceTextFmt {
 class SC_DLLPUBLIC ScCellFormat
 {
 public:
-    static void     GetString( ScBaseCell* pCell, sal_uLong nFormat, String& rString,
+    static void     GetString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUString& rString,
                                Color** ppColor, SvNumberFormatter& rFormatter,
                                sal_Bool bNullVals = sal_True,
                                sal_Bool bFormula  = false,
                                ScForceTextFmt eForceTextFmt = ftDontForce );
 
-    static void     GetInputString( ScBaseCell* pCell, sal_uLong nFormat, String& rString,
+    static void     GetInputString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUString& rString,
                                       SvNumberFormatter& rFormatter );
 };
 

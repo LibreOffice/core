@@ -47,7 +47,7 @@ const ScFormulaCell* pLastFormulaTreeTop = 0;
 
 // -----------------------------------------------------------------------
 
-void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, String& rString,
+void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUString& rString,
                               Color** ppColor, SvNumberFormatter& rFormatter,
                               sal_Bool bNullVals,
                               sal_Bool bFormula,
@@ -56,10 +56,11 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, String& rStr
     *ppColor = NULL;
     if (&rFormatter==NULL)
     {
-        rString.Erase();
+        rString = rtl::OUString();
         return;
     }
 
+    String aString = rString;
     CellType eType = pCell->GetCellType();
     switch(eType)
     {
@@ -67,21 +68,21 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, String& rStr
             {
                 String aCellString;
                 ((ScStringCell*)pCell)->GetString( aCellString );
-                rFormatter.GetOutputString( aCellString, nFormat, rString, ppColor );
+                rFormatter.GetOutputString( aCellString, nFormat, aString, ppColor );
             }
             break;
         case CELLTYPE_EDIT:
             {
                 String aCellString;
                 ((ScEditCell*)pCell)->GetString( aCellString );
-                rFormatter.GetOutputString( aCellString, nFormat, rString, ppColor );
+                rFormatter.GetOutputString( aCellString, nFormat, aString, ppColor );
             }
             break;
         case CELLTYPE_VALUE:
             {
                 double nValue = ((ScValueCell*)pCell)->GetValue();
                 if ( !bNullVals && nValue == 0.0 )
-                    rString.Erase();
+                    aString.Erase();
                 else
                 {
                     if( eForceTextFmt == ftCheck )
@@ -93,10 +94,10 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, String& rStr
                     {
                         String aTemp;
                         rFormatter.GetOutputString( nValue, 0, aTemp, ppColor );
-                        rFormatter.GetOutputString( aTemp, nFormat, rString, ppColor );
+                        rFormatter.GetOutputString( aTemp, nFormat, aString, ppColor );
                     }
                     else
-                        rFormatter.GetOutputString( nValue, nFormat, rString, ppColor );
+                        rFormatter.GetOutputString( nValue, nFormat, aString, ppColor );
                 }
             }
             break;
@@ -104,7 +105,7 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, String& rStr
             {
                 ScFormulaCell*  pFCell = (ScFormulaCell*)pCell;
                 if ( bFormula )
-                    pFCell->GetFormula( rString );
+                    pFCell->GetFormula( aString );
                 else
                 {
                     // A macro started from the interpreter, which has
@@ -117,7 +118,7 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, String& rStr
                             (!pFCell->GetDocument()->GetMacroInterpretLevel()
                             || pFCell->IsRunning()) )
                     {
-                        rString.AssignAscii( RTL_CONSTASCII_STRINGPARAM("...") );
+                        aString.AssignAscii( RTL_CONSTASCII_STRINGPARAM("...") );
                     }
                     else
                     {
@@ -129,88 +130,91 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, String& rStr
                                 nFormat );
 
                         if (nErrCode != 0)
-                            rString = ScGlobal::GetErrorString(nErrCode);
+                            aString = ScGlobal::GetErrorString(nErrCode);
                         else if ( pFCell->IsEmptyDisplayedAsString() )
-                            rString.Erase();
+                            aString.Erase();
                         else if ( pFCell->IsValue() )
                         {
                             double fValue = pFCell->GetValue();
                             if ( !bNullVals && fValue == 0.0 )
-                                rString.Erase();
+                                aString.Erase();
                             else
-                                rFormatter.GetOutputString( fValue, nFormat, rString, ppColor );
+                                rFormatter.GetOutputString( fValue, nFormat, aString, ppColor );
                         }
                         else
                         {
                             String aCellString;
                             pFCell->GetString( aCellString );
-                            rFormatter.GetOutputString( aCellString, nFormat, rString, ppColor );
+                            rFormatter.GetOutputString( aCellString, nFormat, aString, ppColor );
                         }
                     }
                 }
             }
             break;
         default:
-            rString.Erase();
+            aString.Erase();
             break;
     }
+    rString = aString;
 }
 
-void ScCellFormat::GetInputString( ScBaseCell* pCell, sal_uLong nFormat, String& rString,
+void ScCellFormat::GetInputString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUString& rString,
                                       SvNumberFormatter& rFormatter )
 {
     if (&rFormatter==NULL)
     {
-        rString.Erase();
+        rString = rtl::OUString();
         return;
     }
 
+    String aString = rString;
     CellType eType = pCell->GetCellType();
     switch(eType)
     {
         case CELLTYPE_STRING:
             {
-                ((ScStringCell*)pCell)->GetString( rString );
+                ((ScStringCell*)pCell)->GetString( aString );
             }
             break;
         case CELLTYPE_EDIT:
             {
-                ((ScEditCell*)pCell)->GetString( rString );
+                ((ScEditCell*)pCell)->GetString( aString );
             }
             break;
         case CELLTYPE_VALUE:
             {
                 double nValue = ((ScValueCell*)pCell)->GetValue();
-                rFormatter.GetInputLineString( nValue, nFormat, rString );
+                rFormatter.GetInputLineString( nValue, nFormat, aString );
             }
             break;
         case CELLTYPE_FORMULA:
             {
                 if (((ScFormulaCell*)pCell)->IsEmptyDisplayedAsString())
                 {
-                    rString.Erase();
+                    aString.Erase();
                 }
                 else if (((ScFormulaCell*)pCell)->IsValue())
                 {
                     double nValue = ((ScFormulaCell*)pCell)->GetValue();
-                    rFormatter.GetInputLineString( nValue, nFormat, rString );
+                    rFormatter.GetInputLineString( nValue, nFormat, aString );
                 }
                 else
                 {
-                    ((ScFormulaCell*)pCell)->GetString( rString );
+                    ((ScFormulaCell*)pCell)->GetString( aString );
                 }
 
                 sal_uInt16 nErrCode = ((ScFormulaCell*)pCell)->GetErrCode();
                 if (nErrCode != 0)
                 {
-                    rString.Erase();
+                    aString.Erase();
                 }
             }
             break;
         default:
-            rString.Erase();
+            aString.Erase();
             break;
     }
+    rString = aString;
 }
 
 

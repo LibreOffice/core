@@ -3407,7 +3407,8 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
         ScDocument* pThisDoc   = pViewData->GetDocument();
         if (pSourceDoc == pThisDoc)
         {
-            if ( pThisDoc->HasChartAtPoint(pViewData->GetTabNo(), PixelToLogic(aPos)) )
+            rtl::OUString aName;
+            if ( pThisDoc->HasChartAtPoint(pViewData->GetTabNo(), PixelToLogic(aPos), aName ))
             {
                 if (bDragRect)          // Rechteck loeschen
                 {
@@ -3957,8 +3958,8 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
         }
         else                                        // move/copy block
         {
-            String aChartName;
-            if (pThisDoc->HasChartAtPoint( nThisTab, rLogicPos, &aChartName ))
+            rtl::OUString aChartName;
+            if (pThisDoc->HasChartAtPoint( nThisTab, rLogicPos, aChartName ))
             {
                 String aRangeName;
                 aSource.Format( aRangeName, SCR_ABS_3D, pThisDoc );

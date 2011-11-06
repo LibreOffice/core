@@ -772,14 +772,14 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
 }
 
 
-inline void lcl_getLongVarCharEditString( String& rString,
+inline void lcl_getLongVarCharEditString( rtl::OUString& rString,
         const ScBaseCell* pCell, ScFieldEditEngine& rEditEngine )
 {
     rEditEngine.SetText( *((const ScEditCell*)pCell)->GetData() );
     rString = rEditEngine.GetText( LINEEND_CRLF );
 }
 
-inline void lcl_getLongVarCharString( String& rString, ScBaseCell* pCell,
+inline void lcl_getLongVarCharString( rtl::OUString& rString, ScBaseCell* pCell,
         ScDocument& rDocument, SCCOL nCol, SCROW nRow, SCTAB nTab,
         SvNumberFormatter& rNumFmt )
 {
@@ -833,7 +833,7 @@ sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet
     // also needed for exception catch
     SCROW nDocRow = 0;
     ScFieldEditEngine aEditEngine( aDocument.GetEditPool() );
-    String aString;
+    rtl::OUString aString;
     String aTabName;
 
     try
@@ -996,7 +996,7 @@ sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet
                     case sdbc::DataType::VARCHAR:
                         aDocument.GetString( nDocCol, nDocRow, nTab, aString );
                         xRowUpdate->updateString( nCol+1, aString );
-                        if ( nErr == eERR_OK && pColLengths[nCol] < aString.Len() )
+                        if ( nErr == eERR_OK && pColLengths[nCol] < aString.getLength() )
                             nErr = SCWARN_EXPORT_DATALOST;
                         break;
 
@@ -1136,7 +1136,7 @@ sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet
 #endif
                     }
                     else
-                        nLen = aString.Len() * sizeof(sal_Unicode);
+                        nLen = aString.getLength() * sizeof(sal_Unicode);
                     if (!bEncErr &&
                             pColTypes[nCol] != sdbc::DataType::LONGVARCHAR &&
                             pColLengths[nCol] < nLen)

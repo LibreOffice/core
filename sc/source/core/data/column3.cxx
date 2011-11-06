@@ -1569,7 +1569,7 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollec
 {
     bool bHasDates = false;
     SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
-    String aString;
+    rtl::OUString aString;
     SCROW nRow = 0;
     SCSIZE nIndex;
 
@@ -1779,7 +1779,7 @@ void ScColumn::SetValue( SCROW nRow, const double& rVal)
 }
 
 
-void ScColumn::GetString( SCROW nRow, String& rString ) const
+void ScColumn::GetString( SCROW nRow, rtl::OUString& rString ) const
 {
     SCSIZE  nIndex;
     Color* pColor;
@@ -1792,14 +1792,14 @@ void ScColumn::GetString( SCROW nRow, String& rString ) const
             ScCellFormat::GetString( pCell, nFormat, rString, &pColor, *(pDocument->GetFormatTable()) );
         }
         else
-            rString.Erase();
+            rString = rtl::OUString();
     }
     else
-        rString.Erase();
+        rString = rtl::OUString();
 }
 
 
-void ScColumn::GetInputString( SCROW nRow, String& rString ) const
+void ScColumn::GetInputString( SCROW nRow, rtl::OUString& rString ) const
 {
     SCSIZE  nIndex;
     if (Search(nRow, nIndex))
@@ -1811,10 +1811,10 @@ void ScColumn::GetInputString( SCROW nRow, String& rString ) const
             ScCellFormat::GetInputString( pCell, nFormat, rString, *(pDocument->GetFormatTable()) );
         }
         else
-            rString.Erase();
+            rString = rtl::OUString();
     }
     else
-        rString.Erase();
+        rString = rtl::OUString();
 }
 
 
@@ -1846,7 +1846,7 @@ double ScColumn::GetValue( SCROW nRow ) const
 }
 
 
-void ScColumn::GetFormula( SCROW nRow, String& rFormula ) const
+void ScColumn::GetFormula( SCROW nRow, rtl::OUString& rFormula ) const
 {
     SCSIZE  nIndex;
     if (Search(nRow, nIndex))
@@ -1855,10 +1855,10 @@ void ScColumn::GetFormula( SCROW nRow, String& rFormula ) const
         if (pCell->GetCellType() == CELLTYPE_FORMULA)
             ((ScFormulaCell*)pCell)->GetFormula( rFormula );
         else
-            rFormula.Erase();
+            rFormula = rtl::OUString();
     }
     else
-        rFormula.Erase();
+        rFormula = rtl::OUString();
 }
 
 
@@ -1964,7 +1964,7 @@ sal_Int32 ScColumn::GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, CharSet eCh
     sal_Int32 nStringLen = 0;
     if ( pItems )
     {
-        String aString;
+        rtl::OUString aString;
         rtl::OString aOString;
         bool bIsOctetTextEncoding = rtl_isOctetTextEncoding( eCharSet);
         SvNumberFormatter* pNumFmt = pDocument->GetFormatTable();
@@ -1984,8 +1984,7 @@ sal_Int32 ScColumn::GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, CharSet eCh
                 sal_Int32 nLen;
                 if (bIsOctetTextEncoding)
                 {
-                    rtl::OUString aOUString( aString);
-                    if (!aOUString.convertToString( &aOString, eCharSet,
+                    if (!aString.convertToString( &aOString, eCharSet,
                                 RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
                                 RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR))
                     {
@@ -1997,7 +1996,7 @@ sal_Int32 ScColumn::GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, CharSet eCh
                     nLen = aOString.getLength();
                 }
                 else
-                    nLen = aString.Len() * sizeof(sal_Unicode);
+                    nLen = aString.getLength() * sizeof(sal_Unicode);
                 if ( nStringLen < nLen)
                     nStringLen = nLen;
             }
@@ -2019,7 +2018,7 @@ xub_StrLen ScColumn::GetMaxNumberStringLen(
 
     if ( pItems )
     {
-        String aString;
+        rtl::OUString aString;
         SvNumberFormatter* pNumFmt = pDocument->GetFormatTable();
         SCSIZE nIndex;
         SCROW nRow;
@@ -2034,7 +2033,7 @@ xub_StrLen ScColumn::GetMaxNumberStringLen(
                 sal_uLong nFormat = (sal_uLong) ((SfxUInt32Item*) GetAttr(
                     nRow, ATTR_VALUE_FORMAT ))->GetValue();
                 ScCellFormat::GetInputString( pCell, nFormat, aString, *pNumFmt );
-                xub_StrLen nLen = aString.Len();
+                xub_StrLen nLen = aString.getLength();
                 if ( nLen )
                 {
                     if ( nFormat )
@@ -2057,12 +2056,12 @@ xub_StrLen ScColumn::GetMaxNumberStringLen(
                     {   // less than nPrecision in string => widen it
                         // more => shorten it
                         String aSep = pNumFmt->GetFormatDecimalSep( nFormat );
-                        xub_StrLen nTmp = aString.Search( aSep );
-                        if ( nTmp == STRING_NOTFOUND )
+                        sal_Int32 nTmp = aString.indexOf( aSep );
+                        if ( nTmp == -1 )
                             nLen += nPrecision + aSep.Len();
                         else
                         {
-                            nTmp = aString.Len() - (nTmp + aSep.Len());
+                            nTmp = aString.getLength() - (nTmp + aSep.Len());
                             if ( nTmp != nPrecision )
                                 nLen += nPrecision - nTmp;
                                 // nPrecision > nTmp : nLen + Diff

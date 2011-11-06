@@ -41,7 +41,7 @@ namespace {
 
 rtl::OUString getConditionalFormatString(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
-    String aString;
+    rtl::OUString aString;
     Color* pColor;
     ScBaseCell* pCell = pDoc->GetCell(ScAddress(nCol, nRow, nTab));
     const SfxItemSet* pCondSet = pDoc->GetCondResult( nCol, nRow, nTab );
@@ -49,7 +49,7 @@ rtl::OUString getConditionalFormatString(ScDocument* pDoc, SCCOL nCol, SCROW nRo
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
     sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
     ScCellFormat::GetString( pCell, nFormat, aString, &pColor, *pFormatter);
-    return rtl::OUString(aString);
+    return aString;
 }
 
 rtl::OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab)
