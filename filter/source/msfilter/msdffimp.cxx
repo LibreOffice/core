@@ -662,7 +662,6 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
                             nLen -= 6;
                             while ( nLen > 0 )
                             {
-                                ByteString aString;
                                 for ( sal_uInt32 j = 0; nLen && ( j < ( nNumSize >> 1 ) ); j++ )
                                 {
                                     for ( sal_uInt32 k = 0; k < 2; k++ )
@@ -686,7 +685,7 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
                                     }
                                     *pOut << (char)( ' ' );
                                 }
-                                pOut->WriteLine( aString );
+                                pOut->WriteLine( rtl::OString() );
                             }
                         }
                     }
