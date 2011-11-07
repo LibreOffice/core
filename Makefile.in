@@ -15,7 +15,7 @@ else
 gb_MAKETARGET=all
 endif
 
-.PHONY : build dev-install all cross-build-toolset install distro-pack-install clean distclean findunusedcode
+.PHONY : build dev-install all cross-build-toolset install distro-pack-install clean clean-host clean-build distclean findunusedcode
 
 all: build unitcheck
 	@echo
@@ -90,7 +90,9 @@ endif
 	desktop/scripts/soffice.sh ooo.lst post_download post_download.log \
 	set_soenv set_soenv.last set_soenv.stamp src.downloaded warn 
 
-clean:
+clean: clean-host clean-build
+
+clean-host:
 	. ./Env.Host.sh && \
 	rm -rf */$$INPATH && \
 	rm -rf solver/$$INPATH && \
@@ -101,6 +103,8 @@ ifeq (@BUILD_DMAKE@,YES)
 	(if [ -f dmake/Makefile ] ; then $$GNUMAKE -C dmake clean; fi) && \
 	rm -f solenv/*/bin/dmake*
 endif
+
+clean-build:
 ifeq (@CROSS_COMPILING@,YES)
 	. ./Env.Host.sh && \
 	rm -rf */$$INPATH_FOR_BUILD && \
