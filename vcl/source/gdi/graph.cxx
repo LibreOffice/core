@@ -680,44 +680,6 @@ void Graphic::SetContext( GraphicReader* pReader )
 
 // ------------------------------------------------------------------------
 
-sal_uInt16 Graphic::GetGraphicsCompressMode( SvStream& rIStm )
-{
-    const sal_uLong     nPos = rIStm.Tell();
-    const sal_uInt16    nOldFormat = rIStm.GetNumberFormatInt();
-    sal_uInt32          nTmp32;
-    sal_uInt16          nTmp16;
-    sal_uInt16          nCompressMode = COMPRESSMODE_NONE;
-
-    rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-
-    rIStm >> nTmp32;
-
-    // is it a swapped graphic with a bitmap?
-    rIStm.SeekRel( (nTmp32 == (sal_uInt32) GRAPHIC_BITMAP ) ? 40 : -4 );
-
-    // try to read bitmap id
-    rIStm >> nTmp16;
-
-    // check id of BitmapFileHeader
-    if( 0x4D42 == nTmp16 )
-    {
-        // seek to compress field of BitmapInfoHeader
-        rIStm.SeekRel( 28 );
-        rIStm >> nTmp32;
-
-        // Compare with our own compressmode
-        if( ZCOMPRESS == nTmp32 )
-            nCompressMode = COMPRESSMODE_ZBITMAP;
-    }
-
-    rIStm.SetNumberFormatInt( nOldFormat );
-    rIStm.Seek( nPos );
-
-    return nCompressMode;
-}
-
-// ------------------------------------------------------------------------
-
 void Graphic::SetDocFileName( const String& rName, sal_uLong nFilePos )
 {
     mpImpGraphic->ImplSetDocFileName( rName, nFilePos );
@@ -743,14 +705,6 @@ sal_Bool Graphic::ReadEmbedded( SvStream& rIStream, sal_Bool bSwap )
 {
     ImplTestRefCount();
     return mpImpGraphic->ImplReadEmbedded( rIStream, bSwap );
-}
-
-// ------------------------------------------------------------------------
-
-sal_Bool Graphic::WriteEmbedded( SvStream& rOStream )
-{
-    ImplTestRefCount();
-    return mpImpGraphic->ImplWriteEmbedded( rOStream );
 }
 
 // ------------------------------------------------------------------------

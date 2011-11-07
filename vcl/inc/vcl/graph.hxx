@@ -188,14 +188,11 @@ public:
 
 public:
 
-    static sal_uInt16       GetGraphicsCompressMode( SvStream& rIStm );
-
     void                SetDocFileName( const String& rName, sal_uLong nFilePos );
     const String&       GetDocFileName() const;
     sal_uLong               GetDocFilePos() const;
 
     sal_Bool                ReadEmbedded( SvStream& rIStream, sal_Bool bSwap = sal_False );
-    sal_Bool                WriteEmbedded( SvStream& rOStream );
 
     sal_Bool                SwapOut();
     sal_Bool                SwapOut( SvStream* pOStm );
