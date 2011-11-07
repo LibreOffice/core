@@ -142,7 +142,7 @@ void ScDocument::MakeTable( SCTAB nTab,bool _bNeedsNameCheck )
     if ( ValidTab(nTab) && ( nTab >= static_cast<SCTAB>(maTabs.size()) ||!maTabs[nTab]) )
     {
         rtl::OUString aString = ScGlobal::GetRscString(STR_TABLE_DEF); //"Table"
-        aString += rtl::OUString::valueOf(nTab+1);
+        aString += rtl::OUString::valueOf(static_cast<SCTAB>(nTab+1));
         if ( _bNeedsNameCheck )
             CreateValidTabName( aString );  // no doubles
         if (nTab < static_cast<SCTAB>(maTabs.size()))

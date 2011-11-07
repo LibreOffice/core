@@ -1967,7 +1967,7 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
         {
             rtl::OUString rStr;
             GetString(nCol1 + 3, nRow, rStr);
-            rEntry.SetQueryString(aStr);
+            rEntry.SetQueryString(rStr);
             rEntry.bDoQuery = true;
         }
         nIndex++;

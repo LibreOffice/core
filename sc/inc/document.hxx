@@ -829,7 +829,7 @@ public:
     bool            ExtendMerge( ScRange& rRange, bool bRefresh = false );
     bool            ExtendTotalMerge( ScRange& rRange ) const;
     SC_DLLPUBLIC bool           ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
-                                SCCOL nEndCol, SCROW nEndRow, SCTAB nTab );
+                                SCCOL nEndCol, SCROW nEndRow, SCTAB nTab ) const;
     SC_DLLPUBLIC bool           ExtendOverlapped( ScRange& rRange ) const;
 
     bool            RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
