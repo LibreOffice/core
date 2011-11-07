@@ -724,15 +724,14 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 Size aNewSize;
 
                 // create a view
-                SdrView*        pView;
-
+                boost::scoped_ptr< SdrView > pView;
                 if( PTR_CAST( FmFormModel, mpDoc ) )
                 {
-                    pView = new FmFormView( PTR_CAST( FmFormModel, mpDoc ), &aVDev );
+                    pView.reset(new FmFormView( PTR_CAST( FmFormModel, mpDoc ), &aVDev ));
                 }
                 else
                 {
-                    pView = new SdrView( mpDoc, &aVDev );
+                    pView.reset(new SdrView( mpDoc, &aVDev ));
                 }
 
                 pView->SetBordVisible( sal_False );
@@ -773,7 +772,6 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 aGraphic = Graphic(aMtf);
 
                 pView->HideSdrPage();
-                delete pView;
 
                 if( rSettings.mbTranslucent )
                 {
