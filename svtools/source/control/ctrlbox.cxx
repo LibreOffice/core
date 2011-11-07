@@ -1057,9 +1057,10 @@ void FontNameBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 void FontNameBox::SaveMRUEntries( const String& aFontMRUEntriesFile, xub_Unicode cSep ) const
 {
-    ByteString aEntries =  ByteString( GetMRUEntries( cSep ), RTL_TEXTENCODING_UTF8 );
+    rtl::OString aEntries(rtl::OUStringToOString(GetMRUEntries(cSep),
+        RTL_TEXTENCODING_UTF8));
 
-    if( ! aEntries.Len() || ! aFontMRUEntriesFile.Len() )
+    if (!aEntries.getLength() || !aFontMRUEntriesFile.Len())
         return;
 
     SvFileStream aStream;
@@ -1067,14 +1068,14 @@ void FontNameBox::SaveMRUEntries( const String& aFontMRUEntriesFile, xub_Unicode
     if( ! (aStream.IsOpen() && aStream.IsWritable()) )
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "FontNameBox::SaveMRUEntries: opening mru entries file %s failed\n", ByteString(aFontMRUEntriesFile , RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+        fprintf( stderr, "FontNameBox::SaveMRUEntries: opening mru entries file %s failed\n", rtl::OUStringToOString(aFontMRUEntriesFile, RTL_TEXTENCODING_UTF8 ).getStr() );
 #endif
         return;
     }
 
     aStream.SetLineDelimiter( LINEEND_LF );
     aStream.WriteLine( aEntries );
-    aStream.WriteLine( ByteString() );
+    aStream.WriteLine( rtl::OString() );
 }
 
 // -------------------------------------------------------------------
@@ -1088,14 +1089,15 @@ void FontNameBox::LoadMRUEntries( const String& aFontMRUEntriesFile, xub_Unicode
     if( ! aStream.IsOpen() )
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "FontNameBox::LoadMRUEntries: opening mru entries file %s failed\n", ByteString( aFontMRUEntriesFile, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+        fprintf( stderr, "FontNameBox::LoadMRUEntries: opening mru entries file %s failed\n", rtl::OUStringToOString(aFontMRUEntriesFile, RTL_TEXTENCODING_UTF8).getStr() );
 #endif
         return;
     }
 
-    ByteString aLine;
+    rtl::OString aLine;
     aStream.ReadLine( aLine );
-    XubString aEntries = XubString( aLine, RTL_TEXTENCODING_UTF8 );
+    rtl::OUString aEntries = rtl::OStringToOUString(aLine,
+        RTL_TEXTENCODING_UTF8);
     SetMRUEntries( aEntries, cSep );
 }
 

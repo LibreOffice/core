@@ -1927,7 +1927,7 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
 
             sTmp.append( cUC < 256U ? (sal_Char)cUC : '.' );
         }
-        sCmp = ByteString( sTmp.makeStringAndClear() );
+        sCmp = sTmp.makeStringAndClear();
     }
     else
     {
@@ -2270,9 +2270,10 @@ rtl_TextEncoding HTMLParser::GetEncodingByMIME( const String& rMime )
             = aParameters.find("charset");
         if (pCharset != 0)
         {
-            ByteString sValue( pCharset->m_sValue, RTL_TEXTENCODING_ASCII_US );
+            rtl::OString sValue(rtl::OUStringToOString(pCharset->m_sValue,
+                RTL_TEXTENCODING_ASCII_US));
             return GetExtendedCompatibilityTextEncoding(
-                    rtl_getTextEncodingFromMimeCharset( sValue.GetBuffer() ) );
+                    rtl_getTextEncodingFromMimeCharset( sValue.getStr() ) );
         }
     }
     return RTL_TEXTENCODING_DONTKNOW;

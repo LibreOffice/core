@@ -104,17 +104,18 @@ void IMapObject::Write( SvStream& rOStm, const String& rBaseURL ) const
     rOStm << GetVersion();
     rOStm << ( (sal_uInt16) eEncoding );
 
-    const ByteString aRelURL = ByteString( String(URIHelper::simpleNormalizedMakeRelative( rBaseURL, aURL )), eEncoding );
-    rOStm.WriteByteString( aRelURL );
-    rOStm.WriteByteString( ByteString( aAltText, eEncoding ) );
+    const rtl::OString aRelURL = rtl::OUStringToOString(
+        URIHelper::simpleNormalizedMakeRelative(rBaseURL, aURL), eEncoding);
+    rOStm.WriteByteString(aRelURL);
+    rOStm.WriteByteString(rtl::OUStringToOString(aAltText, eEncoding));
     rOStm << bActive;
-    rOStm.WriteByteString( ByteString( aTarget, eEncoding ) );
+    rOStm.WriteByteString(rtl::OUStringToOString(aTarget, eEncoding));
 
     pCompat = new IMapCompat( rOStm, STREAM_WRITE );
 
     WriteIMapObject( rOStm );
     aEventList.Write( rOStm );                                 // V4
-    rOStm.WriteByteString( ByteString( aName, eEncoding ) );   // V5
+    rOStm.WriteByteString(rtl::OUStringToOString(aName, eEncoding));   // V5
 
     delete pCompat;
 }
@@ -1128,10 +1129,10 @@ void ImageMap::Write( SvStream& rOStm, const String& rBaseURL ) const
     // MagicCode schreiben
     rOStm << IMAPMAGIC;
     rOStm << GetVersion();
-    rOStm.WriteByteString( ByteString( aImageName, eEncoding ) );
-    rOStm.WriteByteString( ByteString( aDummy, eEncoding ) );
+    rOStm.WriteByteString(rtl::OUStringToOString(aImageName, eEncoding));
+    rOStm.WriteByteString(rtl::OUStringToOString(aDummy, eEncoding));
     rOStm << nCount;
-    rOStm.WriteByteString( ByteString( aImageName, eEncoding ) );
+    rOStm.WriteByteString(rtl::OUStringToOString(aImageName, eEncoding));
 
     pCompat = new IMapCompat( rOStm, STREAM_WRITE );
 

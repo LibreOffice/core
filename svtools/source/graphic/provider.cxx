@@ -163,8 +163,9 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadGraphicObject( co
     {
         // graphic manager url
         String aTmpStr( rResourceURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 ) );
-        ByteString aUniqueID( aTmpStr, RTL_TEXTENCODING_UTF8 );
-        GraphicObject aGrafObj( aUniqueID );
+        rtl::OString aUniqueID(rtl::OUStringToOString(aTmpStr,
+            RTL_TEXTENCODING_UTF8));
+        GraphicObject aGrafObj(aUniqueID);
         // I don't call aGrafObj.GetXGraphic because it will call us back
         // into implLoadMemory ( with "private:memorygraphic" test )
         ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic;
@@ -288,9 +289,10 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const :
 
     if( ( 0 == rResourceURL.getToken( 0, '/', nIndex ).compareToAscii( "private:resource" ) ) )
     {
-        ByteString aResMgrName( String( rResourceURL.getToken( 0, '/', nIndex ) ), RTL_TEXTENCODING_ASCII_US );
+        rtl::OString aResMgrName(rtl::OUStringToOString(
+            rResourceURL.getToken(0, '/', nIndex), RTL_TEXTENCODING_ASCII_US));
 
-        ResMgr* pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
+        ResMgr* pResMgr = ResMgr::CreateResMgr( aResMgrName.getStr(), Application::GetSettings().GetUILocale() );
 
         if( pResMgr )
         {

@@ -648,7 +648,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
         if( pObj )
         {
             const sal_Char *pShape = 0;
-            ByteString aCoords;
+            rtl::OString aCoords;
             switch( pObj->GetType() )
             {
             case( IMAP_OBJ_RECTANGLE ):
@@ -956,7 +956,7 @@ rtl::OString HTMLOutFuncs::CreateTableDataOptionsValNum(
         // printf / scanf ist zu ungenau
         String aValStr;
         rFormatter.GetInputLineString( fVal, 0, aValStr );
-        ByteString sTmp( aValStr, eDestEnc );
+        rtl::OString sTmp(rtl::OUStringToOString(aValStr, eDestEnc));
         aStrTD.append(' ').
             append(OOO_STRING_SVTOOLS_HTML_O_SDval).
             append(RTL_CONSTASCII_STRINGPARAM("=\"")).

@@ -38,6 +38,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
+#include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
 
 // ------------------------------------------------------------------------
@@ -289,14 +290,13 @@ void WinMtfAssertHandler( const sal_Char* pAction, sal_uInt32 nFlags )
     {
         if ( ( nAssertCount == 0 ) || ( bOnlyOnce == sal_False ) )
         {
-            ByteString aText( "WMF/EMF Import: " );
-            if ( pAction )
-            {
-                ByteString aAction( pAction );
-                aText.Append( aAction );
-            }
-            aText.Append( " needs to be implemented (SJ)" );
-            DBG_ASSERT( 0, aText.GetBuffer() );
+            rtl::OStringBuffer aText(RTL_CONSTASCII_STRINGPARAM(
+                "WMF/EMF Import: "));
+            if (pAction)
+                aText.append(pAction);
+            aText.append(RTL_CONSTASCII_STRINGPARAM(
+                " needs to be implemented"));
+            DBG_ASSERT( 0, aText.getStr() );
         }
         nAssertCount++;
     }

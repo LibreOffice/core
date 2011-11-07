@@ -2180,7 +2180,7 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData*, pData )
     if( pData )
     {
         sal_uInt16      nFormat = GRFILTER_FORMAT_DONTKNOW;
-        ByteString  aShortName;
+        rtl::OString aShortName;
         switch( pData->mnFormat )
         {
             case( CVT_BMP ): aShortName = BMP_SHORTNAME; break;
@@ -2201,13 +2201,13 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData*, pData )
         if( GRAPHIC_NONE == pData->maGraphic.GetType() || pData->maGraphic.GetContext() ) // Import
         {
             // Import
-            nFormat = GetImportFormatNumberForShortName( String( aShortName.GetBuffer(), RTL_TEXTENCODING_UTF8 ) );
+            nFormat = GetImportFormatNumberForShortName( rtl::OStringToOUString( aShortName, RTL_TEXTENCODING_UTF8) );
             nRet = ImportGraphic( pData->maGraphic, String(), pData->mrStm, nFormat ) == 0;
         }
-        else if( aShortName.Len() )
+        else if( aShortName.getLength() )
         {
             // Export
-            nFormat = GetExportFormatNumberForShortName( String( aShortName.GetBuffer(), RTL_TEXTENCODING_UTF8 ) );
+            nFormat = GetExportFormatNumberForShortName( rtl::OStringToOUString(aShortName, RTL_TEXTENCODING_UTF8) );
             nRet = ExportGraphic( pData->maGraphic, String(), pData->mrStm, nFormat ) == 0;
         }
     }

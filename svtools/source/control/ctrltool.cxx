@@ -917,11 +917,12 @@ long FontSizeNames::Name2Size( const String& rName ) const
 {
     if ( mnElem )
     {
-        ByteString aName( rName, RTL_TEXTENCODING_UTF8 );
+        rtl::OString aName(rtl::OUStringToOString(rName,
+            RTL_TEXTENCODING_UTF8));
 
         // linear search is sufficient for this rare case
         for( long i = mnElem; --i >= 0; )
-            if ( aName == mpArray[i].mszUtf8Name )
+            if ( aName.equals(mpArray[i].mszUtf8Name) )
                 return mpArray[i].mnSize;
     }
 

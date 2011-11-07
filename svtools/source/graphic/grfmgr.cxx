@@ -1161,7 +1161,7 @@ SvStream& operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj )
     rOStm << rGraphicObj.GetGraphic() << rGraphicObj.GetAttr() << bLink;
 
     if( bLink )
-        rOStm << ByteString( rGraphicObj.GetLink(), RTL_TEXTENCODING_UTF8 );
+        rOStm << rtl::OUStringToOString(rGraphicObj.GetLink(), RTL_TEXTENCODING_UTF8);
 
     return rOStm;
 }
@@ -1174,7 +1174,7 @@ GraphicObject GraphicObject::CreateGraphicObjectFromURL( const ::rtl::OUString &
     if( aURL.Search( aPrefix ) == 0 )
     {
         // graphic manager url
-        ByteString aUniqueID( String(rURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 )), RTL_TEXTENCODING_UTF8 );
+        rtl::OString aUniqueID(rtl::OUStringToOString(rURL.copy(sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX) - 1), RTL_TEXTENCODING_UTF8));
         return GraphicObject( aUniqueID );
     }
     else

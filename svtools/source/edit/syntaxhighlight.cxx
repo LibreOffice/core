@@ -434,14 +434,14 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
             if( bCanBeKeyword )
             {
                 String aKWString(rpStartPos, sal::static_int_cast< xub_StrLen >(nCount) );
-                ByteString aByteStr( aKWString, RTL_TEXTENCODING_ASCII_US );
-                aByteStr.ToLowerAscii();
-                if ( bsearch( aByteStr.GetBuffer(), ppListKeyWords, nKeyWordCount, sizeof( char* ),
+                rtl::OString aByteStr = rtl::OUStringToOString(aKWString,
+                    RTL_TEXTENCODING_ASCII_US).toAsciiLowerCase();
+                if ( bsearch( aByteStr.getStr(), ppListKeyWords, nKeyWordCount, sizeof( char* ),
                                                                         compare_strings ) )
                 {
                     reType = TT_KEYWORDS;
 
-                    if ( aByteStr.Equals( "rem" ) )
+                    if (aByteStr.equalsL(RTL_CONSTASCII_STRINGPARAM("rem")))
                     {
                         // Alle Zeichen bis Zeilen-Ende oder EOF entfernen
                         sal_Unicode cPeek = peekChar();

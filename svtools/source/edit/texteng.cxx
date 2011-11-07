@@ -2586,7 +2586,7 @@ sal_Bool TextEngine::Read( SvStream& rInput, const TextSelection* pSel )
     if ( aSel.HasRange() )
         aSel = ImpDeleteText( aSel );
 
-    ByteString aLine;
+    rtl::OString aLine;
     sal_Bool bDone = rInput.ReadLine( aLine );
     String aTmpStr( aLine, rInput.GetStreamCharSet() ), aStr;
     while ( bDone )
@@ -2687,7 +2687,8 @@ sal_Bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, sal_Bo
 
             aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "</P>" ) );
         }
-        rOutput.WriteLine( ByteString( aText, rOutput.GetStreamCharSet() ) );
+        rOutput.WriteLine(rtl::OUStringToOString(aText,
+            rOutput.GetStreamCharSet()));
     }
 
     if ( bHTML )

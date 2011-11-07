@@ -366,8 +366,8 @@ class NameTranslationEntry : public HashedEntry
 protected:
     OUString                maTranslatedName;
 public:
-    inline                  NameTranslationEntry( const OUString& rOriginalName, const OUString& rTranslatedName );
-    inline                  NameTranslationEntry( const ByteString& rOriginalName, const ByteString& rTranslatedName );
+    inline                  NameTranslationEntry( const rtl::OUString& rOriginalName, const rtl::OUString& rTranslatedName );
+    inline                  NameTranslationEntry( const rtl::OString& rOriginalName, const rtl::OString& rTranslatedName );
 
     inline const OUString&  GetTranslation() const;
 };
@@ -378,9 +378,9 @@ inline NameTranslationEntry::NameTranslationEntry( const OUString& rOrg, const O
 {
 }
 
-inline NameTranslationEntry::NameTranslationEntry( const ByteString& rOrg, const ByteString& rTrans ):
-    HashedEntry( OUString( rOrg.GetBuffer(), rOrg.Len(), RTL_TEXTENCODING_ASCII_US ) ),
-    maTranslatedName( OUString( rTrans.GetBuffer(), rTrans.Len(), RTL_TEXTENCODING_UTF8 ) )
+inline NameTranslationEntry::NameTranslationEntry( const rtl::OString& rOrg, const rtl::OString& rTrans )
+    : HashedEntry(rtl::OStringToOUString(rOrg, RTL_TEXTENCODING_ASCII_US))
+    , maTranslatedName(rtl::OStringToOUString(rTrans, RTL_TEXTENCODING_UTF8))
 {
 }
 
@@ -438,12 +438,12 @@ void NameTranslationList::Init()
         ::ucbhelper::Content aTestContent( maTransFile.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >() );
 
         if( aTestContent.isDocument() )
-        {// ... also tests the existence of maTransFile by throwing an Exception
-            const sal_Char*     pSection = "TRANSLATIONNAMES";
+        {
+            // ... also tests the existence of maTransFile by throwing an Exception
             String          aFsysName( maTransFile.getFSysPath( INetURLObject::FSYS_DETECT ) );
             Config          aConfig( aFsysName );
 
-            aConfig.SetGroup( ByteString( pSection ) );
+            aConfig.SetGroup( rtl::OString(RTL_CONSTASCII_STRINGPARAM("TRANSLATIONNAMES")) );
 
             sal_uInt16          nKeyCnt = aConfig.GetKeyCount();
 
@@ -969,7 +969,7 @@ void ViewTabListBox_Impl::DeleteEntries()
     SvLBoxEntry* pEntry = FirstSelected();
     String aURL;
 
-    ByteString sDialogPosition;
+    rtl::OString sDialogPosition;
     while ( pEntry && ( eResult != svtools::QUERYDELETE_CANCEL ) )
     {
         SvLBoxEntry *pCurEntry = pEntry;
@@ -1005,7 +1005,7 @@ void ViewTabListBox_Impl::DeleteEntries()
         {
             INetURLObject aObj( aURL );
             svtools::QueryDeleteDlg_Impl aDlg( NULL, aObj.GetName( INetURLObject::DECODE_WITH_CHARSET ) );
-            if ( sDialogPosition.Len() )
+            if ( sDialogPosition.getLength() )
                 aDlg.SetWindowState( sDialogPosition );
 
             if ( GetSelectionCount() > 1 )

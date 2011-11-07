@@ -87,43 +87,42 @@
 
 using namespace ::com::sun::star;
 
-static sal_Int16 GetFilterFormat( String& rExt )
+static sal_Int16 GetFilterFormat(const rtl::OUString& rExt)
 {
     sal_Int16 nFormat = FORMAT_UNKNOWN;
-    ByteString aExt( rExt, RTL_TEXTENCODING_UTF8 );
-    if ( aExt.Equals( "JPG" ) )
+    if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("JPG")))
         nFormat = FORMAT_JPG;
-    else if ( aExt.Equals( "PNG" ) )
+    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PNG")))
         nFormat = FORMAT_PNG;
-    else if ( aExt.Equals( "BMP" ) )
+    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("BMP")))
         nFormat = FORMAT_BMP;
-    else if ( aExt.Equals( "GIF" ) )
+    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("GIF")))
         nFormat = FORMAT_GIF;
-    else if ( aExt.Equals( "PBM" ) )
+    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PBM")))
         nFormat = FORMAT_PBM;
-    else if ( aExt.Equals( "PGM" ) )
+    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PGM")))
         nFormat = FORMAT_PGM;
-    else if ( aExt.Equals( "PPM" ) )
+    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PPM")))
         nFormat = FORMAT_PPM;
-    else if ( aExt.Equals( "PCT" ) )
+    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PCT")))
         nFormat = FORMAT_PCT;
-    else if ( aExt.Equals( "RAS" ) )
+    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("RAS")))
         nFormat = FORMAT_RAS;
-    else if ( aExt.Equals( "TIF" ) )
+    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TIF")))
         nFormat = FORMAT_TIF;
-    else if ( aExt.Equals( "XPM" ) )
+    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("XPM")))
         nFormat = FORMAT_XPM;
-    else if ( aExt.Equals( "WMF" ) )
+    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("WMF")))
         nFormat = FORMAT_WMF;
-    else if ( aExt.Equals( "EMF" ) )
+    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EMF")))
         nFormat = FORMAT_EMF;
-    else if ( aExt.Equals( "EPS" ) )
+    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EPS")))
         nFormat = FORMAT_EPS;
-    else if ( aExt.Equals( "MET" ) )
+    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MET")))
         nFormat = FORMAT_MET;
-    else if ( aExt.Equals( "SVG" ) )
+    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SVG")))
         nFormat = FORMAT_SVG;
-    else if ( aExt.Equals( "SVM" ) )
+    else if (rExt.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SVM")))
         nFormat = FORMAT_SVM;
     return nFormat;
 }
