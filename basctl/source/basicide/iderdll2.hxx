@@ -33,7 +33,6 @@ class StarBASIC;
 class SvxSearchItem;
 class Accelerator;
 
-#include <tools/string.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 

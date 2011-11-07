@@ -32,7 +32,6 @@
 #include "scriptdocument.hxx"
 
 #include <com/sun/star/resource/XStringResourceManager.hpp>
-#include <tools/string.hxx>
 
 class BasicIDEShell;
 class DlgEditor;
@@ -45,7 +44,7 @@ class LocalizationMgr
     BasicIDEShell*                                              m_pIDEShell;
 
     ScriptDocument                                              m_aDocument;
-    String                                                      m_aLibName;
+    ::rtl::OUString                                             m_aLibName;
 
     ::com::sun::star::lang::Locale                              m_aLocaleBeforeBasicStart;
 
