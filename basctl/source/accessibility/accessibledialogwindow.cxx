@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
+
 #include <accessibledialogwindow.hxx>
 #include <accessibledialogcontrolshape.hxx>
 #include <baside3.hxx>
@@ -45,10 +46,6 @@
 #include <toolkit/helper/externallock.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
-
-#include <vector>
-#include <algorithm>
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
