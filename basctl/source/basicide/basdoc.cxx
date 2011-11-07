@@ -28,24 +28,15 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
-
-
 #include <ide_pch.hxx>
-#include <svx/svxids.hrc>
 
-#include <sfx2/docfac.hxx>
-#include <sfx2/sfxmodelfactory.hxx>
-#include <vcl/status.hxx>
-
-#include <svx/xmlsecctrl.hxx>
+#include "unomodel.hxx"
 
 #include <basdoc.hxx>
-
-#define BasicDocShell
+#define BasicDocShell     // This CANNOT come before basdoc apparently
 #include <basslots.hxx>
-
-#include "basicmod.hxx"
-#include "unomodel.hxx"
+#include <sfx2/sfxmodelfactory.hxx>
+#include <svx/svxids.hrc>
 
 TYPEINIT1(BasicDocShell, SfxObjectShell);
 DBG_NAME(BasicDocShell);
