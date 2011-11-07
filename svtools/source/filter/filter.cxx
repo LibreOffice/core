@@ -790,10 +790,8 @@ sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const String& rPath, SvStream& rS
 static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& rConfigItem )
 {
     Graphic     aGraphic;
-    ByteString  aResMgrName( "svt", 3 );
-    ResMgr*     pResMgr;
 
-    pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
+    ResMgr*     pResMgr = ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILocale() );
 
     sal_Int32 nLogicalWidth = rConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "LogicalWidth" ) ), 0 );
     sal_Int32 nLogicalHeight = rConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "LogicalHeight" ) ), 0 );
