@@ -142,7 +142,7 @@ void ScDocument::MakeTable( SCTAB nTab,bool _bNeedsNameCheck )
     if ( ValidTab(nTab) && ( nTab >= static_cast<SCTAB>(maTabs.size()) ||!maTabs[nTab]) )
     {
         rtl::OUString aString = ScGlobal::GetRscString(STR_TABLE_DEF); //"Table"
-        aString += rtl::OUString::valueOf(static_cast<SCTAB>(nTab+1));
+        aString += rtl::OUString::valueOf(static_cast<sal_Int32>(nTab+1));
         if ( _bNeedsNameCheck )
             CreateValidTabName( aString );  // no doubles
         if (nTab < static_cast<SCTAB>(maTabs.size()))
@@ -334,7 +334,7 @@ void ScDocument::CreateValidTabName(rtl::OUString& rName) const
         for ( SCTAB i = static_cast<SCTAB>(maTabs.size())+1; !bOk ; i++ )
         {
             rName  = aStrTable;
-            rName += rtl::OUString::valueOf(i);
+            rName += rtl::OUString::valueOf(static_cast<SCTAB>(i));
             if (bPrefix)
                 bOk = ValidNewTabName( rName );
             else
