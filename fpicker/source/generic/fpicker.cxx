@@ -85,9 +85,11 @@ static Reference< css::uno::XInterface > FilePicker_createInstance (
         return xResult;
 
     Reference< css::lang::XMultiComponentFactory > xFactory (rxContext->getServiceManager());
-    if (xFactory.is())
+    if (xFactory.is() && SvtMiscOptions().UseSystemFileDialog())
     {
-        if (SvtMiscOptions().UseSystemFileDialog())
+        xResult = Reference< css::uno::XInterface >( Application::createFilePicker( rxContext ) );
+
+        if (!xResult.is())
         {
             try
             {
@@ -102,8 +104,6 @@ static Reference< css::uno::XInterface > FilePicker_createInstance (
         }
     }
 
-    if (!xResult.is())
-        xResult = Reference< css::uno::XInterface >( Application::createFilePicker( rxContext ) );
 
     if (!xResult.is() && xFactory.is())
     {
@@ -162,9 +162,10 @@ static Reference< css::uno::XInterface > FolderPicker_createInstance (
         return xResult;
 
     Reference< css::lang::XMultiComponentFactory > xFactory (rxContext->getServiceManager());
-    if (xFactory.is())
+    if (xFactory.is() && SvtMiscOptions().UseSystemFileDialog())
     {
-        if (SvtMiscOptions().UseSystemFileDialog())
+        xResult = Reference< css::uno::XInterface >( Application::createFolderPicker( rxContext ) );
+        if (!xResult.is())
         {
             try
             {
@@ -178,8 +179,6 @@ static Reference< css::uno::XInterface > FolderPicker_createInstance (
             }
         }
     }
-    if (!xResult.is())
-        xResult = Reference< css::uno::XInterface >( Application::createFolderPicker( rxContext ) );
     if (!xResult.is() && xFactory.is() )
     {
         // Always fall back to OfficeFolderPicker.
