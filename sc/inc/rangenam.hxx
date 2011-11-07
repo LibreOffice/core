@@ -73,7 +73,7 @@ class ScRangeData
 {
 private:
     String          aName;
-    String          aUpperName;         // #i62977# for faster searching (aName is never modified after ctor)
+    rtl::OUString   aUpperName;     // #i62977# for faster searching (aName is never modified after ctor)
     ScTokenArray*   pCode;
     ScAddress       aPos;
     RangeType       eType;
@@ -117,7 +117,7 @@ public:
 
     void            GetName( String& rName ) const  { rName = aName; }
     const String&   GetName( void ) const           { return aName; }
-    const String&   GetUpperName( void ) const      { return aUpperName; }
+    const rtl::OUString&   GetUpperName( void ) const      { return aUpperName; }
     ScAddress       GetPos() const                  { return aPos; }
     // The index has to be unique. If index=0 a new index value is assigned.
     void            SetIndex( sal_uInt16 nInd )         { nIndex = nInd; }
