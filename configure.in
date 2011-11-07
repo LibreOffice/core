@@ -5,6 +5,270 @@ dnl in order to create a configure script.
 AC_INIT([LibreOffice],[3.5],[],[],[http://documentfoundation.org/])
 AC_PREREQ([2.59])
 
+save_CC=$CC
+save_CXX=$CXX
+
+BUILD_TYPE="LibO"
+SCPDEFS=""
+GIT_REPO_NAMES=""
+MINGW_EXTERNAL_DLLS=""
+
+if test -n "$SOLARENV" ; then
+    AC_MSG_ERROR([You have sourced Env.Host.sh in this shell.  This may lead to trouble, please run in a fresh (login) shell.])
+fi
+
+echo "********************************************************************"
+echo "*"
+echo "*   Running ${PACKAGE_NAME} build configuration."
+echo "*"
+echo "********************************************************************"
+echo ""
+
+dnl ===================================================================
+dnl checks build and host OSes
+dnl do this before argument processing to allow for platform dependent defaults
+dnl ===================================================================
+AC_CANONICAL_HOST
+
+if test "$cross_compiling" = "yes"; then
+    CROSS_COMPILING=YES
+else
+    CROSS_COMPILING=
+    BUILD_TYPE="$BUILD_TYPE NATIVE"
+fi
+AC_SUBST(CROSS_COMPILING)
+
+if test "$build_os" = "cygwin"; then
+    EXEEXT_FOR_BUILD=.exe
+else
+    EXEEXT_FOR_BUILD=
+fi
+AC_SUBST(EXEEXT_FOR_BUILD)
+
+cat /dev/null > warn
+
+if test "z$EUID" = "z0" -a "z`uname -o 2>/dev/null`" = "zCygwin"; then
+    AC_MSG_ERROR([You must build LibreOffice as a normal user - not using an administrative account])
+fi
+
+# need sed in os checks...
+AC_PATH_PROGS(SED, sed)
+if test -z "$SED"; then
+    AC_MSG_ERROR([install sed to run this script])
+fi
+
+dnl ===================================================================
+dnl The following is a list of supported systems.
+dnl Sequential to keep the logic very simple
+dnl These values may be checked and reset later.
+dnl ===================================================================
+#defaults unless the os test overrides this:
+test_randr=yes
+test_cups=yes
+test_fontconfig=yes
+
+case "$host_os" in
+
+solaris*)
+    test_gtk=yes
+    build_gstreamer=yes
+    test_kde=yes
+    test_freetype=yes
+    test_gstreamer=yes
+    _os=SunOS
+    AC_PATH_PROG( GNUTAR, gtar,,$PATH:/usr/sfw/bin)
+    if test -z "$GNUTAR"; then
+        AC_MSG_ERROR([gtar (GNU tar) not found but needed. Install it (Sun Freeware package).])
+    fi
+    AC_SUBST(GNUTAR)
+
+    dnl ===========================================================
+    dnl Check whether we're using Solaris 6,7,8 - SPARC or Intel.
+    dnl ===========================================================
+    AC_MSG_CHECKING([the Solaris operating system release])
+    _os_release=`echo $host_os | $SED -e s/solaris2\.//`
+    if test "$_os_release" -lt "6"; then
+        AC_MSG_ERROR([use Solaris >= 6 to build LibreOffice])
+    else
+        AC_MSG_RESULT([ok ($_os_release)])
+    fi
+
+    dnl Check whether we're using a SPARC or i386 processor
+    AC_MSG_CHECKING([the processor type])
+    if test "$host_cpu" = "sparc" -o "$host_cpu" = "i386"; then
+        AC_MSG_RESULT([ok ($host_cpu)])
+    else
+        AC_MSG_ERROR([only SPARC and i386 processors are supported])
+    fi
+    ;;
+
+linux-gnu*|k*bsd*-gnu*)
+    test_gtk=yes
+    build_gstreamer=yes
+    test_kde=yes
+    test_kde4=yes
+    test_freetype=yes
+    test_unix_quickstarter=yes
+    _os=Linux
+    ;;
+
+gnu)
+    test_randr=no
+    _os=GNU
+     ;;
+
+cygwin*|interix*|mingw32*)
+
+    # When building on Windows normally with MSVC under Cygwin,
+    # configure thinks that the host platform (the platform the
+    # built code will run on) is Cygwin, even if it obviously is
+    # Windows, which in Autoconf terminology is called
+    # "mingw32". (Which is misleading as MinGW is the name of the
+    # tool-chain, not an operating system.)
+
+    # Somewhat confusing, yes. But this configure script doesn't
+    # look at $host etc that much, it mostly uses its own $_os
+    # variable, set here in this case statement.
+
+    # When cross-compiling to Windows from Unix, the host platform
+    # is "mingw32" (because in that case it is the MinGW
+    # tool-chain that is used).
+
+    test_cups=no
+    test_randr=no
+    test_freetype=no
+    test_fontconfig=no
+    _os=WINNT
+
+    # If the host OS matches "mingw32*", that means we are using the
+    # MinGW cross-compiler, because we don't see the point in building
+    # LibreOffice using MinGW on Windows. If you want to build on
+    # Windows, use MSVC. If you want to use MinGW, surely you want to
+    # cross-compile (from Linux or some other Unix).
+
+    case "$host_os" in
+    mingw32*)
+        WITH_MINGW=yes
+        if test -z "$CC" ; then
+            CC="$host_cpu-$host_vendor-$host_os-gcc"
+        fi
+        if test -z "$CXX" ; then
+            CXX="$host_cpu-$host_vendor-$host_os-g++"
+        fi
+        ;;
+    esac
+    ;;
+
+darwin*) # Mac OS X or iOS
+    test_gtk=yes
+    test_randr=no
+    test_freetype=no
+    test_fontconfig=no
+    if test "$host_cpu" = "arm"; then
+        _os=iOS
+        test_gtk=no
+        test_cups=no
+    else
+        _os=Darwin
+    fi
+    enable_systray=no
+;;
+
+freebsd*)
+    test_gtk=yes
+    build_gstreamer=yes
+    test_kde=yes
+    test_kde4=yes
+    test_freetype=yes
+    AC_MSG_CHECKING([the FreeBSD operating system release])
+    if test -n "$with_os_version"; then
+        OSVERSION="$with_os_version"
+    else
+        OSVERSION=`/sbin/sysctl -n kern.osreldate`
+    fi
+    AC_MSG_RESULT([found OSVERSION=$OSVERSION])
+    AC_MSG_CHECKING([which thread library to use])
+    if test "$OSVERSION" -lt "500016"; then
+        PTHREAD_CFLAGS="-D_THREAD_SAFE"
+        PTHREAD_LIBS="-pthread"
+    elif test "$OSVERSION" -lt "502102"; then
+        PTHREAD_CFLAGS="-D_THREAD_SAFE"
+        PTHREAD_LIBS="-lc_r"
+    else
+        PTHREAD_CFLAGS=""
+        PTHREAD_LIBS="-pthread"
+    fi
+    AC_MSG_RESULT([$PTHREAD_LIBS])
+    _os=FreeBSD
+    ;;
+
+*netbsd*)
+    test_gtk=yes
+    build_gstreamer=yes
+    test_kde=no
+    test_kde4=yes
+    test_freetype=yes
+    PTHREAD_LIBS="-pthread -lpthread"
+    _os=NetBSD
+    ;;
+
+aix*)
+    test_randr=no
+    test_freetype=yes
+    PTHREAD_LIBS=-pthread
+    _os=AIX
+    ;;
+
+openbsd*)
+    test_gtk=yes
+    test_kde=yes
+    test_freetype=yes
+    PTHREAD_CFLAGS="-D_THREAD_SAFE"
+    PTHREAD_LIBS="-pthread"
+    _os=OpenBSD
+    ;;
+
+dragonfly*)
+    test_gtk=yes
+    build_gstreamer=yes
+    test_kde=yes
+    test_kde4=yes
+    test_freetype=yes
+    PTHREAD_LIBS="-pthread"
+    _os=DragonFly
+    ;;
+
+linux-androideabi*)
+    build_gstreamer=no
+    test_cups=no
+    test_fontconfig=no
+    test_freetype=no
+    test_gtk=no
+    test_kde=no
+    test_kde4=no
+    test_randr=no
+    test_unix_quickstarter=no
+    _os=Android
+    ;;
+
+*)
+    AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice for!])
+    ;;
+esac
+
+if test "$_os" = "AIX"; then
+    AC_PATH_PROG(GAWK, gawk)
+    if test -z "$GAWK"; then
+        AC_MSG_ERROR([gawk not found in \$PATH])
+    fi
+fi
+
+AC_SUBST(WITH_MINGW)
+AC_SUBST(OSVERSION)
+AC_SUBST(PTHREAD_CFLAGS)
+AC_SUBST(PTHREAD_LIBS)
+
+
 ###############################################################################
 # Extensions switches --enable/--disable
 ###############################################################################
@@ -1459,64 +1723,14 @@ AC_ARG_WITH(macosx-version-max-allowed,
 ,)
 
 
-BUILD_TYPE="LibO"
-SCPDEFS=""
-GIT_REPO_NAMES=""
-MINGW_EXTERNAL_DLLS=""
-
-if test -n "$SOLARENV" ; then
-    AC_MSG_ERROR([You have sourced Env.Host.sh in this shell.  This may lead to trouble, please run in a fresh (login) shell.])
-fi
-
-echo "********************************************************************"
-echo "*"
-echo "*   Running ${PACKAGE_NAME} build configuration."
-echo "*"
-echo "********************************************************************"
-echo ""
-
-dnl ===================================================================
-dnl checks build and host OSes
-dnl ===================================================================
-AC_CANONICAL_HOST
-
-if test "$cross_compiling" = "yes"; then
-    CROSS_COMPILING=YES
-else
-    CROSS_COMPILING=
-    BUILD_TYPE="$BUILD_TYPE NATIVE"
-fi
-AC_SUBST(CROSS_COMPILING)
-
-if test "$build_os" = "cygwin"; then
-    EXEEXT_FOR_BUILD=.exe
-else
-    EXEEXT_FOR_BUILD=
-fi
-AC_SUBST(EXEEXT_FOR_BUILD)
-
 dnl ===================================================================
 dnl check for required programs (grep, awk, sed, bash)
 dnl ===================================================================
-cat /dev/null > warn
-
-if test "z$EUID" = "z0" -a "z`uname -o 2>/dev/null`" = "zCygwin"; then
-    AC_MSG_ERROR([You must build LibreOffice as a normal user - not using an administrative account])
-fi
-
-save_CC=$CC
-save_CXX=$CXX
-
 AC_PROG_EGREP
 AC_PROG_AWK
 AC_PATH_PROG( AWK, $AWK)
 if test -z "$AWK"; then
     AC_MSG_ERROR([install awk to run this script])
-fi
-
-AC_PATH_PROGS(SED, sed )
-if test -z "$SED"; then
-    AC_MSG_ERROR([install sed to run this script])
 fi
 
 AC_PATH_PROG(BASH, bash)
@@ -1538,217 +1752,6 @@ if test -z "$GNUTAR"; then
     AC_MSG_ERROR([not found. install GNU or BSD tar.])
 fi
 AC_SUBST(GNUTAR)
-
-dnl ===================================================================
-dnl The following is a list of supported systems.
-dnl Sequential to keep the logic very simple
-dnl These values may be checked and reset later.
-dnl ===================================================================
-#defaults unless the os test overrides this:
-test_randr=yes
-test_cups=yes
-test_fontconfig=yes
-
-case "$host_os" in
-
-solaris*)
-    test_gtk=yes
-    build_gstreamer=yes
-    test_kde=yes
-    test_freetype=yes
-    test_gstreamer=yes
-    _os=SunOS
-    AC_PATH_PROG( GNUTAR, gtar,,$PATH:/usr/sfw/bin)
-    if test -z "$GNUTAR"; then
-        AC_MSG_ERROR([gtar (GNU tar) not found but needed. Install it (Sun Freeware package).])
-    fi
-    AC_SUBST(GNUTAR)
-
-    dnl ===========================================================
-    dnl Check whether we're using Solaris 6,7,8 - SPARC or Intel.
-    dnl ===========================================================
-    AC_MSG_CHECKING([the Solaris operating system release])
-    _os_release=`echo $host_os | $SED -e s/solaris2\.//`
-    if test "$_os_release" -lt "6"; then
-        AC_MSG_ERROR([use Solaris >= 6 to build LibreOffice])
-    else
-        AC_MSG_RESULT([ok ($_os_release)])
-    fi
-
-    dnl Check whether we're using a SPARC or i386 processor
-    AC_MSG_CHECKING([the processor type])
-    if test "$host_cpu" = "sparc" -o "$host_cpu" = "i386"; then
-        AC_MSG_RESULT([ok ($host_cpu)])
-    else
-        AC_MSG_ERROR([only SPARC and i386 processors are supported])
-    fi
-    ;;
-
-linux-gnu*|k*bsd*-gnu*)
-    test_gtk=yes
-    build_gstreamer=yes
-    test_kde=yes
-    test_kde4=yes
-    test_freetype=yes
-    test_unix_quickstarter=yes
-    _os=Linux
-    ;;
-
-gnu)
-    test_randr=no
-    _os=GNU
-     ;;
-
-cygwin*|interix*|mingw32*)
-
-    # When building on Windows normally with MSVC under Cygwin,
-    # configure thinks that the host platform (the platform the
-    # built code will run on) is Cygwin, even if it obviously is
-    # Windows, which in Autoconf terminology is called
-    # "mingw32". (Which is misleading as MinGW is the name of the
-    # tool-chain, not an operating system.)
-
-    # Somewhat confusing, yes. But this configure script doesn't
-    # look at $host etc that much, it mostly uses its own $_os
-    # variable, set here in this case statement.
-
-    # When cross-compiling to Windows from Unix, the host platform
-    # is "mingw32" (because in that case it is the MinGW
-    # tool-chain that is used).
-
-    test_cups=no
-    test_randr=no
-    test_freetype=no
-    test_fontconfig=no
-    _os=WINNT
-
-    # If the host OS matches "mingw32*", that means we are using the
-    # MinGW cross-compiler, because we don't see the point in building
-    # LibreOffice using MinGW on Windows. If you want to build on
-    # Windows, use MSVC. If you want to use MinGW, surely you want to
-    # cross-compile (from Linux or some other Unix).
-
-    case "$host_os" in
-    mingw32*)
-        WITH_MINGW=yes
-        if test -z "$CC" ; then
-            CC="$host_cpu-$host_vendor-$host_os-gcc"
-        fi
-        if test -z "$CXX" ; then
-            CXX="$host_cpu-$host_vendor-$host_os-g++"
-        fi
-        ;;
-    esac
-    ;;
-
-darwin*) # Mac OS X or iOS
-    test_gtk=yes
-    test_randr=no
-    test_freetype=no
-    test_fontconfig=no
-    if test "$host_cpu" = "arm"; then
-        _os=iOS
-        test_gtk=no
-        test_cups=no
-    else
-        _os=Darwin
-    fi
-    enable_systray=no
-;;
-
-freebsd*)
-    test_gtk=yes
-    build_gstreamer=yes
-    test_kde=yes
-    test_kde4=yes
-    test_freetype=yes
-    AC_MSG_CHECKING([the FreeBSD operating system release])
-    if test -n "$with_os_version"; then
-        OSVERSION="$with_os_version"
-    else
-        OSVERSION=`/sbin/sysctl -n kern.osreldate`
-    fi
-    AC_MSG_RESULT([found OSVERSION=$OSVERSION])
-    AC_MSG_CHECKING([which thread library to use])
-    if test "$OSVERSION" -lt "500016"; then
-        PTHREAD_CFLAGS="-D_THREAD_SAFE"
-        PTHREAD_LIBS="-pthread"
-    elif test "$OSVERSION" -lt "502102"; then
-        PTHREAD_CFLAGS="-D_THREAD_SAFE"
-        PTHREAD_LIBS="-lc_r"
-    else
-        PTHREAD_CFLAGS=""
-        PTHREAD_LIBS="-pthread"
-    fi
-    AC_MSG_RESULT([$PTHREAD_LIBS])
-    _os=FreeBSD
-    ;;
-
-*netbsd*)
-    test_gtk=yes
-    build_gstreamer=yes
-    test_kde=no
-    test_kde4=yes
-    test_freetype=yes
-    PTHREAD_LIBS="-pthread -lpthread"
-    _os=NetBSD
-    ;;
-
-aix*)
-    test_randr=no
-    test_freetype=yes
-    PTHREAD_LIBS=-pthread
-    _os=AIX
-    ;;
-
-openbsd*)
-    test_gtk=yes
-    test_kde=yes
-    test_freetype=yes
-    PTHREAD_CFLAGS="-D_THREAD_SAFE"
-    PTHREAD_LIBS="-pthread"
-    _os=OpenBSD
-    ;;
-
-dragonfly*)
-    test_gtk=yes
-    build_gstreamer=yes
-    test_kde=yes
-    test_kde4=yes
-    test_freetype=yes
-    PTHREAD_LIBS="-pthread"
-    _os=DragonFly
-    ;;
-
-linux-androideabi*)
-    build_gstreamer=no
-    test_cups=no
-    test_fontconfig=no
-    test_freetype=no
-    test_gtk=no
-    test_kde=no
-    test_kde4=no
-    test_randr=no
-    test_unix_quickstarter=no
-    _os=Android
-    ;;
-
-*)
-    AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice for!])
-    ;;
-esac
-
-if test "$_os" = "AIX"; then
-    AC_PATH_PROG(GAWK, gawk)
-    if test -z "$GAWK"; then
-        AC_MSG_ERROR([gawk not found in \$PATH])
-    fi
-fi
-
-AC_SUBST(WITH_MINGW)
-AC_SUBST(OSVERSION)
-AC_SUBST(PTHREAD_CFLAGS)
-AC_SUBST(PTHREAD_LIBS)
 
 dnl It is useful to have a BUILD_TYPE keyword to distinguish "normal"
 dnl desktop OSes from "mobile" ones.
