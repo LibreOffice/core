@@ -7,9 +7,6 @@ AtomPubSession::~AtomPubSession()
 BufferNode::childAt(int) const
 ByteString::Assign(char const*, unsigned short)
 ByteString::Assign(char)
-CAT::Apply(float*, float const*) const
-CAT::Inverse() const
-CAT::makeChromaticAdaptationTag() const
 CIccCLUT::Interp3dTetra(float*, float const*)
 CIccCLUT::Iterate(IIccCLUTExec*)
 CIccFormulaCurveSegment::SetFunction(unsigned short, unsigned char, float*)
@@ -357,7 +354,6 @@ SbiIoSystem::NextChannel()
 SbiRuntime::GetParams()
 SbiSymPool::Clear()
 SbxAlias::SbxAlias(String const&, SbxVariable*)
-SbxBase::StaticEnableBroadcasting(unsigned char)
 SbxDecimal::SbxDecimal()
 SbxDecimal::getByte(unsigned char&)
 SbxDecimal::getChar(unsigned short&)
@@ -436,6 +432,7 @@ ScDocRowHeightUpdater::TabRanges::TabRanges()
 ScDocument::ValidNewTabName(std::__debug::vector<String, std::allocator<String> > const&) const
 ScFilterDetect::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 ScFiltersTest::testPassword()
+ScFormulaCell::IsRangeNameInUse(unsigned short) const
 ScFormulaCell::ScFormulaCell()
 ScHTMLColOffset::Insert(ScHTMLColOffset const*, unsigned short, unsigned short)
 ScHTMLColOffset::Insert(unsigned long const&, unsigned short&)
@@ -458,7 +455,6 @@ ScNameDlg::CalcCurTableAssign(String&, ScRangeData*)
 ScNamedRangeObj::SetContentWithGrammar(rtl::OUString const&, formula::FormulaGrammar::Grammar)
 ScNamedRangeObj::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
 ScOutputData::DrawEditParam::getEngineWidth(ScFieldEditEngine*) const
-ScPivotParam::ClearPivotArrays()
 ScRTFColTwips::Insert(ScRTFColTwips const*, unsigned short, unsigned short)
 ScRTFColTwips::Insert(unsigned long const&, unsigned short&)
 ScRTFColTwips::Insert(unsigned long const*, unsigned short)
@@ -481,6 +477,7 @@ ScTpCalcOptions::GetRanges()
 ScTpPrintOptions::GetRanges()
 ScTpSubTotalGroup::GetRanges()
 ScTpUserLists::GetRanges()
+ScUndoAllRangeNames::ScUndoAllRangeNames(ScDocShell*, ScRangeName const*, ScRangeName const*, std::__debug::map<short, ScRangeName const*, std::less<short>, std::allocator<std::pair<short const, ScRangeName const*> > > const&, std::__debug::map<short, ScRangeName const*, std::less<short>, std::allocator<std::pair<short const, ScRangeName const*> > > const&)
 ScUserList::end()
 ScUserList::end() const
 ScValidationEntries_Impl::Insert(ScValidationData* const&, unsigned short&)

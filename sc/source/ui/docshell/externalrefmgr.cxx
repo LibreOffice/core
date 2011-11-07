@@ -1011,26 +1011,6 @@ bool ScExternalRefCache::setCacheTableReferenced( sal_uInt16 nFileId, const OUSt
     return areAllCacheTablesReferenced();
 }
 
-void ScExternalRefCache::setCacheTableReferencedPermanently( sal_uInt16 nFileId, const OUString& rTabName, size_t nSheets )
-{
-    DocItem* pDoc = getDocItem(nFileId);
-    if (pDoc)
-    {
-        size_t nIndex = 0;
-        String aTabNameUpper = ScGlobal::pCharClass->upper( rTabName);
-        if (lcl_getTableDataIndex( pDoc->maTableNameIndex, aTabNameUpper, nIndex))
-        {
-            size_t nStop = ::std::min( nIndex + nSheets, pDoc->maTables.size());
-            for (size_t i = nIndex; i < nStop; ++i)
-            {
-                TableTypeRef pTab = pDoc->maTables[i];
-                if (pTab.get())
-                    pTab->setReferencedFlag( Table::REFERENCED_PERMANENT);
-            }
-        }
-    }
-}
-
 void ScExternalRefCache::setAllCacheTableReferencedStati( bool bReferenced )
 {
     if (bReferenced)

@@ -122,11 +122,6 @@ bool ScQueryEntry::MatchByString(const rtl::OUString& rStr, bool bCaseSens) cons
     return pTransliteration->isEqual(rStr, *itr);
 }
 
-void ScQueryEntry::SwapQueryStrings(QueryStringsType& rStrings)
-{
-    maQueryStrings.swap(rStrings);
-}
-
 void ScQueryEntry::SortQueryStrings(bool bCaseSens)
 {
     std::sort(maQueryStrings.begin(), maQueryStrings.end(), CompareString(bCaseSens));

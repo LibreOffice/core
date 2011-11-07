@@ -110,7 +110,6 @@ struct ScPivotParam
 
     ScPivotParam&   operator=       ( const ScPivotParam& r );
     bool            operator==      ( const ScPivotParam& r ) const;
-    void            ClearPivotArrays();
     void            SetLabelData    (const ::std::vector<ScDPLabelDataRef>& r);
 };
 

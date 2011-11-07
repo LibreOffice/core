@@ -885,9 +885,6 @@ public:
     void                EnterBlockNotifications();
     void                LeaveBlockNotifications();
 
-
-    EditSelection       MatchGroup( const EditSelection& rSel );
-
     void                UndoActionStart( sal_uInt16 nId );
     void                UndoActionStart( sal_uInt16 nId, const ESelection& rSel );
     void                UndoActionEnd( sal_uInt16 nId );

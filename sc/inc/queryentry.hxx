@@ -65,7 +65,6 @@ struct ScQueryEntry
 
     bool            IsQueryStringEmpty() const;
     bool            MatchByString(const rtl::OUString& rStr, bool bCaseSens) const;
-    void            SwapQueryStrings(QueryStringsType& rStrings);
     void            SortQueryStrings(bool bCaseSens);
     SC_DLLPUBLIC void SetQueryString(const rtl::OUString& rStr);
     SC_DLLPUBLIC rtl::OUString GetQueryString() const;

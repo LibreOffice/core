@@ -148,14 +148,6 @@ ScPivotParam::~ScPivotParam()
 {
 }
 
-void ScPivotParam::ClearPivotArrays()
-{
-    maPageFields.clear();
-    maColFields.clear();
-    maRowFields.clear();
-    maDataFields.clear();
-}
-
 void ScPivotParam::SetLabelData(const vector<ScDPLabelDataRef>& r)
 {
     vector<ScDPLabelDataRef> aNewArray;
