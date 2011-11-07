@@ -888,7 +888,6 @@ ZeilenGleichmaessig .uno:DistributeRows
 AlleGruppenVerlassen .uno:LeaveAllGroups
 AlleGruppierungenVerlassen .uno:ConnectorLinesCircles
 DrehmodusNachKlick .uno:ClickChangeRotation
-EinfacheHandles .uno:HandlesDraft
 FangenAnObjektRahmen .uno:SnapFrame
 FangenAnObjektpunkten .uno:SnapPoints
 FangenAnSeitenraendern .uno:SnapBorder

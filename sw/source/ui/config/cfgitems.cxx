@@ -145,7 +145,6 @@ SwElemItem::SwElemItem( sal_uInt16 _nWhich ) :
     bVertRuler     =
     bVertRulerRight=
     bCrosshair     =
-    bHandles       =
     bBigHandles     =
     bSmoothScroll  =
     bTable              =
@@ -171,7 +170,6 @@ SwElemItem::SwElemItem(const SwViewOption& rVOpt, sal_uInt16 _nWhich) :
     bVertRuler      = rVOpt.IsViewVRuler(sal_True);
     bVertRulerRight = rVOpt.IsVRulerRight();
     bCrosshair      = rVOpt.IsCrossHair();
-    bHandles        = rVOpt.IsSolidMarkHdl();
     bBigHandles     = rVOpt.IsBigMarkHdl();
     bSmoothScroll   = rVOpt.IsSmoothScroll();
     bTable              = rVOpt.IsTable();
@@ -200,7 +198,6 @@ int SwElemItem::operator==( const SfxPoolItem& rAttr ) const
                 bVertRuler      == rItem.bVertRuler     &&
                 bVertRulerRight == rItem.bVertRulerRight&&
                 bCrosshair      == rItem.bCrosshair     &&
-                bHandles        == rItem.bHandles       &&
                 bBigHandles     == rItem.bBigHandles    &&
                 bSmoothScroll   == rItem.bSmoothScroll  &&
                 bTable                == rItem.bTable              &&
@@ -219,7 +216,6 @@ void  SwElemItem::operator=( const SwElemItem& rElemItem)
     bVertRuler      = rElemItem.  bVertRuler        ;
     bVertRulerRight = rElemItem.  bVertRulerRight   ;
     bCrosshair      = rElemItem.  bCrosshair        ;
-    bHandles        = rElemItem.  bHandles          ;
     bBigHandles     = rElemItem.  bBigHandles       ;
     bSmoothScroll   = rElemItem.  bSmoothScroll     ;
     bTable              = rElemItem.bTable                ;
@@ -238,7 +234,6 @@ void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetViewVRuler(bVertRuler    );
     rVOpt.SetVRulerRight(bVertRulerRight );
     rVOpt.SetCrossHair(bCrosshair     );
-    rVOpt.SetSolidMarkHdl(bHandles    );
     rVOpt.SetBigMarkHdl(bBigHandles );
     rVOpt.SetSmoothScroll(bSmoothScroll);
     rVOpt.SetTable      (bTable             );

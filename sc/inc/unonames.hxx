@@ -517,7 +517,6 @@
 #define SC_UNO_SHOWOBJ              "ShowObjects"
 #define SC_UNO_SHOWPAGEBR           "ShowPageBreaks"
 #define SC_UNO_SHOWZERO             "ShowZeroValues"
-#define SC_UNO_SHOWSOLID            "SolidHandles"
 #define SC_UNO_VALUEHIGH            "IsValueHighlightingEnabled"
 #define SC_UNO_VERTSCROLL           "HasVerticalScrollBar"
 #define SC_UNO_SNAPTORASTER         "IsSnapToRaster"

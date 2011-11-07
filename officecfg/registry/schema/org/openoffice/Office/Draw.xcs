@@ -364,17 +364,6 @@
 				</info>
 				<value>true</value>
 			</prop>
-      <prop oor:name="SimpleHandles" oor:type="xs:boolean">
-        <!-- OldPath: Draw/Other -->
-        <!-- OldLocation: soffice.cfg -->
-        <!-- UIHints: Optionbar -->
-        <info>
-          <author>AF</author>
-          <desc>Indicates whether to show simple (true) or 3D-handles (false).</desc>
-          <label>Simple Handles</label>
-        </info>
-        <value>true</value>
-      </prop>
       <prop oor:name="BigHandles" oor:type="xs:boolean">
 				<!-- OldPath: Draw/Other -->
 				<!-- OldLocation: soffice.cfg -->

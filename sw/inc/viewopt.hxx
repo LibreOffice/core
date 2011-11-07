@@ -291,11 +291,6 @@ public:
     inline void SetPageBack( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_PAGEBACK) : ( nCoreOptions &= ~VIEWOPT_1_PAGEBACK); }
 
-    inline sal_Bool IsSolidMarkHdl() const
-        { return nCoreOptions & VIEWOPT_1_SOLIDMARKHDL ? sal_True : sal_False; }
-    inline void SetSolidMarkHdl( sal_Bool b )
-        { (b != 0) ? (nCoreOptions |= VIEWOPT_1_SOLIDMARKHDL) : ( nCoreOptions &= ~VIEWOPT_1_SOLIDMARKHDL); }
-
     inline sal_Bool IsBigMarkHdl() const
         { return nCore2Options & VIEWOPT_CORE2_BIGMARKHDL ? sal_True : sal_False;}
     inline void SetBigMarkHdl(sal_Bool b)

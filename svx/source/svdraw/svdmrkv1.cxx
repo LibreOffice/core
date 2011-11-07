@@ -241,7 +241,6 @@ sal_Bool SdrMarkView::MarkPoints(const Rectangle* pRect, sal_Bool bUnmark)
     const SdrPageView* pPV0=NULL;
     SdrMark* pM=NULL;
     aHdl.Sort();
-    //HMHBOOL bHideHdl=IsMarkHdlShown() && IsSolidMarkHdl() && !bPlusHdlAlways;
     sal_uIntPtr nHdlAnz=aHdl.GetHdlCount();
     for (sal_uIntPtr nHdlNum=nHdlAnz; nHdlNum>0;) {
         nHdlNum--;

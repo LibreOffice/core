@@ -2722,9 +2722,6 @@
         <prop oor:name="ShowComments" oor:type="xs:boolean">
           <value>true</value>
         </prop>
-        <prop oor:name="SimpleHandles" oor:type="xs:boolean">
-          <value>true</value>
-        </prop>
         <prop oor:name="BigHandles" oor:type="xs:boolean">
           <value>true</value>
         </prop>
@@ -3129,9 +3126,6 @@
         </prop>
         <prop oor:name="ShowComments" oor:type="xs:boolean">
           <value>true</value>
-        </prop>
-        <prop oor:name="SimpleHandles" oor:type="xs:boolean">
-          <value>false</value>
         </prop>
         <prop oor:name="BigHandles" oor:type="xs:boolean">
           <value>true</value>
@@ -41921,14 +41915,6 @@
         <node oor:name=".uno:LineDraft" oor:op="replace">
           <prop oor:name="Label" oor:type="xs:string">
             <value xml:lang="en-US">Line Contour Only</value>
-          </prop>
-          <prop oor:name="Properties" oor:type="xs:int">
-            <value>1</value>
-          </prop>
-        </node>
-        <node oor:name=".uno:HandlesDraft" oor:op="replace">
-          <prop oor:name="Label" oor:type="xs:string">
-            <value xml:lang="en-US">Simple Handles</value>
           </prop>
           <prop oor:name="Properties" oor:type="xs:int">
             <value>1</value>

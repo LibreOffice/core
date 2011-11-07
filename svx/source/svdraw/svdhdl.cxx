@@ -263,15 +263,9 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrHdlBitmapSet& getSimpleSet()
-{
-    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aSimpleSet(new SdrHdlBitmapSet(SIP_SA_MARKERS));
-    return *aSimpleSet.get();
-}
-
 SdrHdlBitmapSet& getModernSet()
 {
-    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aModernSet(new SdrHdlBitmapSet(SIP_SA_FINE_MARKERS));
+    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aModernSet(new SdrHdlBitmapSet(SIP_SA_MARKERS));
     return *aModernSet.get();
 }
 
@@ -632,16 +626,9 @@ BitmapMarkerKind SdrHdl::GetNextBigger(BitmapMarkerKind eKnd) const
 }
 
 // #101928#
-BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd, sal_Bool bFine )
+BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd)
 {
-    if(bFine)
-    {
-        return getModernSet().GetBitmapEx(eKindOfMarker, nInd);
-    }
-    else
-    {
-        return getSimpleSet().GetBitmapEx(eKindOfMarker, nInd);
-    }
+    return getModernSet().GetBitmapEx(eKindOfMarker, nInd);
 }
 
 ::sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
@@ -649,7 +636,6 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
     BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker, Point aMoveOutsideOffset)
 {
     ::sdr::overlay::OverlayObject* pRetval = 0L;
-    sal_Bool bIsFineHdl(pHdlList->IsFineHdl());
 
     // support bigger sizes
     sal_Bool bForceBiggerSize(sal_False);
@@ -695,9 +681,8 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
         }
 
         // create animated hdl
-        // #101928# use ImpGetBitmapEx(...) now
-        BitmapEx aBmpEx1 = ImpGetBitmapEx( eKindOfMarker, (sal_uInt16)eColIndex, bIsFineHdl );
-        BitmapEx aBmpEx2 = ImpGetBitmapEx( eNextBigger,   (sal_uInt16)eColIndex, bIsFineHdl );
+        BitmapEx aBmpEx1 = ImpGetBitmapEx( eKindOfMarker, (sal_uInt16)eColIndex );
+        BitmapEx aBmpEx2 = ImpGetBitmapEx( eNextBigger,   (sal_uInt16)eColIndex );
 
         // #i53216# Use system cursor blink time. Use the unsigned value.
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
@@ -728,7 +713,7 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
     else
     {
         // create normal handle: use ImpGetBitmapEx(...) now
-        BitmapEx aBmpEx = ImpGetBitmapEx(eKindOfMarker, (sal_uInt16)eColIndex, bIsFineHdl );
+        BitmapEx aBmpEx = ImpGetBitmapEx(eKindOfMarker, (sal_uInt16)eColIndex);
 
         if(eKindOfMarker == Anchor || eKindOfMarker == AnchorPressed)
         {
@@ -2232,22 +2217,12 @@ SdrCropHdl::SdrCropHdl(const Point& rPnt, SdrHdlKind eNewKind)
 
 // --------------------------------------------------------------------
 
-BitmapEx SdrCropHdl::GetHandlesBitmap( bool bIsFineHdl )
+BitmapEx SdrCropHdl::GetHandlesBitmap()
 {
-    if( bIsFineHdl )
-    {
-        static BitmapEx* pModernBitmap = 0;
-        if( pModernBitmap == 0 )
-            pModernBitmap = new BitmapEx(ResId(SIP_SA_CROP_FINE_MARKERS, *ImpGetResMgr()));
-        return *pModernBitmap;
-    }
-    else
-    {
-        static BitmapEx* pSimpleBitmap = 0;
-        if( pSimpleBitmap == 0 )
-            pSimpleBitmap = new BitmapEx(ResId(SIP_SA_CROP_MARKERS, *ImpGetResMgr()));
-        return *pSimpleBitmap;
-    }
+    static BitmapEx* pModernBitmap = 0;
+    if( pModernBitmap == 0 )
+        pModernBitmap = new BitmapEx(ResId(SIP_SA_CROP_MARKERS, *ImpGetResMgr()));
+    return *pModernBitmap;
 }
 
 // --------------------------------------------------------------------
@@ -2304,11 +2279,10 @@ void SdrCropHdl::CreateB2dIAObject()
 
     if( pPageView && !pView->areMarkHandlesHidden() )
     {
-        sal_Bool bIsFineHdl(pHdlList->IsFineHdl());
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
         int nHdlSize = pHdlList->GetHdlSize();
 
-        const BitmapEx aHandlesBitmap( GetHandlesBitmap( bIsFineHdl ) );
+        const BitmapEx aHandlesBitmap( GetHandlesBitmap() );
         BitmapEx aBmpEx1( GetBitmapForHandle( aHandlesBitmap, nHdlSize ) );
 
         for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)

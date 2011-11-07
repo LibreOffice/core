@@ -215,7 +215,6 @@
 #define SID_CONNECTOR_LINES_CIRCLES         (SID_SD_START+145)
 
 // Options-Leisten Slot-IDs
-#define SID_HANDLES_DRAFT                   (SID_SD_START+150)
 #define SID_SOLID_CREATE                    (SID_SD_START+151)
 #define SID_HELPLINES_USE                   (SID_SD_START+152)
 #define SID_HELPLINES_MOVE                  (SID_SD_START+153)

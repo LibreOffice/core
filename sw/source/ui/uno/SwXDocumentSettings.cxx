@@ -207,7 +207,6 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("ShowTableLimitGuide"),        HANDLE_SHOW_TABLE_LIMIT_GUIDE,          CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("ShowSectionLimitGuide"),      HANDLE_SHOW_SECTION_LIMIT_GUIDE,        CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("ShowGuidesWhileMoving"),      HANDLE_SHOW_GUIDES_WHILE_MOVING,        CPPUTYPE_BOOLEAN,           0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("ShowSimpleHandles"),          HANDLE_SHOW_SIMPLE_HANDLES,             CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("ShowLargeHandles"),           HANDLE_SHOW_LARGE_HANDLES,              CPPUTYPE_BOOLEAN,           0,   0},
 */
         { NULL, 0, 0, CPPUTYPE_UNKNOWN, 0, 0 }

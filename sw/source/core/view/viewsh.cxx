@@ -1979,9 +1979,6 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         Fraction aSnGrWdtY(rSz.Height(), rOpt.GetDivisionY() + 1);
         pDView->SetSnapGridWidth( aSnGrWdtX, aSnGrWdtY );
 
-        if ( pOpt->IsSolidMarkHdl() != rOpt.IsSolidMarkHdl() )
-            pDView->SetSolidMarkHdl( rOpt.IsSolidMarkHdl() );
-
             // it's a JOE interface !
         if ( pOpt->IsBigMarkHdl() != rOpt.IsBigMarkHdl() )
             pDView->SetMarkHdlSizePixel(rOpt.IsBigMarkHdl() ? 9 : 7);

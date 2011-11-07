@@ -738,7 +738,6 @@ Opl_SD_FangenAnObjektpunkten .uno:SnapPoints
 Opl_SD_Schnellbearbeitung .uno:QuickEdit
 Opl_SD_NurTextbreichSelektieren .uno:PickThrough
 Opl_SD_TextBearbeitenBeiDoppelklick .uno:DoubleClickTextEdit
-Opl_SD_EinfacheHandles .uno:HandlesDraft
 Opl_SD_GrosseHandles .uno:BigHandles
 Opl_SD_ObjektMitAttributen .uno:SolidCreate
 Opl_SD_AlleGruppierungenVerlassen .uno:ConnectorLinesCircles

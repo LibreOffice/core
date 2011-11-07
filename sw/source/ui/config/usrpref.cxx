@@ -288,7 +288,6 @@ void SwLayoutViewConfig::Commit()
         switch(nProp)
         {
             case  0: rVal <<= (sal_Bool) rParent.IsCrossHair(); break;              // "Line/Guide",
-            case  1: rVal <<= (sal_Bool) rParent.IsSolidMarkHdl(); break;           // "Line/SimpleControlPoint",
             case  2: rVal <<= (sal_Bool) rParent.IsBigMarkHdl(); break;             // "Line/LargeControlPoint",
             case  3: rVal <<= (sal_Bool) rParent.IsViewHScrollBar(); break;         // "Window/HorizontalScroll",
             case  4: rVal <<= (sal_Bool) rParent.IsViewVScrollBar(); break;         // "Window/VerticalScroll",
@@ -341,7 +340,6 @@ void SwLayoutViewConfig::Load()
                 switch(nProp)
                 {
                     case  0: rParent.SetCrossHair(bSet); break;// "Line/Guide",
-                    case  1: rParent.SetSolidMarkHdl(bSet); break;// "Line/SimpleControlPoint",
                     case  2: rParent.SetBigMarkHdl(bSet); break;// "Line/LargeControlPoint",
                     case  3: rParent.SetViewHScrollBar(bSet); break;// "Window/HorizontalScroll",
                     case  4: rParent.SetViewVScrollBar(bSet); break;// "Window/VerticalScroll",

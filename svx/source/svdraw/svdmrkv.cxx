@@ -1547,16 +1547,6 @@ sal_uInt16 SdrMarkView::GetMarkHdlSizePixel() const
     return aHdl.GetHdlSize()*2+1;
 }
 
-void SdrMarkView::SetSolidMarkHdl(sal_Bool bOn)
-{
-    if (bOn!=aHdl.IsFineHdl()) {
-        //HMHBOOL bMerk=IsMarkHdlShown();
-        //HMHif (bMerk) HideMarkHdl();
-        aHdl.SetFineHdl(bOn);
-        //HMHif (bMerk) ShowMarkHdl();
-    }
-}
-
 void SdrMarkView::SetMarkHdlSizePixel(sal_uInt16 nSiz)
 {
     if (nSiz<3) nSiz=3;

@@ -93,7 +93,6 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
         pDrawView->SetAnimationEnabled( sal_False );
 
     pDrawView->SetUseIncompatiblePathCreateInterface( sal_False );
-    pDrawView->SetSolidMarkHdl(pNewOpt->IsSolidMarkHdl());
 
     // it's a JOE interface !
     pDrawView->SetMarkHdlSizePixel(pNewOpt->IsBigMarkHdl() ? 9 : 7);

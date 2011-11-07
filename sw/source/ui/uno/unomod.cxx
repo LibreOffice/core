@@ -90,7 +90,6 @@ enum SwViewSettingsPropertyHandles
     HANDLE_VIEWSET_VRULER,
     HANDLE_VIEWSET_VSCROLL,
     HANDLE_VIEWSET_SMOOTH_SCROLLING,
-    HANDLE_VIEWSET_SOLID_MARK_HANDLES,
     HANDLE_VIEWSET_ZOOM_TYPE,
     HANDLE_VIEWSET_ZOOM,
     HANDLE_VIEWSET_PREVENT_TIPS,
@@ -170,7 +169,6 @@ static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM ( "ShowVertRuler"),        HANDLE_VIEWSET_VRULER               , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowVertScrollBar"),    HANDLE_VIEWSET_VSCROLL              , CPPUTYPE_BOOLEAN, PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "SmoothScrolling"),      HANDLE_VIEWSET_SMOOTH_SCROLLING     , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
-        { RTL_CONSTASCII_STRINGPARAM ( "SolidMarkHandles"),     HANDLE_VIEWSET_SOLID_MARK_HANDLES   , CPPUTYPE_BOOLEAN, PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "VerticalRulerMetric"),  HANDLE_VIEWSET_VERT_RULER_METRIC   , CPPUTYPE_INT32, PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "ZoomType"),             HANDLE_VIEWSET_ZOOM_TYPE            , CPPUTYPE_INT16,   PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "ZoomValue"),            HANDLE_VIEWSET_ZOOM                 , CPPUTYPE_INT16,   PROPERTY_NONE, 0},
@@ -655,7 +653,6 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   mpViewOption->SetAppearanceFlag(VIEWOPT_TABLE_BOUNDARIES, bVal, sal_True);    break;
         case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :   mpViewOption->SetDocBoundaries(bVal);    break;
         case  HANDLE_VIEWSET_SMOOTH_SCROLLING      :   mpViewOption->SetSmoothScroll(bVal); break;
-        case  HANDLE_VIEWSET_SOLID_MARK_HANDLES    :   mpViewOption->SetSolidMarkHdl(bVal); break;
         case  HANDLE_VIEWSET_PREVENT_TIPS :            mpViewOption->SetPreventTips(bVal); break;
         case  HANDLE_VIEWSET_IS_RASTER_VISIBLE     : mpViewOption->SetGridVisible(bVal); break;
         case  HANDLE_VIEWSET_IS_SNAP_TO_RASTER     : mpViewOption->SetSnap(bVal); break;
@@ -888,7 +885,6 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   bBoolVal = SwViewOption::IsTableBoundaries(); break;
         case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :   bBoolVal = SwViewOption::IsDocBoundaries(); break;
         case  HANDLE_VIEWSET_SMOOTH_SCROLLING      :   bBoolVal = mpConstViewOption->IsSmoothScroll();  break;
-        case  HANDLE_VIEWSET_SOLID_MARK_HANDLES    :   bBoolVal = mpConstViewOption->IsSolidMarkHdl();  break;
         case  HANDLE_VIEWSET_PREVENT_TIPS :            bBoolVal = mpConstViewOption->IsPreventTips(); break;
         case  HANDLE_VIEWSET_IS_RASTER_VISIBLE     : bBoolVal = mpConstViewOption->IsGridVisible(); break;
         case  HANDLE_VIEWSET_IS_SNAP_TO_RASTER     : bBoolVal = mpConstViewOption->IsSnap(); break;

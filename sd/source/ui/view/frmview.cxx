@@ -183,7 +183,6 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         SetEliminatePolyPoints( pFrameView->IsEliminatePolyPoints() );
         SetDesignMode( pFrameView->IsDesignMode() );
 
-        SetSolidMarkHdl( pFrameView->IsSolidMarkHdl() );
         SetSolidDragging( pFrameView->IsSolidDragging() );
 
         maVisibleLayers = pFrameView->GetVisibleLayers();
@@ -350,7 +349,6 @@ void FrameView::Update(SdOptions* pOptions)
         SetEliminatePolyPointLimitAngle( pOptions->GetEliminatePolyPointLimitAngle() );
         GetModel()->SetPickThroughTransparentTextFrames( pOptions->IsPickThrough() );
 
-        SetSolidMarkHdl( pOptions->IsSolidMarkHdl() );
         SetSolidDragging( pOptions->IsSolidDragging() );
 
         SetGridCoarse( Size( pOptions->GetFldDrawX(), pOptions->GetFldDrawY() ) );

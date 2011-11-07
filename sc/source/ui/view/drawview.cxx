@@ -557,7 +557,6 @@ void ScDrawView::UpdateUserViewOptions()
         sal_Bool bBigHdl = rOpt.GetOption( VOPT_BIGHANDLES );
 
         SetDragStripes( rOpt.GetOption( VOPT_HELPLINES ) );
-        SetSolidMarkHdl( rOpt.GetOption( VOPT_SOLIDHANDLES ) );
         SetMarkHdlSizePixel( bBigHdl ? SC_HANDLESIZE_BIG : SC_HANDLESIZE_SMALL );
 
         SetGridVisible( rGrid.GetGridVisible() );

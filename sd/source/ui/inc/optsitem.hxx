@@ -265,7 +265,6 @@ private:
     sal_Bool    bClickChangeRotation    : 1;    // Misc/RotateClick
     sal_Bool    bStartWithActualPage    : 1;    // Misc/Start/CurrentPage
     sal_Bool    bSolidDragging          : 1;    // Misc/ModifyWithAttributes
-    sal_Bool    bSolidMarkHdl           : 1;    // /Misc/SimpleHandles
     sal_Bool    bSummationOfParagraphs  : 1;    // misc/SummationOfParagraphs
     sal_Bool    bShowUndoDeleteWarning  : 1;    // Misc/ShowUndoDeleteWarning
     // #i75315#
@@ -315,7 +314,6 @@ public:
     sal_Bool    IsClickChangeRotation() const { Init(); return (sal_Bool) bClickChangeRotation; }
     sal_Bool    IsStartWithActualPage() const { Init(); return (sal_Bool) bStartWithActualPage; }
     sal_Bool    IsSolidDragging() const { Init(); return (sal_Bool) bSolidDragging; }
-    sal_Bool    IsSolidMarkHdl() const { Init(); return (sal_Bool) bSolidMarkHdl; }
     sal_Bool    IsSummationOfParagraphs() const { Init(); return bSummationOfParagraphs != 0; };
 
     /** Return the currently selected printer independent layout mode.
@@ -363,7 +361,6 @@ public:
     */
     void    SetPrinterIndependentLayout (sal_uInt16 nOn = 1 ){ if ( nOn != mnPrinterIndependentLayout ) { OptionsChanged(); mnPrinterIndependentLayout = nOn; } }
     void    SetSolidDragging( sal_Bool bOn = sal_True ) { if( bSolidDragging != bOn ) { OptionsChanged(); bSolidDragging = bOn; } }
-    void    SetSolidMarkHdl( sal_Bool bOn = sal_True ) { if( bSolidMarkHdl != bOn ) { OptionsChanged(); bSolidMarkHdl = bOn; } }
     void    SetShowUndoDeleteWarning( sal_Bool bOn = sal_True ) { if( bShowUndoDeleteWarning != bOn ) { OptionsChanged(); bShowUndoDeleteWarning = bOn; } }
     void    SetSlideshowRespectZOrder( sal_Bool bOn = sal_True ) { if( bSlideshowRespectZOrder != bOn ) { OptionsChanged(); bSlideshowRespectZOrder = bOn; } }
     void    SetDefaultObjectSizeWidth( sal_uLong nWidth ) { if( nDefaultObjectSizeWidth != nWidth ) { OptionsChanged(); nDefaultObjectSizeWidth = nWidth; } }

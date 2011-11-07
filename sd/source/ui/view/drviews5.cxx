@@ -255,9 +255,6 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     if (mpDrawView->IsEliminatePolyPoints() != pView->IsEliminatePolyPoints() )
         mpDrawView->SetEliminatePolyPoints( pView->IsEliminatePolyPoints() );
 
-    if (mpDrawView->IsSolidMarkHdl() != pView->IsSolidMarkHdl() )
-        mpDrawView->SetSolidMarkHdl( pView->IsSolidMarkHdl() );
-
     if (mpDrawView->IsSolidDragging() != pView->IsSolidDragging() )
         mpDrawView->SetSolidDragging( pView->IsSolidDragging() );
 
@@ -372,7 +369,6 @@ void DrawViewShell::WriteFrameViewData()
     mpFrameView->SetEliminatePolyPointLimitAngle( mpDrawView->GetEliminatePolyPointLimitAngle() );
     mpFrameView->SetEliminatePolyPoints( mpDrawView->IsEliminatePolyPoints() );
 
-    mpFrameView->SetSolidMarkHdl( mpDrawView->IsSolidMarkHdl() );
     mpFrameView->SetSolidDragging( mpDrawView->IsSolidDragging() );
     mpFrameView->SetQuickEdit( mpDrawView->IsQuickTextEditMode() );
 

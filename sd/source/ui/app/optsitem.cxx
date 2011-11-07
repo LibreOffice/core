@@ -501,7 +501,6 @@ SdOptionsMisc::SdOptionsMisc( sal_uInt16 nConfigId, sal_Bool bUseConfig ) :
     bClickChangeRotation( sal_False ),
     bStartWithActualPage( sal_False ),
     bSolidDragging( sal_True ),
-    bSolidMarkHdl( sal_True ),
     bSummationOfParagraphs( sal_False ),
     bShowUndoDeleteWarning( sal_True ),
     bSlideshowRespectZOrder( sal_True ),
@@ -538,7 +537,6 @@ sal_Bool SdOptionsMisc::operator==( const SdOptionsMisc& rOpt ) const
             IsStartWithActualPage() == rOpt.IsStartWithActualPage() &&
             IsSummationOfParagraphs() == rOpt.IsSummationOfParagraphs() &&
             IsSolidDragging() == rOpt.IsSolidDragging() &&
-            IsSolidMarkHdl() == rOpt.IsSolidMarkHdl() &&
             IsShowUndoDeleteWarning() == rOpt.IsShowUndoDeleteWarning() &&
             IsSlideshowRespectZOrder() == rOpt.IsSlideshowRespectZOrder() &&
             GetPrinterIndependentLayout() == rOpt.GetPrinterIndependentLayout() &&
@@ -572,7 +570,6 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
         "RotateClick",
         "Preview",
         "ModifyWithAttributes",
-        "SimpleHandles",
         "DefaultObjectSize/Width",
         "DefaultObjectSize/Height",
 
@@ -597,7 +594,7 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
         "PenWidth"
     };
 
-    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 27 : 16 );
+    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 26 : 15 );
     ppNames = aPropNames;
 }
 
@@ -615,46 +612,45 @@ sal_Bool SdOptionsMisc::ReadData( const Any* pValues )
     if( pValues[7].hasValue() ) SetDoubleClickTextEdit( *(sal_Bool*) pValues[ 7 ].getValue() );
     if( pValues[8].hasValue() ) SetClickChangeRotation( *(sal_Bool*) pValues[ 8 ].getValue() );
     if( pValues[10].hasValue() ) SetSolidDragging( *(sal_Bool*) pValues[ 10 ].getValue() );
-    if( pValues[11].hasValue() ) SetSolidMarkHdl( *(sal_Bool*) pValues[ 11 ].getValue() );
-    if( pValues[12].hasValue() ) SetDefaultObjectSizeWidth( *(sal_uInt32*) pValues[ 12 ].getValue() );
-    if( pValues[13].hasValue() ) SetDefaultObjectSizeHeight( *(sal_uInt32*) pValues[ 13 ].getValue() );
-    if( pValues[14].hasValue() ) SetPrinterIndependentLayout( *(sal_uInt16*) pValues[ 14 ].getValue() );
+    if( pValues[11].hasValue() ) SetDefaultObjectSizeWidth( *(sal_uInt32*) pValues[ 11 ].getValue() );
+    if( pValues[12].hasValue() ) SetDefaultObjectSizeHeight( *(sal_uInt32*) pValues[ 12 ].getValue() );
+    if( pValues[13].hasValue() ) SetPrinterIndependentLayout( *(sal_uInt16*) pValues[ 13 ].getValue() );
 
-    if( pValues[15].hasValue() )
-        SetShowComments(  *(sal_Bool*) pValues[ 15 ].getValue() );
+    if( pValues[14].hasValue() )
+        SetShowComments(  *(sal_Bool*) pValues[ 14 ].getValue() );
 
     // just for Impress
     if( GetConfigId() == SDCFG_IMPRESS )
     {
+        if( pValues[15].hasValue() )
+            SetStartWithTemplate( *(sal_Bool*) pValues[ 15 ].getValue() );
         if( pValues[16].hasValue() )
-            SetStartWithTemplate( *(sal_Bool*) pValues[ 16 ].getValue() );
+            SetStartWithActualPage( *(sal_Bool*) pValues[ 16 ].getValue() );
         if( pValues[17].hasValue() )
-            SetStartWithActualPage( *(sal_Bool*) pValues[ 17 ].getValue() );
+            SetSummationOfParagraphs( *(sal_Bool*) pValues[ 17 ].getValue() );
         if( pValues[18].hasValue() )
-            SetSummationOfParagraphs( *(sal_Bool*) pValues[ 18 ].getValue() );
+            SetShowUndoDeleteWarning( *(sal_Bool*) pValues[ 18 ].getValue() );
+
         if( pValues[19].hasValue() )
-            SetShowUndoDeleteWarning( *(sal_Bool*) pValues[ 19 ].getValue() );
+            SetSlideshowRespectZOrder(*(sal_Bool*) pValues[ 19 ].getValue());
 
         if( pValues[20].hasValue() )
-            SetSlideshowRespectZOrder(*(sal_Bool*) pValues[ 20 ].getValue());
+            SetPreviewNewEffects(*(sal_Bool*) pValues[ 20 ].getValue());
 
         if( pValues[21].hasValue() )
-            SetPreviewNewEffects(*(sal_Bool*) pValues[ 21 ].getValue());
+            SetPreviewChangedEffects(*(sal_Bool*) pValues[ 21 ].getValue());
 
         if( pValues[22].hasValue() )
-            SetPreviewChangedEffects(*(sal_Bool*) pValues[ 22 ].getValue());
+            SetPreviewTransitions(*(sal_Bool*) pValues[ 22 ].getValue());
 
         if( pValues[23].hasValue() )
-            SetPreviewTransitions(*(sal_Bool*) pValues[ 23 ].getValue());
+            SetDisplay(*(sal_Int32*) pValues[ 23 ].getValue());
 
         if( pValues[24].hasValue() )
-            SetDisplay(*(sal_Int32*) pValues[ 24 ].getValue());
+            SetPresentationPenColor( getSafeValue< sal_Int32 >( pValues[ 24 ] ) );
 
         if( pValues[25].hasValue() )
-            SetPresentationPenColor( getSafeValue< sal_Int32 >( pValues[ 25 ] ) );
-
-        if( pValues[26].hasValue() )
-            SetPresentationPenWidth( getSafeValue< double >( pValues[ 26 ] ) );
+            SetPresentationPenWidth( getSafeValue< double >( pValues[ 25 ] ) );
     }
 
     return sal_True;
@@ -676,29 +672,28 @@ sal_Bool SdOptionsMisc::WriteData( Any* pValues ) const
     // The preview is not supported anymore.  Use a dummy value.
     pValues[ 9 ] <<= (double)0;// GetPreviewQuality();
     pValues[ 10 ] <<= IsSolidDragging();
-    pValues[ 11 ] <<= IsSolidMarkHdl();
-    pValues[ 12 ] <<= GetDefaultObjectSizeWidth();
-    pValues[ 13 ] <<= GetDefaultObjectSizeHeight();
-    pValues[ 14 ] <<= GetPrinterIndependentLayout();
-    pValues[ 15 ] <<= (sal_Bool)IsShowComments();
+    pValues[ 11 ] <<= GetDefaultObjectSizeWidth();
+    pValues[ 12 ] <<= GetDefaultObjectSizeHeight();
+    pValues[ 13 ] <<= GetPrinterIndependentLayout();
+    pValues[ 14 ] <<= (sal_Bool)IsShowComments();
 
     // just for Impress
     if( GetConfigId() == SDCFG_IMPRESS )
     {
-        pValues[ 16 ] <<= IsStartWithTemplate();
-        pValues[ 17 ] <<= IsStartWithActualPage();
-        pValues[ 18 ] <<= IsSummationOfParagraphs();
-        pValues[ 19 ] <<= IsShowUndoDeleteWarning();
-        pValues[ 20 ] <<= IsSlideshowRespectZOrder();
+        pValues[ 15 ] <<= IsStartWithTemplate();
+        pValues[ 16 ] <<= IsStartWithActualPage();
+        pValues[ 17 ] <<= IsSummationOfParagraphs();
+        pValues[ 18 ] <<= IsShowUndoDeleteWarning();
+        pValues[ 19 ] <<= IsSlideshowRespectZOrder();
 
-        pValues[ 21 ] <<= IsPreviewNewEffects();
-        pValues[ 22 ] <<= IsPreviewChangedEffects();
-        pValues[ 23 ] <<= IsPreviewTransitions();
+        pValues[ 20 ] <<= IsPreviewNewEffects();
+        pValues[ 21 ] <<= IsPreviewChangedEffects();
+        pValues[ 22 ] <<= IsPreviewTransitions();
 
-        pValues[ 24 ] <<= GetDisplay();
+        pValues[ 23 ] <<= GetDisplay();
 
-        pValues[ 25 ] <<= GetPresentationPenColor();
-        pValues[ 26 ] <<= GetPresentationPenWidth();
+        pValues[ 24 ] <<= GetPresentationPenColor();
+        pValues[ 25 ] <<= GetPresentationPenWidth();
     }
 
     return sal_True;
@@ -759,7 +754,6 @@ SdOptionsMiscItem::SdOptionsMiscItem( sal_uInt16 _nWhich, SdOptions* pOpts, ::sd
         maOptionsMisc.SetDoubleClickTextEdit( pView->IsDoubleClickTextEdit() );
         maOptionsMisc.SetClickChangeRotation( pView->IsClickChangeRotation() );
         maOptionsMisc.SetSolidDragging( pView->IsSolidDragging() );
-        maOptionsMisc.SetSolidMarkHdl( pView->IsSolidMarkHdl() );
     }
     else if( pOpts )
     {
@@ -774,7 +768,6 @@ SdOptionsMiscItem::SdOptionsMiscItem( sal_uInt16 _nWhich, SdOptions* pOpts, ::sd
         maOptionsMisc.SetDoubleClickTextEdit( pOpts->IsDoubleClickTextEdit() );
         maOptionsMisc.SetClickChangeRotation( pOpts->IsClickChangeRotation() );
         maOptionsMisc.SetSolidDragging( pOpts->IsSolidDragging() );
-        maOptionsMisc.SetSolidMarkHdl( pOpts->IsSolidMarkHdl() );
     }
 }
 
@@ -815,7 +808,6 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
         pOpts->SetStartWithActualPage( maOptionsMisc.IsStartWithActualPage() );
         pOpts->SetSummationOfParagraphs( maOptionsMisc.IsSummationOfParagraphs() );
         pOpts->SetSolidDragging( maOptionsMisc.IsSolidDragging() );
-        pOpts->SetSolidMarkHdl( maOptionsMisc.IsSolidMarkHdl() );
         pOpts->SetShowUndoDeleteWarning( maOptionsMisc.IsShowUndoDeleteWarning() );
         pOpts->SetPrinterIndependentLayout( maOptionsMisc.GetPrinterIndependentLayout() );
         pOpts->SetShowComments( maOptionsMisc.IsShowComments() );

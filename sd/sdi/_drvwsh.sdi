@@ -1944,11 +1944,6 @@ interface DrawView
          //ExecMethod = FuTemporary ;
          //StateMethod = GetMenuState ;
     ]
-    SID_HANDLES_DRAFT // ole : ?, status : ?
-    [
-        ExecMethod = ExecOptionsBar ;
-        StateMethod = GetOptionsBarState ;
-    ]
     SID_SOLID_CREATE // ole : ?, status : ?
     [
         ExecMethod = ExecOptionsBar ;

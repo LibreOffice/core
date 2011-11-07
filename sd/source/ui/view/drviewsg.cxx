@@ -134,10 +134,6 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 
     switch( nSlot )
     {
-        case SID_HANDLES_DRAFT:
-            pOptions->SetSolidMarkHdl( !mpDrawView->IsSolidMarkHdl() );
-        break;
-
         case SID_SOLID_CREATE:
             pOptions->SetSolidDragging( !mpDrawView->IsSolidDragging() );
         break;
@@ -256,7 +252,6 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 
 void DrawViewShell::GetOptionsBarState( SfxItemSet& rSet )
 {
-    rSet.Put( SfxBoolItem( SID_HANDLES_DRAFT, !mpDrawView->IsSolidMarkHdl() ) );
     rSet.Put( SfxBoolItem( SID_SOLID_CREATE, mpDrawView->IsSolidDragging() ) );
     rSet.Put( SfxBoolItem( SID_GRID_VISIBLE, mpDrawView->IsGridVisible() ) );
     rSet.Put( SfxBoolItem( SID_GRID_USE, mpDrawView->IsGridSnap() ) );

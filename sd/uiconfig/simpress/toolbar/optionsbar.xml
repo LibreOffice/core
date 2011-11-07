@@ -17,7 +17,6 @@
  <toolbar:toolbaritem xlink:href=".uno:PickThrough" toolbar:helpid="27159"/>
  <toolbar:toolbaritem xlink:href=".uno:DoubleClickTextEdit" toolbar:helpid="27169"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:HandlesDraft" toolbar:helpid="27150"/>
  <toolbar:toolbaritem xlink:href=".uno:BigHandles" toolbar:helpid="27168"/>
  <toolbar:toolbaritem xlink:href=".uno:SolidCreate" toolbar:helpid="helpid:27151"/>
  <toolbar:toolbarseparator/>

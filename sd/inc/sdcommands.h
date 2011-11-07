@@ -145,7 +145,6 @@
 #define CMD_SID_GRAPHIC_EXPORT                      ".uno:GraphicExport"
 #define CMD_SID_GRID_FRONT                          ".uno:GridFront"
 #define CMD_SID_3D_HALF_SPHERE                      ".uno:HalfSphere"
-#define CMD_SID_HANDLES_DRAFT                       ".uno:HandlesDraft"
 #define CMD_SID_HANDOUT_MASTERPAGE                  ".uno:HandoutMasterPage"
 #define CMD_SID_HANDOUTMODE                         ".uno:HandoutMode"
 #define CMD_SID_HATCH                               ".uno:Hatch"

@@ -338,15 +338,6 @@ public:
     sal_uInt16 GetMarkHdlSizePixel() const;
     void SetMarkHdlSizePixel(sal_uInt16 nSiz);
 
-    // Die Groesse der Markierungs-Handles wird ueber die jeweilige Aufloesung
-    // und die Groesse des Bereichs der markierten Objekte so angepasst, dass
-    // sie sich bei einer Frame-Selektion moeglichst nicht ueberschneiden.
-    // Dazu muessen die Handles ggf. verkleinert dargestellt werden. Mit der
-    // MinMarkHdlSize kann man hierfuer eine Mindestgroesse angeben.
-    // Defaultwert ist 3, Mindestwert 3 Pixel.
-    sal_Bool IsSolidMarkHdl() const { return aHdl.IsFineHdl(); }
-    void SetSolidMarkHdl(sal_Bool bOn);
-
     virtual sal_Bool HasMarkablePoints() const;
     virtual sal_uIntPtr GetMarkablePointCount() const;
     virtual sal_Bool HasMarkedPoints() const;

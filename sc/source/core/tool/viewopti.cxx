@@ -165,7 +165,6 @@ void ScViewOptions::SetDefaults()
     aOptArr[ VOPT_GRID        ] =
     aOptArr[ VOPT_ANCHOR      ] =
     aOptArr[ VOPT_PAGEBREAKS  ] =
-    aOptArr[ VOPT_SOLIDHANDLES] =
     aOptArr[ VOPT_CLIPMARKS   ] = sal_True;
 
     aModeArr[VOBJ_TYPE_OLE ]  =
@@ -457,10 +456,6 @@ ScViewCfg::ScViewCfg() :
                     case SCLAYOUTOPT_GUIDE:
                         SetOption( VOPT_HELPLINES, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
-                    case SCLAYOUTOPT_SIMPLECONT:
-                        // content is reversed
-                        SetOption( VOPT_SOLIDHANDLES, !ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
-                        break;
                     case SCLAYOUTOPT_LARGECONT:
                         SetOption( VOPT_BIGHANDLES, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
@@ -627,10 +622,6 @@ IMPL_LINK( ScViewCfg, LayoutCommitHdl, void *, EMPTYARG )
                 break;
             case SCLAYOUTOPT_GUIDE:
                 ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetOption( VOPT_HELPLINES ) );
-                break;
-            case SCLAYOUTOPT_SIMPLECONT:
-                // content is reversed
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], !GetOption( VOPT_SOLIDHANDLES ) );
                 break;
             case SCLAYOUTOPT_LARGECONT:
                 ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetOption( VOPT_BIGHANDLES ) );
