@@ -358,7 +358,7 @@ struct ImplSVData
     UnoWrapperBase*         mpUnoWrapper;
     Window*                 mpIntroWindow;      // the splash screen
     DockingManager*         mpDockingManager;
-    sal_Bool                    mbIsTestTool;
+    sal_Bool                mbIsTestTool;
 
     oslThreadIdentifier                     mnMainThreadId;
     rtl::Reference< vcl::DisplayConnection >            mxDisplayConnection;

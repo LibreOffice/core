@@ -49,9 +49,13 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
-//----------------------------------------------------------
-// class declaration
-//----------------------------------------------------------
+#define FOLDERPICKER_TITLE            500
+#define FOLDER_PICKER_DEF_DESCRIPTION 501
+#define FILE_PICKER_TITLE_OPEN        502
+#define FILE_PICKER_TITLE_SAVE        503
+#define FILE_PICKER_FILE_TYPE         504
+#define FILE_PICKER_OVERWRITE         505
+#define FILE_PICKER_ALLFORMATS        506
 
 class SalGtkPicker
 {
@@ -73,9 +77,11 @@ class SalGtkPicker
         rtl::OUString uritounicode(const gchar *pIn);
         rtl::OString unicodetouri(const rtl::OUString &rURL);
 
-        // to instanciate own services
+        // to instantiate own services
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
         ::com::sun::star::uno::Reference< com::sun::star::uno::XInterface > createInstance( const rtl::OUString &rName );
+
+        rtl::OUString getResString( sal_Int32 aId );
     private:
         void setGtkLanguage();
 };

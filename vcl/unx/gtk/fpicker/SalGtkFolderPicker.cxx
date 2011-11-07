@@ -45,7 +45,6 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include "unx/gtk/gtkinst.hxx"
-#include "gtk/fpicker/resourceprovider.hxx"
 #include "gtk/fpicker/SalGtkFolderPicker.hxx"
 
 #include <string.h>
@@ -62,10 +61,8 @@ using namespace ::com::sun::star::uno;
 SalGtkFolderPicker::SalGtkFolderPicker( const uno::Reference< uno::XComponentContext >& xContext ) :
     SalGtkPicker( xContext )
 {
-    CResourceProvider aResProvider;
-
     m_pDialog = gtk_file_chooser_dialog_new(
-        OUStringToOString( aResProvider.getResString( FOLDERPICKER_TITLE ), RTL_TEXTENCODING_UTF8 ).getStr(),
+        OUStringToOString( getResString( FOLDERPICKER_TITLE ), RTL_TEXTENCODING_UTF8 ).getStr(),
         NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
         GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, (char *)NULL );
 

@@ -57,10 +57,6 @@
 #include "unx/gtk/gtkframe.hxx"
 #include "gtk/fpicker/SalGtkPicker.hxx"
 
-//------------------------------------------------------------------------
-// namespace directives
-//------------------------------------------------------------------------
-
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -203,29 +199,17 @@ void SalGtkPicker::setGtkLanguage()
     if (bSet)
         return;
 
-    OUString sUILocale;
-    try
+    ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+    rtl::OUStringBuffer aBuffer;
+    aBuffer.append( aLocale.Language );
+    aBuffer.appendAscii( "_" );
+    aBuffer.append( aLocale.Country );
+    aBuffer.appendAscii( ".UTF-8" );
+
+    if (aBuffer.getLength() > 8)
     {
-        uno::Reference<lang::XMultiComponentFactory> xConfigMgr(
-            createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))),
-            UNO_QUERY_THROW );
-
-        Sequence< Any > theArgs(1);
-        theArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Linguistic/General"));
-
-        uno::Reference< container::XNameAccess > xNameAccess =
-          uno::Reference< container::XNameAccess >(xConfigMgr->createInstanceWithArgumentsAndContext(
-                                                                                                                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")), theArgs, m_xContext ), UNO_QUERY_THROW );
-
-        if (xNameAccess.is())
-            xNameAccess->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("UILocale"))) >>= sUILocale;
-    } catch (...) {}
-
-    if (sUILocale.getLength())
-    {
-        sUILocale = sUILocale.replace('-', '_');
-        rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("LANGUAGE"));
-        osl_setEnvironment(envVar.pData, sUILocale.pData);
+        rtl::OUString envVar( RTL_CONSTASCII_USTRINGPARAM( "LANGUAGE" ) );
+        osl_setEnvironment( envVar.pData, aBuffer.makeStringAndClear().pData );
     }
     bSet = true;
 }

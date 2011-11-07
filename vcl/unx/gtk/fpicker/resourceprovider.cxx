@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <osl/diagnose.h>
-#include "resourceprovider.hxx"
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
@@ -35,6 +34,7 @@
 
 #include "svids.hrc"
 #include "svdata.hxx"
+#include "gtk/fpicker/SalGtkPicker.hxx"
 
 using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
@@ -77,55 +77,19 @@ static sal_Int16 CtrlIdToResId( sal_Int32 aControlId )
     return -1;
 }
 
-class CResourceProvider_Impl
+rtl::OUString SalGtkPicker::getResString( sal_Int32 aId )
 {
-public:
-    CResourceProvider_Impl( )
+    rtl::OUString aResString;
+    try
     {
-        m_ResMgr = ImplGetResMgr();
+        // translate the control id to a resource id
+        sal_Int16 aResId = CtrlIdToResId( aId );
+        if ( aResId > -1 )
+            aResString = String( ResId( aResId, *ImplGetResMgr() ) );
     }
+    catch(...) { }
 
-    ~CResourceProvider_Impl( )
-    {
-        delete m_ResMgr;
-    }
-
-    rtl::OUString getResString( sal_Int16 aId )
-    {
-        OSL_ASSERT( m_ResMgr );
-
-        String aResString;
-        try
-        {
-            // translate the control id to a resource id
-            sal_Int16 aResId = CtrlIdToResId( aId );
-            if ( aResId > -1 )
-                aResString = String( ResId( aResId, *m_ResMgr ) );
-        }
-        catch(...)
-        {
-        }
-
-        return rtl::OUString( aResString );
-    }
-
-public:
-    ResMgr* m_ResMgr;
-};
-
-CResourceProvider::CResourceProvider( ) :
-    m_pImpl( new CResourceProvider_Impl() )
-{
-}
-
-CResourceProvider::~CResourceProvider( )
-{
-    delete m_pImpl;
-}
-
-rtl::OUString CResourceProvider::getResString( sal_Int32 aId )
-{
-   return m_pImpl->getResString( aId ).replace('~', '_');
+    return aResString.replace('~', '_');
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

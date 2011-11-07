@@ -56,7 +56,6 @@
 #include <set>
 #include <string.h>
 
-#include "gtk/fpicker/resourceprovider.hxx"
 #include "gtk/fpicker/SalGtkFilePicker.hxx"
 
 //------------------------------------------------------------------------
@@ -147,8 +146,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
         mbListVisibility[i] = false;
     }
 
-    CResourceProvider aResProvider;
-    OUString aFilePickerTitle = aResProvider.getResString( FILE_PICKER_TITLE_OPEN );
+    OUString aFilePickerTitle = getResString( FILE_PICKER_TITLE_OPEN );
 
     m_pDialog = gtk_file_chooser_dialog_new(
             OUStringToOString( aFilePickerTitle, RTL_TEXTENCODING_UTF8 ).getStr(),
@@ -182,7 +180,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
 
 #define LABEL_TOGGLE( elem ) \
         case elem : \
-            aLabel = aResProvider.getResString( CHECKBOX_##elem ); \
+            aLabel = getResString( CHECKBOX_##elem ); \
             setLabel( CHECKBOX_##elem, aLabel ); \
             break
 
@@ -222,7 +220,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
 
 #define LABEL_LIST( elem ) \
         case elem : \
-            aLabel = aResProvider.getResString( LISTBOX_##elem##_LABEL ); \
+            aLabel = getResString( LISTBOX_##elem##_LABEL ); \
             setLabel( LISTBOX_##elem##_LABEL, aLabel ); \
             break
 
@@ -244,7 +242,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
         gtk_box_pack_end( GTK_BOX( m_pVBox ), m_pHBoxs[i], sal_False, sal_False, 0 );
     }
 
-    aLabel = aResProvider.getResString( FILE_PICKER_FILE_TYPE );
+    aLabel = getResString( FILE_PICKER_FILE_TYPE );
     m_pFilterExpander = gtk_expander_new_with_mnemonic(
         OUStringToOString( aLabel, RTL_TEXTENCODING_UTF8 ).getStr());
 
@@ -1006,10 +1004,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
                         OString sFileName = unicodetouri( aPathSeq[0] );
                         if( g_file_test( g_filename_from_uri( sFileName.getStr(), NULL, NULL ), G_FILE_TEST_IS_REGULAR ) )
                         {
-                            CResourceProvider aResProvider;
                             GtkWidget *dlg;
-
-
                             INetURLObject aFileObj( sFileName );
 
                             OString baseName(
@@ -1024,7 +1019,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
                             );
                             OString aMsg(
                               OUStringToOString(
-                                aResProvider.getResString( FILE_PICKER_OVERWRITE ),
+                                getResString( FILE_PICKER_OVERWRITE ),
                                 RTL_TEXTENCODING_UTF8
                               )
                             );
@@ -1045,7 +1040,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
                             );
 
                             gtk_window_set_title( GTK_WINDOW( dlg ),
-                                OUStringToOString(aResProvider.getResString(FILE_PICKER_TITLE_SAVE ),
+                                OUStringToOString(getResString(FILE_PICKER_TITLE_SAVE ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
 
                             RunDialog* pAnotherDialog = new RunDialog(dlg, xToolkit, xDesktop);
@@ -1486,8 +1481,7 @@ void SAL_CALL SalGtkFilePicker::setImage( sal_Int16 /*aImageFormat*/, const uno:
 
 void SalGtkFilePicker::implChangeType( GtkTreeSelection *selection )
 {
-    CResourceProvider aResProvider;
-    OUString aLabel = aResProvider.getResString( FILE_PICKER_FILE_TYPE );
+    OUString aLabel = getResString( FILE_PICKER_FILE_TYPE );
 
     GtkTreeIter iter;
     GtkTreeModel *model;
@@ -1734,8 +1728,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
 
     if( GTK_FILE_CHOOSER_ACTION_SAVE == eAction )
     {
-        CResourceProvider aResProvider;
-        OUString aFilePickerTitle(aResProvider.getResString( FILE_PICKER_TITLE_SAVE ));
+        OUString aFilePickerTitle(getResString( FILE_PICKER_TITLE_SAVE ));
         gtk_window_set_title ( GTK_WINDOW( m_pDialog ),
             OUStringToOString( aFilePickerTitle, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
@@ -1750,8 +1743,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
 #ifdef GTK_STOCK_MEDIA_PLAY
             m_pButtons[ nTVIndex ] = gtk_dialog_add_button( GTK_DIALOG( m_pDialog ), GTK_STOCK_MEDIA_PLAY, 1 );
 #else
-            CResourceProvider aResProvider;
-            OString aPlay = OUStringToOString( aResProvider.getResString( PUSHBUTTON_PLAY ), RTL_TEXTENCODING_UTF8 );
+            OString aPlay = OUStringToOString( getResString( PUSHBUTTON_PLAY ), RTL_TEXTENCODING_UTF8 );
             m_pButtons[ nTVIndex ] = gtk_dialog_add_button( GTK_DIALOG( m_pDialog ), aPlay.getStr(), 1 );
 #endif
         }
@@ -1969,8 +1961,7 @@ void SalGtkFilePicker::SetFilters()
                     sAllFilter += OUString(sal_Unicode(';'));
                 sAllFilter += *aIter;
             }
-            CResourceProvider aResProvider;
-            sPseudoFilter = aResProvider.getResString(FILE_PICKER_ALLFORMATS);
+            sPseudoFilter = getResString(FILE_PICKER_ALLFORMATS);
             m_pPseudoFilter = implAddFilter( sPseudoFilter, sAllFilter );
         }
     }
