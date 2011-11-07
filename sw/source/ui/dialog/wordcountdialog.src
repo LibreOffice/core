@@ -40,11 +40,6 @@ ModelessDialog DLG_WORDCOUNT
     Sizeable = FALSE ;
     Hide = TRUE ;
 
-  Window WINDOW_DLG
-  {
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 170 , 132 ) ;
-
     FixedLine  FL_CURRENT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
@@ -145,5 +140,4 @@ ModelessDialog DLG_WORDCOUNT
         Pos = MAP_APPFONT ( 114 , 112 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-  };
 };

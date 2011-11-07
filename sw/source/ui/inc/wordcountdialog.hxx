@@ -38,7 +38,7 @@ struct SwDocStat;
 
 class SwWrtShell;
 
-class SwWordCountDialog : public Window
+class SwWordCountDialog
 {
     FixedLine       aCurrentFL;
     FixedText       aCurrentWordFT;

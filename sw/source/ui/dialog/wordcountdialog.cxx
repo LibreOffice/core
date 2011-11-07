@@ -55,37 +55,31 @@
 #endif /* ENABLE_LAYOUT */
 
 SwWordCountDialog::SwWordCountDialog(Window* pParent) :
-    Window(pParent, SW_RES(WINDOW_DLG)),
 #if defined _MSC_VER
 #pragma warning (disable : 4355)
 #endif
-    aCurrentFL( this, SW_RES(              FL_CURRENT            )),
-    aCurrentWordFT( this, SW_RES(          FT_CURRENTWORD        )),
-    aCurrentWordFI( this, SW_RES(          FI_CURRENTWORD        )),
-    aCurrentCharacterFT( this, SW_RES(     FT_CURRENTCHARACTER   )),
-    aCurrentCharacterFI( this, SW_RES(     FI_CURRENTCHARACTER   )),
-    aCurrentCharacterExcludingSpacesFT( this, SW_RES(     FT_CURRENTCHARACTEREXCLUDINGSPACES   )),
-    aCurrentCharacterExcludingSpacesFI( this, SW_RES(     FI_CURRENTCHARACTEREXCLUDINGSPACES   )),
+    aCurrentFL( pParent, SW_RES(              FL_CURRENT            )),
+    aCurrentWordFT( pParent, SW_RES(          FT_CURRENTWORD        )),
+    aCurrentWordFI( pParent, SW_RES(          FI_CURRENTWORD        )),
+    aCurrentCharacterFT( pParent, SW_RES(     FT_CURRENTCHARACTER   )),
+    aCurrentCharacterFI( pParent, SW_RES(     FI_CURRENTCHARACTER   )),
+    aCurrentCharacterExcludingSpacesFT( pParent, SW_RES(     FT_CURRENTCHARACTEREXCLUDINGSPACES   )),
+    aCurrentCharacterExcludingSpacesFI( pParent, SW_RES(     FI_CURRENTCHARACTEREXCLUDINGSPACES   )),
 
-    aDocFL( this, SW_RES(                  FL_DOC                )),
-    aDocWordFT( this, SW_RES(              FT_DOCWORD            )),
-    aDocWordFI( this, SW_RES(              FI_DOCWORD            )),
-    aDocCharacterFT( this, SW_RES(         FT_DOCCHARACTER       )),
-    aDocCharacterFI( this, SW_RES(         FI_DOCCHARACTER       )),
-    aDocCharacterExcludingSpacesFT( this, SW_RES(         FT_DOCCHARACTEREXCLUDINGSPACES       )),
-    aDocCharacterExcludingSpacesFI( this, SW_RES(         FI_DOCCHARACTEREXCLUDINGSPACES       )),
-    aBottomFL(this, SW_RES(                FL_BOTTOM             )),
-    aOK( this, SW_RES(                     PB_OK                 )),
-    aHelp( this, SW_RES(                   PB_HELP               ))
+    aDocFL( pParent, SW_RES(                  FL_DOC                )),
+    aDocWordFT( pParent, SW_RES(              FT_DOCWORD            )),
+    aDocWordFI( pParent, SW_RES(              FI_DOCWORD            )),
+    aDocCharacterFT( pParent, SW_RES(         FT_DOCCHARACTER       )),
+    aDocCharacterFI( pParent, SW_RES(         FI_DOCCHARACTER       )),
+    aDocCharacterExcludingSpacesFT( pParent, SW_RES(         FT_DOCCHARACTEREXCLUDINGSPACES       )),
+    aDocCharacterExcludingSpacesFI( pParent, SW_RES(         FI_DOCCHARACTEREXCLUDINGSPACES       )),
+    aBottomFL(pParent, SW_RES(                FL_BOTTOM             )),
+    aOK( pParent, SW_RES(                     PB_OK                 )),
+    aHelp( pParent, SW_RES(                   PB_HELP               ))
 #if defined _MSC_VER
 #pragma warning (default : 4355)
 #endif
 {
-#if ENABLE_LAYOUT
-    SetHelpId (HID_DLG_WORDCOUNT);
-#endif /* ENABLE_LAYOUT */
-    FreeResource();
-
     aOK.SetClickHdl(LINK(this,SwWordCountDialog,        OkHdl));
 }
 
@@ -129,7 +123,6 @@ SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
 void SwWordCountFloatDlg::Activate()
 {
     SfxModelessDialog::Activate();
-    aDlg.Activate();
 }
 
 void SwWordCountFloatDlg::UpdateCounts()
