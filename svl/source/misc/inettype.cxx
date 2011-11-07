@@ -542,7 +542,7 @@ TypeNameMapEntry * Registration::getExtensionEntry(UniString const &
     UniString aTheTypeName = rTypeName;
     aTheTypeName.ToLowerAscii();
     Registration &rRegistration = theRegistration::get();
-    typename TypeNameMap::iterator it = rRegistration.m_aTypeNameMap.find(aTheTypeName);
+    TypeNameMap::iterator it = rRegistration.m_aTypeNameMap.find(aTheTypeName);
     if (it != rRegistration.m_aTypeNameMap.end())
         return it->second;
     return 0;
@@ -599,7 +599,7 @@ INetContentType Registration::GetContentType(UniString const & rTypeName)
 
     UniString aTheTypeName = rTypeName;
     aTheTypeName.ToLowerAscii();
-    typename TypeNameMap::iterator it = rRegistration.m_aTypeNameMap.find(aTheTypeName);
+    TypeNameMap::iterator it = rRegistration.m_aTypeNameMap.find(aTheTypeName);
     return it != rRegistration.m_aTypeNameMap.end()
         ? it->second->m_eTypeID
         : CONTENT_TYPE_UNKNOWN;
@@ -636,7 +636,7 @@ INetContentType Registration::GetContentType4Extension(UniString const &
 {
     Registration &rRegistration = theRegistration::get();
 
-    typename ExtensionMap::iterator it = rRegistration.m_aExtensionMap.find(rExtension);
+    ExtensionMap::iterator it = rRegistration.m_aExtensionMap.find(rExtension);
     return it != rRegistration.m_aExtensionMap.end()
         ? it->second->m_eTypeID
         : CONTENT_TYPE_UNKNOWN;
