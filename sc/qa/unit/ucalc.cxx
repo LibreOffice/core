@@ -44,6 +44,7 @@
 #include "refundo.hxx"
 #include "undoblk.hxx"
 #include "queryentry.hxx"
+#include "postit.hxx"
 
 #include "docsh.hxx"
 #include "docfunc.hxx"
@@ -148,6 +149,8 @@ public:
 
     void testGraphicsInGroup();
 
+    void testPostIts();
+
     /**
      * Test toggling relative/absolute flag of cell and cell range references.
      * This corresponds with hitting Shift-F4 while the cursor is on a formula
@@ -174,6 +177,7 @@ public:
     CPPUNIT_TEST(testExternalRefFunctions);
     CPPUNIT_TEST(testDataArea);
     CPPUNIT_TEST(testGraphicsInGroup);
+    CPPUNIT_TEST(testPostIts);
     CPPUNIT_TEST(testStreamValid);
     CPPUNIT_TEST(testFunctionLists);
     CPPUNIT_TEST(testToggleRefFlag);
@@ -2074,6 +2078,38 @@ void Test::testGraphicsInGroup()
         (rNewRect.nBottom - rNewRect.nTop) <= 1);
     m_pDoc->ShowRows(0, 100, 0, true);
     CPPUNIT_ASSERT_MESSAGE("Should not change when page anchored", aOrigRect == rNewRect);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testPostIts()
+{
+    rtl::OUString aHello(RTL_CONSTASCII_USTRINGPARAM("Hello world"));
+    rtl::OUString aJimBob(RTL_CONSTASCII_USTRINGPARAM("Jim Bob"));
+    rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("PostIts"));
+    m_pDoc->InsertTab(0, aTabName);
+
+    ScAddress rAddr(2, 2, 0);
+    ScPostIt *pNote = m_pDoc->GetOrCreateNote(rAddr);
+    pNote->SetText(rAddr, aHello);
+    pNote->SetAuthor(aJimBob);
+
+    ScPostIt *pGetNote = m_pDoc->GetNote(rAddr);
+    CPPUNIT_ASSERT_MESSAGE("note should be itself", pGetNote == pNote );
+
+    bool bInsertRow = m_pDoc->InsertRow( 0, 0, 100, 1, 1, 1 );
+    CPPUNIT_ASSERT_MESSAGE("failed to insert row", bInsertRow );
+
+    CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNote(rAddr) == NULL);
+    rAddr.IncRow();
+    CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNote(rAddr) == pNote);
+
+    bool bInsertCol = m_pDoc->InsertCol( 0, 0, 100, 1, 1, 1 );
+    CPPUNIT_ASSERT_MESSAGE("failed to insert column", bInsertCol );
+
+    CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNote(rAddr) == NULL);
+    rAddr.IncCol();
+    CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNote(rAddr) == pNote);
 
     m_pDoc->DeleteTab(0);
 }
