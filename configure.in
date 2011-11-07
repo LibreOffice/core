@@ -1303,9 +1303,10 @@ AC_ARG_WITH(system-mozilla,
 WITH_SYSTEM_MOZILLA=no)
 
 AC_ARG_WITH(system-mozilla-headers,
-   AS_HELP_STRING([--with-system-mozilla-headers],
-       [Use mozilla headers provided by system instead of bundled ones. Needed for
-        nsplugin])
+    AS_HELP_STRING([--with-system-mozilla-headers],
+        [Use mozilla headers provided by system instead of bundled ones. Needed for
+         nsplugin]),
+    [with_system_mozilla_headers="$with_system_libs"]
 )
 
 AC_ARG_WITH(system-gettext,
@@ -5979,15 +5980,14 @@ dnl ===================================================================
 dnl Check for system mozilla headers
 dnl ===================================================================
 AC_MSG_CHECKING([which mozilla headers to use])
-if test -n "$with_system_mozilla_headers" -o -n "$with_system_headers" && \
-        test "x$with_system_mozilla_headers" != "xno"; then
+if test "$with_system_mozilla_headers" = "xyes"; then
     AC_MSG_RESULT([external])
     SYSTEM_MOZILLA_HEADERS=YES
     # First try npapi-sdk:
-    PKG_CHECK_MODULES(MOZILLA_HEADERS, npapi-sdk, [LOCATED=yes], [LOCATED=NO])
+    PKG_CHECK_MODULES(MOZILLA_HEADERS, npapi-sdk, [LOCATED=yes], [LOCATED=no])
     # Then go with libxul:
     if test "x$LOCATED" != "xyes"; then
-        PKG_CHECK_MODULES(MOZILLA_HEADERS, libxul, [LOCATED=yes], [LOCATED=NO])
+        PKG_CHECK_MODULES(MOZILLA_HEADERS, libxul, [LOCATED=yes], [LOCATED=no])
     fi
     # if still not found bail out
     if test "x$LOCATED" != "xyes"; then
