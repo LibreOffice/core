@@ -107,7 +107,6 @@ sal_Bool INetImage::Read( SvStream& rIStm, sal_uLong nFormat )
 */
             rtl_TextEncoding eSysCSet = osl_getThreadTextEncoding();
             sal_Int32 nVal, nAnchorOffset, nAltOffset, nFilePos;
-            ByteString sData;
 
             nFilePos = rIStm.Tell();
             // skip over iSize (int), bIsMao ( sal_Bool ) alignment of 4 !!!!
