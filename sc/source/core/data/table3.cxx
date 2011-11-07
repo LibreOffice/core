@@ -1629,7 +1629,7 @@ static void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPa
         {
             // TODO: adapt this for multi-query items.
             ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-            if (rItem.meType != ScQueryEntry::ByString)
+            if (rItem.meType == ScQueryEntry::ByString)
             {
                 sal_uInt32 nIndex = 0;
                 bool bNumber = pDoc->GetFormatTable()->
