@@ -29,9 +29,9 @@
 #ifndef _BASDOC_HXX
 #define _BASDOC_HXX
 
-#include <svx/ifaceids.hxx>
 #include <iderid.hxx>
-#include <sfx2/objsh.hxx>
+
+#include <svx/ifaceids.hxx>
 
 class SfxPrinter;
 
