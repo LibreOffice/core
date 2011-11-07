@@ -1030,7 +1030,7 @@ AC_ARG_WITH(system-libwpg,
 
 AC_ARG_WITH(system-libxml,
     AS_HELP_STRING([--with-system-libxml],
-        [Use libxml already on system.]),,
+        [Use libxml/libxslt already on system.]),,
  [if test "$_os" = "Darwin" -o $_os = "iOS"; then
     with_system_libxml=yes
   else
@@ -1219,17 +1219,6 @@ AC_ARG_WITH(saxon-jar,
     AS_HELP_STRING([--with-saxon-jar=JARFILE],
         [Specify path to jarfile manually.]),
     SAXON_JAR=$withval)
-
-AC_ARG_WITH(system-libxslt,
-    AS_HELP_STRING([--with-system-libxslt],
-        [Use libxslt already on system.]),
- [if test "$_os" = "Darwin"; then
-    with_system_libxslt=yes
-  else
-    if test -n "$with_system_libs"; then
-        with_system_libxslt="$with_system_libs";
-    fi
-  fi])
 
 AC_ARG_WITH(system-odbc,
     AS_HELP_STRING([--with-system-odbc],
@@ -4829,28 +4818,13 @@ if test  "$test_freetype" = "yes"; then
 fi
 AC_SUBST(USE_FT_EMBOLDEN)
 
-if test "$with_system_libxslt" = "yes"; then
-    if test "$with_system_libxml" != "yes"; then
-        # somehow AC_MSG_WARN won't work...
-        echo "to prevent incompatibilities between internal libxml2 and libxslt, the office will be build with system-libxml"
-        echo "to prevent incompatibilities between internal libxml2 and libxslt, the office will be build with system-libxml" >> warn
-        with_system_libxml=yes
-    fi
-fi
-if test "$with_system_libxml" = "yes"; then
-    if test "$with_system_libxslt" != "yes"; then
-        # somehow AC_MSG_WARN won't work...
-        echo "to prevent incompatibilities between internal libxslt and libxml2, the office will be build with system-libxslt"
-        echo "to prevent incompatibilities between internal libxslt and libxml2, the office will be build with system-libxslt" >> warn
-        with_system_libxslt=yes
-    fi
-fi
-
 # ===================================================================
 # Check for system libxslt
+# to prevent incompatibilities between internal libxml2 and external libxslt,
+# or vice versa, use with_system_libxml here
 # ===================================================================
 AC_MSG_CHECKING([which libxslt to use])
-if test "$with_system_libxslt" = "yes"; then
+if test "$with_system_libxml" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBXSLT=YES
     if test "$_os" = "Darwin"; then
