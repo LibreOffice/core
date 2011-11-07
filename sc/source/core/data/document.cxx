@@ -334,7 +334,7 @@ void ScDocument::CreateValidTabName(rtl::OUString& rName) const
         for ( SCTAB i = static_cast<SCTAB>(maTabs.size())+1; !bOk ; i++ )
         {
             rName  = aStrTable;
-            rName += rtl::OUString::valueOf(static_cast<SCTAB>(i));
+            rName += rtl::OUString::valueOf(static_cast<sal_Int32>(i));
             if (bPrefix)
                 bOk = ValidNewTabName( rName );
             else
