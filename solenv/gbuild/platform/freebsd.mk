@@ -31,8 +31,8 @@ COM := GCC
 gb_MKTEMP := gmktemp -t gbuild.XXXXXX
 
 gb_CC := cc
-gb_CXX := g++
-gb_GCCP := gcc
+gb_CXX := c++
+gb_GCCP := cc
 gb_AR := ar
 gb_AWK := awk
 gb_CLASSPATHSEP := :
@@ -121,7 +121,7 @@ gb_LinkTarget_NOEXCEPTIONFLAGS := \
 	-fno-exceptions \
 
 gb_LinkTarget_LDFLAGS := \
-	-Wl,-rpath-link=$(SOLARLIBDIR):$(SYSBASE)/lib:$(SYSBASE)/usr/lib \
+	-Wl,-rpath-link=$(SOLARLIBDIR):$(SYSBASE)/lib:$(SYSBASE)/usr/lib:$(SYSBASE)/usr/local/lib \
 	-Wl,-z,combreloc \
 	-Wl,-z,defs \
 	$(subst -L../lib , ,$(SOLARLIB)) \
@@ -261,19 +261,23 @@ gb_Library_STLEXT := port_gcc_stldebug$(gb_Library_PLAINEXT)
 endif
 
 ifeq ($(CPUNAME),X86_64)
-gb_Library_OOOEXT := fx$(gb_Library_PLAINEXT)
+gb_Library_OOOEXT := $(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 else
-gb_Library_OOOEXT := fi$(gb_Library_PLAINEXT)
+gb_Library_OOOEXT := $(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 endif
 
 gb_Library_PLAINLIBS_NONE += \
 	dl \
+  freetype \
 	jpeg \
 	m \
 	pthread \
 	X11 \
+  Xext \
+  SM \
+  ICE \
 	z
 
 gb_Library_FILENAMES := \
