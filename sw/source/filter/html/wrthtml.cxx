@@ -396,20 +396,16 @@ sal_uLong SwHTMLWriter::WriteStream()
     if( aImgMapNames.Count() )
         aImgMapNames.DeleteAndDestroy( sal_uInt16(0), aImgMapNames.Count() );
 
-    if( aImplicitMarks.Count() )
-        aImplicitMarks.DeleteAndDestroy( sal_uInt16(0), aImplicitMarks.Count() );
+    aImplicitMarks.clear();
 
     aOutlineMarks.clear();
 
     aOutlineMarkPoss.clear();
 
-    if( aNumRuleNames.Count() )
-        aNumRuleNames.DeleteAndDestroy( sal_uInt16(0), aNumRuleNames.Count() );
+    aNumRuleNames.clear();
 
-    if( aScriptParaStyles.Count() )
-        aScriptParaStyles.DeleteAndDestroy( sal_uInt16(0), aScriptParaStyles.Count() );
-    if( aScriptTextStyles.Count() )
-        aScriptTextStyles.DeleteAndDestroy( sal_uInt16(0), aScriptTextStyles.Count() );
+    aScriptParaStyles.clear();
+    aScriptTextStyles.clear();
 
     delete pDfltColor;
     pDfltColor = 0;
@@ -1077,17 +1073,15 @@ void SwHTMLWriter::OutBookmarks()
 void SwHTMLWriter::OutImplicitMark( const String& rMark,
                                     const sal_Char *pMarkType )
 {
-    if( rMark.Len() && aImplicitMarks.Count() )
+    if( rMark.Len() && !aImplicitMarks.empty() )
     {
         String sMark( rMark );
         sMark.Append( cMarkSeperator );
         sMark.AppendAscii( pMarkType );
-        sal_uInt16 nPos;
-        if( aImplicitMarks.Seek_Entry( &sMark, &nPos ) )
+        if( 0 != aImplicitMarks.erase( sMark ) )
         {
             sMark.SearchAndReplaceAll( '?', '_' );  // '?' causes problems in IE/Netscape 5
             OutAnchor( sMark );
-            aImplicitMarks.DeleteAndDestroy( nPos, 1 );
         }
     }
 }

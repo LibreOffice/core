@@ -1822,7 +1822,7 @@ void SwHTMLWriter::AddLinkTarget( const String& rURL )
             aURL.Erase( nPos, 2 );
             aURL.SetChar( nPos-1, cMarkSeperator );
         }
-        aImplicitMarks.Insert( new String( aURL ) );
+        aImplicitMarks.insert( aURL );
     }
     else if( sCmp.EqualsAscii( pMarkToOutline ) )
     {

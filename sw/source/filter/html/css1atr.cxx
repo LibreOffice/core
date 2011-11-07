@@ -1763,15 +1763,12 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
                       bCheckForPseudo ) )
     {
         if( bCharFmt )
-            rHTMLWrt.aScriptTextStyles.Insert( new String( rFmt.GetName() ) );
+            rHTMLWrt.aScriptTextStyles.insert( rFmt.GetName() );
         else
         {
             if( nPoolFmtId==RES_POOLCOLL_TEXT )
-                rHTMLWrt.aScriptParaStyles.Insert
-                    (new String( pDoc->GetTxtCollFromPool
-                                 ( RES_POOLCOLL_STANDARD, false )->GetName()
-                                 ) );
-            rHTMLWrt.aScriptParaStyles.Insert( new String( rFmt.GetName() ) );
+                rHTMLWrt.aScriptParaStyles.insert( pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false )->GetName() );
+            rHTMLWrt.aScriptParaStyles.insert( rFmt.GetName() );
         }
         bHasScriptDependencies = sal_True;
     }
@@ -1950,7 +1947,7 @@ static Writer& OutCSS1_SwFtnInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
             aSelector.AppendAscii( bEndNote ? OOO_STRING_SVTOOLS_HTML_sdendnote_sym
                                         : OOO_STRING_SVTOOLS_HTML_sdfootnote_sym );
             if( OutCSS1Rule( rHTMLWrt, aSelector, aItemSet, sal_True, sal_False ))
-                rHTMLWrt.aScriptTextStyles.Insert( new String( pSymCharFmt->GetName() ) );
+                rHTMLWrt.aScriptTextStyles.insert( pSymCharFmt->GetName() );
         }
     }
 

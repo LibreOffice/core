@@ -729,7 +729,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
     if( !bSameRule && rInfo.GetDepth() )
     {
         String aName( rInfo.GetNumRule()->GetName() );
-        if( rWrt.aNumRuleNames.Seek_Entry( &aName ) )
+        if( 0 != rWrt.aNumRuleNames.count( aName ) )
         {
             // The rule has been applied before
             sal_Int16 eType = rInfo.GetNumRule()
@@ -787,7 +787,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
         }
         else
         {
-            rWrt.aNumRuleNames.Insert( new String( aName ) );
+            rWrt.aNumRuleNames.insert( aName );
         }
     }
 

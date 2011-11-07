@@ -273,7 +273,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         xCtrlAcc->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, sal_False);
     }
 
-    SvStringsSortDtor aFormats;
+    std::vector<String> aFormats;
     SwDoc* pDoc = pDocShell->GetDoc();
     const sal_uInt16 nArrLen = pDoc->GetFrmFmts()->Count();
     sal_uInt16 i;
@@ -282,8 +282,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         SwFrmFmt* pFmt = (*pDoc->GetFrmFmts())[ i ];
         if(pFmt->IsDefault() || pFmt->IsAuto())
             continue;
-        String *pFormat = new String(pFmt->GetName());
-        aFormats.Insert(pFormat);
+        aFormats.push_back(pFmt->GetName());
     }
 
     // pool formats
@@ -291,18 +290,19 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     const SvStringsDtor& rFrmPoolArr = SwStyleNameMapper::GetFrmFmtUINameArray();
     for( i = 0; i < rFrmPoolArr.Count(); i++ )
     {
-        String *pFormat = new String(*rFrmPoolArr[i]);
-        if (!aFormats.Insert(pFormat))
-            delete pFormat;
+        aFormats.push_back(*rFrmPoolArr[i]);
     }
 
-    Sequence<OUString> aListBoxEntries(aFormats.Count());
+    std::sort(aFormats.begin(), aFormats.end());
+    aFormats.erase(std::unique(aFormats.begin(), aFormats.end()), aFormats.end());
+
+    Sequence<OUString> aListBoxEntries(aFormats.size());
     OUString* pEntries = aListBoxEntries.getArray();
     sal_Int16 nSelect = 0;
     String sGraphicFormat = SW_RESSTR(STR_POOLFRM_GRAPHIC);
-    for(i = 0; i < aFormats.Count(); ++i)
+    for( i = 0; i < aFormats.size(); i++ )
     {
-        pEntries[i] = *aFormats[i];
+        pEntries[i] = aFormats[i];
         if(pEntries[i].equals(sGraphicFormat))
             nSelect = i;
     }

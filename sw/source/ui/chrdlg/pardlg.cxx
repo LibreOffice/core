@@ -246,14 +246,14 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
         SfxStyleSheetBasePool* pPool = rView.GetDocShell()->GetStyleSheetPool();
         pPool->SetSearchMask(SFX_STYLE_FAMILY_PSEUDO, SFXSTYLEBIT_ALL);
         const SfxStyleSheetBase* pBase = pPool->First();
-        SvStringsSortDtor aNames;
+        std::set<String> aNames;
         while(pBase)
         {
-            aNames.Insert(new String(pBase->GetName()));
+            aNames.insert(pBase->GetName());
             pBase = pPool->Next();
         }
-        for(sal_uInt16 i = 0; i < aNames.Count(); i++)
-            rBox.InsertEntry(*aNames.GetObject(i));
+        for(std::set<String>::const_iterator it = aNames.begin(); it != aNames.end(); ++it)
+            rBox.InsertEntry(*it);
     }
 
 }

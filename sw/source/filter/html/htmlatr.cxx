@@ -651,7 +651,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
                                       !rHWrt.IsHTMLMode(HTMLMODE_DROPCAPS) );
         rHWrt.aTxtCollInfos.C40_PTR_INSERT( SwHTMLFmtInfo, pFmtInfo );
         String aName( rFmt.GetName() );
-        if( rHWrt.aScriptParaStyles.Seek_Entry( &aName ) )
+        if( 0 != rHWrt.aScriptParaStyles.count( aName ) )
             ((SwHTMLFmtInfo *)pFmtInfo)->bScriptDependent = sal_True;
     }
 
@@ -1251,7 +1251,7 @@ class HTMLEndPosLst
     SwDoc *pDoc;            // das aktuelle Dokument
     SwDoc* pTemplate;       // die HTML-Vorlage (oder 0)
     const Color* pDfltColor;// die Default-Vordergrund-Farbe
-    SvStringsSortDtor& rScriptTxtStyles;    //
+    std::set<String>& rScriptTxtStyles;    //
 
     sal_uLong nHTMLMode;
     sal_Bool bOutStyles : 1;    // werden Styles exportiert
@@ -1302,7 +1302,7 @@ public:
 
     HTMLEndPosLst( SwDoc *pDoc, SwDoc* pTemplate, const Color* pDfltColor,
                    sal_Bool bOutStyles, sal_uLong nHTMLMode,
-                   const String& rText, SvStringsSortDtor& rStyles );
+                   const String& rText, std::set<String>& rStyles );
     ~HTMLEndPosLst();
 
     // Ein Attribut einfuegen
@@ -1763,7 +1763,7 @@ const SwHTMLFmtInfo *HTMLEndPosLst::GetFmtInfo( const SwFmt& rFmt,
                                       bOutStyles );
         rFmtInfos.C40_PTR_INSERT( SwHTMLFmtInfo, pFmtInfo );
         String aName( rFmt.GetName() );
-        if( rScriptTxtStyles.Seek_Entry( &aName ) )
+        if( 0 != rScriptTxtStyles.count( aName ) )
             ((SwHTMLFmtInfo *)pFmtInfo)->bScriptDependent = sal_True;
     }
 
@@ -1773,7 +1773,7 @@ const SwHTMLFmtInfo *HTMLEndPosLst::GetFmtInfo( const SwFmt& rFmt,
 HTMLEndPosLst::HTMLEndPosLst( SwDoc *pD, SwDoc* pTempl,
                               const Color* pDfltCol, sal_Bool bStyles,
                               sal_uLong nMode, const String& rText,
-                              SvStringsSortDtor& rStyles ):
+                              std::set<String>& rStyles ):
     pDoc( pD ),
     pTemplate( pTempl ),
     pDfltColor( pDfltCol ),

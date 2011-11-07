@@ -53,6 +53,8 @@
 #include <xmloff/styleexp.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/XMLEventExport.hxx>
+#include <set>
+#include <boost/scoped_ptr.hpp>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -409,7 +411,7 @@ void XMLStyleExport::exportStyleFamily(
        // If next styles are supported and used styles should be exported only,
     // the next style may be unused but has to be exported, too. In this case
     // the names of all exported styles are remembered.
-    SvStringsSortDtor *pExportedStyles = 0;
+    boost::scoped_ptr<std::set<String> > pExportedStyles(0);
     sal_Bool bFirstStyle = sal_True;
 
     const uno::Sequence< ::rtl::OUString> aSeq = xStyles->getElementNames();
@@ -447,16 +449,14 @@ void XMLStyleExport::exportStyleFamily(
                         xPropSet->getPropertySetInfo();
 
                     if( xPropSetInfo->hasPropertyByName( sFollowStyle ) )
-                        pExportedStyles = new SvStringsSortDtor;
+                        pExportedStyles.reset(new std::set<String>());
                     bFirstStyle = sal_False;
                 }
 
                 if( pExportedStyles && bExported )
                 {
                     // If next styles are supported, remember this style's name.
-                    String *pTmp = new String( xStyle->getName() );
-                    if( !pExportedStyles->Insert( pTmp ) )
-                        delete pTmp;
+                    pExportedStyles->insert( xStyle->getName() );
                 }
             }
 
@@ -507,19 +507,17 @@ void XMLStyleExport::exportStyleFamily(
                 // if the next style hasn't been exported by now, export it now
                 // and remember its name.
                 if( xStyle->getName() != sNextName &&
-                    !pExportedStyles->Seek_Entry( &sTmp ) )
+                    0 == pExportedStyles->count( sTmp ) )
                 {
                     xStyleCont->getByName( sNextName ) >>= xStyle;
                     DBG_ASSERT( xStyle.is(), "Style not found for export!" );
 
                     if( xStyle.is() && exportStyle( xStyle, rXMLFamily, rPropMapper, xStyles,pPrefix ) )
-                        pExportedStyles->Insert( new String( sTmp ) );
+                        pExportedStyles->insert( sTmp );
                 }
             }
         }
     }
-
-    delete pExportedStyles;
 }
 
 

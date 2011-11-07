@@ -467,7 +467,7 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFmtFtn& rFmtFtn,
     }
 
     const SwCharFmt *pSymCharFmt = pInfo->GetCharFmt( *pDoc );
-    if( pSymCharFmt && aScriptTextStyles.Seek_Entry( (String *)&pSymCharFmt->GetName() ) )
+    if( pSymCharFmt && 0 != aScriptTextStyles.count( pSymCharFmt->GetName() ) )
     {
         switch( nScript )
         {

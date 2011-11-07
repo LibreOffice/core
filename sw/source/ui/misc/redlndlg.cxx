@@ -300,7 +300,7 @@ void SwRedlineAcceptDlg::InitAuthors()
     SvxTPFilter *pFilterPage = aTabPagesCTRL.GetFilterPage();
 
     String sAuthor;
-    SvStringsSortDtor aStrings;
+    std::vector<String> aStrings;
     String sOldAuthor(pFilterPage->GetSelectedAuthor());
     pFilterPage->ClearAuthors();
 
@@ -320,23 +320,22 @@ void SwRedlineAcceptDlg::InitAuthors()
         if( bOnlyFormatedRedlines && nsRedlineType_t::REDLINE_FORMAT != rRedln.GetType() )
             bOnlyFormatedRedlines = sal_False;
 
-        String *pAuthor = new String(rRedln.GetAuthorString());
-        if (!aStrings.Insert(pAuthor))
-            delete pAuthor;
+        aStrings.push_back(rRedln.GetAuthorString());
 
         for (sal_uInt16 nStack = 1; nStack < rRedln.GetStackCount(); nStack++)
         {
-            pAuthor = new String(rRedln.GetAuthorString(nStack));
-            if (!aStrings.Insert(pAuthor))
-                delete pAuthor;
+            aStrings.push_back(rRedln.GetAuthorString(nStack));
         }
     }
 
-    for (i = 0; i < aStrings.Count(); i++)
-        pFilterPage->InsertAuthor(*aStrings[i]);
+    std::sort(aStrings.begin(), aStrings.end());
+    aStrings.erase(std::unique(aStrings.begin(), aStrings.end()), aStrings.end());
 
-    if (pFilterPage->SelectAuthor(sOldAuthor) == LISTBOX_ENTRY_NOTFOUND && aStrings.Count())
-        pFilterPage->SelectAuthor(*aStrings[0]);
+    for (i = 0; i < aStrings.size(); i++)
+        pFilterPage->InsertAuthor(aStrings[i]);
+
+    if (pFilterPage->SelectAuthor(sOldAuthor) == LISTBOX_ENTRY_NOTFOUND && !aStrings.empty())
+        pFilterPage->SelectAuthor(aStrings[0]);
 
     sal_Bool bEnable = pTable->GetEntryCount() != 0 && !pSh->getIDocumentRedlineAccess()->GetRedlinePassword().getLength();
     sal_Bool bSel = pTable->FirstSelected() != 0;

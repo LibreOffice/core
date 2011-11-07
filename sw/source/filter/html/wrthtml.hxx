@@ -227,10 +227,10 @@ public:
 #endif
 
     SvStringsDtor aImgMapNames;     // geschriebene Image Maps
-    SvStringsSortDtor aImplicitMarks;// implizite Stprungmarken
-    SvStringsSortDtor aNumRuleNames;// Names of exported num rules
-    SvStringsSortDtor aScriptParaStyles;// script dependent para styles
-    SvStringsSortDtor aScriptTextStyles;// script dependent text styles
+    std::set<String> aImplicitMarks;// implizite Stprungmarken
+    std::set<String> aNumRuleNames;// Names of exported num rules
+    std::set<String> aScriptParaStyles;// script dependent para styles
+    std::set<String> aScriptTextStyles;// script dependent text styles
     boost::ptr_vector<String> aOutlineMarks;
     std::vector<sal_uInt32> aOutlineMarkPoss;
     HTMLControls aHTMLControls;     // die zu schreibenden ::com::sun::star::form::Forms
