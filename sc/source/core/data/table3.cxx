@@ -1071,7 +1071,7 @@ bool isQueryByValue(
     const ScTable& rTable, const ScQueryEntry::Item& rItem,
     SCCOL nCol, SCROW nRow, const ScBaseCell* pCell)
 {
-    if (rItem.meType != ScQueryEntry::ByString)
+    if (rItem.meType == ScQueryEntry::ByString)
         return false;
 
     if (pCell)
