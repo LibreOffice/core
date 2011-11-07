@@ -142,6 +142,7 @@ my_components = \
     component/xmloff/util/xo \
     component/xmlscript/util/xcr \
     component/xmlsecurity/util/xmlsecurity \
+    component/xmlsecurity/util/xsec_fw \
     configmgr \
     ctl \
     dbase \
@@ -280,8 +281,6 @@ my_components += ldapbe2
 .IF "$(WITH_MOZILLA)" != "NO"
 my_components += pl
 .END
-
-my_components += component/xmlsecurity/util/xsec_fw
 
 .IF "$(ENABLE_XMLSEC)" == "YES"
 .IF "$(OS)" == "WNT"
