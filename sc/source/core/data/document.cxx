@@ -1147,7 +1147,7 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
 
         //  UpdateRef for drawing layer must be after inserting,
         //  when the new row heights are known.
-        for (i=nStartTab; i<=nEndTab && static_cast<SCTAB>(maTabs.size()); i++)
+        for (i=nStartTab; i<=nEndTab && i < static_cast<SCTAB>(maTabs.size()); i++)
             if (maTabs[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
                 maTabs[i]->UpdateDrawRef( URM_INSDEL,
                             nStartCol, nStartRow, nStartTab, nEndCol, MAXROW, nEndTab,
