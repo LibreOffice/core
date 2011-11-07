@@ -682,10 +682,11 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
 {
     bool bConflict = false;
     String  sText;
-    rtl::OUString aQueryStr = rEntry.GetQueryString();
-    if (!aQueryStr.isEmpty())
+    const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+    const rtl::OUString& rQueryStr = rItem.maString;
+    if (!rQueryStr.isEmpty())
     {
-        sText.Assign(aQueryStr);
+        sText.Assign(rQueryStr);
         switch( rEntry.eOp )
         {
             case SC_CONTAINS:
@@ -713,9 +714,9 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
     bool bLen = sText.Len() > 0;
 
     // empty/nonempty fields
-    if( !bLen && (rEntry.nVal == SC_EMPTYFIELDS) )
+    if( !bLen && (rItem.mfVal == SC_EMPTYFIELDS) )
         bConflict = !AddCondition( rEntry.eConnect, EXC_AFTYPE_EMPTY, EXC_AFOPER_NONE, 0.0, NULL, true );
-    else if( !bLen && (rEntry.nVal == SC_NONEMPTYFIELDS) )
+    else if( !bLen && (rItem.mfVal == SC_NONEMPTYFIELDS) )
         bConflict = !AddCondition( rEntry.eConnect, EXC_AFTYPE_NOTEMPTY, EXC_AFOPER_NONE, 0.0, NULL, true );
     // other conditions
     else

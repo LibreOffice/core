@@ -1074,20 +1074,17 @@ void ScFilterDescriptorBase::fillQueryParam(
     for (i=0; i<nCount; i++)
     {
         ScQueryEntry& rEntry = rParam.GetEntry(i);
+        ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
 
-        rEntry.bDoQuery         = sal_True;
-        rEntry.eConnect         = (pAry[i].Connection == sheet::FilterConnection_AND) ? SC_AND : SC_OR;
-        rEntry.nField           = pAry[i].Field;
-        rEntry.bQueryByString   = !pAry[i].IsNumeric;
-        rEntry.nVal             = pAry[i].NumericValue;
-        rEntry.SetQueryString(pAry[i].StringValue);
+        rEntry.bDoQuery = true;
+        rEntry.eConnect = (pAry[i].Connection == sheet::FilterConnection_AND) ? SC_AND : SC_OR;
+        rEntry.nField   = pAry[i].Field;
+        rItem.meType    = pAry[i].IsNumeric ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
+        rItem.mfVal     = pAry[i].NumericValue;
+        rItem.maString  = pAry[i].StringValue;
 
-        if (!rEntry.bQueryByString && pDoc)
-        {
-            rtl::OUString aStr;
-            pDoc->GetFormatTable()->GetInputLineString(rEntry.nVal, 0, aStr);
-            rEntry.SetQueryString(aStr);
-        }
+        if (rItem.meType == ScQueryEntry::ByValue && pDoc)
+            pDoc->GetFormatTable()->GetInputLineString(rItem.mfVal, 0, rItem.maString);
 
         switch (pAry[i].Operator)           // FilterOperator
         {
@@ -1110,17 +1107,17 @@ void ScFilterDescriptorBase::fillQueryParam(
         case sheet::FilterOperator2::EMPTY:
             {
                 rEntry.eOp = SC_EQUAL;
-                rEntry.nVal = SC_EMPTYFIELDS;
-                rEntry.bQueryByString = false;
-                rEntry.SetQueryString(rtl::OUString());
+                rItem.mfVal = SC_EMPTYFIELDS;
+                rItem.meType = ScQueryEntry::ByValue;
+                rItem.maString = rtl::OUString();
             }
             break;
         case sheet::FilterOperator2::NOT_EMPTY:
             {
                 rEntry.eOp = SC_EQUAL;
-                rEntry.nVal = SC_NONEMPTYFIELDS;
-                rEntry.bQueryByString = false;
-                rEntry.SetQueryString(rtl::OUString());
+                rItem.mfVal = SC_NONEMPTYFIELDS;
+                rItem.meType = ScQueryEntry::ByValue;
+                rItem.maString = rtl::OUString();
             }
             break;
         default:
@@ -1181,29 +1178,28 @@ uno::Sequence<sheet::TableFilterField> SAL_CALL ScFilterDescriptorBase::getFilte
     for (SCSIZE i=0; i<nCount; i++)
     {
         const ScQueryEntry& rEntry = aParam.GetEntry(i);
-
-        rtl::OUString aStringValue = rEntry.GetQueryString();
+        const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
 
         aField.Connection    = (rEntry.eConnect == SC_AND) ? sheet::FilterConnection_AND :
                                                              sheet::FilterConnection_OR;
         aField.Field         = rEntry.nField;
-        aField.IsNumeric     = !rEntry.bQueryByString;
-        aField.StringValue   = aStringValue;
-        aField.NumericValue  = rEntry.nVal;
+        aField.IsNumeric     = rItem.meType != ScQueryEntry::ByString;
+        aField.StringValue   = rItem.maString;
+        aField.NumericValue  = rItem.mfVal;
 
         switch (rEntry.eOp)             // ScQueryOp
         {
             case SC_EQUAL:
                 {
                     aField.Operator = sheet::FilterOperator_EQUAL;
-                    if (!rEntry.bQueryByString && rEntry.GetQueryString().isEmpty())
+                    if (!rItem.meType != ScQueryEntry::ByString && rItem.maString.isEmpty())
                     {
-                        if (rEntry.nVal == SC_EMPTYFIELDS)
+                        if (rItem.mfVal == SC_EMPTYFIELDS)
                         {
                             aField.Operator = sheet::FilterOperator_EMPTY;
                             aField.NumericValue = 0;
                         }
-                        else if (rEntry.nVal == SC_NONEMPTYFIELDS)
+                        else if (rItem.mfVal == SC_NONEMPTYFIELDS)
                         {
                             aField.Operator = sheet::FilterOperator_NOT_EMPTY;
                             aField.NumericValue = 0;
@@ -1248,28 +1244,27 @@ throw(uno::RuntimeException)
     for (SCSIZE i=0; i<nCount; i++)
     {
         const ScQueryEntry& rEntry = aParam.GetEntry(i);
-
-        rtl::OUString aStringValue = rEntry.GetQueryString();
+        const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
 
         aField.Connection    = (rEntry.eConnect == SC_AND) ? sheet::FilterConnection_AND : sheet::FilterConnection_OR;
         aField.Field         = rEntry.nField;
-        aField.IsNumeric     = !rEntry.bQueryByString;
-        aField.StringValue   = aStringValue;
-        aField.NumericValue  = rEntry.nVal;
+        aField.IsNumeric     = !rItem.meType != ScQueryEntry::ByString;
+        aField.StringValue   = rItem.maString;
+        aField.NumericValue  = rItem.mfVal;
 
         switch (rEntry.eOp)             // ScQueryOp
         {
         case SC_EQUAL:
             {
                 aField.Operator = sheet::FilterOperator2::EQUAL;
-                if (!rEntry.bQueryByString && rEntry.GetQueryString().isEmpty())
+                if (!rItem.meType != ScQueryEntry::ByString && rItem.maString.isEmpty())
                 {
-                    if (rEntry.nVal == SC_EMPTYFIELDS)
+                    if (rItem.mfVal == SC_EMPTYFIELDS)
                     {
                         aField.Operator = sheet::FilterOperator2::EMPTY;
                         aField.NumericValue = 0;
                     }
-                    else if (rEntry.nVal == SC_NONEMPTYFIELDS)
+                    else if (rItem.mfVal == SC_NONEMPTYFIELDS)
                     {
                         aField.Operator = sheet::FilterOperator2::NOT_EMPTY;
                         aField.NumericValue = 0;
@@ -1317,20 +1312,16 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields(
     for (i=0; i<nCount; i++)
     {
         ScQueryEntry& rEntry = aParam.GetEntry(i);
+        ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+        rEntry.bDoQuery = true;
+        rEntry.eConnect = (pAry[i].Connection == sheet::FilterConnection_AND) ? SC_AND : SC_OR;
+        rEntry.nField   = pAry[i].Field;
+        rItem.meType    = pAry[i].IsNumeric ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
+        rItem.mfVal     = pAry[i].NumericValue;
+        rItem.maString  = pAry[i].StringValue;
 
-        rEntry.bDoQuery         = true;
-        rEntry.eConnect         = (pAry[i].Connection == sheet::FilterConnection_AND) ? SC_AND : SC_OR;
-        rEntry.nField           = pAry[i].Field;
-        rEntry.bQueryByString   = !pAry[i].IsNumeric;
-        rEntry.nVal             = pAry[i].NumericValue;
-        rEntry.SetQueryString(pAry[i].StringValue);
-
-        if (!rEntry.bQueryByString && pDocSh)
-        {
-            rtl::OUString aStr;
-            pDocSh->GetDocument()->GetFormatTable()->GetInputLineString(rEntry.nVal, 0, aStr);
-            rEntry.SetQueryString(aStr);
-        }
+        if (rItem.meType != ScQueryEntry::ByString && pDocSh)
+            pDocSh->GetDocument()->GetFormatTable()->GetInputLineString(rItem.mfVal, 0, rItem.maString);
 
         switch (pAry[i].Operator)           // FilterOperator
         {
@@ -1347,17 +1338,17 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields(
             case sheet::FilterOperator_EMPTY:
                 {
                     rEntry.eOp = SC_EQUAL;
-                    rEntry.nVal = SC_EMPTYFIELDS;
-                    rEntry.bQueryByString = false;
-                    rEntry.SetQueryString(rtl::OUString());
+                    rItem.mfVal = SC_EMPTYFIELDS;
+                    rItem.meType = ScQueryEntry::ByValue;
+                    rItem.maString = rtl::OUString();
                 }
                 break;
             case sheet::FilterOperator_NOT_EMPTY:
                 {
                     rEntry.eOp = SC_EQUAL;
-                    rEntry.nVal = SC_NONEMPTYFIELDS;
-                    rEntry.bQueryByString = false;
-                    rEntry.SetQueryString(rtl::OUString());
+                    rItem.mfVal = SC_NONEMPTYFIELDS;
+                    rItem.meType = ScQueryEntry::ByValue;
+                    rItem.maString = rtl::OUString();
                 }
                 break;
             default:

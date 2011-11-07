@@ -1067,15 +1067,17 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
 namespace {
 
-bool isQueryByValue(const ScTable& rTable, const ScQueryEntry& rEntry, SCROW nRow, const ScBaseCell* pCell)
+bool isQueryByValue(
+    const ScTable& rTable, const ScQueryEntry::Item& rItem,
+    SCCOL nCol, SCROW nRow, const ScBaseCell* pCell)
 {
-    if (rEntry.bQueryByString)
+    if (rItem.meType != ScQueryEntry::ByString)
         return false;
 
     if (pCell)
         return pCell->HasValueData();
 
-    return rTable.HasValueData(static_cast<SCCOL>(rEntry.nField), nRow);
+    return rTable.HasValueData(nCol, nRow);
 }
 
 bool isPartialTextMatchOp(const ScQueryEntry& rEntry)
@@ -1113,18 +1115,20 @@ bool isTextMatchOp(const ScQueryEntry& rEntry)
     return false;
 }
 
-bool isQueryByString(const ScTable& rTable, const ScQueryEntry& rEntry, SCROW nRow, const ScBaseCell* pCell)
+bool isQueryByString(
+    const ScTable& rTable, const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
+    SCCOL nCol, SCROW nRow, const ScBaseCell* pCell)
 {
     if (isTextMatchOp(rEntry))
         return true;
 
-    if (!rEntry.bQueryByString)
+    if (rItem.meType != ScQueryEntry::ByString)
         return false;
 
     if (pCell)
         return pCell->HasStringData();
 
-    return rTable.HasStringData(static_cast<SCCOL>(rEntry.nField), nRow);
+    return rTable.HasStringData(nCol, nRow);
 }
 
 bool isRealRegExp(const ScQueryParam& rParam, const ScQueryEntry& rEntry)
@@ -1171,21 +1175,27 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
     for (size_t i = 0; i < nEntryCount && rParam.GetEntry(i).bDoQuery; ++i)
     {
         const ScQueryEntry& rEntry = rParam.GetEntry(i);
+        SCCOL nCol = static_cast<SCCOL>(rEntry.nField);
+
         // we can only handle one single direct query
         if ( !pCell || i > 0 )
-            pCell = GetCell( static_cast<SCCOL>(rEntry.nField), nRow );
+            pCell = GetCell(nCol, nRow);
 
         bool bOk = false;
         bool bTestEqual = false;
 
+        // For now, we only handle single item queries.  We need to adopt this
+        // to multi-item queries later.
+        const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+
         if ( pSpecial && pSpecial[i] )
         {
-            if (rEntry.nVal == SC_EMPTYFIELDS)
+            if (rItem.mfVal == SC_EMPTYFIELDS)
                 bOk = !( aCol[rEntry.nField].HasDataAt( nRow ) );
             else // if (rEntry.nVal == SC_NONEMPTYFIELDS)
                 bOk = aCol[rEntry.nField].HasDataAt( nRow );
         }
-        else if (isQueryByValue(*this, rEntry, nRow, pCell))
+        else if (isQueryByValue(*this, rItem, nCol, nRow, pCell))
         {
             double nCellVal;
             if ( pCell )
@@ -1204,7 +1214,7 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
 
             }
             else
-                nCellVal = GetValue( static_cast<SCCOL>(rEntry.nField), nRow );
+                nCellVal = GetValue(nCol, nRow);
 
             /* NOTE: lcl_PrepareQuery() prepares a filter query such that if a
              * date+time format was queried rEntry.bQueryByDate is not set. In
@@ -1212,9 +1222,9 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
              * the same, in other words only if rEntry.nVal is an integer value
              * rEntry.bQueryByDate should be true and the time fraction be
              * stripped here. */
-            if (rEntry.bQueryByDate)
+            if (rItem.meType == ScQueryEntry::ByDate)
             {
-                sal_uInt32 nNumFmt = GetNumberFormat(static_cast<SCCOL>(rEntry.nField), nRow);
+                sal_uInt32 nNumFmt = GetNumberFormat(nCol, nRow);
                 const SvNumberformat* pEntry = pDocument->GetFormatTable()->GetEntry(nNumFmt);
                 if (pEntry)
                 {
@@ -1237,26 +1247,26 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
             switch (rEntry.eOp)
             {
                 case SC_EQUAL :
-                    bOk = ::rtl::math::approxEqual( nCellVal, rEntry.nVal );
+                    bOk = ::rtl::math::approxEqual(nCellVal, rItem.mfVal);
                     break;
                 case SC_LESS :
-                    bOk = (nCellVal < rEntry.nVal) && !::rtl::math::approxEqual( nCellVal, rEntry.nVal );
+                    bOk = (nCellVal < rItem.mfVal) && !::rtl::math::approxEqual(nCellVal, rItem.mfVal);
                     break;
                 case SC_GREATER :
-                    bOk = (nCellVal > rEntry.nVal) && !::rtl::math::approxEqual( nCellVal, rEntry.nVal );
+                    bOk = (nCellVal > rItem.mfVal) && !::rtl::math::approxEqual(nCellVal, rItem.mfVal);
                     break;
                 case SC_LESS_EQUAL :
-                    bOk = (nCellVal < rEntry.nVal) || ::rtl::math::approxEqual( nCellVal, rEntry.nVal );
+                    bOk = (nCellVal < rItem.mfVal) || ::rtl::math::approxEqual(nCellVal, rItem.mfVal);
                     if ( bOk && pbTestEqualCondition )
-                        bTestEqual = ::rtl::math::approxEqual( nCellVal, rEntry.nVal );
+                        bTestEqual = ::rtl::math::approxEqual(nCellVal, rItem.mfVal);
                     break;
                 case SC_GREATER_EQUAL :
-                    bOk = (nCellVal > rEntry.nVal) || ::rtl::math::approxEqual( nCellVal, rEntry.nVal );
+                    bOk = (nCellVal > rItem.mfVal) || ::rtl::math::approxEqual( nCellVal, rItem.mfVal);
                     if ( bOk && pbTestEqualCondition )
-                        bTestEqual = ::rtl::math::approxEqual( nCellVal, rEntry.nVal );
+                        bTestEqual = ::rtl::math::approxEqual(nCellVal, rItem.mfVal);
                     break;
                 case SC_NOT_EQUAL :
-                    bOk = !::rtl::math::approxEqual( nCellVal, rEntry.nVal );
+                    bOk = !::rtl::math::approxEqual(nCellVal, rItem.mfVal);
                     break;
                 default:
                 {
@@ -1264,7 +1274,7 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                 }
             }
         }
-        else if (isQueryByString(*this, rEntry, nRow, pCell))
+        else if (isQueryByString(*this, rEntry, rItem, nCol, nRow, pCell))
         {
             rtl::OUString  aCellStr;
             if (isPartialTextMatchOp(rEntry))
@@ -1343,7 +1353,7 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                 // Simple string matching i.e. no regexp match.
                 if (isTextMatchOp(rEntry))
                 {
-                    if (!rEntry.bQueryByString && rEntry.IsQueryStringEmpty())
+                    if (!rItem.meType != ScQueryEntry::ByString && rItem.maString.isEmpty())
                     {
                         // #i18374# When used from functions (match, countif, sumif, vlookup, hlookup, lookup),
                         // the query value is assigned directly, and the string is empty. In that case,
@@ -1354,18 +1364,18 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                     }
                     else if ( bMatchWholeCell )
                     {
-                        bOk = rEntry.MatchByString(aCellStr, rParam.bCaseSens);
+                        bOk = pTransliteration->isEqual(aCellStr, rEntry.GetQueryItem().maString);
                         if ( rEntry.eOp == SC_NOT_EQUAL )
                             bOk = !bOk;
                     }
                     else
                     {
-                        rtl::OUString aQueryStr = rEntry.GetQueryString();
+                        const rtl::OUString& rQueryStr = rItem.maString;
                         String aCell( pTransliteration->transliterate(
                             aCellStr, ScGlobal::eLnge, 0, aCellStr.getLength(),
                             NULL ) );
                         String aQuer( pTransliteration->transliterate(
-                            aQueryStr, ScGlobal::eLnge, 0, aQueryStr.getLength(),
+                            rQueryStr, ScGlobal::eLnge, 0, rQueryStr.getLength(),
                             NULL ) );
                         xub_StrLen nIndex = (rEntry.eOp == SC_ENDS_WITH
                             || rEntry.eOp == SC_DOES_NOT_END_WITH)? (aCell.Len()-aQuer.Len()):0;
@@ -1402,7 +1412,7 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                 else
                 {   // use collator here because data was probably sorted
                     sal_Int32 nCompare = pCollator->compareString(
-                        aCellStr, rEntry.GetQueryString());
+                        aCellStr, rEntry.GetQueryItem().maString);
                     switch (rEntry.eOp)
                     {
                         case SC_LESS :
@@ -1431,14 +1441,14 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
         }
         else if (rParam.bMixedComparison)
         {
-            if (rEntry.bQueryByString &&
+            if (rItem.meType == ScQueryEntry::ByString &&
                     (rEntry.eOp == SC_LESS || rEntry.eOp == SC_LESS_EQUAL) &&
                     (pCell ? pCell->HasValueData() :
                      HasValueData( static_cast<SCCOL>(rEntry.nField), nRow)))
             {
                 bOk = true;
             }
-            else if (!rEntry.bQueryByString &&
+            else if (rItem.meType != ScQueryEntry::ByString &&
                     (rEntry.eOp == SC_GREATER || rEntry.eOp == SC_GREATER_EQUAL) &&
                     (pCell ? pCell->HasStringData() :
                      HasStringData( static_cast<SCCOL>(rEntry.nField), nRow)))
@@ -1491,6 +1501,8 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
     for ( SCSIZE i=0; (i<nEntryCount) && (rParam.GetEntry(i).bDoQuery); i++ )
     {
         ScQueryEntry& rEntry = rParam.GetEntry(i);
+        ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+
         switch ( rEntry.eOp )
         {
             case SC_TOPVAL:
@@ -1520,12 +1532,12 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                     nValidCount--;
                 if ( nValidCount > 0 )
                 {
-                    if ( rEntry.bQueryByString )
+                    if ( rItem.meType == ScQueryEntry::ByString )
                     {   // dat wird nix
-                        rEntry.bQueryByString = false;
-                        rEntry.nVal = 10;   // 10 bzw. 10%
+                        rItem.meType = ScQueryEntry::ByValue;
+                        rItem.mfVal = 10;   // 10 bzw. 10%
                     }
-                    SCSIZE nVal = (rEntry.nVal >= 1 ? static_cast<SCSIZE>(rEntry.nVal) : 1);
+                    SCSIZE nVal = (rItem.mfVal >= 1 ? static_cast<SCSIZE>(rItem.mfVal) : 1);
                     SCSIZE nOffset = 0;
                     switch ( rEntry.eOp )
                     {
@@ -1574,22 +1586,22 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                     if ( pCell->HasValueData() )
                     {
                         if ( pCell->GetCellType() == CELLTYPE_VALUE )
-                            rEntry.nVal = ((ScValueCell*)pCell)->GetValue();
+                            rItem.mfVal = ((ScValueCell*)pCell)->GetValue();
                         else
-                            rEntry.nVal = ((ScFormulaCell*)pCell)->GetValue();
+                            rItem.mfVal = ((ScFormulaCell*)pCell)->GetValue();
                     }
                     else
                     {
                         OSL_FAIL( "TopTenQuery: pCell kein ValueData" );
                         rEntry.eOp = SC_GREATER_EQUAL;
-                        rEntry.nVal = 0;
+                        rItem.mfVal = 0;
                     }
                 }
                 else
                 {
                     rEntry.eOp = SC_GREATER_EQUAL;
-                    rEntry.bQueryByString = false;
-                    rEntry.nVal = 0;
+                    rItem.meType = ScQueryEntry::ByValue;
+                    rItem.mfVal = 0;
                 }
                 delete pArray;
             }
@@ -1615,35 +1627,35 @@ static void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPa
         ScQueryEntry& rEntry = rParam.GetEntry(i);
         if ( rEntry.bDoQuery )
         {
-            rEntry.SortQueryStrings(rParam.bCaseSens);
-
-            if ( rEntry.bQueryByString )
+            // TODO: adapt this for multi-query items.
+            ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+            if (rItem.meType != ScQueryEntry::ByString)
             {
                 sal_uInt32 nIndex = 0;
-                rEntry.bQueryByString = !( pDoc->GetFormatTable()->
-                    IsNumberFormat(rEntry.GetQueryString(), nIndex, rEntry.nVal));
-                if (rEntry.bQueryByDate)
+                bool bNumber = pDoc->GetFormatTable()->
+                    IsNumberFormat(rItem.maString, nIndex, rItem.mfVal);
+                if (rItem.meType == ScQueryEntry::ByDate)
                 {
-                    if (!rEntry.bQueryByString && ((nIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0))
+                    if (bNumber && ((nIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0))
                     {
                         const SvNumberformat* pEntry = pDoc->GetFormatTable()->GetEntry(nIndex);
                         if (pEntry)
                         {
                             short nNumFmtType = pEntry->GetType();
                             if (!((nNumFmtType & NUMBERFORMAT_DATE) && !(nNumFmtType & NUMBERFORMAT_TIME)))
-                                rEntry.bQueryByDate = false;    // not a date only
+                                rItem.meType = ScQueryEntry::ByValue;    // not a date only
                         }
                         else
-                            rEntry.bQueryByDate = false;    // what the ... not a date
+                            rItem.meType = ScQueryEntry::ByValue;    // what the ... not a date
                     }
                     else
-                        rEntry.bQueryByDate = false;    // not a date
+                        rItem.meType = ScQueryEntry::ByValue;    // not a date
                 }
             }
             else
             {
                 // call from UNO or second call from autofilter
-                if ( rEntry.nVal == SC_EMPTYFIELDS || rEntry.nVal == SC_NONEMPTYFIELDS )
+                if ( rItem.mfVal == SC_EMPTYFIELDS || rItem.mfVal == SC_NONEMPTYFIELDS )
                 {
                     pSpecial[i] = true;
                 }
@@ -1965,9 +1977,9 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
         // Vierte Spalte Wert
         if (bValid)
         {
-            rtl::OUString rStr;
-            GetString(nCol1 + 3, nRow, rStr);
-            rEntry.SetQueryString(rStr);
+            rtl::OUString aStr;
+            GetString(nCol1 + 3, nRow, aStr);
+            rEntry.GetQueryItem().maString = aStr;
             rEntry.bDoQuery = true;
         }
         nIndex++;
@@ -1998,7 +2010,7 @@ bool ScTable::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
     {
         //  bQueryByString muss gesetzt sein
         for (i=0; i < nCount; i++)
-            rQueryParam.GetEntry(i).bQueryByString = true;
+            rQueryParam.GetEntry(i).GetQueryItem().meType = ScQueryEntry::ByString;
     }
     else
     {

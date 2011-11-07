@@ -531,9 +531,11 @@ ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(const ScDBQueryDat
     for (i=0; (i<nCount) && (mpParam->GetEntry(i).bDoQuery); i++)
     {
         ScQueryEntry& rEntry = mpParam->GetEntry(i);
+        ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
         sal_uInt32 nIndex = 0;
-        rEntry.bQueryByString =
-            !(mpDoc->GetFormatTable()->IsNumberFormat(rEntry.GetQueryString(), nIndex, rEntry.nVal));
+        bool bNumber = mpDoc->GetFormatTable()->IsNumberFormat(
+            rItem.maString, nIndex, rItem.mfVal);
+        rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
     }
     nNumFormat = 0;                 // werden bei GetNumberFormat initialisiert
     pAttrArray = 0;
@@ -713,9 +715,9 @@ bool ScDBQueryDataIterator::DataAccessMatrix::getNext(Value& rValue)
 
 namespace {
 
-bool lcl_isQueryByValue(const ScQueryEntry& rEntry, const ScMatrix& rMat, SCSIZE nCol, SCSIZE nRow)
+bool isQueryByValue(const ScQueryEntry::Item& rItem, const ScMatrix& rMat, SCSIZE nCol, SCSIZE nRow)
 {
-    if (rEntry.bQueryByString)
+    if (rItem.meType == ScQueryEntry::ByString)
         return false;
 
     if (!rMat.IsValueOrEmpty(nCol, nRow))
@@ -724,7 +726,7 @@ bool lcl_isQueryByValue(const ScQueryEntry& rEntry, const ScMatrix& rMat, SCSIZE
     return true;
 }
 
-bool lcl_isQueryByString(const ScQueryEntry& rEntry, const ScMatrix& rMat, SCSIZE nCol, SCSIZE nRow)
+bool isQueryByString(const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem, const ScMatrix& rMat, SCSIZE nCol, SCSIZE nRow)
 {
     switch (rEntry.eOp)
     {
@@ -741,7 +743,7 @@ bool lcl_isQueryByString(const ScQueryEntry& rEntry, const ScMatrix& rMat, SCSIZ
             ;
     }
 
-    if (rEntry.bQueryByString && rMat.IsString(nCol, nRow))
+    if (rItem.meType == ScQueryEntry::ByString && rMat.IsString(nCol, nRow))
         return true;
 
     return false;
@@ -761,6 +763,7 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
     for (SCSIZE i = 0; i < nEntryCount; ++i)
     {
         const ScQueryEntry& rEntry = mpParam->GetEntry(i);
+        const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
         if (!rEntry.bDoQuery)
             continue;
 
@@ -781,27 +784,27 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
         bool bValid = false;
 
         SCSIZE nField = static_cast<SCSIZE>(rEntry.nField);
-        if (lcl_isQueryByValue(rEntry, rMat, nField, nRow))
+        if (isQueryByValue(rItem, rMat, nField, nRow))
         {
             // By value
             double fMatVal = rMat.GetDouble(nField, nRow);
-            bool bEqual = approxEqual(fMatVal, rEntry.nVal);
+            bool bEqual = approxEqual(fMatVal, rItem.mfVal);
             switch (rEntry.eOp)
             {
                 case SC_EQUAL:
                     bValid = bEqual;
                 break;
                 case SC_LESS:
-                    bValid = (fMatVal < rEntry.nVal) && !bEqual;
+                    bValid = (fMatVal < rItem.mfVal) && !bEqual;
                 break;
                 case SC_GREATER:
-                    bValid = (fMatVal > rEntry.nVal) && !bEqual;
+                    bValid = (fMatVal > rItem.mfVal) && !bEqual;
                 break;
                 case SC_LESS_EQUAL:
-                    bValid = (fMatVal < rEntry.nVal) || bEqual;
+                    bValid = (fMatVal < rItem.mfVal) || bEqual;
                 break;
                 case SC_GREATER_EQUAL:
-                    bValid = (fMatVal > rEntry.nVal) || bEqual;
+                    bValid = (fMatVal > rItem.mfVal) || bEqual;
                 break;
                 case SC_NOT_EQUAL:
                     bValid = !bEqual;
@@ -810,7 +813,7 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
                     ;
             }
         }
-        else if (lcl_isQueryByString(rEntry, rMat, nField, nRow))
+        else if (isQueryByString(rEntry, rItem, rMat, nField, nRow))
         {
             // By string
             do
@@ -819,7 +822,7 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
 
                 OUString aMatStr = rMat.GetString(nField, nRow);
                 lcl_toUpper(aMatStr);
-                OUString aQueryStr = rEntry.GetQueryString();
+                OUString aQueryStr = rEntry.GetQueryItem().maString;
                 lcl_toUpper(aQueryStr);
                 bool bDone = false;
                 switch (rEntry.eOp)
@@ -1104,10 +1107,11 @@ ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, SCTAB nTable,
         for (i = 0; (i < nCount) && (aParam.GetEntry(i).bDoQuery); ++i)
         {
             ScQueryEntry& rEntry = aParam.GetEntry(i);
+            ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
             sal_uInt32 nIndex = 0;
-            rEntry.bQueryByString =
-                !(pDoc->GetFormatTable()->IsNumberFormat(
-                    rEntry.GetQueryString(), nIndex, rEntry.nVal));
+            bool bNumber = pDoc->GetFormatTable()->IsNumberFormat(
+                rItem.maString, nIndex, rItem.mfVal);
+            rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
         }
     }
     nNumFormat = 0;                 // werden bei GetNumberFormat initialisiert
@@ -1121,11 +1125,13 @@ ScBaseCell* ScQueryCellIterator::GetThis()
         OSL_FAIL("try to access index out of bounds, FIX IT");
     ScColumn* pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
     const ScQueryEntry& rEntry = aParam.GetEntry(0);
+    const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+
     SCCOLROW nFirstQueryField = rEntry.nField;
     bool bAllStringIgnore = bIgnoreMismatchOnLeadingStrings &&
-        !rEntry.bQueryByString;
+        rItem.meType != ScQueryEntry::ByString;
     bool bFirstStringIgnore = bIgnoreMismatchOnLeadingStrings &&
-        !aParam.bHasHeader && rEntry.bQueryByString &&
+        !aParam.bHasHeader && rItem.meType == ScQueryEntry::ByString &&
         ((aParam.bByRow && nRow == aParam.nRow1) ||
          (!aParam.bByRow && nCol == aParam.nCol1));
     for ( ;; )
@@ -1148,7 +1154,7 @@ ScBaseCell* ScQueryCellIterator::GetThis()
             } while ( pCol->nCount == 0 );
             pCol->Search( nRow, nColRow );
             bFirstStringIgnore = bIgnoreMismatchOnLeadingStrings &&
-                !aParam.bHasHeader && rEntry.bQueryByString &&
+                !aParam.bHasHeader && rItem.meType == ScQueryEntry::ByString &&
                 aParam.bByRow;
         }
 
@@ -1267,7 +1273,7 @@ sal_Bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
     SetStopOnMismatch( sal_True );      // assume sorted keys
     SetTestEqualCondition( sal_True );
     bIgnoreMismatchOnLeadingStrings = bIgnoreMismatchOnLeadingStringsP;
-    bool bRegExp = aParam.bRegExp && aParam.GetEntry(0).bQueryByString;
+    bool bRegExp = aParam.bRegExp && aParam.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByString;
     bool bBinary = !bRegExp && aParam.bByRow && (aParam.GetEntry(0).eOp ==
             SC_LESS_EQUAL || aParam.GetEntry(0).eOp == SC_GREATER_EQUAL);
     if (bBinary ? (BinarySearch() ? GetThis() : 0) : GetFirst())
@@ -1396,8 +1402,9 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
         ScGlobal::GetCollator());
     SvNumberFormatter& rFormatter = *(pDoc->GetFormatTable());
     const ScQueryEntry& rEntry = aParam.GetEntry(0);
+    const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
     bool bLessEqual = rEntry.eOp == SC_LESS_EQUAL;
-    bool bByString = rEntry.bQueryByString;
+    bool bByString = rItem.meType == ScQueryEntry::ByString;
     bool bAllStringIgnore = bIgnoreMismatchOnLeadingStrings && !bByString;
     bool bFirstStringIgnore = bIgnoreMismatchOnLeadingStrings &&
         !aParam.bHasHeader && bByString;
@@ -1413,7 +1420,7 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
         sal_uLong nFormat = pCol->GetNumberFormat( pItems[nLo].nRow);
         ScCellFormat::GetInputString( pItems[nLo].pCell, nFormat, aCellStr,
                 rFormatter);
-        sal_Int32 nTmp = pCollator->compareString(aCellStr, rEntry.GetQueryString());
+        sal_Int32 nTmp = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString);
         if ((rEntry.eOp == SC_LESS_EQUAL && nTmp > 0) ||
                 (rEntry.eOp == SC_GREATER_EQUAL && nTmp < 0) ||
                 (rEntry.eOp == SC_EQUAL && nTmp != 0))
@@ -1502,8 +1509,8 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
                 default:
                     nCellVal = 0.0;
             }
-            if ((nCellVal < rEntry.nVal) && !::rtl::math::approxEqual(
-                        nCellVal, rEntry.nVal))
+            if ((nCellVal < rItem.mfVal) && !::rtl::math::approxEqual(
+                        nCellVal, rItem.mfVal))
             {
                 nRes = -1;
                 if (bLessEqual)
@@ -1521,8 +1528,8 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
                     }
                 }
             }
-            else if ((nCellVal > rEntry.nVal) && !::rtl::math::approxEqual(
-                        nCellVal, rEntry.nVal))
+            else if ((nCellVal > rItem.mfVal) && !::rtl::math::approxEqual(
+                        nCellVal, rItem.mfVal))
             {
                 nRes = 1;
                 if (!bLessEqual)
@@ -1547,7 +1554,7 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
             sal_uLong nFormat = pCol->GetNumberFormat( pItems[i].nRow);
             ScCellFormat::GetInputString( pItems[i].pCell, nFormat, aCellStr,
                     rFormatter);
-            nRes = pCollator->compareString( aCellStr, rEntry.GetQueryString());
+            nRes = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString);
             if (nRes < 0 && bLessEqual)
             {
                 sal_Int32 nTmp = pCollator->compareString( aLastInRangeString,

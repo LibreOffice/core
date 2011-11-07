@@ -544,7 +544,7 @@ static void ExcelQueryToOooQuery( ScQueryEntry& rEntry )
     if (rEntry.eOp != SC_EQUAL && rEntry.eOp != SC_NOT_EQUAL)
         return;
 
-    String aStr = rEntry.GetQueryString();
+    String aStr = rEntry.GetQueryItem().maString;
     xub_StrLen nLen = aStr.Len();
     sal_Unicode nStart = aStr.GetChar( 0 );
     sal_Unicode nEnd   = aStr.GetChar( nLen-1 );
@@ -568,7 +568,7 @@ static void ExcelQueryToOooQuery( ScQueryEntry& rEntry )
     {
         aStr.Erase( 0, 1 );
     }
-    rEntry.SetQueryString(aStr);
+    rEntry.GetQueryItem().maString = aStr;
 }
 
 void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
@@ -588,13 +588,15 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
         if( nFirstEmpty < nCount )
         {
             ScQueryEntry& aEntry = aParam.GetEntry( nFirstEmpty );
-            aEntry.bDoQuery = sal_True;
-            aEntry.bQueryByString = sal_True;
+            ScQueryEntry::Item& rItem = aEntry.GetQueryItem();
+            aEntry.bDoQuery = true;
             aEntry.nField = static_cast<SCCOLROW>(StartCol() + static_cast<SCCOL>(nCol));
             aEntry.eOp = bTopOfTop10 ?
                 (bPercent ? SC_TOPPERC : SC_TOPVAL) : (bPercent ? SC_BOTPERC : SC_BOTVAL);
             aEntry.eConnect = SC_AND;
-            aEntry.SetQueryString(rtl::OUString::valueOf(static_cast<sal_Int32>(nCntOfTop10)));
+
+            rItem.meType = ScQueryEntry::ByString;
+            rItem.maString = rtl::OUString::valueOf(static_cast<sal_Int32>(nCntOfTop10));
 
             rStrm.Ignore( 20 );
             nFirstEmpty++;
@@ -605,7 +607,7 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
         sal_uInt8   nE, nType, nOper, nBoolErr, nVal;
         sal_Int32   nRK;
         double  fVal;
-        sal_Bool    bIgnore;
+        bool bIgnore;
 
         sal_uInt8   nStrLen[ 2 ]    = { 0, 0 };
         ScQueryEntry *pQueryEntries[ 2 ] = { NULL, NULL };
@@ -615,6 +617,7 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
             if( nFirstEmpty < nCount )
             {
                 ScQueryEntry& aEntry = aParam.GetEntry( nFirstEmpty );
+                ScQueryEntry::Item& rItem = aEntry.GetQueryItem();
                 pQueryEntries[ nE ] = &aEntry;
                 bIgnore = false;
 
@@ -650,36 +653,33 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
                     case EXC_AFTYPE_RK:
                         rStrm >> nRK;
                         rStrm.Ignore( 4 );
-                        aStr = aEntry.GetQueryString();
-                        CreateFromDouble(aStr, XclTools::GetDoubleFromRK(nRK));
-                        aEntry.SetQueryString(aStr);
+                        CreateFromDouble(
+                            rItem.maString, XclTools::GetDoubleFromRK(nRK));
                     break;
                     case EXC_AFTYPE_DOUBLE:
                         rStrm >> fVal;
-                        aStr = aEntry.GetQueryString();
-                        CreateFromDouble(aStr, fVal);
-                        aEntry.SetQueryString(aStr);
+                        CreateFromDouble(rItem.maString, fVal);
                     break;
                     case EXC_AFTYPE_STRING:
                         rStrm.Ignore( 4 );
                         rStrm >> nStrLen[ nE ];
                         rStrm.Ignore( 3 );
-                        aEntry.SetQueryString(rtl::OUString());
+                        rItem.maString = rtl::OUString();
                     break;
                     case EXC_AFTYPE_BOOLERR:
                         rStrm >> nBoolErr >> nVal;
                         rStrm.Ignore( 6 );
-                        aEntry.SetQueryString(rtl::OUString::valueOf(static_cast<sal_Int32>(nVal)));
-                        bIgnore = (sal_Bool) nBoolErr;
+                        rItem.maString = rtl::OUString::valueOf(static_cast<sal_Int32>(nVal));
+                        bIgnore = (nBoolErr != 0);
                     break;
                     case EXC_AFTYPE_EMPTY:
-                        aEntry.bQueryByString = false;
-                        aEntry.nVal = SC_EMPTYFIELDS;
+                        rItem.meType = ScQueryEntry::ByValue;
+                        rItem.mfVal = SC_EMPTYFIELDS;
                         aEntry.eOp = SC_EQUAL;
                     break;
                     case EXC_AFTYPE_NOTEMPTY:
-                        aEntry.bQueryByString = false;
-                        aEntry.nVal = SC_NONEMPTYFIELDS;
+                        rItem.meType = ScQueryEntry::ByValue;
+                        rItem.mfVal = SC_NONEMPTYFIELDS;
                         aEntry.eOp = SC_EQUAL;
                     break;
                     default:
@@ -697,8 +697,8 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
                     bHasConflict = sal_True;
                 if( !bHasConflict && !bIgnore )
                 {
-                    aEntry.bDoQuery = sal_True;
-                    aEntry.bQueryByString = sal_True;
+                    aEntry.bDoQuery = true;
+                    rItem.meType = ScQueryEntry::ByString;
                     aEntry.nField = static_cast<SCCOLROW>(StartCol() + static_cast<SCCOL>(nCol));
                     aEntry.eConnect = nE ? eConn : SC_AND;
                     nFirstEmpty++;
@@ -711,7 +711,7 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
         for( nE = 0; nE < 2; nE++ )
             if( nStrLen[ nE ] && pQueryEntries[ nE ] )
             {
-                pQueryEntries[nE]->SetQueryString(rStrm.ReadUniString(nStrLen[nE]));
+                pQueryEntries[nE]->GetQueryItem().maString = rStrm.ReadUniString(nStrLen[nE]);
                 ExcelQueryToOooQuery( *pQueryEntries[ nE ] );
             }
 

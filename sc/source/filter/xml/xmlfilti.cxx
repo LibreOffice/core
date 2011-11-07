@@ -763,22 +763,23 @@ void ScXMLDPConditionContext::EndElement()
     getOperatorXML(sOperator, aFilterField.eOp, bUseRegularExpressions, dVal);
     pFilterContext->SetUseRegularExpressions(bUseRegularExpressions);
     aFilterField.nField = nField;
+    ScQueryEntry::Item& rItem = aFilterField.GetQueryItem();
     if (IsXMLToken(sDataType, XML_NUMBER))
     {
-        aFilterField.nVal = sConditionValue.toDouble();
-        aFilterField.SetQueryString(sConditionValue);
-        aFilterField.bQueryByString = false;
+        rItem.mfVal = sConditionValue.toDouble();
+        rItem.maString = sConditionValue;
+        rItem.meType = ScQueryEntry::ByValue;
         if (dVal != 0.0)
         {
-            aFilterField.nVal = dVal;
-            aFilterField.SetQueryString(rtl::OUString());
+            rItem.mfVal = dVal;
+            rItem.maString = rtl::OUString();
         }
     }
     else
     {
-        aFilterField.SetQueryString(sConditionValue);
-        aFilterField.bQueryByString = true;
-        aFilterField.nVal = 0;
+        rItem.maString = sConditionValue;
+        rItem.meType = ScQueryEntry::ByString;
+        rItem.mfVal = 0.0;
     }
     pFilterContext->AddFilterField(aFilterField);
 }

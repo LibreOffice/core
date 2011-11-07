@@ -1178,7 +1178,7 @@ void Test::testDataPilotFilters()
     ScQueryEntry& rEntry = aQueryParam.GetEntry(0);
     rEntry.bDoQuery = true;
     rEntry.nField = 1;  // Group1
-    rEntry.nVal = 1;
+    rEntry.GetQueryItem().mfVal = 1;
     aDesc.SetQueryParam(aQueryParam);
     pDPObj->SetSheetDesc(aDesc);
     pDPObj->Output(aOutRange.aStart);
@@ -2229,7 +2229,7 @@ void Test::testAutofilter()
     ScQueryEntry& aEntry = aParam.GetEntry(0);
     aEntry.bDoQuery = true;
     aEntry.eOp = SC_EQUAL;
-    aEntry.nVal = 0;
+    aEntry.GetQueryItem().mfVal = 0;
     //add queryParam to autofilter
     pDBData->SetQueryParam(aParam);
     //perform the query

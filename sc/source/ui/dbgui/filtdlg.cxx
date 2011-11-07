@@ -310,21 +310,22 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         ScQueryEntry& rEntry = theQueryData.GetEntry(i);
         if ( rEntry.bDoQuery )
         {
+            const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
             nCondPos     = (sal_uInt16)rEntry.eOp;
             nFieldSelPos = GetFieldSelPos( static_cast<SCCOL>(rEntry.nField) );
-            bool bEmptyString = rEntry.GetQueryString().isEmpty();
-            if (rEntry.nVal == SC_EMPTYFIELDS && !rEntry.bQueryByString && bEmptyString)
+            bool bEmptyString = rItem.maString.isEmpty();
+            if (rItem.mfVal == SC_EMPTYFIELDS && rItem.meType != ScQueryEntry::ByString && bEmptyString)
             {
                 aValStr = aStrEmpty;
                 aCondLbArr[i]->Disable();
             }
-            else if (rEntry.nVal == SC_NONEMPTYFIELDS && !rEntry.bQueryByString && bEmptyString)
+            else if (rItem.mfVal == SC_NONEMPTYFIELDS && rItem.meType != ScQueryEntry::ByString && bEmptyString)
             {
                 aValStr = aStrNotEmpty;
                 aCondLbArr[i]->Disable();
             }
             else
-                aValStr = rEntry.GetQueryString();
+                aValStr = rItem.maString;
         }
         else if ( i == 0 )
         {
@@ -1140,6 +1141,7 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
             maRefreshExceptQuery.resize(nQE + 1, false);
 
         ScQueryEntry& rEntry = theQueryData.GetEntry( nQE );
+        ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
         bool bDoThis = (pLbField->GetSelectEntryPos() != 0);
         rEntry.bDoQuery = bDoThis;
 
@@ -1147,21 +1149,21 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
         {
             if ( aStrEmpty.equals(aStrVal) )
             {
-                rEntry.SetQueryString(rtl::OUString());
-                rEntry.nVal = SC_EMPTYFIELDS;
-                rEntry.bQueryByString = false;
+                rItem.maString = rtl::OUString();
+                rItem.mfVal = SC_EMPTYFIELDS;
+                rItem.meType = ScQueryEntry::ByValue;
             }
             else if ( aStrNotEmpty.equals(aStrVal) )
             {
-                rEntry.SetQueryString(rtl::OUString());
-                rEntry.nVal = SC_NONEMPTYFIELDS;
-                rEntry.bQueryByString = false;
+                rItem.maString = rtl::OUString();
+                rItem.mfVal = SC_NONEMPTYFIELDS;
+                rItem.meType = ScQueryEntry::ByValue;
             }
             else
             {
-                rEntry.SetQueryString(aStrVal);
-                rEntry.nVal           = 0;
-                rEntry.bQueryByString = true;
+                rItem.maString = aStrVal;
+                rItem.mfVal = 0.0;
+                rItem.meType = ScQueryEntry::ByString;
             }
 
             sal_uInt16  nField  = pLbField->GetSelectEntryPos();
@@ -1170,8 +1172,8 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
 
             ScQueryOp eOp  = (ScQueryOp)pLbCond->GetSelectEntryPos();
             rEntry.eOp     = eOp;
-            rEntry.bQueryByDate = maHasDates[nQE];
-
+            if (maHasDates[nQE])
+                rItem.meType = ScQueryEntry::ByDate;
         }
     }
     return 0;
@@ -1219,20 +1221,21 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
             if(rEntry.bDoQuery)
                nFieldSelPos = GetFieldSelPos( static_cast<SCCOL>(rEntry.nField) );
 
-            rtl::OUString aQueryStr = rEntry.GetQueryString();
-            if ( rEntry.nVal == SC_EMPTYFIELDS && !rEntry.bQueryByString && aQueryStr.isEmpty())
+            const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+            const rtl::OUString& rQueryStr = rItem.maString;
+            if (rItem.mfVal == SC_EMPTYFIELDS && rItem.meType != ScQueryEntry::ByString && rQueryStr.isEmpty())
             {
                 aValStr = aStrEmpty;
                 aCondLbArr[i]->Disable();
             }
-            else if ( rEntry.nVal == SC_NONEMPTYFIELDS && !rEntry.bQueryByString && aQueryStr.isEmpty())
+            else if (rItem.mfVal == SC_NONEMPTYFIELDS && rItem.meType != ScQueryEntry::ByString && rQueryStr.isEmpty())
             {
                 aValStr = aStrNotEmpty;
                 aCondLbArr[i]->Disable();
             }
             else
             {
-                aValStr = aQueryStr;
+                aValStr = rQueryStr;
                 aCondLbArr[i]->Enable();
             }
             aFieldLbArr[i]->Enable();

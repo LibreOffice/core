@@ -215,13 +215,13 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
         if ( theQueryData.GetEntry(i).bDoQuery )
         {
             const ScQueryEntry& rEntry = theQueryData.GetEntry(i);
-
-            rtl::OUString aValStr = rEntry.GetQueryString();
-            if (!rEntry.bQueryByString && aValStr.isEmpty())
+            const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+            rtl::OUString aValStr = rItem.maString;
+            if (rItem.meType != ScQueryEntry::ByString && aValStr.isEmpty())
             {
-                if (rEntry.nVal == SC_EMPTYFIELDS)
+                if (rItem.mfVal == SC_EMPTYFIELDS)
                     aValStr = aStrEmpty;
-                else if (rEntry.nVal == SC_NONEMPTYFIELDS)
+                else if (rItem.mfVal == SC_NONEMPTYFIELDS)
                     aValStr = aStrNotEmpty;
             }
             sal_uInt16  nCondPos     = (sal_uInt16)rEntry.eOp;
@@ -417,6 +417,7 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
         if ( bDoThis )
         {
             ScQueryEntry& rEntry = theParam.GetEntry(i);
+            ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
 
             String aStrVal( aValueEdArr[i]->GetText() );
 
@@ -427,21 +428,21 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
              */
             if ( aStrVal == aStrEmpty )
             {
-                rEntry.SetQueryString(rtl::OUString());
-                rEntry.nVal     = SC_EMPTYFIELDS;
-                rEntry.bQueryByString = false;
+                rItem.maString = rtl::OUString();
+                rItem.mfVal = SC_EMPTYFIELDS;
+                rItem.meType = ScQueryEntry::ByValue;
             }
             else if ( aStrVal == aStrNotEmpty )
             {
-                rEntry.SetQueryString(rtl::OUString());
-                rEntry.nVal     = SC_NONEMPTYFIELDS;
-                rEntry.bQueryByString = false;
+                rItem.maString = rtl::OUString();
+                rItem.mfVal = SC_NONEMPTYFIELDS;
+                rItem.meType = ScQueryEntry::ByValue;
             }
             else
             {
-                rEntry.SetQueryString(aStrVal);
-                rEntry.nVal     = 0;
-                rEntry.bQueryByString = sal_True;
+                rItem.maString = aStrVal;
+                rItem.mfVal = 0.0;
+                rItem.meType = ScQueryEntry::ByString;
             }
 
             rEntry.nField   = nField ? (theQueryData.nCol1 +

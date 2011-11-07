@@ -142,7 +142,7 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
         if (bValid)
         {
             // Finally, the right-hand-side value in the 4th column.
-            rEntry.SetQueryString(pQueryRef->getString(3, nRow));
+            rEntry.GetQueryItem().maString = pQueryRef->getString(3, nRow);
             rEntry.bDoQuery = true;
         }
         nIndex++;
@@ -236,7 +236,7 @@ bool lcl_fillQueryEntries(
     {
         //  bQueryByString muss gesetzt sein
         for (SCSIZE i = 0; i < nCount; ++i)
-            pParam->GetEntry(i).bQueryByString = true;
+            pParam->GetEntry(i).GetQueryItem().meType = ScQueryEntry::ByString;
     }
     else
     {

@@ -695,9 +695,10 @@ void ScGridWindow::UpdateAutoFilterFromMenu()
         return;
 
     ScQueryEntry& rEntry = aParam.GetEntry(0);
+    ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
     rEntry.bDoQuery = true;
-    rEntry.bQueryByString = true;
-    rEntry.SetQueryString(aSelected[0]);
+    rItem.meType = ScQueryEntry::ByString;
+    rItem.maString = aSelected[0];
 
     pViewData->GetView()->Query(aParam, NULL, true);
     pDBData->SetQueryParam(aParam);
@@ -1172,15 +1173,15 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
                             bValid = false;
                     if (rEntry.nField == nCol)
                     {
-                        rtl::OUString aQueryStr = rEntry.GetQueryString();
+                        const rtl::OUString& rQueryStr = rEntry.GetQueryItem().maString;
                         if (rEntry.eOp == SC_EQUAL)
                         {
-                            if (!aQueryStr.isEmpty())
+                            if (!rQueryStr.isEmpty())
                             {
-                                nSelPos = pFilterBox->GetEntryPos(aQueryStr);
+                                nSelPos = pFilterBox->GetEntryPos(rQueryStr);
                             }
                         }
-                        else if (rEntry.eOp == SC_TOPVAL && aQueryStr.equalsAscii("10"))
+                        else if (rEntry.eOp == SC_TOPVAL && rQueryStr.equalsAscii("10"))
                             nSelPos = SC_AUTOFILTER_TOP10;
                         else
                             nSelPos = SC_AUTOFILTER_CUSTOM;
@@ -1385,36 +1386,34 @@ void ScGridWindow::ExecFilter( sal_uLong nSel,
                 if (nSel)
                 {
                     ScQueryEntry& rNewEntry = aParam.GetEntry(nQueryPos);
-
-                    rNewEntry.bDoQuery       = sal_True;
-                    rNewEntry.bQueryByString = sal_True;
+                    ScQueryEntry::Item& rItem = rNewEntry.GetQueryItem();
+                    rNewEntry.bDoQuery       = true;
                     rNewEntry.nField         = nCol;
-                    rNewEntry.bQueryByDate   = bCheckForDates;
+                    rItem.meType = bCheckForDates ? ScQueryEntry::ByDate : ScQueryEntry::ByString;
+
                     if ( nSel == SC_AUTOFILTER_TOP10 )
                     {
-                        rNewEntry.eOp   = SC_TOPVAL;
-                        rNewEntry.SetQueryString(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("10")));
+                        rNewEntry.eOp = SC_TOPVAL;
+                        rItem.maString = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("10"));
                     }
                     else if (nSel == SC_AUTOFILTER_EMPTY)
                     {
-                        rNewEntry.SetQueryString(rtl::OUString());
-                        rNewEntry.bQueryByString = false;
-                        rNewEntry.eOp   = SC_EQUAL;
-                        rNewEntry.nVal  = SC_EMPTYFIELDS;
-
+                        rNewEntry.eOp = SC_EQUAL;
+                        rItem.maString = rtl::OUString();
+                        rItem.meType = ScQueryEntry::ByValue;
+                        rItem.mfVal  = SC_EMPTYFIELDS;
                     }
                     else if (nSel == SC_AUTOFILTER_NOTEMPTY)
                     {
-                        rNewEntry.SetQueryString(rtl::OUString());
-                        rNewEntry.bQueryByString = false;
-                        rNewEntry.eOp   = SC_EQUAL;
-                        rNewEntry.nVal  = SC_NONEMPTYFIELDS;
+                        rNewEntry.eOp = SC_EQUAL;
+                        rItem.maString = rtl::OUString();
+                        rItem.meType = ScQueryEntry::ByValue;
+                        rItem.mfVal = SC_NONEMPTYFIELDS;
                     }
                     else
                     {
-                        rNewEntry.eOp   = SC_EQUAL;
-                        rNewEntry.SetQueryString(aValue);
+                        rNewEntry.eOp = SC_EQUAL;
+                        rItem.maString = aValue;
                     }
                     if (nQueryPos > 0)
                         rNewEntry.eConnect   = SC_AND;

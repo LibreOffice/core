@@ -44,15 +44,23 @@ namespace utl {
  */
 struct ScQueryEntry
 {
-    typedef std::vector<rtl::OUString> QueryStringsType;
+    enum QueryType { ByValue, ByString, ByDate };
+
+    struct Item
+    {
+        QueryType     meType;
+        double        mfVal;
+        rtl::OUString maString;
+
+        bool operator== (const Item& r) const;
+        Item();
+    };
+    typedef std::vector<Item> QueryItemsType;
 
     bool            bDoQuery;
-    bool            bQueryByString;
-    bool            bQueryByDate;
     SCCOLROW        nField;
     ScQueryOp       eOp;
     ScQueryConnect  eConnect;
-    double          nVal;
     mutable utl::SearchParam* pSearchParam;       // if RegExp, not saved
     mutable utl::TextSearch*  pSearchText;        // if RegExp, not saved
 
@@ -63,16 +71,19 @@ struct ScQueryEntry
     // creates pSearchParam and pSearchText if necessary, always RegExp!
     utl::TextSearch* GetSearchTextPtr( bool bCaseSens ) const;
 
-    bool            IsQueryStringEmpty() const;
-    bool            MatchByString(const rtl::OUString& rStr, bool bCaseSens) const;
-    void            SortQueryStrings(bool bCaseSens);
-    SC_DLLPUBLIC void SetQueryString(const rtl::OUString& rStr);
-    SC_DLLPUBLIC rtl::OUString GetQueryString() const;
+    SC_DLLPUBLIC const Item& GetQueryItem() const;
+    SC_DLLPUBLIC Item& GetQueryItem();
     void            Clear();
     ScQueryEntry&   operator=( const ScQueryEntry& r );
     bool            operator==( const ScQueryEntry& r ) const;
+
 private:
-    QueryStringsType maQueryStrings;
+    /**
+     * Stores all query items.  It must contain at least one item at all times
+     * (for single equality match queries or comparative queries).  It may
+     * contain multiple items for multi-equality match queries.
+     */
+    mutable QueryItemsType maQueryItems;
 };
 
 #endif

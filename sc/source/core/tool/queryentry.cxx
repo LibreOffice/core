@@ -32,30 +32,33 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/collatorwrapper.hxx>
 
+ScQueryEntry::Item::Item() :
+    meType(ByValue), mfVal(0.0) {}
+
+bool ScQueryEntry::Item::operator== (const Item& r) const
+{
+    return meType == r.meType && mfVal == r.mfVal && maString.equals(r.maString);
+}
+
 ScQueryEntry::ScQueryEntry() :
     bDoQuery(false),
-    bQueryByString(false),
-    bQueryByDate(false),
     nField(0),
     eOp(SC_EQUAL),
     eConnect(SC_AND),
-    nVal(0.0),
     pSearchParam(NULL),
-    pSearchText(NULL)
+    pSearchText(NULL),
+    maQueryItems(1)
 {
 }
 
 ScQueryEntry::ScQueryEntry(const ScQueryEntry& r) :
     bDoQuery(r.bDoQuery),
-    bQueryByString(r.bQueryByString),
-    bQueryByDate(r.bQueryByDate),
     nField(r.nField),
     eOp(r.eOp),
     eConnect(r.eConnect),
-    nVal(r.nVal),
     pSearchParam(NULL),
     pSearchText(NULL),
-    maQueryStrings(r.maQueryStrings)
+    maQueryItems(r.maQueryItems)
 {
 }
 
@@ -68,13 +71,10 @@ ScQueryEntry::~ScQueryEntry()
 ScQueryEntry& ScQueryEntry::operator=( const ScQueryEntry& r )
 {
     bDoQuery        = r.bDoQuery;
-    bQueryByString  = r.bQueryByString;
-    bQueryByDate    = r.bQueryByDate;
     eOp             = r.eOp;
     eConnect        = r.eConnect;
     nField          = r.nField;
-    nVal            = r.nVal;
-    maQueryStrings  = r.maQueryStrings;
+    maQueryItems  = r.maQueryItems;
 
     delete pSearchParam;
     delete pSearchText;
@@ -84,9 +84,20 @@ ScQueryEntry& ScQueryEntry::operator=( const ScQueryEntry& r )
     return *this;
 }
 
-bool ScQueryEntry::IsQueryStringEmpty() const
+const ScQueryEntry::Item& ScQueryEntry::GetQueryItem() const
 {
-    return maQueryStrings.empty();
+    if (maQueryItems.size() > 1)
+        // Reset to a single query mode.
+        maQueryItems.resize(1);
+    return maQueryItems[0];
+}
+
+ScQueryEntry::Item& ScQueryEntry::GetQueryItem()
+{
+    if (maQueryItems.size() > 1)
+        // Reset to a single query mode.
+        maQueryItems.resize(1);
+    return maQueryItems[0];
 }
 
 namespace {
@@ -108,47 +119,14 @@ public:
 
 }
 
-bool ScQueryEntry::MatchByString(const rtl::OUString& rStr, bool bCaseSens) const
-{
-    QueryStringsType::const_iterator itr =
-        std::lower_bound(
-            maQueryStrings.begin(), maQueryStrings.end(), rStr, CompareString(bCaseSens));
-
-    if (itr == maQueryStrings.end())
-        return false;
-
-    utl::TransliterationWrapper* pTransliteration =
-        bCaseSens ? ScGlobal::GetCaseTransliteration() : ScGlobal::GetpTransliteration();
-    return pTransliteration->isEqual(rStr, *itr);
-}
-
-void ScQueryEntry::SortQueryStrings(bool bCaseSens)
-{
-    std::sort(maQueryStrings.begin(), maQueryStrings.end(), CompareString(bCaseSens));
-}
-
-void ScQueryEntry::SetQueryString(const rtl::OUString& rStr)
-{
-    maQueryStrings.clear();
-    if (!rStr.isEmpty())
-        maQueryStrings.push_back(rStr);
-}
-
-rtl::OUString ScQueryEntry::GetQueryString() const
-{
-    return maQueryStrings.empty() ? rtl::OUString() : maQueryStrings[0];
-}
-
 void ScQueryEntry::Clear()
 {
     bDoQuery        = false;
-    bQueryByString  = false;
-    bQueryByDate    = false;
     eOp             = SC_EQUAL;
     eConnect        = SC_AND;
     nField          = 0;
-    nVal            = 0.0;
-    maQueryStrings.clear();
+    maQueryItems.clear();
+    maQueryItems.push_back(Item());
 
     delete pSearchParam;
     delete pSearchText;
@@ -159,13 +137,10 @@ void ScQueryEntry::Clear()
 bool ScQueryEntry::operator==( const ScQueryEntry& r ) const
 {
     return bDoQuery         == r.bDoQuery
-        && bQueryByString   == r.bQueryByString
-        && bQueryByDate     == r.bQueryByDate
         && eOp              == r.eOp
         && eConnect         == r.eConnect
         && nField           == r.nField
-        && nVal             == r.nVal
-        && maQueryStrings   == r.maQueryStrings;
+        && maQueryItems   == r.maQueryItems;
     //! pSearchParam und pSearchText nicht vergleichen
 }
 
@@ -173,11 +148,9 @@ utl::TextSearch* ScQueryEntry::GetSearchTextPtr( bool bCaseSens ) const
 {
     if ( !pSearchParam )
     {
-        rtl::OUString aStr;
-        if (!maQueryStrings.empty())
-            aStr = maQueryStrings[0];
+        const rtl::OUString& rStr = maQueryItems[0].maString;
         pSearchParam = new utl::SearchParam(
-            aStr, utl::SearchParam::SRCH_REGEXP, bCaseSens, false, false);
+            rStr, utl::SearchParam::SRCH_REGEXP, bCaseSens, false, false);
         pSearchText = new utl::TextSearch( *pSearchParam, *ScGlobal::pCharClass );
     }
     return pSearchText;

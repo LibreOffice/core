@@ -601,6 +601,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, bool *pSpeci
     while ((i < nEntryCount) && rParam.GetEntry(i).bDoQuery)
     {
         const ScQueryEntry& rEntry = rParam.GetEntry(i);
+        const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
         // we can only handle one single direct query
         // #i115431# nField in QueryParam is the sheet column, not the field within the source range
         SCCOL nQueryCol = (SCCOL)rEntry.nField;
@@ -617,34 +618,34 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, bool *pSpeci
 
         if (pSpecial && pSpecial[i])
         {
-            if (rEntry.nVal == SC_EMPTYFIELDS)
+            if (rItem.mfVal == SC_EMPTYFIELDS)
                 bOk = ! pCellData->IsHasData();
             else // if (rEntry.nVal == SC_NONEMPTYFIELDS)
                 bOk =  pCellData->IsHasData();
         }
-        else if (!rEntry.bQueryByString && pCellData->IsValue())
+        else if (rEntry.GetQueryItem().meType != ScQueryEntry::ByString && pCellData->IsValue())
         {   // by Value
             double nCellVal = pCellData->GetValue();
 
             switch (rEntry.eOp)
             {
                 case SC_EQUAL :
-                    bOk = ::rtl::math::approxEqual( nCellVal, rEntry.nVal );
+                    bOk = ::rtl::math::approxEqual(nCellVal, rItem.mfVal);
                     break;
                 case SC_LESS :
-                    bOk = (nCellVal < rEntry.nVal) && !::rtl::math::approxEqual( nCellVal, rEntry.nVal );
+                    bOk = (nCellVal < rItem.mfVal) && !::rtl::math::approxEqual(nCellVal, rItem.mfVal);
                     break;
                 case SC_GREATER :
-                    bOk = (nCellVal > rEntry.nVal) && !::rtl::math::approxEqual( nCellVal, rEntry.nVal );
+                    bOk = (nCellVal > rItem.mfVal) && !::rtl::math::approxEqual(nCellVal, rItem.mfVal);
                     break;
                 case SC_LESS_EQUAL :
-                    bOk = (nCellVal < rEntry.nVal) || ::rtl::math::approxEqual( nCellVal, rEntry.nVal );
+                    bOk = (nCellVal < rItem.mfVal) || ::rtl::math::approxEqual(nCellVal, rItem.mfVal);
                     break;
                 case SC_GREATER_EQUAL :
-                    bOk = (nCellVal > rEntry.nVal) || ::rtl::math::approxEqual( nCellVal, rEntry.nVal );
+                    bOk = (nCellVal > rItem.mfVal) || ::rtl::math::approxEqual(nCellVal, rItem.mfVal);
                     break;
                 case SC_NOT_EQUAL :
-                    bOk = !::rtl::math::approxEqual( nCellVal, rEntry.nVal );
+                    bOk = !::rtl::math::approxEqual(nCellVal, rItem.mfVal);
                     break;
                 default:
                     bOk= false;
@@ -652,7 +653,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, bool *pSpeci
             }
         }
         else if ((rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL)
-                 || (rEntry.bQueryByString
+                 || (rEntry.GetQueryItem().meType == ScQueryEntry::ByString
                      && pCellData->HasStringData() )
                 )
         {   // by String
@@ -682,7 +683,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, bool *pSpeci
                 {
                     if (bMatchWholeCell)
                     {
-                        String aStr = rEntry.GetQueryString();
+                        String aStr = rEntry.GetQueryItem().maString;
                         bOk = pTransliteration->isEqual(aCellStr, aStr);
                         bool bHasStar = false;
                         xub_StrLen nIndex;
@@ -706,11 +707,12 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, bool *pSpeci
                     }
                     else
                     {
+                        const rtl::OUString& rQueryStr = rEntry.GetQueryItem().maString;
                         ::com::sun::star::uno::Sequence< sal_Int32 > xOff;
                         String aCell = pTransliteration->transliterate(
                             aCellStr, ScGlobal::eLnge, 0, aCellStr.Len(), &xOff);
                         String aQuer = pTransliteration->transliterate(
-                            rEntry.GetQueryString(), ScGlobal::eLnge, 0, rEntry.GetQueryString().getLength(), &xOff);
+                            rQueryStr, ScGlobal::eLnge, 0, rQueryStr.getLength(), &xOff);
                         bOk = (aCell.Search( aQuer ) != STRING_NOTFOUND);
                     }
                     if (rEntry.eOp == SC_NOT_EQUAL)
@@ -719,7 +721,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, bool *pSpeci
                 else
                 {   // use collator here because data was probably sorted
                     sal_Int32 nCompare = pCollator->compareString(
-                        aCellStr, rEntry.GetQueryString());
+                        aCellStr, rEntry.GetQueryItem().maString);
                     switch (rEntry.eOp)
                     {
                         case SC_LESS :

@@ -51,10 +51,12 @@ ScLookupCache::QueryCriteria::QueryCriteria( const ScQueryEntry& rEntry ) :
             meOp = UNKNOWN;
             DBG_ERRORFILE( "ScLookupCache::QueryCriteria not prepared for this ScQueryOp");
     }
-    if (rEntry.bQueryByString)
-        setString(rEntry.GetQueryString());
+
+    const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+    if (rItem.meType == ScQueryEntry::ByString)
+        setString(rItem.maString);
     else
-        setDouble( rEntry.nVal);
+        setDouble(rItem.mfVal);
 }
 
 ScLookupCache::QueryCriteria::QueryCriteria( const ScLookupCache::QueryCriteria & r ) :

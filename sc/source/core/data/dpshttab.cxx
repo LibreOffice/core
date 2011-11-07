@@ -71,24 +71,25 @@ ScSheetDPData::ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, con
 {
     SCSIZE nEntryCount( aQuery.GetEntryCount());
     pSpecial = new bool[nEntryCount];
-    for (SCSIZE j = 0; j < nEntryCount; ++j )
+    for (SCSIZE j = 0; j < nEntryCount; ++j)
     {
         ScQueryEntry& rEntry = aQuery.GetEntry(j);
         if (rEntry.bDoQuery)
         {
-           pSpecial[j] = false;
-            if (!rEntry.bQueryByString)
+            ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+            pSpecial[j] = false;
+            if (rItem.meType != ScQueryEntry::ByString)
             {
-                if (rEntry.GetQueryString().isEmpty() &&
-                   ((rEntry.nVal == SC_EMPTYFIELDS) || (rEntry.nVal == SC_NONEMPTYFIELDS)))
+                if (rItem.maString.isEmpty() &&
+                   ((rItem.mfVal == SC_EMPTYFIELDS) || (rItem.mfVal == SC_NONEMPTYFIELDS)))
                     pSpecial[j] = true;
             }
             else
             {
                 sal_uInt32 nIndex = 0;
-                rEntry.bQueryByString =
-                    !(pD->GetFormatTable()->IsNumberFormat(
-                        rEntry.GetQueryString(), nIndex, rEntry.nVal));
+                bool bNumber = pD->GetFormatTable()->IsNumberFormat(
+                    rItem.maString, nIndex, rItem.mfVal);
+                rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
             }
         }
     }

@@ -119,6 +119,7 @@ void ScQueryParamBase::FillInExcelSyntax(const rtl::OUString& rStr, SCSIZE nInde
             Resize( nIndex+1 );
 
         ScQueryEntry& rEntry = GetEntry(nIndex);
+        ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
 
         rEntry.bDoQuery = sal_True;
         // Operatoren herausfiltern
@@ -126,17 +127,17 @@ void ScQueryParamBase::FillInExcelSyntax(const rtl::OUString& rStr, SCSIZE nInde
         {
             if (aCellStr.GetChar(1) == '>')
             {
-                rEntry.SetQueryString(aCellStr.Copy(2));
+                rItem.maString = aCellStr.Copy(2);
                 rEntry.eOp   = SC_NOT_EQUAL;
             }
             else if (aCellStr.GetChar(1) == '=')
             {
-                rEntry.SetQueryString(aCellStr.Copy(2));
+                rItem.maString = aCellStr.Copy(2);
                 rEntry.eOp   = SC_LESS_EQUAL;
             }
             else
             {
-                rEntry.SetQueryString(aCellStr.Copy(1));
+                rItem.maString = aCellStr.Copy(1);
                 rEntry.eOp   = SC_LESS;
             }
         }
@@ -144,21 +145,21 @@ void ScQueryParamBase::FillInExcelSyntax(const rtl::OUString& rStr, SCSIZE nInde
         {
             if (aCellStr.GetChar(1) == '=')
             {
-                rEntry.SetQueryString(aCellStr.Copy(2));
+                rItem.maString = aCellStr.Copy(2);
                 rEntry.eOp   = SC_GREATER_EQUAL;
             }
             else
             {
-                rEntry.SetQueryString(aCellStr.Copy(1));
+                rItem.maString = aCellStr.Copy(1);
                 rEntry.eOp   = SC_GREATER;
             }
         }
         else
         {
             if (aCellStr.GetChar(0) == '=')
-                rEntry.SetQueryString(aCellStr.Copy(1));
+                rItem.maString = aCellStr.Copy(1);
             else
-                rEntry.SetQueryString(aCellStr);
+                rItem.maString = aCellStr;
             rEntry.eOp = SC_EQUAL;
         }
     }

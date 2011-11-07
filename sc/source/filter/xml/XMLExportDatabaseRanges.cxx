@@ -406,17 +406,20 @@ private:
             case SC_ENDS_WITH:
                 return GetXMLToken(XML_ENDS_WITH);
             case SC_EQUAL:
-                if (!rEntry.bQueryByString && rEntry.GetQueryString().isEmpty())
+            {
+                const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+                if (!rItem.meType != ScQueryEntry::ByString && rItem.maString.isEmpty())
                 {
-                    if (rEntry.nVal == SC_EMPTYFIELDS)
+                    if (rItem.mfVal == SC_EMPTYFIELDS)
                         return GetXMLToken(XML_EMPTY);
-                    else if (rEntry.nVal == SC_NONEMPTYFIELDS)
+                    else if (rItem.mfVal == SC_NONEMPTYFIELDS)
                         return GetXMLToken(XML_NOEMPTY);
                 }
                 if (bRegExp)
                     return GetXMLToken(XML_MATCH);
                 else
                     return OUString(RTL_CONSTASCII_USTRINGPARAM("="));
+            }
             case SC_GREATER:
                 return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
             case SC_GREATER_EQUAL:
@@ -442,16 +445,17 @@ private:
 
     void writeCondition(const ScQueryEntry& rEntry, SCCOLROW nFieldStart, bool bCaseSens, bool bRegExp)
     {
+        const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
         mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::valueOf(rEntry.nField - nFieldStart));
         if (bCaseSens)
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
-        if (rEntry.bQueryByString)
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rEntry.GetQueryString());
+        if (rItem.meType == ScQueryEntry::ByString)
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString);
         else
         {
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
             OUStringBuffer aBuf;
-            ::sax::Converter::convertDouble(aBuf, rEntry.nVal);
+            ::sax::Converter::convertDouble(aBuf, rItem.mfVal);
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, aBuf.makeStringAndClear());
         }
 
