@@ -76,11 +76,6 @@ solaris*)
     test_freetype=yes
     test_gstreamer=yes
     _os=SunOS
-    AC_PATH_PROG( GNUTAR, gtar,,$PATH:/usr/sfw/bin)
-    if test -z "$GNUTAR"; then
-        AC_MSG_ERROR([gtar (GNU tar) not found but needed. Install it (Sun Freeware package).])
-    fi
-    AC_SUBST(GNUTAR)
 
     dnl ===========================================================
     dnl Check whether we're using Solaris 6,7,8 - SPARC or Intel.
@@ -1794,7 +1789,7 @@ fi
 AC_SUBST(BASH)
 
 AC_MSG_CHECKING([for GNU or BSD tar])
-for a in $GNUTAR gtar gnutar tar; do
+for a in $GNUTAR gtar gnutar tar /usr/sfw/bin/gtar; do
     $a --version 2> /dev/null | egrep "GNU|bsdtar"  2>&1 > /dev/null
     if test $? -eq 0;  then
         GNUTAR=$a
