@@ -153,7 +153,7 @@ extern "C"
             XInitThreads();
 
 #if GTK_CHECK_VERSION(3,0,0)
-        const gchar* pVersion = gtk_check_version( 3, 0, 0 );
+        const gchar* pVersion = gtk_check_version( 3, 2, 0 );
 #else
         const gchar* pVersion = gtk_check_version( 2, 2, 0 );
 #endif
