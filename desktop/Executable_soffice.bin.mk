@@ -69,7 +69,9 @@ $(eval $(call gb_Executable_add_noexception_objects,$(sofficebin),\
     desktop/win32/source/extendloaderenvironment \
 ))
 
-$(OUTDIR)/bin/soffice.bin : $(call gb_Executable_get_target,$(sofficebin)) 
+$(call gb_Module_get_target,desktop) : $(OUTDIR)/bin/soffice.bin
+
+$(OUTDIR)/bin/soffice.bin : $(call gb_Executable_get_target,$(sofficebin))
 $(call gb_Executable_get_clean_target,$(sofficebin)) : $(WORKDIR)/Clean/OutDir/bin/soffice.bin
 $(OUTDIR)/bin/soffice.bin : $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktargetname,$(sofficebin)))
 	$(call gb_Deliver_deliver,$<,$@)
@@ -79,6 +81,8 @@ $(WORKDIR)/Clean/OutDir/bin/soffice.bin :
 	rm -f $(OUTDIR)/bin/soffice.bin
 
 ifeq ($(COM),MSC)
+$(call gb_Module_get_target,desktop) : $(OUTDIR)/bin/soffice.bin.manifest
+
 $(OUTDIR)/bin/soffice.bin.manifest : $(call gb_Executable_get_target,$(sofficebin))
 $(call gb_Executable_get_clean_target,$(sofficebin)) : $(WORKDIR)/Clean/OutDir/bin/soffice.bin.manifest
 $(OUTDIR)/bin/soffice.bin.manifest : $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktargetname,$(sofficebin))).manifest $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktargetname,$(sofficebin)))
