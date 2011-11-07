@@ -32,8 +32,6 @@
 // declare system types in sysdata.hxx
 #include <svsys.h>
 #include <vcl/sysdata.hxx>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
 
 #include <svdata.hxx>
 #include <salframe.hxx>
@@ -188,18 +186,6 @@ void WorkWindow::ShowFullScreenMode( sal_Bool bFullScreenMode, sal_Int32 nDispla
     mbFullScreenMode = bFullScreenMode != 0;
     if ( !mbSysChild )
     {
-        // Dispose of the canvas implementation, which might rely on
-        // screen-specific system data.
-        com::sun::star::uno::Reference< com::sun::star::rendering::XCanvas > xCanvas( mpWindowImpl->mxCanvas );
-        if( xCanvas.is() )
-        {
-            com::sun::star::uno::Reference< com::sun::star::lang::XComponent >
-                xCanvasComponent( xCanvas,
-                                  com::sun::star::uno::UNO_QUERY );
-            if( xCanvasComponent.is() )
-                xCanvasComponent->dispose();
-        }
-
         mpWindowImpl->mpFrameWindow->mpWindowImpl->mbWaitSystemResize = sal_True;
         ImplGetFrame()->ShowFullScreen( bFullScreenMode, nDisplay );
     }

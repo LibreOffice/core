@@ -731,12 +731,6 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
         ViewShellBase* pFullScreenViewShellBase = mpFullScreenViewShellBase;
         mpFullScreenViewShellBase = 0;
 
-        // dispose before fullscreen window changes screens
-        // (potentially). If this needs to be moved behind
-        // pWorkWindow->StartPresentationMode() again, read issue
-        // i94007 & implement the solution outlined there.
-        xController->dispose();
-
         if( pFullScreenViewShellBase )
         {
             PresentationViewShell* pShell = dynamic_cast<PresentationViewShell*>(pFullScreenViewShellBase->GetMainViewShell().get());
@@ -750,6 +744,8 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
                 }
             }
         }
+
+        xController->dispose();
 
         if( pFullScreenViewShellBase )
         {
