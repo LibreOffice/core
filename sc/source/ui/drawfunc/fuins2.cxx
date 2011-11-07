@@ -162,7 +162,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
 
             // use ScChartPositioner to auto-detect column/row headers (like ScChartArray in old version)
             ScRangeListRef aRangeListRef( new ScRangeList );
-            aRangeListRef->Parse( aRangeString, pScDoc );
+            aRangeListRef->Parse( aRangeString, pScDoc, SCA_VALID, pScDoc->GetAddressConvention() );
             if ( !aRangeListRef->empty() )
             {
                 pScDoc->LimitChartIfAll( aRangeListRef );               // limit whole columns/rows to used area
