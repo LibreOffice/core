@@ -43,10 +43,8 @@ DBG_NAMEEX( Accelerator )
 
 ImplAccelManager::~ImplAccelManager()
 {
-    if ( mpAccelList )
-        delete mpAccelList;
-    if ( mpSequenceList )
-        delete mpSequenceList;
+    delete mpAccelList;
+    delete mpSequenceList;
 }
 
 // -----------------------------------------------------------------------

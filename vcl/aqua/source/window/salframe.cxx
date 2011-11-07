@@ -128,8 +128,7 @@ AquaSalFrame::~AquaSalFrame()
     if( this == s_pCaptureFrame )
         s_pCaptureFrame = NULL;
 
-    if ( mpGraphics )
-        delete mpGraphics;
+    delete mpGraphics;
 
     if( mpDockMenuEntry )
         // life cycle comment: the menu has ownership of the item, so no release

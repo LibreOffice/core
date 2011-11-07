@@ -1899,8 +1899,7 @@ sal_Bool Window::ImplSetClipFlagChilds( sal_Bool bSysObjOnlySmaller )
             bUpdate = sal_False;
         }
 
-        if ( pOldRegion )
-            delete pOldRegion;
+        delete pOldRegion;
     }
     else
     {
@@ -2459,8 +2458,7 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
     if( !aSelectionRect.IsEmpty() )
         DrawSelectionBackground( aSelectionRect, 3, sal_False, sal_True, sal_False );
 
-    if ( pChildRegion )
-        delete pChildRegion;
+    delete pChildRegion;
 }
 
 // -----------------------------------------------------------------------
@@ -3469,10 +3467,8 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             mpWindowImpl->mpSysObj->SetPosSize( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight );
     }
 
-    if ( pOverlapRegion )
-        delete pOverlapRegion;
-    if ( pOldRegion )
-        delete pOldRegion;
+    delete pOverlapRegion;
+    delete pOldRegion;
 }
 
 // -----------------------------------------------------------------------

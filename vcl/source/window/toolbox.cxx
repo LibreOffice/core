@@ -1796,8 +1796,7 @@ ToolBox::~ToolBox()
     delete mpData;
 
     // FloatSizeAry gegebenenfalls loeschen
-    if ( mpFloatSizeAry )
-        delete mpFloatSizeAry;
+    delete mpFloatSizeAry;
 
     // Wenn keine ToolBox-Referenzen mehr auf die Listen bestehen, dann
     // Listen mit wegloeschen

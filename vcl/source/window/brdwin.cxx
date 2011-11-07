@@ -1438,10 +1438,8 @@ ImplStdBorderWindowView::ImplStdBorderWindowView( ImplBorderWindow* pBorderWindo
 
 ImplStdBorderWindowView::~ImplStdBorderWindowView()
 {
-    if ( mpATitleVirDev )
-        delete mpATitleVirDev;
-    if ( mpDTitleVirDev )
-        delete mpDTitleVirDev;
+    delete mpATitleVirDev;
+    delete mpDTitleVirDev;
 }
 
 // -----------------------------------------------------------------------

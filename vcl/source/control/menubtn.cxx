@@ -133,10 +133,8 @@ void MenuButton::ImplLoadRes( const ResId& rResId )
 
 MenuButton::~MenuButton()
 {
-    if ( mpMenuTimer )
-        delete mpMenuTimer;
-    if ( mpOwnMenu )
-        delete mpOwnMenu;
+    delete mpMenuTimer;
+    delete mpOwnMenu;
 }
 
 // -----------------------------------------------------------------------

@@ -253,8 +253,7 @@ Edit::~Edit()
 
     delete mpIMEInfos;
 
-    if ( mpUpdateDataTimer )
-        delete mpUpdateDataTimer;
+    delete mpUpdateDataTimer;
 
     if ( mxDnDListener.is() )
     {

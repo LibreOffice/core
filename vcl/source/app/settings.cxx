@@ -1546,10 +1546,8 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
 
 ImplAllSettingsData::~ImplAllSettingsData()
 {
-    if ( mpLocaleDataWrapper )
-        delete mpLocaleDataWrapper;
-    if ( mpUILocaleDataWrapper )
-        delete mpUILocaleDataWrapper;
+    delete mpLocaleDataWrapper;
+    delete mpUILocaleDataWrapper;
     if ( mpI18nHelper )
         delete mpI18nHelper;
     if ( mpUII18nHelper )

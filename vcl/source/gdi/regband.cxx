@@ -201,8 +201,7 @@ void ImplRegionBand::ProcessPoints()
     }
 
     // remove last element if necessary
-    if ( pRegionBandPoint )
-        delete pRegionBandPoint;
+    delete pRegionBandPoint;
 
     // list is now empty
     mpFirstBandPoint = NULL;

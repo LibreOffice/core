@@ -785,14 +785,11 @@ WinSalGraphics::~WinSalGraphics()
     if ( mpStdClipRgnData )
         delete [] mpStdClipRgnData;
 
-    if ( mpLogFont )
-        delete mpLogFont;
+    delete mpLogFont;
 
-    if ( mpFontCharSets )
-        delete mpFontCharSets;
+    delete mpFontCharSets;
 
-    if ( mpFontKernPairs )
-        delete mpFontKernPairs;
+    delete mpFontKernPairs;
 }
 
 // -----------------------------------------------------------------------

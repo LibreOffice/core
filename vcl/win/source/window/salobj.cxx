@@ -654,8 +654,7 @@ WinSalObject::~WinSalObject()
     }
 
     // Cache-Daten zerstoeren
-    if ( mpStdClipRgnData )
-        delete mpStdClipRgnData;
+    delete mpStdClipRgnData;
 
     HWND hWndParent = ::GetParent( mhWnd );
 

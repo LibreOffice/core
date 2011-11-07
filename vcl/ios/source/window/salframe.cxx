@@ -106,8 +106,7 @@ IosSalFrame::~IosSalFrame()
     if( this == s_pCaptureFrame )
         s_pCaptureFrame = NULL;
 
-    if ( mpGraphics )
-        delete mpGraphics;
+    delete mpGraphics;
 
     if ( mpView ) {
         [mpView release];

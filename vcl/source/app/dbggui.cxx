@@ -1998,8 +1998,7 @@ void DbgGUIDeInit()
     DbgSetAbort( NULL );
 
     DbgWindow* pDbgWindow = ImplGetSVData()->maWinData.mpDbgWin;
-    if ( pDbgWindow )
-        delete pDbgWindow;
+    delete pDbgWindow;
 }
 
 // -----------------------------------------------------------------------

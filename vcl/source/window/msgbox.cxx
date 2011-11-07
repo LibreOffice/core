@@ -258,8 +258,7 @@ void MessBox::ImplPosControls()
     WinBits         nWinStyle = WB_LEFT | WB_WORDBREAK | WB_NOLABEL | WB_INFO;
     sal_uInt16          nTextStyle = TEXT_DRAW_MULTILINE | TEXT_DRAW_TOP | TEXT_DRAW_LEFT;
 
-    if ( mpFixedText )
-        delete mpFixedText;
+    delete mpFixedText;
     if ( mpFixedImage )
     {
         delete mpFixedImage;

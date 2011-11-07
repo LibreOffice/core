@@ -239,8 +239,7 @@ TabDialog::TabDialog( Window* pParent, const ResId& rResId ) :
 
 TabDialog::~TabDialog()
 {
-    if ( mpFixedLine )
-        delete mpFixedLine;
+    delete mpFixedLine;
 }
 
 // -----------------------------------------------------------------------

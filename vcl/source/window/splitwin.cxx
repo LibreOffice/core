@@ -2621,8 +2621,7 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
 
         if ( rTEvt.IsTrackingEnded() )
         {
-            if ( mpLastSizes )
-                delete mpLastSizes;
+            delete mpLastSizes;
             mpLastSizes     = NULL;
             mpSplitSet      = NULL;
             mnMouseOff      = 0;
