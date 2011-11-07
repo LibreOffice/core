@@ -29,11 +29,8 @@
 #ifndef _BASCTL_DLGEDCLIP_HXX
 #define _BASCTL_DLGEDCLIP_HXX
 
-#include <cppuhelper/implbase2.hxx>
-#include <com/sun/star/datatransfer/XTransferable.hpp>
-#include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
-
+#include <cppuhelper/implbase2.hxx>
 
 //============================================================================
 // DlgEdTransferableImpl

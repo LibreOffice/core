@@ -82,6 +82,7 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 
 #include <svx/xmlsecctrl.hxx>
+#include <sfx2/viewfac.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;

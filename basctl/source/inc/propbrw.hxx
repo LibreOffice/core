@@ -29,15 +29,11 @@
 #ifndef _BASCTL_PROPBRW_HXX
 #define _BASCTL_PROPBRW_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/awt/XControlContainer.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <comphelper/stl_types.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <svl/brdcst.hxx>
-#include <svl/lstner.hxx>
 #include <sfx2/childwin.hxx>
+#include <svl/lstner.hxx>
 #include <svx/svdmark.hxx>
 
 //============================================================================

@@ -32,14 +32,9 @@
 
 #include <svx/svdmodel.hxx>
 
-
 //============================================================================
 // DlgEdModel
 //============================================================================
-
-class DlgEdPage;
-class Window;
-class SfxObjectShell;
 
 class DlgEdModel : public SdrModel
 {

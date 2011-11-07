@@ -29,15 +29,12 @@
 #ifndef _BASCTL_ACCESSIBLEDIALOGWINDOW_HXX_
 #define _BASCTL_ACCESSIBLEDIALOGWINDOW_HXX_
 
-#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/implbase3.hxx>
-#include <tools/link.hxx>
 #include <svl/lstner.hxx>
-
-#include <vector>
+#include <tools/link.hxx>
 
 class DialogWindow;
 class DlgEditor;

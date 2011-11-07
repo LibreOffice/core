@@ -29,12 +29,7 @@
 #ifndef _BASCTL_DLGEDFUNC_HXX
 #define _BASCTL_DLGEDFUNC_HXX
 
-#include <vcl/timer.hxx>
-
 class DlgEditor;
-class Timer;
-class MouseEvent;
-class Point;
 
 //============================================================================
 // DlgEdFunc

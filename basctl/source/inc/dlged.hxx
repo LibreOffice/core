@@ -29,20 +29,18 @@
 #ifndef _BASCTL_DLGED_HXX
 #define _BASCTL_DLGED_HXX
 
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <tools/link.hxx>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <svl/brdcst.hxx>
+#include <svl/hint.hxx>
 #include <tools/gen.hxx>
 #include <vcl/timer.hxx>
-#include <svl/hint.hxx>
-#include <svl/brdcst.hxx>
 
 #define DLGED_PAGE_WIDTH_MIN    1280
 #define DLGED_PAGE_HEIGHT_MIN   1024
-
 
 //============================================================================
 // DlgEdHint

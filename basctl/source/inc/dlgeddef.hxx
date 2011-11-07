@@ -29,8 +29,7 @@
 #ifndef _BASCTL_DLGEDDEF_HXX
 #define _BASCTL_DLGEDDEF_HXX
 
-#include <tools/solar.h>
-
+#include <sal/types.h>
 
 const sal_uInt32 DlgInventor = sal_uInt32('D')*0x00000001+
                            sal_uInt32('L')*0x00000100+

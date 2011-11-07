@@ -29,23 +29,16 @@
 #define _BASOBJ_HXX
 
 #include "scriptdocument.hxx"
-#include <tools/string.hxx>
-#include <svl/lstner.hxx>
 
-#include <com/sun/star/io/XInputStreamProvider.hpp>
-#include <com/sun/star/script/XLibraryContainer.hpp>
-#include <com/sun/star/frame/XModel.hpp>
+#include <svl/lstner.hxx>
 
 class SbMethod;
 class SbModule;
-class SbxObject;
 class SbxVariable;
 class StarBASIC;
-class BasicManager;
 class SfxUInt16Item;
 class SfxBindings;
 class Window;
-struct BasicIDE_Impl;
 
 namespace BasicIDE
 {

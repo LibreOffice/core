@@ -28,31 +28,17 @@
 #ifndef _BASTYPES_HXX
 #define _BASTYPES_HXX
 
-#include <svheader.hxx>
-
 #include "scriptdocument.hxx"
 
-class ModulWindow;
-class SfxRequest;
-class SvTreeListBox;
-class SvLBoxEntry;
-class ScrollBar;
-class SbModule;
-class BasicManager;
-class SfxItemSet;
-#include <vcl/dockwin.hxx>
-#include <vcl/toolbox.hxx>
-#include <basic/sbstar.hxx>
-
 #include <iderid.hxx>
-
-#include <tools/table.hxx>
-
 #include <svtools/tabbar.hxx>
-#include <com/sun/star/script/XLibraryContainer.hpp>
+#include <vcl/toolbox.hxx>
 
 #include <boost/unordered_map.hpp>
-#include <vector>
+
+class SbModule;
+class SfxItemSet;
+class SfxRequest;
 
 #define LINE_SEP_CR     0x0D
 #define LINE_SEP        0x0A
@@ -60,12 +46,10 @@ class SfxItemSet;
 // Implementation: baside2b.cxx
 sal_Int32 searchEOL( const ::rtl::OUString& rStr, sal_Int32 fromIndex );
 
-
 // Meaning of bToBeKilled:
 // While being in a reschedule-loop, I may not destroy the window.
 // It must first break from the reschedule-loop to self-destroy then.
 // Does unfortunately not work that way: Destroying Window with living Child!
-
 
 struct BasicStatus
 {

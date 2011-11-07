@@ -29,14 +29,10 @@
 #ifndef _BASCTL_ACCESSIBLEDIALOGCONTROLSHAPE_HXX_
 #define _BASCTL_ACCESSIBLEDIALOGCONTROLSHAPE_HXX_
 
-#include <com/sun/star/accessibility/XAccessible.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/implbase3.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
-
-#include <vector>
 
 class Window;
 class DialogWindow;
@@ -46,7 +42,6 @@ class VCLExternalSolarLock;
 namespace utl {
 class AccessibleStateSetHelper;
 }
-
 
 //  ----------------------------------------------------
 //  class AccessibleDialogControlShape

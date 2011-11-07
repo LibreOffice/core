@@ -29,10 +29,10 @@
 #ifndef _LOCALIZATIONMGR_HXX
 #define _LOCALIZATIONMGR_HXX
 
-#include <com/sun/star/resource/XStringResourceManager.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-
 #include "scriptdocument.hxx"
+
+#include <com/sun/star/resource/XStringResourceManager.hpp>
+#include <tools/string.hxx>
 
 class BasicIDEShell;
 class DlgEditor;

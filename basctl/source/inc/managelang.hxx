@@ -29,12 +29,11 @@
 #ifndef _BASCTL_MANAGELANG_HXX
 #define _BASCTL_MANAGELANG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/button.hxx>
 #include <svx/langbox.hxx>
 #include <svx/checklbx.hxx>
+#include <vcl/button.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/fixed.hxx>
 
 class LocalizationMgr;
 

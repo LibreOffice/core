@@ -34,9 +34,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
 
-
 class BasicIDEShell;
-
 
 class BasicIDEController    :public comphelper::OMutexAndBroadcastHelper
                             ,public ::comphelper::OPropertyContainer

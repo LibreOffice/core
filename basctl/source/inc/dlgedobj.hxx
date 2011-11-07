@@ -29,13 +29,10 @@
 #ifndef _BASCTL_DLGEDOBJ_HXX
 #define _BASCTL_DLGEDOBJ_HXX
 
-#include <svx/svdouno.hxx>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
-
-#include <vector>
-#include <map>
+#include <comphelper/processfactory.hxx>
+#include <svx/svdouno.hxx>
 
 #include <boost/optional.hpp>
 

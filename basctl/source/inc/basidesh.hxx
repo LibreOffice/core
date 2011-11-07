@@ -28,20 +28,16 @@
 #ifndef _BASIDESH_HXX
 #define _BASIDESH_HXX
 
+#include "doceventnotifier.hxx"
 #include "sbxitem.hxx"
 
-#include "scriptdocument.hxx"
-#include "doceventnotifier.hxx"
-#include <sfx2/viewfac.hxx>
-#include <sfx2/shell.hxx>
-#include <vcl/scrbar.hxx>
-#include <tools/table.hxx>
+#include <com/sun/star/container/XContainerListener.hpp>
 #include <sfx2/viewsh.hxx>
 #include <svx/ifaceids.hxx>
+#include <tools/table.hxx>
+#include <vcl/scrbar.hxx>
 
-#include <com/sun/star/io/XInputStreamProvider.hpp>
-
-#include <com/sun/star/container/XContainerListener.hpp>
+class SfxViewFactory;
 
 //----------------------------------------------------------------------------
 
