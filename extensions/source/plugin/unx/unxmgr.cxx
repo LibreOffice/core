@@ -56,14 +56,14 @@ using ::rtl::OStringBuffer;
 using ::rtl::OStringToOUString;
 
 // Unix specific implementation
-static bool CheckPlugin( const ByteString& rPath, list< PluginDescription* >& rDescriptions )
+static bool CheckPlugin( const rtl::OString& rPath, list< PluginDescription* >& rDescriptions )
 {
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "Trying plugin %s ... ", rPath.GetBuffer() );
+    fprintf( stderr, "Trying plugin %s ... ", rPath.getStr() );
 #endif
 
-    xub_StrLen nPos = rPath.SearchBackward( '/' );
-    if( nPos == STRING_NOTFOUND )
+    sal_Int32 nPos = rPath.lastIndexOf('/');
+    if (nPos == -1)
     {
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "no absolute path to plugin\n" );
@@ -71,29 +71,29 @@ static bool CheckPlugin( const ByteString& rPath, list< PluginDescription* >& rD
         return false;
     }
 
-    ByteString aBaseName = rPath.Copy( nPos+1 );
-    if( aBaseName.Equals( "libnullplugin.so" ) )
+    rtl::OString aBaseName = rPath.copy(nPos+1);
+    if (aBaseName.equalsL(RTL_CONSTASCII_STRINGPARAM("libnullplugin.so")))
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "don't like %s\n", aBaseName.GetBuffer() );
+        fprintf( stderr, "don't like %s\n", aBaseName.getStr() );
 #endif
         return false;
     }
 
     struct stat aStat;
-    if( stat( rPath.GetBuffer(), &aStat ) || ! S_ISREG( aStat.st_mode ) )
+    if (stat(rPath.getStr(), &aStat) || !S_ISREG(aStat.st_mode))
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "%s is not a regular file\n", rPath.GetBuffer() );
+        fprintf( stderr, "%s is not a regular file\n", rPath.getStr() );
 #endif
         return false;
     }
 
-
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
 
     rtl::OString path;
-    if (!UnxPluginComm::getPluginappPath(&path)) {
+    if (!UnxPluginComm::getPluginappPath(&path))
+    {
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "cannot construct path to pluginapp.bin\n" );
 #endif
@@ -209,7 +209,7 @@ static void CheckPluginRegistryFiles( const rtl::OString& rPath, list< PluginDes
             for( nDotPos = nLineLen-1; nDotPos > 0 && aLine[nDotPos] != ':'; nDotPos-- )
                 ;
             if( aLine[0] == '/' && aLine[nDotPos] == ':' && aLine[nDotPos+1] == '$' )
-                CheckPlugin( ByteString( aLine, nDotPos ), rDescriptions );
+                CheckPlugin( rtl::OString(aLine, nDotPos), rDescriptions );
         }
         fclose( fp );
     }
@@ -270,16 +270,16 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
                 rPaths.getConstArray()[i], aEncoding));
         }
 
-        ByteString aSearchPath = aSearchBuffer.makeStringAndClear();
+        rtl::OString aSearchPath = aSearchBuffer.makeStringAndClear();
 
-        int nPaths = aSearchPath.GetTokenCount( ':' );
+        sal_Int32 nIndex = 0;
         maxDirent u;
-        for( i = 0; i < nPaths; i++ )
+        do
         {
-            ByteString aPath( aSearchPath.GetToken( i, ':' ) );
-            if( aPath.Len() )
+            rtl::OString aPath(aSearchPath.getToken(0, ':', nIndex));
+            if (aPath.getLength())
             {
-                DIR* pDIR = opendir( aPath.GetBuffer() );
+                DIR* pDIR = opendir(aPath.getStr());
                 struct dirent* pDirEnt = NULL;
                 while( pDIR && ! readdir_r( pDIR, &u.asDirent, &pDirEnt ) && pDirEnt )
                 {
@@ -288,16 +288,16 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
                         pBaseName[1] != '.' ||
                         pBaseName[2] != 0 )
                     {
-                        ByteString aFileName( aPath );
-                        aFileName += "/";
-                        aFileName += pBaseName;
-                        CheckPlugin( aFileName, aPlugins );
+                        rtl::OStringBuffer aFileName(aPath);
+                        aFileName.append('/').append(pBaseName);
+                        CheckPlugin( aFileName.makeStringAndClear(), aPlugins );
                     }
                 }
                 if( pDIR )
                     closedir( pDIR );
             }
         }
+        while ( nIndex >= 0 );
 
         // try ~/.mozilla/pluginreg.dat
         rtl::OStringBuffer aBuf(256);

@@ -114,10 +114,10 @@ public:
     void invalidate() { m_bValid = false; }
 
     sal_uLong SendMessage( sal_uLong nBytes, const char* pBytes, sal_uLong nMessageID = 0 );
-    sal_uLong SendMessage( const ByteString& rMessage, sal_uLong nMessageID = 0 )
-        {
-            return SendMessage( rMessage.Len(), rMessage.GetBuffer(), nMessageID );
-        }
+    sal_uLong SendMessage( const rtl::OString& rMessage, sal_uLong nMessageID = 0 )
+    {
+        return SendMessage( rMessage.getLength(), rMessage.getStr(), nMessageID );
+    }
 
     sal_Bool WaitForMessage( sal_uLong nTimeOut = 5000 );
     // timeout in ms

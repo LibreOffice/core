@@ -515,8 +515,9 @@ IMPL_LINK( SaneDlg, SelectHdl, ListBox*, pListBox )
     {
         if( pListBox == &maQuantumRangeBox )
         {
-            ByteString aValue( maQuantumRangeBox.GetSelectEntry(), osl_getThreadTextEncoding() );
-            double fValue = atof( aValue.GetBuffer() );
+            rtl::OString aValue(rtl::OUStringToOString(maQuantumRangeBox.GetSelectEntry(),
+                osl_getThreadTextEncoding()));
+            double fValue = atof(aValue.getStr());
             mrSane.SetOptionValue( mnCurrentOption, fValue, mnCurrentElement );
         }
         else if( pListBox == &maStringRangeBox )
@@ -533,7 +534,8 @@ IMPL_LINK( SaneDlg, OptionsBoxSelectHdl, SvTreeListBox*, pBox )
     {
         String aOption =
             maOptionBox.GetEntryText( maOptionBox.FirstSelected() );
-        int nOption = mrSane.GetOptionByName( ByteString( aOption, osl_getThreadTextEncoding() ).GetBuffer() );
+        int nOption = mrSane.GetOptionByName(rtl::OUStringToOString(aOption,
+            osl_getThreadTextEncoding()).getStr());
         if( nOption != -1 && nOption != mnCurrentOption )
         {
             DisableOption();
@@ -636,8 +638,9 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )
         {
             double fValue;
             char pBuf[256];
-            ByteString aContents( maNumericEdit.GetText(), osl_getThreadTextEncoding() );
-            fValue = atof( aContents.GetBuffer() );
+            rtl::OString aContents(rtl::OUStringToOString(maNumericEdit.GetText(),
+                osl_getThreadTextEncoding()));
+            fValue = atof(aContents.getStr());
             if( mfMin != mfMax && ( fValue < mfMin || fValue > mfMax ) )
             {
                 if( fValue < mfMin )
@@ -825,7 +828,7 @@ void SaneDlg::EstablishBoolOption()
 void SaneDlg::EstablishStringOption()
 {
     sal_Bool bSuccess;
-    ByteString aValue;
+    rtl::OString aValue;
 
     bSuccess = mrSane.GetOptionValue( mnCurrentOption, aValue );
     if( bSuccess )
@@ -843,7 +846,7 @@ void SaneDlg::EstablishStringRange()
     maStringRangeBox.Clear();
     for( int i = 0; ppStrings[i] != 0; i++ )
         maStringRangeBox.InsertEntry( String( ppStrings[i], osl_getThreadTextEncoding() ) );
-    ByteString aValue;
+    rtl::OString aValue;
     mrSane.GetOptionValue( mnCurrentOption, aValue );
     maStringRangeBox.SelectEntry( String( aValue, osl_getThreadTextEncoding() ) );
     maStringRangeBox.Show( sal_True );
@@ -1189,13 +1192,13 @@ sal_Bool SaneDlg::LoadState()
         return sal_False;
 
     aConfig.SetGroup( "SANE" );
-    ByteString aString = aConfig.ReadKey( "SO_LastSaneDevice" );
-    for( i = 0; i < Sane::CountDevices() && ! aString.Equals( ByteString( Sane::GetName( i ), osl_getThreadTextEncoding() ) ); i++ ) ;
+    rtl::OString aString = aConfig.ReadKey( "SO_LastSaneDevice" );
+    for( i = 0; i < Sane::CountDevices() && !aString.equals(rtl::OUStringToOString(Sane::GetName(i), osl_getThreadTextEncoding())); i++ ) ;
     if( i == Sane::CountDevices() )
         return sal_False;
 
     mrSane.Close();
-    mrSane.Open( aString.GetBuffer() );
+    mrSane.Open( aString.getStr() );
 
     DisableOption();
     InitFields();
@@ -1207,7 +1210,7 @@ sal_Bool SaneDlg::LoadState()
         {
             aString = aConfig.GetKeyName( i );
             rtl::OString aValue = aConfig.ReadKey( i );
-            int nOption = mrSane.GetOptionByName( aString.GetBuffer() );
+            int nOption = mrSane.GetOptionByName( aString.getStr() );
             if( nOption == -1 )
                 continue;
 
@@ -1235,7 +1238,7 @@ sal_Bool SaneDlg::LoadState()
                     rtl::OString aSub = aValue.getToken(0, ':', nIndex);
                     double fValue=0.0;
                     sscanf(aSub.getStr(), "%lg", &fValue);
-                    SetAdjustedNumericalValue(aString.GetBuffer(), fValue, n++);
+                    SetAdjustedNumericalValue(aString.getStr(), fValue, n++);
                 }
                 while ( nIndex >= 0 );
             }
@@ -1260,7 +1263,8 @@ void SaneDlg::SaveState()
     Config aConfig( aFileName );
     aConfig.DeleteGroup( "SANE" );
     aConfig.SetGroup( "SANE" );
-    aConfig.WriteKey( "SO_LastSANEDevice", ByteString( maDeviceBox.GetSelectEntry(), RTL_TEXTENCODING_UTF8 ) );
+    aConfig.WriteKey( "SO_LastSANEDevice",
+        rtl::OUStringToOString(maDeviceBox.GetSelectEntry(), RTL_TEXTENCODING_UTF8) );
 
     static char const* pSaveOptions[] = {
         "resolution",
@@ -1269,9 +1273,9 @@ void SaneDlg::SaveState()
         "br-x",
         "br-y"
     };
-    for( size_t i = 0; i < SAL_N_ELEMENTS(pSaveOptions); i++ )
+    for( size_t i = 0; i < SAL_N_ELEMENTS(pSaveOptions); ++i )
     {
-        ByteString aOption = pSaveOptions[i];
+        rtl::OString aOption = pSaveOptions[i];
         int nOption = mrSane.GetOptionByName( pSaveOptions[i] );
         if( nOption > -1 )
         {
@@ -1292,19 +1296,19 @@ void SaneDlg::SaveState()
                 break;
                 case SANE_TYPE_STRING:
                 {
-                    ByteString aString( "STRING=" );
-                    ByteString aValue;
+                    rtl::OString aValue;
                     if( mrSane.GetOptionValue( nOption, aValue ) )
                     {
-                        aString += aValue;
-                        aConfig.WriteKey( aOption, aString );
+                        rtl::OStringBuffer aString(RTL_CONSTASCII_STRINGPARAM("STRING="));
+                        aString.append(aValue);
+                        aConfig.WriteKey( aOption, aString.makeStringAndClear() );
                     }
                 }
                 break;
                 case SANE_TYPE_FIXED:
                 case SANE_TYPE_INT:
                 {
-                    ByteString aString( "NUMERIC=" );
+                    rtl::OStringBuffer aString(RTL_CONSTASCII_STRINGPARAM("NUMERIC="));
                     double fValue;
                     char buf[256];
                     int n;
@@ -1314,12 +1318,12 @@ void SaneDlg::SaveState()
                         if( ! mrSane.GetOptionValue( nOption, fValue, n ) )
                             break;
                         if( n > 0 )
-                            aString += ":";
+                            aString.append(':');
                         sprintf( buf, "%lg", fValue );
-                        aString += buf;
+                        aString.append(buf);
                     }
                     if( n >= mrSane.GetOptionElements( nOption ) )
-                        aConfig.WriteKey( aOption, aString );
+                        aConfig.WriteKey( aOption, aString.makeStringAndClear() );
                 }
                 break;
                 default:

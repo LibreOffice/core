@@ -156,7 +156,7 @@ SANE_Status Sane::ControlOption( int nOption, SANE_Action nAction,
                 pAction = "SANE_ACTION_SET_AUTO";break;
         }
         dbg_msg( "Option: \"%s\" action: %s\n",
-                 ByteString( GetOptionName( nOption ), gsl_getSystemTextEncoding() ).GetBuffer(),
+                 rtl::OUStringToOString(GetOptionName(nOption), osl_getThreadTextEncoding()).getStr(),
                  pAction );
     }
 #endif
@@ -312,10 +312,10 @@ sal_Bool Sane::Open( const char* name )
 
     if( mnDevice == -1 )
     {
-        ByteString aDevice( name );
+        rtl::OString aDevice( name );
         for( int i = 0; i < nDevices; i++ )
         {
-            if( aDevice.Equals( ppDevices[i]->name ) )
+            if( aDevice.equals( ppDevices[i]->name ) )
             {
                 mnDevice = i;
                 break;
@@ -351,10 +351,10 @@ void Sane::Close()
 int Sane::GetOptionByName( const char* rName )
 {
     int i;
-    ByteString aOption( rName );
+    rtl::OString aOption( rName );
     for( i = 0; i < mnOptions; i++ )
     {
-        if( mppOptions[i]->name && aOption.Equals( mppOptions[i]->name ) )
+        if( mppOptions[i]->name && aOption.equals( mppOptions[i]->name ) )
             return i;
     }
     return -1;
@@ -373,7 +373,7 @@ sal_Bool Sane::GetOptionValue( int n, sal_Bool& rRet )
     return sal_True;
 }
 
-sal_Bool Sane::GetOptionValue( int n, ByteString& rRet )
+sal_Bool Sane::GetOptionValue( int n, rtl::OString& rRet )
 {
     sal_Bool bSuccess = sal_False;
     if( ! maHandle  ||  mppOptions[n]->type != SANE_TYPE_STRING )
@@ -450,8 +450,8 @@ sal_Bool Sane::SetOptionValue( int n, const String& rSet )
 {
     if( ! maHandle  ||  mppOptions[n]->type != SANE_TYPE_STRING )
         return sal_False;
-    ByteString aSet( rSet, gsl_getSystemTextEncoding() );
-    SANE_Status nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, (void*)aSet.GetBuffer() );
+    rtl::OString aSet(rtl::OUStringToOString(rSet, osl_getThreadTextEncoding()));
+    SANE_Status nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, (void*)aSet.getStr() );
     if( nStatus != SANE_STATUS_GOOD )
         return sal_False;
     return sal_True;

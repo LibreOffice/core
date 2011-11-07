@@ -777,15 +777,15 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
 #endif
         if( isfile && stype == NP_ASFILEONLY )
         {
-            OString aFileName;
+            rtl::OString aFileName;
             if( url.compareToAscii( "file:", 5 ) == 0 )
             {
                 OUString aSysName;
                 osl_getSystemPathFromFileURL( url.pData, &aSysName.pData );
-                aFileName = OUStringToOString( aSysName, m_aEncoding );
+                aFileName = rtl::OUStringToOString( aSysName, m_aEncoding );
             }
             else
-                aFileName = OUStringToOString( url, m_aEncoding );
+                aFileName = rtl::OUStringToOString( url, m_aEncoding );
             m_pPluginComm->
                 NPP_StreamAsFile( &m_aInstance,
                                   pStream->getStream(),
@@ -989,7 +989,7 @@ PluginInputStream::~PluginInputStream()
     m_aFileStream.Close();
     if( m_pPlugin )
     {
-        ByteString aFileName( aFile, m_pPlugin->getTextEncoding() );
+        rtl::OString aFileName(rtl::OUStringToOString(aFile, m_pPlugin->getTextEncoding()));
         if( m_pPlugin->getPluginComm() && m_nMode != -1 )
             // mode -1 means either an error occurred,
             // or the plugin is already disposing
@@ -1000,7 +1000,7 @@ PluginInputStream::~PluginInputStream()
                 m_pPlugin->getPluginComm()->
                     NPP_StreamAsFile( m_pPlugin->getNPPInstance(),
                                       &m_aNPStream,
-                                      aFileName.GetBuffer() );
+                                      aFileName.getStr() );
             }
             m_pPlugin->getPluginComm()->NPP_SetWindow( m_pPlugin );
             m_pPlugin->getInputStreams().remove( this );

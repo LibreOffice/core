@@ -118,7 +118,7 @@ Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
         {
             xDataSource = Reference< XDataSource > (Reference< XNamingService > (xNamingContext, UNO_QUERY)->getRegisteredObject(_rURL), UNO_QUERY);
         }
-        catch(Exception &)
+        catch (const Exception&)
         {
             OSL_FAIL("Exception caught in ODatabaseContext::getRegisteredObject()");
         }
@@ -138,15 +138,13 @@ Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
             Reference<task::XInteractionHandler> xIHdl(xHdl, UNO_QUERY);
             xConn = xComplConn->connectWithCompletion(xIHdl);
         }
-        catch(SQLException&)
+        catch (const SQLException&)
         {
             // TODO : a real error handling
         }
-        catch(Exception& e )
+        catch (const Exception&)
         {
-            (void) e;   // make compiler happy
         }
-
     }
     return xConn;
 }
@@ -166,9 +164,8 @@ Reference< XConnection >    getConnection(const Reference< XInterface > & xRowSe
             DBG_WARNING("no active connection");
         }
     }
-    catch(Exception& e )
+    catch (const Exception&)
     {
-        (void) e;   // make compiler happy
         OSL_FAIL("exception in getConnection");
     }
 
@@ -204,17 +201,15 @@ Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
                 if (xSupplyCols.is())
                     xReturn = xSupplyCols->getColumns();
             }
-#ifdef DBG_UTIL
-            catch(Exception& e )
-#else
-            catch(Exception&)
-#endif
+            catch (const Exception& e)
             {
 #ifdef DBG_UTIL
                 String sMsg(String::CreateFromAscii("::getColumns : catched an exception ("));
                 sMsg += String(e.Message);
                 sMsg.AppendAscii(") ...");
-                OSL_FAIL( ByteString(sMsg, RTL_TEXTENCODING_ASCII_US ).GetBuffer());
+                OSL_FAIL(rtl::OUStringToOString(sMsg, RTL_TEXTENCODING_ASCII_US ).getStr());
+#else
+                (void)e;
 #endif
             }
 
@@ -625,13 +620,10 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
         }
         aSelectionLB.GetModel()->Resort();
     }
-    catch(Exception& e )
+    catch (const Exception&)
     {
-        (void) e;   // make compiler happy
         OSL_FAIL("Exception in BibDataManager::DBChangeDialog_Impl::DBChangeDialog_Impl");
     }
-
-
 }
 
 IMPL_LINK(DBChangeDialog_Impl, DoubleClickHdl, SvTabListBox*, /*pLB*/)
@@ -855,9 +847,8 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
             xColContainer->insertByName( *pFields, makeAny( xCurrentCol ) );
         }
     }
-    catch(Exception& e )
+    catch (const Exception&)
     {
-        (void) e;   // make compiler happy
         OSL_FAIL("Exception in BibDataManager::InsertFields");
     }
 }
@@ -887,12 +878,10 @@ Reference< awt::XControlModel > BibDataManager::updateGridModel(const Reference<
         Reference< XFormComponent > xFormComp( m_xGridModel, UNO_QUERY );
         InsertFields( xFormComp );
     }
-    catch(Exception& e )
+    catch (const Exception&)
     {
-        (void) e;   // make compiler happy
         OSL_FAIL("::updateGridModel: something went wrong !");
     }
-
 
     return m_xGridModel;
 }
@@ -971,12 +960,10 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
             }
         }
     }
-    catch(Exception& e )
+    catch (const Exception&)
     {
-        (void) e;   // make compiler happy
         OSL_FAIL("::createDatabaseForm: something went wrong !");
     }
-
 
     return xResult;
 }
@@ -994,12 +981,10 @@ Sequence< ::rtl::OUString > BibDataManager::getDataSources()
         if (xTables.is())
             aTableNameSeq = xTables->getElementNames();
     }
-    catch(Exception& e )
+    catch (const Exception&)
     {
-        (void) e;   // make compiler happy
         OSL_FAIL("::getDataSources: something went wrong !");
     }
-
 
     return aTableNameSeq;
 }
@@ -1022,7 +1007,7 @@ void BibDataManager::setFilter(const ::rtl::OUString& rQuery)
         xFormProps->setPropertyValue( C2U( "ApplyFilter" ), makeAny( sal_True ) );
         reload();
     }
-    catch(Exception&)
+    catch (const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -1039,7 +1024,7 @@ void BibDataManager::setFilter(const ::rtl::OUString& rQuery)
         Reference< XPropertySet > xFormProps( m_xForm, UNO_QUERY_THROW );
         OSL_VERIFY( xFormProps->getPropertyValue( C2U( "Filter" ) ) >>= aQueryString );
     }
-    catch( const Exception& )
+    catch (const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -1234,12 +1219,10 @@ void BibDataManager::setActiveDataTable(const ::rtl::OUString& rTable)
             }
         }
     }
-    catch(Exception& e )
+    catch (const Exception&)
     {
-        (void) e;   // make compiler happy
         OSL_FAIL("::setActiveDataTable: something went wrong !");
     }
-
 }
 
 //------------------------------------------------------------------------
@@ -1367,12 +1350,10 @@ Reference< awt::XControlModel > BibDataManager::createGridModel(const ::rtl::OUS
             xPropSet->setPropertyValue( uProp, makeAny( sId ) );
         }
     }
-    catch(Exception& e )
+    catch (const Exception&)
     {
-        (void) e;   // make compiler happy
         OSL_FAIL("::createGridModel: something went wrong !");
     }
-
 
     return xModel;
 }
@@ -1489,9 +1470,8 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
             }
         }
     }
-    catch(Exception& e )
+    catch (const Exception&)
     {
-        (void) e;   // make compiler happy
         OSL_FAIL("::loadControlModel: something went wrong !");
     }
     return xModel;
@@ -1529,104 +1509,97 @@ void BibDataManager::propertyChange(const beans::PropertyChangeEvent& evt) throw
             xLocate->moveToBookmark(aUID);
         }
     }
-    catch(Exception& e )
+    catch (const Exception&)
     {
-        (void) e;   // make compiler happy
         OSL_FAIL("::propertyChange: something went wrong !");
     }
-
-
 }
+
 //------------------------------------------------------------------------
 void BibDataManager::SetMeAsUidListener()
 {
-try
-{
-    Reference< XNameAccess >  xFields = getColumns( m_xForm );
-    if (!xFields.is())
-        return;
-
-    Sequence< ::rtl::OUString > aFields(xFields->getElementNames());
-    const ::rtl::OUString* pFields = aFields.getConstArray();
-    sal_Int32 nCount=aFields.getLength();
-    String StrUID(C2S(STR_UID));
-    ::rtl::OUString theFieldName;
-    for( sal_Int32 i=0; i<nCount; i++ )
+    try
     {
-        String aName= pFields[i];
+        Reference< XNameAccess >  xFields = getColumns( m_xForm );
+        if (!xFields.is())
+            return;
 
-        if(aName.EqualsIgnoreCaseAscii(StrUID))
+        Sequence< ::rtl::OUString > aFields(xFields->getElementNames());
+        const ::rtl::OUString* pFields = aFields.getConstArray();
+        sal_Int32 nCount=aFields.getLength();
+        String StrUID(C2S(STR_UID));
+        ::rtl::OUString theFieldName;
+        for( sal_Int32 i=0; i<nCount; i++ )
         {
-            theFieldName=pFields[i];
-            break;
+            String aName= pFields[i];
+
+            if(aName.EqualsIgnoreCaseAscii(StrUID))
+            {
+                theFieldName=pFields[i];
+                break;
+            }
         }
-    }
 
-    if(theFieldName.getLength()>0)
+        if(theFieldName.getLength()>0)
+        {
+            Reference< XPropertySet >  xPropSet;
+            Any aElement;
+
+            aElement = xFields->getByName(theFieldName);
+            xPropSet = *(Reference< XPropertySet > *)aElement.getValue();
+
+            xPropSet->addPropertyChangeListener(FM_PROP_VALUE, this);
+        }
+
+    }
+    catch (const Exception&)
     {
-        Reference< XPropertySet >  xPropSet;
-        Any aElement;
-
-        aElement = xFields->getByName(theFieldName);
-        xPropSet = *(Reference< XPropertySet > *)aElement.getValue();
-
-        xPropSet->addPropertyChangeListener(FM_PROP_VALUE, this);
+        OSL_FAIL("Exception in BibDataManager::SetMeAsUidListener");
     }
-
-}
-catch(Exception& e )
-{
-    (void) e;   // make compiler happy
-    OSL_FAIL("Exception in BibDataManager::SetMeAsUidListener");
 }
 
-
-}
 //------------------------------------------------------------------------
 void BibDataManager::RemoveMeAsUidListener()
 {
-try
-{
-    Reference< XNameAccess >  xFields = getColumns( m_xForm );
-    if (!xFields.is())
-        return;
-
-
-    Sequence< ::rtl::OUString > aFields(xFields->getElementNames());
-    const ::rtl::OUString* pFields = aFields.getConstArray();
-    sal_Int32 nCount=aFields.getLength();
-    String StrUID(C2S(STR_UID));
-    ::rtl::OUString theFieldName;
-    for( sal_Int32 i=0; i<nCount; i++ )
+    try
     {
-        String aName= pFields[i];
+        Reference< XNameAccess >  xFields = getColumns( m_xForm );
+        if (!xFields.is())
+            return;
 
-        if(aName.EqualsIgnoreCaseAscii(StrUID))
+
+        Sequence< ::rtl::OUString > aFields(xFields->getElementNames());
+        const ::rtl::OUString* pFields = aFields.getConstArray();
+        sal_Int32 nCount=aFields.getLength();
+        String StrUID(C2S(STR_UID));
+        ::rtl::OUString theFieldName;
+        for( sal_Int32 i=0; i<nCount; i++ )
         {
-            theFieldName=pFields[i];
-            break;
+            String aName= pFields[i];
+
+            if(aName.EqualsIgnoreCaseAscii(StrUID))
+            {
+                theFieldName=pFields[i];
+                break;
+            }
         }
-    }
 
-    if(theFieldName.getLength()>0)
+        if(theFieldName.getLength()>0)
+        {
+            Reference< XPropertySet >  xPropSet;
+            Any aElement;
+
+            aElement = xFields->getByName(theFieldName);
+            xPropSet = *(Reference< XPropertySet > *)aElement.getValue();
+
+            xPropSet->removePropertyChangeListener(FM_PROP_VALUE, this);
+        }
+
+    }
+    catch (const Exception&)
     {
-        Reference< XPropertySet >  xPropSet;
-        Any aElement;
-
-        aElement = xFields->getByName(theFieldName);
-        xPropSet = *(Reference< XPropertySet > *)aElement.getValue();
-
-        xPropSet->removePropertyChangeListener(FM_PROP_VALUE, this);
+        OSL_FAIL("Exception in BibDataManager::RemoveMeAsUidListener");
     }
-
-}
-catch(Exception& e )
-{
-    (void) e;   // make compiler happy
-    OSL_FAIL("Exception in BibDataManager::RemoveMeAsUidListener");
-}
-
-
 }
 
 void BibDataManager::CreateMappingDialog(Window* pParent)

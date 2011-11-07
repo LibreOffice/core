@@ -58,22 +58,24 @@ UnxPluginComm::UnxPluginComm(
         PluginComm( ::rtl::OUStringToOString( library, osl_getThreadTextEncoding() ), false ),
         PluginConnector( nDescriptor2 )
 {
-    char pDesc[32];
-    char pWindow[32];
-    sprintf( pWindow, "%d", (int)aParent );
-    sprintf( pDesc, "%d", nDescriptor1 );
-    ByteString aLib( library, osl_getThreadTextEncoding() );
     rtl::OString path;
-    if (!getPluginappPath(&path)) {
+    if (!getPluginappPath(&path))
+    {
         fprintf( stderr, "cannot construct path to pluginapp.bin\n" );
         m_nCommPID = -1;
         return;
     }
 
+    char pDesc[32];
+    char pWindow[32];
+    sprintf( pWindow, "%d", (int)aParent );
+    sprintf( pDesc, "%d", nDescriptor1 );
+    rtl::OString aLib(rtl::OUStringToOString(library, osl_getThreadTextEncoding()));
+
     char const* pArgs[5];
     pArgs[0] = path.getStr();
     pArgs[1] = pDesc;
-    pArgs[2] = aLib.GetBuffer();
+    pArgs[2] = aLib.getStr();
     pArgs[3] = pWindow;
     pArgs[4] = NULL;
 
@@ -83,11 +85,11 @@ UnxPluginComm::UnxPluginComm(
 #endif
 
     if( ! ( m_nCommPID = fork() ) )
-      {
-         execvp( pArgs[0], const_cast< char ** >(pArgs) );
-          fprintf( stderr, "Error: could not exec %s\n", pArgs[0] );
-          _exit(255);
-      }
+    {
+        execvp( pArgs[0], const_cast< char ** >(pArgs) );
+        fprintf( stderr, "Error: could not exec %s\n", pArgs[0] );
+        _exit(255);
+    }
 
     if( m_nCommPID != -1 )
     {
