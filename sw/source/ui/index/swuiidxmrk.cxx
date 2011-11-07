@@ -256,16 +256,14 @@ void SwIndexMarkDlg::InitControls()
     std::vector<String> aArr;
     nCount = pSh->GetTOIKeys( TOI_PRIMARY, aArr );
     std::sort(aArr.begin(), aArr.end());
-    for(typename std::vector<String>::iterator it = aArr.begin(); it != aArr.end(); ++it) {
+    for (std::vector<String>::iterator it = aArr.begin(); it != aArr.end(); ++it)
         aKeyDCB.InsertEntry( *it );
-    }
 
     // read keywords secondary
     nCount = pSh->GetTOIKeys( TOI_SECONDARY, aArr );
     std::sort(aArr.begin(), aArr.end());
-    for(typename std::vector<String>::iterator it = aArr.begin(); it != aArr.end(); ++it) {
+    for (std::vector<String>::iterator it = aArr.begin(); it != aArr.end(); ++it)
         aKey2DCB.InsertEntry( *it );
-    }
 
     UpdateLanguageDependenciesForPhoneticReading();
 
