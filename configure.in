@@ -4537,21 +4537,6 @@ fi
 AC_SUBST(GPERF)
 
 dnl ===================================================================
-dnl Check for building stax
-dnl ===================================================================
-AC_MSG_CHECKING([whether to build the stax])
-if test "$with_system_saxon" = "no" -a "$with_system_jars" = "no" -a "$SOLAR_JAVA" != ""; then
-    if test -f "./stax/download/jsr173_1.0_api.jar"; then
-        BUILD_STAX=NO
-        AC_MSG_RESULT([no, will use the prebuilt stax/download/jsr173_1.0_api.jar])
-    else
-        BUILD_STAX=YES
-        AC_MSG_RESULT([yes])
-    fi
-fi
-AC_SUBST(BUILD_STAX)
-
-dnl ===================================================================
 dnl Check for building ODK
 dnl ===================================================================
 AC_MSG_CHECKING([whether to build the ODK])
@@ -5473,6 +5458,23 @@ AC_SUBST(SAXON_JAR)
 if test -n "$NEED_SAXON"; then
     BUILD_TYPE="$BUILD_TYPE SAXON"
 fi
+
+# ===================================================================
+# Check whether to build stax
+# ===================================================================
+AC_MSG_CHECKING([whether building the stax is required])
+BUILD_STAX=NO
+if test -z "$SOLAR_JAVA"; then
+    AC_MSG_RESULT([no (java disabled)])
+elif test "$SYSTEM_SAXON" = "YES"; then
+    AC_MSG_RESULT([no (already provided by system saxon)])
+elif test -f "./stax/download/jsr173_1.0_api.jar"; then
+    AC_MSG_RESULT([no (will use the prebuilt stax/download/jsr173_1.0_api.jar)])
+else
+    BUILD_STAX=YES
+    AC_MSG_RESULT([yes (no system saxon and no prebuilt copy)])
+fi
+AC_SUBST(BUILD_STAX)
 
 dnl ===================================================================
 dnl Check for system curl
