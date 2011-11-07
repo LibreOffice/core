@@ -29,31 +29,25 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
 
-#include "managelang.hxx"
-#include "iderid.hxx"
-#include "localizationmgr.hxx"
-#include "iderdll.hxx"
 #include "basidesh.hxx"
 #include "basobj.hxx"
+#include "dlgresid.hrc"
+#include "iderdll.hxx"
+#include "iderid.hxx"
+#include "localizationmgr.hxx"
+#include "managelang.hxx"
 
 #include "managelang.hrc"
-#include "dlgresid.hrc"
 #include "helpid.hrc"
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/resource/XStringResourceManager.hpp>
-#include <comphelper/processfactory.hxx>
+#include <editeng/unolingu.hxx>
+#include <sfx2/bindings.hxx>
+#include <svtools/langtab.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
-#include <unotools/localedatawrapper.hxx>
-#include <editeng/unolingu.hxx>
-
-#include <svtools/langtab.hxx>
-
-#include <sfx2/bindings.hxx>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
