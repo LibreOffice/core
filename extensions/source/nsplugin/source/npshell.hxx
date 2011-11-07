@@ -37,7 +37,7 @@
 
 typedef struct _PluginInstance
 {
-    uint16 mode;
+    uint16_t mode;
 #ifdef MOZ_X11
     Window window;
     Display *display;
@@ -79,7 +79,7 @@ typedef struct _MimeTypeElement
 typedef struct _PluginInstance
 {
     NPWindow*            fWindow;
-    uint16                fMode;
+    uint16_t                fMode;
 
     HWND                fhWnd;
     WNDPROC                fDefaultWindowProc;
