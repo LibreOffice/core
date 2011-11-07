@@ -640,13 +640,13 @@ void SvxHyphenWordDialog::SetWindowTitle( LanguageType nLang )
 
 void SvxHyphenWordDialog::SelLeft()
 {
-    m_pImpl->SelRight_Impl();
+    m_pImpl->SelLeft_Impl();
 }
 
 
 void SvxHyphenWordDialog::SelRight()
 {
-    m_pImpl->SelLeft_Impl();
+    m_pImpl->SelRight_Impl();
 }
 
 
