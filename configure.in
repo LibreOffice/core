@@ -910,22 +910,22 @@ AC_ARG_WITH(system-jars,
 AC_ARG_WITH(system-stdlibs,
     AS_HELP_STRING([--with-system-stdlibs],
         [Use libstdc++/libgcc_s already on system.]),,
-    [test -n "$with_system_libs" && with_system_stdlibs="$with_system_libs"])
+    [with_system_stdlibs="$with_system_libs"])
 
 AC_ARG_WITH(system-cairo,
     AS_HELP_STRING([--with-system-cairo],
         [Use Cairo libraries already on system.]),,
-    [test -n "$with_system_libs" && with_system_cairo="$with_system_libs"])
+    [with_system_cairo="$with_system_libs"])
 
 AC_ARG_WITH(system-graphite,
     AS_HELP_STRING([--with-system-graphite],
         [Use graphite library already installed on system.]),,
-    [test -n "$with_system_libs" && with_system_graphite="$with_system_libs"])
+    [with_system_graphite="$with_system_libs"])
 
 AC_ARG_WITH(system-nss,
     AS_HELP_STRING([--with-system-nss],
         [Use NSS/nspr libraries already on system.]),,
-    [test -n "$with_system_libs" && with_system_nss="$with_system_libs"])
+    [with_system_nss="$with_system_libs"])
 
 AC_ARG_WITH(mozilla-version,
     AS_HELP_STRING([--with-mozilla-version],
@@ -970,17 +970,15 @@ AC_ARG_WITH(system-zlib,
     AS_HELP_STRING([--with-system-zlib],
         [Use zlib already on system.]),,
  [if test "$_os" != "WINNT"; then
-        with_system_zlib=yes
+    with_system_zlib=yes
   else
-    if test -n "$with_system_libs"; then
-        with_system_zlib="$with_system_libs";
-    fi
+    with_system_zlib="$with_system_libs"
   fi])
 
 AC_ARG_WITH(system-openssl,
     AS_HELP_STRING([--with-system-openssl],
         [Use OpenSSL already on system.]),,
-    [test -n "$with_system_libs" && with_system_openssl="$with_system_libs"])
+    [with_system_openssl="$with_system_libs"])
 
 AC_ARG_WITH(system-jpeg,
     AS_HELP_STRING([--with-system-jpeg],
@@ -988,40 +986,38 @@ AC_ARG_WITH(system-jpeg,
  [if test "$_os" = "Linux"; then
     with_system_jpeg=yes
   else
-    if test -n "$with_system_libs"; then
-        with_system_jpeg="$with_system_libs";
-    fi
+    with_system_jpeg="$with_system_libs"
   fi])
 
 AC_ARG_WITH(system-expat,
     AS_HELP_STRING([--with-system-expat],
         [Use expat already on system.]),,
-    [test -n "$with_system_libs" && with_system_expat="$with_system_libs"])
+    [with_system_expat="$with_system_libs"])
 
 AC_ARG_WITH(system-libcmis,
     AS_HELP_STRING([--with-system-libcmis],
         [Use libcmis already on system.]),,
-    [test -n "$with_system_libs" && with_system_libcmis="$with_system_libs"])
+    [with_system_libcmis="$with_system_libs"])
 
 AC_ARG_WITH(system-libvisio,
     AS_HELP_STRING([--with-system-libvisio],
         [Use libvisio already on system.]),,
-    [test -n "$with_system_libs" && with_system_libvisio="$with_system_libs"])
+    [with_system_libvisio="$with_system_libs"])
 
 AC_ARG_WITH(system-libwpd,
     AS_HELP_STRING([--with-system-libwpd],
         [Use libwpd already on system.]),,
-    [test -n "$with_system_libs" && with_system_libwpd="$with_system_libs"])
+    [with_system_libwpd="$with_system_libs"])
 
 AC_ARG_WITH(system-libwps,
     AS_HELP_STRING([--with-system-libwps],
         [Use libwps already on system.]),,
-    [test -n "$with_system_libs" && with_system_libwps="$with_system_libs"])
+    [with_system_libwps="$with_system_libs"])
 
 AC_ARG_WITH(system-libwpg,
     AS_HELP_STRING([--with-system-libwpg],
         [Use libwpg already on system.]),,
-    [test -n "$with_system_libs" && with_system_libwpg="$with_system_libs"])
+    [with_system_libwpg="$with_system_libs"])
 
 AC_ARG_WITH(system-libxml,
     AS_HELP_STRING([--with-system-libxml],
@@ -1029,35 +1025,33 @@ AC_ARG_WITH(system-libxml,
  [if test "$_os" = "Darwin" -o $_os = "iOS"; then
     with_system_libxml=yes
   else
-    if test -n "$with_system_libs"; then
-        with_system_libxml="$with_system_libs";
-    fi
+    with_system_libxml="$with_system_libs"
   fi])
 
 AC_ARG_WITH(system-icu,
     AS_HELP_STRING([--with-system-icu],
         [Use icu already on system.]),,
-    [test -n "$with_system_libs" && with_system_icu="$with_system_libs"])
+    [with_system_icu="$with_system_libs"])
 
 AC_ARG_WITH(system-poppler,
     AS_HELP_STRING([--with-system-poppler],
         [Use system poppler. (only needed for pdfimport extension)]),,
-    [test -n "$with_system_libs" && with_system_poppler="$with_system_libs"])
+    [with_system_poppler="$with_system_libs"])
 
 AC_ARG_WITH(system-db,
     AS_HELP_STRING([--with-system-db],
         [Use Berkeley db already on system.]),,
-    [test -n "$with_system_libs" && with_system_db="$with_system_libs"])
+    [with_system_db="$with_system_libs"])
 
 AC_ARG_WITH(system-lucene,
     AS_HELP_STRING([--with-system-lucene],
         [Use Lucene already on system.]),,
-    [test -n "$with_system_jars" && with_system_lucene="$with_system_jars"])
+    [with_system_lucene="$with_system_jars"])
 
 AC_ARG_WITH(system-apache-commons,
     AS_HELP_STRING([--with-system-apache-commons],
         [Use Apache commons libraries already on system.]),,
-    [test -n "$with_system_jars" && with_system_apache_commons="$with_system_jars"])
+    [with_system_apache_commons="$with_system_jars"])
 
 AC_ARG_WITH(lucene-core-jar,
     AS_HELP_STRING([--with-lucene-core-jar=JARFILE],
@@ -1073,7 +1067,7 @@ AC_ARG_WITH(system-mysql,
     AS_HELP_STRING([--with-system-mysql],
         [Use MySQL libraries already on system, for building the MySQL Connector/LibreOffice
          extension. Requires MYSQLCONFIG to point to the mysql_config executable.]),,
-    [test -n "$with_system_libs" && with_system_mysql="$with_system_libs"])
+    [with_system_mysql="$with_system_libs"])
 
 AC_ARG_WITH(libmysql-path,
     AS_HELP_STRING([--with-libmysql-path],
@@ -1088,12 +1082,12 @@ AC_ARG_WITH(libmysql-path,
 AC_ARG_WITH(system-mysql-cppconn,
     AS_HELP_STRING([--with-system-mysql-cppconn],
         [Use MySQL C++ Connector libraries already on system.]),,
-    [test -n "$with_system_libs" && with_system_mysql_cppconn="$with_system_libs"])
+    [with_system_mysql_cppconn="$with_system_libs"])
 
 AC_ARG_WITH(system-hsqldb,
     AS_HELP_STRING([--with-system-hsqldb],
         [Use hsqldb already on system.]),,
-    [test -n "$with_system_jars" && with_system_hsqldb="$with_system_jars"])
+    [with_system_hsqldb="$with_system_jars"])
 
 AC_ARG_WITH(hsqldb-jar,
     AS_HELP_STRING([--with-hsqldb-jar=JARFILE],
@@ -1103,7 +1097,7 @@ AC_ARG_WITH(hsqldb-jar,
 AC_ARG_WITH(system-beanshell,
     AS_HELP_STRING([--with-system-beanshell],
         [Use beanshell already on system.]),,
-    [test -n "$with_system_jars" && with_system_beanshell="$with_system_jars"])
+    [with_system_beanshell="$with_system_jars"])
 
 AC_ARG_WITH(beanshell-jar,
     AS_HELP_STRING([--with-beanshell-jar=JARFILE],
@@ -1133,7 +1127,7 @@ AC_ARG_WITH(commons-logging-jar,
 AC_ARG_WITH(system-servlet-api,
     AS_HELP_STRING([--with-system-servlet-api],
         [Use servlet-api already on system.]),,
-    [test -n "$with_system_jars" && with_system_servlet_api="$with_system_jars"])
+    [with_system_servlet_api="$with_system_jars"])
 
 AC_ARG_WITH(servlet-api-jar,
     AS_HELP_STRING([--with-servlet-api-jar=JARFILE],
@@ -1143,7 +1137,7 @@ AC_ARG_WITH(servlet-api-jar,
 AC_ARG_WITH(system-jfreereport,
     AS_HELP_STRING([--with-system-jfreereport],
         [Use JFreeReport already on system.]),,
-    [test -n "$with_system_jars" && with_system_jfreereport="$with_system_jars"])
+    [with_system_jfreereport="$with_system_jars"])
 
 AC_ARG_WITH(sac-jar,
     AS_HELP_STRING([--with-sac-jar=JARFILE],
@@ -1208,7 +1202,7 @@ AC_ARG_WITH(libbase-jar,
 AC_ARG_WITH(system-saxon,
     AS_HELP_STRING([--with-system-saxon],
         [Use saxon already on system.]),,
-    [test -n "$with_system_jars" && with_system_saxon="$with_system_jars"])
+    [with_system_saxon="$with_system_jars"])
 
 AC_ARG_WITH(saxon-jar,
     AS_HELP_STRING([--with-saxon-jar=JARFILE],
@@ -1218,22 +1212,22 @@ AC_ARG_WITH(saxon-jar,
 AC_ARG_WITH(system-odbc,
     AS_HELP_STRING([--with-system-odbc],
         [Use the odbc headers already on system.]),,
-    [test -n "$with_system_headers" && with_system_odbc="$with_system_headers"])
+    [with_system_odbc="$with_system_headers"])
 
 AC_ARG_WITH(system-sane,
     AS_HELP_STRING([--with-system-sane],
         [Use sane.h already on system.]),,
-    [test -n "$with_system_headers" && with_system_sane="$with_system_headers"])
+    [with_system_sane="$with_system_headers"])
 
 AC_ARG_WITH(system-xrender-headers,
     AS_HELP_STRING([--with-system-xrender-headers],
         [Use XRender headers already on system.]),
-    [test -n "$with_system_headers" && with_system_xrender_headers="$with_system_headers"])
+    [with_system_xrender_headers="$with_system_headers"])
 
 AC_ARG_WITH(system-mesa-headers,
     AS_HELP_STRING([--with-system-mesa-headers],
         [Use Mesa headers already on system.]),,
-    [test -n "$with_system_headers" && with_system_mesa_headers="$with_system_headers"])
+    [with_system_mesa_headers="$with_system_headers"])
 
 AC_ARG_WITH(system-curl,
     AS_HELP_STRING([--with-system-curl],
@@ -1241,65 +1235,63 @@ AC_ARG_WITH(system-curl,
  [if test "$_os" = "Darwin"; then
     with_system_curl=yes
   else
-    if test -n "$with_system_libs"; then
-        with_system_curl="$with_system_libs";
-    fi
+    with_system_curl="$with_system_libs"
   fi])
 
 AC_ARG_WITH(system-boost,
     AS_HELP_STRING([--with-system-boost],
         [Use boost already on system.]),,
-    [test -n "$with_system_headers" && with_system_boost="$with_system_headers"])
+    [with_system_boost="$with_system_headers"])
 
 AC_ARG_WITH(system-mdds,
     AS_HELP_STRING([--with-system-mdds],
         [Use mdds already on system.]),,
-    [test -n "$with_system_headers" && with_system_mdds="$with_system_headers"])
+    [with_system_mdds="$with_system_headers"])
 
 AC_ARG_WITH(system-vigra,
     AS_HELP_STRING([--with-system-vigra],
         [Use vigra already on system.]),,
-    [test -n "$with_system_headers" && with_system_vigra="$with_system_headers"])
+    [with_system_vigra="$with_system_headers"])
 
 AC_ARG_WITH(system-neon,
     AS_HELP_STRING([--with-system-neon],
         [Use neon already on system.]),,
-    [test -n "$with_system_libs" && with_system_neon="$with_system_libs"])
+    [with_system_neon="$with_system_libs"])
 
 AC_ARG_WITH(system-hunspell,
     AS_HELP_STRING([--with-system-hunspell],
         [Use libhunspell already on system.]),,
-    [test -n "$with_system_libs" && with_system_hunspell="$with_system_libs"])
+    [with_system_hunspell="$with_system_libs"])
 
 AC_ARG_WITH(system-mythes,
     AS_HELP_STRING([--with-system-mythes],
         [Use mythes already on system.]),,
-    [test -n "$with_system_libs" && with_system_mythes="$with_system_libs"])
+    [with_system_mythes="$with_system_libs"])
 
 AC_ARG_WITH(system-altlinuxhyph,
     AS_HELP_STRING([--with-system-altlinuxhyph],
         [Use ALTLinuxhyph already on system.]),,
-    [test -n "$with_system_libs" && with_system_altlinuxhyph="$with_system_libs"])
+    [with_system_altlinuxhyph="$with_system_libs"])
 
 AC_ARG_WITH(system-lpsolve,
     AS_HELP_STRING([--with-system-lpsolve],
         [Use lpsolve already on system.]),,
-    [test -n "$with_system_libs" && with_system_lpsolve="$with_system_libs"])
+    [with_system_lpsolve="$with_system_libs"])
 
 AC_ARG_WITH(system-libexttextcat,
     AS_HELP_STRING([--with-system-libexttextcat],
         [Use libexttextcat already on system.]),,
-    [test -n "$with_system_libs" && with_system_libexttextcat="$with_system_libs"])
+    [with_system_libexttextcat="$with_system_libs"])
 
 AC_ARG_WITH(system-cppunit,
     AS_HELP_STRING([--with-system-cppunit],
         [Use cppunit already on system.]),,
-    [test -n "$with_system_libs" && with_system_cppunit="$with_system_libs"])
+    [with_system_cppunit="$with_system_libs"])
 
 AC_ARG_WITH(system-redland,
     AS_HELP_STRING([--with-system-redland],
         [Use redland library already on system.]),,
-    [test -n "$with_system_libs" && with_system_redland="$with_system_libs"])
+    [with_system_redland="$with_system_libs"])
 
 AC_ARG_WITH(system-mozilla,
     AS_HELP_STRING([--with-system-mozilla],
@@ -1313,12 +1305,12 @@ WITH_SYSTEM_MOZILLA=no)
 AC_ARG_WITH(system-gettext,
     AS_HELP_STRING([--with-system-gettext],
         [Use gettext runtime library already on system.]),,
-    [test -n "$with_system_libs" && with_system_gettext="$with_system_libs"])
+    [with_system_gettext="$with_system_libs"])
 
 AC_ARG_WITH(system-libpng,
     AS_HELP_STRING([--with-system-libpng],
         [Use libpng already on system.]),,
-    [test -n "$with_system_libs" && with_system_libpng="$with_system_libs"])
+    [with_system_libpng="$with_system_libs"])
 
 AC_ARG_WITH(linker-hash-style,
     AS_HELP_STRING([--with-linker-hash-style],
