@@ -101,6 +101,8 @@ extern SdrObject* pSkipPaintObj;            // output.cxx - dieses Objekt nicht 
 #define IS_AVAILABLE(WhichId,ppItem) \
     (pReqArgs->GetItemState((WhichId), sal_True, ppItem ) == SFX_ITEM_SET)
 
+namespace {
+
 void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScViewData* pViewData,
                     const rtl::OUString& rRangeParam )
 {
@@ -119,7 +121,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
 
         ScMarkData& rMark = pViewData->GetMarkData();
         if ( !rMark.IsMarked() )
-            pViewData->GetView()->MarkDataArea( sal_True );
+            pViewData->GetView()->MarkDataArea( true );
 
         if ( pViewData->GetSimpleArea( nCol1,nRow1,nTab1, nCol2,nRow2,nTab2 ) == SC_MARK_SIMPLE )
         {
@@ -130,10 +132,8 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
                 ScDocument* pDoc = pViewData->GetDocument();
                 pDoc->LimitChartArea( nTab1, nCol1,nRow1, nCol2,nRow2 );
 
-                String aStr;
                 ScRange aRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-                aRange.Format( aStr, SCR_ABS_3D, pScDoc );
-                aRangeString = aStr;
+                aRange.Format( aRangeString, SCR_ABS_3D, pScDoc );
             }
         }
     }
@@ -210,6 +210,8 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
             // don't create chart listener here (range may be modified in chart dialog)
         }
     }
+}
+
 }
 
 /*************************************************************************
