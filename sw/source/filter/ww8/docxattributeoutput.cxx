@@ -2313,10 +2313,7 @@ void DocxAttributeOutput::WritePostponedMath()
     if( m_postponedMath == NULL )
         return;
     uno::Reference < embed::XEmbeddedObject > xObj(const_cast<SwOLENode*>(m_postponedMath)->GetOLEObj().GetOleRef());
-    sal_Int64 nAspect = m_postponedMath->GetAspect();
-    svt::EmbeddedObjectRef aObjRef( xObj, nAspect );
-
-    uno::Reference< uno::XInterface > xInterface( aObjRef->getComponent(), uno::UNO_QUERY );
+    uno::Reference< uno::XInterface > xInterface( xObj->getComponent(), uno::UNO_QUERY );
     if( OoxmlFormulaExportBase* formulaexport = dynamic_cast< OoxmlFormulaExportBase* >( xInterface.get()))
         formulaexport->writeFormulaOoxml( m_pSerializer, GetExport().GetFilter().getVersion());
     else
