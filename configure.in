@@ -78,12 +78,12 @@ solaris*)
     _os=SunOS
 
     dnl ===========================================================
-    dnl Check whether we're using Solaris 6,7,8 - SPARC or Intel.
+    dnl Check whether we're using Solaris 10 - SPARC or Intel.
     dnl ===========================================================
     AC_MSG_CHECKING([the Solaris operating system release])
     _os_release=`echo $host_os | $SED -e s/solaris2\.//`
-    if test "$_os_release" -lt "6"; then
-        AC_MSG_ERROR([use Solaris >= 6 to build LibreOffice])
+    if test "$_os_release" -lt "10"; then
+        AC_MSG_ERROR([use Solaris >= 10 to build LibreOffice])
     else
         AC_MSG_RESULT([ok ($_os_release)])
     fi
