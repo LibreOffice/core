@@ -51,7 +51,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    class BASEGFX_DLLPUBLIC ip_single
+    class ip_single
     {
     private:
         double                                      mfVal;
@@ -77,7 +77,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    class BASEGFX_DLLPUBLIC ip_double
+    class ip_double
     {
     private:
         ip_single                                   maX;
@@ -103,7 +103,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    class BASEGFX_DLLPUBLIC ip_triple
+    class ip_triple
     {
     private:
         ip_single                                   maX;
@@ -139,7 +139,7 @@ namespace basegfx
 {
     #define SCANLINE_EMPTY_INDEX (0xffffffff)
 
-    class BASEGFX_DLLPUBLIC InterpolatorProvider3D
+    class InterpolatorProvider3D
     {
     private:
         ::std::vector< ip_triple >                  maColorInterpolators;
@@ -211,7 +211,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    class BASEGFX_DLLPUBLIC RasterConversionLineEntry3D
+    class RasterConversionLineEntry3D
     {
     private:
         ip_single                                   maX;

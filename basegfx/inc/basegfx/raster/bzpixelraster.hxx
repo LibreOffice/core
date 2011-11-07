@@ -40,7 +40,7 @@
 
 namespace basegfx
 {
-    class BASEGFX_DLLPUBLIC BZPixelRaster : public BPixelRaster
+    class BZPixelRaster : public BPixelRaster
     {
     protected:
         // additionally, host a ZBuffer

@@ -42,7 +42,7 @@
 
 namespace basegfx
 {
-    class BASEGFX_DLLPUBLIC BPixelRaster
+    class BPixelRaster
     {
     private:
         // do not allow copy constructor and assignment operator
