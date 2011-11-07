@@ -437,7 +437,6 @@ public:
     sal_Bool isInFilterMode() const {return m_bFilterMode;}
     void startFiltering();
     void stopFiltering(sal_Bool bSave);
-    void clearFilter();
 
     static PopupMenu* GetConversionMenu();
         // ein Menue, das alle ControlConversion-Eintraege enthaelt

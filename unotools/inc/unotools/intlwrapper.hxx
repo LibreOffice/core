@@ -59,17 +59,13 @@ private:
     ::com::sun::star::lang::Locale  aLocale;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
 
-            CharClass*          pCharClass;
             LocaleDataWrapper*  pLocaleData;
-            CalendarWrapper*    pCalendar;
             CollatorWrapper*    pCollator;
             CollatorWrapper*    pCaseCollator;
 
             LanguageType        eLanguage;
 
-            void                ImplNewCharClass() const;
             void                ImplNewLocaleData() const;
-            void                ImplNewCalendar() const;
             void                ImplNewCollator( sal_Bool bCaseSensitive ) const;
 
 
@@ -87,23 +83,11 @@ public:
     LanguageType                getLanguage() const { return eLanguage; }
     const ::com::sun::star::lang::Locale&   getLocale() const { return aLocale; }
 
-    const CharClass*            getCharClass() const
-                                    {
-                                        if ( !pCharClass )
-                                            ImplNewCharClass();
-                                        return pCharClass;
-                                    }
     const LocaleDataWrapper*    getLocaleData() const
                                     {
                                         if ( !pLocaleData )
                                             ImplNewLocaleData();
                                         return pLocaleData;
-                                    }
-    CalendarWrapper*            getCalendar() const
-                                    {
-                                        if ( !pCalendar )
-                                            ImplNewCalendar();
-                                        return pCalendar;
                                     }
     /// case insensitive collator, simple IGNORE_CASE
     const CollatorWrapper*      getCollator() const

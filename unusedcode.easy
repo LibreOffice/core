@@ -129,10 +129,8 @@ FmFieldWinMgr::GetChildWindowId()
 FmFormObj::getType() const
 FmPropBrwMgr::GetChildWindowId()
 FmXFilterCell::getImplementation(com::sun::star::uno::Reference<com::sun::star::awt::XControl> const&)
-FmXFormShell::clearFilter()
 FontCharMap::GetLastChar() const
 FontSelectPattern::FontSelectPattern(ImplFontData const&, Size const&, float, int, bool)
-FontSizeBox::GetValue(unsigned short, FieldUnit) const
 FontSizeBox::SetUserValue(long, FieldUnit)
 FontStyleBox::FontStyleBox(Window*, long)
 FontStyleMenu::Fill(String const&, FontList const*)
@@ -198,8 +196,6 @@ InsCapOptArr::Insert(InsCaptionOpt* const&, unsigned short&)
 InsCapOptArr::Insert(InsCaptionOpt* const*, unsigned short)
 InsCapOptArr::Remove(InsCaptionOpt* const&, unsigned short)
 InsCapOptArr::Remove(unsigned short, unsigned short)
-IntlWrapper::ImplNewCalendar() const
-IntlWrapper::ImplNewCharClass() const
 IntroWindow::SetBackgroundBitmap(Bitmap const&)
 ItemList::FindAttrib(unsigned short)
 KeyCode::GetSymbolName(String const&, Window*) const
@@ -429,7 +425,7 @@ ScDPItemData::GetNumFormat() const
 ScDPSaveData::Refresh(com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier> const&)
 ScDdeLink::ResetValue()
 ScDocRowHeightUpdater::TabRanges::TabRanges()
-ScDocument::ValidNewTabName(std::__debug::vector<String, std::allocator<String> > const&) const
+ScDocument::ValidNewTabName(std::__debug::vector<rtl::OUString, std::allocator<rtl::OUString> > const&) const
 ScFilterDetect::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 ScFiltersTest::testPassword()
 ScFormulaCell::IsRangeNameInUse(unsigned short) const

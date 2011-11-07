@@ -39,9 +39,7 @@ IntlWrapper::IntlWrapper(
         :
         aLocale( rLocale ),
         xSMgr( xSF ),
-        pCharClass( NULL ),
         pLocaleData( NULL ),
-        pCalendar( NULL ),
         pCollator( NULL ),
         pCaseCollator( NULL )
 {
@@ -54,9 +52,7 @@ IntlWrapper::IntlWrapper(
             LanguageType eLang )
         :
         xSMgr( xSF ),
-        pCharClass( NULL ),
         pLocaleData( NULL ),
-        pCalendar( NULL ),
         pCollator( NULL ),
         pCaseCollator( NULL ),
         eLanguage( eLang )
@@ -67,31 +63,15 @@ IntlWrapper::IntlWrapper(
 
 IntlWrapper::~IntlWrapper()
 {
-    delete pCharClass;
     delete pLocaleData;
-    delete pCalendar;
     delete pCollator;
     delete pCaseCollator;
-}
-
-
-void IntlWrapper::ImplNewCharClass() const
-{
-    ((IntlWrapper*)this)->pCharClass = new CharClass( xSMgr, aLocale );
 }
 
 
 void IntlWrapper::ImplNewLocaleData() const
 {
     ((IntlWrapper*)this)->pLocaleData = new LocaleDataWrapper( xSMgr, aLocale );
-}
-
-
-void IntlWrapper::ImplNewCalendar() const
-{
-    CalendarWrapper* p = new CalendarWrapper( xSMgr );
-    p->loadDefaultCalendar( aLocale );
-    ((IntlWrapper*)this)->pCalendar = p;
 }
 
 
