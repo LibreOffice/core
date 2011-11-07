@@ -739,51 +739,41 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 pView->SetPageVisible( sal_False );
                 pView->ShowSdrPage( pPage );
 
-                if ( pView && pPage )
-                {
-                    pView->SetBordVisible( sal_False );
-                    pView->SetPageVisible( sal_False );
-                    pView->ShowSdrPage( pPage );
+                const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );
+                aNewSize = Size( aSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder(),
+                                 aSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder() );
+                const Rectangle aClipRect( aNewOrg, aNewSize );
+                MapMode         aVMap( aMap );
 
-                    const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );
-                    aNewSize = Size( aSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder(),
-                                          aSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder() );
-                    const Rectangle aClipRect( aNewOrg, aNewSize );
-                    MapMode         aVMap( aMap );
+                aVDev.Push();
+                aVMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
+                aVDev.SetRelativeMapMode( aVMap );
+                aVDev.IntersectClipRegion( aClipRect );
 
-                    aVDev.Push();
-                    aVMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
-                    aVDev.SetRelativeMapMode( aVMap );
-                    aVDev.IntersectClipRegion( aClipRect );
+                // Use new StandardCheckVisisbilityRedirector
+                ImplExportCheckVisisbilityRedirector aRedirector( mpCurrentPage );
 
-                    // Use new StandardCheckVisisbilityRedirector
-                    ImplExportCheckVisisbilityRedirector aRedirector( mpCurrentPage );
+                pView->CompleteRedraw(&aVDev, Region(Rectangle(Point(), aNewSize)), &aRedirector);
 
-                    pView->CompleteRedraw(&aVDev, Region(Rectangle(Point(), aNewSize)), &aRedirector);
+                aVDev.Pop();
 
-                    aVDev.Pop();
+                aMtf.Stop();
+                aMtf.WindStart();
+                aMtf.SetPrefMapMode( aMap );
+                aMtf.SetPrefSize( aNewSize );
 
-                    aMtf.Stop();
-                    aMtf.WindStart();
-                    aMtf.SetPrefMapMode( aMap );
-                    aMtf.SetPrefSize( aNewSize );
+                // AW: Here the current version was filtering out the META_CLIPREGION_ACTIONs
+                // from the metafile. I asked some other developers why this was done, but no
+                // one knew a direct reason. Since it's in for long time, it may be an old
+                // piece of code. MetaFiles save and load ClipRegions with polygons with preserving
+                // the polygons, so a resolution-indepent roundtrip is supported. Removed this
+                // code since it destroys some MetaFiles where ClipRegions are used. Anyways,
+                // just filtering them out is a hack, at least the encapsulated content would need
+                // to be clipped geometrically.
+                aGraphic = Graphic(aMtf);
 
-                    // AW: Here the current version was filtering out the META_CLIPREGION_ACTIONs
-                    // from the metafile. I asked some other developers why this was done, but no
-                    // one knew a direct reason. Since it's in for long time, it may be an old
-                    // piece of code. MetaFiles save and load ClipRegions with polygons with preserving
-                    // the polygons, so a resolution-indepent roundtrip is supported. Removed this
-                    // code since it destroys some MetaFiles where ClipRegions are used. Anyways,
-                    // just filtering them out is a hack, at least the encapsulated content would need
-                    // to be clipped geometrically.
-                    aGraphic = Graphic(aMtf);
-                }
-
-                if ( pView )
-                {
-                    pView->HideSdrPage();
-                    delete pView;
-                }
+                pView->HideSdrPage();
+                delete pView;
 
                 if( rSettings.mbTranslucent )
                 {
