@@ -97,7 +97,7 @@ sal_Int32 CustomShapeProperties::GetCustomShapeGuideValue( const std::vector< Cu
 CustomShapeProperties::PresetsMap CustomShapeProperties::maPresetsMap;
 
 void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFilterBase */,
-    const Reference < XPropertySet >& xPropSet, const Reference < XShape > & xShape ) const
+    const Reference < XPropertySet >& xPropSet, const Reference < XShape > & xShape )
 {
     if ( mnShapePresetType >= 0 )
     {
@@ -187,7 +187,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         aPropertyMap[ PROP_Type ] <<= CREATE_OUSTRING( "ooxml-non-primitive" );
         aPropertyMap[ PROP_MirroredX ] <<= Any( mbMirroredX );
         aPropertyMap[ PROP_MirroredY ] <<= Any( mbMirroredY );
-        awt::Size aSize( xShape->getSize() );
+        awt::Size aSize;
         awt::Rectangle aViewBox( 0, 0, aSize.Width * 360, aSize.Height * 360 );
         if ( maPath2DList.size() )
         {   // TODO: each polygon may have its own size, but I think it is rather been used

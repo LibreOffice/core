@@ -781,12 +781,11 @@ void PropertyMap::dumpCode( Reference< XPropertySet > rXPropSet )
     Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo ();
     Sequence< Property > props = info->getProperties ();
     const OUString sType = CREATE_OUSTRING( "Type" );
-    const OUString sViewBox = CREATE_OUSTRING( "ViewBox" );
 
     for (int i=0; i < props.getLength (); i++) {
 
         // ignore Type, it is set elsewhere
-        if (props[i].Name.equals (sType) || props[i].Name.equals (sViewBox))
+        if (props[i].Name.equals (sType))
             continue;
 
         OString name = OUStringToOString( props [i].Name, RTL_TEXTENCODING_UTF8);

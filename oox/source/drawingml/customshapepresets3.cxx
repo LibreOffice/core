@@ -476,6 +476,14 @@ void CustomShapeProperties::initializePresetsMap3()
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-round2SameRect");
 
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "round2SameRect" ) ) ) ] = aPropertyMap;
@@ -727,6 +735,14 @@ void CustomShapeProperties::initializePresetsMap3()
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-nonIsoscelesTrapezoid");
 
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "nonIsoscelesTrapezoid" ) ) ) ] = aPropertyMap;
@@ -869,6 +885,14 @@ void CustomShapeProperties::initializePresetsMap3()
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-diamond");
 
@@ -2402,6 +2426,14 @@ void CustomShapeProperties::initializePresetsMap3()
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-ellipseRibbon");
 
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "ellipseRibbon" ) ) ) ] = aPropertyMap;
@@ -2844,6 +2876,14 @@ void CustomShapeProperties::initializePresetsMap3()
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-callout2");
 
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "callout2" ) ) ) ] = aPropertyMap;
@@ -3069,6 +3109,14 @@ void CustomShapeProperties::initializePresetsMap3()
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-pie");
 
@@ -3341,6 +3389,14 @@ void CustomShapeProperties::initializePresetsMap3()
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-star4");
 
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "star4" ) ) ) ] = aPropertyMap;
@@ -3353,13 +3409,15 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_AdjustmentValues] <<= aStringSequence;
     }
     {
-        Sequence< OUString > aStringSequence (6);
+        Sequence< OUString > aStringSequence (8);
         aStringSequence[0] = CREATE_OUSTRING ("logwidth*7/8");
         aStringSequence[1] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[2] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[3] = CREATE_OUSTRING ("logheight");
         aStringSequence[4] = CREATE_OUSTRING ("logwidth");
         aStringSequence[5] = CREATE_OUSTRING ("logwidth/8");
+        aStringSequence[6] = CREATE_OUSTRING ("logwidth/1");
+        aStringSequence[7] = CREATE_OUSTRING ("logheight/1");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -3692,6 +3750,14 @@ void CustomShapeProperties::initializePresetsMap3()
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 1;
+        aRectangle.Height = 1;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-flowChartPredefinedProcess");
 
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "flowChartPredefinedProcess" ) ) ) ] = aPropertyMap;
@@ -3704,7 +3770,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_AdjustmentValues] <<= aStringSequence;
     }
     {
-        Sequence< OUString > aStringSequence (15);
+        Sequence< OUString > aStringSequence (17);
         aStringSequence[0] = CREATE_OUSTRING ("logheight*9/10");
         aStringSequence[1] = CREATE_OUSTRING ("logheight*4/5");
         aStringSequence[2] = CREATE_OUSTRING ("logwidth/2");
@@ -3720,6 +3786,8 @@ void CustomShapeProperties::initializePresetsMap3()
         aStringSequence[12] = CREATE_OUSTRING ("(-10800000)/60000.0");
         aStringSequence[13] = CREATE_OUSTRING ("(0)/60000.0");
         aStringSequence[14] = CREATE_OUSTRING ("(10800000)/60000.0");
+        aStringSequence[15] = CREATE_OUSTRING ("logwidth/20");
+        aStringSequence[16] = CREATE_OUSTRING ("logheight/20");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -3962,6 +4030,14 @@ void CustomShapeProperties::initializePresetsMap3()
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 20;
+        aRectangle.Height = 20;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-flowChartPunchedTape");
 
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "flowChartPunchedTape" ) ) ) ] = aPropertyMap;
@@ -4100,6 +4176,14 @@ void CustomShapeProperties::initializePresetsMap3()
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-curvedConnector2");
 
@@ -4287,6 +4371,14 @@ void CustomShapeProperties::initializePresetsMap3()
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-bentConnector3");
 
@@ -4645,6 +4737,14 @@ void CustomShapeProperties::initializePresetsMap3()
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-cornerTabs");
 
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "cornerTabs" ) ) ) ] = aPropertyMap;
@@ -4892,6 +4992,14 @@ void CustomShapeProperties::initializePresetsMap3()
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-hexagon");
 
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "hexagon" ) ) ) ] = aPropertyMap;
@@ -5137,6 +5245,14 @@ void CustomShapeProperties::initializePresetsMap3()
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-flowChartConnector");
 
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "flowChartConnector" ) ) ) ] = aPropertyMap;
@@ -5149,7 +5265,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_AdjustmentValues] <<= aStringSequence;
     }
     {
-        Sequence< OUString > aStringSequence (16);
+        Sequence< OUString > aStringSequence (18);
         aStringSequence[0] = CREATE_OUSTRING ("logheight*5/6");
         aStringSequence[1] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[2] = CREATE_OUSTRING ("logheight/3");
@@ -5166,6 +5282,8 @@ void CustomShapeProperties::initializePresetsMap3()
         aStringSequence[13] = CREATE_OUSTRING ("(10800000)/60000.0");
         aStringSequence[14] = CREATE_OUSTRING ("(0)/60000.0");
         aStringSequence[15] = CREATE_OUSTRING ("(10800000)/60000.0");
+        aStringSequence[16] = CREATE_OUSTRING ("logwidth/6");
+        aStringSequence[17] = CREATE_OUSTRING ("logheight/6");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -5564,6 +5682,14 @@ void CustomShapeProperties::initializePresetsMap3()
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 6;
+        aRectangle.Height = 6;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-flowChartMagneticDisk");
 
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "flowChartMagneticDisk" ) ) ) ] = aPropertyMap;
@@ -5766,6 +5892,14 @@ void CustomShapeProperties::initializePresetsMap3()
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-heart");
 
@@ -7628,6 +7762,14 @@ void CustomShapeProperties::initializePresetsMap3()
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-ribbon2");
 
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "ribbon2" ) ) ) ] = aPropertyMap;
@@ -8724,6 +8866,14 @@ void CustomShapeProperties::initializePresetsMap3()
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-bracePair");
 
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "bracePair" ) ) ) ] = aPropertyMap;
@@ -8736,12 +8886,14 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_AdjustmentValues] <<= aStringSequence;
     }
     {
-        Sequence< OUString > aStringSequence (5);
+        Sequence< OUString > aStringSequence (7);
         aStringSequence[0] = CREATE_OUSTRING ("logwidth*3/4");
         aStringSequence[1] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[2] = CREATE_OUSTRING ("logwidth/4");
         aStringSequence[3] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[4] = CREATE_OUSTRING ("logheight");
+        aStringSequence[5] = CREATE_OUSTRING ("logwidth/2");
+        aStringSequence[6] = CREATE_OUSTRING ("logheight/2");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -8845,6 +8997,14 @@ void CustomShapeProperties::initializePresetsMap3()
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 2;
+        aRectangle.Height = 2;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-flowChartExtract");
 
@@ -10164,6 +10324,14 @@ void CustomShapeProperties::initializePresetsMap3()
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-actionButtonHome");
 
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "actionButtonHome" ) ) ) ] = aPropertyMap;
@@ -10765,6 +10933,14 @@ void CustomShapeProperties::initializePresetsMap3()
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-accentBorderCallout3");
 
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "accentBorderCallout3" ) ) ) ] = aPropertyMap;
@@ -10777,12 +10953,14 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_AdjustmentValues] <<= aStringSequence;
     }
     {
-        Sequence< OUString > aStringSequence (5);
+        Sequence< OUString > aStringSequence (7);
         aStringSequence[0] = CREATE_OUSTRING ("logwidth*3/4");
         aStringSequence[1] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[2] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[3] = CREATE_OUSTRING ("logheight");
         aStringSequence[4] = CREATE_OUSTRING ("logwidth/4");
+        aStringSequence[5] = CREATE_OUSTRING ("logwidth/2");
+        aStringSequence[6] = CREATE_OUSTRING ("logheight/2");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -11031,6 +11209,14 @@ void CustomShapeProperties::initializePresetsMap3()
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 2;
+        aRectangle.Height = 2;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-flowChartOfflineStorage");
 
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "flowChartOfflineStorage" ) ) ) ] = aPropertyMap;
@@ -11043,7 +11229,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_AdjustmentValues] <<= aStringSequence;
     }
     {
-        Sequence< OUString > aStringSequence (10);
+        Sequence< OUString > aStringSequence (12);
         aStringSequence[0] = CREATE_OUSTRING ("logwidth*4627/21600");
         aStringSequence[1] = CREATE_OUSTRING ("logwidth*8485/21600");
         aStringSequence[2] = CREATE_OUSTRING ("logwidth*16702/21600");
@@ -11054,6 +11240,8 @@ void CustomShapeProperties::initializePresetsMap3()
         aStringSequence[7] = CREATE_OUSTRING ("logheight*13290/21600");
         aStringSequence[8] = CREATE_OUSTRING ("logheight");
         aStringSequence[9] = CREATE_OUSTRING ("logwidth");
+        aStringSequence[10] = CREATE_OUSTRING ("logwidth/21600");
+        aStringSequence[11] = CREATE_OUSTRING ("logheight/21600");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -11535,6 +11723,14 @@ void CustomShapeProperties::initializePresetsMap3()
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 21600;
+        aRectangle.Height = 21600;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-irregularSeal1");
 
@@ -12201,6 +12397,14 @@ void CustomShapeProperties::initializePresetsMap3()
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-quadArrow");
 
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "quadArrow" ) ) ) ] = aPropertyMap;
@@ -12863,6 +13067,14 @@ void CustomShapeProperties::initializePresetsMap3()
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-leftBrace");
 
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "leftBrace" ) ) ) ] = aPropertyMap;
@@ -13260,6 +13472,14 @@ void CustomShapeProperties::initializePresetsMap3()
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-leftBracket");
 
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "leftBracket" ) ) ) ] = aPropertyMap;
@@ -13597,6 +13817,14 @@ void CustomShapeProperties::initializePresetsMap3()
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-blockArc");
 
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "blockArc" ) ) ) ] = aPropertyMap;
@@ -13841,6 +14069,14 @@ void CustomShapeProperties::initializePresetsMap3()
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-curvedConnector3");
 
@@ -14506,6 +14742,14 @@ void CustomShapeProperties::initializePresetsMap3()
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-wedgeRoundRectCallout");
 
@@ -15888,6 +16132,14 @@ void CustomShapeProperties::initializePresetsMap3()
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-actionButtonMovie");
 
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "actionButtonMovie" ) ) ) ] = aPropertyMap;
@@ -15900,7 +16152,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_AdjustmentValues] <<= aStringSequence;
     }
     {
-        Sequence< OUString > aStringSequence (9);
+        Sequence< OUString > aStringSequence (11);
         aStringSequence[0] = CREATE_OUSTRING ("logwidth*5/6");
         aStringSequence[1] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[2] = CREATE_OUSTRING ("logheight/2");
@@ -15910,6 +16162,8 @@ void CustomShapeProperties::initializePresetsMap3()
         aStringSequence[6] = CREATE_OUSTRING ("(-10800000)/60000.0");
         aStringSequence[7] = CREATE_OUSTRING ("(5400000)/60000.0");
         aStringSequence[8] = CREATE_OUSTRING ("(10800000)/60000.0");
+        aStringSequence[9] = CREATE_OUSTRING ("logwidth/6");
+        aStringSequence[10] = CREATE_OUSTRING ("logheight/6");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -16103,6 +16357,14 @@ void CustomShapeProperties::initializePresetsMap3()
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 6;
+        aRectangle.Height = 6;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-flowChartOnlineStorage");
 
@@ -17011,6 +17273,14 @@ void CustomShapeProperties::initializePresetsMap3()
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-gear6");
 
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "gear6" ) ) ) ] = aPropertyMap;
@@ -17298,6 +17568,14 @@ void CustomShapeProperties::initializePresetsMap3()
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-halfFrame");
 
@@ -17620,6 +17898,14 @@ void CustomShapeProperties::initializePresetsMap3()
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+    }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-snip2SameRect");
 
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "snip2SameRect" ) ) ) ] = aPropertyMap;
@@ -17792,6 +18078,14 @@ void CustomShapeProperties::initializePresetsMap3()
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap [PROP_ViewBox] <<= aRectangle;
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-triangle");
 
