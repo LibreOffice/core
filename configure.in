@@ -1305,8 +1305,8 @@ WITH_SYSTEM_MOZILLA=no)
 AC_ARG_WITH(system-mozilla-headers,
     AS_HELP_STRING([--with-system-mozilla-headers],
         [Use mozilla headers provided by system instead of bundled ones. Needed for
-         nsplugin]),
-    [with_system_mozilla_headers="$with_system_libs"]
+         nsplugin]),,
+    [with_system_mozilla_headers="$with_system_headers"]
 )
 
 AC_ARG_WITH(system-gettext,
@@ -5980,7 +5980,7 @@ dnl ===================================================================
 dnl Check for system mozilla headers
 dnl ===================================================================
 AC_MSG_CHECKING([which mozilla headers to use])
-if test "$with_system_mozilla_headers" = "xyes"; then
+if test "$with_system_mozilla_headers" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_MOZILLA_HEADERS=YES
     # First try npapi-sdk:
