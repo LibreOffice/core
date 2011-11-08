@@ -101,22 +101,10 @@ int file_image_pagein (file_image * image)
         return (0);
 
     if (madvise (w.m_base, w.m_size, MADV_WILLNEED) == -1)
-    {
-#ifndef MACOSX
         return (errno);
-#else
-        /* madvise MADV_WILLNEED need not succeed here */
-        /* but that is fine */
-#endif
-    }
 
-
-#ifndef MACOSX
     if ((s = sysconf (_SC_PAGESIZE)) == -1)
         s = 0x1000;
-#else
-    s = getpagesize();
-#endif
 
     k = (size_t)(s);
     while (w.m_size > k)

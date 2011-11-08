@@ -624,7 +624,6 @@ system_checks( void )
 /* re-use the pagein code */
 extern int pagein_execute (int argc, char **argv);
 
-#ifndef MACOSX
 static char *build_pagein_path (Args *args, const char *pagein_name)
 {
     char *path;
@@ -642,15 +641,11 @@ static char *build_pagein_path (Args *args, const char *pagein_name)
 
     return path;
 }
-#endif
 
 void
 exec_pagein (Args *args)
 {
 // no pagein for the while on OSX
-#ifdef MACOSX
-    (void)args;
-#else
     char *argv[3];
 
     /* don't use -L - since that does a chdir that breaks relative paths */
@@ -666,7 +661,6 @@ exec_pagein (Args *args)
     if (argv[2])
         free (argv[2]);
     free (argv[1]);
-#endif
 }
 
 static void extend_library_path (const char *new_element)
