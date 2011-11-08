@@ -29,18 +29,10 @@
 
 CDEFAULTOPT=-Os
 .INCLUDE : unxgcc.mk
-
-# Amend some macros set by unxgcc.mk
-
 CDEFS+=-DARM32
-CFLAGS+=-march=armv7-a -mfloat-abi=softfp -mthumb -mfpu=neon -fno-omit-frame-pointer
+CFLAGS+=-fno-omit-frame-pointer
 
-LINKFLAGS+=-Wl,--fix-cortex-a8
-
-STDLIBGUIMT+=-llog -landroid
-STDLIBCUIMT+=-llog -landroid
-
-# Completely override some others
+# Override some macros set by unxgcc.mk
 
 # We don't build any "tool" style programs for non-desktop OSes like
 # Android. Just unit tests and GUI programs. (Well, that is in
@@ -52,4 +44,7 @@ STDLIBCUIMT+=-llog -landroid
 
 LINKFLAGSAPPGUI=-shared
 LINKFLAGSAPPCUI=-shared
+
+STDLIBGUIMT+=-llog -landroid
+STDLIBCUIMT+=-llog -landroid
 
