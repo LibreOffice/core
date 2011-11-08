@@ -764,8 +764,6 @@ private:
     void ImportGraphics(
         const com::sun::star::uno::Sequence< rtl::OUString >& aURLs );
 
-    BitmapEx AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize);
-
 public:
 
     SvxIconSelectorDialog(

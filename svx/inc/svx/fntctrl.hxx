@@ -57,7 +57,6 @@ private:
     SVX_DLLPRIVATE void SetFontLang(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
 
 public:
-                        SvxFontPrevWindow( Window* pParent );
                         SvxFontPrevWindow( Window* pParent, const ResId& rId );
     virtual             ~SvxFontPrevWindow();
 
@@ -77,11 +76,8 @@ public:
     void                SetBackColor( const Color& rColor );
     void                UseResourceText( sal_Bool bUse = sal_True );
     void                SetDrawBaseLine( sal_Bool bSet = sal_True );
-    void                SetPreviewBackgroundToCharacter( sal_Bool bSet = sal_True );
     void                Paint( const Rectangle& );
 
-    sal_Bool            IsTwoLines() const;
-    void                SetTwoLines(sal_Bool bSet);
     void                SetNoLines(sal_Bool bSet);
 
     void                SetBrackets(sal_Unicode cStart, sal_Unicode cEnd);

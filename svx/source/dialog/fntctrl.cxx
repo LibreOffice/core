@@ -520,12 +520,6 @@ void SvxFontPrevWindow::Init()
     SetBorderStyle( WINDOW_BORDER_MONO );
 }
 
-SvxFontPrevWindow::SvxFontPrevWindow( Window* pParent ) :
-    Window( pParent )
-{
-    Init();
-}
-
 SvxFontPrevWindow::SvxFontPrevWindow( Window* pParent, const ResId& rId ) :
     Window( pParent, rId )
 {
@@ -650,13 +644,6 @@ void SvxFontPrevWindow::UseResourceText( sal_Bool bUse )
 void SvxFontPrevWindow::SetDrawBaseLine( sal_Bool bSet )
 {
     pImpl->bDrawBaseLine = bSet;
-}
-
-// -----------------------------------------------------------------------
-
-void SvxFontPrevWindow::SetPreviewBackgroundToCharacter(sal_Bool bSet)
-{
-    pImpl->bPreviewBackgroundToCharacter = bSet;
 }
 
 // -----------------------------------------------------------------------
@@ -849,16 +836,6 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
             pImpl->DrawPrev( this, pPrinter, aTmpPoint, rFont );
         }
     }
-}
-
-sal_Bool SvxFontPrevWindow::IsTwoLines() const
-{
-    return pImpl->bTwoLines;
-}
-
-void SvxFontPrevWindow::SetTwoLines(sal_Bool bSet)
-{
-    pImpl->bTwoLines = bSet;
 }
 
 void SvxFontPrevWindow::SetNoLines(sal_Bool bSet)

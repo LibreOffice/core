@@ -996,17 +996,6 @@ SvxLightCtl3D::SvxLightCtl3D( Window* pParent, const ResId& rResId)
     Init();
 }
 
-SvxLightCtl3D::SvxLightCtl3D( Window* pParent, WinBits nStyle )
-:   Control(pParent, nStyle),
-    maLightControl(this, 0),
-    maHorScroller(this, WB_HORZ | WB_DRAG),
-    maVerScroller(this, WB_VERT | WB_DRAG),
-    maSwitcher(this, 0)
-{
-    // init members
-    Init();
-}
-
 void SvxLightCtl3D::Init()
 {
     // #i58240# set HelpIDs for scrollbars and switcher

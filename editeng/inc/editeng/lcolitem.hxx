@@ -44,7 +44,6 @@ public:
     TYPEINFO();
 
     SvxLineColorItem( const sal_uInt16 nId  );
-    SvxLineColorItem( const Color& aColor, const sal_uInt16 nId  );
     SvxLineColorItem( const SvxLineColorItem& rCopy );
     ~SvxLineColorItem();
 

@@ -147,8 +147,6 @@ public:
     sal_Bool                    IsCursored() const { return (sal_Bool)((nFlags & ICNVIEW_FLAG_CURSORED) !=0); }
     sal_Bool                    IsDropTarget() const { return (sal_Bool)((nFlags & ICNVIEW_FLAG_DROP_TARGET) !=0); }
     sal_Bool                    IsBlockingEmphasis() const { return (sal_Bool)((nFlags & ICNVIEW_FLAG_BLOCK_EMPHASIS) !=0); }
-    sal_Bool                    WasMoved() const { return (sal_Bool)((nFlags & ICNVIEW_FLAG_POS_MOVED) !=0); }
-    void                    SetMoved( sal_Bool bMoved );
     sal_Bool                    IsPosLocked() const { return (sal_Bool)((nFlags & ICNVIEW_FLAG_POS_LOCKED) !=0); }
     void                    LockPos( sal_Bool bLock );
     // Nur bei AutoArrange gesetzt. Den Kopf der Liste gibts per SvxIconChoiceCtrl::GetPredecessorHead

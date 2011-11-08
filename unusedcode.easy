@@ -58,15 +58,10 @@ CalendarWrapper::setFirstDayOfWeek(short)
 CalendarWrapper::setMinimumNumberOfDaysForFirstWeek(short)
 CertificateContainer::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 CertificateExtension_XmlSecImpl::setCertExtn(com::sun::star::uno::Sequence<signed char>, com::sun::star::uno::Sequence<signed char>, unsigned char)
-CharClass::isAlpha(String const&) const
-CharClass::isAlphaNumeric(String const&) const
-CharClass::isAsciiAlphaNumeric(String const&)
-CharClass::toLower(rtl::OUString&) const
 CharPosArray::Insert(CharPosArray const*, unsigned short, unsigned short, unsigned short)
 CharPosArray::Replace(int const&, unsigned short)
 CharPosArray::Replace(int const*, unsigned short, unsigned short)
 CharPosArray::_ForEach(unsigned short, unsigned short, unsigned char (*)(int const&, void*), void*)
-CloneList::Count() const
 Color::IncreaseContrast(unsigned char)
 ComboBox::SetTopEntry(unsigned short)
 CommunicationLinkList::DeleteAndDestroy(unsigned short, unsigned short)
@@ -928,10 +923,6 @@ SvxEditSourceHint::SetEndValue(unsigned long)
 SvxEditSourceHint::SetStartValue(unsigned long)
 SvxEditSourceHint::SetValue(unsigned long)
 SvxFont::DrawText(OutputDevice*, Point const&, String const&, unsigned short, unsigned short) const
-SvxFontPrevWindow::IsTwoLines() const
-SvxFontPrevWindow::SetNoLines(unsigned char)
-SvxFontPrevWindow::SetPreviewBackgroundToCharacter(unsigned char)
-SvxFontPrevWindow::SvxFontPrevWindow(Window*)
 SvxFrameDirectionItem::SvxFrameDirectionItem(unsigned short)
 SvxGrafToolBoxControl::RegisterControl(unsigned short, SfxModule*)
 SvxGraphCtrlAccessibleContext::checkChildIndex(long)
@@ -942,13 +933,9 @@ SvxHtmlOptions::RemoveListenerLink(Link const&)
 SvxHyperlinkTabPageBase::FileExists(INetURLObject const&)
 SvxIMapDlg::GetTargetList() const
 SvxIconChoiceCtrlEntry::LockPos(unsigned char)
-SvxIconChoiceCtrlEntry::SetMoved(unsigned char)
-SvxIconSelectorDialog::AutoScaleBitmap(BitmapEx&, long)
 SvxInsertStatusBarControl::GetDefItemWidth(StatusBar const&)
 SvxJustifyMethodItem::SvxJustifyMethodItem(unsigned short)
 SvxLanguageBox::SvxLanguageBox(Window*, long, unsigned char)
-SvxLightCtl3D::SvxLightCtl3D(Window*, long)
-SvxLineColorItem::SvxLineColorItem(Color const&, unsigned short)
 SvxListBoxControl::RegisterControl(unsigned short, SfxModule*)
 SvxMSDffManager::GetAutoForm(MSO_SPT) const
 SvxMSDffManager::ImportFontWork(SvStream&, SfxItemSet&, Rectangle&) const

@@ -64,14 +64,6 @@ SvxIconChoiceCtrlEntry::SvxIconChoiceCtrlEntry( sal_uInt16 _nFlags )
     pflink = 0;
 }
 
-void SvxIconChoiceCtrlEntry::SetMoved( sal_Bool bMoved )
-{
-    if( bMoved )
-        nFlags |= ICNVIEW_FLAG_POS_MOVED;
-    else
-        nFlags &= ~ICNVIEW_FLAG_POS_MOVED;
-}
-
 void SvxIconChoiceCtrlEntry::LockPos( sal_Bool bLock )
 {
     if( bLock )
