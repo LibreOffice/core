@@ -63,8 +63,6 @@ LibreOffice
 			ABOUTBOXPRODUCTVERSION 3.5.0
 			BASEPRODUCTVERSION 3.5
             PCPFILENAME libreoffice.pcp
-			UPDATEURL http://update.libreoffice.org/ProductUpdateService/check.Update
-            ODFNOTIFYURL http://odfnotify.libreoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
@@ -96,8 +94,6 @@ LibreOffice
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             STARTCENTER_LAYOUT_STYLE 0
-            REGISTRATION_PRODUCT LibreOffice
-            REGISTRATION_CID 926117
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
 		}
 		active			1
@@ -127,8 +123,6 @@ LibreOffice_wJRE
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.5.0
 			BASEPRODUCTVERSION 3.5
-			UPDATEURL http://update.libreoffice.org/ProductUpdateService/check.Update
-            ODFNOTIFYURL http://odfnotify.libreoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
@@ -162,8 +156,6 @@ LibreOffice_wJRE
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             STARTCENTER_LAYOUT_STYLE 0
-            REGISTRATION_PRODUCT LibreOffice
-            REGISTRATION_CID 926117
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
 		}
 		active			1
@@ -198,8 +190,6 @@ LibreOffice_Dev
 			SOLSUREPACKAGEPREFIX lodev
 			REGISTRYLAYERNAME LayerDev
 			SERVICETAG_URN urn:uuid:1680b00d-e45c-11de-82d6-080020a9ed93
-			UPDATEURL http://update.libreoffice.org/ProductUpdateService/check.Update
-            ODFNOTIFYURL http://odfnotify.libreoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
 			EVAL
 			FILEFORMATNAME OpenOffice.org
@@ -231,8 +221,6 @@ LibreOffice_Dev
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             STARTCENTER_LAYOUT_STYLE 0
-            REGISTRATION_PRODUCT LibreOffice
-            REGISTRATION_CID 926117
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
 		}
 		active			1
@@ -402,8 +390,6 @@ OxygenOffice
 			ABOUTBOXPRODUCTVERSION 3.5.0
 			BASEPRODUCTVERSION 3.5
             PCPFILENAME openoffice.pcp
-			UPDATEURL http://update.libreoffice.org/ProductUpdateService/check.Update
-            ODFNOTIFYURL http://odfnotify.libreoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
@@ -440,8 +426,6 @@ OxygenOffice
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             STARTCENTER_LAYOUT_STYLE 0
-            REGISTRATION_PRODUCT OxygenOffice
-            REGISTRATION_CID 926117
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
 		}
 		active			1
@@ -471,8 +455,6 @@ OxygenOffice_wJRE
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.5.0
 			BASEPRODUCTVERSION 3.5
-			UPDATEURL http://update.libreoffice.org/ProductUpdateService/check.Update
-            ODFNOTIFYURL http://odfnotify.libreoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
@@ -511,8 +493,6 @@ OxygenOffice_wJRE
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             STARTCENTER_LAYOUT_STYLE 0
-            REGISTRATION_PRODUCT OxygenOffice
-            REGISTRATION_CID 926117
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
 		}
 		active			1
