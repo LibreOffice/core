@@ -29,8 +29,6 @@
 #include "queryentry.hxx"
 
 #include <unotools/textsearch.hxx>
-#include <unotools/transliterationwrapper.hxx>
-#include <unotools/collatorwrapper.hxx>
 
 /*
  * dialog returns the special field values "empty"/"not empty"
@@ -151,25 +149,6 @@ ScQueryEntry::Item& ScQueryEntry::GetQueryItem()
         // Reset to a single query mode.
         maQueryItems.resize(1);
     return maQueryItems[0];
-}
-
-namespace {
-
-class CompareString : std::binary_function<rtl::OUString, rtl::OUString, bool>
-{
-    CollatorWrapper* mpCollator;
-public:
-    CompareString(bool bCaseSens) :
-     mpCollator(
-         bCaseSens ? ScGlobal::GetCaseCollator() : ScGlobal::GetCollator())
-    {}
-
-    bool operator() (const rtl::OUString& rL, const rtl::OUString& rR) const
-    {
-        return mpCollator->compareString(rL, rR) < 0;
-    }
-};
-
 }
 
 void ScQueryEntry::Clear()
