@@ -174,8 +174,8 @@ long PluginComm_Impl::doIt()
                 ? (*_NPPfuncs.newp)(
                     (NPMIMEType)m_aArgs[0],
                     (NPP)m_aArgs[1],
-                    (uint16)(sal_IntPtr)m_aArgs[2],
-                    (int16)(sal_IntPtr)m_aArgs[3],
+                    (uint16_t)(sal_IntPtr)m_aArgs[2],
+                    (int16_t)(sal_IntPtr)m_aArgs[3],
                     (char**)m_aArgs[4],
                     (char**)m_aArgs[5],
                     (NPSavedData*)m_aArgs[6] )
@@ -189,7 +189,7 @@ long PluginComm_Impl::doIt()
                     (NPMIMEType)m_aArgs[1],
                     (NPStream*)m_aArgs[2],
                     (NPBool)(sal_IntPtr)m_aArgs[3],
-                    (uint16*)m_aArgs[4] )
+                    (uint16_t*)m_aArgs[4] )
                 : NPERR_GENERIC_ERROR);
         break;
     case eNPP_Print:
@@ -227,13 +227,13 @@ long PluginComm_Impl::doIt()
                 m_aArgs[3] );
         break;
     case eNPP_Write:
-        TRACEN( "eNPP_Write n=", (int32)m_aArgs[3] );
+        TRACEN( "eNPP_Write n=", (int32_t)m_aArgs[3] );
         nRet = (_NPPfuncs.write
                 ? (*_NPPfuncs.write)(
                     (NPP)m_aArgs[0],
                     (NPStream*)m_aArgs[1],
-                    (int32)m_aArgs[2],
-                    (int32)m_aArgs[3],
+                    (int32_t)m_aArgs[2],
+                    (int32_t)m_aArgs[3],
                     m_aArgs[4] )
                 : 0);
         break;
@@ -305,7 +305,7 @@ NPError PluginComm_Impl::NPP_DestroyStream( NPP instance, NPStream* stream, NPEr
 }
 
 //--------------------------------------------------------------------------------------------------
-NPError PluginComm_Impl::NPP_New( NPMIMEType pluginType, NPP instance, uint16 mode, int16 argc,
+NPError PluginComm_Impl::NPP_New( NPMIMEType pluginType, NPP instance, uint16_t mode, int16_t argc,
                                   char* argn[], char* argv[], NPSavedData *saved )
 {
     DBG_ASSERT( _NPPfuncs.newp, "### NPP_New(): null pointer in NPP functions table!" );
@@ -322,7 +322,7 @@ NPError PluginComm_Impl::NPP_New( NPMIMEType pluginType, NPP instance, uint16 mo
 
 //--------------------------------------------------------------------------------------------------
 NPError PluginComm_Impl::NPP_NewStream( NPP instance, NPMIMEType type, NPStream* stream,
-                                        NPBool seekable, uint16* stype )
+                                        NPBool seekable, uint16_t* stype )
 {
     DBG_ASSERT( _NPPfuncs.newstream, "### NPP_NewStream(): null pointer in NPP functions table!" );
     m_eCall = eNPP_NewStream;
@@ -378,7 +378,7 @@ void PluginComm_Impl::NPP_URLNotify( NPP instance, const char* url, NPReason rea
 }
 
 //--------------------------------------------------------------------------------------------------
-int32 PluginComm_Impl::NPP_Write( NPP instance, NPStream* stream, int32 offset, int32 len, void* buffer )
+int32_t PluginComm_Impl::NPP_Write( NPP instance, NPStream* stream, int32_t offset, int32_t len, void* buffer )
 {
     DBG_ASSERT( _NPPfuncs.write, "### NPP_Write(): null pointer in NPP functions table!" );
     m_eCall = eNPP_Write;
@@ -391,7 +391,7 @@ int32 PluginComm_Impl::NPP_Write( NPP instance, NPStream* stream, int32 offset, 
 }
 
 //--------------------------------------------------------------------------------------------------
-int32 PluginComm_Impl::NPP_WriteReady( NPP instance, NPStream* stream )
+int32_t PluginComm_Impl::NPP_WriteReady( NPP instance, NPStream* stream )
 {
     DBG_ASSERT( _NPPfuncs.writeready, "### NPP_WriteReady(): null pointer in NPP functions table!" );
     m_eCall = eNPP_WriteReady;

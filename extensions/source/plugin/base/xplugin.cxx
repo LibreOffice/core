@@ -1085,7 +1085,7 @@ void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer ) throw()
         m_aFileStream.Seek( m_nWritePos );
         nBytes = m_aFileStream.Read( pBuffer, nBytes );
 
-        int32 nBytesRead = 0;
+        int32_t nBytesRead = 0;
         try
         {
             nBytesRead = m_pPlugin->getPluginComm()->NPP_Write(

@@ -87,10 +87,10 @@ public:
     virtual NPError     NPP_DestroyStream( NPP instance, NPStream* stream, NPError reason );
     virtual void *      NPP_GetJavaClass();
     virtual NPError     NPP_Initialize();
-    virtual NPError     NPP_New( NPMIMEType pluginType, NPP instance, uint16 mode, int16 argc,
+    virtual NPError     NPP_New( NPMIMEType pluginType, NPP instance, uint16_t mode, int16_t argc,
                                  char* argn[], char* argv[], NPSavedData *saved );
     virtual NPError     NPP_NewStream( NPP instance, NPMIMEType type, NPStream* stream,
-                                       NPBool seekable, uint16* stype );
+                                       NPBool seekable, uint16_t* stype );
     virtual void        NPP_Print( NPP instance, NPPrint* platformPrint );
 
     using PluginComm::NPP_SetWindow;
@@ -99,9 +99,9 @@ public:
     virtual void        NPP_StreamAsFile( NPP instance, NPStream* stream, const char* fname );
     virtual void        NPP_URLNotify( NPP instance, const char* url,
                                        NPReason reason, void* notifyData );
-    virtual int32       NPP_Write( NPP instance, NPStream* stream, int32 offset,
-                                   int32 len, void* buffer );
-    virtual int32       NPP_WriteReady( NPP instance, NPStream* stream );
+    virtual int32_t     NPP_Write( NPP instance, NPStream* stream, int32_t offset,
+                                   int32_t len, void* buffer );
+    virtual int32_t     NPP_WriteReady( NPP instance, NPStream* stream );
     virtual NPError     NPP_GetValue( NPP instance, NPPVariable variable, void *ret_alue );
     virtual NPError     NPP_SetValue( NPP instance, NPNVariable variable, void *ret_alue );
 
