@@ -753,7 +753,6 @@ else
 gb_WinResTarget__command_dep =
 endif
 
-
 # Python
 gb_PYTHON_PRECOMMAND :=  PATH="$${PATH}:$(OUTDIR)/bin" PYTHONHOME="$(OUTDIR)/lib/python" PYTHONPATH="$(OUTDIR)/lib/python;$(OUTDIR)/lib/python/lib-dynload"
 
