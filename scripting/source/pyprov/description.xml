@@ -20,4 +20,8 @@
     <name lang="en-US">Script provider for Python</name>
   </display-name>
 
+  <extension-description>
+    <src xlink:href="description-en-US.txt" lang="en-US"/>
+  </extension-description>
+
 </description>
