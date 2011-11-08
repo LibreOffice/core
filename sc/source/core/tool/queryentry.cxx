@@ -27,7 +27,6 @@
  */
 
 #include "queryentry.hxx"
-#include "queryparam.hxx"
 
 #include <unotools/textsearch.hxx>
 #include <unotools/transliterationwrapper.hxx>
