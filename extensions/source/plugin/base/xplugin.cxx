@@ -562,7 +562,7 @@ void XPlugin_Impl::loadPlugin()
                                                   m_aEncoding).getStr(),
                  getNPPInstance(),
                  m_aPluginMode == PluginMode::FULL ? NP_FULL : NP_EMBED,
-                 ::sal::static_int_cast< int16, int >( m_nArgs ),
+                 ::sal::static_int_cast< int16_t, int >( m_nArgs ),
                  (char**)(m_nArgs ? m_pArgn : NULL),
                  (char**)(m_nArgs ? m_pArgv : NULL),
                  NULL );
@@ -595,8 +595,8 @@ void XPlugin_Impl::loadPlugin()
 
     m_aNPWindow.clipRect.top        = 0;
     m_aNPWindow.clipRect.left       = 0;
-    m_aNPWindow.clipRect.bottom     = ::sal::static_int_cast< uint16, sal_Int32 >( aPosSize.Height );
-    m_aNPWindow.clipRect.right      = ::sal::static_int_cast< uint16, sal_Int32 >( aPosSize.Width );
+    m_aNPWindow.clipRect.bottom     = ::sal::static_int_cast< uint16_t, sal_Int32 >( aPosSize.Height );
+    m_aNPWindow.clipRect.right      = ::sal::static_int_cast< uint16_t, sal_Int32 >( aPosSize.Width );
     m_aNPWindow.type = NPWindowTypeWindow;
 
     m_aNPWindow.x       = 0;
@@ -742,7 +742,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
      if( iter != m_aPEventListeners.end() )
          pStream->getStream()->notifyData = (*iter)->getNotifyData();
 
-    uint16 stype = 0;
+    uint16_t stype = 0;
 
     // special handling acrobat reader
     // presenting a seekable stream to it does not seem to work correctly
@@ -876,8 +876,8 @@ void XPlugin_Impl::setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, 
     m_aNPWindow.height              = nHeight_;
     m_aNPWindow.clipRect.top        = 0;
     m_aNPWindow.clipRect.left       = 0;
-    m_aNPWindow.clipRect.right      = ::sal::static_int_cast< uint16, sal_Int32 >( nWidth_ );
-    m_aNPWindow.clipRect.bottom     = ::sal::static_int_cast< uint16, sal_Int32 >( nHeight_ );
+    m_aNPWindow.clipRect.right      = ::sal::static_int_cast< uint16_t, sal_Int32 >( nWidth_ );
+    m_aNPWindow.clipRect.bottom     = ::sal::static_int_cast< uint16_t, sal_Int32 >( nHeight_ );
 
     if( getPluginComm() )
         getPluginComm()->NPP_SetWindow( this );

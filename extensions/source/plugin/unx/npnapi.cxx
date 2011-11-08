@@ -608,7 +608,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 pStream->pdata = pStream->ndata = pStream->notifyData = NULL;
                 NPBool* pSeekable       = (NPBool*)pMessage->GetBytes();
                 m_aNPWrapStreams.push_back( pStream );
-                uint16 nStype = NP_ASFILE;
+                uint16_t nStype = NP_ASFILE;
                 NPError aRet = aPluginFuncs.newstream( instance, pType, pStream,
                                                        *pSeekable, &nStype );
                 medDebug( 1, "pluginapp: NPP_NewStream( %p, %s, %p, %s, %p ) returns %d\n"
@@ -626,8 +626,8 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             case eNPP_New:
             {
                 char* pType     = pMessage->GetString();
-                uint16* pMode   = (uint16*)pMessage->GetBytes();
-                int16*  pArgc   = (int16*)pMessage->GetBytes();
+                uint16_t* pMode   = (uint16_t*)pMessage->GetBytes();
+                int16_t*  pArgc   = (int16_t*)pMessage->GetBytes();
                 NPP instance    = new NPP_t;
                 instance->pdata = instance->ndata = NULL;
                 sal_uLong nArgnBytes, nArgvBytes;

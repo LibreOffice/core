@@ -56,11 +56,11 @@ public:
     virtual void* NPP_GetJavaClass();
     virtual NPError NPP_Initialize();
     virtual NPError NPP_New( NPMIMEType pluginType, NPP instance,
-                             uint16 mode, int16 argc,
+                             uint16_t mode, int16_t argc,
                              char* argn[], char* argv[], NPSavedData *saved );
     virtual NPError NPP_NewStream( NPP instance, NPMIMEType type,
                                    NPStream* stream,
-                                   NPBool seekable, uint16* stype );
+                                   NPBool seekable, uint16_t* stype );
     virtual void NPP_Print( NPP instance, NPPrint* platformPrint );
 
     using PluginComm::NPP_SetWindow;

@@ -59,12 +59,12 @@ public:
     virtual void* NPP_GetJavaClass() = 0;
     virtual NPError NPP_Initialize() = 0;
     virtual NPError NPP_New( NPMIMEType pluginType, NPP instance,
-                             uint16 mode, int16 argc,
+                             uint16_t mode, int16_t argc,
                              char* argn[], char* argv[],
                              NPSavedData *saved ) = 0;
     virtual NPError NPP_NewStream( NPP instance, NPMIMEType type,
                                    NPStream* stream,
-                                   NPBool seekable, uint16* stype ) = 0;
+                                   NPBool seekable, uint16_t* stype ) = 0;
     virtual void NPP_Print( NPP instance, NPPrint* platformPrint ) = 0;
     virtual NPError NPP_SetWindow( NPP instance, NPWindow* window ) = 0;
     virtual void NPP_Shutdown() = 0;

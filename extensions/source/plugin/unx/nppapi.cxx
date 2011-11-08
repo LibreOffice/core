@@ -411,7 +411,7 @@ NPError UnxPluginComm::NPP_Initialize()
     return aRet;
 }
 
-NPError UnxPluginComm::NPP_New( NPMIMEType pluginType, NPP instance, uint16 mode, int16 argc,
+NPError UnxPluginComm::NPP_New( NPMIMEType pluginType, NPP instance, uint16_t mode, int16_t argc,
                  char* argn[], char* argv[], NPSavedData *saved )
 {
     m_aInstances.push_back(
@@ -473,7 +473,7 @@ NPError UnxPluginComm::NPP_New( NPMIMEType pluginType, NPP instance, uint16 mode
 }
 
 NPError UnxPluginComm::NPP_NewStream( NPP instance, NPMIMEType type, NPStream* stream,
-                       NPBool seekable, uint16* stype )
+                       NPBool seekable, uint16_t* stype )
 {
     NPError aRet = NPERR_GENERIC_ERROR;
     GET_INSTANCE_RET( aRet );
@@ -493,7 +493,7 @@ NPError UnxPluginComm::NPP_NewStream( NPP instance, NPMIMEType type, NPStream* s
         return NPERR_GENERIC_ERROR;
 
     aRet = GetNPError( pMes );
-    uint16* pSType = (uint16*)pMes->GetBytes();
+    uint16_t* pSType = (uint16_t*)pMes->GetBytes();
     *stype = *pSType;
 
     delete [] pSType;

@@ -96,6 +96,24 @@ using ::rtl::OUString;
 using ::rtl::OString;
 using ::rtl::OStringToOUString;
 
+// Move deprecated functions which no longer appear in npapi.h before
+// their use to avoid errors that they're undeclared at point of use
+extern "C"
+{
+    const JRIEnvInterface** SAL_CALL NP_LOADDS  NPN_GetJavaEnv()
+    {
+        TRACE( "NPN_GetJavaEnv" );
+        // no java in this program
+        return NULL;
+    }
+
+    jref SAL_CALL NP_LOADDS  NPN_GetJavaPeer( NPP /*instance*/ )
+    {
+        TRACE( "NPN_GetJavaPeer" );
+        return NULL;
+    }
+}
+
 NPNetscapeFuncs aNPNFuncs =
 {
     sizeof( NPNetscapeFuncs ),
@@ -112,13 +130,8 @@ NPNetscapeFuncs aNPNFuncs =
     NPN_MemFree,
     NPN_MemFlush,
     NPN_ReloadPlugins,
-#ifdef OJI
     NPN_GetJavaEnv,
     NPN_GetJavaPeer,
-#else
-    0,
-    0,
-#endif
     NPN_GetURLNotify,
     NPN_PostURLNotify,
     NPN_GetValue,
@@ -237,21 +250,6 @@ extern "C" {
 
         return NPERR_NO_ERROR;
     }
-
-    #ifdef OJI
-    const JRIEnvInterface** SAL_CALL NP_LOADDS  NPN_GetJavaEnv()
-    {
-        TRACE( "NPN_GetJavaEnv" );
-        // no java in this program
-        return NULL;
-    }
-
-    jref SAL_CALL NP_LOADDS  NPN_GetJavaPeer( NPP /*instance*/ )
-    {
-        TRACE( "NPN_GetJavaPeer" );
-        return NULL;
-    }
-    #endif
 
     NPError SAL_CALL NP_LOADDS  NPN_GetURL( NPP instance, const char* url, const char* window )
     {
