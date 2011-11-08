@@ -39,7 +39,7 @@ gb_SdiTarget_SVIDLCOMMAND := \
 $(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi | $(gb_SdiTarget_SVIDLTARGET)
 	$(call gb_Output_announce,$*,$(true),SDI,1)
 	$(call gb_Helper_abbreviate_dirs,\
-		mkdir -p $(dir $@))
+		mkdir -p $(dir $@) $(dir $(call gb_SdiTarget_get_dep_target,$*)))
 	$(call gb_Helper_abbreviate_dirs_native,\
 		cd $(dir $<) && \
 		$(gb_SdiTarget_SVIDLCOMMAND) -quiet \
@@ -50,7 +50,15 @@ $(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi | $(gb_SdiTarget_SVIDLTARGET
 			-fz$@.sid \
 			-fx$(EXPORTS) \
 			-fm$@ \
+			-fM$(call gb_SdiTarget_get_dep_target,$*) \
 			$(realpath $<))
+
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_SdiTarget_get_dep_target,%) : $(call gb_SdiTarget_get_target,%)
+	$(if $(wildcard $@),touch $@,\
+	  $(call gb_Object__command_dep,$@,$(call gb_SdiTarget_get_target,$*)))
+
+endif
 
 .PHONY : $(call gb_SdiTarget_get_clean_target,%)
 $(call gb_SdiTarget_get_clean_target,%) :
@@ -58,11 +66,15 @@ $(call gb_SdiTarget_get_clean_target,%) :
 	-$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(foreach ext,.hxx .ilb .lst .sid,\
 			$(call gb_SdiTarget_get_target,$*)$(ext)) \
+			$(call gb_SdiTarget_get_dep_target,$*) \
 			$(call gb_SdiTarget_get_target,$*))
 
 define gb_SdiTarget_SdiTarget
 $(call gb_SdiTarget_get_target,$(1)) : INCLUDE := $$(subst -I. ,-I$$(dir $(SRCDIR)/$(1)) ,$$(SOLARINC))
 $(call gb_SdiTarget_get_target,$(1)) : EXPORTS := $(SRCDIR)/$(2).sdi
+ifeq ($(gb_FULLDEPS),$(true))
+-include $(call gb_SdiTarget_get_dep_target,$(1))
+endif
 endef
 
 define gb_SdiTarget_set_include
