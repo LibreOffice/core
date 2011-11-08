@@ -882,9 +882,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
                     splash = NULL;
                     bShortWait = sal_False;
 
-                    /* Since a client can't distinguish between a first-start and
-                       a factory re-use, we return control to them here. */
-                    daemon( 1 /* don't chdir */, 1 /* don't re-direct output */ );
+                    if (!args->bInhibitDemon)
+                    {
+                        /* Since a client can't distinguish between a first-start and
+                           a factory re-use, we return control to them here. */
+                        daemon( 1 /* don't chdir */, 1 /* don't re-direct output */ );
+                    }
                 }
 
 #if OSL_DEBUG_LEVEL > 1
