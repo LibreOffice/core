@@ -645,7 +645,6 @@ static char *build_pagein_path (Args *args, const char *pagein_name)
 void
 exec_pagein (Args *args)
 {
-// no pagein for the while on OSX
     char *argv[3];
 
     /* don't use -L - since that does a chdir that breaks relative paths */
@@ -698,7 +697,7 @@ static void
 exec_javaldx (Args *args)
 {
 #ifndef SOLAR_JAVA
-	return;
+    return;
 #endif
     char newpath[4096];
     sal_uInt32 nArgs;
