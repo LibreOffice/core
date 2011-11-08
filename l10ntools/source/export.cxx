@@ -76,10 +76,6 @@ ByteString sFile;
 MergeDataFile *pMergeDataFile;
 FILE *pTempFile;
 
-
-ByteString sStrBuffer;
-bool bMarcro = false;
-
 extern "C" {
 // the whole interface to lexer is in this extern "C" section
 
