@@ -145,17 +145,15 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
             default:
             case XML_t :    eVA = drawing::TextVerticalAdjust_TOP; break;
         }
-        if( !xAttributes->hasAttribute( XML_vert ) )
-            mrTextBodyProp.maPropertyMap[ PROP_TextVerticalAdjust ] <<= eVA;
-        else
+        if( xAttributes->hasAttribute( XML_vert ) &&
+            ( ( mrTextBodyProp.moVert.get( XML_horz ) == XML_vert && eVA == drawing::TextVerticalAdjust_TOP ) ||
+              ( mrTextBodyProp.moVert.get( XML_horz ) == XML_vert270 && eVA == drawing::TextVerticalAdjust_BOTTOM ) ) )
         {
-            if( ( mrTextBodyProp.moVert.get( XML_horz ) == XML_vert && eVA == drawing::TextVerticalAdjust_TOP ) ||
-                ( mrTextBodyProp.moVert.get( XML_horz ) == XML_vert270 && eVA == drawing::TextVerticalAdjust_BOTTOM ) )
-            {
-                mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<=
-                    TextHorizontalAdjust_RIGHT;
-            }
+            mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<=
+                TextHorizontalAdjust_RIGHT;
         }
+        else
+            mrTextBodyProp.maPropertyMap[ PROP_TextVerticalAdjust ] <<= eVA;
     }
 }
 
