@@ -342,6 +342,7 @@ namespace writerfilter {
                 void checkNeedPap();
                 void sectBreak(bool bFinal);
                 void replayBuffer(RTFBuffer_t& rBuffer);
+                /// If we got tokens indicating we're in a frame.
                 bool inFrame();
                 void checkChangedFrame();
 
@@ -426,8 +427,8 @@ namespace writerfilter {
                 bool m_bEq;
                 /// If we were in a frame.
                 bool m_bWasInFrame;
-                /// If a shape is already started (nesting them is not OK).
-                bool m_bIsInShape;
+                /// If a frame start token is already sent to dmapper (nesting them is not OK).
+                bool m_bIsInFrame;
 
         };
     } // namespace rtftok
