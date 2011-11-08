@@ -129,7 +129,14 @@ BinaryOutputStream::writeUnicodeArray( const ::rtl::OUString& rString, bool bAll
     OUString sBuf( rString );
     if( !bAllowNulChars )
         sBuf.replace( '\0', '?' );
+#ifdef OSL_BIGENDIAN
+    // need a non-const buffer for swapping byte order
+    sal_Unicode notConst[sBuf.getLength()];
+    memcpy( notConst, sBuf.getStr(), sizeof(sal_Unicode)*sBuf.getLength() );
+    writeArray( notConst, sBuf.getLength() );
+#else
     writeArray( sBuf.getStr(), sBuf.getLength() );
+#endif
 }
 
 void
