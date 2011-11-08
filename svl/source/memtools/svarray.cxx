@@ -60,7 +60,7 @@ SV_IMPL_PTRARR( SvStringsDtor, StringPtr )
 
 // ---------------- strings -------------------------------------
 
-// Array mit anderer Seek-Methode!
+// Array with different Seek method
 _SV_IMPL_SORTAR_ALG( SvStringsISort, StringPtr )
 void SvStringsISort::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
 {
@@ -107,7 +107,7 @@ sal_Bool SvStringsISort::Seek_Entry( const StringPtr aE, sal_uInt16* pP ) const
 
 // ---------------- strings -------------------------------------
 
-// Array mit anderer Seek-Methode!
+// Array with different Seek method
 _SV_IMPL_SORTAR_ALG( SvStringsISortDtor, StringPtr )
 void SvStringsISortDtor::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
 {
