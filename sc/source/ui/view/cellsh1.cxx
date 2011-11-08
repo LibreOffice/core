@@ -1150,7 +1150,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_COPY:              // fuer Grafiken in DrawShell
             {
                 WaitObject aWait( GetViewData()->GetDialogParent() );
-                pTabViewShell->CopyToClip( NULL, false, false, sal_True );
+                pTabViewShell->CopyToClip( NULL, false, false, true );
                 rReq.Done();
                 GetViewData()->SetPasteMode( (ScPasteFlags) (SC_PASTE_MODE | SC_PASTE_BORDER) );
                 pTabViewShell->ShowCursor();
@@ -1161,9 +1161,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_CUT:               // fuer Grafiken in DrawShell
             {
                 WaitObject aWait( GetViewData()->GetDialogParent() );
-                pTabViewShell->CutToClip( NULL, sal_True );
+                pTabViewShell->CutToClip( NULL, true );
                 rReq.Done();
-                GetViewData()->SetPasteMode( SC_PASTE_MODE );
+                GetViewData()->SetPasteMode( (ScPasteFlags)(SC_PASTE_MODE | SC_PASTE_BORDER));
+                pTabViewShell->ShowCursor();
                 pTabViewShell->UpdateCopySourceOverlay();
             }
             break;
