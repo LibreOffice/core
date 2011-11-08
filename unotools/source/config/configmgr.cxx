@@ -348,14 +348,28 @@ void ConfigManager::StoreConfigItems()
         }
     }
 }
+ConfigManager*   ConfigManager::pConfigManager = 0;
 /* -----------------------------07.09.00 11:06--------------------------------
 
  ---------------------------------------------------------------------------*/
-struct theConfigManager : public rtl::Static<ConfigManager, theConfigManager> {};
-
-ConfigManager* ConfigManager::GetConfigManager()
+ConfigManager*  ConfigManager::GetConfigManager()
 {
-    return &theConfigManager::get();
+    if(!pConfigManager)
+    {
+        pConfigManager = new ConfigManager();
+    }
+    return pConfigManager;
+}
+/* -----------------------------07.09.00 11:06--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void    ConfigManager::RemoveConfigManager()
+{
+    if(pConfigManager)
+    {
+        delete pConfigManager;
+        pConfigManager = 0;
+    }
 }
 /* -----------------------------08.09.00 13:22--------------------------------
 
