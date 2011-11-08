@@ -31,10 +31,13 @@
 #please make generic modifications to unxgcc.mk or linux.mk
 gb_CPUDEFS += -DARM32
 gb_COMPILERDEFAULTOPTFLAGS := -Os
-gb_CXXFLAGS += -fno-omit-frame-pointer
-gb_CFLAGS += -fno-omit-frame-pointer
 
 include $(GBUILDDIR)/platform/unxgcc.mk
+
+# See <ndk>/docs/STANDALONE-TOOLCHAIN.html
+gb_LinkTarget_CFLAGS += -march=armv7-a -mfloat-abi=softfp -mthumb -mfpu=neon -fno-omit-frame-pointer
+gb_LinkTarget_CXXFLAGS += -march=armv7-a -mfloat-abi=softfp -mthumb -mfpu=neon -fno-omit-frame-pointer
+gb_LinkTarget_LDFLAGS += -Wl,--fix-cortex-a8
 
 # No unit testing can be run
 gb_CppunitTest_CPPTESTPRECOMMAND := :
