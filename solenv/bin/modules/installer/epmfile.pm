@@ -1424,7 +1424,7 @@ sub set_autoprovreq_in_specfile
 
     if ( $findrequires )
     {
-        $autoreqprovline = "AutoProv\: no\n%define __find_requires $bindir/$findrequires\n";
+        $autoreqprovline = "AutoProv\: no\n%define _use_internal_dependency_generator 0\n%define __find_requires $bindir/$findrequires\n";
     }
     else
     {
