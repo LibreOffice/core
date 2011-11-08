@@ -31,7 +31,7 @@
 # (This can be workarounded by using gb_Package, but really should not.)
 
 # SdiTarget class
-
+gb_SdiTarget_SVIDLPRECOMMAND := $(gb_Helper_set_ld_path)
 gb_SdiTarget_SVIDLTARGET := $(call gb_Executable_get_target_for_build,svidl)
 gb_SdiTarget_SVIDLCOMMAND := \
 	$(gb_Helper_set_ld_path) $(gb_SdiTarget_SVIDLTARGET)
