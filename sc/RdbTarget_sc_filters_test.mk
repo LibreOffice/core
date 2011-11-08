@@ -52,10 +52,22 @@ $(eval $(call gb_RdbTarget_add_components,sc_filters_test,\
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
-    xmlsecurity/util/xsec_xmlsec \
     xmlsecurity/util/xsec_fw \
     xmlsecurity/util/xmlsecurity \
 ))
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_RdbTarget_add_components,sc_filters_test,\
+    xmlsecurity/util/xsec_xmlsec.windows \
+))
+
+else
+$(eval $(call gb_RdbTarget_add_components,sc_filters_test,\
+    xmlsecurity/util/xsec_xmlsec \
+))
+
+endif
+
 
 $(eval $(call gb_RdbTarget_add_old_components,sc_filters_test,\
     configmgr \
