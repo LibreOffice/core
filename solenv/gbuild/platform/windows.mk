@@ -753,18 +753,6 @@ else
 gb_WinResTarget__command_dep =
 endif
 
-# UnoApiTarget
-
-gb_UnoApiTarget_IDLCTARGET := $(OUTDIR)/bin/idlc.exe
-gb_UnoApiTarget_IDLCCOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_IDLCTARGET)
-gb_UnoApiTarget_REGMERGETARGET := $(OUTDIR)/bin/regmerge.exe
-gb_UnoApiTarget_REGMERGECOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGMERGETARGET)
-gb_UnoApiTarget_REGCOMPARETARGET := $(OUTDIR)/bin/regcompare.exe
-gb_UnoApiTarget_REGCOMPARECOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
-gb_UnoApiTarget_CPPUMAKERTARGET := $(OUTDIR)/bin/cppumaker.exe
-gb_UnoApiTarget_CPPUMAKERCOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_CPPUMAKERTARGET)
-gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR)/bin/regview.exe
-gb_UnoApiTarget_REGVIEWCOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
 
 # Python
 gb_PYTHON_PRECOMMAND :=  PATH="$${PATH}:$(OUTDIR)/bin" PYTHONHOME="$(OUTDIR)/lib/python" PYTHONPATH="$(OUTDIR)/lib/python;$(OUTDIR)/lib/python/lib-dynload"

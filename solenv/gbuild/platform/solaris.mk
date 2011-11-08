@@ -135,6 +135,8 @@ gb_COMPILERNOOPTFLAGS :=
 
 gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
 
+gb_Helper_set_ld_path := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
+
 # convert parameters filesystem root to native notation
 # does some real work only on windows, make sure not to
 # break the dummy implementations on unx*
@@ -340,7 +342,7 @@ endef
 
 # CppunitTest class
 
-gb_CppunitTest_CPPTESTPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib
+gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path)
 gb_CppunitTest_SYSPRE := libtest_
 gb_CppunitTest_EXT := .so
 gb_CppunitTest_LIBDIR := $(gb_Helper_OUTDIRLIBDIR)
@@ -365,7 +367,7 @@ endef
 # SrsPartTarget class
 
 gb_SrsPartTarget_RSCTARGET := $(OUTDIR)/bin/rsc
-gb_SrsPartTarget_RSCCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_SrsPartTarget_RSCTARGET)
+gb_SrsPartTarget_RSCCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR)/bin $(gb_SrsPartTarget_RSCTARGET)
 
 # Sun cc/CC support -xM1/-xMF flags, but unfortunately refuse input files that
 # do not have the right suffix, so use makedepend here...
@@ -387,18 +389,8 @@ endef
 
 # UnoApiTarget
 
-gb_UnoApiTarget_IDLCTARGET := $(OUTDIR)/bin/idlc
-gb_UnoApiTarget_IDLCCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_IDLCTARGET)
-gb_UnoApiTarget_REGMERGETARGET := $(OUTDIR)/bin/regmerge
-gb_UnoApiTarget_REGMERGECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGMERGETARGET)
-gb_UnoApiTarget_REGCOMPARETARGET := $(OUTDIR)/bin/regcompare
-gb_UnoApiTarget_REGCOMPARECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
-gb_UnoApiTarget_CPPUMAKERTARGET := $(OUTDIR)/bin/cppumaker
-gb_UnoApiTarget_CPPUMAKERCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_CPPUMAKERTARGET)
-gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR)/bin/regview
-gb_UnoApiTarget_REGVIEWCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
 
 # Python
-gb_PYTHON_PRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib PYTHONHOME=$(OUTDIR)/lib/python PYTHONPATH=$(OUTDIR)/lib/python:$(OUTDIR)/lib/python/lib-dynload
+gb_PYTHON_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME=$(OUTDIR)/lib/python PYTHONPATH=$(OUTDIR)/lib/python:$(OUTDIR)/lib/python/lib-dynload
 
 # vim: set noet sw=4:

@@ -414,18 +414,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		-o $(call gb_SrsPartTarget_get_dep_target,$(1)))
 endef
 
-# UnoApiTarget
-
-gb_UnoApiTarget_IDLCTARGET := $(OUTDIR)/bin/idlc
-gb_UnoApiTarget_IDLCCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_IDLCTARGET)
-gb_UnoApiTarget_REGMERGETARGET := $(OUTDIR)/bin/regmerge
-gb_UnoApiTarget_REGMERGECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGMERGETARGET)
-gb_UnoApiTarget_REGCOMPARETARGET := $(OUTDIR)/bin/regcompare
-gb_UnoApiTarget_REGCOMPARECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
-gb_UnoApiTarget_CPPUMAKERTARGET := $(OUTDIR)/bin/cppumaker
-gb_UnoApiTarget_CPPUMAKERCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_CPPUMAKERTARGET)
-gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR)/bin/regview
-gb_UnoApiTarget_REGVIEWCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
 
 # Python
 gb_PYTHON_PRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib

@@ -29,6 +29,8 @@
 GUI := UNX
 COM := GCC
 
+gb_Executable_EXT:=
+
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 
 gb_MKTEMP := mktemp -t gbuild.XXXXXX
@@ -399,18 +401,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		-o $(call gb_SrsPartTarget_get_dep_target,$(1)))
 endef
 
-# UnoApiTarget
-
-gb_UnoApiTarget_IDLCTARGET := $(OUTDIR)/bin/idlc
-gb_UnoApiTarget_IDLCCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_IDLCTARGET)
-gb_UnoApiTarget_REGMERGETARGET := $(OUTDIR)/bin/regmerge
-gb_UnoApiTarget_REGMERGECOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGMERGETARGET)
-gb_UnoApiTarget_REGCOMPARETARGET := $(OUTDIR)/bin/regcompare
-gb_UnoApiTarget_REGCOMPARECOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
-gb_UnoApiTarget_CPPUMAKERTARGET := $(OUTDIR)/bin/cppumaker
-gb_UnoApiTarget_CPPUMAKERCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_CPPUMAKERTARGET)
-gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR)/bin/regview
-gb_UnoApiTarget_REGVIEWCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
 
 # Python
 gb_PYTHON_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME=$(OUTDIR)/lib/python PYTHONPATH=$(OUTDIR)/lib/python:$(OUTDIR)/lib/python/lib-dynload
