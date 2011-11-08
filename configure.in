@@ -2009,7 +2009,7 @@ if test "$_os" = "Darwin" ; then
         MAC_OS_X_VERSION_MIN_REQUIRED="1050"
         AC_MSG_WARN([Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build])
         echo "Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build" >>warn
-        if [ -z $save_CC ] ; then
+        if test -z "$save_CC" ; then
             CC="gcc-4.2 -m32"
             CXX="g++-4.2 -m32"
         fi
@@ -2018,7 +2018,7 @@ if test "$_os" = "Darwin" ; then
         MAC_OS_X_VERSION_MIN_REQUIRED="1060"
         AC_MSG_WARN([Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build])
         echo "Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build" >>warn
-        if [ -z "$save_CC" ] ; then
+        if test -z "$save_CC" ; then
             CC="gcc-4.2 -m32"
             CXX="g++-4.2 -m32"
         fi
@@ -2027,7 +2027,7 @@ if test "$_os" = "Darwin" ; then
         MAC_OS_X_VERSION_MIN_REQUIRED="1070"
         AC_MSG_WARN([Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build])
         echo "Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build" >>warn
-        if [ -z "$save_CC" ] ; then
+        if test -z "$save_CC" ; then
             CC="gcc-4.2 -m32"
             CXX="g++-4.2 -m32"
         fi
