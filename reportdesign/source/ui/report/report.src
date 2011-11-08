@@ -80,17 +80,14 @@ String RID_STR_PROPTITLE_FIXEDTEXT
 String RID_STR_PROPTITLE_FIXEDLINE
 {
     Text [ en-US ] = "Line" ;
-    Text [ x-comment ] = " ";
 };
 String RID_STR_PROPTITLE_FORMATTED
 {
     Text [ en-US ] = "Formatted Field";
-    Text [ x-comment ] = " ";
 };
 String RID_STR_PROPTITLE_SHAPE
 {
     Text [ en-US ] = "Shape";
-    Text [ x-comment ] = " ";
 };
 String RID_STR_PROPTITLE_REPORT
 {
@@ -212,7 +209,6 @@ String RID_STR_PREVIEW_VIEW
 String STR_RPT_TITLE
 {
     Text [ en-US ] = "Report #" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_RPT_LABEL
@@ -425,7 +421,6 @@ Menu RID_MENU_REPORT
             Identifier = SID_OBJECT_RESIZING ;
             Command = ".uno:ObjectResize" ;
             Text [ en-US ] = "~Object Resizing" ;
-            Text [ x-comment ] = " ";
             SubMenu = Menu
             {
                 ItemList =
@@ -435,14 +430,12 @@ Menu RID_MENU_REPORT
                         Identifier = SID_OBJECT_SMALLESTWIDTH ;
                         Command = ".uno:SmallestWidth" ;
                         Text [ en-US ] = "~Fit to smallest width" ;
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = SID_OBJECT_GREATESTWIDTH ;
                         Command = ".uno:GreatestWidth" ;
                         Text [ en-US ] = "~Fit to greatest width" ;
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
@@ -453,14 +446,12 @@ Menu RID_MENU_REPORT
                         Identifier = SID_OBJECT_SMALLESTHEIGHT ;
                         Command = ".uno:SmallestHeight" ;
                         Text [ en-US ] = "~Fit to smallest height" ;
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = SID_OBJECT_GREATESTHEIGHT ;
                         Command = ".uno:GreatestHeight" ;
                         Text [ en-US ] = "~Fit to greatest height" ;
-                        Text [ x-comment ] = " ";
                     };
                 };
             };
@@ -475,7 +466,6 @@ Menu RID_MENU_REPORT
             Identifier = SID_SECTION_SHRINK_MENU ;
             Command = ".uno:SectionShrinkMenu" ;
             Text [ en-US ] = "Section" ;
-            Text [ x-comment ] = " ";
             SubMenu = Menu
             {
                 ItemList =
@@ -485,21 +475,18 @@ Menu RID_MENU_REPORT
                         Identifier = SID_SECTION_SHRINK ;
                         Command = ".uno:SectionShrink" ;
                         Text [ en-US ] = "Shrink" ;
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = SID_SECTION_SHRINK_TOP ;
                         Command = ".uno:SectionShrinkTop" ;
                         Text [ en-US ] = "Shrink from top" ;
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = SID_SECTION_SHRINK_BOTTOM ;
                         Command = ".uno:SectionShrinkBottom" ;
                         Text [ en-US ] = "Shrink from bottom" ;
-                        Text [ x-comment ] = " ";
                     };
                 };
             };

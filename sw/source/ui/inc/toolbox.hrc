@@ -296,7 +296,6 @@
     {\
         ITEM_TOOLBAR_BACKGROUND_COLOR\
         Text [ en-US ] = "Paragraph Background" ; \
-        Text [ x-comment ] = " ";\
     };
 
 #define MN_TEXT_DIALOGS(HIDE)\
@@ -520,7 +519,6 @@
         Identifier = FN_FORMAT_FRAME_DLG;\
         HelpID = FN_FORMAT_GRAFIC_DLG;\
         Text [ en-US ] = "Graphics Properties";\
-        Text [ x-comment ] = " ";\
     };
 
 
@@ -530,7 +528,6 @@
         Identifier = FN_FORMAT_FRAME_DLG;\
         HelpID = FN_FORMAT_FRAME_DLG;\
         Text [ en-US ] = "Object Properties";\
-        Text [ x-comment ] = " ";\
     };
 
 #define MN_GRID(hide)\

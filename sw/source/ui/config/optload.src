@@ -153,7 +153,6 @@ TabPage TP_OPTLOAD_PAGE
         Pos = MAP_APPFONT ( 12 , 130) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
         Text [ en-US ] = "Enable char unit";
-        Text [ x-comment ] = " ";
     };
 
 };

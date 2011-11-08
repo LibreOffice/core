@@ -45,7 +45,6 @@ ModalDialog DLG_TITLEPAGE
         Pos = MAP_APPFONT ( 6 , 5 ) ;
         Size = MAP_APPFONT ( 204 , 8 ) ;
         Text [ en-US ] = "Make Title Pages" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_USE_EXISTING_PAGES
     {
@@ -54,21 +53,18 @@ ModalDialog DLG_TITLEPAGE
         Text [ en-US ] = "Convert existing pages to title pages" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_INSERT_NEW_PAGES
     {
         Pos = MAP_APPFONT ( 12 , 34 ) ;
         Size = MAP_APPFONT ( 198 , 10 ) ;
         Text [ en-US ] = "Insert new title pages" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_PAGE_COUNT
     {
         Pos = MAP_APPFONT ( 12 , 50 ) ;
         Size = MAP_APPFONT ( 82 , 8 ) ;
         Text [ en-US ] = "Number of title pages" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NF_PAGE_COUNT
     {
@@ -90,14 +86,12 @@ ModalDialog DLG_TITLEPAGE
         Pos = MAP_APPFONT ( 136 , 50 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         Text [ en-US ] = "pages" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_PAGE_START
     {
         Pos = MAP_APPFONT ( 12 , 66 ) ;
         Size = MAP_APPFONT ( 82 , 8 ) ;
         Text [ en-US ] = "Place title pages at" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_DOCUMENT_START
     {
@@ -106,14 +100,12 @@ ModalDialog DLG_TITLEPAGE
         Text [ en-US ] = "Document Start" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_PAGE_START
     {
         Pos = MAP_APPFONT ( 100 , 78 ) ;
         Size = MAP_APPFONT ( 30 , 10 ) ;
         Text [ en-US ] = "Page" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NF_PAGE_START
     {
@@ -135,7 +127,6 @@ ModalDialog DLG_TITLEPAGE
         Pos = MAP_APPFONT ( 6 , 98 ) ;
         Size = MAP_APPFONT ( 204 , 8 ) ;
         Text [ en-US ] = "Page Numbering" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_RESTART_NUMBERING
     {
@@ -143,14 +134,12 @@ ModalDialog DLG_TITLEPAGE
         Size = MAP_APPFONT ( 198 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Reset Page Numbering after title pages" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_RESTART_NUMBERING
     {
         Pos = MAP_APPFONT ( 20 , 125 ) ;
         Size = MAP_APPFONT ( 74 , 10 ) ;
         Text [ en-US ] = "Page Number" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NF_RESTART_NUMBERING
     {
@@ -173,14 +162,12 @@ ModalDialog DLG_TITLEPAGE
         Size = MAP_APPFONT ( 198 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Set Page Number for first title page" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_SET_PAGE_NUMBER
     {
         Pos = MAP_APPFONT ( 20 , 153 ) ;
         Size = MAP_APPFONT ( 74 , 10 ) ;
         Text [ en-US ] = "Page Number" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NF_SET_PAGE_NUMBER
     {
@@ -202,7 +189,6 @@ ModalDialog DLG_TITLEPAGE
         Pos = MAP_APPFONT ( 6 , 169 ) ;
         Size = MAP_APPFONT ( 204 , 8 ) ;
         Text [ en-US ] = "Edit Page Properties" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_PAGE_PROPERTIES
     {

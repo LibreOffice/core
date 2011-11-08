@@ -175,7 +175,6 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ cs ] = "Aktivovat přirozené třídění" ;
         Text [ sk ] = "Aktivovať prirodzené triedenie" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " " ;
     };
     CheckBox BTN_COPYRESULT
     {

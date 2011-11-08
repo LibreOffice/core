@@ -50,7 +50,6 @@ TabDialog RID_SVX_FORMAT_CELLS_DLG
                 PageResID = RID_SVXPAGE_CHAR_NAME ;
                 Text [ de ] = "Schrift" ;
                 Text [ en-US ] = "Font" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
@@ -58,7 +57,6 @@ TabDialog RID_SVX_FORMAT_CELLS_DLG
                 PageResID = RID_SVXPAGE_CHAR_EFFECTS ;
                 Text [ de ] = "Schrifteffekt" ;
                 Text [ en-US ] = "Font Effects" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
@@ -66,7 +64,6 @@ TabDialog RID_SVX_FORMAT_CELLS_DLG
                 PageResID = RID_SVXPAGE_BORDER;
                 Text [ de ] = "Umrandung" ;
                 Text [ en-US ] = "Borders" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
@@ -74,7 +71,6 @@ TabDialog RID_SVX_FORMAT_CELLS_DLG
                 PageResID = RID_SVXPAGE_AREA;
                 Text [ de ] = "Hintergrund";
                 Text [ en-US ] = "Background";
-                Text [ x-comment ] = " ";
             };
         };
     };
@@ -103,7 +99,5 @@ TabDialog RID_SVX_FORMAT_CELLS_DLG
         Text [ de ] = "Zurück" ;
         Text [ en-US ] = "Return" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };

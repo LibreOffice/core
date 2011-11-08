@@ -46,14 +46,12 @@ TabDialog RID_PAGEDIALOG_PAGE
                 Identifier = RID_SVXPAGE_PAGE ;
                 Text [ en-US ] = "Page" ;
                 PageResID = RID_SVXPAGE_PAGE ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_BACKGROUND ;
                 Text [ en-US ] = "Background" ;
                 PageResID = RID_SVXPAGE_BACKGROUND ;
-                Text [ x-comment ] = " ";
             };
         };
     };
@@ -82,7 +80,6 @@ TabDialog RID_PAGEDIALOG_PAGE
         Text [ en-US ] = "Return" ;
         TabStop = TRUE ;
     };
-    Text [ x-comment ] = " ";
 
     String 1
     {
@@ -130,9 +127,7 @@ TabDialog RID_PAGEDIALOG_BACKGROUND
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "Return" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 
     String 1
     {
@@ -157,14 +152,12 @@ TabDialog RID_PAGEDIALOG_CHAR
                 Identifier = RID_PAGE_CHAR ;
                 Text [ en-US ] = "Font" ;
                 PageResID = RID_PAGE_CHAR ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_PAGE_EFFECTS ;
                 Text [ en-US ] = "Font Effects" ;
                 PageResID = RID_PAGE_EFFECTS ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
@@ -183,14 +176,12 @@ TabDialog RID_PAGEDIALOG_CHAR
                 Identifier = RID_PAGE_BACKGROUND ;
                 Text [ en-US ] = "Background" ;
                 PageResID = RID_PAGE_BACKGROUND ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_PAGE_ALIGNMENT ;
                 Text [ en-US ] = "Alignment" ;
                 PageResID = RID_PAGE_ALIGNMENT ;
-                Text [ x-comment ] = " ";
             };
         };
     };
@@ -218,9 +209,7 @@ TabDialog RID_PAGEDIALOG_CHAR
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "Return" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 
     String 1
     {
@@ -247,21 +236,18 @@ TabDialog RID_PAGEDIALOG_LINE
                 Identifier = RID_SVXPAGE_LINE ;
                 Text [ en-US ] = "Line" ;
                 PageResID = RID_SVXPAGE_LINE ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_LINE_DEF ;
                 Text [ en-US ] = "Line Styles" ;
                 PageResID = RID_SVXPAGE_LINE_DEF ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_LINEEND_DEF ;
                 Text [ en-US ] = "Arrow Styles" ;
                 PageResID = RID_SVXPAGE_LINEEND_DEF ;
-                Text [ x-comment ] = " ";
             };
         };
     };
@@ -289,9 +275,7 @@ TabDialog RID_PAGEDIALOG_LINE
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "Return" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 
     String 1
     {
