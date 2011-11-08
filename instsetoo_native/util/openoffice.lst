@@ -62,7 +62,7 @@ LibreOffice
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.5.0
 			BASEPRODUCTVERSION 3.5
-            PCPFILENAME openoffice.pcp
+            PCPFILENAME libreoffice.pcp
 			UPDATEURL http://update.libreoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.libreoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
