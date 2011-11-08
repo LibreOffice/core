@@ -1,6 +1,7 @@
 mkdir: %_DEST%\inc\npsdk
 
 ..\mozsrc\*.h %_DEST%\inc\npsdk\*.h
+..\inc\*.h %_DEST%\inc\npsdk\*.h
 
 ..\%__SRC%\slo\npunix.o %_DEST%\lib\npunix.o
 ..\%__SRC%\slo\npunix.obj %_DEST%\lib\npunix.obj
