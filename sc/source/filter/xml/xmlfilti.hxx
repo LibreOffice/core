@@ -303,8 +303,8 @@ public:
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
-    void getOperatorXML(const rtl::OUString sTempOperator, ScQueryOp& aFilterOperator, bool& bUseRegularExpressions,
-                        double& dVal) const;
+    void getOperatorXML(
+        const rtl::OUString sTempOperator, ScQueryOp& aFilterOperator, bool& bUseRegularExpressions) const;
     virtual void EndElement();
 };
 

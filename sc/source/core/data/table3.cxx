@@ -1190,10 +1190,13 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
 
         if ( pSpecial && pSpecial[i] )
         {
-            if (rItem.mfVal == SC_EMPTYFIELDS)
+            if (rEntry.IsQueryByEmpty())
                 bOk = !( aCol[rEntry.nField].HasDataAt( nRow ) );
-            else // if (rEntry.nVal == SC_NONEMPTYFIELDS)
+            else
+            {
+                OSL_ASSERT(rEntry.IsQueryByNonEmpty());
                 bOk = aCol[rEntry.nField].HasDataAt( nRow );
+            }
         }
         else if (isQueryByValue(*this, rItem, nCol, nRow, pCell))
         {
@@ -1655,7 +1658,7 @@ static void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPa
             else
             {
                 // call from UNO or second call from autofilter
-                if ( rItem.mfVal == SC_EMPTYFIELDS || rItem.mfVal == SC_NONEMPTYFIELDS )
+                if (rEntry.IsQueryByEmpty() || rEntry.IsQueryByNonEmpty())
                 {
                     pSpecial[i] = true;
                 }

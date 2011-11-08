@@ -407,14 +407,11 @@ private:
                 return GetXMLToken(XML_ENDS_WITH);
             case SC_EQUAL:
             {
-                const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-                if (!rItem.meType != ScQueryEntry::ByString && rItem.maString.isEmpty())
-                {
-                    if (rItem.mfVal == SC_EMPTYFIELDS)
-                        return GetXMLToken(XML_EMPTY);
-                    else if (rItem.mfVal == SC_NONEMPTYFIELDS)
-                        return GetXMLToken(XML_NOEMPTY);
-                }
+                if (rEntry.IsQueryByEmpty())
+                    return GetXMLToken(XML_EMPTY);
+                else if (rEntry.IsQueryByNonEmpty())
+                    return GetXMLToken(XML_NOEMPTY);
+
                 if (bRegExp)
                     return GetXMLToken(XML_MATCH);
                 else

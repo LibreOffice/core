@@ -1105,20 +1105,10 @@ void ScFilterDescriptorBase::fillQueryParam(
         case sheet::FilterOperator2::ENDS_WITH:             rEntry.eOp = SC_ENDS_WITH;          break;
         case sheet::FilterOperator2::DOES_NOT_END_WITH:     rEntry.eOp = SC_DOES_NOT_END_WITH;  break;
         case sheet::FilterOperator2::EMPTY:
-            {
-                rEntry.eOp = SC_EQUAL;
-                rItem.mfVal = SC_EMPTYFIELDS;
-                rItem.meType = ScQueryEntry::ByValue;
-                rItem.maString = rtl::OUString();
-            }
+            rEntry.SetQueryByEmpty();
             break;
         case sheet::FilterOperator2::NOT_EMPTY:
-            {
-                rEntry.eOp = SC_EQUAL;
-                rItem.mfVal = SC_NONEMPTYFIELDS;
-                rItem.meType = ScQueryEntry::ByValue;
-                rItem.maString = rtl::OUString();
-            }
+            rEntry.SetQueryByNonEmpty();
             break;
         default:
             OSL_FAIL("Falscher Query-enum");
@@ -1192,18 +1182,15 @@ uno::Sequence<sheet::TableFilterField> SAL_CALL ScFilterDescriptorBase::getFilte
             case SC_EQUAL:
                 {
                     aField.Operator = sheet::FilterOperator_EQUAL;
-                    if (!rItem.meType != ScQueryEntry::ByString && rItem.maString.isEmpty())
+                    if (rEntry.IsQueryByEmpty())
                     {
-                        if (rItem.mfVal == SC_EMPTYFIELDS)
-                        {
-                            aField.Operator = sheet::FilterOperator_EMPTY;
-                            aField.NumericValue = 0;
-                        }
-                        else if (rItem.mfVal == SC_NONEMPTYFIELDS)
-                        {
-                            aField.Operator = sheet::FilterOperator_NOT_EMPTY;
-                            aField.NumericValue = 0;
-                        }
+                        aField.Operator = sheet::FilterOperator_EMPTY;
+                        aField.NumericValue = 0;
+                    }
+                    else if (rEntry.IsQueryByNonEmpty())
+                    {
+                        aField.Operator = sheet::FilterOperator_NOT_EMPTY;
+                        aField.NumericValue = 0;
                     }
                 }
                 break;
@@ -1257,18 +1244,15 @@ throw(uno::RuntimeException)
         case SC_EQUAL:
             {
                 aField.Operator = sheet::FilterOperator2::EQUAL;
-                if (!rItem.meType != ScQueryEntry::ByString && rItem.maString.isEmpty())
+                if (rEntry.IsQueryByEmpty())
                 {
-                    if (rItem.mfVal == SC_EMPTYFIELDS)
-                    {
-                        aField.Operator = sheet::FilterOperator2::EMPTY;
-                        aField.NumericValue = 0;
-                    }
-                    else if (rItem.mfVal == SC_NONEMPTYFIELDS)
-                    {
-                        aField.Operator = sheet::FilterOperator2::NOT_EMPTY;
-                        aField.NumericValue = 0;
-                    }
+                    aField.Operator = sheet::FilterOperator2::EMPTY;
+                    aField.NumericValue = 0;
+                }
+                else if (rEntry.IsQueryByNonEmpty())
+                {
+                    aField.Operator = sheet::FilterOperator2::NOT_EMPTY;
+                    aField.NumericValue = 0;
                 }
             }
             break;
@@ -1336,20 +1320,10 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields(
             case sheet::FilterOperator_TOP_PERCENT:     rEntry.eOp = SC_TOPPERC;         break;
             case sheet::FilterOperator_BOTTOM_PERCENT:  rEntry.eOp = SC_BOTPERC;         break;
             case sheet::FilterOperator_EMPTY:
-                {
-                    rEntry.eOp = SC_EQUAL;
-                    rItem.mfVal = SC_EMPTYFIELDS;
-                    rItem.meType = ScQueryEntry::ByValue;
-                    rItem.maString = rtl::OUString();
-                }
+                rEntry.SetQueryByEmpty();
                 break;
             case sheet::FilterOperator_NOT_EMPTY:
-                {
-                    rEntry.eOp = SC_EQUAL;
-                    rItem.mfVal = SC_NONEMPTYFIELDS;
-                    rItem.meType = ScQueryEntry::ByValue;
-                    rItem.maString = rtl::OUString();
-                }
+                rEntry.SetQueryByNonEmpty();
                 break;
             default:
                 OSL_FAIL("Falscher Query-enum");

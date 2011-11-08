@@ -618,10 +618,13 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, bool *pSpeci
 
         if (pSpecial && pSpecial[i])
         {
-            if (rItem.mfVal == SC_EMPTYFIELDS)
-                bOk = ! pCellData->IsHasData();
-            else // if (rEntry.nVal == SC_NONEMPTYFIELDS)
+            if (rEntry.IsQueryByEmpty())
+                bOk = !pCellData->IsHasData();
+            else
+            {
+                OSL_ASSERT(rEntry.IsQueryByNonEmpty());
                 bOk =  pCellData->IsHasData();
+            }
         }
         else if (rEntry.GetQueryItem().meType != ScQueryEntry::ByString && pCellData->IsValue())
         {   // by Value

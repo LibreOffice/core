@@ -34,15 +34,6 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
-/*
- * dialog returns the special field values "empty"/"not empty"
- * as constants SC_EMPTYFIELDS and SC_NONEMPTYFIELDS respectively in nVal in
- * conjuctions with the flag bQueryByString = FALSE.
- */
-
-#define SC_EMPTYFIELDS      ((double)0x0042)
-#define SC_NONEMPTYFIELDS   ((double)0x0043)
-
 struct ScDBQueryParamInternal;
 struct ScQueryEntry;
 

@@ -52,8 +52,8 @@ struct ScQueryEntry
         double        mfVal;
         rtl::OUString maString;
 
-        bool operator== (const Item& r) const;
         Item();
+        bool operator== (const Item& r) const;
     };
     typedef std::vector<Item> QueryItemsType;
 
@@ -71,6 +71,10 @@ struct ScQueryEntry
     // creates pSearchParam and pSearchText if necessary, always RegExp!
     utl::TextSearch* GetSearchTextPtr( bool bCaseSens ) const;
 
+    SC_DLLPUBLIC void SetQueryByEmpty();
+    SC_DLLPUBLIC bool IsQueryByEmpty() const;
+    SC_DLLPUBLIC void SetQueryByNonEmpty();
+    SC_DLLPUBLIC bool IsQueryByNonEmpty() const;
     SC_DLLPUBLIC const Item& GetQueryItem() const;
     SC_DLLPUBLIC Item& GetQueryItem();
     void            Clear();

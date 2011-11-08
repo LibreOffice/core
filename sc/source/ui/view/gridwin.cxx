@@ -1398,17 +1398,11 @@ void ScGridWindow::ExecFilter( sal_uLong nSel,
                     }
                     else if (nSel == SC_AUTOFILTER_EMPTY)
                     {
-                        rNewEntry.eOp = SC_EQUAL;
-                        rItem.maString = rtl::OUString();
-                        rItem.meType = ScQueryEntry::ByValue;
-                        rItem.mfVal  = SC_EMPTYFIELDS;
+                        rNewEntry.SetQueryByEmpty();
                     }
                     else if (nSel == SC_AUTOFILTER_NOTEMPTY)
                     {
-                        rNewEntry.eOp = SC_EQUAL;
-                        rItem.maString = rtl::OUString();
-                        rItem.meType = ScQueryEntry::ByValue;
-                        rItem.mfVal = SC_NONEMPTYFIELDS;
+                        rNewEntry.SetQueryByNonEmpty();
                     }
                     else
                     {

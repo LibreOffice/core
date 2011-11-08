@@ -710,8 +710,8 @@ SvXMLImportContext *ScXMLDPConditionContext::CreateChildContext( sal_uInt16 nPre
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
-void ScXMLDPConditionContext::getOperatorXML(const rtl::OUString sTempOperator, ScQueryOp& aFilterOperator, bool& bUseRegularExpressions,
-                                            double& dVal) const
+void ScXMLDPConditionContext::getOperatorXML(
+    const rtl::OUString sTempOperator, ScQueryOp& aFilterOperator, bool& bUseRegularExpressions) const
 {
     bUseRegularExpressions = false;
     if (IsXMLToken(sTempOperator, XML_MATCH))
@@ -732,8 +732,6 @@ void ScXMLDPConditionContext::getOperatorXML(const rtl::OUString sTempOperator, 
         aFilterOperator = SC_BOTPERC;
     else if (IsXMLToken(sTempOperator, XML_BOTTOM_VALUES))
         aFilterOperator = SC_BOTVAL;
-    else if (IsXMLToken(sTempOperator, XML_EMPTY))
-        dVal = SC_EMPTYFIELDS;
     else if (sTempOperator.compareToAscii(">") == 0)
         aFilterOperator = SC_GREATER;
     else if (sTempOperator.compareToAscii(">=") == 0)
@@ -742,8 +740,6 @@ void ScXMLDPConditionContext::getOperatorXML(const rtl::OUString sTempOperator, 
         aFilterOperator = SC_LESS;
     else if (sTempOperator.compareToAscii("<=") == 0)
         aFilterOperator = SC_LESS_EQUAL;
-    else if (IsXMLToken(sTempOperator, XML_NOEMPTY))
-        dVal = SC_NONEMPTYFIELDS;
     else if (IsXMLToken(sTempOperator, XML_TOP_PERCENT))
         aFilterOperator = SC_TOPPERC;
     else if (IsXMLToken(sTempOperator, XML_TOP_VALUES))
@@ -758,28 +754,29 @@ void ScXMLDPConditionContext::EndElement()
     else
         aFilterField.eConnect = SC_AND;
     pFilterContext->SetIsCaseSensitive(bIsCaseSensitive);
-    bool bUseRegularExpressions;
-    double dVal(0.0);
-    getOperatorXML(sOperator, aFilterField.eOp, bUseRegularExpressions, dVal);
-    pFilterContext->SetUseRegularExpressions(bUseRegularExpressions);
-    aFilterField.nField = nField;
-    ScQueryEntry::Item& rItem = aFilterField.GetQueryItem();
-    if (IsXMLToken(sDataType, XML_NUMBER))
-    {
-        rItem.mfVal = sConditionValue.toDouble();
-        rItem.maString = sConditionValue;
-        rItem.meType = ScQueryEntry::ByValue;
-        if (dVal != 0.0)
-        {
-            rItem.mfVal = dVal;
-            rItem.maString = rtl::OUString();
-        }
-    }
+    if (IsXMLToken(sOperator, XML_EMPTY))
+        aFilterField.SetQueryByEmpty();
+    else if (IsXMLToken(sOperator, XML_NOEMPTY))
+        aFilterField.SetQueryByNonEmpty();
     else
     {
-        rItem.maString = sConditionValue;
-        rItem.meType = ScQueryEntry::ByString;
-        rItem.mfVal = 0.0;
+        bool bUseRegularExpressions = false;
+        getOperatorXML(sOperator, aFilterField.eOp, bUseRegularExpressions);
+        pFilterContext->SetUseRegularExpressions(bUseRegularExpressions);
+        aFilterField.nField = nField;
+        ScQueryEntry::Item& rItem = aFilterField.GetQueryItem();
+        if (IsXMLToken(sDataType, XML_NUMBER))
+        {
+            rItem.mfVal = sConditionValue.toDouble();
+            rItem.maString = sConditionValue;
+            rItem.meType = ScQueryEntry::ByValue;
+        }
+        else
+        {
+            rItem.maString = sConditionValue;
+            rItem.meType = ScQueryEntry::ByString;
+            rItem.mfVal = 0.0;
+        }
     }
     pFilterContext->AddFilterField(aFilterField);
 }

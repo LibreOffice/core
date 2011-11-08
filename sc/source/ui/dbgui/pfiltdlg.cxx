@@ -217,13 +217,10 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
             const ScQueryEntry& rEntry = theQueryData.GetEntry(i);
             const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
             rtl::OUString aValStr = rItem.maString;
-            if (rItem.meType != ScQueryEntry::ByString && aValStr.isEmpty())
-            {
-                if (rItem.mfVal == SC_EMPTYFIELDS)
-                    aValStr = aStrEmpty;
-                else if (rItem.mfVal == SC_NONEMPTYFIELDS)
-                    aValStr = aStrNotEmpty;
-            }
+            if (rEntry.IsQueryByEmpty())
+                aValStr = aStrEmpty;
+            else if (rEntry.IsQueryByNonEmpty())
+                aValStr = aStrNotEmpty;
             sal_uInt16  nCondPos     = (sal_uInt16)rEntry.eOp;
             sal_uInt16  nFieldSelPos = GetFieldSelPos( static_cast<SCCOL>(rEntry.nField) );
 
@@ -428,15 +425,13 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
              */
             if ( aStrVal == aStrEmpty )
             {
-                rItem.maString = rtl::OUString();
-                rItem.mfVal = SC_EMPTYFIELDS;
-                rItem.meType = ScQueryEntry::ByValue;
+                OSL_ASSERT(eOp == SC_EQUAL);
+                rEntry.SetQueryByEmpty();
             }
             else if ( aStrVal == aStrNotEmpty )
             {
-                rItem.maString = rtl::OUString();
-                rItem.mfVal = SC_NONEMPTYFIELDS;
-                rItem.meType = ScQueryEntry::ByValue;
+                OSL_ASSERT(eOp == SC_EQUAL);
+                rEntry.SetQueryByNonEmpty();
             }
             else
             {

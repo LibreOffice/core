@@ -714,9 +714,9 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
     bool bLen = sText.Len() > 0;
 
     // empty/nonempty fields
-    if( !bLen && (rItem.mfVal == SC_EMPTYFIELDS) )
+    if (rEntry.IsQueryByEmpty())
         bConflict = !AddCondition( rEntry.eConnect, EXC_AFTYPE_EMPTY, EXC_AFOPER_NONE, 0.0, NULL, true );
-    else if( !bLen && (rItem.mfVal == SC_NONEMPTYFIELDS) )
+    else if(rEntry.IsQueryByNonEmpty())
         bConflict = !AddCondition( rEntry.eConnect, EXC_AFTYPE_NOTEMPTY, EXC_AFOPER_NONE, 0.0, NULL, true );
     // other conditions
     else

@@ -78,28 +78,17 @@ ScXMLExportDataPilot::~ScXMLExportDataPilot()
 {
 }
 
-rtl::OUString ScXMLExportDataPilot::getDPOperatorXML(const ScQueryOp aFilterOperator, const bool bUseRegularExpressions,
-    const bool bIsString, const double dVal, const String& sVal) const
+rtl::OUString ScXMLExportDataPilot::getDPOperatorXML(
+    const ScQueryOp aFilterOperator, const bool bUseRegularExpressions) const
 {
     switch (aFilterOperator)
     {
         case SC_EQUAL :
         {
-            rtl::OUString sReturn;
             if (bUseRegularExpressions)
-                sReturn = GetXMLToken(XML_MATCH);
+                return GetXMLToken(XML_MATCH);
             else
-                sReturn = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
-
-            if (!bIsString && sVal == EMPTY_STRING)
-            {
-                if (dVal == SC_EMPTYFIELDS)
-                    sReturn = GetXMLToken(XML_EMPTY);
-                else if (dVal == SC_NONEMPTYFIELDS)
-                    sReturn = GetXMLToken(XML_NOEMPTY);
-            }
-
-            return sReturn;
+                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
         }
         case SC_NOT_EQUAL :
         {
@@ -146,9 +135,20 @@ void ScXMLExportDataPilot::WriteDPCondition(const ScQueryEntry& aQueryEntry, boo
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rQueryStr);
     }
-    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR,
-                         getDPOperatorXML(aQueryEntry.eOp, bUseRegularExpressions,
-                                          rItem.meType == ScQueryEntry::ByString, rItem.mfVal, rQueryStr));
+
+    if (aQueryEntry.IsQueryByEmpty())
+    {
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, GetXMLToken(XML_EMPTY));
+    }
+    else if (aQueryEntry.IsQueryByNonEmpty())
+    {
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, GetXMLToken(XML_NOEMPTY));
+    }
+    else
+        rExport.AddAttribute(
+            XML_NAMESPACE_TABLE, XML_OPERATOR,
+            getDPOperatorXML(aQueryEntry.eOp, bUseRegularExpressions));
+
     SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_FILTER_CONDITION, true, true);
 }
 

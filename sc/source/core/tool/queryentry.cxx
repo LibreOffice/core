@@ -27,10 +27,20 @@
  */
 
 #include "queryentry.hxx"
+#include "queryparam.hxx"
 
 #include <unotools/textsearch.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/collatorwrapper.hxx>
+
+/*
+ * dialog returns the special field values "empty"/"not empty"
+ * as constants SC_EMPTYFIELDS and SC_NONEMPTYFIELDS respectively in nVal in
+ * conjuctions with the flag bQueryByString = FALSE.
+ */
+
+#define SC_EMPTYFIELDS      ((double)0x0042)
+#define SC_NONEMPTYFIELDS   ((double)0x0043)
 
 ScQueryEntry::Item::Item() :
     meType(ByValue), mfVal(0.0) {}
@@ -82,6 +92,50 @@ ScQueryEntry& ScQueryEntry::operator=( const ScQueryEntry& r )
     pSearchText     = NULL;
 
     return *this;
+}
+
+void ScQueryEntry::SetQueryByEmpty()
+{
+    eOp = SC_EQUAL;
+    Item& rItem = GetQueryItem();
+    rItem.meType = ByValue;
+    rItem.maString = rtl::OUString();
+    rItem.mfVal = SC_EMPTYFIELDS;
+}
+
+bool ScQueryEntry::IsQueryByEmpty() const
+{
+    if (maQueryItems.size() > 1)
+        // multi-item query.
+        return false;
+
+    const Item& rItem = GetQueryItem();
+    return eOp == SC_EQUAL &&
+        rItem.meType == ByValue &&
+        rItem.maString.isEmpty() &&
+        rItem.mfVal == SC_EMPTYFIELDS;
+}
+
+void ScQueryEntry::SetQueryByNonEmpty()
+{
+    eOp = SC_EQUAL;
+    Item& rItem = GetQueryItem();
+    rItem.meType = ByValue;
+    rItem.maString = rtl::OUString();
+    rItem.mfVal = SC_NONEMPTYFIELDS;
+}
+
+bool ScQueryEntry::IsQueryByNonEmpty() const
+{
+    if (maQueryItems.size() > 1)
+        // multi-item query.
+        return false;
+
+    const Item& rItem = GetQueryItem();
+    return eOp == SC_EQUAL &&
+        rItem.meType == ByValue &&
+        rItem.maString.isEmpty() &&
+        rItem.mfVal == SC_NONEMPTYFIELDS;
 }
 
 const ScQueryEntry::Item& ScQueryEntry::GetQueryItem() const

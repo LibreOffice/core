@@ -673,18 +673,14 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
                         bIgnore = (nBoolErr != 0);
                     break;
                     case EXC_AFTYPE_EMPTY:
-                        rItem.meType = ScQueryEntry::ByValue;
-                        rItem.mfVal = SC_EMPTYFIELDS;
-                        aEntry.eOp = SC_EQUAL;
+                        aEntry.SetQueryByEmpty();
                     break;
                     case EXC_AFTYPE_NOTEMPTY:
-                        rItem.meType = ScQueryEntry::ByValue;
-                        rItem.mfVal = SC_NONEMPTYFIELDS;
-                        aEntry.eOp = SC_EQUAL;
+                        aEntry.SetQueryByNonEmpty();
                     break;
                     default:
                         rStrm.Ignore( 8 );
-                        bIgnore = sal_True;
+                        bIgnore = true;
                 }
 
                 /*  #i39464# conflict, if two conditions of one column are 'OR'ed,

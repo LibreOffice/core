@@ -2255,9 +2255,7 @@ void Test::testAutofilter()
     // Filter for non-empty cells by column C.
     rEntry.bDoQuery = true;
     rEntry.nField = 2;
-    rEntry.GetQueryItem().meType = ScQueryEntry::ByValue;
-    rEntry.GetQueryItem().maString = rtl::OUString();
-    rEntry.GetQueryItem().mfVal = SC_NONEMPTYFIELDS;
+    rEntry.SetQueryByNonEmpty();
     m_pDoc->Query(0, aParam, true);
 
     // only row 3 should be hidden.  The rest should be visible.
@@ -2269,7 +2267,7 @@ void Test::testAutofilter()
     CPPUNIT_ASSERT_MESSAGE("row 4 and down should be visible.", !bHidden && nRow1 == 3 && nRow2 == MAXROW);
 
     // Now, filter for empty cells by column C.
-    rEntry.GetQueryItem().mfVal = SC_EMPTYFIELDS;
+    rEntry.SetQueryByEmpty();
     m_pDoc->Query(0, aParam, true);
 
     // Now, only row 1 and 3, and 6 and down should be visible.

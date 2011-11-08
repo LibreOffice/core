@@ -78,18 +78,16 @@ ScSheetDPData::ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, con
         {
             ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
             pSpecial[j] = false;
-            if (rItem.meType != ScQueryEntry::ByString)
-            {
-                if (rItem.maString.isEmpty() &&
-                   ((rItem.mfVal == SC_EMPTYFIELDS) || (rItem.mfVal == SC_NONEMPTYFIELDS)))
-                    pSpecial[j] = true;
-            }
-            else
+            if (rItem.meType == ScQueryEntry::ByString)
             {
                 sal_uInt32 nIndex = 0;
                 bool bNumber = pD->GetFormatTable()->IsNumberFormat(
                     rItem.maString, nIndex, rItem.mfVal);
                 rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
+            }
+            else if (rEntry.IsQueryByEmpty() || rEntry.IsQueryByNonEmpty())
+            {
+                pSpecial[j] = true;
             }
         }
     }
