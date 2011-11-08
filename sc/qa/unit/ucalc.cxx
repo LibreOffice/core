@@ -2247,11 +2247,42 @@ void Test::testAutofilter()
     CPPUNIT_ASSERT_MESSAGE("rows 2 & 3 should be hidden", bHidden && nRow1 == 2 && nRow2 == 3);
 
     // Remove filtering.
-    aParam.GetEntry(0).Clear();
-    pDBData->SetQueryParam(aParam);
+    rEntry.Clear();
     m_pDoc->Query(0, aParam, true);
     bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("All rows should be shown.", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
+
+    // Filter for non-empty cells by column C.
+    rEntry.bDoQuery = true;
+    rEntry.nField = 2;
+    rEntry.GetQueryItem().meType = ScQueryEntry::ByValue;
+    rEntry.GetQueryItem().maString = rtl::OUString();
+    rEntry.GetQueryItem().mfVal = SC_NONEMPTYFIELDS;
+    m_pDoc->Query(0, aParam, true);
+
+    // only row 3 should be hidden.  The rest should be visible.
+    bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("rows 1 & 2 should be visible.", !bHidden && nRow1 == 0 && nRow2 == 1);
+    bHidden = m_pDoc->RowHidden(2, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("row 3 should be hidden.", bHidden && nRow1 == 2 && nRow2 == 2);
+    bHidden = m_pDoc->RowHidden(3, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("row 4 and down should be visible.", !bHidden && nRow1 == 3 && nRow2 == MAXROW);
+
+    // Now, filter for empty cells by column C.
+    rEntry.GetQueryItem().mfVal = SC_EMPTYFIELDS;
+    m_pDoc->Query(0, aParam, true);
+
+    // Now, only row 1 and 3, and 6 and down should be visible.
+    bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("row 1 should be visible.", !bHidden && nRow1 == 0 && nRow2 == 0);
+    bHidden = m_pDoc->RowHidden(1, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("row 2 should be hidden.", bHidden && nRow1 == 1 && nRow2 == 1);
+    bHidden = m_pDoc->RowHidden(2, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("row 3 should be visible.", !bHidden && nRow1 == 2 && nRow2 == 2);
+    bHidden = m_pDoc->RowHidden(3, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("rows 4 & 5 should be hidden.", bHidden && nRow1 == 3 && nRow2 == 4);
+    bHidden = m_pDoc->RowHidden(5, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("rows 6 and down should be all visible.", !bHidden && nRow1 == 5 && nRow2 == MAXROW);
 
     m_pDoc->DeleteTab(0);
 }
