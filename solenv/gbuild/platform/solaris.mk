@@ -364,11 +364,6 @@ $(call gb_JunitTest_get_target,$(1)) : DEFS := \
 
 endef
 
-# SrsPartTarget class
-
-gb_SrsPartTarget_RSCTARGET := $(OUTDIR)/bin/rsc
-gb_SrsPartTarget_RSCCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR)/bin $(gb_SrsPartTarget_RSCTARGET)
-
 # Sun cc/CC support -xM1/-xMF flags, but unfortunately refuse input files that
 # do not have the right suffix, so use makedepend here...
 define gb_SrsPartTarget__command_dep

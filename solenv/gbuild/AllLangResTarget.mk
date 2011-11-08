@@ -72,9 +72,10 @@ $(call gb_SrsPartMergeTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY) 
 # SrsPartTarget class
 
 # defined by platform
-#  gb_SrsPartTarget_RSCTARGET
-#  gb_SrsPartTarget_RSCCOMMAND
 #  gb_SrsPartTarget__command_dep
+
+gb_SrsPartTarget_RSCTARGET := $(OUTDIR_FOR_BUILD)/bin/rsc$(gb_Executable_EXT_for_build)
+gb_SrsPartTarget_RSCCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_SrsPartTarget_RSCTARGET)
 
 define gb_SrsPartTarget__command
 $(call gb_Helper_abbreviate_dirs_native,\

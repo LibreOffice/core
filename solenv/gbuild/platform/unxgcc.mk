@@ -385,23 +385,6 @@ $(call gb_JunitTest_get_target,$(1)) : DEFS := \
 
 endef
 
-# SrsPartTarget class
-
-gb_SrsPartTarget_RSCTARGET := $(OUTDIR_FOR_BUILD)/bin/rsc
-gb_SrsPartTarget_RSCCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(OUTDIR_FOR_BUILD)/bin/rsc
-
-define gb_SrsPartTarget__command_dep
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(call gb_SrsPartTarget_get_dep_target,$(1))) && \
-	$(gb_GCCP) \
-		-MM -MT $(call gb_SrsPartTarget_get_target,$(1)) \
-		$(INCLUDE) \
-		$(DEFS) \
-		-c -x c++-header $(2) \
-		-o $(call gb_SrsPartTarget_get_dep_target,$(1)))
-endef
-
-
 # Python
 gb_PYTHON_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME=$(OUTDIR)/lib/python PYTHONPATH=$(OUTDIR)/lib/python:$(OUTDIR)/lib/python/lib-dynload
 

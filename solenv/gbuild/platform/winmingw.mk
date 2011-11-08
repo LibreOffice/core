@@ -508,31 +508,6 @@ $(call gb_LinkTarget_set_auxtargets,$(2),\
 
 endef
 
-# SrsPartTarget class
-
-gb_SrsPartTarget_RSCTARGET := $(OUTDIR_FOR_BUILD)/bin/rsc
-gb_SrsPartTarget_RSCCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_SrsPartTarget_RSCTARGET)
-
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_SrsPartTarget__command_dep
-$(call gb_Helper_abbreviate_dirs,\
-	$(OUTDIR_FOR_BUILD)/bin/makedepend \
-		$(INCLUDE) \
-		$(DEFS) \
-		$(2) \
-		-f - \
-	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-		-v OBJECTFILE=$(call gb_SrsPartTarget_get_target,$(1)) \
-		-v OUTDIR=$(OUTDIR)/ \
-		-v WORKDIR=$(WORKDIR)/ \
-		-v SRCDIR=$(SRCDIR)/ \
-		-v REPODIR=$(REPODIR)/ \
-	> $(call gb_SrsPartTarget_get_dep_target,$(1)))
-endef
-else
-gb_SrsPartTarget__command_dep =
-endif
-
 # WinResTarget class
 
 gb_WinResTarget_POSTFIX :=.res

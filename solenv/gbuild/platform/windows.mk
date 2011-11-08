@@ -689,9 +689,6 @@ endef
 
 # SrsPartTarget class
 
-gb_SrsPartTarget_RSCTARGET := $(OUTDIR)/bin/rsc.exe
-gb_SrsPartTarget_RSCCOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_SrsPartTarget_RSCTARGET)
-
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_SrsPartTarget__command_dep
 $(call gb_Helper_abbreviate_dirs_native,\

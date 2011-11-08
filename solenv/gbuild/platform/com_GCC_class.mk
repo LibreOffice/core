@@ -59,3 +59,14 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(INCLUDE_STL) $(INCLUDE))
 endef
 
+define gb_SrsPartTarget__command_dep
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(call gb_SrsPartTarget_get_dep_target,$(1))) && \
+	$(gb_GCCP) \
+		-MM -MT $(call gb_SrsPartTarget_get_target,$(1)) \
+		$(INCLUDE) \
+		$(DEFS) \
+		-c -x c++-header $(2) \
+		-o $(call gb_SrsPartTarget_get_dep_target,$(1)))
+endef
+
