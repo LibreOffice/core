@@ -213,7 +213,7 @@ IMPL_LINK( AsynchronousGetURL, getURL, XPlugin_Impl*, pImpl )
 
 extern "C" {
 
-    void* SAL_CALL NP_LOADDS  NPN_MemAlloc( uint32 nBytes )
+    void* SAL_CALL NP_LOADDS  NPN_MemAlloc( uint32_t nBytes )
     {
         TRACE( "NPN_MemAlloc" );
         void* pMem = malloc( nBytes );
@@ -226,7 +226,7 @@ extern "C" {
         free( pMem );
     }
 
-    uint32 SAL_CALL NP_LOADDS  NPN_MemFlush( uint32 /*nSize*/ )
+    uint32_t SAL_CALL NP_LOADDS  NPN_MemFlush( uint32_t /*nSize*/ )
     {
         TRACE( "NPN_MemFlush" );
         return 0;
@@ -334,7 +334,7 @@ extern "C" {
         return NPERR_NO_ERROR;
     }
 
-    NPError SAL_CALL NP_LOADDS  NPN_PostURLNotify( NPP instance, const char* url, const char* target, uint32 len, const char* buf, NPBool file, void* notifyData )
+    NPError SAL_CALL NP_LOADDS  NPN_PostURLNotify( NPP instance, const char* url, const char* target, uint32_t len, const char* buf, NPBool file, void* notifyData )
     {
         TRACE( "NPN_PostURLNotify" );
         XPlugin_Impl* pImpl = XPluginManager_Impl::getXPluginFromNPP( instance );
@@ -376,7 +376,7 @@ extern "C" {
         return NPERR_NO_ERROR;
     }
 
-    NPError SAL_CALL NP_LOADDS  NPN_PostURL( NPP instance, const char* url, const char* window, uint32 len, const char* buf, NPBool file )
+    NPError SAL_CALL NP_LOADDS  NPN_PostURL( NPP instance, const char* url, const char* window, uint32_t len, const char* buf, NPBool file )
     {
         TRACE( "NPN_PostURL" );
         XPlugin_Impl* pImpl = XPluginManager_Impl::getXPluginFromNPP( instance );
@@ -526,7 +526,7 @@ void SAL_CALL NP_LOADDS  NPN_Version( int* major, int* minor, int* net_major, in
     *net_minor = 5;
 }
 
-int32 SAL_CALL NP_LOADDS  NPN_Write( NPP instance, NPStream* stream, int32 len,
+int32_t SAL_CALL NP_LOADDS  NPN_Write( NPP instance, NPStream* stream, int32_t len,
                  void* buffer )
 {
     TRACE( "NPN_Write" );

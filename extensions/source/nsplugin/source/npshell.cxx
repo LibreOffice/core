@@ -666,20 +666,20 @@ NPP_NewStream(NPP instance,
 }
 
 
-int32 STREAMBUFSIZE = 0X0FFFFFFF;
+int32_t STREAMBUFSIZE = 0X0FFFFFFF;
 /* If we are reading from a file in NPAsFile
  * mode so we can take any size stream in our
  * write call (since we ignore it) */
 
-int32
+int32_t
 NPP_WriteReady(NPP /*instance*/, NPStream* /*stream*/)
 {
     return STREAMBUFSIZE;
 }
 
 
-int32
-NPP_Write(NPP /*instance*/, NPStream* /*stream*/, int32 /*offset*/, int32 len, void* /*buffer*/)
+int32_t
+NPP_Write(NPP /*instance*/, NPStream* /*stream*/, int32_t /*offset*/, int32_t len, void* /*buffer*/)
 {
     return len;     /* The number of bytes accepted */
 }

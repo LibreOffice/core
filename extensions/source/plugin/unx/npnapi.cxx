@@ -56,7 +56,7 @@ void* CreateNewShell( void**, XLIB_Window );
 // begin Netscape plugin api calls
 extern "C" {
 
-static void* l_NPN_MemAlloc( uint32 nBytes )
+static void* l_NPN_MemAlloc( uint32_t nBytes )
 {
     void* pMem = new char[nBytes];
     return pMem;
@@ -67,7 +67,7 @@ static void l_NPN_MemFree( void* pMem )
     delete [] (char*)pMem;
 }
 
-static uint32 l_NPN_MemFlush( uint32 /*nSize*/ )
+static uint32_t l_NPN_MemFlush( uint32_t /*nSize*/ )
 {
     return 0;
 }
@@ -209,7 +209,7 @@ static NPError l_NPN_NewStream( NPP instance, NPMIMEType type, const char* targe
     return aRet;
 }
 
-static NPError l_NPN_PostURLNotify( NPP instance, const char* url, const char* target, uint32 len, const char* buf, NPBool file, void* notifyData )
+static NPError l_NPN_PostURLNotify( NPP instance, const char* url, const char* target, uint32_t len, const char* buf, NPBool file, void* notifyData )
 {
     sal_uInt32 nInstance = pConnector->GetNPPID( instance );
     if( nInstance == PluginConnector::UnknownNPPID )
@@ -234,7 +234,7 @@ static NPError l_NPN_PostURLNotify( NPP instance, const char* url, const char* t
     return aRet;
 }
 
-static NPError l_NPN_PostURL( NPP instance, const char* url, const char* window, uint32 len, const char* buf, NPBool file )
+static NPError l_NPN_PostURL( NPP instance, const char* url, const char* window, uint32_t len, const char* buf, NPBool file )
 {
     sal_uInt32 nInstance = pConnector->GetNPPID( instance );
     if( nInstance == PluginConnector::UnknownNPPID )
@@ -340,7 +340,7 @@ static const char* l_NPN_UserAgent( NPP instance )
     return pAgent;
 }
 
-static int32 l_NPN_Write( NPP instance, NPStream* stream, int32 len, void* buffer )
+static int32_t l_NPN_Write( NPP instance, NPStream* stream, int32_t len, void* buffer )
 {
     sal_uInt32 nFileID = pConnector->GetStreamID( stream );
     if( nFileID == PluginConnector::UnknownStreamID )
