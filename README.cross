@@ -318,8 +318,8 @@ Windows will probably drive you insane.)
 
 Here is my autogen.lastrun for Android:
 SYSBASE=/home/tml/android-ndk-r6b/platforms/android-9/arch-arm
-CC=ccache /home/tml/android-ndk-r6b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-gcc -march=armv7-a -mfloat-abi=softfp -mthumb -mfpu=neon --sysroot /home/tml/android-ndk-r6b/platforms/android-9/arch-arm
-CXX=ccache /home/tml/android-ndk-r6b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-g++ -march=armv7-a -mfloat-abi=softfp -mthumb -mfpu=neon --sysroot /home/tml/android-ndk-r6b/platforms/android-9/arch-arm -I /home/tml/android-ndk-r6b/sources/cxx-stl/gnu-libstdc++/include -I/home/tml/android-ndk-r6b/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/include -L/home/tml/android-ndk-r6b/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a -fexceptions -frtti
+CC=ccache /home/tml/android-ndk-r6b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-gcc -march=armv7-a -mfloat-abi=softfp -mthumb -mfpu=neon -Wl,--fix-cortex-a8 --sysroot /home/tml/android-ndk-r6b/platforms/android-9/arch-arm
+CXX=ccache /home/tml/android-ndk-r6b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-g++ -march=armv7-a -mfloat-abi=softfp -mthumb -mfpu=neon -Wl,--fix-cortex-a8 --sysroot /home/tml/android-ndk-r6b/platforms/android-9/arch-arm -I /home/tml/android-ndk-r6b/sources/cxx-stl/gnu-libstdc++/include -I/home/tml/android-ndk-r6b/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/include -L/home/tml/android-ndk-r6b/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a -fexceptions -frtti
 AR=/home/tml/android-ndk-r6b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-ar
 NM=/home/tml/android-ndk-r6b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-nm
 OBJDUMP=/home/tml/android-ndk-r6b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-objdump
