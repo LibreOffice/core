@@ -255,32 +255,37 @@ void Test::testCellFunctions()
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
 
-    // SUM
-    double val = 1;
-    m_pDoc->SetValue (0, 0, 0, val);
-    m_pDoc->SetValue (0, 1, 0, val);
-    m_pDoc->SetString (0, 2, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=SUM(A1:A2)")));
-    m_pDoc->CalcAll();
-    double result;
-    m_pDoc->GetValue (0, 2, 0, result);
-    CPPUNIT_ASSERT_MESSAGE ("calculation failed", result == 2.0);
+    double val, result;
+    {
+        // SUM
+        val = 1;
+        m_pDoc->SetValue (0, 0, 0, val);
+        m_pDoc->SetValue (0, 1, 0, val);
+        m_pDoc->SetString (0, 2, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=SUM(A1:A2)")));
+        m_pDoc->CalcAll();
+        m_pDoc->GetValue (0, 2, 0, result);
+        CPPUNIT_ASSERT_MESSAGE ("calculation failed", result == 2.0);
+    }
 
-    // PRODUCT
-    val = 1;
-    m_pDoc->SetValue(0, 0, 0, val);
-    val = 2;
-    m_pDoc->SetValue(0, 1, 0, val);
-    val = 3;
-    m_pDoc->SetValue(0, 2, 0, val);
-    m_pDoc->SetString(0, 3, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=PRODUCT(A1:A3)")));
-    m_pDoc->CalcAll();
-    m_pDoc->GetValue(0, 3, 0, result);
-    CPPUNIT_ASSERT_MESSAGE("Calculation of PRODUCT failed", result == 6.0);
+    {
+        // PRODUCT
 
-    m_pDoc->SetString(0, 4, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=PRODUCT({1;2;3})")));
-    m_pDoc->CalcAll();
-    m_pDoc->GetValue(0, 4, 0, result);
-    CPPUNIT_ASSERT_MESSAGE("Calculation of PRODUCT with inline array failed", result == 6.0);
+        val = 1;
+        m_pDoc->SetValue(0, 0, 0, val);
+        val = 2;
+        m_pDoc->SetValue(0, 1, 0, val);
+        val = 3;
+        m_pDoc->SetValue(0, 2, 0, val);
+        m_pDoc->SetString(0, 3, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=PRODUCT(A1:A3)")));
+        m_pDoc->CalcAll();
+        m_pDoc->GetValue(0, 3, 0, result);
+        CPPUNIT_ASSERT_MESSAGE("Calculation of PRODUCT failed", result == 6.0);
+
+        m_pDoc->SetString(0, 4, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=PRODUCT({1;2;3})")));
+        m_pDoc->CalcAll();
+        m_pDoc->GetValue(0, 4, 0, result);
+        CPPUNIT_ASSERT_MESSAGE("Calculation of PRODUCT with inline array failed", result == 6.0);
+    }
 
     {
         // N
