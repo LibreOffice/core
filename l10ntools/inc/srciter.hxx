@@ -43,11 +43,10 @@ private:
     void ExecuteDirectory( transex::Directory& pDirectory );
 
 protected:
-    bool bLocal;
     bool bSkipLinks;
 
 public:
-    SourceTreeIterator( const ByteString &rRootDirectory, const ByteString &rVersion , bool bLocal_in = false);
+    SourceTreeIterator( const ByteString &rRootDirectory, const ByteString &rVersion );
     virtual ~SourceTreeIterator();
 
     sal_Bool StartExecute();

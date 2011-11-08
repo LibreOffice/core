@@ -172,7 +172,6 @@ const char DLIST_NAME[] = "d.lst";
 
 #define LOCALIZE_NONE       0x0000
 #define LOCALIZE_EXTRACT    0x0001
-#define LOCALIZE_MERGE      0x0002
 
 class SourceTreeLocalizer : public SourceTreeIterator
 {
@@ -208,10 +207,8 @@ private:
     );
     void WorkOnDirectory( const ByteString &rDirectory );
 public:
-    SourceTreeLocalizer( const ByteString &rRoot, const ByteString &rVersion , bool bLocal , bool skip_links );
+    SourceTreeLocalizer( const ByteString &rRoot, const ByteString &rVersion , bool skip_links );
     ~SourceTreeLocalizer();
-
-    ByteString getSourceLanguages( ByteString sLanguageRestriction , ByteString sCommand );
 
     void SetLanguageRestriction( const ByteString& rRestrictions )
         { sLanguageRestriction = rRestrictions; }
@@ -223,9 +220,9 @@ public:
 
 /*****************************************************************************/
 SourceTreeLocalizer::SourceTreeLocalizer(
-    const ByteString &rRoot, const ByteString &rVersion, bool bLocal_in , bool skip_links )
+    const ByteString &rRoot, const ByteString &rVersion, bool skip_links )
 /*****************************************************************************/
-                : SourceTreeIterator( rRoot, rVersion , bLocal_in ),
+                : SourceTreeIterator( rRoot, rVersion ),
                 nMode( LOCALIZE_NONE ),
                 nFileCnt( 0 )
 {
@@ -368,7 +365,7 @@ void SourceTreeLocalizer::WorkOnFile(
         sCommand += sTempFile;
         if ( sLanguageRestriction.Len()) {
             sCommand += " -l ";
-        sCommand += getSourceLanguages( sLanguageRestriction , sCommand );
+            sCommand +=  sLanguageRestriction;
         }
 
             //printf("DBG: %s\n",sCommand.GetBuffer());
@@ -391,18 +388,6 @@ void SourceTreeLocalizer::WorkOnFile(
         }
         // reset current working directory
         aOldCWD.SetCWD();
-}
-
-ByteString SourceTreeLocalizer::getSourceLanguages( ByteString sLanguageRestriction_inout , ByteString sCommand )
-{
-    // Source languages in helpcontent2 and macromigration en-US only!
-    if( sCommand.Search("helpex") != STRING_NOTFOUND ) {
-        sLanguageRestriction_inout.Assign( ByteString("en-US") );
-    }
-    else if( sCommand.Search("xmlex") != STRING_NOTFOUND ){
-        sLanguageRestriction_inout.Assign( ByteString("en-US") );
-    }
-    return sLanguageRestriction_inout;
 }
 
 /*****************************************************************************/
@@ -559,14 +544,6 @@ sal_Bool SourceTreeLocalizer::Extract( const ByteString &rDestinationFile )
 }
 using namespace transex3;
 
-#define STATE_NONE      0x0000
-#define STATE_EXPORT    0x0001
-#define STATE_MERGE     0x0002
-#define STATE_ISOCODE   0x0003
-#define STATE_LANGUAGES 0x0004
-#define STATE_FILENAME  0x0005
-#define STATE_OUTPUT    0x0006
-
 /*****************************************************************************/
 void Help()
 /*****************************************************************************/
@@ -575,23 +552,12 @@ void Help()
         "localize (c)2001 by Sun Microsystems\n"
         "====================================\n" );
     fprintf( stdout,
-        "As part of the L10N framework, localize extracts and merges translations\n"
-        "out of and into the toplevel modules defined in ModuleList array in\n"
+        "As part of the L10N framework, localize extracts en-US strings for\n"
+        "translation out of the toplevel modules defined in ModuleList array in\n"
         "l10ntools/source/localize.cxx.\n\n"
-        "Syntax: localize -e -l en-US -f FileName \n"
+        "Syntax: localize -f FileName \n"
         "Parameter:\n"
-        "\t-e: Extract mode\n"
-        "\tFileName: Output file when extract mode, input file when merge mode\n"
-        "\tl1...ln: supported languages (\"all\" for all languages).\n"
-    );
-
-    fprintf( stdout,
-        "Valid language codes for l1...ln and f1...fn are:\n" );
-    fprintf( stdout,
-        "\nExample 1:\n"
-        "==========\n"
-        "localize -e -l en-US -f MyFile\n\n"
-        "All strings will be extracted for language en-US.\n"
+        "\tFileName: Output file\n"
     );
 }
 
@@ -604,14 +570,6 @@ int Error()
 }
 
 /*****************************************************************************/
-sal_Bool CheckLanguages( ByteString &rLanguages )
-/*****************************************************************************/
-{
-    ByteString sTmp( rLanguages );
-    return true;
-}
-
-/*****************************************************************************/
 #if defined(UNX)
 int main( int argc, char *argv[] )
 #else
@@ -621,101 +579,42 @@ int _cdecl main( int argc, char *argv[] )
 {
     String sTempBase( String::CreateFromAscii( "loc" ));
     DirEntry::SetTempNameBase( sTempBase );
-    sal_uInt16 nState   = STATE_NONE;
 
-    sal_Bool bExport    = sal_False;
-    sal_Bool bMerge     = sal_False;
     bool bSkipLinks = false;
 
     ByteString sLanguages;
     ByteString sFileName;
-    ByteString sOutput;
 
-    bExport = sal_True;
+    sLanguages = ByteString( "en-US" );
 
-    for( int i = 1; i < argc; i++ ) {
-        ByteString sSwitch( argv[ i ] );
-        sSwitch.ToUpperAscii();
+    ByteString sSwitch( argv[ 1 ] );
+    sSwitch.ToUpperAscii();
 
-        if ( sSwitch.Equals( "-E" )) {
-            nState = STATE_EXPORT;
-            if ( bMerge )
-                return Error();
-            bExport = sal_True;
-        }
-        else if ( sSwitch.Equals( "-I" ) )
-            nState = STATE_ISOCODE;
-        else if ( sSwitch.Equals( "-L" ) )
-            nState = STATE_LANGUAGES;
-        else if ( sSwitch.Equals( "-F" ) )
-            nState = STATE_FILENAME;
-        else if ( ByteString( argv[ i ]).ToUpperAscii().Equals( "-O" ) )
-            nState = STATE_OUTPUT;
-        else {
-            switch ( nState ) {
-                case STATE_NONE:
-                    return Error();
-                case STATE_OUTPUT:
-                    if ( sOutput.Len())
-                        return Error();
-                    sOutput = ByteString( argv[ i ] );
-                    nState = STATE_NONE;
-                break;
-                case STATE_LANGUAGES:
-                    if ( sLanguages.Len())
-                        return Error();
-                    sLanguages = ByteString( argv[ i ] );
-                    nState = STATE_NONE;
-                break;
-                case STATE_FILENAME:
-                    if ( sFileName.Len())
-                        return Error();
-                    sFileName = ByteString( argv[ i ] );
-                    nState = STATE_NONE;
-                break;
-                default:
-                    return Error();
-            }
-        }
-    }
-    if ( !bMerge && !bExport ) {
-        Help();
-        return 1;
-    }
+    if ( ( argc == 3 ) && sSwitch.Equals( "-F" ) )
+        sFileName = ByteString( argv[ 2 ] );
+    else
+        return Error();
 
-    ByteString sSolarVer( Export::GetEnv( "WORK_STAMP" ));
     ByteString sVersion( Export::GetEnv( "WORK_STAMP" ));
 
-    if ( !sSolarVer.Len() || !sVersion.Len()) {
+    if ( !sVersion.Len() ) {
         fprintf( stderr, "ERROR: No environment set!\n" );
         return 1;
-    }
-
-    if ( !CheckLanguages( sLanguages ))
-        return 2;
-
-    if ( !sFileName.Len()) {
-        fprintf( stderr, "ERROR: No filename given\n" );
-        return 3;
     }
 
     DirEntry aEntry( String( sFileName , RTL_TEXTENCODING_ASCII_US ));
     aEntry.ToAbs();
     String sFullEntry = aEntry.GetFull();
     ByteString sFileABS(aEntry.GetFull(), osl_getThreadTextEncoding());
-    //printf("B %s\nA %s\n",rDestinationFile.GetBuffer(), sFile.GetBuffer());
     sFileName = sFileABS;
 
     string pwd;
     Export::getCurrentDir( pwd );
     cout << "Localizing directory " << pwd << "\n";
-    SourceTreeLocalizer aIter( ByteString( pwd.c_str() ) , sVersion , (sOutput.Len() > 0) , bSkipLinks );
+    SourceTreeLocalizer aIter( ByteString( pwd.c_str() ) , sVersion , bSkipLinks );
     aIter.SetLanguageRestriction( sLanguages );
-    if ( bExport ){
-        fflush( stdout );
-        aIter.Extract( sFileName );
-        printf("\n%d files found!\n",aIter.GetFileCnt());
-    }
+    aIter.Extract( sFileName );
+    printf("\n%d files found!\n",aIter.GetFileCnt());
     return 0;
 }
 

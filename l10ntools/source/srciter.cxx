@@ -39,16 +39,14 @@
 
 /*****************************************************************************/
 SourceTreeIterator::SourceTreeIterator(
-    const ByteString &rRootDirectory, const ByteString &rVersion , bool bLocal_in )
+    const ByteString &rRootDirectory, const ByteString &rVersion )
 /*****************************************************************************/
-                : bInExecute( sal_False ) , bLocal( bLocal_in )
+                : bInExecute( sal_False )
 {
     (void) rVersion ;
 
-    if(!bLocal){
-        rtl::OUString sRootDirectory( rRootDirectory.GetBuffer() , rRootDirectory.Len() , RTL_TEXTENCODING_UTF8 );
-        aRootDirectory = transex::Directory( sRootDirectory );
-    }
+    rtl::OUString sRootDirectory( rRootDirectory.GetBuffer() , rRootDirectory.Len() , RTL_TEXTENCODING_UTF8 );
+    aRootDirectory = transex::Directory( sRootDirectory );
 }
 
 /*****************************************************************************/
