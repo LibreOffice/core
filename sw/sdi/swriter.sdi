@@ -7249,7 +7249,7 @@ SfxVoidItem SendOutlineToStarImpress FN_OUTLINE_TO_IMPRESS
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem SetAnchorAtChar FN_TOOL_ANKER_AT_CHAR
+SfxVoidItem SetAnchorAtChar FN_TOOL_ANCHOR_AT_CHAR
 ()
 [
     /* flags: */
@@ -7277,7 +7277,7 @@ SfxVoidItem SetAnchorAtChar FN_TOOL_ANKER_AT_CHAR
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem SetAnchorToChar FN_TOOL_ANKER_CHAR
+SfxVoidItem SetAnchorToChar FN_TOOL_ANCHOR_CHAR
 ()
 [
     /* flags: */
@@ -7305,7 +7305,7 @@ SfxVoidItem SetAnchorToChar FN_TOOL_ANKER_CHAR
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem SetAnchorToFrame FN_TOOL_ANKER_FRAME
+SfxVoidItem SetAnchorToFrame FN_TOOL_ANCHOR_FRAME
 ()
 [
     /* flags: */
@@ -7333,7 +7333,7 @@ SfxVoidItem SetAnchorToFrame FN_TOOL_ANKER_FRAME
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem SetAnchorToPage FN_TOOL_ANKER_PAGE
+SfxVoidItem SetAnchorToPage FN_TOOL_ANCHOR_PAGE
 ()
 [
     /* flags: */
@@ -7361,7 +7361,7 @@ SfxVoidItem SetAnchorToPage FN_TOOL_ANKER_PAGE
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem SetAnchorToPara FN_TOOL_ANKER_PARAGRAPH
+SfxVoidItem SetAnchorToPara FN_TOOL_ANCHOR_PARAGRAPH
 ()
 [
     /* flags: */
@@ -8419,7 +8419,7 @@ SfxVoidItem TextWrap FN_DRAW_WRAP_DLG
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem ToggleAnchorType FN_TOOL_ANKER
+SfxVoidItem ToggleAnchorType FN_TOOL_ANCHOR
 ()
 [
     /* flags: */

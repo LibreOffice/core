@@ -1004,16 +1004,16 @@ String MN_DRAW_POPUPMENU
     MenuItem\
     {\
         RadioCheck = TRUE ; \
-        Identifier = FN_TOOL_ANKER_FRAME ; \
-        HelpId = CMD_FN_TOOL_ANKER_FRAME ; \
+        Identifier = FN_TOOL_ANCHOR_FRAME ; \
+        HelpId = CMD_FN_TOOL_ANCHOR_FRAME ; \
         Text [ en-US ] = "To ~Frame" ; \
     };
 
 #define MN_ANCHOR \
     MenuItem\
     {\
-        Identifier = FN_TOOL_ANKER ; \
-        HelpId = CMD_FN_TOOL_ANKER ; \
+        Identifier = FN_TOOL_ANCHOR ; \
+        HelpId = CMD_FN_TOOL_ANCHOR ; \
         Command = ".uno:AnchorMenu" ; \
         Text [ en-US ] = "An~chor" ; \
         SubMenu = Menu\
@@ -1023,29 +1023,29 @@ String MN_DRAW_POPUPMENU
                 MenuItem\
                 {\
                     RadioCheck = TRUE ; \
-                    Identifier = FN_TOOL_ANKER_PAGE ; \
-                    HelpId = CMD_FN_TOOL_ANKER_PAGE ; \
+                    Identifier = FN_TOOL_ANCHOR_PAGE ; \
+                    HelpId = CMD_FN_TOOL_ANCHOR_PAGE ; \
                     Text [ en-US ] = "To P~age" ; \
                 };\
                 MenuItem\
                 {\
                     RadioCheck = TRUE ; \
-                    Identifier = FN_TOOL_ANKER_PARAGRAPH ; \
-                    HelpId = CMD_FN_TOOL_ANKER_PARAGRAPH ; \
+                    Identifier = FN_TOOL_ANCHOR_PARAGRAPH ; \
+                    HelpId = CMD_FN_TOOL_ANCHOR_PARAGRAPH ; \
                     Text [ en-US ] = "To ~Paragraph" ; \
                 };\
                 MenuItem\
                 {\
                     RadioCheck = TRUE ; \
-                    Identifier = FN_TOOL_ANKER_AT_CHAR ; \
-                    HelpId = CMD_FN_TOOL_ANKER_AT_CHAR ; \
+                    Identifier = FN_TOOL_ANCHOR_AT_CHAR ; \
+                    HelpId = CMD_FN_TOOL_ANCHOR_AT_CHAR ; \
                     Text [ en-US ] = "To ~Character" ; \
                 };\
                 MenuItem\
                 {\
                     RadioCheck = TRUE ; \
-                    Identifier = FN_TOOL_ANKER_CHAR ; \
-                    HelpId = CMD_FN_TOOL_ANKER_CHAR ; \
+                    Identifier = FN_TOOL_ANCHOR_CHAR ; \
+                    HelpId = CMD_FN_TOOL_ANCHOR_CHAR ; \
                     Text [ en-US ] = "As C~haracter" ; \
                 };\
                 MN_AT_FRAME\

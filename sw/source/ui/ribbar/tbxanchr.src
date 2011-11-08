@@ -35,35 +35,35 @@ Menu MN_ANCHOR_POPUP
         {
             _MenuItemFlags = MIB_RADIOCHECK ;
             RadioCheck = TRUE ;
-            Identifier = FN_TOOL_ANKER_PAGE ;
+            Identifier = FN_TOOL_ANCHOR_PAGE ;
             Text [ en-US ] = "To Page" ;
         };
         MenuItem
         {
             _MenuItemFlags = MIB_RADIOCHECK ;
             RadioCheck = TRUE ;
-            Identifier = FN_TOOL_ANKER_PARAGRAPH ;
+            Identifier = FN_TOOL_ANCHOR_PARAGRAPH ;
             Text [ en-US ] = "To Paragraph" ;
         };
         MenuItem
         {
             _MenuItemFlags = MIB_RADIOCHECK ;
             RadioCheck = TRUE ;
-            Identifier = FN_TOOL_ANKER_AT_CHAR ;
+            Identifier = FN_TOOL_ANCHOR_AT_CHAR ;
             Text [ en-US ] = "To Character" ;
         };
         MenuItem
         {
             _MenuItemFlags = MIB_RADIOCHECK ;
             RadioCheck = TRUE ;
-            Identifier = FN_TOOL_ANKER_CHAR ;
+            Identifier = FN_TOOL_ANCHOR_CHAR ;
             Text [ en-US ] = "As Character" ;
         };
         MenuItem
         {
             _MenuItemFlags = MIB_RADIOCHECK ;
             RadioCheck = TRUE ;
-            Identifier = FN_TOOL_ANKER_FRAME ;
+            Identifier = FN_TOOL_ANCHOR_FRAME ;
             Text [ en-US ] = "To Frame" ;
         };
     };

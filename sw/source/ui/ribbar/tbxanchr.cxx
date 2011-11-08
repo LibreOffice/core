@@ -121,14 +121,14 @@ void  SwTbxAnchor::Click()
         return;
     }
     SwWrtShell* pWrtShell = pActiveView->GetWrtShellPtr();
-    aPopMenu.EnableItem( FN_TOOL_ANKER_FRAME, 0 != pWrtShell->IsFlyInFly() );
+    aPopMenu.EnableItem( FN_TOOL_ANCHOR_FRAME, 0 != pWrtShell->IsFlyInFly() );
 
     Rectangle aRect(GetToolBox().GetItemRect(GetId()));
     sal_uInt16 nHtmlMode = ::GetHtmlMode((SwDocShell*)SfxObjectShell::Current());
     sal_Bool bHtmlModeNoAnchor = ( nHtmlMode & HTMLMODE_ON) && 0 == (nHtmlMode & HTMLMODE_SOME_ABS_POS);
 
     if (bHtmlModeNoAnchor || pWrtShell->IsInHeaderFooter())
-        aPopMenu.RemoveItem(aPopMenu.GetItemPos(FN_TOOL_ANKER_PAGE));
+        aPopMenu.RemoveItem(aPopMenu.GetItemPos(FN_TOOL_ANCHOR_PAGE));
 
     if (nActAnchorId)
         aPopMenu.CheckItem(nActAnchorId);

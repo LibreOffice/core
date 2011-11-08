@@ -389,35 +389,35 @@ interface BaseTextSelection
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 // Methode fuer Rahmen und Objekte
-    FN_TOOL_ANKER
+    FN_TOOL_ANCHOR
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    FN_TOOL_ANKER_PARAGRAPH
+    FN_TOOL_ANCHOR_PARAGRAPH
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    FN_TOOL_ANKER_CHAR
+    FN_TOOL_ANCHOR_CHAR
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    FN_TOOL_ANKER_AT_CHAR
+    FN_TOOL_ANCHOR_AT_CHAR
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    FN_TOOL_ANKER_FRAME
+    FN_TOOL_ANCHOR_FRAME
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;

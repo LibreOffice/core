@@ -504,7 +504,7 @@ void ExtraIdle::Timeout()
         }
         case 7:
         {
-            new StatementSlot( 20384 ); // FN_TOOL_ANKER_CHAR aus SW?
+            new StatementSlot( 20384 ); // FN_TOOL_ANCHOR_CHAR from SW?
             return;
         }
     }

@@ -33,7 +33,7 @@ interface TextSelection : BaseTextSelection
     // hier sollen die Slots eingefuegt werden, die vom StarWriter/WEB
     // nicht unterstuetzt werden
 
-    FN_TOOL_ANKER_PAGE
+    FN_TOOL_ANCHOR_PAGE
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;

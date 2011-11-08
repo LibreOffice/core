@@ -352,16 +352,16 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_TOOL_GROUP           (FN_INSERT + 47)    /* Group objects */
 #define FN_TOOL_UNGROUP         (FN_INSERT + 48)    /* Remove Grouping */
 
-#define FN_TOOL_ANKER           (FN_INSERT + 49)    /* Draw Anchor for object */
-#define FN_TOOL_ANKER_PAGE      (FN_INSERT + 50)    /* anchor Draw object to page */
-#define FN_TOOL_ANKER_PARAGRAPH (FN_INSERT + 51)    /* anchor Draw object to paragraph */
+#define FN_TOOL_ANCHOR          (FN_INSERT + 49)    /* Draw Anchor for object */
+#define FN_TOOL_ANCHOR_PAGE     (FN_INSERT + 50)    /* anchor Draw object to page */
+#define FN_TOOL_ANCHOR_PARAGRAPH (FN_INSERT + 51)   /* anchor Draw object to paragraph */
 #define FN_TOOL_HIERARCHIE      (FN_INSERT + 52)    /* change hierarchy */
 
 #define FN_MAILMERGE_WIZARD     (FN_INSERT + 64)    /* mail merge wizard */
 #define FN_QRY_OPEN_TABLE       (FN_INSERT + 65)    /* open database (Basic) */
-#define FN_TOOL_ANKER_FRAME     (FN_INSERT + 66)    /* anchor Draw-Object to frame*/
+#define FN_TOOL_ANCHOR_FRAME    (FN_INSERT + 66)    /* anchor Draw-Object to frame*/
 #define FN_QRY_MERGE            (FN_INSERT + 67)    /* insert record (serial letter) */
-#define FN_MAILMERGE_CHILDWINDOW (FN_INSERT + 68)    /* back-to-mail-merge-wizard child window*/
+#define FN_MAILMERGE_CHILDWINDOW (FN_INSERT + 68)   /* back-to-mail-merge-wizard child window*/
 #define FN_INSERT_SMA           (FN_INSERT + 69)    /* insert StarMath  */
 
 #define FN_QRY_GET_COLUMN_NAME  (FN_INSERT + 70)    /* number of columns (Basic) */
@@ -376,7 +376,7 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_QRY_DELETE_RECORD    (FN_INSERT + 79)    /* delete record */
 #define FN_QRY_GET_PHYS_RECORD_ID (FN_INSERT + 80)  /* get physical (absolute) record number (Basic) */
 
-#define FN_TOOL_ANKER_CHAR       (FN_INSERT + 84)   /* anchor Draw object to charater */
+#define FN_TOOL_ANCHOR_CHAR     (FN_INSERT + 84)    /* anchor Draw object to charater */
 
 #define FN_QRY_INSERT           (FN_INSERT + 86)    /* insert record selection in to text */
 #define FN_QRY_MERGE_FIELD      (FN_INSERT + 87)    /* insert record selection into fields */
@@ -410,7 +410,7 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_SBA_BRW_MERGE        (FN_INSERT2 + 9)    /* serial letter print */
 #define FN_JAVAEDIT             (FN_INSERT2 + 10)   /* edit script field */
 #define FN_INSERT_HRULER        (FN_INSERT2 + 11)   /* insert horizontal ruler */
-#define FN_TOOL_ANKER_AT_CHAR   (FN_INSERT2 + 12)   /* anchor object to character*/
+#define FN_TOOL_ANCHOR_AT_CHAR  (FN_INSERT2 + 12)   /* anchor object to character*/
 
 #define FN_INSERT_PAGEHEADER    (FN_INSERT2 + 13)   /* insert default header */
 #define FN_INSERT_PAGEFOOTER    (FN_INSERT2 + 14)   /* insert default footer */
