@@ -77,6 +77,8 @@
 #include <i18npool/mslangid.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <comphelper/string.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -3289,12 +3291,11 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                                 aTmpFont.SetEscapement( 0 );
                                                 aTmpFont.SetPropr( 100 );
                                                 aTmpFont.SetPhysFont( pOutDev );
-                                                String aBlanks;
-                                                aBlanks.Fill( nTextLen, ' ' );
+                                                rtl::OUStringBuffer aBlanks = comphelper::string::padToLength( aBlanks, (sal_Int32) nTextLen, ' ' );
                                                 Point aUnderlinePos( aOutPos );
                                                 if ( nOrientation )
                                                     aUnderlinePos = lcl_ImplCalcRotatedPos( aTmpPos, aOrigin, nSin, nCos );
-                                                pOutDev->DrawStretchText( aUnderlinePos, aSz.Width(), aBlanks, 0, nTextLen );
+                                                pOutDev->DrawStretchText( aUnderlinePos, aSz.Width(), aBlanks.makeStringAndClear(), 0, nTextLen );
 
                                                 aTmpFont.SetUnderline( UNDERLINE_NONE );
                                                 if ( !nOrientation )
