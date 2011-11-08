@@ -229,10 +229,9 @@ void ScQueryParam::Clear()
     bHasHeader = bCaseSens = bRegExp = bMixedComparison = false;
     bInplace = bByRow = bDuplicate = sal_True;
 
-    boost::ptr_vector<ScQueryEntry> aNewEntries;
-    for (size_t i = 0; i < MAXQUERY; ++i)
-        aNewEntries.push_back(new ScQueryEntry);
-    maEntries.swap(aNewEntries);
+    boost::ptr_vector<ScQueryEntry>::iterator itr = maEntries.begin(), itrEnd = maEntries.end();
+    for (; itr != itrEnd; ++itr)
+        itr->Clear();
 
     ClearDestParams();
 }

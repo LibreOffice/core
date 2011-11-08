@@ -45,6 +45,7 @@
 #include "undoblk.hxx"
 #include "queryentry.hxx"
 #include "postit.hxx"
+#include "attrib.hxx"
 
 #include "docsh.hxx"
 #include "docfunc.hxx"
@@ -2194,52 +2195,63 @@ void Test::testToggleRefFlag()
 void Test::testAutofilter()
 {
     OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("Test"));
-    m_pDoc->InsertTab( 0, aTabName );
-
-    OUString aCol1(RTL_CONSTASCII_USTRINGPARAM("COL1"));
-    OUString aCol2(RTL_CONSTASCII_USTRINGPARAM("COL2"));
     OUString aDBName(RTL_CONSTASCII_USTRINGPARAM("NONAME"));
 
-    //set column headers
-    m_pDoc->SetString(0,0,0,aCol1);
-    m_pDoc->SetString(1,0,0,aCol2);
+    m_pDoc->InsertTab( 0, aTabName );
 
-    //set values
-    m_pDoc->SetValue(0,1,0,0);
-    m_pDoc->SetValue(1,1,0,1);
-    m_pDoc->SetValue(0,2,0,1);
-    m_pDoc->SetValue(1,2,0,3);
-    m_pDoc->SetValue(0,3,0,1);
-    m_pDoc->SetValue(1,3,0,2);
+    // cell contents (0 = empty cell)
+    const char* aData[][3] = {
+        { "C1", "C2", "C3" },
+        {  "0",  "1",  "A" },
+        {  "1",  "2",    0 },
+        {  "1",  "2",  "B" },
+        {  "0",  "2",  "B" }
+    };
 
-    //create db data and set it to autofilter
-    ScDBData* pDBData = new ScDBData(aDBName,0,0,0,1,3);
+    SCCOL nCols = SAL_N_ELEMENTS(aData[0]);
+    SCROW nRows = SAL_N_ELEMENTS(aData);
+
+    // Populate cells.
+    for (SCROW i = 0; i < nRows; ++i)
+        for (SCCOL j = 0; j < nCols; ++j)
+            if (aData[i][j])
+                m_pDoc->SetString(j, i, 0, rtl::OUString::createFromAscii(aData[i][j]));
+
+    ScDBData* pDBData = new ScDBData(aDBName, 0, 0, 0, nCols-1, nRows-1);
     m_pDoc->SetAnonymousDBData(0,pDBData);
 
     pDBData->SetAutoFilter(true);
     ScRange aRange;
     pDBData->GetArea(aRange);
     m_pDoc->ApplyFlagsTab( aRange.aStart.Col(), aRange.aStart.Row(),
-                                aRange.aEnd.Col(), aRange.aStart.Row(),
-                                aRange.aStart.Tab(), 4 );
+                           aRange.aEnd.Col(), aRange.aStart.Row(),
+                           aRange.aStart.Tab(), SC_MF_AUTO);
 
     //create the query param
     ScQueryParam aParam;
-    aParam.Resize(1);
-    ScQueryEntry& aEntry = aParam.GetEntry(0);
-    aEntry.bDoQuery = true;
-    aEntry.eOp = SC_EQUAL;
-    aEntry.GetQueryItem().mfVal = 0;
-    //add queryParam to autofilter
+    pDBData->GetQueryParam(aParam);
+    ScQueryEntry& rEntry = aParam.GetEntry(0);
+    rEntry.bDoQuery = true;
+    rEntry.nField = 0;
+    rEntry.eOp = SC_EQUAL;
+    rEntry.GetQueryItem().mfVal = 0;
+    // add queryParam to database range.
     pDBData->SetQueryParam(aParam);
-    //perform the query
-    ScDBDocFunc aDBFunc(*m_xDocShRef);
-    aDBFunc.RepeatDB(aCol1,true,true,true,0);
+
+    // perform the query.
+    m_pDoc->Query(0, aParam, true);
 
     //control output
     SCROW nRow1, nRow2;
     bool bHidden = m_pDoc->RowHidden(2, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("rows 2 & 3 should be hidden", bHidden && nRow1 == 2 && nRow2 == 3);
+
+    // Remove filtering.
+    aParam.GetEntry(0).Clear();
+    pDBData->SetQueryParam(aParam);
+    m_pDoc->Query(0, aParam, true);
+    bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("All rows should be shown.", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
 
     m_pDoc->DeleteTab(0);
 }
