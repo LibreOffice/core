@@ -559,6 +559,7 @@ read_percent( ChildInfo *info, int *pPercent )
 
     char *pBegin;
     char *pIter;
+    char c;
 
     /* from the last call */
     int nNotProcessed = nRead - ( pNext - pBuffer );
@@ -598,7 +599,7 @@ read_percent( ChildInfo *info, int *pPercent )
         return ProgressExit;
     else if ( !strncasecmp( pBegin, "restart", 7 ) )
         return ProgressRestart;
-    else if ( sscanf( pBegin, "%d%%", pPercent ) )
+    else if ( sscanf( pBegin, "%d%c", pPercent, &c ) == 2 && c == '%' )
         return ProgressContinue;
 
     /* unexpected - let's exit the splash to be safe */
