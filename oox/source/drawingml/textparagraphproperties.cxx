@@ -456,7 +456,7 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
         }
     }
     if ( noParaLeftMargin )
-        aPropSet.setProperty( PROP_ParaLeftMargin, sal_Int32(0) /**noParaLeftMargin*/ );
+        aPropSet.setProperty( PROP_ParaLeftMargin, sal_Int32( *noParaLeftMargin ) );
     if ( noFirstLineIndentation )
         aPropSet.setProperty( PROP_ParaFirstLineIndent, *noFirstLineIndentation );
 }
