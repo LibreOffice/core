@@ -91,12 +91,12 @@ ScPivotFilterDlg::ScPivotFilterDlg( Window*             pParent,
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp        ( this, ScResId( BTN_HELP ) ),
         aBtnMore        ( this, ScResId( BTN_MORE ) ),
-        aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
-        aStrNone        ( ScResId( SCSTR_NONE ) ),
-        aStrEmpty       ( ScResId( SCSTR_EMPTY ) ),
-        aStrNotEmpty    ( ScResId( SCSTR_NOTEMPTY ) ),
-        aStrRow         ( ScResId( SCSTR_ROW ) ),
-        aStrColumn      ( ScResId( SCSTR_COLUMN ) ),
+        aStrUndefined   ( ResId::toString(ScResId(SCSTR_UNDEFINED)) ),
+        aStrNone        ( ResId::toString(ScResId(SCSTR_NONE)) ),
+        aStrEmpty       ( ResId::toString(ScResId(SCSTR_EMPTY)) ),
+        aStrNotEmpty    ( ResId::toString(ScResId(SCSTR_NOTEMPTY)) ),
+        aStrRow         ( ResId::toString(ScResId(SCSTR_ROW)) ),
+        aStrColumn      ( ResId::toString(ScResId(SCSTR_COLUMN)) ),
         //
         nWhichQuery     ( rArgSet.GetPool()->GetWhich( SID_QUERY ) ),
         theQueryData    ( ((const ScQueryItem&)
@@ -416,19 +416,19 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
             ScQueryEntry& rEntry = theParam.GetEntry(i);
             ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
 
-            String aStrVal( aValueEdArr[i]->GetText() );
+            rtl::OUString aStrVal = aValueEdArr[i]->GetText();
 
             /*
              * Dialog liefert die ausgezeichneten Feldwerte "leer"/"nicht leer"
              * als Konstanten in nVal in Verbindung mit dem Schalter
              * bQueryByString auf FALSE.
              */
-            if ( aStrVal == aStrEmpty )
+            if ( aStrVal.equals(aStrEmpty) )
             {
                 OSL_ASSERT(eOp == SC_EQUAL);
                 rEntry.SetQueryByEmpty();
             }
-            else if ( aStrVal == aStrNotEmpty )
+            else if ( aStrVal.equals(aStrNotEmpty) )
             {
                 OSL_ASSERT(eOp == SC_EQUAL);
                 rEntry.SetQueryByNonEmpty();
@@ -594,7 +594,7 @@ IMPL_LINK( ScPivotFilterDlg, ValModifyHdl, ComboBox*, pEd )
 {
     if ( pEd )
     {
-        String aStrVal  = pEd->GetText();
+        rtl::OUString aStrVal = pEd->GetText();
         ListBox* pLb    = &aLbCond1;
 
              if ( pEd == &aEdVal2 ) pLb = &aLbCond2;
@@ -603,7 +603,7 @@ IMPL_LINK( ScPivotFilterDlg, ValModifyHdl, ComboBox*, pEd )
         // wenn einer der Sonderwerte leer/nicht-leer
         // gewaehlt wird, so macht nur der =-Operator Sinn:
 
-        if ( aStrEmpty == aStrVal || aStrNotEmpty == aStrVal )
+        if ( aStrEmpty.equals(aStrVal) || aStrNotEmpty.equals(aStrVal) )
         {
             pLb->SelectEntry( '=' );
             pLb->Disable();

@@ -89,14 +89,14 @@ private:
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
     MoreButton      aBtnMore;
-    const String    aStrUndefined;
-    const String    aStrNone;
-    const String    aStrEmpty;
-    const String    aStrNotEmpty;
-    const String    aStrRow;
-    const String    aStrColumn;
+    const rtl::OUString aStrUndefined;
+    const rtl::OUString aStrNone;
+    const rtl::OUString aStrEmpty;
+    const rtl::OUString aStrNotEmpty;
+    const rtl::OUString aStrRow;
+    const rtl::OUString aStrColumn;
 
-    const sal_uInt16        nWhichQuery;
+    const sal_uInt16    nWhichQuery;
     const ScQueryParam  theQueryData;
     ScQueryItem*        pOutItem;
     ScViewData*         pViewData;
