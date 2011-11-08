@@ -687,7 +687,6 @@ $(call gb_JunitTest_get_target,$(1)) : DEFS := \
 
 endef
 
-
 # SrsPartTarget class
 
 gb_SrsPartTarget_RSCTARGET := $(OUTDIR)/bin/rsc.exe
