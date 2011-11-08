@@ -74,7 +74,7 @@
 #include <iostream>
 #include <vector>
 
-#define CALC_DEBUG_OUTPUT 0
+#define CALC_DEBUG_OUTPUT 1
 
 #include "helper/debughelper.hxx"
 
@@ -193,6 +193,32 @@ private:
     ScDocShellRef m_xDocShRef;
 };
 
+void clearRange(ScDocument* pDoc, const ScRange& rRange)
+{
+    ScMarkData aMarkData;
+    aMarkData.SetMarkArea(rRange);
+    pDoc->DeleteArea(
+        rRange.aStart.Col(), rRange.aStart.Row(),
+        rRange.aEnd.Col(), rRange.aEnd.Row(), aMarkData, IDF_CONTENTS);
+}
+
+void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption)
+{
+    SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
+    SCCOL nCol1 = rRange.aStart.Col(), nCol2 = rRange.aEnd.Col();
+    SheetPrinter printer(nRow2 - nRow1 + 1, nCol2 - nCol1 + 1);
+    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+    {
+        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        {
+            rtl::OUString aVal;
+            pDoc->GetString(nCol, nRow, rRange.aStart.Tab(), aVal);
+            printer.set(nRow, nCol, aVal);
+        }
+    }
+    printer.print(pCaption);
+}
+
 Test::Test()
     : m_pDoc(0)
 {
@@ -291,9 +317,7 @@ void Test::testCellFunctions()
         // N
 
         // Clear the area first.
-        ScMarkData aMarkData;
-        aMarkData.SetMarkArea(ScRange(0, 0, 0, 1, 20, 0));
-        m_pDoc->DeleteArea(0, 0, 1, 20, aMarkData, IDF_CONTENTS);
+        clearRange(m_pDoc, ScRange(0, 0, 0, 1, 20, 0));
 
         // Put values to reference.
         val = 0;
@@ -346,6 +370,69 @@ void Test::testCellFunctions()
             {
                 cerr << "row " << (i+1) << ": expected=" << checks[i] << " actual=" << result << endl;
                 CPPUNIT_ASSERT_MESSAGE("Unexpected result for N", false);
+            }
+        }
+    }
+
+    {
+        // COUNTIF (test case adopted from OOo i#36381)
+
+        // Empty A1:A39 first.
+        clearRange(m_pDoc, ScRange(0, 0, 0, 0, 40, 0));
+
+        // Raw data (rows 1 through 9)
+        const char* aData[] = {
+            "1999",
+            "2000",
+            "0",
+            "0",
+            "0",
+            "2002",
+            "2001",
+            "X",
+            "2002"
+        };
+
+        SCROW nRows = SAL_N_ELEMENTS(aData);
+        for (SCROW i = 0; i < nRows; ++i)
+            m_pDoc->SetString(0, i, 0, rtl::OUString::createFromAscii(aData[i]));
+
+        printRange(m_pDoc, ScRange(0, 0, 0, 0, 8, 0), "data range");
+
+        // formulas and results
+        struct {
+            const char* pFormula; double fResult;
+        } aChecks[] = {
+            { "=COUNTIF(A1:A12;1999)",       1 },
+            { "=COUNTIF(A1:A12;2002)",       2 },
+            { "=COUNTIF(A1:A12;1998)",       0 },
+            { "=COUNTIF(A1:A12;\">=1999\")", 5 },
+            { "=COUNTIF(A1:A12;\">1999\")",  4 },
+            { "=COUNTIF(A1:A12;\"<2001\")",  5 },
+            { "=COUNTIF(A1:A12;\">0\")",     5 },
+            { "=COUNTIF(A1:A12;\">=0\")",    8 },
+            { "=COUNTIF(A1:A12;0)",          3 },
+            { "=COUNTIF(A1:A12;\"X\")",      1 },
+            { "=COUNTIF(A1:A12;)",           3 }
+        };
+
+        nRows = SAL_N_ELEMENTS(aChecks);
+        for (SCROW i = 0; i < nRows; ++i)
+        {
+            SCROW nRow = 20 + i;
+            m_pDoc->SetString(0, nRow, 0, rtl::OUString::createFromAscii(aChecks[i].pFormula));
+        }
+        m_pDoc->CalcAll();
+
+        for (SCROW i = 0; i < nRows; ++i)
+        {
+            SCROW nRow = 20 + i;
+            m_pDoc->GetValue(0, nRow, 0, result);
+            bool bGood = result == aChecks[i].fResult;
+            if (!bGood)
+            {
+                cerr << "row " << (nRow+1) << ": formula" << aChecks[i].pFormula << "  expected=" << aChecks[i].fResult << "  actual=" << result << endl;
+                CPPUNIT_ASSERT_MESSAGE("Unexpected result for COUNTIF", false);
             }
         }
     }
@@ -696,23 +783,6 @@ struct DPFieldDef
     const char* pName;
     sheet::DataPilotFieldOrientation eOrient;
 };
-
-void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption)
-{
-    SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
-    SCCOL nCol1 = rRange.aStart.Col(), nCol2 = rRange.aEnd.Col();
-    SheetPrinter printer(nRow2 - nRow1 + 1, nCol2 - nCol1 + 1);
-    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
-    {
-        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-        {
-            rtl::OUString aVal;
-            pDoc->GetString(nCol, nRow, rRange.aStart.Tab(), aVal);
-            printer.set(nRow, nCol, aVal);
-        }
-    }
-    printer.print(pCaption);
-}
 
 template<size_t _Size>
 ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef aFields[], size_t nFieldCount, const char* aData[][_Size], size_t nDataCount)
