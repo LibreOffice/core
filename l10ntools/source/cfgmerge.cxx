@@ -763,10 +763,6 @@ void CfgMerge::WorkOnText(
             if ( Export::isAllowed( nLangIndex ) &&
                 ( sContent != "-" ) && ( sContent.Len()))
             {
-#ifdef MERGE_SOURCE_LANGUAGES
-                    if( nLangIndex.EqualsIgnoreCaseAscii("de") || nLangIndex.EqualsIgnoreCaseAscii("en-US") )
-                        rText = sContent;
-#endif
                 Export::QuotHTML( rText );
             }
         }

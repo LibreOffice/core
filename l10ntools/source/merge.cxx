@@ -222,11 +222,7 @@ MergeDataFile::MergeDataFile(
                 const ByteString sTITLE = sLine.GetToken( 0, '\t', rIdx );  // 13
 
 
-#ifdef MERGE_SOURCE_LANGUAGES
-                if( true )
-#else
                 if( !nLANG.EqualsIgnoreCaseAscii("en-US") )
-#endif
                 {
                     aLanguageSet.insert(nLANG);
                     InsertEntry( sTYP, sGID, sLID, sPFO, nLANG, sTEXT, sQHTEXT, sTITLE, filename, bCaseSensitive );

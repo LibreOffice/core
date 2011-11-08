@@ -550,11 +550,7 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const ByteString& sCur , Re
 
     pEntrys = NULL;
 
-#ifdef MERGE_SOURCE_LANGUAGES
-    if( true ){                  // Merge en-US!
-#else
     if( !sCur.EqualsIgnoreCaseAscii("en-US") ){
-#endif
         pXMLElement = (*aLangHM)[ "en-US" ];
         if( pXMLElement == NULL )
         {
