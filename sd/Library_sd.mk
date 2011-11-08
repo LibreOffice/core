@@ -30,6 +30,22 @@ $(eval $(call gb_Library_Library,sd))
 
 $(eval $(call gb_Library_add_precompiled_header,sd,$(SRCDIR)/sd/inc/pch/precompiled_sd))
 
+$(eval $(call gb_SdiTarget_SdiTarget,sd/sdi/sdslots,sd/sdi/sdslots))
+
+$(eval $(call gb_SdiTarget_set_include,sd/sdi/sdslots,\
+    -I$(realpath $(SRCDIR)/sd/inc) \
+    -I$(realpath $(SRCDIR)/sd/sdi) \
+    $$(INCLUDE) \
+))
+
+$(eval $(call gb_SdiTarget_SdiTarget,sd/sdi/sdgslots,sd/sdi/sdgslots))
+
+$(eval $(call gb_SdiTarget_set_include,sd/sdi/sdgslots,\
+    -I$(realpath $(SRCDIR)/sd/inc) \
+    -I$(realpath $(SRCDIR)/sd/sdi) \
+    $$(INCLUDE) \
+))
+
 $(eval $(call gb_Library_add_sdi_headers,sd,\
     sd/sdi/sdgslots \
     sd/sdi/sdslots \
