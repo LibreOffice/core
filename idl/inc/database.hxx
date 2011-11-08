@@ -34,6 +34,11 @@
 #include <lex.hxx>
 #include <tools/pstm.hxx>
 
+#ifdef IDL_COMPILER
+#include <rtl/ustring.hxx>
+#include <set>
+#endif
+
 class SvCommand;
 
 #ifdef IDL_COMPILER
@@ -82,6 +87,7 @@ class SvIdlDataBase
 
 protected:
 #ifdef IDL_COMPILER
+    ::std::set< ::rtl::OUString > m_DepFiles;
     SvMetaObjectMemberStack     aContextStack;
     String                      aPath;
     SvIdlError                  aError;
@@ -153,6 +159,8 @@ public:
                                             SvMetaType * pType = NULL );
     SvMetaAttribute *       SearchKnownAttr( const SvNumberIdentifier& );
     SvMetaClass *           ReadKnownClass( SvTokenStream & rInStm );
+    void AddDepFile(String const& rFileName);
+    bool WriteDepFile(SvFileStream & rStream, ::rtl::OUString const& rTarget);
 #endif
 };
 

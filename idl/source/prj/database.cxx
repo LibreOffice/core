@@ -227,6 +227,7 @@ sal_Bool SvIdlDataBase::ReadIdFile( const String & rFileName )
 
     aIdFileList.push_back( new String( rFileName ) );
 
+    this->AddDepFile(aFullName.GetFull());
     SvTokenStream aTokStm( aFullName.GetFull() );
     if( aTokStm.GetStream().GetError() == SVSTREAM_OK )
     {
@@ -643,6 +644,7 @@ sal_Bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, sal_Bool bImported
                 DirEntry aFullName( String::CreateFromAscii( pTok->GetString().GetBuffer() ) );
                 if( aFullName.Find( rPath ) )
                 {
+                    this->AddDepFile(aFullName.GetFull());
                     SvFileStream aStm( aFullName.GetFull(),
                                         STREAM_STD_READ | STREAM_NOCREATE );
                     Load( aStm );
@@ -830,7 +832,32 @@ sal_Bool SvIdlWorkingBase::WriteDocumentation( SvStream & rOutStm )
     return sal_True;
 }
 
+void SvIdlDataBase::AddDepFile(String const& rFileName)
+{
+    m_DepFiles.insert(rFileName);
+}
 
+struct WriteDep
+{
+    SvFileStream & m_rStream;
+    explicit WriteDep(SvFileStream & rStream) : m_rStream(rStream) { }
+    void operator() (::rtl::OUString const& rItem)
+    {
+        m_rStream << " \\\n ";
+        m_rStream <<
+            ::rtl::OUStringToOString(rItem, RTL_TEXTENCODING_UTF8).getStr();
+    }
+};
+
+bool SvIdlDataBase::WriteDepFile(
+        SvFileStream & rStream, ::rtl::OUString const& rTarget)
+{
+    rStream <<
+            ::rtl::OUStringToOString(rTarget, RTL_TEXTENCODING_UTF8).getStr();
+    rStream << " : ";
+    ::std::for_each(m_DepFiles.begin(), m_DepFiles.end(), WriteDep(rStream));
+    return rStream.GetError() == SVSTREAM_OK;
+}
 
 #endif // IDL_COMPILER
 

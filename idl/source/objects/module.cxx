@@ -248,6 +248,7 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
             rBase.StartNewFile( aFullName.GetFull() );
             if( aFullName.Find( rBase.GetPath() ) )
             {
+                rBase.AddDepFile(aFullName.GetFull());
                 SvTokenStream aTokStm( aFullName.GetFull() );
                 if( SVSTREAM_OK == aTokStm.GetStream().GetError() )
                 {

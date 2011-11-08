@@ -30,6 +30,7 @@
 #define _COMMAND_HXX
 
 #include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <vector>
 
 #ifndef STRING_LIST
@@ -61,6 +62,7 @@ public:
     String      aCSVFile;
     String      aExportFile;
     String      aDocuFile;
+    ::rtl::OUString m_DepFile;
     sal_uInt32      nVerbosity;
     sal_uInt32      nFlags;
 

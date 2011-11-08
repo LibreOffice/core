@@ -146,6 +146,7 @@ sal_Bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
     for( size_t n = 0; n < rCommand.aInFileList.size(); ++n )
     {
         String aFileName ( *rCommand.aInFileList[ n ] );
+        pDataBase->AddDepFile(aFileName);
         SvFileStream aStm( aFileName, STREAM_STD_READ | STREAM_NOCREATE );
         if( aStm.GetError() == SVSTREAM_OK )
         {
@@ -291,6 +292,10 @@ SvCommand::SvCommand( int argc, char ** argv )
                 else if( 'x' == aFirstChar )
                 { // name of IDL file for the CSV file
                     aExportFile = aName;
+                }
+                else if( 'M' == aFirstChar )
+                {
+                    m_DepFile = aName;
                 }
                 else
                 {

@@ -109,6 +109,7 @@ int cdecl main ( int argc, char ** argv)
     String aTmpHelpIdFile;
     String aTmpCSVFile;
     String aTmpDocuFile;
+    String aTmpDepFile;
 
     SvCommand aCommand( argc, argv );
 
@@ -226,6 +227,21 @@ int cdecl main ( int argc, char ** argv)
                 fprintf( stderr, "%s\n", aStr.GetBuffer() );
             }
         }
+        if (nExit == 0 && aCommand.m_DepFile.getLength())
+        {
+            DirEntry aDE(aCommand.m_DepFile);
+            aDE.ToAbs();
+            aTmpDepFile = aDE.GetPath().TempName().GetFull();
+            SvFileStream aOutStm( aTmpDepFile, STREAM_READWRITE | STREAM_TRUNC );
+            pDataBase->WriteDepFile(aOutStm, aCommand.aTargetFile);
+            if( aOutStm.GetError() != SVSTREAM_OK )
+            {
+                nExit = -1;
+                fprintf( stderr, "cannot write dependency file: %s\n",
+                        ::rtl::OUStringToOString( aCommand.m_DepFile,
+                            RTL_TEXTENCODING_UTF8 ).getStr() );
+            }
+        }
     }
     else
         nExit = -1;
@@ -313,6 +329,14 @@ int cdecl main ( int argc, char ** argv)
             if( bErr ) {
                 aErrFile = aCommand.aDocuFile;
                 aErrFile2 = aTmpDocuFile;
+            }
+        }
+        if (!bErr && aCommand.m_DepFile.getLength())
+        {
+            bErr |= !FileMove_Impl( aCommand.m_DepFile, aTmpDepFile, bDoMove );
+            if (bErr) {
+                aErrFile = aCommand.m_DepFile;
+                aErrFile2 = aTmpDepFile;
             }
         }
 
