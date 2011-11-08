@@ -39,7 +39,6 @@
 //===================================================================
 
 #define MIN_COLUMNWIDTH  2
-#define DRAG_CRITICAL    4
 
 typedef ::std::vector< Rectangle* > RectangleList;
 

@@ -50,9 +50,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#define WATERMARK_LUM_OFFSET                50
-#define WATERMARK_CON_OFFSET                -70
-
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::UNO_QUERY;

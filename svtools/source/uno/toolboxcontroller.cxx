@@ -43,7 +43,6 @@
 //shizhobo
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 const int TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIABLE  = 1;
-const int TOOLBARCONTROLLER_PROPCOUNT               = 1;
 const rtl::OUString TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIABLE( RTL_CONSTASCII_USTRINGPARAM( "SupportsVisiable" ));
 //end
 

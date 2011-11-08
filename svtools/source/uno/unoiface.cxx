@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#define _SVT_UNOIFACE_CXX
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/svmedit.hxx>
