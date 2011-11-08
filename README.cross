@@ -266,16 +266,16 @@ highly experimental and just in its baby steps phase.
 
 Technically, one important special aspect of iOS is that apps are not
 allowed to load own dynamic libraries. (System libraries are used in
-the form of dynamic libraries, just like on MacOSX, of which iOS is a
+the form of dynamic libraries, just like on Mac OS X, of which iOS is a
 variant.) So all the libraries in LibreOffice that normally are shared
 libraries (DLLs on Windows, shared objects (.so) on Linux, dynamic
-libraries on MacOSX (.dylib)) need to be built as static archives
+libraries on Mac OS X (.dylib)) need to be built as static archives
 instead. Obviously this will have some interesting consequences for
 how UNO is implemented and used. None of that has been spared much
 thought yet.
 
 The Apple tool-chain for iOS cross-building is available only for
-MacOSX, so that is where I have been doing it.
+Mac OS X, so that is where I have been doing it.
 
 Here is my autogen.lastrun for iOS (device):
 CXX=ccache /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/g++-4.2 -arch armv7 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk
@@ -311,10 +311,10 @@ approach as used on iOS will need to be used.
 As for the GUI, the same holds as said above for iOS.
 
 I have done my Android cross-compilation work on Linux (openSUSE in
-particular), but it could as well be done on MacOSX. The Android
-cross-buld tool-chain (the "Native Development Kit", or NDK) is
-available for Linux, MacOSX and Windows. (Trying to cross-compile from
-Windows will probably drive you insane.)
+particular) and Mac OS X. The Android cross-buld tool-chain (the
+"Native Development Kit", or NDK) is available for Linux, Mac OS X and
+Windows. (Trying to cross-compile from Windows will probably drive you
+insane.)
 
 Here is my autogen.lastrun for Android:
 SYSBASE=/home/tml/android-ndk-r6b/platforms/android-9/arch-arm
