@@ -64,7 +64,6 @@ protected:
     // test the checkForUpdates() method
     void testCheckForUpdates()
     {
-        UpdateState eUIState = UPDATESTATE_NO_UPDATE_AVAIL;
 
         UpdateInfo aInfo;
         rtl::Reference< UpdateCheck > aController( UpdateCheck::get() );
@@ -73,7 +72,6 @@ protected:
         if ( checkForUpdates( aInfo, m_xContext, aController->getInteractionHandler(), m_xProvider ) )
         {
             aController->setUpdateInfo( aInfo );
-            eUIState = aController->getUIState( aInfo );
         }
         else
             CPPUNIT_FAIL("Calling checkForUpdates() failed.");
