@@ -342,7 +342,8 @@ public class UnoRuntime {
             return Array.newInstance(type.getZClass().getComponentType(), 0);
         case TypeClass.STRUCT_value:
             try {
-                return type.getZClass().getConstructor(null).newInstance(null);
+                return type.getZClass().getConstructor((Class[]) null).
+                    newInstance((Object[]) null);
             } catch (java.lang.RuntimeException e) {
                 throw e;
             } catch (java.lang.Exception e) {
@@ -350,8 +351,8 @@ public class UnoRuntime {
             }
         case TypeClass.ENUM_value:
             try {
-                return type.getZClass().getMethod("getDefault", null).invoke(
-                    null, null);
+                return type.getZClass().getMethod("getDefault", (Class[]) null).
+                    invoke(null, (Object[]) null);
             } catch (java.lang.RuntimeException e) {
                 throw e;
             } catch (java.lang.Exception e) {

@@ -318,8 +318,8 @@ final class Marshal {
         if (value == null) {
             try {
                 n = ((Enum)
-                     (type.getZClass().getMethod("getDefault", null).
-                      invoke(null, null))).
+                     (type.getZClass().getMethod("getDefault", (Class[]) null).
+                      invoke(null, (Object[]) null))).
                     getValue();
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e.toString());

@@ -175,13 +175,16 @@ final class ProxyFactory {
         try {
             METHOD_EQUALS = Object.class.getMethod(
                 "equals", new Class[] { Object.class });
-            METHOD_HASH_CODE = Object.class.getMethod("hashCode", null);
-            METHOD_TO_STRING = Object.class.getMethod("toString", null);
+            METHOD_HASH_CODE = Object.class.getMethod(
+                "hashCode", (Class[]) null);
+            METHOD_TO_STRING = Object.class.getMethod(
+                "toString", (Class[]) null);
             METHOD_QUERY_INTERFACE = IQueryInterface.class.getMethod(
                 "queryInterface", new Class[] { Type.class });
             METHOD_IS_SAME = IQueryInterface.class.getMethod(
                 "isSame", new Class[] { Object.class });
-            METHOD_GET_OID = IQueryInterface.class.getMethod("getOid", null);
+            METHOD_GET_OID = IQueryInterface.class.getMethod(
+                "getOid", (Class[]) null);
         } catch (NoSuchMethodException e) {
             throw new ExceptionInInitializerError(e);
         }
