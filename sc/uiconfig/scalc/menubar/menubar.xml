@@ -339,7 +339,6 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:GoalSeekDialog"/>
-            <menu:menuitem menu:id=".uno:SolverDialog"/>
             <menu:menuitem menu:id=".uno:ScenarioManager"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ShareDocument"/>

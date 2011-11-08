@@ -562,9 +562,6 @@ AC_ARG_WITH(system-mythes,
 AC_ARG_WITH(system-altlinuxhyph,
 [  --with-system-altlinuxhyph    Use ALTLinuxhyph already on system
 ],,)
-AC_ARG_WITH(system-lpsolve,
-[  --with-system-lpsolve         Use lpsolve already on system
-],,)
 AC_ARG_WITH(system-libtextcat,
 [  --with-system-libtextcat      Use libtextcat already on system
 ],,)
@@ -5274,28 +5271,6 @@ AC_SUBST(MYTHES_CFLAGS)
 AC_SUBST(MYTHES_LIBS)
 
 fi
-
-dnl ===================================================================
-dnl Checking for lpsolve
-dnl ===================================================================
-AC_MSG_CHECKING([which lpsolve to use])
-if test -n "$with_system_lpsolve" -o -n "$with_system_libs" && \
-	test "$with_system_lpsolve" != "no"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_LPSOLVE=YES
-    AC_CHECK_HEADER(lpsolve/lp_lib.h, [],
-       [ AC_MSG_ERROR(lpsolve headers not found.)], [])
-    # some systems need this. Like Ubuntu....
-    AC_CHECK_LIB(m, floor)
-    AC_CHECK_LIB(dl, dlopen)
-    AC_CHECK_LIB(lpsolve55, make_lp, ,
-        [ AC_MSG_ERROR(lpsolve library not found or too old.)], [])
-else
-    AC_MSG_RESULT([internal])
-    SYSTEM_LPSOLVE=NO
-    BUILD_TYPE="$BUILD_TYPE LPSOLVE"
-fi
-AC_SUBST(SYSTEM_LPSOLVE)
 
 dnl ===================================================================
 dnl Checking for libtextcat

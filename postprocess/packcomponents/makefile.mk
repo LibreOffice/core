@@ -145,7 +145,6 @@ my_components = \
     slideshow \
     sm \
     smd \
-    solver \
     spl \
     srtrs1 \
     stringresource \

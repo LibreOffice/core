@@ -27,15 +27,6 @@
 
 #include "macros.inc"
 
-STD_LIB_FILE( gid_File_Lib_Solver, solver)
-
-#ifndef SYSTEM_LPSOLVE
-File gid_File_Lib_Lpsolve
-    Name = SPECIAL_NAME(lpsolve55);
-    PACKED_LIB_FILE_BODY;
-End
-#endif
-
 STD_LIB_FILE( gid_File_Lib_Analysis, analysis)
 
 File gid_File_Share_Registry_Calc_Xcd
@@ -56,8 +47,6 @@ STD_LIB_FILE( gid_File_Lib_Scui, scui)
 STD_LIB_FILE( gid_File_Lib_Scfilt, scfilt)
 
 STD_LIB_FILE( gid_File_Lib_Scd, scd)
-
-STD_RES_FILE( gid_File_Res_Solver, solver)
 
 STD_RES_FILE( gid_File_Res_Analysis, analysis)
 

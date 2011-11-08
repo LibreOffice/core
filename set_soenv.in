@@ -1970,7 +1970,6 @@ ToFile( "REDLAND_LIBS",      "@REDLAND_LIBS@",     "e" );
 ToFile( "SYSTEM_HUNSPELL",   "@SYSTEM_HUNSPELL@",  "e" );
 ToFile( "HUNSPELL_CFLAGS",   "@HUNSPELL_CFLAGS@",  "e" );
 ToFile( "HUNSPELL_LIBS",     "@HUNSPELL_LIBS@",    "e" );
-ToFile( "SYSTEM_LPSOLVE",    "@SYSTEM_LPSOLVE@",   "e" );
 ToFile( "HAVE_GETOPT",       "@HAVE_GETOPT@",      "e" );
 ToFile( "HAVE_READDIR_R",    "@HAVE_READDIR_R@",   "e" );
 ToFile( "SYSTEM_LIBC",       "@SYSTEM_LIBC@",      "e" );
