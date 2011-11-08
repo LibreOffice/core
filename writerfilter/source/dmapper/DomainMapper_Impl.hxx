@@ -295,7 +295,7 @@ private:
     bool                                                                            m_bIsColumnBreakDeferred;
     bool                                                                            m_bIsPageBreakDeferred;
     bool                                                                            m_bIsInShape;
-    bool                                                                            m_bShapeContextAdded;
+    bool                                                                            m_bRemovedLastAnchored;
 
     LineNumberSettings                                                              m_aLineNumberSettings;
 

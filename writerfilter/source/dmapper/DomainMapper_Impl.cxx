@@ -188,7 +188,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsColumnBreakDeferred( false ),
         m_bIsPageBreakDeferred( false ),
         m_bIsInShape( false ),
-        m_bShapeContextAdded( false ),
+        m_bRemovedLastAnchored( false ),
         m_pLastSectionContext( ),
         m_nCurrentTabStopIndex( 0 ),
         m_sCurrentParaStyleId(),
@@ -928,6 +928,8 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                         // this is normal: the shape is already attached
                     }
                     m_aAnchoredStack.pop( );
+                    m_aTextAppendStack.pop( );
+                    m_bRemovedLastAnchored = true;
                 }
 
                 // Get the end of paragraph character inserted
@@ -1065,10 +1067,10 @@ void DomainMapper_Impl::appendOLE( const ::rtl::OUString& rStreamName, OLEHandle
         // gives a better ( visually ) result
         xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_ANCHOR_TYPE ),  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) );
         // remove ( if valid ) associated shape ( used for graphic replacement )
-        if ( m_bShapeContextAdded )
+        if ( m_aAnchoredStack.size() > 0 )
         {
             if ( lcl_removeShape(  m_xTextDocument, pOLEHandler->getShape(), m_aAnchoredStack, m_aTextAppendStack ) )
-                m_bShapeContextAdded = false; // ensure PopShapeContext processing doesn't pop the append stack
+                m_bRemovedLastAnchored = true; // ensure PopShapeContext processing doesn't pop the append stack
         }
 
         //
@@ -1080,7 +1082,6 @@ void DomainMapper_Impl::appendOLE( const ::rtl::OUString& rStreamName, OLEHandle
         (void)rEx;
         OSL_FAIL( "Exception in creation of OLE object" );
     }
-
 }
 
 
@@ -1373,7 +1374,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
     {
         // Add the shape to the text append stack
         m_aTextAppendStack.push( uno::Reference< text::XTextAppend >( xShape, uno::UNO_QUERY_THROW ) );
-        m_bShapeContextAdded = true;
+        m_bRemovedLastAnchored = false;
 
         // Add the shape to the anchored objects stack
         uno::Reference< text::XTextContent > xTxtContent( xShape, uno::UNO_QUERY_THROW );
@@ -1418,11 +1419,11 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
 
 void DomainMapper_Impl::PopShapeContext()
 {
-    if ( m_bShapeContextAdded )
+    if ( !m_bRemovedLastAnchored && m_aAnchoredStack.size() > 0 )
     {
         RemoveLastParagraph();
         m_aTextAppendStack.pop();
-        m_bShapeContextAdded = false;
+        m_aAnchoredStack.pop();
     }
     m_bIsInShape = false;
 }
