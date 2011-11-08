@@ -85,8 +85,8 @@ $(call gb_Module_get_target,desktop) : $(OUTDIR)/bin/soffice.bin.manifest
 
 $(OUTDIR)/bin/soffice.bin.manifest : $(call gb_Executable_get_target,$(sofficebin))
 $(call gb_Executable_get_clean_target,$(sofficebin)) : $(WORKDIR)/Clean/OutDir/bin/soffice.bin.manifest
-$(OUTDIR)/bin/soffice.bin.manifest : $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktargetname,$(sofficebin))).manifest $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktargetname,$(sofficebin)))
-	$(call gb_Deliver_deliver,$<,$@)
+$(OUTDIR)/bin/soffice.bin.manifest : $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktargetname,$(sofficebin)))
+	$(call gb_Deliver_deliver,$<.manifest,$@)
 
 .PHONY : $(WORKDIR)/Clean/OutDir/bin/soffice.bin.manifest
 $(WORKDIR)/Clean/OutDir/bin/soffice.bin.manifest :
