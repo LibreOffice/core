@@ -1507,7 +1507,7 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
     if( !rLineThick )
         return nOutsideThick;
 
-    ::editeng::SvxBorderStyle nIdx = ::editeng::SOLID;
+    ::editeng::SvxBorderStyle nIdx = ::editeng::NO_STYLE;
 
     sal_Int32 nLineThick=rLineThick;
     nOutsideThick = SwMSDffManager::GetEscherLineMatch(eLineStyle,
