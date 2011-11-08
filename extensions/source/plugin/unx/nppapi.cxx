@@ -554,7 +554,7 @@ void UnxPluginComm::NPP_URLNotify( NPP instance, const char* url, NPReason reaso
           NULL );
 }
 
-int32 UnxPluginComm::NPP_Write( NPP instance, NPStream* stream, int32 offset, int32 len, void* buffer )
+int32_t UnxPluginComm::NPP_Write( NPP instance, NPStream* stream, int32_t offset, int32_t len, void* buffer )
 {
     GET_INSTANCE_RET( -1 );
     sal_uInt32 nFileID = GetStreamID( stream );
@@ -577,7 +577,7 @@ int32 UnxPluginComm::NPP_Write( NPP instance, NPStream* stream, int32 offset, in
     return aRet;
 }
 
-int32 UnxPluginComm::NPP_WriteReady( NPP instance, NPStream* stream )
+int32_t UnxPluginComm::NPP_WriteReady( NPP instance, NPStream* stream )
 {
     GET_INSTANCE_RET( -1 );
     sal_uInt32 nFileID = GetStreamID( stream );
@@ -593,7 +593,7 @@ int32 UnxPluginComm::NPP_WriteReady( NPP instance, NPStream* stream )
     if( ! pMes )
         return 0;
 
-    int32 aRet = pMes->GetUINT32();
+    int32_t aRet = pMes->GetUINT32();
     delete pMes;
 
     return aRet;

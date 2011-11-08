@@ -70,9 +70,9 @@ public:
                                    const char* fname );
     virtual void NPP_URLNotify( NPP instance, const char* url, NPReason reason,
                                 void* notifyData );
-    virtual int32 NPP_Write( NPP instance, NPStream* stream, int32 offset,
-                             int32 len, void* buffer );
-    virtual int32 NPP_WriteReady( NPP instance, NPStream* stream );
+    virtual int32_t NPP_Write( NPP instance, NPStream* stream, int32_t offset,
+                               int32_t len, void* buffer );
+    virtual int32_t NPP_WriteReady( NPP instance, NPStream* stream );
     virtual char* NPP_GetMIMEDescription();
     virtual NPError NPP_GetValue( NPP instance, NPPVariable variable, void* value );
     virtual NPError NPP_SetValue( NPP instance, NPNVariable variable,
