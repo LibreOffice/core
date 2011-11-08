@@ -452,6 +452,7 @@ TextAutoGrowHeight
 TextBreak
 TextColor
 TextFitToSize
+TextFrames
 TextHorizontalAdjust
 TextLeftDistance
 TextLowerDistance

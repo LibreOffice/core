@@ -37,6 +37,7 @@
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 
 using rtl::OUString;
 using namespace ::oox::core;
@@ -114,7 +115,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
 
             aPropertyMap = maPresetsMap[ mnShapePresetType ];
 #ifdef DEBUG
-            aPropertyMap.dump();
+            aPropertyMap.dumpCode();
 #endif
         }
         else
@@ -214,6 +215,16 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         for ( i = 0; i < maSegments.size(); i++ )
             aSegments[ i ] = maSegments[ i ];
         aPath[ PROP_Segments ] <<= aSegments;
+
+        if ( maTextRect.has() ) {
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrames(1);
+            aTextFrames[0].TopLeft.First = maTextRect.get().l;
+            aTextFrames[0].TopLeft.Second = maTextRect.get().t;
+            aTextFrames[0].BottomRight.First = maTextRect.get().r;
+            aTextFrames[0].BottomRight.Second = maTextRect.get().b;
+            aPath[ PROP_TextFrames ] <<= aTextFrames;
+        }
+
         sal_uInt32 j, k, nParameterPairs = 0;
         for ( i = 0; i < maPath2DList.size(); i++ )
             nParameterPairs += maPath2DList[ i ].parameter.size();

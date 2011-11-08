@@ -163,7 +163,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (13);
@@ -474,6 +474,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 11);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 9);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 12);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 13);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -626,7 +671,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (4);
@@ -733,6 +778,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 10);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 13);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 15);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 18);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -777,7 +867,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (4);
@@ -883,6 +973,51 @@ void CustomShapeProperties::initializePresetsMap3()
                 aSegmentSeq [3] = aSegment;
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
+        }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 6);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 7);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 1);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
@@ -1111,7 +1246,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (57);
@@ -2424,6 +2559,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 9);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 17);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 13);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 36);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -2689,7 +2869,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (7);
@@ -2874,6 +3054,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 6);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 9);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -2995,7 +3220,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (4);
@@ -3108,6 +3333,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 23);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 24);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 25);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 26);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -3208,7 +3478,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (8);
@@ -3387,6 +3657,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 8);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 11);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 9);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 12);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -3409,15 +3724,13 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_AdjustmentValues] <<= aStringSequence;
     }
     {
-        Sequence< OUString > aStringSequence (8);
+        Sequence< OUString > aStringSequence (6);
         aStringSequence[0] = CREATE_OUSTRING ("logwidth*7/8");
         aStringSequence[1] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[2] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[3] = CREATE_OUSTRING ("logheight");
         aStringSequence[4] = CREATE_OUSTRING ("logwidth");
         aStringSequence[5] = CREATE_OUSTRING ("logwidth/8");
-        aStringSequence[6] = CREATE_OUSTRING ("logwidth/1");
-        aStringSequence[7] = CREATE_OUSTRING ("logheight/1");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -3431,7 +3744,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (12);
@@ -3748,6 +4061,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 5);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 3);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -3770,7 +4128,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_AdjustmentValues] <<= aStringSequence;
     }
     {
-        Sequence< OUString > aStringSequence (17);
+        Sequence< OUString > aStringSequence (15);
         aStringSequence[0] = CREATE_OUSTRING ("logheight*9/10");
         aStringSequence[1] = CREATE_OUSTRING ("logheight*4/5");
         aStringSequence[2] = CREATE_OUSTRING ("logwidth/2");
@@ -3786,8 +4144,6 @@ void CustomShapeProperties::initializePresetsMap3()
         aStringSequence[12] = CREATE_OUSTRING ("(-10800000)/60000.0");
         aStringSequence[13] = CREATE_OUSTRING ("(0)/60000.0");
         aStringSequence[14] = CREATE_OUSTRING ("(10800000)/60000.0");
-        aStringSequence[15] = CREATE_OUSTRING ("logwidth/20");
-        aStringSequence[16] = CREATE_OUSTRING ("logheight/20");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -3801,7 +4157,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (10);
@@ -4028,6 +4384,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 6);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 5);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 1);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -4068,7 +4469,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (4);
@@ -4175,6 +4576,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 1);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -4263,7 +4709,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (4);
@@ -4370,6 +4816,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 2);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 3);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -4412,7 +4903,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (12);
@@ -4735,6 +5226,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 1);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 1);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 3);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 2);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -4847,7 +5383,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (6);
@@ -4990,6 +5526,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 19);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 20);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 21);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 22);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -5046,7 +5627,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (9);
@@ -5243,6 +5824,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 5);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 8);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 6);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 9);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -5265,7 +5891,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_AdjustmentValues] <<= aStringSequence;
     }
     {
-        Sequence< OUString > aStringSequence (18);
+        Sequence< OUString > aStringSequence (16);
         aStringSequence[0] = CREATE_OUSTRING ("logheight*5/6");
         aStringSequence[1] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[2] = CREATE_OUSTRING ("logheight/3");
@@ -5282,8 +5908,6 @@ void CustomShapeProperties::initializePresetsMap3()
         aStringSequence[13] = CREATE_OUSTRING ("(10800000)/60000.0");
         aStringSequence[14] = CREATE_OUSTRING ("(0)/60000.0");
         aStringSequence[15] = CREATE_OUSTRING ("(10800000)/60000.0");
-        aStringSequence[16] = CREATE_OUSTRING ("logwidth/6");
-        aStringSequence[17] = CREATE_OUSTRING ("logheight/6");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -5297,7 +5921,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (15);
@@ -5680,6 +6304,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 2);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 5);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -5730,7 +6399,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (7);
@@ -5890,6 +6559,51 @@ void CustomShapeProperties::initializePresetsMap3()
                 aSegmentSeq [3] = aSegment;
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
+        }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 9);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 12);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 10);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 11);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
@@ -6081,7 +6795,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (75);
@@ -7760,6 +8474,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 6);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 7);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 18);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -7893,7 +8652,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (44);
@@ -8864,6 +9623,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 11);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 11);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 12);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 13);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -8886,14 +9690,12 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_AdjustmentValues] <<= aStringSequence;
     }
     {
-        Sequence< OUString > aStringSequence (7);
+        Sequence< OUString > aStringSequence (5);
         aStringSequence[0] = CREATE_OUSTRING ("logwidth*3/4");
         aStringSequence[1] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[2] = CREATE_OUSTRING ("logwidth/4");
         aStringSequence[3] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[4] = CREATE_OUSTRING ("logheight");
-        aStringSequence[5] = CREATE_OUSTRING ("logwidth/2");
-        aStringSequence[6] = CREATE_OUSTRING ("logheight/2");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -8907,7 +9709,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (3);
@@ -8996,6 +9798,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 2);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 3);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 4);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -9063,7 +9910,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (57);
@@ -10322,6 +11169,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 29);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 30);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -10662,7 +11554,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (10);
@@ -10931,6 +11823,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 8);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 11);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -10953,14 +11890,12 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_AdjustmentValues] <<= aStringSequence;
     }
     {
-        Sequence< OUString > aStringSequence (7);
+        Sequence< OUString > aStringSequence (5);
         aStringSequence[0] = CREATE_OUSTRING ("logwidth*3/4");
         aStringSequence[1] = CREATE_OUSTRING ("logheight/2");
         aStringSequence[2] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[3] = CREATE_OUSTRING ("logheight");
         aStringSequence[4] = CREATE_OUSTRING ("logwidth/4");
-        aStringSequence[5] = CREATE_OUSTRING ("logwidth/2");
-        aStringSequence[6] = CREATE_OUSTRING ("logheight/2");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -10974,7 +11909,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (8);
@@ -11207,6 +12142,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 4);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 1);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -11229,7 +12209,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_AdjustmentValues] <<= aStringSequence;
     }
     {
-        Sequence< OUString > aStringSequence (12);
+        Sequence< OUString > aStringSequence (10);
         aStringSequence[0] = CREATE_OUSTRING ("logwidth*4627/21600");
         aStringSequence[1] = CREATE_OUSTRING ("logwidth*8485/21600");
         aStringSequence[2] = CREATE_OUSTRING ("logwidth*16702/21600");
@@ -11240,8 +12220,6 @@ void CustomShapeProperties::initializePresetsMap3()
         aStringSequence[7] = CREATE_OUSTRING ("logheight*13290/21600");
         aStringSequence[8] = CREATE_OUSTRING ("logheight");
         aStringSequence[9] = CREATE_OUSTRING ("logwidth");
-        aStringSequence[10] = CREATE_OUSTRING ("logwidth/21600");
-        aStringSequence[11] = CREATE_OUSTRING ("logheight/21600");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -11255,7 +12233,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (24);
@@ -11722,6 +12700,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 4);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 2);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 6);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -11928,7 +12951,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (24);
@@ -12395,6 +13418,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 22);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 19);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 23);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 20);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -12562,7 +13630,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (22);
@@ -13065,6 +14133,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 13);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 14);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 17);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 15);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -13171,7 +14284,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (12);
@@ -13470,6 +14583,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 7);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 8);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 10);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 9);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -13660,7 +14818,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (6);
@@ -13815,6 +14973,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 60);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 68);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 44);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 52);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -13907,7 +15110,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (7);
@@ -14067,6 +15270,51 @@ void CustomShapeProperties::initializePresetsMap3()
                 aSegmentSeq [3] = aSegment;
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
+        }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 5);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 6);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
@@ -14232,7 +15480,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (24);
@@ -14741,6 +15989,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 38);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 38);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 39);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 40);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -14823,7 +16116,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (65);
@@ -16130,6 +17423,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 44);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 45);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -16152,7 +17490,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_AdjustmentValues] <<= aStringSequence;
     }
     {
-        Sequence< OUString > aStringSequence (11);
+        Sequence< OUString > aStringSequence (9);
         aStringSequence[0] = CREATE_OUSTRING ("logwidth*5/6");
         aStringSequence[1] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[2] = CREATE_OUSTRING ("logheight/2");
@@ -16162,8 +17500,6 @@ void CustomShapeProperties::initializePresetsMap3()
         aStringSequence[6] = CREATE_OUSTRING ("(-10800000)/60000.0");
         aStringSequence[7] = CREATE_OUSTRING ("(5400000)/60000.0");
         aStringSequence[8] = CREATE_OUSTRING ("(10800000)/60000.0");
-        aStringSequence[9] = CREATE_OUSTRING ("logwidth/6");
-        aStringSequence[10] = CREATE_OUSTRING ("logheight/6");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
@@ -16177,7 +17513,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (7);
@@ -16355,6 +17691,51 @@ void CustomShapeProperties::initializePresetsMap3()
                 aSegmentSeq [6] = aSegment;
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
+        }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 4);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 3);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
@@ -16612,7 +17993,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (31);
@@ -17271,6 +18652,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 105);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 29);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 27);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 83);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -17424,7 +18850,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (6);
@@ -17566,6 +18992,51 @@ void CustomShapeProperties::initializePresetsMap3()
                 aSegmentSeq [3] = aSegment;
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
+        }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 0);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 19);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 20);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
@@ -17717,7 +19188,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (8);
@@ -17896,6 +19367,51 @@ void CustomShapeProperties::initializePresetsMap3()
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 10);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 12);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 11);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 13);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }
     {
@@ -17988,7 +19504,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (2);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
             Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (3);
@@ -18076,6 +19592,51 @@ void CustomShapeProperties::initializePresetsMap3()
                 aSegmentSeq [3] = aSegment;
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
+        }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("TextFrames");
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 1);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 5);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.TopLeft = aParameterPair;
+                }
+                {
+                    EnhancedCustomShapeParameterPair aParameterPair;
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 4);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.First = aParameter;
+                    }
+                    {
+                        EnhancedCustomShapeParameter aParameter;
+                        Any aAny ((sal_Int32) 6);
+                        aParameter.Value = aAny;
+                        aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aParameterPair.Second = aParameter;
+                    }
+                    aTextFrame.BottomRight = aParameterPair;
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
         aPropertyMap [PROP_Path] <<= aPropSequence;
     }

@@ -48,6 +48,7 @@ using ::com::sun::star::text::WritingMode;
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
@@ -473,9 +474,11 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
     Sequence< PropertyValue > propArray;
     Sequence< Sequence< PropertyValue > > propArrayArray;
     Sequence< EnhancedCustomShapeAdjustmentValue > adjArray;
+    Sequence< EnhancedCustomShapeTextFrame > segTextFrame;
     Sequence< EnhancedCustomShapeSegment > segArray;
     Sequence< EnhancedCustomShapeParameterPair > ppArray;
     EnhancedCustomShapeSegment segment;
+    EnhancedCustomShapeTextFrame textFrame;
     EnhancedCustomShapeParameterPair pp;
     EnhancedCustomShapeParameter par;
     awt::Rectangle rect;
@@ -565,6 +568,19 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
                 fprintf (stderr, "}\n");
             }
             return "aSegmentSeq";
+        } else if( value >>= segTextFrame ) {
+            printLevel (level);
+            fprintf (stderr, "Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (%"SAL_PRIdINT32");\n", segTextFrame.getLength());
+            for( int i=0; i<segTextFrame.getLength(); i++ ) {
+                printLevel (level);
+                fprintf (stderr, "{\n");
+                const char *var = lclDumpAnyValueCode (makeAny (segTextFrame[i]), level + 1);
+                printLevel (level + 1);
+                fprintf (stderr, "aTextFrameSeq [%d] = %s;\n", i, var);
+                printLevel (level);
+                fprintf (stderr, "}\n");
+            }
+            return "aTextFrameSeq";
         } else if( value >>= ppArray ) {
             printLevel (level);
             fprintf (stderr, "Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (%"SAL_PRIdINT32");\n", ppArray.getLength());
@@ -587,6 +603,30 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             printLevel (level);
             fprintf (stderr, "aSegment.Count = %d;\n", segment.Count);
             return "aSegment";
+        } else if( value >>= textFrame ) {
+            printLevel (level);
+            fprintf (stderr, "EnhancedCustomShapeTextFrame aTextFrame;\n");
+            printLevel (level);
+            fprintf (stderr, "{\n");
+            {
+                const char* var = lclDumpAnyValueCode( makeAny (textFrame.TopLeft), level + 1 );
+                printLevel (level + 1);
+                fprintf (stderr, "aTextFrame.TopLeft = %s;\n", var);
+            }
+            printLevel (level);
+            fprintf (stderr, "}\n");
+
+            printLevel (level);
+            fprintf (stderr, "{\n");
+            {
+                const char* var = lclDumpAnyValueCode( makeAny (textFrame.BottomRight), level + 1 );
+                printLevel (level + 1);
+                fprintf (stderr, "aTextFrame.BottomRight = %s;\n", var);
+            }
+            printLevel (level);
+            fprintf (stderr, "}\n");
+
+            return "aTextFrame";
         } else if( value >>= pp ) {
             printLevel (level);
             fprintf (stderr, "EnhancedCustomShapeParameterPair aParameterPair;\n");
