@@ -1149,8 +1149,8 @@ Rectangle EnhancedCustomShape2d::GetTextRect() const
     nIndex = 0;
     if ( bTextFlow && ( nSize > 1 ) )
         nIndex++;
-    Point aTopLeft( GetPoint( seqTextFrames[ nIndex ].TopLeft, sal_True, sal_True ) );
-    Point aBottomRight( GetPoint( seqTextFrames[ nIndex ].BottomRight, sal_True, sal_True ) );
+    Point aTopLeft( GetPoint( seqTextFrames[ nIndex ].TopLeft, !bOOXMLShape, sal_True ) );
+    Point aBottomRight( GetPoint( seqTextFrames[ nIndex ].BottomRight, !bOOXMLShape, sal_True ) );
     if ( bFlipH )
     {
         aTopLeft.X() = aLogicRect.GetWidth() - aTopLeft.X();
@@ -1162,6 +1162,7 @@ Rectangle EnhancedCustomShape2d::GetTextRect() const
         aBottomRight.Y() = aLogicRect.GetHeight() - aBottomRight.Y();
     }
     Rectangle aRect( aTopLeft, aBottomRight );
+    OSL_TRACE("EnhancedCustomShape2d::GetTextRect: %d x %d", aRect.GetWidth(), aRect.GetHeight());
     aRect.Move( aLogicRect.Left(), aLogicRect.Top() );
     aRect.Justify();
     return aRect;
