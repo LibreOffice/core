@@ -244,6 +244,15 @@ linux-androideabi*)
     test_randr=no
     test_unix_quickstarter=no
     _os=Android
+
+    # Make sure env vars pointing to where to find the cross-build
+    # toolchain are set. There aren't really any sensible
+    # guesstimates.
+    for var in CC CXX AR NM OBJDUMP RANLIB STRIP; do
+        if test -z `eval echo '$'$var`; then
+            AC_MSG_ERROR([You need to set the $var environment variable in a cross-compilation for Android. See README.cross for an example.])
+        fi
+    done
     ;;
 
 *)
