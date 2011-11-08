@@ -895,11 +895,6 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet& rSet)
 
     if(m_bHtmlMode)
     {
-        if( 0 == (m_nHtmlMode & HTMLMODE_FULL_ABS_POS))
-        {
-            m_aHeightFT .Enable( sal_False );
-            m_aHeightMF .Enable( sal_False );
-        }
         if( 0 == (m_nHtmlMode & HTMLMODE_SOME_ABS_POS))
         {
             if(GetAnchorType() == TextContentAnchorType_AT_PAGE)

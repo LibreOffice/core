@@ -480,12 +480,6 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         nTop    = aVal.nVPos - aVal.nMinVPos;
         nBottom = aVal.nMaxHeight - aVal.nHeight;
 
-        if (bHtmlMode && 0 == (nHtmlMode & HTMLMODE_FULL_ABS_POS))
-        {
-            nLeft = nRight = ( nLeft + nRight ) / 2;
-            nTop = nBottom = ( nTop + nBottom ) / 2;
-        }
-        else
         {
             if (aVal.nAnchorType == FLY_AS_CHAR)
             {
@@ -620,20 +614,6 @@ int SwWrapTabPage::DeactivatePage(SfxItemSet* _pSet)
  --------------------------------------------------------------------*/
 IMPL_LINK( SwWrapTabPage, RangeModifyHdl, MetricField *, pEdit )
 {
-    if(bHtmlMode && 0 == (nHtmlMode & HTMLMODE_FULL_ABS_POS))
-    {
-        sal_Int64 nValue = pEdit->GetValue();
-        if (pEdit == &aLeftMarginED)
-            aRightMarginED.SetUserValue(nValue, FUNIT_NONE);
-        else if (pEdit == &aRightMarginED)
-            aLeftMarginED.SetUserValue(nValue, FUNIT_NONE);
-        else if (pEdit == &aTopMarginED)
-            aBottomMarginED.SetUserValue(nValue, FUNIT_NONE);
-        else if (pEdit == &aBottomMarginED)
-            aTopMarginED.SetUserValue(nValue, FUNIT_NONE);
-    }
-    else
-    {
         sal_Int64 nValue = pEdit->GetValue();
         MetricField *pOpposite = 0;
 
@@ -655,7 +635,6 @@ IMPL_LINK( SwWrapTabPage, RangeModifyHdl, MetricField *, pEdit )
             if (nValue + nOpposite > Max(pEdit->GetMax(), pOpposite->GetMax()))
                 pOpposite->SetValue(pOpposite->GetMax() - nValue);
         }
-    }
 
     return 0;
 }

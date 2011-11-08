@@ -908,13 +908,6 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
 
     if(bHtmlMode)
     {
-        if(nDlgType == DLG_FRM_STD &&
-                0 == (nHtmlMode & HTMLMODE_FULL_ABS_POS))
-        {
-            aHeightFT   .Enable( sal_False );
-            aHeightED   .Enable( sal_False );
-            aRelHeightCB.Enable( sal_False );
-        }
         if( 0 == (nHtmlMode & HTMLMODE_SOME_ABS_POS))
         {
             if (GetAnchor() == FLY_AT_PAGE)

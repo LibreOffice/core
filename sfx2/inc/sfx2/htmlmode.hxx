@@ -37,7 +37,6 @@
 #define HTMLMODE_PARA_BLOCK         0x0100
 #define HTMLMODE_DROPCAPS           0x0200
 #define HTMLMODE_FIRSTLINE          0x0400 /* First-line intent with Spacer == NS 3.0 */
-#define HTMLMODE_FULL_ABS_POS       0x1000
 #define HTMLMODE_SOME_ABS_POS       0x2000
 #define HTMLMODE_RESERVED1          0x4000
 #define HTMLMODE_RESERVED0          0x8000

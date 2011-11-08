@@ -340,7 +340,7 @@ sal_uInt16      GetHtmlMode(const SwDocShell* pShell)
         {
             case HTML_CFG_MSIE:
                 nRet |= HTMLMODE_FULL_STYLES|
-                        HTMLMODE_FULL_ABS_POS|HTMLMODE_SOME_ABS_POS;
+                        HTMLMODE_SOME_ABS_POS;
             break;
             case HTML_CFG_NS40:
                 nRet |= HTMLMODE_FRM_COLUMNS|
@@ -349,7 +349,7 @@ sal_uInt16      GetHtmlMode(const SwDocShell* pShell)
             case HTML_CFG_WRITER:
                 nRet |= HTMLMODE_FRM_COLUMNS|HTMLMODE_FULL_STYLES|
                         HTMLMODE_DROPCAPS|
-                        HTMLMODE_FULL_ABS_POS|HTMLMODE_SOME_ABS_POS;
+                        HTMLMODE_SOME_ABS_POS;
             break;
         }
     }

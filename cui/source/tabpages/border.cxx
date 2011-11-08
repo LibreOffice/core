@@ -559,17 +559,6 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
             aLbShadowColor.Disable();
             aFlShadow     .Disable();
 
-            sal_uInt16 nLBCount = aLbLineStyle.GetEntryCount();
-            // ist es ein Absatzdialog, dann alle Linien fuer
-            // Sw-Export, sonst ist die Page nicht da
-            if(!(mbHorEnabled || mbVerEnabled)
-                 && 0 == (nHtmlMode & HTMLMODE_FULL_ABS_POS) &&
-                SFX_ITEM_AVAILABLE > rSet.GetItemState(GetWhich( SID_ATTR_PARA_LINESPACE )))
-            {
-                for( sal_uInt16 i = nLBCount - 1; i > LINESTYLE_HTML_MAX; --i)
-                    aLbLineStyle.RemoveEntry(i);
-            }
-
             if( !(nSWMode & SW_BORDER_MODE_TABLE) )
             {
                 aUserDefFT.Disable();
