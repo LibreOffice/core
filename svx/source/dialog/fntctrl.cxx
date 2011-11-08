@@ -760,7 +760,7 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
         long nStdAscent = pImpl->nAscent;
         nY += nStdAscent;
 
-        if(pImpl->bTwoLines)
+        if (IsTwoLines())
         {
             SvxFont aSmallFont( rFont );
             Size aOldSize = pImpl->aCJKFont.GetSize();
@@ -836,6 +836,16 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
             pImpl->DrawPrev( this, pPrinter, aTmpPoint, rFont );
         }
     }
+}
+
+sal_Bool SvxFontPrevWindow::IsTwoLines() const
+{
+    return pImpl->bTwoLines;
+}
+
+void SvxFontPrevWindow::SetTwoLines(sal_Bool bSet)
+{
+    pImpl->bTwoLines = bSet;
 }
 
 void SvxFontPrevWindow::SetNoLines(sal_Bool bSet)
