@@ -57,6 +57,10 @@ RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES= $(SRS)$/preload.srs
 
 SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
+.IF "$(GUI)" == "OS2"
+# YD preload is not a valid library name...
+SHL1TARGET= $(TARGET)g
+.ENDIF
 SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 SHL1STDLIBS= \
