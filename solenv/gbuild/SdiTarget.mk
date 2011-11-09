@@ -72,9 +72,7 @@ define gb_SdiTarget_SdiTarget
 $(call gb_SdiTarget_get_target,$(1)) : INCLUDE := $$(subst -I. ,-I$$(dir $(SRCDIR)/$(1)) ,$$(SOLARINC))
 $(call gb_SdiTarget_get_target,$(1)) : EXPORTS := $(SRCDIR)/$(2).sdi
 ifeq ($(gb_FULLDEPS),$(true))
-ifneq ($(OS),WNT)
 -include $(call gb_SdiTarget_get_dep_target,$(1))
-endif
 endif
 endef
 
