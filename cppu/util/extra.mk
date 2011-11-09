@@ -77,7 +77,7 @@ SHL5OBJS    := $(SLO)$/LogBridge.obj
 .IF "$(GUI)"=="OS2"
 SHL5VERSIONMAP=unsafe_os2.map
 SHL5DEF=$(MISC)$/$(SHL5TARGET).def
-DEF5NAME=LogMapping.def
+DEF5NAME=$(SHL5TARGET)
 .ELSE
 SHL5DEF     := empty.def
 .ENDIF
