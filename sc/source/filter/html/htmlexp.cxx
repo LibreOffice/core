@@ -243,8 +243,6 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const String& rBaseURL, ScDocument
     aBaseURL( rBaseURL ),
     aStreamPath( rStreamPathP ),
     pAppWin( Application::GetDefaultDevice() ),
-    pSrcArr( NULL ),
-    pDestArr( NULL ),
     nUsedTables( 0 ),
     nIndent( 0 ),
     bAll( bAllP ),
@@ -294,8 +292,6 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const String& rBaseURL, ScDocument
 ScHTMLExport::~ScHTMLExport()
 {
     aGraphList.clear();
-    delete pSrcArr;
-    delete pDestArr;
 }
 
 
@@ -1313,31 +1309,30 @@ sal_Bool ScHTMLExport::CopyLocalFileToINet( String& rFileNm,
                            INET_PROT_FTP <= aTargetUrl.GetProtocol() &&
                            INET_PROT_NEWS >= aTargetUrl.GetProtocol()) ) )
     {
-        if( pSrcArr )
+        if( pFileNameMap )
         {
             // wurde die Datei schon verschoben
-            sal_uInt16 nPos;
-            if( pSrcArr->Seek_Entry( &rFileNm, &nPos ))
+            std::map<String, String>::iterator it = pFileNameMap->find( rFileNm );
+            if( it != pFileNameMap->end() )
             {
-                rFileNm = *(*pDestArr)[ nPos ];
+                rFileNm = it->second;
                 return sal_True;
             }
         }
         else
         {
-            pSrcArr = new SvStringsSortDtor( 4, 4 );
-            pDestArr = new SvStringsSortDtor( 4, 4 );
+            pFileNameMap.reset( new std::map<String, String>() );
         }
 
-        String* pSrc = new String( rFileNm );
         SvFileStream aTmp( aFileUrl.PathToFileName(), STREAM_READ );
 
-        String* pDest = new String( aTargetUrl.GetPartBeforeLastName() );
-        *pDest += String(aFileUrl.GetName());
+        String aSrc = rFileNm;
+        String aDest = aTargetUrl.GetPartBeforeLastName();
+        aDest += String(aFileUrl.GetName());
 
         if( bFileToFile )
         {
-            INetURLObject aCpyURL( *pDest );
+            INetURLObject aCpyURL( aDest );
             SvFileStream aCpy( aCpyURL.PathToFileName(), STREAM_WRITE );
             aCpy << aTmp;
 
@@ -1346,7 +1341,7 @@ sal_Bool ScHTMLExport::CopyLocalFileToINet( String& rFileNm,
         }
         else
         {
-            SfxMedium aMedium( *pDest, STREAM_WRITE | STREAM_SHARE_DENYNONE,
+            SfxMedium aMedium( aDest, STREAM_WRITE | STREAM_SHARE_DENYNONE,
                                 false );
 
             {
@@ -1363,14 +1358,8 @@ sal_Bool ScHTMLExport::CopyLocalFileToINet( String& rFileNm,
 
         if( bRet )
         {
-            pSrcArr->Insert( pSrc );
-            pDestArr->Insert( pDest );
-            rFileNm = *pDest;
-        }
-        else
-        {
-            delete pSrc;
-            delete pDest;
+            pFileNameMap->insert( std::make_pair( aSrc, aDest ) );
+            rFileNm = aDest;
         }
     }
 

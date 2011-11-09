@@ -34,6 +34,7 @@
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include "expbase.hxx"
 
@@ -45,7 +46,6 @@ class Graphic;
 class SdrObject;
 class OutputDevice;
 class ScDrawLayer;
-class SvStringsSortDtor;
 class ScEditCell;
 
 namespace editeng { class SvxBorderLine; }
@@ -109,8 +109,7 @@ class ScHTMLExport : public ScExportBase
     String              aStreamPath;
     String              aCId;           // Content-Id fuer Mail-Export
     OutputDevice*       pAppWin;        // fuer Pixelei
-    SvStringsSortDtor*  pSrcArr;        // fuer CopyLocalFileToINet
-    SvStringsSortDtor*  pDestArr;
+    boost::scoped_ptr< std::map<String, String> >  pFileNameMap;        // fuer CopyLocalFileToINet
     String              aNonConvertibleChars;   // collect nonconvertible characters
     rtl_TextEncoding    eDestEnc;
     SCTAB               nUsedTables;

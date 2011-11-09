@@ -63,7 +63,6 @@ sal_uInt16 SvPtrarr::GetPos( const VoidPtr& aElement ) const
 
 SV_IMPL_PTRARR( SvStrings, StringPtr )
 SV_IMPL_PTRARR( SvStringsDtor, StringPtr )
-SV_IMPL_OP_PTRARR_SORT( SvStringsSortDtor, StringPtr )
 
 // ---------------- strings -------------------------------------
 

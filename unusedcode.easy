@@ -731,11 +731,6 @@ SvStringsISort::Insert(SvStringsISort const*, unsigned short, unsigned short)
 SvStringsISort::Remove(String* const&, unsigned short)
 SvStringsISort::Remove(unsigned short, unsigned short)
 SvStringsISortDtor::Insert(String* const*, unsigned short)
-SvStringsSortDtor::Insert(String* const&, unsigned short&)
-SvStringsSortDtor::Insert(String* const*, unsigned short)
-SvStringsSortDtor::Insert(SvStringsSortDtor const*, unsigned short, unsigned short)
-SvStringsSortDtor::Remove(String* const&, unsigned short)
-SvStringsSortDtor::Remove(unsigned short, unsigned short)
 SvTabListBox::GetTabJustify(unsigned short) const
 SvUnoAttributeContainer::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
 SvXMLAutoStylePoolNamesP_Impl::GetPos(rtl::OUString const*) const

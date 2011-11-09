@@ -47,6 +47,7 @@
 #include <numrule.hxx>
 #include <swerror.h>
 #include <boost/bind.hpp>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -61,7 +62,7 @@ struct Writer_Impl
 {
     SvStream * m_pStream;
 
-    SvStringsSortDtor *pSrcArr, *pDestArr;
+    boost::scoped_ptr< std::map<String, String> > pFileNameMap;
     SvPtrarr* pFontRemoveLst, *pBkmkArr;
     SwBookmarkNodeTable* pBkmkNodePos;
 
@@ -74,15 +75,13 @@ struct Writer_Impl
 
 Writer_Impl::Writer_Impl()
     : m_pStream(0)
-    , pSrcArr( 0 ), pDestArr( 0 ), pFontRemoveLst( 0 )
+    , pFontRemoveLst( 0 )
     , pBkmkArr( 0 ), pBkmkNodePos( 0 )
 {
 }
 
 Writer_Impl::~Writer_Impl()
 {
-    delete pSrcArr;
-    delete pDestArr;
     delete pFontRemoveLst;
 
     if( pBkmkNodePos )
@@ -357,28 +356,27 @@ sal_Bool Writer::CopyLocalFileToINet( String& rFileNm )
             INET_PROT_NEWS >= aTargetUrl.GetProtocol() ) )
         return bRet;
 
-    if (m_pImpl->pSrcArr)
+    if (m_pImpl->pFileNameMap)
     {
         // wurde die Datei schon verschoben
-        sal_uInt16 nPos;
-        if (m_pImpl->pSrcArr->Seek_Entry( &rFileNm, &nPos ))
+        std::map<String, String>::iterator it = m_pImpl->pFileNameMap->find( rFileNm );
+        if ( it != m_pImpl->pFileNameMap->end() )
         {
-            rFileNm = *(*m_pImpl->pDestArr)[ nPos ];
+            rFileNm = it->second;
             return sal_True;
         }
     }
     else
     {
-        m_pImpl->pSrcArr = new SvStringsSortDtor( 4, 4 );
-        m_pImpl->pDestArr = new SvStringsSortDtor( 4, 4 );
+        m_pImpl->pFileNameMap.reset( new std::map<String, String>() );
     }
 
-    String *pSrc = new String( rFileNm );
-    String *pDest = new String( aTargetUrl.GetPartBeforeLastName() );
-    *pDest += String(aFileUrl.GetName());
+    String aSrc  = rFileNm;
+    String aDest = aTargetUrl.GetPartBeforeLastName();
+    aDest += String(aFileUrl.GetName());
 
-    SfxMedium aSrcFile( *pSrc, STREAM_READ, sal_False );
-    SfxMedium aDstFile( *pDest, STREAM_WRITE | STREAM_SHARE_DENYNONE, sal_False );
+    SfxMedium aSrcFile( aSrc, STREAM_READ, sal_False );
+    SfxMedium aDstFile( aDest, STREAM_WRITE | STREAM_SHARE_DENYNONE, sal_False );
 
     *aDstFile.GetOutStream() << *aSrcFile.GetInStream();
 
@@ -389,14 +387,8 @@ sal_Bool Writer::CopyLocalFileToINet( String& rFileNm )
 
     if( bRet )
     {
-        m_pImpl->pSrcArr->Insert( pSrc );
-        m_pImpl->pDestArr->Insert( pDest );
-        rFileNm = *pDest;
-    }
-    else
-    {
-        delete pSrc;
-        delete pDest;
+        m_pImpl->pFileNameMap->insert( std::make_pair( aSrc, aDest ) );
+        rFileNm = aDest;
     }
 
     return bRet;
