@@ -20,6 +20,7 @@ mkdir: %_DEST%\inc\systools\win32
 
 ..\%__SRC%\lib\libuno_sal.so.3 %_DEST%\lib\libuno_sal.so.3
 symlink: %_DEST%\lib\libuno_sal.so.3 %_DEST%\lib\libuno_sal.so
+..\%__SRC%\lib\libuno_sal.so %_DEST%\lib\libuno_sal.so
 ..\%__SRC%\lib\libuno_sal.dylib.3 %_DEST%\lib\libuno_sal.dylib.3
 symlink: %_DEST%\lib\libuno_sal.dylib.3 %_DEST%\lib\libuno_sal.dylib
 ..\%__SRC%\lib\libsal_textenc.so %_DEST%\lib\libsal_textenc.so
