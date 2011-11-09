@@ -38,7 +38,7 @@ use File::Basename;
 # IIa. Declaring variables for the system commands, etc.
 #--------------------------------------------------------
 #
-my ( $outfile, $outfile_sh, $bootfile, $newline, $comment,
+my ( $outfile, $outfile_sh, $outfile_bat, $bootfile, $newline, $comment,
      $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps,
      $wps, $cur_dir, $par_dir, $I, $L, $D, $buildenv, $answer, $tmp, $MINGW,
      $USE_MINGW, $platform,
@@ -920,6 +920,13 @@ $COMMON_BUILD_TOOLS   = '$SRC_ROOT'.$ds."external".$ds."common";
 # Generate alternate output file for sh?
 $outfile_sh = $outfile.".sh";
 
+if ($GUI eq "OS2")
+{
+   # Generate output file for 4os2?
+   $outfile_bat = $outfile;
+   $outfile_bat =~ s/set$/cmd/i;
+}
+
 if ($STLPORT4 ne $no_stl) {
 	$ps_STLPORT_LIB		= $ps.'$STLPORT4'.$LIB64;
 	$L_STLPORT_LIB		= $L.'$STLPORT4'.$LIB64;
@@ -1300,6 +1307,11 @@ elsif ($platform =~ m/os2/)
 	  }
    }
 
+  if ( '@ANT_HOME@' ne '' )
+  {
+     $PATH .= $ps.'@ANT_HOME@';
+  }
+
   # Append old PATH
   my $temp = $oldPATH;
   $temp =~ s/\\/\//g ;
@@ -1534,6 +1546,12 @@ open( OUT, ">$outfile" ) ||
 open( OUT_SH, ">$outfile_sh" ) ||
   die "Cannot open $outfile_sh: $!\n";
 
+if(defined($outfile_bat))
+{  # Create bat environment file
+   open( OUT_BAT, ">$outfile_bat" ) ||
+   die "Cannot open $outfile_bat: $!\n";
+}
+
 #
 #------------------------------------------
 # VII. Writing the data to the output file.
@@ -1542,6 +1560,7 @@ open( OUT_SH, ">$outfile_sh" ) ||
 # Write file header.
 CreateFileHeader( *OUT, $UPD, $platform, "(t)csh", "#" );
 CreateFileHeader( *OUT_SH, $UPD, $platform, "sh/bash/ksh", "#" );
+CreateFileHeader( *OUT_BAT, $UPD, $platform, "4nt", "rem" ) if defined($outfile_bat);
 
 ToFile( "SRC_ROOT",	     $SRC_ROOT,          "e" );
 ToFile( "OOO_SHELL",         $OOO_SHELL,         "e" );
@@ -2099,6 +2118,9 @@ print OUT $unsetvars;
 print OUT_SH "export $exportvars$newline";
 print OUT_SH "unset $unsetvarssh$newline";
 
+if(defined($outfile_bat))
+{  print OUT_BAT $unsetvarsbat;
+}
 
 #
 #---------------------------
@@ -2108,6 +2130,10 @@ print OUT_SH "unset $unsetvarssh$newline";
 close( OUT ) || print "Can't close $outfile: $!";
 
 close( OUT_SH ) || print "Can't close $outfile_sh: $!";
+
+if( defined($outfile_bat))
+{  close( OUT_BAT ) || print "Can't close $outfile_bat: $!";
+}
 
 #
 #------------------------------
@@ -2130,6 +2156,14 @@ if (rename( $outfile, $tmp ) ne 1)
 $tmp = $SRC_ROOT.$ds.$outfile_sh;
 if (rename( $outfile_sh, $tmp ) ne 1)
 {  `mv -f $outfile_sh $tmp`;
+}
+
+if(defined($outfile_bat))
+{
+    $tmp = $SRC_ROOT.$ds.$outfile_bat;
+    if (rename( $outfile_bat, $tmp ) ne 1)
+    {  `mv -f $outfile_bat $tmp`;
+    }
 }
 
 #
@@ -2285,19 +2319,53 @@ sub ToFile {
          my $envvar = $_[ 1 ];
          my $envvarbash = $envvar;
 
+         if ($platform =~ m/os2/) {
+             # expand the variables
+             $envvar =~ s/(\$\{?\w+\}?)/$1/eeg ;
+             # Some variables need to be translated
+             #if ( ($_[ 0 ] =~ /^PATH$/) and ($platform !~ m/os2/) ) {
+             #    # PATH is in cygwin format, but for 4nt it needs to be DOS.
+             #    $win_format_var = WinPath( $envvar, ":" );
+             #} else {
+             #    $win_format_var = WinFormat( $envvar );
+             #}
+             ## The excluded variables are translated by cygwin
+             #if ( $_[ 0 ] !~ /^PATH$|^TMP$|^TEMP$|^TMPDIR$|^HOME$/i ) {
+             #    $envvar = $win_format_var;
+             #}
+         }
+
          # Tcsh/bash needs backslashes quoted
          $envvar =~ s/\\/\\\\/g;
          $envvarbash = $envvar;
+
+         if ($platform =~ m/os2/) {
+             # expand the variables
+             $envvar =~ s/(\$\{?\w+\}?)/$1/eeg ;
+             if ($_[ 0 ] =~ /^PATH$|^BEGINLIBPATH$/) {
+                # always use \ for them
+                $envvar =~ s/\//\\/g ;             
+             }
+             $win_format_var = $envvar;
+         }
 
          printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", $envvar);
          print OUT "$setenv $_[ 0 ] \"$envvar\"$newline";  # to tcsh file
          print OUT_SH "$_[ 0 ]=\"$envvarbash\"$newline";   # to sh file
          $exportvars .= " $_[ 0 ]";                        # add to export list for sh file
 
+         if(defined($outfile_bat)) {
+             print OUT_BAT "IF DEFINED $_[ 0 ] $unset $_[ 0 ]$newline";
+             print OUT_BAT "$set $_[ 0 ]=$win_format_var$newline";
+         }
+
       } else {
          printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", "unset") ; # to stdout
          $unsetvars .= "$unsetenv $_[ 0 ] >& /dev/null$newline"; # for tcsh file
          $unsetvarssh .= " $_[ 0 ]";                             # for sh file
+         if(defined($outfile_bat)) {
+             $unsetvarsbat .= "$unset $_[ 0 ] >& NUL$newline";
+         }
       }
    }
    elsif ( $_[ 2 ] eq "a" ) 
@@ -2305,6 +2373,13 @@ sub ToFile {
       print "The $_[ 0 ] is set to: $_[ 1 ]\n";    # to stdout
       print OUT "$_[ 0 ] $_[ 1 ]$newline";         # to tcsh file
       print OUT_SH "$_[ 0 ]=$_[ 1 ]$newline";      # to sh file
+      if(defined($outfile_bat)) # create the correct 4nt alias format
+      {  my $aliastmp = $_[ 1 ];
+         $aliastmp =~ s/\$/\%/g;
+         $aliastmp =~ s!/!\\!g;
+         $aliastmp =~ s!"!!g;
+         print OUT_BAT "$_[ 0 ]=".'`'.$aliastmp.'`'.$newline;
+      }
    }
    elsif ( $_[ 2 ] eq "c" ) 
    {  # Write a comment to file.
@@ -2320,11 +2395,18 @@ sub ToFile {
       print OUT_SH "$comment$newline";
       print OUT_SH "$comment $_[ 0 ]$newline";
       print OUT_SH "$comment$newline";
+      if(defined($outfile_bat)) {
+          print OUT_BAT "$newline";
+          print OUT_BAT "rem $newline";
+          print OUT_BAT "rem $_[ 0 ]$newline";
+          print OUT_BAT "rem $newline";
+      }
    }
    elsif ( $_[ 2 ] eq "n" )
    {  #Write a newline to a file
       print OUT "$newline";
       print OUT_SH "$newline";
+      print OUT_BAT "$newline" if defined($outfile_bat);
    }
    elsif ( $_[ 2 ] eq "y" )
    {
