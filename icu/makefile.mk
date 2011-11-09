@@ -152,6 +152,13 @@ OUT2LIB= \
     $(BUILD_DIR)$/lib$/libicui18n.a \
     $(BUILD_DIR)$/lib$/libicule.a \
     $(BUILD_DIR)$/lib$/libicutu.a
+.ELIF "$(OS)"=="ANDROID"
+OUT2LIB= \
+    $(BUILD_DIR)$/lib$/libicudata.so \
+    $(BUILD_DIR)$/lib$/libicuuc.so \
+    $(BUILD_DIR)$/lib$/libicui18n.so \
+    $(BUILD_DIR)$/lib$/libicule.so \
+    $(BUILD_DIR)$/lib$/libicutu.so
 .ELSE
 OUT2LIB= \
     $(BUILD_DIR)$/lib$/libicudata$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR).$(ICU_MICRO) \
