@@ -6103,6 +6103,7 @@ AC_MSG_CHECKING([whether to build the Report Builder extension])
 if test -n "$enable_report_builder" -a "$enable_report_builder" != "no" && test "$WITH_JAVA" != "no"; then
   AC_MSG_RESULT([yes])
   ENABLE_REPORTBUILDER=YES
+  SYSTEM_JFREEREPORT=YES
   AC_MSG_CHECKING([for reportbuilder module])
   if test -d ./reportbuilder; then
     AC_MSG_RESULT([OK])
@@ -6273,6 +6274,7 @@ else
   ENABLE_REPORTBUILDER=NO
 fi
 AC_SUBST(ENABLE_REPORTBUILDER)
+AC_SUBST(SYSTEM_JFREEREPORT)
 AC_SUBST(SAC_JAR)
 AC_SUBST(LIBXML_JAR)
 AC_SUBST(FLUTE_JAR)
