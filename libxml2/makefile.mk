@@ -63,6 +63,10 @@ PATCH_FILES+= libxml2-mingw.patch
 .ENDIF
 .ENDIF
 
+.IF "$(OS)"=="ANDROID"
+PATCH_FILES+= libxml2-android.patch
+.ENDIF
+
 # This is only for UNX environment now
 
 .IF "$(OS)"=="WNT"
