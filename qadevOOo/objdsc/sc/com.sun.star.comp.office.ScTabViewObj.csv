@@ -29,7 +29,6 @@
 "ScTabViewObj";"com::sun::star::sheet::SpreadsheetViewSettings";"ShowHelpLines"
 "ScTabViewObj";"com::sun::star::sheet::SpreadsheetViewSettings";"ShowAnchor"
 "ScTabViewObj";"com::sun::star::sheet::SpreadsheetViewSettings";"ShowPageBreaks"
-"ScTabViewObj";"com::sun::star::sheet::SpreadsheetViewSettings";"SolidHandles"
 "ScTabViewObj";"com::sun::star::sheet::SpreadsheetViewSettings";"ShowObjects"
 "ScTabViewObj";"com::sun::star::sheet::SpreadsheetViewSettings";"ShowCharts"
 "ScTabViewObj";"com::sun::star::sheet::SpreadsheetViewSettings";"ShowDrawing"

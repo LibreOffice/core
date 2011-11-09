@@ -22,7 +22,6 @@
 "SwXViewSettings";"com::sun::star::text::ViewSettings";"ShowVertRuler"
 "SwXViewSettings";"com::sun::star::text::ViewSettings";"ShowVertScrollBar"
 "SwXViewSettings";"com::sun::star::text::ViewSettings";"SmoothScrolling"
-"SwXViewSettings";"com::sun::star::text::ViewSettings";"SolidMarkHandles"
 "SwXViewSettings";"com::sun::star::text::ViewSettings";"IsVertRulerRightAligned"
 "SwXViewSettings";"com::sun::star::text::ViewSettings";"ShowOnlineLayout"
 "SwXViewSettings";"com::sun::star::text::ViewSettings";"ZoomType"

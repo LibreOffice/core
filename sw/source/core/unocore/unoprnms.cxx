@@ -258,7 +258,6 @@ const SwPropNameTab aPropNameTab = {
 /* 0218 IS_SYNC_HEIGHT_TO_WIDTH */      {MAP_CHAR_LEN("IsSyncHeightToWidth")},
 /* 0219 SIZE_PROTECTED */               {MAP_CHAR_LEN("SizeProtected")},
 /* 0220 SMOOTH_SCROLLING */             {MAP_CHAR_LEN("SmoothScrolling")},
-/* 0221 SOLID_MARK_HANDLES */           {MAP_CHAR_LEN("SolidMarkHandles")},
 /* 0222 TABLES */                       {MAP_CHAR_LEN("Tables")},
 /* 0223 TEXT_FRAMES */                  {MAP_CHAR_LEN("TextFrames")},
 /* 0224 TEXT_COLUMNS */                 {MAP_CHAR_LEN("TextColumns")},

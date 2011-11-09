@@ -95,8 +95,6 @@ On Error Goto ErrHndl
 
     PropertyTester.TestProperty("SmoothScrolling")
 
-    PropertyTester.TestProperty("SolidMarkHandles")
-
     PropertyTester.TestProperty("IsVertRulerRightAligned")
 
     Dim zoomTypes As Variant

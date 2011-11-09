@@ -1874,7 +1874,6 @@ OpenOffice.org Chart : showing;live presentations on the Internet
 OpenOffice.org Chart : showing;toolbars
 OpenOffice.org Chart : signing documents with digital signatures
 OpenOffice.org Chart : similarity search
-OpenOffice.org Chart : simple handles (Writer)
 OpenOffice.org Chart : simplified Chinese
 OpenOffice.org Chart : simplified Chinese;translating to traditional Chinese
 OpenOffice.org Chart : single sign on options
@@ -4395,7 +4394,6 @@ OpenOffice.org Basic : showing;live presentations on the Internet
 OpenOffice.org Basic : showing;toolbars
 OpenOffice.org Basic : signing documents with digital signatures
 OpenOffice.org Basic : similarity search
-OpenOffice.org Basic : simple handles (Writer)
 OpenOffice.org Basic : simplified Chinese
 OpenOffice.org Basic : simplified Chinese;translating to traditional Chinese
 OpenOffice.org Basic : Sin function
@@ -7958,7 +7956,6 @@ OpenOffice.org Calc : showing;toolbars
 OpenOffice.org Calc : SIGN function
 OpenOffice.org Calc : signing documents with digital signatures
 OpenOffice.org Calc : similarity search
-OpenOffice.org Calc : simple handles (Writer)
 OpenOffice.org Calc : simplified Chinese
 OpenOffice.org Calc : simplified Chinese;translating to traditional Chinese
 OpenOffice.org Calc : SIN function
@@ -10393,7 +10390,6 @@ OpenOffice.org Base : showing;live presentations on the Internet
 OpenOffice.org Base : showing;toolbars
 OpenOffice.org Base : signing documents with digital signatures
 OpenOffice.org Base : similarity search
-OpenOffice.org Base : simple handles (Writer)
 OpenOffice.org Base : simplified Chinese
 OpenOffice.org Base : simplified Chinese;translating to traditional Chinese
 OpenOffice.org Base : single sign on options
@@ -13033,7 +13029,6 @@ OpenOffice.org Draw : showing;toolbars
 OpenOffice.org Draw : sign conversion to curves
 OpenOffice.org Draw : signing documents with digital signatures
 OpenOffice.org Draw : similarity search
-OpenOffice.org Draw : simple handles (Writer)
 OpenOffice.org Draw : simplified Chinese
 OpenOffice.org Draw : simplified Chinese;translating to traditional Chinese
 OpenOffice.org Draw : single sign on options
@@ -16041,7 +16036,6 @@ OpenOffice.org Writer : showing;toolbars
 OpenOffice.org Writer : sideways orientation of pages
 OpenOffice.org Writer : signing documents with digital signatures
 OpenOffice.org Writer : similarity search
-OpenOffice.org Writer : simple handles (Writer)
 OpenOffice.org Writer : simplified Chinese
 OpenOffice.org Writer : simplified Chinese;translating to traditional Chinese
 OpenOffice.org Writer : single sign on options
@@ -18741,7 +18735,6 @@ OpenOffice.org Math : showing;toolbars
 OpenOffice.org Math : signing documents with digital signatures
 OpenOffice.org Math : similar to relations
 OpenOffice.org Math : similarity search
-OpenOffice.org Math : simple handles (Writer)
 OpenOffice.org Math : simplified Chinese
 OpenOffice.org Math : simplified Chinese;translating to traditional Chinese
 OpenOffice.org Math : sine function
@@ -21443,7 +21436,6 @@ OpenOffice.org Impress : showing;toolbars
 OpenOffice.org Impress : sign conversion to curves
 OpenOffice.org Impress : signing documents with digital signatures
 OpenOffice.org Impress : similarity search
-OpenOffice.org Impress : simple handles (Writer)
 OpenOffice.org Impress : simplified Chinese
 OpenOffice.org Impress : simplified Chinese;translating to traditional Chinese
 OpenOffice.org Impress : single sign on options

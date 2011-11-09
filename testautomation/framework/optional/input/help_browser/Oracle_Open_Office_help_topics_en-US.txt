@@ -3137,7 +3137,6 @@ Oracle Open Office Calc : showing;toolbars
 Oracle Open Office Calc : SIGN function
 Oracle Open Office Calc : signing documents with digital signatures
 Oracle Open Office Calc : similarity search
-Oracle Open Office Calc : simple handles (Writer)
 Oracle Open Office Calc : simplified Chinese
 Oracle Open Office Calc : simplified Chinese;conversion to traditional Chinese
 Oracle Open Office Calc : SIN function
@@ -6050,7 +6049,6 @@ Oracle Open Office Impress : showing;toolbars
 Oracle Open Office Impress : sign conversion to curves
 Oracle Open Office Impress : signing documents with digital signatures
 Oracle Open Office Impress : similarity search
-Oracle Open Office Impress : simple handles (Writer)
 Oracle Open Office Impress : simplified Chinese
 Oracle Open Office Impress : simplified Chinese;conversion to traditional Chinese
 Oracle Open Office Impress : single sign on options
@@ -8445,7 +8443,6 @@ Oracle Open Office Chart : showing;live presentations on the Internet
 Oracle Open Office Chart : showing;toolbars
 Oracle Open Office Chart : signing documents with digital signatures
 Oracle Open Office Chart : similarity search
-Oracle Open Office Chart : simple handles (Writer)
 Oracle Open Office Chart : simplified Chinese
 Oracle Open Office Chart : simplified Chinese;conversion to traditional Chinese
 Oracle Open Office Chart : single sign on options
@@ -10659,7 +10656,6 @@ Oracle Open Office Base : showing;live presentations on the Internet
 Oracle Open Office Base : showing;toolbars
 Oracle Open Office Base : signing documents with digital signatures
 Oracle Open Office Base : similarity search
-Oracle Open Office Base : simple handles (Writer)
 Oracle Open Office Base : simplified Chinese
 Oracle Open Office Base : simplified Chinese;conversion to traditional Chinese
 Oracle Open Office Base : single sign on options
@@ -13166,7 +13162,6 @@ Oracle Open Office Basic : showing;live presentations on the Internet
 Oracle Open Office Basic : showing;toolbars
 Oracle Open Office Basic : signing documents with digital signatures
 Oracle Open Office Basic : similarity search
-Oracle Open Office Basic : simple handles (Writer)
 Oracle Open Office Basic : simplified Chinese
 Oracle Open Office Basic : simplified Chinese;conversion to traditional Chinese
 Oracle Open Office Basic : Sin function
@@ -15716,7 +15711,6 @@ Oracle Open Office Math : showing;toolbars
 Oracle Open Office Math : signing documents with digital signatures
 Oracle Open Office Math : similar to relations
 Oracle Open Office Math : similarity search
-Oracle Open Office Math : simple handles (Writer)
 Oracle Open Office Math : simplified Chinese
 Oracle Open Office Math : simplified Chinese;conversion to traditional Chinese
 Oracle Open Office Math : sine function
@@ -18694,7 +18688,6 @@ Oracle Open Office Writer : showing;toolbars
 Oracle Open Office Writer : sideways orientation of pages
 Oracle Open Office Writer : signing documents with digital signatures
 Oracle Open Office Writer : similarity search
-Oracle Open Office Writer : simple handles (Writer)
 Oracle Open Office Writer : simplified Chinese
 Oracle Open Office Writer : simplified Chinese;conversion to traditional Chinese
 Oracle Open Office Writer : single sign on options
@@ -21566,7 +21559,6 @@ Oracle Open Office Draw : showing;toolbars
 Oracle Open Office Draw : sign conversion to curves
 Oracle Open Office Draw : signing documents with digital signatures
 Oracle Open Office Draw : similarity search
-Oracle Open Office Draw : simple handles (Writer)
 Oracle Open Office Draw : simplified Chinese
 Oracle Open Office Draw : simplified Chinese;conversion to traditional Chinese
 Oracle Open Office Draw : single sign on options

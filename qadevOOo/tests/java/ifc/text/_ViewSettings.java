@@ -56,7 +56,6 @@ import lib.MultiPropertyTest;
  *  <li><code> ShowVertRuler</code></li>
  *  <li><code> ShowVertScrollBar</code></li>
  *  <li><code> SmoothScrolling</code></li>
- *  <li><code> SolidMarkHandles</code></li>
  *  <li><code> IsVertRulerRightAligned</code></li>
  *  <li><code> ShowOnlineLayout</code></li>
  *  <li><code> ZoomType</code></li>

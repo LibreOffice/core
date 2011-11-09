@@ -74,8 +74,6 @@ On Error Goto ErrHndl
 
     PropertyTester.TestProperty("ShowPageBreaks")
 
-    PropertyTester.TestProperty("SolidHandles")
-
     PropertyTester.TestProperty("ShowObjects")
 
     PropertyTester.TestProperty("ShowCharts")

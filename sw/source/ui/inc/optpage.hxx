@@ -51,7 +51,6 @@ class SwContentOptPage : public SfxTabPage
     //visual aids
     FixedLine   aLineFL;
     CheckBox    aCrossCB;
-    CheckBox    aSolidHandleCB;
     CheckBox    aBigHandleCB;
 
     //view

@@ -215,12 +215,6 @@ published service ViewSettings
     [property] boolean SmoothScrolling;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::text::ViewSettings::SolidMarkHandles
-    /** If this property is <TRUE/>, handles of drawing objects are visible.
-     */
-    [property] boolean SolidMarkHandles;
-    //-------------------------------------------------------------------------
     /** If this property is <TRUE/>, the vertical ruler is aligned to the right side
      of the view and the vertical scrollbar is on the left.
      */

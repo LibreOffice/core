@@ -137,13 +137,6 @@ published service SpreadsheetViewSettings
 
     //-------------------------------------------------------------------------
 
-    /** enables solid (colored) handles when drawing
-        objects are selected.
-     */
-    [property] boolean SolidHandles;
-
-    //-------------------------------------------------------------------------
-
     /** enables display of embedded objects in the view.
 
         @see SpreadsheetViewObjectsMode

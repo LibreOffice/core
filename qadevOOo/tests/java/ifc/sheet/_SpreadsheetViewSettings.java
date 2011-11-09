@@ -49,7 +49,6 @@ import lib.MultiPropertyTest;
 *  <li><code> ShowHelpLines</code></li>
 *  <li><code> ShowAnchor</code></li>
 *  <li><code> ShowPageBreaks</code></li>
-*  <li><code> SolidHandles</code></li>
 *  <li><code> ShowObjects</code></li>
 *  <li><code> ShowCharts</code></li>
 *  <li><code> ShowDrawing</code></li>

@@ -130,7 +130,6 @@ Gitterlinien sym:sc:CheckBox:RID_SCPAGE_CONTENT:CB_GRID
 Farbe sym:sc:ListBox:RID_SCPAGE_CONTENT:LB_COLOR
 Seitenumbruch sym:sc:CheckBox:RID_SCPAGE_CONTENT:CB_PAGEBREAKS
 Hilfslinien sym:sc:CheckBox:RID_SCPAGE_CONTENT:CB_GUIDELINE
-EinfacheGriffe sym:sc:CheckBox:RID_SCPAGE_CONTENT:CB_HANDLES
 GrosseGriffe sym:sc:CheckBox:RID_SCPAGE_CONTENT:CB_BIGHANDLES
 ZeilenUndSpaltenkoepfe sym:sc:CheckBox:RID_SCPAGE_CONTENT:CB_ROWCOLHEADER
 HorizontalerBildaufbau sym:sc:CheckBox:RID_SCPAGE_CONTENT:CB_HSCROLL

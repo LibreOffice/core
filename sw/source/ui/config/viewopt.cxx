@@ -198,7 +198,7 @@ SwViewOption::SwViewOption() :
                     VIEWOPT_1_GRAPHIC |
                     VIEWOPT_1_TABLE    | VIEWOPT_1_DRAW | VIEWOPT_1_CONTROL |
                     VIEWOPT_1_PAGEBACK |
-                    VIEWOPT_1_SOLIDMARKHDL | VIEWOPT_1_POSTITS;
+                    VIEWOPT_1_POSTITS;
     nCore2Options = VIEWOPT_CORE2_BLACKFONT | VIEWOPT_CORE2_HIDDENPARA;
     nUIOptions    = VIEWOPT_2_MODIFIED | VIEWOPT_2_GRFKEEPZOOM |VIEWOPT_2_ANY_RULER;
 

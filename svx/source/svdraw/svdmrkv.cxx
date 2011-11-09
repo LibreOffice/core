@@ -2053,26 +2053,4 @@ void SdrMarkView::SetDesignMode( sal_Bool _bOn )
     }
 }
 
-// MarkHandles Objektaenderung:
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// - Bei Notify mit HINT_OBJCHG (oder so) werden die Handles erstmal versteckt
-//   (wenn nicht schon wegen Dragging versteckt).
-// - XorHdl: Bei ModelHasChanged() werden sie dann wieder angezeigt.
-// - PaintEvents kommen nun durch.
-//   - Die XorHandles werden z.T. wieder uebermalt.
-//   - Xor:  Nach dem Painten werden die Handles im (vom PaintHandler gerufenen)
-//           CompleteRedraw per ToggleShownXor bei gesetzter ClipRegion nochmal gemalt
-//           und damit ist alles in Butter.
-//   - ToggleShownXor macht bei SolidHdl nix weil bHdlShown=FALSE
-//   - Der AfterPaintTimer wird gestartet.
-// - SolidHdl: Im AfterPaintHandler wird ShowMarkHdl gerufen.
-//   Da die Handles zu diesem Zeitpunkt nicht angezeigt sind wird:
-//   - SaveBackground durchgefuehrt.
-//   - DrawMarkHdl gerufen und bHdlShown gesetzt.
-//
-// MarkHandles bei sonstigem Invalidate:
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// In diesem Fall bekomme ich kein Notify und beim Aufruf des
-// PaintHandlers->CompleteRedraw() sind auch die SolidHandles sichtbar.
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
