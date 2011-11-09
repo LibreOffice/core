@@ -527,33 +527,46 @@ struct NumStrCheck {
     const char* pRes;
 };
 
+struct StrStrCheck {
+    const char* pVal;
+    const char* pRes;
+};
+
 template<size_t _DataSize, size_t _FormulaSize, int _Type>
-void runTestMATCH(ScDocument* pDoc, const char* aData[_DataSize], NumStrCheck aChecks[_FormulaSize])
+void runTestMATCH(ScDocument* pDoc, const char* aData[_DataSize], StrStrCheck aChecks[_FormulaSize])
 {
-    for (size_t i = 0; i < _DataSize; ++i)
+    size_t nDataSize = _DataSize;
+    for (size_t i = 0; i < nDataSize; ++i)
         pDoc->SetString(0, i, 0, rtl::OUString::createFromAscii(aData[i]));
 
     for (size_t i = 0; i < _FormulaSize; ++i)
     {
+        pDoc->SetString(1, i, 0, rtl::OUString::createFromAscii(aChecks[i].pVal));
+
         rtl::OUStringBuffer aBuf;
-        aBuf.appendAscii("=MATCH(");
-        aBuf.append(aChecks[i].fVal);
-        aBuf.appendAscii(";A1:A9;");
+        aBuf.appendAscii("=MATCH(B");
+        aBuf.append(static_cast<sal_Int32>(i+1));
+        aBuf.appendAscii(";A1:A");
+        aBuf.append(static_cast<sal_Int32>(nDataSize));
+        aBuf.appendAscii(";");
         aBuf.append(static_cast<sal_Int32>(_Type));
         aBuf.appendAscii(")");
-        pDoc->SetString(1, i, 0, aBuf.makeStringAndClear());
+        rtl::OUString aFormula = aBuf.makeStringAndClear();
+        pDoc->SetString(2, i, 0, aFormula);
     }
 
     pDoc->CalcAll();
+    printRange(pDoc, ScRange(0, 0, 0, 2, _FormulaSize-1, 0), "MATCH");
 
     // verify the results.
     for (size_t i = 0; i < _FormulaSize; ++i)
     {
         rtl::OUString aStr;
-        pDoc->GetString(1, i, 0, aStr);
+        pDoc->GetString(2, i, 0, aStr);
         if (!aStr.equalsAscii(aChecks[i].pRes))
         {
-            cerr << "row " << (i+1) << ": expected='" << aChecks[i].pRes << "' actual='" << aStr << "'" << endl;
+            cerr << "row " << (i+1) << ": expected='" << aChecks[i].pRes << "' actual='" << aStr << "'"
+                << " criterion='" << aChecks[i].pVal << "'" << endl;
             CPPUNIT_ASSERT_MESSAGE("Unexpected result for MATCH", false);
         }
     }
@@ -561,6 +574,7 @@ void runTestMATCH(ScDocument* pDoc, const char* aData[_DataSize], NumStrCheck aC
 
 void testFuncMATCH(ScDocument* pDoc)
 {
+    clearRange(pDoc, ScRange(0, 0, 0, 4, 40, 0));
     {
         // Ascending in-exact match
 
@@ -574,23 +588,29 @@ void testFuncMATCH(ScDocument* pDoc)
             "6",
             "7",
             "8",
-            "9"
+            "9",
+            "A",
+            "B",
+            "C",
         };
 
         // formula (B1:C12)
-        NumStrCheck aChecks[] = {
-            { 0.8,   "#N/A" },
-            { 1.2,      "1" },
-            { 2.3,      "2" },
-            { 3.9,      "3" },
-            { 4.1,      "4" },
-            { 5.99,     "5" },
-            { 6.1,      "6" },
-            { 7.2,      "7" },
-            { 8.569,    "8" },
-            { 9.59,     "9" },
-            { 10,       "9" },
-            { 100,      "9" }
+        StrStrCheck aChecks[] = {
+            { "0.8",   "#N/A" },
+            { "1.2",      "1" },
+            { "2.3",      "2" },
+            { "3.9",      "3" },
+            { "4.1",      "4" },
+            { "5.99",     "5" },
+            { "6.1",      "6" },
+            { "7.2",      "7" },
+            { "8.569",    "8" },
+            { "9.59",     "9" },
+            { "10",       "9" },
+            { "100",      "9" },
+//          { "Andy",    "10" },
+//          { "Bruce",   "11" },
+//          { "Charlie", "12" }
         };
 
         runTestMATCH<SAL_N_ELEMENTS(aData),SAL_N_ELEMENTS(aChecks),1>(pDoc, aData, aChecks);
@@ -601,6 +621,9 @@ void testFuncMATCH(ScDocument* pDoc)
 
         // data range (A1:A9)
         const char* aData[] = {
+            "C",
+            "B",
+            "A",
             "9",
             "8",
             "7",
@@ -613,19 +636,22 @@ void testFuncMATCH(ScDocument* pDoc)
         };
 
         // formula (B1:C12)
-        NumStrCheck aChecks[] = {
-            {  10, "#N/A" },
-            { 8.9,    "1" },
-            { 7.8,    "2" },
-            { 6.7,    "3" },
-            { 5.5,    "4" },
-            { 4.6,    "5" },
-            { 3.3,    "6" },
-            { 2.2,    "7" },
-            { 1.1,    "8" },
-            { 0.8,    "9" },
-            {   0,    "9" },
-            {  -2,    "9" }
+        StrStrCheck aChecks[] = {
+            { "10",      "#N/A" },
+            { "8.9",     "4" },
+            { "7.8",     "5" },
+            { "6.7",     "6" },
+            { "5.5",     "7" },
+            { "4.6",     "8" },
+            { "3.3",     "9" },
+            { "2.2",     "10" },
+            { "1.1",     "11" },
+            { "0.8",     "12" },
+            { "0",       "12" },
+            { "-2",      "12" },
+//          { "Andy",    "2" },
+//          { "Bruce",   "1" },
+//          { "Charlie", "#N/A" },
         };
 
         runTestMATCH<SAL_N_ELEMENTS(aData),SAL_N_ELEMENTS(aChecks),-1>(pDoc, aData, aChecks);
