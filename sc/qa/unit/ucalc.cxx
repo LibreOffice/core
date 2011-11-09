@@ -275,253 +275,264 @@ void Test::testInput()
     m_pDoc->DeleteTab(0);
 }
 
+void testFuncSUM(ScDocument* pDoc)
+{
+    double val = 1;
+    double result;
+    pDoc->SetValue (0, 0, 0, val);
+    pDoc->SetValue (0, 1, 0, val);
+    pDoc->SetString (0, 2, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=SUM(A1:A2)")));
+    pDoc->CalcAll();
+    pDoc->GetValue (0, 2, 0, result);
+    CPPUNIT_ASSERT_MESSAGE ("calculation failed", result == 2.0);
+}
+
+void testFuncPRODUCT(ScDocument* pDoc)
+{
+    double val = 1;
+    double result;
+    pDoc->SetValue(0, 0, 0, val);
+    val = 2;
+    pDoc->SetValue(0, 1, 0, val);
+    val = 3;
+    pDoc->SetValue(0, 2, 0, val);
+    pDoc->SetString(0, 3, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=PRODUCT(A1:A3)")));
+    pDoc->CalcAll();
+    pDoc->GetValue(0, 3, 0, result);
+    CPPUNIT_ASSERT_MESSAGE("Calculation of PRODUCT failed", result == 6.0);
+
+    pDoc->SetString(0, 4, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=PRODUCT({1;2;3})")));
+    pDoc->CalcAll();
+    pDoc->GetValue(0, 4, 0, result);
+    CPPUNIT_ASSERT_MESSAGE("Calculation of PRODUCT with inline array failed", result == 6.0);
+}
+
+void testFuncN(ScDocument* pDoc)
+{
+    double result;
+
+    // Clear the area first.
+    clearRange(pDoc, ScRange(0, 0, 0, 1, 20, 0));
+
+    // Put values to reference.
+    double val = 0;
+    pDoc->SetValue(0, 0, 0, val);
+    pDoc->SetString(0, 2, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("Text")));
+    val = 1;
+    pDoc->SetValue(0, 3, 0, val);
+    val = -1;
+    pDoc->SetValue(0, 4, 0, val);
+    val = 12.3;
+    pDoc->SetValue(0, 5, 0, val);
+    pDoc->SetString(0, 6, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("'12.3")));
+
+    // Cell references
+    pDoc->SetString(1, 0, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A1)")));
+    pDoc->SetString(1, 1, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A2)")));
+    pDoc->SetString(1, 2, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A3)")));
+    pDoc->SetString(1, 3, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A4)")));
+    pDoc->SetString(1, 4, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A5)")));
+    pDoc->SetString(1, 5, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A6)")));
+    pDoc->SetString(1, 6, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A9)")));
+
+    // In-line values
+    pDoc->SetString(1, 7, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(0)")));
+    pDoc->SetString(1, 8, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(1)")));
+    pDoc->SetString(1, 9, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(-1)")));
+    pDoc->SetString(1, 10, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(123)")));
+    pDoc->SetString(1, 11, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(\"\")")));
+    pDoc->SetString(1, 12, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(\"12\")")));
+    pDoc->SetString(1, 13, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(\"foo\")")));
+
+    // Range references
+    pDoc->SetString(1, 14, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A1:A8)")));
+    pDoc->SetString(1, 15, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A4:B8)")));
+    pDoc->SetString(1, 16, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A6:B8)")));
+    pDoc->SetString(1, 17, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A2:B8)")));
+
+    // Calculate and check the results.
+    pDoc->CalcAll();
+    double checks[] = {
+        0, 0,  0,    1, -1, 12.3, 0, // cell reference
+        0, 1, -1, 123,  0,    0, 0, // in-line values
+        0, 1, 12.3, 0                // range references
+    };
+    for (size_t i = 0; i < SAL_N_ELEMENTS(checks); ++i)
+    {
+        pDoc->GetValue(1, i, 0, result);
+        bool bGood = result == checks[i];
+        if (!bGood)
+        {
+            cerr << "row " << (i+1) << ": expected=" << checks[i] << " actual=" << result << endl;
+            CPPUNIT_ASSERT_MESSAGE("Unexpected result for N", false);
+        }
+    }
+}
+
+void testFuncCOUNTIF(ScDocument* pDoc)
+{
+    // COUNTIF (test case adopted from OOo i#36381)
+
+    // Empty A1:A39 first.
+    clearRange(pDoc, ScRange(0, 0, 0, 0, 40, 0));
+
+    // Raw data (rows 1 through 9)
+    const char* aData[] = {
+        "1999",
+        "2000",
+        "0",
+        "0",
+        "0",
+        "2002",
+        "2001",
+        "X",
+        "2002"
+    };
+
+    SCROW nRows = SAL_N_ELEMENTS(aData);
+    for (SCROW i = 0; i < nRows; ++i)
+        pDoc->SetString(0, i, 0, rtl::OUString::createFromAscii(aData[i]));
+
+    printRange(pDoc, ScRange(0, 0, 0, 0, 8, 0), "data range for COUNTIF");
+
+    // formulas and results
+    struct {
+        const char* pFormula; double fResult;
+    } aChecks[] = {
+        { "=COUNTIF(A1:A12;1999)",       1 },
+        { "=COUNTIF(A1:A12;2002)",       2 },
+        { "=COUNTIF(A1:A12;1998)",       0 },
+        { "=COUNTIF(A1:A12;\">=1999\")", 5 },
+        { "=COUNTIF(A1:A12;\">1999\")",  4 },
+        { "=COUNTIF(A1:A12;\"<2001\")",  5 },
+        { "=COUNTIF(A1:A12;\">0\")",     5 },
+        { "=COUNTIF(A1:A12;\">=0\")",    8 },
+        { "=COUNTIF(A1:A12;0)",          3 },
+        { "=COUNTIF(A1:A12;\"X\")",      1 },
+        { "=COUNTIF(A1:A12;)",           3 }
+    };
+
+    nRows = SAL_N_ELEMENTS(aChecks);
+    for (SCROW i = 0; i < nRows; ++i)
+    {
+        SCROW nRow = 20 + i;
+        pDoc->SetString(0, nRow, 0, rtl::OUString::createFromAscii(aChecks[i].pFormula));
+    }
+    pDoc->CalcAll();
+
+    for (SCROW i = 0; i < nRows; ++i)
+    {
+        double result;
+        SCROW nRow = 20 + i;
+        pDoc->GetValue(0, nRow, 0, result);
+        bool bGood = result == aChecks[i].fResult;
+        if (!bGood)
+        {
+            cerr << "row " << (nRow+1) << ": formula" << aChecks[i].pFormula
+                << "  expected=" << aChecks[i].fResult << "  actual=" << result << endl;
+            CPPUNIT_ASSERT_MESSAGE("Unexpected result for COUNTIF", false);
+        }
+    }
+}
+
+void testFuncVLOOKUP(ScDocument* pDoc)
+{
+    // VLOOKUP
+
+    // Clear A1:F40.
+    clearRange(pDoc, ScRange(0, 0, 0, 5, 39, 0));
+
+    // Raw data
+    const char* aData[][2] = {
+        { "Key", "Val" },
+        {  "10",   "3" },
+        {  "20",   "4" },
+        {  "30",   "5" },
+        {  "40",   "6" },
+        {  "50",   "7" },
+        {  "60",   "8" },
+        {  "70",   "9" },
+        {   "A",  "10" },
+        {   "B",  "11" },
+        {   "C",  "12" },
+        {   "D",  "13" },
+        {   "E",  "14" },
+        {   "F",  "15" },
+        { 0, 0 } // terminator
+    };
+
+    // Insert raw data into A1:B14.
+    for (SCROW i = 0; aData[i][0]; ++i)
+    {
+        pDoc->SetString(0, i, 0, rtl::OUString::createFromAscii(aData[i][0]));
+        pDoc->SetString(1, i, 0, rtl::OUString::createFromAscii(aData[i][1]));
+    }
+
+    printRange(pDoc, ScRange(0, 0, 0, 1, 13, 0), "raw data for VLOOKUP");
+
+    // Formula data
+    struct {
+        const char* pLookup; const char* pFormula; double fResult;
+    } aChecks[] = {
+        { "Lookup",  "Formula", 0 },
+        { "12",      "=VLOOKUP(D2;A2:B14;2;1)",   3 },
+        { "29",      "=VLOOKUP(D3;A2:B14;2;1)",   4 },
+        { "31",      "=VLOOKUP(D4;A2:B14;2;1)",   5 },
+        { "45",      "=VLOOKUP(D5;A2:B14;2;1)",   6 },
+        { "56",      "=VLOOKUP(D6;A2:B14;2;1)",   7 },
+        { "65",      "=VLOOKUP(D7;A2:B14;2;1)",   8 },
+        { "78",      "=VLOOKUP(D8;A2:B14;2;1)",   9 },
+        { "Andy",    "=VLOOKUP(D9;A2:B14;2;1)",  10 },
+        { "Bruce",   "=VLOOKUP(D10;A2:B14;2;1)", 11 },
+        { "Charlie", "=VLOOKUP(D11;A2:B14;2;1)", 12 },
+        { "David",   "=VLOOKUP(D12;A2:B14;2;1)", 13 },
+        { "Edward",  "=VLOOKUP(D13;A2:B14;2;1)", 14 },
+        { "Frank",   "=VLOOKUP(D14;A2:B14;2;1)", 15 },
+        { "Henry",   "=VLOOKUP(D15;A2:B14;2;1)", 15 },
+        { "100",     "=VLOOKUP(D16;A2:B14;2;1)",  9 },
+        { "1000",    "=VLOOKUP(D17;A2:B14;2;1)",  9 },
+        { "Zena",    "=VLOOKUP(D18;A2:B14;2;1)", 15 }
+    };
+
+    // Insert formula data into D1:E18.
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+    {
+        pDoc->SetString(3, i, 0, rtl::OUString::createFromAscii(aChecks[i].pLookup));
+        pDoc->SetString(4, i, 0, rtl::OUString::createFromAscii(aChecks[i].pFormula));
+    }
+    pDoc->CalcAll();
+    printRange(pDoc, ScRange(3, 0, 0, 4, 17, 0), "formula data for VLOOKUP");
+
+    // Verify results.
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+    {
+        if (i == 0)
+            // Skip the header row.
+            continue;
+
+        double result;
+        pDoc->GetValue(4, i, 0, result);
+        bool bGood = result == aChecks[i].fResult;
+        if (!bGood)
+        {
+            cerr << "row " << (i+1) << ": lookup value='" << aChecks[i].pLookup
+                << "'  expected=" << aChecks[i].fResult << "  actual=" << result << endl;
+            CPPUNIT_ASSERT_MESSAGE("Unexpected result for VLOOKUP", false);
+        }
+    }
+}
+
 void Test::testCellFunctions()
 {
     rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("foo"));
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
 
-    double val, result;
-    {
-        // SUM
-        val = 1;
-        m_pDoc->SetValue (0, 0, 0, val);
-        m_pDoc->SetValue (0, 1, 0, val);
-        m_pDoc->SetString (0, 2, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=SUM(A1:A2)")));
-        m_pDoc->CalcAll();
-        m_pDoc->GetValue (0, 2, 0, result);
-        CPPUNIT_ASSERT_MESSAGE ("calculation failed", result == 2.0);
-    }
-
-    {
-        // PRODUCT
-
-        val = 1;
-        m_pDoc->SetValue(0, 0, 0, val);
-        val = 2;
-        m_pDoc->SetValue(0, 1, 0, val);
-        val = 3;
-        m_pDoc->SetValue(0, 2, 0, val);
-        m_pDoc->SetString(0, 3, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=PRODUCT(A1:A3)")));
-        m_pDoc->CalcAll();
-        m_pDoc->GetValue(0, 3, 0, result);
-        CPPUNIT_ASSERT_MESSAGE("Calculation of PRODUCT failed", result == 6.0);
-
-        m_pDoc->SetString(0, 4, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=PRODUCT({1;2;3})")));
-        m_pDoc->CalcAll();
-        m_pDoc->GetValue(0, 4, 0, result);
-        CPPUNIT_ASSERT_MESSAGE("Calculation of PRODUCT with inline array failed", result == 6.0);
-    }
-
-    {
-        // N
-
-        // Clear the area first.
-        clearRange(m_pDoc, ScRange(0, 0, 0, 1, 20, 0));
-
-        // Put values to reference.
-        val = 0;
-        m_pDoc->SetValue(0, 0, 0, val);
-        m_pDoc->SetString(0, 2, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("Text")));
-        val = 1;
-        m_pDoc->SetValue(0, 3, 0, val);
-        val = -1;
-        m_pDoc->SetValue(0, 4, 0, val);
-        val = 12.3;
-        m_pDoc->SetValue(0, 5, 0, val);
-        m_pDoc->SetString(0, 6, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("'12.3")));
-
-        // Cell references
-        m_pDoc->SetString(1, 0, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A1)")));
-        m_pDoc->SetString(1, 1, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A2)")));
-        m_pDoc->SetString(1, 2, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A3)")));
-        m_pDoc->SetString(1, 3, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A4)")));
-        m_pDoc->SetString(1, 4, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A5)")));
-        m_pDoc->SetString(1, 5, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A6)")));
-        m_pDoc->SetString(1, 6, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A9)")));
-
-        // In-line values
-        m_pDoc->SetString(1, 7, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(0)")));
-        m_pDoc->SetString(1, 8, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(1)")));
-        m_pDoc->SetString(1, 9, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(-1)")));
-        m_pDoc->SetString(1, 10, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(123)")));
-        m_pDoc->SetString(1, 11, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(\"\")")));
-        m_pDoc->SetString(1, 12, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(\"12\")")));
-        m_pDoc->SetString(1, 13, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(\"foo\")")));
-
-        // Range references
-        m_pDoc->SetString(1, 14, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A1:A8)")));
-        m_pDoc->SetString(1, 15, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A4:B8)")));
-        m_pDoc->SetString(1, 16, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A6:B8)")));
-        m_pDoc->SetString(1, 17, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A2:B8)")));
-
-        // Calculate and check the results.
-        m_pDoc->CalcAll();
-        double checks[] = {
-            0, 0,  0,    1, -1, 12.3, 0, // cell reference
-            0, 1, -1, 123,  0,    0, 0, // in-line values
-            0, 1, 12.3, 0                // range references
-        };
-        for (size_t i = 0; i < SAL_N_ELEMENTS(checks); ++i)
-        {
-            m_pDoc->GetValue(1, i, 0, result);
-            bool bGood = result == checks[i];
-            if (!bGood)
-            {
-                cerr << "row " << (i+1) << ": expected=" << checks[i] << " actual=" << result << endl;
-                CPPUNIT_ASSERT_MESSAGE("Unexpected result for N", false);
-            }
-        }
-    }
-
-    {
-        // COUNTIF (test case adopted from OOo i#36381)
-
-        // Empty A1:A39 first.
-        clearRange(m_pDoc, ScRange(0, 0, 0, 0, 40, 0));
-
-        // Raw data (rows 1 through 9)
-        const char* aData[] = {
-            "1999",
-            "2000",
-            "0",
-            "0",
-            "0",
-            "2002",
-            "2001",
-            "X",
-            "2002"
-        };
-
-        SCROW nRows = SAL_N_ELEMENTS(aData);
-        for (SCROW i = 0; i < nRows; ++i)
-            m_pDoc->SetString(0, i, 0, rtl::OUString::createFromAscii(aData[i]));
-
-        printRange(m_pDoc, ScRange(0, 0, 0, 0, 8, 0), "data range for COUNTIF");
-
-        // formulas and results
-        struct {
-            const char* pFormula; double fResult;
-        } aChecks[] = {
-            { "=COUNTIF(A1:A12;1999)",       1 },
-            { "=COUNTIF(A1:A12;2002)",       2 },
-            { "=COUNTIF(A1:A12;1998)",       0 },
-            { "=COUNTIF(A1:A12;\">=1999\")", 5 },
-            { "=COUNTIF(A1:A12;\">1999\")",  4 },
-            { "=COUNTIF(A1:A12;\"<2001\")",  5 },
-            { "=COUNTIF(A1:A12;\">0\")",     5 },
-            { "=COUNTIF(A1:A12;\">=0\")",    8 },
-            { "=COUNTIF(A1:A12;0)",          3 },
-            { "=COUNTIF(A1:A12;\"X\")",      1 },
-            { "=COUNTIF(A1:A12;)",           3 }
-        };
-
-        nRows = SAL_N_ELEMENTS(aChecks);
-        for (SCROW i = 0; i < nRows; ++i)
-        {
-            SCROW nRow = 20 + i;
-            m_pDoc->SetString(0, nRow, 0, rtl::OUString::createFromAscii(aChecks[i].pFormula));
-        }
-        m_pDoc->CalcAll();
-
-        for (SCROW i = 0; i < nRows; ++i)
-        {
-            SCROW nRow = 20 + i;
-            m_pDoc->GetValue(0, nRow, 0, result);
-            bool bGood = result == aChecks[i].fResult;
-            if (!bGood)
-            {
-                cerr << "row " << (nRow+1) << ": formula" << aChecks[i].pFormula
-                    << "  expected=" << aChecks[i].fResult << "  actual=" << result << endl;
-                CPPUNIT_ASSERT_MESSAGE("Unexpected result for COUNTIF", false);
-            }
-        }
-    }
-
-    {
-        // VLOOKUP
-
-        // Clear A1:F40.
-        clearRange(m_pDoc, ScRange(0, 0, 0, 5, 39, 0));
-
-        // Raw data
-        const char* aData[][2] = {
-            { "Key", "Val" },
-            {  "10",   "3" },
-            {  "20",   "4" },
-            {  "30",   "5" },
-            {  "40",   "6" },
-            {  "50",   "7" },
-            {  "60",   "8" },
-            {  "70",   "9" },
-            {   "A",  "10" },
-            {   "B",  "11" },
-            {   "C",  "12" },
-            {   "D",  "13" },
-            {   "E",  "14" },
-            {   "F",  "15" },
-            { 0, 0 } // terminator
-        };
-
-        // Insert raw data into A1:B14.
-        for (SCROW i = 0; aData[i][0]; ++i)
-        {
-            m_pDoc->SetString(0, i, 0, rtl::OUString::createFromAscii(aData[i][0]));
-            m_pDoc->SetString(1, i, 0, rtl::OUString::createFromAscii(aData[i][1]));
-        }
-
-        printRange(m_pDoc, ScRange(0, 0, 0, 1, 13, 0), "raw data for VLOOKUP");
-
-        // Formula data
-        struct {
-            const char* pLookup; const char* pFormula; double fResult;
-        } aChecks[] = {
-            { "Lookup",  "Formula", 0 },
-            { "12",      "=VLOOKUP(D2;A2:B14;2;1)",   3 },
-            { "29",      "=VLOOKUP(D3;A2:B14;2;1)",   4 },
-            { "31",      "=VLOOKUP(D4;A2:B14;2;1)",   5 },
-            { "45",      "=VLOOKUP(D5;A2:B14;2;1)",   6 },
-            { "56",      "=VLOOKUP(D6;A2:B14;2;1)",   7 },
-            { "65",      "=VLOOKUP(D7;A2:B14;2;1)",   8 },
-            { "78",      "=VLOOKUP(D8;A2:B14;2;1)",   9 },
-            { "Andy",    "=VLOOKUP(D9;A2:B14;2;1)",  10 },
-            { "Bruce",   "=VLOOKUP(D10;A2:B14;2;1)", 11 },
-            { "Charlie", "=VLOOKUP(D11;A2:B14;2;1)", 12 },
-            { "David",   "=VLOOKUP(D12;A2:B14;2;1)", 13 },
-            { "Edward",  "=VLOOKUP(D13;A2:B14;2;1)", 14 },
-            { "Frank",   "=VLOOKUP(D14;A2:B14;2;1)", 15 },
-            { "Henry",   "=VLOOKUP(D15;A2:B14;2;1)", 15 },
-            { "100",     "=VLOOKUP(D16;A2:B14;2;1)",  9 },
-            { "1000",    "=VLOOKUP(D17;A2:B14;2;1)",  9 },
-            { "Zena",    "=VLOOKUP(D18;A2:B14;2;1)", 15 }
-        };
-
-        // Insert formula data into D1:E18.
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
-        {
-            m_pDoc->SetString(3, i, 0, rtl::OUString::createFromAscii(aChecks[i].pLookup));
-            m_pDoc->SetString(4, i, 0, rtl::OUString::createFromAscii(aChecks[i].pFormula));
-        }
-        m_pDoc->CalcAll();
-        printRange(m_pDoc, ScRange(3, 0, 0, 4, 17, 0), "formula data for VLOOKUP");
-
-        // Verify results.
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
-        {
-            if (i == 0)
-                // Skip the header row.
-                continue;
-
-            m_pDoc->GetValue(4, i, 0, result);
-            bool bGood = result == aChecks[i].fResult;
-            if (!bGood)
-            {
-                cerr << "row " << (i+1) << ": lookup value='" << aChecks[i].pLookup
-                    << "'  expected=" << aChecks[i].fResult << "  actual=" << result << endl;
-                CPPUNIT_ASSERT_MESSAGE("Unexpected result for VLOOKUP", false);
-            }
-        }
-    }
+    testFuncSUM(m_pDoc);
+    testFuncPRODUCT(m_pDoc);
+    testFuncN(m_pDoc);
+    testFuncCOUNTIF(m_pDoc);
+    testFuncVLOOKUP(m_pDoc);
 
     m_pDoc->DeleteTab(0);
 }
