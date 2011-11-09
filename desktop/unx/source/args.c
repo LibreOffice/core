@@ -48,33 +48,29 @@ static struct {
     unsigned int  bInhibitSplash : 1;
     unsigned int  bInhibitPagein : 1;
     unsigned int  bInhibitJavaLdx : 1;
-    unsigned int  bInhibitDemon : 1;
     const char   *pPageinType;
 } pArgDescr[] = {
     /* have a trailing argument */
-    { "pt",         1, 0, 0, 0, 0, NULL },
-    { "display",    1, 0, 0, 0, 0, NULL },
+    { "pt",         1, 0, 0, 0, NULL },
+    { "display",    1, 0, 0, 0, NULL },
 
     /* no splash */
-    { "nologo",     0, 1, 0, 0, 0, NULL },
-    { "headless",   0, 1, 0, 0, 0, NULL },
-    { "invisible",  0, 1, 0, 0, 0, NULL },
-    { "minimized",  0, 1, 0, 0, 0, NULL },
+    { "nologo",     0, 1, 0, 0, NULL },
+    { "headless",   0, 1, 0, 0, NULL },
+    { "invisible",  0, 1, 0, 0, NULL },
+    { "minimized",  0, 1, 0, 0, NULL },
 
     /* pagein bits */
-    { "writer",     0, 0, 0, 0, 0, "pagein-writer"  },
-    { "calc",       0, 0, 0, 0, 0, "pagein-calc"    },
-    { "draw",       0, 0, 0, 0, 0, "pagein-draw"    },
-    { "impress",    0, 0, 0, 0, 0, "pagein-impress" },
+    { "writer",     0, 0, 0, 0, "pagein-writer"  },
+    { "calc",       0, 0, 0, 0, "pagein-calc"    },
+    { "draw",       0, 0, 0, 0, "pagein-draw"    },
+    { "impress",    0, 0, 0, 0, "pagein-impress" },
 
     /* nothing much */
-    { "version",    0, 1, 1, 1, 0, NULL },
-    { "help",       0, 1, 1, 1, 0, NULL },
-    { "h",          0, 1, 1, 1, 0, NULL },
-    { "?",          0, 1, 1, 1, 0, NULL },
-
-    /* UNO remote controlled process */
-    { "accept",     0, 0, 0, 0, 1, NULL },
+    { "version",    0, 1, 1, 1, NULL },
+    { "help",       0, 1, 1, 1, NULL },
+    { "h",          0, 1, 1, 1, NULL },
+    { "?",          0, 1, 1, 1, NULL },
 };
 
 Args *args_parse (void)
@@ -135,7 +131,6 @@ Args *args_parse (void)
                 args->bInhibitSplash  |= pArgDescr[j].bInhibitSplash;
                 args->bInhibitPagein  |= pArgDescr[j].bInhibitPagein;
                 args->bInhibitJavaLdx |= pArgDescr[j].bInhibitJavaLdx;
-                args->bInhibitDemon   |= pArgDescr[j].bInhibitDemon;
                 if (pArgDescr[j].pPageinType)
                     args->pPageinType = pArgDescr[j].pPageinType;
             }

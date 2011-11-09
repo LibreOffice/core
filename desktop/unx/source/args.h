@@ -38,7 +38,6 @@ typedef struct {
   sal_Bool     bInhibitSplash;  // should we show a splash screen
   sal_Bool     bInhibitPagein;  // should we run pagein ?
   sal_Bool     bInhibitJavaLdx; // should we run javaldx ?
-  sal_Bool     bInhibitDemon;   // we want to match the lifecycle of soffice.bin
 
   sal_uInt32   nArgsEnv;        // number of -env: style args
   sal_uInt32   nArgsTotal;      // number of -env: as well as -writer style args
