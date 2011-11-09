@@ -36,9 +36,6 @@
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
 
-#define _SVSTDARR_sal_uIt16S
-#include <svl/svstdarr.hxx>
-
 #include <vcl/wrkwin.hxx>
 #include <editeng/adjitem.hxx>
 #include <editeng/tstpitem.hxx>
