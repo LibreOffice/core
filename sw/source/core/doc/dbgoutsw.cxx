@@ -106,15 +106,15 @@ SW_DLLPUBLIC const char * dbg_out(const String & aStr)
     aDbgOutResult = rtl::OUStringToOString(aStr, RTL_TEXTENCODING_ASCII_US);
 
     if (bDbgOutStdErr)
-        fprintf(stderr, "%s", aDbgOutResult.GetBuffer());
+        fprintf(stderr, "%s", aDbgOutResult.getStr());
 
-    return aDbgOutResult.GetBuffer();
+    return aDbgOutResult.getStr();
 }
 
 SW_DLLPUBLIC const char * dbg_out(const ::rtl::OUString & aStr)
 {
     aDbgOutResult = rtl::OUStringToOString(aStr, RTL_TEXTENCODING_ASCII_US);
-    return aDbgOutResult.GetBuffer();
+    return aDbgOutResult.getStr();
 }
 
 
