@@ -1739,12 +1739,12 @@ void ScOutputData::FindChanged()
     SCCOL   nX;
     SCSIZE  nArrY;
 
-    sal_Bool bWasIdleDisabled = pDoc->IsIdleDisabled();
-    pDoc->DisableIdle( sal_True );
+    bool bWasIdleDisabled = pDoc->IsIdleDisabled();
+    pDoc->DisableIdle(true);
     for (nArrY=0; nArrY<nArrCount; nArrY++)
         pRowInfo[nArrY].bChanged = false;
 
-    sal_Bool bProgress = false;
+    bool bProgress = false;
     for (nArrY=0; nArrY<nArrCount; nArrY++)
     {
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
@@ -1757,22 +1757,22 @@ void ScOutputData::FindChanged()
                     ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
                     if ( !bProgress && pFCell->GetDirty() )
                     {
-                        ScProgress::CreateInterpretProgress( pDoc, sal_True );
-                        bProgress = sal_True;
+                        ScProgress::CreateInterpretProgress(pDoc, true);
+                        bProgress = true;
                     }
                     if (!pFCell->IsRunning())
                     {
                         (void)pFCell->GetValue();
                         if (pFCell->IsChanged())
                         {
-                            pThisRowInfo->bChanged = sal_True;
+                            pThisRowInfo->bChanged = true;
                             if ( pThisRowInfo->pCellInfo[nX+1].bMerged )
                             {
                                 SCSIZE nOverY = nArrY + 1;
                                 while ( nOverY<nArrCount &&
                                         pRowInfo[nOverY].pCellInfo[nX+1].bVOverlapped )
                                 {
-                                    pRowInfo[nOverY].bChanged = sal_True;
+                                    pRowInfo[nOverY].bChanged = true;
                                     ++nOverY;
                                 }
                             }
