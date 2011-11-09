@@ -29,8 +29,8 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_DEPENDENCIES_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_DEPENDENCIES_HXX
 
-#include "unotools/configmgr.hxx"
 #include "sal/config.h"
+
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "dp_misc_api.hxx"
@@ -44,14 +44,6 @@ namespace dp_misc { class DescriptionInfoset; }
 namespace rtl { class OUString; }
 
 namespace dp_misc {
-
-struct BrandName : public ::rtl::StaticWithInit< ::rtl::OUString, BrandName > {
-    const ::rtl::OUString operator () () {
-        return ::utl::ConfigManager::GetDirectConfigProperty(
-            ::utl::ConfigManager::PRODUCTNAME ).get< ::rtl::OUString >();
-    }
-};
-
 
 /**
    Dependency handling.
@@ -67,10 +59,9 @@ namespace Dependencies {
        a list of the unsatisfied dependencies from <code>infoset</code> (in no
        specific order)
     */
-    DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::dom::XElement > >
-    check(::dp_misc::DescriptionInfoset const & infoset);
+    DESKTOP_DEPLOYMENTMISC_DLLPUBLIC com::sun::star::uno::Sequence<
+        com::sun::star::uno::Reference< com::sun::star::xml::dom::XElement > >
+    check(dp_misc::DescriptionInfoset const & infoset);
 
     /**
        Obtain the (human-readable) error message of a failed dependency.
@@ -81,10 +72,10 @@ namespace Dependencies {
        @return
        the name of the dependency; will never be empty, as a localized
        &ldquo;unknown&rdquo; is substituted for an empty/missing name
-     */
-    DESKTOP_DEPLOYMENTMISC_DLLPUBLIC ::rtl::OUString getErrorText(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::dom::XElement > const & dependency);
+    */
+    DESKTOP_DEPLOYMENTMISC_DLLPUBLIC rtl::OUString getErrorText(
+        com::sun::star::uno::Reference< com::sun::star::xml::dom::XElement >
+            const & dependency);
 }
 
 }

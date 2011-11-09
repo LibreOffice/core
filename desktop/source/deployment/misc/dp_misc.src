@@ -27,14 +27,14 @@
 
 #include "dp_misc.hrc"
 
-String RID_DEPLYOMENT_DEPENDENCIES_UNKNOWN {
+String RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN {
     Text[en-US] = "Unknown";
 };
 
-String RID_DEPLYOMENT_DEPENDENCIES_MIN {
+String RID_DEPLOYMENT_DEPENDENCIES_MIN {
     Text[en-US] = "Extension requires at least %PRODUCTNAME %VERSION";
 };
 
-String RID_DEPLYOMENT_DEPENDENCIES_MAX {
+String RID_DEPLOYMENT_DEPENDENCIES_MAX {
     Text[en-US] = "Extension doesn't support versions greater than: %PRODUCTNAME %VERSION";
 };

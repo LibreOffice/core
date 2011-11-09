@@ -26,22 +26,21 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
-
 #include "sal/config.h"
 
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/xml/dom/XElement.hpp"
-#include "com/sun/star/xml/dom/XNode.hpp"
 #include "com/sun/star/xml/dom/XNodeList.hpp"
+#include "comphelper/string.hxx"
 #include "rtl/bootstrap.hxx"
 #include "rtl/string.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
-#include "tools/string.hxx"
+#include "tools/resid.hxx"
+#include "unotools/configmgr.hxx"
 
 #include "deployment.hrc"
 #include "dp_resource.h"
@@ -52,30 +51,48 @@
 
 namespace {
 
-namespace css = ::com::sun::star;
+namespace css = com::sun::star;
 
 static char const xmlNamespace[] =
     "http://openoffice.org/extensions/description/2006";
 
-bool
-lcl_versionIsNot(dp_misc::Order i_eOrder, ::rtl::OUString const& i_rVersion)
-{
-    ::rtl::OUString aVersion(
+static char const minimalVersion[] = "OpenOffice.org-minimal-version";
+
+static char const maximalVersion[] = "OpenOffice.org-maximal-version";
+
+bool versionIsNot(dp_misc::Order order, rtl::OUString const & version) {
+    rtl::OUString oooVersion(
         RTL_CONSTASCII_USTRINGPARAM(
             "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version")
             ":Version:OOOPackageVersion}"));
-    ::rtl::Bootstrap::expandMacros(aVersion);
-    return ::dp_misc::compareVersions(aVersion, i_rVersion) != i_eOrder;
+    rtl::Bootstrap::expandMacros(oooVersion); //TODO: check for failure
+    return dp_misc::compareVersions(oooVersion, version) != order;
 }
 
-bool satisfiesMinimalVersion(::rtl::OUString const& i_rVersion)
-{
-    return lcl_versionIsNot(dp_misc::LESS, i_rVersion);
+bool satisfiesMinimalVersion(rtl::OUString const & version) {
+    return versionIsNot(dp_misc::LESS, version);
 }
 
-bool satisfiesMaximalVersion(::rtl::OUString const& i_rVersion)
+bool satisfiesMaximalVersion(rtl::OUString const & version) {
+    return versionIsNot(dp_misc::GREATER, version);
+}
+
+rtl::OUString produceErrorText(
+    rtl::OUString const & reason, rtl::OUString const & version)
 {
-    return lcl_versionIsNot(dp_misc::GREATER, i_rVersion);
+    rtl::OUString buf(
+        comphelper::string::searchAndReplaceAsciiL(
+            reason, RTL_CONSTASCII_STRINGPARAM("%VERSION"),
+            (version.isEmpty()
+             ? ResId::toString(
+                 dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN))
+             : version)));
+    return comphelper::string::searchAndReplaceAsciiL(
+        buf, RTL_CONSTASCII_STRINGPARAM("%PRODUCTNAME"),
+        utl::ConfigManager::GetDirectConfigProperty(
+            utl::ConfigManager::PRODUCTNAME).get< rtl::OUString >());
+        //TODO: can fail if the replacement of "%VERSION" introduces an
+        // instance of "%PRODUCTNAME" into the string
 }
 
 }
@@ -85,44 +102,44 @@ namespace dp_misc {
 namespace Dependencies {
 
 css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
-check(::dp_misc::DescriptionInfoset const & infoset) {
+check(dp_misc::DescriptionInfoset const & infoset) {
     css::uno::Reference< css::xml::dom::XNodeList > deps(
         infoset.getDependencies());
-    ::sal_Int32 n = deps->getLength();
+    sal_Int32 n = deps->getLength();
     css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
         unsatisfied(n);
-    ::sal_Int32 unsat = 0;
-    for (::sal_Int32 i = 0; i < n; ++i) {
-        static rtl::OUString const minimalVersion(
-                RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org-minimal-version"));
+    sal_Int32 unsat = 0;
+    for (sal_Int32 i = 0; i < n; ++i) {
         css::uno::Reference< css::xml::dom::XElement > e(
             deps->item(i), css::uno::UNO_QUERY_THROW);
         bool sat = false;
         if (e->getNamespaceURI().equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM(xmlNamespace))
-            && (e->getTagName() == minimalVersion))
+            && e->getTagName().equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM(minimalVersion)))
         {
             sat = satisfiesMinimalVersion(
                 e->getAttribute(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
         } else if (e->getNamespaceURI().equalsAsciiL(
                        RTL_CONSTASCII_STRINGPARAM(xmlNamespace))
                    && e->getTagName().equalsAsciiL(
-                       RTL_CONSTASCII_STRINGPARAM(
-                           "OpenOffice.org-maximal-version")))
+                       RTL_CONSTASCII_STRINGPARAM(maximalVersion)))
         {
             sat = satisfiesMaximalVersion(
                     e->getAttribute(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
         } else if (e->hasAttributeNS(
-                       ::rtl::OUString(
+                       rtl::OUString(
                            RTL_CONSTASCII_USTRINGPARAM(xmlNamespace)),
-                        minimalVersion))
+                       rtl::OUString(
+                           RTL_CONSTASCII_USTRINGPARAM(minimalVersion))))
         {
             sat = satisfiesMinimalVersion(
                 e->getAttributeNS(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(xmlNamespace)),
-                    minimalVersion));
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(xmlNamespace)),
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(minimalVersion))));
         }
         if (!sat) {
             unsatisfied[unsat++] = e;
@@ -132,45 +149,41 @@ check(::dp_misc::DescriptionInfoset const & infoset) {
     return unsatisfied;
 }
 
-::rtl::OUString getErrorText( css::uno::Reference< css::xml::dom::XElement > const & dependency )
+rtl::OUString getErrorText(
+    css::uno::Reference< css::xml::dom::XElement > const & dependency)
 {
-    ::rtl::OUString sReason;
-    ::rtl::OUString sValue;
-    ::rtl::OUString sVersion(RTL_CONSTASCII_USTRINGPARAM("%VERSION"));
-    ::rtl::OUString sProductName(RTL_CONSTASCII_USTRINGPARAM("%PRODUCTNAME"));
-
-    if ( dependency->getNamespaceURI().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( xmlNamespace ) )
-         && dependency->getTagName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OpenOffice.org-minimal-version" ) ) )
+    OSL_ASSERT(dependency.is());
+    if (dependency->getNamespaceURI().equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM(xmlNamespace))
+        && dependency->getTagName().equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM(minimalVersion)))
     {
-        sValue = dependency->getAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "value" ) ) );
-        sReason = ::rtl::OUString( ::String(::dp_misc::getResId(RID_DEPLYOMENT_DEPENDENCIES_MIN)) );
-    }
-    else if ( dependency->getNamespaceURI().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( xmlNamespace ) )
-              && dependency->getTagName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OpenOffice.org-maximal-version" ) ) )
+        return produceErrorText(
+            ResId::toString(dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_MIN)),
+            dependency->getAttribute(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
+    } else if (dependency->getNamespaceURI().equalsAsciiL(
+                   RTL_CONSTASCII_STRINGPARAM(xmlNamespace))
+               && dependency->getTagName().equalsAsciiL(
+                   RTL_CONSTASCII_STRINGPARAM(maximalVersion)))
     {
-        sValue = dependency->getAttribute( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value") ) );
-        sReason = ::rtl::OUString( ::String(::dp_misc::getResId(RID_DEPLYOMENT_DEPENDENCIES_MAX)) );
-    }
-    else if ( dependency->hasAttributeNS( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( xmlNamespace ) ),
-                                          ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenOffice.org-minimal-version" ))))
+        return produceErrorText(
+            ResId::toString(dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_MAX)),
+            dependency->getAttribute(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
+    } else if (dependency->hasAttributeNS(
+                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(xmlNamespace)),
+                   rtl::OUString(
+                       RTL_CONSTASCII_USTRINGPARAM(minimalVersion))))
     {
-        sValue = dependency->getAttributeNS( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( xmlNamespace ) ),
-                                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenOffice.org-minimal-version" ) ) );
-        sReason = ::rtl::OUString( ::String(::dp_misc::getResId(RID_DEPLYOMENT_DEPENDENCIES_MIN)) );
-    }
-    else
-        return ::rtl::OUString( ::String(::dp_misc::getResId(RID_DEPLYOMENT_DEPENDENCIES_UNKNOWN)) );
-
-    if ( sValue.getLength() == 0 )
-        sValue = ::rtl::OUString( ::String(::dp_misc::getResId(RID_DEPLYOMENT_DEPENDENCIES_UNKNOWN)) );
-
-    sal_Int32 nPos = sReason.indexOf( sVersion );
-    if ( nPos >= 0 )
-        sReason = sReason.replaceAt( nPos, sVersion.getLength(), sValue );
-    nPos = sReason.indexOf( sProductName );
-    if ( nPos >= 0 )
-        sReason = sReason.replaceAt( nPos, sProductName.getLength(), BrandName::get() );
-    return sReason;
+        return produceErrorText(
+            ResId::toString(dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_MIN)),
+            dependency->getAttributeNS(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(xmlNamespace)),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(minimalVersion))));
+    } else
+        return ResId::toString(
+            dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN));
 }
 
 }
