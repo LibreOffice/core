@@ -5,8 +5,9 @@ Module: external/redland
 Upstream URL: http://librdf.org/
 
 License: Triple-licensed: LGPL v2+/GPL v2+/Apache v2
-         Note that Sun distributes this software only under LGPL v2
-         (see LICENSE.txt)
+	Note that the Apache Software Foundation distributes
+	this software only under Apache License v2
+         (see LICENSE in the root dir)
 
 Description:
 This module contains the third-party Redland RDF / librdf library, which
