@@ -628,6 +628,8 @@ void ScTabView::GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode 
     {
         nNewX = aViewData.GetRefEndX();
         nNewY = aViewData.GetRefEndY();
+        nCurX = aViewData.GetRefStartX();
+        nCurY = aViewData.GetRefStartY();
     }
     else if (IsBlockMode())
     {
