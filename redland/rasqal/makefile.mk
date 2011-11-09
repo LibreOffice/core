@@ -52,7 +52,6 @@ TARFILE_MD5=fca8706f2c4619e2fa3f8f42f8fc1e9d
 ADDITIONAL_FILES=src/makefile.mk src/rasqal_config.h
 
 OOO_PATCH_FILES= \
-    $(TARFILE_NAME).patch.legal \
     $(TARFILE_NAME).patch.autotools \
     $(TARFILE_NAME).patch.ooo_build \
     $(TARFILE_NAME).patch.dmake \
@@ -64,6 +63,8 @@ PATCH_FILES=$(OOO_PATCH_FILES)
 .IF "$(OS)"=="OS2"
 BUILD_ACTION=dmake
 BUILD_DIR=$(CONFIGURE_DIR)$/src
+ADDITIONAL_FILES+=src/windows.h
+OOO_PATCH_FILES+=$(TARFILE_NAME).patch.os2
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 rasqal_CC=$(CC) -mthreads

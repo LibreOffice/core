@@ -52,7 +52,6 @@ TARFILE_MD5=ca66e26082cab8bb817185a116db809b
 ADDITIONAL_FILES=librdf/makefile.mk librdf/rdf_config.h
 
 OOO_PATCH_FILES= \
-    $(TARFILE_NAME).patch.legal \
     $(TARFILE_NAME).patch.autotools \
     $(TARFILE_NAME).patch.dmake \
     $(TARFILE_NAME).patch.ooo_build \
@@ -64,6 +63,8 @@ PATCH_FILES=$(OOO_PATCH_FILES) \
 .IF "$(OS)"=="OS2"
 BUILD_ACTION=dmake
 BUILD_DIR=$(CONFIGURE_DIR)$/librdf
+ADDITIONAL_FILES+=librdf/windows.h
+OOO_PATCH_FILES+=$(TARFILE_NAME).patch.os2
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 redland_CC=$(CC) -mthreads

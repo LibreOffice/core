@@ -52,7 +52,6 @@ TARFILE_MD5=284e768eeda0e2898b0d5bf7e26a016e
 ADDITIONAL_FILES=src/makefile.mk src/raptor_config.h
 
 OOO_PATCH_FILES= \
-    $(TARFILE_NAME).patch.legal \
     $(TARFILE_NAME).patch.autotools \
     $(TARFILE_NAME).patch.ooo_build \
     $(TARFILE_NAME).patch.dmake \
@@ -64,7 +63,9 @@ PATCH_FILES=$(OOO_PATCH_FILES)
 
 .IF "$(OS)"=="OS2"
 BUILD_ACTION=dmake
-BUILD_DIR=$(CONFIGURE_DIR)$/src
+BUILD_DIR=$(CONFIGURE_DIR)/src
+ADDITIONAL_FILES+=src/windows.h
+OOO_PATCH_FILES+=$(TARFILE_NAME).patch.os2
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 OOO_PATCH_FILES+=$(TARFILE_NAME).patch.mingw
@@ -136,7 +137,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 .ENDIF
 
 
-OUT2INC+=src$/raptor.h
+OUT2INC+=src/raptor.h
 
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=src$/.libs$/libraptor.$(RAPTOR_MAJOR).dylib src$/.libs$/libraptor.dylib

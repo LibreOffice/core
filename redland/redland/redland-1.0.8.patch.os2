@@ -1,0 +1,12 @@
+--- misc/redland-1.0.8/librdf/windos.h	Thu Nov  6 15:25:51 2008
++++ misc/build/redland-1.0.8/librdf/windows.h	Thu Nov  6 15:33:14 2008
+@@ -1,1 +1,8 @@
+-dummy
++#define BOOL
++#define APIENTRY
++#define HANDLE int
++#define DWORD int
++#define LPVOID void*
++#define TRUE 1
++#define FALSE 0
++typedef unsigned long long __int64;

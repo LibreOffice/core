@@ -1,6 +1,6 @@
 --- misc/rasqal-0.9.16/src/makefile.mk	Thu Nov  6 15:56:45 2008
 +++ misc/build/rasqal-0.9.16/src/makefile.mk	Thu Nov  6 15:55:09 2008
-@@ -1,1 +1,94 @@
+@@ -1,1 +1,97 @@
 -dummy
 +#*************************************************************************
 +#
@@ -82,6 +82,9 @@
 +SHL1IMPLIB= lib$(TARGET)
 +
 +#SHL1VERSIONMAP=../service/exports.map
++.IF "$(GUI)"=="OS2"
++SHL1VERSIONMAP=$(PRJ)/rasqal/rasqal2.map
++.ENDIF
 +SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 +DEF1NAME=$(SHL1TARGET)
 +

@@ -1,0 +1,11 @@
+--- misc/raptor-1.4.18/src/windos.h	Thu Nov  6 15:25:51 2008
++++ misc/build/raptor-1.4.18/src/windows.h	Thu Nov  6 15:33:14 2008
+@@ -1,1 +1,7 @@
+-dummy
++#define BOOL
++#define APIENTRY
++#define HANDLE int
++#define DWORD int
++#define LPVOID void*
++#define TRUE 1
++#define FALSE 0

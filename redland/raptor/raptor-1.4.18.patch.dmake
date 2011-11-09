@@ -1,6 +1,6 @@
 --- misc/raptor-1.4.18/src/makefile.mk	Thu Nov  6 15:25:51 2008
 +++ misc/build/raptor-1.4.18/src/makefile.mk	Thu Nov  6 15:33:14 2008
-@@ -1,1 +1,119 @@
+@@ -1,1 +1,122 @@
 -dummy
 +#*************************************************************************
 +#
@@ -108,6 +108,9 @@
 +SHL1IMPLIB= lib$(TARGET)
 +
 +#SHL1VERSIONMAP=../service/exports.map
++.IF "$(GUI)"=="OS2"
++SHL1VERSIONMAP=$(PRJ)/raptor/raptor2.map
++.ENDIF
 +SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 +DEF1NAME=$(SHL1TARGET)
 +

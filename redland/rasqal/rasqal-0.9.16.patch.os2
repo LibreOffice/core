@@ -1,0 +1,5 @@
+--- misc/rasqal-0.9.16/src/windos.h	Thu Nov  6 15:25:51 2008
++++ misc/build/rasqal-0.9.16/src/windows.h	Thu Nov  6 15:33:14 2008
+@@ -1,1 +1,1 @@
+-dummy
++/* dummy */
