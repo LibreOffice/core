@@ -63,7 +63,7 @@ bool versionIsNot(dp_misc::Order order, rtl::OUString const & version) {
     rtl::OUString oooVersion(
         RTL_CONSTASCII_USTRINGPARAM(
             "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version")
-            ":Version:OOOPackageVersion}"));
+            ":Version:ReferenceOOoMajorMinor}"));
     rtl::Bootstrap::expandMacros(oooVersion); //TODO: check for failure
     return dp_misc::compareVersions(oooVersion, version) != order;
 }

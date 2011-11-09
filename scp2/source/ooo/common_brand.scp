@@ -1099,6 +1099,14 @@ ProfileItem gid_Brand_Profileitem_Version_Extensionupdateurl
     Value = "http://updateexte.libreoffice.org/ExtensionUpdateService/check.Update";
 End
 
+ProfileItem gid_Brand_Profileitem_Version_ReferenceOOoMajorMinor
+    ProfileID = gid_Brand_Profile_Version_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Version";
+    Key = "ReferenceOOoMajorMinor";
+    Value = "${REFERENCEOOOMAJORMINOR}";
+End
+
 ProfileItem gid_Brand_Profileitem_Fundamental_Brand_Base_Dir
     ModuleID = gid_Module_Root_Brand;
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
