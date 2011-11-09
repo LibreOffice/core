@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
+#include <comphelper/string.hxx>
 #include <string.h>
 #include <rtl/strbuf.hxx>
 #include <vcl/svapp.hxx>
@@ -250,18 +251,17 @@ sal_uLong ImageMap::Read( SvStream& rIStm, sal_uLong nFormat, const String& rBas
 
 sal_uLong ImageMap::ImpReadCERN( SvStream& rIStm, const String& rBaseURL )
 {
-    ByteString aStr;
-
     // alten Inhalt loeschen
     ClearImageMap();
 
+    rtl::OString aStr;
     while ( rIStm.ReadLine( aStr ) )
         ImpReadCERNLine( aStr, rBaseURL );
 
     return IMAP_ERR_OK;
 }
 
-void ImageMap::ImpReadCERNLine( const ByteString& rLine, const String& rBaseURL  )
+void ImageMap::ImpReadCERNLine( const rtl::OString& rLine, const String& rBaseURL  )
 {
     ByteString  aStr( rLine );
 
@@ -394,18 +394,17 @@ String ImageMap::ImpReadCERNURL( const char** ppStr, const String& rBaseURL )
 
 sal_uLong ImageMap::ImpReadNCSA( SvStream& rIStm, const String& rBaseURL )
 {
-    ByteString aStr;
-
     // alten Inhalt loeschen
     ClearImageMap();
 
+    rtl::OString aStr;
     while ( rIStm.ReadLine( aStr ) )
         ImpReadNCSALine( aStr, rBaseURL );
 
     return IMAP_ERR_OK;
 }
 
-void ImageMap::ImpReadNCSALine( const ByteString& rLine, const String& rBaseURL )
+void ImageMap::ImpReadNCSALine( const rtl::OString& rLine, const String& rBaseURL )
 {
     ByteString  aStr( rLine );
 
@@ -532,20 +531,22 @@ sal_uLong ImageMap::ImpDetectFormat( SvStream& rIStm )
     // untersuchen wir das Format
     if ( memcmp( cMagic, IMAPMAGIC, sizeof( cMagic ) ) )
     {
-        ByteString  aStr;
         long        nCount = 128;
 
         rIStm.Seek( nPos );
+        rtl::OString aStr;
         while ( rIStm.ReadLine( aStr ) && nCount-- )
         {
-            aStr.ToLowerAscii();
+            aStr = aStr.toAsciiLowerCase();
 
-            if ( ( aStr.Search( "rect" ) != STRING_NOTFOUND ) ||
-                 ( aStr.Search( "circ" ) != STRING_NOTFOUND ) ||
-                 ( aStr.Search( "poly" ) != STRING_NOTFOUND ) )
+            using comphelper::string::indexOfL;
+
+            if ( (indexOfL(aStr, RTL_CONSTASCII_STRINGPARAM("rect")) != -1) ||
+                 (indexOfL(aStr, RTL_CONSTASCII_USTRINGPARAM("circ")) != -1) ||
+                 (indexOfL(aStr, RTL_CONSTASCII_USTRINGPARAM("poly")) != -1) )
             {
-                if ( ( aStr.Search( '(' ) != STRING_NOTFOUND ) &&
-                     ( aStr.Search( ')' ) != STRING_NOTFOUND ) )
+                if ( ( aStr.indexOf('(') != -1 ) &&
+                     ( aStr.indexOf(')') != -1 ) )
                 {
                     nRet = IMAP_FORMAT_CERN;
                 }

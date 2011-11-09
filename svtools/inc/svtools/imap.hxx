@@ -67,12 +67,12 @@ protected:
     sal_uLong           ImpReadCERN( SvStream& rOStm, const String& rBaseURL );
     sal_uLong           ImpReadNCSA( SvStream& rOStm, const String& rBaseURL );
 
-    void                ImpReadCERNLine( const ByteString& rLine, const String& rBaseURL );
+    void                ImpReadCERNLine( const rtl::OString& rLine, const String& rBaseURL );
     Point               ImpReadCERNCoords( const char** ppStr );
     long                ImpReadCERNRadius( const char** ppStr );
     String              ImpReadCERNURL( const char** ppStr, const String& rBaseURL );
 
-    void                ImpReadNCSALine( const ByteString& rLine, const String& rBaseURL );
+    void                ImpReadNCSALine( const rtl::OString& rLine, const String& rBaseURL );
     String              ImpReadNCSAURL( const char** ppStr, const String& rBaseURL );
     Point               ImpReadNCSACoords( const char** ppStr );
 

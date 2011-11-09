@@ -53,6 +53,7 @@ public:
     void testIsdigitAsciiString();
     void testIsalnumAsciiString();
     void testIsupperAsciiString();
+    void testIndexOfL();
 
     CPPUNIT_TEST_SUITE(TestString);
     CPPUNIT_TEST(testSearchAndReplaceAsciiL);
@@ -63,6 +64,7 @@ public:
     CPPUNIT_TEST(testIsdigitAsciiString);
     CPPUNIT_TEST(testIsalnumAsciiString);
     CPPUNIT_TEST(testIsupperAsciiString);
+    CPPUNIT_TEST(testIndexOfL);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -145,6 +147,23 @@ void TestString::testIsupperAsciiString()
 
     rtl::OString s3(RTL_CONSTASCII_STRINGPARAM("AABB"));
     CPPUNIT_ASSERT_EQUAL(comphelper::string::isupperAsciiString(s3), true);
+}
+
+void TestString::testIndexOfL()
+{
+    rtl::OString s1(RTL_CONSTASCII_STRINGPARAM("one two three"));
+
+    CPPUNIT_ASSERT_EQUAL(comphelper::string::indexOfL(s1,
+        RTL_CONSTASCII_STRINGPARAM("one")), 0);
+
+    CPPUNIT_ASSERT_EQUAL(comphelper::string::indexOfL(s1,
+        RTL_CONSTASCII_STRINGPARAM("two")), 4);
+
+    CPPUNIT_ASSERT_EQUAL(comphelper::string::indexOfL(s1,
+        RTL_CONSTASCII_STRINGPARAM("four")), -1);
+
+    CPPUNIT_ASSERT_EQUAL(comphelper::string::indexOfL(s1,
+        RTL_CONSTASCII_STRINGPARAM("two"), 5), -1);
 }
 
 using namespace ::com::sun::star;

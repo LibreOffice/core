@@ -251,6 +251,29 @@ COMPHELPER_DLLPUBLIC inline sal_Bool matchL(const rtl::OString& rStr, const char
         rStr.pData->length-fromIndex, pMatch, nMatchLen, nMatchLen ) == 0;
 }
 
+/**
+  Returns the index within this string of the first occurrence of the
+  specified substring, starting at the specified index.
+
+  If str doesn't include any character, always -1 is
+  returned. This is also the case, if both strings are empty.
+
+  @param    rStr        The string that pSearch will be searched within.
+  @param    pSearch     the substring to search for.
+  @param    nSearchLen  the length of pSearch
+  @param    fromIndex   the index to start the search from.
+  @return   If the string argument occurs one or more times as a substring
+            within this string at the starting index, then the index
+            of the first character of the first such substring is
+            returned. If it does not occur as a substring starting
+            at fromIndex or beyond, -1 is returned.
+*/
+COMPHELPER_DLLPUBLIC inline sal_Int32 indexOfL(const rtl::OString& rStr, const char *pSearch, sal_Int32 nSearchLen, sal_Int32 fromIndex = 0) SAL_THROW(())
+{
+    sal_Int32 ret = rtl_str_indexOfStr_WithLength(rStr.pData->buffer+fromIndex,
+        rStr.pData->length-fromIndex, pSearch, nSearchLen);
+    return (ret < 0 ? ret : ret+fromIndex);
+}
 
 namespace detail
 {
