@@ -51,7 +51,11 @@ PYFILES = $(BIN)$/const.py \
 .IGNORE : create_pyc 
 ALLTAR : create_pyc 
 create_pyc : $(PYFILES)
+.IF "$(GUI)"=="OS2"
+    @$(PYTHON) $(BIN)/xtxex.py > /dev/null
+.ELSE
     @$(PYTHON) $(BIN)/xtxex.py >& /dev/null
+.ENDIF
 
 $(BIN)$/%.py : tool/%.py
     @$(COPY) $< $@
