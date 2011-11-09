@@ -368,8 +368,8 @@ long MacPluginComm::doIt()
                 ? (*m_aNPPfuncs.newp)(
                     (NPMIMEType)m_aArgs[0],
                     (NPP)m_aArgs[1],
-                    (uint16)(sal_IntPtr)m_aArgs[2],
-                    (int16)(sal_IntPtr)m_aArgs[3],
+                    (uint16_t)(sal_IntPtr)m_aArgs[2],
+                    (int16_t)(sal_IntPtr)m_aArgs[3],
                     (char**)m_aArgs[4],
                     (char**)m_aArgs[5],
                     (NPSavedData*)m_aArgs[6] )
@@ -392,7 +392,7 @@ long MacPluginComm::doIt()
                     (NPMIMEType)m_aArgs[1],
                     (NPStream*)m_aArgs[2],
                     (NPBool)(sal_IntPtr)m_aArgs[3],
-                    (uint16*)m_aArgs[4] )
+                    (uint16_t*)m_aArgs[4] )
                 : NPERR_GENERIC_ERROR);
         break;
     case eNPP_Print:
@@ -442,13 +442,13 @@ long MacPluginComm::doIt()
                 m_aArgs[3] );
         break;
     case eNPP_Write:
-        TRACEN( "eNPP_Write n=", (int32)m_aArgs[3] );
+        TRACEN( "eNPP_Write n=", (int32_t)m_aArgs[3] );
         nRet = (m_aNPPfuncs.write
                 ? (*m_aNPPfuncs.write)(
                     (NPP)m_aArgs[0],
                     (NPStream*)m_aArgs[1],
-                    (int32)m_aArgs[2],
-                    (int32)m_aArgs[3],
+                    (int32_t)m_aArgs[2],
+                    (int32_t)m_aArgs[3],
                     m_aArgs[4] )
                 : 0);
         break;
@@ -540,7 +540,7 @@ NPError MacPluginComm::NPP_DestroyStream( NPP instance, NPStream* stream, NPErro
 }
 
 //--------------------------------------------------------------------------------------------------
-NPError MacPluginComm::NPP_New( NPMIMEType pluginType, NPP instance, uint16 mode, int16 argc,
+NPError MacPluginComm::NPP_New( NPMIMEType pluginType, NPP instance, uint16_t mode, int16_t argc,
                                   char* argn[], char* argv[], NPSavedData *saved )
 {
     XPlugin_Impl* pImpl = XPluginManager_Impl::getXPluginFromNPP( instance );
@@ -553,7 +553,7 @@ NPError MacPluginComm::NPP_New( NPMIMEType pluginType, NPP instance, uint16 mode
     #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "NPP_New( %s. %p, %d, %d",
              pluginType, instance, (int)mode, (int)argc );
-    for( int16 i = 0; i < argc; i++ )
+    for( int16_t i = 0; i < argc; i++ )
     fprintf( stderr, "\n%s = %s", argn[i], argv[i] );
     fprintf( stderr, ", %p )\n", saved );
     #endif
@@ -571,7 +571,7 @@ NPError MacPluginComm::NPP_New( NPMIMEType pluginType, NPP instance, uint16 mode
 
 //--------------------------------------------------------------------------------------------------
 NPError MacPluginComm::NPP_NewStream( NPP instance, NPMIMEType type, NPStream* stream,
-                                        NPBool seekable, uint16* stype )
+                                        NPBool seekable, uint16_t* stype )
 {
     DBG_ASSERT( m_aNPPfuncs.newstream, "### NPP_NewStream(): null pointer in NPP functions table!" );
     m_eCall = eNPP_NewStream;
@@ -637,7 +637,7 @@ void MacPluginComm::NPP_URLNotify( NPP instance, const char* url, NPReason reaso
 }
 
 //--------------------------------------------------------------------------------------------------
-int32 MacPluginComm::NPP_Write( NPP instance, NPStream* stream, int32 offset, int32 len, void* buffer )
+int32_t MacPluginComm::NPP_Write( NPP instance, NPStream* stream, int32_t offset, int32_t len, void* buffer )
 {
     DBG_ASSERT( m_aNPPfuncs.write, "### NPP_Write(): null pointer in NPP functions table!" );
     m_eCall = eNPP_Write;
@@ -650,7 +650,7 @@ int32 MacPluginComm::NPP_Write( NPP instance, NPStream* stream, int32 offset, in
 }
 
 //--------------------------------------------------------------------------------------------------
-int32 MacPluginComm::NPP_WriteReady( NPP instance, NPStream* stream )
+int32_t MacPluginComm::NPP_WriteReady( NPP instance, NPStream* stream )
 {
     DBG_ASSERT( m_aNPPfuncs.writeready, "### NPP_WriteReady(): null pointer in NPP functions table!" );
     m_eCall = eNPP_WriteReady;
@@ -805,7 +805,7 @@ void MacPluginComm::drawView( XPlugin_Impl* i_pImpl )
     NSWindow* pWin = [rPlugData.m_pPlugView window];
     FakeEventRecord aRec;
     aRec.what       =  updateEvt;
-    aRec.message    = (UInt32)[pWin windowRef];
+    aRec.message    = (uint32_t)[pWin windowRef];
     this->NPP_HandleEvent( i_pImpl->getNPPInstance(), &aRec );
 }
 
