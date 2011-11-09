@@ -530,24 +530,4 @@ void SvtInetOptions::flush()
     m_pImpl->flush();
 }
 
-//============================================================================
-void
-SvtInetOptions::addPropertiesChangeListener(
-    star::uno::Sequence< rtl::OUString > const & rPropertyNames,
-    star::uno::Reference< star::beans::XPropertiesChangeListener > const &
-        rListener)
-{
-    m_pImpl->addPropertiesChangeListener(rPropertyNames, rListener);
-}
-
-//============================================================================
-void
-SvtInetOptions::removePropertiesChangeListener(
-    star::uno::Sequence< rtl::OUString > const & rPropertyNames,
-    star::uno::Reference< star::beans::XPropertiesChangeListener > const &
-        rListener)
-{
-    m_pImpl->removePropertiesChangeListener(rPropertyNames, rListener);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

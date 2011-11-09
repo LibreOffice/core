@@ -43,10 +43,6 @@ namespace rtl { class OUString; }
 //============================================================================
 /** The names of all the properties (options) accessible through
     SvtInetOptions.
-
-    @descr  These names are used in the methods
-    SvtInetOptions::addPropertiesChangeListener() and
-    SvtInetOptions::removePropertiesChangeListener().
  */
 #define SVT_INET_OPTION_PROXY_NO_PROXY "Inet/Proxy/NoProxy"
 #define SVT_INET_OPTION_PROXY_TYPE "Inet/Proxy/Type"
@@ -94,40 +90,6 @@ public:
     void SetProxyHttpPort(sal_Int32 nValue, bool bFlush = false);
 
     void flush();
-
-    /** Add a listener on changes of certain properties (options).
-
-        @param rPropertyNames  The names of the properties (options).  If an
-        empty sequence is used, nothing is done.
-
-        @param rListener  A listener.  If the listener is already registered
-        on other properties, it continues to also get notifications about
-        changes of those properties.  The
-        com::sun::star::beans::PropertyChangeEvents supplied to the listener
-        will have void OldValue and NewValue slots.
-     */
-    void
-    addPropertiesChangeListener(
-        com::sun::star::uno::Sequence< rtl::OUString > const & rPropertyNames,
-        com::sun::star::uno::Reference<
-                com::sun::star::beans::XPropertiesChangeListener > const &
-            rListener);
-
-    /** Remove a listener on changes of certain properties (options).
-
-        @param rPropertyNames  The names of the properties (options).  If an
-        empty sequence is used, nothing is done.
-
-        @param rListener  A listener.  If the listener is still registered on
-        other properties, it continues to get notifications about changes of
-        those properties.
-     */
-    void
-    removePropertiesChangeListener(
-        com::sun::star::uno::Sequence< rtl::OUString > const & rPropertyNames,
-        com::sun::star::uno::Reference<
-                com::sun::star::beans::XPropertiesChangeListener > const &
-            rListener);
 
 private:
     class Impl;

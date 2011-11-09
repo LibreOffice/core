@@ -556,7 +556,6 @@ SdrPaintView::PostPaint()
 SdrPaintView::SetAllLayersLocked(unsigned char)
 SdrPaintView::SetAllLayersPrintable(unsigned char)
 SdrPaintView::SetAllLayersVisible(unsigned char)
-SdrPaintView::getColorConfig() const
 SdrPaintWindow::HideOverlay(Region const&)
 SdrPolyEditView::ShutMarkedObjects()
 SdrSnapView::SnapRect(Rectangle const&, SdrPageView const*, long&, long&) const
@@ -813,8 +812,6 @@ SvtIconChoiceCtrl::InsertEntry(unsigned long, Point const*, unsigned short)
 SvtIconChoiceCtrl::SetUpdateMode(unsigned char)
 SvtIconChoiceCtrl::SvtIconChoiceCtrl(Window*, ResId const&)
 SvtIconWindow_Impl::GetSelectedIconText() const
-SvtInetOptions::addPropertiesChangeListener(com::sun::star::uno::Sequence<rtl::OUString> const&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> const&)
-SvtInetOptions::removePropertiesChangeListener(com::sun::star::uno::Sequence<rtl::OUString> const&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> const&)
 SvtInternalOptions::CrashMailEnabled() const
 SvtInternalOptions::IsRemoveMenuEntryBackToWebtop() const
 SvtInternalOptions::IsRemoveMenuEntryClose() const

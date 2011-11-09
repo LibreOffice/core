@@ -46,7 +46,6 @@ class HeaderBar;
 #include <readonlyimage.hxx>
 
 class SfxFilter;
-class SvtInetOptions;
 
 #ifndef SV_NODIALOG
 #define PROXY_CONTROLS  23
