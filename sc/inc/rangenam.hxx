@@ -72,7 +72,7 @@ class ScTokenArray;
 class ScRangeData
 {
 private:
-    String          aName;
+    rtl::OUString   aName;
     rtl::OUString   aUpperName;     // #i62977# for faster searching (aName is never modified after ctor)
     ScTokenArray*   pCode;
     ScAddress       aPos;
@@ -95,18 +95,18 @@ public:
     typedef ::std::map<sal_uInt16, sal_uInt16> IndexMap;
 
     SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
-                                 const String& rName,
+                                 const rtl::OUString& rName,
                                  const String& rSymbol,
                                  const ScAddress& rAdr = ScAddress(),
                                  RangeType nType = RT_NAME,
                                  const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT );
     SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
-                                 const String& rName,
+                                 const rtl::OUString& rName,
                                  const ScTokenArray& rArr,
                                  const ScAddress& rAdr = ScAddress(),
                                  RangeType nType = RT_NAME );
     SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
-                                 const String& rName,
+                                 const rtl::OUString& rName,
                                  const ScAddress& rTarget );
                                 // rTarget is ABSPOS jump label
                     ScRangeData(const ScRangeData& rScRangeData, ScDocument* pDocument = NULL);
@@ -115,8 +115,8 @@ public:
 
     bool            operator== (const ScRangeData& rData) const;
 
-    void            GetName( String& rName ) const  { rName = aName; }
-    const String&   GetName( void ) const           { return aName; }
+    void            GetName( rtl::OUString& rName ) const  { rName = aName; }
+    const rtl::OUString&   GetName( void ) const           { return aName; }
     const rtl::OUString&   GetUpperName( void ) const      { return aUpperName; }
     ScAddress       GetPos() const                  { return aPos; }
     // The index has to be unique. If index=0 a new index value is assigned.

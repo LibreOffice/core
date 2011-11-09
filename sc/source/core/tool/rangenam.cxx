@@ -64,7 +64,7 @@ ScRangeData::ScRangeData( sal_uInt16 n )
 {}
 
 ScRangeData::ScRangeData( ScDocument* pDok,
-                          const String& rName,
+                          const rtl::OUString& rName,
                           const String& rSymbol,
                           const ScAddress& rAddress,
                           RangeType nType,
@@ -96,7 +96,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
 }
 
 ScRangeData::ScRangeData( ScDocument* pDok,
-                          const String& rName,
+                          const rtl::OUString& rName,
                           const ScTokenArray& rArr,
                           const ScAddress& rAddress,
                           RangeType nType ) :
@@ -127,7 +127,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
 }
 
 ScRangeData::ScRangeData( ScDocument* pDok,
-                          const String& rName,
+                          const rtl::OUString& rName,
                           const ScAddress& rTarget ) :
                 aName       ( rName ),
                 aUpperName  ( ScGlobal::pCharClass->upper( rName ) ),

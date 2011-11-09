@@ -4758,7 +4758,7 @@ sal_Bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, sal_Bool bApi )
             qsort( (void*)ppSortArray, nValidCount, sizeof(ScRangeData*),
                 ICCQsortNameCompare );
 #endif
-            String aName;
+            rtl::OUString aName;
             rtl::OUStringBuffer aContent;
             String aFormula;
             SCROW nOutRow = nStartRow;
