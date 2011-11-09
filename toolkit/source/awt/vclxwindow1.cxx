@@ -36,6 +36,8 @@
 #include <tools/prewin.h>
 #include <windows.h>
 #include <tools/postwin.h>
+#elif defined ( OS2 )
+#include <svpm.h>
 #elif defined ( QUARTZ )
 #include "premac.h"
 #include <Cocoa/Cocoa.h>

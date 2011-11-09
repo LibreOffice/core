@@ -9,6 +9,9 @@ TARGET=source
 .IF "$(GUI)"=="WNT"
 SYSLICBASE=license.txt license.html license.rtf
 SYSLICDEST=$(MISC)$/license$/wnt
+.ELIF "$(GUI)"=="OS2"
+SYSLICBASE=license.txt license.html license.rtf
+SYSLICDEST=$(MISC)$/license$/os2
 .ELSE          # "$(GUI)"=="WNT"
 SYSLICBASE=LICENSE LICENSE.html
 SYSLICDEST=$(MISC)$/license$/unx

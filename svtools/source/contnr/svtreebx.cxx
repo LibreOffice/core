@@ -1508,9 +1508,6 @@ void SvTreeListBox::ImplInitStyle()
         GetModel()->SetSortMode( SortNone );
         GetModel()->SetCompareHdl( Link() );
     }
-#ifdef OS2
-    nWindowStyle |= WB_VSCROLL;
-#endif
     pImp->SetStyle( nWindowStyle );
     pImp->Resize();
     Invalidate();

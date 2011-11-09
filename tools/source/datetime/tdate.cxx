@@ -142,7 +142,7 @@ static void DaysToDate( long nDays,
 Date::Date()
 {
 #if defined( OS2 )
-    DATETIME aDateTime;
+    PM_DATETIME aDateTime;
     DosGetDateTime( &aDateTime );
 
     // Datum zusammenbauen

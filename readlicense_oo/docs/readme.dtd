@@ -11,8 +11,8 @@
 <!ELEMENT Paragraph (Text | List)*>
 <!ATTLIST Paragraph
 	id CDATA #REQUIRED
-	gui (all | UNX | WNT) "all"
-	os (none | all | SOLARIS | LINUX | WNT | MACOSX) "all"
+	gui (all |OS2 | UNX | WNT) "all"
+	os (none | all | OS2 | SOLARIS | LINUX | WNT | MACOSX) "all"
 	cpuname (all | SPARC | INTEL | POWERPC) "all"
 	com (all | C50 | C52 | GCC | MSC) "all"
 	localized (true | false) "true"

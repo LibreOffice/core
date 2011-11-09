@@ -96,7 +96,7 @@ static Time Sec100ToTime( sal_Int32 nSec100 )
 Time::Time()
 {
 #if defined( OS2 )
-    DATETIME aDateTime;
+    PM_DATETIME aDateTime;
     DosGetDateTime( &aDateTime );
 
     // Zeit zusammenbauen
@@ -316,7 +316,7 @@ Time Time::GetUTCOffset()
 {
 #if defined( OS2 )
 #undef timezone
-    DATETIME aDateTime;
+    PM_DATETIME aDateTime;
     DosGetDateTime( &aDateTime );
 
     // Zeit zusammenbauen

@@ -21,7 +21,7 @@
 	<body>
 	<table border='1' style='border-collapse:collapse;' cellpadding='5'>
 	<tr>
-	<th>attribs</th><th class="wnt">WNT</th><th class="mac">MAC</th><th class="soli">SOLI</th><th class="solx">SOLX</th><th class="unx">UNX</th><th>none</th><th>all</th><th>Content</th>
+	<th>attribs</th><th class="wnt">WNT</th><th class="os2">OS2</th><th class="mac">MAC</th><th class="soli">SOLI</th><th class="solx">SOLX</th><th class="unx">UNX</th><th>none</th><th>all</th><th>Content</th>
 	</tr>
 	<xsl:apply-templates />
 	</table>
@@ -42,6 +42,7 @@
 				<xsl:if test="@os">os=<xsl:value-of select="@os"/></xsl:if><xsl:text> </xsl:text><xsl:if test="@gui">gui=<xsl:value-of select="@gui"/></xsl:if>
 			</td>
 			<th class="wnt"><xsl:if test="@os='WNT' or @gui='WNT'">WNT</xsl:if></th>
+			<th class="os2"><xsl:if test="@os='OS2' or @gui='WNT'">OS2</xsl:if></th>
 			<th class="mac"><xsl:if test="@os='MACOSX'">MAC</xsl:if></th>
 			<th class="soli"><xsl:if test="@os='SOLARIS' and @cpuname='INTEL'">SOLI</xsl:if></th>
 			<th class="solx"><xsl:if test="@os='SOLARIS' and @cpuname='SPARC'">SOLX</xsl:if></th>

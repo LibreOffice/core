@@ -59,7 +59,7 @@ String ToLowerImpl( const String& );
 
 #define START_DRV       'a'
 
-inline BOOL DRIVE_EXISTS( char c )
+inline PM_BOOL DRIVE_EXISTS( char c )
 {
     ULONG  nCur, nMap;
     APIRET nRet = DosQueryCurrentDisk( &nCur, &nMap );

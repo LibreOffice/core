@@ -23,7 +23,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
-#ifdef UNX
+#if defined(UNX) || defined(OS2)
 #include <unistd.h>
 #endif
 

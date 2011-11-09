@@ -85,7 +85,7 @@ void GlobalDeInitTools()
 #if defined WNT
     ImpDeInitWinTools();
 #endif
-#ifdef OS2
+#ifdef OS2_YD_REMOVEME
     ImpDeInitOS2Tools();
 #endif
 }

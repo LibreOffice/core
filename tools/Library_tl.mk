@@ -126,6 +126,12 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
 ))
 endif
 
+ifeq ($(GUI),OS2)
+$(eval $(call gb_Library_add_exception_objects,tl,\
+    tools/os2/source/dll/toolsdll \
+))
+endif
+
 ifeq ($(SYSTEM_ZLIB),YES)
 $(eval $(call gb_Library_set_cxxflags,tl,\
     $$(CXXFLAGS) \

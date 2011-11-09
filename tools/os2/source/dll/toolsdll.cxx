@@ -21,13 +21,7 @@
 
 
 
-#ifndef _SHL_HXX
 #include <tools/shl.hxx>
-#endif
-
-#ifndef _DLL_HXX
-#include <dll.hxx>
-#endif
 
 // =======================================================================
 
@@ -35,7 +29,7 @@ static void* aAppData[SHL_COUNT];
 
 // -----------------------------------------------------------------------
 
-void** GetAppData( USHORT nSharedLib )
+void** GetAppData( sal_uInt16 nSharedLib )
 {
     return &(aAppData[nSharedLib]);
 }

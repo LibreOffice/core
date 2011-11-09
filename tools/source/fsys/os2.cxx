@@ -49,8 +49,8 @@ DECLARE_LIST( FSysSortList, FSysSort* );
 DECLARE_LIST( FileStatList, FileStat* );
 
 static char sCaseMap[256];
-static BOOL bCaseMap = FALSE;
-static BOOL bDriveMap = FALSE;
+static sal_Bool bCaseMap = FALSE;
+static sal_Bool bDriveMap = FALSE;
 
 struct DriveMapItem
 {
@@ -64,7 +64,7 @@ void CreateDriveMapImpl();
 
 static DriveMapItem aDriveMap[26];
 
-static BOOL   bLastCaseSensitive    = FALSE;
+static sal_Bool   bLastCaseSensitive    = FALSE;
 
 //====================================================================
 
@@ -146,7 +146,7 @@ char* volumeid( const char* pPfad )
 |*
 *************************************************************************/
 
-BOOL DirEntry::ToAbs()
+sal_Bool DirEntry::ToAbs()
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
@@ -207,7 +207,7 @@ String DirEntry::GetVolume() const
 |*
 *************************************************************************/
 
-BOOL DirEntry::SetCWD( BOOL bSloppy ) const
+sal_Bool DirEntry::SetCWD( sal_Bool bSloppy ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
@@ -242,7 +242,7 @@ BOOL DirEntry::SetCWD( BOOL bSloppy ) const
 *************************************************************************/
 
 #if 0 // YD see dirent.cxx
-BOOL createLongNameEA( const PCSZ pszPath, ULONG ulAttributes, const String& aLongName );
+sal_Bool createLongNameEA( const PCSZ pszPath, ULONG ulAttributes, const String& aLongName );
 
 FSysError DirEntry::MoveTo( const DirEntry& rDest ) const
 {
@@ -450,7 +450,7 @@ struct _FSYS_FSQBUFFER
     UCHAR       sBuf[256];
 };
 
-BOOL FileStat::Update( const DirEntry& rDirEntry, BOOL bAccessRemovableDevice )
+sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bAccessRemovableDevice )
 {
     nSize = 0;
     FSysPathStyle eStyle = FSYS_STYLE_UNKNOWN;
@@ -604,7 +604,7 @@ BOOL FileStat::Update( const DirEntry& rDirEntry, BOOL bAccessRemovableDevice )
     return TRUE;
 }
 
-BOOL IsRedirectable_Impl( const ByteString &rPath )
+sal_Bool IsRedirectable_Impl( const ByteString &rPath )
 {
     if ( rPath.Len() >= 3 && ':' == rPath.GetBuffer()[1] )
     {
@@ -616,7 +616,7 @@ BOOL IsRedirectable_Impl( const ByteString &rPath )
 }
 
 #if 0
-BOOL IsRedirectable_Impl( const String &rPath )
+sal_Bool IsRedirectable_Impl( const String &rPath )
 {
     if ( rPath.Len() >= 3 && ':' == rPath.GetStr()[1] )
     {
@@ -643,7 +643,7 @@ const char* TempDirImpl( char *pBuf )
 {
     PSZ         pVar;
     USHORT      nRet;
-    BOOL        bAppendTemp = FALSE; // mu\s noch \\temp angeh"angt werden
+    sal_Bool        bAppendTemp = FALSE; // mu\s noch \\temp angeh"angt werden
 
     // Erstmal sehen, ob TEMP oder TMP gesetzt sind
     nRet = DosScanEnv( (PSZ)"TEMP", &pVar );
@@ -659,7 +659,7 @@ const char* TempDirImpl( char *pBuf )
     // falls das geklappt hat, und ein Backslash dranhaengt,
     // oder falls es bisher nicht geklappt hat,
     // muessen wir nachher einen Backslash entfernen
-    BOOL bRemoveBS = nRet || *(pVar+strlen(pVar)-1) == '\\';
+    sal_Bool bRemoveBS = nRet || *(pVar+strlen(pVar)-1) == '\\';
 
     // Keine temp-Variable gefunden, dann gehen wir mal auf die Suche
     // nach dem System-Laufwerk
@@ -790,7 +790,7 @@ void CreateDriveMapImpl()
     DosError(FERR_DISABLEHARDERR);
 
     // determine number of floppy-drives
-    BYTE nFloppies;
+    PM_BYTE nFloppies;
     nRet = DosDevConfig( (void*) &nFloppies, DEVINFO_FLOPPY );
 
     // reset the map
@@ -812,7 +812,7 @@ void CreateDriveMapImpl()
     for ( nDrive = 2; nDrive < 26; ++nDrive )
     {
         // open drive
-        BOOL bFixed;
+        sal_Bool bFixed;
         HFILE nDevHandle;
         char pDriveName[3] = "#:";
         pDriveName[0] = nDrive+'a';
@@ -826,7 +826,7 @@ void CreateDriveMapImpl()
         if ( !nRet )
         {
             // removeable?
-            BYTE nDriveId = nDrive;
+            PM_BYTE nDriveId = nDrive;
             ULONG nParaOutLen, nDataOutLen;
             nRet = DosDevIOCtl(nDevHandle, 8, 0x20,
                 &nDriveId, sizeof(nDriveId), &nParaOutLen,
@@ -932,7 +932,7 @@ FSysPathStyle DirEntry::GetPathStyle( const String &rDevice )
 |*
 *************************************************************************/
 
-BOOL DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
+sal_Bool DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
 {
     if (eFormatter==FSYS_STYLE_HOST)
     {
@@ -947,7 +947,7 @@ BOOL DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
     }
     else
     {
-        BOOL isCaseSensitive = FALSE;           // ich bin unter OS2, also ist der default im Zweifelsfall case insensitiv
+        sal_Bool isCaseSensitive = FALSE;           // ich bin unter OS2, also ist der default im Zweifelsfall case insensitiv
         switch ( eFormatter )
         {
             case FSYS_STYLE_MAC:
@@ -1003,7 +1003,7 @@ ErrCode FileStat::QueryDiskSpace( const String &rPath,
 
 //=========================================================================
 
-void FSysEnableSysErrorBox( BOOL bEnable )
+void FSysEnableSysErrorBox( sal_Bool bEnable )
 {
     DosError( bEnable ? 0 : FERR_DISABLEHARDERR );
 }
