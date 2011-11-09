@@ -44,6 +44,8 @@
 #include <svl/lngmisc.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 
 #include <doctok/sprmids.hxx> // NS_sprm namespace
 #include <doctok/resourceids.hxx> // NS_rtf namespace
@@ -590,6 +592,13 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     if (m_xModelFactory.is())
         xShape.set(m_xModelFactory->createInstance(aService), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawSupplier( m_xDstDoc, uno::UNO_QUERY);
+    if ( xDrawSupplier.is() )
+    {
+        uno::Reference< drawing::XShapes > xShapes( xDrawSupplier->getDrawPage(), uno::UNO_QUERY );
+        if ( xShapes.is() )
+            xShapes->add( xShape );
+    }
     if (m_bObject)
     {
         // Set bitmap
