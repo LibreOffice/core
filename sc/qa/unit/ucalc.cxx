@@ -522,6 +522,116 @@ void testFuncVLOOKUP(ScDocument* pDoc)
     }
 }
 
+struct NumStrCheck {
+    double fVal;
+    const char* pRes;
+};
+
+template<size_t _DataSize, size_t _FormulaSize, int _Type>
+void runTestMATCH(ScDocument* pDoc, const char* aData[_DataSize], NumStrCheck aChecks[_FormulaSize])
+{
+    for (size_t i = 0; i < _DataSize; ++i)
+        pDoc->SetString(0, i, 0, rtl::OUString::createFromAscii(aData[i]));
+
+    for (size_t i = 0; i < _FormulaSize; ++i)
+    {
+        rtl::OUStringBuffer aBuf;
+        aBuf.appendAscii("=MATCH(");
+        aBuf.append(aChecks[i].fVal);
+        aBuf.appendAscii(";A1:A9;");
+        aBuf.append(static_cast<sal_Int32>(_Type));
+        aBuf.appendAscii(")");
+        pDoc->SetString(1, i, 0, aBuf.makeStringAndClear());
+    }
+
+    pDoc->CalcAll();
+
+    // verify the results.
+    for (size_t i = 0; i < _FormulaSize; ++i)
+    {
+        rtl::OUString aStr;
+        pDoc->GetString(1, i, 0, aStr);
+        if (!aStr.equalsAscii(aChecks[i].pRes))
+        {
+            cerr << "row " << (i+1) << ": expected='" << aChecks[i].pRes << "' actual='" << aStr << "'" << endl;
+            CPPUNIT_ASSERT_MESSAGE("Unexpected result for MATCH", false);
+        }
+    }
+}
+
+void testFuncMATCH(ScDocument* pDoc)
+{
+    {
+        // Ascending in-exact match
+
+        // data range (A1:A9)
+        const char* aData[] = {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9"
+        };
+
+        // formula (B1:C12)
+        NumStrCheck aChecks[] = {
+            { 0.8,   "#N/A" },
+            { 1.2,      "1" },
+            { 2.3,      "2" },
+            { 3.9,      "3" },
+            { 4.1,      "4" },
+            { 5.99,     "5" },
+            { 6.1,      "6" },
+            { 7.2,      "7" },
+            { 8.569,    "8" },
+            { 9.59,     "9" },
+            { 10,       "9" },
+            { 100,      "9" }
+        };
+
+        runTestMATCH<SAL_N_ELEMENTS(aData),SAL_N_ELEMENTS(aChecks),1>(pDoc, aData, aChecks);
+    }
+
+    {
+        // Descending in-exact match
+
+        // data range (A1:A9)
+        const char* aData[] = {
+            "9",
+            "8",
+            "7",
+            "6",
+            "5",
+            "4",
+            "3",
+            "2",
+            "1"
+        };
+
+        // formula (B1:C12)
+        NumStrCheck aChecks[] = {
+            {  10, "#N/A" },
+            { 8.9,    "1" },
+            { 7.8,    "2" },
+            { 6.7,    "3" },
+            { 5.5,    "4" },
+            { 4.6,    "5" },
+            { 3.3,    "6" },
+            { 2.2,    "7" },
+            { 1.1,    "8" },
+            { 0.8,    "9" },
+            {   0,    "9" },
+            {  -2,    "9" }
+        };
+
+        runTestMATCH<SAL_N_ELEMENTS(aData),SAL_N_ELEMENTS(aChecks),-1>(pDoc, aData, aChecks);
+    }
+}
+
 void Test::testCellFunctions()
 {
     rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("foo"));
@@ -533,6 +643,7 @@ void Test::testCellFunctions()
     testFuncN(m_pDoc);
     testFuncCOUNTIF(m_pDoc);
     testFuncVLOOKUP(m_pDoc);
+    testFuncMATCH(m_pDoc);
 
     m_pDoc->DeleteTab(0);
 }
