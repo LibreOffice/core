@@ -811,7 +811,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 NPP instance            = m_aInstances[ nInstance ]->instance;
                 sal_uInt32 nFileID          = pMessage->GetUINT32();
                 NPStream* pStream       = m_aNPWrapStreams[ nFileID ];
-                int32 nRet = aPluginFuncs.writeready( instance, pStream );
+                int32_t nRet = aPluginFuncs.writeready( instance, pStream );
 
                 medDebug( 1, "pluginapp: NPP_WriteReady( %p, %p ) (stream id = %d) returns %d\n",
                           instance, pStream, nFileID, nRet );
@@ -827,10 +827,10 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 NPP instance            = m_aInstances[ nInstance ]->instance;
                 sal_uInt32 nFileID          = pMessage->GetUINT32();
                 NPStream* pStream       = m_aNPWrapStreams[ nFileID ];
-                int32 offset            = pMessage->GetUINT32();
+                int32_t offset            = pMessage->GetUINT32();
                 sal_uLong len;
                 char* buffer            = (char*)pMessage->GetBytes( len );
-                int32 nRet = aPluginFuncs.write( instance, pStream, offset, len, buffer );
+                int32_t nRet = aPluginFuncs.write( instance, pStream, offset, len, buffer );
 
                 medDebug( 1,"pluginapp: NPP_Write( %p, %p, %d, %d, %p ) returns %d\n"
                           "stream = { pdata = %p, ndata = %p, url = %s, end = %d, lastmodified = %d, notifyData = %p }\n",

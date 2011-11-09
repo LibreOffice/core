@@ -571,7 +571,7 @@ int32_t UnxPluginComm::NPP_Write( NPP instance, NPStream* stream, int32_t offset
     if( ! pMes )
         return 0;
 
-    int32 aRet = pMes->GetUINT32();
+    int32_t aRet = pMes->GetUINT32();
     delete pMes;
 
     return aRet;

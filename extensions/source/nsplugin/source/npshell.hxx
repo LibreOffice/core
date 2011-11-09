@@ -42,8 +42,8 @@ typedef struct _PluginInstance
     Window window;
     Display *display;
 #endif
-    uint32 x, y;
-    uint32 width, height;
+    uint32_t x, y;
+    uint32_t width, height;
     NPMIMEType type;
     char *message;
 
