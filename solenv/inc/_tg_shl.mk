@@ -190,7 +190,7 @@ $(USE_SHL1VERSIONMAP) .ERRREMOVE: $(SHL1VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL1SONAME=\"$(SONAME_SWITCH)$(SHL1TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -491,7 +491,7 @@ $(SHL1TARGETN) : \
 .ENDIF				# "$(SHL1NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL1TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL1TARGETN:f) $(SHL1TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -694,7 +694,7 @@ $(USE_SHL2VERSIONMAP) .ERRREMOVE: $(SHL2VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL2SONAME=\"$(SONAME_SWITCH)$(SHL2TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -995,7 +995,7 @@ $(SHL2TARGETN) : \
 .ENDIF				# "$(SHL2NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL2TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL2TARGETN:f) $(SHL2TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -1198,7 +1198,7 @@ $(USE_SHL3VERSIONMAP) .ERRREMOVE: $(SHL3VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL3SONAME=\"$(SONAME_SWITCH)$(SHL3TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -1499,7 +1499,7 @@ $(SHL3TARGETN) : \
 .ENDIF				# "$(SHL3NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL3TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL3TARGETN:f) $(SHL3TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -1702,7 +1702,7 @@ $(USE_SHL4VERSIONMAP) .ERRREMOVE: $(SHL4VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL4SONAME=\"$(SONAME_SWITCH)$(SHL4TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -2003,7 +2003,7 @@ $(SHL4TARGETN) : \
 .ENDIF				# "$(SHL4NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL4TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL4TARGETN:f) $(SHL4TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -2206,7 +2206,7 @@ $(USE_SHL5VERSIONMAP) .ERRREMOVE: $(SHL5VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL5SONAME=\"$(SONAME_SWITCH)$(SHL5TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -2507,7 +2507,7 @@ $(SHL5TARGETN) : \
 .ENDIF				# "$(SHL5NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL5TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL5TARGETN:f) $(SHL5TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -2710,7 +2710,7 @@ $(USE_SHL6VERSIONMAP) .ERRREMOVE: $(SHL6VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL6SONAME=\"$(SONAME_SWITCH)$(SHL6TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -3011,7 +3011,7 @@ $(SHL6TARGETN) : \
 .ENDIF				# "$(SHL6NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL6TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL6TARGETN:f) $(SHL6TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -3214,7 +3214,7 @@ $(USE_SHL7VERSIONMAP) .ERRREMOVE: $(SHL7VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL7SONAME=\"$(SONAME_SWITCH)$(SHL7TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -3515,7 +3515,7 @@ $(SHL7TARGETN) : \
 .ENDIF				# "$(SHL7NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL7TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL7TARGETN:f) $(SHL7TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -3718,7 +3718,7 @@ $(USE_SHL8VERSIONMAP) .ERRREMOVE: $(SHL8VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL8SONAME=\"$(SONAME_SWITCH)$(SHL8TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -4019,7 +4019,7 @@ $(SHL8TARGETN) : \
 .ENDIF				# "$(SHL8NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL8TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL8TARGETN:f) $(SHL8TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -4222,7 +4222,7 @@ $(USE_SHL9VERSIONMAP) .ERRREMOVE: $(SHL9VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL9SONAME=\"$(SONAME_SWITCH)$(SHL9TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -4523,7 +4523,7 @@ $(SHL9TARGETN) : \
 .ENDIF				# "$(SHL9NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL9TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL9TARGETN:f) $(SHL9TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -4726,7 +4726,7 @@ $(USE_SHL10VERSIONMAP) .ERRREMOVE: $(SHL10VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL10SONAME=\"$(SONAME_SWITCH)$(SHL10TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -5027,7 +5027,7 @@ $(SHL10TARGETN) : \
 .ENDIF				# "$(SHL10NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL10TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL10TARGETN:f) $(SHL10TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
