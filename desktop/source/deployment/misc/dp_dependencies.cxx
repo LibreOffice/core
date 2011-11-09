@@ -40,7 +40,6 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "tools/resid.hxx"
-#include "unotools/configmgr.hxx"
 
 #include "deployment.hrc"
 #include "dp_resource.h"
@@ -80,19 +79,12 @@ bool satisfiesMaximalVersion(rtl::OUString const & version) {
 rtl::OUString produceErrorText(
     rtl::OUString const & reason, rtl::OUString const & version)
 {
-    rtl::OUString buf(
-        comphelper::string::searchAndReplaceAsciiL(
-            reason, RTL_CONSTASCII_STRINGPARAM("%VERSION"),
-            (version.isEmpty()
-             ? ResId::toString(
-                 dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN))
-             : version)));
     return comphelper::string::searchAndReplaceAsciiL(
-        buf, RTL_CONSTASCII_STRINGPARAM("%PRODUCTNAME"),
-        utl::ConfigManager::GetDirectConfigProperty(
-            utl::ConfigManager::PRODUCTNAME).get< rtl::OUString >());
-        //TODO: can fail if the replacement of "%VERSION" introduces an
-        // instance of "%PRODUCTNAME" into the string
+        reason, RTL_CONSTASCII_STRINGPARAM("%VERSION"),
+        (version.isEmpty()
+         ? ResId::toString(
+             dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN))
+         : version));
 }
 
 }

@@ -32,9 +32,9 @@ String RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN {
 };
 
 String RID_DEPLOYMENT_DEPENDENCIES_MIN {
-    Text[en-US] = "Extension requires at least %PRODUCTNAME %VERSION";
+    Text[en-US] = "Extension requires at least OpenOffice.org reference version %VERSION";
 };
 
 String RID_DEPLOYMENT_DEPENDENCIES_MAX {
-    Text[en-US] = "Extension doesn't support versions greater than: %PRODUCTNAME %VERSION";
+    Text[en-US] = "Extension does not support OpenOffice.org reference versions greater than %VERSION";
 };
