@@ -1751,34 +1751,38 @@ void ScOutputData::FindChanged()
         for (nX=nX1; nX<=nX2; nX++)
         {
             ScBaseCell* pCell = pThisRowInfo->pCellInfo[nX+1].pCell;
-            if (pCell)
-                if (pCell->GetCellType() == CELLTYPE_FORMULA)
+            if (!pCell)
+                continue;
+
+            if (pCell->GetCellType() != CELLTYPE_FORMULA)
+                continue;
+
+            ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
+            if ( !bProgress && pFCell->GetDirty() )
+            {
+                ScProgress::CreateInterpretProgress(pDoc, true);
+                bProgress = true;
+            }
+            if (pFCell->IsRunning())
+                // still being interpreted. Skip it.
+                continue;
+
+            (void)pFCell->GetValue();
+            if (!pFCell->IsChanged())
+                // the result hasn't changed. Skip it.
+                continue;
+
+            pThisRowInfo->bChanged = true;
+            if ( pThisRowInfo->pCellInfo[nX+1].bMerged )
+            {
+                SCSIZE nOverY = nArrY + 1;
+                while ( nOverY<nArrCount &&
+                        pRowInfo[nOverY].pCellInfo[nX+1].bVOverlapped )
                 {
-                    ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
-                    if ( !bProgress && pFCell->GetDirty() )
-                    {
-                        ScProgress::CreateInterpretProgress(pDoc, true);
-                        bProgress = true;
-                    }
-                    if (!pFCell->IsRunning())
-                    {
-                        (void)pFCell->GetValue();
-                        if (pFCell->IsChanged())
-                        {
-                            pThisRowInfo->bChanged = true;
-                            if ( pThisRowInfo->pCellInfo[nX+1].bMerged )
-                            {
-                                SCSIZE nOverY = nArrY + 1;
-                                while ( nOverY<nArrCount &&
-                                        pRowInfo[nOverY].pCellInfo[nX+1].bVOverlapped )
-                                {
-                                    pRowInfo[nOverY].bChanged = true;
-                                    ++nOverY;
-                                }
-                            }
-                        }
-                    }
+                    pRowInfo[nOverY].bChanged = true;
+                    ++nOverY;
                 }
+            }
         }
     }
     if ( bProgress )
