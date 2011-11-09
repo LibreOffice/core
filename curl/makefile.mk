@@ -54,6 +54,9 @@ PATCH_FILES=\
     .ENDIF
 .ENDIF
 
+.IF "$(OS)" == "ANDROID"
+    PATCH_FILES+=curl-android.patch
+.ENDIF
 
 #CONVERTFILES= \
     lib$/Makefile.vc6
@@ -96,6 +99,8 @@ BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 
 .IF "$(OS)"=="IOS"
 OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl.a
+.ELIF "$(OS)"=="ANDROID"
+OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl.so
 .ELSE
 OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl$(DLLPOST).?
 .ENDIF
