@@ -21,6 +21,7 @@
 
 
 
+#include <svpm.h>
 
 #include <unotools/moduleoptions.hxx>
 

@@ -283,7 +283,7 @@ endif
 
 ifeq ($(OS),OS2)
 $(eval $(call gb_Library_add_exception_objects,sfx,\
-    sfx2/source/appl/shutdowniconOs2.ob \
+    sfx2/source/appl/shutdowniconOs2 \
 ))
 endif
 ifeq ($(OS),MACOSX)

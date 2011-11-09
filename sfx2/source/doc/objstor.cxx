@@ -132,6 +132,7 @@
 #include "appdata.hxx"
 
 #ifdef OS2
+#include <svpm.h>
 #include <osl/file.hxx>
 #include <stdio.h>
 #include <sys/ea.h>
