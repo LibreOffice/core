@@ -18,4 +18,18 @@
  	      | -uxpv* | -beos* | -mpeix* | -udk* \
  	      | -interix* | -uwin* | -mks* | -rhapsody* | -darwin* | -opened* \
  	      | -openstep* | -oskit* | -conix* | -pw32* | -nonstopux* \
+--- misc/cppunit-1.12.1/config/ltmain.sh
++++ misc/build/cppunit-1.12.1/config/ltmain.sh
+@@ -3228,6 +3228,12 @@
+ 	fi
+       else
  
++	# Force no versioning suffix for Android thanks to silly
++	# apkbuilder which doesn't add extra native libs unless their
++	# name ends with .so
++
++	version_type=none
++
+ 	# Parse the version information argument.
+ 	save_ifs="$IFS"; IFS=':'
+ 	set dummy $vinfo 0 0 0

@@ -34,11 +34,15 @@ TARFILE_MD5=bd30e9cf5523cdfc019b94f5e1d7fd19
     # from <https://sourceforge.net/projects/cppunit/files/cppunit/1.12.1/
     #  cppunit-1.12.1.tar.gz/download>
 
-PATCH_FILES = solarisfinite.patch warnings.patch windows.patch ldflags.patch aix.patch avoid-synthetised-destructor.patch android.patch ios.patch
+PATCH_FILES = solarisfinite.patch warnings.patch windows.patch ldflags.patch aix.patch avoid-synthetised-destructor.patch ios.patch
     # solarisfinite.patch: see <https://sourceforge.net/tracker/?func=detail&
     #  aid=2912590&group_id=11795&atid=311795>
     # warnings.patch: see <https://sourceforge.net/tracker/?func=detail&
     #  aid=2912630&group_id=11795&atid=311795>
+
+.IF "$(OS)" == "ANDROID"
+PATCH_FILES += android.patch
+.ENDIF
 
 .IF "$(OS)" == "WNT"
 .IF "$(COM)" == "MSC"
@@ -165,6 +169,8 @@ OUT2LIB = ooo-install/lib/libcppunit-1.12.a
 OUT2LIB = ooo-install/lib/libcppunit-1.12.so.1.0
 .ELIF "$(OS)" == "IOS"
 OUT2LIB = ooo-install/lib/libcppunit.a
+.ELIF "$(OS)" == "ANDROID"
+OUT2LIB = ooo-install/lib/libcppunit-1.12.so
 .ELSE
 OUT2LIB = ooo-install/lib/libcppunit-1.12.so.1
 .END

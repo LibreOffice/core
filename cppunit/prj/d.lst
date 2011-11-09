@@ -22,6 +22,9 @@ mkdir: %_DEST%\inc\cppunit\ui\text
 ..\%__SRC%\lib\libcppunit-1.12.1.dylib %_DEST%\lib\libcppunit-1.12.1.dylib
 symlink: %_DEST%\lib\libcppunit-1.12.1.dylib %_DEST%\lib\libcppunit.dylib
 
+..\%__SRC%\lib\libcppunit-1.12.so %_DEST%\lib\libcppunit-1.12.so
+symlink: %_DEST%\lib\libcppunit-1.12.so %_DEST%\lib\libcppunit.so
+
 ..\%__SRC%\lib\libcppunit-1.12.so.1 %_DEST%\lib\libcppunit-1.12.so.1
 symlink: %_DEST%\lib\libcppunit-1.12.so.1 %_DEST%\lib\libcppunit.so
 
