@@ -44,6 +44,9 @@
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
+#ifdef OS2
+#include <process.h>
+#endif
 
 //------------------------------------------------------------------------
 // namespace directives

@@ -40,8 +40,10 @@
 #include "internal/types.hxx"
 
 #include <string>
+#ifndef OS2
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
+#endif
 
 //---------------------------------
 /** Convert a string to a wstring
@@ -90,6 +92,10 @@ std::wstring getShortPathName( const std::wstring& aLongName );
 LCID LocaleSetToLCID( const LocaleSet_t & Locale );
 #endif
 
+#ifdef OS2
+typedef const   char            *LPCSTR;
+#endif
+
 //----------------------------------------------------------
 #ifdef DEBUG
 inline void OutputDebugStringFormat( LPCSTR pFormat, ... )
@@ -97,9 +103,11 @@ inline void OutputDebugStringFormat( LPCSTR pFormat, ... )
     CHAR    buffer[1024];
     va_list args;
 
+#ifndef OS2
     va_start( args, pFormat );
     StringCchVPrintfA( buffer, sizeof(buffer), pFormat, args );
     OutputDebugStringA( buffer );
+#endif
 }
 #else
 static inline void OutputDebugStringFormat( LPCSTR, ... )
