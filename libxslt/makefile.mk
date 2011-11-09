@@ -59,6 +59,10 @@ PATCH_FILES=libxslt-configure.patch \
             libxslt-aix.patch \
             libxslt-vc10.patch
 
+.IF "$(OS)"=="ANDROID"
+PATCH_FILES+= libxslt-android.patch
+.ENDIF
+
 # This is only for UNX environment now
 .IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
