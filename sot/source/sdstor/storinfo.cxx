@@ -82,9 +82,10 @@ void WriteClipboardFormat( SvStream & rStm, sal_uLong nFormat )
         aCbFmt = SotExchange::GetFormatName( nFormat );
     if( aCbFmt.Len() )
     {
-        ByteString aAsciiCbFmt( aCbFmt, RTL_TEXTENCODING_ASCII_US );
-        rStm << (sal_Int32) (aAsciiCbFmt.Len() + 1);
-        rStm << (const char *)aAsciiCbFmt.GetBuffer();
+        rtl::OString aAsciiCbFmt(rtl::OUStringToOString(aCbFmt,
+            RTL_TEXTENCODING_ASCII_US));
+        rStm << (sal_Int32) (aAsciiCbFmt.getLength() + 1);
+        rStm << (const char *)aAsciiCbFmt.getStr();
         rStm << (sal_uInt8) 0;
     }
     else if( nFormat )

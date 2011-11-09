@@ -511,9 +511,9 @@ void TransferDataContainer::CopyAnyData( sal_uLong nFormatId,
 // -----------------------------------------------------------------------------
 
 void TransferDataContainer::CopyByteString( sal_uLong nFormatId,
-                                            const ByteString& rStr )
+                                            const rtl::OString& rStr )
 {
-    CopyAnyData( nFormatId, rStr.GetBuffer(), rStr.Len() );
+    CopyAnyData( nFormatId, rStr.getStr(), rStr.getLength() );
 }
 
 // -----------------------------------------------------------------------------

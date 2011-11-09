@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <sal/macros.h>
+#include <rtl/strbuf.hxx>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -115,8 +116,7 @@ public:
 
 SvXMLGraphicInputStream::SvXMLGraphicInputStream( const ::rtl::OUString& rGraphicId )
 {
-    String          aGraphicId( rGraphicId );
-    GraphicObject   aGrfObject( ByteString( aGraphicId, RTL_TEXTENCODING_ASCII_US ) );
+    GraphicObject   aGrfObject( rtl::OUStringToOString(rGraphicId, RTL_TEXTENCODING_ASCII_US) );
 
     maTmp.EnableKillingFile();
 
@@ -584,8 +584,7 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
                                                const ::rtl::OUString& rGraphicId,
                                                bool bUseGfxLink )
 {
-    String          aGraphicId( rGraphicId );
-    GraphicObject   aGrfObject( ByteString( aGraphicId, RTL_TEXTENCODING_ASCII_US ) );
+    GraphicObject   aGrfObject( rtl::OUStringToOString(rGraphicId, RTL_TEXTENCODING_ASCII_US) );
     sal_Bool        bRet = sal_False;
 
     if( aGrfObject.GetType() != GRAPHIC_NONE )
@@ -709,7 +708,7 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
         else
         {
             const String        aGraphicObjectId( aPictureStreamName );
-            const ByteString    aAsciiObjectID( aGraphicObjectId, RTL_TEXTENCODING_ASCII_US );
+            const rtl::OString aAsciiObjectID(rtl::OUStringToOString(aGraphicObjectId, RTL_TEXTENCODING_ASCII_US));
             const GraphicObject aGrfObject( aAsciiObjectID );
             if( aGrfObject.GetType() != GRAPHIC_NONE )
             {
@@ -802,10 +801,11 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
 #if OSL_DEBUG_LEVEL > 0
             else
             {
-                ByteString sMessage = "graphic object with ID '";
-                sMessage += aAsciiObjectID;
-                sMessage += "' has an unknown type";
-                OSL_ENSURE( false, sMessage.GetBuffer() );
+                rtl::OStringBuffer sMessage(
+                    RTL_CONSTASCII_STRINGPARAM("graphic object with ID '"));
+                sMessage.append(aAsciiObjectID).
+                    append(RTL_CONSTASCII_STRINGPARAM("' has an unknown type"));
+                OSL_ENSURE( false, sMessage.getStr() );
             }
 #endif
         }

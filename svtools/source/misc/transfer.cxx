@@ -446,7 +446,7 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
 
 #ifdef DEBUG
             if( maAny.hasValue() && ::com::sun::star::uno::TypeClass_STRING != maAny.getValueType().getTypeClass() )
-                fprintf( stderr, "TransferableHelper delivers sequence of data [ %s ]\n", ByteString( String( rFlavor.MimeType), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+                fprintf( stderr, "TransferableHelper delivers sequence of data [ %s ]\n", rtl::OUStringToOString(rFlavor.MimeType, RTL_TEXTENCODING_ASCII_US).getStr() );
 #endif
         }
         catch( const ::com::sun::star::uno::Exception& )
@@ -667,7 +667,7 @@ void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
 
 #ifdef DEBUG
                 fprintf( stderr, "TransferableHelper exchanged objectdescriptor [ %s ]\n",
-                         ByteString( String( aIter->MimeType), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+                         rtl::OUStringToOString(aIter->MimeType, RTL_TEXTENCODING_ASCII_US).getStr() );
 #endif
             }
 
@@ -780,12 +780,11 @@ sal_Bool TransferableHelper::SetString( const ::rtl::OUString& rString, const Da
         SotExchange::GetFormatDataFlavor( FORMAT_FILE, aFileFlavor ) &&
         TransferableDataHelper::IsEqual( aFileFlavor, rFlavor ) )
     {
-        const String            aString( rString );
-        const ByteString        aByteStr( aString, osl_getThreadTextEncoding() );
-        Sequence< sal_Int8 >    aSeq( aByteStr.Len() + 1 );
+        const rtl::OString aByteStr(rtl::OUStringToOString(rString, osl_getThreadTextEncoding()));
+        Sequence< sal_Int8 >    aSeq( aByteStr.getLength() + 1 );
 
-        rtl_copyMemory( aSeq.getArray(), aByteStr.GetBuffer(), aByteStr.Len() );
-        aSeq[ aByteStr.Len() ] = 0;
+        rtl_copyMemory( aSeq.getArray(), aByteStr.getStr(), aByteStr.getLength() );
+        aSeq[ aByteStr.getLength() ] = 0;
         maAny <<= aSeq;
     }
     else
@@ -900,9 +899,9 @@ sal_Bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
 
         case( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ):
         {
-            ByteString sURL( rBmk.GetURL(), eSysCSet );
-            Sequence< sal_Int8 > aSeq( sURL.Len() );
-            memcpy( aSeq.getArray(), sURL.GetBuffer(), sURL.Len() );
+            rtl::OString sURL(rtl::OUStringToOString(rBmk.GetURL(), eSysCSet));
+            Sequence< sal_Int8 > aSeq( sURL.getLength() );
+            memcpy( aSeq.getArray(), sURL.getStr(), sURL.getLength() );
             maAny <<= aSeq;
         }
         break;
@@ -912,8 +911,8 @@ sal_Bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
             Sequence< sal_Int8 > aSeq( 2048 );
 
             memset( aSeq.getArray(), 0, 2048 );
-            strcpy( reinterpret_cast< char* >( aSeq.getArray() ), ByteString( rBmk.GetURL(), eSysCSet).GetBuffer() );
-            strcpy( reinterpret_cast< char* >( aSeq.getArray() ) + 1024, ByteString( rBmk.GetDescription(), eSysCSet ).GetBuffer() );
+            strcpy( reinterpret_cast< char* >( aSeq.getArray() ), rtl::OUStringToOString(rBmk.GetURL(), eSysCSet).getStr() );
+            strcpy( reinterpret_cast< char* >( aSeq.getArray() ) + 1024, rtl::OUStringToOString(rBmk.GetDescription(), eSysCSet).getStr() );
 
             maAny <<= aSeq;
         }
@@ -2106,11 +2105,11 @@ sal_Bool TransferableDataHelper::GetFileList(
             {
                 if( aFlavor.MimeType.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text/uri-list" )) ) > -1 )
                 {
-                    ByteString aByteString;
+                    rtl::OString aDiskString;
 
-                    while( xStm->ReadLine( aByteString ) )
-                        if( aByteString.Len() && aByteString.GetChar( 0 ) != '#' )
-                            rFileList.AppendFile( String( aByteString, RTL_TEXTENCODING_UTF8 ) );
+                    while( xStm->ReadLine( aDiskString ) )
+                        if( aDiskString.getLength() && aDiskString[0] != '#' )
+                            rFileList.AppendFile( rtl::OStringToOUString(aDiskString, RTL_TEXTENCODING_UTF8) );
 
                     bRet = sal_True;
                  }

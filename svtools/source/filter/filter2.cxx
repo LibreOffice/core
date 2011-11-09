@@ -1318,38 +1318,38 @@ sal_Bool GraphicDescriptor::ImpDetectSVG( SvStream& /*rStm*/, sal_Bool /*bExtend
 
 String GraphicDescriptor::GetImportFormatShortName( sal_uInt16 nFormat )
 {
-    ByteString          aKeyName;
+    const char *pKeyName = 0;
 
     switch( nFormat )
     {
-        case( GFF_BMP ) :   aKeyName = "bmp";   break;
-        case( GFF_GIF ) :   aKeyName = "gif";   break;
-        case( GFF_JPG ) :   aKeyName = "jpg";   break;
-        case( GFF_PCD ) :   aKeyName = "pcd";   break;
-        case( GFF_PCX ) :   aKeyName = "pcx";   break;
-        case( GFF_PNG ) :   aKeyName = "png";   break;
-        case( GFF_XBM ) :   aKeyName = "xbm";   break;
-        case( GFF_XPM ) :   aKeyName = "xpm";   break;
-        case( GFF_PBM ) :   aKeyName = "pbm";   break;
-        case( GFF_PGM ) :   aKeyName = "pgm";   break;
-        case( GFF_PPM ) :   aKeyName = "ppm";   break;
-        case( GFF_RAS ) :   aKeyName = "ras";   break;
-        case( GFF_TGA ) :   aKeyName = "tga";   break;
-        case( GFF_PSD ) :   aKeyName = "psd";   break;
-        case( GFF_EPS ) :   aKeyName = "eps";   break;
-        case( GFF_TIF ) :   aKeyName = "tif";   break;
-        case( GFF_DXF ) :   aKeyName = "dxf";   break;
-        case( GFF_MET ) :   aKeyName = "met";   break;
-        case( GFF_PCT ) :   aKeyName = "pct";   break;
-        case( GFF_SGF ) :   aKeyName = "sgf";   break;
-        case( GFF_SGV ) :   aKeyName = "sgv";   break;
-        case( GFF_SVM ) :   aKeyName = "svm";   break;
-        case( GFF_WMF ) :   aKeyName = "wmf";   break;
-        case( GFF_EMF ) :   aKeyName = "emf";   break;
-        case( GFF_SVG ) :   aKeyName = "svg";   break;
+        case( GFF_BMP ) :   pKeyName = "bmp";   break;
+        case( GFF_GIF ) :   pKeyName = "gif";   break;
+        case( GFF_JPG ) :   pKeyName = "jpg";   break;
+        case( GFF_PCD ) :   pKeyName = "pcd";   break;
+        case( GFF_PCX ) :   pKeyName = "pcx";   break;
+        case( GFF_PNG ) :   pKeyName = "png";   break;
+        case( GFF_XBM ) :   pKeyName = "xbm";   break;
+        case( GFF_XPM ) :   pKeyName = "xpm";   break;
+        case( GFF_PBM ) :   pKeyName = "pbm";   break;
+        case( GFF_PGM ) :   pKeyName = "pgm";   break;
+        case( GFF_PPM ) :   pKeyName = "ppm";   break;
+        case( GFF_RAS ) :   pKeyName = "ras";   break;
+        case( GFF_TGA ) :   pKeyName = "tga";   break;
+        case( GFF_PSD ) :   pKeyName = "psd";   break;
+        case( GFF_EPS ) :   pKeyName = "eps";   break;
+        case( GFF_TIF ) :   pKeyName = "tif";   break;
+        case( GFF_DXF ) :   pKeyName = "dxf";   break;
+        case( GFF_MET ) :   pKeyName = "met";   break;
+        case( GFF_PCT ) :   pKeyName = "pct";   break;
+        case( GFF_SGF ) :   pKeyName = "sgf";   break;
+        case( GFF_SGV ) :   pKeyName = "sgv";   break;
+        case( GFF_SVM ) :   pKeyName = "svm";   break;
+        case( GFF_WMF ) :   pKeyName = "wmf";   break;
+        case( GFF_EMF ) :   pKeyName = "emf";   break;
+        case( GFF_SVG ) :   pKeyName = "svg";   break;
     }
 
-    return String( aKeyName, RTL_TEXTENCODING_ASCII_US );
+    return rtl::OUString::createFromAscii(pKeyName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

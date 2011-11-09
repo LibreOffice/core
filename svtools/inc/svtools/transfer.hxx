@@ -569,7 +569,7 @@ public:
     void                CopyString( sal_uInt16 nFmt, const String& rStr );
     void                CopyAny( sal_uInt16 nFmt, const ::com::sun::star::uno::Any& rAny );
 
-    void                CopyByteString( sal_uLong nFormatId, const ByteString& rStr );
+    void                CopyByteString( sal_uLong nFormatId, const rtl::OString& rStr );
     void                CopyAnyData( sal_uLong nFormatId, const sal_Char* pData, sal_uLong nLen );
 
     sal_Bool            HasAnyData() const;

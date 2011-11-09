@@ -208,8 +208,8 @@ const String SgaObject::GetTitle() const
             if ( aReturnValue.GetToken( 0, ':' ).EqualsAscii( "private" ) &&
                 aResourceName.Len() && ( nResId > 0 ) && ( nResId < 0x10000 ) )
             {
-                ByteString aMgrName( aResourceName, RTL_TEXTENCODING_UTF8 );
-                ResMgr* pResMgr = ResMgr::CreateResMgr( aMgrName.GetBuffer(),
+                rtl::OString aMgrName(rtl::OUStringToOString(aResourceName, RTL_TEXTENCODING_UTF8));
+                ResMgr* pResMgr = ResMgr::CreateResMgr( aMgrName.getStr(),
                             Application::GetSettings().GetUILocale() );
                 if ( pResMgr )
                 {

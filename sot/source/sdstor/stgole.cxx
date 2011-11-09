@@ -153,14 +153,14 @@ sal_Bool StgCompObjStream::Store()
     if( GetError() != SVSTREAM_OK )
         return sal_False;
     Seek( 0L );
-    ByteString aAsciiUserName( aUserName, RTL_TEXTENCODING_MS_1252 );
+    rtl::OString aAsciiUserName(rtl::OUStringToOString(aUserName, RTL_TEXTENCODING_MS_1252));
     *this << (sal_Int16) 1          // Version?
               << (sal_Int16) -2                     // 0xFFFE = Byte Order Indicator
               << (sal_Int32) 0x0A03         // Windows 3.10
               << (sal_Int32) -1L
               << aClsId             // Class ID
-              << (sal_Int32) (aAsciiUserName.Len() + 1)
-              << (const char *)aAsciiUserName.GetBuffer()
+              << (sal_Int32) (aAsciiUserName.getLength() + 1)
+              << (const char *)aAsciiUserName.getStr()
               << (sal_uInt8) 0;             // string terminator
     WriteClipboardFormat( *this, nCbFormat );
     *this << (sal_Int32) 0;             // terminator
