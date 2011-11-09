@@ -1124,18 +1124,6 @@ sal_Bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
 {
     if(pTextEditOutlinerView)
     {
-#ifdef DBG_UTIL
-        if(rKEvt.GetKeyCode().GetCode() == KEY_RETURN && pTextEditOutliner->GetParagraphCount() == 1)
-        {
-            ByteString aLine(
-                pTextEditOutliner->GetText(pTextEditOutliner->GetParagraph( 0 ), 1),
-                gsl_getSystemTextEncoding());
-            aLine = aLine.ToUpperAscii();
-
-            if(aLine == "HELLO JOE, PLEASE SHOW THE ITEMBROWSER")
-                ShowItemBrowser();
-        }
-#endif
         if (pTextEditOutlinerView->PostKeyEvent(rKEvt, pWin))
         {
             if( pMod /* && !pMod->IsChanged() */ )
