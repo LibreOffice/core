@@ -34,5 +34,8 @@
 #define FL_BOTTOM                                15
 #define PB_OK                                    16
 #define PB_HELP                                  17
+#define WINDOW_DLG                               18
+#define FT_CURRENT                               19
+#define FT_DOC                                   20
 
 #endif

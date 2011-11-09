@@ -379,6 +379,11 @@ private:
     //
     WindowImpl* mpWindowImpl;
 
+    //^^^la la la, I can't hear you^^^
+    bool m_bExpand;
+    bool m_bFill;
+    long m_nPadding;
+
     SAL_DLLPRIVATE void ImplInitWindowData( WindowType nType );
 
 #ifdef DBG_UTIL
@@ -1057,6 +1062,14 @@ public:
 
     // Advisory Sizing - what is a good size for this widget ?
     virtual Size GetOptimalSize(WindowSizeType eType) const;
+    bool getExpand() const { return m_bExpand; }
+    bool getFill() const { return m_bFill; }
+    long getPadding() const { return m_nPadding; }
+    void setExpand(bool bExpand) { m_bExpand = bExpand; }
+    void setFill(bool bFill) { m_bFill = bFill; }
+    void setPadding(long nPadding) { m_nPadding = nPadding; }
+    void queueResize();
+
 
     //-------------------------------------
     //  Native Widget Rendering functions

@@ -83,6 +83,10 @@ public:
     virtual void    StateChanged( StateChangedType nStateChange );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
+    virtual Size    GetOptimalSize(WindowSizeType eType) const;
+    virtual void    Resize();
+
+
     virtual sal_Bool    Close();
 
     virtual short   Execute();

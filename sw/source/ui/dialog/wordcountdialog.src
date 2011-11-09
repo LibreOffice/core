@@ -37,14 +37,19 @@ ModelessDialog DLG_WORDCOUNT
     Moveable = TRUE ;
 
     Closeable = TRUE;
-    Sizeable = FALSE ;
+    Sizeable = TRUE ;
     Hide = TRUE ;
 
-    FixedLine  FL_CURRENT
+    FixedText  FT_CURRENT
     {
         Pos = MAP_APPFONT ( 5 , 5 ) ;
         Size = MAP_APPFONT ( 160 , 8 ) ;
         Text [ en-US ] = "Current selection";
+    };
+    FixedLine  FL_CURRENT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 158 , 8 ) ;
     };
     FixedText       FT_CURRENTWORD
     {
@@ -82,11 +87,16 @@ ModelessDialog DLG_WORDCOUNT
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Right = TRUE;
     };
-    FixedLine       FL_DOC
+    FixedText       FT_DOC
     {
         Pos = MAP_APPFONT (  5, 54 ) ;
         Size = MAP_APPFONT ( 160 , 8 ) ;
         Text [ en-US ] = "Whole document";
+    };
+    FixedLine       FL_DOC
+    {
+        Pos = MAP_APPFONT (  6, 52 ) ;
+        Size = MAP_APPFONT ( 158 , 8 ) ;
     };
     FixedText       FT_DOCWORD
     {

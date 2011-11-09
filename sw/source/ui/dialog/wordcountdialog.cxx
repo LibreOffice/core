@@ -40,34 +40,86 @@
 #include <wrtsh.hxx>
 
 //TODO, add asian/non-asian word count to UI when CJK mode is enabled.
-
-SwWordCountDialog::SwWordCountDialog(Window* pParent) :
-#if defined _MSC_VER
-#pragma warning (disable : 4355)
-#endif
-    aCurrentFL( pParent, SW_RES(              FL_CURRENT            )),
-    aCurrentWordFT( pParent, SW_RES(          FT_CURRENTWORD        )),
-    aCurrentWordFI( pParent, SW_RES(          FI_CURRENTWORD        )),
-    aCurrentCharacterFT( pParent, SW_RES(     FT_CURRENTCHARACTER   )),
-    aCurrentCharacterFI( pParent, SW_RES(     FI_CURRENTCHARACTER   )),
-    aCurrentCharacterExcludingSpacesFT( pParent, SW_RES(     FT_CURRENTCHARACTEREXCLUDINGSPACES   )),
-    aCurrentCharacterExcludingSpacesFI( pParent, SW_RES(     FI_CURRENTCHARACTEREXCLUDINGSPACES   )),
-
-    aDocFL( pParent, SW_RES(                  FL_DOC                )),
-    aDocWordFT( pParent, SW_RES(              FT_DOCWORD            )),
-    aDocWordFI( pParent, SW_RES(              FI_DOCWORD            )),
-    aDocCharacterFT( pParent, SW_RES(         FT_DOCCHARACTER       )),
-    aDocCharacterFI( pParent, SW_RES(         FI_DOCCHARACTER       )),
-    aDocCharacterExcludingSpacesFT( pParent, SW_RES(         FT_DOCCHARACTEREXCLUDINGSPACES       )),
-    aDocCharacterExcludingSpacesFI( pParent, SW_RES(         FI_DOCCHARACTEREXCLUDINGSPACES       )),
-    aBottomFL(pParent, SW_RES(                FL_BOTTOM             )),
-    aOK( pParent, SW_RES(                     PB_OK                 )),
-    aHelp( pParent, SW_RES(                   PB_HELP               ))
-#if defined _MSC_VER
-#pragma warning (default : 4355)
-#endif
+SwWordCountDialog::SwWordCountDialog(Window* pParent)
+    : dialog_vbox1(pParent)
+    , box1(&dialog_vbox1)
+    , aCurrentSelection(&box1)
+    , aCurrentSelectionText(&aCurrentSelection, SW_RES(FT_CURRENT))
+    , aCurrentSelectionLine(&aCurrentSelection, SW_RES(FL_CURRENT))
+    , aSelectionBox(&box1)
+    , aSelectionRow1(&aSelectionBox)
+    , aCurrentWordFT(&aSelectionRow1, SW_RES(FT_CURRENTWORD))
+    , aCurrentWordFI(&aSelectionRow1, SW_RES(FI_CURRENTWORD))
+    , aSelectionRow2(&aSelectionBox)
+    , aCurrentCharacterFT(&aSelectionRow2, SW_RES(FT_CURRENTCHARACTER))
+    , aCurrentCharacterFI(&aSelectionRow2, SW_RES(FI_CURRENTCHARACTER))
+    , aSelectionRow3(&aSelectionBox)
+    , aCurrentCharacterExcludingSpacesFT(&aSelectionRow3, SW_RES(FT_CURRENTCHARACTEREXCLUDINGSPACES))
+    , aCurrentCharacterExcludingSpacesFI(&aSelectionRow3, SW_RES(FI_CURRENTCHARACTEREXCLUDINGSPACES))
+    , aDoc(&box1)
+    , aDocText(&aDoc, SW_RES(FT_DOC))
+    , aDocLine(&aDoc, SW_RES(FL_DOC))
+    , dialog_action_area1(&dialog_vbox1)
+    , aOK(&dialog_action_area1, SW_RES(PB_OK))
+    , aHelp(&dialog_action_area1, SW_RES(PB_HELP))
 {
+    Size aSize;
+
+    dialog_vbox1.setFill(true);
+
+    dialog_action_area1.setFill(true);
+
+    box1.setFill(true);
+    box1.setExpand(true);
+
+    aCurrentSelection.setFill(true);
+    aCurrentSelectionText.setFill(true);
+    aCurrentSelectionLine.setFill(true);
+    aCurrentSelectionLine.setExpand(true);
+
+    aSelectionBox.setFill(true);
+
+    aSelectionRow1.setFill(true);
+    aSelectionRow1.setExpand(true);
+    aCurrentWordFT.setFill(true);
+    aCurrentWordFI.setFill(true);
+    aCurrentWordFI.setExpand(true);
+
+    aSelectionRow2.setFill(true);
+    aSelectionRow2.setExpand(true);
+    aCurrentCharacterFT.setFill(true);
+    aCurrentCharacterFI.setFill(true);
+    aCurrentCharacterFI.setExpand(true);
+    aSelectionRow3.setFill(true);
+    aSelectionRow3.setExpand(true);
+    aCurrentCharacterExcludingSpacesFT.setFill(true);
+    aCurrentCharacterExcludingSpacesFI.setFill(true);
+    aCurrentCharacterExcludingSpacesFI.setExpand(true);
+
+    aDoc.setFill(true);
+    aDocText.setFill(true);
+    aDocLine.setFill(true);
+    aDocLine.setExpand(true);
+
+    aSize = dialog_vbox1.GetOptimalSize(WINDOWSIZE_PREFERRED);
+    dialog_vbox1.SetSizePixel(aSize);
+
+    aSize = pParent->GetOptimalSize(WINDOWSIZE_PREFERRED);
+    pParent->SetSizePixel(aSize);
+    fprintf(stderr, "size is %ld %ld on %p\n", aSize.Width(), aSize.Height(), pParent);
+
+    aSize = dialog_vbox1.GetOptimalSize(WINDOWSIZE_PREFERRED);
+    dialog_vbox1.SetSizePixel(aSize);
+
     aOK.SetClickHdl(LINK(this,SwWordCountDialog,        OkHdl));
+
+    fprintf(stderr, "aOk is %p\n", &aOK);
+    fprintf(stderr, "aHelp is %p\n", &aHelp);
+    fprintf(stderr, "dialog_action_area1 is is %p\n", &dialog_action_area1);
+    fprintf(stderr, "aCurrentSelectionLine is is %p\n", &aCurrentSelectionLine);
+    fprintf(stderr, "aCurrentSelectionText is is %p\n", &aCurrentSelectionText);
+    fprintf(stderr, "aCurrentSelection is is %p\n", &aCurrentSelection);
+    fprintf(stderr, "dialog_vbox1 is is %p\n", &dialog_vbox1);
 }
 
 IMPL_LINK_NOARG(SwWordCountDialog, OkHdl)
@@ -85,14 +137,16 @@ SwWordCountDialog::~SwWordCountDialog()
     ViewShell::SetCareWin( 0 );
 }
 
-void  SwWordCountDialog::SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc)
+void  SwWordCountDialog::SetValues(const SwDocStat& rCurrent, const SwDocStat&)
 {
     aCurrentWordFI.SetText(     String::CreateFromInt32(rCurrent.nWord ));
     aCurrentCharacterFI.SetText(String::CreateFromInt32(rCurrent.nChar ));
     aCurrentCharacterExcludingSpacesFI.SetText(String::CreateFromInt32(rCurrent.nCharExcludingSpaces ));
+#if 0
     aDocWordFI.SetText(         String::CreateFromInt32(rDoc.nWord ));
     aDocCharacterFI.SetText(    String::CreateFromInt32(rDoc.nChar ));
     aDocCharacterExcludingSpacesFI.SetText(    String::CreateFromInt32(rDoc.nCharExcludingSpaces ));
+#endif
 }
 
 

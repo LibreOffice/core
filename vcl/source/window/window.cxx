@@ -574,6 +574,10 @@ CommandEvent ImplTranslateCommandEvent( const CommandEvent& rCEvt, Window* pSour
 
 void Window::ImplInitWindowData( WindowType nType )
 {
+    m_bExpand = false;
+    m_bFill = false;
+    m_nPadding = 0;
+
     mpWindowImpl = new WindowImpl;
 
     meOutDevType        = OUTDEV_WINDOW;
@@ -9569,6 +9573,20 @@ rtl::OUString Window::GetSurroundingText() const
 Selection Window::GetSurroundingTextSelection() const
 {
   return Selection( 0, 0 );
+}
+
+//Poor man's equivalent, when widget want's to renegotiate
+//size, get parent dialog and call resize on it
+void Window::queueResize()
+{
+    fprintf(stderr, "Window::queueResize called\n");
+    Window *pParent = GetParentDialog();
+    fprintf(stderr, "parent dialog is %p\n", pParent);
+    if (pParent && pParent->GetChildCount() == 1)
+    {
+        fprintf(stderr, "suitable, so call resize\n");
+        pParent->Resize();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

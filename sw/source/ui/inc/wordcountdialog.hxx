@@ -29,6 +29,7 @@
 #define SW_WORDCOUNTDIALOG_HXX
 #include <sfx2/basedlgs.hxx>
 #include <svtools/stdctrl.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/button.hxx>
 struct SwDocStat;
 #include <sfx2/childwin.hxx>
@@ -36,26 +37,31 @@ struct SwDocStat;
 
 class SwWordCountDialog
 {
-    FixedLine       aCurrentFL;
-    FixedText       aCurrentWordFT;
-    FixedInfo       aCurrentWordFI;
-    FixedText       aCurrentCharacterFT;
-    FixedInfo       aCurrentCharacterFI;
-    FixedText       aCurrentCharacterExcludingSpacesFT;
-    FixedInfo       aCurrentCharacterExcludingSpacesFI;
+    VBox dialog_vbox1;
+    VBox box1;
 
-    FixedLine       aDocFL;
-    FixedText       aDocWordFT;
-    FixedInfo       aDocWordFI;
-    FixedText       aDocCharacterFT;
-    FixedInfo       aDocCharacterFI;
-    FixedText       aDocCharacterExcludingSpacesFT;
-    FixedInfo       aDocCharacterExcludingSpacesFI;
+    HBox aCurrentSelection;
+    FixedText aCurrentSelectionText;
+    FixedLine aCurrentSelectionLine;
 
-    FixedLine       aBottomFL;
+    VBox aSelectionBox;
+    HBox aSelectionRow1;
+    FixedText aCurrentWordFT;
+    FixedInfo aCurrentWordFI;
+    HBox aSelectionRow2;
+    FixedText aCurrentCharacterFT;
+    FixedInfo aCurrentCharacterFI;
+    HBox aSelectionRow3;
+    FixedText aCurrentCharacterExcludingSpacesFT;
+    FixedInfo aCurrentCharacterExcludingSpacesFI;
 
-    OKButton        aOK;
-    HelpButton      aHelp;
+    HBox aDoc;
+    FixedText aDocText;
+    FixedLine aDocLine;
+
+    HBox dialog_action_area1;
+    OKButton aOK;
+    HelpButton aHelp;
 
     void InitControls();
 

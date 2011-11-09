@@ -944,6 +944,29 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal
     pDev->Pop();
 }
 
+Size Dialog::GetOptimalSize(WindowSizeType eType) const
+{
+    if (eType == WINDOWSIZE_MAXIMUM)
+        return SystemWindow::GetOptimalSize(eType);
+    Size aSize;
+    if (GetChildCount() == 1)
+        aSize = GetChild(0)->GetOptimalSize(eType);
+    return Window::CalcWindowSize(aSize);
+}
+
+void Dialog::Resize()
+{
+    fprintf(stderr, "Dialog::Resize\n");
+    if (GetChildCount() == 1)
+    {
+        Size aSize = GetSizePixel();
+        aSize.Width() -= mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder;
+        aSize.Height() -= mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder;
+        Point aPos(mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder);
+        GetChild(0)->SetPosSizePixel(aPos, aSize);
+    }
+}
+
 // -----------------------------------------------------------------------
 
 ModelessDialog::ModelessDialog( Window* pParent, const ResId& rResId ) :

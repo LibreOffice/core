@@ -264,6 +264,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/introwin \
     vcl/source/window/keycod \
     vcl/source/window/keyevent \
+    vcl/source/window/layout \
     vcl/source/window/menu \
     vcl/source/window/mnemonic \
     vcl/source/window/mnemonicengine \
