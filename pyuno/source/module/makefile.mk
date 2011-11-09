@@ -54,7 +54,7 @@ EXTRA_FRAMEWORK_FLAG=-framework Python
 PYUNO_MODULE=$(DLLDEST)$/pyuno.so
 PYUNORC=pyunorc
 .ELIF "$(GUI)" == "OS2"
-.INCLUDE :  pyversion.mk
+#.INCLUDE :  pyversion.mk
 PYUNORC=pyuno.ini
 .ELSE
 .INCLUDE :  pyversion.mk
