@@ -2252,9 +2252,13 @@ bool SvNumberformat::GetOutputString(double fNumber,
             {
                 if (rScan.GetStandardPrec() == SvNumberFormatter::UNLIMITED_PRECISION)
                 {
-                    bool bSign = ::rtl::math::isSignBitSet(fNumber) && fNumber != 0.0;
+                    bool bSign = ::rtl::math::isSignBitSet(fNumber);
                     if (bSign)
+                    {
+                        if (!(fNumber < 0.0))
+                            bSign = false;
                         fNumber = -fNumber;
+                    }
                     ImpGetOutputStdToPrecision(fNumber, OutString, 10); // Use 10 decimals for general 'unlimited' format.
                     if (fNumber < EXP_LOWER_BOUND)
                     {
