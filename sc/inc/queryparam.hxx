@@ -45,7 +45,6 @@ struct ScQueryParamBase
     bool            bCaseSens;
     bool            bRegExp;
     bool            bDuplicate;
-    bool            bMixedComparison;   // whether numbers are smaller than strings
 
     virtual ~ScQueryParamBase();
 
