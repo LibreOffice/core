@@ -152,6 +152,8 @@ OUT2INC+=librdf$/*.h
 OUT2LIB+=librdf$/.libs$/librdf.$(REDLAND_MAJOR).dylib
 .ELIF "$(OS)"=="IOS"
 OUT2LIB+=librdf$/.libs$/librdf.a
+.ELIF "$(OS)"=="ANDROID"
+OUT2LIB+=librdf$/.libs$/librdf.so
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 OUT2LIB+=librdf$/.libs$/*.a

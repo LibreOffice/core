@@ -172,6 +172,9 @@ OUT2BIN+=src/raptor-config
 .ELIF "$(OS)"=="IOS"
 OUT2LIB+=src$/.libs$/libraptor.a
 OUT2BIN+=src/raptor-config
+.ELIF "$(OS)"=="ANDROID"
+OUT2LIB+=src$/.libs$/libraptor.so
+OUT2BIN+=src/raptor-config
 .ELIF "$(OS)"=="AIX"
 OUT2LIB+=src$/.libs$/libraptor.so.$(RAPTOR_MAJOR) src$/.libs$/libraptor.so
 OUT2BIN+=src/raptor-config

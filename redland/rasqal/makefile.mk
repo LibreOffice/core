@@ -147,6 +147,9 @@ OUT2BIN+=src/rasqal-config
 .ELIF "$(OS)"=="IOS"
 OUT2LIB+=src$/.libs$/librasqal.a
 OUT2BIN+=src/rasqal-config
+.ELIF "$(OS)"=="ANDROID"
+OUT2LIB+=src$/.libs$/librasqal.so
+OUT2BIN+=src/rasqal-config
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 OUT2LIB+=src$/.libs$/*.a
