@@ -26,21 +26,9 @@
 #
 #*************************************************************************
 
-GUI := UNX
-COM := GCC
-
 gb_SDKDIR := $(MACOSX_SDK_PATH)
 
-ifeq ($(CPUNAME),POWERPC)
-gb_CPUDEFS := -DPPC
-else
-gb_CPUDEFS := -DX86
-endif
-
-gb_COMPILERDEFAULTOPTFLAGS := -O2
-
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
-
 
 # Darwin mktemp -t expects a prefix, not a pattern
 gb_MKTEMP ?= /usr/bin/mktemp -t gbuild.

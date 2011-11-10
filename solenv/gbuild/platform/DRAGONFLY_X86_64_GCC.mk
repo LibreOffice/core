@@ -30,17 +30,10 @@
 
 #please make generic modifications to unxgcc.mk
 
-ifeq ($(CPUNAME),INTEL)
-gb_CPUDEFS := -DX86
-endif
-
-gb_COMPILERDEFAULTOPTFLAGS := -O2
+gb_COMPILERDEFAULTOPTFLAGS := -O -g
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 
-NB_ADD_LIBPATH := /usr/pkg/lib:/usr/X11R7/lib
-
-gb_Helper_set_ld_path := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib:$(NB_ADD_LIBPATH)
-gb_CppunitTest_CPPTESTPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib:$(NB_ADD_LIBPATH)
+gb_CppunitTest_CPPTESTPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib:/usr/pkg/lib
 
 # vim: set noet sw=4:

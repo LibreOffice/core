@@ -27,7 +27,6 @@
 #*************************************************************************
 
 GUI := WNT
-COM := GCC
 
 gb_COMPILERDEFAULTOPTFLAGS := -Os
 gb_CPUDEFS := -D_M_IX86

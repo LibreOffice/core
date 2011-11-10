@@ -155,33 +155,8 @@ $(eval $(call gb_Helper_collect_libtargets))
 
 gb_Library_DLLPOSTFIX := lo
 
-ifeq ($(OS),LINUX)
-include $(GBUILDDIR)/platform/linux-$(CPUNAME).mk
-else ifeq ($(OS),MACOSX)
-include $(GBUILDDIR)/platform/macosx.mk
-else ifeq ($(OS),WNT)
-ifeq ($(COM),GCC)
-include $(GBUILDDIR)/platform/winmingw.mk
-else
-include $(GBUILDDIR)/platform/windows.mk
-endif
-else ifeq ($(OS),OPENBSD)
-include $(GBUILDDIR)/platform/openbsd.mk
-else ifeq ($(OS),FREEBSD)
-include $(GBUILDDIR)/platform/freebsd.mk
-else ifeq ($(OS),NETBSD)
-include $(GBUILDDIR)/platform/netbsd.mk
-else ifeq ($(OS),DRAGONFLY)
-include $(GBUILDDIR)/platform/dragonfly.mk
-else ifeq ($(OS),SOLARIS)
-include $(GBUILDDIR)/platform/solaris.mk
-else ifeq ($(OS),IOS)
-include $(GBUILDDIR)/platform/ios.mk
-else ifeq ($(OS),ANDROID)
-include $(GBUILDDIR)/platform/android.mk
-else
-$(eval $(call gb_Output_error,Unsupported OS: $(OS)))
-endif
+# Include platform/cpu/compiler specific config/definitions
+include $(GBUILDDIR)/platform/$(OS)_$(CPUNAME)_$(COM).mk
 
 ifeq ($(CROSS_COMPILING),YES)
 # We can safely Assume all cross-compilation is from Unix systems.

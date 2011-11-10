@@ -30,12 +30,30 @@
 
 #please make generic modifications to unxgcc.mk
 
-ifeq ($(CPUNAME),INTEL)
 gb_CPUDEFS := -DX86
-endif
-
 gb_COMPILERDEFAULTOPTFLAGS := -O2
+gb_STDLIBS := pthread
 
 include $(GBUILDDIR)/platform/unxgcc.mk
+
+gb_LinkTarget_NOEXCEPTIONFLAGS += -DBOOST_NO_EXCEPTIONS
+
+define gb_LinkTarget__command_dynamiclink
+$(call gb_Helper_abbreviate_dirs,\
+mkdir -p $(dir $(1)) && \
+	$(gb_CXX) \
+		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
+		$(subst \d,$$,$(RPATH)) \
+		$(T_LDFLAGS) \
+		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
+		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
+		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),`cat $(extraobjectlist)`) \
+		-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group \
+		$(LIBS) \
+		$(subst -lpthread,$(PTHREAD_LIBS),$(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))))) \
+		-o $(1))
+endef
 
 # vim: set noet sw=4:

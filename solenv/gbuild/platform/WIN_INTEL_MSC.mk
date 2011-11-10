@@ -27,7 +27,6 @@
 #*************************************************************************
 
 GUI := WNT
-COM := MSC
 
 # set tmpdir to some mixed case path, suitable for native tools
 gb_TMPDIR:=$(if $(TMPDIR),$(shell cygpath -m $(TMPDIR)),$(shell cygpath -m /tmp))
