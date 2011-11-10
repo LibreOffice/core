@@ -80,7 +80,6 @@ public:
 
     sal_Bool            IsTwoLines() const;
     void                SetTwoLines(sal_Bool bSet);
-    void                SetNoLines(sal_Bool bSet);
 
     void                SetBrackets(sal_Unicode cStart, sal_Unicode cEnd);
 

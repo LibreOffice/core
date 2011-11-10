@@ -176,7 +176,6 @@ class FontPrevWin_Impl
                                     bDrawBaseLine   : 1,
                                     bPreviewBackgroundToCharacter : 1,
                                     bTwoLines       : 1,
-                                    bNoLines        : 1,
                                     bUseFontNameAsText : 1,
                                     bTextInited     : 1;
 
@@ -192,7 +191,6 @@ public:
         cStartBracket( 0 ), cEndBracket( 0 ), nFontWidthScale( 100 ),
         bSelection( sal_False ), bGetSelection( sal_False ), bUseResText( sal_False ),
         bDrawBaseLine( sal_True ), bPreviewBackgroundToCharacter( sal_False ), bTwoLines( sal_False ),
-        bNoLines( sal_False ),
         bUseFontNameAsText( sal_False ), bTextInited( sal_False )
     {
         SvtLanguageOptions aLanguageOptions;
@@ -819,18 +817,15 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
         else
         {
 
-            if (!pImpl->bNoLines)
-            {
-                Color aLineCol = GetLineColor();
+            Color aLineCol = GetLineColor();
 
-                SetLineColor( rFont.GetColor() );
-                if ( pImpl->bDrawBaseLine )
-                {
-                    DrawLine( Point( 0,  nY ), Point( nX, nY ) );
-                    DrawLine( Point( nX + aTxtSize.Width(), nY ), Point( aLogSize.Width(), nY ) );
-                }
-                SetLineColor( aLineCol );
+            SetLineColor( rFont.GetColor() );
+            if ( pImpl->bDrawBaseLine )
+            {
+                DrawLine( Point( 0,  nY ), Point( nX, nY ) );
+                DrawLine( Point( nX + aTxtSize.Width(), nY ), Point( aLogSize.Width(), nY ) );
             }
+            SetLineColor( aLineCol );
 
             Point aTmpPoint( nX, nY );
             pImpl->DrawPrev( this, pPrinter, aTmpPoint, rFont );
@@ -846,11 +841,6 @@ sal_Bool SvxFontPrevWindow::IsTwoLines() const
 void SvxFontPrevWindow::SetTwoLines(sal_Bool bSet)
 {
     pImpl->bTwoLines = bSet;
-}
-
-void SvxFontPrevWindow::SetNoLines(sal_Bool bSet)
-{
-    pImpl->bNoLines = bSet;
 }
 
 void SvxFontPrevWindow::SetBrackets(sal_Unicode cStart, sal_Unicode cEnd)
