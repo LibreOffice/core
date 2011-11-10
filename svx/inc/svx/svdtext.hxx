@@ -48,6 +48,7 @@ namespace sdr { namespace properties {
 /** This class stores information about one text inside a shape.
 */
 
+class SfxStyleSheet;
 class SVX_DLLPUBLIC SdrText : public tools::WeakBase< SdrText >
 {
 public:
