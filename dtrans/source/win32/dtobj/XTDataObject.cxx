@@ -83,13 +83,13 @@ public:
 //------------------------------------------------------------------------
 
 CXTDataObject::CXTDataObject( const Reference< XMultiServiceFactory >& aServiceManager,
-                              const Reference< XTransferable >& aXTransferable ) :
-    m_nRefCnt( 0 ),
-    m_SrvMgr( aServiceManager ),
-    m_XTransferable( aXTransferable ),
-    m_DataFormatTranslator( aServiceManager ),
-    m_bFormatEtcContainerInitialized( sal_False ),
-    m_FormatRegistrar( m_SrvMgr, m_DataFormatTranslator )
+                              const Reference< XTransferable >& aXTransferable )
+    : m_nRefCnt( 0 )
+    , m_SrvMgr( aServiceManager )
+    , m_XTransferable( aXTransferable )
+    , m_bFormatEtcContainerInitialized( sal_False )
+    , m_DataFormatTranslator( aServiceManager )
+    , m_FormatRegistrar( m_SrvMgr, m_DataFormatTranslator )
 {
 }
 
