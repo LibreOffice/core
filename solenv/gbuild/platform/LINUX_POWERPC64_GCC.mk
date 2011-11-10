@@ -29,9 +29,11 @@
 #*************************************************************************
 
 #please make generic modifications to unxgcc.mk or linux.mk
-gb_CXXFLAGS += -mminimal-toc
+gb_CPUDEFS += -DPPC
+gb_COMPILERDEFAULTOPTFLAGS := -O2
+gb_CXXFLAGS += -mminimal-toc -fsigned-char
 gb_CFLAGS += -fsigned-char
 
-include $(GBUILDDIR)/platform/linux-POWERPC.mk
+include $(GBUILDDIR)/platform/linux.mk
 
 # vim: set noet sw=4:
