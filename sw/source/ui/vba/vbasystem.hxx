@@ -39,12 +39,12 @@ class PrivateProfileStringListener : public PropListener
 {
 private:
     rtl::OUString maFileName;
-    ByteString maGroupName;
-    ByteString  maKey;
+    rtl::OString maGroupName;
+    rtl::OString maKey;
 public:
     PrivateProfileStringListener(){};
     virtual ~PrivateProfileStringListener();
-    void Initialize( const rtl::OUString& rFileName, const ByteString& rGroupName, const ByteString& rKey );
+    void Initialize( const rtl::OUString& rFileName, const rtl::OString& rGroupName, const rtl::OString& rKey );
 
     //PropListener
     virtual void setValueEvent( const css::uno::Any& value );

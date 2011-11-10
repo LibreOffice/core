@@ -46,37 +46,37 @@ PrivateProfileStringListener::~PrivateProfileStringListener()
 {
 }
 
-void PrivateProfileStringListener::Initialize( const rtl::OUString& rFileName, const ByteString& rGroupName, const ByteString& rKey )
+void PrivateProfileStringListener::Initialize( const rtl::OUString& rFileName, const rtl::OString& rGroupName, const rtl::OString& rKey )
 {
     maFileName = rFileName;
     maGroupName = rGroupName;
     maKey = rKey;
 }
 #ifdef WNT
-void lcl_getRegKeyInfo( const ByteString& sKeyInfo, HKEY& hBaseKey, ByteString& sSubKey )
+void lcl_getRegKeyInfo( const rtl::OString& sKeyInfo, HKEY& hBaseKey, rtl::OString& sSubKey )
 {
-    sal_Int32 nBaseKeyIndex = sKeyInfo.Search('\\');
+    sal_Int32 nBaseKeyIndex = sKeyInfo.indexOf('\\');
     if( nBaseKeyIndex > 0 )
     {
-        ByteString sBaseKey = sKeyInfo.Copy( 0, nBaseKeyIndex );
-        sSubKey = sKeyInfo.Copy( nBaseKeyIndex + 1 );
-        if( sBaseKey.Equals("HKEY_CURRENT_USER") )
+        rtl::OString sBaseKey = sKeyInfo.copy( 0, nBaseKeyIndex );
+        sSubKey = sKeyInfo.copy( nBaseKeyIndex + 1 );
+        if( sBaseKey.equalsL(RTL_CONSTASCII_STRINGPARAM("HKEY_CURRENT_USER")) )
         {
             hBaseKey = HKEY_CURRENT_USER;
         }
-        else if( sBaseKey.Equals("HKEY_LOCAL_MACHINE") )
+        else if( sBaseKey.equalsL(RTL_CONSTASCII_STRINGPARAM("HKEY_LOCAL_MACHINE")) )
         {
             hBaseKey = HKEY_LOCAL_MACHINE;
         }
-        else if( sBaseKey.Equals("HKEY_CLASSES_ROOT") )
+        else if( sBaseKey.equalsL(RTL_CONSTASCII_STRINGPARAM("HKEY_CLASSES_ROOT")) )
         {
             hBaseKey = HKEY_CLASSES_ROOT;
         }
-        else if( sBaseKey.Equals("HKEY_USERS") )
+        else if( sBaseKey.equalsL(RTL_CONSTASCII_STRINGPARAM("HKEY_USERS")) )
         {
             hBaseKey = HKEY_USERS;
         }
-        else if( sBaseKey.Equals("HKEY_CURRENT_CONFIG") )
+        else if( sBaseKey.equalsL(RTL_CONSTASCII_STRINGPARAM("HKEY_CURRENT_CONFIG")) )
         {
             hBaseKey = HKEY_CURRENT_CONFIG;
         }
@@ -100,19 +100,19 @@ uno::Any PrivateProfileStringListener::getValueEvent()
         // get key/value from windows register
 #ifdef WNT
         HKEY hBaseKey = NULL;
-        ByteString sSubKey;
+        rtl::OString sSubKey;
         lcl_getRegKeyInfo( maGroupName, hBaseKey, sSubKey );
         if( hBaseKey != NULL )
         {
             HKEY hKey = NULL;
             LONG lResult;
-            LPCTSTR lpSubKey = TEXT( sSubKey.GetBuffer());
+            LPCTSTR lpSubKey = TEXT( sSubKey.getStr());
             TCHAR szBuffer[1024];
             DWORD cbData = sizeof( szBuffer );
             lResult = RegOpenKeyEx( hBaseKey, lpSubKey, 0, KEY_QUERY_VALUE, &hKey );
             if( ERROR_SUCCESS == lResult )
             {
-                LPCTSTR lpValueName = TEXT(maKey.GetBuffer());
+                LPCTSTR lpValueName = TEXT(maKey.getStr());
                 lResult = RegQueryValueEx( hKey, lpValueName, NULL, NULL, (LPBYTE)szBuffer, &cbData );
                 RegCloseKey( hKey );
                 sValue = rtl::OUString::createFromAscii(szBuffer);
@@ -139,26 +139,26 @@ void PrivateProfileStringListener::setValueEvent( const css::uno::Any& value )
         // set value into a file
         Config aCfg( maFileName );
         aCfg.SetGroup( maGroupName );
-        aCfg.WriteKey( maKey, ByteString( aValue.getStr(), RTL_TEXTENCODING_DONTKNOW ) );
+        aCfg.WriteKey( maKey, rtl::OUStringToOString(aValue, RTL_TEXTENCODING_DONTKNOW) );
     }
     else
     {
         //set value into windows register
 #ifdef WNT
         HKEY hBaseKey = NULL;
-        ByteString sSubKey;
+        rtl::OString sSubKey;
         lcl_getRegKeyInfo( maGroupName, hBaseKey, sSubKey );
         if( hBaseKey != NULL )
         {
             HKEY hKey = NULL;
             LONG lResult;
-            LPCTSTR lpSubKey = TEXT( sSubKey.GetBuffer());
+            LPCTSTR lpSubKey = TEXT( sSubKey.getStr());
             lResult = RegCreateKeyEx( hBaseKey, lpSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, NULL );
             if( ERROR_SUCCESS == lResult )
             {
                 LPCTSTR szValue = TEXT( rtl::OUStringToOString( aValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                 DWORD cbData = sizeof(TCHAR) * (_tcslen(szValue) + 1);
-                LPCTSTR lpValueName = TEXT(maKey.GetBuffer());
+                LPCTSTR lpValueName = TEXT(maKey.getStr());
                 lResult = RegSetValueEx( hKey, lpValueName, 0 /* Reserved */, REG_SZ, (LPBYTE)szValue, cbData );
                 RegCloseKey( hKey );
             }
@@ -263,8 +263,8 @@ SwVbaSystem::PrivateProfileString( const rtl::OUString& rFilename, const rtl::OU
             osl::FileBase::getFileURLFromSystemPath( rFilename, sFileUrl);
     }
 
-    ByteString aGroupName = ByteString( rSection.getStr(), RTL_TEXTENCODING_DONTKNOW);
-    ByteString aKey = ByteString( rKey.getStr(), RTL_TEXTENCODING_DONTKNOW);
+    rtl::OString aGroupName(rtl::OUStringToOString(rSection, RTL_TEXTENCODING_DONTKNOW));
+    rtl::OString aKey(rtl::OUStringToOString(rKey, RTL_TEXTENCODING_DONTKNOW));
     maPrivateProfileStringListener.Initialize( sFileUrl, aGroupName, aKey );
 
     return uno::makeAny( uno::Reference< XPropValue > ( new ScVbaPropValue( &maPrivateProfileStringListener ) ) );
