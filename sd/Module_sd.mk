@@ -42,13 +42,13 @@ $(eval $(call gb_Module_add_targets,sd,\
 
 ifneq ($(OS),DRAGONFLY)
 $(eval $(call gb_Module_add_check_targets,sd,\
+    CppunitTest_sd_uimpress \
     CppunitTest_sd_filters_test \
     RdbTarget_sd_uimpress \
 	RdbTarget_sd_filters_test \
 ))
 endif
 
-#    CppunitTest_sd_uimpress \
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sd,\
     JunitTest_sd_unoapi \
