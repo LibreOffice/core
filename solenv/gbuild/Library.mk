@@ -81,8 +81,7 @@ define gb_Library_set_componentfile
 $(call gb_ComponentTarget_ComponentTarget,$(or $(strip $(3)),$(strip $(2))),$(call gb_Library__get_componentprefix,$(1)),\
 	$(call gb_Library_get_runtime_filename,$(if $(MERGELIBS),$(if $(filter $(gb_MERGED_LIBS),$(1)),merged,$(1)),$(1))),$(2))
 $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))) : \
-	$(call gb_ComponentTarget_get_outdir_target,$(2)) \
-	$(call gb_ComponentTarget_get_outdir_inbuild_target,$(2))
+	$(call gb_ComponentTarget_get_outdir_target,$(2))
 $(call gb_Library_get_clean_target,$(1)) : $(call gb_ComponentTarget_get_clean_target,$(or $(strip $(3)),$(strip $(2))))
 
 endef
@@ -97,8 +96,8 @@ gb_Library__get_layer_componentprefix = \
 		$(call gb_Output_error,no ComponentTarget native prefix for layer '$(1)')))
 
 gb_Library__COMPONENTPREFIXES := \
-    NONE:vnd.sun.star.expand:\dOOO_INBUILD_SHAREDLIB_DIR/ \
-    OOO:vnd.sun.star.expand:\dBRAND_BASE_DIR/program/ \
+    NONE:vnd.sun.star.expand:\dLO_LIB_DIR/ \
+    OOO:vnd.sun.star.expand:\dLO_LIB_DIR/ \
     URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
 
 define gb_Library__forward_to_Linktarget

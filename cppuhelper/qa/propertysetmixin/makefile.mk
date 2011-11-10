@@ -135,7 +135,7 @@ test .PHONY: $(SHL1TARGETN) $(SHL2TARGETN) $(MISC)/$(TARGET)/$(TARGET).uno.jar \
         '-env:UNO_SERVICES=$(my_file)$(SOLARXMLDIR)/ure/services.rdb $(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb'\
         -env:URE_INTERNAL_LIB_DIR=$(my_file)$(SOLARSHAREDBIN) \
         -env:URE_INTERNAL_JAVA_DIR=$(my_file)$(SOLARBINDIR) \
-        -env:OOO_INBUILD_SHAREDLIB_DIR=$(my_file)$(PWD)/$(DLLDEST) \
-        -env:OOO_INBUILD_JAR_DIR=$(my_file)$(PWD)/$(MISC)/$(TARGET)
+        -env:LO_LIB_DIR=$(my_file)$(PWD)/$(DLLDEST) \
+        -env:LO_JAVA_DIR=$(my_file)$(PWD)/$(MISC)/$(TARGET)
 
 .END

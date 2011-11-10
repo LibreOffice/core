@@ -41,10 +41,8 @@ $(call gb_RdbTarget_get_target,%) :
 		$(gb_AWK) -- \
 			' BEGIN { RS=">"; } \
 			/^<\?xml version.*/ { next; } \
-			/.*[^\r\n\t\s].*/ { \
-				gsub(/vnd.sun.star.expand:\$$BRAND_BASE_DIR\/program/, "vnd.sun.star.expand:$$BRAND_BASE_DIR",$$0); \
-				print $$0 ">"; \
-			}' $(call gb_RdbTarget__get_rdbs,$(COMPONENTS),$(OLD_COMPONENTS)) \
+			/.*[^\r\n\t\s].*/ { print $$0 ">"; }' \
+            $(call gb_RdbTarget__get_rdbs,$(COMPONENTS),$(OLD_COMPONENTS)) \
 			>> $@ && \
 		echo '</components>' >> $@)
 

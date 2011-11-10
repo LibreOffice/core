@@ -29,7 +29,6 @@
 # outdir target pattern
 
 gb_ComponentTarget_get_outdir_target = $(OUTDIR)/xml/component/$(1).component
-gb_ComponentTarget_get_outdir_inbuild_target = $(OUTDIR)/xml/component/$(1).inbuild.component
 gb_Executable_get_target = $(OUTDIR)/bin/$(1)$(gb_Executable_EXT)
 gb_Executable_get_target_for_build = $(OUTDIR_FOR_BUILD)/bin/$(1)$(gb_Executable_EXT_for_build)
 gb_Extension_get_outdir_target = $(OUTDIR)/bin/$(1).oxt
@@ -71,7 +70,6 @@ gb_AsmObject_get_target = $(WORKDIR)/AsmObject/$(1).o
 gb_CObject_get_target = $(WORKDIR)/CObject/$(1).o
 gb_GenCObject_get_target = $(WORKDIR)/GenCObject/$(1).o
 gb_ComponentTarget_get_target = $(WORKDIR)/ComponentTarget/$(1).component
-gb_ComponentTarget_get_inbuild_target = $(WORKDIR)/ComponentTarget/$(1).inbuild.component
 gb_ComponentsTarget_get_target = $(WORKDIR)/ComponentsTarget/$(1).components
 gb_CppunitTest_get_target = $(WORKDIR)/CppunitTest/$(1).test
 gb_CustomTarget_get_repo_target = $(WORKDIR)/CustomTarget/$(2)_$(1).done

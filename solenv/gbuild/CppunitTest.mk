@@ -73,7 +73,7 @@ $(if $(strip $(UNO_SERVICES)),\
 		$(foreach rdb,$(UNO_SERVICES),\
 			$(call gb_CppunitTarget__make_url,$(call gb_RdbTarget_get_target,$(rdb))))") \
 $(if $(URE),\
-	$(foreach dir,URE_INTERNAL_LIB_DIR BRAND_BASE_DIR,\
+	$(foreach dir,URE_INTERNAL_LIB_DIR LO_LIB_DIR,\
 		-env:$(dir)=$(call gb_CppunitTarget__make_url,$(gb_CppunitTest_LIBDIR))))
 endef
 

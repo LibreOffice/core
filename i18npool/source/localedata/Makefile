@@ -31,7 +31,7 @@ all : $(patsubst %.xml,localedata_%.cxx,$(notdir $(wildcard $(SRC_ROOT)/i18npool
 include $(GBUILDDIR)/gbuild_simple.mk
 
 my_file := file://$(if $(filter $(OS_FOR_BUILD),WNT),/)
-my_components := component/sax/source/expatwrap/expwrap.inbuild.component
+my_components := component/sax/source/expatwrap/expwrap.component
 
 localedata_%.cxx : localedata_%_invis.cxx
 	sed 's/\(^.*get[^;]*$$\)/SAL_DLLPUBLIC_EXPORT \1/' $< > $@
@@ -40,11 +40,11 @@ localedata_%_invis.cxx : $(realpath $(SRC_ROOT)/i18npool/source/localedata/data)
 ifeq ($(OS_FOR_BUILD),WNT)
 	$(gb_Helper_execute)saxparser $* `cygpath -m $<` $@ \
 		$(my_file)`cygpath -m $(WORKDIR)/CustomTarget/i18npool/source/localedata/saxparser.rdb` `cygpath -m $(OUTDIR)/bin/types.rdb` \
-		-env:OOO_INBUILD_SHAREDLIB_DIR=$(my_file)`cygpath -m $(OUTDIR)/bin`
+		-env:LO_LIB_DIR=$(my_file)`cygpath -m $(OUTDIR)/bin`
 else
 	$(gb_Helper_execute)saxparser $* $< $@ \
 		$(my_file)$(WORKDIR_FOR_BUILD)/CustomTarget/i18npool/source/localedata/saxparser.rdb $(OUTDIR_FOR_BUILD)/bin/types.rdb \
-		-env:OOO_INBUILD_SHAREDLIB_DIR=$(my_file)$(OUTDIR_FOR_BUILD)/lib
+		-env:LO_LIB_DIR=$(my_file)$(OUTDIR_FOR_BUILD)/lib
 endif
 
 saxparser.rdb : saxparser.input
