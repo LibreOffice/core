@@ -147,7 +147,6 @@ protected:
 
     String              aEmptyStr;
 
-    sal_Bool            FileExists( const INetURLObject& rURL );
     static String   GetSchemeFromURL( String aStrURL );
 
     inline void     DisableClose( sal_Bool _bDisable ) { mbIsCloseDisabled = _bDisable; }

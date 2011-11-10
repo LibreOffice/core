@@ -69,33 +69,4 @@ const String& SvxStringArray::GetStringByPos( sal_uInt32 nPos ) const
         return String::EmptyString();
 }
 
-//------------------------------------------------------------------------
-
-const String& SvxStringArray::GetStringByType( long nType ) const
-{
-    sal_uInt32 nPos = FindIndex( nType );
-
-    if ( RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count() )
-        return ResStringArray::GetString( nPos );
-    else
-        return String::EmptyString();
-}
-
-//------------------------------------------------------------------------
-
-long SvxStringArray::GetValueByStr( const String& rStr ) const
-{
-    long nType = 0;
-    sal_uInt32 nCount = Count();
-
-    for ( sal_uInt32 i = 0; i < nCount; ++i )
-        if ( rStr == ResStringArray::GetString( i ) )
-        {
-            nType = GetValue( i );
-            break;
-        }
-    return nType;
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

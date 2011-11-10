@@ -49,10 +49,6 @@ class SVX_DLLPUBLIC SvxContourDlgChildWindow : public SfxChildWindow
     SvxContourDlgChildWindow( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
 
     SFX_DECL_CHILDWINDOW( SvxContourDlgChildWindow );
-
-    static void UpdateContourDlg( const Graphic& rGraphic, sal_Bool bGraphicLinked,
-                                  const PolyPolygon* pPolyPoly = NULL,
-                                  void* pEditingObj = NULL );
 };
 
 #ifndef _REDUCED_ContourDlg_HXX_

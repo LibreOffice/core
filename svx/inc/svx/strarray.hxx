@@ -43,8 +43,6 @@ public:
     ~SvxStringArray();
 
     const String&   GetStringByPos( sal_uInt32 nPos ) const;
-    const String&   GetStringByType( long nType ) const;
-    long            GetValueByStr( const String& rStr ) const;
 };
 
 

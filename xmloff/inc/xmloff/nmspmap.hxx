@@ -159,10 +159,7 @@ public:
 
 /* deprecated */ sal_Bool AddAtIndex( sal_uInt16 nIdx, const ::rtl::OUString& rPrefix,
                      const ::rtl::OUString& rName, sal_uInt16 nKey = XML_NAMESPACE_UNKNOWN );
-/* deprecated */ sal_Bool AddAtIndex( sal_uInt16 nIdx, const sal_Char *pPrefix,
-                     const sal_Char *pName, sal_uInt16 nKey = XML_NAMESPACE_UNKNOWN );
 /* deprecated */ sal_uInt16 GetIndexByKey( sal_uInt16 nKey ) const;
-/* deprecated */ sal_uInt16 GetKeyByIndex( sal_uInt16 nIdx ) const;
 /* deprecated */ sal_uInt16 GetIndexByPrefix( const ::rtl::OUString& rPrefix ) const;
 /* deprecated */ sal_uInt16 GetFirstIndex() const;
 /* deprecated */ sal_uInt16 GetNextIndex( sal_uInt16 nOldIdx ) const;

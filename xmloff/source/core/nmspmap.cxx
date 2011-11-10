@@ -382,11 +382,6 @@ sal_uInt16 SvXMLNamespaceMap::GetNextKey( sal_uInt16 nLastKey ) const
 
 // All methods after this are deprecated...
 
-sal_uInt16 SvXMLNamespaceMap::GetKeyByIndex( sal_uInt16 nIdx ) const
-{
-    return nIdx;
-}
-
 sal_uInt16 SvXMLNamespaceMap::GetIndexByKey( sal_uInt16 nKey ) const
 {
     return nKey;
@@ -418,15 +413,6 @@ sal_Bool SvXMLNamespaceMap::AddAtIndex( sal_uInt16 /*nIdx*/, const OUString& rPr
         bRet = sal_True;
     }
     return bRet;
-}
-
-sal_Bool SvXMLNamespaceMap::AddAtIndex( sal_uInt16 nIdx, const sal_Char *pPrefix,
-                                     const sal_Char *pName, sal_uInt16 nKey )
-{
-    OUString sPrefix( OUString::createFromAscii(pPrefix) );
-    OUString sName( OUString::createFromAscii(pName) );
-
-    return AddAtIndex( nIdx, sPrefix, sName, nKey );
 }
 
 OUString SvXMLNamespaceMap::GetAttrNameByIndex( sal_uInt16 nIdx ) const

@@ -70,11 +70,6 @@ public:
     bool            IsHit(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevice& rOut) const;
     // OutputDevice wird benoetigt, da Fangpunkte eine feste Pixelgroesse haben
     Rectangle       GetBoundRect(const OutputDevice& rOut) const;
-
-    /* returns true if this and the given help line would be rendered at the same pixel position
-        of the given OutputDevice. This can be used to avoid drawing multiple help lines with xor
-        on same position which could render them invisible */
-    bool            IsVisibleEqual( const SdrHelpLine& rHelpLine, const OutputDevice& rOut ) const;
 };
 
 #define SDRHELPLINE_NOTFOUND 0xFFFF

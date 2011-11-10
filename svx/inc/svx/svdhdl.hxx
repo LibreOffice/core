@@ -460,7 +460,6 @@ protected:
     unsigned                    bRotateShear : 1;
     unsigned                    bDistortShear : 1;
     unsigned                    bMoveOutside : 1;      // Handles nach aussen ruecken (fuer TextEdit)
-    unsigned                    bFineHandles : 1;
 
 private:
     SVX_DLLPRIVATE SdrHdlList(const SdrHdlList&): aList(1024,64,64)  {}
@@ -497,8 +496,6 @@ public:
     sal_Bool IsRotateShear() const                     { return bRotateShear; }
     void     SetDistortShear(sal_Bool bOn);
     sal_Bool IsDistortShear() const                    { return bDistortShear; }
-    void     SetFineHdl(sal_Bool bOn);
-    sal_Bool IsFineHdl() const                        { return bFineHandles; }
 
     // AddHdl uebernimmt das Handle in sein Eigentum. Es muss
     // also auf dem Heap stehen, da Clear() ein delete macht.

@@ -1553,17 +1553,6 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
     return 0;
 };
 
-IMPL_LINK(SwTOXSelectTabPage, TOXAreaHdl,   ListBox*, pBox)
-{
-    OSL_FAIL("not implemented");
-    switch((long)pBox->GetEntryData( pBox->GetSelectEntryPos() ))
-    {
-        case AREA_DOCUMENT  : break;
-        case AREA_CHAPTER   : break;
-    }
-    return 0;
-}
-
 IMPL_LINK(SwTOXSelectTabPage, AddStylesHdl, PushButton*, pButton)
 {
     SwAddStylesDlg_Impl* pDlg = new SwAddStylesDlg_Impl(pButton,

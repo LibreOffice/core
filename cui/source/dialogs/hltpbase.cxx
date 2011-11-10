@@ -513,35 +513,6 @@ SvxMacroTableDtor* SvxHyperlinkTabPageBase::GetMacroTable()
 
 /*************************************************************************
 |*
-|* Does the given file exists ?
-|*
-|************************************************************************/
-
-sal_Bool SvxHyperlinkTabPageBase::FileExists( const INetURLObject& rURL )
-{
-    sal_Bool bRet = sal_False;
-
-    if( rURL.GetFull().getLength() > 0 )
-    {
-        try
-        {
-            Content     aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
-            ::rtl::OUString aTitle;
-
-            aCnt.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" ) ) ) >>= aTitle;
-            bRet = ( aTitle.getLength() > 0 );
-        }
-        catch( ... )
-        {
-            OSL_FAIL( "FileExists: ucb error" );
-        }
-    }
-
-    return bRet;
-}
-
-/*************************************************************************
-|*
 |* try to detect the current protocol that is used in aStrURL
 |*
 |************************************************************************/

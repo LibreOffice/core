@@ -2029,7 +2029,6 @@ SdrHdlList::SdrHdlList(SdrMarkView* pV)
     bRotateShear = sal_False;
     bMoveOutside = sal_False;
     bDistortShear = sal_False;
-    bFineHandles = sal_False;
 }
 
 SdrHdlList::~SdrHdlList()
@@ -2077,22 +2076,6 @@ void SdrHdlList::SetRotateShear(sal_Bool bOn)
 void SdrHdlList::SetDistortShear(sal_Bool bOn)
 {
     bDistortShear = bOn;
-}
-
-void SdrHdlList::SetFineHdl(sal_Bool bOn)
-{
-    if(bFineHandles != bOn)
-    {
-        // remember new state
-        bFineHandles = bOn;
-
-        // propagate change to IAOs
-        for(sal_uInt32 i=0; i<GetHdlCount(); i++)
-        {
-            SdrHdl* pHdl = GetHdl(i);
-            pHdl->Touch();
-        }
-    }
 }
 
 SdrHdl* SdrHdlList::RemoveHdl(sal_uIntPtr nNum)

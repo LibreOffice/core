@@ -389,8 +389,6 @@ public:
         it to the appropriate size.
      */
     void            getGraphic          ( Graphic& ) const;
-    /// Query a textual representation of the object's content
-    ::rtl::OString  toString            () const;
 
     // mutators
     /// Set path to fill

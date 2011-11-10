@@ -520,7 +520,6 @@ SdrGrafObj::SetFileName(String const&)
 SdrGrafObj::SetFilterName(String const&)
 SdrGrafObj::StopAnimation(OutputDevice*, long)
 SdrHdl::isMouseOver() const
-SdrHelpLine::IsVisibleEqual(SdrHelpLine const&, OutputDevice const&) const
 SdrHint::GetObjList() const
 SdrHint::GetRect() const
 SdrHint::SdrHint()
@@ -750,8 +749,6 @@ SvXMLImport::SetError(int, rtl::OUString const&, rtl::OUString const&, rtl::OUSt
 SvXMLImport::SetError(int, rtl::OUString const&, rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
 SvXMLImportContexts_Impl::DeleteAndDestroy(unsigned short, unsigned short)
 SvXMLImportPropertyMapper::importXML(std::__debug::vector<XMLPropertyState, std::allocator<XMLPropertyState> >&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>, SvXMLUnitConverter const&, SvXMLNamespaceMap const&, unsigned int) const
-SvXMLNamespaceMap::AddAtIndex(unsigned short, char const*, char const*, unsigned short)
-SvXMLNamespaceMap::GetKeyByIndex(unsigned short) const
 SvXMLNumFormatContext::AddCondition(int, rtl::OUString const&, LocaleDataWrapper const&)
 SvXMLStyleIndices_Impl::GetPos(SvXMLStyleIndex_Impl const*) const
 SvXMLStyleIndices_Impl::Remove(SvXMLStyleIndex_Impl*)
@@ -791,7 +788,6 @@ SvtGraphicFill::setHatchType(SvtGraphicFill::HatchType)
 SvtGraphicFill::setTiling(bool)
 SvtGraphicFill::setTransform(SvtGraphicFill::Transform const&)
 SvtGraphicFill::setTransparency(double)
-SvtGraphicFill::toString() const
 SvtGraphicStroke::setCapType(SvtGraphicStroke::CapType)
 SvtGraphicStroke::setDashArray(std::__debug::vector<double, std::allocator<double> > const&)
 SvtGraphicStroke::setEndArrow(PolyPolygon const&)
@@ -905,7 +901,6 @@ SvxContourDlg::SetExecState(unsigned char)
 SvxContourDlg::SetGraphic(Graphic const&)
 SvxContourDlg::SetGraphicLinked(unsigned char)
 SvxContourDlg::SetPolyPolygon(PolyPolygon const&)
-SvxContourDlgChildWindow::UpdateContourDlg(Graphic const&, unsigned char, PolyPolygon const*, void*)
 SvxDoCapitals::Do(String const&, unsigned short, unsigned short, unsigned char)
 SvxDrawOutlinerViewForwarder::SetShapePos(Point const&)
 SvxDrawPage::GetPageForSdrPage(SdrPage*)
@@ -922,7 +917,6 @@ SvxGraphCtrlAccessibleContext::setDescription(rtl::OUString const&)
 SvxGraphCtrlAccessibleContext::setName(rtl::OUString const&)
 SvxHtmlOptions::AddListenerLink(Link const&)
 SvxHtmlOptions::RemoveListenerLink(Link const&)
-SvxHyperlinkTabPageBase::FileExists(INetURLObject const&)
 SvxIMapDlg::GetTargetList() const
 SvxIconChoiceCtrlEntry::LockPos(unsigned char)
 SvxInsertStatusBarControl::GetDefItemWidth(StatusBar const&)
@@ -980,8 +974,6 @@ SvxShapePolyPolygonBezier::GetPolygonKind() const
 SvxShapeText::SvxShapeText()
 SvxSimpleTable::ClearAll()
 SvxSimpleTable::TableToTop()
-SvxStringArray::GetStringByType(long) const
-SvxStringArray::GetValueByStr(String const&) const
 SvxSuperContourDlg::DoAutoCreate()
 SvxSuperContourDlg::ReducePoints(long)
 SvxTPFilter::DisableRange(unsigned char)
@@ -1088,7 +1080,6 @@ SwSortTableLines::Remove(SwTableLine* const&, unsigned short)
 SwSortTableLines::Remove(unsigned short, unsigned short)
 SwSyncChildWin::GetChildWindowId()
 SwTOXMarks::DeleteAndDestroy(unsigned short, unsigned short)
-SwTOXSelectTabPage::LinkStubTOXAreaHdl(void*, void*)
 SwTOXSources::Insert(SwTOXSources const*, unsigned short, unsigned short, unsigned short)
 SwTOXSources::Remove(unsigned short, unsigned short)
 SwTOXSources::Replace(SwTOXSource const&, unsigned short)
@@ -1105,7 +1096,6 @@ SwVbaStyle::getOOoStyleTypeFromMSWord(int)
 SwVbaTableHelper::setTableWidth(int)
 SwView::LinkStubHtmlOptionsHdl(void*, void*)
 SwView::LinkStubSpellError(void*, void*)
-SwViewImp::LinkStubSetStopPrt(void*, void*)
 SwWriteTableCols::Insert(SwWriteTableCol* const&, unsigned short&)
 SwWriteTableCols::Insert(SwWriteTableCol* const*, unsigned short)
 SwWriteTableCols::Insert(SwWriteTableCols const*, unsigned short, unsigned short)

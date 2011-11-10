@@ -86,24 +86,6 @@ Rectangle SdrHelpLine::GetBoundRect(const OutputDevice& rOut) const
     return aRet;
 }
 
-bool SdrHelpLine::IsVisibleEqual( const SdrHelpLine& rHelpLine, const OutputDevice& rOut ) const
-{
-    if( eKind == rHelpLine.eKind)
-    {
-        Point aPt1(rOut.LogicToPixel(aPos)), aPt2(rOut.LogicToPixel(rHelpLine.aPos));
-        switch( eKind )
-        {
-            case SDRHELPLINE_POINT:
-                return aPt1 == aPt2;
-            case SDRHELPLINE_VERTICAL:
-                return aPt1.X() == aPt2.X();
-            case SDRHELPLINE_HORIZONTAL:
-                return aPt1.Y() == aPt2.Y();
-        }
-    }
-    return false;
-}
-
 void SdrHelpLineList::Clear()
 {
     sal_uInt16 nAnz=GetCount();

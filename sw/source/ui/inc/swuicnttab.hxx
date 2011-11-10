@@ -222,7 +222,6 @@ class SwTOXSelectTabPage : public SfxTabPage
     sal_Bool            bFirstCall;
 
     DECL_LINK(TOXTypeHdl,   ListBox* );
-    DECL_LINK(TOXAreaHdl,   ListBox* );
     DECL_LINK(AddStylesHdl, PushButton* );
     DECL_LINK(MenuEnableHdl, Menu*);
     DECL_LINK(MenuExecuteHdl, Menu*);

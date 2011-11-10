@@ -105,18 +105,6 @@ public:
 
     inline void flush() { Commit(); }
 
-    void
-    addPropertiesChangeListener(
-        star::uno::Sequence< rtl::OUString > const & rPropertyNames,
-        star::uno::Reference< star::beans::XPropertiesChangeListener > const &
-            rListener);
-
-    void
-    removePropertiesChangeListener(
-        star::uno::Sequence< rtl::OUString > const & rPropertyNames,
-        star::uno::Reference< star::beans::XPropertiesChangeListener > const &
-            rListener);
-
 private:
     enum { ENTRY_COUNT = INDEX_HTTP_PROXY_PORT + 1 };
 
@@ -358,37 +346,6 @@ void SvtInetOptions::Impl::setProperty(Index nIndex,
     }
     else
         notifyListeners(aKeys);
-}
-
-//============================================================================
-void
-SvtInetOptions::Impl::addPropertiesChangeListener(
-    star::uno::Sequence< rtl::OUString > const & rPropertyNames,
-    star::uno::Reference< star::beans::XPropertiesChangeListener > const &
-        rListener)
-{
-    osl::MutexGuard aGuard(m_aMutex);
-    Map::mapped_type & rEntry = m_aListeners[rListener];
-    for (sal_Int32 i = 0; i < rPropertyNames.getLength(); ++i)
-        rEntry.insert(rPropertyNames[i]);
-}
-
-//============================================================================
-void
-SvtInetOptions::Impl::removePropertiesChangeListener(
-    star::uno::Sequence< rtl::OUString > const & rPropertyNames,
-    star::uno::Reference< star::beans::XPropertiesChangeListener > const &
-        rListener)
-{
-    osl::MutexGuard aGuard(m_aMutex);
-    Map::iterator aIt(m_aListeners.find(rListener));
-    if (aIt != m_aListeners.end())
-    {
-        for (sal_Int32 i = 0; i < rPropertyNames.getLength(); ++i)
-            aIt->second.erase(rPropertyNames[i]);
-        if (aIt->second.empty())
-            m_aListeners.erase(aIt);
-    }
 }
 
 //============================================================================

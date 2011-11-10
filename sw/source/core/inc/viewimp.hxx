@@ -109,13 +109,6 @@ class SwViewImp
     SwPagePreviewLayout* mpPgPrevwLayout;
 
     /**
-        Signal whether to stop printing.
-
-        @param _useless just to fit macro
-    */
-    DECL_LINK(SetStopPrt, void * _useless = NULL);
-
-    /**
        Returns if printer shall be stopped.
 
        @retval sal_True The printer shall be stopped.

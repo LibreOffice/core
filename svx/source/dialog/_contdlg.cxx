@@ -105,14 +105,6 @@ SvxContourDlgChildWindow::SvxContourDlgChildWindow( Window* _pParent, sal_uInt16
     pDlg->Initialize( pInfo );
 }
 
-void SvxContourDlgChildWindow::UpdateContourDlg( const Graphic& rGraphic, sal_Bool bGraphicLinked,
-                                                 const PolyPolygon* pPolyPoly, void* pEditingObj )
-{
-    if ( SfxViewFrame::Current() &&
-         SfxViewFrame::Current()->HasChildWindow( SvxContourDlgChildWindow::GetChildWindowId() ) )
-        SVXCONTOURDLG()->Update( rGraphic, bGraphicLinked, pPolyPoly, pEditingObj );
-}
-
 SvxContourDlg::SvxContourDlg( SfxBindings* _pBindings, SfxChildWindow* pCW,
                               Window* _pParent, const ResId& rResId ) :
 
