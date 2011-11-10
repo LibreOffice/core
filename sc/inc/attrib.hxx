@@ -55,7 +55,7 @@
 class EditTextObject;
 namespace editeng { class SvxBorderLine; }
 
-sal_Bool SC_DLLPUBLIC ScHasPriority( const ::editeng::SvxBorderLine* pThis, const ::editeng::SvxBorderLine* pOther );
+bool SC_DLLPUBLIC ScHasPriority( const ::editeng::SvxBorderLine* pThis, const ::editeng::SvxBorderLine* pOther );
 
 //------------------------------------------------------------------------
 
@@ -79,7 +79,7 @@ public:
             SCsCOL          GetColMerge() const {return nColMerge; }
             SCsROW          GetRowMerge() const {return nRowMerge; }
 
-            sal_Bool            IsMerged() const { return nColMerge>1 || nRowMerge>1; }
+            bool            IsMerged() const { return nColMerge>1 || nRowMerge>1; }
 
     inline  ScMergeAttr& operator=(const ScMergeAttr& rMerge)
             {
@@ -98,31 +98,31 @@ public:
             ScMergeFlagAttr(sal_Int16 nFlags);
             ~ScMergeFlagAttr();
 
-    sal_Bool    IsHorOverlapped() const     { return ( GetValue() & SC_MF_HOR ) != 0;  }
-    sal_Bool    IsVerOverlapped() const     { return ( GetValue() & SC_MF_VER ) != 0;  }
-    sal_Bool    IsOverlapped() const        { return ( GetValue() & ( SC_MF_HOR | SC_MF_VER ) ) != 0; }
+    bool    IsHorOverlapped() const     { return ( GetValue() & SC_MF_HOR ) != 0;  }
+    bool    IsVerOverlapped() const     { return ( GetValue() & SC_MF_VER ) != 0;  }
+    bool    IsOverlapped() const        { return ( GetValue() & ( SC_MF_HOR | SC_MF_VER ) ) != 0; }
 
-    sal_Bool    HasAutoFilter() const       { return ( GetValue() & SC_MF_AUTO ) != 0; }
-    sal_Bool    HasButton() const           { return ( GetValue() & SC_MF_BUTTON ) != 0; }
+    bool    HasAutoFilter() const       { return ( GetValue() & SC_MF_AUTO ) != 0; }
+    bool    HasButton() const           { return ( GetValue() & SC_MF_BUTTON ) != 0; }
     bool    HasDPTable() const          { return ( GetValue() & SC_MF_DP_TABLE ) != 0; }
 
-    sal_Bool    IsScenario() const          { return ( GetValue() & SC_MF_SCENARIO ) != 0; }
+    bool    IsScenario() const          { return ( GetValue() & SC_MF_SCENARIO ) != 0; }
 };
 
 //------------------------------------------------------------------------
 class SC_DLLPUBLIC ScProtectionAttr: public SfxPoolItem
 {
-    sal_Bool        bProtection;    // protect cell
-    sal_Bool        bHideFormula;   // hide formula
-    sal_Bool        bHideCell;      // hide cell
-    sal_Bool        bHidePrint;     // don't print cell
+    bool        bProtection;    // protect cell
+    bool        bHideFormula;   // hide formula
+    bool        bHideCell;      // hide cell
+    bool        bHidePrint;     // don't print cell
 public:
                             TYPEINFO();
                             ScProtectionAttr();
-                            ScProtectionAttr(   sal_Bool bProtect,
-                                                sal_Bool bHFormula = false,
-                                                sal_Bool bHCell = false,
-                                                sal_Bool bHPrint = false);
+                            ScProtectionAttr(   bool bProtect,
+                                                bool bHFormula = false,
+                                                bool bHCell = false,
+                                                bool bHPrint = false);
                             ScProtectionAttr( const ScProtectionAttr& );
                             ~ScProtectionAttr();
 
@@ -141,14 +141,14 @@ public:
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-            sal_Bool            GetProtection() const { return bProtection; }
-            sal_Bool            SetProtection( sal_Bool bProtect);
-            sal_Bool            GetHideFormula() const { return bHideFormula; }
-            sal_Bool            SetHideFormula( sal_Bool bHFormula);
-            sal_Bool            GetHideCell() const { return bHideCell; }
-            sal_Bool            SetHideCell( sal_Bool bHCell);
-            sal_Bool            GetHidePrint() const { return bHidePrint; }
-            sal_Bool            SetHidePrint( sal_Bool bHPrint);
+            bool            GetProtection() const { return bProtection; }
+            bool            SetProtection( bool bProtect);
+            bool            GetHideFormula() const { return bHideFormula; }
+            bool            SetHideFormula( bool bHFormula);
+            bool            GetHideCell() const { return bHideCell; }
+            bool            SetHideCell( bool bHCell);
+            bool            GetHidePrint() const { return bHidePrint; }
+            bool            SetHidePrint( bool bHPrint);
     inline  ScProtectionAttr& operator=(const ScProtectionAttr& rProtection)
             {
                 bProtection = rProtection.bProtection;
