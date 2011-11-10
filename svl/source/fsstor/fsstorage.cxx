@@ -180,9 +180,9 @@ FSStorage::~FSStorage()
 }
 
 //-----------------------------------------------
-sal_Bool FSStorage::MakeFolderNoUI( const String& rFolder, sal_Bool )
+sal_Bool FSStorage::MakeFolderNoUI( const ::rtl::OUString& rFolder, sal_Bool )
 {
-       INetURLObject aURL( rFolder );
+    INetURLObject aURL( rFolder );
     ::rtl::OUString aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
     aURL.removeSegment();
     ::ucbhelper::Content aParent;

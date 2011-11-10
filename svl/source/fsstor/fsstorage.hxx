@@ -75,7 +75,7 @@ public:
     void CopyContentToStorage_Impl( ::ucbhelper::Content* pContent,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xDest );
 
-    static sal_Bool MakeFolderNoUI( const String& rFolder, sal_Bool bNewOnly );
+    static sal_Bool MakeFolderNoUI( const ::rtl::OUString& rFolder, sal_Bool bNewOnly );
 
     //____________________________________________________________________________________________________
     //  XInterface
