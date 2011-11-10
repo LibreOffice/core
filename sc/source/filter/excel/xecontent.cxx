@@ -384,12 +384,13 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
             mnFlags |= EXC_HLINK_ABS;
         mnFlags |= EXC_HLINK_BODY;
 
-        ByteString aAsciiLink( aFileName, rRoot.GetTextEncoding() );
+        rtl::OString aAsciiLink(rtl::OUStringToOString(aFileName,
+            rRoot.GetTextEncoding()));
         XclExpString aLink( aFileName, EXC_STR_FORCEUNICODE, 255 );
         aXclStrm    << XclTools::maGuidFileMoniker
                     << nLevel
-                    << sal_uInt32( aAsciiLink.Len() + 1 );      // string length + 1 trailing zero byte
-        aXclStrm.Write( aAsciiLink.GetBuffer(), aAsciiLink.Len() );
+                    << sal_uInt32( aAsciiLink.getLength() + 1 );      // string length + 1 trailing zero byte
+        aXclStrm.Write( aAsciiLink.getStr(), aAsciiLink.getLength() );
         aXclStrm    << sal_uInt8( 0 )
                     << sal_uInt32( 0xDEADFFFF );
         aXclStrm.WriteZeroBytes( 20 );

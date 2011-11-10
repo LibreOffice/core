@@ -1234,7 +1234,7 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
     switch( rRoot.GetBiff() )
     {
         case EXC_BIFF5:
-            maNoteText = ByteString( aNoteText, rRoot.GetTextEncoding() );
+            maNoteText = rtl::OUStringToOString(aNoteText, rRoot.GetTextEncoding());
         break;
 
         case EXC_BIFF8:
@@ -1276,15 +1276,15 @@ void XclExpNote::Save( XclExpStream& rStrm )
         case EXC_BIFF5:
         {
             // write the NOTE record directly, there may be the need to create more than one
-            const sal_Char* pcBuffer = maNoteText.GetBuffer();
-            sal_uInt16 nCharsLeft = static_cast< sal_uInt16 >( maNoteText.Len() );
+            const sal_Char* pcBuffer = maNoteText.getStr();
+            sal_uInt16 nCharsLeft = static_cast< sal_uInt16 >( maNoteText.getLength() );
 
             while( nCharsLeft )
             {
                 sal_uInt16 nWriteChars = ::std::min( nCharsLeft, EXC_NOTE5_MAXLEN );
 
                 rStrm.StartRecord( EXC_ID_NOTE, 6 + nWriteChars );
-                if( pcBuffer == maNoteText.GetBuffer() )
+                if( pcBuffer == maNoteText.getStr() )
                 {
                     // first record: row, col, length of complete text
                     rStrm   << static_cast< sal_uInt16 >( maScPos.Row() )

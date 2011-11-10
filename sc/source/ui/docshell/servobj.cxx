@@ -188,12 +188,12 @@ sal_Bool ScServerObject::GetData(
         if( aDdeTextFmt.EqualsAscii( "SYLK" ) ||
             aDdeTextFmt.EqualsAscii( "FSYLK" ) )
         {
-            ByteString aByteData;
+            rtl::OString aByteData;
             if( aObj.ExportByteString( aByteData, gsl_getSystemTextEncoding(), SOT_FORMATSTR_ID_SYLK ) )
             {
                 rData <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
-                                        (sal_Int8*)aByteData.GetBuffer(),
-                                        aByteData.Len() + 1 );
+                                        (const sal_Int8*)aByteData.getStr(),
+                                        aByteData.getLength() + 1 );
                 return 1;
             }
             return 0;

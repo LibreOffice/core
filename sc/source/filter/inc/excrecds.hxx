@@ -295,7 +295,7 @@ public:
 class ExcBundlesheet : public ExcBundlesheetBase
 {
 private:
-    ByteString              aName;
+    rtl::OString            aName;
 
     virtual void            SaveCont( XclExpStream& rStrm );
 

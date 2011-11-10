@@ -348,10 +348,10 @@ void XclExpStream::WriteUnicodeBuffer( const ScfUInt16Vec& rBuffer, sal_uInt8 nF
 // Xcl has an obscure sense of whether starting a new record or not,
 // and crashes if it encounters the string header at the very end of a record.
 // Thus we add 1 to give some room, seems like they do it that way but with another count (10?)
-void XclExpStream::WriteByteString( const ByteString& rString, sal_uInt16 nMaxLen, bool b16BitCount )
+void XclExpStream::WriteByteString( const rtl::OString& rString, sal_uInt16 nMaxLen, bool b16BitCount )
 {
     SetSliceSize( 0 );
-    sal_Size nLen = ::std::min< sal_Size >( rString.Len(), nMaxLen );
+    sal_Size nLen = ::std::min< sal_Size >( rString.getLength(), nMaxLen );
     if( !b16BitCount )
         nLen = ::std::min< sal_Size >( nLen, 0xFF );
 
@@ -364,7 +364,7 @@ void XclExpStream::WriteByteString( const ByteString& rString, sal_uInt16 nMaxLe
         operator<<( static_cast< sal_uInt16 >( nLen ) );
     else
         operator<<( static_cast< sal_uInt8 >( nLen ) );
-    Write( rString.GetBuffer(), nLen );
+    Write( rString.getStr(), nLen );
 }
 
 void XclExpStream::WriteCharBuffer( const ScfUInt8Vec& rBuffer )

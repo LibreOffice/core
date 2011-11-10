@@ -376,7 +376,7 @@ private:
 private:
     XclExpString        maAuthor;       /// Name of the author.
     String              maOrigNoteText; /// Original main text of the note.
-    ByteString          maNoteText;     /// Main text of the note (<=BIFF7).
+    rtl::OString        maNoteText;     /// Main text of the note (<=BIFF7).
     XclExpStringRef     mpNoteContents; /// Text and formatting data (OOXML)
     ScAddress           maScPos;        /// Calc cell address of the note.
     sal_uInt16          mnObjId;        /// Escher object ID (BIFF8).

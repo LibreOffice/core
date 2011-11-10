@@ -198,7 +198,7 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
 
 
 void ScHTMLExport::WriteImage( String& rLinkName, const Graphic& rGrf,
-            const ByteString& rImgOptions, sal_uLong nXOutFlags )
+            const rtl::OString& rImgOptions, sal_uLong nXOutFlags )
 {
     // embeddete Grafik -> via WriteGraphic schreiben
     if( !rLinkName.Len() )
@@ -241,8 +241,8 @@ void ScHTMLExport::WriteImage( String& rLinkName, const Graphic& rGrf,
         HTMLOutFuncs::Out_String( rStrm, URIHelper::simpleNormalizedMakeRelative(
                     aBaseURL,
                     rLinkName ), eDestEnc ) << '\"';
-        if ( rImgOptions.Len() )
-            rStrm << rImgOptions.GetBuffer();
+        if ( rImgOptions.getLength() )
+            rStrm << rImgOptions.getStr();
         rStrm << '>' << sNewLine << GetIndentStr();
     }
 }

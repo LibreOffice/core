@@ -342,9 +342,9 @@ sal_Bool ScImportExport::ExportString( ::rtl::OUString& rText, sal_uLong nFmt )
     if ( nFmt != FORMAT_STRING )
     {
         rtl_TextEncoding eEnc = gsl_getSystemTextEncoding();
-        ByteString aTmp;
+        rtl::OString aTmp;
         sal_Bool bOk = ExportByteString( aTmp, eEnc, nFmt );
-        rText = UniString( aTmp, eEnc );
+        rText = rtl::OStringToOUString( aTmp, eEnc );
         return bOk;
     }
     //  nSizeLimit not needed for OUString
@@ -368,7 +368,7 @@ sal_Bool ScImportExport::ExportString( ::rtl::OUString& rText, sal_uLong nFmt )
 }
 
 
-sal_Bool ScImportExport::ExportByteString( ByteString& rText, rtl_TextEncoding eEnc, sal_uLong nFmt )
+sal_Bool ScImportExport::ExportByteString( rtl::OString& rText, rtl_TextEncoding eEnc, sal_uLong nFmt )
 {
     OSL_ENSURE( eEnc != RTL_TEXTENCODING_UNICODE, "ScImportExport::ExportByteString: Unicode not supported" );
     if ( eEnc == RTL_TEXTENCODING_UNICODE )
@@ -392,7 +392,7 @@ sal_Bool ScImportExport::ExportByteString( ByteString& rText, rtl_TextEncoding e
             return sal_True;
         }
     }
-    rText.Erase();
+    rText = rtl::OString();
     return false;
 }
 
@@ -534,8 +534,8 @@ void ScImportExport::WriteUnicodeOrByteString( SvStream& rStrm, const String& rS
     }
     else
     {
-        ByteString aByteStr( rString, eEnc );
-        rStrm << aByteStr.GetBuffer();
+        rtl::OString aByteStr(rtl::OUStringToOString(rString, eEnc));
+        rStrm << aByteStr.getStr();
         if ( bZero )
             rStrm << sal_Char(0);
     }
@@ -1560,7 +1560,7 @@ sal_Bool ScImportExport::Sylk2Doc( SvStream& rStrm )
     {
         String aLine;
         String aText;
-        ByteString aByteLine;
+        rtl::OString aByteLine;
         SCCOL nCol = nStartCol;
         SCROW nRow = nStartRow;
         SCCOL nRefCol = 1;
@@ -1570,7 +1570,7 @@ sal_Bool ScImportExport::Sylk2Doc( SvStream& rStrm )
         {
             //! allow unicode
             rStrm.ReadLine( aByteLine );
-            aLine = String( aByteLine, rStrm.GetStreamCharSet() );
+            aLine = rtl::OStringToOUString(aByteLine, rStrm.GetStreamCharSet());
             if( rStrm.IsEof() )
                 break;
             const sal_Unicode* p = aLine.GetBuffer();

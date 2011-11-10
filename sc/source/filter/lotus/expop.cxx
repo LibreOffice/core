@@ -164,11 +164,11 @@ void ExportWK1::Label( const sal_uInt16 nCol, const sal_uInt16 nRow, const Strin
     OSL_ENSURE( nCol <= WK1MAXCOL, "ExportWK1::Label(): Col > WK1MAXCOL" );
     OSL_ENSURE( nRow <= WK1MAXROW, "ExportWK1::Label(): Row > WK1MAXROW" );
 
-    ByteString  aStr( rStr, eZielChar );
+    rtl::OString aStr(rtl::OUStringToOString(rStr, eZielChar));
 
     sal_uInt16      nLaenge = 7;         // Anzahl Bytes vor String+Nullbyte am Ende + Alignment-Char
 
-    xub_StrLen  nAnz = aStr.Len();
+    sal_Int32 nAnz = aStr.getLength();
 
 
     if( nAnz > 240 )            // max. 240 Zeichen im String
@@ -179,7 +179,7 @@ void ExportWK1::Label( const sal_uInt16 nCol, const sal_uInt16 nRow, const Strin
     aOut << ( sal_uInt16 ) 0x0F << nLaenge << GenFormByte( aAttr ) << nCol << nRow << ( sal_Char ) '\'';
                     // ACHTUNG: ZUNAECHST NUR LEFT ALIGNMENT
 
-    aOut.Write( aStr.GetBuffer(), nAnz );
+    aOut.Write( aStr.getStr(), nAnz );
 
     aOut << ( sal_uInt8 ) 0x00;      // ...und Nullterminator anhaengen
 }

@@ -2018,10 +2018,11 @@ long ScDocShell::DdeGetData( const String& rItem,
     {
         if( rItem.EqualsIgnoreCaseAscii( "Format" ) )
         {
-            ByteString aFmtByte( aDdeTextFmt, gsl_getSystemTextEncoding() );
+            rtl::OString aFmtByte(rtl::OUStringToOString(aDdeTextFmt,
+                osl_getThreadTextEncoding()));
             rValue <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
-                                        (sal_Int8*)aFmtByte.GetBuffer(),
-                                        aFmtByte.Len() + 1 );
+                                        (const sal_Int8*)aFmtByte.getStr(),
+                                        aFmtByte.getLength() + 1 );
             return 1;
         }
         ScImportExport aObj( &aDocument, rItem );
@@ -2033,13 +2034,13 @@ long ScDocShell::DdeGetData( const String& rItem,
         if( aDdeTextFmt.EqualsAscii( "SYLK" ) ||
             aDdeTextFmt.EqualsAscii( "FSYLK" ) )
         {
-            ByteString aData;
+            rtl::OString aData;
             if( aObj.ExportByteString( aData, gsl_getSystemTextEncoding(),
                                         SOT_FORMATSTR_ID_SYLK ) )
             {
                 rValue <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
-                                            (sal_Int8*)aData.GetBuffer(),
-                                            aData.Len() + 1 );
+                                            (const sal_Int8*)aData.getStr(),
+                                            aData.getLength() + 1 );
                 return 1;
             }
             else

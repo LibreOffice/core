@@ -410,9 +410,9 @@ sal_uInt16 ExcBundlesheetBase::GetNum( void ) const
 ExcBundlesheet::ExcBundlesheet( RootData& rRootData, SCTAB _nTab ) :
     ExcBundlesheetBase( rRootData, _nTab )
 {
-    String sTabName = rRootData.pER->GetTabInfo().GetScTabName( _nTab );
-    OSL_ENSURE( sTabName.Len() < 256, "ExcBundlesheet::ExcBundlesheet - table name too long" );
-    aName = ByteString( sTabName, rRootData.pER->GetTextEncoding() );
+    rtl::OUString sTabName = rRootData.pER->GetTabInfo().GetScTabName( _nTab );
+    OSL_ENSURE( sTabName.getLength() < 256, "ExcBundlesheet::ExcBundlesheet - table name too long" );
+    aName = rtl::OUStringToOString(sTabName, rRootData.pER->GetTextEncoding());
 }
 
 
@@ -421,13 +421,13 @@ void ExcBundlesheet::SaveCont( XclExpStream& rStrm )
     nOwnPos = rStrm.GetSvStreamPos();
     rStrm   << (sal_uInt32) 0x00000000              // dummy (stream position of the sheet)
             << nGrbit;
-    rStrm.WriteByteString( aName );             // 8 bit length, max 255 chars
+    rStrm.WriteByteString(aName);             // 8 bit length, max 255 chars
 }
 
 
 sal_Size ExcBundlesheet::GetLen() const
 {
-    return 7 + Min( aName.Len(), (xub_StrLen) 255 );
+    return 7 + Min( aName.getLength(), (sal_Int32) 255 );
 }
 
 

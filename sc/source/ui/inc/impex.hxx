@@ -136,7 +136,7 @@ public:
 
     sal_Bool ImportString( const ::rtl::OUString&, sal_uLong=FORMAT_STRING );
     sal_Bool ExportString( ::rtl::OUString&, sal_uLong=FORMAT_STRING );
-    sal_Bool ExportByteString( ByteString&, rtl_TextEncoding, sal_uLong=FORMAT_STRING );
+    sal_Bool ExportByteString( ::rtl::OString&, rtl_TextEncoding, sal_uLong=FORMAT_STRING );
 
     sal_Bool ImportStream( SvStream&, const String& rBaseURL, sal_uLong=FORMAT_STRING );
     sal_Bool ExportStream( SvStream&, const String& rBaseURL, sal_uLong=FORMAT_STRING );

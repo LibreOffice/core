@@ -50,7 +50,6 @@
 /* ============================================================================
 Output stream class for Excel export
 - CONTINUE record handling
-- ByteString and UniString support
 ============================================================================ */
 
 class XclExpRoot;
@@ -143,9 +142,9 @@ public:
     // *** write 8-bit-strings ***
     // (slice length setting has no effect here -> disabled automatically)
 
-    /** Writes string length field and ByteString buffer. */
+    /** Writes string length field and rtl::OString buffer. */
     void                WriteByteString(
-                            const ByteString& rString,
+                            const rtl::OString& rString,
                             sal_uInt16 nMaxLen = 0x00FF,
                             bool b16BitCount = false );
 

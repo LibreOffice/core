@@ -40,7 +40,6 @@ class XclImpRoot;
 /* ============================================================================
 Input stream class for Excel import
 - CONTINUE record handling
-- ByteString and UniString support
 - Decryption
 ============================================================================ */
 

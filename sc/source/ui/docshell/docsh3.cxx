@@ -39,20 +39,21 @@
 #include "scitems.hxx"
 #include "rangelst.hxx"
 #include <editeng/flstitem.hxx>
-#include <svx/pageitem.hxx>
 #include <editeng/paperinf.hxx>
-#include <svx/postattr.hxx>
 #include <editeng/sizeitem.hxx>
-#include <unotools/misccfg.hxx>
+#include <rtl/strbuf.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 #include <svtools/ctrltool.hxx>
+#include <svx/pageitem.hxx>
+#include <svx/postattr.hxx>
+#include <unotools/localedatawrapper.hxx>
+#include <unotools/misccfg.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
-#include <unotools/localedatawrapper.hxx>
 
 #include "docsh.hxx"
 #include "docshimp.hxx"
@@ -963,9 +964,10 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                 String aValue;
                 if ( eSourceType == SC_CAT_CONTENT )
                     ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue );
-                ByteString aError( aValue, gsl_getSystemTextEncoding() );
-                aError += " weggelassen";
-                OSL_FAIL( aError.GetBuffer() );
+                rtl::OStringBuffer aError(rtl::OUStringToOString(aValue,
+                    osl_getThreadTextEncoding()));
+                aError.append(RTL_CONSTASCII_STRINGPARAM(" weggelassen"));
+                OSL_FAIL( aError.getStr() );
 #endif
             }
             else

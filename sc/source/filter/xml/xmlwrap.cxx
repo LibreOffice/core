@@ -66,6 +66,7 @@
 
 #include <svx/xmleohlp.hxx>
 #include <rtl/logfile.hxx>
+#include <rtl/strbuf.hxx>
 #include <unotools/saveopt.hxx>
 
 #include "document.hxx"
@@ -220,9 +221,10 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         {
 
 #if OSL_DEBUG_LEVEL > 0
-            ByteString aError( "SAX parse exception catched while importing:\n" );
-            aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-            OSL_FAIL( aError.GetBuffer() );
+            rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+                "SAX parse exception catched while importing:\n"));
+            aError.append(rtl::OUStringToOString(r.Message, RTL_TEXTENCODING_ASCII_US));
+            OSL_FAIL(aError.getStr());
 #endif
 
             String sErr( String::CreateFromInt32( r.LineNumber ));
@@ -256,9 +258,11 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         {
 
 #if OSL_DEBUG_LEVEL > 0
-            ByteString aError( "SAX exception catched while importing:\n" );
-            aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-            OSL_FAIL( aError.GetBuffer() );
+            rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+                "SAX exception catched while importing:\n"));
+            aError.append(rtl::OUStringToOString(r.Message,
+                RTL_TEXTENCODING_ASCII_US));
+            OSL_FAIL(aError.getStr());
 #endif
             (void)r;    // avoid warning in product version
 
@@ -268,9 +272,11 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     catch( const packages::zip::ZipIOException& r )
     {
 #if OSL_DEBUG_LEVEL > 0
-        ByteString aError( "Zip exception catched while importing:\n" );
-        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        OSL_FAIL( aError.GetBuffer() );
+        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+            "Zip exception catched while importing:\n"));
+        aError.append(rtl::OUStringToOString(r.Message,
+            RTL_TEXTENCODING_ASCII_US));
+        OSL_FAIL( aError.getStr() );
 #endif
         (void)r;    // avoid warning in product version
 
@@ -279,9 +285,11 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     catch( const io::IOException& r )
     {
 #if OSL_DEBUG_LEVEL > 0
-        ByteString aError( "IO exception catched while importing:\n" );
-        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        OSL_FAIL( aError.GetBuffer() );
+        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+            "IO exception catched while importing:\n"));
+        aError.append(rtl::OUStringToOString(r.Message,
+            RTL_TEXTENCODING_ASCII_US));
+        OSL_FAIL(aError.getStr());
 #endif
         (void)r;    // avoid warning in product version
 
@@ -290,9 +298,11 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     catch( const uno::Exception& r )
     {
 #if OSL_DEBUG_LEVEL > 0
-        ByteString aError( "uno exception catched while importing:\n" );
-        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        OSL_FAIL( aError.GetBuffer() );
+        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+            "uno exception catched while importing:\n"));
+        aError.append(rtl::OUStringToOString(r.Message,
+            RTL_TEXTENCODING_ASCII_US));
+        OSL_FAIL(aError.getStr());
 #endif
         (void)r;    // avoid warning in product version
 
