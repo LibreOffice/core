@@ -608,9 +608,9 @@ void testFuncMATCH(ScDocument* pDoc)
             { "9.59",     "9" },
             { "10",       "9" },
             { "100",      "9" },
-//          { "Andy",    "10" },
-//          { "Bruce",   "11" },
-//          { "Charlie", "12" }
+            { "Andy",    "10" },
+            { "Bruce",   "11" },
+            { "Charlie", "12" }
         };
 
         runTestMATCH<SAL_N_ELEMENTS(aData),SAL_N_ELEMENTS(aChecks),1>(pDoc, aData, aChecks);
@@ -649,9 +649,9 @@ void testFuncMATCH(ScDocument* pDoc)
             { "0.8",     "12" },
             { "0",       "12" },
             { "-2",      "12" },
-//          { "Andy",    "2" },
-//          { "Bruce",   "1" },
-//          { "Charlie", "#N/A" },
+            { "Andy",    "2" },
+            { "Bruce",   "1" },
+            { "Charlie", "#N/A" },
         };
 
         runTestMATCH<SAL_N_ELEMENTS(aData),SAL_N_ELEMENTS(aChecks),-1>(pDoc, aData, aChecks);

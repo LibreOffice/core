@@ -54,6 +54,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/sheet/TablePageBreakData.hpp>
+#include <com/sun/star/lang/NotInitializedException.hpp>
 
 #include "document.hxx"
 #include "table.hxx"
@@ -5764,13 +5765,19 @@ void ScDocument::EnableUndo( bool bVal )
 
 bool ScDocument::IsInVBAMode() const
 {
-    bool bResult = false;
-    if ( pShell )
+    if (!pShell)
+        return false;
+
+    try
     {
-        com::sun::star::uno::Reference< com::sun::star::script::vba::XVBACompatibility > xVBA( pShell->GetBasicContainer(), com::sun::star::uno::UNO_QUERY );
-        bResult = xVBA.is() && xVBA->getVBACompatibilityMode();
+        uno::Reference<script::vba::XVBACompatibility> xVBA(
+            pShell->GetBasicContainer(), uno::UNO_QUERY);
+
+        return xVBA.is() && xVBA->getVBACompatibilityMode();
     }
-    return bResult;
+    catch (const lang::NotInitializedException&) {}
+
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
