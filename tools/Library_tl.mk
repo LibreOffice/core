@@ -38,7 +38,6 @@ $(eval $(call gb_Library_set_include,tl,\
     -I$(realpath $(SRCDIR)/tools/inc) \
     -I$(realpath $(SRCDIR)/tools/inc/pch) \
     -I$(SRCDIR)/solenv/inc \
-    -I$(SRCDIR)/solenv/inc/Xp31 \
     -I$(WORKDIR)/CustomTarget/tools/source/reversemap \
 ))
 

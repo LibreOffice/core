@@ -1268,8 +1268,6 @@ if ($platform =~ m/solaris/ && ! $CC =~ "gcc")
     $SOLARINC         .= $I.$COMPATH.$INCLUDE;
 }
 
-	$SOLARINC      .= $I.'$SOLARENV'.$INC.$ds."Xp31";
-
 	# pickup system jpeg over java jpeg on OpenBSD
 	if ($platform =~ m/openbsd/)
 	{   $SOLARINC  .= $I.$USR_LOCAL.$INCLUDE;
