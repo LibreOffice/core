@@ -2311,6 +2311,10 @@ void ScViewFunc::SetWidthOrHeight( sal_Bool bWidth, SCCOLROW nRangeCnt, SCCOLROW
                                      pUndoTab, eMode, nSizeTwips, bWidth ) );
     }
 
+    // fdo#36247 Ensure that the drawing layer's map mode scaling factors match
+    // the new heights and widths.
+    GetViewData()->GetView()->RefreshZoom();
+
     itr = pMarkData->begin();
     for (; itr != itrEnd; ++itr)
         pDoc->UpdatePageBreaks( *itr );
