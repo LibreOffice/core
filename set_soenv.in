@@ -684,43 +684,49 @@ elsif ( $platform =~ m/cygwin|mingw32/ )
   }
 }
 elsif ( $platform =~ m/darwin/ )
-{     $COM            = "GCC";
-      $COMPATH        = '@COMPATH@';
-      if ($platform =~ m/^arm/)
-      {
-          print "Setting values for iOS... ";
-          $oldoutfile     = "iOSEnv.Set.sh";
-          $CPU            = "R";
-          $CPUNAME        = "ARM";
-          $OUTPATH        = "unxiosr";
-          $GUI            = "UNX";
-          $OS             = "IOS";
-          $GUIBASE        = "cocoatouch";
-      }
-      elsif ($platform =~ m/^powerpc/)
-      {
-          print "Setting values for Mac OS X/Darwin on PowerPC... ";
-          $oldoutfile     = "MacOSXPPCEnv.Set.sh";
-          $CPU            = "P";
-          $CPUNAME        = "POWERPC";
-          $OUTPATH        = "unxmacxp";
-          $OS             = "MACOSX";
-          $GUI            = "UNX";
-      }
-      else
-      {
-          print "Setting values for Mac OS X/Darwin on default x86... ";
-          $oldoutfile     = "MacOSXX86Env.Set.sh";
-          $CPU            = "I";
-          $CPUNAME        = "INTEL";
-          $OUTPATH        = "unxmacxi";
-          $OS             = "MACOSX";
-          $GUI            = "UNX";
-      }
-      $GVER           = "VCL";
-      $INPATH         = $OUTPATH.$PROEXT;
-      $PATH_SEPERATOR = $ps;
-      # GUIBASE is set below for Mac OS X; may be "aqua" or "unx".
+{
+    $COM            = "GCC";
+    $COMPATH        = '@COMPATH@';
+    if ($platform =~ m/^arm/)
+    {
+        print "Setting values for iOS... ";
+        $oldoutfile     = "iOSEnv.Set.sh";
+        $CPU            = "R";
+        $CPUNAME        = "ARM";
+        $OUTPATH        = "unxiosr";
+        $GUI            = "UNX";
+        $OS             = "IOS";
+        $GUIBASE        = "cocoatouch";
+    }
+    elsif ($platform =~ m/^powerpc/)
+    {
+        print "Setting values for Mac OS X/Darwin on PowerPC... ";
+        $oldoutfile     = "MacOSXPPCEnv.Set.sh";
+        $CPU            = "P";
+        $CPUNAME        = "POWERPC";
+        $OUTPATH        = "unxmacxp";
+        $OS             = "MACOSX";
+        $GUI            = "UNX";
+        $GUIBASE        = "aqua";
+        $MACOSX_SDK_PATH='@MACOSX_SDK_PATH@';
+        $FRAMEWORKSHOME = $MACOSX_SDK_PATH."/System/Library/Frameworks";
+    }
+    else
+    {
+        print "Setting values for Mac OS X/Darwin on default x86... ";
+        $oldoutfile     = "MacOSXX86Env.Set.sh";
+        $CPU            = "I";
+        $CPUNAME        = "INTEL";
+        $OUTPATH        = "unxmacxi";
+        $OS             = "MACOSX";
+        $GUI            = "UNX";
+        $GUIBASE        = "aqua";
+        $MACOSX_SDK_PATH='@MACOSX_SDK_PATH@';
+        $FRAMEWORKSHOME = $MACOSX_SDK_PATH."/System/Library/Frameworks";
+    }
+    $GVER           = "VCL";
+    $INPATH         = $OUTPATH.$PROEXT;
+    $PATH_SEPERATOR = $ps;
 }
 elsif ( $platform =~ m/dragonfly/ )
 {
@@ -905,22 +911,6 @@ $PERL                 = PathFormat('@PERL@'); # Perl program
 $PERL_PATH            = dirname('@PERL@'); # Perl Path
 $XLIB                 = PathFormat('@XLIB@'); # X11 libraries
 $XINC                 = PathFormat('@XINC@'); # X11 includes
-
-
-# Mac OS X/Darwin only variables.
-if ( $platform =~ m/darwin/ && $platform !~ m/^arm/)
-{
-    $MACOSX_SDK_PATH='@MACOSX_SDK_PATH@';
-    $FRAMEWORKSHOME       = $MACOSX_SDK_PATH."/System/Library/Frameworks";
-    if ( $XLIB eq "no_x_libraries" )
-    {
-        $GUIBASE  = "aqua";
-    }
-    else
-    {
-        $GUIBASE  = "unx";
-    }
-}
 
 # The project's workstamp.
 $WORK_STAMP            = "@SOURCEVERSION@";
