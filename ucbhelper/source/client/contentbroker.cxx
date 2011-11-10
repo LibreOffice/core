@@ -301,7 +301,7 @@ bool ContentBroker_Impl::initialize()
                 }
             }
 
-            OSL_ENSURE( xIfc.is(), "Error creating UCB service!" );
+            OSL_ENSURE( xIfc.is(), "Error creating UCB service 'com.sun.star.ucb.UniversalContentBroker'" );
 
             if ( !xIfc.is() )
                 return false;
