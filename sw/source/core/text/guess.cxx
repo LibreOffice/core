@@ -125,8 +125,12 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         if ( nLineWidth < 0 ) nLineWidth = 0;
     }
 
+    const bool bUnbreakableNumberings = rInf.GetTxtFrm()->GetTxtNode()->
+            getIDocumentSettingAccess()->get(IDocumentSettingAccess::UNBREAKABLE_NUMBERINGS);
+
     // first check if everything fits to line
-    if ( long ( nLineWidth ) * 2 > long ( nMaxLen ) * nPorHeight )
+    if ( ( long ( nLineWidth ) * 2 > long ( nMaxLen ) * nPorHeight ) ||
+         ( bUnbreakableNumberings && rPor.IsNumberPortion() ) )
     {
         // call GetTxtSize with maximum compression (for kanas)
         rInf.GetTxtSize( &rSI, rInf.GetIdx(), nMaxLen,
@@ -134,7 +138,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
         nBreakWidth = nMinSize;
 
-        if ( nBreakWidth <= nLineWidth )
+        if ( ( nBreakWidth <= nLineWidth ) || ( bUnbreakableNumberings && rPor.IsNumberPortion() ) )
         {
             // portion fits to line
             nCutPos = rInf.GetIdx() + nMaxLen;

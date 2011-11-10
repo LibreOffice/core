@@ -83,6 +83,7 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
          COLLAPSE_EMPTY_CELL_PARA,
          SMALL_CAPS_PERCENTAGE_66,
          TAB_OVERFLOW,
+         UNBREAKABLE_NUMBERINGS,
          // COMPATIBILITY FLAGS END
 
          BROWSE_MODE,

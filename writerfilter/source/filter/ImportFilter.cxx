@@ -28,8 +28,10 @@
 
 #include <osl/diagnose.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/mediadescriptor.hxx>
 #include <oox/core/filterdetect.hxx>
 #include <dmapper/DomainMapper.hxx>
@@ -175,6 +177,13 @@ void WriterFilter::setTargetDocument( const uno::Reference< lang::XComponent >& 
    throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
    m_xDstDoc = xDoc;
+
+   // Set some compatibility options that are valid for all the formats
+   uno::Reference< lang::XMultiServiceFactory > xFactory( xDoc, uno::UNO_QUERY );
+   uno::Reference< beans::XPropertySet > xSettings( xFactory->createInstance(
+               rtl::OUString::createFromAscii( "com.sun.star.document.Settings" ) ), uno::UNO_QUERY );
+
+   xSettings->setPropertyValue( rtl::OUString::createFromAscii( "UnbreakableNumberings" ), uno::makeAny( sal_True ) );
 }
 
 void WriterFilter::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )
