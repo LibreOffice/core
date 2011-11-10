@@ -186,8 +186,6 @@ Resource RID_SW_SHELLRES
     {
         Text [ en-US ] = "Total editing time" ;
     };
-    BITMAP BMP_FRAME_ANCHOR { FILE = "anchor.bmp" ; };
-    BITMAP BMP_FRAME_DRAG_ANCHOR { FILE = "danchor.bmp" ; };
 
     String STR_PAGEDESC_NAME
     {

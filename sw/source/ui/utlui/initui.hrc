@@ -28,9 +28,6 @@
 #ifndef _INITUI_HRC
 #define _INITUI_HRC
 
-#define BMP_FRAME_ANCHOR             1
-#define BMP_FRAME_DRAG_ANCHOR        2
-
 // lokale Resourcen fuer die Shells:
 #define STR_POSTIT_PAGE              1
 #define STR_POSTIT_AUTHOR            2
