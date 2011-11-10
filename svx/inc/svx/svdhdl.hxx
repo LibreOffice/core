@@ -84,6 +84,7 @@ enum SdrHdlKind
     HDL_REF2,       // Referenzpunkt 2, z.B. Endpunkt der Spiegelachse
     HDL_MIRX,       // Die Spiegelachse selbst
     HDL_GLUE,       // GluePoint
+    HDL_GLUE_DESELECTED,       // GluePoint
     HDL_ANCHOR,     // anchor symbol (SD, SW)
     HDL_TRNS,       // interactive transparence
     HDL_GRAD,       // interactive gradient
@@ -129,6 +130,7 @@ enum BitmapMarkerKind
     RectPlus_11x11,
     Crosshair,
     Glue,
+    Glue_Deselected,
     Anchor,
 
     // #98388# add AnchorPressed to be able to aninate anchor control, too.

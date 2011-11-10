@@ -168,15 +168,15 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
                 }
                 case 2:
                 {
-                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(72, 78), Size(13, 13)));
+                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(72, 79), Size(13, 13)));
                 }
                 case 3:
                 {
-                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(85, 78), Size(13, 13)));
+                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(85, 79), Size(13, 13)));
                 }
                 case 4:
                 {
-                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(98, 78), Size(13, 13)));
+                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(98, 79), Size(13, 13)));
                 }
                 default: // case 5:
                 {
@@ -243,20 +243,25 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
 
         case Glue:
         {
-            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 1, Rectangle(Point(15, 74), Size(9, 9)));
+            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 1, Rectangle(Point(15, 76), Size(9, 9)));
+        }
+
+        case Glue_Deselected:
+        {
+            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 1, Rectangle(Point(15, 67), Size(9, 9)));
         }
 
         case Anchor: // #101688# AnchorTR for SW
         case AnchorTR:
         {
-            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 2, Rectangle(Point(24, 68), Size(24, 23)));
+            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 2, Rectangle(Point(24, 67), Size(24, 24)));
         }
 
         // #98388# add AnchorPressed to be able to aninate anchor control
         case AnchorPressed:
         case AnchorPressedTR:
         {
-            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 3, Rectangle(Point(48, 68), Size(24, 23)));
+            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 3, Rectangle(Point(48, 67), Size(24, 24)));
         }
     }
 }
@@ -514,6 +519,11 @@ void SdrHdl::CreateB2dIAObject()
                 eKindOfMarker = Glue;
                 break;
             }
+            case HDL_GLUE_DESELECTED:
+            {
+                eKindOfMarker = Glue_Deselected;
+                break;
+            }
             case HDL_ANCHOR:
             {
                 eKindOfMarker = Anchor;
@@ -675,6 +685,9 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
                 case Glue:
                     eNextBigger = Crosshair;
                     break;
+                case Glue_Deselected:
+                    eNextBigger = Glue;
+                    break;
                 default:
                     break;
             }
@@ -825,6 +838,7 @@ Pointer SdrHdl::GetPointer() const
                 case HDL_REF2 : ePtr=POINTER_REFHAND;   break;
                 case HDL_BWGT : ePtr=POINTER_MOVEBEZIERWEIGHT; break;
                 case HDL_GLUE : ePtr=POINTER_MOVEPOINT; break;
+                case HDL_GLUE_DESELECTED : ePtr=POINTER_MOVEPOINT; break;
                 case HDL_CUSTOMSHAPE1 : ePtr=POINTER_HAND; break;
                 default:
                     break;
@@ -863,7 +877,7 @@ sal_Bool SdrHdl::IsFocusHdl() const
         case HDL_REF2:      // Referenzpunkt 2, z.B. Endpunkt der Spiegelachse
         //case HDL_MIRX:        // Die Spiegelachse selbst
         case HDL_GLUE:      // GluePoint
-
+        case HDL_GLUE_DESELECTED:      // formerly a little blue cross
         // #98388# do NOT activate here, let SW implement their own SdrHdl and
         // overload IsFocusHdl() there to make the anchor accessible
         //case HDL_ANCHOR:      // anchor symbol (SD, SW)
@@ -1687,11 +1701,11 @@ int ImpSdrHdlListSorter::Compare(const void* pElem1, const void* pElem2) const
     if (eKind1!=eKind2)
     {
         if (eKind1==HDL_REF1 || eKind1==HDL_REF2 || eKind1==HDL_MIRX) n1=5;
-        else if (eKind1==HDL_GLUE) n1=2;
+        else if (eKind1==HDL_GLUE || eKind1==HDL_GLUE_DESELECTED) n1=2;
         else if (eKind1==HDL_USER) n1=3;
         else if (eKind1==HDL_SMARTTAG) n1=0;
         if (eKind2==HDL_REF1 || eKind2==HDL_REF2 || eKind2==HDL_MIRX) n2=5;
-        else if (eKind2==HDL_GLUE) n2=2;
+        else if (eKind2==HDL_GLUE || eKind2==HDL_GLUE_DESELECTED) n2=2;
         else if (eKind2==HDL_USER) n2=3;
         else if (eKind2==HDL_SMARTTAG) n2=0;
     }
@@ -2222,12 +2236,12 @@ BitmapEx SdrCropHdl::GetBitmapForHandle( const BitmapEx& rBitmap, int nSize )
     else if( nSize <=4 )
     {
         nPixelSize = 17;
-        nOffset = 36;
+        nOffset = 39;
     }
     else
     {
         nPixelSize = 21;
-        nOffset = 84;
+        nOffset = 90;
     }
 
     switch( eKind )
@@ -2243,7 +2257,7 @@ BitmapEx SdrCropHdl::GetBitmapForHandle( const BitmapEx& rBitmap, int nSize )
         default: break;
     }
 
-    Rectangle aSourceRect( Point( nX * (nPixelSize-1) + nOffset,  nY * (nPixelSize-1)), Size(nPixelSize, nPixelSize) );
+    Rectangle aSourceRect( Point( nX * (nPixelSize) + nOffset,  nY * (nPixelSize)), Size(nPixelSize, nPixelSize) );
 
     BitmapEx aRetval(rBitmap);
     aRetval.Crop(aSourceRect);
