@@ -101,9 +101,9 @@ friend void lcl_IterGetNumberFormat( sal_uLong& nFormat,
         const ScAttrArray*& rpArr, SCROW& nAttrEndRow,
         const ScAttrArray* pNewArr, SCROW nRow, ScDocument* pDoc );
 
-    sal_Bool    ApplyFrame( const SvxBoxItem* pLineOuter, const SvxBoxInfoItem* pLineInner,
+    bool    ApplyFrame( const SvxBoxItem* pLineOuter, const SvxBoxInfoItem* pLineInner,
                             SCROW nStartRow, SCROW nEndRow,
-                            sal_Bool bLeft, SCCOL nDistRight, sal_Bool bTop, SCROW nDistBottom );
+                            bool bLeft, SCCOL nDistRight, bool bTop, SCROW nDistBottom );
 
     void RemoveCellCharAttribs( SCROW nStartRow, SCROW nEndRow,
                               const ScPatternAttr* pPattern, ScEditDataArray* pDataArray );
@@ -117,72 +117,72 @@ public:
 #if OSL_DEBUG_LEVEL > 1
     void    TestData() const;
 #endif
-    void    Reset( const ScPatternAttr* pPattern, sal_Bool bAlloc = sal_True );
-    sal_Bool    Concat(SCSIZE nPos);
+    void    Reset( const ScPatternAttr* pPattern, bool bAlloc = sal_True );
+    bool    Concat(SCSIZE nPos);
 
     const ScPatternAttr* GetPattern( SCROW nRow ) const;
     const ScPatternAttr* GetPatternRange( SCROW& rStartRow, SCROW& rEndRow, SCROW nRow ) const;
-    void    MergePatternArea( SCROW nStartRow, SCROW nEndRow, ScMergePatternState& rState, sal_Bool bDeep ) const;
+    void    MergePatternArea( SCROW nStartRow, SCROW nEndRow, ScMergePatternState& rState, bool bDeep ) const;
 
     void    MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner, ScLineFlags& rFlags,
-                            SCROW nStartRow, SCROW nEndRow, sal_Bool bLeft, SCCOL nDistRight ) const;
+                            SCROW nStartRow, SCROW nEndRow, bool bLeft, SCCOL nDistRight ) const;
     void    ApplyBlockFrame( const SvxBoxItem* pLineOuter, const SvxBoxInfoItem* pLineInner,
-                            SCROW nStartRow, SCROW nEndRow, sal_Bool bLeft, SCCOL nDistRight );
+                            SCROW nStartRow, SCROW nEndRow, bool bLeft, SCCOL nDistRight );
 
-    void    SetPattern( SCROW nRow, const ScPatternAttr* pPattern, sal_Bool bPutToPool = false );
+    void    SetPattern( SCROW nRow, const ScPatternAttr* pPattern, bool bPutToPool = false );
     void    SetPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr* pPattern,
-                            sal_Bool bPutToPool = false, ScEditDataArray* pDataArray = NULL );
+                            bool bPutToPool = false, ScEditDataArray* pDataArray = NULL );
     void    ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* pStyle );
     void    ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCache* pCache,
                             ScEditDataArray* pDataArray = NULL );
     bool    SetAttrEntries(ScAttrEntry* pNewData, SCSIZE nSize);
     void    ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
-                                const ::editeng::SvxBorderLine* pLine, sal_Bool bColorOnly );
+                                const ::editeng::SvxBorderLine* pLine, bool bColorOnly );
 
     void    ClearItems( SCROW nStartRow, SCROW nEndRow, const sal_uInt16* pWhich );
-    void    ChangeIndent( SCROW nStartRow, SCROW nEndRow, sal_Bool bIncrement );
+    void    ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement );
 
             /// Including current, may return -1
-    SCsROW  GetNextUnprotected( SCsROW nRow, sal_Bool bUp ) const;
+    SCsROW  GetNextUnprotected( SCsROW nRow, bool bUp ) const;
 
             /// May return -1 if not found
     SCsROW  SearchStyle( SCsROW nRow, const ScStyleSheet* pSearchStyle,
-                            sal_Bool bUp, ScMarkArray* pMarkArray = NULL );
-    sal_Bool    SearchStyleRange( SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle,
-                            sal_Bool bUp, ScMarkArray* pMarkArray = NULL );
+                            bool bUp, ScMarkArray* pMarkArray = NULL );
+    bool    SearchStyleRange( SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle,
+                            bool bUp, ScMarkArray* pMarkArray = NULL );
 
-    sal_Bool    ApplyFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags );
-    sal_Bool    RemoveFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags );
+    bool    ApplyFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags );
+    bool    RemoveFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags );
 
-    sal_Bool    Search( SCROW nRow, SCSIZE& nIndex ) const;
+    bool    Search( SCROW nRow, SCSIZE& nIndex ) const;
 
-    sal_Bool    HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
-                        sal_Bool bLeft, sal_Bool bRight ) const;
+    bool    HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
+                        bool bLeft, bool bRight ) const;
     bool    HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const;
-    sal_Bool    ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
+    bool    ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
                                 SCCOL& rPaintCol, SCROW& rPaintRow,
-                                sal_Bool bRefresh );
-    sal_Bool    RemoveAreaMerge( SCROW nStartRow, SCROW nEndRow );
+                                bool bRefresh );
+    bool    RemoveAreaMerge( SCROW nStartRow, SCROW nEndRow );
 
     void    FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBoolRowSegments& rUsedRows, bool bReset );
-    sal_Bool    IsStyleSheetUsed( const ScStyleSheet& rStyle, sal_Bool bGatherAllStyles ) const;
+    bool    IsStyleSheetUsed( const ScStyleSheet& rStyle, bool bGatherAllStyles ) const;
 
     void    DeleteAreaSafe(SCROW nStartRow, SCROW nEndRow);
     void    SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow,
-                                    const ScPatternAttr* pWantedPattern, sal_Bool bDefault );
+                                    const ScPatternAttr* pWantedPattern, bool bDefault );
     void    CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray );
 
-    sal_Bool    IsEmpty() const;
+    bool    IsEmpty() const;
 
-    sal_Bool    GetFirstVisibleAttr( SCROW& rFirstRow ) const;
-    sal_Bool    GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData ) const;
-    sal_Bool    HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const;
-    sal_Bool    IsVisibleEqual( const ScAttrArray& rOther,
+    bool    GetFirstVisibleAttr( SCROW& rFirstRow ) const;
+    bool    GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData ) const;
+    bool    HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const;
+    bool    IsVisibleEqual( const ScAttrArray& rOther,
                             SCROW nStartRow, SCROW nEndRow ) const;
-    sal_Bool    IsAllEqual( const ScAttrArray& rOther, SCROW nStartRow, SCROW nEndRow ) const;
+    bool    IsAllEqual( const ScAttrArray& rOther, SCROW nStartRow, SCROW nEndRow ) const;
 
-    sal_Bool    TestInsertCol( SCROW nStartRow, SCROW nEndRow) const;
-    sal_Bool    TestInsertRow( SCSIZE nSize ) const;
+    bool    TestInsertCol( SCROW nStartRow, SCROW nEndRow) const;
+    bool    TestInsertRow( SCSIZE nSize ) const;
     void    InsertRow( SCROW nStartRow, SCSIZE nSize );
     void    DeleteRow( SCROW nStartRow, SCSIZE nSize );
     void    DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex );
