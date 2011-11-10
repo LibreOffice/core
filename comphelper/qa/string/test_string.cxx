@@ -154,16 +154,16 @@ void TestString::testIndexOfL()
     rtl::OString s1(RTL_CONSTASCII_STRINGPARAM("one two three"));
 
     CPPUNIT_ASSERT_EQUAL(comphelper::string::indexOfL(s1,
-        RTL_CONSTASCII_STRINGPARAM("one")), 0);
+        RTL_CONSTASCII_STRINGPARAM("one")), static_cast<sal_Int32>(0));
 
     CPPUNIT_ASSERT_EQUAL(comphelper::string::indexOfL(s1,
-        RTL_CONSTASCII_STRINGPARAM("two")), 4);
+        RTL_CONSTASCII_STRINGPARAM("two")), static_cast<sal_Int32>(4));
 
     CPPUNIT_ASSERT_EQUAL(comphelper::string::indexOfL(s1,
-        RTL_CONSTASCII_STRINGPARAM("four")), -1);
+        RTL_CONSTASCII_STRINGPARAM("four")), static_cast<sal_Int32>(-1));
 
     CPPUNIT_ASSERT_EQUAL(comphelper::string::indexOfL(s1,
-        RTL_CONSTASCII_STRINGPARAM("two"), 5), -1);
+        RTL_CONSTASCII_STRINGPARAM("two"), 5), static_cast<sal_Int32>(-1));
 }
 
 using namespace ::com::sun::star;
