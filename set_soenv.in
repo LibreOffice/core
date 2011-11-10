@@ -1307,7 +1307,7 @@ if ($platform =~ m/solaris/ && ! $CC =~ "gcc")
 	}
     #The tail, if needed
     if ($platform =~ m/linux|freebsd|netbsd|aix|openbsd|dragonfly/)
-    {  if ( $XINC ne "/usr/include" ) {
+    {  if ( $XINC ne "/usr/include" && $XINC ne 'no_x_includes' ) {
             $SOLARINC  .= $I.$XINC;
        }
     }
