@@ -240,8 +240,6 @@ public :
     void                SetCurPageId( sal_uInt16 nId ) { mnCurrentPageId = nId; FocusOnIcon( nId ); }
     sal_uInt16              GetCurPageId() const       { return mnCurrentPageId; }
     void                ShowPage( sal_uInt16 nId );
-    void                RemoveTabPage( sal_uInt16 nId );
-    void                RemoveResetButton();
 
                         // liefert ggf. per Map konvertierte lokale Slots
     const sal_uInt16*       GetInputRanges( const SfxItemPool& );

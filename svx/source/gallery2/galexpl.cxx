@@ -253,14 +253,6 @@ sal_uIntPtr GalleryExplorer::GetObjCount( const String& rThemeName )
 
 // ------------------------------------------------------------------------
 
-sal_uIntPtr GalleryExplorer::GetObjCount( sal_uIntPtr nThemeId )
-{
-    Gallery* pGal = ImplGetGallery();
-    return( pGal ? GetObjCount( pGal->GetThemeName( nThemeId ) ) : sal_False );
-}
-
-// ------------------------------------------------------------------------
-
 sal_Bool GalleryExplorer::GetGraphicObj( const String& rThemeName, sal_uIntPtr nPos,
                                      Graphic* pGraphic, Bitmap* pThumb,
                                      sal_Bool bProgress )
@@ -443,13 +435,6 @@ sal_Bool GalleryExplorer::EndLocking( sal_uIntPtr nThemeId )
 {
     Gallery* pGal = ImplGetGallery();
     return( pGal ? EndLocking( pGal->GetThemeName( nThemeId ) ) : sal_False );
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool GalleryExplorer::DrawCentered( OutputDevice* pOut, const FmFormModel& rModel )
-{
-    return SgaObjectSvDraw::DrawCentered( pOut, rModel );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

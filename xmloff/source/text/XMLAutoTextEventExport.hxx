@@ -65,27 +65,9 @@ class XMLAutoTextEventExport : public SvXMLExport
 
 public:
 
-    // #110680#
-    //XMLAutoTextEventExport();
     XMLAutoTextEventExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory, sal_uInt16 nFlags
         );
-
-    // #110680#
-    //XMLAutoTextEventExport(
-    //  const ::rtl::OUString& rFileName,
-    //  const ::com::sun::star::uno::Reference<
-    //      ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-    //  const ::com::sun::star::uno::Reference<
-    //      ::com::sun::star::frame::XModel > & rModel,
-    //  const ::com::sun::star::uno::Reference<
-    //      ::com::sun::star::container::XNameAccess > & rEvents);
-    XMLAutoTextEventExport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-        const ::rtl::OUString& rFileName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rModel,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & rEvents, sal_uInt16 nFlags);
 
     ~XMLAutoTextEventExport();
 

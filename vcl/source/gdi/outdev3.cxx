@@ -418,18 +418,6 @@ sal_uInt16 OutputDevice::GetFontSubstituteCount()
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::GetFontSubstitute( sal_uInt16 n,
-                                      XubString& rFontName,
-                                      XubString& rReplaceFontName,
-                                      sal_uInt16& rFlags )
-{
-    const ImplDirectFontSubstitution* pSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
-    if( pSubst )
-        pSubst->GetFontSubstitute( n, rFontName, rReplaceFontName, rFlags );
-}
-
-// -----------------------------------------------------------------------
-
 bool ImplDirectFontSubstitution::GetFontSubstitute( int nIndex,
     String& rFontName, String& rSubstFontName, sal_uInt16& rFlags ) const
 {

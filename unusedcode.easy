@@ -145,8 +145,6 @@ GDIMetaFile::SaveStatus()
 GDIMetaFile::Wind(unsigned long)
 GDIMetaFile::WindEnd()
 GDIMetaFile::WindNext()
-GalleryExplorer::DrawCentered(OutputDevice*, FmFormModel const&)
-GalleryExplorer::GetObjCount(unsigned long)
 GraphCtrl::GraphCtrl(Window*, long)
 Graphic::Draw(OutputDevice*, String const&, Font&, Bitmap const&, Point const&, Size const&)
 Graphic::StartAnimation(OutputDevice*, Point const&, long, OutputDevice*)
@@ -164,8 +162,6 @@ HeaderBar::InsertItem(unsigned short, Image const&, String const&, long, unsigne
 HeaderBar::InsertItem(unsigned short, Image const&, long, unsigned short, unsigned short)
 HeaderBar::SetHelpId(unsigned short, rtl::OString const&)
 HeaderBar::SetHelpText(unsigned short, String const&)
-IconChoiceDialog::RemoveResetButton()
-IconChoiceDialog::RemoveTabPage(unsigned short)
 ImageButton::ImageButton(unsigned short)
 ImageList::Clear()
 ImageList::RemoveImage(rtl::OUString const&)
@@ -272,7 +268,6 @@ Octree::AddColor(BitmapColor const&)
 Octree::Octree(unsigned long)
 OdtGeneratorPrivate::_writeBegin()
 OutputDevice::DrawNativeControlText(unsigned int, unsigned int, Rectangle const&, unsigned int, ImplControlValue const&, rtl::OUString)
-OutputDevice::GetFontSubstitute(unsigned short, String&, String&, unsigned short&)
 OutputDevice::GetMinKashida(Font const&) const
 OutputDevice::GetPixel(Polygon const&) const
 OutputDevice::ImplFloatDevicePixelToLogicHeight(float) const
@@ -291,7 +286,6 @@ OutputDevice::PixelToLogic(basegfx::B2DPolyPolygon const&) const
 OutputDevice::PixelToLogic(basegfx::B2DPolygon const&) const
 PageSpan::getMarginLeft() const
 PageSpan::getMarginRight() const
-ParaPortionList::DbgCheck(EditDoc&)
 ParagraphObj::ParagraphObj(ParagraphObj&)
 ParagraphStyleManager::get(WPXString const&) const
 PathDialog::SetPath(Edit const&)
@@ -1207,7 +1201,6 @@ WrongRanges::_ForEach(unsigned short, unsigned short, unsigned char (*)(WrongRan
 X11SalGraphics::SetMask(int&, int&, unsigned int&, unsigned int&, int&, int&, unsigned long)
 X509Certificate_NssImpl::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
 XFillExchangeData::RegisterClipboardFormatName()
-XMLAutoTextEventExport::XMLAutoTextEventExport(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XDocumentHandler> const&, com::sun::star::uno::Reference<com::sun::star::frame::XModel> const&, com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> const&, unsigned short)
 XMLElement::Equals(rtl::OUString)
 XMLEmbeddedObjectExportFilter::XMLEmbeddedObjectExportFilter()
 XMLErrors::AddRecord(int, com::sun::star::uno::Sequence<rtl::OUString> const&)

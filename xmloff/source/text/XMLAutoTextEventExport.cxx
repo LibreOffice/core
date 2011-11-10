@@ -84,24 +84,9 @@ XMLAutoTextEventExport::XMLAutoTextEventExport(
 {
 }
 
-XMLAutoTextEventExport::XMLAutoTextEventExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-    const OUString& rFileName,
-    const Reference<XDocumentHandler> & rHandler,
-    const Reference<XModel> & rModel,
-    const Reference<XNameAccess> & rEvents,
-    sal_uInt16 /*nFlags*/ )
-:   SvXMLExport( xServiceFactory, rFileName, rHandler, rModel, FUNIT_INCH),
-    xEvents(rEvents),
-    sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
-    sNone(RTL_CONSTASCII_USTRINGPARAM("None"))
-{
-}
-
 XMLAutoTextEventExport::~XMLAutoTextEventExport()
 {
 }
-
 
 void XMLAutoTextEventExport::initialize(
     const Sequence<Any> & rArguments )

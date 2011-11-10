@@ -1157,10 +1157,6 @@ public:
                                            sal_uInt16 nFlags = 0 );
     static void         RemoveFontSubstitute( sal_uInt16 n );
     static sal_uInt16       GetFontSubstituteCount();
-    static void         GetFontSubstitute( sal_uInt16 n,
-                                           XubString& rFontName,
-                                           XubString& rReplaceFontName,
-                                           sal_uInt16& rFlags );
 
     static Font         GetDefaultFont( sal_uInt16 nType,
                                         LanguageType eLang,

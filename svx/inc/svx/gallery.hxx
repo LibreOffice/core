@@ -244,7 +244,6 @@ public:
                                            const sal_uIntPtr nSgaFormat /* = SGA_FORMAT_ALL */ );
 
     static sal_uIntPtr              GetObjCount( const String& rThemeName );
-    static sal_uIntPtr              GetObjCount( sal_uIntPtr nThemeId );
 
     static sal_Bool                 GetGraphicObj( const String& rThemeName, sal_uIntPtr nPos,
                                                Graphic* pGraphic = NULL, Bitmap* pThumb = NULL,
@@ -266,8 +265,6 @@ public:
 
     static sal_Bool                 EndLocking( const String& rThemeName );
     static sal_Bool                 EndLocking( sal_uIntPtr nThemeId );
-
-    static sal_Bool                 DrawCentered( OutputDevice* pOut, const FmFormModel& rModel );
 };
 
 #endif // _GALLERY_HXX_

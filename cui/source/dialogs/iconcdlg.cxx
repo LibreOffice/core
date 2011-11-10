@@ -336,72 +336,6 @@ SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage(
 
 /**********************************************************************
 |
-| remove page
-|
-\**********************************************************************/
-
-void IconChoiceDialog::RemoveTabPage( sal_uInt16 nId )
-{
-    IconChoicePageData* pData = GetPageData ( nId );
-
-    // remove page from list
-    if ( pData )
-    {
-        for ( vector< IconChoicePageData* >::iterator i = maPageList.begin(); i < maPageList.end(); ++i )
-        {
-            if ( *i == pData )
-            {
-                maPageList.erase( i );
-                break;
-            }
-        }
-
-        // save settings
-        if ( pData->pPage )
-        {
-            pData->pPage->FillUserData();
-            String aPageData(pData->pPage->GetUserData());
-            if ( aPageData.Len() )
-            {
-                SvtViewOptions aTabPageOpt( E_TABPAGE, String::CreateFromInt32( pData->nId ) );
-
-                SetViewOptUserItem( aTabPageOpt, aPageData );
-            }
-        }
-
-        if ( pData->bOnDemand )
-            delete ( SfxItemSet * )&( pData->pPage->GetItemSet() );
-
-        delete pData->pPage;
-        delete pData;
-    }
-
-    // remove Icon
-    bool bFound = false;
-    for ( sal_uLong i=0; i<maIconCtrl.GetEntryCount() && !bFound; i++)
-    {
-        SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.GetEntry ( i );
-        sal_uInt16* pUserData = (sal_uInt16*) pEntry->GetUserData();
-
-        if ( *pUserData == nId )
-        {
-            delete pUserData;
-            maIconCtrl.RemoveEntry ( pEntry );
-            bFound = true;
-        }
-    }
-
-    // was it the current page ?
-    if ( nId == mnCurrentPageId )
-    {
-        mnCurrentPageId = maPageList.front()->nId;
-    }
-
-    Invalidate ();
-}
-
-/**********************************************************************
-|
 | Paint-method
 |
 \**********************************************************************/
@@ -477,14 +411,6 @@ void IconChoiceDialog::HidePageImpl ( IconChoicePageData* pData )
 {
     if ( pData->pPage )
         pData->pPage->Hide();
-}
-
-// -----------------------------------------------------------------------
-
-void IconChoiceDialog::RemoveResetButton()
-{
-    aResetBtn.Hide();
-    bHideResetBtn = true;
 }
 
 // -----------------------------------------------------------------------

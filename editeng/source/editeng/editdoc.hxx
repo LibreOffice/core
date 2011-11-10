@@ -653,9 +653,10 @@ public:
         { return ( nPos < Count() ) ? GetObject( nPos ) : 0; }
 
     sal_uInt16                  GetPos( const ParaPortionPtr &rPtr ) const;
-
+#if OSL_DEBUG_LEVEL > 2
     // temporary:
     void            DbgCheck( EditDoc& rDoc );
+#endif
 };
 
 // -------------------------------------------------------------------------

@@ -379,13 +379,9 @@ sal_uInt16 ParaPortionList::FindParagraph( long nYOffset )
     return 0xFFFF;  // Should be reachable through EE_PARA_NOT_FOUND!
 }
 
-void ParaPortionList::DbgCheck( EditDoc&
-#ifdef DBG_UTIL
-                               rDoc
-#endif
-                                )
+#if OSL_DEBUG_LEVEL > 2
+void ParaPortionList::DbgCheck( EditDoc& rDoc)
 {
-#ifdef DBG_UTIL
     DBG_ASSERT( Count() == rDoc.Count(), "ParaPortionList::DbgCheck() - Count() unequal!" );
     for ( sal_uInt16 i = 0; i < Count(); i++ )
     {
@@ -393,9 +389,8 @@ void ParaPortionList::DbgCheck( EditDoc&
         DBG_ASSERT( GetObject(i)->GetNode(), "ParaPortionList::DbgCheck() - Null-Pointer in List(2)!" );
         DBG_ASSERT( GetObject(i)->GetNode() == rDoc.GetObject(i), "ParaPortionList::DbgCheck() - Entries intersect!" );
     }
-#endif
 }
-
+#endif
 
 ContentAttribsInfo::ContentAttribsInfo( const SfxItemSet& rParaAttribs ) :
         aPrevParaAttribs( rParaAttribs)
