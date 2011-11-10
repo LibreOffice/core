@@ -83,7 +83,7 @@ public:
     const SfxPoolItem&      GetItem( sal_uInt16 nWhich, const SfxItemSet* pCondSet ) const;
 
                             // pWhich are no ranges, but single IDs, 0-terminated
-    sal_Bool                    HasItemsSet( const sal_uInt16* pWhich ) const;
+    bool                    HasItemsSet( const sal_uInt16* pWhich ) const;
     void                    ClearItems( const sal_uInt16* pWhich );
 
     void                    DeleteUnchanged( const ScPatternAttr* pOldAttrs );
@@ -127,12 +127,12 @@ public:
     void                    UpdateStyleSheet();
     void                    StyleToName();
 
-    sal_Bool                    IsVisible() const;
-    sal_Bool                    IsVisibleEqual( const ScPatternAttr& rOther ) const;
+    bool                    IsVisible() const;
+    bool                    IsVisibleEqual( const ScPatternAttr& rOther ) const;
 
                             /** If font is an old symbol font StarBats/StarMath
                                 with text encoding RTL_TEXTENC_SYMBOL */
-    sal_Bool                    IsSymbolFont() const;
+    bool                    IsSymbolFont() const;
 
     sal_uLong                   GetNumberFormat( SvNumberFormatter* ) const;
     sal_uLong                   GetNumberFormat( SvNumberFormatter* pFormatter,
