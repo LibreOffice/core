@@ -58,9 +58,9 @@ FIXED_TARFILE_LOCATION=$(TARFILE_LOCATION)
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
-BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj jar
+BUILD_ACTION=$(ANT) -DTARFILE_LOCATION="$(FIXED_TARFILE_LOCATION)" -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj jar
 .ELSE
-BUILD_ACTION=TARFILE_LOCATION="$(FIXED_TARFILE_LOCATION)" $(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dant.build.javac.source=$(JAVA_SOURCE_VER) -Dant.build.javac.target=$(JAVA_TARGET_VER) jar
+BUILD_ACTION=$(ANT) -DTARFILE_LOCATION="$(FIXED_TARFILE_LOCATION)" -Dbuild.label="build-$(RSCREVISION)" -Dant.build.javac.source=$(JAVA_SOURCE_VER) -Dant.build.javac.target=$(JAVA_TARGET_VER) jar
 .ENDIF
 
 # --- Targets ------------------------------------------------------
