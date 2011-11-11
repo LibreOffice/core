@@ -78,6 +78,7 @@ SLOFILES=   $(SLO)$/conditn.obj  \
         $(SLO)$/file_path_helper.obj \
         $(SLO)$/debug.obj \
         $(SLO)$/except.obj \
+        $(SLO)$/debug_printf.obj \
         $(SLO)$/salinit.obj
 
 OBJFILES=   $(OBJ)$/conditn.obj  \

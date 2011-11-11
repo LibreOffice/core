@@ -130,13 +130,6 @@ typedef enum _PATHTYPE
 
 DWORD WINAPI IsValidFilePath(LPCTSTR, LPCTSTR*, DWORD);
 
-typedef struct
-{
-    rtl_uString* ustrFilePath;      /* holds native file path */
-    int fd;
-    sal_Bool bLocked;
-} oslFileHandleImpl;
-
 
 typedef struct _oslVolumeDeviceHandleImpl
 {

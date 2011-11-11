@@ -94,7 +94,7 @@ extern "C" {
 #define SAL_DLLEXTENSION ".dll"
 #define SAL_PRGEXTENSION ".exe"
 #define SAL_PATHSEPARATOR ';'
-#define SAL_PATHDELIMITER '\\'
+#define SAL_PATHDELIMITER '/'
 #define SAL_CONFIGFILE( name ) name ".ini"
 #define SAL_SYSCONFIGFILE( name ) name ".ini"
 #endif

@@ -256,7 +256,9 @@ typedef void *                   sal_Handle;
 #endif
 #elif defined SAL_OS2 // YD
 /* YD 25/09/2007 gcc doesn't like imports inside class members */
-#   define SAL_DLLPUBLIC_EXPORT
+//#   define SAL_DLLPUBLIC_EXPORT
+/* YD 01/11/2011 */
+#   define SAL_DLLPUBLIC_EXPORT    __declspec(dllexport)
 #   define SAL_DLLPUBLIC_IMPORT
 #   define SAL_DLLPRIVATE
 #   define SAL_CALL

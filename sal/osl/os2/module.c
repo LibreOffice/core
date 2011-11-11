@@ -34,6 +34,7 @@
 #include <osl/thread.h>
 
 #include <stdlib.h>
+#include <dlfcn.h>
 
 int UnicodeToText(char *, size_t, const sal_Unicode *, sal_Int32);
 
@@ -97,8 +98,13 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
             }
             _makepath( buffer, drive, dir, fname, ext);
 
-            rc = _DosLoadModule( szErrorMessage, sizeof( szErrorMessage), (PCSZ)buffer, &hModule);
-            if (rc == NO_ERROR )
+#if OSL_DEBUG_LEVEL>0
+            debug_printf("osl_loadModule module %s\n", buffer);
+#endif
+            //rc = _DosLoadModule( szErrorMessage, sizeof( szErrorMessage), (PCSZ)buffer, &hModule);
+        //if (rc == NO_ERROR )
+            hModule = dlopen( buffer, RTLD_LOCAL);
+            if (hModule != NULL )
                 pModule = (oslModule)hModule;
             else
             {

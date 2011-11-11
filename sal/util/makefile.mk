@@ -126,7 +126,7 @@ SHL1STDLIBS+= -z allextract -staticlib=Crun -z defaultextract
 .ENDIF # UNX
 
 .IF "$(GUI)"=="OS2"
-SHL1STDLIBS=pthread.lib
+SHL1STDLIBS=mmap pthread
 .ENDIF # OS2
 
 # If we compile sal with STLport checking iterators
