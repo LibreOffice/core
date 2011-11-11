@@ -73,7 +73,13 @@ void cpp2uno_call(
     if (pReturnTypeDescr)
     {
         // xxx todo: test PolyStructy<STRUCT<long>> foo()
-        if (CPPU_CURRENT_NAMESPACE::isSimpleReturnType( pReturnTypeDescr ))
+        if (
+#ifdef __arm
+            !arm::return_in_hidden_param(pReturnTypeRef)
+#else
+            CPPU_CURRENT_NAMESPACE::isSimpleReturnType( pReturnTypeDescr )
+#endif
+                                                                          )
         {
             pUnoReturn = pReturnValue; // direct way for simple types
         }
@@ -479,7 +485,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
         TYPELIB_DANGER_GET(&member, type->ppMembers[i]);
         OSL_ASSERT(member != 0);
         switch (member->eTypeClass) {
-        case typelib_TypeClass_INTERFACE_ATTRIBUTE:
+        case typelib_TypeClass_INTERFACE_ATTRIBUTE: {
 #ifdef __arm
             typelib_InterfaceAttributeTypeDescription *pAttrTD =
                 reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>( member );
@@ -508,9 +514,10 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
 #endif
                                         );
             }
+            }
             break;
 
-        case typelib_TypeClass_INTERFACE_METHOD:
+        case typelib_TypeClass_INTERFACE_METHOD: {
 #ifdef __arm
             typelib_InterfaceMethodTypeDescription *pMethodTD =
                 reinterpret_cast<
@@ -525,6 +532,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                     member)->pReturnTypeRef
 #endif
                                     );
+            }
             break;
 
         default:

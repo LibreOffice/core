@@ -186,8 +186,13 @@ static void cpp_call(
 
     if (pReturnTypeDescr)
     {
+#ifdef __arm
+        if (arm::return_in_hidden_param( pReturnTypeRef ) )
+            bSimpleReturn = false;
+#else
         bSimpleReturn = CPPU_CURRENT_NAMESPACE::isSimpleReturnType(
             pReturnTypeDescr);
+#endif
         if (bSimpleReturn)
         {
             pCppReturn = pUnoReturn; // direct way for simple types
