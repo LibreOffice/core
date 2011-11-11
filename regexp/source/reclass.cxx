@@ -1255,6 +1255,7 @@ Regexpr::regex_compile()
         break;
       } else {
         p = p1+1;
+        p1++;
         last_char = (sal_Unicode)':';
         set_list_bit(last_char, b);
       }
