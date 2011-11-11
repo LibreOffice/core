@@ -32,10 +32,79 @@
 #include <exception>
 #include <cstddef>
 
+// As this code is used both for the simulatos (x86) and device (ARM),
+// this file is a combination of the share.hxx in ../gcc3_linux_intel
+// and in ../gcc3_linux_arm.
+
+#ifdef __arm
+
 namespace CPPU_CURRENT_NAMESPACE
 {
 
-bool isSimpleReturnType(typelib_TypeDescription * pTD, bool recursive = false);
+    void dummy_can_throw_anything( char const * );
+
+    // -- following decl from libstdc++-v3/libsupc++/unwind-cxx.h and unwind.h
+
+    struct __cxa_exception
+    {
+        ::std::type_info *exceptionType;
+        void (*exceptionDestructor)(void *);
+
+        ::std::unexpected_handler unexpectedHandler;
+        ::std::terminate_handler terminateHandler;
+
+        __cxa_exception *nextException;
+
+        int handlerCount;
+#ifdef __ARM_EABI__
+    __cxa_exception *nextPropagatingException;
+    int propagationCount;
+#else
+        int handlerSwitchValue;
+        const unsigned char *actionRecord;
+        const unsigned char *languageSpecificData;
+        void *catchTemp;
+        void *adjustedPtr;
+#endif
+        _Unwind_Exception unwindHeader;
+    };
+
+    extern "C" void *__cxa_allocate_exception(
+        std::size_t thrown_size ) throw();
+    extern "C" void __cxa_throw (
+        void *thrown_exception, std::type_info *tinfo,
+        void (*dest) (void *) ) __attribute__((noreturn));
+
+    struct __cxa_eh_globals
+    {
+        __cxa_exception *caughtExceptions;
+        unsigned int uncaughtExceptions;
+#ifdef __ARM_EABI__
+    __cxa_exception *propagatingExceptions;
+#endif
+    };
+    extern "C" __cxa_eh_globals *__cxa_get_globals () throw();
+
+    // -----
+
+    //====================================================================
+    void raiseException(
+        uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );
+    //====================================================================
+    void fillUnoException(
+        __cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
+}
+
+namespace arm
+{
+    enum armlimits { MAX_GPR_REGS = 4 };
+    bool return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef );
+}
+
+#else
+
+namespace CPPU_CURRENT_NAMESPACE
+{
 
 void dummy_can_throw_anything( char const * );
 
@@ -90,6 +159,8 @@ void raiseException(
 //==================================================================================================
 void fillUnoException(
     __cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
+
+    bool isSimpleReturnType(typelib_TypeDescription * pTD, bool recursive = false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
