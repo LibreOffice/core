@@ -2221,6 +2221,10 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 }
             }
             break;
+        case RTF_UC:
+            if ((SAL_MIN_INT16 <= nParam) && (nParam <= SAL_MAX_INT16))
+                m_aStates.top().nUc = nParam;
+            break;
         case RTF_U:
             if ((SAL_MIN_INT16 <= nParam) && (nParam <= SAL_MAX_INT16))
             {
