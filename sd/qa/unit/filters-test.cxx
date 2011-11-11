@@ -116,7 +116,12 @@ FileFormat aFileFormats[] = {
     ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
     SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READWRITE, true);
     pSrcMed->SetFilter(aFilter);
-    CPPUNIT_ASSERT_MESSAGE( "load failed", xDocShRef->DoLoad(pSrcMed) );
+    if ( !xDocShRef->DoLoad(pSrcMed) )
+    {
+        if (xDocShRef.Is())
+            xDocShRef->DoClose();
+        CPPUNIT_ASSERT_MESSAGE( "failed to load", false );
+    }
 
     return xDocShRef;
 }
