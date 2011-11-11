@@ -24,7 +24,7 @@
 #include <svpm.h>
 
 #define _SV_SALSHL_CXX
-#include <saldata.hxx>
+#include <os2/saldata.hxx>
 #include <tools/debug.hxx>
 
 // =======================================================================
@@ -74,7 +74,7 @@ HPOINTER ImplLoadSalCursor( int nId )
 
 // -----------------------------------------------------------------------
 
-BOOL ImplLoadSalIcon( int nId, HPOINTER& rIcon)
+sal_Bool ImplLoadSalIcon( int nId, HPOINTER& rIcon)
 {
     DBG_ASSERT( aSalShlData.mhMod, "no DLL instance handle" );
 

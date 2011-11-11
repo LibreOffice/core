@@ -71,4 +71,10 @@ $(eval $(call gb_Module_add_targets,vcl,\
 ))
 endif
 
+ifeq ($(GUIBASE),os2)
+$(eval $(call gb_Module_add_targets,vcl,\
+    WinResTarget_vcl \
+))
+endif
+
 # vim: set noet sw=4 ts=4:

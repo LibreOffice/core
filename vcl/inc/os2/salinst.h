@@ -28,8 +28,7 @@
 #ifndef _SV_SALINST_H
 #define _SV_SALINST_H
 
-#include <vcl/sv.h>
-#include <vcl/salinst.hxx>
+#include <salinst.hxx>
 
 namespace vos { class OMutex; }
 
@@ -62,7 +61,7 @@ public:
     virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, ULONG nStyle );
     virtual SalFrame*       CreateFrame( SalFrame* pParent, ULONG nStyle );
     virtual void            DestroyFrame( SalFrame* pFrame );
-    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow = TRUE );
+    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow = TRUE );
     virtual void            DestroyObject( SalObject* pObject );
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long nDX, long nDY,
@@ -86,8 +85,13 @@ public:
     virtual ULONG               ReleaseYieldMutex();
     virtual void                AcquireYieldMutex( ULONG nCount );
     virtual bool                CheckYieldMutex();
+
     virtual void                Yield( bool, bool );
     virtual bool                AnyInput( USHORT nType );
+    virtual SalMenu*            CreateMenu( sal_Bool bMenuBar, Menu* );
+    virtual void                DestroyMenu( SalMenu* );
+    virtual SalMenuItem*            CreateMenuItem( const SalItemParams* pItemData );
+    virtual void                DestroyMenuItem( SalMenuItem* );
     virtual SalSession*                         CreateSalSession();
     virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
     virtual void                AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
@@ -95,6 +99,6 @@ public:
 
 SalFrame* ImplSalCreateFrame( Os2SalInstance* pInst, HWND hWndParent, ULONG nSalFrameStyle );
 SalObject* ImplSalCreateObject( Os2SalInstance* pInst, Os2SalFrame* pParent );
-void ImplSalStartTimer( ULONG nMS, BOOL bMutex = FALSE );
+void ImplSalStartTimer( ULONG nMS, sal_Bool bMutex = FALSE );
 
 #endif // _SV_SALINST_H

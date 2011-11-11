@@ -26,18 +26,19 @@
 
 #define _SV_SALGDI_CXX
 #include <tools/debug.hxx>
-#include <saldata.hxx>
-#include <salgdi.h>
+#include <os2/saldata.hxx>
+#include <os2/salgdi.h>
 #include <tools/debug.hxx>
-#include <salframe.h>
+#include <os2/salframe.h>
 #include <tools/poly.hxx>
 #ifndef _RTL_STRINGBUF_HXX
 #include <rtl/strbuf.hxx>
 #endif
-#include "vcl/region.h"
+
+#include <region.h>
 
 #ifndef __H_FT2LIB
-#include <wingdi.h>
+#include <os2/wingdi.h>
 #include <ft2lib.h>
 #endif
 
@@ -670,14 +671,14 @@ bool Os2SalGraphics::drawPolyLine(
 
 // -----------------------------------------------------------------------
 
-sal_Bool Os2SalGraphics::drawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+sal_Bool Os2SalGraphics::drawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
 {
     return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Os2SalGraphics::drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+sal_Bool Os2SalGraphics::drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
 {
     return sal_False;
 }
@@ -685,7 +686,7 @@ sal_Bool Os2SalGraphics::drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAr
 // -----------------------------------------------------------------------
 
 sal_Bool Os2SalGraphics::drawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints,
-                                             const SalPoint* const* pPtAry, const BYTE* const* pFlgAry )
+                                             const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry )
 {
     return sal_False;
 }
@@ -694,10 +695,10 @@ sal_Bool Os2SalGraphics::drawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoint
 
 // MAXIMUM BUFSIZE EQ 0xFFFF
 #define POSTSCRIPT_BUFSIZE          0x4000
-// we only try to get the BoundingBox in the first 4096 bytes
+// we only try to get the BoundingBox in the first 4096 PM_BYTEs
 #define POSTSCRIPT_BOUNDINGSEARCH   0x1000
 
-static BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, ULONG nComp, ULONG nSize )
+static PM_BYTE* ImplSearchEntry( PM_BYTE* pSource, PM_BYTE* pDest, ULONG nComp, ULONG nSize )
 {
     while ( nComp-- >= nSize )
     {
@@ -715,10 +716,10 @@ static BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, ULONG nComp, ULONG nSi
 }
 
 
-static BOOL ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
+static PM_BOOL ImplGetBoundingBox( double* nNumb, PM_BYTE* pSource, ULONG nSize )
 {
-    BOOL    bRetValue = FALSE;
-    BYTE* pDest = ImplSearchEntry( pSource, (BYTE*)"%%BoundingBox:", nSize, 14 );
+    PM_BOOL bRetValue = FALSE;
+    PM_BYTE* pDest = ImplSearchEntry( pSource, (PM_BYTE*)"%%BoundingBox:", nSize, 14 );
     if ( pDest )
     {
         nNumb[0] = nNumb[1] = nNumb[2] = nNumb[3] = 0;
@@ -726,21 +727,21 @@ static BOOL ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
 
         int nSizeLeft = nSize - ( pDest - pSource );
         if ( nSizeLeft > 100 )
-            nSizeLeft = 100;    // only 100 bytes following the bounding box will be checked
+            nSizeLeft = 100;    // only 100 PM_BYTEs following the bounding box will be checked
 
         int i;
         for ( i = 0; ( i < 4 ) && nSizeLeft; i++ )
         {
             int     nDivision = 1;
-            BOOL    bDivision = FALSE;
-            BOOL    bNegative = FALSE;
-            BOOL    bValid = TRUE;
+            PM_BOOL bDivision = FALSE;
+            PM_BOOL bNegative = FALSE;
+            PM_BOOL bValid = TRUE;
 
             while ( ( --nSizeLeft ) && ( *pDest == ' ' ) || ( *pDest == 0x9 ) ) pDest++;
-            BYTE nByte = *pDest;
-            while ( nSizeLeft && ( nByte != ' ' ) && ( nByte != 0x9 ) && ( nByte != 0xd ) && ( nByte != 0xa ) )
+            PM_BYTE nPM_BYTE = *pDest;
+            while ( nSizeLeft && ( nPM_BYTE != ' ' ) && ( nPM_BYTE != 0x9 ) && ( nPM_BYTE != 0xd ) && ( nPM_BYTE != 0xa ) )
             {
-                switch ( nByte )
+                switch ( nPM_BYTE )
                 {
                     case '.' :
                         if ( bDivision )
@@ -752,19 +753,19 @@ static BOOL ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
                         bNegative = TRUE;
                         break;
                     default :
-                        if ( ( nByte < '0' ) || ( nByte > '9' ) )
+                        if ( ( nPM_BYTE < '0' ) || ( nPM_BYTE > '9' ) )
                             nSizeLeft = 1;  // error parsing the bounding box values
                         else if ( bValid )
                         {
                             if ( bDivision )
                                 nDivision*=10;
                             nNumb[i] *= 10;
-                            nNumb[i] += nByte - '0';
+                            nNumb[i] += nPM_BYTE - '0';
                         }
                         break;
                 }
                 nSizeLeft--;
-                nByte = *(++pDest);
+                nPM_BYTE = *(++pDest);
             }
             if ( bNegative )
                 nNumb[i] = -nNumb[i];
@@ -778,13 +779,13 @@ static BOOL ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
 }
 
 #if 0
-static void ImplWriteDouble( BYTE** pBuf, double nNumber )
+static void ImplWriteDouble( PM_BYTE** pBuf, double nNumber )
 {
 //  *pBuf += sprintf( (char*)*pBuf, "%f", nNumber );
 
     if ( nNumber < 0 )
     {
-        *(*pBuf)++ = (BYTE)'-';
+        *(*pBuf)++ = (PM_BYTE)'-';
         nNumber = -nNumber;
     }
     ULONG nTemp = (ULONG)nNumber;
@@ -797,7 +798,7 @@ static void ImplWriteDouble( BYTE** pBuf, double nNumber )
     nTemp = (ULONG)( ( nNumber - nTemp ) * 100000 );
     if ( nTemp )
     {
-        *(*pBuf)++ = (BYTE)'.';
+        *(*pBuf)++ = (PM_BYTE)'.';
         const String aNumber2( nTemp );
 
         ULONG nLen = aNumber2.Len();
@@ -805,7 +806,7 @@ static void ImplWriteDouble( BYTE** pBuf, double nNumber )
         {
             for ( n = 0; n < ( 5 - nLen ); n++ )
             {
-                *(*pBuf)++ = (BYTE)'0';
+                *(*pBuf)++ = (PM_BYTE)'0';
             }
         }
         for ( USHORT n = 0; n < nLen; n++ )
@@ -817,27 +818,27 @@ static void ImplWriteDouble( BYTE** pBuf, double nNumber )
 }
 #endif
 
-inline void ImplWriteString( BYTE** pBuf, const char* sString )
+inline void ImplWriteString( PM_BYTE** pBuf, const char* sString )
 {
     strcpy( (char*)*pBuf, sString );
     *pBuf += strlen( sString );
 }
 
-BOOL Os2SalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize )
+sal_Bool Os2SalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize )
 {
     if ( !mbPrinter )
         return FALSE;
 
-    BOOL    bRet  = FALSE;
+    PM_BOOL bRet  = FALSE;
     LONG    nLong = 0;
     if ( !(DevQueryCaps( mhDC, CAPS_TECHNOLOGY, 1, &nLong ) &&
            (CAPS_TECH_POSTSCRIPT == nLong)) )
         return FALSE;
 
-    BYTE*   pBuf = new BYTE[ POSTSCRIPT_BUFSIZE ];
+    PM_BYTE*    pBuf = new PM_BYTE[ POSTSCRIPT_BUFSIZE ];
     double  nBoundingBox[4];
 
-    if ( pBuf && ImplGetBoundingBox( nBoundingBox, (BYTE*)pPtr, nSize ) )
+    if ( pBuf && ImplGetBoundingBox( nBoundingBox, (PM_BYTE*)pPtr, nSize ) )
     {
         LONG pOS2DXAry[4];        // hack -> print always 2 white space
         POINTL aPt;
@@ -932,7 +933,7 @@ BOOL Os2SalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                 *((USHORT*)aBuf.getStr()) = (USHORT)( aBuf.getLength() - 2 );
                 //Escape ( mhDC, nEscape, aBuf.getLength(), (LPTSTR)aBuf.getStr(), 0 );
                 DevEscape( mhDC, DEVESC_RAWDATA, aBuf.getLength(),
-                        (PBYTE)aBuf.getStr(), 0, NULL );
+                        (PM_BYTE*)aBuf.getStr(), 0, NULL );
 
         double dM11 = nWidth / ( nBoundingBox[2] - nBoundingBox[0] );
         double dM22 = - ( nHeight / (nBoundingBox[1] - nBoundingBox[3] ) );
@@ -951,9 +952,9 @@ BOOL Os2SalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                              "%%BeginDocument:\n" );
                 *((USHORT*)aBuf.getStr()) = (USHORT)( aBuf.getLength() - 2 );
                 DevEscape( mhDC, DEVESC_RAWDATA, aBuf.getLength(),
-                        (PBYTE)aBuf.getStr(), 0, NULL );
+                        (PM_BYTE*)aBuf.getStr(), 0, NULL );
 #if 0
-        BYTE* pTemp = pBuf;
+        PM_BYTE* pTemp = pBuf;
         ImplWriteString( &pTemp, "save\n[ " );
         ImplWriteDouble( &pTemp, dM11 );
         ImplWriteDouble( &pTemp, 0 );
@@ -964,11 +965,11 @@ BOOL Os2SalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
         ImplWriteString( &pTemp, "] concat /showpage {} def\n" );
 
         if ( DevEscape( mhDC, DEVESC_RAWDATA, pTemp - pBuf,
-            (PBYTE)pBuf, 0, NULL ) == DEV_OK )
+            (PM_BYTE*)pBuf, 0, NULL ) == DEV_OK )
 #endif //
         {
-            UINT32 nToDo = nSize;
-            UINT32 nDoNow;
+            sal_uInt32 nToDo = nSize;
+            sal_uInt32 nDoNow;
             bRet = TRUE;
             while( nToDo && bRet )
             {
@@ -976,7 +977,7 @@ BOOL Os2SalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                 if ( nToDo < nDoNow )
                     nDoNow = nToDo;
 
-                if ( DevEscape( mhDC, DEVESC_RAWDATA, nDoNow, (PBYTE)pPtr + nSize - nToDo,
+                if ( DevEscape( mhDC, DEVESC_RAWDATA, nDoNow, (PM_BYTE*)pPtr + nSize - nToDo,
                    0, NULL ) == -1 )
                     bRet = FALSE;
                 nToDo -= nDoNow;
@@ -985,7 +986,7 @@ BOOL Os2SalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
             if ( bRet )
             {
                 strcpy ( (char*)pBuf, "\nrestore\n" );
-                if ( DevEscape( mhDC, DEVESC_RAWDATA, 9, (PBYTE)pBuf,
+                if ( DevEscape( mhDC, DEVESC_RAWDATA, 9, (PM_BYTE*)pBuf,
                     0, NULL ) == DEV_OK ) bRet = TRUE;
             }
 
@@ -999,7 +1000,7 @@ BOOL Os2SalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                              "b4_Inc_state_salWin restore\n\n" );
                 *((USHORT*)aBuf.getStr()) = (USHORT)( aBuf.getLength() - 2 );
                 DevEscape( mhDC, DEVESC_RAWDATA, aBuf.getLength(),
-                        (PBYTE)aBuf.getStr(), 0, NULL );
+                        (PM_BYTE*)aBuf.getStr(), 0, NULL );
                 bRet = TRUE;
 
         }
@@ -1014,7 +1015,7 @@ BOOL Os2SalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
  *  Returns TRUE if the platform supports native
  *  drawing of the control defined by nPart
  */
-BOOL Os2SalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
+sal_Bool Os2SalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
 {
     return( FALSE );
 }

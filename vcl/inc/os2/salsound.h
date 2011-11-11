@@ -78,7 +78,7 @@ public:
 
     virtual bool        IsValid();
     virtual bool        Init( const String& rSoundName, ULONG& rSoundLen );
-       virtual void     Play( ULONG nStartTime, ULONG nPlayTime, bool bLoop );
+    virtual void        Play( ULONG nStartTime, ULONG nPlayTime, bool bLoop );
     virtual void        Stop();
     virtual void        Pause();
     virtual void        Continue();

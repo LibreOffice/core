@@ -21,12 +21,14 @@
 
 
 
-#include <string.h>
-
 #define INCL_DOS
 #define INCL_PM
 #define INCL_WIN
 #include <svpm.h>
+
+#include <string.h>
+
+#include <tools/svwin.h>
 
 // =======================================================================
 
@@ -38,31 +40,34 @@
 
 #define private public
 
-#ifndef _SV_SALLANG_HXX
-#include <sallang.hxx>
-#endif
-#ifndef _SV_SALIDS_HRC
-#include <salids.hrc>
-#endif
-#include <saldata.hxx>
-#include <salinst.h>
-#include <salgdi.h>
-#include <salframe.h>
+#include "os2/sallang.hxx"
+#include "os2/salids.hrc"
+#include "os2/saldata.hxx"
+#include "os2/salinst.h"
+#include "os2/salgdi.h"
+#include "os2/salframe.h"
+#include "os2/saltimer.h"
+
 #include <vcl/timer.hxx>
 #include <vcl/settings.hxx>
-#ifndef _SV_KEYCOES_HXX
 #include <vcl/keycodes.hxx>
-#endif
-#include <saltimer.h>
 
 #if OSL_DEBUG_LEVEL>10
 extern "C" int debug_printf(const char *f, ...);
 
-static BOOL _bCapture;
+static sal_Bool _bCapture;
 
 #else
 #define debug_printf( ...) { 1; }
 #endif
+
+// =======================================================================
+
+#undef WinEnableMenuItem
+#define WinEnableMenuItem(hwndMenu,id,fEnable) \
+    ((PM_BOOL)WinSendMsg (hwndMenu, MM_SETITEMATTR, MPFROM2SHORT (id, TRUE), \
+               MPFROM2SHORT (MIA_DISABLED, \
+                     ((USHORT)(fEnable) ? 0 : MIA_DISABLED))))
 
 // =======================================================================
 
@@ -80,7 +85,7 @@ MRESULT EXPENTRY SalFrameSubClassWndProc( HWND hWnd, ULONG nMsg,
 // =======================================================================
 
 static LanguageType eImplKeyboardLanguage = LANGUAGE_DONTKNOW;
-BOOL Os2SalFrame::mbInReparent = FALSE;
+sal_Bool Os2SalFrame::mbInReparent = FALSE;
 ULONG Os2SalFrame::mnInputLang = 0;
 
 // =======================================================================
@@ -94,26 +99,26 @@ ULONG Os2SalFrame::mnInputLang = 0;
 static LONG nScreenHeight  = WinQuerySysValue( HWND_DESKTOP, SV_CYSCREEN);
 static LONG nScreenWidth   = WinQuerySysValue( HWND_DESKTOP, SV_CXSCREEN );
 
-BOOL APIENTRY _WinQueryWindowRect( HWND hwnd, PRECTL prclDest)
+sal_Bool APIENTRY _WinQueryWindowRect( HWND hwnd, PRECTL prclDest)
 {
-    BOOL rc = WinQueryWindowRect( hwnd, prclDest);
+    sal_Bool rc = WinQueryWindowRect( hwnd, prclDest);
     ULONG tmp = prclDest->yBottom;
     prclDest->yBottom = prclDest->yTop;
     prclDest->yTop = tmp;
     return rc;
 }
 
-BOOL APIENTRY _WinQueryPointerPos (HWND hwndDesktop, PPOINTL pptl)
+sal_Bool APIENTRY _WinQueryPointerPos (HWND hwndDesktop, PPOINTL pptl)
 {
-    BOOL rc = WinQueryPointerPos( hwndDesktop, pptl);
+    sal_Bool rc = WinQueryPointerPos( hwndDesktop, pptl);
     pptl->y = nScreenHeight - pptl->y;
     return rc;
 }
 
-BOOL APIENTRY _WinQueryWindowPos( Os2SalFrame* pFrame, PSWP pswp)
+sal_Bool APIENTRY _WinQueryWindowPos( Os2SalFrame* pFrame, PSWP pswp)
 {
     SWP swpOwner;
-    BOOL rc = WinQueryWindowPos( pFrame->mhWndFrame, pswp);
+    sal_Bool rc = WinQueryWindowPos( pFrame->mhWndFrame, pswp);
 
 #if OSL_DEBUG_LEVEL>1
     debug_printf( "> WinQueryWindowPos hwnd %x at %d,%d (%dx%d)\n",
@@ -152,7 +157,7 @@ BOOL APIENTRY _WinQueryWindowPos( Os2SalFrame* pFrame, PSWP pswp)
     return rc;
 }
 
-BOOL APIENTRY _WinSetWindowPos( Os2SalFrame* pFrame, HWND hwndInsertBehind, LONG x, LONG y,
+sal_Bool APIENTRY _WinSetWindowPos( Os2SalFrame* pFrame, HWND hwndInsertBehind, LONG x, LONG y,
     LONG cx, LONG cy, ULONG fl)
 {
     SWP     swpOwner = {0};
@@ -301,7 +306,7 @@ static SalIMEData* GetSalIMEData()
         if ( 0 == DosLoadModule( NULL, 0, "OS2IM", &hMod ) )
         {
             SalIMEData*     pIMEData = new SalIMEData;
-            BOOL            bError = FALSE;
+            sal_Bool            bError = FALSE;
             ImplSalIMEProc  aProcAry[SAL_IME_PROC_COUNT] =
             {
             { 101, (PFN*)&(pIMEData->mpAssocIME) },
@@ -364,7 +369,7 @@ static void ImplSaveFrameState( Os2SalFrame* pFrame )
     if ( !pFrame->mbFullScreen )
     {
         SWP aSWP;
-        BOOL bVisible = WinIsWindowVisible( pFrame->mhWndFrame);
+        sal_Bool bVisible = WinIsWindowVisible( pFrame->mhWndFrame);
 
         // Query actual state (maState uses screen coords)
         WinQueryWindowPos( pFrame->mhWndFrame, &aSWP );
@@ -495,7 +500,7 @@ static void ImplSalCalcFullScreenSize( const Os2SalFrame* pFrame,
 
 // -----------------------------------------------------------------------
 
-static void ImplSalFrameFullScreenPos( Os2SalFrame* pFrame, BOOL bAlways = FALSE )
+static void ImplSalFrameFullScreenPos( Os2SalFrame* pFrame, sal_Bool bAlways = FALSE )
 {
     SWP aSWP;
     _WinQueryWindowPos( pFrame, &aSWP );
@@ -591,7 +596,7 @@ SalFrame* ImplSalCreateFrame( Os2SalInstance* pInst, HWND hWndParent, ULONG nSal
     ULONG           nFrameFlags = FCF_NOBYTEALIGN | FCF_SCREENALIGN;
     ULONG           nFrameStyle = 0;
     ULONG           nClientStyle = WS_CLIPSIBLINGS;
-    BOOL            bSubFrame = FALSE;
+    sal_Bool            bSubFrame = FALSE;
 
 #if OSL_DEBUG_LEVEL>0
     debug_printf(">ImplSalCreateFrame hWndParent 0x%x, nSalFrameStyle 0x%x\n", hWndParent, nSalFrameStyle);
@@ -907,9 +912,9 @@ void Os2SalFrame::ReleaseGraphics( SalGraphics* )
 
 // -----------------------------------------------------------------------
 
-BOOL Os2SalFrame::PostEvent( void* pData )
+sal_Bool Os2SalFrame::PostEvent( void* pData )
 {
-    return (BOOL)WinPostMsg( mhWndClient, SAL_MSG_USEREVENT, 0, (MPARAM)pData );
+    return (sal_Bool)WinPostMsg( mhWndClient, SAL_MSG_USEREVENT, 0, (MPARAM)pData );
 }
 
 // -----------------------------------------------------------------------
@@ -1004,7 +1009,7 @@ void Os2SalFrame::SetExtendedFrameStyle( SalExtStyle nExtStyle )
 
 // -----------------------------------------------------------------------
 
-void Os2SalFrame::Show( BOOL bVisible, BOOL bNoActivate )
+void Os2SalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
 {
     // Post this Message to the window, because this only works
     // in the thread of the window, which has create this window.
@@ -1017,7 +1022,7 @@ void Os2SalFrame::Show( BOOL bVisible, BOOL bNoActivate )
 
 // -----------------------------------------------------------------------
 
-void Os2SalFrame::Enable( BOOL bEnable )
+void Os2SalFrame::Enable( sal_Bool bEnable )
 {
     WinEnableWindow( mhWndFrame, bEnable );
 }
@@ -1054,7 +1059,7 @@ void Os2SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
 
     SWP aSWP;
     _WinQueryWindowPos( this, &aSWP );
-    BOOL bVisible = WinIsWindowVisible( mhWndFrame );
+    sal_Bool bVisible = WinIsWindowVisible( mhWndFrame );
     if ( !bVisible )
     {
         if ( mbFloatWin )
@@ -1099,7 +1104,7 @@ void Os2SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
     }
 
     // Adjust Window in the screen
-    BOOL bCheckOffScreen = TRUE;
+    sal_Bool bCheckOffScreen = TRUE;
 
     // but don't do this for floaters or ownerdraw windows that are currently moved interactively
     if( (mnStyle & SAL_FRAME_STYLE_FLOAT) && !(mnStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
@@ -1227,7 +1232,7 @@ void Os2SalFrame::SetWindowState( const SalFrameState* pState )
         pState->mnWidth,pState->mnHeight,pState->mnX,pState->mnY);
 #endif
 
-    BOOL bVisible = WinIsWindowVisible( mhWndFrame );
+    sal_Bool bVisible = WinIsWindowVisible( mhWndFrame );
 
     // get screen coordinates
     SWP aSWP;
@@ -1292,7 +1297,7 @@ void Os2SalFrame::SetWindowState( const SalFrameState* pState )
 
     // Status setzen
     bVisible = WinIsWindowVisible( mhWndFrame);
-    BOOL bUpdateHiddenFramePos = FALSE;
+    sal_Bool bUpdateHiddenFramePos = FALSE;
     if ( !bVisible )
     {
         aPlacement.fl = SWP_HIDE;
@@ -1367,7 +1372,7 @@ void Os2SalFrame::SetWindowState( const SalFrameState* pState )
 
 // -----------------------------------------------------------------------
 
-BOOL Os2SalFrame::GetWindowState( SalFrameState* pState )
+sal_Bool Os2SalFrame::GetWindowState( SalFrameState* pState )
 {
     if ( maState.mnWidth && maState.mnHeight )
     {
@@ -1430,7 +1435,7 @@ void Os2SalFrame::SetMenu( SalMenu* pSalMenu )
 
 // -----------------------------------------------------------------------
 
-void Os2SalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay )
+void Os2SalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay )
 {
     if ( mbFullScreen == bFullScreen )
         return;
@@ -1457,14 +1462,14 @@ void Os2SalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay )
 
 // -----------------------------------------------------------------------
 
-void Os2SalFrame::StartPresentation( BOOL bStart )
+void Os2SalFrame::StartPresentation( sal_Bool bStart )
 {
     // SysSetObjectData("<WP_DESKTOP>","Autolockup=no"); oder OS2.INI: PM_Lockup
 }
 
 // -----------------------------------------------------------------------
 
-void Os2SalFrame::SetAlwaysOnTop( BOOL bOnTop )
+void Os2SalFrame::SetAlwaysOnTop( sal_Bool bOnTop )
 {
     mbAllwayOnTop = bOnTop;
 #if 0
@@ -1667,7 +1672,7 @@ void Os2SalFrame::SetPointer( PointerStyle ePointerStyle )
 
 // -----------------------------------------------------------------------
 
-void Os2SalFrame::CaptureMouse( BOOL bCapture )
+void Os2SalFrame::CaptureMouse( sal_Bool bCapture )
 {
 #if OSL_DEBUG_LEVEL>10
     _bCapture=bCapture;
@@ -1938,12 +1943,12 @@ XubString Os2SalFrame::GetSymbolKeyName( const XubString&, USHORT nKeyCode )
 
 inline long ImplOS2ColorToSal( long nOS2Color )
 {
-    return MAKE_SALCOLOR( (BYTE)( nOS2Color>>16), (BYTE)(nOS2Color>>8), (BYTE)nOS2Color );
+    return MAKE_SALCOLOR( (PM_BYTE)( nOS2Color>>16), (PM_BYTE)(nOS2Color>>8), (PM_BYTE)nOS2Color );
 }
 
 // -----------------------------------------------------------------------
 
-static USHORT ImplMouseSysValueToSAL( int iSysValue, USHORT& rCode, USHORT& rClicks, BOOL& rDown )
+static USHORT ImplMouseSysValueToSAL( int iSysValue, USHORT& rCode, USHORT& rClicks, sal_Bool& rDown )
 {
     LONG lValue = WinQuerySysValue( HWND_DESKTOP, iSysValue );
 
@@ -2015,7 +2020,7 @@ static USHORT ImplMouseSysValueToSAL( int iSysValue, USHORT& rCode, USHORT& rCli
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplSalIsSameColor( const Color& rColor1, const Color& rColor2 )
+static sal_Bool ImplSalIsSameColor( const Color& rColor1, const Color& rColor2 )
 {
     ULONG nWrong = 0;
     nWrong += Abs( (short)rColor1.GetRed()-(short)rColor2.GetRed() );
@@ -2026,7 +2031,7 @@ static BOOL ImplSalIsSameColor( const Color& rColor1, const Color& rColor2 )
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplOS2NameFontToVCLFont( const char* pFontName, Font& rFont )
+static sal_Bool ImplOS2NameFontToVCLFont( const char* pFontName, Font& rFont )
 {
     char aNumBuf[10];
     int  nNumBufLen = 0;
@@ -2101,7 +2106,7 @@ void Os2SalFrame::UpdateSettings( AllSettings& rSettings )
     // --- Mouse setting ---
     USHORT  nCode;
     USHORT  nClicks;
-    BOOL    bDown;
+    sal_Bool    bDown;
     MouseSettings aMouseSettings = rSettings.GetMouseSettings();
     aMouseSettings.SetDoubleClickTime( WinQuerySysValue( HWND_DESKTOP, SV_DBLCLKTIME ) );
     if ( ImplMouseSysValueToSAL( SV_BEGINDRAG, nCode, nClicks, bDown ) )
@@ -2186,9 +2191,9 @@ void Os2SalFrame::UpdateSettings( AllSettings& rSettings )
     // Checked-Color berechnen
     Color   aColor1 = aStyleSettings.GetFaceColor();
     Color   aColor2 = aStyleSettings.GetLightColor();
-    BYTE    nRed    = (BYTE)(((USHORT)aColor1.GetRed()   + (USHORT)aColor2.GetRed())/2);
-    BYTE    nGreen  = (BYTE)(((USHORT)aColor1.GetGreen() + (USHORT)aColor2.GetGreen())/2);
-    BYTE    nBlue   = (BYTE)(((USHORT)aColor1.GetBlue()  + (USHORT)aColor2.GetBlue())/2);
+    PM_BYTE    nRed    = (PM_BYTE)(((USHORT)aColor1.GetRed()   + (USHORT)aColor2.GetRed())/2);
+    PM_BYTE    nGreen  = (PM_BYTE)(((USHORT)aColor1.GetGreen() + (USHORT)aColor2.GetGreen())/2);
+    PM_BYTE    nBlue   = (PM_BYTE)(((USHORT)aColor1.GetBlue()  + (USHORT)aColor2.GetBlue())/2);
     aStyleSettings.SetCheckedColor( Color( nRed, nGreen, nBlue ) );
 
     // Fonts updaten
@@ -2366,7 +2371,7 @@ static long ImplHandleMouseMsg( HWND hWnd,
     SalMouseEvent   aMouseEvt;
     long            nRet;
     USHORT          nEvent;
-    BOOL            bCall = TRUE;
+    sal_Bool            bCall = TRUE;
     USHORT          nFlags = SHORT2FROMMP( nMP2 );
     Os2SalFrame* pFrame = GetWindowPtr( hWnd );
     if ( !pFrame )
@@ -2660,7 +2665,7 @@ static USHORT ImplSalGetKeyCode( Os2SalFrame* pFrame, MPARAM aMP1, MPARAM aMP2 )
 
 static void ImplUpdateInputLang( Os2SalFrame* pFrame )
 {
-    BOOL    bLanguageChange = FALSE;
+    sal_Bool    bLanguageChange = FALSE;
     ULONG   nLang = 0;
     APIRET  rc;
     UconvObject  uconv_object = NULL;
@@ -2724,7 +2729,7 @@ LanguageType Os2SalFrame::GetInputLanguage()
 
 // -----------------------------------------------------------------------
 
-BOOL Os2SalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , KeyCode& )
+sal_Bool Os2SalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , KeyCode& )
 {
     // not supported yet
     return FALSE;
@@ -2846,7 +2851,7 @@ static long ImplHandleKeyMsg( HWND hWnd,
 
 static bool ImplHandlePaintMsg( HWND hWnd )
 {
-    BOOL bMutex = FALSE;
+    sal_Bool bMutex = FALSE;
 
     if ( ImplSalYieldMutexTryToAcquire() )
         bMutex = TRUE;
@@ -3238,7 +3243,7 @@ static long ImplHandleIMEConversion( Os2SalFrame* pFrame, MPARAM nMP2Param )
                 xub_Unicode*     pBuf = NULL;
                 ULONG    nAttrBufLen = 0;
                 PM_BYTE*    pAttrBuf = NULL;
-                BOOL        bLastCursor = FALSE;
+                sal_Bool        bLastCursor = FALSE;
                 if ( nMP2 & IMR_RESULT_RESULTSTRING )
                 {
                     pIMEData->mpGetResultString( hIMI, IMR_RESULT_RESULTSTRING, 0, &nBufLen );
@@ -3452,7 +3457,7 @@ MRESULT EXPENTRY SalFrameWndProc( HWND hWnd, ULONG nMsg,
 {
     Os2SalFrame*    pFrame      = (Os2SalFrame*)GetWindowPtr( hWnd );
     MRESULT         nRet        = (MRESULT)0;
-    BOOL            bDef        = TRUE;
+    sal_Bool            bDef        = TRUE;
     bool            bCheckTimers= false;
 
 #if OSL_DEBUG_LEVEL>10

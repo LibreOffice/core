@@ -26,7 +26,7 @@
  ************************************************************************/
 
 #ifndef _SV_SALIDS_HRC
-#include <salids.hrc>
+#include <os2/salids.hrc>
 #endif
 
 POINTER 	SAL_RESID_POINTER_NULL					NULLPTR.PTR

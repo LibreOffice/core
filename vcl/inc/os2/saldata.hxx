@@ -24,9 +24,8 @@
 #ifndef _SV_SALDATA_HXX
 #define _SV_SALDATA_HXX
 
-#include <vcl/sv.h>
-#include <vcl/svdata.hxx>
-#include <vcl/salwtype.hxx>
+#include <svdata.hxx>
+#include <salwtype.hxx>
 
 class Os2SalInstance;
 class Os2SalFrame;
@@ -107,7 +106,7 @@ struct SalData
     ULONG                   mnNextTimerTime;
     ULONG                   mnLastEventTime;
     ULONG                   mnTimerId;          // os2 timer id
-    BOOL                    mbInTimerProc;          // timer event is currently being dispatched
+    PM_BOOL                     mbInTimerProc;          // timer event is currently being dispatched
     //SALTIMERPROC              mpTimerProc;            // timer callback proc
     HWND                    mhWantLeaveMsg;         // window handle, that want a MOUSELEAVE message
     AutoTimer*              mpMouseLeaveTimer;      // Timer for MouseLeave Test
@@ -118,10 +117,10 @@ struct SalData
     ULONG                   mnAppThreadId;          // Id from Applikation-Thread
     ULONG                   mnFontMetricCount;      // number of entries in the font list
     PFONTMETRICS                mpFontMetrics;          // cached font list
-    BOOL                    mbObjClassInit;         // Ist SALOBJECTCLASS initialised
+    PM_BOOL                 mbObjClassInit;         // Ist SALOBJECTCLASS initialised
 #ifdef ENABLE_IME
     SalIMEData*                 mpIMEData;              // SalIME-Data
-    BOOL                    mbIMEInit;              // SalIME-Data-Init
+    PM_BOOL                 mbIMEInit;              // SalIME-Data-Init
 #endif
 
     SalIcon*                mpFirstIcon;            // icon cache, points to first icon, NULL if none
@@ -149,7 +148,7 @@ struct SalShlData
 
 extern SalShlData aSalShlData;
 
-BOOL SalImplHandleProcessMenu( HWND hWnd, ULONG nMsg, MPARAM nMP1, MPARAM nMP2 );
+PM_BOOL SalImplHandleProcessMenu( HWND hWnd, ULONG nMsg, MPARAM nMP1, MPARAM nMP2 );
 
 // --------------------------------------------
 // - SALSHL.CXX - for accessing DLL resources -
@@ -157,7 +156,7 @@ BOOL SalImplHandleProcessMenu( HWND hWnd, ULONG nMsg, MPARAM nMP1, MPARAM nMP2 )
 
 HPOINTER ImplLoadSalCursor( int nId );
 HBITMAP ImplLoadSalBitmap( int nId );
-BOOL ImplLoadSalIcon( int nId, HPOINTER& rIcon);
+sal_Bool ImplLoadSalIcon( int nId, HPOINTER& rIcon);
 
 // SALGDI.CXX
 void ImplInitSalGDI();
@@ -172,7 +171,7 @@ void ImplSalYieldMutexAcquireWithWait();
 ULONG ImplSalReleaseYieldMutex();
 void ImplSalAcquireYieldMutex( ULONG nCount );
 ULONG GetCurrentThreadId();
-BOOL ImplSalYieldMutexTryToAcquire();
+sal_Bool ImplSalYieldMutexTryToAcquire();
 void ImplSalYieldMutexAcquire();
 void ImplSalYieldMutexRelease();
 

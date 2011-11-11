@@ -25,14 +25,25 @@
 
 #include <svpm.h>
 
+#include <tools/svwin.h>
+
+#include <vcl/sysdata.hxx>
+
+#include <os2/saldata.hxx>
+#include <os2/salinst.h>
+#include <os2/salgdi.h>
+#include <os2/salvd.h>
+
+/*
 #define _SV_SALVD_CXX
 #include <saldata.hxx>
 #include <salinst.h>
 #include <salgdi.h>
 #include <salvd.h>
+*/
 
 #ifndef __H_FT2LIB
-#include <wingdi.h>
+#include <os2/wingdi.h>
 #include <ft2lib.h>
 #endif
 
@@ -172,7 +183,7 @@ void Os2SalVirtualDevice::ReleaseGraphics( SalGraphics* )
 
 // -----------------------------------------------------------------------
 
-BOOL Os2SalVirtualDevice::SetSize( long nDX, long nDY )
+sal_Bool Os2SalVirtualDevice::SetSize( long nDX, long nDY )
 {
     HBITMAP hNewBmp = ImplCreateVirDevBitmap( mhDC,
                                               mhPS, nDX, nDY,

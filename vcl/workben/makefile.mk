@@ -70,10 +70,11 @@ APP1STDLIBS=	$(CPPULIB)			\
 
 APP2TARGET= outdevgrind
 APP2OBJS=	\
-    $(OBJ)$/outdevgrind.obj $(OBJ)$/salmain.obj
+    $(OBJ)$/outdevgrind.obj 
 
 APP2NOSAL=		TRUE
 APP2STDLIBS=$(TOOLSLIB) 		\
+            vclmain.lib \
             $(COMPHELPERLIB)	\
             $(CPPULIB)			\
             $(CPPUHELPERLIB)	\

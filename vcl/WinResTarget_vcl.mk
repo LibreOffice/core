@@ -32,6 +32,8 @@ $(eval $(call gb_WinResTarget_set_include,vcl/src,\
         -I$(SRCDIR)/vcl/inc \
 ))
 
+ifeq ($(OS),WNT)
+
 $(eval $(call gb_WinResTarget_add_file,vcl/src,\
     vcl/win/source/src/salsrc \
 ))
@@ -121,3 +123,16 @@ $(eval $(call gb_WinResTarget_add_dependency,vcl/src,\
     vcl/win/source/src/movebw.cur \
     vcl/win/source/src/refhand.cur \
 ))
+
+else
+
+$(eval $(call gb_WinResTarget_add_file,vcl/src,\
+    vcl/os2/source/src/salsrc \
+))
+
+$(eval $(call gb_WinResTarget_set_include,vcl/src,\
+        $$(INCLUDE) \
+        -I$(SRCDIR)/vcl/os2/source/src \
+))
+
+endif

@@ -21,16 +21,27 @@
 
 
 
-#include <tools/svwin.h>
+#define INCL_GPI
+#define INCL_DOS
+#include <svpm.h>
 
-#include <rtl/ustring.hxx>
-#include <osl/module.h>
-#include <salgdi.h>
-#include <saldata.hxx>
-#include <vcl/sallayout.hxx>
+#include "tools/svwin.h"
+
+#include "vcl/svapp.hxx"
+
+#include "os2/salgdi.h"
+#include "os2/saldata.hxx"
+
+// for GetMirroredChar
+#include "sft.hxx"
+#include "sallayout.hxx"
+
+#include "rtl/ustring.hxx"
+#include "osl/module.h"
+#include "sallayout.hxx"
 
 #ifndef __H_FT2LIB
-#include <wingdi.h>
+#include <os2/wingdi.h>
 #include <ft2lib.h>
 #endif
 
@@ -40,9 +51,6 @@
 #ifdef GCP_KERN_HACK
     #include <algorithm>
 #endif // GCP_KERN_HACK
-
-// for GetMirroredChar
-#include <vcl/svapp.hxx>
 
 #include <hash_map>
 typedef std::hash_map<int,int> IntMap;
@@ -120,7 +128,7 @@ protected:
 class Os2SalLayout : public Os2Layout
 {
 public:
-                    Os2SalLayout( HPS, BYTE nCharSet, const ImplOs2FontData&, ImplOs2FontEntry& );
+                    Os2SalLayout( HPS, PM_BYTE nCharSet, const ImplOs2FontData&, ImplOs2FontEntry& );
     virtual         ~Os2SalLayout();
 
     virtual bool    LayoutText( ImplLayoutArgs& );
@@ -159,7 +167,7 @@ private:
     bool            mbDisableGlyphs;
 
     int             mnNotdefWidth;
-    BYTE            mnCharSet;
+    PM_BYTE            mnCharSet;
 
 };
 
@@ -172,7 +180,7 @@ Os2Layout::Os2Layout( HPS hPS, const ImplOs2FontData& rWFD, ImplOs2FontEntry& rW
     mrOs2FontData( rWFD ),
     mrOs2FontEntry( rWFE )
 {
-    BOOL fSuccess;
+    sal_Bool fSuccess;
     fSuccess = Ft2QueryLogicalFont( mhPS, LCID_BASE, NULL, &mhFont, sizeof(FATTRS));
 }
 
@@ -186,7 +194,7 @@ void Os2Layout::InitFont() const
 
 // =======================================================================
 
-Os2SalLayout::Os2SalLayout( HPS hPS, BYTE nCharSet,
+Os2SalLayout::Os2SalLayout( HPS hPS, PM_BYTE nCharSet,
     const ImplOs2FontData& rOs2FontData, ImplOs2FontEntry& rOs2FontEntry )
 :   Os2Layout( hPS, rOs2FontData, rOs2FontEntry ),
     mnGlyphCount( 0 ),
@@ -957,7 +965,7 @@ SalLayout* Os2SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
         }
 #endif // GCP_KERN_HACK
 
-        //BYTE eCharSet = ANSI_CHARSET;
+        //PM_BYTE eCharSet = ANSI_CHARSET;
         //if( mpLogFont )
         //    eCharSet = mpLogFont->lfCharSet;
         pLayout = new Os2SalLayout( mhPS, 0, rFontFace, rFontInstance );

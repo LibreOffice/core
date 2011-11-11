@@ -109,7 +109,7 @@ namespace vcl
     };
 
 /** Value of the width member of the TTGlobalFontInfo struct */
-#ifndef OS2
+#ifndef FWIDTH_DONT_CARE // OS2
     enum WidthClass {
         FWIDTH_ULTRA_CONDENSED = 1,         /**< 50% of normal                      */
         FWIDTH_EXTRA_CONDENSED = 2,         /**< 62.5% of normal                    */
@@ -121,7 +121,7 @@ namespace vcl
         FWIDTH_EXTRA_EXPANDED = 8,          /**< 150% of normal                     */
         FWIDTH_ULTRA_EXPANDED = 9           /**< 200% of normal                     */
     };
-#endif // OS2
+#endif // FWIDTH_DONT_CARE
 #endif /* FW_THIN */
 
 /** Type of the 'kern' table, stored in _TrueTypeFont::kerntype */

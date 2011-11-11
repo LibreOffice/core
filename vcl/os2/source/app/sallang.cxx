@@ -22,7 +22,7 @@
 
 
 #ifndef _SALLANG_HXX
-#include <sallang.hxx>
+#include <os2/sallang.hxx>
 #endif
 
 // =======================================================================

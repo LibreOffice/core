@@ -159,6 +159,8 @@ struct SystemFontData
     unsigned long   nSize;          // size in bytes of this structure
 #if defined( WNT )
     HFONT           hFont;          // native font object
+#elif defined( OS2 )
+    ULONG           hFont;          // native font object
 #elif defined( QUARTZ )
     void*           aATSUFontID;    // native font object
 #elif defined( UNX )

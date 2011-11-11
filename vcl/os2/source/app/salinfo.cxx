@@ -26,19 +26,20 @@
 #define INCL_GPI
 #include <svpm.h>
 
-#include <tools/string.hxx>
-#include <salsys.h>
-#include <salframe.h>
-#include <salinst.h>
-#include "saldata.hxx"
-#include <tools/debug.hxx>
-#include <vcl/svdata.hxx>
-#include <rtl/ustrbuf.hxx>
+#include "svsys.h"
+#include "rtl/ustrbuf.hxx"
+
+#include "tools/debug.hxx"
+#include "tools/string.hxx"
+
 #include "vcl/window.hxx"
 
-#ifndef _SV_SALGTYPE_HXX
-//#include <salgtype.hxx>
-#endif
+#include "os2/salsys.h"
+#include "os2/salframe.h"
+#include "os2/salinst.h"
+#include "os2/saldata.hxx"
+
+#include "svdata.hxx"
 
 #define CHAR_POINTER(THE_OUSTRING) ::rtl::OUStringToOString (THE_OUSTRING, RTL_TEXTENCODING_UTF8).pData->buffer
 

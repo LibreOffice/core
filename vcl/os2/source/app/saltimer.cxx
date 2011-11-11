@@ -24,9 +24,9 @@
 #include <svpm.h>
 
 #define _SV_SALTIMER_CXX
-#include <saldata.hxx>
-#include <saltimer.h>
-#include <salinst.h>
+#include <os2/saldata.hxx>
+#include <os2/saltimer.h>
+#include <os2/salinst.h>
 
 // =======================================================================
 
@@ -36,7 +36,7 @@
 
 // =======================================================================
 
-void ImplSalStartTimer( ULONG nMS, BOOL bMutex )
+void ImplSalStartTimer( ULONG nMS, sal_Bool bMutex )
 {
     SalData*    pSalData = GetSalData();
 

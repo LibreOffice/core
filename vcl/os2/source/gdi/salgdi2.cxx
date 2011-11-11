@@ -25,28 +25,21 @@
 #include <svpm.h>
 
 #define _SV_SALGDI2_CXX
-#include <salbmp.h>
-#include <saldata.hxx>
+#include <os2/salbmp.h>
+#include <os2/saldata.hxx>
 #ifndef _SV_SALIDS_HRC
-#include <salids.hrc>
+#include <os2/salids.hrc>
 #endif
-#include <salgdi.h>
-#include <salvd.h>
+#include <os2/salgdi.h>
+#include <os2/salvd.h>
 #include <vcl/salbtype.hxx>
 
 #ifndef __H_FT2LIB
-#include <wingdi.h>
+#include <os2/wingdi.h>
 #include <ft2lib.h>
 #endif
 
-BOOL bFastTransparent = FALSE;
-
-// -----------
-// - Defines -
-// -----------
-
-#define RGBCOLOR( r, g, b ) ((ULONG)(((BYTE)(b)|((USHORT)(g)<<8))|(((ULONG)(BYTE)(r))<<16)))
-#define TY( y )             (mnHeight-(y)-1)
+PM_BOOL bFastTransparent = FALSE;
 
 // ---------------
 // - SalGraphics -
@@ -283,15 +276,15 @@ void Os2SalGraphics::copyArea( long nDestX, long nDestY,
 
 void ImplDrawBitmap( HPS hPS, long nScreenHeight,
                      const SalTwoRect* pPosAry, const Os2SalBitmap& rSalBitmap,
-                     BOOL bPrinter, int nDrawMode )
+                     PM_BOOL bPrinter, int nDrawMode )
 {
     if( hPS )
     {
         HANDLE      hDrawDIB;
         HBITMAP     hDrawDDB = rSalBitmap.ImplGethDDB();
         Os2SalBitmap*   pTmpSalBmp = NULL;
-        BOOL        bPrintDDB = ( bPrinter && hDrawDDB );
-        BOOL        bDrawDDB1 = ( ( rSalBitmap.GetBitCount() == 1 ) && hDrawDDB );
+        PM_BOOL     bPrintDDB = ( bPrinter && hDrawDDB );
+        PM_BOOL     bDrawDDB1 = ( ( rSalBitmap.GetBitCount() == 1 ) && hDrawDDB );
 
         if( bPrintDDB || bDrawDDB1 )
         {
@@ -310,7 +303,7 @@ void ImplDrawBitmap( HPS hPS, long nScreenHeight,
             BITMAPINFOHEADER2*  pBIH = (BITMAPINFOHEADER2*) pBI;
             const long          nHeight = pBIH->cy;
             long                nInfoSize = *(ULONG*) pBI + rSalBitmap.ImplGetDIBColorCount( hDrawDIB ) * sizeof( RGB2 );
-            BYTE*               pBits = (BYTE*) pBI + nInfoSize;
+            PM_BYTE*                pBits = (PM_BYTE*) pBI + nInfoSize;
 
             pts[0].x = pPosAry->mnDestX;
             pts[0].y = nScreenHeight - pPosAry->mnDestY - pPosAry->mnDestHeight;
@@ -338,12 +331,12 @@ void ImplDrawBitmap( HPS hPS, long nScreenHeight,
                 pBI = (BITMAPINFO2*) hSubst;
                 pBIH = (BITMAPINFOHEADER2*) pBI;
                 nInfoSize = *(ULONG*) pBI + rSalBitmap.ImplGetDIBColorCount( hSubst ) * sizeof( RGB2 );
-                pBits = (BYTE*) pBI + nInfoSize;
+                pBits = (PM_BYTE*) pBI + nInfoSize;
             }
 
             if( bPrinter )
             {
-                BYTE* pDummy;
+                PM_BYTE* pDummy;
 
                 // expand 8Bit-DIB's to 24Bit-DIB's, because some printer drivers
                 // have problems to print these DIB's (strange)
@@ -356,7 +349,7 @@ void ImplDrawBitmap( HPS hPS, long nScreenHeight,
                     const long          nNewImageSize = nHeight * nWidthAl24;
                     BITMAPINFOHEADER2*  pNewInfo;
 
-                    pDummy = new BYTE[ sizeof( BITMAPINFO2 ) + nNewImageSize ];
+                    pDummy = new PM_BYTE[ sizeof( BITMAPINFO2 ) + nNewImageSize ];
                     memset( pDummy, 0, sizeof( BITMAPINFO2 ) );
 
                     pNewInfo = (BITMAPINFOHEADER2*) pDummy;
@@ -368,13 +361,13 @@ void ImplDrawBitmap( HPS hPS, long nScreenHeight,
                     pNewInfo->ulCompression = BCA_UNCOMP;
                     pNewInfo->cbImage = nNewImageSize;
 
-                    BYTE* pBitsSrc = (BYTE*) pBIH + nInfoSize;
-                    BYTE* pBitsDst = pDummy + sizeof( BITMAPINFO2 );
+                    PM_BYTE* pBitsSrc = (PM_BYTE*) pBIH + nInfoSize;
+                    PM_BYTE* pBitsDst = pDummy + sizeof( BITMAPINFO2 );
 
                     for( long nY = 0UL; nY < nHeight; nY++ )
                     {
-                        BYTE* pSrcLine = pBitsSrc + nY * nWidthAl8;
-                        BYTE* pDstLine = pBitsDst + nY * nWidthAl24;
+                        PM_BYTE* pSrcLine = pBitsSrc + nY * nWidthAl8;
+                        PM_BYTE* pDstLine = pBitsDst + nY * nWidthAl24;
 
                         for( long nX = 0UL; nX < nWidth; nX++ )
                         {
@@ -393,7 +386,7 @@ void ImplDrawBitmap( HPS hPS, long nScreenHeight,
                     const long nImageSize = ( pBIH->cbImage ? pBIH->cbImage : ( pBIH->cy * AlignedWidth4Bytes( pBIH->cx * pBIH->cBitCount ) ) );
                     const long nTotalSize = nInfoSize + nImageSize;
 
-                    pDummy = new BYTE[ nTotalSize ];
+                    pDummy = new PM_BYTE[ nTotalSize ];
                     memcpy( pDummy, pBI, nTotalSize );
                 }
 
@@ -666,7 +659,7 @@ SalColor Os2SalGraphics::getPixel( long nX, long nY )
     POINTL    aPt = { nX, TY( nY ) };
     LONG    nColor = Ft2QueryPel( mhPS, &aPt );
 
-    return MAKE_SALCOLOR( (BYTE) ( nColor >> 16 ), (BYTE) ( nColor >> 8 ), (BYTE) nColor );
+    return MAKE_SALCOLOR( (PM_BYTE) ( nColor >> 16 ), (PM_BYTE) ( nColor >> 8 ), (PM_BYTE) nColor );
 }
 
 // -----------------------------------------------------------------------

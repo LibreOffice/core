@@ -87,6 +87,18 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
 ))
 endif
 
+ifeq ($(GUIBASE),os2)
+# YD FIXME this is not working... needs ldflags hack...
+$(eval $(call gb_Library_add_linked_libs,vcl,\
+    ft2lib \
+))
+$(eval $(call gb_Library_set_ldflags,vcl,\
+    $$(LDFLAGS) \
+    -lft2lib \
+))
+
+endif
+
 ifeq ($(GUIBASE),aqua)
 $(eval $(call gb_Library_set_cxxflags,vcl,\
     $$(CXXFLAGS) \
@@ -227,6 +239,35 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/win/source/window/salmenu \
     vcl/win/source/window/salobj \
 ))
+
+$(eval $(call gb_Library_add_nativeres,vcl,src))
+
+endif
+
+ifeq ($(OS),OS2)
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/os2/source/app/salinfo \
+    vcl/os2/source/app/salinst \
+    vcl/os2/source/app/sallang \
+    vcl/os2/source/app/salshl \
+    vcl/os2/source/app/saltimer \
+    vcl/os2/source/gdi/salbmp \
+    vcl/os2/source/gdi/salgdi \
+    vcl/os2/source/gdi/salgdi2 \
+    vcl/os2/source/gdi/salgdi3 \
+    vcl/os2/source/gdi/salprn \
+    vcl/os2/source/gdi/salvd \
+    vcl/os2/source/gdi/os2layout \
+    vcl/os2/source/window/salframe \
+    vcl/os2/source/window/salmenu \
+    vcl/os2/source/window/salobj \
+))
+
+ifeq ($(gb_DEBUGLEVEL),2)
+$(eval $(call gb_Library_add_cobjects,vcl,\
+    vcl/os2/source/app/printf \
+))
+endif
 
 $(eval $(call gb_Library_add_nativeres,vcl,src))
 

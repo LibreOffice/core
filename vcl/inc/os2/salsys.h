@@ -28,8 +28,7 @@
 #ifndef _SV_SALSYS_H
 #define _SV_SALSYS_H
 
-#include <vcl/salsys.hxx>
-#include <vcl/sv.h>
+#include <salsys.hxx>
 
 class SalFrame;
 

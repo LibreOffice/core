@@ -100,7 +100,8 @@ DBG_NAME( Menu )
 
 #ifdef OS2
 
-#include <xwphook.h>
+#include "svsys.h"
+#include "os2/xwphook.h"
 
 // return sal_True if hilite should be executed: left mouse button down
 // or xwp mouse hook enabled

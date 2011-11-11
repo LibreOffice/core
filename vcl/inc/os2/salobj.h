@@ -28,8 +28,7 @@
 #ifndef _SV_SALOBJ_H
 #define _SV_SALOBJ_H
 
-#include <vcl/sv.h>
-#include <vcl/salobj.hxx>
+#include <salobj.hxx>
 
 // -----------------
 // - SalObjectData -
@@ -58,8 +57,8 @@ public:
     virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
     virtual void                    EndSetClipRegion();
     virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight );
-    virtual void                    Show( BOOL bVisible );
-    virtual void                    Enable( BOOL nEnable );
+    virtual void                    Show( sal_Bool bVisible );
+    virtual void                    Enable( sal_Bool nEnable );
     virtual void                    GrabFocus();
     virtual void                    SetBackground();
     virtual void                    SetBackground( SalColor nSalColor );

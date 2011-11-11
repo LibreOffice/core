@@ -26,14 +26,14 @@
 #define _SV_SALBMP_CXX
 #include <rtl/alloc.h>
 #include <vcl/salbtype.hxx>
-#include <salgdi.h>
-#include <saldata.hxx>
-#include <salbmp.h>
+#include <os2/salgdi.h>
+#include <os2/saldata.hxx>
+#include <os2/salbmp.h>
 #include <vcl/bitmap.hxx> // for BitmapSystemData
 #include <string.h>
 
 #ifndef __H_FT2LIB
-#include <wingdi.h>
+#include <os2/wingdi.h>
 #include <ft2lib.h>
 #endif
 
@@ -41,9 +41,9 @@
 // - Inlines -
 // -----------
 
-inline void ImplSetPixel4( const HPBYTE pScanline, long nX, const BYTE cIndex )
+inline void ImplSetPixel4( const HPBYTE pScanline, long nX, const PM_BYTE cIndex )
 {
-    BYTE& rByte = pScanline[ nX >> 1 ];
+    PM_BYTE rByte = pScanline[ nX >> 1 ];
 
     ( nX & 1 ) ? ( rByte &= 0xf0, rByte |= ( cIndex & 0x0f ) ) :
                  ( rByte &= 0x0f, rByte |= ( cIndex << 4 ) );
@@ -72,7 +72,7 @@ Os2SalBitmap::~Os2SalBitmap()
 
 bool Os2SalBitmap::Create( HANDLE hBitmap, bool bDIB, bool bCopyHandle )
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = TRUE;
 
     if( bDIB )
         mhDIB = (HANDLE) ( bCopyHandle ? ImplCopyDIBOrDDB( hBitmap, TRUE ) : hBitmap );
@@ -397,7 +397,7 @@ HANDLE Os2SalBitmap::ImplCreateDIB4FromDIB1( HANDLE hDIB1 )
     PBYTE               pDIB4 = (PBYTE) rtl_allocateZeroMemory( nSize4 );
     PBITMAPINFO2        pBI4 = (PBITMAPINFO2) pDIB4;
     PBITMAPINFOHEADER2  pBIH4 = (PBITMAPINFOHEADER2) pBI4;
-    BYTE                aMap[ 4 ] = { 0x00, 0x01, 0x10, 0x11 };
+    PM_BYTE                aMap[ 4 ] = { 0x00, 0x01, 0x10, 0x11 };
 
     memset( pBIH4, 0, sizeof( BITMAPINFOHEADER2 ) );
     pBIH4->cbFix = sizeof( BITMAPINFOHEADER2 );
@@ -431,7 +431,7 @@ HANDLE Os2SalBitmap::ImplCreateDIB4FromDIB1( HANDLE hDIB1 )
 
 // ------------------------------------------------------------------
 
-HANDLE Os2SalBitmap::ImplCopyDIBOrDDB( HANDLE hHdl, BOOL bDIB )
+HANDLE Os2SalBitmap::ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB )
 {
     HANDLE hCopy = 0;
 
@@ -442,8 +442,8 @@ HANDLE Os2SalBitmap::ImplCopyDIBOrDDB( HANDLE hHdl, BOOL bDIB )
                             + ImplGetDIBColorCount( hHdl ) * sizeof( RGB2 ) +
                             ( pBIH->cbImage ? pBIH->cbImage : AlignedWidth4Bytes( pBIH->cx * pBIH->cBitCount ) );
 
-        BYTE* pCopy = (BYTE*)rtl_allocateZeroMemory( nSize );
-        memcpy( pCopy, (BYTE*) hHdl, nSize );
+        PM_BYTE* pCopy = (PM_BYTE*)rtl_allocateZeroMemory( nSize );
+        memcpy( pCopy, (PM_BYTE*) hHdl, nSize );
         hCopy = (HANDLE) pCopy;
     }
     else if( hHdl )
@@ -537,8 +537,8 @@ BitmapBuffer* Os2SalBitmap::AcquireBuffer( bool bReadOnly )
                 PBITMAPINFOHEADER2    pNewBIH = (PBITMAPINFOHEADER2) pNewBI;
                 const USHORT        nColorCount = ImplGetDIBColorCount( hNewDIB );
                 const ULONG            nOffset = *(ULONG*) pBI + nColorCount * sizeof( RGB2 );
-                BYTE*                pOldBits = (BYTE*) pBI + nOffset;
-                BYTE*                pNewBits = (BYTE*) pNewBI + nOffset;
+                PM_BYTE*                pOldBits = (PM_BYTE*) pBI + nOffset;
+                PM_BYTE*                pNewBits = (PM_BYTE*) pNewBI + nOffset;
 
                 memcpy( pNewBI, pBI, nOffset );
                 pNewBIH->ulCompression = 0;
@@ -580,10 +580,10 @@ BitmapBuffer* Os2SalBitmap::AcquireBuffer( bool bReadOnly )
                     if( nPalCount )
                         memcpy( pBuffer->maPalette.ImplGetColorBuffer(), pBI->argbColor, nPalCount * sizeof( RGB2 ) );
 
-                    pBuffer->mpBits = (BYTE*) pBI + *(ULONG*) pBI + nPalCount * sizeof( RGB2 );
+                    pBuffer->mpBits = (sal_uInt8*) pBI + *(ULONG*) pBI + nPalCount * sizeof( RGB2 );
                 }
                 else
-                    pBuffer->mpBits = (BYTE*) pBI + *(ULONG*) pBI;
+                    pBuffer->mpBits = (sal_uInt8*) pBI + *(ULONG*) pBI;
             }
             else
             {
@@ -627,8 +627,8 @@ void Os2SalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
 
 // ------------------------------------------------------------------
 
-void Os2SalBitmap::ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
-                                     const Size& rSizePixel, BOOL bRLE4 )
+void Os2SalBitmap::ImplDecodeRLEBuffer( const PM_BYTE* pSrcBuf, PM_BYTE* pDstBuf,
+                                     const Size& rSizePixel, bool bRLE4 )
 {
     HPBYTE    pRLE = (HPBYTE) pSrcBuf;
     HPBYTE    pDIB = (HPBYTE) pDstBuf;
@@ -639,8 +639,8 @@ void Os2SalBitmap::ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
     ULONG    nRunByte;
     ULONG    nX = 0;
     ULONG    i;
-    BYTE    cTmp;
-    BOOL    bEndDecoding = FALSE;
+    PM_BYTE    cTmp;
+    sal_Bool    bEndDecoding = FALSE;
 
     if( pRLE && pDIB )
     {

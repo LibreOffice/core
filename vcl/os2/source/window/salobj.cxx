@@ -23,15 +23,21 @@
 
 #include <svpm.h>
 
-#define _SV_SALOBJ_CXX
-#include <saldata.hxx>
-#include <salinst.h>
-#include <salframe.h>
-#include <salobj.h>
+#include <string.h>
+
+#include <tools/debug.hxx>
+#include <tools/svwin.h>
+
+#include "vcl/svapp.hxx"
+
+#include "os2/saldata.hxx"
+#include "os2/salinst.h"
+#include "os2/salframe.h"
+#include "os2/salobj.h"
 
 // =======================================================================
 
-static BOOL ImplIsSysWindowOrChild( HWND hWndParent, HWND hWndChild )
+static sal_Bool ImplIsSysWindowOrChild( HWND hWndParent, HWND hWndChild )
 {
     if ( hWndParent == hWndChild )
         return TRUE;
@@ -66,7 +72,7 @@ static Os2SalObject* ImplFindOs2SalObject( HWND hWndChild )
 
 // =======================================================================
 
-BOOL EXPENTRY SalSysMsgProc( HAB /* hAB */, QMSG* pMsg, ULONG /* fs */ )
+sal_Bool EXPENTRY SalSysMsgProc( HAB /* hAB */, QMSG* pMsg, ULONG /* fs */ )
 {
     if ( (pMsg->msg == WM_BUTTON1DOWN) ||
          (pMsg->msg == WM_BUTTON2DOWN) ||
@@ -484,7 +490,7 @@ void Os2SalObject::EndSetClipRegion()
 void Os2SalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 {
     ULONG  nStyle = 0;
-    BOOL   bVisible = WinIsWindowVisible( mhWnd );
+    sal_Bool   bVisible = WinIsWindowVisible( mhWnd );
     if ( bVisible )
     {
         WinShowWindow( mhWnd, FALSE );
@@ -498,14 +504,14 @@ void Os2SalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 
 // -----------------------------------------------------------------------
 
-void Os2SalObject::Show( BOOL bVisible )
+void Os2SalObject::Show( sal_Bool bVisible )
 {
     WinShowWindow( mhWnd, bVisible );
 }
 
 // -----------------------------------------------------------------------
 
-void Os2SalObject::Enable( BOOL bEnable )
+void Os2SalObject::Enable( sal_Bool bEnable )
 {
     // Im Gegensatz zu Windows disablen wir das Childfenster,
     // da ansonsten unser Clippen nicht mehr funktioniert, da

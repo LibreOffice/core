@@ -37,16 +37,16 @@
 #include <tools/debug.hxx>
 
 #ifndef _SV_SALIDS_HRC
-#include <salids.hrc>
+#include <os2/salids.hrc>
 #endif
 #include <vcl/apptypes.hxx>
-#include <saldata.hxx>
-#include <salinst.h>
-#include <salframe.h>
-#include <salobj.h>
-#include <saltimer.h>
-#include <salbmp.h>
-#include <vcl/salimestatus.hxx>
+#include <os2/saldata.hxx>
+#include <os2/salinst.h>
+#include <os2/salframe.h>
+#include <os2/salobj.h>
+#include <os2/saltimer.h>
+#include <os2/salbmp.h>
+#include <salimestatus.hxx>
 #include <vcl/timer.hxx>
 #include <tools/solarmutex.hxx>
 
@@ -196,7 +196,7 @@ void ImplSalYieldMutexAcquireWithWait()
     {
         // Wenn wir den Mutex nicht bekommen, muessen wir solange
         // warten, bis wir Ihn bekommen
-        BOOL bAcquire = FALSE;
+        sal_Bool bAcquire = FALSE;
         do
         {
             if ( pInst->mpSalYieldMutex->tryToAcquire() )
@@ -229,7 +229,7 @@ void ImplSalYieldMutexAcquireWithWait()
 
 // -----------------------------------------------------------------------
 
-BOOL ImplSalYieldMutexTryToAcquire()
+sal_Bool ImplSalYieldMutexTryToAcquire()
 {
     Os2SalInstance* pInst = GetSalData()->mpFirstInstance;
     if ( pInst )
@@ -529,7 +529,7 @@ void Os2SalInstance::AcquireYieldMutex( ULONG nCount )
 
 // -----------------------------------------------------------------------
 
-static void ImplSalYield( BOOL bWait, BOOL bHandleAllCurrentEvents )
+static void ImplSalYield( sal_Bool bWait, sal_Bool bHandleAllCurrentEvents )
 {
     QMSG            aMsg;
     bool bWasMsg = false, bOneEvent = false;
@@ -782,7 +782,7 @@ void Os2SalInstance::DestroyFrame( SalFrame* pFrame )
 
 SalObject* Os2SalInstance::CreateObject( SalFrame* pParent,
                                          SystemWindowData* /*pWindowData*/, // SystemWindowData meaningless on Windows
-                                         BOOL /*bShow*/ )
+                                         sal_Bool /*bShow*/ )
 {
     // Um auf Main-Thread umzuschalten
     return (SalObject*)WinSendMsg( mhComWnd, SAL_MSG_CREATEOBJECT, 0, (MPARAM)pParent );
@@ -854,4 +854,3 @@ SalSession* Os2SalInstance::CreateSalSession()
 {
     return NULL;
 }
-

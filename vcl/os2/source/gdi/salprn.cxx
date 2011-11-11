@@ -39,6 +39,37 @@
 
 #include <string.h>
 
+#include <osl/module.h>
+
+#include <tools/urlobj.hxx>
+#include <tools/svwin.h>
+#ifdef __MINGW32__
+#include <excpt.h>
+#endif
+
+#include <os2/saldata.hxx>
+#include <os2/salinst.h>
+#include <os2/salgdi.h>
+#include <os2/salframe.h>
+#include <os2/salprn.h>
+
+#include <salptype.hxx>
+#include <print.h>
+#include <jobset.h>
+
+/*
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <comphelper/processfactory.hxx>
+*/
+
+#include <malloc.h>
+
+/*
 #define _SV_SALPRN_CXX
 #include <tools/debug.hxx>
 #include <saldata.hxx>
@@ -50,8 +81,10 @@
 #include <vcl/print.h>
 #include <vcl/jobset.h>
 
+*/
+
 #ifndef __H_FT2LIB
-#include <wingdi.h>
+#include <os2/wingdi.h>
 #include <ft2lib.h>
 #endif
 
@@ -126,7 +159,7 @@ ImplQueueSalSysData::ImplQueueSalSysData( const ByteString& rPrinterName,
 {
     if ( pDrivData )
     {
-        mpDrivData = (PDRIVDATA)new BYTE[pDrivData->cb];
+        mpDrivData = (PDRIVDATA)new PM_BYTE[pDrivData->cb];
         memcpy( mpDrivData, pDrivData, pDrivData->cb );
     }
     else
@@ -427,10 +460,10 @@ static void ImplUpdateSetupData( const PDRIVDATA pDrivData, ImplJobSetup* pSetup
         {
             if ( pSetupData->mnDriverDataLen != pDrivData->cb )
                 rtl_freeMemory( pSetupData->mpDriverData );
-            pSetupData->mpDriverData = (BYTE*)rtl_allocateMemory( pDrivData->cb);
+            pSetupData->mpDriverData = (sal_uInt8*)rtl_allocateMemory( pDrivData->cb);
         }
         else
-            pSetupData->mpDriverData = (BYTE*)rtl_allocateMemory( pDrivData->cb);
+            pSetupData->mpDriverData = (sal_uInt8*)rtl_allocateMemory( pDrivData->cb);
         pSetupData->mnDriverDataLen = pDrivData->cb;
         memcpy( pSetupData->mpDriverData, pDrivData, pDrivData->cb );
     }
@@ -441,7 +474,7 @@ static void ImplUpdateSetupData( const PDRIVDATA pDrivData, ImplJobSetup* pSetup
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplPaperSizeEqual( long nPaperWidth1, long nPaperHeight1,
+static sal_Bool ImplPaperSizeEqual( long nPaperWidth1, long nPaperHeight1,
                                 long nPaperWidth2, long nPaperHeight2 )
 {
     return (((nPaperWidth1 >= nPaperWidth2-1) && (nPaperWidth1 <= nPaperWidth2+1)) &&
@@ -450,7 +483,7 @@ static BOOL ImplPaperSizeEqual( long nPaperWidth1, long nPaperHeight1,
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplIsDriverDJPEnabled( HDC hDC )
+static sal_Bool ImplIsDriverDJPEnabled( HDC hDC )
 {
 #ifdef NO_DJP
     return FALSE;
@@ -502,7 +535,7 @@ static BOOL ImplIsDriverDJPEnabled( HDC hDC )
 static void ImplFormatInputList( PDJP_ITEM pDJP, PQUERYTUPLE pTuple )
 {
    // Loop through the query elements
-   BOOL fContinue = TRUE;
+   sal_Bool fContinue = TRUE;
    do
    {
       pDJP->cb            = sizeof (DJP_ITEM);
@@ -580,7 +613,7 @@ static void ImplGetFormAndTrayList( Os2SalInfoPrinter* pOs2SalInfoPrinter, const
 
     // allocate the memory
     nAlloc = pQuerySize->ulSizeNeeded;
-    pBuffer = (PBYTE)new BYTE[nAlloc];
+    pBuffer = (PBYTE)new PM_BYTE[nAlloc];
 
     // set up the input
     PDJP_ITEM pDJP = (PDJP_ITEM)pBuffer;
@@ -646,7 +679,7 @@ static void ImplGetFormAndTrayList( Os2SalInfoPrinter* pOs2SalInfoPrinter, const
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplGetCurrentSettings( Os2SalInfoPrinter* pOs2SalInfoPrinter, ImplJobSetup* pSetupData )
+static sal_Bool ImplGetCurrentSettings( Os2SalInfoPrinter* pOs2SalInfoPrinter, ImplJobSetup* pSetupData )
 {
     // Um den aktuellen Tray zu ermitteln, brauchen wir auch die Listen dazu
     if ( !pOs2SalInfoPrinter->mnFormCount )
@@ -667,7 +700,7 @@ static BOOL ImplGetCurrentSettings( Os2SalInfoPrinter* pOs2SalInfoPrinter, ImplJ
     PDRIVDATA   pCopyDrivData       = ImplPrnDrivData( pSetupData );
     LONG        nDrivDataSize       = pCopyDrivData->cb;
     PBYTE       pDrivData           = (PBYTE)pCopyDrivData;
-    BOOL        bResult;
+    sal_Bool        bResult;
 
     // find out how many bytes to allocate
     pQuerySize->cb = sizeof( alQuery );
@@ -685,7 +718,7 @@ static BOOL ImplGetCurrentSettings( Os2SalInfoPrinter* pOs2SalInfoPrinter, ImplJ
 
     // allocate the memory
     nAlloc = pQuerySize->ulSizeNeeded;
-    pBuffer = (PBYTE)new BYTE[nAlloc];
+    pBuffer = (PBYTE)new PM_BYTE[nAlloc];
 
     // set up the input
     PDJP_ITEM pDJP = (PDJP_ITEM)pBuffer;
@@ -740,11 +773,11 @@ static BOOL ImplGetCurrentSettings( Os2SalInfoPrinter* pOs2SalInfoPrinter, ImplJ
                             break;
 
                         case DJP_PSI_B4:
-                            pSetupData->mePaperFormat = PAPER_B4;
+                            pSetupData->mePaperFormat = PAPER_B4_JIS;
                             break;
 
                         case DJP_PSI_B5:
-                            pSetupData->mePaperFormat = PAPER_B5;
+                            pSetupData->mePaperFormat = PAPER_B5_JIS;
                             break;
 
                         case DJP_PSI_LETTER:
@@ -765,7 +798,7 @@ static BOOL ImplGetCurrentSettings( Os2SalInfoPrinter* pOs2SalInfoPrinter, ImplJ
                     }
 
                     // Wir suchen zuerst ueber den Namen/Id und dann ueber die Id
-                    BOOL    bTrayFound = FALSE;
+                    sal_Bool    bTrayFound = FALSE;
                     USHORT  j;
                     for ( j = 0; j < pOs2SalInfoPrinter->mnTrayCount; j++ )
                     {
@@ -815,7 +848,7 @@ static BOOL ImplGetCurrentSettings( Os2SalInfoPrinter* pOs2SalInfoPrinter, ImplJ
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplSetOrientation( HDC hPrinterDC, PDRIVDATA pDriverData,
+static sal_Bool ImplSetOrientation( HDC hPrinterDC, PDRIVDATA pDriverData,
                                 Orientation eOrientation )
 {
     LONG alQuery[] =
@@ -844,7 +877,7 @@ static BOOL ImplSetOrientation( HDC hPrinterDC, PDRIVDATA pDriverData,
 
     // allocate the memory
     nAlloc = pQuerySize->ulSizeNeeded;
-    pBuffer = (PBYTE)new BYTE[nAlloc];
+    pBuffer = (PBYTE)new PM_BYTE[nAlloc];
 
     // set up the input
     PDJP_ITEM pDJP = (PDJP_ITEM)pBuffer;
@@ -872,7 +905,7 @@ static BOOL ImplSetOrientation( HDC hPrinterDC, PDRIVDATA pDriverData,
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplSetPaperSize( HDC hPrinterDC, PDRIVDATA pDriverData,
+static sal_Bool ImplSetPaperSize( HDC hPrinterDC, PDRIVDATA pDriverData,
                               DJPT_PAPERSIZE nOS2PaperFormat )
 {
     LONG alQuery[] =
@@ -901,7 +934,7 @@ static BOOL ImplSetPaperSize( HDC hPrinterDC, PDRIVDATA pDriverData,
 
     // allocate the memory
     nAlloc = pQuerySize->ulSizeNeeded;
-    pBuffer = (PBYTE)new BYTE[nAlloc];
+    pBuffer = (PBYTE)new PM_BYTE[nAlloc];
 
     // set up the input
     PDJP_ITEM pDJP = (PDJP_ITEM)pBuffer;
@@ -929,7 +962,7 @@ static BOOL ImplSetPaperSize( HDC hPrinterDC, PDRIVDATA pDriverData,
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplSetPaperBin( HDC hPrinterDC, PDRIVDATA pDriverData,
+static sal_Bool ImplSetPaperBin( HDC hPrinterDC, PDRIVDATA pDriverData,
                              ImplTrayInfo* pTrayInfo )
 {
     LONG alQuery[] =
@@ -958,7 +991,7 @@ static BOOL ImplSetPaperBin( HDC hPrinterDC, PDRIVDATA pDriverData,
 
     // allocate the memory
     nAlloc = pQuerySize->ulSizeNeeded;
-    pBuffer = (PBYTE)new BYTE[nAlloc];
+    pBuffer = (PBYTE)new PM_BYTE[nAlloc];
 
     // set up the input
     PDJP_ITEM pDJP = (PDJP_ITEM)pBuffer;
@@ -985,7 +1018,7 @@ static BOOL ImplSetPaperBin( HDC hPrinterDC, PDRIVDATA pDriverData,
 
 // =======================================================================
 
-static BOOL ImplSalCreateInfoPrn( Os2SalInfoPrinter* pPrinter, PDRIVDATA pDriverData,
+static sal_Bool ImplSalCreateInfoPrn( Os2SalInfoPrinter* pPrinter, PDRIVDATA pDriverData,
                                   HDC& rDC, HPS& rPS )
 {
     SalData* pSalData = GetSalData();
@@ -1044,7 +1077,7 @@ SalInfoPrinter* Os2SalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
     // Nur Setup-Daten uebernehmen, wenn Treiber und Laenge der Treiberdaten
     // uebereinstimmt
     PDRIVDATA   pDriverData;
-    BOOL        bUpdateDriverData;
+    sal_Bool        bUpdateDriverData;
     if ( pSetupData->mpDriverData && pSysQueueData->mpDrivData &&
          (pSetupData->mnSystem == JOBSETUP_SYSTEM_OS2) &&
          (pSetupData->mnDriverDataLen == pSysQueueData->mpDrivData->cb) &&
@@ -1090,7 +1123,7 @@ SalInfoPrinter* Os2SalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
     {
         if ( pSetupData->mpDriverData )
             rtl_freeMemory( pSetupData->mpDriverData);
-        pSetupData->mpDriverData = (BYTE*)rtl_allocateMemory( pDriverData->cb);
+        pSetupData->mpDriverData = (sal_uInt8*)rtl_allocateMemory( pDriverData->cb);
         memcpy( pSetupData->mpDriverData, pDriverData, pDriverData->cb );
         pSetupData->mnDriverDataLen = pDriverData->cb;
     }
@@ -1160,7 +1193,7 @@ void Os2SalInfoPrinter::ReleaseGraphics( SalGraphics* )
 
 // -----------------------------------------------------------------------
 
-BOOL Os2SalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pSetupData )
+sal_Bool Os2SalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pSetupData )
 {
     PDRIVDATA pDrivData = ImplPrnDrivData( pSetupData );
     if ( !pDrivData )
@@ -1207,7 +1240,7 @@ BOOL Os2SalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pSetupData )
 
 // -----------------------------------------------------------------------
 
-BOOL Os2SalInfoPrinter::SetPrinterData( ImplJobSetup* pSetupData )
+sal_Bool Os2SalInfoPrinter::SetPrinterData( ImplJobSetup* pSetupData )
 {
     // Wir koennen nur Treiberdaten von OS2 setzen
     if ( pSetupData->mnSystem != JOBSETUP_SYSTEM_OS2 )
@@ -1249,7 +1282,7 @@ BOOL Os2SalInfoPrinter::SetPrinterData( ImplJobSetup* pSetupData )
 
 // -----------------------------------------------------------------------
 
-BOOL Os2SalInfoPrinter::SetData( ULONG nFlags, ImplJobSetup* pSetupData )
+sal_Bool Os2SalInfoPrinter::SetData( ULONG nFlags, ImplJobSetup* pSetupData )
 {
     // needs DJP support
     if ( !mbDJPSupported )
@@ -1260,7 +1293,7 @@ BOOL Os2SalInfoPrinter::SetData( ULONG nFlags, ImplJobSetup* pSetupData )
     if ( !pDrivData )
         return FALSE;
 
-    BOOL bOK = FALSE;
+    sal_Bool bOK = FALSE;
 
     // set orientation
     if ( nFlags & SAL_JOBSET_ORIENTATION )
@@ -1288,11 +1321,11 @@ BOOL Os2SalInfoPrinter::SetData( ULONG nFlags, ImplJobSetup* pSetupData )
                 nOS2PaperFormat = DJP_PSI_A5;
                 break;
 
-            case PAPER_B4:
+            case PAPER_B4_JIS:
                 nOS2PaperFormat = DJP_PSI_B4;
                 break;
 
-            case PAPER_B5:
+            case PAPER_B5_JIS:
                 nOS2PaperFormat = DJP_PSI_B5;
                 break;
 
@@ -1487,7 +1520,7 @@ void Os2SalInfoPrinter::GetPageInfo( const ImplJobSetup*,
 
 // =======================================================================
 
-static BOOL ImplIsDriverPrintDJPEnabled( HDC hDC )
+static sal_Bool ImplIsDriverPrintDJPEnabled( HDC hDC )
 {
 #ifdef NO_DJP
     return FALSE;
@@ -1549,7 +1582,7 @@ Os2SalPrinter::~Os2SalPrinter()
 
 // -----------------------------------------------------------------------
 
-BOOL Os2SalPrinter::StartJob( const XubString* pFileName,
+sal_Bool Os2SalPrinter::StartJob( const XubString* pFileName,
                            const XubString& rJobName,
                            const XubString& rAppName,
                            ULONG nCopies,
@@ -1682,7 +1715,7 @@ BOOL Os2SalPrinter::StartJob( const XubString* pFileName,
 
 // -----------------------------------------------------------------------
 
-BOOL Os2SalPrinter::EndJob()
+sal_Bool Os2SalPrinter::EndJob()
 {
     APIRET rc;
     rc = DevEscape( mhDC,
@@ -1699,7 +1732,7 @@ BOOL Os2SalPrinter::EndJob()
 
 // -----------------------------------------------------------------------
 
-BOOL Os2SalPrinter::AbortJob()
+sal_Bool Os2SalPrinter::AbortJob()
 {
     APIRET rc;
 
@@ -1725,7 +1758,7 @@ BOOL Os2SalPrinter::AbortJob()
 
 // -----------------------------------------------------------------------
 
-SalGraphics* Os2SalPrinter::StartPage( ImplJobSetup* pSetupData, BOOL bNewJobSetup )
+SalGraphics* Os2SalPrinter::StartPage( ImplJobSetup* pSetupData, sal_Bool bNewJobSetup )
 {
     APIRET rc;
 
@@ -1797,7 +1830,7 @@ SalGraphics* Os2SalPrinter::StartPage( ImplJobSetup* pSetupData, BOOL bNewJobSet
 
 // -----------------------------------------------------------------------
 
-BOOL Os2SalPrinter::EndPage()
+sal_Bool Os2SalPrinter::EndPage()
 {
     if ( mpGraphics )
     {
