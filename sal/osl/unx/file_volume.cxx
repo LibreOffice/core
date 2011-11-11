@@ -542,7 +542,7 @@ oslFileError osl_releaseVolumeDeviceHandle( oslVolumeDeviceHandle Handle )
     return osl_File_E_None;
 }
 
-#if !defined(MACOSX) && !defined(AIX) && !defined(ANDROID)
+#if !defined(MACOSX) && !defined(AIX) && !defined(IOS) && !defined(ANDROID)
 
 /*****************************************
  * osl_newVolumeDeviceHandleImpl
@@ -1145,14 +1145,14 @@ static oslFileError osl_unmountFloppy(oslVolumeDeviceHandle hFloppy)
 }
 #endif
 
-#if ( defined(NETBSD) || defined(IOS) || defined(FREEBSD) || defined(OPENBSD) || defined(DRAGONFLY) )
+#if ( defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD) || defined(DRAGONFLY) )
 static sal_Bool osl_getFloppyMountEntry(const sal_Char* pszPath, oslVolumeDeviceHandleImpl* pItem)
 {
     return sal_False;
 }
 #endif /* NETBSD || FREEBSD || OPENBSD */
 
-#if ( defined(NETBSD) || defined(IOS) || defined(FREEBSD) || defined(OPENBSD) || defined(DRAGONFLY) )
+#if ( defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD) || defined(DRAGONFLY) )
 static sal_Bool osl_isFloppyMounted(oslVolumeDeviceHandleImpl* pDevice)
 {
     return sal_False;
