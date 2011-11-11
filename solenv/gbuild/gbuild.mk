@@ -132,7 +132,11 @@ else
 ifeq ($(OS),FREEBSD)
 include $(GBUILDDIR)/platform/freebsd.mk
 else
+ifeq ($(OS),OS2)
+include $(GBUILDDIR)/platform/os2.mk
+else
 $(eval $(call gb_Output_error,Unsupported OS: $(OS)))
+endif
 endif
 endif
 endif

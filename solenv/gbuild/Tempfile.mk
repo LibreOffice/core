@@ -16,3 +16,14 @@ $(foreach item,$(3),$(eval gb_var2file_curblock += $(item)
     ))
 endef
 
+define var2filecr
+$(strip $(1)
+$(foreach item,$(strip $(3)),$(eval gb_var2file_curblock += $(item)
+    ifeq ($$(words $$(gb_var2file_curblock)),$(2)) 
+        gb_var2file_helpervar :=$$(shell echo $$(gb_var2file_curblock) >> $(1) )
+        gb_var2file_curblock :=
+    endif
+    )) \
+	)
+endef
+
