@@ -26,15 +26,14 @@
 #
 #*************************************************************************
 
-GUI := WNT
+# please make generic modifications to either of these
+include $(GBUILDDIR)/platform/com_GCC_defs.mk
+include $(GBUILDDIR)/platform/windows.mk
 
 gb_COMPILERDEFAULTOPTFLAGS := -Os
 gb_CPUDEFS := -D_M_IX86
 
-include $(GBUILDDIR)/platform/com_GCC_defs.mk
-
 gb_TMPDIR:=$(if $(TMPDIR),$(TMPDIR),/tmp)
-gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) gbuild.XXXXXX
 
 gb_RC := $(WINDRES)
 

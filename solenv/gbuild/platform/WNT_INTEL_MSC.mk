@@ -26,11 +26,11 @@
 #
 #*************************************************************************
 
-GUI := WNT
+# please make generic modifications to windows.mk
+include $(GBUILDDIR)/platform/windows.mk
 
 # set tmpdir to some mixed case path, suitable for native tools
 gb_TMPDIR:=$(if $(TMPDIR),$(shell cygpath -m $(TMPDIR)),$(shell cygpath -m /tmp))
-gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) gbuild.XXXXXX
 
 gb_CC := cl
 gb_CXX := cl
@@ -273,8 +273,6 @@ $(patsubst $(WORKDIR)%,$(gb_Helper_WORKDIR_NATIVE)%, \
 $(patsubst $(SRCDIR)%,$(gb_Helper_SRCDIR_NATIVE)%, \
 $(1)))))
 endef
-
-gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/bin
 
 # YaccTarget class
 
