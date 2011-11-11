@@ -29,9 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 #include "DrawModelBroadcaster.hxx"
+#include <osl/diagnose.h>
+#include <rtl/strbuf.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/unomod.hxx>
-#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 
@@ -84,9 +85,10 @@ void ScDrawModelBroadcaster::Notify( SfxBroadcaster&,
         {
             (void) r;
 #if OSL_DEBUG_LEVEL > 1
-            ByteString aError( "Runtime exception caught while notifying shape.:\n" );
-            aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-            OSL_FAIL( aError.GetBuffer() );
+            rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+                "Runtime exception caught while notifying shape.:\n"));
+            aError.append(rtl::OUStringToOString(r.Message, RTL_TEXTENCODING_ASCII_US));
+            OSL_FAIL( aError.getStr() );
 #endif
         }
     }

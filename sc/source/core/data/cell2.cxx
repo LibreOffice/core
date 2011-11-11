@@ -671,13 +671,14 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
                 {
 #if OSL_DEBUG_LEVEL > 0
                     String aTmp;
-                    ByteString aMsg( "broken Matrix, no MatFormula at origin, Pos: " );
+                    rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM(
+                        "broken Matrix, no MatFormula at origin, Pos: "));
                     aPos.Format( aTmp, SCA_VALID_COL | SCA_VALID_ROW, pDocument );
-                    aMsg += ByteString( aTmp, RTL_TEXTENCODING_ASCII_US );
-                    aMsg += ", MatOrg: ";
+                    aMsg.append(rtl::OUStringToOString(aTmp, RTL_TEXTENCODING_ASCII_US));
+                    aMsg.append(RTL_CONSTASCII_STRINGPARAM(", MatOrg: "));
                     aOrg.Format( aTmp, SCA_VALID_COL | SCA_VALID_ROW, pDocument );
-                    aMsg += ByteString( aTmp, RTL_TEXTENCODING_ASCII_US );
-                    OSL_FAIL( aMsg.GetBuffer() );
+                    aMsg.append(rtl::OUStringToOString(aTmp, RTL_TEXTENCODING_ASCII_US));
+                    OSL_FAIL(aMsg.getStr());
 #endif
                     return 0;           // bad luck ...
                 }

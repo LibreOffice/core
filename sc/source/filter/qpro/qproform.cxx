@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
+#include <rtl/strbuf.hxx>
 #include <sal/config.h>
 #include <sal/macros.h>
 #include "qpro.hxx"
@@ -102,10 +103,9 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtStr
         bAddIn = sal_True;
         if( pExtString )
         {
-            ByteString s;
-            s = pExtString;
-            s.Insert( "QPRO_", 0 );
-            nPush = aPool.Store( eOc, String( s, maIn.GetStreamCharSet() ) );
+            rtl::OStringBuffer s(RTL_CONSTASCII_STRINGPARAM("QPRO_"));
+            s.append(pExtString);
+            nPush = aPool.Store( eOc, String(s.makeStringAndClear(), maIn.GetStreamCharSet()) );
             aPool << nPush;
         }
         else

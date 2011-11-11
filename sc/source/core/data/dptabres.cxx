@@ -35,6 +35,7 @@
 
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
+#include <rtl/strbuf.hxx>
 
 #include "dptabdat.hxx"
 #include "dptabres.hxx"
@@ -2980,9 +2981,10 @@ bool ScDPResultDimension::IsValidEntry( const vector< SCROW >& aMembers ) const
     if ( NULL != pMember )
         return pMember->IsValidEntry( aMembers );
 #if OSL_DEBUG_LEVEL > 1
-    ByteString strTemp ("IsValidEntry: Member not found, DimName = " );
-    strTemp += ByteString( GetName(), RTL_TEXTENCODING_UTF8 );
-    OSL_TRACE( "%s", strTemp.GetBuffer() );
+    rtl::OStringBuffer strTemp(RTL_CONSTASCII_STRINGPARAM(
+        "IsValidEntry: Member not found, DimName = "));
+    strTemp.append(rtl::OUStringToOString(GetName(), RTL_TEXTENCODING_UTF8));
+    OSL_TRACE("%s", strTemp.getStr());
 #endif
     return false;
 }

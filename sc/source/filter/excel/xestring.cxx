@@ -148,8 +148,9 @@ void XclExpString::Assign( sal_Unicode cChar, XclStrFlags nFlags, sal_uInt16 nMa
 void XclExpString::AssignByte(
         const String& rString, rtl_TextEncoding eTextEnc, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
-    ByteString aByteStr( rString, eTextEnc );   // length may differ from length of rString
-    Build( aByteStr.GetBuffer(), aByteStr.Len(), nFlags, nMaxLen );
+    // length may differ from length of rString
+    rtl::OString aByteStr(rtl::OUStringToOString(rString, eTextEnc));
+    Build(aByteStr.getStr(), aByteStr.getLength(), nFlags, nMaxLen);
 }
 
 // append ---------------------------------------------------------------------
@@ -163,8 +164,9 @@ void XclExpString::AppendByte( const String& rString, rtl_TextEncoding eTextEnc 
 {
     if( rString.Len() > 0 )
     {
-        ByteString aByteStr( rString, eTextEnc );   // length may differ from length of rString
-        BuildAppend( aByteStr.GetBuffer(), aByteStr.Len() );
+        // length may differ from length of rString
+        rtl::OString aByteStr(rtl::OUStringToOString(rString, eTextEnc));
+        BuildAppend(aByteStr.getStr(), aByteStr.getLength());
     }
 }
 

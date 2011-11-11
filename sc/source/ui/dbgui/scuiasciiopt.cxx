@@ -296,8 +296,9 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     if( nFromRow != 1 )
         aNfRow.SetValue( nFromRow );
 
-    ByteString bString(maFieldSeparators,RTL_TEXTENCODING_MS_1252);
-    const sal_Char *aSep = bString.GetBuffer();
+    rtl::OString sString(rtl::OUStringToOString(maFieldSeparators,
+        RTL_TEXTENCODING_MS_1252));
+    const sal_Char *aSep = sString.getStr();
     int len = maFieldSeparators.Len();
     for (int i = 0; i < len; ++i)
     {
