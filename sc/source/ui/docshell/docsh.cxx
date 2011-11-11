@@ -134,6 +134,7 @@
 #include <rtl/logfile.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include "uiitems.hxx"
 #include "cellsuno.hxx"
 #include "dpobject.hxx"
@@ -1593,7 +1594,7 @@ sal_Bool ScDocShell::IsInformationLost()
 
 
 // Xcl-like column width measured in characters of standard font.
-xub_StrLen lcl_ScDocShell_GetColWidthInChars( sal_uInt16 nWidth )
+sal_Int32 lcl_ScDocShell_GetColWidthInChars( sal_uInt16 nWidth )
 {
     double f = nWidth;
     f *= 1328.0 / 25.0;
@@ -1601,46 +1602,52 @@ xub_StrLen lcl_ScDocShell_GetColWidthInChars( sal_uInt16 nWidth )
     f *= 1.0 / 23.0;
     f /= 256.0;
 
-    return xub_StrLen( f );
+    return sal_Int32( f );
 }
 
 
 void lcl_ScDocShell_GetFixedWidthString( rtl::OUString& rStr, const ScDocument& rDoc,
         SCTAB nTab, SCCOL nCol, sal_Bool bValue, SvxCellHorJustify eHorJust )
 {
-    String aString = rStr;
-    xub_StrLen nLen = lcl_ScDocShell_GetColWidthInChars(
+    rtl::OUString aString = rStr;
+    sal_Int32 nLen = lcl_ScDocShell_GetColWidthInChars(
             rDoc.GetColWidth( nCol, nTab ) );
-    if ( nLen < aString.Len() )
+    if ( nLen < aString.getLength() )
     {
         if ( bValue )
-            aString.AssignAscii( "###" );
-        aString.Erase( nLen );
+            aString = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "###" ));
     }
-    if ( nLen > aString.Len() )
+    if ( nLen > aString.getLength() )
     {
         if ( bValue && eHorJust == SVX_HOR_JUSTIFY_STANDARD )
             eHorJust = SVX_HOR_JUSTIFY_RIGHT;
+        sal_Int32  nBlanks = nLen - aString.getLength();
         switch ( eHorJust )
         {
             case SVX_HOR_JUSTIFY_RIGHT:
             {
-                String aTmp;
-                aTmp.Fill( nLen - aString.Len() );
-                aString.Insert( aTmp, 0 );
+                rtl::OUStringBuffer aTmp;
+                aTmp = comphelper::string::padToLength( aTmp, nBlanks, ' ' );
+                aString = aTmp.append(aString).makeStringAndClear();
             }
             break;
             case SVX_HOR_JUSTIFY_CENTER:
             {
-                xub_StrLen nLen2 = (nLen - aString.Len()) / 2;
-                String aTmp;
-                aTmp.Fill( nLen2 );
-                aString.Insert( aTmp, 0 );
-                aString.Expand( nLen );
+                sal_Int32 nLen2 = nBlanks / 2;
+                rtl::OUStringBuffer aLeft;
+                rtl::OUStringBuffer aRight;
+                aLeft = comphelper::string::padToLength( aLeft, nLen2, ' ' );
+                aRight = comphelper::string::padToLength( aRight, nBlanks - nLen2, ' ' );
+                aString = aLeft.append(aString).makeStringAndClear();
+                aString += aRight.makeStringAndClear();
             }
             break;
             default:
-                aString.Expand( nLen );
+            {
+                rtl::OUStringBuffer aTmp;
+                comphelper::string::padToLength( aTmp, nBlanks, ' ' );
+                aString += aTmp.makeStringAndClear();
+            }
         }
     }
     rStr = aString;
