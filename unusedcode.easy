@@ -2439,4 +2439,3 @@ writerfilter::TagLogger::attribute(std::basic_string<char, std::char_traits<char
 writerfilter::TagLogger::chars(rtl::OUString const&)
 writerfilter::TagLogger::endElement()
 writerfilter::TagLogger::startElement(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
-writerfilter::TagLogger::~TagLogger()

@@ -35,10 +35,7 @@
 
 namespace writerfilter
 {
-    typedef boost::unordered_map<string, TagLogger::Pointer_t> TagLoggerHashMap_t;
-    static TagLoggerHashMap_t * tagLoggers = NULL;
-
-        TagLogger::TagLogger(const char* name)
+    TagLogger::TagLogger(const char* name)
         : pWriter( NULL ), pName( name )
     {
     }
@@ -99,20 +96,20 @@ namespace writerfilter
 
     TagLogger::Pointer_t TagLogger::getInstance(const char * name)
     {
-        if (tagLoggers == NULL)
-            tagLoggers = new TagLoggerHashMap_t();
+        typedef boost::unordered_map<string, TagLogger::Pointer_t> TagLoggerHashMap_t;
+        static TagLoggerHashMap_t tagLoggers;
 
-        TagLoggerHashMap_t::iterator aIt = tagLoggers->end();
+        TagLoggerHashMap_t::iterator aIt = tagLoggers.end();
 
         string sName = name;
-        if (! tagLoggers->empty())
-            aIt = tagLoggers->find(sName);
+        if (! tagLoggers.empty())
+            aIt = tagLoggers.find(sName);
 
-        if (aIt == tagLoggers->end())
+        if (aIt == tagLoggers.end())
         {
             TagLogger::Pointer_t pTagLogger(new TagLogger(name));
             pair<string, TagLogger::Pointer_t> entry(sName, pTagLogger);
-            aIt = tagLoggers->insert(entry).first;
+            aIt = tagLoggers.insert(entry).first;
         }
 
         return aIt->second;
