@@ -368,7 +368,7 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
     {
         if( bFirst )
         {
-            if( !m_sFirstPageStyleName.getLength() )
+            if( !m_sFirstPageStyleName.getLength() && xPageStyles.is() )
             {
                 uno::Sequence< ::rtl::OUString > aPageStyleNames = xPageStyles->getElementNames();
                 m_sFirstPageStyleName = lcl_FindUnusedPageStyleName(aPageStyleNames);
