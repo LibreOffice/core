@@ -55,7 +55,9 @@ SLOFILES = $(SHL1OBJS)
 
 .INCLUDE: target.mk
 
+.IF "$(depend)" == ""
 ALLTAR: test
+.END
 
 $(SHL1OBJS): $(MISC)/$(TARGET).cppumaker.flag
 

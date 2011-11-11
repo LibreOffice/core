@@ -29,7 +29,10 @@
 
 COMPONENT_CONFIG_SCHEMA*=$(TARGET).xcs
 
+.IF "$(depend)" == ""
 ALLTAR: "$(PWD)$/$(MISC)$/registry$/schema$/$(PACKAGEDIR)$/$(COMPONENT_CONFIG_SCHEMA)"
+.END
+
 "$(PWD)$/$(MISC)$/registry$/schema$/$(PACKAGEDIR)$/$(COMPONENT_CONFIG_SCHEMA)" : $(SOLARXMLDIR)$/registry$/schema$/$(PACKAGEDIR)$/Drivers.xcs
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@

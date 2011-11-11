@@ -48,7 +48,9 @@ XCUFILES= \
 
 .INCLUDE :  target.mk
 
+.IF "$(depend)" == ""
 ALLTAR: "$(PWD)$/$(MISC)$/$(EXTNAME)$/registry$/schema$/$(PACKAGEDIR)$/Embedding.xcs" "$(PWD)$/$(MISC)$/$(EXTNAME)$/registry$/schema$/$(PACKAGEDIR)$/ExtendedColorScheme.xcs" "$(PWD)$/$(MISC)$/$(EXTNAME)$/registry$/schema$/$(PACKAGEDIR)$/Paths.xcs"
+.END
 
 "$(PWD)$/$(MISC)$/$(EXTNAME)$/registry$/schema$/$(PACKAGEDIR)$/Embedding.xcs" : $(SOLARXMLDIR)$/registry$/schema$/$(PACKAGEDIR)$/Embedding.xcs
     @@-$(MKDIRHIER) $(@:d)

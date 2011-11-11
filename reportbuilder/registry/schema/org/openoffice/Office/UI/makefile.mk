@@ -42,7 +42,9 @@ MODULEFILES=
 
 .INCLUDE : target.mk
 
+.IF "$(depend)" == ""
 ALLTAR: "$(PWD)$/$(MISC)$/$(EXTNAME)$/registry$/schema$/$(PACKAGEDIR)$/Commands.xcs" "$(PWD)$/$(MISC)$/$(EXTNAME)$/registry$/schema$/$(PACKAGEDIR)$/WindowState.xcs" "$(PWD)$/$(MISC)$/$(EXTNAME)$/registry$/schema$/$(PACKAGEDIR)$/Controller.xcs"
+.END
 
 "$(PWD)$/$(MISC)$/$(EXTNAME)$/registry$/schema$/$(PACKAGEDIR)$/Commands.xcs": $(SOLARXMLDIR)$/registry$/schema$/$(PACKAGEDIR)$/Commands.xcs
     @@-$(MKDIRHIER) $(@:d)

@@ -115,9 +115,9 @@ DEF1EXPORTFILE=	exports.dxp
 
 .INCLUDE : $(PRJ)$/target.pmk
 
-
-
+.IF "$(depend)" == ""
 ALLTAR : $(MISC)/hsqldb.component
+.END
 
 $(MISC)/hsqldb.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
         hsqldb.component

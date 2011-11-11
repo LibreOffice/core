@@ -30,11 +30,12 @@ TARGET=prj
 
 .INCLUDE : settings.mk
 
-.IF "$(VERBOSE)"!=""
+.IF "$(depend)" != ""
+all:
+.ELIF "$(VERBOSE)"!=""
 all:
 	cd $(PRJ) && $(GNUMAKE) -r -j$(GMAKE_MODULE_PARALLELISM) $(gb_MAKETARGET) gb_PARTIALBUILD=T
 .ELSE
 all:
 	@cd $(PRJ) && $(GNUMAKE) -rs -j$(GMAKE_MODULE_PARALLELISM) $(gb_MAKETARGET) gb_PARTIALBUILD=T
-.ENDIF
-
+.END

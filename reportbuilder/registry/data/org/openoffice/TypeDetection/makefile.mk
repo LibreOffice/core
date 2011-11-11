@@ -44,7 +44,9 @@ XCUFILES= \
 
 .INCLUDE :  target.mk
 
+.IF "$(depend)" == ""
 ALLTAR: "$(PWD)$/$(MISC)$/$(EXTNAME)$/registry$/schema$/$(PACKAGEDIR)$/Filter.xcs" "$(PWD)$/$(MISC)$/$(EXTNAME)$/registry$/schema$/$(PACKAGEDIR)$/Types.xcs"
+.END
 
 "$(PWD)$/$(MISC)$/$(EXTNAME)$/registry$/schema$/$(PACKAGEDIR)$/Filter.xcs" : $(SOLARXMLDIR)$/registry$/schema$/$(PACKAGEDIR)$/Filter.xcs
     @@-$(MKDIRHIER) $(@:d)

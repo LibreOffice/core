@@ -39,7 +39,9 @@ XCSFILES= \
 
 .INCLUDE :  target.mk
 
+.IF "$(depend)" == ""
 ALLTAR: "$(PWD)$/$(MISC)$/$(EXTNAME)$/registry$/schema$/$(PACKAGEDIR)$/DataAccess.xcs"
+.END
 
 "$(PWD)$/$(MISC)$/$(EXTNAME)$/registry$/schema$/$(PACKAGEDIR)$/DataAccess.xcs" : $(SOLARXMLDIR)$/registry$/schema$/$(PACKAGEDIR)$/DataAccess.xcs
     @@-$(MKDIRHIER) $(@:d)
