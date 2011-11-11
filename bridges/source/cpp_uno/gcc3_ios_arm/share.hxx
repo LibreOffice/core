@@ -163,4 +163,6 @@ void fillUnoException(
     bool isSimpleReturnType(typelib_TypeDescription * pTD, bool recursive = false);
 }
 
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
