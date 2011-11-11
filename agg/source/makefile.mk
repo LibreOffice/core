@@ -30,6 +30,8 @@ PRJNAME=agg
 TARGET=agg
 ENABLE_EXCEPTIONS=TRUE
 
+EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+
 # --- Settings ----------------------------------
 
 .INCLUDE :  	settings.mk
