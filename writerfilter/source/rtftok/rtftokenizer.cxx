@@ -84,9 +84,10 @@ int RTFTokenizer::resolveParse()
                     ret = m_rImport.popState();
                     if (ret)
                         return ret;
-                    if (m_rImport.isSubstream() && m_rImport.getGroup() == 0)
+                    if (m_rImport.getGroup() == 0)
                     {
-                        m_rImport.finishSubstream();
+                        if (m_rImport.isSubstream())
+                            m_rImport.finishSubstream();
                         return 0;
                     }
                     break;
