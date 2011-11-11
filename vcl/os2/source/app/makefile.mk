@@ -48,7 +48,7 @@ YD00_CXXFILES=\
             salsys.cxx
 
 SLOFILES=	$(SLO)$/salshl.obj	\
-            $(SLO)$/printf.obj \
+            $(SLO)$/debug_printf.obj \
             $(SLO)$/salinfo.obj \
             $(SLO)$/salinst.obj	\
             $(SLO)$/sallang.obj	\
