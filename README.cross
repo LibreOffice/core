@@ -278,8 +278,8 @@ The Apple tool-chain for iOS cross-building is available only for
 Mac OS X, so that is where I have been doing it.
 
 Here is my autogen.lastrun for iOS (device):
-CXX=ccache /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/g++ -arch armv7 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk
-CC=ccache /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/gcc -arch armv7 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk
+CXX=ccache /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/g++ -arch armv7 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk
+CC=ccache /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/gcc -arch armv7 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk
 CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0 -mmacosx-version-min=10.4
 CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
 --with-distro=LibreOfficeiOS
