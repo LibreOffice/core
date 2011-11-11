@@ -45,7 +45,7 @@ ContentProvider::queryContent(
     throw( com::sun::star::ucb::IllegalIdentifierException,
            uno::RuntimeException )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf(stderr, "QueryContent: '%s'\n",
        rtl::OUStringToOString
        (Identifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8).getStr());

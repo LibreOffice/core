@@ -127,7 +127,7 @@ Content::Content(
       m_bTransient( sal_False )
 {
     CLEAR_INFO (&m_info);
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     g_warning ("New Content ('%s')", getURI());
 #endif
 }
@@ -144,7 +144,7 @@ Content::Content(
 {
     CLEAR_INFO (&m_info);
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     g_warning ("New Transient content ('%s') (%d)", getURI(), IsFolder);
 #endif
 //  m_info.name = FIXME: set name ?
@@ -298,7 +298,7 @@ uno::Any SAL_CALL Content::execute(
 {
     uno::Any aRet;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     {
         uno::Reference< task::XInteractionHandler > xIH;
 
@@ -510,7 +510,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
         return uno::Reference< ucb::XContent >();
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     g_warning( "createNewContent (%d)", (int) create_document );
 #endif
 
@@ -558,7 +558,7 @@ rtl::OUString Content::getParentURL()
     if ( nPos1 != -1 )
         aParentURL = rtl::OUString( aURL.copy( 0, nPos + 1 ) );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     g_warning ("getParentURL '%s' -> '%s'",
            getURI(), rtl::OUStringToOString
                ( aParentURL, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -694,7 +694,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             xRow->appendVoid( rProp );
         }
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     g_warning ("getPropertyValues on '%s' %d properties returned (of %d)",
            getURI(), 0, (int)nProps);
 #endif
@@ -795,7 +795,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     for ( sal_Int32 n = 0; n < nCount; ++n ) {
         const beans::PropertyValue& rValue = pValues[ n ];
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         g_warning( "Set prop '%s'", OUStringToGnome( rValue.Name ) );
 #endif
         if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) ||
@@ -816,7 +816,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                     char *newName = OUStringToGnome( aNewTitle );
 
                     if( !newName || !m_info.name || strcmp( newName, m_info.name ) ) {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                         g_warning ("Set new name to '%s'", newName);
 #endif
 
@@ -936,7 +936,7 @@ void Content::insert(
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     g_warning( "Insert '%s' (%d) (0x%x:%d)", getURI(), bReplaceExisting,
            m_info.valid_fields, m_info.type );
 #endif
@@ -961,7 +961,7 @@ void Content::insert(
              GNOME_VFS_PERM_GROUP_READ |
              GNOME_VFS_PERM_OTHER_READ );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         g_warning ("Make directory");
 #endif
         result = gnome_vfs_make_directory( aURI.getStr(), perm );
@@ -1073,7 +1073,7 @@ sal_Bool Content::exchangeIdentity(
 
     uno::Reference< ucb::XContent > xThis = this;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     g_warning( "exchangeIdentity from '%s' to '%s'",
            getURI(), OUStringToGnome( xNewId->getContentIdentifier() ) );
 #endif
@@ -1144,7 +1144,7 @@ Content::getInfo( const uno::Reference< ucb::XCommandEnvironment >& xEnv )
             gnome_vfs_file_info_clear( &m_info );
     } else
         result = GNOME_VFS_OK;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     g_warning( "getInfo on '%s' returns '%s' (%d) (0x%x)",
            getURI(), gnome_vfs_result_to_string( result ),
            result, m_info.valid_fields );
@@ -1168,7 +1168,7 @@ uno::Any Content::mapVFSException( const GnomeVFSResult result, sal_Bool bWrite 
     rtl::OUString message;
     uno::Sequence< uno::Any > aArgs( 1 );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     g_warning ("Map VFS exception '%s' (%d)",
            gnome_vfs_result_to_string( result ), result );
 #endif
@@ -1556,7 +1556,7 @@ extern "C" {
     {
         task::XInteractionHandler *xIH;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         g_warning ("Full authentication callback (%p) ...", callback_data);
 #endif
 
@@ -1572,7 +1572,7 @@ extern "C" {
         g_return_if_fail (sizeof (GnomeVFSModuleCallbackFullAuthenticationIn) == in_size &&
                   sizeof (GnomeVFSModuleCallbackFullAuthenticationOut) == out_size);
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #  define NNIL(x) (x?x:"<Null>")
         g_warning (" InComing data 0x%x uri '%s' prot '%s' server '%s' object '%s' "
                    "port %d auth_t '%s' user '%s' domain '%s' "
@@ -1668,7 +1668,7 @@ extern "C" {
                 out->password = OUStringToGnome( aPassword );
                 out->save_password = xSupp->getRememberPasswordMode();
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 g_warning ("Got valid user/domain/password '%s' '%s' '%s', %s password",
                            out->username, out->domain, out->password,
                            out->save_password ? "save" : "don't save");

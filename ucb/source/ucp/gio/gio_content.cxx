@@ -98,7 +98,7 @@ Content::Content(
     : ContentImplHelper( rxSMgr, pProvider, Identifier ),
       m_pProvider( pProvider ), mpFile (NULL), mpInfo( NULL ), mbTransient(false)
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf(stderr, "New Content ('%s')\n", rtl::OUStringToOString(m_xIdentifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8).getStr());
 #endif
 }
@@ -112,7 +112,7 @@ Content::Content(
     : ContentImplHelper( rxSMgr, pProvider, Identifier ),
       m_pProvider( pProvider ), mpFile (NULL), mpInfo( NULL ), mbTransient(true)
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf(stderr, "Create Content ('%s')\n", rtl::OUStringToOString(m_xIdentifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8).getStr());
 #endif
     mpInfo = g_file_info_new();
@@ -658,7 +658,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
         const beans::PropertyValue& rValue = pValues[ n ];
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         g_warning("Set prop '%s'", rtl::OUStringToOString(rValue.Name, RTL_TEXTENCODING_UTF8).getStr());
 #endif
         if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) ||
@@ -696,7 +696,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
             if (!newName || !oldName || strcmp(newName, oldName))
             {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 g_warning ("Set new name to '%s'", newName);
 #endif
 
@@ -910,7 +910,7 @@ uno::Any SAL_CALL Content::execute(
            ucb::CommandAbortedException,
            uno::RuntimeException )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf(stderr, "Content::execute %s\n", rtl::OUStringToOString(aCommand.Name, RTL_TEXTENCODING_UTF8).getStr());
 #endif
     uno::Any aRet;
@@ -1029,7 +1029,7 @@ void Content::insert(const uno::Reference< io::XInputStream > &xInputStream,
          g_file_info_has_attribute(pInfo, G_FILE_ATTRIBUTE_STANDARD_TYPE) &&
          g_file_info_get_file_type(pInfo) == G_FILE_TYPE_DIRECTORY )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         g_warning ("Make directory");
 #endif
         if( !g_file_make_directory( getGFile(), NULL, &pError))
@@ -1155,7 +1155,7 @@ uno::Reference< ucb::XContent >
         return uno::Reference< ucb::XContent >();
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     g_warning( "createNewContent (%d)", (int) create_document );
 #endif
 

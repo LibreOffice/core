@@ -389,7 +389,7 @@ sal_Bool DataSupplier::getData()
 
         gnome_vfs_file_info_unref (fileInfo);
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         g_warning ("Got %d directory entries", result);
 #endif
 
