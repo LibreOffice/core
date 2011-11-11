@@ -36,7 +36,7 @@ namespace ww
     class bytes : public std::vector<sal_uInt8>
     {
         public:
-            const sal_uInt8* data() const { return &front(); }
+            const sal_uInt8* data() const { return empty() ? 0 : &front(); }
     };
 
     enum WordVersion {eWW2 = 2, eWW6 = 6, eWW7 = 7, eWW8 = 8};
