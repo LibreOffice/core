@@ -98,8 +98,10 @@
 #define PASCAL
 #define VOID            void
 #define CALLBACK
+#ifndef OS2
 #define _cdecl
 #define __stdcall
+#endif
 
 
 /*

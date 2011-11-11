@@ -106,6 +106,8 @@ extern "C" {
 
 #ifdef WIN32
 #define SQL_API __stdcall
+#elif defined(OS2)
+#define SQL_API _System
 #else
 #define SQL_API
 #endif
@@ -192,13 +194,18 @@ typedef SQLHANDLE       SQLHDESC;
 /*
  *  Window Handle
  */
-#if defined(WIN32) || defined (_WIN64) || defined(OS2)
+#if defined(WIN32) || defined (_WIN64)
 typedef void*           HWND;   /* Make up for no windows.h */
 typedef HWND            SQLHWND;
 #elif defined(macintosh)
 #include <Dialogs.h>
 typedef WindowPtr       HWND;
 typedef HWND            SQLHWND;
+#elif defined(OS2)
+#ifndef _OS2_H // YD define only if system headers are not included
+typedef SQLPOINTER      HWND;
+#endif
+typedef SQLPOINTER      SQLHWND;
 #else
 typedef SQLPOINTER      HWND;
 typedef SQLPOINTER      SQLHWND;

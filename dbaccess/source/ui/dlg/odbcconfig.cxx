@@ -108,10 +108,6 @@
 #endif // defined(WNT)
 // from here on you can do what you want to
 
-#if defined(OS2)
-#define SQL_API _System
-#endif // defined(OS2)
-
 #else
 
 #define ODBC_LIBRARY    ""
