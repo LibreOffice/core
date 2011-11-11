@@ -84,6 +84,7 @@
 
 #include <cairo.h>
 #include <cairo-ft.h>
+#include <cairo-xlib.h>
 #include <cairo-xlib-xrender.h>
 
 struct BOX
@@ -321,14 +322,25 @@ void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
 
     // find a XRenderPictFormat compatible with the Drawable
     XRenderPictFormat* pVisualFormat = GetXRenderFormat();
-    DBG_ASSERT( pVisualFormat!=NULL, "no matching XRenderPictFormat for text" );
-    if( !pVisualFormat )
-        return;
 
     Display* pDisplay = GetXDisplay();
 
-    cairo_surface_t *surface = cairo_xlib_surface_create_with_xrender_format (pDisplay,
-        hDrawable_, ScreenOfDisplay(pDisplay, m_nScreen), pVisualFormat, SAL_MAX_INT16, SAL_MAX_INT16);
+    cairo_surface_t *surface;
+
+    if (pVisualFormat)
+    {
+        surface = cairo_xlib_surface_create_with_xrender_format (pDisplay, hDrawable_,
+            ScreenOfDisplay(pDisplay, m_nScreen), pVisualFormat, SAL_MAX_INT16, SAL_MAX_INT16);
+    }
+    else
+    {
+        surface = cairo_xlib_surface_create(pDisplay, hDrawable_,
+            GetVisual().visual, SAL_MAX_INT16, SAL_MAX_INT16);
+    }
+
+    DBG_ASSERT( surface!=NULL, "no cairo surface for text" );
+    if( !surface )
+        return;
 
     /*
      * It might be ideal to cache surface and cairo context between calls and
