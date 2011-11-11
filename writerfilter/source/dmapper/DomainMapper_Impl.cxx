@@ -2503,6 +2503,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         handleAuthor(pContext, rPropNameSupplier, xFieldInterface, xFieldProperties, aIt->second.eFieldId  );
                     break;
                     case FIELD_DATE:
+                    if (xFieldProperties.is())
                     {
                         //not fixed,
                         xFieldProperties->setPropertyValue(
