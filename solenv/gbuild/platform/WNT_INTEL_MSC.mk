@@ -26,11 +26,11 @@
 #
 #*************************************************************************
 
-# please make generic modifications to windows.mk
-include $(GBUILDDIR)/platform/windows.mk
-
 # set tmpdir to some mixed case path, suitable for native tools
 gb_TMPDIR:=$(if $(TMPDIR),$(shell cygpath -m $(TMPDIR)),$(shell cygpath -m /tmp))
+
+# please make generic Windows modifications to windows.mk
+include $(GBUILDDIR)/platform/windows.mk
 
 gb_CC := cl
 gb_CXX := cl
