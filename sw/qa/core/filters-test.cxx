@@ -71,15 +71,15 @@ private:
 bool SwFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
     const rtl::OUString &rUserData)
 {
-    SfxFilter aFilter(
+    SfxFilter* pFilter = new SfxFilter(
         rFilter,
         rtl::OUString(), 0, 0, rtl::OUString(), 0, rtl::OUString(),
         rUserData, rtl::OUString() );
 
     SwDocShellRef xDocShRef = new SwDocShell;
-    SfxMedium aSrcMed(rURL, STREAM_STD_READ, true);
-    aSrcMed.SetFilter(&aFilter);
-    bool bLoaded = xDocShRef->DoLoad(&aSrcMed);
+    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ, true);
+    pSrcMed->SetFilter(pFilter);
+    bool bLoaded = xDocShRef->DoLoad(pSrcMed);
     if (xDocShRef.Is())
         xDocShRef->DoClose();
     return bLoaded;
