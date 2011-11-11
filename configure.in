@@ -6015,23 +6015,6 @@ AC_SUBST(MOZILLA_HEADERS_CFLAGS)
 AC_SUBST(SYSTEM_MOZILLA_HEADERS)
 
 dnl ===================================================================
-dnl Check for nsplugin
-dnl ===================================================================
-AC_MSG_CHECKING([wether to build nsplugin extension])
-ENABLE_NSPLUGIN=NO
-if test "$enable_nsplugin" != "no"; then
-    if test "$enable_gtk" != "no"; then
-        AC_MSG_RESULT([yes])
-	ENABLE_NSPLUGIN=YES
-    else
-        AC_MSG_RESULT([no, disabled gtk2])
-    fi
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ENABLE_NSPLUGIN)
-
-dnl ===================================================================
 dnl Check for system sane
 dnl ===================================================================
 AC_MSG_CHECKING([which sane header to use])
@@ -6173,6 +6156,23 @@ fi
 if test $_os = iOS -o $_os = Android; then
     enable_gtk=no
 fi
+
+dnl ===================================================================
+dnl Check for nsplugin
+dnl ===================================================================
+AC_MSG_CHECKING([wether to build nsplugin extension])
+ENABLE_NSPLUGIN=NO
+if test "$enable_nsplugin" != "no"; then
+    if test "$enable_gtk" != "no"; then
+        AC_MSG_RESULT([yes])
+	ENABLE_NSPLUGIN=YES
+    else
+        AC_MSG_RESULT([no, disabled gtk2])
+    fi
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_NSPLUGIN)
 
 dnl ***************************************
 dnl testing for X libraries and includes...
