@@ -170,6 +170,27 @@ endif
 
 endif
 
+ifeq ($(OS),OS2)
+gb_Library_FILENAMES := $(patsubst comphelper:icomphelper%,comphelper:icomphelp%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst cppunit:icppunit%,cppunit:cppunit%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst cui:icuc%,cui:iicuc%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst i18nisolang1:ii18nisolang1%,i18nisolang1:ii18nisolang%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst rdf:irdf%,rdf:librdf%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst tl:itl%,tl:itools%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst sb:isb%,sb:basic%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst sfx:isfx%,sfx:sfx%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst svt:isvt%,svt:svtool%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst vbahelper:ivbahelper%,vbahelper:vbahelper%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst vos3:ivos3%,vos3:ivos%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst xml2:ixml2%,xml2:xml2%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst xslt:ixslt%,xslt:libxslt%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst stl:istl%,stl:stlp45% stl:stdc444.lib,$(gb_Library_FILENAMES))
+#$(info libnames: $(gb_Library_FILENAMES))
+
+gb_Library_DLLFILENAMES := $(patsubst comphelper:comphelper%,comphelper:comphelp%,$(gb_Library_DLLFILENAMES))
+
+endif
+
 ifeq ($(OS),SOLARIS)
 gb_Library_FILENAMES := $(patsubst comphelper:libcomphelper%,comphelper:libcomphelp%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cppuhelper:libcppuhelper%,cppuhelper:libuno_cppuhelper%,$(gb_Library_FILENAMES))
