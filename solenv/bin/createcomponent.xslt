@@ -27,17 +27,21 @@
 **********************************************************************-->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    exclude-result-prefixes="uc"
+    xmlns="http://openoffice.org/2010/uno-components"
     xmlns:uc="http://openoffice.org/2010/uno-components">
   <xsl:param name="uri"/>
   <xsl:strip-space elements="*"/>
   <xsl:template match="uc:component">
-    <xsl:copy>
-      <xsl:apply-templates select="@*"/>
-      <xsl:attribute name="uri">
-        <xsl:value-of select="$uri"/>
-      </xsl:attribute>
-      <xsl:apply-templates/>
-    </xsl:copy>
+    <components>
+      <xsl:copy>
+        <xsl:apply-templates select="@*"/>
+        <xsl:attribute name="uri">
+          <xsl:value-of select="$uri"/>
+        </xsl:attribute>
+        <xsl:apply-templates/>
+      </xsl:copy>
+    </components>
   </xsl:template>
   <xsl:template match="*">
     <xsl:copy>

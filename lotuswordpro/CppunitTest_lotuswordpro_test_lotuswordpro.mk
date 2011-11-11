@@ -63,8 +63,8 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,lotuswordpro_test_lotuswordpro,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_service_rdbs,lotuswordpro_test_lotuswordpro,\
-    lotuswordpro_test_lotuswordpro \
+$(eval $(call gb_CppunitTest_add_components,lotuswordpro_test_lotuswordpro,\
+    lotuswordpro/util/lwpfilter,\
 ))
 
 $(eval $(call gb_CppunitTest_set_args,lotuswordpro_test_lotuswordpro,\

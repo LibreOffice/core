@@ -86,8 +86,9 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,sd_uimpress,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_service_rdbs,sd_uimpress,\
-    sd_uimpress \
+$(eval $(call gb_CppunitTest_add_components,sd_uimpress,\
+    framework/util/fwk \
+    i18npool/util/i18npool \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sd_uimpress,\

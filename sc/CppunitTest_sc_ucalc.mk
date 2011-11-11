@@ -94,8 +94,16 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,sc_ucalc,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_service_rdbs,sc_ucalc,\
-    sc_ucalc \
+$(eval $(call gb_CppunitTest_add_components,sc_ucalc,\
+    framework/util/fwk \
+    i18npool/util/i18npool \
+    sfx2/util/sfx \
+    unoxml/source/service/unoxml \
+))
+
+$(eval $(call gb_CppunitTest_add_old_components,sc_ucalc,\
+    ucb1 \
+    ucpfile1 \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sc_ucalc,\

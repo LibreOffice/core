@@ -80,8 +80,24 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,sw_filters_test,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_service_rdbs,sw_filters_test,\
-    sw_filters_test \
+$(eval $(call gb_CppunitTest_add_components,sw_filters_test,\
+    sw/util/sw \
+    sw/util/msword \
+    forms/util/frm \
+    dbaccess/util/dba \
+    sfx2/util/sfx \
+    framework/util/fwk \
+    toolkit/util/tk \
+    unoxml/source/service/unoxml \
+    fileaccess/source/fileacc \
+    comphelper/util/comphelp \
+    i18npool/util/i18npool \
+	package/util/package2 \
+))
+
+$(eval $(call gb_CppunitTest_add_old_components,sw_filters_test,\
+    ucb1 \
+    ucpfile1 \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sw_filters_test,\

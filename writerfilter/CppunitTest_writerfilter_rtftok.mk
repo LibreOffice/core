@@ -58,8 +58,13 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,writerfilter_rtftok,\
 	types \
 ))
 
-$(eval $(call gb_CppunitTest_add_service_rdbs,writerfilter_rtftok,\
-	writerfilter_rtftok \
+$(eval $(call gb_CppunitTest_add_components,writerfilter_rtftok,\
+	writerfilter/util/writerfilter \
+))
+
+$(eval $(call gb_CppunitTest_add_old_components,writerfilter_rtftok,\
+	ucb1 \
+	ucpfile1 \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,writerfilter_rtftok,\

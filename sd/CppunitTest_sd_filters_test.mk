@@ -88,8 +88,37 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,sd_filters_test,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_service_rdbs,sd_filters_test,\
-    sd_filters_test \
+$(eval $(call gb_CppunitTest_add_components,sd_filters_test,\
+    basic/util/sb \
+    comphelper/util/comphelp \
+    dbaccess/util/dba \
+    fileaccess/source/fileacc \
+    filter/source/config/cache/filterconfig1 \
+    forms/util/frm \
+    framework/util/fwk \
+    i18npool/util/i18npool \
+    oox/util/oox \
+    package/source/xstor/xstor \
+    package/util/package2 \
+    sax/source/expatwrap/expwrap \
+    sax/source/fastparser/fastsax \
+    sd/util/sd \
+    sd/util/sdfilt \
+    sfx2/util/sfx \
+    sot/util/sot \
+    toolkit/util/tk \
+    unotools/util/utl \
+    unoxml/source/rdf/unordf \
+    unoxml/source/service/unoxml \
+    xmlsecurity/util/xsec_fw \
+    xmlsecurity/util/xmlsecurity \
+))
+
+$(eval $(call gb_CppunitTest_add_old_components,sd_filters_test,\
+    configmgr \
+    ucb1 \
+    ucpfile1 \
+    ucptdoc1 \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sd_filters_test,\

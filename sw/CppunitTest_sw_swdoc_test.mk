@@ -94,8 +94,18 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,sw_swdoc_test,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_service_rdbs,sw_swdoc_test,\
-    sw_swdoc_test \
+$(eval $(call gb_CppunitTest_add_components,sw_swdoc_test,\
+    sfx2/util/sfx \
+    framework/util/fwk \
+    unoxml/source/service/unoxml \
+    fileaccess/source/fileacc \
+    comphelper/util/comphelp \
+    i18npool/util/i18npool \
+))
+
+$(eval $(call gb_CppunitTest_add_old_components,sw_swdoc_test,\
+    ucb1 \
+    ucpfile1 \
 ))
 
 $(call gb_CppunitTest_get_target,sw_swdoc_test) : \

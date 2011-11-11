@@ -27,6 +27,8 @@
 **********************************************************************-->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    exclude-result-prefixes="uc"
+    xmlns="http://openoffice.org/2010/uno-components"
     xmlns:uc="http://openoffice.org/2010/uno-components">
   <xsl:param name="prefix"/>
   <xsl:strip-space elements="*"/>
@@ -36,8 +38,8 @@
       <xsl:for-each select="list/filename">
         <xsl:variable name="doc" select="document(concat($prefix, .))"/>
         <xsl:choose>
-          <xsl:when test="count($doc/uc:component) = 1">
-            <xsl:copy-of select="$doc/uc:component"/>
+          <xsl:when test="count($doc/uc:components/uc:component) = 1">
+            <xsl:copy-of select="$doc/uc:components/uc:component"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:message terminate="yes">

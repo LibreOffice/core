@@ -55,8 +55,8 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,i18npool_test_breakiterator,\
 	types \
 ))
 
-$(eval $(call gb_CppunitTest_add_service_rdbs,i18npool_test_breakiterator,\
-	i18npool_test_breakiterator \
+$(eval $(call gb_CppunitTest_add_components,i18npool_test_breakiterator,\
+	i18npool/util/i18npool \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,i18npool_test_breakiterator,\

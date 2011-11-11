@@ -70,8 +70,8 @@ $(if $(strip $(UNO_TYPES)),\
 		$(call gb_CppunitTarget__make_url,$(call gb_CppunitTest__get_uno_type_target,$(rdb))))") \
 $(if $(strip $(UNO_SERVICES)),\
 	"-env:UNO_SERVICES=$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/ure/services.rdb) \
-		$(foreach rdb,$(UNO_SERVICES),\
-			$(call gb_CppunitTarget__make_url,$(call gb_RdbTarget_get_target,$(rdb))))") \
+		$(foreach item,$(UNO_SERVICES),\
+			$(call gb_CppunitTarget__make_url,$(item)))") \
 $(if $(URE),\
 	$(foreach dir,URE_INTERNAL_LIB_DIR LO_LIB_DIR,\
 		-env:$(dir)=$(call gb_CppunitTarget__make_url,$(gb_CppunitTest_LIBDIR))))
@@ -146,7 +146,8 @@ endef
 define gb_CppunitTest_add_service_rdb
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_RdbTarget_get_target,$(2))
 $(call gb_CppunitTest_get_clean_target,$(1)) : $(call gb_RdbTarget_get_clean_target,$(2))
-$(call gb_CppunitTest_get_target,$(1)) : UNO_SERVICES += $(2)
+$(call gb_CppunitTest_get_target,$(1)) : \
+    UNO_SERVICES += $(call gb_RdbTarget_get_target,$(2))
 
 endef
 
@@ -154,6 +155,36 @@ define gb_CppunitTest_add_service_rdbs
 $(foreach rdb,$(2),$(call gb_CppunitTest_add_service_rdb,$(1),$(rdb)))
 
 endef
+
+define gb_CppunitTest_add_component
+$(call gb_CppunitTest_get_target,$(1)) : \
+    $(call gb_ComponentTarget_get_target,$(2))
+$(call gb_CppunitTest_get_clean_target,$(1)) : \
+    $(call gb_ComponentTarget_get_clean_target,$(2))
+$(call gb_CppunitTest_get_target,$(1)) : \
+    UNO_SERVICES += $(call gb_ComponentTarget_get_target,$(2))
+
+endef
+
+define gb_CppunitTest_add_components
+$(foreach component,$(2),$(call gb_CppunitTest_add_component,$(1),$(component)))
+
+endef
+
+define gb_CppunitTest_add_old_component
+$(call gb_CppunitTest_get_target,$(1)) : \
+    $(call gb_CppunitTest__get_old_component_target,$(2))
+$(call gb_CppunitTest_get_target,$(1)) : \
+    UNO_SERVICES += $(call gb_ComponentTarget__get_old_component_target,$(2))
+
+endef
+
+define gb_CppunitTest_add_old_components
+$(foreach component,$(2),$(call gb_CppunitTest_add_old_component,$(1),$(component)))
+
+endef
+
+gb_ComponentTarget__get_old_component_target = $(OUTDIR)/xml/$(1).component
 
 define gb_CppunitTest__forward_to_Linktarget
 gb_CppunitTest_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_CppunitTest__get_linktargetname,$$(1)),$$(2),$$(3))

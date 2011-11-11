@@ -88,8 +88,49 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,sc_filters_test,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_service_rdbs,sc_filters_test,\
-    sc_filters_test \
+$(eval $(call gb_CppunitTest_add_components,sc_filters_test,\
+    basic/util/sb \
+    comphelper/util/comphelp \
+    dbaccess/util/dba \
+    fileaccess/source/fileacc \
+    filter/source/config/cache/filterconfig1 \
+    forms/util/frm \
+    framework/util/fwk \
+    i18npool/util/i18npool \
+    oox/util/oox \
+    package/source/xstor/xstor \
+    package/util/package2 \
+    sax/source/expatwrap/expwrap \
+    sax/source/fastparser/fastsax \
+    sc/util/sc \
+    sc/util/scfilt \
+    sfx2/util/sfx \
+    sot/util/sot \
+    toolkit/util/tk \
+    unotools/util/utl \
+    unoxml/source/rdf/unordf \
+    unoxml/source/service/unoxml \
+    xmlsecurity/util/xsec_fw \
+    xmlsecurity/util/xmlsecurity \
+))
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_CppunitTest_add_components,sc_filters_test,\
+    xmlsecurity/util/xsec_xmlsec.windows \
+))
+
+else
+$(eval $(call gb_CppunitTest_add_components,sc_filters_test,\
+    xmlsecurity/util/xsec_xmlsec \
+))
+
+endif
+
+$(eval $(call gb_CppunitTest_add_old_components,sc_filters_test,\
+    configmgr \
+    ucb1 \
+    ucpfile1 \
+    ucptdoc1 \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sc_filters_test,\

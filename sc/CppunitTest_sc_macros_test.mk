@@ -92,8 +92,40 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,sc_macros_test,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_service_rdbs,sc_macros_test,\
-    sc_macros_test \
+$(eval $(call gb_CppunitTest_add_components,sc_macros_test,\
+    basic/util/sb \
+    comphelper/util/comphelp \
+    dbaccess/util/dba \
+    fileaccess/source/fileacc \
+    filter/source/config/cache/filterconfig1 \
+    forms/util/frm \
+    framework/util/fwk \
+    i18npool/util/i18npool \
+    oox/util/oox \
+    package/source/xstor/xstor \
+    package/util/package2 \
+    sax/source/expatwrap/expwrap \
+    sax/source/fastparser/fastsax \
+    sc/util/sc \
+    sc/util/scd \
+    sc/util/scfilt \
+    sc/util/vbaobj \
+    scripting/source/basprov/basprov \
+    scripting/util/scriptframe \
+    sfx2/util/sfx \
+    sot/util/sot \
+    svl/source/fsstor/fsstorage \
+    toolkit/util/tk \
+    unotools/util/utl \
+    unoxml/source/rdf/unordf \
+    unoxml/source/service/unoxml \
+))
+
+$(eval $(call gb_CppunitTest_add_old_components,sc_macros_test,\
+    configmgr \
+    ucb1 \
+    ucpfile1 \
+    ucptdoc1 \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sc_macros_test,\
