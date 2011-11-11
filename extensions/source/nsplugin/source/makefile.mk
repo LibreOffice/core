@@ -47,19 +47,19 @@ INCPRE=$(SOLARINCDIR)$/npsdk
 # not sure about -DMOZ_X11 but otheriwse some struct member don't exist...
 CFLAGS+=-DMOZ_X11
 
-.IF "$(ENABLE_GTK)"==""
+.IF "$(ENABLE_NSPLUGIN)"=="NO"
 
 dummy:
-    @echo GTK disabled - nothing to build
+    @echo Nsplugin disabled, nothing to build
 
-.ELSE           # "$(ENABLE_GTK)"==""
+.ELSE           # ENABLE_NSPLUGIN
 .IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || \
     "$(OS)"=="OPENBSD" || "$(OS)"=="DRAGONFLY"
 INC+= -DNP_LINUX
 .ENDIF
 PKGCONFIG_MODULES=gtk+-2.0
 .INCLUDE: pkg_config.mk
-.ENDIF          # "$(ENABLE_GTK)"==""
+.ENDIF          # ENABLE_NSPLUGIN
 .ENDIF          # "$(GUI)"=="UNX"
 .IF "$(GUI)"=="WNT" 
 INC+= -DENGLISH
