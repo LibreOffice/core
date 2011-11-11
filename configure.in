@@ -1031,7 +1031,7 @@ AC_ARG_WITH(system-libwpg,
 AC_ARG_WITH(system-libxml,
     AS_HELP_STRING([--with-system-libxml],
         [Use libxml/libxslt already on system.]),,
- [if test "$_os" = "Darwin" -o $_os = "iOS"; then
+ [if test "$_os" = "Darwin"; then
     with_system_libxml=yes
   else
     with_system_libxml="$with_system_libs"
