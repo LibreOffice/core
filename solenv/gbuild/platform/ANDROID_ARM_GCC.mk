@@ -39,4 +39,30 @@ include $(GBUILDDIR)/platform/unxgcc.mk
 # No unit testing can be run
 gb_CppunitTest_CPPTESTPRECOMMAND := :
 
+# Re-define this shebang from unxgcc.mk, adding -shared and -llog
+# -landroid Just temporarily done this way, shm_get promised to do
+# this in some more elegant fashion.
+
+define gb_LinkTarget__command_dynamiclink
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(1)) && \
+	$(gb_CXX) \
+		-shared \
+		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
+		$(subst \d,$$,$(RPATH)) \
+		$(T_LDFLAGS) \
+		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
+		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
+		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
+		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),`cat $(extraobjectlist)`) \
+		-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group \
+		$(LIBS) \
+		$(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))))) \
+		-llog -landroid \
+		-o $(1))
+endef
+
 # vim: set noet sw=4:
