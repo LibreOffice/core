@@ -218,7 +218,7 @@ SvXMLImportContext *SvxXMLTableImportContext::CreateChildContext( sal_uInt16 nPr
                 }
             }
         }
-        catch( uno::Exception& )
+        catch (const uno::Exception&)
         {
         }
     }
@@ -266,7 +266,7 @@ void SvxXMLTableImportContext::importMarker( sal_uInt16 nPrfx, const OUString& r
         XMLMarkerStyleImport aMarkerStyle( GetImport() );
         aMarkerStyle.importXML( xAttrList, rAny, rName );
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
         OSL_FAIL("SvxXMLTableImportContext::importMarker(), exception caught!");
     }
@@ -282,7 +282,7 @@ void SvxXMLTableImportContext::importDash( sal_uInt16 nPrfx, const OUString& rLo
         XMLDashStyleImport aDashStyle( GetImport() );
         aDashStyle.importXML( xAttrList, rAny, rName );
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
         OSL_FAIL("SvxXMLTableImportContext::importDash(), exception caught!");
     }
@@ -298,7 +298,7 @@ void SvxXMLTableImportContext::importHatch( sal_uInt16 nPrfx, const OUString& rL
         XMLHatchStyleImport aHatchStyle( GetImport() );
         aHatchStyle.importXML( xAttrList, rAny, rName );
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
         OSL_FAIL("SvxXMLTableImportContext::importHatch(), exception caught!");
     }
@@ -314,7 +314,7 @@ void SvxXMLTableImportContext::importGradient( sal_uInt16 nPrfx, const OUString&
         XMLGradientStyleImport aGradientStyle( GetImport() );
         aGradientStyle.importXML( xAttrList, rAny, rName );
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
         OSL_FAIL("SvxXMLTableImportContext::importGradient(), exception caught!");
     }
@@ -330,7 +330,7 @@ void SvxXMLTableImportContext::importBitmap( sal_uInt16 nPrfx, const OUString& r
         XMLImageStyle aImageStyle;
         aImageStyle.importXML( xAttrList, rAny, rName, GetImport() );
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
         OSL_FAIL("SvxXMLTableImportContext::importBitmap(), exception caught!");
     }
@@ -423,10 +423,13 @@ bool SvxXMLXTableImport::load( const rtl::OUString &rPath,
         else // relative URL into a storage
         {
             uno::Reference< embed::XStorage > xSubStorage;
-            try {
+            try
+            {
                 xSubStorage = comphelper::OStorageHelper::GetStorageAtPath(
                         xStorage, rPath, embed::ElementModes::READ, aNasty );
-            } catch (uno::Exception &) {
+            }
+            catch (const uno::Exception&)
+            {
             }
             if( xSubStorage.is() )
                 openStorageStream( &aParserInput, &pGraphicHelper, xSubStorage );
@@ -447,10 +450,14 @@ bool SvxXMLXTableImport::load( const rtl::OUString &rPath,
         if (pGraphicHelper)
             xGrfResolver = pGraphicHelper;
 
-        try {
+        try
+        {
             uno::Reference< io::XSeekable > xSeek( aParserInput.aInputStream, uno::UNO_QUERY_THROW );
             xSeek->seek( 0 );
-        } catch( uno::Exception &) {}
+        }
+        catch (const uno::Exception&)
+        {
+        }
 
         uno::Reference< XDocumentHandler > xHandler( new SvxXMLXTableImport( xServiceFactory, xTable, xGrfResolver ) );
         xParser->setDocumentHandler( xHandler );
@@ -459,9 +466,8 @@ bool SvxXMLXTableImport::load( const rtl::OUString &rPath,
         if( pGraphicHelper )
             SvXMLGraphicHelper::Destroy( pGraphicHelper );
     }
-    catch( uno::Exception& e )
+    catch (const uno::Exception&)
     {
-        (void)e;
 //      thrown each time you load a document with property tables that are not
 //      on the current machine. FIXME: would be better to check a file exists
 //      before importing ...
