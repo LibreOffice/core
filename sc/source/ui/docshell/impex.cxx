@@ -787,7 +787,6 @@ sal_Bool ScImportExport::Text2Doc( SvStream& rStrm )
 
     while( bOk )
     {
-        ByteString aByteLine;
         String aLine, aCell;
         SCROW nRow = nStartRow;
         rStrm.Seek( nOldPos );
