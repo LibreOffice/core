@@ -134,15 +134,15 @@ CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
 
 .IF "$(OS)"=="IOS"
-# --with-libxml-prefix actually gives the prefix where bin/xml2-config is looked for,
-# and we want it to find our dummy one that prints the LIBXML_CFLAGS and LIBXML_LIBS that
-# the configure script found out.
-CONFIGURE_FLAGS=--disable-shared --with-libxml-prefix=$(SRC_ROOT)/$(PRJNAME)/dummy
-.ELIF "$(SYSTEM_LIBXML)"!="YES"
-# Use the xml2-config from our own libxml2 copy
-CONFIGURE_FLAGS=--disable-static --with-libxml-prefix=$(SOLARVER)/$(INPATH)
+CONFIGURE_ACTION+=LIBS=-liconv
+CONFIGURE_FLAGS=--disable-shared
 .ELSE
 CONFIGURE_FLAGS=--disable-static
+.ENDIF
+
+.IF "$(SYSTEM_LIBXML)"!="YES"
+# Use the xml2-config from our own libxml2 copy
+CONFIGURE_FLAGS+=--with-libxml-prefix=$(SOLARVER)/$(INPATH)
 .ENDIF
 
 CONFIGURE_FLAGS+=--enable-ipv6=no --without-crypto --without-python --with-sax1=yes
