@@ -1,6 +1,6 @@
-all: jni/LibreOfficeBootstrap-debug.apk
+all: bin/LibreOfficeBootstrap-debug.apk
 
-jni/LibreOfficeBootstrap-debug.apk : jni/*.c src/org/libreoffice/android/*.java
+bin/LibreOfficeBootstrap-debug.apk : jni/*.c src/org/libreoffice/android/*.java
 	ndk-build V=1
 	cp ../../../solver/unxandr.pro/bin/cppunit/cppunittester libs/armeabi-v7a/libcppunittester.so
 	cp ../../../solver/unxandr.pro/lib/libcppunit-1.12.so libs/armeabi-v7a
