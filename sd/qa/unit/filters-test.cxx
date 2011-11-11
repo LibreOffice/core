@@ -62,15 +62,18 @@ public:
     SdFiltersTest();
 
     ::sd::DrawDocShellRef loadURL( const rtl::OUString &rURL );
-    virtual bool load(const rtl::OUString &, const rtl::OUString &, const rtl::OUString &) { return false; }
+    virtual bool load( const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData);
+
     virtual void setUp();
     virtual void tearDown();
 
-    // FIXME: we should add some CVE tests ...
     void test();
+    // Ensure CVEs remain unbroken
+    void testCVEs();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(test);
+    CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -153,6 +156,29 @@ void SdFiltersTest::test()
 
     CPPUNIT_ASSERT_MESSAGE( "changed", !pDoc->IsChanged() );
     xDocShRef->DoClose();
+}
+
+bool SdFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
+    const rtl::OUString &rUserData)
+{
+    SfxFilter aFilter(
+        rFilter,
+        rtl::OUString(), 0, 0, rtl::OUString(), 0, rtl::OUString(),
+        rUserData, rtl::OUString() );
+
+    ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
+    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ, true);
+    pSrcMed->SetFilter(&aFilter);
+    bool bLoaded = xDocShRef->DoLoad(pSrcMed);
+    xDocShRef->DoClose();
+    return bLoaded;
+}
+
+void SdFiltersTest::testCVEs()
+{
+    testDir(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS PowerPoint 97")),
+            getURLFromSrc("/sd/qa/unit/data/ppt/"),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdfilt")));
 }
 
 SdFiltersTest::SdFiltersTest()

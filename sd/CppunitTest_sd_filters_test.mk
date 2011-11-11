@@ -128,4 +128,8 @@ $(eval $(call gb_CppunitTest_set_args,sd_filters_test,\
 ))
     # .../spool is required for the (somewhat strange) filter configuration
 
+# we need to explicitly depend on library sdfilt because it is not implied
+# by a link relation
+$(call gb_CppunitTest_get_target,sd_filters_test) : $(call gb_Library_get_target,sdfilt)
+
 # vim: set noet sw=4 ts=4:
