@@ -1,0 +1,49 @@
+Android-specific notes
+
+Unit tests are the first thing we want to run on Android, to get some
+idea how well, if at all, the basic LO libraraies work. We want to
+build even unit tests as normal Android apps, i.e. packaged as .apk
+files, so that they run in a sandboxed environment like that of
+whatever eventual end-user Android apps there will be that use LO
+code.
+
+Sure, we could quite easily build unit tests as plain Android
+executables, push them to the device or emulator with adb and run them
+from adb shell, but that would not be a good test as the environment
+would be completely different. They would run as root, and not
+sandboxed. We have no intent to require LibreOffice code to be used
+only on "rooted" devices etc.
+
+All Android apps are basically Java programs. They run "in" a Dalvik
+virtual machine. Yes, you can also have apps where your code is only
+native code, written in a compiled language like C or C++. But also
+also such apps are actually started by system-provided Java
+bootstrapping code (NativeActivity) running in a Dalvik VM.
+
+Such a native app (or actually, "activity") is not built as a
+executable program, but as a shared object. The Java NativeActivity
+bootstrapper loads that shared object with dlopen.
+
+It is somewhat problematic to construct .apk packages except by using
+the high-level tools in the Android SDK. At least I haven't figured
+out how to manually construct an .apk that is properly signed so that
+it will run in the emulator. (I don't have any Android device...) I
+only know how to let the SDK Ant tooling do it...
+
+A LO Android app would work would something like this:
+
+We have a top Java bootstrapping class
+org.libreoffice.android.Bootstrap that loads a small helper native
+library liblo-bootstrap.so that implements JNI wrappers for dlopen(),
+dlsym(), and ELF header scanning coresponding to looking for DT_NEEDED
+entries with readelf.
+
+The Java code then loads the actual native library that corresponds to
+the LibreOffice-related "program" we want to run. For unit tests, a
+library that corresponds to cppunittester program. Then through helper
+functions in liblo-bootstrap it calls a named function in that
+"program".
+
+This Android-specific code is for now in sal/osl/android.
+
+--Tor Lillqvist <tml@iki.fi>
