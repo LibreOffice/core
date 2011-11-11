@@ -79,7 +79,10 @@ bool SwFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL
     SwDocShellRef xDocShRef = new SwDocShell;
     SfxMedium aSrcMed(rURL, STREAM_STD_READ, true);
     aSrcMed.SetFilter(&aFilter);
-    return xDocShRef->DoLoad(&aSrcMed);
+    bool bLoaded = xDocShRef->DoLoad(&aSrcMed);
+    if (xDocShRef.Is())
+        xDocShRef->DoClose();
+    return bLoaded;
 }
 
 void SwFiltersTest::testCVEs()
