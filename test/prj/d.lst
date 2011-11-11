@@ -8,7 +8,6 @@ mkdir: %_DEST%\inc\test
 ..\inc\test\bootstrapfixture.hxx %_DEST%\inc\test\bootstrapfixture.hxx
 mkdir: %_DEST%\unittest
 mkdir: %_DEST%\unittest\user\
-mkdir: %_DEST%\unittest\user\data
 mkdir: %_DEST%\unittest\user\autocorr
 mkdir: %_DEST%\unittest\user\autotext
 mkdir: %_DEST%\unittest\user\autotext\en-US
@@ -144,8 +143,6 @@ mkdir: %_DEST%\unittest\user\gallery\www-graf
 mkdir: %_DEST%\unittest\user\psprint
 mkdir: %_DEST%\unittest\user\psprint\driver
 mkdir: %_DEST%\unittest\user\psprint\fontmetric
-mkdir: %_DEST%\unittest\user\registry
-mkdir: %_DEST%\unittest\user\registry\res
 mkdir: %_DEST%\unittest\user\template
 mkdir: %_DEST%\unittest\user\template\common
 mkdir: %_DEST%\unittest\user\template\common\layout
@@ -204,7 +201,6 @@ mkdir: %_DEST%\unittest\user\xslt\import\spreadsheetml
 mkdir: %_DEST%\unittest\user\xslt\import\uof
 mkdir: %_DEST%\unittest\user\xslt\import\wordml
 ..\user-template\user\*  %_DEST%\unittest\user\*
-..\user-template\user\data\*  %_DEST%\unittest\user\data\*
 ..\user-template\user\autocorr\*  %_DEST%\unittest\user\autocorr\*
 ..\user-template\user\autotext\*  %_DEST%\unittest\user\autotext\*
 ..\user-template\user\autotext\en-US\*  %_DEST%\unittest\user\autotext\en-US\*
@@ -340,8 +336,6 @@ mkdir: %_DEST%\unittest\user\xslt\import\wordml
 ..\user-template\user\psprint\*  %_DEST%\unittest\user\psprint\*
 ..\user-template\user\psprint\driver\*  %_DEST%\unittest\user\psprint\driver\*
 ..\user-template\user\psprint\fontmetric\*  %_DEST%\unittest\user\psprint\fontmetric\*
-..\user-template\user\registry\*  %_DEST%\unittest\user\registry\*
-..\user-template\user\registry\res\*  %_DEST%\unittest\user\registry\res\*
 ..\user-template\user\template\*  %_DEST%\unittest\user\template\*
 ..\user-template\user\template\common\*  %_DEST%\unittest\user\template\common\*
 ..\user-template\user\template\common\layout\*  %_DEST%\unittest\user\template\common\layout\*
