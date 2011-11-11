@@ -225,21 +225,19 @@ ConfigItem::ConfigItem(const OUString &rSubTree, sal_Int16 nSetMode ) :
 {
     AutoDeleter<ConfigItem_Impl> aNewImpl(pImpl);
 
-    pImpl->pManager = &ConfigManager::GetConfigManager();
+    pImpl->pManager = &ConfigManager::getConfigManager();
     pImpl->nMode = nSetMode;
     if(0 != (nSetMode&CONFIG_MODE_RELEASE_TREE))
-        pImpl->pManager->AddConfigItem(*this);
+        pImpl->pManager->addConfigItem(*this);
     else
-        m_xHierarchyAccess = pImpl->pManager->AddConfigItem(*this);
+        m_xHierarchyAccess = pImpl->pManager->addConfigItem(*this);
 
-    // no more exceptions after c'tor has finished
     aNewImpl.keep();
-    pImpl->nMode &= ~CONFIG_MODE_PROPAGATE_ERRORS;
 }
 
 sal_Bool ConfigItem::IsValidConfigMgr() const
 {
-    return ( pImpl->pManager && pImpl->pManager->GetConfigurationProvider().is() );
+    return pImpl->pManager != 0;
 }
 
 ConfigItem::~ConfigItem()
@@ -247,7 +245,7 @@ ConfigItem::~ConfigItem()
     if(pImpl->pManager)
     {
         RemoveChangesListener();
-        pImpl->pManager->RemoveConfigItem(*this);
+        pImpl->pManager->removeConfigItem(*this);
     }
     delete pImpl;
 }
@@ -276,29 +274,6 @@ void ConfigItem::CallNotify( const com::sun::star::uno::Sequence<OUString>& rPro
     // want to notify listeners
     if(!IsInValueChange() || pImpl->bEnableInternalNotification)
         Notify(rPropertyNames);
-}
-
-sal_Bool lcl_IsLocalProperty(const OUString& rSubTree, const OUString& rProperty)
-{
-    static const sal_Char* aLocalProperties[] =
-    {
-        "Office.Common/Path/Current/Storage",
-        "Office.Common/Path/Current/Temp"
-    };
-    static const int aLocalPropLen[] =
-    {
-        34,
-        31
-    };
-    OUString sProperty(rSubTree);
-    sProperty += C2U("/");
-    sProperty += rProperty;
-
-    if(sProperty.equalsAsciiL( aLocalProperties[0], aLocalPropLen[0]) ||
-        sProperty.equalsAsciiL( aLocalProperties[1], aLocalPropLen[1]))
-        return sal_True;
-
-    return sal_False;
 }
 
 void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   lInNames    ,
@@ -471,12 +446,6 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Se
     {
         try
         {
-            if(pImpl->pManager->IsLocalConfigProvider() && lcl_IsLocalProperty(sSubTree, rNames[i]))
-            {
-                OSL_FAIL("ConfigItem::IsReadonly()\nlocal mode seams to be used!?\n");
-                continue;
-            }
-
             OUString sName = rNames[i];
             OUString sPath;
             OUString sProperty;
@@ -546,15 +515,7 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
         {
             try
             {
-                if(pImpl->pManager->IsLocalConfigProvider() && lcl_IsLocalProperty(sSubTree, pNames[i]))
-                {
-                    OUString sProperty(sSubTree);
-                    sProperty += C2U("/");
-                    sProperty += pNames[i];
-                    pRet[i] = pImpl->pManager->GetLocalProperty(sProperty);
-                }
-                else
-                    pRet[i] = xHierarchyAccess->getByHierarchicalName(pNames[i]);
+                pRet[i] = xHierarchyAccess->getByHierarchicalName(pNames[i]);
             }
             catch (const Exception& rEx)
             {
@@ -563,10 +524,7 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
                 sMsg += OString(rEx.Message.getStr(),
                     rEx.Message.getLength(),
                      RTL_TEXTENCODING_ASCII_US);
-                sMsg += OString("\n");
-                sMsg += OString(ConfigManager::GetConfigBaseURL().getStr(),
-                    ConfigManager::GetConfigBaseURL().getLength(),
-                     RTL_TEXTENCODING_ASCII_US);
+                sMsg += OString("\n/org.openoffice.");
                 sMsg += OString(sSubTree.getStr(),
                     sSubTree.getLength(),
                      RTL_TEXTENCODING_ASCII_US);
@@ -627,43 +585,33 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
         }
         for(int i = 0; i < nNameCount; i++)
         {
-            if(pImpl->pManager->IsLocalConfigProvider() && lcl_IsLocalProperty(sSubTree, pNames[i]))
+            try
             {
-                OUString sProperty(sSubTree);
-                sProperty += C2U("/");
-                sProperty += pNames[i];
-                pImpl->pManager->PutLocalProperty(sProperty, pValues[i]);
-            }
-            else
-            {
-                try
+                OUString sNode, sProperty;
+                if (splitLastFromConfigurationPath(pNames[i],sNode, sProperty))
                 {
-                    OUString sNode, sProperty;
-                    if (splitLastFromConfigurationPath(pNames[i],sNode, sProperty))
-                    {
-                        Any aNode = xHierarchyAccess->getByHierarchicalName(sNode);
+                    Any aNode = xHierarchyAccess->getByHierarchicalName(sNode);
 
-                        Reference<XNameAccess> xNodeAcc;
-                        aNode >>= xNodeAcc;
-                        Reference<XNameReplace>   xNodeReplace(xNodeAcc, UNO_QUERY);
-                        Reference<XNameContainer> xNodeCont   (xNodeAcc, UNO_QUERY);
+                    Reference<XNameAccess> xNodeAcc;
+                    aNode >>= xNodeAcc;
+                    Reference<XNameReplace>   xNodeReplace(xNodeAcc, UNO_QUERY);
+                    Reference<XNameContainer> xNodeCont   (xNodeAcc, UNO_QUERY);
 
-                        sal_Bool bExist = (xNodeAcc.is() && xNodeAcc->hasByName(sProperty));
-                        if (bExist && xNodeReplace.is())
-                            xNodeReplace->replaceByName(sProperty, pValues[i]);
-                        else
+                    sal_Bool bExist = (xNodeAcc.is() && xNodeAcc->hasByName(sProperty));
+                    if (bExist && xNodeReplace.is())
+                        xNodeReplace->replaceByName(sProperty, pValues[i]);
+                    else
                         if (!bExist && xNodeCont.is())
                             xNodeCont->insertByName(sProperty, pValues[i]);
                         else
                             bRet = sal_False;
-                    }
-                    else //direct value
-                    {
-                        xTopNodeReplace->replaceByName(sProperty, pValues[i]);
-                    }
                 }
-                CATCH_INFO("Exception from PutProperties: ");
+                else //direct value
+                {
+                    xTopNodeReplace->replaceByName(sProperty, pValues[i]);
+                }
             }
+            CATCH_INFO("Exception from PutProperties: ");
         }
         try
         {
@@ -1314,7 +1262,7 @@ Reference< XHierarchicalNameAccess> ConfigItem::GetTree()
 {
     Reference< XHierarchicalNameAccess> xRet;
     if(!m_xHierarchyAccess.is())
-        xRet = pImpl->pManager->AcquireTree(*this);
+        xRet = ConfigManager::acquireTree(*this);
     else
         xRet = m_xHierarchyAccess;
     return xRet;

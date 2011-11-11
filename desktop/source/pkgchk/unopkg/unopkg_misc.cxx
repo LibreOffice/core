@@ -511,8 +511,7 @@ Reference<XComponentContext> getUNO(
                                             NULL );
                 {
                     WarningBox warn(NULL, WB_OK | WB_DEF_OK, sMsg);
-                    warn.SetText(::utl::ConfigManager::GetDirectConfigProperty(
-                                     ::utl::ConfigManager::PRODUCTNAME).get<OUString>());
+                    warn.SetText(utl::ConfigManager::getProductName());
                     warn.SetIcon(0);
                     warn.Execute();
                 }

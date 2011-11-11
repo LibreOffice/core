@@ -539,11 +539,6 @@ static FileBase::RC _checkAndCreateDirectory(INetURLObject& dirURL)
 
 install_info MigrationImpl::findInstallation(const strings_v& rVersions)
 {
-    rtl::OUString aProductName;
-    uno::Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
-    aRet >>= aProductName;
-    aProductName = aProductName.toAsciiLowerCase();
-
     install_info aInfo;
     strings_v::const_iterator i_ver = rVersions.begin();
     while (i_ver != rVersions.end())
@@ -556,9 +551,10 @@ install_info MigrationImpl::findInstallation(const strings_v& rVersions)
             aProfileName = (*i_ver).copy( nSeparatorIndex+1 );
         }
 
-        if ( aVersion.getLength() && aProfileName.getLength() &&
-                ( !aInfo.userdata.getLength() || !aProfileName.toAsciiLowerCase().compareTo( aProductName, aProductName.getLength() ) )
-           )
+        if ( !aVersion.isEmpty() && !aProfileName.isEmpty() &&
+             ( aInfo.userdata.isEmpty() ||
+               aProfileName.equalsIgnoreAsciiCase(
+                   utl::ConfigManager::getProductName() ) ) )
         {
             ::rtl::OUString aUserInst;
             osl::Security().getConfigDir( aUserInst );

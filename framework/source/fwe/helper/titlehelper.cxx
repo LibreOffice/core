@@ -542,28 +542,23 @@ void TitleHelper::impl_appendComponentTitle (      ::rtl::OUStringBuffer&       
 //*****************************************************************************************************************
 void TitleHelper::impl_appendProductName (::rtl::OUStringBuffer& sTitle)
 {
-    ::rtl::OUString sProductName;
-    ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME) >>= sProductName;
-
-    if (sProductName.getLength ())
+    rtl::OUString name(utl::ConfigManager::getProductName());
+    if (!name.isEmpty())
     {
-        if (sTitle.getLength() > 0)
-            sTitle.appendAscii (" - ");
-
-        sTitle.append (sProductName);
+        if (sTitle.getLength() != 0)
+            sTitle.appendAscii(RTL_CONSTASCII_STRINGPARAM(" - "));
+        sTitle.append(name);
     }
 }
 
 //*****************************************************************************************************************
 void TitleHelper::impl_appendProductExtension (::rtl::OUStringBuffer& sTitle)
 {
-    ::rtl::OUString sProductExtension;
-    ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::PRODUCTEXTENSION) >>= sProductExtension;
-
-    if (sProductExtension.getLength ())
+    rtl::OUString ext(utl::ConfigManager::getProductExtension());
+    if (!ext.isEmpty())
     {
-        sTitle.appendAscii (" ");
-        sTitle.append      (sProductExtension);
+        sTitle.append(' ');
+        sTitle.append(ext);
     }
 }
 

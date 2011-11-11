@@ -107,36 +107,21 @@ void ReplaceProductNameHookProc( String& rStr )
     nAll++;
     if ( rStr.SearchAscii( "%PRODUCT" ) != STRING_NOTFOUND )
     {
-        String &rProductName = ProductName::get();
-        String &rVersion = Version::get();
-        String &rAboutBoxVersion = AboutBoxVersion::get();
-        String &rExtension = Extension::get();
-        String &rOOOVendor = OOOVendor::get();
+        String rProductName = ProductName::get();
+        String rVersion = Version::get();
+        String rAboutBoxVersion = AboutBoxVersion::get();
+        String rExtension = Extension::get();
+        String rOOOVendor = OOOVendor::get();
 
         if ( !rProductName.Len() )
         {
-            rtl::OUString aTmp;
-            Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
-            aRet >>= aTmp;
-            rProductName = aTmp;
-
-            aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
-            aRet >>= aTmp;
-            rVersion = aTmp;
-
-            aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::ABOUTBOXPRODUCTVERSION );
-            aRet >>= aTmp;
-            rAboutBoxVersion = aTmp;
-
-            aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::OOOVENDOR );
-            aRet >>= aTmp;
-            rOOOVendor = aTmp;
-
+            rProductName = utl::ConfigManager::getProductName();
+            rVersion = utl::ConfigManager::getProductVersion();
+            rAboutBoxVersion = utl::ConfigManager::getAboutBoxProductVersion();
+            rOOOVendor = utl::ConfigManager::getVendor();
             if ( !rExtension.Len() )
             {
-                aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTEXTENSION );
-                aRet >>= aTmp;
-                rExtension = aTmp;
+                rExtension = utl::ConfigManager::getProductExtension();
             }
         }
 
@@ -253,19 +238,14 @@ void ServiceImpl::startExecuteModal(
                 throw RuntimeException( OUSTR("Cannot initialize VCL!"),
                                         static_cast<OWeakObject *>(this) );
             AllSettings as = app->GetSettings();
-            OUString slang;
-            if (! (::utl::ConfigManager::GetDirectConfigProperty(
-                       ::utl::ConfigManager::LOCALE ) >>= slang))
-                throw RuntimeException( OUSTR("Cannot determine language!"),
-                                        static_cast<OWeakObject *>(this) );
-            as.SetUILanguage( MsLangId::convertIsoStringToLanguage( slang ) );
+            as.SetUILanguage(
+                MsLangId::convertIsoStringToLanguage(
+                    utl::ConfigManager::getLocale() ) );
             app->SetSettings( as );
-            String sTitle = ::utl::ConfigManager::GetDirectConfigProperty(
-                                ::utl::ConfigManager::PRODUCTNAME).get<OUString>()
-                                + String(static_cast<sal_Unicode>(' '))
-                                + ::utl::ConfigManager::GetDirectConfigProperty(
-                                    ::utl::ConfigManager::PRODUCTVERSION).get<OUString>();
-            app->SetDisplayName(sTitle);
+            app->SetDisplayName(
+                utl::ConfigManager::getProductName() +
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ")) +
+                utl::ConfigManager::getProductVersion());
             ExtensionCmdQueue::syncRepositories( m_xComponentContext );
         }
     }

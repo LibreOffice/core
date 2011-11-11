@@ -47,25 +47,21 @@ namespace utl
 
     // First product: branded name + version
     // version is <product_versions>_<product_extension>$<platform>
-    utl::ConfigManager& rMgr = utl::ConfigManager::GetConfigManager();
+
     // plain product name
-    rtl::OUString aValue;
-    uno::Any aAny = rMgr.GetDirectConfigProperty(
-                                        utl::ConfigManager::PRODUCTNAME);
-    if ( (aAny >>= aValue) && aValue.getLength() )
+    rtl::OUString aValue( utl::ConfigManager::getProductName() );
+    if ( !aValue.isEmpty() )
     {
         aResult.append( aValue.replace( ' ', '_' ) );
         aResult.append( (sal_Unicode)'/' );
 
-        aAny = rMgr.GetDirectConfigProperty(
-                                    utl::ConfigManager::PRODUCTVERSION);
-        if ( (aAny >>= aValue) && aValue.getLength() )
+        aValue = utl::ConfigManager::getProductVersion();
+        if ( !aValue.isEmpty() )
         {
             aResult.append( aValue.replace( ' ', '_' ) );
 
-            aAny = rMgr.GetDirectConfigProperty(
-                                    utl::ConfigManager::PRODUCTEXTENSION);
-            if ( (aAny >>= aValue) && aValue.getLength() )
+            aValue = utl::ConfigManager::getProductExtension();
+            if ( !aValue.isEmpty() )
             {
                 aResult.append( (sal_Unicode)'_' );
                 aResult.append( aValue.replace( ' ', '_' ) );

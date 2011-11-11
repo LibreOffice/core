@@ -191,24 +191,18 @@ void SwCompatibilityOptPage::ReplaceFormatName( String& rEntry )
     static const String sOpenOfficeName = String::CreateFromAscii("OpenOffice.org");
     static const String sAsianName = String::CreateFromAscii("StarSuite");
 
-    Any aAny = ::utl::ConfigManager::
-        GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
-    rtl::OUString sTmp;
-    if ( aAny >>= sTmp )
-    {
-        String sFormatName = sTmp;
-        String sFormatVersion;
-        bool bOpenOffice = ( sOpenOfficeName == sFormatName );
-        if ( bOpenOffice )
-            sFormatVersion = String::CreateFromAscii("1.1");
-        else
-            sFormatVersion = String::CreateFromAscii("6.0/7");
-        if ( !bOpenOffice && ( sAsianName != sFormatName ) )
-            sFormatName = String::CreateFromAscii("StarOffice");
+    String sFormatName( utl::ConfigManager::getProductName() );
+    String sFormatVersion;
+    bool bOpenOffice = ( sOpenOfficeName == sFormatName );
+    if ( bOpenOffice )
+        sFormatVersion = String::CreateFromAscii("1.1");
+    else
+        sFormatVersion = String::CreateFromAscii("6.0/7");
+    if ( !bOpenOffice && ( sAsianName != sFormatName ) )
+        sFormatName = String::CreateFromAscii("StarOffice");
 
-        rEntry.SearchAndReplace( String::CreateFromAscii("%FORMATNAME"), sFormatName );
-        rEntry.SearchAndReplace( String::CreateFromAscii("%FORMATVERSION"), sFormatVersion );
-    }
+    rEntry.SearchAndReplace( String::CreateFromAscii("%FORMATNAME"), sFormatName );
+    rEntry.SearchAndReplace( String::CreateFromAscii("%FORMATVERSION"), sFormatVersion );
 }
 
 sal_uLong convertBools2Ulong_Impl

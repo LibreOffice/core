@@ -441,9 +441,7 @@ void RtfExport::WriteInfo()
     }
 
     Strm() << '{' << OOO_STRING_SVTOOLS_RTF_COMMENT << " ";
-    OUString sProduct;
-    utl::ConfigManager::GetDirectConfigProperty(utl::ConfigManager::PRODUCTNAME) >>= sProduct;
-    Strm() << OUStringToOString( sProduct, eCurrentEncoding).getStr() << "}{" << OOO_STRING_SVTOOLS_RTF_VERN;
+    Strm() << OUStringToOString( utl::ConfigManager::getProductName(), eCurrentEncoding).getStr() << "}{" << OOO_STRING_SVTOOLS_RTF_VERN;
     OutULong( SUPD*10 ) << '}';
     Strm() << '}';
 }

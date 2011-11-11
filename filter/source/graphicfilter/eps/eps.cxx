@@ -484,15 +484,9 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     ImplWriteLine( "%%Pages: 0" );
     ::rtl::OUStringBuffer aCreator;
     aCreator.appendAscii( RTL_CONSTASCII_STRINGPARAM( "%%Creator: " ) );
-    ::utl::ConfigManager& rMgr = ::utl::ConfigManager::GetConfigManager();
-    Any aProductName = rMgr.GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
-    ::rtl::OUString sProductName;
-    aProductName >>= sProductName;
-    aCreator.append( sProductName );
-    aProductName = rMgr.GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
-    aProductName >>= sProductName;
+    aCreator.append( utl::ConfigManager::getProductName() );
     aCreator.appendAscii( RTL_CONSTASCII_STRINGPARAM( " " ) );
-    aCreator.append( sProductName );
+    aCreator.append( utl::ConfigManager::getProductVersion() );
     ImplWriteLine( ::rtl::OUStringToOString( aCreator.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr() );
     ImplWriteLine( "%%Title: none" );
     ImplWriteLine( "%%CreationDate: none" );

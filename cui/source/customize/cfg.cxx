@@ -1717,13 +1717,9 @@ void SvxConfigPage::Reset( const SfxItemSet& )
 
         if ( pModuleData != NULL )
         {
-            OUString label;
-            utl::ConfigManager::GetDirectConfigProperty(
-                utl::ConfigManager::PRODUCTNAME ) >>= label;
-            label += OUString(RTL_CONSTASCII_USTRINGPARAM( " " ));
-            label += aModuleName;
-
-            nPos = aSaveInListBox.InsertEntry( label );
+            nPos = aSaveInListBox.InsertEntry(
+                utl::ConfigManager::getProductName() +
+                OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) ) + aModuleName );
             aSaveInListBox.SetEntryData( nPos, pModuleData );
         }
 

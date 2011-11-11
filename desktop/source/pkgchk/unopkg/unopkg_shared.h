@@ -54,24 +54,11 @@ namespace unopkg {
         return locale;
     }
 
-
-    struct OfficeLocale :
-        public rtl::StaticWithInit<css::lang::Locale, OfficeLocale> {
-            const css::lang::Locale operator () () {
-                ::rtl::OUString slang;
-        if (! (::utl::ConfigManager::GetDirectConfigProperty(
-                   ::utl::ConfigManager::LOCALE ) >>= slang))
-            throw css::uno::RuntimeException( OUSTR("Cannot determine language!"), 0 );
-        if (slang.getLength() == 0)
-            slang = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US"));
-        return toLocale(slang);
-    }
-};
-
 struct DeploymentResMgr :  public rtl::StaticWithInit< ResMgr *, DeploymentResMgr >
 {
     ResMgr * operator () () {
-        return ResMgr::CreateResMgr( "deployment", OfficeLocale::get());
+        return ResMgr::CreateResMgr(
+            "deployment", toLocale( utl::ConfigManager::getLocale() ) );
     }
 };
 

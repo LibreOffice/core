@@ -67,12 +67,14 @@ $(eval $(call gb_CppunitTest_add_components,hwpfilter_test_hwpfilter,\
     hwpfilter/source/hwp \
 ))
 $(eval $(call gb_CppunitTest_add_old_components,hwpfilter_test_hwpfilter,\
+    configmgr \
     ucb1 \
     ucpfile1 \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,hwpfilter_test_hwpfilter,\
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
+    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry)" \
 ))
 
 # we need to explicitly depend on library hwp because it is not implied

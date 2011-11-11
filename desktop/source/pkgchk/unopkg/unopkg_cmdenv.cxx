@@ -66,18 +66,6 @@ using ::rtl::OUString;
 namespace {
 
 //==============================================================================
-struct OfficeLocale :
-        public rtl::StaticWithInit<lang::Locale, OfficeLocale> {
-    const lang::Locale operator () () {
-        OUString slang;
-        if (! (::utl::ConfigManager::GetDirectConfigProperty(
-                   ::utl::ConfigManager::LOCALE ) >>= slang))
-            throw RuntimeException( OUSTR("Cannot determine language!"), 0 );
-        return toLocale(slang);
-    }
-};
-
-//==============================================================================
 class CommandEnvironmentImpl
     : public ::cppu::WeakImplHelper3< XCommandEnvironment,
                                       task::XInteractionHandler,
@@ -189,7 +177,8 @@ void CommandEnvironmentImpl::printLicense(
             ->createInstanceWithContext(
                 OUSTR("com.sun.star.i18n.Collator"),m_xComponentContext),
             UNO_QUERY_THROW );
-    xCollator->loadDefaultCollator(OfficeLocale::get(),
+    xCollator->loadDefaultCollator(
+        toLocale(utl::ConfigManager::getLocale()),
         css::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE);
 
     do

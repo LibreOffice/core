@@ -157,22 +157,6 @@ void SvObjectServerList::FillInsertObjects()
                 ::rtl::OUString aStringProductVersion( RTL_CONSTASCII_USTRINGPARAM( "%PRODUCTVERSION" ) );
                 sal_Int32 nStringProductVersionLength = aStringProductVersion.getLength();
 
-                // TODO/LATER: Do the request only once ( needs incompatible change )
-                ::rtl::OUString aProductName;
-                ::rtl::OUString aProductVersion;
-                uno::Any aProperty =
-                    ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
-                if ( !( aProperty >>= aProductName ) )
-                {
-                    OSL_FAIL( "Coudn't get PRODUCTNAME variable!\n" );
-                    aProductName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice" ) );
-                }
-                aProperty = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
-                if ( !( aProperty >>= aProductVersion ) )
-                {
-                    OSL_FAIL( "Coudn't get PRODUCTVERSION variable!\n" );
-                }
-
                 for( nInd = 0; nInd < seqNames.getLength(); nInd++ )
                 {
                     uno::Reference< container::XNameAccess > xEntry ;
@@ -190,7 +174,9 @@ void SvObjectServerList::FillInsertObjects()
                             sal_Int32 nIndex = aUIName.indexOf( aStringProductName );
                             while( nIndex != -1 )
                             {
-                                aUIName = aUIName.replaceAt( nIndex, nStringProductNameLength, aProductName );
+                                aUIName = aUIName.replaceAt(
+                                    nIndex, nStringProductNameLength,
+                                    utl::ConfigManager::getProductName() );
                                 nIndex = aUIName.indexOf( aStringProductName );
                             }
 
@@ -198,7 +184,9 @@ void SvObjectServerList::FillInsertObjects()
                             nIndex = aUIName.indexOf( aStringProductVersion );
                             while( nIndex != -1 )
                             {
-                                aUIName = aUIName.replaceAt( nIndex, nStringProductVersionLength, aProductVersion );
+                                aUIName = aUIName.replaceAt(
+                                    nIndex, nStringProductVersionLength,
+                                    utl::ConfigManager::getProductVersion() );
                                 nIndex = aUIName.indexOf( aStringProductVersion );
                             }
                         }

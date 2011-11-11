@@ -1324,19 +1324,7 @@ UUIInteractionHelper::handleGenericErrorRequest(
 
             boost::scoped_ptr< ResMgr > xManager(
                 ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( uui ) ) );
-            ::rtl::OUString aTitle;
-
-            try
-            {
-                uno::Any aProductNameAny =
-                    ::utl::ConfigManager::GetConfigManager()
-                        .GetDirectConfigProperty(
-                           ::utl::ConfigManager::PRODUCTNAME );
-                aProductNameAny >>= aTitle;
-            }
-            catch( uno::Exception& )
-            {
-            }
+            rtl::OUString aTitle( utl::ConfigManager::getProductName() );
 
             ::rtl::OUString aErrTitle
                   = String( ResId( nError == ERRCODE_SFX_BROKENSIGNATURE
@@ -1542,28 +1530,13 @@ UUIInteractionHelper::handleBrokenPackageRequest(
     else
         return;
 
-    uno::Any aProductNameAny =
-        ::utl::ConfigManager::GetConfigManager().GetDirectConfigProperty(
-            ::utl::ConfigManager::PRODUCTNAME );
-    uno::Any aProductVersionAny =
-        ::utl::ConfigManager::GetConfigManager().GetDirectConfigProperty(
-            ::utl::ConfigManager::PRODUCTVERSION );
-    ::rtl::OUString aProductName, aProductVersion;
-    if ( !( aProductNameAny >>= aProductName ) )
-        aProductName
-            = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("StarOffice") );
+    rtl::OUString title(
+        utl::ConfigManager::getProductName() +
+        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) ) +
+        utl::ConfigManager::getProductVersion() );
 
-    ::rtl::OUString aTitle( aProductName );
-    if( aProductVersionAny >>= aProductVersion )
-    {
-        aTitle += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(" ") );
-        aTitle += aProductVersion;
-    }
-
-    switch ( executeMessageBox( getParentProperty(),
-                                aTitle,
-                                aMessage,
-                                nButtonMask ))
+    switch (
+        executeMessageBox( getParentProperty(), title, aMessage, nButtonMask ) )
     {
     case ERRCODE_BUTTON_OK:
         OSL_ENSURE( xAbort.is(), "unexpected situation" );

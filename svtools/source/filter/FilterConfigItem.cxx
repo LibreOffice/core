@@ -121,8 +121,6 @@ void FilterConfigItem::ImpInitTree( const String& rSubTree )
 {
     bModified = sal_False;
 
-    OUString sTree( ConfigManager::GetConfigBaseURL() );
-    sTree += rSubTree;
     Reference< XMultiServiceFactory > xSMGR = getProcessServiceFactory();   // get global uno service manager
 
     Reference< XMultiServiceFactory > xCfgProv(
@@ -131,6 +129,9 @@ void FilterConfigItem::ImpInitTree( const String& rSubTree )
 
     if ( xCfgProv.is() )
     {
+        OUString sTree(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.")) +
+            rSubTree);
         if ( ImpIsTreeAvailable( xCfgProv, String( sTree ) ) )
         {
             Any aAny;

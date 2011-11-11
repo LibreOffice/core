@@ -48,10 +48,7 @@ namespace {
 struct OfficeLocale :
         public rtl::StaticWithInit<OUString, OfficeLocale> {
     const OUString operator () () {
-        OUString slang;
-        if (! (::utl::ConfigManager::GetDirectConfigProperty(
-                   ::utl::ConfigManager::LOCALE ) >>= slang))
-            throw RuntimeException( OUSTR("Cannot determine language!"), 0 );
+        OUString slang(utl::ConfigManager::getLocale());
         //fallback, the locale is currently only set when the user starts the
         //office for the first time.
         if (slang.getLength() == 0)
@@ -83,16 +80,8 @@ String getResourceString( sal_uInt16 id )
 {
     const osl::MutexGuard guard( s_mutex );
     String ret( ResId( id, *DeploymentResMgr::get() ) );
-    if (ret.SearchAscii( "%PRODUCTNAME" ) != STRING_NOTFOUND) {
-        static String s_brandName;
-        if (s_brandName.Len() == 0) {
-            OUString brandName(
-                ::utl::ConfigManager::GetDirectConfigProperty(
-                    ::utl::ConfigManager::PRODUCTNAME ).get<OUString>() );
-            s_brandName = brandName;
-        }
-        ret.SearchAndReplaceAllAscii( "%PRODUCTNAME", s_brandName );
-    }
+    ret.SearchAndReplaceAllAscii(
+        "%PRODUCTNAME", utl::ConfigManager::getProductName() );
     return ret;
 }
 

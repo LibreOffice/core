@@ -187,9 +187,6 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
     ::rtl::OUString sApplicationID;
     try
     {
-        ::rtl::OUString aProductName;
-        ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME) >>= aProductName;
-
         // SYNCHRONIZED ->
         ReadGuard aReadLock(m_aLock);
         css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
@@ -231,7 +228,8 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
             sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("startcenter"));
         else
             sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("startcenter"));
-        sApplicationID = aProductName.toAsciiLowerCase();
+        sApplicationID = utl::ConfigManager::getProductName().
+            toAsciiLowerCase();
         sApplicationID += ::rtl::OUString(sal_Unicode('-'));
         sApplicationID += sDesktopName;
     }

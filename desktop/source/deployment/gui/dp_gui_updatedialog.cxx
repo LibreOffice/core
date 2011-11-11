@@ -101,6 +101,7 @@
 #include "tools/resmgr.hxx"
 #include "tools/solar.h"
 #include "tools/string.hxx"
+#include "unotools/configmgr.hxx"
 #include "vcl/button.hxx"
 #include "vcl/dialog.hxx"
 #include "vcl/fixed.hxx"
@@ -1288,12 +1289,12 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
                     nPos = m_noDependencyCurVer.indexOf( sProductName );
                     if ( nPos >= 0 )
                     {
-                        m_noDependencyCurVer = m_noDependencyCurVer.replaceAt( nPos, sProductName.getLength(), BrandName::get() );
+                        m_noDependencyCurVer = m_noDependencyCurVer.replaceAt( nPos, sProductName.getLength(), utl::ConfigManager::getProductName() );
                     }
                     nPos = m_noDependency.indexOf( sProductName );
                     if ( nPos >= 0 )
                     {
-                        m_noDependency = m_noDependency.replaceAt( nPos, sProductName.getLength(), BrandName::get() );
+                        m_noDependency = m_noDependency.replaceAt( nPos, sProductName.getLength(), utl::ConfigManager::getProductName() );
                     }
 
                     b.append(m_noInstall);

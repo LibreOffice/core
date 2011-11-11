@@ -71,15 +71,8 @@ MyApp aMyApp;
 
 void MyApp::ReadStringHook( String& rStr )
 {
-    static String maProduct;
-    if( ! maProduct.Len() )
-    {
-        Any aRet = utl::ConfigManager::GetDirectConfigProperty( utl::ConfigManager::PRODUCTNAME );
-        OUString aProd;
-        aRet >>= aProd;
-        maProduct = String( aProd );
-    }
-    rStr.SearchAndReplaceAllAscii( "%PRODUCTNAME", maProduct );
+    rStr.SearchAndReplaceAllAscii(
+        "%PRODUCTNAME", utl::ConfigManager::getProductName() );
 };
 
 

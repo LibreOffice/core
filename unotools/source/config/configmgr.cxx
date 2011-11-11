@@ -26,693 +26,225 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_unotools.hxx"
-#include "unotools/configmgr.hxx"
-#include "unotools/configitem.hxx"
-#include "unotools/configpathes.hxx"
-#include <unotools/processfactory.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <osl/diagnose.h>
-#include <rtl/bootstrap.hxx>
-#include <rtl/instance.hxx>
-#if OSL_DEBUG_LEVEL > 0
-#include <rtl/strbuf.hxx>
-#endif
+#include "sal/config.h"
 
 #include <list>
 
-#include <stdio.h>
+#include "boost/noncopyable.hpp"
+#include "com/sun/star/beans/NamedValue.hpp"
+#include "com/sun/star/container/XHierarchicalNameAccess.hpp"
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/uno/Any.hxx"
+#include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/Sequence.hxx"
+#include "osl/diagnose.h"
+#include "rtl/instance.hxx"
+#include "rtl/ustring.h"
+#include "rtl/ustring.hxx"
+#include "unotools/configitem.hxx"
+#include "unotools/configmgr.hxx"
+#include "unotools/processfactory.hxx"
 
-//-----------------------------------------------------------------------------
+namespace {
 
-using namespace utl;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::container;
+namespace css = com::sun::star;
 
-using ::rtl::OUString;
-#if OSL_DEBUG_LEVEL > 0
-using ::rtl::OString;
-#endif
-
-#define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
-
-//-----------------------------------------------------------------------------
-const char aConfigBaseURL[] = "/org.openoffice.";
-const char aAccessSrvc[] = "com.sun.star.configuration.ConfigurationUpdateAccess";
-
-namespace
-{
-    struct BrandName
-        : public rtl::Static< ::rtl::OUString, BrandName > {};
-    struct ProductVersion
-        : public rtl::Static< ::rtl::OUString, ProductVersion > {};
-    struct AboutBoxProductVersion
-        : public rtl::Static< ::rtl::OUString, AboutBoxProductVersion > {};
-    struct OOOVendor
-        : public rtl::Static< ::rtl::OUString, OOOVendor > {};
-    struct ProductExtension
-        : public rtl::Static< ::rtl::OUString, ProductExtension > {};
-    struct XMLFileFormatName
-        : public rtl::Static< ::rtl::OUString, XMLFileFormatName > {};
-    struct XMLFileFormatVersion
-        : public rtl::Static< ::rtl::OUString, XMLFileFormatVersion > {};
-    struct WriterCompatibilityVersionOOo11
-        : public rtl::Static< ::rtl::OUString, WriterCompatibilityVersionOOo11 > {};
-    struct OpenSourceContext : public rtl::StaticWithInit< sal_Int32, OpenSourceContext >
+class RegisterConfigItemHelper: private boost::noncopyable {
+public:
+    RegisterConfigItemHelper(
+        utl::ConfigManager & manager, utl::ConfigItem & item):
+            manager_(manager), item_(&item)
     {
-        sal_Int32 operator() () { return sal_Int32( -1 ); }
-    };
+        manager.registerConfigItem(item_);
+    }
 
-}
+    ~RegisterConfigItemHelper() {
+        if (item_ != 0) {
+            manager_.removeConfigItem(*item_);
+        }
+    }
 
-//-----------------------------------------------------------------------------
-struct ConfigItemListEntry_Impl
-{
-    ConfigItem*                 pConfigItem;
+    void keep() { item_ = 0; }
 
-    ConfigItemListEntry_Impl(ConfigItem*    pItem ) :
-        pConfigItem(pItem){}
-};
-typedef std::list<ConfigItemListEntry_Impl> ConfigItemList;
-struct utl::ConfigMgr_Impl
-{
-    ConfigItemList                          aItemList;
+private:
+    utl::ConfigManager & manager_;
+    utl::ConfigItem * item_;
 };
 
-ConfigManager::ConfigManager() :
-    pMgrImpl(new utl::ConfigMgr_Impl)
-{
-    GetConfigurationProvider(); // attempt to create the provider early
+css::uno::Reference< css::lang::XMultiServiceFactory >
+getConfigurationProvider() {
+    return css::uno::Reference< css::lang::XMultiServiceFactory >(
+        (css::uno::Reference< css::lang::XMultiServiceFactory >(
+            utl::getProcessServiceFactory(), css::uno::UNO_SET_THROW)->
+         createInstance(
+             rtl::OUString(
+                 RTL_CONSTASCII_USTRINGPARAM(
+                     "com.sun.star.configuration.ConfigurationProvider")))),
+        css::uno::UNO_QUERY_THROW);
 }
 
-ConfigManager::ConfigManager(Reference< XMultiServiceFactory > xConfigProv) :
-    xConfigurationProvider(xConfigProv),
-    pMgrImpl(new utl::ConfigMgr_Impl)
+rtl::OUString getConfigurationString(
+    rtl::OUString const & module, rtl::OUString const & path)
 {
+    css::uno::Sequence< css::uno::Any > args(1);
+    args[0] <<= css::beans::NamedValue(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
+        css::uno::makeAny(module));
+    return
+        css::uno::Reference< css::container::XHierarchicalNameAccess >(
+            getConfigurationProvider()->createInstanceWithArguments(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.configuration.ConfigurationAccess")),
+                args),
+            css::uno::UNO_QUERY_THROW)->
+        getByHierarchicalName(path).get< rtl::OUString >();
 }
 
-ConfigManager::~ConfigManager()
-{
-    //check list content -> should be empty!
-#if OSL_DEBUG_LEVEL > 0
-    if(!pMgrImpl->aItemList.empty())
-    {
-        ConfigItemList::iterator aListIter;
-        for (aListIter = pMgrImpl->aItemList.begin(); aListIter != pMgrImpl->aItemList.end(); ++aListIter)
-        {
-            ConfigItemListEntry_Impl& rEntry = *aListIter;
-            fprintf(stderr, "Dangling config item of %s\n", rtl::OUStringToOString(rEntry.pConfigItem->GetSubTreeName(), RTL_TEXTENCODING_UTF8).getStr());
-        }
-    }
-#endif
-    OSL_ENSURE(pMgrImpl->aItemList.empty(), "some ConfigItems are still alive");
-    if(!pMgrImpl->aItemList.empty())
-    {
-        ConfigItemList::iterator aListIter;
-        for(aListIter = pMgrImpl->aItemList.begin(); aListIter != pMgrImpl->aItemList.end(); ++aListIter)
-        {
-            ConfigItemListEntry_Impl& rEntry = *aListIter;
-            rEntry.pConfigItem->ReleaseConfigMgr();
-        }
-        pMgrImpl->aItemList.erase(pMgrImpl->aItemList.begin(), pMgrImpl->aItemList.end());
-    }
-    delete pMgrImpl;
+struct theConfigManager:
+    public rtl::Static< utl::ConfigManager, theConfigManager >
+{};
 
 }
 
-Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
-{
-    if(!xConfigurationProvider.is())
-    {
-        Reference< XMultiServiceFactory > xMSF = ::utl::getProcessServiceFactory();
-        if ( xMSF.is() )
-        {
-            try
-            {
-                xConfigurationProvider = Reference< XMultiServiceFactory >
-                    (xMSF->createInstance(
-                        UNISTRING("com.sun.star.configuration.ConfigurationProvider")),
-                     UNO_QUERY);
-            }
-#if OSL_DEBUG_LEVEL > 1
-            catch (const Exception& rEx)
-            {
-                static sal_Bool bMessage = sal_True;
-                if(bMessage)
-                {
-                    bMessage = sal_False;
-                    OString sMsg("CreateInstance with arguments exception: ");
-                    sMsg += OString(rEx.Message.getStr(),
-                                rEx.Message.getLength(),
-                                RTL_TEXTENCODING_ASCII_US);
-                    OSL_FAIL(sMsg.getStr());
-                }
-            }
-#else
-            catch (const Exception&)
-            {
-            }
-#endif
-        }
-    }
-    return xConfigurationProvider;
+rtl::OUString utl::ConfigManager::getAboutBoxProductVersion() {
+    return getConfigurationString(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("Product/ooSetupVersionAboutBox")));
 }
 
-namespace
-{
-    // helper to achieve exception - safe registration of a ConfigItem under construction
-    class RegisterConfigItemHelper // : Noncopyable
-    {
-        utl::ConfigManager & rCfgMgr;
-        utl::ConfigItem* pCfgItem;
-    public:
-        RegisterConfigItemHelper(utl::ConfigManager & rMgr, utl::ConfigItem& rCfgItem)
-        : rCfgMgr(rMgr)
-        , pCfgItem(&rCfgItem)
-        {
-            rCfgMgr.RegisterConfigItem(rCfgItem);
-        }
-
-        ~RegisterConfigItemHelper()
-        {
-            if (pCfgItem) rCfgMgr.RemoveConfigItem(*pCfgItem);
-        }
-
-        void keep() { pCfgItem = 0; }
-    };
+rtl::OUString utl::ConfigManager::getDefaultCurrency() {
+    return getConfigurationString(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("L10N/ooSetupCurrency")));
 }
 
-Reference< XMultiServiceFactory > ConfigManager::GetLocalConfigurationProvider()
-{
-    return GetConfigurationProvider();
+rtl::OUString utl::ConfigManager::getLocale() {
+    return getConfigurationString(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("L10N/ooLocale")));
 }
 
-Reference< XHierarchicalNameAccess > ConfigManager::AddConfigItem(utl::ConfigItem& rCfgItem)
-{
-    RegisterConfigItemHelper registeredItem(*this,rCfgItem);
-    Reference< XHierarchicalNameAccess > xTree = AcquireTree(rCfgItem);
-    registeredItem.keep();
-    return xTree;
+rtl::OUString utl::ConfigManager::getProductExtension() {
+    return getConfigurationString(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Product/ooSetupExtension")));
 }
 
-void    ConfigManager::RegisterConfigItem(utl::ConfigItem& rCfgItem)
-{
-    ConfigItemList::iterator aListIter = pMgrImpl->aItemList.begin();
-#if OSL_DEBUG_LEVEL > 1
-    for(aListIter = pMgrImpl->aItemList.begin(); aListIter != pMgrImpl->aItemList.end(); ++aListIter)
-    {
-        ConfigItemListEntry_Impl& rEntry = *aListIter;
-        if(rEntry.pConfigItem == &rCfgItem)
-            OSL_FAIL("RegisterConfigItem: already inserted!");
-    }
-#endif
-    pMgrImpl->aItemList.insert(aListIter, ConfigItemListEntry_Impl(&rCfgItem));
+rtl::OUString utl::ConfigManager::getProductName() {
+    return getConfigurationString(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Product/ooName")));
 }
 
-Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& rCfgItem)
-{
-#if OSL_DEBUG_LEVEL > 1
-    sal_Bool bFound = sal_False;
-    ConfigItemList::iterator aListIter = pMgrImpl->aItemList.begin();
-    for(aListIter = pMgrImpl->aItemList.begin(); aListIter != pMgrImpl->aItemList.end(); ++aListIter)
-    {
-        ConfigItemListEntry_Impl& rEntry = *aListIter;
-        if(rEntry.pConfigItem == &rCfgItem)
-        {
-            bFound = sal_True;
-            break;
-        }
-    }
-    OSL_ENSURE(bFound, "AcquireTree: ConfigItem unknown!");
-#endif
-    OUString sPath(RTL_CONSTASCII_USTRINGPARAM(aConfigBaseURL));
-    sPath += rCfgItem.GetSubTreeName();
-    Sequence< Any > aArgs(2);
-    Any* pArgs = aArgs.getArray();
-    PropertyValue aPath;
-    aPath.Name = UNISTRING("nodepath");
-    aPath.Value <<= sPath;
-    pArgs[0] <<= aPath;
-    sal_Bool bLazy = 0 != (rCfgItem.GetMode()&CONFIG_MODE_DELAYED_UPDATE);
-    PropertyValue aUpdate;
-    aUpdate.Name = UNISTRING("lazywrite");
-    aUpdate.Value.setValue(&bLazy, ::getBooleanCppuType());
-    pArgs[1] <<= aUpdate;
-
-    // Initialize item with support for reading/writing more then one locales at same time!
-    // It's neccessary for creation of a complete configuration entry without changing office locale
-    // at runtime.
-    if((rCfgItem.GetMode() & CONFIG_MODE_ALL_LOCALES) == CONFIG_MODE_ALL_LOCALES)
-    {
-        sal_Int32 nCount = aArgs.getLength();
-        aArgs.realloc(nCount+1);
-
-        PropertyValue aAllLocale;
-        aAllLocale.Name  =   UNISTRING("locale");
-        aAllLocale.Value <<= UNISTRING("*"     );
-        aArgs[nCount]    <<= aAllLocale;
-    }
-
-    Reference< XMultiServiceFactory > xCfgProvider = GetConfigurationProvider();
-    Reference< XInterface > xIFace;
-    if(xCfgProvider.is())
-    {
-        try
-        {
-            xIFace = xCfgProvider->createInstanceWithArguments(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(aAccessSrvc)),
-                    aArgs);
-        }
-        catch (const Exception& rEx)
-        {
-            if (CONFIG_MODE_PROPAGATE_ERRORS & rCfgItem.GetMode())
-            {
-                OSL_TRACE("ConfigItem: Propagating creation error: %s\n",
-                            OUStringToOString(rEx.Message,RTL_TEXTENCODING_ASCII_US).getStr());
-
-                throw;
-            }
-#if OSL_DEBUG_LEVEL > 1
-            if(0 == (CONFIG_MODE_IGNORE_ERRORS & rCfgItem.GetMode()))
-            {
-                OString sMsg("CreateInstance exception: ");
-                sMsg += OString(rEx.Message.getStr(),
-                            rEx.Message.getLength(),
-                            RTL_TEXTENCODING_ASCII_US);
-                OSL_FAIL(sMsg.getStr());
-            }
-#endif
-        }
-    }
-    return Reference<XHierarchicalNameAccess>(xIFace, UNO_QUERY);
+rtl::OUString utl::ConfigManager::getProductVersion() {
+    return getConfigurationString(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Product/ooSetupVersion")));
 }
 
-void ConfigManager::RemoveConfigItem(utl::ConfigItem& rCfgItem)
-{
-    if( !pMgrImpl->aItemList.empty() )
-    {
-        ConfigItemList::iterator aListIter = pMgrImpl->aItemList.begin();
-        for(aListIter = pMgrImpl->aItemList.begin(); aListIter != pMgrImpl->aItemList.end(); ++aListIter)
-        {
-            ConfigItemListEntry_Impl& rEntry = *aListIter;
-            if(rEntry.pConfigItem == &rCfgItem)
-            {
-                pMgrImpl->aItemList.erase(aListIter);
-                break;
-            }
-        }
-    }
+rtl::OUString utl::ConfigManager::getProductXmlFileFormat() {
+    return getConfigurationString(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("Product/ooXMLFileFormatName")));
 }
 
-void ConfigManager::StoreConfigItems()
-{
-    if(!pMgrImpl->aItemList.empty())
-    {
-        ConfigItemList::iterator aListIter = pMgrImpl->aItemList.begin();
-        for(aListIter = pMgrImpl->aItemList.begin(); aListIter != pMgrImpl->aItemList.end(); ++aListIter)
-        {
-            ConfigItemListEntry_Impl& rEntry = *aListIter;
-            if(rEntry.pConfigItem->IsModified())
-            {
-                rEntry.pConfigItem->Commit();
-                rEntry.pConfigItem->ClearModified();
-            }
-        }
-    }
+rtl::OUString utl::ConfigManager::getProductXmlFileFormatVersion() {
+    return getConfigurationString(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("Product/ooXMLFileFormatVersion")));
 }
 
-struct theConfigManager : public rtl::Static<ConfigManager, theConfigManager> {};
+rtl::OUString utl::ConfigManager::getVendor() {
+    return getConfigurationString(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Product/ooVendor")));
+}
 
-ConfigManager& ConfigManager::GetConfigManager()
-{
+rtl::OUString utl::ConfigManager::getWriterCompatibilityVersionOOo_1_1() {
+    return getConfigurationString(
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM(
+                "/org.openoffice.Office.Compatibility")),
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("WriterCompatibilityVersion/OOo11")));
+}
+
+void utl::ConfigManager::storeConfigItems() {
+    getConfigManager().doStoreConfigItems();
+}
+
+utl::ConfigManager & utl::ConfigManager::getConfigManager() {
     return theConfigManager::get();
 }
 
-rtl::OUString ConfigManager::GetConfigBaseURL()
-{
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(aConfigBaseURL));
-}
-
-Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
-{
-    switch(eProp)
-    {
-        case INSTALLPATH:
-            OSL_FAIL( "ConfigManager::GetDirectConfigProperty: "
-                        "INSTALLPATH no longer supported." );
-            return Any();
-        case USERINSTALLURL:
-            OSL_FAIL( "ConfigManager::GetDirectConfigProperty: "
-                        "USERINSTALLURL no longer supported." );
-            return Any();
-        case OFFICEINSTALL:
-            OSL_FAIL( "ConfigManager::GetDirectConfigProperty: "
-                        "OFFICEINSTALL no longer supported." );
-            return Any();
-        case OFFICEINSTALLURL:
-            OSL_FAIL( "ConfigManager::GetDirectConfigProperty: "
-                        "OFFICEINSTALLURL no longer supported." );
-            return Any();
-        default:
-            break;
+css::uno::Reference< css::container::XHierarchicalNameAccess >
+utl::ConfigManager::acquireTree(utl::ConfigItem & item) {
+    css::uno::Sequence< css::uno::Any > args(1);
+    args[0] <<= css::beans::NamedValue(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
+        css::uno::makeAny(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.")) +
+            item.GetSubTreeName()));
+    if ((item.GetMode() & CONFIG_MODE_ALL_LOCALES) != 0) {
+        args.realloc(2);
+        args[1] <<= css::beans::NamedValue(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("locale")),
+            css::uno::makeAny(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"))));
     }
-
-    Any aRet;
-
-    ::rtl::OUString &rBrandName = BrandName::get();
-    if ( eProp == PRODUCTNAME && rBrandName.getLength() )
-    {
-        aRet <<= rBrandName;
-        return aRet;
-    }
-
-    rtl::OUString &rProductVersion = ProductVersion::get();
-    if ( eProp == PRODUCTVERSION && rProductVersion.getLength() )
-    {
-        aRet <<= rProductVersion;
-        return aRet;
-    }
-
-    rtl::OUString &rAboutBoxProductVersion = AboutBoxProductVersion::get();
-    if ( eProp == ABOUTBOXPRODUCTVERSION && rAboutBoxProductVersion.getLength() )
-    {
-        aRet <<= rAboutBoxProductVersion;
-        return aRet;
-    }
-
-    rtl::OUString &rOOOVendor = OOOVendor::get();
-    if ( eProp == OOOVENDOR && rOOOVendor.getLength() )
-    {
-        aRet <<= rOOOVendor;
-        return aRet;
-    }
-
-
-    rtl::OUString &rProductExtension = ProductExtension::get();
-    if ( eProp == PRODUCTEXTENSION && rProductExtension.getLength() )
-    {
-        aRet <<= rProductExtension;
-        return aRet;
-    }
-
-    rtl::OUString &rXMLFileFormatName = XMLFileFormatName::get();
-    if ( eProp == PRODUCTXMLFILEFORMATNAME && rXMLFileFormatName.getLength() )
-    {
-        aRet <<= rXMLFileFormatName;
-        return aRet;
-    }
-
-    rtl::OUString &rXMLFileFormatVersion = XMLFileFormatVersion::get();
-    if ( eProp == PRODUCTXMLFILEFORMATVERSION && rXMLFileFormatVersion.getLength() )
-    {
-        aRet <<= rXMLFileFormatVersion;
-        return aRet;
-    }
-
-    sal_Int32 &rOpenSourceContext = OpenSourceContext::get();
-    if ( eProp == OPENSOURCECONTEXT && ( rOpenSourceContext >= 0 ) )
-    {
-        aRet <<= rOpenSourceContext;
-        return aRet;
-    }
-
-    rtl::OUString &rWriterCompatibilityVersionOOo11 = WriterCompatibilityVersionOOo11::get();
-    if ( eProp == WRITERCOMPATIBILITYVERSIONOOO11 && rWriterCompatibilityVersionOOo11.getLength() )
-    {
-        aRet <<= rWriterCompatibilityVersionOOo11;
-        return aRet;
-    }
-
-    if (eProp == PRODUCTEXTENSION) {
-        rtl::OUString name(
+    return css::uno::Reference< css::container::XHierarchicalNameAccess >(
+        getConfigurationProvider()->createInstanceWithArguments(
+            rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "${BRAND_BASE_DIR}/program/edition/edition.ini"));
-        rtl::Bootstrap::expandMacros(name);
-        if (rtl::Bootstrap(name).getFrom(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EDITIONNAME")),
-                rProductExtension))
-        {
-            return com::sun::star::uno::Any(rProductExtension);
-        }
-    }
+                    "com.sun.star.configuration.ConfigurationUpdateAccess")),
+            args),
+        css::uno::UNO_QUERY_THROW);
+}
 
-    OUString sPath(RTL_CONSTASCII_USTRINGPARAM(aConfigBaseURL));
-    switch(eProp)
+utl::ConfigManager::ConfigManager() {}
+
+utl::ConfigManager::~ConfigManager() {
+    OSL_ASSERT(items_.empty());
+}
+
+css::uno::Reference< css::container::XHierarchicalNameAccess >
+utl::ConfigManager::addConfigItem(utl::ConfigItem & item) {
+    RegisterConfigItemHelper reg(*this, item);
+    css::uno::Reference< css::container::XHierarchicalNameAccess > tree(
+        acquireTree(item));
+    reg.keep();
+    return tree;
+}
+
+void utl::ConfigManager::removeConfigItem(utl::ConfigItem & item) {
+    for (std::list< ConfigItem * >::iterator i(items_.begin());
+         i != items_.end(); ++i)
     {
-        case LOCALE:                        sPath += UNISTRING("Setup/L10N"); break;
-
-        case PRODUCTNAME:
-        case PRODUCTVERSION:
-        case PRODUCTEXTENSION:
-        case PRODUCTXMLFILEFORMATNAME :
-        case PRODUCTXMLFILEFORMATVERSION:
-        case OPENSOURCECONTEXT:
-        case OOOVENDOR:
-        case ABOUTBOXPRODUCTVERSION:        sPath += UNISTRING("Setup/Product"); break;
-
-        case DEFAULTCURRENCY:               sPath += UNISTRING("Setup/L10N"); break;
-
-        case WRITERCOMPATIBILITYVERSIONOOO11:
-            sPath += UNISTRING("Office.Compatibility/WriterCompatibilityVersion"); break;
-        default:
+        if (*i == &item) {
+            items_.erase(i);
             break;
-    }
-    Sequence< Any > aArgs(1);
-    aArgs[0] <<= sPath;
-    Reference< XMultiServiceFactory > xCfgProvider = GetConfigManager().GetConfigurationProvider();
-    if(!xCfgProvider.is())
-        return aRet;
-    Reference< XInterface > xIFace;
-    try
-    {
-        xIFace = xCfgProvider->createInstanceWithArguments(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(aAccessSrvc)),
-                aArgs);
-
-    }
-    catch (const Exception&)
-    {
-    }
-    Reference<XNameAccess> xDirectAccess(xIFace, UNO_QUERY);
-    if(xDirectAccess.is())
-    {
-        OUString sProperty;
-        switch(eProp)
-        {
-            case LOCALE:                            sProperty = UNISTRING("ooLocale"); break;
-            case PRODUCTNAME:                       sProperty = UNISTRING("ooName"); break;
-            case PRODUCTVERSION:                    sProperty = UNISTRING("ooSetupVersion"); break;
-            case ABOUTBOXPRODUCTVERSION:            sProperty = UNISTRING("ooSetupVersionAboutBox"); break;
-            case OOOVENDOR:                         sProperty = UNISTRING("ooVendor"); break;
-            case PRODUCTEXTENSION:                  sProperty = UNISTRING("ooSetupExtension"); break;
-            case PRODUCTXMLFILEFORMATNAME:          sProperty = UNISTRING("ooXMLFileFormatName"); break;
-            case PRODUCTXMLFILEFORMATVERSION:       sProperty = UNISTRING("ooXMLFileFormatVersion"); break;
-            case OPENSOURCECONTEXT:                 sProperty = UNISTRING("ooOpenSourceContext"); break;
-            case DEFAULTCURRENCY:                   sProperty = UNISTRING("ooSetupCurrency"); break;
-            case WRITERCOMPATIBILITYVERSIONOOO11:   sProperty = UNISTRING("OOo11"); break;
-            default:
-                break;
-        }
-        try
-        {
-            aRet = xDirectAccess->getByName(sProperty);
-        }
-        catch (const Exception&)
-        {
-            #if OSL_DEBUG_LEVEL > 0
-            rtl::OStringBuffer aBuf(256);
-            aBuf.append( "ConfigManager::GetDirectConfigProperty: could not retrieve the property \"" );
-            aBuf.append( rtl::OUStringToOString( sProperty, RTL_TEXTENCODING_ASCII_US ) );
-            aBuf.append( "\" under \"" );
-            aBuf.append( rtl::OUStringToOString( sPath, RTL_TEXTENCODING_ASCII_US ) );
-            aBuf.append( "\" (caught an exception)!" );
-            OSL_FAIL( aBuf.getStr() );
-            #endif
-        }
-    }
-
-    if ( eProp == PRODUCTNAME )
-        aRet >>= rBrandName;
-
-    if ( eProp == PRODUCTXMLFILEFORMATNAME )
-        aRet >>= rXMLFileFormatName;
-
-    if ( eProp == PRODUCTXMLFILEFORMATVERSION )
-        aRet >>= rXMLFileFormatVersion;
-
-    if ( eProp == PRODUCTVERSION )
-        aRet >>= rProductVersion;
-
-    if( eProp == OOOVENDOR )
-        aRet >>= rOOOVendor;
-
-    if ( eProp == ABOUTBOXPRODUCTVERSION )
-    {
-        aRet >>= rAboutBoxProductVersion;
-        getBasisAboutBoxProductVersion( rAboutBoxProductVersion );
-        aRet <<= rAboutBoxProductVersion;
-    }
-
-    if ( eProp == PRODUCTEXTENSION )
-        aRet >>= rProductExtension;
-
-    if ( eProp == WRITERCOMPATIBILITYVERSIONOOO11 )
-        aRet >>= rWriterCompatibilityVersionOOo11;
-
-    if ( eProp == OPENSOURCECONTEXT )
-        aRet >>= rOpenSourceContext;
-
-    return aRet;
-}
-
-/*---------------------------------------------------------------------------*/
-void ConfigManager::getBasisAboutBoxProductVersion( OUString& rVersion )
-{
-    rtl::OUString aPackageVersion = UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":OOOPackageVersion}" );
-    rtl::Bootstrap::expandMacros( aPackageVersion );
-
-    if ( aPackageVersion.getLength() )
-    {
-        sal_Int32 nTokIndex = 0;
-        rtl::OUString aVersionMinor = aPackageVersion.getToken( 1, '.', nTokIndex );
-        rtl::OUString aVersionMicro;
-
-        if ( nTokIndex > 0 )
-            aVersionMicro = aPackageVersion.getToken( 0, '.', nTokIndex );
-
-        if ( aVersionMinor.getLength() == 0 )
-            aVersionMinor = UNISTRING( "0" );
-        if ( aVersionMicro.getLength() == 0 )
-            aVersionMicro = UNISTRING( "0" );
-
-        sal_Int32 nIndex = rVersion.indexOf( '.' );
-        if ( nIndex == -1 )
-        {
-            rVersion += UNISTRING( "." );
-            rVersion += aVersionMinor;
-        }
-        else
-        {
-            nIndex = rVersion.indexOf( '.', nIndex+1 );
-        }
-        if ( nIndex == -1 )
-        {
-            rVersion += UNISTRING( "." );
-            rVersion += aVersionMicro;
-        }
-        else
-        {
-            rVersion = rVersion.replaceAt( nIndex+1, rVersion.getLength()-nIndex-1, aVersionMicro );
         }
     }
 }
 
-Reference< XHierarchicalNameAccess> ConfigManager::GetHierarchyAccess(const OUString& rFullPath)
-{
-    Sequence< Any > aArgs(1);
-    aArgs[0] <<= rFullPath;
-    Reference< XMultiServiceFactory > xCfgProvider = GetLocalConfigurationProvider();
-    Reference< XInterface > xIFace;
-    if(xCfgProvider.is())
-    {
-        try
-        {
-            xIFace = xCfgProvider->createInstanceWithArguments(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(aAccessSrvc)),
-                    aArgs);
-        }
-#if OSL_DEBUG_LEVEL > 1
-        catch (const Exception& rEx)
-        {
-            OString sMsg("CreateInstance exception: ");
-            sMsg += OString(rEx.Message.getStr(),
-                        rEx.Message.getLength(),
-                         RTL_TEXTENCODING_ASCII_US);
-            OSL_FAIL(sMsg.getStr());
-        }
-#else
-        catch (const Exception&)
-        {
-        }
-#endif
-    }
-    return Reference<XHierarchicalNameAccess>(xIFace, UNO_QUERY);
+void utl::ConfigManager::registerConfigItem(utl::ConfigItem * item) {
+    OSL_ASSERT(item != 0);
+    items_.push_back(item);
 }
 
-Any ConfigManager::GetLocalProperty(const OUString& rProperty)
-{
-    OUString sPath(RTL_CONSTASCII_USTRINGPARAM(aConfigBaseURL));
-    sPath += rProperty;
-
-    OUString sNode, sProperty;
-    OSL_VERIFY( splitLastFromConfigurationPath(sPath, sNode, sProperty) );
-
-    Reference< XNameAccess> xAccess( GetHierarchyAccess(sNode), UNO_QUERY );
-    Any aRet;
-    try
+void utl::ConfigManager::doStoreConfigItems() {
+    for (std::list< ConfigItem * >::iterator i(items_.begin());
+         i != items_.end(); ++i)
     {
-        if(xAccess.is())
-            aRet = xAccess->getByName(sProperty);
-    }
-#if OSL_DEBUG_LEVEL > 1
-    catch (const Exception& rEx)
-    {
-        OString sMsg("GetLocalProperty: ");
-        sMsg += OString(rEx.Message.getStr(),
-                    rEx.Message.getLength(),
-                     RTL_TEXTENCODING_ASCII_US);
-        OSL_FAIL(sMsg.getStr());
-    }
-#else
-    catch (const Exception&)
-    {
-    }
-#endif
-    return aRet;
-}
-
-void ConfigManager::PutLocalProperty(const OUString& rProperty, const Any& rValue)
-{
-    OUString sPath(RTL_CONSTASCII_USTRINGPARAM(aConfigBaseURL));
-    sPath += rProperty;
-
-    OUString sNode, sProperty;
-    OSL_VERIFY( splitLastFromConfigurationPath(sPath, sNode, sProperty) );
-
-    Reference<XNameReplace> xNodeReplace(GetHierarchyAccess(sNode), UNO_QUERY);
-    if(xNodeReplace.is())
-    {
-        try
-        {
-            xNodeReplace->replaceByName(sProperty, rValue);
+        if ((*i)->IsModified()) {
+            (*i)->Commit();
+            (*i)->ClearModified();
         }
-#if OSL_DEBUG_LEVEL > 1
-        catch (const Exception& rEx)
-        {
-            OString sMsg("PutLocalProperty: ");
-            sMsg += OString(rEx.Message.getStr(),
-                        rEx.Message.getLength(),
-                         RTL_TEXTENCODING_ASCII_US);
-            OSL_FAIL(sMsg.getStr());
-        }
-#else
-        catch (const Exception&)
-        {
-        }
-#endif
     }
-}
-
-sal_Bool    ConfigManager::IsLocalConfigProvider()
-{
-    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

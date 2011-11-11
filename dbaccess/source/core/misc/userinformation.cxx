@@ -34,18 +34,17 @@
 #include <osl/diagnose.h>
 #include <i18npool/mslangid.hxx>
 #include <unotools/configmgr.hxx>
-#include <comphelper/types.hxx>
 
 using namespace ::utl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
 //--------------------------------------------------------------------------
-UserInformation::UserInformation()
-{
-    Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
-    LanguageType eLanguage = MsLangId::convertIsoStringToLanguage(comphelper::getString(aValue),'-');
-    m_aUserLocale = MsLangId::convertLanguageToLocale(eLanguage);
-}
+UserInformation::UserInformation():
+    m_aUserLocale(
+        MsLangId::convertLanguageToLocale(
+            MsLangId::convertIsoStringToLanguage(
+                ConfigManager::getLocale(), '-')))
+{}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

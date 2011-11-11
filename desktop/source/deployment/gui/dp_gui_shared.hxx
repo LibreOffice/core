@@ -29,7 +29,6 @@
 #if !defined INCLUDED_DP_GUI_SHARED_HXX
 #define INCLUDED_DP_GUI_SHARED_HXX
 
-#include "unotools/configmgr.hxx"
 #include "rtl/instance.hxx"
 #include "tools/resmgr.hxx"
 
@@ -42,13 +41,6 @@ struct DeploymentGuiResMgr :
     public ::rtl::StaticWithInit< ResMgr *, DeploymentGuiResMgr > {
         ResMgr * operator () () {
             return ResMgr::CreateResMgr( "deploymentgui" );
-    }
-};
-
-struct BrandName : public ::rtl::StaticWithInit< ::rtl::OUString, BrandName > {
-    const ::rtl::OUString operator () () {
-        return ::utl::ConfigManager::GetDirectConfigProperty(
-            ::utl::ConfigManager::PRODUCTNAME ).get< ::rtl::OUString >();
     }
 };
 

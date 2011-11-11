@@ -26,92 +26,76 @@
  *
  ************************************************************************/
 
-#ifndef _UTL_CONFIGMGR_HXX_
-#define _UTL_CONFIGMGR_HXX_
+#ifndef INCLUDED_UNOTOOLS_CONFIGMGR_HXX
+#define INCLUDED_UNOTOOLS_CONFIGMGR_HXX
 
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Any.hxx>
-#include <rtl/ustring.hxx>
+#include "sal/config.h"
+
+#include <list>
+
+#include "boost/noncopyable.hpp"
+#include "com/sun/star/uno/Reference.hxx"
+#include "sal/types.h"
 #include "unotools/unotoolsdllapi.h"
 
-//-----------------------------------------------------------------------------
-namespace com{ namespace sun{ namespace star{
-    namespace lang{
-        class XMultiServiceFactory;
-    }
-    namespace container{
-        class XHierarchicalNameAccess;
-    }
-}}}
+namespace com { namespace sun { namespace star {
+    namespace container{ class XHierarchicalNameAccess; }
+} } }
+namespace rtl { class OUString; }
+namespace utl { class ConfigItem; }
 
-//-----------------------------------------------------------------------------
-namespace utl
-{
-    struct ConfigMgr_Impl;
-    class ConfigItem;
-    class UNOTOOLS_DLLPUBLIC ConfigManager
-    {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                xConfigurationProvider;
-            ConfigMgr_Impl*     pMgrImpl;
+namespace utl {
 
-            static void getBasisAboutBoxProductVersion( rtl::OUString& rVersion );
+class UNOTOOLS_DLLPUBLIC ConfigManager: private boost::noncopyable {
+public:
+    static rtl::OUString getAboutBoxProductVersion();
 
-        public:
-            ConfigManager();
-            ConfigManager(com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xConfigProvider);
-            ~ConfigManager();
+    static rtl::OUString getDefaultCurrency();
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                GetConfigurationProvider();
+    static rtl::OUString getLocale();
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                GetLocalConfigurationProvider();
+    static rtl::OUString getProductExtension();
 
-            com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess>
-                AddConfigItem(utl::ConfigItem& rCfgItem);
+    static rtl::OUString getProductName();
 
-            void RegisterConfigItem(utl::ConfigItem& rCfgItem);
-            com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess>
-                AcquireTree(utl::ConfigItem& rCfgItem);
+    static rtl::OUString getProductXmlFileFormat();
 
+    static rtl::OUString getProductXmlFileFormatVersion();
 
-            void RemoveConfigItem(utl::ConfigItem& rCfgItem);
+    static rtl::OUString getProductVersion();
 
-            void StoreConfigItems();
+    static rtl::OUString getVendor();
 
-            static ConfigManager&           GetConfigManager();
-            static rtl::OUString            GetConfigBaseURL();
+    static rtl::OUString getWriterCompatibilityVersionOOo_1_1();
 
-            enum ConfigProperty
-            {
-                INSTALLPATH,        // deprecated. don't use
-                LOCALE,
-                OFFICEINSTALL,      // deprecated. don't use
-                USERINSTALLURL,     // deprecated. don't use
-                OFFICEINSTALLURL,   // deprecated. don't use
-                PRODUCTNAME,
-                PRODUCTVERSION,
-                PRODUCTEXTENSION,
-                DEFAULTCURRENCY,
-                PRODUCTXMLFILEFORMATNAME,
-                PRODUCTXMLFILEFORMATVERSION,
-                WRITERCOMPATIBILITYVERSIONOOO11,
-                OPENSOURCECONTEXT,
-                ABOUTBOXPRODUCTVERSION,
-                OOOVENDOR
-            };
-            //direct readonly access to some special configuration elements
-            static com::sun::star::uno::Any GetDirectConfigProperty(ConfigProperty eProp);
+    static void storeConfigItems();
 
-            sal_Bool        IsLocalConfigProvider();
-            com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess>
-                GetHierarchyAccess(const rtl::OUString& rFullPath);
-            com::sun::star::uno::Any GetLocalProperty(const rtl::OUString& rProperty);
-            void PutLocalProperty(const rtl::OUString& , const com::sun::star::uno::Any& rValue);
+    SAL_DLLPRIVATE static ConfigManager & getConfigManager();
 
-    };
-}//namespace utl
-#endif //_UTL_CONFIGMGR_HXX_
+    SAL_DLLPRIVATE static com::sun::star::uno::Reference<
+        com::sun::star::container::XHierarchicalNameAccess>
+    acquireTree(utl::ConfigItem & item);
+
+    SAL_DLLPRIVATE ConfigManager();
+
+    SAL_DLLPRIVATE ~ConfigManager();
+
+    SAL_DLLPRIVATE com::sun::star::uno::Reference<
+        com::sun::star::container::XHierarchicalNameAccess >
+    addConfigItem(utl::ConfigItem & item);
+
+    SAL_DLLPRIVATE void removeConfigItem(utl::ConfigItem & item);
+
+    SAL_DLLPRIVATE void registerConfigItem(utl::ConfigItem * item);
+
+private:
+    void doStoreConfigItems();
+
+    std::list< ConfigItem * > items_;
+};
+
+}
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2586,7 +2586,7 @@ short OfaTreeOptionsDialog::Execute()
         ApplyItemSets();
         if( mpColorPage )
             mpColorPage->SaveToViewFrame( SfxViewFrame::Current() );
-        utl::ConfigManager::GetConfigManager().StoreConfigItems();
+        utl::ConfigManager::storeConfigItems();
     }
 
     return nRet;

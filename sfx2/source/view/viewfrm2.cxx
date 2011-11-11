@@ -236,11 +236,8 @@ String SfxViewFrame::UpdateTitle()
     GetBindings().Invalidate( SID_FRAMETITLE );
     GetBindings().Invalidate( SID_CURRENT_URL );
 
-    ::rtl::OUString aProductName;
-    ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME) >>= aProductName;
-
     aTitle += String::CreateFromAscii( " - " );
-    aTitle += String(aProductName);
+    aTitle += utl::ConfigManager::getProductName();
     aTitle += ' ';
     ::rtl::OUString aDocServiceName( GetObjectShell()->GetFactory().GetDocumentServiceName() );
     aTitle += String( GetModuleName_Impl( aDocServiceName ) );

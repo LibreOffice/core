@@ -101,10 +101,8 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
     if ( xSupplier.is() )
     {
         m_xAppEvents = xSupplier->getEvents();
-        OUString label;
-        utl::ConfigManager::GetDirectConfigProperty(
-            utl::ConfigManager::PRODUCTNAME ) >>= label;
-        nPos = aSaveInListBox.InsertEntry( label );
+        nPos = aSaveInListBox.InsertEntry(
+            utl::ConfigManager::getProductName() );
         aSaveInListBox.SetEntryData( nPos, new bool(true) );
         aSaveInListBox.SelectEntryPos( nPos, sal_True );
     }

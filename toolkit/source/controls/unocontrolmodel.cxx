@@ -391,11 +391,8 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
             break;
             case BASEPROPERTY_CURRENCYSYMBOL:
             {
-                Any aDefaultCurrency = ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::DEFAULTCURRENCY);
-                DBG_ASSERT( TypeClass_STRING == aDefaultCurrency.getValueTypeClass(), "UnoControlModel::ImplGetDefaultValue: invalid currency config value!" );
-
-                ::rtl::OUString sDefaultCurrency;
-                aDefaultCurrency >>= sDefaultCurrency;
+                rtl::OUString sDefaultCurrency(
+                    utl::ConfigManager::getDefaultCurrency() );
 
                 // extract the bank symbol
                 sal_Int32 nSepPos = sDefaultCurrency.indexOf( '-' );

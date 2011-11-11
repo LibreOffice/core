@@ -133,7 +133,6 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
-#include <unotools/configmgr.hxx>
 #include <vcl/help.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/bitmap.hxx>
@@ -359,41 +358,24 @@ void ReplaceStringHookProc( UniString& rStr )
     nAll++;
     if ( rStr.SearchAscii( "%PRODUCT" ) != STRING_NOTFOUND )
     {
-        String &rBrandName = BrandName::get();
-        String &rVersion = Version::get();
-        String &rAboutBoxVersion = AboutBoxVersion::get();
-        String &rExtension = Extension::get();
-        String &rXMLFileFormatName = XMLFileFormatName::get();
-        String &rXMLFileFormatVersion = XMLFileFormatVersion::get();
+        String rBrandName = BrandName::get();
+        String rVersion = Version::get();
+        String rAboutBoxVersion = AboutBoxVersion::get();
+        String rExtension = Extension::get();
+        String rXMLFileFormatName = XMLFileFormatName::get();
+        String rXMLFileFormatVersion = XMLFileFormatVersion::get();
 
         if ( !rBrandName.Len() )
         {
-            rtl::OUString aTmp;
-            Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
-            aRet >>= aTmp;
-            rBrandName = aTmp;
-
-            aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTXMLFILEFORMATNAME );
-            aRet >>= aTmp;
-            rXMLFileFormatName = aTmp;
-
-            aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTXMLFILEFORMATVERSION );
-            aRet >>= aTmp;
-            rXMLFileFormatVersion = aTmp;
-
-            aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
-            aRet >>= aTmp;
-            rVersion = aTmp;
-
-            aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::ABOUTBOXPRODUCTVERSION );
-            aRet >>= aTmp;
-            rAboutBoxVersion = aTmp;
-
+            rBrandName = utl::ConfigManager::getProductName();
+            rXMLFileFormatName = utl::ConfigManager::getProductXmlFileFormat();
+            rXMLFileFormatVersion =
+                utl::ConfigManager::getProductXmlFileFormatVersion();
+            rVersion = utl::ConfigManager::getProductVersion();
+            rAboutBoxVersion = utl::ConfigManager::getAboutBoxProductVersion();
             if ( !rExtension.Len() )
             {
-                aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTEXTENSION );
-                aRet >>= aTmp;
-                rExtension = aTmp;
+                rExtension = utl::ConfigManager::getProductExtension();
             }
         }
 
@@ -407,30 +389,22 @@ void ReplaceStringHookProc( UniString& rStr )
     }
     if ( rStr.SearchAscii( "%OOOVENDOR" ) != STRING_NOTFOUND )
     {
-        String &rOOOVendor = OOOVendor::get();
+        String rOOOVendor = OOOVendor::get();
 
         if ( !rOOOVendor.Len() )
         {
-            rtl::OUString aTmp;
-            Any aRet = ::utl::ConfigManager::GetDirectConfigProperty(
-                    ::utl::ConfigManager::OOOVENDOR );
-            aRet >>= aTmp;
-            rOOOVendor = aTmp;
-
+            rOOOVendor = utl::ConfigManager::getVendor();
         }
         rStr.SearchAndReplaceAllAscii( "%OOOVENDOR" ,rOOOVendor );
     }
 
     if ( rStr.SearchAscii( "%WRITERCOMPATIBILITYVERSIONOOO11" ) != STRING_NOTFOUND )
     {
-        String &rWriterCompatibilityVersionOOo11 = WriterCompatibilityVersionOOo11::get();
+        String rWriterCompatibilityVersionOOo11 = WriterCompatibilityVersionOOo11::get();
         if ( !rWriterCompatibilityVersionOOo11.Len() )
         {
-            rtl::OUString aTmp;
-            Any aRet = ::utl::ConfigManager::GetDirectConfigProperty(
-                    ::utl::ConfigManager::WRITERCOMPATIBILITYVERSIONOOO11 );
-            aRet >>= aTmp;
-            rWriterCompatibilityVersionOOo11 = aTmp;
+            rWriterCompatibilityVersionOOo11 =
+                utl::ConfigManager::getWriterCompatibilityVersionOOo_1_1();
         }
 
         rStr.SearchAndReplaceAllAscii( "%WRITERCOMPATIBILITYVERSIONOOO11",
@@ -792,7 +766,7 @@ void Desktop::DeInit()
     try {
         // instead of removing of the configManager just let it commit all the changes
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
-        utl::ConfigManager::GetConfigManager().StoreConfigItems();
+        utl::ConfigManager::storeConfigItems();
         FlushConfiguration();
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
 
@@ -822,7 +796,7 @@ sal_Bool Desktop::QueryExit()
     try
     {
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
-        utl::ConfigManager::GetConfigManager().StoreConfigItems();
+        utl::ConfigManager::storeConfigItems();
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
     }
     catch ( RuntimeException& )
@@ -2065,18 +2039,14 @@ sal_Bool Desktop::InitializeConfiguration()
 
 void Desktop::FlushConfiguration()
 {
-    Reference < XFlushable > xCFGFlush( ::utl::ConfigManager::GetConfigManager().GetConfigurationProvider(), UNO_QUERY );
-    if (xCFGFlush.is())
-    {
-        xCFGFlush->flush();
-    }
-    else
-    {
-        // because there is no method to flush the condiguration data, we must dispose the ConfigManager
-        Reference < XComponent > xCFGDispose( ::utl::ConfigManager::GetConfigManager().GetConfigurationProvider(), UNO_QUERY );
-        if (xCFGDispose.is())
-            xCFGDispose->dispose();
-    }
+    css::uno::Reference< css::util::XFlushable >(
+        (css::uno::Reference< css::lang::XMultiServiceFactory >(
+            comphelper::getProcessServiceFactory(), css::uno::UNO_SET_THROW)->
+         createInstance(
+             rtl::OUString(
+                 RTL_CONSTASCII_USTRINGPARAM(
+                     "com.sun.star.configuration.ConfigurationProvider")))),
+        css::uno::UNO_QUERY_THROW)->flush();
 }
 
 sal_Bool Desktop::shouldLaunchQuickstart()
@@ -2620,19 +2590,15 @@ void Desktop::OpenClients()
             aHelpURLBuffer.appendAscii("vnd.sun.star.help://smath/start");
         }
         if (bShowHelp) {
-            Help *pHelp = Application::GetHelp();
-
-            Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
-            rtl::OUString aTmp;
-            aRet >>= aTmp;
             aHelpURLBuffer.appendAscii("?Language=");
-            aHelpURLBuffer.append(aTmp);
+            aHelpURLBuffer.append(utl::ConfigManager::getLocale());
 #if defined UNX
             aHelpURLBuffer.appendAscii("&System=UNX");
 #elif defined WNT
             aHelpURLBuffer.appendAscii("&System=WIN");
 #endif
-            pHelp->Start(aHelpURLBuffer.makeStringAndClear(), NULL);
+            Application::GetHelp()->Start(
+                aHelpURLBuffer.makeStringAndClear(), NULL);
             return;
         }
     }

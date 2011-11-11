@@ -67,9 +67,16 @@ $(eval $(call gb_CppunitTest_add_components,lotuswordpro_test_lotuswordpro,\
     lotuswordpro/util/lwpfilter,\
 ))
 
+$(eval $(call gb_CppunitTest_add_old_components,lotuswordpro_test_lotuswordpro,\
+    configmgr \
+    ucb1 \
+    ucpfile1 \
+))
+
 $(eval $(call gb_CppunitTest_set_args,lotuswordpro_test_lotuswordpro,\
     --headless \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
+    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry)" \
 ))
 
 # we need to explicitly depend on library lwpft because it is not implied

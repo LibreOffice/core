@@ -187,7 +187,6 @@ class ConfigurationAccess_UICommand : // Order is neccessary for right initializ
         rtl::OUString                     m_aPropName;
         rtl::OUString                     m_aPropPopup;
         rtl::OUString                     m_aPropProperties;
-        rtl::OUString                     m_aBrandName;
         rtl::OUString                     m_aXMLFileFormatVersion;
         rtl::OUString                     m_aVersion;
         rtl::OUString                     m_aExtension;
@@ -236,10 +235,6 @@ ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const rtl::OUStrin
 
     m_aConfigPopupAccess += aModuleName;
     m_aConfigPopupAccess += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_POP_ELEMENT_ACCESS ));
-
-    rtl::OUString aTmp;
-    ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME ) >>= aTmp;
-    m_aBrandName = aTmp;
 }
 
 ConfigurationAccess_UICommand::~ConfigurationAccess_UICommand()
@@ -330,8 +325,8 @@ throw ( RuntimeException )
 void ConfigurationAccess_UICommand::fillInfoFromResult( CmdToInfoMap& rCmdInfo, const rtl::OUString& aLabel )
 {
     String rStr( aLabel );
-    if ( rStr.SearchAscii( "%PRODUCT" ) != STRING_NOTFOUND )
-        rStr.SearchAndReplaceAllAscii( "%PRODUCTNAME", m_aBrandName );
+    rStr.SearchAndReplaceAllAscii(
+        "%PRODUCTNAME", utl::ConfigManager::getProductName() );
     rCmdInfo.aLabel       = ::rtl::OUString( rStr );
     rStr.EraseTrailingChars( '.' ); // Remove "..." from string
     rCmdInfo.aCommandName = ::rtl::OUString( MnemonicGenerator::EraseAllMnemonicChars( rStr ));

@@ -1153,19 +1153,11 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                     nPreNum++;
                 }
                 pVDev->SetFont(aStdFont);
-
-                // Changed as per BugID 79541 Branding/Configuration
-                uno::Any MyAny = ::utl::ConfigManager::GetConfigManager().
-                        GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
-                ::rtl::OUString aProductName;
-
-                MyAny >>= aProductName;
-                String sMsg(C2S("%PRODUCTNAME"));
-                sMsg.SearchAndReplaceAscii( "%PRODUCTNAME" , aProductName );
-
-                if(pOutlineNames)
-                    sMsg = pOutlineNames[nLevel];
-                pVDev->DrawText( Point(nXStart + nTextOffset, nYStart), sMsg );
+                pVDev->DrawText(
+                    Point(nXStart + nTextOffset, nYStart),
+                    (pOutlineNames == 0
+                     ? utl::ConfigManager::getProductName()
+                     : rtl::OUString(pOutlineNames[nLevel])));
             }
         }
     }

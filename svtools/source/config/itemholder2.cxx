@@ -71,7 +71,6 @@ ItemHolder2::ItemHolder2()
         if (xCfg.is())
             xCfg->addEventListener(static_cast< css::lang::XEventListener* >(this));
     }
-// #i37892  got errorhandling from   ConfigManager::GetConfigurationProvider()
     catch(css::uno::RuntimeException& rREx)
     {
         throw rREx;

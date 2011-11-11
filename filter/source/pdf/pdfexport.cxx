@@ -444,19 +444,10 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 }
             }
             // getting the string for the producer
-            String aProducer;
-            {
-                ::utl::ConfigManager& cMgr = ::utl::ConfigManager::GetConfigManager();
-                Any aProductName = cMgr.GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
-                ::rtl::OUString sProductName;
-                aProductName >>= sProductName;
-                aProducer = sProductName;
-                aProductName = cMgr.GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
-                aProductName >>= sProductName;
-                aProducer.AppendAscii(" ");
-                aProducer += String( sProductName );
-            }
-            aContext.DocumentInfo.Producer = aProducer;
+            aContext.DocumentInfo.Producer =
+                utl::ConfigManager::getProductName() +
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ")) +
+                utl::ConfigManager::getProductVersion();
             aContext.DocumentInfo.Creator = aCreator;
 
             for( sal_Int32 nData = 0, nDataCount = rFilterData.getLength(); nData < nDataCount; ++nData )

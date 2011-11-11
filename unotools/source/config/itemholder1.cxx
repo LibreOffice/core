@@ -90,7 +90,6 @@ ItemHolder1::ItemHolder1()
         if (xCfg.is())
             xCfg->addEventListener(static_cast< css::lang::XEventListener* >(this));
     }
-// #i37892  got errorhandling from   ConfigManager::GetConfigurationProvider()
 #ifdef DBG_UTIL
     catch(css::uno::Exception& rEx)
     {

@@ -510,22 +510,11 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     }
 
     // Set language type!
-    Any aLocale = ConfigManager::GetConfigManager().GetDirectConfigProperty( ConfigManager::LOCALE );
-    OUString aLocaleStr;
-    if ( aLocale >>= aLocaleStr )
-    {
-        sal_Int32 nIndex = 0;
-        m_aLocale.Language = aLocaleStr.getToken(0, '-', nIndex );
-        m_aLocale.Country = aLocaleStr.getToken(0, '-', nIndex );
-        m_aLocale.Variant = aLocaleStr.getToken(0, '-', nIndex );
-    }
-    else
-    {
-        DBG_ASSERT(!aLocale.hasValue(), "wrong any type");
-        m_aLocale.Language = OStringToOUString(OString("en"), RTL_TEXTENCODING_UTF8);
-        m_aLocale.Country =  OStringToOUString(OString("US"), RTL_TEXTENCODING_UTF8);
-        m_aLocale.Variant =  OStringToOUString(OString(""), RTL_TEXTENCODING_UTF8);
-    }
+    OUString aLocaleStr( ConfigManager::getLocale() );
+    sal_Int32 nIndex = 0;
+    m_aLocale.Language = aLocaleStr.getToken(0, '-', nIndex );
+    m_aLocale.Country = aLocaleStr.getToken(0, '-', nIndex );
+    m_aLocale.Variant = aLocaleStr.getToken(0, '-', nIndex );
 }
 
 // -----------------------------------------------------------------------

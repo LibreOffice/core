@@ -417,12 +417,6 @@ void SpaPrinterController::printPage( int ) const
 
     pPrinter->SetMapMode( aMapMode );
 
-    Any aRet = utl::ConfigManager::GetDirectConfigProperty( utl::ConfigManager::PRODUCTNAME );
-    OUString aJobName;
-    aRet >>= aJobName;
-
-    aJobName = aJobName + OUString( RTL_CONSTASCII_USTRINGPARAM( " Testpage" ) );
-
     Size aPaperSize=pPrinter->GetOutputSize();
     Point aCenter( aPaperSize.Width()/2-300,
                    aPaperSize.Height() - aPaperSize.Width()/2 );

@@ -678,9 +678,6 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     /*                       reading setup                                */
     /**********************************************************************/
 
-    rtl::OUString productName;
-    ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME) >>= productName;
-
     xHierAccess = getHierAccess( sProvider,
                                  "org.openoffice.Setup" );
 
@@ -803,7 +800,7 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     configData.m_vAdd[2] = 11;
     configData.m_vAdd[3] = 14;
     configData.m_vAdd[4] = 12;
-    configData.m_vReplacement[0] = productName;
+    configData.m_vReplacement[0] = utl::ConfigManager::getProductName();
     configData.m_vReplacement[1] = productVersion;
     // m_vReplacement[2...4] (vendorName/-Version/-Short) are empty strings
 

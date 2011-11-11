@@ -63,12 +63,14 @@ $(eval $(call gb_CppunitTest_add_components,writerfilter_rtftok,\
 ))
 
 $(eval $(call gb_CppunitTest_add_old_components,writerfilter_rtftok,\
+    configmgr \
 	ucb1 \
 	ucpfile1 \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,writerfilter_rtftok,\
 	--protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
+    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry)" \
 ))
 
 # we need to explicitly depend on library rtftok and writerfilter because it is not implied

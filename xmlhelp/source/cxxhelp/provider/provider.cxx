@@ -301,15 +301,6 @@ void ContentProvider::init()
     {
     }
 
-    /**
-     *  now determing
-     *  productname,
-     *  productversion,
-     */
-
-    rtl::OUString productname;
-    ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME) >>= productname;
-
     xHierAccess = getHierAccess( sProvider, "org.openoffice.Setup" );
 
     rtl::OUString setupversion(
@@ -371,7 +362,7 @@ void ContentProvider::init()
     m_pDatabases = new Databases( showBasic,
                                   instPath,
                                   aImagesZipPaths,
-                                  productname,
+                                  utl::ConfigManager::getProductName(),
                                   productversion,
                                   stylesheet,
                                   xContext );

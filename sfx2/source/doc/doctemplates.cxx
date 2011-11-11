@@ -504,10 +504,7 @@ void SfxDocTplService_Impl::getDefaultLocale()
         ::osl::MutexGuard aGuard( maMutex );
         if ( !mbLocaleSet )
         {
-            rtl::OUString aLocale;
-            utl::ConfigManager::GetDirectConfigProperty( utl::ConfigManager::LOCALE )
-                >>= aLocale;
-
+            rtl::OUString aLocale( utl::ConfigManager::getLocale() );
             if ( aLocale.getLength() > 0 )
             {
                 sal_Int32 nPos = aLocale.indexOf( sal_Unicode( '-' ) );

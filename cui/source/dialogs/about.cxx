@@ -114,9 +114,6 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     m_aLinkStr(ResId( ABOUT_STR_LINK, *rId.GetResMgr())),
     m_sBuildStr(ResId(ABOUT_STR_BUILD, *rId.GetResMgr()))
 {
-    rtl::OUString sProduct;
-    utl::ConfigManager::GetDirectConfigProperty(utl::ConfigManager::PRODUCTNAME) >>= sProduct;
-
     // load image from module path
     aAppLogo = SfxApplication::GetApplicationLogo();
 
@@ -162,8 +159,10 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
 
     rtl::OUStringBuffer sText(m_aVendorTextStr);
     sText.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n\n"));
-    sal_uInt32 nCopyrightId = sProduct.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LibreOffice" )) ?
-        ABOUT_STR_COPYRIGHT : ABOUT_STR_COPYRIGHT_DERIVED;
+    sal_uInt32 nCopyrightId =
+        utl::ConfigManager::getProductName().equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("LibreOffice"))
+        ? ABOUT_STR_COPYRIGHT : ABOUT_STR_COPYRIGHT_DERIVED;
     String aProductCopyrightTextStr(ResId(nCopyrightId, *rId.GetResMgr()));
     sText.append(aProductCopyrightTextStr);
     sText.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n\n"));

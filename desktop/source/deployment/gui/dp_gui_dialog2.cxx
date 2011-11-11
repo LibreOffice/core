@@ -64,6 +64,7 @@
 #include "comphelper/processfactory.hxx"
 #include "ucbhelper/content.hxx"
 #include "unotools/collatorwrapper.hxx"
+#include "unotools/configmgr.hxx"
 
 #include "com/sun/star/beans/StringPair.hpp"
 
@@ -577,12 +578,11 @@ ResId DialogHelper::getResId( sal_uInt16 nId )
 //------------------------------------------------------------------------------
 String DialogHelper::getResourceString( sal_uInt16 id )
 {
-    // init with non-acquired solar mutex:
-    BrandName::get();
     const SolarMutexGuard guard;
     String ret( ResId( id, *DeploymentGuiResMgr::get() ) );
     if (ret.SearchAscii( "%PRODUCTNAME" ) != STRING_NOTFOUND) {
-        ret.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
+        ret.SearchAndReplaceAllAscii(
+            "%PRODUCTNAME", utl::ConfigManager::getProductName() );
     }
     return ret;
 }
@@ -607,7 +607,8 @@ bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::
         const SolarMutexGuard guard;
         WarningBox aInfoBox( pParent, getResId( nResID ) );
         String aMsgText = aInfoBox.GetMessText();
-        aMsgText.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
+        aMsgText.SearchAndReplaceAllAscii(
+            "%PRODUCTNAME", utl::ConfigManager::getProductName() );
         aInfoBox.SetMessText( aMsgText );
 
         bHadWarning = true;
@@ -665,7 +666,8 @@ bool DialogHelper::installForAllUsers( bool &bInstallForAll ) const
     QueryBox aQuery( m_pVCLWindow, getResId( RID_QUERYBOX_INSTALL_FOR_ALL ) );
 
     String sMsgText = aQuery.GetMessText();
-    sMsgText.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
+    sMsgText.SearchAndReplaceAllAscii(
+        "%PRODUCTNAME", utl::ConfigManager::getProductName() );
     aQuery.SetMessText( sMsgText );
 
     sal_uInt16 nYesBtnID = aQuery.GetButtonId( 0 );
@@ -1279,7 +1281,8 @@ UpdateRequiredDialog::UpdateRequiredDialog( Window *pParent, TheExtensionManager
     m_aCancelBtn.SetClickHdl( LINK( this, UpdateRequiredDialog, HandleCancelBtn ) );
 
     String aText = m_aUpdateNeeded.GetText();
-    aText.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
+    aText.SearchAndReplaceAllAscii(
+        "%PRODUCTNAME", utl::ConfigManager::getProductName() );
     m_aUpdateNeeded.SetText( aText );
 
     // resize update button

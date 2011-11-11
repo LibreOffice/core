@@ -45,7 +45,6 @@
 #include "unotools/fontcfg.hxx"
 #include "unotools/localedatawrapper.hxx"
 #include "unotools/collatorwrapper.hxx"
-#include "unotools/configmgr.hxx"
 #include "unotools/confignode.hxx"
 #include "unotools/syslocaleoptions.hxx"
 
@@ -804,34 +803,16 @@ sal_uLong StyleSettings::GetCurrentSymbolsStyle() const
 
 sal_uLong StyleSettings::GetAutoSymbolsStyle() const
 {
-    const ::rtl::OUString&      rDesktopEnvironment = Application::GetDesktopEnvironment();
-    sal_uLong                       nRet = STYLE_SYMBOLS_DEFAULT;
-    bool                        bCont = true;
-
-    try
-    {
-        const ::com::sun::star::uno::Any aAny( ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::OPENSOURCECONTEXT ) );
-        sal_Int32 nValue( 0 );
-
-        aAny >>= nValue;
-
-        if( 0 == nValue )
-            bCont = false;
-    }
-    catch ( ::com::sun::star::uno::Exception& )
-    {
-    }
-
-    if( bCont )
-    {
-        if( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "gnome" ) ||
-            rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "windows" ) )
-            nRet = STYLE_SYMBOLS_TANGO;
-        else if( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "kde" ) )
-            nRet = STYLE_SYMBOLS_CRYSTAL;
-        else if( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "kde4" ) )
-            nRet = STYLE_SYMBOLS_OXYGEN;
-    }
+    rtl::OUString const & env = Application::GetDesktopEnvironment();
+    sal_uLong nRet =
+        ( env.equalsIgnoreAsciiCaseAscii( "gnome" ) ||
+          env.equalsIgnoreAsciiCaseAscii( "windows" ) )
+        ? STYLE_SYMBOLS_TANGO
+        : env.equalsIgnoreAsciiCaseAscii( "kde" )
+        ? STYLE_SYMBOLS_CRYSTAL
+        : env.equalsIgnoreAsciiCaseAscii( "kde4" )
+        ? STYLE_SYMBOLS_OXYGEN
+        : STYLE_SYMBOLS_DEFAULT;
 
     // falback to any existing style
     if ( ! CheckSymbolStyle (nRet) )

@@ -127,7 +127,7 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
         xDesktop->removeTerminateListener( this );
 
     SolarMutexGuard aGuard;
-    utl::ConfigManager::GetConfigManager().StoreConfigItems();
+    utl::ConfigManager::storeConfigItems();
 
     SfxApplication* pApp = SFX_APP();
     pApp->Broadcast( SfxSimpleHint( SFX_HINT_DEINITIALIZING ) );

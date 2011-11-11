@@ -63,9 +63,14 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,svtools_filters_test,\
     types \
 ))
 
+$(eval $(call gb_CppunitTest_add_old_components,svtools_filters_test,\
+    configmgr \
+))
+
 $(eval $(call gb_CppunitTest_set_args,svtools_filters_test,\
     --headless \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
+    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry)" \
 ))
 
 # vim: set noet sw=4 ts=4:

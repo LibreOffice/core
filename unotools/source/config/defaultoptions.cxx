@@ -234,7 +234,6 @@ String SvtDefaultOptions_Impl::GetDefaultPath( sal_uInt16 nId ) const
 
 SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( ASCII_STR("Office.Common/Path/Default") )
 {
-    /*ConfigManager* pCfgMgr =*/ ConfigManager::GetConfigManager();
     Sequence< OUString > aNames = GetDefaultPropertyNames();
     Sequence< Any > aValues = GetProperties( aNames );
     EnableNotification( aNames );

@@ -826,11 +826,8 @@ void SAL_CALL OfficeIPCThread::run()
                     aHelpURLBuffer.appendAscii("vnd.sun.star.help://smath/start");
                 }
                 if (bShowHelp) {
-                    Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
-                    rtl::OUString aTmp;
-                    aRet >>= aTmp;
                     aHelpURLBuffer.appendAscii("?Language=");
-                    aHelpURLBuffer.append(aTmp);
+                    aHelpURLBuffer.append(utl::ConfigManager::getLocale());
 #if defined UNX
                     aHelpURLBuffer.appendAscii("&System=UNX");
 #elif defined WNT

@@ -554,29 +554,10 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
     SetOptions(nPos++, GRAPHIC_CAP);
 
     // get Productname and -version
-    String sComplete, sWithoutVersion;
-    ::rtl::OUString sTemp;
-    uno::Any aAny =
-        ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
-    if ( aAny >>= sTemp )
-    {
-        sComplete = sTemp;
-        sWithoutVersion = sTemp;
-        aAny = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
-        if ( !( aAny >>= sTemp ) )
-        {
-            OSL_FAIL("Couldn't get PRODUCTVERSION variable" );
-        }
-        else
-        {
-            sComplete += ' ';
-            sComplete += String( sTemp );
-        }
-    }
-    else
-    {
-        OSL_FAIL("Couldn't get PRODUCTNAME variable" );
-    }
+    rtl::OUString sWithoutVersion( utl::ConfigManager::getProductName() );
+    rtl::OUString sComplete(
+        sWithoutVersion + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ")) +
+        utl::ConfigManager::getProductVersion() );
 
     SvObjectServerList aObjS;
     aObjS.FillInsertObjects();

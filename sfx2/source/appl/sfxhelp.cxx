@@ -123,14 +123,11 @@ static bool impl_hasHelpInstalled( const rtl::OUString &rLang );
 static rtl::OUString HelpLocaleString()
 {
     static rtl::OUString aLocaleStr;
-    if (!aLocaleStr.getLength())
+    if (aLocaleStr.isEmpty())
     {
         const rtl::OUString aEnglish( RTL_CONSTASCII_USTRINGPARAM( "en" ) );
         // detect installed locale
-        Any aLocale =
-            ::utl::ConfigManager::GetConfigManager().GetDirectConfigProperty(
-               ::utl::ConfigManager::LOCALE );
-        aLocale >>= aLocaleStr;
+        aLocaleStr = utl::ConfigManager::getLocale();
         bool bOk = aLocaleStr.getLength() != 0;
         if ( !bOk )
             aLocaleStr = aEnglish;

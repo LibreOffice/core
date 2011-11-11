@@ -456,13 +456,6 @@ struct SQLMessageBox_Impl
 //------------------------------------------------------------------------------
 namespace
 {
-    ::rtl::OUString lcl_getProductName()
-    {
-        ::rtl::OUString sProductName;
-        OSL_VERIFY( ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME ) >>= sProductName );
-        return sProductName;
-    }
-
     void lcl_positionInAppFont( const Window& _rParent, Window& _rChild, long _nX, long _nY, long _Width, long _Height )
     {
         Point aPos = _rParent.LogicToPixel( Point( _nX, _nY ), MAP_APPFONT );
@@ -694,9 +687,9 @@ void OSQLMessageBox::impl_addDetailsButton()
 //------------------------------------------------------------------------------
 void OSQLMessageBox::Construct( WinBits _nStyle, MessageType _eImage )
 {
-    // Changed as per BugID 79541 Branding/Configuration
-    String sDialogTitle( lcl_getProductName() );
-    SetText( sDialogTitle.AppendAscii( " Base" ) );
+    SetText(
+        utl::ConfigManager::getProductName() +
+        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " Base" ) ) );
 
     // position and size the controls and the dialog, depending on whether we have one or two texts to display
     impl_positionControls();

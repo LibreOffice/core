@@ -106,7 +106,6 @@ public:
     ::rtl::OUString   GetApartment() const;
 
     ::rtl::OUString   GetFullName() const;
-    ::rtl::OUString   GetLocale() const { return m_aLocale; }
 
     // set the address token
     void              SetCompany( const ::rtl::OUString& rNewToken );
@@ -136,7 +135,6 @@ private:
     uno::Reference< util::XChangesListener >           m_xChangeListener;
     css::uno::Reference< css::container::XNameAccess > m_xCfg;
     css::uno::Reference< css::beans::XPropertySet >    m_xData;
-    ::rtl::OUString m_aLocale;
 };
 
 // global ----------------------------------------------------------------
@@ -202,15 +200,6 @@ SvtUserOptions_Impl::SvtUserOptions_Impl() :
     {
         m_xCfg.clear();
         LogHelper::logIt(ex);
-    }
-
-    Any aAny = ConfigManager::GetConfigManager().GetDirectConfigProperty( ConfigManager::LOCALE );
-    ::rtl::OUString aLocale;
-    if ( aAny >>= aLocale )
-        m_aLocale = aLocale;
-    else
-    {
-        DBG_ERRORFILE( "SvtUserOptions_Impl::SvtUserOptions_Impl(): no locale found" );
     }
 }
 
@@ -1150,8 +1139,7 @@ namespace
 
 ::rtl::OUString SvtUserOptions::GetLocale() const
 {
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    return pImp->GetLocale();
+    return utl::ConfigManager::getLocale();
 }
 
 // -----------------------------------------------------------------------
