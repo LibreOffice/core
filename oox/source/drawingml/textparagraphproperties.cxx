@@ -475,7 +475,9 @@ void TextParagraphProperties::dump() const
     Reference< ::com::sun::star::drawing::XShape > xShape( oox::ppt::PowerPointImport::mpDebugFilterBase->getModelFactory()->createInstance( CREATE_OUSTRING( "com.sun.star.presentation.TitleTextShape" ) ), UNO_QUERY );
     Reference< ::com::sun::star::text::XText > xText( xShape, UNO_QUERY );
 
-    ppt::SlidePersist::mxDebugPage->add( xShape );
+    Reference< com::sun::star::drawing::XDrawPage > xDebugPage(ppt::SlidePersist::mxDebugPage.get(), UNO_QUERY);
+    if (xDebugPage.is())
+        xDebugPage->add( xShape );
 
     PropertyMap emptyMap;
 

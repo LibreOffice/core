@@ -80,12 +80,11 @@ SlidePersist::SlidePersist( XmlFilterBase& rFilter, sal_Bool bMaster, sal_Bool b
 }
 
 #if OSL_DEBUG_LEVEL > 0
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > SlidePersist::mxDebugPage;
+::com::sun::star::uno::WeakReference< ::com::sun::star::drawing::XDrawPage > SlidePersist::mxDebugPage;
 #endif
 
 SlidePersist::~SlidePersist()
 {
-
 }
 
 sal_Int16 SlidePersist::getLayoutFromValueToken()
