@@ -865,6 +865,10 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
             }
             while (false);
         }
+        else if (mpParam->bMixedComparison)
+        {
+            // Not used at the moment.
+        }
 
         if (aResults.empty())
             // First query entry.
