@@ -110,7 +110,7 @@ FileFormat aFileFormats[] = {
         rtl::OUString(), pFmt->nFormatType, nFormat,
         rtl::OUString::createFromAscii( pFmt->pTypeName ),
         0, rtl::OUString(), rtl::OUString(), /* userdata */
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc*")) );
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/sdraw*")) );
     aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
