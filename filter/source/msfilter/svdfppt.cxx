@@ -4437,12 +4437,15 @@ void PPTCharPropSet::SetColor( sal_uInt32 nColor )
     pCharSet->mnAttrSet |= 1 << PPT_CharAttr_FontColor;
 }
 
-PPTRuler::PPTRuler() :
-    nRefCount   ( 1 ),
-    nFlags      ( 0 ),
-    pTab        ( NULL ),
-    nTabCount   ( 0 )
+PPTRuler::PPTRuler()
+    : nRefCount(1)
+    , nFlags(0)
+    , nDefaultTab(0x240)
+    , pTab(NULL)
+    , nTabCount(0)
 {
+    memset(nTextOfs, 0, sizeof(nTextOfs));
+    memset(nBulletOfs, 0, sizeof(nBulletOfs));
 }
 
 PPTRuler::~PPTRuler()
@@ -4511,7 +4514,8 @@ PPTTextRulerInterpreter::PPTTextRulerInterpreter( sal_uInt32 nFileOfs, SdrPowerP
                     rIn >> mpImplRuler->nTextOfs[ i ];
                 if ( mpImplRuler->nFlags & ( 256 << i ) )
                     rIn >> mpImplRuler->nBulletOfs[ i ];
-                if( mpImplRuler->nBulletOfs[ i ] > 0x7fff) {
+                if( mpImplRuler->nBulletOfs[ i ] > 0x7fff)
+                {
                     // workaround
                     // when bullet offset is > 0x7fff, the paragraph should look like
                     // *    first line text
