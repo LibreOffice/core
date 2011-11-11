@@ -75,21 +75,21 @@ void ScCellShell::Execute( SfxRequest& rReq )
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
     sal_uInt16              nSlot       = rReq.GetSlot();
 
-    if (nSlot != SID_CURRENTCELL)       // der kommt beim MouseButtonUp
+    if (nSlot != SID_CURRENTCELL)       // this comes with MouseButtonUp
         pTabViewShell->HideListBox();   // Autofilter-DropDown-Listbox
 
     if ( IS_EDITMODE() )
     {
         switch ( nSlot )
         {
-            //  beim Oeffnen eines Referenz-Dialogs darf die SubShell nicht umgeschaltet werden
-            //  (beim Schliessen des Dialogs wird StopEditShell gerufen)
+            //  when opening a reference-dialog the subshell may not be switched
+            //  (on closing the dialog StopEditShell is called)
             case SID_OPENDLG_FUNCTION:
-                    //  inplace macht die EditShell Aerger...
-                    //! kann nicht immer umgeschaltet werden ????
+                    //  inplace leads to trouble with EditShell ...
+                    //! cannot always be switched werden ????
                     if (!pTabViewShell->GetViewFrame()->GetFrame().IsInPlace())
-                        pTabViewShell->SetDontSwitch(sal_True);         // EditShell nicht abschalten
-                    // kein break
+                        pTabViewShell->SetDontSwitch(sal_True);         // do not switch off EditShell
+                    // no break
 
             case FID_CELL_FORMAT:
             case SID_ENABLE_HYPHENATION:
@@ -121,16 +121,16 @@ void ScCellShell::Execute( SfxRequest& rReq )
         case SID_STATUS_SELMODE:
             if ( pReqArgs )
             {
-                /* 0: STD   Click hebt Sel auf
-                 * 1: ER    Click erweitert Selektion
-                 * 2: ERG   Click definiert weitere Selektion
+                /* 0: STD   Click cancels selection
+                 * 1: ER    Click extends selection
+                 * 2: ERG   Click defines further selection
                  */
                 sal_uInt16 nMode = ((const SfxUInt16Item&)pReqArgs->Get( nSlot )).GetValue();
 
                 switch ( nMode )
                 {
                     case 1: nMode = KEY_SHIFT;  break;
-                    case 2: nMode = KEY_MOD1;   break; // Control-Taste
+                    case 2: nMode = KEY_MOD1;   break; // control-key
                     case 0:
                     default:
                         nMode = 0;
@@ -157,14 +157,14 @@ void ScCellShell::Execute( SfxRequest& rReq )
             rReq.Done();
             break;
 
-        //  SID_STATUS_SELMODE_NORM wird nicht benutzt ???
+        //  SID_STATUS_SELMODE_NORM is not used ???
 
         case SID_STATUS_SELMODE_NORM:
             pTabViewShell->LockModifiers( 0 );
             rBindings.Invalidate( SID_STATUS_SELMODE );
             break;
 
-        //  SID_STATUS_SELMODE_ERG / SID_STATUS_SELMODE_ERW als Toggles:
+        //  SID_STATUS_SELMODE_ERG / SID_STATUS_SELMODE_ERW as toggles:
 
         case SID_STATUS_SELMODE_ERG:
             if ( pTabViewShell->GetLockedModifiers() & KEY_MOD1 )
@@ -206,9 +206,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                     rReq.Done();
 
-                    //  hier kein GrabFocus, weil sonst auf dem Mac die Tabelle vor die
-                    //  Seitenansicht springt, wenn die Eingabe nicht abgeschlossen war
-                    //  (GrabFocus passiert in KillEditView)
+                    //  no GrabFocus here, as otherwise on a Mac the tab jumps before the
+                    //  sideview, when the input was not finished
+                    //  (GrabFocus is called in KillEditView)
                 }
             }
             break;
@@ -230,7 +230,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
         case FID_INPUTLINE_BLOCK:
         case FID_INPUTLINE_MATRIX:
             {
-                if( pReqArgs == 0 ) //XXX vorlaufiger HACK um GPF zu vermeiden
+                if( pReqArgs == 0 ) //XXX temporary HACK to avoid GPF
                     break;
 
                 const ScInputStatusItem* pStatusItem
@@ -296,9 +296,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                 }
 
-                //  hier kein GrabFocus, weil sonst auf dem Mac die Tabelle vor die
-                //  Seitenansicht springt, wenn die Eingabe nicht abgeschlossen war
-                //  (GrabFocus passiert in KillEditView)
+                //  no GrabFocus here, as otherwise on a Mac the tab jumps before the
+                //  sideview, when the input was not finished
+                //  (GrabFocus is called in KillEditView)
             }
             break;
 
@@ -328,7 +328,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 if ( pReqArgs != NULL )
                 {
                     //----------------------------------
-                    // Zellattribute ohne Dialog setzen:
+                    // set cell attribute without dialog:
                     //----------------------------------
                     SfxItemSet*     pEmptySet =
                                         new SfxItemSet( *pReqArgs->GetPool(),
@@ -442,8 +442,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         aBaseName += ScGlobal::GetRscString(STR_SCENARIO);
                         aBaseName += '_';
 
-                        //  vorneweg testen, ob der Prefix als gueltig erkannt wird
-                        //  wenn nicht, nur doppelte vermeiden
+                        //  first test, if the prefix is recognised as valid,
+                        //  else avoid only doubles
                         sal_Bool bPrefix = pDoc->ValidTabName( aBaseName );
                         OSL_ENSURE(bPrefix, "ungueltiger Tabellenname");
 
@@ -475,7 +475,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                 aArgComment = ((const SfxStringItem*)pItem)->GetValue();
 
                             aColor = Color( COL_LIGHTGRAY );        // Default
-                            nFlags = 0;                             // nicht-TwoWay
+                            nFlags = 0;                             // not-TwoWay
 
                             pTabViewShell->MakeScenario( aArgName, aArgComment, aColor, nFlags );
                             if( ! rReq.IsAPI() )
@@ -547,7 +547,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                                                                     RID_SCDLG_ROW_MAN,
                                                                                     eMetric,
                                                                                     2,
-                                                                                    MAX_COL_HEIGHT);
+                                                                                    MAX_ROW_HEIGHT);
                     OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     if ( pDlg->Execute() == RET_OK )
@@ -775,7 +775,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                     if (pTabViewShell->MergeCells( bApi, bMoveContents, true, bCenter ))
                     {
-                        if (!bApi && bMoveContents)             // "ja" im Dialog geklickt
+                        if (!bApi && bMoveContents)             // "yes" clicked in dialog
                             rReq.AppendItem( SfxBoolItem( nSlot, bMoveContents ) );
                         rBindings.Invalidate( nSlot );
                         rReq.Done();
@@ -868,7 +868,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 else if (pTabViewShell->HasPaintBrush())
                     pTabViewShell->ResetBrushDocument();            // abort format paint brush
                 else if (pTabViewShell->HasHintWindow())
-                    pTabViewShell->RemoveHintWindow();              // Eingabemeldung abschalten
+                    pTabViewShell->RemoveHintWindow();
                 else if( ScViewUtil::IsFullScreen( *pTabViewShell ) )
                     ScViewUtil::SetFullScreen( *pTabViewShell, false );
                 else

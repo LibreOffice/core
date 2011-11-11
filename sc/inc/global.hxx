@@ -138,7 +138,7 @@ const SCSIZE MAXSUBTOTAL        = 3;
 #define MAX_EXTRA_WIDTH     23811   /* 42cm in TWIPS, 41.8430cm TeX, 41.9999cm PS */
 #define MAX_EXTRA_HEIGHT    23811
 #define MAX_COL_WIDTH       56693   /* 1m in TWIPS, 99.6266cm TeX, 100.0001cm PS */
-#define MAX_COL_HEIGHT      56693
+#define MAX_ROW_HEIGHT      56693
 
                                     /* standard row height: text + margin - STD_ROWHEIGHT_DIFF */
 #define STD_ROWHEIGHT_DIFF  23
