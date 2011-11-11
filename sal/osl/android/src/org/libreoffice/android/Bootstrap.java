@@ -122,13 +122,27 @@ public class Bootstrap extends Activity
             Log.i(TAG, String.format("dataDir=%s\n", dataDir));
         }
         catch (PackageManager.NameNotFoundException e) {
+            return;
         }
 
-        Object mainLibrary = getIntent().getExtras().get("lo-main-library");
+        String mainLibrary = getIntent().getStringExtra("lo-main-library");
 
-        if (mainLibrary != null && mainLibrary instanceof String) {
-            int loLib = loadLibrary((String)mainLibrary + ".so");
+        if (mainLibrary != null) {
+            int loLib = loadLibrary(mainLibrary + ".so");
+
+            if (loLib == 0)
+                return;
+
+            // Get "command line" to pass to the LO "program"
+            String cmdLine = getIntent().getStringExtra("lo-main-cmdline");
+            String[] argv;
+            if (cmdLine != null)
+                argv = cmdLine.split(" *");
+            else
+                argv = new String[0];
             int loLibMain = dlsym(loLib, "lo_main");
+            if (loLibMain != 0)
+                dlcall(loLibMain, argv);
         }
     }
 
