@@ -1827,19 +1827,6 @@ File gid_File_Lib_Gdkpixbuf
 End
 #endif
 
-#if ! defined SYSTEM_LIBCROCO
-File gid_File_Lib_Libcroco
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    #ifdef MACOSX
-    Name = "libcroco-0.6.3.0.1.dylib";
-    #elif defined WNT
-    Name = "libcroco-0.6-3.dll";
-    #endif
-End
-#endif
-
 #if ! defined SYSTEM_PANGO
 File gid_File_Lib_Libpango
     TXT_FILE_BODY;
@@ -1869,29 +1856,5 @@ File gid_File_Lib_Libpangowin32
     Name = "libpangowin32-1.0-0.dll";
 End
 #endif
-#endif
-
-#if ! defined SYSTEM_LIBGSF
-File gid_File_Lib_Libgsf
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-#ifdef WNT
-    Name = "gsf-1.dll";
-#endif
-End
-#endif
-
-#if ! defined SYSTEM_LIBRSVG
-File gid_File_Lib_Librsvg
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    #ifdef MACOSX
-    Name = "librsvg-2.2.dylib";
-    #elif defined WNT
-    Name = "librsvg-2-2.dll";
-    #endif
-End
 #endif
 

@@ -296,7 +296,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/components/dtranscomp \
     vcl/source/components/factory \
     vcl/source/components/fontident \
-    vcl/source/components/rasterizer_rsvg \
     vcl/source/components/stringmirror \
     vcl/source/control/button \
     vcl/source/control/combobox \

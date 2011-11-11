@@ -275,18 +275,12 @@ Module gid_Module_Root_Files_5
 #if ! defined SYSTEM_GDKPIXBUF
     gid_File_Lib_Gdkpixbuf,
 #endif
-#if ! defined SYSTEM_LIBCROCO
-    gid_File_Lib_Libcroco,
-#endif
 #if ! defined SYSTEM_PANGO
     gid_File_Lib_Libpango,
     gid_File_Lib_Libpangocairo,
 #ifdef WNT
     gid_File_Lib_Libpangowin32,
 #endif
-#endif
-#if ! defined SYSTEM_LIBGSF
-    gid_File_Lib_Libgsf,
 #endif
 	gid_File_Lib_Dict_Ja,
 	gid_File_Lib_Dict_Zh,

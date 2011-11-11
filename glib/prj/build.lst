@@ -1,3 +1,0 @@
-gl	glib	: gettext NULL
-gl	glib			    usr1	-	all	gl_mkout NULL
-gl	glib			    nmake	-	all	gl_glib NULL

@@ -43,10 +43,7 @@ SLOFILES=   $(SLO)$/display.obj		\
             $(SLO)$/dtranscomp.obj	\
             $(SLO)$/fontident.obj	\
             $(SLO)$/stringmirror.obj	\
-            $(SLO)$/rasterizer_rsvg.obj \
             $(SLO)$/factory.obj
-
-EXCEPTIONSFILES=	$(SLO)$/rasterizer_rsvg.obj
 
 
 # --- Targets ------------------------------------------------------

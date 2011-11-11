@@ -71,13 +71,6 @@ extern Reference< XInterface > SAL_CALL DragSource_createInstance( const Referen
 extern Sequence< OUString > SAL_CALL DropTarget_getSupportedServiceNames();
 extern OUString SAL_CALL DropTarget_getImplementationName();
 extern Reference< XInterface > SAL_CALL DropTarget_createInstance( const Reference< XMultiServiceFactory > & );
-
-namespace rsvg
-{
-    extern Sequence< OUString > SAL_CALL Rasterizer_getSupportedServiceNames();
-    extern OUString SAL_CALL Rasterizer_getImplementationName();
-    extern Reference< XInterface > SAL_CALL Rasterizer_createInstance( const Reference< XMultiServiceFactory > & );
-}
 }
 
 extern "C" {
@@ -142,12 +135,6 @@ extern "C" {
                 xFactory = ::cppu::createSingleFactory(
                     xMgr, vcl::DropTarget_getImplementationName(), vcl::DropTarget_createInstance,
                     vcl::DropTarget_getSupportedServiceNames() );
-            }
-            else if( vcl::rsvg::Rasterizer_getImplementationName().equalsAscii( pImplementationName ) )
-            {
-                xFactory = ::cppu::createSingleFactory(
-                    xMgr, vcl::rsvg::Rasterizer_getImplementationName(), vcl::rsvg::Rasterizer_createInstance,
-                    vcl::rsvg::Rasterizer_getSupportedServiceNames() );
             }
             if( xFactory.is() )
             {
