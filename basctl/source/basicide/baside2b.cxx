@@ -580,6 +580,7 @@ void EditorWindow::CreateEditEngine()
     pModulWindow->GetLayout()->GetWatchWindow().Update();
     pModulWindow->GetLayout()->GetStackWindow().Update();
     pModulWindow->GetBreakPointWindow().Update();
+    pModulWindow->GetLineNumberWindow().Update();
 
     pEditView->ShowCursor( sal_True, sal_True );
 
@@ -660,6 +661,7 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             pModulWindow->GetEditVScrollBar().SetThumbPos( pEditView->GetStartDocPos().Y() );
             pModulWindow->GetBreakPointWindow().DoScroll
                 ( 0, pModulWindow->GetBreakPointWindow().GetCurYOffset() - pEditView->GetStartDocPos().Y() );
+            pModulWindow->GetLineNumberWindow().Invalidate();
         }
         else if( rTextHint.GetId() == TEXT_HINT_TEXTHEIGHTCHANGED )
         {
@@ -669,6 +671,8 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 long nTextHeight = pEditEngine->GetTextHeight();
                 if ( nTextHeight < nOutHeight )
                     pEditView->Scroll( 0, pEditView->GetStartDocPos().Y() );
+
+                pModulWindow->GetLineNumberWindow().Invalidate();
             }
 
             SetScrollBarRanges();
@@ -792,7 +796,10 @@ void EditorWindow::ImplSetFont()
         aFont = GetFont();
 
         if ( pModulWindow )
+        {
             pModulWindow->GetBreakPointWindow().SetFont( aFont );
+            pModulWindow->GetLineNumberWindow().SetFont( aFont );
+        }
 
         if ( pEditEngine )
         {
@@ -873,6 +880,7 @@ void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, sal_Bool bInserted
     {
         pModulWindow->GetBreakPoints().reset();
         pModulWindow->GetBreakPointWindow().Invalidate();
+        pModulWindow->GetLineNumberWindow().Invalidate();
         aHighlighter.initialize( HIGHLIGHT_BASIC );
     }
     else
@@ -885,6 +893,11 @@ void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, sal_Bool bInserted
         long nY = nPara*nLineHeight - pModulWindow->GetBreakPointWindow().GetCurYOffset();
         aInvRec.Top() = nY;
         pModulWindow->GetBreakPointWindow().Invalidate( aInvRec );
+
+        Size aLnSz(pModulWindow->GetLineNumberWindow().GetWidth(),
+                   GetOutputSizePixel().Height() - 2 * DWBORDER);
+        pModulWindow->GetLineNumberWindow().SetPosSizePixel(Point(DWBORDER + 19, DWBORDER), aLnSz);
+        pModulWindow->GetLineNumberWindow().Invalidate();
 
         if ( bDoSyntaxHighlight )
         {
@@ -1612,12 +1625,10 @@ void StackWindow::UpdateCalls()
     aTreeListBox.SetUpdateMode( sal_True );
 }
 
-
-
-
 ComplexEditorWindow::ComplexEditorWindow( ModulWindow* pParent ) :
     Window( pParent, WB_3DLOOK | WB_CLIPCHILDREN ),
     aBrkWindow( this ),
+    aLineNumberWindow( this, pParent ),
     aEdtWindow( this ),
     aEWVScrollBar( this, WB_VSCROLL | WB_DRAG )
 {
@@ -1625,14 +1636,13 @@ ComplexEditorWindow::ComplexEditorWindow( ModulWindow* pParent ) :
     aBrkWindow.SetModulWindow( pParent );
     aEdtWindow.Show();
     aBrkWindow.Show();
+    aLineNumberWindow.Show();
 
     aEWVScrollBar.SetLineSize( SCROLL_LINE );
     aEWVScrollBar.SetPageSize( SCROLL_PAGE );
     aEWVScrollBar.SetScrollHdl( LINK( this, ComplexEditorWindow, ScrollHdl ) );
     aEWVScrollBar.Show();
 }
-
-
 
 void ComplexEditorWindow::Resize()
 {
@@ -1643,11 +1653,14 @@ void ComplexEditorWindow::Resize()
     long nBrkWidth = 20;
     long nSBWidth = aEWVScrollBar.GetSizePixel().Width();
 
-    Size aBrkSz( Size( nBrkWidth, aSz.Height() ) );
+    Size aBrkSz(nBrkWidth, aSz.Height());
     aBrkWindow.SetPosSizePixel( Point( DWBORDER, DWBORDER ), aBrkSz );
 
-    Size aEWSz( Size( aSz.Width() - nBrkWidth - nSBWidth + 2, aSz.Height() ) );
-    aEdtWindow.SetPosSizePixel( Point( DWBORDER+aBrkSz.Width()-1, DWBORDER ), aEWSz );
+    Size aLnSz(aLineNumberWindow.GetWidth(), aSz.Height());
+    aLineNumberWindow.SetPosSizePixel(Point(DWBORDER+aBrkSz.Width() - 1, DWBORDER), aLnSz);
+
+    Size aEWSz(aSz.Width() - nBrkWidth - aLineNumberWindow.GetWidth() - nSBWidth + 2, aSz.Height());
+    aEdtWindow.SetPosSizePixel( Point( DWBORDER+aBrkSz.Width()+aLnSz.Width()-1, DWBORDER ), aEWSz );
 
     aEWVScrollBar.SetPosSizePixel( Point( aOutSz.Width()-DWBORDER-nSBWidth, DWBORDER ), Size( nSBWidth, aSz.Height() ) );
 }

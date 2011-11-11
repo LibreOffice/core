@@ -42,6 +42,7 @@ class SvxSearchItem;
 #include <svtools/headbar.hxx>
 
 #include <vcl/button.hxx>
+#include <basic/sbstar.hxx>
 #include <basic/sbmod.hxx>
 #include <vcl/split.hxx>
 #include "svl/lstner.hxx"
@@ -49,6 +50,8 @@ class SvxSearchItem;
 
 #include <sfx2/progress.hxx>
 #include <svtools/syntaxhighlight.hxx>
+
+#include "linenumberwindow.hxx"
 
 DBG_NAMEEX( ModulWindow )
 
@@ -284,6 +287,7 @@ class ComplexEditorWindow : public Window
 {
 private:
     BreakPointWindow    aBrkWindow;
+    LineNumberWindow    aLineNumberWindow;
     EditorWindow        aEdtWindow;
     ScrollBar           aEWVScrollBar;
 
@@ -297,6 +301,7 @@ public:
                         ComplexEditorWindow( ModulWindow* pParent );
 
     BreakPointWindow&   GetBrkWindow()      { return aBrkWindow; }
+    LineNumberWindow&   GetLineNumberWindow() { return aLineNumberWindow; }
     EditorWindow&       GetEdtWindow()      { return aEdtWindow; }
     ScrollBar&          GetEWVScrollBar()   { return aEWVScrollBar; }
 };
@@ -402,6 +407,7 @@ public:
 
     EditorWindow&       GetEditorWindow()       { return aXEditorWindow.GetEdtWindow(); }
     BreakPointWindow&   GetBreakPointWindow()   { return aXEditorWindow.GetBrkWindow(); }
+    LineNumberWindow&   GetLineNumberWindow()   { return aXEditorWindow.GetLineNumberWindow(); }
     ScrollBar&          GetEditVScrollBar()     { return aXEditorWindow.GetEWVScrollBar(); }
     ExtTextEngine*      GetEditEngine()         { return GetEditorWindow().GetEditEngine(); }
     ExtTextView*        GetEditView()           { return GetEditorWindow().GetEditView(); }
