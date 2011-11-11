@@ -6165,7 +6165,7 @@ ENABLE_NSPLUGIN=NO
 if test "$enable_nsplugin" != "no"; then
     if test "$enable_gtk" != "no"; then
         AC_MSG_RESULT([yes])
-	ENABLE_NSPLUGIN=YES
+        ENABLE_NSPLUGIN=YES
     else
         AC_MSG_RESULT([no, disabled gtk2])
     fi
