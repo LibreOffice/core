@@ -754,6 +754,8 @@ bool RTFDocumentImpl::inFrame()
 
 void RTFDocumentImpl::checkChangedFrame()
 {
+    if (!getModelFactory().is())
+        return;
     // Check if this is a frame.
     if (inFrame() && !m_bWasInFrame)
     {
