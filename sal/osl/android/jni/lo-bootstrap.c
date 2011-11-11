@@ -81,6 +81,9 @@ Java_org_libreoffice_android_Bootstrap_dlneeds( JNIEnv* env,
   LOGI("dlneeds(%s)\n", libName);
 
   fd = open (libName, O_RDONLY);
+
+  (*env)->ReleaseStringUTFChars(env, library, libName);
+
   if (fd == -1) {
     LOGI("Could not open library");
     return NULL;
@@ -229,6 +232,7 @@ Java_org_libreoffice_android_Bootstrap_dlopen(JNIEnv* env,
   const jbyte *libName = (*env)->GetStringUTFChars(env, library, NULL);
   void *p = dlopen (libName, RTLD_LOCAL);
   LOGI("dlopen(%s) = %p", libName, p);
+  (*env)->ReleaseStringUTFChars(env, library, libName);
   if (p == NULL) {
     LOGI(dlerror());
     return 0;
@@ -245,6 +249,7 @@ Java_org_libreoffice_android_Bootstrap_dlsym(JNIEnv* env,
   const jbyte *symName = (*env)->GetStringUTFChars(env, symbol, NULL);
   void *p = dlsym ((void *)handle, symName);
   LOGI("dlsym(%p,%s) = %p", handle, symName, p);
+  (*env)->ReleaseStringUTFChars(env, symbol, symName);
   if (p == NULL) {
     LOGI(dlerror());
     return 0;
