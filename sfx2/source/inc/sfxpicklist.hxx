@@ -52,8 +52,6 @@ class SfxPickList : public SfxListener
         String      aOptions;
     };
 
-    static SfxPickList*             pUniqueInstance;
-
     std::vector< PickListEntry* >   m_aPicklistVector;
     sal_uInt32                      m_nAllowedMenuSize;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringWidth > m_xStringLength;

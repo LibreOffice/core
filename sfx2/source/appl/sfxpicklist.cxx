@@ -70,10 +70,6 @@ using namespace ::com::sun::star::util;
 
 // ----------------------------------------------------------------------------
 
-SfxPickList*    SfxPickList::pUniqueInstance = 0;
-
-// ----------------------------------------------------------------------------
-
 class StringLength : public ::cppu::WeakImplHelper1< XStringWidth >
 {
     public:
