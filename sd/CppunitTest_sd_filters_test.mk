@@ -116,6 +116,7 @@ $(eval $(call gb_CppunitTest_add_components,sd_filters_test,\
 
 $(eval $(call gb_CppunitTest_add_old_components,sd_filters_test,\
     configmgr \
+    embobj \
     ucb1 \
     ucpfile1 \
     ucptdoc1 \
