@@ -811,52 +811,11 @@ static struct hostent* _osl_gethostbyname_r (
 
 static sal_Bool  _osl_getDomainName (sal_Char *buffer, sal_Int32 bufsiz)
 {
-    sal_Bool result;
-    int      p[2];
-
-    result = sal_False;
-    if (pipe (p) == 0)
-    {
-        pid_t pid;
-        int nStatus;
-
-        pid = fork();
-        if (pid == 0)
-        {
-            char *argv[] =
-            {
-                "/bin/domainname",
-                NULL
-            };
-
-            close (p[0]);
-            dup2  (p[1], 1);
-            close (p[1]);
-
-            execv ("/bin/domainname", argv);
-            // arriving here means exec failed
-            _exit(-1);
-        }
-        else if (pid > 0)
-        {
-            sal_Int32 k = 0, n = bufsiz;
-
-            close (p[1]);
-            if ((k = read (p[0], buffer, n - 1)) > 0)
-            {
-                buffer[k] = 0;
-                if (buffer[k - 1] == '\n')
-                    buffer[k - 1] = 0;
-                result = sal_True;
-            }
-            close (p[0]);
-            waitpid (pid, &nStatus, 0);
-        }
-        else
-        {
-            close (p[0]);
-            close (p[1]);
-        }
+    sal_Bool result = (getdomainname(buffer, bufsiz) == 0);
+    if  (!result) {
+        OSL_TRACE("osl_getDomainName failed. Errno: %d; %s\n",
+                      errno,
+                      strerror(errno));
     }
     return (result);
 }
