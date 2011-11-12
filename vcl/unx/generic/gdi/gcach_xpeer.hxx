@@ -49,7 +49,6 @@ public:
     const RawBitmap*    GetRawBitmap( ServerFont&, int nGlyphIndex );
 
     GlyphSet            GetGlyphSet( ServerFont&, int nScreen );
-    Glyph               GetGlyphId( ServerFont&, int nGlyphIndex );
 
 protected:
     void                InitAntialiasing();

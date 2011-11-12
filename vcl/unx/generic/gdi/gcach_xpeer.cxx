@@ -584,56 +584,6 @@ const RawBitmap* X11GlyphPeer::GetRawBitmap( ServerFont& rServerFont,
     return pRawBitmap;
 }
 
-// ---------------------------------------------------------------------------
-
-Glyph X11GlyphPeer::GetGlyphId( ServerFont& rServerFont, int nGlyphIndex )
-{
-    if( rServerFont.IsGlyphInvisible( nGlyphIndex ) )
-        return NO_GLYPHID;
-
-    GlyphData& rGlyphData = rServerFont.GetGlyphData( nGlyphIndex );
-
-    Glyph aGlyphId = GetRenderGlyph( rGlyphData );
-    if( aGlyphId == NO_GLYPHID )
-    {
-        // prepare GlyphInfo and Bitmap
-        if( rServerFont.GetGlyphBitmap8( nGlyphIndex, maRawBitmap ) )
-        {
-            XGlyphInfo aGlyphInfo;
-            aGlyphInfo.width    = maRawBitmap.mnWidth;
-            aGlyphInfo.height   = maRawBitmap.mnHeight;
-            aGlyphInfo.x        = -maRawBitmap.mnXOffset;
-            aGlyphInfo.y        = -maRawBitmap.mnYOffset;
-
-            rGlyphData.SetSize( Size( maRawBitmap.mnWidth, maRawBitmap.mnHeight ) );
-            rGlyphData.SetOffset( +maRawBitmap.mnXOffset, +maRawBitmap.mnYOffset );
-
-            const GlyphMetric& rGM = rGlyphData.GetMetric();
-            aGlyphInfo.xOff     = +rGM.GetDelta().X();
-            aGlyphInfo.yOff     = +rGM.GetDelta().Y();
-
-            // upload glyph bitmap to server
-            GlyphSet aGlyphSet = GetGlyphSet( rServerFont, -1 );
-
-            aGlyphId = nGlyphIndex & 0x00FFFFFF;
-            const sal_uLong nBytes = maRawBitmap.mnScanlineSize * maRawBitmap.mnHeight;
-            XRenderPeer::GetInstance().AddGlyph( aGlyphSet, aGlyphId,
-                aGlyphInfo, (char*)maRawBitmap.mpBits, nBytes );
-            mnBytesUsed += nBytes;
-        }
-        else
-        {
-            // fall back to .notdef glyph
-            if( nGlyphIndex != 0 )  // recurse only once
-                aGlyphId = GetGlyphId( rServerFont, 0 );
-        }
-
-        SetRenderGlyph( rGlyphData, aGlyphId );
-    }
-
-    return aGlyphId;
-}
-
 // ===========================================================================
 
 X11GlyphCache::X11GlyphCache( X11GlyphPeer& rPeer )
