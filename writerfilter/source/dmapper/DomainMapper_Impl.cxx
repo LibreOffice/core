@@ -1368,6 +1368,8 @@ void DomainMapper_Impl::PopAnnotation()
 
 void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape > xShape )
 {
+    if (m_aTextAppendStack.empty())
+        return;
     uno::Reference<text::XTextAppend> xTextAppend = m_aTextAppendStack.top().xTextAppend;
     m_bIsInShape = true;
     try
