@@ -487,11 +487,9 @@ private:
 #define STYLE_SYMBOLS_HICONTRAST    ((sal_uLong)2)
 #define STYLE_SYMBOLS_INDUSTRIAL    ((sal_uLong)3)
 #define STYLE_SYMBOLS_CRYSTAL       ((sal_uLong)4)
-#define STYLE_SYMBOLS_TANGO         ((sal_uLong)5)
-#define STYLE_SYMBOLS_OXYGEN        ((sal_uLong)6)
-#define STYLE_SYMBOLS_CLASSIC       ((sal_uLong)7)
-#define STYLE_SYMBOLS_THEMES_MAX    ((sal_uLong)8)
-
+#define STYLE_SYMBOLS_TANGO     ((sal_uLong)5)
+#define STYLE_SYMBOLS_CLASSIC       ((sal_uLong)6)
+#define STYLE_SYMBOLS_THEMES_MAX    ((sal_uLong)7)
 #define STYLE_CURSOR_NOBLINKTIME    ((sal_uLong)0xFFFFFFFF)
 
 class VCL_DLLPUBLIC StyleSettings
