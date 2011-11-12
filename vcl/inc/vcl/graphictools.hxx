@@ -37,15 +37,8 @@
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
 
-#ifndef INCLUDED_MEMORY
 #include <memory>
-#define INCLUDED_MEMORY
-#endif
-
-#ifndef INCLUDED_VECTOR
 #include <vector>
-#define INCLUDED_VECTOR
-#endif
 
 /** Encapsulates geometry and associated attributes of a graphical 'pen stroke'
 
