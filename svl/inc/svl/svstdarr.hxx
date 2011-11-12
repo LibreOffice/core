@@ -44,7 +44,6 @@
 #include <tools/string.hxx>
 
 typedef String* StringPtr;
-typedef ByteString* ByteStringPtr;
 
 
 #ifndef _SVSTDARR_STRINGS_DECL
