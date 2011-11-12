@@ -237,37 +237,36 @@ namespace CPPU_CURRENT_NAMESPACE
         type_info * rtti;
 
         {
-        // construct cpp exception object
-        typelib_TypeDescription * pTypeDescr = 0;
-        TYPELIB_DANGER_GET( &pTypeDescr, pUnoExc->pType );
-        OSL_ASSERT( pTypeDescr );
-        if (! pTypeDescr)
-        {
-            throw RuntimeException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("cannot get typedescription for type ") ) +
-                *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
-                Reference< XInterface >() );
+            // construct cpp exception object
+            typelib_TypeDescription * pTypeDescr = 0;
+            TYPELIB_DANGER_GET( &pTypeDescr, pUnoExc->pType );
+            OSL_ASSERT( pTypeDescr );
+            if (! pTypeDescr)
+            {
+                throw RuntimeException(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("cannot get typedescription for type ") ) +
+                    *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
+                    Reference< XInterface >() );
+            }
+
+            pCppExc = __cxa_allocate_exception( pTypeDescr->nSize );
+            ::uno_copyAndConvertData( pCppExc, pUnoExc->pData, pTypeDescr, pUno2Cpp );
+
+            // destruct uno exception
+            ::uno_any_destruct( pUnoExc, 0 );
+            rtti = (type_info *)RTTISingleton::get().getRTTI( (typelib_CompoundTypeDescription *) pTypeDescr );
+            TYPELIB_DANGER_RELEASE( pTypeDescr );
+            OSL_ENSURE( rtti, "### no rtti for throwing exception!" );
+            if (! rtti)
+            {
+                throw RuntimeException(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("no rtti for type ") ) +
+                    *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
+                    Reference< XInterface >() );
+            }
         }
 
-        pCppExc = __cxa_allocate_exception( pTypeDescr->nSize );
-        ::uno_copyAndConvertData( pCppExc, pUnoExc->pData, pTypeDescr, pUno2Cpp );
-
-        // destruct uno exception
-        ::uno_any_destruct( pUnoExc, 0 );
-        rtti = (type_info *)RTTISingleton::get().getRTTI( (typelib_CompoundTypeDescription *) pTypeDescr );
-        TYPELIB_DANGER_RELEASE( pTypeDescr );
-        OSL_ENSURE( rtti, "### no rtti for throwing exception!" );
-        if (! rtti)
-        {
-            throw RuntimeException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("no rtti for type ") ) +
-                *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
-                Reference< XInterface >() );
-        }
-        }
-
-
-    __cxa_throw( pCppExc, rtti, deleteException );
+        __cxa_throw( pCppExc, rtti, deleteException );
     }
 
 #ifdef __ARM_EABI__

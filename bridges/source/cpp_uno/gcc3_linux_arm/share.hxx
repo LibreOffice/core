@@ -53,8 +53,8 @@ namespace CPPU_CURRENT_NAMESPACE
 
         int handlerCount;
 #ifdef __ARM_EABI__
-    __cxa_exception *nextPropagatingException;
-    int propagationCount;
+        __cxa_exception *nextPropagatingException;
+        int propagationCount;
 #else
         int handlerSwitchValue;
         const unsigned char *actionRecord;
