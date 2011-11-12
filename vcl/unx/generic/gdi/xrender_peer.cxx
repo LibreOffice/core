@@ -115,11 +115,6 @@ sal_uInt32 XRenderPeer::InitRenderText()
         }
     }
 
-    // #97763# disable XRENDER on <15bit displays for XFree<=4.2.0
-    if( mnRenderVersion <= 0x02 )
-        if( nMaxDepth < 15 )
-            nRetMask = 0;
-
     return nRetMask;
 }
 
