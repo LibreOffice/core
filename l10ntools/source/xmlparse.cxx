@@ -497,22 +497,6 @@ void XMLFile::Extract( XMLFile *pCur )
 }
 
 /*****************************************************************************/
-void XMLFile::View(){
-/*****************************************************************************/
-    XMLElement* cur;
-    for(XMLHashMap::iterator pos=XMLStrings->begin(); pos!=XMLStrings->end();++pos){
-        fprintf(stdout,"\nid=%s\n",(pos->first).GetBuffer());
-        LangHashMap* elem=pos->second;
-        for(LangHashMap::iterator pos2=elem->begin(); pos2!=elem->end();++pos2){
-            fprintf( stdout,"\nlanguage=%s\n",(pos2->first).GetBuffer() );
-            cur=pos2->second;
-            fprintf(stdout,"\n%s\n",((XMLElement*)cur)->ToOString().getStr());
-
-        }
-    }
-}
-
-/*****************************************************************************/
 void XMLFile::InsertL10NElement( XMLElement* pElement ){
 /*****************************************************************************/
     ByteString tmpStr,id,oldref,language("");
@@ -552,26 +536,6 @@ void XMLFile::InsertL10NElement( XMLElement* pElement ){
         (*elem)[ language ]=pElement;
     }
 }
-/*****************************************************************************/
-void XMLFile::showType(XMLParentNode* node){
-/*****************************************************************************/
-    switch (node->GetNodeType()){
-        case XML_NODE_TYPE_ELEMENT: fprintf(stdout,"ELEMENT\n") ;break;
-        case XML_NODE_TYPE_FILE:    fprintf(stdout,"FILE\n")    ;break;
-        case XML_NODE_TYPE_COMMENT: fprintf(stdout,"COMMENT\n") ;break;
-        case XML_NODE_TYPE_DATA:    fprintf(stdout,"DATA\n")    ;break;
-        case XML_NODE_TYPE_DEFAULT: fprintf(stdout,"DEFAULT\n") ;break;
-        default: break;
-    }
-}
-XMLFile::XMLFile()
-/*****************************************************************************/
-                : XMLParentNode( NULL ),
-                  ID           ( "id" ),
-                  OLDREF       ( "oldref" ),
-                  XML_LANG     ( "xml-lang" ),
-                  XMLStrings   ( NULL ){};
-
 
 XMLFile::XMLFile( const XMLFile& obj )
 /*****************************************************************************/

@@ -228,13 +228,4 @@ void SvxParaPrevWindow::DrawParagraph( sal_Bool bAll )
 
 #undef DEF_MARGIN
 
-// -----------------------------------------------------------------------
-
-void SvxParaPrevWindow::OutputSizeChanged()
-{
-    aWinSize = GetOutputSizePixel();
-    aWinSize = PixelToLogic( aWinSize );
-    Invalidate();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

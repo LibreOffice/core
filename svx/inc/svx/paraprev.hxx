@@ -105,8 +105,6 @@ public:
     String              GetText() const         { return aText; }
     Size                GetSize() const         { return aSize; }
 
-    void        OutputSizeChanged();
-
     void        Draw( sal_Bool bAll )               { DrawParagraph( bAll ); }
 };
 

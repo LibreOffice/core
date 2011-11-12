@@ -59,10 +59,6 @@ namespace vcl
 
         RenderGraphic( const RenderGraphic& rRenderGraphic );
 
-        RenderGraphic( const GraphicData& rGraphicData,
-                       sal_uInt32 nGraphicDataLength,
-                       const rtl::OUString& rGraphicDataMimeType );
-
         RenderGraphic( const rtl::OUString& rGraphicDataMimeType,
                        sal_uInt32 nGraphicDataLength,
                        const sal_uInt8* pGraphicData = NULL );

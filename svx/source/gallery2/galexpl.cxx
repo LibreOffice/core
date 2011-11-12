@@ -231,28 +231,6 @@ sal_Bool GalleryExplorer::InsertURL( sal_uIntPtr nThemeId, const String& rURL, c
 
 // ------------------------------------------------------------------------
 
-sal_uIntPtr GalleryExplorer::GetObjCount( const String& rThemeName )
-{
-    Gallery*    pGal = ImplGetGallery();
-    sal_uIntPtr     nRet = 0;
-
-    if( pGal )
-    {
-        SfxListener     aListener;
-        GalleryTheme*   pTheme = pGal->AcquireTheme( rThemeName, aListener );
-
-        if( pTheme )
-        {
-            nRet = pTheme->GetObjectCount();
-            pGal->ReleaseTheme( pTheme, aListener );
-        }
-    }
-
-    return nRet;
-}
-
-// ------------------------------------------------------------------------
-
 sal_Bool GalleryExplorer::GetGraphicObj( const String& rThemeName, sal_uIntPtr nPos,
                                      Graphic* pGraphic, Bitmap* pThumb,
                                      sal_Bool bProgress )

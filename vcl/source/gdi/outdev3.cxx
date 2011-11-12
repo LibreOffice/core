@@ -418,23 +418,6 @@ sal_uInt16 OutputDevice::GetFontSubstituteCount()
 
 // -----------------------------------------------------------------------
 
-bool ImplDirectFontSubstitution::GetFontSubstitute( int nIndex,
-    String& rFontName, String& rSubstFontName, sal_uInt16& rFlags ) const
-{
-    FontSubstList::const_iterator it = maFontSubstList.begin();
-    for( int nCount = 0; (it != maFontSubstList.end()) && (nCount++ != nIndex); ++it ) ;
-    if( it == maFontSubstList.end() )
-        return false;
-
-    const ImplFontSubstEntry* pEntry = &(*it);
-    rFontName       = pEntry->maName;
-    rSubstFontName  = pEntry->maReplaceName;
-    rFlags          = pEntry->mnFlags;
-    return true;
-}
-
-// -----------------------------------------------------------------------
-
 bool ImplDirectFontSubstitution::FindFontSubstitute( String& rSubstName,
     const String& rSearchName, sal_uInt16 nFlags ) const
 {

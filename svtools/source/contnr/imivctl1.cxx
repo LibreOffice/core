@@ -381,85 +381,6 @@ void SvxIconChoiceCtrl_Impl::SetListPositions()
     nFlags |= F_ENTRYLISTPOS_VALID;
 }
 
-void SvxIconChoiceCtrl_Impl::RemoveEntry( SvxIconChoiceCtrlEntry* pEntry )
-{
-    sal_Bool bSyncSingleSelection;
-    // bei Single-Selection wird die Selektion beim Umsetzen des Cursors
-    // mitgefuehrt. Das soll aber nur erfolgen, wenn ueberhaupt ein
-    // Eintrag selektiert ist.
-    if( GetSelectionCount() )
-        bSyncSingleSelection = sal_True;
-    else
-        bSyncSingleSelection = sal_False;
-
-    if( pEntry == pCurHighlightFrame )
-        pCurHighlightFrame = 0;
-
-    if( pEntry->IsSelected() )
-        CallSelectHandler( 0 );
-
-    if( aEntries.size() == 1 && aEntries[ 0 ] == pEntry )
-    {
-        Clear();
-        return;
-    }
-
-    StopEditTimer();
-    if( pEntry == pAnchor )
-        pAnchor = 0;
-    if( pEntry->IsSelected() )
-        nSelectionCount--;
-    sal_Bool bEntryBoundValid = IsBoundingRectValid( pEntry->aRect );
-    if( bEntryBoundValid )
-        pView->Invalidate( pEntry->aRect );
-
-    sal_Bool bSetNewCursor = sal_False;
-    SvxIconChoiceCtrlEntry* pNewCursor = NULL;
-
-    if( pEntry == pCursor )
-    {
-        bSetNewCursor = sal_True;
-        pNewCursor = FindNewCursor();
-        ShowCursor( sal_False );
-        pCursor = 0;
-    }
-
-    sal_Bool bCurEntryPosValid = (nFlags & F_ENTRYLISTPOS_VALID) ? sal_True : sal_False;
-    if( bCurEntryPosValid && aEntries[ aEntries.size()-1 ] != pEntry )
-        nFlags &= ~F_ENTRYLISTPOS_VALID;
-
-    for (
-        SvxIconChoiceCtrlEntryList_impl::iterator it = pZOrderList->begin();
-        it < pZOrderList->end();
-        ++it
-    ) {
-        if ( *it == pEntry )
-        {
-            pZOrderList->erase( it );
-            break;
-        }
-    }
-
-    if( bCurEntryPosValid )
-    {
-        DBG_ASSERT(aEntries[ pEntry->nPos ] == pEntry,"RemoveEntry: Wrong nPos in entry");
-        aEntries.remove( pEntry->nPos );
-    }
-    else
-        aEntries.remove( pEntry );
-    pImpCursor->Clear();
-    pGridMap->Clear();
-    delete pEntry;
-    if( IsAutoArrange() && aEntries.size() )
-        aAutoArrangeTimer.Start();
-    if( bSetNewCursor )
-    {
-        // Fokusrechteck asynchron einblenden, um das Loeschen einer
-        // Multiselektion zu beschleunigen.
-        SetCursor( pNewCursor, bSyncSingleSelection, sal_True );
-    }
-}
-
 void SvxIconChoiceCtrl_Impl::SelectEntry( SvxIconChoiceCtrlEntry* pEntry, sal_Bool bSelect,
     sal_Bool bCallHdl, sal_Bool bAdd, sal_Bool bSyncPaint )
 {
@@ -2073,35 +1994,6 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetEntry( const Point& rDocPos, 
     return 0;
 }
 
-SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetNextEntry(
-    const Point& rDocPos,
-    SvxIconChoiceCtrlEntry* pCurEntry
-) {
-    CheckBoundingRects();
-    SvxIconChoiceCtrlEntry* pTarget = 0;
-
-    for (
-        SvxIconChoiceCtrlEntryList_impl::iterator it = pZOrderList->begin();
-        it < pZOrderList->end();
-        ++it
-    ) {
-        if ( *it == pCurEntry )
-        {
-            while ( ++it < pZOrderList->end() )
-            {
-                if ( (*it)->aRect.IsInside( rDocPos ) )
-                {
-                    pTarget = *it;
-                    break;
-                }
-            }
-            break;
-        }
-    }
-
-    return pTarget;
-}
-
 Point SvxIconChoiceCtrl_Impl::GetEntryPos( SvxIconChoiceCtrlEntry* pEntry )
 {
     return pEntry->aRect.TopLeft();
@@ -2639,30 +2531,6 @@ void SvxIconChoiceCtrl_Impl::MakeVisible( const Rectangle& rRect, sal_Bool bScrB
     // eine ScrollBar aber eine groessere Line-Size eingestellt hat.
     if( bCallRectChangedHdl || GetOutputRect() != rRect )
         VisRectChanged();
-}
-
-
-SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::FindNewCursor()
-{
-    SvxIconChoiceCtrlEntry* pNewCursor;
-    if( pCursor )
-    {
-        pNewCursor = pImpCursor->GoLeftRight( pCursor, sal_False );
-        if( !pNewCursor )
-        {
-            pNewCursor = pImpCursor->GoLeftRight( pCursor, sal_True );
-            if( !pNewCursor )
-            {
-                pNewCursor = pImpCursor->GoUpDown( pCursor, sal_False );
-                if( !pNewCursor )
-                    pNewCursor = pImpCursor->GoUpDown( pCursor, sal_True );
-            }
-        }
-    }
-    else
-        pNewCursor = aEntries[ 0 ];
-    DBG_ASSERT(!pNewCursor|| (pCursor&&pCursor!=pNewCursor),"FindNewCursor failed");
-    return pNewCursor;
 }
 
 sal_uLong SvxIconChoiceCtrl_Impl::GetSelectionCount() const
@@ -3675,50 +3543,6 @@ void EntryList_Impl::insert( size_t nPos, SvxIconChoiceCtrlEntry* pEntry )
         pEntry->SetBacklink( _pOwner->pHead->pblink );
 }
 
-SvxIconChoiceCtrlEntry* EntryList_Impl::remove( size_t nPos )
-{
-    SvxIconChoiceCtrlEntry* pEntry = NULL;
-    if ( nPos < maIconChoiceCtrlEntryList.size() ) {
-        pEntry = maIconChoiceCtrlEntryList[ nPos ];
-        maIconChoiceCtrlEntryList.erase( maIconChoiceCtrlEntryList.begin() + nPos );
-        Removed_Impl( pEntry );
-    }
-    return pEntry;
-}
-
-void EntryList_Impl::remove( SvxIconChoiceCtrlEntry* pEntry )
-{
-    for (
-        SvxIconChoiceCtrlEntryList_impl::iterator it = maIconChoiceCtrlEntryList.begin();
-        it < maIconChoiceCtrlEntryList.end();
-        ++it
-    ) {
-        if ( *it == pEntry ) {
-            maIconChoiceCtrlEntryList.erase( it );
-            Removed_Impl( pEntry );
-            break;
-        }
-    }
-}
-
-void EntryList_Impl::Removed_Impl( SvxIconChoiceCtrlEntry* pEntry )
-{
-    if( _pOwner->pHead )
-    {
-        if( _pOwner->pHead == pEntry )
-        {
-            if( _pOwner->pHead != pEntry->pflink )
-                _pOwner->pHead = pEntry->pflink;
-            else
-            {
-                DBG_ASSERT(!size(),"EntryList_Impl::Remove > Invalid predecessor" );
-                _pOwner->pHead = 0;
-            }
-        }
-        pEntry->Unlink();
-    }
-}
-
 void SvxIconChoiceCtrl_Impl::SetPositionMode( SvxIconChoiceCtrlPositionMode eMode )
 {
     if( eMode == ePositionMode )
@@ -3864,14 +3688,6 @@ sal_uLong SvxIconChoiceCtrl_Impl::GetPredecessorGrid( const Point& rPos) const
             nGrid--;
     }
     return nGrid;
-}
-
-void SvxIconChoiceCtrl_Impl::Flush()
-{
-    if( aAutoArrangeTimer.IsActive() )
-    {
-        AutoArrangeHdl( 0 );
-    }
 }
 
 sal_Bool SvxIconChoiceCtrl_Impl::RequestHelp( const HelpEvent& rHEvt )
@@ -4070,40 +3886,6 @@ void SvxIconChoiceCtrl_Impl::SetOrigin( const Point& rPos, sal_Bool bDoNotUpdate
             pView->SetBackground( aPaper );
         }
     }
-}
-
-sal_Bool SvxIconChoiceCtrl_Impl::HandleShortCutKey( const KeyEvent& rKEvt )
-{
-    StopEditTimer();
-
-    sal_Bool        bRet = sal_False;
-
-    DBG_ASSERT( rKEvt.GetKeyCode().IsMod2(), "*SvxIconChoiceCtrl_Impl::HandleShortCutKey(): no <ALT> pressed!?" );
-
-    sal_Unicode cChar = rKEvt.GetCharCode();
-    sal_uLong       nPos = (sal_uLong)-1;
-
-    if( cChar && IsMnemonicChar( cChar, nPos ) )
-    {
-        // shortcut is clicked
-        SvxIconChoiceCtrlEntry* pNewCursor = GetEntry( nPos );
-        SvxIconChoiceCtrlEntry* pOldCursor = pCursor;
-        if( pNewCursor != pOldCursor )
-        {
-            SetCursor_Impl( pOldCursor, pNewCursor, sal_False, sal_False, sal_False );
-
-            if( pNewCursor != NULL )
-            {
-                pHdlEntry = pNewCursor;
-                pCurHighlightFrame = pHdlEntry;
-                pView->ClickIcon();
-                pCurHighlightFrame = NULL;
-            }
-        }
-        bRet = sal_True;
-    }
-
-    return bRet;
 }
 
 void SvxIconChoiceCtrl_Impl::CallEventListeners( sal_uLong nEvent, void* pData )

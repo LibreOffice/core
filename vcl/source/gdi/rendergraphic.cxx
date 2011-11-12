@@ -59,18 +59,6 @@ RenderGraphic::RenderGraphic( const RenderGraphic& rRenderGraphic ) :
 
 // -------------------------------------------------------------------------
 
-RenderGraphic::RenderGraphic( const GraphicData& rGraphicData,
-                              sal_uInt32 nGraphicDataLength,
-                              const rtl::OUString& rGraphicDataMimeType ) :
-    maGraphicData( rGraphicData ),
-    mnGraphicDataLength( nGraphicDataLength ),
-    maGraphicDataMimeType( rGraphicDataMimeType )
-{
-    ImplCheckData( );
-}
-
-// -------------------------------------------------------------------------
-
 RenderGraphic::RenderGraphic( const rtl::OUString& rGraphicDataMimeType,
                               sal_uInt32 nGraphicDataLength,
                               const sal_uInt8* pGraphicData ) :

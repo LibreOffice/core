@@ -379,7 +379,7 @@ ScAddInDocs::Insert(ScDocument* const&, unsigned short&)
 ScAddInDocs::Insert(ScDocument* const*, unsigned short)
 ScAddInDocs::Remove(ScDocument* const&, unsigned short)
 ScAreaLinkSaveCollection::clear()
-ScAttrArray::HasLines(int, int, Rectangle&, unsigned char, unsigned char) const
+ScAttrArray::HasLines(int, int, Rectangle&, bool, bool) const
 ScCellMergeOption::ScCellMergeOption()
 ScChangeActionContent::SetNewValue(String const&, ScDocument*)
 ScCompressedArray<int, unsigned char>::GetEntryCount() const
@@ -773,6 +773,11 @@ SvtFilterOptions::SetUseEnhancedFields(unsigned char)
 SvtFontOptions::EnableReplacementTable(unsigned char)
 SvtFontOptions::IsReplacementTableEnabled() const
 SvtFrameWindow_Impl::ExecuteHdl_Impl(SvtFrameWindow_Impl*, SvtFrameWindow_Impl::SvtExecuteInfo*)
+SvtGraphicFill::getGradient1stColor() const
+SvtGraphicFill::getGradient2ndColor() const
+SvtGraphicFill::getGradientStepCount() const
+SvtGraphicFill::getHatchColor() const
+SvtGraphicFill::getHatchType() const
 SvtGraphicFill::setFillColor(Color)
 SvtGraphicFill::setFillRule(SvtGraphicFill::FillRule)
 SvtGraphicFill::setFillType(SvtGraphicFill::FillType)
@@ -792,14 +797,6 @@ SvtGraphicStroke::setStrokeWidth(double)
 SvtGraphicStroke::setTransparency(double)
 SvtHelpOptions::GetLocale() const
 SvtHistoryOptions::SetSize(EHistoryType, unsigned int)
-SvtIconChoiceCtrl::Clear()
-SvtIconChoiceCtrl::Flush()
-SvtIconChoiceCtrl::GetEntryTextMode(SvxIconChoiceCtrlEntry const*) const
-SvtIconChoiceCtrl::GetLogicPos(Point const&) const
-SvtIconChoiceCtrl::GetNextEntry(Point const&, SvxIconChoiceCtrlEntry*, unsigned char) const
-SvtIconChoiceCtrl::HandleShortCutKey(KeyEvent const&)
-SvtIconChoiceCtrl::InsertEntry(unsigned long, Point const*, unsigned short)
-SvtIconChoiceCtrl::SetUpdateMode(unsigned char)
 SvtIconChoiceCtrl::SvtIconChoiceCtrl(Window*, ResId const&)
 SvtIconWindow_Impl::GetSelectedIconText() const
 SvtInternalOptions::CrashMailEnabled() const
@@ -912,7 +909,6 @@ SvxGraphCtrlAccessibleContext::setName(rtl::OUString const&)
 SvxHtmlOptions::AddListenerLink(Link const&)
 SvxHtmlOptions::RemoveListenerLink(Link const&)
 SvxIMapDlg::GetTargetList() const
-SvxIconChoiceCtrlEntry::LockPos(unsigned char)
 SvxInsertStatusBarControl::GetDefItemWidth(StatusBar const&)
 SvxJustifyMethodItem::SvxJustifyMethodItem(unsigned short)
 SvxLanguageBox::SvxLanguageBox(Window*, long, unsigned char)
@@ -939,8 +935,6 @@ SvxNumberInfoItem::SetDoubleValue(double const&)
 SvxNumberInfoItem::SetNumberFormatter(SvNumberFormatter*)
 SvxNumberInfoItem::SetStringValue(String const&)
 SvxOpenGraphicDialog::SetControlHelpIds(short const*, char const**)
-SvxParaPrevWindow::OutputSizeChanged()
-SvxPixelCtl::GetBitmapPixel(unsigned short)
 SvxPluginFileDlg::IsAvailable(unsigned short)
 SvxPopupWindowListBox::StartSelection()
 SvxPosSizeStatusBarControl::GetDefItemWidth(StatusBar const&)
@@ -1207,8 +1201,6 @@ XMLErrors::AddRecord(int, com::sun::star::uno::Sequence<rtl::OUString> const&)
 XMLErrors::AddRecord(int, com::sun::star::uno::Sequence<rtl::OUString> const&, rtl::OUString const&)
 XMLFamilyDataList_Impl::GetPos(XMLFamilyData_Impl const*) const
 XMLFamilyDataList_Impl::Remove(XMLFamilyData_Impl*)
-XMLFile::View()
-XMLFile::showType(XMLParentNode*)
 XMLFilterListBox::LinkStubHeaderSelect_Impl(void*, void*)
 XMLFilterTabDialog::LinkStubCancelHdl(void*, void*)
 XMLFontAutoStylePoolNames_Impl::GetPos(rtl::OUString const*) const
@@ -2430,7 +2422,6 @@ vcl::PDFExtOutDevData::SetOutlineItemText(int, rtl::OUString const&)
 vcl::PDFWriter::DrawPixel(Polygon const&, Color const*)
 vcl::PDFWriterImpl::drawPolyPolygon(PolyPolygon const&, int, bool)
 vcl::PrintDialog::getCopyCount()
-vcl::RenderGraphic::RenderGraphic(boost::shared_array<unsigned char> const&, unsigned int, rtl::OUString const&)
 vcl::RowOrColumn::remove(Window*)
 vcl::RowOrColumn::remove(boost::shared_ptr<vcl::WindowArranger> const&)
 void ScCompressedArrayIterator<int, unsigned short>::Follow<unsigned char>(ScCompressedArrayIterator<int, unsigned char> const&)

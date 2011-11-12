@@ -120,7 +120,6 @@ class SvxIconChoiceCtrlEntry
                             }
 
 public:
-                            SvxIconChoiceCtrlEntry( sal_uInt16 nFlags = 0 );
                             SvxIconChoiceCtrlEntry( const String& rText, const Image& rImage, sal_uInt16 nFlags = 0 );
                             ~SvxIconChoiceCtrlEntry () {}
 
@@ -148,7 +147,7 @@ public:
     sal_Bool                    IsDropTarget() const { return (sal_Bool)((nFlags & ICNVIEW_FLAG_DROP_TARGET) !=0); }
     sal_Bool                    IsBlockingEmphasis() const { return (sal_Bool)((nFlags & ICNVIEW_FLAG_BLOCK_EMPHASIS) !=0); }
     sal_Bool                    IsPosLocked() const { return (sal_Bool)((nFlags & ICNVIEW_FLAG_POS_LOCKED) !=0); }
-    void                    LockPos( sal_Bool bLock );
+
     // Nur bei AutoArrange gesetzt. Den Kopf der Liste gibts per SvxIconChoiceCtrl::GetPredecessorHead
     SvxIconChoiceCtrlEntry*         GetSuccessor() const { return pflink; }
     SvxIconChoiceCtrlEntry*         GetPredecessor() const { return pblink; }
@@ -281,7 +280,6 @@ public:
 
     sal_Bool                SetChoiceWithCursor ( sal_Bool bDo = sal_True );
 
-    void                SetUpdateMode( sal_Bool bUpdateMode );
     void                SetFont( const Font& rFont );
     void                SetPointFont( const Font& rFont );
 
@@ -294,9 +292,6 @@ public:
     void                ArrangeIcons();
 
 
-    SvxIconChoiceCtrlEntry* InsertEntry( sal_uLong nPos = LIST_APPEND,
-                                     const Point* pPos = 0,
-                                     sal_uInt16 nFlags = 0 );
     SvxIconChoiceCtrlEntry* InsertEntry( const String& rText,
                                          const Image& rImage,
                                          sal_uLong nPos = LIST_APPEND,
@@ -317,12 +312,9 @@ public:
     */
     void                CreateAutoMnemonics( MnemonicGenerator& _rUsedMnemonics );
 
-    void                RemoveEntry( SvxIconChoiceCtrlEntry* pEntry );
-
     sal_Bool                DoKeyInput( const KeyEvent& rKEvt );
 
     sal_Bool                IsEntryEditing() const;
-    void                Clear();
 
     sal_uLong                   GetEntryCount() const;
     SvxIconChoiceCtrlEntry* GetEntry( sal_uLong nPos ) const;
@@ -337,19 +329,11 @@ public:
     // bHit==sal_False: Eintrag gilt als getroffen, wenn Position im BoundRect liegt
     //     ==sal_True : Bitmap oder Text muss getroffen sein
     SvxIconChoiceCtrlEntry* GetEntry( const Point& rPosPixel, sal_Bool bHit = sal_False ) const;
-    // Gibt den naechsten ueber pCurEntry liegenden Eintrag (ZOrder)
-    SvxIconChoiceCtrlEntry* GetNextEntry( const Point& rPosPixel, SvxIconChoiceCtrlEntry* pCurEntry, sal_Bool  ) const;
 
     // in dem sal_uLong wird die Position in der Liste des gefunden Eintrags zurueckgegeben
     SvxIconChoiceCtrlEntry* GetSelectedEntry( sal_uLong& rPos ) const;
 
     void                        SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry = 0 );
-    SvxIconChoiceCtrlTextMode   GetEntryTextMode( const SvxIconChoiceCtrlEntry* pEntry = 0 ) const;
-
-    // offene asynchron abzuarbeitende Aktionen ausfuehren. Muss vor dem Speichern von
-    // Eintragspositionen etc. gerufen werden
-    void                Flush();
-
 
     virtual sal_Bool        HasBackground() const;
     virtual sal_Bool        HasFont() const;
@@ -359,11 +343,8 @@ public:
     void                SetFontColorToBackground ( sal_Bool bDo = sal_True ) { _bAutoFontColor = bDo; }
     sal_Bool                AutoFontColor () { return _bAutoFontColor; }
 
-    Point               GetLogicPos( const Point& rPosPixel ) const;
     Point               GetPixelPos( const Point& rPosLogic ) const;
     void                SetSelectionMode( SelectionMode eMode );
-
-    sal_Bool                HandleShortCutKey( const KeyEvent& rKeyEvent );
 
     Rectangle           GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const;
     Rectangle           GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const;

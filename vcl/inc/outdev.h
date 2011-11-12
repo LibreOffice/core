@@ -176,7 +176,6 @@ private:
 public:
     void    AddFontSubstitute( const String& rFontName, const String& rSubstName, sal_uInt16 nFlags );
     void    RemoveFontSubstitute( int nIndex );
-    bool    GetFontSubstitute( int nIndex, String& rFontName, String& rSubstName, sal_uInt16& rFlags ) const;
     int     GetFontSubstituteCount() const { return maFontSubstList.size(); };
     bool    Empty() const { return maFontSubstList.empty(); }
     void    Clear() { maFontSubstList.clear(); }

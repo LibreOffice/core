@@ -124,16 +124,11 @@ private:
     SvxIconChoiceCtrlEntryList_impl maIconChoiceCtrlEntryList;
     SvxIconChoiceCtrl_Impl*         _pOwner;
 
-    void                    Removed_Impl( SvxIconChoiceCtrlEntry* pEntry );
-
 public:
                             EntryList_Impl( SvxIconChoiceCtrl_Impl* );
                             ~EntryList_Impl();
 
     void                    clear();
-
-    SvxIconChoiceCtrlEntry* remove( size_t nPos );
-    void                    remove( SvxIconChoiceCtrlEntry* pEntry );
 
     size_t                  size()
                             {
@@ -261,7 +256,6 @@ class SvxIconChoiceCtrl_Impl
                             rPosPixel -= pView->GetMapMode().GetOrigin();
                         }
     void                InitScrollBarBox();
-    SvxIconChoiceCtrlEntry* FindNewCursor();
     void                ToggleSelection( SvxIconChoiceCtrlEntry* );
     void                DeselectAllBut( SvxIconChoiceCtrlEntry*, sal_Bool bPaintSync=sal_False );
     void                Center( SvxIconChoiceCtrlEntry* pEntry ) const;
@@ -349,7 +343,6 @@ public:
     WinBits             GetStyle() const { return nWinBits; }
     void                InsertEntry( SvxIconChoiceCtrlEntry*, size_t nPos, const Point* pPos=0 );
     void                CreateAutoMnemonics( MnemonicGenerator* _pGenerator = NULL );
-    void                RemoveEntry( SvxIconChoiceCtrlEntry* pEntry );
     void                FontModified();
     void                SelectAll( sal_Bool bSelect = sal_True, sal_Bool bPaint = sal_True );
     void                SelectEntry(
@@ -410,7 +403,6 @@ public:
                         );
 
     SvxIconChoiceCtrlEntry* GetEntry( const Point& rDocPos, sal_Bool bHit = sal_False );
-    SvxIconChoiceCtrlEntry* GetNextEntry( const Point& rDocPos, SvxIconChoiceCtrlEntry* pCurEntry );
 
     Point               GetEntryPos( SvxIconChoiceCtrlEntry* );
     void                MakeEntryVisible( SvxIconChoiceCtrlEntry* pEntry, sal_Bool bBound = sal_True );
@@ -550,7 +542,6 @@ public:
     void                SetPositionMode( SvxIconChoiceCtrlPositionMode );
     SvxIconChoiceCtrlPositionMode GetPositionMode() const { return ePositionMode;}
 
-    void                Flush();
     void                SetColumn( sal_uInt16 nIndex, const SvxIconChoiceCtrlColumnInfo& );
     const SvxIconChoiceCtrlColumnInfo* GetColumn( sal_uInt16 nIndex ) const;
 
@@ -568,8 +559,6 @@ public:
                             sal_Bool bHide
                         );
     void                StopSelectTimer() { aCallSelectHdlTimer.Stop(); }
-
-    sal_Bool            HandleShortCutKey( const KeyEvent& rKeyEvent );
 
     void                CallEventListeners( sal_uLong nEvent, void* pData = NULL );
 

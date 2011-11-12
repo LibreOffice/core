@@ -206,7 +206,6 @@ typedef boost::unordered_map<ByteString , sal_Bool ,
 class XMLFile : public XMLParentNode
 {
 public:
-    XMLFile() ;
     XMLFile(
                 const String &rFileName // the file name, empty if created from memory stream
     );
@@ -217,9 +216,6 @@ public:
     void        Print( XMLNode *pCur = NULL, sal_uInt16 nLevel = 0 );
     virtual void SearchL10NElements( XMLParentNode *pCur, int pos = 0 );
     void        Extract( XMLFile *pCur = NULL );
-    void        View();
-//  void static Signal_handler(int signo);//void*,oslSignalInfo * pInfo);
-    void        showType(XMLParentNode* node);
 
     XMLHashMap* GetStrings(){return XMLStrings;}
     sal_Bool        Write( ByteString &rFilename );

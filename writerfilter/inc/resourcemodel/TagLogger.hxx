@@ -50,7 +50,7 @@ namespace writerfilter
     class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC TagLogger
     {
     public:
-        typedef TagLogger* Pointer_t;
+        typedef boost::shared_ptr<TagLogger> Pointer_t;
 
     private:
         xmlTextWriterPtr pWriter;

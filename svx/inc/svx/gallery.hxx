@@ -243,8 +243,6 @@ public:
     static sal_Bool                 InsertURL( sal_uIntPtr nThemeId, const String& rURL,
                                            const sal_uIntPtr nSgaFormat /* = SGA_FORMAT_ALL */ );
 
-    static sal_uIntPtr              GetObjCount( const String& rThemeName );
-
     static sal_Bool                 GetGraphicObj( const String& rThemeName, sal_uIntPtr nPos,
                                                Graphic* pGraphic = NULL, Bitmap* pThumb = NULL,
                                                sal_Bool bProgess = sal_False );
