@@ -47,13 +47,11 @@ public:
 
 protected:
                         XRenderPeer();
-                        ~XRenderPeer();
     void                InitRenderLib();
 
     Display*            mpDisplay;
     XRenderPictFormat*  mpStandardFormatA8;
     int                 mnRenderVersion;
-    oslModule           mpRenderLib;
 
 public:
     XRenderPictFormat* GetStandardFormatA8() const;
@@ -85,45 +83,8 @@ public:
     void        CompositeTrapezoids( int nOp, Picture aSrc, Picture aDst,
                     const XRenderPictFormat*, int nXSrc, int nYSrc,
                     const XTrapezoid*, int nCount ) const;
-    bool        AddTraps( Picture aDst, int nXOfs, int nYOfs,
+    void        AddTraps( Picture aDst, int nXOfs, int nYOfs,
                     const _XTrap*, int nCount ) const;
-
-    bool        AreTrapezoidsSupported() const
-#ifdef XRENDER_LINK
-                    { return true; }
-#else
-                    { return mpXRenderCompositeTrapezoids!=NULL; }
-
-private:
-    XRenderPictFormat* (*mpXRenderFindFormat)(Display*,unsigned long,
-        const XRenderPictFormat*,int);
-    XRenderPictFormat* (*mpXRenderFindVisualFormat)(Display*,Visual*);
-    XRenderPictFormat* (*mpXRenderFindStandardFormat)(Display*,int);
-    Bool        (*mpXRenderQueryExtension)(Display*,int*,int*);
-    void        (*mpXRenderQueryVersion)(Display*,int*,int*);
-
-    Picture     (*mpXRenderCreatePicture)(Display*,Drawable, const XRenderPictFormat*,
-                    unsigned long,const XRenderPictureAttributes*);
-    void        (*mpXRenderChangePicture)(Display*,Picture,
-                    unsigned long,const XRenderPictureAttributes*);
-    void        (*mpXRenderSetPictureClipRegion)(Display*,Picture,XLIB_Region);
-    void        (*mpXRenderFreePicture)(Display*,Picture);
-    void        (*mpXRenderComposite)(Display*,int,Picture,Picture,Picture,
-                    int,int,int,int,int,int,unsigned,unsigned);
-
-    GlyphSet    (*mpXRenderCreateGlyphSet)(Display*, const XRenderPictFormat*);
-    void        (*mpXRenderFreeGlyphSet)(Display*,GlyphSet);
-    void        (*mpXRenderAddGlyphs)(Display*,GlyphSet,Glyph*,
-                    const XGlyphInfo*,int,const char*,int);
-    void        (*mpXRenderFreeGlyphs)(Display*,GlyphSet,Glyph*,int);
-    void        (*mpXRenderCompositeString32)(Display*,int,Picture,Picture,
-                    const XRenderPictFormat*,GlyphSet,int,int,int,int,const unsigned*,int);
-    void        (*mpXRenderFillRectangle)(Display*,int,Picture,
-                    const XRenderColor*,int,int,unsigned int,unsigned int);
-    void        (*mpXRenderCompositeTrapezoids)(Display*,int,Picture,Picture,
-                    const XRenderPictFormat*,int,int,const XTrapezoid*,int);
-    void        (*mpXRenderAddTraps)(Display*,Picture,int,int,const _XTrap*,int);
-#endif // XRENDER_LINK
 };
 
 //=====================================================================
@@ -158,63 +119,38 @@ inline XRenderPictFormat* XRenderPeer::GetStandardFormatA8() const
 
 inline XRenderPictFormat* XRenderPeer::FindStandardFormat(int nFormat) const
 {
-#ifdef XRENDER_LINK
     return XRenderFindStandardFormat(mpDisplay, nFormat);
-#else
-    return (*mpXRenderFindStandardFormat)(mpDisplay, nFormat);
-#endif
 }
 
 inline XRenderPictFormat* XRenderPeer::FindVisualFormat( Visual* pVisual ) const
 {
-#ifdef XRENDER_LINK
     return XRenderFindVisualFormat ( mpDisplay, pVisual );
-#else
-    return (*mpXRenderFindVisualFormat)( mpDisplay, pVisual );
-#endif
 }
 
 inline XRenderPictFormat* XRenderPeer::FindPictureFormat( unsigned long nFormatMask,
     const XRenderPictFormat& rFormatAttr ) const
 {
-#ifdef XRENDER_LINK
     return XRenderFindFormat( mpDisplay, nFormatMask, &rFormatAttr, 0 );
-#else
-    return (*mpXRenderFindFormat)( mpDisplay, nFormatMask, &rFormatAttr, 0 );
-#endif
 }
 
 inline Picture XRenderPeer::CreatePicture( Drawable aDrawable,
     const XRenderPictFormat* pVisFormat, unsigned long nValueMask,
     const XRenderPictureAttributes* pRenderAttr ) const
 {
-#ifdef XRENDER_LINK
     return XRenderCreatePicture( mpDisplay, aDrawable, pVisFormat,
                                  nValueMask, pRenderAttr );
-#else
-    return (*mpXRenderCreatePicture)( mpDisplay, aDrawable, pVisFormat,
-        nValueMask, pRenderAttr );
-#endif
 }
 
 inline void XRenderPeer::ChangePicture( Picture aPicture,
     unsigned long nValueMask, const XRenderPictureAttributes* pRenderAttr ) const
 {
-#ifdef XRENDER_LINK
     XRenderChangePicture( mpDisplay, aPicture, nValueMask, pRenderAttr );
-#else
-    (*mpXRenderChangePicture)( mpDisplay, aPicture, nValueMask, pRenderAttr );
-#endif
 }
 
 inline void XRenderPeer::SetPictureClipRegion( Picture aPicture,
     XLIB_Region aXlibRegion ) const
 {
-#ifdef XRENDER_LINK
     XRenderSetPictureClipRegion( mpDisplay, aPicture, aXlibRegion );
-#else
-    (*mpXRenderSetPictureClipRegion)( mpDisplay, aPicture, aXlibRegion );
-#endif
 }
 
 inline void XRenderPeer::CompositePicture( int nXRenderOp,
@@ -222,52 +158,30 @@ inline void XRenderPeer::CompositePicture( int nXRenderOp,
     int nSrcX, int nSrcY, int nMaskX, int nMaskY, int nDstX, int nDstY,
     unsigned nWidth, unsigned nHeight ) const
 {
-#ifdef XRENDER_LINK
     XRenderComposite( mpDisplay, nXRenderOp, aSrcPic, aMaskPic, aDstPic,
                       nSrcX, nSrcY, nMaskX, nMaskY, nDstX, nDstY, nWidth, nHeight );
-#else
-    (*mpXRenderComposite)( mpDisplay, nXRenderOp, aSrcPic, aMaskPic, aDstPic,
-        nSrcX, nSrcY, nMaskX, nMaskY, nDstX, nDstY, nWidth, nHeight );
-#endif
 }
 
 inline void XRenderPeer::FreePicture( Picture aPicture ) const
 {
-#ifdef XRENDER_LINK
     XRenderFreePicture( mpDisplay, aPicture );
-#else
-    (*mpXRenderFreePicture)( mpDisplay, aPicture );
-#endif
 }
 
 inline GlyphSet XRenderPeer::CreateGlyphSet() const
 {
-#ifdef XRENDER_LINK
     return XRenderCreateGlyphSet( mpDisplay, mpStandardFormatA8 );
-#else
-    return (*mpXRenderCreateGlyphSet)( mpDisplay, mpStandardFormatA8 );
-#endif
 }
 
 inline void XRenderPeer::FreeGlyphSet( GlyphSet aGS ) const
 {
-#ifdef XRENDER_LINK
     XRenderFreeGlyphSet( mpDisplay, aGS );
-#else
-    (*mpXRenderFreeGlyphSet)( mpDisplay, aGS );
-#endif
 }
 
 inline void XRenderPeer::AddGlyph( GlyphSet aGS, Glyph nGlyphId,
     const XGlyphInfo& rGI, const char* pBuffer, int nBufSize ) const
 {
-#ifdef XRENDER_LINK
     XRenderAddGlyphs( mpDisplay, aGS, &nGlyphId, &rGI, 1,
                       const_cast<char*>(pBuffer), nBufSize );
-#else
-    (*mpXRenderAddGlyphs)( mpDisplay, aGS, &nGlyphId, &rGI, 1,
-        const_cast<char*>(pBuffer), nBufSize );
-#endif
 }
 
 inline void XRenderPeer::FreeGlyph( GlyphSet aGS, Glyph nGlyphId ) const
@@ -284,23 +198,14 @@ inline void XRenderPeer::CompositeString32( Picture aSrc, Picture aDst,
     GlyphSet aGlyphSet, int nDstX, int nDstY,
     const unsigned* pText, int nTextLen ) const
 {
-#ifdef XRENDER_LINK
     XRenderCompositeString32( mpDisplay, PictOpOver, aSrc, aDst, NULL,
                               aGlyphSet, 0, 0, nDstX, nDstY, pText, nTextLen );
-#else
-    (*mpXRenderCompositeString32)( mpDisplay, PictOpOver, aSrc, aDst, NULL,
-        aGlyphSet, 0, 0, nDstX, nDstY, pText, nTextLen );
-#endif
 }
 
 inline void XRenderPeer::FillRectangle( int a, Picture b, const XRenderColor* c,
     int d, int e, unsigned int f, unsigned int g) const
 {
-#ifdef XRENDER_LINK
     XRenderFillRectangle( mpDisplay, a, b, c, d, e, f, g );
-#else
-    (*mpXRenderFillRectangle)( mpDisplay, a, b, c, d, e, f, g );
-#endif
 }
 
 
@@ -308,26 +213,14 @@ inline void XRenderPeer::CompositeTrapezoids( int nOp,
     Picture aSrc, Picture aDst, const XRenderPictFormat* pXRPF,
     int nXSrc, int nYSrc, const XTrapezoid* pXT, int nCount ) const
 {
-#ifdef XRENDER_LINK
     XRenderCompositeTrapezoids( mpDisplay, nOp, aSrc, aDst, pXRPF,
         nXSrc, nYSrc, pXT, nCount );
-#else
-    (*mpXRenderCompositeTrapezoids)( mpDisplay, nOp, aSrc, aDst, pXRPF,
-        nXSrc, nYSrc, pXT, nCount );
-#endif
 }
 
-inline bool XRenderPeer::AddTraps( Picture aDst, int nXOfs, int nYOfs,
+inline void XRenderPeer::AddTraps( Picture aDst, int nXOfs, int nYOfs,
     const _XTrap* pTraps, int nCount ) const
 {
-#ifdef XRENDER_LINK
     XRenderAddTraps( mpDisplay, aDst, nXOfs, nYOfs, pTraps, nCount );
-#else
-    if( !mpXRenderAddTraps )
-        return false;
-    (*mpXRenderAddTraps)( mpDisplay, aDst, nXOfs, nYOfs, pTraps, nCount );
-#endif
-    return true;
 }
 
 //=====================================================================

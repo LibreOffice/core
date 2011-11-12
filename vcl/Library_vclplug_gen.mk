@@ -172,14 +172,9 @@ endif
 endif
 
 ## handle Render linking
-ifeq ($(XRENDER_LINK),YES)
-$(eval $(call gb_Library_add_defs,vclplug_gen,\
-    -DXRENDER_LINK \
-))
 $(eval $(call gb_Library_add_libs,vclplug_gen,\
     $(shell pkg-config --libs xrender) \
 ))
-endif
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_linked_libs,vclplug_gen,\

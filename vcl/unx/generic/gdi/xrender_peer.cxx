@@ -47,23 +47,11 @@ using namespace rtl;
 // ---------------------------------------------------------------------------
 
 XRenderPeer::XRenderPeer()
-:   mpDisplay( GetGenericData()->GetSalDisplay()->GetDisplay() ),
-    mpStandardFormatA8( NULL ),
-    mnRenderVersion( 0 ),
-    mpRenderLib( NULL )
-#ifndef XRENDER_LINK
-,   mpXRenderCompositeTrapezoids( NULL )
-,   mpXRenderAddTraps( NULL )
-#endif // XRENDER_LINK
+    : mpDisplay( GetGenericData()->GetSalDisplay()->GetDisplay() )
+    , mpStandardFormatA8( NULL )
+    , mnRenderVersion( 0 )
 {
     InitRenderLib();
-}
-
-// ---------------------------------------------------------------------------
-
-XRenderPeer::~XRenderPeer()
-{
-    osl_unloadModule( mpRenderLib );
 }
 
 // ---------------------------------------------------------------------------
@@ -79,117 +67,11 @@ XRenderPeer& XRenderPeer::GetInstance()
 void XRenderPeer::InitRenderLib()
 {
     int nDummy;
-    if( !XQueryExtension( mpDisplay, "RENDER", &nDummy, &nDummy, &nDummy ) )
-        return;
-
-#ifndef XRENDER_LINK
-    // we don't know if we are running on a system with xrender library
-    // we don't want to install system libraries ourselves
-    // => load them dynamically when they are there
-    const OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( "libXrender.so.1" ));
-    mpRenderLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
-    if( !mpRenderLib ) {
-#ifdef DEBUG
-        fprintf( stderr, "Display can do XRender, but no %s installed.\n"
-            "Please install for improved display performance\n", OUStringToOString( aLibName.getStr(),
-                                                                                    osl_getThreadTextEncoding() ).getStr() );
-#endif
-        return;
-    }
-
-    oslGenericFunction pFunc;
-    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderQueryExtension" );
-    if( !pFunc ) return;
-    mpXRenderQueryExtension = (Bool(*)(Display*,int*,int*))pFunc;
-
-    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderQueryVersion" );
-    if( !pFunc ) return;
-    mpXRenderQueryVersion = (void(*)(Display*,int*,int*))pFunc;
-
-    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderFindVisualFormat" );
-    if( !pFunc ) return;
-    mpXRenderFindVisualFormat = (XRenderPictFormat*(*)(Display*,Visual*))pFunc;
-
-    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderFindStandardFormat" );
-    if( !pFunc ) return;
-    mpXRenderFindStandardFormat = (XRenderPictFormat*(*)(Display*,int))pFunc;
-
-    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderFindFormat" );
-    if( !pFunc ) return;
-    mpXRenderFindFormat = (XRenderPictFormat*(*)(Display*,unsigned long,
-        const XRenderPictFormat*,int))pFunc;
-
-    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderCreateGlyphSet" );
-    if( !pFunc ) return;
-    mpXRenderCreateGlyphSet = (GlyphSet(*)(Display*,const XRenderPictFormat*))pFunc;
-
-    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderFreeGlyphSet" );
-    if( !pFunc ) return;
-    mpXRenderFreeGlyphSet = (void(*)(Display*,GlyphSet))pFunc;
-
-    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderAddGlyphs" );
-    if( !pFunc ) return;
-    mpXRenderAddGlyphs = (void(*)(Display*,GlyphSet,Glyph*,const XGlyphInfo*,
-        int,const char*,int))pFunc;
-
-    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderFreeGlyphs" );
-    if( !pFunc ) return;
-    mpXRenderFreeGlyphs = (void(*)(Display*,GlyphSet,Glyph*,int))pFunc;
-
-    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderCompositeString32" );
-    if( !pFunc ) return;
-    mpXRenderCompositeString32 = (void(*)(Display*,int,Picture,Picture,
-        const XRenderPictFormat*,GlyphSet,int,int,int,int,const unsigned*,int))pFunc;
-
-    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderCreatePicture" );
-    if( !pFunc ) return;
-    mpXRenderCreatePicture = (Picture(*)(Display*,Drawable,const XRenderPictFormat*,
-        unsigned long,const XRenderPictureAttributes*))pFunc;
-
-    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderChangePicture" );
-    if( !pFunc ) return;
-    mpXRenderChangePicture = (void(*)(Display*,Picture,unsigned long,const XRenderPictureAttributes*))pFunc;
-
-    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderSetPictureClipRegion" );
-    if( !pFunc ) return;
-    mpXRenderSetPictureClipRegion = (void(*)(Display*,Picture,XLIB_Region))pFunc;
-
-    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderFreePicture" );
-    if( !pFunc ) return;
-    mpXRenderFreePicture = (void(*)(Display*,Picture))pFunc;
-
-    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderComposite" );
-    if( !pFunc ) return;
-    mpXRenderComposite = (void(*)(Display*,int,Picture,Picture,Picture,
-        int,int,int,int,int,int,unsigned,unsigned))pFunc;
-
-    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderFillRectangle" );
-    if( !pFunc ) return;
-    mpXRenderFillRectangle = (void(*)(Display*,int,Picture,const XRenderColor*,
-        int,int,unsigned int,unsigned int))pFunc;
-
-    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderCompositeTrapezoids" );
-    mpXRenderCompositeTrapezoids = (void(*)(Display*,int,Picture,Picture,
-        const XRenderPictFormat*,int,int,const XTrapezoid*,int))pFunc;
-
-    pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderAddTraps" );
-    mpXRenderAddTraps = (void(*)(Display*,Picture,int,int,const _XTrap*,int))pFunc;
-
-#endif // XRENDER_LINK
-
-    // needed to initialize libXrender internals, we already know its there
-#ifdef XRENDER_LINK
+    // needed to initialize libXrender internals
     XRenderQueryExtension( mpDisplay, &nDummy, &nDummy );
-#else
-    (*mpXRenderQueryExtension)( mpDisplay, &nDummy, &nDummy );
-#endif
 
     int nMajor, nMinor;
-#ifdef XRENDER_LINK
     XRenderQueryVersion( mpDisplay, &nMajor, &nMinor );
-#else
-    (*mpXRenderQueryVersion)( mpDisplay, &nMajor, &nMinor );
-#endif
     mnRenderVersion = 16*nMajor + nMinor;
 
     // the 8bit alpha mask format must be there
