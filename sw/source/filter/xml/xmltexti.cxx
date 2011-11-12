@@ -206,7 +206,7 @@ sal_Bool SwXMLTextImportHelper::IsInHeaderFooter() const
     OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
     OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
-    SwDoc *pDoc = pTxtCrsr->GetDoc();
+    SwDoc *pDoc = pTxtCrsr ? pTxtCrsr->GetDoc() : NULL;
 
     return pDoc && pDoc->IsInHeaderFooter( pTxtCrsr->GetPaM()->GetPoint()->nNode );
 }

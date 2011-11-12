@@ -183,6 +183,13 @@ void CheckSelection( struct ESelection& rSel, SvxTextForwarder* pForwarder ) thr
     }
 }
 
+void CheckSelection( struct ESelection& rSel, SvxEditSource *pEdit ) throw()
+{
+    if (!pEdit)
+        return;
+    CheckSelection( rSel, pEdit->GetTextForwarder() );
+}
+
 // ====================================================================
 // class SvxUnoTextRangeBase
 // ====================================================================
@@ -275,8 +282,7 @@ void SvxUnoTextRangeBase::SetSelection( const ESelection& rSelection ) throw()
     SolarMutexGuard aGuard;
 
     maSelection = rSelection;
-    if (mpEditSource != NULL)
-        CheckSelection( maSelection, mpEditSource->GetTextForwarder() );
+    CheckSelection( maSelection, mpEditSource );
 }
 
 // Interface XTextRange ( XText )
@@ -291,7 +297,6 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getStart(void)
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
     {
-
         CheckSelection( maSelection, pForwarder );
 
         SvxUnoTextBase* pText = SvxUnoTextBase::getImplementation( getText() );
@@ -406,7 +411,6 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValue( const OUString& PropertyNa
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
     {
-
         CheckSelection( maSelection, pForwarder );
 
         const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName );
@@ -1308,7 +1312,7 @@ uno::Sequence< uno::Any > SAL_CALL SvxUnoTextRangeBase::getPropertyDefaults( con
 // internal
 void SvxUnoTextRangeBase::CollapseToStart(void) throw()
 {
-    CheckSelection( maSelection, mpEditSource->GetTextForwarder() );
+    CheckSelection( maSelection, mpEditSource );
 
     maSelection.nEndPara = maSelection.nStartPara;
     maSelection.nEndPos  = maSelection.nStartPos;
@@ -1316,7 +1320,7 @@ void SvxUnoTextRangeBase::CollapseToStart(void) throw()
 
 void SvxUnoTextRangeBase::CollapseToEnd(void) throw()
 {
-    CheckSelection( maSelection, mpEditSource->GetTextForwarder() );
+    CheckSelection( maSelection, mpEditSource );
 
     maSelection.nStartPara = maSelection.nEndPara;
     maSelection.nStartPos  = maSelection.nEndPos;
@@ -1324,7 +1328,7 @@ void SvxUnoTextRangeBase::CollapseToEnd(void) throw()
 
 sal_Bool SvxUnoTextRangeBase::IsCollapsed(void) throw()
 {
-    CheckSelection( maSelection, mpEditSource->GetTextForwarder() );
+    CheckSelection( maSelection, mpEditSource );
 
     return ( maSelection.nStartPara == maSelection.nEndPara &&
              maSelection.nStartPos  == maSelection.nEndPos );
@@ -1332,7 +1336,7 @@ sal_Bool SvxUnoTextRangeBase::IsCollapsed(void) throw()
 
 sal_Bool SvxUnoTextRangeBase::GoLeft(sal_Int16 nCount, sal_Bool Expand) throw()
 {
-    CheckSelection( maSelection, mpEditSource->GetTextForwarder() );
+    CheckSelection( maSelection, mpEditSource );
 
     //  #75098# use end position, as in Writer (start is anchor, end is cursor)
     sal_uInt16 nNewPos = maSelection.nEndPos;
@@ -1374,7 +1378,6 @@ sal_Bool SvxUnoTextRangeBase::GoRight(sal_Int16 nCount, sal_Bool Expand)  throw(
     if( pForwarder )
     {
         CheckSelection( maSelection, pForwarder );
-
 
         sal_uInt16 nNewPos = maSelection.nEndPos + nCount; //! Overflow???
         sal_uInt16 nNewPar = maSelection.nEndPara;
@@ -1419,7 +1422,7 @@ void SvxUnoTextRangeBase::GotoStart(sal_Bool Expand) throw()
 
 void SvxUnoTextRangeBase::GotoEnd(sal_Bool Expand) throw()
 {
-    CheckSelection( maSelection, mpEditSource->GetTextForwarder() );
+    CheckSelection( maSelection, mpEditSource );
 
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
@@ -1670,8 +1673,11 @@ void SAL_CALL SvxUnoTextBase::insertString( const uno::Reference< text::XTextRan
         return;
 
     ESelection aSelection;
-    ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
-    SetSelection( aSelection );
+    if (GetEditSource())
+    {
+        ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
+        SetSelection( aSelection );
+    }
 
     SvxUnoTextRangeBase* pRange = SvxUnoTextRange::getImplementation( xRange );
     if(pRange)
@@ -1771,10 +1777,10 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
                 return;
             }
         }
+        default:
+            throw lang::IllegalArgumentException();
         }
     }
-
-    throw lang::IllegalArgumentException();
 }
 
 // XText
