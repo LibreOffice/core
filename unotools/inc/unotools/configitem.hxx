@@ -183,9 +183,6 @@ namespace utl
                 PropertyChangeListener if the sub tree broadcasts changes. */
             virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames)=0;
 
-            /** is called from the ConfigManager if it is destroyed before the ConfigItem. */
-            void                    ReleaseConfigMgr();
-
             const rtl::OUString&    GetSubTreeName() const {return sSubTree;}
 
             sal_Bool                IsModified() const;

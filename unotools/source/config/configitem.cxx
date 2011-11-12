@@ -250,23 +250,6 @@ ConfigItem::~ConfigItem()
     delete pImpl;
 }
 
-void    ConfigItem::ReleaseConfigMgr()
-{
-    Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
-    if(xHierarchyAccess.is())
-    {
-        try
-        {
-            Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
-            xBatch->commitChanges();
-        }
-        CATCH_INFO("Exception from commitChanges(): ")
-    }
-    RemoveChangesListener();
-    OSL_ENSURE(pImpl->pManager, "ConfigManager already released");
-    pImpl->pManager = 0;
-}
-
 void ConfigItem::CallNotify( const com::sun::star::uno::Sequence<OUString>& rPropertyNames )
 {
     // the call is forwarded to the virtual Notify() method
