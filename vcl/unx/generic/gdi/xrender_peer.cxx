@@ -74,36 +74,4 @@ void XRenderPeer::InitRenderLib()
     mpStandardFormatA8 = FindPictureFormat( PictFormatAlphaMask|PictFormatDepth, aPictFormat );
 }
 
-// ---------------------------------------------------------------------------
-
-// return mask of screens capable of XRENDER text
-sal_uInt32 XRenderPeer::InitRenderText()
-{
-    if( !mpStandardFormatA8 )
-        return 0;
-
-    // and the visual must be supported too on at least one screen
-    sal_uInt32 nRetMask = 0;
-    SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
-    const int nScreenCount = pSalDisp->GetScreenCount();
-    XRenderPictFormat* pVisualFormat = NULL;
-    int nMaxDepth = 0;
-    for( int nScreen = 0; nScreen < nScreenCount; ++nScreen )
-    {
-        Visual* pXVisual = pSalDisp->GetVisual( nScreen ).GetVisual();
-        pVisualFormat = FindVisualFormat( pXVisual );
-        if( pVisualFormat != NULL )
-        {
-            int nVDepth = pSalDisp->GetVisual( nScreen ).GetDepth();
-            if( nVDepth > nMaxDepth )
-                nMaxDepth = nVDepth;
-            nRetMask |= 1U << nScreen;
-        }
-    }
-
-    return nRetMask;
-}
-
-// ---------------------------------------------------------------------------
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

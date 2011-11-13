@@ -42,8 +42,6 @@ class XRenderPeer
 public:
     static XRenderPeer& GetInstance();
 
-    sal_uInt32          InitRenderText();
-
 protected:
                         XRenderPeer();
     void                InitRenderLib();

@@ -49,8 +49,6 @@ public:
     const RawBitmap*    GetRawBitmap( ServerFont&, int nGlyphIndex );
 
 protected:
-    void                InitAntialiasing();
-
     virtual void        RemovingFont( ServerFont& );
     virtual void        RemovingGlyph( ServerFont&, GlyphData&, int nGlyphIndex );
 

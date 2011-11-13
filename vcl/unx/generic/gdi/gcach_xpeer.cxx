@@ -75,8 +75,6 @@ X11GlyphPeer::X11GlyphPeer()
     if( mnMaxScreens > 1 )
         mnExtByteCount = sizeof(MultiScreenGlyph) + sizeof(Pixmap) * (mnMaxScreens - 1);
     mnDefaultScreen = rSalDisplay.GetDefaultScreenNumber();
-
-    InitAntialiasing();
 }
 
 // ---------------------------------------------------------------------------
@@ -101,25 +99,6 @@ X11GlyphPeer::~X11GlyphPeer()
         }
         rMap.clear();
     }
-}
-
-// ---------------------------------------------------------------------------
-
-void X11GlyphPeer::InitAntialiasing()
-{
-    int nEnvAntiAlias = 0;
-    const char* pEnvAntiAlias = getenv( "SAL_ANTIALIAS_DISABLE" );
-    if( pEnvAntiAlias )
-    {
-        nEnvAntiAlias = atoi( pEnvAntiAlias );
-        if( nEnvAntiAlias == 0 )
-            return;
-    }
-
-    // enable XRENDER accelerated aliasing on screens that support it
-    // unless it explicitly disabled by an environment variable
-    if( (nEnvAntiAlias & 2) == 0 )
-        XRenderPeer::GetInstance().InitRenderText();
 }
 
 // ===========================================================================
