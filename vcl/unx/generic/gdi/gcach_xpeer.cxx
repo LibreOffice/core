@@ -42,18 +42,6 @@
 
 // ===========================================================================
 
-// all glyph specific data needed by the XGlyphPeer is quite trivial
-// with one exception: if multiple screens are involved and non-antialiased
-// glyph rendering is active, then we need screen specific pixmaps
-struct MultiScreenGlyph
-{
-    const RawBitmap*    mpRawBitmap;
-    Glyph               maXRGlyphId;
-    Pixmap              maPixmaps[1];   // [mnMaxScreens]
-};
-
-// ===========================================================================
-
 X11GlyphPeer::X11GlyphPeer()
 :   mpDisplay( GetGenericData()->GetSalDisplay()->GetDisplay() )
 ,   mnMaxScreens(0)
@@ -96,7 +84,7 @@ X11GlyphPeer::~X11GlyphPeer()
 
 // ===========================================================================
 
-enum { INFO_EMPTY=0, INFO_PIXMAP, INFO_XRENDER, INFO_RAWBMP, INFO_MULTISCREEN };
+enum { INFO_EMPTY=0, INFO_PIXMAP, INFO_XRENDER, INFO_RAWBMP };
 static const Glyph NO_GLYPHID = 0;
 static RawBitmap* const NO_RAWBMP = NULL;
 static const Pixmap NO_PIXMAP = ~0;
@@ -111,9 +99,6 @@ void X11GlyphPeer::RemovingFont( ServerFont& rServerFont )
         case INFO_PIXMAP:
         case INFO_RAWBMP:
             // nothing to do
-            break;
-        case INFO_MULTISCREEN:
-            // cannot happen...
             break;
 
         case INFO_XRENDER:
@@ -148,25 +133,6 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& /*rServerFont*/, GlyphData& rGlyph
                     XFreePixmap( mpDisplay, aPixmap );
                     mnBytesUsed -= nHeight * ((nWidth + 7) >> 3);
                 }
-            }
-            break;
-
-        case INFO_MULTISCREEN:
-            {
-                MultiScreenGlyph* pMSGlyph = reinterpret_cast<MultiScreenGlyph*>(pGlyphExt);
-                for( int i = 0; i < mnMaxScreens; ++i)
-                {
-                    if( pMSGlyph->maPixmaps[i] == NO_PIXMAP )
-                        continue;
-                    if( pMSGlyph->maPixmaps[i] == None )
-                        continue;
-                    XFreePixmap( mpDisplay, pMSGlyph->maPixmaps[i] );
-                    mnBytesUsed -= nHeight * ((nWidth + 7) >> 3);
-                }
-                delete pMSGlyph->mpRawBitmap;
-                // Glyph nGlyphId = (Glyph)rGlyphData.GetExtPointer();
-                // XRenderPeer::GetInstance().FreeGlyph( aGlyphSet, &nGlyphId );
-                delete[] pMSGlyph; // it was allocated with new char[]
             }
             break;
 

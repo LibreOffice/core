@@ -36,7 +36,6 @@
 #include "generic/glyphcache.hxx"
 
 class SalDisplay;
-struct MultiScreenGlyph;
 
 class X11GlyphPeer
 : public GlyphCachePeer
