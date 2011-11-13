@@ -79,7 +79,7 @@ public class Bootstrap extends Activity
 
         String fullName = null;
         boolean found = false;
-        String[] libraryLocations = { "/system/lib/", dataDir + "/lib/" };
+        String[] libraryLocations = { dataDir + "/lib/", "/system/lib/" };
         for (String dir : libraryLocations ) {
             fullName = dir + library;
             if (new File(fullName).exists()) {
