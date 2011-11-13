@@ -1066,3 +1066,39 @@
 +
 +.INCLUDE :  target.mk
 +
+--- misc/db-4.7.25.NC/dbinc/mutex_int.h
++++ misc/build/db-4.7.25.NC/dbinc/mutex_int.h
+@@ -402,6 +402,25 @@
+ 
+ #ifdef LOAD_ACTUAL_MUTEX_CODE
+ /* gcc/arm: 0 is clear, 1 is set. */
++#if defined __thumb__
++#define       MUTEX_SET(tsl) ({                                       \
++      int __r, __p;                                                   \
++      __asm__ volatile(                                               \
++              ".align 2\n\t"                                          \
++              "bx     pc\n\t"                                         \
++              "nop\n\t"                                               \
++              ".arm\n\t"                                              \
++              "swpb   %0, %2, [%3]\n\t"                               \
++              "eor    %0, %0, #1\n\t"                                 \
++              "orr    %1, pc, #1\n\t"                                 \
++              "bx     %1\n\t"                                         \
++              ".force_thumb"                                          \
++          : "=&r" (__r), "=r" (__p)                                   \
++          : "r" (1), "r" (tsl)                                        \
++          );                                                          \
++      __r & 1;                                                        \
++})
++#else
+ #define	MUTEX_SET(tsl) ({						\
+ 	int __r;							\
+ 	asm volatile(							\
+@@ -484,6 +503,7 @@
+ 	    );								\
+ 	__r & 1;							\
+ })
++#endif
+ 
+ #define	MUTEX_UNSET(tsl)	(*(volatile tsl_t *)(tsl) = 0)
+ #define	MUTEX_INIT(tsl)         (MUTEX_UNSET(tsl), 0)
