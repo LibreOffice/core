@@ -43,10 +43,6 @@ class X11GlyphPeer
 public:
                         X11GlyphPeer();
     virtual            ~X11GlyphPeer();
-
-protected:
-    virtual void        RemovingFont( ServerFont& );
-    virtual void        RemovingGlyph( ServerFont&, GlyphData&, int nGlyphIndex );
 };
 
 class X11GlyphCache : public GlyphCache

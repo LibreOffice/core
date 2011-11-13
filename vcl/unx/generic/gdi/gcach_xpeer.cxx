@@ -73,19 +73,6 @@ X11GlyphPeer::~X11GlyphPeer()
     }
 }
 
-// ---------------------------------------------------------------------------
-
-void X11GlyphPeer::RemovingFont( ServerFont& )
-{
-}
-
-// ---------------------------------------------------------------------------
-
-// notification to clean up GlyphPeer resources for this glyph
-void X11GlyphPeer::RemovingGlyph( ServerFont&, GlyphData&, int /*nGlyphIndex*/ )
-{
-}
-
 // ===========================================================================
 
 X11GlyphCache::X11GlyphCache( X11GlyphPeer& rPeer )
