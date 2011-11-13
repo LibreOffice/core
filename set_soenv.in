@@ -1220,7 +1220,7 @@ elsif ($platform =~ m/linux|netbsd|aix|freebsd|openbsd|dragonfly/)
    if ($platform =~ m/openbsd/) {
       $SOLARLIB       .= $L.$USR_LOCAL.$LIB;
    }
-   if ( $XLIB ne "/usr/lib" && $XLIB ne "/usr/lib64" ) {
+   if ( $XLIB ne "/usr/lib" && $XLIB ne "/usr/lib64" && $XLIB ne "no_x_libraries" ) {
       $SOLARLIB       .= $L.$XLIB;
    }
    $JAVALIB           = $L.'$JAVA_HOME'.$LIB64.
