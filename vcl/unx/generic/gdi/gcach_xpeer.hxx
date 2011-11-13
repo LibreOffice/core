@@ -45,15 +45,11 @@ public:
                         X11GlyphPeer();
     virtual            ~X11GlyphPeer();
 
-    const RawBitmap*    GetRawBitmap( ServerFont&, int nGlyphIndex );
-
 protected:
     virtual void        RemovingFont( ServerFont& );
     virtual void        RemovingGlyph( ServerFont&, GlyphData&, int nGlyphIndex );
 
     MultiScreenGlyph*   PrepareForMultiscreen( ExtGlyphData& ) const;
-    void                SetRawBitmap( GlyphData&, const RawBitmap* ) const;
-    const RawBitmap*    GetRawBitmap( const GlyphData& ) const;
 
 private:
     Display*            mpDisplay;

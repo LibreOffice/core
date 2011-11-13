@@ -144,45 +144,6 @@ MultiScreenGlyph* X11GlyphPeer::PrepareForMultiscreen( ExtGlyphData& rEGD ) cons
 
 // ---------------------------------------------------------------------------
 
-const RawBitmap* X11GlyphPeer::GetRawBitmap( const GlyphData& rGD ) const
-{
-    const RawBitmap* pRawBitmap = NO_RAWBMP;
-    const ExtGlyphData& rEGD = rGD.ExtDataRef();
-    if( rEGD.meInfo == INFO_RAWBMP )
-        pRawBitmap = reinterpret_cast<RawBitmap*>(rEGD.mpData);
-    else if( rEGD.meInfo == INFO_MULTISCREEN )
-        pRawBitmap = reinterpret_cast<MultiScreenGlyph*>(rEGD.mpData)->mpRawBitmap;
-    return pRawBitmap;
-}
-
-// ---------------------------------------------------------------------------
-
-void X11GlyphPeer::SetRawBitmap( GlyphData& rGD, const RawBitmap* pRawBitmap ) const
-{
-    ExtGlyphData& rEGD = rGD.ExtDataRef();
-    switch( rEGD.meInfo )
-    {
-        case INFO_EMPTY:
-            rEGD.meInfo = INFO_RAWBMP;
-            // fall through
-        case INFO_RAWBMP:
-            rEGD.mpData = (void*)pRawBitmap;
-            break;
-        case INFO_PIXMAP:
-        case INFO_XRENDER:
-            PrepareForMultiscreen( rEGD );
-            // fall through
-        case INFO_MULTISCREEN:
-            reinterpret_cast<MultiScreenGlyph*>(rEGD.mpData)->mpRawBitmap = pRawBitmap;
-            break;
-        default:
-            // cannot happen...
-            break;
-    }
-}
-
-// ---------------------------------------------------------------------------
-
 void X11GlyphPeer::RemovingFont( ServerFont& rServerFont )
 {
     void* pFontExt = rServerFont.GetExtPointer();
@@ -275,40 +236,6 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& /*rServerFont*/, GlyphData& rGlyph
         mnBytesUsed = 0;
 
     rGlyphData.ExtDataRef() = ExtGlyphData();
-}
-
-// ---------------------------------------------------------------------------
-
-const RawBitmap* X11GlyphPeer::GetRawBitmap( ServerFont& rServerFont,
-    int nGlyphIndex )
-{
-    if( rServerFont.IsGlyphInvisible( nGlyphIndex ) )
-        return NO_RAWBMP;
-
-    GlyphData& rGlyphData = rServerFont.GetGlyphData( nGlyphIndex );
-
-    const RawBitmap* pRawBitmap = GetRawBitmap( rGlyphData );
-    if( pRawBitmap == NO_RAWBMP )
-    {
-        RawBitmap* pNewBitmap = new RawBitmap;
-        if( rServerFont.GetGlyphBitmap8( nGlyphIndex, *pNewBitmap ) )
-        {
-            pRawBitmap = pNewBitmap;
-            mnBytesUsed += pNewBitmap->mnScanlineSize * pNewBitmap->mnHeight;
-            mnBytesUsed += sizeof(pNewBitmap);
-        }
-        else
-        {
-            delete pNewBitmap;
-            // fall back to .notdef glyph
-            if( nGlyphIndex != 0 )  // recurse only once
-                pRawBitmap = GetRawBitmap( rServerFont, 0 );
-        }
-
-        SetRawBitmap( rGlyphData, pRawBitmap );
-    }
-
-    return pRawBitmap;
 }
 
 // ===========================================================================
