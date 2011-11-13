@@ -348,6 +348,8 @@ void DomainMapper_Impl::PushListProperties(PropertyMapPtr pListProperties)
 void    DomainMapper_Impl::PopProperties(ContextType eId)
 {
     OSL_ENSURE(!m_aPropertyStacks[eId].empty(), "section stack already empty");
+    if ( m_aPropertyStacks[eId].empty() )
+        return;
 
     if ( eId == CONTEXT_SECTION )
     {

@@ -1668,6 +1668,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().aTableRowSprms = m_aDefaultState.aTableRowSprms;
             m_aStates.top().aTableRowAttributes = m_aDefaultState.aTableRowAttributes;
             m_aStates.top().nCellX = 0;
+            // In case the table definition is in the middle of the row
+            // (invalid), make sure table definition is emitted.
+            m_bNeedPap = true;
             break;
         case RTF_WIDCTLPAR:
         case RTF_NOWIDCTLPAR:
@@ -1954,6 +1957,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     if (nSprm > 0)
     {
         m_aStates.top().aParagraphSprms->push_back(make_pair(nSprm, pIntValue));
+        if (nKeyword == RTF_ITAP && nParam > 0)
+            // Invalid tables may omit INTBL after ITAP
+            dispatchFlag(RTF_INTBL);
         return 0;
     }
 
@@ -2286,6 +2292,8 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aTableCellsAttributes.push_back(m_aStates.top().aTableCellAttributes);
                 m_aStates.top().aTableCellSprms = m_aDefaultState.aTableCellSprms;
                 m_aStates.top().aTableCellAttributes = m_aDefaultState.aTableCellAttributes;
+                // We assume text after a row definition always belongs to the table, to handle text before the real INTBL token
+                dispatchFlag(RTF_INTBL);
             }
             break;
         case RTF_TRRH:
