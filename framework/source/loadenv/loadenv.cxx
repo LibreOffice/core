@@ -266,9 +266,9 @@ void LoadEnv::initializeLoading(const ::rtl::OUString&                          
     m_bReactivateControllerOnError  = sal_False         ;
     m_bLoaded                       = sal_False         ;
 
-    // try to find out, if its realy a content, which can be loaded or must be "handled"
+    // try to find out, if its really a content, which can be loaded or must be "handled"
     // We use a default value for this in-parameter. Then we have to start a complex check method
-    // internaly. But if this check was already done outside it can be supressed to perform
+    // internally. But if this check was already done outside it can be supressed to perform
     // the load request. We take over the result then!
     if (m_eContentType == E_UNSUPPORTED_CONTENT)
     {
@@ -278,7 +278,7 @@ void LoadEnv::initializeLoading(const ::rtl::OUString&                          
     }
 
     // make URL part of the MediaDescriptor
-    // It doesnt mater, if its already an item of it.
+    // It doesn't mater, if it is already an item of it.
     // It must be the same value ... so we can overwrite it :-)
     m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_URL()] <<= sURL;
 
@@ -298,7 +298,7 @@ void LoadEnv::initializeLoading(const ::rtl::OUString&                          
         m_lMediaDescriptor.erase(pIt);
 
     // patch the MediaDescriptor, so it fullfill the outside requirements
-    // Means especialy items like e.g. UI InteractionHandler, Status Indicator,
+    // Means especially items like e.g. UI InteractionHandler, Status Indicator,
     // MacroExecutionMode etcpp.
 
     /*TODO progress is bound to a frame ... How can we set it here? */
@@ -414,7 +414,7 @@ void LoadEnv::startLoading()
         bStarted = impl_loadContent();
 
     // not started => general error
-    // We cant say - what was the reason for.
+    // We can't say - what was the reason for.
     if (!bStarted)
         throw LoadEnvException(LoadEnvException::ID_GENERAL_ERROR);
 }
@@ -428,8 +428,8 @@ sal_Bool LoadEnv::waitWhileLoading(sal_uInt32 nTimeout)
     throw(LoadEnvException, css::uno::RuntimeException)
 {
     // Because its not a good idea to block the main thread
-    // (and we cant be shure that we are currently not used inside the
-    // main thread!), we cant use conditions here realy. We must yield
+    // (and we can't be sure that we are currently not used inside the
+    // main thread!), we can't use conditions here really. We must yield
     // in an intellegent manner :-)
 
     sal_Int32 nTime = nTimeout;
@@ -489,8 +489,8 @@ void LoadEnv::cancelLoading()
             m_bLoaded = sal_False;
             m_xAsynchronousJob.clear();
         }
-        // or may be its a content handler? Such handler cant be cancelled in its running
-        // operation :-( And we cant deregister us there again :-(
+        // or may be its a content handler? Such handler can't be cancelled in its running
+        // operation :-( And we can't deregister us there again :-(
         // => The only chance is an exception :-)
         else
             throw LoadEnvException(LoadEnvException::ID_STILL_RUNNING);
@@ -618,7 +618,7 @@ void LoadEnv::impl_setResult(sal_Bool bResult)
     impl_reactForLoadingState();
 
     // clearing of this reference will unblock waitWhileLoading()!
-    // So we must be shure, that loading process was realy finished.
+    // So we must be sure, that loading process was really finished.
     // => do it as last operation of this method ...
     m_xAsynchronousJob.clear();
 
@@ -640,7 +640,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
     //     Note: These URL schemata are fix and well known ...
     //     But there can be some additional ones, which was not
     //     defined at implementation time of this class :-(
-    //     So we have to make shure, that the following code
+    //     So we have to make sure, that the following code
     //     can detect such protocol schemata too :-)
 
     if(
@@ -665,7 +665,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
     //      all needed resources. If they are missing - the following
     //      load request will fail.
 
-    /* Attention: The following code cant work on such special URLs!
+    /* Attention: The following code can't work on such special URLs!
                   It should not break the office .. but it make no sense
                   to start expensive object creations and complex search
                   algorithm if its clear, that such URLs must be handled
@@ -768,7 +768,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
     //        But it seems to be better, to break all
     //        further requests for this URL. Otherwhise
     //        we can run into some trouble.
-    LOG_WARNING("LoadEnv::classifyContent()", "realy an unsupported content?")
+    LOG_WARNING("LoadEnv::classifyContent()", "really an unsupported content?")
     return E_UNSUPPORTED_CONTENT;
 }
 
@@ -784,7 +784,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     ReadGuard aReadLock(m_aLock);
 
     // Attention: Because our stl media descriptor is a copy of an uno sequence
-    // we cant use as an in/out parameter here. Copy it before and dont forget to
+    // we can't use as an in/out parameter here. Copy it before and dont forget to
     // update structure afterwards again!
     css::uno::Sequence< css::beans::PropertyValue >        lDescriptor = m_lMediaDescriptor.getAsConstPropertyValueList();
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR       = m_xSMGR;
@@ -1188,7 +1188,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
 
     // Otherwhise ...
     // We need this type information to locate an registered frame loader
-    // Without such information we cant work!
+    // Without such information we can't work!
     ::rtl::OUString sType = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_TYPENAME(), ::rtl::OUString());
     if (!sType.getLength())
         throw LoadEnvException(LoadEnvException::ID_INVALID_MEDIADESCRIPTOR);
@@ -1282,7 +1282,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     }
 
     // check URL
-    // May its not usefull to start expensive document search, if it
+    // May its not useful to start expensive document search, if it
     // can fail only .. because we load from a stream or model directly!
     if (
         (ProtocolCheck::isProtocol(m_aURL.Complete, ProtocolCheck::E_PRIVATE_STREAM )) ||
@@ -1302,12 +1302,12 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
         return css::uno::Reference< css::frame::XFrame >(); // task list can be empty!
 
     // Note: To detect if a document was alrady loaded before
-    // we check URLs here only. But might the existing and the requred
+    // we check URLs here only. But might the existing and the required
     // document has different versions! Then its URLs are the same ...
     sal_Int16 nNewVersion = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_VERSION(), (sal_Int16)(-1));
 
     // will be used to save the first hidden frame referring the searched model
-    // Normaly we are interested on visible frames ... but if there is no such visible
+    // Normally we are interested on visible frames ... but if there is no such visible
     // frame we referr to any hidden frame also (but as fallback only).
     css::uno::Reference< css::frame::XFrame > xHiddenTask;
     css::uno::Reference< css::frame::XFrame > xTask;
@@ -1348,7 +1348,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
             }
 
             // get the original load arguments from the current document
-            // and decide if its realy the same then the one will be.
+            // and decide if its really the same then the one will be.
             // It must be visible and must use the same file revision ...
             // or must not have any file revision set (-1 == -1!)
             ::comphelper::MediaDescriptor lOldDocDescriptor(xModel->getArgs());
@@ -1392,8 +1392,8 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
 
     if (xResult.is())
     {
-        // Now we are shure, that this task includes the searched document.
-        // It's time to activate it. As special feature we try to jump internaly
+        // Now we are sure, that this task includes the searched document.
+        // It's time to activate it. As special feature we try to jump internally
         // if an optional jumpmark is given too.
         if (m_aURL.Mark.getLength())
             impl_jumpToMark(xResult, m_aURL);
@@ -1419,7 +1419,7 @@ sal_Bool LoadEnv::impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< c
     if (!xLock.is())
         return sal_False;
 
-    // Otherwhise we have to look for any other existing lock.
+    // Otherwise we have to look for any other existing lock.
     return xLock->isActionLocked();
 }
 
@@ -1431,7 +1431,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     ReadGuard aReadLock(m_aLock);
 
     // The special backing mode frame will be recycled by definition!
-    // It does'nt matter if somehwere whish to create a new view
+    // It doesn't matter if somehwere whish to create a new view
     // or open a new untitled document ...
     // The only exception form that - hidden frames!
     if (m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_HIDDEN(), sal_False) == sal_True)
@@ -1449,7 +1449,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
         }
     }
 
-    // These states indicates the wishing for creation of a new view in general.
+    // These states indicates a wish for creation of a new view in general.
     if (
         (m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_ASTEMPLATE() , sal_False) == sal_True) ||
         (m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_OPENNEWVIEW(), sal_False) == sal_True)
@@ -1608,7 +1608,7 @@ void LoadEnv::impl_reactForLoadingState()
         // Try to reactivate the old document (if any exists!)
         css::uno::Reference< css::frame::XController > xOldDoc = m_xTargetFrame->getController();
         // clear does not depend from reactivation state of a might existing old document!
-        // We must make shure, that a might following getTargetComponent() call does not return
+        // We must make sure, that a might following getTargetComponent() call does not return
         // the old document!
         m_xTargetFrame.clear();
         if (xOldDoc.is())
