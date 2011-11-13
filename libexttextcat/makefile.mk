@@ -44,10 +44,9 @@ all:
 
 # See http://cgit.freedesktop.org/libreoffice/libexttextcat/ for upstream
 # sources, far better to commit your changes in there
-TARFILE_NAME=libexttextcat-3.1.1
-TARFILE_MD5=33f01c57f92eb6f940b59015c35a4eea
-TARFILE_ROOTDIR=libexttextcat-3.1.1
-PATCH_FILES=libexttextcat-3.1.1.patch
+TARFILE_NAME=libexttextcat-3.2.0
+TARFILE_MD5=e1c178b18f130b40494561f02bc1a948
+TARFILE_ROOTDIR=libexttextcat-3.2.0
 
 .IF "$(GUI)"=="UNX"
 #relative to CONFIGURE_DIR

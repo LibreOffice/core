@@ -4,7 +4,7 @@
 ..\%__SRC%\bin\l*.dll         %_DEST%\bin\*.dll
 
 mkdir: %_DEST%\inc\external\libexttextcat
-..\%__SRC%\misc\build\libexttextcat-3.1.1\src\*.h %_DEST%\inc\external\libexttextcat\*.h
+..\%__SRC%\misc\build\libexttextcat-3.2.0\src\*.h %_DEST%\inc\external\libexttextcat\*.h
 
 # data for language guessing
 ..\%COMMON_OUTDIR%\bin\*.zip %COMMON_DEST%\pck\*.zip
