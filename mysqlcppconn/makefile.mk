@@ -30,7 +30,7 @@ PRJ=.
 PRJNAME=mysqlcppconn
 TARGET=so_mysqlcppconn
 
-EXT_PROJECT_NAME=mysql-connector-cpp
+EXT_PROJECT_NAME=mysql-connector-c++-1.1.0
 
 # --- Settings -----------------------------------------------------
 
@@ -39,7 +39,7 @@ EXT_PROJECT_NAME=mysql-connector-cpp
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=$(EXT_PROJECT_NAME)
-TARFILE_MD5=831126a1ee5af269923cfab6050769fe
+TARFILE_MD5=0981bda6548a8c8233ffce2b6e4b2a23
 ADDITIONAL_FILES=\
                  driver$/makefile.mk \
                  driver$/nativeapi$/makefile.mk \
@@ -61,7 +61,7 @@ MYSQL_BINDING=dynamic
 
 PATCH_FILES=\
     $(TARFILE_NAME).patch \
-    mysql-connector-cpp-mysql-binding-$(MYSQL_BINDING).patch \
+    $(TARFILE_NAME)-mysql-binding-$(MYSQL_BINDING).patch \
     patches/default_to_protocol_tcp.patch
 
 BUILD_DIR=driver
