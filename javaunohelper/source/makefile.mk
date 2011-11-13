@@ -82,11 +82,19 @@ SLOFILES= \
 
 # ------------------------------------------------------------------
 
+.IF "$(GUI)" == "OS2"
+SHL1OBJS=\
+        $(SLO)$/javaunohelper.obj				\
+        $(SLO)$/bootstrap.obj \
+        $(SLO)$/vm.obj
+.ELSE
 LIB1TARGET=$(SLB)$/$(SHL1TARGET).lib
 LIB1OBJFILES=\
         $(SLO)$/javaunohelper.obj				\
         $(SLO)$/bootstrap.obj \
         $(SLO)$/vm.obj
+SHL1VERSIONMAP = javaunohelper.map
+.ENDIF
 
 SHL1TARGET=juhx
 
@@ -96,8 +104,6 @@ SHL1STDLIBS= \
         $(SALLIB)		\
         $(CPPULIB)		\
         $(CPPUHELPERLIB)
-
-SHL1VERSIONMAP = javaunohelper.map
 
 SHL1DEPN=
 SHL1IMPLIB=i$(SHL1TARGET)
@@ -109,16 +115,21 @@ DEF1NAME=$(SHL1TARGET)
 
 # ------------------------------------------------------------------
 
+.IF "$(GUI)" == "OS2"
+SHL2OBJS=\
+        $(SLO)$/preload.obj
+.ELSE
 LIB2TARGET=$(SLB)$/$(SHL2TARGET).lib
 LIB2OBJFILES=\
         $(SLO)$/preload.obj
+SHL2VERSIONMAP = javaunohelper.map
+.ENDIF
 
 SHL2TARGET=juh
 
 SHL2STDLIBS= \
         $(SALLIB)
 
-SHL2VERSIONMAP = javaunohelper.map
 
 SHL2DEPN=
 SHL2IMPLIB=i$(SHL2TARGET)

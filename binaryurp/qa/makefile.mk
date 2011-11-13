@@ -33,17 +33,30 @@ ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
 
+.IF "$(GUI)" == "OS2"
+
+@all:
+    @echo "Skipping, cppunit broken."
+
+.ELSE
+
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 DLLPRE =
 
+.IF "$(GUI)" != "OS2"
 SLOFILES = $(SLO)/test-cache.obj $(SLO)/test-unmarshal.obj
+.ENDIF
 
 SHL1IMPLIB = i$(SHL1TARGET)
 SHL1OBJS = $(SLO)/test-cache.obj
 SHL1RPATH = NONE
 SHL1STDLIBS = $(CPPUNITLIB) $(SALLIB)
+.IF "$(GUI)" != "OS2"
 SHL1TARGET = test-cache
+.ELSE
+SHL1TARGET = test-c
+.ENDIF
 SHL1VERSIONMAP = version.map
 DEF1NAME = $(SHL1TARGET)
 
@@ -69,9 +82,16 @@ SHL2STDLIBS = \
     $(CPPUNITLIB) \
     $(SALHELPERLIB) \
     $(SALLIB)
+.IF "$(GUI)" != "OS2"
 SHL2TARGET = test-unmarshal
+.ELSE
+SHL2TARGET = test-u
+.ENDIF
 SHL2VERSIONMAP = version.map
 DEF2NAME = $(SHL2TARGET)
 
+.ENDIF # "$(GUI)" == "OS2"
+
 .INCLUDE: target.mk
 .INCLUDE: _cppunit.mk
+

@@ -125,7 +125,6 @@ $(MISC)$/$(SHL1TARGET).def: makefile.mk
     @echo ------------------------------
     @echo Making: $@
     @echo LIBRARY     $(SHL1TARGET) INITINSTANCE TERMINSTANCE >$@
-    @echo DESCRIPTION 'DateF StarCalc Addin DLL'>>$@
     @echo DATA        MULTIPLE>>$@
     @echo EXPORTS>>$@
     @echo     _GetFunctionCount>>$@

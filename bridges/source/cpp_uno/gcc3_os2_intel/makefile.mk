@@ -55,6 +55,7 @@ SLOFILES= \
 SHL1TARGET= $(TARGET)
 
 SHL1DEF=defs$/gcc3_uno.def
+SHL1USE_EXPORTS=name
 SHL1IMPLIB=i$(TARGET)
 SHL1VERSIONMAP=..$/..$/bridge_exports.map
 

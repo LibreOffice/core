@@ -85,7 +85,9 @@ SLOFILES=\
         $(SLO)$/HTools.obj                      \
         $(SLO)$/accesslog.obj
 
+.IF "$(GUI)" != "OS2"
 SHL1VERSIONMAP=$(HSQLDB_TARGET).map
+.ENDIF
 
 # --- Library -----------------------------------
 # NO $(DLLPOSTFIX) otherwise we have to find on which plattform we are for the java files
@@ -109,7 +111,9 @@ SHL1IMPLIB=	i$(HSQLDB_TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=	$(SHL1TARGET)
+.IF "$(GUI)" != "OS2"
 DEF1EXPORTFILE=	exports.dxp
+.ENDIF
 
 # --- Targets ----------------------------------
 

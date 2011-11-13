@@ -35,6 +35,13 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(GUI)" == "OS2"
+
+@all:
+    @echo "Skipping, cppunit broken."
+
+.ELSE
+
 #building with stlport, but cppunit was not built with stlport
 .IF "$(USE_SYSTEM_STL)"!="YES"
 .IF "$(SYSTEM_CPPUNIT)"=="YES"
@@ -72,6 +79,8 @@ SLOFILES= \
 
 
 # --- Targets ------------------------------------------------------
+
+.ENDIF # "$(GUI)" == "OS2"
 
 .INCLUDE :  target.mk
 .INCLUDE : _cppunit.mk

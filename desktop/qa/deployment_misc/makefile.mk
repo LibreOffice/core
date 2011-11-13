@@ -25,6 +25,13 @@
 #
 #*************************************************************************
 
+.IF "$(GUI)" == "OS2"
+
+@all:
+    @echo "Skipping, cppunit broken."
+
+.ENDIF # "$(GUI)" == "OS2"
+
 PRJ := ..$/..
 PRJNAME := desktop
 TARGET := qa_deployment_misc
