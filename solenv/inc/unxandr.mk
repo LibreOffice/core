@@ -45,6 +45,6 @@ CFLAGS+=-fno-omit-frame-pointer
 LINKFLAGSAPPGUI=-shared
 LINKFLAGSAPPCUI=-shared
 
-STDLIBGUIMT+=-llog -landroid
-STDLIBCUIMT+=-llog -landroid
+STDLIBGUIMT+=-llog -landroid -lgnustl_shared
+STDLIBCUIMT+=-llog -landroid -lgnustl_shared
 
