@@ -2633,7 +2633,7 @@
 						<author>CD</author>
 						<desc>Every new document window will be forced to front and grabs the focus.</desc>
 					</info>
-					<value>true</value>
+					<value>false</value>
 				</prop>
 			</group>
 			<group oor:name="AppWindow">

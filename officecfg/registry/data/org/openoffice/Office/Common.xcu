@@ -34,6 +34,11 @@
         <value install:module="wnt">1</value>
       </prop>
     </node>
+    <node oor:name="NewDocumentHandling">
+      <prop oor:name="ForceFocusAndToFront">
+        <value install:module="wnt">true</value>
+      </prop>
+    </node>
     <node oor:name="Localisation">
       <prop oor:name="AutoMnemonic">
         <value xml:lang="x-no-translate">true</value>
@@ -98,7 +103,7 @@
           <value xml:lang="tr">13</value>
           <value xml:lang="zh-CN">13</value>
           <value xml:lang="zh-TW">13</value>
-    </prop>
+      </prop>
     </node>
     <node oor:name="FontAntiAliasing" install:module="gconflockdown">
       <prop oor:name="Enabled">
