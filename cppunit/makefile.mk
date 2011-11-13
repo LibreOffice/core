@@ -121,6 +121,10 @@ OUT2LIB = ooo-install/lib/libcppunit.dll.a
 MY_LIBS = -lm
 .END
 
+.IF "$(OS)" == "ANDROID"
+MY_LIBS= -lgnustl_shared
+.ENDIF
+
 CONFIGURE_ACTION = ./configure
 
 .IF "$(COM)" == "GCC"
