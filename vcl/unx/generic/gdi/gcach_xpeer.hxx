@@ -49,8 +49,6 @@ protected:
     virtual void        RemovingFont( ServerFont& );
     virtual void        RemovingGlyph( ServerFont&, GlyphData&, int nGlyphIndex );
 
-    MultiScreenGlyph*   PrepareForMultiscreen( ExtGlyphData& ) const;
-
 private:
     Display*            mpDisplay;
 
@@ -58,7 +56,6 @@ private:
     static const int MAX_GCACH_SCREENS = 32;
     int                 mnMaxScreens;
     int                 mnDefaultScreen;
-    int                 mnExtByteCount;
 };
 
 class X11GlyphCache : public GlyphCache

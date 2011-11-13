@@ -224,7 +224,6 @@ public:
     int                 FixupGlyphIndex( int nGlyphIndex, sal_UCS4 ) const;
     bool                GetGlyphOutline( int nGlyphIndex, ::basegfx::B2DPolyPolygon& ) const;
     bool                GetAntialiasAdvice( void ) const;
-    bool                        IsGlyphInvisible( int nGlyphIndex );
     bool                GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const;
     bool                GetGlyphBitmap8( int nGlyphIndex, RawBitmap& ) const;
 

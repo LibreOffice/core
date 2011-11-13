@@ -413,23 +413,6 @@ void ServerFont::GarbageCollect( long nMinLruIndex )
     }
 }
 
-bool ServerFont::IsGlyphInvisible( int nGlyphIndex )
-{
-    if (!mbCollectedZW)
-    {
-        mnZWJ = GetGlyphIndex( 0x200D );
-        mnZWNJ = GetGlyphIndex( 0x200C );
-        mbCollectedZW = true;
-    }
-
-    if( !nGlyphIndex ) // don't hide the NotDef glyph
-        return false;
-    if( (nGlyphIndex == mnZWNJ) || (nGlyphIndex == mnZWJ) )
-        return true;
-
-    return false;
-}
-
 // =======================================================================
 
 ImplServerFontEntry::ImplServerFontEntry( FontSelectPattern& rFSD )

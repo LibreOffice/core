@@ -58,7 +58,6 @@ X11GlyphPeer::X11GlyphPeer()
 :   mpDisplay( GetGenericData()->GetSalDisplay()->GetDisplay() )
 ,   mnMaxScreens(0)
 ,   mnDefaultScreen(0)
-,   mnExtByteCount(0)
 {
     if( !mpDisplay )
         return;
@@ -68,10 +67,6 @@ X11GlyphPeer::X11GlyphPeer()
     mnMaxScreens = rSalDisplay.GetScreenCount();
     if( mnMaxScreens > MAX_GCACH_SCREENS )
         mnMaxScreens = MAX_GCACH_SCREENS;
-    // if specific glyph data has to be kept for many screens
-    // then prepare the allocation of MultiScreenGlyph objects
-    if( mnMaxScreens > 1 )
-        mnExtByteCount = sizeof(MultiScreenGlyph) + sizeof(Pixmap) * (mnMaxScreens - 1);
     mnDefaultScreen = rSalDisplay.GetDefaultScreenNumber();
 }
 
@@ -105,40 +100,6 @@ enum { INFO_EMPTY=0, INFO_PIXMAP, INFO_XRENDER, INFO_RAWBMP, INFO_MULTISCREEN };
 static const Glyph NO_GLYPHID = 0;
 static RawBitmap* const NO_RAWBMP = NULL;
 static const Pixmap NO_PIXMAP = ~0;
-
-// ---------------------------------------------------------------------------
-
-MultiScreenGlyph* X11GlyphPeer::PrepareForMultiscreen( ExtGlyphData& rEGD ) const
-{
-    // prepare to store screen specific pixmaps
-    MultiScreenGlyph* pMSGlyph = (MultiScreenGlyph*)new char[ mnExtByteCount ];
-
-    // init the glyph formats
-    pMSGlyph->mpRawBitmap = NO_RAWBMP;
-    pMSGlyph->maXRGlyphId = NO_GLYPHID;
-    for( int i = 0; i < mnMaxScreens; ++i )
-        pMSGlyph->maPixmaps[i] = NO_PIXMAP;
-    // reuse already available glyph formats
-    if( rEGD.meInfo == INFO_XRENDER )
-        pMSGlyph->maXRGlyphId = reinterpret_cast<Glyph>(rEGD.mpData);
-    else if( rEGD.meInfo == INFO_RAWBMP )
-        pMSGlyph->mpRawBitmap = reinterpret_cast<RawBitmap*>(rEGD.mpData);
-    else if( rEGD.meInfo == INFO_PIXMAP )
-    {
-        Pixmap aPixmap = reinterpret_cast<Pixmap>(rEGD.mpData);
-        if( aPixmap != None )
-            // pixmap for the default screen is available
-            pMSGlyph->maPixmaps[ mnDefaultScreen ] = aPixmap;
-        else // empty pixmap for all screens is available
-            for( int i = 0; i < mnMaxScreens; ++i )
-                pMSGlyph->maPixmaps[ i ] = None;
-    }
-    // enable use of multiscreen glyph
-    rEGD.mpData = (void*)pMSGlyph;
-    rEGD.meInfo = INFO_MULTISCREEN;
-
-    return pMSGlyph;
- }
 
 // ---------------------------------------------------------------------------
 
