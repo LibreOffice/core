@@ -48,8 +48,6 @@ public:
     Pixmap              GetPixmap( ServerFont&, int nGlyphIndex, int nScreen );
     const RawBitmap*    GetRawBitmap( ServerFont&, int nGlyphIndex );
 
-    GlyphSet            GetGlyphSet( ServerFont&, int nScreen );
-
 protected:
     void                InitAntialiasing();
 
@@ -57,10 +55,8 @@ protected:
     virtual void        RemovingGlyph( ServerFont&, GlyphData&, int nGlyphIndex );
 
     MultiScreenGlyph*   PrepareForMultiscreen( ExtGlyphData& ) const;
-    void                SetRenderGlyph( GlyphData&, Glyph ) const;
     void                SetRawBitmap( GlyphData&, const RawBitmap* ) const;
     void                SetPixmap( GlyphData&, Pixmap, int nScreen ) const;
-    Glyph               GetRenderGlyph( const GlyphData& ) const;
     const RawBitmap*    GetRawBitmap( const GlyphData& ) const;
     Pixmap              GetPixmap( const GlyphData&, int nScreen ) const;
 

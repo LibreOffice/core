@@ -196,44 +196,6 @@ MultiScreenGlyph* X11GlyphPeer::PrepareForMultiscreen( ExtGlyphData& rEGD ) cons
 
 // ---------------------------------------------------------------------------
 
-Glyph X11GlyphPeer::GetRenderGlyph( const GlyphData& rGD ) const
-{
-    Glyph aGlyphId = NO_GLYPHID;
-    const ExtGlyphData& rEGD = rGD.ExtDataRef();
-    if( rEGD.meInfo == INFO_XRENDER )
-        aGlyphId = reinterpret_cast<Glyph>(rEGD.mpData);
-    else if( rEGD.meInfo == INFO_MULTISCREEN )
-        aGlyphId = reinterpret_cast<MultiScreenGlyph*>(rEGD.mpData)->maXRGlyphId;
-    return aGlyphId;
-}
-
-// ---------------------------------------------------------------------------
-
-void X11GlyphPeer::SetRenderGlyph( GlyphData& rGD, Glyph aGlyphId ) const
-{
-    ExtGlyphData& rEGD = rGD.ExtDataRef();
-    switch( rEGD.meInfo )
-    {
-        case INFO_EMPTY:
-            rEGD.meInfo = INFO_XRENDER;
-            // fall through
-        case INFO_XRENDER:
-            rEGD.mpData = reinterpret_cast<void*>(aGlyphId);
-            break;
-        case INFO_PIXMAP:
-        case INFO_RAWBMP:
-            PrepareForMultiscreen( rEGD );
-            // fall through
-        case INFO_MULTISCREEN:
-            reinterpret_cast<MultiScreenGlyph*>(rEGD.mpData)->maXRGlyphId = aGlyphId;
-            break;
-        default:
-            break;  // cannot happen...
-    }
-}
-
-// ---------------------------------------------------------------------------
-
 const RawBitmap* X11GlyphPeer::GetRawBitmap( const GlyphData& rGD ) const
 {
     const RawBitmap* pRawBitmap = NO_RAWBMP;
@@ -403,46 +365,6 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& /*rServerFont*/, GlyphData& rGlyph
         mnBytesUsed = 0;
 
     rGlyphData.ExtDataRef() = ExtGlyphData();
-}
-
-// ---------------------------------------------------------------------------
-
-GlyphSet X11GlyphPeer::GetGlyphSet( ServerFont& rServerFont, int nScreen )
-{
-    if( (nScreen >= 0) && ((mnUsingXRender >> nScreen) & 1) == 0 )
-        return 0;
-
-    GlyphSet aGlyphSet;
-
-    switch( rServerFont.GetExtInfo() )
-    {
-        case INFO_XRENDER:
-            aGlyphSet = (GlyphSet)rServerFont.GetExtPointer();
-            break;
-
-        case INFO_EMPTY:
-            {
-                // antialiasing for reasonable font heights only
-                // => prevents crashes caused by X11 requests >= 256k
-                // => prefer readablity of hinted glyphs at small sizes
-                // => prefer "grey clouds" to "black clouds" at very small sizes
-                int nHeight = rServerFont.GetFontSelData().mnHeight;
-                if( nHeight<250 && rServerFont.GetAntialiasAdvice() )
-                {
-                    aGlyphSet = XRenderPeer::GetInstance().CreateGlyphSet();
-                    rServerFont.SetExtended( INFO_XRENDER, (void*)aGlyphSet );
-                }
-                else
-                    aGlyphSet = 0;
-            }
-            break;
-
-        default:
-            aGlyphSet = 0;
-            break;
-    }
-
-    return aGlyphSet;
 }
 
 // ---------------------------------------------------------------------------
