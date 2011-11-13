@@ -47,4 +47,6 @@ LINKFLAGSAPPCUI=-shared
 
 STDLIBGUIMT+=-llog -landroid -lgnustl_shared
 STDLIBCUIMT+=-llog -landroid -lgnustl_shared
+STDSHLGUIMT+=-llog -landroid -lgnustl_shared
+STDSHLCUIMT+=-llog -landroid -lgnustl_shared
 
