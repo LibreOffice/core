@@ -1342,51 +1342,49 @@ sub usage {
 sub get_options {
     my $arg;
     while ($arg = shift @ARGV) {
-        $arg =~ /^-P$/            and $processes_to_run = shift @ARGV     and next;
-        $arg =~ /^-P(\d+)$/            and $processes_to_run = $1 and next;
-        $arg =~ /^--all$/        and $build_all_parents = 1             and next;
-        $arg =~ /^-a$/        and $build_all_parents = 1             and next;
-        $arg =~ /^--show$/        and $show = 1                         and next;
-        $arg =~ /^--checkmodules$/       and $checkparents = 1 and $ignore = 1 and next;
-        $arg =~ /^-s$/        and $show = 1                         and next;
-        $arg =~ /^--deliver$/    and $deliver = 1                     and next;
-        $arg =~ /^(--job=)/       and $custom_job = $' and next;
-        $arg =~ /^(--pre_job=)/       and $pre_custom_job = $' and next;
-        $arg =~ /^(--post_job=)/       and $post_custom_job = $' and next; #'
-        $arg =~ /^-d$/    and $deliver = 1                     and next;
-        $arg =~ /^--dlv_switch$/    and $dlv_switch = shift @ARGV    and next;
-        $arg =~ /^--file$/        and $cmd_file = shift @ARGV             and next;
-        $arg =~ /^-F$/        and $cmd_file = shift @ARGV             and next;
-        $arg =~ /^--skip$/    and get_modules_passed(\%skip_modules)      and next;
+        if ($arg =~ /^-P$/)              { $processes_to_run = shift @ARGV;     next; }
+        if ($arg =~ /^-P(\d+)$/)         { $processes_to_run = $1;              next; }
+        if ($arg =~ /^--all$/)           { $build_all_parents = 1;              next; }
+        if ($arg =~ /^-a$/)              { $build_all_parents = 1;              next; }
+        if ($arg =~ /^--show$/)          { $show = 1;                           next; }
+        if ($arg =~ /^--checkmodules$/)  { $checkparents = 1; $ignore = 1;      next; }
+        if ($arg =~ /^-s$/)              { $show = 1;                           next; }
+        if ($arg =~ /^--deliver$/)       { $deliver = 1;                        next; }
+        if ($arg =~ /^(--job=)/)         { $custom_job = $';                    next; }
+        if ($arg =~ /^(--pre_job=)/)     { $pre_custom_job = $';                next; }
+        if ($arg =~ /^(--post_job=)/)    { $post_custom_job = $';               next; } #'
+        if ($arg =~ /^-d$/)              { $deliver = 1;                        next; }
+        if ($arg =~ /^--dlv_switch$/)    { $dlv_switch = shift @ARGV;           next; }
+        if ($arg =~ /^--file$/)          { $cmd_file = shift @ARGV;             next; }
+        if ($arg =~ /^-F$/)              { $cmd_file = shift @ARGV;             next; }
+        if ($arg =~ /^--skip$/)          { get_modules_passed(\%skip_modules);  next; }
 
-        $arg =~ /^--all:(\S+)$/ and $build_all_parents = 1
-                                and $build_all_cont = $1            and next;
-        $arg =~ /^-a:(\S+)$/ and $build_all_parents = 1
-                                and $build_all_cont = $1            and next;
+        if ($arg =~ /^--all:(\S+)$/)     { $build_all_parents = 1;
+                                           $build_all_cont = $1;                next; }
+        if ($arg =~ /^-a:(\S+)$/)        { $build_all_parents = 1;
+                                           $build_all_cont = $1;                next; }
         if ($arg =~ /^--from$/ || $arg =~ /^-f$/) {
-                                    $build_all_parents = 1;
-                                    get_modules_passed(\%incompatibles);
-                                    next;
-        };
-        $arg =~ /^--since$/        and $build_all_parents = 1
-                                and $build_since = shift @ARGV         and next;
-        $arg =~ /^-c$/        and $build_all_parents = 1
-                                and $build_since = shift @ARGV         and next;
-        $arg =~ /^-s$/            and $build_all_parents = 1
-                                and $build_since = shift @ARGV         and next;
-        $arg =~ /^--help$/        and usage()                            and do_exit(0);
-        $arg =~ /^-h$/        and usage()                            and do_exit(0);
-        $arg =~ /^--ignore$/        and $ignore = 1                            and next;
-        $arg =~ /^--html$/        and $html = 1                            and next;
-        $arg =~ /^--html_path$/ and $html_path = shift @ARGV  and next;
-        $arg =~ /^-i$/        and $ignore = 1                            and next;
-        $arg =~ /^--version$/   and do_exit(0);
-        $arg =~ /^-V$/          and do_exit(0);
-        $arg =~ /^-m$/            and get_modes()         and next;
-        $arg =~ /^--mode$/        and get_modes()         and next;
-        $arg =~ /^--stoponerror$/        and $stop_build_on_error = 1         and next;
-        $arg =~ /^--interactive$/        and $interactive = 1         and next;
-        $arg =~ /^--verbose$/       and $verbose = 1         and next;
+                                           $build_all_parents = 1;
+                                           get_modules_passed(\%incompatibles); next; }
+        if ($arg =~ /^--since$/)         { $build_all_parents = 1;
+                                           $build_since = shift @ARGV;          next; }
+        if ($arg =~ /^-c$/)              { $build_all_parents = 1;
+                                           $build_since = shift @ARGV;          next; }
+        if ($arg =~ /^-s$/)              { $build_all_parents = 1;
+                                           $build_since = shift @ARGV;          next; }
+        if ($arg =~ /^--help$/)          { usage();                             do_exit(0); }
+        if ($arg =~ /^-h$/)              { usage();                             do_exit(0); }
+        if ($arg =~ /^--ignore$/)        { $ignore = 1;                         next; }
+        if ($arg =~ /^--html$/)          { $html = 1;                           next; }
+        if ($arg =~ /^--html_path$/)     { $html_path = shift @ARGV;            next; }
+        if ($arg =~ /^-i$/)              { $ignore = 1;                         next; }
+        if ($arg =~ /^--version$/)       {                                      do_exit(0); }
+        if ($arg =~ /^-V$/)              {                                      do_exit(0); }
+        if ($arg =~ /^-m$/)              { get_modes();                         next; }
+        if ($arg =~ /^--mode$/)          { get_modes();                         next; }
+        if ($arg =~ /^--stoponerror$/)   { $stop_build_on_error = 1;            next; }
+        if ($arg =~ /^--interactive$/)   { $interactive = 1;                    next; }
+        if ($arg =~ /^--verbose$/)       { $verbose = 1;                        next; }
         if ($arg =~ /^--$/) {
             push (@dmake_args, get_dmake_args()) if (!$custom_job);
             next;
