@@ -36,10 +36,10 @@
 #define STR_UNDO_REPLACE        (RID_APP_START+42)
 
 /*
- *  Dummy-Strings, diese ResourceIDs duerfen nicht an andere Strings vergeben
- *  werden, da sie fuer Popup-Menues benutzt werden (ein Popup-Menue und sein
- *  Konfigurationsstring muessen dieselbe ResourceID haben!).
- *  siehe auch: res_bmp.hrc, popup.src
+ *  Dummy-Strings, these ResourceIDs: should not be assigned to other strings
+ *  as they're used for popup-menus (a popup-menu and its
+ *  configurationsstring should have identical ResourceID's!).
+ *  See also: res_bmp.hrc, popup.src
  */
 
 #define STR_DRAW_TEXTOBJ_POPUP          (RID_APP_START+43)
@@ -64,9 +64,9 @@
 #define STR_INSERTGRAPHIC       (RID_APP_START+67)
 
 /*
- * Ueberblendeffekte: sollten nach hinten offen bleiben,
- * da FadeEffectLB mit variabler Anzahl arbeitet
- * (Jetzt ueber STR_EFFECT_...)
+ * Overlay effects: should remain open at the bottom,
+ * as FadeEffectLB works with variable numbers
+ * (Now via STR_EFFECT_...)
  */
 #define STR_DRAGTYPE_URL            (RID_APP_START+70)
 #define STR_DRAGTYPE_EMBEDDED       (RID_APP_START+71)
@@ -90,7 +90,7 @@
 #define STR_PUBLISH_OUTLINE         (RID_APP_START+88)
 #define STR_UNDO_COLORRESOLUTION    (RID_APP_START+89)
 
-/* Von 90 - 100 fuer Popups freihalten */
+/* keep 90 - 100 free for popup's */
 #define STR_DRAW_3DOBJ_POPUP        (RID_APP_START+90)
 #define STR_DRAW_MEASUREOBJ_POPUP   (RID_APP_START+91)
 #define STR_ASK_DELETE_ALL_PICTURES (RID_APP_START+92)
@@ -139,9 +139,9 @@
 #define STR_IMPRESS_DOCUMENT_FULLTYPE_60  (RID_APP_START+170)
 
 /*
- *  ResourceIDs fuer Toolboxen nicht aendern, ohne die Strings in
- *  strings.hrc auf die selben IDs zu setzen (eine Toolbox und sein
- *  Konfigurationsstring muessen dieselbe ResourceID haben!).
+ *  Do not change ResourceID's for toolboxes, without assigning strings in
+ *  strings.hrc to the same  ID (a toolbox and its
+ *  configurations string should have identical ResourceID's!).
  */
 
 #define STR_PLUGIN_TOOLBOX          RID_PLUGINTOOLBOX
@@ -218,7 +218,7 @@
 #define STR_READ_DATA_ERROR                 (RID_APP_START+290)
 
 /******************************************************************************
-* Ab (RID_APP_START+300 beginnen die Ids in sdstring.hrc!
+* The Ids in sdstring.hrc start from (RID_APP_START+300) !
 ******************************************************************************/
 
 #define STR_DELETE_PAGES                    (RID_APP_START+332)
@@ -253,7 +253,7 @@
 #define STR_PRINT_OUTLINE                   (RID_APP_START+364)
 #define STR_WARN_SCALE_FAIL                 (RID_APP_START+365)
 
-// Strings fuer Klick-Effekte (Reihenfolge beibehalten)
+// strings for click-effects (Keep the sequence)
 #define STR_CLICK_ACTION_NONE               (RID_APP_START+366)
 #define STR_CLICK_ACTION_PREVPAGE           (RID_APP_START+367)
 #define STR_CLICK_ACTION_NEXTPAGE           (RID_APP_START+368)
@@ -267,7 +267,7 @@
 #define STR_CLICK_ACTION_VERB               (RID_APP_START+376)
 #define STR_CLICK_ACTION_PROGRAM            (RID_APP_START+377)
 #define STR_CLICK_ACTION_MACRO              (RID_APP_START+378)
-// Mind. bis 380 freihalten
+// Keep free till at least 380
 
 #define STR_EFFECTDLG_SOUND                 (RID_APP_START+380)
 #define STR_EFFECTDLG_PAGE_OBJECT           (RID_APP_START+382)
@@ -277,11 +277,11 @@
 #define STR_EFFECTDLG_JUMP                  (RID_APP_START+386)
 #define STR_EFFECTDLG_ACTION                (RID_APP_START+387)
 
-/*  Fortsetzung von RID_APP_START+43 bis RID_APP_START+58:
- *  Dummy-Strings, diese ResourceIDs duerfen nicht an andere Strings vergeben
- *  werden, da sie fuer Popup-Menues benutzt werden (ein Popup-Menue und sein
- *  Konfigurationsstring muessen dieselbe ResourceID haben!).
- *  siehe auch: res_bmp.hrc, popup.src
+/*  Continuation from RID_APP_START+43 to RID_APP_START+58:
+ *  Dummy-Strings, these ResourceIDs should not be assigned to other strings,
+ *  as they're used for popup-menu  (a popup-menu and its
+ *  configurations string should have identical ResourceID!).
+ *  See also: res_bmp.hrc, popup.src
  */
 
 #define STR_DRAW_SNAPOBJECT_POPUP           (RID_APP_START+390)
@@ -300,7 +300,7 @@
 #define STR_AIFF_FILE                       (RID_APP_START+437)
 #define STR_SVX_FILE                        (RID_APP_START+438)
 
-/*           Stringdefinitionen fuer die Chartbeschriftung
+/*           stringdefinitions for the Chart-texts
 */
 #define STR_LOAD_PRESENTATION_LAYOUT        (RID_APP_START+448)
 
