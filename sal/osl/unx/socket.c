@@ -40,7 +40,6 @@
 
 #include "sockimpl.h"
 
-
 /* defines for poll */
 #ifdef HAVE_POLL_H
 #undef HAVE_POLL_H
@@ -809,142 +808,25 @@ static struct hostent* _osl_gethostbyname_r (
 #endif
 }
 
-static sal_Bool  _osl_getDomainName (sal_Char *buffer, sal_Int32 bufsiz)
-{
-    sal_Bool result = (getdomainname(buffer, bufsiz) == 0);
-    if  (!result) {
-        OSL_TRACE("osl_getDomainName failed. Errno: %d; %s\n",
-                      errno,
-                      strerror(errno));
-    }
-    return (result);
-}
-
 static sal_Char* _osl_getFullQualifiedDomainName (const sal_Char *pHostName)
 {
 #   define DOMAINNAME_LENGTH 512
-    sal_uInt32          nLengthOfHostName;
-    static sal_uInt32   nLengthOfDomainName = 0;
-    static sal_Char    *pDomainName = NULL;
+    struct hostent  aHostByName;
+    struct hostent *pHostByName;
+    sal_Char        pQualifiedHostBuffer[ MAX_HOSTBUFFER_SIZE ];
+    sal_Char  *pFullQualifiedName = NULL;
+    int     nErrorNo;
 
-    sal_Char  *pFullQualifiedName;
-
-    /* get a '\0' terminated domainname */
-
-    /* read default domainname default from environment */
-    if (nLengthOfDomainName == 0)
+    pHostByName = _osl_gethostbyname_r (
+        pHostName,
+        &aHostByName, pQualifiedHostBuffer,
+        sizeof(pQualifiedHostBuffer), &nErrorNo );
+    if (pHostByName != NULL)
     {
-        sal_Char *pEnvDomain;
-
-        pEnvDomain = getenv ("STAR_OVERRIDE_DOMAINNAME");
-        if (pEnvDomain)
-        {
-            pDomainName = strdup (pEnvDomain);
-            nLengthOfDomainName = strlen (pDomainName);
-        }
+        pFullQualifiedName = strdup(pHostByName->h_name);
     }
-
-    if (nLengthOfDomainName == 0)
-    {
-        sal_Char pDomainNameBuffer[ DOMAINNAME_LENGTH ];
-
-        pDomainNameBuffer[0] = '\0';
-
-        if (_osl_getDomainName (pDomainNameBuffer, DOMAINNAME_LENGTH))
-        {
-            pDomainName = strdup (pDomainNameBuffer);
-            nLengthOfDomainName = strlen (pDomainName);
-        }
-    }
-
-    /* compose hostname and domainname */
-    nLengthOfHostName = strlen( pHostName );
-    pFullQualifiedName = (sal_Char*) malloc( (nLengthOfHostName + 1
-                            + nLengthOfDomainName + 1) * sizeof(sal_Char) );
-    memcpy( pFullQualifiedName, pHostName,
-        (nLengthOfHostName + 1) * sizeof(sal_Char) );
-
-    if ( nLengthOfDomainName > 0 )
-    {
-        /* fqdn = hostname + '.' + domainname + '\0' */
-        pFullQualifiedName[ nLengthOfHostName ] = '.';
-        memcpy( pFullQualifiedName + nLengthOfHostName + 1, pDomainName,
-            nLengthOfDomainName + 1 );
-    }
-
-    /* check whether full-qualified name and hostname point to the same host
-     * should almost always be true */
-    if ( nLengthOfDomainName > 0 )
-    {
-        struct hostent *pQualifiedHostByName;
-        struct hostent *pHostByName;
-        sal_Bool        bHostsAreEqual;
-
-        /* buffer for calls to reentrant version of gethostbyname */
-        struct hostent  aHostByName, aQualifiedHostByName;
-        sal_Char        pHostBuffer[ MAX_HOSTBUFFER_SIZE ];
-        sal_Char        pQualifiedHostBuffer[ MAX_HOSTBUFFER_SIZE ];
-        int     nErrorNo;
-
-        pHostBuffer[0] = '\0';
-        pQualifiedHostBuffer[0] = '\0';
-
-        /* get list of addresses */
-        pQualifiedHostByName = _osl_gethostbyname_r (
-            pFullQualifiedName,
-            &aQualifiedHostByName, pQualifiedHostBuffer,
-            sizeof(pQualifiedHostBuffer), &nErrorNo );
-        pHostByName = _osl_gethostbyname_r (
-            pHostName,
-            &aHostByName, pHostBuffer,
-            sizeof(pHostBuffer), &nErrorNo );
-
-        /* compare addresses */
-        bHostsAreEqual = sal_False;
-        if ( pQualifiedHostByName && pHostByName )
-        {
-            sal_Char **p, **q;
-            struct in_addr in;
-
-            /* lists are expected to be (very) short */
-            for ( p = pQualifiedHostByName->h_addr_list; *p != NULL; p++ )
-            {
-                for ( q = pHostByName->h_addr_list; *q != NULL; q++ )
-                {
-                    /* in.s_addr may be in_addr_t or uint32_t or heaven knows */
-                    if ( memcmp( *p, *q, sizeof(in.s_addr) ) == 0 )
-                    {
-                        bHostsAreEqual = sal_True;
-                        break;
-                    }
-                }
-                if ( bHostsAreEqual )
-                    break;
-            }
-        }
-
-        /* very strange case, but have to believe it: reduce the
-         * full qualified name to the unqualified host name */
-        if ( !bHostsAreEqual )
-        {
-            sal_Char *pTmp;
-
-            OSL_TRACE("_osl_getFullQualifiedDomainName: "
-                      "suspect FQDN: %s\n", pFullQualifiedName);
-
-            pFullQualifiedName[ nLengthOfHostName ] = '\0';
-            pTmp = (sal_Char*)realloc ( pFullQualifiedName,
-                                (nLengthOfHostName + 1) * sizeof( sal_Char ));
-            if (pTmp)
-                pFullQualifiedName = pTmp;
-        }
-    }
-
-    /* always return a hostname looked up as carefully as possible
-     * this string must be freed by the caller */
     return pFullQualifiedName;
 }
-
 /*****************************************************************************/
 /* _osl_isFullQualifiedDomainName */
 /*****************************************************************************/
