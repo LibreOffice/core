@@ -85,24 +85,6 @@ public:
 
 //=====================================================================
 
-class ScopedPic
-{
-public:
-               ScopedPic( XRenderPeer& rPeer, Picture& rPic );
-               ~ScopedPic();
-    Picture&   Get();
-
-private:
-    XRenderPeer& mrRenderPeer;
-    Picture      maPicture;
-
-private: // prevent copy and assignmet
-           ScopedPic( const ScopedPic& );
-    void   operator=( const ScopedPic& );
-};
-
-//=====================================================================
-
 inline XRenderPictFormat* XRenderPeer::GetStandardFormatA8() const
 {
     return mpStandardFormatA8;
@@ -212,24 +194,6 @@ inline void XRenderPeer::AddTraps( Picture aDst, int nXOfs, int nYOfs,
     const _XTrap* pTraps, int nCount ) const
 {
     XRenderAddTraps( mpDisplay, aDst, nXOfs, nYOfs, pTraps, nCount );
-}
-
-//=====================================================================
-
-inline ScopedPic::ScopedPic( XRenderPeer& rPeer, Picture& rPic )
-:   mrRenderPeer( rPeer)
-,   maPicture( rPic )
-{}
-
-inline ScopedPic::~ScopedPic()
-{
-    if( maPicture )
-        mrRenderPeer.FreePicture( maPicture );
-}
-
-inline Picture& ScopedPic::Get()
-{
-    return maPicture;
 }
 
 //=====================================================================

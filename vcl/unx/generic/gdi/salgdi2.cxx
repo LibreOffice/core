@@ -894,7 +894,6 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
         rTR.mnSrcX, rTR.mnSrcY, 0, 0,
         rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight );
 
-    // TODO: used ScopedPic
     rPeer.FreePicture( aAlphaPic );
     XFreePixmap(pXDisplay, aAlphaPM);
     rPeer.FreePicture( aSrcPic );
