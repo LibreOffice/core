@@ -96,18 +96,20 @@ sal_Bool CppDep::Search( ByteString aFileName )
     sal_Bool bRet = sal_False;
 
     SvFileStream aFile;
-    ByteString aReadLine;
+    rtl::OString aReadLine;
 
     UniString suFileName(aFileName, osl_getThreadTextEncoding());
 
     aFile.Open( suFileName, STREAM_READ );
     while ( aFile.ReadLine( aReadLine ))
     {
-        sal_uInt16 nPos = aReadLine.Search( "include" );
-        if ( nPos != STRING_NOTFOUND  )
+        using comphelper::string::indexOfL;
+        sal_Int32 nPos = indexOfL(aReadLine,
+            RTL_CONSTASCII_STRINGPARAM("include"));
+        if ( nPos != -1 )
         {
 #ifdef DEBUG_VERBOSE
-            fprintf( stderr, "found : %d %s\n", nPos, aReadLine.GetBuffer() );
+            fprintf( stderr, "found : %d %s\n", nPos, aReadLine.getStr() );
 #endif
             ByteString aResult = IsIncludeStatement( aReadLine );
 #ifdef DEBUG_VERBOSE
@@ -127,7 +129,7 @@ sal_Bool CppDep::Search( ByteString aFileName )
                         bFound = sal_True;
                 }
 #ifdef DEBUG_VERBOSE
-                fprintf( stderr, "not in list : %d %s\n", nPos, aReadLine.GetBuffer() );
+                fprintf( stderr, "not in list : %d %s\n", nPos, aReadLine.getStr() );
 #endif
                 if ( !bFound )
                 {

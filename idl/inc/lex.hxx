@@ -146,11 +146,11 @@ class SvTokenStream
 
     void        InitCtor();
 
-    ByteString          aBufStr;
+    rtl::OString aBufStr;
     int             GetNextChar();
     int             GetFastNextChar()
                     {
-                        return aBufStr.GetChar((sal_uInt16)nBufPos++);
+                        return aBufStr[nBufPos++];
                     }
 
     void            FillTokenList();
@@ -171,7 +171,7 @@ class SvTokenStream
                             sal_uInt16 n = 0;
                             nColumn = 0;
                             while( n < nBufPos )
-                                nColumn += aBufStr.GetChar(n++) == '\t' ? nTabSize : 1;
+                                nColumn += aBufStr[n++] == '\t' ? nTabSize : 1;
                         }
                     }
 public:

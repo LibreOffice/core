@@ -165,7 +165,7 @@ void SvTokenStream::FillTokenList()
 int SvTokenStream::GetNextChar()
 {
     int nChar;
-    if( (int)aBufStr.Len() < nBufPos )
+    if( aBufStr.getLength() < nBufPos )
     {
         if( rInStream.ReadLine( aBufStr ) )
         {
@@ -175,13 +175,13 @@ int SvTokenStream::GetNextChar()
         }
         else
         {
-            aBufStr.Erase();
+            aBufStr = rtl::OString();
             nColumn = 0;
             nBufPos = 0;
             return '\0';
         }
     }
-    nChar = aBufStr.GetChar( (sal_uInt16)nBufPos++ );
+    nChar = aBufStr[nBufPos++];
     nColumn += nChar == '\t' ? nTabSize : 1;
     return nChar;
 }

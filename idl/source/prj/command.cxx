@@ -196,20 +196,20 @@ static sal_Bool ResponseFile( StringList * pList, int argc, char ** argv )
             if( aStm.GetError() != SVSTREAM_OK )
                 return sal_False;
 
-            ByteString aStr;
+            rtl::OString aStr;
             while( aStm.ReadLine( aStr ) )
             {
                 sal_uInt16 n = 0;
                 sal_uInt16 nPos = 1;
                 while( n != nPos )
                 {
-                    while( aStr.GetChar(n) && isspace( aStr.GetChar(n) ) )
+                    while( aStr[n] && isspace( aStr[n] ) )
                         n++;
                     nPos = n;
-                    while( aStr.GetChar(n) && !isspace( aStr.GetChar(n) ) )
+                    while( aStr[n] && !isspace( aStr[n] ) )
                         n++;
                     if( n != nPos )
-                        pList->push_back( new String( String::CreateFromAscii( aStr.Copy( nPos, n - nPos ).GetBuffer() ) ) );
+                        pList->push_back( new String( rtl::OStringToOUString(aStr.copy(nPos, n - nPos), RTL_TEXTENCODING_ASCII_US) ) );
                 }
             }
         }
