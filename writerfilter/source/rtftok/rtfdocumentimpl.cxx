@@ -272,7 +272,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aColorTable(),
     m_bFirstRun(true),
     m_bFirstRow(true),
-    m_bNeedPap(false),
+    m_bNeedPap(true),
     m_bNeedCr(false),
     m_bNeedPar(true),
     m_aListTableSprms(),
@@ -392,9 +392,6 @@ void RTFDocumentImpl::checkFirstRun()
 {
     if (m_bFirstRun)
     {
-        writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(
-                new RTFReferenceProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms)
-                );
         // output settings table
         RTFSprms aAttributes;
         writerfilter::Reference<Properties>::Pointer_t const pProp(new RTFReferenceProperties(aAttributes, m_aSettingsTableSprms));
@@ -406,7 +403,6 @@ void RTFDocumentImpl::checkFirstRun()
         if (!m_bIsSubstream)
             Mapper().startSectionGroup();
         Mapper().startParagraphGroup();
-        Mapper().props(pParagraphProperties);
         m_bFirstRun = false;
     }
 }
