@@ -59,7 +59,6 @@ X11GlyphPeer::X11GlyphPeer()
 ,   mnMaxScreens(0)
 ,   mnDefaultScreen(0)
 ,   mnExtByteCount(0)
-,   mnForcedAA(0)
 ,   mnUsingXRender(0)
 {
     maRawBitmap.mnAllocated = 0;
@@ -119,38 +118,11 @@ void X11GlyphPeer::InitAntialiasing()
     }
 
     mnUsingXRender = 0;
-    mnForcedAA = 0;
 
     // enable XRENDER accelerated aliasing on screens that support it
     // unless it explicitly disabled by an environment variable
     if( (nEnvAntiAlias & 2) == 0 )
         mnUsingXRender = XRenderPeer::GetInstance().InitRenderText();
-
-    // else enable client side antialiasing for these screens
-    // unless it is explicitly disabled by an environment variable
-    if( (nEnvAntiAlias & 1) != 0 )
-        return;
-
-    // enable client side antialiasing for screen visuals that are suitable
-    // mnForcedAA is a bitmask of screens enabled for client side antialiasing
-    mnForcedAA = (~(~0U << mnMaxScreens)) ^ mnUsingXRender;
-    SalDisplay& rSalDisplay = *GetGenericData()->GetSalDisplay();
-    for( int nScreen = 0; nScreen < mnMaxScreens; ++nScreen)
-    {
-        Visual* pVisual = rSalDisplay.GetVisual( nScreen ).GetVisual();
-        XVisualInfo aXVisualInfo;
-        aXVisualInfo.visualid = pVisual->visualid;
-        int nVisuals = 0;
-        XVisualInfo* pXVisualInfo = XGetVisualInfo( mpDisplay, VisualIDMask, &aXVisualInfo, &nVisuals );
-        for( int i = nVisuals; --i >= 0; )
-        {
-            if( ((pXVisualInfo[i].c_class==PseudoColor) || (pXVisualInfo[i].depth<24))
-            && ((pXVisualInfo[i].c_class>GrayScale) || (pXVisualInfo[i].depth!=8) ) )
-                mnForcedAA &= ~(1U << nScreen);
-        }
-        if( pXVisualInfo != NULL )
-            XFree( pXVisualInfo );
-    }
 }
 
 // ===========================================================================

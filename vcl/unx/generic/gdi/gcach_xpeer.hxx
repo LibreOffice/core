@@ -69,7 +69,6 @@ private:
     int                 mnDefaultScreen;
     int                 mnExtByteCount;
     RawBitmap           maRawBitmap;
-    sal_uInt32          mnForcedAA;
     sal_uInt32          mnUsingXRender;
 };
 
