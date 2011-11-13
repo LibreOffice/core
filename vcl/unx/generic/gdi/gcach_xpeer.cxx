@@ -59,7 +59,6 @@ X11GlyphPeer::X11GlyphPeer()
 ,   mnMaxScreens(0)
 ,   mnDefaultScreen(0)
 ,   mnExtByteCount(0)
-,   mnUsingXRender(0)
 {
     maRawBitmap.mnAllocated = 0;
     maRawBitmap.mpBits = NULL;
@@ -117,12 +116,10 @@ void X11GlyphPeer::InitAntialiasing()
             return;
     }
 
-    mnUsingXRender = 0;
-
     // enable XRENDER accelerated aliasing on screens that support it
     // unless it explicitly disabled by an environment variable
     if( (nEnvAntiAlias & 2) == 0 )
-        mnUsingXRender = XRenderPeer::GetInstance().InitRenderText();
+        XRenderPeer::GetInstance().InitRenderText();
 }
 
 // ===========================================================================
