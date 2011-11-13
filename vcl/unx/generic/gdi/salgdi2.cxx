@@ -790,10 +790,6 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     if( rTR.mnDestHeight!= rTR.mnSrcHeight )
         return false;
 
-    XRenderPeer& rPeer = XRenderPeer::GetInstance();
-    if( rPeer.GetVersion() < 0x02 )
-        return false;
-
     // create destination picture
     Picture aDstPic = GetXRenderPicture();
     if( !aDstPic )
@@ -824,6 +820,7 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     // create source picture
     // TODO: use scoped picture
     Visual* pSrcXVisual = rSalVis.GetVisual();
+    XRenderPeer& rPeer = XRenderPeer::GetInstance();
     XRenderPictFormat* pSrcVisFmt = rPeer.FindVisualFormat( pSrcXVisual );
     if( !pSrcVisFmt )
         return false;
@@ -917,10 +914,6 @@ bool X11SalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
     if( m_pVDev && m_pVDev->GetDepth() < 8 )
         return false;
 
-    XRenderPeer& rPeer = XRenderPeer::GetInstance();
-    if( rPeer.GetVersion() < 0x02 ) // TODO: replace with better test
-        return false;
-
     Picture aDstPic = GetXRenderPicture();
     if( !aDstPic )
         return false;
@@ -928,6 +921,7 @@ bool X11SalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
     const double fTransparency = (100 - nTransparency) * (1.0/100);
     const XRenderColor aRenderColor = GetXRenderColor( nBrushColor_ , fTransparency);
 
+    XRenderPeer& rPeer = XRenderPeer::GetInstance();
     rPeer.FillRectangle( PictOpOver,
                          aDstPic,
                          &aRenderColor,
@@ -1131,16 +1125,13 @@ bool X11SalGraphics::supportsOperation( OutDevSupportType eType ) const
     case OutDevSupport_B2DDraw:
         {
             XRenderPeer& rPeer = XRenderPeer::GetInstance();
-            if( rPeer.GetVersion() >= 0x02 )
-            {
-                const SalDisplay* pSalDisp = GetDisplay();
-                const SalVisual& rSalVis = pSalDisp->GetVisual( m_nScreen );
+            const SalDisplay* pSalDisp = GetDisplay();
+            const SalVisual& rSalVis = pSalDisp->GetVisual( m_nScreen );
 
-                Visual* pDstXVisual = rSalVis.GetVisual();
-                XRenderPictFormat* pDstVisFmt = rPeer.FindVisualFormat( pDstXVisual );
-                if( pDstVisFmt )
-                    bRet = true;
-            }
+            Visual* pDstXVisual = rSalVis.GetVisual();
+            XRenderPictFormat* pDstVisFmt = rPeer.FindVisualFormat( pDstXVisual );
+            if( pDstVisFmt )
+                bRet = true;
         }
         break;
     default: break;

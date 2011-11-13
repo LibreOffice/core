@@ -41,7 +41,6 @@ class XRenderPeer
 {
 public:
     static XRenderPeer& GetInstance();
-    int                 GetVersion() const;
 
     sal_uInt32          InitRenderText();
 
@@ -51,7 +50,6 @@ protected:
 
     Display*            mpDisplay;
     XRenderPictFormat*  mpStandardFormatA8;
-    int                 mnRenderVersion;
 
 public:
     XRenderPictFormat* GetStandardFormatA8() const;
@@ -106,11 +104,6 @@ private: // prevent copy and assignmet
 };
 
 //=====================================================================
-
-inline int XRenderPeer::GetVersion() const
-{
-    return mnRenderVersion;
-}
 
 inline XRenderPictFormat* XRenderPeer::GetStandardFormatA8() const
 {

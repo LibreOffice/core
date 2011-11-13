@@ -49,7 +49,6 @@ using namespace rtl;
 XRenderPeer::XRenderPeer()
     : mpDisplay( GetGenericData()->GetSalDisplay()->GetDisplay() )
     , mpStandardFormatA8( NULL )
-    , mnRenderVersion( 0 )
 {
     InitRenderLib();
 }
@@ -70,10 +69,6 @@ void XRenderPeer::InitRenderLib()
     // needed to initialize libXrender internals
     XRenderQueryExtension( mpDisplay, &nDummy, &nDummy );
 
-    int nMajor, nMinor;
-    XRenderQueryVersion( mpDisplay, &nMajor, &nMinor );
-    mnRenderVersion = 16*nMajor + nMinor;
-
     // the 8bit alpha mask format must be there
     XRenderPictFormat aPictFormat={0,0,8,{0,0,0,0,0,0,0,0xFF},0};
     mpStandardFormatA8 = FindPictureFormat( PictFormatAlphaMask|PictFormatDepth, aPictFormat );
@@ -84,15 +79,6 @@ void XRenderPeer::InitRenderLib()
 // return mask of screens capable of XRENDER text
 sal_uInt32 XRenderPeer::InitRenderText()
 {
-    if( mnRenderVersion < 0x01 )
-        return 0;
-
-    // #93033# disable XRENDER for old RENDER versions if XINERAMA is present
-    int nDummy;
-    if( XQueryExtension( mpDisplay, "XINERAMA", &nDummy, &nDummy, &nDummy ) )
-        if( mnRenderVersion < 0x02 )
-            return 0;
-
     if( !mpStandardFormatA8 )
         return 0;
 
