@@ -45,7 +45,6 @@ public:
                         X11GlyphPeer();
     virtual            ~X11GlyphPeer();
 
-    Pixmap              GetPixmap( ServerFont&, int nGlyphIndex, int nScreen );
     const RawBitmap*    GetRawBitmap( ServerFont&, int nGlyphIndex );
 
 protected:
@@ -54,9 +53,7 @@ protected:
 
     MultiScreenGlyph*   PrepareForMultiscreen( ExtGlyphData& ) const;
     void                SetRawBitmap( GlyphData&, const RawBitmap* ) const;
-    void                SetPixmap( GlyphData&, Pixmap, int nScreen ) const;
     const RawBitmap*    GetRawBitmap( const GlyphData& ) const;
-    Pixmap              GetPixmap( const GlyphData&, int nScreen ) const;
 
 private:
     Display*            mpDisplay;

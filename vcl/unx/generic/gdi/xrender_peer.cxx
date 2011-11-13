@@ -38,8 +38,6 @@
 #include <unx/saldata.hxx>
 #include <unx/saldisp.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
 #include <xrender_peer.hxx>
 
 using namespace rtl;
