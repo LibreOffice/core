@@ -586,12 +586,11 @@ void DecorationView::DrawSymbol( const Rectangle& rRect, SymbolType eType,
                                  const Color& rColor, sal_uInt16 nStyle )
 {
     const StyleSettings&    rStyleSettings  = mpOutDev->GetSettings().GetStyleSettings();
-    Rectangle               aRect           = mpOutDev->LogicToPixel( rRect );
-    Color                   aOldLineColor   = mpOutDev->GetLineColor();
-    Color                   aOldFillColor   = mpOutDev->GetFillColor();
-    sal_Bool                    bOldMapMode     = mpOutDev->IsMapModeEnabled();
-    mpOutDev->SetLineColor();
-    mpOutDev->SetFillColor( rColor );
+    const Rectangle         aRect           = mpOutDev->LogicToPixel( rRect );
+    const Color             aOldLineColor   = mpOutDev->GetLineColor();
+    const Color             aOldFillColor   = mpOutDev->GetFillColor();
+    const bool              bOldMapMode     = mpOutDev->IsMapModeEnabled();
+    Color                   nColor(rColor);
     mpOutDev->EnableMapMode( sal_False );
 
     if ( (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) ||
@@ -600,28 +599,27 @@ void DecorationView::DrawSymbol( const Rectangle& rRect, SymbolType eType,
 
     if ( nStyle & SYMBOL_DRAW_MONO )
     {
-        if ( nStyle & SYMBOL_DRAW_DISABLE )
-            mpOutDev->SetFillColor( Color( COL_GRAY ) );
-        else
-            mpOutDev->SetFillColor( Color( COL_BLACK ) );
+        // Monochrome: set color to black if enabled, to gray if disabled
+        nColor = Color( ( nStyle & SYMBOL_DRAW_DISABLE ) ? COL_GRAY : COL_BLACK );
     }
     else
     {
         if ( nStyle & SYMBOL_DRAW_DISABLE )
         {
-            // Als Embosed ausgeben
+            // Draw shifted and brighter symbol for embossed look
+            mpOutDev->SetLineColor( rStyleSettings.GetLightColor() );
             mpOutDev->SetFillColor( rStyleSettings.GetLightColor() );
-            Rectangle aTempRect = aRect;
-            aTempRect.Move( 1, 1 );
-            ImplDrawSymbol( mpOutDev, aTempRect, eType );
-            mpOutDev->SetFillColor( rStyleSettings.GetShadowColor() );
+            ImplDrawSymbol( mpOutDev, aRect + Point(1, 1) , eType );
+            nColor = rStyleSettings.GetShadowColor();
         }
-        else
-            mpOutDev->SetFillColor( rColor );
     }
 
+    // Set selected color and draw the symbol
+    mpOutDev->SetLineColor( nColor );
+    mpOutDev->SetFillColor( nColor );
     ImplDrawSymbol( mpOutDev, aRect, eType );
 
+    // Restore previous settings
     mpOutDev->SetLineColor( aOldLineColor );
     mpOutDev->SetFillColor( aOldFillColor );
     mpOutDev->EnableMapMode( bOldMapMode );
