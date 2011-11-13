@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; eval:(c-set-style "bsd"); tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1688,14 +1688,21 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
     Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
     if ( pWindow )
     {
+        bool preview(false);
+        css::uno::Any a = m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_PREVIEW()];
+        a >>= preview;
+
         bool bForceFrontAndFocus(false);
-        css::uno::Any a = ::comphelper::ConfigurationHelper::readDirectKey(
-            xSMGR,
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/View")),
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NewDocumentHandling")),
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ForceFocusAndToFront")),
-            ::comphelper::ConfigurationHelper::E_READONLY);
-        a >>= bForceFrontAndFocus;
+        if ( !preview )
+        {
+            a = ::comphelper::ConfigurationHelper::readDirectKey(
+                  xSMGR,
+                  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/View")),
+                  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NewDocumentHandling")),
+                  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ForceFocusAndToFront")),
+                  ::comphelper::ConfigurationHelper::E_READONLY);
+            a >>= bForceFrontAndFocus;
+        }
 
         if( pWindow->IsVisible() && (bForceFrontAndFocus || bForceToFront) )
             pWindow->ToTop();
