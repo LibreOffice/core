@@ -59,7 +59,6 @@ private:
     int                 mnMaxScreens;
     int                 mnDefaultScreen;
     int                 mnExtByteCount;
-    RawBitmap           maRawBitmap;
 };
 
 class X11GlyphCache : public GlyphCache

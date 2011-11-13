@@ -60,8 +60,6 @@ X11GlyphPeer::X11GlyphPeer()
 ,   mnDefaultScreen(0)
 ,   mnExtByteCount(0)
 {
-    maRawBitmap.mnAllocated = 0;
-    maRawBitmap.mpBits = NULL;
     if( !mpDisplay )
         return;
 
