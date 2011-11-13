@@ -43,6 +43,9 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
+#include "com/sun/star/system/XSystemShellExecute.hpp"
+#include "com/sun/star/system/SystemShellExecuteFlags.hpp"
+
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
@@ -50,12 +53,12 @@
 #include <osl/file.hxx>
 #include <unotools/tempfile.hxx>
 #include <tools/urlobj.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include "xmlfilterdialogstrings.hrc"
 #include "xmlfiltersettingsdialog.hxx"
 #include "xmlfiltertestdialog.hxx"
 #include "xmlfiltertestdialog.hrc"
-#include "xmlfileview.hxx"
 
 
 using namespace utl;
@@ -164,7 +167,6 @@ XMLFilterTestDialog::XMLFilterTestDialog( Window* pParent, ResMgr& rResMgr, cons
     maFTNameOfRecentFile( this, ResId( FT_NAME_OF_RECENT_FILE, rResMgr ) ),
     maPBClose( this, ResId( PB_CLOSE, rResMgr ) ),
     maPBHelp( this, ResId( PB_HELP, rResMgr ) ),
-    mpSourceDLG( NULL ),
     mpFilterInfo( NULL ),
     sDTDPath( RTL_CONSTASCII_USTRINGPARAM( "$(inst)/share/dtd/officedocument/1_0/office.dtd" ) )
 {
@@ -209,7 +211,6 @@ XMLFilterTestDialog::~XMLFilterTestDialog()
         OSL_FAIL( "XMLFilterTestDialog::~XMLFilterTestDialog exception catched!" );
     }
 
-    delete mpSourceDLG;
     delete mpFilterInfo;
 }
 
@@ -469,7 +470,9 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
         Reference< XStorable > xStorable( xComp, UNO_QUERY );
         if( xStorable.is() )
         {
-            utl::TempFile aTempFile;
+            String leadingChars;
+            String ext(RTL_CONSTASCII_USTRINGPARAM(".xml"));
+            utl::TempFile aTempFile(leadingChars, &ext);
             OUString aTempFileURL( aTempFile.GetURL() );
 
             const application_info_impl* pAppInfo = getApplicationInfo( mpFilterInfo->maExportService );
@@ -564,10 +567,13 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
 
 void XMLFilterTestDialog::displayXMLFile( const OUString& rURL )
 {
-    if( NULL == mpSourceDLG )
-        mpSourceDLG = new XMLSourceFileDialog( NULL, mrResMgr, mxMSF );
+    ::com::sun::star::uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(comphelper::getProcessServiceFactory()->createInstance(DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), com::sun::star::uno::UNO_QUERY_THROW );
+    xSystemShellExecute->execute( rURL, rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
 
-    mpSourceDLG->ShowWindow( rURL, mpFilterInfo);
+//    if( NULL == mpSourceDLG )
+//        mpSourceDLG = new XMLSourceFileDialog( NULL, mrResMgr, mxMSF );
+//
+//    mpSourceDLG->ShowWindow( rURL, mpFilterInfo);
 }
 
 void XMLFilterTestDialog::onImportBrowse()
@@ -644,7 +650,9 @@ void XMLFilterTestDialog::import( const OUString& rURL )
 
         if( maCBXDisplaySource.IsChecked() )
         {
-            TempFile aTempFile;
+            String lead;
+            String ext(RTL_CONSTASCII_USTRINGPARAM(".xml"));
+            TempFile aTempFile(lead, &ext);
             OUString aTempFileURL( aTempFile.GetURL() );
 
             Reference< XImportFilter > xImporter( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.documentconversion.XSLTFilter" )) ), UNO_QUERY );

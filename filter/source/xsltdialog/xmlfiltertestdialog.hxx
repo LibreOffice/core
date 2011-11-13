@@ -95,7 +95,6 @@ private:
     PushButton  maPBClose;
     HelpButton  maPBHelp;
 
-    XMLSourceFileDialog*    mpSourceDLG;
     filter_info_impl*       mpFilterInfo;
 
     String maDialogTitle;
