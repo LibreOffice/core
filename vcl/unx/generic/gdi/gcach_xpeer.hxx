@@ -47,14 +47,6 @@ public:
 protected:
     virtual void        RemovingFont( ServerFont& );
     virtual void        RemovingGlyph( ServerFont&, GlyphData&, int nGlyphIndex );
-
-private:
-    Display*            mpDisplay;
-
-    // thirty-two screens should be enough for everyone...
-    static const int MAX_GCACH_SCREENS = 32;
-    int                 mnMaxScreens;
-    int                 mnDefaultScreen;
 };
 
 class X11GlyphCache : public GlyphCache

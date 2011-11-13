@@ -43,19 +43,7 @@
 // ===========================================================================
 
 X11GlyphPeer::X11GlyphPeer()
-:   mpDisplay( GetGenericData()->GetSalDisplay()->GetDisplay() )
-,   mnMaxScreens(0)
-,   mnDefaultScreen(0)
 {
-    if( !mpDisplay )
-        return;
-
-    SalDisplay& rSalDisplay = *GetGenericData()->GetSalDisplay();
-    mpDisplay    = rSalDisplay.GetDisplay();
-    mnMaxScreens = rSalDisplay.GetScreenCount();
-    if( mnMaxScreens > MAX_GCACH_SCREENS )
-        mnMaxScreens = MAX_GCACH_SCREENS;
-    mnDefaultScreen = rSalDisplay.GetDefaultScreenNumber();
 }
 
 // ---------------------------------------------------------------------------
@@ -65,10 +53,13 @@ X11GlyphPeer::~X11GlyphPeer()
     if( !ImplGetSVData() )
         return;
 
+    //Why do this here, move into dtor/shutdown of display?
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
     Display* const pX11Disp = pSalDisp->GetDisplay();
+    int nMaxScreens = pSalDisp->GetScreenCount();
     XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
-    for( int i = 0; i < mnMaxScreens; i++ )
+
+    for( int i = 0; i < nMaxScreens; i++ )
     {
         SalDisplay::RenderEntryMap& rMap = pSalDisp->GetRenderEntries( i );
         for( SalDisplay::RenderEntryMap::iterator it = rMap.begin(); it != rMap.end(); ++it )
@@ -82,85 +73,17 @@ X11GlyphPeer::~X11GlyphPeer()
     }
 }
 
-// ===========================================================================
-
-enum { INFO_EMPTY=0, INFO_PIXMAP, INFO_XRENDER, INFO_RAWBMP };
-static const Glyph NO_GLYPHID = 0;
-static RawBitmap* const NO_RAWBMP = NULL;
-static const Pixmap NO_PIXMAP = ~0;
-
 // ---------------------------------------------------------------------------
 
-void X11GlyphPeer::RemovingFont( ServerFont& rServerFont )
+void X11GlyphPeer::RemovingFont( ServerFont& )
 {
-    void* pFontExt = rServerFont.GetExtPointer();
-    switch( rServerFont.GetExtInfo() )
-    {
-        case INFO_PIXMAP:
-        case INFO_RAWBMP:
-            // nothing to do
-            break;
-
-        case INFO_XRENDER:
-            XRenderPeer::GetInstance().FreeGlyphSet( (GlyphSet)pFontExt );
-            break;
-    }
-
-    rServerFont.SetExtended( INFO_EMPTY, NULL );
 }
 
 // ---------------------------------------------------------------------------
 
 // notification to clean up GlyphPeer resources for this glyph
-void X11GlyphPeer::RemovingGlyph( ServerFont& /*rServerFont*/, GlyphData& rGlyphData, int /*nGlyphIndex*/ )
+void X11GlyphPeer::RemovingGlyph( ServerFont&, GlyphData&, int /*nGlyphIndex*/ )
 {
-    // nothing to do if the GlyphPeer hasn't allocated resources for the glyph
-    if( rGlyphData.ExtDataRef().meInfo == INFO_EMPTY )
-        return;
-
-    const GlyphMetric& rGM = rGlyphData.GetMetric();
-    const int nWidth  = rGM.GetSize().Width();
-    const int nHeight = rGM.GetSize().Height();
-
-    void* pGlyphExt = rGlyphData.ExtDataRef().mpData;
-    switch( rGlyphData.ExtDataRef().meInfo )
-    {
-        case INFO_PIXMAP:
-            {
-                Pixmap aPixmap = (Pixmap)pGlyphExt;
-                if( aPixmap != None )
-                {
-                    XFreePixmap( mpDisplay, aPixmap );
-                    mnBytesUsed -= nHeight * ((nWidth + 7) >> 3);
-                }
-            }
-            break;
-
-        case INFO_RAWBMP:
-            {
-                RawBitmap* pRawBitmap = (RawBitmap*)pGlyphExt;
-                if( pRawBitmap != NULL )
-                {
-                    mnBytesUsed -= pRawBitmap->mnScanlineSize * pRawBitmap->mnHeight;
-                    mnBytesUsed -= sizeof(RawBitmap);
-                    delete pRawBitmap;
-                }
-            }
-            break;
-
-        case INFO_XRENDER:
-            {
-                // Glyph nGlyphId = (Glyph)rGlyphData.GetExtPointer();
-                // XRenderPeer::GetInstance().FreeGlyph( aGlyphSet, &nGlyphId );
-                mnBytesUsed -= nHeight * ((nWidth + 3) & ~3);
-            }
-            break;
-    }
-
-    if( mnBytesUsed < 0 )   // TODO: eliminate nBytesUsed calc mismatch
-        mnBytesUsed = 0;
-
-    rGlyphData.ExtDataRef() = ExtGlyphData();
 }
 
 // ===========================================================================
