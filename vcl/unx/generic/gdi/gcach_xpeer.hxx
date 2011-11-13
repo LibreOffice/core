@@ -29,20 +29,13 @@
 #ifndef _SV_GCACH_XPEER_HXX
 #define _SV_GCACH_XPEER_HXX
 
-#include <tools/prex.h>
-#include <X11/extensions/Xrender.h>
-#include <tools/postx.h>
-
 #include "generic/glyphcache.hxx"
 
-class SalDisplay;
-
-class X11GlyphPeer
-: public GlyphCachePeer
+class X11GlyphPeer : public GlyphCachePeer
 {
 public:
-                        X11GlyphPeer();
-    virtual            ~X11GlyphPeer();
+    X11GlyphPeer();
+    virtual ~X11GlyphPeer();
 };
 
 class X11GlyphCache : public GlyphCache

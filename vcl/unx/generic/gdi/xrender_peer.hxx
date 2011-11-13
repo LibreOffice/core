@@ -42,7 +42,7 @@ class XRenderPeer
 public:
     static XRenderPeer& GetInstance();
 
-protected:
+private:
                         XRenderPeer();
     void                InitRenderLib();
 
