@@ -264,12 +264,8 @@ void
                     continue;
                 case C_ALPH:
                     for (j = 0; j < 256; j++)
-#ifdef S390
-                        if( isalpha( j ) || (j == '_') )
-#else
                         if (('a' <= j && j <= 'z') || ('A' <= j && j <= 'Z')
                             || j == '_')
-#endif
                             bigfsm[j][fp->state] = (short) nstate;
                     continue;
                 case C_NUM:
