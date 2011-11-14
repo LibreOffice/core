@@ -1674,29 +1674,33 @@ static void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPa
         ScQueryEntry& rEntry = rParam.GetEntry(i);
         if ( rEntry.bDoQuery )
         {
-            // TODO: adapt this for multi-query items.
-            ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-            if (rItem.meType == ScQueryEntry::ByString)
+            ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
+            ScQueryEntry::QueryItemsType::iterator itr = rItems.begin(), itrEnd = rItems.end();
+            for (; itr != itrEnd; ++itr)
             {
-                sal_uInt32 nIndex = 0;
-                bool bNumber = pDoc->GetFormatTable()->
-                    IsNumberFormat(rItem.maString, nIndex, rItem.mfVal);
-                if (rItem.meType == ScQueryEntry::ByDate)
+                ScQueryEntry::Item& rItem = *itr;
+                if (rItem.meType == ScQueryEntry::ByString)
                 {
-                    if (bNumber && ((nIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0))
+                    sal_uInt32 nIndex = 0;
+                    bool bNumber = pDoc->GetFormatTable()->
+                        IsNumberFormat(rItem.maString, nIndex, rItem.mfVal);
+                    if (rItem.meType == ScQueryEntry::ByDate)
                     {
-                        const SvNumberformat* pEntry = pDoc->GetFormatTable()->GetEntry(nIndex);
-                        if (pEntry)
+                        if (bNumber && ((nIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0))
                         {
-                            short nNumFmtType = pEntry->GetType();
-                            if (!((nNumFmtType & NUMBERFORMAT_DATE) && !(nNumFmtType & NUMBERFORMAT_TIME)))
-                                rItem.meType = ScQueryEntry::ByValue;    // not a date only
+                            const SvNumberformat* pEntry = pDoc->GetFormatTable()->GetEntry(nIndex);
+                            if (pEntry)
+                            {
+                                short nNumFmtType = pEntry->GetType();
+                                if (!((nNumFmtType & NUMBERFORMAT_DATE) && !(nNumFmtType & NUMBERFORMAT_TIME)))
+                                    rItem.meType = ScQueryEntry::ByValue;    // not a date only
+                            }
+                            else
+                                rItem.meType = ScQueryEntry::ByValue;    // what the ... not a date
                         }
                         else
-                            rItem.meType = ScQueryEntry::ByValue;    // what the ... not a date
+                            rItem.meType = ScQueryEntry::ByValue;    // not a date
                     }
-                    else
-                        rItem.meType = ScQueryEntry::ByValue;    // not a date
                 }
             }
 

@@ -91,6 +91,11 @@ ScQueryEntry& ScQueryEntry::operator=( const ScQueryEntry& r )
     return *this;
 }
 
+ScQueryEntry::QueryItemsType& ScQueryEntry::GetQueryItems()
+{
+    return maQueryItems;
+}
+
 const ScQueryEntry::QueryItemsType& ScQueryEntry::GetQueryItems() const
 {
     return maQueryItems;

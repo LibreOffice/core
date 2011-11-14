@@ -71,6 +71,7 @@ struct ScQueryEntry
     // creates pSearchParam and pSearchText if necessary, always RegExp!
     utl::TextSearch* GetSearchTextPtr( bool bCaseSens ) const;
 
+    QueryItemsType& GetQueryItems();
     const QueryItemsType& GetQueryItems() const;
     SC_DLLPUBLIC void SetQueryByEmpty();
     SC_DLLPUBLIC bool IsQueryByEmpty() const;
