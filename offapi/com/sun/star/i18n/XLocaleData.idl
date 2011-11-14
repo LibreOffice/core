@@ -49,10 +49,8 @@ module com { module sun { module star { module i18n {
     respectively localedata*.dll.
 
     <p> For XML locale data files definitions see <a
-    href="http://l10n.openoffice.org/source/browse/l10n/i18npool/source/localedata/data/locale.dtd">
-    the DTD file </a> (or the <a
-    href="http://l10n.openoffice.org/source/browse/l10n/i18npool/source/localedata_ascii/Attic/locale.dtd">
-    old Attic version </a> for OOo1.0/SO6.0). </p>
+    href="http://cgit.freedesktop.org/libreoffice/core/tree/i18npool/source/localedata/data/locale.dtd">
+    the DTD file</a>. </p>
  */
 
 published interface XLocaleData: com::sun::star::uno::XInterface
