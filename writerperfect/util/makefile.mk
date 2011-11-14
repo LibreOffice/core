@@ -4,7 +4,7 @@ TARGET=writerperfect
 
 .INCLUDE :  settings.mk
 
-.IF "$(DISABLE_LIBWPD)" == ""
+.IF "$(SYSTEM_LIBWPD)" == "YES"
 
 .IF "$(GUI)"=="UNX"
 .IF "$(SYSTEM_LIBWPD)" == "YES"
@@ -56,5 +56,5 @@ $(MISC)/wpft.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
 
 .ELSE
 all:
-    @echo "libwpd disabled"
+    @echo "no system libpwd is used..."
 .ENDIF

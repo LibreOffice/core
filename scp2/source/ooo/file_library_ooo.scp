@@ -873,7 +873,7 @@ End
 
 #endif
 
-#ifndef DISABLE_LIBWPD
+#ifdef SYSTEM_LIBWPD
 STD_LIB_FILE(gid_File_Lib_Wpft,wpft)
 #endif
 

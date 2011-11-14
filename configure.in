@@ -1240,7 +1240,6 @@ if test "$enable_copyleft" != "yes"; then
 
    DISABLE_HUNSPELL="TRUE"
    DISABLE_HYPHEN="TRUE"
-   DISABLE_LIBWPD="TRUE"
    DISABLE_SAXON="TRUE"
 
    BUILD_EPM="NO"
@@ -1251,7 +1250,6 @@ else
 
    DISABLE_HUNSPELL=
    DISABLE_HYPHEN=
-   DISABLE_LIBWPD=
    DISABLE_SAXON=
 
    AC_MSG_RESULT([no])
@@ -1259,7 +1257,6 @@ else
 fi
 AC_SUBST(DISABLE_HUNSPELL)
 AC_SUBST(DISABLE_HYPHEN)
-AC_SUBST(DISABLE_LIBWPD)
 AC_SUBST(DISABLE_SAXON)
 AC_SUBST(BUILD_EPM)
 
@@ -3671,22 +3668,16 @@ AC_SUBST(SYSTEM_EXPAT)
 dnl ===================================================================
 dnl Check for system libwpd
 dnl ===================================================================
-if test -n "$enable_copyleft" -a "$enable_copyleft" != "no"; then
 AC_MSG_CHECKING([which libwpd to use])
 if test -n "$with_system_libwpd" -o -n "$with_system_libs" && \
         test "$with_system_libwpd" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBWPD=YES
     PKG_CHECK_MODULES( LIBWPD, libwpd-0.8 )
-else
-    AC_MSG_RESULT([internal])
-    SYSTEM_LIBWPD=NO
-    BUILD_TYPE="$BUILD_TYPE LIBWPD"
 fi
 AC_SUBST(SYSTEM_LIBWPD)
 AC_SUBST(LIBWPD_CFLAGS)
 AC_SUBST(LIBWPD_LIBS)
-fi
 
 dnl ===================================================================
 dnl Check for system cppunit

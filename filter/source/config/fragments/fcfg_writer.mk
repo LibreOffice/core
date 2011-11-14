@@ -17,7 +17,6 @@ T4_WRITER = \
     writer_MS_Word_97_Vorlage \
     writer_Rich_Text_Format \
     writer_StarOffice_XML_Writer \
-    writer_WordPerfect_Document \
     writer_T602_Document \
     writer_Text \
     writer_Text_encoded \
@@ -30,8 +29,12 @@ T4_WRITER = \
     writer_MS_Word_2007_XML \
     writer_MS_Word_2007_XML_Template
 
+.IF "$(SYSTEM_LIBWPD)" == "YES"
+T4_WRITER += writer_WordPerfect_Document
+.ENDIF
+
 # -----------------------------------------------
-# count = 39
+# count = 38
 F4_WRITER = \
     HTML__StarWriter_ \
     Lotus_1_2_3_1_0__DOS___StarWriter_ \
@@ -47,7 +50,6 @@ F4_WRITER = \
     MS_Word_97_Vorlage \
     Rich_Text_Format \
     StarOffice_XML__Writer_ \
-    WordPerfect \
     T602Document \
     Text \
     Text__encoded_ \
@@ -59,6 +61,11 @@ F4_WRITER = \
     MS_Word_2003_XML \
     MS_Word_2007_XML \
     MS_Word_2007_XML_Template
+
+.IF "$(SYSTEM_LIBWPD)" == "YES"
+F4_WRITER += WordPerfect
+.ENDIF
+
 
 # -----------------------------------------------
 # count = 14

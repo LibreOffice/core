@@ -206,7 +206,7 @@ my_components += \
     spell
 .END
 
-.IF "$(DISABLE_LIBWPD)" == ""
+.IF "$(SYSTEM_LIBWPD)" == "YES"
 my_components +=     wpft
 .END
 
