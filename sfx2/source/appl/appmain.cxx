@@ -61,30 +61,11 @@
 #include <sfx2/docfile.hxx>
 #include "workwin.hxx"
 
-#ifdef UNX
-#define stricmp(a,b) strcmp(a,b)
-#endif
-
-
-//===================================================================
-
 DBG_NAME(SfxAppMainNewMenu)
 DBG_NAME(SfxAppMainBmkMenu)
 DBG_NAME(SfxAppMainWizMenu)
 DBG_NAME(SfxAppMainOLEReg)
 DBG_NAME(SfxAppMainCHAOSReg)
-
-//===================================================================
-
-#define SFX_TEMPNAMEBASE_DIR    "soffice.tmp"
-#define SFX_KEY_TEMPNAMEBASE    "Temp-Dir"
-
-//===================================================================
-
-static SfxItemInfo const aItemInfos[] =
-{
-    { 0, 0 }
-};
 
 //===================================================================
 

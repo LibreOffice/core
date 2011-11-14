@@ -81,10 +81,6 @@
 #include "sfxpicklist.hxx"
 #include <tools/svlibrary.hxx>
 
-#ifdef UNX
-#define stricmp(a,b) strcmp(a,b)
-#endif
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
@@ -183,9 +179,6 @@ Sequence< ::rtl::OUString > SAL_CALL SfxTerminateListener_Impl::getSupportedServ
 }
 
 //====================================================================
-
-#define DOSTRING( x )                       #x
-#define STRING( x )                         DOSTRING( x )
 
 typedef bool ( *PFunc_getSpecialCharsForEdit)( Window* i_pParent, const Font& i_rFont, String& o_rOutString );
 
