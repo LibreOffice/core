@@ -127,6 +127,9 @@ public class Bootstrap extends Activity
 
         String mainLibrary = getIntent().getStringExtra("lo-main-library");
 
+        if (mainLibrary == null)
+            mainLibrary = "libcppunittester";
+
         if (mainLibrary != null) {
             int loLib = loadLibrary(mainLibrary + ".so");
 
@@ -135,9 +138,13 @@ public class Bootstrap extends Activity
 
             // Get "command line" to pass to the LO "program"
             String cmdLine = getIntent().getStringExtra("lo-main-cmdline");
+
+            if (cmdLine == null)
+                cmdLine = "cppunittester /data/data/org.libreoffice.android/lib/libqa_rtl_strings.so";
+
             String[] argv;
             if (cmdLine != null)
-                argv = cmdLine.split(" *");
+                argv = cmdLine.split(" ");
             else
                 argv = new String[0];
             int loLibMain = dlsym(loLib, "lo_main");

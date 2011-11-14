@@ -119,27 +119,20 @@ static int sal_main(void);
 
 #elif defined ANDROID
 
+#include <android/log.h>
+
+#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "lo-bootstrap", __VA_ARGS__))
+#define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "lo-bootstrap", __VA_ARGS__))
+
 #ifdef __cplusplus
-extern "C" {
-#endif
-#include <android_native_app_glue.c>
-#ifdef __cplusplus
-}
+extern "C" void lo_main(int argc, char **argv);
 #endif
 
 #define SAL_MAIN_WITH_ARGS_IMPL \
 static int sal_main_with_args(int argc, char **argv); \
 \
-void android_main(struct android_app *state) \
+void lo_main(int argc, char **argv) \
 { \
-    int argc = 0; \
-    char **argv = { NULL }; \
-\
-    (void) state; \
-\
-    /* Make sure glue isn't stripped. */ \
-    app_dummy(); \
-\
     sal_detail_initialize(argc, argv); \
     sal_main_with_args(argc, argv); \
     sal_detail_deinitialize(); \
@@ -148,16 +141,9 @@ void android_main(struct android_app *state) \
 #define SAL_MAIN_IMPL \
 static int sal_main(void); \
 \
-void android_main(struct android_app *state) \
+void lo_main(int argc, char **argv) \
 { \
-    int argc = 0; \
-    char **argv = { NULL }; \
-\
-    (void) state; \
-\
-    /* Make sure glue isn't stripped. */ \
-    app_dummy(); \
-\
+    LOGI("in lo_main, argc=%d, argv[0]=%s, argv[1]=%s", argc, argv[0], argv[1]);    \
     sal_detail_initialize(argc, argv); \
     sal_main(); \
     sal_detail_deinitialize(); \
