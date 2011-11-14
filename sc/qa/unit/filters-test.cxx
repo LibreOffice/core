@@ -209,7 +209,7 @@ ScDocShellRef ScFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUStr
     aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ScDocShellRef xDocShRef = new ScDocShell;
-    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READWRITE, true);
+    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ, true);
     pSrcMed->SetFilter(aFilter);
     if (!xDocShRef->DoLoad(pSrcMed))
     {
