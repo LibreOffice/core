@@ -44,7 +44,7 @@ namespace utl {
  */
 struct ScQueryEntry
 {
-    enum QueryType { ByValue, ByString, ByDate };
+    enum QueryType { ByValue, ByString, ByDate, ByEmpty };
 
     struct Item
     {

@@ -500,7 +500,7 @@ bool ScDBQueryDataIterator::IsQueryValid(ScDocument& rDoc, const ScQueryParam& r
 {
     if (nTab >= rDoc.GetTableCount())
         OSL_FAIL("try to access index out of bounds, FIX IT");
-    return rDoc.maTabs[nTab]->ValidQuery(nRow, rParam, NULL, pCell);
+    return rDoc.maTabs[nTab]->ValidQuery(nRow, rParam, pCell);
 }
 
 SCSIZE ScDBQueryDataIterator::SearchColEntryIndex(ScDocument& rDoc, SCTAB nTab, SCROW nRow, SCCOL nCol)
@@ -1168,7 +1168,7 @@ ScBaseCell* ScQueryCellIterator::GetThis()
             else
             {
                 bool bTestEqualCondition;
-                if ( (pDoc->maTabs[nTab])->ValidQuery( nRow, aParam, NULL,
+                if ( (pDoc->maTabs[nTab])->ValidQuery( nRow, aParam,
                         (nCol == static_cast<SCCOL>(nFirstQueryField) ? pCell : NULL),
                         (nTestEqualCondition ? &bTestEqualCondition : NULL) ) )
                 {

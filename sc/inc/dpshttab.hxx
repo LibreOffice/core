@@ -103,7 +103,6 @@ class SC_DLLPUBLIC ScSheetDPData : public ScDPTableData
 {
 private:
     ScQueryParam    aQuery;
-    bool*           pSpecial;
     bool            bIgnoreEmptyRows;
     bool            bRepeatIfEmpty;
 

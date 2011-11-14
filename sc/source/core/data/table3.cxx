@@ -1441,9 +1441,9 @@ public:
 
 }
 
-bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
-        bool* pSpecial /* =NULL */ , ScBaseCell* pCell /* =NULL */ ,
-        bool* pbTestEqualCondition /* = NULL */ )
+bool ScTable::ValidQuery(
+    SCROW nRow, const ScQueryParam& rParam, ScBaseCell* pCell,
+    bool* pbTestEqualCondition)
 {
     if (!rParam.GetEntry(0).bDoQuery)
         return true;
@@ -1468,7 +1468,8 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
 
         std::pair<bool,bool> aRes(false, false);
 
-        if ( pSpecial && pSpecial[i] )
+        const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
+        if (rItems.size() == 1 && rItems.front().meType == ScQueryEntry::ByEmpty)
         {
             if (rEntry.IsQueryByEmpty())
                 aRes.first = !aCol[rEntry.nField].HasDataAt(nRow);
@@ -1480,7 +1481,6 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
         }
         else
         {
-            const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
             ScQueryEntry::QueryItemsType::const_iterator itr = rItems.begin(), itrEnd = rItems.end();
 
             for (; itr != itrEnd; ++itr)
@@ -1664,14 +1664,13 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
         DestroySortCollator();
 }
 
-static void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rParam, bool* pSpecial )
+static void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rParam )
 {
     bool bTopTen = false;
     SCSIZE nEntryCount = rParam.GetEntryCount();
 
     for ( SCSIZE i = 0; i < nEntryCount; ++i )
     {
-        pSpecial[i] = false;
         ScQueryEntry& rEntry = rParam.GetEntry(i);
         if ( rEntry.bDoQuery )
         {
@@ -1700,14 +1699,7 @@ static void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPa
                         rItem.meType = ScQueryEntry::ByValue;    // not a date
                 }
             }
-            else
-            {
-                // call from UNO or second call from autofilter
-                if (rEntry.IsQueryByEmpty() || rEntry.IsQueryByNonEmpty())
-                {
-                    pSpecial[i] = true;
-                }
-            }
+
             if ( !bTopTen )
             {
                 switch ( rEntry.eOp )
@@ -1749,9 +1741,7 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, bool bKeepSub)
     SCROW nOutRow   = 0;
     SCROW nHeader   = aParam.bHasHeader ? 1 : 0;
 
-    SCSIZE nEntryCount = aParam.GetEntryCount();
-    bool* pSpecial = new bool[nEntryCount];
-    lcl_PrepareQuery( pDocument, this, aParam, pSpecial );
+    lcl_PrepareQuery(pDocument, this, aParam);
 
     if (!aParam.bInplace)
     {
@@ -1769,7 +1759,7 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, bool bKeepSub)
     for (SCROW j = aParam.nRow1 + nHeader; j <= nRealRow2; ++j)
     {
         bool bResult;                                   // Filterergebnis
-        bool bValid = ValidQuery(j, aParam, pSpecial);
+        bool bValid = ValidQuery(j, aParam);
         if (!bValid && bKeepSub)                        // Subtotals stehenlassen
         {
             for (SCCOL nCol=aParam.nCol1; nCol<=aParam.nCol2 && !bValid; nCol++)
@@ -1845,7 +1835,6 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, bool bKeepSub)
     if (aParam.bInplace)
         SetDrawPageSize();
 
-    delete[] pSpecial;
     return nCount;
 }
 
@@ -2113,12 +2102,11 @@ void ScTable::GetFilteredFilterEntries(
     }
     nEntryCount = aParam.GetEntryCount();
 
-    bool* pSpecial = new bool[nEntryCount];
-    lcl_PrepareQuery( pDocument, this, aParam, pSpecial );
+    lcl_PrepareQuery(pDocument, this, aParam);
     bool bHasDates = false;
     for ( SCROW j = nRow1; j <= nRow2; ++j )
     {
-        if ( ValidQuery( j, aParam, pSpecial ) )
+        if (ValidQuery(j, aParam))
         {
             bool bThisHasDates = false;
             aCol[nCol].GetFilterEntries( j, j, rStrings, bThisHasDates );
@@ -2127,7 +2115,6 @@ void ScTable::GetFilteredFilterEntries(
     }
 
     rHasDates = bHasDates;
-    delete[] pSpecial;
 }
 
 bool ScTable::GetDataEntries(SCCOL nCol, SCROW nRow, TypedScStrCollection& rStrings, bool bLimit)

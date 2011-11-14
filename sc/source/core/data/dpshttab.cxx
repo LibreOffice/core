@@ -63,21 +63,18 @@ using ::std::vector;
 ScSheetDPData::ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, const ScDPCache* pCache) :
     ScDPTableData(pD),
     aQuery ( rDesc.GetQueryParam() ),
-    pSpecial(NULL),
     bIgnoreEmptyRows( false ),
     bRepeatIfEmpty(false),
     mrDesc(rDesc),
     aCacheTable(pCache)
 {
     SCSIZE nEntryCount( aQuery.GetEntryCount());
-    pSpecial = new bool[nEntryCount];
     for (SCSIZE j = 0; j < nEntryCount; ++j)
     {
         ScQueryEntry& rEntry = aQuery.GetEntry(j);
         if (rEntry.bDoQuery)
         {
             ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-            pSpecial[j] = false;
             if (rItem.meType == ScQueryEntry::ByString)
             {
                 sal_uInt32 nIndex = 0;
@@ -85,17 +82,12 @@ ScSheetDPData::ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, con
                     rItem.maString, nIndex, rItem.mfVal);
                 rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
             }
-            else if (rEntry.IsQueryByEmpty() || rEntry.IsQueryByNonEmpty())
-            {
-                pSpecial[j] = true;
-            }
         }
     }
 }
 
 ScSheetDPData::~ScSheetDPData()
 {
-     delete[] pSpecial;
 }
 
 void ScSheetDPData::DisposeData()
@@ -203,7 +195,7 @@ void ScSheetDPData::CreateCacheTable()
     if (!aCacheTable.hasCache())
         aCacheTable.setCache(mrDesc.CreateCache());
 
-    aCacheTable.fillTable(aQuery, pSpecial, bIgnoreEmptyRows, bRepeatIfEmpty);
+    aCacheTable.fillTable(aQuery, bIgnoreEmptyRows, bRepeatIfEmpty);
 }
 
 void ScSheetDPData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims)

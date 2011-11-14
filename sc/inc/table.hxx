@@ -758,9 +758,9 @@ public:
     void        ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
 
     void        Sort(const ScSortParam& rSortParam, bool bKeepQuery);
-    bool        ValidQuery(SCROW nRow, const ScQueryParam& rQueryParam,
-                    bool* pSpecial = NULL, ScBaseCell* pCell = NULL,
-                    bool* pbTestEqualCondition = NULL );
+    bool        ValidQuery(
+        SCROW nRow, const ScQueryParam& rQueryParam, ScBaseCell* pCell = NULL,
+        bool* pbTestEqualCondition = NULL);
     void        TopTenQuery( ScQueryParam& );
     SCSIZE      Query(ScQueryParam& rQueryParam, bool bKeepSub);
     bool        CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);

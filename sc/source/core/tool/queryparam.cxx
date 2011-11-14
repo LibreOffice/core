@@ -264,7 +264,7 @@ ScQueryParam& ScQueryParam::operator=( const ScQueryParam& r )
     bByRow      = r.bByRow;
     bDestPers   = r.bDestPers;
 
-    maEntries = r.maEntries;
+    maEntries = r.maEntries.clone();
 
     return *this;
 }

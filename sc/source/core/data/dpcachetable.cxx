@@ -190,7 +190,7 @@ sal_Int32 ScDPCacheTable::getColSize() const
 }
 
 void ScDPCacheTable::fillTable(
-    const ScQueryParam& rQuery, bool* pSpecial, bool bIgnoreEmptyRows, bool bRepeatIfEmpty)
+    const ScQueryParam& rQuery, bool bIgnoreEmptyRows, bool bRepeatIfEmpty)
 {
     const SCROW nRowCount = getRowSize();
     const SCCOL  nColCount = (SCCOL) getColSize();
@@ -224,7 +224,7 @@ void ScDPCacheTable::fillTable(
                 }
 
                 if ( lcl_HasQueryEntry(rQuery) &&
-                    !getCache()->ValidQuery( nRow , rQuery, pSpecial ) )
+                    !getCache()->ValidQuery(nRow , rQuery) )
                     continue;
                 if ( bIgnoreEmptyRows &&  getCache()->IsRowEmpty( nRow ) )
                     continue;

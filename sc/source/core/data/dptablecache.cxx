@@ -576,7 +576,7 @@ sal_uLong ScDPCache::GetDimNumType( SCCOL nDim) const
         return GetNumType(maTableDataValues[nDim][0].nNumFormat);
 }
 
-bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, bool *pSpecial) const
+bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
 {
     if (!rParam.GetEntry(0).bDoQuery)
         return true;
@@ -616,7 +616,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, bool *pSpeci
         bool bOk = false;
         bool bTestEqual = false;
 
-        if (pSpecial && pSpecial[i])
+        if (rEntry.GetQueryItem().meType == ScQueryEntry::ByEmpty)
         {
             if (rEntry.IsQueryByEmpty())
                 bOk = !pCellData->IsHasData();
