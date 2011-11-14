@@ -35,13 +35,12 @@
 #include <cppuhelper/factory.hxx>   // helper for factories
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
 
 #include "thesdsp.hxx"
 #include "linguistic/lngprops.hxx"
 
-using namespace utl;
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
@@ -177,7 +176,8 @@ Sequence< Reference< XMeaning > > SAL_CALL
             const OUString *pImplNames = pEntry->aSvcImplNames.getConstArray();
             Reference< XThesaurus > *pRef = pEntry->aSvcRefs.getArray();
 
-            Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
+            Reference< XMultiServiceFactory > xMgr(
+                comphelper::getProcessServiceFactory() );
             if (xMgr.is())
             {
                 // build service initialization argument

@@ -68,7 +68,6 @@
 
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <unotools/processfactory.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

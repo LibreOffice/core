@@ -324,7 +324,6 @@
 
 #include "unotools/configmgr.hxx"
 #include "unotools/confignode.hxx"
-#include "unotools/processfactory.hxx"
 #include "unotools/sharedunocomponent.hxx"
 
 #include "osl/mutex.hxx"

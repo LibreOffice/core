@@ -50,7 +50,7 @@
 #include "MQuery.hxx"
 #include <MQueryHelper.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include "com/sun/star/mozilla/XProxyRunner.hpp"
 
 using namespace com::sun::star::uno;

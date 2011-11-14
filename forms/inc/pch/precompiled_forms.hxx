@@ -378,7 +378,6 @@
 
 #include "unotools/desktopterminationobserver.hxx"
 #include "unotools/idhelper.hxx"
-#include "unotools/processfactory.hxx"
 #include "unotools/streamhelper.hxx"
 #include "unotools/textsearch.hxx"
 #include "unotools/ucbstreamhelper.hxx"

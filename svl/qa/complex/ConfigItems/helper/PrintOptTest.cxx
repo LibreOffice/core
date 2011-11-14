@@ -30,7 +30,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
 
 namespace css = ::com::sun::star;
@@ -52,7 +52,7 @@ PrintOptTest::PrintOptTest()
 {
     m_xCfg = css::uno::Reference< css::container::XNameAccess >(
             ::comphelper::ConfigurationHelper::openConfig(
-            ::utl::getProcessServiceFactory(),
+            ::comphelper::getProcessServiceFactory(),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Print/Option")),
             ::comphelper::ConfigurationHelper::E_STANDARD),
             css::uno::UNO_QUERY);

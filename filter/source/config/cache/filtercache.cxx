@@ -52,7 +52,7 @@
 #include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/locale.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <unotools/configpathes.hxx>
 #include <rtl/ustrbuf.hxx>

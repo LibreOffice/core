@@ -45,7 +45,6 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <unotools/processfactory.hxx>
 #include <i18npool/mslangid.hxx>
 
 using namespace utl;

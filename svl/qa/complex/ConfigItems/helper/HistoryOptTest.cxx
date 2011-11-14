@@ -37,7 +37,7 @@
 
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 
 namespace css = ::com::sun::star;
 
@@ -390,7 +390,7 @@ css::uno::Reference< css::container::XNameAccess > HistoryOptTest::impl_getNewHi
     {
         m_xHistoriesXCU = css::uno::Reference< css::container::XNameAccess >(
             ::comphelper::ConfigurationHelper::openConfig(
-            ::utl::getProcessServiceFactory(),
+            ::comphelper::getProcessServiceFactory(),
             s_sHistories,
             ::comphelper::ConfigurationHelper::E_STANDARD),
             css::uno::UNO_QUERY_THROW);
@@ -426,7 +426,7 @@ css::uno::Reference< css::container::XNameAccess > HistoryOptTest::impl_getOldHi
     {
         m_xCommonXCU = css::uno::Reference< css::container::XNameAccess >(
             ::comphelper::ConfigurationHelper::openConfig(
-            ::utl::getProcessServiceFactory(),
+            ::comphelper::getProcessServiceFactory(),
             s_sCommonHistory,
             ::comphelper::ConfigurationHelper::E_STANDARD),
             css::uno::UNO_QUERY_THROW);

@@ -63,7 +63,7 @@
 #include <unotools/saveopt.hxx>
 #include <svl/stritem.hxx>
 #include <svl/itemprop.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -106,7 +106,7 @@ sal_Bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
 {
     sal_Bool bRet=sal_True;
     uno::Reference<lang::XMultiServiceFactory>
-        xServiceFactory(utl::getProcessServiceFactory());
+        xServiceFactory(comphelper::getProcessServiceFactory());
     OSL_ENSURE(xServiceFactory.is(),"got no service manager");
 
     //Get model

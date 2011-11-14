@@ -30,6 +30,7 @@ $(eval $(call gb_Library_set_include,icg,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,icg,\
+        comphelper \
 	tk \
 	vcl \
 	utl \

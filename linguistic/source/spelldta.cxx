@@ -33,7 +33,6 @@
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <tools/debug.hxx>
-#include <unotools/processfactory.hxx>
 #include <osl/mutex.hxx>
 
 #include <vector>

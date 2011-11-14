@@ -92,7 +92,7 @@
 #include <toolkit/unohlp.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svtools/sfxecode.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -705,7 +705,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
     }
 
     // following operatons can work on an internal type name only :-(
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::utl::getProcessServiceFactory();
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
     css::uno::Reference< css::document::XTypeDetection > xDetect(xSMGR->createInstance(SERVICENAME_TYPEDETECTION), css::uno::UNO_QUERY);
 
     ::rtl::OUString sType = xDetect->queryTypeByURL(sURL);

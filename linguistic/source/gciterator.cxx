@@ -62,7 +62,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/factory.hxx>
 #include <i18npool/mslangid.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>
 
 #include <deque>
@@ -454,7 +454,7 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
             try
             {
                 uno::Reference< lang::XMultiServiceFactory > xMgr(
-                        utl::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+                        comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
                 uno::Reference< linguistic2::XProofreader > xGC(
                         xMgr->createInstance( aSvcImplName ), uno::UNO_QUERY_THROW );
                 uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xGC, uno::UNO_QUERY_THROW );
@@ -989,7 +989,7 @@ uno::Reference< util::XChangesBatch > GrammarCheckingIterator::GetUpdateAccess()
         {
             // get configuration provider
             uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider;
-            uno::Reference< lang::XMultiServiceFactory > xMgr = utl::getProcessServiceFactory();
+            uno::Reference< lang::XMultiServiceFactory > xMgr = comphelper::getProcessServiceFactory();
             if (xMgr.is())
             {
                 xConfigurationProvider = uno::Reference< lang::XMultiServiceFactory > (

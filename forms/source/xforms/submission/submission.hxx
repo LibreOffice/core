@@ -33,7 +33,7 @@
 #include <rtl/ustring.h>
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -142,7 +142,7 @@ public:
     CSubmission(const rtl::OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment)
         : m_aURLObj(aURL)
         , m_aFragment(aFragment)
-        , m_aFactory(::utl::getProcessServiceFactory())
+        , m_aFactory(::comphelper::getProcessServiceFactory())
     {}
 
     virtual ~CSubmission() {}

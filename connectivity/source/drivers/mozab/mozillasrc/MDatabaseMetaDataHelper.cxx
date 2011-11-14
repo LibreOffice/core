@@ -61,7 +61,7 @@ static ::osl::Mutex m_aMetaMutex;
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdb/ErrorCondition.hpp>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 
 

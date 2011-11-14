@@ -88,7 +88,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <vcl/svapp.hxx>
 #include <rtl/ustring.hxx>
@@ -762,7 +762,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                                 xFrame = pSfxViewFrame->GetFrame().GetFrameInterface();
                             com::sun::star::util::URL aURL;
                             uno::Reference< frame::XDispatchProvider > xDispatchProvider( xFrame, UNO_QUERY );
-                            uno::Reference< lang::XMultiServiceFactory > xMgr( utl::getProcessServiceFactory(), uno::UNO_QUERY );
+                            uno::Reference< lang::XMultiServiceFactory > xMgr( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
 
                             try
                             {

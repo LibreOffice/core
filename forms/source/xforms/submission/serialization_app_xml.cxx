@@ -32,7 +32,7 @@
 #include "serialization.hxx"
 #include "serialization_app_xml.hxx"
 
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
@@ -43,7 +43,7 @@
 #include <libxml/tree.h>
 
 CSerializationAppXML::CSerializationAppXML()
-    : m_aFactory(utl::getProcessServiceFactory())
+    : m_aFactory(comphelper::getProcessServiceFactory())
     , m_aPipe(CSS::uno::Reference< CSS::io::XOutputStream > (m_aFactory->createInstance(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe") ) ), CSS::uno::UNO_QUERY))
 {

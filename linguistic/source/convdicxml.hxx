@@ -34,6 +34,7 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <comphelper/processfactory.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <cppuhelper/implbase3.hxx>
@@ -56,7 +57,7 @@ public:
     ConvDicXMLExport( ConvDic &rConvDic,
         const rtl::OUString &rFileName,
         com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > &rHandler) :
-        SvXMLExport ( utl::getProcessServiceFactory(), rFileName,
+        SvXMLExport ( comphelper::getProcessServiceFactory(), rFileName,
                       ::com::sun::star::util::MeasureUnit::CM, rHandler ),
         rDic        ( rConvDic ),
         bSuccess    ( sal_False )
@@ -96,7 +97,7 @@ public:
 
     //!!  see comment for pDic member
     ConvDicXMLImport( ConvDic *pConvDic, const rtl::OUString /*&rFileName*/ ) :
-        SvXMLImport ( utl::getProcessServiceFactory(), IMPORT_ALL ),
+        SvXMLImport ( comphelper::getProcessServiceFactory(), IMPORT_ALL ),
         pDic        ( pConvDic )
     {
         nLanguage       = LANGUAGE_NONE;

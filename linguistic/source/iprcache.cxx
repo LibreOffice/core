@@ -37,7 +37,6 @@
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
-#include <unotools/processfactory.hxx>
 #include <linguistic/lngprops.hxx>
 
 using namespace utl;

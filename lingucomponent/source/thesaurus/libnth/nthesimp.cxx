@@ -35,7 +35,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <i18npool/mslangid.hxx>
 #include <tools/debug.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/lingucfg.hxx>
@@ -64,7 +64,6 @@
 // XML-header to query SPELLML support
 #define SPELLML_SUPPORT "<?xml?>"
 
-using namespace utl;
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
@@ -82,7 +81,8 @@ using ::rtl::OUStringToOString;
 static uno::Reference< XLinguServiceManager > GetLngSvcMgr_Impl()
 {
     uno::Reference< XLinguServiceManager > xRes;
-    uno::Reference< XMultiServiceFactory >  xMgr = getProcessServiceFactory();
+    uno::Reference< XMultiServiceFactory > xMgr(
+        comphelper::getProcessServiceFactory() );
     if (xMgr.is())
     {
         xRes = uno::Reference< XLinguServiceManager > ( xMgr->createInstance(

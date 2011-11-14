@@ -39,7 +39,7 @@
 
 #include <tools/solar.h>
 #include <unotools/lingucfg.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <i18npool/lang.h>
 #include <i18npool/mslangid.hxx>
 #include <cppuhelper/factory.hxx>
@@ -87,7 +87,7 @@ static uno::Sequence< lang::Locale > GetAvailLocales(
 {
     uno::Sequence< lang::Locale > aRes;
 
-    uno::Reference< lang::XMultiServiceFactory >  xFac( utl::getProcessServiceFactory() );
+    uno::Reference< lang::XMultiServiceFactory >  xFac( comphelper::getProcessServiceFactory() );
     sal_Int32 nNames = rSvcImplNames.getLength();
     if (nNames  &&  xFac.is())
     {
@@ -682,7 +682,7 @@ void LngSvcMgr::GetGrammarCheckerDsp_Impl( sal_Bool bSetSvcList  )
         try
         {
             uno::Reference< lang::XMultiServiceFactory > xMgr(
-                    utl::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+                    comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
             xGCI = uno::Reference< linguistic2::XProofreadingIterator >(
                     xMgr->createInstance( A2OU( SN_GRAMMARCHECKINGITERATOR ) ), uno::UNO_QUERY_THROW );
         }
@@ -733,7 +733,7 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
     {
         pAvailSpellSvcs = new SvcInfoArray;
 
-        uno::Reference< lang::XMultiServiceFactory >  xFac( utl::getProcessServiceFactory() );
+        uno::Reference< lang::XMultiServiceFactory >  xFac( comphelper::getProcessServiceFactory() );
         if (xFac.is())
         {
             uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xFac, uno::UNO_QUERY );
@@ -799,7 +799,7 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
     {
         pAvailGrammarSvcs = new SvcInfoArray;
 
-        uno::Reference< lang::XMultiServiceFactory >  xFac( utl::getProcessServiceFactory() );
+        uno::Reference< lang::XMultiServiceFactory >  xFac( comphelper::getProcessServiceFactory() );
         if (xFac.is())
         {
             uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xFac, uno::UNO_QUERY );
@@ -864,7 +864,7 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
     if (!pAvailHyphSvcs)
     {
         pAvailHyphSvcs = new SvcInfoArray;
-        uno::Reference< lang::XMultiServiceFactory >  xFac( utl::getProcessServiceFactory() );
+        uno::Reference< lang::XMultiServiceFactory >  xFac( comphelper::getProcessServiceFactory() );
         if (xFac.is())
         {
             uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xFac, uno::UNO_QUERY );
@@ -930,7 +930,7 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
     {
         pAvailThesSvcs = new SvcInfoArray;
 
-        uno::Reference< lang::XMultiServiceFactory >  xFac( utl::getProcessServiceFactory() );
+        uno::Reference< lang::XMultiServiceFactory >  xFac( comphelper::getProcessServiceFactory() );
         if (xFac.is())
         {
             uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xFac, uno::UNO_QUERY );

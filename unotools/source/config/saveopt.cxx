@@ -39,7 +39,7 @@
 
 #include <osl/mutex.hxx>
 #include <comphelper/configurationhelper.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <rtl/logfile.hxx>
 #include "itemholder1.hxx"
 
@@ -594,7 +594,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     try
     {
     css::uno::Reference< css::uno::XInterface > xCFG = ::comphelper::ConfigurationHelper::openConfig(
-        ::utl::getProcessServiceFactory(),
+        ::comphelper::getProcessServiceFactory(),
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery")),
         ::comphelper::ConfigurationHelper::E_READONLY);
 
@@ -781,7 +781,7 @@ void SvtSaveOptions_Impl::Commit()
     PutProperties( aNames, aValues );
 
     css::uno::Reference< css::uno::XInterface > xCFG = ::comphelper::ConfigurationHelper::openConfig(
-        ::utl::getProcessServiceFactory(),
+        ::comphelper::getProcessServiceFactory(),
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery")),
         ::comphelper::ConfigurationHelper::E_STANDARD);
 

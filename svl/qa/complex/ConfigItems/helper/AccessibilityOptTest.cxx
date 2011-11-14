@@ -33,7 +33,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include <comphelper/configurationhelper.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 
 namespace css = ::com::sun::star;
 
@@ -41,7 +41,7 @@ AccessibilityOptTest::AccessibilityOptTest()
 {
     m_xCfg = css::uno::Reference< css::container::XNameAccess >(
         ::comphelper::ConfigurationHelper::openConfig(
-        ::utl::getProcessServiceFactory(),
+        ::comphelper::getProcessServiceFactory(),
         s_sAccessibility,
         ::comphelper::ConfigurationHelper::E_STANDARD),
         css::uno::UNO_QUERY);

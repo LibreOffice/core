@@ -37,7 +37,6 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <i18npool/mslangid.hxx>
 #include <tools/debug.hxx>
-#include <unotools/processfactory.hxx>
 #include <osl/mutex.hxx>
 
 #include <hyphen.h>

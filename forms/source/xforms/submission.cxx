@@ -62,7 +62,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/interaction.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <memory>
 
 
@@ -111,7 +111,7 @@ Submission::Submission() :
     msReplace( OUSTRING("none") ),
     msSeparator(),
     msIncludeNamespacePrefixes(),
-    m_aFactory(utl::getProcessServiceFactory())
+    m_aFactory(comphelper::getProcessServiceFactory())
 {
     initializePropertySet();
 }

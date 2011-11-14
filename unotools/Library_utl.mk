@@ -140,7 +140,6 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/misc/fontdefs \
     unotools/source/misc/sharedunocomponent \
     unotools/source/misc/syslocale \
-    unotools/source/processfactory/processfactory \
     unotools/source/streaming/streamhelper \
     unotools/source/streaming/streamwrap \
     unotools/source/ucbhelper/localfilehelper \

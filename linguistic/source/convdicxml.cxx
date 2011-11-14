@@ -35,7 +35,6 @@
 #include <i18npool/mslangid.hxx>
 #include <tools/stream.hxx>
 #include <osl/mutex.hxx>
-#include <unotools/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 
 #include <cppuhelper/factory.hxx>   // helper for factories

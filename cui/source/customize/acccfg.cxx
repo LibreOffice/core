@@ -67,7 +67,7 @@
 
 //-----------------------------------------------
 // include other projects
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svtools/svlbitm.hxx>
@@ -850,7 +850,7 @@ void SfxAcceleratorConfigPage::InitAccCfg()
     try
     {
         // no - initialize this instance
-        m_xSMGR = ::utl::getProcessServiceFactory();
+        m_xSMGR = ::comphelper::getProcessServiceFactory();
 
         m_xUICmdDescription = css::uno::Reference< css::container::XNameAccess >(m_xSMGR->createInstance(SERVICE_UICMDDESCRIPTION), css::uno::UNO_QUERY_THROW);
 

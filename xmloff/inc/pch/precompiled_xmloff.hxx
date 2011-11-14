@@ -463,7 +463,6 @@
 #include "unotools/bootstrap.hxx"
 #include "unotools/charclass.hxx"
 #include "unotools/configmgr.hxx"
-#include "unotools/processfactory.hxx"
 #include "unotools/streamwrap.hxx"
 
 #include "tools/fldunit.hxx"

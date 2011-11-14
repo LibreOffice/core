@@ -38,7 +38,6 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <osl/file.hxx>
-#include <unotools/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 
 using namespace CSS::uno;

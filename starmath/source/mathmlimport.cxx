@@ -58,7 +58,7 @@ one go*/
 #include <unotools/saveopt.hxx>
 #include <svl/stritem.hxx>
 #include <svl/itemprop.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -101,7 +101,7 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
     sal_uLong nError = ERRCODE_SFX_DOLOADFAILED;
 
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory(
-        utl::getProcessServiceFactory());
+        comphelper::getProcessServiceFactory());
     OSL_ENSURE(xServiceFactory.is(), "XMLReader::Read: got no service manager");
     if ( !xServiceFactory.is() )
         return nError;

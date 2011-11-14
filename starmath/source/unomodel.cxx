@@ -36,7 +36,7 @@
 #include <svtools/ctrltool.hxx>
 #include <svl/itemprop.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <editeng/paperinf.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/print.hxx>

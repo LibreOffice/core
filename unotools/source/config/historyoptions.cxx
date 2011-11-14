@@ -53,7 +53,7 @@
 
 #include <comphelper/configurationhelper.hxx>
 
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <unotools/loghelper.hxx>
 
@@ -150,14 +150,14 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
     {
         m_xCfg = Reference< css::container::XNameAccess > (
             ::comphelper::ConfigurationHelper::openConfig(
-            utl::getProcessServiceFactory(),
+            ::comphelper::getProcessServiceFactory(),
             s_sHistories,
             ::comphelper::ConfigurationHelper::E_STANDARD),
             css::uno::UNO_QUERY );
 
         m_xCommonXCU = Reference< css::container::XNameAccess > (
             ::comphelper::ConfigurationHelper::openConfig(
-            utl::getProcessServiceFactory(),
+            ::comphelper::getProcessServiceFactory(),
             s_sCommonHistory,
             ::comphelper::ConfigurationHelper::E_STANDARD),
             css::uno::UNO_QUERY );

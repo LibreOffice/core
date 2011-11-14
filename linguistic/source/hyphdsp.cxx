@@ -39,7 +39,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <tools/debug.hxx>
 #include <svl/lngmisc.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
 
 #include "hyphdsp.hxx"
@@ -47,8 +47,6 @@
 #include "linguistic/lngprops.hxx"
 #include "lngsvcmgr.hxx"
 
-
-using namespace utl;
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
@@ -342,7 +340,8 @@ Reference< XHyphenatedWord > SAL_CALL
             {
                 Reference< XHyphenator > *pRef = pEntry->aSvcRefs.getArray();
 
-                Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
+                Reference< XMultiServiceFactory > xMgr(
+                    comphelper::getProcessServiceFactory() );
                 if (xMgr.is())
                 {
                     // build service initialization argument
@@ -477,7 +476,8 @@ Reference< XHyphenatedWord > SAL_CALL
             {
                 Reference< XHyphenator > *pRef = pEntry->aSvcRefs.getArray();
 
-                Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
+                Reference< XMultiServiceFactory > xMgr(
+                    comphelper::getProcessServiceFactory() );
                 if (xMgr.is())
                 {
                     // build service initialization argument
@@ -607,7 +607,8 @@ Reference< XPossibleHyphens > SAL_CALL
             {
                 Reference< XHyphenator > *pRef = pEntry->aSvcRefs.getArray();
 
-                Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
+                Reference< XMultiServiceFactory > xMgr(
+                    comphelper::getProcessServiceFactory() );
                 if (xMgr.is())
                 {
                     // build service initialization argument

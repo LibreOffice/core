@@ -40,7 +40,7 @@
 #include <com/sun/star/frame/XModule.hpp>
 #include <com/sun/star/xforms/XModel.hpp>
 #include <com/sun/star/xforms/XFormsUIHelper1.hpp>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
 
 
@@ -71,7 +71,7 @@ bool SwDoc::isXForms() const
 Reference<XInterface> lcl_createInstance( const sal_Char* pServiceName )
 {
     OSL_ENSURE( pServiceName != NULL, "no service name" );
-    return utl::getProcessServiceFactory()->createInstance(
+    return comphelper::getProcessServiceFactory()->createInstance(
         OUString::createFromAscii( pServiceName  ) );
 }
 

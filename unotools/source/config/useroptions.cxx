@@ -51,7 +51,7 @@
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/util/ChangesEvent.hpp>
 #include <comphelper/configurationhelper.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <unotools/loghelper.hxx>
 
 using namespace utl;
@@ -181,7 +181,7 @@ SvtUserOptions_Impl::SvtUserOptions_Impl() :
     {
         m_xCfg = Reference< css::container::XNameAccess > (
             ::comphelper::ConfigurationHelper::openConfig(
-            utl::getProcessServiceFactory(),
+            ::comphelper::getProcessServiceFactory(),
             s_sData,
             ::comphelper::ConfigurationHelper::E_STANDARD),
             css::uno::UNO_QUERY );

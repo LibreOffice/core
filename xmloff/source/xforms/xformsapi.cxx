@@ -41,7 +41,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xsd/DataTypeClass.hpp>
 
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 
 #include <xmloff/xmltoken.hxx>
@@ -60,7 +60,7 @@ using com::sun::star::lang::XMultiServiceFactory;
 using com::sun::star::xforms::XFormsSupplier;
 using com::sun::star::xforms::XDataTypeRepository;
 using com::sun::star::container::XNameContainer;
-using utl::getProcessServiceFactory;
+using comphelper::getProcessServiceFactory;
 using com::sun::star::uno::makeAny;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::Exception;

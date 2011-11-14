@@ -28,7 +28,7 @@
 
 #include <set>
 #include <map>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <tools/debug.hxx>
 #include <vcl/stdtext.hxx>
@@ -57,7 +57,7 @@ typedef map< String, StrSet, ltstr > FilterMap;
 //==================================================================================================
 void fillNetscapePluginFilters( Sequence< rtl::OUString >& rPluginNames, Sequence< rtl::OUString >& rPluginTypes )
 {
-    Reference< XMultiServiceFactory > xMan( ::utl::getProcessServiceFactory() );
+    Reference< XMultiServiceFactory > xMan( ::comphelper::getProcessServiceFactory() );
     Reference< XPluginManager > xPMgr( xMan->createInstance(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.plugin.PluginManager") ) ), UNO_QUERY );
 

@@ -49,7 +49,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/linguistic2/DictionaryType.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 
@@ -61,7 +61,6 @@
 #include "linguistic/hyphdta.hxx"
 #include <i18npool/mslangid.hxx>
 
-using namespace utl;
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
@@ -90,7 +89,7 @@ osl::Mutex &    GetLinguMutex()
 LocaleDataWrapper & GetLocaleDataWrapper( sal_Int16 nLang )
 {
     static LocaleDataWrapper aLclDtaWrp(
-                getProcessServiceFactory(),
+                comphelper::getProcessServiceFactory(),
                 CreateLocale( SvtSysLocale().GetUILanguage() ) );
 
     const Locale &rLcl = aLclDtaWrp.getLoadedLocale();
@@ -789,7 +788,8 @@ uno::Reference< XInterface > GetOneInstanceService( const char *pServiceName )
 
     if (pServiceName)
     {
-        uno::Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
+        uno::Reference< XMultiServiceFactory > xMgr(
+            comphelper::getProcessServiceFactory() );
         if (xMgr.is())
         {
             try
@@ -838,7 +838,8 @@ AppExitListener::AppExitListener()
 {
     // add object to Desktop EventListeners in order to properly call
     // the AtExit function at appliction exit.
-    uno::Reference< XMultiServiceFactory > xMgr = getProcessServiceFactory();
+    uno::Reference< XMultiServiceFactory > xMgr(
+        comphelper::getProcessServiceFactory() );
 
     if (xMgr.is())
     {

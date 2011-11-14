@@ -37,7 +37,7 @@
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/text/XFlatParagraphIteratorProvider.hpp>
 
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <rtl/logfile.hxx>
@@ -138,7 +138,7 @@ SV_IMPL_PTRARR( SwGrfFmtColls, SwGrfFmtCollPtr)
 {
     if (!m_xGCIterator.is() && SvtLinguConfig().HasGrammarChecker())
     {
-        uno::Reference< lang::XMultiServiceFactory >  xMgr( utl::getProcessServiceFactory() );
+        uno::Reference< lang::XMultiServiceFactory >  xMgr( comphelper::getProcessServiceFactory() );
         if (xMgr.is())
         {
             try

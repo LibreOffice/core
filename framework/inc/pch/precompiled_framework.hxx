@@ -444,7 +444,6 @@
 #include "unotools/configpathes.hxx"
 #include "unotools/intlwrapper.hxx"
 #include "unotools/localfilehelper.hxx"
-#include "unotools/processfactory.hxx"
 #include "unotools/streamwrap.hxx"
 #include "unotools/tempfile.hxx"
 #include "unotools/ucbstreamhelper.hxx"

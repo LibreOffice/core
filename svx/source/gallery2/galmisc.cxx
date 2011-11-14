@@ -31,7 +31,7 @@
 
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/urlobj.hxx>
@@ -403,7 +403,7 @@ sal_Bool KillFile( const INetURLObject& rURL )
 GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
     mpFilter( pFilter )
 {
-    uno::Reference< lang::XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
+    uno::Reference< lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
 
     if( xMgr.is() )
     {

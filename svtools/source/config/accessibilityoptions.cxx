@@ -40,7 +40,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <comphelper/configurationhelper.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <unotools/loghelper.hxx>
 
 #include <svl/smplhint.hxx>
@@ -115,7 +115,7 @@ SvtAccessibilityOptions_Impl::SvtAccessibilityOptions_Impl()
     {
         m_xCfg = css::uno::Reference< css::container::XNameAccess >(
             ::comphelper::ConfigurationHelper::openConfig(
-            utl::getProcessServiceFactory(),
+            comphelper::getProcessServiceFactory(),
             s_sAccessibility,
             ::comphelper::ConfigurationHelper::E_STANDARD),
             css::uno::UNO_QUERY);

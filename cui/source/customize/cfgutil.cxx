@@ -58,7 +58,7 @@
 #include "cuires.hrc"
 #include <sfx2/app.hxx>
 #include <sfx2/minfitem.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <svtools/imagemgr.hxx>
 #include <rtl/ustrbuf.hxx>

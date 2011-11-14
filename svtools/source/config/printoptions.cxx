@@ -51,7 +51,7 @@
 
 #include <comphelper/configurationhelper.hxx>
 
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <unotools/loghelper.hxx>
 
@@ -173,7 +173,7 @@ SvtPrintOptions_Impl::SvtPrintOptions_Impl(const OUString& rConfigRoot)
     {
         m_xCfg = css::uno::Reference< css::container::XNameAccess >(
             ::comphelper::ConfigurationHelper::openConfig(
-            utl::getProcessServiceFactory(),
+            comphelper::getProcessServiceFactory(),
             ROOTNODE_PRINTOPTION,
             ::comphelper::ConfigurationHelper::E_STANDARD),
             css::uno::UNO_QUERY);

@@ -46,7 +46,6 @@
 #include "vcl/svapp.hxx"
 #include "toolkit/awt/vclxdevice.hxx"
 #include "unotools/localfilehelper.hxx"
-#include "unotools/processfactory.hxx"
 #include "svtools/FilterConfigItem.hxx"
 #include "svtools/filter.hxx"
 #include "svl/solar.hrc"

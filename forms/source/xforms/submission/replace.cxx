@@ -35,7 +35,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
@@ -59,7 +59,7 @@ CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aRepla
         return CSubmission::UNKNOWN_ERROR;
 
     try {
-        Reference< XMultiServiceFactory > xFactory = utl::getProcessServiceFactory();
+        Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
         if (aReplace.equalsIgnoreAsciiCaseAscii("all") || aReplace.equalsIgnoreAsciiCaseAscii("document")) {
             Reference< XComponentLoader > xLoader;
             if (aFrame.is())

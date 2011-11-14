@@ -44,7 +44,7 @@
 #include "rtl/ustring.hxx"
 #include "unotools/configitem.hxx"
 #include "unotools/configmgr.hxx"
-#include "unotools/processfactory.hxx"
+#include "comphelper/processfactory.hxx"
 
 namespace {
 
@@ -76,7 +76,7 @@ css::uno::Reference< css::lang::XMultiServiceFactory >
 getConfigurationProvider() {
     return css::uno::Reference< css::lang::XMultiServiceFactory >(
         (css::uno::Reference< css::lang::XMultiServiceFactory >(
-            utl::getProcessServiceFactory(), css::uno::UNO_SET_THROW)->
+            comphelper::getProcessServiceFactory(), css::uno::UNO_SET_THROW)->
          createInstance(
              rtl::OUString(
                  RTL_CONSTASCII_USTRINGPARAM(

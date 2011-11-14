@@ -37,21 +37,20 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
 #include <stdio.h>
 
 #include "serialization_urlencoded.hxx"
 
-using namespace utl;
 using namespace CSS::uno;
 using namespace CSS::io;
 using namespace CSS::xml::xpath;
 using namespace CSS::xml::dom;
 
 CSerializationURLEncoded::CSerializationURLEncoded()
-    : m_aFactory(getProcessServiceFactory())
+    : m_aFactory(comphelper::getProcessServiceFactory())
     , m_aPipe(Reference< XOutputStream > (m_aFactory->createInstance(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe") ) ), UNO_QUERY))
 {

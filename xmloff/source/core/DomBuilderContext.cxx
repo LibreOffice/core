@@ -48,7 +48,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
 
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 
 
 using com::sun::star::lang::XMultiServiceFactory;
@@ -197,7 +197,7 @@ const sal_Char sDocumentBuilder[] = "com.sun.star.xml.dom.DocumentBuilder";
 
 Reference<XNode> lcl_createDomInstance()
 {
-    Reference<XMultiServiceFactory> xFactory = utl::getProcessServiceFactory();
+    Reference<XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
     DBG_ASSERT( xFactory.is(), "can't get service factory" );
 
     Reference<XDocumentBuilder> xBuilder(

@@ -41,7 +41,6 @@
 #include "svdata.hxx"
 
 #include "unotools/streamwrap.hxx"
-#include "unotools/processfactory.hxx"
 
 #include "comphelper/processfactory.hxx"
 

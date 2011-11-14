@@ -32,7 +32,7 @@
 
 #include <tools/debug.hxx>
 #include <unotools/configmgr.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
@@ -121,7 +121,8 @@ void FilterConfigItem::ImpInitTree( const String& rSubTree )
 {
     bModified = sal_False;
 
-    Reference< XMultiServiceFactory > xSMGR = getProcessServiceFactory();   // get global uno service manager
+    Reference< XMultiServiceFactory > xSMGR(
+        comphelper::getProcessServiceFactory() );
 
     Reference< XMultiServiceFactory > xCfgProv(
         xSMGR->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ) ) ),

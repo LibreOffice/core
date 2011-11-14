@@ -38,7 +38,7 @@
 #include "MTypeConverter.hxx"
 #include "MNSMozabProxy.hxx"
 #include <com/sun/star/uno/Reference.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 
 #if OSL_DEBUG_LEVEL > 0

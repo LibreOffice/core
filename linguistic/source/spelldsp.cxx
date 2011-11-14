@@ -36,7 +36,7 @@
 
 #include <cppuhelper/factory.hxx>   // helper for factories
 #include <unotools/localedatawrapper.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <svl/lngmisc.hxx>
 #include <osl/mutex.hxx>
@@ -48,8 +48,6 @@
 #include "lngsvcmgr.hxx"
 #include "linguistic/lngprops.hxx"
 
-
-using namespace utl;
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
@@ -393,7 +391,8 @@ sal_Bool SpellCheckerDispatcher::isValid_Impl(
             const OUString *pImplNames = pEntry->aSvcImplNames.getConstArray();
             Reference< XSpellChecker >  *pRef  = pEntry->aSvcRefs .getArray();
 
-            Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
+            Reference< XMultiServiceFactory > xMgr(
+                comphelper::getProcessServiceFactory() );
             if (xMgr.is())
             {
                 // build service initialization argument
@@ -576,7 +575,8 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             const OUString *pImplNames = pEntry->aSvcImplNames.getConstArray();
             Reference< XSpellChecker >  *pRef  = pEntry->aSvcRefs .getArray();
 
-            Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
+            Reference< XMultiServiceFactory > xMgr(
+                comphelper::getProcessServiceFactory() );
             if (xMgr.is())
             {
                 // build service initialization argument

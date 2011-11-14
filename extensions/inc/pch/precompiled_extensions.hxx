@@ -519,7 +519,6 @@
 
 #include "unotools/configitem.hxx"
 #include "unotools/confignode.hxx"
-#include "unotools/processfactory.hxx"
 
 #include "tools/fldunit.hxx"
 

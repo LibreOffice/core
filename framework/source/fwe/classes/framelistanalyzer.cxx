@@ -47,7 +47,7 @@
 
 //_______________________________________________
 //  includes of other projects
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 
 //_______________________________________________
@@ -158,7 +158,7 @@ void FrameListAnalyzer::impl_analyze()
     {
         try
         {
-            css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::utl::getProcessServiceFactory();
+            css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
             css::uno::Reference< css::frame::XModuleManager > xModuleMgr(xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY_THROW);
             ::rtl::OUString sModule = xModuleMgr->identify(m_xReferenceFrame);
             m_bReferenceIsBacking = (sModule.equals(SERVICENAME_STARTMODULE));
@@ -229,7 +229,7 @@ void FrameListAnalyzer::impl_analyze()
             {
                 try
                 {
-                    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::utl::getProcessServiceFactory();
+                    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
                     css::uno::Reference< css::frame::XModuleManager > xModuleMgr(xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY);
                     ::rtl::OUString sModule = xModuleMgr->identify(xFrame);
                     if (sModule.equals(SERVICENAME_STARTMODULE))

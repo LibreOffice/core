@@ -34,7 +34,7 @@
 #include <ucbhelper/content.hxx>
 #include <tools/debug.hxx>
 #include <unotools/pathoptions.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/ucbhelper.hxx>
@@ -81,7 +81,7 @@ static uno::Sequence< rtl::OUString > GetMultiPaths_Impl(
     rtl::OUString                    aWritablePath;
 
     bool bSuccess = true;
-    uno::Reference< lang::XMultiServiceFactory >  xMgr( utl::getProcessServiceFactory() );
+    uno::Reference< lang::XMultiServiceFactory >  xMgr( comphelper::getProcessServiceFactory() );
     if (xMgr.is())
     {
         try

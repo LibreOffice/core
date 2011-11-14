@@ -904,7 +904,6 @@
 #include "unotools/configpathes.hxx"
 #include "unotools/configvaluecontainer.hxx"
 #include "unotools/localfilehelper.hxx"
-#include "unotools/processfactory.hxx"
 #include "comphelper/servicehelper.hxx"
 #include "unotools/streamwrap.hxx"
 #include "unotools/textsearch.hxx"

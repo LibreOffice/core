@@ -39,7 +39,7 @@
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
@@ -91,7 +91,7 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
         return;
     DBG_ASSERT(!INetURLObject( rMainURL ).HasError(), "invalid URL");
 
-    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( utl::getProcessServiceFactory() );
+    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
 
     // get xInputStream stream
     uno::Reference< io::XInputStream > xIn;
@@ -266,7 +266,7 @@ void ConvDic::Save()
         return;
     DBG_ASSERT(!INetURLObject( aMainURL ).HasError(), "invalid URL");
 
-    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( utl::getProcessServiceFactory() );
+    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
 
     // get XOutputStream stream
     uno::Reference< io::XStream > xStream;

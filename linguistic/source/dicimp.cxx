@@ -40,7 +40,7 @@
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
@@ -275,7 +275,7 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
     if (rMainURL.getLength() == 0)
         return 0;
 
-    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( utl::getProcessServiceFactory() );
+    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
 
     // get XInputStream stream
     uno::Reference< io::XInputStream > xStream;
@@ -419,7 +419,7 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
         return 0;
     DBG_ASSERT(!INetURLObject( rURL ).HasError(), "lng : invalid URL");
 
-    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( utl::getProcessServiceFactory() );
+    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
 
     // get XOutputStream stream
     uno::Reference< io::XStream > xStream;

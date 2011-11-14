@@ -51,7 +51,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <unotools/configitem.hxx>
-#include <unotools/processfactory.hxx>
 #include <osl/diagnose.h>
 #include <salhelper/refobj.hxx>
 #include <rtl/logfile.hxx>

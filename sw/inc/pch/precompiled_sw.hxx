@@ -888,7 +888,6 @@
 #include "unotools/intlwrapper.hxx"
 #include "unotools/localedatawrapper.hxx"
 #include "unotools/localfilehelper.hxx"
-#include "unotools/processfactory.hxx"
 #include "unotools/streamwrap.hxx"
 #include "unotools/tempfile.hxx"
 #include "unotools/transliterationwrapper.hxx"

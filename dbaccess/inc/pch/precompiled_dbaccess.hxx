@@ -498,7 +498,6 @@
 #include "unotools/configmgr.hxx"
 #include "unotools/confignode.hxx"
 #include "unotools/eventlisteneradapter.hxx"
-#include "unotools/processfactory.hxx"
 
 
 #include "osl/mutex.hxx"

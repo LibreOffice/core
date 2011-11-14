@@ -418,7 +418,6 @@
 #include <unotools/configpathes.hxx>
 #include <unotools/nativenumberwrapper.hxx>
 #include <unotools/numberformatcodewrapper.hxx>
-#include <unotools/processfactory.hxx>
 
 
 #include <osl/mutex.hxx>

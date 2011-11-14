@@ -42,7 +42,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 
 
 using com::sun::star::uno::Reference;
@@ -59,7 +59,7 @@ using rtl::OUString;
 
 Reference<XInterface> xforms::createInstance( const OUString& sServiceName )
 {
-    Reference<XMultiServiceFactory> xFactory = utl::getProcessServiceFactory();
+    Reference<XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
     OSL_ENSURE( xFactory.is(), "can't get service factory" );
 
     Reference<XInterface> xInstance = xFactory->createInstance( sServiceName );

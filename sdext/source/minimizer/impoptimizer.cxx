@@ -36,7 +36,6 @@
 #include "informationdialog.hxx"
 
 #include <unotools/localfilehelper.hxx>
-#include <unotools/processfactory.hxx>
 #include <vector>
 #include "com/sun/star/util/URL.hpp"
 #include "com/sun/star/util/XURLTransformer.hpp"

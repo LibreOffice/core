@@ -30,7 +30,6 @@
 #include "precompiled_lingucomponent.hxx"
 #include <com/sun/star/uno/Reference.h>
 #include <tools/debug.hxx>
-#include <unotools/processfactory.hxx>
 #include <osl/mutex.hxx>
 
 #include "nthesdta.hxx"

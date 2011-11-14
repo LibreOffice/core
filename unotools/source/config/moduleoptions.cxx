@@ -33,7 +33,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 
@@ -121,7 +121,7 @@ struct FactoryInfo
         {
             free();
             // @@@ should be supplied from outside!
-            xSMgr = ::utl::getProcessServiceFactory();
+            xSMgr = ::comphelper::getProcessServiceFactory();
         }
 
         //---------------------------------------------------------------------------------------------------------
@@ -1366,7 +1366,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByServiceName(const 
 SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::OUString&                                 sURL            ,
                                                                   const css::uno::Sequence< css::beans::PropertyValue >& lMediaDescriptor)
 {
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::utl::getProcessServiceFactory();
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
     if (!xSMGR.is())
         return E_UNKNOWN_FACTORY;
 

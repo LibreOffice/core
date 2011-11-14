@@ -49,7 +49,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/style/HorizontalAlignment.hpp>
 
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include "main.hxx"
@@ -73,7 +73,7 @@ CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XMod
             maXDrawPages = aDrawPageSup->getDrawPages();
             if ( maXDrawPages.is() )
             {
-                maXServiceManagerSC = utl::getProcessServiceFactory();
+                maXServiceManagerSC = comphelper::getProcessServiceFactory();
                 if ( maXServiceManagerSC.is() )
                 {
                     uno::Any aAny( rModel->queryInterface( ::getCppuType((const uno::Reference< lang::XMultiServiceFactory >*)0) ));

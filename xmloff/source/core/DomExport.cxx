@@ -52,7 +52,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 
-#include <unotools/processfactory.hxx>
 
 #include <vector>
 

@@ -45,7 +45,7 @@
 #include "tools/getprocessworkingdir.hxx"
 #include "ucbhelper/contentbroker.hxx"
 #include "ucbhelper/configurationkeys.hxx"
-#include "unotools/processfactory.hxx"
+#include "comphelper/processfactory.hxx"
 #include "unotools/configmgr.hxx"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "cppuhelper/bootstrap.hxx"
@@ -384,7 +384,7 @@ Reference<XComponentContext> bootstrapStandAlone(
     Reference<lang::XMultiServiceFactory> xServiceManager(
         xContext->getServiceManager(), UNO_QUERY_THROW );
     // set global process service factory used by unotools config helpers
-    ::utl::setProcessServiceFactory( xServiceManager );
+    ::comphelper::setProcessServiceFactory( xServiceManager );
 
     // initialize the ucbhelper ucb,
     // because the package implementation uses it
