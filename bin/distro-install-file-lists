@@ -186,7 +186,7 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         if test "$OOO_VENDOR" = "Mandriva" -o \( "$OOO_VENDOR" = "Novell, Inc." -a "$SPLIT_APP_MODULES" = "YES" \) ; then
             for lang in `echo $WITH_LANG_LIST | sed -e s/-/_/g`; do
                 test -f $FILELISTSDIR/help_${lang}_list.txt || continue;
-                mv_file_between_flists $FILELISTSDIR/help_${lang}_list.txt $FILELISTSDIR/lang_${lang}_list.txt $INSTALLDIR/basis$PRODUCTVERSION/help/.*
+                mv_file_between_flists $FILELISTSDIR/help_${lang}_list.txt $FILELISTSDIR/lang_${lang}_list.txt $INSTALLDIR/help/.*
                 add_used_directories $FILELISTSDIR/help_${lang}_list.txt $FILELISTSDIR/lang_${lang}_list.txt
             done
         fi
@@ -206,28 +206,28 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
     # kde subpackage
     test -f $DESTDIR/gid_Module_Optional_Kde && cp $DESTDIR/gid_Module_Optional_Kde kde_list.txt || :
     mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/program/kdefilepicker
-    mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/fps_kde.uno.so
-    mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/libvclplug_kdel..so
-    mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/libkabdrv1.so
+    mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/program/fps_kde.uno.so
+    mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/program/libvclplug_kdel..so
+    mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/program/libkabdrv1.so
     add_used_directories kde_list.txt common_list.txt
 
     # create kde4 subpackage
-    mv_file_between_flists kde4_list.txt kde_list.txt    $INSTALLDIR/basis$PRODUCTVERSION/program/kde4be1.uno.so
-    mv_file_between_flists kde4_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/libvclplug_kde4l..so
-    mv_file_between_flists kde4_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/fps_kde4.uno.so
+    mv_file_between_flists kde4_list.txt kde_list.txt    $INSTALLDIR/program/kde4be1.uno.so
+    mv_file_between_flists kde4_list.txt common_list.txt $INSTALLDIR/program/libvclplug_kde4l..so
+    mv_file_between_flists kde4_list.txt common_list.txt $INSTALLDIR/program/fps_kde4.uno.so
     add_used_directories kde4_list.txt common_list.txt
 
     # gnome subpackage
     test -f $DESTDIR/gid_Module_Optional_Gnome && cp $DESTDIR/gid_Module_Optional_Gnome gnome_list.txt || :
-    mv_file_between_flists gnome_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/libevoab2.so
-    mv_file_between_flists gnome_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/libvclplug_gtk[0-9]*l..so
-    mv_file_between_flists common_list.txt gnome_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/ucpgvfs1.uno.so
+    mv_file_between_flists gnome_list.txt common_list.txt $INSTALLDIR/program/libevoab2.so
+    mv_file_between_flists gnome_list.txt common_list.txt $INSTALLDIR/program/libvclplug_gtk[0-9]*l..so
+    mv_file_between_flists common_list.txt gnome_list.txt $INSTALLDIR/program/ucpgvfs1.uno.so
     add_used_directories gnome_list.txt common_list.txt
 
     # mono subpackage
-    mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/cli_.*.dll
-    mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/cli_.*.dll.config
-    mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/policy.*.cli_.*.dll
+    mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/program/cli_.*.dll
+    mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/program/cli_.*.dll.config
+    mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/program/policy.*.cli_.*.dll
     mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/ure/lib/cli_.*.dll
     mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/ure/lib/cli_.*.dll.config
     mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/ure/lib/policy.*.cli_.*.dll
@@ -243,14 +243,14 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         else
             flist=mailmerge_list.txt
         fi
-        mv_file_between_flists $flist common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/mailmerge.py
+        mv_file_between_flists $flist common_list.txt $INSTALLDIR/program/mailmerge.py
         add_used_directories $flist common_list.txt
     fi
 
     if test "z$OOO_VENDOR" = "zNovell" ; then
         # officebean subpackage
-        mv_file_between_flists officebean_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/classes/officebean.jar
-        mv_file_between_flists officebean_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/libofficebean.so
+        mv_file_between_flists officebean_list.txt common_list.txt $INSTALLDIR/program/classes/officebean.jar
+        mv_file_between_flists officebean_list.txt common_list.txt $INSTALLDIR/program/libofficebean.so
         add_used_directories officebean_list.txt common_list.txt
     fi
 
@@ -260,10 +260,10 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         mv_file_between_flists sdk_doc_list.txt sdk_list.txt "$DOCDIRBASE/sdk/docs.*"
         mv_file_between_flists sdk_doc_list.txt sdk_list.txt "$DOCDIRBASE/sdk/examples"
         mv_file_between_flists sdk_doc_list.txt sdk_list.txt "$DOCDIRBASE/sdk/index.html"
-        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "%dir $INSTALLDIR/basis$PRODUCTVERSION/sdk/examples.*"
-        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "$INSTALLDIR/basis$PRODUCTVERSION/sdk/docs"
-        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "$INSTALLDIR/basis$PRODUCTVERSION/sdk/examples.*"
-        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "$INSTALLDIR/basis$PRODUCTVERSION/sdk/index.html"
+        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "%dir $INSTALLDIR/sdk/examples.*"
+        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "$INSTALLDIR/sdk/docs"
+        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "$INSTALLDIR/sdk/examples.*"
+        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "$INSTALLDIR/sdk/index.html"
         add_used_directories sdk_doc_list.txt sdk_list.txt
     fi
 
@@ -271,12 +271,12 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         # move the prebuilt icons into a hacky temporary package
         # we want to repack them into a noarch package as soon as possible
         # without the build dependency on the huge devel package
-        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/config/images_classic8.zip
-        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/config/images_crystal.zip
-        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/config/images_hicontrast.zip
-        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/config/images_industrial.zip
-        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/config/images_tango.zip
-        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/config/images.zip
+        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/share/config/images_classic8.zip
+        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/share/config/images_crystal.zip
+        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/share/config/images_hicontrast.zip
+        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/share/config/images_industrial.zip
+        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/share/config/images_tango.zip
+        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/share/config/images.zip
     fi
 
     # Mandriva packaging
@@ -286,29 +286,29 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         remove_file common_list.txt $INSTALLDIR/share/dict/ooo/dictionary.lst
 
         # And these are in -draw package
-        mv_file_between_flists draw_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/registry/modules/org/openoffice/TypeDetection/Filter/fcfg_drawgraphics_filters.xcu
-        mv_file_between_flists draw_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/registry/modules/org/openoffice/TypeDetection/Filter/fcfg_drawgraphics_types.xcu
+        mv_file_between_flists draw_list.txt common_list.txt $INSTALLDIR/share/registry/modules/org/openoffice/TypeDetection/Filter/fcfg_drawgraphics_filters.xcu
+        mv_file_between_flists draw_list.txt common_list.txt $INSTALLDIR/share/registry/modules/org/openoffice/TypeDetection/Filter/fcfg_drawgraphics_types.xcu
 
         # And these are in -impress package
-        mv_file_between_flists impress_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/registry/modules/org/openoffice/TypeDetection/Filter/fcfg_impressgraphics_filters.xcu
-        mv_file_between_flists impress_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/registry/modules/org/openoffice/TypeDetection/Types/fcfg_impressgraphics_types.xcu
+        mv_file_between_flists impress_list.txt common_list.txt $INSTALLDIR/share/registry/modules/org/openoffice/TypeDetection/Filter/fcfg_impressgraphics_filters.xcu
+        mv_file_between_flists impress_list.txt common_list.txt $INSTALLDIR/share/registry/modules/org/openoffice/TypeDetection/Types/fcfg_impressgraphics_types.xcu
 
         # Split out the gallery
-        mv_file_between_flists gallery_list.txt common_list.txt "$INSTALLDIR/basis$PRODUCTVERSION/share/gallery.*"
+        mv_file_between_flists gallery_list.txt common_list.txt "$INSTALLDIR/share/gallery.*"
         test -r galleries.txt && cat galleries.txt >> gallery_list.txt
 
         # Split out dtd-officedocument1.0
         mv_file_between_flists dtd_list.txt common_list.txt "$INSTALLDIR/share/dtd/officedocument.*"
 
         # Split out java stuff
-        mv_file_between_flists java_common_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/JREProperties.class
-        mv_file_between_flists java_common_list.txt common_list.txt "$INSTALLDIR/basis$PRODUCTVERSION/program/classes.*"
-        mv_file_between_flists java_common_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/libofficebean.so
-        mv_file_between_flists java_common_list.txt common_list.txt "$INSTALLDIR/basis$PRODUCTVERSION/share/Scripts/java.*"
-        mv_file_between_flists java_common_list.txt filter-binfilter_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/classes/aportisdoc.jar
-        mv_file_between_flists java_common_list.txt filter-binfilter_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/classes/pocketword.jar
-        mv_file_between_flists java_common_list.txt filter-binfilter_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/classes/pexcel.jar
-        mv_file_between_flists java_common_list.txt writer_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/classes/writer2latex.jar
+        mv_file_between_flists java_common_list.txt common_list.txt $INSTALLDIR/program/JREProperties.class
+        mv_file_between_flists java_common_list.txt common_list.txt "$INSTALLDIR/program/classes.*"
+        mv_file_between_flists java_common_list.txt common_list.txt $INSTALLDIR/program/libofficebean.so
+        mv_file_between_flists java_common_list.txt common_list.txt "$INSTALLDIR/share/Scripts/java.*"
+        mv_file_between_flists java_common_list.txt filter-binfilter_list.txt $INSTALLDIR/program/classes/aportisdoc.jar
+        mv_file_between_flists java_common_list.txt filter-binfilter_list.txt $INSTALLDIR/program/classes/pocketword.jar
+        mv_file_between_flists java_common_list.txt filter-binfilter_list.txt $INSTALLDIR/program/classes/pexcel.jar
+        mv_file_between_flists java_common_list.txt writer_list.txt $INSTALLDIR/program/classes/writer2latex.jar
 
         # Move arch-dependent/dup files from common to core
         for f in \
@@ -335,35 +335,35 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
             program/unopkg.bin \
             program/uri-encode
         do
-            mv_file_between_flists core_list.txt common_list.txt "$INSTALLDIR/basis$PRODUCTVERSION/$f"
+            mv_file_between_flists core_list.txt common_list.txt "$INSTALLDIR/$f"
         done
 
         # Put gtk/gnome stuff into gnome package
-        mv_file_between_flists gnome_list.txt core_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/gnome-open-url.bin
-        mv_file_between_flists gnome_list.txt core_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/ucpgvfs1.uno.so
+        mv_file_between_flists gnome_list.txt core_list.txt $INSTALLDIR/program/gnome-open-url.bin
+        mv_file_between_flists gnome_list.txt core_list.txt $INSTALLDIR/program/ucpgvfs1.uno.so
 
         # Ship ooqstart for gnome in gnome package
         mv_file_between_flists gnome_list.txt core_list.txt "$INSTALLDIR/program/libqstart_gtk680.*"
 
         # themes are included in other packages
         # don't use remove_file as we don't want them removed from the buildroot.
-        mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/config/images_crystal.zip
-        mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/config/images_hicontrast.zip
-        mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/config/images_industrial.zip
-        mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/config/images_tango.zip
-        mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/config/images.zip
+        mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/share/config/images_crystal.zip
+        mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/share/config/images_hicontrast.zip
+        mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/share/config/images_industrial.zip
+        mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/share/config/images_tango.zip
+        mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/share/config/images.zip
     fi
 
     # remove known duplicities to do not have files packaged in two packages
     # the Bulgarian fixes can be removed after the issue #54110 is fixed
-    remove_duplicity_from_flists common_list.txt lang_bg_list.txt $INSTALLDIR/basis$PRODUCTVERSION/presets/config/arrowhd.soe
-    remove_duplicity_from_flists common_list.txt lang_bg_list.txt $INSTALLDIR/basis$PRODUCTVERSION/presets/config/classic.sog
-    remove_duplicity_from_flists common_list.txt lang_bg_list.txt $INSTALLDIR/basis$PRODUCTVERSION/presets/config/hatching.soh
-    remove_duplicity_from_flists common_list.txt lang_bg_list.txt $INSTALLDIR/basis$PRODUCTVERSION/presets/config/modern.sog
-    remove_duplicity_from_flists common_list.txt lang_bg_list.txt $INSTALLDIR/basis$PRODUCTVERSION/presets/config/palette.soc
-    remove_duplicity_from_flists common_list.txt lang_bg_list.txt $INSTALLDIR/basis$PRODUCTVERSION/presets/config/styles.sod
+    remove_duplicity_from_flists common_list.txt lang_bg_list.txt $INSTALLDIR/presets/config/arrowhd.soe
+    remove_duplicity_from_flists common_list.txt lang_bg_list.txt $INSTALLDIR/presets/config/classic.sog
+    remove_duplicity_from_flists common_list.txt lang_bg_list.txt $INSTALLDIR/presets/config/hatching.soh
+    remove_duplicity_from_flists common_list.txt lang_bg_list.txt $INSTALLDIR/presets/config/modern.sog
+    remove_duplicity_from_flists common_list.txt lang_bg_list.txt $INSTALLDIR/presets/config/palette.soc
+    remove_duplicity_from_flists common_list.txt lang_bg_list.txt $INSTALLDIR/presets/config/styles.sod
     # the British fixes can be removed after the issue #54113 is fixed
-    remove_duplicity_from_flists common_list.txt lang_en-GB_list.txt $INSTALLDIR/basis$PRODUCTVERSION/presets/config/standard.sog
+    remove_duplicity_from_flists common_list.txt lang_en-GB_list.txt $INSTALLDIR/presets/config/standard.sog
 
 else
 
@@ -424,9 +424,9 @@ else
     if [ -e gid_Module_Optional_Pymailmerge ]; then
         create_package_directory gid_Module_Optional_Pymailmerge    pkg/libreoffice-emailmerge
     else # post m26
-        mkdir -p pkg/libreoffice-emailmerge/$INSTALLDIR/basis$PRODUCTVERSION/program
-        mv pkg/libreoffice-common/$INSTALLDIR/basis$PRODUCTVERSION/program/mailmerge.py \
-            pkg/libreoffice-emailmerge/$INSTALLDIR/basis$PRODUCTVERSION/program/mailmerge.py
+        mkdir -p pkg/libreoffice-emailmerge/$INSTALLDIR/program
+        mv pkg/libreoffice-common/$INSTALLDIR/program/mailmerge.py \
+            pkg/libreoffice-emailmerge/$INSTALLDIR/program/mailmerge.py
     fi
     create_package_directory gid_Module_Optional_OGLTrans           pkg/libreoffice-ogltrans
 
@@ -450,9 +450,9 @@ else
         # some help files are in _Langpack_{Writer,Impress,...}_<lang>
         # move them from -l10n to -help
         if [ "$l" = "en-US" ]; then d=en; else d=$l; fi
-        mv pkg/libreoffice-l10n-$l/$INSTALLDIR/basis$PRODUCTVERSION/help/$d/* \
-            pkg/libreoffice-help-$l/$INSTALLDIR/basis$PRODUCTVERSION/help/$d && \
-        rmdir pkg/libreoffice-l10n-$l/$INSTALLDIR/basis$PRODUCTVERSION/help/$d
+        mv pkg/libreoffice-l10n-$l/$INSTALLDIR/help/$d/* \
+            pkg/libreoffice-help-$l/$INSTALLDIR/help/$d && \
+        rmdir pkg/libreoffice-l10n-$l/$INSTALLDIR/help/$d
     done
 
     # move_wrappers <directory_name> <name> [...]
@@ -485,7 +485,7 @@ else
     move_wrappers pkg/libreoffice-draw lodraw
 
     # Move all libraries, binaries, *.rdb from -common to -core
-    for d in $INSTALLDIR/basis$PRODUCTVERSION/program $INSTALLDIR/program; do \
+    for d in $INSTALLDIR/program $INSTALLDIR/program; do \
       if [ ! -d $DESTDIR/pkg/libreoffice-core/$d ]; then \
       mkdir -p $DESTDIR/pkg/libreoffice-core/$d; \
       fi &&
@@ -511,13 +511,13 @@ else
     fi
     mv etc/bash_completion.d/libreoffice$BINSUFFIX.sh \
         pkg/libreoffice-common/etc/bash_completion.d
-    mv .$INSTALLDIR/basis$PRODUCTVERSION/program/java-set-classpath \
+    mv .$INSTALLDIR/program/java-set-classpath \
         pkg/libreoffice-common/$INSTALLDIR/program
     if echo $WITH_LANG_LIST | grep -q en-US; then
         for i in forms/resume.ott officorr/project-proposal.ott; do \
-            mkdir -p pkg/libreoffice-common/$INSTALLDIR/basis$PRODUCTVERSION/share/template/en-US/`dirname $i`; \
-            mv .$INSTALLDIR/basis$PRODUCTVERSION/share/template/en-US/$i \
-                pkg/libreoffice-common/$INSTALLDIR/basis$PRODUCTVERSION/share/template/en-US/$i; \
+            mkdir -p pkg/libreoffice-common/$INSTALLDIR/share/template/en-US/`dirname $i`; \
+            mv .$INSTALLDIR/share/template/en-US/$i \
+                pkg/libreoffice-common/$INSTALLDIR/share/template/en-US/$i; \
         done; \
     fi
     # Warn for any remaining files

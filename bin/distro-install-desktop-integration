@@ -182,9 +182,9 @@ if test "$WITH_COMPAT_OOWRAPPERS" = "YES" ; then
 fi
 
 echo "Install $OOINSTDIR/basis$VERSION/program/java-set-classpath";
-mkdir -p $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/program
-sed -e "s|@INSTALLDIR@|$INSTALLDIR|g" bin/java-set-classpath.in >| "$DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/program/java-set-classpath" || exit 1;
-chmod 755 "$DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/program/java-set-classpath"
-test -f $DESTDIR/gid_Module_Root_Brand && echo "$INSTALLDIR/basis$PRODUCTVERSION/program/java-set-classpath" >>$DESTDIR/gid_Module_Root_Brand
+mkdir -p $DESTDIR$INSTALLDIR/program
+sed -e "s|@INSTALLDIR@|$INSTALLDIR|g" bin/java-set-classpath.in >| "$DESTDIR$INSTALLDIR/program/java-set-classpath" || exit 1;
+chmod 755 "$DESTDIR$INSTALLDIR/program/java-set-classpath"
+test -f $DESTDIR/gid_Module_Root_Brand && echo "$INSTALLDIR/program/java-set-classpath" >>$DESTDIR/gid_Module_Root_Brand
 
 exit 0
