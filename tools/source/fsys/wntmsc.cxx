@@ -45,6 +45,7 @@
 #include <tools/wldcrd.hxx>
 #include <tools/fsys.hxx>
 #include <tools/bigint.hxx>
+#include <vector>
 
 int Sys2SolarError_Impl( int nSysErr );
 
@@ -52,11 +53,12 @@ static sal_Bool   bLastCaseSensitive    = sal_False;
 
 //--------------------------------------------------------------------
 
-ByteString Upper_Impl( const ByteString &rStr )
+rtl::OString Upper_Impl(const rtl::OString &rStr)
 {
-    ByteString aRet( rStr.GetBuffer() ); // es muss ein neuer String entstehen!
-    CharUpperBuff( (char*) aRet.GetBuffer(), aRet.Len() );
-    return aRet;
+    std::vector<sal_Char> aBuffer(rStr.getLength());
+    memcpy(&aBuffer[0], rStr.getStr(), rStr.getLength());
+    CharUpperBuff(&aBuffer[0], rStr.getLength());
+    return rtl::OString(&aBuffer[0], rStr.getLength());
 }
 
 //--------------------------------------------------------------------
@@ -132,9 +134,10 @@ sal_Bool DirEntry::ToAbs()
 
     char sBuf[256];
     char *pOld;
-    ByteString aFullName( GetFull(), osl_getThreadTextEncoding() );
+    rtl::OString aFullName(rtl::OUStringToOString(GetFull(),
+        osl_getThreadTextEncoding()));
     FSysFailOnErrorImpl();
-    if ( GetFullPathName((char*)aFullName.GetBuffer(),256,sBuf,&pOld) > 511 )
+    if ( GetFullPathName(aFullName.getStr(), 256, sBuf, &pOld) > 511 )
         return sal_False;
 
     *this = DirEntry( String(sBuf, osl_getThreadTextEncoding() ));
@@ -150,16 +153,17 @@ sal_Bool DirEntry::ToAbs()
 
 String DirEntry::GetVolume() const
 {
-  DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
+    DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
     String aRet;
     const DirEntry *pTop = ImpGetTopPtr();
-    ByteString aName = ByteString( pTop->aName ).ToLowerAscii();
+    rtl::OString aName = rtl::OString(pTop->aName).toAsciiLowerCase();
 
     if ( ( pTop->eFlag == FSYS_FLAG_ABSROOT ||
            pTop->eFlag == FSYS_FLAG_RELROOT ||
            pTop->eFlag == FSYS_FLAG_VOLUME )
-         && aName != "a:" && aName != "b:" && Exists() )
+         && !aName.equalsL(RTL_CONSTASCII_STRINGPARAM("a:"))
+         && !aName.equalsL(RTL_CONSTASCII_STRINGPARAM("b:")) && Exists() )
     {
         char sFileSysName[256];
         char sVolumeName[256];
@@ -167,19 +171,19 @@ String DirEntry::GetVolume() const
         DWORD nSerial[2];
         DWORD nMaxCompLen[2];
         DWORD nFlags[2];
-        ByteString aRootDir = pTop->aName;
+        rtl::OString aRootDir = pTop->aName;
         FSysFailOnErrorImpl();
 
         // Network-Device zuerst probieren wegen langsamer Samba-Drives
-        if ( !WNetGetConnection( (char*) aRootDir.GetBuffer(),
+        if ( !WNetGetConnection( aRootDir.getStr(),
                                  sVolumeName, &nVolumeNameLen ) )
             aRet = String( sVolumeName, osl_getThreadTextEncoding());
 
         // dann den VolumeNamen fuer lokale Drives
         if ( aRet.Len() == 0 )
         {
-            aRootDir += "\\";
-            if ( GetVolumeInformation( (char*) aRootDir.GetBuffer(),
+            aRootDir += rtl::OString(RTL_CONSTASCII_STRINGPARAM("\\"));
+            if ( GetVolumeInformation( aRootDir.getStr(),
                                        sVolumeName, 256,
                                        (LPDWORD) &nSerial, (LPDWORD) &nMaxCompLen,
                                        (LPDWORD) &nFlags, sFileSysName, 256 ) )
@@ -205,13 +209,13 @@ sal_Bool DirEntry::SetCWD( sal_Bool bSloppy ) const
     if ( eFlag == FSYS_FLAG_CURRENT && !aName.Len() )
         return sal_True;
 
-    if ( SetCurrentDirectory(ByteString(GetFull(), osl_getThreadTextEncoding()).GetBuffer()) )
+    if ( SetCurrentDirectory(rtl::OUStringToOString(GetFull(), osl_getThreadTextEncoding()).getStr()) )
     {
         return sal_True;
     }
 
     if ( bSloppy && pParent &&
-         SetCurrentDirectory(ByteString(pParent->GetFull(), osl_getThreadTextEncoding()).GetBuffer()) )
+         SetCurrentDirectory(rtl::OUStringToOString(pParent->GetFull(), osl_getThreadTextEncoding()).getStr()) )
     {
         return sal_True;
     }
@@ -239,7 +243,7 @@ USHORT DirReader_Impl::Init()
             sDrive[0] = c;
             sRoot[0] = c;
             DirEntry* pDrive = new DirEntry( sDrive, FSYS_FLAG_VOLUME, FSYS_STYLE_HOST );
-            if ( pDir->aNameMask.Matches( String( ByteString(sDrive), osl_getThreadTextEncoding())) && GetDriveType( sRoot ) != 1 )
+            if ( pDir->aNameMask.Matches( String(rtl::OStringToOUString(sDrive, osl_getThreadTextEncoding())) ) && GetDriveType( sRoot ) != 1 )
             {
                 if ( pDir->pStatLst ) //Status fuer Sort gewuenscht?
                 {
@@ -272,8 +276,11 @@ USHORT DirReader_Impl::Read()
            ( ( pDosEntry = readdir( pDosDir ) ) != NULL ) )
     {
         // Gross/Kleinschreibung nicht beruecksichtigen
-        ByteString aLowerName = pDosEntry->d_name;
-        CharLowerBuff( (char*) aLowerName.GetBuffer(), aLowerName.Len() );
+        size_t nLen = strlen(pDosEntry->d_name);
+        std::vector<char> aBuffer(nLen);
+        memcpy(&aBuffer[0], pDosEntry->d_name, nLen);
+        CharLowerBuff(&aBuffer[0], nLen);
+        rtl::OString aLowerName(&aBuffer[0], nLen);
 
         // Flags pruefen
         sal_Bool bIsDirAndWantsDir =
@@ -297,7 +304,7 @@ USHORT DirReader_Impl::Read()
         sal_Bool bWantsHidden = 0 == ( pDir->eAttrMask & FSYS_KIND_VISIBLE );
         if ( ( bIsDirAndWantsDir || bIsFileAndWantsFile ) &&
              ( bWantsHidden || !bIsHidden ) &&
-             pDir->aNameMask.Matches( String(aLowerName, osl_getThreadTextEncoding()) ) )
+             pDir->aNameMask.Matches( rtl::OStringToOUString(aLowerName, osl_getThreadTextEncoding()) ) )
         {
 #ifdef DBG_UTIL
             DbgOutf( "%s %s flags:%x found",
@@ -309,7 +316,7 @@ USHORT DirReader_Impl::Read()
                     0 == strcmp( pDosEntry->d_name, "." ) ? FSYS_FLAG_CURRENT
                 :   0 == strcmp( pDosEntry->d_name, ".." ) ? FSYS_FLAG_PARENT
                 :   FSYS_FLAG_NORMAL;
-            DirEntry *pTemp = new DirEntry( ByteString(pDosEntry->d_name),
+            DirEntry *pTemp = new DirEntry( rtl::OString(pDosEntry->d_name),
                                             eFlag, FSYS_STYLE_NTFS );
 #ifdef FEAT_FSYS_DOUBLESPEED
             pTemp->ImpSetStat( new FileStat( (void*) pDosDir, (void*) 0 ) );
@@ -615,13 +622,13 @@ HRESULT SHResolvePath( HWND hwndOwner, LPCTSTR pszPath, LPITEMIDLIST *ppidl )
 // The Wrapper
 //---------------------------------------------------------------------------
 
-sal_Bool Exists_Impl( const ByteString & crPath )
+sal_Bool Exists_Impl(const rtl::OString& crPath)
 {
     // We do not know if OLE was initialized for this thread
 
     CoInitialize( NULL );
 
-    sal_Bool    bSuccess = SUCCEEDED( SHResolvePath(NULL, crPath.GetBuffer(), NULL) );
+    sal_Bool    bSuccess = SUCCEEDED( SHResolvePath(NULL, crPath.getStr(), NULL) );
 
     CoUninitialize();
 
@@ -673,16 +680,19 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
         HACK("wie?")
         sal_Bool bAccess = sal_True;
         const DirEntry *pTop = aDirEntry.ImpGetTopPtr();
-        ByteString aName = ByteString(pTop->aName).ToLowerAscii();
+        rtl::OString aName = rtl::OString(pTop->aName).toAsciiLowerCase();
         if ( !bForceAccess &&
                 ( pTop->eFlag == FSYS_FLAG_ABSROOT ||
                 pTop->eFlag == FSYS_FLAG_RELROOT ||
                 pTop->eFlag == FSYS_FLAG_VOLUME ) )
-            if ( aName == "a:" || aName == "b:" )
+            if ( aName.equalsL(RTL_CONSTASCII_STRINGPARAM("a:")) ||
+                 aName.equalsL(RTL_CONSTASCII_STRINGPARAM("b:")) )
                 bAccess = sal_False;
             else
                 OSL_TRACE( "FSys: will access removable device!" );
-        if ( bAccess && ( aName == "a:" || aName == "b:" ) ) {
+        if ( bAccess && ( aName.equalsL(RTL_CONSTASCII_STRINGPARAM("a:")) ||
+                          aName.equalsL(RTL_CONSTASCII_STRINGPARAM("b:")) ) )
+        {
             DBG_WARNING( "floppy will clatter" );
         }
 
@@ -706,9 +716,9 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
                 return sal_False;
             }
 
-            ByteString aRootDir = aDirEntry.aName;
-            aRootDir += ByteString( "\\" );
-            UINT nType = GetDriveType( (char *) aRootDir.GetBuffer() );       //TPF: 2i
+            rtl::OString aRootDir = aDirEntry.aName;
+            aRootDir += rtl::OString(RTL_CONSTASCII_STRINGPARAM("\\"));
+            UINT nType = GetDriveType( aRootDir.getStr() );       //TPF: 2i
             if ( nType == 1 || nType == 0 )
             {
                 nError = FSYS_ERR_NOTEXISTS;
@@ -737,21 +747,19 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
         if ( bAccess && aAbsEntry.ToAbs() )
         {
             // im Namen k"onnen auch ';*?' als normale Zeichen vorkommen
-            ByteString aFilePath( aAbsEntry.GetFull(), osl_getThreadTextEncoding() );
+            rtl::OString aFilePath(rtl::OUStringToOString(aAbsEntry.GetFull(), osl_getThreadTextEncoding()));
 
-            // MI: dann gehen Umlaute auf Novell-Servern nicht / wozu ueberhaupt
-            // CharUpperBuff( (char*) aFilePath.GetStr(), aFilePath.Len() );
-            OSL_TRACE( "FileStat: %s", aFilePath.GetBuffer() );
-            h = aFilePath.Len() < 230
+            OSL_TRACE( "FileStat: %s", aFilePath.getStr() );
+            h = aFilePath.getLength() < 230
                     // die Win32-API ist hier sehr schwammig
-                    ? FindFirstFile( (char *) aFilePath.GetBuffer(), &aEntry )//TPF: 2i
+                    ? FindFirstFile( aFilePath.getStr(), &aEntry )//TPF: 2i
                     : INVALID_HANDLE_VALUE;
 
             if ( INVALID_HANDLE_VALUE != h )
             {
                 if ( !( aEntry.dwFileAttributes & 0x40 ) ) // com1: etc. e.g. not encrypted (means normal)
                 {
-                    ByteString  aUpperName = Upper_Impl(ByteString(aAbsEntry.GetName(), osl_getThreadTextEncoding()));
+                    rtl::OString aUpperName = Upper_Impl(rtl::OUStringToOString(aAbsEntry.GetName(), osl_getThreadTextEncoding()));
 
                     // HRO: #74051# Compare also with short alternate filename
                     if ( aUpperName != Upper_Impl( aEntry.cFileName ) && aUpperName != Upper_Impl( aEntry.cAlternateFileName ) )
@@ -799,10 +807,10 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
         if ( h == INVALID_HANDLE_VALUE )
         {
             // Sonderbehandlung falls es sich um eine Wildcard handelt
-            ByteString aTempName( aDirEntry.GetName(), osl_getThreadTextEncoding() );
-            if ( strchr( aTempName.GetBuffer(), '?' ) ||
-                 strchr( aTempName.GetBuffer(), '*' ) ||
-                 strchr( aTempName.GetBuffer(), ';' ) )
+            rtl::OString aTempName(rtl::OUStringToOString(aDirEntry.GetName(), osl_getThreadTextEncoding()));
+            if ( strchr( aTempName.getStr(), '?' ) ||
+                 strchr( aTempName.getStr(), '*' ) ||
+                 strchr( aTempName.getStr(), ';' ) )
             {
                 nKindFlags = FSYS_KIND_WILD;
                 nError = FSYS_ERR_OK;
@@ -830,12 +838,12 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
 
 }
 
-sal_Bool IsRedirectable_Impl( const ByteString &rPath )
+sal_Bool IsRedirectable_Impl( const rtl::OString& rPath )
 {
-    if ( rPath.Len() >= 3 && ':' == rPath.GetBuffer()[1] )
+    if ( rPath.getLength() >= 3 && ':' == rPath[1] )
     {
-        ByteString aVolume = rPath.Copy( 0, 3 );
-        UINT nType = GetDriveType( (char *) aVolume.GetBuffer() );
+        rtl::OString aVolume = rPath.copy( 0, 3 );
+        UINT nType = GetDriveType( aVolume.getStr() );
         SetLastError( ERROR_SUCCESS );
         return DRIVE_FIXED != nType;
     }

@@ -136,7 +136,7 @@ struct FileCopier_Impl
 //--------------------------------------------------------------------
 
 #if defined WNT
-sal_Bool IsRedirectable_Impl( const ByteString &rPath );
+sal_Bool IsRedirectable_Impl( const rtl::OString &rPath );
 #else
 #define IsRedirectable_Impl( rPath )    sal_True
 #endif

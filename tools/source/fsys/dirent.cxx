@@ -162,7 +162,7 @@ void FSysRedirector::DoRedirect( String &rPath )
                 return;
 
         // redirect only removable or remote volumes
-        if ( !IsRedirectable_Impl( ByteString( aURL, osl_getThreadTextEncoding() ) ) )
+        if (!IsRedirectable_Impl(rtl::OUStringToOString(aURL, osl_getThreadTextEncoding())))
                 return;
 
         // Redirection is acessible only by one thread per time
