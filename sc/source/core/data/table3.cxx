@@ -1442,23 +1442,6 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                 }
             }
         }
-        else if (rParam.bMixedComparison)
-        {
-            if (rItem.meType == ScQueryEntry::ByString &&
-                    (rEntry.eOp == SC_LESS || rEntry.eOp == SC_LESS_EQUAL) &&
-                    (pCell ? pCell->HasValueData() :
-                     HasValueData( static_cast<SCCOL>(rEntry.nField), nRow)))
-            {
-                bOk = true;
-            }
-            else if (rItem.meType != ScQueryEntry::ByString &&
-                    (rEntry.eOp == SC_GREATER || rEntry.eOp == SC_GREATER_EQUAL) &&
-                    (pCell ? pCell->HasStringData() :
-                     HasStringData( static_cast<SCCOL>(rEntry.nField), nRow)))
-            {
-                bOk = true;
-            }
-        }
 
         if (nPos == -1)
         {

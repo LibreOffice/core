@@ -4473,7 +4473,6 @@ void ScInterpreter::ScMatch()
             rParam.nRow1       = nRow1;
             rParam.nCol2       = nCol2;
             rParam.nTab        = nTab1;
-            rParam.bMixedComparison = true;
 
             ScQueryEntry& rEntry = rParam.GetEntry(0);
             ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
@@ -5805,7 +5804,6 @@ void ScInterpreter::ScLookup()
     aParam.nCol2            = bVertical ? nCol1 : nCol2;
     aParam.nRow2            = bVertical ? nRow2 : nRow1;
     aParam.bByRow           = bVertical;
-    aParam.bMixedComparison = true;
 
     rEntry.bDoQuery = true;
     rEntry.eOp = SC_LESS_EQUAL;
@@ -6026,7 +6024,6 @@ void ScInterpreter::CalculateLookup(bool HLookup)
                 rParam.nRow2       = nRow2;
                 rParam.nTab        = nTab1;
             }
-            rParam.bMixedComparison = true;
 
             ScQueryEntry& rEntry = rParam.GetEntry(0);
             rEntry.bDoQuery = true;

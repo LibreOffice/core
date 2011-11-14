@@ -48,7 +48,7 @@ ScQueryParamBase::ScQueryParamBase()
 
 ScQueryParamBase::ScQueryParamBase(const ScQueryParamBase& r) :
     bHasHeader(r.bHasHeader), bByRow(r.bByRow), bInplace(r.bInplace), bCaseSens(r.bCaseSens),
-    bRegExp(r.bRegExp), bDuplicate(r.bDuplicate), bMixedComparison(r.bMixedComparison),
+    bRegExp(r.bRegExp), bDuplicate(r.bDuplicate),
     maEntries(r.maEntries)
 {
 }
@@ -226,7 +226,7 @@ void ScQueryParam::Clear()
     nCol1=nCol2 = 0;
     nRow1=nRow2 = 0;
     nTab = SCTAB_MAX;
-    bHasHeader = bCaseSens = bRegExp = bMixedComparison = false;
+    bHasHeader = bCaseSens = bRegExp = false;
     bInplace = bByRow = bDuplicate = sal_True;
 
     boost::ptr_vector<ScQueryEntry>::iterator itr = maEntries.begin(), itrEnd = maEntries.end();
@@ -260,7 +260,6 @@ ScQueryParam& ScQueryParam::operator=( const ScQueryParam& r )
     bInplace    = r.bInplace;
     bCaseSens   = r.bCaseSens;
     bRegExp     = r.bRegExp;
-    bMixedComparison = r.bMixedComparison;
     bDuplicate  = r.bDuplicate;
     bByRow      = r.bByRow;
     bDestPers   = r.bDestPers;
@@ -297,7 +296,6 @@ bool ScQueryParam::operator==( const ScQueryParam& rOther ) const
         && (bInplace    == rOther.bInplace)
         && (bCaseSens   == rOther.bCaseSens)
         && (bRegExp     == rOther.bRegExp)
-        && (bMixedComparison == rOther.bMixedComparison)
         && (bDuplicate  == rOther.bDuplicate)
         && (bDestPers   == rOther.bDestPers)
         && (nDestTab    == rOther.nDestTab)

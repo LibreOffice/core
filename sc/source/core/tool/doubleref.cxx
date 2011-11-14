@@ -276,7 +276,6 @@ void ScDBRangeBase::fillQueryOptions(ScQueryParamBase* pParam)
     pParam->bCaseSens = false;
     pParam->bRegExp = false;
     pParam->bDuplicate = true;
-    pParam->bMixedComparison = false;
 }
 
 ScDocument* ScDBRangeBase::getDoc() const
