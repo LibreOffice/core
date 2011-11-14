@@ -27,6 +27,7 @@
 
 package mod._configmgr;
 
+import com.sun.star.configuration.theDefaultProvider;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.XInterface;
 import lib.TestCase;
@@ -44,9 +45,7 @@ public final class DefaultProvider extends TestCase {
             return ProviderTestEnvironment.create(
                 AnyConverter.toObject(
                     XInterface.class,
-                    tParam.getComponentContext().getValueByName(
-                        "/singletons/" +
-                        "com.sun.star.configuration.theDefaultProvider")));
+                    theDefaultProvider.get(tParam.getComponentContext())));
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             throw new RuntimeException(e);
         }

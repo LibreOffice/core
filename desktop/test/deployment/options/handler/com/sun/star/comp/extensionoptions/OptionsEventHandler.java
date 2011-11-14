@@ -26,6 +26,7 @@
  *************************************************************************/
 package com.sun.star.comp.extensionoptions;
 
+import com.sun.star.configuration.theDefaultProvider;
 import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.lang.XMultiComponentFactory;
@@ -49,8 +50,7 @@ import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XControlContainer;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.NoSuchElementException;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.PropertyState;
+import com.sun.star.beans.NamedValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.PropertyVetoException;
@@ -93,24 +93,15 @@ public class OptionsEventHandler {
             //Create the com.sun.star.configuration.ConfigurationUpdateAccess
             //for the registry node which contains the data for our option
             //pages.
-            XMultiServiceFactory xConfig;
-            try {
-                xConfig = (XMultiServiceFactory) UnoRuntime.queryInterface(
-                    XMultiServiceFactory.class,
-                    m_cmpCtx.getServiceManager().createInstanceWithContext(
-                        "com.sun.star.configuration.ConfigurationProvider", m_cmpCtx));
-            } catch (com.sun.star.uno.Exception e) {
-                e.printStackTrace();
-                return;
-            }
+            XMultiServiceFactory xConfig = theDefaultProvider.get(m_cmpCtx);
 
             //One argument for creating the ConfigurationUpdateAccess is the "nodepath".
             //Our nodepath point to the node of which the direct subnodes represent the
             //different options pages.
             Object[] args = new Object[1];
-            args[0] = new PropertyValue(
-                "nodepath", 0, "/org.openoffice.desktop.deployment.options.ExtensionData/Leaves",
-                PropertyState.DIRECT_VALUE);
+            args[0] = new NamedValue(
+                "nodepath",
+                "/org.openoffice.desktop.deployment.options.ExtensionData/Leaves");
 
             //We get the com.sun.star.container.XNameAccess from the instance of
             //ConfigurationUpdateAccess and save it for later use.

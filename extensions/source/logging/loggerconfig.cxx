@@ -32,6 +32,7 @@
 #include "loggerconfig.hxx"
 
 /** === begin UNO includes === **/
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -214,11 +215,9 @@ namespace logging
             if ( !_rxLogger.is() )
                 throw NullPointerException();
 
-            // the configuration provider
-            Reference< XMultiServiceFactory > xConfigProvider;
-            ::rtl::OUString sConfigProvServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ) );
-            if ( !_rContext.createComponent( sConfigProvServiceName, xConfigProvider ) )
-                throw ServiceNotRegisteredException( sConfigProvServiceName, _rxLogger );
+            Reference< XMultiServiceFactory > xConfigProvider(
+                com::sun::star::configuration::theDefaultProvider::get(
+                    _rContext.getUNOContext()));
 
             // write access to the "Settings" node (which includes settings for all loggers)
             Sequence< Any > aArguments(1);

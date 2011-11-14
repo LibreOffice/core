@@ -34,6 +34,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <osl/security.hxx>
 #include <osl/time.h>
@@ -269,21 +270,8 @@ UpdateCheckConfig::get(
     const uno::Reference<uno::XComponentContext>& xContext,
     const ::rtl::Reference< UpdateCheckConfigListener >& rListener)
 {
-    if( !xContext.is() )
-        throw uno::RuntimeException(
-            UNISTRING( "UpdateCheckConfig: empty component context" ),
-            uno::Reference< uno::XInterface >() );
-
-    uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
-
-    if( !xServiceManager.is() )
-        throw uno::RuntimeException(
-            UNISTRING( "UpdateCheckConfig: unable to obtain service manager from component context" ),
-            uno::Reference< uno::XInterface >() );
-
     uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
-        xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.configuration.ConfigurationProvider" ), xContext ),
-        uno::UNO_QUERY_THROW);
+        com::sun::star::configuration::theDefaultProvider::get( xContext ) );
 
     beans::PropertyValue aProperty;
     aProperty.Name  = UNISTRING( "nodepath" );

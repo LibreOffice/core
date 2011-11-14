@@ -54,6 +54,7 @@
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
 #include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
 #include <com/sun/star/configuration/CorruptedConfigurationException.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
@@ -321,14 +322,6 @@ CommandLineArgs& Desktop::GetCommandLineArgs()
 {
     ensureProcessServiceFactory();
     return theCommandLineArgs::get();
-}
-
-sal_Bool InitConfiguration()
-{
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (jb99855) ::InitConfiguration" );
-
-    Reference< XMultiServiceFactory > xProvider( CreateApplicationConfigurationProvider( ) );
-    return xProvider.is();
 }
 
 namespace
@@ -1971,13 +1964,14 @@ IMPL_LINK( Desktop, ImplInitFilterHdl, ConvertData*, pData )
     return GraphicFilter::GetGraphicFilter().GetFilterCallback().Call( pData );
 }
 
-sal_Bool Desktop::InitializeConfiguration()
+bool Desktop::InitializeConfiguration()
 {
-    sal_Bool bOk = sal_False;
-
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (jb99855) ::InitConfiguration" );
     try
     {
-        bOk = InitConfiguration();
+        css::configuration::theDefaultProvider::get(
+            comphelper::getProcessComponentContext() );
+        return true;
     }
     catch( ::com::sun::star::lang::ServiceNotRegisteredException& )
     {
@@ -2033,19 +2027,14 @@ sal_Bool Desktop::InitializeConfiguration()
                                                 OUString() ));
         HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_BASE_INSTALL, aMsg );
     }
-
-    return bOk;
+    return false;
 }
 
 void Desktop::FlushConfiguration()
 {
     css::uno::Reference< css::util::XFlushable >(
-        (css::uno::Reference< css::lang::XMultiServiceFactory >(
-            comphelper::getProcessServiceFactory(), css::uno::UNO_SET_THROW)->
-         createInstance(
-             rtl::OUString(
-                 RTL_CONSTASCII_USTRINGPARAM(
-                     "com.sun.star.configuration.ConfigurationProvider")))),
+        css::configuration::theDefaultProvider::get(
+            comphelper::getProcessComponentContext()),
         css::uno::UNO_QUERY_THROW)->flush();
 }
 
@@ -2435,116 +2424,6 @@ void Desktop::PreloadConfigurationData()
              aSeq = xNameAccess->getElementNames();
         }
         catch ( ::com::sun::star::uno::Exception& )
-        {
-        }
-    }
-
-    static const OUString sConfigSrvc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ) );
-    static const OUString sAccessSrvc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ) );
-
-    // get configuration provider
-    Reference< XMultiServiceFactory > xConfigProvider;
-    xConfigProvider = Reference< XMultiServiceFactory > (
-                rFactory->createInstance( sConfigSrvc ),UNO_QUERY );
-
-    if ( xConfigProvider.is() )
-    {
-        // preload writer configuration
-        Sequence< Any > theArgs(1);
-        theArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Writer/MailMergeWizard"));
-        try
-        {
-            xNameAccess = Reference< XNameAccess >(
-                xConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY );
-        }
-        catch (::com::sun::star::uno::Exception& )
-        {
-        }
-
-        // WriterWeb
-        theArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.WriterWeb/Content"));
-        try
-        {
-            xNameAccess = Reference< XNameAccess >(
-                xConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY );
-        }
-        catch (::com::sun::star::uno::Exception& )
-        {
-        }
-
-        // preload compatibility
-        theArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Compatibility/WriterCompatibilityVersion"));
-        try
-        {
-            xNameAccess = Reference< XNameAccess >(
-                xConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY );
-        }
-        catch (::com::sun::star::uno::Exception& )
-        {
-        }
-
-        // preload calc configuration
-        theArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Calc/Content"));
-        try
-        {
-            xNameAccess = Reference< XNameAccess >(
-                xConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY );
-        }
-        catch (::com::sun::star::uno::Exception& )
-        {
-        }
-
-        // preload impress configuration
-        theArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.UI.Effects/UserInterface"));
-        try
-        {
-            xNameAccess = Reference< XNameAccess >(
-                xConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY );
-        }
-        catch (::com::sun::star::uno::Exception& )
-        {
-        }
-
-        theArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Impress/Layout"));
-        try
-        {
-            xNameAccess = Reference< XNameAccess >(
-                xConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY );
-        }
-        catch (::com::sun::star::uno::Exception& )
-        {
-        }
-
-        // preload draw configuration
-        theArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Draw/Layout"));
-        try
-        {
-            xNameAccess = Reference< XNameAccess >(
-                xConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY );
-        }
-        catch (::com::sun::star::uno::Exception& )
-        {
-        }
-
-        // preload ui configuration
-        theArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.UI/FilterClassification"));
-        try
-        {
-            xNameAccess = Reference< XNameAccess >(
-                xConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY );
-        }
-        catch (::com::sun::star::uno::Exception& )
-        {
-        }
-
-        // preload addons configuration
-        theArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Addons/AddonUI"));
-        try
-        {
-            xNameAccess = Reference< XNameAccess >(
-                xConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY );
-        }
-        catch (::com::sun::star::uno::Exception& )
         {
         }
     }

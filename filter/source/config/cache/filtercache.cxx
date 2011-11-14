@@ -41,9 +41,11 @@
 
 //_______________________________________________
 // includes
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XProperty.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -962,13 +964,11 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
     try
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
-            m_xSMGR->createInstance(SERVICE_CONFIGURATIONPROVIDER), css::uno::UNO_QUERY);
-
-        if (!xConfigProvider.is())
-            return css::uno::Reference< css::uno::XInterface >();
+            css::configuration::theDefaultProvider::get(
+                comphelper::getComponentContext(m_xSMGR)));
 
         ::comphelper::SequenceAsVector< css::uno::Any > lParams;
-        css::beans::PropertyValue                       aParam ;
+        css::beans::NamedValue aParam;
 
         // set root path
         aParam.Name    = _FILTER_CONFIG_FROM_ASCII_("nodepath");

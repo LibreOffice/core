@@ -32,11 +32,11 @@
 #include <stdio.h>
 
 #include "mdrivermanager.hxx"
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 
 #include <tools/diagnose_ex.h>
 #include <comphelper/extract.hxx>
@@ -186,16 +186,15 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
         try
         {
             // some strings we need
-            const ::rtl::OUString sConfigurationProviderServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ));
             const ::rtl::OUString sDriverManagerConfigLocation( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office.DataAccess/DriverManager" ));
             const ::rtl::OUString sDriverPreferenceLocation( RTL_CONSTASCII_USTRINGPARAM( "DriverPrecedence" ));
             const ::rtl::OUString sNodePathArgumentName( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
             const ::rtl::OUString sNodeAccessServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ));
 
             // create a configuration provider
-            Reference< XMultiServiceFactory > xConfigurationProvider;
-            if ( !_rContext.createComponent( sConfigurationProviderServiceName, xConfigurationProvider ) )
-                throw ServiceNotRegisteredException( sConfigurationProviderServiceName, NULL );
+            Reference< XMultiServiceFactory > xConfigurationProvider(
+                com::sun::star::configuration::theDefaultProvider::get(
+                    _rContext.getUNOContext() ) );
 
             // one argument for creating the node access: the path to the configuration node
             Sequence< Any > aCreationArgs(1);

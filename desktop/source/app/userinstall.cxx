@@ -48,6 +48,7 @@
 #include <svl/languageoptions.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -82,19 +83,13 @@ namespace desktop {
     {
         try
         {
-            OUString sConfigSrvc(
-                 RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.ConfigurationProvider" ) );
             OUString sAccessSrvc(
                  RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.configuration.ConfigurationAccess" ) );
 
-            // get configuration provider
-            Reference< XMultiServiceFactory > theMSF
-                = comphelper::getProcessServiceFactory();
-            Reference< XMultiServiceFactory > theConfigProvider
-                = Reference< XMultiServiceFactory >(
-                    theMSF->createInstance(sConfigSrvc), UNO_QUERY_THROW);
+            Reference< XMultiServiceFactory > theConfigProvider(
+                com::sun::star::configuration::theDefaultProvider::get(
+                    comphelper::getProcessComponentContext() ) );
 
             // localize the provider to user selection
             Reference< XLocalizable > localizable(theConfigProvider, UNO_QUERY_THROW);
@@ -104,7 +99,7 @@ namespace desktop {
 
             Sequence< Any > theArgs(1);
             NamedValue v;
-            v.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath"));
+            v.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
             v.Value = makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup")));
             theArgs[0] <<= v;
             Reference< XHierarchicalNameAccess> hnacc(
@@ -261,15 +256,13 @@ namespace desktop {
         }
         try
         {
-            OUString sConfigSrvc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"));
             OUString sAccessSrvc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess"));
 
-            // get configuration provider
-            Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
-            Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory >(
-                theMSF->createInstance(sConfigSrvc), UNO_QUERY_THROW);
+            Reference< XMultiServiceFactory > theConfigProvider(
+                com::sun::star::configuration::theDefaultProvider::get(
+                    comphelper::getProcessComponentContext() ) );
             Sequence< Any > theArgs(1);
-            NamedValue v(OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath")), makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup"))));
+            NamedValue v(OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")), makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup"))));
             theArgs[0] <<= v;
             Reference< XHierarchicalPropertySet> hpset(
                 theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);

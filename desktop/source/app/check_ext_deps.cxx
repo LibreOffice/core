@@ -48,6 +48,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include "com/sun/star/deployment/XPackage.hpp"
 #include "com/sun/star/deployment/ExtensionManager.hpp"
 #include "com/sun/star/deployment/LicenseException.hpp"
@@ -220,7 +221,6 @@ void SilentCommandEnv::pop() throw (uno::RuntimeException)
 } // end namespace
 
 //-----------------------------------------------------------------------------
-static const OUString sConfigSrvc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ) );
 static const OUString sAccessSrvc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess" ) );
 //------------------------------------------------------------------------------
 static sal_Int16 impl_showExtensionDialog( uno::Reference< uno::XComponentContext > &xContext )
@@ -326,13 +326,12 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
 static void impl_setNeedsCompatCheck()
 {
     try {
-        Reference < XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-        // get configuration provider
-        Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory >(
-                xFactory->createInstance(sConfigSrvc), UNO_QUERY_THROW);
+        Reference< XMultiServiceFactory > theConfigProvider(
+            configuration::theDefaultProvider::get(
+                comphelper::getProcessComponentContext() ) );
 
         Sequence< Any > theArgs(1);
-        beans::NamedValue v( OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath")),
+        beans::NamedValue v( OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
                       makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/Office")) ) );
         theArgs[0] <<= v;
         Reference< beans::XPropertySet > pset = Reference< beans::XPropertySet >(
@@ -379,13 +378,12 @@ static bool impl_needsCompatCheck()
     rtl::Bootstrap::expandMacros( aCurrentBuildID );
 
     try {
-        Reference < XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-        // get configuration provider
-        Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory >(
-                xFactory->createInstance(sConfigSrvc), UNO_QUERY_THROW);
+        Reference< XMultiServiceFactory > theConfigProvider(
+            configuration::theDefaultProvider::get(
+                comphelper::getProcessComponentContext() ) );
 
         Sequence< Any > theArgs(1);
-        beans::NamedValue v( OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath")),
+        beans::NamedValue v( OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
                       makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/Office")) ) );
         theArgs[0] <<= v;
         Reference< beans::XPropertySet > pset = Reference< beans::XPropertySet >(

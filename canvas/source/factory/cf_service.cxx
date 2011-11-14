@@ -39,6 +39,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -154,9 +155,7 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
     {
         // read out configuration for preferred services:
         Reference<lang::XMultiServiceFactory> xConfigProvider(
-            m_xContext->getServiceManager()->createInstanceWithContext(
-                OUSTR("com.sun.star.configuration.ConfigurationProvider"),
-                m_xContext ), UNO_QUERY_THROW );
+            configuration::theDefaultProvider::get( m_xContext ) );
 
         Any propValue(
             makeAny( beans::PropertyValue(

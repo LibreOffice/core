@@ -26,6 +26,7 @@
  ************************************************************************/
 package complex.dbaccess;
 
+import com.sun.star.configuration.theDefaultProvider;
 import com.sun.star.lang.NotInitializedException;
 import com.sun.star.frame.DoubleInitializationException;
 import com.sun.star.awt.XTopWindow;
@@ -39,6 +40,7 @@ import com.sun.star.task.XInteractionRequest;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.frame.XStorable;
+import com.sun.star.beans.NamedValue;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameContainer;
@@ -489,11 +491,12 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     // --------------------------------------------------------------------------------------------------------
     private int impl_setMacroSecurityLevel(int _level) throws Exception
     {
-        final XMultiServiceFactory configProvider = UnoRuntime.queryInterface(XMultiServiceFactory.class, getMSF().createInstance("com.sun.star.configuration.ConfigurationProvider"));
+        final XMultiServiceFactory configProvider = theDefaultProvider.get(
+            getComponentContext());
 
-        final PropertyValue[] args = new PropertyValue[]
+        final NamedValue[] args = new NamedValue[]
         {
-            new PropertyValue("nodepath", 0, "/org.openoffice.Office.Common/Security/Scripting", PropertyState.DIRECT_VALUE)
+            new NamedValue("nodepath", "/org.openoffice.Office.Common/Security/Scripting")
         };
 
         final XPropertySet securitySettings = UnoRuntime.queryInterface(XPropertySet.class, configProvider.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess", args));

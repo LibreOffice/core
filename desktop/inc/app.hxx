@@ -155,7 +155,7 @@ class Desktop : public Application
         void                    RemoveTemporaryDirectory();
 
         sal_Bool                InitializeInstallation( const rtl::OUString& rAppFilename );
-        sal_Bool                InitializeConfiguration();
+        bool                    InitializeConfiguration();
         void                    FlushConfiguration();
         static sal_Bool         shouldLaunchQuickstart();
         sal_Bool                InitializeQuickstartMode( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMgr );

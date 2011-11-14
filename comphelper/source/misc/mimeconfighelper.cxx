@@ -29,11 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 
 #include <comphelper/fileformat.h>
 #include <comphelper/mimeconfighelper.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/documentconstants.hxx>
@@ -131,10 +133,8 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetConfigurati
     try
     {
         if ( !m_xConfigProvider.is() )
-            m_xConfigProvider = uno::Reference< lang::XMultiServiceFactory >(
-                m_xFactory->createInstance(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" )) ),
-                uno::UNO_QUERY_THROW );
+            m_xConfigProvider = configuration::theDefaultProvider::get(
+                getComponentContext( m_xFactory ) );
 
         uno::Sequence< uno::Any > aArgs( 1 );
         beans::PropertyValue aPathProp;

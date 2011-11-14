@@ -51,6 +51,7 @@
 #include "com/sun/star/beans/Optional.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
+#include "com/sun/star/configuration/theDefaultProvider.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/container/XNameContainer.hpp"
 #include "com/sun/star/deployment/DeploymentException.hpp"
@@ -845,10 +846,9 @@ void UpdateDialog::createNotifyJob( bool bPrepareOnly,
     // notify update check job
     try
     {
-        uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
         uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
-            xFactory->createInstance( OUSTR( "com.sun.star.configuration.ConfigurationProvider" )),
-            uno::UNO_QUERY_THROW);
+            configuration::theDefaultProvider::get(
+                comphelper::getProcessComponentContext()));
 
         beans::PropertyValue aProperty;
         aProperty.Name  = OUSTR( "nodepath" );
@@ -865,6 +865,7 @@ void UpdateDialog::createNotifyJob( bool bPrepareOnly,
         util::URL aURL;
         xNameAccess->getByName(OUSTR("URL")) >>= aURL.Complete;
 
+        uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
         uno::Reference < util::XURLTransformer > xTransformer( xFactory->createInstance( OUSTR( "com.sun.star.util.URLTransformer" ) ),
             uno::UNO_QUERY_THROW );
 
@@ -1082,8 +1083,8 @@ bool UpdateDialog::showDescription( const String& rDescription, bool bWithPublis
 //------------------------------------------------------------------------------
 void UpdateDialog::getIgnoredUpdates()
 {
-    uno::Reference< lang::XMultiServiceFactory > xConfig( m_context->getServiceManager()->createInstanceWithContext(
-        OUSTR("com.sun.star.configuration.ConfigurationProvider"), m_context ), uno::UNO_QUERY_THROW);
+    uno::Reference< lang::XMultiServiceFactory > xConfig(
+        configuration::theDefaultProvider::get(m_context));
     beans::NamedValue aValue( OUSTR("nodepath"), uno::Any( IGNORED_UPDATES ) );
     uno::Sequence< uno::Any > args(1);
     args[0] <<= aValue;
@@ -1108,8 +1109,8 @@ void UpdateDialog::storeIgnoredUpdates()
 {
     if ( m_bModified && ( !m_ignoredUpdates.empty() ) )
     {
-        uno::Reference< lang::XMultiServiceFactory > xConfig( m_context->getServiceManager()->createInstanceWithContext(
-            OUSTR("com.sun.star.configuration.ConfigurationProvider"), m_context ), uno::UNO_QUERY_THROW );
+        uno::Reference< lang::XMultiServiceFactory > xConfig(
+            configuration::theDefaultProvider::get(m_context));
         beans::NamedValue aValue( OUSTR("nodepath"), uno::Any( IGNORED_UPDATES ) );
         uno::Sequence< uno::Any > args(1);
         args[0] <<= aValue;

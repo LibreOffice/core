@@ -31,9 +31,12 @@
 #include "ZPoolCollection.hxx"
 #include "ZDriverWrapper.hxx"
 #include "ZConnectionPool.hxx"
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/extract.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "diagnose_ex.h"
 
@@ -351,71 +354,30 @@ OConnectionPool* OPoolCollection::getConnectionPool(const ::rtl::OUString& _sImp
 // -----------------------------------------------------------------------------
 Reference< XInterface > OPoolCollection::createWithServiceFactory(const ::rtl::OUString& _rPath) const
 {
-    Reference< XInterface > xInterface;
-    try
-    {
-        Reference< XInterface > xProvider = m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider")));
-        OSL_ENSURE(xProvider.is(), "OConfigurationTreeRoot::createWithServiceFactory: could not instantiate the config provider service!");
-        Reference< XMultiServiceFactory > xProviderAsFac(xProvider, UNO_QUERY);
-        OSL_ENSURE(xProviderAsFac.is() || !xProvider.is(), "OConfigurationTreeRoot::createWithServiceFactory: the provider is missing an interface!");
-        if (xProviderAsFac.is())
-            xInterface = createWithProvider(xProviderAsFac, _rPath);
-    }
-    catch(const Exception&)
-    {
-        OSL_FAIL("createWithServiceFactory: error while instantiating the provider service!");
-    }
-    return xInterface;
+    return createWithProvider(
+        com::sun::star::configuration::theDefaultProvider::get(
+            comphelper::getComponentContext(m_xServiceFactory)),
+        _rPath);
 }
 //------------------------------------------------------------------------
 Reference< XInterface > OPoolCollection::createWithProvider(const Reference< XMultiServiceFactory >& _rxConfProvider,
                             const ::rtl::OUString& _rPath) const
 {
-    OSL_ENSURE(_rxConfProvider.is(), "createWithProvider: invalid provider!");
-
-    Reference< XInterface > xInterface;
-#ifdef DBG_UTIL
-    if (_rxConfProvider.is())
-    {
-        try
-        {
-            Reference< XServiceInfo > xSI(_rxConfProvider, UNO_QUERY);
-            if (!xSI.is())
-            {
-                OSL_FAIL("::createWithProvider: no XServiceInfo interface on the provider!");
-            }
-            else
-            {
-                OSL_ENSURE(xSI->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))),
-                    "::createWithProvider: sure this is a provider? Missing the ConfigurationProvider service!");
-            }
-        }
-        catch(const Exception&)
-        {
-            OSL_FAIL("::createWithProvider: unable to check the service conformance of the provider given!");
-        }
-    }
-#endif
-
-    if (_rxConfProvider.is())
-    {
-        try
-        {
-            Sequence< Any > aCreationArgs(3);
-            aCreationArgs[0] = makeAny(PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")), 0, makeAny(_rPath), PropertyState_DIRECT_VALUE));
-            aCreationArgs[1] = makeAny(PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("depth")), 0, makeAny((sal_Int32)-1), PropertyState_DIRECT_VALUE));
-            aCreationArgs[2] = makeAny(PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("lazywrite")), 0, makeAny(sal_True), PropertyState_DIRECT_VALUE));
-
-            static ::rtl::OUString sAccessService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ));
-
-            xInterface = _rxConfProvider->createInstanceWithArguments(sAccessService, aCreationArgs);
-            OSL_ENSURE(xInterface.is(), "::createWithProvider: could not create the node access!");
-        }
-        catch(Exception&)
-        {
-            OSL_FAIL("OConfigurationTreeRoot::createWithProvider: caught an exception while creating the access object!");
-        }
-    }
+    OSL_ASSERT(_rxConfProvider.is());
+    Sequence< Any > args(1);
+    args[0] = makeAny(
+        NamedValue(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
+            makeAny(_rPath)));
+    Reference< XInterface > xInterface(
+        _rxConfProvider->createInstanceWithArguments(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.configuration.ConfigurationAccess")),
+            args));
+    OSL_ENSURE(
+        xInterface.is(),
+        "::createWithProvider: could not create the node access!");
     return xInterface;
 }
 // -----------------------------------------------------------------------------

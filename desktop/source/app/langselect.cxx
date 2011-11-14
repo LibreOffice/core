@@ -41,6 +41,7 @@
 #include <tools/config.hxx>
 #include <i18npool/mslangid.hxx>
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -129,20 +130,10 @@ Locale LanguageSelection::IsoStringToLocale(const OUString& str)
 bool LanguageSelection::prepareLanguage()
 {
     m_eStatus = LS_STATUS_OK;
-    OUString sConfigSrvc = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"));
-    Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
-    Reference< XLocalizable > theConfigProvider;
-    try
-    {
-        theConfigProvider = Reference< XLocalizable >(theMSF->createInstance( sConfigSrvc ),UNO_QUERY_THROW );
-    }
-    catch(const Exception&)
-    {
-        m_eStatus = LS_STATUS_CONFIGURATIONACCESS_BROKEN;
-    }
-
-    if(!theConfigProvider.is())
-        return false;
+    Reference< XLocalizable > theConfigProvider(
+        com::sun::star::configuration::theDefaultProvider::get(
+            comphelper::getProcessComponentContext() ),
+        UNO_QUERY_THROW );
 
     sal_Bool bSuccess = sal_False;
 
@@ -225,11 +216,6 @@ bool LanguageSelection::prepareLanguage()
             // this will ensure localized configuration settings to be selected accoring to the
             // UI language.
             Locale loc = LanguageSelection::IsoStringToLocale(aLocaleString);
-            // flush any data already written to the configuration (which
-            // currently uses independent caches for different locales and thus
-            // would ignore data written to another cache):
-            Reference< XFlushable >(theConfigProvider, UNO_QUERY_THROW)->
-                flush();
             theConfigProvider->setLocale(loc);
 
             Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.Setup/L10N/", sal_True), UNO_QUERY_THROW);
@@ -371,7 +357,6 @@ Reference< XNameAccess > LanguageSelection::getConfigAccess(const sal_Char* pPat
 {
     Reference< XNameAccess > xNameAccess;
     try{
-        OUString sConfigSrvc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"));
         OUString sAccessSrvc;
         if (bUpdate)
             sAccessSrvc = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess"));
@@ -380,19 +365,16 @@ Reference< XNameAccess > LanguageSelection::getConfigAccess(const sal_Char* pPat
 
         OUString sConfigURL = OUString::createFromAscii(pPath);
 
-        // get configuration provider
-        Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
-        if (theMSF.is()) {
-            Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory > (
-                theMSF->createInstance( sConfigSrvc ),UNO_QUERY_THROW );
+        Reference< XMultiServiceFactory > theConfigProvider(
+            com::sun::star::configuration::theDefaultProvider::get(
+                comphelper::getProcessComponentContext() ) );
 
-            // access the provider
-            Sequence< Any > theArgs(1);
-            theArgs[ 0 ] <<= sConfigURL;
-            xNameAccess = Reference< XNameAccess > (
-                theConfigProvider->createInstanceWithArguments(
-                    sAccessSrvc, theArgs ), UNO_QUERY_THROW );
-        }
+        // access the provider
+        Sequence< Any > theArgs(1);
+        theArgs[ 0 ] <<= sConfigURL;
+        xNameAccess = Reference< XNameAccess > (
+            theConfigProvider->createInstanceWithArguments(
+                sAccessSrvc, theArgs ), UNO_QUERY_THROW );
     } catch (com::sun::star::uno::Exception& e)
     {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);

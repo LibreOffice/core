@@ -40,140 +40,24 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <stdio.h>
-#include <map>
-#include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
-#include <com/sun/star/configuration/CannotLoadConfigurationException.hpp>
-#include <com/sun/star/configuration/InvalidBootstrapFileException.hpp>
-#include <com/sun/star/configuration/backend/BackendSetupException.hpp>
-#include <com/sun/star/configuration/backend/CannotConnectException.hpp>
 
 // ----------------------------------------------------------------------------
 
 namespace uno           = ::com::sun::star::uno;
 namespace lang          = ::com::sun::star::lang;
-namespace configuration = ::com::sun::star::configuration;
-namespace backend       = ::com::sun::star::configuration::backend;
 using rtl::OUString;
 using uno::UNO_QUERY;
-using desktop::Desktop;
 
 // ----------------------------------------------------------------------------
-static char const CONFIGURATION_PROVIDER[]  = "com.sun.star.configuration.ConfigurationProvider";
-
 static char const CONFIGURATION_ERROR_HANDLER[]  = "com.sun.star.configuration.backend.InteractionHandler";
 
 // must be aligned with configmgr/source/misc/configinteractionhandler
 static char const CONFIG_ERROR_HANDLER[] = "configuration.interaction-handler";
 // ----------------------------------------------------------------------------
 
-// ----------------------------------------------------------------------------
-#define arraysize( arr ) ( sizeof (arr)/sizeof *(arr) )
-
-typedef uno::Reference< lang::XMultiServiceFactory > ConfigurationProvider;
-
 #define OUSTRING( constascii ) OUString( RTL_CONSTASCII_USTRINGPARAM( constascii ) )
 
-#define OU2O( ustr, enc ) rtl::OUStringToOString( (ustr), RTL_TEXTENCODING_ ## enc )
-
-#define k_PROVIDER OUSTRING( CONFIGURATION_PROVIDER )
 #define k_ERRORHANDLER OUSTRING( CONFIGURATION_ERROR_HANDLER )
-// ----------------------------------------------------------------------------
-// Get a message string securely. There is a fallback string if the resource
-// is not available. Adapted from Desktop::GetMsgString()
-
-OUString getMsgString( sal_uInt16 nId, char const * aFallBackMsg )
-{
-    ResMgr* pResMgr = Desktop::GetDesktopResManager();
-    if ( !pResMgr || !nId )
-        return OUString::createFromAscii(aFallBackMsg);
-    else
-        return OUString( String(ResId( nId, *pResMgr )));
-}
-// ----------------------------------------------------------------------------
-/** Creates the normal configuration provider.
-
-*/
-static
-ConfigurationProvider createDefaultConfigurationProvider( )
-{
-    uno::Reference< lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-
-    OSL_ENSURE( xServiceManager.is(),"No ServiceManager set for CreateApplicationConfigurationProvider");
-
-    ConfigurationProvider xProvider;
-
-    if (xServiceManager.is())
-    {
-
-            xProvider.set( xServiceManager->createInstance(k_PROVIDER),  UNO_QUERY);
-    }
-
-    if (!xProvider.is())
-    {
-        OUString const sMsg = OUSTRING("Service \"") + k_PROVIDER +
-                                OUSTRING("\" is not available at the service manager.");
-
-        throw lang::ServiceNotRegisteredException(sMsg, xServiceManager);
-    }
-
-    return xProvider;
-}
-// ----------------------------------------------------------------------------
-/// @attention this method must be called from a catch statement!
-static void handleGeneralException(uno::Exception& aException,
-                                   const rtl::OUString& aMessage)
-{
-    aException.Message = aMessage ;
-    throw ;
-}
-// ----------------------------------------------------------------------------
-
-uno::Reference< lang::XMultiServiceFactory > CreateApplicationConfigurationProvider( )
-{
-    uno::Reference< lang::XMultiServiceFactory > xProvider;
-
-    try
-    {
-        xProvider = createDefaultConfigurationProvider( );
-    }
-    catch (configuration::InvalidBootstrapFileException & exception)
-    {
-        handleGeneralException(exception,
-                getMsgString( STR_CONFIG_ERR_SETTINGS_INCOMPLETE,
-                            "The startup settings for your configuration settings are incomplete. "));
-    }
-     catch (backend::CannotConnectException & exception)
-    {
-        handleGeneralException(exception,
-                getMsgString( STR_CONFIG_ERR_CANNOT_CONNECT,
-                            "A connection to your configuration settings could not be established. "));
-    }
-    catch (backend::BackendSetupException & exception)
-    {
-        handleGeneralException(exception,
-                getMsgString( STR_CONFIG_ERR_CANNOT_CONNECT,
-                            "A connection to your configuration settings could not be established. "));
-    }
-    catch (configuration::CannotLoadConfigurationException & exception)
-    {
-        handleGeneralException(exception,
-                getMsgString( STR_CONFIG_ERR_CANNOT_CONNECT,
-                            "A connection to your configuration settings could not be established. "));
-    }
-    catch (uno::Exception & exception)
-    {
-        handleGeneralException(exception,
-                getMsgString( STR_CONFIG_ERR_ACCESS_GENERAL,
-                            "A general error occurred while accessing your configuration settings."));
-    }
-
-
-    return xProvider ;
-}
-// ----------------------------------------------------------------------------
-
-
-
 
 // ----------------------------------------------------------------------------
 // ConfigurationErrorHandler

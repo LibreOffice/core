@@ -182,7 +182,6 @@ extern rtl::OUString pFilterStrings[];
 
 /** @short  some uno service names.
  */
-#define  SERVICE_CONFIGURATIONPROVIDER      _FILTER_CONFIG_FROM_ASCII_("com.sun.star.configuration.ConfigurationProvider"     )
 #define  SERVICE_CONFIGURATIONUPDATEACCESS  _FILTER_CONFIG_FROM_ASCII_("com.sun.star.configuration.ConfigurationUpdateAccess" )
 #define  SERVICE_CONFIGURATIONACCESS        _FILTER_CONFIG_FROM_ASCII_("com.sun.star.configuration.ConfigurationAccess"       )
 #define  SERVICE_URLTRANSFORMER             _FILTER_CONFIG_FROM_ASCII_("com.sun.star.util.URLTransformer"                     )

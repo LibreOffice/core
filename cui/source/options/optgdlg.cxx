@@ -77,6 +77,7 @@
 #include <unotools/saveopt.hxx>
 #include <sal/macros.h>
 
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -587,17 +588,14 @@ CanvasSettings::CanvasSettings() :
 {
     try
     {
-        Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
         Reference<XMultiServiceFactory> xConfigProvider(
-            xFactory->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))),
-                UNO_QUERY_THROW );
+            com::sun::star::configuration::theDefaultProvider::get(
+                comphelper::getProcessComponentContext()));
 
         Any propValue(
-            makeAny( PropertyValue(
-                         OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")), -1,
-                         makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Canvas")) ),
-                         PropertyState_DIRECT_VALUE ) ) );
+            makeAny( NamedValue(
+                         OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
+                         makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Canvas")) ) ) ) );
 
         mxForceFlagNameAccess.set(
             xConfigProvider->createInstanceWithArguments(
@@ -606,10 +604,9 @@ CanvasSettings::CanvasSettings() :
             UNO_QUERY_THROW );
 
         propValue = makeAny(
-            PropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")), -1,
-                makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Canvas/CanvasServiceList")) ),
-                PropertyState_DIRECT_VALUE ) );
+            NamedValue(
+                OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
+                makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Canvas/CanvasServiceList")) ) ) );
 
         Reference<XNameAccess> xNameAccess(
             xConfigProvider->createInstanceWithArguments(
@@ -1230,7 +1227,6 @@ struct LanguageConfig_Impl
 static sal_Bool bLanguageCurrentDoc_Impl = sal_False;
 
 // some things we'll need...
-static const OUString sConfigSrvc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"));
 static const OUString sAccessSrvc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess"));
 static const OUString sAccessUpdSrvc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess"));
 static const OUString sInstalledLocalesPath(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/Office/InstalledLocales"));
@@ -1293,15 +1289,14 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
         OUString sOfficeLocaleValue;
         OUString sSystemLocaleValue;
 
-        Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
-        Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory > (
-            theMSF->createInstance( sConfigSrvc ),UNO_QUERY_THROW);
-        Sequence< Any > theArgs(2);
+        Reference< XMultiServiceFactory > theConfigProvider(
+            com::sun::star::configuration::theDefaultProvider::get(
+                comphelper::getProcessComponentContext()));
+        Sequence< Any > theArgs(1);
         Reference< XNameAccess > theNameAccess;
 
         // find out which locales are currently installed and add them to the listbox
-        theArgs[0] = makeAny(NamedValue(OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath")), makeAny(sInstalledLocalesPath)));
-        theArgs[1] = makeAny(NamedValue(OUString(RTL_CONSTASCII_USTRINGPARAM("reload")), makeAny(sal_True)));
+        theArgs[0] = makeAny(NamedValue(OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")), makeAny(sInstalledLocalesPath)));
     theNameAccess = Reference< XNameAccess > (
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs ), UNO_QUERY_THROW );
         seqInstalledLanguages = theNameAccess->getElementNames();
@@ -1320,7 +1315,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
 
         // find out whether the user has a specific locale specified
         Sequence< Any > theArgs2(1);
-        theArgs2[0] = makeAny(NamedValue(OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath")), makeAny(sUserLocalePath)));
+        theArgs2[0] = makeAny(NamedValue(OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")), makeAny(sUserLocalePath)));
         theNameAccess = Reference< XNameAccess > (
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs2 ), UNO_QUERY_THROW );
         if (theNameAccess->hasByName(sUserLocaleKey))
@@ -1490,11 +1485,11 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         if( aUserInterfaceLB.GetSelectEntryPos() > 0)
             aLangString = ConvertLanguageToIsoString(aUserInterfaceLB.GetSelectLanguage());
         */
-        Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
-        Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory > (
-            theMSF->createInstance( sConfigSrvc ),UNO_QUERY_THROW);
+        Reference< XMultiServiceFactory > theConfigProvider(
+            com::sun::star::configuration::theDefaultProvider::get(
+                comphelper::getProcessComponentContext()));
         Sequence< Any > theArgs(1);
-        theArgs[0] = makeAny(sUserLocalePath);
+        theArgs[0] = makeAny(NamedValue(OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")), makeAny(sUserLocalePath)));
         Reference< XPropertySet >xProp(
             theConfigProvider->createInstanceWithArguments(sAccessUpdSrvc, theArgs ), UNO_QUERY_THROW );
         if ( !m_sUserLocaleValue.equals(aLangString))
@@ -1509,6 +1504,8 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 
             // tell quickstarter to stop being a veto listener
 
+            Reference< XMultiServiceFactory > theMSF(
+                comphelper::getProcessServiceFactory());
             Reference< XInitialization > xInit(theMSF->createInstance(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.Quickstart"))), UNO_QUERY);
             if (xInit.is())

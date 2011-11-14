@@ -36,6 +36,7 @@
 #include "com/sun/star/beans/XPropertyChangeListener.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/beans/XPropertyState.hpp"
+#include "com/sun/star/configuration/theDefaultProvider.hpp"
 #include "com/sun/star/container/XHierarchicalNameAccess.hpp"
 #include "com/sun/star/container/XNameReplace.hpp"
 #include "com/sun/star/container/XNamed.hpp"
@@ -371,13 +372,7 @@ void Test::setUp() {
             css::uno::UNO_QUERY_THROW)->getPropertyValue(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext"))),
         css::uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(
-        context_->getValueByName(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "/singletons/"
-                    "com.sun.star.configuration.theDefaultProvider"))) >>=
-        provider_);
+    provider_ = css::configuration::theDefaultProvider::get(context_);
 }
 
 void Test::tearDown() {

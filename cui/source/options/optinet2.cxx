@@ -86,9 +86,10 @@
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
@@ -224,35 +225,23 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
     aProxyModeLB.SetSelectHdl(LINK( this, SvxProxyTabPage, ProxyHdl_Impl ));
 
-    Reference< com::sun::star::lang::XMultiServiceFactory > xServiceManager(
-        ::comphelper::getProcessServiceFactory());
+    Reference< com::sun::star::lang::XMultiServiceFactory >
+        xConfigurationProvider(
+            configuration::theDefaultProvider::get(
+                comphelper::getProcessComponentContext() ) );
 
-    if( xServiceManager.is() )
-    {
-        try
-        {
-            Reference< com::sun::star::lang::XMultiServiceFactory > xConfigurationProvider =
-                Reference< com::sun::star::lang::XMultiServiceFactory > ( xServiceManager->createInstance( rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ) ) ),
-                UNO_QUERY_THROW);
+    OUString aConfigRoot(RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Inet/Settings" ) );
 
-            OUString aConfigRoot(RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Inet/Settings" ) );
+    beans::NamedValue aProperty;
+    aProperty.Name  = OUString(RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
+    aProperty.Value = makeAny( aConfigRoot );
 
-            beans::PropertyValue aProperty;
-            aProperty.Name  = OUString(RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
-            aProperty.Value = makeAny( aConfigRoot );
+    Sequence< Any > aArgumentList( 1 );
+    aArgumentList[0] = makeAny( aProperty );
 
-            Sequence< Any > aArgumentList( 1 );
-            aArgumentList[0] = makeAny( aProperty );
-
-            m_xConfigurationUpdateAccess = xConfigurationProvider->createInstanceWithArguments( rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess" ) ),
-                    aArgumentList );
-        }
-        catch ( RuntimeException& )
-        {
-        }
-    }
+    m_xConfigurationUpdateAccess = xConfigurationProvider->createInstanceWithArguments( rtl::OUString(
+                                                                                            RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess" ) ),
+                                                                                        aArgumentList );
 
     ArrangeControls_Impl();
 }

@@ -69,6 +69,7 @@ SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 SHL1TARGET= $(TARGET)$(KAB_MAJOR)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
+    $(COMPHELPERLIB)            \
     $(CPPULIB)                  \
     $(CPPUHELPERLIB)            \
     $(DBTOOLSLIB)               \

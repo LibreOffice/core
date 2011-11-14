@@ -29,7 +29,6 @@ package complex.dbaccess;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -55,18 +54,7 @@ public abstract class TestCase
     // --------------------------------------------------------------------------------------------------------
     protected final XComponentContext getComponentContext()
     {
-        XComponentContext context = null;
-        try
-        {
-            final XPropertySet orbProps = UnoRuntime.queryInterface( XPropertySet.class, getMSF() );
-            context = UnoRuntime.queryInterface( XComponentContext.class,
-                orbProps.getPropertyValue( "DefaultContext" ) );
-        }
-        catch ( Exception ex )
-        {
-            fail( "could not retrieve the ComponentContext" );
-        }
-        return context;
+        return connection.getComponentContext();
     }
 
     // --------------------------------------------------------------------------------------------------------

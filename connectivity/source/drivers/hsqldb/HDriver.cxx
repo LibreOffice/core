@@ -32,6 +32,7 @@
 #include "hsqldb/HConnection.hxx"
 #include <osl/diagnose.h>
 #include "connectivity/dbexception.hxx"
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -53,6 +54,7 @@
 #include <osl/process.h>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -837,13 +839,8 @@ namespace connectivity
             {
                 //.........................................................
                 Reference< XMultiServiceFactory > xConfigProvider(
-                    _rxORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider")) ),
-                    UNO_QUERY
-                );
-                OSL_ENSURE( xConfigProvider.is(), "lcl_getSystemLocale: could not create the config provider!" );
-
-                if ( !xConfigProvider.is() )
-                    return sLocaleString;
+                    com::sun::star::configuration::theDefaultProvider::get(
+                        comphelper::getComponentContext( _rxORB ) ) );
 
                 //.........................................................
                 // arguments for creating the config access

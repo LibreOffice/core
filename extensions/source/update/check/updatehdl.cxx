@@ -60,6 +60,8 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include "com/sun/star/beans/XPropertySet.hpp"
 
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
+
 #include "com/sun/star/container/XNameContainer.hpp"
 
 #include "com/sun/star/frame/XDesktop.hpp"
@@ -861,17 +863,8 @@ void UpdateHandler::insertControlModel( uno::Reference< awt::XControlModel > & r
 //--------------------------------------------------------------------
 void UpdateHandler::setFullVersion( rtl::OUString& rString )
 {
-    if( !mxContext.is() )
-        throw uno::RuntimeException( UNISTRING( "getProductName: empty component context" ), *this );
-
-    uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager() );
-
-    if( !xServiceManager.is() )
-        throw uno::RuntimeException( UNISTRING( "getProductName: unable to obtain service manager from component context" ), *this );
-
     uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(
-        xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.configuration.ConfigurationProvider" ), mxContext ),
-        uno::UNO_QUERY_THROW);
+        com::sun::star::configuration::theDefaultProvider::get( mxContext ) );
 
     beans::PropertyValue aProperty;
     aProperty.Name  = UNISTRING( "nodepath" );

@@ -35,6 +35,7 @@
 #include <dialmgr.hxx>
 #include <cuires.hrc>
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
@@ -342,10 +343,10 @@ IMPL_LINK( SvxOnlineUpdateTabPage, CheckNowHdl_Impl, PushButton *, EMPTYARG )
     try
     {
         uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
-            xFactory->createInstance( UNISTRING( "com.sun.star.configuration.ConfigurationProvider" )),
-            uno::UNO_QUERY_THROW);
+            com::sun::star::configuration::theDefaultProvider::get(
+                comphelper::getProcessComponentContext() ) );
 
-        beans::PropertyValue aProperty;
+        beans::NamedValue aProperty;
         aProperty.Name  = UNISTRING( "nodepath" );
         aProperty.Value = uno::makeAny( UNISTRING("org.openoffice.Office.Addons/AddonUI/OfficeHelp/UpdateCheckJob") );
 

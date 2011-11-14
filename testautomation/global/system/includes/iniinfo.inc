@@ -650,7 +650,7 @@ function fgetL10Nvalue() as string
     dim args(0) as new com.sun.star.beans.NamedValue
     args(0).Name = "nodepath"
     args(0).Value = "/org.openoffice.Setup/L10N"
-    fgetL10Nvalue = hGetUNOService().createInstance("com.sun.star.configuration.DefaultProvider").createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", args()).getByName("ooLocale")
+    fgetL10Nvalue = com.sun.star.configuration.theDefaultProvider.get.createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", args()).getByName("ooLocale")
 end function
 
 '-------------------------------------------------------------------------

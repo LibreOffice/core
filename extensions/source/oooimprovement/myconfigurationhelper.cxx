@@ -30,32 +30,23 @@
 #include "precompiled_extensions.hxx"
 
 #include "myconfigurationhelper.hxx"
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <vector>
-
 
 namespace css = ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-using ::std::vector;
-
 
 namespace
 {
-    static const Sequence<Any> sequenceFromVector(const vector<Any>& vec)
-    {
-        Sequence<Any> result(vec.size());
-        for(size_t idx = 0; idx < vec.size(); ++idx)
-            result[idx] = vec[idx];
-        return result;
-    };
-
     static const OUString noSuchElement(const OUString& path)
     {
         OUStringBuffer buf(256);
@@ -74,30 +65,16 @@ namespace oooimprovement
         sal_Int32 eMode)
     {
         Reference<XMultiServiceFactory> xConfigProvider(
-            xSMGR->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))),
-            UNO_QUERY_THROW);
+            css::configuration::theDefaultProvider::get(
+                comphelper::getComponentContext(xSMGR)));
 
-        vector<Any> lParams;
-        css::beans::PropertyValue aParam;
+        css::uno::Sequence<Any> lParams(1);
+        css::beans::NamedValue aParam;
 
         // set root path
         aParam.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
         aParam.Value <<= sPackage;
-        lParams.push_back(makeAny(aParam));
-
-        // enable all locales mode
-        if ((eMode & MyConfigurationHelper::E_ALL_LOCALES)==MyConfigurationHelper::E_ALL_LOCALES)
-        {
-            aParam.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("locale"));
-            aParam.Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
-            lParams.push_back(makeAny(aParam));
-        }
-
-        // enable lazy writing
-        sal_Bool bLazy = ((eMode & MyConfigurationHelper::E_LAZY_WRITE)==MyConfigurationHelper::E_LAZY_WRITE);
-        aParam.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("lazywrite"));
-        aParam.Value = makeAny(bLazy);
-        lParams.push_back(makeAny(aParam));
+        lParams[0] = makeAny(aParam);
 
         // open it
         Reference<XInterface> xCFG;
@@ -106,11 +83,11 @@ namespace oooimprovement
         if (bReadOnly)
             xCFG = xConfigProvider->createInstanceWithArguments(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
-                sequenceFromVector(lParams));
+                lParams);
         else
             xCFG = xConfigProvider->createInstanceWithArguments(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess")),
-                sequenceFromVector(lParams));
+                lParams);
         return xCFG;
     }
 

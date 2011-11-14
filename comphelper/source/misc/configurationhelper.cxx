@@ -32,7 +32,9 @@
 //_______________________________________________
 // includes
 #include <comphelper/configurationhelper.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -53,7 +55,8 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
                                                                                   sal_Int32                                              eMode   )
 {
     css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
-        xSMGR->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))), css::uno::UNO_QUERY_THROW);
+        css::configuration::theDefaultProvider::get(
+            getComponentContext( xSMGR ) ) );
 
     ::comphelper::SequenceAsVector< css::uno::Any > lParams;
     css::beans::PropertyValue                       aParam ;

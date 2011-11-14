@@ -29,6 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 
+#include "com/sun/star/configuration/theDefaultProvider.hpp"
+#include "comphelper/processfactory.hxx"
+
 #include "MConfigAccess.hxx"
 #include "MExtConfigAccess.hxx"
 #include "MConnection.hxx"
@@ -51,44 +54,39 @@ namespace connectivity
                 //=============================================================
                 // create the config provider
                 Reference< XMultiServiceFactory > xConfigProvider(
-                    _rxORB->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider" )) ),
-                    UNO_QUERY
+                    com::sun::star::configuration::theDefaultProvider::get(
+                        comphelper::getComponentContext( _rxORB ) ) );
+
+                ::rtl::OUString sCompleteNodePath(RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.DataAccess/DriverSettings/" ));
+                sCompleteNodePath += OConnection::getDriverImplementationName();
+
+                //=========================================================
+                // arguments for creating the config access
+                Sequence< Any > aArguments(2);
+                // the path to the node to open
+                aArguments[0] <<= PropertyValue(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("nodepath")),
+                    0,
+                    makeAny( sCompleteNodePath ),
+                    PropertyState_DIRECT_VALUE
                 );
-                OSL_ENSURE( xConfigProvider.is(), "createDriverConfigNode: could not create the config provider!" );
+                // the depth: -1 means unlimited
+                aArguments[1] <<= PropertyValue(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("depth")),
+                    0,
+                    makeAny( (sal_Int32)-1 ),
+                    PropertyState_DIRECT_VALUE
+                );
 
-                if ( xConfigProvider.is() )
-                {
-                    ::rtl::OUString sCompleteNodePath(RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.DataAccess/DriverSettings/" ));
-                    sCompleteNodePath += OConnection::getDriverImplementationName();
+                //=========================================================
+                // create the access
+                Reference< XInterface > xAccess = xConfigProvider->createInstanceWithArguments(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess" )),
+                    aArguments
+                );
+                OSL_ENSURE( xAccess.is(), "createDriverConfigNode: invalid access returned (should throw an exception instead)!" );
 
-                    //=========================================================
-                    // arguments for creating the config access
-                    Sequence< Any > aArguments(2);
-                    // the path to the node to open
-                    aArguments[0] <<= PropertyValue(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("nodepath")),
-                        0,
-                        makeAny( sCompleteNodePath ),
-                        PropertyState_DIRECT_VALUE
-                    );
-                    // the depth: -1 means unlimited
-                    aArguments[1] <<= PropertyValue(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("depth")),
-                        0,
-                        makeAny( (sal_Int32)-1 ),
-                        PropertyState_DIRECT_VALUE
-                    );
-
-                    //=========================================================
-                    // create the access
-                    Reference< XInterface > xAccess = xConfigProvider->createInstanceWithArguments(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess" )),
-                        aArguments
-                    );
-                    OSL_ENSURE( xAccess.is(), "createDriverConfigNode: invalid access returned (should throw an exception instead)!" );
-
-                    xNode = xNode.query( xAccess );
-                }
+                xNode = xNode.query( xAccess );
             }
             catch( const Exception& )
             {

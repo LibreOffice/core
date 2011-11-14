@@ -62,6 +62,7 @@
 
 #include "vcl/graphictools.hxx"
 #include "com/sun/star/beans/XPropertySet.hpp"
+#include "com/sun/star/configuration/theDefaultProvider.hpp"
 #include "com/sun/star/awt/Rectangle.hpp"
 #include "com/sun/star/awt/XDevice.hpp"
 #include "com/sun/star/util/MeasureUnit.hpp"
@@ -325,55 +326,51 @@ static OUString getMimetypeForDocument( const Reference< XMultiServiceFactory >&
             // get the actual filter name
             OUString aFilterName;
             Reference< lang::XMultiServiceFactory > xConfigProvider(
-                xFactory->createInstance(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ) ) ),
-                        uno::UNO_QUERY );
-            if( xConfigProvider.is() )
+                configuration::theDefaultProvider::get(
+                    comphelper::getComponentContext( xFactory ) ) );
+            uno::Sequence< uno::Any > aArgs( 1 );
+            beans::NamedValue aPathProp;
+            aPathProp.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
+            aPathProp.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Setup/Office/Factories/" ) );
+            aArgs[0] <<= aPathProp;
+
+            Reference< container::XNameAccess > xSOFConfig(
+                xConfigProvider->createInstanceWithArguments(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ) ),
+                    aArgs ),
+                uno::UNO_QUERY );
+
+            Reference< container::XNameAccess > xApplConfig;
+            xSOFConfig->getByName( aDocServiceName ) >>= xApplConfig;
+            if ( xApplConfig.is() )
             {
-                uno::Sequence< uno::Any > aArgs( 1 );
-                beans::PropertyValue aPathProp;
-                aPathProp.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
-                aPathProp.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Setup/Office/Factories/" ) );
-                aArgs[0] <<= aPathProp;
-
-                Reference< container::XNameAccess > xSOFConfig(
-                    xConfigProvider->createInstanceWithArguments(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ) ),
-                        aArgs ),
+                xApplConfig->getByName( OUString( RTL_CONSTASCII_USTRINGPARAM( "ooSetupFactoryActualFilter" ) ) ) >>= aFilterName;
+                if( aFilterName.getLength() )
+                {
+                    // find the related type name
+                    OUString aTypeName;
+                    Reference< container::XNameAccess > xFilterFactory(
+                        xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" )) ),
                         uno::UNO_QUERY );
 
-                Reference< container::XNameAccess > xApplConfig;
-                xSOFConfig->getByName( aDocServiceName ) >>= xApplConfig;
-                if ( xApplConfig.is() )
-                {
-                    xApplConfig->getByName( OUString( RTL_CONSTASCII_USTRINGPARAM( "ooSetupFactoryActualFilter" ) ) ) >>= aFilterName;
-                    if( aFilterName.getLength() )
+                    Sequence< beans::PropertyValue > aFilterData;
+                    xFilterFactory->getByName( aFilterName ) >>= aFilterData;
+                    for ( sal_Int32 nInd = 0; nInd < aFilterData.getLength(); nInd++ )
+                        if ( aFilterData[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
+                            aFilterData[nInd].Value >>= aTypeName;
+
+                    if ( aTypeName.getLength() )
                     {
-                        // find the related type name
-                        OUString aTypeName;
-                        Reference< container::XNameAccess > xFilterFactory(
-                            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" )) ),
-                            uno::UNO_QUERY );
+                        // find the mediatype
+                        Reference< container::XNameAccess > xTypeDetection(
+                            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" )) ),
+                            UNO_QUERY );
 
-                        Sequence< beans::PropertyValue > aFilterData;
-                        xFilterFactory->getByName( aFilterName ) >>= aFilterData;
-                        for ( sal_Int32 nInd = 0; nInd < aFilterData.getLength(); nInd++ )
-                            if ( aFilterData[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
-                                aFilterData[nInd].Value >>= aTypeName;
-
-                        if ( aTypeName.getLength() )
-                        {
-                            // find the mediatype
-                            Reference< container::XNameAccess > xTypeDetection(
-                                xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" )) ),
-                                UNO_QUERY );
-
-                            Sequence< beans::PropertyValue > aTypeData;
-                            xTypeDetection->getByName( aTypeName ) >>= aTypeData;
-                            for ( sal_Int32 nInd = 0; nInd < aTypeData.getLength(); nInd++ )
-                                if ( aTypeData[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
-                                    aTypeData[nInd].Value >>= aDocMimetype;
-                        }
+                        Sequence< beans::PropertyValue > aTypeData;
+                        xTypeDetection->getByName( aTypeName ) >>= aTypeData;
+                        for ( sal_Int32 nInd = 0; nInd < aTypeData.getLength(); nInd++ )
+                            if ( aTypeData[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+                                aTypeData[nInd].Value >>= aDocMimetype;
                     }
                 }
             }

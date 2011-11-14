@@ -66,6 +66,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,offapi,offapi/com/sun/star/char
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,offapi,offapi/com/sun/star/configuration,\
 	Update \
+    theDefaultProvider \
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,offapi,offapi/com/sun/star/deployment,\
 	ExtensionManager \

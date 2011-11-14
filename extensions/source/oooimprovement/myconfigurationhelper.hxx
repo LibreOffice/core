@@ -61,10 +61,6 @@ namespace oooimprovement
                 E_STANDARD = 0,
                 /// configuration will be opened readonly
                 E_READONLY = 1,
-                /// all localized nodes will be interpreted as css::uno::XInterface instead of interpreting it as atomic value nodes
-                E_ALL_LOCALES = 2,
-                /// enable lazy writing
-                E_LAZY_WRITE = 4
             };
 
             //-----------------------------------------------

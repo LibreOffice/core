@@ -75,6 +75,17 @@ COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XI
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArgs
     ) SAL_THROW( ( ::com::sun::star::uno::RuntimeException ) );
 
+/** Tries to obtain a component context from a service factory.
+
+    @param factory may be null
+    @return may be null
+ */
+COMPHELPER_DLLPUBLIC
+com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+getComponentContext(
+    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
+        const & factory);
+
 /**
  * This function gets the process service factory's default component context.
  * If no service factory is set the function returns a null interface.

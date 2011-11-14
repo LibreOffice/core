@@ -31,14 +31,16 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <cppuhelper/compbase2.hxx>
 
 #include "ldapaccess.hxx"
+
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
 
 namespace extensions { namespace config { namespace ldap {
 
@@ -144,7 +146,7 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
     private:
         /** Check if LDAP is configured */
         bool readLdapConfiguration(
-            uno::Reference<lang::XMultiServiceFactory> const & factory,
+            uno::Reference<uno::XComponentContext> const & context,
             LdapDefinition * definition, rtl::OUString * loggedOnUser);
 
         bool getLdapStringParam(uno::Reference<container::XNameAccess>& xAccess,

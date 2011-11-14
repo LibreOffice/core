@@ -37,6 +37,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 
 #include "app.hxx"
@@ -46,20 +47,16 @@ using namespace ::desktop;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 
-static const OUString sConfigSrvc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ) );
 static const OUString sAccessSrvc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess" ) );
 
 /* Local function - get access to the configuration */
 static Reference< XPropertySet > impl_getConfigurationAccess( const OUString& rPath )
 {
-    Reference < XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-
-    // get configuration provider
-    Reference< XMultiServiceFactory > xConfigProvider = Reference< XMultiServiceFactory >(
-            xFactory->createInstance( sConfigSrvc ), UNO_QUERY_THROW );
-
+    Reference< XMultiServiceFactory > xConfigProvider(
+        configuration::theDefaultProvider::get(
+            comphelper::getProcessComponentContext() ) );
     Sequence< Any > aArgs( 1 );
-    NamedValue aValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "NodePath" ) ), makeAny( rPath ) );
+    NamedValue aValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) ), makeAny( rPath ) );
     aArgs[0] <<= aValue;
     return Reference< XPropertySet >(
             xConfigProvider->createInstanceWithArguments( sAccessSrvc, aArgs ), UNO_QUERY_THROW );

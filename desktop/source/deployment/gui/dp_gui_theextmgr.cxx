@@ -37,6 +37,7 @@
 #include "toolkit/helper/vclunohelper.hxx"
 
 #include "com/sun/star/beans/XPropertySet.hpp"
+#include "com/sun/star/configuration/theDefaultProvider.hpp"
 
 #include "dp_gui_dialog2.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
@@ -75,8 +76,7 @@ TheExtensionManager::TheExtensionManager( Window *pParent,
     m_xExtensionManager->addModifyListener( this );
 
     uno::Reference< lang::XMultiServiceFactory > xConfig(
-        xContext->getServiceManager()->createInstanceWithContext(
-            OUSTR("com.sun.star.configuration.ConfigurationProvider"), xContext ), uno::UNO_QUERY_THROW);
+        configuration::theDefaultProvider::get(xContext));
     uno::Any args[1];
     beans::PropertyValue aValue( OUSTR("nodepath"), 0, uno::Any( OUSTR("/org.openoffice.Office.OptionsDialog/Nodes") ),
                                  beans::PropertyState_DIRECT_VALUE );

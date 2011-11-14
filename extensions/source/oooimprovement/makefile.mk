@@ -60,6 +60,7 @@ SLOFILES= \
     $(SLO)$/soapsender.obj \
 
 SHL1STDLIBS= \
+        $(COMPHELPERLIB) \
         $(CPPUHELPERLIB) \
         $(CPPULIB) \
         $(SALLIB) \

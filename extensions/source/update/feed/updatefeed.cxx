@@ -34,7 +34,8 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/deployment/UpdateInformationEntry.hpp>
 #include <com/sun/star/deployment/UpdateInformationProvider.hpp>
@@ -338,17 +339,8 @@ UpdateInformationProvider::UpdateInformationProvider(
     m_xContentProvider(xContentProvider), m_xDocumentBuilder(xDocumentBuilder),
     m_xXPathAPI(xXPathAPI), m_aRequestHeaderList(1)
 {
-    uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
-    if( !xServiceManager.is() )
-        throw uno::RuntimeException(
-            UNISTRING("unable to obtain service manager from component context"),
-            uno::Reference< uno::XInterface >());
-
     uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(
-        xServiceManager->createInstanceWithContext(
-            UNISTRING("com.sun.star.configuration.ConfigurationProvider"),
-            xContext ),
-        uno::UNO_QUERY_THROW);
+        com::sun::star::configuration::theDefaultProvider::get(xContext));
 
     rtl::OUStringBuffer buf;
     rtl::OUString name;
@@ -448,7 +440,7 @@ UpdateInformationProvider::~UpdateInformationProvider()
 uno::Any
 UpdateInformationProvider::getConfigurationItem(uno::Reference<lang::XMultiServiceFactory> const & configurationProvider, rtl::OUString const & node, rtl::OUString const & item)
 {
-    beans::PropertyValue aProperty;
+    beans::NamedValue aProperty;
     aProperty.Name  = UNISTRING("nodepath");
     aProperty.Value = uno::makeAny(node);
 

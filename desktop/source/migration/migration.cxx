@@ -52,6 +52,7 @@
 #include <unotools/configmgr.hxx>
 
 #include <com/sun/star/configuration/Update.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -349,13 +350,10 @@ sal_Bool MigrationImpl::doMigration()
 
 void MigrationImpl::refresh()
 {
-    uno::Reference< XRefreshable > xRefresh(m_xFactory->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))), uno::UNO_QUERY);
-    if (xRefresh.is())
-        xRefresh->refresh();
-    else
-        OSL_FAIL("could not get XRefresh interface from default config provider. No refresh done.");
-
+    uno::Reference< XRefreshable >(
+        configuration::theDefaultProvider::get(
+            comphelper::getComponentContext(m_xFactory)),
+        uno::UNO_QUERY_THROW)->refresh();
 }
 
 void MigrationImpl::setMigrationCompleted()
@@ -854,7 +852,6 @@ uno::Reference< XNameAccess > MigrationImpl::getConfigAccess(const sal_Char* pPa
 {
     uno::Reference< XNameAccess > xNameAccess;
     try{
-        OUString sConfigSrvc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"));
         OUString sAccessSrvc;
         if (bUpdate)
             sAccessSrvc = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess"));
@@ -863,10 +860,9 @@ uno::Reference< XNameAccess > MigrationImpl::getConfigAccess(const sal_Char* pPa
 
         OUString sConfigURL = OUString::createFromAscii(pPath);
 
-        // get configuration provider
-        uno::Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
-        uno::Reference< XMultiServiceFactory > theConfigProvider = uno::Reference< XMultiServiceFactory > (
-                theMSF->createInstance( sConfigSrvc ),uno::UNO_QUERY_THROW );
+        uno::Reference< XMultiServiceFactory > theConfigProvider(
+            configuration::theDefaultProvider::get(
+                comphelper::getProcessComponentContext()));
 
         // access the provider
         uno::Sequence< uno::Any > theArgs(1);

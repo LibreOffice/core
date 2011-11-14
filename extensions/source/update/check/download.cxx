@@ -41,6 +41,7 @@
 #include <curl/curl.h>
 #endif
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
@@ -194,21 +195,8 @@ progress_callback( void *clientp, double dltotal, double dlnow, double ultotal, 
 void
 Download::getProxyForURL(const rtl::OUString& rURL, rtl::OString& rHost, sal_Int32& rPort) const
 {
-    if( !m_xContext.is() )
-        throw uno::RuntimeException(
-            UNISTRING( "Download: empty component context" ),
-            uno::Reference< uno::XInterface >() );
-
-    uno::Reference< lang::XMultiComponentFactory > xServiceManager(m_xContext->getServiceManager());
-
-    if( !xServiceManager.is() )
-        throw uno::RuntimeException(
-            UNISTRING( "Download: unable to obtain service manager from component context" ),
-            uno::Reference< uno::XInterface >() );
-
     uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
-        xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.configuration.ConfigurationProvider" ), m_xContext ),
-        uno::UNO_QUERY_THROW);
+        com::sun::star::configuration::theDefaultProvider::get( m_xContext ) );
 
     beans::PropertyValue aProperty;
     aProperty.Name  = UNISTRING( "nodepath" );

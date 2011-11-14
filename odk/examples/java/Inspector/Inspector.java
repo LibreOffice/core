@@ -38,6 +38,7 @@ import com.sun.star.awt.XMessageBoxFactory;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.NamedValue;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.configuration.theDefaultProvider;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
@@ -410,8 +411,7 @@ public class Inspector{
                 sAccess = "com.sun.star.configuration.ConfigurationAccess";
             }
             XMultiComponentFactory xMCF = m_xComponentContext.getServiceManager();
-            Object oDefaultProvider = xMCF.createInstanceWithContext("com.sun.star.configuration.DefaultProvider", this.getXComponentContext());
-            XMultiServiceFactory xMSFCfg = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, oDefaultProvider);
+            XMultiServiceFactory xMSFCfg = theDefaultProvider.get(this.getXComponentContext());
             Object oAccess = xMSFCfg.createInstanceWithArguments(sAccess, new Object[]{new NamedValue("nodepath", _sNodePath)});
             xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oAccess);
         } catch (com.sun.star.uno.Exception e) {

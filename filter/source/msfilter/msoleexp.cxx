@@ -32,6 +32,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
@@ -97,37 +98,29 @@ String GetStorageType( const SvGlobalName& aEmbName )
 
 sal_Bool UseOldMSExport()
 {
-    uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-
-    if ( xFactory.is() )
-    {
-        uno::Reference< lang::XMultiServiceFactory > xProvider( xFactory->createInstance(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider"))),
-                    uno::UNO_QUERY);
-        if ( xProvider.is() )
+    uno::Reference< lang::XMultiServiceFactory > xProvider(
+        configuration::theDefaultProvider::get(
+            comphelper::getProcessComponentContext()));
+    try {
+        uno::Sequence< uno::Any > aArg( 1 );
+        aArg[0] <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/InternalMSExport") );
+        uno::Reference< container::XNameAccess > xNameAccess(
+            xProvider->createInstanceWithArguments(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess" ) ),
+                aArg ),
+            uno::UNO_QUERY );
+        if ( xNameAccess.is() )
         {
-            try {
-                uno::Sequence< uno::Any > aArg( 1 );
-                aArg[0] <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/InternalMSExport") );
-                uno::Reference< container::XNameAccess > xNameAccess(
-                    xProvider->createInstanceWithArguments(
-                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess" ) ),
-                        aArg ),
-                    uno::UNO_QUERY );
-                if ( xNameAccess.is() )
-                {
-                    uno::Any aResult = xNameAccess->getByName(
-                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseOldExport" ) ) );
+            uno::Any aResult = xNameAccess->getByName(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseOldExport" ) ) );
 
-                    sal_Bool bResult = sal_Bool();
-                    if ( aResult >>= bResult )
-                        return bResult;
-                }
-            }
-            catch( uno::Exception& )
-            {
-            }
+            sal_Bool bResult = sal_Bool();
+            if ( aResult >>= bResult )
+                return bResult;
         }
+    }
+    catch( uno::Exception& )
+    {
     }
 
     OSL_FAIL( "Could not get access to configuration entry!\n" );

@@ -40,6 +40,7 @@
 #include <rtl/instance.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/Optional.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <osl/security.hxx>
 
 //==============================================================================
@@ -68,10 +69,7 @@ LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContex
             {
                 bReentrantCall = true ;
                 if (!readLdapConfiguration(
-                        css::uno::Reference< css::lang::XMultiServiceFactory >(
-                            xContext->getServiceManager(),
-                            css::uno::UNO_QUERY_THROW),
-                        &aDefinition, &loggedOnUser))
+                        xContext, &aDefinition, &loggedOnUser))
                 {
                     throw css::uno::RuntimeException(
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LdapUserProfileBe- LDAP not configured")),
@@ -100,11 +98,10 @@ LdapUserProfileBe::~LdapUserProfileBe()
 //------------------------------------------------------------------------------
 
 bool LdapUserProfileBe::readLdapConfiguration(
-    css::uno::Reference< css::lang::XMultiServiceFactory > const & factory,
+    css::uno::Reference< css::uno::XComponentContext > const & context,
     LdapDefinition * definition, rtl::OUString * loggedOnUser)
 {
-    OSL_ASSERT(factory.is() && definition != 0 && loggedOnUser != 0);
-    const rtl::OUString kConfigurationProviderService( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider")) ;
+    OSL_ASSERT(context.is() && definition != 0 && loggedOnUser != 0);
     const rtl::OUString kReadOnlyViewService( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")) ;
     const rtl::OUString kComponent( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.LDAP/UserDirectory"));
     const rtl::OUString kServerDefiniton(RTL_CONSTASCII_USTRINGPARAM ("ServerDefinition"));
@@ -120,11 +117,7 @@ bool LdapUserProfileBe::readLdapConfiguration(
     try
     {
         uno::Reference< lang::XMultiServiceFactory > xCfgProvider(
-                                                        factory->createInstance(kConfigurationProviderService),
-                                                        uno::UNO_QUERY);
-        OSL_ENSURE(xCfgProvider.is(),"LdapUserProfileBe: could not create the configuration provider");
-        if (!xCfgProvider.is())
-            return false;
+            css::configuration::theDefaultProvider::get(context));
 
         css::beans::NamedValue aPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")), uno::makeAny(kComponent) );
 

@@ -96,11 +96,11 @@ Reference< XInterface > createProcessComponentWithArguments( const ::rtl::OUStri
     return xComponent;
 }
 
-Reference< XComponentContext > getProcessComponentContext()
+Reference< XComponentContext > getComponentContext(
+    Reference< XMultiServiceFactory > const & factory)
 {
     Reference< XComponentContext > xRet;
-    uno::Reference<beans::XPropertySet> const xProps(
-        comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
+    uno::Reference<beans::XPropertySet> const xProps( factory, uno::UNO_QUERY );
     if (xProps.is()) {
         try {
             xRet.set( xProps->getPropertyValue( rtl::OUString(
@@ -111,6 +111,11 @@ Reference< XComponentContext > getProcessComponentContext()
         }
     }
     return xRet;
+}
+
+Reference< XComponentContext > getProcessComponentContext()
+{
+    return getComponentContext( getProcessServiceFactory() );
 }
 
 } // namespace comphelper
