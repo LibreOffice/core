@@ -591,21 +591,29 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
     if (!win)
         return false;
 
-    try {
+    try
+    {
         const uno::Reference<rendering::XCanvas>& xCanvas = win->GetCanvas ();
+
+        if (!xCanvas.is())
+            return false;
+
         Size aSize (rDestSize.Width () + 1, rDestSize.Height () + 1);
         const uno::Reference<rendering::XBitmap>& xBitmap = xCanvas->getDevice ()->createCompatibleAlphaBitmap (vcl::unotools::integerSize2DFromSize( aSize));
         uno::Reference< lang::XMultiServiceFactory > xFactory = vcl::unohelper::GetMultiServiceFactory();
-        if( xFactory.is() && xBitmap.is () ) {
+        if( xFactory.is() && xBitmap.is () )
+        {
             uno::Reference< rendering::XMtfRenderer > xMtfRenderer;
             uno::Sequence< uno::Any > args (1);
             uno::Reference< rendering::XBitmapCanvas > xBitmapCanvas( xBitmap, uno::UNO_QUERY );
-            if( xBitmapCanvas.is() ) {
+            if( xBitmapCanvas.is() )
+            {
                 args[0] = uno::Any( xBitmapCanvas );
                 xMtfRenderer.set( xFactory->createInstanceWithArguments( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.rendering.MtfRenderer")),
                                                                          args ), uno::UNO_QUERY );
 
-                if( xMtfRenderer.is() ) {
+                if( xMtfRenderer.is() )
+                {
                     xBitmapCanvas->clear();
                     uno::Reference< beans::XFastPropertySet > xMtfFastPropertySet( xMtfRenderer, uno::UNO_QUERY );
                     if( xMtfFastPropertySet.is() )
@@ -617,7 +625,8 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
                     xMtfRenderer->draw( rDestSize.Width(), rDestSize.Height() );
 
                     uno::Reference< beans::XFastPropertySet > xFastPropertySet( xBitmapCanvas, uno::UNO_QUERY );
-                    if( xFastPropertySet.get() ) {
+                    if( xFastPropertySet.get() )
+                    {
                         // 0 means get BitmapEx
                         uno::Any aAny = xFastPropertySet->getFastPropertyValue( 0 );
                         BitmapEx* pBitmapEx = (BitmapEx*) *reinterpret_cast<const sal_Int64*>(aAny.getValue());
@@ -631,7 +640,8 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
                     SalBitmap* pSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
                     SalBitmap* pSalMask = ImplGetSVData()->mpDefInst->CreateSalBitmap();
 
-                    if( pSalBmp->Create( xBitmapCanvas, aSize ) && pSalMask->Create( xBitmapCanvas, aSize, true ) ) {
+                    if( pSalBmp->Create( xBitmapCanvas, aSize ) && pSalMask->Create( xBitmapCanvas, aSize, true ) )
+                    {
                         Bitmap aBitmap( pSalBmp );
                         Bitmap aMask( pSalMask );
                         AlphaMask aAlphaMask( aMask );
@@ -645,9 +655,13 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
                 }
             }
         }
-    } catch( uno::RuntimeException& ) {
+    }
+    catch (const uno::RuntimeException& )
+    {
         throw; // runtime errors are fatal
-    } catch( uno::Exception& ) {
+    }
+    catch (const uno::Exception&)
+    {
         // ignore errors, no way of reporting them here
     }
 
@@ -713,12 +727,12 @@ void GDIMetaFile::ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct,
                 xRenderer->render(xGraphic);
             }
         }
-        catch( uno::RuntimeException& )
+        catch (const uno::RuntimeException&)
         {
             // runtime errors are fatal
             throw;
         }
-        catch( uno::Exception& )
+        catch (const uno::Exception&)
         {
             // ignore errors, no way of reporting them here
         }
