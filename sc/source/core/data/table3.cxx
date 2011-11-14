@@ -1700,7 +1700,7 @@ public:
     }
 };
 
-void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rParam )
+void lcl_PrepareQuery( const ScDocument* pDoc, ScTable* pTab, ScQueryParam& rParam )
 {
     bool bTopTen = false;
     SCSIZE nEntryCount = rParam.GetEntryCount();
