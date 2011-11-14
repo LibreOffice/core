@@ -1612,10 +1612,17 @@ void lcl_ScDocShell_GetFixedWidthString( rtl::OUString& rStr, const ScDocument& 
     rtl::OUString aString = rStr;
     sal_Int32 nLen = lcl_ScDocShell_GetColWidthInChars(
             rDoc.GetColWidth( nCol, nTab ) );
+    //If the text won't fit in the column
     if ( nLen < aString.getLength() )
     {
-        if ( bValue )
-            aString = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "###" ));
+        rtl::OUStringBuffer aReplacement;
+        if (bValue)
+            aReplacement.appendAscii(RTL_CONSTASCII_STRINGPARAM("###"));
+        else
+            aReplacement.append(aString);
+        //truncate to the number of characters that should fit, even in the
+        //bValue case nLen might be < len ###
+        aString = comphelper::string::truncateToLength(aReplacement, nLen).makeStringAndClear();
     }
     if ( nLen > aString.getLength() )
     {
