@@ -1688,14 +1688,14 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
     Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
     if ( pWindow )
     {
-        bool preview(false);
-        css::uno::Any a = m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_PREVIEW()];
-        a >>= preview;
+        bool const preview( m_lMediaDescriptor.getUnpackedValueOrDefault(
+                ::comphelper::MediaDescriptor::PROP_PREVIEW(), sal_False) );
 
         bool bForceFrontAndFocus(false);
         if ( !preview )
         {
-            a = ::comphelper::ConfigurationHelper::readDirectKey(
+            css::uno::Any const a =
+                ::comphelper::ConfigurationHelper::readDirectKey(
                   xSMGR,
                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/View")),
                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NewDocumentHandling")),
