@@ -1067,7 +1067,7 @@ void ScTable::GetString( SCCOL nCol, SCROW nRow, rtl::OUString& rString )
 }
 
 
-void ScTable::GetInputString( SCCOL nCol, SCROW nRow, rtl::OUString& rString )
+void ScTable::GetInputString( SCCOL nCol, SCROW nRow, rtl::OUString& rString ) const
 {
     if (ValidColRow(nCol,nRow))
         aCol[nCol].GetInputString( nRow, rString );
@@ -1076,7 +1076,7 @@ void ScTable::GetInputString( SCCOL nCol, SCROW nRow, rtl::OUString& rString )
 }
 
 
-double ScTable::GetValue( SCCOL nCol, SCROW nRow )
+double ScTable::GetValue( SCCOL nCol, SCROW nRow ) const
 {
     if (ValidColRow( nCol, nRow ))
         return aCol[nCol].GetValue( nRow );

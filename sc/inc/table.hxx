@@ -312,14 +312,14 @@ public:
     void        SetError( SCCOL nCol, SCROW nRow, sal_uInt16 nError);
 
     void        GetString( SCCOL nCol, SCROW nRow, rtl::OUString& rString );
-    void        GetInputString( SCCOL nCol, SCROW nRow, rtl::OUString& rString );
+    void        GetInputString( SCCOL nCol, SCROW nRow, rtl::OUString& rString ) const;
     double      GetValue( const ScAddress& rPos ) const
                     {
                         return ValidColRow(rPos.Col(),rPos.Row()) ?
                             aCol[rPos.Col()].GetValue( rPos.Row() ) :
                             0.0;
                     }
-    double      GetValue( SCCOL nCol, SCROW nRow );
+    double      GetValue( SCCOL nCol, SCROW nRow ) const;
     void        GetFormula( SCCOL nCol, SCROW nRow, rtl::OUString& rFormula );
 
     CellType    GetCellType( const ScAddress& rPos ) const

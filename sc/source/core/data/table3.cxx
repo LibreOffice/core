@@ -1081,7 +1081,7 @@ bool isQueryByValue(
 }
 
 std::pair<bool,bool> compareByValue(
-    ScDocument& rDoc, ScTable& rTab, const ScBaseCell* pCell, SCCOL nCol, SCROW nRow,
+    const ScDocument& rDoc, const ScTable& rTab, const ScBaseCell* pCell, SCCOL nCol, SCROW nRow,
     const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem, bool* pbTestEqualCondition)
 {
     bool bOk = false;
@@ -1237,7 +1237,7 @@ bool isTestRegExp(const ScQueryParam& rParam, const ScQueryEntry& rEntry, bool* 
 }
 
 std::pair<bool,bool> compareByString(
-    ScDocument& rDoc, ScTable& rTab, ScBaseCell* pCell, SCROW nRow,
+    const ScDocument& rDoc, const ScTable& rTab, ScBaseCell* pCell, SCROW nRow,
     const ScQueryParam& rParam, const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem, bool bMatchWholeCell,
     ::utl::TransliterationWrapper* pTransliteration, CollatorWrapper* pCollator,
     bool* pbTestEqualCondition)
@@ -1254,7 +1254,7 @@ std::pair<bool,bool> compareByString(
         if (pCell->GetCellType() != CELLTYPE_NOTE)
         {
             sal_uLong nFormat = rTab.GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
-            ScCellFormat::GetInputString( pCell, nFormat, aCellStr, *(rDoc.GetFormatTable()) );
+            ScCellFormat::GetInputString(pCell, nFormat, aCellStr, *rDoc.GetFormatTable());
         }
     }
     else
