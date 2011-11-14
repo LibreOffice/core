@@ -574,10 +574,6 @@ CommandEvent ImplTranslateCommandEvent( const CommandEvent& rCEvt, Window* pSour
 
 void Window::ImplInitWindowData( WindowType nType )
 {
-    m_bExpand = false;
-    m_bFill = false;
-    m_nPadding = 0;
-
     mpWindowImpl = new WindowImpl;
 
     meOutDevType        = OUTDEV_WINDOW;

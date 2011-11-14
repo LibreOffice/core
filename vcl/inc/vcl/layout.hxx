@@ -37,7 +37,7 @@ protected:
     bool m_bHomogeneous;
     int m_nSpacing;
 public:
-    Box(Window *pParent, bool bHomogeneous = false, int nSpacing = 0)
+    Box(Window *pParent, bool bHomogeneous, int nSpacing)
         : Window(pParent)
         , m_bHomogeneous(bHomogeneous)
         , m_nSpacing(nSpacing)
@@ -67,6 +67,11 @@ protected:
 
 class VCL_DLLPUBLIC VBox : public Box
 {
+public:
+    VBox(Window *pParent, bool bHomogeneous = false, int nSpacing = 0)
+        : Box(pParent, bHomogeneous, nSpacing)
+    {
+    }
 protected:
     virtual long getPrimaryDimension(const Size &rSize) const
     {
@@ -109,6 +114,11 @@ protected:
 
 class VCL_DLLPUBLIC HBox : public Box
 {
+public:
+    HBox(Window *pParent, bool bHomogeneous = false, int nSpacing = 0)
+        : Box(pParent, bHomogeneous, nSpacing)
+    {
+    }
 protected:
     virtual long getPrimaryDimension(const Size &rSize) const
     {

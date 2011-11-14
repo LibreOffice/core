@@ -94,7 +94,8 @@ void Box::setAllocation(const Size &rAllocation)
         if (!pChild->IsVisible())
             continue;
         ++nVisibleChildren;
-        if (pChild->getExpand())
+        bool bExpand = pChild->getChildProperty<sal_Bool>(rtl::OString(RTL_CONSTASCII_STRINGPARAM("expand")));
+        if (bExpand)
             ++nExpandChildren;
     }
 
@@ -126,6 +127,8 @@ void Box::setAllocation(const Size &rAllocation)
         if (!pChild->IsVisible())
             continue;
 
+        long nPadding = pChild->getChildProperty<sal_Int32>(rtl::OString(RTL_CONSTASCII_STRINGPARAM("padding")));
+
         Size aBoxSize;
         if (m_bHomogeneous)
             setPrimaryDimension(aBoxSize, nHomogeneousDimension);
@@ -133,19 +136,21 @@ void Box::setAllocation(const Size &rAllocation)
         {
             aBoxSize = pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
             long nPrimaryDimension = getPrimaryDimension(aBoxSize);
-            nPrimaryDimension += pChild->getPadding();
-            if (pChild->getExpand())
+            nPrimaryDimension += nPadding;
+            bool bExpand = pChild->getChildProperty<sal_Bool>(rtl::OString(RTL_CONSTASCII_STRINGPARAM("expand")));
+            if (bExpand)
                 setPrimaryDimension(aBoxSize, nPrimaryDimension + nExtraSpace);
         }
         setSecondaryDimension(aBoxSize, getSecondaryDimension(aSize));
 
         Point aChildPos(aPos);
         long nPrimaryCoordinate = getPrimaryCoordinate(aChildPos);
-        setPrimaryCoordinate(aChildPos, nPrimaryCoordinate + pChild->getPadding());
+        setPrimaryCoordinate(aChildPos, nPrimaryCoordinate + nPadding);
 
         Size aChildSize(aBoxSize);
-        if (pChild->getFill())
-            setPrimaryDimension(aChildSize, std::max(static_cast<long>(1), getPrimaryDimension(aBoxSize)-pChild->getPadding()));
+        bool bFill = pChild->getChildProperty<sal_Bool>(rtl::OString(RTL_CONSTASCII_STRINGPARAM("fill")), sal_True);
+        if (bFill)
+            setPrimaryDimension(aChildSize, std::max(static_cast<long>(1), getPrimaryDimension(aBoxSize)-nPadding));
         else
         {
             setPrimaryDimension(aChildSize, getPrimaryDimension(pChild->GetOptimalSize(WINDOWSIZE_PREFERRED)));
@@ -158,7 +163,7 @@ void Box::setAllocation(const Size &rAllocation)
         pChild->SetPosSizePixel(aChildPos, aChildSize);
         fprintf(stderr, "child %p set to %ld %ld : %ld %ld\n", pChild, aPos.X(), aPos.Y(), aChildSize.Width(), aChildSize.Height());
         nPrimaryCoordinate = getPrimaryCoordinate(aPos);
-        setPrimaryCoordinate(aPos, nPrimaryCoordinate + getPrimaryDimension(aBoxSize) + m_nSpacing + pChild->getPadding());
+        setPrimaryCoordinate(aPos, nPrimaryCoordinate + getPrimaryDimension(aBoxSize) + m_nSpacing + nPadding);
     }
 }
 

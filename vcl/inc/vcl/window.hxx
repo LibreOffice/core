@@ -47,6 +47,8 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <boost/shared_ptr.hpp>
 
+#include <map>
+
 class VirtualDevice;
 struct ImplDelData;
 struct ImplWinData;
@@ -380,9 +382,8 @@ private:
     WindowImpl* mpWindowImpl;
 
     //^^^la la la, I can't hear you^^^
-    bool m_bExpand;
-    bool m_bFill;
-    long m_nPadding;
+    typedef std::map< ::rtl::OString, ::com::sun::star::uno::Any > ChildPropertyMap;
+    ChildPropertyMap m_aChildProperties;
 
     SAL_DLLPRIVATE void ImplInitWindowData( WindowType nType );
 
@@ -1062,14 +1063,15 @@ public:
 
     // Advisory Sizing - what is a good size for this widget ?
     virtual Size GetOptimalSize(WindowSizeType eType) const;
-    bool getExpand() const { return m_bExpand; }
-    bool getFill() const { return m_bFill; }
-    long getPadding() const { return m_nPadding; }
-    void setExpand(bool bExpand) { m_bExpand = bExpand; }
-    void setFill(bool bFill) { m_bFill = bFill; }
-    void setPadding(long nPadding) { m_nPadding = nPadding; }
     void queueResize();
-
+    template <typename T> T getChildProperty(const rtl::OString &rString, const T &rDefaultValue = T())
+    {
+        T nValue = rDefaultValue;
+        ChildPropertyMap::const_iterator aI = m_aChildProperties.find(rString);
+        if (aI != m_aChildProperties.end())
+            aI->second >>= nValue;
+        return nValue;
+    }
 
     //-------------------------------------
     //  Native Widget Rendering functions
