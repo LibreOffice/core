@@ -35,34 +35,9 @@
 #include <osl/file.hxx>
 
 #include <com/sun/star/frame/XDesktop.hpp>
-#include <com/sun/star/frame/XUntitledNumbers.hpp>
 
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
-#include <com/sun/star/frame/WindowArrange.hpp>
-#include <com/sun/star/frame/TerminationVetoException.hpp>
-#include <com/sun/star/frame/XTerminateListener.hpp>
-#include <com/sun/star/frame/XWindowArranger.hpp>
-#include <com/sun/star/frame/XTask.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
-#include <com/sun/star/frame/XFrames.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/frame/FrameAction.hpp>
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
-#include <com/sun/star/frame/XTasksSupplier.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/frame/XDispatchResultListener.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/frame/FeatureStateEvent.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 
 #include <sfx2/app.hxx>
@@ -103,7 +78,7 @@ FileFormat aFileFormats[] = {
 
 }
 
-/* Implementation of Filters test */
+/* Implementation of Macros test */
 
 class ScMacrosTest
     : public test::FiltersTest
@@ -129,8 +104,6 @@ public:
     //enable this test if you want to play with star basic macros in unit tests
     //works but does nothing useful yet
     CPPUNIT_TEST(testStarBasic);
-    //enable if you want to hack vba support for unit tests
-    //does not work, still problems during loading
     CPPUNIT_TEST(testVba);
 #endif
 
@@ -165,7 +138,7 @@ ScDocShellRef ScMacrosTest::load(const rtl::OUString &rFilter, const rtl::OUStri
     }
     else if (nFormatType)
     {
-        pSrcMed->GetItemSet()->Put( SfxUInt16Item( SID_MACROEXECMODE, 4));
+        pSrcMed->GetItemSet()->Put( SfxUInt16Item( SID_MACROEXECMODE, document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN ));
         SfxObjectShell::SetCurrentComponent( xDocShRef->GetModel() );
     }
 
@@ -183,7 +156,7 @@ uno::Reference< com::sun::star::lang::XComponent > ScMacrosTest::loadFromDesktop
         com::sun::star::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
     args[0].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
     uno::Reference< com::sun::star::lang::XComponent> xComponent= xLoader->loadComponentFromURL(rURL, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")), 0, args);
-    CPPUNIT_ASSERT_MESSAGE("", xComponent.is());
+    CPPUNIT_ASSERT_MESSAGE("loading failed", xComponent.is());
     return xComponent;
 }
 
