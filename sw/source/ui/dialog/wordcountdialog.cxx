@@ -67,6 +67,7 @@ SwWordCountDialog::SwWordCountDialog(Window* pParent)
 
     rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
     rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
+    rtl::OString sPackType(RTL_CONSTASCII_STRINGPARAM("pack-type"));
 
     dialog_vbox1.setChildProperty(sFill, true);
     dialog_action_area1.setChildProperty(sFill, true);
@@ -113,7 +114,10 @@ SwWordCountDialog::SwWordCountDialog(Window* pParent)
     aSize = dialog_vbox1.GetOptimalSize(WINDOWSIZE_PREFERRED);
     dialog_vbox1.SetSizePixel(aSize);
 
-    aOK.SetClickHdl(LINK(this,SwWordCountDialog,        OkHdl));
+    aOK.setChildProperty<sal_Int32>(sPackType, VCL_PACK_END);
+    aHelp.setChildProperty<sal_Int32>(sPackType, VCL_PACK_END);
+
+    aOK.SetClickHdl(LINK(this, SwWordCountDialog, OkHdl));
 
     fprintf(stderr, "aOk is %p\n", &aOK);
     fprintf(stderr, "aHelp is %p\n", &aHelp);

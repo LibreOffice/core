@@ -31,6 +31,12 @@
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
 
+enum VclPackType
+{
+    VCL_PACK_START = 0,
+    VCL_PACK_END = 1
+};
+
 class VCL_DLLPUBLIC Box : public Window
 {
 protected:

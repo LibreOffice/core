@@ -129,6 +129,10 @@ void Box::setAllocation(const Size &rAllocation)
 
         long nPadding = pChild->getChildProperty<sal_Int32>(rtl::OString(RTL_CONSTASCII_STRINGPARAM("padding")));
 
+        sal_Int32 ePacking = pChild->getChildProperty<sal_Int32>(rtl::OString(RTL_CONSTASCII_STRINGPARAM("pack-type")));
+
+        fprintf(stderr, "child packing is %d\n", ePacking);
+
         Size aBoxSize;
         if (m_bHomogeneous)
             setPrimaryDimension(aBoxSize, nHomogeneousDimension);
