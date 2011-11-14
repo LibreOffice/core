@@ -48,10 +48,10 @@ NO_BSYMBOLIC=TRUE
 .INCLUDE: settings.mk
 .IF "$(L10N_framework)"==""
 
-.IF "$(DISABLE_NEON)" == "TRUE"
+.IF "$(SYSTEM_NEON)" != "YES"
 
 @all:
-    @echo "neon disabled...."
+    @echo "no system neon is used...."
 
 .ELSE
 

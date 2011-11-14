@@ -1396,11 +1396,8 @@ File gid_File_Lib_Ucpchelp1
     Styles = (PACKED);
 End
 
-#ifndef DISABLE_NEON
+#ifdef SYSTEM_NEON
 SPECIAL_LIB_FILE(gid_File_Lib_Ucpdav1,ucpdav1)
- #ifndef SYSTEM_NEON
-   SPECIAL_LIB_FILE(gid_File_Lib_Neon,neon)
- #endif
 #endif
 
 SPECIAL_LIB_FILE(gid_File_Lib_Ucpfile1,ucpfile1)

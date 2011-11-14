@@ -214,7 +214,7 @@ my_components +=     wpft
 my_components += emboleobj
 .END
 
-.IF "$(DISABLE_NEON)" != "TRUE"
+.IF "$(SYSTEM_NEON)" == "YES"
 my_components += ucpdav1
 .END
 
