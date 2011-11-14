@@ -1080,6 +1080,92 @@ bool isQueryByValue(
     return rTable.HasValueData(nCol, nRow);
 }
 
+std::pair<bool,bool> compareByValue(
+    ScDocument& rDoc, ScTable& rTab, const ScBaseCell* pCell, SCCOL nCol, SCROW nRow,
+    const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem, bool* pbTestEqualCondition)
+{
+    bool bOk = false;
+    bool bTestEqual = false;
+    double nCellVal;
+    if ( pCell )
+    {
+        switch ( pCell->GetCellType() )
+        {
+            case CELLTYPE_VALUE :
+                nCellVal = ((ScValueCell*)pCell)->GetValue();
+            break;
+            case CELLTYPE_FORMULA :
+                nCellVal = ((ScFormulaCell*)pCell)->GetValue();
+            break;
+            default:
+                nCellVal = 0.0;
+        }
+
+    }
+    else
+        nCellVal = rTab.GetValue(nCol, nRow);
+
+    /* NOTE: lcl_PrepareQuery() prepares a filter query such that if a
+     * date+time format was queried rEntry.bQueryByDate is not set. In
+     * case other queries wanted to use this mechanism they should do
+     * the same, in other words only if rEntry.nVal is an integer value
+     * rEntry.bQueryByDate should be true and the time fraction be
+     * stripped here. */
+    if (rItem.meType == ScQueryEntry::ByDate)
+    {
+        sal_uInt32 nNumFmt = rTab.GetNumberFormat(nCol, nRow);
+        const SvNumberformat* pEntry = rDoc.GetFormatTable()->GetEntry(nNumFmt);
+        if (pEntry)
+        {
+            short nNumFmtType = pEntry->GetType();
+            /* NOTE: Omitting the check for absence of
+             * NUMBERFORMAT_TIME would include also date+time formatted
+             * values of the same day. That may be desired in some
+             * cases, querying all time values of a day, but confusing
+             * in other cases. A user can always setup a standard
+             * filter query for x >= date AND x < date+1 */
+            if ((nNumFmtType & NUMBERFORMAT_DATE) && !(nNumFmtType & NUMBERFORMAT_TIME))
+            {
+                // The format is of date type.  Strip off the time
+                // element.
+                nCellVal = ::rtl::math::approxFloor(nCellVal);
+            }
+        }
+    }
+
+    switch (rEntry.eOp)
+    {
+        case SC_EQUAL :
+            bOk = ::rtl::math::approxEqual(nCellVal, rItem.mfVal);
+            break;
+        case SC_LESS :
+            bOk = (nCellVal < rItem.mfVal) && !::rtl::math::approxEqual(nCellVal, rItem.mfVal);
+            break;
+        case SC_GREATER :
+            bOk = (nCellVal > rItem.mfVal) && !::rtl::math::approxEqual(nCellVal, rItem.mfVal);
+            break;
+        case SC_LESS_EQUAL :
+            bOk = (nCellVal < rItem.mfVal) || ::rtl::math::approxEqual(nCellVal, rItem.mfVal);
+            if ( bOk && pbTestEqualCondition )
+                bTestEqual = ::rtl::math::approxEqual(nCellVal, rItem.mfVal);
+            break;
+        case SC_GREATER_EQUAL :
+            bOk = (nCellVal > rItem.mfVal) || ::rtl::math::approxEqual( nCellVal, rItem.mfVal);
+            if ( bOk && pbTestEqualCondition )
+                bTestEqual = ::rtl::math::approxEqual(nCellVal, rItem.mfVal);
+            break;
+        case SC_NOT_EQUAL :
+            bOk = !::rtl::math::approxEqual(nCellVal, rItem.mfVal);
+            break;
+        default:
+        {
+            // added to avoid warnings
+        }
+    }
+
+    return std::pair<bool,bool>(bOk, bTestEqual);
+}
+
 bool isPartialTextMatchOp(const ScQueryEntry& rEntry)
 {
     switch (rEntry.eOp)
@@ -1150,6 +1236,180 @@ bool isTestRegExp(const ScQueryParam& rParam, const ScQueryEntry& rEntry, bool* 
     return (rEntry.eOp == SC_LESS_EQUAL || rEntry.eOp == SC_GREATER_EQUAL);
 }
 
+std::pair<bool,bool> compareByString(
+    ScDocument& rDoc, ScTable& rTab, ScBaseCell* pCell, SCROW nRow,
+    const ScQueryParam& rParam, const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem, bool bMatchWholeCell,
+    ::utl::TransliterationWrapper* pTransliteration, CollatorWrapper* pCollator,
+    bool* pbTestEqualCondition)
+{
+    bool bOk = false;
+    bool bTestEqual = false;
+    rtl::OUString  aCellStr;
+    if (isPartialTextMatchOp(rEntry))
+        // may have to do partial textural comparison.
+        bMatchWholeCell = false;
+
+    if ( pCell )
+    {
+        if (pCell->GetCellType() != CELLTYPE_NOTE)
+        {
+            sal_uLong nFormat = rTab.GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
+            ScCellFormat::GetInputString( pCell, nFormat, aCellStr, *(rDoc.GetFormatTable()) );
+        }
+    }
+    else
+        rTab.GetInputString( static_cast<SCCOL>(rEntry.nField), nRow, aCellStr );
+
+    bool bRealRegExp = isRealRegExp(rParam, rEntry);
+    bool bTestRegExp = isTestRegExp(rParam, rEntry, pbTestEqualCondition);
+
+    if ( bRealRegExp || bTestRegExp )
+    {
+        xub_StrLen nStart = 0;
+        xub_StrLen nEnd   = aCellStr.getLength();
+
+        // from 614 on, nEnd is behind the found text
+        bool bMatch = false;
+        if ( rEntry.eOp == SC_ENDS_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH )
+        {
+            nEnd = 0;
+            nStart = aCellStr.getLength();
+            bMatch = (bool) rEntry.GetSearchTextPtr( rParam.bCaseSens )
+                ->SearchBkwrd( aCellStr, &nStart, &nEnd );
+        }
+        else
+        {
+            bMatch = (bool) rEntry.GetSearchTextPtr( rParam.bCaseSens )
+                ->SearchFrwrd( aCellStr, &nStart, &nEnd );
+        }
+        if ( bMatch && bMatchWholeCell
+                && (nStart != 0 || nEnd != aCellStr.getLength()) )
+            bMatch = false;    // RegExp must match entire cell string
+        if ( bRealRegExp )
+            switch (rEntry.eOp)
+        {
+            case SC_EQUAL:
+            case SC_CONTAINS:
+                bOk = bMatch;
+                break;
+            case SC_NOT_EQUAL:
+            case SC_DOES_NOT_CONTAIN:
+                bOk = !bMatch;
+                break;
+            case SC_BEGINS_WITH:
+                bOk = ( bMatch && (nStart == 0) );
+                break;
+            case SC_DOES_NOT_BEGIN_WITH:
+                bOk = !( bMatch && (nStart == 0) );
+                break;
+            case SC_ENDS_WITH:
+                bOk = ( bMatch && (nEnd == aCellStr.getLength()) );
+                break;
+            case SC_DOES_NOT_END_WITH:
+                bOk = !( bMatch && (nEnd == aCellStr.getLength()) );
+                break;
+            default:
+                {
+                    // added to avoid warnings
+                }
+        }
+        else
+            bTestEqual = bMatch;
+    }
+    if ( !bRealRegExp )
+    {
+        // Simple string matching i.e. no regexp match.
+        if (isTextMatchOp(rEntry))
+        {
+            if (!rItem.meType != ScQueryEntry::ByString && rItem.maString.isEmpty())
+            {
+                // #i18374# When used from functions (match, countif, sumif, vlookup, hlookup, lookup),
+                // the query value is assigned directly, and the string is empty. In that case,
+                // don't find any string (isEqual would find empty string results in formula cells).
+                bOk = false;
+                if ( rEntry.eOp == SC_NOT_EQUAL )
+                    bOk = !bOk;
+            }
+            else if ( bMatchWholeCell )
+            {
+                bOk = pTransliteration->isEqual(aCellStr, rEntry.GetQueryItem().maString);
+                if ( rEntry.eOp == SC_NOT_EQUAL )
+                    bOk = !bOk;
+            }
+            else
+            {
+                const rtl::OUString& rQueryStr = rItem.maString;
+                String aCell( pTransliteration->transliterate(
+                    aCellStr, ScGlobal::eLnge, 0, aCellStr.getLength(),
+                    NULL ) );
+                String aQuer( pTransliteration->transliterate(
+                    rQueryStr, ScGlobal::eLnge, 0, rQueryStr.getLength(),
+                    NULL ) );
+                xub_StrLen nIndex = (rEntry.eOp == SC_ENDS_WITH
+                    || rEntry.eOp == SC_DOES_NOT_END_WITH)? (aCell.Len()-aQuer.Len()):0;
+                xub_StrLen nStrPos = aCell.Search( aQuer, nIndex );
+                switch (rEntry.eOp)
+                {
+                case SC_EQUAL:
+                case SC_CONTAINS:
+                    bOk = ( nStrPos != STRING_NOTFOUND );
+                    break;
+                case SC_NOT_EQUAL:
+                case SC_DOES_NOT_CONTAIN:
+                    bOk = ( nStrPos == STRING_NOTFOUND );
+                    break;
+                case SC_BEGINS_WITH:
+                    bOk = ( nStrPos == 0 );
+                    break;
+                case SC_DOES_NOT_BEGIN_WITH:
+                    bOk = ( nStrPos != 0 );
+                    break;
+                case SC_ENDS_WITH:
+                    bOk = ( nStrPos + aQuer.Len() == aCell.Len() );
+                    break;
+                case SC_DOES_NOT_END_WITH:
+                    bOk = ( nStrPos + aQuer.Len() != aCell.Len() );
+                    break;
+                default:
+                    {
+                        // added to avoid warnings
+                    }
+                }
+            }
+        }
+        else
+        {   // use collator here because data was probably sorted
+            sal_Int32 nCompare = pCollator->compareString(
+                aCellStr, rEntry.GetQueryItem().maString);
+            switch (rEntry.eOp)
+            {
+                case SC_LESS :
+                    bOk = (nCompare < 0);
+                    break;
+                case SC_GREATER :
+                    bOk = (nCompare > 0);
+                    break;
+                case SC_LESS_EQUAL :
+                    bOk = (nCompare <= 0);
+                    if ( bOk && pbTestEqualCondition && !bTestEqual )
+                        bTestEqual = (nCompare == 0);
+                    break;
+                case SC_GREATER_EQUAL :
+                    bOk = (nCompare >= 0);
+                    if ( bOk && pbTestEqualCondition && !bTestEqual )
+                        bTestEqual = (nCompare == 0);
+                    break;
+                default:
+                {
+                    // added to avoid warnings
+                }
+            }
+        }
+    }
+
+    return std::pair<bool,bool>(bOk, bTestEqual);
+}
+
 }
 
 bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
@@ -1200,247 +1460,18 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
         }
         else if (isQueryByValue(*this, rItem, nCol, nRow, pCell))
         {
-            double nCellVal;
-            if ( pCell )
-            {
-                switch ( pCell->GetCellType() )
-                {
-                    case CELLTYPE_VALUE :
-                        nCellVal = ((ScValueCell*)pCell)->GetValue();
-                    break;
-                    case CELLTYPE_FORMULA :
-                        nCellVal = ((ScFormulaCell*)pCell)->GetValue();
-                    break;
-                    default:
-                        nCellVal = 0.0;
-                }
-
-            }
-            else
-                nCellVal = GetValue(nCol, nRow);
-
-            /* NOTE: lcl_PrepareQuery() prepares a filter query such that if a
-             * date+time format was queried rEntry.bQueryByDate is not set. In
-             * case other queries wanted to use this mechanism they should do
-             * the same, in other words only if rEntry.nVal is an integer value
-             * rEntry.bQueryByDate should be true and the time fraction be
-             * stripped here. */
-            if (rItem.meType == ScQueryEntry::ByDate)
-            {
-                sal_uInt32 nNumFmt = GetNumberFormat(nCol, nRow);
-                const SvNumberformat* pEntry = pDocument->GetFormatTable()->GetEntry(nNumFmt);
-                if (pEntry)
-                {
-                    short nNumFmtType = pEntry->GetType();
-                    /* NOTE: Omitting the check for absence of
-                     * NUMBERFORMAT_TIME would include also date+time formatted
-                     * values of the same day. That may be desired in some
-                     * cases, querying all time values of a day, but confusing
-                     * in other cases. A user can always setup a standard
-                     * filter query for x >= date AND x < date+1 */
-                    if ((nNumFmtType & NUMBERFORMAT_DATE) && !(nNumFmtType & NUMBERFORMAT_TIME))
-                    {
-                        // The format is of date type.  Strip off the time
-                        // element.
-                        nCellVal = ::rtl::math::approxFloor(nCellVal);
-                    }
-                }
-            }
-
-            switch (rEntry.eOp)
-            {
-                case SC_EQUAL :
-                    bOk = ::rtl::math::approxEqual(nCellVal, rItem.mfVal);
-                    break;
-                case SC_LESS :
-                    bOk = (nCellVal < rItem.mfVal) && !::rtl::math::approxEqual(nCellVal, rItem.mfVal);
-                    break;
-                case SC_GREATER :
-                    bOk = (nCellVal > rItem.mfVal) && !::rtl::math::approxEqual(nCellVal, rItem.mfVal);
-                    break;
-                case SC_LESS_EQUAL :
-                    bOk = (nCellVal < rItem.mfVal) || ::rtl::math::approxEqual(nCellVal, rItem.mfVal);
-                    if ( bOk && pbTestEqualCondition )
-                        bTestEqual = ::rtl::math::approxEqual(nCellVal, rItem.mfVal);
-                    break;
-                case SC_GREATER_EQUAL :
-                    bOk = (nCellVal > rItem.mfVal) || ::rtl::math::approxEqual( nCellVal, rItem.mfVal);
-                    if ( bOk && pbTestEqualCondition )
-                        bTestEqual = ::rtl::math::approxEqual(nCellVal, rItem.mfVal);
-                    break;
-                case SC_NOT_EQUAL :
-                    bOk = !::rtl::math::approxEqual(nCellVal, rItem.mfVal);
-                    break;
-                default:
-                {
-                    // added to avoid warnings
-                }
-            }
+            std::pair<bool,bool> res = compareByValue(
+                *pDocument, *this, pCell, nCol, nRow, rEntry, rItem, pbTestEqualCondition);
+            bOk = res.first;
+            bTestEqual = res.second;
         }
         else if (isQueryByString(*this, rEntry, rItem, nCol, nRow, pCell))
         {
-            rtl::OUString  aCellStr;
-            if (isPartialTextMatchOp(rEntry))
-                // may have to do partial textural comparison.
-                bMatchWholeCell = false;
-
-            if ( pCell )
-            {
-                if (pCell->GetCellType() != CELLTYPE_NOTE)
-                {
-                    sal_uLong nFormat = GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
-                    ScCellFormat::GetInputString( pCell, nFormat, aCellStr, *(pDocument->GetFormatTable()) );
-                }
-            }
-            else
-                GetInputString( static_cast<SCCOL>(rEntry.nField), nRow, aCellStr );
-
-            bool bRealRegExp = isRealRegExp(rParam, rEntry);
-            bool bTestRegExp = isTestRegExp(rParam, rEntry, pbTestEqualCondition);
-
-            if ( bRealRegExp || bTestRegExp )
-            {
-                xub_StrLen nStart = 0;
-                xub_StrLen nEnd   = aCellStr.getLength();
-
-                // from 614 on, nEnd is behind the found text
-                bool bMatch = false;
-                if ( rEntry.eOp == SC_ENDS_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH )
-                {
-                    nEnd = 0;
-                    nStart = aCellStr.getLength();
-                    bMatch = (bool) rEntry.GetSearchTextPtr( rParam.bCaseSens )
-                        ->SearchBkwrd( aCellStr, &nStart, &nEnd );
-                }
-                else
-                {
-                    bMatch = (bool) rEntry.GetSearchTextPtr( rParam.bCaseSens )
-                        ->SearchFrwrd( aCellStr, &nStart, &nEnd );
-                }
-                if ( bMatch && bMatchWholeCell
-                        && (nStart != 0 || nEnd != aCellStr.getLength()) )
-                    bMatch = false;    // RegExp must match entire cell string
-                if ( bRealRegExp )
-                    switch (rEntry.eOp)
-                {
-                    case SC_EQUAL:
-                    case SC_CONTAINS:
-                        bOk = bMatch;
-                        break;
-                    case SC_NOT_EQUAL:
-                    case SC_DOES_NOT_CONTAIN:
-                        bOk = !bMatch;
-                        break;
-                    case SC_BEGINS_WITH:
-                        bOk = ( bMatch && (nStart == 0) );
-                        break;
-                    case SC_DOES_NOT_BEGIN_WITH:
-                        bOk = !( bMatch && (nStart == 0) );
-                        break;
-                    case SC_ENDS_WITH:
-                        bOk = ( bMatch && (nEnd == aCellStr.getLength()) );
-                        break;
-                    case SC_DOES_NOT_END_WITH:
-                        bOk = !( bMatch && (nEnd == aCellStr.getLength()) );
-                        break;
-                    default:
-                        {
-                            // added to avoid warnings
-                        }
-                }
-                else
-                    bTestEqual = bMatch;
-            }
-            if ( !bRealRegExp )
-            {
-                // Simple string matching i.e. no regexp match.
-                if (isTextMatchOp(rEntry))
-                {
-                    if (!rItem.meType != ScQueryEntry::ByString && rItem.maString.isEmpty())
-                    {
-                        // #i18374# When used from functions (match, countif, sumif, vlookup, hlookup, lookup),
-                        // the query value is assigned directly, and the string is empty. In that case,
-                        // don't find any string (isEqual would find empty string results in formula cells).
-                        bOk = false;
-                        if ( rEntry.eOp == SC_NOT_EQUAL )
-                            bOk = !bOk;
-                    }
-                    else if ( bMatchWholeCell )
-                    {
-                        bOk = pTransliteration->isEqual(aCellStr, rEntry.GetQueryItem().maString);
-                        if ( rEntry.eOp == SC_NOT_EQUAL )
-                            bOk = !bOk;
-                    }
-                    else
-                    {
-                        const rtl::OUString& rQueryStr = rItem.maString;
-                        String aCell( pTransliteration->transliterate(
-                            aCellStr, ScGlobal::eLnge, 0, aCellStr.getLength(),
-                            NULL ) );
-                        String aQuer( pTransliteration->transliterate(
-                            rQueryStr, ScGlobal::eLnge, 0, rQueryStr.getLength(),
-                            NULL ) );
-                        xub_StrLen nIndex = (rEntry.eOp == SC_ENDS_WITH
-                            || rEntry.eOp == SC_DOES_NOT_END_WITH)? (aCell.Len()-aQuer.Len()):0;
-                        xub_StrLen nStrPos = aCell.Search( aQuer, nIndex );
-                        switch (rEntry.eOp)
-                        {
-                        case SC_EQUAL:
-                        case SC_CONTAINS:
-                            bOk = ( nStrPos != STRING_NOTFOUND );
-                            break;
-                        case SC_NOT_EQUAL:
-                        case SC_DOES_NOT_CONTAIN:
-                            bOk = ( nStrPos == STRING_NOTFOUND );
-                            break;
-                        case SC_BEGINS_WITH:
-                            bOk = ( nStrPos == 0 );
-                            break;
-                        case SC_DOES_NOT_BEGIN_WITH:
-                            bOk = ( nStrPos != 0 );
-                            break;
-                        case SC_ENDS_WITH:
-                            bOk = ( nStrPos + aQuer.Len() == aCell.Len() );
-                            break;
-                        case SC_DOES_NOT_END_WITH:
-                            bOk = ( nStrPos + aQuer.Len() != aCell.Len() );
-                            break;
-                        default:
-                            {
-                                // added to avoid warnings
-                            }
-                        }
-                    }
-                }
-                else
-                {   // use collator here because data was probably sorted
-                    sal_Int32 nCompare = pCollator->compareString(
-                        aCellStr, rEntry.GetQueryItem().maString);
-                    switch (rEntry.eOp)
-                    {
-                        case SC_LESS :
-                            bOk = (nCompare < 0);
-                            break;
-                        case SC_GREATER :
-                            bOk = (nCompare > 0);
-                            break;
-                        case SC_LESS_EQUAL :
-                            bOk = (nCompare <= 0);
-                            if ( bOk && pbTestEqualCondition && !bTestEqual )
-                                bTestEqual = (nCompare == 0);
-                            break;
-                        case SC_GREATER_EQUAL :
-                            bOk = (nCompare >= 0);
-                            if ( bOk && pbTestEqualCondition && !bTestEqual )
-                                bTestEqual = (nCompare == 0);
-                            break;
-                        default:
-                        {
-                            // added to avoid warnings
-                        }
-                    }
-                }
-            }
+            std::pair<bool,bool> res = compareByString(
+                *pDocument, *this, pCell, nRow, rParam, rEntry, rItem, bMatchWholeCell,
+                pTransliteration, pCollator, pbTestEqualCondition);
+            bOk = res.first;
+            bTestEqual = res.second;
         }
 
         if (nPos == -1)
