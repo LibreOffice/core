@@ -117,7 +117,7 @@ FileFormat aFileFormats[] = {
     aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
-    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READWRITE, true);
+    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ, true);
     pSrcMed->SetFilter(aFilter);
     if ( !xDocShRef->DoLoad(pSrcMed) )
     {
