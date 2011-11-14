@@ -8569,18 +8569,19 @@ if test "$with_system_cairo" = "yes"; then
 
     PKG_CHECK_MODULES( CAIRO, cairo >= 1.0.2 )
 
-    if test "$with_system_xextensions_headers" != "no"; then
-        AC_MSG_CHECKING([whether Xrender.h defines PictStandardA8])
-        AC_LANG_PUSH([C])
-
-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <X11/extensions/Xrender.h>]],[[
+    if test "$test_xrender" = "yes"; then
+        if test "$with_system_xextensions_headers" != "no"; then
+            AC_MSG_CHECKING([whether Xrender.h defines PictStandardA8])
+            AC_LANG_PUSH([C])
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <X11/extensions/Xrender.h>]],[[
 #ifdef PictStandardA8
 #else
       return fail;
 #endif
 ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no, X headers too old.])])
 
-        AC_LANG_POP([C])
+            AC_LANG_POP([C])
+        fi
     fi
     MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS libfontconfig-1.dll libfreetype-6.dll libpixman-1-0.dll libpng15-15.dll libcairo-2.dll"
 else
