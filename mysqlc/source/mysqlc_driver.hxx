@@ -66,10 +66,6 @@ namespace connectivity
             OWeakRefArray   m_xConnections; // vector containing a list
                                             // of all the Connection objects
                                             // for this Driver
-#ifndef SYSTEM_MYSQL_CPPCONN
-            oslModule       m_hCppConnModule;
-            bool            m_bAttemptedLoadCppConn;
-#endif
 
             sql::Driver * cppDriver;
 

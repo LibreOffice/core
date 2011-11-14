@@ -112,9 +112,7 @@ CFLAGS+=-DSYSTEM_MYSQL_CPPCONN
 .ENDIF
 
 CDEFS+=-DCPPDBC_EXPORTS -DCPPCONN_LIB_BUILD
-.IF "$(SYSTEM_MYSQL_CPPCONN)" != "YES"
-CDEFS += -DCPPCONN_LIB=\"$(DLLPRE)mysqlcppconn$(DLLPOST)\"
-.ELSE
+.IF "$(SYSTEM_MYSQL_CPPCONN)" == "YES"
 CDEFS += -DCPPCONN_LIB=\"$(shell readlink /usr/lib/libmysqlcppconn.so)\"
 .IF "$(USE_SYSTEM_STL)"!="YES"
 CDEFS += -DADAPT_EXT_STL
@@ -122,12 +120,7 @@ CDEFS += -DADAPT_EXT_STL
 .ENDIF
 
 # --------------- MySQL settings ------------------
-.IF "$(GUI)"=="WNT"
-  MYSQL_INC=-I$(SOLARINCDIR)$/mysqlcppconn -I$(SOLARINCDIR)$/mysqlcppconn/cppconn -I$(MYSQL_INCDIR)
-  MYSQL_LIB=$(MYSQL_LIBDIR)$/libmysql.lib
-  MYSQL_LIBFILE=$(MYSQL_LIBDIR)$/libmysql.dll
-  MYSQL_CPPCONNFILE=$(SOLARBINDIR)$/$(DLLPRE)mysqlcppconn$(DLLPOST)
-.ELSE
+.IF "$(GUI)"!="WNT"
   .IF "$(SYSTEM_MYSQL)" != "YES"
     MYSQL_INC+=-I$(MYSQL_INCDIR)
     .IF "$(OS)"=="MACOSX"
@@ -140,20 +133,7 @@ CDEFS += -DADAPT_EXT_STL
     EXTRALIBPATHS=-L$(MYSQL_LIBDIR)
   .ENDIF
 
-  .IF "$(SYSTEM_MYSQL_CPPCONN)" != "YES"
-    .IF "$(OS)"=="MACOSX" || "$(OS)" == "SOLARIS"
-      MYSQL_LIB+=-lz -lm
-    .ELSE
-      MYSQL_LIB+=-rdynamic -lz -lcrypt -lnsl -lm
-    .ENDIF
-    MYSQL_CPPCONNFILE=$(SOLARLIBDIR)$/$(DLLPRE)mysqlcppconn$(DLLPOST)
-  .ELSE
     MYSQL_CPPCONN_LIB+=-lmysqlcppconn
-  .ENDIF
-.ENDIF
-
-.IF "$(SYSTEM_MYSQL_CPPCONN)" != "YES"
-  MYSQL_INC+=-I$(SOLARINCDIR)$/mysqlcppconn -I$(SOLARINCDIR)$/mysqlcppconn/cppconn
 .ENDIF
 
 CFLAGS+=-I..$/..$/inc $(MYSQL_INC) \
@@ -258,10 +238,6 @@ EXTENSION_PACKDEPS=makefile.mk $(COMPONENT_IMAGES) $(COMPONENT_DESCRIPTIONS_PACK
 EXTENSION_PACKDEPS+=$(COMPONENT_MYSQL_LIBFILE)
 .ENDIF
 
-.IF "$(SYSTEM_MYSQL_CPPCONN)" != "YES"
-EXTENSION_PACKDEPS+=$(COMPONENT_MYSQL_CPPCONN_FILE)
-.ENDIF
-
 # --- Targets ------------------------------------------------------
 .INCLUDE : extension_pre.mk
 .INCLUDE : target.mk
@@ -314,16 +290,6 @@ $(COMPONENT_MYSQL_LIBFILE): $(MYSQL_LIBFILE)
     @$(COPY) $< $@ > $(NULLDEV)
     .IF "$(OS)" == "MACOSX"
         install_name_tool -id @__________________________________________________OOO/$(MYSQL_LIBFILE:f) $@
-    .ENDIF
-.ENDIF
-
-.IF "$(SYSTEM_MYSQL_CPPCONN)" != "YES"
-# --- the MySQL cppconn lib needs to be copied
-$(COMPONENT_MYSQL_CPPCONN_FILE): $(MYSQL_CPPCONNFILE)
-    @@-$(MKDIRHIER) $(@:d)
-    @$(COPY) $< $@ > $(NULLDEV)
-    .IF "$(OS)" == "MACOSX"
-        install_name_tool -change $(MYSQL_LIBFILE:f) @loader_path/$(MYSQL_LIBFILE:f) $@
     .ENDIF
 .ENDIF
 

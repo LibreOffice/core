@@ -40,9 +40,7 @@ using ::rtl::OUString;
 
 #include <preextstl.h>
 #include <cppconn/exception.h>
-#ifdef SYSTEM_MYSQL_CPPCONN
-    #include <mysql_driver.h>
-#endif
+#include <mysql_driver.h>
 #include <postextstl.h>
 
 
@@ -50,10 +48,6 @@ using ::rtl::OUString;
 MysqlCDriver::MysqlCDriver(const Reference< XMultiServiceFactory >& _rxFactory)
     : ODriver_BASE(m_aMutex)
     ,m_xFactory(_rxFactory)
-#ifndef SYSTEM_MYSQL_CPPCONN
-    ,m_hCppConnModule( NULL )
-    ,m_bAttemptedLoadCppConn( false )
-#endif
 {
     OSL_TRACE("MysqlCDriver::MysqlCDriver");
     cppDriver = NULL;
@@ -146,48 +140,7 @@ extern "C" { static void SAL_CALL thisModule() {} }
 
 void MysqlCDriver::impl_initCppConn_lck_throw()
 {
-#ifdef SYSTEM_MYSQL_CPPCONN
     cppDriver = get_driver_instance();
-#else
-    if ( !m_bAttemptedLoadCppConn )
-    {
-        const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii( CPPCONN_LIB );
-        m_hCppConnModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, 0 );
-        m_bAttemptedLoadCppConn = true;
-    }
-
-    // attempted to load - was it successful?
-    if ( !m_hCppConnModule )
-    {
-        OSL_ENSURE( false, "MysqlCDriver::impl_initCppConn_lck_throw: could not load the " CPPCONN_LIB " library!");
-        throw SQLException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unable to load the " CPPCONN_LIB " library." ) ),
-            *this,
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "08001" ) ),  // "unable to connect"
-            0,
-            Any()
-        );
-    }
-
-    // find the factory symbol
-    const ::rtl::OUString sSymbolName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sql_mysql_get_driver_instance" ) );
-    typedef void* (* FGetMySQLDriver)();
-
-    const FGetMySQLDriver pFactoryFunction = (FGetMySQLDriver)( osl_getFunctionSymbol( m_hCppConnModule, sSymbolName.pData ) );
-    if ( !pFactoryFunction )
-    {
-        OSL_ENSURE( false, "MysqlCDriver::impl_initCppConn_lck_throw: could not find the factory symbol in " CPPCONN_LIB "!");
-        throw SQLException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CPPCONN_LIB " is invalid: missing the driver factory function." ) ),
-            *this,
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "08001" ) ),  // "unable to connect"
-            0,
-            Any()
-        );
-    }
-
-    cppDriver = static_cast< sql::Driver* >( (*pFactoryFunction)() );
-#endif
     if ( !cppDriver )
     {
         throw SQLException(

@@ -1,3 +1,0 @@
-my	mysqlcppconn	:	solenv sal NULL
-my	mysqlcppconn    nmake	-	all	my_mkout NULL
-

@@ -3975,6 +3975,9 @@ if test -n "$with_system_mysql" -o -n "$with_system_libs" && \
 	SYSTEM_MYSQL=YES
 	AC_PATH_PROG( MYSQLCONFIG, mysql_config)
 	AC_MSG_CHECKING([MySQL version])
+	if test -z "$MYSQLCONFIG" -o ! -x "$MYSQLCONFIG" ; then
+		AC_MSG_ERROR([can not find/execute mysql_config]);
+	fi
 	MYSQL_VERSION=`$MYSQLCONFIG --version` 
 	MYSQL_MAJOR=`$MYSQLCONFIG --version | cut -d"." -f1`
 	if test "$MYSQL_MAJOR" -ge "5"; then
@@ -4048,15 +4051,8 @@ int main(int argc, char **argv) {
         AC_LANG_POP([C++])
 
 else
-	AC_MSG_RESULT([internal])
-        AC_MSG_CHECKING([for mysqlcppconn module])
-        if test -d mysqlcppconn; then
-          AC_MSG_RESULT([OK])
-        else
-          AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
-        fi
-	BUILD_TYPE="$BUILD_TYPE MYSQLCPPCONN"
-	SYSTEM_MYSQL_CPPCONN=NO
+	AC_MSG_RESULT([no])
+	SYSTEM_MYSQL_CPPCONN=
 fi
 AC_LANG_POP([C++])
 AC_SUBST(SYSTEM_MYSQL_CPPCONN)
