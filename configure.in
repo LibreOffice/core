@@ -8558,6 +8558,7 @@ dnl ===================================================================
 dnl Test whether to build cairo or rely on the system version
 dnl ===================================================================
 
+
 SYSTEM_CAIRO=""
 
 AC_MSG_CHECKING([whether to use the system cairo])
@@ -8569,19 +8570,17 @@ if test "$with_system_cairo" = "yes"; then
     PKG_CHECK_MODULES( CAIRO, cairo >= 1.0.2 )
 
     if test "$with_system_xextensions_headers" != "no"; then
-         AC_MSG_CHECKING([whether Xrender.h defines PictStandardA8])
-         AC_RUN_IFELSE([AC_LANG_SOURCE([[
-#include <X11/extensions/Xrender.h>
+        AC_MSG_CHECKING([whether Xrender.h defines PictStandardA8])
+        AC_LANG_PUSH([C])
 
-int main(int argc, char **argv) {
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <X11/extensions/Xrender.h>]],[[
 #ifdef PictStandardA8
-      return 0;
 #else
-      return 1;
+      return fail;
 #endif
-}
-        ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no, X headers too old.])
-        ],[])
+]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no, X headers too old.])])
+
+        AC_LANG_POP([C])
     fi
     MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS libfontconfig-1.dll libfreetype-6.dll libpixman-1-0.dll libpng15-15.dll libcairo-2.dll"
 else
