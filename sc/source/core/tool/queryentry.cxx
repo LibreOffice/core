@@ -91,6 +91,11 @@ ScQueryEntry& ScQueryEntry::operator=( const ScQueryEntry& r )
     return *this;
 }
 
+const ScQueryEntry::QueryItemsType& ScQueryEntry::GetQueryItems() const
+{
+    return maQueryItems;
+}
+
 void ScQueryEntry::SetQueryByEmpty()
 {
     eOp = SC_EQUAL;

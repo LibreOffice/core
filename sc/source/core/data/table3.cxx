@@ -1468,10 +1468,6 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
 
         std::pair<bool,bool> aRes(false, false);
 
-        // For now, we only handle single item queries.  We need to adopt this
-        // to multi-item queries later.
-        const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-
         if ( pSpecial && pSpecial[i] )
         {
             if (rEntry.IsQueryByEmpty())
@@ -1482,13 +1478,31 @@ bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                 aRes.first = aCol[rEntry.nField].HasDataAt(nRow);
             }
         }
-        else if (aEval.isQueryByValue(rItem, nCol, nRow, pCell))
+        else
         {
-            aRes = aEval.compareByValue(pCell, nCol, nRow, rEntry, rItem);
-        }
-        else if (aEval.isQueryByString(rEntry, rItem, nCol, nRow, pCell))
-        {
-            aRes = aEval.compareByString(pCell, nRow, rEntry, rItem);
+            const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
+            ScQueryEntry::QueryItemsType::const_iterator itr = rItems.begin(), itrEnd = rItems.end();
+
+            for (; itr != itrEnd; ++itr)
+            {
+                if (aEval.isQueryByValue(*itr, nCol, nRow, pCell))
+                {
+                    std::pair<bool,bool> aThisRes =
+                        aEval.compareByValue(pCell, nCol, nRow, rEntry, *itr);
+                    aRes.first |= aThisRes.first;
+                    aRes.second |= aThisRes.second;
+                }
+                else if (aEval.isQueryByString(rEntry, *itr, nCol, nRow, pCell))
+                {
+                    std::pair<bool,bool> aThisRes =
+                        aEval.compareByString(pCell, nRow, rEntry, *itr);
+                    aRes.first |= aThisRes.first;
+                    aRes.second |= aThisRes.second;
+                }
+
+                if (aRes.first && aRes.second)
+                    break;
+            }
         }
 
         if (nPos == -1)
