@@ -65,41 +65,43 @@ SwWordCountDialog::SwWordCountDialog(Window* pParent)
 {
     Size aSize;
 
-    dialog_vbox1.setFill(true);
+    rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
+    rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
 
-    dialog_action_area1.setFill(true);
+    dialog_vbox1.setChildProperty(sFill, true);
+    dialog_action_area1.setChildProperty(sFill, true);
 
-    box1.setFill(true);
-    box1.setExpand(true);
+    box1.setChildProperty(sFill, true);
+    box1.setChildProperty(sExpand, true);
 
-    aCurrentSelection.setFill(true);
-    aCurrentSelectionText.setFill(true);
-    aCurrentSelectionLine.setFill(true);
-    aCurrentSelectionLine.setExpand(true);
+    aCurrentSelection.setChildProperty(sFill, true);
+    aCurrentSelectionText.setChildProperty(sFill, true);
+    aCurrentSelectionLine.setChildProperty(sFill, true);
+    aCurrentSelectionLine.setChildProperty(sExpand, true);
 
-    aSelectionBox.setFill(true);
+    aSelectionBox.setChildProperty(sFill, true);
 
-    aSelectionRow1.setFill(true);
-    aSelectionRow1.setExpand(true);
-    aCurrentWordFT.setFill(true);
-    aCurrentWordFI.setFill(true);
-    aCurrentWordFI.setExpand(true);
+    aSelectionRow1.setChildProperty(sFill, true);
+    aSelectionRow1.setChildProperty(sExpand, true);
+    aCurrentWordFT.setChildProperty(sFill, true);
+    aCurrentWordFI.setChildProperty(sFill, true);
+    aCurrentWordFI.setChildProperty(sExpand, true);
 
-    aSelectionRow2.setFill(true);
-    aSelectionRow2.setExpand(true);
-    aCurrentCharacterFT.setFill(true);
-    aCurrentCharacterFI.setFill(true);
-    aCurrentCharacterFI.setExpand(true);
-    aSelectionRow3.setFill(true);
-    aSelectionRow3.setExpand(true);
-    aCurrentCharacterExcludingSpacesFT.setFill(true);
-    aCurrentCharacterExcludingSpacesFI.setFill(true);
-    aCurrentCharacterExcludingSpacesFI.setExpand(true);
+    aSelectionRow2.setChildProperty(sFill, true);
+    aSelectionRow2.setChildProperty(sExpand, true);
+    aCurrentCharacterFT.setChildProperty(sFill, true);
+    aCurrentCharacterFI.setChildProperty(sFill, true);
+    aCurrentCharacterFI.setChildProperty(sExpand, true);
+    aSelectionRow3.setChildProperty(sFill, true);
+    aSelectionRow3.setChildProperty(sExpand, true);
+    aCurrentCharacterExcludingSpacesFT.setChildProperty(sFill, true);
+    aCurrentCharacterExcludingSpacesFI.setChildProperty(sFill, true);
+    aCurrentCharacterExcludingSpacesFI.setChildProperty(sExpand, true);
 
-    aDoc.setFill(true);
-    aDocText.setFill(true);
-    aDocLine.setFill(true);
-    aDocLine.setExpand(true);
+    aDoc.setChildProperty(sFill, true);
+    aDocText.setChildProperty(sFill, true);
+    aDocLine.setChildProperty(sFill, true);
+    aDocLine.setChildProperty(sExpand, true);
 
     aSize = dialog_vbox1.GetOptimalSize(WINDOWSIZE_PREFERRED);
     dialog_vbox1.SetSizePixel(aSize);

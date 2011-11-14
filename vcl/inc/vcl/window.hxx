@@ -1072,6 +1072,18 @@ public:
             aI->second >>= nValue;
         return nValue;
     }
+    template <typename T> void setChildProperty(const rtl::OString &rString, const T &rValue)
+    {
+        m_aChildProperties[rString] <<= rValue;
+    }
+    void setChildProperty(const rtl::OString &rString, const bool &rValue)
+    {
+        m_aChildProperties[rString] <<= static_cast<sal_Bool>(rValue);
+    }
+    bool getChildProperty(const rtl::OString &rString, const bool &rValue = false)
+    {
+        return getChildProperty<sal_Bool>(rString, rValue);
+    }
 
     //-------------------------------------
     //  Native Widget Rendering functions
