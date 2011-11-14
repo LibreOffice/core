@@ -68,4 +68,7 @@ part of the Anti-Grain Geometry Project. More information on
 AGG is available here:
   http://www.antigrain.com/
 
+The graphite module is distributed under CPL 0.5 (Common Public License).
+Silgraphite as used by the program is available at
+    http://sourceforge.net/projects/silgraphite/files/silgraphite/2.3.1/silgraphite-2.3.1.tar.gz
 
