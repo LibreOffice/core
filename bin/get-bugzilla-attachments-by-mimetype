@@ -1,0 +1,141 @@
+#!/usr/bin/env python
+# -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+#*************************************************************************
+# Version: MPL 1.1 / GPLv3+ / LGPLv3+
+#
+# The contents of this file are subject to the Mozilla Public License Version
+# 1.1 (the "License"); you may not use this file except in compliance with
+# the License or as specified alternatively below. You may obtain a copy of
+# the License at http://www.mozilla.org/MPL/
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+# The Initial Developer of the Original Code is
+#       Caolán McNamara, Red Hat, Inc. <caolanm@redhat.com>
+# Portions created by the Initial Developer are Copyright (C) 2011 the
+# Initial Developer. All Rights Reserved.
+#
+# Major Contributor(s):
+#
+# For minor contributions see the git repository.
+#
+# Alternatively, the contents of this file may be used under the terms of
+# either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+# the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+# in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+# instead of those above.
+#*************************************************************************
+
+#This digs through a pile of bugzilla's and populates the cwd with a big
+#collection of bug-docs in per-filetype dirs with bug-ids as names with
+#prefixes to indicate which bug-tracker, e.g.
+#
+#fdo-bugid-X.suffix
+#rhbz-bugid-X.suffix
+#moz-bugid-X.suffix
+#
+#where X is the n'th attachment of that type in the bug
+
+import urllib
+import feedparser
+import base64
+import os, os.path
+import xmlrpclib
+from xml.dom import minidom
+from xml.sax.saxutils import escape
+
+def get_from_bug_url_via_xml(url, mimetype, prefix, suffix):
+    id = url.rsplit('=', 2)[1]
+    print "id is", prefix, id, suffix
+    if os.path.isfile(suffix + '/' + prefix + id + '-1.' + suffix):
+        print "assuming", id, "is up to date"
+    else:
+        print "parsing", id
+        sock = urllib.urlopen(url+"&ctype=xml")
+        dom = minidom.parse(sock)
+        sock.close()
+        attachmentid=1
+        for attachment in dom.getElementsByTagName('attachment'):
+            print " mimetype is", 
+            for node in attachment.childNodes:
+                if node.nodeName == 'type':
+                    print node.firstChild.nodeValue,
+                    if node.firstChild.nodeValue.lower() != mimetype.lower():
+                        print 'skipping'
+                        break
+                elif node.nodeName == 'data':
+                    download = suffix + '/' +prefix + id + '-' + str(attachmentid) + '.' + suffix
+                    print 'downloading as', download
+                    f = open(download, 'w')
+                    f.write(base64.b64decode(node.firstChild.nodeValue))
+                    f.close()
+                    attachmentid += 1
+                    break
+
+def get_through_rpc_query(rpcurl, showurl, mimetype, prefix, suffix):
+    try:
+        proxy = xmlrpclib.ServerProxy(rpcurl)
+        query = dict()
+        query['column_list']='bug_id'
+        query['query_format']='advanced'
+        query['field0-0-0']='attachments.mimetype'
+        query['type0-0-0']='equals'
+        query['value0-0-0']=mimetype
+        result = proxy.Bug.search(query)
+        bugs = result['bugs']
+        print len(bugs), 'bugs to process'
+        for bug in bugs:
+            url = showurl + str(bug['bug_id'])
+            get_from_bug_url_via_xml(url, mimetype, prefix, suffix)
+    except xmlrpclib.Fault, err:
+            print "A fault occurred"
+        print "Fault code: %s" % err.faultCode
+        print err.faultString
+
+def get_through_rss_query_url(url, mimetype, prefix, suffix):
+    try:
+        os.mkdir(suffix)
+    except:
+        pass
+    d = feedparser.parse(url)
+    for entry in d['entries']:
+        get_from_bug_url_via_xml(entry['id'], mimetype, prefix, suffix)
+
+def get_through_rss_query(queryurl, mimetype, prefix, suffix):
+    url = queryurl + '?query_format=advanced&field0-0-0=attachments.mimetype&type0-0-0=equals&value0-0-0=' + escape(mimetype) + '&ctype=rss'
+    print 'url is', url
+    get_through_rss_query_url(url, mimetype, prefix, suffix)
+
+
+freedesktop = 'http://bugs.freedesktop.org/buglist.cgi'
+openoffice = 'http://openoffice.org/bugzilla/buglist.cgi'
+redhatrpc = 'https://bugzilla.redhat.com/xmlrpc.cgi'
+redhatbug = 'https://bugzilla.redhat.com/show_bug.cgi?id='
+novell = 'https://bugzilla.novell.com/buglist.cgi'
+mozilla = 'https://bugzilla.mozilla.org/buglist.cgi'
+
+get_through_rss_query(freedesktop, 'application/msword', "fdo", "doc")
+get_through_rss_query(freedesktop, 'application/rtf', "fdo", "rtf")
+get_through_rss_query(freedesktop, 'text/rtf', "fdo", "rtf")
+get_through_rss_query(freedesktop, 'text/spreadsheet', "fdo", "slk")
+get_through_rss_query(freedesktop, 'application/vnd.ms-powerpoint', "fdo", "ppt")
+
+get_through_rpc_query(redhatrpc, redhatbug, 'application/msword', "rhbz", "doc")
+get_through_rpc_query(redhatrpc, redhatbug, 'application/rtf', "rhbz", "rtf")
+get_through_rpc_query(redhatrpc, redhatbug, 'text/rtf', "rhbz", "rtf")
+get_through_rpc_query(redhatrpc, redhatbug, 'text/spreadsheet', "rhbz", "slk")
+get_through_rpc_query(redhatrpc, redhatbug, 'application/vnd.ms-powerpoint', "rhbz", "ppt")
+
+#to-do, get attachments some other way, not inline in xml
+#get_through_rss_query(novell, 'application/msword', "n", "doc")
+
+get_through_rss_query(openoffice, 'application/msword', "ooo", "doc")
+get_through_rss_query(openoffice, 'application/rtf', "ooo", "rtf")
+get_through_rss_query(openoffice, 'text/rtf', "ooo", "rtf")
+get_through_rss_query(openoffice, 'text/spreadsheet', "ooo", "slk")
+get_through_rss_query(openoffice, 'application/vnd.ms-powerpoint', "ooo", "ppt")
+
+# vim:set shiftwidth=4 softtabstop=4 expandtab:
