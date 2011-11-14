@@ -1628,7 +1628,7 @@ void lcl_ScDocShell_GetFixedWidthString( rtl::OUString& rStr, const ScDocument& 
     {
         if ( bValue && eHorJust == SVX_HOR_JUSTIFY_STANDARD )
             eHorJust = SVX_HOR_JUSTIFY_RIGHT;
-        sal_Int32  nBlanks = nLen - aString.getLength();
+        sal_Int32 nBlanks = nLen - aString.getLength();
         switch ( eHorJust )
         {
             case SVX_HOR_JUSTIFY_RIGHT:
@@ -1640,20 +1640,19 @@ void lcl_ScDocShell_GetFixedWidthString( rtl::OUString& rStr, const ScDocument& 
             break;
             case SVX_HOR_JUSTIFY_CENTER:
             {
-                sal_Int32 nLen2 = nBlanks / 2;
-                rtl::OUStringBuffer aLeft;
-                rtl::OUStringBuffer aRight;
-                aLeft = comphelper::string::padToLength( aLeft, nLen2, ' ' );
-                aRight = comphelper::string::padToLength( aRight, nBlanks - nLen2, ' ' );
-                aString = aLeft.append(aString).makeStringAndClear();
-                aString += aRight.makeStringAndClear();
+                sal_Int32 nLeftPad = nBlanks / 2;
+                rtl::OUStringBuffer aTmp;
+                comphelper::string::padToLength( aTmp, nLeftPad, ' ' );
+                aTmp.append(aString);
+                comphelper::string::padToLength( aTmp, nLen, ' ' );
+                aString = aTmp.makeStringAndClear();
             }
             break;
             default:
             {
-                rtl::OUStringBuffer aTmp;
-                comphelper::string::padToLength( aTmp, nBlanks, ' ' );
-                aString += aTmp.makeStringAndClear();
+                rtl::OUStringBuffer aTmp(aString);
+                comphelper::string::padToLength( aTmp, nLen, ' ' );
+                aString = aTmp.makeStringAndClear();
             }
         }
     }
