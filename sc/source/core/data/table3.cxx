@@ -1664,7 +1664,43 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
         DestroySortCollator();
 }
 
-static void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rParam )
+namespace {
+
+class PrepareQueryItem : public std::unary_function<ScQueryEntry::Item, void>
+{
+    const ScDocument& mrDoc;
+public:
+    PrepareQueryItem(const ScDocument& rDoc) : mrDoc(rDoc) {}
+
+    void operator() (ScQueryEntry::Item& rItem)
+    {
+        // Double-check if the query by date is really appropriate.
+
+        if (rItem.meType != ScQueryEntry::ByDate)
+            return;
+
+        sal_uInt32 nIndex = 0;
+        bool bNumber = mrDoc.GetFormatTable()->
+            IsNumberFormat(rItem.maString, nIndex, rItem.mfVal);
+
+        if (bNumber && ((nIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0))
+        {
+            const SvNumberformat* pEntry = mrDoc.GetFormatTable()->GetEntry(nIndex);
+            if (pEntry)
+            {
+                short nNumFmtType = pEntry->GetType();
+                if (!((nNumFmtType & NUMBERFORMAT_DATE) && !(nNumFmtType & NUMBERFORMAT_TIME)))
+                    rItem.meType = ScQueryEntry::ByValue;    // not a date only
+            }
+            else
+                rItem.meType = ScQueryEntry::ByValue;    // what the ... not a date
+        }
+        else
+            rItem.meType = ScQueryEntry::ByValue;    // not a date
+    }
+};
+
+void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rParam )
 {
     bool bTopTen = false;
     SCSIZE nEntryCount = rParam.GetEntryCount();
@@ -1672,53 +1708,26 @@ static void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPa
     for ( SCSIZE i = 0; i < nEntryCount; ++i )
     {
         ScQueryEntry& rEntry = rParam.GetEntry(i);
-        if ( rEntry.bDoQuery )
-        {
-            ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
-            ScQueryEntry::QueryItemsType::iterator itr = rItems.begin(), itrEnd = rItems.end();
-            for (; itr != itrEnd; ++itr)
-            {
-                ScQueryEntry::Item& rItem = *itr;
-                if (rItem.meType == ScQueryEntry::ByString)
-                {
-                    sal_uInt32 nIndex = 0;
-                    bool bNumber = pDoc->GetFormatTable()->
-                        IsNumberFormat(rItem.maString, nIndex, rItem.mfVal);
-                    if (rItem.meType == ScQueryEntry::ByDate)
-                    {
-                        if (bNumber && ((nIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0))
-                        {
-                            const SvNumberformat* pEntry = pDoc->GetFormatTable()->GetEntry(nIndex);
-                            if (pEntry)
-                            {
-                                short nNumFmtType = pEntry->GetType();
-                                if (!((nNumFmtType & NUMBERFORMAT_DATE) && !(nNumFmtType & NUMBERFORMAT_TIME)))
-                                    rItem.meType = ScQueryEntry::ByValue;    // not a date only
-                            }
-                            else
-                                rItem.meType = ScQueryEntry::ByValue;    // what the ... not a date
-                        }
-                        else
-                            rItem.meType = ScQueryEntry::ByValue;    // not a date
-                    }
-                }
-            }
+        if (!rEntry.bDoQuery)
+            continue;
 
-            if ( !bTopTen )
+        ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
+        std::for_each(rItems.begin(), rItems.end(), PrepareQueryItem(*pDoc));
+
+        if ( !bTopTen )
+        {
+            switch ( rEntry.eOp )
             {
-                switch ( rEntry.eOp )
+                case SC_TOPVAL:
+                case SC_BOTVAL:
+                case SC_TOPPERC:
+                case SC_BOTPERC:
                 {
-                    case SC_TOPVAL:
-                    case SC_BOTVAL:
-                    case SC_TOPPERC:
-                    case SC_BOTPERC:
-                    {
-                        bTopTen = true;
-                    }
-                    break;
-                    default:
-                    {
-                    }
+                    bTopTen = true;
+                }
+                break;
+                default:
+                {
                 }
             }
         }
@@ -1728,6 +1737,8 @@ static void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPa
     {
         pTab->TopTenQuery( rParam );
     }
+}
+
 }
 
 SCSIZE ScTable::Query(ScQueryParam& rParamOrg, bool bKeepSub)
