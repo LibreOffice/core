@@ -44,8 +44,6 @@ class BASIC_DLLPUBLIC SbxObject : public SbxVariable, public SfxListener
     SbxObjectImpl* mpSbxObjectImpl; // Impl data
 
     BASIC_DLLPRIVATE SbxArray* FindVar( SbxVariable*, sal_uInt16& );
-    // AB 23.3.1997, special method for VCPtrRemove (see below)
-    BASIC_DLLPRIVATE SbxArray* VCPtrFindVar( SbxVariable*, sal_uInt16& );
 protected:
     SbxArrayRef  pMethods;                  // Methods
     SbxArrayRef  pProps;                    // Properties
@@ -91,13 +89,8 @@ public:
     // AB 23.4.1997, Optimization, Insertion without check for duplicate Entries and
     // without Broadcasts, only used in SO2/auto.cxx
     void QuickInsert( SbxVariable* );
-    // AB 23.3.1997, Special-Method, allow corresponding controls
-    void VCPtrInsert( SbxVariable* );
     virtual void Remove( const String&, SbxClassType );
     virtual void Remove( SbxVariable* );
-    // AB 23.3.1997, deletion per pointer for controls (duplicate names!)
-    void VCPtrRemove( SbxVariable* );
-    void SetPos( SbxVariable*, sal_uInt16 );
 
     // Macro-Recording
     virtual String GenerateSource( const String &rLinePrefix,
@@ -110,8 +103,6 @@ public:
     virtual SvDispatch* GetSvDispatch();
     // Debugging
     void Dump( SvStream&, sal_Bool bDumpAll=sal_False );
-
-    static void GarbageCollection( sal_uIntPtr nObjects = 0 /* ::= all */ );
 };
 
 #ifndef __SBX_SBXOBJECTREF_HXX

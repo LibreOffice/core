@@ -100,7 +100,6 @@ public:
     SbxInfo( const String&, sal_uInt32 );
 
     void                AddParam( const String&, SbxDataType, sal_uInt16=SBX_READ );
-    void                AddParam( const SbxParamInfo& );
     const SbxParamInfo* GetParam( sal_uInt16 n ) const; // index starts with 1!
     const String&       GetComment() const              { return aComment; }
     const String&       GetHelpFile() const             { return aHelpFile; }
@@ -139,7 +138,6 @@ class BASIC_DLLPUBLIC SbxAlias : public SbxVariable, public SfxListener
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType );
 public:
-    SbxAlias( const String& rName, SbxVariable* pOriginal );
     SbxAlias( const SbxAlias& );
     SbxAlias& operator=( const SbxAlias& );
 };
@@ -227,7 +225,6 @@ class BASIC_DLLPUBLIC SbxDimArray : public SbxArray
 protected:
     sal_uInt16  Offset( const short* );
     sal_uInt32  Offset32( const sal_Int32* );
-    sal_uInt16  Offset( SbxArray* );
     sal_uInt32  Offset32( SbxArray* );
     virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
     virtual sal_Bool StoreData( SvStream& ) const;
@@ -240,14 +237,11 @@ public:
     SbxDimArray& operator=( const SbxDimArray& );
     virtual void Clear();
     using SbxArray::GetRef;
-    SbxVariableRef& GetRef( const short* );
     using SbxArray::Get;
     SbxVariable* Get( const short* );
     using SbxArray::Put;
     void Put( SbxVariable*, const short* );
-    SbxVariableRef& GetRef( SbxArray* );
     SbxVariable* Get( SbxArray* );
-    void Put( SbxVariable*, SbxArray* );
 
     short  GetDims() const;
     void   AddDim( short, short );
@@ -255,7 +249,6 @@ public:
     sal_Bool   GetDim( short, short&, short& ) const;
 
     using SbxArray::GetRef32;
-    SbxVariableRef& GetRef32( const sal_Int32* );
     using SbxArray::Get32;
     SbxVariable* Get32( const sal_Int32* );
     using SbxArray::Put32;

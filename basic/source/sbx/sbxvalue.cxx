@@ -465,15 +465,6 @@ sal_Bool SbxValue::Get( SbxValues& rRes ) const
     return bRes;
 }
 
-sal_Bool SbxValue::GetNoBroadcast( SbxValues& rRes )
-{
-    sal_uInt16 nFlags_ = GetFlags();
-    SetFlag( SBX_NO_BROADCAST );
-    sal_Bool bRes = Get( rRes );
-    SetFlags( nFlags_ );
-    return bRes;
-}
-
 const XubString& SbxValue::GetString() const
 {
     SbxValues aRes;
@@ -509,16 +500,6 @@ const XubString& SbxValue::GetCoreString() const
     return aResult;
 }
 
-sal_Bool SbxValue::HasObject() const
-{
-    ErrCode eErr = GetError();
-    SbxValues aRes;
-    aRes.eType = SbxOBJECT;
-    Get( aRes );
-    SetError( eErr );
-    return 0 != aRes.pObj;
-}
-
 sal_Bool SbxValue::GetBool() const
 {
     SbxValues aRes;
@@ -534,10 +515,7 @@ GET( GetByte,     SbxBYTE,       sal_uInt8,     nByte )
 GET( GetChar,     SbxCHAR,       xub_Unicode,   nChar )
 GET( GetCurrency, SbxCURRENCY,   sal_Int64,     nInt64 )
 GET( GetDate,     SbxDATE,       double,        nDouble )
-GET( GetData,     SbxDATAOBJECT, void*,         pData )
 GET( GetDouble,   SbxDOUBLE,     double,        nDouble )
-GET( GetErr,      SbxERROR,      sal_uInt16,    nUShort )
-GET( GetInt,      SbxINT,        int,           nInt )
 GET( GetInteger,  SbxINTEGER,    sal_Int16,     nInteger )
 GET( GetLong,     SbxLONG,       sal_Int32,     nLong )
 GET( GetObject,   SbxOBJECT,     SbxBase*,      pObj )
@@ -715,16 +693,6 @@ sal_Bool SbxValue::PutStringExt( const ::rtl::OUString& r )
     return bRet;
 }
 
-sal_Bool SbxValue::PutString( const xub_Unicode* p )
-{
-    ::rtl::OUString aVal( p );
-    SbxValues aRes;
-    aRes.eType = SbxSTRING;
-    aRes.pOUString = &aVal;
-    Put( aRes );
-    return sal_Bool( !IsError() );
-}
-
 sal_Bool SbxValue::PutBool( sal_Bool b )
 {
     SbxValues aRes;
@@ -773,16 +741,6 @@ sal_Bool SbxValue::fillAutomationDecimal
 }
 
 
-sal_Bool SbxValue::PutpChar( const xub_Unicode* p )
-{
-    ::rtl::OUString aVal( p );
-    SbxValues aRes;
-    aRes.eType = SbxLPSTR;
-    aRes.pOUString = &aVal;
-    Put( aRes );
-    return sal_Bool( !IsError() );
-}
-
 sal_Bool SbxValue::PutString( const ::rtl::OUString& r )
 {
     SbxValues aRes;
@@ -801,10 +759,8 @@ PUT( PutByte,     SbxBYTE,       sal_uInt8,             nByte )
 PUT( PutChar,     SbxCHAR,       sal_Unicode,      nChar )
 PUT( PutCurrency, SbxCURRENCY,   const sal_Int64&, nInt64 )
 PUT( PutDate,     SbxDATE,       double,           nDouble )
-PUT( PutData,     SbxDATAOBJECT, void*,            pData )
 PUT( PutDouble,   SbxDOUBLE,     double,           nDouble )
 PUT( PutErr,      SbxERROR,      sal_uInt16,           nUShort )
-PUT( PutInt,      SbxINT,        int,              nInt )
 PUT( PutInteger,  SbxINTEGER,    sal_Int16,            nInteger )
 PUT( PutLong,     SbxLONG,       sal_Int32,            nLong )
 PUT( PutObject,   SbxOBJECT,     SbxBase*,         pObj )
@@ -813,7 +769,6 @@ PUT( PutULong,    SbxULONG,      sal_uInt32,           nULong )
 PUT( PutUShort,   SbxUSHORT,     sal_uInt16,           nUShort )
 PUT( PutInt64,    SbxSALINT64,   sal_Int64,        nInt64 )
 PUT( PutUInt64,   SbxSALUINT64,  sal_uInt64,       uInt64 )
-PUT( PutDecimal,  SbxDECIMAL,    SbxDecimal*,      pDecimal )
 
 
 ////////////////////////// Setting of the data type ///////////////////////////

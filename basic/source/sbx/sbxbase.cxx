@@ -388,13 +388,6 @@ void SbxInfo::AddParam
     aParams.Insert( p, aParams.Count() );
 }
 
-void SbxInfo::AddParam( const SbxParamInfo& r )
-{
-    const SbxParamInfo* p = new SbxParamInfo
-        ( r.aName, r.eType, r.nFlags, r.aTypeRef );
-    aParams.Insert( p, aParams.Count() );
-}
-
 const SbxParamInfo* SbxInfo::GetParam( sal_uInt16 n ) const
 {
     if( n < 1 || n > aParams.Count() )

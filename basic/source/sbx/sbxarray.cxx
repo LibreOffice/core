@@ -744,11 +744,6 @@ sal_uInt16 SbxDimArray::Offset( const short* pIdx )
     return (sal_uInt16) nPos;
 }
 
-SbxVariableRef& SbxDimArray::GetRef( const short* pIdx )
-{
-    return SbxArray::GetRef( Offset( pIdx ) );
-}
-
 SbxVariable* SbxDimArray::Get( const short* pIdx )
 {
     return SbxArray::Get( Offset( pIdx ) );
@@ -757,11 +752,6 @@ SbxVariable* SbxDimArray::Get( const short* pIdx )
 void SbxDimArray::Put( SbxVariable* p, const short* pIdx  )
 {
     SbxArray::Put( p, Offset( pIdx ) );
-}
-
-SbxVariableRef& SbxDimArray::GetRef32( const sal_Int32* pIdx )
-{
-    return SbxArray::GetRef32( Offset32( pIdx ) );
 }
 
 SbxVariable* SbxDimArray::Get32( const sal_Int32* pIdx )
@@ -801,29 +791,9 @@ sal_uInt32 SbxDimArray::Offset32( SbxArray* pPar )
     return nPos;
 }
 
-sal_uInt16 SbxDimArray::Offset( SbxArray* pPar )
-{
-    sal_uInt32 nPos = Offset32( pPar );
-    if( nPos > (long) SBX_MAXINDEX )
-    {
-        SetError( SbxERR_BOUNDS ); nPos = 0;
-    }
-    return (sal_uInt16) nPos;
-}
-
-SbxVariableRef& SbxDimArray::GetRef( SbxArray* pPar )
-{
-    return SbxArray::GetRef32( Offset32( pPar ) );
-}
-
 SbxVariable* SbxDimArray::Get( SbxArray* pPar )
 {
     return SbxArray::Get32( Offset32( pPar ) );
-}
-
-void SbxDimArray::Put( SbxVariable* p, SbxArray* pPar  )
-{
-    SbxArray::Put32( p, Offset32( pPar ) );
 }
 
 sal_Bool SbxDimArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )

@@ -541,33 +541,6 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
     }
 }
 
-// special method, allow controls of the same name
-void SbxObject::VCPtrInsert( SbxVariable* pVar )
-{
-    SbxArray* pArray = NULL;
-    if( pVar )
-    {
-        switch( pVar->GetClass() )
-        {
-            case SbxCLASS_VARIABLE:
-            case SbxCLASS_PROPERTY: pArray = pProps;    break;
-            case SbxCLASS_METHOD:   pArray = pMethods;  break;
-            case SbxCLASS_OBJECT:   pArray = pObjs;     break;
-            default:
-                DBG_ASSERT( !this, "Ungueltige SBX-Klasse" );
-        }
-    }
-    if( pArray )
-    {
-        StartListening( pVar->GetBroadcaster(), sal_True );
-        pArray->Put( pVar, pArray->Count() );
-        if( pVar->GetParent() != this )
-            pVar->SetParent( this );
-        SetModified( sal_True );
-        Broadcast( SBX_HINT_OBJECTCHANGED );
-    }
-}
-
 void SbxObject::Remove( const XubString& rName, SbxClassType t )
 {
     Remove( SbxObject::Find( rName, t ) );
@@ -596,74 +569,6 @@ void SbxObject::Remove( SbxVariable* pVar )
             pVar_->SetParent( NULL );
         SetModified( sal_True );
         Broadcast( SBX_HINT_OBJECTCHANGED );
-    }
-}
-
-// cleanup per Pointer for Controls (double names!)
-void SbxObject::VCPtrRemove( SbxVariable* pVar )
-{
-    sal_uInt16 nIdx;
-    // New FindVar-Method, otherwise identical with the normal method
-    SbxArray* pArray = VCPtrFindVar( pVar, nIdx );
-    if( pArray && nIdx < pArray->Count() )
-    {
-        SbxVariableRef xVar = pArray->Get( nIdx );
-        if( xVar->IsBroadcaster() )
-            EndListening( xVar->GetBroadcaster(), sal_True );
-        if( (SbxVariable*) xVar == pDfltProp )
-            pDfltProp = NULL;
-        pArray->Remove( nIdx );
-        if( xVar->GetParent() == this )
-            xVar->SetParent( NULL );
-        SetModified( sal_True );
-        Broadcast( SBX_HINT_OBJECTCHANGED );
-    }
-}
-
-// associated special method, search only by Pointer
-SbxArray* SbxObject::VCPtrFindVar( SbxVariable* pVar, sal_uInt16& nArrayIdx )
-{
-    SbxArray* pArray = NULL;
-    if( pVar ) switch( pVar->GetClass() )
-    {
-        case SbxCLASS_VARIABLE:
-        case SbxCLASS_PROPERTY: pArray = pProps;    break;
-        case SbxCLASS_METHOD:   pArray = pMethods;  break;
-        case SbxCLASS_OBJECT:   pArray = pObjs;     break;
-        default:
-            DBG_ASSERT( !this, "Ungueltige SBX-Klasse" );
-    }
-    if( pArray )
-    {
-        nArrayIdx = pArray->Count();
-        for( sal_uInt16 i = 0; i < pArray->Count(); i++ )
-        {
-            SbxVariableRef& rRef = pArray->GetRef( i );
-            if( (SbxVariable*) rRef == pVar )
-            {
-                nArrayIdx = i; break;
-            }
-        }
-    }
-    return pArray;
-}
-
-
-
-void SbxObject::SetPos( SbxVariable* pVar, sal_uInt16 nPos )
-{
-    sal_uInt16 nIdx;
-    SbxArray* pArray = FindVar( pVar, nIdx );
-    if( pArray )
-    {
-        if( nPos >= pArray->Count() )
-            nPos = pArray->Count() - 1;
-        if( nIdx < ( pArray->Count() - 1 ) )
-        {
-            SbxVariableRef refVar = pArray->Get( nIdx );
-            pArray->Remove( nIdx );
-            pArray->Insert( refVar, nPos );
-        }
     }
 }
 
@@ -1028,20 +933,6 @@ SbxProperty::~SbxProperty()
 SbxClassType SbxProperty::GetClass() const
 {
     return SbxCLASS_PROPERTY;
-}
-
-void SbxObject::GarbageCollection( sal_uIntPtr /* nObjects */ )
-
-/*  [Description]
-
-    This statistic method browse the next 'nObjects' of the currently existing
-    <SbxObject>-Instances for cyclic references, which keep only themselfes alive
-    If there is 'nObjects==0', then all existing will be browsed.
-
-    currently only implemented: Object -> Parent-Property -> Parent -> Object
-*/
-
-{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

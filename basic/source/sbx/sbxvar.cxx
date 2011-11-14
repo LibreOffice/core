@@ -590,16 +590,6 @@ SbxInfo::SbxInfo( const String& r, sal_uInt32 n )
 
 ////////////////////////////// SbxAlias //////////////////////////////////
 
-SbxAlias::SbxAlias( const XubString& rName, SbxVariable* p )
-        : SbxVariable(), xAlias( p )
-{
-    SetName( rName );
-    SetFlags( p->GetFlags() );
-    SetFlag( SBX_DONTSTORE );
-    aData.eType = p->GetType();
-    StartListening( p->GetBroadcaster() );
-}
-
 SbxAlias::SbxAlias( const SbxAlias& r )
         : SvRefBase( r ), SbxVariable( r ),
           SfxListener( r ), xAlias( r.xAlias )

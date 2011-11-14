@@ -164,7 +164,6 @@ public:
     sal_Bool SetType( SbxDataType );
 
     virtual sal_Bool Get( SbxValues& ) const;
-    sal_Bool GetNoBroadcast( SbxValues& );
     const SbxValues& GetValues_Impl() const { return aData; }
     virtual sal_Bool Put( const SbxValues& );
 
@@ -184,18 +183,14 @@ public:
     double      GetDate() const;
 
     sal_Bool   GetBool() const;
-    sal_uInt16 GetErr() const;
     const String&   GetString() const;
     const String&   GetCoreString() const;
     rtl::OUString   GetOUString() const;
 
     SbxBase*    GetObject() const;
-    sal_Bool    HasObject() const;
-    void*       GetData() const;
     sal_uInt8   GetByte() const;
     sal_uInt16 GetUShort() const;
     sal_uInt32 GetULong() const;
-    int    GetInt() const;
 
     sal_Bool PutInteger( sal_Int16 );
     sal_Bool PutLong( sal_Int32 );
@@ -208,26 +203,21 @@ public:
     sal_Bool PutInt64( sal_Int64 );
     sal_Bool PutUInt64( sal_uInt64 );
     sal_Bool PutString( const ::rtl::OUString& );
-    sal_Bool PutString( const sal_Unicode* );   // Type = SbxSTRING
-    sal_Bool PutpChar( const sal_Unicode* );    // Type = SbxLPSTR
     sal_Bool PutChar( sal_Unicode );
     sal_Bool PutByte( sal_uInt8 );
     sal_Bool PutUShort( sal_uInt16 );
     sal_Bool PutULong( sal_uInt32 );
-    sal_Bool PutInt( int );
     sal_Bool PutEmpty();
     sal_Bool PutNull();
 
             // Special methods
     sal_Bool PutDecimal( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec );
     sal_Bool fillAutomationDecimal( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec );
-    sal_Bool PutDecimal( SbxDecimal* pDecimal );
     sal_Bool PutCurrency( const sal_Int64& );
             // Interface for CDbl in Basic
     static SbxError ScanNumIntnl( const String& rSrc, double& nVal, sal_Bool bSingle = sal_False );
 
     sal_Bool PutObject( SbxBase* );
-    sal_Bool PutData( void* );
 
     virtual sal_Bool Convert( SbxDataType );
     virtual sal_Bool Compute( SbxOperator, const SbxValue& );
