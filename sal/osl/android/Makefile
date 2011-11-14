@@ -15,4 +15,4 @@ run: all
 	unset JAVA_HOME && ant debug install
 #
 # Note: this is of course just an example
-	adb shell am start -a org.libreoffice.android -n org.libreoffice.android/.Bootstrap -e lo-main-library libcppunittester -e lo-main-cmdline "cppunittester /data/data/org.libreoffice.android/lib/libqa_sal_types.so"
+	adb shell am start -n org.libreoffice.android/.Bootstrap -e lo-main-library libcppunittester -e lo-main-cmdline "cppunittester /data/data/org.libreoffice.android/lib/libqa_sal_types.so"

@@ -18,6 +18,6 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE    := lo-bootstrap
 LOCAL_SRC_FILES := lo-bootstrap.c
-LOCAL_LDLIBS    := -llog
+LOCAL_LDLIBS    := -llog -landroid
 
 include $(BUILD_SHARED_LIBRARY)

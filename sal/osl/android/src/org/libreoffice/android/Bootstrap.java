@@ -28,96 +28,43 @@
 
 package org.libreoffice.android;
 
-import android.app.Activity;
+import android.app.NativeActivity;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 
-import java.io.File;
-import java.util.HashMap;
+// We override NativeActivity so that we can get at the intent of the
+// activity and its extra parameters, that we use to tell us what
+// actual LibreOffice "program" to run. I.e. something that on desktop
+// OSes would be a program, but for Androis is actually built as a
+// shared object, with an "lo_main" function.
 
-public class Bootstrap extends Activity
+public class Bootstrap extends NativeActivity
 {
     private static String TAG = "lo-bootstrap";
-    private String dataDir;
 
-    // A native method to list the DT_NEEDED names in a ELF shared object
-    public static native String[] dlneeds(String library);
+    public native boolean setup(String dataDir);
 
-    // A native method to call dlopen(library, RTLD_LOCAL)
+    public native boolean setup(int lo_main_ptr,
+                                Object lo_main_argument);
+
+    // This is not just a wrapper for the C library dlopen(), but also
+    // loads recursively dependent libraries.
     public static native int dlopen(String library);
 
-    // A native method to call dlsym(handle, symbol)
+    // This is just a wrapper for the C library dlsym().
     public static native int dlsym(int handle, String symbol);
 
-    // A native method to call (*function)(argument)
-    public static native int dlcall(int function, Object argument);
-
-    // Already loaded libraries
-    private HashMap<String, Integer> presentLibs = new HashMap<String, Integer>();
-
-    private int loadLibrary(String library)
-    {
-        // We should *not* try to just dlopen() the bare library name
-        // first, as the stupid dynamic linker remembers for each
-        // library basename if loading it has failed. Thus if you try
-        // loading it once, and it fails because of missing needed
-        // libraries, and your load those, and then try again, it
-        // fails with an infurtating message "failed to load
-        // previously" in the log.
-
-        // We *must* first dlopen() all needed libraries,
-        // recursively. It shouldn't matter if we dlopen() a library
-        // that already is loaded, dlopen() just returns the same
-        // value then.
-
-        Integer handle;
-
-        if ((handle = presentLibs.get(library)) != null)
-            return handle;
-
-        String fullName = null;
-        boolean found = false;
-        String[] libraryLocations = { dataDir + "/lib/", "/system/lib/" };
-        for (String dir : libraryLocations ) {
-            fullName = dir + library;
-            if (new File(fullName).exists()) {
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            Log.i(TAG, String.format("Library not found: %s\n", library));
-            return 0;
-        }
-
-        String[] needs = dlneeds(fullName);
-        if (needs == null)
-            return 0;
-
-        for (String neededLibrary : needs) {
-            if (loadLibrary(neededLibrary) == 0)
-                return 0;
-        }
-        if ((handle = dlopen(fullName)) == 0)
-            return 0;
-
-        presentLibs.put(library, handle);
-        return handle;
-    }
-
-    /** Called when the activity is first created. */
     @Override
-    public void onCreate(Bundle savedInstanceState)
+    protected void onCreate(Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
+        String dataDir = null;
 
         try {
             ApplicationInfo ai = this.getPackageManager().getApplicationInfo
                 ("org.libreoffice.android",
                  PackageManager.GET_META_DATA);
-            Log.i(TAG, String.format("sourceDir=%s\n", ai.sourceDir));
             dataDir = ai.dataDir;
             Log.i(TAG, String.format("dataDir=%s\n", dataDir));
         }
@@ -125,39 +72,62 @@ public class Bootstrap extends Activity
             return;
         }
 
+        // This inspects LD_LIBRARY_PATH and dataDir
+        if (!setup(dataDir))
+            return;
+
         String mainLibrary = getIntent().getStringExtra("lo-main-library");
 
         if (mainLibrary == null)
             mainLibrary = "libcppunittester";
 
-        if (mainLibrary != null) {
-            int loLib = loadLibrary(mainLibrary + ".so");
+        mainLibrary += ".so";
 
-            if (loLib == 0)
-                return;
+        Log.i(TAG, String.format("mainLibrary=%s", mainLibrary));
 
-            // Get "command line" to pass to the LO "program"
-            String cmdLine = getIntent().getStringExtra("lo-main-cmdline");
+        // Get "command line" to pass to the LO "program"
+        String cmdLine = getIntent().getStringExtra("lo-main-cmdline");
 
-            if (cmdLine == null)
-                cmdLine = "cppunittester /data/data/org.libreoffice.android/lib/libqa_rtl_strings.so";
+        if (cmdLine == null)
+            cmdLine = "cppunittester /data/data/org.libreoffice.android/lib/libqa_sal_types.so";
 
-            String[] argv;
-            if (cmdLine != null)
-                argv = cmdLine.split(" ");
-            else
-                argv = new String[0];
-            int loLibMain = dlsym(loLib, "lo_main");
-            if (loLibMain != 0)
-                dlcall(loLibMain, argv);
+        Log.i(TAG, String.format("cmdLine=%s", cmdLine));
+
+        String[] argv = cmdLine.split(" ");
+
+        // Load the LO "program" here and look up lo_main
+        int loLib = dlopen(mainLibrary);
+
+        if (loLib == 0) {
+            Log.i(TAG, String.format("Could not load %s", mainLibrary));
+            return;
         }
+
+        int lo_main = dlsym(loLib, "lo_main");
+        if (lo_main == 0) {
+            Log.i(TAG, String.format("No lo_main in %s", mainLibrary));
+            return;
+        }
+
+        // This saves lo_main and argv
+        if (!setup(lo_main, argv))
+            return;
+
+        // Finally, call our super-class, NativeActivity's onCreate(),
+        // which eventually calls the ANativeActivity_onCreate() in
+        // android_native_app_glue.c, which starts a thread in which
+        // android_main() from lo-bootstrap.c is called.
+
+        // android_main() calls the lo_main() defined in sal/main.h
+        // through the function pointer passed to setup() above, with
+        // the argc and argv also saved from the setup() call.
+        super.onCreate(savedInstanceState);
     }
 
-    /* This is used to load the 'lo-bootstrap' library on application
-     * startup. The library has already been unpacked into
-     * /data/data/<app name>/lib/liblo-bootstrap.so at
-     * installation time by the package manager.
-     */
+    // This is used to load the 'lo-bootstrap' library on application
+    // startup. The library has already been unpacked into
+    // /data/data/<app name>/lib/liblo-bootstrap.so at installation
+    // time by the package manager.
     static {
         System.loadLibrary("lo-bootstrap");
     }

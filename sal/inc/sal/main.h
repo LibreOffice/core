@@ -133,6 +133,7 @@ static int sal_main_with_args(int argc, char **argv); \
 \
 void lo_main(int argc, char **argv) \
 { \
+    LOGI("in lo_main, argc=%d, argv[0]=%s, argv[1]=%s", argc, argv[0], argv[1]); \
     sal_detail_initialize(argc, argv); \
     sal_main_with_args(argc, argv); \
     sal_detail_deinitialize(); \
@@ -143,7 +144,7 @@ static int sal_main(void); \
 \
 void lo_main(int argc, char **argv) \
 { \
-    LOGI("in lo_main, argc=%d, argv[0]=%s, argv[1]=%s", argc, argv[0], argv[1]);    \
+    LOGI("in lo_main, argc=%d, argv[0]=%s, argv[1]=%s", argc, argv[0], argv[1]); \
     sal_detail_initialize(argc, argv); \
     sal_main(); \
     sal_detail_deinitialize(); \

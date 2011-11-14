@@ -28,19 +28,61 @@
  */
 
 #include <string.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+
 #include <unistd.h>
 #include <fcntl.h>
 #include <dlfcn.h>
+
 #include <jni.h>
+
 #include <linux/elf.h>
+
 #include <android/log.h>
+
+#include <../../../inc/osl/android-lo-bootstrap.h>
+
+#include "android_native_app_glue.c"
+
+#undef LOGI
+#undef LOGW
 
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "lo-bootstrap", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "lo-bootstrap", __VA_ARGS__))
 
+struct engine {
+    int dummy;
+};
+
+static struct android_app *app;
+static JNIEnv *jni_env;
+static const char **library_locations;
+static int (*lo_main)(int, const char **);
+static int lo_main_argc;
+static const char **lo_main_argv;
+
+static void
+engine_handle_cmd(struct android_app* app,
+                  int32_t cmd)
+{
+    struct engine* engine = (struct engine*)app->userData;
+    switch (cmd) {
+    case APP_CMD_SAVE_STATE:
+        break;
+    case APP_CMD_INIT_WINDOW:
+        break;
+    case APP_CMD_TERM_WINDOW:
+        break;
+    case APP_CMD_GAINED_FOCUS:
+        break;
+    case APP_CMD_LOST_FOCUS:
+        break;
+    }
+}
+
 static char *
-read_section(JNIEnv *env,
-             int fd,
+read_section(int fd,
              Elf32_Shdr *shdr)
 {
     char *result;
@@ -60,168 +102,97 @@ read_section(JNIEnv *env,
     return result;
 }
 
+static void
+free_ptrarray(void **pa)
+{
+    void **rover = pa;
+
+    while (*rover != NULL)
+        free(*rover++);
+
+    free(pa);
+}
+
+static void
+setup_library_locations(const char *lib_dir)
+{
+    int n;
+    char *ld_library_path;
+    char *elem;
+
+    ld_library_path = getenv("LD_LIBRARY_PATH");
+    if (ld_library_path == NULL)
+        ld_library_path = "/vendor/lib:/system/lib";
+    ld_library_path = strdup(ld_library_path);
+
+    n = 1;
+    elem = ld_library_path;
+    while ((elem = strchr(elem, ':')) != NULL) {
+        n++;
+        elem++;
+    }
+    library_locations = malloc((n + 2) * sizeof(char *));
+    library_locations[0] = lib_dir;
+    elem = ld_library_path;
+    library_locations[1] = elem;
+    n = 2;
+    while ((elem = strchr(elem, ':')) != NULL) {
+        *elem = '\0';
+        elem++;
+        library_locations[n++] = elem;
+    }
+    library_locations[n] = NULL;
+
+    for (n = 0; library_locations[n] != NULL; n++)
+        LOGI("library_locations[%d] = %s", n, library_locations[n]);
+}
+
 jobjectArray
 Java_org_libreoffice_android_Bootstrap_dlneeds(JNIEnv* env,
                                                jobject clazz,
                                                jstring library)
 {
-    int i, fd;
+    char **needed;
     int n_needed;
     const jbyte *libName;
+    jclass String;
     jobjectArray result;
-    char *shstrtab, *dynstr;
-    Elf32_Ehdr hdr;
-    Elf32_Shdr shdr;
-    Elf32_Dyn dyn;
-
-    /* Open library and read ELF header */
 
     libName = (*env)->GetStringUTFChars(env, library, NULL);
 
-    LOGI("dlneeds(%s)\n", libName);
-
-    fd = open (libName, O_RDONLY);
+    needed = lo_dlneeds(libName);
 
     (*env)->ReleaseStringUTFChars(env, library, libName);
 
-    if (fd == -1) {
-        LOGI("Could not open library");
+    if (needed == NULL)
+        return NULL;
+
+    n_needed = 0;
+    while (needed[n_needed] != NULL)
+        n_needed++;
+
+    /* Allocate return value */
+
+    String = (*env)->FindClass(env, "java/lang/String");
+    if (String == NULL) {
+        LOGI("Could not find the String class");
+        free_ptrarray((void **) needed);
         return NULL;
     }
 
-    if (read(fd, &hdr, sizeof(hdr)) < sizeof(hdr)) {
-        close(fd);
-        LOGI("Could not read ELF header");
+    result = (*env)->NewObjectArray(env, n_needed, String, NULL);
+    if (result == NULL) {
+        LOGI("Could not create the String array");
+        free_ptrarray((void **) needed);
         return NULL;
     }
 
-    /* Read in .shstrtab */
+    for (n_needed = 0; needed[n_needed] != NULL; n_needed++)
+        (*env)->SetObjectArrayElement(env, result, n_needed, (*env)->NewStringUTF(env, needed[n_needed]));
 
-    if (lseek(fd, hdr.e_shoff + hdr.e_shstrndx * sizeof(shdr), SEEK_SET) < 0) {
-        close(fd);
-        LOGI("Could not seek to .shstrtab section header");
-        return NULL;
-    }
-    if (read(fd, &shdr, sizeof(shdr)) < sizeof(shdr)) {
-        close(fd);
-        LOGI("Could not read section header");
-        return NULL;
-    }
+    free_ptrarray((void **) needed);
 
-    shstrtab = read_section(env, fd, &shdr);
-    if (shstrtab == NULL)
-        return NULL;
-
-    /* Read section headers, looking for .dynstr section */
-
-    if (lseek(fd, hdr.e_shoff, SEEK_SET) < 0) {
-        close(fd);
-        LOGI("Could not seek to section headers");
-        return NULL;
-    }
-    for (i = 0; i < hdr.e_shnum; i++) {
-        if (read(fd, &shdr, sizeof(shdr)) < sizeof(shdr)) {
-            close(fd);
-            LOGI("Could not read section header");
-            return NULL;
-        }
-        if (shdr.sh_type == SHT_STRTAB &&
-            strcmp(shstrtab + shdr.sh_name, ".dynstr") == 0) {
-            dynstr = read_section(env, fd, &shdr);
-            if (dynstr == NULL) {
-                free(shstrtab);
-                return NULL;
-            }
-            break;
-        }
-    }
-
-    if (i == hdr.e_shnum) {
-        close(fd);
-        LOGI("No .dynstr section");
-        return NULL;
-    }
-
-    /* Read section headers, looking for .dynamic section */
-
-    if (lseek(fd, hdr.e_shoff, SEEK_SET) < 0) {
-        close(fd);
-        LOGI("Could not seek to section headers");
-        return NULL;
-    }
-    for (i = 0; i < hdr.e_shnum; i++) {
-        if (read(fd, &shdr, sizeof(shdr)) < sizeof(shdr)) {
-            close(fd);
-            LOGI("Could not read section header");
-            return NULL;
-        }
-        if (shdr.sh_type == SHT_DYNAMIC) {
-            int dynoff;
-            int *libnames;
-            jclass String;
-
-            /* Count number of DT_NEEDED entries */
-            n_needed = 0;
-            if (lseek(fd, shdr.sh_offset, SEEK_SET) < 0) {
-                close(fd);
-                LOGI("Could not seek to .dynamic section");
-                return NULL;
-            }
-            for (dynoff = 0; dynoff < shdr.sh_size; dynoff += sizeof(dyn)) {
-                if (read(fd, &dyn, sizeof(dyn)) < sizeof(dyn)) {
-                    close(fd);
-                    LOGI("Could not read .dynamic entry");
-                    return NULL;
-                }
-                if (dyn.d_tag == DT_NEEDED)
-                    n_needed++;
-            }
-
-            LOGI("Found %d DT_NEEDED libs", n_needed);
-
-            /* Allocate return value */
-
-            String = (*env)->FindClass(env, "java/lang/String");
-            if (String == NULL) {
-                close(fd);
-                LOGI("Could not find the String class");
-                return NULL;
-            }
-
-            result = (*env)->NewObjectArray(env, n_needed, String, NULL);
-            if (result == NULL) {
-                close (fd);
-                LOGI("Could not create the String array");
-                return NULL;
-            }
-
-            n_needed = 0;
-            if (lseek(fd, shdr.sh_offset, SEEK_SET) < 0) {
-                close(fd);
-                LOGI("Could not seek to .dynamic section");
-                return NULL;
-            }
-            for (dynoff = 0; dynoff < shdr.sh_size; dynoff += sizeof(dyn)) {
-                if (read(fd, &dyn, sizeof(dyn)) < sizeof(dyn)) {
-                    close(fd);
-                    LOGI("Could not read .dynamic entry");
-                    return NULL;
-                }
-                if (dyn.d_tag == DT_NEEDED) {
-                    LOGI("needs: %s\n", dynstr + dyn.d_un.d_val);
-                    (*env)->SetObjectArrayElement(env, result, n_needed, (*env)->NewStringUTF(env, dynstr + dyn.d_un.d_val));
-                    n_needed++;
-                }
-            }
-
-            close(fd);
-            free(dynstr);
-            free(shstrtab);
-            return result;
-        }
-    }
-
-    return NULL;
+    return result;
 }
 
 jint
@@ -230,13 +201,10 @@ Java_org_libreoffice_android_Bootstrap_dlopen(JNIEnv* env,
                                               jstring library)
 {
     const jbyte *libName = (*env)->GetStringUTFChars(env, library, NULL);
-    void *p = dlopen (libName, RTLD_LOCAL);
-    LOGI("dlopen(%s) = %p", libName, p);
+    void *p = lo_dlopen (libName);
+
     (*env)->ReleaseStringUTFChars(env, library, libName);
-    if (p == NULL) {
-        LOGI(dlerror());
-        return 0;
-    }
+
     return (jint) p;
 }
 
@@ -247,13 +215,10 @@ Java_org_libreoffice_android_Bootstrap_dlsym(JNIEnv* env,
                                              jstring symbol)
 {
     const jbyte *symName = (*env)->GetStringUTFChars(env, symbol, NULL);
-    void *p = dlsym ((void *)handle, symName);
-    LOGI("dlsym(%p,%s) = %p", handle, symName, p);
+    void *p = lo_dlsym ((void *) handle, symName);
+
     (*env)->ReleaseStringUTFChars(env, symbol, symName);
-    if (p == NULL) {
-        LOGI(dlerror());
-        return 0;
-    }
+
     return (jint) p;
 }
 
@@ -281,9 +246,7 @@ Java_org_libreoffice_android_Bootstrap_dlcall(JNIEnv* env,
         }
         argv[argc] = NULL;
 
-        int (*fp)(int, const char **) = function;
-
-        result = fp(argc, argv);
+        result = lo_dlcall_argc_argv((void *) function, argc, argv);
 
         for (i = 0; i < argc; i++)
             (*env)->ReleaseStringUTFChars(env, (*env)->GetObjectArrayElement(env, argument, i), argv[i]);
@@ -292,8 +255,379 @@ Java_org_libreoffice_android_Bootstrap_dlcall(JNIEnv* env,
         return result;
     }
 
-    /* To be implemented */
     return 0;
+}
+
+jboolean
+Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2(JNIEnv* env,
+                                                                  jobject this,
+                                                                  jstring dataDir)
+{
+    int i;
+    const jbyte *dataDirPath;
+    char *lib_dir;
+
+    LOGI("in %s! this=%p", __FUNCTION__, this);
+
+    dataDirPath = (*env)->GetStringUTFChars(env, dataDir, NULL);
+
+    lib_dir = malloc(strlen(dataDirPath) + 5);
+    strcpy(lib_dir, dataDirPath);
+    strcat(lib_dir, "/lib");
+
+    (*env)->ReleaseStringUTFChars(env, dataDir, dataDirPath);
+
+    setup_library_locations(lib_dir);
+
+    return JNI_TRUE;
+}
+
+jboolean
+Java_org_libreoffice_android_Bootstrap_setup__ILjava_lang_Object_2(JNIEnv* env,
+                                                                   jobject this,
+                                                                   void *lo_main_ptr,
+                                                                   jobject lo_main_argument)
+{
+    jclass StringArray;
+    int i;
+
+    LOGI("in %s! this=%p", __FUNCTION__, this);
+
+    lo_main = lo_main_ptr;
+
+    StringArray = (*env)->FindClass(env, "[Ljava/lang/String;");
+    if (StringArray == NULL) {
+        LOGI("Could not find String[] class");
+        return JNI_FALSE;
+    }
+
+    if (!(*env)->IsInstanceOf(env, lo_main_argument, StringArray)) {
+        LOGI("lo_main_argument is not a String[]?");
+        return JNI_FALSE;
+    }
+
+    lo_main_argc = (*env)->GetArrayLength(env, lo_main_argument);
+    lo_main_argv = malloc(sizeof(char *) * (lo_main_argc+1));
+
+    for (i = 0; i < lo_main_argc; i++) {
+        const jbyte *s = (*env)->GetStringUTFChars(env, (*env)->GetObjectArrayElement(env, lo_main_argument, i), NULL);
+        lo_main_argv[i] = strdup(s);
+        (*env)->ReleaseStringUTFChars(env, (*env)->GetObjectArrayElement(env, lo_main_argument, i), s);
+        LOGI("argv[%d] = %s", i, lo_main_argv[i]);
+    }
+    lo_main_argv[lo_main_argc] = NULL;
+
+    return JNI_TRUE;
+}
+
+char **
+lo_dlneeds(const char *library)
+{
+    int i, fd;
+    int n_needed;
+    char **result;
+    char *shstrtab, *dynstr;
+    Elf32_Ehdr hdr;
+    Elf32_Shdr shdr;
+    Elf32_Dyn dyn;
+
+    /* Open library and read ELF header */
+
+    LOGI("lo_dlneeds(%s)\n", library);
+    fd = open(library, O_RDONLY);
+
+    if (fd == -1) {
+        LOGI("Could not open library");
+        return NULL;
+    }
+
+    if (read(fd, &hdr, sizeof(hdr)) < sizeof(hdr)) {
+        LOGI("Could not read ELF header");
+        close(fd);
+        return NULL;
+    }
+
+    /* Read in .shstrtab */
+
+    if (lseek(fd, hdr.e_shoff + hdr.e_shstrndx * sizeof(shdr), SEEK_SET) < 0) {
+        LOGI("Could not seek to .shstrtab section header");
+        close(fd);
+        return NULL;
+    }
+    if (read(fd, &shdr, sizeof(shdr)) < sizeof(shdr)) {
+        LOGI("Could not read section header");
+        close(fd);
+        return NULL;
+    }
+
+    shstrtab = read_section(fd, &shdr);
+    if (shstrtab == NULL)
+        return NULL;
+
+    /* Read section headers, looking for .dynstr section */
+
+    if (lseek(fd, hdr.e_shoff, SEEK_SET) < 0) {
+        LOGI("Could not seek to section headers");
+        close(fd);
+        return NULL;
+    }
+    for (i = 0; i < hdr.e_shnum; i++) {
+        if (read(fd, &shdr, sizeof(shdr)) < sizeof(shdr)) {
+            LOGI("Could not read section header");
+            close(fd);
+            return NULL;
+        }
+        if (shdr.sh_type == SHT_STRTAB &&
+            strcmp(shstrtab + shdr.sh_name, ".dynstr") == 0) {
+            dynstr = read_section(fd, &shdr);
+            if (dynstr == NULL) {
+                free(shstrtab);
+                return NULL;
+            }
+            break;
+        }
+    }
+
+    if (i == hdr.e_shnum) {
+        LOGI("No .dynstr section");
+        close(fd);
+        return NULL;
+    }
+
+    /* Read section headers, looking for .dynamic section */
+
+    if (lseek(fd, hdr.e_shoff, SEEK_SET) < 0) {
+        LOGI("Could not seek to section headers");
+        close(fd);
+        return NULL;
+    }
+    for (i = 0; i < hdr.e_shnum; i++) {
+        if (read(fd, &shdr, sizeof(shdr)) < sizeof(shdr)) {
+            LOGI("Could not read section header");
+            close(fd);
+            return NULL;
+        }
+        if (shdr.sh_type == SHT_DYNAMIC) {
+            int dynoff;
+            int *libnames;
+
+            /* Count number of DT_NEEDED entries */
+            n_needed = 0;
+            if (lseek(fd, shdr.sh_offset, SEEK_SET) < 0) {
+                LOGI("Could not seek to .dynamic section");
+                close(fd);
+                return NULL;
+            }
+            for (dynoff = 0; dynoff < shdr.sh_size; dynoff += sizeof(dyn)) {
+                if (read(fd, &dyn, sizeof(dyn)) < sizeof(dyn)) {
+                    LOGI("Could not read .dynamic entry");
+                    close(fd);
+                    return NULL;
+                }
+                if (dyn.d_tag == DT_NEEDED)
+                    n_needed++;
+            }
+
+            LOGI("Found %d DT_NEEDED libs", n_needed);
+
+            result = malloc((n_needed+1) * sizeof(char *));
+
+            n_needed = 0;
+            if (lseek(fd, shdr.sh_offset, SEEK_SET) < 0) {
+                LOGI("Could not seek to .dynamic section");
+                close(fd);
+                free(result);
+                return NULL;
+            }
+            for (dynoff = 0; dynoff < shdr.sh_size; dynoff += sizeof(dyn)) {
+                if (read(fd, &dyn, sizeof(dyn)) < sizeof(dyn)) {
+                    LOGI("Could not read .dynamic entry");
+                    close(fd);
+                    free(result);
+                    return NULL;
+                }
+                if (dyn.d_tag == DT_NEEDED) {
+                    LOGI("needs: %s\n", dynstr + dyn.d_un.d_val);
+                    result[n_needed] = strdup(dynstr + dyn.d_un.d_val);
+                    n_needed++;
+                }
+            }
+
+            close(fd);
+            free(dynstr);
+            free(shstrtab);
+            result[n_needed] = NULL;
+            return result;
+        }
+    }
+
+    return NULL;
+}
+
+void *
+lo_dlopen(const char *library)
+{
+    /*
+     * We should *not* try to just dlopen() the bare library name
+     * first, as the stupid dynamic linker remembers for each library
+     * basename if loading it has failed. Thus if you try loading it
+     * once, and it fails because of missing needed libraries, and
+     * your load those, and then try again, it fails with an
+     * infuriating message "failed to load previously" in the log.
+     *
+     * We *must* first dlopen() all needed libraries, recursively. It
+     * shouldn't matter if we dlopen() a library that already is
+     * loaded, dlopen() just returns the same value then.
+     */
+
+    typedef struct loadedLib {
+        const char *name;
+        void *handle;
+        struct loadedLib *next;
+    } *loadedLib;
+    static loadedLib loaded_libraries = NULL;
+
+    loadedLib rover;
+    loadedLib new_loaded_lib;
+
+    struct stat st;
+    void *p;
+    char *full_name;
+    char **needed;
+    int i;
+    int found = 0;
+
+    rover = loaded_libraries;
+    while (rover != NULL &&
+           strcmp(rover->name, library) != 0)
+        rover = rover->next;
+
+    if (rover != NULL)
+        return rover->handle;
+
+    LOGI("lo_dlopen(%s)", library);
+
+    if (library[0] == '/') {
+        full_name = strdup(library);
+
+        if (stat(full_name, &st) == 0 &&
+            S_ISREG(st.st_mode))
+            found = 1;
+        else
+            free(full_name);
+    } else {
+        for (i = 0; !found && library_locations[i] != NULL; i++) {
+            full_name = malloc(strlen(library_locations[i]) + 1 + strlen(library) + 1);
+            strcpy(full_name, library_locations[i]);
+            strcat(full_name, "/");
+            strcat(full_name, library);
+
+            if (stat(full_name, &st) == 0 &&
+                S_ISREG(st.st_mode))
+                found = 1;
+            else
+                free(full_name);
+        }
+    }
+
+    if (!found) {
+        LOGI("Library %s not found", library);
+        return NULL;
+    }
+
+    needed = lo_dlneeds(full_name);
+    if (needed == NULL) {
+        free(full_name);
+        return NULL;
+    }
+
+    for (i = 0; needed[i] != NULL; i++) {
+        if (lo_dlopen(needed[i]) == NULL) {
+            free_ptrarray((void **) needed);
+            free(full_name);
+            return NULL;
+        }
+    }
+
+    p = dlopen(full_name, RTLD_LOCAL);
+    LOGI("dlopen(%s) = %p", full_name, p);
+    free(full_name);
+    if (p == NULL)
+        LOGI(dlerror());
+
+    new_loaded_lib = malloc(sizeof(*new_loaded_lib));
+    new_loaded_lib->name = strdup(library);
+    new_loaded_lib->handle = p;
+
+    new_loaded_lib->next = loaded_libraries;
+    loaded_libraries = new_loaded_lib;
+
+    return p;
+}
+
+void *
+lo_dlsym(void *handle,
+         const char *symbol)
+{
+    void *p = dlsym(handle, symbol);
+    LOGI("dlsym(%p, %s) = %p", handle, symbol, p);
+    if (p == NULL)
+        LOGI(dlerror());
+    return p;
+}
+
+int
+lo_dlcall_argc_argv(void *function,
+                    int argc,
+                    const char **argv)
+{
+    int (*fp)(int, const char **) = function;
+    int result = fp(argc, argv);
+
+    return result;
+}
+
+void android_main(struct android_app* state)
+{
+    struct engine engine;
+
+    LOGI("here we are %s:%d", __FUNCTION__, __LINE__);
+
+    app = state;
+
+    memset(&engine, 0, sizeof(engine));
+    state->userData = &engine;
+    state->onAppCmd = engine_handle_cmd;
+
+    char cwd[1000];
+    getcwd(cwd, sizeof(cwd));
+    LOGI("cwd=%s", cwd);
+
+    // lo_main(lo_main_argc, lo_main_argv);
+
+    // loop waiting for stuff to do.
+
+    while (1) {
+        // Read all pending events.
+        int ident;
+        int events;
+        struct android_poll_source* source;
+
+        while ((ident=ALooper_pollAll(-1, NULL, &events,
+                                      (void**)&source)) >= 0) {
+            LOGI("got an event ident=%d", ident);
+
+            // Process this event.
+            if (source != NULL) {
+                source->process(state, source);
+            }
+
+            // Check if we are exiting.
+            if (state->destroyRequested != 0) {
+                return;
+            }
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
