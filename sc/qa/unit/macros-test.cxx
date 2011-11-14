@@ -64,7 +64,6 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
@@ -116,7 +115,7 @@ public:
     virtual bool load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData);
     ScDocShellRef load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
         const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType=0);
-    uno::Reference< com::sun::star::frame::XModel > loadFromDesktop(const rtl::OUString& rURL);
+    uno::Reference< com::sun::star::lang::XComponent > loadFromDesktop(const rtl::OUString& rURL);
 
     void createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath);
 
@@ -173,7 +172,7 @@ ScDocShellRef ScMacrosTest::load(const rtl::OUString &rFilter, const rtl::OUStri
     return xDocShRef;
 }
 
-uno::Reference< com::sun::star::frame::XModel > ScMacrosTest::loadFromDesktop(const rtl::OUString& rURL)
+uno::Reference< com::sun::star::lang::XComponent > ScMacrosTest::loadFromDesktop(const rtl::OUString& rURL)
 {
     uno::Reference< com::sun::star::frame::XComponentLoader> xLoader = uno::Reference< com::sun::star::frame::XComponentLoader >( mxDesktop, UNO_QUERY );
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > args(1);
@@ -184,9 +183,8 @@ uno::Reference< com::sun::star::frame::XModel > ScMacrosTest::loadFromDesktop(co
         com::sun::star::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
     args[0].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
     uno::Reference< com::sun::star::lang::XComponent> xComponent= xLoader->loadComponentFromURL(rURL, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")), 0, args);
-    uno::Reference< com::sun::star::frame::XModel > xModel( xComponent, UNO_QUERY );
     CPPUNIT_ASSERT_MESSAGE("", xComponent.is());
-    return xModel;
+    return xComponent;
 }
 
 
@@ -219,9 +217,9 @@ void ScMacrosTest::testStarBasic()
     createFileURL(aFileNameBase, aFileExtension, aFileName);
     rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[0].pName << " Test" << std::endl;
-    uno::Reference< com::sun::star::frame::XModel > xModel = loadFromDesktop(aFileName);
+    uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName);
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xModel.is());
+    CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xComponent.is());
 
     rtl::OUString aURL(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:Standard.Module1.Macro1?language=Basic&location=document"));
     String sUrl = aURL;
@@ -230,13 +228,13 @@ void ScMacrosTest::testStarBasic()
     Sequence< Any > aOutParam;
     Sequence< uno::Any > aParams;
 
-    com::sun::star::uno::Reference< com::sun::star::lang::XUnoTunnel >  xObjShellTunnel( xModel,com::sun::star::uno:: UNO_QUERY_THROW );
-    SfxObjectShell* pFoundShell = reinterpret_cast<SfxObjectShell*>( xObjShellTunnel->getSomething(SfxObjectShell::getUnoTunnelId()));
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* xDocSh = ( ScDocShell*)pFoundShell;
+    ScDocShell* xDocSh = static_cast<ScDocShell*>(pFoundShell);
     ScDocument* pDoc = xDocSh->GetDocument();
 
-    pFoundShell->CallXScript(xModel, sUrl, aParams, aRet, aOutParamIndex,aOutParam);
+    pFoundShell->CallXScript(xComponent, sUrl, aParams, aRet, aOutParamIndex,aOutParam);
     double aValue;
     pDoc->GetValue(0,0,0,aValue);
     std::cout << "returned value = " << aValue << std::endl;
@@ -270,26 +268,21 @@ void ScMacrosTest::testVba()
     {
         rtl::OUString aFileName;
         createFileURL(testInfo[i].sFileBaseName, aFileExtension, aFileName);
-        uno::Reference< com::sun::star::frame::XModel > xModel = loadFromDesktop(aFileName);
+        uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName);
         rtl::OUString sMsg( RTL_CONSTASCII_USTRINGPARAM("Failed to load ") );
         sMsg.concat( aFileName );
-        CPPUNIT_ASSERT_MESSAGE( rtl::OUStringToOString( sMsg, RTL_TEXTENCODING_UTF8 ).getStr(), xModel.is() );
+        CPPUNIT_ASSERT_MESSAGE( rtl::OUStringToOString( sMsg, RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );
 
-        //is it really the right way to call a vba macro through CallXScript?
-        //it seems that the basic ide does it differently, but then we would need to init all parts ourself
-        //the problem is that CallXScript inits the basic part
-        ////BasicIDE::RunMethod takes an SbMethod as parametre
         String sUrl = testInfo[i].sMacroUrl;
         Any aRet;
         Sequence< sal_Int16 > aOutParamIndex;
         Sequence< Any > aOutParam;
         Sequence< uno::Any > aParams;
 
-        com::sun::star::uno::Reference< com::sun::star::lang::XUnoTunnel >  xObjShellTunnel( xModel,com::sun::star::uno:: UNO_QUERY_THROW );
-        SfxObjectShell* pFoundShell = reinterpret_cast<SfxObjectShell*>( xObjShellTunnel->getSomething(SfxObjectShell::getUnoTunnelId()));
+        SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
 
         CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-        pFoundShell->CallXScript(xModel, sUrl, aParams, aRet, aOutParamIndex,aOutParam);
+        pFoundShell->CallXScript(xComponent, sUrl, aParams, aRet, aOutParamIndex,aOutParam);
         rtl::OUString aStringRes;
         aRet >>= aStringRes;
         std::cout << "value of Ret " << rtl::OUStringToOString( aStringRes, RTL_TEXTENCODING_UTF8 ).getStr() << std::endl;
