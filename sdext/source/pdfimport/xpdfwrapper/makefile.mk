@@ -41,16 +41,12 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 CFLAGS+=-DSYSTEM_ZLIB
 .ENDIF
 
-.IF "$(ENABLE_PDFIMPORT)" == "NO"
+.IF "$(ENABLE_PDFIMPORT)" == "NO" || "$(SYSTEM_POPPLER)" != "YES"
 @all:
     @echo "PDF Import extension disabled."
 .ENDIF
 
-.IF "$(SYSTEM_POPPLER)" == "YES"
 CFLAGS += $(POPPLER_CFLAGS) -DSYSTEM_POPPLER
-.ELSE
-CFLAGS += -I$(SOLARINCDIR)$/xpdf
-.ENDIF
 
 # --- Files --------------------------------------------------------
 UWINAPILIB:=
@@ -61,22 +57,8 @@ APP1OBJS= \
 
 APP1STDLIBS+=$(ZLIB3RDLIB)
 
-.IF "$(SYSTEM_POPPLER)" == "YES"
 APP1STDLIBS+=$(POPPLER_LIBS)
-.ELSE
-.IF "$(GUI)" == "WNT"
-.IF "$(COM)"=="GCC"
-APP1STDLIBS+=-lxpdf -lfofi -lGoo -lgdi32 -ladvapi32
-.ELSE
-APP1STDLIBS+=xpdf.lib fofi.lib Goo.lib gdi32.lib advapi32.lib
-.ENDIF
-.ELSE
-.IF "$(OS)" == "MACOSX" && "$(GUIBASE)"=="unx"
-APP1STDLIBS+=-lobjc
-.ENDIF
-APP1STDLIBS+=-lxpdf -lfofi -lGoo
-.ENDIF
-.ENDIF
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk

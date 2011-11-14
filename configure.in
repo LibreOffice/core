@@ -419,7 +419,7 @@ AC_ARG_ENABLE(presenter-console,
 [  --enable-presenter-console          enables the build of the Presenter Console extension
 ],,)
 AC_ARG_ENABLE(pdfimport,
-[  --enable-pdfimport          enables the build of the PDF Import extension and xpdf
+[  --enable-pdfimport          enables the build of the PDF Import extension
 ],,)
 AC_ARG_ENABLE(wiki-publisher,
 [  --enable-wiki-publisher      enables the build of the Wiki Publisher extension
@@ -5950,22 +5950,16 @@ if test -n "$enable_pdfimport" -a "$enable_pdfimport" != "no"; then
   dnl ===================================================================
   dnl Check for system poppler
   dnl ===================================================================
-  AC_MSG_CHECKING([which pdf backend to use])
+  AC_MSG_CHECKING([whether to use system pdf backend])
   if test -n "$with_system_poppler" -o -n "$with_system_libs" && \
        test "$with_system_poppler" != "no"; then
       AC_MSG_RESULT([external])
       SYSTEM_POPPLER=YES
       PKG_CHECK_MODULES( POPPLER, poppler >= 0.8.0 )
   else
-      AC_MSG_RESULT([internal])
+      AC_MSG_RESULT([no])
       SYSTEM_POPPLER=NO
-      BUILD_TYPE="$BUILD_TYPE XPDF"
-      AC_MSG_CHECKING([for xpdf module])
-      if test -d ./xpdf; then
-       AC_MSG_RESULT([OK])
-      else
-        AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
-      fi
+      ENABLE_PDFIMPORT=NO
   fi
 else
    AC_MSG_RESULT([no])
