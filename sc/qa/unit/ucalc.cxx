@@ -452,7 +452,7 @@ void testFuncVLOOKUP(ScDocument* pDoc)
         {  "50",   "7" },
         {  "60",   "8" },
         {  "70",   "9" },
-        {   "A",  "10" },
+        {   "B",  "10" },
         {   "B",  "11" },
         {   "C",  "12" },
         {   "D",  "13" },
@@ -472,26 +472,26 @@ void testFuncVLOOKUP(ScDocument* pDoc)
 
     // Formula data
     struct {
-        const char* pLookup; const char* pFormula; double fResult;
+        const char* pLookup; const char* pFormula; const char* pRes;
     } aChecks[] = {
         { "Lookup",  "Formula", 0 },
-        { "12",      "=VLOOKUP(D2;A2:B14;2;1)",   3 },
-        { "29",      "=VLOOKUP(D3;A2:B14;2;1)",   4 },
-        { "31",      "=VLOOKUP(D4;A2:B14;2;1)",   5 },
-        { "45",      "=VLOOKUP(D5;A2:B14;2;1)",   6 },
-        { "56",      "=VLOOKUP(D6;A2:B14;2;1)",   7 },
-        { "65",      "=VLOOKUP(D7;A2:B14;2;1)",   8 },
-        { "78",      "=VLOOKUP(D8;A2:B14;2;1)",   9 },
-        { "Andy",    "=VLOOKUP(D9;A2:B14;2;1)",  10 },
-        { "Bruce",   "=VLOOKUP(D10;A2:B14;2;1)", 11 },
-        { "Charlie", "=VLOOKUP(D11;A2:B14;2;1)", 12 },
-        { "David",   "=VLOOKUP(D12;A2:B14;2;1)", 13 },
-        { "Edward",  "=VLOOKUP(D13;A2:B14;2;1)", 14 },
-        { "Frank",   "=VLOOKUP(D14;A2:B14;2;1)", 15 },
-        { "Henry",   "=VLOOKUP(D15;A2:B14;2;1)", 15 },
-        { "100",     "=VLOOKUP(D16;A2:B14;2;1)",  9 },
-        { "1000",    "=VLOOKUP(D17;A2:B14;2;1)",  9 },
-        { "Zena",    "=VLOOKUP(D18;A2:B14;2;1)", 15 }
+        { "12",      "=VLOOKUP(D2;A2:B14;2;1)",     "3" },
+        { "29",      "=VLOOKUP(D3;A2:B14;2;1)",     "4" },
+        { "31",      "=VLOOKUP(D4;A2:B14;2;1)",     "5" },
+        { "45",      "=VLOOKUP(D5;A2:B14;2;1)",     "6" },
+        { "56",      "=VLOOKUP(D6;A2:B14;2;1)",     "7" },
+        { "65",      "=VLOOKUP(D7;A2:B14;2;1)",     "8" },
+        { "78",      "=VLOOKUP(D8;A2:B14;2;1)",     "9" },
+        { "Andy",    "=VLOOKUP(D9;A2:B14;2;1)",  "#N/A" },
+        { "Bruce",   "=VLOOKUP(D10;A2:B14;2;1)",   "11" },
+        { "Charlie", "=VLOOKUP(D11;A2:B14;2;1)",   "12" },
+        { "David",   "=VLOOKUP(D12;A2:B14;2;1)",   "13" },
+        { "Edward",  "=VLOOKUP(D13;A2:B14;2;1)",   "14" },
+        { "Frank",   "=VLOOKUP(D14;A2:B14;2;1)",   "15" },
+        { "Henry",   "=VLOOKUP(D15;A2:B14;2;1)",   "15" },
+        { "100",     "=VLOOKUP(D16;A2:B14;2;1)",    "9" },
+        { "1000",    "=VLOOKUP(D17;A2:B14;2;1)",    "9" },
+        { "Zena",    "=VLOOKUP(D18;A2:B14;2;1)",   "15" }
     };
 
     // Insert formula data into D1:E18.
@@ -510,13 +510,13 @@ void testFuncVLOOKUP(ScDocument* pDoc)
             // Skip the header row.
             continue;
 
-        double result;
-        pDoc->GetValue(4, i, 0, result);
-        bool bGood = result == aChecks[i].fResult;
+        rtl::OUString aRes;
+        pDoc->GetString(4, i, 0, aRes);
+        bool bGood = aRes.equalsAscii(aChecks[i].pRes);
         if (!bGood)
         {
             cerr << "row " << (i+1) << ": lookup value='" << aChecks[i].pLookup
-                << "'  expected=" << aChecks[i].fResult << "  actual=" << result << endl;
+                << "'  expected='" << aChecks[i].pRes << "' actual='" << aRes << "'" << endl;
             CPPUNIT_ASSERT_MESSAGE("Unexpected result for VLOOKUP", false);
         }
     }
