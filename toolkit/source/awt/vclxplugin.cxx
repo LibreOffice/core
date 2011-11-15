@@ -65,11 +65,6 @@ void SAL_CALL VCLXPlugin::dispose() throw(uno::RuntimeException)
     VCLXWindow::dispose();
 }
 
-void VCLXPlugin::SetPlugin( ::Control *p )
-{
-    mpPlugin = p;
-}
-
 awt::Size SAL_CALL VCLXPlugin::getMinimumSize()
     throw(::com::sun::star::uno::RuntimeException)
 {

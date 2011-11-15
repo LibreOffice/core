@@ -88,18 +88,6 @@ setProperty( const uno::Reference< uno::XInterface > &xPeer,
     }
 }
 
-uno::Any TOOLKIT_DLLPUBLIC
-getProperty( const uno::Reference< uno::XInterface > &xPeer,
-                      const OUString &rName )
-{
-    uno::Reference< awt::XVclWindowPeer> xVclPeer( xPeer, uno::UNO_QUERY );
-    if ( xVclPeer.is() )
-        return xVclPeer->getProperty( rName );
-
-    uno::Reference< beans::XPropertySet > xPropSet( xPeer, uno::UNO_QUERY );
-    return xPropSet->getPropertyValue( rName );
-}
-
 } // namespace prophlp
 
 

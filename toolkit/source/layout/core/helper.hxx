@@ -121,12 +121,6 @@ protected:
 
 css::uno::Any anyFromString (const rtl::OUString &value, const css::uno::Type &type);
 
-// The native widgets wrapper hierarchy may not reflect that of the layout
-// hierarchy as some containers don't have an associated native widget.
-// Use this function to get the native parent of the given peer.
-css::uno::Reference< css::awt::XWindowPeer >
-getParent( css::uno::Reference< css::uno::XInterface > xPeer );
-
 class TOOLKIT_DLLPUBLIC WidgetFactory
 {
 public:
@@ -138,7 +132,6 @@ public:
     static css::uno::Reference< css::awt::XLayoutConstrains > createWidget( css::uno::Reference <css::awt::XToolkit > xToolkit, css::uno::Reference< css::uno::XInterface > xParent, rtl::OUString const &name, long properties);
     static css::uno::Reference <css::awt::XLayoutContainer> createContainer (rtl::OUString const& name);
     static css::uno::Reference <css::awt::XLayoutConstrains> implCreateWidget (css::uno::Reference <css::uno::XInterface> xParent, rtl::OUString name, long attributes);
-    static Window* sfx2CreateWindow (VCLXWindow** component, Window* parent, rtl::OUString const& name, long& attributes);
     static Window* layoutCreateWindow (VCLXWindow** component, Window *parent, rtl::OUString const& name, long& attributes);
 };
 

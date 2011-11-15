@@ -64,12 +64,10 @@ bool TOOLKIT_DLLPUBLIC canHandleProps( const css::uno::Reference< css::uno::XInt
 // if so which properties ?
 css::uno::Reference< css::beans::XPropertySetInfo > TOOLKIT_DLLPUBLIC queryPropertyInfo(
     const css::uno::Reference< css::uno::XInterface > &xRef );
-// set / get ...
+// set ...
 void TOOLKIT_DLLPUBLIC setProperty( const css::uno::Reference< css::uno::XInterface > &xRef,
                   const rtl::OUString &rName,
                   css::uno::Any aValue );
-css::uno::Any TOOLKIT_DLLPUBLIC getProperty( const css::uno::Reference< css::uno::XInterface > &xRef,
-                           const rtl::OUString &rName );
 } // namespace prophlp
 
 } // namespace layoutimpl

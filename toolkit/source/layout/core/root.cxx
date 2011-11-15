@@ -202,13 +202,6 @@ uno::Reference< awt::XLayoutContainer > LayoutRoot::getLayoutContainer() throw (
     return uno::Reference< awt::XLayoutContainer >();
 }
 
-// local helper ...
-void LayoutRoot::addItem( const OUString &rName,
-                          const uno::Reference< awt::XLayoutConstrains > &xRef )
-{
-    maItems[ rName ] = xRef;
-}
-
 // XNameAccess
 uno::Any SAL_CALL LayoutRoot::getByName( const OUString &rName )
     throw ( container::NoSuchElementException,

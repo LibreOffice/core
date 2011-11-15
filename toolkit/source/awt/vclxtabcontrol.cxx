@@ -240,19 +240,6 @@ void SAL_CALL VCLXTabControl::draw( sal_Int32 nX, sal_Int32 nY ) throw(uno::Runt
     VCLXWindow::draw( nX, nY );
 }
 
-void VCLXTabControl::AddChild (uno::Reference< awt::XLayoutConstrains > const& xChild)
-
-{
-#ifndef __SUNPRO_CC
-    OSL_TRACE ("%s: children: %d", __PRETTY_FUNCTION__, maChildren.size ());
-#endif
-    mIdMap[ xChild ] = mTabId++;
-    Box_Base::AddChild( xChild );
-#ifndef __SUNPRO_CC
-    OSL_TRACE ("%s: children: %d", __PRETTY_FUNCTION__, maChildren.size ());
-#endif
-}
-
 void SAL_CALL VCLXTabControl::addChild(
     const uno::Reference< awt::XLayoutConstrains > &xChild )
     throw (uno::RuntimeException, awt::MaxChildrenException)

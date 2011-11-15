@@ -47,8 +47,6 @@ public:
 
     VCLXPlugin( Window *p, WinBits b );
 
-    void SetPlugin( ::Control *p );
-
 protected:
     ~VCLXPlugin();
 

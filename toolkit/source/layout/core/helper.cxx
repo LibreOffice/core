@@ -43,24 +43,6 @@ namespace layoutimpl
 using namespace com::sun::star;
 using rtl::OUString;
 
-uno::Reference< awt::XWindowPeer >
-getParent( uno::Reference< uno::XInterface > xRef )
-{
-    do
-    {
-        uno::Reference< awt::XWindowPeer > xPeer( xRef, uno::UNO_QUERY );
-        if ( xPeer.is() )
-            return xPeer;
-
-        uno::Reference< awt::XLayoutContainer > xCont( xRef, uno::UNO_QUERY );
-        if ( xCont.is() )
-            xRef = xCont->getParent();
-    }
-    while ( xRef.is() );
-
-    return uno::Reference< awt::XWindowPeer >();
-}
-
 }
 
 #include "bin.hxx"
@@ -329,7 +311,7 @@ uno::Reference <awt::XLayoutConstrains> WidgetFactory::implCreateWidget (uno::Re
         parent = parentComponent->GetWindow ();
 
     VCLXWindow* component = 0;
-    Window* window = 0; //sfx2CreateWindow (&component, parent, name, attributes);
+    Window* window = 0;
     if (!window)
         window = layoutCreateWindow (&component, parent, name, attributes);
 
@@ -346,29 +328,6 @@ uno::Reference <awt::XLayoutConstrains> WidgetFactory::implCreateWidget (uno::Re
     }
 
     return reference;
-}
-
-extern "C" { static void SAL_CALL thisModule() {} }
-
-Window* WidgetFactory::sfx2CreateWindow (VCLXWindow** component, Window* parent, OUString const& name, long& attributes)
-{
-    OSL_TRACE("Asking sfx2: %s", OUSTRING_CSTR (name));
-
-    if (!mSfx2Library)
-    {
-        OUString libraryName = ::vcl::unohelper::CreateLibraryName ("sfx", sal_True);
-        mSfx2Library = osl_loadModuleRelative (&thisModule, libraryName.pData, SAL_LOADMODULE_DEFAULT);
-        if (mSfx2Library)
-        {
-            OUString functionName (RTL_CONSTASCII_USTRINGPARAM ("CreateWindow"));
-            mSfx2CreateWidget = (WindowCreator) osl_getFunctionSymbol (mSfx2Library, functionName.pData);
-        }
-    }
-
-    if (mSfx2CreateWidget)
-        return mSfx2CreateWidget (component, name, parent, attributes);
-
-    return 0;
 }
 
 Window* WidgetFactory::layoutCreateWindow (VCLXWindow** component, Window *parent, OUString const& name, long& attributes)

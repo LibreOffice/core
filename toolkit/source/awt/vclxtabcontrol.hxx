@@ -53,8 +53,6 @@ class VCLXTabControl :public VCLXWindow
 public:
     VCLXTabControl();
 
-    void AddChild (css::uno::Reference <css::awt::XLayoutConstrains> const &);
-
 protected:
     ~VCLXTabControl();
 

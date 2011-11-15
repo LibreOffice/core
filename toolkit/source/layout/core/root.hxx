@@ -95,9 +95,6 @@ public:
     LayoutRoot( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
     virtual ~LayoutRoot();
 
-    void addItem( const rtl::OUString &rName,
-                  const css::uno::Reference< css::awt::XLayoutConstrains > &xRef );
-
     void setWindow(    css::uno::Reference< css::awt::XLayoutConstrains > xPeer )
     {
         mxWindow = css::uno::Reference< css::awt::XWindow >( xPeer, css::uno::UNO_QUERY );
