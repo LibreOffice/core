@@ -32,6 +32,7 @@ PRJNAME=mysqlc
 
 TARGET=mysqlc
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN = TRUE
 LIBTARGET=NO
 EXTENSIONNAME:=mysql-connector-ooo
 
@@ -49,21 +50,6 @@ EXTENSION_VERSION_BASE=$(MYSQLC_VERSION_MAJOR).$(MYSQLC_VERSION_MINOR).$(MYSQLC_
 
 #---- extension title package name
 EXTENSION_ZIPNAME:=$(EXTENSIONNAME)
-
-#-------------------------------------------------------------------
-
-# set default symbol visibility / scope to hidden
-.IF "$(COMNAME)" == "gcc3"
-.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
- CFLAGS += -fvisibility=hidden
-.ENDIF # HAVE_GCC_VISIBILITY_FEATURE
-.ENDIF # gcc3
-
-.IF "$(COMNAME)" == "sunpro5"
-.IF "$(CCNUMVER)" >= "00050005"
- CFLAGS += -xldscope=hidden
-.ENDIF # 5.5
-.ENDIF # sunpro5
 
 #-------------------------------------------------------------------
 
@@ -178,7 +164,7 @@ SHL1STDLIBS= \
         $(SALHELPERLIB)             \
         $(CPPUHELPERLIB)
 
-SHL1VERSIONMAP=$(TARGET).map
+SHL1USE_EXPORTS = name
 SHL1LIBS=	$(LIB1TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 SHL1RPATH=OXT
