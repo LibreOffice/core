@@ -120,6 +120,5 @@ test/user-template/user/psprint/pspfontcache
 .~lock.*#
 
 # Everyone loves patching
-*.patch
 *.orig
 *.rej
