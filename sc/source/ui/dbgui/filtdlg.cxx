@@ -676,10 +676,9 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
 
     if ( aBtnCopyResult.IsChecked() )
     {
-        ScRange aTempRange;
-        sal_uInt16 nResult = aTempRange.Parse(aEdCopyArea.GetText(), pDoc, pDoc->GetAddressConvention());
+        sal_uInt16 nResult = theCopyPos.Parse(
+            aEdCopyArea.GetText(), pDoc, pDoc->GetAddressConvention());
         bCopyPosOk = ( SCA_VALID == (nResult & SCA_VALID) );
-        theCopyPos = aTempRange.aStart;
     }
 
     if ( aBtnCopyResult.IsChecked() && bCopyPosOk )
