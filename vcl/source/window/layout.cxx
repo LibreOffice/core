@@ -87,6 +87,8 @@ void Box::setAllocation(const Size &rAllocation)
     if (!nChildren)
         return;
 
+    rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
+
     sal_uInt16 nVisibleChildren = 0, nExpandChildren = 0;;
     for (sal_uInt16 i = 0; i < nChildren; ++i)
     {
@@ -94,7 +96,7 @@ void Box::setAllocation(const Size &rAllocation)
         if (!pChild->IsVisible())
             continue;
         ++nVisibleChildren;
-        bool bExpand = pChild->getChildProperty<sal_Bool>(rtl::OString(RTL_CONSTASCII_STRINGPARAM("expand")));
+        bool bExpand = pChild->getChildProperty<sal_Bool>(sExpand);
         if (bExpand)
             ++nExpandChildren;
     }
@@ -102,17 +104,14 @@ void Box::setAllocation(const Size &rAllocation)
     if (!nVisibleChildren)
         return;
 
-    sal_Int32 nLeftBorder, nTopBorder, nRightBorder, nBottomBorder;
-    GetBorder(nLeftBorder, nTopBorder, nRightBorder, nBottomBorder);
-    Point aPos(nLeftBorder, nTopBorder);
-
     Size aSize = rAllocation;
+
+    long nAllocPrimaryDimension = getPrimaryDimension(rAllocation);
 
     long nHomogeneousDimension, nExtraSpace = 0;
     if (m_bHomogeneous)
     {
-        long nBorder = getPrimaryDimensionBorders(nLeftBorder, nTopBorder, nRightBorder, nBottomBorder);
-        nHomogeneousDimension = ( ( getPrimaryDimension(rAllocation) - nBorder -
+        nHomogeneousDimension = ( ( nAllocPrimaryDimension -
                           ( nVisibleChildren - 1 ) * m_nSpacing )) / nVisibleChildren;
     }
     else if (nExpandChildren)
@@ -121,53 +120,82 @@ void Box::setAllocation(const Size &rAllocation)
         nExtraSpace = (getPrimaryDimension(rAllocation) - getPrimaryDimension(aRequisition)) / nExpandChildren;
     }
 
-    for (sal_uInt16 i = 0; i < nChildren; ++i)
+    rtl::OString sPadding(RTL_CONSTASCII_STRINGPARAM("padding"));
+    rtl::OString sPackType(RTL_CONSTASCII_STRINGPARAM("pack-type"));
+    rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
+
+    Point aPos(0, 0);
+    for (sal_Int32 ePackType = VCL_PACK_START; ePackType <= VCL_PACK_END; ++ePackType)
     {
-        Window *pChild = GetChild(i);
-        if (!pChild->IsVisible())
-            continue;
-
-        long nPadding = pChild->getChildProperty<sal_Int32>(rtl::OString(RTL_CONSTASCII_STRINGPARAM("padding")));
-
-        sal_Int32 ePacking = pChild->getChildProperty<sal_Int32>(rtl::OString(RTL_CONSTASCII_STRINGPARAM("pack-type")));
-
-        fprintf(stderr, "child packing is %d\n", ePacking);
-
-        Size aBoxSize;
-        if (m_bHomogeneous)
-            setPrimaryDimension(aBoxSize, nHomogeneousDimension);
-        else
+        if (ePackType == VCL_PACK_END)
         {
-            aBoxSize = pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
-            long nPrimaryDimension = getPrimaryDimension(aBoxSize);
-            nPrimaryDimension += nPadding;
-            bool bExpand = pChild->getChildProperty<sal_Bool>(rtl::OString(RTL_CONSTASCII_STRINGPARAM("expand")));
-            if (bExpand)
-                setPrimaryDimension(aBoxSize, nPrimaryDimension + nExtraSpace);
-        }
-        setSecondaryDimension(aBoxSize, getSecondaryDimension(aSize));
-
-        Point aChildPos(aPos);
-        long nPrimaryCoordinate = getPrimaryCoordinate(aChildPos);
-        setPrimaryCoordinate(aChildPos, nPrimaryCoordinate + nPadding);
-
-        Size aChildSize(aBoxSize);
-        bool bFill = pChild->getChildProperty<sal_Bool>(rtl::OString(RTL_CONSTASCII_STRINGPARAM("fill")), sal_True);
-        if (bFill)
-            setPrimaryDimension(aChildSize, std::max(static_cast<long>(1), getPrimaryDimension(aBoxSize)-nPadding));
-        else
-        {
-            setPrimaryDimension(aChildSize, getPrimaryDimension(pChild->GetOptimalSize(WINDOWSIZE_PREFERRED)));
-            setPrimaryCoordinate(aChildPos, getPrimaryCoordinate(aChildPos) +
-                (getPrimaryDimension(aBoxSize) - getPrimaryDimension(aChildSize)) / 2);
-            setSecondaryCoordinate(aChildPos, getSecondaryCoordinate(aChildPos) +
-                (getSecondaryDimension(aBoxSize) - getSecondaryDimension(aChildSize)) / 2);
+            long nPrimaryCoordinate = getPrimaryCoordinate(aPos);
+            setPrimaryCoordinate(aPos, nPrimaryCoordinate + nAllocPrimaryDimension);
         }
 
-        pChild->SetPosSizePixel(aChildPos, aChildSize);
-        fprintf(stderr, "child %p set to %ld %ld : %ld %ld\n", pChild, aPos.X(), aPos.Y(), aChildSize.Width(), aChildSize.Height());
-        nPrimaryCoordinate = getPrimaryCoordinate(aPos);
-        setPrimaryCoordinate(aPos, nPrimaryCoordinate + getPrimaryDimension(aBoxSize) + m_nSpacing + nPadding);
+        for (sal_uInt16 i = 0; i < nChildren; ++i)
+        {
+            Window *pChild = GetChild(i);
+            if (!pChild->IsVisible())
+                continue;
+
+            sal_Int32 ePacking = pChild->getChildProperty<sal_Int32>(sPackType);
+            fprintf(stderr, "child packing is %d\n", ePacking);
+
+            if (ePacking != ePackType)
+                continue;
+
+            long nPadding = pChild->getChildProperty<sal_Int32>(sPadding);
+
+            Size aBoxSize;
+            if (m_bHomogeneous)
+                setPrimaryDimension(aBoxSize, nHomogeneousDimension);
+            else
+            {
+                aBoxSize = pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
+                long nPrimaryDimension = getPrimaryDimension(aBoxSize);
+                nPrimaryDimension += nPadding;
+                bool bExpand = pChild->getChildProperty<bool>(sExpand);
+                if (bExpand)
+                    setPrimaryDimension(aBoxSize, nPrimaryDimension + nExtraSpace);
+            }
+            setSecondaryDimension(aBoxSize, getSecondaryDimension(aSize));
+
+            Point aChildPos(aPos);
+            Size aChildSize(aBoxSize);
+            long nPrimaryCoordinate = getPrimaryCoordinate(aPos);
+
+            bool bFill = pChild->getChildProperty<sal_Bool>(sFill, sal_True);
+            if (bFill)
+            {
+                setPrimaryDimension(aChildSize, std::max(static_cast<long>(1),
+                    getPrimaryDimension(aBoxSize) - nPadding * 2));
+
+                setPrimaryCoordinate(aChildPos, nPrimaryCoordinate + nPadding);
+            }
+            else
+            {
+                setPrimaryDimension(aChildSize,
+                    getPrimaryDimension(pChild->GetOptimalSize(WINDOWSIZE_PREFERRED)));
+
+                setPrimaryCoordinate(aChildPos, nPrimaryCoordinate +
+                    (getPrimaryDimension(aBoxSize) - getPrimaryDimension(aChildSize)) / 2);
+            }
+
+            fprintf(stderr, "child %p set to %ld %ld : %ld %ld\n",
+                pChild, aPos.X(), aPos.Y(), aChildSize.Width(), aChildSize.Height());
+            long nDiff = getPrimaryDimension(aBoxSize) + m_nSpacing;
+            if (ePackType == VCL_PACK_START)
+                setPrimaryCoordinate(aPos, nPrimaryCoordinate + nDiff);
+            else
+            {
+                setPrimaryCoordinate(aPos, nPrimaryCoordinate - nDiff);
+                setPrimaryCoordinate(aChildPos, getPrimaryCoordinate(aChildPos) -
+                    getPrimaryDimension(aChildSize));
+            }
+
+            pChild->SetPosSizePixel(aChildPos, aChildSize);
+        }
     }
 }
 

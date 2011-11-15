@@ -66,9 +66,6 @@ protected:
     virtual void setSecondaryDimension(Size &rSize, long) const = 0;
     virtual long getSecondaryCoordinate(const Point &rPos) const = 0;
     virtual void setSecondaryCoordinate(Point &rPos, long) const = 0;
-
-    virtual long getPrimaryDimensionBorders(sal_Int32 nLeftBorder, sal_Int32 nTopBorder,
-        sal_Int32 nRightBorder, sal_Int32 nBottomBorder) = 0;
 };
 
 class VCL_DLLPUBLIC VBox : public Box
@@ -111,11 +108,6 @@ protected:
     {
         rPos.setX(nPos);
     }
-    virtual long getPrimaryDimensionBorders(sal_Int32, sal_Int32 nTopBorder,
-        sal_Int32, sal_Int32 nBottomBorder)
-    {
-        return nTopBorder + nBottomBorder;
-    }
 };
 
 class VCL_DLLPUBLIC HBox : public Box
@@ -157,11 +149,6 @@ protected:
     virtual void setSecondaryCoordinate(Point &rPos, long nPos) const
     {
         rPos.setY(nPos);
-    }
-    virtual long getPrimaryDimensionBorders(sal_Int32 nLeftBorder, sal_Int32,
-        sal_Int32 nRightBorder, sal_Int32)
-    {
-        return nLeftBorder + nRightBorder;
     }
 };
 
