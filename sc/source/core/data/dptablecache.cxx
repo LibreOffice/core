@@ -586,10 +586,8 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
 
     const SCSIZE nFixedBools = 32;
     bool aBool[nFixedBools];
-    bool aTest[nFixedBools];
     SCSIZE nEntryCount = rParam.GetEntryCount();
     bool* pPasst = ( nEntryCount <= nFixedBools ? &aBool[0] : new bool[nEntryCount] );
-    bool* pTest = ( nEntryCount <= nFixedBools ? &aTest[0] : new bool[nEntryCount] );
 
     long    nPos = -1;
     SCSIZE  i    = 0;
@@ -757,20 +755,17 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
         {
             nPos++;
             pPasst[nPos] = bOk;
-            pTest[nPos] = bTestEqual;
         }
         else
         {
             if (rEntry.eConnect == SC_AND)
             {
                 pPasst[nPos] = pPasst[nPos] && bOk;
-                pTest[nPos] = pTest[nPos] && bTestEqual;
             }
             else
             {
                 nPos++;
                 pPasst[nPos] = bOk;
-                pTest[nPos] = bTestEqual;
             }
         }
         i++;
@@ -779,14 +774,11 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
     for (long j=1; j <= nPos; j++)
     {
         pPasst[0] = pPasst[0] || pPasst[j];
-        pTest[0] = pTest[0] || pTest[j];
     }
 
     bool bRet = pPasst[0];
     if (pPasst != &aBool[0])
         delete [] pPasst;
-    if (pTest != &aTest[0])
-        delete [] pTest;
 
     return bRet;
 }
