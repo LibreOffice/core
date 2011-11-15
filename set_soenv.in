@@ -837,7 +837,7 @@ if ( "@WITH_MOZILLA@" eq "YES" and "@BUILD_MOZAB@" ne "TRUE" and "@SYSTEM_MOZILL
        print "mozilla libraries yourself you have to provide the needed files\n";
        print "$OS$COM$CPU\{inc,lib,runtime\}.zip in moz/zipped/ .\n";
        print "These files can be found here:\n";
-       print "  <http://tools.openoffice.org/moz_prebuild/680/>.\n\n";
+       print "  <http://dev-www.libreoffice.org/mozilla/>.\n\n";
        die;
    }
 }
