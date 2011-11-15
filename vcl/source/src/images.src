@@ -264,6 +264,21 @@ Bitmap (SV_ICON_SIZE16_START + SV_ICON_ID_MASTER_DOCUMENT)
     File = "odm_16_8.png" ;
 };
 
+Bitmap (SV_ICON_SIZE48_START + SV_ICON_ID_HTML_DOCUMENT)
+{
+    File = "oth_48_8.png" ;
+};
+
+Bitmap (SV_ICON_SIZE32_START + SV_ICON_ID_HTML_DOCUMENT)
+{
+    File = "oth_32_8.png" ;
+};
+
+Bitmap (SV_ICON_SIZE16_START + SV_ICON_ID_HTML_DOCUMENT)
+{
+    File = "oth_16_8.png" ;
+};
+
 Bitmap (SV_ICON_SIZE48_START + SV_ICON_ID_DATABASE)
 {
     File = "odb_48_8.png" ;
@@ -450,6 +465,16 @@ Bitmap (SV_ICON_LARGE_START + SV_ICON_ID_MASTER_DOCUMENT)
 Bitmap (SV_ICON_SMALL_START + SV_ICON_ID_MASTER_DOCUMENT)
 {
     File = "sx03248.png" ;
+};
+
+Bitmap (SV_ICON_LARGE_START + SV_ICON_ID_HTML_DOCUMENT)
+{
+    File = "lx03139.png" ;
+};
+
+Bitmap (SV_ICON_SMALL_START + SV_ICON_ID_HTML_DOCUMENT)
+{
+    File = "sx03139.png" ;
 };
 
 Bitmap (SV_ICON_LARGE_START + SV_ICON_ID_DATABASE)
