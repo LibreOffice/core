@@ -30,7 +30,6 @@
 #include "precompiled_tools.hxx"
 #include <impcont.hxx>
 #include <tools/unqidx.hxx>
-#include <tools/unqid.hxx>
 
 /*************************************************************************
 |*
@@ -350,100 +349,6 @@ sal_Bool UniqueIndex::operator ==( const UniqueIndex& rIdx ) const
         return sal_True;
     else
         return sal_False;
-}
-/*************************************************************************
-|*
-|*    UniqueIdContainer::UniqueIdContainer ()
-|*
-*************************************************************************/
-
-UniqueIdContainer::UniqueIdContainer( const UniqueIdContainer& rObj )
-    : UniqueIndex( rObj )
-    , nCollectCount( rObj.nCollectCount )
-{
-    sal_uIntPtr nCur = GetCurIndex();
-
-    ImpUniqueId * pEle = (ImpUniqueId *)First();
-    while( pEle )
-    {
-        pEle->nRefCount++;
-        pEle = (ImpUniqueId *)Next();
-    }
-    Seek( nCur );
-}
-
-/*************************************************************************
-|*
-|*    UniqueIdContainer::operator = ()
-|*
-*************************************************************************/
-
-UniqueIdContainer& UniqueIdContainer::operator = ( const UniqueIdContainer & rObj )
-{
-    UniqueIndex::operator = ( rObj );
-    nCollectCount = rObj.nCollectCount;
-
-    sal_uIntPtr nCur = GetCurIndex();
-
-    ImpUniqueId * pEle = (ImpUniqueId *)First();
-    while( pEle )
-    {
-        pEle->nRefCount++;
-        pEle = (ImpUniqueId *)Next();
-    }
-    Seek( nCur );
-    return *this;
-}
-
-/*************************************************************************
-|*
-|*    UniqueIdContainer::Clear()
-|*
-*************************************************************************/
-
-void UniqueIdContainer::Clear( sal_Bool bAll )
-{
-    sal_uInt16 nFree = bAll ? 0xFFFF : 1;
-
-    ImpUniqueId* pId = (ImpUniqueId*)Last();
-    sal_Bool bLast = sal_True;
-    while ( pId )
-    {
-        if ( pId->nRefCount <= nFree )
-        {
-            ((ImpUniqueId *)Remove( pId->nId ))->Release();
-            if( bLast )
-                pId = (ImpUniqueId *)Last();
-            else
-                pId = (ImpUniqueId *)Prev();
-        }
-        else
-        {
-            pId = (ImpUniqueId *)Prev();
-            bLast = sal_False;
-        }
-    }
-}
-
-/*************************************************************************
-|*
-|*    UniqueIdContainer::CreateId()
-|*
-*************************************************************************/
-
-UniqueItemId UniqueIdContainer::CreateId()
-{
-    if( nCollectCount > 50 )
-    { // aufraeumen
-        Clear( sal_False );
-        nCollectCount = 0;
-    }
-    nCollectCount++;
-
-    ImpUniqueId * pId = new ImpUniqueId;
-    pId->nRefCount = 1;
-    pId->nId = Insert( pId );
-    return UniqueItemId( pId );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

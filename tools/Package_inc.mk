@@ -92,7 +92,6 @@ $(eval $(call gb_Package_add_file,tools_inc,inc/tools/testtoolloader.hxx,tools/t
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/time.hxx,tools/time.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/tools.h,tools/tools.h))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/toolsdllapi.h,tools/toolsdllapi.h))
-$(eval $(call gb_Package_add_file,tools_inc,inc/tools/unqid.hxx,tools/unqid.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/unqidx.hxx,tools/unqidx.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/urlobj.hxx,tools/urlobj.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/vcompat.hxx,tools/vcompat.hxx))
