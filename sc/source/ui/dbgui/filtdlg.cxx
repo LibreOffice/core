@@ -594,49 +594,50 @@ void ScFilterDlg::UpdateHdrInValueList( sal_uInt16 nList )
 {
     //! GetText / SetText ??
 
-    if (pDoc && nList > 0 && nList <= QUERY_ENTRY_COUNT)
+    if (!pDoc)
+        return;
+
+    if (nList == 0 || nList > QUERY_ENTRY_COUNT)
+        return;
+
+    sal_uInt16 nFieldSelPos = maFieldLbArr[nList-1]->GetSelectEntryPos();
+    if (!nFieldSelPos)
+        return;
+
+    SCCOL nColumn = theQueryData.nCol1 + static_cast<SCCOL>(nFieldSelPos) - 1;
+    if (!maEntryLists.count(nColumn))
     {
-        sal_uInt16 nFieldSelPos = maFieldLbArr[nList-1]->GetSelectEntryPos();
-        if ( nFieldSelPos )
-        {
-            SCCOL nColumn = theQueryData.nCol1 + static_cast<SCCOL>(nFieldSelPos) - 1;
-            if (maEntryLists.count(nColumn))
-            {
-                size_t nPos = maEntryLists[nColumn].mnHeaderPos;
-                if (nPos != INVALID_HEADER_POS)
-                {
-                    ComboBox* pValList = maValueEdArr[nList-1];
-                    size_t nListPos = nPos + 2;                 // for "empty" and "non-empty"
+        OSL_FAIL("Spalte noch nicht initialisiert");
+        return;
+    }
 
-                    TypedStrData* pHdrEntry = maEntryLists[nColumn].maList[nPos];
-                    if ( pHdrEntry )
-                    {
-                        String aHdrStr = pHdrEntry->GetString();
-                        sal_Bool bWasThere = ( pValList->GetEntry(nListPos) == aHdrStr );
-                        sal_Bool bInclude = !aBtnHeader.IsChecked();
+    size_t nPos = maEntryLists[nColumn].mnHeaderPos;
+    if (nPos == INVALID_HEADER_POS)
+        return;
 
-                        if (bInclude)           // Include entry
-                        {
-                            if (!bWasThere)
-                                pValList->InsertEntry(aHdrStr, nListPos);
-                        }
-                        else                    // Omit entry
-                        {
-                            if (bWasThere)
-                                pValList->RemoveEntry(nListPos);
-                        }
-                    }
-                    else
-                    {
-                        OSL_FAIL("Eintag in Liste nicht gefunden");
-                    }
-                }
-            }
-            else
-            {
-                OSL_FAIL("Spalte noch nicht initialisiert");
-            }
-        }
+    ComboBox* pValList = maValueEdArr[nList-1];
+    size_t nListPos = nPos + 2;                 // for "empty" and "non-empty"
+
+    TypedStrData* pHdrEntry = maEntryLists[nColumn].maList[nPos];
+    if (!pHdrEntry)
+    {
+        OSL_FAIL("Eintag in Liste nicht gefunden");
+        return;
+    }
+
+    String aHdrStr = pHdrEntry->GetString();
+    sal_Bool bWasThere = ( pValList->GetEntry(nListPos) == aHdrStr );
+    sal_Bool bInclude = !aBtnHeader.IsChecked();
+
+    if (bInclude)           // Include entry
+    {
+        if (!bWasThere)
+            pValList->InsertEntry(aHdrStr, nListPos);
+    }
+    else                    // Omit entry
+    {
+        if (bWasThere)
+            pValList->RemoveEntry(nListPos);
     }
 }
 
