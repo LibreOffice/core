@@ -30,6 +30,7 @@ PRJNAME=cppuhelper
 TARGET=cppu_unourl
 
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -51,7 +52,7 @@ SHL1STDLIBS=\
     $(CPPUNITLIB)
 SHL1IMPLIB= i$(SHL1TARGET)
 DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP= export.map
+SHL1USE_EXPORTS = name
 
 SLOFILES = $(SHL1OBJS)
 
