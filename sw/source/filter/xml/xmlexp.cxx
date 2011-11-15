@@ -90,58 +90,13 @@ using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::xforms;
 using namespace ::xmloff::token;
 
-#ifdef XML_CORE_API
-void SwXMLExport::SetCurPaM( SwPaM& rPaM, sal_Bool bWhole, sal_Bool bTabOnly )
-{
-    if( !pCurPaM )
-    {
-        pCurPaM = new SwPaM( *rPaM.End(), *rPaM.Start() );
-    }
-    else
-    {
-        *pCurPaM->GetPoint() = *rPaM.Start();
-        *pCurPaM->GetMark() = *rPaM.End();
-    }
-
-    // Set PaM to table/section start node if whole doc should be exported
-    if( bWhole )
-    {
-        SwTableNode *pTblNd = pCurPaM->GetNode()->FindTableNode();
-        if( pTblNd )
-        {
-            pCurPaM->GetPoint()->nNode = *pTblNd;
-
-            if( bTabOnly )
-                pCurPaM->GetMark()->nNode = *pTblNd->EndOfSectionNode();
-        }
-
-        SwSectionNode * pSectNd = pCurPaM->GetNode()->FindSectionNode();
-        while( pSectNd )
-        {
-            pCurPaM->GetPoint()->nNode = *pSectNd;
-
-            // SwSectionNode::FindSectionNode() returns the section node itself
-            pSectNd = pSectNd->StartOfSectionNode()->FindSectionNode();
-        }
-    }
-}
-#endif
-
 SwXMLExport::SwXMLExport(
     const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     sal_uInt16 nExportFlags)
 :   SvXMLExport( util::MeasureUnit::INCH, xServiceFactory, XML_TEXT,
         nExportFlags ),
-#ifdef XML_CORE_API
-    pCurPaM( 0 ),
-    pOrigPaM( &rPaM ),
-#endif
     pTableItemMapper( 0 ),
     pTableLines( 0 ),
-#ifdef XML_CORE_API
-    bExportWholeDoc( bExpWholeDoc ),
-    bExportFirstTableOnly( bExpFirstTableOnly ),
-#endif
     bBlock( sal_False ),
     bShowProgress( sal_True ),
     sNumberFormat(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")),
@@ -150,34 +105,6 @@ SwXMLExport::SwXMLExport(
 {
     _InitItemExport();
 }
-
-#ifdef XML_CORE_API
-
-SwXMLExport::SwXMLExport(
-    const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
-    const Reference< XModel >& rModel,
-    SwPaM& rPaM,
-    const OUString& rFileName,
-    const Reference< XDocumentHandler > & rHandler,
-    const Reference< XGraphicObjectResolver > & rEmbeddedGrfObjs,
-    sal_Bool bExpWholeDoc, sal_Bool bExpFirstTableOnly,
-    sal_Bool bShowProg )
-:   SvXMLExport( xServiceFactory, rFileName, rHandler, rModel, rEmbeddedGrfObjs,
-                 SW_MOD()->GetMetric( rPaM.GetDoc()->get(IDocumentSettingAccess::HTML_MODE) ) ),
-    pCurPaM( 0 ),
-    pOrigPaM( &rPaM ),
-    pTableItemMapper( 0 ),
-    pTableLines( 0 ),
-    bExportWholeDoc( bExpWholeDoc ),
-    bExportFirstTableOnly( bExpFirstTableOnly ),
-    bShowProgress( bShowProg ),
-    sNumberFormat(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")),
-    sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected")),
-    sCell(RTL_CONSTASCII_USTRINGPARAM("Cell"))
-{
-    _InitItemExport();
-}
-#endif
 
 void SwXMLExport::setBlockMode()
 {
@@ -922,66 +849,5 @@ OUString SAL_CALL SwXMLExport::getImplementationName()
                 "com.sun.star.comp.Writer.SwXMLExport" ) );
     }
 }
-
-
-#ifdef XML_CORE_API
-void SwXMLExport::ExportCurPaM( sal_Bool bExportWholePaM )
-{
-    sal_Bool bFirstNode = sal_True;
-    sal_Bool bExportWholeNode = bExportWholePaM;
-
-    SwXMLNumRuleInfo aPrevNumInfo;
-    SwXMLNumRuleInfo aNextNumInfo;
-
-    while( pCurPaM->GetPoint()->nNode.GetIndex() <
-                                pCurPaM->GetMark()->nNode.GetIndex() ||
-           ( pCurPaM->GetPoint()->nNode.GetIndex() ==
-                                pCurPaM->GetMark()->nNode.GetIndex() &&
-             pCurPaM->GetPoint()->nContent.GetIndex() <=
-                                pCurPaM->GetMark()->nContent.GetIndex() ) )
-    {
-        SwNode *pNd = pCurPaM->GetNode();
-
-        aNextNumInfo.Set( *pNd );
-        ExportListChange( aPrevNumInfo, aNextNumInfo );
-
-        OSL_ENSURE( !(pNd->IsGrfNode() || pNd->IsOLENode()),
-                "SwXMLExport::exportCurPaM: grf or OLE node unexpected" );
-        if( pNd->IsTxtNode() )
-        {
-            SwTxtNode* pTxtNd = pNd->GetTxtNode();
-
-            if( !bFirstNode )
-                pCurPaM->GetPoint()->nContent.Assign( pTxtNd, 0 );
-
-            ExportTxtNode( *pTxtNd, 0, STRING_LEN, bExportWholeNode );
-        }
-        else if( pNd->IsTableNode() )
-        {
-            ExportTable( *pNd->GetTableNode() );
-        }
-        else if( pNd->IsSectionNode() )
-        {
-            ExportSection( *pNd->GetSectionNode() );
-        }
-        else if( pNd == &pDoc->GetNodes().GetEndOfContent() )
-            break;
-
-        pCurPaM->GetPoint()->nNode++;   // next node
-
-        sal_uInt32 nPos = pCurPaM->GetPoint()->nNode.GetIndex();
-
-        // if not everything should be exported, the WriteAll flag must be
-        // set for all but the first and last node anyway.
-        bExportWholeNode = bExportWholePaM ||
-                           nPos != pCurPaM->GetMark()->nNode.GetIndex();
-        bFirstNode = sal_False;
-
-        aPrevNumInfo = aNextNumInfo;
-    }
-    aNextNumInfo.Reset();
-    ExportListChange( aPrevNumInfo, aNextNumInfo );
-}
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -456,42 +456,6 @@ SwXMLImport::SwXMLImport(
 
 }
 
-#ifdef XML_CORE_API
-
-SwXMLImport::SwXMLImport(
-    const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
-    SwDoc& rDoc,
-    const SwPaM& rPaM,
-    sal_Bool bLDoc,
-    sal_Bool bInsertMode,
-    sal_uInt16 nStyleFamMask,
-    const uno::Reference<   frame::XModel > & rModel,
-    const uno::Reference<   document::XGraphicObjectResolver > & rEGO,
-    SvStorage *pPkg )
-:   SvXMLImport( xServiceFactory, rModel, rEGO ),
-    bLoadDoc( bLDoc ),
-    bInsert( bInsertMode ),
-    nStyleFamilyMask( nStyleFamMask ),
-    pDocElemTokenMap( 0 ),
-    pTableElemTokenMap( 0 ),
-    pTableCellAttrTokenMap( 0 ),
-    pTableItemMapper( 0 ),
-    pSttNdIdx( 0 ),
-    bShowProgress( sal_True ),
-    bPreserveRedlineMode( sal_True ),
-    xPackage( pPkg )
-{
-    _InitItemImport();
-
-    Reference < XTextRange > xTextRange =
-        SwXTextRange::CreateTextRangeFromPosition( &rDoc, *rPaM.GetPoint(), 0 );
-    Reference < XText > xText = xTextRange->getText();
-    Reference < XTextCursor > xTextCursor =
-        xText->createTextCursorByRange( xTextRange );
-    GetTextImport()->SetCursor( xTextCursor );
-}
-#endif
-
 SwXMLImport::~SwXMLImport() throw ()
 {
     delete pDocElemTokenMap;

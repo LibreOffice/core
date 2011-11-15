@@ -121,19 +121,6 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         sal_uInt16 nImportFlags = IMPORT_ALL);
 
-#ifdef XML_CORE_API
-    SwXMLImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
-        SwDoc& rDoc,
-        const SwPaM& rPaM,
-        sal_Bool bLoadDoc,
-        sal_Bool bInsertMode,
-        sal_uInt16 nStyleFamMask,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rModel,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > &,
-        SvStorage *pPkg );
-#endif
-
     ~SwXMLImport() throw();
 
     // ::com::sun::star::xml::sax::XDocumentHandler

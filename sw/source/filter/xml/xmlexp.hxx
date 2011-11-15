@@ -59,11 +59,6 @@ class SwXMLExport : public SvXMLExport
 {
     friend class SwXMLExpContext;
 
-#ifdef XML_CORE_API
-    SwPaM                       *pCurPaM;       // the current PaM
-    SwPaM                       *pOrigPaM;      // the original PaM
-#endif
-
     SvXMLUnitConverter*         pTwipUnitConv;
     SvXMLExportItemMapper*      pTableItemMapper;
     SwXMLTableLinesCache_Impl*  pTableLines;
@@ -116,10 +111,6 @@ class SwXMLExport : public SvXMLExport
     virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
     virtual sal_Int32 GetDocumentSpecificSettings( ::std::list< SettingsGroup >& _out_rSettings );
 
-#ifdef XML_CORE_API
-    void SetCurPaM( SwPaM& rPaM, sal_Bool bWhole, sal_Bool bTabOnly );
-#endif
-
     // string constants for table cell export
     const ::rtl::OUString sNumberFormat;
     const ::rtl::OUString sIsProtected;
@@ -141,18 +132,6 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         sal_uInt16 nExportFlags = EXPORT_ALL);
 
-#ifdef XML_CORE_API
-    SwXMLExport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rModel,
-        SwPaM& rPaM,
-        const ::rtl::OUString& rFileName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > &,
-        sal_Bool bExpWholeDoc,
-        sal_Bool bExpFirstTableOnly,
-        sal_Bool bShowProgr );
-#endif
     virtual ~SwXMLExport();
 
     virtual sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID );
