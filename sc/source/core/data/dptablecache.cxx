@@ -589,14 +589,13 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
     SCSIZE nEntryCount = rParam.GetEntryCount();
     bool* pPasst = ( nEntryCount <= nFixedBools ? &aBool[0] : new bool[nEntryCount] );
 
-    long    nPos = -1;
-    SCSIZE  i    = 0;
+    long nPos = -1;
     CollatorWrapper* pCollator = (rParam.bCaseSens ? ScGlobal::GetCaseCollator() :
                                   ScGlobal::GetCollator() );
     ::utl::TransliterationWrapper* pTransliteration = (rParam.bCaseSens ?
                                                        ScGlobal::GetCaseTransliteration() : ScGlobal::GetpTransliteration());
 
-    while ((i < nEntryCount) && rParam.GetEntry(i).bDoQuery)
+    for (size_t i = 0; i < nEntryCount && rParam.GetEntry(i).bDoQuery; ++i)
     {
         const ScQueryEntry& rEntry = rParam.GetEntry(i);
         const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
@@ -768,7 +767,6 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
                 pPasst[nPos] = bOk;
             }
         }
-        i++;
     }
 
     for (long j=1; j <= nPos; j++)
