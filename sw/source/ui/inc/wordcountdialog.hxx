@@ -59,6 +59,19 @@ class SwWordCountDialog
     FixedText aDocText;
     FixedLine aDocLine;
 
+    VBox aDocBox;
+    HBox aDocRow1;
+    FixedText aDocWordFT;
+    FixedInfo aDocWordFI;
+    HBox aDocRow2;
+    FixedText aDocCharacterFT;
+    FixedInfo aDocCharacterFI;
+    HBox aDocRow3;
+    FixedText aDocCharacterExcludingSpacesFT;
+    FixedInfo aDocCharacterExcludingSpacesFI;
+
+    FixedLine aBottomFL;
+
     HButtonBox dialog_action_area1;
     OKButton aOK;
     HelpButton aHelp;

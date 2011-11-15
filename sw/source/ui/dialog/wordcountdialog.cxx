@@ -59,6 +59,17 @@ SwWordCountDialog::SwWordCountDialog(Window* pParent)
     , aDoc(&box1)
     , aDocText(&aDoc, SW_RES(FT_DOC))
     , aDocLine(&aDoc, SW_RES(FL_DOC))
+    , aDocBox(&box1)
+    , aDocRow1(&aDocBox)
+    , aDocWordFT(&aDocRow1, SW_RES(FT_DOCWORD))
+    , aDocWordFI(&aDocRow1, SW_RES(FI_DOCWORD))
+    , aDocRow2(&aDocBox)
+    , aDocCharacterFT(&aDocRow2, SW_RES(FT_DOCCHARACTER))
+    , aDocCharacterFI(&aDocRow2, SW_RES(FI_DOCCHARACTER))
+    , aDocRow3(&aDocBox)
+    , aDocCharacterExcludingSpacesFT(&aDocRow3, SW_RES(FT_DOCCHARACTEREXCLUDINGSPACES))
+    , aDocCharacterExcludingSpacesFI(&aDocRow3, SW_RES(FI_DOCCHARACTEREXCLUDINGSPACES))
+    , aBottomFL(&dialog_vbox1, SW_RES(FL_BOTTOM))
     , dialog_action_area1(&dialog_vbox1)
     , aOK(&dialog_action_area1, SW_RES(PB_OK))
     , aHelp(&dialog_action_area1, SW_RES(PB_HELP))
@@ -104,6 +115,28 @@ SwWordCountDialog::SwWordCountDialog(Window* pParent)
     aDocLine.setChildProperty(sFill, true);
     aDocLine.setChildProperty(sExpand, true);
 
+    aDocBox.setChildProperty(sFill, true);
+
+    aDocRow1.setChildProperty(sFill, true);
+    aDocRow1.setChildProperty(sExpand, true);
+    aDocWordFT.setChildProperty(sFill, true);
+    aDocWordFI.setChildProperty(sFill, true);
+    aDocWordFI.setChildProperty(sExpand, true);
+
+    aDocRow2.setChildProperty(sFill, true);
+    aDocRow2.setChildProperty(sExpand, true);
+    aDocCharacterFT.setChildProperty(sFill, true);
+    aDocCharacterFI.setChildProperty(sFill, true);
+    aDocCharacterFI.setChildProperty(sExpand, true);
+    aDocRow3.setChildProperty(sFill, true);
+    aDocRow3.setChildProperty(sExpand, true);
+    aDocCharacterExcludingSpacesFT.setChildProperty(sFill, true);
+    aDocCharacterExcludingSpacesFI.setChildProperty(sFill, true);
+    aDocCharacterExcludingSpacesFI.setChildProperty(sExpand, true);
+
+    aBottomFL.setChildProperty(sFill, true);
+    aBottomFL.setChildProperty(sFill, true);
+
     aSize = dialog_vbox1.GetOptimalSize(WINDOWSIZE_PREFERRED);
     dialog_vbox1.SetSizePixel(aSize);
 
@@ -143,16 +176,14 @@ SwWordCountDialog::~SwWordCountDialog()
     ViewShell::SetCareWin( 0 );
 }
 
-void  SwWordCountDialog::SetValues(const SwDocStat& rCurrent, const SwDocStat&)
+void  SwWordCountDialog::SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc)
 {
     aCurrentWordFI.SetText(     String::CreateFromInt32(rCurrent.nWord ));
     aCurrentCharacterFI.SetText(String::CreateFromInt32(rCurrent.nChar ));
     aCurrentCharacterExcludingSpacesFI.SetText(String::CreateFromInt32(rCurrent.nCharExcludingSpaces ));
-#if 0
     aDocWordFI.SetText(         String::CreateFromInt32(rDoc.nWord ));
     aDocCharacterFI.SetText(    String::CreateFromInt32(rDoc.nChar ));
     aDocCharacterExcludingSpacesFI.SetText(    String::CreateFromInt32(rDoc.nCharExcludingSpaces ));
-#endif
 }
 
 
