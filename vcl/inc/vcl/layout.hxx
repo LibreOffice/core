@@ -152,6 +152,16 @@ protected:
     }
 };
 
+class VCL_DLLPUBLIC HButtonBox : public HBox
+{
+public:
+    HButtonBox(Window *pParent, int nSpacing = 0)
+        : HBox(pParent, false, nSpacing)
+    {
+    }
+};
+
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
