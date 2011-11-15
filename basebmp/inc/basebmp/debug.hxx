@@ -46,6 +46,16 @@ namespace basebmp
         Stream to write output to.
 
         Used in vcl/headless/svpgdi.cxx when OSL_DEBUG_LEVEL > 2
+
+        Use like this:
+<pre>
+        #include <basebmp/debug.hxx>
+        #include <iostream>
+        #include <fstream>
+
+        std::ofstream output("/tmp/my_test.dump");
+        debugDump( pMyDevice, output );
+</pre>
     */
     void BASEBMP_DLLPUBLIC debugDump( const boost::shared_ptr< BitmapDevice >& rDevice,
                                       ::std::ostream&                          rOutputStream );

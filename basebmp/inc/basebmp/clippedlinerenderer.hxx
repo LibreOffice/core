@@ -65,7 +65,8 @@ inline bool prepareClip( sal_Int32  a1,
                          sal_uInt32 bMinFlag,
                          sal_Int32  bMax,
                          sal_uInt32 bMaxFlag,
-                         bool       bRoundTowardsPt2 )
+                         bool       bRoundTowardsPt2,
+                         bool&      o_bUseAlternateBresenham )
 {
     int ca(0), cb(0);
     if( clipCode1 )
@@ -103,13 +104,13 @@ inline bool prepareClip( sal_Int32  a1,
             {
                 o_bs = b1 + cb;
                 if( o_bs > bMax )
-                    return false;
+                    return false; // fully clipped
             }
             else
             {
                 o_bs = b1 - cb;
                 if( o_bs < bMin )
-                    return false;
+                    return false; // fully clipped
             }
 
             io_rem += ca - 2*da*cb;
@@ -121,13 +122,13 @@ inline bool prepareClip( sal_Int32  a1,
             {
                 o_as = a1 + ca;
                 if( o_as > aMax )
-                    return false;
+                    return false; // fully clipped
             }
             else
             {
                 o_as = a1 - ca;
                 if( o_as < aMin )
-                    return false;
+                    return false; // fully clipped
             }
 
             io_rem += 2*db*ca - cb;
@@ -138,7 +139,6 @@ inline bool prepareClip( sal_Int32  a1,
         o_as = a1; o_bs = b1;
     }
 
-    bool bRetVal = false;
     if( clipCode2 )
     {
         if( clipCount2 == 2 )
@@ -153,13 +153,13 @@ inline bool prepareClip( sal_Int32  a1,
         else
         {
             o_n = (clipCode2 & bMinFlag) ? o_bs - bMin : bMax - o_bs;
-            bRetVal = true;
+            o_bUseAlternateBresenham = true;
         }
     }
     else
         o_n = (a2 >= o_as) ? a2 - o_as : o_as - a2;
 
-    return bRetVal;
+    return true; // at least one pixel to render
 }
 
 
@@ -214,7 +214,7 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
                                                                        rClipRect);
 
     if( clipCode1 & clipCode2 )
-        return; // line fully clipped away
+        return; // line fully clipped away, both endpoints share a half-plane
 
     sal_uInt32 clipCount1 = basegfx::tools::getNumberOfClipPlanes(clipCode1);
     sal_uInt32 clipCount2 = basegfx::tools::getNumberOfClipPlanes(clipCode2);
@@ -254,19 +254,20 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
     int n  = 0;
     sal_Int32 xs = x1;
     sal_Int32 ys = y1;
+    bool bUseAlternateBresenham=false;
     if( adx >= ady )
     {
         // semi-horizontal line
         sal_Int32 rem = 2*ady - adx - !bRoundTowardsPt2;
 
-        const bool bUseAlternateBresenham(
-            prepareClip(x1, x2, y1, adx, ady, xs, ys, sx, sy,
-                        rem, n, clipCode1, clipCount1, clipCode2, clipCount2,
-                        rClipRect.getMinX(), basegfx::tools::RectClipFlags::LEFT,
-                        rClipRect.getMaxX()-1, basegfx::tools::RectClipFlags::RIGHT,
-                        rClipRect.getMinY(), basegfx::tools::RectClipFlags::TOP,
-                        rClipRect.getMaxY()-1, basegfx::tools::RectClipFlags::BOTTOM,
-                        bRoundTowardsPt2 ));
+        if( !prepareClip(x1, x2, y1, adx, ady, xs, ys, sx, sy,
+                         rem, n, clipCode1, clipCount1, clipCode2, clipCount2,
+                         rClipRect.getMinX(), basegfx::tools::RectClipFlags::LEFT,
+                         rClipRect.getMaxX()-1, basegfx::tools::RectClipFlags::RIGHT,
+                         rClipRect.getMinY(), basegfx::tools::RectClipFlags::TOP,
+                         rClipRect.getMaxY()-1, basegfx::tools::RectClipFlags::BOTTOM,
+                         bRoundTowardsPt2, bUseAlternateBresenham ) )
+            return; // line fully clipped away, no active pixel inside rect
 
         Iterator currIter( begin + vigra::Diff2D(0,ys) );
         typename vigra::IteratorTraits<Iterator>::row_iterator
@@ -283,6 +284,8 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
 
                 if( rem >= 0 )
                 {
+                    // this is intended - we clip endpoint against y
+                    // plane, so n here denotes y range to render
                     if( --n < 0 )
                         break;
 
@@ -335,14 +338,14 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
         // semi-vertical line
         sal_Int32 rem = 2*adx - ady - !bRoundTowardsPt2;
 
-        const bool bUseAlternateBresenham(
-            prepareClip(y1, y2, x1, ady, adx, ys, xs, sy, sx,
-                        rem, n, clipCode1, clipCount1, clipCode2, clipCount2,
-                        rClipRect.getMinY(), basegfx::tools::RectClipFlags::TOP,
-                        rClipRect.getMaxY()-1, basegfx::tools::RectClipFlags::BOTTOM,
-                        rClipRect.getMinX(), basegfx::tools::RectClipFlags::LEFT,
-                        rClipRect.getMaxX()-1, basegfx::tools::RectClipFlags::RIGHT,
-                        bRoundTowardsPt2 ));
+        if( !prepareClip(y1, y2, x1, ady, adx, ys, xs, sy, sx,
+                         rem, n, clipCode1, clipCount1, clipCode2, clipCount2,
+                         rClipRect.getMinY(), basegfx::tools::RectClipFlags::TOP,
+                         rClipRect.getMaxY()-1, basegfx::tools::RectClipFlags::BOTTOM,
+                         rClipRect.getMinX(), basegfx::tools::RectClipFlags::LEFT,
+                         rClipRect.getMaxX()-1, basegfx::tools::RectClipFlags::RIGHT,
+                         bRoundTowardsPt2, bUseAlternateBresenham ) )
+            return; // line fully clipped away, no active pixel inside rect
 
         Iterator currIter( begin + vigra::Diff2D(xs,0) );
         typename vigra::IteratorTraits<Iterator>::column_iterator
@@ -359,6 +362,8 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
 
                 if( rem >= 0 )
                 {
+                    // this is intended - we clip endpoint against x
+                    // plane, so n here denotes x range to render
                     if( --n < 0 )
                         break;
 

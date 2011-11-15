@@ -171,6 +171,38 @@ public:
                                            Format::THIRTYTWO_BIT_TC_MASK );
     }
 
+    void testCornerCases()
+    {
+        const basegfx::B2ISize aSize(1,1);
+        BitmapDeviceSharedPtr pDevice = createBitmapDevice(
+            aSize,
+            true,
+            Format::ONE_BIT_MSB_PAL );
+
+        const basegfx::B2IPoint aPt1(0,0);
+        const basegfx::B2IPoint aPt2(10,10);
+        CPPUNIT_ASSERT_MESSAGE("only pixel cleared",
+                                pDevice->getPixelData(aPt1) == 0);
+
+        const Color aCol(0xFFFFFFFF);
+        pDevice->drawLine( aPt1, aPt2, aCol, DrawMode_PAINT );
+        CPPUNIT_ASSERT_MESSAGE("only pixel set",
+                               pDevice->getPixelData(aPt1) == 1);
+
+        const basegfx::B2ISize aSize2(1,0);
+        pDevice = createBitmapDevice(
+            aSize2,
+            true,
+            Format::ONE_BIT_MSB_PAL );
+
+        CPPUNIT_ASSERT_MESSAGE("only pixel cleared",
+                                pDevice->getPixelData(aPt1) == 0);
+
+        pDevice->drawLine( aPt1, aPt2, aCol, DrawMode_PAINT );
+        CPPUNIT_ASSERT_MESSAGE("only pixel still cleared",
+                               pDevice->getPixelData(aPt1) == 0);
+    }
+
     void testBasicDiagonalLines()
     {
         implTestBasicDiagonalLines( mpDevice1bpp );
@@ -202,6 +234,7 @@ public:
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(LineTest);
+    CPPUNIT_TEST(testCornerCases);
     CPPUNIT_TEST(testBasicDiagonalLines);
     CPPUNIT_TEST(testBasicHorizontalLines);
     CPPUNIT_TEST(testBasicVerticalLines);
