@@ -29,8 +29,6 @@
 #include <vcl/layout.hxx>
 #include <boost/bind.hpp>
 
-#define callDimension(object,ptrToMember) ((object).*(ptrToMember))()
-
 Size Box::calculateRequisition() const
 {
     long nMaxChildDimension = 0;
@@ -46,7 +44,6 @@ Size Box::calculateRequisition() const
             continue;
         ++nVisibleChildren;
         Size aChildSize = pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
-        fprintf(stderr, "child %p wants to be %ld %ld\n", pChild, aChildSize.Width(), aChildSize.Height());
         long nSecondaryDimension = getSecondaryDimension(aChildSize);
         if (nSecondaryDimension > getSecondaryDimension(aSize))
             setSecondaryDimension(aSize, nSecondaryDimension);
@@ -67,7 +64,7 @@ Size Box::calculateRequisition() const
     {
         long nPrimaryDimension = getPrimaryDimension(aSize);
         if (m_bHomogeneous)
-            nPrimaryDimension += nMaxChildDimension * (nVisibleChildren-1);
+            nPrimaryDimension += nMaxChildDimension * nVisibleChildren;
         setPrimaryDimension(aSize, nPrimaryDimension + m_nSpacing * (nVisibleChildren-1));
     }
 
@@ -89,7 +86,7 @@ void Box::setAllocation(const Size &rAllocation)
 
     rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
 
-    sal_uInt16 nVisibleChildren = 0, nExpandChildren = 0;;
+    sal_uInt16 nVisibleChildren = 0, nExpandChildren = 0;
     for (sal_uInt16 i = 0; i < nChildren; ++i)
     {
         Window *pChild = GetChild(i);
@@ -111,8 +108,8 @@ void Box::setAllocation(const Size &rAllocation)
     long nHomogeneousDimension, nExtraSpace = 0;
     if (m_bHomogeneous)
     {
-        nHomogeneousDimension = ( ( nAllocPrimaryDimension -
-                          ( nVisibleChildren - 1 ) * m_nSpacing )) / nVisibleChildren;
+        nHomogeneousDimension = ((nAllocPrimaryDimension -
+            (nVisibleChildren - 1) * m_nSpacing)) / nVisibleChildren;
     }
     else if (nExpandChildren)
     {
@@ -140,7 +137,6 @@ void Box::setAllocation(const Size &rAllocation)
                 continue;
 
             sal_Int32 ePacking = pChild->getChildProperty<sal_Int32>(sPackType);
-            fprintf(stderr, "child packing is %d\n", ePacking);
 
             if (ePacking != ePackType)
                 continue;
@@ -182,8 +178,6 @@ void Box::setAllocation(const Size &rAllocation)
                     (getPrimaryDimension(aBoxSize) - getPrimaryDimension(aChildSize)) / 2);
             }
 
-            fprintf(stderr, "child %p set to %ld %ld : %ld %ld\n",
-                pChild, aPos.X(), aPos.Y(), aChildSize.Width(), aChildSize.Height());
             long nDiff = getPrimaryDimension(aBoxSize) + m_nSpacing;
             if (ePackType == VCL_PACK_START)
                 setPrimaryCoordinate(aPos, nPrimaryCoordinate + nDiff);
@@ -204,5 +198,53 @@ void Box::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
     Window::SetPosSizePixel(rAllocPos, rAllocation);
     setAllocation(rAllocation);
 }
+
+void ButtonBox::setAllocation(const Size &rAllocation)
+{
+    sal_uInt16 nChildren = GetChildCount();
+    if (!nChildren)
+        return;
+
+    sal_uInt16 nVisibleChildren = 0;
+    for (sal_uInt16 i = 0; i < nChildren; ++i)
+    {
+        Window *pChild = GetChild(i);
+        if (!pChild->IsVisible())
+            continue;
+        ++nVisibleChildren;
+    }
+
+    if (!nVisibleChildren)
+        return;
+
+    Size aSize = rAllocation;
+
+    long nAllocPrimaryDimension = getPrimaryDimension(rAllocation);
+    Size aRequisition = calculateRequisition();
+    long nHomogeneousDimension = ((getPrimaryDimension(aRequisition) -
+        (nVisibleChildren - 1) * m_nSpacing)) / nVisibleChildren;
+
+    Point aPos(0, 0);
+    long nPrimaryCoordinate = getPrimaryCoordinate(aPos);
+    setPrimaryCoordinate(aPos, nPrimaryCoordinate + nAllocPrimaryDimension
+        - getPrimaryDimension(aRequisition));
+
+    for (sal_uInt16 i = 0; i < nChildren; ++i)
+    {
+        Window *pChild = GetChild(i);
+        if (!pChild->IsVisible())
+            continue;
+
+        Size aChildSize;
+        setSecondaryDimension(aChildSize, getSecondaryDimension(aSize));
+        setPrimaryDimension(aChildSize, nHomogeneousDimension);
+
+        pChild->SetPosSizePixel(aPos, aChildSize);
+
+        nPrimaryCoordinate = getPrimaryCoordinate(aPos);
+        setPrimaryCoordinate(aPos, nPrimaryCoordinate + nHomogeneousDimension + m_nSpacing);
+    }
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

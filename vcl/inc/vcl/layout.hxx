@@ -56,7 +56,7 @@ public:
     virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
 protected:
     Size calculateRequisition() const;
-    void setAllocation(const Size &rAllocation);
+    virtual void setAllocation(const Size &rAllocation);
 
     virtual long getPrimaryDimension(const Size &rSize) const = 0;
     virtual void setPrimaryDimension(Size &rSize, long) const = 0;
@@ -152,15 +152,100 @@ protected:
     }
 };
 
-class VCL_DLLPUBLIC HButtonBox : public HBox
+class VCL_DLLPUBLIC ButtonBox : public Box
 {
 public:
-    HButtonBox(Window *pParent, int nSpacing = 0)
-        : HBox(pParent, false, nSpacing)
+    ButtonBox(Window *pParent, int nSpacing)
+        : Box(pParent, true, nSpacing)
     {
+    }
+protected:
+    virtual void setAllocation(const Size &rAllocation);
+};
+
+class VCL_DLLPUBLIC VButtonBox : public ButtonBox
+{
+public:
+    VButtonBox(Window *pParent, int nSpacing = 0)
+        : ButtonBox(pParent, nSpacing)
+    {
+    }
+protected:
+    virtual long getPrimaryDimension(const Size &rSize) const
+    {
+        return rSize.getHeight();
+    }
+    virtual void setPrimaryDimension(Size &rSize, long nHeight) const
+    {
+        rSize.setHeight(nHeight);
+    }
+    virtual long getPrimaryCoordinate(const Point &rPos) const
+    {
+        return rPos.getY();
+    }
+    virtual void setPrimaryCoordinate(Point &rPos, long nPos) const
+    {
+        rPos.setY(nPos);
+    }
+    virtual long getSecondaryDimension(const Size &rSize) const
+    {
+        return rSize.getWidth();
+    }
+    virtual void setSecondaryDimension(Size &rSize, long nWidth) const
+    {
+        rSize.setWidth(nWidth);
+    }
+    virtual long getSecondaryCoordinate(const Point &rPos) const
+    {
+        return rPos.getX();
+    }
+    virtual void setSecondaryCoordinate(Point &rPos, long nPos) const
+    {
+        rPos.setX(nPos);
     }
 };
 
+class VCL_DLLPUBLIC HButtonBox : public ButtonBox
+{
+public:
+    HButtonBox(Window *pParent, int nSpacing = 0)
+        : ButtonBox(pParent, nSpacing)
+    {
+    }
+protected:
+    virtual long getPrimaryDimension(const Size &rSize) const
+    {
+        return rSize.getWidth();
+    }
+    virtual void setPrimaryDimension(Size &rSize, long nWidth) const
+    {
+        rSize.setWidth(nWidth);
+    }
+    virtual long getPrimaryCoordinate(const Point &rPos) const
+    {
+        return rPos.getX();
+    }
+    virtual void setPrimaryCoordinate(Point &rPos, long nPos) const
+    {
+        rPos.setX(nPos);
+    }
+    virtual long getSecondaryDimension(const Size &rSize) const
+    {
+        return rSize.getHeight();
+    }
+    virtual void setSecondaryDimension(Size &rSize, long nHeight) const
+    {
+        rSize.setHeight(nHeight);
+    }
+    virtual long getSecondaryCoordinate(const Point &rPos) const
+    {
+        return rPos.getY();
+    }
+    virtual void setSecondaryCoordinate(Point &rPos, long nPos) const
+    {
+        rPos.setY(nPos);
+    }
+};
 
 #endif
 
