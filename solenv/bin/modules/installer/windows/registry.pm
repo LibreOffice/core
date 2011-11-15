@@ -85,9 +85,9 @@ sub get_registry_component_name
     if ( $styles =~ /\bLAYER_REGISTRY\b/ )
     {
         $componentname = "g_m_root_registry_layer_ooo_reglayer";
-        # Styles USE_URELAYERVERSION, USE_OOOBASEVERSION
+        # Styles USE_URELAYERVERSION, USE_PRODUCTVERSION
         if ( $styles =~ /\bUSE_URELAYERVERSION\b/ ) { $addon = "_ure_" . $allvariables->{'URELAYERVERSION'}; }
-        if ( $styles =~ /\bUSE_OOOBASEVERSION\b/ ) { $addon = "_basis_" . $allvariables->{'OOOBASEVERSION'}; }
+        if ( $styles =~ /\bUSE_PRODUCTVERSION\b/ ) { $addon = "_basis_" . $allvariables->{'PRODUCTVERSION'}; }
         $addon =~ s/\.//g;
     }
 

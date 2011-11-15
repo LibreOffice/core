@@ -1073,23 +1073,6 @@ ProfileItem gid_Brand_Profileitem_Version_BuildVersion
     Value = "<buildversion>";
 End
 
-ProfileItem gid_Brand_Profileitem_Version_Ooobaseversion
-    ProfileID = gid_Brand_Profile_Version_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Version";
-    Order = 18;
-    Key = "OOOBaseVersion";
-    Value = "${OOOBASEVERSION}";
-End
-
-ProfileItem gid_Brand_Profileitem_Version_Ooopackageversion
-    ProfileID = gid_Brand_Profile_Version_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Version";
-    Key = "OOOPackageVersion";
-    Value = "${OOOPACKAGEVERSION}";
-End
-
 ProfileItem gid_Brand_Profileitem_Version_Extensionupdateurl
     ProfileID = gid_Brand_Profile_Version_Ini;
     ModuleID = gid_Module_Root_Brand;

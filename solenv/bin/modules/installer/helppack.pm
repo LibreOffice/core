@@ -336,20 +336,20 @@ sub put_searchpackage_into_script
     my ($scriptfile, $variableshashref) = @_;
 
     my $basispackageprefix = $variableshashref->{'BASISPACKAGEPREFIX'};
-    my $basispackageversion = $variableshashref->{'OOOBASEVERSION'};
+    my $productversion = $variableshashref->{'PRODUCTVERSION'};
 
-    if ( $installer::globals::issolarisbuild ) { $basispackageversion =~ s/\.//g; } # "3.0" -> "30"
+    if ( $installer::globals::issolarisbuild ) { $productversion =~ s/\.//g; } # "3.0" -> "30"
 
     my $infoline = "Adding basis package prefix $basispackageprefix into help pack script\n";
     push( @installer::globals::logfileinfo, $infoline);
 
-    $infoline = "Adding basis package version $basispackageversion into help pack script\n";
+    $infoline = "Adding basis package version $productversion into help pack script\n";
     push( @installer::globals::logfileinfo, $infoline);
 
     for ( my $i = 0; $i <= $#{$scriptfile}; $i++ )
     {
         ${$scriptfile}[$i] =~ s/BASISPACKAGEPREFIXPLACEHOLDER/$basispackageprefix/;
-        ${$scriptfile}[$i] =~ s/OOOBASEVERSIONPLACEHOLDER/$basispackageversion/;
+        ${$scriptfile}[$i] =~ s/PRODUCTVERSIONPLACEHOLDER/$productversion/;
     }
 
 }

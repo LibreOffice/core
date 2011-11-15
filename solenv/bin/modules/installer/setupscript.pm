@@ -190,13 +190,6 @@ sub add_lowercase_productname_setupscriptvariable
                 my $newline = "\%WITHOUTDOTPRODUCTVERSION " . $value . "\n";
                 push(@{$variablesref} ,$newline);
             }
-            elsif  ( $key eq "OOOBASEVERSION" )
-            {
-                $value =~ s/\.//g;
-                my $newline = "\%WITHOUTDOTOOOBASEVERSION " . $value . "\n";
-                push(@{$variablesref} ,$newline);
-            }
-
         }
     }
 }

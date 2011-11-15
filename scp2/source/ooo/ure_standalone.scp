@@ -31,7 +31,6 @@ Installation gid_Installation_Ure
     ProductName = "${PRODUCTNAME}";
     ProductVersion = "${PRODUCTVERSION}";
     ProductExtension = "${PRODUCTEXTENSION}";
-    OOoBaseVersion = "${OOOBASEVERSION}";
 #if defined WNT
     DefaultDestPath = "<winprogpath>\%PRODUCTNAME";
 #else

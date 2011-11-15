@@ -880,51 +880,12 @@ void UpdateHandler::setFullVersion( rtl::OUString& rString )
     uno::Reference< container::XNameAccess > xNameAccess( xConfigAccess, uno::UNO_QUERY_THROW );
 
     rtl::OUString aProductVersion;
-    rtl::OUString aProductFullVersion;
-
     xNameAccess->getByName(UNISTRING("ooSetupVersion")) >>= aProductVersion;
-    aProductFullVersion = aProductVersion;
-
     sal_Int32 nVerIndex = rString.indexOf( aProductVersion );
     if ( nVerIndex != -1 )
     {
-        rtl::OUString aPackageVersion = UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":OOOPackageVersion}" );
-        rtl::Bootstrap::expandMacros( aPackageVersion );
-
-        if ( aPackageVersion.getLength() )
-        {
-            sal_Int32 nTokIndex = 0;
-            rtl::OUString aVersionMinor = aPackageVersion.getToken( 1, '.', nTokIndex );
-            rtl::OUString aVersionMicro;
-
-            if ( nTokIndex > 0 )
-                aVersionMicro = aPackageVersion.getToken( 0, '.', nTokIndex );
-
-            if ( aVersionMinor.getLength() == 0 )
-                aVersionMinor = UNISTRING( "0" );
-            if ( aVersionMicro.getLength() == 0 )
-                aVersionMicro = UNISTRING( "0" );
-
-            sal_Int32 nIndex = aProductFullVersion.indexOf( '.' );
-            if ( nIndex == -1 )
-            {
-                aProductFullVersion += UNISTRING( "." );
-                aProductFullVersion += aVersionMinor;
-            }
-            else
-            {
-                nIndex = aProductFullVersion.indexOf( '.', nIndex+1 );
-            }
-            if ( nIndex == -1 )
-            {
-                aProductFullVersion += UNISTRING( "." );
-                aProductFullVersion += aVersionMicro;
-            }
-            else
-            {
-                aProductFullVersion = aProductFullVersion.replaceAt( nIndex+1, aProductFullVersion.getLength()-nIndex-1, aVersionMicro );
-            }
-        }
+        rtl::OUString aProductFullVersion;
+        xNameAccess->getByName(UNISTRING("ooSetupVersionAboutBox")) >>= aProductFullVersion;
         rString = rString.replaceAt( nVerIndex, aProductVersion.getLength(), aProductFullVersion );
     }
 }

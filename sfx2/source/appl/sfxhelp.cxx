@@ -57,7 +57,6 @@
 #include <svtools/helpopt.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <tools/urlobj.hxx>
-#include <unotools/configmgr.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/pathoptions.hxx>
 #include <rtl/ustring.hxx>
@@ -184,16 +183,8 @@ void AppendConfigToken( String& rURL, sal_Bool bQuestionMark, const rtl::OUStrin
     rURL += String( aLocaleStr );
     rURL += DEFINE_CONST_UNICODE("&System=");
     rURL += SvtHelpOptions().GetSystem();
-
-    static rtl::OUString aVersion;
-    if ( aVersion.isEmpty() )
-        aVersion = utl::Bootstrap::getProductVersion();
-
-    if ( !aVersion.isEmpty() )
-    {
-        rURL += DEFINE_CONST_UNICODE( "&Version=" );
-        rURL += String( aVersion );
-    }
+    rURL += DEFINE_CONST_UNICODE("&Version=");
+    rURL += utl::ConfigManager::getProductVersion();
 }
 
 sal_Bool GetHelpAnchor_Impl( const String& _rURL, String& _rAnchor )

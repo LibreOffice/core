@@ -111,7 +111,7 @@ function hGetOleObjectName( cApplication as string ) as string
         
         ' The string contains placeholders %PRODUCTNAME and %PRODUCTVERSION which have to be replaced
         if ( gOfficeVersion = "" ) then
-            warnlog( CFN & "gOOoBaseVersion is empty, run hGetOfficeVersion() first" )
+            warnlog( CFN & "gOfficeVersion is empty, run hGetOfficeVersion() first" )
             cString = right( cConfigString, len( cConfigString ) - 29 )
         else
             cString = gProductName & " " & gOfficeVersion & " " & right( cConfigString, len( cConfigString ) - 29 )

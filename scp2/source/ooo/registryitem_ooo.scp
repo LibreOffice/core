@@ -349,11 +349,11 @@ End
 
 RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Basisinstall
 	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "Software\LibreOffice\${REGISTRYLAYERNAME}\Basis\%OOOBASEVERSION";
+    Subkey = "Software\LibreOffice\${REGISTRYLAYERNAME}\Basis\%PRODUCTVERSION";
 	ModuleID = gid_Module_Root;
 	Name = "BASISINSTALLLOCATION";
 	Value = "[INSTALLLOCATION]Basis\\";
-	Styles = (ALWAYS_REQUIRED,LAYER_REGISTRY,USE_OOOBASEVERSION);
+	Styles = (ALWAYS_REQUIRED,LAYER_REGISTRY,USE_PRODUCTVERSION);
 End
 
 RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Layer_Basisinstall

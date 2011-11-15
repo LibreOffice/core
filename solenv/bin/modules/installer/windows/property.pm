@@ -280,12 +280,6 @@ sub set_important_properties
         push(@{$propertyfile}, $onepropertyline);
     }
 
-    if ( $allvariables->{'OOOBASEVERSION'} )
-    {
-        my $onepropertyline = "OOOBASEVERSION" . "\t" . $allvariables->{'OOOBASEVERSION'} . "\n";
-        push(@{$propertyfile}, $onepropertyline);
-    }
-
     if ( $allvariables->{'URELAYERVERSION'} )
     {
         my $onepropertyline = "URELAYERVERSION" . "\t" . $allvariables->{'URELAYERVERSION'} . "\n";

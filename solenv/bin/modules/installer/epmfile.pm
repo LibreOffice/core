@@ -1987,7 +1987,7 @@ sub include_languageinfos_into_pkginfo
     else
     {
         # Using default package ooobasis30-core01.
-        my $packagelistentry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01";
+        my $packagelistentry = "%BASISPACKAGEPREFIX%WITHOUTDOTPACKAGEVERSION-core01";
         installer::packagelist::resolve_packagevariables(\$packagelistentry, $variableshashref, 1);
         $newline = "SUNW_PKGLIST=" . $packagelistentry . "\n";
         add_one_line_into_file($changefile, $newline, $filename);

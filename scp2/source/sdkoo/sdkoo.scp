@@ -31,7 +31,6 @@ Installation gid_Installation_Sdk
     ProductName = "${PRODUCTNAME}";
     ProductVersion = "${PRODUCTVERSION}";
     ProductExtension = "${PRODUCTEXTENSION}";
-    OOoBaseVersion = "${OOOBASEVERSION}";
 #if defined WNT
     DefaultDestPath = "<winprogpath>\%PRODUCTNAME";
 #else
@@ -43,7 +42,7 @@ End
 
 Directory gid_Dir_Basis_Sdk
     ParentID = PREDEFINED_PROGDIR;
-    DosName = "LibreOffice${OOOBASEVERSION}_SDK";
+    DosName = "LibreOffice${PRODUCTVERSION}_SDK";
 End
 
 #elif defined WNT
