@@ -1994,38 +1994,6 @@ graphite2::TtfUtil::GlyfLookup(unsigned short, void const*, void const*, unsigne
 jfw_plugin::VendorBase::createInstance()
 jfw_plugin::VendorBase::getJavaExePaths(int*)
 jvmaccess::ClassPath::doLoadClass(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, void*, rtl::OUString const&, rtl::OUString const&)
-layout::Box::Box(layout::Context const*, char const*)
-layout::Box::Box(rtl::OUString const&, int, bool)
-layout::Box::setProps(com::sun::star::uno::Reference<com::sun::star::awt::XLayoutConstrains>, bool, bool, int)
-layout::Button::GetButton() const
-layout::Container::ShowAll(bool)
-layout::ControlImpl::GetGetFocusHdl()
-layout::ControlImpl::GetLoseFocusHdl()
-layout::Dialog::GetDialog() const
-layout::Edit::GetEdit() const
-layout::ErrorBox::ErrorBox(Window*, char const*, char const*, char const*, rtl::OString const&, char const*, char const*)
-layout::ErrorBox::ErrorBox(Window*, long, char const*, char const*, char const*, rtl::OString const&, char const*, char const*)
-layout::ErrorBox::ErrorBox(Window*, long, rtl::OUString const&, rtl::OUString, rtl::OUString, rtl::OString const&, char const*, char const*)
-layout::ErrorBox::ErrorBox(Window*, rtl::OUString const&, rtl::OUString, rtl::OUString, rtl::OString const&, char const*, char const*)
-layout::InfoBox::InfoBox(Window*, char const*, char const*, char const*, rtl::OString const&, char const*, char const*)
-layout::InfoBox::InfoBox(Window*, long, char const*, char const*, char const*, rtl::OString const&, char const*, char const*)
-layout::InfoBox::InfoBox(Window*, long, rtl::OUString const&, rtl::OUString, rtl::OUString, rtl::OString const&, char const*, char const*)
-layout::InfoBox::InfoBox(Window*, rtl::OUString const&, rtl::OUString, rtl::OUString, rtl::OString const&, char const*, char const*)
-layout::ListBox::GetEntry(unsigned short) const
-layout::ListBox::GetEntryPos(String const&) const
-layout::ListBox::GetSelectEntryPos(unsigned short) const
-layout::ListBox::SelectEntryPos(unsigned short, bool)
-layout::MetricFormatter::MetricFormatter(layout::FormatterBaseImpl*)
-layout::MetricFormatter::getFormatImpl() const
-layout::NumericFormatter::NumericFormatter(layout::FormatterBaseImpl*)
-layout::NumericFormatter::getFormatImpl() const
-layout::PushButton::Check(bool)
-layout::PushButton::GetPushButton() const
-layout::TabControl::SetCurPageId(unsigned short)
-layout::Table::setProps(com::sun::star::uno::Reference<com::sun::star::awt::XLayoutConstrains>, bool, bool, int, int)
-layout::Window::CreatePeer(layout::Window*, long, char const*)
-layout::Window::getContext()
-layout::WindowImpl::getProperty(char const*)
 layoutimpl::LayoutRoot::addItem(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::awt::XLayoutConstrains> const&)
 layoutimpl::VCLXPlugin::SetPlugin(Control*)
 layoutimpl::VCLXTabControl::AddChild(com::sun::star::uno::Reference<com::sun::star::awt::XLayoutConstrains> const&)

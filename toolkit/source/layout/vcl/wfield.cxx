@@ -109,80 +109,6 @@ void Edit::SetModifyHdl( const Link& link )
 }
 
 IMPL_GET_IMPL( Edit );
-IMPL_GET_WINDOW (Edit);
-
-class FormatterBaseImpl
-{
-  protected:
-    PeerHandle mpeer;
-  public:
-    explicit FormatterBaseImpl( const PeerHandle &peer )
-        : mpeer( peer )
-    {
-    };
-};
-
-FormatterBase::FormatterBase( FormatterBaseImpl *pFormatImpl )
-    : mpFormatImpl( pFormatImpl )
-{
-}
-
-class NumericFormatterImpl : public FormatterBaseImpl
-{
-  public:
-    uno::Reference< awt::XNumericField > mxField;
-    explicit NumericFormatterImpl( const PeerHandle &peer )
-        : FormatterBaseImpl( peer )
-        , mxField( peer, uno::UNO_QUERY )
-    {
-    }
-
-    // FIXME: burn that CPU ! cut/paste from vclxwindows.cxx
-    double valueToDouble( sal_Int64 nValue )
-    {
-        sal_Int16 nDigits = mxField->getDecimalDigits();
-        double n = (double)nValue;
-        for ( sal_uInt16 d = 0; d < nDigits; d++ )
-            n /= 10;
-        return n;
-    } // FIXME: burn that CPU ! cut/paste from vclxwindows.cxx
-    sal_Int64 doubleToValue( double nValue )
-    {
-        sal_Int16 nDigits = mxField->getDecimalDigits();
-        double n = nValue;
-        for ( sal_uInt16 d = 0; d < nDigits; d++ )
-            n *= 10;
-        return (sal_Int64) n;
-    }
-};
-
-class MetricFormatterImpl : public FormatterBaseImpl
-{
-  public:
-    uno::Reference< awt::XMetricField > mxField;
-    explicit MetricFormatterImpl( const PeerHandle &peer )
-        : FormatterBaseImpl( peer )
-        , mxField( peer, uno::UNO_QUERY )
-    {
-    }
-};
-
-NumericFormatter::NumericFormatter( FormatterBaseImpl *pImpl )
-    : FormatterBase( pImpl )
-{
-}
-
-NumericFormatterImpl& NumericFormatter::getFormatImpl() const
-{
-    return *( static_cast<NumericFormatterImpl *>( mpFormatImpl ) );
-}
-
-MetricFormatter::MetricFormatter( FormatterBaseImpl *pImpl )
-    : FormatterBase( pImpl )
-{
-}
-MetricFormatterImpl& MetricFormatter::getFormatImpl() const
-{    return *( static_cast<MetricFormatterImpl *>( mpFormatImpl ) );   }
 
 class ListBoxImpl : public ControlImpl
                   , public ::cppu::WeakImplHelper1< awt::XActionListener >
@@ -349,30 +275,6 @@ public:
 
 ListBox::~ListBox ()
 {
-}
-
-sal_uInt16 ListBox::GetEntryPos( String const& rStr ) const
-{
-    return getImpl().GetEntryPos( rStr );
-}
-
-String ListBox::GetEntry( sal_uInt16 nPos ) const
-{
-    return getImpl().GetEntry( nPos );
-}
-
-void ListBox::SelectEntryPos( sal_uInt16 nPos, bool bSelect )
-{
-#if LAYOUT_API_CALLS_HANDLER
-    getImpl().SelectEntryPos( nPos, bSelect );
-#else /* !LAYOUT_API_CALLS_HANDLER */
-    GetListBox ()->SelectEntryPos (nPos, bSelect);
-#endif /* !LAYOUT_API_CALLS_HANDLER */
-}
-
-sal_uInt16 ListBox::GetSelectEntryPos( sal_uInt16 nSelIndex ) const
-{
-    return getImpl().GetSelectEntryPos( nSelIndex );
 }
 
 void ListBox::SetNoSelection ()

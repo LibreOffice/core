@@ -143,7 +143,6 @@ void Button::Click()
 }
 
 IMPL_GET_IMPL( Button );
-IMPL_GET_WINDOW (Button);
 
 class PushButtonImpl : public ButtonImpl
                  , public ::cppu::WeakImplHelper1< awt::XItemListener >
@@ -193,13 +192,6 @@ PushButton::~PushButton ()
     SetToggleHdl (Link ());
 }
 
-void PushButton::Check( bool bCheck )
-{
-    getImpl().setProperty( "State", uno::Any( (sal_Int16) !!bCheck ) );
-    // XButton doesn't have explicit toggle event
-    getImpl().fireToggle();
-}
-
 void PushButton::SetToggleHdl( const Link& link )
 {
     if (&getImpl () && getImpl().mxButton.is ())
@@ -207,7 +199,6 @@ void PushButton::SetToggleHdl( const Link& link )
 }
 
 IMPL_GET_IMPL( PushButton );
-IMPL_GET_WINDOW (PushButton);
 
 #define BUTTON_IMPL(t, parent, response) \
     class t##Impl : public parent##Impl \

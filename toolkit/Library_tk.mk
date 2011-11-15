@@ -157,7 +157,6 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/layout/core/translate \
     toolkit/source/layout/core/vcl \
     toolkit/source/layout/vcl/wbutton \
-    toolkit/source/layout/vcl/wcontainer \
     toolkit/source/layout/vcl/wfield \
     toolkit/source/layout/vcl/wrapper \
 ))

@@ -116,8 +116,6 @@ class TOOLKIT_DLLPUBLIC Window
 protected:
     friend class WindowImpl;
     WindowImpl *mpImpl;
-    static PeerHandle CreatePeer( Window *parent, WinBits nStyle,
-                                  char const* pName);
 
     virtual void setRes (ResId const& res);
 
@@ -127,7 +125,6 @@ public:
     virtual ~Window();
 
     PeerHandle GetPeer() const;
-    Context *getContext();
 
     void Show( bool bVisible = true );
     inline void Hide() { Show( false ); }
@@ -223,7 +220,6 @@ class TOOLKIT_DLLPUBLIC Button : public Control
 {
     DECL_GET_IMPL( Button );
     DECL_CONSTRUCTORS( Button, Control, 0 );
-    DECL_GET_WINDOW (Button);
 
 public:
     ~Button ();
@@ -237,14 +233,12 @@ class PushButtonImpl;
 class TOOLKIT_DLLPUBLIC PushButton : public Button
 {
     DECL_GET_IMPL( PushButton );
-    DECL_GET_WINDOW (PushButton);
 
 protected:
     explicit PushButton( WindowImpl *pImpl ) : Button( pImpl ) {}
 
 public:
     ~PushButton ();
-    void Check( bool bCheck=true );
 
     void SetToggleHdl( Link const& rLink );
 };
@@ -285,36 +279,10 @@ class TOOLKIT_DLLPUBLIC Edit : public Control
 {
     DECL_GET_IMPL( Edit );
     DECL_CONSTRUCTORS( Edit, Control, WB_BORDER );
-    DECL_GET_WINDOW (Edit);
 
 public:
     ~Edit ();
     void SetModifyHdl( Link const& rLink );
-};
-
-class FormatterBaseImpl;
-class TOOLKIT_DLLPUBLIC FormatterBase
-{
-protected:
-    FormatterBaseImpl *mpFormatImpl;
-    FormatterBase( FormatterBaseImpl *pFormatImpl );
-};
-
-class NumericFormatterImpl;
-class TOOLKIT_DLLPUBLIC NumericFormatter : public FormatterBase
-{
-protected:
-    explicit NumericFormatter( FormatterBaseImpl *pImpl );
-    NumericFormatterImpl &getFormatImpl() const;
-};
-
-class MetricFormatterImpl;
-// Different inheritance to save code
-class TOOLKIT_DLLPUBLIC MetricFormatter : public FormatterBase
-{
-  protected:
-    explicit MetricFormatter( FormatterBaseImpl *pImpl );
-    MetricFormatterImpl &getFormatImpl() const;
 };
 
 class ListBoxImpl;
@@ -327,21 +295,12 @@ class TOOLKIT_DLLPUBLIC ListBox : public Control
 public:
     ~ListBox ();
 
-    sal_uInt16 GetEntryPos( String const& rStr ) const;
-    String GetEntry( sal_uInt16 nPos ) const;
-
-    void SelectEntryPos( sal_uInt16 nPos, bool bSelect=true );
-
-    sal_uInt16 GetSelectEntryPos( sal_uInt16 nSelIndex=0 ) const;
-
     virtual void SetNoSelection ();
 };
 
 class DialogImpl;
 class TOOLKIT_DLLPUBLIC Dialog : public Context, public Window
 {
-    DECL_GET_WINDOW (Dialog);
-
 public:
     DECL_GET_IMPL (Dialog);
     Dialog( ::Window *parent, char const* xml_file, char const* id, sal_uInt32 nId=0 );
@@ -397,19 +356,6 @@ protected:
     void init (char const* message, char const* yes, char const* no, const rtl::OString& help_id);
 };
 
-#define CLASS_MESSAGE_BOX(Name)\
-    class TOOLKIT_DLLPUBLIC Name##Box : public MessageBox\
-    {\
-        DECL_MESSAGE_BOX_CTORS (Name);\
-    }
-
-//CLASS_MESSAGE_BOX (Mess);
-typedef MessageBox MessBox;
-CLASS_MESSAGE_BOX (Error);
-CLASS_MESSAGE_BOX (Info);
-
-#undef CLASS_MESSAGE_BOX
-
 #undef TAB_APPEND
 
 class TabControlImpl;
@@ -424,7 +370,6 @@ class TOOLKIT_DLLPUBLIC TabControl : public Control
 
 public:
     ~TabControl ();
-    void SetCurPageId (sal_uInt16 id);
     void SetActivatePageHdl (Link const& link);
     void SetDeactivatePageHdl (Link const& link);
 };
@@ -446,41 +391,6 @@ public:
 // -----------------------------------------------------------------
 //                 layout container / helper wrappers
 // -----------------------------------------------------------------
-
-class TOOLKIT_DLLPUBLIC Container
-{
-protected:
-    css::uno::Reference< css::awt::XLayoutContainer > mxContainer;
-    Container( rtl::OUString const& rName, sal_Int32 nBorder );
-public:
-    Container( Context const* context, char const* id );
-
-    // we can't really do a GetChildren() as they don't have a common class,
-    // besides we would need to keep track of children, uh
-
-    void ShowAll( bool bVisible );
-
-    css::uno::Reference< css::awt::XLayoutContainer > getImpl()
-    { return mxContainer; }
-};
-
-class TOOLKIT_DLLPUBLIC Table : public Container
-{
-    void setProps( css::uno::Reference< css::awt::XLayoutConstrains > xChild,
-                   bool bXExpand, bool bYExpand, sal_Int32 nXSpan, sal_Int32 nYSpan );
-};
-
-class TOOLKIT_DLLPUBLIC Box : public Container
-{
-protected:
-    Box( rtl::OUString const& rName, sal_Int32 nBorder, bool bHomogeneous );
-public:
-    Box( Context const* context, char const* id );
-
-private:
-    void setProps( css::uno::Reference< css::awt::XLayoutConstrains > xChild,
-                   bool bXExpand, bool bYExpand, sal_Int32 nPadding );
-};
 
 class InPlugImpl;
 class TOOLKIT_DLLPUBLIC InPlug : public Context, public Window

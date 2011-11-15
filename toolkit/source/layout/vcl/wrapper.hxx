@@ -58,7 +58,6 @@ public:
     virtual ~WindowImpl ();
 
     void wrapperGone();
-    css::uno::Any getProperty (char const *name);
     void setProperty (char const *name, css::uno::Any any);
     void redraw (bool resize=false);
 
@@ -77,9 +76,7 @@ public:
     ~ControlImpl ();
 
     virtual void SetGetFocusHdl (Link const& link);
-    Link& GetGetFocusHdl ();
     virtual void SetLoseFocusHdl (Link const& link);
-    Link& GetLoseFocusHdl ();
     virtual void UpdateListening (Link const& link);
 
     // XFocusListener

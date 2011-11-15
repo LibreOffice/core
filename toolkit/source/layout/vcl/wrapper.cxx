@@ -191,14 +191,6 @@ void SAL_CALL WindowImpl::disposing (lang::EventObject const&)
         mxWindow.clear ();
 }
 
-uno::Any WindowImpl::getProperty (char const* name)
-{
-    if ( !this || !mxVclPeer.is() )
-        return css::uno::Any();
-    return mxVclPeer->getProperty
-        ( rtl::OUString( name, strlen( name ), RTL_TEXTENCODING_ASCII_US ) );
-}
-
 void WindowImpl::setProperty (char const *name, uno::Any any)
 {
     if ( !this || !mxVclPeer.is() )
@@ -319,11 +311,6 @@ void Window::SetParent( Window *parent )
 void Window::ParentSet (Window *window)
 {
     window->SetParent (GetWindow ());
-}
-
-Context *Window::getContext()
-{
-    return this && mpImpl ? mpImpl->mpCtx : NULL;
 }
 
 PeerHandle Window::GetPeer() const
@@ -447,16 +434,6 @@ uno::Reference< awt::XToolkit > getToolkit()
     return xToolkit;
 }
 
-PeerHandle Window::CreatePeer( Window *parent, WinBits nStyle, const char *pName)
-{
-    long nWinAttrbs = 0;
-    for (int i = 0; i < toolkitVclPropsMapLen; i++)
-        if ( nStyle & toolkitVclPropsMap[ i ].vclStyle )
-            nWinAttrbs |= toolkitVclPropsMap[ i ].initAttr;
-
-    return layoutimpl::WidgetFactory::createWidget (getToolkit(), parent->GetPeer(), OUString::createFromAscii( pName ), nWinAttrbs);
-}
-
 void Window::Show( bool bVisible )
 {
     if ( !getImpl().mxWindow.is() )
@@ -496,21 +473,11 @@ void ControlImpl::SetGetFocusHdl (Link const& link)
     mGetFocusHdl = link;
 }
 
-Link& ControlImpl::GetGetFocusHdl ()
-{
-    return mGetFocusHdl;
-}
-
 void ControlImpl::SetLoseFocusHdl (Link const& link)
 {
     if (!mGetFocusHdl || !link)
         UpdateListening (link);
     mLoseFocusHdl = link;
-}
-
-Link& ControlImpl::GetLoseFocusHdl ()
-{
-    return mGetFocusHdl;
 }
 
 void ControlImpl::UpdateListening (Link const& link)
@@ -577,7 +544,6 @@ Dialog::~Dialog ()
 {
 }
 
-IMPL_GET_WINDOW (Dialog);
 IMPL_GET_IMPL (Dialog);
 
 #define MX_DIALOG if (getImpl ().mxDialog.is ()) getImpl ().mxDialog
@@ -719,40 +685,6 @@ void MessageBox::init (OUString const& message, OUString const& yes, OUString co
         helpButton.Hide ();
 }
 
-#undef MESSAGE_BOX_IMPL
-#define MESSAGE_BOX_IMPL(Name)\
-    Name##Box::Name##Box (::Window *parent, char const* message,\
-                          char const* yes, char const* no, const rtl::OString& help_id,\
-                          char const* xml_file, char const* id)\
-    : MessageBox (parent, message, yes, no, help_id, xml_file, id)\
-    {\
-        image##Name.Show ();\
-    }\
-    Name##Box::Name##Box (::Window *parent, OUString const& message,\
-                          OUString yes, OUString no, const rtl::OString& help_id,\
-                          char const* xml_file, char const* id)\
-    : MessageBox (parent, message, yes, no, help_id, xml_file, id)\
-    {\
-        image##Name.Show ();\
-    }\
-    Name##Box::Name##Box (::Window *parent, WinBits bits, char const* message,\
-                          char const* yes, char const* no, const rtl::OString& help_id,\
-                          char const* xml_file, char const* id)\
-    : MessageBox (parent, bits, message, yes, no, help_id, xml_file, id)\
-    {\
-        image##Name.Show ();\
-    }\
-    Name##Box::Name##Box (::Window *parent, WinBits bits, OUString const& message,\
-                          OUString yes, OUString no, const rtl::OString& help_id,\
-                          char const* xml_file, char const* id)\
-    : MessageBox (parent, bits, message, yes, no, help_id, xml_file, id)\
-    {\
-        image##Name.Show ();\
-    }
-
-MESSAGE_BOX_IMPL (Error);
-MESSAGE_BOX_IMPL (Info);
-
 class TabControlImpl
     : public ControlImpl
     , public ::cppu::WeakImplHelper1 <awt::XTabListener>
@@ -836,11 +768,6 @@ TabControl::~TabControl ()
     SetDeactivatePageHdl (Link ());
 }
 
-void TabControl::SetCurPageId (sal_uInt16 id)
-{
-    getImpl ().redraw ();
-    GetTabControl ()->SetCurPageId (id);
-}
 void TabControl::SetActivatePageHdl (Link const& link)
 {
     if (&getImpl () && getImpl().mxTabControl.is ())
