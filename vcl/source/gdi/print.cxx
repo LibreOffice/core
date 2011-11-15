@@ -1292,8 +1292,8 @@ rtl::OUString Printer::GetPaperName( Paper ePaper )
                 PAPER_ENV_9, PAPER_ENV_10, PAPER_ENV_11, PAPER_ENV_12, PAPER_KAI16,
                 PAPER_KAI32, PAPER_KAI32BIG, PAPER_B4_JIS, PAPER_B5_JIS, PAPER_B6_JIS
             };
-            OSL_ENSURE( sal_uInt32(sizeof(PaperIndex)/sizeof(PaperIndex[0])) == aPaperStrings.Count(), "localized paper name count wrong" );
-            for( int i = 0; i < int(sizeof(PaperIndex)/sizeof(PaperIndex[0])); i++ )
+            OSL_ENSURE( sal_uInt32(SAL_N_ELEMENTS(PaperIndex)) == aPaperStrings.Count(), "localized paper name count wrong" );
+            for( int i = 0; i < int(SAL_N_ELEMENTS(PaperIndex)); i++ )
                 (*pSVData->mpPaperNames)[PaperIndex[i]] = aPaperStrings.GetString(i);
         }
     }
