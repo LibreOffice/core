@@ -435,6 +435,32 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
         case 0x2265:
             pC = " >= ";
             break;
+
+        case 0x227A:
+            pC = " prec ";
+            break;
+        case 0x227B:
+            pC = " succ ";
+            break;
+        case 0x227C:
+            pC = " preccurlyeq ";
+            break;
+        case 0x227D:
+            pC = " succcurlyeq ";
+            break;
+        case 0x227E:
+            pC = " precsim ";
+            break;
+        case 0x227F:
+            pC = " succsim ";
+            break;
+        case 0x2280:
+            pC = " nprec ";
+            break;
+        case 0x2281:
+            pC = " nsucc ";
+            break;
+
         case 0x2282:
             pC = " subset ";
             break;
@@ -459,8 +485,6 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
         case 0x2289:
             pC = " nsupseteq ";
             break;
-        case 0x227a:
-        case 0x227b:
         case 0x22b2:
         case 0x22b3:
             rRet += ' ';

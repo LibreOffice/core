@@ -199,7 +199,16 @@ enum MathSymbol
     MS_SETR         = (sal_Unicode) 0x211D,
     MS_SETC         = (sal_Unicode) 0x2102,
 
-    MS_PERCENT      = (sal_Unicode) 0x0025
+    MS_PERCENT      = (sal_Unicode) 0x0025,
+
+    MS_PRECEDES     = (sal_Unicode) 0x227A,
+    MS_PRECEDESEQUAL= (sal_Unicode) 0x227C,
+    MS_PRECEDESEQUIV= (sal_Unicode) 0x227E,
+    MS_SUCCEEDS     = (sal_Unicode) 0x227B,
+    MS_SUCCEEDSEQUAL= (sal_Unicode) 0x227D,
+    MS_SUCCEEDSEQUIV= (sal_Unicode) 0x227F,
+    MS_NOTPRECEDES  = (sal_Unicode) 0x2280,
+    MS_NOTSUCCEEDS  = (sal_Unicode) 0x2281,
 };
 
 #endif

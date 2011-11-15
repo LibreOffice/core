@@ -259,7 +259,7 @@ FloatingWindow RID_TOOLBOXWINDOW
         Size = MAP_APPFONT ( 65 , 95 ) ;
         SVLook = TRUE ;
         Hide = TRUE ;
-        LineCount = 5 ;
+        LineCount = 7 ;
         ItemList =
         {
             ToolBoxItem
@@ -412,6 +412,62 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Identifier = RID_DRARROW ;
                 HelpId = HID_SMA_DRARROW ;
                 Text [ en-US ] = "Double Arrow Right";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_BREAK ;
+            };
+            ToolBoxItem
+            {
+                Identifier = RID_XPRECEDESY ;
+                HelpId = HID_SMA_PRECEDES ;
+                Text [ en-US ] = "Precedes";
+            };
+            ToolBoxItem
+            {
+                Identifier = RID_XNOTPRECEDESY ;
+                HelpId = HID_SMA_NOTPRECEDES ;
+                Text [ en-US ] = "Not precedes";
+            };
+            ToolBoxItem
+            {
+                Identifier = RID_XSUCCEEDSY ;
+                HelpId = HID_SMA_SUCCEEDS ;
+                Text [ en-US ] = "Succeeds";
+            };
+            ToolBoxItem
+            {
+                Identifier = RID_XNOTSUCCEEDSY ;
+                HelpId = HID_SMA_NOTSUCCEEDS ;
+                Text [ en-US ] = "Not succeeds";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_BREAK ;
+            };
+            ToolBoxItem
+            {
+                Identifier = RID_XPRECEDESEQUALY ;
+                HelpId = HID_SMA_PRECEDESEQUAL ;
+                Text [ en-US ] = "Precedes or equal to";
+            };
+            ToolBoxItem
+            {
+                Identifier = RID_XSUCCEEDSEQUALY ;
+                HelpId = HID_SMA_SUCCEEDSEQUAL ;
+                Text [ en-US ] = "Succeeds or equal to";
+            };
+            ToolBoxItem
+            {
+                Identifier = RID_XPRECEDESEQUIVY ;
+                HelpId = HID_SMA_PRECEDESEQUIV ;
+                Text [ en-US ] = "Precedes or equivalent to";
+            };
+            ToolBoxItem
+            {
+                Identifier = RID_XSUCCEEDSEQUIVY ;
+                HelpId = HID_SMA_SUCCEEDSEQUIV ;
+                Text [ en-US ] = "Succeeds or equivalent to";
             };
         };
     };
@@ -1516,8 +1572,16 @@ FloatingWindow RID_TOOLBOXWINDOW
         RID_DLARROW ;       \
         RID_DLRARROW ;      \
         RID_DRARROW ;       \
+        RID_XPRECEDESY ;    \
+        RID_XNOTPRECEDESY ; \
+        RID_XPRECEDESEQUALY ; \
+        RID_XPRECEDESEQUIVY ; \
+        RID_XSUCCEEDSY ;    \
+        RID_XNOTSUCCEEDSY ; \
+        RID_XSUCCEEDSEQUALY ; \
+        RID_XSUCCEEDSEQUIVY ; \
     };                      \
-    IdCount ={ 21 ; };
+    IdCount ={ 29 ; };
 
     ImageList RID_IL_RELATIONS
     {
@@ -1728,7 +1792,7 @@ FloatingWindow RID_TOOLBOXWINDOW
         RID_PARTIAL ;       \
         RID_NABLA ;         \
         RID_EXISTS ;        \
-        RID_NOTEXISTS ;        \
+        RID_NOTEXISTS ;     \
         RID_FORALL ;        \
         RID_HBAR;           \
         RID_LAMBDABAR ;     \

@@ -226,7 +226,14 @@ String RID_UPARROW          { Text = "uparrow " ; };
 String RID_DOWNARROW        { Text = "downarrow " ; };
 String RID_NOSPACE          { Text = "nospace {<?>} " ; };
 
-
+String RID_XPRECEDESY        { Text = "<?> prec <?> " ; };
+String RID_XPRECEDESEQUALY   { Text = "<?> preccurlyeq <?> " ; };
+String RID_XPRECEDESEQUIVY   { Text = "<?> precsim <?> " ; };
+String RID_XSUCCEEDSY        { Text = "<?> succ <?> " ; };
+String RID_XSUCCEEDSEQUALY   { Text = "<?> succcurlyeq <?> " ; };
+String RID_XSUCCEEDSEQUIVY   { Text = "<?> succsim <?> " ; };
+String RID_XNOTPRECEDESY     { Text = "<?> nprec <?> " ; };
+String RID_XNOTSUCCEEDSY     { Text = "<?> nsucc <?> " ; };
 //////////////////////////////////////////
 
 
@@ -508,6 +515,58 @@ Menu RID_COMMANDMENU
                         Identifier = RID_DRARROW;
                         HelpId = HID_SMA_DRARROW;
                         Text = "a drarrow b";
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE;
+                    };
+                    MenuItem
+                    {
+                        Identifier = RID_XPRECEDESY;
+                        HelpId = HID_SMA_PRECEDES;
+                        Text = "a prec b";
+                    };
+                    MenuItem
+                    {
+                        Identifier = RID_XSUCCEEDSY;
+                        HelpId = HID_SMA_SUCCEEDS;
+                        Text = "a succ b";
+                    };
+                    MenuItem
+                    {
+                        Identifier = RID_XPRECEDESEQUALY;
+                        HelpId = HID_SMA_PRECEDESEQUAL;
+                        Text = "a preccurlyeq b";
+                    };
+                    MenuItem
+                    {
+                        Identifier = RID_XSUCCEEDSEQUALY;
+                        HelpId = HID_SMA_SUCCEEDSEQUAL;
+                        Text = "a succcurlyeq b";
+                    };
+                    MenuItem
+                    {
+                        Identifier = RID_XPRECEDESEQUIVY;
+                        HelpId = HID_SMA_PRECEDESEQUIV;
+                        Text = "a precsim b";
+                    };
+                    MenuItem
+                    {
+                        Identifier = RID_XSUCCEEDSEQUIVY;
+                        HelpId = HID_SMA_SUCCEEDSEQUIV;
+                        Text = "a succsim b";
+                    };
+                    MenuItem
+                    {
+                        Identifier = RID_XNOTPRECEDESY;
+                        HelpId = HID_SMA_NOTPRECEDES;
+                        Text = "a nprec b";
+                    };
+                    MenuItem
+                    {
+                        Identifier = RID_XNOTSUCCEEDSY;
+                        HelpId = HID_SMA_NOTSUCCEEDS;
+                        Text = "a nsucc b";
                     };
                 };
             };

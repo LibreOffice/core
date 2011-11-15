@@ -238,7 +238,7 @@ void SmToolBoxWindow::StateChanged( StateChangedType nStateChange )
 void SmToolBoxWindow::AdjustPosSize( bool bSetPos )
 {
     Size aCatSize( aToolBoxCat.CalcWindowSizePixel( 2 ) );
-    Size aCmdSize( pToolBoxCmd->CalcWindowSizePixel( 5 /* see nLines in SetCategory*/ ) );
+    Size aCmdSize( pToolBoxCmd->CalcWindowSizePixel( 7 /* see nLines in SetCategory*/ ) );
     OSL_ENSURE( aCatSize.Width() == aCmdSize.Width(), "width mismatch" );
 
     // catalog settings
@@ -307,7 +307,7 @@ void SmToolBoxWindow::SetCategory(sal_uInt16 nCategoryRID)
     switch (nCategoryRID)
     {
         case RID_UNBINOPS_CAT :     nLines = 4; break;
-        case RID_RELATIONS_CAT:     nLines = 5; break;
+        case RID_RELATIONS_CAT:     nLines = 7; break;
         case RID_SETOPERATIONS_CAT: nLines = 5; break;
         case RID_FUNCTIONS_CAT:     nLines = 5; break;
         case RID_OPERATORS_CAT:     nLines = 3; break;

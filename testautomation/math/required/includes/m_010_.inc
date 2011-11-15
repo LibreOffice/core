@@ -157,6 +157,23 @@ try
    Teilt.Click
        Call Bereinigen
    TeiltNicht.Click
+       Call Bereinigen
+   Precedes.Click
+       Call Bereinigen
+   Succeeds.Click
+       Call Bereinigen
+   NotPrecedes.Click
+       Call Bereinigen
+   NotSucceeds.Click
+       Call Bereinigen
+   PrecedesOrEqualTo.Click
+       Call Bereinigen
+   SucceedsOrEqualTo.Click
+       Call Bereinigen
+   PrecedesOrEquivalentTo.Click 
+       Call Bereinigen
+   SucceedsOrEquivalentTo.Click
+       Call Bereinigen
 
 catch
    warnlog "failed!"

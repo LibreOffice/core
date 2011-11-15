@@ -18408,6 +18408,10 @@ OpenOffice.org Math : PostScript;PDF converter, UNIX
 OpenOffice.org Math : PowerPoint export
 OpenOffice.org Math : powers
 OpenOffice.org Math : precision as shown (Calc)
+OpenOffice.org Math : precedes symbol
+OpenOffice.org Math : not precedes symbol
+OpenOffice.org Math : precedes or equal to symbol
+OpenOffice.org Math : precedes or equivalent to symbol
 OpenOffice.org Math : predefining fonts
 OpenOffice.org Math : presentations
 OpenOffice.org Math : presentations;creating/opening
@@ -18835,6 +18839,10 @@ OpenOffice.org Math : submitting forms
 OpenOffice.org Math : subscripts
 OpenOffice.org Math : subset set operators
 OpenOffice.org Math : subtraction signs
+OpenOffice.org Math : succeeds symbol
+OpenOffice.org Math : not succeeds symbol
+OpenOffice.org Math : succeeds or equal to symbol
+OpenOffice.org Math : succeeds or equivalent to symbol
 OpenOffice.org Math : suffixes in file formats
 OpenOffice.org Math : sum range example
 OpenOffice.org Math : summation
@@ -18980,7 +18988,7 @@ OpenOffice.org Math : Thai
 OpenOffice.org Math : Thai;entering text
 OpenOffice.org Math : Thai;language settings
 OpenOffice.org Math : there exists symbol
-OpenOffice.org Math : there not exists symbol
+OpenOffice.org Math : there does not exists symbol
 OpenOffice.org Math : thesaurus
 OpenOffice.org Math : thesaurus;activating for a language
 OpenOffice.org Math : ticker text

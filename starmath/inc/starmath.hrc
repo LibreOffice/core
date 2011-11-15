@@ -241,6 +241,17 @@
 #define RID_DLARROW                 (RID_APP_START + 1324)
 #define RID_DLRARROW                (RID_APP_START + 1325)
 #define RID_DRARROW                 (RID_APP_START + 1326)
+// Game theory
+
+#define RID_XPRECEDESY              (RID_APP_START + 1327)
+#define RID_XNOTPRECEDESY           (RID_APP_START + 1328)
+#define RID_XSUCCEEDSY              (RID_APP_START + 1329)
+#define RID_XNOTSUCCEEDSY           (RID_APP_START + 1330)
+#define RID_XPRECEDESEQUALY         (RID_APP_START + 1331)
+#define RID_XSUCCEEDSEQUALY         (RID_APP_START + 1332)
+#define RID_XPRECEDESEQUIVY         (RID_APP_START + 1333)
+#define RID_XSUCCEEDSEQUIVY         (RID_APP_START + 1334)
+
 
 #define RID_XINY                    (RID_APP_START + 1401)
 #define RID_XNOTINY                 (RID_APP_START + 1402)

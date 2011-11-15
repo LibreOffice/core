@@ -15381,6 +15381,10 @@ Oracle Open Office Math : PostScript;PDF converter, UNIX
 Oracle Open Office Math : PowerPoint export
 Oracle Open Office Math : powers
 Oracle Open Office Math : precision as shown (Calc)
+Oracle Open Office Math : precedes symbol
+Oracle Open Office Math : not precedes symbol
+Oracle Open Office Math : precedes or equal to  symbol
+Oracle Open Office Math : precedes or equivalent to symbol
 Oracle Open Office Math : predefining fonts
 Oracle Open Office Math : predictive text, see also AutoCorrect function/AutoFill function/AutoInput function/word completion/text completion
 Oracle Open Office Math : presentations
@@ -15813,6 +15817,10 @@ Oracle Open Office Math : submitting forms
 Oracle Open Office Math : subscripts
 Oracle Open Office Math : subset set operators
 Oracle Open Office Math : subtraction signs
+Oracle Open Office Math : succeeds symbol
+Oracle Open Office Math : not succeeds symbol
+Oracle Open Office Math : succeeds or equal to  symbol
+Oracle Open Office Math : succeeds or equivalent to symbol
 Oracle Open Office Math : suffixes in file formats
 Oracle Open Office Math : sum range example
 Oracle Open Office Math : summation
@@ -15958,7 +15966,7 @@ Oracle Open Office Math : Thai
 Oracle Open Office Math : Thai;entering text
 Oracle Open Office Math : Thai;language settings
 Oracle Open Office Math : there exists symbol
-Oracle Open Office Math : there not exists symbol
+Oracle Open Office Math : there does not exists symbol
 Oracle Open Office Math : thesaurus
 Oracle Open Office Math : thesaurus;activating for a language
 Oracle Open Office Math : ticker text
