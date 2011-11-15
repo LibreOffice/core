@@ -84,30 +84,30 @@ class StringLength : public ::cppu::WeakImplHelper1< XStringWidth >
         }
 };
 
-void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, const ::rtl::OUString& aURLString, sal_uInt32 nNo )
+void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, const String& aURLString, sal_uInt32 nNo )
 {
-    ::rtl::OUStringBuffer aPickEntry;
+    String aPickEntry;
 
     if ( nNo < 9 )
     {
-        aPickEntry.append('~');
-        aPickEntry.append(::rtl::OUString::valueOf(static_cast<sal_Int32>(nNo + 1)));
+        aPickEntry += '~';
+        aPickEntry += String::CreateFromInt32( nNo + 1 );
     }
     else if ( nNo == 9 )
-        aPickEntry.appendAscii("1~0");
+        aPickEntry += DEFINE_CONST_UNICODE("1~0");
     else
-        aPickEntry.append(::rtl::OUString::valueOf(static_cast<sal_Int32>(nNo + 1)));
-    aPickEntry.appendAscii(": ");
+        aPickEntry += String::CreateFromInt32( nNo + 1 );
+    aPickEntry += DEFINE_CONST_UNICODE(": ");
 
     INetURLObject   aURL( aURLString );
     rtl::OUString   aTipHelpText;
-    rtl::OUString   aAccessibleName = aPickEntry.toString();
+    rtl::OUString   aAccessibleName( aPickEntry );
 
     if ( aURL.GetProtocol() == INET_PROT_FILE )
     {
         // Do handle file URL differently => convert it to a system
         // path and abbreviate it with a special function:
-        ::rtl::OUString aFileSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
+        String aFileSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
 
         ::rtl::OUString aSystemPath( aFileSystemPath );
         ::rtl::OUString aCompactedSystemPath;
@@ -116,28 +116,28 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, cons
         aAccessibleName += aSystemPath;
         oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, NULL );
         if ( !nError )
-            aPickEntry.append( aCompactedSystemPath );
+            aPickEntry += String( aCompactedSystemPath );
         else
-            aPickEntry.append( aFileSystemPath );
+            aPickEntry += aFileSystemPath;
 
-        if ( aPickEntry.getLength() > 50 )
+        if ( aPickEntry.Len() > 50 )
         {
-            aPickEntry.setLength( 47 );
-            aPickEntry.appendAscii("...");
+            aPickEntry.Erase( 47 );
+            aPickEntry += DEFINE_CONST_UNICODE("...");
         }
     }
     else
     {
         // Use INetURLObject to abbreviate all other URLs
-        ::rtl::OUString aShortURL;
+        String  aShortURL;
         aShortURL = aURL.getAbbreviated( m_xStringLength, 46, INetURLObject::DECODE_UNAMBIGUOUS );
-        aPickEntry.append(aShortURL);
+        aPickEntry += aShortURL;
         aTipHelpText = aURLString;
         aAccessibleName += aURLString;
     }
 
     // Set menu item text, tip help and accessible name
-    pMenu->SetItemText( nItemId, aPickEntry.toString() );
+    pMenu->SetItemText( nItemId, aPickEntry );
     pMenu->SetTipHelpText( nItemId, aTipHelpText );
     pMenu->SetAccessibleName( nItemId, aAccessibleName );
 }
@@ -425,7 +425,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 pDocSh->Get_Impl()->bWaitingForPicklist = sal_False;
 
                 if ( aURL.GetProtocol() == INET_PROT_FILE )
-                    Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ), (pFilter) ? pFilter->GetMimeType() : ::rtl::OUString() );
+                    Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ), (pFilter) ? pFilter->GetMimeType() : String() );
             }
             break;
         }

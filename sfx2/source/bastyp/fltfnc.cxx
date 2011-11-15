@@ -649,7 +649,7 @@ const SfxFilter* SfxFilterMatcher::GetFilterForProps( const com::sun::star::uno:
     return 0;
 }
 
-const SfxFilter* SfxFilterMatcher::GetFilter4Mime( const ::rtl::OUString& rMediaType, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
+const SfxFilter* SfxFilterMatcher::GetFilter4Mime( const String& rMediaType,SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
     if ( m_rImpl.pList )
     {
@@ -666,7 +666,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4Mime( const ::rtl::OUString& rMedia
 
     com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aSeq(1);
     aSeq[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
-    aSeq[0].Value <<= rMediaType;
+    aSeq[0].Value <<= ::rtl::OUString( rMediaType );
     return GetFilterForProps( aSeq, nMust, nDont );
 }
 

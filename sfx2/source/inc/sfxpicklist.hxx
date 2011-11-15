@@ -30,6 +30,7 @@
 #define _SFX_PICKLIST_HXX_
 
 #include <osl/mutex.hxx>
+#include <tools/string.hxx>
 #include <vcl/menu.hxx>
 #include <svl/lstner.hxx>
 #include <com/sun/star/util/XStringWidth.hpp>
@@ -42,13 +43,13 @@ class SfxPickList : public SfxListener
 {
     struct PickListEntry
     {
-        PickListEntry( const ::rtl::OUString& _aName, const ::rtl::OUString& _aFilter, const ::rtl::OUString& _aTitle ) :
+        PickListEntry( const String& _aName, const String& _aFilter, const String& _aTitle ) :
             aName( _aName ), aFilter( _aFilter ), aTitle( _aTitle ) {}
 
-        ::rtl::OUString aName;
-        ::rtl::OUString aFilter;
-        ::rtl::OUString aTitle;
-        ::rtl::OUString aOptions;
+        String      aName;
+        String      aFilter;
+        String      aTitle;
+        String      aOptions;
     };
 
     std::vector< PickListEntry* >   m_aPicklistVector;
@@ -58,7 +59,7 @@ class SfxPickList : public SfxListener
                             SfxPickList( sal_uInt32 nMenuSize );
                             ~SfxPickList();
 
-    void                    CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, const ::rtl::OUString& aURL, sal_uInt32 nNo );
+    void                    CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, const String& aURL, sal_uInt32 nNo );
     PickListEntry*          GetPickListEntry( sal_uInt32 nIndex );
     void                    CreatePickListEntries();
     void                    RemovePickListEntries();
