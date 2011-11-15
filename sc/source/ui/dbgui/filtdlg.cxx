@@ -340,7 +340,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         maValueEdArr[i]->SetText( aValStr );
         maValueEdArr[i]->EnableAutocomplete( false );
         maValueEdArr[i]->SetModifyHdl( LINK( this, ScFilterDlg, ValModifyHdl ) );
-        UpdateValueList( static_cast<sal_uInt16>(i+1) );
+        UpdateValueList(i+1);
     }
 
     aScrollBar.SetEndScrollHdl( LINK( this, ScFilterDlg, ScrollHdl ) );
@@ -505,7 +505,7 @@ void ScFilterDlg::FillFieldLists()
 
 //----------------------------------------------------------------------------
 
-void ScFilterDlg::UpdateValueList( sal_uInt16 nList )
+void ScFilterDlg::UpdateValueList( size_t nList )
 {
     if (pDoc && nList > 0 && nList <= QUERY_ENTRY_COUNT)
     {
@@ -527,7 +527,7 @@ void ScFilterDlg::UpdateValueList( sal_uInt16 nList )
             EntryList* pList = NULL;
             if (!maEntryLists.count(nColumn))
             {
-                sal_uInt16 nOffset = GetSliderPos();
+                size_t nOffset = GetSliderPos();
                 SCTAB nTab       = nSrcTab;
                 SCROW nFirstRow = theQueryData.nRow1;
                 SCROW nLastRow   = theQueryData.nRow2;
@@ -590,7 +590,7 @@ void ScFilterDlg::UpdateValueList( sal_uInt16 nList )
     UpdateHdrInValueList( nList );
 }
 
-void ScFilterDlg::UpdateHdrInValueList( sal_uInt16 nList )
+void ScFilterDlg::UpdateHdrInValueList( size_t nList )
 {
     //! GetText / SetText ??
 
@@ -643,7 +643,7 @@ void ScFilterDlg::UpdateHdrInValueList( sal_uInt16 nList )
 
 //----------------------------------------------------------------------------
 
-void ScFilterDlg::ClearValueList( sal_uInt16 nList )
+void ScFilterDlg::ClearValueList( size_t nList )
 {
     if (nList > 0 && nList <= QUERY_ENTRY_COUNT)
     {
@@ -1201,7 +1201,7 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
     else
         maConnLbArr[0]->Show();
 
-    for ( sal_uInt16 i=0; i<4; i++ )
+    for (size_t i = 0; i < QUERY_ENTRY_COUNT; ++i)
     {
         rtl::OUString aValStr;
         size_t nCondPos = 0;
@@ -1296,7 +1296,7 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
         maFieldLbArr[i]->SelectEntryPos( nFieldSelPos );
         maCondLbArr [i]->SelectEntryPos( nCondPos );
         maValueEdArr[i]->SetText( aValStr );
-        UpdateValueList( static_cast<sal_uInt16>(i+1) );
+        UpdateValueList(i+1);
     }
 }
 

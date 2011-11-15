@@ -161,9 +161,9 @@ private:
     void            Init            ( const SfxItemSet& rArgSet );
     void            FillFieldLists  ();
     void            FillAreaList    ();
-    void            UpdateValueList ( sal_uInt16 nList );
-    void            UpdateHdrInValueList( sal_uInt16 nList );
-    void            ClearValueList  ( sal_uInt16 nList );
+    void            UpdateValueList ( size_t nList );
+    void            UpdateHdrInValueList( size_t nList );
+    void            ClearValueList  ( size_t nList );
     size_t          GetFieldSelPos  ( SCCOL nField );
     ScQueryItem*    GetOutputItem   ();
 
