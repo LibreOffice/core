@@ -436,7 +436,7 @@ void ScFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart( &aEdCopyArea );
-        String aRefStr;
+        rtl::OUString aRefStr;
         rRef.aStart.Format( aRefStr, SCA_ABS_3D, pDocP, pDocP->GetAddressConvention() );
         aEdCopyArea.SetRefString( aRefStr );
     }
@@ -474,7 +474,7 @@ void ScFilterDlg::FillFieldLists()
 
     if ( pDoc )
     {
-        String  aFieldName;
+        rtl::OUString aFieldName;
         SCTAB   nTab        = nSrcTab;
         SCCOL   nFirstCol   = theQueryData.nCol1;
         SCROW   nFirstRow   = theQueryData.nRow1;
@@ -485,11 +485,13 @@ void ScFilterDlg::FillFieldLists()
         for ( col=nFirstCol; col<=nMaxCol; col++ )
         {
             pDoc->GetString( col, nFirstRow, nTab, aFieldName );
-            if ( !aBtnHeader.IsChecked() || (aFieldName.Len() == 0) )
+            if (!aBtnHeader.IsChecked() || aFieldName.isEmpty())
             {
-                aFieldName  = aStrColumn;
-                aFieldName += ' ';
-                aFieldName += ScColToAlpha( col );
+                rtl::OUStringBuffer aBuf;
+                aBuf.append(aStrColumn);
+                aBuf.append(sal_Unicode(' '));
+                aBuf.append(ScColToAlpha(col));
+                aFieldName = aBuf.makeStringAndClear();
             }
             aLbField1.InsertEntry( aFieldName, i );
             aLbField2.InsertEntry( aFieldName, i );
@@ -510,7 +512,7 @@ void ScFilterDlg::UpdateValueList( sal_uInt16 nList )
         ComboBox*   pValList        = maValueEdArr[nList-1];
         sal_uInt16      nFieldSelPos    = maFieldLbArr[nList-1]->GetSelectEntryPos();
         sal_uInt16      nListPos        = 0;
-        String      aCurValue       = pValList->GetText();
+        rtl::OUString aCurValue = pValList->GetText();
 
         pValList->Clear();
         pValList->InsertEntry( aStrNotEmpty, 0 );
@@ -727,7 +729,7 @@ IMPL_LINK( ScFilterDlg, EndDlgHdl, Button*, pBtn )
 {
     if ( pBtn == &aBtnOk )
     {
-        sal_Bool bAreaInputOk = true;
+        bool bAreaInputOk = true;
 
         if ( aBtnCopyResult.IsChecked() )
         {
@@ -1101,7 +1103,7 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
     size_t nQE = i + nOffset;
     if ( pEd )
     {
-        String    aStrVal   = pEd->GetText();
+        rtl::OUString aStrVal = pEd->GetText();
         ListBox*  pLbCond   = &aLbCond1;
         ListBox*  pLbField  = &aLbField1;
         if ( pEd == &aEdVal2 )
@@ -1201,9 +1203,9 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
 
     for ( sal_uInt16 i=0; i<4; i++ )
     {
-        String  aValStr;
-        sal_uInt16  nCondPos     = 0;
-        sal_uInt16  nFieldSelPos = 0;
+        rtl::OUString aValStr;
+        size_t nCondPos = 0;
+        size_t nFieldSelPos = 0;
         size_t nQE = i + nOffset;
 
         if (maRefreshExceptQuery.size() < nQE + 1)
@@ -1212,7 +1214,7 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
         ScQueryEntry& rEntry = theQueryData.GetEntry( nQE);
         if ( rEntry.bDoQuery || maRefreshExceptQuery[nQE] )
         {
-            nCondPos     = (sal_uInt16)rEntry.eOp;
+            nCondPos = static_cast<size_t>(rEntry.eOp);
             if(rEntry.bDoQuery)
                nFieldSelPos = GetFieldSelPos( static_cast<SCCOL>(rEntry.nField) );
 
