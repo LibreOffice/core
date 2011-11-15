@@ -26,7 +26,7 @@
 #*************************************************************************
 
 #
-# FreBSD/amd64 specific defines
+# FreeBSD/amd64 specific defines
 #
 
 CDEFS+=-DX86_64

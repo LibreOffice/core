@@ -31,6 +31,7 @@ ASM=
 AFLAGS=
 
 SOLAR_JAVA*=
+PICSWITCH*:=-fpic
 JAVAFLAGSDEBUG=-g
 
 # Include arch specific makefile.
@@ -68,7 +69,7 @@ CXX*=g++
 # name of C Compiler
 CC*=gcc
 .IF "$(SYSBASE)"!=""
-CFLAGS_SYSBASE:=-isystem $(SYSBASE)/usr/include
+CFLAGS_SYSBASE:=--sysroot=$(SYSBASE)
 CXX+:=$(CFLAGS_SYSBASE)
 CC+:=$(CFLAGS_SYSBASE)
 .ENDIF          # "$(SYSBASE)"!=""
@@ -91,7 +92,6 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 # -fpermissive should be removed as soon as possible
 CFLAGSCXX= -pipe $(ARCH_FLAGS)
-PICSWITCH:=-fpic
 .IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 CFLAGSCXX += -fvisibility-inlines-hidden
 .ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
@@ -136,20 +136,26 @@ LINK*=$(CXX)
 LINKC*=$(CC)
 
 # default linker flags
-LINKFLAGSDEFS*=#-Wl,-z,defs
-LINKFLAGSRUNPATH_URELIB=-Wl,-z,origin -Wl,-rpath,\''$$ORIGIN'\'
-LINKFLAGSRUNPATH_UREBIN=-Wl,-z,origin -Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\'
+.IF "$(SYSBASE)"!=""
+LINKFLAGS_SYSBASE:=-Wl,--sysroot=$(SYSBASE)
+.ENDIF          # "$(SYSBASE)"!=""
+LINKFLAGSDEFS*=-Wl,-z,defs
+LINKFLAGSRUNPATH_URELIB=-Wl,-rpath,\''$$ORIGIN'\'
+LINKFLAGSRUNPATH_UREBIN=-Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\'
     #TODO: drop $ORIGIN once no URE executable is also shipped in OOo
-LINKFLAGSRUNPATH_OOO=-Wl,-z,origin -Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
-LINKFLAGSRUNPATH_SDK=-Wl,-z,origin -Wl,-rpath,\''$$ORIGIN/../../ure-link/lib'\'
-LINKFLAGSRUNPATH_BRAND=-Wl,-z,origin -Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\'
+LINKFLAGSRUNPATH_OOO=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
+LINKFLAGSRUNPATH_SDK=-Wl,-rpath,\''$$ORIGIN/../../ure-link/lib'\'
+LINKFLAGSRUNPATH_BRAND=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\'
 LINKFLAGSRUNPATH_OXT=
+LINKFLAGSRUNPATH_BOXT=-Wl,-rpath,\''$$ORIGIN/../../../basis-link/program'\'
 LINKFLAGSRUNPATH_NONE=
-LINKFLAGS=-Wl,-z,combreloc $(LINKFLAGSDEFS)
+LINKFLAGS=-Wl,-z,combreloc $(LINKFLAGSDEFS) $(LINKFLAGS_SYSBASE)
 
 # linker flags for linking applications
-LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
-LINKFLAGSAPPCUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
+LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec \
+      -Wl,-rpath-link,$(LB):$(SOLARLIBDIR):$(SYSBASE)/lib:$(SYSBASE)/usr/lib
+LINKFLAGSAPPCUI= -Wl,-export-dynamic -Wl,--noinhibit-exec \
+      -Wl,-rpath-link,$(LB):$(SOLARLIBDIR):$(SYSBASE)/lib:$(SYSBASE)/usr/lib
 
 # linker flags for linking shared libraries
 LINKFLAGSSHLGUI= -shared
@@ -172,18 +178,38 @@ SONAME_SWITCH=-Wl,-h
 STDLIBCPP=-lstdc++
 
 # default objectfilenames to link
-STDOBJVCL=$(L)/salmain.o
+STDOBJVCL=$(L)$/salmain.o
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
 
+.IF "$(ALLOC)" == "PTMALLOC"
+STDLIBGUIMT+=-lptmalloc
+STDLIBCUIMT+=-lptmalloc
+STDSHLGUIMT+=-lptmalloc
+STDSHLCUIMT+=-lptmalloc
+.ELIF "$(ALLOC)" == "TCMALLOC"
+STDLIBGUIMT+=-ltcmalloc
+STDLIBCUIMT+=-ltcmalloc
+STDSHLGUIMT+=-ltcmalloc
+STDSHLCUIMT+=-ltcmalloc
+.ENDIF
+
+.IF "$(HAVE_LD_HASH_STYLE)"  == "TRUE"
+LINKFLAGS += -Wl,--hash-style=both
+.ELSE
+LINKFLAGS += -Wl,-zdynsort
+.ENDIF
+
 # libraries for linking applications
-STDLIBGUIMT=-lX11 $(PTHREAD_LIBS) -lm
-STDLIBCUIMT=$(PTHREAD_LIBS) -lm
+STDLIBGUIMT+=-Wl,--as-needed $(PTHREAD_LIBS) -lm -Wl,--no-as-needed
+STDLIBCUIMT+=-Wl,--as-needed $(PTHREAD_LIBS) -lm -Wl,--no-as-needed
 # libraries for linking shared libraries
-STDSHLGUIMT=-lX11 -lXext $(PTHREAD_LIBS) -lm
-STDSHLCUIMT=$(PTHREAD_LIBS) -lm
+STDSHLGUIMT+=-Wl,--as-needed $(PTHREAD_LIBS) -lm -Wl,--no-as-needed
+STDSHLCUIMT+=-Wl,--as-needed $(PTHREAD_LIBS) -lm -Wl,--no-as-needed
+
+X11LINK_DYNAMIC = -Wl,--as-needed -lXext -lX11 -Wl,--no-as-needed
 
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 
@@ -227,3 +253,4 @@ RCSETVERSION=
 # platform specific identifier for shared libs
 DLLPRE=lib
 DLLPOST=.so
+PCHPOST=.gch

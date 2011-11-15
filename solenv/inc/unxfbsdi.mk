@@ -26,7 +26,7 @@
 #*************************************************************************
 
 #
-# FreBSD/i386 specific defines
+# FreeBSD/i386 specific defines
 #
  
 CDEFS+=-DX86
@@ -43,4 +43,5 @@ CFLAGSOPT= 					# no optimizing for non products
 .ENDIF	# "$(PRODUCT)"!=""
 
 # platform specific identifier for shared libs
+DLLPOST=.so
 DLLPOSTFIX=
