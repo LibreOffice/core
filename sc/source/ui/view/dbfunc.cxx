@@ -92,7 +92,7 @@ void ScDBFunc::GotoDBArea( const ::rtl::OUString& rDBName )
     }
 }
 
-//  get actual datarange for sort / filter search
+//  search current datarange for sort / filter
 
 ScDBData* ScDBFunc::GetDBData( bool bMark, ScGetDBMode eMode, ScGetDBSelection eSel )
 {
@@ -320,7 +320,7 @@ void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource
         sal_Bool bCopy = !rQueryParam.bInplace;
         if (bCopy)
         {
-            //  mark target range (data base  range has been set up if applicable)
+            //  mark target range (data base range has been set up if applicable)
             ScDocument* pDoc = pDocSh->GetDocument();
             ScDBData* pDestData = pDoc->GetDBAtCursor(
                                             rQueryParam.nDestCol, rQueryParam.nDestRow,
@@ -422,7 +422,7 @@ void ScDBFunc::ToggleAutoFilter()
             {
                 if ( MessBox( GetViewData()->GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                         ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),       // "StarCalc"
-                        ScGlobal::GetRscString( STR_MSSG_MAKEAUTOFILTER_0 )     // header from first cell?
+                        ScGlobal::GetRscString( STR_MSSG_MAKEAUTOFILTER_0 )     // header from first row?
                     ).Execute() == RET_YES )
                 {
                     pDBData->SetHeader( sal_True );     //! Undo ??
