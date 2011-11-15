@@ -582,12 +582,8 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
         return true;
     bool bMatchWholeCell = mpDoc->GetDocOptions().IsMatchWholeCell();
 
-    //---------------------------------------------------------------
-
-    const SCSIZE nFixedBools = 32;
-    bool aBool[nFixedBools];
     SCSIZE nEntryCount = rParam.GetEntryCount();
-    bool* pPasst = ( nEntryCount <= nFixedBools ? &aBool[0] : new bool[nEntryCount] );
+    std::vector<bool> aPassed(nEntryCount, false);
 
     long nPos = -1;
     CollatorWrapper* pCollator = (rParam.bCaseSens ? ScGlobal::GetCaseCollator() :
@@ -753,31 +749,26 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
         if (nPos == -1)
         {
             nPos++;
-            pPasst[nPos] = bOk;
+            aPassed[nPos] = bOk;
         }
         else
         {
             if (rEntry.eConnect == SC_AND)
             {
-                pPasst[nPos] = pPasst[nPos] && bOk;
+                aPassed[nPos] = aPassed[nPos] && bOk;
             }
             else
             {
                 nPos++;
-                pPasst[nPos] = bOk;
+                aPassed[nPos] = bOk;
             }
         }
     }
 
     for (long j=1; j <= nPos; j++)
-    {
-        pPasst[0] = pPasst[0] || pPasst[j];
-    }
+        aPassed[0] = aPassed[0] || aPassed[j];
 
-    bool bRet = pPasst[0];
-    if (pPasst != &aBool[0])
-        delete [] pPasst;
-
+    bool bRet = aPassed[0];
     return bRet;
 }
 
