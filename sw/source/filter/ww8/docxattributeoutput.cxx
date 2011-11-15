@@ -2879,7 +2879,7 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
         if ( *pIt < sal_Unicode( WW8ListManager::nMaxLevel ) )
         {
             aBuffer.append( pPrev, pIt - pPrev );
-            aBuffer.appendAscii( "%" );
+            aBuffer.append( '%' );
             aBuffer.append( OUString::valueOf( sal_Int32( *pIt ) + 1 ) );
 
             pPrev = pIt + 1;

@@ -307,9 +307,9 @@ void DocxExport::DoFormText(const SwInputField* /*pFld*/)
 rtl::OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_Int32 nCount )
 {
     rtl::OUString aFileName = rtl::OUStringBuffer()
-                                .appendAscii("charts/chart")
+                                .appendAscii(RTL_CONSTASCII_STRINGPARAM("charts/chart"))
                                 .append(nCount)
-                                .appendAscii( ".xml" )
+                                .appendAscii(RTL_CONSTASCII_STRINGPARAM(".xml"))
                                 .makeStringAndClear();
 
     OUString sId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
@@ -317,9 +317,9 @@ rtl::OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, s
                     aFileName );
 
     aFileName = rtl::OUStringBuffer()
-                  .appendAscii("word/charts/chart")
+                  .appendAscii(RTL_CONSTASCII_STRINGPARAM("word/charts/chart"))
                   .append(nCount)
-                  .appendAscii( ".xml" )
+                  .appendAscii(RTL_CONSTASCII_STRINGPARAM(".xml"))
                   .makeStringAndClear();
 
     ::sax_fastparser::FSHelperPtr pChartFS =
@@ -577,26 +577,28 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
     ::sax_fastparser::FSHelperPtr pFS;
     if ( bHeader )
     {
-        OUString aName( OUStringBuffer().appendAscii( "header" ).append( ++m_nHeaders ).appendAscii( ".xml" ).makeStringAndClear() );
+        OUString aName( OUStringBuffer().appendAscii(RTL_CONSTASCII_STRINGPARAM("header"))
+            .append( ++m_nHeaders ).appendAscii(RTL_CONSTASCII_STRINGPARAM(".xml"))
+            .makeStringAndClear() );
 
         aRelId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
                 S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" ),
                 aName );
 
-        pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().appendAscii( "word/" ).append( aName ).makeStringAndClear(),
+        pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().appendAscii(RTL_CONSTASCII_STRINGPARAM("word/")).append( aName ).makeStringAndClear(),
                     S( "application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml" ) );
 
         pFS->startElementNS( XML_w, XML_hdr, MainXmlNamespaces( pFS ));
     }
     else
     {
-        OUString aName( OUStringBuffer().appendAscii( "footer" ).append( ++m_nFooters ).appendAscii( ".xml" ).makeStringAndClear() );
+        OUString aName( OUStringBuffer().appendAscii(RTL_CONSTASCII_STRINGPARAM("footer")).append( ++m_nFooters ).appendAscii(RTL_CONSTASCII_STRINGPARAM(".xml")).makeStringAndClear() );
 
         aRelId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
                 S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" ),
                 aName );
 
-        pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().appendAscii( "word/" ).append( aName ).makeStringAndClear(),
+        pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().appendAscii(RTL_CONSTASCII_STRINGPARAM("word/")).append( aName ).makeStringAndClear(),
                     S( "application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml" ) );
 
         pFS->startElementNS( XML_w, XML_ftr, MainXmlNamespaces( pFS ));

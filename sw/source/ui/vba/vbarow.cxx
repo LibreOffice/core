@@ -91,13 +91,13 @@ SwVbaRow::Select( ) throw ( uno::RuntimeException )
 void SwVbaRow::SelectRow( const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextTable >& xTextTable, sal_Int32 nStartRow, sal_Int32 nEndRow ) throw ( uno::RuntimeException )
 {
     rtl::OUStringBuffer aRangeName;
-    aRangeName.appendAscii("A").append(sal_Int32( nStartRow + 1 ) );
+    aRangeName.append('A').append(sal_Int32( nStartRow + 1 ) );
     SwVbaTableHelper aTableHelper( xTextTable );
     sal_Int32 nColCount = aTableHelper.getTabColumnsCount( nEndRow );
     // FIXME: the column count > 26
     //sal_Char cCol = 'A' + nColCount - 1;
     rtl::OUString sCol = aTableHelper.getColumnStr( nColCount - 1);
-    aRangeName.appendAscii(":").append( sCol ).append( sal_Int32( nEndRow + 1 ) );
+    aRangeName.append(':').append( sCol ).append( sal_Int32( nEndRow + 1 ) );
 
     uno::Reference< table::XCellRange > xCellRange( xTextTable, uno::UNO_QUERY_THROW );
     rtl::OUString sSelRange = aRangeName.makeStringAndClear();

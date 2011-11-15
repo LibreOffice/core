@@ -138,10 +138,12 @@ namespace sw { namespace mark
     rtl::OUString MarkBase::ToString( ) const
     {
         rtl::OUStringBuffer buf;
-        buf.appendAscii( "Mark: ( Name, [ Node1, Index1 ] ): ( " );
-        buf.append( m_aName ).appendAscii( ", [ " );
-        buf.append( sal_Int32( GetMarkPos().nNode.GetIndex( ) ) ).appendAscii( ", " );
-        buf.append( sal_Int32( GetMarkPos().nContent.GetIndex( ) ) ).appendAscii( " ] )" );
+        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("Mark: ( Name, [ Node1, Index1 ] ): ( "));
+        buf.append( m_aName ).appendAscii(RTL_CONSTASCII_STRINGPARAM(", [ "));
+        buf.append( sal_Int32( GetMarkPos().nNode.GetIndex( ) ) )
+            .appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+        buf.append( sal_Int32( GetMarkPos().nContent.GetIndex( ) ) )
+            .appendAscii(RTL_CONSTASCII_STRINGPARAM(" ] )") );
 
         return buf.makeStringAndClear( );
     }
@@ -160,7 +162,7 @@ namespace sw { namespace mark
             sal_Int32 nRandom;
             ::rtl::OUStringBuffer sUniquePostfixBuffer;
             rtl_random_getBytes(aPool, &nRandom, sizeof(nRandom));
-            sUniquePostfix = ::rtl::OUStringBuffer(13).appendAscii("_").append(static_cast<sal_Int32>(abs(nRandom))).makeStringAndClear();
+            sUniquePostfix = ::rtl::OUStringBuffer(13).append('_').append(static_cast<sal_Int32>(abs(nRandom))).makeStringAndClear();
             nCount = 0;
         }
         // putting the counter in front of the random parts will speed up string comparisons
@@ -291,13 +293,18 @@ namespace sw { namespace mark
     rtl::OUString Fieldmark::ToString( ) const
     {
         rtl::OUStringBuffer buf;
-        buf.appendAscii( "Fieldmark: ( Name, Type, [ Nd1, Id1 ], [ Nd2, Id2 ] ): ( " );
-        buf.append( m_aName ).appendAscii( ", " );
-        buf.append( m_aFieldname ).appendAscii( ", [ " );
-        buf.append( sal_Int32( GetMarkPos().nNode.GetIndex( ) ) ).appendAscii( ", " );
-        buf.append( sal_Int32( GetMarkPos( ).nContent.GetIndex( ) ) ).appendAscii( " ], [" );
-        buf.append( sal_Int32( GetOtherMarkPos().nNode.GetIndex( ) ) ).appendAscii( ", " );
-        buf.append( sal_Int32( GetOtherMarkPos( ).nContent.GetIndex( ) ) ).appendAscii( " ] ) " );
+        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(
+            "Fieldmark: ( Name, Type, [ Nd1, Id1 ], [ Nd2, Id2 ] ): ( "));
+        buf.append( m_aName ).appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+        buf.append( m_aFieldname ).appendAscii(RTL_CONSTASCII_STRINGPARAM(", [ "));
+        buf.append( sal_Int32( GetMarkPos().nNode.GetIndex( ) ) )
+            .appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+        buf.append( sal_Int32( GetMarkPos( ).nContent.GetIndex( ) ) )
+            .appendAscii(RTL_CONSTASCII_STRINGPARAM(" ], ["));
+        buf.append( sal_Int32( GetOtherMarkPos().nNode.GetIndex( ) ) )
+            .appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+        buf.append( sal_Int32( GetOtherMarkPos( ).nContent.GetIndex( ) ) )
+            .appendAscii(RTL_CONSTASCII_STRINGPARAM(" ] ) "));
 
         return buf.makeStringAndClear( );
     }
@@ -357,13 +364,18 @@ namespace sw { namespace mark
     rtl::OUString CheckboxFieldmark::toString( ) const
     {
         rtl::OUStringBuffer buf;
-        buf.appendAscii( "CheckboxFieldmark: ( Name, Type, [ Nd1, Id1 ], [ Nd2, Id2 ] ): ( " );
-        buf.append( m_aName ).appendAscii( ", " );
-        buf.append( GetFieldname() ).appendAscii( ", [ " );
-        buf.append( sal_Int32( GetMarkPos().nNode.GetIndex( ) ) ).appendAscii( ", " );
-        buf.append( sal_Int32( GetMarkPos( ).nContent.GetIndex( ) ) ).appendAscii( " ], [" );
-        buf.append( sal_Int32( GetOtherMarkPos().nNode.GetIndex( ) ) ).appendAscii( ", " );
-        buf.append( sal_Int32( GetOtherMarkPos( ).nContent.GetIndex( ) ) ).appendAscii( " ] ) " );
+        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(
+            "CheckboxFieldmark: ( Name, Type, [ Nd1, Id1 ], [ Nd2, Id2 ] ): ( "));
+        buf.append( m_aName ).appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+        buf.append( GetFieldname() ).appendAscii(RTL_CONSTASCII_STRINGPARAM(", [ "));
+        buf.append( sal_Int32( GetMarkPos().nNode.GetIndex( ) ) )
+            .appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+        buf.append( sal_Int32( GetMarkPos( ).nContent.GetIndex( ) ) )
+            .appendAscii(RTL_CONSTASCII_STRINGPARAM(" ], ["));
+        buf.append( sal_Int32( GetOtherMarkPos().nNode.GetIndex( ) ) )
+            .appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+        buf.append( sal_Int32( GetOtherMarkPos( ).nContent.GetIndex( ) ) )
+            .appendAscii(RTL_CONSTASCII_STRINGPARAM(" ] ) "));
 
         return buf.makeStringAndClear( );
     }

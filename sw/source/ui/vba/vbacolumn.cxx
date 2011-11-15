@@ -133,7 +133,7 @@ void SwVbaColumn::SelectColumn( const uno::Reference< frame::XModel >& xModel, c
     aRangeName.append(sStartCol).append(sal_Int32( 1 ) );
     rtl::OUString sEndCol = SwVbaTableHelper::getColumnStr( nEndColumn );
     sal_Int32 nRowCount = xTextTable->getRows()->getCount();
-    aRangeName.appendAscii(":").append( sEndCol ).append( sal_Int32( nRowCount ) );
+    aRangeName.append(':').append( sEndCol ).append( sal_Int32( nRowCount ) );
 
     uno::Reference< table::XCellRange > xCellRange( xTextTable, uno::UNO_QUERY_THROW );
     rtl::OUString sSelRange = aRangeName.makeStringAndClear();
