@@ -187,7 +187,7 @@ public:
     CPPUNIT_TEST(testBugFixesODS);
     CPPUNIT_TEST(testBugFixesXLS);
     CPPUNIT_TEST(testBugFixesXLSX);
-    //CPPUNIT_TEST(testPassword);
+    CPPUNIT_TEST(testPassword);
 
     CPPUNIT_TEST_SUITE_END();
 

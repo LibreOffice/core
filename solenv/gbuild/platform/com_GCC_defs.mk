@@ -117,6 +117,11 @@ endif
 
 gb_Helper_set_ld_path := $(gb_Helper_LIBRARY_PATH_VAR)=$(OUTDIR_FOR_BUILD)/lib
 
+# $(1): list of directory pathnames to append at the end of the ld path
+define gb_Helper_extend_ld_path
+$(gb_Helper_set_ld_path)$(foreach dir,$(1),:$(dir))
+endef
+
 
 # convert parameters filesystem root to native notation
 # does some real work only on windows, make sure not to

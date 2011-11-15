@@ -137,6 +137,11 @@ gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
 
 gb_Helper_set_ld_path := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 
+# $(1): list of directory pathnames to append at the end of the ld path
+define gb_Helper_extend_ld_path
+$(gb_Helper_set_ld_path)$(foreach dir,$(1),:$(dir))
+endef
+
 # convert parameters filesystem root to native notation
 # does some real work only on windows, make sure not to
 # break the dummy implementations on unx*
@@ -342,7 +347,8 @@ endef
 
 # CppunitTest class
 
-gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path)
+gb_CppunitTest_CPPTESTPRECOMMAND := \
+    $(call gb_Helper_extend_ld_path,$(OUTDIR_FOR_BUILD)/lib/sqlite)
 gb_CppunitTest_SYSPRE := libtest_
 gb_CppunitTest_EXT := .so
 gb_CppunitTest_LIBDIR := $(gb_Helper_OUTDIRLIBDIR)
