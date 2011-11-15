@@ -1603,6 +1603,16 @@ void ScFormulaCell::ReplaceRangeNamesInUse( const ScRangeData::IndexMap& rMap )
         CompileTokenArray();
 }
 
+bool ScFormulaCell::IsChanged() const
+{
+    return bChanged;
+}
+
+void ScFormulaCell::ResetChanged()
+{
+    bChanged = false;
+}
+
 void ScFormulaCell::CompileDBFormula()
 {
     for( FormulaToken* p = pCode->First(); p; p = pCode->Next() )

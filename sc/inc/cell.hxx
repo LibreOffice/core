@@ -458,8 +458,8 @@ public:
     void            FindRangeNamesInUse(std::set<sal_uInt16>& rIndexes) const;
     void            ReplaceRangeNamesInUse( const ScRangeData::IndexMap& rMap );
     bool            IsSubTotal() const                      { return bSubTotal; }
-    bool            IsChanged() const                       { return bChanged; }
-    void            ResetChanged()                          { bChanged = false; }
+    bool            IsChanged() const;
+    void            ResetChanged();
     bool            IsEmpty();      // formula::svEmptyCell result
                     // display as empty string if formula::svEmptyCell result
     bool            IsEmptyDisplayedAsString();
