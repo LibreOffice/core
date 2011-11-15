@@ -38,6 +38,7 @@
 #include "anyrefdg.hxx"
 
 #include <deque>
+#include <vector>
 
 //----------------------------------------------------------------------------
 
@@ -131,10 +132,11 @@ private:
     ScDocument*         pDoc;
     SCTAB               nSrcTab;
 
-    ComboBox*           aValueEdArr[4];
-    ListBox*            aFieldLbArr[4];
-    ListBox*            aCondLbArr[4];
-    ListBox*            aConnLbArr[4];
+    std::vector<ComboBox*> maValueEdArr;
+    std::vector<ListBox*>  maFieldLbArr;
+    std::vector<ListBox*>  maCondLbArr;
+    std::vector<ListBox*>  maConnLbArr;
+
     std::deque<bool>   maHasDates;
     std::deque<bool>   maRefreshExceptQuery;
     sal_uInt16          nFieldCount;

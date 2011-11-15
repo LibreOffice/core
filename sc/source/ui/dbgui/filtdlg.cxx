@@ -60,16 +60,10 @@
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
-// DEFINE --------------------------------------------------------------------
-
 #define ERRORBOX(rid)   ErrorBox( this, WinBits( WB_OK|WB_DEF_OK), \
                                    ScGlobal::GetRscString(rid) ).Execute()
 
-
-//============================================================================
-//  class ScFilterDlg
-
-//----------------------------------------------------------------------------
+#define QUERY_ENTRY_COUNT 4
 
 ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                           const SfxItemSet& rArgSet )
@@ -258,22 +252,26 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     nSrcTab     = pViewData ? pViewData->GetTabNo() : static_cast<SCTAB>(0);
 
     // for easier access:
-    aFieldLbArr  [0] = &aLbField1;
-    aFieldLbArr  [1] = &aLbField2;
-    aFieldLbArr  [2] = &aLbField3;
-    aFieldLbArr  [3] = &aLbField4;
-    aValueEdArr  [0] = &aEdVal1;
-    aValueEdArr  [1] = &aEdVal2;
-    aValueEdArr  [2] = &aEdVal3;
-    aValueEdArr  [3] = &aEdVal4;
-    aCondLbArr   [0] = &aLbCond1;
-    aCondLbArr   [1] = &aLbCond2;
-    aCondLbArr   [2] = &aLbCond3;
-    aCondLbArr   [3] = &aLbCond4;
-    aConnLbArr   [0] = &aLbConnect1;
-    aConnLbArr   [1] = &aLbConnect2;
-    aConnLbArr   [2] = &aLbConnect3;
-    aConnLbArr   [3] = &aLbConnect4;
+    maFieldLbArr.reserve(QUERY_ENTRY_COUNT);
+    maFieldLbArr.push_back(&aLbField1);
+    maFieldLbArr.push_back(&aLbField2);
+    maFieldLbArr.push_back(&aLbField3);
+    maFieldLbArr.push_back(&aLbField4);
+    maValueEdArr.reserve(QUERY_ENTRY_COUNT);
+    maValueEdArr.push_back(&aEdVal1);
+    maValueEdArr.push_back(&aEdVal2);
+    maValueEdArr.push_back(&aEdVal3);
+    maValueEdArr.push_back(&aEdVal4);
+    maCondLbArr.reserve(QUERY_ENTRY_COUNT);
+    maCondLbArr.push_back(&aLbCond1);
+    maCondLbArr.push_back(&aLbCond2);
+    maCondLbArr.push_back(&aLbCond3);
+    maCondLbArr.push_back(&aLbCond4);
+    maConnLbArr.reserve(QUERY_ENTRY_COUNT);
+    maConnLbArr.push_back(&aLbConnect1);
+    maConnLbArr.push_back(&aLbConnect2);
+    maConnLbArr.push_back(&aLbConnect3);
+    maConnLbArr.push_back(&aLbConnect4);
 
     // Option initialization:
 
@@ -301,7 +299,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
 
     FillFieldLists();
 
-    for ( SCSIZE i=0; i<4; i++ )
+    for (size_t i = 0; i < QUERY_ENTRY_COUNT; ++i)
     {
         String  aValStr;
         sal_uInt16  nCondPos     = 0;
@@ -316,12 +314,12 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
             if (rEntry.IsQueryByEmpty())
             {
                 aValStr = aStrEmpty;
-                aCondLbArr[i]->Disable();
+                maCondLbArr[i]->Disable();
             }
             else if (rEntry.IsQueryByNonEmpty())
             {
                 aValStr = aStrNotEmpty;
-                aCondLbArr[i]->Disable();
+                maCondLbArr[i]->Disable();
             }
             else
                 aValStr = rItem.maString;
@@ -337,11 +335,11 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
             maRefreshExceptQuery[i] = true;
 
         }
-        aFieldLbArr[i]->SelectEntryPos( nFieldSelPos );
-        aCondLbArr [i]->SelectEntryPos( nCondPos );
-        aValueEdArr[i]->SetText( aValStr );
-        aValueEdArr[i]->EnableAutocomplete( false );
-        aValueEdArr[i]->SetModifyHdl( LINK( this, ScFilterDlg, ValModifyHdl ) );
+        maFieldLbArr[i]->SelectEntryPos( nFieldSelPos );
+        maCondLbArr [i]->SelectEntryPos( nCondPos );
+        maValueEdArr[i]->SetText( aValStr );
+        maValueEdArr[i]->EnableAutocomplete( false );
+        maValueEdArr[i]->SetModifyHdl( LINK( this, ScFilterDlg, ValModifyHdl ) );
         UpdateValueList( static_cast<sal_uInt16>(i+1) );
     }
 
@@ -508,10 +506,10 @@ void ScFilterDlg::FillFieldLists()
 
 void ScFilterDlg::UpdateValueList( sal_uInt16 nList )
 {
-    if ( pDoc && nList>0 && nList<=4 )
+    if (pDoc && nList > 0 && nList <= QUERY_ENTRY_COUNT)
     {
-        ComboBox*   pValList        = aValueEdArr[nList-1];
-        sal_uInt16      nFieldSelPos    = aFieldLbArr[nList-1]->GetSelectEntryPos();
+        ComboBox*   pValList        = maValueEdArr[nList-1];
+        sal_uInt16      nFieldSelPos    = maFieldLbArr[nList-1]->GetSelectEntryPos();
         sal_uInt16      nListPos        = 0;
         String      aCurValue       = pValList->GetText();
 
@@ -587,9 +585,9 @@ void ScFilterDlg::UpdateHdrInValueList( sal_uInt16 nList )
 {
     //! GetText / SetText ??
 
-    if ( pDoc && nList>0 && nList<=4 )
+    if (pDoc && nList > 0 && nList <= QUERY_ENTRY_COUNT)
     {
-        sal_uInt16 nFieldSelPos = aFieldLbArr[nList-1]->GetSelectEntryPos();
+        sal_uInt16 nFieldSelPos = maFieldLbArr[nList-1]->GetSelectEntryPos();
         if ( nFieldSelPos )
         {
             SCCOL nColumn = theQueryData.nCol1 + static_cast<SCCOL>(nFieldSelPos) - 1;
@@ -598,7 +596,7 @@ void ScFilterDlg::UpdateHdrInValueList( sal_uInt16 nList )
                 sal_uInt16 nPos = nHeaderPos[nColumn];
                 if ( nPos != USHRT_MAX )
                 {
-                    ComboBox* pValList = aValueEdArr[nList-1];
+                    ComboBox* pValList = maValueEdArr[nList-1];
                     sal_uInt16 nListPos = nPos + 2;                 // for "empty" and "non-empty"
 
                     TypedStrData* pHdrEntry = (*pEntryLists[nColumn])[nPos];
@@ -637,9 +635,9 @@ void ScFilterDlg::UpdateHdrInValueList( sal_uInt16 nList )
 
 void ScFilterDlg::ClearValueList( sal_uInt16 nList )
 {
-    if ( nList>0 && nList<=4 )
+    if (nList > 0 && nList <= QUERY_ENTRY_COUNT)
     {
-        ComboBox* pValList = aValueEdArr[nList-1];
+        ComboBox* pValList = maValueEdArr[nList-1];
         pValList->Clear();
         pValList->InsertEntry( aStrNotEmpty, 0 );
         pValList->InsertEntry( aStrEmpty, 1 );
@@ -1195,9 +1193,9 @@ size_t ScFilterDlg::GetSliderPos()
 void ScFilterDlg::RefreshEditRow( size_t nOffset )
 {
     if (nOffset==0)
-        aConnLbArr[0]->Hide();
+        maConnLbArr[0]->Hide();
     else
-        aConnLbArr[0]->Show();
+        maConnLbArr[0]->Show();
 
     for ( sal_uInt16 i=0; i<4; i++ )
     {
@@ -1221,51 +1219,51 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
             if (rEntry.IsQueryByEmpty())
             {
                 aValStr = aStrEmpty;
-                aCondLbArr[i]->Disable();
+                maCondLbArr[i]->Disable();
             }
             else if (rEntry.IsQueryByNonEmpty())
             {
                 aValStr = aStrNotEmpty;
-                aCondLbArr[i]->Disable();
+                maCondLbArr[i]->Disable();
             }
             else
             {
                 aValStr = rQueryStr;
-                aCondLbArr[i]->Enable();
+                maCondLbArr[i]->Enable();
             }
-            aFieldLbArr[i]->Enable();
-            aValueEdArr[i]->Enable();
+            maFieldLbArr[i]->Enable();
+            maValueEdArr[i]->Enable();
 
             if (nOffset==0)
             {
                 if (i<3)
                 {
                     if(rEntry.bDoQuery)
-                        aConnLbArr[i+1]->Enable();
+                        maConnLbArr[i+1]->Enable();
                     else
-                        aConnLbArr[i+1]->Disable();
+                        maConnLbArr[i+1]->Disable();
                     size_t nQENext = nQE + 1;
                     if (maRefreshExceptQuery.size() < nQENext + 1)
                         maRefreshExceptQuery.resize(nQENext + 1, false);
                     if (theQueryData.GetEntry(nQENext).bDoQuery || maRefreshExceptQuery[nQENext])
-                        aConnLbArr[i+1]->SelectEntryPos( (sal_uInt16) theQueryData.GetEntry(nQENext).eConnect );
+                        maConnLbArr[i+1]->SelectEntryPos( (sal_uInt16) theQueryData.GetEntry(nQENext).eConnect );
                     else
-                        aConnLbArr[i+1]->SetNoSelection();
+                        maConnLbArr[i+1]->SetNoSelection();
                 }
             }
             else
             {
                 if(theQueryData.GetEntry( nQE-1).bDoQuery)
-                    aConnLbArr[i]->Enable();
+                    maConnLbArr[i]->Enable();
                 else
-                    aConnLbArr[i]->Disable();
+                    maConnLbArr[i]->Disable();
 
                 if (maRefreshExceptQuery.size() < nQE + 1)
                     maRefreshExceptQuery.resize(nQE + 1, false);
                 if(rEntry.bDoQuery || maRefreshExceptQuery[nQE])
-                    aConnLbArr[i]->SelectEntryPos( (sal_uInt16) rEntry.eConnect );
+                    maConnLbArr[i]->SelectEntryPos( (sal_uInt16) rEntry.eConnect );
                 else
-                    aConnLbArr[i]->SetNoSelection();
+                    maConnLbArr[i]->SetNoSelection();
             }
 
         }
@@ -1275,25 +1273,25 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
             {
                 if(i<3)
                 {
-                    aConnLbArr[i+1]->SetNoSelection();
-                    aConnLbArr[i+1]->Disable();
+                    maConnLbArr[i+1]->SetNoSelection();
+                    maConnLbArr[i+1]->Disable();
                 }
             }
             else
             {
                 if(theQueryData.GetEntry( nQE-1).bDoQuery)
-                    aConnLbArr[i]->Enable();
+                    maConnLbArr[i]->Enable();
                 else
-                    aConnLbArr[i]->Disable();
-                aConnLbArr[i]->SetNoSelection();
+                    maConnLbArr[i]->Disable();
+                maConnLbArr[i]->SetNoSelection();
             }
-            aFieldLbArr[i]->Disable();
-            aCondLbArr[i]->Disable();
-            aValueEdArr[i]->Disable();
+            maFieldLbArr[i]->Disable();
+            maCondLbArr[i]->Disable();
+            maValueEdArr[i]->Disable();
         }
-        aFieldLbArr[i]->SelectEntryPos( nFieldSelPos );
-        aCondLbArr [i]->SelectEntryPos( nCondPos );
-        aValueEdArr[i]->SetText( aValStr );
+        maFieldLbArr[i]->SelectEntryPos( nFieldSelPos );
+        maCondLbArr [i]->SelectEntryPos( nCondPos );
+        maValueEdArr[i]->SetText( aValStr );
         UpdateValueList( static_cast<sal_uInt16>(i+1) );
     }
 }
