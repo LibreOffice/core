@@ -674,14 +674,10 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
 
     if ( aBtnCopyResult.IsChecked() )
     {
-        String theCopyStr( aEdCopyArea.GetText() );
-        xub_StrLen nColonPos = theCopyStr.Search( ':' );
-
-        if ( STRING_NOTFOUND != nColonPos )
-            theCopyStr.Erase( nColonPos );
-
-        sal_uInt16 nResult = theCopyPos.Parse( theCopyStr, pDoc, pDoc->GetAddressConvention() );
+        ScRange aTempRange;
+        sal_uInt16 nResult = aTempRange.Parse(aEdCopyArea.GetText(), pDoc, pDoc->GetAddressConvention());
         bCopyPosOk = ( SCA_VALID == (nResult & SCA_VALID) );
+        theCopyPos = aTempRange.aStart;
     }
 
     if ( aBtnCopyResult.IsChecked() && bCopyPosOk )
