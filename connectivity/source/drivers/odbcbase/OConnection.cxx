@@ -86,6 +86,7 @@ OConnection::~OConnection()
 
         rc = N3SQLFreeHandle( SQL_HANDLE_DBC, m_aConnectionHandle );
         OSL_ENSURE( rc == SQL_SUCCESS , "Failure from SQLFreeHandle for connection");
+        (void) rc;
 
         m_aConnectionHandle = SQL_NULL_HANDLE;
     }
