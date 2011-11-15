@@ -212,6 +212,7 @@ public:
 
             // Special methods
     sal_Bool PutDecimal( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec );
+    sal_Bool PutDecimal( SbxDecimal* pDecimal ); // This function is needed for Windows build, don't remove
     sal_Bool fillAutomationDecimal( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec );
     sal_Bool PutCurrency( const sal_Int64& );
             // Interface for CDbl in Basic

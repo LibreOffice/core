@@ -755,21 +755,21 @@ sal_Bool SbxValue::PutString( const ::rtl::OUString& r )
 sal_Bool SbxValue::p( t n ) \
 { SbxValues aRes(e); aRes.m = n; Put( aRes ); return sal_Bool( !IsError() ); }
 
-PUT( PutByte,     SbxBYTE,       sal_uInt8,             nByte )
+PUT( PutByte,     SbxBYTE,       sal_uInt8,        nByte )
 PUT( PutChar,     SbxCHAR,       sal_Unicode,      nChar )
 PUT( PutCurrency, SbxCURRENCY,   const sal_Int64&, nInt64 )
 PUT( PutDate,     SbxDATE,       double,           nDouble )
 PUT( PutDouble,   SbxDOUBLE,     double,           nDouble )
-PUT( PutErr,      SbxERROR,      sal_uInt16,           nUShort )
-PUT( PutInteger,  SbxINTEGER,    sal_Int16,            nInteger )
-PUT( PutLong,     SbxLONG,       sal_Int32,            nLong )
+PUT( PutErr,      SbxERROR,      sal_uInt16,       nUShort )
+PUT( PutInteger,  SbxINTEGER,    sal_Int16,        nInteger )
+PUT( PutLong,     SbxLONG,       sal_Int32,        nLong )
 PUT( PutObject,   SbxOBJECT,     SbxBase*,         pObj )
 PUT( PutSingle,   SbxSINGLE,     float,            nSingle )
-PUT( PutULong,    SbxULONG,      sal_uInt32,           nULong )
-PUT( PutUShort,   SbxUSHORT,     sal_uInt16,           nUShort )
+PUT( PutULong,    SbxULONG,      sal_uInt32,       nULong )
+PUT( PutUShort,   SbxUSHORT,     sal_uInt16,       nUShort )
 PUT( PutInt64,    SbxSALINT64,   sal_Int64,        nInt64 )
 PUT( PutUInt64,   SbxSALUINT64,  sal_uInt64,       uInt64 )
-
+PUT( PutDecimal,  SbxDECIMAL,    SbxDecimal*,      pDecimal )
 
 ////////////////////////// Setting of the data type ///////////////////////////
 
