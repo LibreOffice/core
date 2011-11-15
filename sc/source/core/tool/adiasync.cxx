@@ -151,7 +151,6 @@ void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
         ScDocument* pDoc = (ScDocument*)*ppDoc;
         pDoc->TrackFormulas();
         pDoc->GetDocumentShell()->Broadcast( SfxSimpleHint( FID_DATACHANGED ) );
-        pDoc->ResetChanged( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB) );
     }
 }
 

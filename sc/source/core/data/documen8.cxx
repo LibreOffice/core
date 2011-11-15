@@ -1056,7 +1056,6 @@ void ScDocument::UpdateExternalRefLinks(Window* pWin)
     {
         TrackFormulas();
         pShell->Broadcast( SfxSimpleHint(FID_DATACHANGED) );
-        ResetChanged( ScRange(0, 0, 0, MAXCOL, MAXROW, MAXTAB) );
 
         // #i101960# set document modified, as in TrackTimeHdl for DDE links
         if (!pShell->IsModified())
@@ -1117,7 +1116,6 @@ void ScDocument::UpdateDdeLinks(Window* pWin)
             //  Formeln berechnen und painten wie im TrackTimeHdl
             TrackFormulas();
             pShell->Broadcast( SfxSimpleHint( FID_DATACHANGED ) );
-            ResetChanged( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB) );
 
             //  wenn FID_DATACHANGED irgendwann mal asynchron werden sollte
             //  (z.B. mit Invalidate am Window), muss hier ein Update erzwungen werden.

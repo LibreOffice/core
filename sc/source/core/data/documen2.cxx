@@ -336,7 +336,6 @@ IMPL_LINK( ScDocument, TrackTimeHdl, Timer*, EMPTYARG )
     {
         TrackFormulas();
         pShell->Broadcast( SfxSimpleHint( FID_DATACHANGED ) );
-        ResetChanged( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB) );
 
             //  modified...
 

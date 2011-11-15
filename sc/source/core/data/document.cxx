@@ -3504,18 +3504,14 @@ sal_uInt16 ScDocument::GetErrCode( const ScAddress& rPos ) const
 }
 
 
-void ScDocument::ResetChanged( const ScRangeList& rRanges )
+void ScDocument::ResetChanged( const ScRange& rRange )
 {
     SCTAB nTabSize = static_cast<SCTAB>(maTabs.size());
-    for (size_t i = 0, n = rRanges.size(); i < n; ++i)
-    {
-        const ScRange& rRange = *rRanges[i];
-        SCTAB nTab1 = rRange.aStart.Tab();
-        SCTAB nTab2 = rRange.aEnd.Tab();
-        for (SCTAB nTab = nTab1; nTab1 <= nTab2 && nTab < nTabSize; ++nTab)
-            if (maTabs[nTab])
-                maTabs[nTab]->ResetChanged(rRange);
-    }
+    SCTAB nTab1 = rRange.aStart.Tab();
+    SCTAB nTab2 = rRange.aEnd.Tab();
+    for (SCTAB nTab = nTab1; nTab1 <= nTab2 && nTab < nTabSize; ++nTab)
+        if (maTabs[nTab])
+            maTabs[nTab]->ResetChanged(rRange);
 }
 
 //

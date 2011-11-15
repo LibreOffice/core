@@ -864,7 +864,7 @@ public:
                                     const ::editeng::SvxBorderLine** ppRight,
                                     const ::editeng::SvxBorderLine** ppBottom ) const;
 
-    void            ResetChanged( const ScRangeList& rRanges );
+    void            ResetChanged( const ScRange& rRange );
 
     void            SetDirty();
     void            SetDirty( const ScRange& );

@@ -105,8 +105,6 @@ void ScDocShell::PostEditView( ScEditEngineDefaulter* pEditEngine, const ScAddre
 void ScDocShell::PostDataChanged()
 {
     Broadcast( SfxSimpleHint( FID_DATACHANGED ) );
-    aDocument.ResetChanged( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB) );
-
     SFX_APP()->Broadcast(SfxSimpleHint( FID_ANYDATACHANGED ));      // Navigator
     //! Navigator direkt benachrichtigen!
 }
@@ -184,9 +182,6 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, sal_uInt16 nPart, sal_uI
     }
 
     Broadcast(ScPaintHint(aPaintRanges.Combine(), nPart));
-
-    if (nPart & PAINT_GRID)
-        aDocument.ResetChanged(aPaintRanges);
 }
 
 void ScDocShell::PostPaintGridAll()

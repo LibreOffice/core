@@ -135,7 +135,6 @@ void SAL_CALL ScAddInListener::modified( const ::com::sun::star::sheet::ResultEv
         ScDocument* pDoc = (ScDocument*)*ppDoc;
         pDoc->TrackFormulas();
         pDoc->GetDocumentShell()->Broadcast( SfxSimpleHint( FID_DATACHANGED ) );
-        pDoc->ResetChanged( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB) );
     }
 }
 
