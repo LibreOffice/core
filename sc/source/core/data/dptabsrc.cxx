@@ -792,13 +792,13 @@ void ScDPSource::CreateRes_Impl()
         // TODO: Aggreate pDataNames, pDataRefValues, nDataRefOrient, and
         // eDataFunctions into a structure and use vector instead of static
         // or pointer arrays.
-        String* pDataNames = NULL;
+        vector<String> aDataNames;
         sheet::DataPilotFieldReference* pDataRefValues = NULL;
         ScSubTotalFunc eDataFunctions[SC_DAPI_MAXFIELDS];
         sal_uInt16 nDataRefOrient[SC_DAPI_MAXFIELDS];
         if (nDataDimCount)
         {
-            pDataNames = new String[nDataDimCount];
+            aDataNames.resize(nDataDimCount);
             pDataRefValues = new sheet::DataPilotFieldReference[nDataDimCount];
         }
 
@@ -849,12 +849,12 @@ void ScDPSource::CreateRes_Impl()
                 }
             }
 
-            pDataNames[i] = String( pDim->getName() );  //! label?
+            aDataNames[i] = pDim->getName();
 
             //  asterisk is added to duplicated dimension names by ScDPSaveData::WriteToSource
             //! modify user visible strings as in ScDPResultData::GetMeasureString instead!
 
-            pDataNames[i].EraseTrailingChars('*');
+            aDataNames[i].EraseTrailingChars('*');
 
             //! if the name is overridden by user, a flag must be set
             //! so the user defined name replaces the function string and field name.
@@ -869,11 +869,10 @@ void ScDPSource::CreateRes_Impl()
         }
 
         pResData = new ScDPResultData( this );
-        pResData->SetMeasureData( nDataDimCount, eDataFunctions, pDataRefValues, nDataRefOrient, pDataNames );
+        pResData->SetMeasureData( nDataDimCount, eDataFunctions, pDataRefValues, nDataRefOrient, aDataNames );
         pResData->SetDataLayoutOrientation(nDataOrient);
         pResData->SetLateInit( bLateInit );
 
-        delete[] pDataNames;
         delete[] pDataRefValues;
 
         bool bHasAutoShow = false;

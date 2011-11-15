@@ -299,7 +299,7 @@ private:
     ScSubTotalFunc*         pMeasFuncs;
     ::com::sun::star::sheet::DataPilotFieldReference* pMeasRefs;
     sal_uInt16*                 pMeasRefOrient;
-    String*                 pMeasNames;
+    std::vector<String>     maMeasureNames;
     bool                    bLateInit:1;
     bool                    bDataAtCol:1;
     bool                    bDataAtRow:1;
@@ -312,7 +312,7 @@ public:
 
     void                SetMeasureData( long nCount, const ScSubTotalFunc* pFunctions,
                                         const ::com::sun::star::sheet::DataPilotFieldReference* pRefs,
-                                        const sal_uInt16* pRefOrient, const String* pNames );
+                                        const sal_uInt16* pRefOrient, std::vector<String>& rNames );
     void                SetDataLayoutOrientation( sal_uInt16 nOrient );
     void                SetLateInit( bool bSet );
 

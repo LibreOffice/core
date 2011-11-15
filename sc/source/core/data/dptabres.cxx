@@ -767,7 +767,6 @@ ScDPResultData::ScDPResultData( ScDPSource* pSrc ) :        //! Ref
     pMeasFuncs( NULL ),
     pMeasRefs( NULL ),
     pMeasRefOrient( NULL ),
-    pMeasNames( NULL ),
     bLateInit( false ),
     bDataAtCol( false ),
     bDataAtRow( false )
@@ -781,32 +780,30 @@ ScDPResultData::~ScDPResultData()
     delete[] pMeasFuncs;
     delete[] pMeasRefs;
     delete[] pMeasRefOrient;
-    delete[] pMeasNames;
 
       lcl_ResizePointVector( mpDimMembers , 0 );
 }
 
 void ScDPResultData::SetMeasureData( long nCount, const ScSubTotalFunc* pFunctions,
                                     const sheet::DataPilotFieldReference* pRefs, const sal_uInt16* pRefOrient,
-                                    const String* pNames )
+                                    std::vector<String>& rNames )
 {
     delete[] pMeasFuncs;
     delete[] pMeasRefs;
     delete[] pMeasRefOrient;
-    delete[] pMeasNames;
     if ( nCount )
     {
+        OSL_ASSERT(nCount == static_cast<long>(rNames.size()));
         nMeasCount = nCount;
         pMeasFuncs = new ScSubTotalFunc[nCount];
         pMeasRefs  = new sheet::DataPilotFieldReference[nCount];
         pMeasRefOrient = new sal_uInt16[nCount];
-        pMeasNames = new String[nCount];
+        maMeasureNames.swap(rNames);
         for (long i=0; i<nCount; i++)
         {
             pMeasFuncs[i] = pFunctions[i];
             pMeasRefs[i]  = pRefs[i];
             pMeasRefOrient[i] = pRefOrient[i];
-            pMeasNames[i] = pNames[i];
         }
     }
     else
@@ -818,8 +815,9 @@ void ScDPResultData::SetMeasureData( long nCount, const ScSubTotalFunc* pFunctio
         pMeasRefs  = new sheet::DataPilotFieldReference[1]; // default ctor is ok
         pMeasRefOrient = new sal_uInt16[1];
         pMeasRefOrient[0] = sheet::DataPilotFieldOrientation_HIDDEN;
-        pMeasNames = new String[1];
-        pMeasNames[0] = ScGlobal::GetRscString( STR_EMPTYDATA );
+        std::vector<String> aMeasureName;
+        aMeasureName.push_back(ScGlobal::GetRscString(STR_EMPTYDATA));
+        maMeasureNames.swap(aMeasureName);
     }
 }
 
@@ -881,7 +879,7 @@ String ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSubTotalFu
     }
     else
     {
-        OSL_ENSURE( pMeasNames && nMeasure < nMeasCount, "bumm" );
+        OSL_ENSURE( nMeasure < nMeasCount, "bumm" );
         ScDPDimension* pDataDim = pSource->GetDataDimension(nMeasure);
         if (pDataDim)
         {
@@ -898,7 +896,7 @@ String ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSubTotalFu
             aRet += ScGlobal::GetRscString(nId);        // function name
             aRet.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " - " ));
         }
-        aRet += pMeasNames[nMeasure];                   // field name
+        aRet += maMeasureNames[nMeasure];                   // field name
 
         return aRet;
     }
