@@ -152,7 +152,7 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
             mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<=
                 TextHorizontalAdjust_RIGHT;
         }
-        else
+        else if( mrTextBodyProp.moVert.get( XML_horz ) == XML_horz )
             mrTextBodyProp.maPropertyMap[ PROP_TextVerticalAdjust ] <<= eVA;
     }
 }
