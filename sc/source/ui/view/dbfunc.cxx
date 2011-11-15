@@ -226,7 +226,7 @@ void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const std::
     std::vector<ScRange>::const_iterator iter;
     for (iter = rDelAreaList.begin(); iter != rDelAreaList.end(); ++iter)
     {
-        //  register target in SBA no longer necessary
+        //  registering target in SBA no longer necessary
         const ScAddress& rStart = iter->aStart;
         const ScAddress& rEnd   = iter->aEnd;
         pDocShell->DBAreaDeleted( rStart.Tab(),
