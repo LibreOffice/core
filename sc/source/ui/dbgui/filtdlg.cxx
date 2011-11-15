@@ -57,6 +57,8 @@
 #undef _FILTDLG_CXX
 #include <vcl/msgbox.hxx>
 
+#include <limits>
+
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
@@ -64,6 +66,11 @@ using ::rtl::OUStringBuffer;
                                    ScGlobal::GetRscString(rid) ).Execute()
 
 #define QUERY_ENTRY_COUNT 4
+#define INVALID_HEADER_POS std::numeric_limits<size_t>::max()
+
+ScFilterDlg::EntryList::EntryList() :
+    maList(128, 128),
+    mnHeaderPos(INVALID_HEADER_POS) {}
 
 ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                           const SfxItemSet& rArgSet )
@@ -517,7 +524,7 @@ void ScFilterDlg::UpdateValueList( sal_uInt16 nList )
             WaitObject aWaiter( this );     // even if only the list box has content
 
             SCCOL nColumn = theQueryData.nCol1 + static_cast<SCCOL>(nFieldSelPos) - 1;
-            TypedScStrCollection* pColl = NULL;
+            EntryList* pList = NULL;
             if (!maEntryLists.count(nColumn))
             {
                 sal_uInt16 nOffset = GetSliderPos();
@@ -530,20 +537,20 @@ void ScFilterDlg::UpdateValueList( sal_uInt16 nList )
 
                 // first without the first line
                 std::pair<EntryListsMap::iterator, bool> r =
-                    maEntryLists.insert(nColumn, new TypedScStrCollection(128, 128));
+                    maEntryLists.insert(nColumn, new EntryList);
                 if (!r.second)
                     // insertion failed.
                     return;
 
-                pColl = r.first->second;
-                pColl->SetCaseSensitive(aBtnCase.IsChecked());
+                pList = r.first->second;
+                pList->maList.SetCaseSensitive(aBtnCase.IsChecked());
                 pDoc->GetFilterEntriesArea( nColumn, nFirstRow+1, nLastRow,
-                                            nTab, *pColl, maHasDates[nOffset+nList-1] );
+                                            nTab, pList->maList, maHasDates[nOffset+nList-1] );
 
                 // Entry for the first line
                 //! Entry (pHdrEntry) doesn't generate collection?
 
-                nHeaderPos[nColumn] = USHRT_MAX;
+                pList->mnHeaderPos = INVALID_HEADER_POS;
                 TypedScStrCollection aHdrColl( 1, 1 );
                 bool bDummy = false;
                 pDoc->GetFilterEntriesArea( nColumn, nFirstRow, nFirstRow,
@@ -552,10 +559,10 @@ void ScFilterDlg::UpdateValueList( sal_uInt16 nList )
                 if ( pHdrEntry )
                 {
                     TypedStrData* pNewEntry = new TypedStrData(*pHdrEntry);
-                    if ( pColl->Insert(pNewEntry) )
+                    if ( pList->maList.Insert(pNewEntry) )
                     {
-                        nHeaderPos[nColumn] = pColl->IndexOf(pNewEntry);
-                        OSL_ENSURE( nHeaderPos[nColumn] != USHRT_MAX,
+                        pList->mnHeaderPos = pList->maList.IndexOf(pNewEntry);
+                        OSL_ENSURE( pList->mnHeaderPos != INVALID_HEADER_POS,
                                     "Header-Eintrag nicht wiedergefunden" );
                     }
                     else
@@ -563,15 +570,15 @@ void ScFilterDlg::UpdateValueList( sal_uInt16 nList )
                 }
             }
             else
-                pColl = &maEntryLists[nColumn];
+                pList = &maEntryLists[nColumn];
 
-            OSL_ASSERT(pColl);
-            sal_uInt16 nValueCount = pColl->GetCount();
+            OSL_ASSERT(pList);
+            sal_uInt16 nValueCount = pList->maList.GetCount();
             if ( nValueCount > 0 )
             {
                 for ( sal_uInt16 i=0; i<nValueCount; i++ )
                 {
-                    pValList->InsertEntry( (*pColl)[i]->GetString(), nListPos );
+                    pValList->InsertEntry(pList->maList[i]->GetString(), nListPos);
                     nListPos++;
                 }
             }
@@ -595,13 +602,13 @@ void ScFilterDlg::UpdateHdrInValueList( sal_uInt16 nList )
             SCCOL nColumn = theQueryData.nCol1 + static_cast<SCCOL>(nFieldSelPos) - 1;
             if (maEntryLists.count(nColumn))
             {
-                sal_uInt16 nPos = nHeaderPos[nColumn];
-                if ( nPos != USHRT_MAX )
+                size_t nPos = maEntryLists[nColumn].mnHeaderPos;
+                if (nPos != INVALID_HEADER_POS)
                 {
                     ComboBox* pValList = maValueEdArr[nList-1];
-                    sal_uInt16 nListPos = nPos + 2;                 // for "empty" and "non-empty"
+                    size_t nListPos = nPos + 2;                 // for "empty" and "non-empty"
 
-                    TypedStrData* pHdrEntry = maEntryLists[nColumn][nPos];
+                    TypedStrData* pHdrEntry = maEntryLists[nColumn].maList[nPos];
                     if ( pHdrEntry )
                     {
                         String aHdrStr = pHdrEntry->GetString();

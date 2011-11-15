@@ -39,7 +39,9 @@
 
 #include <deque>
 #include <vector>
+#include <map>
 #include <boost/ptr_container/ptr_map.hpp>
+#include <boost/noncopyable.hpp>
 
 //----------------------------------------------------------------------------
 
@@ -52,6 +54,13 @@ class TypedScStrCollection;
 
 class ScFilterDlg : public ScAnyRefDlg
 {
+    struct EntryList : boost::noncopyable
+    {
+        TypedScStrCollection maList;
+        size_t mnHeaderPos;
+        EntryList();
+    };
+    typedef boost::ptr_map<SCCOL,EntryList> EntryListsMap;
 public:
                     ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                                  const SfxItemSet&  rArgSet );
@@ -143,9 +152,7 @@ private:
     sal_uInt16          nFieldCount;
     bool                bRefInputMode;
 
-    typedef boost::ptr_map<SCCOL,TypedScStrCollection> EntryListsMap;
     EntryListsMap maEntryLists;
-    sal_uInt16              nHeaderPos[MAXCOLCOUNT];
 
     // Hack: RefInput control
     Timer*  pTimer;
