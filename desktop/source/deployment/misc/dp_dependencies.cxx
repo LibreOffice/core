@@ -40,6 +40,7 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "tools/resid.hxx"
+#include "unotools/configmgr.hxx"
 
 #include "deployment.hrc"
 #include "dp_resource.h"
@@ -52,28 +53,43 @@ namespace {
 
 namespace css = com::sun::star;
 
-static char const xmlNamespace[] =
+static char const namespaceLibreOffice[] =
+    "http://libreoffice.org/extensions/description/2011";
+
+static char const namespaceOpenOfficeOrg[] =
     "http://openoffice.org/extensions/description/2006";
 
-static char const minimalVersion[] = "OpenOffice.org-minimal-version";
+static char const minimalVersionLibreOffice[] = "LibreOffice-minimal-version";
 
-static char const maximalVersion[] = "OpenOffice.org-maximal-version";
+static char const minimalVersionOpenOfficeOrg[] =
+    "OpenOffice.org-minimal-version";
 
-bool versionIsNot(dp_misc::Order order, rtl::OUString const & version) {
-    rtl::OUString oooVersion(
+static char const maximalVersionOpenOfficeOrg[] =
+    "OpenOffice.org-maximal-version";
+
+rtl::OUString getLibreOfficeMajorMinorMicro() {
+    return utl::ConfigManager::getAboutBoxProductVersion();
+}
+
+rtl::OUString getReferenceOpenOfficeOrgMajorMinor() {
+    rtl::OUString v(
         RTL_CONSTASCII_USTRINGPARAM(
             "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version")
             ":Version:ReferenceOOoMajorMinor}"));
-    rtl::Bootstrap::expandMacros(oooVersion); //TODO: check for failure
-    return dp_misc::compareVersions(oooVersion, version) != order;
+    rtl::Bootstrap::expandMacros(v); //TODO: check for failure
+    return v;
 }
 
-bool satisfiesMinimalVersion(rtl::OUString const & version) {
-    return versionIsNot(dp_misc::LESS, version);
+bool satisfiesMinimalVersion(
+    rtl::OUString const & actual, rtl::OUString const & specified)
+{
+    return dp_misc::compareVersions(actual, specified) != dp_misc::LESS;
 }
 
-bool satisfiesMaximalVersion(rtl::OUString const & version) {
-    return versionIsNot(dp_misc::GREATER, version);
+bool satisfiesMaximalVersion(
+    rtl::OUString const & actual, rtl::OUString const & specified)
+{
+    return dp_misc::compareVersions(actual, specified) != dp_misc::GREATER;
 }
 
 rtl::OUString produceErrorText(
@@ -106,32 +122,47 @@ check(dp_misc::DescriptionInfoset const & infoset) {
             deps->item(i), css::uno::UNO_QUERY_THROW);
         bool sat = false;
         if (e->getNamespaceURI().equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(xmlNamespace))
+                RTL_CONSTASCII_STRINGPARAM(namespaceOpenOfficeOrg))
             && e->getTagName().equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(minimalVersion)))
+                RTL_CONSTASCII_STRINGPARAM(minimalVersionOpenOfficeOrg)))
         {
             sat = satisfiesMinimalVersion(
+                getReferenceOpenOfficeOrgMajorMinor(),
                 e->getAttribute(
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
         } else if (e->getNamespaceURI().equalsAsciiL(
-                       RTL_CONSTASCII_STRINGPARAM(xmlNamespace))
+                       RTL_CONSTASCII_STRINGPARAM(namespaceOpenOfficeOrg))
                    && e->getTagName().equalsAsciiL(
-                       RTL_CONSTASCII_STRINGPARAM(maximalVersion)))
+                       RTL_CONSTASCII_STRINGPARAM(maximalVersionOpenOfficeOrg)))
         {
             sat = satisfiesMaximalVersion(
-                    e->getAttribute(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
-        } else if (e->hasAttributeNS(
-                       rtl::OUString(
-                           RTL_CONSTASCII_USTRINGPARAM(xmlNamespace)),
-                       rtl::OUString(
-                           RTL_CONSTASCII_USTRINGPARAM(minimalVersion))))
+                getReferenceOpenOfficeOrgMajorMinor(),
+                e->getAttribute(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
+        } else if (e->getNamespaceURI().equalsAsciiL(
+                       RTL_CONSTASCII_STRINGPARAM(namespaceLibreOffice))
+                   && e->getTagName().equalsAsciiL(
+                       RTL_CONSTASCII_STRINGPARAM(minimalVersionLibreOffice)))
         {
             sat = satisfiesMinimalVersion(
+                getLibreOfficeMajorMinorMicro(),
+                e->getAttribute(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
+        } else if (e->hasAttributeNS(
+                       rtl::OUString(
+                           RTL_CONSTASCII_USTRINGPARAM(namespaceOpenOfficeOrg)),
+                       rtl::OUString(
+                           RTL_CONSTASCII_USTRINGPARAM(
+                               minimalVersionOpenOfficeOrg))))
+        {
+            sat = satisfiesMinimalVersion(
+                getReferenceOpenOfficeOrgMajorMinor(),
                 e->getAttributeNS(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(xmlNamespace)),
                     rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(minimalVersion))));
+                        RTL_CONSTASCII_USTRINGPARAM(namespaceOpenOfficeOrg)),
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            minimalVersionOpenOfficeOrg))));
         }
         if (!sat) {
             unsatisfied[unsat++] = e;
@@ -146,36 +177,54 @@ rtl::OUString getErrorText(
 {
     OSL_ASSERT(dependency.is());
     if (dependency->getNamespaceURI().equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM(xmlNamespace))
+            RTL_CONSTASCII_STRINGPARAM(namespaceOpenOfficeOrg))
         && dependency->getTagName().equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM(minimalVersion)))
+            RTL_CONSTASCII_STRINGPARAM(minimalVersionOpenOfficeOrg)))
     {
         return produceErrorText(
-            ResId::toString(dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_MIN)),
+            ResId::toString(
+                dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_OOO_MIN)),
             dependency->getAttribute(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
     } else if (dependency->getNamespaceURI().equalsAsciiL(
-                   RTL_CONSTASCII_STRINGPARAM(xmlNamespace))
+                   RTL_CONSTASCII_STRINGPARAM(namespaceOpenOfficeOrg))
                && dependency->getTagName().equalsAsciiL(
-                   RTL_CONSTASCII_STRINGPARAM(maximalVersion)))
+                   RTL_CONSTASCII_STRINGPARAM(maximalVersionOpenOfficeOrg)))
     {
         return produceErrorText(
-            ResId::toString(dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_MAX)),
+            ResId::toString(
+                dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_OOO_MAX)),
+            dependency->getAttribute(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
+    } else if (dependency->getNamespaceURI().equalsAsciiL(
+                   RTL_CONSTASCII_STRINGPARAM(namespaceLibreOffice))
+               && dependency->getTagName().equalsAsciiL(
+                   RTL_CONSTASCII_STRINGPARAM(minimalVersionLibreOffice)))
+    {
+        return produceErrorText(
+            ResId::toString(
+                dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_LO_MIN)),
             dependency->getAttribute(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
     } else if (dependency->hasAttributeNS(
-                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(xmlNamespace)),
                    rtl::OUString(
-                       RTL_CONSTASCII_USTRINGPARAM(minimalVersion))))
+                       RTL_CONSTASCII_USTRINGPARAM(namespaceOpenOfficeOrg)),
+                   rtl::OUString(
+                       RTL_CONSTASCII_USTRINGPARAM(
+                           minimalVersionOpenOfficeOrg))))
     {
         return produceErrorText(
-            ResId::toString(dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_MIN)),
+            ResId::toString(
+                dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_OOO_MIN)),
             dependency->getAttributeNS(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(xmlNamespace)),
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(minimalVersion))));
-    } else
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(namespaceOpenOfficeOrg)),
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(minimalVersionOpenOfficeOrg))));
+    } else {
         return ResId::toString(
             dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN));
+    }
 }
 
 }

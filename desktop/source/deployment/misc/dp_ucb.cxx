@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
-#include "dp_misc.hrc"
+#include "deployment.hrc"
 #include "dp_misc.h"
 #include "dp_ucb.h"
 #include "rtl/uri.hxx"

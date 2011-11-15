@@ -25,16 +25,20 @@
  *
  ************************************************************************/
 
-#include "dp_misc.hrc"
+#include "deployment.hrc"
 
 String RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN {
     Text[en-US] = "Unknown";
 };
 
-String RID_DEPLOYMENT_DEPENDENCIES_MIN {
+String RID_DEPLOYMENT_DEPENDENCIES_OOO_MIN {
     Text[en-US] = "Extension requires at least OpenOffice.org reference version %VERSION";
 };
 
-String RID_DEPLOYMENT_DEPENDENCIES_MAX {
+String RID_DEPLOYMENT_DEPENDENCIES_OOO_MAX {
     Text[en-US] = "Extension does not support OpenOffice.org reference versions greater than %VERSION";
+};
+
+String RID_DEPLOYMENT_DEPENDENCIES_LO_MIN {
+    Text[en-US] = "Extension requires at least LibreOffice version %VERSION";
 };
