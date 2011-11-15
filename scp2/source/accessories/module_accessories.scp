@@ -28,6 +28,8 @@
 
 #include "macros.inc"
 
+#if defined(WITH_EXTRA_FONT) || defined(WITH_EXTRA_GALLERY) || defined(WITH_EXTRA_SAMPLE) || defined(WITH_EXTRA_TEMPLATE)
+
 Module gid_Module_Optional_Accessories
     ParentID = gid_Module_Optional;
     Files = (
@@ -38,3 +40,4 @@ Module gid_Module_Optional_Accessories
     MOD_NAME_DESC(MODULE_OPTIONAL_ACCESSORIES);
 End
 
+#endif
