@@ -504,6 +504,8 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
         default:
         {
             sal_Unicode code = rKEvt.GetCharCode();
+            SmBraceNode* pBraceNode = NULL;
+
             if(code == ' ') {
                 rCursor.InsertElement(BlankElement);
             }else if(code == 'c' && rKEvt.GetKeyCode().IsMod1()) {
@@ -524,6 +526,12 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
                 rCursor.InsertElement(FactorialElement);
             }else if(code == '%') {
                 rCursor.InsertElement(PercentElement);
+            }else if(code == ')' && rCursor.IsAtTailOfBracket(RoundBrackets, &pBraceNode)) {
+                rCursor.MoveAfterBracket(pBraceNode);
+            }else if(code == ']' && rCursor.IsAtTailOfBracket(SquareBrackets, &pBraceNode)) {
+                rCursor.MoveAfterBracket(pBraceNode);
+            }else if(code == '}' && rCursor.IsAtTailOfBracket(CurlyBrackets, &pBraceNode)) {
+                rCursor.MoveAfterBracket(pBraceNode);
             }else{
                 if(code != 0){
                     rCursor.InsertText(code);

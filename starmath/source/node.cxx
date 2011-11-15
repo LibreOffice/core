@@ -381,6 +381,21 @@ void SmNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
             pNode->Prepare(rFormat, rDocShell);
 }
 
+sal_uInt16 SmNode::FindIndex() const
+{
+    const SmStructureNode* pParent = GetParent();
+    if (!pParent) { return 0; }
+
+    for (sal_uInt16 i = 0; i < pParent->GetNumSubNodes(); ++i) {
+        if (pParent->GetSubNode(i) == this) {
+            return i;
+        }
+    }
+
+    DBG_ASSERT(false, "Connection between parent and child is inconsistent.");
+    return 0;
+}
+
 
 #if OSL_DEBUG_LEVEL > 1
 void  SmNode::ToggleDebug() const

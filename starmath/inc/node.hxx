@@ -119,13 +119,13 @@ public:
     virtual SmNode *    GetSubNode(sal_uInt16 nIndex);
             const SmNode * GetSubNode(sal_uInt16 nIndex) const
             {
-                return ((SmNode *) this)->GetSubNode(nIndex);
+                return const_cast<SmNode *>(this)->GetSubNode(nIndex);
             }
 
     virtual SmNode *       GetLeftMost();
             const SmNode * GetLeftMost() const
             {
-                return ((SmNode *) this)->GetLeftMost();
+                return const_cast<SmNode *>(this)->GetLeftMost();
             }
 
             sal_uInt16 &    Flags() { return nFlags; }
@@ -148,6 +148,8 @@ public:
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void PrepareAttributes();
+
+    sal_uInt16 FindIndex() const;
 
 #if OSL_DEBUG_LEVEL
             void ToggleDebug() const;
@@ -206,6 +208,7 @@ public:
 
     /** Get the parent node of this node */
     SmStructureNode* GetParent(){ return aParentNode; }
+    const SmStructureNode* GetParent() const { return aParentNode; }
     /** Set the parent node */
     void SetParent(SmStructureNode* parent){
         aParentNode = parent;

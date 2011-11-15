@@ -118,7 +118,7 @@ public:
     SmCaretPos GetAnchor(){ return anchor->CaretPos; }
 
     /** Get position */
-    SmCaretPos GetPosition() { return position->CaretPos; }
+    SmCaretPos GetPosition() const { return position->CaretPos; }
 
     /** True, if the cursor has a selection */
     bool HasSelection() { return anchor != position; }
@@ -235,6 +235,9 @@ public:
 
     /** Draw the caret */
     void Draw(OutputDevice& pDev, Point Offset, bool isCaretVisible);
+
+    bool IsAtTailOfBracket(SmBracketType eBracketType, SmBraceNode** ppBraceNode = NULL) const;
+    void MoveAfterBracket(SmBraceNode* pBraceNode, bool bMoveAnchor = true);
 
 private:
     friend class SmDocShell;

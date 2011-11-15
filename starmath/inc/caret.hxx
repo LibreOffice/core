@@ -50,7 +50,7 @@ struct SmCaretPos{
     //TODO: Consider forgetting about the todo above... As it's really unpleasent.
     int Index;
     /** True, if this is a valid caret position */
-    bool IsValid() { return pSelectedNode != NULL; }
+    bool IsValid() const { return pSelectedNode != NULL; }
     bool operator!=(SmCaretPos pos) const {
         return pos.pSelectedNode != pSelectedNode || Index != pos.Index;
     }

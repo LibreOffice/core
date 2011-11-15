@@ -1474,6 +1474,95 @@ void SmCursor::RequestRepaint(){
     }
 }
 
+bool SmCursor::IsAtTailOfBracket(SmBracketType eBracketType, SmBraceNode** ppBraceNode) const {
+    const SmCaretPos pos = GetPosition();
+    if (!pos.IsValid()) {
+        return false;
+    }
+
+    SmNode* pNode = pos.pSelectedNode;
+
+    if (pNode->GetType() == NTEXT) {
+        SmTextNode* pTextNode = static_cast<SmTextNode*>(pNode);
+        if (pos.Index < pTextNode->GetText().Len()) {
+            // The cursor is on a text node and at the middle of it.
+            return false;
+        }
+    } else {
+        if (pos.Index < 1) {
+            return false;
+        }
+    }
+
+    while (true) {
+        SmStructureNode* pParentNode = pNode->GetParent();
+        if (!pParentNode) {
+            // There's no brace body node in the ancestors.
+            return false;
+        }
+
+        sal_uInt16 index = pNode->FindIndex();
+        if (index + 1 != pParentNode->GetNumSubNodes()) {
+            // The cursor is not at the tail at one of ancestor nodes.
+            return false;
+        }
+
+        pNode = pParentNode;
+        if (pNode->GetType() == NBRACEBODY) {
+            // Found the brace body node.
+            break;
+        }
+    }
+
+    SmStructureNode* pBraceNodeTmp = pNode->GetParent();
+    if (!pBraceNodeTmp || pBraceNodeTmp->GetType() != NBRACE) {
+        // Brace node is invalid.
+        return false;
+    }
+
+    SmBraceNode* pBraceNode = static_cast<SmBraceNode*>(pBraceNodeTmp);
+    SmMathSymbolNode* pClosingNode = pBraceNode->ClosingBrace();
+    if (!pClosingNode) {
+        // Couldn't get closing symbol node.
+        return false;
+    }
+
+    // Check if the closing brace matches eBracketType.
+    SmTokenType eClosingTokenType = pClosingNode->GetToken().eType;
+    switch (eBracketType) {
+    case NoneBrackets:         if (eClosingTokenType != TNONE)      { return false; } break;
+    case RoundBrackets:        if (eClosingTokenType != TRPARENT)   { return false; } break;
+    case SquareBrackets:       if (eClosingTokenType != TRBRACKET)  { return false; } break;
+    case DoubleSquareBrackets: if (eClosingTokenType != TRDBRACKET) { return false; } break;
+    case LineBrackets:         if (eClosingTokenType != TRLINE)     { return false; } break;
+    case DoubleLineBrackets:   if (eClosingTokenType != TRDLINE)    { return false; } break;
+    case CurlyBrackets:        if (eClosingTokenType != TRBRACE)    { return false; } break;
+    case AngleBrackets:        if (eClosingTokenType != TRANGLE)    { return false; } break;
+    case CeilBrackets:         if (eClosingTokenType != TRCEIL)     { return false; } break;
+    case FloorBrackets:        if (eClosingTokenType != TRFLOOR)    { return false; } break;
+    default:
+        return false;
+    }
+
+    if (ppBraceNode) {
+        *ppBraceNode = static_cast<SmBraceNode*>(pBraceNode);
+    }
+
+    return true;
+}
+
+void SmCursor::MoveAfterBracket(SmBraceNode* pBraceNode, bool bMoveAnchor)
+{
+    position->CaretPos.pSelectedNode = pBraceNode;
+    position->CaretPos.Index = 1;
+    if (bMoveAnchor) {
+        anchor->CaretPos.pSelectedNode = pBraceNode;
+        anchor->CaretPos.Index = 1;
+    }
+    RequestRepaint();
+}
+
+
 /////////////////////////////////////// SmNodeListParser ///////////////////////////////////////
 
 SmNode* SmNodeListParser::Parse(SmNodeList* list, bool bDeleteErrorNodes){
