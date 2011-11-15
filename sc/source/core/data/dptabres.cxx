@@ -829,7 +829,7 @@ void ScDPResultData::SetDataLayoutOrientation( sal_uInt16 nOrient )
     bDataAtRow = ( nOrient == sheet::DataPilotFieldOrientation_ROW );
 }
 
-void ScDPResultData::SetLateInit( sal_Bool bSet )
+void ScDPResultData::SetLateInit( bool bSet )
 {
     bLateInit = bSet;
 }
@@ -864,7 +864,7 @@ sal_uInt16 ScDPResultData::GetMeasureRefOrient(long nMeasure) const
     return pMeasRefOrient[nMeasure];
 }
 
-String ScDPResultData::GetMeasureString(long nMeasure, sal_Bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const
+String ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const
 {
     //  with bForce==sal_True, return function instead of "result" for single measure
     //  with eForceFunc != SUBTOTAL_FUNC_NONE, always use eForceFunc
@@ -915,7 +915,7 @@ String ScDPResultData::GetMeasureDimensionName(long nMeasure) const
     return pSource->GetDataDimName( nMeasure );
 }
 
-sal_Bool ScDPResultData::IsBaseForGroup( long nDim ) const
+bool ScDPResultData::IsBaseForGroup( long nDim ) const
 {
     return pSource->GetData()->IsBaseForGroup( nDim );
 }
@@ -925,12 +925,12 @@ long ScDPResultData::GetGroupBase( long nGroupDim ) const
     return pSource->GetData()->GetGroupBase( nGroupDim );
 }
 
-sal_Bool ScDPResultData::IsNumOrDateGroup( long nDim ) const
+bool ScDPResultData::IsNumOrDateGroup( long nDim ) const
 {
     return pSource->GetData()->IsNumOrDateGroup( nDim );
 }
 
-sal_Bool ScDPResultData::IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
+bool ScDPResultData::IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
                                 long nBaseDataId, long nBaseIndex ) const
 {
     const ScDPItemData* pData = pSource->GetItemDataById( nGroupIndex , nBaseDataId);
@@ -939,8 +939,8 @@ sal_Bool ScDPResultData::IsInGroup( const ScDPItemData& rGroupData, long nGroupI
     else
         return false;
 }
-sal_Bool ScDPResultData::IsInGroup( SCROW nGroupDataId, long nGroupIndex,
-                                                               const ScDPItemData& rBaseData, long nBaseIndex ) const
+bool ScDPResultData::IsInGroup( SCROW nGroupDataId, long nGroupIndex,
+                                const ScDPItemData& rBaseData, long nBaseIndex ) const
 {
     const ScDPItemData* pGroupData = pSource->GetItemDataById( nGroupIndex , nGroupDataId);
     if ( pGroupData )
@@ -949,7 +949,7 @@ sal_Bool ScDPResultData::IsInGroup( SCROW nGroupDataId, long nGroupIndex,
         return false;
 }
 
-sal_Bool ScDPResultData::HasCommonElement(/* const ScDPItemData& rFirstData*/SCROW nFirstDataId, long nFirstIndex,
+bool ScDPResultData::HasCommonElement( SCROW nFirstDataId, long nFirstIndex,
                                        const ScDPItemData& rSecondData, long nSecondIndex ) const
 {
     const ScDPItemData* pFirstData = pSource->GetItemDataById( nFirstIndex , nFirstDataId);

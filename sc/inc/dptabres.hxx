@@ -300,12 +300,12 @@ private:
     ::com::sun::star::sheet::DataPilotFieldReference* pMeasRefs;
     sal_uInt16*                 pMeasRefOrient;
     String*                 pMeasNames;
-    sal_Bool                    bLateInit;
-    sal_Bool                    bDataAtCol;
-    sal_Bool                    bDataAtRow;
+    bool                    bLateInit:1;
+    bool                    bDataAtCol:1;
+    bool                    bDataAtRow:1;
 
     //! add "displayed values" settings
-        mutable std::vector< ResultMembers* > mpDimMembers;
+    mutable std::vector< ResultMembers* > mpDimMembers;
 public:
                         ScDPResultData( ScDPSource* pSrc );     //! Ref
                         ~ScDPResultData();
@@ -314,18 +314,18 @@ public:
                                         const ::com::sun::star::sheet::DataPilotFieldReference* pRefs,
                                         const sal_uInt16* pRefOrient, const String* pNames );
     void                SetDataLayoutOrientation( sal_uInt16 nOrient );
-    void                SetLateInit( sal_Bool bSet );
+    void                SetLateInit( bool bSet );
 
     long                GetMeasureCount() const     { return nMeasCount; }
     ScSubTotalFunc      GetMeasureFunction(long nMeasure) const;
-    String              GetMeasureString(long nMeasure, sal_Bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const;
+    String              GetMeasureString(long nMeasure, bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const;
     String              GetMeasureDimensionName(long nMeasure) const;
     const ::com::sun::star::sheet::DataPilotFieldReference& GetMeasureRefVal(long nMeasure) const;
     sal_uInt16              GetMeasureRefOrient(long nMeasure) const;
 
-    sal_Bool                IsDataAtCol() const             { return bDataAtCol; }
-    sal_Bool                IsDataAtRow() const             { return bDataAtRow; }
-    sal_Bool                IsLateInit() const              { return bLateInit; }
+    bool                IsDataAtCol() const             { return bDataAtCol; }
+    bool                IsDataAtRow() const             { return bDataAtRow; }
+    bool                IsLateInit() const              { return bLateInit; }
 
     long                GetColStartMeasure() const;
     long                GetRowStartMeasure() const;
@@ -333,14 +333,14 @@ public:
     long                GetCountForMeasure( long nMeas ) const
                                 { return ( nMeas == SC_DPMEASURE_ALL ) ? nMeasCount : 1; }
 
-    sal_Bool                IsBaseForGroup( long nDim ) const;              // any group
+    bool                IsBaseForGroup( long nDim ) const;              // any group
     long                GetGroupBase( long nGroupDim ) const;
-    sal_Bool                IsNumOrDateGroup( long nDim ) const;
-    sal_Bool                IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
-                                               long nBaseDataId, long nBaseIndex ) const;
-    sal_Bool                IsInGroup( SCROW nGroupDataId, long nGroupIndex,
-                                              const ScDPItemData& rBaseData, long nBaseIndex ) const;
-    sal_Bool                HasCommonElement( SCROW nFirstDataId, long nFirstIndex,
+    bool                IsNumOrDateGroup( long nDim ) const;
+    bool                IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
+                                   long nBaseDataId, long nBaseIndex ) const;
+    bool                IsInGroup( SCROW nGroupDataId, long nGroupIndex,
+                                   const ScDPItemData& rBaseData, long nBaseIndex ) const;
+    bool                HasCommonElement( SCROW nFirstDataId, long nFirstIndex,
                                           const ScDPItemData& rSecondData, long nSecondIndex ) const;
 
     ResultMembers* GetDimResultMembers( long nDim , ScDPDimension* pDim , ScDPLevel*   pLevel) const ;
