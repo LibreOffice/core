@@ -79,61 +79,6 @@ STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed_BoldItalic, DejaVuSerifCondense
 #endif 
 
 
-// Liberation fonts
-
-// Liberation Sans Narrow
-#ifndef WITHOUT_FONTS 
-STD_FONT_FILE( gid_File_Fnt_LibSansNarrow_Regular, LiberationSansNarrow-Regular.ttf, Liberation Sans Narrow Regular) 
-STD_FONT_FILE( gid_File_Fnt_LibSansNarrow_Bold, LiberationSansNarrow-Bold.ttf, Liberation Sans Narrow Bold) 
-STD_FONT_FILE( gid_File_Fnt_LibSansNarrow_Italic, LiberationSansNarrow-Italic.ttf, Liberation Sans Narrow Italic) 
-STD_FONT_FILE( gid_File_Fnt_LibSansNarrow_BoldItalic, LiberationSansNarrow-BoldItalic.ttf, Liberation Sans Narrow Bold Italic) 
-#endif
-
-// Liberation Mono
-#ifndef WITHOUT_FONTS 
-#ifndef WNT 
-STD_FONT_FILE( gid_File_Fnt_LiberationMono_Regular, LiberationMono-Regular.ttf, Liberation Mono Regular) 
-STD_FONT_FILE( gid_File_Fnt_LiberationMono_Bold, LiberationMono-Bold.ttf, Liberation Mono Bold) 
-STD_FONT_FILE( gid_File_Fnt_LiberationMono_Italic, LiberationMono-Italic.ttf, Liberation Mono Italic) 
-STD_FONT_FILE( gid_File_Fnt_LiberationMono_BoldItalic, LiberationMono-BoldItalic.ttf, Liberation Mono Bold Italic) 
-#endif
-#endif
-
-// Liberation Sans
-#ifndef WITHOUT_FONTS 
-#ifndef WNT 
-STD_FONT_FILE( gid_File_Fnt_LiberationSans_Regular, LiberationSans-Regular.ttf, Liberation Sans Regular) 
-STD_FONT_FILE( gid_File_Fnt_LiberationSans_Italic, LiberationSans-Italic.ttf, Liberation Sans Italic) 
-STD_FONT_FILE( gid_File_Fnt_LiberationSans_Bold, LiberationSans-Bold.ttf, Liberation Serif Bold) 
-STD_FONT_FILE( gid_File_Fnt_LiberationSans_BoldItalic, LiberationSans-BoldItalic.ttf, Liberation Sans Bold Italic) 
-#endif
-#endif
-
-// Liberation Serif
-#ifndef WITHOUT_FONTS 
-#ifndef WNT 
-STD_FONT_FILE( gid_File_Fnt_LiberationSerif_Regular, LiberationSerif-Regular.ttf, Liberation Serif Regular) 
-STD_FONT_FILE( gid_File_Fnt_LiberationSerif_Bold, LiberationSerif-Bold.ttf, Liberation Serif Bold) 
-STD_FONT_FILE( gid_File_Fnt_LiberationSerif_Italic, LiberationSerif-Italic.ttf, Liberation Serif Italic) 
-STD_FONT_FILE( gid_File_Fnt_LiberationSerif_BoldItalic, LiberationSerif-BoldItalic.ttf, Liberation Serif Bold Italic) 
-#endif
-#endif
-
-// Gentium fonts
-
-#ifndef WITHOUT_FONTS 
-STD_FONT_FILE( gid_File_Fnt_GentiumBasicRegular, GenBasR.ttf, Gentium Basic)
-STD_FONT_FILE( gid_File_Fnt_GentiumBasicBold, GenBasB.ttf, Gentium Basic Bold)
-STD_FONT_FILE( gid_File_Fnt_GentiumBasicItalic, GenBasI.ttf, Gentium Basic Bold)
-STD_FONT_FILE( gid_File_Fnt_GentiumBasicBoldItalic, GenBasBI.ttf, Gentium Basic Bold Italic)
-#endif 
-
-#ifndef WITHOUT_FONTS 
-STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicRegular, GenBkBasR.ttf, Gentium Book Basic)
-STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicBold, GenBkBasB.ttf, Gentium Book Basic Bold)
-STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicItalic, GenBkBasI.ttf, Gentium Book Basic Bold)
-STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicBoldItalic, GenBkBasBI.ttf, Gentium Book Basic Bold Italic)
-#endif 
 
 // fontconfig updates to allow proper use of local fonts
 
