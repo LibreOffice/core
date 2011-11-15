@@ -318,8 +318,8 @@ public:
 
     long                GetMeasureCount() const     { return nMeasCount; }
     ScSubTotalFunc      GetMeasureFunction(long nMeasure) const;
-    String              GetMeasureString(long nMeasure, bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const;
-    String              GetMeasureDimensionName(long nMeasure) const;
+    rtl::OUString       GetMeasureString(long nMeasure, bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const;
+    rtl::OUString       GetMeasureDimensionName(long nMeasure) const;
     const ::com::sun::star::sheet::DataPilotFieldReference& GetMeasureRefVal(long nMeasure) const;
     sal_uInt16              GetMeasureRefOrient(long nMeasure) const;
 

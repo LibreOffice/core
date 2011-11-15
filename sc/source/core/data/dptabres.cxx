@@ -862,7 +862,7 @@ sal_uInt16 ScDPResultData::GetMeasureRefOrient(long nMeasure) const
     return pMeasRefOrient[nMeasure];
 }
 
-String ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const
+rtl::OUString ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const
 {
     //  with bForce==sal_True, return function instead of "result" for single measure
     //  with eForceFunc != SUBTOTAL_FUNC_NONE, always use eForceFunc
@@ -902,12 +902,12 @@ String ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSubTotalFu
     }
 }
 
-String ScDPResultData::GetMeasureDimensionName(long nMeasure) const
+rtl::OUString ScDPResultData::GetMeasureDimensionName(long nMeasure) const
 {
     if ( nMeasure < 0 )
     {
         OSL_FAIL("GetMeasureDimensionName: negative");
-        return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("***"));
+        return rtl::OUString::createFromAscii("***");
     }
 
     return pSource->GetDataDimName( nMeasure );
