@@ -30,8 +30,6 @@
 #define BTN_ADD         3
 #define BTN_HELP        5
 #define BTN_MORE        6
-#define BTN_MODIFY      55
-#define BTN_BACK        56
 #define BTN_DELETE      57
 #define BTN_CLOSE       62
 
@@ -53,11 +51,9 @@
 #define BTN_COLHEADER   33
 #define BTN_ROWHEADER   34
 
-#define ED_NAME_LINE    63
-#define ED_EXPR_LINE    64
-#define ED_SCOPE_LINE   65
-
 #define CTRL_MANAGENAMES    66
 #define STR_HEADER_NAME     69
 #define STR_HEADER_RANGE    70
 #define STR_HEADER_SCOPE    71
+
+#define FT_INFO_LINE 72

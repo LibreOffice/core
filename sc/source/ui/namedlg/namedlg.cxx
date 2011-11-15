@@ -252,8 +252,6 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     //
     maBtnHelp        ( this, ScResId( BTN_HELP ) ),
     maBtnAdd         ( this, ScResId( BTN_ADD ) ),
-    maBtnModify      ( this, ScResId( BTN_MODIFY ) ),
-    maBtnBack        ( this, ScResId( BTN_BACK ) ),
     maBtnDelete      ( this, ScResId( BTN_DELETE ) ),
     maBtnClose       ( this, ScResId( BTN_CLOSE ) ),
     maBtnMore        ( this, ScResId( BTN_MORE ) ),
@@ -297,16 +295,12 @@ void ScNameDlg::Init()
 
     maBtnClose.SetClickHdl  ( LINK( this, ScNameDlg, CloseBtnHdl ) );
     maBtnAdd.SetClickHdl     ( LINK( this, ScNameDlg, AddBtnHdl ) );
-    maBtnBack.SetClickHdl ( LINK( this, ScNameDlg, BackBtnHdl ) );
     maEdAssign.SetGetFocusHdl( LINK( this, ScNameDlg, AssignGetFocusHdl ) );
     maEdAssign.SetModifyHdl  ( LINK( this, ScNameDlg, EdModifyHdl ) );
     maEdName.SetModifyHdl ( LINK( this, ScNameDlg, EdModifyHdl ) );
     maLbScope.SetSelectHdl( LINK(this, ScNameDlg, ScopeChangedHdl) );
     maBtnDelete.SetClickHdl ( LINK( this, ScNameDlg, RemoveBtnHdl ) );
-    maBtnModify.SetClickHdl ( LINK( this, ScNameDlg, ModifyBtnHdl ) );
     maBtnMore.SetClickHdl   ( LINK( this, ScNameDlg, MoreBtnHdl ) );
-
-    maBtnBack.Disable();
 
     maBtnCriteria .Hide();
     maBtnPrintArea.Hide();
@@ -391,22 +385,16 @@ void ScNameDlg::UpdateChecks(ScRangeData* pData)
 void ScNameDlg::UpdateNames()
 {
     mpRangeManagerTable->UpdateEntries();
-    if (!maUndoStack.empty())
-        maBtnBack.Enable();
-    else
-        maBtnBack.Disable();
 
     ScRangeNameLine aLine;
     mpRangeManagerTable->GetCurrentLine(aLine);
     if (aLine.aName.getLength())
     {
         maBtnDelete.Enable();
-        maBtnModify.Enable();
     }
     else
     {
         maBtnDelete.Disable();
-        maBtnModify.Disable();
     }
 }
 
@@ -525,7 +513,6 @@ void ScNameDlg::NameModified()
     if (!aName.getLength() || !ScRangeData::IsNameValid(aName, mpDoc))
     {
         maBtnAdd.Disable();
-        maBtnModify.Disable();
     }
     else
     {
@@ -540,10 +527,6 @@ void ScNameDlg::NameModified()
         }
         ScRangeNameLine aLine;
         mpRangeManagerTable->GetCurrentLine(aLine);
-        if (aLine.aName.getLength())
-            maBtnModify.Enable();
-        else
-            maBtnModify.Disable();
     }
 }
 
@@ -564,10 +547,6 @@ void ScNameDlg::BackPushed()
     aUndo->Undo();
     delete aUndo;
     maUndoStack.pop();
-    if (maUndoStack.empty())
-    {
-        maBtnBack.Disable();
-    }
     UpdateNames();
     NameModified();
 }
@@ -665,8 +644,6 @@ void ScNameDlg::MorePushed()
         nPixel *= -1;
     }
     MoveWindow(maBtnAdd, nPixel);
-    MoveWindow(maBtnModify, nPixel);
-    MoveWindow(maBtnBack, nPixel);
     MoveWindow(maBtnDelete, nPixel);
     MoveWindow(maBtnHelp, nPixel);
     MoveWindow(maBtnClose, nPixel);

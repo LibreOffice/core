@@ -51,20 +51,6 @@ ModelessDialog RID_SCDLG_NAMES
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
-    PushButton BTN_MODIFY
-    {
-        Pos = MAP_APPFONT( 60, 200) ;
-        Size = MAP_APPFONT ( 50, 14 ) ;
-        Text [ en-US ] = "Modify" ;
-        TabStop = TRUE ;
-    };
-    PushButton BTN_BACK
-    {
-        Pos = MAP_APPFONT( 114, 200) ;
-        Size = MAP_APPFONT ( 50, 14 ) ;
-        Text [ en-US ] = "Back" ;
-        TabStop = TRUE ;
-    };
     PushButton BTN_DELETE
     {
         Pos = MAP_APPFONT( 168, 200) ;
@@ -128,7 +114,7 @@ ModelessDialog RID_SCDLG_NAMES
         HelpID = "sc:ImageButton:RID_SCDLG_NAMES:RB_ASSIGN";
         Pos = MAP_APPFONT ( 205 , 155 ) ;
         Size = MAP_APPFONT ( 13 , 12 ) ;
-        TabStop = FALSE ;
+        TabStop = TRUE ;
         QuickHelpText [ en-US ] = "Shrink" ;
     };
     MoreButton BTN_MORE
@@ -191,26 +177,12 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ en-US ] = "Document (Global)" ;
     };
 
-    FixedText ED_NAME_LINE
+    FixedText FT_INFO_LINE
     {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 100 ) ;
-        Size = MAP_APPFONT ( 72 , 12 ) ;
-        TabStop = TRUE ;
-    };
-    FixedText ED_EXPR_LINE
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 78 , 100 ) ;
-        Size = MAP_APPFONT ( 70 , 12 ) ;
-        TabStop = TRUE ;
-    };
-    FixedText ED_SCOPE_LINE
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 70 , 100 ) ;
-        Size = MAP_APPFONT ( 148 , 12 ) ;
-        TabStop = TRUE ;
+        Border = TRUE;
+        Pos = MAP_APPFONT( 6, 130 );
+        Size = MAP_APPFONT( 210, 14 );
+        TabStop = FALSE;
     };
 
     Control CTRL_MANAGENAMES

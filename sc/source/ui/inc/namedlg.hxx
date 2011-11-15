@@ -155,8 +155,6 @@ private:
 
     HelpButton      maBtnHelp;
     PushButton      maBtnAdd;
-    PushButton      maBtnModify;
-    PushButton      maBtnBack;
     PushButton      maBtnDelete;
     PushButton      maBtnClose;
     MoreButton      maBtnMore;
