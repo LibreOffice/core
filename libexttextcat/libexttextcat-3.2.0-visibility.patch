@@ -1,0 +1,10 @@
+--- misc/libexttextcat-3.2.0/src/makefile.mk	2011-10-07 00:09:38.000000000 +0200
++++ misc/build/libexttextcat-3.2.0/src/makefile.mk	2011-11-15 13:57:19.742958488 +0100
+@@ -33,6 +33,7 @@
+ 
+ USE_DEFFILE=TRUE
+ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++VISIBILITY_HIDDEN=TRUE
+ UWINAPILIB=
+ 
+ .INCLUDE : settings.mk

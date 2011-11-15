@@ -31,6 +31,7 @@ PRJNAME=lingucomponent
 TARGET=guesslang
 
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 #----- Settings ---------------------------------------------------------
 
@@ -71,13 +72,11 @@ SHL1STDLIBS= \
         $(UNOTOOLSLIB)
 
 # build DLL
+SHL1USE_EXPORTS = name
 SHL1LIBS=       $(SLB)$/$(TARGET).lib
 SHL1IMPLIB=     i$(TARGET)
 SHL1DEPN=       $(SHL1LIBS)
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
-.IF "$(OS)"!="MACOSX"
-SHL1VERSIONMAP=$(SOLARENV)/src/component.map
-.ENDIF
 
 # build DEF file
 DEF1NAME    =$(SHL1TARGET)
