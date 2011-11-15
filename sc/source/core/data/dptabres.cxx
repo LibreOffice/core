@@ -786,7 +786,7 @@ ScDPResultData::~ScDPResultData()
 
 void ScDPResultData::SetMeasureData( long nCount, const ScSubTotalFunc* pFunctions,
                                     const sheet::DataPilotFieldReference* pRefs, const sal_uInt16* pRefOrient,
-                                    std::vector<String>& rNames )
+                                    std::vector<rtl::OUString>& rNames )
 {
     delete[] pMeasFuncs;
     delete[] pMeasRefs;
@@ -815,7 +815,7 @@ void ScDPResultData::SetMeasureData( long nCount, const ScSubTotalFunc* pFunctio
         pMeasRefs  = new sheet::DataPilotFieldReference[1]; // default ctor is ok
         pMeasRefOrient = new sal_uInt16[1];
         pMeasRefOrient[0] = sheet::DataPilotFieldOrientation_HIDDEN;
-        std::vector<String> aMeasureName;
+        std::vector<rtl::OUString> aMeasureName;
         aMeasureName.push_back(ScGlobal::GetRscString(STR_EMPTYDATA));
         maMeasureNames.swap(aMeasureName);
     }
@@ -887,18 +887,18 @@ String ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSubTotalFu
             if (pLayoutName)
                 return *pLayoutName;
         }
-        String aRet;
+        rtl::OUStringBuffer aRet;
         ScSubTotalFunc eFunc = ( eForceFunc == SUBTOTAL_FUNC_NONE ) ?
                                     GetMeasureFunction(nMeasure) : eForceFunc;
         sal_uInt16 nId = nFuncStrIds[eFunc];
         if (nId)
         {
-            aRet += ScGlobal::GetRscString(nId);        // function name
-            aRet.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " - " ));
+            aRet.append(ScGlobal::GetRscString(nId));        // function name
+            aRet.appendAscii(RTL_CONSTASCII_STRINGPARAM(" - "));
         }
-        aRet += maMeasureNames[nMeasure];                   // field name
+        aRet.append(maMeasureNames[nMeasure]);                   // field name
 
-        return aRet;
+        return aRet.makeStringAndClear();
     }
 }
 

@@ -69,6 +69,7 @@
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 
+#include "comphelper/string.hxx"
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
@@ -792,7 +793,7 @@ void ScDPSource::CreateRes_Impl()
         // TODO: Aggreate pDataNames, pDataRefValues, nDataRefOrient, and
         // eDataFunctions into a structure and use vector instead of static
         // or pointer arrays.
-        vector<String> aDataNames;
+        vector<rtl::OUString> aDataNames;
         sheet::DataPilotFieldReference* pDataRefValues = NULL;
         ScSubTotalFunc eDataFunctions[SC_DAPI_MAXFIELDS];
         sal_uInt16 nDataRefOrient[SC_DAPI_MAXFIELDS];
@@ -854,7 +855,7 @@ void ScDPSource::CreateRes_Impl()
             //  asterisk is added to duplicated dimension names by ScDPSaveData::WriteToSource
             //! modify user visible strings as in ScDPResultData::GetMeasureString instead!
 
-            aDataNames[i].EraseTrailingChars('*');
+            aDataNames[i] = comphelper::string::removeTrailingChars(aDataNames[i], '*');
 
             //! if the name is overridden by user, a flag must be set
             //! so the user defined name replaces the function string and field name.

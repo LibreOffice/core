@@ -235,6 +235,18 @@ sal_uInt32 decimalStringToNumber(
     return result;
 }
 
+rtl::OUString removeTrailingChars(const rtl::OUString& rStr, sal_Unicode cChar)
+{
+    sal_Int32 n = rStr.getLength();
+    const sal_Unicode* p = &rStr.getStr()[n-1]; // last char
+    while (n > 0 && *p == cChar)
+    {
+        --p;
+        --n;
+    }
+    return rStr.copy(0, n);
+}
+
 using namespace ::com::sun::star;
 
 // convert between sequence of string and comma separated string
