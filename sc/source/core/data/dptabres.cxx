@@ -1369,6 +1369,10 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
     //  IsVisible() test is in ScDPResultDimension::FillMemberResults
     //  (not on data layout dimension)
 
+    if (!pSequences->getLength())
+        // empty sequence.  Bail out.
+        return;
+
     long nSize = GetSize(nMeasure);
     sheet::MemberResult* pArray = pSequences->getArray();
     OSL_ENSURE( rPos+nSize <= pSequences->getLength(), "bumm" );
