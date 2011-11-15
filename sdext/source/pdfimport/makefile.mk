@@ -30,6 +30,7 @@ PRJ=..$/..
 PRJNAME=sdext
 TARGET=pdfimport
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -90,7 +91,7 @@ SHL1STDLIBS=\
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-SHL1VERSIONMAP=$(SOLARENV)/src/reg-component.map
+SHL1USE_EXPORTS = name
 SHL1RPATH=OXT
 
 DEF1NAME=$(SHL1TARGET)

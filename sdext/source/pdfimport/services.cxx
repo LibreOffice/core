@@ -121,7 +121,8 @@ namespace
     }
 }
 
-extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
+component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
 {
     Reference< XRegistryKey > xRootKey( static_cast< XRegistryKey* >( pRegistryKey ) );
 
