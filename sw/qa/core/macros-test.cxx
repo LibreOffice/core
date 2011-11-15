@@ -58,14 +58,11 @@ using namespace ::com::sun::star::uno;
 
 /* Implementation of Macros test */
 
-class SwMacrosTest
-    : public test::FiltersTest
-    , public test::BootstrapFixture
+class SwMacrosTest : public test::BootstrapFixture
 {
 public:
     SwMacrosTest();
 
-    virtual bool load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData);
     SwDocShellRef load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
         const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType=0);
     uno::Reference< com::sun::star::lang::XComponent > loadFromDesktop(const rtl::OUString& rURL);
@@ -106,18 +103,6 @@ uno::Reference< com::sun::star::lang::XComponent > SwMacrosTest::loadFromDesktop
     uno::Reference< com::sun::star::lang::XComponent> xComponent= xLoader->loadComponentFromURL(rURL, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")), 0, args);
     CPPUNIT_ASSERT_MESSAGE("loading failed", xComponent.is());
     return xComponent;
-}
-
-
-bool SwMacrosTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
-    const rtl::OUString &rUserData)
-{
-    SwDocShellRef xDocShRef;
-    bool bLoaded = xDocShRef.Is();
-    //reference counting of SwDocShellRef is very confused.
-    if (bLoaded)
-        xDocShRef->DoClose();
-    return bLoaded;
 }
 
 void SwMacrosTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
