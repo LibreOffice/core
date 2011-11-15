@@ -53,7 +53,7 @@ DBTreeView::DBTreeView( Window* pParent, const Reference< XMultiServiceFactory >
 {
     DBG_CTOR(DBTreeView,NULL);
 
-    m_pTreeListBox = new DBTreeListBox(this, _rxORB ,WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT,sal_True);
+    m_pTreeListBox = new DBTreeListBox(this, _rxORB ,WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT);
     m_pTreeListBox->EnableCheckButton(NULL);
     m_pTreeListBox->SetDragDropMode( 0 );
     m_pTreeListBox->EnableInplaceEditing( sal_True );
