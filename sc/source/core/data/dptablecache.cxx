@@ -607,7 +607,6 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
         const ScDPItemData* pCellData = GetItemDataById( nSourceField, nId );
 
         bool bOk = false;
-        bool bTestEqual = false;
 
         if (rEntry.GetQueryItem().meType == ScQueryEntry::ByEmpty)
         {
@@ -670,8 +669,6 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
                     bMatch = false;    // RegExp must match entire cell string
                 if (bRealRegExp)
                     bOk = ((rEntry.eOp == SC_NOT_EQUAL) ? !bMatch : bMatch);
-                else
-                    bTestEqual = bMatch;
             }
             if (!bRealRegExp)
             {
