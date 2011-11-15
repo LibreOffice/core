@@ -408,6 +408,7 @@ public:
     void appendTextContent( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >,
                                 const uno::Sequence< beans::PropertyValue >  );
     void appendOLE( const ::rtl::OUString& rStreamName, OLEHandlerPtr pOleHandler );
+    void appendStarMath( const Value& v );
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > appendTextSectionAfter(
                     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xBefore );
 

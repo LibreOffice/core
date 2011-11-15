@@ -695,7 +695,8 @@ bool SwOLEProperties_Impl::AnyToItemSet(
         SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, bool& rSizeFound)
 {
     const ::uno::Any* pTemp;
-    if(!GetProperty(FN_UNO_CLSID, 0, pTemp) && !GetProperty(FN_UNO_STREAM_NAME, 0, pTemp) )
+    if(!GetProperty(FN_UNO_CLSID, 0, pTemp) && !GetProperty(FN_UNO_STREAM_NAME, 0, pTemp)
+         && !GetProperty(FN_EMBEDDED_OBJECT, 0, pTemp) )
         return sal_False;
     SwFrameProperties_Impl::AnyToItemSet( pDoc, rFrmSet, rSet, rSizeFound);
     //
@@ -1364,7 +1365,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
 
                 pFmt->GetDoc()->SetFlyFrmAttr( *pFmt, aSet );
             }
-            else if(FN_UNO_CLSID == pEntry->nWID || FN_UNO_STREAM_NAME == pEntry->nWID)
+            else if(FN_UNO_CLSID == pEntry->nWID || FN_UNO_STREAM_NAME == pEntry->nWID || FN_EMBEDDED_OBJECT == pEntry->nWID)
             {
                 throw lang::IllegalArgumentException();
             }
@@ -1641,6 +1642,10 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             else if(FN_UNO_STREAM_NAME == pEntry->nWID)
             {
                 aAny <<= ::rtl::OUString(pOleNode->GetOLEObj().GetCurrentPersistName());
+            }
+            else if(FN_EMBEDDED_OBJECT == pEntry->nWID)
+            {
+                aAny <<= pOleNode->GetOLEObj().GetOleRef();
             }
         }
         else if(WID_LAYOUT_SIZE == pEntry->nWID)
@@ -2200,7 +2205,10 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         {
             const ::uno::Any* pCLSID = 0;
             const ::uno::Any* pStreamName = 0;
-            if(!pProps->GetProperty(FN_UNO_CLSID, 0, pCLSID) && !pProps->GetProperty( FN_UNO_STREAM_NAME, 0, pStreamName ))
+            const ::uno::Any* pEmbeddedObject = 0;
+            if(!pProps->GetProperty(FN_UNO_CLSID, 0, pCLSID)
+                && !pProps->GetProperty( FN_UNO_STREAM_NAME, 0, pStreamName )
+                && !pProps->GetProperty( FN_EMBEDDED_OBJECT, 0, pEmbeddedObject ))
                 throw uno::RuntimeException();
             if(pCLSID)
             {
@@ -2281,7 +2289,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                         pDoc->SetFlyName((SwFlyFrmFmt&)*pFmt2, sName);
                 }
             }
-            else if( pStreamName )
+            else if( pStreamName && false )
             {
                 ::rtl::OUString sStreamName;
                 (*pStreamName) >>= sStreamName;
@@ -2289,6 +2297,23 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
 
                 SwFlyFrmFmt* pFrmFmt = 0;
                 pFrmFmt = pDoc->InsertOLE( aPam, sStreamName, embed::Aspects::MSOLE_CONTENT, &aFrmSet, NULL, NULL );
+                pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
+                pFrmFmt->Add(this);
+                if(sName.Len())
+                    pDoc->SetFlyName((SwFlyFrmFmt&)*pFrmFmt, sName);
+            }
+            else if( pEmbeddedObject || pStreamName )
+            {
+                uno::Reference< embed::XEmbeddedObject > obj;
+//                (*pEmbeddedObject) >>= obj;
+                (*pStreamName) >>= obj;
+                svt::EmbeddedObjectRef xObj;
+                xObj.Assign( obj, embed::Aspects::MSOLE_CONTENT );
+
+                pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
+
+                SwFlyFrmFmt* pFrmFmt = 0;
+                pFrmFmt = pDoc->Insert( aPam, xObj, &aFrmSet, NULL, NULL );
                 pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
                 pFrmFmt->Add(this);
                 if(sName.Len())

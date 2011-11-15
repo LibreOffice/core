@@ -48,6 +48,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sw_swdoc_test, \
     i18nisolang1 \
     i18nutil \
     lng \
+    oox \
     sal \
     salhelper \
     sax \

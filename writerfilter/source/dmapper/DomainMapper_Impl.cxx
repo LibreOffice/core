@@ -25,6 +25,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+#include <oox/export/starmathimport.hxx>
+
 #include <DomainMapper_Impl.hxx>
 #include <ConversionHelper.hxx>
 #include <DomainMapperTableHandler.hxx>
@@ -70,6 +73,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/string.h>
 #include "FieldTypes.hxx"
@@ -1086,6 +1090,45 @@ void DomainMapper_Impl::appendOLE( const ::rtl::OUString& rStreamName, OLEHandle
     }
 }
 
+void DomainMapper_Impl::appendStarMath( const Value& val )
+{
+            fprintf(stderr,"SM 1 %s\n", typeid(*GetTextDocument().get()).name());
+            uno::Reference< embed::XEmbeddedObject > formula;
+            val.getAny() >>= formula;
+            if( formula.is() )
+            {
+                if( OoxmlFormulaImportBase* import = dynamic_cast< OoxmlFormulaImportBase* >( GetTextDocument().get()))
+                {
+                    fprintf( stderr,"SM 3 %p\n", import );
+                    import->addFormula( formula );
+                }
+    static const rtl::OUString sEmbeddedService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextEmbeddedObject"));
+    try
+    {
+        uno::Reference< text::XTextContent > xOLE( m_xTextFactory->createInstance(sEmbeddedService), uno::UNO_QUERY_THROW );
+        fprintf(stderr,"SM4\n");
+        uno::Reference< beans::XPropertySet > xOLEProperties(xOLE, uno::UNO_QUERY_THROW);
+        fprintf(stderr,"SM5\n");
+
+        sleep(10);
+        xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_STREAM_NAME ),
+                        val.getAny());
+        fprintf(stderr,"SM6\n");
+        // mimic the treatment of graphics here.. it seems anchoring as character
+        // gives a better ( visually ) result
+        xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_ANCHOR_TYPE ),  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) );
+        fprintf(stderr,"SM7\n");
+        appendTextContent( xOLE, uno::Sequence< beans::PropertyValue >() );
+        fprintf(stderr,"SM8\n");
+
+    }
+    catch( const uno::Exception& rEx )
+    {
+        (void)rEx;
+        OSL_FAIL( "Exception in creation of OLE object" );
+    }
+            }
+}
 
 uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
                                     uno::Reference< text::XTextRange >& xBefore )

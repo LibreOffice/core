@@ -1118,7 +1118,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_GRAPHIC_URL), FN_UNO_REPLACEMENT_GRAPHIC_URL, CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NMID(UNO_NAME_GRAPHIC), FN_UNO_REPLACEMENT_GRAPHIC, CPPU_E2T(CPPUTYPE_REFXGRAPHIC), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NMID(UNO_NAME_COMPONENT),FN_UNO_COMPONENT, CPPU_E2T(CPPUTYPE_REFCOMPONENT), PropertyAttribute::READONLY, 0},
-                    { SW_PROP_NMID(UNO_NAME_EMBEDDED_OBJECT),FN_EMBEDDED_OBJECT, CPPU_E2T(CPPUTPYE_REFEMBEDDEDOBJECT), PropertyAttribute::READONLY, 0},
+                    { SW_PROP_NMID(UNO_NAME_EMBEDDED_OBJECT),FN_EMBEDDED_OBJECT, CPPU_E2T(CPPUTPYE_REFEMBEDDEDOBJECT), PROPERTY_NONE, 0},
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aEmbeddedPropertyMap_Impl;

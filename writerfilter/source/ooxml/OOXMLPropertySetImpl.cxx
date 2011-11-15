@@ -690,6 +690,35 @@ OOXMLValue * OOXMLShapeValue::clone() const
 }
 
 /*
+  class OOXMLStarMathValue
+ */
+
+
+OOXMLStarMathValue::OOXMLStarMathValue( uno::Reference< embed::XEmbeddedObject > c )
+: component(c)
+{
+}
+
+OOXMLStarMathValue::~OOXMLStarMathValue()
+{
+}
+
+uno::Any OOXMLStarMathValue::getAny() const
+{
+    return uno::Any(component);
+}
+
+string OOXMLStarMathValue::toString() const
+{
+    return "StarMath";
+}
+
+OOXMLValue * OOXMLStarMathValue::clone() const
+{
+    return new OOXMLStarMathValue( component );
+}
+
+/*
   class OOXMLTableImpl
  */
 

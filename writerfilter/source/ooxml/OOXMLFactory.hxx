@@ -62,6 +62,7 @@ enum ResourceType_t {
     RT_TextTableRow,
     RT_TextTable,
     RT_PropertyTable,
+    RT_Math,
     RT_Any
 };
 

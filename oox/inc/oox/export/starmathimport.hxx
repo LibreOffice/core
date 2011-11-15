@@ -13,7 +13,7 @@
  * License.
  *
  * Major Contributor(s):
- * Copyright (C) 2011 Tor Lillqvist <tlillqvist@suse.com> (initial developer)
+ * Copyright (C) 2011 Lubos Lunak <l.lunak@suse.cz> (initial developer)
  *
  * All Rights Reserved.
  *
@@ -25,16 +25,20 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
+#ifndef _STARMATHIMPORT_HXX
+#define _STARMATHIMPORT_HXX
 
-#include <oox/export/ooxmlexport.hxx>
-#include <oox/export/starmathimport.hxx>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 
-OoxmlFormulaExportBase::OoxmlFormulaExportBase()
+#include <oox/dllapi.h>
+
+class OOX_DLLPUBLIC OoxmlFormulaImportBase
 {
-}
+public:
+    OoxmlFormulaImportBase();
+    virtual void addFormula( com::sun::star::uno::Reference< com::sun::star::embed::XEmbeddedObject > ) = 0;
+};
 
-OoxmlFormulaImportBase::OoxmlFormulaImportBase()
-{
-}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

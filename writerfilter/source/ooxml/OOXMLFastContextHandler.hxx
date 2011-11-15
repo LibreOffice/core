@@ -42,6 +42,7 @@
 #include "OOXMLDocumentImpl.hxx"
 #include "RefAndPointer.hxx"
 #include <ooxml/OOXMLFastTokens.hxx>
+#include <svtools/embedhlp.hxx>
 
 namespace writerfilter {
 namespace ooxml
@@ -636,6 +637,30 @@ private:
 
     OOXMLFastContextHandler * getFastContextHandler() const;
 };
+
+
+class OOXMLFastContextHandlerMath: public OOXMLFastContextHandlerProperties
+{
+public:
+    explicit OOXMLFastContextHandlerMath(OOXMLFastContextHandler * pContext);
+    virtual ~OOXMLFastContextHandlerMath();
+
+    virtual string getType() const { return "Math"; }
+
+protected:
+    virtual void lcl_startFastElement(Token_t Element, const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
+        throw (uno::RuntimeException, xml::sax::SAXException);
+
+    virtual void lcl_endFastElement(Token_t Element) throw (uno::RuntimeException, xml::sax::SAXException);
+
+    virtual uno::Reference< xml::sax::XFastContextHandler > lcl_createFastChildContext(Token_t Element,
+        const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
+        throw (uno::RuntimeException, xml::sax::SAXException);
+
+    virtual void lcl_characters(const ::rtl::OUString & aChars) throw (uno::RuntimeException, xml::sax::SAXException);
+};
+
+
 }}
 #endif // INCLUDED_OOXML_FAST_CONTEXT_HANDLER_HXX
 

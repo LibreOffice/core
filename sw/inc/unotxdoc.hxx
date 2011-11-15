@@ -78,6 +78,7 @@
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <cppuhelper/implbase4.hxx> // helper for implementations
 #include <RefreshListenerContainer.hxx>
+#include <oox/export/starmathimport.hxx>
 
 #include <viewopt.hxx>
 
@@ -180,7 +181,8 @@ SwXTextDocumentBaseClass;
 
 class SW_DLLPUBLIC SwXTextDocument : public SwXTextDocumentBaseClass,
     public SvxFmMSFactory,
-    public SfxBaseModel
+    public SfxBaseModel,
+    public OoxmlFormulaImportBase
 {
     ActionContextArr        aActionArr;
     SwRefreshListenerContainer  aRefreshCont;
@@ -251,6 +253,8 @@ public:
     virtual     css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw(css::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw();
     virtual void SAL_CALL release(  ) throw();
+
+    virtual void addFormula( com::sun::star::uno::Reference< com::sun::star::embed::XEmbeddedObject > p );
 
     //XWeak
     virtual css::uno::Reference< css::uno::XAdapter > SAL_CALL queryAdapter(  ) throw(css::uno::RuntimeException);

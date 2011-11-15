@@ -874,6 +874,7 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
             break;
         case NS_ooxml::LN_shape:
             {
+            fprintf(stderr,"SHAPE2\n");
                 uno::Reference< drawing::XShape> xShape;
                 val.getAny( ) >>= xShape;
 
@@ -949,6 +950,9 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                     }
                 }
             }
+        break;
+        case NS_ooxml::LN_starmath:
+            fprintf(stderr,"STARMATH2\n");
         break;
         case NS_ooxml::LN_CT_Inline_distT:
         case NS_ooxml::LN_CT_Inline_distB:

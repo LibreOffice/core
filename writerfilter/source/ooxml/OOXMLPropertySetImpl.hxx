@@ -31,6 +31,7 @@
 #include <vector>
 #include "OOXMLPropertySet.hxx"
 #include "OOXMLBinaryObjectReference.hxx"
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 namespace com {
 namespace sun {
@@ -229,6 +230,19 @@ protected:
 public:
     explicit OOXMLShapeValue(uno::Reference<XShape> rShape);
     virtual ~OOXMLShapeValue();
+
+    virtual uno::Any getAny() const;
+    virtual string toString() const;
+    virtual OOXMLValue * clone() const;
+};
+
+class OOXMLStarMathValue : public OOXMLValue
+{
+protected:
+    uno::Reference< embed::XEmbeddedObject > component;
+public:
+    explicit OOXMLStarMathValue( uno::Reference< embed::XEmbeddedObject > component );
+    virtual ~OOXMLStarMathValue();
 
     virtual uno::Any getAny() const;
     virtual string toString() const;

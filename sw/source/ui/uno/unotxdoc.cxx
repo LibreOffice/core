@@ -409,6 +409,11 @@ SwXTextDocument::~SwXTextDocument()
     delete m_pRenderData;
 }
 
+void SwXTextDocument::addFormula( uno::Reference< embed::XEmbeddedObject > p )
+{
+    pDocShell->addFormula(p);
+}
+
 SwXDocumentPropertyHelper * SwXTextDocument::GetPropertyHelper ()
 {
     if(!xPropertyHelper.is())

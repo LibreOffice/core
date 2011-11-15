@@ -102,6 +102,7 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
         break;
         case NS_ooxml::LN_shape:
         {
+            fprintf(stderr,"SHAPE1\n");
             uno::Reference< drawing::XShape > xTempShape;
             rVal.getAny() >>= xTempShape;
             if( xTempShape.is() )
@@ -133,6 +134,9 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
                 }
             }
         }
+        break;
+        case NS_ooxml::LN_starmath:
+            fprintf(stderr,"STARMATH1\n");
         break;
         default:
             OSL_FAIL( "unknown attribute");

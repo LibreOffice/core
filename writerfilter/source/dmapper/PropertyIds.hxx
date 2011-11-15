@@ -290,6 +290,7 @@ enum PropertyIds
         ,PROP_WIDTH_TYPE
         ,PROP_WRITING_MODE
 /*253*/ ,PROP_FRM_DIRECTION
+        ,PROP_EMBEDDED_OBJECT
     };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier

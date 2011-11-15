@@ -20,6 +20,7 @@
   <token tokenid="ooxml:object"/>
   <token tokenid="ooxml:tblStart"/>
   <token tokenid="ooxml:ffdata"/>
+  <token tokenid="ooxml:starmath"/>
   <namespace name="dml-stylesheet" url="http://schemas.openxmlformats.org/drawingml/2006/main" file="dml-stylesheet.rng">
     <start name="theme"/>
     <start name="themeOverride"/>
@@ -23622,5 +23623,6 @@
     <resource name="document" resource="Stream" tag="content"/>
     <resource name="glossaryDocument" resource="Stream" tag="content"/>
     <resource name="CT_TxbxContent" resource="Stream" tag="shape"/>
+    <resource name="CT_OMath" resource="Math" tag="math"/>
   </namespace>
 </model>
