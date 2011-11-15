@@ -3411,7 +3411,7 @@ void ScDocument::CalcAll()
     for (; it != maTabs.end(); ++it)
         if (*it)
             (*it)->SetDirtyVar();
-    for (; it != maTabs.end(); ++it)
+    for (it = maTabs.begin(); it != maTabs.end(); ++it)
         if (*it)
             (*it)->CalcAll();
     ClearFormulaTree();
