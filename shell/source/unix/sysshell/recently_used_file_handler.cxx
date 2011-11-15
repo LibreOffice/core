@@ -495,7 +495,9 @@ namespace /* private */ {
                 </RecentFiles>
 */
 
-extern "C" void add_to_recently_used_file_list(const rtl::OUString& file_url, const rtl::OUString& mime_type)
+extern "C" SAL_DLLPUBLIC_EXPORT
+void add_to_recently_used_file_list(const rtl::OUString& file_url,
+        const rtl::OUString& mime_type)
 {
     try
     {

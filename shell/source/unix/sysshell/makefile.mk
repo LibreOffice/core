@@ -31,6 +31,7 @@ PRJNAME=shell
 TARGET=sysshell
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN = TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -52,9 +53,9 @@ SHL1TARGET=recentfile
 SHL1STDLIBS=$(EXPATASCII3RDLIB)\
     $(SALLIB)
 
+SHL1USE_EXPORTS = name
 SHL1LIBS=$(SLB)$/xmlparser.lib
 SHL1OBJS=$(SLOFILES)
-SHL1VERSIONMAP=recfile.map
 
 .ELSE
 

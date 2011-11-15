@@ -30,6 +30,7 @@ PRJ=..$/..
 PRJNAME=shell
 TARGET=xmlparser
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN = TRUE
 
 
 # --- Settings -----------------------------------------------------
