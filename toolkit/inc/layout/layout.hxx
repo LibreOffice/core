@@ -400,10 +400,6 @@ class TOOLKIT_DLLPUBLIC InPlug : public Context, public Window
 
 } // end namespace layout
 
-#define LAYOUT_NS
-#define LAYOUT_DIALOG_PARENT this
-#define LAYOUT_THIS_WINDOW( this ) this
-
 #endif /* _LAYOUT_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

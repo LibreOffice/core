@@ -91,7 +91,7 @@ inline Window* GetParentWindow( SvxSearchDialog* pSrchDlg )
 {
     Window* pWin;
     if( pSrchDlg && pSrchDlg->IsVisible() )
-        pWin = LAYOUT_THIS_WINDOW (pSrchDlg);
+        pWin = pSrchDlg;
     else
         pWin = 0;
     return pWin;
@@ -763,7 +763,7 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
     return nFound;
 }
 
-LAYOUT_NS Dialog* SwView::GetSearchDialog()
+Dialog* SwView::GetSearchDialog()
 {
     const sal_uInt16 nId = SvxSearchDialogWrapper::GetChildWindowId();
     SvxSearchDialogWrapper *pWrp = (SvxSearchDialogWrapper*)SfxViewFrame::Current()->GetChildWindow(nId);

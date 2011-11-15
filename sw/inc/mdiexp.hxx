@@ -62,7 +62,7 @@ void RescheduleProgress( SwDocShell *pDocShell );
 
 void EnableCmdInterface(sal_Bool bEnable = sal_True);
 
-LAYOUT_NS Dialog* GetSearchDialog();
+Dialog* GetSearchDialog();
 
 void RepaintPagePreview( ViewShell* pVwSh, const SwRect& rRect );
 

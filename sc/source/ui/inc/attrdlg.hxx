@@ -35,8 +35,6 @@ class Window;
 class SfxViewFrame;
 class SfxItemSet;
 
-#include <sfx2/layout.hxx>
-
 //==================================================================
 
 class ScAttrDlg : public SfxTabDialog

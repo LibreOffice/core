@@ -145,7 +145,7 @@ sal_Bool SwEditWin::RulerMarginDrag( const MouseEvent& rMEvt,
     return !rRuler.StartDocDrag( rMEvt, RULER_TYPE_INDENT);
 }
 
-LAYOUT_NS Dialog* GetSearchDialog()
+Dialog* GetSearchDialog()
 {
     return SwView::GetSearchDialog();
 }

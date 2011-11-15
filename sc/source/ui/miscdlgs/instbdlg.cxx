@@ -155,7 +155,7 @@ short ScInsertTableDlg::Execute()
 {
     // set Parent of DocumentInserter and Doc-Manager
     Window* pOldDefParent = Application::GetDefDialogParent();
-    Application::SetDefDialogParent( LAYOUT_THIS_WINDOW (this) );
+    Application::SetDefDialogParent( this );
 
     if ( aBtnFromFile.IsChecked() )
         aBrowseTimer.Start();

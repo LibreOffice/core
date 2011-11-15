@@ -497,7 +497,7 @@ public:
             void    CheckVisArea();
 
     void RecheckBrowseMode();
-    static LAYOUT_NS Dialog* GetSearchDialog();
+    static Dialog* GetSearchDialog();
 
     static sal_uInt16   GetMoveType();
     static void     SetMoveType(sal_uInt16 nSet);

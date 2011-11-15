@@ -550,7 +550,7 @@ SwCursor* SwShellCrsr::Create( SwPaM* pRing ) const
 short SwShellCrsr::MaxReplaceArived()
 {
     short nRet = RET_YES;
-    Window* pDlg = LAYOUT_THIS_WINDOW (::GetSearchDialog());
+    Window* pDlg = ::GetSearchDialog();
     if( pDlg )
     {
         // Terminate old actions. The table-frames get constructed and

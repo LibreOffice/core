@@ -1519,7 +1519,7 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            AbstractSvxSearchSimilarityDialog* pDlg = pFact->CreateSvxSearchSimilarityDialog( LAYOUT_THIS_WINDOW (this),
+            AbstractSvxSearchSimilarityDialog* pDlg = pFact->CreateSvxSearchSimilarityDialog( this,
                                                                         pSearchItem->IsLEVRelaxed(),
                                                                         pSearchItem->GetLEVOther(),
                                                                         pSearchItem->GetLEVShorter(),
@@ -1543,7 +1543,7 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            AbstractSvxJSearchOptionsDialog* aDlg = pFact->CreateSvxJSearchOptionsDialog( LAYOUT_THIS_WINDOW (this), aSet,
+            AbstractSvxJSearchOptionsDialog* aDlg = pFact->CreateSvxJSearchOptionsDialog( this, aSet,
                     pSearchItem->GetTransliterationFlags() );
             DBG_ASSERT(aDlg, "Dialogdiet fail!");
             int nRet = aDlg->Execute();
@@ -1563,7 +1563,7 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
         pArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SearchString"));
         pArgs[0].Value <<= ::rtl::OUString(aSearchLB.GetText());
         pArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow"));
-        pArgs[1].Value <<= VCLUnoHelper::GetInterface( LAYOUT_THIS_WINDOW (this) );
+        pArgs[1].Value <<= VCLUnoHelper::GetInterface( this );
         if(pBtn == &aSearchComponent1PB)
         {
             if ( pImpl->xCommand1Dispatch.is() )
@@ -2145,7 +2145,7 @@ IMPL_LINK( SvxSearchDialog, FormatHdl_Impl, Button *, EMPTYARG )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        SfxAbstractTabDialog* pDlg = pFact->CreateTabItemDialog( LAYOUT_THIS_WINDOW (this), aSet, RID_SVXDLG_SEARCHFORMAT );
+        SfxAbstractTabDialog* pDlg = pFact->CreateTabItemDialog( this, aSet, RID_SVXDLG_SEARCHFORMAT );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
         aTxt.Insert( pDlg->GetText(), 0 );
         pDlg->SetText( aTxt );
@@ -2221,7 +2221,7 @@ IMPL_LINK( SvxSearchDialog, AttributeHdl_Impl, Button *, EMPTYARG )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        VclAbstractDialog* pDlg = pFact->CreateSvxSearchAttributeDialog( LAYOUT_THIS_WINDOW (this), *pSearchList, pImpl->pRanges );
+        VclAbstractDialog* pDlg = pFact->CreateSvxSearchAttributeDialog( this, *pSearchList, pImpl->pRanges );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
         pDlg->Execute();
         delete pDlg;
@@ -2484,7 +2484,6 @@ SvxSearchDialogWrapper::SvxSearchDialogWrapper( Window* _pParent, sal_uInt16 nId
     : SfxChildWindow( _pParent, nId )
     , dialog (new SvxSearchDialog (_pParent, this, *pBindings))
 {
-    pWindow = LAYOUT_THIS_WINDOW (dialog);
     dialog->Initialize( pInfo );
 
     pBindings->Update( SID_SEARCH_ITEM );
