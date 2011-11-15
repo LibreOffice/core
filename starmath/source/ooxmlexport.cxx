@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_starmath.hxx"
 
-#include "ooxml.hxx"
+#include "ooxmlexport.hxx"
 
 #include <oox/token/tokens.hxx>
 
@@ -71,14 +71,14 @@ static sal_Unicode Convert(sal_Unicode nIn)
     return nIn;
 }
 
-SmOoxml::SmOoxml( const String &rIn, const SmNode* pIn, OoxmlVersion v )
+SmOoxmlExport::SmOoxmlExport( const String &rIn, const SmNode* pIn, OoxmlVersion v )
 : str( rIn )
 , pTree( pIn )
 , version( v )
 {
 }
 
-bool SmOoxml::ConvertFromStarMath( ::sax_fastparser::FSHelperPtr serializer )
+bool SmOoxmlExport::ConvertFromStarMath( ::sax_fastparser::FSHelperPtr serializer )
 {
     if( pTree == NULL )
         return false;
@@ -93,7 +93,7 @@ bool SmOoxml::ConvertFromStarMath( ::sax_fastparser::FSHelperPtr serializer )
 // NOTE: This is still work in progress and unfinished, but it already covers a good
 // part of the ooxml math stuff.
 
-void SmOoxml::HandleNode( const SmNode* pNode, int nLevel )
+void SmOoxmlExport::HandleNode( const SmNode* pNode, int nLevel )
 {
 //    fprintf(stderr,"XX %d %d %d\n", nLevel, pNode->GetType(), pNode->GetNumSubNodes());
     switch(pNode->GetType())
@@ -180,7 +180,7 @@ void SmOoxml::HandleNode( const SmNode* pNode, int nLevel )
 }
 
 //Root Node, PILE equivalent, i.e. vertical stack
-void SmOoxml::HandleTable( const SmNode* pNode, int nLevel )
+void SmOoxmlExport::HandleTable( const SmNode* pNode, int nLevel )
 {
     //The root of the starmath is a table, if
     //we convert this them each iteration of
@@ -194,7 +194,7 @@ void SmOoxml::HandleTable( const SmNode* pNode, int nLevel )
         HandleAllSubNodes( pNode, nLevel );
 }
 
-void SmOoxml::HandleAllSubNodes( const SmNode* pNode, int nLevel )
+void SmOoxmlExport::HandleAllSubNodes( const SmNode* pNode, int nLevel )
 {
     int size = pNode->GetNumSubNodes();
     for( int i = 0;
@@ -214,7 +214,7 @@ void SmOoxml::HandleAllSubNodes( const SmNode* pNode, int nLevel )
 // output vertical stack, firstItem says which child to use as first (if there
 // are more than two children, OOXML can have only a vertical stack of two items,
 // so create a bigger vertical stack recursively)
-void SmOoxml::HandleVerticalStack( const SmNode* pNode, int nLevel, int firstItem )
+void SmOoxmlExport::HandleVerticalStack( const SmNode* pNode, int nLevel, int firstItem )
 {
     if( firstItem == pNode->GetNumSubNodes() - 1 ) // only one item, just output the item
     {
@@ -236,7 +236,7 @@ void SmOoxml::HandleVerticalStack( const SmNode* pNode, int nLevel, int firstIte
     m_pSerializer->endElementNS( XML_m, XML_f );
 }
 
-void SmOoxml::HandleText( const SmNode* pNode, int /*nLevel*/)
+void SmOoxmlExport::HandleText( const SmNode* pNode, int /*nLevel*/)
 {
     m_pSerializer->startElementNS( XML_m, XML_r, FSEND );
 
@@ -306,7 +306,7 @@ void SmOoxml::HandleText( const SmNode* pNode, int /*nLevel*/)
     m_pSerializer->endElementNS( XML_m, XML_r );
 }
 
-void SmOoxml::HandleFractions( const SmNode* pNode, int nLevel, const char* type )
+void SmOoxmlExport::HandleFractions( const SmNode* pNode, int nLevel, const char* type )
 {
     m_pSerializer->startElementNS( XML_m, XML_f, FSEND );
     if( type != NULL )
@@ -325,7 +325,7 @@ void SmOoxml::HandleFractions( const SmNode* pNode, int nLevel, const char* type
     m_pSerializer->endElementNS( XML_m, XML_f );
 }
 
-void SmOoxml::HandleUnaryOperation( const SmUnHorNode* pNode, int nLevel )
+void SmOoxmlExport::HandleUnaryOperation( const SmUnHorNode* pNode, int nLevel )
 {
     // update HandleMath() when adding new items
 //    fprintf(stderr,"UNARY %d\n", pNode->GetToken().eType );
@@ -339,7 +339,7 @@ void SmOoxml::HandleUnaryOperation( const SmUnHorNode* pNode, int nLevel )
 //    }
 }
 
-void SmOoxml::HandleBinaryOperation( const SmBinHorNode* pNode, int nLevel )
+void SmOoxmlExport::HandleBinaryOperation( const SmBinHorNode* pNode, int nLevel )
 {
 //    fprintf(stderr,"BINARY %d\n", pNode->Symbol()->GetToken().eType );
     // update HandleMath() when adding new items
@@ -353,7 +353,7 @@ void SmOoxml::HandleBinaryOperation( const SmBinHorNode* pNode, int nLevel )
     }
 }
 
-void SmOoxml::HandleAttribute( const SmAttributNode* pNode, int nLevel )
+void SmOoxmlExport::HandleAttribute( const SmAttributNode* pNode, int nLevel )
 {
     switch( pNode->Attribute()->GetToken().eType )
     {
@@ -417,7 +417,7 @@ void SmOoxml::HandleAttribute( const SmAttributNode* pNode, int nLevel )
     }
 }
 
-void SmOoxml::HandleMath( const SmNode* pNode, int nLevel )
+void SmOoxmlExport::HandleMath( const SmNode* pNode, int nLevel )
 {
 //    fprintf(stderr,"MATH %d\n", pNode->GetToken().eType);
     switch( pNode->GetToken().eType )
@@ -432,7 +432,7 @@ void SmOoxml::HandleMath( const SmNode* pNode, int nLevel )
     }
 }
 
-void SmOoxml::HandleRoot( const SmRootNode* pNode, int nLevel )
+void SmOoxmlExport::HandleRoot( const SmRootNode* pNode, int nLevel )
 {
     m_pSerializer->startElementNS( XML_m, XML_rad, FSEND );
     if( const SmNode* argument = pNode->Argument())
@@ -461,7 +461,7 @@ static rtl::OString mathSymbolToString( const SmNode* node )
     return rtl::OUStringToOString( rtl::OUString( chr ), RTL_TEXTENCODING_UTF8 );
 }
 
-void SmOoxml::HandleOperator( const SmOperNode* pNode, int nLevel )
+void SmOoxmlExport::HandleOperator( const SmOperNode* pNode, int nLevel )
 {
 //    fprintf( stderr, "OPER %d\n", pNode->GetToken().eType );
     switch( pNode->GetToken().eType )
@@ -538,7 +538,7 @@ void SmOoxml::HandleOperator( const SmOperNode* pNode, int nLevel )
     }
 }
 
-void SmOoxml::HandleSubSupScript( const SmSubSupNode* pNode, int nLevel )
+void SmOoxmlExport::HandleSubSupScript( const SmSubSupNode* pNode, int nLevel )
 {
     // set flags to a bitfield of which sub/sup items exists
     int flags = ( pNode->GetSubSup( CSUB ) != NULL ? ( 1 << CSUB ) : 0 )
@@ -552,7 +552,7 @@ void SmOoxml::HandleSubSupScript( const SmSubSupNode* pNode, int nLevel )
     HandleSubSupScriptInternal( pNode, nLevel, flags );
 }
 
-void SmOoxml::HandleSubSupScriptInternal( const SmSubSupNode* pNode, int nLevel, int flags )
+void SmOoxmlExport::HandleSubSupScriptInternal( const SmSubSupNode* pNode, int nLevel, int flags )
 {
     if( flags == ( 1 << RSUP | 1 << RSUB ))
     { // m:sSubSup
@@ -611,7 +611,7 @@ void SmOoxml::HandleSubSupScriptInternal( const SmSubSupNode* pNode, int nLevel,
     }
 }
 
-void SmOoxml::HandleMatrix( const SmMatrixNode* pNode, int nLevel )
+void SmOoxmlExport::HandleMatrix( const SmMatrixNode* pNode, int nLevel )
 {
     m_pSerializer->startElementNS( XML_m, XML_m, FSEND );
     for( int row = 0; row < pNode->GetNumRows(); ++row )
@@ -629,7 +629,7 @@ void SmOoxml::HandleMatrix( const SmMatrixNode* pNode, int nLevel )
     m_pSerializer->endElementNS( XML_m, XML_m );
 }
 
-void SmOoxml::HandleBrace( const SmBraceNode* pNode, int nLevel )
+void SmOoxmlExport::HandleBrace( const SmBraceNode* pNode, int nLevel )
 {
     m_pSerializer->startElementNS( XML_m, XML_d, FSEND );
     m_pSerializer->startElementNS( XML_m, XML_dPr, FSEND );
@@ -671,7 +671,7 @@ void SmOoxml::HandleBrace( const SmBraceNode* pNode, int nLevel )
     m_pSerializer->endElementNS( XML_m, XML_d );
 }
 
-void SmOoxml::HandleVerticalBrace( const SmVerticalBraceNode* pNode, int nLevel )
+void SmOoxmlExport::HandleVerticalBrace( const SmVerticalBraceNode* pNode, int nLevel )
 {
 //    fprintf( stderr, "VERT %d\n", pNode->GetToken().eType );
     switch( pNode->GetToken().eType )

@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef SM_OOXML_HXX
-#define SM_OOXML_HXX
+#ifndef SM_OOXMLEXPORT_HXX
+#define SM_OOXMLEXPORT_HXX
 
 #include "node.hxx"
 
@@ -37,10 +37,10 @@
 /**
  Class implementing writing of formulas to OOXML.
  */
-class SmOoxml
+class SmOoxmlExport
 {
 public:
-    SmOoxml( const String &rIn,const SmNode* pIn, oox::core::OoxmlVersion version );
+    SmOoxmlExport( const String &rIn,const SmNode* pIn, oox::core::OoxmlVersion version );
     bool ConvertFromStarMath( ::sax_fastparser::FSHelperPtr m_pSerializer );
 private:
     void HandleNode( const SmNode* pNode, int nLevel );

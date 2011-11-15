@@ -95,7 +95,7 @@
 #include <utility.hxx>
 #include <view.hxx>
 #include "mathtype.hxx"
-#include "ooxml.hxx"
+#include "ooxmlexport.hxx"
 #include "mathmlimport.hxx"
 #include "mathmlexport.hxx"
 #include <sfx2/sfxsids.hrc>
@@ -994,7 +994,7 @@ bool SmDocShell::writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer,
         Parse();
     if( pTree && !IsFormulaArranged() )
         ArrangeFormula();
-    SmOoxml aEquation( aText, pTree, version );
+    SmOoxmlExport aEquation( aText, pTree, version );
     return aEquation.ConvertFromStarMath( m_pSerializer );
 }
 
