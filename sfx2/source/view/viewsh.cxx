@@ -873,9 +873,9 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                                     aBuffer.append( RetrieveLabelFromCommand(
                                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:PrintDefault" )),
                                                 xFrame ));
-                                    aBuffer.appendAscii( " (" );
+                                    aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM(" ("));
                                     aBuffer.append( aPrinterName );
-                                    aBuffer.appendAscii( ")" );
+                                    aBuffer.append(')');
 
                                     rSet.Put( SfxStringItem( SID_PRINTDOCDIRECT, aBuffer.makeStringAndClear() ) );
                                 }

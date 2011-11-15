@@ -115,13 +115,13 @@ namespace sfx2
 
                 const ::rtl::OUString sWindowStateRef( aModuleProps.getOrDefault( "ooSetupFactoryWindowStateConfigRef", ::rtl::OUString() ) );
 
-                aPathComposer.appendAscii( "org.openoffice.Office.UI." );
+                aPathComposer.appendAscii(RTL_CONSTASCII_STRINGPARAM(
+                    "org.openoffice.Office.UI."));
                 aPathComposer.append( sWindowStateRef );
-                aPathComposer.appendAscii( "/UIElements/States" );
+                aPathComposer.appendAscii(RTL_CONSTASCII_STRINGPARAM("/UIElements/States"));
                 if ( i_rResourceURL.getLength() )
                 {
-                    aPathComposer.appendAscii( "/" );
-                    aPathComposer.append( i_rResourceURL );
+                    aPathComposer.append('/').append( i_rResourceURL );
                 }
             }
             catch( const Exception& )
@@ -181,7 +181,7 @@ namespace sfx2
                     if ( sImageURL.compareToAscii( pCommandImagePrefix, nCommandImagePrefixLen ) == 0 )
                     {
                         ::rtl::OUStringBuffer aCommandName;
-                        aCommandName.appendAscii( ".uno:" );
+                        aCommandName.appendAscii(RTL_CONSTASCII_STRINGPARAM(".uno:"));
                         aCommandName.append( sImageURL.copy( nCommandImagePrefixLen ) );
                         const ::rtl::OUString sCommandName( aCommandName.makeStringAndClear() );
 

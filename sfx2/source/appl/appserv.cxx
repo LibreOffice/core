@@ -950,8 +950,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 if ( xSystemShell.is() && sTemplRepoURL.getLength() > 0 )
                 {
                     ::rtl::OUStringBuffer aURLBuf( sTemplRepoURL );
-                    aURLBuf.appendAscii( "?" );
-                    aURLBuf.appendAscii( "lang=" );
+                    aURLBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM("?lang="));
 
                     // read locale from configuration
                     ::rtl::OUString sLocale = getConfigurationStringValue(

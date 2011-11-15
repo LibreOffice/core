@@ -673,11 +673,11 @@ void SAL_CALL SfxDocumentInfoObject::addProperty(const ::rtl::OUString&         
     if ( bFixProp )
     {
         ::rtl::OUStringBuffer sMsg(256);
-        sMsg.appendAscii("The property \""   );
-        sMsg.append     (sName               );
-        sMsg.appendAscii("\" "               );
+        sMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM("The property \""));
+        sMsg.append(sName);
+        sMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM("\" "));
         if ( bFixProp )
-            sMsg.appendAscii(" already exists as a fix property. Please have a look into the IDL documentation of the DocumentInfo service.");
+            sMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM(" already exists as a fix property. Please have a look into the IDL documentation of the DocumentInfo service."));
 
         throw ::com::sun::star::beans::PropertyExistException(
                 sMsg.makeStringAndClear(),
@@ -699,9 +699,9 @@ void SAL_CALL SfxDocumentInfoObject::removeProperty(const ::rtl::OUString& sName
     if ( bFixProp )
     {
         ::rtl::OUStringBuffer sMsg(256);
-        sMsg.appendAscii("The property \""                                                    );
-        sMsg.append     (sName                                                                );
-        sMsg.appendAscii("\" cant be removed. Its a fix property of the DocumentInfo service.");
+        sMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM("The property \""));
+        sMsg.append(sName);
+        sMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM("\" cant be removed. Its a fix property of the DocumentInfo service."));
 
         throw ::com::sun::star::beans::NotRemoveableException(
                 sMsg.makeStringAndClear(),

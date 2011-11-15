@@ -47,7 +47,7 @@ SfxViewShell *SfxViewFactory::CreateInstance(SfxViewFrame *pFrame, SfxViewShell 
 String SfxViewFactory::GetLegacyViewName() const
 {
     ::rtl::OUStringBuffer aViewName;
-    aViewName.appendAscii( "view" );
+    aViewName.appendAscii(RTL_CONSTASCII_STRINGPARAM("view"));
     aViewName.append( sal_Int32( GetOrdinal() ) );
     return aViewName.makeStringAndClear();
 }

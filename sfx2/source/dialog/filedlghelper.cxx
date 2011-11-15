@@ -1741,13 +1741,13 @@ void FileDialogHelper_Impl::addFilters( sal_Int64 nFlags,
 
     // create the list of filters
     ::rtl::OUStringBuffer sQuery(256);
-    sQuery.appendAscii("getSortedFilterList()");
-    sQuery.appendAscii(":module="                                       );
-    sQuery.append     (rFactory                                         ); // use long name here !
-    sQuery.appendAscii(":iflags="                                       );
-    sQuery.append     (::rtl::OUString::valueOf((sal_Int32)m_nMustFlags));
-    sQuery.appendAscii(":eflags="                                       );
-    sQuery.append     (::rtl::OUString::valueOf((sal_Int32)m_nDontFlags));
+    sQuery.appendAscii(RTL_CONSTASCII_STRINGPARAM("getSortedFilterList()"));
+    sQuery.appendAscii(RTL_CONSTASCII_STRINGPARAM(":module="));
+    sQuery.append(rFactory); // use long name here !
+    sQuery.appendAscii(RTL_CONSTASCII_STRINGPARAM(":iflags="));
+    sQuery.append(::rtl::OUString::valueOf((sal_Int32)m_nMustFlags));
+    sQuery.appendAscii(RTL_CONSTASCII_STRINGPARAM(":eflags="));
+    sQuery.append(::rtl::OUString::valueOf((sal_Int32)m_nDontFlags));
 
     uno::Reference< XEnumeration > xResult;
     try
