@@ -53,17 +53,6 @@
 #define SC_INSTBDLG_CXX
 #include "instbdlg.hxx"
 
-#include <layout/layout-pre.hxx>
-
-#if ENABLE_LAYOUT
-#undef ScResId
-#define ScResId(x) #x
-#undef ModalDialog
-#define ModalDialog( parent, id ) Dialog( parent, "insert-sheet.xml", id )
-#undef ErrorBox
-#define ErrorBox( this, bits, message ) ErrorBox (LAYOUT_THIS_WINDOW (this), bits, message)
-#endif /* ENABLE_LAYOUT */
-
 //==================================================================
 
 ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nTabCount, bool bFromFile )
@@ -95,10 +84,6 @@ ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nT
         nSelTabIndex    ( 0 ),
         nTableCount     (nTabCount)
 {
-#if ENABLE_LAYOUT
-    SetHelpId (SID_INSERT_TABLE);
-    aFtPath.SetText (EMPTY_STRING);
-#endif /* ENABLE_LAYOUT */
     Init_Impl( bFromFile );
     FreeResource();
     aLbTables.SetAccessibleName(aBtnFromFile.GetText());
@@ -165,11 +150,6 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
 }
 
 //------------------------------------------------------------------------
-
-#if ENABLE_LAYOUT
-#undef ModalDialog
-#define ModalDialog Dialog
-#endif /* ENABLE_LAYOUT */
 
 short ScInsertTableDlg::Execute()
 {

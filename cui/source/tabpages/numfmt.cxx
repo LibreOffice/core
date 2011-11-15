@@ -215,19 +215,8 @@ void SvxNumberPreviewImpl::DataChanged( const DataChangedEvent& rDCEvt )
 
 #define HDL(hdl) LINK( this, SvxNumberFormatTabPage, hdl )
 
-#include <layout/layout-pre.hxx>
-
-#if ENABLE_LAYOUT
-#undef CUI_RES
-#define CUI_RES(x) #x
-#define CUI_RES_PLAIN(x) ResId (x, CUI_MGR ())
-#define THIS_CUI_RES(x) this, #x
-#undef SfxTabPage
-#define SfxTabPage( parent, id, args ) SfxTabPage( parent, "number-format.xml", id, &args )
-#else /* !ENABLE_LAYOUT */
 #define CUI_RES_PLAIN CUI_RES
 #define THIS_CUI_RES CUI_RES
-#endif /* !ENABLE_LAYOUT */
 
 SvxNumberFormatTabPage::SvxNumberFormatTabPage( Window*             pParent,
                                                 const SfxItemSet&   rCoreAttrs )
@@ -242,11 +231,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage( Window*             pParent,
         aFtLanguage     ( this, CUI_RES( FT_LANGUAGE ) ),
         aLbLanguage     ( this, CUI_RES( LB_LANGUAGE ), sal_False ),
         aCbSourceFormat ( this, CUI_RES( CB_SOURCEFORMAT ) ),
-#if ENABLE_LAYOUT
-        aWndPreview     ( LAYOUT_THIS_WINDOW(this), CUI_RES_PLAIN( WND_NUMBER_PREVIEW ) ),
-#else
         aWndPreview     ( this, CUI_RES_PLAIN( WND_NUMBER_PREVIEW ) ),
-#endif
         aFlOptions      ( this, CUI_RES( FL_OPTIONS ) ),
         aFtDecimals     ( this, CUI_RES( FT_DECIMALS ) ),
         aEdDecimals     ( this, CUI_RES( ED_DECIMALS ) ),
@@ -270,10 +255,6 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage( Window*             pParent,
         sAutomaticEntry ( THIS_CUI_RES( STR_AUTO_ENTRY)),
         pLastActivWindow( NULL )
 {
-#if ENABLE_LAYOUT
-    aLbFormat.Clear ();
-#endif /* ENABLE_LAYOUT */
-
     Init_Impl();
     SetExchangeSupport(); // diese Page braucht ExchangeSupport
     FreeResource();
@@ -1096,22 +1077,14 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
             aPos.Y()=nStdFormatY;
             aSize.Height()=nStdFormatHeight;
             aLbFormat.SetPosSizePixel(aPos,aSize);
-#if ENABLE_LAYOUT
-            aLbCurrency.Disable();
-#else /* !ENABLE_LAYOUT */
             aLbCurrency.Hide();
-#endif /* !ENABLE_LAYOUT */
         }
         else
         {
             aPos.Y()=nCurFormatY;
             aSize.Height()=nCurFormatHeight;
             aLbFormat.SetPosSizePixel(aPos,aSize);
-#if ENABLE_LAYOUT
-            aLbCurrency.Enable();
-#else /* !ENABLE_LAYOUT */
             aLbCurrency.Show();
-#endif /* !ENABLE_LAYOUT */
         }
 
         pNumFmtShell->CategoryChanged( nTmpCatPos,nFmtLbSelPos, aEntryList );
@@ -1237,15 +1210,11 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
 
         // Reinit options enable/disable for current selection.
 
-#if ENABLE_LAYOUT
-        if (aLbFormat.GetSelectEntryPos () == LISTBOX_ENTRY_NOTFOUND)
-#else /* !ENABLE_LAYOUT */
         // Current category may be UserDefined with no format entries defined.
         // And yes, aLbFormat is a SvxFontListBox with sal_uLong list positions,
         // implementation returns a LIST_APPEND if empty, comparison with
         // sal_uInt16 LISTBOX_ENTRY_NOTFOUND wouldn't match.
         if ( aLbFormat.GetSelectEntryPos() == LIST_APPEND )
-#endif /* !ENABLE_LAYOUT */
             pLb = &aLbCategory; // continue with the current category selected
         else
             pLb = &aLbFormat;   // continue with the current format selected

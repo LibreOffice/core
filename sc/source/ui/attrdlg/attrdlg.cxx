@@ -49,10 +49,6 @@
 #include <editeng/flstitem.hxx>
 #include <sfx2/app.hxx>
 
-#if !LAYOUT_SFX_TABDIALOG_BROKEN
-#include <layout/layout-pre.hxx>
-#endif
-
 //==================================================================
 
 ScAttrDlg::ScAttrDlg( SfxViewFrame*     pFrameP,
@@ -69,12 +65,7 @@ ScAttrDlg::ScAttrDlg( SfxViewFrame*     pFrameP,
     OSL_ENSURE(pFact, "Dialogdiet fail!");
 
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), "GetTabPageCreatorFunc fail!");
-#if LAYOUT_SFX_TABDIALOG_BROKEN
     AddTabPage( TP_NUMBER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), 0 );
-#else
-    String number(RTL_CONSTASCII_USTRINGPARAM("Numbers"));
-    AddTabPage( TP_NUMBER, number, pFact->GetTabPageCreatorFunc (RID_SVXPAGE_NUMBERFORMAT), 0, false, TAB_APPEND);
-#endif
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");
     AddTabPage( TP_FONT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), 0 );
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), "GetTabPageCreatorFunc fail!");

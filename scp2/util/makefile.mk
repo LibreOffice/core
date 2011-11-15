@@ -218,10 +218,6 @@ SCP1FILES += cairocanvas.par
 .ENDIF
 .ENDIF
 
-.IF "$(ENABLE_LAYOUT)" == "TRUE"
-SCP1FILES += layout.par
-.ENDIF # ENABLE_LAYOUT == TRUE
-
 .IF "$(ENABLE_ONLINE_UPDATE)"!=""
 SCP1FILES += \
              module_onlineupdate.par   \

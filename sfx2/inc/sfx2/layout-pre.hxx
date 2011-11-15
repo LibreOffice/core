@@ -29,23 +29,6 @@
 #ifndef _SFX2_LAYOUT_PRE_HXX
 #define _SFX2_LAYOUT_PRE_HXX
 
-#include <layout/layout-pre.hxx>
-
-#if ENABLE_LAYOUT
-
-///* Allow re-inclusion for next hxx file. */
-#undef _SFX2_LAYOUT_POST_HXX
-
-#undef SfxDialog
-#undef SfxModalDialog
-#undef SfxModelessDialog
-
-#define SfxDialog layout::SfxDialog
-
-#define SfxModalDialog SfxDialog
-#define SfxModelessDialog SfxDialog
-
-#endif /* ENABLE_LAYOUT */
 
 #endif /* _SFX2_LAYOUT_PRE_HXX */
 

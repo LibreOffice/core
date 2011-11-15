@@ -41,10 +41,6 @@ SCP_PRODUCT_TYPE=osl
 
 PARFILES=
 
-.IF "$(ENABLE_LAYOUT)" == "TRUE"
-PARFILES+= layout.par
-.ENDIF # ENABLE_LAYOUT == TRUE
-
 # --- File ---------------------------------------------------------
 
 .INCLUDE :  target.mk

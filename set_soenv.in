@@ -1809,7 +1809,6 @@ ToFile( "ENABLE_FONTCONFIG", "@ENABLE_FONTCONFIG@", "e" );
 ToFile( "FONTCONFIG_LIBS",   "@FONTCONFIG_LIBS@",   "e");
 ToFile( "FONTCONFIG_CFLAGS", "@FONTCONFIG_CFLAGS@", "e");
 ToFile( "ENABLE_DIRECTX",    "@ENABLE_DIRECTX@",    "e" );
-ToFile( "ENABLE_LAYOUT",     "@ENABLE_LAYOUT@",     "e" );
 ToFile( "ENABLE_PCH",        "@ENABLE_PCH@",       "e" );
 ToFile( "ENABLE_GRAPHITE",   "@ENABLE_GRAPHITE@",   "e");
 ToFile( "SYSTEM_GRAPHITE",   "@SYSTEM_GRAPHITE@",   "e");

@@ -36,8 +36,6 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 
-#include <layout/layout-pre.hxx>
-
 class SvxZoomDialog : public SfxModalDialog
 {
 private:
@@ -86,8 +84,6 @@ public:
     void                HideButton( sal_uInt16 nBtnId );
     void                SetLimits( sal_uInt16 nMin, sal_uInt16 nMax );
 };
-
-#include <layout/layout-post.hxx>
 
 #endif
 

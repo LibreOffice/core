@@ -43,7 +43,6 @@
 #include "expftext.hxx"
 
 #include <layout/layout.hxx>
-#include <layout/layout-pre.hxx>
 
 class ScViewData;
 class ScDocument;
@@ -118,8 +117,6 @@ private:
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
 #endif
 };
-
-#include <layout/layout-post.hxx>
 
 #endif // SC_INSTBDLG_HXX
 

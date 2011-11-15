@@ -62,7 +62,6 @@ using namespace ::com::sun::star;
 }
 
 #include <sfx2/layout.hxx>
-#include <layout/layout-pre.hxx>
 
 #undef TabPage
 #undef SfxTabPage

@@ -31,7 +31,6 @@
 #include <svtools/stdctrl.hxx>
 #include <vcl/button.hxx>
 #include <layout/layout.hxx>
-#include <layout/layout-pre.hxx>
 struct SwDocStat;
 #include <sfx2/childwin.hxx>
 #include "swabstdlg.hxx"
@@ -98,8 +97,6 @@ protected:
 public:
     void    UpdateCounts();
 };
-
-#include <layout/layout-post.hxx>
 
 #endif
 

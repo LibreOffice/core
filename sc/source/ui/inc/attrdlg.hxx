@@ -35,14 +35,7 @@ class Window;
 class SfxViewFrame;
 class SfxItemSet;
 
-#ifndef LAYOUT_SFX_TABDIALOG_BROKEN
-#define LAYOUT_SFX_TABDIALOG_BROKEN 1
-#endif /* !LAYOUT_SFX_TABDIALOG_BROKEN */
-
-#if !LAYOUT_SFX_TABDIALOG_BROKEN
 #include <sfx2/layout.hxx>
-#include <layout/layout-pre.hxx>
-#endif
 
 //==================================================================
 
@@ -60,10 +53,6 @@ protected:
 private:
     DECL_LINK( OkHandler, void* ); // fuer DoppelClick-Beenden in TabPages
 };
-
-#if !LAYOUT_SFX_TABDIALOG_BROKEN
-#include <layout/layout-post.hxx>
-#endif
 
 #endif // SC_ATTRDLG_HXX
 

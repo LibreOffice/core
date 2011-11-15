@@ -27,8 +27,6 @@
 #*************************************************************************
 
 $(eval $(call gb_Package_Package,toolkit_inc,$(SRCDIR)/toolkit/inc))
-$(eval $(call gb_Package_add_file,toolkit_inc,inc/layout/layout-post.hxx,layout/layout-post.hxx))
-$(eval $(call gb_Package_add_file,toolkit_inc,inc/layout/layout-pre.hxx,layout/layout-pre.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/layout/layout.hxx,layout/layout.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/awt/vclxaccessiblecomponent.hxx,toolkit/awt/vclxaccessiblecomponent.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/awt/vclxcontainer.hxx,toolkit/awt/vclxcontainer.hxx))

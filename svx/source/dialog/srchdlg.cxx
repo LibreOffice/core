@@ -75,8 +75,6 @@
 #include <tools/resary.hxx>
 #include <svx/svxdlg.hxx>
 
-#include <sfx2/layout-pre.hxx>
-
 using namespace com::sun::star::i18n;
 using namespace com::sun::star;
 using namespace comphelper;
@@ -107,11 +105,6 @@ SV_IMPL_VARARR(SrchAttrItemList, SearchAttrItem);
 #define GetCheckBoxValue( rBox )                                \
     rBox.IsEnabled() ? rBox.IsChecked() : sal_False
 
-#if ENABLE_LAYOUT
-#undef SVX_RES
-#define SVX_RES(x) #x
-#endif /* ENABLE_LAYOUT */
-
 struct SearchDlg_Impl
 {
     FixedText   aSearchFormats;
@@ -129,11 +122,7 @@ struct SearchDlg_Impl
     util::URL   aCommand1URL;
     util::URL   aCommand2URL;
 
-#if ENABLE_LAYOUT
-    SearchDlg_Impl( layout::Context* pParent ) :
-#else /* !ENABLE_LAYOUT */
         SearchDlg_Impl( Window* pParent ) :
-#endif /* !ENABLE_LAYOUT */
         aSearchFormats  ( pParent, SVX_RES( FT_SEARCH_FORMATS ) ),
         aReplaceFormats ( pParent, SVX_RES( FT_REPLACE_FORMATS ) ),
         bMultiLineEdit  ( sal_False ),
@@ -286,15 +275,8 @@ void SearchAttrItemList::Remove( sal_uInt16 nPos, sal_uInt16 nLen )
     SrchAttrItemList::Remove( nPos, nLen );
 }
 
-#if ENABLE_LAYOUT
-#undef SfxModelessDialog
-#define SfxModelessDialog(bindings, child, parent, id) SfxDialog (parent, "find-and-replace.xml", id, bindings, child)
-#define SVX_RES_PLAIN(x) ResId (x, DIALOG_MGR ())
-#define THIS_SVX_RES(x) this, #x
-#else /* !ENABLE_LAYOUT */
 #define SVX_RES_PLAIN SVX_RES
 #define THIS_SVX_RES SVX_RES
-#endif /* !ENABLE_LAYOUT */
 
 #undef INI_LIST
 #define INI_LIST() \
@@ -387,10 +369,6 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxChildWindow* pChildWin, Sf
 }
 
 #undef INI_LIST
-#if ENABLE_LAYOUT
-#undef SVX_RES
-#define SVX_RES(x) ResId (x, DIALOG_MGR ())
-#endif
 
 // -----------------------------------------------------------------------
 
@@ -413,11 +391,6 @@ SvxSearchDialog::~SvxSearchDialog()
     delete pMoreBtn;
 }
 
-#if ENABLE_LAYOUT
-#undef Window
-#define Window layout::Window
-#endif /* ENABLE_LAYOUT */
-
 void lcl_MoveDown( Window& rWindow, sal_Int32 nOffset )
 {
     Point aPos(rWindow.GetPosPixel());
@@ -427,17 +400,11 @@ void lcl_MoveDown( Window& rWindow, sal_Int32 nOffset )
 
 void SvxSearchDialog::Construct_Impl()
 {
-#if ENABLE_LAYOUT
-    SetHelpId (".uno:SearchDialog");
-#endif /* ENABLE_LAYOUT */
-
     // temporary to avoid incompatibility
     pImpl = new SearchDlg_Impl( this );
-#if !ENABLE_LAYOUT
     pImpl->aSelectionTimer.SetTimeout( 500 );
     pImpl->aSelectionTimer.SetTimeoutHdl(
         LINK( this, SvxSearchDialog, TimeoutHdl_Impl ) );
-#endif /* !ENABLE_LAYOUT */
     EnableControls_Impl( 0 );
 
     // Store old Text from aWordBtn
@@ -926,11 +893,6 @@ void SvxSearchDialog::CalculateDelta_Impl()
     pMoreBtn->Show();
     pMoreBtn->Enable();
 }
-
-#if ENABLE_LAYOUT
-#undef Window
-#define Window ::Window
-#endif /* ENABLE_LAYOUT */
 
 // -----------------------------------------------------------------------
 
@@ -2538,10 +2500,6 @@ SvxSearchDialogWrapper::SvxSearchDialogWrapper( Window* _pParent, sal_uInt16 nId
 
 SvxSearchDialogWrapper::~SvxSearchDialogWrapper ()
 {
-#if ENABLE_LAYOUT
-    delete dialog;
-    pWindow = 0;
-#endif /* ENABLE_LAYOUT */
 }
 
 SvxSearchDialog *SvxSearchDialogWrapper::getDialog ()

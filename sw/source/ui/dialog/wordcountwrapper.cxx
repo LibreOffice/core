@@ -30,7 +30,6 @@
 #include <wordcountdialog.hxx>
 #include <docstat.hxx>
 #include <dialog.hrc>
-#include <layout/layout-pre.hxx>
 #include <wordcountdialog.hrc>
 #include <cmdid.h>
 

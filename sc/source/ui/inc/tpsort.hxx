@@ -130,12 +130,7 @@ class ScRangeData;
 class CollatorRessource;
 class CollatorWrapper;
 
-#if ENABLE_LAYOUT_EXPERIMENTAL
-#include <sfx2/layout.hxx>
-#include <layout/layout-pre.hxx>
-#else /* !ENABLE_LAYOUT_EXPERIMENTAL */
 #define LocalizedString String
-#endif /* !ENABLE_LAYOUT_EXPERIMENTAL */
 
 class ScTabPageSortOptions : public SfxTabPage
 {
@@ -214,10 +209,6 @@ private:
     DECL_LINK( FillAlgorHdl, void * );
 #endif
 };
-
-#if ENABLE_LAYOUT_EXPERIMENTAL
-#include <layout/layout-post.hxx>
-#endif /* ENABLE_LAYOUT_EXPERIMENTAL */
 
 #endif // SC_TPSORT_HXX
 

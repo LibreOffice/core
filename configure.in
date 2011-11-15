@@ -9353,16 +9353,6 @@ else
 fi
 AC_SUBST(ENABLE_STATIC_GTK)
 
-AC_MSG_CHECKING([whether to use layout dialogs])
-if test -n "$enable_layout" && test "$enable_layout" != "no"; then
-    ENABLE_LAYOUT="TRUE"
-    AC_MSG_RESULT([yes])
-else
-    ENABLE_LAYOUT="FALSE"
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ENABLE_LAYOUT)
-
 # ===================================================================
 # De- or increase default verbosity of build process
 # ===================================================================

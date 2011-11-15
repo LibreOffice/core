@@ -38,7 +38,6 @@
 #include <vcl/edit.hxx>
 
 #include <layout/layout.hxx>
-#include <layout/layout-pre.hxx>
 
 //------------------------------------------------------------------------
 
@@ -100,8 +99,6 @@ private:
     DECL_LINK( CheckBtnHdl, void * );
     DECL_LINK( CheckNameHdl, Edit * );
 };
-
-#include <layout/layout-post.hxx>
 
 #endif // SC_MVTABDLG_HXX
 

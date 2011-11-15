@@ -490,16 +490,9 @@ class TOOLKIT_DLLPUBLIC InPlug : public Context, public Window
 
 } // end namespace layout
 
-#if ENABLE_LAYOUT
-#define LAYOUT_NS layout::
-#define LAYOUT_DIALOG_PARENT\
-    VCLXWindow::GetImplementation( uno::Reference <awt::XWindow> ( GetPeer(), uno::UNO_QUERY ) )->GetWindow()
-#define LAYOUT_THIS_WINDOW( this ) this->GetWindow ()
-#else /* !ENABLE_LAYOUT */
 #define LAYOUT_NS
 #define LAYOUT_DIALOG_PARENT this
 #define LAYOUT_THIS_WINDOW( this ) this
-#endif /* !ENABLE_LAYOUT */
 
 #endif /* _LAYOUT_HXX */
 

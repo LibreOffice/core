@@ -618,12 +618,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 {
                     //  wenn's nicht von Basic kommt, nochmal nachfragen:
 
-#if ENABLE_LAYOUT
-// Using layout::QueryBox without client code modification is
-// deprecated, rather add HIG-complient buttons with verbs.
-#define QueryBox( parent, winbits, question ) layout::QueryBox (parent, question, ScGlobal::GetRscString (STR_UNDO_DELETE_TAB))
-#endif /* ENABLE_LAYOUT */
-
                         bDoIt = ( RET_YES ==
                                   QueryBox( GetDialogParent(),
                                             WinBits( WB_YES_NO | WB_DEF_YES ),

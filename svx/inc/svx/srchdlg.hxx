@@ -101,7 +101,7 @@ public:
 // class SvxSearchDialogWrapper ------------------------------------------
 
 #include <sfx2/layout.hxx>
-#include <sfx2/layout-pre.hxx>
+#define LocalizedString String
 
 class SvxSearchDialog;
 class SVX_DLLPUBLIC SvxSearchDialogWrapper : public SfxChildWindow
@@ -278,8 +278,6 @@ private:
     void            ApplyTransliterationFlags_Impl( sal_Int32 nSettings );
 #endif
 };
-
-#include <sfx2/layout-post.hxx>
 
 inline sal_Bool SvxSearchDialog::HasSearchAttributes() const
 {

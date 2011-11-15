@@ -31,16 +31,6 @@ TARGET=layout
 
 .INCLUDE : settings.mk
 
-.IF "$(ENABLE_LAYOUT)" == "TRUE"
-
-all: ALLTAR
-
-XML_FILES=zoom.xml
-
-.INCLUDE : layout.mk
-
-.ELSE # ENABLE_LAYOUT != TRUE
 all .PHONY:
-.ENDIF # ENABLE_LAYOUT != TRUE
 
 .INCLUDE :  target.mk

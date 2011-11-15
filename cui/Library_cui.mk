@@ -49,10 +49,6 @@ $(eval $(call gb_Library_add_api,cui,\
     udkapi \
 ))
 
-# .IF "$(ENABLE_LAYOUT)" == "TRUE"
-# CFLAGS+= -DENABLE_LAYOUT=1 -I../$(PRJ)/layout/inc -I../$(PRJ)/layout/$(INPATH)/inc
-# .ENDIF # ENABLE_LAYOUT == TRUE
-
 $(eval $(call gb_Library_add_linked_libs,cui,\
     avmedia \
     basegfx \

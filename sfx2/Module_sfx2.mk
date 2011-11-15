@@ -53,7 +53,6 @@ endif
 endif
 
 #todo: source/dialog BUILD_VER_STRING
-#todo: ENABLE_LAYOUT
 #todo: clean up quickstarter stuff in both libraries
 #todo: move standard pool to svl
 

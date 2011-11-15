@@ -191,26 +191,6 @@ gb_GLOBALDEFS := \
 	$(gb_CPUDEFS) \
 
 
-ifeq ($(strip $(ENABLE_LAYOUT)),TRUE)
-gb_GLOBALDEFS += \
-	-DENABLE_LAYOUT=1 \
-
-else
-gb_GLOBALDEFS += \
-	-DENABLE_LAYOUT=0 \
-
-endif
-
-ifeq ($(strip $(ENABLE_LAYOUT_EXPERIMENTAL)),TRUE)
-gb_GLOBALDEFS += \
-	-DENABLE_LAYOUT_EXPERIMENTAL=1 \
-
-else
-gb_GLOBALDEFS += \
-	-DENABLE_LAYOUT_EXPERIMENTAL=0 \
-
-endif
-
 ifeq ($(gb_PRODUCT),$(true))
 gb_GLOBALDEFS += \
 	-DPRODUCT \

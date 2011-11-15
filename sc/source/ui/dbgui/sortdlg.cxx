@@ -38,10 +38,6 @@
 #include "scresid.hxx"
 #include "sortdlg.hrc"
 
-#if !LAYOUT_SFX_TABDIALOG_BROKEN
-#include <layout/layout-pre.hxx>
-#endif
-
 ScSortDlg::ScSortDlg( Window*           pParent,
                       const SfxItemSet* pArgSet ) :
         SfxTabDialog( pParent,
@@ -51,15 +47,8 @@ ScSortDlg::ScSortDlg( Window*           pParent,
         bIsByRows   ( false )
 
 {
-#if LAYOUT_SFX_TABDIALOG_BROKEN
     AddTabPage( TP_FIELDS,  ScTabPageSortFields::Create,  0 );
     AddTabPage( TP_OPTIONS, ScTabPageSortOptions::Create, 0 );
-#else
-    String fields = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fields"));
-    AddTabPage( TP_FIELDS, fields, ScTabPageSortFields::Create, 0, false, TAB_APPEND);
-    String options = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("options"));
-    AddTabPage( TP_OPTIONS, options, ScTabPageSortOptions::Create, 0, false, TAB_APPEND);
-#endif
     FreeResource();
 }
 

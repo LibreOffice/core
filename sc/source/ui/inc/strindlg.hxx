@@ -36,7 +36,6 @@
 #include <vcl/edit.hxx>
 
 #include <layout/layout.hxx>
-#include <layout/layout-pre.hxx>
 
 //------------------------------------------------------------------------
 
@@ -59,8 +58,6 @@ private:
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
 };
-
-#include <layout/layout-post.hxx>
 
 #endif // SC_STRINDLG_HXX
 

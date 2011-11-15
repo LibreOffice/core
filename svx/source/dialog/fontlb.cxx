@@ -157,29 +157,6 @@ void SvxFontListBox::InitEntry(
                                   eButtonKind );
 }
 
-#if ENABLE_LAYOUT
-
-namespace layout
-{
-
-SvxFontListBox::~SvxFontListBox ()
-{
-}
-
-sal_uInt16 SvxFontListBox::InsertFontEntry (String const& entry, Font const&, Color const*)
-{
-    return InsertEntry (entry);
-}
-
-SvxFontListBox::SvxFontListBox( Context* pParent, const char* pFile)
-: ListBox( pParent, pFile )
-{
-}
-
-};
-
-#endif
-
 // ============================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

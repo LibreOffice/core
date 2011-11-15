@@ -35,7 +35,6 @@
 #include <wordcountdialog.hxx>
 #include <docstat.hxx>
 #include <dialog.hrc>
-#include <layout/layout-pre.hxx>
 #include <wordcountdialog.hrc>
 #include <cmdid.h>
 #include "vcl/msgbox.hxx" // RET_CANCEL
@@ -44,15 +43,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <swwait.hxx>
 #include <wrtsh.hxx>
-
-#if ENABLE_LAYOUT
-#undef SW_RES
-#define SW_RES(x) #x
-#undef SfxModalDialog
-#define SfxModalDialog( parent, id ) Dialog( parent, "wordcount.xml", id )
-#define SW_WORDCOUNTDIALOG_HRC
-#include <helpid.h>
-#endif /* ENABLE_LAYOUT */
 
 SwWordCountDialog::SwWordCountDialog(Window* pParent) :
 #if defined _MSC_VER

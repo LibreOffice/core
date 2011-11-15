@@ -39,36 +39,16 @@
 #include <svl/itemset.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
-#if ENABLE_LAYOUT
-#include <layout/layout.hxx>
-namespace layout { class SfxTabDialog; class SfxTabDialogController; }
-#endif /* ENABLE_LAYOUT */
-
 class SfxPoolItem;
 class SfxTabDialog;
 class SfxViewFrame;
 class SfxTabPage;
 class SfxBindings;
 
-#ifndef ENABLE_LAYOUT_SFX_TABDIALOG
-#define ENABLE_LAYOUT_SFX_TABDIALOG 0
-#define NAMESPACE_LAYOUT_SFX_TABDIALOG
-#define END_NAMESPACE_LAYOUT_SFX_TABDIALOG
-#define LAYOUT_NS_SFX_TABDIALOG
-#endif /* !ENABLE_LAYOUT_SFX_TABDIALOG*/
-
 typedef SfxTabPage* (*CreateTabPage)(Window *pParent, const SfxItemSet &rAttrSet);
 typedef sal_uInt16*     (*GetTabPageRanges)(); // provides international Which-value
 struct TabPageImpl;
 class SfxUs_Impl;
-
-#if ENABLE_LAYOUT_SFX_TABDIALOG
-#include <layout/layout-pre.hxx>
-#undef SfxTabDialog
-#undef SfxTabPage
-#endif /* ENABLE_LAYOUT_SFX_TABDIALOG */
-
-NAMESPACE_LAYOUT_SFX_TABDIALOG
 
 struct TabDlg_Impl;
 
@@ -205,11 +185,7 @@ public:
     void                StartExecuteModal( const Link& rEndDialogHdl );
     void                Start( sal_Bool bShow = sal_True );
 
-#if !ENABLE_LAYOUT_SFX_TABDIALOG
     const SfxItemSet*   GetExampleSet() const { return pExampleSet; }
-#else /* ENABLE_LAYOUT_SFX_TABDIALOG */
-    SfxItemSet* GetExampleSet() const { return 0; }
-#endif /* ENABLE_LAYOUT_SFX_TABDIALOG */
     SfxViewFrame*       GetViewFrame() const { return pFrame; }
 
     void                EnableApplyButton(sal_Bool bEnable = sal_True);
@@ -221,22 +197,11 @@ public:
     SAL_DLLPRIVATE sal_Bool OK_Impl() { return PrepareLeaveCurrentPage(); }
 };
 
-END_NAMESPACE_LAYOUT_SFX_TABDIALOG
-
-#if ENABLE_LAYOUT_SFX_TABDIALOG
-#include <layout/layout-post.hxx>
-#endif /* ENABLE_LAYOUT_SFX_TABDIALOG */
-
-#if !ENABLE_LAYOUT_SFX_TABDIALOG
-
 namespace sfx { class ItemConnectionBase; }
 
 class SFX2_DLLPUBLIC SfxTabPage: public TabPage
 {
 friend class SfxTabDialog;
-    #if ENABLE_LAYOUT
-     friend class layout::SfxTabDialog;
-    #endif
 
 private:
     const SfxItemSet*   pSet;
@@ -298,8 +263,6 @@ public:
     void SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > GetFrame();
 };
-
-#endif /* !ENABLE_LAYOUT_SFX_TABDIALOG */
 
 #endif
 

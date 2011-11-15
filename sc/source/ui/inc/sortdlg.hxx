@@ -35,15 +35,6 @@
 #include <vcl/fixed.hxx>
 #include "scui_def.hxx"
 
-#ifndef LAYOUT_SFX_TABDIALOG_BROKEN
-#define LAYOUT_SFX_TABDIALOG_BROKEN 1
-#endif /* !LAYOUT_SFX_TABDIALOG_BROKEN */
-
-#if !LAYOUT_SFX_TABDIALOG_BROKEN
-#include <sfx2/layout.hxx>
-#include <layout/layout-pre.hxx>
-#endif
-
 class ScSortDlg : public SfxTabDialog
 {
 public:
@@ -80,10 +71,6 @@ private:
     PushButton      aBtnCurSort;
     CancelButton    aBtnCancel;
 };
-
-#if !LAYOUT_SFX_TABDIALOG_BROKEN
-#include <layout/layout-post.hxx>
-#endif
 
 #endif // SC_SORTDLG_HXX
 

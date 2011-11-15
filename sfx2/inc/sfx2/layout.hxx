@@ -31,11 +31,6 @@
 
 #include <layout/layout.hxx>
 #include <sfx2/tabdlg.hxx>
-#if ENABLE_LAYOUT
-#undef ENABLE_LAYOUT_SFX_TABDIALOG
-#define ENABLE_LAYOUT_SFX_TABDIALOG 1
-#include <sfx2/layout-tabdlg.hxx>
-#endif
 
 class SfxChildWindow;
 class SfxBindings;

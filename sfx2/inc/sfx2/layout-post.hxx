@@ -29,14 +29,6 @@
 #ifndef _SFX2_LAYOUT_POST_HXX
 #define _SFX2_LAYOUT_POST_HXX
 
-#include <layout/layout-post.hxx>
-
-#if ENABLE_LAYOUT
-
-/* Allow re-inclusion for cxx file. */
-#undef _SFX2_LAYOUT_PRE_HXX
-
-#endif /* ENABLE_LAYOUT */
 
 #endif /* _SFX2_LAYOUT_POST_HXX */
 

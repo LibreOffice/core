@@ -71,7 +71,7 @@ public:
 
 // -----------------------------------------------------------------------
 #include <sfx2/layout.hxx>
-#include <layout/layout-pre.hxx>
+#define LocalizedString String
 
 class SvxNumberFormatTabPage : public SfxTabPage
 {
@@ -79,11 +79,6 @@ class SvxNumberFormatTabPage : public SfxTabPage
 
 public:
     ~SvxNumberFormatTabPage();
-
-#if ENABLE_LAYOUT
-#  undef SfxTabPage
-#  define SfxTabPage ::SfxTabPage
-#endif
 
     static SfxTabPage*      Create( Window* pParent,
                                     const SfxItemSet& rAttrSet );
@@ -176,8 +171,6 @@ private:
 
 #endif
 };
-
-#include <layout/layout-post.hxx>
 
 #endif
 

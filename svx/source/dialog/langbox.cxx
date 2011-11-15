@@ -473,49 +473,4 @@ sal_Bool SvxLanguageBox::IsLanguageSelected( const LanguageType eLangType ) cons
         return sal_False;
 }
 
-#if ENABLE_LAYOUT
-
-namespace layout
-{
-
-SvxLanguageBox::~SvxLanguageBox ()
-{
-}
-
-SvxLanguageBox::SvxLanguageBox( Context* pParent, const char* pFile, sal_Bool bCheck )
-: ListBox ( pParent, pFile, bCheck )
-{
-}
-
-void SvxLanguageBox::SetLanguageList( sal_Int16/*list*/, bool/*hasLangNone*/, bool /*langNoneIsLangAll*/, bool /*checkSpellAvail*/)
-{
-}
-
-sal_uInt16 SvxLanguageBox::InsertLanguage( const LanguageType/*type*/, sal_uInt16/*pos*/)
-{
-    return 0;
-}
-sal_uInt16 SvxLanguageBox::InsertLanguage( const LanguageType/*type*/, bool/*checkEntry*/, sal_uInt16 /*pos*/)
-{
-    return 0;
-}
-void SvxLanguageBox::RemoveLanguage( const LanguageType/*type*/)
-{
-}
-void SvxLanguageBox::SelectLanguage( const LanguageType/*type*/, bool/*select*/)
-{
-}
-LanguageType SvxLanguageBox::GetSelectLanguage() const
-{
-    return 0;
-}
-bool SvxLanguageBox::IsLanguageSelected( const LanguageType/*type*/) const
-{
-    return true;
-}
-
-};
-
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -99,27 +99,6 @@ public:
     sal_Bool            IsLanguageSelected( const LanguageType eLangType ) const;
 };
 
-#if ENABLE_LAYOUT
-namespace layout
-{
-class SvxLanguageBoxImpl;
-class SVX_DLLPUBLIC SvxLanguageBox : public ListBox
-{
-public:
-    SvxLanguageBox( Context*, const char*, sal_Bool bCheck = sal_False );
-    ~SvxLanguageBox ();
-    void SetLanguageList (sal_Int16 list, bool hasLangNone, bool langNoneIsLangAll=false, bool checkSpellAvailable=false);
-
-    sal_uInt16 InsertLanguage (LanguageType const type, sal_uInt16 pos=LISTBOX_APPEND);
-    sal_uInt16 InsertLanguage (LanguageType const type, bool checkEntry, sal_uInt16 pos=LISTBOX_APPEND);
-    void RemoveLanguage (LanguageType const type);
-    void SelectLanguage (LanguageType const type, bool select=true);
-    LanguageType GetSelectLanguage () const;
-    bool IsLanguageSelected( LanguageType const type) const;
-};
-};
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

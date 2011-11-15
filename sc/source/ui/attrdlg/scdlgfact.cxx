@@ -29,10 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#if ! ENABLE_LAYOUT_EXPERIMENTAL
-#undef ENABLE_LAYOUT
-#endif
-
 #undef SC_DLLIMPLEMENTATION
 
 #include "scdlgfact.hxx"
@@ -154,44 +150,6 @@ String AbstractTabDialog_Impl::GetText() const
 {
     return pDlg->GetText();
 }
-
-#if ENABLE_LAYOUT
-namespace layout
-{
-IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl);
-
-// AbstractTabDialog_Impl begin
-void AbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
-{
-    pDlg->SetCurPageId( nId );
-}
-
-const SfxItemSet* AbstractTabDialog_Impl::GetOutputItemSet() const
-{
-    return pDlg->GetOutputItemSet();
-}
-
-const sal_uInt16* AbstractTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
-{
-    return pDlg->GetInputRanges( pItem );
-}
-
-void AbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
-{
-     pDlg->SetInputSet( pInSet );
-}
-//From class Window.
-void AbstractTabDialog_Impl::SetText( const XubString& rStr )
-{
-    pDlg->SetText( rStr );
-}
-String AbstractTabDialog_Impl::GetText() const
-{
-    return pDlg->GetText();
-}
-}
-#endif /* ENABLE_LAYOUT */
-
 
 // AbstractScImportAsciiDlg_Impl begin
 void AbstractScImportAsciiDlg_Impl::GetOptions( ScAsciiOptions& rOpt )
@@ -1406,11 +1364,6 @@ AbstractScImportOptionsDlg * ScAbstractDialogFactory_Impl::CreateScImportOptions
 }
 
 
-#if ENABLE_LAYOUT && !LAYOUT_SFX_TABDIALOG_BROKEN
-#define SfxTabDialog layout::SfxTabDialog
-#define AbstractTabDialog_Impl layout::AbstractTabDialog_Impl
-#endif /* ENABLE_LAYOUT */
-
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScAttrDlg( SfxViewFrame*  pFrame,
                                                                         Window*          pParent,
                                                                         const SfxItemSet* pCellAttrs,
@@ -1562,11 +1515,6 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScValidationDlg( Wind
     return 0;
 }
 
-
-#if ENABLE_LAYOUT && !LAYOUT_SFX_TABDIALOG_BROKEN
-#define SfxTabDialog layout::SfxTabDialog
-#define AbstractTabDialog_Impl layout::AbstractTabDialog_Impl
-#endif /* ENABLE_LAYOUT */
 
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScSortDlg( Window*            pParent,
                                                     const SfxItemSet* pArgSet,int nId )
