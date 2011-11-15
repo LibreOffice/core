@@ -7013,7 +7013,7 @@ AC_SUBST(LIBPNG_LIBS)
 AC_SUBST(LIBPNG_CFLAGS)
 
 AC_MSG_CHECKING([whether to enable libpng linking in quickstarter])
-if test "x$enable_unix_libpng" = "xyes"; then
+if test "x$unix_qstart_libpng" != "xno"; then
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
