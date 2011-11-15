@@ -101,7 +101,6 @@ public:
 // class SvxSearchDialogWrapper ------------------------------------------
 
 #include <sfx2/layout.hxx>
-#define LocalizedString String
 
 class SvxSearchDialog;
 class SVX_DLLPUBLIC SvxSearchDialogWrapper : public SfxChildWindow
@@ -227,7 +226,7 @@ private:
     sal_uIntPtr         nModifyFlag;
     String          aStylesStr;
     String          aLayoutStr;
-    LocalizedString aCalcStr;
+    String aCalcStr;
 
     SvStringsDtor   aSearchStrings;
     SvStringsDtor   aReplaceStrings;

@@ -215,9 +215,6 @@ void SvxNumberPreviewImpl::DataChanged( const DataChangedEvent& rDCEvt )
 
 #define HDL(hdl) LINK( this, SvxNumberFormatTabPage, hdl )
 
-#define CUI_RES_PLAIN CUI_RES
-#define THIS_CUI_RES CUI_RES
-
 SvxNumberFormatTabPage::SvxNumberFormatTabPage( Window*             pParent,
                                                 const SfxItemSet&   rCoreAttrs )
 
@@ -231,7 +228,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage( Window*             pParent,
         aFtLanguage     ( this, CUI_RES( FT_LANGUAGE ) ),
         aLbLanguage     ( this, CUI_RES( LB_LANGUAGE ), sal_False ),
         aCbSourceFormat ( this, CUI_RES( CB_SOURCEFORMAT ) ),
-        aWndPreview     ( this, CUI_RES_PLAIN( WND_NUMBER_PREVIEW ) ),
+        aWndPreview     ( this, CUI_RES( WND_NUMBER_PREVIEW ) ),
         aFlOptions      ( this, CUI_RES( FL_OPTIONS ) ),
         aFtDecimals     ( this, CUI_RES( FT_DECIMALS ) ),
         aEdDecimals     ( this, CUI_RES( ED_DECIMALS ) ),
@@ -252,7 +249,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage( Window*             pParent,
         pNumFmtShell    ( NULL ),
         nInitFormat     ( ULONG_MAX ),
 
-        sAutomaticEntry ( THIS_CUI_RES( STR_AUTO_ENTRY)),
+        sAutomaticEntry ( CUI_RES( STR_AUTO_ENTRY)),
         pLastActivWindow( NULL )
 {
     Init_Impl();
@@ -269,7 +266,7 @@ SvxNumberFormatTabPage::~SvxNumberFormatTabPage()
 
 void SvxNumberFormatTabPage::Init_Impl()
 {
-    ImageList               aIconList( CUI_RES_PLAIN ( IL_ICON ) );
+    ImageList               aIconList( CUI_RES ( IL_ICON ) );
 
     bNumItemFlag=sal_True;
     bOneAreaFlag=sal_False;

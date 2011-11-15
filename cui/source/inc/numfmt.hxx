@@ -71,7 +71,6 @@ public:
 
 // -----------------------------------------------------------------------
 #include <sfx2/layout.hxx>
-#define LocalizedString String
 
 class SvxNumberFormatTabPage : public SfxTabPage
 {
@@ -142,7 +141,7 @@ private:
     long                    nCurFormatHeight;
     long                    nStdFormatY;
     long                    nStdFormatHeight;
-    LocalizedString sAutomaticEntry;
+    String sAutomaticEntry;
 
     Window*                 pLastActivWindow;
 

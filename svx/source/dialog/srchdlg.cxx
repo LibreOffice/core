@@ -275,9 +275,6 @@ void SearchAttrItemList::Remove( sal_uInt16 nPos, sal_uInt16 nLen )
     SrchAttrItemList::Remove( nPos, nLen );
 }
 
-#define SVX_RES_PLAIN SVX_RES
-#define THIS_SVX_RES SVX_RES
-
 #undef INI_LIST
 #define INI_LIST() \
     aSearchText     ( this, SVX_RES( FT_SEARCH ) ),                         \
@@ -332,7 +329,7 @@ void SearchAttrItemList::Remove( sal_uInt16 nPos, sal_uInt16 nLen )
     bReadOnly       ( sal_False ),                                              \
     bConstruct      ( sal_True ),                                               \
     nModifyFlag     ( 0 ),                                                  \
-    aCalcStr        ( THIS_SVX_RES( STR_WORDCALC ) ),                       \
+    aCalcStr        ( SVX_RES( STR_WORDCALC ) ),                       \
     pImpl           ( NULL ),                                               \
     pSearchList     ( NULL ),                                               \
     pReplaceList    ( new SearchAttrItemList ),                             \

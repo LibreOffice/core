@@ -1192,8 +1192,6 @@ IMPL_LINK( SfxTabDialog, BaseFmtHdl, Button *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-#define tabControlWindow pTabCtrl
-
 IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
 /*  [Description]
@@ -1230,10 +1228,10 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
         }
 
         if ( pTmpSet && !pDataObject->bOnDemand )
-            pTabPage = (pDataObject->fnCreatePage)( tabControlWindow, *pTmpSet );
+            pTabPage = (pDataObject->fnCreatePage)( pTabCtrl, *pTmpSet );
         else
             pTabPage = (pDataObject->fnCreatePage)
-                            ( tabControlWindow, *CreateInputItemSet( nId ) );
+                            ( pTabCtrl, *CreateInputItemSet( nId ) );
         DBG_ASSERT( NULL == pDataObject->pTabPage, "create TabPage more than once" );
         pDataObject->pTabPage = pTabPage;
 

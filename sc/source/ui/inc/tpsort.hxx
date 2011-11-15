@@ -130,8 +130,6 @@ class ScRangeData;
 class CollatorRessource;
 class CollatorWrapper;
 
-#define LocalizedString String
-
 class ScTabPageSortOptions : public SfxTabPage
 {
 public:
@@ -180,9 +178,9 @@ private:
 
 //     FixedText           aFtAreaLabel;
 //  FixedInfo           aFtArea;
-    LocalizedString aStrRowLabel;
-    LocalizedString aStrColLabel;
-    LocalizedString aStrUndefined;
+    String aStrRowLabel;
+    String aStrColLabel;
+    String aStrUndefined;
     String              aStrAreaLabel;
 
     const sal_uInt16        nWhichSort;
