@@ -1841,7 +1841,6 @@ void ScTabView::UpdateFormulas()
 void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                             ScUpdateMode eMode )
 {
-    sal_uInt16 i;
     SCCOL nCol1;
     SCROW nRow1;
     SCCOL nCol2;
@@ -1850,86 +1849,87 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
     PutInOrder( nStartCol, nEndCol );
     PutInOrder( nStartRow, nEndRow );
 
-    for (i=0; i<4; i++)
-        if (pGridWin[i])
-            if (pGridWin[i]->IsVisible())
+    for (size_t i = 0; i < 4; ++i)
+    {
+        if (!pGridWin[i] || !pGridWin[i]->IsVisible())
+            continue;
+
+        ScHSplitPos eHWhich = WhichH( (ScSplitPos) i );
+        ScVSplitPos eVWhich = WhichV( (ScSplitPos) i );
+        bool bOut = false;
+
+        nCol1 = nStartCol;
+        nRow1 = nStartRow;
+        nCol2 = nEndCol;
+        nRow2 = nEndRow;
+
+        SCCOL nScrX = aViewData.GetPosX( eHWhich );
+        SCROW nScrY = aViewData.GetPosY( eVWhich );
+        if (nCol1 < nScrX) nCol1 = nScrX;
+        if (nCol2 < nScrX)
+        {
+            if ( eMode == SC_UPDATE_ALL )   // for UPDATE_ALL, paint anyway
+                nCol2 = nScrX;              // (because of extending strings to the right)
+            else
+                bOut = true;                // completely outside the window
+        }
+        if (nRow1 < nScrY) nRow1 = nScrY;
+        if (nRow2 < nScrY) bOut = true;
+
+        SCCOL nLastX = nScrX + aViewData.VisibleCellsX( eHWhich ) + 1;
+        SCROW nLastY = nScrY + aViewData.VisibleCellsY( eVWhich ) + 1;
+        if (nCol1 > nLastX) bOut = true;
+        if (nCol2 > nLastX) nCol2 = nLastX;
+        if (nRow1 > nLastY) bOut = true;
+        if (nRow2 > nLastY) nRow2 = nLastY;
+
+        if (bOut)
+            continue;
+
+        if ( eMode == SC_UPDATE_CHANGED )
+            pGridWin[i]->Draw( nCol1, nRow1, nCol2, nRow2, eMode );
+        else    // ALL oder MARKS
+        {
+            bool bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
+            long nLayoutSign = bLayoutRTL ? -1 : 1;
+
+            Point aStart = aViewData.GetScrPos( nCol1, nRow1, (ScSplitPos) i );
+            Point aEnd   = aViewData.GetScrPos( nCol2+1, nRow2+1, (ScSplitPos) i );
+            if ( eMode == SC_UPDATE_ALL )
+                aEnd.X() = bLayoutRTL ? 0 : (pGridWin[i]->GetOutputSizePixel().Width());
+            aEnd.X() -= nLayoutSign;
+            aEnd.Y() -= 1;
+
+            // #i85232# include area below cells (could be done in GetScrPos?)
+            if ( eMode == SC_UPDATE_ALL && nRow2 >= MAXROW )
+                aEnd.Y() = pGridWin[i]->GetOutputSizePixel().Height();
+
+            bool bShowChanges = true;           //! ...
+            if (bShowChanges)
             {
-                ScHSplitPos eHWhich = WhichH( (ScSplitPos) i );
-                ScVSplitPos eVWhich = WhichV( (ScSplitPos) i );
-                bool bOut = false;
+                aStart.X() -= nLayoutSign;      // include change marks
+                aStart.Y() -= 1;
+            }
 
-                nCol1 = nStartCol;
-                nRow1 = nStartRow;
-                nCol2 = nEndCol;
-                nRow2 = nEndRow;
-
-                SCCOL nScrX = aViewData.GetPosX( eHWhich );
-                SCROW nScrY = aViewData.GetPosY( eVWhich );
-                if (nCol1 < nScrX) nCol1 = nScrX;
-                if (nCol2 < nScrX)
+            bool bMarkClipped = aViewData.GetOptions().GetOption( VOPT_CLIPMARKS );
+            if (bMarkClipped)
+            {
+                //  dazu muesste ScColumn::IsEmptyBlock optimiert werden
+                //  (auf Search() umstellen)
+                //!if ( nCol1 > 0 && !aViewData.GetDocument()->IsBlockEmpty(
+                //!                     aViewData.GetTabNo(),
+                //!                     0, nRow1, nCol1-1, nRow2 ) )
                 {
-                    if ( eMode == SC_UPDATE_ALL )   // for UPDATE_ALL, paint anyway
-                        nCol2 = nScrX;              // (because of extending strings to the right)
-                    else
-                        bOut = true;                // completely outside the window
-                }
-                if (nRow1 < nScrY) nRow1 = nScrY;
-                if (nRow2 < nScrY) bOut = true;
-
-                SCCOL nLastX = nScrX + aViewData.VisibleCellsX( eHWhich ) + 1;
-                SCROW nLastY = nScrY + aViewData.VisibleCellsY( eVWhich ) + 1;
-                if (nCol1 > nLastX) bOut = true;
-                if (nCol2 > nLastX) nCol2 = nLastX;
-                if (nRow1 > nLastY) bOut = true;
-                if (nRow2 > nLastY) nRow2 = nLastY;
-
-                if (!bOut)
-                {
-                    if ( eMode == SC_UPDATE_CHANGED )
-                        pGridWin[i]->Draw( nCol1, nRow1, nCol2, nRow2, eMode );
-                    else    // ALL oder MARKS
-                    {
-                        bool bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
-                        long nLayoutSign = bLayoutRTL ? -1 : 1;
-
-                        Point aStart = aViewData.GetScrPos( nCol1, nRow1, (ScSplitPos) i );
-                        Point aEnd   = aViewData.GetScrPos( nCol2+1, nRow2+1, (ScSplitPos) i );
-                        if ( eMode == SC_UPDATE_ALL )
-                            aEnd.X() = bLayoutRTL ? 0 : (pGridWin[i]->GetOutputSizePixel().Width());
-                        aEnd.X() -= nLayoutSign;
-                        aEnd.Y() -= 1;
-
-                        // #i85232# include area below cells (could be done in GetScrPos?)
-                        if ( eMode == SC_UPDATE_ALL && nRow2 >= MAXROW )
-                            aEnd.Y() = pGridWin[i]->GetOutputSizePixel().Height();
-
-                        bool bShowChanges = true;           //! ...
-                        if (bShowChanges)
-                        {
-                            aStart.X() -= nLayoutSign;      // include change marks
-                            aStart.Y() -= 1;
-                        }
-
-                        bool bMarkClipped = aViewData.GetOptions().GetOption( VOPT_CLIPMARKS );
-                        if (bMarkClipped)
-                        {
-                            //  dazu muesste ScColumn::IsEmptyBlock optimiert werden
-                            //  (auf Search() umstellen)
-                            //!if ( nCol1 > 0 && !aViewData.GetDocument()->IsBlockEmpty(
-                            //!                     aViewData.GetTabNo(),
-                            //!                     0, nRow1, nCol1-1, nRow2 ) )
-                            {
-                                long nMarkPixel = (long)( SC_CLIPMARK_SIZE * aViewData.GetPPTX() );
-                                aStart.X() -= nMarkPixel * nLayoutSign;
-                                if (!bShowChanges)
-                                    aStart.X() -= nLayoutSign;      // cell grid
-                            }
-                        }
-
-                        pGridWin[i]->Invalidate( pGridWin[i]->PixelToLogic( Rectangle( aStart,aEnd ) ) );
-                    }
+                    long nMarkPixel = (long)( SC_CLIPMARK_SIZE * aViewData.GetPPTX() );
+                    aStart.X() -= nMarkPixel * nLayoutSign;
+                    if (!bShowChanges)
+                        aStart.X() -= nLayoutSign;      // cell grid
                 }
             }
+
+            pGridWin[i]->Invalidate( pGridWin[i]->PixelToLogic( Rectangle( aStart,aEnd ) ) );
+        }
+    }
 
     // #i79909# Calling UpdateAllOverlays here isn't necessary and would lead to overlay calls from a timer,
     // with a wrong MapMode if editing in a cell (reference input).
