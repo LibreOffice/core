@@ -85,7 +85,7 @@ SLOFILES=\
             
 # --- MOZAB BASE Library -----------------------------------
 
-SHL1VERSIONMAP=$(SOLARENV)/src/component.map
+SHL1USE_EXPORTS = name
 SHL1TARGET=	$(TARGET)$(DLLPOSTFIX)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
@@ -145,7 +145,7 @@ DEPOBJFILES=$(SLO2FILES)
 
 # --- MOZAB BASE Library -----------------------------------
 
-SHL2VERSIONMAP= $(TARGET2).map
+SHL2USE_EXPORTS = name
 SHL2NOCHECK=TRUE
 SHL2TARGET=	$(TARGET2)$(DLLPOSTFIX)
 SHL2OBJS=$(SLO2FILES)
