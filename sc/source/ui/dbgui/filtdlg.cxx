@@ -132,7 +132,6 @@ ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         pViewData       ( NULL ),
         pDoc            ( NULL ),
         nSrcTab         ( 0 ),
-        nFieldCount     ( 0 ),
         bRefInputMode   ( false ),
         pTimer          ( NULL )
 {
@@ -302,15 +301,15 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
 
     for (size_t i = 0; i < QUERY_ENTRY_COUNT; ++i)
     {
-        String  aValStr;
-        sal_uInt16  nCondPos     = 0;
-        sal_uInt16  nFieldSelPos = 0;
+        rtl::OUString aValStr;
+        size_t nCondPos = 0;
+        size_t nFieldSelPos = 0;
 
         ScQueryEntry& rEntry = theQueryData.GetEntry(i);
         if ( rEntry.bDoQuery )
         {
             const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-            nCondPos     = (sal_uInt16)rEntry.eOp;
+            nCondPos = static_cast<size_t>(rEntry.eOp);
             nFieldSelPos = GetFieldSelPos( static_cast<SCCOL>(rEntry.nField) );
             if (rEntry.IsQueryByEmpty())
             {
@@ -498,7 +497,6 @@ void ScFilterDlg::FillFieldLists()
             aLbField4.InsertEntry( aFieldName, i );
             i++;
         }
-        nFieldCount = i;
     }
 }
 
@@ -600,7 +598,7 @@ void ScFilterDlg::UpdateHdrInValueList( sal_uInt16 nList )
     if (nList == 0 || nList > QUERY_ENTRY_COUNT)
         return;
 
-    sal_uInt16 nFieldSelPos = maFieldLbArr[nList-1]->GetSelectEntryPos();
+    size_t nFieldSelPos = maFieldLbArr[nList-1]->GetSelectEntryPos();
     if (!nFieldSelPos)
         return;
 
@@ -625,9 +623,9 @@ void ScFilterDlg::UpdateHdrInValueList( sal_uInt16 nList )
         return;
     }
 
-    String aHdrStr = pHdrEntry->GetString();
-    sal_Bool bWasThere = ( pValList->GetEntry(nListPos) == aHdrStr );
-    sal_Bool bInclude = !aBtnHeader.IsChecked();
+    rtl::OUString aHdrStr = pHdrEntry->GetString();
+    bool bWasThere = aHdrStr.equals(pValList->GetEntry(nListPos));
+    bool bInclude = !aBtnHeader.IsChecked();
 
     if (bInclude)           // Include entry
     {
@@ -658,10 +656,10 @@ void ScFilterDlg::ClearValueList( sal_uInt16 nList )
 
 //----------------------------------------------------------------------------
 
-sal_uInt16 ScFilterDlg::GetFieldSelPos( SCCOL nField )
+size_t ScFilterDlg::GetFieldSelPos( SCCOL nField )
 {
     if ( nField >= theQueryData.nCol1 && nField <= theQueryData.nCol2 )
-        return static_cast<sal_uInt16>(nField - theQueryData.nCol1 + 1);
+        return static_cast<size_t>(nField - theQueryData.nCol1 + 1);
     else
         return 0;
 }
@@ -672,7 +670,7 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
 {
     ScAddress       theCopyPos;
     ScQueryParam    theParam( theQueryData );
-    sal_Bool            bCopyPosOk = false;
+    bool            bCopyPosOk = false;
 
     if ( aBtnCopyResult.IsChecked() )
     {

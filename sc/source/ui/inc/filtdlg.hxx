@@ -149,7 +149,6 @@ private:
 
     std::deque<bool>   maHasDates;
     std::deque<bool>   maRefreshExceptQuery;
-    sal_uInt16          nFieldCount;
     bool                bRefInputMode;
 
     EntryListsMap maEntryLists;
@@ -165,7 +164,7 @@ private:
     void            UpdateValueList ( sal_uInt16 nList );
     void            UpdateHdrInValueList( sal_uInt16 nList );
     void            ClearValueList  ( sal_uInt16 nList );
-    sal_uInt16          GetFieldSelPos  ( SCCOL nField );
+    size_t          GetFieldSelPos  ( SCCOL nField );
     ScQueryItem*    GetOutputItem   ();
 
     // Handler:
