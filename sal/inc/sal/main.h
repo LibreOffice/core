@@ -129,8 +129,6 @@ extern "C" void lo_main(int argc, char **argv);
 #endif
 
 #define SAL_MAIN_WITH_ARGS_IMPL \
-static int sal_main_with_args(int argc, char **argv); \
-\
 void lo_main(int argc, char **argv) \
 { \
     LOGI("in lo_main, argc=%d, argv[0]=%s, argv[1]=%s", argc, argv[0], argv[1]); \
@@ -140,8 +138,6 @@ void lo_main(int argc, char **argv) \
 }
 
 #define SAL_MAIN_IMPL \
-static int sal_main(void); \
-\
 void lo_main(int argc, char **argv) \
 { \
     LOGI("in lo_main, argc=%d, argv[0]=%s, argv[1]=%s", argc, argv[0], argv[1]); \

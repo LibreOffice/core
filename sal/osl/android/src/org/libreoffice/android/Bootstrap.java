@@ -44,7 +44,8 @@ public class Bootstrap extends NativeActivity
 {
     private static String TAG = "lo-bootstrap";
 
-    public native boolean setup(String dataDir);
+    public native boolean setup(String dataDir,
+                                String[] ld_library_path);
 
     public native boolean setup(int lo_main_ptr,
                                 Object lo_main_argument);
@@ -72,8 +73,13 @@ public class Bootstrap extends NativeActivity
             return;
         }
 
-        // This inspects LD_LIBRARY_PATH and dataDir
-        if (!setup(dataDir))
+        String llp = System.getenv("LD_LIBRARY_PATH");
+        if (llp == null)
+            llp = "/vendor/lib:/system/lib";
+
+        String[] llpa = llp.split(":");
+
+        if (!setup(dataDir, llpa))
             return;
 
         String mainLibrary = getIntent().getStringExtra("lo-main-library");

@@ -932,7 +932,11 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
         locale = getenv( "LANG" );
 
     if( NULL == locale )
+#ifdef ANDROID
+        locale = "en-US.UTF-8";
+#else
         locale = "C";
+#endif
 
     *ppLocale = _parse_locale( locale );
 }

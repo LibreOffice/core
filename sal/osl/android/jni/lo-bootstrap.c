@@ -41,7 +41,7 @@
 
 #include <android/log.h>
 
-#include <../../../inc/osl/android-lo-bootstrap.h>
+#include "lo-bootstrap.h"
 
 #include "android_native_app_glue.c"
 
@@ -111,40 +111,6 @@ free_ptrarray(void **pa)
         free(*rover++);
 
     free(pa);
-}
-
-static void
-setup_library_locations(const char *lib_dir)
-{
-    int n;
-    char *ld_library_path;
-    char *elem;
-
-    ld_library_path = getenv("LD_LIBRARY_PATH");
-    if (ld_library_path == NULL)
-        ld_library_path = "/vendor/lib:/system/lib";
-    ld_library_path = strdup(ld_library_path);
-
-    n = 1;
-    elem = ld_library_path;
-    while ((elem = strchr(elem, ':')) != NULL) {
-        n++;
-        elem++;
-    }
-    library_locations = malloc((n + 2) * sizeof(char *));
-    library_locations[0] = lib_dir;
-    elem = ld_library_path;
-    library_locations[1] = elem;
-    n = 2;
-    while ((elem = strchr(elem, ':')) != NULL) {
-        *elem = '\0';
-        elem++;
-        library_locations[n++] = elem;
-    }
-    library_locations[n] = NULL;
-
-    for (n = 0; library_locations[n] != NULL; n++)
-        LOGI("library_locations[%d] = %s", n, library_locations[n]);
 }
 
 jobjectArray
@@ -236,7 +202,6 @@ Java_org_libreoffice_android_Bootstrap_dlcall(JNIEnv* env,
     }
 
     if ((*env)->IsInstanceOf(env, argument, StringArray)) {
-        LOGI("Yes, a string array argument of length %d", (*env)->GetArrayLength(env, argument));
         int argc = (*env)->GetArrayLength(env, argument);
         const char **argv = malloc(sizeof(char *) * (argc+1));
         int i, result;
@@ -258,16 +223,22 @@ Java_org_libreoffice_android_Bootstrap_dlcall(JNIEnv* env,
     return 0;
 }
 
+// public native boolean setup(String dataDir,
+//                             String[] ld_library_path);
+
 jboolean
-Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2(JNIEnv* env,
-                                                                  jobject this,
-                                                                  jstring dataDir)
+Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2_3Ljava_lang_String_2(JNIEnv* env,
+                                                                                       jobject this,
+                                                                                       jstring dataDir,
+                                                                                       jobjectArray ld_library_path)
 {
-    int i;
+    int i, n;
     const jbyte *dataDirPath;
     char *lib_dir;
 
-    LOGI("in %s! this=%p", __FUNCTION__, this);
+    n = (*env)->GetArrayLength(env, ld_library_path);
+
+    library_locations = malloc((n+2) * sizeof(char *));
 
     dataDirPath = (*env)->GetStringUTFChars(env, dataDir, NULL);
 
@@ -277,10 +248,24 @@ Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2(JNIEnv* env,
 
     (*env)->ReleaseStringUTFChars(env, dataDir, dataDirPath);
 
-    setup_library_locations(lib_dir);
+    library_locations[0] = lib_dir;
+
+    for (i = 0; i < n; i++) {
+        const jbyte *s = (*env)->GetStringUTFChars(env, (*env)->GetObjectArrayElement(env, ld_library_path, i), NULL);
+        library_locations[i+1] = strdup(s);
+        (*env)->ReleaseStringUTFChars(env, (*env)->GetObjectArrayElement(env, ld_library_path, i), s);
+    }
+
+    library_locations[n+1] = NULL;
+
+    for (n = 0; library_locations[n] != NULL; n++)
+        LOGI("library_locations[%d] = %s", n, library_locations[n]);
 
     return JNI_TRUE;
 }
+
+// public native boolean setup(int lo_main_ptr,
+//                             Object lo_main_argument);
 
 jboolean
 Java_org_libreoffice_android_Bootstrap_setup__ILjava_lang_Object_2(JNIEnv* env,
@@ -290,8 +275,6 @@ Java_org_libreoffice_android_Bootstrap_setup__ILjava_lang_Object_2(JNIEnv* env,
 {
     jclass StringArray;
     int i;
-
-    LOGI("in %s! this=%p", __FUNCTION__, this);
 
     lo_main = lo_main_ptr;
 
@@ -333,16 +316,15 @@ lo_dlneeds(const char *library)
 
     /* Open library and read ELF header */
 
-    LOGI("lo_dlneeds(%s)\n", library);
     fd = open(library, O_RDONLY);
 
     if (fd == -1) {
-        LOGI("Could not open library");
+        LOGI("lo_dlneeds: Could not open library %s: %s", library, strerror(errno));
         return NULL;
     }
 
     if (read(fd, &hdr, sizeof(hdr)) < sizeof(hdr)) {
-        LOGI("Could not read ELF header");
+        LOGI("lo_dlneeds: Could not read ELF header of %s", library);
         close(fd);
         return NULL;
     }
@@ -350,12 +332,12 @@ lo_dlneeds(const char *library)
     /* Read in .shstrtab */
 
     if (lseek(fd, hdr.e_shoff + hdr.e_shstrndx * sizeof(shdr), SEEK_SET) < 0) {
-        LOGI("Could not seek to .shstrtab section header");
+        LOGI("lo_dlneeds: Could not seek to .shstrtab section header of %s", library);
         close(fd);
         return NULL;
     }
     if (read(fd, &shdr, sizeof(shdr)) < sizeof(shdr)) {
-        LOGI("Could not read section header");
+        LOGI("lo_dlneeds: Could not read section header of %s", library);
         close(fd);
         return NULL;
     }
@@ -367,13 +349,13 @@ lo_dlneeds(const char *library)
     /* Read section headers, looking for .dynstr section */
 
     if (lseek(fd, hdr.e_shoff, SEEK_SET) < 0) {
-        LOGI("Could not seek to section headers");
+        LOGI("lo_dlneeds: Could not seek to section headers of %s", library);
         close(fd);
         return NULL;
     }
     for (i = 0; i < hdr.e_shnum; i++) {
         if (read(fd, &shdr, sizeof(shdr)) < sizeof(shdr)) {
-            LOGI("Could not read section header");
+            LOGI("lo_dlneeds: Could not read section header of %s", library);
             close(fd);
             return NULL;
         }
@@ -389,7 +371,7 @@ lo_dlneeds(const char *library)
     }
 
     if (i == hdr.e_shnum) {
-        LOGI("No .dynstr section");
+        LOGI("lo_dlneeds: No .dynstr section in %s", library);
         close(fd);
         return NULL;
     }
@@ -397,13 +379,13 @@ lo_dlneeds(const char *library)
     /* Read section headers, looking for .dynamic section */
 
     if (lseek(fd, hdr.e_shoff, SEEK_SET) < 0) {
-        LOGI("Could not seek to section headers");
+        LOGI("lo_dlneeds: Could not seek to section headers of %s", library);
         close(fd);
         return NULL;
     }
     for (i = 0; i < hdr.e_shnum; i++) {
         if (read(fd, &shdr, sizeof(shdr)) < sizeof(shdr)) {
-            LOGI("Could not read section header");
+            LOGI("lo_dlneeds: Could not read section header of %s", library);
             close(fd);
             return NULL;
         }
@@ -414,13 +396,13 @@ lo_dlneeds(const char *library)
             /* Count number of DT_NEEDED entries */
             n_needed = 0;
             if (lseek(fd, shdr.sh_offset, SEEK_SET) < 0) {
-                LOGI("Could not seek to .dynamic section");
+                LOGI("lo_dlneeds: Could not seek to .dynamic section of %s", library);
                 close(fd);
                 return NULL;
             }
             for (dynoff = 0; dynoff < shdr.sh_size; dynoff += sizeof(dyn)) {
                 if (read(fd, &dyn, sizeof(dyn)) < sizeof(dyn)) {
-                    LOGI("Could not read .dynamic entry");
+                    LOGI("lo_dlneeds: Could not read .dynamic entry of %s", library);
                     close(fd);
                     return NULL;
                 }
@@ -428,26 +410,26 @@ lo_dlneeds(const char *library)
                     n_needed++;
             }
 
-            LOGI("Found %d DT_NEEDED libs", n_needed);
+            /* LOGI("Found %d DT_NEEDED libs", n_needed); */
 
             result = malloc((n_needed+1) * sizeof(char *));
 
             n_needed = 0;
             if (lseek(fd, shdr.sh_offset, SEEK_SET) < 0) {
-                LOGI("Could not seek to .dynamic section");
+                LOGI("lo_dlneeds: Could not seek to .dynamic section of %s", library);
                 close(fd);
                 free(result);
                 return NULL;
             }
             for (dynoff = 0; dynoff < shdr.sh_size; dynoff += sizeof(dyn)) {
                 if (read(fd, &dyn, sizeof(dyn)) < sizeof(dyn)) {
-                    LOGI("Could not read .dynamic entry");
+                    LOGI("lo_dlneeds: Could not read .dynamic entry in %s", library);
                     close(fd);
                     free(result);
                     return NULL;
                 }
                 if (dyn.d_tag == DT_NEEDED) {
-                    LOGI("needs: %s\n", dynstr + dyn.d_un.d_val);
+                    /* LOGI("needs: %s\n", dynstr + dyn.d_un.d_val); */
                     result[n_needed] = strdup(dynstr + dyn.d_un.d_val);
                     n_needed++;
                 }
@@ -461,6 +443,8 @@ lo_dlneeds(const char *library)
         }
     }
 
+    LOGI("lo_dlneeds: Could not find .dynamic section in %s", library);
+    close(fd);
     return NULL;
 }
 
@@ -505,7 +489,7 @@ lo_dlopen(const char *library)
     if (rover != NULL)
         return rover->handle;
 
-    LOGI("lo_dlopen(%s)", library);
+    /* LOGI("lo_dlopen(%s)", library); */
 
     if (library[0] == '/') {
         full_name = strdup(library);
@@ -531,7 +515,7 @@ lo_dlopen(const char *library)
     }
 
     if (!found) {
-        LOGI("Library %s not found", library);
+        LOGI("lo_dlopen: Library %s not found", library);
         return NULL;
     }
 
@@ -553,7 +537,7 @@ lo_dlopen(const char *library)
     LOGI("dlopen(%s) = %p", full_name, p);
     free(full_name);
     if (p == NULL)
-        LOGI(dlerror());
+        LOGI("lo_dlopen: %s", dlerror());
 
     new_loaded_lib = malloc(sizeof(*new_loaded_lib));
     new_loaded_lib->name = strdup(library);
@@ -570,9 +554,9 @@ lo_dlsym(void *handle,
          const char *symbol)
 {
     void *p = dlsym(handle, symbol);
-    LOGI("dlsym(%p, %s) = %p", handle, symbol, p);
+    /* LOGI("dlsym(%p, %s) = %p", handle, symbol, p); */
     if (p == NULL)
-        LOGI(dlerror());
+        LOGI("lo_dlsym: %s", dlerror());
     return p;
 }
 
@@ -591,21 +575,13 @@ void android_main(struct android_app* state)
 {
     struct engine engine;
 
-    LOGI("here we are %s:%d", __FUNCTION__, __LINE__);
-
     app = state;
 
     memset(&engine, 0, sizeof(engine));
     state->userData = &engine;
     state->onAppCmd = engine_handle_cmd;
 
-    char cwd[1000];
-    getcwd(cwd, sizeof(cwd));
-    LOGI("cwd=%s", cwd);
-
-    // lo_main(lo_main_argc, lo_main_argv);
-
-    // loop waiting for stuff to do.
+    lo_main(lo_main_argc, lo_main_argv);
 
     while (1) {
         // Read all pending events.
