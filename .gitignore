@@ -123,3 +123,7 @@ test/user-template/user/psprint/pspfontcache
 # Everyone loves patching
 *.orig
 *.rej
+
+# Somepeople love debugging
+gdbtrace.log
+valgrind.log
