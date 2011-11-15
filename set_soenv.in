@@ -819,7 +819,8 @@ if ($platform =~ m/cygwin/)
 # the $OS, $COM, $CPU variables are not yet present there.
 #
 if ( "@WITH_MOZILLA@" eq "YES" and "@BUILD_MOZAB@" ne "TRUE" and "@SYSTEM_MOZILLA@" ne "YES" )
-{  print("\nChecking for prebuilt Mozilla libraries ...");
+{
+   print("Checking for prebuilt Mozilla libraries ...");
    my $mozbinfile = $SRC_ROOT."/moz/zipped/";
    if ( $^O eq 'MSWin32' ) {
        chomp( $mozbinfile = qx{cygpath -d "$mozbinfile"} );
@@ -840,6 +841,30 @@ if ( "@WITH_MOZILLA@" eq "YES" and "@BUILD_MOZAB@" ne "TRUE" and "@SYSTEM_MOZILL
        print "  <http://dev-www.libreoffice.org/mozilla/>.\n\n";
        die;
    }
+   if ( $OS eq 'WNT' ) {
+       my $ext_msvc = $SRC_ROOT."/external/msvcp80";
+       chomp( $ext_msvc = qx{cygpath -d "$ext_msvc"} );
+       print("Checking for MSVC 2005 runtime needed for the prebuilt Mozilla ...");
+       if ( -e $ext_msvc."/Microsoft.VC80.CRT.manifest" and
+               -e $ext_msvc."/msvcp80.dll" and
+               -e $ext_msvc."/msvcr80.dll" ) 
+       {
+           print " found.\n";
+       }
+       else
+       {   print " not found!\n\n";
+           print "For the pre-built Mozilla libraries, you need MSVC 2005 runtime\n";
+           print "files Microsoft.VC80.CRT.manifest, msvcp80.dll, and msvcr80.dll\n";
+           print "in external/msvcp80.\n\n";
+           print "You can get them by installing:\n";
+           print "  <http://download.microsoft.com/download/8/B/4/8B42259F-5D70-43F4-AC2E-4B208FD8D66A/vcredist_x86.EXE>.\n";
+           print "and copying the abovementioned files from:\n";
+           print "  c:/windows/winsxs/x86_Microsoft.VC80.CRT_1fc8b3b9a1e18e3b_8.0.50727.4053_x-ww_e6967989/\n";
+           print "and\n";
+           print "  c:/windows/winsxs/manifests/x86_Microsoft.VC80.CRT_1fc8b3b9a1e18e3b_8.0.50727.4053_x-ww_e6967989.manifest\n\n";
+           die;
+       }
+    }
 }
 else
 {
