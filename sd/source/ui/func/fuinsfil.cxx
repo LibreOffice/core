@@ -111,7 +111,7 @@ FunctionReference FuInsertFile::Create( ViewShell* pViewSh, ::sd::Window* pWin, 
 void FuInsertFile::DoExecute( SfxRequest& rReq )
 {
     SfxFilterMatcher&       rMatcher = SFX_APP()->GetFilterMatcher();
-    ::std::vector< String > aFilterVector;
+    ::std::vector< OUString > aFilterVector;
     const SfxItemSet*       pArgs = rReq.GetArgs ();
 
     FuInsertFile::GetSupportedFilterVector( aFilterVector );
@@ -229,7 +229,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
                 // add additional supported filters
-                ::std::vector< String >::const_iterator aIter( aFilterVector.begin() );
+                ::std::vector< OUString >::const_iterator aIter( aFilterVector.begin() );
 
                 while( aIter != aFilterVector.end() )
                 {
@@ -796,7 +796,7 @@ sal_Bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
 
 // -----------------------------------------------------------------------------
 
-void FuInsertFile::GetSupportedFilterVector( ::std::vector< String >& rFilterVector )
+void FuInsertFile::GetSupportedFilterVector( ::std::vector< OUString >& rFilterVector )
 {
     SfxFilterMatcher&   rMatcher = SFX_APP()->GetFilterMatcher();
     const SfxFilter*    pSearchFilter = NULL;

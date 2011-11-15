@@ -57,7 +57,7 @@ friend class SfxFilterContainer;
     SfxFilterFlags  nFormatType;
     sal_uInt16          nDocIcon;
     String          aServiceName;
-    String          aMimeType;
+    ::rtl::OUString aMimeType;
     String          aFilterName;
     String          aPattern;
     sal_uIntPtr           nVersion;
@@ -85,7 +85,7 @@ public:
     bool IsInternal() const { return nFormatType & SFX_FILTER_INTERNAL; }
     SfxFilterFlags  GetFilterFlags() const  { return nFormatType; }
     const String&   GetFilterName() const { return aFilterName; }
-    const String&   GetMimeType() const { return aMimeType; }
+    const ::rtl::OUString& GetMimeType() const { return aMimeType; }
     const String&   GetName() const { return  aFilterName; }
     const WildCard& GetWildcard() const { return aWildCard; }
     const String&   GetRealTypeName() const { return aTypeName; }

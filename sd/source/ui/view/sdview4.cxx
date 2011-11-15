@@ -412,7 +412,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
 
                 if( pFoundFilter && !nErr )
                 {
-                    ::std::vector< String > aFilterVector;
+                    ::std::vector< ::rtl::OUString > aFilterVector;
                     const String            aFilterName( pFoundFilter->GetFilterName() );
                     String                  aLowerAsciiFileName( aCurrentDropFile );
                     aLowerAsciiFileName.ToLowerAscii();

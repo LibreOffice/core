@@ -1103,7 +1103,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
 
     if(!pSfxFlt)
         return 0;
-    String sMimeType = pSfxFlt->GetMimeType();
+    ::rtl::OUString sMimeType = pSfxFlt->GetMimeType();
 
     if(!m_aSubjectED.GetText().Len())
     {
