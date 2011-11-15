@@ -177,52 +177,6 @@ void ScRangeManagerTable::UpdateEntries()
     }
 }
 
-//undo
-//
-ScNameManagerUndo::~ScNameManagerUndo()
-{
-
-}
-
-void ScNameManagerUndo::Undo()
-{
-    //should never be called
-}
-
-ScNameManagerUndoAdd::~ScNameManagerUndoAdd()
-{
-    delete mpData;
-}
-
-void ScNameManagerUndoAdd::Undo()
-{
-    mpRangeName->erase(*mpData);
-}
-
-ScNameManagerUndoDelete::~ScNameManagerUndoDelete()
-{
-    delete mpData;
-}
-
-void ScNameManagerUndoDelete::Undo()
-{
-    mpRangeName->insert(mpData);
-    mpData = NULL;
-}
-
-ScNameManagerUndoModify::~ScNameManagerUndoModify()
-{
-    delete mpOldData;
-    delete mpNewData;
-}
-
-void ScNameManagerUndoModify::Undo()
-{
-    mpNewRangeName->erase(*mpNewData);
-    mpOldRangeName->insert(mpOldData);//takes ownership
-    mpOldData = NULL;
-}
-
 //logic
 
 #define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute();
@@ -271,12 +225,6 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 ScNameDlg::~ScNameDlg()
 {
     delete mpRangeManagerTable;
-    //need to delete undo stack here
-    while (!maUndoStack.empty())
-    {
-        delete maUndoStack.top();
-        maUndoStack.pop();
-    }
 }
 
 void ScNameDlg::Init()
@@ -461,7 +409,6 @@ bool ScNameDlg::AddPushed()
         {
             maEdName.SetText(EMPTY_STRING);
             maBtnAdd.Disable();
-            maUndoStack.push( new ScNameManagerUndoAdd( pRangeName, new ScRangeData(*pNewEntry) ));
             UpdateNames();
             SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
         }
@@ -495,7 +442,6 @@ void ScNameDlg::RemovePushed()
         if (RET_YES ==
                 QueryBox( this, WinBits( WB_YES_NO | WB_DEF_YES ), aMsg.makeStringAndClear() ).Execute() )
         {
-            maUndoStack.push( new ScNameManagerUndoDelete( pRangeName, new ScRangeData(*pData) ));
             pRangeName->erase(*pData);
             UpdateNames();
             SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
@@ -541,87 +487,9 @@ void ScNameDlg::SelectionChanged()
     maBtnDelete.Enable();
 }
 
-void ScNameDlg::BackPushed()
-{
-    ScNameManagerUndo* aUndo = maUndoStack.top();
-    aUndo->Undo();
-    delete aUndo;
-    maUndoStack.pop();
-    UpdateNames();
-    NameModified();
-}
-
 void ScNameDlg::ScopeChanged()
 {
     NameModified();
-}
-
-void ScNameDlg::ModifiedPushed()
-{
-    if (!mpDoc)
-        return;
-
-    rtl::OUString aName = maEdName.GetText();
-    aName = aName.trim();
-    if (!aName.getLength())
-        return;
-
-    if (!ScRangeData::IsNameValid( aName, mpDoc ))
-    {
-        ERRORBOX( ScGlobal::GetRscString(STR_INVALIDNAME));
-        return;
-    }
-
-    rtl::OUString aNewExpr = maEdAssign.GetText();
-    rtl::OUString aNewScope = maLbScope.GetSelectEntry();
-    ScRangeName* pNewRangeName = GetRangeName(aNewScope, mpDoc);
-
-    ScRangeNameLine aLine;
-    mpRangeManagerTable->GetCurrentLine(aLine);
-    if (!aLine.aName.getLength()) //no line selected
-        return;
-    ScRangeName* pOldRangeName = GetRangeName(aLine.aScope, mpDoc);
-
-
-
-    rtl::OUString aScope = maLbScope.GetSelectEntry();
-    rtl::OUString aExpr = maEdAssign.GetText();
-
-    RangeType nType = RT_NAME |
-         (maBtnRowHeader.IsChecked() ? RT_ROWHEADER : RangeType(0))
-        |(maBtnColHeader.IsChecked() ? RT_COLHEADER : RangeType(0))
-        |(maBtnPrintArea.IsChecked() ? RT_PRINTAREA : RangeType(0))
-        |(maBtnCriteria.IsChecked()  ? RT_CRITERIA  : RangeType(0));
-
-    ScRangeData* pNewEntry = new ScRangeData( mpDoc, aName, aExpr,
-                                            maCursorPos, nType);
-    if ( 0 == pNewEntry->GetErrCode() )
-    {
-        ScRangeData* pData = pOldRangeName->findByName(aLine.aName);
-        ScRangeData* pTemp = new ScRangeData(*pData);
-        pOldRangeName->erase(*pData);
-        if (!pNewRangeName->insert( pNewEntry))
-        {
-            pOldRangeName->insert(pTemp);
-            pTemp = NULL;
-            pNewEntry = NULL;
-            ERRORBOX( maErrMsgModifiedFailed );
-        }
-        else
-        {
-            maEdName.SetText(EMPTY_STRING);
-            maBtnAdd.Disable();
-            maBtnDelete.Disable();
-            maUndoStack.push( new ScNameManagerUndoModify( pOldRangeName, new ScRangeData(*pTemp), pNewRangeName, new ScRangeData(*pNewEntry) ));
-            UpdateNames();
-        }
-        delete pTemp;
-    }
-    else
-    {
-        delete pNewEntry;
-        ERRORBOX( mErrMsgInvalidSym );
-    }
 }
 
 namespace {
@@ -661,13 +529,6 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
     return AddPushed();
 }
 
-IMPL_LINK( ScNameDlg, ModifyBtnHdl, void *, EMPTYARG )
-{
-    ModifiedPushed();
-    return 0;
-}
-
-
 IMPL_LINK( ScNameDlg, RemoveBtnHdl, void *, EMPTYARG )
 {
     RemovePushed();
@@ -689,12 +550,6 @@ IMPL_LINK( ScNameDlg, AssignGetFocusHdl, void *, EMPTYARG )
 IMPL_LINK( ScNameDlg, SelectionChangedHdl_Impl, void *, EMPTYARG )
 {
     SelectionChanged();
-    return 0;
-}
-
-IMPL_LINK( ScNameDlg, BackBtnHdl, void*, EMPTYARG )
-{
-    BackPushed();
     return 0;
 }
 

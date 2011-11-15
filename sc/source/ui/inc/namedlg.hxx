@@ -85,50 +85,6 @@ public:
         Control( pParent, rResId) {}
 };
 
-//Undo Stack
-class ScNameManagerUndo
-{
-protected:
-public:
-    virtual ~ScNameManagerUndo();
-    virtual void Undo();
-};
-
-class ScNameManagerUndoAdd : public ScNameManagerUndo
-{
-    ScRangeData* mpData;
-    ScRangeName* mpRangeName;
-public:
-    ScNameManagerUndoAdd(ScRangeName* pRangeName, ScRangeData* pData):
-        mpData(pData), mpRangeName(pRangeName) {}
-    virtual ~ScNameManagerUndoAdd();
-    virtual void Undo();
-};
-
-class ScNameManagerUndoDelete : public ScNameManagerUndo
-{
-    ScRangeData* mpData;
-    ScRangeName* mpRangeName;
-public:
-    ScNameManagerUndoDelete(ScRangeName* pRangeName, ScRangeData* pData):
-        mpData(pData), mpRangeName(pRangeName) {}
-    virtual ~ScNameManagerUndoDelete();
-    virtual void Undo();
-};
-
-class ScNameManagerUndoModify : public ScNameManagerUndo
-{
-    ScRangeData* mpOldData;
-    ScRangeData* mpNewData;
-    ScRangeName* mpOldRangeName;
-    ScRangeName* mpNewRangeName;
-public:
-    ScNameManagerUndoModify(ScRangeName* pOldRangeName, ScRangeData* pOldData, ScRangeName* pNewRangeName, ScRangeData* pNewData):
-        mpOldData(pOldData), mpNewData(pNewData), mpOldRangeName(pOldRangeName), mpNewRangeName(pNewRangeName) {}
-    virtual ~ScNameManagerUndoModify();
-    virtual void Undo();
-};
-
 //==================================================================
 
 //logic behind the manage names dialog
@@ -168,8 +124,6 @@ private:
     const ScAddress maCursorPos;
     Selection       maCurSel;
 
-    std::stack<ScNameManagerUndo*> maUndoStack;
-
 private:
     void Init();
     void UpdateChecks(ScRangeData* pData);
@@ -181,11 +135,9 @@ private:
     bool AddPushed();
     void RemovePushed();
     void OKPushed();
-    void ModifiedPushed();
     void NameSelected();
     void ScopeChanged();
     void NameModified();
-    void BackPushed();
     void MorePushed();
 
     void SelectionChanged();
@@ -193,12 +145,10 @@ private:
     // Handler:
     DECL_LINK( CloseBtnHdl, void * );
     DECL_LINK( AddBtnHdl, void * );
-    DECL_LINK( ModifyBtnHdl, void * );
     DECL_LINK( RemoveBtnHdl, void * );
     DECL_LINK( EdModifyHdl, void * );
     DECL_LINK( AssignGetFocusHdl, void * );
     DECL_LINK( SelectionChangedHdl_Impl, void* );
-    DECL_LINK( BackBtnHdl, void * );
     DECL_LINK( ScopeChangedHdl, void* );
     DECL_LINK( MoreBtnHdl, void* );
 
