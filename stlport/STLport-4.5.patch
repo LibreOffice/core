@@ -300,7 +300,7 @@
 + 
 --- misc/STLport-4.5/src/gcc-3.0-os2.def	2008-11-26 12:40:40.000000000 +0100
 +++ misc/build/STLport-4.5/src/gcc-3.0-os2.def	2008-10-10 15:05:36.000000000 +0200
-@@ -1 +1,40 @@
+@@ -1 +1,42 @@
 -dummy
 +LIBRARY stlp45 INITINSTANCE TERMINSTANCE
 +DATA MULTIPLE
@@ -342,6 +342,8 @@
 +
 +;comphelper
 +__ZTVN4_STL13runtime_errorE
++;sw
++__ZN4_STL10_Sl_globalIbE10__previousEPNS_16_Slist_node_baseEPKS2_
 --- misc/STLport-4.5/src/gcc-3.0-os2.mak	2008-11-26 12:40:40.000000000 +0100
 +++ misc/build/STLport-4.5/src/gcc-3.0-os2.mak	2008-11-03 15:56:24.000000000 +0100
 @@ -1 +1,79 @@
@@ -367,7 +369,7 @@
 +#
 +#
 +LINK=emxomfar cr
-+DYN_LINK=$(CXX) -Zlinker "DISABLE 1121" -Zomf -Zmap -Zhigh-mem -Zbin-files -Zdll gcc-3.0-os2.def -o
++DYN_LINK=$(CXX) -g -Zlinker "DISABLE 1121" -Zomf -Zmap -Zhigh-mem -Zdll gcc-3.0-os2.def -o
 +
 +OBJEXT=o
 +DYNEXT=so
@@ -379,8 +381,8 @@
 +COMP=GCC$(ARCH)
 +INSTALL_STEP = install_unix 
 +LN_S = cp
-+LDLIBS_RELEASE_dynamic = -lgcc_eh
-+LDLIBS_RELEASE_static = -lgcc_eh
++LDLIBS_RELEASE_dynamic = -lstdc444 -lgcc_eh
++LDLIBS_RELEASE_static = -lstdc444 -lgcc_eh
 +
 +#all_static symbolic_links 
 +all: all_dynamic all_import
@@ -393,8 +395,8 @@
 +CXXFLAGS_COMMON = -Zomf -D_REENTRANT -DGXX_INCLUDE_PATH=${GXX_INCLUDE_PATH} -fexceptions -I${STLPORT_DIR} ${WARNING_FLAGS} ${ARCH_FLAGS}
 +CFLAGS_COMMON = -Zomf -D_REENTRANT -DGXX_INCLUDE_PATH=${GXX_INCLUDE_PATH} -fexceptions -I${STLPORT_DIR} ${WARNING_FLAGS} ${ARCH_FLAGS}
 +
-+CXXFLAGS_RELEASE_static = $(CXXFLAGS_COMMON) -DSTL_OS2_BUILDING -O3 -march=pentium -mtune=pentium4
-+CXXFLAGS_RELEASE_dynamic = $(CXXFLAGS_COMMON) -DSTL_OS2_BUILDING -O3 -march=pentium -mtune=pentium4
++CXXFLAGS_RELEASE_static = $(CXXFLAGS_COMMON) -g -DOS2 -DSTL_OS2_BUILDING -O3 -march=pentium -mtune=pentium4
++CXXFLAGS_RELEASE_dynamic = $(CXXFLAGS_COMMON) -g -DOS2 -DSTL_OS2_BUILDING -O3 -march=pentium -mtune=pentium4
 +
 +CXXFLAGS_DEBUG_static = $(CXXFLAGS_COMMON) -g
 +CXXFLAGS_DEBUG_dynamic = $(CXXFLAGS_COMMON) -g
@@ -1045,3 +1047,45 @@
  # elif defined (__FreeBSD__)
  
  # define _Locale_CNTRL _CTYPE_C
+--- misc/STLport-4.5/stlport/stl/_iosfwd.h	2001-03-28 03:19:00.000000000 +0200
++++ misc/build/STLport-4.5/stlport/stl/_iosfwd.h	2011-11-15 18:03:16.000000000 +0100
+@@ -100,21 +100,39 @@
+ template <class _CharT> class collate;
+ template <class _CharT> class collate_byname;
+ 
++#ifdef OS2
++_STLP_TEMPLATE_NULL class ctype<char>;
++_STLP_TEMPLATE_NULL class ctype_byname<char>;
++_STLP_TEMPLATE_NULL class collate<char>;
++_STLP_TEMPLATE_NULL class collate_byname<char>;
++#else
+ _STLP_TEMPLATE_NULL class _STLP_CLASS_DECLSPEC ctype<char>;
+ _STLP_TEMPLATE_NULL class _STLP_CLASS_DECLSPEC ctype_byname<char>;
+ _STLP_TEMPLATE_NULL class _STLP_CLASS_DECLSPEC collate<char>;
+ _STLP_TEMPLATE_NULL class _STLP_CLASS_DECLSPEC collate_byname<char>;
++#endif
+ 
+ #  ifndef _STLP_NO_WCHAR_T
++#ifdef OS2
++_STLP_TEMPLATE_NULL class ctype<wchar_t>;
++_STLP_TEMPLATE_NULL class ctype_byname<wchar_t>;
++_STLP_TEMPLATE_NULL class collate<wchar_t>;
++_STLP_TEMPLATE_NULL class collate_byname<wchar_t>;
++#else
+ _STLP_TEMPLATE_NULL class _STLP_CLASS_DECLSPEC ctype<wchar_t>;
+ _STLP_TEMPLATE_NULL class _STLP_CLASS_DECLSPEC ctype_byname<wchar_t>;
+ _STLP_TEMPLATE_NULL class _STLP_CLASS_DECLSPEC collate<wchar_t>;
+ _STLP_TEMPLATE_NULL class _STLP_CLASS_DECLSPEC collate_byname<wchar_t>;
++#endif
+ #  endif
+ 
+ # if !(defined (__SUNPRO_CC) && __SUNPRO_CC < 0x500 )
+ // Typedefs for ordinary (narrow-character) streams.
++#ifdef OS2
++_STLP_TEMPLATE_NULL class basic_streambuf<char, char_traits<char> >;
++#else
+ _STLP_TEMPLATE_NULL class _STLP_CLASS_DECLSPEC basic_streambuf<char, char_traits<char> >;
++#endif
+ # endif
+ 
+ typedef basic_istream<char, char_traits<char> >   istream;

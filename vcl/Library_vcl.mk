@@ -263,12 +263,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/os2/source/window/salobj \
 ))
 
-ifeq ($(gb_DEBUGLEVEL),2)
-$(eval $(call gb_Library_add_cobjects,vcl,\
-    vcl/os2/source/app/printf \
-))
-endif
-
 $(eval $(call gb_Library_add_nativeres,vcl,src))
 
 endif

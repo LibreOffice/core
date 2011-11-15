@@ -33,6 +33,13 @@ TARGETTYPE=GUI
 
 ENABLE_EXCEPTIONS=TRUE
 
+.IF "$(GUI)" == "OS2"
+
+@all:
+    @echo "Skipping, cppunit broken."
+
+.ELSE
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -130,3 +137,5 @@ SLOFILES=$(SHL1OBJS)
 .IF "$(L10N_framework)"==""
 .INCLUDE : _cppunit.mk
 .ENDIF
+
+.ENDIF # "$(GUI)" == "OS2"

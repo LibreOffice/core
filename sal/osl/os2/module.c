@@ -99,7 +99,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
             _makepath( buffer, drive, dir, fname, ext);
 
 #if OSL_DEBUG_LEVEL>0
-            debug_printf("osl_loadModule module %s\n", buffer);
+            debug_printf("osl_loadModule module %s", buffer);
 #endif
             //rc = _DosLoadModule( szErrorMessage, sizeof( szErrorMessage), (PCSZ)buffer, &hModule);
         //if (rc == NO_ERROR )

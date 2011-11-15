@@ -2864,6 +2864,8 @@ oslFileError osl_removeDirectory( rtl_uString* ustrDirectoryURL )
 int path_make_parent(sal_Unicode* path)
 {
     int i = rtl_ustr_lastIndexOfChar(path, '/');
+    if (i == -1)
+        i = rtl_ustr_lastIndexOfChar(path, '\\');
 
     if (i > 0)
     {

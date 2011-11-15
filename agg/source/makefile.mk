@@ -68,6 +68,9 @@ SLOFILES= \
         $(SLO)$/agg_vpgen_clip_polyline.obj		\
         $(SLO)$/agg_vpgen_segmentator.obj
 
+.IF "$(GUI)" == "OS2"
+SHL1OBJS = $(SLOFILES)
+.ENDIF
 SHL1TARGET = $(TARGET)$(DLLPOSTFIX)
 SHL1IMPLIB = i$(TARGET)
 SHL1LIBS = $(SLB)$/$(TARGET).lib

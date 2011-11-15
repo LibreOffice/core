@@ -34,7 +34,7 @@ mkdir: %_DEST%\bin%_EXT%\help\com\sun\star\help
 ..\%__SRC%\bin\HelpCompiler %_DEST%\bin%_EXT%\HelpCompiler
 ..\%__SRC%\bin\HelpCompiler.exe %_DEST%\bin%_EXT%\HelpCompiler.exe
 ..\%__SRC%\bin\HelpLinker.exe %_DEST%\bin%_EXT%\HelpLinker.exe
-..\%__SRC%\bin\HelpLinker* %_DEST%\bin%_EXT%
+..\%__SRC%\bin\HelpLink* %_DEST%\bin%_EXT%
 
 ..\%__SRC%\class\converter\converter.jar %_DEST%\bin%_EXT%\converter.jar
 ..\%__SRC%\doc\converter_javadoc.zip %_DEST%\bin%_EXT%\converter_javadoc.zip
