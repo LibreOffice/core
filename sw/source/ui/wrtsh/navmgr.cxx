@@ -35,6 +35,10 @@
 #include <cmdid.h>
 #include <view.hxx>
 
+#include <com/sun/star/frame/XLayoutManager.hpp>
+
+namespace css = ::com::sun::star;
+
 /**
  * If SMART is defined, the navigation history has recency with temporal ordering enhancement,
  * as described on http://zing.ncsl.nist.gov/hfweb/proceedings/greenberg/
@@ -219,6 +223,31 @@ bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
         _pMyShell->GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_BACK);
     if (bForwardWasEnabled)
         _pMyShell->GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_FORWARD);
+
+    /* show the Navigation toolbar */
+    css::uno::Reference< css::frame::XFrame > xFrame = _pMyShell->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
+    if (xFrame.is())
+    {
+        css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
+        if (xPropSet.is())
+        {
+            css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+            css::uno::Any aValue = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) );
+
+            aValue >>= xLayoutManager;
+            if (xLayoutManager.is())
+            {
+                const ::rtl::OUString sResourceURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/navigationobjectbar" ) );
+                css::uno::Reference< css::ui::XUIElement > xUIElement = xLayoutManager->getElement(sResourceURL);
+                if (!xUIElement.is())
+                {
+                    xLayoutManager->createElement( sResourceURL );
+                    xLayoutManager->showElement( sResourceURL );
+                }
+            }
+        }
+    }
+
     return bRet;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
