@@ -185,7 +185,7 @@ void ScColBar::SelectWindow()
 {
     ScTabViewShell* pViewSh = pViewData->GetViewShell();
 
-    pViewSh->SetActive();           // Appear und SetViewFrame
+    pViewSh->SetActive();           // Appear and SetViewFrame
     pViewSh->DrawDeselectAll();
 
     ScSplitPos eActive = pViewData->GetActivePart();
@@ -350,7 +350,7 @@ void ScRowBar::SelectWindow()
 {
     ScTabViewShell* pViewSh = pViewData->GetViewShell();
 
-    pViewSh->SetActive();           // Appear und SetViewFrame
+    pViewSh->SetActive();           // Appear and SetViewFrame
     pViewSh->DrawDeselectAll();
 
     ScSplitPos eActive = pViewData->GetActivePart();
@@ -398,9 +398,7 @@ String ScRowBar::GetDragHelp( long nVal )
     return lcl_MetricString( nTwips, ScGlobal::GetRscString(STR_TIP_HEIGHT) );
 }
 
-//  GetHiddenCount ist nur fuer Zeilen ueberladen
-
-SCROW ScRowBar::GetHiddenCount( SCROW nEntryNo )
+SCROW ScRowBar::GetHiddenCount( SCROW nEntryNo )   // overloaded only for rows
 {
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();

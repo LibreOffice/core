@@ -64,7 +64,7 @@ ScDBFunc::~ScDBFunc()
 }
 
 //
-//      Hilfsfunktionen
+//      auxiliary functions
 //
 
 void ScDBFunc::GotoDBArea( const ::rtl::OUString& rDBName )
@@ -92,7 +92,7 @@ void ScDBFunc::GotoDBArea( const ::rtl::OUString& rDBName )
     }
 }
 
-//  aktuellen Datenbereich fuer Sortieren / Filtern suchen
+//  get actual datarange for sort / filter search
 
 ScDBData* ScDBFunc::GetDBData( bool bMark, ScGetDBMode eMode, ScGetDBSelection eSel )
 {
@@ -210,7 +210,7 @@ ScDBData* ScDBFunc::GetAnonymousDBData()
     return pDocSh->GetAnonymousDBData(aRange);
 }
 
-//  Datenbankbereiche aendern (Dialog)
+//  change database range (dialog)
 
 void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const std::vector<ScRange> &rDelAreaList )
 {
@@ -226,7 +226,7 @@ void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const std::
     std::vector<ScRange>::const_iterator iter;
     for (iter = rDelAreaList.begin(); iter != rDelAreaList.end(); ++iter)
     {
-        //  Targets am SBA abmelden nicht mehr noetig
+        //  register target in SBA no longer necessary
         const ScAddress& rStart = iter->aStart;
         const ScAddress& rEnd   = iter->aEnd;
         pDocShell->DBAreaDeleted( rStart.Tab(),
@@ -238,7 +238,7 @@ void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const std::
     if (bRecord)
         pUndoColl = new ScDBCollection( *pOldColl );
 
-    //  neue Targets am SBA anmelden nicht mehr noetig
+    //  register target in SBA no longer necessary
 
     pDoc->CompileDBFormula( sal_True );     // CreateFormulaString
     pDoc->SetDBCollection( new ScDBCollection( rNewColl ) );
@@ -257,10 +257,10 @@ void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const std::
 }
 
 //
-//      wirkliche Funktionen
+//      main functions
 //
 
-// Sortieren
+// Sort
 
 void ScDBFunc::UISort( const ScSortParam& rSortParam, sal_Bool bRecord )
 {
@@ -271,7 +271,7 @@ void ScDBFunc::UISort( const ScSortParam& rSortParam, sal_Bool bRecord )
                                                     rSortParam.nCol2, rSortParam.nRow2 );
     if (!pDBData)
     {
-        OSL_FAIL( "Sort: keine DBData" );
+        OSL_FAIL( "Sort: no DBData" );
         return;
     }
 
@@ -279,13 +279,13 @@ void ScDBFunc::UISort( const ScSortParam& rSortParam, sal_Bool bRecord )
     pDBData->GetSubTotalParam( aSubTotalParam );
     if (aSubTotalParam.bGroupActive[0] && !aSubTotalParam.bRemoveOnly)
     {
-        //  Subtotals wiederholen, mit neuer Sortierung
+        //  repeat subtotals, with new sortorder
 
         DoSubTotals( aSubTotalParam, bRecord, &rSortParam );
     }
     else
     {
-        Sort( rSortParam, bRecord );        // nur sortieren
+        Sort( rSortParam, bRecord );        // just sort
     }
 }
 
@@ -297,7 +297,7 @@ void ScDBFunc::Sort( const ScSortParam& rSortParam, sal_Bool bRecord, sal_Bool b
     sal_Bool bSuccess = aDBDocFunc.Sort( nTab, rSortParam, bRecord, bPaint, false );
     if ( bSuccess && !rSortParam.bInplace )
     {
-        //  Ziel markieren
+        //  mark target
         ScRange aDestRange( rSortParam.nDestCol, rSortParam.nDestRow, rSortParam.nDestTab,
                             rSortParam.nDestCol + rSortParam.nCol2 - rSortParam.nCol1,
                             rSortParam.nDestRow + rSortParam.nRow2 - rSortParam.nRow1,
@@ -306,7 +306,7 @@ void ScDBFunc::Sort( const ScSortParam& rSortParam, sal_Bool bRecord, sal_Bool b
     }
 }
 
-//  Filtern
+//  filters
 
 void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource, sal_Bool bRecord )
 {
@@ -320,7 +320,7 @@ void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource
         sal_Bool bCopy = !rQueryParam.bInplace;
         if (bCopy)
         {
-            //  Zielbereich markieren (DB-Bereich wurde ggf. angelegt)
+            //  mark target range (data base  range has been set up if applicable)
             ScDocument* pDoc = pDocSh->GetDocument();
             ScDBData* pDestData = pDoc->GetDBAtCursor(
                                             rQueryParam.nDestCol, rQueryParam.nDestRow,
@@ -343,7 +343,7 @@ void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource
     }
 }
 
-//  Autofilter-Knoepfe ein-/ausblenden
+//  autofilter-buttons show / hide
 
 void ScDBFunc::ToggleAutoFilter()
 {
@@ -354,7 +354,7 @@ void ScDBFunc::ToggleAutoFilter()
     ScDocument*     pDoc    = GetViewData()->GetDocument();
     ScDBData*       pDBData = GetDBData(false, SC_DB_MAKE, SC_DBSEL_ROW_DOWN);
 
-    pDBData->SetByRow( sal_True );              //! Undo, vorher abfragen ??
+    pDBData->SetByRow( sal_True );              //! undo, retrieve beforehand ??
     pDBData->GetQueryParam( aParam );
 
 
@@ -366,7 +366,7 @@ void ScDBFunc::ToggleAutoFilter()
     sal_Bool    bHeader  = pDBData->HasHeader();
     sal_Bool    bPaint   = false;
 
-    //!     stattdessen aus DB-Bereich abfragen?
+    //!     instead retrieve from DB-range?
 
     for (nCol=aParam.nCol1; nCol<=aParam.nCol2 && bHasAuto; nCol++)
     {
@@ -377,9 +377,9 @@ void ScDBFunc::ToggleAutoFilter()
             bHasAuto = false;
     }
 
-    if (bHasAuto)                               // aufheben
+    if (bHasAuto)                               // remove
     {
-        //  Filterknoepfe ausblenden
+        //  hide filter buttons
 
         for (nCol=aParam.nCol1; nCol<=aParam.nCol2; nCol++)
         {
@@ -400,7 +400,7 @@ void ScDBFunc::ToggleAutoFilter()
 
         pDBData->SetAutoFilter(false);
 
-        //  Filter aufheben (incl. Paint / Undo)
+        //  remove filter (incl. Paint / Undo)
 
         SCSIZE nEC = aParam.GetEntryCount();
         for (SCSIZE i=0; i<nEC; i++)
@@ -412,7 +412,7 @@ void ScDBFunc::ToggleAutoFilter()
 
         bPaint = sal_True;
     }
-    else                                    // Filterknoepfe einblenden
+    else                                    // show filter buttons
     {
         if ( !pDoc->IsBlockEmpty( nTab,
                                   aParam.nCol1, aParam.nRow1,
@@ -422,7 +422,7 @@ void ScDBFunc::ToggleAutoFilter()
             {
                 if ( MessBox( GetViewData()->GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                         ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),       // "StarCalc"
-                        ScGlobal::GetRscString( STR_MSSG_MAKEAUTOFILTER_0 )     // Koepfe aus erster Zeile?
+                        ScGlobal::GetRscString( STR_MSSG_MAKEAUTOFILTER_0 )     // header from first cell?
                     ).Execute() == RET_YES )
                 {
                     pDBData->SetHeader( sal_True );     //! Undo ??
@@ -465,7 +465,7 @@ void ScDBFunc::ToggleAutoFilter()
     }
 }
 
-//      nur ausblenden, keine Daten veraendern
+//      just hide, no data change
 
 void ScDBFunc::HideAutoFilter()
 {

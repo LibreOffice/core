@@ -119,7 +119,7 @@ void ScAuditingShell::Execute( SfxRequest& rReq )
                       && pReqArgs->GetItemState( SID_RANGE_ROW, sal_True, &pYItem ) == SFX_ITEM_SET )
                     {
                         OSL_ENSURE( pXItem->ISA(SfxInt16Item) && pYItem->ISA(SfxInt32Item),
-                                        "falsche Items" );
+                                        "wrong items" );
                         SCsCOL nCol = static_cast<SCsCOL>(((const SfxInt16Item*) pXItem)->GetValue());
                         SCsROW nRow = static_cast<SCsROW>(((const SfxInt32Item*) pYItem)->GetValue());
                         ScViewFunc* pView = pViewData->GetView();

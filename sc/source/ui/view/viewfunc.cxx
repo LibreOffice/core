@@ -2769,7 +2769,7 @@ void ScViewFunc::ChangeNumFmtDecimals( sal_Bool bIncrement )
     const SvNumberformat* pOldEntry = pFormatter->GetEntry( nOldFormat );
     if (!pOldEntry)
     {
-        OSL_FAIL("Zahlformat nicht gefunden !!!");
+        OSL_FAIL("numberformat not found !!!");
         return;
     }
 
@@ -2850,7 +2850,7 @@ void ScViewFunc::ChangeNumFmtDecimals( sal_Bool bIncrement )
             short nNewType = 0;
             sal_Bool bOk = pFormatter->PutEntry( aNewPicture, nErrPos,
                                                 nNewType, nNewFormat, eLanguage );
-            OSL_ENSURE( bOk, "falsches Zahlformat generiert" );
+            OSL_ENSURE( bOk, "incorrect numberformat generated" );
             if (!bOk)
                 bError = sal_True;
         }
