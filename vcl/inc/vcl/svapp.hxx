@@ -33,7 +33,6 @@
 #include <osl/mutex.hxx>
 #include <tools/string.hxx>
 #include <tools/link.hxx>
-#include <tools/unqid.hxx>
 #include <vcl/sv.h>
 #include <vcl/dllapi.h>
 #include <vcl/apptypes.hxx>
@@ -310,8 +309,6 @@ public:
     static sal_uInt16               GetSystemWindowMode();
 
     static void                 SetDialogScaleX( short nScale );
-
-    static UniqueItemId         CreateUniqueId();
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayConnection > GetDisplayConnection();
 

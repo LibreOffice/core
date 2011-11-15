@@ -33,7 +33,6 @@
 #include <tools/globname.hxx>
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
-#include <tools/unqid.hxx>
 #include <tools/string.hxx>
 
 class SvStringHashEntry;

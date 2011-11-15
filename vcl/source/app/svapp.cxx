@@ -1569,17 +1569,6 @@ sal_uInt16 Application::GetSystemWindowMode()
 
 // -----------------------------------------------------------------------
 
-UniqueItemId Application::CreateUniqueId()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-
-    if ( !pSVData->maAppData.mpUniqueIdCont )
-        pSVData->maAppData.mpUniqueIdCont = new UniqueIdContainer( UNIQUEID_SV_BEGIN );
-    return pSVData->maAppData.mpUniqueIdCont->CreateId();
-}
-
-// -----------------------------------------------------------------------
-
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > Application::GetVCLToolkit()
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > xT;

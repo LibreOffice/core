@@ -103,7 +103,6 @@
 #include <sfx2/shell.hxx>
 #include <vcl/window.hxx>
 #include <vcl/group.hxx>
-#include <tools/unqid.hxx>
 #include <tools/table.hxx>
 #include <svl/itemset.hxx>
 #include <vcl/dialog.hxx>

@@ -128,7 +128,6 @@
 #include <basic/sbxcore.hxx>
 #include <basic/sbxprop.hxx>
 #include <basic/sbxmeth.hxx>
-#include <tools/unqid.hxx>
 #include <svl/poolitem.hxx>
 #include <svtools/args.hxx>
 #include <smmod.hxx>

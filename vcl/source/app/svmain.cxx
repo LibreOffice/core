@@ -36,7 +36,6 @@
 
 #include "tools/tools.h"
 #include "tools/debug.hxx"
-#include "tools/unqid.hxx"
 #include "tools/resmgr.hxx"
 
 #include "comphelper/processfactory.hxx"
@@ -512,11 +511,6 @@ void DeInitVCL()
     {
         delete pSVData->maAppData.mpAccelMgr;
         pSVData->maAppData.mpAccelMgr = NULL;
-    }
-    if ( pSVData->maAppData.mpUniqueIdCont )
-    {
-        delete pSVData->maAppData.mpUniqueIdCont;
-        pSVData->maAppData.mpUniqueIdCont = NULL;
     }
     if ( pSVData->maAppData.mpAppFileName )
     {

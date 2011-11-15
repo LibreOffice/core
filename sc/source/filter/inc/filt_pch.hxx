@@ -151,7 +151,6 @@
 #include <namebuff.hxx>
 #include <tools/shl.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <tools/unqid.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <uno/sequence2.h>
 #include <com/sun/star/uno/Sequence.hxx>

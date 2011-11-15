@@ -99,7 +99,6 @@
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <rechead.hxx>
-#include <tools/unqid.hxx>
 #include <vcl/apptypes.hxx>
 #include <vcl/vclenum.hxx>
 #include <globstr.hrc>

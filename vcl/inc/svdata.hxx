@@ -150,7 +150,6 @@ struct ImplSVAppData
     String*                 mpFontPath;         // Additional Fontpath
     Help*                   mpHelp;             // Application help
     PopupMenu*              mpActivePopupMenu;  // Actives Popup-Menu (in Execute)
-    UniqueIdContainer*      mpUniqueIdCont;     // Fuer Eindeutige Id's
     ImplIdleMgr*            mpIdleMgr;          // Idle-Manager
     ImplWheelWindow*        mpWheelWindow;      // WheelWindow
     ImplHotKey*             mpFirstHotKey;      // HotKey-Verwaltung

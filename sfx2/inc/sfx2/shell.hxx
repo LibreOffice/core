@@ -36,7 +36,6 @@
 #include <tools/rtti.hxx>
 #include <svl/brdcst.hxx>
 
-#include <tools/unqid.hxx>
 #include <tools/string.hxx>
 
 #include <sfx2/sfxuno.hxx>
