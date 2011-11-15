@@ -55,17 +55,4 @@ $(eval $(call gb_Executable_add_exception_objects,rscdep,\
     tools/bootstrp/rscdep \
 ))
 
-ifeq ($(OS),WNT)
-ifeq ($(HAVE_GETOPT),YES)
-$(eval $(call gb_Executable_set_cxxflags,rscdep,\
-    $$(CXXFLAGS) \
-    -DHAVE_GETOPT \
-))
-else
-$(eval $(call gb_Executable_add_linked_libs,rscdep,\
-    gnu_getopt \
-))
-endif
-endif
-
 # vim: set noet sw=4 ts=4:

@@ -41,16 +41,6 @@
 
 #include "cppdep.hxx"
 
-#if defined WNT
-#if !defined HAVE_GETOPT
-#define __STDC__ 1
-#define __GNU_LIBRARY__
-#include <external/glibc/getopt.h>
-#else
-#include <getopt.h>
-#endif
-#endif
-
 class RscHrcDep : public CppDep
 {
 public:
@@ -78,7 +68,6 @@ void RscHrcDep::Execute()
 
 int main( int argc, char** argv )
 {
-    int c;
     char aBuf[255];
     char pFileNamePrefix[255];
     char pOutputFileName[255];
@@ -89,8 +78,12 @@ int main( int argc, char** argv )
 //  who needs anything but '/' ?
 //  String aDelim = String(DirEntry::GetAccessDelimiter());
     String aDelim = '/';
-
     RscHrcDep *pDep = new RscHrcDep;
+
+    // When the options are processed, the non-option arguments are
+    // collected at the head of the argv array.
+    // nLastNonOption points to the last of them.
+    int nLastNonOption (-1);
 
     pOutputFileName[0] = 0;
     pSrsFileName[0] = 0;
@@ -98,35 +91,83 @@ int main( int argc, char** argv )
     for ( int i=1; i<argc; i++)
     {
         strcpy( aBuf, (const char *)argv[i] );
-        if ( aBuf[0] == '-' && aBuf[1] == 'p' && aBuf[2] == '=' )
+        const sal_Int32 nLength (strlen(aBuf));
+
+        printf("option %d is [%s] and has length %d\n", i, aBuf, nLength);
+
+        if (nLength == 0)
         {
-            strcpy(pFileNamePrefix, &aBuf[3]);
-            //break;
+            // Is this even possible?
+            continue;
         }
-        if ( aBuf[0] == '-' && aBuf[1] == 'f' && aBuf[2] == 'o' && aBuf[3] == '=' )
+        if (aBuf[0] == '-' && nLength > 0)
         {
-            strcpy(pOutputFileName, &aBuf[4]);
-            //break;
+            bool bIsKnownOption (true);
+            // Make a switch on the first character after the - for a
+            // preselection of the option.
+            // This is faster then multiple ifs and improves readability.
+            switch (aBuf[1])
+            {
+                case 'p':
+                    if (nLength>1 && aBuf[2] == '=' )
+                        strcpy(pFileNamePrefix, &aBuf[3]);
+                    else
+                        bIsKnownOption = false;
+                    break;
+
+                case 'f':
+                    if (nLength>2 && aBuf[2] == 'o' && aBuf[3] == '=' )
+                    {
+                        strcpy(pOutputFileName, &aBuf[4]);
+                    }
+                    else if (nLength>2 && aBuf[2] == 'p' && aBuf[3] == '=' )
+                    {
+                        strcpy(pSrsFileName, &aBuf[4]);
+                        String aName( pSrsFileName, gsl_getSystemTextEncoding());
+                        DirEntry aDest( aName );
+                        aSrsBaseName = aDest.GetBase();
+                    }
+                    else
+                        bIsKnownOption = false;
+                    break;
+
+                case 'i':
+                case 'I':
+#ifdef DEBUG_VERBOSE
+                    printf("Include : %s\n", &aBuf[2] );
+#endif
+                    pDep->AddSearchPath( &aBuf[2] );
+                    break;
+
+                case 'h' :
+                case 'H' :
+                case '?' :
+                    printf("RscDep 1.0\n");
+                    break;
+
+                case 'a' :
+#ifdef DEBUG_VERBOSE
+                    printf("option a\n");
+#endif
+                    break;
+
+                case 'l' :
+#ifdef DEBUG_VERBOSE
+                    printf("option l with Value %s\n", &aBuf[2] );
+#endif
+                    pDep->AddSource(&aBuf[2]);
+                    break;
+
+                default:
+                    bIsKnownOption = false;
+                    break;
+            }
+#ifdef DEBUG_VERBOSE
+            if ( ! bIsKnownOption)
+                printf("Unknown option error [%s]\n", aBuf);
+#endif
         }
-        if ( aBuf[0] == '-' && aBuf[1] == 'f' && aBuf[2] == 'p' && aBuf[3] == '=' )
-        {
-            strcpy(pSrsFileName, &aBuf[4]);
-            String aName( pSrsFileName, gsl_getSystemTextEncoding());
-            DirEntry aDest( aName );
-            aSrsBaseName = aDest.GetBase();
-            //break;
-        }
-        if (aBuf[0] == '-' &&  aBuf[1] == 'i' )
-        {
-            //printf("Include : %s\n", &aBuf[2] );
-            pDep->AddSearchPath( &aBuf[2] );
-        }
-        if (aBuf[0] == '-' &&  aBuf[1] == 'I' )
-        {
-            //printf("Include : %s\n", &aBuf[2] );
-            pDep->AddSearchPath( &aBuf[2] );
-        }
-        if (aBuf[0] == '@' )
+        else if (aBuf[0] == '@' )
         {
             ByteString aToken;
             String aRespName( &aBuf[1], gsl_getSystemTextEncoding());
@@ -172,46 +213,13 @@ int main( int argc, char** argv )
                 }
             }
         }
-    }
-
-    while( 1 )
-    {
-        c = getopt( argc, argv,
-        "_abcdefghi:jklmnopqrstuvwxyzABCDEFGHI:JKLMNOPQRSTUVWXYZ1234567890/-+=.\\()\"");
-        if ( c == -1 )
-            break;
-
-        switch( c )
+        else
         {
-            case 0:
-                break;
-            case 'a' :
-#ifdef DEBUG_VERBOSE
-                printf("option a\n");
-#endif
-                break;
-
-            case 'l' :
-#ifdef DEBUG_VERBOSE
-                printf("option l with Value %s\n", optarg );
-#endif
-                pDep->AddSource( optarg );
-                break;
-
-            case 'h' :
-            case 'H' :
-            case '?' :
-                printf("RscDep 1.0\n");
-                break;
-
-            default:
-#ifdef DEBUG_VERBOSE
-                printf("Unknown getopt error\n");
-#endif
-                ;
+            // Collect all non-options at the head of argv.
+            if (++nLastNonOption < i)
+                argv[nLastNonOption] = argv[i];
         }
     }
-
 
     DirEntry aEntry(".");
     aEntry.ToAbs();
@@ -241,8 +249,10 @@ int main( int argc, char** argv )
     //fprintf( stderr, "OutFileName : %s \n",aFileName.GetStr());
     aOutStream.Open( aFileName, STREAM_WRITE );
 
+    // Process the yet unhandled non-options.  These are supposed to
+    // be names of files on which the target depends.
     ByteString aString;
-    if ( optind < argc )
+    if (nLastNonOption >= 0)
     {
 #ifdef DEBUG_VERBOSE
         printf("further arguments : ");
@@ -251,17 +261,14 @@ int main( int argc, char** argv )
         aString.SearchAndReplaceAll('\\', ByteString( aDelim,  RTL_TEXTENCODING_ASCII_US ));
         aString += ByteString(" : " );
 
-        while ( optind < argc )
+        for (sal_Int32 nIndex=0; nIndex<=nLastNonOption; ++nIndex)
         {
+            printf("option at %d is [%s]\n", nIndex, argv[nIndex]);
             if (!bSource )
             {
                 aString += ByteString(" " );
-                aString += ByteString( argv[optind]);
-                pDep->AddSource( argv[optind++]);
-            }
-            else
-            {
-                optind++;
+                aString += ByteString( argv[nIndex]);
+                pDep->AddSource( argv[nIndex]);
             }
         }
     }
