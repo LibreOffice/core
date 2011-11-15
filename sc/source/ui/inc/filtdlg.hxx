@@ -39,6 +39,7 @@
 
 #include <deque>
 #include <vector>
+#include <boost/ptr_container/ptr_map.hpp>
 
 //----------------------------------------------------------------------------
 
@@ -142,7 +143,8 @@ private:
     sal_uInt16          nFieldCount;
     bool                bRefInputMode;
 
-    TypedScStrCollection*   pEntryLists[MAXCOLCOUNT];
+    typedef boost::ptr_map<SCCOL,TypedScStrCollection> EntryListsMap;
+    EntryListsMap maEntryLists;
     sal_uInt16              nHeaderPos[MAXCOLCOUNT];
 
     // Hack: RefInput control
