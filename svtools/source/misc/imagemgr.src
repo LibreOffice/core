@@ -35,7 +35,6 @@
     IMG_IMPRESS ;           \
     IMG_CALC ;              \
     IMG_CALCTEMPLATE ;      \
-    IMG_CHART ;             \
     IMG_IMPRESSTEMPLATE ;   \
     IMG_HTML ;              \
     IMG_MATH ;              \
@@ -51,7 +50,6 @@
     IMG_CALC ; \
     IMG_CALCTEMPLATE ; \
     IMG_CDROMDEV ; \
-    IMG_CHART ; \
     IMG_DATABASE ; \
     IMG_DRAW ; \
     IMG_DRAWTEMPLATE ; \
@@ -74,7 +72,6 @@
     IMG_OO_CALC_TEMPLATE ; \
     IMG_OO_DATABASE_DOC ; \
     IMG_OO_DRAW_DOC ; \
-    IMG_OO_DRAW_TEMPLATE ; \
     IMG_OO_GLOBAL_DOC ; \
     IMG_OO_IMPRESS_DOC ; \
     IMG_OO_IMPRESS_TEMPLATE ; \
