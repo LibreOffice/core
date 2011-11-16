@@ -1360,7 +1360,7 @@ public:
                 }
                 else if ( bMatchWholeCell )
                 {
-                    bOk = mpTransliteration->isEqual(aCellStr, rEntry.GetQueryItem().maString);
+                    bOk = mpTransliteration->isEqual(aCellStr, rItem.maString);
                     if ( rEntry.eOp == SC_NOT_EQUAL )
                         bOk = !bOk;
                 }
@@ -1408,7 +1408,7 @@ public:
             else
             {   // use collator here because data was probably sorted
                 sal_Int32 nCompare = mpCollator->compareString(
-                    aCellStr, rEntry.GetQueryItem().maString);
+                    aCellStr, rItem.maString);
                 switch (rEntry.eOp)
                 {
                     case SC_LESS :
