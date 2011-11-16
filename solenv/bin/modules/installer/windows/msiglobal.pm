@@ -981,6 +981,15 @@ sub create_transforms
     installer::logger::include_header_into_logfile("Creating Transforms");
 
     my $msitran = "msitran.exe";    # Has to be in the path
+    my $msidb = "msidb.exe";    # Has to be in the path
+    my $msiinfo = "msiinfo.exe";    # Has to be in the path
+
+    my $from = cwd();
+
+    my $architecture = "Intel";
+    if (( $allvariableshashref->{'64BITPRODUCT'} ) && ( $allvariableshashref->{'64BITPRODUCT'} == 1 )) { $architecture = "x64"; }
+
+    my $templatevalue = "\"" . $architecture . ";1033";
 
     $installdir = installer::converter::make_path_conform($installdir);
 
@@ -1003,7 +1012,8 @@ sub create_transforms
         my $referencedbname = get_msidatabasename($allvariableshashref, $onelanguage);
         $referencedbname = $installdir . $installer::globals::separator . $referencedbname;
 
-        my $transformfile = $installdir . $installer::globals::separator . "trans_" . $onelanguage . ".mst";
+        my $windowslanguage = installer::windows::language::get_windows_language($onelanguage);
+        my $transformfile = $installdir . $installer::globals::separator .  $windowslanguage;
 
         my $systemcall = $msitran . " " . " -g " . $basedbname . " " . $referencedbname . " " . $transformfile . " " . $errorhandling;
 
@@ -1098,6 +1108,39 @@ sub create_transforms
             push( @installer::globals::logfileinfo, $infoline);
             installer::exiter::exit_program($infoline, "create_transforms");
         }
+
+        chdir($installdir);
+        $systemcall = $msidb . " " . " -d " . $basedbname . " -r " . $windowslanguage;
+        system($systemcall);
+        chdir($from);
+        unlink($transformfile);
+
+        $infoline = "Systemcall: $systemcall\n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+        if ( $windowslanguage ne '1033')
+        {
+            $templatevalue = $templatevalue . "," . $windowslanguage;
+        }
+    }
+
+    $templatevalue = $templatevalue . "\"";                     # adding ending '"'
+    $systemcall = $msiinfo . " " . $basedbname . " -p " . $templatevalue;
+
+    $returnvalue = system($systemcall);
+
+    $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: Could not execute $msiinfo!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: Executed $msiinfo successfully!\n";
+        push( @installer::globals::logfileinfo, $infoline);
     }
 }
 
