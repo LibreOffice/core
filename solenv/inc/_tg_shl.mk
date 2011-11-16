@@ -225,19 +225,6 @@ LINKINCTARGETS+=$(MISC)/$(SHL1TARGETN:b)_linkinc.ls
 $(SHL1TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
-.IF "$(SHL1USE_EXPORTS)"=="name"
-.IF "$(GUI)"=="WNT"
-.IF "$(COM)"!="GCC"
-.IF "$(SHL1LIBS)"!=""
-SHL1LINKLIST=$(MISC)/$(SHL1TARGET)_link.lst
-SHL1LINKLISTPARAM=@$(SHL1LINKLIST)
-$(SHL1LINKLIST) : $(SHL1LIBS)
-    @@-$(RM) $@
-    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL1LIBS) $(i:s/.lib/.lin/)) >> $@
-.ENDIF          # "$(SHL1LIBS)"!=""
-.ENDIF          # "$(COM)"!="GCC"
-.ENDIF
-.ENDIF			# "$(SHL1USE_EXPORTS)"=="name"
 
 $(MISC)/%linkinc.ls:
     @echo . > $@
@@ -254,8 +241,7 @@ $(SHL1TARGETN) : \
                     $(USE_SHL1DEF)\
                     $(USE_SHL1VERSIONMAP)\
                     $(SHL1RES)\
-                    $(SHL1DEPN) \
-                    $(SHL1LINKLIST)
+                    $(SHL1DEPN)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL1DEFAULTRES)"!=""
@@ -395,7 +381,7 @@ $(SHL1TARGETN) : \
         $(USE_1IMPLIB) \
         $(STDOBJ)							\
         $(SHL1OBJS) $(SHL1VERSIONOBJ))   \
-        $(SHL1LINKLISTPARAM) \
+        $(SHL1LIBS) \
         @$(mktmp $(SHL1STDLIBS)                      \
         $(SHL1STDSHL) $(STDSHL1)                           \
         $(SHL1LINKRES) \
@@ -729,19 +715,6 @@ LINKINCTARGETS+=$(MISC)/$(SHL2TARGETN:b)_linkinc.ls
 $(SHL2TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
-.IF "$(SHL2USE_EXPORTS)"=="name"
-.IF "$(GUI)"=="WNT"
-.IF "$(COM)"!="GCC"
-.IF "$(SHL2LIBS)"!=""
-SHL2LINKLIST=$(MISC)/$(SHL2TARGET)_link.lst
-SHL2LINKLISTPARAM=@$(SHL2LINKLIST)
-$(SHL2LINKLIST) : $(SHL2LIBS)
-    @@-$(RM) $@
-    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL2LIBS) $(i:s/.lib/.lin/)) >> $@
-.ENDIF          # "$(SHL2LIBS)"!=""
-.ENDIF          # "$(COM)"!="GCC"
-.ENDIF
-.ENDIF			# "$(SHL2USE_EXPORTS)"=="name"
 
 $(MISC)/%linkinc.ls:
     @echo . > $@
@@ -758,8 +731,7 @@ $(SHL2TARGETN) : \
                     $(USE_SHL2DEF)\
                     $(USE_SHL2VERSIONMAP)\
                     $(SHL2RES)\
-                    $(SHL2DEPN) \
-                    $(SHL2LINKLIST)
+                    $(SHL2DEPN)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL2DEFAULTRES)"!=""
@@ -899,7 +871,7 @@ $(SHL2TARGETN) : \
         $(USE_2IMPLIB) \
         $(STDOBJ)							\
         $(SHL2OBJS) $(SHL2VERSIONOBJ))   \
-        $(SHL2LINKLISTPARAM) \
+        $(SHL2LIBS) \
         @$(mktmp $(SHL2STDLIBS)                      \
         $(SHL2STDSHL) $(STDSHL2)                           \
         $(SHL2LINKRES) \
@@ -1233,19 +1205,6 @@ LINKINCTARGETS+=$(MISC)/$(SHL3TARGETN:b)_linkinc.ls
 $(SHL3TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
-.IF "$(SHL3USE_EXPORTS)"=="name"
-.IF "$(GUI)"=="WNT"
-.IF "$(COM)"!="GCC"
-.IF "$(SHL3LIBS)"!=""
-SHL3LINKLIST=$(MISC)/$(SHL3TARGET)_link.lst
-SHL3LINKLISTPARAM=@$(SHL3LINKLIST)
-$(SHL3LINKLIST) : $(SHL3LIBS)
-    @@-$(RM) $@
-    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL3LIBS) $(i:s/.lib/.lin/)) >> $@
-.ENDIF          # "$(SHL3LIBS)"!=""
-.ENDIF          # "$(COM)"!="GCC"
-.ENDIF
-.ENDIF			# "$(SHL3USE_EXPORTS)"=="name"
 
 $(MISC)/%linkinc.ls:
     @echo . > $@
@@ -1262,8 +1221,7 @@ $(SHL3TARGETN) : \
                     $(USE_SHL3DEF)\
                     $(USE_SHL3VERSIONMAP)\
                     $(SHL3RES)\
-                    $(SHL3DEPN) \
-                    $(SHL3LINKLIST)
+                    $(SHL3DEPN)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL3DEFAULTRES)"!=""
@@ -1403,7 +1361,7 @@ $(SHL3TARGETN) : \
         $(USE_3IMPLIB) \
         $(STDOBJ)							\
         $(SHL3OBJS) $(SHL3VERSIONOBJ))   \
-        $(SHL3LINKLISTPARAM) \
+        $(SHL3LIBS) \
         @$(mktmp $(SHL3STDLIBS)                      \
         $(SHL3STDSHL) $(STDSHL3)                           \
         $(SHL3LINKRES) \
@@ -1737,19 +1695,6 @@ LINKINCTARGETS+=$(MISC)/$(SHL4TARGETN:b)_linkinc.ls
 $(SHL4TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
-.IF "$(SHL4USE_EXPORTS)"=="name"
-.IF "$(GUI)"=="WNT"
-.IF "$(COM)"!="GCC"
-.IF "$(SHL4LIBS)"!=""
-SHL4LINKLIST=$(MISC)/$(SHL4TARGET)_link.lst
-SHL4LINKLISTPARAM=@$(SHL4LINKLIST)
-$(SHL4LINKLIST) : $(SHL4LIBS)
-    @@-$(RM) $@
-    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL4LIBS) $(i:s/.lib/.lin/)) >> $@
-.ENDIF          # "$(SHL4LIBS)"!=""
-.ENDIF          # "$(COM)"!="GCC"
-.ENDIF
-.ENDIF			# "$(SHL4USE_EXPORTS)"=="name"
 
 $(MISC)/%linkinc.ls:
     @echo . > $@
@@ -1766,8 +1711,7 @@ $(SHL4TARGETN) : \
                     $(USE_SHL4DEF)\
                     $(USE_SHL4VERSIONMAP)\
                     $(SHL4RES)\
-                    $(SHL4DEPN) \
-                    $(SHL4LINKLIST)
+                    $(SHL4DEPN)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL4DEFAULTRES)"!=""
@@ -1907,7 +1851,7 @@ $(SHL4TARGETN) : \
         $(USE_4IMPLIB) \
         $(STDOBJ)							\
         $(SHL4OBJS) $(SHL4VERSIONOBJ))   \
-        $(SHL4LINKLISTPARAM) \
+        $(SHL4LIBS) \
         @$(mktmp $(SHL4STDLIBS)                      \
         $(SHL4STDSHL) $(STDSHL4)                           \
         $(SHL4LINKRES) \
@@ -2241,19 +2185,6 @@ LINKINCTARGETS+=$(MISC)/$(SHL5TARGETN:b)_linkinc.ls
 $(SHL5TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
-.IF "$(SHL5USE_EXPORTS)"=="name"
-.IF "$(GUI)"=="WNT"
-.IF "$(COM)"!="GCC"
-.IF "$(SHL5LIBS)"!=""
-SHL5LINKLIST=$(MISC)/$(SHL5TARGET)_link.lst
-SHL5LINKLISTPARAM=@$(SHL5LINKLIST)
-$(SHL5LINKLIST) : $(SHL5LIBS)
-    @@-$(RM) $@
-    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL5LIBS) $(i:s/.lib/.lin/)) >> $@
-.ENDIF          # "$(SHL5LIBS)"!=""
-.ENDIF          # "$(COM)"!="GCC"
-.ENDIF
-.ENDIF			# "$(SHL5USE_EXPORTS)"=="name"
 
 $(MISC)/%linkinc.ls:
     @echo . > $@
@@ -2270,8 +2201,7 @@ $(SHL5TARGETN) : \
                     $(USE_SHL5DEF)\
                     $(USE_SHL5VERSIONMAP)\
                     $(SHL5RES)\
-                    $(SHL5DEPN) \
-                    $(SHL5LINKLIST)
+                    $(SHL5DEPN)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL5DEFAULTRES)"!=""
@@ -2411,7 +2341,7 @@ $(SHL5TARGETN) : \
         $(USE_5IMPLIB) \
         $(STDOBJ)							\
         $(SHL5OBJS) $(SHL5VERSIONOBJ))   \
-        $(SHL5LINKLISTPARAM) \
+        $(SHL5LIBS) \
         @$(mktmp $(SHL5STDLIBS)                      \
         $(SHL5STDSHL) $(STDSHL5)                           \
         $(SHL5LINKRES) \
@@ -2745,19 +2675,6 @@ LINKINCTARGETS+=$(MISC)/$(SHL6TARGETN:b)_linkinc.ls
 $(SHL6TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
-.IF "$(SHL6USE_EXPORTS)"=="name"
-.IF "$(GUI)"=="WNT"
-.IF "$(COM)"!="GCC"
-.IF "$(SHL6LIBS)"!=""
-SHL6LINKLIST=$(MISC)/$(SHL6TARGET)_link.lst
-SHL6LINKLISTPARAM=@$(SHL6LINKLIST)
-$(SHL6LINKLIST) : $(SHL6LIBS)
-    @@-$(RM) $@
-    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL6LIBS) $(i:s/.lib/.lin/)) >> $@
-.ENDIF          # "$(SHL6LIBS)"!=""
-.ENDIF          # "$(COM)"!="GCC"
-.ENDIF
-.ENDIF			# "$(SHL6USE_EXPORTS)"=="name"
 
 $(MISC)/%linkinc.ls:
     @echo . > $@
@@ -2774,8 +2691,7 @@ $(SHL6TARGETN) : \
                     $(USE_SHL6DEF)\
                     $(USE_SHL6VERSIONMAP)\
                     $(SHL6RES)\
-                    $(SHL6DEPN) \
-                    $(SHL6LINKLIST)
+                    $(SHL6DEPN)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL6DEFAULTRES)"!=""
@@ -2915,7 +2831,7 @@ $(SHL6TARGETN) : \
         $(USE_6IMPLIB) \
         $(STDOBJ)							\
         $(SHL6OBJS) $(SHL6VERSIONOBJ))   \
-        $(SHL6LINKLISTPARAM) \
+        $(SHL6LIBS) \
         @$(mktmp $(SHL6STDLIBS)                      \
         $(SHL6STDSHL) $(STDSHL6)                           \
         $(SHL6LINKRES) \
@@ -3249,19 +3165,6 @@ LINKINCTARGETS+=$(MISC)/$(SHL7TARGETN:b)_linkinc.ls
 $(SHL7TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
-.IF "$(SHL7USE_EXPORTS)"=="name"
-.IF "$(GUI)"=="WNT"
-.IF "$(COM)"!="GCC"
-.IF "$(SHL7LIBS)"!=""
-SHL7LINKLIST=$(MISC)/$(SHL7TARGET)_link.lst
-SHL7LINKLISTPARAM=@$(SHL7LINKLIST)
-$(SHL7LINKLIST) : $(SHL7LIBS)
-    @@-$(RM) $@
-    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL7LIBS) $(i:s/.lib/.lin/)) >> $@
-.ENDIF          # "$(SHL7LIBS)"!=""
-.ENDIF          # "$(COM)"!="GCC"
-.ENDIF
-.ENDIF			# "$(SHL7USE_EXPORTS)"=="name"
 
 $(MISC)/%linkinc.ls:
     @echo . > $@
@@ -3278,8 +3181,7 @@ $(SHL7TARGETN) : \
                     $(USE_SHL7DEF)\
                     $(USE_SHL7VERSIONMAP)\
                     $(SHL7RES)\
-                    $(SHL7DEPN) \
-                    $(SHL7LINKLIST)
+                    $(SHL7DEPN)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL7DEFAULTRES)"!=""
@@ -3419,7 +3321,7 @@ $(SHL7TARGETN) : \
         $(USE_7IMPLIB) \
         $(STDOBJ)							\
         $(SHL7OBJS) $(SHL7VERSIONOBJ))   \
-        $(SHL7LINKLISTPARAM) \
+        $(SHL7LIBS) \
         @$(mktmp $(SHL7STDLIBS)                      \
         $(SHL7STDSHL) $(STDSHL7)                           \
         $(SHL7LINKRES) \
@@ -3753,19 +3655,6 @@ LINKINCTARGETS+=$(MISC)/$(SHL8TARGETN:b)_linkinc.ls
 $(SHL8TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
-.IF "$(SHL8USE_EXPORTS)"=="name"
-.IF "$(GUI)"=="WNT"
-.IF "$(COM)"!="GCC"
-.IF "$(SHL8LIBS)"!=""
-SHL8LINKLIST=$(MISC)/$(SHL8TARGET)_link.lst
-SHL8LINKLISTPARAM=@$(SHL8LINKLIST)
-$(SHL8LINKLIST) : $(SHL8LIBS)
-    @@-$(RM) $@
-    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL8LIBS) $(i:s/.lib/.lin/)) >> $@
-.ENDIF          # "$(SHL8LIBS)"!=""
-.ENDIF          # "$(COM)"!="GCC"
-.ENDIF
-.ENDIF			# "$(SHL8USE_EXPORTS)"=="name"
 
 $(MISC)/%linkinc.ls:
     @echo . > $@
@@ -3782,8 +3671,7 @@ $(SHL8TARGETN) : \
                     $(USE_SHL8DEF)\
                     $(USE_SHL8VERSIONMAP)\
                     $(SHL8RES)\
-                    $(SHL8DEPN) \
-                    $(SHL8LINKLIST)
+                    $(SHL8DEPN)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL8DEFAULTRES)"!=""
@@ -3923,7 +3811,7 @@ $(SHL8TARGETN) : \
         $(USE_8IMPLIB) \
         $(STDOBJ)							\
         $(SHL8OBJS) $(SHL8VERSIONOBJ))   \
-        $(SHL8LINKLISTPARAM) \
+        $(SHL8LIBS) \
         @$(mktmp $(SHL8STDLIBS)                      \
         $(SHL8STDSHL) $(STDSHL8)                           \
         $(SHL8LINKRES) \
@@ -4257,19 +4145,6 @@ LINKINCTARGETS+=$(MISC)/$(SHL9TARGETN:b)_linkinc.ls
 $(SHL9TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
-.IF "$(SHL9USE_EXPORTS)"=="name"
-.IF "$(GUI)"=="WNT"
-.IF "$(COM)"!="GCC"
-.IF "$(SHL9LIBS)"!=""
-SHL9LINKLIST=$(MISC)/$(SHL9TARGET)_link.lst
-SHL9LINKLISTPARAM=@$(SHL9LINKLIST)
-$(SHL9LINKLIST) : $(SHL9LIBS)
-    @@-$(RM) $@
-    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL9LIBS) $(i:s/.lib/.lin/)) >> $@
-.ENDIF          # "$(SHL9LIBS)"!=""
-.ENDIF          # "$(COM)"!="GCC"
-.ENDIF
-.ENDIF			# "$(SHL9USE_EXPORTS)"=="name"
 
 $(MISC)/%linkinc.ls:
     @echo . > $@
@@ -4286,8 +4161,7 @@ $(SHL9TARGETN) : \
                     $(USE_SHL9DEF)\
                     $(USE_SHL9VERSIONMAP)\
                     $(SHL9RES)\
-                    $(SHL9DEPN) \
-                    $(SHL9LINKLIST)
+                    $(SHL9DEPN)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL9DEFAULTRES)"!=""
@@ -4427,7 +4301,7 @@ $(SHL9TARGETN) : \
         $(USE_9IMPLIB) \
         $(STDOBJ)							\
         $(SHL9OBJS) $(SHL9VERSIONOBJ))   \
-        $(SHL9LINKLISTPARAM) \
+        $(SHL9LIBS) \
         @$(mktmp $(SHL9STDLIBS)                      \
         $(SHL9STDSHL) $(STDSHL9)                           \
         $(SHL9LINKRES) \
@@ -4761,19 +4635,6 @@ LINKINCTARGETS+=$(MISC)/$(SHL10TARGETN:b)_linkinc.ls
 $(SHL10TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
-.IF "$(SHL10USE_EXPORTS)"=="name"
-.IF "$(GUI)"=="WNT"
-.IF "$(COM)"!="GCC"
-.IF "$(SHL10LIBS)"!=""
-SHL10LINKLIST=$(MISC)/$(SHL10TARGET)_link.lst
-SHL10LINKLISTPARAM=@$(SHL10LINKLIST)
-$(SHL10LINKLIST) : $(SHL10LIBS)
-    @@-$(RM) $@
-    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL10LIBS) $(i:s/.lib/.lin/)) >> $@
-.ENDIF          # "$(SHL10LIBS)"!=""
-.ENDIF          # "$(COM)"!="GCC"
-.ENDIF
-.ENDIF			# "$(SHL10USE_EXPORTS)"=="name"
 
 $(MISC)/%linkinc.ls:
     @echo . > $@
@@ -4790,8 +4651,7 @@ $(SHL10TARGETN) : \
                     $(USE_SHL10DEF)\
                     $(USE_SHL10VERSIONMAP)\
                     $(SHL10RES)\
-                    $(SHL10DEPN) \
-                    $(SHL10LINKLIST)
+                    $(SHL10DEPN)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL10DEFAULTRES)"!=""
@@ -4931,7 +4791,7 @@ $(SHL10TARGETN) : \
         $(USE_10IMPLIB) \
         $(STDOBJ)							\
         $(SHL10OBJS) $(SHL10VERSIONOBJ))   \
-        $(SHL10LINKLISTPARAM) \
+        $(SHL10LIBS) \
         @$(mktmp $(SHL10STDLIBS)                      \
         $(SHL10STDSHL) $(STDSHL10)                           \
         $(SHL10LINKRES) \

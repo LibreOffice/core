@@ -254,19 +254,6 @@ LINKINCTARGETS+=$(MISC)/$(SHL$(TNR)TARGETN:b)_linkinc.ls
 $(SHL$(TNR)TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
-.IF "$(SHL$(TNR)USE_EXPORTS)"=="name"
-.IF "$(GUI)"=="WNT"
-.IF "$(COM)"!="GCC"
-.IF "$(SHL$(TNR)LIBS)"!=""
-SHL$(TNR)LINKLIST=$(MISC)/$(SHL$(TNR)TARGET)_link.lst
-SHL$(TNR)LINKLISTPARAM=@$(SHL$(TNR)LINKLIST)
-$(SHL$(TNR)LINKLIST) : $(SHL$(TNR)LIBS)
-    @@-$(RM) $@
-    $(COMMAND_ECHO)$(SED) -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(SHL$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
-.ENDIF          # "$(SHL$(TNR)LIBS)"!=""
-.ENDIF          # "$(COM)"!="GCC"
-.ENDIF
-.ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"=="name"
 
 $(MISC)/%linkinc.ls:
     @echo . > $@
@@ -283,8 +270,7 @@ $(SHL$(TNR)TARGETN) : \
                     $(USE_SHL$(TNR)DEF)\
                     $(USE_SHL$(TNR)VERSIONMAP)\
                     $(SHL$(TNR)RES)\
-                    $(SHL$(TNR)DEPN) \
-                    $(SHL$(TNR)LINKLIST)
+                    $(SHL$(TNR)DEPN)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(SHL$(TNR)DEFAULTRES)"!=""
@@ -424,7 +410,7 @@ $(SHL$(TNR)TARGETN) : \
         $(USE_$(TNR)IMPLIB) \
         $(STDOBJ)							\
         $(SHL$(TNR)OBJS) $(SHL$(TNR)VERSIONOBJ))   \
-        $(SHL$(TNR)LINKLISTPARAM) \
+        $(SHL$(TNR)LIBS) \
         @$(mktmp $(SHL$(TNR)STDLIBS)                      \
         $(SHL$(TNR)STDSHL) $(STDSHL$(TNR))                           \
         $(SHL$(TNR)LINKRES) \
