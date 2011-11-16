@@ -27,19 +27,12 @@
 
 # if no environment is set, try to find one, source it and re-exec
 ifeq ($(strip $(SOLARENV)),)
+include ./solenv/gbuild/source_and_rerun.mk
+else
 
-all:
-	if test -f ./Env.Host.sh; then . ./Env.Host.sh; fi && \
-	if test -z "$${SOLARENV}"; then echo "No environment set!"; exit 1; fi && \
-	$(MAKE)
-
-else # SOLARENV
-
-GBUILDDIR := $(SOLARENV)/gbuild
-include $(GBUILDDIR)/gbuild.mk
+include $(SOLARENV)/gbuild/gbuild.mk
 
 $(eval $(call gb_Module_make_global_targets,$(SRC_ROOT)/Module_tail_build.mk))
 
-endif # SOLARENV
-
+endif
 # vim: set noet sw=4 ts=4:

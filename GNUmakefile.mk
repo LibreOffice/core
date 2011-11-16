@@ -27,11 +27,10 @@
 #*************************************************************************
 
 ifeq ($(strip $(SOLARENV)),)
-$(error No environment set!)
+include ./solenv/gbuild/source_and_rerun.mk
 endif
 
-GBUILDDIR := $(SOLARENV)/gbuild
-include $(GBUILDDIR)/gbuild.mk
+include $(SOLARENV)/gbuild/gbuild.mk
 
 $(eval $(call gb_Module_make_global_targets,$(wildcard $(SRCDIR)/RepositoryModule_*.mk)))
 

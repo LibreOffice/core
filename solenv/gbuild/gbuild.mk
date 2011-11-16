@@ -26,10 +26,11 @@
 #
 #*************************************************************************
 
+GBUILDDIR:=$(SRC_ROOT)/solenv/gbuild
+
 # vars needed from the env/calling makefile
 
 # DEBUG
-# GBUILDDIR
 # INPATH
 # JAVA_HOME
 # JDKINCS

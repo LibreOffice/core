@@ -26,6 +26,8 @@
 #
 #*************************************************************************
 
+GBUILDDIR:=$(SRC_ROOT)/solenv/gbuild
+
 # this is a subset of gbuild functionality, for use in custom makefiles
 
 COMMA :=,
