@@ -32,7 +32,6 @@
 #include <svtools/svtabbx.hxx>
 #include <vcl/virdev.hxx>
 #include "svx/svxdllapi.h"
-#include <layout/layout.hxx>
 
 // ============================================================================
 

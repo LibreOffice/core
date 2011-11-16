@@ -37,8 +37,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 
-#include <layout/layout.hxx>
-
 //------------------------------------------------------------------------
 
 class ScMoveTableDlg : public ModalDialog

@@ -35,8 +35,6 @@
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 
-#include <layout/layout.hxx>
-
 //------------------------------------------------------------------------
 
 class ScStringInputDlg : public ModalDialog

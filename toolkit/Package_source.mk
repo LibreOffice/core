@@ -27,24 +27,6 @@
 #*************************************************************************
 
 $(eval $(call gb_Package_Package,toolkit_source,$(SRCDIR)/toolkit/source))
-$(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/bin.hxx,layout/core/bin.hxx))
-$(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/box-base.hxx,layout/core/box-base.hxx))
-$(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/box.hxx,layout/core/box.hxx))
-$(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/container.hxx,layout/core/container.hxx))
-$(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/dialogbuttonhbox.hxx,layout/core/dialogbuttonhbox.hxx))
-$(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/factory.hxx,layout/core/factory.hxx))
-$(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/flow.hxx,layout/core/flow.hxx))
-$(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/helper.hxx,layout/core/helper.hxx))
-$(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/import.hxx,layout/core/import.hxx))
-$(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/localized-string.hxx,layout/core/localized-string.hxx))
-$(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/precompiled_xmlscript.hxx,layout/core/precompiled_xmlscript.hxx))
-$(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/proplist.hxx,layout/core/proplist.hxx))
-$(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/root.hxx,layout/core/root.hxx))
-$(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/table.hxx,layout/core/table.hxx))
-$(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/timer.hxx,layout/core/timer.hxx))
-$(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/translate.hxx,layout/core/translate.hxx))
-$(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/vcl.hxx,layout/core/vcl.hxx))
-$(eval $(call gb_Package_add_file,toolkit_source,inc/layout/vcl/wrapper.hxx,layout/vcl/wrapper.hxx))
 $(eval $(call gb_Package_add_file,toolkit_source,inc/toolkit/awt/vclxdialog.hxx,awt/vclxdialog.hxx))
 
 # vim: set noet sw=4 ts=4:

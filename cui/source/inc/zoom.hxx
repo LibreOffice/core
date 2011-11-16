@@ -30,7 +30,6 @@
 
 // include ---------------------------------------------------------------
 
-#include <layout/layout.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>

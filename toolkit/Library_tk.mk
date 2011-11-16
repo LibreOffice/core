@@ -139,26 +139,6 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/helper/unopropertyarrayhelper \
     toolkit/source/helper/unowrapper \
     toolkit/source/helper/vclunohelper \
-    toolkit/source/layout/core/bin \
-    toolkit/source/layout/core/box \
-    toolkit/source/layout/core/box-base \
-    toolkit/source/layout/core/byteseq \
-    toolkit/source/layout/core/container \
-    toolkit/source/layout/core/dialogbuttonhbox \
-    toolkit/source/layout/core/factory \
-    toolkit/source/layout/core/flow \
-    toolkit/source/layout/core/helper \
-    toolkit/source/layout/core/import \
-    toolkit/source/layout/core/localized-string \
-    toolkit/source/layout/core/proplist \
-    toolkit/source/layout/core/root \
-    toolkit/source/layout/core/table \
-    toolkit/source/layout/core/timer \
-    toolkit/source/layout/core/translate \
-    toolkit/source/layout/core/vcl \
-    toolkit/source/layout/vcl/wbutton \
-    toolkit/source/layout/vcl/wfield \
-    toolkit/source/layout/vcl/wrapper \
 ))
 
 ifeq ($(GUIBASE),aqua)

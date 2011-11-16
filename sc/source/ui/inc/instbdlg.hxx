@@ -42,8 +42,6 @@
 #include <vcl/field.hxx>
 #include "expftext.hxx"
 
-#include <layout/layout.hxx>
-
 class ScViewData;
 class ScDocument;
 class ScDocShell;

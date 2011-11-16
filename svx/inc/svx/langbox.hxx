@@ -35,7 +35,6 @@
 #include "svx/svxdllapi.h"
 #include <vcl/image.hxx>
 #include <tools/solar.h>
-#include <layout/layout.hxx>
 
 class SvtLanguageTable;
 

@@ -100,8 +100,6 @@ public:
 
 // class SvxSearchDialogWrapper ------------------------------------------
 
-#include <sfx2/layout.hxx>
-
 class SvxSearchDialog;
 class SVX_DLLPUBLIC SvxSearchDialogWrapper : public SfxChildWindow
 {

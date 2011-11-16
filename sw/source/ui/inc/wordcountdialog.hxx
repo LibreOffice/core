@@ -30,7 +30,6 @@
 #include <sfx2/basedlgs.hxx>
 #include <svtools/stdctrl.hxx>
 #include <vcl/button.hxx>
-#include <layout/layout.hxx>
 struct SwDocStat;
 #include <sfx2/childwin.hxx>
 #include "swabstdlg.hxx"

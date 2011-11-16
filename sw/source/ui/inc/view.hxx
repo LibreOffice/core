@@ -41,7 +41,6 @@
 #include "swdllapi.h"
 #include <swtypes.hxx>
 #include <shellid.hxx>
-#include <layout/layout.hxx>
 #include <IMark.hxx>
 
 class SwBaseShell;

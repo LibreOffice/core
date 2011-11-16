@@ -30,7 +30,6 @@
 
 #include <tools/solar.h>
 #include <tblenum.hxx>
-#include <layout/layout.hxx>
 #include <swdllapi.h>
 
 class UniString;

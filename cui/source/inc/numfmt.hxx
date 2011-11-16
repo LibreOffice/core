@@ -70,7 +70,6 @@ public:
 };
 
 // -----------------------------------------------------------------------
-#include <sfx2/layout.hxx>
 
 class SvxNumberFormatTabPage : public SfxTabPage
 {

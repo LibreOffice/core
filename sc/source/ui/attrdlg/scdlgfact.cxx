@@ -83,7 +83,6 @@
 
 // ause
 #include "editutil.hxx"
-#include <sfx2/layout.hxx>
 
 IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl);
