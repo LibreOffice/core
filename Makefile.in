@@ -86,9 +86,9 @@ ifeq (@BUILD_DMAKE@,YES)
 	-test -f dmake/Makefile && $(MAKE) -C dmake distclean
 endif
 	rm -rf Env.Host.sh Makefile aclocal.m4 autogen.lastrun autom4te.cache \
-	bin/repo-list config.log config.status configure \
+	bin/repo-list build_env config.log config.status configure \
 	desktop/scripts/soffice.sh ooo.lst post_download post_download.log \
-	set_soenv set_soenv.last set_soenv.stamp src.downloaded warn 
+	set_soenv set_soenv.last set_soenv.stamp src.downloaded warn
 
 clean: clean-host clean-build
 

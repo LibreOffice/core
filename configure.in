@@ -40,9 +40,14 @@ AC_SUBST(CROSS_COMPILING)
 
 if test "$build_os" = "cygwin"; then
     EXEEXT_FOR_BUILD=.exe
+    SRC_ROOT=`pwd`
+    SRC_ROOT=`cygpath -d "$SRC_ROOT"`
+    SRC_ROOT=`cygpath -u "$SRC_ROOT"`
 else
     EXEEXT_FOR_BUILD=
+    SRC_ROOT=`pwd`
 fi
+AC_SUBST(SRC_ROOT)
 AC_SUBST(EXEEXT_FOR_BUILD)
 
 cat /dev/null > warn
@@ -9548,7 +9553,7 @@ else
     echo > set_soenv.last
 fi
 
-AC_CONFIG_FILES([ooo.lst set_soenv Makefile bin/repo-list desktop/scripts/soffice.sh])
+AC_CONFIG_FILES([ooo.lst set_soenv Makefile bin/repo-list desktop/scripts/soffice.sh build_env])
 AC_OUTPUT
 
 # make sure this is executable

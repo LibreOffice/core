@@ -45,6 +45,7 @@
 /aclocal.m4
 /autom4te.cache
 /autogen.lastrun
+/build_env
 /ChangeLog
 /config.guess
 /config.log
