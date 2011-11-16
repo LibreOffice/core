@@ -2484,6 +2484,7 @@ SvxSearchDialogWrapper::SvxSearchDialogWrapper( Window* _pParent, sal_uInt16 nId
     : SfxChildWindow( _pParent, nId )
     , dialog (new SvxSearchDialog (_pParent, this, *pBindings))
 {
+    pWindow = dialog;
     dialog->Initialize( pInfo );
 
     pBindings->Update( SID_SEARCH_ITEM );
