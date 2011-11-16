@@ -109,8 +109,8 @@ const char* AppleRemoteDeviceName = "AppleIRController";
         [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonLeft_Hold]	forKey:@"33_21_20_13_12_2_"];
         [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonMenu_Hold]	forKey:@"33_21_20_2_33_21_20_2_"];
         [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonPlay_Hold]	forKey:@"37_33_21_20_2_37_33_21_20_2_"];
-        [cookieToButtonMapping setObject:[NSNumber numberWithInt:kMetallicRemote2009ButtonPlay]       forKey:@"33_21_20_8_2_33_21_20_8_2_"];
-        [cookieToButtonMapping setObject:[NSNumber numberWithInt:kMetallicRemote2009ButtonMiddlePlay] forKey:@"33_21_20_3_2_33_21_20_3_2_"];
+        [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kMetallicRemote2009ButtonPlay]       forKey:@"33_21_20_8_2_33_21_20_8_2_"];
+        [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kMetallicRemote2009ButtonMiddlePlay] forKey:@"33_21_20_3_2_33_21_20_3_2_"];
         [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteControl_Switched]	forKey:@"19_"];
 	}
 }
