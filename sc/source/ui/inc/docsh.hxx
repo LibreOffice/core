@@ -420,7 +420,6 @@ public:
 
     const ScOptSolverSave* GetSolverSaveData() const    { return pSolverSaveData; }     // may be null
     void            SetSolverSaveData( const ScOptSolverSave& rData );
-    sal_Bool        AcceptStateUpdate() const;
     ScSheetSaveData* GetSheetSaveData();
 
     void ResetKeyBindings( ScOptionsUtil::KeyBindingType eType );

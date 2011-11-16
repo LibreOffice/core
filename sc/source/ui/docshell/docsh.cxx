@@ -2971,18 +2971,6 @@ void ScDocShellModificator::SetDocumentModified()
     }
 }
 
-sal_Bool ScDocShell::AcceptStateUpdate() const
-{
-    if( SfxObjectShell::AcceptStateUpdate() )
-        return sal_True;
-
-    if( SC_MOD()->Find1RefWindow( SFX_APP()->GetTopWindow() ) )
-        return sal_True;
-
-    return false;
-}
-
-
 bool ScDocShell::IsChangeRecording() const
 {
     ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
