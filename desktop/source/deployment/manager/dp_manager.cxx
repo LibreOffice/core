@@ -198,8 +198,7 @@ void PackageManagerImpl::initActivationLayer(
             dbName = m_registrationData_expanded + OUSTR("/extensions.db");
         }
         //The data base can always be written because it it always in the user installation
-        m_activePackagesDB.reset(
-            new ActivePackages( dbName, false ) );
+        m_activePackagesDB.reset( new ActivePackages( dbName ) );
 
         if (! m_readOnly && ! m_context.equals(OUSTR("bundled")))
         {

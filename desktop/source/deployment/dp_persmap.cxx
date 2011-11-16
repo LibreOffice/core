@@ -79,35 +79,20 @@ PersistentMap::~PersistentMap()
 }
 
 //______________________________________________________________________________
-PersistentMap::PersistentMap( OUString const & url_, bool readOnly )
+PersistentMap::PersistentMap( OUString const & url )
     : m_db( 0, 0 )
 {
     try {
-        OUString url( expandUnoRcUrl(url_) );
-        if ( File::getSystemPathFromFileURL( url, m_sysPath ) != File::E_None )
-        {
+        rtl::OUString fileURL = expandUnoRcUrl(url);
+        if ( File::getSystemPathFromFileURL( fileURL, m_sysPath ) != File::E_None )
             OSL_ASSERT( false );
-        }
+
         OString cstr_sysPath(
             OUStringToOString( m_sysPath, RTL_TEXTENCODING_UTF8 ) );
-        char const * pcstr_sysPath = cstr_sysPath.getStr();
-
-        u_int32_t flags = DB_CREATE;
-        if (readOnly) {
-            flags = DB_RDONLY;
-            if (! create_ucb_content(
-                    0, url,
-                    Reference<com::sun::star::ucb::XCommandEnvironment>(),
-                    false /* no throw */ )) {
-                // ignore non-existent file in read-only mode: simulate empty db
-                pcstr_sysPath = 0;
-                flags = DB_CREATE;
-            }
-        }
-
         int err = m_db.open(
             // xxx todo: DB_THREAD, DB_DBT_MALLOC currently not used
-            0, pcstr_sysPath, 0, DB_HASH, flags/* | DB_THREAD*/, 0664 /* fs mode */ );
+            0, cstr_sysPath.getStr(), 0, DB_HASH,
+            DB_CREATE/* | DB_THREAD*/, 0664 /* fs mode */ );
         if (err != 0)
             throw_rtexc(err);
     }

@@ -127,8 +127,7 @@ namespace dp_manager {
 
 ActivePackages::ActivePackages() {}
 
-ActivePackages::ActivePackages(::rtl::OUString const & url, bool readOnly):
-    m_map(url, readOnly) {}
+ActivePackages::ActivePackages(::rtl::OUString const & url) : m_map(url) {}
 
 ActivePackages::~ActivePackages() {}
 

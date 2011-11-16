@@ -41,7 +41,8 @@ namespace dp_misc
 typedef ::boost::unordered_map<
     ::rtl::OString, ::rtl::OString, ::rtl::OStringHash > t_string2string_map;
 
-//==============================================================================
+// Class to read obsolete registered extensions
+// should be removed for LibreOffice 4.0
 class PersistentMap
 {
     ::rtl::OUString m_sysPath;
@@ -50,7 +51,7 @@ class PersistentMap
 
 public:
     ~PersistentMap();
-    PersistentMap( ::rtl::OUString const & url, bool readOnly );
+    PersistentMap( ::rtl::OUString const & url );
     /** in mem db */
     PersistentMap();
 

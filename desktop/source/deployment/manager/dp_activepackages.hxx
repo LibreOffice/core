@@ -71,7 +71,7 @@ public:
 
     ActivePackages();
 
-    ActivePackages(::rtl::OUString const & url, bool readOnly);
+    ActivePackages(::rtl::OUString const & url);
 
     ~ActivePackages();
 

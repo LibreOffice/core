@@ -43,6 +43,7 @@
 #include "osl/file.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "ucbhelper/content.hxx"
+#include "unotools/ucbhelper.hxx"
 #include "comphelper/anytostring.hxx"
 #include "comphelper/servicedecl.hxx"
 #include "xmlscript/xml_helper.hxx"
@@ -120,8 +121,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         OUString const & identifier,
         Reference<XCommandEnvironment> const & xCmdEnv );
 
+    // for backwards compatibility - nil if no (compatible) back-compat db present
     ::std::auto_ptr<PersistentMap> m_registeredPackages;
-        // for backwards compatibility
 
     virtual void SAL_CALL disposing();
 
@@ -209,7 +210,7 @@ BackendImpl::BackendImpl(
 
     if (transientMode())
     {
-        //TODO
+        // TODO
     }
     else
     {
@@ -224,12 +225,23 @@ BackendImpl::BackendImpl(
         ::std::list<OUString> folders = m_backendDb->getAllDataUrls();
         deleteUnusedFolders(OUString(), folders);
 
-
         configmgrini_verify_init( xCmdEnv );
-        m_registeredPackages.reset(
-            new PersistentMap(
-                makeURL( getCachePath(), OUSTR("registered_packages.db") ),
-                false ) );
+        ::std::auto_ptr<PersistentMap> pMap;
+        rtl::OUString aCompatURL( makeURL( getCachePath(), OUSTR("registered_packages.db") ) );
+
+        // Don't create it if it doesn't exist already
+        if ( ::utl::UCBContentHelper::Exists( expandUnoRcUrl( aCompatURL ) ) )
+        {
+            try {
+                pMap = ::std::auto_ptr<PersistentMap>( new PersistentMap( aCompatURL ) );
+            } catch (Exception &e) { // const uno::RunTimeException &e) {
+                rtl::OStringBuffer aStr( "Exception loading legacy package database: '" );
+                aStr.append( rtl::OUStringToOString( e.Message, osl_getThreadTextEncoding() ) );
+                aStr.append( "' - ignoring file, please remove it.\n" );
+                dp_misc::writeConsole( aStr.getStr() );
+            }
+        }
+        m_registeredPackages = pMap;
      }
 }
 
@@ -549,10 +561,12 @@ BackendImpl::PackageImpl::isRegistered_(
     bool bReg = false;
     if (that->hasActiveEntry(getURL()))
         bReg = true;
-    if (!bReg)
-        //fallback for user extension registered in berkeley DB
+    if (!bReg && that->m_registeredPackages.get())
+    {
+        // fallback for user extension registered in berkeley DB
         bReg = that->m_registeredPackages->has(
             rtl::OUStringToOString( url, RTL_TEXTENCODING_UTF8 ));
+    }
 
     return beans::Optional< beans::Ambiguous<sal_Bool> >(
         true, beans::Ambiguous<sal_Bool>( bReg, false ) );
@@ -735,7 +749,9 @@ void BackendImpl::PackageImpl::processPackage_(
     }
     else // revoke
     {
-        if (!that->removeFromConfigmgrIni(m_isSchema, url, xCmdEnv)) {
+        if (!that->removeFromConfigmgrIni(m_isSchema, url, xCmdEnv) &&
+            that->m_registeredPackages.get()) {
+            // Obsolete package database handling - should be removed for LibreOffice 4.0
             t_string2string_map entries(
                 that->m_registeredPackages->getEntries());
             for (t_string2string_map::iterator i(entries.begin());
