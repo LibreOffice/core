@@ -2835,10 +2835,11 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case  FIELD_NUMCHARS:
                     case  FIELD_NUMWORDS:
                     case  FIELD_NUMPAGES:
+                    if (xFieldProperties.is())
                         xFieldProperties->setPropertyValue(
                             rPropNameSupplier.GetName(PROP_NUMBERING_TYPE),
                             uno::makeAny( lcl_ParseNumberingType(pContext->GetCommand()) ));
-                        break;
+                    break;
 
                 }
             }
