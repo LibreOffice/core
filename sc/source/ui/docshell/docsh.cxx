@@ -1036,8 +1036,6 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
     vector<ScDocRowHeightUpdater::TabRanges> aRecalcRowRangesArray;
 
-    aConvFilterName.Erase(); //@ #BugId 54198
-
     //  Alle Filter brauchen die komplette Datei am Stueck (nicht asynchron),
     //  darum vorher per CreateFileStream dafuer sorgen, dass die komplette
     //  Datei uebertragen wird.
@@ -1050,8 +1048,6 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
     if (pFilter)
     {
         String aFltName = pFilter->GetFilterName();
-
-        aConvFilterName=aFltName; //@ #BugId 54198
 
         sal_Bool bCalc3 = ( aFltName.EqualsAscii(pFilterSc30) );
         sal_Bool bCalc4 = ( aFltName.EqualsAscii(pFilterSc40) );
@@ -2500,15 +2496,14 @@ sal_Bool ScDocShell::HasAutomaticTableName( const String& rFilter )
         aDdeTextFmt(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("TEXT"))), \
         nPrtToScreenFactor( 1.0 ), \
         pImpl           ( new DocShell_Impl ), \
-        bHeaderOn       ( sal_True ), \
-        bFooterOn       ( sal_True ), \
-        bNoInformLost   ( sal_True ), \
-        bIsEmpty        ( sal_True ), \
+        bHeaderOn       ( true ), \
+        bFooterOn       ( true ), \
+        bIsEmpty        ( true ), \
         bIsInUndo       ( false ), \
         bDocumentModifiedPending( false ), \
+        bUpdateEnabled  ( true ), \
         nDocumentLock   ( 0 ), \
         nCanUpdate (com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG), \
-        bUpdateEnabled  ( sal_True ), \
         pOldAutoDBRange ( NULL ), \
         pDocHelper      ( NULL ), \
         pAutoStyleList  ( NULL ), \
@@ -2726,7 +2721,7 @@ void ScDocShell::SetDrawModified( sal_Bool bIsModified /* = sal_True */ )
     }
 }
 
-void ScDocShell::SetInUndo(sal_Bool bSet)
+void ScDocShell::SetInUndo(bool bSet)
 {
     bIsInUndo = bSet;
 }

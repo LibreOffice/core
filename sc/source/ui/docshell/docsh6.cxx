@@ -301,7 +301,7 @@ void ScDocShell::LoadStyles( SfxObjectShell &rSource )
     PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID | PAINT_LEFT );
 }
 
-void ScDocShell::LoadStylesArgs( ScDocShell& rSource, sal_Bool bReplace, sal_Bool bCellStyles, sal_Bool bPageStyles )
+void ScDocShell::LoadStylesArgs( ScDocShell& rSource, bool bReplace, bool bCellStyles, bool bPageStyles )
 {
     //  similar to LoadStyles, but with selectable behavior for XStyleLoader::loadStylesFromURL call
 

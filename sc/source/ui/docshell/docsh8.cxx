@@ -171,14 +171,14 @@ namespace
 // -----------------------------------------------------------------------
 // MoveFile/KillFile/IsDocument: similar to SfxContentHelper
 
-sal_Bool ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject& rDestObj )
+bool ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject& rDestObj )
 {
-    sal_Bool bMoveData = sal_True;
-    sal_Bool bRet = sal_True, bKillSource = false;
+    bool bMoveData = true;
+    bool bRet = true, bKillSource = false;
     if ( rSourceObj.GetProtocol() != rDestObj.GetProtocol() )
     {
         bMoveData = false;
-        bKillSource = sal_True;
+        bKillSource = true;
     }
     String aName = rDestObj.getName();
     INetURLObject aDestPathObj = rDestObj;
@@ -215,9 +215,9 @@ sal_Bool ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObj
 }
 
 
-sal_Bool ScDocShell::KillFile( const INetURLObject& rURL )
+bool ScDocShell::KillFile( const INetURLObject& rURL )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     try
     {
         ::ucbhelper::Content aCnt( rURL.GetMainURL(INetURLObject::NO_DECODE),
@@ -234,9 +234,9 @@ sal_Bool ScDocShell::KillFile( const INetURLObject& rURL )
     return bRet;
 }
 
-sal_Bool ScDocShell::IsDocument( const INetURLObject& rURL )
+bool ScDocShell::IsDocument( const INetURLObject& rURL )
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
     try
     {
         ::ucbhelper::Content aCnt( rURL.GetMainURL(INetURLObject::NO_DECODE),

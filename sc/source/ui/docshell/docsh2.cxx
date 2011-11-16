@@ -104,13 +104,13 @@ sal_Bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 
 //------------------------------------------------------------------
 
-sal_Bool ScDocShell::IsEmpty() const
+bool ScDocShell::IsEmpty() const
 {
     return bIsEmpty;
 }
 
 
-void ScDocShell::SetEmpty(sal_Bool bSet)
+void ScDocShell::SetEmpty(bool bSet)
 {
     bIsEmpty = bSet;
 }

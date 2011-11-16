@@ -97,25 +97,20 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
     ScDocument          aDocument;
 
     String              aDdeTextFmt;
-    String              aConvFilterName; //@ #BugId 54198
 
     double              nPrtToScreenFactor;
-//!   FontList*           pFontList;
     DocShell_Impl*      pImpl;
     ScDocFunc*          pDocFunc;
 
-    //SfxObjectCreateMode   eShellMode;
-
-    sal_Bool                bIsInplace;         // wird von der View gesetzt
-    sal_Bool                bHeaderOn;
-    sal_Bool                bFooterOn;
-    sal_Bool                bNoInformLost;
-    sal_Bool                bIsEmpty;
-    sal_Bool                bIsInUndo;
-    sal_Bool                bDocumentModifiedPending;
-    sal_uInt16              nDocumentLock;
+    bool                bHeaderOn;
+    bool                bFooterOn;
+    bool                bIsInplace:1;         // wird von der View gesetzt
+    bool                bIsEmpty:1;
+    bool                bIsInUndo:1;
+    bool                bDocumentModifiedPending:1;
+    bool                bUpdateEnabled:1;
+    sal_uInt16          nDocumentLock;
     sal_Int16           nCanUpdate;  // stores the UpdateDocMode from loading a document till update links
-    sal_Bool                bUpdateEnabled;
 
     ScDBData*           pOldAutoDBRange;
 
@@ -158,9 +153,9 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
     SC_DLLPRIVATE sal_uLong         DBaseExport( const String& rFullFileName, CharSet eCharSet,
                                  sal_Bool& bHasMemo );
 
-    SC_DLLPRIVATE static sal_Bool       MoveFile( const INetURLObject& rSource, const INetURLObject& rDest );
-    SC_DLLPRIVATE static sal_Bool       KillFile( const INetURLObject& rURL );
-    SC_DLLPRIVATE static sal_Bool       IsDocument( const INetURLObject& rURL );
+    SC_DLLPRIVATE static bool       MoveFile( const INetURLObject& rSource, const INetURLObject& rDest );
+    SC_DLLPRIVATE static bool       KillFile( const INetURLObject& rURL );
+    SC_DLLPRIVATE static bool       IsDocument( const INetURLObject& rURL );
 
     SC_DLLPRIVATE void          LockPaint_Impl(sal_Bool bDoc);
     SC_DLLPRIVATE void          UnlockPaint_Impl(sal_Bool bDoc);
@@ -277,12 +272,12 @@ public:
                     /// If bJustQueryIfProtected==sal_True protection is not
                     /// changed and <TRUE/> is returned if not protected or
                     /// password was entered correctly.
-    sal_Bool            ExecuteChangeProtectionDialog( Window* _pParent, sal_Bool bJustQueryIfProtected = false );
+    bool            ExecuteChangeProtectionDialog( Window* _pParent, sal_Bool bJustQueryIfProtected = false );
 
     void            SetPrintZoom( SCTAB nTab, sal_uInt16 nScale, sal_uInt16 nPages );
-    sal_Bool            AdjustPrintZoom( const ScRange& rRange );
+    bool            AdjustPrintZoom( const ScRange& rRange );
 
-    void            LoadStylesArgs( ScDocShell& rSource, sal_Bool bReplace, sal_Bool bCellStyles, sal_Bool bPageStyles );
+    void            LoadStylesArgs( ScDocShell& rSource, bool bReplace, bool bCellStyles, bool bPageStyles );
 
     void            PageStyleModified( const rtl::OUString& rStyleName, sal_Bool bApi );
 
@@ -365,18 +360,18 @@ public:
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool();
 
     void            SetInplace( sal_Bool bInplace );
-    sal_Bool            IsEmpty() const;
-    void            SetEmpty(sal_Bool bSet);
+    bool            IsEmpty() const;
+    void            SetEmpty(bool bSet);
 
-    sal_Bool            IsInUndo() const                { return bIsInUndo; }
-    void            SetInUndo(sal_Bool bSet);
+    bool            IsInUndo() const                { return bIsInUndo; }
+    void            SetInUndo(bool bSet);
 
     void            CalcOutputFactor();
     double          GetOutputFactor() const;
     void            GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
                                                SCTAB             nCurTab,
-                                               sal_Bool&             rbHeader,
-                                               sal_Bool&             rbFooter );
+                                               bool&             rbHeader,
+                                               bool&             rbFooter );
 
     virtual long DdeGetData( const String& rItem, const String& rMimeType,
                                 ::com::sun::star::uno::Any & rValue );
@@ -391,14 +386,14 @@ public:
     ScTabViewShell* GetBestViewShell( sal_Bool bOnlyVisible = sal_True );
     ScSbxDocHelper* GetDocHelperObject() { return pDocHelper; }
 
-    void            SetDocumentModifiedPending( sal_Bool bVal )
+    void            SetDocumentModifiedPending( bool bVal )
                         { bDocumentModifiedPending = bVal; }
-    sal_Bool            IsDocumentModifiedPending() const
+    bool            IsDocumentModifiedPending() const
                         { return bDocumentModifiedPending; }
 
-    sal_Bool            IsUpdateEnabled() const
+    bool            IsUpdateEnabled() const
                         { return bUpdateEnabled; }
-    void            SetUpdateEnabled(sal_Bool bValue)
+    void            SetUpdateEnabled(bool bValue)
                         { bUpdateEnabled = bValue; }
 
     OutputDevice*   GetRefDevice(); // WYSIWYG: Printer, otherwise VirtualDevice...

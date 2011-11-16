@@ -1153,15 +1153,15 @@ void UpdateAcceptChangesDialog()
 
 //------------------------------------------------------------------
 
-sal_Bool ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, sal_Bool bJustQueryIfProtected )
+bool ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, sal_Bool bJustQueryIfProtected )
 {
-    sal_Bool bDone = false;
+    bool bDone = false;
     ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
     if ( pChangeTrack )
     {
         sal_Bool bProtected = pChangeTrack->IsProtected();
         if ( bJustQueryIfProtected && !bProtected )
-            return sal_True;
+            return true;
 
         String aTitle( ScResId( bProtected ? SCSTR_CHG_UNPROTECT : SCSTR_CHG_PROTECT ) );
         String aText( ScResId( SCSTR_PASSWORD ) );
@@ -1186,7 +1186,7 @@ sal_Bool ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, sal_Bool b
                 if ( SvPasswordHelper::CompareHashPassword(pChangeTrack->GetProtection(), aPassword) )
                 {
                     if ( bJustQueryIfProtected )
-                        bDone = sal_True;
+                        bDone = true;
                     else
                         pChangeTrack->SetProtection(
                             com::sun::star::uno::Sequence< sal_Int8 > (0) );
@@ -1207,12 +1207,12 @@ sal_Bool ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, sal_Bool b
             if ( bProtected != pChangeTrack->IsProtected() )
             {
                 UpdateAcceptChangesDialog();
-                bDone = sal_True;
+                bDone = true;
             }
         }
     }
     else if ( bJustQueryIfProtected )
-        bDone = sal_True;
+        bDone = true;
     return bDone;
 }
 
@@ -1425,9 +1425,9 @@ void ScDocShell::SetPrintZoom( SCTAB nTab, sal_uInt16 nScale, sal_uInt16 nPages 
     }
 }
 
-sal_Bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
+bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
 {
-    sal_Bool bChange = false;
+    bool bChange = false;
     SCTAB nTab = rRange.aStart.Tab();
 
     String aStyleName = aDocument.GetPageStyle( nTab );
@@ -1786,7 +1786,6 @@ void ScDocShell::GetStatePageStyle( SfxViewShell&   /* rCaller */,
                     if ( pStyleSheet )
                     {
                         SfxItemSet& rStyleSet = pStyleSheet->GetItemSet();
-
                         GetPageOnFromPageStyleSet( &rStyleSet, nCurTab, bHeaderOn, bFooterOn );
 
                         if ( !bHeaderOn && !bFooterOn )
@@ -1976,8 +1975,8 @@ Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
 
 void ScDocShell::GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
                                             SCTAB             nCurTab,
-                                            sal_Bool&             rbHeader,
-                                            sal_Bool&             rbFooter )
+                                            bool&             rbHeader,
+                                            bool&             rbFooter )
 {
     if ( !pStyleSet )
     {
