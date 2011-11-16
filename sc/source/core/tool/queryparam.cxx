@@ -45,7 +45,15 @@ public:
     FindByField(SCCOLROW nField) : mnField(nField) {}
     bool operator() (const ScQueryEntry& rEntry) const
     {
-        return rEntry.nField == mnField;
+        return rEntry.bDoQuery && rEntry.nField == mnField;
+    }
+};
+
+struct FindUnused : public std::unary_function<ScQueryEntry, bool>
+{
+    bool operator() (const ScQueryEntry& rEntry) const
+    {
+        return !rEntry.bDoQuery;
     }
 };
 
@@ -90,16 +98,13 @@ ScQueryEntry& ScQueryParamBase::GetEntry(SCSIZE n)
 
 ScQueryEntry* ScQueryParamBase::FindEntryByField(SCCOLROW nField, bool bNew)
 {
-    size_t n = maEntries.size();
-    for (SCSIZE i = 0; i < n; ++i)
-    {
-        ScQueryEntry& rEntry = GetEntry(i);
-        if (!rEntry.bDoQuery)
-            break;
+    EntriesType::iterator itr = std::find_if(
+        maEntries.begin(), maEntries.end(), FindByField(nField));
 
-        if (rEntry.nField == nField)
-            // existing entry found!
-            return &rEntry;
+    if (itr != maEntries.end())
+    {
+        // existing entry found!
+        return &(*itr);
     }
 
     if (!bNew)
@@ -107,12 +112,9 @@ ScQueryEntry* ScQueryParamBase::FindEntryByField(SCCOLROW nField, bool bNew)
         return NULL;
 
     // Find the first unused entry.
-    for (SCSIZE i = 0; i < n; ++i)
-    {
-        ScQueryEntry& rEntry = GetEntry(i);
-        if (!rEntry.bDoQuery)
-            return &rEntry;
-    }
+    itr = std::find_if(maEntries.begin(), maEntries.end(), FindUnused());
+    if (itr != maEntries.end())
+        return &(*itr);
 
     // Add a new entry to the end.
     maEntries.push_back(new ScQueryEntry);
@@ -121,7 +123,9 @@ ScQueryEntry* ScQueryParamBase::FindEntryByField(SCCOLROW nField, bool bNew)
 
 void ScQueryParamBase::RemoveEntryByField(SCCOLROW nField)
 {
-    EntriesType::iterator itr = std::find_if(maEntries.begin(), maEntries.end(), FindByField(nField));
+    EntriesType::iterator itr = std::find_if(
+        maEntries.begin(), maEntries.end(), FindByField(nField));
+
     if (itr != maEntries.end())
     {
         maEntries.erase(itr);
