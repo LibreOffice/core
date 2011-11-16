@@ -77,10 +77,35 @@ ScQueryEntry& ScQueryParamBase::GetEntry(SCSIZE n)
     return maEntries[n];
 }
 
-ScQueryEntry& ScQueryParamBase::AppendEntry()
+ScQueryEntry* ScQueryParamBase::FindEntryByField(SCCOLROW nField, bool bNew)
 {
+    size_t n = maEntries.size();
+    for (SCSIZE i = 0; i < n; ++i)
+    {
+        ScQueryEntry& rEntry = GetEntry(i);
+        if (!rEntry.bDoQuery)
+            break;
+
+        if (rEntry.nField == nField)
+            // existing entry found!
+            return &rEntry;
+    }
+
+    if (!bNew)
+        // no existing entry found, and we are not creating a new one.
+        return NULL;
+
+    // Find the first unused entry.
+    for (SCSIZE i = 0; i < n; ++i)
+    {
+        ScQueryEntry& rEntry = GetEntry(i);
+        if (!rEntry.bDoQuery)
+            return &rEntry;
+    }
+
+    // Add a new entry to the end.
     maEntries.push_back(new ScQueryEntry);
-    return maEntries.back();
+    return &maEntries.back();
 }
 
 void ScQueryParamBase::Resize(size_t nNew)

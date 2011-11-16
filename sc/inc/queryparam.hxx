@@ -53,7 +53,7 @@ struct ScQueryParamBase
     SC_DLLPUBLIC SCSIZE GetEntryCount() const;
     SC_DLLPUBLIC const ScQueryEntry& GetEntry(SCSIZE n) const;
     SC_DLLPUBLIC ScQueryEntry& GetEntry(SCSIZE n);
-    ScQueryEntry& AppendEntry();
+    ScQueryEntry* FindEntryByField(SCCOLROW nField, bool bNew);
     void Resize(size_t nNew);
     SC_DLLPUBLIC void DeleteQuery(size_t nPos);
     void FillInExcelSyntax(const rtl::OUString& aCellStr, SCSIZE nIndex);

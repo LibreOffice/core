@@ -600,6 +600,7 @@ public:
 struct AutoFilterData : public ScCheckListMenuWindow::ExtendedData
 {
     ScAddress maPos;
+    ScDBData* mpData;
 };
 
 class AutoFilterOKAction : public ScMenuFloatingWindow::Action
@@ -629,24 +630,56 @@ public:
     }
 };
 
+class AddSelectedItemString : public std::unary_function<ScQueryEntry::Item, void>
+{
+    boost::unordered_set<rtl::OUString, rtl::OUStringHash>& mrSet;
+public:
+    AddSelectedItemString(boost::unordered_set<rtl::OUString, rtl::OUStringHash>& r) :
+        mrSet(r) {}
+
+    void operator() (const ScQueryEntry::Item& rItem)
+    {
+        mrSet.insert(rItem.maString);
+    }
+};
+
 }
 
 void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 {
     SCTAB nTab = pViewData->GetTabNo();
+    ScDocument* pDoc = pViewData->GetDocument();
 
-    mpAutoFilterPopup.reset(new ScCheckListMenuWindow(this, pViewData->GetDocument()));
+    mpAutoFilterPopup.reset(new ScCheckListMenuWindow(this, pDoc));
     mpAutoFilterPopup->setOKAction(new AutoFilterOKAction(this));
     std::auto_ptr<AutoFilterData> pData(new AutoFilterData);
     pData->maPos = ScAddress(nCol, nRow, nTab);
-    mpAutoFilterPopup->setExtendedData(pData.release());
 
     Point aPos = pViewData->GetScrPos(nCol, nRow, eWhich);
-    ScDocument* pDoc = pViewData->GetDocument();
     long nSizeX  = 0;
     long nSizeY  = 0;
     pViewData->GetMergeSizePixel(nCol, nRow, nSizeX, nSizeY);
     Rectangle aCellRect(OutputToScreenPixel(aPos), Size(nSizeX, nSizeY));
+
+    ScDBData* pDBData = pDoc->GetDBAtCursor(nCol, nRow, nTab);
+    if (!pDBData)
+        return;
+
+    pData->mpData = pDBData;
+    mpAutoFilterPopup->setExtendedData(pData.release());
+
+    ScQueryParam aParam;
+    pDBData->GetQueryParam(aParam);
+    ScQueryEntry* pEntry = aParam.FindEntryByField(nCol, false);
+    boost::unordered_set<rtl::OUString, rtl::OUStringHash> aSelected;
+    if (pEntry && pEntry->bDoQuery)
+    {
+        if (pEntry->eOp == SC_EQUAL)
+        {
+            ScQueryEntry::QueryItemsType& rItems = pEntry->GetQueryItems();
+            std::for_each(rItems.begin(), rItems.end(), AddSelectedItemString(aSelected));
+        }
+    }
 
     // Populate the check box list.
     bool bHasDates = false;
@@ -656,11 +689,16 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     sal_uInt16 nCount = aStrings.GetCount();
     mpAutoFilterPopup->setMemberSize(nCount);
     for (sal_uInt16 i = 0; i < nCount; ++i)
-        mpAutoFilterPopup->addMember(aStrings[i]->GetString(), true);
+    {
+        rtl::OUString aVal = aStrings[i]->GetString();
+        bool bSelected = true;
+        if (!aSelected.empty())
+            bSelected = aSelected.count(aVal) > 0;
+        mpAutoFilterPopup->addMember(aVal, bSelected);
+    }
     mpAutoFilterPopup->initMembers();
 
     // Populate the menu.
-//  mpAutoFilterPopup->addMenuItem(ScResId::toString(ScResId(SCSTR_ALLFILTER)), true, new PopupAction);
     mpAutoFilterPopup->addMenuItem(ScResId::toString(ScResId(SCSTR_TOP10FILTER)), true, new PopupAction);
     mpAutoFilterPopup->addMenuItem(ScResId::toString(ScResId(SCSTR_STDFILTER)), true, new PopupAction);
     mpAutoFilterPopup->addMenuItem(ScResId::toString(ScResId(SCSTR_EMPTY)), true, new PopupAction);
@@ -682,7 +720,6 @@ void ScGridWindow::UpdateAutoFilterFromMenu()
             aSelected.push_back(itr->first);
     }
 
-    ScDocument* pDoc = pViewData->GetDocument();
     const AutoFilterData* pData =
         static_cast<const AutoFilterData*>(mpAutoFilterPopup->getExtendedData());
 
@@ -690,7 +727,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu()
         return;
 
     const ScAddress& rPos = pData->maPos;
-    ScDBData* pDBData = pDoc->GetDBAtCursor(rPos.Col(), rPos.Row(), rPos.Tab());
+    ScDBData* pDBData = pData->mpData;
     if (!pDBData)
         return;
 
@@ -698,39 +735,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu()
     pDBData->GetQueryParam(aParam);
 
     // Try to use the existing entry for the column (if one exists).
-    SCSIZE n = aParam.GetEntryCount();
-    ScQueryEntry* pEntry = NULL;
-    for (SCSIZE i = 0; i < n; ++i)
-    {
-        ScQueryEntry& rEntry = aParam.GetEntry(i);
-        if (!rEntry.bDoQuery)
-            break;
-
-        if (rEntry.nField == rPos.Col())
-        {
-            // existing entry found!
-            pEntry = &rEntry;
-            break;
-        }
-    }
-
-    if (!pEntry)
-    {
-        // Use the first unused entry.
-        for (SCSIZE i = 0; i < n; ++i)
-        {
-            ScQueryEntry& rEntry = aParam.GetEntry(i);
-            if (!rEntry.bDoQuery)
-            {
-                pEntry = &rEntry;
-                break;
-            }
-        }
-
-        if (!pEntry)
-            // Add a new entry.
-            pEntry = &aParam.AppendEntry();
-    }
+    ScQueryEntry* pEntry = aParam.FindEntryByField(rPos.Col(), true);
 
     if (!pEntry)
         // Something went terribly wrong!
