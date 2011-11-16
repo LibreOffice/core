@@ -60,7 +60,21 @@ ModelessDialog RID_SCDLG_NAMES
     };
     PushButton BTN_CLOSE
     {
+        Pos = MAP_APPFONT ( 108 , 225 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "Close" ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_CANCEL
+    {
         Pos = MAP_APPFONT ( 168 , 225 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "Close" ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_SELECT
+    {
+        Pos = MAP_APPFONT ( 108 , 200 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "Close" ;
         TabStop = TRUE ;

@@ -112,7 +112,9 @@ private:
     HelpButton      maBtnHelp;
     PushButton      maBtnAdd;
     PushButton      maBtnDelete;
-    PushButton      maBtnClose;
+    PushButton      maBtnSelect;
+    OKButton        maBtnOk;
+    CancelButton    maBtnCancel;
     MoreButton      maBtnMore;
 
     const String    mErrMsgInvalidSym;
@@ -135,6 +137,7 @@ private:
     bool AddPushed();
     void RemovePushed();
     void OKPushed();
+    void CancelPushed();
     void NameSelected();
     void ScopeChanged();
     void NameModified();
@@ -143,9 +146,11 @@ private:
     void SelectionChanged();
 
     // Handler:
-    DECL_LINK( CloseBtnHdl, void * );
+    DECL_LINK( OkBtnHdl, void * );
+    DECL_LINK( CancelBtnHdl, void * );
     DECL_LINK( AddBtnHdl, void * );
     DECL_LINK( RemoveBtnHdl, void * );
+    DECL_LINK( SelectBtnHdl, void * );
     DECL_LINK( EdModifyHdl, void * );
     DECL_LINK( AssignGetFocusHdl, void * );
     DECL_LINK( SelectionChangedHdl_Impl, void* );

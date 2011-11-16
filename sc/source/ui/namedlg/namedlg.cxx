@@ -207,7 +207,9 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     maBtnHelp        ( this, ScResId( BTN_HELP ) ),
     maBtnAdd         ( this, ScResId( BTN_ADD ) ),
     maBtnDelete      ( this, ScResId( BTN_DELETE ) ),
-    maBtnClose       ( this, ScResId( BTN_CLOSE ) ),
+    maBtnSelect      ( this, ScResId( BTN_SELECT ) ),
+    maBtnOk          ( this, ScResId( BTN_CLOSE ) ),
+    maBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
     maBtnMore        ( this, ScResId( BTN_MORE ) ),
     //
     mErrMsgInvalidSym( ScResId( STR_INVALIDSYMBOL ) ),
@@ -241,7 +243,8 @@ void ScNameDlg::Init()
     mpRangeManagerTable->SetSelectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
     mpRangeManagerTable->SetDeselectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
 
-    maBtnClose.SetClickHdl  ( LINK( this, ScNameDlg, CloseBtnHdl ) );
+    maBtnOk.SetClickHdl  ( LINK( this, ScNameDlg, OkBtnHdl ) );
+    maBtnCancel.SetClickHdl  ( LINK( this, ScNameDlg, CancelBtnHdl ) );
     maBtnAdd.SetClickHdl     ( LINK( this, ScNameDlg, AddBtnHdl ) );
     maEdAssign.SetGetFocusHdl( LINK( this, ScNameDlg, AssignGetFocusHdl ) );
     maEdAssign.SetModifyHdl  ( LINK( this, ScNameDlg, EdModifyHdl ) );
@@ -313,6 +316,11 @@ void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 sal_Bool ScNameDlg::Close()
 {
     return DoClose( ScNameDlgWrapper::GetChildWindowId() );
+}
+
+void ScNameDlg::CancelPushed()
+{
+    DoClose( ScNameDlgWrapper::GetChildWindowId() );
 }
 
 void ScNameDlg::SetActive()
@@ -505,7 +513,7 @@ void MoveWindow( Window& rButton, long nPixel)
 
 void ScNameDlg::MorePushed()
 {
-    //depending on the state of the button, move all elements beloe up/down
+    //depending on the state of the button, move all elements below up/down
     long nPixel = 85;
     if (!maBtnMore.GetState())
     {
@@ -514,13 +522,21 @@ void ScNameDlg::MorePushed()
     MoveWindow(maBtnAdd, nPixel);
     MoveWindow(maBtnDelete, nPixel);
     MoveWindow(maBtnHelp, nPixel);
-    MoveWindow(maBtnClose, nPixel);
+    MoveWindow(maBtnOk, nPixel);
+    MoveWindow(maBtnCancel, nPixel);
+    MoveWindow(maBtnSelect, nPixel);
     MoveWindow(maFlDiv, nPixel);
 }
 
-IMPL_LINK( ScNameDlg, CloseBtnHdl, void *, EMPTYARG )
+IMPL_LINK( ScNameDlg, OkBtnHdl, void *, EMPTYARG )
 {
     Close();
+    return 0;
+}
+
+IMPL_LINK( ScNameDlg, CancelBtnHdl, void *, EMPTYARG )
+{
+    CancelPushed();
     return 0;
 }
 
