@@ -155,20 +155,6 @@ void ScQueryParamBase::Resize(size_t nNew)
     }
 }
 
-void ScQueryParamBase::DeleteQuery(size_t nPos)
-{
-    if (nPos >= maEntries.size())
-        return;
-
-    boost::ptr_vector<ScQueryEntry>::iterator itr = maEntries.begin();
-    std::advance(itr, nPos);
-    maEntries.erase(itr);
-
-    // Don't forget to append an empty entry to make up for the removed one.
-    // The size of the entries is not supposed to change.
-    maEntries.push_back(new ScQueryEntry);
-}
-
 void ScQueryParamBase::FillInExcelSyntax(const rtl::OUString& rStr, SCSIZE nIndex)
 {
     const String aCellStr = rStr;

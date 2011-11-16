@@ -2105,17 +2105,7 @@ void ScTable::GetFilteredFilterEntries(
 {
     // remove the entry for this column from the query parameter
     ScQueryParam aParam( rParam );
-    SCSIZE nEntryCount = aParam.GetEntryCount();
-    for ( SCSIZE i = 0; i < nEntryCount && aParam.GetEntry(i).bDoQuery; ++i )
-    {
-        ScQueryEntry& rEntry = aParam.GetEntry(i);
-        if ( rEntry.nField == nCol )
-        {
-            aParam.DeleteQuery(i);
-            break;
-        }
-    }
-    nEntryCount = aParam.GetEntryCount();
+    aParam.RemoveEntryByField(nCol);
 
     lcl_PrepareQuery(pDocument, this, aParam);
     bool bHasDates = false;

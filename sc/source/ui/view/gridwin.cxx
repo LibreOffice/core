@@ -1472,7 +1472,7 @@ void ScGridWindow::ExecFilter( sal_uLong nSel,
                 else
                 {
                     if (bFound)
-                        aParam.DeleteQuery(nQueryPos);
+                        aParam.RemoveEntryByField(nCol);
                 }
 
                 //  end edit mode - like in ScCellShell::ExecuteDB

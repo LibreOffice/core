@@ -4404,31 +4404,10 @@ ScQueryParam lcl_GetQueryParam( ScDocShell* pDocShell, sal_Int16 nSheet )
     return aParam;
 }
 
-void lcl_SetAllQueryForField( ScQueryParam& aParam, SCCOLROW nField )
-{
-    bool bFound = false;
-    SCSIZE i = 0;
-    for (; i < aParam.GetEntryCount() && !bFound; ++i)
-    {
-        ScQueryEntry& rEntry = aParam.GetEntry(i);
-        if ( rEntry.nField == nField)
-        {
-            OSL_TRACE("found at pos %d", i );
-            bFound = true;
-        }
-    }
-    if ( bFound )
-    {
-        OSL_TRACE("field %d to delete at pos %d", nField, ( i - 1 ) );
-        aParam.DeleteQuery(--i);
-    }
-}
-
-
 void lcl_SetAllQueryForField( ScDocShell* pDocShell, SCCOLROW nField, sal_Int16 nSheet )
 {
     ScQueryParam aParam = lcl_GetQueryParam( pDocShell, nSheet );
-    lcl_SetAllQueryForField( aParam, nField );
+    aParam.RemoveEntryByField(nField);
     lcl_SelectAll( pDocShell, aParam );
 }
 

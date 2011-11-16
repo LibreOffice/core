@@ -54,9 +54,8 @@ struct ScQueryParamBase
     SC_DLLPUBLIC const ScQueryEntry& GetEntry(SCSIZE n) const;
     SC_DLLPUBLIC ScQueryEntry& GetEntry(SCSIZE n);
     ScQueryEntry* FindEntryByField(SCCOLROW nField, bool bNew);
-    void RemoveEntryByField(SCCOLROW nField);
+    SC_DLLPUBLIC void RemoveEntryByField(SCCOLROW nField);
     void Resize(size_t nNew);
-    SC_DLLPUBLIC void DeleteQuery(size_t nPos);
     void FillInExcelSyntax(const rtl::OUString& aCellStr, SCSIZE nIndex);
 
 protected:
