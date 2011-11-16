@@ -226,15 +226,22 @@ BackendImpl::BackendImpl(
         deleteUnusedFolders(OUString(), folders);
 
         configmgrini_verify_init( xCmdEnv );
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<PersistentMap> pMap;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         rtl::OUString aCompatURL( makeURL( getCachePath(), OUSTR("registered_packages.db") ) );
 
         // Don't create it if it doesn't exist already
         if ( ::utl::UCBContentHelper::Exists( expandUnoRcUrl( aCompatURL ) ) )
         {
-            try {
+            try
+            {
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 pMap = ::std::auto_ptr<PersistentMap>( new PersistentMap( aCompatURL ) );
-            } catch (Exception &e) { // const uno::RunTimeException &e) {
+                SAL_WNODEPRECATED_DECLARATIONS_POP
+            }
+            catch (const Exception &e)
+            {
                 rtl::OStringBuffer aStr( "Exception loading legacy package database: '" );
                 aStr.append( rtl::OUStringToOString( e.Message, osl_getThreadTextEncoding() ) );
                 aStr.append( "' - ignoring file, please remove it.\n" );
