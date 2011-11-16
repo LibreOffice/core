@@ -198,6 +198,11 @@
       <value xml:lang="en-US">.uno:ToggleBreakPointEnabled</value>
      </prop>
     </node>
+    <node oor:name="L_MOD1" oor:op="replace">
+     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="en-US">.uno:GotoLine</value>
+     </prop>
+    </node>
    </node>
    <node oor:name="com.sun.star.frame.StartModule" oor:op="replace">
     <node oor:name="A_MOD1" oor:op="replace">

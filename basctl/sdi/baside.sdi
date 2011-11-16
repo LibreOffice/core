@@ -116,6 +116,12 @@ shell BasicIDEShell
         StateMethod = GetState;
     ]
 
+    SID_GOTOLINE
+    [
+        ExecMethod  = ExecuteCurrent;
+        StateMethod = GetState;
+    ]
+
     FID_SEARCH_NOW
     [
         ExecMethod  = ExecuteCurrent;

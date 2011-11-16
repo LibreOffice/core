@@ -70,6 +70,18 @@ public:
     void        SetObjectName( const String& rName ) { aEdit.SetText( rName ); aEdit.SetSelection( Selection( 0, rName.Len() ) );}
 };
 
+class GotoLineDialog : public ModalDialog
+{
+    FixedText       aText;
+    Edit            aEdit;
+    OKButton        aOKButton;
+    CancelButton    aCancelButton;
+    DECL_LINK(OkButtonHandler, Button *);
+public:
+    GotoLineDialog( Window * pParent );
+    sal_Int32   GetLineNumber();
+};
+
 class ExportDialog : public ModalDialog
 {
 private:

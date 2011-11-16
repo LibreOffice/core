@@ -3619,6 +3619,30 @@ SfxVoidItem RunMacro SID_RUNMACRO
     GroupId = GID_MACRO;
 ]
 
+SfxVoidItem GotoLine SID_GOTOLINE
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_MACRO;
+]
+
 //--------------------------------------------------------------------------
 SfxVoidItem MacroDialog SID_BASICCHOOSER
 ()

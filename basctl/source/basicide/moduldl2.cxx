@@ -439,6 +439,41 @@ NewObjectDialog::~NewObjectDialog()
 {
 }
 
+
+//----------------------------------------------------------------------------
+// GotoLineDialog
+//----------------------------------------------------------------------------
+
+GotoLineDialog::GotoLineDialog(Window * pParent )
+    : ModalDialog( pParent, IDEResId( RID_DLG_GOTOLINE ) ),
+        aText( this, IDEResId( RID_FT_LINE ) ),
+        aEdit( this, IDEResId( RID_ED_LINE ) ),
+        aOKButton( this, IDEResId( RID_PB_OK ) ),
+        aCancelButton( this, IDEResId( RID_PB_CANCEL ) )
+{
+    FreeResource();
+    aEdit.GrabFocus();
+
+    SetText( String( IDEResId( RID_STR_GETLINE ) ) );
+    aOKButton.SetClickHdl(LINK(this, GotoLineDialog, OkButtonHandler));
+
+}
+
+sal_Int32 GotoLineDialog::GetLineNumber()
+{
+    return rtl::OUString( aEdit.GetText() ).toInt32();
+}
+
+IMPL_LINK(GotoLineDialog, OkButtonHandler, Button *, EMPTYARG)
+{
+    if ( GetLineNumber() )
+        EndDialog(1);
+    else
+        aEdit.SetText( aEdit.GetText(), Selection(0, aEdit.GetText().Len() ));
+    return 0;
+}
+
+
 //----------------------------------------------------------------------------
 // ExportDialog
 //----------------------------------------------------------------------------

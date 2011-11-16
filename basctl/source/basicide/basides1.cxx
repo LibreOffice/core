@@ -34,6 +34,7 @@
 #include <basic/sbx.hxx>
 #define _SVSTDARR_STRINGS
 #include <svl/svstdarr.hxx>
+#include <svl/visitem.hxx>
 #include <ide_pch.hxx>
 
 #define _SOLAR__PRIVATE 1
@@ -57,6 +58,7 @@
 #include <managelang.hxx>
 #include <localizationmgr.hxx>
 #include <helpid.hrc>
+#include <moduldlg.hxx>
 
 #include <svtools/texteng.hxx>
 #include <svtools/textview.hxx>
@@ -251,6 +253,22 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
             }
         }
         break;
+        case SID_GOTOLINE:
+        {
+            if ( pCurWin && pCurWin->IsA( TYPE( ModulWindow ) ) )
+            {
+                std::auto_ptr< GotoLineDialog > xGotoDlg( new GotoLineDialog( pCurWin ) );
+                if ( xGotoDlg->Execute() )
+                {
+                    rtl::OUString sText =  xGotoDlg->GetText();
+
+                    sal_Int32 nLine = xGotoDlg->GetLineNumber();
+
+                    if ( nLine )
+                        ((ModulWindow*)pCurWin)->GetEditView()->SetSelection( TextSelection( TextPaM( nLine - 1 , 0 ), TextPaM( nLine - 1, 0 ) ) );
+                }
+            }
+        }
         default:
         {
             pCurWin->ExecuteCommand( rReq );
@@ -1017,6 +1035,18 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
                     rSet.DisableItem( nWh );
             }
             break;
+            case SID_GOTOLINE:
+            {
+                // if this is not a module window hide the
+                // setting, doesn't make sense for example if the
+                // dialog editor is open
+                if( pCurWin && !pCurWin->IsA( TYPE( ModulWindow ) ) )
+                {
+                    rSet.DisableItem( nWh );
+                    rSet.Put(SfxVisibilityItem(nWh, sal_False));
+                }
+                break;
+            }
         }
     }
     if ( pCurWin )

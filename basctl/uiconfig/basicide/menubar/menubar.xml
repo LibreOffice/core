@@ -48,6 +48,7 @@
             <menu:menuitem menu:id=".uno:AvailableToolbars"/>
             <menu:menuitem menu:id=".uno:StatusBarVisible"/>
             <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
+            <menu:menuitem menu:id=".uno:GotoLine"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FullScreen"/>
         </menu:menupopup>

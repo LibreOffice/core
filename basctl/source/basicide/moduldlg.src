@@ -331,6 +331,44 @@ ModalDialog RID_DLG_LIBS
         Text [ en-US ] = "Replace existing libraries" ;
     };
 };
+
+ModalDialog RID_DLG_GOTOLINE
+{
+    HelpID = "basctl:ModalDialog:RID_DLG_GOTOLINE";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 160 , 55 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    OKButton RID_PB_OK
+    {
+        Pos = MAP_APPFONT ( 104 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton RID_PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 104 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText RID_FT_LINE
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 96 , 10 ) ;
+        Text [ en-US ] = "~Line Number:" ;
+    };
+    Edit RID_ED_LINE
+    {
+        HelpID = "basctl:Edit:RID_DLG_GOTOLINE:RID_ED_LINE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 19 ) ;
+        Size = MAP_APPFONT ( 62 , 12 ) ;
+        TabStop = TRUE ;
+    };
+};
+
 ModalDialog RID_DLG_NEWLIB
 {
     HelpID = "basctl:ModalDialog:RID_DLG_NEWLIB";
