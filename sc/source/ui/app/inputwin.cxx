@@ -79,12 +79,25 @@
 #include "AccessibleText.hxx"
 #include <svtools/miscopt.hxx>
 #include <comphelper/string.hxx>
+#include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XController.hpp>
 
 #define TEXT_STARTPOS       3
 #define TEXT_MULTI_STARTPOS 5
 #define THESIZE             1000000 //!!! langt... :-)
 #define TBX_WINDOW_HEIGHT   22 // in Pixeln - fuer alle Systeme gleich?
 #define LEFT_OFFSET         5
+
+using com::sun::star::uno::Reference;
+using com::sun::star::uno::UNO_QUERY;
+
+using com::sun::star::frame::XLayoutManager;
+using com::sun::star::frame::XModel;
+using com::sun::star::frame::XFrame;
+using com::sun::star::frame::XController;
+using com::sun::star::beans::XPropertySet;
+
 
 enum ScNameInputType
 {
@@ -903,8 +916,35 @@ IMPL_LINK( ScInputBarGroup, ClickHdl, PushButton*, EMPTYARG )
     {
         pParent->SetMultiLineStatus(false);
     }
-    pParent->Resize();
     //pParent->CalcWindowSizePixel(); // TODO: changed from RecalcItems(). check if this does the same thing.
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    if ( pViewFrm )
+    {
+        Reference< com::sun::star::beans::XPropertySet > xPropSet( pViewFrm->GetFrame().GetFrameInterface(), UNO_QUERY );
+        Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+
+        if ( xPropSet.is() )
+        {
+            com::sun::star::uno::Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+            aValue >>= xLayoutManager;
+        }
+
+        if ( xLayoutManager.is() )
+        {
+            xLayoutManager->lock(); // this will core
+            pParent->Resize();
+            DataChangedEvent aFakeUpdate( DATACHANGED_SETTINGS, NULL,  SETTINGS_STYLE );
+            // this basically will trigger the reposititioning of the
+            // items in the toolbar from ImplFormat ( which is controlled by
+            // mnWinHeight ) which in turn is updated in ImplCalcItem which is
+            // controlled by mbCalc. Additionally the ImplFormat above is
+            // controlled via mbFormat. It seems the easiest way to get these
+            // booleans set is to send in the fake event below.
+            pParent->DataChanged( aFakeUpdate);
+            // unlock relayouts the toolbars in the 4 quadrants
+            xLayoutManager->unlock();
+        }
+    }
     return 0;
 }
 
