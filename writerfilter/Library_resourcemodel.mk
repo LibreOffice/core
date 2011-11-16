@@ -75,9 +75,23 @@ $(eval $(call gb_Library_add_generated_exception_objects,resourcemodel,\
     CustomTarget/writerfilter/source/sprmcodetostr \
 ))
 
+
+ifneq ($(COM)-$(OS)-$(CPUNAME),GCC-LINUX-POWERPC64)
+#Apparently some compilers, according to the original .mk this was converted
+#from, require this to be noopt or they fail to compile it, probably good to
+#revisit that and narrow this down to where it's necessary
 $(eval $(call gb_Library_add_generated_cxxobjects,resourcemodel,\
     CustomTarget/writerfilter/source/qnametostr \
 	, $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
 ))
+else
+#Ironically, on RHEL-6 PPC64 with no-opt the output is too large for the
+#toolchain, "Error: operand out of range", but it build fine with
+#normal flags
+$(eval $(call gb_Library_add_generated_cxxobjects,resourcemodel,\
+    CustomTarget/writerfilter/source/qnametostr \
+	, $(gb_LinkTarget_EXCEPTIONFLAGS) \
+))
+endif
 
 # vim: set noet sw=4 ts=4:
