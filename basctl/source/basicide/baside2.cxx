@@ -1401,6 +1401,11 @@ sal_Bool ModulWindow::IsReadOnly()
     return bReadOnly;
 }
 
+void ModulWindow::SetLineNumberDisplay(bool b)
+{
+    aXEditorWindow.SetLineNumberDisplay(b);
+}
+
 sal_Bool ModulWindow::IsPasteAllowed()
 {
     sal_Bool bPaste = sal_False;

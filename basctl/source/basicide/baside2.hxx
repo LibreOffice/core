@@ -290,6 +290,7 @@ private:
     LineNumberWindow    aLineNumberWindow;
     EditorWindow        aEdtWindow;
     ScrollBar           aEWVScrollBar;
+    bool                bLineNumberDisplay;
 
     virtual void DataChanged(DataChangedEvent const & rDCEvt);
 
@@ -304,6 +305,8 @@ public:
     LineNumberWindow&   GetLineNumberWindow() { return aLineNumberWindow; }
     EditorWindow&       GetEdtWindow()      { return aEdtWindow; }
     ScrollBar&          GetEWVScrollBar()   { return aEWVScrollBar; }
+
+    void SetLineNumberDisplay(bool b);
 };
 
 
@@ -364,6 +367,8 @@ public:
     virtual sal_Bool    AllowUndo();
     virtual void    SetReadOnly( sal_Bool bReadOnly );
     virtual sal_Bool    IsReadOnly();
+
+    void SetLineNumberDisplay(bool);
 
     StarBASIC*      GetBasic() { XModule(); return xBasic; }
 

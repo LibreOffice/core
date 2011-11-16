@@ -114,7 +114,7 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
             lcl_GetSourceLinesEnabledValue() = bValue;
             if ( pCurWin && pCurWin->IsA( TYPE( ModulWindow ) ) )
             {
-//                (ModuleWindow*)(pCurWin)->SetLineNumberDisplay( bValue );
+                dynamic_cast<ModulWindow*>(pCurWin)->SetLineNumberDisplay( bValue );
             }
         }
         break;

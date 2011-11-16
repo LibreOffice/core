@@ -1630,13 +1630,13 @@ ComplexEditorWindow::ComplexEditorWindow( ModulWindow* pParent ) :
     aBrkWindow( this ),
     aLineNumberWindow( this, pParent ),
     aEdtWindow( this ),
-    aEWVScrollBar( this, WB_VSCROLL | WB_DRAG )
+    aEWVScrollBar( this, WB_VSCROLL | WB_DRAG ),
+    bLineNumberDisplay(false)
 {
     aEdtWindow.SetModulWindow( pParent );
     aBrkWindow.SetModulWindow( pParent );
     aEdtWindow.Show();
     aBrkWindow.Show();
-    aLineNumberWindow.Show();
 
     aEWVScrollBar.SetLineSize( SCROLL_LINE );
     aEWVScrollBar.SetPageSize( SCROLL_PAGE );
@@ -1659,8 +1659,16 @@ void ComplexEditorWindow::Resize()
     Size aLnSz(aLineNumberWindow.GetWidth(), aSz.Height());
     aLineNumberWindow.SetPosSizePixel(Point(DWBORDER+aBrkSz.Width() - 1, DWBORDER), aLnSz);
 
-    Size aEWSz(aSz.Width() - nBrkWidth - aLineNumberWindow.GetWidth() - nSBWidth + 2, aSz.Height());
-    aEdtWindow.SetPosSizePixel( Point( DWBORDER+aBrkSz.Width()+aLnSz.Width()-1, DWBORDER ), aEWSz );
+    if(bLineNumberDisplay)
+    {
+        Size aEWSz(aSz.Width() - nBrkWidth - aLineNumberWindow.GetWidth() - nSBWidth + 2, aSz.Height());
+        aEdtWindow.SetPosSizePixel( Point( DWBORDER+aBrkSz.Width()+aLnSz.Width()-1, DWBORDER ), aEWSz );
+    }
+    else
+    {
+        Size aEWSz(aSz.Width() - nBrkWidth - nSBWidth + 1, aSz.Height());
+        aEdtWindow.SetPosSizePixel(Point(DWBORDER + aBrkSz.Width() - 1, DWBORDER), aEWSz);
+    }
 
     aEWVScrollBar.SetPosSizePixel( Point( aOutSz.Width()-DWBORDER-nSBWidth, DWBORDER ), Size( nSBWidth, aSz.Height() ) );
 }
@@ -1694,6 +1702,20 @@ void ComplexEditorWindow::DataChanged(DataChangedEvent const & rDCEvt)
             Invalidate();
         }
     }
+}
+
+void ComplexEditorWindow::SetLineNumberDisplay(bool b)
+{
+    if(b == bLineNumberDisplay)
+        return;
+
+    if(b)
+        aLineNumberWindow.Show();
+    else
+        aLineNumberWindow.Hide();
+
+    bLineNumberDisplay = b;
+    Resize();
 }
 
 uno::Reference< awt::XWindowPeer >
