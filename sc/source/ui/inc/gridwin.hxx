@@ -42,7 +42,7 @@
 #include <memory>
 #include <boost/scoped_ptr.hpp>
 
-#define USE_NEW_AUTOFILTER 0
+#define USE_NEW_AUTOFILTER 1
 
 // ---------------------------------------------------------------------------
 
