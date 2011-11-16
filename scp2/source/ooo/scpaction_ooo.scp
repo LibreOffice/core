@@ -35,6 +35,7 @@ ScpAction scp_Copy_Thirdpartylicense_Readme_Html
 End
 #endif
 
+#ifndef WNT
 ScpAction scp_Copy_Readme_Txt
   #ifdef UNX
     README_ALL_LANG(Copy, README);
@@ -50,6 +51,7 @@ ScpAction scp_Copy_Readme_Txt
     Subdir = "READMEs";
   #endif
 End
+#endif
 
 #if defined(WNT) && defined(_gcc3)
 #if defined(MINGW_GCCDLL)
