@@ -47,9 +47,7 @@ all:
 TARFILE_NAME=libexttextcat-3.2.0
 TARFILE_MD5=e1c178b18f130b40494561f02bc1a948
 TARFILE_ROOTDIR=libexttextcat-3.2.0
-PATCH_FILES=libexttextcat-3.2.0-visibility.patch
-
-PATCH_FILES = android.patch
+PATCH_FILES=libexttextcat-3.2.0-visibility.patch android.patch
 
 .IF "$(GUI)"=="UNX"
 .IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
