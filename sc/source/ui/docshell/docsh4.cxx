@@ -1219,9 +1219,9 @@ sal_Bool ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, sal_Bool b
 
 //------------------------------------------------------------------
 
-void ScDocShell::DoRecalc( sal_Bool bApi )
+void ScDocShell::DoRecalc( bool bApi )
 {
-    sal_Bool bDone = false;
+    bool bDone = false;
     ScTabViewShell* pSh = GetBestViewShell();
     if ( pSh )
     {
@@ -1229,7 +1229,7 @@ void ScDocShell::DoRecalc( sal_Bool bApi )
         if ( pHdl && pHdl->IsInputMode() && pHdl->IsFormulaMode() && !bApi )
         {
             pHdl->FormulaPreview();     // Teilergebnis als QuickHelp
-            bDone = sal_True;
+            bDone = true;
         }
         else
         {
@@ -1242,7 +1242,7 @@ void ScDocShell::DoRecalc( sal_Bool bApi )
         WaitObject aWaitObj( GetActiveDialogParent() );
         aDocument.CalcFormulaTree();
         if ( pSh )
-            pSh->UpdateCharts(sal_True);
+            pSh->UpdateCharts(true);
 
         aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
 
@@ -1258,7 +1258,7 @@ void ScDocShell::DoRecalc( sal_Bool bApi )
     }
 }
 
-void ScDocShell::DoHardRecalc( sal_Bool /* bApi */ )
+void ScDocShell::DoHardRecalc( bool /* bApi */ )
 {
     WaitObject aWaitObj( GetActiveDialogParent() );
     ScTabViewShell* pSh = GetBestViewShell();
@@ -1270,7 +1270,7 @@ void ScDocShell::DoHardRecalc( sal_Bool /* bApi */ )
     aDocument.CalcAll();
     GetDocFunc().DetectiveRefresh();    // erzeugt eigenes Undo
     if ( pSh )
-        pSh->UpdateCharts(sal_True);
+        pSh->UpdateCharts(true);
 
     // set notification flags for "calculate" event (used in SFX_HINT_DATACHANGED broadcast)
     // (might check for the presence of any formulas on each sheet)

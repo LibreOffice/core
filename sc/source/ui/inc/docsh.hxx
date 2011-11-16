@@ -311,8 +311,8 @@ public:
 
     sal_Bool            MoveTable( SCTAB nSrcTab, SCTAB nDestTab, sal_Bool bCopy, sal_Bool bRecord );
 
-    void            DoRecalc( sal_Bool bApi );
-    void            DoHardRecalc( sal_Bool bApi );
+    void            DoRecalc( bool bApi );
+    void            DoHardRecalc( bool bApi );
 
     void            UpdateOle( const ScViewData* pViewData, sal_Bool bSnapSize = false);
     sal_Bool        IsOle();
