@@ -2343,9 +2343,6 @@ utl::MultiAtomProvider::insertAtomClass(int)
 utl::MultiAtomProvider::overrideAtom(int, int, rtl::OUString const&)
 utl::NodeValueAccessor::bind(com::sun::star::uno::Any*)
 utl::OConfigurationNode::appendNode(rtl::OUString const&, utl::OConfigurationNode const&) const
-utl::OConfigurationTreeRoot::OConfigurationTreeRoot(com::sun::star::uno::Reference<com::sun::star::util::XChangesBatch> const&)
-utl::OConfigurationTreeRoot::OConfigurationTreeRoot(comphelper::ComponentContext const&, char const*, bool)
-utl::OConfigurationValueContainer::OConfigurationValueContainer(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, osl::Mutex&, rtl::OUString const&, unsigned short, int)
 utl::OConfigurationValueContainer::getServiceFactory() const
 utl::TransliterationWrapper::compareSubstring(String const&, int, int, String const&, int, int) const
 vcl::Clipboard_getSupportedServiceNames()

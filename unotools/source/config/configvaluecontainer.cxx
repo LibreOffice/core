@@ -258,14 +258,6 @@ namespace utl
         implConstruct( ::rtl::OUString::createFromAscii( _pConfigLocation ), _nAccessFlags, _nLevels );
     }
 
-    OConfigurationValueContainer::OConfigurationValueContainer(
-            const Reference< XMultiServiceFactory >& _rxORB, ::osl::Mutex& _rAccessSafety,
-            const ::rtl::OUString& _rConfigLocation, const sal_uInt16 _nAccessFlags, const sal_Int32 _nLevels )
-        :m_pImpl( new OConfigurationValueContainerImpl( _rxORB, _rAccessSafety ) )
-    {
-        implConstruct( _rConfigLocation, _nAccessFlags, _nLevels );
-    }
-
     OConfigurationValueContainer::~OConfigurationValueContainer()
     {
         delete m_pImpl;

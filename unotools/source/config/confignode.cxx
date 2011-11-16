@@ -547,34 +547,12 @@ namespace utl
             return NULL;
         }
     }
-    //========================================================================
-    //= OConfigurationTreeRoot
-    //========================================================================
-    //------------------------------------------------------------------------
-    OConfigurationTreeRoot::OConfigurationTreeRoot( const Reference< XChangesBatch >& _rxRootNode )
-        :OConfigurationNode( _rxRootNode.get() )
-        ,m_xCommitter(_rxRootNode)
-    {
-    }
 
     //------------------------------------------------------------------------
     OConfigurationTreeRoot::OConfigurationTreeRoot( const Reference< XInterface >& _rxRootNode )
         :OConfigurationNode( _rxRootNode )
         ,m_xCommitter( _rxRootNode, UNO_QUERY )
     {
-    }
-
-    //------------------------------------------------------------------------
-    OConfigurationTreeRoot::OConfigurationTreeRoot( const ::comphelper::ComponentContext& i_rContext, const sal_Char* i_pAsciiNodePath, const bool i_bUpdatable )
-        :OConfigurationNode( lcl_createConfigurationRoot( lcl_getConfigProvider( i_rContext.getLegacyServiceFactory() ),
-            ::rtl::OUString::createFromAscii( i_pAsciiNodePath ), i_bUpdatable, -1, false ).get() )
-        ,m_xCommitter()
-    {
-        if ( i_bUpdatable )
-        {
-            m_xCommitter.set( getUNONode(), UNO_QUERY );
-            OSL_ENSURE( m_xCommitter.is(), "OConfigurationTreeRoot::OConfigurationTreeRoot: could not create an updatable node!" );
-        }
     }
 
     //------------------------------------------------------------------------

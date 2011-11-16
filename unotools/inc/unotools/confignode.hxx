@@ -248,12 +248,6 @@ namespace utl
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XChangesBatch >
                                 m_xCommitter;
     protected:
-        /** ctor<p/>
-        */
-        OConfigurationTreeRoot(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XChangesBatch >& _rxRootNode
-        );
-
         /** ctor for a readonly node
         */
         OConfigurationTreeRoot(
@@ -275,14 +269,6 @@ namespace utl
             The object constructed here is invalid (i.e. <method>isValid</method> will return sal_False).
         */
         OConfigurationTreeRoot() :OConfigurationNode() { }
-
-        /** creates a configuration tree for the given path in the given mode
-        */
-        OConfigurationTreeRoot(
-            const ::comphelper::ComponentContext& i_rContext,
-            const sal_Char* i_pAsciiNodePath,
-            const bool i_bUpdatable
-        );
 
         /** creates a configuration tree for the given path in the given mode
         */

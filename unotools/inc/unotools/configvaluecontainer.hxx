@@ -104,30 +104,6 @@ namespace utl
             const sal_Int32 _nLevels = -1
         );
 
-        /** constructs the object
-
-            @param _rxORB
-                specifies the service factory which should be used to access the configuration
-            @param _rAccessSafety
-                As this class is intented to manipulate objects it does not hold itself (see the various
-                registerXXX methods), it needs to guard these access for muti threading safety.<br/>
-                The mutex given here is locked whenever such an access occurs.
-            @param _rConfigLocation
-                describes the configurations node path
-            @param _nAccessFlags
-                specifies different aspects of the configuration aspect to be created, e.g. it's update mode etc.<br/>
-                See the CVC_xxx constants for what you can use here.
-            @param _nLevels
-                specifies the number of levels to access under the node given by <arg>_pConfigLocation</arg>
-        */
-        OConfigurationValueContainer(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-            ::osl::Mutex& _rAccessSafety,
-            const ::rtl::OUString& _rConfigLocation,
-            const sal_uInt16 _nAccessFlags = CVC_UPDATE_ACCESS | CVC_LAZY_UPDATE,
-            const sal_Int32 _nLevels = -1
-        );
-
         /// dtor
         ~OConfigurationValueContainer();
 
