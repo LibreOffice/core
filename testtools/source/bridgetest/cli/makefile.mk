@@ -28,7 +28,7 @@
 PRJ=..$/..$/..
 
 PRJNAME=testtools
-TARGET=cli_cpp_bridgetest.uno
+TARGET=$(ENFORCEDSHLPREFIX)cli_cpp_bridgetest.uno
 USE_DEFFILE=TRUE
 NO_BSYMBOLIC=TRUE
 ENABLE_EXCEPTIONS=TRUE

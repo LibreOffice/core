@@ -27,7 +27,7 @@
 PRJ=..$/..
 
 PRJNAME=	stoc
-TARGET = namingservice.uno
+TARGET = $(ENFORCEDSHLPREFIX)namingservice.uno
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST = namingservice
 

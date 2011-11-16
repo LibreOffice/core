@@ -50,3 +50,7 @@ STDLIBCUIMT+=-llog -landroid -lgnustl_shared
 STDSHLGUIMT+=-llog -landroid -lgnustl_shared
 STDSHLCUIMT+=-llog -landroid -lgnustl_shared
 
+# All shared libraries we build must start with "lib" because
+# otherwise the Android package installer will not unpack them from
+# the .apk into the app's lib directory
+ENFORCEDSHLPREFIX=lib

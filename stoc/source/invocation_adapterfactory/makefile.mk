@@ -27,7 +27,7 @@
 PRJ=..$/..
 
 PRJNAME=stoc
-TARGET = invocadapt.uno
+TARGET = $(ENFORCEDSHLPREFIX)invocadapt.uno
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST = invadp
 

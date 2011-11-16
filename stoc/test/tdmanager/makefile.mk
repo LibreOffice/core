@@ -38,7 +38,7 @@ DLLPRE = # no leading "lib" on .so files
 
 SLOFILES = $(SLO)$/testtdmanager.obj
 
-SHL1TARGET = testtdmanager.uno
+SHL1TARGET = $(ENFORCEDSHLPREFIX)testtdmanager.uno
 SHL1OBJS = $(SLOFILES)
 SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB)

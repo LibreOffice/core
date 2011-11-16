@@ -28,7 +28,7 @@
 PRJ=..$/..
 
 PRJNAME=stoc
-TARGET = javaloader.uno
+TARGET = $(ENFORCEDSHLPREFIX)javaloader.uno
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST = javaloader
 

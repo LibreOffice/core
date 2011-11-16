@@ -28,7 +28,7 @@
 PRJ=..$/..
 
 PRJNAME=io
-TARGET = textoutstream.uno
+TARGET = $(ENFORCEDSHLPREFIX)textoutstream.uno
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------

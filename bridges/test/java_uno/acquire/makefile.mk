@@ -40,7 +40,7 @@ INCPRE += $(MISC)$/$(TARGET)$/inc
 
 SLOFILES = $(SLO)$/testacquire.obj
 
-SHL1TARGET = testacquire.uno
+SHL1TARGET = $(ENFORCEDSHLPREFIX)testacquire.uno
 SHL1OBJS = $(SLOFILES)
 SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB)
 SHL1VERSIONMAP = $(SOLARENV)/src/component.map

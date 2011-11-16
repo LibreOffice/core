@@ -27,7 +27,7 @@
 PRJ=..$/..
 
 PRJNAME=	stoc
-TARGET = introspection.uno
+TARGET = $(ENFORCEDSHLPREFIX)introspection.uno
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST = insp
 

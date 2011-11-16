@@ -37,7 +37,7 @@ DLLPRE =
 
 # ------------------------------------------------------------------
 
-SHL1TARGET=	$(TARGET)
+SHL1TARGET=	$(ENFORCEDSHLPREFIX)$(TARGET)
 
 LIB1TARGET=	$(SLB)$/$(TARGET).lib
 LIB1FILES=	$(SLB)$/bootstrap.lib \
@@ -68,7 +68,7 @@ SHL1RPATH=  URELIB
 
 DEF1NAME=	$(SHL1TARGET)
 
-SHL2TARGET=	stocservices.uno
+SHL2TARGET=	$(ENFORCEDSHLPREFIX)stocservices.uno
 
 LIB2TARGET=	$(SLB)$/stocservices.uno.lib
 LIB2FILES=	\

@@ -27,7 +27,7 @@
 PRJ=..$/..
 
 PRJNAME=remotebridges
-TARGET = uuresolver.uno
+TARGET = $(ENFORCEDSHLPREFIX)uuresolver.uno
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST = uuresolver
 

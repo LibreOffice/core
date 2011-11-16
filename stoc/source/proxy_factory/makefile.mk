@@ -28,7 +28,7 @@
 PRJ=..$/..
 
 PRJNAME=stoc
-TARGET = proxyfac.uno
+TARGET = $(ENFORCEDSHLPREFIX)proxyfac.uno
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST = proxyfac
 

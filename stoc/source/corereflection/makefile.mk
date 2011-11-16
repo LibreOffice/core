@@ -27,7 +27,7 @@
 PRJ=..$/..
 
 PRJNAME=	stoc
-TARGET = reflection.uno
+TARGET = $(ENFORCEDSHLPREFIX)reflection.uno
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST = corefl
 

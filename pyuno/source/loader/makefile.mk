@@ -27,7 +27,7 @@
 PRJ=../..
 
 PRJNAME=pyuno
-TARGET=pythonloader.uno
+TARGET=$(ENFORCEDSHLPREFIX)pythonloader.uno
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------

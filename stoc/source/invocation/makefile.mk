@@ -27,7 +27,7 @@
 PRJ=..$/..
 
 PRJNAME=	stoc
-TARGET = invocation.uno
+TARGET = $(ENFORCEDSHLPREFIX)invocation.uno
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST = inv
 

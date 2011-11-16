@@ -99,7 +99,7 @@ SLOFILES=										\
 
 # --- Library -----------------------------------
 
-SHL1TARGET=		$(TARGET).uno
+SHL1TARGET=$(ENFORCEDSHLPREFIX)$(TARGET).uno
 
 SHL1STDLIBS=	$(CPPUHELPERLIB)	\
                 $(CPPULIB)			\

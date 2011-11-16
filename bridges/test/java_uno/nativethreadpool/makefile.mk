@@ -45,13 +45,13 @@ ERROR -- missing platform
 DLLPRE = # no leading "lib" on .so files
 INCPRE += $(MISC)$/$(TARGET)$/inc
 
-SHL1TARGET = $(TARGET)_client.uno
+SHL1TARGET = $(ENFORCEDSHLPREFIX)$(TARGET)_client.uno
 SHL1OBJS = $(SLO)$/testnativethreadpoolclient.obj
 SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB)
 SHL1VERSIONMAP = version.map
 SHL1IMPLIB = i$(TARGET)_client
 
-SHL2TARGET = $(TARGET)_server.uno
+SHL2TARGET = $(ENFORCEDSHLPREFIX)$(TARGET)_server.uno
 SHL2OBJS = $(SLO)$/testnativethreadpoolserver.obj
 SHL2STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB)
 SHL2VERSIONMAP = version.map

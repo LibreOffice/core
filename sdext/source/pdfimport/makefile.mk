@@ -58,7 +58,7 @@ SLOFILES=\
     $(SLO)$/services.obj
 
 SHL1DLLPRE=
-SHL1TARGET=$(TARGET).uno
+SHL1TARGET=$(ENFORCEDSHLPREFIX)$(TARGET).uno
 
 SHL1LIBS=\
     $(SLB)$/pdfmisc.lib \

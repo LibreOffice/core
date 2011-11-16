@@ -27,7 +27,7 @@
 
 PRJ = ..$/..$/..
 PRJNAME = ucb
-TARGET = ucpext.uno
+TARGET = $(ENFORCEDSHLPREFIX)ucpext.uno
 ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE : settings.mk

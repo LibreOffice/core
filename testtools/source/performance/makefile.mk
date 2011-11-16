@@ -43,7 +43,7 @@ LIB1TARGET=$(SLB)$/perftest.lib
 LIB1OBJFILES= \
         $(SLO)$/ubtest.obj
 
-SHL1TARGET = perftest.uno
+SHL1TARGET = $(ENFORCEDSHLPREFIX)$(ENFORCEDSHLPREFIX)perftest.uno
 
 SHL1VERSIONMAP = $(SOLARENV)$/src$/component.map
 
@@ -62,7 +62,7 @@ LIB2TARGET=$(SLB)$/perfobj.lib
 LIB2OBJFILES= \
         $(SLO)$/ubobject.obj
 
-SHL2TARGET = perfobj.uno
+SHL2TARGET = $(ENFORCEDSHLPREFIX)$(ENFORCEDSHLPREFIX)perfobj.uno
 
 SHL2VERSIONMAP = $(SOLARENV)$/src$/component.map
 
