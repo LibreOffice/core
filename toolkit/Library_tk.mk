@@ -66,24 +66,16 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/awt/stylesettings \
     toolkit/source/awt/vclxaccessiblecomponent \
     toolkit/source/awt/vclxbitmap \
-    toolkit/source/awt/vclxbutton \
     toolkit/source/awt/vclxcontainer \
     toolkit/source/awt/vclxdevice \
-    toolkit/source/awt/vclxdialog \
-    toolkit/source/awt/vclxfixedline \
     toolkit/source/awt/vclxfont \
     toolkit/source/awt/vclxgraphics \
     toolkit/source/awt/vclxmenu \
-    toolkit/source/awt/vclxplugin \
     toolkit/source/awt/vclxpointer \
     toolkit/source/awt/vclxprinter \
     toolkit/source/awt/vclxregion \
-    toolkit/source/awt/vclxscroller \
     toolkit/source/awt/vclxspinbutton \
-    toolkit/source/awt/vclxsplitter \
     toolkit/source/awt/vclxsystemdependentwindow \
-    toolkit/source/awt/vclxtabcontrol \
-    toolkit/source/awt/vclxtabpage \
     toolkit/source/awt/vclxtabpagecontainer \
     toolkit/source/awt/animatedimagespeer \
     toolkit/source/awt/vclxtoolkit \

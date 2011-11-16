@@ -231,8 +231,6 @@ extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL
 
 extern void * SAL_CALL comp_AsyncCallback_component_getFactory( const char * implName, void * serviceManager, void * registryKey );
 
-extern void * SAL_CALL comp_Layout_component_getFactory( const char * implName, void * serviceManager, void * registryKey );
-
 extern "C"
 {
 
@@ -330,8 +328,6 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL tk_component_getFactory( const sal_Char* sImple
 
         if ( rtl_str_compare( sImplementationName, "com.sun.star.awt.comp.AsyncCallback" ) == 0 )
             return comp_AsyncCallback_component_getFactory( sImplementationName, _pServiceManager, _pRegistryKey );
-        if( pRet == 0 )
-            pRet = comp_Layout_component_getFactory( sImplementationName, _pServiceManager, _pRegistryKey );
     }
     return pRet;
 }

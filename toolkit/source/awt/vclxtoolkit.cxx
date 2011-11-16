@@ -129,7 +129,6 @@
 
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
-#include "awt/vclxtabcontrol.hxx"
 
 namespace css = ::com::sun::star;
 

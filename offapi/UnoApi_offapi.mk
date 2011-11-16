@@ -356,7 +356,6 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,offapi/com/sun/star/a
 	UnoControlThrobberModel \
 	UnoControlTimeField \
 	UnoControlTimeFieldModel \
-	XLayoutFlowContainer \
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,offapi/com/sun/star/awt/grid,\
 	UnoControlGrid \
@@ -1706,10 +1705,6 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/awt,\
 	XKeyHandler \
 	XKeyListener \
 	XLayoutConstrains \
-	XLayoutContainer \
-	XLayoutFlow \
-	XLayoutRoot \
-	XLayoutUnit \
 	XListBox \
 	XMenu \
 	XMenuBar \

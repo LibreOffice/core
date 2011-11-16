@@ -21,10 +21,6 @@
 # instead of those above.
 
 $(eval $(call gb_Package_Package,sc_uiconfig,$(SRCDIR)/sc/uiconfig))
-$(eval $(call gb_Package_add_file,sc_uiconfig,xml/uiconfig/modules/scalc/layout/insert-sheet.xml,layout/insert-sheet.xml))
-$(eval $(call gb_Package_add_file,sc_uiconfig,xml/uiconfig/modules/scalc/layout/move-copy-sheet.xml,layout/move-copy-sheet.xml))
-$(eval $(call gb_Package_add_file,sc_uiconfig,xml/uiconfig/modules/scalc/layout/sort-options.xml,layout/sort-options.xml))
-$(eval $(call gb_Package_add_file,sc_uiconfig,xml/uiconfig/modules/scalc/layout/string-input.xml,layout/string-input.xml))
 $(eval $(call gb_Package_add_file,sc_uiconfig,xml/uiconfig/modules/scalc/menubar/menubar.xml,scalc/menubar/menubar.xml))
 $(eval $(call gb_Package_add_file,sc_uiconfig,xml/uiconfig/modules/scalc/statusbar/statusbar.xml,scalc/statusbar/statusbar.xml))
 $(eval $(call gb_Package_add_file,sc_uiconfig,xml/uiconfig/modules/scalc/toolbar/alignmentbar.xml,scalc/toolbar/alignmentbar.xml))
