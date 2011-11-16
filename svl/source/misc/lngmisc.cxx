@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
+#include <comphelper/string.hxx>
 #include <svl/lngmisc.hxx>
 #include <tools/solar.h>
 #include <tools/string.hxx>
@@ -55,21 +56,17 @@ sal_Int32 GetNumControlChars( const OUString &rTxt )
     return nCnt;
 }
 
-
 sal_Bool RemoveHyphens( OUString &rTxt )
 {
     sal_Bool bModified = sal_False;
-    if (HasHyphens( rTxt ))
+    if (HasHyphens(rTxt))
     {
-        String aTmp( rTxt );
-        aTmp.EraseAllChars( SVT_SOFT_HYPHEN );
-        aTmp.EraseAllChars( SVT_HARD_HYPHEN );
-        rTxt = aTmp;
+        rTxt = comphelper::string::remove(rTxt, SVT_SOFT_HYPHEN);
+        rTxt = comphelper::string::remove(rTxt, SVT_HARD_HYPHEN);
         bModified = sal_True;
     }
     return bModified;
 }
-
 
 sal_Bool RemoveControlChars( OUString &rTxt )
 {

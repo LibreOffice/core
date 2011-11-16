@@ -52,15 +52,20 @@ LngParser::LngParser( const ByteString &rLngFile, sal_Bool bUTF8, sal_Bool bULFF
 {
     pLines = new LngLineList();
     DirEntry aEntry( String( sSource, RTL_TEXTENCODING_ASCII_US ));
-    if ( aEntry.Exists()) {
+    if ( aEntry.Exists())
+    {
         SvFileStream aStream( String( sSource, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_READ );
-        if ( aStream.IsOpen()) {
-            ByteString sLine;
+        if ( aStream.IsOpen())
+        {
+            rtl::OString sLine;
             bool bFirstLine = true;
-            while ( !aStream.IsEof()) {
+            while ( !aStream.IsEof())
+            {
                 aStream.ReadLine( sLine );
 
-                if( bFirstLine ){       // Always remove UTF8 BOM from the first line
+                if( bFirstLine )
+                {
+                    // Always remove UTF8 BOM from the first line
                     Export::RemoveUTF8ByteOrderMarker( sLine );
                     bFirstLine = false;
                 }

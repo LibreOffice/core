@@ -329,8 +329,8 @@ public:
     static std::vector<ByteString> GetForcedLanguages();
 
     static void SetLanguages( std::vector<ByteString> val );
-    static void RemoveUTF8ByteOrderMarker( ByteString &rString );
-    static bool hasUTF8ByteOrderMarker( const ByteString &rString );
+    static void RemoveUTF8ByteOrderMarker( rtl::OString &rString );
+    static bool hasUTF8ByteOrderMarker( const rtl::OString &rString );
     static void RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename );
     static bool fileHasUTF8ByteOrderMarker( const ByteString &rString );
     static void QuotHTML( ByteString &rString );

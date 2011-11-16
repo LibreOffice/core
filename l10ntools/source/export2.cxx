@@ -192,35 +192,43 @@ void Export::QuotHTML( ByteString &rString )
     rString = sReturn.makeStringAndClear();
 }
 
-void Export::RemoveUTF8ByteOrderMarker( ByteString &rString ){
+void Export::RemoveUTF8ByteOrderMarker( rtl::OString &rString )
+{
     if( hasUTF8ByteOrderMarker( rString ) )
-        rString.Erase( 0 , 3 );
+        rString = rString.copy(3);
 }
 
-bool Export::hasUTF8ByteOrderMarker( const ByteString &rString ){
-    return      rString.Len() >= 3 &&
-                rString.GetChar( 0 ) == '\xEF' &&
-                rString.GetChar( 1 ) == '\xBB' &&
-                rString.GetChar( 2 ) == '\xBF' ;
+bool Export::hasUTF8ByteOrderMarker( const rtl::OString &rString )
+{
+    return rString.getLength() >= 3 && rString[0] == '\xEF' &&
+           rString[1] == '\xBB' && rString[2] == '\xBF' ;
 }
-bool Export::fileHasUTF8ByteOrderMarker( const ByteString &rString ){
+
+bool Export::fileHasUTF8ByteOrderMarker( const ByteString &rString )
+{
     SvFileStream aFileIn( String( rString , RTL_TEXTENCODING_ASCII_US ) , STREAM_READ );
-    ByteString sLine;
-    if( !aFileIn.IsEof() ) {
+    rtl::OString sLine;
+    if( !aFileIn.IsEof() )
+    {
         aFileIn.ReadLine( sLine );
-        if( aFileIn.IsOpen() ) aFileIn.Close();
+        if( aFileIn.IsOpen() )
+            aFileIn.Close();
         return hasUTF8ByteOrderMarker( sLine );
     }
     if( aFileIn.IsOpen() ) aFileIn.Close();
     return false;
 }
-void Export::RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename ){
+
+void Export::RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename )
+{
     SvFileStream aFileIn( String( rFilename , RTL_TEXTENCODING_ASCII_US ) , STREAM_READ );
-    ByteString sLine;
-    if( !aFileIn.IsEof() ) {
+    rtl::OString sLine;
+    if( !aFileIn.IsEof() )
+    {
         aFileIn.ReadLine( sLine );
         // Test header
-        if( hasUTF8ByteOrderMarker( sLine ) ){
+        if( hasUTF8ByteOrderMarker( sLine ) )
+        {
             DirEntry aTempFile = Export::GetTempFile();
             ByteString sTempFile = ByteString( aTempFile.GetFull() , RTL_TEXTENCODING_ASCII_US );
             SvFileStream aNewFile( String( sTempFile , RTL_TEXTENCODING_ASCII_US ) , STREAM_WRITE );
@@ -228,7 +236,8 @@ void Export::RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename ){
             RemoveUTF8ByteOrderMarker( sLine );
             aNewFile.WriteLine( sLine );
             // Copy the rest
-            while( !aFileIn.IsEof() ){
+            while( !aFileIn.IsEof() )
+            {
                 aFileIn.ReadLine( sLine );
                 aNewFile.WriteLine( sLine );
             }
@@ -239,7 +248,8 @@ void Export::RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename ){
             DirEntry( sTempFile ).MoveTo( DirEntry( rFilename.GetBuffer() ) );
         }
     }
-    if( aFileIn.IsOpen() ) aFileIn.Close();
+    if( aFileIn.IsOpen() )
+        aFileIn.Close();
 }
 
 bool Export::CopyFile( const ByteString& source , const ByteString& dest )
@@ -398,12 +408,14 @@ sal_Bool Export::ConvertLineEnds(
         return sal_False;
     }
 
-    ByteString sLine;
+    rtl::OString sLine;
 
-    while ( !aSource.IsEof()) {
+    while ( !aSource.IsEof())
+    {
         aSource.ReadLine( sLine );
-        if ( !aSource.IsEof()) {
-            sLine.EraseAllChars( '\r' );
+        if ( !aSource.IsEof())
+        {
+            sLine = comphelper::string::remove(sLine, '\r');
             aDestination.WriteLine( sLine );
         }
         else
