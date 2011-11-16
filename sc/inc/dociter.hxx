@@ -40,6 +40,7 @@
 #include <set>
 #include <vector>
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 
 class ScDocument;
 class ScBaseCell;
@@ -48,6 +49,9 @@ class ScAttrArray;
 class ScAttrIterator;
 class ScRange;
 class ScFlatBoolRowSegments;
+struct ScQueryParam;
+struct ScDBQueryParamInternal;
+struct ScDBQueryParamMatrix;
 
 class ScDocumentIterator                // walk through all non-empty cells
 {
@@ -265,7 +269,7 @@ class ScQueryCellIterator           // walk through all non-empty cells in an ar
     };
 
 private:
-    ScQueryParam    aParam;
+    boost::scoped_ptr<ScQueryParam> mpParam;
     ScDocument*     pDoc;
     const ScAttrArray*  pAttrArray;
     sal_uLong           nNumFormat;
