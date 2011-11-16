@@ -479,7 +479,7 @@ lo_dlopen(const char *library)
     char *full_name;
     char **needed;
     int i;
-    int found = 0;
+    int found;
 
     rover = loaded_libraries;
     while (rover != NULL &&
@@ -491,6 +491,7 @@ lo_dlopen(const char *library)
 
     /* LOGI("lo_dlopen(%s)", library); */
 
+    found = 0;
     if (library[0] == '/') {
         full_name = strdup(library);
 
@@ -537,7 +538,7 @@ lo_dlopen(const char *library)
     LOGI("dlopen(%s) = %p", full_name, p);
     free(full_name);
     if (p == NULL)
-        LOGI("lo_dlopen: %s", dlerror());
+        LOGI("lo_dlopen: Error from dlopen(%s): %s", library, dlerror());
 
     new_loaded_lib = malloc(sizeof(*new_loaded_lib));
     new_loaded_lib->name = strdup(library);
