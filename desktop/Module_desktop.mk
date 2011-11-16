@@ -39,6 +39,19 @@ $(eval $(call gb_Module_add_targets,desktop,\
     AllLangResTarget_deployment \
     AllLangResTarget_deploymentgui \
     AllLangResTarget_dkt \
+    Library_offacc \
+    Library_sofficeapp \
+    Library_spl \
+    Library_unopkgapp \
+    Package_branding \
+    Package_intro \
+    Zip_brand \
+    Zip_brand_dev \
+    Zip_shell \
+))
+
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+$(eval $(call gb_Module_add_targets,desktop,\
     Executable_soffice.bin \
     Executable_unopkg.bin \
     Library_deployment \
@@ -46,22 +59,14 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Library_deploymentmisc \
     Library_migrationoo2 \
     Library_migrationoo3 \
-    Library_offacc \
-    Library_sofficeapp \
-    Library_spl \
-    Library_unopkgapp \
-    Package_branding \
-    Package_intro \
     Package_scripts \
     Pagein_calc \
     Pagein_common \
     Pagein_draw \
     Pagein_impress \
     Pagein_writer \
-    Zip_brand \
-    Zip_brand_dev \
-    Zip_shell \
 ))
+endif
 
 ifeq ($(OS),WNT)
 
