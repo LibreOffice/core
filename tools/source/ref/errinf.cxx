@@ -203,16 +203,14 @@ class ErrHdl_Impl
                                      const ErrorInfo*, String&, sal_uInt16&);
 };
 
-
 static void aDspFunc(const String &rErr, const String &rAction)
 {
-    ByteString aErr("Aktion: ");
-    aErr+= ByteString( rAction, RTL_TEXTENCODING_ASCII_US );
-    aErr+=" Fehler: ";
-    aErr+= ByteString( rErr, RTL_TEXTENCODING_ASCII_US );
-    OSL_FAIL(aErr.GetBuffer());
+    rtl::OStringBuffer aErr(RTL_CONSTASCII_STRINGPARAM("Aktion: "));
+    aErr.append(rtl::OUStringToOString(rAction, RTL_TEXTENCODING_ASCII_US));
+    aErr.append(RTL_CONSTASCII_STRINGPARAM(" Fehler: "));
+    aErr.append(rtl::OUStringToOString(rErr, RTL_TEXTENCODING_ASCII_US));
+    OSL_FAIL(aErr.getStr());
 }
-
 
 ErrorContext::ErrorContext(Window *pWinP)
 {
@@ -327,45 +325,47 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
 
     if(ErrHdl_Impl::CreateString(pData->pFirstHdl,pInfo,aErr,nErrFlags))
     {
-    if (bJustCreateString)
-    {
-        rError = aErr;
-        return 1;
-    }
-    else
-    {
-        if(!pData->pDsp)
+        if (bJustCreateString)
         {
-        ByteString aStr("Action: ");
-        aStr += ByteString( aAction, RTL_TEXTENCODING_ASCII_US );
-        aStr += ByteString("\nFehler: ");
-        aStr += ByteString( aErr, RTL_TEXTENCODING_ASCII_US );
-        OSL_FAIL( aStr.GetBuffer() );
+            rError = aErr;
+            return 1;
         }
         else
         {
-        delete pInfo;
-        if(!pData->bIsWindowDsp)
-        {
-            (*(BasicDisplayErrorFunc*)pData->pDsp)(aErr,aAction);
-            return 0;
+            if(!pData->pDsp)
+            {
+                rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Action: "));
+                aStr.append(rtl::OUStringToOString(aAction, RTL_TEXTENCODING_ASCII_US));
+                aStr.append(RTL_CONSTASCII_STRINGPARAM("\nFehler: "));
+                aStr.append(rtl::OUStringToOString(aErr, RTL_TEXTENCODING_ASCII_US));
+                OSL_FAIL(aStr.getStr());
+            }
+            else
+            {
+                delete pInfo;
+                if(!pData->bIsWindowDsp)
+                {
+                    (*(BasicDisplayErrorFunc*)pData->pDsp)(aErr,aAction);
+                    return 0;
+                }
+                else
+                {
+                    if( nFlags != USHRT_MAX )
+                    nErrFlags = nFlags;
+                    return (*(WindowDisplayErrorFunc*)pData->pDsp)(
+                    pParent, nErrFlags, aErr, aAction);
+                }
+            }
         }
-        else
-        {
-            if( nFlags != USHRT_MAX )
-            nErrFlags = nFlags;
-            return (*(WindowDisplayErrorFunc*)pData->pDsp)(
-            pParent, nErrFlags, aErr, aAction);
-        }
-        }
-    }
     }
     OSL_FAIL("Error nicht behandelt");
     // Error 1 ist General Error im Sfx
-    if(pInfo->GetErrorCode()!=1) {
+    if(pInfo->GetErrorCode()!=1)
+    {
         HandleError_Impl(1, USHRT_MAX, bJustCreateString, rError);
     }
-    else {
+    else
+    {
         OSL_FAIL("Error 1 nicht gehandeled");
     }
     delete pInfo;

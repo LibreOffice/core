@@ -80,26 +80,16 @@ public:
     friend SvStream& operator<< (
         SvStream& rStrm, const INetMessageHeader& rHdr)
     {
-#ifdef ENABLE_BYTESTRING_STREAM_OPERATORS
-        rStrm << rHdr.m_aName;
-        rStrm << rHdr.m_aValue;
-#else
         rStrm.WriteByteString (rHdr.m_aName);
         rStrm.WriteByteString (rHdr.m_aValue);
-#endif
         return rStrm;
     }
 
     friend SvStream& operator>> (
         SvStream& rStrm, INetMessageHeader& rHdr)
     {
-#ifdef ENABLE_BYTESTRING_STREAM_OPERATORS
-        rStrm >> rHdr.m_aName;
-        rStrm >> rHdr.m_aValue;
-#else
         rStrm.ReadByteString (rHdr.m_aName);
         rStrm.ReadByteString (rHdr.m_aValue);
-#endif
         return rStrm;
     }
 };
@@ -160,7 +150,7 @@ protected:
 
     void SetHeaderField_Impl (
         INetMIME::HeaderFieldType  eType,
-        const ByteString          &rName,
+        const rtl::OString        &rName,
         const UniString           &rValue,
         sal_uIntPtr                     &rnIndex);
 
