@@ -36,6 +36,7 @@
 #include "global.hxx" // -> ScQueryParam
 #include "address.hxx"
 #include "anyrefdg.hxx"
+#include "queryparam.hxx"
 
 #include <deque>
 #include <vector>

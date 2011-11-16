@@ -32,15 +32,17 @@
 #include "scdllapi.h"
 #include "conditio.hxx"
 #include "sortparam.hxx"
-#include "queryparam.hxx"
 #include "subtotalparam.hxx"
 #include "paramisc.hxx"
 #include <svl/poolitem.hxx>
+
+#include <boost/scoped_ptr.hpp>
 
 class ScEditEngineDefaulter;
 class EditTextObject;
 class ScViewData;
 class ScDPSaveData;
+struct ScQueryParam;
 
 // ---------------------------------------------------------------------------
 
@@ -192,16 +194,16 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
     ScViewData*         GetViewData () const { return pViewData; }
-    const ScQueryParam& GetQueryData() const { return theQueryData; }
+    const ScQueryParam& GetQueryData() const;
 
-    sal_Bool        GetAdvancedQuerySource(ScRange& rSource) const;
+    bool        GetAdvancedQuerySource(ScRange& rSource) const;
     void        SetAdvancedQuerySource(const ScRange* pSource);
 
 private:
+    boost::scoped_ptr<ScQueryParam> mpQueryData;
     ScViewData*     pViewData;
-    ScQueryParam    theQueryData;
-    sal_Bool            bIsAdvanced;
     ScRange         aAdvSource;
+    bool            bIsAdvanced;
 };
 
 //----------------------------------------------------------------------------

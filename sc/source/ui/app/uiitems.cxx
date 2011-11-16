@@ -30,12 +30,13 @@
 #include "precompiled_sc.hxx"
 
 
-
-#include <editeng/editobj.hxx>
+#include "uiitems.hxx"
 
 #include "userlist.hxx"
-#include "uiitems.hxx"
 #include "dpsave.hxx"
+#include "queryparam.hxx"
+
+#include <editeng/editobj.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -237,10 +238,14 @@ ScQueryItem::ScQueryItem( sal_uInt16                nWhichP,
                           ScViewData*           ptrViewData,
                           const ScQueryParam*   pQueryData ) :
         SfxPoolItem ( nWhichP ),
+        mpQueryData(NULL),
         pViewData   ( ptrViewData ),
         bIsAdvanced ( false )
 {
-    if ( pQueryData ) theQueryData = *pQueryData;
+    if (pQueryData)
+        mpQueryData.reset(new ScQueryParam(*pQueryData));
+    else
+        mpQueryData.reset(new ScQueryParam);
 }
 
 //------------------------------------------------------------------------
@@ -248,20 +253,24 @@ ScQueryItem::ScQueryItem( sal_uInt16                nWhichP,
 ScQueryItem::ScQueryItem( sal_uInt16                nWhichP,
                           const ScQueryParam*   pQueryData ) :
         SfxPoolItem ( nWhichP ),
+        mpQueryData(NULL),
         pViewData   ( NULL ),
         bIsAdvanced ( false )
 {
-    if ( pQueryData ) theQueryData = *pQueryData;
+    if (pQueryData)
+        mpQueryData.reset(new ScQueryParam(*pQueryData));
+    else
+        mpQueryData.reset(new ScQueryParam);
 }
 
 //------------------------------------------------------------------------
 
 ScQueryItem::ScQueryItem( const ScQueryItem& rItem ) :
         SfxPoolItem ( rItem ),
+        mpQueryData(new ScQueryParam(*rItem.mpQueryData)),
         pViewData   ( rItem.pViewData ),
-        theQueryData( rItem.theQueryData ),
-        bIsAdvanced ( rItem.bIsAdvanced ),
-        aAdvSource  ( rItem.aAdvSource )
+        aAdvSource  ( rItem.aAdvSource ),
+        bIsAdvanced ( rItem.bIsAdvanced )
 {
 }
 
@@ -276,13 +285,18 @@ void ScQueryItem::SetAdvancedQuerySource(const ScRange* pSource)
     if (pSource)
     {
         aAdvSource = *pSource;
-        bIsAdvanced = sal_True;
+        bIsAdvanced = true;
     }
     else
         bIsAdvanced = false;
 }
 
-sal_Bool ScQueryItem::GetAdvancedQuerySource(ScRange& rSource) const
+const ScQueryParam& ScQueryItem::GetQueryData() const
+{
+    return *mpQueryData;
+}
+
+bool ScQueryItem::GetAdvancedQuerySource(ScRange& rSource) const
 {
     rSource = aAdvSource;
     return bIsAdvanced;
@@ -306,7 +320,7 @@ int ScQueryItem::operator==( const SfxPoolItem& rItem ) const
     return (   (pViewData    == rQueryItem.pViewData)
             && (bIsAdvanced  == rQueryItem.bIsAdvanced)
             && (aAdvSource   == rQueryItem.aAdvSource)
-            && (theQueryData == rQueryItem.theQueryData) );
+            && (*mpQueryData == *rQueryItem.mpQueryData) );
 }
 
 //------------------------------------------------------------------------
