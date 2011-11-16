@@ -137,7 +137,7 @@ com::sun::star::util::Time string2Time( const rtl::OUString & time )
 
     if( time.getLength() >9 )
     {
-        ret.HundredthSeconds = (sal_Int32)rtl_ustr_toInt32( &time[9] , 10 );
+        ret.HundredthSeconds = (sal_Int32)rtl_ustr_toInt32( &time.getStr()[9] , 10 );
     }
     return ret;
 
@@ -429,12 +429,12 @@ bool isWhitespace( sal_Unicode c )
     for( ; i < sql.getLength() && isWhitespace(sql[i])  ; i++ );
 
     if( 0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
-            &sql[i], sql.getLength() - i, "insert" , 6 ) )
+            &sql.getStr()[i], sql.getLength() - i, "insert" , 6 ) )
     {
         i += 6;
         for( ; i < sql.getLength() && isWhitespace(sql[i]) ; i++ );
         if( 0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
-            &sql[i], sql.getLength() - i, "into" , 4 ) )
+            &sql.getStr()[i], sql.getLength() - i, "into" , 4 ) )
         {
             i +=4;
             for( ; i < sql.getLength() && isWhitespace(sql[i]) ; i++ );
@@ -470,7 +470,7 @@ bool isWhitespace( sal_Unicode c )
                     }
                 }
             }
-            ret = rtl::OUString( &sql[start], i - start ).trim();
+            ret = rtl::OUString( &sql.getStr()[start], i - start ).trim();
 //             printf( "pq_statement: parsed table name %s from insert\n" ,
 //                     OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US).getStr() );
         }
@@ -524,7 +524,7 @@ void splitSQL( const rtl::OString & sql, OStringVector &vec )
         {
             if( '"' == c )
             {
-                vec.push_back( rtl::OString( &sql[start], i-start+1  ) );
+                vec.push_back( rtl::OString( &sql.getStr()[start], i-start+1  ) );
                 start = i + 1;
                 doubleQuote = false;
             }
@@ -539,7 +539,7 @@ void splitSQL( const rtl::OString & sql, OStringVector &vec )
             }
             else if( '\'' == c )
             {
-                vec.push_back( rtl::OString( &sql[start], i - start +1 ) );
+                vec.push_back( rtl::OString( &sql.getStr()[start], i - start +1 ) );
                 start = i + 1; // leave single quotes !
                 singleQuote = false;
             }
@@ -548,20 +548,20 @@ void splitSQL( const rtl::OString & sql, OStringVector &vec )
         {
             if( '"' == c )
             {
-                vec.push_back( rtl::OString( &sql[start], i - start ) );
+                vec.push_back( rtl::OString( &sql.getStr()[start], i - start ) );
                 doubleQuote = true;
                 start = i;
             }
             else if( '\'' == c )
             {
-                vec.push_back( rtl::OString( &sql[start], i - start ) );
+                vec.push_back( rtl::OString( &sql.getStr()[start], i - start ) );
                 singleQuote = true;
                 start = i;
             }
         }
     }
     if( start < i )
-        vec.push_back( rtl::OString( &sql[start] , i - start ) );
+        vec.push_back( rtl::OString( &sql.getStr()[start] , i - start ) );
 
 //     for( i = 0 ; i < vec.size() ; i ++ )
 //         printf( "%s!" , vec[i].getStr() );
@@ -584,7 +584,7 @@ void tokenizeSQL( const rtl::OString & sql, OStringVector &vec  )
         {
             if( '"' == c )
             {
-                vec.push_back( rtl::OString( &sql[start], i-start  ) );
+                vec.push_back( rtl::OString( &sql.getStr()[start], i-start  ) );
                 start = i + 1;
                 doubleQuote = false;
             }
@@ -593,7 +593,7 @@ void tokenizeSQL( const rtl::OString & sql, OStringVector &vec  )
         {
             if( '\'' == c )
             {
-                vec.push_back( rtl::OString( &sql[start], i - start +1 ) );
+                vec.push_back( rtl::OString( &sql.getStr()[start], i - start +1 ) );
                 start = i + 1; // leave single quotes !
                 singleQuote = false;
             }
@@ -616,15 +616,15 @@ void tokenizeSQL( const rtl::OString & sql, OStringVector &vec  )
                     start ++;   // skip additional whitespace
                 else
                 {
-                    vec.push_back( rtl::OString( &sql[start], i - start  ) );
+                    vec.push_back( rtl::OString( &sql.getStr()[start], i - start  ) );
                     start = i +1;
                 }
             }
             else if( ',' == c || isOperator( c ) || '(' == c || ')' == c )
             {
                 if( i - start )
-                    vec.push_back( rtl::OString( &sql[start], i - start ) );
-                vec.push_back( rtl::OString( &sql[i], 1 ) );
+                    vec.push_back( rtl::OString( &sql.getStr()[start], i - start ) );
+                vec.push_back( rtl::OString( &sql.getStr()[i], 1 ) );
                 start = i + 1;
             }
             else if( '.' == c )
@@ -637,7 +637,7 @@ void tokenizeSQL( const rtl::OString & sql, OStringVector &vec  )
                 else
                 {
                     if( i - start )
-                        vec.push_back( rtl::OString( &sql[start], i - start ) );
+                        vec.push_back( rtl::OString( &sql.getStr()[start], i - start ) );
                     vec.push_back( rtl::OString( RTL_CONSTASCII_STRINGPARAM( "." ) ) );
                     start = i + 1;
                 }
@@ -645,7 +645,7 @@ void tokenizeSQL( const rtl::OString & sql, OStringVector &vec  )
         }
     }
     if( start < i )
-        vec.push_back( rtl::OString( &sql[start] , i - start ) );
+        vec.push_back( rtl::OString( &sql.getStr()[start] , i - start ) );
 
 //     for( i = 0 ; i < vec.size() ; i ++ )
 //         printf( "%s!" , vec[i].getStr() );
@@ -877,7 +877,7 @@ void fillAttnum2attnameMap(
             // it is a table or a function name
             rtl::OStringBuffer buf(128);
             if( '"' == vec[token][0] )
-                buf.append( &(vec[token][1]) , vec[token].getLength() -2 );
+                buf.append( &(vec[token].getStr()[1]) , vec[token].getLength() -2 );
             else
                 buf.append( vec[token] );
             token ++;
@@ -893,7 +893,7 @@ void fillAttnum2attnameMap(
                     if( token < vec.size() )
                     {
                         if( '"' == vec[token][0] )
-                            buf.append( &(vec[token][1]) , vec[token].getLength() -2 );
+                            buf.append( &(vec[token].getStr()[1]) , vec[token].getLength() -2 );
                         else
                             buf.append( vec[token] );
                         token ++;
@@ -965,7 +965,7 @@ com::sun::star::uno::Sequence< sal_Int32 > string2intarray( const ::rtl::OUStrin
         do
         {
             start ++;
-            vec.push_back( (sal_Int32)rtl_ustr_toInt32( &str[start], 10 ) );
+            vec.push_back( (sal_Int32)rtl_ustr_toInt32( &str.getStr()[start], 10 ) );
             start = str.indexOf( ',' , start );
         } while( start != -1 );
         ret = com::sun::star::uno::Sequence< sal_Int32 > ( &vec[0] , vec.size() );

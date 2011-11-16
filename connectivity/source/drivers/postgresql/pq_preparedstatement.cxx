@@ -325,7 +325,7 @@ void PreparedStatement::raiseSQLException(
     buf.append(
         rtl::OUString( errorMsg, strlen(errorMsg) , m_pSettings->encoding ) );
     buf.appendAscii( " (caused by statement '" );
-    buf.appendAscii( m_executedStatement );
+    buf.appendAscii( m_executedStatement.getStr() );
     buf.appendAscii( "')" );
     OUString error = buf.makeStringAndClear();
     log( m_pSettings, LogLevel::ERROR, error );
