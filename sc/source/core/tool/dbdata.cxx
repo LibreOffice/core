@@ -32,7 +32,6 @@
 #include <unotools/transliterationwrapper.hxx>
 
 #include "dbdata.hxx"
-#include "global.hxx"
 #include "globalnames.hxx"
 #include "refupdat.hxx"
 #include "rechead.hxx"
@@ -41,6 +40,7 @@
 #include "queryentry.hxx"
 #include "globstr.hrc"
 #include "subtotalparam.hxx"
+#include "sortparam.hxx"
 
 #include <memory>
 
@@ -62,6 +62,10 @@ ScDBData::ScDBData( const ::rtl::OUString& rName,
                     SCTAB nTab,
                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     bool bByR, bool bHasH) :
+    mpSortParam(new ScSortParam),
+    mpQueryParam(new ScQueryParam),
+    mpSubTotal(new ScSubTotalParam),
+    mpImportParam(new ScImportParam),
     aName       (rName),
     aUpper      (rName),
     nTable      (nTab),
@@ -81,21 +85,14 @@ ScDBData::ScDBData( const ::rtl::OUString& rName,
     bModified   (false)
 {
     ScGlobal::pCharClass->toUpper(aUpper);
-    ScSortParam aSortParam;
-    ScQueryParam aQueryParam;
-    ScImportParam aImportParam;
-
-    SetSortParam( aSortParam );
-    SetQueryParam( aQueryParam );
-    SetImportParam( aImportParam );
 }
 
 ScDBData::ScDBData( const ScDBData& rData ) :
     ScRefreshTimer      ( rData ),
-    maSortParam         (rData.maSortParam),
-    maQueryParam        (rData.maQueryParam),
-    maSubTotal          (rData.maSubTotal),
-    maImportParam       (rData.maImportParam),
+    mpSortParam(new ScSortParam(*rData.mpSortParam)),
+    mpQueryParam(new ScQueryParam(*rData.mpQueryParam)),
+    mpSubTotal(new ScSubTotalParam(*rData.mpSubTotal)),
+    mpImportParam(new ScImportParam(*rData.mpImportParam)),
     aName               (rData.aName),
     aUpper              (rData.aUpper),
     nTable              (rData.nTable),
@@ -119,10 +116,10 @@ ScDBData::ScDBData( const ScDBData& rData ) :
 
 ScDBData::ScDBData( const ::rtl::OUString& rName, const ScDBData& rData ) :
     ScRefreshTimer      ( rData ),
-    maSortParam         (rData.maSortParam),
-    maQueryParam        (rData.maQueryParam),
-    maSubTotal          (rData.maSubTotal),
-    maImportParam       (rData.maImportParam),
+    mpSortParam(new ScSortParam(*rData.mpSortParam)),
+    mpQueryParam(new ScQueryParam(*rData.mpQueryParam)),
+    mpSubTotal(new ScSubTotalParam(*rData.mpSubTotal)),
+    mpImportParam(new ScImportParam(*rData.mpImportParam)),
     aName               (rName),
     aUpper              (rName),
     nTable              (rData.nTable),
@@ -150,10 +147,10 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     // Don't modify the name.  The name is not mutable as it is used as a key
     // in the container to keep the db ranges sorted by the name.
     ScRefreshTimer::operator=( rData );
-    maSortParam         = rData.maSortParam;
-    maQueryParam        = rData.maQueryParam;
-    maSubTotal          = rData.maSubTotal;
-    maImportParam       = rData.maImportParam;
+    mpSortParam.reset(new ScSortParam(*rData.mpSortParam));
+    mpQueryParam.reset(new ScQueryParam(*rData.mpQueryParam));
+    mpSubTotal.reset(new ScSubTotalParam(*rData.mpSubTotal));
+    mpImportParam.reset(new ScImportParam(*rData.mpImportParam));
     nTable              = rData.nTable;
     nStartCol           = rData.nStartCol;
     nStartRow           = rData.nStartRow;
@@ -232,11 +229,11 @@ ScDBData::~ScDBData()
 ::rtl::OUString ScDBData::GetSourceString() const
 {
     ::rtl::OUStringBuffer aBuf;
-    if (maImportParam.bImport)
+    if (mpImportParam->bImport)
     {
-        aBuf.append(maImportParam.aDBName);
+        aBuf.append(mpImportParam->aDBName);
         aBuf.append(sal_Unicode('/'));
-        aBuf.append(maImportParam.aStatement);
+        aBuf.append(mpImportParam->aStatement);
     }
     return aBuf.makeStringAndClear();
 }
@@ -244,21 +241,21 @@ ScDBData::~ScDBData()
 ::rtl::OUString ScDBData::GetOperations() const
 {
     ::rtl::OUStringBuffer aBuf;
-    if (maQueryParam.GetEntryCount())
+    if (mpQueryParam->GetEntryCount())
     {
-        const ScQueryEntry& rEntry = maQueryParam.GetEntry(0);
+        const ScQueryEntry& rEntry = mpQueryParam->GetEntry(0);
         if (rEntry.bDoQuery)
             aBuf.append(ScGlobal::GetRscString(STR_OPERATION_FILTER));
     }
 
-    if (maSortParam.bDoSort[0])
+    if (mpSortParam->bDoSort[0])
     {
         if (aBuf.getLength())
             aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
         aBuf.append(ScGlobal::GetRscString(STR_OPERATION_SORT));
     }
 
-    if (maSubTotal.bGroupActive[0] && !maSubTotal.bRemoveOnly)
+    if (mpSubTotal->bGroupActive[0] && !mpSubTotal->bRemoveOnly)
     {
         if (aBuf.getLength())
             aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
@@ -306,18 +303,18 @@ void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
 
     for (i=0; i<MAXSORT; i++)
     {
-        maSortParam.nField[i] += nSortDif;
-        if (maSortParam.nField[i] > nSortEnd)
+        mpSortParam->nField[i] += nSortDif;
+        if (mpSortParam->nField[i] > nSortEnd)
         {
-            maSortParam.nField[i] = 0;
-            maSortParam.bDoSort[i] = false;
+            mpSortParam->nField[i] = 0;
+            mpSortParam->bDoSort[i] = false;
         }
     }
 
-    SCSIZE nCount = maQueryParam.GetEntryCount();
+    SCSIZE nCount = mpQueryParam->GetEntryCount();
     for (i = 0; i < nCount; ++i)
     {
-        ScQueryEntry& rEntry = maQueryParam.GetEntry(i);
+        ScQueryEntry& rEntry = mpQueryParam->GetEntry(i);
         rEntry.nField += nDifX;
         if (rEntry.nField > nCol2)
         {
@@ -327,11 +324,11 @@ void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
     }
     for (i=0; i<MAXSUBTOTAL; i++)
     {
-        maSubTotal.nField[i] = sal::static_int_cast<SCCOL>( maSubTotal.nField[i] + nDifX );
-        if (maSubTotal.nField[i] > nCol2)
+        mpSubTotal->nField[i] = sal::static_int_cast<SCCOL>( mpSubTotal->nField[i] + nDifX );
+        if (mpSubTotal->nField[i] > nCol2)
         {
-            maSubTotal.nField[i] = 0;
-            maSubTotal.bGroupActive[i] = false;
+            mpSubTotal->nField[i] = 0;
+            mpSubTotal->bGroupActive[i] = false;
         }
     }
 
@@ -340,7 +337,7 @@ void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
 
 void ScDBData::GetSortParam( ScSortParam& rSortParam ) const
 {
-    rSortParam = maSortParam;
+    rSortParam = *mpSortParam;
     rSortParam.nCol1 = nStartCol;
     rSortParam.nRow1 = nStartRow;
     rSortParam.nCol2 = nEndCol;
@@ -351,13 +348,13 @@ void ScDBData::GetSortParam( ScSortParam& rSortParam ) const
 
 void ScDBData::SetSortParam( const ScSortParam& rSortParam )
 {
-    maSortParam = rSortParam;
+    mpSortParam.reset(new ScSortParam(rSortParam));
     bByRow = rSortParam.bByRow;
 }
 
 void ScDBData::GetQueryParam( ScQueryParam& rQueryParam ) const
 {
-    rQueryParam = maQueryParam;
+    rQueryParam = *mpQueryParam;
     rQueryParam.nCol1 = nStartCol;
     rQueryParam.nRow1 = nStartRow;
     rQueryParam.nCol2 = nEndCol;
@@ -369,7 +366,7 @@ void ScDBData::GetQueryParam( ScQueryParam& rQueryParam ) const
 
 void ScDBData::SetQueryParam(const ScQueryParam& rQueryParam)
 {
-    maQueryParam = rQueryParam;
+    mpQueryParam.reset(new ScQueryParam(rQueryParam));
 
     //  set bIsAdvanced to false for everything that is not from the
     //  advanced filter dialog
@@ -395,7 +392,7 @@ bool ScDBData::GetAdvancedQuerySource(ScRange& rSource) const
 
 void ScDBData::GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const
 {
-    rSubTotalParam = maSubTotal;
+    rSubTotalParam = *mpSubTotal;
 
     // Share the data range with the parent db data.  The range in the subtotal
     // param struct is not used.
@@ -407,12 +404,12 @@ void ScDBData::GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const
 
 void ScDBData::SetSubTotalParam(const ScSubTotalParam& rSubTotalParam)
 {
-    maSubTotal = rSubTotalParam;
+    mpSubTotal.reset(new ScSubTotalParam(rSubTotalParam));
 }
 
 void ScDBData::GetImportParam(ScImportParam& rImportParam) const
 {
-    rImportParam = maImportParam;
+    rImportParam = *mpImportParam;
     // set the range.
     rImportParam.nCol1 = nStartCol;
     rImportParam.nRow1 = nStartRow;
@@ -423,7 +420,7 @@ void ScDBData::GetImportParam(ScImportParam& rImportParam) const
 void ScDBData::SetImportParam(const ScImportParam& rImportParam)
 {
     // the range is ignored.
-    maImportParam = rImportParam;
+    mpImportParam.reset(new ScImportParam(rImportParam));
 }
 
 bool ScDBData::IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const
@@ -447,12 +444,30 @@ bool ScDBData::IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
                     && (nCol2 == nEndCol) && (nRow2 == nEndRow));
 }
 
+bool ScDBData::HasImportParam() const
+{
+    return mpImportParam && mpImportParam->bImport;
+}
+
 bool ScDBData::HasQueryParam() const
 {
-    if (!maQueryParam.GetEntryCount())
+    if (!mpQueryParam)
         return false;
 
-    return maQueryParam.GetEntry(0).bDoQuery;
+    if (!mpQueryParam->GetEntryCount())
+        return false;
+
+    return mpQueryParam->GetEntry(0).bDoQuery;
+}
+
+bool ScDBData::HasSortParam() const
+{
+    return mpSortParam && mpSortParam->bDoSort[0];
+}
+
+bool ScDBData::HasSubTotalParam() const
+{
+    return mpSubTotal && mpSubTotal->bGroupActive[0];
 }
 
 void ScDBData::UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos)

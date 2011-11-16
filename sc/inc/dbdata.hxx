@@ -30,28 +30,27 @@
 #define SC_DBCOLECT_HXX
 
 #include "scdllapi.h"
-#include "collect.hxx"
-#include "global.hxx"       // MAXQUERY
-#include "sortparam.hxx"    // MAXSORT
 #include "refreshtimer.hxx"
 #include "address.hxx"
-#include "scdllapi.h"
-#include "subtotalparam.hxx"
-#include "queryparam.hxx"
+#include "global.hxx"
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/ptr_container/ptr_set.hpp>
 #include <boost/scoped_ptr.hpp>
 
 class ScDocument;
+struct ScSortParam;
+struct ScQueryParam;
+struct ScSubTotalParam;
+struct ScImportParam;
 
 class ScDBData : public ScRefreshTimer
 {
 private:
-    ScSortParam maSortParam;
-    ScQueryParam maQueryParam;
-    ScSubTotalParam maSubTotal;
-    ScImportParam maImportParam;
+    boost::scoped_ptr<ScSortParam> mpSortParam;
+    boost::scoped_ptr<ScQueryParam> mpQueryParam;
+    boost::scoped_ptr<ScSubTotalParam> mpSubTotal;
+    boost::scoped_ptr<ScImportParam> mpImportParam;
 
     // DBParam
     const ::rtl::OUString aName;
@@ -137,10 +136,10 @@ public:
     bool        IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const;
     bool        IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
 
-    bool        HasImportParam() const   { return maImportParam.bImport; }
+    bool        HasImportParam() const;
     SC_DLLPUBLIC bool HasQueryParam() const;
-    bool        HasSortParam() const     { return maSortParam.bDoSort[0]; }
-    bool        HasSubTotalParam() const { return maSubTotal.bGroupActive[0]; }
+    bool        HasSortParam() const;
+    bool        HasSubTotalParam() const;
 
     bool        HasImportSelection() const      { return bDBSelection; }
     void        SetImportSelection(bool bSet)   { bDBSelection = bSet; }

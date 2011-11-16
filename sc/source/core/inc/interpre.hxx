@@ -50,6 +50,7 @@ class ScDBRangeBase;
 struct MatrixDoubleOp;
 struct ScQueryParam;
 struct ScDBQueryParamBase;
+struct ScQueryEntry;
 
 struct ScCompare;
 struct ScCompareOptions;
