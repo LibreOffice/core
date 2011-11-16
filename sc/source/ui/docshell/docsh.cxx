@@ -2489,38 +2489,31 @@ sal_Bool ScDocShell::HasAutomaticTableName( const String& rFilter )
         || rFilter.EqualsAscii( pFilterRtf );
 }
 
-//==================================================================
-
-#define __SCDOCSHELL_INIT \
-        aDocument       ( SCDOCMODE_DOCUMENT, this ), \
-        aDdeTextFmt(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("TEXT"))), \
-        nPrtToScreenFactor( 1.0 ), \
-        pImpl           ( new DocShell_Impl ), \
-        bHeaderOn       ( true ), \
-        bFooterOn       ( true ), \
-        bIsEmpty        ( true ), \
-        bIsInUndo       ( false ), \
-        bDocumentModifiedPending( false ), \
-        bUpdateEnabled  ( true ), \
-        nDocumentLock   ( 0 ), \
-        nCanUpdate (com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG), \
-        pOldAutoDBRange ( NULL ), \
-        pDocHelper      ( NULL ), \
-        pAutoStyleList  ( NULL ), \
-        pPaintLockData  ( NULL ), \
-        pOldJobSetup    ( NULL ), \
-        pSolverSaveData ( NULL ), \
-        pSheetSaveData  ( NULL ), \
-        pModificator    ( NULL )
-
-//------------------------------------------------------------------
-
-ScDocShell::ScDocShell( const ScDocShell& rShell )
-    :   SvRefBase(),
-        SotObject(),
-        SfxObjectShell( rShell.GetCreateMode() ),
-        SfxListener(),
-        __SCDOCSHELL_INIT
+ScDocShell::ScDocShell( const ScDocShell& rShell ) :
+    SvRefBase(),
+    SotObject(),
+    SfxObjectShell( rShell.GetCreateMode() ),
+    SfxListener(),
+    aDocument       ( SCDOCMODE_DOCUMENT, this ),
+    aDdeTextFmt(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("TEXT"))),
+    nPrtToScreenFactor( 1.0 ),
+    pImpl           ( new DocShell_Impl ),
+    bHeaderOn       ( true ),
+    bFooterOn       ( true ),
+    bIsEmpty        ( true ),
+    bIsInUndo       ( false ),
+    bDocumentModifiedPending( false ),
+    bUpdateEnabled  ( true ),
+    nDocumentLock   ( 0 ),
+    nCanUpdate (com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG),
+    pOldAutoDBRange ( NULL ),
+    pDocHelper      ( NULL ),
+    pAutoStyleList  ( NULL ),
+    pPaintLockData  ( NULL ),
+    pOldJobSetup    ( NULL ),
+    pSolverSaveData ( NULL ),
+    pSheetSaveData  ( NULL ),
+    pModificator    ( NULL )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ScDocShell" );
 
@@ -2546,9 +2539,28 @@ ScDocShell::ScDocShell( const ScDocShell& rShell )
 
 //------------------------------------------------------------------
 
-ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags )
-    :   SfxObjectShell( i_nSfxCreationFlags )
-    ,   __SCDOCSHELL_INIT
+ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
+    SfxObjectShell( i_nSfxCreationFlags ),
+    aDocument       ( SCDOCMODE_DOCUMENT, this ),
+    aDdeTextFmt(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("TEXT"))),
+    nPrtToScreenFactor( 1.0 ),
+    pImpl           ( new DocShell_Impl ),
+    bHeaderOn       ( true ),
+    bFooterOn       ( true ),
+    bIsEmpty        ( true ),
+    bIsInUndo       ( false ),
+    bDocumentModifiedPending( false ),
+    bUpdateEnabled  ( true ),
+    nDocumentLock   ( 0 ),
+    nCanUpdate (com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG),
+    pOldAutoDBRange ( NULL ),
+    pDocHelper      ( NULL ),
+    pAutoStyleList  ( NULL ),
+    pPaintLockData  ( NULL ),
+    pOldJobSetup    ( NULL ),
+    pSolverSaveData ( NULL ),
+    pSheetSaveData  ( NULL ),
+    pModificator    ( NULL )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ScDocShell" );
 
