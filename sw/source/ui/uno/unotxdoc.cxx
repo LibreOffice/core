@@ -187,10 +187,20 @@ SwPrintUIOptions * lcl_GetPrintUIOptions(
     const SwPrintData &rPrintData = pDocShell->GetDoc()->getPrintData();
 
     // Get current page number
+    sal_uInt16 nCurrentPage = 1;
     SwWrtShell* pSh = pDocShell->GetWrtShell();
-    SwPaM* pShellCrsr = pSh->GetCrsr();
-    sal_uInt16 nCurrentPage = pShellCrsr->GetPageNum(sal_True, 0);
-
+    if (pSh)
+    {
+        SwPaM* pShellCrsr = pSh->GetCrsr();
+        nCurrentPage = pShellCrsr->GetPageNum(sal_True, 0);
+    }
+    else
+    {
+        const SwPagePreView* pPreView = dynamic_cast< const SwPagePreView* >(pView);
+        OSL_ENSURE(pPreView, "Unexpected type of the view shell");
+        if (pPreView)
+            nCurrentPage = pPreView->GetSelectedPage();
+    }
     return new SwPrintUIOptions( nCurrentPage, bWebDoc, bSwSrcView, bHasSelection, bHasPostIts, rPrintData );
 }
 

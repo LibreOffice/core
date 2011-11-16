@@ -273,6 +273,7 @@ public:
     void            ShowVScrollbar(sal_Bool bShow);
 
     sal_uInt16          GetPageCount() const        { return mnPageCount; }
+    sal_uInt16      GetSelectedPage() const {return aViewWin.SelectedPage();}
 
     sal_Bool            HandleWheelCommands( const CommandEvent& );
 
