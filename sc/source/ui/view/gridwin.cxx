@@ -674,7 +674,6 @@ void ScGridWindow::UpdateAutoFilterFromMenu()
 {
     ScCheckListMenuWindow::ResultType aResult;
     mpAutoFilterPopup->getResult(aResult);
-    size_t nCount = aResult.size();
     std::vector<rtl::OUString> aSelected;
     ScCheckListMenuWindow::ResultType::const_iterator itr = aResult.begin(), itrEnd = aResult.end();
     for (; itr != itrEnd; ++itr)
