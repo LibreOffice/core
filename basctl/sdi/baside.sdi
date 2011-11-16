@@ -39,6 +39,11 @@ shell BasicIDEShell
     // ========================================================
     // Current, je nach aktuellem Fenster:
     // ========================================================
+    SID_SHOWLINES
+    [
+        StateMethod = GetState;
+        ExecMethod  = ExecuteCurrent;
+    ]
     SID_BASICIDE_HIDECURPAGE
     [
         ExecMethod  = ExecuteCurrent;

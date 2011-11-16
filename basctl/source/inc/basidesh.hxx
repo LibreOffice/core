@@ -227,6 +227,7 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                         GetCurrentDocument() const;
+    bool SourceLinesDisplayed();
 
 };
 

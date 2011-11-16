@@ -85,6 +85,19 @@ using namespace ::com::sun::star::frame;
 class SvxSearchItem;
 
 
+// until we have some configuration lets just keep
+// persist this value for the process lifetime
+bool& lcl_GetSourceLinesEnabledValue()
+{
+    static bool bSourceLinesEnabled(false);
+    return bSourceLinesEnabled;
+}
+
+bool  BasicIDEShell::SourceLinesDisplayed()
+{
+    return lcl_GetSourceLinesEnabledValue();
+}
+
 void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
 {
     if ( !pCurWin )
@@ -92,6 +105,20 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
 
     switch ( rReq.GetSlot() )
     {
+        case SID_SHOWLINES:
+        {
+            SFX_REQUEST_ARG(rReq, pItem, SfxBoolItem, rReq.GetSlot(), sal_False);
+            bool bValue = false;
+            if ( pItem )
+                bValue = pItem->GetValue();
+            lcl_GetSourceLinesEnabledValue() = bValue;
+            if ( pCurWin && pCurWin->IsA( TYPE( ModulWindow ) ) )
+            {
+//                (ModuleWindow*)(pCurWin)->SetLineNumberDisplay( bValue );
+            }
+        }
+        break;
+
         case SID_BASICIDE_HIDECURPAGE:
         {
             pCurWin->StoreData();
@@ -797,6 +824,20 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
     {
         switch ( nWh )
         {
+            case SID_SHOWLINES:
+            {
+                // if this is not a module window hide the
+                // setting, doesn't make sense for example if the
+                // dialog editor is open
+                if( pCurWin && !pCurWin->IsA( TYPE( ModulWindow ) ) )
+                {
+                    rSet.DisableItem( nWh );
+                    rSet.Put(SfxVisibilityItem(nWh, sal_False));
+                }
+                else
+                    rSet.Put( SfxBoolItem( nWh, lcl_GetSourceLinesEnabledValue() ) );
+                break;
+            }
             case SID_DOCINFO:
             {
                 rSet.DisableItem( nWh );

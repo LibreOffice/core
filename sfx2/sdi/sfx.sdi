@@ -3593,6 +3593,30 @@ SfxBoolItem ReccomendReadonly SID_RECOMMENDREADONLY
     GroupId = ;
 ]
 
+//----------------------------------------------------FALSE
+SfxBoolItem ShowLines SID_SHOWLINES
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_MACRO;
+]
 
 //--------------------------------------------------------------------------
 SfxVoidItem RunMacro SID_RUNMACRO
