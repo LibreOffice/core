@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include <list>
 
 #include <tools/debug.hxx>

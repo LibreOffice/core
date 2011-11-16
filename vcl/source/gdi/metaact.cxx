@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#define ENABLE_BYTESTRING_STREAM_OPERATORS
-
 #include <algorithm>
 #include <string.h>
 #include <tools/stream.hxx>
@@ -4202,7 +4200,8 @@ sal_Bool MetaCommentAction::Compare( const MetaAction& rMetaAction ) const
 void MetaCommentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    rOStm << maComment << mnValue << mnDataSize;
+    rOStm.WriteByteString(maComment);
+    rOStm << mnValue << mnDataSize;
 
     if ( mnDataSize )
         rOStm.Write( mpData, mnDataSize );
@@ -4214,7 +4213,7 @@ void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
     ByteString sTmp;
-    rIStm >> sTmp;
+    rIStm.ReadByteString(sTmp);
     maComment = sTmp;
     rIStm >> mnValue >> mnDataSize;
 

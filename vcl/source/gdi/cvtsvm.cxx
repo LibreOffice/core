@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#define ENABLE_BYTESTRING_STREAM_OPERATORS
-
 #include <algorithm>
 #include <string.h>
 #include <tools/stack.hxx>
@@ -1326,7 +1324,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     sal_uInt8*      pData;
                     sal_Int32       nFollowingActionCount;
 
-                    rIStm >> aComment >> nValue >> nDataSize;
+                    rIStm.ReadByteString(aComment);
+                    rIStm >> nValue >> nDataSize;
 
                     if( nDataSize )
                     {
@@ -2397,7 +2396,8 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rOStm.SeekRel( 4 );
 
                 // write data
-                rOStm << pA->GetComment() << pA->GetValue() << nDataSize;
+                rOStm.WriteByteString(pA->GetComment());
+                rOStm << pA->GetValue() << nDataSize;
 
                 if( nDataSize )
                     rOStm.Write( pA->GetData(), nDataSize );

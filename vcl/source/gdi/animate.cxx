@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include <vcl/animate.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
@@ -836,7 +835,7 @@ SvStream& operator<<( SvStream& rOStm, const Animation& rAnimation )
             rOStm << nDummy32;  // unbenutzt
             rOStm << nDummy32;  // unbenutzt
             rOStm << nDummy32;  // unbenutzt
-            rOStm << aDummyStr; // unbenutzt
+            rOStm.WriteByteString(aDummyStr); // unbenutzt
             rOStm << nRest;     // Anzahl der Strukturen, die noch _folgen_
         }
     }
@@ -901,7 +900,7 @@ SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
             rIStm >> nTmp32;    // unbenutzt
             rIStm >> nTmp32;    // unbenutzt
             rIStm >> nTmp32;    // unbenutzt
-            rIStm >> aDummyStr; // unbenutzt
+            rIStm.ReadByteString(aDummyStr); // unbenutzt
             rIStm >> nTmp16;    // Rest zu lesen
 
             rAnimation.Insert( aAnimBmp );
