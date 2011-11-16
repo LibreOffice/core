@@ -231,6 +231,7 @@ public:
 
     const Size& getWindowSize() const;
 
+    bool isAllSelected() const;
     void getResult(ResultType& rResult);
     void launch(const Rectangle& rRect);
     void close(bool bOK);

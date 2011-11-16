@@ -710,16 +710,6 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 
 void ScGridWindow::UpdateAutoFilterFromMenu()
 {
-    ScCheckListMenuWindow::ResultType aResult;
-    mpAutoFilterPopup->getResult(aResult);
-    std::vector<rtl::OUString> aSelected;
-    ScCheckListMenuWindow::ResultType::const_iterator itr = aResult.begin(), itrEnd = aResult.end();
-    for (; itr != itrEnd; ++itr)
-    {
-        if (itr->second)
-            aSelected.push_back(itr->first);
-    }
-
     const AutoFilterData* pData =
         static_cast<const AutoFilterData*>(mpAutoFilterPopup->getExtendedData());
 
@@ -734,20 +724,38 @@ void ScGridWindow::UpdateAutoFilterFromMenu()
     ScQueryParam aParam;
     pDBData->GetQueryParam(aParam);
 
-    // Try to use the existing entry for the column (if one exists).
-    ScQueryEntry* pEntry = aParam.FindEntryByField(rPos.Col(), true);
+    if (mpAutoFilterPopup->isAllSelected())
+    {
+        // Remove this entry.
+        aParam.RemoveEntryByField(rPos.Col());
+    }
+    else
+    {
+        // Try to use the existing entry for the column (if one exists).
+        ScQueryEntry* pEntry = aParam.FindEntryByField(rPos.Col(), true);
 
-    if (!pEntry)
-        // Something went terribly wrong!
-        return;
+        if (!pEntry)
+            // Something went terribly wrong!
+            return;
 
-    pEntry->bDoQuery = true;
-    pEntry->nField = rPos.Col();
-    pEntry->eConnect = SC_AND;
+        pEntry->bDoQuery = true;
+        pEntry->nField = rPos.Col();
+        pEntry->eConnect = SC_AND;
 
-    ScQueryEntry::QueryItemsType& rItems = pEntry->GetQueryItems();
-    rItems.clear();
-    std::for_each(aSelected.begin(), aSelected.end(), AddItemToEntry(rItems));
+        ScCheckListMenuWindow::ResultType aResult;
+        mpAutoFilterPopup->getResult(aResult);
+        std::vector<rtl::OUString> aSelected;
+        ScCheckListMenuWindow::ResultType::const_iterator itr = aResult.begin(), itrEnd = aResult.end();
+        for (; itr != itrEnd; ++itr)
+        {
+            if (itr->second)
+                aSelected.push_back(itr->first);
+        }
+
+        ScQueryEntry::QueryItemsType& rItems = pEntry->GetQueryItems();
+        rItems.clear();
+        std::for_each(aSelected.begin(), aSelected.end(), AddItemToEntry(rItems));
+    }
 
     pViewData->GetView()->Query(aParam, NULL, true);
     pDBData->SetQueryParam(aParam);

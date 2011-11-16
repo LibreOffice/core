@@ -1178,6 +1178,11 @@ const Size& ScCheckListMenuWindow::getWindowSize() const
     return maWndSize;
 }
 
+bool ScCheckListMenuWindow::isAllSelected() const
+{
+    return maChkToggleAll.IsChecked();
+}
+
 void ScCheckListMenuWindow::getResult(ResultType& rResult)
 {
     ResultType aResult;

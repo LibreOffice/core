@@ -38,6 +38,17 @@ namespace {
 
 const size_t MAXQUERY = 8;
 
+class FindByField : public std::unary_function<ScQueryEntry, bool>
+{
+    SCCOLROW mnField;
+public:
+    FindByField(SCCOLROW nField) : mnField(nField) {}
+    bool operator() (const ScQueryEntry& rEntry) const
+    {
+        return rEntry.nField == mnField;
+    }
+};
+
 }
 
 ScQueryParamBase::ScQueryParamBase()
@@ -106,6 +117,19 @@ ScQueryEntry* ScQueryParamBase::FindEntryByField(SCCOLROW nField, bool bNew)
     // Add a new entry to the end.
     maEntries.push_back(new ScQueryEntry);
     return &maEntries.back();
+}
+
+void ScQueryParamBase::RemoveEntryByField(SCCOLROW nField)
+{
+    EntriesType::iterator itr = std::find_if(maEntries.begin(), maEntries.end(), FindByField(nField));
+    if (itr != maEntries.end())
+    {
+        maEntries.erase(itr);
+        if (maEntries.size() < MAXQUERY)
+            // Make sure that we have at least MAXQUERY number of entries at
+            // all times.
+            maEntries.push_back(new ScQueryEntry);
+    }
 }
 
 void ScQueryParamBase::Resize(size_t nNew)
