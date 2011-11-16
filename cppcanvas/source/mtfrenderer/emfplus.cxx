@@ -207,6 +207,7 @@ namespace cppcanvas
                         if ((pPointTypes [i] & 0x07) == 3) {
                             if (((i - last_normal )% 3) == 1) {
                                 polygon.setNextControlPoint (p - 1, mapped);
+                                EMFP_DEBUG (printf ("polygon append  next: %d mapped: %f,%f\n", p - 1, mapped.getX (), mapped.getY ()));
                                 continue;
                             } else if (((i - last_normal) % 3) == 2) {
                                 prev = mapped;
@@ -217,14 +218,17 @@ namespace cppcanvas
                             last_normal = i;
                     }
                     polygon.append (mapped);
+                    EMFP_DEBUG (printf ("polygon append point: %f,%f mapped: %f,%f\n", pPoints [i*2], pPoints [i*2 + 1], mapped.getX (), mapped.getY ()));
                     if (hasPrev) {
                         polygon.setPrevControlPoint (p, prev);
+                        EMFP_DEBUG (printf ("polygon append  prev: %d mapped: %f,%f\n", p, prev.getX (), prev.getY ()));
                         hasPrev = false;
                     }
                     p ++;
                     if (pPointTypes && (pPointTypes [i] & 0x80)) { // closed polygon
                         polygon.setClosed (true);
                         aPolygon.append (polygon);
+                        EMFP_DEBUG (printf ("close polygon\n"));
                         last_normal = i + 1;
                         p = 0;
                         polygon.clear ();
@@ -233,6 +237,25 @@ namespace cppcanvas
 
                 if (polygon.count ())
                     aPolygon.append (polygon);
+
+                EMFP_DEBUG (
+                    for (unsigned int i=0; i<aPolygon.count(); i++) {
+                        polygon = aPolygon.getB2DPolygon(i);
+                        printf ("polygon: %d\n", i);
+                        for (unsigned int j=0; j<polygon.count(); j++) {
+                            ::basegfx::B2DPoint point = polygon.getB2DPoint(j);
+                            printf ("point: %f,%f\n", point.getX(), point.getY());
+                            if (polygon.isPrevControlPointUsed(j)) {
+                                point = polygon.getPrevControlPoint(j);
+                                printf ("prev: %f,%f\n", point.getX(), point.getY());
+                            }
+                            if (polygon.isNextControlPointUsed(j)) {
+                                point = polygon.getNextControlPoint(j);
+                                printf ("next: %f,%f\n", point.getX(), point.getY());
+                            }
+                        }
+                    }
+                );
 
                 return aPolygon;
             }
