@@ -60,6 +60,7 @@
 #include "sheetevents.hxx"
 #include "globstr.hrc"
 #include "segmenttree.hxx"
+#include "queryparam.hxx"
 #include "queryentry.hxx"
 
 // STATIC DATA -----------------------------------------------------------

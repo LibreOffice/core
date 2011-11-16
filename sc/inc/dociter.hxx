@@ -33,7 +33,6 @@
 #include <tools/solar.h>
 #include "global.hxx"
 #include "scdllapi.h"
-#include "queryparam.hxx"
 
 #include <memory>
 
@@ -49,6 +48,8 @@ class ScAttrArray;
 class ScAttrIterator;
 class ScRange;
 class ScFlatBoolRowSegments;
+class ScMatrix;
+struct ScDBQueryParamBase;
 struct ScQueryParam;
 struct ScDBQueryParamInternal;
 struct ScDBQueryParamMatrix;

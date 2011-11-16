@@ -88,6 +88,7 @@
 #include "editutil.hxx"
 #include "formula/errorcodes.hxx"
 #include "queryentry.hxx"
+#include "queryparam.hxx"
 
 #include "excdoc.hxx"
 #include "xeescher.hxx"

@@ -75,6 +75,7 @@
 #include "formula/FormulaCompiler.hxx"
 #include "macromgr.hxx"
 #include "doubleref.hxx"
+#include "queryparam.hxx"
 
 #include <math.h>
 #include <float.h>
