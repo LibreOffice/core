@@ -1395,7 +1395,6 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                     m_aStates.top().aTableCellsAttributes.pop_front();
                     replayBuffer(m_aTableBuffer);
                 }
-                m_aStates.top().nCells = 0;
                 m_aStates.top().aTableCellSprms = m_aDefaultState.aTableCellSprms;
                 m_aStates.top().aTableCellAttributes = m_aDefaultState.aTableCellAttributes;
 
@@ -1413,7 +1412,8 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                         NS_ooxml::LN_CT_TblPrBase_tblW, NS_ooxml::LN_CT_TblWidth_w, pWValue);
 
                 RTFValue::Pointer_t pRowValue(new RTFValue(1));
-                m_aStates.top().aTableRowSprms->push_back(make_pair(NS_sprm::LN_PRow, pRowValue));
+                if (m_aStates.top().nCells > 0)
+                    m_aStates.top().aTableRowSprms->push_back(make_pair(NS_sprm::LN_PRow, pRowValue));
                 writerfilter::Reference<Properties>::Pointer_t const pTableRowProperties(
                         new RTFReferenceProperties(m_aStates.top().aTableRowAttributes, m_aStates.top().aTableRowSprms)
                         );
@@ -1422,6 +1422,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 tableBreak();
                 m_bNeedPap = true;
                 m_aTableBuffer.clear();
+                m_aStates.top().nCells = 0;
                 m_aStates.top().aTableCellsSprms.clear();
                 m_aStates.top().aTableCellsAttributes.clear();
             }
