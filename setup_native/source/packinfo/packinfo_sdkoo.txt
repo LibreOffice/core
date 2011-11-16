@@ -27,8 +27,8 @@
 
 Start
 module = "gid_Module_Root_SDK"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPACKAGEVERSION-sdk"
-solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPACKAGEVERSION-core01, SUNWbtool (Name="CCS tools bundled with SunOS"), SUNWxcu4 (Name="XCU4 Utilities")"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-sdk"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01, SUNWbtool (Name="CCS tools bundled with SunOS"), SUNWxcu4 (Name="XCU4 Utilities")"
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-sdk"
 freebsdrequires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01"
 requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01"
