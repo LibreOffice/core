@@ -502,7 +502,7 @@ void OCommonStatement::parseSql( const rtl::OUString& sql, QueryData& _out_rQuer
     const OSQLParseNode* pOrderByClause = m_aSQLIterator.getOrderTree();
     if ( pOrderByClause )
     {
-    #if OSL_DEBUG_LEVEL > 0
+    #if OSL_DEBUG_LEVEL > 1
         ::rtl::OUString sTreeDebug;
         pOrderByClause->showParseTree( sTreeDebug );
         EVO_TRACE_STRING( "found order-by tree:\n%s", sTreeDebug );
@@ -513,7 +513,7 @@ void OCommonStatement::parseSql( const rtl::OUString& sql, QueryData& _out_rQuer
     const OSQLParseNode* pWhereClause = m_aSQLIterator.getWhereTree();
     if ( pWhereClause && SQL_ISRULE( pWhereClause, where_clause ) )
     {
-    #if OSL_DEBUG_LEVEL > 0
+    #if OSL_DEBUG_LEVEL > 1
         ::rtl::OUString sTreeDebug;
         pWhereClause->showParseTree( sTreeDebug );
         EVO_TRACE_STRING( "found where tree:\n%s", sTreeDebug );
@@ -591,7 +591,7 @@ QueryData OCommonStatement::impl_getEBookQuery_throw( const ::rtl::OUString& _rS
     QueryData aData;
     parseSql( _rSql, aData );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     char *pSexpr = aData.getQuery() ? e_book_query_to_string( aData.getQuery() ) : g_strdup( "<map failed>" );
     g_message( "Parsed SQL to sexpr '%s'\n", pSexpr );
     g_free( pSexpr );
@@ -626,7 +626,7 @@ Reference< XResultSet > OCommonStatement::impl_executeQuery_throw( const ::rtl::
 {
     EVO_TRACE_STRING( "OCommonStatement::impl_executeQuery_throw(%s)\n", _rSql );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     g_message( "Parse SQL '%s'\n",
                OUStringToOString(_rSql, RTL_TEXTENCODING_UTF8).getStr() );
 #endif

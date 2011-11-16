@@ -33,7 +33,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     void evo_traceStringMessage( const sal_Char* pFormat, const ::rtl::OUString& rString );
 #   define EVO_TRACE_STRING( pFormat, rString ) evo_traceStringMessage( pFormat, rString )
 #else

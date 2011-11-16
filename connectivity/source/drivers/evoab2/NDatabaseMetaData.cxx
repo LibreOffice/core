@@ -42,12 +42,6 @@
 #include <string.h>
 #include "EApi.h"
 
-#if OSL_DEBUG_LEVEL > 0
-# define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
-#else /* OSL_DEBUG_LEVEL */
-# define OUtoCStr( x ) ("dummy")
-#endif /* OSL_DEBUG_LEVEL */
-
 using namespace connectivity::evoab;
 using namespace connectivity;
 using namespace com::sun::star::uno;

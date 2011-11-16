@@ -30,7 +30,7 @@
 #include "precompiled_connectivity.hxx"
 #include "NDebug.hxx"
 #include <osl/diagnose.h>
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 void evo_traceStringMessage( const sal_Char *pFormat,
                              const ::rtl::OUString& rString )
 {
