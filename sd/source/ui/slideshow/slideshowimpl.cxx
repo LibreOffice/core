@@ -1873,6 +1873,9 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
 
 IMPL_LINK( SlideshowImpl, PostYieldListener, void*, EMPTYARG )
 {
+    // prevent me from deletion when recursing (App::Reschedule does)
+    const rtl::Reference<SlideshowImpl> this_(this);
+
     Application::EnableNoYieldMode(false);
     Application::RemovePostYieldListener(LINK(this, SlideshowImpl, PostYieldListener));
     Application::Reschedule(true); // fix for fdo#32861 - process
@@ -1888,7 +1891,7 @@ IMPL_LINK( SlideshowImpl, PostYieldListener, void*, EMPTYARG )
 
 sal_Int32 SlideshowImpl::updateSlideShow (void)
 {
-    // doing some nMagic
+    // prevent me from deletion when recursing (App::EnableYieldMode does)
     const rtl::Reference<SlideshowImpl> this_(this);
 
     Reference< XSlideShow > xShow( mxShow );
