@@ -121,8 +121,12 @@ endif
 
 fetch: src.downloaded
 
+ifneq ($(MAKECMDGOALS),clean)
+ifneq ($(MAKECMDGOALS),distclean)
 Makefile: autogen.lastrun configure.in ooo.lst.in set_soenv.in Makefile.in
 	./autogen.sh
+endif
+endif
 
 id:
 	@. ./Env.Host.sh && \
