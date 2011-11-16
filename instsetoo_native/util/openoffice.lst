@@ -293,7 +293,7 @@ LibreOffice_SDK
             PACK_INSTALLED 1
             POOLPRODUCT 0
             DMG_VOLUMEEXTENSION SDK
-            DATABASENAME libreoffice33sdk
+            DATABASENAME libreoffice35sdk
             NO_README_IN_ROOTDIR 1
             LICENSENAME LGPL
             IGNOREDIRECTORYLAYER 1
@@ -345,7 +345,7 @@ LibreOffice_Dev_SDK
             PACK_INSTALLED 1
             POOLPRODUCT 0
             DMG_VOLUMEEXTENSION SDK
-            DATABASENAME libreoffice33devsdk
+            DATABASENAME libreoffice35devsdk
             NO_README_IN_ROOTDIR 1
             LICENSENAME LGPL
             IGNOREDIRECTORYLAYER 1
