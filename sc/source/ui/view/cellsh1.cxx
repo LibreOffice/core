@@ -1837,6 +1837,16 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
+        case FID_ADD_NAME:
+            {
+                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+
+                AbstractScNameAddDlg* pDlg = pFact->CreateScNameAddDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_NAMES_DEFINE );
+                pDlg->Execute();
+                delete pDlg;
+            }
+            break;
+
         case SID_RANGE_NOTETEXT:
             if (pReqArgs)
             {

@@ -53,6 +53,7 @@
 #include "mvtabdlg.hxx"
 #include "namecrea.hxx"
 #include "namepast.hxx"
+#include "namedefdlg.hxx"
 #include "pfiltdlg.hxx"
 #include "pvfundlg.hxx"
 #include "dpgroupdlg.hxx"
@@ -106,6 +107,7 @@ IMPL_ABSTDLG_BASE(AbstractScMetricInputDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScMoveTableDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScNameCreateDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScNamePasteDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractScNameAddDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScPivotFilterDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDPFunctionDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDPSubtotalDlg_Impl);
@@ -1131,7 +1133,7 @@ AbstractScNameCreateDlg * ScAbstractDialogFactory_Impl::CreateScNameCreateDlg ( 
 
 
 
- AbstractScNamePasteDlg * ScAbstractDialogFactory_Impl::CreateScNamePasteDlg ( Window * pParent, const ScRangeName* pList,
+AbstractScNamePasteDlg * ScAbstractDialogFactory_Impl::CreateScNamePasteDlg ( Window * pParent, const ScRangeName* pList,
                                                             const ScRangeName* pLocalList, int nId , bool bInsList )
 {
     ScNamePasteDlg * pDlg=NULL;
@@ -1149,6 +1151,22 @@ AbstractScNameCreateDlg * ScAbstractDialogFactory_Impl::CreateScNameCreateDlg ( 
     return 0;
 }
 
+
+AbstractScNameAddDlg* ScAbstractDialogFactory_Impl::CreateScNameAddDlg( Window* pParent, int nId)
+{
+    ScNameDefDlg* pDlg = NULL;
+    switch ( nId )
+    {
+        case RID_SCDLG_NAMES_DEFINE :
+            pDlg = new ScNameDefDlg( pParent );
+            break;
+        default:
+            break;
+    }
+    if ( pDlg )
+        return new AbstractScNameAddDlg_Impl( pDlg );
+    return 0;
+}
 
 
 AbstractScPivotFilterDlg * ScAbstractDialogFactory_Impl::CreateScPivotFilterDlg ( Window* pParent,

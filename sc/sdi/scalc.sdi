@@ -3758,6 +3758,31 @@ SfxVoidItem InsertMatrix SID_INSERT_MATRIX
 ]
 
 //--------------------------------------------------------------------------
+SfxVoidItem AddName FID_ADD_NAME
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_INSERT;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem InsertName FID_INSERT_NAME
 ()
 [

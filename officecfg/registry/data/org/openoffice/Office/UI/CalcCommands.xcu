@@ -898,6 +898,14 @@
                     <value xml:lang="en-US">Shee~t From File...</value>
                 </prop>
             </node>
+            <node oor:name=".uno:AddName" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Define Name...</value>
+                </prop>
+                <prop oor:name="ContextLabel" oor:type="xs:string">
+                    <value xml:lang="en-US">~Define...</value>
+                </prop>
+            </node>
             <node oor:name=".uno:DefineName" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">~Manage Names...</value>

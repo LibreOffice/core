@@ -178,6 +178,7 @@ interface CellSelection
 
     SID_TABOP               [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_CONSOLIDATE         [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    FID_ADD_NAME    [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     FID_INSERT_NAME [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     FID_USE_NAME    [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_CANCEL      [ ExecMethod = Execute; ]

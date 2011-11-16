@@ -51,6 +51,7 @@ class ScMetricInputDlg;
 class ScMoveTableDlg;
 class ScNameCreateDlg;
 class ScNamePasteDlg;
+class ScNameDefDlg;
 class ScPivotFilterDlg;
 class ScDPFunctionDlg;
 class ScDPSubtotalDlg;
@@ -285,6 +286,11 @@ class AbstractScNamePasteDlg_Impl : public AbstractScNamePasteDlg  //add for ScN
     virtual String          GetSelectedName() const;
 };
 
+class AbstractScNameAddDlg_Impl : public AbstractScNameAddDlg // Define Name
+{
+    DECL_ABSTDLG_BASE( AbstractScNameAddDlg_Impl, ScNameDefDlg )
+};
+
 class AbstractScPivotFilterDlg_Impl : public AbstractScPivotFilterDlg  //add for ScPivotFilterDlg
 {
     DECL_ABSTDLG_BASE( AbstractScPivotFilterDlg_Impl, ScPivotFilterDlg)
@@ -485,6 +491,8 @@ public:
 
     virtual AbstractScNamePasteDlg * CreateScNamePasteDlg ( Window * pParent, const ScRangeName* pList, //add for ScNamePasteDlg
                                                             const ScRangeName* pLocalList, int nId , bool bInsList=true );
+
+    virtual AbstractScNameAddDlg* CreateScNameAddDlg ( Window* pParent, int nId);
 
     virtual AbstractScPivotFilterDlg * CreateScPivotFilterDlg ( Window* pParent, //add for ScPivotFilterDlg
                                                                 const SfxItemSet&   rArgSet, sal_uInt16 nSourceTab , int nId );

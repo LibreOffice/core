@@ -1,0 +1,21 @@
+
+#include "namedefdlg.hrc"
+
+ModalDialog RID_SCDLG_NAMES_DEFINE
+{
+    OutputSize = TRUE ;
+    HelpId = CMD_FID_ADD_NAME ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 100 , 200 ) ;
+    Text [ en-US ] = "Define Names" ;
+    Moveable = TRUE ;
+    Closeable = TRUE;
+    OkButton BTN_OK
+    {
+        Pos = MAP_APPFONT( 50, 50 );
+        Size = MAP_APPFONT( 40, 14 );
+        TabStop = TRUE;
+
+    };
+};

@@ -100,6 +100,7 @@ $(eval $(call gb_Library_add_exception_objects,scui,\
     sc/source/ui/miscdlgs/strindlg \
     sc/source/ui/miscdlgs/tabbgcolordlg \
     sc/source/ui/miscdlgs/textdlgs \
+    sc/source/ui/namedlg/namedefdlg \
     sc/source/ui/optdlg/opredlin \
     sc/source/ui/optdlg/tpcalc \
     sc/source/ui/optdlg/tpcompatibility \

@@ -451,6 +451,16 @@ void ScEditShell::Execute( SfxRequest& rReq )
             }
             break;
 
+        case FID_ADD_NAME:
+            {
+                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+
+                AbstractScNameAddDlg* pDlg = pFact->CreateScNameAddDlg( pViewData->GetDialogParent(), RID_SCDLG_NAMES_DEFINE );
+                pDlg->Execute();
+                delete pDlg;
+            }
+            break;
+
         case SID_CHAR_DLG:
             {
                 SfxItemSet aAttrs( pTableView->GetAttribs() );

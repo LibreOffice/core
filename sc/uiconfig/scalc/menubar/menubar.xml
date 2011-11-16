@@ -163,6 +163,7 @@
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:NamesMenu">
                 <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:AddName"/>
                     <menu:menuitem menu:id=".uno:DefineName"/>
                     <menu:menuitem menu:id=".uno:InsertName"/>
                     <menu:menuseparator/>

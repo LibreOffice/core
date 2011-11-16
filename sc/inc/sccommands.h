@@ -36,6 +36,7 @@
 #define CMD_FID_TAB_APPEND                          ".uno:Add"
 #define CMD_SID_CHART_ADDSOURCE                     ".uno:AddChartData"
 #define CMD_SID_ADD_IN_MANAGER                      ".uno:AddInManager"
+#define CMD_FID_ADD_NAME                            ".uno:AddName"
 #define CMD_SID_ADD_PRINTAREA                       ".uno:AddPrintArea"
 #define CMD_SID_RANGE_ADDRESS                       ".uno:Address"
 #define CMD_FID_ADJUST_PRINTZOOM                    ".uno:AdjustPrintZoom"

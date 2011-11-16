@@ -221,7 +221,7 @@ public:
     virtual void    EnableRenameTable       (sal_Bool bFlag=true) = 0;
 };
 
-class AbstractScNameCreateDlg : public VclAbstractDialog  //add for ScNameCreateDlg
+class AbstractScNameCreateDlg : public VclAbstractDialog  // Manage Name Dialog
 {
 public:
     virtual sal_uInt16          GetFlags() const = 0;
@@ -231,6 +231,11 @@ class AbstractScNamePasteDlg : public VclAbstractDialog  //add for ScNamePasteDl
 {
 public:
     virtual String          GetSelectedName() const = 0;
+};
+
+class AbstractScNameAddDlg : public VclAbstractDialog // Define Name Dialog
+{
+public:
 };
 
 class AbstractScPivotFilterDlg : public VclAbstractDialog  //add for ScPivotFilterDlg
@@ -418,6 +423,8 @@ public:
 
     virtual AbstractScNamePasteDlg * CreateScNamePasteDlg ( Window * pParent, const ScRangeName* pList, //add for ScNamePasteDlg
                                                             const ScRangeName* pLocalList, int nId , bool bInsList=true ) = 0;
+
+    virtual AbstractScNameAddDlg* CreateScNameAddDlg ( Window* pParent, int nId) = 0;
 
     virtual AbstractScPivotFilterDlg * CreateScPivotFilterDlg ( Window* pParent, //add for ScPivotFilterDlg
                                                                 const SfxItemSet&   rArgSet, sal_uInt16 nSourceTab , int nId ) = 0;

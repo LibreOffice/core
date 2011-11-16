@@ -349,6 +349,7 @@
 #define FID_USE_NAME            (INSERT_MENU_START + 13)
 #define FID_APPLY_NAME          (INSERT_MENU_START + 14)
 #define FID_INS_TABLE_EXT       (INSERT_MENU_START + 15)
+#define FID_ADD_NAME            (INSERT_MENU_START + 16)
 #define SID_INSERT_CLIPART      (INSERT_MENU_START + 17) //!!! should come from Svx
 #define FID_INS_CELLSDOWN       (INSERT_MENU_START + 18)
 #define FID_INS_CELLSRIGHT      (INSERT_MENU_START + 19)
@@ -1106,6 +1107,7 @@
 #define RID_SCDLG_NAMES_PASTE           (SC_DIALOGS_START + 72)
 #define RID_SCDLG_NAMES_CREATE          (SC_DIALOGS_START + 73)
 #define RID_SCDLG_NAMES_APPLY           (SC_DIALOGS_START + 74) //NYI
+#define RID_SCDLG_NAMES_DEFINE          (SC_DIALOGS_START + 75)
 
 #define RID_SCDLG_CHAR                  (SC_DIALOGS_START + 76)
 #define RID_SCDLG_PARAGRAPH             (SC_DIALOGS_START + 77)

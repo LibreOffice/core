@@ -1,0 +1,3 @@
+#include "sc.hrc"
+
+#define BTN_OK 1
