@@ -41,10 +41,10 @@ $(eval $(call gb_Library_add_api,sofficeapp,\
 
 $(eval $(call gb_Library_add_defs,sofficeapp,\
     -DDESKTOP_DLLIMPLEMENTATION \
-    $(if $(firstword TRUE,$(ENABLE_GNOMEVFS)),-DGNOME_VFS_ENABLED) \
-    $(if $(firstword WNT,$(GUI)),-DENABLE_QUICKSTART_APPLET) \
-    $(if $(firstword aqua,$(GUIBASE)),-DENABLE_QUICKSTART_APPLET) \
-    $(if $(firstword TRUE,$(ENABLE_SYSTRAY_GTK)),-DENABLE_QUICKSTART_APPLET) \
+    $(if $(filter TRUE,$(ENABLE_GNOMEVFS)),-DGNOME_VFS_ENABLED) \
+    $(if $(filter WNT,$(GUI)),-DENABLE_QUICKSTART_APPLET) \
+    $(if $(filter aqua,$(GUIBASE)),-DENABLE_QUICKSTART_APPLET) \
+    $(if $(filter TRUE,$(ENABLE_SYSTRAY_GTK)),-DENABLE_QUICKSTART_APPLET) \
 ))
 
 $(eval $(call gb_Library_set_include,sofficeapp,\
