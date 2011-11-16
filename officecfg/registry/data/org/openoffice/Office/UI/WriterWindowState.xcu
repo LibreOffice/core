@@ -54,7 +54,7 @@
             </node>
             <node oor:name="private:resource/toolbar/findbar" oor:op="replace">
                 <prop oor:name="DockPos" oor:type="xs:string">
-                    <value>1,0</value>
+                    <value>0,3</value>
                 </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>true</value>
@@ -107,8 +107,14 @@
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/tableobjectbar" oor:op="replace">
+                <prop oor:name="DockPos" oor:type="xs:string">
+                    <value>0,0</value>
+                </prop>
+                <prop oor:name="DockingArea" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
-                    <value>false</value>
+                    <value>true</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
@@ -121,8 +127,14 @@
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/numobjectbar" oor:op="replace">
+                <prop oor:name="DockPos" oor:type="xs:string">
+                    <value>0,0</value>
+                </prop>
+                <prop oor:name="DockingArea" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
-                    <value>false</value>
+                    <value>true</value>
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Bullets and Numbering</value>
@@ -169,8 +181,14 @@
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/bezierobjectbar" oor:op="replace">
+                <prop oor:name="DockPos" oor:type="xs:string">
+                    <value>0,0</value>
+                </prop>
+                <prop oor:name="DockingArea" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
-                    <value>false</value>
+                    <value>true</value>
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Edit Points</value>
@@ -186,11 +204,14 @@
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/extrusionobjectbar" oor:op="replace">
+                <prop oor:name="DockPos" oor:type="xs:string">
+                    <value>0,0</value>
+                </prop>
                 <prop oor:name="DockingArea" oor:type="xs:int">
-                    <value>0</value>
+                    <value>1</value>
                 </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
-                    <value>false</value>
+                    <value>true</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
@@ -209,8 +230,14 @@
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Text Box Formatting</value>
                 </prop>
+                <prop oor:name="DockPos" oor:type="xs:string">
+                    <value>0,0</value>
+                </prop>
+                <prop oor:name="DockingArea" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
-                    <value>false</value>
+                    <value>true</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
@@ -226,8 +253,14 @@
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Form Filter</value>
                 </prop>
+                <prop oor:name="DockPos" oor:type="xs:string">
+                    <value>0,0</value>
+                </prop>
+                <prop oor:name="DockingArea" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
-                    <value>false</value>
+                    <value>true</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
@@ -311,6 +344,9 @@
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Frame</value>
                 </prop>
+                <prop oor:name="DockPos" oor:type="xs:string">
+                    <value>0,1</value>
+                </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>true</value>
                 </prop>
@@ -359,8 +395,14 @@
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/graphicobjectbar" oor:op="replace">
+                <prop oor:name="DockPos" oor:type="xs:string">
+                    <value>0,0</value>
+                </prop>
+                <prop oor:name="DockingArea" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
-                    <value>false</value>
+                    <value>true</value>
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Picture</value>
@@ -493,6 +535,9 @@
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/drawbar" oor:op="replace">
+                <prop oor:name="DockPos" oor:type="xs:string">
+                    <value>0,0</value>
+                </prop>
                 <prop oor:name="DockingArea" oor:type="xs:int">
                     <value>1</value>
                 </prop>
@@ -625,8 +670,14 @@
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/fontworkobjectbar" oor:op="replace">
+                <prop oor:name="DockPos" oor:type="xs:string">
+                    <value>0,0</value>
+                </prop>
+                <prop oor:name="DockingArea" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
-                    <value>false</value>
+                    <value>true</value>
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Fontwork</value>
