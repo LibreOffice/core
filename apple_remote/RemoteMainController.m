@@ -29,7 +29,6 @@
 
 #import "RemoteMainController.h"
 #import "AppleRemote.h"
-#import "KeyspanFrontRowControl.h"
 #import "GlobalKeyboardDevice.h"
 #import "RemoteControlContainer.h"
 #import "MultiClickRemoteBehavior.h"

@@ -52,7 +52,6 @@ LIB1FILES+= \
         $(SLB)$/AppleRemote.lib
 
 SLOFILES=	\
-        $(SLO)$/KeyspanFrontRowControl.obj 	\
         $(SLO)$/AppleRemote.obj 		\
         $(SLO)$/RemoteControl.obj		\
         $(SLO)$/RemoteControlContainer.obj	\
@@ -65,7 +64,6 @@ SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
 SHL1OBJS= $(SLOFILES)
 
 OUT2INC = \
-        $(BUILDDIR)$/KeyspaFrontRowControl.h	\
         $(BUILDDIR)$/AppleRemote.h		\
         $(BUILDDIR)$/RemoteControl.h		\
         $(BUILDDIR)$/RemoteControlContainer.h	\
