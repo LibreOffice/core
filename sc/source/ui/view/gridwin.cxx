@@ -614,6 +614,20 @@ public:
     }
 };
 
+class AddItemToEntry : public std::unary_function<rtl::OUString, void>
+{
+    ScQueryEntry::QueryItemsType& mrItems;
+public:
+    AddItemToEntry(ScQueryEntry::QueryItemsType& rItems) : mrItems(rItems) {}
+    void operator() (const rtl::OUString& rSelected)
+    {
+        ScQueryEntry::Item aNew;
+        aNew.maString = rSelected;
+        aNew.meType = ScQueryEntry::ByString;
+        aNew.mfVal = 0.0;
+        mrItems.push_back(aNew);
+    }
+};
 
 }
 
@@ -684,21 +698,52 @@ void ScGridWindow::UpdateAutoFilterFromMenu()
     ScQueryParam aParam;
     pDBData->GetQueryParam(aParam);
 
+    // Try to use the existing entry for the column (if one exists).
     SCSIZE n = aParam.GetEntryCount();
+    ScQueryEntry* pEntry = NULL;
     for (SCSIZE i = 0; i < n; ++i)
     {
         ScQueryEntry& rEntry = aParam.GetEntry(i);
-        rEntry.Clear();
+        if (!rEntry.bDoQuery)
+            break;
+
+        if (rEntry.nField == rPos.Col())
+        {
+            // existing entry found!
+            pEntry = &rEntry;
+            break;
+        }
     }
 
-    if (aSelected.empty())
+    if (!pEntry)
+    {
+        // Use the first unused entry.
+        for (SCSIZE i = 0; i < n; ++i)
+        {
+            ScQueryEntry& rEntry = aParam.GetEntry(i);
+            if (!rEntry.bDoQuery)
+            {
+                pEntry = &rEntry;
+                break;
+            }
+        }
+
+        if (!pEntry)
+            // Add a new entry.
+            pEntry = &aParam.AppendEntry();
+    }
+
+    if (!pEntry)
+        // Something went terribly wrong!
         return;
 
-    ScQueryEntry& rEntry = aParam.GetEntry(0);
-    ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-    rEntry.bDoQuery = true;
-    rItem.meType = ScQueryEntry::ByString;
-    rItem.maString = aSelected[0];
+    pEntry->bDoQuery = true;
+    pEntry->nField = rPos.Col();
+    pEntry->eConnect = SC_AND;
+
+    ScQueryEntry::QueryItemsType& rItems = pEntry->GetQueryItems();
+    rItems.clear();
+    std::for_each(aSelected.begin(), aSelected.end(), AddItemToEntry(rItems));
 
     pViewData->GetView()->Query(aParam, NULL, true);
     pDBData->SetQueryParam(aParam);

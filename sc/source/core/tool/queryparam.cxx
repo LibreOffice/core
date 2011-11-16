@@ -77,6 +77,12 @@ ScQueryEntry& ScQueryParamBase::GetEntry(SCSIZE n)
     return maEntries[n];
 }
 
+ScQueryEntry& ScQueryParamBase::AppendEntry()
+{
+    maEntries.push_back(new ScQueryEntry);
+    return maEntries.back();
+}
+
 void ScQueryParamBase::Resize(size_t nNew)
 {
     if (nNew < MAXQUERY)
