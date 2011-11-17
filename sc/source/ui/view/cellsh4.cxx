@@ -144,10 +144,10 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
         nRTLSign = -1;
     }
 
-    // einmal extra, damit der Cursor bei ExecuteInputDirect nicht zuoft gemalt wird:
+    // once extra, so that the cursor will not be painted too often with ExecuteInputDirect:
     pTabViewShell->HideAllCursors();
 
-    //OS: einmal fuer alle wird doch reichen!
+    //OS: once for all should do, however!
     pTabViewShell->ExecuteInputDirect();
     switch ( nSlotId )
     {
@@ -200,7 +200,7 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
             break;
 
         default:
-            OSL_FAIL("Unbekannte Message bei ViewShell (Cursor)");
+            OSL_FAIL("Unknown message in ViewShell (Cursor)");
             return;
     }
 
@@ -312,8 +312,8 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
             pTabViewShell->SelectNextTab( -1, (nSlotId == SID_PREV_TABLE_SEL) );
             break;
 
-        //  Cursorbewegungen in Bloecken gehen nicht von Basic aus,
-        //  weil das ScSbxRange-Objekt bei Eingaben die Markierung veraendert
+        //  cursor movements in range do not originate from Basic,
+        //  because the ScSbxRange-object changes the marking at input
 
         case SID_NEXT_UNPROTECT:
             pTabViewShell->FindNextUnprot( false, !rReq.IsAPI() );
@@ -386,7 +386,7 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
             break;
 
         default:
-            OSL_FAIL("Unbekannte Message bei ViewShell (Cursor)");
+            OSL_FAIL("Unknown message in ViewShell (Cursor)");
             return;
     }
 
@@ -403,7 +403,7 @@ void ScCellShell::ExecutePageSel( SfxRequest& rReq )
         case SID_CURSORTOPOFFILE_SEL:   rReq.SetSlot( SID_CURSORTOPOFFILE );  break;
         case SID_CURSORENDOFFILE_SEL:   rReq.SetSlot( SID_CURSORENDOFFILE );  break;
         default:
-            OSL_FAIL("Unbekannte Message bei ViewShell (ExecutePageSel)");
+            OSL_FAIL("Unknown message in ViewShell (ExecutePageSel)");
             return;
     }
     rReq.AppendItem( SfxBoolItem(FN_PARAM_2, sal_True) );
@@ -458,7 +458,7 @@ void ScCellShell::ExecutePage( SfxRequest& rReq )
             break;
 
         default:
-            OSL_FAIL("Unbekannte Message bei ViewShell (ExecutePage)");
+            OSL_FAIL("Unknown message in ViewShell (ExecutePage)");
             return;
     }
 

@@ -137,59 +137,59 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
     while ( nWhich )
     {
         sal_Bool bDisable = false;
-        sal_Bool bNeedEdit = sal_True;      // muss Selektion editierbar sein?
+        sal_Bool bNeedEdit = sal_True;      // need selection be editable?
         switch ( nWhich )
         {
-            case FID_FILL_TO_BOTTOM:    // Fuellen oben/unten
-            case FID_FILL_TO_TOP:       // mind. 2 Zeilen markiert?
+            case FID_FILL_TO_BOTTOM:    // fill to top / bottom
+            case FID_FILL_TO_TOP:       // are at least 2 rows marked?
                 bDisable = (!bSimpleArea) || (nRow1 == nRow2);
                 if ( !bDisable && bEditable )
-                {   // Matrix nicht zerreissen
+                {   // do not damage matrix
                     if ( nWhich == FID_FILL_TO_BOTTOM )
                         bDisable = pDoc->HasSelectedBlockMatrixFragment(
-                            nCol1, nRow1, nCol2, nRow1, rMark );    // erste Zeile
+                            nCol1, nRow1, nCol2, nRow1, rMark );    // first row
                     else
                         bDisable = pDoc->HasSelectedBlockMatrixFragment(
-                            nCol1, nRow2, nCol2, nRow2, rMark );    // letzte Zeile
+                            nCol1, nRow2, nCol2, nRow2, rMark );    // last row
                 }
                 break;
 
-            case FID_FILL_TO_RIGHT:     // Fuellen links/rechts
-            case FID_FILL_TO_LEFT:      // mind. 2 Spalten markiert?
+            case FID_FILL_TO_RIGHT:     // fill to left / right
+            case FID_FILL_TO_LEFT:      // are at least 2 columns marked?
                 bDisable = (!bSimpleArea) || (nCol1 == nCol2);
                 if ( !bDisable && bEditable )
                 {   // Matrix nicht zerreissen
                     if ( nWhich == FID_FILL_TO_RIGHT )
                         bDisable = pDoc->HasSelectedBlockMatrixFragment(
-                            nCol1, nRow1, nCol1, nRow2, rMark );    // erste Spalte
+                            nCol1, nRow1, nCol1, nRow2, rMark );    // first column
                     else
                         bDisable = pDoc->HasSelectedBlockMatrixFragment(
-                            nCol2, nRow1, nCol2, nRow2, rMark );    // letzte Spalte
+                            nCol2, nRow1, nCol2, nRow2, rMark );    // last column
                 }
                 break;
 
-            case FID_FILL_SERIES:       // Block fuellen
-            case SID_OPENDLG_TABOP:     // Mehrfachoperationen, mind. 2 Zellen markiert?
+            case FID_FILL_SERIES:       // fill block
+            case SID_OPENDLG_TABOP:     // multiple-cell operations, are at least 2 cells marked?
                 if (pDoc->GetChangeTrack()!=NULL &&nWhich ==SID_OPENDLG_TABOP)
                     bDisable = sal_True;
                 else
                     bDisable = (!bSimpleArea) || (nCol1 == nCol2 && nRow1 == nRow2);
 
                 if ( !bDisable && bEditable && nWhich == FID_FILL_SERIES )
-                {   // Matrix nicht zerreissen
+                {   // do not damage matrix
                     bDisable = pDoc->HasSelectedBlockMatrixFragment(
-                            nCol1, nRow1, nCol2, nRow1, rMark ) // erste Zeile
+                            nCol1, nRow1, nCol2, nRow1, rMark )     // first row
                         ||  pDoc->HasSelectedBlockMatrixFragment(
-                            nCol1, nRow2, nCol2, nRow2, rMark ) // letzte Zeile
+                            nCol1, nRow2, nCol2, nRow2, rMark )     // last row
                         ||  pDoc->HasSelectedBlockMatrixFragment(
-                            nCol1, nRow1, nCol1, nRow2, rMark ) // erste Spalte
+                            nCol1, nRow1, nCol1, nRow2, rMark )     // first column
                         ||  pDoc->HasSelectedBlockMatrixFragment(
-                            nCol2, nRow1, nCol2, nRow2, rMark );    // letzte Spalte
+                            nCol2, nRow1, nCol2, nRow2, rMark );    // last column
                 }
                 break;
 
-            case SID_CUT:               // Ausschneiden,
-            case FID_INS_CELL:          // Zellen einfuegen, nur einf. Selektion
+            case SID_CUT:               // cut
+            case FID_INS_CELL:          // insert cells, just simple selection
                 bDisable = (!bSimpleArea);
                 break;
 
@@ -203,16 +203,16 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 bDisable = (!bSimpleArea) || GetViewData()->SimpleRowMarked();
                 break;
 
-            case SID_COPY:                      // Kopieren
-                // nur wegen Matrix nicht editierbar? Matrix nicht zerreissen
-                //! schlaegt nicht zu, wenn geschuetzt UND Matrix, aber damit
-                //! muss man leben.. wird in Copy-Routine abgefangen, sonst
-                //! muesste hier nochmal Aufwand getrieben werden
+            case SID_COPY:              // copy
+                // not editable because of matrix only? Do not damage matrix
+                //! is not called, when protected AND matrix, we will have
+                //! to live with this... is caught in Copy-Routine, otherwise
+                //! work is to be done once more
                 if ( !(!bEditable && bOnlyNotBecauseOfMatrix) )
-                    bNeedEdit = false;          // erlaubt, wenn geschuetzt/ReadOnly
+                    bNeedEdit = false;          // allowed when protected/ReadOnly
                 break;
 
-            case SID_AUTOFORMAT:        // Autoformat, mind. 3x3 selektiert
+            case SID_AUTOFORMAT:        // Autoformat, at least 3x3 selected
                 bDisable =    (!bSimpleArea)
                            || ((nCol2 - nCol1) < 2) || ((nRow2 - nRow1) < 2);
                 break;
@@ -234,7 +234,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case SID_CELL_FORMAT_RESET :
             case FID_CELL_FORMAT :
             case SID_ENABLE_HYPHENATION :
-                // nur wegen Matrix nicht editierbar? Attribute trotzdem ok
+                // not editable because of matrix only? Attribute ok nonetheless
                 if ( !bEditable && bOnlyNotBecauseOfMatrix )
                     bNeedEdit = false;
                 break;
@@ -269,7 +269,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
     }
 }
 
-//  Funktionen, die je nach Cursorposition disabled sind
+//  functionen, disabled depending on cursor position
 //  Default:
 //      SID_INSERT_POSTIT, SID_CHARMAP, SID_OPENDLG_FUNCTION
 
@@ -285,7 +285,7 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
     while ( nWhich )
     {
         sal_Bool bDisable = false;
-        sal_Bool bNeedEdit = sal_True;      // muss Cursorposition editierbar sein?
+        sal_Bool bNeedEdit = sal_True;      // need cursor position be editable?
         switch ( nWhich )
         {
             case SID_THESAURUS:
@@ -400,7 +400,7 @@ void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats )
         lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE );
 }
 
-//  Einfuegen, Inhalte einfuegen
+//  insert, insert contents
 
 sal_Bool lcl_IsCellPastePossible( const TransferableDataHelper& rData )
 {
@@ -510,7 +510,7 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
 
     bool bDisable = !bPastePossible;
 
-    //  Zellschutz / Multiselektion
+    //  cell protection / multiple selection
 
     if (!bDisable)
     {
@@ -648,16 +648,16 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_STATUS_SELMODE:
                 {
-                    /* 0: STD   Click hebt Sel auf
-                     * 1: ER    Click erweitert Selektion
-                     * 2: ERG   Click definiert weitere Selektion
+                    /* 0: STD   Click cancels Sel
+                     * 1: ER    Click extends selection
+                     * 2: ERG   Click defines further selection
                      */
                     sal_uInt16 nMode = pTabViewShell->GetLockedModifiers();
 
                     switch ( nMode )
                     {
                         case KEY_SHIFT: nMode = 1;  break;
-                        case KEY_MOD1:  nMode = 2;  break; // Control-Taste
+                        case KEY_MOD1:  nMode = 2;  break; // Control-key
                         case 0:
                         default:
                             nMode = 0;
@@ -679,14 +679,14 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 }
                 break;
 
-            //  Summe etc. mit Datum/Zeit/Fehler/Pos&Groesse zusammengefasst
+            //  calculations etc. with date/time/Fail/position&size together
 
             // #i34458# The SfxStringItem belongs only into SID_TABLE_CELL. It no longer has to be
             // duplicated in SID_ATTR_POSITION or SID_ATTR_SIZE for SvxPosSizeStatusBarControl.
             case SID_TABLE_CELL:
                 {
-                    //  Testen, ob Fehler unter Cursor
-                    //  (nicht pDoc->GetErrCode, um keine zirkulaeren Referenzen auszuloesen)
+                    //  Test, if error under cursor
+                    //  (not pDoc->GetErrCode, to avoid erasing circular references)
 
                     // In interpreter may happen via rescheduled Basic
                     if ( pDoc->IsInInterpreter() )
@@ -883,7 +883,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     if ( pDocSh->IsReadOnly())
                         rSet.DisableItem( nWhich );
 
-                    //XXX Disablen wenn nicht eindeutig
+                    //XXX disable if not conclusive
                 }
                 break;
 
@@ -892,7 +892,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     //GetViewData()->GetCurY();
                     SfxUInt16Item aHeightItem( FID_ROW_HEIGHT, pDoc->GetRowHeight( nPosY , nTab) );
                     rSet.Put( aHeightItem );
-                    //XXX Disablen wenn nicht eindeutig
+                    //XXX disable if not conclusive
                     if ( pDocSh->IsReadOnly())
                         rSet.DisableItem( nWhich );
                 }
@@ -906,8 +906,8 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 OSL_FAIL( "Old update method. Use ScTabViewShell::UpdateInputHandler()." );
                 break;
 
-            case SID_SCENARIOS:                                     // Szenarios:
-                if (!(rMark.IsMarked() || rMark.IsMultiMarked()))   // nur, wenn etwas selektiert
+            case SID_SCENARIOS:                                     // scenarios:
+                if (!(rMark.IsMarked() || rMark.IsMultiMarked()))   // only, if something selected
                     rSet.DisableItem( nWhich );
                 break;
 

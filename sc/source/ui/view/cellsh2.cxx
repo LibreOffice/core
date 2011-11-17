@@ -291,7 +291,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 ScDBData* pDBData = pTabViewShell->GetDBData(sal_True,SC_DB_OLD);
                 if (pDBData)
                 {
-                    //  Import wiederholen wie SID_REIMPORT_DATA
+                    //  repeat import like SID_REIMPORT_DATA
 
                     sal_Bool bContinue = sal_True;
                     ScImportParam aImportParam;
@@ -301,21 +301,21 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         bContinue = pTabViewShell->ImportData( aImportParam );
                         pDBData->SetImportParam( aImportParam );    //! Undo ??
 
-                        //  markieren (Groesse kann sich geaendert haben)
+                        //  mark (size may have been changed)
                         ScRange aNewRange;
                         pDBData->GetArea(aNewRange);
                         pTabViewShell->MarkRange(aNewRange);
                     }
 
-                    if ( bContinue )        // Fehler beim Import -> Abbruch
+                    if ( bContinue )        // fail at import -> break
                     {
-                        //  interne Operationen, wenn welche gespeichert
+                        //  internal operations, when any stored
 
                         if ( pDBData->HasQueryParam() || pDBData->HasSortParam() ||
                                                           pDBData->HasSubTotalParam() )
                             pTabViewShell->RepeatDB();
 
-                        //  Pivottabellen die den Bereich als Quelldaten haben
+                        //  pivot tables that have the range as data source
 
                         ScRange aRange;
                         pDBData->GetArea(aRange);
@@ -391,7 +391,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     aArgSet.Put( ScSortItem( SCITEM_SORTDATA, GetViewData(), &aSortParam ) );
 
-                    pTabViewShell->UISort( aSortParam );        // Teilergebnisse bei Bedarf neu
+                    pTabViewShell->UISort( aSortParam );        // subtotal when needed new
 
                     rReq.Done();
                 }
@@ -422,7 +422,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         if( bHasHeader )
                             aSortParam.bHasHeader = bHasHeader;
 
-                        aSortParam.bInplace = sal_True;             // von Basic immer
+                        aSortParam.bInplace = sal_True;             // from Basic always
 
                         const SfxPoolItem* pItem;
                         if ( pArgs->GetItemState( SID_SORT_BYROW, sal_True, &pItem ) == SFX_ITEM_SET )
@@ -440,7 +440,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             sal_uInt16 nUserIndex = ((const SfxUInt16Item*)pItem)->GetValue();
                             aSortParam.bUserDef = ( nUserIndex != 0 );
                             if ( nUserIndex )
-                                aSortParam.nUserIndex = nUserIndex - 1;     // Basic: 1-basiert
+                                aSortParam.nUserIndex = nUserIndex - 1;     // Basic: 1-based
                         }
 
                         SCCOLROW nField0 = 0;
@@ -465,7 +465,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         if ( pArgs->GetItemState( FN_PARAM_6, sal_True, &pItem ) == SFX_ITEM_SET )
                             aSortParam.bAscending[2] = ((const SfxBoolItem*)pItem)->GetValue();
 
-                        // Teilergebnisse bei Bedarf neu
+                        // subtotal when needed new
                         pTabViewShell->UISort( aSortParam );
                         rReq.Done();
                     }
@@ -504,7 +504,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             const ScSortParam& rOutParam = ((const ScSortItem&)
                                 pOutSet->Get( SCITEM_SORTDATA )).GetSortData();
 
-                            // Teilergebnisse bei Bedarf neu
+                            // subtotal when needed new
+
                             pTabViewShell->UISort( rOutParam );
 
                             if ( rOutParam.bInplace )
@@ -661,8 +662,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     SCTAB nCurTab = GetViewData()->GetTabNo();
                     SCTAB nRefTab = GetViewData()->GetRefTabNo();
 
-                    // Wenn RefInput auf andere Tabelle als Datentabelle umgeschaltet
-                    // hat wieder zurueckschalten:
+                    // If RefInput switched to a different sheet from the data sheet,
+                    // switch back:
 
                     if ( nCurTab != nRefTab )
                     {
@@ -761,7 +762,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 const SfxItemSet* pArgs = rReq.GetArgs();
                 if ( pArgs )
                 {
-                    OSL_FAIL("spaeter...");
+                    OSL_FAIL("later...");
                 }
                 else
                 {
@@ -902,13 +903,13 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         aData.SetIgnoreBlank( bBlank );
                         aData.SetListType( nListType );
 
-                        aData.SetInput(aHelpTitle, aHelpText);      // sets bShowInput to TRUE
+                        aData.SetInput(aHelpTitle, aHelpText);          // sets bShowInput to TRUE
                         if (!bShowHelp)
-                            aData.ResetInput();                     // reset only bShowInput
+                            aData.ResetInput();                         // reset only bShowInput
 
                         aData.SetError(aErrTitle, aErrText, eErrStyle); // sets bShowError to TRUE
                         if (!bShowError)
-                            aData.ResetError();                     // reset only bShowError
+                            aData.ResetError();                         // reset only bShowError
 
                         pTabViewShell->SetValidation( aData );
                         rReq.Done( *pOutSet );
@@ -995,8 +996,8 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
         {
             case SID_REFRESH_DBAREA:
                 {
-                    //  importierte Daten ohne Selektion
-                    //  oder Filter,Sortierung,Teilergebis (auch ohne Import)
+                    //  imported data without selection
+                    //  or filter,sort,subtotal (also without import)
                     sal_Bool bOk = false;
                     ScDBData* pDBData = pTabViewShell->GetDBData(false,SC_DB_OLD);
                     if (pDBData && pDoc->GetChangeTrack() == NULL)
@@ -1028,7 +1029,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                 break;
 
 
-                //Bei Redlining und Multiselektion Disablen
+                //in case of Redlining and multiselection disable
             case SID_SORT_ASCENDING:
             case SID_SORT_DESCENDING:
             case SCITEM_SORTDATA:
@@ -1047,7 +1048,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
 
             case SID_REIMPORT_DATA:
                 {
-                    //  nur importierte Daten ohne Selektion
+                    //  only imported data without selection
                     ScDBData* pDBData = pTabViewShell->GetDBData(false,SC_DB_OLD);
                     if (!pDBData || !pDBData->HasImportParam() || pDBData->HasImportSelection() ||
                         pDoc->GetChangeTrack()!=NULL)
@@ -1068,7 +1069,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                 break;
             case SID_SBA_BRW_INSERT:
                 {
-                    //  SBA will ein sal_Bool-Item, damit ueberhaupt enabled
+                    //  SBA wants a sal_Bool-item, enabled
 
                     sal_Bool bEnable = sal_True;
                     rSet.Put(SfxBoolItem(nWhich, bEnable));
