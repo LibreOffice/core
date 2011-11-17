@@ -95,9 +95,19 @@ static sal_Bool getModulePathFromAddress(void * address, rtl_String ** path) {
 #else
     Dl_info dl_info;
 
-    if ((result = dladdr(address, &dl_info)) != 0)
+#ifdef ANDROID
+    int (*lo_dladdr)(void *, Dl_info *) = dlsym(RTLD_DEFAULT, "lo_dladdr");
+    result = (*lo_dladdr)(address, &dl_info);
+#else
+    result = dladdr(address, &dl_info)
+#endif
+
+    if (result != 0)
     {
         rtl_string_newFromStr(path, dl_info.dli_fname);
+#ifdef ANDROID
+        free((void *) dl_info.dli_fname);
+#endif
         result = sal_True;
     }
     else
