@@ -464,7 +464,14 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     SAL_THROW( (loader::CannotActivateFactoryException) )
 {
 #ifndef IOS
-    OUString aModulePath( makeComponentPath( rLibName, rPath ) );
+    OUString sLibName(rLibName);
+
+#ifdef ANDROID
+    if ( rLibName.equals( OUSTR("bootstrap.uno" SAL_DLLEXTENSION) ) )
+        sLibName = OUSTR("libbootstrap.uno" SAL_DLLEXTENSION);
+#endif
+
+    OUString aModulePath( makeComponentPath( sLibName, rPath ) );
     if (! checkAccessPath( &aModulePath ))
     {
         throw loader::CannotActivateFactoryException(
