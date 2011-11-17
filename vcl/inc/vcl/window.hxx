@@ -383,7 +383,7 @@ private:
 
     //^^^la la la, I can't hear you^^^
     typedef std::map< ::rtl::OString, ::com::sun::star::uno::Any > ChildPropertyMap;
-    ChildPropertyMap m_aChildProperties;
+    ChildPropertyMap m_aWidgetProperties;
 
     SAL_DLLPRIVATE void ImplInitWindowData( WindowType nType );
 
@@ -1064,25 +1064,25 @@ public:
     // Advisory Sizing - what is a good size for this widget ?
     virtual Size GetOptimalSize(WindowSizeType eType) const;
     void queueResize();
-    template <typename T> T getChildProperty(const rtl::OString &rString, const T &rDefaultValue = T())
+    template <typename T> T getWidgetProperty(const rtl::OString &rString, const T &rDefaultValue = T())
     {
         T nValue = rDefaultValue;
-        ChildPropertyMap::const_iterator aI = m_aChildProperties.find(rString);
-        if (aI != m_aChildProperties.end())
+        ChildPropertyMap::const_iterator aI = m_aWidgetProperties.find(rString);
+        if (aI != m_aWidgetProperties.end())
             aI->second >>= nValue;
         return nValue;
     }
     template <typename T> void setChildProperty(const rtl::OString &rString, const T &rValue)
     {
-        m_aChildProperties[rString] <<= rValue;
+        m_aWidgetProperties[rString] <<= rValue;
     }
     void setChildProperty(const rtl::OString &rString, const bool &rValue)
     {
-        m_aChildProperties[rString] <<= static_cast<sal_Bool>(rValue);
+        m_aWidgetProperties[rString] <<= static_cast<sal_Bool>(rValue);
     }
-    bool getChildProperty(const rtl::OString &rString, const bool &rValue = false)
+    bool getWidgetProperty(const rtl::OString &rString, const bool &rValue = false)
     {
-        return getChildProperty<sal_Bool>(rString, rValue);
+        return getWidgetProperty<sal_Bool>(rString, rValue);
     }
 
     //does nothing yet

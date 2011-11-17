@@ -9580,6 +9580,7 @@ void Window::queueResize()
     fprintf(stderr, "parent dialog is %p\n", pParent);
     if (pParent && pParent->GetChildCount() == 1)
     {
+        //To-Do: integrate with mpWindowImpl->mpFrameData->maResizeTimer.SetTimeout( 50 );
         fprintf(stderr, "suitable, so call resize\n");
         pParent->Resize();
     }

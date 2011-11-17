@@ -93,7 +93,7 @@ void Box::setAllocation(const Size &rAllocation)
         if (!pChild->IsVisible())
             continue;
         ++nVisibleChildren;
-        bool bExpand = pChild->getChildProperty<sal_Bool>(sExpand);
+        bool bExpand = pChild->getWidgetProperty<sal_Bool>(sExpand);
         if (bExpand)
             ++nExpandChildren;
     }
@@ -136,12 +136,12 @@ void Box::setAllocation(const Size &rAllocation)
             if (!pChild->IsVisible())
                 continue;
 
-            sal_Int32 ePacking = pChild->getChildProperty<sal_Int32>(sPackType);
+            sal_Int32 ePacking = pChild->getWidgetProperty<sal_Int32>(sPackType);
 
             if (ePacking != ePackType)
                 continue;
 
-            long nPadding = pChild->getChildProperty<sal_Int32>(sPadding);
+            long nPadding = pChild->getWidgetProperty<sal_Int32>(sPadding);
 
             Size aBoxSize;
             if (m_bHomogeneous)
@@ -151,7 +151,7 @@ void Box::setAllocation(const Size &rAllocation)
                 aBoxSize = pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
                 long nPrimaryDimension = getPrimaryDimension(aBoxSize);
                 nPrimaryDimension += nPadding;
-                bool bExpand = pChild->getChildProperty<bool>(sExpand);
+                bool bExpand = pChild->getWidgetProperty<bool>(sExpand);
                 if (bExpand)
                     setPrimaryDimension(aBoxSize, nPrimaryDimension + nExtraSpace);
             }
@@ -161,7 +161,7 @@ void Box::setAllocation(const Size &rAllocation)
             Size aChildSize(aBoxSize);
             long nPrimaryCoordinate = getPrimaryCoordinate(aPos);
 
-            bool bFill = pChild->getChildProperty<sal_Bool>(sFill, sal_True);
+            bool bFill = pChild->getWidgetProperty<sal_Bool>(sFill, sal_True);
             if (bFill)
             {
                 setPrimaryDimension(aChildSize, std::max(static_cast<long>(1),
@@ -201,16 +201,18 @@ void Box::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
 
 #define DEFAULT_CHILD_INTERNAL_PAD_X 4
 #define DEFAULT_CHILD_INTERNAL_PAD_Y 0
+#define DEFAULT_CHILD_MIN_WIDTH 85
+#define DEFAULT_CHILD_MIN_HEIGHT 27
 
 Size ButtonBox::calculateRequisition() const
 {
-    Size aSize = Box::calculateRequisition();
+    sal_uInt16 nVisibleChildren = 0;
 
-    rtl::OString sChildInternalPadX(RTL_CONSTASCII_STRINGPARAM("child-internal-pad-x"));
-    sal_Int32 nChildInternalPadX = getWidgetStyleProperty<sal_Int32>(sChildInternalPadX, DEFAULT_CHILD_INTERNAL_PAD_X);
-    rtl::OString sChildInternalPadY(RTL_CONSTASCII_STRINGPARAM("child-internal-pad-y"));
-    sal_Int32 nChildInternalPadY = getWidgetStyleProperty<sal_Int32>(sChildInternalPadY, DEFAULT_CHILD_INTERNAL_PAD_Y);
-    Size aChildPad(nChildInternalPadX, nChildInternalPadY);
+    rtl::OString sChildMinWidth(RTL_CONSTASCII_STRINGPARAM("child-min-width"));
+    sal_Int32 nChildMinWidth = getWidgetStyleProperty<sal_Int32>(sChildMinWidth, DEFAULT_CHILD_MIN_WIDTH);
+    rtl::OString sChildMinHeight(RTL_CONSTASCII_STRINGPARAM("child-min-height"));
+    sal_Int32 nChildMinHeight = getWidgetStyleProperty<sal_Int32>(sChildMinHeight, DEFAULT_CHILD_MIN_HEIGHT);
+    Size aSize(nChildMinWidth, nChildMinHeight);
 
     sal_uInt16 nChildren = GetChildCount();
     for (sal_uInt16 i = 0; i < nChildren; ++i)
@@ -218,9 +220,28 @@ Size ButtonBox::calculateRequisition() const
         Window *pChild = GetChild(i);
         if (!pChild->IsVisible())
             continue;
-        long nPrimaryDimension = getPrimaryDimension(aSize);
-        setPrimaryDimension(aSize, nPrimaryDimension + getPrimaryDimension(aChildPad)*2);
+        ++nVisibleChildren;
+        Size aChildSize = pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
+        if (aChildSize.Width() > aSize.Width())
+            aSize.Width() = aChildSize.Width();
+        if (aChildSize.Height() > aSize.Height())
+            aSize.Height() = aChildSize.Height();
     }
+
+    if (!nVisibleChildren)
+        return Size();
+
+    rtl::OString sChildInternalPadX(RTL_CONSTASCII_STRINGPARAM("child-internal-pad-x"));
+    sal_Int32 nChildInternalPadX = getWidgetStyleProperty<sal_Int32>(sChildInternalPadX, DEFAULT_CHILD_INTERNAL_PAD_X);
+    rtl::OString sChildInternalPadY(RTL_CONSTASCII_STRINGPARAM("child-internal-pad-y"));
+    sal_Int32 nChildInternalPadY = getWidgetStyleProperty<sal_Int32>(sChildInternalPadY, DEFAULT_CHILD_INTERNAL_PAD_Y);
+    Size aChildPad(nChildInternalPadX, nChildInternalPadY);
+
+    long nPrimaryDimension =
+        (getPrimaryDimension(aSize) * nVisibleChildren) +
+        (m_nSpacing * (nVisibleChildren-1)) +
+        ((getPrimaryDimension(aChildPad)*2) * nVisibleChildren);
+    setPrimaryDimension(aSize, nPrimaryDimension + m_nSpacing);
 
     long nSecondaryDimension = getSecondaryDimension(aSize);
     setSecondaryDimension(aSize, nSecondaryDimension + getSecondaryDimension(aChildPad)*2);
