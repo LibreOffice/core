@@ -43,6 +43,7 @@
 #include <editeng/justifyitem.hxx>
 
 #define CALC_DEBUG_OUTPUT 0
+#define TEST_BUG_FILES 0
 
 #include "helper/csv_handler.hxx"
 #include "helper/debughelper.hxx"
@@ -95,6 +96,8 @@ void testFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab, StringType
     aConfig.delimiters.push_back(',');
     aConfig.delimiters.push_back(';');
     aConfig.text_qualifier = '"';
+
+
     std::string aContent;
     loadFile(aFileName, aContent);
     orcus::csv_parser<csv_handler> parser ( &aContent[0], aContent.size() , aHandler, aConfig);
@@ -176,6 +179,13 @@ public:
     //misc tests unrelated to the import filters
     void testPassword();
 
+#if TEST_BUG_FILES
+    //test Bug Files and search for files that crash LibO
+    void testBugFiles();
+    void testBugFilesXLS();
+    void testBugFilesXLSX();
+#endif
+
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST(testRangeName);
@@ -189,6 +199,11 @@ public:
     CPPUNIT_TEST(testBugFixesXLSX);
     CPPUNIT_TEST(testPassword);
 
+#if TEST_BUG_FILES
+    CPPUNIT_TEST(testBugFiles);
+    CPPUNIT_TEST(testBugFilesXLS);
+    CPPUNIT_TEST(testBugFilesXLSX);
+#endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -260,6 +275,82 @@ void ScFiltersTest::testCVEs()
     testDir(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYLK")),
         getURLFromSrc("/sc/qa/unit/data/slk/"), rtl::OUString());
 }
+
+#if TEST_BUG_FILES
+
+void ScFiltersTest::testBugFiles()
+{
+    rtl::OUString aFilterName(aFileFormats[0].pFilterName, strlen(aFileFormats[0].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
+    rtl::OUString aDirName = getURLFromSrc("/sc/qa/unit/data/bugODS/");
+    osl::Directory aDir(aDirName);
+
+    CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.open());
+    osl::DirectoryItem aItem;
+    osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL|osl_FileStatus_Mask_Type);
+    while (aDir.getNextItem(aItem) == osl::FileBase::E_None)
+    {
+        aItem.getFileStatus(aFileStatus);
+        rtl::OUString sURL = aFileStatus.getFileURL();
+        std::cout << "File: " << rtl::OUStringToOString(sURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+        rtl::OStringBuffer aMessage("Failed loading: ");
+        aMessage.append(rtl::OUStringToOString(sURL, RTL_TEXTENCODING_UTF8));
+        ScDocShellRef xDocSh = load( aFilterName,sURL, rtl::OUString(),aFilterType, aFileFormats[0].nFormatType);
+        //CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), xDocSh.Is());
+        if (xDocSh.Is())
+            xDocSh->DoClose();
+    }
+}
+
+void ScFiltersTest::testBugFilesXLS()
+{
+    rtl::OUString aFilterName(aFileFormats[1].pFilterName, strlen(aFileFormats[1].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    rtl::OUString aFilterType(aFileFormats[1].pTypeName, strlen(aFileFormats[1].pTypeName), RTL_TEXTENCODING_UTF8);
+    rtl::OUString aDirName = getURLFromSrc("/sc/qa/unit/data/bugXLS/");
+    osl::Directory aDir(aDirName);
+
+    CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.open());
+    osl::DirectoryItem aItem;
+    osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL|osl_FileStatus_Mask_Type);
+    while (aDir.getNextItem(aItem) == osl::FileBase::E_None)
+    {
+        aItem.getFileStatus(aFileStatus);
+        rtl::OUString sURL = aFileStatus.getFileURL();
+        std::cout << "File: " << rtl::OUStringToOString(sURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+        rtl::OStringBuffer aMessage("Failed loading: ");
+        aMessage.append(rtl::OUStringToOString(sURL, RTL_TEXTENCODING_UTF8));
+        ScDocShellRef xDocSh = load( aFilterName,sURL, rtl::OUString(),aFilterType, aFileFormats[1].nFormatType);
+        //CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), xDocSh.Is());
+        if (xDocSh.Is())
+            xDocSh->DoClose();
+    }
+}
+
+void ScFiltersTest::testBugFilesXLSX()
+{
+    rtl::OUString aFilterName(aFileFormats[2].pFilterName, strlen(aFileFormats[2].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    rtl::OUString aFilterType(aFileFormats[2].pTypeName, strlen(aFileFormats[2].pTypeName), RTL_TEXTENCODING_UTF8);
+    rtl::OUString aDirName = getURLFromSrc("/sc/qa/unit/data/bugXLSX/");
+    osl::Directory aDir(aDirName);
+
+    CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.open());
+    osl::DirectoryItem aItem;
+    osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL|osl_FileStatus_Mask_Type);
+    while (aDir.getNextItem(aItem) == osl::FileBase::E_None)
+    {
+        aItem.getFileStatus(aFileStatus);
+        rtl::OUString sURL = aFileStatus.getFileURL();
+        std::cout << "File: " << rtl::OUStringToOString(sURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+        rtl::OStringBuffer aMessage("Failed loading: ");
+        aMessage.append(rtl::OUStringToOString(sURL, RTL_TEXTENCODING_UTF8));
+        ScDocShellRef xDocSh = load( aFilterName,sURL, rtl::OUString(),aFilterType, aFileFormats[2].nFormatType);
+        //CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), xDocSh.Is());
+        if (xDocSh.Is())
+            xDocSh->DoClose();
+    }
+}
+
+#endif
 
 namespace {
 
