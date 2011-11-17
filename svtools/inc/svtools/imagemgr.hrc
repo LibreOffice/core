@@ -36,7 +36,6 @@
 #define IMG_BITMAP                      (IMAGELIST_START + 49)
 #define IMG_CALC                        (IMAGELIST_START + 50)
 #define IMG_CALCTEMPLATE                (IMAGELIST_START + 51)
-#define IMG_CHART                       (IMAGELIST_START + 52)
 #define IMG_DATABASE                    (IMAGELIST_START + 53)
 #define IMG_IMPRESSTEMPLATE             (IMAGELIST_START + 54)
 #define IMG_GIF                         (IMAGELIST_START + 61)
