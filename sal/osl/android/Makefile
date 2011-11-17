@@ -29,9 +29,12 @@ all:
 	    test -f $(WORKDIR)/LinkTarget/CppunitTest/libtest_$${F}.so && cp $(WORKDIR)/LinkTarget/CppunitTest/libtest_$${F}.so $(SODEST); \
 	done
 #
-# Then libs that the tests from other modules need.
+# Then libs and UNO components that the tests from other modules need.
 #
-	-for F in libuno_cppu libuno_salhelpergcc3 libuno_cppuhelpergcc3; do \
+	-for F in libuno_cppu \
+		  libuno_salhelpergcc3 \
+	          libuno_cppuhelpergcc3 \
+		  libbootstrap.uno; do \
 	    test -f $(OUTDIR)/lib/$${F}.so && cp $(OUTDIR)/lib/$${F}.so $(SODEST); \
 	done
 #
