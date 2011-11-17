@@ -31,11 +31,12 @@ all:
 #
 # Then libs and UNO components that the tests from other modules need.
 #
-	-for F in uno_cppu \
-		  uno_salhelpergcc3 \
-	          uno_cppuhelpergcc3 \
+	-for F in gcc3_uno \
 		  reg \
 		  store \
+		  uno_cppu \
+		  uno_salhelpergcc3 \
+	          uno_cppuhelpergcc3 \
 		  xmlreader \
 		  bootstrap.uno; do \
 	    test -f $(OUTDIR)/lib/lib$${F}.so && cp $(OUTDIR)/lib/lib$${F}.so $(SODEST); \
