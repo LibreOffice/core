@@ -39,7 +39,7 @@ NO_BSYMBOLIC=TRUE
 
 # --- Files --------------------------------------------------------
 
-.IF "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCLINUXRgcc3"
+.IF "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCLINUXRgcc3" || "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCANDROIDRgcc3"
 
 CFLAGSCXX += -fno-omit-frame-pointer -fno-strict-aliasing
 
