@@ -342,11 +342,9 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
         PointerStyle eStyle = POINTER_FILL;
         if( rSh.IsOverReadOnlyPos( rLPt ))
         {
-            if( pUserMarker )
-            {
-                delete pUserMarker;
-                pUserMarker = 0L;
-            }
+            delete pUserMarker;
+            pUserMarker = 0L;
+
             eStyle = POINTER_NOTALLOWED;
         }
         else
@@ -373,7 +371,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                     pUserMarker = new SdrDropMarkerOverlay( *rSh.GetDrawView(), aTmp );
                 }
             }
-            else if(pUserMarker)
+            else
             {
                 delete pUserMarker;
                 pUserMarker = 0L;
@@ -661,8 +659,7 @@ void SwEditWin::LeaveArea(const Point &rPos)
     JustifyAreaTimer();
     if( !aTimer.IsActive() )
         aTimer.Start();
-    if( pShadCrsr )
-        delete pShadCrsr, pShadCrsr = 0;
+    delete pShadCrsr, pShadCrsr = 0;
 }
 
 inline void SwEditWin::EnterArea()
@@ -1325,8 +1322,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         // running on a document, no order is being taken
         return;
 
-    if( pShadCrsr )
-        delete pShadCrsr, pShadCrsr = 0;
+    delete pShadCrsr, pShadCrsr = 0;
     aKeyInputFlushTimer.Stop();
 
     sal_Bool bIsDocReadOnly = rView.GetDocShell()->IsReadOnly() &&
@@ -2680,8 +2676,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     }
 
     bWasShdwCrsr = 0 != pShadCrsr;
-    if( bWasShdwCrsr )
-        delete pShadCrsr, pShadCrsr = 0;
+    delete pShadCrsr, pShadCrsr = 0;
 
     const Point aDocPos( PixelToLogic( rMEvt.GetPosPixel() ) );
 

@@ -116,8 +116,7 @@ SwDropSave::~SwDropSave()
 
 SwDropPortionPart::~SwDropPortionPart()
 {
-    if ( pFollow )
-        delete pFollow;
+    delete pFollow;
     delete pFnt;
 }
 

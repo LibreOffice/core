@@ -193,8 +193,7 @@ ShellResource::ShellResource()
 
 ShellResource::~ShellResource()
 {
-    if( pAutoFmtNameLst )
-        delete pAutoFmtNameLst, pAutoFmtNameLst = 0;
+    delete pAutoFmtNameLst;
 }
 
 String ShellResource::GetPageDescName( sal_uInt16 nNo, PageNameMode eMode )

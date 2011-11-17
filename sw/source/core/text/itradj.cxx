@@ -597,8 +597,7 @@ SwMarginPortion *SwTxtAdjuster::CalcRightMargin( SwLineLayout *pCurrent,
             aCurrRect.Left( nLeftMar + nPrtWidth );
             pFly = CalcFlyPortion( nRealWidth, aCurrRect );
         }
-        if( pFly )
-            delete pFly;
+        delete pFly;
     }
 
     SwMarginPortion *pRight = new SwMarginPortion( 0 );

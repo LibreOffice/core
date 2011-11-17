@@ -2498,8 +2498,7 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, sal_Bool bNext,
 
     SwTxtNode *pNode = new SwTxtNode( rPos, pColl, pNewAttrSet );
 
-    if( pNewAttrSet )
-        delete pNewAttrSet;
+    delete pNewAttrSet;
 
     const SwNumRule* pRule = GetNumRule();
     if( pRule && pRule == pNode->GetNumRule() && rNds.IsDocNodes() ) // #115901#

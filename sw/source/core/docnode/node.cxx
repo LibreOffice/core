@@ -1001,8 +1001,7 @@ SwCntntNode::~SwCntntNode()
     if( GetDepends() )
         DelFrms();
 
-    if( pCondColl )
-        delete pCondColl;
+    delete pCondColl;
 
     if ( mpAttrSet.get() && mbSetModifyAtAttr )
         ((SwAttrSet*)mpAttrSet.get())->SetModifyAtAttr( 0 );

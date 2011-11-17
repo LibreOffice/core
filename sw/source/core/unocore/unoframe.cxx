@@ -882,8 +882,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXFrame::getPropertySetInfo(void) th
 
 void SwXFrame::SetSelection(SwPaM& rCopySource)
 {
-    if(m_pCopySource)
-        delete m_pCopySource;
+    delete m_pCopySource;
     m_pCopySource = new SwPaM( *rCopySource.Start() );
     m_pCopySource->SetMark();
     *m_pCopySource->GetMark() = *rCopySource.End();

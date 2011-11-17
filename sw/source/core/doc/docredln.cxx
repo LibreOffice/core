@@ -2585,7 +2585,7 @@ void SwDoc::SetAutoFmtRedlineComment( const String* pTxt, sal_uInt16 nSeqNo )
         else
             *pAutoFmtRedlnComment = *pTxt;
     }
-    else if( pAutoFmtRedlnComment )
+    else
         delete pAutoFmtRedlnComment, pAutoFmtRedlnComment = 0;
 
     nAutoFmtRedlnCommentNo = nSeqNo;

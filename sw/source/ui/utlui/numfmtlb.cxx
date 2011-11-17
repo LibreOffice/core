@@ -126,8 +126,7 @@ void NumFormatListBox::Init(short nFormatType, sal_Bool bUsrFmts)
 
 NumFormatListBox::~NumFormatListBox()
 {
-    if (pOwnFormatter)
-        delete pOwnFormatter;
+    delete pOwnFormatter;
 }
 
 SwView* NumFormatListBox::GetView()

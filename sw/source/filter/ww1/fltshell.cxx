@@ -104,8 +104,7 @@ SwFltStackEntry::SwFltStackEntry(const SwPosition& rStartPos, SfxPoolItem* pHt)
 SwFltStackEntry::~SwFltStackEntry()
 {
     // Attribut kam zwar als Pointer, wird aber hier geloescht
-    if (pAttr)
-        delete pAttr;
+    delete pAttr;
 }
 
 void SwFltStackEntry::SetEndPos(const SwPosition& rEndPos)
@@ -1047,8 +1046,7 @@ SwFltShell::~SwFltShell()
 
     delete pPaM;
     for (i=0; i<sizeof(pColls)/sizeof(*pColls); i++)
-        if( pColls[i] )
-            delete pColls[i];
+        delete pColls[i];
     delete pOutDoc;
 }
 

@@ -1507,8 +1507,7 @@ SwFmtAnchor::SwFmtAnchor( const SwFmtAnchor &rCpy )
 
 void SwFmtAnchor::SetAnchor( const SwPosition *pPos )
 {
-    if ( pCntntAnchor )
-        delete pCntntAnchor;
+    delete pCntntAnchor;
     pCntntAnchor = pPos ? new SwPosition( *pPos ) : 0;
         //AM Absatz gebundene Flys sollten nie in den Absatz hineinzeigen.
     if (pCntntAnchor &&
@@ -1630,7 +1629,7 @@ bool SwFmtAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     break;
                 case  text::TextContentAnchorType_AT_PAGE:
                     eAnchor = FLY_AT_PAGE;
-                    if( GetPageNum() > 0 && pCntntAnchor )
+                    if( GetPageNum() > 0 )
                     {
                         // If the anchor type is page and a valid page number
                         // has been set, the content position isn't required
@@ -1659,7 +1658,7 @@ bool SwFmtAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if((rVal >>= nVal) && nVal > 0)
             {
                 SetPageNum( nVal );
-                if ((FLY_AT_PAGE == GetAnchorId()) && pCntntAnchor)
+                if (FLY_AT_PAGE == GetAnchorId())
                 {
                     // If the anchor type is page and a valid page number
                     // is set, the content paoition has to be deleted to not
@@ -1705,8 +1704,7 @@ SwFmtURL::SwFmtURL( const SwFmtURL &rURL) :
 
 SwFmtURL::~SwFmtURL()
 {
-    if ( pMap )
-        delete pMap;
+    delete pMap;
 }
 
 int SwFmtURL::operator==( const SfxPoolItem &rAttr ) const
@@ -1740,8 +1738,7 @@ void SwFmtURL::SetURL( const XubString &rURL, sal_Bool bServerMap )
 
 void SwFmtURL::SetMap( const ImageMap *pM )
 {
-    if ( pMap )
-        delete pMap;
+    delete pMap;
     pMap = pM ? new ImageMap( *pM ) : 0;
 }
 extern const SvEventDescription* lcl_GetSupportedMacroItems();

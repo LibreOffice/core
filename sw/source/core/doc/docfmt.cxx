@@ -1138,7 +1138,7 @@ void SwDoc::ResetAttrAtFormat( const sal_uInt16 nWhichId,
 
         SetModified();
     }
-    else if ( pUndo )
+    else
         delete pUndo;
 }
 

@@ -673,8 +673,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
         }
     }
 
-    if( pCalc )
-        delete pCalc;
+    delete pCalc;
 }
 
 void SwDoc::UpdatePageFlds( SfxPoolItem* pMsgHnt )
@@ -2210,8 +2209,7 @@ void SwDocUpdtFld::MakeFldList( SwDoc& rDoc, int bAll, int eGetMode )
 void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
 {
     // new version: walk all fields of the attribute pool
-    if( pFldSortLst )
-        delete pFldSortLst;
+    delete pFldSortLst;
     pFldSortLst = new _SetGetExpFlds( 64, 16 );
 
     /// consider and unhide sections

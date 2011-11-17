@@ -86,11 +86,8 @@ namespace {
 
 inline void ClearFly( SwTxtFormatInfo &rInf )
 {
-    if( rInf.GetFly() )
-    {
-        delete rInf.GetFly();
-        rInf.SetFly(0);
-    }
+    delete rInf.GetFly();
+    rInf.SetFly(0);
 }
 
 /*************************************************************************

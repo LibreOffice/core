@@ -1831,8 +1831,7 @@ void SwInsertDBColAutoPilot::Load()
             else
                 aLbDbParaColl.SelectEntryPos( 0 );
 
-            if( pTAutoFmt )
-                delete pTAutoFmt, pTAutoFmt = 0;
+            delete pTAutoFmt, pTAutoFmt = 0;
             sTmp = pNewData->sTAutoFmtNm;
             if( sTmp.Len() )
             {

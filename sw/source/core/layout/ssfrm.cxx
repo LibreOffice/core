@@ -402,8 +402,7 @@ SwFrm::~SwFrm()
                 }
             }
         }
-        if ( pDrawObjs )
-            delete pDrawObjs;
+        delete pDrawObjs;
     }
 
 #if OSL_DEBUG_LEVEL > 1

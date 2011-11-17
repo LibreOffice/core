@@ -1238,7 +1238,7 @@ SwXNumberingRules::~SwXNumberingRules()
     SolarMutexGuard aGuard;
     if(pDoc && sCreatedNumRuleName.Len())
         pDoc->DelNumRule( sCreatedNumRuleName );
-    if( pNumRule && bOwnNumRuleCreated )
+    if( bOwnNumRuleCreated )
         delete pNumRule;
 }
 

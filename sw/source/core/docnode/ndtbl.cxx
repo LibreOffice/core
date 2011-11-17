@@ -2294,7 +2294,7 @@ sal_uInt16 SwDoc::MergeTbl( SwPaM& rPam )
                 GetIDocumentUndoRedo().AppendUndo( pUndo );
             }
         }
-        else if( pUndo )
+        else
             delete pUndo;
 
         rPam.GetPoint()->nNode = *pMergeBox->GetSttNd();

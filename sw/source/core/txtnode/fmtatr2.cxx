@@ -290,7 +290,7 @@ void SwFmtINetFmt::SetMacroTbl( const SvxMacroTableDtor* pNewTbl )
         else
             pMacroTbl = new SvxMacroTableDtor( *pNewTbl );
     }
-    else if( pMacroTbl )
+    else
         delete pMacroTbl, pMacroTbl = 0;
 }
 

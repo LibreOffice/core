@@ -640,8 +640,7 @@ sal_Bool SwView::IsFormMode() const
 
 void SwView::SetDrawFuncPtr(SwDrawBase* pFuncPtr)
 {
-    if (pDrawActual)
-        delete pDrawActual;
+    delete pDrawActual;
     pDrawActual = pFuncPtr;
 }
 

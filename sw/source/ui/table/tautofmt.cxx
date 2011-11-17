@@ -303,7 +303,7 @@ void SwAutoFormatDlg::FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill ) const
         else
             rToFill = new SwTableAutoFmt( *(*pTableTbl)[ nIndex ] );
     }
-    else if( rToFill )
+    else
         delete rToFill, rToFill = 0;
 }
 

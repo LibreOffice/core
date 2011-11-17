@@ -538,8 +538,7 @@ void SwFlyFrm::FinitDrawObj()
     }
     GetVirtDrawObj()->SetUserCall( 0 ); //Ruft sonst Delete des ContactObj
     delete GetVirtDrawObj();            //Meldet sich selbst beim Master ab.
-    if ( pMyContact )
-        delete pMyContact;      //zerstoert den Master selbst.
+    delete pMyContact;      //zerstoert den Master selbst.
 }
 
 /*************************************************************************

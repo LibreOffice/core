@@ -144,8 +144,7 @@ sal_Int16 SwXFilterOptions::execute() throw (uno::RuntimeException)
         delete pAsciiDlg;
     }
 
-    if( pInStream )
-        delete pInStream;
+    delete pInStream;
 
     return nRet;
 }

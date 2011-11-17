@@ -1482,8 +1482,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
         rSh.GetView().StopShellTimer();
     }
 
-    if( pAction )
-        delete pAction;
+    delete pAction;
     if( bCallAutoCaption )
         rSh.GetView().AutoCaption( GRAPHIC_CAP );
 

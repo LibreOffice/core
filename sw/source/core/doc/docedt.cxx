@@ -691,11 +691,8 @@ _SaveRedlEndPosForRestore::_SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx
 
 _SaveRedlEndPosForRestore::~_SaveRedlEndPosForRestore()
 {
-    if( pSavArr )
-    {
-        delete pSavArr;
-        delete pSavIdx;
-    }
+    delete pSavArr;
+    delete pSavIdx;
 }
 
 void _SaveRedlEndPosForRestore::_Restore()
@@ -1236,8 +1233,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
         GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
 
-    if( pSaveInsPos )
-        delete pSaveInsPos;
+    delete pSaveInsPos;
 
     if( bUpdateFtn )
     {
@@ -2500,7 +2496,7 @@ SetRedlineMode( eOld );
 // in die Autokorrektur
 void SwDoc::SetAutoCorrExceptWord( SwAutoCorrExceptWord* pNew )
 {
-    if( pACEWord && pNew != pACEWord )
+    if( pNew != pACEWord )
         delete pACEWord;
     pACEWord = pNew;
 }

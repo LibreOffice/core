@@ -914,13 +914,12 @@ void SwWW8ImplReader::SetNumOlst(SwNumRule* pNumR, WW8_OLST* pO, sal_uInt8 nSwLe
 // von Gliederungsabsaetzen zugreifbar ist.
 void SwWW8ImplReader::Read_OLST( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
+    delete pNumOlst;
     if (nLen <= 0)
     {
-        delete pNumOlst, pNumOlst = 0;
+        pNumOlst = 0;
         return;
     }
-    if (pNumOlst)
-        delete pNumOlst;                    // nur sicherheitshalber
     pNumOlst = new WW8_OLST;
     if( nLen < sal::static_int_cast< sal_Int32 >(sizeof( WW8_OLST )) )         // auffuellen, falls zu kurz
         memset( pNumOlst, 0, sizeof( *pNumOlst ) );

@@ -210,8 +210,7 @@ SwPagePreViewWin::SwPagePreViewWin( Window *pParent, SwPagePreView& rPView )
 
 SwPagePreViewWin::~SwPagePreViewWin()
 {
-    if( mpViewShell )
-        delete mpViewShell;
+    delete mpViewShell;
 }
 
 void  SwPagePreViewWin::Paint( const Rectangle& rRect )

@@ -155,13 +155,11 @@ sal_Bool lcl_ConnectToPrev( xub_Unicode cCh, xub_Unicode cPrevCh )
 SwLineLayout::~SwLineLayout()
 {
     Truncate();
-    if( GetNext() )
-        delete GetNext();
+    delete pNext;
     if( pBlink )
         pBlink->Delete( this );
     delete pLLSpaceAdd;
-    if ( pKanaComp )
-        delete pKanaComp;
+    delete pKanaComp;
 }
 
 /*************************************************************************

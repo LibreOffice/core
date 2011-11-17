@@ -120,11 +120,8 @@ void CheckRange( SwCursor* pCurCrsr )
          * Bereich gehoert !
          */
         pTmp = (SwPaM*)pTmp->GetNext();
-        if( pTmpDel )
-        {
-            delete pTmpDel;         // hebe alten Bereich auf
-            pTmpDel = 0;
-        }
+        delete pTmpDel;         // hebe alten Bereich auf
+        pTmpDel = 0;
     }
 }
 

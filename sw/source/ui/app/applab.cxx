@@ -436,9 +436,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
         rReq.SetReturnValue(SfxVoidItem(bLabel ? FN_LABEL : FN_BUSINESS_CARD));
     }
     delete pDlg;
-
-    if( pNewDBMgr )
-        delete pNewDBMgr;
+    delete pNewDBMgr;
 }
 
 

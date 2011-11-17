@@ -143,8 +143,7 @@ SwInputWindow::~SwInputWindow()
         pView->GetHLineal().SetActive( sal_True );
         pView->GetVLineal().SetActive( sal_True );
     }
-    if ( pMgr )
-        delete pMgr;
+    delete pMgr;
     if(pWrtShell)
         pWrtShell->EndSelTblCells();
 

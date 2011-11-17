@@ -498,12 +498,8 @@ SwDoc::~SwDoc()
     delete pRedlineTbl;
     delete pUnoCrsrTbl;
     delete pAutoFmtRedlnComment;
-
-    if( pUpdtFlds )
-        delete pUpdtFlds;
-
-    if( pACEWord )
-        delete pACEWord;
+    delete pUpdtFlds;
+    delete pACEWord;
 
     // die BaseLinks freigeben.
     {
@@ -769,8 +765,7 @@ void SwDoc::ClearDoc()
 
     pRedlineTbl->DeleteAndDestroy( 0, pRedlineTbl->Count() );
 
-    if( pACEWord )
-        delete pACEWord;
+    delete pACEWord;
 
     // in den BookMarks sind Indizies auf den Content. Diese muessen vorm
     // loesche der Nodes geloescht werden.

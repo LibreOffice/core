@@ -505,8 +505,7 @@ void SwHTMLParser::NewObject()
     sal_Bool bPrcWidth = sal_False, bPrcHeight = sal_False,
              bDeclare = sal_False;
     // Eine neue Command-List anlegen
-    if( pAppletImpl )
-        delete pAppletImpl;
+    delete pAppletImpl;
     pAppletImpl = new SwApplet_Impl( pDoc->GetAttrPool(),
                                      RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
 
@@ -675,8 +674,7 @@ void SwHTMLParser::InsertApplet()
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
 
     // Eine neue Command-List anlegen
-    if( pAppletImpl )
-        delete pAppletImpl;
+    delete pAppletImpl;
     pAppletImpl = new SwApplet_Impl( pDoc->GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
 
     const HTMLOptions& rHTMLOptions = GetOptions();

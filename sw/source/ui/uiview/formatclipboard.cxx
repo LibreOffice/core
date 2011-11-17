@@ -279,10 +279,8 @@ SwFormatClipboard::SwFormatClipboard()
 }
 SwFormatClipboard::~SwFormatClipboard()
 {
-    if(m_pItemSet)
-        delete m_pItemSet;
-    if(m_pTableItemSet)
-        delete m_pTableItemSet;
+    delete m_pItemSet;
+    delete m_pTableItemSet;
 }
 
 bool SwFormatClipboard::HasContent() const
@@ -569,16 +567,13 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
 void SwFormatClipboard::Erase()
 {
     m_nSelectionType = 0;
-    if(m_pItemSet)
-    {
-        delete m_pItemSet;
-        m_pItemSet = 0;
-    }
-    if(m_pTableItemSet)
-    {
-        delete m_pTableItemSet;
-        m_pTableItemSet = 0;
-    }
+
+    delete m_pItemSet;
+    m_pItemSet = 0;
+
+    delete m_pTableItemSet;
+    m_pTableItemSet = 0;
+
     if( m_aCharStyle.Len() )
         m_aCharStyle.Erase();
     if( m_aParaStyle.Len() )

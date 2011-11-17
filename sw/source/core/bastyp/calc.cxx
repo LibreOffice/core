@@ -1626,8 +1626,7 @@ SwHash::SwHash( const String& rStr ) :
 
 SwHash::~SwHash()
 {
-    if( pNext )
-        delete pNext;
+    delete pNext;
 }
 
 void DeleteHashTable( SwHash **ppHashTable, sal_uInt16 nCount )

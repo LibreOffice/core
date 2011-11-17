@@ -932,8 +932,7 @@ void SwLayoutFrm::MakeAll()
             Format( pAttrs );
         }
     } //while ( !bValidPos || !bValidSize || !bValidPrtArea )
-    if ( pAccess )
-        delete pAccess;
+    delete pAccess;
 }
 
 /*************************************************************************
@@ -1769,8 +1768,7 @@ void SwCntntFrm::MakeAll()
                          static_cast<SwTxtFrm&>(*this) );
 
 
-    if ( pSaveFtn )
-        delete pSaveFtn;
+    delete pSaveFtn;
 
     UnlockJoin();
     if ( bMovedFwd || bMovedBwd )

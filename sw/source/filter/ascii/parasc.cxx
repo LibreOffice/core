@@ -253,8 +253,7 @@ sal_uLong SwASCIIParser::CallParser()
         delete pItemSet, pItemSet = 0;
     }
 
-    if( pInsPam )
-        delete pInsPam;
+    delete pInsPam;
 
     ::EndProgress( pDoc->GetDocShell() );
     return nError;

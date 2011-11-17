@@ -1547,8 +1547,7 @@ SwXTextTableCursor::~SwXTextTableCursor()
 {
     SolarMutexGuard aGuard;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(pUnoCrsr)
-        delete pUnoCrsr;
+    delete pUnoCrsr;
 }
 
 OUString SwXTextTableCursor::getRangeName(void) throw( uno::RuntimeException )

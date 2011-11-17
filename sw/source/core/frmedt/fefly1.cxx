@@ -1263,8 +1263,7 @@ void SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, sal_Bool bKeepOrient, Point* pDocP
             else
                 GetLayout()->SetAssertFlyPages();
         }
-        if( pSet )
-            delete pSet;
+        delete pSet;
 
         EndAllActionAndCall();
     }

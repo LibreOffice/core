@@ -87,8 +87,7 @@ SwLabPrtPage::SwLabPrtPage(Window* pParent, const SfxItemSet& rSet) :
 
 SwLabPrtPage::~SwLabPrtPage()
 {
-    if (pPrinter)
-        delete pPrinter;
+    delete pPrinter;
 }
 
 IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )

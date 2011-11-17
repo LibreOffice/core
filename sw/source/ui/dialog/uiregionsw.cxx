@@ -1115,8 +1115,7 @@ IMPL_LINK( SwEditRegionDlg, FileSearchHdl, PushButton *, EMPTYARG )
 
     m_pOldDefDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
-    if ( m_pDocInserter )
-        delete m_pDocInserter;
+    delete m_pDocInserter;
     m_pDocInserter = new ::sfx2::DocumentInserter( 0, String::CreateFromAscii("swriter") );
     m_pDocInserter->StartExecuteModal( LINK( this, SwEditRegionDlg, DlgClosedHdl ) );
     return 0;
@@ -1866,8 +1865,7 @@ IMPL_LINK( SwInsertSectionTabPage, FileSearchHdl, PushButton *, EMPTYARG )
 {
     m_pOldDefDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
-    if ( m_pDocInserter )
-        delete m_pDocInserter;
+    delete m_pDocInserter;
     m_pDocInserter = new ::sfx2::DocumentInserter( 0, String::CreateFromAscii("swriter") );
     m_pDocInserter->StartExecuteModal( LINK( this, SwInsertSectionTabPage, DlgClosedHdl ) );
     return 0;
