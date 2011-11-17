@@ -75,9 +75,10 @@ ScDocumentIterator::ScDocumentIterator( ScDocument* pDocument,
     nStartTab( nStartTable ),
     nEndTab( nEndTable )
 {
+    SCTAB nDocMaxTab = pDoc->GetTableCount() - 1;
     PutInOrder( nStartTab, nEndTab );
-    if (!ValidTab(nStartTab)) nStartTab = pDoc->GetTableCount()-1;
-    if (!ValidTab(nEndTab)) nEndTab = pDoc->GetTableCount()-1;
+    if (!ValidTab(nStartTab) || nStartTab > nDocMaxTab ) nStartTab = nDocMaxTab;
+    if (!ValidTab(nEndTab) || nStartTab > nDocMaxTab ) nEndTab = nDocMaxTab;
 
     pDefPattern = pDoc->GetDefPattern();
 
@@ -262,6 +263,8 @@ ScValueIterator::ScValueIterator( ScDocument* pDocument, const ScRange& rRange,
     bCalcAsShown( pDocument->GetDocOptions().IsCalcAsShown() ),
     bTextAsZero( bTextZero )
 {
+    SCTAB nDocMaxTab = pDocument->GetTableCount() - 1;
+
     PutInOrder( nStartCol, nEndCol);
     PutInOrder( nStartRow, nEndRow);
     PutInOrder( nStartTab, nEndTab );
@@ -270,8 +273,8 @@ ScValueIterator::ScValueIterator( ScDocument* pDocument, const ScRange& rRange,
     if (!ValidCol(nEndCol)) nEndCol = MAXCOL;
     if (!ValidRow(nStartRow)) nStartRow = MAXROW;
     if (!ValidRow(nEndRow)) nEndRow = MAXROW;
-    if (!ValidTab(nStartTab)) nStartTab = MAXTAB;
-    if (!ValidTab(nEndTab)) nEndTab = MAXTAB;
+    if (!ValidTab(nStartTab) || nStartTab > nDocMaxTab) nStartTab = nDocMaxTab;
+    if (!ValidTab(nEndTab) || nEndTab > nDocMaxTab) nEndTab = nDocMaxTab;
 
     nCol = nStartCol;
     nRow = nStartRow;
@@ -944,6 +947,8 @@ ScCellIterator::ScCellIterator( ScDocument* pDocument,
     bSubTotal(bSTotal)
 
 {
+    SCTAB nDocMaxTab = pDocument->GetTableCount() - 1;
+
     PutInOrder( nStartCol, nEndCol);
     PutInOrder( nStartRow, nEndRow);
     PutInOrder( nStartTab, nEndTab );
@@ -952,8 +957,8 @@ ScCellIterator::ScCellIterator( ScDocument* pDocument,
     if (!ValidCol(nEndCol)) nEndCol = MAXCOL;
     if (!ValidRow(nStartRow)) nStartRow = MAXROW;
     if (!ValidRow(nEndRow)) nEndRow = MAXROW;
-    if (!ValidTab(nStartTab)) nStartTab = pDoc->GetTableCount()-1;
-    if (!ValidTab(nEndTab)) nEndTab = pDoc->GetTableCount()-1;
+    if (!ValidTab(nStartTab) || nStartTab > nDocMaxTab) nStartTab = nDocMaxTab;
+    if (!ValidTab(nEndTab) || nEndTab > nDocMaxTab) nEndTab = nDocMaxTab;
 
     while (nEndTab>0 && !pDoc->maTabs[nEndTab])
         --nEndTab;                                      // nur benutzte Tabellen
