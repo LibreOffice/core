@@ -1869,6 +1869,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         {
             my $create_download = 0;
             if ( $$downloadname ne "" ) { $create_download = 1; }
+            if ( $installer::globals::iswindowsbuild ) { $create_download = 0; }
             if (( $is_success ) && ( $create_download ) && ( $ENV{'ENABLE_DOWNLOADSETS'} ))
             {
                 my $downloaddir = installer::download::create_download_sets($finalinstalldir, $includepatharrayref, $allvariableshashref, $$downloadname, $languagestringref, $languagesarrayref);
@@ -2349,6 +2350,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         if ( $is_success ) { installer::followme::save_followme_info($finalinstalldir, $includepatharrayref, $allvariableshashref, $$downloadname, $languagestringref, $languagesarrayref, $current_install_number, $loggingdir, $installlogdir); }
 
         if ( $$downloadname ne "" ) { $create_download = 1; }
+        if ( $installer::globals::iswindowsbuild ) { $create_download = 0; }
         if (( $is_success ) && ( $create_download ) && ( $ENV{'ENABLE_DOWNLOADSETS'} ))
         {
             my $downloaddir = installer::download::create_download_sets($finalinstalldir, $includepatharrayref, $allvariableshashref, $$downloadname, $languagestringref, $languagesarrayref);
