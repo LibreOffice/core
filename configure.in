@@ -359,6 +359,11 @@ AC_ARG_ENABLE(ext-pdfimport,
         [Disable the PDF Import extension.])
 )
 
+AC_ARG_ENABLE(ext-postgresql-sdbc,
+    AS_HELP_STRING([--enable-ext-postgresql-sdbc],
+        [Enable the build of the PostgreSQL sdbc extension.])
+)
+
 AC_ARG_ENABLE(ext-presenter-console,
     AS_HELP_STRING([--disable-ext-presenter-console],
         [Disable the Presenter Console extension.])
@@ -5358,19 +5363,24 @@ fi
 dnl ===================================================================
 dnl Check for PostgreSQL stuff
 dnl ===================================================================
-AC_PATH_PROG(PGCONFIG, pg_config)
-if test -z "$PGCONFIG"; then
-    AC_MSG_ERROR([pg_config needed])
+
+if test "x$enable_ext_postgresql_sdbc" = "xyes"; then
+    AC_PATH_PROG(PGCONFIG, pg_config)
+    if test -z "$PGCONFIG"; then
+        AC_MSG_ERROR([pg_config needed])
+    fi
+    save_CFLAGS=$CFLAGS
+    save_LIBS=$LIBS
+    CFLAGS="-I`pg_config --includedir`"
+    AC_CHECK_HEADER([libpq-fe.h], [], [AC_MSG_ERROR([libpq-fe.h is needed])], [])
+    AC_CHECK_LIB(pq, PQconnectdbParams, [],
+        [AC_MSG_ERROR(libpq not found or too old. Need >= 9.0)], [])
+    CFLAGS=$save_CFLAGS
+    LIBS=$save_LIBS
+    BUILD_POSTGRESQL_SDBC=YES
+    SYSTEM_POSTGRESQL=YES # only option atm :-)
 fi
-save_CFLAGS=$CFLAGS
-save_LIBS=$LIBS
-CFLAGS="-I`pg_config --includedir`"
-AC_CHECK_HEADER([libpq-fe.h], [], [AC_MSG_ERROR([libpq-fe.h is needed])], [])
-AC_CHECK_LIB(pq, PQconnectdbParams, [],
-    [AC_MSG_ERROR(libpq not found or too old. Need >= 9.0)], [])
-CFLAGS=$save_CFLAGS
-LIBS=$save_LIBS
-SYSTEM_POSTGRESQL=YES # only option atm :-)
+AC_SUBST(BUILD_POSTGRESQL_SDBC)
 AC_SUBST(SYSTEM_POSTGRESQL)
 
 dnl ===================================================================

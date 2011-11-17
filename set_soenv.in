@@ -2002,6 +2002,7 @@ ToFile( "XINERAMA_LINK",     "@XINERAMA_LINK@",    "e" );
 ToFile( "SYSTEM_REDLAND",    "@SYSTEM_REDLAND@",   "e" );
 ToFile( "REDLAND_CFLAGS",    "@REDLAND_CFLAGS@",   "e" );
 ToFile( "REDLAND_LIBS",      "@REDLAND_LIBS@",     "e" );
+ToFile( "BUILD_POSTGRESQL_SDBC",   "@BUILD_POSTGRESQL_SDBC@", "e" );
 ToFile( "SYSTEM_POSTGRESQL", "@SYSTEM_POSTGRESQL@", "e" );
 ToFile( "SYSTEM_HUNSPELL",   "@SYSTEM_HUNSPELL@",  "e" );
 ToFile( "HUNSPELL_CFLAGS",   "@HUNSPELL_CFLAGS@",  "e" );

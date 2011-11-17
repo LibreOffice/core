@@ -36,6 +36,9 @@ NO_DEFAULT_STL=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+
+.IF "$(BUILD_POSTGRESQL_SDBC)" == "YES"
+
 .IF "$(SYSTEM_POSTGRESQL)" != "YES"
 .INCLUDE :  $(SOLARINCDIR)$/postgresql/postgresql-version.mk
 .ENDIF
@@ -144,6 +147,8 @@ SLOFILES=       $(LIB1OBJFILES) $(LIB2OBJFILES)
 
 DRIVERNAME=postgresql-sdbc-$(PQ_SDBC_VERSION).oxt
 ALLTAR : $(DLLDEST)$/$(DRIVERNAME)
+
+.ENDIF # BUILD_POSTGRESQL_SDBC
 
 # --- Targets ------------------------------------------------------
 .INCLUDE :  target.mk
