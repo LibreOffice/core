@@ -90,8 +90,11 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,sc_filters_test,\
 
 $(eval $(call gb_CppunitTest_add_components,sc_filters_test,\
     basic/util/sb \
+    chart2/source/controller/chartcontroller \
+    chart2/source/model/chartmodel \
     comphelper/util/comphelp \
     dbaccess/util/dba \
+    eventattacher/source/evtatt \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
     forms/util/frm \
@@ -104,8 +107,11 @@ $(eval $(call gb_CppunitTest_add_components,sc_filters_test,\
     sax/source/fastparser/fastsax \
     sc/util/sc \
     sc/util/scfilt \
+    scaddins/source/analysis/analysis \
+    scaddins/source/datefunc/date \
     sfx2/util/sfx \
     sot/util/sot \
+    svl/util/svl \
     toolkit/util/tk \
     unotools/util/utl \
     unoxml/source/rdf/unordf \
@@ -127,6 +133,7 @@ $(eval $(call gb_CppunitTest_add_components,sc_filters_test,\
 endif
 
 $(eval $(call gb_CppunitTest_add_old_components,sc_filters_test,\
+	embobj \
     configmgr \
     ucb1 \
     ucpfile1 \
