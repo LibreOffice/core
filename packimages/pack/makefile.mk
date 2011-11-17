@@ -42,6 +42,7 @@ CUSTOM_IMAGES+=$(foreach,i,$(CUSTOM_IMAGE_SETS) images_$i)
 CUSTOM_PREFERRED_FALLBACK_1*=-c $(SOLARSRC)$/ooo_custom_images$/tango
 CUSTOM_PREFERRED_FALLBACK_2*=-c $(SOLARSRC)$/ooo_custom_images$/industrial
 
+CRYSTAL_TARBALL=$(SOLARSRC)$/external_images$/ooo_crystal_images-1.tar.gz
 CLASSIC_TARBALL=$(SOLARSRC)$/ooo_custom_images$/classic/classic_images.tar.gz
 
 ALLTAR : $(IMAGES) $(CUSTOM_IMAGES) $(COMMONBIN)$/images_brand.zip
@@ -67,6 +68,18 @@ images_% : $(RES)$/img$/commandimagelist.ilst
 # make sure to have one to keep packing happy
 $(COMMONBIN)$/images_brand.zip:
     @$(TOUCH) $@
+
+# generate the HiContrast icon set
+$(MISC)$/hicontrast.flag .PHONY :
+    $(PERL) $(SOLARENV)$/bin$/hicontrast-to-theme.pl $(SOLARSRC)$/default_images $(MISC)$/hicontrast && $(TOUCH) $@
+
+# unpack the Crystal icon set
+$(MISC)$/crystal.flag : $(CRYSTAL_TARBALL)
+    cd $(MISC) && gzip -d -c $(CRYSTAL_TARBALL) | ( tar -xf - ) && $(TOUCH) $(@:f)
+.IF "$(GUI)"=="UNX"
+    chmod -R g+w $(MISC)$/crystal
+.ENDIF
+    @$(TYPE) $@ || echo "ERROR: unpacking $(CRYSTAL_TARBALL) failed"
 
 # unpack the classic icon set
 $(MISC)$/classic.flag : $(CLASSIC_TARBALL)

@@ -133,9 +133,6 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     bOwnerOfRefDev      = sal_False;
     bDowning            = sal_False;
     bIsInUndo           = sal_False;
-    //#115580# fixed by JingDongChen from China at 2011/11/16 start
-    bIsPasting          = sal_False;
-    //#115580# fixed by JingDongChen from China at 2011/11/16 end
     bIsFormatting       = sal_False;
     bFormatted          = sal_False;
     bUpdate             = sal_True;
@@ -3704,9 +3701,6 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
 
     if ( rxDataObj.is() )
     {
-        //#115580# fixed by JingDongChen from China at 2011/11/16 start
-        bIsPasting = sal_True;
-        //#115580# fixed by JingDongChen from China at 2011/11/16 end
         datatransfer::DataFlavor aFlavor;
         sal_Bool bDone = sal_False;
 
@@ -3797,9 +3791,6 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
                 }
             }
         }
-        //#115580# fixed by JingDongChen from China at 2011/11/16 start
-        bIsPasting = sal_False;
-        //#115580# fixed by JingDongChen from China at 2011/11/16 end
     }
 
     return aNewSelection;
