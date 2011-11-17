@@ -39,9 +39,6 @@ NO_DEFAULT_STL=TRUE
 
 .IF "$(BUILD_POSTGRESQL_SDBC)" == "YES"
 
-.IF "$(SYSTEM_POSTGRESQL)" != "YES"
-.INCLUDE :  $(SOLARINCDIR)$/postgresql/postgresql-version.mk
-.ENDIF
 #-------------------------------------------------------------------
 
 # uno component naming scheme
@@ -51,22 +48,8 @@ PQ_SDBC_MAJOR=0
 PQ_SDBC_MINOR=8
 PQ_SDBC_MICRO=1
 PQ_SDBC_VERSION=$(PQ_SDBC_MAJOR).$(PQ_SDBC_MINOR).$(PQ_SDBC_MICRO)
-.IF "$(SYSTEM_POSTGRESQL)" == "YES"
-POSTGRESQL_MAJOR:=$(shell @pg_config --version | awk '{ print $$2 }' | cut -d. -f1)
-POSTGRESQL_MINOR:=$(shell @pg_config --version | awk '{ print $$2 }' | cut -d. -f2)
-POSTGRESQL_MICRO:=$(shell @pg_config --version | awk '{ print $$2 }' | cut -d. -f3)
-.ENDIF
 
-.IF "$(SYSTEM_POSTGRESQL)" != "YES"
-POSTGRESQL_INCLUDES=-I$(SOLARINCDIR)$/postgresql
-.ELSE
-POSTGRESQL_INCLUDES:=-I$(shell @pg_config --includedir)
-.ENDIF
-
-CFLAGS+=$(POSTGRESQL_INCLUDES) \
-    -DPOSTGRESQL_MAJOR=$(POSTGRESQL_MAJOR) \
-    -DPOSTGRESQL_MINOR=$(POSTGRESQL_MINOR) \
-    -DPOSTGRESQL_MICRO=$(POSTGRESQL_MICRO) \
+CFLAGS+=$(POSTGRESQL_INC) \
     -DPQ_SDBC_MAJOR=$(PQ_SDBC_MAJOR) \
     -DPQ_SDBC_MINOR=$(PQ_SDBC_MINOR) \
     -DPQ_SDBC_MICRO=$(PQ_SDBC_MICRO)
@@ -87,10 +70,13 @@ DEF1NAME=	$(SHL1TARGET)
 SHL1VERSIONMAP=$(SOLARENV)$/src$/reg-component.map
 
 # use the static version
+# LEM 17/11/2011: removed everything except libpq proper;
+#  as per instructions in libpq documentation.
+#  If it turns out the rest was needed, reenable it.
 .IF "$(GUI)"=="WNT"
-PQLIB=libpq.lib wsock32.lib advapi32.lib
+POSTGRESQL_LIB=libpq.lib #wsock32.lib advapi32.lib
 .ELSE
-PQLIB=-lpq -lcrypt
+POSTGRESQL_LIB=-lpq #-lcrypt
 .ENDIF
 SHL2TARGET=postgresql-sdbc-impl.uno
 LIB2TARGET=$(SLB)$/$(SHL2TARGET).lib
@@ -134,7 +120,7 @@ SHL2STDLIBS= \
         $(CPPUHELPERLIB)	\
         $(SALLIB)		\
         $(SALHELPERLIB)		\
-        $(PQLIB)
+        $(POSTGRESQL_LIB)
 
 SHL2LIBS=	$(LIB2TARGET)
 SHL2DEF=	$(MISC)$/$(SHL2TARGET).def

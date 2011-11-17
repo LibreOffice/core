@@ -1090,7 +1090,8 @@ AC_ARG_WITH(lucene-analyzers-jar,
 AC_ARG_WITH(system-mysql,
     AS_HELP_STRING([--with-system-mysql],
         [Use MySQL libraries already on system, for building the MySQL Connector/LibreOffice
-         extension. Requires MYSQLCONFIG to point to the mysql_config executable.]),,
+         extension. If the the mysql_config executable is not in PATH, use MYSQLCONFIG to
+         point to it.]),,
     [with_system_mysql="$with_system_libs"])
 
 AC_ARG_WITH(libmysql-path,
@@ -1107,6 +1108,22 @@ AC_ARG_WITH(system-mysql-cppconn,
     AS_HELP_STRING([--with-system-mysql-cppconn],
         [Use MySQL C++ Connector libraries already on system.]),,
     [with_system_mysql_cppconn="$with_system_libs"])
+
+AC_ARG_WITH(system-postgresql,
+    AS_HELP_STRING([--with-system-postgresql],
+        [Use PostgreSQL libraries already on system, for building the PostgreSQL-SDBC
+         extension. If pg_config is not in PATH, use PGCONFIG to point to it.]),,
+    [with_system_postgresql="$with_system_libs"])
+
+AC_ARG_WITH(libpq-path,
+    AS_HELP_STRING([--with-libpq-path],
+        [Use this PostgreSQL C interface (libpq) installation for building
+         the PostgreSQL-SDBC extension.])
+    [
+                          Usage:     --with-libpq-path=<absolute path to
+                                                  your libq installation>
+    ],
+,)
 
 AC_ARG_WITH(system-hsqldb,
     AS_HELP_STRING([--with-system-hsqldb],
@@ -5218,7 +5235,7 @@ if test "$ENABLE_MYSQLC" = "YES"; then
     dnl ===================================================================
     dnl Check for system MySQL
     dnl ===================================================================
-    AC_MSG_CHECKING([for mysql pre-requisites])
+    AC_MSG_CHECKING([for MySQL prerequisites])
     if test "$with_system_mysql" = "yes"; then
         AC_MSG_RESULT([external MySQL])
         SYSTEM_MYSQL=YES
@@ -5365,23 +5382,44 @@ dnl Check for PostgreSQL stuff
 dnl ===================================================================
 
 if test "x$enable_ext_postgresql_sdbc" = "xyes"; then
-    AC_PATH_PROG(PGCONFIG, pg_config)
-    if test -z "$PGCONFIG"; then
-        AC_MSG_ERROR([pg_config needed])
+    AC_MSG_CHECKING([for PostgreSQL prerequisites])
+    if test "$with_system_postgresql" = "yes"; then
+        AC_MSG_RESULT([external PostgreSQL])
+        SYSTEM_POSTGRESQL=YES
+        AC_PATH_PROG(PGCONFIG, pg_config)
+        if test -z "$PGCONFIG"; then
+           AC_MSG_ERROR([pg_config needed; set PGCONFIG if not in PATH])
+        fi
+        POSTGRESQL_INC=-I$(pg_config --includedir)
+        POSTGRESQL_LIB="-L$(pg_config --libdir) -lpq"
+    else
+        SYSTEM_POSTGRESQL=NO
+        if test -n "$with_libpq_path"; then
+            AC_MSG_RESULT([external libpq])
+            POSTGRESQL_LIB="-L${with_libpq_path}/lib/ -lpq"
+            POSTGRESQL_INC=-I"${with_libpq_path}/include/"
+        else
+            AC_MSG_ERROR([not given. Please specify either --with-system-postgresql or --with-libpq-path])
+        fi
     fi
+    AC_MSG_CHECKING([for PostgreSQL C interface])
     save_CFLAGS=$CFLAGS
+    save_CPPFLAGS=$CPPFLAGS
     save_LIBS=$LIBS
-    CFLAGS="-I`pg_config --includedir`"
+    CPPFLAGS="${POSTGRESQL_INC}"
+    LIBS="${POSTGRESQL_LIB}"
     AC_CHECK_HEADER([libpq-fe.h], [], [AC_MSG_ERROR([libpq-fe.h is needed])], [])
     AC_CHECK_LIB(pq, PQconnectdbParams, [],
         [AC_MSG_ERROR(libpq not found or too old. Need >= 9.0)], [])
     CFLAGS=$save_CFLAGS
+    CPPFLAGS=$save_CPPFLAGS
     LIBS=$save_LIBS
     BUILD_POSTGRESQL_SDBC=YES
-    SYSTEM_POSTGRESQL=YES # only option atm :-)
 fi
 AC_SUBST(BUILD_POSTGRESQL_SDBC)
 AC_SUBST(SYSTEM_POSTGRESQL)
+AC_SUBST(POSTGRESQL_INC)
+AC_SUBST(POSTGRESQL_LIB)
 
 dnl ===================================================================
 dnl Check for system beanshell

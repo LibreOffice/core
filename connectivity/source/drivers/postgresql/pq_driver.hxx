@@ -49,14 +49,6 @@ namespace pq_sdbc_driver
                                MY_STRINGIFY(PQ_SDBC_MINOR) "." \
                                MY_STRINGIFY(PQ_SDBC_MICRO)
 
-#define POSTGRES_MAJOR 7
-#define POSTGRES_MINOR 3
-#define POSTGRES_MICRO 2
-#define POSTGRESQL_VERSION MY_STRINGIFY(POSTGRESQL_MAJOR) "." \
-                           MY_STRINGIFY(POSTGRESQL_MINOR) "." \
-                           MY_STRINGIFY(POSTGRESQL_MICRO)
-
-
 struct MutexHolder { osl::Mutex m_mutex; };
 // use this to switch off sdbc support !
 // typedef cppu::WeakComponentImplHelper2<
