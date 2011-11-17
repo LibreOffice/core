@@ -79,8 +79,13 @@ SwWordCountDialog::SwWordCountDialog(Window* pParent)
     rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
     rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
     rtl::OString sPackType(RTL_CONSTASCII_STRINGPARAM("pack-type"));
+    rtl::OString sBorderWidth(RTL_CONSTASCII_STRINGPARAM("border-width"));
 
     dialog_vbox1.setChildProperty(sFill, true);
+    //TO-DO, when vbox1 belongs to dialog via builder, this becomes
+    //content-area-border on the dialog
+    dialog_vbox1.setChildProperty(sBorderWidth, sal_Int32(7));
+
     dialog_action_area1.setChildProperty(sFill, true);
 
     box1.setChildProperty(sFill, true);

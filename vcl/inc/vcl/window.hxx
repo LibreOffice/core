@@ -1064,7 +1064,7 @@ public:
     // Advisory Sizing - what is a good size for this widget ?
     virtual Size GetOptimalSize(WindowSizeType eType) const;
     void queueResize();
-    template <typename T> T getWidgetProperty(const rtl::OString &rString, const T &rDefaultValue = T())
+    template <typename T> T getWidgetProperty(const rtl::OString &rString, const T &rDefaultValue = T()) const
     {
         T nValue = rDefaultValue;
         ChildPropertyMap::const_iterator aI = m_aWidgetProperties.find(rString);
@@ -1080,7 +1080,7 @@ public:
     {
         m_aWidgetProperties[rString] <<= static_cast<sal_Bool>(rValue);
     }
-    bool getWidgetProperty(const rtl::OString &rString, const bool &rValue = false)
+    bool getWidgetProperty(const rtl::OString &rString, const bool &rValue = false) const
     {
         return getWidgetProperty<sal_Bool>(rString, rValue);
     }

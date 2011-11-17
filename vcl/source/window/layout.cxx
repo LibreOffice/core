@@ -68,6 +68,12 @@ Size Box::calculateRequisition() const
         setPrimaryDimension(aSize, nPrimaryDimension + m_nSpacing * (nVisibleChildren-1));
     }
 
+    rtl::OString sBorderWidth(RTL_CONSTASCII_STRINGPARAM("border-width"));
+    sal_Int32 nBorderWidth = getWidgetProperty<sal_Int32>(sBorderWidth);
+
+    aSize.Width() += nBorderWidth*2;
+    aSize.Height() += nBorderWidth*2;
+
     return aSize;
 }
 
@@ -101,9 +107,14 @@ void Box::setAllocation(const Size &rAllocation)
     if (!nVisibleChildren)
         return;
 
-    Size aSize = rAllocation;
+    rtl::OString sBorderWidth(RTL_CONSTASCII_STRINGPARAM("border-width"));
+    sal_Int32 nBorderWidth = getWidgetProperty<sal_Int32>(sBorderWidth);
 
-    long nAllocPrimaryDimension = getPrimaryDimension(rAllocation);
+    Size aAllocation = rAllocation;
+    aAllocation.Width() -= nBorderWidth*2;
+    aAllocation.Height() -= nBorderWidth*2;
+
+    long nAllocPrimaryDimension = getPrimaryDimension(aAllocation);
 
     long nHomogeneousDimension, nExtraSpace = 0;
     if (m_bHomogeneous)
@@ -114,14 +125,16 @@ void Box::setAllocation(const Size &rAllocation)
     else if (nExpandChildren)
     {
         Size aRequisition = calculateRequisition();
-        nExtraSpace = (getPrimaryDimension(rAllocation) - getPrimaryDimension(aRequisition)) / nExpandChildren;
+        aRequisition.Width() -= nBorderWidth*2;
+        aRequisition.Height() -= nBorderWidth*2;
+        nExtraSpace = (getPrimaryDimension(aAllocation) - getPrimaryDimension(aRequisition)) / nExpandChildren;
     }
 
     rtl::OString sPadding(RTL_CONSTASCII_STRINGPARAM("padding"));
     rtl::OString sPackType(RTL_CONSTASCII_STRINGPARAM("pack-type"));
     rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
 
-    Point aPos(0, 0);
+    Point aPos(nBorderWidth, nBorderWidth);
     for (sal_Int32 ePackType = VCL_PACK_START; ePackType <= VCL_PACK_END; ++ePackType)
     {
         if (ePackType == VCL_PACK_END)
@@ -155,7 +168,7 @@ void Box::setAllocation(const Size &rAllocation)
                 if (bExpand)
                     setPrimaryDimension(aBoxSize, nPrimaryDimension + nExtraSpace);
             }
-            setSecondaryDimension(aBoxSize, getSecondaryDimension(aSize));
+            setSecondaryDimension(aBoxSize, getSecondaryDimension(aAllocation));
 
             Point aChildPos(aPos);
             Size aChildSize(aBoxSize);
