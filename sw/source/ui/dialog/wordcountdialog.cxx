@@ -46,7 +46,7 @@ SwWordCountDialog::SwWordCountDialog(Window* pParent)
     , aCurrentSelection(&box1)
     , aCurrentSelectionText(&aCurrentSelection, SW_RES(FT_CURRENT))
     , aCurrentSelectionLine(&aCurrentSelection, SW_RES(FL_CURRENT))
-    , aSelectionBox(&box1)
+    , aSelectionBox(&box1, false, 7)
     , aSelectionRow1(&aSelectionBox)
     , aCurrentWordFT(&aSelectionRow1, SW_RES(FT_CURRENTWORD))
     , aCurrentWordFI(&aSelectionRow1, SW_RES(FI_CURRENTWORD))
@@ -59,7 +59,7 @@ SwWordCountDialog::SwWordCountDialog(Window* pParent)
     , aDoc(&box1)
     , aDocText(&aDoc, SW_RES(FT_DOC))
     , aDocLine(&aDoc, SW_RES(FL_DOC))
-    , aDocBox(&box1)
+    , aDocBox(&box1, false, 7)
     , aDocRow1(&aDocBox)
     , aDocWordFT(&aDocRow1, SW_RES(FT_DOCWORD))
     , aDocWordFI(&aDocRow1, SW_RES(FI_DOCWORD))
@@ -97,6 +97,7 @@ SwWordCountDialog::SwWordCountDialog(Window* pParent)
     aCurrentSelectionLine.setChildProperty(sExpand, true);
 
     aSelectionBox.setChildProperty(sFill, true);
+    aSelectionBox.setChildProperty(sBorderWidth, sal_Int32(7));
 
     aSelectionRow1.setChildProperty(sFill, true);
     aSelectionRow1.setChildProperty(sExpand, true);
@@ -121,6 +122,7 @@ SwWordCountDialog::SwWordCountDialog(Window* pParent)
     aDocLine.setChildProperty(sExpand, true);
 
     aDocBox.setChildProperty(sFill, true);
+    aDocBox.setChildProperty(sBorderWidth, sal_Int32(7));
 
     aDocRow1.setChildProperty(sFill, true);
     aDocRow1.setChildProperty(sExpand, true);
