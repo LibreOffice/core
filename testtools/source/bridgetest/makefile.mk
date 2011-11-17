@@ -79,7 +79,7 @@ LIB1TARGET=$(SLB)$/cppobj.lib
 LIB1OBJFILES= \
         $(SLO)$/cppobj.obj $(SLO)$/currentcontextchecker.obj $(SLO)$/multi.obj
 
-SHL1TARGET = $(ENFORCEDSHLPREFIX)$(ENFORCEDSHLPREFIX)$(ENFORCEDSHLPREFIX)cppobj.uno
+SHL1TARGET = $(ENFORCEDSHLPREFIX)cppobj.uno
 SHL1STDLIBS= \
         $(CPPULIB)		\
         $(CPPUHELPERLIB)	\
@@ -98,7 +98,7 @@ LIB2OBJFILES= \
         $(SLO)$/currentcontextchecker.obj \
         $(SLO)$/multi.obj
 
-SHL2TARGET = $(ENFORCEDSHLPREFIX)$(ENFORCEDSHLPREFIX)$(ENFORCEDSHLPREFIX)bridgetest.uno
+SHL2TARGET = $(ENFORCEDSHLPREFIX)bridgetest.uno
 SHL2STDLIBS= \
         $(CPPULIB)		\
         $(CPPUHELPERLIB)	\
@@ -109,7 +109,7 @@ SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=	$(SHL2TARGET)
 SHL2VERSIONMAP = $(SOLARENV)/src/component.map
 
-SHL3TARGET = $(ENFORCEDSHLPREFIX)$(ENFORCEDSHLPREFIX)$(ENFORCEDSHLPREFIX)constructors.uno
+SHL3TARGET = $(ENFORCEDSHLPREFIX)constructors.uno
 SHL3OBJS = $(SLO)$/constructors.obj
 SHL3STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB)
 SHL3VERSIONMAP = $(SOLARENV)/src/component.map
