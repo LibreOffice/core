@@ -813,6 +813,25 @@ void ImpEditEngine::GetCharAttribs( sal_uInt16 nPara, EECharAttribArray& rLst ) 
     }
 }
 
+//#115580# fixed by JingDongChen from China at 2011/11/16 start
+void ImpEditEngine::AdjustParaAttribsByStyleSheet( ContentNode* pNode )
+{
+    if ( !pNode )
+        return;
+
+    SfxStyleSheet* pStyle = pNode->GetStyleSheet();
+    for ( sal_uInt16 nWhich = EE_PARA_START; nWhich < EE_CHAR_START && pStyle; nWhich++ )
+    {
+        if ( pNode->GetContentAttribs().HasItem( nWhich ) )
+        {
+            const SfxItemSet& rStyleAttribs = pStyle->GetItemSet();
+            if ( rStyleAttribs.GetItemState( nWhich ) == SFX_ITEM_ON )
+                pNode->GetContentAttribs().GetItems().ClearItem( nWhich );
+        }
+    }
+}
+//#115580# fixed by JingDongChen from China at 2011/11/16 end
+
 void ImpEditEngine::ParaAttribsToCharAttribs( ContentNode* pNode )
 {
     pNode->GetCharAttribs().DeleteEmptyAttribs( GetEditDoc().GetItemPool() );
@@ -841,6 +860,11 @@ void ImpEditEngine::ParaAttribsToCharAttribs( ContentNode* pNode )
     }
     bFormatted = sal_False;
     // Portion braucht hier nicht invalidiert werden, geschieht woanders.
+
+    //#115580# fixed by JingDongChen from China at 2011/11/16 start
+    if ( bIsPasting )
+        pNode->GetContentAttribs().GetItems().ClearItem();
+    //#115580# fixed by JingDongChen from China at 2011/11/16 end
 }
 
 IdleFormattter::IdleFormattter()

@@ -1241,6 +1241,14 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
     EditSelection aSel( aPaM, aPaM );
     DBG_ASSERT( !aSel.DbgIsBuggy( aEditDoc ), "InsertBibTextObject: Selektion kaput!(1)" );
 
+    //#115580# fixed by JingDongChen from China at 2011/11/16 start
+    EditPaM aStart1PaM( aSel.Min().GetNode(), aSel.Min().GetIndex() );
+    aSel = ImpInsertParaBreak( aSel );
+    EditPaM aStart2PaM = aSel.Min();
+    EditPaM aEnd1PaM( ImpInsertParaBreak( aSel.Max() ) );
+    aEnd1PaM.GetNode()->SetStyleSheet( aStart1PaM.GetNode()->GetStyleSheet(), sal_False );
+    //#115580# fixed by JingDongChen from China at 2011/11/16 end
+
     sal_Bool bUsePortionInfo = sal_False;
 //  sal_Bool bFields = sal_False;
     XParaPortionList* pPortionInfo = rTextObject.GetPortionInfo();
@@ -1270,6 +1278,19 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
     for ( sal_uInt16 n = 0; n < nContents; n++, nPara++ )
     {
         ContentInfo* pC = rTextObject.GetContents().GetObject( n );
+
+        //#115580# fixed by JingDongChen from China at 2011/11/16 start
+        if ( bIsPasting )
+        {
+            if ( !n )
+                aPaM = aStart2PaM;
+
+            aPaM.GetNode()->SetStyleSheet( aStart1PaM.GetNode()->GetStyleSheet(), sal_False );
+            aPaM.GetNode()->GetContentAttribs().GetItems().ClearItem();
+            aPaM.GetNode()->GetCharAttribs().Clear();
+        }
+        //#115580# fixed by JingDongChen from China at 2011/11/16 end
+
         sal_Bool bNewContent = aPaM.GetNode()->Len() ? sal_False: sal_True;
         sal_uInt16 nStartPos = aPaM.GetIndex();
 
@@ -1340,6 +1361,20 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
                 // nur dann Style und ParaAttribs, wenn neuer Absatz, oder
                 // komplett inneliegender...
                 bParaAttribs = pC->GetParaAttribs().Count() ? sal_True : sal_False;
+
+                    //#115580# fixed by JingDongChen from China at 2011/11/16 start
+                    if ( bIsPasting )
+                    {
+                        nPara = aEditDoc.GetPos( aPaM.GetNode() );
+                        if ( GetStyleSheetPool() && pC->GetStyle().Len() )
+                        {
+                            SfxStyleSheet* pStyle = (SfxStyleSheet*)GetStyleSheetPool()->Find( pC->GetStyle(), pC->GetFamily() );
+                            DBG_ASSERT( pStyle, "InsertBinTextObject - Style not found!" );
+                            SetStyleSheet( nPara, pStyle );
+                        }
+                    }
+                    else
+                    //#115580# fixed by JingDongChen from China at 2011/11/16 end
                 if ( GetStyleSheetPool() && pC->GetStyle().Len() )
                 {
                     SfxStyleSheet* pStyle = (SfxStyleSheet*)GetStyleSheetPool()->Find( pC->GetStyle(), pC->GetFamily() );
@@ -1412,6 +1447,14 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
         }
 #endif // !SVX_LIGHT
 
+        //#115580# fixed by JingDongChen from China at 2011/11/16 start
+        if ( bIsPasting )
+        {
+            AdjustParaAttribsByStyleSheet( aPaM.GetNode() );
+            ParaAttribsToCharAttribs( aPaM.GetNode() );
+        }
+        //#115580# fixed by JingDongChen from China at 2011/11/16 end
+
         // Zeilenumbruch, wenn weitere folgen...
         if ( n < ( nContents-1) )
         {
@@ -1422,7 +1465,25 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
         }
     }
 
-    aSel.Max() = aPaM;
+    //#115580# fixed by JingDongChen from China at 2011/11/16 start
+    /* aSel.Max() = aPaM; */
+
+    if ( bIsPasting )
+    {
+        EditPaM aEnd2PaM( aPaM );
+
+        sal_Bool bSpecialBackward = aStart1PaM.GetNode()->Len() ? sal_False : sal_True;
+
+        aSel.Min() = ImpConnectParagraphs( aStart1PaM.GetNode(), aStart2PaM.GetNode(), bSpecialBackward );
+        bSpecialBackward = aEnd1PaM.GetNode()->Len() ? sal_True : sal_False;
+
+        aSel.Max() = ImpConnectParagraphs( ( ( nContents == 1 ) ? aStart1PaM.GetNode() : aEnd2PaM.GetNode() ),
+                                                                        aEnd1PaM.GetNode(), bSpecialBackward );
+    }
+    else
+        aSel.Max() = aPaM;
+    //#115580# fixed by JingDongChen from China at 2011/11/16 end
+
     DBG_ASSERT( !aSel.DbgIsBuggy( aEditDoc ), "InsertBibTextObject: Selektion kaput!(1)" );
     return aSel;
 }

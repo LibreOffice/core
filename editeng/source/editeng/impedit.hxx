@@ -479,6 +479,9 @@ private:
     sal_Bool            bFormatted;
     sal_Bool            bInSelection;
     sal_Bool            bIsInUndo;
+    //#115580# fixed by JingDongChen from China at 2011/11/16 start
+    sal_Bool            bIsPasting;
+    //#115580# fixed by JingDongChen from China at 2011/11/16 end
     sal_Bool            bUpdate;
     sal_Bool            bUndoEnabled;
     sal_Bool            bOwnerOfRefDev;
@@ -543,6 +546,9 @@ private:
     void                SetParaAttrib( sal_uInt8 nFunc, EditSelection aSel, sal_uInt16 nValue );
     sal_uInt16          GetParaAttrib( sal_uInt8 nFunc, EditSelection aSel );
     void                SetCharAttrib( EditSelection aSel, const SfxPoolItem& rItem );
+    //#115580# fixed by JingDongChen from China at 2011/11/16 start
+    void                AdjustParaAttribsByStyleSheet( ContentNode* pNode );
+    //#115580# fixed by JingDongChen from China at 2011/11/16 end
     void                ParaAttribsToCharAttribs( ContentNode* pNode );
     void                GetCharAttribs( sal_uInt16 nPara, EECharAttribArray& rLst ) const;
 
