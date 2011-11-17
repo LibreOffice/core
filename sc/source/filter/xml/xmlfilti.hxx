@@ -84,14 +84,11 @@ public:
     virtual void EndElement();
 
     void SetCaseSensitive(const bool b);
-    void SetUseRegularExpressions(const bool bTemp) { if (!bUseRegularExpressions) bUseRegularExpressions = bTemp;}
-    void OpenConnection(const bool bTemp) { bool* pTemp = new bool; *pTemp = bConnectionOr;
-                            bConnectionOr = bNextConnectionOr; bNextConnectionOr = bTemp;
-                            aConnectionOrStack.Push(pTemp);}
-    void CloseConnection() { bool* pTemp = static_cast <bool*> (aConnectionOrStack.Pop()); bConnectionOr = *pTemp; bNextConnectionOr = *pTemp; delete pTemp;}
-    bool GetConnection() { bool bTemp = bConnectionOr; bConnectionOr = bNextConnectionOr; return bTemp; }
-    void AddFilterField(const com::sun::star::sheet::TableFilterField2 aFilterField) { aFilterFields.realloc(aFilterFields.getLength() + 1);
-                                                                                aFilterFields[aFilterFields.getLength() - 1] = aFilterField; }
+    void SetUseRegularExpressions(bool bTemp);
+    void OpenConnection(bool bTemp);
+    void CloseConnection();
+    bool GetConnection();
+    void AddFilterField(const com::sun::star::sheet::TableFilterField2& aFilterField);
 };
 
 class ScXMLAndContext : public SvXMLImportContext

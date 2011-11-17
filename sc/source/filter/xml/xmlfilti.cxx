@@ -176,6 +176,42 @@ void ScXMLFilterContext::SetCaseSensitive(bool b)
     mrQueryParam.bCaseSens = b;
 }
 
+void ScXMLFilterContext::SetUseRegularExpressions(bool bTemp)
+{
+    if (!bUseRegularExpressions)
+        bUseRegularExpressions = bTemp;
+}
+
+void ScXMLFilterContext::OpenConnection(bool bTemp)
+{
+    bool* pTemp = new bool;
+    *pTemp = bConnectionOr;
+    bConnectionOr = bNextConnectionOr;
+    bNextConnectionOr = bTemp;
+    aConnectionOrStack.Push(pTemp);
+}
+
+void ScXMLFilterContext::CloseConnection()
+{
+    bool* pTemp = static_cast <bool*> (aConnectionOrStack.Pop());
+    bConnectionOr = *pTemp;
+    bNextConnectionOr = *pTemp;
+    delete pTemp;
+}
+
+bool ScXMLFilterContext::GetConnection()
+{
+    bool bTemp = bConnectionOr;
+    bConnectionOr = bNextConnectionOr;
+    return bTemp;
+}
+
+void ScXMLFilterContext::AddFilterField(const sheet::TableFilterField2& aFilterField)
+{
+    aFilterFields.realloc(aFilterFields.getLength() + 1);
+    aFilterFields[aFilterFields.getLength() - 1] = aFilterField;
+}
+
 ScXMLAndContext::ScXMLAndContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
