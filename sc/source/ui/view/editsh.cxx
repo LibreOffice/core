@@ -455,7 +455,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
             {
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                AbstractScNameAddDlg* pDlg = pFact->CreateScNameAddDlg( pViewData->GetDialogParent(), RID_SCDLG_NAMES_DEFINE );
+                ScDocument* pDoc = pViewData->GetDocument();
+                AbstractScNameAddDlg* pDlg = pFact->CreateScNameAddDlg( pViewData->GetDialogParent(), pDoc, RID_SCDLG_NAMES_DEFINE );
                 pDlg->Execute();
                 delete pDlg;
             }

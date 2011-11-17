@@ -7,15 +7,112 @@ ModalDialog RID_SCDLG_NAMES_DEFINE
     HelpId = CMD_FID_ADD_NAME ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 100 , 200 ) ;
-    Text [ en-US ] = "Define Names" ;
+    Size = MAP_APPFONT ( 200 , 100 ) ;
+    Text [ en-US ] = "Define Name" ;
     Moveable = TRUE ;
     Closeable = TRUE;
-    OkButton BTN_OK
+    PushButton BTN_ADD
     {
-        Pos = MAP_APPFONT( 50, 50 );
+        Pos = MAP_APPFONT( 110, 80 );
         Size = MAP_APPFONT( 40, 14 );
         TabStop = TRUE;
-
+        Text [en-US] = "Add";
     };
+    PushButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT( 155, 80 );
+        Size = MAP_APPFONT ( 40, 14 );
+        TabStop = TRUE;
+        Text [en-US] = "Cancel";
+    };
+    FixedText FT_INFO
+    {
+        Pos = MAP_APPFONT( 6, 6 );
+        Size = MAP_APPFONT( 180, 14 );
+        Text [en-US] = "Define the name and range or formula expression.";
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT( 6, 25 );
+        Size = MAP_APPFONT( 30, 14 );
+        Text [en-US] = "Name";
+    };
+    FixedText FT_RANGE
+    {
+        Pos = MAP_APPFONT( 6, 44 );
+        Size = MAP_APPFONT( 30, 14 );
+        Text [en-US] = "Range";
+    };
+    FixedText FT_SCOPE
+    {
+        Pos = MAP_APPFONT( 6, 63 );
+        Size = MAP_APPFONT( 30, 14 );
+        Text [en-US] = "Scope";
+    };
+    Edit ED_NAME
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 40, 25 );
+        Size = MAP_APPFONT( 150, 14 );
+        TabStop = TRUE;
+    };
+    Edit ED_RANGE
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 40, 44 );
+        Size = MAP_APPFONT( 150, 14 );
+        TabStop = TRUE;
+    };
+    CheckBox BTN_PRINTAREA
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_PRINTAREA";
+        Pos = MAP_APPFONT ( 6 , 208 ) ;
+        Size = MAP_APPFONT ( 80 , 14 ) ;
+        Text [ en-US ] = "~Print range" ;
+        TabStop = TRUE ;
+    };
+    CheckBox BTN_CRITERIA
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_CRITERIA";
+        Pos = MAP_APPFONT ( 6 , 223 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "~Filter" ;
+        TabStop = TRUE ;
+    };
+    CheckBox BTN_ROWHEADER
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_ROWHEADER";
+        Pos = MAP_APPFONT ( 110, 223 ) ;
+        Size = MAP_APPFONT ( 82 , 14 ) ;
+        Text [ en-US ] = "Repeat ~row" ;
+        TabStop = TRUE ;
+    };
+    CheckBox BTN_COLHEADER
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_COLHEADER";
+        Pos = MAP_APPFONT ( 110 , 208 ) ;
+        Size = MAP_APPFONT ( 82 , 14 ) ;
+        Text [ en-US ] = "Repeat ~column" ;
+        TabStop = TRUE ;
+    };
+    ListBox LB_SCOPE
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 40 , 63 );
+        Size = MAP_APPFONT ( 150 , 80 );
+        TabStop = TRUE;
+        DropDown = TRUE;
+    };
+    FixedLine FL_DIV
+    {
+        Pos = MAP_APPFONT( 0, 75 );
+        Size = MAP_APPFONT(200, 3 );
+    };
+
+    String STR_GLOBAL_SCOPE
+    {
+        Text [ en-US ] = "Document (Global)" ;
+    };
+
+
 };

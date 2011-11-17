@@ -29,13 +29,35 @@
 #include "anyrefdg.hxx"
 #include "namedefdlg.hrc"
 #include <vcl/button.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/edit.hxx>
+#include <vcl/lstbox.hxx>
+
+class ScDocument;
 
 class ScNameDefDlg : public ModalDialog
 {
 private:
-    OKButton maBtnOk;
+    PushButton maBtnAdd;
+    PushButton maBtnCancel;
+    FixedText maFtInfo;
+    FixedText maFtName;
+    FixedText maFtRange;
+    FixedText maFtScope;
+    FixedLine maFlDiv;
+
+    Edit maEdName;
+    Edit maEdRange;
+
+    ListBox maLbScope;
+
+    rtl::OUString maGlobalNameStr;
+
+    void CancelPushed();
+
+    DECL_LINK( CancelBtnHdl, void * );
 public:
-    ScNameDefDlg(Window* pParent);
+    ScNameDefDlg(Window* pParent, ScDocument* pDoc);
 
 };
 

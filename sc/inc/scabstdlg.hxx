@@ -424,7 +424,7 @@ public:
     virtual AbstractScNamePasteDlg * CreateScNamePasteDlg ( Window * pParent, const ScRangeName* pList, //add for ScNamePasteDlg
                                                             const ScRangeName* pLocalList, int nId , bool bInsList=true ) = 0;
 
-    virtual AbstractScNameAddDlg* CreateScNameAddDlg ( Window* pParent, int nId) = 0;
+    virtual AbstractScNameAddDlg* CreateScNameAddDlg ( Window* pParent, ScDocument* pDoc, int nId) = 0;
 
     virtual AbstractScPivotFilterDlg * CreateScPivotFilterDlg ( Window* pParent, //add for ScPivotFilterDlg
                                                                 const SfxItemSet&   rArgSet, sal_uInt16 nSourceTab , int nId ) = 0;

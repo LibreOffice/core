@@ -1,3 +1,17 @@
 #include "sc.hrc"
 
-#define BTN_OK 1
+#define BTN_ADD 1
+#define BTN_CANCEL 2
+#define FT_NAME 3
+#define FT_RANGE 4
+#define FT_SCOPE 5
+#define FT_INFO 6
+#define ED_NAME 7
+#define ED_RANGE 8
+#define LB_SCOPE 9
+#define BTN_PRINTAREA 10
+#define BTN_CRITERIA 11
+#define BTN_ROWHEADER 12
+#define BTN_COLHEADER 13
+#define STR_GLOBAL_SCOPE 14
+#define FL_DIV 15

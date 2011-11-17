@@ -119,6 +119,7 @@
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 
 #include <boost/scoped_ptr.hpp>
+#include <iostream>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -1841,7 +1842,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                AbstractScNameAddDlg* pDlg = pFact->CreateScNameAddDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_NAMES_DEFINE );
+                std::cout << "Create Dialog in cellsh1.cxx" << std::endl;
+                ScDocument* pDoc = GetViewData()->GetDocument();
+                AbstractScNameAddDlg* pDlg = pFact->CreateScNameAddDlg( pTabViewShell->GetDialogParent(), pDoc, RID_SCDLG_NAMES_DEFINE );
                 pDlg->Execute();
                 delete pDlg;
             }
