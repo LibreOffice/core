@@ -376,7 +376,7 @@ extern "C" void nsscrypto_finalize()
         }
         else
         {
-            xmlsec_trace("Failed unloadeding module \""ROOT_CERTS"\".");
+            xmlsec_trace("Failed unloading module \""ROOT_CERTS"\".");
         }
         SECMOD_DestroyModule(RootsModule);
     }
