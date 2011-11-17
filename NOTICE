@@ -66,7 +66,11 @@ license. More information is available here:
 The optional "agg" module contains code by Maxim Shemanarev as
 part of the Anti-Grain Geometry Project. More information on
 AGG is available here:
-  http://www.antigrain.com/
+    http://www.antigrain.com/
+
+We use the Tango base icon theme under Public Domain by the
+Tango Desktop Project. More information is available here:
+    http://tango.freedesktop.org/
 
 The graphite module is distributed under CPL 0.5 (Common Public License).
 Silgraphite as used by the program is available at
