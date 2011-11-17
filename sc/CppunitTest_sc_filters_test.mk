@@ -91,6 +91,7 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,sc_filters_test,\
 $(eval $(call gb_CppunitTest_add_components,sc_filters_test,\
     basic/util/sb \
     chart2/source/controller/chartcontroller \
+    chart2/source/tools/charttools \
     chart2/source/model/chartmodel \
     comphelper/util/comphelp \
     dbaccess/util/dba \
