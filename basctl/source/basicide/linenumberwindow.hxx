@@ -10,6 +10,7 @@ class LineNumberWindow : public Window
 private:
   ModulWindow* pModulWindow;
   ulong nWidth;
+  long nCurYOffset;
 
   virtual void DataChanged(DataChangedEvent const & rDCEvt);
 
@@ -20,7 +21,12 @@ public:
   LineNumberWindow( Window* pParent, ModulWindow* pModulWin );
   ~LineNumberWindow();
 
-  ulong GetWidth() { return (nWidth < 20 ? 20 : nWidth); }
+  void DoScroll( long nHorzScroll, long nVertScroll );
+
+  bool SyncYOffset();
+  long& GetCurYOffset();
+
+  ulong GetWidth();
 };
 
 #endif // BASICIDE_LINENUMBERWINDOW_HXX

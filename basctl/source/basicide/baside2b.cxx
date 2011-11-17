@@ -333,6 +333,7 @@ void EditorWindow::Resize()
             pEditView->SetStartDocPos( aStartDocPos );
             pEditView->ShowCursor();
             pModulWindow->GetBreakPointWindow().GetCurYOffset() = aStartDocPos.Y();
+            pModulWindow->GetLineNumberWindow().GetCurYOffset() = aStartDocPos.Y();
         }
         InitScrollBars();
         if ( nVisY != pEditView->GetStartDocPos().Y() )
@@ -574,6 +575,7 @@ void EditorWindow::CreateEditEngine()
     pEditView->SetStartDocPos( Point( 0, 0 ) );
     pEditView->SetSelection( TextSelection() );
     pModulWindow->GetBreakPointWindow().GetCurYOffset() = 0;
+    pModulWindow->GetLineNumberWindow().GetCurYOffset() = 0;
     pEditEngine->SetUpdateMode( sal_True );
     Update();   // has only been invalidated at UpdateMode = sal_True
 
@@ -661,7 +663,9 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             pModulWindow->GetEditVScrollBar().SetThumbPos( pEditView->GetStartDocPos().Y() );
             pModulWindow->GetBreakPointWindow().DoScroll
                 ( 0, pModulWindow->GetBreakPointWindow().GetCurYOffset() - pEditView->GetStartDocPos().Y() );
-            pModulWindow->GetLineNumberWindow().Invalidate();
+            pModulWindow->GetLineNumberWindow().DoScroll
+                ( 0, pModulWindow->GetLineNumberWindow().GetCurYOffset() - pEditView->GetStartDocPos().Y() );
+            pModulWindow->Invalidate();
         }
         else if( rTextHint.GetId() == TEXT_HINT_TEXTHEIGHTCHANGED )
         {
@@ -1681,6 +1685,7 @@ IMPL_LINK( ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
         long nDiff = aEdtWindow.GetEditView()->GetStartDocPos().Y() - pCurScrollBar->GetThumbPos();
         aEdtWindow.GetEditView()->Scroll( 0, nDiff );
         aBrkWindow.DoScroll( 0, nDiff );
+        aLineNumberWindow.DoScroll(0, nDiff);
         aEdtWindow.GetEditView()->ShowCursor( sal_False, sal_True );
         pCurScrollBar->SetThumbPos( aEdtWindow.GetEditView()->GetStartDocPos().Y() );
     }
