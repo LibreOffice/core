@@ -129,6 +129,7 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
+    mpQueryParam(new ScQueryParam),
     sDatabaseRangeName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)),
     aSortSequence(),
     eOrientation(table::TableOrientation_ROWS),
@@ -141,7 +142,6 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     bKeepFormats(false),
     bMoveCells(false),
     bStripData(false),
-    bContainsHeader(true),
     bAutoFilter(false),
     bSubTotalsBindFormatsToContent(false),
     bSubTotalsIsCaseSensitive(false),
@@ -202,7 +202,7 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
             break;
             case XML_TOK_DATABASE_RANGE_ATTR_CONTAINS_HEADER :
             {
-                bContainsHeader = IsXMLToken(sValue, XML_TRUE);
+                mpQueryParam->bHasHeader = IsXMLToken(sValue, XML_TRUE);
             }
             break;
             case XML_TOK_DATABASE_RANGE_ATTR_DISPLAY_FILTER_BUTTONS :
@@ -343,31 +343,34 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
     }
 
     {
-        ScQueryParam aParam;
-        pData->GetQueryParam(aParam);
-        aParam.bByRow = (eOrientation == table::TableOrientation_ROWS);
-        aParam.bHasHeader = bContainsHeader;
-        aParam.bInplace = !bFilterCopyOutputData;
-        aParam.bCaseSens = bFilterIsCaseSensitive;
-        aParam.bDuplicate = !bFilterSkipDuplicates;
-        aParam.bRegExp = bFilterUseRegularExpressions;
-        aParam.nDestTab = aFilterOutputPosition.Sheet;
-        aParam.nDestCol = aFilterOutputPosition.Column;
-        aParam.nDestRow = aFilterOutputPosition.Row;
-        ScFilterDescriptorBase::fillQueryParam(aParam, pDoc, aFilterFields);
+        mpQueryParam->nTab = aRange.aStart.Tab();
+        mpQueryParam->nCol1 = aRange.aStart.Col();
+        mpQueryParam->nRow1 = aRange.aStart.Row();
+        mpQueryParam->nCol2 = aRange.aEnd.Col();
+        mpQueryParam->nRow2 = aRange.aEnd.Row();
+
+        mpQueryParam->bByRow = (eOrientation == table::TableOrientation_ROWS);
+        mpQueryParam->bInplace = !bFilterCopyOutputData;
+        mpQueryParam->bCaseSens = bFilterIsCaseSensitive;
+        mpQueryParam->bDuplicate = !bFilterSkipDuplicates;
+        mpQueryParam->bRegExp = bFilterUseRegularExpressions;
+        mpQueryParam->nDestTab = aFilterOutputPosition.Sheet;
+        mpQueryParam->nDestCol = aFilterOutputPosition.Column;
+        mpQueryParam->nDestRow = aFilterOutputPosition.Row;
+        ScFilterDescriptorBase::fillQueryParam(*mpQueryParam, pDoc, aFilterFields);
 
         // Convert from relative to absolute column IDs for the fields. Calc
         // core expects the field positions to be absolute column IDs.
-        SCCOLROW nStartPos = aParam.bByRow ? aRange.aStart.Col() : aRange.aStart.Row();
-        for (SCSIZE i = 0; i < aParam.GetEntryCount(); ++i)
+        SCCOLROW nStartPos = mpQueryParam->bByRow ? aRange.aStart.Col() : aRange.aStart.Row();
+        for (SCSIZE i = 0; i < mpQueryParam->GetEntryCount(); ++i)
         {
-            ScQueryEntry& rEntry = aParam.GetEntry(i);
+            ScQueryEntry& rEntry = mpQueryParam->GetEntry(i);
             if (!rEntry.bDoQuery)
                 break;
             rEntry.nField += nStartPos;
         }
 
-        pData->SetQueryParam(aParam);
+        pData->SetQueryParam(*mpQueryParam);
     }
 
     if (bFilterConditionSourceRange)

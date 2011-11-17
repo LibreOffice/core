@@ -41,7 +41,10 @@
 
 #include "dbdata.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 class ScDBData;
+struct ScQueryParam;
 class ScXMLImport;
 
 class ScXMLDatabaseRangesContext : public SvXMLImportContext
@@ -74,6 +77,7 @@ struct ScSubTotalRule
 
 class ScXMLDatabaseRangeContext : public SvXMLImportContext
 {
+    boost::scoped_ptr<ScQueryParam> mpQueryParam;
     rtl::OUString   sDatabaseRangeName;
     rtl::OUString   sConnectionRessource;
     rtl::OUString   sRangeAddress;
@@ -96,7 +100,6 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     bool            bKeepFormats;
     bool            bMoveCells;
     bool            bStripData;
-    bool            bContainsHeader;
     bool            bAutoFilter;
     bool            bSubTotalsBindFormatsToContent;
     bool            bSubTotalsIsCaseSensitive;
