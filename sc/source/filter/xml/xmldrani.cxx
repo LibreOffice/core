@@ -132,7 +132,6 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     mpQueryParam(new ScQueryParam),
     sDatabaseRangeName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)),
     aSortSequence(),
-    eOrientation(table::TableOrientation_ROWS),
     nRefresh(0),
     nSubTotalsUserListIndex(0),
     bContainsSort(false),
@@ -196,8 +195,7 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
             break;
             case XML_TOK_DATABASE_RANGE_ATTR_ORIENTATION :
             {
-                if (IsXMLToken(sValue, XML_COLUMN))
-                    eOrientation = table::TableOrientation_COLUMNS;
+                mpQueryParam->bByRow = !IsXMLToken(sValue, XML_COLUMN);
             }
             break;
             case XML_TOK_DATABASE_RANGE_ATTR_CONTAINS_HEADER :
@@ -349,7 +347,6 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
         mpQueryParam->nCol2 = aRange.aEnd.Col();
         mpQueryParam->nRow2 = aRange.aEnd.Row();
 
-        mpQueryParam->bByRow = (eOrientation == table::TableOrientation_ROWS);
         mpQueryParam->bInplace = !bFilterCopyOutputData;
         mpQueryParam->bCaseSens = bFilterIsCaseSensitive;
         mpQueryParam->bDuplicate = !bFilterSkipDuplicates;
@@ -386,7 +383,9 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
         aSortSequence.realloc(nOldSize + 1);
         beans::PropertyValue aProperty;
         aProperty.Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ORIENT));
-        aProperty.Value <<= eOrientation;
+        table::TableOrientation eOrient = mpQueryParam->bByRow ?
+            table::TableOrientation_ROWS : table::TableOrientation_COLUMNS;
+        aProperty.Value <<= eOrient;
         aSortSequence[nOldSize] = aProperty;
         ScSortParam aParam;
         ScSortDescriptor::FillSortParam(aParam, aSortSequence);

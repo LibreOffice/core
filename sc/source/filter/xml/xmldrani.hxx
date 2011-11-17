@@ -89,7 +89,6 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     com::sun::star::table::CellAddress aFilterOutputPosition;
     com::sun::star::table::CellRangeAddress aFilterConditionSourceRangeAddress;
     com::sun::star::sheet::DataImportMode nSourceType;
-    com::sun::star::table::TableOrientation eOrientation;
     sal_Int32       nRefresh;
     sal_Int16       nSubTotalsUserListIndex;
     sal_Int16       nSubTotalRuleGroupFieldNumber;
