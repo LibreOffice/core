@@ -49,7 +49,9 @@ DEF1NAME = $(SHL1TARGET)
 .INCLUDE: target.mk
 .INCLUDE: installationtest.mk
 
+.IF "$(depend)" == ""
 ALLTAR : cpptest
+.END
 
 cpptest : $(SHL1TARGETN)
 

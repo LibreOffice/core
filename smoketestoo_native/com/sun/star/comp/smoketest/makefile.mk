@@ -62,6 +62,7 @@ ZIP1DEPS=$(MISC)/$(TARGET)/$(JARTARGET)\
 
 .INCLUDE :  target.mk
 
+.IF "$(depend)" == ""
 $(MISC)/$(TARGET)/META-INF:
     @-$(MKDIRHIER) $(@)
 
@@ -81,6 +82,7 @@ $(JAVACLASSFILES) .UPDATEALL: $(MISC)/$(TARGET)/TestExtension.rdb
 
 $(MISC)/$(TARGET)/$(JARTARGET) : $(JARTARGETN)
     $(COMMAND_ECHO)$(COPY) $< $@
+.END
 
 .ELSE
 @all:
