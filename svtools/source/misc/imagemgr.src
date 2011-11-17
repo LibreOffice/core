@@ -40,7 +40,6 @@
     IMG_MATH ;              \
     IMG_WRITER ;            \
     IMG_WRITERTEMPLATE ;    \
-    IMG_MACROLIB ;          \
     IMG_GLOBAL_DOC ;        \
     IMG_DRAW ;              \
     IMG_DRAWTEMPLATE ;      \
@@ -94,7 +93,6 @@
     IMG_WRITER ; \
     IMG_WRITERTEMPLATE ; \
     /* svx */ \
-    IMG_MACROLIB ; \
     IMG_NEWFROMTEMPLATE ;
 
 ImageList RID_SVTOOLS_IMAGELIST_BIG

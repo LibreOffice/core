@@ -262,7 +262,6 @@
 #define SV_ICON_ID_DATABASE                    14
 #define SV_ICON_ID_FORMULA                     15
 #define SV_ICON_ID_TEMPLATE                    16
-#define SV_ICON_ID_MACRO                       17
 #define SV_ICON_ID_PRINTERADMIN               501
 
 #define HID_PRINTDLG                        HID_VCL_START

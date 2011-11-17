@@ -61,7 +61,6 @@
 #define IMG_NETWORKDEV                  (IMAGELIST_START + 91)
 #define IMG_TABLE                       (IMAGELIST_START + 112)
 #define IMG_FOLDER                      (IMAGELIST_START + 113)
-#define IMG_MACROLIB                    (IMAGELIST_START + 140)
 #define IMG_DXF                         (IMAGELIST_START + 141)
 #define IMG_MET                         (IMAGELIST_START + 142)
 #define IMG_PNG                         (IMAGELIST_START + 143)
