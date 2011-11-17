@@ -2249,22 +2249,13 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             installer::windows::msiglobal::rename_msi_database_in_installset($defaultlanguage, $installdir, $allvariableshashref);
 
             if ( $allvariableshashref->{'ADDLANGUAGEINDATABASENAME'} ) { installer::windows::msiglobal::add_language_to_msi_database($defaultlanguage, $installdir, $allvariableshashref); }
-
-            installer::logger::print_message( "... generating setup.ini ...\n" );
-
-            if ( ! $allvariableshashref->{'NOLOADERREQUIRED'} ) { installer::windows::msiglobal::create_setup_ini($languagesarrayref, $defaultlanguage, $installdir, $allvariableshashref); }
         }
 
         # Analyzing the ScpActions and copying the files into the installation set
-        # At least the loader.exe
 
         installer::logger::print_message( "... copying files into installation set ...\n" );
 
         installer::worker::put_scpactions_into_installset($installdir);
-
-        # ... copying the setup.exe
-
-        installer::windows::msiglobal::copy_windows_installer_files_into_installset($installdir, $includepatharrayref, $allvariableshashref);
 
         # ... copying MergeModules into installation set
 

@@ -1334,61 +1334,6 @@ sub include_windows_lineends
     }
 }
 
-##########################################################################
-# Generation the file setup.ini, that is used by the loader setup.exe.
-##########################################################################
-
-sub create_setup_ini
-{
-    my ($languagesarray, $defaultlanguage, $installdir, $allvariableshashref) = @_;
-
-    installer::logger::include_header_into_logfile("Creating setup.ini");
-
-    my $setupinifilename = $installdir . $installer::globals::separator . "setup.ini";
-
-    my @setupinifile = ();
-    my $setupinifile = \@setupinifile;
-
-    my $line = "\[setup\]\n";
-    push(@setupinifile, $line);
-
-    put_databasename_into_setupini($setupinifile, $allvariableshashref);
-    put_msiversion_into_setupini($setupinifile);
-    put_productname_into_setupini($setupinifile, $allvariableshashref);
-    put_productcode_into_setupini($setupinifile);
-    put_productversion_into_setupini($setupinifile);
-    put_upgradekey_into_setupini($setupinifile);
-
-    $line = "\[languages\]\n";
-    push(@setupinifile, $line);
-
-    put_languagecount_into_setupini($setupinifile, $languagesarray);
-    put_defaultlanguage_into_setupini($setupinifile, $defaultlanguage);
-
-    if ( $#{$languagesarray} > 0 )  # writing the transforms information
-    {
-        my $counter = 1;
-
-        for ( my $i = 0; $i <= $#{$languagesarray}; $i++ )
-        {
-            if ( ${$languagesarray}[$i] eq $defaultlanguage ) { next; }
-
-            put_transforms_into_setupini($setupinifile, ${$languagesarray}[$i], $counter);
-            $counter++;
-        }
-    }
-
-    if ( $installer::globals::iswin && $installer::globals::plat =~ /cygwin/i)      # Windows line ends only for Cygwin
-    {
-        include_windows_lineends($setupinifile);
-    }
-
-    installer::files::save_file($setupinifilename, $setupinifile);
-
-    $infoline = "Generated file $setupinifilename !\n";
-    push( @installer::globals::logfileinfo, $infoline);
-}
-
 #################################################################
 # Copying the files defined as ScpActions into the
 # installation set.
@@ -1417,39 +1362,6 @@ sub copy_scpactions_into_installset
 
             installer::systemactions::copy_one_file($sourcefile, $destfile);
         }
-    }
-}
-
-#################################################################
-# Copying the files for the Windows installer into the
-# installation set (setup.exe).
-#################################################################
-
-sub copy_windows_installer_files_into_installset
-{
-    my ($installdir, $includepatharrayref, $allvariables) = @_;
-
-    installer::logger::include_header_into_logfile("Copying Windows installer files into installation set");
-
-    @copyfile = ();
-    push(@copyfile, "loader2.exe");
-
-    if ( $allvariables->{'NOLOADERREQUIRED'} ) { @copyfile = (); }
-
-    for ( my $i = 0; $i <= $#copyfile; $i++ )
-    {
-        my $filename = $copyfile[$i];
-        my $sourcefileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 1);
-
-        if ( ! -f $$sourcefileref ) { installer::exiter::exit_program("ERROR: msi file not found: $$sourcefileref !", "copy_windows_installer_files_into_installset"); }
-
-        my $destfile;
-        if ( $copyfile[$i] eq "loader2.exe" ) { $destfile = "setup.exe"; }  # renaming the loader
-        else { $destfile = $copyfile[$i]; }
-
-        $destfile = $installdir . $installer::globals::separator . $destfile;
-
-        installer::systemactions::copy_one_file($$sourcefileref, $destfile);
     }
 }
 
