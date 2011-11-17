@@ -31,11 +31,14 @@ all:
 #
 # Then libs and UNO components that the tests from other modules need.
 #
-	-for F in libuno_cppu \
-		  libuno_salhelpergcc3 \
-	          libuno_cppuhelpergcc3 \
-		  libbootstrap.uno; do \
-	    test -f $(OUTDIR)/lib/$${F}.so && cp $(OUTDIR)/lib/$${F}.so $(SODEST); \
+	-for F in uno_cppu \
+		  uno_salhelpergcc3 \
+	          uno_cppuhelpergcc3 \
+		  reg \
+		  store \
+		  xmlreader \
+		  bootstrap.uno; do \
+	    test -f $(OUTDIR)/lib/lib$${F}.so && cp $(OUTDIR)/lib/lib$${F}.so $(SODEST); \
 	done
 #
 # Then the shared GNU C++ library
