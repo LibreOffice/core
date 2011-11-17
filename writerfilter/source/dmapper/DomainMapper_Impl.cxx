@@ -2569,9 +2569,10 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_FILENAME:
                     {
                         sal_Int32 nNumberingTypeIndex = pContext->GetCommand().indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\\p")));
-                        xFieldProperties->setPropertyValue(
-                                rPropNameSupplier.GetName(PROP_FILE_FORMAT),
-                                uno::makeAny( nNumberingTypeIndex > 0 ? text::FilenameDisplayFormat::FULL : text::FilenameDisplayFormat::NAME ));
+                        if (xFieldProperties.is())
+                            xFieldProperties->setPropertyValue(
+                                    rPropNameSupplier.GetName(PROP_FILE_FORMAT),
+                                    uno::makeAny( nNumberingTypeIndex > 0 ? text::FilenameDisplayFormat::FULL : text::FilenameDisplayFormat::NAME ));
                     }
                     break;
                     case FIELD_FILESIZE     : break;
