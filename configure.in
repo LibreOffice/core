@@ -361,7 +361,7 @@ AC_ARG_ENABLE(ext-pdfimport,
 
 AC_ARG_ENABLE(ext-postgresql-sdbc,
     AS_HELP_STRING([--enable-ext-postgresql-sdbc],
-        [Enable the build of the PostgreSQL sdbc extension.])
+        [Enable the build of the PostgreSQL-SDBC extension.])
 )
 
 AC_ARG_ENABLE(ext-presenter-console,
