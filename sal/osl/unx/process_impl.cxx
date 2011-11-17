@@ -130,8 +130,16 @@ oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
 {
     oslProcessError result = osl_Process_E_NotFound;
 
+#ifdef ANDROID
+    /* On Android we want the address of the "lo_main()" function, as
+     * that is what corresponds to "main()" in LibreOffice programs on
+     * normal desktop OSes.
+     */
+    void * addr = dlsym (RTLD_DEFAULT, "lo_main");
+#else
     /* Determine address of "main()" function. */
     void * addr = dlsym (RTLD_DEFAULT, "main");
+#endif
     if (addr != 0)
     {
         /* Determine module URL. */
