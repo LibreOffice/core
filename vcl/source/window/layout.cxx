@@ -199,6 +199,36 @@ void Box::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
     setAllocation(rAllocation);
 }
 
+#define DEFAULT_CHILD_INTERNAL_PAD_X 4
+#define DEFAULT_CHILD_INTERNAL_PAD_Y 0
+
+Size ButtonBox::calculateRequisition() const
+{
+    Size aSize = Box::calculateRequisition();
+
+    rtl::OString sChildInternalPadX(RTL_CONSTASCII_STRINGPARAM("child-internal-pad-x"));
+    sal_Int32 nChildInternalPadX = getWidgetStyleProperty<sal_Int32>(sChildInternalPadX, DEFAULT_CHILD_INTERNAL_PAD_X);
+    rtl::OString sChildInternalPadY(RTL_CONSTASCII_STRINGPARAM("child-internal-pad-y"));
+    sal_Int32 nChildInternalPadY = getWidgetStyleProperty<sal_Int32>(sChildInternalPadY, DEFAULT_CHILD_INTERNAL_PAD_Y);
+    Size aChildPad(nChildInternalPadX, nChildInternalPadY);
+
+    sal_uInt16 nChildren = GetChildCount();
+    for (sal_uInt16 i = 0; i < nChildren; ++i)
+    {
+        Window *pChild = GetChild(i);
+        if (!pChild->IsVisible())
+            continue;
+        long nPrimaryDimension = getPrimaryDimension(aSize);
+        setPrimaryDimension(aSize, nPrimaryDimension + getPrimaryDimension(aChildPad)*2);
+    }
+
+    long nSecondaryDimension = getSecondaryDimension(aSize);
+    setSecondaryDimension(aSize, nSecondaryDimension + getSecondaryDimension(aChildPad)*2);
+
+    return aSize;
+}
+
+
 void ButtonBox::setAllocation(const Size &rAllocation)
 {
     sal_uInt16 nChildren = GetChildCount();
@@ -217,6 +247,12 @@ void ButtonBox::setAllocation(const Size &rAllocation)
     if (!nVisibleChildren)
         return;
 
+    rtl::OString sChildInternalPadX(RTL_CONSTASCII_STRINGPARAM("child-internal-pad-x"));
+    sal_Int32 nChildInternalPadX = getWidgetStyleProperty<sal_Int32>(sChildInternalPadX, DEFAULT_CHILD_INTERNAL_PAD_X);
+    rtl::OString sChildInternalPadY(RTL_CONSTASCII_STRINGPARAM("child-internal-pad-y"));
+    sal_Int32 nChildInternalPadY = getWidgetStyleProperty<sal_Int32>(sChildInternalPadY, DEFAULT_CHILD_INTERNAL_PAD_Y);
+    Size aChildPad(nChildInternalPadX, nChildInternalPadY);
+
     Size aSize = rAllocation;
 
     long nAllocPrimaryDimension = getPrimaryDimension(rAllocation);
@@ -224,7 +260,9 @@ void ButtonBox::setAllocation(const Size &rAllocation)
     long nHomogeneousDimension = ((getPrimaryDimension(aRequisition) -
         (nVisibleChildren - 1) * m_nSpacing)) / nVisibleChildren;
 
-    Point aPos(0, 0);
+    nHomogeneousDimension = nHomogeneousDimension - getPrimaryDimension(aChildPad) * 2;
+
+    Point aPos(nChildInternalPadX, nChildInternalPadY);
     long nPrimaryCoordinate = getPrimaryCoordinate(aPos);
     setPrimaryCoordinate(aPos, nPrimaryCoordinate + nAllocPrimaryDimension
         - getPrimaryDimension(aRequisition));
@@ -242,7 +280,8 @@ void ButtonBox::setAllocation(const Size &rAllocation)
         pChild->SetPosSizePixel(aPos, aChildSize);
 
         nPrimaryCoordinate = getPrimaryCoordinate(aPos);
-        setPrimaryCoordinate(aPos, nPrimaryCoordinate + nHomogeneousDimension + m_nSpacing);
+        setPrimaryCoordinate(aPos, nPrimaryCoordinate + nHomogeneousDimension + m_nSpacing +
+            getPrimaryDimension(aChildPad) * 2);
     }
 }
 

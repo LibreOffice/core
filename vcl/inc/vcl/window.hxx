@@ -1085,6 +1085,13 @@ public:
         return getChildProperty<sal_Bool>(rString, rValue);
     }
 
+    //does nothing yet
+    template <typename T> T getWidgetStyleProperty(const rtl::OString &, const T &rDefaultValue = T()) const
+    {
+        T nValue = rDefaultValue;
+        return nValue;
+    }
+
     //-------------------------------------
     //  Native Widget Rendering functions
     //-------------------------------------

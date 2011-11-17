@@ -55,7 +55,7 @@ public:
     using Window::SetPosSizePixel;
     virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
 protected:
-    Size calculateRequisition() const;
+    virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);
 
     virtual long getPrimaryDimension(const Size &rSize) const = 0;
@@ -160,6 +160,7 @@ public:
     {
     }
 protected:
+    virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);
 };
 
