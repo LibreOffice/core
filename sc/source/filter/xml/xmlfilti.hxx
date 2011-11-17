@@ -42,9 +42,11 @@
 #include "xmldpimp.hxx"
 
 class ScXMLImport;
+struct ScQueryParam;
 
 class ScXMLFilterContext : public SvXMLImportContext
 {
+    ScQueryParam& mrQueryParam;
     ScXMLDatabaseRangeContext* pDatabaseRangeContext;
 
     com::sun::star::uno::Sequence <com::sun::star::sheet::TableFilterField2> aFilterFields;
@@ -54,7 +56,6 @@ class ScXMLFilterContext : public SvXMLImportContext
     bool        bSkipDuplicates;
     bool        bCopyOutputData;
     bool        bUseRegularExpressions;
-    bool        bIsCaseSensitive;
     bool        bEnabledUserList;
     bool        bConnectionOr;
     bool        bNextConnectionOr;
@@ -69,8 +70,9 @@ public:
     ScXMLFilterContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                        ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
+                            ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScQueryParam& rParam,
+                        ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
     virtual ~ScXMLFilterContext();
 
@@ -81,7 +83,7 @@ public:
 
     virtual void EndElement();
 
-    void SetIsCaseSensitive(const bool bTemp) { bIsCaseSensitive = bTemp; }
+    void SetCaseSensitive(const bool b);
     void SetUseRegularExpressions(const bool bTemp) { if (!bUseRegularExpressions) bUseRegularExpressions = bTemp;}
     void OpenConnection(const bool bTemp) { bool* pTemp = new bool; *pTemp = bConnectionOr;
                             bConnectionOr = bNextConnectionOr; bNextConnectionOr = bTemp;

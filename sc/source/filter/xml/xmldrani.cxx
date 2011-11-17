@@ -149,7 +149,6 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     bSubTotalsEnabledUserList(false),
     bSubTotalsAscending(true),
     bFilterCopyOutputData(false),
-    bFilterIsCaseSensitive(false),
     bFilterSkipDuplicates(false),
     bFilterUseRegularExpressions(false),
     bFilterConditionSourceRange(false),
@@ -263,8 +262,8 @@ SvXMLImportContext *ScXMLDatabaseRangeContext::CreateChildContext( sal_uInt16 nP
         break;
         case XML_TOK_FILTER :
         {
-            pContext = new ScXMLFilterContext( GetScImport(), nPrefix,
-                                                          rLName, xAttrList, this);
+            pContext = new ScXMLFilterContext(
+                GetScImport(), nPrefix, rLName, xAttrList, *mpQueryParam, this);
         }
         break;
         case XML_TOK_SORT :
@@ -348,7 +347,6 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
         mpQueryParam->nRow2 = aRange.aEnd.Row();
 
         mpQueryParam->bInplace = !bFilterCopyOutputData;
-        mpQueryParam->bCaseSens = bFilterIsCaseSensitive;
         mpQueryParam->bDuplicate = !bFilterSkipDuplicates;
         mpQueryParam->bRegExp = bFilterUseRegularExpressions;
         mpQueryParam->nDestTab = aFilterOutputPosition.Sheet;

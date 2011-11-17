@@ -53,12 +53,13 @@ using ::com::sun::star::xml::sax::XAttributeList;
 //------------------------------------------------------------------
 
 ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
-                                      const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                                        sal_uInt16 nPrfx,
+                                        const rtl::OUString& rLName,
+                                        const Reference<XAttributeList>& xAttrList,
+                                        ScQueryParam& rParam,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
+    mrQueryParam(rParam),
     pDatabaseRangeContext(pTempDatabaseRangeContext),
     aFilterFields(),
     bSkipDuplicates(false),
@@ -164,11 +165,15 @@ void ScXMLFilterContext::EndElement()
     }
     else
         pDatabaseRangeContext->SetFilterCopyOutputData(false);
-    pDatabaseRangeContext->SetFilterIsCaseSensitive(bIsCaseSensitive);
     pDatabaseRangeContext->SetFilterSkipDuplicates(bSkipDuplicates);
     pDatabaseRangeContext->SetFilterFields(aFilterFields);
     if (bConditionSourceRange)
         pDatabaseRangeContext->SetFilterConditionSourceRangeAddress(aConditionSourceRangeAddress);
+}
+
+void ScXMLFilterContext::SetCaseSensitive(bool b)
+{
+    mrQueryParam.bCaseSens = b;
 }
 
 ScXMLAndContext::ScXMLAndContext( ScXMLImport& rImport,
@@ -410,7 +415,7 @@ void ScXMLConditionContext::EndElement()
         aFilterField.Connection = sheet::FilterConnection_OR;
     else
         aFilterField.Connection = sheet::FilterConnection_AND;
-    pFilterContext->SetIsCaseSensitive(bIsCaseSensitive);
+    pFilterContext->SetCaseSensitive(bIsCaseSensitive);
     bool bUseRegularExpressions;
     getOperatorXML(sOperator, aFilterField.Operator, bUseRegularExpressions);
     pFilterContext->SetUseRegularExpressions(bUseRegularExpressions);

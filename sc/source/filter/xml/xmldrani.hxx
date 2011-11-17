@@ -107,7 +107,6 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     bool            bSubTotalsEnabledUserList;
     bool            bSubTotalsAscending;
     bool            bFilterCopyOutputData;
-    bool            bFilterIsCaseSensitive;
     bool            bFilterSkipDuplicates;
     bool            bFilterUseRegularExpressions;
     bool            bFilterConditionSourceRange;
@@ -149,7 +148,6 @@ public:
     void AddSubTotalRule(const ScSubTotalRule& rRule) { aSubTotalRules.push_back(rRule); }
     void SetSortSequence(const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& aTempSortSequence) { aSortSequence = aTempSortSequence; }
     void SetFilterCopyOutputData(const bool bTemp) { bFilterCopyOutputData = bTemp; }
-    void SetFilterIsCaseSensitive(const bool bTemp) { bFilterIsCaseSensitive = bTemp; }
     void SetFilterSkipDuplicates(const bool bTemp) { bFilterSkipDuplicates = bTemp; }
     void SetFilterUseRegularExpressions(const bool bTemp) { bFilterUseRegularExpressions = bTemp; }
     void SetFilterFields(const com::sun::star::uno::Sequence <com::sun::star::sheet::TableFilterField2>& aTemp) { aFilterFields = aTemp; }
