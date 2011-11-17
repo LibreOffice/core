@@ -2556,6 +2556,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/i18n,\
 	BreakType \
 	CTLScriptType \
 	Calendar \
+	Calendar2 \
 	CalendarDisplayCode \
 	CalendarDisplayIndex \
 	CalendarFieldIndex \
@@ -2603,6 +2604,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/i18n,\
 	WordType \
 	XBreakIterator \
 	XCalendar \
+	XCalendar3 \
 	XCharacterClassification \
 	XCollator \
 	XExtendedCalendar \
@@ -2615,6 +2617,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/i18n,\
 	XInputSequenceChecker \
 	XLocaleData \
 	XLocaleData2 \
+	XLocaleData3 \
 	XNativeNumberSupplier \
 	XNumberFormatCode \
 	XOrdinalSuffix \

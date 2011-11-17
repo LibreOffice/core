@@ -48,40 +48,50 @@ module com { module sun { module star { module i18n {
 published constants CalendarDisplayCode
 {
     /// Day of month, one or two digits, no leading zero.
-    const long SHORT_DAY            = 1;
+    const long SHORT_DAY                 = 1;
     /// Day of month, two digits, with leading zero.
-    const long LONG_DAY             = 2;
+    const long LONG_DAY                  = 2;
     /// Day of week, abbreviated name.
-    const long SHORT_DAY_NAME       = 3;
+    const long SHORT_DAY_NAME            = 3;
     /// Day of week, full name.
-    const long LONG_DAY_NAME        = 4;
+    const long LONG_DAY_NAME             = 4;
 
     /// Month of year, one or two digits, no leading zero.
-    const long SHORT_MONTH          = 5;
+    const long SHORT_MONTH               = 5;
     /// Month of year, with leading zero.
-    const long LONG_MONTH           = 6;
+    const long LONG_MONTH                = 6;
     /// Full month name.
-    const long SHORT_MONTH_NAME     = 7;
+    const long SHORT_MONTH_NAME          = 7;
     /// Abbreviated month name.
-    const long LONG_MONTH_NAME      = 8;
+    const long LONG_MONTH_NAME           = 8;
 
     /// Year, two digits.
-    const long SHORT_YEAR           = 9;
+    const long SHORT_YEAR                = 9;
     /// Year, four digits.
-    const long LONG_YEAR            = 10;
+    const long LONG_YEAR                 = 10;
     /// Full era name, for example, "Before Christ" or "Anno Dominus".
-    const long SHORT_ERA            = 11;
+    const long SHORT_ERA                 = 11;
     /// Abbreviated era name, for example, BC or AD.
-    const long LONG_ERA             = 12;
+    const long LONG_ERA                  = 12;
     /// Combined short year and era, order depends on locale/calendar.
-    const long SHORT_YEAR_AND_ERA   = 13;
+    const long SHORT_YEAR_AND_ERA        = 13;
     /// Combined full year and era, order depends on locale/calendar.
-    const long LONG_YEAR_AND_ERA    = 14;
+    const long LONG_YEAR_AND_ERA         = 14;
 
     /// Short quarter, for example, "Q1"
-    const long SHORT_QUARTER        = 15;
+    const long SHORT_QUARTER             = 15;
     /// Long quarter, for example, "1st quarter"
-    const long LONG_QUARTER         = 16;
+    const long LONG_QUARTER              = 16;
+
+	/** Abbreviated possessive genitive case month name.
+        @since LibreOffice 3.5
+     */
+    const long SHORT_GENITIVE_MONTH_NAME = 17;
+
+	/** Full possessive genitive case month name.
+        @since LibreOffice 3.5
+     */
+    const long LONG_GENITIVE_MONTH_NAME  = 18;
 };
 
 //=============================================================================

@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/i18n/XCalendar.idl>
 #include <com/sun/star/i18n/XExtendedCalendar.idl>
+#include <com/sun/star/i18n/XCalendar3.idl>
 
 //============================================================================
 
@@ -45,6 +46,7 @@ published service LocaleCalendar
     interface com::sun::star::lang::XServiceInfo;
 
     [optional] interface com::sun::star::i18n::XExtendedCalendar;
+    [optional] interface com::sun::star::i18n::XCalendar3;
 };
 
 //============================================================================

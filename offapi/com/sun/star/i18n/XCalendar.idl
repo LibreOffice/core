@@ -197,6 +197,10 @@ published interface XCalendar : com::sun::star::uno::XInterface
                     <dd>a number used as an offset into the
                     corresponding <member>Calendar:Eras</member>
                     sequence</dd>
+                <dt><const>CalendarDisplayIndex::GENITIVE_MONTH</const></dt>
+                    <dd>a number used as an offset into the
+                    corresponding <member>Calendar2:GenitiveMonth</member>
+                    sequence</dd>
             </dl>
 
             <p> The value should be obtained by a previous call to
