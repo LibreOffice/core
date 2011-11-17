@@ -39,7 +39,6 @@
 #include <toolkit/awt/vclxcontainer.hxx>
 #include <toolkit/awt/vclxtopwindow.hxx>
 #include <toolkit/awt/vclxgraphics.hxx>
-#include <awt/vclxtabcontrol.hxx>
 
 #include "toolkit/dllapi.h"
 #include <vcl/svapp.hxx>
