@@ -817,10 +817,10 @@ String SCSTR_WARN_ME_IN_FUTURE_CHECK
 
 String SCSTR_DDEDOC_NOT_LOADED
 {
-    Text [ en-US ] = "The following DDE source could not be updated possibly because the source document was not open.  Please launch the source document and try again." ;
+    Text [ en-US ] = "The following DDE source could not be updated possibly because the source document was not open. Please launch the source document and try again." ;
 };
 
 String SCSTR_EXTDOC_NOT_LOADED
 {
-    Text [ en-US ] = "The following external file could not be loaded.  Data linked from this file did not get updated." ;
+    Text [ en-US ] = "The following external file could not be loaded. Data linked from this file did not get updated." ;
 };

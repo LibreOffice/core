@@ -42,7 +42,7 @@ InfoBox MSG_ILLEGAL_PAGENUM
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "Page numbers cannot be applied to the current page.  Even numbers can be used on left pages, odd numbers on right pages." ;
+    Message [ en-US ] = "Page numbers cannot be applied to the current page. Even numbers can be used on left pages, odd numbers on right pages." ;
 };
 
 
