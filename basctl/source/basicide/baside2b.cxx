@@ -29,43 +29,37 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
 
-#include <vector>
 #define _BASIC_TEXTPORTIONS
-#include <basic/sbdef.hxx>
-#include <ide_pch.hxx>
 
+#include "helpid.hrc"
+#include "baside2.hrc"
 
-#include <tools/urlobj.hxx>
-#include <unotools/charclass.hxx>
-#include <svl/urihelper.hxx>
-#include <basic/sbx.hxx>
-#include <vcl/sound.hxx>
-#include <svtools/xtextedt.hxx>
-#include <svtools/txtattr.hxx>
-#include <svtools/textwindowpeer.hxx>
+#include "baside2.hxx"
+#include "basobj.hxx"
+#include "brkdlg.hxx"
+#include "iderdll.hxx"
+#include "iderdll2.hxx"
+#include "objdlg.hxx"
+
+#include <basic/sbmeth.hxx>
 #include <basic/sbuno.hxx>
-
-#include <helpid.hrc>
-#include <baside2.hrc>
-#include <baside2.hxx>
-#include <brkdlg.hxx>
-#include <objdlg.hxx>
-#include <basobj.hxx>
-#include <iderdll.hxx>
-#include <iderdll2.hxx>
-#include <vcl/taskpanelist.hxx>
-#include <vcl/help.hxx>
-
-#include <unotools/sourceviewconfig.hxx>
-
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-
+#include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/sound.hxx>
+#include <svl/urihelper.hxx>
+#include <svtools/xtextedt.hxx>
+#include <svtools/txtattr.hxx>
+#include <svtools/textwindowpeer.hxx>
+#include <vcl/taskpanelist.hxx>
+#include <vcl/help.hxx>
+#include <unotools/sourceviewconfig.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-
 
 long nVirtToolBoxHeight;    // inited in WatchWindow, used in Stackwindow
 long nHeaderBarHeight;
