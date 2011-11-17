@@ -29,6 +29,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <sys/stat.h>
 
 #include <unistd.h>
@@ -562,6 +563,53 @@ lo_dlsym(void *handle,
 }
 
 int
+lo_dladdr(void *addr,
+          Dl_info *info)
+{
+    FILE *maps;
+    char line[200];
+    int result;
+
+    result = dladdr(addr, info);
+    if (result != 0)
+        LOGI("dladdr(%p) = { %s:%p, %s:%p ]",
+             addr,
+             info->dli_fname, info->dli_fbase,
+             info->dli_sname ? info->dli_sname : "(none)", info->dli_saddr);
+    else {
+        LOGI("dladdr(%p) = 0", addr);
+        return 0;
+    }
+
+    maps = fopen("/proc/self/maps", "r");
+    if (maps == NULL) {
+        LOGI("lo_dladdr: Could not open /proc/self/maps: %s", strerror(errno));
+        return 0;
+    }
+    while (fgets(line, sizeof(line), maps) != NULL &&
+           line[strlen(line)-1] == '\n') {
+        void *lo, *hi;
+        char file[sizeof(line)];
+        file[0] = '\0';
+        if (sscanf(line, "%x-%x %*s %*x %*x:%*x %*d %[^\n]", &lo, &hi, file) == 3) {
+            /* LOGI("got %p-%p: %s", lo, hi, file); */
+            if (addr >= lo && addr < hi) {
+                if (info->dli_fbase != lo) {
+                    LOGI("lo_dladdr: Base for %s in /proc/self/maps %p doesn't match what dladdr() said", file, lo);
+                    fclose(maps);
+                    return 0;
+                }
+                info->dli_fname = strdup(file);
+                break;
+            }
+        }
+    }
+    fclose(maps);
+
+    return result;
+}
+
+int
 lo_dlcall_argc_argv(void *function,
                     int argc,
                     const char **argv)
@@ -584,27 +632,7 @@ void android_main(struct android_app* state)
 
     lo_main(lo_main_argc, lo_main_argv);
 
-    while (1) {
-        // Read all pending events.
-        int ident;
-        int events;
-        struct android_poll_source* source;
-
-        while ((ident=ALooper_pollAll(-1, NULL, &events,
-                                      (void**)&source)) >= 0) {
-            LOGI("got an event ident=%d", ident);
-
-            // Process this event.
-            if (source != NULL) {
-                source->process(state, source);
-            }
-
-            // Check if we are exiting.
-            if (state->destroyRequested != 0) {
-                return;
-            }
-        }
-    }
+    exit(0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

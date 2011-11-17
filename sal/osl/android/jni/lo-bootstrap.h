@@ -29,6 +29,8 @@
 
 #if defined(ANDROID)
 
+#include <dlfcn.h>
+
 char **lo_dlneeds(const char *library);
 
 void *lo_dlopen(const char *library);
@@ -36,6 +38,9 @@ void *lo_dlopen(const char *library);
 
 void *lo_dlsym(void *handle,
                const char *symbol);
+
+int lo_dladdr(void *addr,
+              Dl_info *info);
 
 int lo_dlcall_argc_argv(void *function,
                         int argc,
