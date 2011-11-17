@@ -1151,6 +1151,22 @@ const SvXMLTokenMap& ScXMLImport::GetFilterAttrTokenMap()
     return *pFilterAttrTokenMap;
 }
 
+const SvXMLTokenMap& ScXMLImport::GetFilterConditionElemTokenMap()
+{
+    if( !pFilterConditionElemTokenMap )
+    {
+        static SvXMLTokenMapEntry aTokenMap[] =
+        {
+            { XML_NAMESPACE_TABLE, XML_FILTER_SET_ITEM, XML_TOK_CONDITION_FILTER_SET_ITEM },
+            XML_TOKEN_MAP_END
+        };
+
+        pFilterConditionElemTokenMap = new SvXMLTokenMap( aTokenMap );
+    }
+
+    return *pFilterConditionElemTokenMap;
+}
+
 const SvXMLTokenMap& ScXMLImport::GetFilterConditionAttrTokenMap()
 {
     if( !pFilterConditionAttrTokenMap )
@@ -1169,6 +1185,22 @@ const SvXMLTokenMap& ScXMLImport::GetFilterConditionAttrTokenMap()
     } // if( !pFilterConditionAttrTokenMap )
 
     return *pFilterConditionAttrTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetFilterSetItemAttrTokenMap()
+{
+    if( !pFilterSetItemAttrTokenMap )
+    {
+        static SvXMLTokenMapEntry aTokenMap[] =
+        {
+            { XML_NAMESPACE_TABLE, XML_VALUE, XML_TOK_FILTER_SET_ITEM_ATTR_VALUE },
+            XML_TOKEN_MAP_END
+        };
+
+        pFilterSetItemAttrTokenMap = new SvXMLTokenMap( aTokenMap );
+    }
+
+    return *pFilterSetItemAttrTokenMap;
 }
 
 const SvXMLTokenMap& ScXMLImport::GetSortElemTokenMap()
@@ -1717,7 +1749,9 @@ ScXMLImport::ScXMLImport(
     pDatabaseRangeSourceQueryAttrTokenMap( 0 ),
     pFilterElemTokenMap( 0 ),
     pFilterAttrTokenMap( 0 ),
+    pFilterConditionElemTokenMap( 0 ),
     pFilterConditionAttrTokenMap( 0 ),
+    pFilterSetItemAttrTokenMap( 0 ),
     pSortElemTokenMap( 0 ),
     pSortAttrTokenMap( 0 ),
     pSortSortByAttrTokenMap( 0 ),
@@ -1842,7 +1876,9 @@ ScXMLImport::~ScXMLImport() throw()
     delete pDatabaseRangeSourceQueryAttrTokenMap;
     delete pFilterElemTokenMap;
     delete pFilterAttrTokenMap;
+    delete pFilterConditionElemTokenMap;
     delete pFilterConditionAttrTokenMap;
+    delete pFilterSetItemAttrTokenMap;
     delete pSortElemTokenMap;
     delete pSortAttrTokenMap;
     delete pSortSortByAttrTokenMap;

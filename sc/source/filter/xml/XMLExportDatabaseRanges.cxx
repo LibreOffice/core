@@ -440,24 +440,61 @@ private:
         return OUString(RTL_CONSTASCII_USTRINGPARAM("="));
     }
 
+    class WriteSetItem : public std::unary_function<ScQueryEntry::Item, void>
+    {
+        ScXMLExport& mrExport;
+    public:
+        WriteSetItem(ScXMLExport& r) : mrExport(r) {}
+        void operator() (const ScQueryEntry::Item& rItem) const
+        {
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString);
+            SvXMLElementExport aElem(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_SET_ITEM, true, true);
+        }
+    };
+
     void writeCondition(const ScQueryEntry& rEntry, SCCOLROW nFieldStart, bool bCaseSens, bool bRegExp)
     {
-        const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
         mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::valueOf(rEntry.nField - nFieldStart));
         if (bCaseSens)
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
-        if (rItem.meType == ScQueryEntry::ByString)
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString);
-        else
+
+        const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
+        if (rItems.empty())
         {
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
-            OUStringBuffer aBuf;
-            ::sax::Converter::convertDouble(aBuf, rItem.mfVal);
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, aBuf.makeStringAndClear());
+            OSL_FAIL("Query entry has no items at all!  It must have at least one!");
+            return;
         }
 
-        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, getOperatorXML(rEntry, bRegExp));
-        SvXMLElementExport aElemC(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_CONDITION, true, true);
+        else if (rItems.size() == 1)
+        {
+            // Single item condition.
+            const ScQueryEntry::Item& rItem = rItems.front();
+            if (rItem.meType == ScQueryEntry::ByString)
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString);
+            else
+            {
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
+                OUStringBuffer aBuf;
+                ::sax::Converter::convertDouble(aBuf, rItem.mfVal);
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, aBuf.makeStringAndClear());
+            }
+
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, getOperatorXML(rEntry, bRegExp));
+            SvXMLElementExport aElemC(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_CONDITION, true, true);
+        }
+        else
+        {
+            // Multi-item condition.
+            OSL_ASSERT(rItems.size() > 1);
+
+            // Store the 1st value for backward compatibility.
+            const ScQueryEntry::Item& rItem = rItems.front();
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString);
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, OUString(RTL_CONSTASCII_USTRINGPARAM("=")));
+            SvXMLElementExport aElemC(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_CONDITION, true, true);
+
+            std::for_each(rItems.begin(), rItems.end(), WriteSetItem(mrExport));
+        }
     }
 
     void writeFilter(const ScDBData& rData)

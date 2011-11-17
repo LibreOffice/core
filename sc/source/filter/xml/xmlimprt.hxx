@@ -413,6 +413,11 @@ enum ScXMLFilterAttrTokens
     XML_TOK_FILTER_ATTR_DISPLAY_DUPLICATES
 };
 
+enum ScXMLFilterConditionElemTokens
+{
+    XML_TOK_CONDITION_FILTER_SET_ITEM
+};
+
 enum ScXMLFilterConditionAttrTokens
 {
     XML_TOK_CONDITION_ATTR_FIELD_NUMBER,
@@ -420,6 +425,11 @@ enum ScXMLFilterConditionAttrTokens
     XML_TOK_CONDITION_ATTR_DATA_TYPE,
     XML_TOK_CONDITION_ATTR_VALUE,
     XML_TOK_CONDITION_ATTR_OPERATOR
+};
+
+enum ScXMLFilterSetItemAttrTokens
+{
+    XML_TOK_FILTER_SET_ITEM_ATTR_VALUE
 };
 
 enum ScXMLSortTokens
@@ -736,7 +746,9 @@ class ScXMLImport: public SvXMLImport
     SvXMLTokenMap           *pDatabaseRangeSourceQueryAttrTokenMap;
     SvXMLTokenMap           *pFilterElemTokenMap;
     SvXMLTokenMap           *pFilterAttrTokenMap;
+    SvXMLTokenMap           *pFilterConditionElemTokenMap;
     SvXMLTokenMap           *pFilterConditionAttrTokenMap;
+    SvXMLTokenMap           *pFilterSetItemAttrTokenMap;
     SvXMLTokenMap           *pSortElemTokenMap;
     SvXMLTokenMap           *pSortAttrTokenMap;
     SvXMLTokenMap           *pSortSortByAttrTokenMap;
@@ -887,7 +899,9 @@ public:
     const SvXMLTokenMap& GetDatabaseRangeSourceQueryAttrTokenMap();
     const SvXMLTokenMap& GetFilterElemTokenMap();
     const SvXMLTokenMap& GetFilterAttrTokenMap();
+    const SvXMLTokenMap& GetFilterConditionElemTokenMap();
     const SvXMLTokenMap& GetFilterConditionAttrTokenMap();
+    const SvXMLTokenMap& GetFilterSetItemAttrTokenMap();
     const SvXMLTokenMap& GetSortElemTokenMap();
     const SvXMLTokenMap& GetSortAttrTokenMap();
     const SvXMLTokenMap& GetSortSortByAttrTokenMap();

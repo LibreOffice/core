@@ -174,6 +174,27 @@ public:
     virtual void EndElement();
 };
 
+class ScXMLSetItemContext : public SvXMLImportContext
+{
+    const ScXMLImport& GetScImport() const;
+    ScXMLImport& GetScImport();
+public:
+    ScXMLSetItemContext(ScXMLImport& rImport, sal_uInt16 nPrfx,
+                        const ::rtl::OUString& rLName,
+                        const ::com::sun::star::uno::Reference<
+                            ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
+
+    virtual ~ScXMLSetItemContext();
+
+    virtual SvXMLImportContext *CreateChildContext(
+        sal_uInt16 nPrefix,
+        const ::rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
+
+    virtual void EndElement();
+};
+
 // Datapilot (Core)
 
 class ScXMLDPFilterContext : public SvXMLImportContext

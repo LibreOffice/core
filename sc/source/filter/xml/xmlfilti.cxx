@@ -47,6 +47,9 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::xml::sax::XAttributeList;
+
 //------------------------------------------------------------------
 
 ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
@@ -328,10 +331,25 @@ ScXMLConditionContext::~ScXMLConditionContext()
 
 SvXMLImportContext *ScXMLConditionContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const ::rtl::OUString& rLName,
-                                            const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
+                                            const Reference<XAttributeList>& xAttrList )
 {
-    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
+    SvXMLImportContext *pContext = NULL;
+
+    const SvXMLTokenMap& rTokenMap(GetScImport().GetFilterConditionElemTokenMap());
+    switch( rTokenMap.Get( nPrefix, rLName ) )
+    {
+        case XML_TOK_CONDITION_FILTER_SET_ITEM:
+        {
+            pContext = new ScXMLSetItemContext(
+                GetScImport(), nPrefix, rLName, xAttrList);
+        }
+        break;
+    }
+
+    if( !pContext )
+        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
+
+    return pContext;
 }
 
 void ScXMLConditionContext::getOperatorXML(const rtl::OUString sTempOperator, sal_Int32& aFilterOperator, bool& bUseRegularExpressions) const
@@ -408,6 +426,58 @@ void ScXMLConditionContext::EndElement()
         aFilterField.IsNumeric = false;
     }
     pFilterContext->AddFilterField(aFilterField);
+}
+
+const ScXMLImport& ScXMLSetItemContext::GetScImport() const
+{
+    return static_cast<const ScXMLImport&>(GetImport());
+}
+
+ScXMLImport& ScXMLSetItemContext::GetScImport()
+{
+    return static_cast<ScXMLImport&>(GetImport());
+}
+
+ScXMLSetItemContext::ScXMLSetItemContext(
+    ScXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLName,
+    const Reference<XAttributeList>& xAttrList) :
+    SvXMLImportContext(rImport, nPrfx, rLName)
+{
+    sal_Int32 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetFilterSetItemAttrTokenMap();
+    for (sal_Int32 i = 0; i < nAttrCount; ++i)
+    {
+        const rtl::OUString& sAttrName = xAttrList->getNameByIndex(i);
+        rtl::OUString aLocalName;
+        sal_uInt16 nPrefix =
+            GetScImport().GetNamespaceMap().GetKeyByAttrName(sAttrName, &aLocalName);
+
+        const rtl::OUString& sValue = xAttrList->getValueByIndex(i);
+
+        switch (rAttrTokenMap.Get(nPrefix, aLocalName))
+        {
+            case XML_TOK_FILTER_SET_ITEM_ATTR_VALUE:
+            {
+                // TODO: import the value.
+            }
+            break;
+        }
+    }
+}
+
+SvXMLImportContext* ScXMLSetItemContext::CreateChildContext(
+    sal_uInt16 nPrefix, const ::rtl::OUString& rLName,
+    const Reference<XAttributeList>& /*xAttrList*/ )
+{
+    return new SvXMLImportContext( GetImport(), nPrefix, rLName );;
+}
+
+ScXMLSetItemContext::~ScXMLSetItemContext()
+{
+}
+
+void ScXMLSetItemContext::EndElement()
+{
 }
 
 //==========================================================================
