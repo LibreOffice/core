@@ -176,27 +176,26 @@ void ScXMLFilterContext::SetCaseSensitive(bool b)
     mrQueryParam.bCaseSens = b;
 }
 
-void ScXMLFilterContext::SetUseRegularExpressions(bool bTemp)
+void ScXMLFilterContext::SetUseRegularExpressions(bool b)
 {
     if (!bUseRegularExpressions)
-        bUseRegularExpressions = bTemp;
+        bUseRegularExpressions = b;
 }
 
-void ScXMLFilterContext::OpenConnection(bool bTemp)
+void ScXMLFilterContext::OpenConnection(bool b)
 {
-    bool* pTemp = new bool;
-    *pTemp = bConnectionOr;
+    bool bTemp = bConnectionOr;
     bConnectionOr = bNextConnectionOr;
-    bNextConnectionOr = bTemp;
-    aConnectionOrStack.Push(pTemp);
+    bNextConnectionOr = b;
+    maOrConnectionStack.push_back(bTemp);
 }
 
 void ScXMLFilterContext::CloseConnection()
 {
-    bool* pTemp = static_cast <bool*> (aConnectionOrStack.Pop());
-    bConnectionOr = *pTemp;
-    bNextConnectionOr = *pTemp;
-    delete pTemp;
+    bool bTemp = maOrConnectionStack.back();
+    maOrConnectionStack.pop_back();
+    bConnectionOr = bTemp;
+    bNextConnectionOr = bTemp;
 }
 
 bool ScXMLFilterContext::GetConnection()

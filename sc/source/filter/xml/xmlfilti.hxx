@@ -41,6 +41,8 @@
 #include "xmldrani.hxx"
 #include "xmldpimp.hxx"
 
+#include <vector>
+
 class ScXMLImport;
 struct ScQueryParam;
 
@@ -60,7 +62,7 @@ class ScXMLFilterContext : public SvXMLImportContext
     bool        bConnectionOr;
     bool        bNextConnectionOr;
     bool        bConditionSourceRange;
-    Stack       aConnectionOrStack;
+    std::vector<bool> maOrConnectionStack;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -84,8 +86,8 @@ public:
     virtual void EndElement();
 
     void SetCaseSensitive(const bool b);
-    void SetUseRegularExpressions(bool bTemp);
-    void OpenConnection(bool bTemp);
+    void SetUseRegularExpressions(bool b);
+    void OpenConnection(bool b);
     void CloseConnection();
     bool GetConnection();
     void AddFilterField(const com::sun::star::sheet::TableFilterField2& aFilterField);
