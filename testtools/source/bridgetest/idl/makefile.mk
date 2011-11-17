@@ -31,11 +31,6 @@ TARGET := bridgetest_idl
 
 .INCLUDE: settings.mk
 
-.IF "$(CROSS_COMPILING)"=="YES"
-all:
-    @echo Nothing done when cross-compiling
-.ENDIF
-
 .INCLUDE: target.mk
 
 .IF "$(L10N_framework)"==""
