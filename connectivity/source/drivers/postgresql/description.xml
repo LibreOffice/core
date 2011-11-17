@@ -9,7 +9,7 @@
         <OpenOffice.org-minimal-version value="3.3" dep:name="OpenOffice.org 3.3"/>
     </dependencies>
     <publisher>
-        <name xlink:href="http://www.mamane.lu/" lang="en">Lionel Elie Mamane</name>
+        <name xlink:href="http://www.documentfoundation.org" lang="en-US">The Document Foundation</name>
     </publisher>
     <extension-description>
       <src lang="en-US" xlink:href="description/description_en-US.txt"/>
