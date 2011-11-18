@@ -59,7 +59,9 @@
 #include <svl/svstdarr.hxx>
 #endif
 
+#include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/langitem.hxx>
@@ -102,6 +104,8 @@
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <com/sun/star/system/XSystemShellExecute.hpp>
 
 
 using namespace ::com::sun::star;
@@ -571,6 +575,7 @@ SwSpellPopup::SwSpellPopup(
 PopupMenu( SW_RES(MN_SPELL_POPUP) ),
 pSh( pWrtSh ),
 aSuggestions( rSuggestions ),
+sExplanationLink( ),
 bGrammarResults( true ),
 aInfo16( SW_RES(IMG_INFO_16) )
 {
@@ -581,6 +586,26 @@ aInfo16( SW_RES(IMG_INFO_16) )
     InsertSeparator( nPos++ );
     InsertItem( MN_SHORT_COMMENT, aMessageText, MIB_NOSELECT, nPos++ );
     SetItemImage( MN_SHORT_COMMENT, aInfo16 );
+
+    // Add an item to show detailled infos if the FullCommentURL property is defined
+    beans::PropertyValues  aProperties = rResult.aErrors[ nErrorInResult ].aProperties;
+    {
+        sal_Int32 i = 0;
+        while ( !sExplanationLink.isEmpty() && i < aProperties.getLength() )
+        {
+            if ( aProperties[i].Name.equalsAscii( "FullCommentURL" ) )
+            {
+                uno::Any aValue = aProperties[i].Value;
+                aValue >>= sExplanationLink;
+            }
+            ++i;
+        }
+    }
+
+    if ( !sExplanationLink.isEmpty( ) )
+    {
+        InsertItem( MN_EXPLANATION_LINK, String( SW_RES( STR_EXPLANATION_LINK ) ), MIB_TEXT | MIB_HELP, nPos++ );
+    }
 
     SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
 
@@ -817,6 +842,26 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
                         nAddRes );
                 }
             }
+    }
+    else if ( nId == MN_EXPLANATION_LINK && !sExplanationLink.isEmpty() )
+    {
+        try
+        {
+            uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
+                ::comphelper::getProcessServiceFactory()->createInstance(
+                    DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), uno::UNO_QUERY_THROW );
+            xSystemShellExecute->execute( sExplanationLink, rtl::OUString(),
+                    com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
+        }
+        catch ( uno::Exception& )
+        {
+            uno::Any exc( ::cppu::getCaughtException() );
+            rtl::OUString msg( ::comphelper::anyToString( exc ) );
+            const SolarMutexGuard guard;
+            ErrorBox aErrorBox( NULL, WB_OK, msg );
+            aErrorBox.SetText( rtl::OUString::createFromAscii( "Explanations" ) );
+            aErrorBox.Execute();
+        }
     }
     else
     {

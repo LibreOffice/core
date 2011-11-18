@@ -52,6 +52,7 @@ class SwSpellPopup : public PopupMenu
         ::com::sun::star::linguistic2::XSpellAlternatives > xSpellAlt;
 
     ::com::sun::star::uno::Sequence< rtl::OUString >  aSuggestions;
+    rtl::OUString sExplanationLink;
 
     LanguageType                nCheckedLanguage;
     LanguageType                nGuessLangWord;

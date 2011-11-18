@@ -39,6 +39,7 @@
 #define STR_LANGSTATUS_MORE             (RC_LINGU_BEGIN + 7)
 #define STR_IGNORE_SELECTION            (RC_LINGU_BEGIN + 8)
 #define STR_RESET_TO_DEFAULT_LANGUAGE   (RC_LINGU_BEGIN + 9)
+#define STR_EXPLANATION_LINK            (RC_LINGU_BEGIN + 10)
 
 #define IMG_INFO_16                     (RC_LINGU_BEGIN + 100)
 
@@ -52,6 +53,7 @@
 #define MN_SET_LANGUAGE_PARAGRAPH       206
 #define MN_SET_LANGUAGE_ALL_TEXT        207
 #define MN_SHORT_COMMENT                208
+#define MN_EXPLANATION_LINK             209
 
 // id range for dictionaries sub menu
 #define MN_DICTIONARIES_START               300

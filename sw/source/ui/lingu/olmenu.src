@@ -127,7 +127,10 @@ String STR_IGNORE_SELECTION
 {
     Text [ en-US ] = "Ignore" ;
 };
-
+String STR_EXPLANATION_LINK
+{
+    Text [ en-US ] = "Explanations..." ;
+};
 Image IMG_INFO_16
 {
     ImageBitmap = Bitmap { File = "info_16.png" ; };
