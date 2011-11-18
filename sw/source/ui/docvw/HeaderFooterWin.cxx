@@ -191,7 +191,7 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
     m_pPopupMenu->SetItemText( FN_HEADERFOOTER_DELETE, aRewriter.Apply( aText ) );
     SetPopupMenu( m_pPopupMenu );
 
-    m_aFadeTimer.SetTimeout( 500 );
+    m_aFadeTimer.SetTimeout( 50 );
     m_aFadeTimer.SetTimeoutHdl( LINK( this, SwHeaderFooterWin, FadeHandler ) );
 }
 
@@ -501,9 +501,9 @@ void SwHeaderFooterWin::Select( )
 IMPL_LINK( SwHeaderFooterWin, FadeHandler, Timer *, EMPTYARG )
 {
     if ( m_bIsAppearing && m_nFadeRate > 0 )
-        m_nFadeRate -= 10;
+        m_nFadeRate -= 25;
     else if ( !m_bIsAppearing && m_nFadeRate < 100 )
-        m_nFadeRate += 10;
+        m_nFadeRate += 25;
 
     if ( m_nFadeRate != 100 && !IsVisible() )
     {
