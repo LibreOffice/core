@@ -256,7 +256,6 @@
 #define SV_ICON_ID_SPREADSHEET_TEMPLATE         5
 #define SV_ICON_ID_DRAWING                      6
 #define SV_ICON_ID_PRESENTATION                 8
-#define SV_ICON_ID_PRESENTATION_TEMPLATE        9
 #define SV_ICON_ID_MASTER_DOCUMENT             11
 #define SV_ICON_ID_DATABASE                    14
 #define SV_ICON_ID_FORMULA                     15

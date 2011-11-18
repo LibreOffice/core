@@ -43,7 +43,6 @@
     IMG_GLOBAL_DOC ;        \
     IMG_DRAW ;              \
     IMG_DRAWTEMPLATE ;      \
-    IMG_NEWFROMTEMPLATE ;   \
     IMG_DATABASE;           \
     IMG_BITMAP ; \
     IMG_CALC ; \
@@ -93,7 +92,6 @@
     IMG_WRITER ; \
     IMG_WRITERTEMPLATE ; \
     /* svx */ \
-    IMG_NEWFROMTEMPLATE ;
 
 ImageList RID_SVTOOLS_IMAGELIST_BIG
 {
