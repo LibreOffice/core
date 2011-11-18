@@ -606,7 +606,7 @@ SwUndoReplace::Impl::Impl(
     m_bSplitNext = m_nSttNd != pEnd->nNode.GetIndex();
 
     SwTxtNode* pNd = pStt->nNode.GetNode().GetTxtNode();
-    OSL_ENSURE( pNd, "wo ist der TextNode" );
+    OSL_ENSURE( pNd, "Dude, where's my TextNode?" );
 
     pHistory = new SwHistory;
     DelCntntIndex( *rPam.GetMark(), *rPam.GetPoint() );
@@ -655,7 +655,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
     rPam.DeleteMark();
 
     SwTxtNode* pNd = pDoc->GetNodes()[ m_nSttNd - m_nOffset ]->GetTxtNode();
-    OSL_ENSURE( pNd, "Wo ist der TextNode geblieben?" );
+    OSL_ENSURE( pNd, "Dude, where's my TextNode?" );
 
     SwAutoCorrExceptWord* pACEWord = pDoc->GetAutoCorrExceptWord();
     if( pACEWord )
@@ -668,7 +668,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
         pDoc->SetAutoCorrExceptWord( 0 );
     }
 
-    SwIndex aIdx( pNd, sal_uInt16( m_nSttCnt ) );
+    SwIndex aIdx( pNd, m_nSttCnt );
     if( m_nSttNd == m_nEndNd )
     {
         pNd->EraseText( aIdx, sal_uInt16( m_sIns.getLength() ) );
@@ -680,11 +680,13 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
         rPam.SetMark();
         rPam.GetPoint()->nNode = m_nEndNd - m_nOffset;
         rPam.GetPoint()->nContent.Assign( rPam.GetCntntNode(), m_nEndCnt );
+        // move it out of the way so it is not registered at deleted node
+        aIdx.Assign(0, 0);
 
         pDoc->DeleteAndJoin( rPam );
         rPam.DeleteMark();
         pNd = rPam.GetNode()->GetTxtNode();
-        OSL_ENSURE( pNd, "Wo ist der TextNode geblieben?" );
+        OSL_ENSURE( pNd, "Dude, where's my TextNode?" );
         aIdx.Assign( pNd, m_nSttCnt );
     }
 
@@ -741,7 +743,7 @@ void SwUndoReplace::Impl::RedoImpl(::sw::UndoRedoContext & rContext)
     rPam.GetPoint()->nNode = m_nSttNd;
 
     SwTxtNode* pNd = rPam.GetPoint()->nNode.GetNode().GetTxtNode();
-    OSL_ENSURE( pNd, "Wo ist der TextNode geblieben?" );
+    OSL_ENSURE( pNd, "Dude, where's my TextNode?" );
     rPam.GetPoint()->nContent.Assign( pNd, m_nSttCnt );
     rPam.SetMark();
     if( m_bSplitNext )
