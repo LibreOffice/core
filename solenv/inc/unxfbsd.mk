@@ -184,12 +184,7 @@ STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
 
-.IF "$(ALLOC)" == "PTMALLOC"
-STDLIBGUIMT+=-lptmalloc
-STDLIBCUIMT+=-lptmalloc
-STDSHLGUIMT+=-lptmalloc
-STDSHLCUIMT+=-lptmalloc
-.ELIF "$(ALLOC)" == "TCMALLOC"
+.IF "$(ALLOC)" == "TCMALLOC"
 STDLIBGUIMT+=-ltcmalloc
 STDLIBCUIMT+=-ltcmalloc
 STDSHLGUIMT+=-ltcmalloc
