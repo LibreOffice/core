@@ -32,11 +32,6 @@ VISIBILITY_HIDDEN = TRUE
 
 .INCLUDE: settings.mk
 
-.IF "$(CROSS_COMPILING)"=="YES"
-all:
-    @echo Nothing done when cross-compiling
-.ENDIF
-
 # --- Files --------------------------------------------------------
 DLLPRE =
 
@@ -52,7 +47,7 @@ SHL1STDLIBS = \
     $(CPPULIB) \
     $(CPPUNITLIB) \
     $(SALLIB)
-SHL1TARGET = unoexceptionprotector
+SHL1TARGET = $(ENFORCEDSHLPREFIX)unoexceptionprotector
 SHL1USE_EXPORTS = name
 DEF1NAME = $(SHL1TARGET)
 

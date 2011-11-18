@@ -8,6 +8,7 @@ mkdir: %_DEST%\inc\unotest\detail
 ..\%__SRC%\lib\libunotest.dll.a %_DEST%\lib\libunotest.dll.a
 ..\%__SRC%\lib\unoexceptionprotector.dylib %_DEST%\lib\unoexceptionprotector.dylib
 ..\%__SRC%\lib\unoexceptionprotector.so %_DEST%\lib\unoexceptionprotector.so
+..\%__SRC%\lib\libunoexceptionprotector.so %_DEST%\lib\libunoexceptionprotector.so
 ..\inc\unotest\detail\unotestdllapi.hxx %_DEST%\inc\unotest\detail\unotestdllapi.hxx
 ..\inc\unotest\bootstrapfixturebase.hxx %_DEST%\inc\unotest\bootstrapfixturebase.hxx
 ..\inc\unotest\filters-test.hxx %_DEST%\inc\unotest\filters-test.hxx
