@@ -8,25 +8,26 @@ class ModulWindow;
 class LineNumberWindow : public Window
 {
 private:
-  ModulWindow* pModulWindow;
-  int nWidth;
-  long nCurYOffset;
-
-  virtual void DataChanged(DataChangedEvent const & rDCEvt);
+    ModulWindow* m_pModulWindow;
+    int m_nWidth;
+    long m_nCurYOffset;
+    int m_nCharWidth;
+    int m_nBaseWidth;
+    virtual void DataChanged(DataChangedEvent const & rDCEvt);
 
 protected:
-  virtual void Paint( const Rectangle& );
+    virtual void Paint( const Rectangle& );
 
 public:
-  LineNumberWindow( Window* pParent, ModulWindow* pModulWin );
-  ~LineNumberWindow();
+    LineNumberWindow( Window* pParent, ModulWindow* pModulWin );
+    ~LineNumberWindow();
 
-  void DoScroll( long nHorzScroll, long nVertScroll );
+    void DoScroll( long nHorzScroll, long nVertScroll );
 
-  bool SyncYOffset();
-  long& GetCurYOffset();
+    bool SyncYOffset();
+    long& GetCurYOffset();
 
-  int GetWidth();
+    int GetWidth();
 };
 
 #endif // BASICIDE_LINENUMBERWINDOW_HXX
