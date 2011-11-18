@@ -304,6 +304,8 @@ protected:
     virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
 public:
+    enum AutoFilterMode { Normal, Top10, Custom, Empty, NonEmpty };
+
     ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhichPos );
     ~ScGridWindow();
 
@@ -342,7 +344,7 @@ public:
 
     void            LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow);
     void            RefreshAutoFilterButton(const ScAddress& rPos);
-    void            UpdateAutoFilterFromMenu();
+    void            UpdateAutoFilterFromMenu(AutoFilterMode eMode);
 
     void            LaunchPageFieldMenu( SCCOL nCol, SCROW nRow );
     void            LaunchDPFieldMenu( SCCOL nCol, SCROW nRow );

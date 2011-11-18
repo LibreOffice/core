@@ -588,28 +588,22 @@ void ScGridWindow::ExecPageFieldSelect( SCCOL nCol, SCROW nRow, sal_Bool bHasSel
 
 namespace {
 
-class PopupAction : public ScMenuFloatingWindow::Action
-{
-public:
-    virtual void execute()
-    {
-    }
-};
-
 struct AutoFilterData : public ScCheckListMenuWindow::ExtendedData
 {
     ScAddress maPos;
     ScDBData* mpData;
 };
 
-class AutoFilterOKAction : public ScMenuFloatingWindow::Action
+class AutoFilterAction : public ScMenuFloatingWindow::Action
 {
     ScGridWindow* mpWindow;
+    ScGridWindow::AutoFilterMode meMode;
 public:
-    AutoFilterOKAction(ScGridWindow* p) : mpWindow(p) {}
+    AutoFilterAction(ScGridWindow* p, ScGridWindow::AutoFilterMode eMode) :
+        mpWindow(p), meMode(eMode) {}
     virtual void execute()
     {
-        mpWindow->UpdateAutoFilterFromMenu();
+        mpWindow->UpdateAutoFilterFromMenu(meMode);
     }
 };
 
@@ -662,7 +656,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     ScDocument* pDoc = pViewData->GetDocument();
 
     mpAutoFilterPopup.reset(new ScCheckListMenuWindow(this, pDoc));
-    mpAutoFilterPopup->setOKAction(new AutoFilterOKAction(this));
+    mpAutoFilterPopup->setOKAction(new AutoFilterAction(this, Normal));
     mpAutoFilterPopup->setPopupEndAction(
         new AutoFilterPopupEndAction(this, ScAddress(nCol, nRow, nTab)));
     std::auto_ptr<AutoFilterData> pData(new AutoFilterData);
@@ -712,10 +706,14 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     mpAutoFilterPopup->initMembers();
 
     // Populate the menu.
-    mpAutoFilterPopup->addMenuItem(ScResId::toString(ScResId(SCSTR_TOP10FILTER)), true, new PopupAction);
-    mpAutoFilterPopup->addMenuItem(ScResId::toString(ScResId(SCSTR_STDFILTER)), true, new PopupAction);
-    mpAutoFilterPopup->addMenuItem(ScResId::toString(ScResId(SCSTR_EMPTY)), true, new PopupAction);
-    mpAutoFilterPopup->addMenuItem(ScResId::toString(ScResId(SCSTR_NOTEMPTY)), true, new PopupAction);
+    mpAutoFilterPopup->addMenuItem(
+        ScResId::toString(ScResId(SCSTR_TOP10FILTER)), true, new AutoFilterAction(this, Top10));
+    mpAutoFilterPopup->addMenuItem(
+        ScResId::toString(ScResId(SCSTR_STDFILTER)), true, new AutoFilterAction(this, Custom));
+    mpAutoFilterPopup->addMenuItem(
+        ScResId::toString(ScResId(SCSTR_EMPTY)), true, new AutoFilterAction(this, Empty));
+    mpAutoFilterPopup->addMenuItem(
+        ScResId::toString(ScResId(SCSTR_NOTEMPTY)), true, new AutoFilterAction(this, NonEmpty));
 
     mpAutoFilterPopup->SetPopupModeEndHdl( LINK(this, ScGridWindow, PopupModeEndHdl) );
 
@@ -735,7 +733,7 @@ void ScGridWindow::RefreshAutoFilterButton(const ScAddress& rPos)
     }
 }
 
-void ScGridWindow::UpdateAutoFilterFromMenu()
+void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
 {
     const AutoFilterData* pData =
         static_cast<const AutoFilterData*>(mpAutoFilterPopup->getExtendedData());
