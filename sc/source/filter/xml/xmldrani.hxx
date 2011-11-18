@@ -78,9 +78,9 @@ struct ScSubTotalRule
 class ScXMLDatabaseRangeContext : public SvXMLImportContext
 {
     boost::scoped_ptr<ScQueryParam> mpQueryParam;
+    ScRange maRange;
     rtl::OUString   sDatabaseRangeName;
     rtl::OUString   sConnectionRessource;
-    rtl::OUString   sRangeAddress;
     rtl::OUString   sDatabaseName;
     rtl::OUString   sSourceObject;
     com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue> aSortSequence;
@@ -90,6 +90,7 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     sal_Int32       nRefresh;
     sal_Int16       nSubTotalsUserListIndex;
     sal_Int16       nSubTotalRuleGroupFieldNumber;
+    bool            mbValidRange;
     bool            bContainsSort;
     bool            bContainsSubTotal;
     bool            bNative;

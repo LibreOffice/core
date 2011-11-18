@@ -134,6 +134,7 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     aSortSequence(),
     nRefresh(0),
     nSubTotalsUserListIndex(0),
+    mbValidRange(true),
     bContainsSort(false),
     bContainsSubTotal(false),
     bNative(true),
@@ -206,7 +207,11 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
             break;
             case XML_TOK_DATABASE_RANGE_ATTR_TARGET_RANGE_ADDRESS :
             {
-                sRangeAddress = sValue;
+                ScDocument* pDoc = GetScImport().GetDocument();
+                sal_Int32 nOffset = 0;
+                if (!ScRangeStringConverter::GetRangeFromString(
+                    maRange, sValue, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset))
+                    mbValidRange = false;
             }
             break;
             case XML_TOK_DATABASE_RANGE_ATTR_REFRESH_DELAY :
@@ -287,16 +292,14 @@ SvXMLImportContext *ScXMLDatabaseRangeContext::CreateChildContext( sal_uInt16 nP
 
 ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
 {
-    ScDocument* pDoc = GetScImport().GetDocument();
-
-    sal_Int32 nOffset = 0;
-    ScRange aRange;
-    if (!ScRangeStringConverter::GetRangeFromString(aRange, sRangeAddress, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset))
+    if (!mbValidRange)
         return NULL;
+
+    ScDocument* pDoc = GetScImport().GetDocument();
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<ScDBData> pData(
-        new ScDBData(rName, aRange.aStart.Tab(), aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row()));
+        new ScDBData(rName, maRange.aStart.Tab(), maRange.aStart.Col(), maRange.aStart.Row(), maRange.aEnd.Col(), maRange.aEnd.Row()));
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
     pData->SetAutoFilter(bAutoFilter);
@@ -337,15 +340,15 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
     }
 
     {
-        mpQueryParam->nTab = aRange.aStart.Tab();
-        mpQueryParam->nCol1 = aRange.aStart.Col();
-        mpQueryParam->nRow1 = aRange.aStart.Row();
-        mpQueryParam->nCol2 = aRange.aEnd.Col();
-        mpQueryParam->nRow2 = aRange.aEnd.Row();
+        mpQueryParam->nTab = maRange.aStart.Tab();
+        mpQueryParam->nCol1 = maRange.aStart.Col();
+        mpQueryParam->nRow1 = maRange.aStart.Row();
+        mpQueryParam->nCol2 = maRange.aEnd.Col();
+        mpQueryParam->nRow2 = maRange.aEnd.Row();
 
         // Convert from relative to absolute column IDs for the fields. Calc
         // core expects the field positions to be absolute column IDs.
-        SCCOLROW nStartPos = mpQueryParam->bByRow ? aRange.aStart.Col() : aRange.aStart.Row();
+        SCCOLROW nStartPos = mpQueryParam->bByRow ? maRange.aStart.Col() : maRange.aStart.Row();
         for (SCSIZE i = 0; i < mpQueryParam->GetEntryCount(); ++i)
         {
             ScQueryEntry& rEntry = mpQueryParam->GetEntry(i);
@@ -377,7 +380,7 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
         ScSortParam aParam;
         ScSortDescriptor::FillSortParam(aParam, aSortSequence);
 
-        SCCOLROW nStartPos = aParam.bByRow ? aRange.aStart.Col() : aRange.aStart.Row();
+        SCCOLROW nStartPos = aParam.bByRow ? maRange.aStart.Col() : maRange.aStart.Row();
         for (size_t i = 0; i < MAXSORT; ++i)
         {
             if (!aParam.bDoSort[i])
