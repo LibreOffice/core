@@ -1145,6 +1145,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
     ::rtl::OUString str;
     sal_Int16 * nbOfDays = new sal_Int16[nbOfCalendars];
     sal_Int16 * nbOfMonths = new sal_Int16[nbOfCalendars];
+    sal_Int16 * nbOfGenitiveMonths = new sal_Int16[nbOfCalendars];
     sal_Int16 * nbOfEras = new sal_Int16[nbOfCalendars];
     sal_Int16 j;
     sal_Int16 i;
@@ -1161,10 +1162,12 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         str = calNode -> getAttr().getValueByName("default");
         of.writeDefaultParameter("Calendar", str, i);
 
+        sal_Int16 nChild = 0;
+
         // Generate Days of Week
         const sal_Char *elementTag;
         LocaleNode * daysNode = NULL;
-        ::rtl::OUString ref_name = calNode->getChildAt(0)->getAttr().getValueByName("ref");
+        ::rtl::OUString ref_name = calNode->getChildAt(nChild)->getAttr().getValueByName("ref");
         if (ref_name.getLength() > 0 && i > 0) {
             for (j = 0; j < i; j++) {
                 str = getChildAt(j)->getAttr().getValueByName("unoid");
@@ -1178,7 +1181,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             nbOfDays[i] = 0;
         } else {
             if (daysNode == NULL)
-                daysNode = calNode -> getChildAt(0);
+                daysNode = calNode -> getChildAt(nChild);
             nbOfDays[i] = sal::static_int_cast<sal_Int16>( daysNode->getNumberOfChildren() );
             if (bGregorian && nbOfDays[i] != 7)
                 incErrorInt( "A Gregorian calendar must have 7 days per week, this one has %d", nbOfDays[i]);
@@ -1193,10 +1196,11 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
             }
         }
+        ++nChild;
 
         // Generate Months of Year
         LocaleNode * monthsNode = NULL;
-        ref_name = calNode->getChildAt(1)->getAttr().getValueByName("ref");
+        ref_name = calNode->getChildAt(nChild)->getAttr().getValueByName("ref");
         if (ref_name.getLength() > 0 && i > 0) {
             for (j = 0; j < i; j++) {
                 str = getChildAt(j)->getAttr().getValueByName("unoid");
@@ -1210,7 +1214,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             nbOfMonths[i] = 0;
         } else {
             if (monthsNode == NULL)
-                monthsNode = calNode -> getChildAt(1);
+                monthsNode = calNode -> getChildAt(nChild);
             nbOfMonths[i] = sal::static_int_cast<sal_Int16>( monthsNode->getNumberOfChildren() );
             if (bGregorian && nbOfMonths[i] != 12)
                 incErrorInt( "A Gregorian calendar must have 12 months, this one has %d", nbOfMonths[i]);
@@ -1225,10 +1229,47 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
             }
         }
+        ++nChild;
+
+        // Generate genitive Months of Year
+        // Optional, if not present fall back to month nouns.
+        if (!calNode->getChildAt(nChild)->getName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GenitiveMonths")))
+            --nChild;
+        LocaleNode * genitiveMonthsNode = NULL;
+        ref_name = calNode->getChildAt(nChild)->getAttr().getValueByName("ref");
+        if (ref_name.getLength() > 0 && i > 0) {
+            for (j = 0; j < i; j++) {
+                str = getChildAt(j)->getAttr().getValueByName("unoid");
+                if (str.equals(ref_name))
+                    genitiveMonthsNode = getChildAt(j)->getChildAt(1);
+            }
+        }
+        if (ref_name.getLength() > 0 && genitiveMonthsNode == NULL) {
+            of.writeParameter("genitiveMonthRef", OUString(RTL_CONSTASCII_USTRINGPARAM("ref")), i);
+            of.writeParameter("genitiveMonthRefName", ref_name, i);
+            nbOfGenitiveMonths[i] = 0;
+        } else {
+            if (genitiveMonthsNode == NULL)
+                genitiveMonthsNode = calNode -> getChildAt(nChild);
+            nbOfGenitiveMonths[i] = sal::static_int_cast<sal_Int16>( genitiveMonthsNode->getNumberOfChildren() );
+            if (bGregorian && nbOfGenitiveMonths[i] != 12)
+                incErrorInt( "A Gregorian calendar must have 12 genitive months, this one has %d", nbOfGenitiveMonths[i]);
+            elementTag = "genitiveMonth";
+            for (j = 0; j < nbOfGenitiveMonths[i]; j++) {
+                LocaleNode *currNode = genitiveMonthsNode -> getChildAt(j);
+                OUString genitiveMonthID( currNode->getChildAt(0)->getValue());
+                of.writeParameter("genitiveMonthID", genitiveMonthID, i, j);
+                if (j == 0 && bGregorian && !genitiveMonthID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "jan")))
+                    incError( "First genitive month of a year of a Gregorian calendar must be <MonthID>jan</MonthID>");
+                of.writeParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
+                of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
+            }
+        }
+        ++nChild;
 
         // Generate Era name
         LocaleNode * erasNode = NULL;
-        ref_name =   calNode -> getChildAt(2) ->getAttr().getValueByName("ref");
+        ref_name =   calNode -> getChildAt(nChild) ->getAttr().getValueByName("ref");
         if (ref_name.getLength() > 0 && i > 0) {
             for (j = 0; j < i; j++) {
                 str = getChildAt(j)->getAttr().getValueByName("unoid");
@@ -1242,7 +1283,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             nbOfEras[i] = 0;
         } else {
             if (erasNode == NULL)
-                erasNode = calNode -> getChildAt(2);
+                erasNode = calNode -> getChildAt(nChild);
             nbOfEras[i] = sal::static_int_cast<sal_Int16>( erasNode->getNumberOfChildren() );
             if (bGregorian && nbOfEras[i] != 2)
                 incErrorInt( "A Gregorian calendar must have 2 eras, this one has %d", nbOfEras[i]);
@@ -1260,7 +1301,9 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
             }
         }
-        str = calNode->getChildAt(3)->getChildAt(0)->getValue();
+        ++nChild;
+
+        str = calNode->getChildAt(nChild)->getChildAt(0)->getValue();
         if (nbOfDays[i])
         {
             for (j = 0; j < nbOfDays[i]; j++)
@@ -1274,7 +1317,9 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 incErrorStr( "<StartDayOfWeek> <DayID> must be one of the <DaysOfWeek>, but is", str);
         }
         of.writeParameter("startDayOfWeek", str, i);
-        str = calNode ->getChildAt(4)-> getValue();
+        ++nChild;
+
+        str = calNode ->getChildAt(nChild)-> getValue();
         sal_Int16 nDays = sal::static_int_cast<sal_Int16>( str.toInt32() );
         if (nDays < 1 || (0 < nbOfDays[i] && nbOfDays[i] < nDays))
             incErrorInt( "Bad value of MinimalDaysInFirstWeek: %d, must be 1 <= value <= days_in_week",  nDays);
@@ -1303,6 +1348,14 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
     of.writeInt(nbOfMonths[i]);
     of.writeAsciiString("};\n");
 
+    of.writeAsciiString("static const sal_Unicode nbOfGenitiveMonths[] = {");
+    for(i = 0; i < nbOfCalendars - 1; i++) {
+        of.writeInt(nbOfGenitiveMonths[i]);
+        of.writeAsciiString(", ");
+    };
+    of.writeInt(nbOfGenitiveMonths[i]);
+    of.writeAsciiString("};\n");
+
     of.writeAsciiString("static const sal_Unicode nbOfEras[] = {");
     for(i = 0; i < nbOfCalendars - 1; i++) {
         of.writeInt(nbOfEras[i]);
@@ -1315,6 +1368,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
     of.writeAsciiString("static const sal_Unicode* calendars[] = {\n");
     of.writeAsciiString("\tnbOfDays,\n");
     of.writeAsciiString("\tnbOfMonths,\n");
+    of.writeAsciiString("\tnbOfGenitiveMonths,\n");
     of.writeAsciiString("\tnbOfEras,\n");
     for(i = 0; i < nbOfCalendars; i++) {
         of.writeAsciiString("\tcalendarID");
@@ -1349,6 +1403,18 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 of.writeAsciiString("\tmonthDefaultFullName");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
             }
         }
+        if (nbOfGenitiveMonths[i] == 0) {
+            of.writeAsciiString("\tgenitiveMonthRef");
+            of.writeInt(i); of.writeAsciiString(",\n");
+            of.writeAsciiString("\tgenitiveMonthRefName");
+            of.writeInt(i); of.writeAsciiString(",\n");
+        } else {
+            for(j = 0; j < nbOfGenitiveMonths[i]; j++) {
+                of.writeAsciiString("\tgenitiveMonthID");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
+                of.writeAsciiString("\tgenitiveMonthDefaultAbbrvName");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
+                of.writeAsciiString("\tgenitiveMonthDefaultFullName");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
+            }
+        }
         if (nbOfEras[i] == 0) {
             of.writeAsciiString("\teraRef");
             of.writeInt(i); of.writeAsciiString(",\n");
@@ -1370,6 +1436,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
 
     delete []nbOfDays;
     delete []nbOfMonths;
+    delete []nbOfGenitiveMonths;
     delete []nbOfEras;
 }
 
@@ -1397,12 +1464,12 @@ void LCCurrencyNode :: generateCode (const OFileWriter &of) const
     bool bTheDefault= false;
     bool bTheCompatible = false;
     for ( i = 0; i < getNumberOfChildren(); i++,nbOfCurrencies++) {
-        LocaleNode * calNode = getChildAt (i);
-        str = calNode->getAttr().getValueByName("default");
+        LocaleNode * currencyNode = getChildAt (i);
+        str = currencyNode->getAttr().getValueByName("default");
         bool bDefault = of.writeDefaultParameter("Currency", str, nbOfCurrencies);
-        str = calNode->getAttr().getValueByName("usedInCompatibleFormatCodes");
+        str = currencyNode->getAttr().getValueByName("usedInCompatibleFormatCodes");
         bool bCompatible = of.writeDefaultParameter("CurrencyUsedInCompatibleFormatCodes", str, nbOfCurrencies);
-        str = calNode->getAttr().getValueByName("legacyOnly");
+        str = currencyNode->getAttr().getValueByName("legacyOnly");
         bool bLegacy = of.writeDefaultParameter("CurrencyLegacyOnly", str, nbOfCurrencies);
         if (bLegacy && (bDefault || bCompatible))
             incError( "Currency: if legacyOnly==true, both 'default' and 'usedInCompatibleFormatCodes' must be false.");
@@ -1418,22 +1485,22 @@ void LCCurrencyNode :: generateCode (const OFileWriter &of) const
                 incError( "Currency: more than one currency flagged as usedInCompatibleFormatCodes.");
             bTheCompatible = true;
         }
-        str = calNode -> findNode ("CurrencyID") -> getValue();
+        str = currencyNode -> findNode ("CurrencyID") -> getValue();
         of.writeParameter("currencyID", str, nbOfCurrencies);
         // CurrencyID MUST be ISO 4217.
         if (!bLegacy && !isIso4217(str))
             incError( "CurrencyID is not ISO 4217");
-        str = calNode -> findNode ("CurrencySymbol") -> getValue();
+        str = currencyNode -> findNode ("CurrencySymbol") -> getValue();
         of.writeParameter("currencySymbol", str, nbOfCurrencies);
-        str = calNode -> findNode ("BankSymbol") -> getValue();
+        str = currencyNode -> findNode ("BankSymbol") -> getValue();
         of.writeParameter("bankSymbol", str, nbOfCurrencies);
         // BankSymbol currently must be ISO 4217. May change later if
         // application always uses CurrencyID instead of BankSymbol.
         if (!bLegacy && !isIso4217(str))
             incError( "BankSymbol is not ISO 4217");
-        str = calNode -> findNode ("CurrencyName") -> getValue();
+        str = currencyNode -> findNode ("CurrencyName") -> getValue();
         of.writeParameter("currencyName", str, nbOfCurrencies);
-        str = calNode -> findNode ("DecimalPlaces") -> getValue();
+        str = currencyNode -> findNode ("DecimalPlaces") -> getValue();
         sal_Int16 nDecimalPlaces = (sal_Int16)str.toInt32();
         of.writeIntParameter("currencyDecimalPlaces", nbOfCurrencies, nDecimalPlaces);
         of.writeAsciiString("\n");
@@ -1490,8 +1557,8 @@ void LCTransliterationNode::generateCode (const OFileWriter &of) const
     sal_Int16 i;
 
     for ( i = 0; i < getNumberOfChildren(); i++,nbOfModules++) {
-        LocaleNode * calNode = getChildAt (i);
-        str = calNode->getAttr().getValueByIndex(0);
+        LocaleNode * transNode = getChildAt (i);
+        str = transNode->getAttr().getValueByIndex(0);
         of.writeParameter("Transliteration", str, nbOfModules);
     }
     of.writeAsciiString("static const sal_Int16 nbOfTransliterations = ");

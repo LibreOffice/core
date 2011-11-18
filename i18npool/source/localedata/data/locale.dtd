@@ -254,7 +254,7 @@
 <!-- At least one Calendar element must be given if the RefLocale mechanism is not used! -->
 <!ATTLIST LC_CALENDAR %RefLocale;>
 
-<!ELEMENT Calendar (DaysOfWeek, MonthsOfYear, Eras, StartDayOfWeek, MinimalDaysInFirstWeek) >
+<!ELEMENT Calendar (DaysOfWeek, MonthsOfYear, GenitiveMonths*, Eras, StartDayOfWeek, MinimalDaysInFirstWeek) >
 <!ATTLIST Calendar %UNOModule;>
 <!-- The unoid of a gregorian calendar MUST be lower case "gregorian",
      calendars MUST match the names defined in the OASIS OpenDocument Format
@@ -283,6 +283,17 @@
 <!-- Sequence of months is important, MUST start with the first month of a
      year, e.g. January in a Gregorian calendar.
  -->
+
+<!ELEMENT GenitiveMonths (Month*)>
+<!-- Possessive genitive case month names, for example in Slavic locales. The
+     element is optional, but if present all Month elements of a Calendar must
+     be given if the RefLocale mechanism is not used! If not present,
+     MonthsOfYear names will be used. -->
+<!ATTLIST GenitiveMonths %RefLocale;>
+<!-- Sequence of months is important, MUST start with the first month of a
+     year, e.g. January in a Gregorian calendar.
+ -->
+
 <!ELEMENT Month (MonthID, DefaultAbbrvName, DefaultFullName)>
 <!ELEMENT MonthID (#PCDATA)>
 <!-- Preferably the lower case abbreviated English name like jan for January. -->
