@@ -576,11 +576,6 @@ int Export::Execute( int nToken, const char * pToken )
                     return 1;
                 }
             }
-            else if (( nToken != LISTASSIGNMENT ) && ( nToken != UIENTRIES )){
-                // cur. line has macro line end
-                ByteString sTmpLine( sToken );
-                sTmpLine.EraseAllChars( '\t' ); sTmpLine.EraseAllChars( ' ' );
-            }
         }
     }
 
