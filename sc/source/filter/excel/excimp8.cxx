@@ -484,7 +484,6 @@ void ImportExcel8::AutoFilter( void )
 XclImpAutoFilterData::XclImpAutoFilterData( RootData* pRoot, const ScRange& rRange ) :
         ExcRoot( pRoot ),
         pCurrDBData(NULL),
-        nFirstEmpty( 0 ),
         bActive( false ),
         bHasConflict( false ),
         bCriteria( false ),
@@ -581,26 +580,21 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
     bool            bTopOfTop10 = ::get_flag( nFlags, EXC_AFFLAG_TOP10TOP );
     bool            bPercent    = ::get_flag( nFlags, EXC_AFFLAG_TOP10PERC );
     sal_uInt16      nCntOfTop10 = nFlags >> 7;
-    SCSIZE          nCount      = aParam.GetEntryCount();
 
     if( bTop10 )
     {
-        if( nFirstEmpty < nCount )
-        {
-            ScQueryEntry& aEntry = aParam.GetEntry( nFirstEmpty );
-            ScQueryEntry::Item& rItem = aEntry.GetQueryItem();
-            aEntry.bDoQuery = true;
-            aEntry.nField = static_cast<SCCOLROW>(StartCol() + static_cast<SCCOL>(nCol));
-            aEntry.eOp = bTopOfTop10 ?
-                (bPercent ? SC_TOPPERC : SC_TOPVAL) : (bPercent ? SC_BOTPERC : SC_BOTVAL);
-            aEntry.eConnect = SC_AND;
+        ScQueryEntry& aEntry = aParam.AppendEntry();
+        ScQueryEntry::Item& rItem = aEntry.GetQueryItem();
+        aEntry.bDoQuery = true;
+        aEntry.nField = static_cast<SCCOLROW>(StartCol() + static_cast<SCCOL>(nCol));
+        aEntry.eOp = bTopOfTop10 ?
+            (bPercent ? SC_TOPPERC : SC_TOPVAL) : (bPercent ? SC_BOTPERC : SC_BOTVAL);
+        aEntry.eConnect = SC_AND;
 
-            rItem.meType = ScQueryEntry::ByString;
-            rItem.maString = rtl::OUString::valueOf(static_cast<sal_Int32>(nCntOfTop10));
+        rItem.meType = ScQueryEntry::ByString;
+        rItem.maString = rtl::OUString::valueOf(static_cast<sal_Int32>(nCntOfTop10));
 
-            rStrm.Ignore( 20 );
-            nFirstEmpty++;
-        }
+        rStrm.Ignore(20);
         return;
     }
 
@@ -614,93 +608,87 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
 
     for (size_t nE = 0; nE < 2; ++nE)
     {
-        if( nFirstEmpty < nCount )
+        ScQueryEntry& rEntry = aEntries[nE];
+        ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+        bIgnore = false;
+
+        rStrm >> nType >> nOper;
+        switch( nOper )
         {
-            ScQueryEntry& rEntry = aEntries[nE];
-            ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-            bIgnore = false;
-
-            rStrm >> nType >> nOper;
-            switch( nOper )
-            {
-                case EXC_AFOPER_LESS:
-                    rEntry.eOp = SC_LESS;
-                break;
-                case EXC_AFOPER_EQUAL:
-                    rEntry.eOp = SC_EQUAL;
-                break;
-                case EXC_AFOPER_LESSEQUAL:
-                    rEntry.eOp = SC_LESS_EQUAL;
-                break;
-                case EXC_AFOPER_GREATER:
-                    rEntry.eOp = SC_GREATER;
-                break;
-                case EXC_AFOPER_NOTEQUAL:
-                    rEntry.eOp = SC_NOT_EQUAL;
-                break;
-                case EXC_AFOPER_GREATEREQUAL:
-                    rEntry.eOp = SC_GREATER_EQUAL;
-                break;
-                default:
-                    rEntry.eOp = SC_EQUAL;
-            }
-
-            rtl::OUString aStr;
-
-            switch( nType )
-            {
-                case EXC_AFTYPE_RK:
-                    rStrm >> nRK;
-                    rStrm.Ignore( 4 );
-                    CreateFromDouble(
-                        rItem.maString, XclTools::GetDoubleFromRK(nRK));
-                break;
-                case EXC_AFTYPE_DOUBLE:
-                    rStrm >> fVal;
-                    CreateFromDouble(rItem.maString, fVal);
-                break;
-                case EXC_AFTYPE_STRING:
-                    rStrm.Ignore( 4 );
-                    rStrm >> nStrLen[ nE ];
-                    rStrm.Ignore( 3 );
-                    rItem.maString = rtl::OUString();
-                break;
-                case EXC_AFTYPE_BOOLERR:
-                    rStrm >> nBoolErr >> nVal;
-                    rStrm.Ignore( 6 );
-                    rItem.maString = rtl::OUString::valueOf(static_cast<sal_Int32>(nVal));
-                    bIgnore = (nBoolErr != 0);
-                break;
-                case EXC_AFTYPE_EMPTY:
-                    rEntry.SetQueryByEmpty();
-                break;
-                case EXC_AFTYPE_NOTEMPTY:
-                    rEntry.SetQueryByNonEmpty();
-                break;
-                default:
-                    rStrm.Ignore( 8 );
-                    bIgnore = true;
-            }
-
-            /*  #i39464# conflict, if two conditions of one column are 'OR'ed,
-                and they follow conditions of other columns.
-                Example: Let A1 be a condition of column A, and B1 and B2
-                conditions of column B, connected with OR. Excel performs
-                'A1 AND (B1 OR B2)' in this case, but Calc would do
-                '(A1 AND B1) OR B2' instead. */
-            if( (nFirstEmpty > 1) && nE && (eConn == SC_OR) && !bIgnore )
-                bHasConflict = true;
-            if( !bHasConflict && !bIgnore )
-            {
-                rEntry.bDoQuery = true;
-                rItem.meType = ScQueryEntry::ByString;
-                rEntry.nField = static_cast<SCCOLROW>(StartCol() + static_cast<SCCOL>(nCol));
-                rEntry.eConnect = nE ? eConn : SC_AND;
-                nFirstEmpty++;
-            }
+            case EXC_AFOPER_LESS:
+                rEntry.eOp = SC_LESS;
+            break;
+            case EXC_AFOPER_EQUAL:
+                rEntry.eOp = SC_EQUAL;
+            break;
+            case EXC_AFOPER_LESSEQUAL:
+                rEntry.eOp = SC_LESS_EQUAL;
+            break;
+            case EXC_AFOPER_GREATER:
+                rEntry.eOp = SC_GREATER;
+            break;
+            case EXC_AFOPER_NOTEQUAL:
+                rEntry.eOp = SC_NOT_EQUAL;
+            break;
+            case EXC_AFOPER_GREATEREQUAL:
+                rEntry.eOp = SC_GREATER_EQUAL;
+            break;
+            default:
+                rEntry.eOp = SC_EQUAL;
         }
-        else
-            rStrm.Ignore( 10 );
+
+        rtl::OUString aStr;
+
+        switch( nType )
+        {
+            case EXC_AFTYPE_RK:
+                rStrm >> nRK;
+                rStrm.Ignore( 4 );
+                CreateFromDouble(
+                    rItem.maString, XclTools::GetDoubleFromRK(nRK));
+            break;
+            case EXC_AFTYPE_DOUBLE:
+                rStrm >> fVal;
+                CreateFromDouble(rItem.maString, fVal);
+            break;
+            case EXC_AFTYPE_STRING:
+                rStrm.Ignore( 4 );
+                rStrm >> nStrLen[ nE ];
+                rStrm.Ignore( 3 );
+                rItem.maString = rtl::OUString();
+            break;
+            case EXC_AFTYPE_BOOLERR:
+                rStrm >> nBoolErr >> nVal;
+                rStrm.Ignore( 6 );
+                rItem.maString = rtl::OUString::valueOf(static_cast<sal_Int32>(nVal));
+                bIgnore = (nBoolErr != 0);
+            break;
+            case EXC_AFTYPE_EMPTY:
+                rEntry.SetQueryByEmpty();
+            break;
+            case EXC_AFTYPE_NOTEMPTY:
+                rEntry.SetQueryByNonEmpty();
+            break;
+            default:
+                rStrm.Ignore( 8 );
+                bIgnore = true;
+        }
+
+        /*  #i39464# conflict, if two conditions of one column are 'OR'ed,
+            and they follow conditions of other columns.
+            Example: Let A1 be a condition of column A, and B1 and B2
+            conditions of column B, connected with OR. Excel performs
+            'A1 AND (B1 OR B2)' in this case, but Calc would do
+            '(A1 AND B1) OR B2' instead. */
+        if (nE && (eConn == SC_OR) && !bIgnore)
+            bHasConflict = true;
+        if( !bHasConflict && !bIgnore )
+        {
+            rEntry.bDoQuery = true;
+            rItem.meType = ScQueryEntry::ByString;
+            rEntry.nField = static_cast<SCCOLROW>(StartCol() + static_cast<SCCOL>(nCol));
+            rEntry.eConnect = nE ? eConn : SC_AND;
+        }
     }
 
     for (size_t nE = 0; nE < 2; ++nE)
@@ -788,9 +776,8 @@ void XclImpAutoFilterData::EnableRemoveFilter()
     // only if this is a saved Advanced filter
     if( !bActive && bAutoOrAdvanced )
     {
-        ScQueryEntry& aEntry = aParam.GetEntry( nFirstEmpty );
-        aEntry.bDoQuery = sal_True;
-        ++nFirstEmpty;
+        ScQueryEntry& aEntry = aParam.AppendEntry();
+        aEntry.bDoQuery = true;
     }
 
     // TBD: force the automatic activation of the

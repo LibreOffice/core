@@ -100,7 +100,6 @@ class XclImpAutoFilterData : private ExcRoot
 private:
     ScDBData*                   pCurrDBData;
     ScQueryParam                aParam;
-    SCSIZE                      nFirstEmpty;
     sal_Bool                        bActive;
     sal_Bool                        bHasConflict;
     sal_Bool                        bCriteria;
