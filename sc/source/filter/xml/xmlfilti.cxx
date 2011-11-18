@@ -388,7 +388,7 @@ SvXMLImportContext *ScXMLConditionContext::CreateChildContext( sal_uInt16 nPrefi
         case XML_TOK_CONDITION_FILTER_SET_ITEM:
         {
             pContext = new ScXMLSetItemContext(
-                GetScImport(), nPrefix, rLName, xAttrList);
+                GetScImport(), nPrefix, rLName, xAttrList, *this);
         }
         break;
     }
@@ -451,6 +451,11 @@ void ScXMLConditionContext::GetOperator(
         rEntry.eOp = SC_DOES_NOT_END_WITH;
 }
 
+void ScXMLConditionContext::AddSetItem(const ScQueryEntry::Item& rItem)
+{
+    maQueryItems.push_back(rItem);
+}
+
 void ScXMLConditionContext::EndElement()
 {
     ScQueryEntry& rEntry = mrQueryParam.AppendEntry();
@@ -464,17 +469,23 @@ void ScXMLConditionContext::EndElement()
     GetOperator(sOperator, mrQueryParam, rEntry);
     SCCOLROW nStartPos = mrQueryParam.bByRow ? mrQueryParam.nCol1 : mrQueryParam.nRow1;
     rEntry.nField = nField + nStartPos;
-    ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-    if (IsXMLToken(sDataType, XML_NUMBER))
+
+    if (maQueryItems.empty())
     {
-        rItem.mfVal = sConditionValue.toDouble();
-        rItem.meType = ScQueryEntry::ByValue;
+        ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+        if (IsXMLToken(sDataType, XML_NUMBER))
+        {
+            rItem.mfVal = sConditionValue.toDouble();
+            rItem.meType = ScQueryEntry::ByValue;
+        }
+        else
+        {
+            rItem.maString = sConditionValue;
+            rItem.meType = ScQueryEntry::ByString;
+        }
     }
     else
-    {
-        rItem.maString = sConditionValue;
-        rItem.meType = ScQueryEntry::ByString;
-    }
+        rEntry.GetQueryItems().swap(maQueryItems);
 }
 
 const ScXMLImport& ScXMLSetItemContext::GetScImport() const
@@ -489,7 +500,7 @@ ScXMLImport& ScXMLSetItemContext::GetScImport()
 
 ScXMLSetItemContext::ScXMLSetItemContext(
     ScXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLName,
-    const Reference<XAttributeList>& xAttrList) :
+    const Reference<XAttributeList>& xAttrList, ScXMLConditionContext& rParent) :
     SvXMLImportContext(rImport, nPrfx, rLName)
 {
     sal_Int32 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -507,7 +518,11 @@ ScXMLSetItemContext::ScXMLSetItemContext(
         {
             case XML_TOK_FILTER_SET_ITEM_ATTR_VALUE:
             {
-                // TODO: import the value.
+                ScQueryEntry::Item aItem;
+                aItem.maString = sValue;
+                aItem.meType = ScQueryEntry::ByString;
+                aItem.mfVal = 0.0;
+                rParent.AddSetItem(aItem);
             }
             break;
         }

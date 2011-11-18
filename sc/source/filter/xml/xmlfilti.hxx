@@ -40,12 +40,12 @@
 
 #include "xmldrani.hxx"
 #include "xmldpimp.hxx"
+#include "queryentry.hxx"
 
 #include <vector>
 
 class ScXMLImport;
 struct ScQueryParam;
-struct ScQueryEntry;
 
 class ScXMLFilterContext : public SvXMLImportContext
 {
@@ -155,6 +155,7 @@ class ScXMLConditionContext : public SvXMLImportContext
     ScQueryParam& mrQueryParam;
     ScXMLFilterContext* pFilterContext;
 
+    ScQueryEntry::QueryItemsType maQueryItems;
     rtl::OUString sDataType;
     rtl::OUString sConditionValue;
     rtl::OUString sOperator;
@@ -180,8 +181,10 @@ public:
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
-    void GetOperator(const rtl::OUString& aOpStr, ScQueryParam& rParam, ScQueryEntry& rEntry) const;
     virtual void EndElement();
+
+    void GetOperator(const rtl::OUString& aOpStr, ScQueryParam& rParam, ScQueryEntry& rEntry) const;
+    void AddSetItem(const ScQueryEntry::Item& rItem);
 };
 
 class ScXMLSetItemContext : public SvXMLImportContext
@@ -192,7 +195,8 @@ public:
     ScXMLSetItemContext(ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
+                            ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLConditionContext& rParent);
 
     virtual ~ScXMLSetItemContext();
 
