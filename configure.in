@@ -633,11 +633,6 @@ AC_ARG_ENABLE(static-gtk,
          instead of the dynamic ones. (Enables -Bstatic linker flag for GTK+ libraries.)]),
 ,)
 
-AC_ARG_ENABLE(layout,
-    AS_HELP_STRING([--enable-layout],
-        [Enable the compilation and use of layout dialogs.]),
-,)
-
 AC_ARG_ENABLE(build-mozilla,
     AS_HELP_STRING([--disable-build-mozilla],
         [Use this option if you do not want to build the Mozilla components from
