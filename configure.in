@@ -806,6 +806,11 @@ AC_ARG_ENABLE(release-build,
          See http://wiki.documentfoundation.org/DevBuild]),
 ,)
 
+AC_ARG_ENABLE(silent-msi,
+    AS_HELP_STRING([--enable-silent-msi],
+        [Enable MSI with LIMITUI=1 (silent install).]),
+,)
+
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -8457,6 +8462,19 @@ else
     ENABLE_RELEASE_BUILD="TRUE"
 fi
 AC_SUBST(ENABLE_RELEASE_BUILD)
+
+dnl ===================================================================
+dnl Test whether to create MSI with LIMITUI=1 (silent install)
+dnl ===================================================================
+AC_MSG_CHECKING([whether to create MSI with LIMITUI=1 (silent install)])
+if test "z$enable_silent_msi" = "z" -o "z$enable_silent_msi" = "zno" ; then
+    AC_MSG_RESULT([no])
+    ENABLE_SILENT_MSI="FALSE"
+else
+    AC_MSG_RESULT([yes])
+    ENABLE_SILENT_MSI="TRUE"
+fi
+AC_SUBST(ENABLE_SILENT_MSI)
 
 dnl ===================================================================
 dnl Test whether to enable ActiveX embedding
