@@ -2093,21 +2093,27 @@ sal_Bool SwCursor::MoveSection( SwWhichSection fnWhichSect,
 
 void SwCursor::RestoreSavePos()
 {
-    // fdo#40831 if you delete the row or column containing pSavePos,
-    // Writer will crash. Work around this.
+    // This method is not supposed to be used in cases when nodes may be
+    // deleted; detect such cases, but do not crash (example: fdo#40831).
     sal_uLong uNodeCount = GetPoint()->nNode.GetNodes().Count();
+    OSL_ENSURE(!pSavePos || pSavePos->nNode < uNodeCount,
+        "SwCursor::RestoreSavePos: invalid node: "
+        "probably something was deleted; consider using SwUnoCrsr instead");
     if( pSavePos && pSavePos->nNode < uNodeCount )
     {
         GetPoint()->nNode = pSavePos->nNode;
 
         xub_StrLen nIdx = 0;
         if ( GetCntntNode() )
+        {
             if ( pSavePos->nCntnt <= GetCntntNode()->Len() )
                 nIdx = pSavePos->nCntnt;
             else
+            {
                 nIdx = GetCntntNode()->Len();
-        else
-            nIdx = GetPoint()->nContent.GetIndex(); // Probably, nIdx = 0
+                OSL_FAIL("SwCursor::RestoreSavePos: invalid content index");
+            }
+        }
         GetPoint()->nContent.Assign( GetCntntNode(), nIdx );
     }
 }
