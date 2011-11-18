@@ -351,7 +351,7 @@ namespace connectivity
 
         OSQLParseNode* getByRule(OSQLParseNode::Rule eRule) const;
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
         // shows the ParseTree with tabs and linefeeds
         void showParseTree( ::rtl::OUString& rString ) const;
         void showParseTree( ::rtl::OUStringBuffer& _inout_rBuf, sal_uInt32 nLevel ) const;

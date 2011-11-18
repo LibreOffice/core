@@ -675,24 +675,7 @@ PathStatus Bootstrap::locateUserInstallation(OUString& _rURL)
     _rURL = aPathData.path;
     return aPathData.status;
 }
-// ---------------------------------------------------------------------------------------
 
-PathStatus Bootstrap::locateSharedData(OUString& _rURL)
-{
-    OUString const csShareDirItem(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_ITEM_SHAREDIR));
-
-    rtl::Bootstrap aData( data().getImplName() );
-
-    if ( aData.getFrom(csShareDirItem, _rURL) )
-    {
-        return checkStatusAndNormalizeURL(_rURL);
-    }
-    else
-    {
-        OUString const csShareDir(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_DIRNAME_SHAREDIR));
-        return getDerivedPath(_rURL, data().aBaseInstall_, csShareDir, aData, csShareDirItem);
-    }
-}
 // ---------------------------------------------------------------------------------------
 
 PathStatus Bootstrap::locateUserData(OUString& _rURL)

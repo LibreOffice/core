@@ -164,7 +164,6 @@ public:
     const SfxItemSet&   GetEmptyItemSet();
     SfxItemSet          GetAttribs();
     void                SetAttribs( const SfxItemSet& rSet );
-    void                SetParaAttribs( const SfxItemSet& rSet, sal_uInt16 nPara );
     void                RemoveAttribs( sal_Bool bRemoveParaAttribs = sal_False, sal_uInt16 nWhich = 0 );
     void                RemoveCharAttribs( sal_uInt16 nPara, sal_uInt16 nWhich = 0 );
     void                RemoveAttribsKeepLanguages( sal_Bool bRemoveParaAttribs = sal_False );

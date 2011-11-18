@@ -101,7 +101,6 @@ EECharAttribArray::Replace(EECharAttrib const*, unsigned short, unsigned short)
 EECharAttribArray::_ForEach(unsigned short, unsigned short, unsigned char (*)(EECharAttrib const&, void*), void*)
 EditView::GetSelectionMode() const
 EditView::SetCursor(Cursor const&)
-EditView::SetParaAttribs(SfxItemSet const&, unsigned short)
 EditView::SetPointer(Pointer const&)
 ElementCollector::isAbleToNotify() const
 ElementCollector::setSecurityId(int)
@@ -1936,13 +1935,6 @@ graphite2::TtfUtil::GlyfLookup(unsigned short, void const*, void const*, unsigne
 jfw_plugin::VendorBase::createInstance()
 jfw_plugin::VendorBase::getJavaExePaths(int*)
 jvmaccess::ClassPath::doLoadClass(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, void*, rtl::OUString const&, rtl::OUString const&)
-layout::MessageBox::MessageBox(Window*, char const*, char const*, char const*, rtl::OString const&, char const*, char const*)
-layout::MessageBox::MessageBox(Window*, long, char const*, char const*, char const*, rtl::OString const&, char const*, char const*)
-layout::MessageBox::MessageBox(Window*, long, rtl::OUString const&, rtl::OUString, rtl::OUString, rtl::OString const&, char const*, char const*)
-layout::MessageBox::MessageBox(Window*, rtl::OUString const&, rtl::OUString, rtl::OUString, rtl::OString const&, char const*, char const*)
-layout::TabControl::GetTabControl() const
-layout::WindowImpl::setProperty(char const*, com::sun::star::uno::Any)
-layout::getToolkit()
 libcmis::SessionFactory::getRepositories(std::__debug::map<int, std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<int>, std::allocator<std::pair<int const, std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >)
 libvisio::VisioDocument::generateSVG(WPXInputStream*, WPXString&)
 libwpg::WPGraphics::generateSVG(unsigned char const*, unsigned long, WPXString&, libwpg::WPGFileFormat)

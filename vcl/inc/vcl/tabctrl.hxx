@@ -194,10 +194,6 @@ public:
     using Control::GetIndexForPoint;
     long GetIndexForPoint( const Point& rPoint, sal_uInt16& rPageId ) const;
 
-    // returns the bounding rectangle of the union of tab page area and the
-    // corresponding tab
-    Rectangle GetTabPageBounds( sal_uInt16 nPageId ) const;
-
     // returns the rectangle of the tab for page nPageId
     Rectangle GetTabBounds( sal_uInt16 nPageId ) const;
 };

@@ -80,9 +80,6 @@ namespace utl
         /// get a file URL to the user installation [${userurl}]
         static PathStatus locateUserInstallation(rtl::OUString& _rURL);
 
-        /// get a file URL to the shared data directory [default is ${insturl}/share]
-        static PathStatus locateSharedData(rtl::OUString& _rURL);
-
         /// get a file URL to the user data directory [default is ${userurl}/user]
         static PathStatus locateUserData(rtl::OUString& _rURL);
 

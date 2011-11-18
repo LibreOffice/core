@@ -48,11 +48,9 @@ class COMPHELPER_DLLPUBLIC OSLInputStreamWrapper : public ::cppu::WeakImplHelper
 {
     ::osl::Mutex    m_aMutex;
     ::osl::File*    m_pFile;
-    sal_Bool        m_bFileOwner : 1;
 
 public:
     OSLInputStreamWrapper(::osl::File& _rStream);
-    OSLInputStreamWrapper(::osl::File* pStream, sal_Bool bOwner=sal_False);
     virtual ~OSLInputStreamWrapper();
 
 // stario::XInputStream

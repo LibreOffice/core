@@ -500,15 +500,6 @@ void EditView::SetAttribs( const SfxItemSet& rSet )
     PIMPEE->FormatAndUpdate( this );
 }
 
-void EditView::SetParaAttribs( const SfxItemSet& rSet, sal_uInt16 nPara )
-{
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    PIMPEE->SetParaAttribs( nPara, rSet );
-    // When you change paragraph attributes you must always format...
-    PIMPEE->FormatAndUpdate( this );
-}
-
 void EditView::RemoveAttribsKeepLanguages( sal_Bool bRemoveParaAttribs )
 {
     DBG_CHKTHIS( EditView, 0 );

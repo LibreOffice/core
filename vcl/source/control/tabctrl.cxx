@@ -2140,31 +2140,6 @@ void TabControl::FillLayoutData() const
 
 // -----------------------------------------------------------------------
 
-Rectangle TabControl::GetTabPageBounds( sal_uInt16 nPage ) const
-{
-    Rectangle aRet;
-
-    if( !HasLayoutData() || ! mpTabCtrlData->maLayoutPageIdToLine.size() )
-        FillLayoutData();
-
-    if( HasLayoutData() )
-    {
-        boost::unordered_map< int, int >::const_iterator it = mpTabCtrlData->maLayoutPageIdToLine.find( (int)nPage );
-        if( it != mpTabCtrlData->maLayoutPageIdToLine.end() )
-        {
-            if( it->second >= 0 && it->second < static_cast<int>(mpTabCtrlData->maTabRectangles.size()) )
-            {
-                aRet = mpTabCtrlData->maTabRectangles[ it->second ];
-                aRet.Union( const_cast<TabControl*>(this)->ImplGetTabRect( TAB_PAGERECT ) );
-            }
-        }
-    }
-
-    return aRet;
-}
-
-// -----------------------------------------------------------------------
-
 Rectangle TabControl::GetTabBounds( sal_uInt16 nPageId ) const
 {
     Rectangle aRet;

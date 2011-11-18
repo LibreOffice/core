@@ -2235,7 +2235,7 @@ void OSQLParseNode::compress(OSQLParseNode *&pSearchCondition)
         }
     }
 }
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
 // -----------------------------------------------------------------------------
 void OSQLParseNode::showParseTree( ::rtl::OUString& rString ) const
 {

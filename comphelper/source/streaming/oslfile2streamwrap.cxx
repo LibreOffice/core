@@ -38,23 +38,13 @@ namespace comphelper
 
 //------------------------------------------------------------------
 OSLInputStreamWrapper::OSLInputStreamWrapper( File& _rFile )
-                 :m_pFile(&_rFile)
-                 ,m_bFileOwner(sal_False)
-{
-}
-
-//------------------------------------------------------------------
-OSLInputStreamWrapper::OSLInputStreamWrapper( File* pStream, sal_Bool bOwner )
-                 :m_pFile( pStream )
-                 ,m_bFileOwner( bOwner )
+    : m_pFile(&_rFile)
 {
 }
 
 //------------------------------------------------------------------
 OSLInputStreamWrapper::~OSLInputStreamWrapper()
 {
-    if( m_bFileOwner )
-        delete m_pFile;
 }
 
 //------------------------------------------------------------------------------
@@ -92,14 +82,6 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::readSomeBytes(staruno::Sequence< sal_I
     if (nMaxBytesToRead < 0)
         throw stario::BufferSizeExceededException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
 
-    /*
-      if (m_pFile->IsEof())
-      {
-      aData.realloc(0);
-      return 0;
-      }
-      else
-    */
     return readBytes(aData, nMaxBytesToRead);
 }
 
@@ -119,11 +101,6 @@ void SAL_CALL OSLInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( st
     {
         throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
     }
-
-#ifdef DBG_UTIL
-    m_pFile->getPos(nCurrentPos);
-//  volatile int dummy = 0;                      // to take a look at last changes ;-)
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -163,8 +140,6 @@ void SAL_CALL OSLInputStreamWrapper::closeInput() throw( stario::NotConnectedExc
         throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
 
     m_pFile->close();
-    if (m_bFileOwner)
-        delete m_pFile;
 
     m_pFile = NULL;
 }
