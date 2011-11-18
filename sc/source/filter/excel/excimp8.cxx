@@ -485,7 +485,6 @@ XclImpAutoFilterData::XclImpAutoFilterData( RootData* pRoot, const ScRange& rRan
         ExcRoot( pRoot ),
         pCurrDBData(NULL),
         bActive( false ),
-        bHasConflict( false ),
         bCriteria( false ),
         bAutoOrAdvanced(false)
 {
@@ -518,7 +517,7 @@ void XclImpAutoFilterData::SetCellAttribs()
 
 void XclImpAutoFilterData::InsertQueryParam()
 {
-    if( pCurrDBData && !bHasConflict )
+    if (pCurrDBData)
     {
         ScRange aAdvRange;
         sal_Bool    bHasAdv = pCurrDBData->GetAdvancedQuerySource( aAdvRange );
@@ -575,11 +574,13 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
     sal_uInt16 nCol, nFlags;
     rStrm >> nCol >> nFlags;
 
-    ScQueryConnect  eConn       = ::get_flagvalue( nFlags, EXC_AFFLAG_ANDORMASK, SC_OR, SC_AND );
-    bool            bTop10      = ::get_flag( nFlags, EXC_AFFLAG_TOP10 );
-    bool            bTopOfTop10 = ::get_flag( nFlags, EXC_AFFLAG_TOP10TOP );
-    bool            bPercent    = ::get_flag( nFlags, EXC_AFFLAG_TOP10PERC );
-    sal_uInt16      nCntOfTop10 = nFlags >> 7;
+    ScQueryConnect eConn = ::get_flagvalue( nFlags, EXC_AFFLAG_ANDORMASK, SC_OR, SC_AND );
+    bool bSimple1    = ::get_flag(nFlags, EXC_AFFLAG_SIMPLE1);
+    bool bSimple2    = ::get_flag(nFlags, EXC_AFFLAG_SIMPLE2);
+    bool bTop10      = ::get_flag(nFlags, EXC_AFFLAG_TOP10);
+    bool bTopOfTop10 = ::get_flag(nFlags, EXC_AFFLAG_TOP10TOP);
+    bool bPercent    = ::get_flag(nFlags, EXC_AFFLAG_TOP10PERC);
+    sal_uInt16 nCntOfTop10 = nFlags >> 7;
 
     if( bTop10 )
     {
@@ -674,15 +675,7 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
                 bIgnore = true;
         }
 
-        /*  #i39464# conflict, if two conditions of one column are 'OR'ed,
-            and they follow conditions of other columns.
-            Example: Let A1 be a condition of column A, and B1 and B2
-            conditions of column B, connected with OR. Excel performs
-            'A1 AND (B1 OR B2)' in this case, but Calc would do
-            '(A1 AND B1) OR B2' instead. */
-        if (nE && (eConn == SC_OR) && !bIgnore)
-            bHasConflict = true;
-        if( !bHasConflict && !bIgnore )
+        if (!bIgnore)
         {
             rEntry.bDoQuery = true;
             rItem.meType = ScQueryEntry::ByString;
@@ -691,13 +684,54 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
         }
     }
 
-    for (size_t nE = 0; nE < 2; ++nE)
+    if (eConn == SC_AND)
     {
-        if (nStrLen[nE] && aEntries[nE].bDoQuery)
+        for (size_t nE = 0; nE < 2; ++nE)
         {
-            aEntries[nE].GetQueryItem().maString = rStrm.ReadUniString(nStrLen[nE]);
-            ExcelQueryToOooQuery(aEntries[nE]);
-            aParam.AppendEntry() = aEntries[nE];
+            if (nStrLen[nE] && aEntries[nE].bDoQuery)
+            {
+                aEntries[nE].GetQueryItem().maString = rStrm.ReadUniString(nStrLen[nE]);
+                ExcelQueryToOooQuery(aEntries[nE]);
+                aParam.AppendEntry() = aEntries[nE];
+            }
+        }
+    }
+    else
+    {
+        OSL_ASSERT(eConn == SC_OR);
+        // Import only when both conditions are for simple equality, else
+        // import only the 1st condition due to conflict with the ordering of
+        // conditions. #i39464#.
+        //
+        // Example: Let A1 be a condition of column A, and B1 and B2
+        // conditions of column B, connected with OR. Excel performs 'A1 AND
+        // (B1 OR B2)' in this case, but Calc would do '(A1 AND B1) OR B2'
+        // instead.
+
+        if (bSimple1 && bSimple2 && nStrLen[0] && nStrLen[1])
+        {
+            // Two simple OR'ed equal conditions.  We can import this correctly.
+            ScQueryEntry& rEntry = aParam.AppendEntry();
+            rEntry.bDoQuery = true;
+            rEntry.eOp = SC_EQUAL;
+            rEntry.eConnect = SC_AND;
+            ScQueryEntry::QueryItemsType aItems;
+            aItems.reserve(2);
+            ScQueryEntry::Item aItem1, aItem2;
+            aItem1.maString = rStrm.ReadUniString(nStrLen[0]);
+            aItem1.meType = ScQueryEntry::ByString;
+            aItem2.maString = rStrm.ReadUniString(nStrLen[1]);
+            aItem2.meType = ScQueryEntry::ByString;
+            aItems.push_back(aItem1);
+            aItems.push_back(aItem2);
+            rEntry.GetQueryItems().swap(aItems);
+        }
+        else if (nStrLen[0] && aEntries[0].bDoQuery)
+        {
+            // Due to conflict, we can import only the first condition.
+            aEntries[0].GetQueryItem().maString = rStrm.ReadUniString(nStrLen[0]);
+            ExcelQueryToOooQuery(aEntries[0]);
+            aParam.AppendEntry() = aEntries[0];
         }
     }
 }

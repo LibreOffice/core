@@ -102,7 +102,6 @@ private:
     ScQueryParam                aParam;
     ScRange                     aCriteriaRange;
     bool                        bActive:1;
-    bool                        bHasConflict:1;
     bool                        bCriteria:1;
     bool                        bAutoOrAdvanced:1;
 
