@@ -54,7 +54,7 @@ using namespace linguistic;
 using ::rtl::OUString;
 
 
-BOOL operator == ( const Locale &rL1, const Locale &rL2 )
+sal_Bool operator == ( const Locale &rL1, const Locale &rL2 )
 {
     return  rL1.Language ==  rL2.Language   &&
             rL1.Country  ==  rL2.Country    &&
@@ -66,7 +66,7 @@ BOOL operator == ( const Locale &rL1, const Locale &rL2 )
 SpellChecker::SpellChecker() :
     aEvtListeners   ( GetLinguMutex() )
 {
-    bDisposing = FALSE;
+    bDisposing = sal_False;
     pPropHelper = NULL;
 }
 
@@ -115,16 +115,16 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (!aSuppLocales.getLength())
         getLocales();
-    INT32 nLen = aSuppLocales.getLength();
-    for (INT32 i = 0;  i < nLen;  ++i)
+    sal_Int32 nLen = aSuppLocales.getLength();
+    for (sal_Int32 i = 0;  i < nLen;  ++i)
     {
         const Locale *pLocale = aSuppLocales.getConstArray();
         if (rLocale == pLocale[i])
         {
-            bRes = TRUE;
+            bRes = sal_True;
             break;
         }
     }
@@ -132,7 +132,7 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
 }
 
 
-INT16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocale )
+sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale & )
 {
     // Checks wether a word is OK in a given language (Locale) or not, and
     // provides a failure type for the incorrect ones.
@@ -141,7 +141,7 @@ INT16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocal
     // - words with 's' or 'S' as first letter will have the wrong caption.
     // - all other words will be OK.
 
-    INT16 nRes = -1;
+    sal_Int16 nRes = -1;
 
     String aTmp( rWord );
     if (aTmp.Len())
@@ -175,13 +175,13 @@ sal_Bool SAL_CALL
     MutexGuard  aGuard( GetLinguMutex() );
 
      if (rLocale == Locale()  ||  !rWord.getLength())
-        return TRUE;
+        return sal_True;
 
     if (!hasLocale( rLocale ))
 #ifdef LINGU_EXCEPTIONS
         throw( IllegalArgumentException() );
 #else
-        return TRUE;
+        return sal_True;
 #endif
 
     // Get property values to be used.
@@ -193,10 +193,10 @@ sal_Bool SAL_CALL
     PropertyHelper_Spell &rHelper = GetPropHelper();
     rHelper.SetTmpPropVals( rProperties );
 
-    INT16 nFailure = GetSpellFailure( rWord, rLocale );
+    sal_Int16 nFailure = GetSpellFailure( rWord, rLocale );
     if (nFailure != -1)
     {
-        INT16 nLang = LocaleToLanguage( rLocale );
+        sal_Int16 nLang = LocaleToLanguage( rLocale );
         // postprocess result for errors that should be ignored
         if (   (!rHelper.IsSpellUpperCase()  && IsUpper( rWord, nLang ))
             || (!rHelper.IsSpellWithDigits() && HasDigits( rWord ))
@@ -225,13 +225,13 @@ Reference< XSpellAlternatives >
     String aTmp( rWord );
     if (aTmp.Len())
     {
-        INT16 nLang = LocaleToLanguage( rLocale );
+        sal_Int16 nLang = LocaleToLanguage( rLocale );
 
         if (STRING_NOTFOUND != aTmp.SearchAscii( "liss" ))
         {
             aTmp.SearchAndReplaceAllAscii( "liss", A2OU("liz") );
             xRes = new SpellAlternatives( aTmp, nLang,
-                        SpellFailure::IS_NEGATIVE_WORD, aTmp );
+                        SpellFailure::IS_NEGATIVE_WORD, ::com::sun::star::uno::Sequence< ::rtl::OUString >() );
         }
         else if (STRING_NOTFOUND != aTmp.Search( (sal_Unicode) 'x' )  ||
                  STRING_NOTFOUND != aTmp.Search( (sal_Unicode) 'X' ))
@@ -263,7 +263,7 @@ Reference< XSpellAlternatives >
                         (sal_Unicode) 'S': (sal_Unicode) 's';
                 aTmp.GetBufferAccess()[0] = cNewChar;
                 xRes = new SpellAlternatives( aTmp, nLang,
-                        SpellFailure::CAPTION_ERROR, aTmp );
+                        SpellFailure::CAPTION_ERROR, ::com::sun::star::uno::Sequence< ::rtl::OUString >() );
             }
         }
     }
@@ -299,7 +299,7 @@ Reference< XSpellAlternatives > SAL_CALL
 
 
 Reference< XInterface > SAL_CALL SpellChecker_CreateInstance(
-            const Reference< XMultiServiceFactory > & rSMgr )
+            const Reference< XMultiServiceFactory > & )
         throw(Exception)
 {
     Reference< XInterface > xService = (cppu::OWeakObject*) new SpellChecker;
@@ -314,7 +314,7 @@ sal_Bool SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (!bDisposing && rxLstnr.is())
     {
         bRes = GetPropHelper().addLinguServiceEventListener( rxLstnr );
@@ -330,7 +330,7 @@ sal_Bool SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (!bDisposing && rxLstnr.is())
     {
         DBG_ASSERT( xPropHelper.is(), "xPropHelper non existent" );
@@ -341,7 +341,7 @@ sal_Bool SAL_CALL
 
 
 OUString SAL_CALL
-    SpellChecker::getServiceDisplayName( const Locale& rLocale )
+    SpellChecker::getServiceDisplayName( const Locale& )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -357,7 +357,7 @@ void SAL_CALL
 
     if (!pPropHelper)
     {
-        INT32 nLen = rArguments.getLength();
+        sal_Int32 nLen = rArguments.getLength();
         if (2 == nLen)
         {
             Reference< XPropertySet >   xPropSet;
@@ -385,7 +385,7 @@ void SAL_CALL
 
     if (!bDisposing)
     {
-        bDisposing = TRUE;
+        bDisposing = sal_True;
         EventObject aEvtObj( (XSpellChecker *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
     }
@@ -431,10 +431,10 @@ sal_Bool SAL_CALL SpellChecker::supportsService( const OUString& ServiceName )
 
     Sequence< OUString > aSNL = getSupportedServiceNames();
     const OUString * pArray = aSNL.getConstArray();
-    for( INT32 i = 0; i < aSNL.getLength(); i++ )
+    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
-            return TRUE;
-    return FALSE;
+            return sal_True;
+    return sal_False;
 }
 
 
@@ -469,7 +469,7 @@ sal_Bool SAL_CALL SpellChecker_writeInfo(
                 pRegistryKey->createKey( aImpl );
         Sequence< OUString > aServices =
                 SpellChecker::getSupportedServiceNames_Static();
-        for( INT32 i = 0; i < aServices.getLength(); i++ )
+        for( sal_Int32 i = 0; i < aServices.getLength(); i++ )
             xNewKey->createKey( aServices.getConstArray()[i] );
 
         return sal_True;

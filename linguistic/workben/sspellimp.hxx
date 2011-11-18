@@ -69,7 +69,7 @@ class SpellChecker :
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
     Reference< XPropertyChangeListener >    xPropHelper;
     PropertyHelper_Spell *                  pPropHelper;
-    BOOL                                    bDisposing;
+    sal_Bool                                    bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
     SpellChecker(const SpellChecker &);
@@ -81,7 +81,7 @@ class SpellChecker :
         return pPropHelper ? *pPropHelper : GetPropHelper_Impl();
     }
 
-    INT16   GetSpellFailure( const OUString &rWord, const Locale &rLocale );
+    sal_Int16   GetSpellFailure( const OUString &rWord, const Locale &rLocale );
     Reference< XSpellAlternatives >
             GetProposals( const OUString &rWord, const Locale &rLocale );
 

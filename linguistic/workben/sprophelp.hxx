@@ -79,7 +79,7 @@ public:
     PropertyChgHelper(
             const Reference< XInterface > &rxSource,
             Reference< XPropertySet > &rxPropSet,
-            const char *pPropNames[], USHORT nPropCount );
+            const char *pPropNames[], sal_uInt16 nPropCount );
     virtual ~PropertyChgHelper();
 
     // XEventListener
@@ -122,20 +122,20 @@ class PropertyHelper_Spell :
     public PropertyChgHelper
 {
     // default values
-    BOOL    bIsGermanPreReform;
-    BOOL    bIsIgnoreControlCharacters;
-    BOOL    bIsUseDictionaryList;
-    BOOL    bIsSpellUpperCase;
-    BOOL    bIsSpellWithDigits;
-    BOOL    bIsSpellCapitalization;
+    sal_Bool    bIsGermanPreReform;
+    sal_Bool    bIsIgnoreControlCharacters;
+    sal_Bool    bIsUseDictionaryList;
+    sal_Bool    bIsSpellUpperCase;
+    sal_Bool    bIsSpellWithDigits;
+    sal_Bool    bIsSpellCapitalization;
 
     // return values, will be set to default value or current temporary value
-    BOOL    bResIsGermanPreReform;
-    BOOL    bResIsIgnoreControlCharacters;
-    BOOL    bResIsUseDictionaryList;
-    BOOL    bResIsSpellUpperCase;
-    BOOL    bResIsSpellWithDigits;
-    BOOL    bResIsSpellCapitalization;
+    sal_Bool    bResIsGermanPreReform;
+    sal_Bool    bResIsIgnoreControlCharacters;
+    sal_Bool    bResIsUseDictionaryList;
+    sal_Bool    bResIsSpellUpperCase;
+    sal_Bool    bResIsSpellWithDigits;
+    sal_Bool    bResIsSpellCapitalization;
 
 
     // disallow use of copy-constructor and assignment-operator
@@ -157,12 +157,12 @@ public:
 
     void    SetTmpPropVals( const PropertyValues &rPropVals );
 
-    BOOL    IsGermanPreReform() const           { return bResIsGermanPreReform; }
-    BOOL    IsIgnoreControlCharacters() const   { return bResIsIgnoreControlCharacters; }
-    BOOL    IsUseDictionaryList() const         { return bResIsUseDictionaryList; }
-    BOOL    IsSpellUpperCase() const            { return bResIsSpellUpperCase; }
-    BOOL    IsSpellWithDigits() const           { return bResIsSpellWithDigits; }
-    BOOL    IsSpellCapitalization() const       { return bResIsSpellCapitalization; }
+    sal_Bool    IsGermanPreReform() const           { return bResIsGermanPreReform; }
+    sal_Bool    IsIgnoreControlCharacters() const   { return bResIsIgnoreControlCharacters; }
+    sal_Bool    IsUseDictionaryList() const         { return bResIsUseDictionaryList; }
+    sal_Bool    IsSpellUpperCase() const            { return bResIsSpellUpperCase; }
+    sal_Bool    IsSpellWithDigits() const           { return bResIsSpellWithDigits; }
+    sal_Bool    IsSpellCapitalization() const       { return bResIsSpellCapitalization; }
 };
 
 

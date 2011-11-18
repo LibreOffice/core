@@ -59,14 +59,14 @@ using ::rtl::OUString;
 PropertyChgHelper::PropertyChgHelper(
         const Reference< XInterface > & rxSource,
         Reference< XPropertySet > &rxPropSet,
-        const char *pPropNames[], USHORT nPropCount ) :
-    xMyEvtObj           (rxSource),
-    xPropSet            (rxPropSet),
-    aPropNames          (nPropCount),
-    aLngSvcEvtListeners (GetLinguMutex())
+        const char *pPropNames[], sal_uInt16 nPropCount )
+    : aPropNames(nPropCount)
+    , xMyEvtObj(rxSource)
+    , aLngSvcEvtListeners(GetLinguMutex())
+    , xPropSet(rxPropSet)
 {
     OUString *pName = aPropNames.getArray();
-    for (INT32 i = 0;  i < nPropCount;  ++i)
+    for (sal_Int32 i = 0;  i < nPropCount;  ++i)
     {
         pName[i] = ::rtl::OUString::createFromAscii( pPropNames[i] );
     }
@@ -93,9 +93,9 @@ void PropertyChgHelper::AddAsPropListener()
 {
     if (xPropSet.is())
     {
-        INT32 nLen = aPropNames.getLength();
+        sal_Int32 nLen = aPropNames.getLength();
         const OUString *pPropName = aPropNames.getConstArray();
-        for (INT32 i = 0;  i < nLen;  ++i)
+        for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
             if (pPropName[i].getLength())
                 xPropSet->addPropertyChangeListener( pPropName[i], this );
@@ -107,9 +107,9 @@ void PropertyChgHelper::RemoveAsPropListener()
 {
     if (xPropSet.is())
     {
-        INT32 nLen = aPropNames.getLength();
+        sal_Int32 nLen = aPropNames.getLength();
         const OUString *pPropName = aPropNames.getConstArray();
-        for (INT32 i = 0;  i < nLen;  ++i)
+        for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
             if (pPropName[i].getLength())
                 xPropSet->removePropertyChangeListener( pPropName[i], this );
@@ -150,10 +150,10 @@ sal_Bool SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (rxListener.is())
     {
-        INT32   nCount = aLngSvcEvtListeners.getLength();
+        sal_Int32   nCount = aLngSvcEvtListeners.getLength();
         bRes = aLngSvcEvtListeners.addInterface( rxListener ) != nCount;
     }
     return bRes;
@@ -167,10 +167,10 @@ sal_Bool SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (rxListener.is())
     {
-        INT32   nCount = aLngSvcEvtListeners.getLength();
+        sal_Int32   nCount = aLngSvcEvtListeners.getLength();
         bRes = aLngSvcEvtListeners.removeInterface( rxListener ) != nCount;
     }
     return bRes;
@@ -194,13 +194,13 @@ PropertyHelper_Spell::PropertyHelper_Spell(
     PropertyChgHelper   ( rxSource, rxPropSet, aSP, SAL_N_ELEMENTS(aSP))
 {
     SetDefault();
-    INT32 nLen = GetPropNames().getLength();
+    sal_Int32 nLen = GetPropNames().getLength();
     if (rxPropSet.is() && nLen)
     {
         const OUString *pPropName = GetPropNames().getConstArray();
-        for (INT32 i = 0;  i < nLen;  ++i)
+        for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            BOOL *pbVal     = NULL,
+            sal_Bool *pbVal     = NULL,
                  *pbResVal  = NULL;
 
             if (A2OU( UPN_IS_GERMAN_PRE_REFORM ) == pPropName[i])
@@ -251,12 +251,12 @@ PropertyHelper_Spell::~PropertyHelper_Spell()
 
 void PropertyHelper_Spell::SetDefault()
 {
-    bResIsGermanPreReform           = bIsGermanPreReform            = FALSE;
-    bResIsIgnoreControlCharacters   = bIsIgnoreControlCharacters    = TRUE;
-    bResIsUseDictionaryList         = bIsUseDictionaryList          = TRUE;
-    bResIsSpellUpperCase            = bIsSpellUpperCase             = FALSE;
-    bResIsSpellWithDigits           = bIsSpellWithDigits            = FALSE;
-    bResIsSpellCapitalization       = bIsSpellCapitalization        = TRUE;
+    bResIsGermanPreReform           = bIsGermanPreReform            = sal_False;
+    bResIsIgnoreControlCharacters   = bIsIgnoreControlCharacters    = sal_True;
+    bResIsUseDictionaryList         = bIsUseDictionaryList          = sal_True;
+    bResIsSpellUpperCase            = bIsSpellUpperCase             = sal_False;
+    bResIsSpellWithDigits           = bIsSpellWithDigits            = sal_False;
+    bResIsSpellCapitalization       = bIsSpellCapitalization        = sal_True;
 }
 
 
@@ -268,11 +268,11 @@ void SAL_CALL
 
     if (GetPropSet().is()  &&  rEvt.Source == GetPropSet())
     {
-        INT16 nLngSvcFlags = 0;
-        BOOL bSCWA = FALSE, // SPELL_CORRECT_WORDS_AGAIN ?
-             bSWWA = FALSE; // SPELL_WRONG_WORDS_AGAIN ?
+        sal_Int16 nLngSvcFlags = 0;
+        sal_Bool bSCWA = sal_False, // SPELL_CORRECT_WORDS_AGAIN ?
+             bSWWA = sal_False; // SPELL_WRONG_WORDS_AGAIN ?
 
-        BOOL *pbVal = NULL;
+        sal_Bool *pbVal = NULL;
         switch (rEvt.PropertyHandle)
         {
             case UPH_IS_IGNORE_CONTROL_CHARACTERS :
@@ -283,34 +283,34 @@ void SAL_CALL
             case UPH_IS_GERMAN_PRE_REFORM         :
             {
                 pbVal = &bIsGermanPreReform;
-                bSCWA = bSWWA = TRUE;
+                bSCWA = bSWWA = sal_True;
                 break;
             }
             case UPH_IS_USE_DICTIONARY_LIST       :
             {
                 pbVal = &bIsUseDictionaryList;
-                bSCWA = bSWWA = TRUE;
+                bSCWA = bSWWA = sal_True;
                 break;
             }
             case UPH_IS_SPELL_UPPER_CASE          :
             {
                 pbVal = &bIsSpellUpperCase;
-                bSCWA = FALSE == *pbVal;    // FALSE->TRUE change?
-                bSWWA = !bSCWA;             // TRUE->FALSE change?
+                bSCWA = sal_False == *pbVal;    // sal_False->sal_True change?
+                bSWWA = !bSCWA;             // sal_True->sal_False change?
                 break;
             }
             case UPH_IS_SPELL_WITH_DIGITS         :
             {
                 pbVal = &bIsSpellWithDigits;
-                bSCWA = FALSE == *pbVal;    // FALSE->TRUE change?
-                bSWWA = !bSCWA;             // TRUE->FALSE change?
+                bSCWA = sal_False == *pbVal;    // sal_False->sal_True change?
+                bSWWA = !bSCWA;             // sal_True->sal_False change?
                 break;
             }
             case UPH_IS_SPELL_CAPITALIZATION      :
             {
                 pbVal = &bIsSpellCapitalization;
-                bSCWA = FALSE == *pbVal;    // FALSE->TRUE change?
-                bSWWA = !bSCWA;             // TRUE->FALSE change?
+                bSCWA = sal_False == *pbVal;    // sal_False->sal_True change?
+                bSWWA = !bSCWA;             // sal_True->sal_False change?
                 break;
             }
             default:
@@ -343,13 +343,13 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
     bResIsSpellWithDigits           = bIsSpellWithDigits;
     bResIsSpellCapitalization       = bIsSpellCapitalization;
 
-    INT32 nLen = rPropVals.getLength();
+    sal_Int32 nLen = rPropVals.getLength();
     if (nLen)
     {
         const PropertyValue *pVal = rPropVals.getConstArray();
-        for (INT32 i = 0;  i < nLen;  ++i)
+        for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            BOOL *pbResVal = NULL;
+            sal_Bool *pbResVal = NULL;
             switch (pVal[i].Handle)
             {
                 case UPH_IS_GERMAN_PRE_REFORM         : pbResVal = &bResIsGermanPreReform; break;
