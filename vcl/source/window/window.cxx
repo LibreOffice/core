@@ -202,7 +202,7 @@ const char* ImplDbgCheckWindow( const void* pObj )
     if ( (pWindow->GetType() < WINDOW_FIRST) || (pWindow->GetType() > WINDOW_LAST) )
         return "Window data overwrite";
 
-    // Fenster-Verkettung ueberpruefen
+    // check window-chain
     Window* pChild = pWindow->mpWindowImpl->mpFirstChild;
     while ( pChild )
     {
@@ -223,10 +223,10 @@ void Window::ImplInitAppFontData( Window* pWindow )
     long nTextHeight = pWindow->GetTextHeight();
     long nTextWidth = pWindow->GetTextWidth( XubString( RTL_CONSTASCII_USTRINGPARAM( "aemnnxEM" ) ) );
     long nSymHeight = nTextHeight*4;
-    // Falls Font zu schmal ist, machen wir die Basis breiter,
-    // damit die Dialoge symetrisch aussehen und nicht zu schmal
-    // werden. Wenn der Dialog die gleiche breite hat, geben wir
-    // noch etwas Spielraum dazu, da etwas mehr Platz besser ist.
+    // Make the basis wider if the font is too narrow
+    // such that the dialog looks symmetrical and does not become too narrow.
+    // Add some extra space when the dialog has the same width,
+    // as a little more space is better.
     if ( nSymHeight > nTextWidth )
         nTextWidth = nSymHeight;
     else if ( nSymHeight+5 > nTextWidth )
@@ -625,8 +625,8 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mpControlFont       = NULL;         // font propertie
     mpWindowImpl->mpVCLXWindow        = NULL;
     mpWindowImpl->mpAccessibleInfos   = NULL;
-    mpWindowImpl->maControlForeground = Color( COL_TRANSPARENT );     // kein Foreground gesetzt
-    mpWindowImpl->maControlBackground = Color( COL_TRANSPARENT );     // kein Background gesetzt
+    mpWindowImpl->maControlForeground = Color( COL_TRANSPARENT );     // no foreground set
+    mpWindowImpl->maControlBackground = Color( COL_TRANSPARENT );     // no background set
     mpWindowImpl->mnLeftBorder        = 0;            // left border
     mpWindowImpl->mnTopBorder         = 0;            // top border
     mpWindowImpl->mnRightBorder       = 0;            // right border
@@ -645,7 +645,7 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mnWaitCount         = 0;            // Wait-Count (>1 == Warte-MousePointer)
     mpWindowImpl->mnPaintFlags        = 0;            // Flags for ImplCallPaint
     mpWindowImpl->mnParentClipMode    = 0;            // Flags for Parent-ClipChildren-Mode
-    mpWindowImpl->mnActivateMode      = 0;            // Wird bei System/Overlap-Windows umgesetzt
+    mpWindowImpl->mnActivateMode      = 0;            // Will be converted in System/Overlap-Windows
     mpWindowImpl->mnDlgCtrlFlags      = 0;            // DialogControl-Flags
     mpWindowImpl->mnLockCount         = 0;            // LockCount
     mpWindowImpl->meAlwaysInputMode   = AlwaysInputNone; // neither AlwaysEnableInput nor AlwaysDisableInput called
@@ -771,7 +771,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
     ImplInsertWindow( pParent );
     mpWindowImpl->mnStyle = nStyle;
 
-    // Overlap-Window-Daten
+    // Overlap-Window-Data
     if ( mpWindowImpl->mbOverlapWin )
     {
         mpWindowImpl->mpOverlapData                   = new ImplOverlapData;
@@ -1055,7 +1055,7 @@ void Window::ImplInsertWindow( Window* pParent )
             mpWindowImpl->mpNextOverlap = mpWindowImpl->mpFrameData->mpFirstOverlap;
             mpWindowImpl->mpFrameData->mpFirstOverlap = this;
 
-            // Overlap-Windows sind per default die obersten
+            // Overlap-Windows are per default the upper
             mpWindowImpl->mpNext = pFirstOverlapParent->mpWindowImpl->mpFirstOverlap;
             pFirstOverlapParent->mpWindowImpl->mpFirstOverlap = this;
             if ( !pFirstOverlapParent->mpWindowImpl->mpLastOverlap )
@@ -1083,7 +1083,7 @@ void Window::ImplInsertWindow( Window* pParent )
 
 void Window::ImplRemoveWindow( sal_Bool bRemoveFrameData )
 {
-    // Fenster aus den Listen austragen
+    // remove window from the lists
     if ( !mpWindowImpl->mbFrame )
     {
         if ( ImplIsOverlapWindow() )
@@ -1125,7 +1125,7 @@ void Window::ImplRemoveWindow( sal_Bool bRemoveFrameData )
 
     if ( bRemoveFrameData )
     {
-        // Graphic freigeben
+        // release the graphic
         ImplReleaseGraphics();
     }
 }
@@ -1246,7 +1246,7 @@ void Window::ImplLoadRes( const ResId& rResId )
 
     if ( nObjMask & (WINDOW_XYMAPMODE | WINDOW_X | WINDOW_Y) )
     {
-        // Groessenangabe aus der Resource verwenden
+        // use size as per resource
         MapUnit ePosMap = MAP_PIXEL;
 
         bPos = sal_True;
@@ -1261,7 +1261,7 @@ void Window::ImplLoadRes( const ResId& rResId )
 
     if ( nObjMask & (WINDOW_WHMAPMODE | WINDOW_WIDTH | WINDOW_HEIGHT) )
     {
-        // Groessenangabe aus der Resource verwenden
+        // use size as per resource
         MapUnit eSizeMap = MAP_PIXEL;
 
         bSize = sal_True;
@@ -1274,7 +1274,7 @@ void Window::ImplLoadRes( const ResId& rResId )
             aSize.Height() = ImplLogicUnitToPixelY( ReadLongRes(), eSizeMap );
     }
 
-    // Wegen Optimierung so schlimm aussehend
+    // looks bad due to optimisation
     if ( nRSStyle & RSWND_CLIENTSIZE )
     {
         if ( bPos )
@@ -1361,7 +1361,7 @@ Window* Window::ImplFindWindow( const Point& rFramePos )
     Window* pTempWindow;
     Window* pFindWindow;
 
-    // Zuerst alle ueberlappenden Fenster ueberpruefen
+    // check first all opverlapping windows
     pTempWindow = mpWindowImpl->mpFirstOverlap;
     while ( pTempWindow )
     {
@@ -1371,7 +1371,7 @@ Window* Window::ImplFindWindow( const Point& rFramePos )
         pTempWindow = pTempWindow->mpWindowImpl->mpNext;
     }
 
-    // dann testen wir unser Fenster
+    // then we check our window
     if ( !mpWindowImpl->mbVisible )
         return NULL;
 
@@ -1472,12 +1472,11 @@ sal_Bool Window::ImplIsWindowOrChild( const Window* pWindow, sal_Bool bSystemWin
 
 int Window::ImplTestMousePointerSet()
 {
-    // Wenn Mouse gecaptured ist, dann soll MousePointer umgeschaltet werden
+    // as soon as mouse was captured switch mouse-pointer
     if ( IsMouseCaptured() )
         return sal_True;
 
-    // Wenn sich Mouse ueber dem Fenster befindet, dann soll MousePointer
-    // umgeschaltet werden
+    // if the mouse is over the window, switch it
     Rectangle aClientRect( Point( 0, 0 ), GetOutputSizePixel() );
     if ( aClientRect.IsInside( GetPointerPosPixel() ) )
         return sal_True;
@@ -1500,8 +1499,8 @@ PointerStyle Window::ImplGetMousePointer() const
     const Window* pWindow = this;
     do
     {
-        // Wenn Pointer nicht sichtbar, dann wird suche abgebrochen, da
-        // dieser Status nicht ueberschrieben werden darf
+        // when the pointer is not visible stop the search, as
+        // this status should not be overwritten
         if ( pWindow->mpWindowImpl->mbNoPtrVisible )
             return POINTER_NULL;
 
@@ -1665,7 +1664,7 @@ void Window::ImplRemoveDel( ImplDelData* pDel ) // TODO: make "const" when incom
 
 void Window::ImplInitResolutionSettings()
 {
-    // AppFont-Aufloesung und DPI-Aufloesung neu berechnen
+    // re-calculate AppFont-resolution and DPI-resolution
     if ( mpWindowImpl->mbFrame )
     {
         const StyleSettings& rStyleSettings = maSettings.GetStyleSettings();
@@ -1680,8 +1679,8 @@ void Window::ImplInitResolutionSettings()
         mnDPIY  = mpWindowImpl->mpParent->mnDPIY;
     }
 
-    // Vorberechnete Werte fuer logische Einheiten updaten und auch
-    // die entsprechenden Tools dazu
+    // update the re-calculated values for logical units
+    // and also tools belonging to the values
     if ( IsMapMode() )
     {
         MapMode aMapMode = GetMapMode();
@@ -1855,7 +1854,7 @@ void Window::ImplUpdateSysObjClip()
     {
         ImplUpdateSysObjChildsClip();
 
-        // Schwestern muessen ihre ClipRegion auch neu berechnen
+        // siblings should re-calculate their clip region
         if ( mpWindowImpl->mbClipSiblings )
         {
             Window* pWindow = mpWindowImpl->mpNext;
@@ -1950,7 +1949,7 @@ sal_Bool Window::ImplSetClipFlag( sal_Bool bSysObjOnlySmaller )
             pParent->mpWindowImpl->mbInitChildRegion = sal_True;
         }
 
-        // Schwestern muessen ihre ClipRegion auch neu berechnen
+        // siblings should re-calculate their clip region
         if ( mpWindowImpl->mbClipSiblings )
         {
             Window* pWindow = mpWindowImpl->mpNext;
@@ -2043,7 +2042,7 @@ void Window::ImplClipBoundaries( Region& rRegion, sal_Bool bThis, sal_Bool bOver
         ImplIntersectWindowClipRegion( rRegion );
     else if ( ImplIsOverlapWindow() )
     {
-        // Evt. noch am Frame clippen
+        // clip to frame if required
         if ( !mpWindowImpl->mbFrame )
             rRegion.Intersect( Rectangle( Point( 0, 0 ), Size( mpWindowImpl->mpFrameWindow->mnOutWidth, mpWindowImpl->mpFrameWindow->mnOutHeight ) ) );
 
@@ -2080,7 +2079,7 @@ sal_Bool Window::ImplClipChilds( Region& rRegion )
     {
         if ( pWindow->mpWindowImpl->mbReallyVisible )
         {
-            // ParentClipMode-Flags auswerten
+            // read-out ParentClipMode-Flags
             sal_uInt16 nClipMode = pWindow->GetParentClipMode();
             if ( !(nClipMode & PARENTCLIPMODE_NOCLIP) &&
                  ((nClipMode & PARENTCLIPMODE_CLIP) || (GetStyle() & WB_CLIPCHILDREN)) )
@@ -2388,7 +2387,7 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
             mbInitClipRegion = sal_True;
             mpWindowImpl->mbInPaint = sal_True;
 
-            // Paint-Region zuruecksetzen
+            // restore Paint-Region
             Region      aPaintRegion( mpWindowImpl->maInvalidateRegion );
             Rectangle   aPaintRect = aPaintRegion.GetBoundRect();
 
@@ -2465,7 +2464,7 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
 
 void Window::ImplCallOverlapPaint()
 {
-    // Zuerst geben wir die ueberlappenden Fenster aus
+    // emit overlapping windows first
     Window* pTempWindow = mpWindowImpl->mpFirstOverlap;
     while ( pTempWindow )
     {
@@ -2474,7 +2473,7 @@ void Window::ImplCallOverlapPaint()
         pTempWindow = pTempWindow->mpWindowImpl->mpNext;
     }
 
-    // und dann erst uns selber
+    // only then we self
     if ( mpWindowImpl->mnPaintFlags & (IMPL_PAINT_PAINT | IMPL_PAINT_PAINTCHILDS) )
     {
         // - RTL - notify ImplCallPaint to check for re-mirroring (CHECKRTL)
@@ -2524,8 +2523,7 @@ IMPL_LINK( Window, ImplHandleResizeTimerHdl, void*, EMPTYARG )
 
 void Window::ImplInvalidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags )
 {
-    // PAINTCHILDS bei allen Parent-Fenster bis zum ersten OverlapWindow
-    // setzen
+    // set PAINTCHILDS for all parent windows till the first OverlapWindow
     if ( !ImplIsOverlapWindow() )
     {
         Window* pTempWindow = this;
@@ -2542,7 +2540,7 @@ void Window::ImplInvalidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags
         while ( !pTempWindow->ImplIsOverlapWindow() );
     }
 
-    // Paint-Flags setzen
+    // set Paint-Flags
     mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINT;
     if ( nFlags & INVALIDATE_CHILDREN )
         mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINTALLCHILDS;
@@ -2551,8 +2549,7 @@ void Window::ImplInvalidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags
     if ( !pRegion )
         mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINTALL;
 
-    // Wenn nicht alles neu ausgegeben werden muss, dann die Region
-    // dazupacken
+    // if not everything has to be re-drawn, add the region to it
     if ( !(mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALL) )
         mpWindowImpl->maInvalidateRegion.Union( *pRegion );
 
@@ -2591,7 +2588,7 @@ void Window::ImplInvalidateOverlapFrameRegion( const Region& rRegion )
     if ( !aRegion.IsEmpty() )
         ImplInvalidateFrameRegion( &aRegion, INVALIDATE_CHILDREN );
 
-    // Dann invalidieren wir die ueberlappenden Fenster
+    // now we invalidate the overlapping windows
     Window* pTempWindow = mpWindowImpl->mpFirstOverlap;
     while ( pTempWindow )
     {
@@ -2620,14 +2617,14 @@ void Window::ImplInvalidateParentFrameRegion( Region& rRegion )
 void Window::ImplInvalidate( const Region* pRegion, sal_uInt16 nFlags )
 {
 
-    // Hintergrund-Sicherung zuruecksetzen
+    // reset background storage
     if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
         ImplInvalidateAllOverlapBackgrounds();
 
-    // Feststellen, was neu ausgegeben werden muss
+    // check what has to be re-drawn
     sal_Bool bInvalidateAll = !pRegion;
 
-    // Transparent-Invalidate beruecksichtigen
+    // take Transparent-Invalidate into account
     Window* pOpaqueWindow = this;
     if ( (mpWindowImpl->mbPaintTransparent && !(nFlags & INVALIDATE_NOTRANSPARENT)) || (nFlags & INVALIDATE_TRANSPARENT) )
     {
@@ -2649,7 +2646,7 @@ void Window::ImplInvalidate( const Region* pRegion, sal_uInt16 nFlags )
         }
     }
 
-    // Region zusammenbauen
+    // assemble region
     sal_uInt16 nOrgFlags = nFlags;
     if ( !(nFlags & (INVALIDATE_CHILDREN | INVALIDATE_NOCHILDREN)) )
     {
@@ -2732,10 +2729,9 @@ void Window::ImplMoveAllInvalidateRegions( const Rectangle& rRect,
                                            long nHorzScroll, long nVertScroll,
                                            sal_Bool bChilds )
 {
-    // Paint-Region auch verschieben, wenn noch Paints anstehen
+    // also shift Paint-Region when paints need processing
     ImplMoveInvalidateRegion( rRect, nHorzScroll, nVertScroll, bChilds );
-    // Paint-Region muss bei uns verschoben gesetzt werden, die durch
-    // die Parents gezeichnet werden
+    // Paint-Region should be shifted, as drawn by the parents
     if ( !ImplIsOverlapWindow() )
     {
         Region  aPaintAllRegion;
@@ -2774,8 +2770,7 @@ void Window::ImplValidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags )
         mpWindowImpl->maInvalidateRegion.SetEmpty();
     else
     {
-        // Wenn alle Childfenster neu ausgegeben werden muessen,
-        // dann invalidieren wir diese vorher
+        // when all sibling windows have to be drawn we need to in-validate them before doing so
         if ( (mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALLCHILDS) && mpWindowImpl->mpFirstChild )
         {
             Region aChildRegion = mpWindowImpl->maInvalidateRegion;
@@ -2815,7 +2810,7 @@ void Window::ImplValidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags )
 
 void Window::ImplValidate( const Region* pRegion, sal_uInt16 nFlags )
 {
-    // Region zusammenbauen
+    // assemble region
     sal_Bool    bValidateAll = !pRegion;
     sal_uInt16  nOrgFlags = nFlags;
     if ( !(nFlags & (VALIDATE_CHILDREN | VALIDATE_NOCHILDREN)) )
@@ -2866,7 +2861,7 @@ void Window::ImplScroll( const Rectangle& rRect,
     if ( !nHorzScroll && !nVertScroll )
         return;
 
-    // Hintergrund-Sicherung zuruecksetzen
+    // restore background storage
     if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
         ImplInvalidateAllOverlapBackgrounds();
 
@@ -2900,7 +2895,7 @@ void Window::ImplScroll( const Rectangle& rRect,
         ImplReMirror( aRectMirror );
     }
 
-    // Paint-Bereiche anpassen
+    // adapt paint-areas
     ImplMoveAllInvalidateRegions( aRectMirror, nHorzScroll, nVertScroll, bScrollChilds );
 
     if ( !(nFlags & SCROLL_NOINVALIDATE) )
@@ -3038,9 +3033,8 @@ void Window::ImplUpdateAll( sal_Bool bOverlapWindows )
             bFlush = sal_True;
     }
 
-    // Ein Update wirkt immer auf das OverlapWindow, damit bei spaeteren
-    // Paints nicht zuviel gemalt wird, wenn dort ALLCHILDREN usw. gesetzt
-    // ist
+    // an update changes the OverlapWindow, such that for later paints
+    // not too much has to be drawn, if ALLCHILDREN etc. is set
     Window* pWindow = ImplGetFirstOverlapWindow();
     if ( bOverlapWindows )
         pWindow->ImplCallOverlapPaint();
@@ -3060,7 +3054,7 @@ void Window::ImplUpdateWindowPtr( Window* pWindow )
 {
     if ( mpWindowImpl->mpFrameWindow != pWindow->mpWindowImpl->mpFrameWindow )
     {
-        // Graphic freigeben
+        // releae graphic
         ImplReleaseGraphics();
     }
 
@@ -3337,8 +3331,8 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             }
         }
 
-        // Move()/Resize() werden erst bei Show() gerufen, damit min. eins vor
-        // einem Show() kommt
+        // Move()/Resize() will be called only for Show(), such that
+        // at least one is called before Show()
         if ( IsVisible() )
         {
             if ( bNewPos )
@@ -3363,16 +3357,16 @@ void Window::ImplPosSizeWindow( long nX, long nY,
         {
             if ( bNewPos || bNewSize )
             {
-                // Hintergrund-Sicherung zuruecksetzen
+                // reset background storage
                 if ( mpWindowImpl->mpOverlapData && mpWindowImpl->mpOverlapData->mpSaveBackDev )
                     ImplDeleteOverlapBackground();
                 if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
                     ImplInvalidateAllOverlapBackgrounds();
-                // Clip-Flag neu setzen
+                // set Clip-Flag
                 bUpdateSysObjClip = !ImplSetClipFlag( sal_True );
             }
 
-            // Fensterinhalt invalidieren ?
+            // invalidate window content ?
             if ( bNewPos || (mnOutWidth > nOldOutWidth) || (mnOutHeight > nOldOutHeight) )
             {
                 if ( bNewPos )
@@ -3396,7 +3390,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                         }
                         if ( !aRegion.IsEmpty() )
                         {
-                            // Paint-Bereiche anpassen
+                            // adapt Paint areas
                             ImplMoveAllInvalidateRegions( Rectangle( Point( nOldOutOffX, nOldOutOffY ),
                                                                      Size( nOldOutWidth, nOldOutHeight ) ),
                                                           mnOutOffX-nOldOutOffX, mnOutOffY-nOldOutOffY,
@@ -3445,7 +3439,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                 }
             }
 
-            // Parent oder Overlaps invalidieren
+            // invalidate Parent or Overlaps
             if ( bNewPos ||
                  (mnOutWidth < nOldOutWidth) || (mnOutHeight < nOldOutHeight) )
             {
@@ -3458,7 +3452,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             }
         }
 
-        // System-Objekte anpassen
+        // adapt system objects
         if ( bUpdateSysObjClip )
             ImplUpdateSysObjClip();
         if ( bUpdateSysObjPos )
@@ -3477,7 +3471,7 @@ void Window::ImplToBottomChild()
 {
     if ( !ImplIsOverlapWindow() && !mpWindowImpl->mbReallyVisible && (mpWindowImpl->mpParent->mpWindowImpl->mpLastChild != this) )
     {
-        // Fenster an das Ende der Liste setzen
+        // put the window to the end of the list
         if ( mpWindowImpl->mpPrev )
             mpWindowImpl->mpPrev->mpWindowImpl->mpNext = mpWindowImpl->mpNext;
         else
@@ -3500,7 +3494,7 @@ void Window::ImplCalcToTop( ImplCalcToTopData* pPrevData )
     {
         if ( IsReallyVisible() )
         {
-            // Region berechnen, wo das Fenster mit anderen Fenstern ueberlappt
+            // calculate region, where the window overlaps with other windows
             Point aPoint( mnOutOffX, mnOutOffY );
             Region  aRegion( Rectangle( aPoint,
                                         Size( mnOutWidth, mnOutHeight ) ) );
@@ -3527,9 +3521,8 @@ void Window::ImplToTop( sal_uInt16 nFlags )
 
     if ( mpWindowImpl->mbFrame )
     {
-        // Wenn in das externe Fenster geklickt wird, ist dieses
-        // dafuer zustaendig dafuer zu sorgen, das unser Frame
-        // nach vorne kommt
+        // when clicked in the external window, this window is
+	// responsible to assure our frame is put in front
         if ( !mpWindowImpl->mpFrameData->mbHasFocus &&
              !mpWindowImpl->mpFrameData->mbSysObjFocus &&
              !mpWindowImpl->mpFrameData->mbInSysObjFocusHdl &&
@@ -3553,14 +3546,14 @@ void Window::ImplToTop( sal_uInt16 nFlags )
     {
         if ( mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpFirstOverlap != this )
         {
-            // Fenster aus der Liste entfernen
+            // remove window from the list
             mpWindowImpl->mpPrev->mpWindowImpl->mpNext = mpWindowImpl->mpNext;
             if ( mpWindowImpl->mpNext )
                 mpWindowImpl->mpNext->mpWindowImpl->mpPrev = mpWindowImpl->mpPrev;
             else
                 mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpLastOverlap = mpWindowImpl->mpPrev;
 
-            // AlwaysOnTop beruecksichtigen
+            // take AlwaysOnTop into account
             sal_Bool    bOnTop = IsAlwaysOnTopEnabled();
             Window* pNextWin = mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpFirstOverlap;
             if ( !bOnTop )
@@ -3573,7 +3566,7 @@ void Window::ImplToTop( sal_uInt16 nFlags )
                 }
             }
 
-            // TopLevel abpruefen
+            // check TopLevel
             sal_uInt8 nTopLevel = mpWindowImpl->mpOverlapData->mnTopLevel;
             while ( pNextWin )
             {
@@ -3583,7 +3576,7 @@ void Window::ImplToTop( sal_uInt16 nFlags )
                 pNextWin = pNextWin->mpWindowImpl->mpNext;
             }
 
-            // Fenster in die Liste wieder eintragen
+            // add the window to the list again
             mpWindowImpl->mpNext = pNextWin;
             if ( pNextWin )
             {
@@ -3600,11 +3593,10 @@ void Window::ImplToTop( sal_uInt16 nFlags )
             else
                 mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpFirstOverlap = this;
 
-            // ClipRegion muss von diesem Fenster und allen weiteren
-            // ueberlappenden Fenstern neu berechnet werden.
+            // re-calculate ClipRegion of this and all overlapping windows
             if ( IsReallyVisible() )
             {
-                // Hintergrund-Sicherung zuruecksetzen
+                // reset background storage
                 if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
                     ImplInvalidateAllOverlapBackgrounds();
                 mpWindowImpl->mpOverlapWindow->ImplSetClipFlagOverlapWindows();
@@ -3626,7 +3618,7 @@ void Window::ImplStartToTop( sal_uInt16 nFlags )
     else
         pOverlapWindow = mpWindowImpl->mpOverlapWindow;
 
-    // Zuerst die Paint-Bereiche berechnen
+    // first calculate paint areas
     Window* pTempOverlapWindow = pOverlapWindow;
     aStartData.mpNext = NULL;
     pCurData = &aStartData;
@@ -3638,7 +3630,7 @@ void Window::ImplStartToTop( sal_uInt16 nFlags )
         pTempOverlapWindow = pTempOverlapWindow->mpWindowImpl->mpOverlapWindow;
     }
     while ( !pTempOverlapWindow->mpWindowImpl->mbFrame );
-    // Dann die Paint-Bereiche der ChildOverlap-Windows berechnen
+    // next calculate the paint areas of the ChildOverlap-Windows
     pTempOverlapWindow = mpWindowImpl->mpFirstOverlap;
     while ( pTempOverlapWindow )
     {
@@ -3648,7 +3640,7 @@ void Window::ImplStartToTop( sal_uInt16 nFlags )
         pTempOverlapWindow = pTempOverlapWindow->mpWindowImpl->mpNext;
     }
 
-    // Dann die Fenster-Verkettung aendern
+    // and next change the windows list
     pTempOverlapWindow = pOverlapWindow;
     do
     {
@@ -3656,7 +3648,7 @@ void Window::ImplStartToTop( sal_uInt16 nFlags )
         pTempOverlapWindow = pTempOverlapWindow->mpWindowImpl->mpOverlapWindow;
     }
     while ( !pTempOverlapWindow->mpWindowImpl->mbFrame );
-    // Und zum Schluss invalidieren wir die ungueltigen Bereiche
+    // as last step invalidate the invalid areas
     pCurData = aStartData.mpNext;
     while ( pCurData )
     {
@@ -3672,15 +3664,15 @@ void Window::ImplStartToTop( sal_uInt16 nFlags )
 
 void Window::ImplFocusToTop( sal_uInt16 nFlags, sal_Bool bReallyVisible )
 {
-    // Soll Focus auch geholt werden?
+    // do we need to fetch the focus?
     if ( !(nFlags & TOTOP_NOGRABFOCUS) )
     {
-        // Erstes Fenster mit GrabFocus-Activate bekommt den Focus
+        // first window with GrabFocus-Activate gets the focus
         Window* pFocusWindow = this;
         while ( !pFocusWindow->ImplIsOverlapWindow() )
         {
-            // Nur wenn Fenster kein Border-Fenster hat, da wir
-            // immer das dazugehoerende BorderFenster finden wollen
+            // if the window has no BorderWindow, we
+            // should always find the belonging BorderWindow
             if ( !pFocusWindow->mpWindowImpl->mpBorderWindow )
             {
                 if ( pFocusWindow->mpWindowImpl->mnActivateMode & ACTIVATE_MODE_GRABFOCUS )
@@ -3743,7 +3735,7 @@ void Window::ImplCallMouseMove( sal_uInt16 nMouseCode, sal_Bool bModChanged )
         sal_uInt16  nCode   = nMouseCode;
         sal_uInt16  nMode   = mpWindowImpl->mpFrameData->mnMouseMode;
         sal_Bool    bLeave;
-        // Auf MouseLeave testen
+        // check for MouseLeave
         if ( ((nX < 0) || (nY < 0) ||
               (nX >= mpWindowImpl->mpFrameWindow->mnOutWidth) ||
               (nY >= mpWindowImpl->mpFrameWindow->mnOutHeight)) &&
@@ -3979,21 +3971,21 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
              (pSVData->maWinData.mpExtTextInputWin != this) )
             pSVData->maWinData.mpExtTextInputWin->EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
 
-        // Dieses Fenster als letztes FocusWindow merken
+        // mark this windows as the last FocusWindow
         Window* pOverlapWindow = ImplGetFirstOverlapWindow();
         pOverlapWindow->mpWindowImpl->mpLastFocusWindow = this;
         mpWindowImpl->mpFrameData->mpFocusWin = this;
 
         if( !bHasFocus )
         {
-            // menue windows never get the system focus
+            // menu windows never get the system focus
             // the application will keep the focus
             if( bMustNotGrabFocus )
                 return;
             else
             {
-                // Hier setzen wir schon den Focus um, da ToTop() den Focus
-                // nicht auf ein anderes Fenster setzen darf
+		// here we already switch focus as ToTop()
+		// should not give focus to another window
                 //DBG_WARNING( "Window::GrabFocus() - Frame doesn't have the focus" );
                 mpWindowImpl->mpFrame->ToTop( SAL_FRAME_TOTOP_GRABFOCUS | SAL_FRAME_TOTOP_GRABFOCUS_ONLY );
                 return;
@@ -4012,11 +4004,11 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
                 pOldFocusWindow->mpWindowImpl->mpCursor->ImplHide();
         }
 
-        // !!!!! Wegen altem SV-Office Activate/Deavtivate Handling
-        // !!!!! erstmal so wie frueher
+        // !!!!! due to old SV-Office Activate/Deavtivate Handling
+        // !!!!! first as before
         if ( pOldFocusWindow )
         {
-            // Focus merken
+            // remember Focus
             Window* pOldOverlapWindow = pOldFocusWindow->ImplGetFirstOverlapWindow();
             Window* pNewOverlapWindow = ImplGetFirstOverlapWindow();
             if ( pOldOverlapWindow != pNewOverlapWindow )
@@ -4113,8 +4105,8 @@ void Window::ImplNewInputContext()
         Size aSize = pFocusWin->ImplLogicToDevicePixel( rFont.GetSize() );
         if ( !aSize.Height() )
         {
-            // Nur dann Defaultgroesse setzen, wenn Fonthoehe auch in logischen
-            // Koordinaaten 0 ist
+	    // only set default sizes if the font height in logical
+	    // coordinates equals 0
             if ( rFont.GetSize().Height() )
                 aSize.Height() = 1;
             else
@@ -4310,7 +4302,7 @@ Window::~Window()
     //DBG_ASSERT( pSVData->maWinData.mpDefDialogParent != this,
     //            "Window::~Window(): Window is DefModalDialogParent" );
 
-    // Wegen alter kompatibilitaet
+    // due to old compatibility
     if ( pSVData->maWinData.mpTrackWin == this )
         EndTracking();
     if ( pSVData->maWinData.mpCaptureWin == this )
@@ -4443,10 +4435,10 @@ Window::~Window()
         }
     }
 
-    // Fenster hiden, um das entsprechende Paint-Handling auszuloesen
+    // hide window in order to trigger the Paint-Handling
     Hide();
 
-    // Mitteilen, das Fenster zerstoert wird
+    // announce the window is to be destroyed
     {
     NotifyEvent aNEvt( EVENT_DESTROY, this );
     Notify( aNEvt );
@@ -4476,7 +4468,7 @@ Window::~Window()
 #endif
     }
 
-    // Wenn wir den Focus haben, dann den Focus auf ein anderes Fenster setzen
+    // if we get focus pass focus to another window
     Window* pOverlapWindow = ImplGetFirstOverlapWindow();
     if ( pSVData->maWinData.mpFocusWin == this
         || bHasFocussedChild )  // #122232#, see above, try some cleanup
@@ -4491,8 +4483,8 @@ Window::~Window()
         {
             Window* pParent = GetParent();
             Window* pBorderWindow = mpWindowImpl->mpBorderWindow;
-            // Bei ueberlappenden Fenstern wird der Focus auf den
-            // Parent vom naechsten FrameWindow gesetzt
+	    // when windows overlap, give focus to the parent
+	    // of the next FrameWindow
             if ( pBorderWindow )
             {
                 if ( pBorderWindow->ImplIsOverlapWindow() )
@@ -4524,7 +4516,7 @@ Window::~Window()
     if( pSVData->maWinData.mpActiveApplicationFrame == this )
         pSVData->maWinData.mpActiveApplicationFrame = NULL;
 
-    // gemerkte Fenster zuruecksetzen
+    // reset marked windows
     if ( mpWindowImpl->mpFrameData->mpFocusWin == this )
         mpWindowImpl->mpFrameData->mpFocusWin = NULL;
     if ( mpWindowImpl->mpFrameData->mpMouseMoveWin == this )
@@ -4532,7 +4524,7 @@ Window::~Window()
     if ( mpWindowImpl->mpFrameData->mpMouseDownWin == this )
         mpWindowImpl->mpFrameData->mpMouseDownWin = NULL;
 
-    // Deactivate-Window zuruecksetzen
+    // reset Deactivate-Window
     if ( pSVData->maWinData.mpLastDeacWin == this )
         pSVData->maWinData.mpLastDeacWin = NULL;
 
@@ -4544,11 +4536,10 @@ Window::~Window()
             Application::RemoveUserEvent( mpWindowImpl->mpFrameData->mnMouseMoveId );
     }
 
-    // Graphic freigeben
+    // release Graphic
     ImplReleaseGraphics();
 
-    // Evt. anderen Funktion mitteilen, das das Fenster geloescht
-    // wurde
+    // if appropriate announce the window has been deleted
     ImplDelData* pDelData = mpWindowImpl->mpFirstDel;
     while ( pDelData )
     {
@@ -4557,7 +4548,7 @@ Window::~Window()
         pDelData = pDelData->mpNext;
     }
 
-    // Fenster aus den Listen austragen
+    // remove window from the list
     ImplRemoveWindow( sal_True );
 
     // de-register as "top window child" at our parent, if necessary
@@ -4576,7 +4567,7 @@ Window::~Window()
         }
     }
 
-    // Extra Window Daten loeschen
+    // delete extra window data
     if ( mpWindowImpl->mpWinData )
     {
         if ( mpWindowImpl->mpWinData->mpExtOldText )
@@ -4594,13 +4585,13 @@ Window::~Window()
     }
 
 
-    // Overlap-Window-Daten loeschen
+    // delete Overlap-Window data
     if ( mpWindowImpl->mpOverlapData )
     {
         delete mpWindowImpl->mpOverlapData;
     }
 
-    // Evt. noch BorderWindow oder Frame zerstoeren
+    // delete BorderWindow or Frame if required
     if ( mpWindowImpl->mpBorderWindow )
         delete mpWindowImpl->mpBorderWindow;
     else if ( mpWindowImpl->mbFrame )
@@ -4656,7 +4647,7 @@ void Window::SimulateKeyPress( sal_uInt16 nKeyCode ) const
 
 void Window::MouseMove( const MouseEvent& rMEvt )
 {
-    { // Klammerung, da in diesem Handler das Window zerstoert werden darf
+    { // Parentheses, as in this handler the window can be destroyed
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
     }
 
@@ -4669,7 +4660,7 @@ void Window::MouseMove( const MouseEvent& rMEvt )
 
 void Window::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    { // Klammerung, da in diesem Handler das Window zerstoert werden darf
+    { // Parentheses, as in this handler the window can be destroyed
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
     }
 
@@ -4682,7 +4673,7 @@ void Window::MouseButtonDown( const MouseEvent& rMEvt )
 
 void Window::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    { // Klammerung, da in diesem Handler das Window zerstoert werden darf
+    { // Parentheses, as in this handler the window can be destroyed
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
     }
 
@@ -4695,7 +4686,7 @@ void Window::MouseButtonUp( const MouseEvent& rMEvt )
 
 void Window::KeyInput( const KeyEvent& rKEvt )
 {
-    { // Klammerung, da in diesem Handler das Window zerstoert werden darf
+    { // Parentheses, as in this handler the window can be destroyed
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
     }
 
@@ -4708,7 +4699,7 @@ void Window::KeyInput( const KeyEvent& rKEvt )
 
 void Window::KeyUp( const KeyEvent& rKEvt )
 {
-    { // Klammerung, da in diesem Handler das Window zerstoert werden darf
+    { // Parentheses, as in this handler the window can be destroyed
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
     }
 
@@ -4727,7 +4718,7 @@ void Window::PrePaint()
 
 void Window::Paint( const Rectangle& rRect )
 {
-    { // Klammerung, da in diesem Handler das Window zerstoert werden darf
+    { // Parentheses, as in this handler the window can be destroyed
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
     }
 
@@ -4779,7 +4770,7 @@ void Window::Deactivate()
 
 void Window::GetFocus()
 {
-    { // Klammerung, da in diesem Handler das Window zerstoert werden darf
+    { // Parentheses, as in this handler the window can be destroyed
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
     }
 
@@ -4799,7 +4790,7 @@ void Window::GetFocus()
 
 void Window::LoseFocus()
 {
-    { // Klammerung, da in diesem Handler das Window zerstoert werden darf
+    { // Parentheses, as in this handler the window can be destroyed
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
     }
 
@@ -4811,12 +4802,12 @@ void Window::LoseFocus()
 
 void Window::RequestHelp( const HelpEvent& rHEvt )
 {
-    { // Klammerung, da in diesem Handler das Window zerstoert werden darf
+    { // Parentheses, as in this handler the window can be destroyed
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
     }
 
-    // Wenn Balloon-Help angefordert wird, dann den Balloon mit dem
-    // gesetzten Hilfetext anzeigen
+    // if Balloon-Help is requested, show the balloon
+    // with help text set
     if ( rHEvt.GetMode() & HELPMODE_BALLOON )
     {
         const XubString* pStr = &(GetHelpText());
@@ -4867,7 +4858,7 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
 
 void Window::Command( const CommandEvent& rCEvt )
 {
-    { // Klammerung, da in diesem Handler das Window zerstoert werden darf
+    { // Parentheses, as in this handler the window can be destroyed
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
     }
 
@@ -5015,7 +5006,7 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
 
 long Window::PreNotify( NotifyEvent& rNEvt )
 {
-    { // Klammerung, da in diesem Handler das Window zerstoert werden darf
+    { // Parentheses, as in this handler the window can be destroyed
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
     }
 
@@ -5062,7 +5053,7 @@ long Window::PreNotify( NotifyEvent& rNEvt )
 
 long Window::Notify( NotifyEvent& rNEvt )
 {
-    { // Klammerung, da in diesem Handler das Window zerstoert werden darf
+    { // Parentheses, as in this handler the window can be destroyed
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
     }
 
@@ -5136,10 +5127,10 @@ long Window::Notify( NotifyEvent& rNEvt )
         }
     }
 
-    // Dialog-Steuerung
+    // manage the dialogs
     if ( (GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) == WB_DIALOGCONTROL )
     {
-        // Wenn Parent auch DialogSteuerung aktiviert hat, uebernimmt dieser die Steuerung
+        // if the parent also has dialog control activated, the parent takes over control
         if ( (rNEvt.GetType() == EVENT_KEYINPUT) || (rNEvt.GetType() == EVENT_KEYUP) )
         {
             if ( ImplIsOverlapWindow() ||
@@ -5501,8 +5492,8 @@ long Window::CalcTitleWidth() const
     }
     else if ( mpWindowImpl->mbFrame && (mpWindowImpl->mnStyle & WB_MOVEABLE) )
     {
-        // Fuer Frame-Fenster raten wir die Breite, da wir den Border fuer
-        // externe Dialoge nicht kennen
+        // we guess the width for frame windows as we do not know the
+	// border of external dialogs
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         Font aFont = GetFont();
         ((Window*)this)->SetPointFont( rStyleSettings.GetTitleFont() );
@@ -5650,7 +5641,7 @@ void Window::SetSettings( const AllSettings& rSettings, sal_Bool bChild )
     OutputDevice::SetSettings( rSettings );
     sal_uLong nChangeFlags = aOldSettings.GetChangeFlags( rSettings );
 
-    // AppFont-Aufloesung und DPI-Aufloesung neu berechnen
+    // re-calculate AppFont-resolution and DPI-resolution
     ImplInitResolutionSettings();
 
     if ( nChangeFlags )
@@ -5690,7 +5681,7 @@ void Window::UpdateSettings( const AllSettings& rSettings, sal_Bool bChild )
                                                  // event can distinguish between the changing of global
                                                  // setting and a local change ( with SetSettings )
 
-    // AppFont-Aufloesung und DPI-Aufloesung neu berechnen
+    // re-calculate AppFont-resolution and DPI-resolution
     ImplInitResolutionSettings();
 
     /* #i73785#
@@ -5828,7 +5819,7 @@ void Window::SetWindowRegionPixel()
 
             if ( IsReallyVisible() )
             {
-                // Hintergrund-Sicherung zuruecksetzen
+                // restore background storage
                 if ( mpWindowImpl->mpOverlapData && mpWindowImpl->mpOverlapData->mpSaveBackDev )
                     ImplDeleteOverlapBackground();
                 if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
@@ -5857,7 +5848,7 @@ void Window::SetWindowRegionPixel( const Region& rRegion )
             mpWindowImpl->mbWinRegion = ! rRegion.IsEmpty();
             if( mpWindowImpl->mbWinRegion )
             {
-                // ClipRegion setzen/updaten
+                // set/update ClipRegion
                 long                nX;
                 long                nY;
                 long                nWidth;
@@ -5902,7 +5893,7 @@ void Window::SetWindowRegionPixel( const Region& rRegion )
 
         if ( IsReallyVisible() )
         {
-            // Hintergrund-Sicherung zuruecksetzen
+            // restore background storage
             if ( mpWindowImpl->mpOverlapData && mpWindowImpl->mpOverlapData->mpSaveBackDev )
                 ImplDeleteOverlapBackground();
             if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
@@ -6084,7 +6075,7 @@ void Window::SetParent( Window* pNewParent )
     sal_Bool bVisible = IsVisible();
     Show( false, SHOW_NOFOCUSCHANGE );
 
-    // Testen, ob sich das Overlap-Window aendert
+    // check if the overlap window changes
     Window* pOldOverlapWindow;
     Window* pNewOverlapWindow = NULL;
     if ( ImplIsOverlapWindow() )
@@ -6098,7 +6089,7 @@ void Window::SetParent( Window* pNewParent )
             pOldOverlapWindow = NULL;
     }
 
-    // Fenster in der Hirachie umsetzen
+    // convert windows in the hierarchy
     sal_Bool bFocusOverlapWin = HasChildPathFocus( sal_True );
     sal_Bool bFocusWin = HasChildPathFocus();
     sal_Bool bNewFrame = pNewParent->mpWindowImpl->mpFrameWindow != mpWindowImpl->mpFrameWindow;
@@ -6128,9 +6119,9 @@ void Window::SetParent( Window* pNewParent )
     if ( ImplUpdatePos() )
         ImplUpdateSysObjPos();
 
-    // Wenn sich das Overlap-Window geaendert hat, dann muss getestet werden,
-    // ob auch OverlapWindow die das Child-Fenster als Parent gehabt haben
-    // in der Window-Hirachie umgesetzt werden muessen
+    // If the Overlap-Window has changed, we need to test whether
+    // OverlapWindows that had the Child window as their parent
+    // need to be put into the window hierarchy.
     if ( ImplIsOverlapWindow() )
     {
         if ( bNewFrame )
@@ -6146,7 +6137,7 @@ void Window::SetParent( Window* pNewParent )
     }
     else if ( pOldOverlapWindow )
     {
-        // Focus-Save zuruecksetzen
+        // reset Focus-Save
         if ( bFocusWin ||
              (pOldOverlapWindow->mpWindowImpl->mpLastFocusWindow &&
               IsWindowOrChild( pOldOverlapWindow->mpWindowImpl->mpLastFocusWindow )) )
@@ -6161,12 +6152,12 @@ void Window::SetParent( Window* pNewParent )
             pOverlapWindow = pNextOverlapWindow;
         }
 
-        // Activate-Status beim naechsten Overlap-Window updaten
+	// update activate-status at next overlap window
         if ( HasChildPathFocus( sal_True ) )
             ImplCallFocusChangeActivate( pNewOverlapWindow, pOldOverlapWindow );
     }
 
-    // Activate-Status mit umsetzen
+    // also convert Activate-Status
     if ( bNewFrame )
     {
         if ( (GetType() == WINDOW_BORDERWINDOW) &&
@@ -6174,8 +6165,8 @@ void Window::SetParent( Window* pNewParent )
             ((ImplBorderWindow*)this)->SetDisplayActive( mpWindowImpl->mpFrameData->mbHasFocus );
     }
 
-    // Focus evtl. auf den neuen Frame umsetzen, wenn FocusWindow mit
-    // SetParent() umgesetzt wird
+    // when required give focus to new frame if
+    // FocusWindow is changed with SetParent()
     if ( bFocusOverlapWin )
     {
         mpWindowImpl->mpFrameData->mpFocusWin = Application::GetFocusWindow();
@@ -6264,7 +6255,7 @@ void Window::Show( sal_Bool bVisible, sal_uInt16 nFlags )
 
             if ( ImplIsOverlapWindow() && !mpWindowImpl->mbFrame )
             {
-                // Focus umsetzen
+                // convert focus
                 if ( !(nFlags & SHOW_NOFOCUSCHANGE) && HasChildPathFocus() )
                 {
                     if ( mpWindowImpl->mpOverlapWindow->IsEnabled() &&
@@ -6330,27 +6321,26 @@ void Window::Show( sal_Bool bVisible, sal_uInt16 nFlags )
             pTestParent = ImplGetParent();
         if ( mpWindowImpl->mbFrame || pTestParent->mpWindowImpl->mbReallyVisible )
         {
-            // Wenn ein Window gerade sichtbar wird, schicken wir allen
-            // Child-Fenstern ein StateChanged, damit diese sich
-            // initialisieren koennen
+	    // if a window becomes visible, send all child windows a StateChange,
+	    // such that these can initialise themselves
             ImplCallInitShow();
 
-            // Wenn es ein SystemWindow ist, dann kommt es auch automatisch
-            // nach vorne, wenn es gewuenscht ist
+	    // If it is a SystemWindow it automatically pops up on top of
+	    // all other windows if needed.
             if ( ImplIsOverlapWindow() && !(nFlags & SHOW_NOACTIVATE) )
             {
                 ImplStartToTop(( nFlags & SHOW_FOREGROUNDTASK ) ? TOTOP_FOREGROUNDTASK : 0 );
                 ImplFocusToTop( 0, sal_False );
             }
 
-            // Hintergrund sichern
+            // save background
             if ( mpWindowImpl->mpOverlapData && mpWindowImpl->mpOverlapData->mbSaveBack )
                 ImplSaveOverlapBackground();
             // adjust mpWindowImpl->mbReallyVisible
             bRealVisibilityChanged = !mpWindowImpl->mbReallyVisible;
             ImplSetReallyVisible();
 
-            // Dafuer sorgen, das Clip-Rechtecke neu berechnet werden
+            // assure clip rectangles will be re-calculated
             ImplSetClipFlag();
 
             if ( !mpWindowImpl->mbFrame )
@@ -6491,8 +6481,9 @@ void Window::Enable( bool bEnable, bool bChild )
 
     if ( !bEnable )
     {
-        // Wenn ein Fenster disablte wird, wird automatisch der Tracking-Modus
-        // beendet oder der Capture geklaut
+
+	// the tracking mode will be stopped or the capture will be stolen
+	// when a window is disabled,
         if ( IsTracking() )
             EndTracking( ENDTRACK_CANCEL );
         if ( IsMouseCaptured() )
@@ -6501,6 +6492,10 @@ void Window::Enable( bool bEnable, bool bChild )
         // wird versucht, den Focus auf das naechste Control weiterzuschalten
         // mpWindowImpl->mbDisabled darf erst nach Aufruf von ImplDlgCtrlNextWindow() gesetzt
         // werden. Ansonsten muss ImplDlgCtrlNextWindow() umgestellt werden
+	// try to pass focus to the next control
+	// if the window has focus and is contained in the dialog control
+        // mpWindowImpl->mbDisabled should only be set after a call of ImplDlgCtrlNextWindow().
+        // Otherwise ImplDlgCtrlNextWindow() should be used
         if ( HasFocus() )
             ImplDlgCtrlNextWindow();
     }
@@ -6585,8 +6580,8 @@ void Window::EnableInput( sal_Bool bEnable, sal_Bool bChild )
     if ( (! bEnable && mpWindowImpl->meAlwaysInputMode != AlwaysInputEnabled) ||
          (  bEnable && mpWindowImpl->meAlwaysInputMode != AlwaysInputDisabled) )
     {
-        // Wenn ein Fenster disablte wird, wird automatisch der
-        // Tracking-Modus beendet oder der Capture geklaut
+	// automatically stop the tracking mode or steal capture
+	// if the window is disabled
         if ( !bEnable )
         {
             if ( IsTracking() )
@@ -6777,7 +6772,7 @@ void Window::SetActivateMode( sal_uInt16 nMode )
     {
         mpWindowImpl->mnActivateMode = nMode;
 
-        // Evtl. ein Decativate/Activate ausloesen
+        // possibly trigger Decativate/Activate
         if ( mpWindowImpl->mnActivateMode )
         {
             if ( (mpWindowImpl->mbActive || (GetType() == WINDOW_BORDERWINDOW)) &&
@@ -6922,7 +6917,7 @@ void Window::SetZOrder( Window* pRefWindow, sal_uInt16 nFlags )
 
     if ( IsReallyVisible() )
     {
-        // Hintergrund-Sicherung zuruecksetzen
+        // restore background storage
         if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
             ImplInvalidateAllOverlapBackgrounds();
 
@@ -6931,18 +6926,18 @@ void Window::SetZOrder( Window* pRefWindow, sal_uInt16 nFlags )
             sal_Bool bInitWinClipRegion = mpWindowImpl->mbInitWinClipRegion;
             ImplSetClipFlag();
 
-            // Wenn ClipRegion noch nicht initalisiert wurde, dann
-            // gehen wir davon aus, das das Fenster noch nicht
-            // ausgegeben wurde und loesen somit auch keine
-            // Invalidates aus. Dies ist eine Optimierung fuer
-            // HTML-Dokumenten mit vielen Controls. Wenn es mal
-            // Probleme mit dieser Abfrage gibt, sollte man ein
-            // Flag einfuehren, ob das Fenster nach Show schon
-            // einmal ausgegeben wurde.
+	    // Assume, when ClipRegion was not initialised,
+	    // the window has not been sent, therefore do not
+	    // trigger any Invalidates. This is an optimisation
+	    // for HTML-documents with many controls. If this
+	    // check gives problems a flag should be introduced
+	    // which checks if the window after Show was
+	    // already sent
+
             if ( !bInitWinClipRegion )
             {
-                // Alle nebeneinanderliegen Fenster invalidieren
-                // Noch nicht komplett implementiert !!!
+		// Invalidate all windows which are next to each other
+		// Is INCOMPLETE !!!
                 Rectangle   aWinRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
                 Window*     pWindow = NULL;
                 if ( ImplIsOverlapWindow() )
@@ -6952,8 +6947,8 @@ void Window::SetZOrder( Window* pRefWindow, sal_uInt16 nFlags )
                 }
                 else
                     pWindow = ImplGetParent()->mpWindowImpl->mpFirstChild;
-                // Alle Fenster, die vor uns liegen und von uns verdeckt wurden,
-                // invalidieren
+
+		// Invalidate all windows in front of us and which are covered by us
                 while ( pWindow )
                 {
                     if ( pWindow == this )
@@ -6964,8 +6959,9 @@ void Window::SetZOrder( Window* pRefWindow, sal_uInt16 nFlags )
                         pWindow->Invalidate( INVALIDATE_CHILDREN | INVALIDATE_NOTRANSPARENT );
                     pWindow = pWindow->mpWindowImpl->mpNext;
                 }
-                // Wenn uns ein Fenster welches im Hinterund liegt verdeckt hat,
-                // dann muessen wir uns neu ausgeben
+
+		// If we are covered by a window in the background
+		// we should redraw it
                 while ( pWindow )
                 {
                     if ( pWindow != this )
@@ -7016,7 +7012,7 @@ void Window::SetPosSizePixel( long nX, long nY,
     if ( nFlags & WINDOW_POSSIZE_SIZE )
         mpWindowImpl->mbDefSize = sal_False;
 
-    // Oberstes BorderWindow ist das Window, welches positioniert werden soll
+    // The top BorderWindow is the window which is to be positioned
     Window* pWindow = this;
     while ( pWindow->mpWindowImpl->mpBorderWindow )
         pWindow = pWindow->mpWindowImpl->mpBorderWindow;
@@ -7426,8 +7422,8 @@ void Window::Update()
             bFlush = sal_True;
     }
 
-    // Zuerst muessen wir alle Fenster ueberspringen, die Paint-Transparent
-    // sind
+
+    // First we should skip all windows which are Paint-Transparent
     Window* pUpdateWindow = this;
     Window* pWindow = pUpdateWindow;
     while ( !pWindow->ImplIsOverlapWindow() )
@@ -7439,8 +7435,8 @@ void Window::Update()
         }
         pWindow = pWindow->ImplGetParent();
     }
-    // Ein Update wirkt immer auf das Window, wo PAINTALLCHILDS gesetzt
-    // ist, damit nicht zuviel gemalt wird
+    // In order to limit drawing, an update only draws the window which
+    // has PAINTALLCHILDS set
     pWindow = pUpdateWindow;
     do
     {
@@ -7452,11 +7448,11 @@ void Window::Update()
     }
     while ( pWindow );
 
-    // Wenn es etwas zu malen gibt, dann ein Paint ausloesen
+    // in order to draw, trigger a Paint
     if ( pUpdateWindow->mpWindowImpl->mnPaintFlags & (IMPL_PAINT_PAINT | IMPL_PAINT_PAINTCHILDS) )
     {
-         // und fuer alle ueber uns stehende System-Fenster auch ein Update
-         // ausloesen, damit nicht die ganze Zeit luecken stehen bleiben
+	 // also for system windows on top trigger an update, otherwise
+	 // holes would remain
          Window* pUpdateOverlapWindow = ImplGetFirstOverlapWindow()->mpWindowImpl->mpFirstOverlap;
          while ( pUpdateOverlapWindow )
          {
@@ -7580,7 +7576,7 @@ void Window::CaptureMouse()
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    // Tracking evt. beenden
+    // possibly stop tracking
     if ( pSVData->maWinData.mpTrackWin != this )
     {
         if ( pSVData->maWinData.mpTrackWin )
@@ -7633,7 +7629,7 @@ void Window::SetPointer( const Pointer& rPointer )
 
     mpWindowImpl->maPointer   = rPointer;
 
-    // Pointer evt. direkt umsetzen
+    // possibly immediately move pointer
     if ( !mpWindowImpl->mpFrameData->mbInMouseMove && ImplTestMousePointerSet() )
         mpWindowImpl->mpFrame->SetPointer( ImplGetMousePointer() );
 }
@@ -7649,7 +7645,7 @@ void Window::EnableChildPointerOverwrite( sal_Bool bOverwrite )
 
     mpWindowImpl->mbChildPtrOverwrite  = bOverwrite;
 
-    // Pointer evt. direkt umsetzen
+    // possibly immediately move pointer
     if ( !mpWindowImpl->mpFrameData->mbInMouseMove && ImplTestMousePointerSet() )
         mpWindowImpl->mpFrame->SetPointer( ImplGetMousePointer() );
 }
@@ -7718,7 +7714,7 @@ void Window::ShowPointer( sal_Bool bVisible )
     {
         mpWindowImpl->mbNoPtrVisible = !bVisible;
 
-        // Pointer evt. direkt umsetzen
+        // possibly immediately move pointer
         if ( !mpWindowImpl->mpFrameData->mbInMouseMove && ImplTestMousePointerSet() )
             mpWindowImpl->mpFrame->SetPointer( ImplGetMousePointer() );
     }
@@ -7764,7 +7760,7 @@ void Window::EnterWait()
 
     if ( mpWindowImpl->mnWaitCount == 1 )
     {
-        // Pointer evt. direkt umsetzen
+        // possibly immediately move pointer
         if ( !mpWindowImpl->mpFrameData->mbInMouseMove && ImplTestMousePointerSet() )
             mpWindowImpl->mpFrame->SetPointer( ImplGetMousePointer() );
     }
@@ -7782,7 +7778,7 @@ void Window::LeaveWait()
 
         if ( !mpWindowImpl->mnWaitCount )
         {
-            // Pointer evt. direkt umsetzen
+            // possibly immediately move pointer
             if ( !mpWindowImpl->mpFrameData->mbInMouseMove && ImplTestMousePointerSet() )
                 mpWindowImpl->mpFrame->SetPointer( ImplGetMousePointer() );
         }
