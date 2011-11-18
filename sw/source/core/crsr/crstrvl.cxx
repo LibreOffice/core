@@ -31,6 +31,7 @@
 
 
 #include <hintids.hxx>
+#include <comphelper/string.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/adjitem.hxx>
@@ -2108,7 +2109,7 @@ sal_Bool SwCrsrShell::SelectNxtPrvHyperlink( sal_Bool bNext )
                         String sTxt( pTxtNd->GetExpandTxt( *rAttr.GetStart(),
                                         *rAttr.GetEnd() - *rAttr.GetStart() ) );
 
-                        sTxt.EraseAllChars( 0x0a );
+                        sTxt = comphelper::string::remove(sTxt, 0x0a);
                         sTxt.EraseLeadingChars().EraseTrailingChars();
 
                         if( sTxt.Len() )

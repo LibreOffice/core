@@ -72,6 +72,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <boost/bind.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <map>
 
 #define TOKEN_OPEN  0
@@ -640,7 +641,7 @@ sal_Bool FormulaDlg_Impl::CalcStruct( const String& rStrExp)
                 aString.Erase((xub_StrLen)(nLength-1));
             }
 
-            aString.EraseAllChars('\n');
+            aString = comphelper::string::remove(aString, '\n');
             String aStrResult;
 
             if ( CalcValue(aString, aStrResult ) )

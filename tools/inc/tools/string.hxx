@@ -237,8 +237,6 @@ public:
     ByteString&         EraseLeadingChars( sal_Char c = ' ' );
     ByteString&         EraseTrailingChars( sal_Char c = ' ' );
     ByteString&         EraseLeadingAndTrailingChars( sal_Char c = ' ' );
-    ByteString&         EraseAllChars( sal_Char c = ' ' );
-
     ByteString&         ConvertLineEnd( LineEnd eLineEnd );
     ByteString&         ConvertLineEnd()
                             { return ConvertLineEnd( GetSystemLineEnd() ); }
@@ -491,7 +489,6 @@ public:
     UniString&          EraseLeadingChars( sal_Unicode c = ' ' );
     UniString&          EraseTrailingChars( sal_Unicode c = ' ' );
     UniString&          EraseLeadingAndTrailingChars( sal_Unicode c = ' ' );
-    UniString&          EraseAllChars( sal_Unicode c = ' ' );
     UniString&          Reverse();
 
     UniString&          ConvertLineEnd( LineEnd eLineEnd );

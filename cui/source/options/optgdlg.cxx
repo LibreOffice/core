@@ -52,6 +52,7 @@
 #include <svtools/accessibilityoptions.hxx>
 #include <unotools/configitem.hxx>
 #include <sfx2/objsh.hxx>
+#include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <svl/ctloptions.hxx>
 #include <svtools/langtab.hxx>
@@ -775,7 +776,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     String sLabel(aAAPointLimitLabel.GetText());
     aMnemonicGenerator.RegisterMnemonic( sLabel );
     aMnemonicGenerator.CreateMnemonic( sLabel );
-    sLabel.EraseAllChars('~');
+    sLabel = comphelper::string::remove(sLabel, '~');
 
     sal_Int32 nLabelWidth = aAAPointLimitLabel.GetTextWidth( sLabel );
     nLabelWidth += 3;   // small gap

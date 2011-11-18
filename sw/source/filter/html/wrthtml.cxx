@@ -32,6 +32,7 @@
 
 #include <stdlib.h>
 #include <hintids.hxx>
+#include <comphelper/string.hxx>
 #include <svl/urihelper.hxx>
 #include <rtl/tencinfo.h>
 #include <vcl/wrkwin.hxx>
@@ -1092,8 +1093,7 @@ void SwHTMLWriter::OutHyperlinkHRefValue( const String& rURL )
     xub_StrLen nPos = sURL.SearchBackward( cMarkSeperator );
     if( STRING_NOTFOUND != nPos )
     {
-        String sCmp( sURL.Copy( nPos+1 ) );
-        sCmp.EraseAllChars();
+        String sCmp(comphelper::string::remove(sURL.Copy(nPos+1), ' '));
         if( sCmp.Len() )
         {
             sCmp.ToLowerAscii();

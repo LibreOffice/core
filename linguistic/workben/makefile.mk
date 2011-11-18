@@ -75,6 +75,7 @@ SLOFILES=	\
 SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
+        $(COMPHELPERLIB) 	 \
         $(CPPULIB) 	 \
         $(CPPUHELPERLIB) 	 \
         $(TOOLSLIB)		\

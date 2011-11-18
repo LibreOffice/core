@@ -30,6 +30,7 @@
 #include "precompiled_sw.hxx"
 
 #include "hintids.hxx"
+#include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svx/svxids.hrc>
@@ -1134,8 +1135,7 @@ ANCHOR_SETEVENT:
         xub_StrLen nPos = sDecoded.SearchBackward( cMarkSeperator );
         if( STRING_NOTFOUND != nPos )
         {
-            String sCmp( sDecoded.Copy( nPos+1 ) );
-            sCmp.EraseAllChars();
+            String sCmp(comphelper::string::remove(sDecoded.Copy(nPos+1), ' '));
             if( sCmp.Len() )
             {
                 sCmp.ToLowerAscii();

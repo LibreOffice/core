@@ -34,6 +34,7 @@
 #include <vcl/cmdevt.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <swwait.hxx>
 #include <fmtsrnd.hxx>
@@ -789,7 +790,7 @@ sal_uInt16 SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
                 String sTxt( pTxtNd->GetExpandTxt( *rAttr.GetStart(),
                                     *rAttr.GetEnd() - *rAttr.GetStart() ) );
 
-                sTxt.EraseAllChars( 0x0a );
+                sTxt = comphelper::string::remove(sTxt, 0x0a);
                 sTxt.EraseLeadingChars().EraseTrailingChars();
 
                 if( sTxt.Len() )

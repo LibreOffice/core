@@ -1263,8 +1263,10 @@ namespace sfx2
         {
             String sExt = _rExtension;
             if ( !_bForOpen )
+            {
                 // show '*' in extensions only when opening a document
-                sExt.EraseAllChars( '*' );
+                sExt = comphelper::string::remove(sExt, '*');
+            }
             sRet += sOpenBracket;
             sRet += sExt;
             sRet += sCloseBracket;

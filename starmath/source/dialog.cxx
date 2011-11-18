@@ -32,6 +32,7 @@
 
 #define SMDLL 1
 #include "tools/rcid.h"
+#include <comphelper/string.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
@@ -2267,8 +2268,7 @@ bool SmSymDefineDialog::SelectSymbol(ComboBox &rComboBox,
 #endif
 
     // 'Normalisieren' des SymbolNamens (ohne Leerzeichen)
-    XubString  aNormName (rSymbolName);
-    aNormName.EraseAllChars(' ');
+    XubString  aNormName(comphelper::string::remove(rSymbolName, ' '));
     // und evtl Abweichungen in der Eingabe beseitigen
     rComboBox.SetText(aNormName);
 

@@ -54,6 +54,7 @@
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
 #include <shellio.hxx>
@@ -120,7 +121,7 @@ IMPL_LINK(SwRenameXNamedDlg, ModifyHdl, NoSpaceEdit*, pEdit)
     for(sal_uInt16 i = 0; i < pEdit->GetForbiddenChars().Len(); i++)
     {
         sal_uInt16 nTmpLen = sTmp.Len();
-        sTmp.EraseAllChars(pEdit->GetForbiddenChars().GetChar(i));
+        sTmp = comphelper::string::remove(sTmp, pEdit->GetForbiddenChars().GetChar(i));
         if(sTmp.Len() != nTmpLen)
             sMsg += pEdit->GetForbiddenChars().GetChar(i);
     }

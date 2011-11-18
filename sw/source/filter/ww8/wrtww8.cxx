@@ -93,6 +93,7 @@
 #include <fmtfsize.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/stlunosequence.hxx>
+#include <comphelper/string.hxx>
 #include <writerfilter/doctok/sprmids.hxx>
 
 #include "writerhelper.hxx"
@@ -2730,8 +2731,7 @@ void MSWordExportBase::AddLinkTarget(const String& rURL)
     if( nPos < 2 )
         return;
 
-    String sCmp( aURL.Copy( nPos+1 ) );
-    sCmp.EraseAllChars();
+    String sCmp(comphelper::string::remove(aURL.Copy(nPos+1), ' '));
     if( !sCmp.Len() )
         return;
 

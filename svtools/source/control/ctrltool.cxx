@@ -33,6 +33,7 @@
 
 #include <string.h>
 
+#include <comphelper/string.hxx>
 #include <tools/debug.hxx>
 #include <i18npool/mslangid.hxx>
 #include <vcl/window.hxx>
@@ -469,7 +470,7 @@ XubString FontList::GetStyleName( const FontInfo& rInfo ) const
         // Translate StyleName to localized name
         XubString aCompareStyleName = aStyleName;
         aCompareStyleName.ToLowerAscii();
-        aCompareStyleName.EraseAllChars( ' ' );
+        aCompareStyleName = comphelper::string::remove(aCompareStyleName, ' ');
         if ( aCompareStyleName.EqualsAscii( "bold" ) )
             aStyleName = maBold;
         else if ( aCompareStyleName.EqualsAscii( "bolditalic" ) )

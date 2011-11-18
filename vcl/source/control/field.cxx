@@ -29,6 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
+#include <comphelper/string.hxx>
+
 #ifndef _BIGINT_HXX
 #define _TOOLS_BIGINT
 #include "tools/bigint.hxx"
@@ -1140,9 +1142,9 @@ static FieldUnit ImplStringToMetric( const String &rMetricString )
     if( pList )
     {
         // return FieldUnit
-        String aStr( rMetricString );
-        aStr.ToLowerAscii();
-        aStr.EraseAllChars( sal_Unicode( ' ' ) );
+        rtl::OUString aStr( rMetricString );
+        aStr = aStr.toAsciiLowerCase();
+        aStr = comphelper::string::remove(aStr, ' ');
         for( FieldUnitStringList::const_iterator it = pList->begin(); it != pList->end(); ++it )
         {
             if ( it->first.Equals( aStr ) )

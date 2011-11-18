@@ -34,6 +34,7 @@
 #include "appwin.hxx"
 #include "status.hxx"
 
+#include <comphelper/string.hxx>
 #include <vcl/decoview.hxx>
 
 StatusLine::StatusLine( BasicFrame* p )
@@ -82,7 +83,7 @@ IMPL_LINK( StatusLine, ActivateTask, TaskToolBox*, pTTB )
 
     nFirstWinPos += pTTB->GetItemPos( pTTB->GetCurItemId() ) / 2;
 
-    AppWin* pWin = pFrame->FindWin( pWinMenu->GetItemText( pWinMenu->GetItemId( nFirstWinPos ) ).EraseAllChars( L'~' ) );
+    AppWin* pWin = pFrame->FindWin(comphelper::string::remove(pWinMenu->GetItemText(pWinMenu->GetItemId(nFirstWinPos)), '~'));
     if ( pWin )
     {
         pWin->Minimize( sal_False );

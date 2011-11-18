@@ -33,7 +33,7 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
+#include <comphelper/string.hxx>
 #include <vcl/msgbox.hxx>
 
 #include "wrtsh.hxx"
@@ -176,7 +176,7 @@ IMPL_LINK_INLINE_START( SwInsTableDlg, ModifyName, Edit *, pEdit )
     String sTblName = pEdit->GetText();
     if(sTblName.Search(' ') != STRING_NOTFOUND)
     {
-        sTblName.EraseAllChars( );
+        sTblName = comphelper::string::remove(sTblName, ' ');
         pEdit->SetText(sTblName);
     }
 

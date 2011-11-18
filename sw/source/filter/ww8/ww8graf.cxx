@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+#include <comphelper/string.hxx>
 #include <svl/urihelper.hxx>
 #include <hintids.hxx>
 #include <osl/endian.h>
@@ -966,9 +967,9 @@ OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(String &rString, WW8_CP nS
         long nDummy(0);
         lcl_StripFields(rString, nDummy);
         //Strip out word's special characters for the simple string
-        rString.EraseAllChars(0x1);
-        rString.EraseAllChars(0x5);
-        rString.EraseAllChars(0x8);
+        rString = comphelper::string::remove(rString, 0x1);
+        rString = comphelper::string::remove(rString, 0x5);
+        rString = comphelper::string::remove(rString, 0x8);
         rString.SearchAndReplaceAllAscii("\007\007", String::CreateFromAscii("\007\012"));
         rString.SearchAndReplaceAll(0x7, ' ');
 

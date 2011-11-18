@@ -41,6 +41,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/string.hxx>
 #include <rtl/logfile.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
@@ -1101,7 +1102,7 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const String& rText, long M
     for (sal_uInt16 i = 0; i < nLines; i++)
     {
         aLine = rText.GetToken(i, '\n');
-        aLine.EraseAllChars('\r');
+        aLine = comphelper::string::remove(aLine, '\r');
         aLine.EraseLeadingChars('\n');
         aLine.EraseTrailingChars('\n');
 
@@ -1192,7 +1193,7 @@ void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const 
     for (sal_uInt16 i = 0; i < nLines; i++)
     {
         aLine = rText.GetToken(i, '\n');
-        aLine.EraseAllChars('\r');
+        aLine = comphelper::string::remove(aLine, '\r');
         aLine.EraseLeadingChars('\n');
         aLine.EraseTrailingChars('\n');
         aSize = GetTextLineSize(rDevice, aLine);

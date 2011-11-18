@@ -810,49 +810,6 @@ STRING& STRING::EraseLeadingAndTrailingChars( STRCODE c )
 
 // -----------------------------------------------------------------------
 
-STRING& STRING::EraseAllChars( STRCODE c )
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    sal_Int32 nCount = 0;
-    for (sal_Int32 i = 0; i < mpData->mnLen; ++i) {
-        if ( mpData->maStr[i] == c )
-            ++nCount;
-    }
-
-    if ( nCount )
-    {
-        if ( nCount == mpData->mnLen )
-        {
-            STRING_NEW((STRING_TYPE **)&mpData);
-        }
-        else
-        {
-            // Neuen String anlegen
-            STRINGDATA* pNewData = ImplAllocData( mpData->mnLen-nCount );
-
-            // Alten String kopieren und initialisieren
-            nCount = 0;
-            for( xub_StrLen j = 0; j < mpData->mnLen; ++j )
-            {
-                if ( mpData->maStr[j] != c )
-                {
-                    pNewData->maStr[nCount] = mpData->maStr[j];
-                    ++nCount;
-                }
-            }
-
-            // Alte Daten loeschen und Neue zuweisen
-            STRING_RELEASE((STRING_TYPE *)mpData);
-            mpData = pNewData;
-        }
-    }
-
-    return *this;
-}
-
-// -----------------------------------------------------------------------
-
 STRING& STRING::ToLowerAscii()
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );

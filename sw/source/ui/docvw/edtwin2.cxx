@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+#include <comphelper/string.hxx>
 #include <tools/ref.hxx>
 #include <hintids.hxx>
 
@@ -209,7 +210,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
                             if( sTxt.Len() )
                             {
-                                sTxt.EraseAllChars( 0xad );
+                                sTxt = comphelper::string::remove(sTxt, 0xad);
                                 for( sal_Unicode* p = sTxt.GetBufferAccess(); *p; ++p )
                                 {
                                     if( *p < 0x20 )

@@ -1028,11 +1028,13 @@ sal_Bool BasicFrame::CompileAll()
 }
 
 // Setup menu
-#define MENU2FILENAME( Name ) Name.Copy( Name.SearchAscii(" ") +1).EraseAllChars( '~' )
+#define MENU2FILENAME( Name ) comphelper::string::remove(Name.Copy(Name.SearchAscii(" ")+1), '~')
+
 #define LRUNr( nNr ) \
     rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("LRU")) \
         .append(static_cast<sal_Int32>(nNr)) \
         .makeStringAndClear()
+
 String FILENAME2MENU( sal_uInt16 nNr, String aName )
 {
     String aRet;
@@ -1536,8 +1538,7 @@ long BasicFrame::Command( short nID, sal_Bool bChecked )
             {
                 MenuBar* pMenu = GetMenuBar();
                 PopupMenu* pWinMenu = pMenu->GetPopupMenu( RID_APPWINDOW );
-                String aName = pWinMenu->GetItemText( nID );
-                aName.EraseAllChars( L'~' );
+                rtl::OUString aName = comphelper::string::remove(pWinMenu->GetItemText(nID), '~');
                 AppWin* pWin = FindWin( aName );
                 if ( pWin )
                     pWin->ToTop();

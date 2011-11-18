@@ -41,6 +41,7 @@
 #endif
 
 #include <hintids.hxx>
+#include <comphelper/string.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/cmapitem.hxx>
@@ -783,10 +784,9 @@ bool AttributeOutputBase::AnalyzeURL( const String& rUrl, const String& /*rTarge
 
         xub_StrLen nPos = sMark.SearchBackward( cMarkSeperator );
 
-        String sRefType( sMark.Copy( nPos+1 ) );
-        sRefType.EraseAllChars();
+        String sRefType(comphelper::string::remove(sMark.Copy(nPos+1), ' '));
 
-        // i21465 Only interested in outline references
+        // #i21465# Only interested in outline references
         if ( sRefType.EqualsAscii( pMarkToOutline ) )
         {
             String sLink = sMark.Copy(0, nPos);

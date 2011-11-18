@@ -35,6 +35,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <editeng/unolingu.hxx>
 #include <doc.hxx>
 #include <pam.hxx>
@@ -377,7 +378,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
                 // alle Sonderzeichen entfernen (durch Blanks ersetzen):
                 if( sTxt.Len() )
                 {
-                    sTxt.EraseAllChars( 0xad );
+                    sTxt = comphelper::string::remove(sTxt, 0xad);
                     for( sal_Unicode* p = sTxt.GetBufferAccess(); *p; ++p )
                     {
                         if( *p < 0x20 )

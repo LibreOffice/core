@@ -42,6 +42,7 @@
 #include "svx/layctrl.hxx"
 #include <svx/dialmgr.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <svtools/colorcfg.hxx>
 
 // namespaces
@@ -673,9 +674,9 @@ void ColumnsWindow::Paint( const Rectangle& )
     SetFillColor( aFaceColor );
     String aText;
     if ( nCol )
-        aText = String( String::CreateFromInt32(nCol) );
+        aText = String::CreateFromInt32(nCol);
     else
-        aText = Button::GetStandardText( BUTTON_CANCEL ).EraseAllChars( '~' );
+        aText = comphelper::string::remove(Button::GetStandardText(BUTTON_CANCEL), '~');
 
     Size aTextSize(GetTextWidth( aText ), GetTextHeight());
     DrawText( Point( ( aSize.Width() - aTextSize.Width() ) / 2, aSize.Height() - nTextHeight + 2 ), aText );

@@ -27,6 +27,7 @@
  ************************************************************************/
 
 // include ---------------------------------------------------------------
+#include <comphelper/string.hxx>
 #include <tools/shl.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
@@ -217,8 +218,8 @@ SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSe
                 sName = sText;
             else
                 sName = sText.GetToken( nIndex, '/' );
-            sName.EraseAllChars( '(' );
-            sName.EraseAllChars( ')' );
+            sName = comphelper::string::remove(sName, '(');
+            sName = comphelper::string::remove(sName, ')');
             if ( sName.Len() > 0 )
                 (*pCurrent)->SetAccessibleName( sName );
         }

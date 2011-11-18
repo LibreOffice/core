@@ -30,6 +30,8 @@
 #include "precompiled_sfx2.hxx"
 
 // INCLUDE ---------------------------------------------------------------
+#include <comphelper/string.hxx>
+
 #include <svl/style.hxx>
 
 #include <sfx2/newstyle.hxx>
@@ -65,7 +67,7 @@ IMPL_LINK( SfxNewStyleDlg, OKHdl, Control *, pControl )
 
 IMPL_LINK_INLINE_START( SfxNewStyleDlg, ModifyHdl, ComboBox *, pBox )
 {
-    aOKBtn.Enable( pBox->GetText().EraseAllChars().Len() > 0 );
+    aOKBtn.Enable( comphelper::string::remove(pBox->GetText(), ' ').getLength() > 0 );
     return 0;
 }
 IMPL_LINK_INLINE_END( SfxNewStyleDlg, ModifyHdl, ComboBox *, pBox )

@@ -65,6 +65,7 @@
 #include <svtools/ehdl.hxx>
 #include <unotools/printwarningoptions.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/script/DocumentDialogLibraryContainer.hpp>
@@ -984,7 +985,8 @@ String SfxObjectShell::GetServiceNameFromFactory( const String& rFact )
         aFact.Erase( nPos, aFact.Len() );
         aParam.Erase(0,1);
     }
-    aFact.EraseAllChars('4').ToLowerAscii();
+    aFact = comphelper::string::remove(aFact, '4');
+    aFact.ToLowerAscii();
 
     // HACK: sometimes a real document service name is given here instead of
     // a factory short name. Set return value directly to this service name as fallback

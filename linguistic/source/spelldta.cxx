@@ -29,9 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_linguistic.hxx"
 #include <com/sun/star/uno/Reference.h>
-
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
+#include <comphelper/string.hxx>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 
@@ -107,9 +107,8 @@ void SearchSimilarText( const OUString &rText, sal_Int16 nLanguage,
                 String aEntryTxt;
                 if (pEntries[k].is())
                 {
-                    aEntryTxt = pEntries[k]->getDictionaryWord();
                     // remove characters used to determine hyphenation positions
-                    aEntryTxt.EraseAllChars( '=' );
+                    aEntryTxt = comphelper::string::remove(pEntries[k]->getDictionaryWord(), '=');
                 }
                 if (aEntryTxt.Len() > 0  &&  LevDistance( rText, aEntryTxt ) <= 2)
                     rDicListProps.push_back( aEntryTxt );

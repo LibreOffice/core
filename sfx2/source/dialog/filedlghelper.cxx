@@ -56,9 +56,10 @@
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/types.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/stillreadwriteinteraction.hxx>
+#include <comphelper/string.hxx>
+#include <comphelper/types.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -1368,12 +1369,12 @@ void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterfac
 {
     rpURLList = NULL;
 
-    String sExtension;
+    rtl::OUString sExtension;
     if (pFilter)
     {
         sExtension = pFilter->GetDefaultExtension ();
-        sExtension.EraseAllChars( '*' );
-        sExtension.EraseAllChars( '.' );
+        sExtension = comphelper::string::remove(sExtension, '*');
+        sExtension = comphelper::string::remove(sExtension, '.');
     }
 
     // a) the new way (optional!)

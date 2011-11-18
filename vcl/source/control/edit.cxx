@@ -68,8 +68,9 @@
 
 #include <com/sun/star/uno/Any.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
@@ -781,10 +782,10 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
 
 String Edit::ImplGetValidString( const String& rString ) const
 {
-    String aValidString( rString );
-    aValidString.EraseAllChars( _LF );
-    aValidString.EraseAllChars( _CR );
-    aValidString.SearchAndReplaceAll( '\t', ' ' );
+    rtl::OUString aValidString( rString );
+    aValidString = comphelper::string::remove(aValidString, _LF);
+    aValidString = comphelper::string::remove(aValidString, _CR);
+    aValidString = aValidString.replace('\t', ' ');
     return aValidString;
 }
 

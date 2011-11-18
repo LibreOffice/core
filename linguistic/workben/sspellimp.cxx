@@ -30,10 +30,10 @@
 #include "precompiled_linguistic.hxx"
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
-
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
-#include <cppuhelper/factory.hxx>   // helper for factories
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#include <comphelper/string.hxx>
+#include <cppuhelper/factory.hxx>   // helper for factories
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 
@@ -242,8 +242,8 @@ Reference< XSpellAlternatives >
                     aAlt2( aTmp );
             aAlt1.SearchAndReplaceAll( (sal_Unicode) 'x', (sal_Unicode) 'u');
             aAlt1.SearchAndReplaceAll( (sal_Unicode) 'X', (sal_Unicode) 'U');
-            aAlt2.EraseAllChars( (sal_Unicode) 'x' );
-            aAlt2.EraseAllChars( (sal_Unicode) 'X' );
+            aAlt2 = comphelper::string::remove(aAlt2, 'x');
+            aAlt2 = comphelper::string::remove(aAlt2, 'X');
             pStr[0] = aAlt1;
             pStr[1] = aAlt2;
 

@@ -48,6 +48,7 @@
 #include <tools/wldcrd.hxx>
 #include <i18npool/lang.h>
 #include <rtl/string.hxx>
+#include <rtl/strbuf.hxx>
 
 #include "runtime.hxx"
 #include "sbunoobj.hxx"
@@ -80,6 +81,8 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::io;
 using namespace com::sun::star::script;
 using namespace com::sun::star::frame;
+
+#include <comphelper/string.hxx>
 
 #include "stdobj.hxx"
 #include <basic/sbstdobj.hxx>
@@ -124,10 +127,22 @@ Reference< XModel > getDocumentModel( StarBASIC* );
 
 static void FilterWhiteSpace( String& rStr )
 {
-    rStr.EraseAllChars( ' ' );
-    rStr.EraseAllChars( '\t' );
-    rStr.EraseAllChars( '\n' );
-    rStr.EraseAllChars( '\r' );
+    if (!rStr.Len())
+        return;
+
+    rtl::OUStringBuffer aRet(rStr);
+
+    for (xub_StrLen i = 0; i < rStr.Len(); ++i)
+    {
+        sal_Unicode cChar = rStr.GetChar(i);
+        if ((cChar != ' ') && (cChar != '\t') &&
+           (cChar != '\n') && (cChar != '\r'))
+        {
+            aRet.append(cChar);
+        }
+    }
+
+    rStr = aRet.makeStringAndClear();
 }
 
 static long GetDayDiff( const Date& rDate )

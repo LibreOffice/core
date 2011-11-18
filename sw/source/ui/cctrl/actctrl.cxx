@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <comphelper/string.hxx>
 #include "actctrl.hxx"
 
 void NumEditAction::Action()
@@ -88,7 +89,7 @@ void NoSpaceEdit::Modify()
     String sTemp = GetText();
     for(sal_uInt16 i = 0; i < sForbiddenChars.Len(); i++)
     {
-        sTemp.EraseAllChars( sForbiddenChars.GetChar(i) );
+        sTemp = comphelper::string::remove(sTemp, sForbiddenChars.GetChar(i));
     }
     sal_uInt16 nDiff = GetText().Len() - sTemp.Len();
     if(nDiff)

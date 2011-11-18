@@ -29,6 +29,8 @@
 #ifndef _EXPORT_HXX
 #define _EXPORT_HXX
 
+#include <comphelper/string.hxx>
+
 #ifndef L10NTOOLS_DIRECTORY_HXX
 #define L10NTOOLS_DIRECTORY_HXX
 #include <l10ntools/directory.hxx>
@@ -218,9 +220,10 @@ public:
             pPairedList( NULL ),
             sPForm( rPF )
     {
-        sGId.EraseAllChars( '\r' );
-        sPForm.EraseAllChars( '\r' );
+        sGId = comphelper::string::remove(sGId, '\r');
+        sPForm = comphelper::string::remove(sPForm, '\r');
     };
+
     ResData( const ByteString &rPF, const ByteString &rGId , const ByteString &rFilename )
             :
             nChildIndex( 0 ),
@@ -246,13 +249,10 @@ public:
             pFilterList( NULL ),
             pPairedList( NULL ),
             sPForm( rPF )
-
     {
-        sGId.EraseAllChars( '\r' );
-        sPForm.EraseAllChars( '\r' );
+        sGId = comphelper::string::remove(sGId, '\r');
+        sPForm = comphelper::string::remove(sPForm, '\r');
     };
-
-
 };
 
 

@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
+#include <comphelper/string.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
 #include <index.hxx>
@@ -124,8 +124,7 @@ void SwDDETable::ChangeContent()
     // zugriff auf den DDEFldType
     SwDDEFieldType* pDDEType = (SwDDEFieldType*)aDepend.GetRegisteredIn();
 
-    String aExpand = pDDEType->GetExpansion();
-    aExpand.EraseAllChars( '\r' );
+    String aExpand = comphelper::string::remove(pDDEType->GetExpansion(), '\r');
 
     for( sal_uInt16 n = 0; n < aLines.Count(); ++n )
     {

@@ -36,6 +36,7 @@
 #include <tools/solar.h>
 
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/string.hxx>
 #include <sot/storinfo.hxx>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -1112,7 +1113,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         // Thus, delete character 0x01, which stands for such a graphic.
         if (aF.nId==51) //#i56768# only do it for the MACROBUTTON field, since DropListFields need the 0x01.
         {
-            aStr.EraseAllChars( 0x01 );
+            aStr = comphelper::string::remove(aStr, 0x01);
         }
 
         eF_ResT eRes = (this->*aWW8FieldTab[aF.nId])( &aF, aStr );
@@ -1620,7 +1621,8 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
                     break;
             }
         }
-        aDocProperty.EraseAllChars('"');
+
+        aDocProperty = comphelper::string::remove(aDocProperty, '"');
 
         /*
         There are up to 26 fields that may be meant by 'DocumentProperty'.

@@ -31,10 +31,11 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
-#include <ooo/vba/word/WdFieldType.hpp>
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
+#include <comphelper/string.hxx>
+#include <ooo/vba/word/WdFieldType.hpp>
 #include <swtypes.hxx>
 
 using namespace ::ooo::vba;
@@ -491,7 +492,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
                 break;
         }
     }
-    aDocProperty.EraseAllChars('"');
+    aDocProperty = comphelper::string::remove(aDocProperty, '"');
     OSL_TRACE("SwVbaFields::Create_Field_DocProperty, the document property name is %s ",rtl::OUStringToOString( aDocProperty, RTL_TEXTENCODING_UTF8 ).getStr() );
     if( aDocProperty.Len() == 0 )
     {

@@ -48,6 +48,7 @@
 
 #endif                      // dump
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <i18npool/lang.h>
 #include <editeng/unolingu.hxx>
@@ -6249,7 +6250,7 @@ void lcl_checkFontname( String& sString )
     // if anything was found, remove \u0001 + leading/trailing ';'
     if( bFound )
     {
-        sString.EraseAllChars( sal_Unicode( 1 ) );
+        sString = comphelper::string::remove(sString, 1);
         sString.EraseLeadingAndTrailingChars( sal_Unicode( ';' ) );
     }
 }

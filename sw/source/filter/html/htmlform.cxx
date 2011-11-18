@@ -31,6 +31,7 @@
 
 
 #include <hintids.hxx>
+#include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 
@@ -1696,8 +1697,8 @@ void SwHTMLParser::InsertInput()
     // geloescht werden.
     if( !bKeepCRLFInValue )
     {
-        sText.EraseAllChars( _CR );
-        sText.EraseAllChars( _LF );
+        sText = comphelper::string::remove(sText, _CR);
+        sText = comphelper::string::remove(sText, _LF);
     }
 
     const uno::Reference< XMultiServiceFactory > & rServiceFactory =

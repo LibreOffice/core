@@ -33,6 +33,7 @@
 
 #include <hintids.hxx>
 
+#include <comphelper/string.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svxids.hrc>
 
@@ -88,9 +89,7 @@
 String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText )
 {
     String sRet;
-    String aText(rText);
-    aText.EraseAllChars( '\r' );
-
+    String aText(comphelper::string::remove(rText, '\r'));
 
     sal_uInt16 nTokenPos = 0;
     while( STRING_NOTFOUND != nTokenPos )

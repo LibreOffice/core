@@ -42,6 +42,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
+#include <comphelper/string.hxx>
 
 #include <vector>
 #include <boost/scoped_ptr.hpp>
@@ -532,7 +533,7 @@ void SwRestrictedComboBox::Modify()
     String sTemp = GetText();
     for(sal_uInt16 i = 0; i < sForbiddenChars.Len(); i++)
     {
-        sTemp.EraseAllChars( sForbiddenChars.GetChar(i) );
+        sTemp = comphelper::string::remove(sTemp, sForbiddenChars.GetChar(i));
     }
     sal_uInt16 nDiff = GetText().Len() - sTemp.Len();
     if(nDiff)

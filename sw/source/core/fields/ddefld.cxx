@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
+#include <comphelper/string.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <doc.hxx>
 #include <editsh.hxx>
@@ -402,9 +402,8 @@ SwDDEField::~SwDDEField()
 String SwDDEField::Expand() const
 {
     xub_StrLen nPos;
-    String aStr( ((SwDDEFieldType*)GetTyp())->GetExpansion() );
+    String aStr(comphelper::string::remove(((SwDDEFieldType*)GetTyp())->GetExpansion(), '\r'));
 
-    aStr.EraseAllChars( '\r' );
     while( (nPos = aStr.Search( '\t' )) != STRING_NOTFOUND )
         aStr.SetChar( nPos, ' ' );
     while( (nPos = aStr.Search( '\n' )) != STRING_NOTFOUND )

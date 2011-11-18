@@ -33,6 +33,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <comphelper/uieventslogger.hxx>
 
 #include <tools/wintypes.hxx>
@@ -817,7 +818,7 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
             case WINDOW_BUTTONDIALOG:
 
             case WINDOW_MENUBARWINDOW:
-                aName = pBase->GetText().EraseAllChars('~');
+                aName = comphelper::string::remove(pBase->GetText(), '~');
                 break;
 
             case WINDOW_EDIT:

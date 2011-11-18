@@ -31,6 +31,7 @@
 
 
 #include <string>
+#include <comphelper/string.hxx>
 #include <svl/eitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <sfx2/dispatch.hxx>
@@ -685,8 +686,7 @@ void    SwZoomBox_Impl::Select()
 {
     if ( !IsTravelSelect() )
     {
-        String sEntry(GetText());
-        sEntry.EraseAllChars( '%' );
+        String sEntry(comphelper::string::remove(GetText(), '%'));
         sal_uInt16 nZoom = (sal_uInt16)sEntry.ToInt32();
         if(nZoom < MINZOOM)
             nZoom = MINZOOM;

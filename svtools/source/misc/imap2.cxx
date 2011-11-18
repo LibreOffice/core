@@ -267,7 +267,7 @@ void ImageMap::ImpReadCERNLine( const rtl::OString& rLine, const String& rBaseUR
 
     aStr.EraseLeadingChars( ' ' );
     aStr.EraseLeadingChars( '\t' );
-    aStr.EraseAllChars( ';' );
+    aStr = comphelper::string::remove(aStr, ';');
     aStr.ToLowerAscii();
 
     const char* pStr = aStr.GetBuffer();
@@ -410,7 +410,7 @@ void ImageMap::ImpReadNCSALine( const rtl::OString& rLine, const String& rBaseUR
 
     aStr.EraseLeadingChars( ' ' );
     aStr.EraseLeadingChars( '\t' );
-    aStr.EraseAllChars( ';' );
+    aStr = comphelper::string::remove(aStr, ';');
     aStr.ToLowerAscii();
 
     const char* pStr = aStr.GetBuffer();

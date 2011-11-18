@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#include <comphelper/string.hxx>
+
 #include "rtl/ustrbuf.hxx"
 
 #include "vcl/cmdevt.hxx"
@@ -682,10 +684,8 @@ void AquaSalMenu::SetItemText( unsigned /*i_nPos*/, SalMenuItem* i_pSalMenuItem,
 
     AquaSalMenuItem *pAquaSalMenuItem = (AquaSalMenuItem *) i_pSalMenuItem;
 
-    String aText( i_rText );
-
     // Delete mnemonics
-    aText.EraseAllChars( '~' );
+    String aText( comphelper::string::remove(i_rText, '~') );
 
     /* #i90015# until there is a correct solution
        strip out any appended (.*) in menubar entries
@@ -933,10 +933,8 @@ AquaSalMenuItem::AquaSalMenuItem( const SalItemParams* pItemData ) :
     mpSubMenu( NULL ),
     mpMenuItem( nil )
 {
-    String aText( pItemData->aText );
-
     // Delete mnemonics
-    aText.EraseAllChars( '~' );
+    String aText( comphelper::string::remove(pItemData->aText, '~') );
 
     if (pItemData->eType == MENUITEM_SEPARATOR)
     {

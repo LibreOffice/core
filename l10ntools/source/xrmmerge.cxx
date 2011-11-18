@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_l10ntools.hxx"
+#include <comphelper/string.hxx>
 #include <stdio.h>
 #include <tools/string.hxx>
 #include <tools/fsys.hxx>
@@ -582,37 +583,40 @@ void XRMResExport::EndOfText(
     (void) rOpenTag;        // FIXME
     (void) rCloseTag;       // FIXME
 
-    if ( pResData && pOutputStream ) {
+    if ( pResData && pOutputStream )
+    {
         ByteString sTimeStamp( Export::GetTimeStamp());
         ByteString sCur;
-        for( unsigned int n = 0; n < aLanguages.size(); n++ ){
+        for( unsigned int n = 0; n < aLanguages.size(); n++ )
+        {
             sCur = aLanguages[ n ];
 
-            ByteString sAct = pResData->sText[ sCur ];
-                sAct.EraseAllChars( 0x0A );
+            rtl::OString sAct = pResData->sText[ sCur ];
+            sAct = comphelper::string::remove(sAct, 0x0A);
 
-                ByteString sOutput( sPrj ); sOutput += "\t";
-                sOutput += sPath;
-                sOutput += "\t0\t";
-                sOutput += sResourceType;
-                sOutput += "\t";
-                sOutput += pResData->sId;
-                // USE LID AS GID OR MERGE DON'T WORK
-                //sOutput += pResData->sGId;
-                sOutput += "\t";
-                sOutput += pResData->sId;
-                sOutput += "\t\t\t0\t";
-                sOutput += sCur;
-                sOutput += "\t";
+            ByteString sOutput( sPrj ); sOutput += "\t";
+            sOutput += sPath;
+            sOutput += "\t0\t";
+            sOutput += sResourceType;
+            sOutput += "\t";
+            sOutput += pResData->sId;
+            // USE LID AS GID OR MERGE DON'T WORK
+            //sOutput += pResData->sGId;
+            sOutput += "\t";
+            sOutput += pResData->sId;
+            sOutput += "\t\t\t0\t";
+            sOutput += sCur;
+            sOutput += "\t";
 
-                sOutput += sAct; sOutput += "\t\t\t\t";
-                sOutput += sTimeStamp;
+            sOutput += sAct;
+            sOutput += "\t\t\t\t";
+            sOutput += sTimeStamp;
 
-                sal_Char cSearch = 0x00;
-                sOutput.SearchAndReplaceAll( cSearch, '_' );
-                if( sAct.Len() > 1 )
-                    pOutputStream->WriteLine( sOutput );
-            }
+            sal_Char cSearch = 0x00;
+            sOutput.SearchAndReplaceAll( cSearch, '_' );
+            if( sAct.getLength() > 1 )
+                pOutputStream->WriteLine( sOutput );
+        }
     }
     delete pResData;
     pResData = NULL;

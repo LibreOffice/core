@@ -73,12 +73,13 @@
 #include <ucbhelper/content.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/useroptions.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>
-#include <comphelper/storagehelper.hxx>
-#include <comphelper/sequenceasvector.hxx>
-#include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/mediadescriptor.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/storagehelper.hxx>
+#include <comphelper/string.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -992,15 +993,15 @@ sal_Bool CreateFromAddress_Impl( String& rFrom )
         }
         rFrom += TRIM( aName );
         // remove illegal characters
-        rFrom.EraseAllChars( '<' );
-        rFrom.EraseAllChars( '>' );
-        rFrom.EraseAllChars( '@' );
+        rFrom = comphelper::string::remove(rFrom, '<');
+        rFrom = comphelper::string::remove(rFrom, '>');
+        rFrom = comphelper::string::remove(rFrom, '@');
     }
     String aEmailName = aUserCFG.GetEmail();
 
     // remove illegal characters
-    aEmailName.EraseAllChars( '<' );
-    aEmailName.EraseAllChars( '>' );
+    aEmailName = comphelper::string::remove(aEmailName, '<');
+    aEmailName = comphelper::string::remove(aEmailName, '>');
 
     if ( aEmailName.Len() )
     {

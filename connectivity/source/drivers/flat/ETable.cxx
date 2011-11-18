@@ -39,18 +39,19 @@
 #include "flat/EColumns.hxx"
 #include <osl/thread.h>
 #include <tools/config.hxx>
-#include <comphelper/sequence.hxx>
 #include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
 #include <stdio.h>      //sprintf
 #include <comphelper/extract.hxx>
 #include <comphelper/numbers.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/string.hxx>
+#include <comphelper/types.hxx>
 #include "flat/EDriver.hxx"
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <unotools/configmgr.hxx>
 #include <i18npool/mslangid.hxx>
 #include "connectivity/dbconversion.hxx"
-#include <comphelper/types.hxx>
 #include "file/quotedstring.hxx"
 #include <unotools/syslocale.hxx>
 #include <rtl/logfile.hxx>
@@ -713,9 +714,10 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
                     } // if ( DataType::INTEGER != nType )
                     else
                     {
-                        aStrConverted = aStr;
                         if ( cThousandDelimiter )
-                            aStrConverted.EraseAllChars(cThousandDelimiter);
+                            aStrConverted = comphelper::string::remove(aStr, cThousandDelimiter);
+                        else
+                            aStrConverted = aStr;
                     }
                     const double nVal = ::rtl::math::stringToDouble(aStrConverted,'.',',',NULL,NULL);
 

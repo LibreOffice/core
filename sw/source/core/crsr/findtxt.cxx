@@ -32,6 +32,8 @@
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 
+#include <comphelper/string.hxx>
+
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
@@ -671,8 +673,8 @@ String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
             String aStr( pPam->GetTxt() );
             String aSearchStr( rSearchOpt.searchString );
             String aReplaceStr( rSearchOpt.replaceString );
-             aStr.EraseAllChars( CH_TXTATR_BREAKWORD );
-             aStr.EraseAllChars( CH_TXTATR_INWORD );
+            aStr = comphelper::string::remove(aStr, CH_TXTATR_BREAKWORD);
+            aStr = comphelper::string::remove(aStr, CH_TXTATR_INWORD);
             xub_StrLen nStart = 0;
             String sX( 'x' );
             if( pPam->Start()->nContent > 0 )

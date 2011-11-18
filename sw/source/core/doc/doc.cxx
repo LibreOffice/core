@@ -44,6 +44,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/poly.hxx>
 #include <tools/multisel.hxx>
@@ -1214,7 +1215,7 @@ static void lcl_FormatPostIt(
     aStr = pField->GetPar2();
 #if defined( WNT )
     // Throw out all CR in Windows
-    aStr.EraseAllChars( '\r' );
+    aStr = comphelper::string::remove(aStr, '\r');
 #endif
     pIDCO->InsertString( aPam, aStr );
 }

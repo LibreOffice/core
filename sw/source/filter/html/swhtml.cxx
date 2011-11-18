@@ -29,10 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <comphelper/string.hxx>
 #include <sfx2/sfx.hrc>
 #include <svx/svxids.hrc>
 #if OSL_DEBUG_LEVEL > 1
@@ -394,14 +394,19 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
             if( sJmpMark.Len() )
             {
                 eJumpTo = JUMPTO_MARK;
-                String sCmp;
                 xub_StrLen nLastPos, nPos = 0;
                 while( STRING_NOTFOUND != ( nLastPos =
                         sJmpMark.Search( cMarkSeperator, nPos + 1 )) )
                     nPos = nLastPos;
 
-                if( nPos && ( sCmp = sJmpMark.Copy( nPos + 1 ) ).
-                                                EraseAllChars().Len() )
+                String sCmp;
+                if (nPos)
+                {
+                    sCmp = comphelper::string::remove(
+                        sJmpMark.Copy(nPos + 1), ' ');
+                }
+
+                if( sCmp.Len() )
                 {
                     sCmp.ToLowerAscii();
                     if( sCmp.EqualsAscii( pMarkToRegion ) )
@@ -5346,8 +5351,8 @@ void SwHTMLParser::ParseMoreMetaOptions()
         aName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_META_content_script_type ) )
         return;
 
-    aContent.EraseAllChars( _CR );
-    aContent.EraseAllChars( _LF );
+    aContent = comphelper::string::remove(aContent, _CR);
+    aContent = comphelper::string::remove(aContent, _LF);
 
     if( aName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_META_sdendnote ) )
     {

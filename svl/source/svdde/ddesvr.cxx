@@ -32,6 +32,7 @@
 #define UNICODE
 #include "ddeimp.hxx"
 #include <algorithm>
+#include <comphelper/string.hxx>
 #include <svl/svdde.hxx>
 #include <svl/svarray.hxx>
 #include <tools/debug.hxx>
@@ -133,7 +134,8 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
                     while( STRING_NOTFOUND != n )
                     {
                         String s( sTopics.GetToken( 0, '\t', n ));
-                        s.EraseAllChars( '\n' ).EraseAllChars( '\r' );
+                        s = comphelper::string::remove(s, '\n');
+                        s = comphelper::string::remove(s, '\r');
                         if( !hText1 || s == reinterpret_cast<const sal_Unicode*>(chTopicBuf) )
                         {
                             DdeString aDStr( pInst->hDdeInstSvr, s );

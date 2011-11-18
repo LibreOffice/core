@@ -510,13 +510,14 @@ int Export::Execute( int nToken, const char * pToken )
     ByteString sOrig( sToken );
     sal_Bool bWriteToMerged = bMergeMode;
 
-    if ( nToken == CONDITION ) {
-        ByteString sTestToken( pToken );
-        sTestToken.EraseAllChars( '\t' );
-        sTestToken.EraseAllChars( ' ' );
-        if (( !bReadOver ) && ( sTestToken.Search( "#ifndef__RSC_PARSER" ) == 0 ))
+    if ( nToken == CONDITION )
+    {
+        rtl::OString sTestToken(pToken);
+        sTestToken = comphelper::string::remove(sTestToken, '\t');
+        sTestToken = comphelper::string::remove(sTestToken, ' ');
+        if (( !bReadOver ) && ( comphelper::string::indexOfL(sTestToken, RTL_CONSTASCII_STRINGPARAM("#ifndef__RSC_PARSER")) == 0 ))
             bReadOver = sal_True;
-        else if (( bReadOver ) && ( sTestToken.Search( "#endif" ) == 0 ))
+        else if (( bReadOver ) && ( comphelper::string::indexOfL(sTestToken, RTL_CONSTASCII_STRINGPARAM("#endif")) == 0 ))
             bReadOver = sal_False;
     }
     if ((( nToken < FILTER_LEVEL ) || ( bReadOver )) &&
@@ -638,16 +639,17 @@ int Export::Execute( int nToken, const char * pToken )
             pResData = new ResData( sActPForm, FullId() , sFilename );
             aResStack.push_back( pResData );
             ByteString sBackup( sToken );
-            sToken.EraseAllChars( '\n' );
-            sToken.EraseAllChars( '\r' );
-            sToken.EraseAllChars( '{' );
+            sToken = comphelper::string::remove(sToken, '\n');
+            sToken = comphelper::string::remove(sToken, '\r');
+            sToken = comphelper::string::remove(sToken, '{');
             while( sToken.SearchAndReplace( "\t", " " ) != STRING_NOTFOUND ) {};
             sToken.EraseTrailingChars( ' ' );
             ByteString sT = getToken(sToken, 0, ' ');
             pResData->sResTyp = sT.ToLowerAscii();
             ByteString sId( sToken.Copy( pResData->sResTyp.Len() + 1 ));
             ByteString sCondition;
-            if ( sId.Search( "#" ) != STRING_NOTFOUND ) {
+            if ( sId.Search( "#" ) != STRING_NOTFOUND )
+            {
                 // between ResTyp, Id and paranthes is a precomp. condition
                 sCondition = "#";
                 sCondition += ByteString(getToken(sId, 1, '#'));
@@ -655,7 +657,7 @@ int Export::Execute( int nToken, const char * pToken )
             }
             sId = getToken(sId, 0, '/');
             CleanValue( sId );
-            sId = sId.EraseAllChars( '\t' );
+            sId = comphelper::string::remove(sId, '\t');
             pResData->SetId( sId, ID_LEVEL_IDENTIFIER );
             if ( sCondition.Len())
             {
@@ -676,12 +678,12 @@ int Export::Execute( int nToken, const char * pToken )
 
             pResData = new ResData( sActPForm, FullId() , sFilename );
             aResStack.push_back( pResData );
-            sToken.EraseAllChars( '\n' );
-            sToken.EraseAllChars( '\r' );
-            sToken.EraseAllChars( '{' );
-            sToken.EraseAllChars( '\t' );
-            sToken.EraseAllChars( ' ' );
-            sToken.EraseAllChars( '\\' );
+            sToken = comphelper::string::remove(sToken, '\n');
+            sToken = comphelper::string::remove(sToken, '\r');
+            sToken = comphelper::string::remove(sToken, '{');
+            sToken = comphelper::string::remove(sToken, '\t');
+            sToken = comphelper::string::remove(sToken, ' ');
+            sToken = comphelper::string::remove(sToken, '\\');
             pResData->sResTyp = sToken.ToLowerAscii();
         }
         break;
@@ -736,36 +738,44 @@ int Export::Execute( int nToken, const char * pToken )
             }
         }
         break;
-        case ASSIGNMENT: {
+        case ASSIGNMENT:
+        {
             bDontWriteOutput = sal_False;
             // interpret different types of assignement
-            ByteString sKey = getToken(sToken, 0, '=');
-            sKey.EraseAllChars( ' ' );
-            sKey.EraseAllChars( '\t' );
+            rtl::OString sKey = getToken(sToken, 0, '=');
+            sKey = comphelper::string::remove(sKey, ' ');
+            sKey = comphelper::string::remove(sKey, '\t');
             ByteString sValue = getToken(sToken, 1, '=');
             CleanValue( sValue );
-            if ( sKey.ToUpperAscii() == "IDENTIFIER" ) {
-                ByteString sId( sValue.EraseAllChars( '\t' ));
-                pResData->SetId( sId.EraseAllChars( ' ' ), ID_LEVEL_IDENTIFIER );
+            sKey = sKey.toAsciiUpperCase();
+            if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("IDENTIFIER")))
+            {
+                ByteString sId(comphelper::string::remove(sValue, '\t'));
+                sId = comphelper::string::remove(sId, ' ');
+                pResData->SetId(sId, ID_LEVEL_IDENTIFIER);
             }
-            else if ( sKey == "HELPID" ) {
+            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("HELPID")))
+            {
                 pResData->sHelpId = sValue;
             }
-            else if ( sKey == "STRINGLIST" ) {
+            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("STRINGLIST")))
+            {
                 pResData->bList = sal_True;
                 nList = LIST_STRING;
                 m_sListLang = SOURCE_LANGUAGE;
                 nListIndex = 0;
                 nListLevel = 0;
             }
-            else if ( sKey == "FILTERLIST" ) {
+            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("FILTERLIST")))
+            {
                 pResData->bList = sal_True;
                 nList = LIST_FILTER;
                 m_sListLang = SOURCE_LANGUAGE;
                 nListIndex = 0;
                 nListLevel = 0;
             }
-            else if ( sKey == "UIENTRIES" ) {
+            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("UIENTRIES")))
+            {
                 pResData->bList = sal_True;
                 nList = LIST_UIENTRIES;
                 m_sListLang = SOURCE_LANGUAGE;
@@ -780,26 +790,29 @@ int Export::Execute( int nToken, const char * pToken )
          }
         break;
         case UIENTRIES:
-        case LISTASSIGNMENT: {
+        case LISTASSIGNMENT:
+        {
             bDontWriteOutput = sal_False;
-            ByteString sTmpToken( sToken);
-            sTmpToken.EraseAllChars(' ');
+            ByteString sTmpToken(comphelper::string::remove(sToken, ' '));
             sal_uInt16 nPos = 0;
             nPos = sTmpToken.ToLowerAscii().Search("[en-us]=");
             if( nPos != STRING_NOTFOUND ) {
-                ByteString sKey = sTmpToken.Copy( 0 , nPos );
-                sKey.EraseAllChars( ' ' );
-                sKey.EraseAllChars( '\t' );
+                rtl::OString sKey = sTmpToken.Copy( 0 , nPos );
+                sKey = comphelper::string::remove(sKey, ' ');
+                sKey = comphelper::string::remove(sKey, '\t');
                 ByteString sValue = getToken(sToken, 1, '=');
                 CleanValue( sValue );
-                if ( sKey.ToUpperAscii() ==  "STRINGLIST" ) {
+                sKey = sKey.toAsciiUpperCase();
+                if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("STRINGLIST")))
+                {
                     pResData->bList = sal_True;
                     nList = LIST_STRING;
                     m_sListLang = SOURCE_LANGUAGE;
                     nListIndex = 0;
                     nListLevel = 0;
                 }
-                else if ( sKey == "FILTERLIST" ) {
+                else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("FILTERLIST")))
+                {
                     pResData->bList = sal_True;
                     nList = LIST_FILTER;
                     m_sListLang = SOURCE_LANGUAGE;
@@ -807,22 +820,24 @@ int Export::Execute( int nToken, const char * pToken )
                     nListLevel = 0;
                 }
                 // PairedList
-                else if ( sKey ==  "PAIREDLIST" ) {
+                else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("PAIREDLIST")))
+                {
                     pResData->bList = sal_True;
                     nList = LIST_PAIRED;
                     m_sListLang = SOURCE_LANGUAGE;
                     nListIndex = 0;
                     nListLevel = 0;
                 }
-
-                else if ( sKey ==  "ITEMLIST" ) {
+                else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("ITEMLIST")))
+                {
                     pResData->bList = sal_True;
                     nList = LIST_ITEM;
                     m_sListLang = SOURCE_LANGUAGE;
                     nListIndex = 0;
                     nListLevel = 0;
                 }
-                else if ( sKey ==  "UIENTRIES" ) {
+                else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("UIENTRIES")))
+                {
                     pResData->bList = sal_True;
                     nList = LIST_UIENTRIES;
                     m_sListLang = SOURCE_LANGUAGE;
@@ -830,20 +845,22 @@ int Export::Execute( int nToken, const char * pToken )
                     nListLevel = 0;
                 }
             }
-            else {
+            else
+            {
                 // new res. is a String- or FilterList
-                ByteString sKey = getToken(sToken, 0, '[');
-                sKey.EraseAllChars( ' ' );
-                sKey.EraseAllChars( '\t' );
-                if ( sKey.ToUpperAscii() == "STRINGLIST" )
+                rtl::OString sKey = getToken(sToken, 0, '[');
+                sKey = comphelper::string::remove(sKey, ' ');
+                sKey = comphelper::string::remove(sKey, '\t');
+                sKey = sKey.toAsciiUpperCase();
+                if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("STRINGLIST")))
                     nList = LIST_STRING;
-                else if ( sKey == "FILTERLIST" )
+                else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("FILTERLIST")))
                     nList = LIST_FILTER;
-                else if ( sKey == "PAIREDLIST" )
+                else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("PAIREDLIST")))
                     nList = LIST_PAIRED;                // abcd
-                else if ( sKey == "ITEMLIST" )
+                else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("ITEMLIST")))
                     nList = LIST_ITEM;
-                else if ( sKey == "UIENTRIES" )
+                else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("UIENTRIES")))
                     nList = LIST_UIENTRIES;
                 if ( nList ) {
                     ByteString sLang = getToken(getToken(sToken, 1, '['), 0, ']');
@@ -877,13 +894,14 @@ int Export::Execute( int nToken, const char * pToken )
         case LONGTEXTLINE:
         case TEXTLINE:
             bDontWriteOutput = sal_False;
-            if ( nLevel ) {
+            if ( nLevel )
+            {
                 CutComment( sToken );
 
                 // this is a text line!!!
-                ByteString sKey = getToken(getToken(sToken, 0, '='), 0, '[');
-                sKey.EraseAllChars( ' ' );
-                sKey.EraseAllChars( '\t' );
+                rtl::OString sKey = getToken(getToken(sToken, 0, '='), 0, '[');
+                sKey = comphelper::string::remove(sKey, ' ');
+                sKey = comphelper::string::remove(sKey, '\t');
                 ByteString sText( GetText( sToken, nToken ));
                 ByteString sLang;
                 if ( getToken(sToken, 0, '=').indexOf('[') != -1 )
@@ -893,12 +911,14 @@ int Export::Execute( int nToken, const char * pToken )
                 }
                 rtl::OString sLangIndex = sLang;
                 ByteString sOrigKey = sKey;
-                if ( sText.Len() && sLang.Len() ) {
-                    if (( sKey.ToUpperAscii() == "TEXT" ) ||
-                        ( sKey == "MESSAGE" ) ||
-                        ( sKey == "CUSTOMUNITTEXT" ) ||
-                        ( sKey == "SLOTNAME" ) ||
-                        ( sKey == "UINAME" ))
+                if ( sText.Len() && sLang.Len() )
+                {
+                    sKey = sKey.toAsciiUpperCase();
+                    if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("TEXT")) ||
+                        sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("MESSAGE"))  ||
+                        sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("CUSTOMUNITTEXT"))  ||
+                        sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("SLOTNAME"))  ||
+                        sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("UINAME")))
                     {
                         SetChildWithText();
                         if ( Export::isSourceLanguage( sLangIndex ) )
@@ -997,22 +1017,19 @@ int Export::Execute( int nToken, const char * pToken )
             bDontWriteOutput = sal_False;
             // this is a AppfontMapping, so look if its a definition
             // of field size
-            ByteString sKey = getToken(sToken, 0, '=');
-            sKey.EraseAllChars( ' ' );
-            sKey.EraseAllChars( '\t' );
+            rtl::OString sKey = getToken(sToken, 0, '=');
+            sKey = comphelper::string::remove(sKey, ' ');
+            sKey = comphelper::string::remove(sKey, '\t');
             rtl::OString sMapping = getToken(sToken, 1, '=');
             sMapping = getToken(sMapping, 1, '(');
             sMapping = getToken(sMapping, 0, ')');
             sMapping = replace(sMapping, rtl::OString(' '), rtl::OString());
             sMapping = replace(sMapping, rtl::OString('\t'), rtl::OString());
-            if ( sKey.ToUpperAscii() == "SIZE" )
-            {
+            sKey = sKey.toAsciiUpperCase();
+            if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("SIZE")))
                 pResData->nWidth = ( sal_uInt16 ) getToken(sMapping, 0, ',').toInt32();
-            }
-            else if ( sKey == "POSSIZE" )
-            {
+            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("POSSIZE")))
                 pResData->nWidth = ( sal_uInt16 ) getToken(sMapping, 2, ',').toInt32();
-            }
         }
         break;
         case RSCDEFINELEND:
@@ -1492,13 +1509,15 @@ ByteString Export::GetText( const ByteString &rSource, int nToken )
 #define TXT_STATE_MACRO 0x002
 {
     ByteString sReturn;
-    switch ( nToken ) {
+    switch ( nToken )
+    {
         case TEXTLINE:
-        case LONGTEXTLINE: {
+        case LONGTEXTLINE:
+        {
             ByteString sTmp( rSource.Copy( rSource.Search( "=" )));
             CleanValue( sTmp );
-            sTmp.EraseAllChars( '\n' );
-            sTmp.EraseAllChars( '\r' );
+            sTmp = comphelper::string::remove(sTmp, '\n');
+            sTmp = comphelper::string::remove(sTmp, '\r');
 
             while ( sTmp.SearchAndReplace( "\\\\\"", "-=<[BSlashBSlashHKom]>=-\"" )
                 != STRING_NOTFOUND ) {};

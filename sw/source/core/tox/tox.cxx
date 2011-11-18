@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <comphelper/string.hxx>
 #include <tools/resid.hxx>
 #include <hintids.hxx>
 #include <swtypes.hxx>
@@ -707,8 +708,7 @@ String SwFormToken::GetString() const
         if( sText.Len() )
         {
             sRet += TOX_STYLE_DELIMITER;
-            String sTmp( sText );
-            sTmp.EraseAllChars( TOX_STYLE_DELIMITER );
+            String sTmp(comphelper::string::remove(sText, TOX_STYLE_DELIMITER));
             sRet += sTmp;
             sRet += TOX_STYLE_DELIMITER;
         }

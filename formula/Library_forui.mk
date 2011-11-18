@@ -48,6 +48,7 @@ $(eval $(call gb_Library_add_api,forui,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,forui,\
+    comphelper \
     cppu \
     cppuhelper \
     for \

@@ -33,6 +33,7 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
+#include <comphelper/string.hxx>
 
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
@@ -290,11 +291,11 @@ FieldUnitStringList* ImplGetCleanedFieldUnits()
             size_t nUnits = pUnits->size();
             pSVData->maCtrlData.mpCleanUnitStrings = new FieldUnitStringList();
             pSVData->maCtrlData.mpCleanUnitStrings->reserve( nUnits );
-            for( size_t i = 0; i < nUnits; i++ )
+            for( size_t i = 0; i < nUnits; ++i )
             {
-                String aUnit( (*pUnits)[i].first );
-                aUnit.EraseAllChars( sal_Unicode( ' ' ) );
-                aUnit.ToLowerAscii();
+                rtl::OUString aUnit( (*pUnits)[i].first );
+                aUnit = comphelper::string::remove(aUnit, ' ');
+                aUnit = aUnit.toAsciiLowerCase();
                 std::pair< String, FieldUnit > aElement( aUnit, (*pUnits)[i].second );
                 pSVData->maCtrlData.mpCleanUnitStrings->push_back( aElement );
             }

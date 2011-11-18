@@ -30,6 +30,7 @@
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
 #include <tools/stream.hxx>
+#include <comphelper/string.hxx>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
@@ -197,7 +198,7 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         {
             String aOutStr( aStr.Copy( nStrPos, nNextAttr - nStrPos ) );
             if ( !bExportSoftHyphens )
-                aOutStr.EraseAllChars( CHAR_SOFTHYPHEN );
+                aOutStr = comphelper::string::remove(aOutStr, CHAR_SOFTHYPHEN);
 
             rWrt.Strm().WriteUnicodeOrByteText( aOutStr );
         }

@@ -37,10 +37,11 @@
 #include <tools/urlobj.hxx>
 #include <svl/converter.hxx>
 #include <svl/zforlist.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/sharedunocomponent.hxx>
-#include <comphelper/processfactory.hxx>
 #include <svx/txenctab.hxx>
 #include <svx/dbcharsethelper.hxx>
 
@@ -539,7 +540,7 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
             if ( nToken > 1 )
             {
                 aFieldName = aString.GetToken( 0, ',' );
-                aString.EraseAllChars( ' ' );
+                aString = comphelper::string::remove(aString, ' ');
                 switch ( aString.GetToken( 1, ',' ).GetChar(0) )
                 {
                     case 'L' :

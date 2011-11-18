@@ -30,6 +30,7 @@
 #include "precompiled_sw.hxx"
 
 
+#include <comphelper/string.hxx>
 #include <tools/urlobj.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>
@@ -266,8 +267,8 @@ sal_Bool SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
     }
 
     String aNewWord(rWord);
-    aNewWord.EraseAllChars( CH_TXTATR_INWORD );
-    aNewWord.EraseAllChars( CH_TXTATR_BREAKWORD );
+    aNewWord = comphelper::string::remove(aNewWord, CH_TXTATR_INWORD);
+    aNewWord = comphelper::string::remove(aNewWord, CH_TXTATR_BREAKWORD);
 
     pImpl->AddDocument(rDoc);
     sal_Bool bRet = sal_False;

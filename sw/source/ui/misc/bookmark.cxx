@@ -34,6 +34,7 @@
 #endif
 
 
+#include <comphelper/string.hxx>
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
@@ -63,7 +64,7 @@ IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
         for(sal_uInt16 i = 0; i < BookmarkCombo::aForbiddenChars.Len(); i++)
         {
             sal_uInt16 nTmpLen = sTmp.Len();
-            sTmp.EraseAllChars(BookmarkCombo::aForbiddenChars.GetChar(i));
+            sTmp = comphelper::string::remove(sTmp, BookmarkCombo::aForbiddenChars.GetChar(i));
             if(sTmp.Len() != nTmpLen)
                 sMsg += BookmarkCombo::aForbiddenChars.GetChar(i);
         }
@@ -125,8 +126,8 @@ void SwInsertBookmarkDlg::Apply()
 
     if ( nLen && (aBookmarkBox.GetEntryPos(aTmpEntry) == COMBOBOX_ENTRY_NOTFOUND) )
     {
-        String sEntry(aBookmarkBox.GetText());
-        sEntry.EraseAllChars(aBookmarkBox.GetMultiSelectionSeparator());
+        String sEntry(comphelper::string::remove(aBookmarkBox.GetText(),
+            aBookmarkBox.GetMultiSelectionSeparator()));
 
         rSh.SetBookmark( KeyCode(), sEntry, aEmptyStr );
         rReq.AppendItem( SfxStringItem( FN_INSERT_BOOKMARK, sEntry ) );

@@ -34,6 +34,7 @@
 #include <svl/eitem.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
@@ -68,10 +69,8 @@ static String getNormDicEntry_Impl( const String &rText )
 {
     String aTmp( rText );
     aTmp.EraseTrailingChars( '.' );
-    aTmp.EraseAllChars( '=' );
-    return aTmp;
+    return comphelper::string::remove(aTmp, '=');
 }
-
 
 // Compare Dictionary Entry  result
 enum CDE_RESULT { CDE_EQUAL, CDE_SIMILAR, CDE_DIFFERENT };

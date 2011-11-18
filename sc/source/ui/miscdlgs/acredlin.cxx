@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
+#include <comphelper/string.hxx>
 #include <svl/undo.hxx>
 #include <unotools/textsearch.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -339,8 +340,7 @@ bool ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
     String aString;
     String aDesc;
 
-    String aComment=pScChangeAction->GetComment();
-    aComment.EraseAllChars('\n');
+    String aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');
 
     if(eType==SC_CAT_CONTENT)
     {
@@ -465,8 +465,8 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(
         bIsGenerated = true;
     }
 
-    String aComment=pScChangeAction->GetComment();
-    aComment.EraseAllChars('\n');
+    String aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');
+
     if(aDesc.Len()>0)
     {
         aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " (" ));
@@ -637,8 +637,8 @@ SvLBoxEntry* ScAcceptChgDlg::InsertFilteredAction(
             aString+='\t';
         }
 
-        String aComment=pScChangeAction->GetComment();
-        aComment.EraseAllChars('\n');
+        String aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');
+
         if(aDesc.Len()>0)
         {
             aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " (" ));
@@ -747,8 +747,8 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionConte
         aString+='\t';
         aString+='\t';
     }
-    String aComment=pScChangeAction->GetComment();
-    aComment.EraseAllChars('\n');
+
+    String aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');
 
     if(aDesc.Len()>0)
     {

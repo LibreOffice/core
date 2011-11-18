@@ -33,6 +33,7 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
+#include <comphelper/string.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/charclass.hxx>
 #include <editeng/unolingu.hxx>
@@ -156,8 +157,7 @@ void SwFldInputDlg::StateChanged( StateChangedType nType )
 
 void SwFldInputDlg::Apply()
 {
-    String aTmp( aEditED.GetText() );
-    aTmp.EraseAllChars( '\r' );
+    String aTmp(comphelper::string::remove(aEditED.GetText(), '\r'));
 
     rSh.StartAllAction();
     sal_Bool bModified = sal_False;

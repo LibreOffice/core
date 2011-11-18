@@ -32,6 +32,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <comphelper/string.hxx>
 #include <svx/svxids.hrc>
 #include "hintids.hxx"
 #include <tools/string.hxx>
@@ -1803,8 +1804,9 @@ void SwHTMLWriter::AddLinkTarget( const String& rURL )
 
     String aURL( rURL.Copy( 1 ) );
 
-    String sCmp( aURL.Copy( bEncoded ? nPos+2 : nPos ) ); // nPos-1+1/3 (-1 wg. Erase)
-    sCmp.EraseAllChars();
+    // nPos-1+1/3 (-1 wg. Erase)
+    String sCmp(comphelper::string::remove(aURL.Copy(bEncoded ? nPos+2 : nPos),
+        ' '));
     if( !sCmp.Len() )
         return;
 

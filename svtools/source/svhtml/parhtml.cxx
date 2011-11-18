@@ -31,6 +31,7 @@
 
 #include <ctype.h>
 #include <stdio.h>
+#include <comphelper/string.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <tools/color.hxx>
@@ -2121,8 +2122,8 @@ bool HTMLParser::ParseMetaOptionsImpl(
     if ( bHTTPEquiv || HTML_META_DESCRIPTION != nAction )
     {
         // if it is not a Description, remove CRs and LFs from CONTENT
-        aContent.EraseAllChars( _CR );
-        aContent.EraseAllChars( _LF );
+        aContent = comphelper::string::remove(aContent, _CR);
+        aContent = comphelper::string::remove(aContent, _LF);
     }
     else
     {

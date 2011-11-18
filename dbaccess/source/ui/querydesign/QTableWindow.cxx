@@ -47,8 +47,9 @@
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include "TableFieldInfo.hxx"
-#include <comphelper/uno3.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/string.hxx>
+#include <comphelper/uno3.hxx>
 #include "UITools.hxx"
 
 
@@ -117,7 +118,7 @@ sal_Bool OQueryTableWindow::Init()
     }
 
 
-    sAliasName = String(sAliasName).EraseAllChars('"');
+    sAliasName = comphelper::string::remove(sAliasName, '"');
     SetAliasName(sAliasName);
         // SetAliasName reicht das als WinName weiter, dadurch benutzt es die Basisklasse
     // reset the title

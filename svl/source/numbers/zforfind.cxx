@@ -33,6 +33,7 @@
 #include <stdlib.h>
 #include <float.h>
 #include <errno.h>
+#include <comphelper/string.hxx>
 #include <tools/date.hxx>
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
@@ -2073,7 +2074,7 @@ bool ImpSvNumberInputScan::ScanStringNumFor(
         return false;
     const ::utl::TransliterationWrapper* pTransliteration = pFormatter->GetTransliteration();
     const String* pStr;
-    String aString( rString );
+    rtl::OUString aString( rString );
     bool bFound = false;
     bool bFirst = true;
     bool bContinue = true;
@@ -2100,7 +2101,7 @@ bool ImpSvNumberInputScan::ScanStringNumFor(
         if ( !bFound && bFirst && nPos )
         {   // try remaining substring
             bFirst = false;
-            aString.Erase( 0, nPos );
+            aString = aString.copy(nPos);
             bContinue = true;
         }
     } while ( bContinue );
@@ -2110,8 +2111,8 @@ bool ImpSvNumberInputScan::ScanStringNumFor(
         if ( !bDontDetectNegation && (nString == 0) && !bFirst && (nSign < 0)
                 && pFormat->IsNegativeRealNegative() )
         {   // simply negated twice? --1
-            aString.EraseAllChars( ' ' );
-            if ( (aString.Len() == 1) && (aString.GetChar(0) == '-') )
+            aString = comphelper::string::remove(aString, ' ');
+            if ( (aString.getLength() == 1) && (aString[0] == '-') )
             {
                 bFound = true;
                 nStringScanSign = -1;

@@ -132,9 +132,10 @@
 
 #include <PostItMgr.hxx>
 
-#include <ndtxt.hxx> //#outline level,added by zhaojianwei
+#include <ndtxt.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
@@ -1783,8 +1784,10 @@ sal_Bool SwView::JumpToSwMark( const String& rMark )
 
         IDocumentMarkAccess::const_iterator_t ppMark;
         IDocumentMarkAccess* const pMarkAccess = pWrtShell->getIDocumentMarkAccess();
-        if( STRING_NOTFOUND != nPos &&
-            ( sCmp = sMark.Copy( nPos + 1 ) ).EraseAllChars().Len() )
+        if( STRING_NOTFOUND != nPos )
+            sCmp = comphelper::string::remove(sMark.Copy(nPos + 1), ' ');
+
+        if( sCmp.Len() )
         {
             String sName( sMark.Copy( 0, nPos ) );
             sCmp.ToLowerAscii();

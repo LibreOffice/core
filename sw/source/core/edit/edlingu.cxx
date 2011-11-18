@@ -33,6 +33,7 @@
 #include <com/sun/star/linguistic2/XProofreader.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/text/XFlatParagraph.hpp>
+#include <comphelper/string.hxx>
 
 #include <unoflatpara.hxx>
 
@@ -1012,7 +1013,8 @@ uno::Reference< XSpellAlternatives >
         {
             String aText( pNode->GetTxt().Copy( nBegin, nLen ) );
             String aWord( aText );
-            aWord.EraseAllChars( CH_TXTATR_BREAKWORD ).EraseAllChars( CH_TXTATR_INWORD );
+            aWord = comphelper::string::remove(aWord, CH_TXTATR_BREAKWORD);
+            aWord = comphelper::string::remove(aWord, CH_TXTATR_INWORD);
 
             uno::Reference< XSpellChecker1 >  xSpell( ::GetSpellChecker() );
             if( xSpell.is() )
