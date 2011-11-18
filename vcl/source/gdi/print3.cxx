@@ -869,11 +869,6 @@ PrinterController::PageSize PrinterController::getPageFile( int i_nUnfilteredPag
     Sequence< PropertyValue > aPageParm( getPageParametersProtected( i_nUnfilteredPage ) );
     const MapMode aMapMode( MAP_100TH_MM );
 
-    if (mpImplData->meJobState != view::PrintableState_JOB_STARTED)
-    {   // rhbz#657394: check that we are still printing...
-        return PrinterController::PageSize();
-    }
-
     mpImplData->mpPrinter->Push();
     mpImplData->mpPrinter->SetMapMode( aMapMode );
 
