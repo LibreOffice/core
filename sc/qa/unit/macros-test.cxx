@@ -80,16 +80,11 @@ FileFormat aFileFormats[] = {
 
 /* Implementation of Macros test */
 
-class ScMacrosTest
-    : public test::FiltersTest
-    , public test::BootstrapFixture
+class ScMacrosTest : public test::BootstrapFixture
 {
 public:
     ScMacrosTest();
 
-    virtual bool load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData);
-    ScDocShellRef load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
-        const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType=0);
     uno::Reference< com::sun::star::lang::XComponent > loadFromDesktop(const rtl::OUString& rURL);
 
     void createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath);
@@ -115,35 +110,6 @@ private:
     ::rtl::OUString m_aBaseString;
 };
 
-ScDocShellRef ScMacrosTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
-    const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType)
-{
-    sal_uInt32 nFormat = 0;
-    if (nFormatType)
-        nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
-    SfxFilter* aFilter = new SfxFilter(
-        rFilter,
-        rtl::OUString(), nFormatType, nFormat, rTypeName, 0, rtl::OUString(),
-        rUserData, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc*")) );
-    aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
-
-    ScDocShellRef xDocShRef = new ScDocShell;
-    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READWRITE, true);
-    pSrcMed->SetFilter(aFilter);
-    if (!xDocShRef->DoLoad(pSrcMed))
-    {
-        xDocShRef->DoClose();
-        // load failed.
-        xDocShRef.Clear();
-    }
-    else if (nFormatType)
-    {
-        pSrcMed->GetItemSet()->Put( SfxUInt16Item( SID_MACROEXECMODE, document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN ));
-        SfxObjectShell::SetCurrentComponent( xDocShRef->GetModel() );
-    }
-
-    return xDocShRef;
-}
 
 uno::Reference< com::sun::star::lang::XComponent > ScMacrosTest::loadFromDesktop(const rtl::OUString& rURL)
 {
@@ -160,17 +126,6 @@ uno::Reference< com::sun::star::lang::XComponent > ScMacrosTest::loadFromDesktop
     return xComponent;
 }
 
-
-bool ScMacrosTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
-    const rtl::OUString &rUserData)
-{
-    ScDocShellRef xDocShRef = load(rFilter, rURL, rUserData, rtl::OUString());
-    bool bLoaded = xDocShRef.Is();
-    //reference counting of ScDocShellRef is very confused.
-    if (bLoaded)
-        xDocShRef->DoClose();
-    return bLoaded;
-}
 
 void ScMacrosTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
 {
