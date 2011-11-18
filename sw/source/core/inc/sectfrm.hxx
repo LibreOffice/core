@@ -60,7 +60,7 @@ class SwSectionFrm: public SwLayoutFrm, public SwFlowFrm
     void CalcFtnAtEndFlag();
     void CalcEndAtEndFlag();
     const SwSectionFmt* _GetEndSectFmt() const;
-    sal_Bool IsEndnoteAtMyEnd() const;
+    bool IsEndnoteAtMyEnd() const;
 protected:
     virtual void MakeAll();
     virtual sal_Bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool bHead, sal_Bool &rReformat );

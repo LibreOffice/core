@@ -2369,7 +2369,7 @@ void SwSectionFrm::CalcFtnAtEndFlag()
     }
 }
 
-sal_Bool SwSectionFrm::IsEndnoteAtMyEnd() const
+bool SwSectionFrm::IsEndnoteAtMyEnd() const
 {
     return pSection->GetFmt()->GetEndAtTxtEnd( sal_False ).IsAtEnd();
 }
@@ -2469,13 +2469,13 @@ void SwSectionFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew
                     } while ( pTmp );
                     aCol.Init( nCol, 0, 1000 );
                 }
-                sal_Bool bChgFtn = IsFtnAtEnd();
-                sal_Bool bChgEndn = IsEndnAtEnd();
-                sal_Bool bChgMyEndn = IsEndnoteAtMyEnd();
+                bool bChgFtn = IsFtnAtEnd();
+                bool const bChgEndn = IsEndnAtEnd();
+                bool const bChgMyEndn = IsEndnoteAtMyEnd();
                 CalcFtnAtEndFlag();
                 CalcEndAtEndFlag();
-                bChgFtn = ( bChgFtn != (sal_Bool) IsFtnAtEnd() ) ||
-                          ( bChgEndn != (sal_Bool) IsEndnAtEnd() ) ||
+                bChgFtn = ( bChgFtn != IsFtnAtEnd() ) ||
+                          ( bChgEndn != IsEndnAtEnd() ) ||
                           ( bChgMyEndn != IsEndnoteAtMyEnd() );
                 ChgColumns( aCol, rNewCol, bChgFtn );
                 rInvFlags |= 0x10;
@@ -2496,9 +2496,9 @@ void SwSectionFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew
         case RES_FTN_AT_TXTEND:
             if( !IsInFtn() )
             {
-                sal_Bool bOld = IsFtnAtEnd();
+                bool const bOld = IsFtnAtEnd();
                 CalcFtnAtEndFlag();
-                if( bOld != (sal_Bool) IsFtnAtEnd() )
+                if (bOld != IsFtnAtEnd())
                 {
                     const SwFmtCol& rNewCol = GetFmt()->GetCol();
                     ChgColumns( rNewCol, rNewCol, sal_True );
@@ -2510,10 +2510,10 @@ void SwSectionFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew
         case RES_END_AT_TXTEND:
             if( !IsInFtn() )
             {
-                sal_Bool bOld = IsEndnAtEnd();
-                sal_Bool bMyOld = IsEndnoteAtMyEnd();
+                bool const bOld = IsEndnAtEnd();
+                bool const bMyOld = IsEndnoteAtMyEnd();
                 CalcEndAtEndFlag();
-                if( bOld != (sal_Bool) IsEndnAtEnd() || bMyOld != IsEndnoteAtMyEnd())
+                if (bOld != IsEndnAtEnd() || bMyOld != IsEndnoteAtMyEnd())
                 {
                     const SwFmtCol& rNewCol = GetFmt()->GetCol();
                     ChgColumns( rNewCol, rNewCol, sal_True );
