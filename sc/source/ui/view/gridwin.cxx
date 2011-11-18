@@ -744,6 +744,16 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
     if (!pDBData)
         return;
 
+    if (eMode == Custom)
+    {
+        ScRange aRange;
+        pDBData->GetArea(aRange);
+        pViewData->GetView()->MarkRange(aRange);
+        pViewData->GetView()->SetCursor(rPos.Col(), rPos.Row());
+        pViewData->GetDispatcher().Execute(SID_FILTER, SFX_CALLMODE_SLOT|SFX_CALLMODE_RECORD);
+        return;
+    }
+
     ScQueryParam aParam;
     pDBData->GetQueryParam(aParam);
 
