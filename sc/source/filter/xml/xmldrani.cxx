@@ -224,6 +224,12 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
         }
     }
 
+    mpQueryParam->nTab = maRange.aStart.Tab();
+    mpQueryParam->nCol1 = maRange.aStart.Col();
+    mpQueryParam->nRow1 = maRange.aStart.Row();
+    mpQueryParam->nCol2 = maRange.aEnd.Col();
+    mpQueryParam->nRow2 = maRange.aEnd.Row();
+
     if (sDatabaseRangeName.matchAsciiL(STR_DB_LOCAL_NONAME, strlen(STR_DB_LOCAL_NONAME)))
         meRangeType = ScDBCollection::SheetAnonymous;
     else if (sDatabaseRangeName.matchAsciiL(STR_DB_GLOBAL_NONAME, strlen(STR_DB_GLOBAL_NONAME)))
@@ -307,6 +313,15 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
     pData->SetDoSize(bMoveCells);
     pData->SetStripData(bStripData);
 
+    pData->SetQueryParam(*mpQueryParam);
+
+    if (bFilterConditionSourceRange)
+    {
+        ScRange aAdvSource;
+        ScUnoConversion::FillScRange(aAdvSource, aFilterConditionSourceRangeAddress);
+        pData->SetAdvancedQuerySource(&aAdvSource);
+    }
+
     {
         ScImportParam aParam;
         aParam.bNative = bNative;
@@ -337,34 +352,6 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
                 aParam.bImport = false;
         }
         pData->SetImportParam(aParam);
-    }
-
-    {
-        mpQueryParam->nTab = maRange.aStart.Tab();
-        mpQueryParam->nCol1 = maRange.aStart.Col();
-        mpQueryParam->nRow1 = maRange.aStart.Row();
-        mpQueryParam->nCol2 = maRange.aEnd.Col();
-        mpQueryParam->nRow2 = maRange.aEnd.Row();
-
-        // Convert from relative to absolute column IDs for the fields. Calc
-        // core expects the field positions to be absolute column IDs.
-        SCCOLROW nStartPos = mpQueryParam->bByRow ? maRange.aStart.Col() : maRange.aStart.Row();
-        for (SCSIZE i = 0; i < mpQueryParam->GetEntryCount(); ++i)
-        {
-            ScQueryEntry& rEntry = mpQueryParam->GetEntry(i);
-            if (!rEntry.bDoQuery)
-                break;
-            rEntry.nField += nStartPos;
-        }
-
-        pData->SetQueryParam(*mpQueryParam);
-    }
-
-    if (bFilterConditionSourceRange)
-    {
-        ScRange aAdvSource;
-        ScUnoConversion::FillScRange(aAdvSource, aFilterConditionSourceRangeAddress);
-        pData->SetAdvancedQuerySource(&aAdvSource);
     }
 
     if (bContainsSort)

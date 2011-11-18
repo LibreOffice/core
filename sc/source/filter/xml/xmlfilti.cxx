@@ -462,7 +462,8 @@ void ScXMLConditionContext::EndElement()
     rEntry.eConnect = pFilterContext->GetConnection() ? SC_OR : SC_AND;
 
     GetOperator(sOperator, mrQueryParam, rEntry);
-    rEntry.nField = nField; // at this point this is relative to the left-most field.
+    SCCOLROW nStartPos = mrQueryParam.bByRow ? mrQueryParam.nCol1 : mrQueryParam.nRow1;
+    rEntry.nField = nField + nStartPos;
     ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
     if (IsXMLToken(sDataType, XML_NUMBER))
     {
