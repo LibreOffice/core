@@ -53,6 +53,7 @@ struct ScQueryParamBase
     SC_DLLPUBLIC SCSIZE GetEntryCount() const;
     SC_DLLPUBLIC const ScQueryEntry& GetEntry(SCSIZE n) const;
     SC_DLLPUBLIC ScQueryEntry& GetEntry(SCSIZE n);
+    SC_DLLPUBLIC ScQueryEntry& AppendEntry();
     ScQueryEntry* FindEntryByField(SCCOLROW nField, bool bNew);
     SC_DLLPUBLIC void RemoveEntryByField(SCCOLROW nField);
     void Resize(size_t nNew);

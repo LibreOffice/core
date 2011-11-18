@@ -102,6 +102,21 @@ ScQueryEntry& ScQueryParamBase::GetEntry(SCSIZE n)
     return maEntries[n];
 }
 
+ScQueryEntry& ScQueryParamBase::AppendEntry()
+{
+    // Find the first unused entry.
+    EntriesType::iterator itr = std::find_if(
+        maEntries.begin(), maEntries.end(), FindUnused());
+
+    if (itr != maEntries.end())
+        // Found!
+        return *itr;
+
+    // Add a new entry to the end.
+    maEntries.push_back(new ScQueryEntry);
+    return maEntries.back();
+}
+
 ScQueryEntry* ScQueryParamBase::FindEntryByField(SCCOLROW nField, bool bNew)
 {
     EntriesType::iterator itr = std::find_if(
@@ -117,14 +132,7 @@ ScQueryEntry* ScQueryParamBase::FindEntryByField(SCCOLROW nField, bool bNew)
         // no existing entry found, and we are not creating a new one.
         return NULL;
 
-    // Find the first unused entry.
-    itr = std::find_if(maEntries.begin(), maEntries.end(), FindUnused());
-    if (itr != maEntries.end())
-        return &(*itr);
-
-    // Add a new entry to the end.
-    maEntries.push_back(new ScQueryEntry);
-    return &maEntries.back();
+    return &AppendEntry();
 }
 
 void ScQueryParamBase::RemoveEntryByField(SCCOLROW nField)

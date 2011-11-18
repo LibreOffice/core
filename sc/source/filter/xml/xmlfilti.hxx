@@ -45,6 +45,7 @@
 
 class ScXMLImport;
 struct ScQueryParam;
+struct ScQueryEntry;
 
 class ScXMLFilterContext : public SvXMLImportContext
 {
@@ -57,7 +58,6 @@ class ScXMLFilterContext : public SvXMLImportContext
     ScQueryParam& mrQueryParam;
     ScXMLDatabaseRangeContext* pDatabaseRangeContext;
 
-    com::sun::star::uno::Sequence <com::sun::star::sheet::TableFilterField2> aFilterFields;
     com::sun::star::table::CellAddress aOutputPosition;
     com::sun::star::table::CellRangeAddress aConditionSourceRangeAddress;
     sal_Int16   nUserListIndex;
@@ -94,11 +94,11 @@ public:
     void OpenConnection(bool b);
     void CloseConnection();
     bool GetConnection();
-    void AddFilterField(const com::sun::star::sheet::TableFilterField2& aFilterField);
 };
 
 class ScXMLAndContext : public SvXMLImportContext
 {
+    ScQueryParam& mrQueryParam;
     ScXMLFilterContext* pFilterContext;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
@@ -107,10 +107,11 @@ class ScXMLAndContext : public SvXMLImportContext
 public:
 
     ScXMLAndContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                        ScXMLFilterContext* pTempFilterContext);
+                     const ::rtl::OUString& rLName,
+                     const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                     ScQueryParam& rParam,
+                     ScXMLFilterContext* pTempFilterContext);
 
     virtual ~ScXMLAndContext();
 
@@ -124,6 +125,7 @@ public:
 
 class ScXMLOrContext : public SvXMLImportContext
 {
+    ScQueryParam& mrQueryParam;
     ScXMLFilterContext* pFilterContext;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
@@ -132,10 +134,11 @@ class ScXMLOrContext : public SvXMLImportContext
 public:
 
     ScXMLOrContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                        ScXMLFilterContext* pTempFilterContext);
+                    const ::rtl::OUString& rLName,
+                    const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                    ScQueryParam& rParam,
+                    ScXMLFilterContext* pTempFilterContext);
 
     virtual ~ScXMLOrContext();
 
@@ -149,6 +152,7 @@ public:
 
 class ScXMLConditionContext : public SvXMLImportContext
 {
+    ScQueryParam& mrQueryParam;
     ScXMLFilterContext* pFilterContext;
 
     rtl::OUString sDataType;
@@ -163,10 +167,11 @@ class ScXMLConditionContext : public SvXMLImportContext
 public:
 
     ScXMLConditionContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                        ScXMLFilterContext* pTempFilterContext);
+                           const ::rtl::OUString& rLName,
+                           const ::com::sun::star::uno::Reference<
+                               ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                           ScQueryParam& rParam,
+                           ScXMLFilterContext* pTempFilterContext);
 
     virtual ~ScXMLConditionContext();
 
@@ -175,7 +180,7 @@ public:
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
-    void getOperatorXML(const rtl::OUString sTempOperator, sal_Int32& aFilterOperator, bool& bUseRegularExpressions) const;
+    void GetOperator(const rtl::OUString& aOpStr, ScQueryParam& rParam, ScQueryEntry& rEntry) const;
     virtual void EndElement();
 };
 

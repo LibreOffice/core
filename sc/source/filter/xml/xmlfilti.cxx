@@ -61,7 +61,6 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     mrQueryParam(rParam),
     pDatabaseRangeContext(pTempDatabaseRangeContext),
-    aFilterFields(),
     bSkipDuplicates(false),
     bCopyOutputData(false),
     bUseRegularExpressions(false),
@@ -129,20 +128,20 @@ SvXMLImportContext *ScXMLFilterContext::CreateChildContext( sal_uInt16 nPrefix,
     {
         case XML_TOK_FILTER_AND:
         {
-            pContext = new ScXMLAndContext( GetScImport(), nPrefix,
-                                                          rLName, xAttrList, this);
+            pContext = new ScXMLAndContext(
+                GetScImport(), nPrefix, rLName, xAttrList, mrQueryParam, this);
         }
         break;
         case XML_TOK_FILTER_OR:
         {
-            pContext = new ScXMLOrContext( GetScImport(), nPrefix,
-                                                          rLName, xAttrList, this);
+            pContext = new ScXMLOrContext(
+                GetScImport(), nPrefix, rLName, xAttrList, mrQueryParam, this);
         }
         break;
         case XML_TOK_FILTER_CONDITION:
         {
-            pContext = new ScXMLConditionContext( GetScImport(), nPrefix,
-                                                          rLName, xAttrList, this);
+            pContext = new ScXMLConditionContext(
+                GetScImport(), nPrefix, rLName, xAttrList, mrQueryParam, this);
         }
         break;
     }
@@ -166,7 +165,6 @@ void ScXMLFilterContext::EndElement()
         mrQueryParam.nDestTab = aOutputPosition.Sheet;
     }
 
-    pDatabaseRangeContext->SetFilterFields(aFilterFields);
     if (bConditionSourceRange)
         pDatabaseRangeContext->SetFilterConditionSourceRangeAddress(aConditionSourceRangeAddress);
 }
@@ -217,19 +215,14 @@ bool ScXMLFilterContext::GetConnection()
     return itr->mbOr; // connection of the last stack.
 }
 
-void ScXMLFilterContext::AddFilterField(const sheet::TableFilterField2& aFilterField)
-{
-    aFilterFields.realloc(aFilterFields.getLength() + 1);
-    aFilterFields[aFilterFields.getLength() - 1] = aFilterField;
-}
-
 ScXMLAndContext::ScXMLAndContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
-                                      const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */,
-                                        ScXMLFilterContext* pTempFilterContext) :
+                                  sal_uInt16 nPrfx,
+                                  const rtl::OUString& rLName,
+                                  const Reference<XAttributeList>& /* xAttrList */,
+                                  ScQueryParam& rParam,
+                                  ScXMLFilterContext* pTempFilterContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
+    mrQueryParam(rParam),
     pFilterContext(pTempFilterContext)
 {
     pFilterContext->OpenConnection(false);
@@ -256,8 +249,8 @@ SvXMLImportContext *ScXMLAndContext::CreateChildContext( sal_uInt16 nPrefix,
         break;
         case XML_TOK_FILTER_CONDITION:
         {
-            pContext = new ScXMLConditionContext( GetScImport(), nPrefix,
-                                                          rLName, xAttrList, pFilterContext);
+            pContext = new ScXMLConditionContext(
+                GetScImport(), nPrefix, rLName, xAttrList, mrQueryParam, pFilterContext);
         }
         break;
     }
@@ -274,12 +267,14 @@ void ScXMLAndContext::EndElement()
 }
 
 ScXMLOrContext::ScXMLOrContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
-                                      const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */,
-                                        ScXMLFilterContext* pTempFilterContext) :
+                                sal_uInt16 nPrfx,
+                                const rtl::OUString& rLName,
+                                const Reference<
+                                    ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */,
+                                ScQueryParam& rParam,
+                                ScXMLFilterContext* pTempFilterContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
+    mrQueryParam(rParam),
     pFilterContext(pTempFilterContext)
 {
     pFilterContext->OpenConnection(true);
@@ -301,14 +296,14 @@ SvXMLImportContext *ScXMLOrContext::CreateChildContext( sal_uInt16 nPrefix,
     {
         case XML_TOK_FILTER_AND:
         {
-            pContext = new ScXMLAndContext( GetScImport(), nPrefix,
-                                                          rLName, xAttrList, pFilterContext);
+            pContext = new ScXMLAndContext(
+                GetScImport(), nPrefix, rLName, xAttrList, mrQueryParam, pFilterContext);
         }
         break;
         case XML_TOK_FILTER_CONDITION:
         {
-            pContext = new ScXMLConditionContext( GetScImport(), nPrefix,
-                                                          rLName, xAttrList, pFilterContext);
+            pContext = new ScXMLConditionContext(
+                GetScImport(), nPrefix, rLName, xAttrList, mrQueryParam, pFilterContext);
         }
         break;
     }
@@ -324,13 +319,13 @@ void ScXMLOrContext::EndElement()
     pFilterContext->CloseConnection();
 }
 
-ScXMLConditionContext::ScXMLConditionContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
-                                      const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                        ScXMLFilterContext* pTempFilterContext) :
+ScXMLConditionContext::ScXMLConditionContext(
+    ScXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLName,
+    const Reference<XAttributeList>& xAttrList,
+    ScQueryParam& rParam,
+    ScXMLFilterContext* pTempFilterContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
+    mrQueryParam(rParam),
     pFilterContext(pTempFilterContext),
     bIsCaseSensitive(false)
 {
@@ -404,80 +399,81 @@ SvXMLImportContext *ScXMLConditionContext::CreateChildContext( sal_uInt16 nPrefi
     return pContext;
 }
 
-void ScXMLConditionContext::getOperatorXML(const rtl::OUString sTempOperator, sal_Int32& aFilterOperator, bool& bUseRegularExpressions) const
+void ScXMLConditionContext::GetOperator(
+    const rtl::OUString& aOpStr, ScQueryParam& rParam, ScQueryEntry& rEntry) const
 {
-    bUseRegularExpressions = false;
-    if (IsXMLToken(sTempOperator, XML_MATCH))
+    rParam.bRegExp = false;
+    if (IsXMLToken(aOpStr, XML_MATCH))
     {
-        bUseRegularExpressions = true;
-        aFilterOperator = sheet::FilterOperator2::EQUAL;
+        rParam.bRegExp = true;
+        rEntry.eOp = SC_EQUAL;
     }
-    else if (IsXMLToken(sTempOperator, XML_NOMATCH))
+    else if (IsXMLToken(aOpStr, XML_NOMATCH))
     {
-        bUseRegularExpressions = true;
-        aFilterOperator = sheet::FilterOperator2::NOT_EQUAL;
+        rParam.bRegExp = true;
+        rEntry.eOp = SC_NOT_EQUAL;
     }
-    else if (sTempOperator.compareToAscii("=") == 0)
-        aFilterOperator = sheet::FilterOperator2::EQUAL;
-    else if (sTempOperator.compareToAscii("!=") == 0)
-        aFilterOperator = sheet::FilterOperator2::NOT_EQUAL;
-    else if (IsXMLToken(sTempOperator, XML_BOTTOM_PERCENT))
-        aFilterOperator = sheet::FilterOperator2::BOTTOM_PERCENT;
-    else if (IsXMLToken(sTempOperator, XML_BOTTOM_VALUES))
-        aFilterOperator = sheet::FilterOperator2::BOTTOM_VALUES;
-    else if (IsXMLToken(sTempOperator, XML_EMPTY))
-        aFilterOperator = sheet::FilterOperator2::EMPTY;
-    else if (sTempOperator.compareToAscii(">") == 0)
-        aFilterOperator = sheet::FilterOperator2::GREATER;
-    else if (sTempOperator.compareToAscii(">=") == 0)
-        aFilterOperator = sheet::FilterOperator2::GREATER_EQUAL;
-    else if (sTempOperator.compareToAscii("<") == 0)
-        aFilterOperator = sheet::FilterOperator2::LESS;
-    else if (sTempOperator.compareToAscii("<=") == 0)
-        aFilterOperator = sheet::FilterOperator2::LESS_EQUAL;
-    else if (IsXMLToken(sTempOperator, XML_NOEMPTY))
-        aFilterOperator = sheet::FilterOperator2::NOT_EMPTY;
-    else if (IsXMLToken(sTempOperator, XML_TOP_PERCENT))
-        aFilterOperator = sheet::FilterOperator2::TOP_PERCENT;
-    else if (IsXMLToken(sTempOperator, XML_TOP_VALUES))
-        aFilterOperator = sheet::FilterOperator2::TOP_VALUES;
-    else if (IsXMLToken(sTempOperator, XML_CONTAINS))
-        aFilterOperator = sheet::FilterOperator2::CONTAINS;
-    else if (IsXMLToken(sTempOperator, XML_DOES_NOT_CONTAIN))
-        aFilterOperator = sheet::FilterOperator2::DOES_NOT_CONTAIN;
-    else if (IsXMLToken(sTempOperator, XML_BEGINS_WITH))
-        aFilterOperator = sheet::FilterOperator2::BEGINS_WITH;
-    else if (IsXMLToken(sTempOperator, XML_DOES_NOT_BEGIN_WITH))
-        aFilterOperator = sheet::FilterOperator2::DOES_NOT_BEGIN_WITH;
-    else if (IsXMLToken(sTempOperator, XML_ENDS_WITH))
-        aFilterOperator = sheet::FilterOperator2::ENDS_WITH;
-    else if (IsXMLToken(sTempOperator, XML_DOES_NOT_END_WITH))
-        aFilterOperator = sheet::FilterOperator2::DOES_NOT_END_WITH;
+    else if (aOpStr.compareToAscii("=") == 0)
+        rEntry.eOp = SC_EQUAL;
+    else if (aOpStr.compareToAscii("!=") == 0)
+        rEntry.eOp = SC_NOT_EQUAL;
+    else if (IsXMLToken(aOpStr, XML_BOTTOM_PERCENT))
+        rEntry.eOp = SC_BOTPERC;
+    else if (IsXMLToken(aOpStr, XML_BOTTOM_VALUES))
+        rEntry.eOp = SC_BOTVAL;
+    else if (IsXMLToken(aOpStr, XML_EMPTY))
+        rEntry.SetQueryByEmpty();
+    else if (aOpStr.compareToAscii(">") == 0)
+        rEntry.eOp = SC_GREATER;
+    else if (aOpStr.compareToAscii(">=") == 0)
+        rEntry.eOp = SC_GREATER_EQUAL;
+    else if (aOpStr.compareToAscii("<") == 0)
+        rEntry.eOp = SC_LESS;
+    else if (aOpStr.compareToAscii("<=") == 0)
+        rEntry.eOp = SC_LESS_EQUAL;
+    else if (IsXMLToken(aOpStr, XML_NOEMPTY))
+        rEntry.SetQueryByNonEmpty();
+    else if (IsXMLToken(aOpStr, XML_TOP_PERCENT))
+        rEntry.eOp = SC_TOPPERC;
+    else if (IsXMLToken(aOpStr, XML_TOP_VALUES))
+        rEntry.eOp = SC_TOPVAL;
+    else if (IsXMLToken(aOpStr, XML_CONTAINS))
+        rEntry.eOp = SC_CONTAINS;
+    else if (IsXMLToken(aOpStr, XML_DOES_NOT_CONTAIN))
+        rEntry.eOp = SC_DOES_NOT_CONTAIN;
+    else if (IsXMLToken(aOpStr, XML_BEGINS_WITH))
+        rEntry.eOp = SC_BEGINS_WITH;
+    else if (IsXMLToken(aOpStr, XML_DOES_NOT_BEGIN_WITH))
+        rEntry.eOp = SC_DOES_NOT_BEGIN_WITH;
+    else if (IsXMLToken(aOpStr, XML_ENDS_WITH))
+        rEntry.eOp = SC_ENDS_WITH;
+    else if (IsXMLToken(aOpStr, XML_DOES_NOT_END_WITH))
+        rEntry.eOp = SC_DOES_NOT_END_WITH;
 }
 
 void ScXMLConditionContext::EndElement()
 {
-    sheet::TableFilterField2 aFilterField;
-    if (pFilterContext->GetConnection())
-        aFilterField.Connection = sheet::FilterConnection_OR;
-    else
-        aFilterField.Connection = sheet::FilterConnection_AND;
-    pFilterContext->SetCaseSensitive(bIsCaseSensitive);
-    bool bUseRegularExpressions;
-    getOperatorXML(sOperator, aFilterField.Operator, bUseRegularExpressions);
-    pFilterContext->SetUseRegularExpressions(bUseRegularExpressions);
-    aFilterField.Field = nField;
+    ScQueryEntry& rEntry = mrQueryParam.AppendEntry();
+
+    // We currently don't support per-condition case sensitivity.
+    mrQueryParam.bCaseSens = bIsCaseSensitive;
+
+    rEntry.bDoQuery = true;
+    rEntry.eConnect = pFilterContext->GetConnection() ? SC_OR : SC_AND;
+
+    GetOperator(sOperator, mrQueryParam, rEntry);
+    rEntry.nField = nField; // at this point this is relative to the left-most field.
+    ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
     if (IsXMLToken(sDataType, XML_NUMBER))
     {
-        aFilterField.NumericValue = sConditionValue.toDouble();
-        aFilterField.IsNumeric = true;
+        rItem.mfVal = sConditionValue.toDouble();
+        rItem.meType = ScQueryEntry::ByValue;
     }
     else
     {
-        aFilterField.StringValue = sConditionValue;
-        aFilterField.IsNumeric = false;
+        rItem.maString = sConditionValue;
+        rItem.meType = ScQueryEntry::ByString;
     }
-    pFilterContext->AddFilterField(aFilterField);
 }
 
 const ScXMLImport& ScXMLSetItemContext::GetScImport() const

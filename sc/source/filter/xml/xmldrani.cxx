@@ -343,8 +343,6 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
         mpQueryParam->nCol2 = aRange.aEnd.Col();
         mpQueryParam->nRow2 = aRange.aEnd.Row();
 
-        ScFilterDescriptorBase::fillQueryParam(*mpQueryParam, pDoc, aFilterFields);
-
         // Convert from relative to absolute column IDs for the fields. Calc
         // core expects the field positions to be absolute column IDs.
         SCCOLROW nStartPos = mpQueryParam->bByRow ? aRange.aStart.Col() : aRange.aStart.Row();

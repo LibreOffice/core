@@ -84,7 +84,6 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     rtl::OUString   sDatabaseName;
     rtl::OUString   sSourceObject;
     com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue> aSortSequence;
-    com::sun::star::uno::Sequence <com::sun::star::sheet::TableFilterField2> aFilterFields;
     std::vector < ScSubTotalRule > aSubTotalRules;
     com::sun::star::table::CellRangeAddress aFilterConditionSourceRangeAddress;
     com::sun::star::sheet::DataImportMode nSourceType;
@@ -143,7 +142,6 @@ public:
     void SetSubTotalsSortGroups(const bool bTemp) { bSubTotalsSortGroups = bTemp; }
     void AddSubTotalRule(const ScSubTotalRule& rRule) { aSubTotalRules.push_back(rRule); }
     void SetSortSequence(const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& aTempSortSequence) { aSortSequence = aTempSortSequence; }
-    void SetFilterFields(const com::sun::star::uno::Sequence <com::sun::star::sheet::TableFilterField2>& aTemp) { aFilterFields = aTemp; }
     void SetFilterConditionSourceRangeAddress(const com::sun::star::table::CellRangeAddress& aTemp) { aFilterConditionSourceRangeAddress = aTemp;
                                                                                                     bFilterConditionSourceRange = true; }
 };
