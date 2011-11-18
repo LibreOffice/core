@@ -199,7 +199,10 @@ public:
     CPPUNIT_TEST(testBugFixesODS);
     CPPUNIT_TEST(testBugFixesXLS);
     CPPUNIT_TEST(testBugFixesXLSX);
+    //disable testPassword on MacOSX due to problems with libsqlite3
+#if !defined(MACOSX)
     CPPUNIT_TEST(testPassword);
+#endif
 
 #if TEST_BUG_FILES
     CPPUNIT_TEST(testBugFiles);

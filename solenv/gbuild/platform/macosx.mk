@@ -363,8 +363,7 @@ endef
 
 # CppunitTest class
 
-gb_CppunitTest_CPPTESTPRECOMMAND := \
-    $(call gb_Helper_extend_ld_path,$(OUTDIR_FOR_BUILD)/lib/sqlite)
+gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path)
 gb_CppunitTest_SYSPRE := libtest_
 gb_CppunitTest_EXT := .dylib
 gb_CppunitTest_LIBDIR := $(gb_Helper_OUTDIRLIBDIR)
