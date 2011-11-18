@@ -556,22 +556,6 @@ String SdrGrafObj::GetGrafStreamURL() const
 
 // -----------------------------------------------------------------------------
 
-void SdrGrafObj::SetFileName(const String& rFileName)
-{
-    aFileName = rFileName;
-    SetChanged();
-}
-
-// -----------------------------------------------------------------------------
-
-void SdrGrafObj::SetFilterName(const String& rFilterName)
-{
-    aFilterName = rFilterName;
-    SetChanged();
-}
-
-// -----------------------------------------------------------------------------
-
 void SdrGrafObj::ForceSwapIn() const
 {
     if( mbIsPreview )
@@ -1027,24 +1011,9 @@ void SdrGrafObj::StartAnimation( OutputDevice* /*pOutDev*/, const Point& /*rPoin
 
 // -----------------------------------------------------------------------------
 
-void SdrGrafObj::StopAnimation(OutputDevice* /*pOutDev*/, long /*nExtraData*/)
-{
-    SetGrafAnimationAllowed(sal_False);
-}
-
-// -----------------------------------------------------------------------------
-
 bool SdrGrafObj::HasGDIMetaFile() const
 {
     return( pGraphic->GetType() == GRAPHIC_GDIMETAFILE );
-}
-
-// -----------------------------------------------------------------------------
-
-const GDIMetaFile* SdrGrafObj::GetGDIMetaFile() const
-{
-    OSL_FAIL( "Invalid return value! Don't use it! (KA)" );
-    return &GetGraphic().GetGDIMetaFile();
 }
 
 // -----------------------------------------------------------------------------
@@ -1333,11 +1302,6 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
 }
 
 // -----------------------------------------------------------------------------
-
-sal_Bool SdrGrafObj::IsGrafAnimationAllowed() const
-{
-    return mbGrafAnimationAllowed;
-}
 
 void SdrGrafObj::SetGrafAnimationAllowed(sal_Bool bNew)
 {

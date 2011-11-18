@@ -313,16 +313,6 @@ sal_Bool SdrMark::operator==(const SdrMark& rMark) const
     return bRet;
 }
 
-SdrPage* SdrMark::GetPage() const
-{
-    return (mpSelectedSdrObject ? mpSelectedSdrObject->GetPage() : 0);
-}
-
-SdrObjList* SdrMark::GetObjList() const
-{
-    return (mpSelectedSdrObject ? mpSelectedSdrObject->GetObjList() : 0);
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class ImpSdrMarkListSorter: public ContainerSorter

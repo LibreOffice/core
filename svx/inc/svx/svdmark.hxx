@@ -177,8 +177,6 @@ public:
     void SetMarkedSdrObj(SdrObject* pNewObj);
     SdrObject* GetMarkedSdrObj() const;
 
-    SdrPage* GetPage() const;
-    SdrObjList* GetObjList() const;
     SdrPageView* GetPageView() const
     {
         return mpPageView;

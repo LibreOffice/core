@@ -549,11 +549,6 @@ SdrObjClosedKind SdrPolyEditView::GetMarkedObjectsClosedState() const
     }
 }
 
-void SdrPolyEditView::ShutMarkedObjects()
-{
-    CloseMarkedObjects();
-}
-
 void SdrPolyEditView::CloseMarkedObjects(sal_Bool bToggle, sal_Bool bOpen) // , long nOpenDistance)
 {
     if (AreObjectsMarked())

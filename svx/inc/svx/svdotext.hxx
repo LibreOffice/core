@@ -299,13 +299,8 @@ protected:
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const;
     virtual void RestGeoData(const SdrObjGeoData& rGeo);
     bool NbcSetEckenradius(long nRad);
-    bool NbcSetAutoGrowHeight(bool bAuto);
     bool NbcSetMinTextFrameHeight(long nHgt);
-    bool NbcSetMaxTextFrameHeight(long nHgt);
-    bool NbcSetAutoGrowWidth(bool bAuto);
     bool NbcSetMinTextFrameWidth(long nWdt);
-    bool NbcSetMaxTextFrameWidth(long nWdt);
-    bool NbcSetFitToSize(SdrFitToSizeType eFit);
 
     // Konstruktoren fuer beschriftete Zeichenobjekte
     SdrTextObj();
@@ -342,7 +337,6 @@ public:
     virtual bool AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt = true, bool bWdt = true) const;
     virtual bool NbcAdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true);
     virtual bool AdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true);
-    void NbcResizeTextAttributes(const Fraction& xFact, const Fraction& yFact);
     bool IsTextFrame() const { return bTextFrame; }
     bool IsOutlText() const { return bTextFrame && (eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT); }
     /// returns true if the PPT autofit of text into shape bounds is enabled. implies IsFitToSize()==false!
@@ -555,18 +549,12 @@ public:
     virtual void RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& rCharWhichIds );
 
     // #111096#
-    // Access to thext hidden flag
-    sal_Bool GetTextHidden() const;
-    void NbcSetTextHidden(sal_Bool bNew);
-
-    // #111096#
     // Get necessary data for text scroll animation. ATM base it on a Text-Metafile and a
     // painting rectangle. Rotation is taken from the object.
     GDIMetaFile* GetTextScrollMetaFileAndRectangle(Rectangle& rScrollRectangle, Rectangle& rPaintRectangle);
 
     // #111096#
     // Access to TextAnimationAllowed flag
-    bool IsTextAnimationAllowed() const;
     void SetTextAnimationAllowed(sal_Bool bNew);
 
     // #i8824#

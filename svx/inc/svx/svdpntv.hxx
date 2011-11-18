@@ -363,21 +363,15 @@ public:
 
     void SetLayerVisible(const String& rName, sal_Bool bShow=sal_True);
     bool IsLayerVisible(const String& rName) const;
-    void SetAllLayersVisible(sal_Bool bShow=sal_True);
 
     void SetLayerLocked(const String& rName, sal_Bool bLock=sal_True);
     bool IsLayerLocked(const String& rName) const;
-    void SetAllLayersLocked(sal_Bool bLock=sal_True);
 
     void SetLayerPrintable(const String& rName, sal_Bool bPrn=sal_True);
     bool IsLayerPrintable(const String& rName) const;
-    void SetAllLayersPrintable(sal_Bool bPrn=sal_True);
 
     // PrePaint call forwarded from app windows
     void PrePaint();
-
-    // PostPaint call forwarded from app windows
-    void PostPaint();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // used internally for Draw/Impress/sch/chart2
@@ -492,7 +486,6 @@ public:
     // pOut bezeichnet das OutputDevice, in das animierte Rechteck dargestellt
     // werden soll. Wird NULL uebergeben, wird es in allen an der View
     // angemeldeten OutputDevices gleichzeitig dargestellt.
-    void BegEncirclement(const Point& rPnt);
     void MovEncirclement(const Point& rPnt);
     Rectangle EndEncirclement(sal_Bool bNoJustify = sal_False);
     void BrkEncirclement();

@@ -209,7 +209,6 @@ public:
     void BegUndo()                       { pMod->BegUndo();         } // Undo-Klammerung auf
     void BegUndo(const String& rComment) { pMod->BegUndo(rComment); } // Undo-Klammerung auf
     void BegUndo(const String& rComment, const String& rObjDescr, SdrRepeatFunc eFunc=SDRREPFUNC_OBJ_NONE) { pMod->BegUndo(rComment,rObjDescr,eFunc); } // Undo-Klammerung auf
-    void BegUndo(SdrUndoGroup* pUndoGrp) { pMod->BegUndo(pUndoGrp); } // Undo-Klammerung auf
     void EndUndo();                                                   // Undo-Klammerung zu (inkl BroadcastEdges)
     void AddUndo(SdrUndoAction* pUndo)   { pMod->AddUndo(pUndo);    } // Action hinzufuegen
     // nur nach dem 1. BegUndo oder vor dem letzten EndUndo:

@@ -165,13 +165,10 @@ public:
     void                    ReleaseGraphicLink();
     sal_Bool IsLinkedGraphic() const { return (sal_Bool)aFileName.Len(); }
 
-    void                    SetFileName(const String& rFileName);
     const String&           GetFileName() const { return aFileName; }
-    void                    SetFilterName(const String& rFilterName);
     const String&           GetFilterName() const { return aFilterName; }
 
     void                    StartAnimation(OutputDevice* pOutDev, const Point& rPoint, const Size& rSize, long nExtraData=0L);
-    void                    StopAnimation(OutputDevice* pOutDev=NULL, long nExtraData=0L);
 
     virtual void            TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual sal_uInt16          GetObjIdentifier() const;
@@ -199,7 +196,6 @@ public:
     virtual void            RestGeoData(const SdrObjGeoData& rGeo);
 
     bool                    HasGDIMetaFile() const;
-    const GDIMetaFile*      GetGDIMetaFile() const;
 
     virtual void            SetPage(SdrPage* pNewPage);
     virtual void            SetModel(SdrModel* pNewModel);
@@ -215,7 +211,6 @@ public:
 
     // #111096#
     // Access to GrafAnimationAllowed flag
-    sal_Bool IsGrafAnimationAllowed() const;
     void SetGrafAnimationAllowed(sal_Bool bNew);
 
     // #i25616#

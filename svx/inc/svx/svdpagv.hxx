@@ -108,7 +108,6 @@ protected:
 protected:
     void ClearPageWindows();
     void AppendPageWindow(SdrPageWindow& rNew);
-    SdrPageWindow* RemovePageWindow(sal_uInt32 nPos);
     SdrPageWindow* RemovePageWindow(SdrPageWindow& rOld);
 public:
     sal_uInt32 PageWindowCount() const { return maPageWindows.size(); }
@@ -178,9 +177,6 @@ public:
 
     // Invalidiert den gesamten Bereich der Page
     void InvalidateAllWin();
-
-    // rRect bezieht sich auf die Page
-    void InvalidateAllWin(const Rectangle& rRect, sal_Bool bPlus1Pix=sal_False);
 
     // PrePaint call forwarded from app windows
     void PrePaint();
@@ -275,12 +271,6 @@ public:
 
     // Feststellen, wie weit hinabgestiegen wurde (0=Root(Page))
     sal_uInt16 GetEnteredLevel() const;
-
-    // Name der aktuellen Objektgruppe
-    String GetActualGroupName() const;
-
-    // Die Namen aller z.Zt. betretenen Gruppen
-    String GetActualPathName(sal_Unicode cSep = sal_Unicode('|')) const;
 
     // #103834# Set background color for svx at SdrPageViews
     void SetApplicationBackgroundColor(Color aBackgroundColor);

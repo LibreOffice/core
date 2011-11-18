@@ -109,13 +109,6 @@ SdrUndoGroup::SdrUndoGroup(SdrModel& rNewMod)
     eFunction(SDRREPFUNC_OBJ_NONE)
 {}
 
-SdrUndoGroup::SdrUndoGroup(SdrModel& rNewMod,const String& rStr)
-:   SdrUndoAction(rNewMod),
-    aBuf(1024,32,32),
-    aComment(rStr),
-    eFunction(SDRREPFUNC_OBJ_NONE)
-{}
-
 SdrUndoGroup::~SdrUndoGroup()
 {
     Clear();
@@ -133,11 +126,6 @@ void SdrUndoGroup::Clear()
 void SdrUndoGroup::AddAction(SdrUndoAction* pAct)
 {
     aBuf.Insert(pAct,CONTAINER_APPEND);
-}
-
-void SdrUndoGroup::push_front( SdrUndoAction* pAct )
-{
-    aBuf.Insert(pAct, (sal_uIntPtr)0 );
 }
 
 void SdrUndoGroup::Undo()
@@ -352,14 +340,6 @@ SdrUndoAttrObj::~SdrUndoAttrObj()
     // #i8508#
     if(pTextRedo)
         delete pTextRedo;
-}
-
-void SdrUndoAttrObj::SetRepeatAttr(const SfxItemSet& rSet)
-{
-    if(pRepeatSet)
-        delete pRepeatSet;
-
-    pRepeatSet = new SfxItemSet(rSet);
 }
 
 void SdrUndoAttrObj::Undo()

@@ -528,15 +528,6 @@ public:
     const         SdrLayerAdmin& GetLayerAdmin() const                  { return *pLayerAdmin; }
                   SdrLayerAdmin& GetLayerAdmin()                        { return *pLayerAdmin; }
 
-    // GetBitmap und GetMetafile sind noch nicht implementiert.
-    // Bitmap in Bildschirmaufloesung und -farbtiefe aus den Objekten der
-    // Page erzeugen.
-    Bitmap        GetBitmap(bool bTrimBorders = true) const             { return GetBitmap(aPrefVisiLayers,bTrimBorders); }
-    Bitmap        GetBitmap(const SetOfByte& rVisibleLayers, bool bTrimBorders = true) const;
-    // Metafile aus den Objekten der Page erzeugen
-    GDIMetaFile   GetMetaFile(bool bTrimBorders = true)                 { return GetMetaFile(aPrefVisiLayers,bTrimBorders); }
-    GDIMetaFile   GetMetaFile(const SetOfByte& rVisibleLayers, bool bTrimBorders = true);
-
     virtual String GetLayoutName() const;
 
     // fuer's Raster im Writer, auch fuer AlignObjects wenn 1 Objekt markiert ist
@@ -578,9 +569,6 @@ public:
         const sdr::contact::DisplayInfo& rDisplayInfo,
         bool bEdit );
 
-    /** Check if page is the HandoutMasterPage (in SVX, no PK_HANDOUT available) */
-    bool isHandoutMasterPage() const;
-
     //////////////////////////////////////////////////////////////////////////////
     // sdr::Comment interface
 private:
@@ -588,9 +576,6 @@ private:
 
 public:
     sal_uInt32 GetCommentCount() const { return maComments.size(); }
-    const sdr::Comment& GetCommentByIndex(sal_uInt32 nIndex);
-    void AddComment(const sdr::Comment& rNew);
-    void ReplaceCommentByIndex(sal_uInt32 nIndex, const sdr::Comment& rNew);
 };
 
 typedef tools::WeakReference< SdrPage > SdrPageWeakRef;

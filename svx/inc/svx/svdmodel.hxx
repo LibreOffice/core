@@ -138,22 +138,16 @@ public:
 public:
     TYPEINFO();
 
-    SdrHint();
     SdrHint(SdrHintKind eNewHint);
     SdrHint(const SdrObject& rNewObj);
-    SdrHint(const SdrObject& rNewObj, const Rectangle& rRect);
 
     void SetPage(const SdrPage* pNewPage);
-    void SetObjList(const SdrObjList* pNewOL);
     void SetObject(const SdrObject* pNewObj);
     void SetKind(SdrHintKind eNewKind);
-    void SetRect(const Rectangle& rNewRect);
 
     const SdrPage* GetPage() const;
-    const SdrObjList* GetObjList() const;
     const SdrObject* GetObject() const;
     SdrHintKind GetKind() const;
-    const Rectangle& GetRect() const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -256,7 +250,6 @@ public:
     void SetUniqueCommentID(sal_uInt32 nNewID) { if(nNewID != mnUniqueCommentID) { mnUniqueCommentID = nNewID; } }
     /** cl: added this for OJ to complete his reporting engine, does not work
         correctly so only enable it for his model */
-    bool IsAllowShapePropertyChangeListener() const;
     void SetAllowShapePropertyChangeListener( bool bAllow );
 
     sal_uInt16          nStarDrawPreviewMasterPageNum;
@@ -284,8 +277,6 @@ public:
     // and destroyed when destroying the SdrModel.
     SvNumberFormatter* mpNumberFormatter;
 public:
-    const SvNumberFormatter& GetNumberFormatter() const;
-
     sal_uInt16 getHandoutPageCount() const { return mnHandoutPageCount; }
     void setHandoutPageCount( sal_uInt16 nHandoutPageCount ) { mnHandoutPageCount = nHandoutPageCount; }
 
@@ -573,7 +564,6 @@ public:
     void BegUndo();                       // Undo-Klammerung auf
     void BegUndo(const String& rComment); // Undo-Klammerung auf
     void BegUndo(const String& rComment, const String& rObjDescr, SdrRepeatFunc eFunc=SDRREPFUNC_OBJ_NONE); // Undo-Klammerung auf
-    void BegUndo(SdrUndoGroup* pUndoGrp); // Undo-Klammerung auf
     void EndUndo();                       // Undo-Klammerung zu
     void AddUndo(SdrUndoAction* pUndo);
     sal_uInt16 GetUndoBracketLevel() const                       { return nUndoLevel; }
@@ -652,15 +642,6 @@ public:
     SfxStyleSheetBasePool* GetStyleSheetPool() const         { return mxStyleSheetPool.get(); }
     void SetStyleSheetPool(SfxStyleSheetBasePool* pPool)     { mxStyleSheetPool=pPool; }
 
-    // Diese Methode fuert einen Konsistenzcheck auf die Struktur des Models
-    // durch. Geprueft wird insbesondere die Verkettung von Verschachtelten
-    // Gruppenobjekten, aber auch Stati wie bInserted sowie Model* und Page*
-    // der Objects, SubLists und Pages. Bei korrekter Struktur liefert die
-    // Methode sal_True, andernfalls FALSE.
-    // Dieser Check steht nur zur Verfuegung, wenn die Engine mit DBG_UTIL
-    // uebersetzt wurde. Andernfalls liefert die Methode immer TRUE. (ni)
-    bool CheckConsistence() const;
-
     void    SetStarDrawPreviewMode(sal_Bool bPreview);
     sal_Bool    IsStarDrawPreviewMode() { return bStarDrawPreviewMode; }
 
@@ -688,8 +669,6 @@ public:
     sal_Bool IsAddExtLeading() const { return (sal_Bool)mbAddExtLeading; }
 
     void ReformatAllTextObjects();
-
-    bool HasTransparentObjects( bool bCheckForAlphaChannel = false ) const;
 
     SdrOutliner* createOutliner( sal_uInt16 nOutlinerMode );
     void disposeOutliner( SdrOutliner* pOutliner );

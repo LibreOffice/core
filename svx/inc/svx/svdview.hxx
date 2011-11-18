@@ -259,8 +259,6 @@ public:
     // - ... to be continued
     void MarkAll();
     void UnmarkAll();
-    sal_Bool MarkNext(sal_Bool bPrev=sal_False);
-    sal_Bool MarkNext(const Point& rPnt, sal_Bool bPrev=sal_False);
 
     const Rectangle& GetMarkedRect() const;
 

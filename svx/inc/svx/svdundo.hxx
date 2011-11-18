@@ -106,14 +106,12 @@ protected:
 
 public:
     SdrUndoGroup(SdrModel& rNewMod);
-    SdrUndoGroup(SdrModel& rNewMod,const String& rStr);
     virtual ~SdrUndoGroup();
 
     void Clear();
     sal_uIntPtr GetActionCount() const { return aBuf.Count(); }
     SdrUndoAction* GetAction(sal_uIntPtr nNum) const { return (SdrUndoAction*)(aBuf.GetObject(nNum)); }
     void AddAction(SdrUndoAction* pAct);
-    void push_front( SdrUndoAction* pAct );
 
     void SetComment(const String& rStr) { aComment=rStr; }
     void SetObjDescription(const String& rStr) { aObjDescription=rStr; }
@@ -187,7 +185,6 @@ protected:
 public:
     SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1 = false, bool bSaveText = false);
     virtual ~SdrUndoAttrObj();
-    void SetRepeatAttr(const SfxItemSet& rSet);
     virtual void Undo();
     virtual void Redo();
 

@@ -1900,11 +1900,6 @@ void SdrObject::SetMergedItem(const SfxPoolItem& rItem)
     GetProperties().SetMergedItem(rItem);
 }
 
-void SdrObject::ClearObjectItem(const sal_uInt16 nWhich)
-{
-    GetProperties().ClearObjectItem(nWhich);
-}
-
 void SdrObject::ClearMergedItem(const sal_uInt16 nWhich)
 {
     GetProperties().ClearMergedItem(nWhich);
@@ -3122,29 +3117,6 @@ SdrObject* SdrObjFactory::MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, S
     }
 
     return pObj;
-}
-
-SdrObjUserData* SdrObjFactory::MakeNewObjUserData(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrObject* pObj1)
-{
-    SdrObjUserData* pData=NULL;
-    if (nInvent==SdrInventor) {
-        switch (nIdent)
-        {
-            case sal_uInt16(SDRUSERDATA_OBJTEXTLINK) : pData=new ImpSdrObjTextLinkUserData((SdrTextObj*)pObj1); break;
-        }
-    }
-    if (pData==NULL) {
-        SdrObjFactory aFact(nInvent,nIdent,pObj1);
-        SdrLinkList& rLL=ImpGetUserMakeObjUserDataHdl();
-        unsigned nAnz=rLL.GetLinkCount();
-        unsigned i=0;
-        while (i<nAnz && pData==NULL) {
-            rLL.GetLink(i).Call((void*)&aFact);
-            pData=aFact.pNewData;
-            i++;
-        }
-    }
-    return pData;
 }
 
 void SdrObjFactory::InsertMakeObjectHdl(const Link& rLink)

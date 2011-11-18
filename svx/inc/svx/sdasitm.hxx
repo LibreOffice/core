@@ -44,14 +44,12 @@ class SdrCustomShapeEngineItem : public SfxStringItem
 {
     public :
             SdrCustomShapeEngineItem();
-            SdrCustomShapeEngineItem( const String& rCustomShapeEngine );
 };
 
 class SdrCustomShapeDataItem : public SfxStringItem
 {
     public :
             SdrCustomShapeDataItem();
-            SdrCustomShapeDataItem( const String& rCustomShapeData );
 };
 
 class SVX_DLLPUBLIC SdrCustomShapeGeometryItem : public SfxPoolItem
@@ -112,14 +110,12 @@ private:
             void SetPropertyValue( const rtl::OUString& rSequenceName, const com::sun::star::beans::PropertyValue& rPropVal );
 
             void ClearPropertyValue( const rtl::OUString& rPropertyName );
-            void ClearPropertyValue( const rtl::OUString& rSequenceName, const rtl::OUString& rPropertyName );
 };
 
 class SdrCustomShapeReplacementURLItem : public SfxStringItem
 {
     public :
             SdrCustomShapeReplacementURLItem();
-            SdrCustomShapeReplacementURLItem( const String& rCustomShapeReplacementURL );
 };
 
 //---------------------------

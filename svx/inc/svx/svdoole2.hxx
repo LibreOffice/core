@@ -87,8 +87,6 @@ public:
     TYPEINFO();
 
     SdrOle2Obj(bool bFrame_ = false);
-    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, bool bFrame_ = false);
-    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, bool bFrame_ = false);
     SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, const Rectangle& rNewRect, bool bFrame_ = false);
     virtual ~SdrOle2Obj();
 

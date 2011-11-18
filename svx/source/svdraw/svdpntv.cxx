@@ -504,19 +504,6 @@ void SdrPaintView::SetActualWin(const OutputDevice* pWin)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrPaintView::BegEncirclement(const Point& rPnt)
-{
-    BrkAction();
-
-    DBG_ASSERT(0L == mpEncirclementOverlay, "SdrSnapView::BegSetPageOrg: There exists a ImplPageOriginOverlay (!)");
-    basegfx::B2DPoint aStartPos(rPnt.X(), rPnt.Y());
-    mpEncirclementOverlay = new ImplEncirclementOverlay(*this, aStartPos);
-
-    aDragStat.Reset(rPnt);
-    aDragStat.SetMinMove(ImpGetMinMovLogic(-2,0L));
-    aDragStat.NextPoint();
-}
-
 void SdrPaintView::MovEncirclement(const Point& rPnt)
 {
     if(IsEncirclement() && aDragStat.CheckMinMoved(rPnt))
@@ -662,16 +649,6 @@ bool SdrPaintView::IsLayerVisible(const XubString& rName) const
     return false;
 }
 
-void SdrPaintView::SetAllLayersVisible(sal_Bool bShow)
-{
-    if(mpPageView)
-    {
-        mpPageView->SetAllLayersVisible(bShow);
-    }
-
-    InvalidateAllWin();
-}
-
 void SdrPaintView::SetLayerLocked(const XubString& rName, sal_Bool bLock)
 {
     if(mpPageView)
@@ -688,14 +665,6 @@ bool SdrPaintView::IsLayerLocked(const XubString& rName) const
     }
 
     return false;
-}
-
-void SdrPaintView::SetAllLayersLocked(sal_Bool bLock)
-{
-    if(mpPageView)
-    {
-        mpPageView->SetAllLayersLocked(bLock);
-    }
 }
 
 void SdrPaintView::SetLayerPrintable(const XubString& rName, sal_Bool bPrn)
@@ -716,27 +685,11 @@ bool SdrPaintView::IsLayerPrintable(const XubString& rName) const
     return false;
 }
 
-void SdrPaintView::SetAllLayersPrintable(sal_Bool bPrn)
-{
-    if(mpPageView)
-    {
-        mpPageView->SetAllLayersPrintable(bPrn);
-    }
-}
-
 void SdrPaintView::PrePaint()
 {
     if(mpPageView)
     {
         mpPageView->PrePaint();
-    }
-}
-
-void SdrPaintView::PostPaint()
-{
-    if(mpPageView)
-    {
-        mpPageView->PostPaint();
     }
 }
 

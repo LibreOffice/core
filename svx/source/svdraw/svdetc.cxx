@@ -89,32 +89,17 @@ SdrGlobalData::SdrGlobalData() :
     nExchangeFormat(0)
 {
     //pSysLocale = new SvtSysLocale;
-    //pCharClass = pSysLocale->GetCharClassPtr();
     //pLocaleData = pSysLocale->GetLocaleDataPtr();
 
     svx::ExtrusionBar::RegisterInterface();
     svx::FontworkBar::RegisterInterface();
 }
 
-SdrGlobalData::~SdrGlobalData()
-{
-    delete pOutliner;
-    delete pDefaults;
-    delete pResMgr;
-    //! do NOT delete pCharClass and pLocaleData
-    delete pSysLocale;
-}
 const SvtSysLocale*         SdrGlobalData::GetSysLocale()
 {
     if ( !pSysLocale )
         pSysLocale = new SvtSysLocale;
     return pSysLocale;
-}
-const CharClass*            SdrGlobalData::GetCharClass()
-{
-    if ( !pCharClass )
-        pCharClass = GetSysLocale()->GetCharClassPtr();
-    return pCharClass;
 }
 const LocaleDataWrapper*    SdrGlobalData::GetLocaleData()
 {

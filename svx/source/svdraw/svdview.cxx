@@ -1382,34 +1382,6 @@ void SdrView::UnmarkAll()
     else UnmarkAllObj();
 }
 
-sal_Bool SdrView::MarkNext(sal_Bool bPrev)
-{
-    if (IsTextEdit()) {
-        return sal_False;
-    }
-    if (IsGluePointEditMode() && HasMarkedGluePoints()) {
-        return MarkNextGluePoint(bPrev);
-    }
-    if (HasMarkedPoints()) {
-        return MarkNextPoint(bPrev);
-    }
-    return MarkNextObj(bPrev);
-}
-
-sal_Bool SdrView::MarkNext(const Point& rPnt, sal_Bool bPrev)
-{
-    if (IsTextEdit()) {
-        return sal_False;
-    }
-    if (IsGluePointEditMode() && HasMarkedGluePoints()) {
-        //return MarkNextGluePoint(rPnt,bPrev); fehlende Implementation !!!
-    }
-    if (HasMarkedPoints()) {
-        //return MarkNextPoint(rPnt,bPrev);     fehlende Implementation !!!
-    }
-    return MarkNextObj(rPnt,-2,bPrev);
-}
-
 const Rectangle& SdrView::GetMarkedRect() const
 {
     if (IsGluePointEditMode() && HasMarkedGluePoints()) {

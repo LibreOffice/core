@@ -75,10 +75,8 @@ public:
         void                        setMediaProperties( const ::avmedia::MediaItem& rState );
         const ::avmedia::MediaItem& getMediaProperties() const;
 
-        bool                        hasPreferredSize() const;
         Size                        getPreferredSize() const;
 
-        const Graphic&              getGraphic() const;
         void                        setGraphic( const Graphic* pGraphic = NULL );
 
 protected:

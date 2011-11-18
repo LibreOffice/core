@@ -1891,49 +1891,8 @@ void SdrPage::ActionChanged() const
     }
 }
 
-// Dummy implementations for declarations in svdpage.hxx
-Bitmap      SdrPage::GetBitmap(const SetOfByte& /*rVisibleLayers*/, bool /*bTrimBorders*/) const
-{
-    DBG_ASSERT(0, "SdrPage::GetBitmap(): not yet implemented.");
-    return Bitmap();
-}
-GDIMetaFile SdrPage::GetMetaFile(const SetOfByte& /*rVisibleLayers*/, bool /*bTrimBorders*/)
-{
-    DBG_ASSERT(0, "SdrPage::GetMetaFile(): not yet implemented.");
-    return GDIMetaFile();
-}
-
-bool SdrPage::isHandoutMasterPage() const
-{
-    return mbMaster && GetModel() && GetModel()->GetMasterPageCount()
-        && GetModel()->GetMasterPage(0) == this;
-}
-
 //////////////////////////////////////////////////////////////////////////////
 // sdr::Comment interface
-
-const sdr::Comment& SdrPage::GetCommentByIndex(sal_uInt32 nIndex)
-{
-    DBG_ASSERT(nIndex < maComments.size(), "SdrPage::GetCommentByIndex: Access out of range (!)");
-    return maComments[nIndex];
-}
-
-void SdrPage::AddComment(const sdr::Comment& rNew)
-{
-    maComments.push_back(rNew);
-    ::std::sort(maComments.begin(), maComments.end());
-}
-
-void SdrPage::ReplaceCommentByIndex(sal_uInt32 nIndex, const sdr::Comment& rNew)
-{
-    DBG_ASSERT(nIndex < maComments.size(), "SdrPage::GetCommentByIndex: Access out of range (!)");
-
-    if(maComments[nIndex] != rNew)
-    {
-        maComments[nIndex] = rNew;
-        ::std::sort(maComments.begin(), maComments.end());
-    }
-}
 
 const SdrPageProperties* SdrPage::getCorrectSdrPageProperties() const
 {

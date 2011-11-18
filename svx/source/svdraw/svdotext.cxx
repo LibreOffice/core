@@ -561,16 +561,6 @@ bool SdrTextObj::NbcSetEckenradius(long nRad)
     return true;
 }
 
-bool SdrTextObj::NbcSetAutoGrowHeight(bool bAuto)
-{
-    if(bTextFrame)
-    {
-        SetObjectItem(SdrTextAutoGrowHeightItem(bAuto));
-        return true;
-    }
-    return false;
-}
-
 bool SdrTextObj::NbcSetMinTextFrameHeight(long nHgt)
 {
     if( bTextFrame && ( !pModel || !pModel->isLocked() ) )          // #i44922#
@@ -590,26 +580,6 @@ bool SdrTextObj::NbcSetMinTextFrameHeight(long nHgt)
     return false;
 }
 
-bool SdrTextObj::NbcSetMaxTextFrameHeight(long nHgt)
-{
-    if(bTextFrame)
-    {
-        SetObjectItem(SdrTextMaxFrameHeightItem(nHgt));
-        return true;
-    }
-    return false;
-}
-
-bool SdrTextObj::NbcSetAutoGrowWidth(bool bAuto)
-{
-    if(bTextFrame)
-    {
-        SetObjectItem(SdrTextAutoGrowWidthItem(bAuto));
-        return true;
-    }
-    return false;
-}
-
 bool SdrTextObj::NbcSetMinTextFrameWidth(long nWdt)
 {
     if( bTextFrame && ( !pModel || !pModel->isLocked() ) )          // #i44922#
@@ -624,26 +594,6 @@ bool SdrTextObj::NbcSetMinTextFrameWidth(long nWdt)
             SetObjectItem(SdrTextAutoGrowWidthItem(sal_False));
         }
 
-        return true;
-    }
-    return false;
-}
-
-bool SdrTextObj::NbcSetMaxTextFrameWidth(long nWdt)
-{
-    if(bTextFrame)
-    {
-        SetObjectItem(SdrTextMaxFrameWidthItem(nWdt));
-        return true;
-    }
-    return false;
-}
-
-bool SdrTextObj::NbcSetFitToSize(SdrFitToSizeType eFit)
-{
-    if(bTextFrame)
-    {
-        SetObjectItem(SdrTextFitToSizeTypeItem(eFit));
         return true;
     }
     return false;
@@ -1869,20 +1819,6 @@ SdrTextAniDirection SdrTextObj::GetTextAniDirection() const
     return ((SdrTextAniDirectionItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_ANIDIRECTION))).GetValue();
 }
 
-// Access to thext hidden flag
-sal_Bool SdrTextObj::GetTextHidden() const
-{
-    return mbTextHidden;
-}
-
-void SdrTextObj::NbcSetTextHidden(sal_Bool bNew)
-{
-    if(bNew != mbTextHidden)
-    {
-        mbTextHidden = bNew;
-    }
-}
-
 // Get necessary data for text scroll animation. ATM base it on a Text-Metafile and a
 // painting rectangle. Rotation is excluded from the returned values.
 GDIMetaFile* SdrTextObj::GetTextScrollMetaFileAndRectangle(
@@ -1939,11 +1875,6 @@ GDIMetaFile* SdrTextObj::GetTextScrollMetaFileAndRectangle(
 }
 
 // Access to TextAnimationAllowed flag
-bool SdrTextObj::IsTextAnimationAllowed() const
-{
-    return mbTextAnimationAllowed;
-}
-
 bool SdrTextObj::IsAutoFit() const
 {
     return GetFitToSize()==SDRTEXTFIT_AUTOFIT;

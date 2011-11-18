@@ -113,7 +113,6 @@ public:
     // Neuer Layer wird angelegt und eingefuegt
     SdrLayer*          NewLayer(const String& rName, sal_uInt16 nPos=0xFFFF);
     void               DeleteLayer(SdrLayer* pLayer)                                 { aLayer.Remove(pLayer); delete pLayer; Broadcast(); }
-    void               MoveLayer(SdrLayer* pLayer, sal_uInt16 nNewPos=0xFFFF);
     SdrLayer*          MoveLayer(sal_uInt16 nPos, sal_uInt16 nNewPos);
     // Neuer Layer, Name wird aus der Resource geholt
     SdrLayer*          NewStandardLayer(sal_uInt16 nPos=0xFFFF);

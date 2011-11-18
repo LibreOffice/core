@@ -252,10 +252,7 @@ public:
         visualisation during mouse over it must override this method and call Touch(). */
     virtual void onMouseLeave();
 
-    bool isMouseOver() const;
-
     static BitmapEx createGluePointBitmap() { return ImpGetBitmapEx(Glue_Deselected, 0); }
-
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

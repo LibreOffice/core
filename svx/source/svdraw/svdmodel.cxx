@@ -366,18 +366,6 @@ bool SdrModel::IsInDestruction() const
     return mbInDestruction;
 }
 
-const SvNumberFormatter& SdrModel::GetNumberFormatter() const
-{
-    if(!mpNumberFormatter)
-    {
-        // use cast here since from outside view this IS a const method
-        ((SdrModel*)this)->mpNumberFormatter = new SvNumberFormatter(
-            ::comphelper::getProcessServiceFactory(), LANGUAGE_SYSTEM);
-    }
-
-    return *mpNumberFormatter;
-}
-
 // noch nicht implementiert:
 void SdrModel::operator=(const SdrModel& /*rSrcModel*/)
 {
@@ -597,32 +585,6 @@ void SdrModel::BegUndo(const XubString& rComment, const XubString& rObjDescr, Sd
             pAktUndoGroup->SetObjDescription(rObjDescr);
             pAktUndoGroup->SetRepeatFunction(eFunc);
         }
-    }
-}
-
-void SdrModel::BegUndo(SdrUndoGroup* pUndoGrp)
-{
-    if( mpImpl->mpUndoManager )
-    {
-        OSL_FAIL("svx::SdrModel::BegUndo(), method not supported with application undo manager!" );
-        nUndoLevel++;
-    }
-    else if( IsUndoEnabled() )
-    {
-        if (pAktUndoGroup==NULL)
-        {
-            pAktUndoGroup=pUndoGrp;
-            nUndoLevel=1;
-        }
-        else
-        {
-            delete pUndoGrp;
-            nUndoLevel++;
-        }
-    }
-    else
-    {
-        delete pUndoGrp;
     }
 }
 
@@ -1547,17 +1509,6 @@ void SdrModel::MoveMasterPage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool SdrModel::CheckConsistence() const
-{
-    bool bRet = true;
-#ifdef DBG_UTIL
-    DBG_CHKTHIS(SdrModel,NULL);
-#endif
-    return bRet;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 // #48289#
 void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
                          sal_uInt16 nDestPos,
@@ -1967,25 +1918,6 @@ void SdrModel::ReformatAllTextObjects()
     ImpReformatAllTextObjects();
 }
 
-bool SdrModel::HasTransparentObjects( bool bCheckForAlphaChannel ) const
-{
-    bool        bRet = false;
-    sal_uInt16      n, nCount;
-
-    for( n = 0, nCount = GetMasterPageCount(); ( n < nCount ) && !bRet; n++ )
-        if( GetMasterPage( n )->HasTransparentObjects( bCheckForAlphaChannel ) )
-            bRet = true;
-
-    if( !bRet )
-    {
-        for( n = 0, nCount = GetPageCount(); ( n < nCount ) && !bRet; n++ )
-            if( GetPage( n )->HasTransparentObjects( bCheckForAlphaChannel ) )
-                bRet = true;
-    }
-
-    return bRet;
-}
-
 SdrOutliner* SdrModel::createOutliner( sal_uInt16 nOutlinerMode )
 {
     if( NULL == mpOutlinerCache )
@@ -2081,11 +2013,6 @@ void SdrModel::SetSdrUndoFactory( SdrUndoFactory* pUndoFactory )
 
 /** cl: added this for OJ to complete his reporting engine, does not work
     correctly so only enable it for his model */
-bool SdrModel::IsAllowShapePropertyChangeListener() const
-{
-    return mpImpl && mpImpl->mbAllowShapePropertyChangeListener;
-}
-
 void SdrModel::SetAllowShapePropertyChangeListener( bool bAllow )
 {
     if( mpImpl )
@@ -2108,14 +2035,6 @@ const ::com::sun::star::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelImpleme
 
 TYPEINIT1(SdrHint,SfxHint);
 
-SdrHint::SdrHint()
-:   mpPage(0L),
-    mpObj(0L),
-    mpObjList(0L),
-    meHint(HINT_UNKNOWN)
-{
-}
-
 SdrHint::SdrHint(SdrHintKind eNewHint)
 :   mpPage(0L),
     mpObj(0L),
@@ -2133,23 +2052,9 @@ SdrHint::SdrHint(const SdrObject& rNewObj)
     maRectangle = rNewObj.GetLastBoundRect();
 }
 
-SdrHint::SdrHint(const SdrObject& rNewObj, const Rectangle& rRect)
-:   mpPage(rNewObj.GetPage()),
-    mpObj(&rNewObj),
-    mpObjList(rNewObj.GetObjList()),
-    meHint(HINT_OBJCHG)
-{
-    maRectangle = rRect;
-}
-
 void SdrHint::SetPage(const SdrPage* pNewPage)
 {
     mpPage = pNewPage;
-}
-
-void SdrHint::SetObjList(const SdrObjList* pNewOL)
-{
-    mpObjList = pNewOL;
 }
 
 void SdrHint::SetObject(const SdrObject* pNewObj)
@@ -2162,19 +2067,9 @@ void SdrHint::SetKind(SdrHintKind eNewKind)
     meHint = eNewKind;
 }
 
-void SdrHint::SetRect(const Rectangle& rNewRect)
-{
-    maRectangle = rNewRect;
-}
-
 const SdrPage* SdrHint::GetPage() const
 {
     return mpPage;
-}
-
-const SdrObjList* SdrHint::GetObjList() const
-{
-    return mpObjList;
 }
 
 const SdrObject* SdrHint::GetObject() const
@@ -2185,11 +2080,6 @@ const SdrObject* SdrHint::GetObject() const
 SdrHintKind SdrHint::GetKind() const
 {
     return meHint;
-}
-
-const Rectangle& SdrHint::GetRect() const
-{
-    return maRectangle;
 }
 
 // eof

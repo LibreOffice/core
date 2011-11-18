@@ -279,11 +279,9 @@ public:
 
 
     const SvtSysLocale*         GetSysLocale();     // follows always locale settings
-    const CharClass*            GetCharClass();     // follows always SysLocale
     const LocaleDataWrapper*    GetLocaleData();    // follows always SysLocale
 public:
     SdrGlobalData();
-    ~SdrGlobalData();
 
     OLEObjCache&        GetOLEObjCache() { return aOLEObjCache; }
 };

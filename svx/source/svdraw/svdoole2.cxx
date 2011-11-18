@@ -755,48 +755,6 @@ SdrOle2Obj::SdrOle2Obj(bool bFrame_) : m_bTypeAsked(false)
 }
 
 // -----------------------------------------------------------------------------
-SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, bool bFrame_)
-    : xObjRef( rNewObjRef )
-    , m_bTypeAsked(false)
-    , m_bChart(false)
-{
-    DBG_CTOR( SdrOle2Obj,NULL);
-    bInDestruction = false;
-    Init();
-
-    bFrame=bFrame_;
-
-    if ( xObjRef.is() && (xObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
-        SetResizeProtect(sal_True);
-
-    // For math objects, set closed state to transparent
-    if( ImplIsMathObj( xObjRef.GetObject() ) )
-        SetClosedObj( false );
-}
-
-// -----------------------------------------------------------------------------
-
-SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, const XubString& rNewObjName, bool bFrame_)
-    : xObjRef( rNewObjRef )
-    , m_bTypeAsked(false)
-    , m_bChart(false)
-{
-    DBG_CTOR( SdrOle2Obj,NULL);
-    bInDestruction = false;
-    Init();
-
-    mpImpl->aPersistName = rNewObjName;
-    bFrame=bFrame_;
-
-    if ( xObjRef.is() && (xObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
-        SetResizeProtect(sal_True);
-
-    // For math objects, set closed state to transparent
-    if( ImplIsMathObj( xObjRef.GetObject() ) )
-        SetClosedObj( false );
-}
-
-// -----------------------------------------------------------------------------
 
 SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const XubString& rNewObjName, const Rectangle& rNewRect, bool bFrame_)
     : SdrRectObj(rNewRect)

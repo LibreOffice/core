@@ -308,20 +308,6 @@ void SdrEditView::DeleteLayer(const XubString& rName)
     }
 }
 
-void SdrEditView::MoveLayer(const XubString& rName, sal_uInt16 nNewPos)
-{
-    SdrLayerAdmin& rLA=pMod->GetLayerAdmin();
-    SdrLayer* pLayer=rLA.GetLayer(rName,sal_True);
-    sal_uInt16 nLayerNum=rLA.GetLayerPos(pLayer);
-    if (nLayerNum!=SDRLAYER_NOTFOUND)
-    {
-        if( IsUndoEnabled() )
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoMoveLayer(nLayerNum,rLA,*pMod,nNewPos));
-        rLA.MoveLayer(nLayerNum,nNewPos);
-        pMod->SetChanged();
-    }
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrEditView::EndUndo()

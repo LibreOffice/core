@@ -100,7 +100,6 @@ public:
     void         SetHorzAlign(sal_uInt16 nAlg)                  { nAlign=(nAlign&0xFF00)|(nAlg&0x00FF); }
     sal_uInt16       GetVertAlign() const                       { return nAlign&0xFF00; }
     void         SetVertAlign(sal_uInt16 nAlg)                  { nAlign=(nAlign&0x00FF)|(nAlg&0xFF00); }
-    void         Draw(OutputDevice& rOut, const SdrObject* pObj) const;
     bool         IsHit(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj) const;
     void         Invalidate(Window& rWin, const SdrObject* pObj) const;
     Point        GetAbsolutePos(const SdrObject& rObj) const;
@@ -110,7 +109,6 @@ public:
     long         EscDirToAngle(sal_uInt16 nEsc) const;
     sal_uInt16       EscAngleToDir(long nWink) const;
     void         Rotate(const Point& rRef, long nWink, double sn, double cs, const SdrObject* pObj);
-    void         Mirror(const Point& rRef1, const Point& rRef2, const SdrObject* pObj);
     void         Mirror(const Point& rRef1, const Point& rRef2, long nWink, const SdrObject* pObj);
     void         Shear (const Point& rRef, long nWink, double tn, bool bVShear, const SdrObject* pObj);
 };

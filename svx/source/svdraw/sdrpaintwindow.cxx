@@ -288,17 +288,6 @@ void SdrPaintWindow::DrawOverlay(const Region& rRegion, bool bUseBuffer)
     }
 }
 
-void SdrPaintWindow::HideOverlay(const Region& rRegion)
-{
-    if(mpOverlayManager && !OutputToPrinter())
-    {
-        if(!mpPreRenderDevice)
-        {
-            mpOverlayManager->restoreBackground(rRegion);
-        }
-    }
-}
-
 const Region& SdrPaintWindow::GetRedrawRegion() const
 {
     return maRedrawRegion;

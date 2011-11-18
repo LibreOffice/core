@@ -143,20 +143,6 @@ void SdrPageView::AppendPageWindow(SdrPageWindow& rNew)
     maPageWindows.push_back(&rNew);
 }
 
-SdrPageWindow* SdrPageView::RemovePageWindow(sal_uInt32 nPos)
-{
-    if(nPos < maPageWindows.size())
-    {
-        SdrPageWindowVector::iterator aAccess = maPageWindows.begin() + nPos;
-        // remember return value
-        SdrPageWindow* pErasedSdrPageWindow = *aAccess;
-        maPageWindows.erase(aAccess);
-        return pErasedSdrPageWindow;
-    }
-
-    return 0L;
-}
-
 SdrPageWindow* SdrPageView::RemovePageWindow(SdrPageWindow& rOld)
 {
     const SdrPageWindowVector::iterator aFindResult = ::std::find(maPageWindows.begin(), maPageWindows.end(), &rOld);
@@ -308,14 +294,6 @@ void SdrPageView::InvalidateAllWin()
         Rectangle aRect(Point(0,0),Size(GetPage()->GetWdt()+1,GetPage()->GetHgt()+1));
         aRect.Union(GetPage()->GetAllObjBoundRect());
         GetView().InvalidateAllWin(aRect);
-    }
-}
-
-void SdrPageView::InvalidateAllWin(const Rectangle& rRect, sal_Bool bPlus1Pix)
-{
-    if(IsVisible())
-    {
-        GetView().InvalidateAllWin(rRect, bPlus1Pix);
     }
 }
 
@@ -1013,54 +991,6 @@ sal_uInt16 SdrPageView::GetEnteredLevel() const
         pGrp=pGrp->GetUpGroup();
     }
     return nAnz;
-}
-
-XubString SdrPageView::GetActualGroupName() const
-{
-    if(GetAktGroup())
-    {
-        XubString aStr(GetAktGroup()->GetName());
-
-        if(!aStr.Len())
-            aStr += sal_Unicode('?');
-
-        return aStr;
-    }
-    else
-        return String();
-}
-
-XubString SdrPageView::GetActualPathName(sal_Unicode cSep) const
-{
-    XubString aStr;
-    sal_Bool bNamFnd(sal_False);
-    SdrObject* pGrp = GetAktGroup();
-
-    while(pGrp)
-    {
-        XubString aStr1(pGrp->GetName());
-
-        if(!aStr1.Len())
-            aStr1 += sal_Unicode('?');
-        else
-            bNamFnd = sal_True;
-
-        aStr += aStr1;
-        pGrp = pGrp->GetUpGroup();
-
-        if(pGrp)
-            aStr += cSep;
-    }
-
-    if(!bNamFnd && GetAktGroup())
-    {
-        aStr = String();
-        aStr += sal_Unicode('(');
-        aStr += String::CreateFromInt32( GetEnteredLevel() );
-        aStr += sal_Unicode(')');
-    }
-
-    return aStr;
 }
 
 void SdrPageView::CheckAktGroup()

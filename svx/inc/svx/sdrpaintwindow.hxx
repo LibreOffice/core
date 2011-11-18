@@ -122,7 +122,6 @@ public:
     ::sdr::overlay::OverlayManager* GetOverlayManager() const;
     // #i73602# add flag if buffer shall be used
     void DrawOverlay(const Region& rRegion, bool bUseBuffer);
-    void HideOverlay(const Region& rRegion);
 
     // calculate visible area and return
     Rectangle GetVisibleArea() const;

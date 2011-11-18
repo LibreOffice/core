@@ -232,26 +232,9 @@ const ::avmedia::MediaItem& SdrMediaObj::getMediaProperties() const
 
 // ------------------------------------------------------------------------------
 
-bool SdrMediaObj::hasPreferredSize() const
-{
-    return static_cast< ::sdr::contact::ViewContactOfSdrMediaObj& >( GetViewContact() ).hasPreferredSize();
-}
-
-// ------------------------------------------------------------------------------
-
 Size SdrMediaObj::getPreferredSize() const
 {
     return static_cast< ::sdr::contact::ViewContactOfSdrMediaObj& >( GetViewContact() ).getPreferredSize();
-}
-
-// ------------------------------------------------------------------------------
-
-const Graphic& SdrMediaObj::getGraphic() const
-{
-    if( !mapGraphic.get() )
-        const_cast< SdrMediaObj* >( this )->mapGraphic.reset( new Graphic( ::avmedia::MediaWindow::grabFrame( getURL(), true ) ) );
-
-    return *mapGraphic;
 }
 
 // ------------------------------------------------------------------------------

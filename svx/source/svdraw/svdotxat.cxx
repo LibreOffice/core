@@ -327,61 +327,6 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
     }
 }
 
-void SdrTextObj::NbcResizeTextAttributes(const Fraction& xFact, const Fraction& yFact)
-{
-    OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
-    if (pOutlinerParaObject!=NULL && xFact.IsValid() && yFact.IsValid())
-    {
-        Fraction n100(100,1);
-        long nX=long(xFact*n100);
-        long nY=long(yFact*n100);
-        if (nX<0) nX=-nX;
-        if (nX<1) nX=1;
-        if (nX>0xFFFF) nX=0xFFFF;
-        if (nY<0) nY=-nY;
-        if (nY<1) nY=1;
-        if (nY>0xFFFF) nY=0xFFFF;
-        if (nX!=100 || nY!=100)
-        {
-            // Rahmenattribute
-            const SfxItemSet& rSet = GetObjectItemSet();
-            const SvxCharScaleWidthItem& rOldWdt=(SvxCharScaleWidthItem&)rSet.Get(EE_CHAR_FONTWIDTH);
-            const SvxFontHeightItem& rOldHgt=(SvxFontHeightItem&)rSet.Get(EE_CHAR_FONTHEIGHT);
-
-            // erstmal die alten Werte holen
-            long nRelWdt=rOldWdt.GetValue();
-            long nAbsHgt=rOldHgt.GetHeight();
-            long nRelHgt=rOldHgt.GetProp();
-
-            // Relative Breite aendern
-            nRelWdt*=nX;
-            nRelWdt/=nY;
-            if (nRelWdt<0) nRelWdt=-nRelWdt; // nicht negativ
-            if (nRelWdt<=0) nRelWdt=1;       // und mind. 1%
-            if (nRelWdt>0xFFFF) nRelWdt=0xFFFF;
-
-            // Absolute Hoehe aendern
-            nAbsHgt*=nY;
-            nAbsHgt/=100;
-            if (nAbsHgt<0) nAbsHgt=-nAbsHgt; // nicht negativ
-            if (nAbsHgt<=0) nAbsHgt=1;       // und mind. 1
-            if (nAbsHgt>0xFFFF) nAbsHgt=0xFFFF;
-
-            // und nun attributieren
-            SetObjectItem(SvxCharScaleWidthItem( (sal_uInt16) nRelWdt, EE_CHAR_FONTWIDTH));
-            SetObjectItem(SvxFontHeightItem(nAbsHgt,(sal_uInt16)nRelHgt, EE_CHAR_FONTHEIGHT));
-            // Zeichen- und Absatzattribute innerhalb des OutlinerParaObjects
-            Outliner& rOutliner=ImpGetDrawOutliner();
-            rOutliner.SetPaperSize(Size(LONG_MAX,LONG_MAX));
-            rOutliner.SetText(*pOutlinerParaObject);
-            rOutliner.DoStretchChars((sal_uInt16)nX,(sal_uInt16)nY);
-            OutlinerParaObject* pNewPara=rOutliner.CreateParaObject();
-            NbcSetOutlinerParaObject(pNewPara);
-            rOutliner.Clear();
-        }
-    }
-}
-
 /**  iterates over the paragraphs of a given SdrObject and removes all
      hard set character attributes with the which ids contained in the
      given vector

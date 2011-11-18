@@ -37,15 +37,9 @@ using namespace com::sun::star;
 SdrCustomShapeEngineItem::SdrCustomShapeEngineItem()
 :   SfxStringItem( SDRATTR_CUSTOMSHAPE_ENGINE, String() )
 {}
-SdrCustomShapeEngineItem::SdrCustomShapeEngineItem( const String& rVal )
-:   SfxStringItem( SDRATTR_CUSTOMSHAPE_ENGINE, rVal )
-{}
 
 SdrCustomShapeDataItem::SdrCustomShapeDataItem()
 :   SfxStringItem( SDRATTR_CUSTOMSHAPE_DATA, String() )
-{}
-SdrCustomShapeDataItem::SdrCustomShapeDataItem( const String& rVal )
-:   SfxStringItem( SDRATTR_CUSTOMSHAPE_DATA, rVal )
 {}
 
 bool SdrCustomShapeGeometryItem::PropertyEq::operator()( const rtl::OUString& r1, const rtl::OUString& r2 ) const
@@ -248,37 +242,6 @@ void SdrCustomShapeGeometryItem::ClearPropertyValue( const rtl::OUString& rPropN
     }
 }
 
-void SdrCustomShapeGeometryItem::ClearPropertyValue( const rtl::OUString& rSequenceName, const rtl::OUString& rPropName )
-{
-    com::sun::star::uno::Any* pSeqAny = GetPropertyValueByName( rSequenceName );
-    if ( pSeqAny )
-    {
-        if ( pSeqAny->getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence < beans::PropertyValue >*)0) )
-        {
-            PropertyPairHashMap::iterator aHashIter( aPropPairHashMap.find( PropertyPair( rSequenceName, rPropName ) ) );
-            if ( aHashIter != aPropPairHashMap.end() )
-            {
-                ::com::sun::star::uno::Sequence < beans::PropertyValue >& rSecSequence =
-                    *((::com::sun::star::uno::Sequence < beans::PropertyValue >*)pSeqAny->getValue());
-
-                sal_Int32 nLength = rSecSequence.getLength();
-                if ( nLength )
-                {
-                    sal_Int32 nIndex  = (*aHashIter).second;
-                    if ( nIndex != ( nLength - 1 ) )                            // resizing sequence
-                    {
-                        PropertyPairHashMap::iterator aHashIter2( aPropPairHashMap.find( PropertyPair( rSequenceName, rSecSequence[ nLength - 1 ].Name ) ) );
-                        (*aHashIter2).second = nIndex;
-                        rSecSequence[ nIndex ] = rSecSequence[ nLength - 1 ];
-                    }
-                    rSecSequence.realloc( aPropSeq.getLength() - 1 );
-                }
-                aPropPairHashMap.erase( aHashIter );
-            }
-        }
-    }
-}
-
 SdrCustomShapeGeometryItem::~SdrCustomShapeGeometryItem()
 {
 }
@@ -354,9 +317,6 @@ const uno::Sequence< beans::PropertyValue >& SdrCustomShapeGeometryItem::GetGeom
 
 SdrCustomShapeReplacementURLItem::SdrCustomShapeReplacementURLItem()
 :   SfxStringItem( SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL, String() )
-{}
-SdrCustomShapeReplacementURLItem::SdrCustomShapeReplacementURLItem( const String& rVal )
-:   SfxStringItem( SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL, rVal )
 {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

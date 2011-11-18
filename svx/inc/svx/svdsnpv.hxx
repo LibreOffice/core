@@ -142,7 +142,6 @@ public:
     // SDRSNAP_YSNAPPED oder SDRSNAP_XYSNAPPED
     sal_uInt16 SnapPos(Point& rPnt, const SdrPageView* pPV) const;
     Point GetSnapPos(const Point& rPnt, const SdrPageView* pPV) const;
-    sal_uInt16 SnapRect(const Rectangle& rRect, const SdrPageView* pPV, long& rDX, long& rDY) const;
     void CheckSnap(const Point& rPt, const SdrPageView* pPV, long& nBestXSnap, long& nBestYSnap, bool& bXSnapped, bool& bYSnapped) const;
 
     // Alle Fangeinstellungen sind Persistent.

@@ -849,7 +849,6 @@ public:
 protected:
     const SfxItemSet& GetObjectItemSet() const;
     void SetObjectItem(const SfxPoolItem& rItem);
-    void ClearObjectItem(const sal_uInt16 nWhich = 0);
     void SetObjectItemSet(const SfxItemSet& rSet);
     const SfxPoolItem& GetObjectItem(const sal_uInt16 nWhich) const;
 
@@ -1174,7 +1173,6 @@ public:
     static SdrObject* MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pPage, SdrModel* pModel=NULL);
     static void InsertMakeObjectHdl(const Link& rLink);
     static void RemoveMakeObjectHdl(const Link& rLink);
-    static SdrObjUserData* MakeNewObjUserData(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrObject* pObj);
     static void InsertMakeUserDataHdl(const Link& rLink);
     static void RemoveMakeUserDataHdl(const Link& rLink);
 };

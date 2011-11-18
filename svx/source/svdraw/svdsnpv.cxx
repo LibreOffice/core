@@ -471,26 +471,6 @@ void SdrSnapView::CheckSnap(const Point& rPt, const SdrPageView* pPV, long& nBes
     }
 }
 
-sal_uInt16 SdrSnapView::SnapRect(const Rectangle& rRect, const SdrPageView* pPV, long& rDX, long& rDY) const
-{
-    long nBestXSnap=0;
-    long nBestYSnap=0;
-    bool bXSnapped=sal_False;
-    bool bYSnapped=sal_False;
-    CheckSnap(rRect.TopLeft()    ,pPV,nBestXSnap,nBestYSnap,bXSnapped,bYSnapped);
-    if (!bMoveSnapOnlyTopLeft) {
-        CheckSnap(rRect.TopRight()   ,pPV,nBestXSnap,nBestYSnap,bXSnapped,bYSnapped);
-        CheckSnap(rRect.BottomLeft() ,pPV,nBestXSnap,nBestYSnap,bXSnapped,bYSnapped);
-        CheckSnap(rRect.BottomRight(),pPV,nBestXSnap,nBestYSnap,bXSnapped,bYSnapped);
-    }
-    rDX=nBestXSnap;
-    rDY=nBestYSnap;
-    sal_uInt16 nRet=0;
-    if (bXSnapped) nRet+=SDRSNAP_XSNAPPED;
-    if (bYSnapped) nRet+=SDRSNAP_YSNAPPED;
-    return nRet;
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 sal_Bool SdrSnapView::BegSetPageOrg(const Point& rPnt)
