@@ -84,6 +84,10 @@ public:
     // Methods in XExtendedCalendar
     virtual rtl::OUString SAL_CALL getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) throw (com::sun::star::uno::RuntimeException);
 
+    // XCalendar3
+    virtual Calendar2 SAL_CALL getLoadedCalendar2() throw(com::sun::star::uno::RuntimeException);
+    virtual com::sun::star::uno::Sequence < CalendarItem > SAL_CALL getGenitiveMonths() throw(com::sun::star::uno::RuntimeException);
+
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw(com::sun::star::uno::RuntimeException);
@@ -104,7 +108,7 @@ protected:
     void getValue() throw(com::sun::star::uno::RuntimeException);
 
 private:
-    Calendar aCalendar;
+    Calendar2 aCalendar;
 
     /** Submit fieldSetValue array according to fieldSet. */
     void submitFields() throw(com::sun::star::uno::RuntimeException);

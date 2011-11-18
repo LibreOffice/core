@@ -28,7 +28,7 @@
 #ifndef _I18N_CALENDARIMPL_HXX_
 #define _I18N_CALENDARIMPL_HXX_
 
-#include <com/sun/star/i18n/XExtendedCalendar.hpp>
+#include <com/sun/star/i18n/XCalendar3.hpp>
 #include <com/sun/star/i18n/CalendarDisplayCode.hpp>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
@@ -44,7 +44,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 class CalendarImpl : public cppu::WeakImplHelper2
 <
-    com::sun::star::i18n::XExtendedCalendar,
+    com::sun::star::i18n::XCalendar3,
     com::sun::star::lang::XServiceInfo
 >
 {
@@ -85,6 +85,10 @@ public:
     // Methods in XExtendedCalendar
     virtual rtl::OUString SAL_CALL getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) throw (com::sun::star::uno::RuntimeException);
 
+    // XCalendar3
+    virtual Calendar2 SAL_CALL getLoadedCalendar2() throw(com::sun::star::uno::RuntimeException);
+    virtual com::sun::star::uno::Sequence < CalendarItem > SAL_CALL getGenitiveMonths() throw(com::sun::star::uno::RuntimeException);
+
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw(com::sun::star::uno::RuntimeException);
@@ -92,14 +96,14 @@ public:
 
 private:
     struct lookupTableItem {
-    lookupTableItem(const rtl::OUString& _uniqueID, com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedCalendar >& _xCalendar) :
+    lookupTableItem(const rtl::OUString& _uniqueID, com::sun::star::uno::Reference < com::sun::star::i18n::XCalendar3 >& _xCalendar) :
         uniqueID(_uniqueID), xCalendar(_xCalendar) {}
     rtl::OUString uniqueID;
-    com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedCalendar > xCalendar;
+    com::sun::star::uno::Reference < com::sun::star::i18n::XCalendar3 > xCalendar;
     };
     std::vector<lookupTableItem*> lookupTable;
     com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xMSF;
-    com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedCalendar > xCalendar;
+    com::sun::star::uno::Reference < com::sun::star::i18n::XCalendar3 > xCalendar;
 };
 
 } } } }

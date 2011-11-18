@@ -32,7 +32,7 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <com/sun/star/i18n/XLocaleData2.hpp>
+#include <com/sun/star/i18n/XLocaleData3.hpp>
 
 
 #include <cppuhelper/implbase2.hxx> // helper for implementations
@@ -74,7 +74,7 @@ inline sal_Bool operator ==(const com::sun::star::lang::Locale& l1, const com::s
 
 class LocaleData : public cppu::WeakImplHelper2
 <
-    XLocaleData2,
+    XLocaleData3,
     com::sun::star::lang::XServiceInfo
 >
 {
@@ -84,6 +84,7 @@ public:
 
     virtual LanguageCountryInfo SAL_CALL getLanguageCountryInfo( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
     virtual LocaleDataItem SAL_CALL getLocaleItem( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
+    virtual com::sun::star::uno::Sequence< Calendar2 > SAL_CALL getAllCalendars2( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
     virtual com::sun::star::uno::Sequence< Calendar > SAL_CALL getAllCalendars( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
     virtual com::sun::star::uno::Sequence< Currency > SAL_CALL getAllCurrencies( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
     virtual com::sun::star::uno::Sequence< Currency2 > SAL_CALL getAllCurrencies2( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
@@ -126,12 +127,12 @@ private :
     oslGenericFunction SAL_CALL getFunctionSymbolByName( const rtl::OUString& localeName, const sal_Char* pFunction );
     sal_Unicode ** SAL_CALL getIndexArray(const com::sun::star::lang::Locale& rLocale, sal_Int16& indexCount);
     sal_Unicode ** SAL_CALL getIndexArrayForAlgorithm(const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rAlgorithm);
-    com::sun::star::i18n::Calendar ref_cal;
+    com::sun::star::i18n::Calendar2 ref_cal;
     rtl::OUString ref_name;
     com::sun::star::uno::Sequence< com::sun::star::i18n::CalendarItem > &
         getCalendarItemByName(const rtl::OUString& name,
         const com::sun::star::lang::Locale& rLocale,
-        const com::sun::star::uno::Sequence< com::sun::star::i18n::Calendar >& calendarsSeq,
+        const com::sun::star::uno::Sequence< com::sun::star::i18n::Calendar2 >& calendarsSeq,
         sal_Int16 item) throw( com::sun::star::uno::RuntimeException );
 
     /// Helper to obtain a sequence of days, months, gmonths or eras.
@@ -141,7 +142,7 @@ private :
             const sal_Int16 nWhichItem,
             const sal_Int16 nCalendar,
             const com::sun::star::lang::Locale & rLocale,
-            const com::sun::star::uno::Sequence< com::sun::star::i18n::Calendar > & calendarsSeq )
+            const com::sun::star::uno::Sequence< com::sun::star::i18n::Calendar2 > & calendarsSeq )
         throw( com::sun::star::uno::RuntimeException );
 
 };

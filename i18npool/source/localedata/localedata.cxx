@@ -468,7 +468,7 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
 #define REF_OFFSET_COUNT 4
 
 Sequence< CalendarItem > &LocaleData::getCalendarItemByName(const OUString& name,
-        const Locale& rLocale, const Sequence< Calendar >& calendarsSeq, sal_Int16 item)
+        const Locale& rLocale, const Sequence< Calendar2 >& calendarsSeq, sal_Int16 item)
         throw(RuntimeException)
 {
     if (!ref_name.equals(name)) {
@@ -476,11 +476,11 @@ Sequence< CalendarItem > &LocaleData::getCalendarItemByName(const OUString& name
         OUString language = name.getToken(0, under, index);
         OUString country = name.getToken(0, under, index);
         Locale loc(language, country, OUString());
-        Sequence < Calendar > cals;
+        Sequence < Calendar2 > cals;
         if (loc == rLocale) {
             cals = calendarsSeq;
         } else {
-            cals = getAllCalendars(loc);
+            cals = getAllCalendars2(loc);
         }
         const OUString& id = name.getToken(0, under, index);
         for (index = 0; index < cals.getLength(); index++) {
@@ -491,7 +491,7 @@ Sequence< CalendarItem > &LocaleData::getCalendarItemByName(const OUString& name
         }
         // Referred locale not found, return name for en_US locale.
         if (index == cals.getLength()) {
-            cals = getAllCalendars(
+            cals = getAllCalendars2(
                     Locale(OUString(RTL_CONSTASCII_USTRINGPARAM("en")), OUString(RTL_CONSTASCII_USTRINGPARAM("US")), OUString()));
             if (cals.getLength() > 0)
                 ref_cal = cals[0];
@@ -500,14 +500,27 @@ Sequence< CalendarItem > &LocaleData::getCalendarItemByName(const OUString& name
         }
         ref_name = name;
     }
-    return item == REF_DAYS ? ref_cal.Days : item == REF_MONTHS ? ref_cal.Months : ref_cal.Eras;
+    switch (item)
+    {
+        case REF_DAYS:
+            return ref_cal.Days;
+        case REF_MONTHS:
+            return ref_cal.Months;
+        case REF_GMONTHS:
+            return ref_cal.GenitiveMonths;
+        default:
+            OSL_FAIL( "LocaleData::getCalendarItemByName: unhandled REF_* case");
+            // fallthru
+        case REF_ERAS:
+            return ref_cal.Eras;
+    }
 }
 
 
 Sequence< CalendarItem > LocaleData::getCalendarItems(
         sal_Unicode const * const * const allCalendars, sal_Int16 & rnOffset,
         const sal_Int16 nWhichItem, const sal_Int16 nCalendar,
-        const Locale & rLocale, const Sequence< Calendar > & calendarsSeq )
+        const Locale & rLocale, const Sequence< Calendar2 > & calendarsSeq )
         throw(RuntimeException)
 {
     Sequence< CalendarItem > aItems;
@@ -532,8 +545,8 @@ Sequence< CalendarItem > LocaleData::getCalendarItems(
 }
 
 
-Sequence< Calendar > SAL_CALL
-LocaleData::getAllCalendars( const Locale& rLocale ) throw(RuntimeException)
+Sequence< Calendar2 > SAL_CALL
+LocaleData::getAllCalendars2( const Locale& rLocale ) throw(RuntimeException)
 {
 
     sal_Unicode const * const * allCalendars = NULL;
@@ -544,7 +557,7 @@ LocaleData::getAllCalendars( const Locale& rLocale ) throw(RuntimeException)
         sal_Int16 calendarsCount = 0;
         allCalendars = func(calendarsCount);
 
-        Sequence< Calendar > calendarsSeq(calendarsCount);
+        Sequence< Calendar2 > calendarsSeq(calendarsCount);
         sal_Int16 offset = REF_OFFSET_COUNT;
         for(sal_Int16 i = 0; i < calendarsCount; i++) {
             OUString calendarID(allCalendars[offset]);
@@ -563,16 +576,32 @@ LocaleData::getAllCalendars( const Locale& rLocale ) throw(RuntimeException)
             offset++;
             sal_Int16 minimalDaysInFirstWeek = allCalendars[offset][0];
             offset++;
-            Calendar aCalendar(days, months, eras, startOfWeekDay,
-                    minimalDaysInFirstWeek, defaultCalendar, calendarID);
+            Calendar2 aCalendar(days, months, eras, startOfWeekDay,
+                    minimalDaysInFirstWeek, defaultCalendar, calendarID, gmonths);
             calendarsSeq[i] = aCalendar;
         }
         return calendarsSeq;
     }
     else {
-        Sequence< Calendar > seq1(0);
+        Sequence< Calendar2 > seq1(0);
         return seq1;
     }
+}
+
+
+Sequence< Calendar > SAL_CALL
+LocaleData::getAllCalendars( const Locale& rLocale ) throw(RuntimeException)
+{
+    Sequence< Calendar2 > aCal2( getAllCalendars2( rLocale));
+    sal_Int32 nLen = aCal2.getLength();
+    Sequence< Calendar > aCal1( nLen);
+    const Calendar2* p2 = aCal2.getArray();
+    Calendar* p1 = aCal1.getArray();
+    for (sal_Int32 i=0; i < nLen; ++i, ++p1, ++p2)
+    {
+        *p1 = *p2;
+    }
+    return aCal1;
 }
 
 

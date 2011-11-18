@@ -57,7 +57,7 @@ CalendarImpl::~CalendarImpl()
 void SAL_CALL
 CalendarImpl::loadDefaultCalendar( const Locale& rLocale ) throw(RuntimeException)
 {
-    Sequence< Calendar> xC = LocaleData().getAllCalendars(rLocale);
+    Sequence< Calendar2 > xC = LocaleData().getAllCalendars2(rLocale);
     for (sal_Int32 i = 0; i < xC.getLength(); i++) {
         if (xC[i].Default) {
             loadCalendar(xC[i].Name, rLocale);
@@ -70,7 +70,7 @@ CalendarImpl::loadDefaultCalendar( const Locale& rLocale ) throw(RuntimeExceptio
 void SAL_CALL
 CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale ) throw (RuntimeException)
 {
-    Reference < XExtendedCalendar > xOldCalendar( xCalendar );  // backup
+    Reference < XCalendar3 > xOldCalendar( xCalendar );  // backup
     sal_Int32 i;
 
     for (i = 0; i < sal::static_int_cast<sal_Int32>(lookupTable.size()); i++) {
@@ -87,7 +87,7 @@ CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale ) thr
 
         if ( ! xI.is() ) {
             // check if the calendar is defined in localedata, load gregorian calendar service.
-            Sequence< Calendar> xC = LocaleData().getAllCalendars(rLocale);
+            Sequence< Calendar2 > xC = LocaleData().getAllCalendars2(rLocale);
             for (i = 0; i < xC.getLength(); i++) {
                 if (uniqueID == xC[i].Name) {
                     xI = xMSF->createInstance(
@@ -98,7 +98,7 @@ CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale ) thr
         }
 
         if ( xI.is() )
-            xI->queryInterface(::getCppuType((const Reference< XExtendedCalendar>*)0)) >>= xCalendar;
+            xI->queryInterface(::getCppuType((const Reference< XCalendar3>*)0)) >>= xCalendar;
         else
             throw ERROR;
 
@@ -122,6 +122,15 @@ CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale ) thr
     }
 }
 
+Calendar2 SAL_CALL
+CalendarImpl::getLoadedCalendar2() throw(RuntimeException)
+{
+    if (xCalendar.is())
+        return xCalendar->getLoadedCalendar2();
+    else
+        throw ERROR ;
+}
+
 Calendar SAL_CALL
 CalendarImpl::getLoadedCalendar() throw(RuntimeException)
 {
@@ -134,7 +143,7 @@ CalendarImpl::getLoadedCalendar() throw(RuntimeException)
 Sequence< OUString > SAL_CALL
 CalendarImpl::getAllCalendars( const Locale& rLocale ) throw(RuntimeException)
 {
-    Sequence< Calendar> xC = LocaleData().getAllCalendars(rLocale);
+    Sequence< Calendar2 > xC = LocaleData().getAllCalendars2(rLocale);
     sal_Int32 nLen = xC.getLength();
     Sequence< OUString > xSeq( nLen );
     for (sal_Int32 i = 0; i < nLen; i++)
@@ -264,6 +273,16 @@ CalendarImpl::getNumberOfDaysInWeek() throw(RuntimeException)
 
 
 Sequence< CalendarItem > SAL_CALL
+CalendarImpl::getDays() throw(RuntimeException)
+{
+    if (xCalendar.is())
+        return xCalendar->getDays();
+    else
+        throw ERROR ;
+}
+
+
+Sequence< CalendarItem > SAL_CALL
 CalendarImpl::getMonths() throw(RuntimeException)
 {
     if (xCalendar.is())
@@ -274,10 +293,10 @@ CalendarImpl::getMonths() throw(RuntimeException)
 
 
 Sequence< CalendarItem > SAL_CALL
-CalendarImpl::getDays() throw(RuntimeException)
+CalendarImpl::getGenitiveMonths() throw(RuntimeException)
 {
     if (xCalendar.is())
-        return xCalendar->getDays();
+        return xCalendar->getGenitiveMonths();
     else
         throw ERROR ;
 }

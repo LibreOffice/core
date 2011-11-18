@@ -246,7 +246,7 @@ Calendar_gregorian::loadCalendar( const OUString& uniqueID, const com::sun::star
         getValue();
 
         aLocale = rLocale;
-        Sequence< Calendar> xC = LocaleData().getAllCalendars(rLocale);
+        Sequence< Calendar2 > xC = LocaleData().getAllCalendars2(rLocale);
         for (sal_Int32 i = 0; i < xC.getLength(); i++)
         {
             if (uniqueID == xC[i].Name)
@@ -272,9 +272,16 @@ Calendar_gregorian::loadCalendar( const OUString& uniqueID, const com::sun::star
 }
 
 
+com::sun::star::i18n::Calendar2 SAL_CALL
+Calendar_gregorian::getLoadedCalendar2() throw(RuntimeException)
+{
+        return aCalendar;
+}
+
 com::sun::star::i18n::Calendar SAL_CALL
 Calendar_gregorian::getLoadedCalendar() throw(RuntimeException)
 {
+        // gets "down-copy-constructed"
         return aCalendar;
 }
 
@@ -838,6 +845,8 @@ static sal_Int32 SAL_CALL DisplayCode2FieldIndex(sal_Int32 nCalendarDisplayCode)
         case CalendarDisplayCode::LONG_MONTH:
         case CalendarDisplayCode::SHORT_MONTH_NAME:
         case CalendarDisplayCode::LONG_MONTH_NAME:
+        case CalendarDisplayCode::SHORT_GENITIVE_MONTH_NAME:
+        case CalendarDisplayCode::LONG_GENITIVE_MONTH_NAME:
             return CalendarFieldIndex::MONTH;
         case CalendarDisplayCode::SHORT_YEAR:
         case CalendarDisplayCode::LONG_YEAR:
@@ -899,6 +908,13 @@ Calendar_gregorian::getNumberOfDaysInWeek() throw(RuntimeException)
 
 
 Sequence< CalendarItem > SAL_CALL
+Calendar_gregorian::getDays() throw(RuntimeException)
+{
+        return aCalendar.Days;
+}
+
+
+Sequence< CalendarItem > SAL_CALL
 Calendar_gregorian::getMonths() throw(RuntimeException)
 {
         return aCalendar.Months;
@@ -906,10 +922,11 @@ Calendar_gregorian::getMonths() throw(RuntimeException)
 
 
 Sequence< CalendarItem > SAL_CALL
-Calendar_gregorian::getDays() throw(RuntimeException)
+Calendar_gregorian::getGenitiveMonths() throw(RuntimeException)
 {
-        return aCalendar.Days;
+        return aCalendar.GenitiveMonths;
 }
+
 
 OUString SAL_CALL
 Calendar_gregorian::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16 nameType ) throw(RuntimeException)
@@ -932,6 +949,12 @@ Calendar_gregorian::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_I
                 if( idx >= aCalendar.Months.getLength() ) throw ERROR;
                 if (nameType == 0) aStr = aCalendar.Months[idx].AbbrevName;
                 else if (nameType == 1) aStr = aCalendar.Months[idx].FullName;
+                else throw ERROR;
+                break;
+            case CalendarDisplayIndex::GENITIVE_MONTH:
+                if( idx >= aCalendar.GenitiveMonths.getLength() ) throw ERROR;
+                if (nameType == 0) aStr = aCalendar.GenitiveMonths[idx].AbbrevName;
+                else if (nameType == 1) aStr = aCalendar.GenitiveMonths[idx].FullName;
                 else throw ERROR;
                 break;
             case CalendarDisplayIndex::ERA:
@@ -1016,6 +1039,10 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
                 return getDisplayName(CalendarDisplayIndex::MONTH, value, 0);
             case CalendarDisplayCode::LONG_MONTH_NAME:
                 return getDisplayName(CalendarDisplayIndex::MONTH, value, 1);
+            case CalendarDisplayCode::SHORT_GENITIVE_MONTH_NAME:
+                return getDisplayName(CalendarDisplayIndex::GENITIVE_MONTH, value, 0);
+            case CalendarDisplayCode::LONG_GENITIVE_MONTH_NAME:
+                return getDisplayName(CalendarDisplayIndex::GENITIVE_MONTH, value, 1);
             case CalendarDisplayCode::SHORT_ERA:
                 return getDisplayName(CalendarDisplayIndex::ERA, value, 0);
             case CalendarDisplayCode::LONG_ERA:
