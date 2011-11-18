@@ -148,9 +148,6 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     bSubTotalsSortGroups(false),
     bSubTotalsEnabledUserList(false),
     bSubTotalsAscending(true),
-    bFilterCopyOutputData(false),
-    bFilterSkipDuplicates(false),
-    bFilterUseRegularExpressions(false),
     bFilterConditionSourceRange(false),
     meRangeType(ScDBCollection::GlobalNamed)
 {
@@ -346,12 +343,6 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
         mpQueryParam->nCol2 = aRange.aEnd.Col();
         mpQueryParam->nRow2 = aRange.aEnd.Row();
 
-        mpQueryParam->bInplace = !bFilterCopyOutputData;
-        mpQueryParam->bDuplicate = !bFilterSkipDuplicates;
-        mpQueryParam->bRegExp = bFilterUseRegularExpressions;
-        mpQueryParam->nDestTab = aFilterOutputPosition.Sheet;
-        mpQueryParam->nDestCol = aFilterOutputPosition.Column;
-        mpQueryParam->nDestRow = aFilterOutputPosition.Row;
         ScFilterDescriptorBase::fillQueryParam(*mpQueryParam, pDoc, aFilterFields);
 
         // Convert from relative to absolute column IDs for the fields. Calc

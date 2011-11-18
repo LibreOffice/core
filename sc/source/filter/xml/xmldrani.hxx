@@ -86,7 +86,6 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue> aSortSequence;
     com::sun::star::uno::Sequence <com::sun::star::sheet::TableFilterField2> aFilterFields;
     std::vector < ScSubTotalRule > aSubTotalRules;
-    com::sun::star::table::CellAddress aFilterOutputPosition;
     com::sun::star::table::CellRangeAddress aFilterConditionSourceRangeAddress;
     com::sun::star::sheet::DataImportMode nSourceType;
     sal_Int32       nRefresh;
@@ -106,9 +105,6 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     bool            bSubTotalsSortGroups;
     bool            bSubTotalsEnabledUserList;
     bool            bSubTotalsAscending;
-    bool            bFilterCopyOutputData;
-    bool            bFilterSkipDuplicates;
-    bool            bFilterUseRegularExpressions;
     bool            bFilterConditionSourceRange;
     ScDBCollection::RangeType meRangeType;
 
@@ -147,11 +143,7 @@ public:
     void SetSubTotalsSortGroups(const bool bTemp) { bSubTotalsSortGroups = bTemp; }
     void AddSubTotalRule(const ScSubTotalRule& rRule) { aSubTotalRules.push_back(rRule); }
     void SetSortSequence(const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& aTempSortSequence) { aSortSequence = aTempSortSequence; }
-    void SetFilterCopyOutputData(const bool bTemp) { bFilterCopyOutputData = bTemp; }
-    void SetFilterSkipDuplicates(const bool bTemp) { bFilterSkipDuplicates = bTemp; }
-    void SetFilterUseRegularExpressions(const bool bTemp) { bFilterUseRegularExpressions = bTemp; }
     void SetFilterFields(const com::sun::star::uno::Sequence <com::sun::star::sheet::TableFilterField2>& aTemp) { aFilterFields = aTemp; }
-    void SetFilterOutputPosition(const com::sun::star::table::CellAddress& aTemp) { aFilterOutputPosition = aTemp; }
     void SetFilterConditionSourceRangeAddress(const com::sun::star::table::CellRangeAddress& aTemp) { aFilterConditionSourceRangeAddress = aTemp;
                                                                                                     bFilterConditionSourceRange = true; }
 };

@@ -155,15 +155,17 @@ SvXMLImportContext *ScXMLFilterContext::CreateChildContext( sal_uInt16 nPrefix,
 
 void ScXMLFilterContext::EndElement()
 {
-    pDatabaseRangeContext->SetFilterUseRegularExpressions(bUseRegularExpressions);
+    mrQueryParam.bRegExp = bUseRegularExpressions;
+    mrQueryParam.bInplace = !bCopyOutputData;
+    mrQueryParam.bDuplicate = !bSkipDuplicates;
+
     if (bCopyOutputData)
     {
-        pDatabaseRangeContext->SetFilterOutputPosition(aOutputPosition);
-        pDatabaseRangeContext->SetFilterCopyOutputData(bCopyOutputData);
+        mrQueryParam.nDestCol = aOutputPosition.Column;
+        mrQueryParam.nDestRow = aOutputPosition.Row;
+        mrQueryParam.nDestTab = aOutputPosition.Sheet;
     }
-    else
-        pDatabaseRangeContext->SetFilterCopyOutputData(false);
-    pDatabaseRangeContext->SetFilterSkipDuplicates(bSkipDuplicates);
+
     pDatabaseRangeContext->SetFilterFields(aFilterFields);
     if (bConditionSourceRange)
         pDatabaseRangeContext->SetFilterConditionSourceRangeAddress(aConditionSourceRangeAddress);
