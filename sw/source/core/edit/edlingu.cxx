@@ -1124,8 +1124,6 @@ bool SwEditShell::GetGrammarCorrection(
         if (pWrong->InWrongWord(nBegin, nLen))
         {
             String aText( pNode->GetTxt().Copy( nBegin, nLen ) );
-            String aWord( aText );
-            aWord.EraseAllChars( CH_TXTATR_BREAKWORD ).EraseAllChars( CH_TXTATR_INWORD );
 
             uno::Reference< linguistic2::XProofreadingIterator >  xGCIterator( pDoc->GetGCIterator() );
             if (xGCIterator.is())
