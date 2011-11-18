@@ -58,27 +58,8 @@ struct frame {
 
 #endif /* defined SOLARIS || FREEBSD || NETBSD || OPENBSD */
 
-#if defined (LINUX) && defined (SPARC)
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/* backtrace function with same behaviour as defined in GNU libc */
-
-int backtrace( void **buffer, int max_frames );
-
-void backtrace_symbols_fd( void **buffer, int size, int fd );
-
-/* no frame.h on linux sparc */
-struct frame {
-    long    arg0[8];
-    long    arg1[6];
-    struct frame *fr_savfp;
-    long    fr_savpc;
-};
-
-#ifdef __cplusplus
-} /* extern "C" */
+#if defined (LINUX)
+#include <execinfo.h>
 #endif
 
 #endif /* defined LINUX && SPARC */
