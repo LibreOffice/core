@@ -42,7 +42,7 @@ namespace utl {
 /**
  * Each instance of this struct represents a single filtering criteria.
  */
-struct ScQueryEntry
+struct SC_DLLPUBLIC ScQueryEntry
 {
     enum QueryType { ByValue, ByString, ByDate, ByEmpty };
 
@@ -73,12 +73,12 @@ struct ScQueryEntry
 
     QueryItemsType& GetQueryItems();
     const QueryItemsType& GetQueryItems() const;
-    SC_DLLPUBLIC void SetQueryByEmpty();
-    SC_DLLPUBLIC bool IsQueryByEmpty() const;
-    SC_DLLPUBLIC void SetQueryByNonEmpty();
-    SC_DLLPUBLIC bool IsQueryByNonEmpty() const;
-    SC_DLLPUBLIC const Item& GetQueryItem() const;
-    SC_DLLPUBLIC Item& GetQueryItem();
+    void SetQueryByEmpty();
+    bool IsQueryByEmpty() const;
+    void SetQueryByNonEmpty();
+    bool IsQueryByNonEmpty() const;
+    const Item& GetQueryItem() const;
+    Item& GetQueryItem();
     void            Clear();
     ScQueryEntry&   operator=( const ScQueryEntry& r );
     bool            operator==( const ScQueryEntry& r ) const;

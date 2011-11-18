@@ -604,46 +604,45 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
         return;
     }
 
-    sal_uInt8   nE, nType, nOper, nBoolErr, nVal;
+    sal_uInt8   nType, nOper, nBoolErr, nVal;
     sal_Int32   nRK;
     double  fVal;
     bool bIgnore;
 
-    sal_uInt8   nStrLen[ 2 ]    = { 0, 0 };
-    ScQueryEntry *pQueryEntries[ 2 ] = { NULL, NULL };
+    sal_uInt8 nStrLen[2] = { 0, 0 };
+    ScQueryEntry aEntries[2];
 
-    for( nE = 0; nE < 2; nE++ )
+    for (size_t nE = 0; nE < 2; ++nE)
     {
         if( nFirstEmpty < nCount )
         {
-            ScQueryEntry& aEntry = aParam.GetEntry( nFirstEmpty );
-            ScQueryEntry::Item& rItem = aEntry.GetQueryItem();
-            pQueryEntries[ nE ] = &aEntry;
+            ScQueryEntry& rEntry = aEntries[nE];
+            ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
             bIgnore = false;
 
             rStrm >> nType >> nOper;
             switch( nOper )
             {
                 case EXC_AFOPER_LESS:
-                    aEntry.eOp = SC_LESS;
+                    rEntry.eOp = SC_LESS;
                 break;
                 case EXC_AFOPER_EQUAL:
-                    aEntry.eOp = SC_EQUAL;
+                    rEntry.eOp = SC_EQUAL;
                 break;
                 case EXC_AFOPER_LESSEQUAL:
-                    aEntry.eOp = SC_LESS_EQUAL;
+                    rEntry.eOp = SC_LESS_EQUAL;
                 break;
                 case EXC_AFOPER_GREATER:
-                    aEntry.eOp = SC_GREATER;
+                    rEntry.eOp = SC_GREATER;
                 break;
                 case EXC_AFOPER_NOTEQUAL:
-                    aEntry.eOp = SC_NOT_EQUAL;
+                    rEntry.eOp = SC_NOT_EQUAL;
                 break;
                 case EXC_AFOPER_GREATEREQUAL:
-                    aEntry.eOp = SC_GREATER_EQUAL;
+                    rEntry.eOp = SC_GREATER_EQUAL;
                 break;
                 default:
-                    aEntry.eOp = SC_EQUAL;
+                    rEntry.eOp = SC_EQUAL;
             }
 
             rtl::OUString aStr;
@@ -673,10 +672,10 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
                     bIgnore = (nBoolErr != 0);
                 break;
                 case EXC_AFTYPE_EMPTY:
-                    aEntry.SetQueryByEmpty();
+                    rEntry.SetQueryByEmpty();
                 break;
                 case EXC_AFTYPE_NOTEMPTY:
-                    aEntry.SetQueryByNonEmpty();
+                    rEntry.SetQueryByNonEmpty();
                 break;
                 default:
                     rStrm.Ignore( 8 );
@@ -693,10 +692,10 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
                 bHasConflict = true;
             if( !bHasConflict && !bIgnore )
             {
-                aEntry.bDoQuery = true;
+                rEntry.bDoQuery = true;
                 rItem.meType = ScQueryEntry::ByString;
-                aEntry.nField = static_cast<SCCOLROW>(StartCol() + static_cast<SCCOL>(nCol));
-                aEntry.eConnect = nE ? eConn : SC_AND;
+                rEntry.nField = static_cast<SCCOLROW>(StartCol() + static_cast<SCCOL>(nCol));
+                rEntry.eConnect = nE ? eConn : SC_AND;
                 nFirstEmpty++;
             }
         }
@@ -704,12 +703,15 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
             rStrm.Ignore( 10 );
     }
 
-    for( nE = 0; nE < 2; nE++ )
-        if( nStrLen[ nE ] && pQueryEntries[ nE ] )
+    for (size_t nE = 0; nE < 2; ++nE)
+    {
+        if (nStrLen[nE] && aEntries[nE].bDoQuery)
         {
-            pQueryEntries[nE]->GetQueryItem().maString = rStrm.ReadUniString(nStrLen[nE]);
-            ExcelQueryToOooQuery( *pQueryEntries[ nE ] );
+            aEntries[nE].GetQueryItem().maString = rStrm.ReadUniString(nStrLen[nE]);
+            ExcelQueryToOooQuery(aEntries[nE]);
+            aParam.AppendEntry() = aEntries[nE];
         }
+    }
 }
 
 void XclImpAutoFilterData::SetAdvancedRange( const ScRange* pRange )
