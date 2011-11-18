@@ -577,10 +577,10 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
     rStrm >> nCol >> nFlags;
 
     ScQueryConnect  eConn       = ::get_flagvalue( nFlags, EXC_AFFLAG_ANDORMASK, SC_OR, SC_AND );
-    sal_Bool            bTop10      = ::get_flag( nFlags, EXC_AFFLAG_TOP10 );
-    sal_Bool            bTopOfTop10 = ::get_flag( nFlags, EXC_AFFLAG_TOP10TOP );
-    sal_Bool            bPercent    = ::get_flag( nFlags, EXC_AFFLAG_TOP10PERC );
-    sal_uInt16          nCntOfTop10 = nFlags >> 7;
+    bool            bTop10      = ::get_flag( nFlags, EXC_AFFLAG_TOP10 );
+    bool            bTopOfTop10 = ::get_flag( nFlags, EXC_AFFLAG_TOP10TOP );
+    bool            bPercent    = ::get_flag( nFlags, EXC_AFFLAG_TOP10PERC );
+    sal_uInt16      nCntOfTop10 = nFlags >> 7;
     SCSIZE          nCount      = aParam.GetEntryCount();
 
     if( bTop10 )
@@ -690,7 +690,7 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
                     'A1 AND (B1 OR B2)' in this case, but Calc would do
                     '(A1 AND B1) OR B2' instead. */
                 if( (nFirstEmpty > 1) && nE && (eConn == SC_OR) && !bIgnore )
-                    bHasConflict = sal_True;
+                    bHasConflict = true;
                 if( !bHasConflict && !bIgnore )
                 {
                     aEntry.bDoQuery = true;
