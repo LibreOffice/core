@@ -30,19 +30,8 @@
 #include "precompiled_basic.hxx"
 
 #include "sbcomp.hxx"
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
-#if defined UNX
-#include <stdlib.h>
-#else
-#include <math.h>   // atof()
-#endif
-#include <rtl/math.hxx>
-#include <vcl/svapp.hxx>
-#include <unotools/charclass.hxx>
 
-#include <runtime.hxx>
+#include <vcl/svapp.hxx>
 
 SbiScanner::SbiScanner( const ::rtl::OUString& rBuf, StarBASIC* p ) : aBuf( rBuf )
 {
