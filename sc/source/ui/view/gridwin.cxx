@@ -757,7 +757,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
     ScQueryParam aParam;
     pDBData->GetQueryParam(aParam);
 
-    if (mpAutoFilterPopup->isAllSelected())
+    if (eMode == Normal && mpAutoFilterPopup->isAllSelected())
     {
         // Remove this entry.
         aParam.RemoveEntryByField(rPos.Col());
@@ -775,19 +775,42 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
         pEntry->nField = rPos.Col();
         pEntry->eConnect = SC_AND;
 
-        ScCheckListMenuWindow::ResultType aResult;
-        mpAutoFilterPopup->getResult(aResult);
-        std::vector<rtl::OUString> aSelected;
-        ScCheckListMenuWindow::ResultType::const_iterator itr = aResult.begin(), itrEnd = aResult.end();
-        for (; itr != itrEnd; ++itr)
+        switch (eMode)
         {
-            if (itr->second)
-                aSelected.push_back(itr->first);
-        }
+            case Normal:
+            {
+                pEntry->eOp = SC_EQUAL;
 
-        ScQueryEntry::QueryItemsType& rItems = pEntry->GetQueryItems();
-        rItems.clear();
-        std::for_each(aSelected.begin(), aSelected.end(), AddItemToEntry(rItems));
+                ScCheckListMenuWindow::ResultType aResult;
+                mpAutoFilterPopup->getResult(aResult);
+                std::vector<rtl::OUString> aSelected;
+                ScCheckListMenuWindow::ResultType::const_iterator itr = aResult.begin(), itrEnd = aResult.end();
+                for (; itr != itrEnd; ++itr)
+                {
+                    if (itr->second)
+                        aSelected.push_back(itr->first);
+                }
+
+                ScQueryEntry::QueryItemsType& rItems = pEntry->GetQueryItems();
+                rItems.clear();
+                std::for_each(aSelected.begin(), aSelected.end(), AddItemToEntry(rItems));
+            }
+            break;
+            case Top10:
+                pEntry->eOp = SC_TOPVAL;
+                pEntry->GetQueryItem().meType = ScQueryEntry::ByString;
+                pEntry->GetQueryItem().maString = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("10"));
+            break;
+            case Empty:
+                pEntry->SetQueryByEmpty();
+            break;
+            case NonEmpty:
+                pEntry->SetQueryByNonEmpty();
+            break;
+            default:
+                // We don't know how to handle this!
+                return;
+        }
     }
 
     pViewData->GetView()->Query(aParam, NULL, true);
