@@ -34,7 +34,7 @@
 #include <tools/debug.hxx>
 #include <instance.hxx>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
-#include <com/sun/star/i18n/XExtendedCalendar.hpp>
+#include <com/sun/star/i18n/XCalendar3.hpp>
 
 #define CALENDAR_LIBRARYNAME "i18n"
 #define CALENDAR_SERVICENAME "com.sun.star.i18n.LocaleCalendar"
@@ -54,7 +54,7 @@ CalendarWrapper::CalendarWrapper(
         xSMgr( xSF ),
         aEpochStart( Date( 1, 1, 1970 ) )
 {
-    xC = Reference< XExtendedCalendar >( intl_createInstance( xSMgr, CALENDAR_SERVICENAME, "CalendarWrapper" ), uno::UNO_QUERY );
+    xC = Reference< XCalendar3 >( intl_createInstance( xSMgr, CALENDAR_SERVICENAME, "CalendarWrapper" ), uno::UNO_QUERY );
 }
 
 CalendarWrapper::~CalendarWrapper()
@@ -104,27 +104,6 @@ void CalendarWrapper::loadCalendar( const ::rtl::OUString& rUniqueID, const ::co
         (void)e;
 #endif
     }
-}
-
-
-::com::sun::star::i18n::Calendar CalendarWrapper::getLoadedCalendar() const
-{
-    try
-    {
-        if ( xC.is() )
-            return xC->getLoadedCalendar();
-    }
-    catch ( Exception& e )
-    {
-#ifdef DBG_UTIL
-        ByteString aMsg( "getLoadedCalendar: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
-#else
-        (void)e;
-#endif
-    }
-    return ::com::sun::star::i18n::Calendar();
 }
 
 
@@ -607,6 +586,50 @@ String CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_In
 #endif
     }
     return String();
+}
+
+
+// --- XCalendar3 ------------------------------------------------------------
+
+::com::sun::star::i18n::Calendar2 CalendarWrapper::getLoadedCalendar() const
+{
+    try
+    {
+        if ( xC.is() )
+            return xC->getLoadedCalendar2();
+    }
+    catch ( Exception& e )
+    {
+#ifdef DBG_UTIL
+        ByteString aMsg( "getLoadedCalendar2: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
+#endif
+    }
+    return ::com::sun::star::i18n::Calendar2();
+}
+
+
+::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > CalendarWrapper::getGenitiveMonths() const
+{
+    try
+    {
+        if ( xC.is() )
+            return xC->getGenitiveMonths();
+    }
+    catch ( Exception& e )
+    {
+#ifdef DBG_UTIL
+        ByteString aMsg( "getGenitiveMonths: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
+#endif
+    }
+    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > (0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

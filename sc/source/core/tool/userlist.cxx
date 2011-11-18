@@ -221,7 +221,7 @@ ScUserList::ScUserList()
     sal_Unicode cDelimiter = ScGlobal::cListDelimiter;
     uno::Sequence< i18n::CalendarItem > xCal;
 
-    uno::Sequence< i18n::Calendar > xCalendars(
+    uno::Sequence< i18n::Calendar2 > xCalendars(
             ScGlobal::pLocaleData->getAllCalendars() );
 
     for ( sal_Int32 j = 0; j < xCalendars.getLength(); ++j )

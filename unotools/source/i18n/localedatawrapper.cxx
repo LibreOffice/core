@@ -84,7 +84,7 @@ LocaleDataWrapper::LocaleDataWrapper(
         bReservedWordValid( sal_False )
 {
     setLocale( rLocale );
-    xLD = Reference< XLocaleData2 > (
+    xLD = Reference< XLocaleData3 > (
         intl_createInstance( xSMgr, "com.sun.star.i18n.LocaleData",
                              "LocaleDataWrapper" ), uno::UNO_QUERY );
 }
@@ -179,27 +179,6 @@ void LocaleDataWrapper::invalidateData()
 #endif
     }
     return ::com::sun::star::i18n::LocaleDataItem();
-}
-
-
-::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Calendar > LocaleDataWrapper::getAllCalendars() const
-{
-    try
-    {
-        if ( xLD.is() )
-            return xLD->getAllCalendars( getLocale() );
-    }
-    catch ( Exception& e )
-    {
-#ifdef DBG_UTIL
-        ByteString aMsg( "getAllCalendars: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
-#else
-        (void)e;
-#endif
-    }
-    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Calendar >(0);
 }
 
 
@@ -603,12 +582,12 @@ void LocaleDataWrapper::getDefaultCalendarImpl()
 {
     if (!xDefaultCalendar)
     {
-        Sequence< Calendar > xCals = getAllCalendars();
+        Sequence< Calendar2 > xCals = getAllCalendars();
         sal_Int32 nCount = xCals.getLength();
         sal_Int32 nDef = 0;
         if (nCount > 1)
         {
-            const Calendar* pArr = xCals.getArray();
+            const Calendar2* pArr = xCals.getArray();
             for (sal_Int32 i=0; i<nCount; ++i)
             {
                 if (pArr[i].Default)
@@ -618,12 +597,12 @@ void LocaleDataWrapper::getDefaultCalendarImpl()
                 }
             }
         }
-        xDefaultCalendar.reset( new Calendar( xCals[nDef]));
+        xDefaultCalendar.reset( new Calendar2( xCals[nDef]));
     }
 }
 
 
-const ::boost::shared_ptr< ::com::sun::star::i18n::Calendar > LocaleDataWrapper::getDefaultCalendar() const
+const ::boost::shared_ptr< ::com::sun::star::i18n::Calendar2 > LocaleDataWrapper::getDefaultCalendar() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
     if (!xDefaultCalendar)
@@ -1948,6 +1927,29 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
     else {
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     }
+}
+
+
+// --- XLocaleData3 ----------------------------------------------------------
+
+::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Calendar2 > LocaleDataWrapper::getAllCalendars() const
+{
+    try
+    {
+        if ( xLD.is() )
+            return xLD->getAllCalendars2( getLocale() );
+    }
+    catch ( Exception& e )
+    {
+#ifdef DBG_UTIL
+        ByteString aMsg( "getAllCalendars: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
+#endif
+    }
+    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Calendar2 >(0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -58,7 +58,7 @@
 #endif
 #if NF_TEST_CALENDAR
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/i18n/XExtendedCalendar.hpp>
+#include <com/sun/star/i18n/XCalendar3.hpp>
 #endif
 
 
@@ -1379,7 +1379,7 @@ input for the following reasons:
     sal_Int32 nZoneInMillis, nDST1InMillis, nDST2InMillis;
     uno::Reference< lang::XMultiServiceFactory > xSMgr =
         ::comphelper::getProcessServiceFactory();
-    uno::Reference< ::com::sun::star::i18n::XExtendedCalendar > xCal(
+    uno::Reference< ::com::sun::star::i18n::XCalendar3 > xCal(
             xSMgr->createInstance( ::rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
                         "com.sun.star.i18n.LocaleCalendar" ) ) ),

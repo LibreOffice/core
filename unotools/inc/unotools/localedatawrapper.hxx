@@ -30,7 +30,7 @@
 #define _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 
 #include <tools/string.hxx>
-#include <com/sun/star/i18n/XLocaleData2.hpp>
+#include <com/sun/star/i18n/XLocaleData3.hpp>
 #include <com/sun/star/i18n/LocaleItem.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
 #include <unotools/readwritemutexguard.hxx>
@@ -67,9 +67,9 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     static  sal_uInt8                nLocaleDataChecking;    // 0:=dontknow, 1:=yes, 2:=no
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    xSMgr;
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData2 >            xLD;
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData3 >            xLD;
     ::com::sun::star::lang::Locale                                                      aLocale;
-    ::boost::shared_ptr< ::com::sun::star::i18n::Calendar >                             xDefaultCalendar;
+    ::boost::shared_ptr< ::com::sun::star::i18n::Calendar2 >                            xDefaultCalendar;
     ::com::sun::star::i18n::LocaleDataItem                                              aLocaleDataItem;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >                                  aReservedWordSeq;
     ::com::sun::star::uno::Sequence< sal_Int32 >                                        aGrouping;
@@ -153,7 +153,8 @@ public:
 
     ::com::sun::star::i18n::LanguageCountryInfo getLanguageCountryInfo() const;
     ::com::sun::star::i18n::LocaleDataItem getLocaleItem() const;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Calendar > getAllCalendars() const;
+    /// NOTE: this wraps XLocaleData3::getAllCalendars2() in fact.
+    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Calendar2 > getAllCalendars() const;
     /// NOTE: this wraps XLocaleData2::getAllCurrencies2() in fact.
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency2 > getAllCurrencies() const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::FormatElement > getAllFormats() const;
@@ -179,7 +180,7 @@ public:
             MeasurementSystem   mapMeasurementStringToEnum( const String& rMS ) const;
 
     /// Convenience method to obtain the default calendar.
-    const ::boost::shared_ptr< ::com::sun::star::i18n::Calendar > getDefaultCalendar() const;
+    const ::boost::shared_ptr< ::com::sun::star::i18n::Calendar2 > getDefaultCalendar() const;
 
     /// Convenience method to obtain the day names of the default calendar.
     const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > getDefaultCalendarDays() const;

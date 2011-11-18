@@ -33,7 +33,7 @@
 #include <tools/string.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/i18n/Calendar.hpp>
+#include <com/sun/star/i18n/Calendar2.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include "unotools/unotoolsdllapi.h"
 
@@ -45,7 +45,7 @@ namespace com { namespace sun { namespace star {
 
 namespace com { namespace sun { namespace star {
     namespace i18n {
-        class XExtendedCalendar;
+        class XCalendar3;
     }
 }}}
 
@@ -53,7 +53,7 @@ namespace com { namespace sun { namespace star {
 class UNOTOOLS_DLLPUBLIC CalendarWrapper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XExtendedCalendar >   xC;
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCalendar3 >   xC;
 
             DateTime            aEpochStart;        // 1Jan1970
 
@@ -68,7 +68,6 @@ public:
 
     void loadDefaultCalendar( const ::com::sun::star::lang::Locale& rLocale );
     void loadCalendar( const ::rtl::OUString& rUniqueID, const ::com::sun::star::lang::Locale& rLocale );
-    ::com::sun::star::i18n::Calendar getLoadedCalendar() const;
     ::com::sun::star::uno::Sequence< ::rtl::OUString > getAllCalendars( const ::com::sun::star::lang::Locale& rLocale ) const;
     ::rtl::OUString getUniqueID() const;
     /// set UTC date/time
@@ -79,6 +78,7 @@ public:
     void setLocalDateTime( double nTimeInDays );
     /// convenience method to get local date/time
     double getLocalDateTime() const;
+
 
     // wrapper implementations of XCalendar
 
@@ -102,9 +102,16 @@ public:
         fields DST_OFFSET and DST_OFFSET_SECOND_MILLIS into account. */
     sal_Int32 getDSTOffsetInMillis() const;
 
+
     // wrapper implementations of XExtendedCalendar
 
     String getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) const;
+
+
+    // wrapper implementations of XCalendar3
+
+    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > getGenitiveMonths() const;
+    ::com::sun::star::i18n::Calendar2 getLoadedCalendar() const;
 
 
     // convenience methods
