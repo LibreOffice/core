@@ -78,7 +78,7 @@
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <cppuhelper/implbase4.hxx> // helper for implementations
 #include <RefreshListenerContainer.hxx>
-#include <oox/export/starmathimport.hxx>
+#include <oox/mathml/import.hxx>
 
 #include <viewopt.hxx>
 
@@ -182,7 +182,7 @@ SwXTextDocumentBaseClass;
 class SW_DLLPUBLIC SwXTextDocument : public SwXTextDocumentBaseClass,
     public SvxFmMSFactory,
     public SfxBaseModel,
-    public OoxmlFormulaImportHelper
+    public oox::FormulaImportHelper
 {
     ActionContextArr        aActionArr;
     SwRefreshListenerContainer  aRefreshCont;

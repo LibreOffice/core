@@ -203,7 +203,6 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/export/ColorPropertySet \
     oox/source/export/drawingml \
     oox/source/export/SchXMLSeriesHelper \
-    oox/source/export/ooxmlexport \
     oox/source/export/shapes \
     oox/source/export/vmlexport \
     oox/source/helper/attributelist \
@@ -219,6 +218,9 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/helper/storagebase \
     oox/source/helper/textinputstream \
     oox/source/helper/zipstorage \
+    oox/source/mathml/export \
+    oox/source/mathml/import \
+    oox/source/mathml/importutils \
     oox/source/ole/axbinaryreader \
     oox/source/ole/axbinarywriter \
     oox/source/ole/axfontdata \

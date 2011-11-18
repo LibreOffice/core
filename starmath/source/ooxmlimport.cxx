@@ -35,7 +35,7 @@
 #include <oox/token/namespaces.hxx>
 
 using namespace oox;
-using namespace ooxmlformulaimport;
+using namespace oox::formulaimport;
 using rtl::OUString;
 
 /*
@@ -52,7 +52,7 @@ The primary internal data structure for the formula is the text representation
 
 // TODO create IS_OPENING(), IS_CLOSING() instead of doing 'next == OPENING( next )' ?
 
-SmOoxmlImport::SmOoxmlImport( ooxmlformulaimport::XmlStream& s )
+SmOoxmlImport::SmOoxmlImport( oox::formulaimport::XmlStream& s )
 : stream( s )
 {
 }

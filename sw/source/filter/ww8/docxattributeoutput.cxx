@@ -45,7 +45,7 @@
 #include <oox/export/drawingml.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/export/vmlexport.hxx>
-#include <oox/export/ooxmlexport.hxx>
+#include <oox/mathml/export.hxx>
 
 #include <i18npool/mslangid.hxx>
 
@@ -2314,7 +2314,7 @@ void DocxAttributeOutput::WritePostponedMath()
         return;
     uno::Reference < embed::XEmbeddedObject > xObj(const_cast<SwOLENode*>(m_postponedMath)->GetOLEObj().GetOleRef());
     uno::Reference< uno::XInterface > xInterface( xObj->getComponent(), uno::UNO_QUERY );
-    if( OoxmlFormulaExportBase* formulaexport = dynamic_cast< OoxmlFormulaExportBase* >( xInterface.get()))
+    if( oox::FormulaExportBase* formulaexport = dynamic_cast< oox::FormulaExportBase* >( xInterface.get()))
         formulaexport->writeFormulaOoxml( m_pSerializer, GetExport().GetFilter().getVersion());
     else
         OSL_FAIL( "Math OLE object cannot write out OOXML" );

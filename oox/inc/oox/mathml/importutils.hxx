@@ -25,17 +25,19 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef _STARMATHIMPORT_HXX
-#define _STARMATHIMPORT_HXX
+#ifndef _STARMATHIMPORTUTILS_HXX
+#define _STARMATHIMPORTUTILS_HXX
 
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <oox/helper/attributelist.hxx>
 #include <vector>
 
 #include <oox/dllapi.h>
 
-namespace ooxmlformulaimport
+namespace oox
+{
+
+namespace formulaimport
 {
 
 const int TAG_OPENING = 1 << 29;
@@ -78,21 +80,7 @@ public:
 };
 
 } // namespace
-
-class OOX_DLLPUBLIC OoxmlFormulaImportHelper
-{
-public:
-    OoxmlFormulaImportHelper();
-    virtual void addFormula( com::sun::star::uno::Reference< com::sun::star::embed::XEmbeddedObject > ) = 0;
-};
-
-class OOX_DLLPUBLIC OoxmlFormulaImportBase
-{
-public:
-    OoxmlFormulaImportBase();
-    virtual void readFormulaOoxml( ooxmlformulaimport::XmlStream& stream ) = 0;
-};
-
+} // namespace
 
 #endif
 

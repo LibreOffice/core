@@ -13,7 +13,7 @@
  * License.
  *
  * Major Contributor(s):
- * Copyright (C) 2011 Lubos Lunak <l.lunak@suse.cz> (initial developer)
+ * Copyright (C) 2011 Tor Lillqvist <tlillqvist@suse.com> (initial developer)
  *
  * All Rights Reserved.
  *
@@ -25,24 +25,16 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef _OOXMLEXPORT_HXX
-#define _OOXMLEXPORT_HXX
 
-#include <sax/fshelper.hxx>
-#include <oox/core/filterbase.hxx>
-#include <oox/dllapi.h>
+#include "oox/mathml/export.hxx"
 
-/**
- Interface class, StarMath will implement writeFormulaOoxml() to write out OOXML
- representing the formula.
- */
-class OOX_DLLPUBLIC OoxmlFormulaExportBase
+namespace oox
 {
-public:
-    OoxmlFormulaExportBase();
-    virtual void writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer, oox::core::OoxmlVersion version ) = 0;
-};
 
-#endif
+FormulaExportBase::FormulaExportBase()
+{
+}
+
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

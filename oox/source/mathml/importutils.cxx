@@ -26,29 +26,18 @@
  * instead of those above.
  */
 
-#include <oox/export/ooxmlexport.hxx>
-#include <oox/export/starmathimport.hxx>
+#include "oox/mathml/importutils.hxx"
+
+#include <assert.h>
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
 
-using namespace oox;
-using namespace oox::core;
 using namespace com::sun::star;
 
-OoxmlFormulaExportBase::OoxmlFormulaExportBase()
+namespace oox
 {
-}
 
-OoxmlFormulaImportBase::OoxmlFormulaImportBase()
-{
-}
-
-OoxmlFormulaImportHelper::OoxmlFormulaImportHelper()
-{
-}
-
-
-namespace ooxmlformulaimport
+namespace formulaimport
 {
 
 XmlStream::XmlStream()
@@ -110,6 +99,7 @@ void XmlStreamBuilder::appendCharacters( const rtl::OUString& chars )
     characters.back() = chars;
 }
 
+} // namespace
 } // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

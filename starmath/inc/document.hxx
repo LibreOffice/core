@@ -41,6 +41,7 @@
 #include <vcl/virdev.hxx>
 #include <sax/fshelper.hxx>
 #include <oox/core/filterbase.hxx>
+#include <oox/mathml/import.hxx>
 
 #include <set>
 
@@ -53,10 +54,6 @@ class SfxMenuBarManager;
 class SfxPrinter;
 class Printer;
 class SmCursor;
-namespace ooxmlformulaimport
-{
-class XmlStream;
-}
 
 #define HINT_DATACHANGED    1004
 
@@ -179,7 +176,7 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     void                InvalidateCursor();
 
     bool writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer, oox::core::OoxmlVersion version );
-    bool readFormulaOoxml( ooxmlformulaimport::XmlStream& stream );
+    bool readFormulaOoxml( oox::formulaimport::XmlStream& stream );
 
 public:
     TYPEINFO();

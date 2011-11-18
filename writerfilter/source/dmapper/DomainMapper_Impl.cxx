@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#include <oox/export/starmathimport.hxx>
+#include <oox/mathml/import.hxx>
 
 #include <DomainMapper_Impl.hxx>
 #include <ConversionHelper.hxx>
@@ -1096,7 +1096,7 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
             val.getAny() >>= formula;
             if( formula.is() )
             {
-                if( OoxmlFormulaImportHelper* import = dynamic_cast< OoxmlFormulaImportHelper* >( GetTextDocument().get()))
+                if( oox::FormulaImportHelper* import = dynamic_cast< oox::FormulaImportHelper* >( GetTextDocument().get()))
                     import->addFormula( formula );
     static const rtl::OUString sEmbeddedService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextEmbeddedObject"));
     try

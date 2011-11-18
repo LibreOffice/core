@@ -29,7 +29,7 @@
 #ifndef SM_OOXMLIMPORT_HXX
 #define SM_OOXMLIMPORT_HXX
 
-#include <oox/export/starmathimport.hxx>
+#include <oox/mathml/importutils.hxx>
 
 #include "node.hxx"
 
@@ -40,7 +40,7 @@
 class SmOoxmlImport
 {
 public:
-    SmOoxmlImport( ooxmlformulaimport::XmlStream& stream );
+    SmOoxmlImport( oox::formulaimport::XmlStream& stream );
     rtl::OUString ConvertToStarMath();
 private:
     rtl::OUString handleStream();
@@ -70,7 +70,7 @@ private:
      Handle the current (unexpected) tag.
     */
     void handleUnexpectedTag();
-    ooxmlformulaimport::XmlStream& stream;
+    oox::formulaimport::XmlStream& stream;
 };
 
 #endif

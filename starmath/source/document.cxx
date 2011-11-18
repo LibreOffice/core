@@ -999,7 +999,7 @@ bool SmDocShell::writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer,
     return aEquation.ConvertFromStarMath( m_pSerializer );
 }
 
-bool SmDocShell::readFormulaOoxml( ooxmlformulaimport::XmlStream& stream )
+bool SmDocShell::readFormulaOoxml( oox::formulaimport::XmlStream& stream )
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::readFormulaOoxml" );
 

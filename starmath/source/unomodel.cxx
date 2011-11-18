@@ -1137,7 +1137,7 @@ void SmModel::writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer, oo
     static_cast< SmDocShell* >( GetObjectShell())->writeFormulaOoxml( m_pSerializer, version );
 }
 
-void SmModel::readFormulaOoxml( ooxmlformulaimport::XmlStream& stream )
+void SmModel::readFormulaOoxml( oox::formulaimport::XmlStream& stream )
 {
     static_cast< SmDocShell* >( GetObjectShell())->readFormulaOoxml( stream );
 }

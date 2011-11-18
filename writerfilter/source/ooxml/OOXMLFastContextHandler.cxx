@@ -2382,7 +2382,7 @@ OOXMLFastContextHandlerMath::~OOXMLFastContextHandlerMath()
     rtl::OUString aName; // TODO?
     uno::Reference< embed::XEmbeddedObject > ref = container.CreateEmbeddedObject( name.GetByteSequence(), aName );
     uno::Reference< uno::XInterface > component( ref->getComponent(), uno::UNO_QUERY );
-    if( OoxmlFormulaImportBase* import = dynamic_cast< OoxmlFormulaImportBase* >( component.get()))
+    if( oox::FormulaImportBase* import = dynamic_cast< oox::FormulaImportBase* >( component.get()))
         import->readFormulaOoxml( buffer );
     if (isForwardEvents())
     {
