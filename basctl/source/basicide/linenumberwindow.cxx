@@ -11,7 +11,7 @@ LineNumberWindow::LineNumberWindow( Window* pParent, ModulWindow* pModulWin ) :
 {
     SetBackground(Wallpaper(GetSettings().GetStyleSettings().GetFieldColor()));
     m_nBaseWidth = GetTextWidth(String('8'));
-    m_nWidth = m_nBaseWidth * 3 + m_nBaseWidth / 2;;
+    m_nWidth = m_nBaseWidth * 3 + m_nBaseWidth / 2;
 }
 
 LineNumberWindow::~LineNumberWindow() { }
