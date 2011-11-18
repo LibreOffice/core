@@ -1815,13 +1815,22 @@ bool SwDoc::IsModified() const
     return mbModified;
 }
 
-void SwDoc::SetModified()
+//Load document from fdo#42534 under valgrind, drag the scrollbar down so full
+//document layout is triggered. Close document before layout has completed, and
+//SwAnchoredObject objects deleted by the deletion of layout remain referenced
+//by the SwLayouter
+void SwDoc::ClearSwLayouterEntries()
 {
     SwLayouter::ClearMovedFwdFrms( *this );
     SwLayouter::ClearObjsTmpConsiderWrapInfluence( *this );
     SwLayouter::ClearFrmsNotToWrap( *this );
     // #i65250#
     SwLayouter::ClearMoveBwdLayoutInfo( *this );
+}
+
+void SwDoc::SetModified()
+{
+    ClearSwLayouterEntries();
     // We return the status for the link according to the old and new value of the flags
     //  Bit 0:  -> old state
     //  Bit 1:  -> new state

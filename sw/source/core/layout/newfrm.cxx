@@ -616,8 +616,13 @@ SwRootFrm::~SwRootFrm()
 
     if(pBlink)
         pBlink->FrmDelete( this );
-    if ( static_cast<SwFrmFmt*>(GetRegisteredInNonConst()) )
-        static_cast<SwFrmFmt*>(GetRegisteredInNonConst())->GetDoc()->DelFrmFmt( static_cast<SwFrmFmt*>(GetRegisteredInNonConst()) );
+    SwFrmFmt *pRegisteredInNonConst = static_cast<SwFrmFmt*>(GetRegisteredInNonConst());
+    if ( pRegisteredInNonConst )
+    {
+        SwDoc *pDoc = pRegisteredInNonConst->GetDoc();
+        pDoc->DelFrmFmt( pRegisteredInNonConst );
+        pDoc->ClearSwLayouterEntries();
+    }
     delete pDestroy;
     pDestroy = 0;
 

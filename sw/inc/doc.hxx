@@ -949,6 +949,7 @@ public:
     virtual const SwRootFrm *GetCurrentLayout() const;
     virtual SwRootFrm *GetCurrentLayout();//swmod 080219
     virtual bool HasLayout() const;
+    void ClearSwLayouterEntries();
 
     /** IDocumentTimerAccess
     */
