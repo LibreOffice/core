@@ -194,7 +194,7 @@ SwPrintUIOptions * lcl_GetPrintUIOptions(
         SwPaM* pShellCrsr = pSh->GetCrsr();
         nCurrentPage = pShellCrsr->GetPageNum(sal_True, 0);
     }
-    else
+    else if (!bSwSrcView)
     {
         const SwPagePreView* pPreView = dynamic_cast< const SwPagePreView* >(pView);
         OSL_ENSURE(pPreView, "Unexpected type of the view shell");
