@@ -159,8 +159,6 @@ namespace sfx2
         void                    implGetAndCacheFiles( const ::com::sun::star::uno::Reference< XInterface >& xPicker  ,
                                                             SvStringsDtor*&               rpURLList,
                                                       const SfxFilter*                    pFilter  );
-        String                  implEnsureURLExtension(const String& sURL      ,
-                                                       const String& sExtension);
 
         DECL_LINK( TimeOutHdl_Impl, Timer* );
         DECL_LINK( HandleEvent, FileDialogHelper* );

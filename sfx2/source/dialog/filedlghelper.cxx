@@ -1344,14 +1344,6 @@ void FileDialogHelper_Impl::implStartExecute()
 }
 
 // ------------------------------------------------------------------------
-String FileDialogHelper_Impl::implEnsureURLExtension(const String& sURL,
-                                                     const String& /*sExtension*/)
-{
-    return sURL;
-
-}
-
-// ------------------------------------------------------------------------
 void lcl_saveLastURLs(SvStringsDtor*&                                    rpURLList ,
                       ::comphelper::SequenceAsVector< ::rtl::OUString >& lLastURLs )
 {
@@ -1386,7 +1378,7 @@ void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterfac
         ::sal_Int32          nFiles    = lFiles.getLength();
         for (::sal_Int32 i = 0; i < nFiles; i++)
         {
-            String* pURL = new String(implEnsureURLExtension(lFiles[i], sExtension));
+            String* pURL = new String(lFiles[i]);
             rpURLList->Insert( pURL, rpURLList->Count() );
         }
     }
@@ -1400,7 +1392,7 @@ void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterfac
         if ( nFiles == 1 )
         {
                     rpURLList = new SvStringsDtor;
-            String* pURL      = new String(implEnsureURLExtension(lFiles[0], sExtension));
+            String* pURL      = new String(lFiles[0]);
             rpURLList->Insert( pURL, 0 );
         }
         else
@@ -1418,7 +1410,7 @@ void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterfac
                 else
                     aPath.setName( lFiles[i] );
 
-                String* pURL = new String(implEnsureURLExtension(aPath.GetMainURL( INetURLObject::NO_DECODE ), sExtension) );
+                String* pURL = new String(aPath.GetMainURL( INetURLObject::NO_DECODE ) );
                 rpURLList->Insert( pURL, rpURLList->Count() );
             }
         }
