@@ -104,12 +104,16 @@ ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, sa
     SetFont(maLabelFont);
 
     SetText( OUString(RTL_CONSTASCII_USTRINGPARAM("ScMenuFloatingWindow")) );
-    SetPopupModeEndHdl( LINK(this, ScMenuFloatingWindow, PopupEndHdl) );
 }
 
 ScMenuFloatingWindow::~ScMenuFloatingWindow()
 {
     EndPopupMode();
+}
+
+void ScMenuFloatingWindow::PopupModeEnd()
+{
+    handlePopupEnd();
 }
 
 void ScMenuFloatingWindow::MouseMove(const MouseEvent& rMEvt)
@@ -259,6 +263,11 @@ ScMenuFloatingWindow* ScMenuFloatingWindow::addSubMenuItem(const OUString& rText
     aItem.mpSubMenuWin->setName(rText);
     maMenuItems.push_back(aItem);
     return aItem.mpSubMenuWin.get();
+}
+
+void ScMenuFloatingWindow::handlePopupEnd()
+{
+    clearSelectedMenuItem();
 }
 
 Size ScMenuFloatingWindow::getMenuSize() const
@@ -736,12 +745,6 @@ void ScMenuFloatingWindow::terminateAllPopupMenus()
         mpParentMenu->terminateAllPopupMenus();
 }
 
-IMPL_LINK( ScMenuFloatingWindow, PopupEndHdl, void*, EMPTYARG )
-{
-    clearSelectedMenuItem();
-    return 0;
-}
-
 // ============================================================================
 
 ScCheckListMenuWindow::Member::Member() :
@@ -773,6 +776,7 @@ ScCheckListMenuWindow::ScCheckListMenuWindow(Window* pParent, ScDocument* pDoc) 
     mnCurTabStop(0),
     mpExtendedData(NULL),
     mpOKAction(NULL),
+    mpPopupEndAction(NULL),
     maWndSize(200, 330),
     mePrevToggleAllState(STATE_DONTKNOW)
 {
@@ -1222,6 +1226,18 @@ ScCheckListMenuWindow::ExtendedData* ScCheckListMenuWindow::getExtendedData()
 void ScCheckListMenuWindow::setOKAction(Action* p)
 {
     mpOKAction.reset(p);
+}
+
+void ScCheckListMenuWindow::setPopupEndAction(Action* p)
+{
+    mpPopupEndAction.reset(p);
+}
+
+void ScCheckListMenuWindow::handlePopupEnd()
+{
+    clearSelectedMenuItem();
+    if (mpPopupEndAction)
+        mpPopupEndAction->execute();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

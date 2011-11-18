@@ -341,6 +341,7 @@ public:
     void            DoScenarioMenue( const ScRange& rScenRange );
 
     void            LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow);
+    void            RefreshAutoFilterButton(const ScAddress& rPos);
     void            UpdateAutoFilterFromMenu();
 
     void            LaunchPageFieldMenu( SCCOL nCol, SCROW nRow );

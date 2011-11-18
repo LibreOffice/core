@@ -607,10 +607,22 @@ class AutoFilterOKAction : public ScMenuFloatingWindow::Action
     ScGridWindow* mpWindow;
 public:
     AutoFilterOKAction(ScGridWindow* p) : mpWindow(p) {}
-
     virtual void execute()
     {
         mpWindow->UpdateAutoFilterFromMenu();
+    }
+};
+
+class AutoFilterPopupEndAction : public ScMenuFloatingWindow::Action
+{
+    ScGridWindow* mpWindow;
+    ScAddress maPos;
+public:
+    AutoFilterPopupEndAction(ScGridWindow* p, const ScAddress& rPos) :
+        mpWindow(p), maPos(rPos) {}
+    virtual void execute()
+    {
+        mpWindow->RefreshAutoFilterButton(maPos);
     }
 };
 
@@ -651,6 +663,8 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 
     mpAutoFilterPopup.reset(new ScCheckListMenuWindow(this, pDoc));
     mpAutoFilterPopup->setOKAction(new AutoFilterOKAction(this));
+    mpAutoFilterPopup->setPopupEndAction(
+        new AutoFilterPopupEndAction(this, ScAddress(nCol, nRow, nTab)));
     std::auto_ptr<AutoFilterData> pData(new AutoFilterData);
     pData->maPos = ScAddress(nCol, nRow, nTab);
 
@@ -706,6 +720,19 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     mpAutoFilterPopup->SetPopupModeEndHdl( LINK(this, ScGridWindow, PopupModeEndHdl) );
 
     mpAutoFilterPopup->launch(aCellRect);
+}
+
+void ScGridWindow::RefreshAutoFilterButton(const ScAddress& rPos)
+{
+    if (mpFilterButton)
+    {
+        bool bFilterActive = IsAutoFilterActive(rPos.Col(), rPos.Row(), rPos.Tab());
+        mpFilterButton->setHasHiddenMember(bFilterActive);
+        mpFilterButton->setPopupPressed(false);
+        HideCursor();
+        mpFilterButton->draw();
+        ShowCursor();
+    }
 }
 
 void ScGridWindow::UpdateAutoFilterFromMenu()
@@ -1980,20 +2007,6 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
     if (nMouseStatus == SC_GM_FILTER)
     {
-        if ( pFilterBox && pFilterBox->GetMode() == SC_FILTERBOX_FILTER )
-        {
-            if (mpFilterButton)
-            {
-                bool bFilterActive = IsAutoFilterActive(
-                    pFilterBox->GetCol(), pFilterBox->GetRow(), pViewData->GetTabNo() );
-
-                mpFilterButton->setHasHiddenMember(bFilterActive);
-                mpFilterButton->setPopupPressed(false);
-                HideCursor();
-                mpFilterButton->draw();
-                ShowCursor();
-            }
-        }
         nMouseStatus = SC_GM_NONE;
         ReleaseMouse();
         return;                         // da muss nix mehr passieren
@@ -2433,17 +2446,6 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
         {
             nButtonDown = 0;
             nMouseStatus = SC_GM_NONE;
-            if ( pFilterBox->GetMode() == SC_FILTERBOX_FILTER )
-            {
-                if (mpFilterButton)
-                {
-                    mpFilterButton->setHasHiddenMember(false);
-                    mpFilterButton->setPopupPressed(false);
-                    HideCursor();
-                    mpFilterButton->draw();
-                    ShowCursor();
-                }
-            }
             ReleaseMouse();
             pFilterBox->MouseButtonDown( MouseEvent( aRelPos, 1, MOUSE_SIMPLECLICK, MOUSE_LEFT ) );
             return;

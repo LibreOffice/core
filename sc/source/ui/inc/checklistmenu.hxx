@@ -66,6 +66,7 @@ public:
     explicit ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, sal_uInt16 nMenuStackLevel = 0);
     virtual ~ScMenuFloatingWindow();
 
+    virtual void PopupModeEnd();
     virtual void MouseMove(const MouseEvent& rMEvt);
     virtual void MouseButtonDown(const MouseEvent& rMEvt);
     virtual void MouseButtonUp(const MouseEvent& rMEvt);
@@ -90,6 +91,7 @@ public:
     ScMenuFloatingWindow* getParentMenuWindow() const;
 
 protected:
+    virtual void handlePopupEnd();
 
     Size getMenuSize() const;
     void drawMenuItem(size_t nPos);
@@ -150,8 +152,6 @@ private:
      * window.  This method is called e.g. when a menu action is fired.
      */
     void terminateAllPopupMenus();
-
-    DECL_LINK( PopupEndHdl, void* );
 
 private:
 
@@ -249,6 +249,10 @@ public:
     ExtendedData* getExtendedData();
 
     void setOKAction(Action* p);
+    void setPopupEndAction(Action* p);
+
+protected:
+    virtual void handlePopupEnd();
 
 private:
     struct Member
@@ -312,6 +316,7 @@ private:
     ::std::vector<Member>           maMembers;
     boost::scoped_ptr<ExtendedData> mpExtendedData;
     boost::scoped_ptr<Action>       mpOKAction;
+    boost::scoped_ptr<Action>       mpPopupEndAction;
 
     Size maWndSize;  /// whole window size.
     Size maMenuSize; /// size of all menu items combined.
