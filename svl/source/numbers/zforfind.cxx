@@ -84,6 +84,8 @@ ImpSvNumberInputScan::ImpSvNumberInputScan( SvNumberFormatter* pFormatterP )
         :
         pUpperMonthText( NULL ),
         pUpperAbbrevMonthText( NULL ),
+        pUpperGenitiveMonthText( NULL ),
+        pUpperGenitiveAbbrevMonthText( NULL ),
         pUpperDayText( NULL ),
         pUpperAbbrevDayText( NULL ),
         eScannedType( NUMBERFORMAT_UNDEFINED ),
@@ -106,6 +108,8 @@ ImpSvNumberInputScan::~ImpSvNumberInputScan()
     delete pNullDate;
     delete [] pUpperMonthText;
     delete [] pUpperAbbrevMonthText;
+    delete [] pUpperGenitiveMonthText;
+    delete [] pUpperGenitiveAbbrevMonthText;
     delete [] pUpperDayText;
     delete [] pUpperAbbrevDayText;
 }
@@ -556,14 +560,26 @@ short ImpSvNumberInputScan::GetMonth( const String& rString, xub_StrLen& nPos )
         sal_Int16 nMonths = pFormatter->GetCalendar()->getNumberOfMonthsInYear();
         for ( sal_Int16 i = 0; i < nMonths; i++ )
         {
-            if ( StringContains( pUpperMonthText[i], rString, nPos ) )
-            {                                           // full names first
+            if ( StringContains( pUpperGenitiveMonthText[i], rString, nPos ) )
+            {                                           // genitive full names first
+                nPos = nPos + pUpperGenitiveMonthText[i].Len();
+                res = i+1;
+                break;  // for
+            }
+            else if ( StringContains( pUpperGenitiveAbbrevMonthText[i], rString, nPos ) )
+            {                                           // genitive abbreviated
+                nPos = nPos + pUpperGenitiveAbbrevMonthText[i].Len();
+                res = sal::static_int_cast< short >(-(i+1)); // negative
+                break;  // for
+            }
+            else if ( StringContains( pUpperMonthText[i], rString, nPos ) )
+            {                                           // noun full names
                 nPos = nPos + pUpperMonthText[i].Len();
                 res = i+1;
                 break;  // for
             }
             else if ( StringContains( pUpperAbbrevMonthText[i], rString, nPos ) )
-            {                                           // abbreviated
+            {                                           // noun abbreviated
                 nPos = nPos + pUpperAbbrevMonthText[i].Len();
                 res = sal::static_int_cast< short >(-(i+1)); // negative
                 break;  // for
@@ -2412,6 +2428,7 @@ void ImpSvNumberInputScan::InitText()
     sal_Int32 j, nElems;
     const CharClass* pChrCls = pFormatter->GetCharClass();
     const CalendarWrapper* pCal = pFormatter->GetCalendar();
+
     delete [] pUpperMonthText;
     delete [] pUpperAbbrevMonthText;
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > xElems
@@ -2424,6 +2441,19 @@ void ImpSvNumberInputScan::InitText()
         pUpperMonthText[j] = pChrCls->upper( xElems[j].FullName );
         pUpperAbbrevMonthText[j] = pChrCls->upper( xElems[j].AbbrevName );
     }
+
+    delete [] pUpperGenitiveMonthText;
+    delete [] pUpperGenitiveAbbrevMonthText;
+    xElems = pCal->getGenitiveMonths();
+    nElems = xElems.getLength();
+    pUpperGenitiveMonthText = new String[nElems];
+    pUpperGenitiveAbbrevMonthText = new String[nElems];
+    for ( j=0; j<nElems; j++ )
+    {
+        pUpperGenitiveMonthText[j] = pChrCls->upper( xElems[j].FullName );
+        pUpperGenitiveAbbrevMonthText[j] = pChrCls->upper( xElems[j].AbbrevName );
+    }
+
     delete [] pUpperDayText;
     delete [] pUpperAbbrevDayText;
     xElems = pCal->getDays();
@@ -2435,6 +2465,7 @@ void ImpSvNumberInputScan::InitText()
         pUpperDayText[j] = pChrCls->upper( xElems[j].FullName );
         pUpperAbbrevDayText[j] = pChrCls->upper( xElems[j].AbbrevName );
     }
+
     bTextInitialized = true;
 }
 

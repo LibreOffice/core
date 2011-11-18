@@ -2942,6 +2942,33 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
     return bRes;
 }
 
+
+/** If a day of month occurs within the format, the month name is in possessive 
+    genitive case.
+ */
+bool SvNumberformat::ImpUseGenitiveMonth( int & io_nState, const ImpSvNumFor& rNumFor ) const
+{
+    if (io_nState)
+        return io_nState == 1;
+
+    const ImpSvNumberformatInfo& rInfo = rNumFor.Info();
+    const sal_uInt16 nAnz = rNumFor.GetCount();
+    sal_uInt16 i;
+    for ( i = 0; i < nAnz; i++ )
+    {
+        switch ( rInfo.nTypeArray[i] )
+        {
+            case NF_KEY_D :
+            case NF_KEY_DD :
+                io_nState = 1;
+                return true;
+        }
+    }
+    io_nState = 2;
+    return false;
+}
+
+
 bool SvNumberformat::ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const
 {
     if ( GetCal().getUniqueID() != Gregorian::get() )
@@ -3101,6 +3128,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
     double fDiff = DateTime(*(rScan.GetNullDate())) - rCal.getEpochStart();
     fNumber += fDiff;
     rCal.setLocalDateTime( fNumber );
+    int nUseGenitiveMonth = 0;  // not decided yet
     String aOrgCalendar;        // empty => not changed yet
     double fOrgDateTime;
     bool bOtherCalendar = ImpIsOtherCalendar( NumFor[nIx] );
@@ -3154,11 +3182,15 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             break;
             case NF_KEY_MMM:                // MMM
                 OutString += rCal.getDisplayString(
-                        CalendarDisplayCode::SHORT_MONTH_NAME, nNatNum );
+                        (ImpUseGenitiveMonth( nUseGenitiveMonth, NumFor[nIx]) ?
+                         CalendarDisplayCode::SHORT_GENITIVE_MONTH_NAME :
+                         CalendarDisplayCode::SHORT_MONTH_NAME), nNatNum );
             break;
             case NF_KEY_MMMM:               // MMMM
                 OutString += rCal.getDisplayString(
-                        CalendarDisplayCode::LONG_MONTH_NAME, nNatNum );
+                        (ImpUseGenitiveMonth( nUseGenitiveMonth, NumFor[nIx]) ?
+                         CalendarDisplayCode::LONG_GENITIVE_MONTH_NAME :
+                         CalendarDisplayCode::LONG_MONTH_NAME), nNatNum );
             break;
             case NF_KEY_MMMMM:              // MMMMM
                 OutString += rCal.getDisplayString(
@@ -3309,6 +3341,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     }
     rCal.setLocalDateTime( fNumber );
 
+    int nUseGenitiveMonth = 0;  // not decided yet
     String aOrgCalendar;        // empty => not changed yet
     double fOrgDateTime;
     bool bOtherCalendar = ImpIsOtherCalendar( NumFor[nIx] );
@@ -3476,11 +3509,15 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             break;
             case NF_KEY_MMM:                // MMM
                 OutString += rCal.getDisplayString(
-                        CalendarDisplayCode::SHORT_MONTH_NAME, nNatNum );
+                        (ImpUseGenitiveMonth( nUseGenitiveMonth, NumFor[nIx]) ?
+                         CalendarDisplayCode::SHORT_GENITIVE_MONTH_NAME :
+                         CalendarDisplayCode::SHORT_MONTH_NAME), nNatNum );
             break;
             case NF_KEY_MMMM:               // MMMM
                 OutString += rCal.getDisplayString(
-                        CalendarDisplayCode::LONG_MONTH_NAME, nNatNum );
+                        (ImpUseGenitiveMonth( nUseGenitiveMonth, NumFor[nIx]) ?
+                         CalendarDisplayCode::LONG_GENITIVE_MONTH_NAME :
+                         CalendarDisplayCode::LONG_MONTH_NAME), nNatNum );
             break;
             case NF_KEY_MMMMM:              // MMMMM
                 OutString += rCal.getDisplayString(

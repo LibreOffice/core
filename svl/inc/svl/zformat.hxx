@@ -476,6 +476,15 @@ private:
 
     SVL_DLLPRIVATE bool ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const;
 
+    /** Whether to use possessive genitive case month name instead of noun.
+        @param io_nState
+            0: execute check, set to 1 if true is returned, set to 2 if false 
+               is returned <br>
+            1: don't execute check, return true <br>
+            2: don't execute check, return false <br>
+     */
+    SVL_DLLPRIVATE bool ImpUseGenitiveMonth( int & io_nState, const ImpSvNumFor& rNumFor ) const;
+
 #ifdef THE_FUTURE
     SVL_DLLPRIVATE bool ImpSwitchToSpecifiedCalendar( String& rOrgCalendar,
             double& fOrgDateTime, const ImpSvNumFor& rNumFor ) const;
