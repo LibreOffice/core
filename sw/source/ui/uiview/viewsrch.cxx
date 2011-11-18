@@ -30,6 +30,9 @@
 #include "precompiled_sw.hxx"
 
 #include <string>
+
+#include <boost/scoped_ptr.hpp>
+
 #include <hintids.hxx>
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <svl/cjkoptions.hxx>
@@ -57,6 +60,8 @@
 #include <uitool.hxx>
 #include <cmdid.h>
 #include <docsh.hxx>
+#include <doc.hxx>
+#include <unocrsr.hxx>
 
 #include <view.hrc>
 #include <SwRewriter.hxx>
@@ -283,7 +288,14 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
             case SVX_SEARCHCMD_REPLACE_ALL:
                 {
                     SwSearchOptions aOpts( pWrtShell, pSrchItem->GetBackward() );
-                    SwCrsrSaveState aSaveCursor( *pWrtShell->GetSwCrsr());
+
+                    // Fix for i#8288: "Replace all" should leave the cursor at the place it was
+                    // before executing the command, rather than at the site of the final replacement.
+                    // To do this take note of the current cursor position before replace all begins:
+                    // note: must be stored so that it is corrected by PamCorr*
+                    ::boost::scoped_ptr<SwUnoCrsr> const pTmpCursor(
+                            pWrtShell->GetDoc()->CreateUnoCrsr(
+                                *pWrtShell->GetSwCrsr()->GetPoint()));
 
                     if( !pSrchItem->GetSelection() )
                     {
@@ -304,7 +316,8 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                         pWrtShell->StartAllAction();
                         nFound = FUNC_Search( aOpts );
                         // #i8288# Now that everything has been replaced, restore the original cursor position.
-                        pWrtShell->GetSwCrsr()->RestoreSavePos();  // (position saved by SwCrsrSaveState above)
+                        *(pWrtShell->GetSwCrsr()->GetPoint()) =
+                            *pTmpCursor->GetPoint();
                         pWrtShell->EndAllAction();
                     }
 
