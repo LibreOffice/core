@@ -26,39 +26,29 @@
  */
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/UnexpectedEOFException.hpp>
-#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <editeng/borderline.hxx>
-#include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/tencinfo.h>
 #include <svl/lngmisc.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
 
 #include <doctok/sprmids.hxx> // NS_sprm namespace
 #include <doctok/resourceids.hxx> // NS_rtf namespace
 #include <ooxml/resourceids.hxx> // NS_ooxml namespace
 #include <ooxml/OOXMLFastTokens.hxx> // ooxml namespace
 
-#include <rtfdocumentimpl.hxx>
 #include <rtfsdrimport.hxx>
 #include <rtftokenizer.hxx>
 #include <rtfcharsets.hxx>
-#include <rtfcontrolwords.hxx>
-#include <rtfvalue.hxx>
-#include <rtfsprm.hxx>
 #include <rtfreferenceproperties.hxx>
 #include <rtfskipdestination.hxx>
 #include <rtffly.hxx>

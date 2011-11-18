@@ -28,21 +28,16 @@
 #ifndef _RTFDOCUMENTIMPL_HXX_
 #define _RTFDOCUMENTIMPL_HXX_
 
-#include <memory>
 #include <stack>
-#include <vector>
 #include <queue>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <oox/helper/graphichelper.hxx>
-#include <oox/helper/storagebase.hxx>
 #include <rtl/strbuf.hxx>
 
-#include <resourcemodel/WW8ResourceModel.hxx>
 #include <rtftok/RTFDocument.hxx>
-#include <rtfcontrolwords.hxx>
 #include <rtfreferencetable.hxx>
 #include <rtfsprm.hxx>
 
