@@ -10,7 +10,7 @@
             </node>
             <node oor:name=".uno:ShowLines" oor:op="replace">
                  <prop oor:name="Label" oor:type="xs:string">
-                     <value xml:lang="en-US">Display Source Line Number...</value>
+                     <value xml:lang="en-US">Display Source Line Number</value>
                  </prop>
             </node>
 
