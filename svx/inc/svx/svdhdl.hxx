@@ -151,8 +151,7 @@ class SVX_DLLPUBLIC SdrHdl
     friend class                SdrMarkView; // fuer den Zugriff auf nObjHdlNum
     friend class                SdrHdlList;
 
-    // #101928#
-    BitmapEx ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd);
+    static BitmapEx ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd);
 
 protected:
     SdrObject*                  pObj;      // Gehoert das Handle zu einem Objekt?
@@ -254,6 +253,9 @@ public:
     virtual void onMouseLeave();
 
     bool isMouseOver() const;
+
+    static BitmapEx createGluePointBitmap() { return ImpGetBitmapEx(Glue_Deselected, 0); }
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

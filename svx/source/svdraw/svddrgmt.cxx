@@ -290,12 +290,9 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragEntryPointGlueDrag::create
         }
         else
         {
-            const basegfx::BColor aBackPen(1.0, 1.0, 1.0);
-            const basegfx::BColor aRGBFrontColor(0.0, 0.0, 1.0); // COL_LIGHTBLUE
             drawinglayer::primitive2d::Primitive2DReference aMarkerArrayPrimitive2D(
                 new drawinglayer::primitive2d::MarkerArrayPrimitive2D(aTransformedPositions,
-                    drawinglayer::primitive2d::createDefaultGluepoint_7x7(aBackPen, aRGBFrontColor)));
-
+                                                                      SdrHdl::createGluePointBitmap()));
             aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aMarkerArrayPrimitive2D, 1);
         }
     }

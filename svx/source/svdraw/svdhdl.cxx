@@ -268,14 +268,6 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrHdlBitmapSet& getModernSet()
-{
-    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aModernSet(new SdrHdlBitmapSet(SIP_SA_MARKERS));
-    return *aModernSet.get();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 SdrHdl::SdrHdl():
     pObj(NULL),
     pPV(NULL),
@@ -635,10 +627,10 @@ BitmapMarkerKind SdrHdl::GetNextBigger(BitmapMarkerKind eKnd) const
     return eRetval;
 }
 
-// #101928#
 BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd)
 {
-    return getModernSet().GetBitmapEx(eKindOfMarker, nInd);
+    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aModernSet(new SdrHdlBitmapSet(SIP_SA_MARKERS));
+    return aModernSet.get()->GetBitmapEx(eKindOfMarker, nInd);
 }
 
 ::sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(

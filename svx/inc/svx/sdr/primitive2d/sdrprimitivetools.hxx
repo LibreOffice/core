@@ -48,9 +48,6 @@ namespace drawinglayer
     {
         // create a 3x3 cross in given color as BitmapEx
         BitmapEx createDefaultCross_3x3(const basegfx::BColor& rBColor);
-
-        // create a 7x7 gluepoint symbol in given colors as BitmapEx
-        BitmapEx createDefaultGluepoint_7x7(const basegfx::BColor& rBColorA, const basegfx::BColor& rBColorB);
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
