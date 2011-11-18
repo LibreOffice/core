@@ -122,9 +122,16 @@ IMPL_LINK_INLINE_END( ScNamePasteDlg, ListDblClickHdl, ListBox *, pListBox )
 
 //------------------------------------------------------------------
 
-String ScNamePasteDlg::GetSelectedName() const
+std::vector<rtl::OUString> ScNamePasteDlg::GetSelectedNames() const
 {
-    return aNameList.GetSelectEntry();
+    std::vector<rtl::OUString> aSelectedNames;
+    aSelectedNames.push_back(aNameList.GetSelectEntry());
+    return aSelectedNames;
+}
+
+bool ScNamePasteDlg::IsAllSelected() const
+{
+    return false;
 }
 
 

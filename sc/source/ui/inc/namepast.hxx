@@ -34,6 +34,8 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 
+#include <vector>
+
 #include "scui_def.hxx"
 class ScRangeName;
 
@@ -53,7 +55,8 @@ protected:
 public:
     ScNamePasteDlg( Window * pParent, const ScRangeName* pList, const ScRangeName* pLocalList, bool bInsList=true );
 
-    String          GetSelectedName() const;
+    std::vector<rtl::OUString> GetSelectedNames() const;
+    bool            IsAllSelected() const;
 };
 
 

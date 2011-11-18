@@ -9,8 +9,10 @@
 
 
 
-ScNameDefDlg::ScNameDefDlg( Window* pParent, ScDocument* pDoc, std::map<rtl::OUString, ScRangeName*> aRangeMap, const ScAddress& aCursorPos, const bool bUndo ) :
-    ModalDialog( pParent, ScResId( RID_SCDLG_NAMES_DEFINE) ),
+ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+        ScDocument* pDoc, std::map<rtl::OUString, ScRangeName*> aRangeMap,
+        const ScAddress& aCursorPos, const bool bUndo ) :
+    ScAnyRefDlg( pB, pCW, pParent, RID_SCDLG_NAMES_DEFINE ),
     maBtnAdd( this, ScResId( BTN_ADD ) ),
     maBtnCancel( this, ScResId( BTN_CANCEL ) ),
     maFtInfo( this, ScResId( FT_INFO ) ),

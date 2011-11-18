@@ -94,6 +94,8 @@
 #include "scui_def.hxx"
 #include "scabstdlg.hxx"
 
+#include <iostream>
+
 
 using namespace ::com::sun::star;
 
@@ -439,29 +441,15 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
                 if ( nRet == BTN_PASTE_NAME )
                 {
-                    String aName = pDlg->GetSelectedName();
-                    pTableView->InsertText(aName);
+                    std::vector<rtl::OUString> aNames = pDlg->GetSelectedNames();
+                    pTableView->InsertText(aNames.at(0));
                     if (pTopView)
-                        pTopView->InsertText(aName);
+                        pTopView->InsertText(aNames.at(0));
                 }
                 delete pDlg;
 
                 if (pTopView)
                     pTopView->GetWindow()->GrabFocus();
-            }
-            break;
-
-        case FID_ADD_NAME:
-            {
-                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-
-                ScDocument* pDoc = pViewData->GetDocument();
-                std::map<rtl::OUString, ScRangeName*> aRangeMap;
-                pDoc->GetRangeNameMap(aRangeMap);
-                ScAddress aPos( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() );
-                AbstractScNameAddDlg* pDlg = pFact->CreateScNameAddDlg( pViewData->GetDialogParent(), pDoc, aRangeMap, aPos, true, RID_SCDLG_NAMES_DEFINE );
-                pDlg->Execute();
-                delete pDlg;
             }
             break;
 

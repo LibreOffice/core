@@ -1828,27 +1828,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 //  "=" in KeyEvent, switches to input-mode
                                 pScMod->InputKeyEvent( KeyEvent('=',KeyCode()) );
 
-                                String aName = pDlg->GetSelectedName();
-                                pHdl->InsertFunction( aName, false );       // without "()"
+                                std::vector<rtl::OUString> aNames = pDlg->GetSelectedNames();
+                                pHdl->InsertFunction( aNames.at(0), false );       // without "()"
                             }
                         }
                         break;
                 }
-                delete pDlg;
-            }
-            break;
-
-        case FID_ADD_NAME:
-            {
-                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-
-                std::cout << "Create Dialog in cellsh1.cxx" << std::endl;
-                ScDocument* pDoc = GetViewData()->GetDocument();
-                std::map<rtl::OUString, ScRangeName*> aRangeMap;
-                pDoc->GetRangeNameMap(aRangeMap);
-                ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
-                AbstractScNameAddDlg* pDlg = pFact->CreateScNameAddDlg( pTabViewShell->GetDialogParent(), pDoc, aRangeMap, aPos, true, RID_SCDLG_NAMES_DEFINE );
-                pDlg->Execute();
                 delete pDlg;
             }
             break;

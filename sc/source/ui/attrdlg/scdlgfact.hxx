@@ -283,12 +283,8 @@ class AbstractScNameCreateDlg_Impl : public AbstractScNameCreateDlg  //add for S
 class AbstractScNamePasteDlg_Impl : public AbstractScNamePasteDlg  //add for ScNamePasteDlg
 {
     DECL_ABSTDLG_BASE( AbstractScNamePasteDlg_Impl, ScNamePasteDlg )
-    virtual String          GetSelectedName() const;
-};
-
-class AbstractScNameAddDlg_Impl : public AbstractScNameAddDlg // Define Name
-{
-    DECL_ABSTDLG_BASE( AbstractScNameAddDlg_Impl, ScNameDefDlg )
+    virtual std::vector<rtl::OUString>          GetSelectedNames() const;
+    virtual bool                                IsAllSelected() const;
 };
 
 class AbstractScPivotFilterDlg_Impl : public AbstractScPivotFilterDlg  //add for ScPivotFilterDlg
@@ -491,9 +487,6 @@ public:
 
     virtual AbstractScNamePasteDlg * CreateScNamePasteDlg ( Window * pParent, const ScRangeName* pList, //add for ScNamePasteDlg
                                                             const ScRangeName* pLocalList, int nId , bool bInsList=true );
-
-    virtual AbstractScNameAddDlg* CreateScNameAddDlg ( Window* pParent, ScDocument* pDoc, std::map<rtl::OUString, ScRangeName*> aRangeMap,
-                                                                const ScAddress& aCursorPos, const bool bUndo, int nId);
 
     virtual AbstractScPivotFilterDlg * CreateScPivotFilterDlg ( Window* pParent, //add for ScPivotFilterDlg
                                                                 const SfxItemSet&   rArgSet, sal_uInt16 nSourceTab , int nId );

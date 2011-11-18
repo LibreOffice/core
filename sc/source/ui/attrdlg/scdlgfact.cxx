@@ -107,7 +107,6 @@ IMPL_ABSTDLG_BASE(AbstractScMetricInputDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScMoveTableDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScNameCreateDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScNamePasteDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractScNameAddDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScPivotFilterDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDPFunctionDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDPSubtotalDlg_Impl);
@@ -508,12 +507,16 @@ sal_uInt16 AbstractScNameCreateDlg_Impl::GetFlags() const
 
 
 
-String AbstractScNamePasteDlg_Impl::GetSelectedName() const
+std::vector<rtl::OUString> AbstractScNamePasteDlg_Impl::GetSelectedNames() const
 {
-    return pDlg->GetSelectedName();
+    return pDlg->GetSelectedNames();
 }
 
 
+bool AbstractScNamePasteDlg_Impl::IsAllSelected() const
+{
+    return pDlg->IsAllSelected();
+}
 
 
 const ScQueryItem&   AbstractScPivotFilterDlg_Impl::GetOutputItem()
@@ -1148,23 +1151,6 @@ AbstractScNamePasteDlg * ScAbstractDialogFactory_Impl::CreateScNamePasteDlg ( Wi
 
     if ( pDlg )
         return new AbstractScNamePasteDlg_Impl( pDlg );
-    return 0;
-}
-
-
-AbstractScNameAddDlg* ScAbstractDialogFactory_Impl::CreateScNameAddDlg( Window* pParent, ScDocument* pDoc, std::map<rtl::OUString, ScRangeName*> aRangeMap, const ScAddress& aCursorPos, const bool bUndo, int nId)
-{
-    ScNameDefDlg* pDlg = NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_NAMES_DEFINE :
-            pDlg = new ScNameDefDlg( pParent, pDoc, aRangeMap, aCursorPos, bUndo );
-            break;
-        default:
-            break;
-    }
-    if ( pDlg )
-        return new AbstractScNameAddDlg_Impl( pDlg );
     return 0;
 }
 

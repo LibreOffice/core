@@ -38,7 +38,7 @@
 class ScRangeName;
 class ScDocument;
 
-class ScNameDefDlg : public ModalDialog
+class ScNameDefDlg : public ScAnyRefDlg
 {
 private:
     PushButton maBtnAdd;
@@ -77,9 +77,10 @@ private:
     DECL_LINK( AddBtnHdl, void* );
     DECL_LINK( NameModifyHdl, void* );
 public:
-    ScNameDefDlg(Window* pParent, ScDocument* pDoc, std::map<rtl::OUString, ScRangeName*> aRangeMap, const ScAddress& aCursorPos, const bool bUndo);
+    ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+                    ScDocument* pDoc, std::map<rtl::OUString, ScRangeName*> aRangeMap,
+                    const ScAddress& aCursorPos, const bool bUndo);
 
 };
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

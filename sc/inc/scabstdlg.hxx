@@ -230,12 +230,8 @@ public:
 class AbstractScNamePasteDlg : public VclAbstractDialog  //add for ScNamePasteDlg
 {
 public:
-    virtual String          GetSelectedName() const = 0;
-};
-
-class AbstractScNameAddDlg : public VclAbstractDialog // Define Name Dialog
-{
-public:
+    virtual std::vector<rtl::OUString> GetSelectedNames() const = 0;
+    virtual bool                IsAllSelected() const = 0;
 };
 
 class AbstractScPivotFilterDlg : public VclAbstractDialog  //add for ScPivotFilterDlg
@@ -423,9 +419,6 @@ public:
 
     virtual AbstractScNamePasteDlg * CreateScNamePasteDlg ( Window * pParent, const ScRangeName* pList, //add for ScNamePasteDlg
                                                             const ScRangeName* pLocalList, int nId , bool bInsList=true ) = 0;
-
-    virtual AbstractScNameAddDlg* CreateScNameAddDlg ( Window* pParent, ScDocument* pDoc, std::map<rtl::OUString, ScRangeName*> aRangeMap,
-                                                                const ScAddress& aCursorPos, const bool bUndo, int nId) = 0;
 
     virtual AbstractScPivotFilterDlg * CreateScPivotFilterDlg ( Window* pParent, //add for ScPivotFilterDlg
                                                                 const SfxItemSet&   rArgSet, sal_uInt16 nSourceTab , int nId ) = 0;

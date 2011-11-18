@@ -402,7 +402,9 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/miscdlgs/solvrdlg \
 	sc/source/ui/miscdlgs/tabopdlg \
 	sc/source/ui/miscdlgs/warnbox \
+	sc/source/ui/namedlg/namedefdlg \
 	sc/source/ui/namedlg/namedlg \
+	sc/source/ui/namedlg/namemgrtable \
 	sc/source/ui/navipi/content \
 	sc/source/ui/navipi/navcitem \
 	sc/source/ui/navipi/navipi \

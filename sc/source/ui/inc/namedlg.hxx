@@ -35,10 +35,10 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/ctrl.hxx>
-#include <svtools/headbar.hxx>
-#include <svtools/svtabbx.hxx>
+
 #include "rangenam.hxx"
 #include "anyrefdg.hxx"
+#include "namemgrtable.hxx"
 
 #include <boost/ptr_container/ptr_map.hpp>
 #include <boost/ptr_container/ptr_set.hpp>
@@ -48,35 +48,8 @@
 
 class ScViewData;
 class ScDocument;
-struct ScNameDlgImpl;
 
-struct ScRangeNameLine
-{
-    rtl::OUString aName;
-    rtl::OUString aExpression;
-    rtl::OUString aScope;
-};
 
-//Implements the table for the manage names dialog
-//TODO: cache the lines for performance improvements
-//otherwise handling of a large set of range names might get extremely slow
-//Need some sort of a filter to handle several range names
-class ScRangeManagerTable : public SvTabListBox
-{
-private:
-    HeaderBar maHeaderBar;
-    ScRangeName* mpGlobalRangeName;
-    std::map<rtl::OUString, ScRangeName*> maTabRangeNames;
-    rtl::OUString maGlobalString;
-public:
-    ScRangeManagerTable( Window* pParent, ScRangeName* pGlobalRangeName, std::map<rtl::OUString, ScRangeName*> aTabRangeNames );
-    ~ScRangeManagerTable() {};
-
-    void addEntry( const ScRangeNameLine& rLine );
-
-    void GetCurrentLine(ScRangeNameLine& rLine);
-    void UpdateEntries();
-};
 
 class ScRangeManagerCtrl : public Control
 {
