@@ -4723,12 +4723,13 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 	return aStr;
 }
 
-//-----------------------------------------------------------------------------
+#if OSL_DEBUG_LEVEL > 1
 ::rtl::OUString OSQLParser::RuleIDToStr(sal_uInt32 nRuleID)
 {
 	OSL_ENSURE(nRuleID < SAL_N_ELEMENTS(yytname), "OSQLParser::RuleIDToStr: Invalid nRuleId!");
 	return ::rtl::OUString::createFromAscii(yytname[nRuleID]);
 }
+#endif
 
 //-----------------------------------------------------------------------------
 sal_uInt32 OSQLParser::StrToRuleID(const ::rtl::OString & rValue)

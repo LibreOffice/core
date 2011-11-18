@@ -214,11 +214,10 @@ namespace connectivity
         // TokenIDToStr: token name belonging to a token number.
         static ::rtl::OString TokenIDToStr(sal_uInt32 nTokenID, const IParseContext* pContext = NULL);
 
-        // StrToTokenID: token number belonging to a token name.
-        // static sal_uInt32 StrToTokenID(const ::rtl::OString & rName);
-
+#if OSL_DEBUG_LEVEL > 1
         // (empty string if not found)
         static ::rtl::OUString RuleIDToStr(sal_uInt32 nRuleID);
+#endif
 
         // StrToRuleID calculates the RuleID for a ::rtl::OUString (that is, ::com::sun::star::sdbcx::Index in yytname)
         // (0 if not found). The search for an ID based on a String is
