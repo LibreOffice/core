@@ -48,6 +48,12 @@ struct ScQueryParam;
 
 class ScXMLFilterContext : public SvXMLImportContext
 {
+    struct ConnStackItem
+    {
+        bool mbOr;
+        int  mnCondCount;
+        ConnStackItem(bool bOr);
+    };
     ScQueryParam& mrQueryParam;
     ScXMLDatabaseRangeContext* pDatabaseRangeContext;
 
@@ -59,10 +65,8 @@ class ScXMLFilterContext : public SvXMLImportContext
     bool        bCopyOutputData;
     bool        bUseRegularExpressions;
     bool        bEnabledUserList;
-    bool        bConnectionOr;
-    bool        bNextConnectionOr;
     bool        bConditionSourceRange;
-    std::vector<bool> maOrConnectionStack;
+    std::vector<ConnStackItem> maConnStack;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }

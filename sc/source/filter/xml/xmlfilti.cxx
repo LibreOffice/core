@@ -50,7 +50,7 @@ using namespace xmloff::token;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
 
-//------------------------------------------------------------------
+ScXMLFilterContext::ConnStackItem::ConnStackItem(bool bOr) : mbOr(bOr), mnCondCount(0) {}
 
 ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
                                         sal_uInt16 nPrfx,
@@ -65,8 +65,6 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
     bSkipDuplicates(false),
     bCopyOutputData(false),
     bUseRegularExpressions(false),
-    bConnectionOr(true),
-    bNextConnectionOr(true),
     bConditionSourceRange(false)
 {
     ScDocument* pDoc(GetScImport().GetDocument());
@@ -184,25 +182,37 @@ void ScXMLFilterContext::SetUseRegularExpressions(bool b)
 
 void ScXMLFilterContext::OpenConnection(bool b)
 {
-    bool bTemp = bConnectionOr;
-    bConnectionOr = bNextConnectionOr;
-    bNextConnectionOr = b;
-    maOrConnectionStack.push_back(bTemp);
+    maConnStack.push_back(ConnStackItem(b));
 }
 
 void ScXMLFilterContext::CloseConnection()
 {
-    bool bTemp = maOrConnectionStack.back();
-    maOrConnectionStack.pop_back();
-    bConnectionOr = bTemp;
-    bNextConnectionOr = bTemp;
+    maConnStack.pop_back();
 }
 
 bool ScXMLFilterContext::GetConnection()
 {
-    bool bTemp = bConnectionOr;
-    bConnectionOr = bNextConnectionOr;
-    return bTemp;
+    // For condition items in each stack, the first one gets the connection of
+    // the last stack, while the rest of them get that of the current stack.
+
+    if (maConnStack.empty())
+        // This should never happen.
+        return true;
+
+    ConnStackItem& rItem = maConnStack.back();
+    if (rItem.mnCondCount)
+        // secondary item gets the current connection.
+        return rItem.mbOr;
+
+    if (maConnStack.size() < 2)
+        // There is no last stack.  Likely the first condition in the first
+        // stack whose connection is not used.
+        return true;
+
+    ++rItem.mnCondCount;
+    std::vector<ConnStackItem>::reverse_iterator itr = maConnStack.rbegin();
+    ++itr;
+    return itr->mbOr; // connection of the last stack.
 }
 
 void ScXMLFilterContext::AddFilterField(const sheet::TableFilterField2& aFilterField)
