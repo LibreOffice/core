@@ -492,7 +492,8 @@ public:
     virtual AbstractScNamePasteDlg * CreateScNamePasteDlg ( Window * pParent, const ScRangeName* pList, //add for ScNamePasteDlg
                                                             const ScRangeName* pLocalList, int nId , bool bInsList=true );
 
-    virtual AbstractScNameAddDlg* CreateScNameAddDlg ( Window* pParent, ScDocument* pDoc, int nId);
+    virtual AbstractScNameAddDlg* CreateScNameAddDlg ( Window* pParent, ScDocument* pDoc, std::map<rtl::OUString, ScRangeName*> aRangeMap,
+                                                                const ScAddress& aCursorPos, const bool bUndo, int nId);
 
     virtual AbstractScPivotFilterDlg * CreateScPivotFilterDlg ( Window* pParent, //add for ScPivotFilterDlg
                                                                 const SfxItemSet&   rArgSet, sal_uInt16 nSourceTab , int nId );

@@ -113,6 +113,17 @@ ModalDialog RID_SCDLG_NAMES_DEFINE
     {
         Text [ en-US ] = "Document (Global)" ;
     };
-
+    String STR_INVALIDSYMBOL
+    {
+        Text [ en-US ] = "Invalid expression" ;
+    };
+    String STR_ERR_NAME_EXISTS
+    {
+        Text [ en-US ] = "Invalid name. Already in use for the selected scope.";
+    };
+    String STR_ERR_NAME_INVALID
+    {
+        Text [ en-US ] = "Invalid name. Only use letters, numbers and underscore and don't use names like cell addresses";
+    };
 
 };

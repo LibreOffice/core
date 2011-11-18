@@ -456,7 +456,10 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
                 ScDocument* pDoc = pViewData->GetDocument();
-                AbstractScNameAddDlg* pDlg = pFact->CreateScNameAddDlg( pViewData->GetDialogParent(), pDoc, RID_SCDLG_NAMES_DEFINE );
+                std::map<rtl::OUString, ScRangeName*> aRangeMap;
+                pDoc->GetRangeNameMap(aRangeMap);
+                ScAddress aPos( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() );
+                AbstractScNameAddDlg* pDlg = pFact->CreateScNameAddDlg( pViewData->GetDialogParent(), pDoc, aRangeMap, aPos, true, RID_SCDLG_NAMES_DEFINE );
                 pDlg->Execute();
                 delete pDlg;
             }

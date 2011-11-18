@@ -33,6 +33,9 @@
 #include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
 
+#include <map>
+
+class ScRangeName;
 class ScDocument;
 
 class ScNameDefDlg : public ModalDialog
@@ -51,13 +54,30 @@ private:
 
     ListBox maLbScope;
 
+    CheckBox maBtnRowHeader;
+    CheckBox maBtnColHeader;
+    CheckBox maBtnPrintArea;
+    CheckBox maBtnCriteria;
+
+
+    bool mbUndo; //if true we need to add an undo action after creating a range name
+    ScDocument* mpDoc;
+
+    ScAddress maCursorPos;
     rtl::OUString maGlobalNameStr;
 
+    std::map<rtl::OUString, ScRangeName*> maRangeMap;
+
     void CancelPushed();
+    void AddPushed();
+
+    bool IsNameValid();
 
     DECL_LINK( CancelBtnHdl, void * );
+    DECL_LINK( AddBtnHdl, void* );
+    DECL_LINK( NameModifyHdl, void* );
 public:
-    ScNameDefDlg(Window* pParent, ScDocument* pDoc);
+    ScNameDefDlg(Window* pParent, ScDocument* pDoc, std::map<rtl::OUString, ScRangeName*> aRangeMap, const ScAddress& aCursorPos, const bool bUndo);
 
 };
 

@@ -1844,7 +1844,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 std::cout << "Create Dialog in cellsh1.cxx" << std::endl;
                 ScDocument* pDoc = GetViewData()->GetDocument();
-                AbstractScNameAddDlg* pDlg = pFact->CreateScNameAddDlg( pTabViewShell->GetDialogParent(), pDoc, RID_SCDLG_NAMES_DEFINE );
+                std::map<rtl::OUString, ScRangeName*> aRangeMap;
+                pDoc->GetRangeNameMap(aRangeMap);
+                ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
+                AbstractScNameAddDlg* pDlg = pFact->CreateScNameAddDlg( pTabViewShell->GetDialogParent(), pDoc, aRangeMap, aPos, true, RID_SCDLG_NAMES_DEFINE );
                 pDlg->Execute();
                 delete pDlg;
             }

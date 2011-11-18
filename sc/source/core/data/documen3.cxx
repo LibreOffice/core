@@ -85,6 +85,7 @@
 #include "sheetevents.hxx"
 #include "queryentry.hxx"
 
+#include "globalnames.hxx"
 #include <memory>
 
 using namespace com::sun::star;
@@ -141,6 +142,17 @@ void ScDocument::GetTabRangeNameMap(std::map<rtl::OUString, ScRangeName*>& aRang
         maTabs[i]->GetName(aTableName);
         aRangeNameMap.insert(std::pair<rtl::OUString, ScRangeName*>(aTableName,p));
     }
+}
+
+void ScDocument::GetRangeNameMap(std::map<rtl::OUString, ScRangeName*>& aRangeNameMap)
+{
+    GetTabRangeNameMap(aRangeNameMap);
+    if (!pRangeName)
+    {
+        pRangeName = new ScRangeName();
+    }
+    rtl::OUString aGlobal(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME));
+    aRangeNameMap.insert(std::pair<rtl::OUString, ScRangeName*>(aGlobal, pRangeName));
 }
 
 ScRangeName* ScDocument::GetRangeName(SCTAB nTab) const

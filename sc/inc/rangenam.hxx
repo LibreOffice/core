@@ -124,7 +124,7 @@ public:
     sal_uInt16    GetIndex() const                { return nIndex; }
     ScTokenArray*   GetCode()                       { return pCode; }
     const ScTokenArray* GetCode() const             { return pCode; }
-    sal_uInt16          GetErrCode() const;
+    SC_DLLPUBLIC sal_uInt16 GetErrCode() const;
     bool            HasReferences() const;
     void            SetDocument( ScDocument* pDocument){ pDoc = pDocument; }
     ScDocument*     GetDocument() const             { return pDoc; }
@@ -204,8 +204,8 @@ public:
     SC_DLLPUBLIC const ScRangeData* findByRange(const ScRange& rRange) const;
     SC_DLLPUBLIC ScRangeData* findByName(const rtl::OUString& rName);
     SC_DLLPUBLIC const ScRangeData* findByName(const rtl::OUString& rName) const;
-    ScRangeData* findByUpperName(const rtl::OUString& rName);
-    const ScRangeData* findByUpperName(const rtl::OUString& rName) const;
+    SC_DLLPUBLIC ScRangeData* findByUpperName(const rtl::OUString& rName);
+    SC_DLLPUBLIC const ScRangeData* findByUpperName(const rtl::OUString& rName) const;
     SC_DLLPUBLIC ScRangeData* findByIndex(sal_uInt16 i);
     void UpdateReference(UpdateRefMode eUpdateRefMode, const ScRange& rRange,
                          SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
