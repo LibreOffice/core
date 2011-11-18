@@ -269,7 +269,7 @@ String SCSTR_CONTENT_RANGENAME
 
 String SCSTR_CONTENT_DBAREA
 {
-    Text [ en-US ] = "Database Ranges" ;
+    Text [ en-US ] = "Database ranges" ;
 };
 
 String SCSTR_CONTENT_GRAPHIC
