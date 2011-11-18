@@ -54,6 +54,7 @@
 #include <tools/diagnose_ex.h>
 #include <basidesh.hrc>
 #include <basidesh.hxx>
+#include <baside2.hxx>
 #include <basdoc.hxx>
 #include <basobj.hxx>
 #include <bastypes.hxx>
@@ -288,11 +289,19 @@ BasicIDEShell::~BasicIDEShell()
 
 void BasicIDEShell::onDocumentCreated( const ScriptDocument& /*_rDocument*/ )
 {
+    if(pCurWin && pCurWin->IsA( TYPE(ModulWindow)))
+    {
+        dynamic_cast<ModulWindow*>(pCurWin)->SetLineNumberDisplay(SourceLinesDisplayed());
+    }
     UpdateWindows();
 }
 
 void BasicIDEShell::onDocumentOpened( const ScriptDocument& /*_rDocument*/ )
 {
+    if(pCurWin && pCurWin->IsA( TYPE(ModulWindow)))
+    {
+        dynamic_cast<ModulWindow*>(pCurWin)->SetLineNumberDisplay(SourceLinesDisplayed());
+    }
     UpdateWindows();
 }
 

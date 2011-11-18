@@ -1143,6 +1143,7 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, sal_Bool bUpdateTabBar
             AdjustPosSizePixel( Point( 0, 0 ), GetViewFrame()->GetWindow().GetOutputSizePixel() );
             if( pCurWin->IsA( TYPE( ModulWindow ) ) )
             {
+                dynamic_cast<ModulWindow*>(pCurWin)->SetLineNumberDisplay(SourceLinesDisplayed());
                 GetViewFrame()->GetWindow().SetHelpId( HID_BASICIDE_MODULWINDOW );
                 pModulLayout->SetModulWindow( (ModulWindow*)pCurWin );
                 pModulLayout->Show();
