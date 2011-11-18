@@ -588,7 +588,7 @@
             <desc>Indicates whether to show the autopilot when creating a new presentation.</desc>
             <label>Start with AutoPilots</label>
           </info>
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="Layout" oor:type="xs:boolean">
           <!-- OldPath: Impress/Other/New_Doc -->

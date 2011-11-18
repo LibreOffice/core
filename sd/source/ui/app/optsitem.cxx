@@ -488,7 +488,7 @@ SdOptionsMisc::SdOptionsMisc( sal_uInt16 nConfigId, sal_Bool bUseConfig ) :
                       OUString() ),
     nDefaultObjectSizeWidth(8000),
     nDefaultObjectSizeHeight(5000),
-    bStartWithTemplate( sal_True ),
+    bStartWithTemplate( sal_False ),
     bMarkedHitMovesAlways( sal_True ),
     bMoveOnlyDragging( sal_False ),
     bCrookNoContortion( sal_False ),
