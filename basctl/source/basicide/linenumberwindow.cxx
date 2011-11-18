@@ -57,8 +57,8 @@ void LineNumberWindow::Paint( const Rectangle& )
     }
 
     sal_Int64 y = (nStartLine - 1) * nLineHeight;
-    for(int i = nStartLine; i <= nEndLine; ++i, y += nLineHeight)
-        DrawText(Point(0, y - m_nCurYOffset), String::CreateFromInt32(i));
+    for(int n = nStartLine; n <= nEndLine; ++n, y += nLineHeight)
+        DrawText(Point(0, y - m_nCurYOffset), String::CreateFromInt32(n));
 }
 
 void LineNumberWindow::DataChanged(DataChangedEvent const & rDCEvt)
