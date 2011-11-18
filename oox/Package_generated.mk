@@ -28,7 +28,6 @@
 
 $(eval $(call gb_Package_Package,oox_generated,$(WORKDIR)/oox))
 
-$(eval $(call gb_Package_add_file,oox_generated,inc/oox/namespaces.txt,misc/namespaces.txt))
 $(eval $(call gb_Package_add_file,oox_generated,inc/oox/token/tokens.hxx,inc/oox/token/tokens.hxx))
 
 # vim: set noet sw=4 ts=4:

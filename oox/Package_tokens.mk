@@ -29,5 +29,6 @@
 $(eval $(call gb_Package_Package,oox_tokens,$(SRCDIR)/oox/source/token))
 
 $(eval $(call gb_Package_add_file,oox_tokens,inc/oox/tokens.txt,tokens.txt))
+$(eval $(call gb_Package_add_file,oox_tokens,inc/oox/namespaces.txt,namespaces.txt))
 
 # vim: set noet sw=4 ts=4:
