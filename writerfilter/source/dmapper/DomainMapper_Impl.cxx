@@ -2562,8 +2562,9 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_FILLIN       :
                     {
                         sal_Int32 nIndex = 0;
-                        xFieldProperties->setPropertyValue(
-                                rPropNameSupplier.GetName(PROP_HINT), uno::makeAny( pContext->GetCommand().getToken( 1, '\"', nIndex)));
+                        if (xFieldProperties.is())
+                            xFieldProperties->setPropertyValue(
+                                    rPropNameSupplier.GetName(PROP_HINT), uno::makeAny( pContext->GetCommand().getToken( 1, '\"', nIndex)));
                     }
                     break;
                     case FIELD_FILENAME:
