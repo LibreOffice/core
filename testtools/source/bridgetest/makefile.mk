@@ -83,7 +83,11 @@ SHL1STDLIBS= \
 SHL1LIBS=	$(LIB1TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
+.IF "$(GUI)"=="WNT"
 SHL1VERSIONMAP = $(SOLARENV)/src/component.map
+.ELSE # just a quick hack for GCC fdo#42865
+SHL1USE_EXPORTS = name
+.ENDIF
 
 # ---- test object ----
 
@@ -102,7 +106,12 @@ SHL2STDLIBS= \
 SHL2LIBS=	$(LIB2TARGET)
 SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=	$(SHL2TARGET)
+.IF "$(GUI)"=="WNT"
 SHL2VERSIONMAP = $(SOLARENV)/src/component.map
+.ELSE # just a quick hack for GCC fdo#42865
+SHL2USE_EXPORTS = name
+.ENDIF
+
 
 SHL3TARGET = $(ENFORCEDSHLPREFIX)constructors.uno
 SHL3OBJS = $(SLO)$/constructors.obj
