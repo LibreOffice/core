@@ -2724,6 +2724,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     break;
                     case FIELD_PAGEREF:
                     case FIELD_REF:
+                    if (xFieldProperties.is())
                     {
                         bool bPageRef = aIt->second.eFieldId == FIELD_PAGEREF;
                         ::rtl::OUString sBookmark = lcl_ExtractParameter(pContext->GetCommand(),
