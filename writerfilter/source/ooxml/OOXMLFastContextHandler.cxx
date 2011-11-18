@@ -2399,14 +2399,12 @@ void OOXMLFastContextHandlerMath::lcl_startFastElement(Token_t Element,
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     buffer.appendOpeningTag( Element, Attribs );
-    fprintf(stderr,"OPEN %d\n", Element);
 }
 
 void OOXMLFastContextHandlerMath::lcl_endFastElement(Token_t Element)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     buffer.appendClosingTag( Element );
-    fprintf(stderr,"CLOSE %d\n", Element);
 }
 
 uno::Reference< xml::sax::XFastContextHandler >
