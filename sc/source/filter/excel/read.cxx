@@ -1126,8 +1126,8 @@ FltError ImportExcel8::Read( void )
                     case 0x8C:  Country(); break;       // COUNTRY      [  345   ]
                     case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45   ]
                     case 0x9B:  FilterMode(); break;    // FILTERMODE
-                    case 0x9D:  AutoFilterInfo(); break;// AUTOFILTERINFO
-                    case 0x9E:  AutoFilter(); break;    // AUTOFILTER
+                    case EXC_ID_AUTOFILTERINFO: AutoFilterInfo(); break;// AUTOFILTERINFO
+                    case EXC_ID_AUTOFILTER: AutoFilter(); break;    // AUTOFILTER
                     case 0x0208: Row34(); break;        // ROW          [  34    ]
                     case EXC_ID2_ARRAY:
                     case EXC_ID3_ARRAY: Array34(); break;      // ARRAY        [  34    ]
