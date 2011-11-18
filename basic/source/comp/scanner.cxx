@@ -80,14 +80,14 @@ void SbiScanner::GenError( SbError code )
 {
     if( GetSbData()->bBlockCompilerError )
     {
-        bAbort = sal_True;
+        bAbort = true;
         return;
     }
     if( !bError && bErrors )
     {
-        sal_Bool bRes = sal_True;
+        bool bRes = true;
         // report only one error per statement
-        bError = sal_True;
+        bError = true;
         if( pBasic )
         {
             // in case of EXPECTED or UNEXPECTED it always refers
@@ -114,14 +114,15 @@ void SbiScanner::GenError( SbError code )
 
 
 // used by SbiTokenizer::MayBeLabel() to detect a label
-
-sal_Bool SbiScanner::DoesColonFollow()
+bool SbiScanner::DoesColonFollow()
 {
     if( pLine && *pLine == ':' )
     {
-        pLine++; nCol++; return sal_True;
+        pLine++; nCol++;
+        return true;
     }
-    else return sal_False;
+    else
+        return false;
 }
 
 // test for legal suffix
@@ -160,19 +161,19 @@ inline bool lclIsWhitespace( sal_Unicode cChar )
 
 } // namespace
 
-sal_Bool SbiScanner::NextSym()
+bool SbiScanner::NextSym()
 {
     // memorize for the EOLN-case
     sal_uInt16 nOldLine = nLine;
     sal_uInt16 nOldCol1 = nCol1;
     sal_uInt16 nOldCol2 = nCol2;
     sal_Unicode buf[ BUF_SIZE ], *p = buf;
-    bHash = sal_False;
+    bHash = false;
 
     eScanType = SbxVARIANT;
     aSym = ::rtl::OUString();
     bSymbol =
-    bNumber = bSpaces = sal_False;
+    bNumber = bSpaces = false;
 
     // read in line?
     if( !pLine )
@@ -180,7 +181,7 @@ sal_Bool SbiScanner::NextSym()
         sal_Int32 n = nBufPos;
         sal_Int32 nLen = aBuf.getLength();
         if( nBufPos >= nLen )
-            return sal_False;
+            return false;
         const sal_Unicode* p2 = aBuf.getStr();
         p2 += n;
         while( ( n < nLen ) && ( *p2 != '\n' ) && ( *p2 != '\r' ) )
@@ -206,7 +207,7 @@ sal_Bool SbiScanner::NextSym()
 
 
     while( lclIsWhitespace( *pLine ) )
-        pLine++, nCol++, bSpaces = sal_True;
+        pLine++, nCol++, bSpaces = true;
 
     nCol1 = nCol;
 
@@ -221,7 +222,7 @@ sal_Bool SbiScanner::NextSym()
     {
         pLine++;
         nCol++;
-        bHash = sal_True;
+        bHash = true;
     }
 
     // copy character if symbol
@@ -231,7 +232,7 @@ sal_Bool SbiScanner::NextSym()
         if( *pLine == '_' && !*(pLine+1) )
         {   pLine++;
             goto eoln;  }
-        bSymbol = sal_True;
+        bSymbol = true;
         short n = nCol;
         for ( ; (BasicSimpleCharClass::isAlphaNumeric( *pLine, bCompatible ) || ( *pLine == '_' ) ); pLine++ )
             nCol++;
@@ -296,13 +297,13 @@ sal_Bool SbiScanner::NextSym()
         short ndig = 0;
         short ncdig = 0;
         eScanType = SbxDOUBLE;
-        sal_Bool bBufOverflow = sal_False;
+        bool bBufOverflow = false;
         while( strchr( "0123456789.DEde", *pLine ) && *pLine )
         {
             // from 4.1.1996: buffer full? -> go on scanning empty
             if( (p-buf) == (BUF_SIZE-1) )
             {
-                bBufOverflow = sal_True;
+                bBufOverflow = true;
                 pLine++, nCol++;
                 continue;
             }
@@ -337,7 +338,7 @@ sal_Bool SbiScanner::NextSym()
             if (!exp) ndig++;
         }
         *p = 0;
-        aSym = p; bNumber = sal_True;
+        aSym = p; bNumber = true;
 
         if( comma > 1 || exp > 1 )
         {   aError = '.';
@@ -390,10 +391,10 @@ sal_Bool SbiScanner::NextSym()
                 aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&"));
                 return SYMBOL;
         }
-        bNumber = sal_True;
+        bNumber = true;
         long l = 0;
         int i;
-        sal_Bool bBufOverflow = sal_False;
+        bool bBufOverflow = false;
         while( BasicSimpleCharClass::isAlphaNumeric( *pLine & 0xFF, bCompatible ) )
         {
             sal_Unicode ch = sal::static_int_cast< sal_Unicode >(
@@ -401,7 +402,7 @@ sal_Bool SbiScanner::NextSym()
             pLine++; nCol++;
             // from 4.1.1996: buffer full, go on scanning empty
             if( (p-buf) == (BUF_SIZE-1) )
-                bBufOverflow = sal_True;
+                bBufOverflow = true;
             else if( String( cmp ).Search( ch ) != STRING_NOTFOUND )
             //else if( strchr( cmp, ch ) )
                 *p++ = ch;
@@ -434,7 +435,7 @@ sal_Bool SbiScanner::NextSym()
     {
         sal_Unicode cSep = *pLine;
         if( cSep == '[' )
-            bSymbol = sal_True, cSep = ']';
+            bSymbol = true, cSep = ']';
         short n = nCol+1;
         while( *pLine )
         {
@@ -489,15 +490,15 @@ PrevLineCommentLbl:
     if( bPrevLineExtentsComment || (eScanType != SbxSTRING &&
                                     ( aSym[0] == '\'' || aSym.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("REM") ) ) ) )
     {
-        bPrevLineExtentsComment = sal_False;
+        bPrevLineExtentsComment = false;
         aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REM"));
         sal_uInt16 nLen = String( pLine ).Len();
         if( bCompatible && pLine[ nLen - 1 ] == '_' && pLine[ nLen - 2 ] == ' ' )
-            bPrevLineExtentsComment = sal_True;
+            bPrevLineExtentsComment = true;
         nCol2 = nCol2 + nLen;
         pLine = NULL;
     }
-    return sal_True;
+    return true;
 
 
 eoln:
@@ -511,7 +512,7 @@ eoln:
             //    .Method
             // ^^^  <- spaces is legal in MSO VBA
             OSL_TRACE("*** resetting bSpaces***");
-            bSpaces = sal_False;
+            bSpaces = false;
         }
         return bRes;
     }
@@ -523,7 +524,7 @@ eoln:
         nCol2 = nOldCol2;
         aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n"));
         nColLock = 0;
-        return sal_True;
+        return true;
     }
 }
 

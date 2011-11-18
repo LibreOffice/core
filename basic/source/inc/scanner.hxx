@@ -59,17 +59,17 @@ protected:
     sal_Int32  nBufPos;
     sal_uInt16 nLine;
     sal_uInt16 nCol1, nCol2;
-    sal_Bool   bSymbol;                     // sal_True: symbol scanned
-    sal_Bool   bNumber;                     // sal_True: number scanned
-    sal_Bool   bSpaces;                     // sal_True: whitespace before token
-    sal_Bool   bErrors;                     // sal_True: generate errors
-    sal_Bool   bAbort;
-    sal_Bool   bHash;                       // sal_True: # has been read in
-    sal_Bool   bError;                      // sal_True: generate error
-    sal_Bool   bUsedForHilite;
-    sal_Bool   bCompatible;                 // sal_True: OPTION compatible
-    sal_Bool   bVBASupportOn;               // sal_True: OPTION VBASupport 1 otherwise default False
-    sal_Bool   bPrevLineExtentsComment;     // sal_True: Previous line is comment and ends on "... _"
+    bool   bSymbol;                     // sal_True: symbol scanned
+    bool   bNumber;                     // sal_True: number scanned
+    bool   bSpaces;                     // sal_True: whitespace before token
+    bool   bErrors;                     // sal_True: generate errors
+    bool   bAbort;
+    bool   bHash;                       // sal_True: # has been read in
+    bool   bError;                      // sal_True: generate error
+    bool   bUsedForHilite;
+    bool   bCompatible;                 // sal_True: OPTION compatible
+    bool   bVBASupportOn;               // sal_True: OPTION VBASupport 1 otherwise default False
+    bool   bPrevLineExtentsComment;     // sal_True: Previous line is comment and ends on "... _"
 
     void   GenError( SbError );
 public:
@@ -77,12 +77,12 @@ public:
    ~SbiScanner();
 
     void  EnableErrors()            { bError = sal_False; }
-    sal_Bool  IsHash()                  { return bHash;   }
-    sal_Bool  IsCompatible()            { return bCompatible; }
+    bool  IsHash()                  { return bHash;   }
+    bool  IsCompatible()            { return bCompatible; }
     void  SetCompatible( bool b )   { bCompatible = b; }        // #118206
-    sal_Bool  IsVBASupportOn()          { return bVBASupportOn; }
+    bool  IsVBASupportOn()          { return bVBASupportOn; }
     void  SetVBASupportOn( bool b ) { bVBASupportOn = b; }
-    sal_Bool  WhiteSpace()              { return bSpaces; }
+    bool  WhiteSpace()              { return bSpaces; }
     short GetErrors()               { return nErrors; }
     short GetLine()                 { return nLine;   }
     short GetCol1()                 { return nCol1;   }
@@ -93,9 +93,9 @@ public:
     void  RestoreLine(void)         { pLine = pSaveLine; }
     void  LockColumn();
     void  UnlockColumn();
-    sal_Bool  DoesColonFollow();
+    bool  DoesColonFollow();
 
-    sal_Bool NextSym();
+    bool NextSym();
     const ::rtl::OUString& GetSym() { return aSym;  }
     SbxDataType GetType()           { return eScanType; }
     double    GetDbl()              { return nVal;  }
