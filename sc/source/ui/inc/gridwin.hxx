@@ -42,10 +42,6 @@
 #include <memory>
 #include <boost/scoped_ptr.hpp>
 
-#define USE_NEW_AUTOFILTER 1
-
-// ---------------------------------------------------------------------------
-
 struct ScTableInfo;
 class ScViewSelectionEngine;
 class ScDPObject;
@@ -343,10 +339,10 @@ public:
 
     void            LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelect );
     void            DoScenarioMenue( const ScRange& rScenRange );
-#if USE_NEW_AUTOFILTER
+
     void            LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow);
     void            UpdateAutoFilterFromMenu();
-#endif
+
     void            LaunchPageFieldMenu( SCCOL nCol, SCROW nRow );
     void            LaunchDPFieldMenu( SCCOL nCol, SCROW nRow );
 

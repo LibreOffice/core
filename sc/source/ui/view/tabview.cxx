@@ -2403,14 +2403,10 @@ void ScTabView::StartDataSelect()
         aViewData.GetDocument()->GetAttr(
             nCol, nRow, aViewData.GetTabNo(), ATTR_MERGE_FLAG));
 
-#if USE_NEW_AUTOFILTER
     if (pAttr->HasAutoFilter())
         pWin->LaunchAutoFilterMenu(nCol, nRow);
     else
         pWin->LaunchDataSelectMenu(nCol, nRow, true);
-#else
-    pWin->LaunchDataSelectMenu(nCol, nRow, !pAttr->HasAutoFilter());
-#endif
 }
 
 void ScTabView::EnableRefInput(bool bFlag)
