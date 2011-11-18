@@ -248,6 +248,10 @@ static sal_Bool InitSignal()
         bSetILLHandler = sal_True;
     }
 
+#ifdef DBG_UTIL
+    bSetSEGVHandler = bSetWINCHHandler = bSetILLHandler = bDoHardKill = sal_False;
+#endif
+
     SignalListMutex = osl_createMutex();
 
     act.sa_handler = SignalHandlerFunction;
