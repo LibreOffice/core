@@ -100,16 +100,15 @@ class XclImpAutoFilterData : private ExcRoot
 private:
     ScDBData*                   pCurrDBData;
     ScQueryParam                aParam;
-    sal_Bool                        bActive;
-    sal_Bool                        bHasConflict;
-    sal_Bool                        bCriteria;
-    sal_Bool                        bAutoOrAdvanced;
     ScRange                     aCriteriaRange;
+    bool                        bActive:1;
+    bool                        bHasConflict:1;
+    bool                        bCriteria:1;
+    bool                        bAutoOrAdvanced:1;
 
     void                        CreateFromDouble( rtl::OUString& rStr, double fVal );
     void                        SetCellAttribs();
     void                        InsertQueryParam();
-    void                        AmendAFName(const sal_Bool bUseUnNamed);
 
 protected:
 public:
@@ -127,10 +126,10 @@ public:
 
     void                        ReadAutoFilter( XclImpStream& rStrm );
 
-    inline void                 Activate()          { bActive = sal_True; }
+    inline void                 Activate()          { bActive = true; }
     void                        SetAdvancedRange( const ScRange* pRange );
     void                        SetExtractPos( const ScAddress& rAddr );
-    inline void                 SetAutoOrAdvanced()  { bAutoOrAdvanced = sal_True; }
+    inline void                 SetAutoOrAdvanced()  { bAutoOrAdvanced = true; }
     void                        Apply();
     void                        CreateScDBData();
     void                        EnableRemoveFilter();

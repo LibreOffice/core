@@ -707,7 +707,7 @@ void XclImpAutoFilterData::SetAdvancedRange( const ScRange* pRange )
     if (pRange)
     {
         aCriteriaRange = *pRange;
-        bCriteria = sal_True;
+        bCriteria = true;
     }
     else
         bCriteria = false;
