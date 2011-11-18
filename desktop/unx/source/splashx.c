@@ -744,6 +744,12 @@ void splash_destroy(struct splash* splash)
     {
         if(splash->display)
         {
+            if(splash->gc)
+            {
+                XFreeGC(splash->display, splash->gc);
+                splash->gc = NULL;
+            }
+
             XCloseDisplay( splash->display );
             splash->display = NULL;
             png_destroy_read_struct( &(splash->png_ptr), &(splash->info_ptr), NULL );
