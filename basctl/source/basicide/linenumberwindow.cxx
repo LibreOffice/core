@@ -30,12 +30,12 @@ void LineNumberWindow::Paint( const Rectangle& )
 
   GetParent()->Resize();
 
-  ulong windowHeight = GetOutputSize().Height();
-  ulong nLineHeight = GetTextHeight();
+  int windowHeight = GetOutputSize().Height();
+  int nLineHeight = GetTextHeight();
 
-  ulong startY = txtView->GetStartDocPos().Y();
-  ulong nStartLine = startY / nLineHeight + 1;
-  ulong nEndLine = (startY + windowHeight) / nLineHeight + 1;
+  int startY = txtView->GetStartDocPos().Y();
+  int nStartLine = startY / nLineHeight + 1;
+  int nEndLine = (startY + windowHeight) / nLineHeight + 1;
 
   if(txtEngine->GetParagraphCount() + 1 < nEndLine)
     nEndLine = txtEngine->GetParagraphCount() + 1;
@@ -43,7 +43,7 @@ void LineNumberWindow::Paint( const Rectangle& )
   nWidth = String::CreateFromInt64(nEndLine).Len() * 10;
 
   sal_Int64 y = (nStartLine - 1) * nLineHeight;
-  for(ulong i = nStartLine; i <= nEndLine; ++i, y += nLineHeight)
+  for(int i = nStartLine; i <= nEndLine; ++i, y += nLineHeight)
     DrawText(Point(0, y - nCurYOffset), String::CreateFromInt64(i));
 }
 
@@ -88,7 +88,7 @@ bool LineNumberWindow::SyncYOffset()
   return true;
 }
 
-ulong LineNumberWindow::GetWidth()
+int LineNumberWindow::GetWidth()
 {
   return (nWidth < 20 ? 20 : nWidth);
 }

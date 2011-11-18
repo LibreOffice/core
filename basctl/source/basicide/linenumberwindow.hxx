@@ -9,7 +9,7 @@ class LineNumberWindow : public Window
 {
 private:
   ModulWindow* pModulWindow;
-  ulong nWidth;
+  int nWidth;
   long nCurYOffset;
 
   virtual void DataChanged(DataChangedEvent const & rDCEvt);
@@ -26,7 +26,7 @@ public:
   bool SyncYOffset();
   long& GetCurYOffset();
 
-  ulong GetWidth();
+  int GetWidth();
 };
 
 #endif // BASICIDE_LINENUMBERWINDOW_HXX
