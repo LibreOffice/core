@@ -36,6 +36,7 @@ namespace
     void testGoto();
     void testExclamation();
     void testNumbers();
+    void testDataType();
 
     // Adds code needed to register the test suite
     CPPUNIT_TEST_SUITE(ScannerTest);
@@ -48,6 +49,7 @@ namespace
     CPPUNIT_TEST(testGoto);
     CPPUNIT_TEST(testExclamation);
     CPPUNIT_TEST(testNumbers);
+    CPPUNIT_TEST(testDataType);
 
     // End of test suite definition
     CPPUNIT_TEST_SUITE_END();
@@ -561,6 +563,54 @@ namespace
     symbols = getSymbols(source10);
     CPPUNIT_ASSERT(symbols.size() == 2);
     CPPUNIT_ASSERT(symbols[0].number == 12000);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+  }
+
+  void ScannerTest::testDataType()
+  {
+    const rtl::OUString source1(RTL_CONSTASCII_USTRINGPARAM("asdf%"));
+    const rtl::OUString source2(RTL_CONSTASCII_USTRINGPARAM("asdf&"));
+    const rtl::OUString source3(RTL_CONSTASCII_USTRINGPARAM("asdf!"));
+    const rtl::OUString source4(RTL_CONSTASCII_USTRINGPARAM("asdf#"));
+    const rtl::OUString source5(RTL_CONSTASCII_USTRINGPARAM("asdf@"));
+    const rtl::OUString source6(RTL_CONSTASCII_USTRINGPARAM("asdf$"));
+    const rtl::OUString source7(RTL_CONSTASCII_USTRINGPARAM("asdf "));
+
+    std::vector<Symbol> symbols;
+
+    symbols = getSymbols(source1);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].type == SbxINTEGER);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+
+    symbols = getSymbols(source2);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].type == SbxLONG);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+
+    symbols = getSymbols(source3);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].type == SbxSINGLE);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+
+    symbols = getSymbols(source4);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].type == SbxDOUBLE);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+
+    symbols = getSymbols(source5);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].type == SbxCURRENCY);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+
+    symbols = getSymbols(source6);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].type == SbxSTRING);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+
+    symbols = getSymbols(source7);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
     CPPUNIT_ASSERT(symbols[1].text == cr);
   }
 

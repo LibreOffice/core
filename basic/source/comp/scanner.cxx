@@ -125,17 +125,25 @@ sal_Bool SbiScanner::DoesColonFollow()
 }
 
 // test for legal suffix
-
 static SbxDataType GetSuffixType( sal_Unicode c )
 {
-    static String aSuffixesStr = String::CreateFromAscii( "%&!#@ $" );
-    if( c )
+    switch (c)
     {
-        sal_uInt32 n = aSuffixesStr.Search( c );
-        if( STRING_NOTFOUND != n && c != ' ' )
-            return SbxDataType( (sal_uInt16) n + SbxINTEGER );
+    case '%':
+        return SbxDataType(SbxINTEGER);
+    case '&':
+        return SbxDataType(SbxLONG);
+    case '!':
+        return SbxDataType(SbxSINGLE);
+    case '#':
+        return SbxDataType(SbxDOUBLE);
+    case '@':
+        return SbxDataType(SbxCURRENCY);
+    case '$':
+        return SbxDataType(SbxSTRING);
+    default:
+        return SbxDataType(SbxVARIANT);
     }
-    return SbxVARIANT;
 }
 
 // reading the next symbol into the variables aSym, nVal and eType
