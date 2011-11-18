@@ -38,6 +38,7 @@
 #include <comphelper/propertysethelper.hxx>
 #include <vcl/print.hxx>
 #include <oox/export/ooxmlexport.hxx>
+#include <oox/export/starmathimport.hxx>
 
 class SmFormat;
 
@@ -65,7 +66,8 @@ class SmModel : public SfxBaseModel,
                 public comphelper::PropertySetHelper,
                 public com::sun::star::lang::XServiceInfo,
                 public com::sun::star::view::XRenderable,
-                public OoxmlFormulaExportBase
+                public OoxmlFormulaExportBase,
+                public OoxmlFormulaImportBase
 {
     SmPrintUIOptions* m_pPrintUIOptions;
 protected:
@@ -104,6 +106,8 @@ public:
 
     // OoxmlFormulaExportBase
     virtual void writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer, oox::core::OoxmlVersion version );
+    // OoxmlFormulaImportBase
+    virtual void readFormulaOoxml( ooxmlformulaimport::XmlStream& stream );
 
     static ::com::sun::star::uno::Sequence< rtl::OUString > getSupportedServiceNames_Static();
     static ::rtl::OUString getImplementationName_Static();

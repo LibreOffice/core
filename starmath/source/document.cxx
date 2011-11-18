@@ -96,6 +96,7 @@
 #include <view.hxx>
 #include "mathtype.hxx"
 #include "ooxmlexport.hxx"
+#include "ooxmlimport.hxx"
 #include "mathmlimport.hxx"
 #include "mathmlexport.hxx"
 #include <sfx2/sfxsids.hrc>
@@ -996,6 +997,15 @@ bool SmDocShell::writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer,
         ArrangeFormula();
     SmOoxmlExport aEquation( aText, pTree, version );
     return aEquation.ConvertFromStarMath( m_pSerializer );
+}
+
+bool SmDocShell::readFormulaOoxml( ooxmlformulaimport::XmlStream& stream )
+{
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::readFormulaOoxml" );
+
+    SmOoxmlImport aEquation( stream );
+    SetText( aEquation.ConvertToStarMath());
+    return true; // TODO just void?
 }
 
 sal_Bool SmDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )

@@ -2373,16 +2373,17 @@ Token_t OOXMLFastContextHandlerWrapper::getToken() const
 OOXMLFastContextHandlerMath::OOXMLFastContextHandlerMath(OOXMLFastContextHandler* pContext)
     : OOXMLFastContextHandlerProperties(pContext)
 {
-    fprintf( stderr, "MMM ctor\n" );
 }
 
 OOXMLFastContextHandlerMath::~OOXMLFastContextHandlerMath()
 {
-    fprintf( stderr, "MMM dtor\n" );
     SvGlobalName name( SO3_SM_CLASSID );
     comphelper::EmbeddedObjectContainer container;
     rtl::OUString aName; // TODO?
     uno::Reference< embed::XEmbeddedObject > ref = container.CreateEmbeddedObject( name.GetByteSequence(), aName );
+    uno::Reference< uno::XInterface > component( ref->getComponent(), uno::UNO_QUERY );
+    if( OoxmlFormulaImportBase* import = dynamic_cast< OoxmlFormulaImportBase* >( component.get()))
+        import->readFormulaOoxml( buffer );
     if (isForwardEvents())
     {
         OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
@@ -2397,22 +2398,22 @@ void OOXMLFastContextHandlerMath::lcl_startFastElement(Token_t Element,
     const uno::Reference< xml::sax::XFastAttributeList >& Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    fprintf( stderr, "MMM start %d\n", Element );
+    buffer.appendOpeningTag( Element, Attribs );
+    fprintf(stderr,"OPEN %d\n", Element);
 }
 
 void OOXMLFastContextHandlerMath::lcl_endFastElement(Token_t Element)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    fprintf( stderr, "MMM end %d\n", Element );
-    OOXMLFastContextHandlerProperties::lcl_endFastElement( Element );
+    buffer.appendClosingTag( Element );
+    fprintf(stderr,"CLOSE %d\n", Element);
 }
 
 uno::Reference< xml::sax::XFastContextHandler >
-OOXMLFastContextHandlerMath::lcl_createFastChildContext(Token_t Element,
-    const uno::Reference< xml::sax::XFastAttributeList >& Attribs)
+OOXMLFastContextHandlerMath::lcl_createFastChildContext(Token_t,
+    const uno::Reference< xml::sax::XFastAttributeList >&)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    fprintf( stderr, "MMM child %d\n", Element );
     uno::Reference< xml::sax::XFastContextHandler > xContextHandler;
     xContextHandler.set( this );
     return xContextHandler;
@@ -2421,7 +2422,7 @@ OOXMLFastContextHandlerMath::lcl_createFastChildContext(Token_t Element,
 void OOXMLFastContextHandlerMath::lcl_characters(const ::rtl::OUString& aChars)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    fprintf( stderr, "MMM chars %s\n", rtl::OUStringToOString( aChars, RTL_TEXTENCODING_UTF8 ).getStr());
+    buffer.appendCharacters( aChars );
 }
 
 

@@ -44,6 +44,8 @@
 #include <ooxml/OOXMLFastTokens.hxx>
 #include <svtools/embedhlp.hxx>
 
+#include <oox/export/starmathimport.hxx>
+
 namespace writerfilter {
 namespace ooxml
 {
@@ -658,6 +660,9 @@ protected:
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     virtual void lcl_characters(const ::rtl::OUString & aChars) throw (uno::RuntimeException, xml::sax::SAXException);
+
+private:
+    ooxmlformulaimport::XmlStreamBuilder buffer;
 };
 
 

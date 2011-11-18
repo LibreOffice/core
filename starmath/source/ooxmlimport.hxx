@@ -1,0 +1,78 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License or as specified alternatively below. You may obtain a copy of
+ * the License at http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * Major Contributor(s):
+ * Copyright (C) 2011 Lubos Lunak <l.lunak@suse.cz> (initial developer)
+ *
+ * All Rights Reserved.
+ *
+ * For minor contributions see the git repository.
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+
+#ifndef SM_OOXMLIMPORT_HXX
+#define SM_OOXMLIMPORT_HXX
+
+#include <oox/export/starmathimport.hxx>
+
+#include "node.hxx"
+
+/**
+ Class implementing reading of formulas from OOXML. The toplevel element is expected
+ to be oMath (handle oMathPara outside of this code).
+ */
+class SmOoxmlImport
+{
+public:
+    SmOoxmlImport( ooxmlformulaimport::XmlStream& stream );
+    rtl::OUString ConvertToStarMath();
+private:
+    rtl::OUString handleStream();
+    rtl::OUString handleF();
+    rtl::OUString readR();
+    /**
+     Checks that the next token is the given opening tag, if not, writes out a warning
+     and tries to recover (skips tags until found or until the current element would end).
+    */
+    void checkOpeningTag( int token );
+    /**
+     Checks that the next token is the given opening tag, if not, writes out a warning
+     and tries to recover (skips tags until found or until the current element would end).
+    */
+    void checkClosingTag( int token );
+    // helper for the two above
+    void checkTag( int token, const char* txt );
+    /**
+     Tries to find the given token, until either found (returns true) or end of current element.
+    */
+    bool recoverAndFindTag( int token );
+    /**
+     Skips the given element (i.e. reads up to and including the matching closing tag).
+    */
+    void skipElement( int token );
+    /**
+     Handle the current (unexpected) tag.
+    */
+    void handleUnexpectedTag();
+    ooxmlformulaimport::XmlStream& stream;
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

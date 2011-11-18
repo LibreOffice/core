@@ -182,7 +182,7 @@ SwXTextDocumentBaseClass;
 class SW_DLLPUBLIC SwXTextDocument : public SwXTextDocumentBaseClass,
     public SvxFmMSFactory,
     public SfxBaseModel,
-    public OoxmlFormulaImportBase
+    public OoxmlFormulaImportHelper
 {
     ActionContextArr        aActionArr;
     SwRefreshListenerContainer  aRefreshCont;

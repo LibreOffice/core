@@ -53,6 +53,10 @@ class SfxMenuBarManager;
 class SfxPrinter;
 class Printer;
 class SmCursor;
+namespace ooxmlformulaimport
+{
+class XmlStream;
+}
 
 #define HINT_DATACHANGED    1004
 
@@ -175,6 +179,7 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     void                InvalidateCursor();
 
     bool writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer, oox::core::OoxmlVersion version );
+    bool readFormulaOoxml( ooxmlformulaimport::XmlStream& stream );
 
 public:
     TYPEINFO();

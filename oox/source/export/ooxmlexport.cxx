@@ -28,6 +28,12 @@
 
 #include <oox/export/ooxmlexport.hxx>
 #include <oox/export/starmathimport.hxx>
+#include <oox/token/tokens.hxx>
+#include <oox/token/namespaces.hxx>
+
+using namespace oox;
+using namespace oox::core;
+using namespace com::sun::star;
 
 OoxmlFormulaExportBase::OoxmlFormulaExportBase()
 {
@@ -36,5 +42,74 @@ OoxmlFormulaExportBase::OoxmlFormulaExportBase()
 OoxmlFormulaImportBase::OoxmlFormulaImportBase()
 {
 }
+
+OoxmlFormulaImportHelper::OoxmlFormulaImportHelper()
+{
+}
+
+
+namespace ooxmlformulaimport
+{
+
+XmlStream::XmlStream()
+: pos( -1 )
+{
+    // make sure our extra bit does not conflict with values used by oox
+    assert( TAG_OPENING > ( 1024 << NMSP_SHIFT ));
+}
+
+bool XmlStream::nextIsEnd() const
+{
+    return pos + 1 >= int( tokens.size());
+}
+
+int XmlStream::getNextToken()
+{
+    ++pos;
+    if( pos < int( tokens.size()))
+        return tokens[ pos ];
+    return XML_TOKEN_INVALID;
+}
+
+int XmlStream::peekNextToken() const
+{
+    if( pos - 1 < int( tokens.size()))
+        return tokens[ pos + 1 ];
+    return XML_TOKEN_INVALID;
+}
+
+AttributeList XmlStream::getAttributes()
+{
+    assert( pos < int( attributes.size()));
+    return attributes[ pos ];
+}
+
+rtl::OUString XmlStream::getCharacters()
+{
+    assert( pos < int( characters.size()));
+    return characters[ pos ];
+}
+
+void XmlStreamBuilder::appendOpeningTag( int token, const uno::Reference< xml::sax::XFastAttributeList >& attrs )
+{
+    tokens.push_back( OPENING( token ));
+    attributes.push_back( AttributeList( attrs ));
+    characters.push_back( rtl::OUString());
+}
+
+void XmlStreamBuilder::appendClosingTag( int token )
+{
+    tokens.push_back( CLOSING( token ));
+    attributes.push_back( AttributeList( uno::Reference< xml::sax::XFastAttributeList >()));
+    characters.push_back( rtl::OUString());
+}
+
+void XmlStreamBuilder::appendCharacters( const rtl::OUString& chars )
+{
+    assert( !characters.empty());
+    characters.back() = chars;
+}
+
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

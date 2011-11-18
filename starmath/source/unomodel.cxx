@@ -1137,4 +1137,9 @@ void SmModel::writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer, oo
     static_cast< SmDocShell* >( GetObjectShell())->writeFormulaOoxml( m_pSerializer, version );
 }
 
+void SmModel::readFormulaOoxml( ooxmlformulaimport::XmlStream& stream )
+{
+    static_cast< SmDocShell* >( GetObjectShell())->readFormulaOoxml( stream );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
