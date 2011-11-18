@@ -1014,22 +1014,17 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *ustrHostname)
 
 oslHostAddr SAL_CALL osl_psz_createHostAddrByName (const sal_Char *pszHostname)
 {
-    struct hostent *he;
-        oslHostAddr addr;
+    struct      hostent  aHe;
+    struct      hostent *pHe;
+    sal_Char    heBuffer[ MAX_HOSTBUFFER_SIZE ];
+    int         nErrorNo;
 
-    static oslMutex mutex = NULL;
+    pHe = _osl_gethostbyname_r (
+        pszHostname,
+        &aHe, heBuffer,
+        sizeof(heBuffer), &nErrorNo );
 
-    if (mutex == NULL)
-        mutex = osl_createMutex();
-
-    osl_acquireMutex(mutex);
-
-    he = gethostbyname((sal_Char *)pszHostname);
-    addr = _osl_hostentToHostAddr (he);
-
-    osl_releaseMutex(mutex);
-
-    return addr;
+    return _osl_hostentToHostAddr (pHe);
 }
 
 /*****************************************************************************/
