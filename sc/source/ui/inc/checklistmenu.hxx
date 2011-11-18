@@ -35,8 +35,8 @@
 #include "vcl/timer.hxx"
 #include "svx/checklbx.hxx"
 
-#include <memory>
 #include <boost/unordered_map.hpp>
+#include <boost/scoped_ptr.hpp>
 
 namespace com { namespace sun { namespace star {
 
@@ -310,8 +310,8 @@ private:
     size_t                          mnCurTabStop;
 
     ::std::vector<Member>           maMembers;
-    ::std::auto_ptr<ExtendedData>   mpExtendedData;
-    ::std::auto_ptr<Action>         mpOKAction;
+    boost::scoped_ptr<ExtendedData> mpExtendedData;
+    boost::scoped_ptr<Action>       mpOKAction;
 
     Size maWndSize;  /// whole window size.
     Size maMenuSize; /// size of all menu items combined.

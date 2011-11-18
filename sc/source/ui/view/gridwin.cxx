@@ -704,6 +704,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     mpAutoFilterPopup->addMenuItem(ScResId::toString(ScResId(SCSTR_NOTEMPTY)), true, new PopupAction);
 
     mpAutoFilterPopup->SetPopupModeEndHdl( LINK(this, ScGridWindow, PopupModeEndHdl) );
+
     mpAutoFilterPopup->launch(aCellRect);
 }
 
