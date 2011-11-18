@@ -2093,10 +2093,22 @@ sal_Bool SwCursor::MoveSection( SwWhichSection fnWhichSect,
 
 void SwCursor::RestoreSavePos()
 {
-    if( pSavePos )
+    // fdo#40831 if you delete the row or column containing pSavePos,
+    // Writer will crash. Work around this.
+    sal_uLong uNodeCount = GetPoint()->nNode.GetNodes().Count();
+    if( pSavePos && pSavePos->nNode < uNodeCount )
     {
         GetPoint()->nNode = pSavePos->nNode;
-        GetPoint()->nContent.Assign( GetCntntNode(), pSavePos->nCntnt );
+
+        xub_StrLen nIdx = 0;
+        if ( GetCntntNode() )
+            if ( pSavePos->nCntnt <= GetCntntNode()->Len() )
+                nIdx = pSavePos->nCntnt;
+            else
+                nIdx = GetCntntNode()->Len();
+        else
+            nIdx = GetPoint()->nContent.GetIndex(); // Probably, nIdx = 0
+        GetPoint()->nContent.Assign( GetCntntNode(), nIdx );
     }
 }
 
