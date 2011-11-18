@@ -216,6 +216,15 @@ public:
      */
     struct ExtendedData {};
 
+    /**
+     * Configuration options for this popup window.
+     */
+    struct Config
+    {
+        bool mbAllowEmptySet;
+        Config();
+    };
+
     explicit ScCheckListMenuWindow(Window* pParent, ScDocument* pDoc);
     virtual ~ScCheckListMenuWindow();
 
@@ -228,6 +237,7 @@ public:
     void setMemberSize(size_t n);
     void addMember(const ::rtl::OUString& rName, bool bVisible);
     void initMembers();
+    void setConfig(const Config& rConfig);
 
     const Size& getWindowSize() const;
 
@@ -318,6 +328,7 @@ private:
     boost::scoped_ptr<Action>       mpOKAction;
     boost::scoped_ptr<Action>       mpPopupEndAction;
 
+    Config maConfig;
     Size maWndSize;  /// whole window size.
     Size maMenuSize; /// size of all menu items combined.
     TriState mePrevToggleAllState;

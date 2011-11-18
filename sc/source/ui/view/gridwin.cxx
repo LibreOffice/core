@@ -715,6 +715,9 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     mpAutoFilterPopup->addMenuItem(
         ScResId::toString(ScResId(SCSTR_NOTEMPTY)), true, new AutoFilterAction(this, NonEmpty));
 
+    ScCheckListMenuWindow::Config aConfig;
+    aConfig.mbAllowEmptySet = false;
+    mpAutoFilterPopup->setConfig(aConfig);
     mpAutoFilterPopup->launch(aCellRect);
 }
 

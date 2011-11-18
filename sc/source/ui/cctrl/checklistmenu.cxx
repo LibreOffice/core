@@ -747,6 +747,11 @@ void ScMenuFloatingWindow::terminateAllPopupMenus()
 
 // ============================================================================
 
+ScCheckListMenuWindow::Config::Config() :
+    mbAllowEmptySet(true)
+{
+}
+
 ScCheckListMenuWindow::Member::Member() :
     mbVisible(true)
 {
@@ -958,7 +963,11 @@ void ScCheckListMenuWindow::setAllMemberState(bool bSet)
 {
     size_t n = maMembers.size();
     for (size_t i = 0; i < n; ++i)
-        maChecks.CheckEntryPos(static_cast< sal_uInt16 >( i ), bSet);
+        maChecks.CheckEntryPos(static_cast<sal_uInt16>(i), bSet);
+
+    if (!maConfig.mbAllowEmptySet)
+        // We need to have at least one member selected.
+        maBtnOk.Enable(maChecks.GetCheckedEntryCount() != 0);
 }
 
 void ScCheckListMenuWindow::selectCurrentMemberOnly(bool bSet)
@@ -1046,6 +1055,10 @@ IMPL_LINK( ScCheckListMenuWindow, CheckHdl, SvTreeListBox*, pChecks )
         maChkToggleAll.SetState(STATE_NOCHECK);
     else
         maChkToggleAll.SetState(STATE_DONTKNOW);
+
+    if (!maConfig.mbAllowEmptySet)
+        // We need to have at least one member selected.
+        maBtnOk.Enable(nNumChecked != 0);
 
     mePrevToggleAllState = maChkToggleAll.GetState();
     return 0;
@@ -1175,6 +1188,11 @@ void ScCheckListMenuWindow::initMembers()
         maChkToggleAll.SetState(STATE_DONTKNOW);
         mePrevToggleAllState = STATE_DONTKNOW;
     }
+}
+
+void ScCheckListMenuWindow::setConfig(const Config& rConfig)
+{
+    maConfig = rConfig;
 }
 
 const Size& ScCheckListMenuWindow::getWindowSize() const
