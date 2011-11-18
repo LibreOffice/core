@@ -504,11 +504,39 @@ Sequence< CalendarItem > &LocaleData::getCalendarItemByName(const OUString& name
 }
 
 
+Sequence< CalendarItem > LocaleData::getCalendarItems(
+        sal_Unicode const * const * const allCalendars, sal_Int16 & rnOffset,
+        const sal_Int16 nWhichItem, const sal_Int16 nCalendar,
+        const Locale & rLocale, const Sequence< Calendar > & calendarsSeq )
+        throw(RuntimeException)
+{
+    Sequence< CalendarItem > aItems;
+    if (OUString( allCalendars[rnOffset]).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ref")))
+    {
+        aItems = getCalendarItemByName( OUString( allCalendars[rnOffset+1]), rLocale, calendarsSeq, nWhichItem);
+        rnOffset += 2;
+    }
+    else
+    {
+        sal_Int32 nSize = allCalendars[nWhichItem][nCalendar];
+        aItems.realloc( nSize);
+        CalendarItem* pItem = aItems.getArray();
+        for (sal_Int16 j = 0; j < nSize; ++j, ++pItem)
+        {
+            CalendarItem day( allCalendars[rnOffset], allCalendars[rnOffset+1], allCalendars[rnOffset+2]);
+            *pItem = day;
+            rnOffset += 3;
+        }
+    }
+    return aItems;
+}
+
+
 Sequence< Calendar > SAL_CALL
 LocaleData::getAllCalendars( const Locale& rLocale ) throw(RuntimeException)
 {
 
-        sal_Unicode **allCalendars = NULL;
+        sal_Unicode const * const * allCalendars = NULL;
 
         MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getAllCalendars" );
 
@@ -518,60 +546,19 @@ LocaleData::getAllCalendars( const Locale& rLocale ) throw(RuntimeException)
 
             Sequence< Calendar > calendarsSeq(calendarsCount);
             sal_Int16 offset = REF_OFFSET_COUNT;
-            sal_Int16 i, j;
-            for(i = 0; i < calendarsCount; i++) {
-                Sequence< CalendarItem > days(allCalendars[REF_DAYS][i]);
-                Sequence< CalendarItem > months(allCalendars[REF_MONTHS][i]);
-//prep                Sequence< CalendarItem > gmonths(allCalendars[REF_GMONTHS][i]);
-                Sequence< CalendarItem > eras(allCalendars[REF_ERAS][i]);
+            for(sal_Int16 i = 0; i < calendarsCount; i++) {
                 OUString calendarID(allCalendars[offset]);
                 offset++;
                 sal_Bool defaultCalendar = sal::static_int_cast<sal_Bool>( allCalendars[offset][0] );
                 offset++;
-                if (OUString(allCalendars[offset]).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ref"))) {
-                    days = getCalendarItemByName(OUString(allCalendars[offset+1]), rLocale, calendarsSeq, REF_DAYS);
-                    offset += 2;
-                } else {
-                    for(j = 0; j < allCalendars[REF_DAYS][i]; j++) {
-                        CalendarItem day(allCalendars[offset],
-                            allCalendars[offset+1], allCalendars[offset+2]);
-                        days[j] = day;
-                        offset += 3;
-                    }
-                }
-                if (OUString(allCalendars[offset]).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ref"))) {
-                    months = getCalendarItemByName(OUString(allCalendars[offset+1]), rLocale, calendarsSeq, REF_MONTHS);
-                    offset += 2;
-                } else {
-                    for(j = 0; j < allCalendars[REF_MONTHS][i]; j++) {
-                        CalendarItem month(allCalendars[offset],
-                            allCalendars[offset+1], allCalendars[offset+2]);
-                        months[j] = month;
-                        offset += 3;
-                    }
-                }
-                if (OUString(allCalendars[offset]).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ref"))) {
-//prep                    gmonths = getCalendarItemByName(OUString(allCalendars[offset+1]), rLocale, calendarsSeq, REF_GMONTHS);
-                    offset += 2;
-                } else {
-                    for(j = 0; j < allCalendars[REF_GMONTHS][i]; j++) {
-//prep                        CalendarItem gmonth(allCalendars[offset],
-//prep                            allCalendars[offset+1], allCalendars[offset+2]);
-//prep                        gmonths[j] = gmonth;
-                        offset += 3;
-                    }
-                }
-                if (OUString(allCalendars[offset]).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ref"))) {
-                    eras = getCalendarItemByName(OUString(allCalendars[offset+1]), rLocale, calendarsSeq, REF_ERAS);
-                    offset += 2;
-                } else {
-                    for(j = 0; j < allCalendars[REF_ERAS][i]; j++) {
-                        CalendarItem era(allCalendars[offset],
-                            allCalendars[offset+1], allCalendars[offset+2]);
-                        eras[j] = era;
-                        offset += 3;
-                    }
-                }
+                Sequence< CalendarItem > days = getCalendarItems( allCalendars, offset, REF_DAYS, i,
+                        rLocale, calendarsSeq);
+                Sequence< CalendarItem > months = getCalendarItems( allCalendars, offset, REF_MONTHS, i,
+                        rLocale, calendarsSeq);
+                Sequence< CalendarItem > gmonths = getCalendarItems( allCalendars, offset, REF_GMONTHS, i,
+                        rLocale, calendarsSeq);
+                Sequence< CalendarItem > eras = getCalendarItems( allCalendars, offset, REF_ERAS, i,
+                        rLocale, calendarsSeq);
                 OUString startOfWeekDay(allCalendars[offset]);
                 offset++;
                 sal_Int16 minimalDaysInFirstWeek = allCalendars[offset][0];

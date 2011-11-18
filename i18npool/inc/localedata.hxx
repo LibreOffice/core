@@ -133,6 +133,17 @@ private :
         const com::sun::star::lang::Locale& rLocale,
         const com::sun::star::uno::Sequence< com::sun::star::i18n::Calendar >& calendarsSeq,
         sal_Int16 item) throw( com::sun::star::uno::RuntimeException );
+
+    /// Helper to obtain a sequence of days, months, gmonths or eras.
+    com::sun::star::uno::Sequence< com::sun::star::i18n::CalendarItem > getCalendarItems(
+            sal_Unicode const * const * const allCalendars,
+            sal_Int16 & rnOffset,
+            const sal_Int16 nWhichItem,
+            const sal_Int16 nCalendar,
+            const com::sun::star::lang::Locale & rLocale,
+            const com::sun::star::uno::Sequence< com::sun::star::i18n::Calendar > & calendarsSeq )
+        throw( com::sun::star::uno::RuntimeException );
+
 };
 
 } } } }
