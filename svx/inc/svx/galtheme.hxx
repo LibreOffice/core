@@ -31,8 +31,6 @@
 
 #include "svx/svxdllapi.h"
 
-#define ENABLE_BYTESTRING_STREAM_OPERATORS
-
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/salctype.hxx>

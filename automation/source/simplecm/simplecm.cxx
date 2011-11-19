@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_automation.hxx"
 
-
-#define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include <tools/solar.h>
 #include <automation/simplecm.hxx>
 #include <osl/diagnose.h>
@@ -286,7 +284,7 @@ void SimpleCommunicationLinkViaSocket::SetApplication( const ByteString& aApp )
 {
     CommunicationLink::SetApplication( aApp );
     SvStream* pData = GetBestCommunicationStream();
-    *pData << aApp;
+    pData->WriteByteString(aApp);
     SendHandshake( CH_SetApplication, pData );
     delete pData;
 }
@@ -458,7 +456,7 @@ void CommunicationManager::CallDataReceived( CommunicationLink* pCL )
             case CH_SetApplication:
                 {
                     ByteString aApplication;
-                    *pData >> aApplication;
+                    pData->ReadByteString(aApplication);
                     pCL->CommunicationLink::SetApplication( aApplication );
 #if OSL_DEBUG_LEVEL > 1
                     debug_printf( "Setting Application to " );

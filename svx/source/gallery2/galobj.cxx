@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#define ENABLE_BYTESTRING_STREAM_OPERATORS
-
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
@@ -172,14 +170,13 @@ void SgaObject::WriteData( SvStream& rOut, const String& rDestDir ) const
 
     String aURLWithoutDestDir = String(aURL.GetMainURL( INetURLObject::NO_DECODE ));
     aURLWithoutDestDir.SearchAndReplace(rDestDir, String());
-    rOut << ByteString( aURLWithoutDestDir, RTL_TEXTENCODING_UTF8 );
+    rOut.WriteByteString(ByteString(aURLWithoutDestDir, RTL_TEXTENCODING_UTF8));
 }
 
 // ------------------------------------------------------------------------
 
 void SgaObject::ReadData(SvStream& rIn, sal_uInt16& rReadVersion )
 {
-    ByteString  aTmpStr;
     sal_uInt32      nTmp32;
     sal_uInt16      nTmp16;
 
@@ -190,7 +187,9 @@ void SgaObject::ReadData(SvStream& rIn, sal_uInt16& rReadVersion )
     else
         rIn >> aThumbMtf;
 
-    rIn >> aTmpStr; aURL = INetURLObject( String( aTmpStr.GetBuffer(), RTL_TEXTENCODING_UTF8 ) );
+    ByteString aTmpStr;
+    rIn.ReadByteString(aTmpStr);
+    aURL = INetURLObject(rtl::OStringToOUString(aTmpStr,RTL_TEXTENCODING_UTF8));
 }
 
 // ------------------------------------------------------------------------
@@ -293,28 +292,29 @@ void SgaObjectBmp::Init( const Graphic& rGraphic, const INetURLObject& rURL )
 
 void SgaObjectBmp::WriteData( SvStream& rOut, const String& rDestDir ) const
 {
-    String  aDummyStr;
-    char    aDummy[ 10 ];
-
     // Version setzen
     SgaObject::WriteData( rOut, rDestDir );
+    char aDummy[ 10 ];
     rOut.Write( aDummy, 10 );
-    rOut << ByteString( aDummyStr, RTL_TEXTENCODING_UTF8 ) << ByteString( aTitle, RTL_TEXTENCODING_UTF8 );
+    String aDummyStr;
+    rOut.WriteByteString(rtl::OUStringToOString(aDummyStr, RTL_TEXTENCODING_UTF8));
+    rOut.WriteByteString(rtl::OUStringToOString(aTitle, RTL_TEXTENCODING_UTF8));
 }
 
 // ------------------------------------------------------------------------
 
 void SgaObjectBmp::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
 {
-    ByteString aTmpStr;
 
     SgaObject::ReadData( rIn, rReadVersion );
     rIn.SeekRel( 10 ); // 16, 16, 32, 16
-    rIn >> aTmpStr; // dummy
+    ByteString aTmpStr;
+    rIn.ReadByteString(aTmpStr); // dummy
 
     if( rReadVersion >= 5 )
     {
-        rIn >> aTmpStr; aTitle = String( aTmpStr.GetBuffer(), RTL_TEXTENCODING_UTF8 );
+        rIn.ReadByteString(aTmpStr);
+        aTitle = rtl::OStringToOUString(aTmpStr, RTL_TEXTENCODING_UTF8);
     }
 }
 
@@ -381,7 +381,8 @@ Bitmap SgaObjectSound::GetThumbBmp() const
 void SgaObjectSound::WriteData( SvStream& rOut, const String& rDestDir ) const
 {
     SgaObject::WriteData( rOut, rDestDir );
-    rOut << (sal_uInt16) eSoundType << ByteString( aTitle, RTL_TEXTENCODING_UTF8 );
+    rOut << (sal_uInt16) eSoundType;
+    rOut.WriteByteString(rtl::OUStringToOString(aTitle, RTL_TEXTENCODING_UTF8));
 }
 
 // ------------------------------------------------------------------------
@@ -392,14 +393,15 @@ void SgaObjectSound::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
 
     if( rReadVersion >= 5 )
     {
-        ByteString  aTmpStr;
         sal_uInt16      nTmp16;
 
         rIn >> nTmp16; eSoundType = (GalSoundType) nTmp16;
 
         if( rReadVersion >= 6 )
         {
-            rIn >> aTmpStr; aTitle = String( aTmpStr.GetBuffer(), RTL_TEXTENCODING_UTF8 );
+            ByteString  aTmpStr;
+            rIn.ReadByteString(aTmpStr);
+            aTitle = rtl::OStringToOUString(aTmpStr, RTL_TEXTENCODING_UTF8);
         }
     }
 }
@@ -591,7 +593,7 @@ sal_Bool SgaObjectSvDraw::DrawCentered( OutputDevice* pOut, const FmFormModel& r
 void SgaObjectSvDraw::WriteData( SvStream& rOut, const String& rDestDir ) const
 {
     SgaObject::WriteData( rOut, rDestDir );
-    rOut << ByteString( aTitle, RTL_TEXTENCODING_UTF8 );
+    rOut.WriteByteString(rtl::OUStringToOString(aTitle, RTL_TEXTENCODING_UTF8));
 }
 
 // ------------------------------------------------------------------------
@@ -603,7 +605,8 @@ void SgaObjectSvDraw::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
     if( rReadVersion >= 5 )
     {
         ByteString aTmpStr;
-        rIn >> aTmpStr; aTitle = String( aTmpStr.GetBuffer(), RTL_TEXTENCODING_UTF8 );
+        rIn.ReadByteString(aTmpStr);
+        aTitle = rtl::OStringToOUString(aTmpStr, RTL_TEXTENCODING_UTF8);
     }
 }
 

@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#define ENABLE_BYTESTRING_STREAM_OPERATORS
-
 #include <tools/vcompat.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -43,8 +41,6 @@
 #include "svx/gallery1.hxx"
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
-
-#define ENABLE_BYTESTRING_STREAM_OPERATORS
 
 // --------------
 // - Namespaces -
@@ -138,13 +134,16 @@ void GalleryThemeEntry::SetId( sal_uInt32 nNewId, sal_Bool bResetThemeName )
 
 SvStream& operator<<( SvStream& rOut, const GalleryImportThemeEntry& rEntry )
 {
-    ByteString aDummy;
+    rOut.WriteByteString(ByteString(rEntry.aThemeName, RTL_TEXTENCODING_UTF8));
 
-    rOut << ByteString( rEntry.aThemeName, RTL_TEXTENCODING_UTF8 ) <<
-            ByteString( rEntry.aUIName, RTL_TEXTENCODING_UTF8 ) <<
-            ByteString( String(rEntry.aURL.GetMainURL( INetURLObject::NO_DECODE )), RTL_TEXTENCODING_UTF8 ) <<
-            ByteString( rEntry.aImportName, RTL_TEXTENCODING_UTF8 ) <<
-            aDummy;
+    rOut.WriteByteString(ByteString(rEntry.aUIName, RTL_TEXTENCODING_UTF8));
+
+    rOut.WriteByteString(ByteString(String(rEntry.aURL.GetMainURL( INetURLObject::NO_DECODE )), RTL_TEXTENCODING_UTF8));
+
+    rOut.WriteByteString(ByteString(rEntry.aImportName, RTL_TEXTENCODING_UTF8));
+
+    ByteString aDummy;
+    rOut.WriteByteString(aDummy);
 
     return rOut;
 }
@@ -155,11 +154,19 @@ SvStream& operator>>( SvStream& rIn, GalleryImportThemeEntry& rEntry )
 {
     ByteString aTmpStr;
 
-    rIn >> aTmpStr; rEntry.aThemeName = String( aTmpStr, RTL_TEXTENCODING_UTF8 );
-    rIn >> aTmpStr; rEntry.aUIName = String( aTmpStr, RTL_TEXTENCODING_UTF8 );
-    rIn >> aTmpStr; rEntry.aURL = INetURLObject( String( aTmpStr, RTL_TEXTENCODING_UTF8 ) );
-    rIn >> aTmpStr; rEntry.aImportName = String( aTmpStr, RTL_TEXTENCODING_UTF8 );
-    rIn >> aTmpStr;
+    rIn.ReadByteString(aTmpStr);
+    rEntry.aThemeName = String( aTmpStr, RTL_TEXTENCODING_UTF8 );
+
+    rIn.ReadByteString(aTmpStr);
+    rEntry.aUIName = String( aTmpStr, RTL_TEXTENCODING_UTF8 );
+
+    rIn.ReadByteString(aTmpStr);
+    rEntry.aURL = INetURLObject( String( aTmpStr, RTL_TEXTENCODING_UTF8 ) );
+
+    rIn.ReadByteString(aTmpStr);
+    rEntry.aImportName = String( aTmpStr, RTL_TEXTENCODING_UTF8 );
+
+    rIn.ReadByteString(aTmpStr);
 
     return rIn;
 }

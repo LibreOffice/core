@@ -30,7 +30,6 @@
 #include "precompiled_svx.hxx"
 #include <sal/macros.h>
 
-#define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include <svx/fmpage.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

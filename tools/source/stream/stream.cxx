@@ -52,7 +52,6 @@ c >>= 4;                    \
 c |= nSwapTmp;
 
 #include <tools/debug.hxx>
-#define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include <tools/stream.hxx>
 #include <osl/thread.h>
 #include <algorithm>

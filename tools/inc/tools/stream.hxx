@@ -346,9 +346,6 @@ public:
     SvStream&       operator>>( unsigned char& rChar );
     SvStream&       operator>>( float& rFloat );
     SvStream&       operator>>( double& rDouble );
-#ifdef ENABLE_BYTESTRING_STREAM_OPERATORS
-    SvStream&       operator>>( ByteString& rString ) { return ReadByteString(rString); }
-#endif
 #ifdef ENABLE_STRING_STREAM_OPERATORS
     SvStream&       operator>>( UniString& rString ) { return ReadByteString(rString); }
 #endif
@@ -367,9 +364,6 @@ public:
     SvStream&       operator<<( const double& rDouble );
     SvStream&       operator<<( const char* pBuf );
     SvStream&       operator<<( const unsigned char* pBuf );
-#ifdef ENABLE_BYTESTRING_STREAM_OPERATORS
-    SvStream&       operator<<( const ByteString& rString ) { return WriteByteString( rString ); }
-#endif
 #ifdef ENABLE_STRING_STREAM_OPERATORS
     SvStream&       operator<<( const UniString& rString ) { return WriteByteString(rString); }
 #endif

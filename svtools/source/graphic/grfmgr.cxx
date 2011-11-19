@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#define ENABLE_BYTESTRING_STREAM_OPERATORS
-
 #include <algorithm>
 
 #include <tools/vcompat.hxx>
@@ -1139,7 +1137,7 @@ SvStream& operator>>( SvStream& rIStm, GraphicObject& rGraphicObj )
 
     if( bLink )
     {
-        rIStm >> aLink;
+        rIStm.ReadByteString(aLink);
         rGraphicObj.SetLink( UniString( aLink, RTL_TEXTENCODING_UTF8 ) );
     }
     else
@@ -1158,7 +1156,7 @@ SvStream& operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj )
     rOStm << rGraphicObj.GetGraphic() << rGraphicObj.GetAttr() << bLink;
 
     if( bLink )
-        rOStm << rtl::OUStringToOString(rGraphicObj.GetLink(), RTL_TEXTENCODING_UTF8);
+        rOStm.WriteByteString(rtl::OUStringToOString(rGraphicObj.GetLink(), RTL_TEXTENCODING_UTF8));
 
     return rOStm;
 }

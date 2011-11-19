@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#define ENABLE_BYTESTRING_STREAM_OPERATORS
-
 #include <tools/urlobj.hxx>
 #include <tools/vcompat.hxx>
 #include <unotools/streamwrap.hxx>
@@ -736,9 +734,10 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, sa
             if( nVersion <= 0x00ff )
             {
                 sal_uInt32      nThemeId = 0;
-                ByteString aTmpStr;
 
-                *pIStm >> aTmpStr; aThemeName = String( aTmpStr.GetBuffer(), RTL_TEXTENCODING_UTF8 );
+                ByteString aTmpStr;
+                pIStm->ReadByteString(aTmpStr);
+                aThemeName = rtl::OStringToOUString(aTmpStr, RTL_TEXTENCODING_UTF8);
 
                 // Charakterkonvertierung durchfuehren
                 if( nVersion >= 0x0004 )
@@ -1363,7 +1362,7 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
     sal_Bool                bRel;
 
     rOStm << (sal_uInt16) 0x0004;
-    rOStm << ByteString( GetRealName(), RTL_TEXTENCODING_UTF8 );
+    rOStm.WriteByteString(rtl::OUStringToOString(GetRealName(), RTL_TEXTENCODING_UTF8));
     rOStm << nCount << (sal_uInt16) gsl_getSystemTextEncoding();
 
     for( sal_uInt32 i = 0; i < nCount; i++ )
@@ -1402,7 +1401,9 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
         }
 
         aPath.SearchAndReplace(m_aDestDir, String());
-        rOStm << bRel << ByteString( aPath, RTL_TEXTENCODING_UTF8 ) << pObj->nOffset << (sal_uInt16) pObj->eObjKind;
+        rOStm << bRel;
+        rOStm.WriteByteString(rtl::OUStringToOString(aPath, RTL_TEXTENCODING_UTF8));
+        rOStm << pObj->nOffset << (sal_uInt16) pObj->eObjKind;
     }
 
     // neuerdings wird ein 512-Byte-Reservepuffer gechrieben;
@@ -1436,12 +1437,14 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
 {
     sal_uInt32          nCount;
     sal_uInt16          nVersion;
-    ByteString          aTmpStr;
     String              aThemeName;
     rtl_TextEncoding    nTextEncoding;
 
     aImportName = String();
-    rIStm >> nVersion >> aTmpStr >> nCount;
+    rIStm >> nVersion;
+    ByteString aTmpStr;
+    rIStm.ReadByteString(aTmpStr);
+    rIStm >> nCount;
 
     if( nVersion >= 0x0004 )
     {
@@ -1452,7 +1455,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
     else
         nTextEncoding = RTL_TEXTENCODING_UTF8;
 
-    aThemeName = String( aTmpStr.GetBuffer(), nTextEncoding );
+    aThemeName = rtl::OStringToOUString(aTmpStr, nTextEncoding);
 
     if( nCount <= ( 1L << 14 ) )
     {
@@ -1480,10 +1483,12 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
             String      aPath;
             sal_uInt16  nTemp;
 
-            rIStm >> bRel >> aTempFileName >> pObj->nOffset;
+            rIStm >> bRel;
+            rIStm.ReadByteString(aTempFileName);
+            rIStm >> pObj->nOffset;
             rIStm >> nTemp; pObj->eObjKind = (SgaObjKind) nTemp;
 
-            aFileName = String( aTempFileName.GetBuffer(), gsl_getSystemTextEncoding() );
+            aFileName = rtl::OStringToOUString(aTempFileName, gsl_getSystemTextEncoding());
 
             if( bRel )
             {
