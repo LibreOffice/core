@@ -38,6 +38,7 @@
 #include <tools/debug.hxx>
 #include <tools/stack.hxx>
 #include <tools/table.hxx>
+#include <tools/dynary.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/poly.hxx>

@@ -134,6 +134,7 @@
 #include <osl/thread.hxx>
 #include <osl/thread.h>
 #include <vcl/apptypes.hxx>
+#include <tools/dynary.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <sfx2/app.hxx>

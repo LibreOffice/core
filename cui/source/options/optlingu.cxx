@@ -32,6 +32,7 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <tools/shl.hxx>
+#include <tools/dynary.hxx>
 #include <i18npool/mslangid.hxx>
 #include <unotools/lingucfg.hxx>
 #include <editeng/unolingu.hxx>
