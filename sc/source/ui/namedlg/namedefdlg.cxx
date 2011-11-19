@@ -8,7 +8,14 @@
 #include "rangenam.hxx"
 #include "reffact.hxx"
 
+// defines -------------------------------------------------------------------
 
+#define ABS_SREF          SCA_VALID \
+    | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
+#define ABS_DREF          ABS_SREF \
+    | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
+#define ABS_SREF3D      ABS_SREF | SCA_TAB_3D
+#define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
 
 ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         ScDocument* pDoc, std::map<rtl::OUString, ScRangeName*> aRangeMap,
@@ -22,7 +29,8 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParen
     maFtScope( this, ScResId( FT_SCOPE ) ),
     maFlDiv( this, ScResId( FL_DIV ) ),
     maEdName( this, ScResId( ED_NAME ) ),
-    maEdRange( this, ScResId( ED_RANGE ) ),
+    maEdRange( this, this, ScResId( ED_RANGE ) ),
+    maRbRange( this, ScResId( RB_RANGE ), &maEdRange, this ),
     maLbScope( this, ScResId( LB_SCOPE ) ),
     maBtnRowHeader( this, ScResId( BTN_ROWHEADER ) ),
     maBtnColHeader( this, ScResId( BTN_COLHEADER ) ),
@@ -44,9 +52,13 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParen
         pDoc->GetName(i, aTabName);
         maLbScope.InsertEntry(aTabName);
     }
+
     maBtnCancel.SetClickHdl( LINK( this, ScNameDefDlg, CancelBtnHdl));
     maBtnAdd.SetClickHdl( LINK( this, ScNameDefDlg, AddBtnHdl ));
     maEdName.SetModifyHdl( LINK( this, ScNameDefDlg, NameModifyHdl ));
+    maEdRange.SetGetFocusHdl( LINK( this, ScNameDefDlg, AssignGetFocusHdl ) );
+
+    maFtInfo.SetText(ResId::toString( ScResId( STR_DEFAULT_INFO ) ));
 
     maBtnAdd.Disable(); // empty name is invalid
 }
@@ -83,6 +95,7 @@ bool ScNameDefDlg::IsNameValid()
         maBtnAdd.Disable();
         return false;
     }
+    maFtInfo.SetText(ResId::toString( ScResId( STR_DEFAULT_INFO ) ));
     maBtnAdd.Enable();
     return true;
 }
@@ -168,33 +181,26 @@ void ScNameDefDlg::AddPushed()
 
 sal_Bool ScNameDefDlg::IsRefInputMode() const
 {
-    /*
-    return maEdAssign.IsEnabled();
-    */
-    return true;
+    return maEdRange.IsEnabled();
 }
 
 void ScNameDefDlg::RefInputDone( sal_Bool bForced)
 {
-    /*
     ScAnyRefDlg::RefInputDone(bForced);
-    EdModifyHdl(&maEdAssign);
-    */
+    EdModifyHdl(&maEdRange);
 }
 
 void ScNameDefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
-    /**
-    if ( maEdAssign.IsEnabled() )
+    if ( maEdRange.IsEnabled() )
     {
         if ( rRef.aStart != rRef.aEnd )
-            RefInputStart(&maEdAssign);
+            RefInputStart(&maEdRange);
         String aRefStr;
         rRef.Format( aRefStr, ABS_DREF3D, pDocP,
                 ScAddress::Details(pDocP->GetAddressConvention(), 0, 0) );
-        maEdAssign.SetRefString( aRefStr );
+        maEdRange.SetRefString( aRefStr );
     }
-    */
 }
 
 sal_Bool ScNameDefDlg::Close()
@@ -204,10 +210,8 @@ sal_Bool ScNameDefDlg::Close()
 
 void ScNameDefDlg::SetActive()
 {
-    /*
-    maEdAssign.GrabFocus();
+    maEdRange.GrabFocus();
     RefInputDone();
-    */
 }
 
 IMPL_LINK( ScNameDefDlg, CancelBtnHdl, void*, EMPTYARG)
@@ -225,5 +229,17 @@ IMPL_LINK( ScNameDefDlg, AddBtnHdl, void*, EMPTYARG)
 IMPL_LINK( ScNameDefDlg, NameModifyHdl, void*, EMPTYARG)
 {
     IsNameValid();
+    return 0;
+}
+
+IMPL_LINK( ScNameDefDlg, EdModifyHdl, void *, EMPTYARG )
+{
+    IsNameValid();
+    return 0;
+}
+
+IMPL_LINK( ScNameDefDlg, AssignGetFocusHdl, void *, EMPTYARG )
+{
+    EdModifyHdl( &maEdRange );
     return 0;
 }

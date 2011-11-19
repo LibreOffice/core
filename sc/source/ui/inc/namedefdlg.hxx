@@ -50,7 +50,8 @@ private:
     FixedLine maFlDiv;
 
     Edit maEdName;
-    Edit maEdRange;
+    formula::RefEdit maEdRange;
+    formula::RefButton maRbRange;
 
     ListBox maLbScope;
 
@@ -76,6 +77,8 @@ private:
     DECL_LINK( CancelBtnHdl, void * );
     DECL_LINK( AddBtnHdl, void* );
     DECL_LINK( NameModifyHdl, void* );
+    DECL_LINK( EdModifyHdl, void * );
+    DECL_LINK( AssignGetFocusHdl, void * );
 
 protected:
     virtual void    RefInputDone( sal_Bool bForced = sal_False );

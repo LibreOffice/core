@@ -29,7 +29,6 @@ ModelessDialog RID_SCDLG_NAMES_DEFINE
     {
         Pos = MAP_APPFONT( 6, 6 );
         Size = MAP_APPFONT( 180, 14 );
-        Text [en-US] = "Define the name and range or formula expression.";
     };
     FixedText FT_NAME
     {
@@ -60,8 +59,15 @@ ModelessDialog RID_SCDLG_NAMES_DEFINE
     {
         Border = TRUE;
         Pos = MAP_APPFONT( 40, 44 );
-        Size = MAP_APPFONT( 150, 14 );
+        Size = MAP_APPFONT( 130, 14 );
         TabStop = TRUE;
+    };
+    ImageButton RB_RANGE
+    {
+        Pos = MAP_APPFONT ( 170 , 44 ) ;
+        Size = MAP_APPFONT ( 15 , 14 ) ;
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
     };
     CheckBox BTN_PRINTAREA
     {
@@ -125,5 +131,8 @@ ModelessDialog RID_SCDLG_NAMES_DEFINE
     {
         Text [ en-US ] = "Invalid name. Only use letters, numbers and underscore and don't use names like cell addresses";
     };
-
+    String STR_DEFAULT_INFO
+    {
+        Text [en-US] = "Define the name and range or formula expression.";
+    };
 };
