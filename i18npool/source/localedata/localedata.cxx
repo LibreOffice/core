@@ -1535,21 +1535,21 @@ sal_Bool OutlineNumbering::hasElements(  ) throw(RuntimeException)
 OUString SAL_CALL
 LocaleData::getImplementationName() throw( RuntimeException )
 {
-    return OUString::createFromAscii(clocaledata);
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(clocaledata));
 }
 
 sal_Bool SAL_CALL
 LocaleData::supportsService(const OUString& rServiceName)
         throw( RuntimeException )
 {
-    return !rServiceName.compareToAscii(clocaledata);
+    return rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(clocaledata));
 }
 
 Sequence< OUString > SAL_CALL
 LocaleData::getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii(clocaledata);
+    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(clocaledata));
     return aRet;
 }
 
