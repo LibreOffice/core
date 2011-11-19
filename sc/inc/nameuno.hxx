@@ -67,7 +67,7 @@ class ScNamedRangeObj : public ::cppu::WeakImplHelper6<
                         public SfxListener
 {
 private:
-    ScNamedRangesObj*       mpParent;
+    com::sun::star::uno::Reference< com::sun::star::sheet::XNamedRanges > mxParent;
     ScDocShell*             pDocShell;
     String                  aName;
     com::sun::star::uno::Reference< com::sun::star::container::XNamed > mxSheet;
@@ -81,7 +81,7 @@ private:
     SCTAB                   GetTab_Impl();
 
 public:
-                            ScNamedRangeObj(ScNamedRangesObj* pParent, ScDocShell* pDocSh, const String& rNm,
+                            ScNamedRangeObj( com::sun::star::uno::Reference< com::sun::star::sheet::XNamedRanges > xParent, ScDocShell* pDocSh, const String& rNm,
                                     com::sun::star::uno::Reference< com::sun::star::container::XNamed > xSheet = com::sun::star::uno::Reference< com::sun::star::container::XNamed > ());
     virtual                 ~ScNamedRangeObj();
 

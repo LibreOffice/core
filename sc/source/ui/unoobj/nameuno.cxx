@@ -99,8 +99,8 @@ bool lcl_UserVisibleName(const ScRangeData& rData)
     return !rData.HasType(RT_DATABASE) && !rData.HasType(RT_SHARED);
 }
 
-ScNamedRangeObj::ScNamedRangeObj(ScNamedRangesObj* pParent, ScDocShell* pDocSh, const String& rNm, Reference<container::XNamed> xSheet):
-    mpParent(pParent),
+ScNamedRangeObj::ScNamedRangeObj( Reference< sheet::XNamedRanges > xParent, ScDocShell* pDocSh, const String& rNm, Reference<container::XNamed> xSheet):
+    mxParent(xParent),
     pDocShell( pDocSh ),
     aName( rNm ),
     mxSheet( xSheet )
@@ -215,7 +215,7 @@ void ScNamedRangeObj::Modify_Impl( const String* pNewName, const ScTokenArray* p
     if (pNewRanges->insert(pNew))
     {
         ScDocFunc aFunc(*pDocShell);
-        aFunc.SetNewRangeNames(pNewRanges, mpParent->IsModifyAndBroadcast(), nTab);
+        aFunc.SetNewRangeNames(pNewRanges, dynamic_cast<ScNamedRangesObj*>(mxParent.get())->IsModifyAndBroadcast(), nTab);
 
         aName = aInsName;   //! broadcast?
     }
