@@ -305,11 +305,6 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSave
 
     if(!bIsGroup || bIs3DScene)
     {
-        if(pUndoSet)
-        {
-            delete pUndoSet;
-        }
-
         pUndoSet = new SfxItemSet(pObj->GetMergedItemSet());
 
         if(bStyleSheet)
