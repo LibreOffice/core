@@ -132,6 +132,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using ::rtl::OUString;
 
+
 namespace com { namespace sun { namespace star { namespace i18n {
 
 #define ERROR RuntimeException()
@@ -281,8 +282,7 @@ Calendar_gregorian::getLoadedCalendar2() throw(RuntimeException)
 com::sun::star::i18n::Calendar SAL_CALL
 Calendar_gregorian::getLoadedCalendar() throw(RuntimeException)
 {
-        // gets "down-copy-constructed"
-        return aCalendar;
+        return LocaleData::downcastCalendar( aCalendar);
 }
 
 OUString SAL_CALL
@@ -838,6 +838,7 @@ static sal_Int32 SAL_CALL DisplayCode2FieldIndex(sal_Int32 nCalendarDisplayCode)
             return CalendarFieldIndex::DAY_OF_MONTH;
         case CalendarDisplayCode::SHORT_DAY_NAME:
         case CalendarDisplayCode::LONG_DAY_NAME:
+        case CalendarDisplayCode::NARROW_DAY_NAME:
             return CalendarFieldIndex::DAY_OF_WEEK;
         case CalendarDisplayCode::SHORT_QUARTER:
         case CalendarDisplayCode::LONG_QUARTER:
@@ -845,8 +846,10 @@ static sal_Int32 SAL_CALL DisplayCode2FieldIndex(sal_Int32 nCalendarDisplayCode)
         case CalendarDisplayCode::LONG_MONTH:
         case CalendarDisplayCode::SHORT_MONTH_NAME:
         case CalendarDisplayCode::LONG_MONTH_NAME:
+        case CalendarDisplayCode::NARROW_MONTH_NAME:
         case CalendarDisplayCode::SHORT_GENITIVE_MONTH_NAME:
         case CalendarDisplayCode::LONG_GENITIVE_MONTH_NAME:
+        case CalendarDisplayCode::NARROW_GENITIVE_MONTH_NAME:
             return CalendarFieldIndex::MONTH;
         case CalendarDisplayCode::SHORT_YEAR:
         case CalendarDisplayCode::LONG_YEAR:
@@ -910,19 +913,33 @@ Calendar_gregorian::getNumberOfDaysInWeek() throw(RuntimeException)
 Sequence< CalendarItem > SAL_CALL
 Calendar_gregorian::getDays() throw(RuntimeException)
 {
-        return aCalendar.Days;
+        return LocaleData::downcastCalendarItems( aCalendar.Days);
 }
 
 
 Sequence< CalendarItem > SAL_CALL
 Calendar_gregorian::getMonths() throw(RuntimeException)
 {
+        return LocaleData::downcastCalendarItems( aCalendar.Months);
+}
+
+
+Sequence< CalendarItem2 > SAL_CALL
+Calendar_gregorian::getDays2() throw(RuntimeException)
+{
+        return aCalendar.Days;
+}
+
+
+Sequence< CalendarItem2 > SAL_CALL
+Calendar_gregorian::getMonths2() throw(RuntimeException)
+{
         return aCalendar.Months;
 }
 
 
-Sequence< CalendarItem > SAL_CALL
-Calendar_gregorian::getGenitiveMonths() throw(RuntimeException)
+Sequence< CalendarItem2 > SAL_CALL
+Calendar_gregorian::getGenitiveMonths2() throw(RuntimeException)
 {
         return aCalendar.GenitiveMonths;
 }
@@ -943,18 +960,21 @@ Calendar_gregorian::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_I
                 if( idx >= aCalendar.Days.getLength() ) throw ERROR;
                 if (nameType == 0) aStr = aCalendar.Days[idx].AbbrevName;
                 else if (nameType == 1) aStr = aCalendar.Days[idx].FullName;
+                else if (nameType == 2) aStr = aCalendar.Days[idx].NarrowName;
                 else throw ERROR;
                 break;
             case CalendarDisplayIndex::MONTH:
                 if( idx >= aCalendar.Months.getLength() ) throw ERROR;
                 if (nameType == 0) aStr = aCalendar.Months[idx].AbbrevName;
                 else if (nameType == 1) aStr = aCalendar.Months[idx].FullName;
+                else if (nameType == 2) aStr = aCalendar.Months[idx].NarrowName;
                 else throw ERROR;
                 break;
             case CalendarDisplayIndex::GENITIVE_MONTH:
                 if( idx >= aCalendar.GenitiveMonths.getLength() ) throw ERROR;
                 if (nameType == 0) aStr = aCalendar.GenitiveMonths[idx].AbbrevName;
                 else if (nameType == 1) aStr = aCalendar.GenitiveMonths[idx].FullName;
+                else if (nameType == 2) aStr = aCalendar.GenitiveMonths[idx].NarrowName;
                 else throw ERROR;
                 break;
             case CalendarDisplayIndex::ERA:
@@ -1035,14 +1055,20 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
                 return getDisplayName(CalendarDisplayIndex::DAY, value, 0);
             case CalendarDisplayCode::LONG_DAY_NAME:
                 return getDisplayName(CalendarDisplayIndex::DAY, value, 1);
+            case CalendarDisplayCode::NARROW_DAY_NAME:
+                return getDisplayName(CalendarDisplayIndex::DAY, value, 2);
             case CalendarDisplayCode::SHORT_MONTH_NAME:
                 return getDisplayName(CalendarDisplayIndex::MONTH, value, 0);
             case CalendarDisplayCode::LONG_MONTH_NAME:
                 return getDisplayName(CalendarDisplayIndex::MONTH, value, 1);
+            case CalendarDisplayCode::NARROW_MONTH_NAME:
+                return getDisplayName(CalendarDisplayIndex::MONTH, value, 2);
             case CalendarDisplayCode::SHORT_GENITIVE_MONTH_NAME:
                 return getDisplayName(CalendarDisplayIndex::GENITIVE_MONTH, value, 0);
             case CalendarDisplayCode::LONG_GENITIVE_MONTH_NAME:
                 return getDisplayName(CalendarDisplayIndex::GENITIVE_MONTH, value, 1);
+            case CalendarDisplayCode::NARROW_GENITIVE_MONTH_NAME:
+                return getDisplayName(CalendarDisplayIndex::GENITIVE_MONTH, value, 2);
             case CalendarDisplayCode::SHORT_ERA:
                 return getDisplayName(CalendarDisplayIndex::ERA, value, 0);
             case CalendarDisplayCode::LONG_ERA:

@@ -74,13 +74,16 @@ inline sal_Bool operator ==(const com::sun::star::lang::Locale& l1, const com::s
 
 class LocaleData : public cppu::WeakImplHelper2
 <
-    XLocaleData3,
+    com::sun::star::i18n::XLocaleData3,
     com::sun::star::lang::XServiceInfo
 >
 {
 public:
     LocaleData();
     ~LocaleData();
+
+    static com::sun::star::uno::Sequence< com::sun::star::i18n::CalendarItem > downcastCalendarItems( const com::sun::star::uno::Sequence< com::sun::star::i18n::CalendarItem2 > & rCi );
+    static com::sun::star::i18n::Calendar downcastCalendar( const com::sun::star::i18n::Calendar2 & rC );
 
     virtual LanguageCountryInfo SAL_CALL getLanguageCountryInfo( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
     virtual LocaleDataItem SAL_CALL getLocaleItem( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
@@ -129,14 +132,14 @@ private :
     sal_Unicode ** SAL_CALL getIndexArrayForAlgorithm(const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rAlgorithm);
     com::sun::star::i18n::Calendar2 ref_cal;
     rtl::OUString ref_name;
-    com::sun::star::uno::Sequence< com::sun::star::i18n::CalendarItem > &
+    com::sun::star::uno::Sequence< com::sun::star::i18n::CalendarItem2 > &
         getCalendarItemByName(const rtl::OUString& name,
         const com::sun::star::lang::Locale& rLocale,
         const com::sun::star::uno::Sequence< com::sun::star::i18n::Calendar2 >& calendarsSeq,
         sal_Int16 item) throw( com::sun::star::uno::RuntimeException );
 
     /// Helper to obtain a sequence of days, months, gmonths or eras.
-    com::sun::star::uno::Sequence< com::sun::star::i18n::CalendarItem > getCalendarItems(
+    com::sun::star::uno::Sequence< com::sun::star::i18n::CalendarItem2 > getCalendarItems(
             sal_Unicode const * const * const allCalendars,
             sal_Int16 & rnOffset,
             const sal_Int16 nWhichItem,

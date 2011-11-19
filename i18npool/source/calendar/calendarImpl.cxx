@@ -292,11 +292,31 @@ CalendarImpl::getMonths() throw(RuntimeException)
 }
 
 
-Sequence< CalendarItem > SAL_CALL
-CalendarImpl::getGenitiveMonths() throw(RuntimeException)
+Sequence< CalendarItem2 > SAL_CALL
+CalendarImpl::getDays2() throw(RuntimeException)
 {
     if (xCalendar.is())
-        return xCalendar->getGenitiveMonths();
+        return xCalendar->getDays2();
+    else
+        throw ERROR ;
+}
+
+
+Sequence< CalendarItem2 > SAL_CALL
+CalendarImpl::getMonths2() throw(RuntimeException)
+{
+    if (xCalendar.is())
+        return xCalendar->getMonths2();
+    else
+        throw ERROR ;
+}
+
+
+Sequence< CalendarItem2 > SAL_CALL
+CalendarImpl::getGenitiveMonths2() throw(RuntimeException)
+{
+    if (xCalendar.is())
+        return xCalendar->getGenitiveMonths2();
     else
         throw ERROR ;
 }

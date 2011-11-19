@@ -183,10 +183,10 @@ public:
     const ::boost::shared_ptr< ::com::sun::star::i18n::Calendar2 > getDefaultCalendar() const;
 
     /// Convenience method to obtain the day names of the default calendar.
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > getDefaultCalendarDays() const;
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > getDefaultCalendarDays() const;
 
     /// Convenience method to obtain the month names of the default calendar.
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > getDefaultCalendarMonths() const;
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > getDefaultCalendarMonths() const;
 
     /** Obtain digit grouping. The usually known grouping by thousands (#,###)
         is actually only one of possible groupings. Another one, for example,

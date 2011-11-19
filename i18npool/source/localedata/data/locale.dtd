@@ -269,13 +269,17 @@
 <!-- All Day elements of a Calendar must be given if the RefLocale mechanism is not used! -->
 <!ATTLIST DaysOfWeek %RefLocale;>
 <!-- Sequence of days is important, MUST start with Sunday. -->
-<!ELEMENT Day (DayID, DefaultAbbrvName, DefaultFullName)>
+<!ELEMENT Day (DayID, DefaultAbbrvName, DefaultFullName, DefaultNarrowName*)>
 <!ELEMENT DayID (#PCDATA)>
 <!-- Preferably the lower case abbreviated English name like sun for Sunday. -->
 <!ELEMENT DefaultAbbrvName (#PCDATA)>
 <!-- The abbreviated day name, e.g. Sun for Sunday. -->
 <!ELEMENT DefaultFullName (#PCDATA)>
 <!-- The full day name, e.g. Sunday for Sunday. -->
+<!ELEMENT DefaultNarrowName (#PCDATA)>
+<!-- The narrow day name, e.g. S for Sunday.
+     If not specified, the first letter of the corresponding DefaultFullName is taken.
+ -->
 
 <!ELEMENT MonthsOfYear (Month*)>
 <!-- All Month elements of a Calendar must be given if the RefLocale mechanism is not used! -->
@@ -294,7 +298,7 @@
      year, e.g. January in a Gregorian calendar.
  -->
 
-<!ELEMENT Month (MonthID, DefaultAbbrvName, DefaultFullName)>
+<!ELEMENT Month (MonthID, DefaultAbbrvName, DefaultFullName, DefaultNarrowName*)>
 <!ELEMENT MonthID (#PCDATA)>
 <!-- Preferably the lower case abbreviated English name like jan for January. -->
 

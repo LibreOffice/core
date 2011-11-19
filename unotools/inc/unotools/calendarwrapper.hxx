@@ -91,8 +91,6 @@ public:
     void setMinimumNumberOfDaysForFirstWeek( sal_Int16 nDays );
     sal_Int16 getNumberOfMonthsInYear() const;
     sal_Int16 getNumberOfDaysInWeek() const;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > getMonths() const;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > getDays() const;
     String getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType ) const;
 
     /** Convenience method to get timezone offset in milliseconds, taking both
@@ -110,8 +108,10 @@ public:
 
     // wrapper implementations of XCalendar3
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > getGenitiveMonths() const;
     ::com::sun::star::i18n::Calendar2 getLoadedCalendar() const;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > getDays() const;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > getMonths() const;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > getGenitiveMonths() const;
 
 
     // convenience methods

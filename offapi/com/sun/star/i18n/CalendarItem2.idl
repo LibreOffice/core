@@ -26,11 +26,10 @@
  * instead of those above.
  */
 
-#ifndef __com_sun_star_i18n_XCalendar3_idl__
-#define __com_sun_star_i18n_XCalendar3_idl__
+#ifndef __com_sun_star_i18n_CalendarItem2_idl__
+#define __com_sun_star_i18n_CalendarItem2_idl__
 
-#include <com/sun/star/i18n/XExtendedCalendar.idl>
-#include <com/sun/star/i18n/Calendar2.idl>
+#include <com/sun/star/i18n/CalendarItem.idl>
 
 //=============================================================================
 
@@ -40,41 +39,21 @@ module com { module sun { module star { module i18n {
 
 
 /**
-    This interface provides access to locale specific calendar
-    systems.
+    One entry in a calendar, for example, a day of week or a month or an
+    era.
 
-    <p> It is derived from
-    <type scope="::com::sun::star::i18n">XExtendedCalendar</type> and
-    provides additional methods to obtain <type>Calendar2</type> items
-    that include the possessive genitive case month names and sequences 
-    of <type>CalendarItem2</type> items.. </p>
+    <p> Derived from <type scope="com::sun::star::i18n">CalendarItem</type>
+    this provides an additional member for narrow names. </p>
 
     @since LibreOffice 3.5
  */
-published interface XCalendar3 : com::sun::star::i18n::XExtendedCalendar
+
+published struct CalendarItem2 : com::sun::star::i18n::CalendarItem
 {
-    //------------------------------------------------------------------------
-    /// Get the currently loaded <type>Calendar2</type>.
-    Calendar2   getLoadedCalendar2();
-
-    //------------------------------------------------------------------------
-    /** returns a sequence of <type>CalendarItem2</type> describing the
-        day names.
+    /** The narrow name, for example, <b>"S"</b> for Sunday or 
+        <b>"J"</b> for January.
      */
-    sequence< CalendarItem2 >    getDays2();
-
-    //------------------------------------------------------------------------
-    /** returns a sequence of <type>CalendarItem2</type> describing the
-        month names.
-     */
-    sequence< CalendarItem2 >    getMonths2();
-
-    //------------------------------------------------------------------------
-    /** returns a sequence of <type>CalendarItem2</type> describing the
-        genitive case month names.
-     */
-    sequence< CalendarItem2 >    getGenitiveMonths2();
-
+    string NarrowName;
 };
 
 //=============================================================================

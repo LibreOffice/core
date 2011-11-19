@@ -62,7 +62,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/i18n/XCalendar.hpp>
+#include <com/sun/star/i18n/XCalendar3.hpp>
 #include <com/sun/star/sheet/XFunctionAccess.hpp>
 
 using namespace comphelper;
@@ -73,15 +73,15 @@ using namespace com::sun::star::i18n;
 void unoToSbxValue( SbxVariable* pVar, const Any& aValue );
 Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, com::sun::star::beans::Property* pUnoProperty = NULL );
 
-static Reference< XCalendar > getLocaleCalendar( void )
+static Reference< XCalendar3 > getLocaleCalendar( void )
 {
-    static Reference< XCalendar > xCalendar;
+    static Reference< XCalendar3 > xCalendar;
     if( !xCalendar.is() )
     {
         Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
         if( xSMgr.is() )
         {
-            xCalendar = Reference< XCalendar >( xSMgr->createInstance
+            xCalendar = Reference< XCalendar3 >( xSMgr->createInstance
                 ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.LocaleCalendar" )) ), UNO_QUERY );
         }
     }
@@ -1752,13 +1752,13 @@ RTLFUNC(MonthName)
         return;
     }
 
-    Reference< XCalendar > xCalendar = getLocaleCalendar();
+    Reference< XCalendar3 > xCalendar = getLocaleCalendar();
     if( !xCalendar.is() )
     {
         StarBASIC::Error( SbERR_INTERNAL_ERROR );
         return;
     }
-    Sequence< CalendarItem > aMonthSeq = xCalendar->getMonths();
+    Sequence< CalendarItem2 > aMonthSeq = xCalendar->getMonths2();
     sal_Int32 nMonthCount = aMonthSeq.getLength();
 
     sal_Int16 nVal = rPar.Get(1)->GetInteger();
@@ -1772,8 +1772,8 @@ RTLFUNC(MonthName)
     if( nParCount == 3 )
         bAbbreviate = rPar.Get(2)->GetBool();
 
-    const CalendarItem* pCalendarItems = aMonthSeq.getConstArray();
-    const CalendarItem& rItem = pCalendarItems[nVal - 1];
+    const CalendarItem2* pCalendarItems = aMonthSeq.getConstArray();
+    const CalendarItem2& rItem = pCalendarItems[nVal - 1];
 
     ::rtl::OUString aRetStr = ( bAbbreviate ? rItem.AbbrevName : rItem.FullName );
     rPar.Get(0)->PutString( String(aRetStr) );
@@ -1792,14 +1792,14 @@ RTLFUNC(WeekdayName)
         return;
     }
 
-    Reference< XCalendar > xCalendar = getLocaleCalendar();
+    Reference< XCalendar3 > xCalendar = getLocaleCalendar();
     if( !xCalendar.is() )
     {
         StarBASIC::Error( SbERR_INTERNAL_ERROR );
         return;
     }
 
-    Sequence< CalendarItem > aDaySeq = xCalendar->getDays();
+    Sequence< CalendarItem2 > aDaySeq = xCalendar->getDays2();
     sal_Int16 nDayCount = (sal_Int16)aDaySeq.getLength();
     sal_Int16 nDay = rPar.Get(1)->GetInteger();
     sal_Int16 nFirstDay = 0;
@@ -1830,8 +1830,8 @@ RTLFUNC(WeekdayName)
             bAbbreviate = pPar2->GetBool();
     }
 
-    const CalendarItem* pCalendarItems = aDaySeq.getConstArray();
-    const CalendarItem& rItem = pCalendarItems[nDay - 1];
+    const CalendarItem2* pCalendarItems = aDaySeq.getConstArray();
+    const CalendarItem2& rItem = pCalendarItems[nDay - 1];
 
     ::rtl::OUString aRetStr = ( bAbbreviate ? rItem.AbbrevName : rItem.FullName );
     rPar.Get(0)->PutString( String(aRetStr) );
@@ -1860,7 +1860,7 @@ sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam = false, sal_Int16 n
         }
         if( nFirstDay == 0 )
         {
-            Reference< XCalendar > xCalendar = getLocaleCalendar();
+            Reference< XCalendar3 > xCalendar = getLocaleCalendar();
             if( !xCalendar.is() )
             {
                 StarBASIC::Error( SbERR_INTERNAL_ERROR );
@@ -2189,7 +2189,7 @@ RTLFUNC(DateDiff)
                     }
                     if( nFirstDay == 0 )
                     {
-                        Reference< XCalendar > xCalendar = getLocaleCalendar();
+                        Reference< XCalendar3 > xCalendar = getLocaleCalendar();
                         if( !xCalendar.is() )
                         {
                             StarBASIC::Error( SbERR_INTERNAL_ERROR );
@@ -2249,7 +2249,7 @@ double implGetDateOfFirstDayInFirstWeek
     if( nFirstWeek < 0 || nFirstWeek > 3 )
         nError = SbERR_BAD_ARGUMENT;
 
-    Reference< XCalendar > xCalendar;
+    Reference< XCalendar3 > xCalendar;
     if( nFirstDay == 0 || nFirstWeek == 0 )
     {
         xCalendar = getLocaleCalendar();
@@ -2453,7 +2453,7 @@ RTLFUNC(FormatDateTime)
         }
     }
 
-    Reference< XCalendar > xCalendar = getLocaleCalendar();
+    Reference< XCalendar3 > xCalendar = getLocaleCalendar();
     if( !xCalendar.is() )
     {
         StarBASIC::Error( SbERR_INTERNAL_ERROR );

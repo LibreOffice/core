@@ -209,12 +209,20 @@ published interface XCalendar : com::sun::star::uno::XInterface
 
         @param nNameType
             A value indicating whether to return the abbreviated or the
-            full name.
+            full name, or the narrow name for some 
+            <type>CalendarDisplayIndex</type> values.
             <dl>
                 <dt> 0 </dt>
                     <dd>abbreviated name, e.g. <b>"Jan"</b></dd>
                 <dt> 1 </dt>
                     <dd>full name, e.g. <b>"January"</b></dd>
+                <dt> 2 </dt>
+                    <dd>narrow name, e.g. <b>"J"</b> <br>
+                    Valid only for <const>CalendarDisplayIndex::DAY</const>, 
+                    <const>CalendarDisplayIndex::MONTH</const> and 
+                    <const>CalendarDisplayIndex::GENITIVE_MONTH</const> <br>
+                    @since LibreOffice 3.5
+                    </dd>
 
             <p> This parameter is not used if the
             <em>nCalendarDisplayIndex</em> argument equals

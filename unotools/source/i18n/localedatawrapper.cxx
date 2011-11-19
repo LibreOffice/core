@@ -614,13 +614,13 @@ const ::boost::shared_ptr< ::com::sun::star::i18n::Calendar2 > LocaleDataWrapper
 }
 
 
-const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > LocaleDataWrapper::getDefaultCalendarDays() const
+const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > LocaleDataWrapper::getDefaultCalendarDays() const
 {
     return getDefaultCalendar()->Days;
 }
 
 
-const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > LocaleDataWrapper::getDefaultCalendarMonths() const
+const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > LocaleDataWrapper::getDefaultCalendarMonths() const
 {
     return getDefaultCalendar()->Months;
 }

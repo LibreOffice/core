@@ -2561,6 +2561,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/i18n,\
 	CalendarDisplayIndex \
 	CalendarFieldIndex \
 	CalendarItem \
+	CalendarItem2 \
 	CharType \
 	CharacterIteratorMode \
 	CollatorOptions \

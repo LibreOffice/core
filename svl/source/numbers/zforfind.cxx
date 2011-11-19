@@ -2431,7 +2431,7 @@ void ImpSvNumberInputScan::InitText()
 
     delete [] pUpperMonthText;
     delete [] pUpperAbbrevMonthText;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > xElems
+    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > xElems
         = pCal->getMonths();
     nElems = xElems.getLength();
     pUpperMonthText = new String[nElems];

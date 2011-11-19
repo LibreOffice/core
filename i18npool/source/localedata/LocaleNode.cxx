@@ -1134,6 +1134,64 @@ void LCIndexNode::generateCode (const OFileWriter &of) const
     of.writeFunction("getFollowPageWords_", "nbOfPageWords", "FollowPageWordArray");
 }
 
+
+static void lcl_writeAbbrFullNarrNames( const OFileWriter & of, const LocaleNode* currNode,
+        const sal_Char* elementTag, sal_Int16 i, sal_Int16 j )
+{
+    OUString aAbbrName = currNode->getChildAt(1)->getValue();
+    OUString aFullName = currNode->getChildAt(2)->getValue();
+    OUString aNarrName;
+    LocaleNode* p = (currNode->getNumberOfChildren() > 3 ? currNode->getChildAt(3) : 0);
+    if (p && p->getName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DefaultNarrowName")))
+        aNarrName = p->getValue();
+    else
+    {
+        sal_Int32 nIndex = 0;
+        sal_uInt32 nChar = aFullName.iterateCodePoints( &nIndex);
+        aNarrName = OUString( &nChar, 1);
+    }
+    of.writeParameter( elementTag, "DefaultAbbrvName",  aAbbrName, i, j);
+    of.writeParameter( elementTag, "DefaultFullName",   aFullName, i, j);
+    of.writeParameter( elementTag, "DefaultNarrowName", aNarrName, i, j);
+}
+
+static void lcl_writeTabTagString( const OFileWriter & of, const sal_Char* pTag, const sal_Char* pStr )
+{
+    of.writeAsciiString("\t");
+    of.writeAsciiString( pTag);
+    of.writeAsciiString( pStr);
+}
+
+static void lcl_writeTabTagStringNums( const OFileWriter & of,
+        const sal_Char* pTag, const sal_Char* pStr, sal_Int16 i, sal_Int16 j )
+{
+    lcl_writeTabTagString( of, pTag, pStr);
+    of.writeInt(i); of.writeInt(j); of.writeAsciiString(",\n");
+}
+
+static void lcl_writeAbbrFullNarrArrays( const OFileWriter & of, sal_Int16 nCount,
+        const sal_Char* elementTag, sal_Int16 i, bool bNarrow )
+{
+    if (nCount == 0)
+    {
+        lcl_writeTabTagString( of, elementTag, "Ref");
+        of.writeInt(i); of.writeAsciiString(",\n");
+        lcl_writeTabTagString( of, elementTag, "RefName");
+        of.writeInt(i); of.writeAsciiString(",\n");
+    }
+    else
+    {
+        for (sal_Int16 j = 0; j < nCount; j++)
+        {
+            lcl_writeTabTagStringNums( of, elementTag, "ID", i, j);
+            lcl_writeTabTagStringNums( of, elementTag, "DefaultAbbrvName",  i, j);
+            lcl_writeTabTagStringNums( of, elementTag, "DefaultFullName",   i, j);
+            if (bNarrow)
+                lcl_writeTabTagStringNums( of, elementTag, "DefaultNarrowName", i, j);
+        }
+    }
+}
+
 void LCCalendarNode::generateCode (const OFileWriter &of) const
 {
     ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
@@ -1192,8 +1250,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 of.writeParameter("dayID", dayID, i, j);
                 if (j == 0 && bGregorian && !dayID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "sun")))
                     incError( "First day of a week of a Gregorian calendar must be <DayID>sun</DayID>");
-                of.writeParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
-                of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
+                lcl_writeAbbrFullNarrNames( of, currNode, elementTag, i, j);
             }
         }
         ++nChild;
@@ -1225,8 +1282,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 of.writeParameter("monthID", monthID, i, j);
                 if (j == 0 && bGregorian && !monthID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "jan")))
                     incError( "First month of a year of a Gregorian calendar must be <MonthID>jan</MonthID>");
-                of.writeParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
-                of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
+                lcl_writeAbbrFullNarrNames( of, currNode, elementTag, i, j);
             }
         }
         ++nChild;
@@ -1261,8 +1317,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 of.writeParameter("genitiveMonthID", genitiveMonthID, i, j);
                 if (j == 0 && bGregorian && !genitiveMonthID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "jan")))
                     incError( "First genitive month of a year of a Gregorian calendar must be <MonthID>jan</MonthID>");
-                of.writeParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
-                of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
+                lcl_writeAbbrFullNarrNames( of, currNode, elementTag, i, j);
             }
         }
         ++nChild;
@@ -1377,56 +1432,10 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         of.writeAsciiString("\tdefaultCalendar");
         of.writeInt(i);
         of.writeAsciiString(",\n");
-        if (nbOfDays[i] == 0) {
-            of.writeAsciiString("\tdayRef");
-            of.writeInt(i); of.writeAsciiString(",\n");
-            of.writeAsciiString("\tdayRefName");
-            of.writeInt(i); of.writeAsciiString(",\n");
-        } else {
-            for(j = 0; j < nbOfDays[i]; j++) {
-                of.writeAsciiString("\tdayID");
-                of.writeInt(i); of.writeInt(j); of.writeAsciiString(",\n");
-                of.writeAsciiString("\tdayDefaultAbbrvName");
-                of.writeInt(i); of.writeInt(j); of.writeAsciiString(",\n");
-                of.writeAsciiString("\tdayDefaultFullName");of.writeInt(i); of.writeInt(j); of.writeAsciiString(",\n");
-            }
-        }
-        if (nbOfMonths[i] == 0) {
-            of.writeAsciiString("\tmonthRef");
-            of.writeInt(i); of.writeAsciiString(",\n");
-            of.writeAsciiString("\tmonthRefName");
-            of.writeInt(i); of.writeAsciiString(",\n");
-        } else {
-            for(j = 0; j < nbOfMonths[i]; j++) {
-                of.writeAsciiString("\tmonthID");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
-                of.writeAsciiString("\tmonthDefaultAbbrvName");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
-                of.writeAsciiString("\tmonthDefaultFullName");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
-            }
-        }
-        if (nbOfGenitiveMonths[i] == 0) {
-            of.writeAsciiString("\tgenitiveMonthRef");
-            of.writeInt(i); of.writeAsciiString(",\n");
-            of.writeAsciiString("\tgenitiveMonthRefName");
-            of.writeInt(i); of.writeAsciiString(",\n");
-        } else {
-            for(j = 0; j < nbOfGenitiveMonths[i]; j++) {
-                of.writeAsciiString("\tgenitiveMonthID");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
-                of.writeAsciiString("\tgenitiveMonthDefaultAbbrvName");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
-                of.writeAsciiString("\tgenitiveMonthDefaultFullName");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
-            }
-        }
-        if (nbOfEras[i] == 0) {
-            of.writeAsciiString("\teraRef");
-            of.writeInt(i); of.writeAsciiString(",\n");
-            of.writeAsciiString("\teraRefName");
-            of.writeInt(i); of.writeAsciiString(",\n");
-        } else {
-            for(j = 0; j < nbOfEras[i]; j++) {
-                of.writeAsciiString("\teraID"); of.writeInt(i); of.writeInt(j); of.writeAsciiString(",\n");
-                of.writeAsciiString("\teraDefaultAbbrvName");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
-                of.writeAsciiString("\teraDefaultFullName");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
-            }
-        }
+        lcl_writeAbbrFullNarrArrays( of, nbOfDays[i], "day", i, true);
+        lcl_writeAbbrFullNarrArrays( of, nbOfMonths[i], "month", i, true);
+        lcl_writeAbbrFullNarrArrays( of, nbOfGenitiveMonths[i], "genitiveMonth", i, true);
+        lcl_writeAbbrFullNarrArrays( of, nbOfEras[i], "era", i, false /*noNarrow*/);
         of.writeAsciiString("\tstartDayOfWeek");of.writeInt(i); of.writeAsciiString(",\n");
         of.writeAsciiString("\tminimalDaysInFirstWeek");of.writeInt(i); of.writeAsciiString(",\n");
     }

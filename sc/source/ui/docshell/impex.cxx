@@ -983,7 +983,7 @@ static bool lcl_PutString(
             {
                 static const String aSeptCorrect( RTL_CONSTASCII_USTRINGPARAM( "SEPT" ) );
                 static const String aSepShortened( RTL_CONSTASCII_USTRINGPARAM( "SEP" ) );
-                uno::Sequence< i18n::CalendarItem > xMonths;
+                uno::Sequence< i18n::CalendarItem2 > xMonths;
                 sal_Int32 i, nMonthCount;
                 //  first test all month names from local international
                 xMonths = rCalendar.getMonths();

@@ -467,12 +467,9 @@ void Calendar::ImplFormat()
         sal_Int16 nDay = maCalendarWrapper.getFirstDayOfWeek();
         for ( sal_Int16 nDayOfWeek = 0; nDayOfWeek < 7; nDayOfWeek++ )
         {
-            // Use first character of full name, since the abbreviated name may
-            // be roman digits or similar in some locales. Proper
-            // implementation would need narrow one letter month names defined
-            // in locale data.
+            // Use narrow name.
             String aDayOfWeek( maCalendarWrapper.getDisplayName(
-                        i18n::CalendarDisplayIndex::DAY, nDay, 1).GetChar(0));
+                        i18n::CalendarDisplayIndex::DAY, nDay, 2));
             long nOffX = (mnDayWidth-GetTextWidth( aDayOfWeek ))/2;
             if ( mnWinStyle & WB_BOLDTEXT )
                 nOffX++;

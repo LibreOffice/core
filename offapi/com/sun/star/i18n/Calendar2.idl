@@ -29,7 +29,7 @@
 #ifndef __com_sun_star_i18n_Calendar2_idl__
 #define __com_sun_star_i18n_Calendar2_idl__
 
-#include <com/sun/star/i18n/Calendar.idl>
+#include <com/sun/star/i18n/CalendarItem2.idl>
 
 //=============================================================================
 
@@ -41,12 +41,17 @@ module com { module sun { module star { module i18n {
     Calendar items as returned in a sequence by
     <member>XLocaleData3::getAllCalendars2()</member>.
 
-    <p> Derived from
+    <p> Similar to
     <type scope="::com::sun::star::i18n">Calendar</type> this provides
     an additional member with a sequence of possessive (genitive case) 
     month names for locales that use them, for example Slavic locales. 
     If a locale does not provide the possessive form, the names are 
-    identical to the nouns in <member>Calendar::Months</member>
+    identical to the nouns in <member>Calendar::Months</member> </p>
+
+    <p> The sequences are of type
+    <type scope="com::sun::star::i18n">CalendarItem2</type> instead of
+    <type scope="com::sun::star::i18n">CalendarItem</type>, with the 
+    additional <member>NarrowName</member> member.
 
     @see XLocaleData
         for links to DTD of XML locale data files.
@@ -54,12 +59,31 @@ module com { module sun { module star { module i18n {
     @since LibreOffice 3.5
  */
 
-published struct Calendar2 : com::sun::star::i18n::Calendar
+published struct Calendar2
 {
-    /** the months of the year in possessive genitive case, see also 
-        <type>CalendarItem</type>.
-     */
-    sequence< CalendarItem >    GenitiveMonths;
+    /// The days of the week.
+    sequence< CalendarItem2 >   Days;
+
+    /// The months of the year.
+    sequence< CalendarItem2 >   Months;
+
+    /// The months of the year in possessive genitive case.
+    sequence< CalendarItem2 >   GenitiveMonths;
+
+    /// The possible eras.
+    sequence< CalendarItem2 >   Eras;
+
+    /// The ID of the day with which the week begins.
+    string                      StartOfWeek;
+
+    /// How many days must reside in the first week of a year.
+    short                       MinimumNumberOfDaysForFirstWeek;
+
+    /// If this is the default calendar for a given locale.
+    boolean                     Default;
+
+    /// The name of the calendar, for example, <b>Gregorian</b>.
+    string                      Name;
 };
 
 //=============================================================================

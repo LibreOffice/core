@@ -503,12 +503,12 @@ sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
 }
 
 
-::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > CalendarWrapper::getMonths() const
+::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > CalendarWrapper::getMonths() const
 {
     try
     {
         if ( xC.is() )
-            return xC->getMonths();
+            return xC->getMonths2();
     }
     catch ( Exception& e )
     {
@@ -520,16 +520,16 @@ sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
         (void)e;
 #endif
     }
-    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > (0);
+    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > (0);
 }
 
 
-::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > CalendarWrapper::getDays() const
+::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > CalendarWrapper::getDays() const
 {
     try
     {
         if ( xC.is() )
-            return xC->getDays();
+            return xC->getDays2();
     }
     catch ( Exception& e )
     {
@@ -541,7 +541,7 @@ sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
         (void)e;
 #endif
     }
-    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > (0);
+    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > (0);
 }
 
 
@@ -612,12 +612,12 @@ String CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_In
 }
 
 
-::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > CalendarWrapper::getGenitiveMonths() const
+::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > CalendarWrapper::getGenitiveMonths() const
 {
     try
     {
         if ( xC.is() )
-            return xC->getGenitiveMonths();
+            return xC->getGenitiveMonths2();
     }
     catch ( Exception& e )
     {
@@ -629,7 +629,7 @@ String CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_In
         (void)e;
 #endif
     }
-    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > (0);
+    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > (0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

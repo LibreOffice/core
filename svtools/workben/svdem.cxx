@@ -599,8 +599,8 @@ MyCalendar::MyCalendar( Window* pParent ) :
     aMenuBar.SetPopupMenu( 1, &aWeekStartMenu );
     aMenuBar.SetPopupMenu( 2, &aWeekCountMenu );
     sal_Int16 nDays = rCal.getNumberOfDaysInWeek();
-    uno::Sequence< i18n::CalendarItem> xItems = rCal.getDays();
-    const i18n::CalendarItem* pArr = xItems.getArray();
+    uno::Sequence< i18n::CalendarItem2> xItems = rCal.getDays();
+    const i18n::CalendarItem2* pArr = xItems.getArray();
     for ( sal_Int16 i = 0; i < nDays; i++ )
         aWeekStartMenu.InsertItem( 10+(sal_uInt16)i, pArr[i].FullName, MIB_AUTOCHECK | MIB_RADIOCHECK );
     aWeekStartMenu.CheckItem( 10+(sal_uInt16)rCal.getFirstDayOfWeek() );

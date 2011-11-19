@@ -42,13 +42,13 @@ published constants CalendarDisplayIndex
 {
     /// name of an AM/PM value
     const short AM_PM           = 0;
-    /// name of a day of week
+	/// name of a day of week
     const short DAY             = 1;
-    /// name of a month
+	/// name of a month
     const short MONTH           = 2;
-    /// name of a year (if used for a specific calendar)
+	/// name of a year (if used for a specific calendar)
     const short YEAR            = 3;
-    /// name of an era, like BC/AD
+	/// name of an era, like BC/AD
     const short ERA             = 4;
 
     /** name of a possessive genitive case month

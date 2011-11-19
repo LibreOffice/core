@@ -281,6 +281,36 @@ struct LocaleDataLookupTableItem
     }
 };
 
+
+// static
+Sequence< CalendarItem > LocaleData::downcastCalendarItems( const Sequence< CalendarItem2 > & rCi )
+{
+    sal_Int32 nSize = rCi.getLength();
+    Sequence< CalendarItem > aCi( nSize);
+    CalendarItem* p1 = aCi.getArray();
+    const CalendarItem2* p2 = rCi.getConstArray();
+    for (sal_Int32 i=0; i < nSize; ++i, ++p1, ++p2)
+        *p1 = *p2;
+    return aCi;
+}
+
+
+// static
+Calendar LocaleData::downcastCalendar( const Calendar2 & rC )
+{
+    Calendar aCal(
+            downcastCalendarItems( rC.Days),
+            downcastCalendarItems( rC.Months),
+            downcastCalendarItems( rC.Eras),
+            rC.StartOfWeek,
+            rC.MinimumNumberOfDaysForFirstWeek,
+            rC.Default,
+            rC.Name
+            );
+    return aCal;
+}
+
+
 LocaleData::LocaleData()
 {
 }
@@ -467,7 +497,7 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
 #define REF_ERAS         3
 #define REF_OFFSET_COUNT 4
 
-Sequence< CalendarItem > &LocaleData::getCalendarItemByName(const OUString& name,
+Sequence< CalendarItem2 > &LocaleData::getCalendarItemByName(const OUString& name,
         const Locale& rLocale, const Sequence< Calendar2 >& calendarsSeq, sal_Int16 item)
         throw(RuntimeException)
 {
@@ -517,13 +547,13 @@ Sequence< CalendarItem > &LocaleData::getCalendarItemByName(const OUString& name
 }
 
 
-Sequence< CalendarItem > LocaleData::getCalendarItems(
+Sequence< CalendarItem2 > LocaleData::getCalendarItems(
         sal_Unicode const * const * const allCalendars, sal_Int16 & rnOffset,
         const sal_Int16 nWhichItem, const sal_Int16 nCalendar,
         const Locale & rLocale, const Sequence< Calendar2 > & calendarsSeq )
         throw(RuntimeException)
 {
-    Sequence< CalendarItem > aItems;
+    Sequence< CalendarItem2 > aItems;
     if (OUString( allCalendars[rnOffset]).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ref")))
     {
         aItems = getCalendarItemByName( OUString( allCalendars[rnOffset+1]), rLocale, calendarsSeq, nWhichItem);
@@ -533,12 +563,32 @@ Sequence< CalendarItem > LocaleData::getCalendarItems(
     {
         sal_Int32 nSize = allCalendars[nWhichItem][nCalendar];
         aItems.realloc( nSize);
-        CalendarItem* pItem = aItems.getArray();
-        for (sal_Int16 j = 0; j < nSize; ++j, ++pItem)
+        CalendarItem2* pItem = aItems.getArray();
+        switch (nWhichItem)
         {
-            CalendarItem day( allCalendars[rnOffset], allCalendars[rnOffset+1], allCalendars[rnOffset+2]);
-            *pItem = day;
-            rnOffset += 3;
+            case REF_DAYS:
+            case REF_MONTHS:
+            case REF_GMONTHS:
+                for (sal_Int16 j = 0; j < nSize; ++j, ++pItem)
+                {
+                    CalendarItem2 item( allCalendars[rnOffset], allCalendars[rnOffset+1],
+                            allCalendars[rnOffset+2], allCalendars[rnOffset+3]);
+                    *pItem = item;
+                    rnOffset += 4;
+                }
+                break;
+            case REF_ERAS:
+                // Absent narrow name.
+                for (sal_Int16 j = 0; j < nSize; ++j, ++pItem)
+                {
+                    CalendarItem2 item( allCalendars[rnOffset], allCalendars[rnOffset+1],
+                            allCalendars[rnOffset+2], OUString());
+                    *pItem = item;
+                    rnOffset += 3;
+                }
+                break;
+            default:
+                OSL_FAIL( "LocaleData::getCalendarItems: unhandled REF_* case");
         }
     }
     return aItems;
@@ -564,20 +614,20 @@ LocaleData::getAllCalendars2( const Locale& rLocale ) throw(RuntimeException)
             offset++;
             sal_Bool defaultCalendar = sal::static_int_cast<sal_Bool>( allCalendars[offset][0] );
             offset++;
-            Sequence< CalendarItem > days = getCalendarItems( allCalendars, offset, REF_DAYS, i,
+            Sequence< CalendarItem2 > days = getCalendarItems( allCalendars, offset, REF_DAYS, i,
                     rLocale, calendarsSeq);
-            Sequence< CalendarItem > months = getCalendarItems( allCalendars, offset, REF_MONTHS, i,
+            Sequence< CalendarItem2 > months = getCalendarItems( allCalendars, offset, REF_MONTHS, i,
                     rLocale, calendarsSeq);
-            Sequence< CalendarItem > gmonths = getCalendarItems( allCalendars, offset, REF_GMONTHS, i,
+            Sequence< CalendarItem2 > gmonths = getCalendarItems( allCalendars, offset, REF_GMONTHS, i,
                     rLocale, calendarsSeq);
-            Sequence< CalendarItem > eras = getCalendarItems( allCalendars, offset, REF_ERAS, i,
+            Sequence< CalendarItem2 > eras = getCalendarItems( allCalendars, offset, REF_ERAS, i,
                     rLocale, calendarsSeq);
             OUString startOfWeekDay(allCalendars[offset]);
             offset++;
             sal_Int16 minimalDaysInFirstWeek = allCalendars[offset][0];
             offset++;
-            Calendar2 aCalendar(days, months, eras, startOfWeekDay,
-                    minimalDaysInFirstWeek, defaultCalendar, calendarID, gmonths);
+            Calendar2 aCalendar(days, months, gmonths, eras, startOfWeekDay,
+                    minimalDaysInFirstWeek, defaultCalendar, calendarID);
             calendarsSeq[i] = aCalendar;
         }
         return calendarsSeq;
@@ -592,14 +642,14 @@ LocaleData::getAllCalendars2( const Locale& rLocale ) throw(RuntimeException)
 Sequence< Calendar > SAL_CALL
 LocaleData::getAllCalendars( const Locale& rLocale ) throw(RuntimeException)
 {
-    Sequence< Calendar2 > aCal2( getAllCalendars2( rLocale));
+    const Sequence< Calendar2 > aCal2( getAllCalendars2( rLocale));
     sal_Int32 nLen = aCal2.getLength();
     Sequence< Calendar > aCal1( nLen);
-    const Calendar2* p2 = aCal2.getArray();
+    const Calendar2* p2 = aCal2.getConstArray();
     Calendar* p1 = aCal1.getArray();
     for (sal_Int32 i=0; i < nLen; ++i, ++p1, ++p2)
     {
-        *p1 = *p2;
+        *p1 = downcastCalendar( *p2);
     }
     return aCal1;
 }

@@ -3194,7 +3194,9 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             break;
             case NF_KEY_MMMMM:              // MMMMM
                 OutString += rCal.getDisplayString(
-                        CalendarDisplayCode::LONG_MONTH_NAME, nNatNum ).GetChar(0);
+                        (ImpUseGenitiveMonth( nUseGenitiveMonth, NumFor[nIx]) ?
+                         CalendarDisplayCode::NARROW_GENITIVE_MONTH_NAME :
+                         CalendarDisplayCode::NARROW_MONTH_NAME), nNatNum );
             break;
             case NF_KEY_Q:                  // Q
                 OutString += rCal.getDisplayString(
@@ -3521,7 +3523,9 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             break;
             case NF_KEY_MMMMM:              // MMMMM
                 OutString += rCal.getDisplayString(
-                        CalendarDisplayCode::LONG_MONTH_NAME, nNatNum ).GetChar(0);
+                        (ImpUseGenitiveMonth( nUseGenitiveMonth, NumFor[nIx]) ?
+                         CalendarDisplayCode::NARROW_GENITIVE_MONTH_NAME :
+                         CalendarDisplayCode::NARROW_MONTH_NAME), nNatNum );
             break;
             case NF_KEY_Q:                  // Q
                 OutString += rCal.getDisplayString(

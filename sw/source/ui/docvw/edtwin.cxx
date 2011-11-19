@@ -5605,7 +5605,7 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
     (*pCalendar)->LoadDefaultCalendar( rSh.GetCurLang() );
 
     {
-        uno::Sequence< i18n::CalendarItem > aNames(
+        uno::Sequence< i18n::CalendarItem2 > aNames(
                                             (*pCalendar)->getMonths() );
         for( int n = 0; n < 2; ++n )
         {
