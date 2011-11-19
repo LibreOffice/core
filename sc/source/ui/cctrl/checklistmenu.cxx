@@ -1220,6 +1220,10 @@ void ScCheckListMenuWindow::getResult(ResultType& rResult)
 void ScCheckListMenuWindow::launch(const Rectangle& rRect)
 {
     packWindow();
+    if (!maConfig.mbAllowEmptySet)
+        // We need to have at least one member selected.
+        maBtnOk.Enable(maChecks.GetCheckedEntryCount() != 0);
+
     StartPopupMode(rRect, (FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_GRABFOCUS));
 }
 
