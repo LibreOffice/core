@@ -161,6 +161,28 @@ inline bool lclIsWhitespace( sal_Unicode cChar )
 
 } // namespace
 
+void SbiScanner::scanGoto()
+{
+    const sal_Unicode* pTestLine = pLine;
+    short nTestCol = nCol;
+    while( lclIsWhitespace( *pTestLine ) )
+    {
+        pTestLine++;
+        nTestCol++;
+    }
+
+    if( *pTestLine && *(pTestLine + 1) )
+    {
+        String aTestSym = aLine.copy( nTestCol, 2 );
+        if( aTestSym.EqualsIgnoreCaseAscii( "to" ) )
+        {
+            aSym = String::CreateFromAscii( "goto" );
+            pLine = pTestLine + 2;
+            nCol = nTestCol + 2;
+        }
+    }
+}
+
 bool SbiScanner::NextSym()
 {
     // memorize for the EOLN-case
@@ -240,26 +262,7 @@ bool SbiScanner::NextSym()
 
         // Special handling for "go to"
         if( bCompatible && *pLine && aSym.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("go") ) )
-        {
-            const sal_Unicode* pTestLine = pLine;
-            short nTestCol = nCol;
-            while( lclIsWhitespace( *pTestLine ) )
-            {
-                pTestLine++;
-                nTestCol++;
-            }
-
-            if( *pTestLine && *(pTestLine + 1) )
-            {
-                String aTestSym = aLine.copy( nTestCol, 2 );
-                if( aTestSym.EqualsIgnoreCaseAscii( "to" ) )
-                {
-                    aSym = String::CreateFromAscii( "goto" );
-                    pLine = pTestLine + 2;
-                    nCol = nTestCol + 2;
-                }
-            }
-        }
+            scanGoto();
 
         // replace closing '_' by space when end of line is following
         // (wrong line continuation otherwise)
