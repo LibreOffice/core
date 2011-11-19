@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_drawinglayer.hxx"
-
 #include <drawinglayer/processor2d/vclmetafileprocessor2d.hxx>
 #include <tools/gen.hxx>
 #include <vcl/virdev.hxx>

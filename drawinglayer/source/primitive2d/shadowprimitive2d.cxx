@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_drawinglayer.hxx"
-
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>

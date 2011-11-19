@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_drawinglayer.hxx"
-
 #include <vclhelperbufferdevice.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <vcl/bitmapex.hxx>

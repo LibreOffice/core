@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_drawinglayer.hxx"
-
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scoped_disposing_ptr.hxx>

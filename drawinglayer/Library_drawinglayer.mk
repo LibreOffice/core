@@ -30,8 +30,6 @@ $(eval $(call gb_Library_Library,drawinglayer))
 
 $(eval $(call gb_Library_add_package_headers,drawinglayer,drawinglayer_inc))
 
-$(eval $(call gb_Library_add_precompiled_header,drawinglayer,$(SRCDIR)/drawinglayer/inc/pch/precompiled_drawinglayer))
-
 $(eval $(call gb_Library_set_include,drawinglayer,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/drawinglayer/inc/pch) \

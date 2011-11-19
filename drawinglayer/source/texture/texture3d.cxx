@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_drawinglayer.hxx"
-
 #include <drawinglayer/texture/texture3d.hxx>
 #include <vcl/bmpacc.hxx>
 #include <drawinglayer/primitive3d/hatchtextureprimitive3d.hxx>

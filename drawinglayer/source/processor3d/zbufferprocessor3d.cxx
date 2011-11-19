@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_drawinglayer.hxx"
-
 #include <drawinglayer/processor3d/zbufferprocessor3d.hxx>
 #include <basegfx/raster/bpixelraster.hxx>
 #include <vcl/bmpacc.hxx>

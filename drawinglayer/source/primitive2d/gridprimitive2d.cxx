@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_drawinglayer.hxx"
-
 #include <drawinglayer/primitive2d/gridprimitive2d.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>

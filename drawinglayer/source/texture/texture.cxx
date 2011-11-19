@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_drawinglayer.hxx"
-
 #include <drawinglayer/texture/texture.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/tools/gradienttools.hxx>

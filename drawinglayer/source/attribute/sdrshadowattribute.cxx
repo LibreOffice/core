@@ -28,9 +28,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_drawinglayer.hxx"
-
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/color/bcolor.hxx>

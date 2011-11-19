@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_drawinglayer.hxx"
-
 #include <helperwrongspellrenderer.hxx>
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <tools/gen.hxx>

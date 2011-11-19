@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_drawinglayer.hxx"
-
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <basegfx/tools/canvastools.hxx>

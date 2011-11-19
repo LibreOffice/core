@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_drawinglayer.hxx"
-
 #include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
 #include <drawinglayer/texture/texture.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>

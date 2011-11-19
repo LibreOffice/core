@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_drawinglayer.hxx"
-
 #include <drawinglayer/primitive2d/animatedprimitive2d.hxx>
 #include <drawinglayer/animation/animationtiming.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>

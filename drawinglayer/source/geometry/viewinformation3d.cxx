@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_drawinglayer.hxx"
-
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <basegfx/range/b3drange.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>

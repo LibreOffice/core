@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_drawinglayer.hxx"
-
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>

@@ -28,9 +28,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_drawinglayer.hxx"
-
 #include <drawinglayer/attribute/sdrobjectattribute3d.hxx>
 #include <drawinglayer/attribute/materialattribute3d.hxx>
 

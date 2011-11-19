@@ -28,9 +28,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_drawinglayer.hxx"
-
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <drawinglayer/attribute/sdrfillbitmapattribute.hxx>
