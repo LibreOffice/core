@@ -79,6 +79,12 @@ struct FileHandle_Impl
     rtl_String *    m_strFilePath; /* holds native file path */
     int             m_fd;
 
+    enum Kind
+    {
+        KIND_FD = 1,
+        KIND_MEM = 2
+    };
+    int          m_kind;
     /** State
      */
     enum StateBits
@@ -242,6 +248,7 @@ FileHandle_Impl::Guard::~Guard()
 FileHandle_Impl::FileHandle_Impl (int fd, char const * path)
     : m_strFilePath (0),
       m_fd      (fd),
+      m_kind    (KIND_FD),
       m_state   (STATE_SEEKABLE | STATE_READABLE),
       m_size    (0),
       m_offset  (0),
@@ -356,6 +363,24 @@ oslFileError FileHandle_Impl::readAt (
     if (!(m_state & STATE_READABLE))
         return osl_File_E_BADF;
 
+    if (m_kind == KIND_MEM)
+    {
+        ssize_t nBytes;
+
+        m_offset = nOffset;
+
+        if ((sal_uInt64) m_offset >= m_size)
+            nBytes = 0;
+        else
+        {
+            nBytes = std::min(nBytesRequested, (size_t) (m_size - m_offset));
+            memmove(pBuffer, m_buffer + m_offset, nBytes);
+            m_offset += nBytes;
+        }
+        *pBytesRead = nBytes;
+        return osl_File_E_None;
+    }
+
 #if defined(LINUX) || defined(SOLARIS)
 
     ssize_t nBytes = ::pread (m_fd, pBuffer, nBytesRequested, nOffset);
@@ -449,7 +474,7 @@ oslFileError FileHandle_Impl::readFileAt (
         *pBytesRead = nBytes;
         return osl_File_E_None;
     }
-    else if (0 == m_buffer)
+    else if (m_kind == KIND_MEM || 0 == m_buffer)
     {
         // not buffered
         return readAt (nOffset, pBuffer, nBytesRequested, pBytesRead);
@@ -825,6 +850,34 @@ static int osl_file_queryLocking (sal_uInt32 uFlags)
     return 0;
 }
 
+#ifdef ANDROID
+
+static oslFileError
+SAL_CALL osl_openMemoryAsFile( void *address, size_t size, oslFileHandle *pHandle )
+{
+    oslFileError eRet;
+    FileHandle_Impl * pImpl = new FileHandle_Impl (-1, "");
+    if (!pImpl)
+    {
+        eRet = oslTranslateFileError (OSL_FET_ERROR, ENOMEM);
+        return eRet;
+    }
+    pImpl->m_kind = FileHandle_Impl::KIND_MEM;
+    pImpl->m_size = sal::static_int_cast< sal_uInt64 >(size);
+
+    *pHandle = (oslFileHandle)(pImpl);
+
+    pImpl->m_bufptr = 0;
+    pImpl->m_buflen = size;
+
+    pImpl->m_bufsiz = size;
+    pImpl->m_buffer = (sal_uInt8*) address;
+
+    return osl_File_E_None;
+}
+
+#endif
+
 /****************************************************************************
  *  osl_openFile
  ***************************************************************************/
@@ -853,6 +906,21 @@ SAL_CALL osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uIn
     if (macxp_resolveAlias (buffer, sizeof(buffer)) != 0)
         return oslTranslateFileError (OSL_FET_ERROR, errno);
 #endif /* MACOSX */
+
+#ifdef ANDROID
+    /* Opening a file from /assets read-only means
+     * we should mmap it from the .apk file
+     */
+    if (!(uFlags & osl_File_OpenFlag_Write) &&
+        strncmp (buffer, "/assets/", strlen ("/assets/")) == 0)
+    {
+        void *address;
+        size_t size;
+        void *(*lo_apkentry)(const char *, size_t *) = (void *(*)(const char *, size_t *)) dlsym(RTLD_DEFAULT, "lo_apkentry");
+        address = (*lo_apkentry)(buffer, &size);
+        return osl_openMemoryAsFile(address, size, pHandle);
+    }
+#endif
 
     /* set mode and flags */
     int mode  = S_IRUSR | S_IRGRP | S_IROTH;
@@ -976,6 +1044,12 @@ SAL_CALL osl_closeFile( oslFileHandle Handle )
 {
     FileHandle_Impl* pImpl = static_cast<FileHandle_Impl*>(Handle);
 
+    if (pImpl->m_kind == FileHandle_Impl::KIND_MEM)
+    {
+        delete pImpl;
+        return osl_File_E_None;
+    }
+
     if ((pImpl == 0) || (pImpl->m_fd < 0))
         return osl_File_E_INVAL;
 
@@ -1008,6 +1082,9 @@ SAL_CALL osl_syncFile(oslFileHandle Handle)
 {
     FileHandle_Impl* pImpl = static_cast<FileHandle_Impl*>(Handle);
 
+    if (pImpl->m_kind == FileHandle_Impl::KIND_MEM)
+        return osl_File_E_None;
+
     if ((0 == pImpl) || (-1 == pImpl->m_fd))
         return osl_File_E_INVAL;
 
@@ -1036,6 +1113,12 @@ SAL_CALL osl_mapFile (
 )
 {
     FileHandle_Impl* pImpl = static_cast<FileHandle_Impl*>(Handle);
+
+    if (pImpl->m_kind == FileHandle_Impl::KIND_MEM)
+    {
+        *ppAddr = pImpl->m_buffer;
+        return osl_File_E_None;
+    }
 
     if ((0 == pImpl) || (-1 == pImpl->m_fd) || (0 == ppAddr))
         return osl_File_E_INVAL;
@@ -1140,7 +1223,7 @@ SAL_CALL osl_readLine (
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
 
-    if ((0 == pImpl) || (-1 == pImpl->m_fd) || (0 == ppSequence))
+    if ((0 == pImpl) || ((pImpl->m_kind == FileHandle_Impl::KIND_FD) && (-1 == pImpl->m_fd)) || (0 == ppSequence))
         return osl_File_E_INVAL;
     sal_uInt64 uBytesRead = 0;
 
@@ -1165,7 +1248,7 @@ SAL_CALL osl_readFile (
 {
     FileHandle_Impl* pImpl = static_cast<FileHandle_Impl*>(Handle);
 
-    if ((0 == pImpl) || (-1 == pImpl->m_fd) || (0 == pBuffer) || (0 == pBytesRead))
+    if ((0 == pImpl) || ((pImpl->m_kind == FileHandle_Impl::KIND_FD) && (-1 == pImpl->m_fd)) || (0 == pBuffer) || (0 == pBytesRead))
         return osl_File_E_INVAL;
 
     static sal_uInt64 const g_limit_ssize_t = std::numeric_limits< ssize_t >::max();
@@ -1226,7 +1309,7 @@ SAL_CALL osl_readFileAt (
 {
     FileHandle_Impl* pImpl = static_cast<FileHandle_Impl*>(Handle);
 
-    if ((0 == pImpl) || (-1 == pImpl->m_fd) || (0 == pBuffer) || (0 == pBytesRead))
+    if ((0 == pImpl) || ((pImpl->m_kind == FileHandle_Impl::KIND_FD) && (-1 == pImpl->m_fd)) || (0 == pBuffer) || (0 == pBytesRead))
         return osl_File_E_INVAL;
     if (0 == (pImpl->m_state & FileHandle_Impl::STATE_SEEKABLE))
         return osl_File_E_SPIPE;
@@ -1289,7 +1372,7 @@ SAL_CALL osl_isEndOfFile( oslFileHandle Handle, sal_Bool *pIsEOF )
 {
     FileHandle_Impl* pImpl = static_cast<FileHandle_Impl*>(Handle);
 
-    if ((0 == pImpl) || (-1 == pImpl->m_fd) || (0 == pIsEOF))
+    if ((0 == pImpl) || ((pImpl->m_kind == FileHandle_Impl::KIND_FD) && (-1 == pImpl->m_fd)) || (0 == pIsEOF))
         return osl_File_E_INVAL;
 
     FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
@@ -1305,7 +1388,7 @@ SAL_CALL osl_getFilePos( oslFileHandle Handle, sal_uInt64* pPos )
 {
     FileHandle_Impl* pImpl = static_cast<FileHandle_Impl*>(Handle);
 
-    if ((0 == pImpl) || (-1 == pImpl->m_fd) || (0 == pPos))
+    if ((0 == pImpl) || ((pImpl->m_kind == FileHandle_Impl::KIND_FD) && (-1 == pImpl->m_fd)) || (0 == pPos))
         return osl_File_E_INVAL;
 
     FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
@@ -1321,7 +1404,7 @@ SAL_CALL osl_setFilePos (oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uOffse
 {
     FileHandle_Impl* pImpl = static_cast<FileHandle_Impl*>(Handle);
 
-    if ((0 == pImpl) || (-1 == pImpl->m_fd))
+    if ((0 == pImpl) || ((pImpl->m_kind == FileHandle_Impl::KIND_FD) && (-1 == pImpl->m_fd)))
         return osl_File_E_INVAL;
 
     static sal_Int64 const g_limit_off_t = std::numeric_limits< off_t >::max();
@@ -1368,7 +1451,7 @@ SAL_CALL osl_getFileSize( oslFileHandle Handle, sal_uInt64* pSize )
 {
     FileHandle_Impl* pImpl = static_cast<FileHandle_Impl*>(Handle);
 
-    if ((0 == pImpl) || (-1 == pImpl->m_fd) || (0 == pSize))
+    if ((0 == pImpl) || ((pImpl->m_kind == FileHandle_Impl::KIND_FD) && (-1 == pImpl->m_fd)) || (0 == pSize))
         return osl_File_E_INVAL;
 
     FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
