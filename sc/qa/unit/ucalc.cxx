@@ -2398,6 +2398,7 @@ void Test::testPostIts()
     rtl::OUString aHello(RTL_CONSTASCII_USTRINGPARAM("Hello world"));
     rtl::OUString aJimBob(RTL_CONSTASCII_USTRINGPARAM("Jim Bob"));
     rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("PostIts"));
+    rtl::OUString aTabName2(RTL_CONSTASCII_USTRINGPARAM("Table2"));
     m_pDoc->InsertTab(0, aTabName);
 
     ScAddress rAddr(2, 2, 0);
@@ -2420,6 +2421,11 @@ void Test::testPostIts()
 
     CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNote(rAddr) == NULL);
     rAddr.IncCol();
+    CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNote(rAddr) == pNote);
+
+    m_pDoc->InsertTab(0, aTabName2);
+    CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNote(rAddr) == NULL);
+    rAddr.IncTab();
     CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNote(rAddr) == pNote);
 
     m_pDoc->DeleteTab(0);
@@ -2716,9 +2722,7 @@ void Test::testMergedCells()
 void Test::testUpdateReference()
 {
     //test that formulas are correctly updated during sheet delete
-    //TODO: add test cases for InsertTabs/InsertTab and DeleteTabs
-    //TODO: add tests for references to other sheets, relative references, updating of named ranges, ...
-    //TODO: maybe rename then to testUpdateReference
+    //TODO: add tests for relative references, updating of named ranges, ...
     rtl::OUString aSheet1(RTL_CONSTASCII_USTRINGPARAM("Sheet1"));
     rtl::OUString aSheet2(RTL_CONSTASCII_USTRINGPARAM("Sheet2"));
     rtl::OUString aSheet3(RTL_CONSTASCII_USTRINGPARAM("Sheet3"));
@@ -2766,6 +2770,7 @@ void Test::testUpdateReference()
     m_pDoc->GetValue(2,1,2, aValue);
     CPPUNIT_ASSERT_MESSAGE("after inserting second sheet formula does not return correct result", aValue == 5);
 
+    //test new DeleteTabs/InsertTabs methods
     m_pDoc->DeleteTabs(0, 2);
     m_pDoc->GetValue(2, 0, 0, aValue);
     CPPUNIT_ASSERT_MESSAGE("after deleting sheets formula does not return correct result", aValue == 3);
@@ -2784,6 +2789,11 @@ void Test::testUpdateReference()
     CPPUNIT_ASSERT_MESSAGE("after inserting sheets formula does not return correct result", aValue == 3);
     m_pDoc->GetValue(2, 1, 2, aValue);
     CPPUNIT_ASSERT_MESSAGE("after inserting sheets formula does not return correct result", aValue == 5);
+
+    m_pDoc->DeleteTab(3);
+    m_pDoc->DeleteTab(2);
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
 }
 
 
