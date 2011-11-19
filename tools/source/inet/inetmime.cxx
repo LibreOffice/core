@@ -2763,7 +2763,7 @@ bool INetMIME::translateUTF8Char(const sal_Char *& rBegin,
 //============================================================================
 // static
 UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
-                                          const ByteString & rBody)
+                                          const rtl::OString& rBody)
 {
     // Due to a bug in INetCoreRFC822MessageStream::ConvertTo7Bit(), old
     // versions of StarOffice send mails with header fields where encoded
@@ -2785,8 +2785,8 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
     //
     // base64 = ALPHA / DIGIT / "+" / "/"
 
-    const sal_Char * pBegin = rBody.GetBuffer();
-    const sal_Char * pEnd = pBegin + rBody.Len();
+    const sal_Char * pBegin = rBody.getStr();
+    const sal_Char * pEnd = pBegin + rBody.getLength();
 
     UniString sDecoded;
     const sal_Char * pCopyBegin = pBegin;
@@ -2984,11 +2984,9 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
                                         bDone = true;
                                         break;
                                     }
-                                    sText.append(rBody.Copy(
-                                        static_cast< xub_StrLen >(
-                                            pEncodedTextCopyBegin - pBegin),
-                                        static_cast< xub_StrLen >(
-                                            q - 1 - pEncodedTextCopyBegin)));
+                                    sText.append(rBody.copy(
+                                        (pEncodedTextCopyBegin - pBegin),
+                                        (q - 1 - pEncodedTextCopyBegin)));
                                     sText.append(sal_Char(nDigit1 << 4 | nDigit2));
                                     q += 2;
                                     pEncodedTextCopyBegin = q;
@@ -2997,22 +2995,18 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
 
                                 case '?':
                                     if (q - pEncodedTextBegin > 1)
-                                        sText.append(rBody.Copy(
-                                            static_cast< xub_StrLen >(
-                                                pEncodedTextCopyBegin - pBegin),
-                                            static_cast< xub_StrLen >(
-                                                q - 1 - pEncodedTextCopyBegin)));
+                                        sText.append(rBody.copy(
+                                            (pEncodedTextCopyBegin - pBegin),
+                                            (q - 1 - pEncodedTextCopyBegin)));
                                     else
                                         bEncodedWord = false;
                                     bDone = true;
                                     break;
 
                                 case '_':
-                                    sText.append(rBody.Copy(
-                                        static_cast< xub_StrLen >(
-                                            pEncodedTextCopyBegin - pBegin),
-                                        static_cast< xub_StrLen >(
-                                            q - 1 - pEncodedTextCopyBegin)));
+                                    sText.append(rBody.copy(
+                                        (pEncodedTextCopyBegin - pBegin),
+                                        (q - 1 - pEncodedTextCopyBegin)));
                                     sText.append(' ');
                                     pEncodedTextCopyBegin = q;
                                     break;
@@ -3284,20 +3278,17 @@ void INetMIMEOutputSink::writeLineEnd()
 void INetMIMEStringOutputSink::writeSequence(const sal_Char * pBegin,
                                              const sal_Char * pEnd)
 {
-    DBG_ASSERT(pBegin && pBegin <= pEnd,
+    OSL_ENSURE(pBegin && pBegin <= pEnd,
                "INetMIMEStringOutputSink::writeSequence(): Bad sequence");
 
-    m_bOverflow = m_bOverflow
-                  || pEnd - pBegin > STRING_MAXLEN - m_aBuffer.Len();
-    if (!m_bOverflow)
-        m_aBuffer.Append(pBegin, static_cast< xub_StrLen >(pEnd - pBegin));
+    m_aBuffer.append(pBegin, pEnd - pBegin);
 }
 
 //============================================================================
 // virtual
 ErrCode INetMIMEStringOutputSink::getError() const
 {
-    return m_bOverflow ? ERRCODE_IO_OUTOFMEMORY : ERRCODE_NONE;
+    return ERRCODE_NONE;
 }
 
 //============================================================================
@@ -4171,12 +4162,12 @@ void INetContentTypeParameterList::Clear()
 
 //============================================================================
 const INetContentTypeParameter *
-INetContentTypeParameterList::find(const ByteString & rAttribute) const
+INetContentTypeParameterList::find(const rtl::OString& rAttribute) const
 {
     boost::ptr_vector<INetContentTypeParameter>::const_iterator iter;
     for (iter = maEntries.begin(); iter != maEntries.end(); ++iter)
     {
-        if (iter->m_sAttribute.EqualsIgnoreCaseAscii(rAttribute))
+        if (iter->m_sAttribute.equalsIgnoreAsciiCase(rAttribute))
             return &(*iter);
     }
 

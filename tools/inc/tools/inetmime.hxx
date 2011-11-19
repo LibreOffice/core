@@ -32,8 +32,9 @@
 
 #include "tools/toolsdllapi.h"
 #include <rtl/alloc.h>
-#include <rtl/string.h>
-#include "rtl/tencinfo.h"
+#include <rtl/string.hxx>
+#include <rtl/strbuf.hxx>
+#include <rtl/tencinfo.h>
 #include <tools/debug.hxx>
 #include <tools/errcode.hxx>
 #include <tools/string.hxx>
@@ -404,19 +405,6 @@ public:
                                 const sal_Unicode * pEnd1,
                                 const sal_Char * pString2);
 
-    /** Check two US-ASCII strings for equality, ignoring case.
-
-        @param rString1  The first string.
-
-        @param sString2  Points to the start of the null terminated second
-        string, must not be null.
-
-        @return  True if the two strings are equal, ignoring the case of US-
-        ASCII alphabetic characters (US-ASCII 'A'--'Z' and 'a'--'z').
-     */
-    static inline bool equalIgnoreCase(const ByteString & rString1,
-                                       const sal_Char * pString2);
-
     static inline bool startsWithLineBreak(const sal_Char * pBegin,
                                            const sal_Char * pEnd);
 
@@ -536,7 +524,7 @@ public:
                                   sal_uInt32 & rCharacter);
 
     static UniString decodeHeaderFieldBody(HeaderFieldType eType,
-                                           const ByteString & rBody);
+                                           const rtl::OString& rBody);
 
 // #i70651#: Prevent warnings on Mac OS X.
 #ifdef MACOSX
@@ -709,14 +697,6 @@ inline sal_uInt32 INetMIME::toUTF32(sal_Unicode cHighSurrogate,
                "INetMIME::toUTF32(): Bad chars");
     return ((sal_uInt32(cHighSurrogate) & 0x3FF) << 10)
                | (sal_uInt32(cLowSurrogate) & 0x3FF);
-}
-
-// static
-inline bool INetMIME::equalIgnoreCase(const ByteString & rString1,
-                                      const sal_Char * pString2)
-{
-    return equalIgnoreCase(rString1.GetBuffer(),
-                           rString1.GetBuffer() + rString1.Len(), pString2);
 }
 
 // static
@@ -973,14 +953,18 @@ public:
 
     /** Write a sequence of octets.
 
-        @param rOctets  A ByteString, interpreted as a sequence of octets.
+        @param rOctets  A rtl::OString, interpreted as a sequence of octets.
 
         @param nBegin  The offset of the first character to write.
 
         @param nEnd  The offset past the last character to write.
      */
-    inline void write(const ByteString & rString, xub_StrLen nBegin,
-                      xub_StrLen nEnd);
+    void write(const rtl::OString& rOctets, xub_StrLen nBegin,
+                      xub_StrLen nEnd)
+    {
+        writeSequence(rOctets.getStr() + nBegin, rOctets.getStr() + nEnd);
+        m_nColumn += nEnd - nBegin;
+    }
 
     /** Write a single octet.
 
@@ -1002,11 +986,16 @@ public:
 
     /** Write a sequence of octets.
 
-        @param rOctets  A ByteString, interpreted as a sequence of octets.
+        @param rOctets  A rtl::OString, interpreted as a sequence of octets.
 
         @return  This instance.
      */
-    inline INetMIMEOutputSink & operator <<(const ByteString & rOctets);
+    INetMIMEOutputSink & operator <<(const rtl::OString& rOctets)
+    {
+        writeSequence(rOctets.getStr(), rOctets.getStr() + rOctets.getLength());
+        m_nColumn += rOctets.getLength();
+        return *this;
+    }
 
     /** Call a manipulator function.
 
@@ -1052,13 +1041,6 @@ inline void INetMIMEOutputSink::write(const sal_Unicode * pBegin,
     m_nColumn += pEnd - pBegin;
 }
 
-inline void INetMIMEOutputSink::write(const ByteString & rOctets,
-                                      xub_StrLen nBegin, xub_StrLen nEnd)
-{
-    writeSequence(rOctets.GetBuffer() + nBegin, rOctets.GetBuffer() + nEnd);
-    m_nColumn += nEnd - nBegin;
-}
-
 inline INetMIMEOutputSink & INetMIMEOutputSink::operator <<(sal_Char nOctet)
 {
     writeSequence(&nOctet, &nOctet + 1);
@@ -1070,14 +1052,6 @@ inline INetMIMEOutputSink & INetMIMEOutputSink::operator <<(const sal_Char *
                                                                 pOctets)
 {
     m_nColumn += writeSequence(pOctets);
-    return *this;
-}
-
-inline INetMIMEOutputSink & INetMIMEOutputSink::operator <<(const ByteString &
-                                                                rOctets)
-{
-    writeSequence(rOctets.GetBuffer(), rOctets.GetBuffer() + rOctets.Len());
-    m_nColumn += rOctets.Len();
     return *this;
 }
 
@@ -1101,8 +1075,7 @@ inline void INetMIME::writeEscapeSequence(INetMIMEOutputSink & rSink,
 //============================================================================
 class INetMIMEStringOutputSink: public INetMIMEOutputSink
 {
-    ByteString m_aBuffer;
-    bool m_bOverflow;
+    rtl::OStringBuffer m_aBuffer;
 
     using INetMIMEOutputSink::writeSequence;
 
@@ -1113,20 +1086,15 @@ public:
     inline INetMIMEStringOutputSink(sal_uInt32 nColumn = 0,
                                     sal_uInt32 nLineLengthLimit
                                         = INetMIME::SOFT_LINE_LENGTH_LIMIT):
-        INetMIMEOutputSink(nColumn, nLineLengthLimit), m_bOverflow(false) {}
+        INetMIMEOutputSink(nColumn, nLineLengthLimit) {}
 
     virtual ErrCode getError() const;
 
-    inline ByteString takeBuffer();
+    rtl::OString takeBuffer()
+    {
+        return m_aBuffer.makeStringAndClear();
+    }
 };
-
-inline ByteString INetMIMEStringOutputSink::takeBuffer()
-{
-    ByteString aTheBuffer = m_aBuffer;
-    m_aBuffer.Erase();
-    m_bOverflow = false;
-    return aTheBuffer;
-}
 
 //============================================================================
 class INetMIMEEncodedWordOutputSink
@@ -1240,17 +1208,17 @@ struct INetContentTypeParameter
         will only be one item for the complete parameter, with the attribute
         name lacking any section suffix.
      */
-    const ByteString m_sAttribute;
+    const rtl::OString m_sAttribute;
 
     /** The optional character set specification (see RFC 2231), in US-ASCII
         encoding and converted to lower case.
      */
-    const ByteString m_sCharset;
+    const rtl::OString m_sCharset;
 
     /** The optional language specification (see RFC 2231), in US-ASCII
         encoding and converted to lower case.
      */
-    const ByteString m_sLanguage;
+    const rtl::OString m_sLanguage;
 
     /** The attribute value.  If the value is a quoted-string, it is
         'unpacked.'  If a character set is specified, and the value can be
@@ -1277,28 +1245,17 @@ struct INetContentTypeParameter
      */
     const bool m_bConverted;
 
-    inline INetContentTypeParameter(const ByteString & rTheAttribute,
-                                    const ByteString & rTheCharset,
-                                    const ByteString & rTheLanguage,
-                                    const UniString & rTheValue,
-                                    bool bTheConverted);
+    INetContentTypeParameter(const rtl::OString& rTheAttribute,
+        const rtl::OString& rTheCharset, const rtl::OString& rTheLanguage,
+        const UniString & rTheValue, bool bTheConverted)
+    : m_sAttribute(rTheAttribute)
+    , m_sCharset(rTheCharset)
+    , m_sLanguage(rTheLanguage)
+    , m_sValue(rTheValue)
+    , m_bConverted(bTheConverted)
+    {
+    }
 };
-
-inline INetContentTypeParameter::INetContentTypeParameter(const ByteString &
-                                                              rTheAttribute,
-                                                          const ByteString &
-                                                              rTheCharset,
-                                                          const ByteString &
-                                                              rTheLanguage,
-                                                          const UniString &
-                                                              rTheValue,
-                                                          bool bTheConverted):
-    m_sAttribute(rTheAttribute),
-    m_sCharset(rTheCharset),
-    m_sLanguage(rTheLanguage),
-    m_sValue(rTheValue),
-    m_bConverted(bTheConverted)
-{}
 
 //============================================================================
 class TOOLS_DLLPUBLIC INetContentTypeParameterList
@@ -1322,8 +1279,7 @@ public:
         return &(maEntries[nIndex]);
     }
 
-    const INetContentTypeParameter * find(const ByteString & rAttribute)
-        const;
+    const INetContentTypeParameter * find(const rtl::OString& rAttribute) const;
 
 private:
 
