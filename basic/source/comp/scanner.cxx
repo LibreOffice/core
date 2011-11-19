@@ -173,7 +173,7 @@ void SbiScanner::scanGoto()
         if(aTestSym.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("to")))
         {
             aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("goto"));
-            pLine = pLine + (nCol - nTestCol) + 2;
+            pLine += (nTestCol - nCol) + 2;
             nCol = nTestCol + 2;
         }
     }
