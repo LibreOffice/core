@@ -42,11 +42,11 @@
 #include <unotools/charclass.hxx>
 #include <fmtcntnt.hxx>
 #include <doc.hxx>
-#include <swserv.hxx>           // fuer Server-Funktionalitaet
+#include <swserv.hxx>           // for server functionality
 #include <IMark.hxx>
 #include <bookmrk.hxx>
-#include <section.hxx>          // fuer SwSectionFmt
-#include <swtable.hxx>          // fuer SwTable
+#include <section.hxx>          // for SwSectionFmt
+#include <swtable.hxx>          // for SwTable
 #include <node.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
@@ -106,20 +106,20 @@ sal_Bool lcl_FindSection( const SwSectionFmtPtr& rpSectFmt, void* pArgs, bool bC
                 : GetAppCharClass().lower( pItem->m_Item ) );
         if( sNm == sCompare )
         {
-            // gefunden, als erfrage die Daten
+            // found, so get the data
             const SwNodeIndex* pIdx;
             if( 0 != (pIdx = rpSectFmt->GetCntnt().GetCntntIdx() ) &&
                 &rpSectFmt->GetDoc()->GetNodes() == &pIdx->GetNodes() )
             {
-                // eine Tabelle im normalen NodesArr
+                // a table in the normal NodesArr
                 pItem->pSectNd = pIdx->GetNode().GetSectionNode();
                 return sal_False;
             }
-//nein!!            // sollte der Namen schon passen, der Rest aber nicht, dann haben wir
-            // sie nicht. Die Namen sind immer eindeutig.
+            // If the name is already correct, but not the rest then we don't have them.
+            // The names are always unique.
         }
     }
-    return sal_True;        // dann weiter
+    return sal_True;
 }
 sal_Bool lcl_FindSectionCaseSensitive( const SwSectionFmtPtr& rpSectFmt, void* pArgs )
 {
@@ -145,15 +145,15 @@ sal_Bool lcl_FindTable( const SwFrmFmtPtr& rpTableFmt, void* pArgs )
             pFBox->GetSttNd() &&
             &rpTableFmt->GetDoc()->GetNodes() == &pFBox->GetSttNd()->GetNodes() )
         {
-            // eine Tabelle im normalen NodesArr
+            // a table in the normal NodesArr
             pItem->pTblNd = (SwTableNode*)
                                         pFBox->GetSttNd()->FindTableNode();
             return sal_False;
         }
-//nein!     // sollte der Namen schon passen, der Rest aber nicht, dann haben wir
-        // sie nicht. Die Namen sind immer eindeutig.
+        // If the name is already correct, but not the rest then we don't have them.
+        // The names are always unique.
     }
-    return sal_True;        // dann weiter
+    return sal_True;
 }
 
 
@@ -161,7 +161,7 @@ sal_Bool lcl_FindTable( const SwFrmFmtPtr& rpTableFmt, void* pArgs )
 bool SwDoc::GetData( const String& rItem, const String& rMimeType,
                      uno::Any & rValue ) const
 {
-    //search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
+    // search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
     bool bCaseSensitive = true;
     while( true )
     {
@@ -169,14 +169,14 @@ bool SwDoc::GetData( const String& rItem, const String& rMimeType,
         if(pBkmk)
             return SwServerObject(*pBkmk).GetData(rValue, rMimeType);
 
-        // haben wir ueberhaupt das Item vorraetig?
+        // Do we already have the Item?
         String sItem( bCaseSensitive ? rItem : GetAppCharClass().lower(rItem));
         _FindItem aPara( sItem );
         ((SwSectionFmts&)*pSectionFmtTbl).ForEach( 0, pSectionFmtTbl->Count(),
                                                     bCaseSensitive ? lcl_FindSectionCaseSensitive : lcl_FindSectionCaseInsensitive, &aPara );
         if( aPara.pSectNd )
         {
-            // gefunden, als erfrage die Daten
+            // found, so get the data
             return SwServerObject( *aPara.pSectNd ).GetData( rValue, rMimeType );
         }
         if( !bCaseSensitive )
@@ -200,7 +200,7 @@ bool SwDoc::GetData( const String& rItem, const String& rMimeType,
 bool SwDoc::SetData( const String& rItem, const String& rMimeType,
                      const uno::Any & rValue )
 {
-    //search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
+    // search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
     bool bCaseSensitive = true;
     while( true )
     {
@@ -208,13 +208,13 @@ bool SwDoc::SetData( const String& rItem, const String& rMimeType,
         if(pBkmk)
             return SwServerObject(*pBkmk).SetData(rMimeType, rValue);
 
-        // haben wir ueberhaupt das Item vorraetig?
+        // Do we already have the Item?
         String sItem( bCaseSensitive ? rItem : GetAppCharClass().lower(rItem));
         _FindItem aPara( sItem );
         pSectionFmtTbl->ForEach( 0, pSectionFmtTbl->Count(), bCaseSensitive ? lcl_FindSectionCaseSensitive : lcl_FindSectionCaseInsensitive, &aPara );
         if( aPara.pSectNd )
         {
-            // gefunden, als erfrage die Daten
+            // found, so get the data
             return SwServerObject( *aPara.pSectNd ).SetData( rMimeType, rValue );
         }
         if( !bCaseSensitive )
@@ -239,7 +239,7 @@ bool SwDoc::SetData( const String& rItem, const String& rMimeType,
 {
     SwServerObject* pObj = NULL;
 
-    //search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
+    // search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
     bool bCaseSensitive = true;
     while( true )
     {
@@ -291,7 +291,7 @@ bool SwDoc::SetData( const String& rItem, const String& rMimeType,
 sal_Bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
                             SwNodeRange*& rpRange ) const
 {
-    // haben wir ueberhaupt das Item vorraetig?
+    // Do we actually have the Item?
     rpPam = 0;
     rpRange = 0;
 
@@ -303,8 +303,8 @@ sal_Bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
 
     const CharClass& rCC = GetAppCharClass();
 
-    // Erweiterung fuer die Bereiche, nicht nur Bookmarks/Bereiche linken,
-    // sondern auch Rahmen(Text!), Tabellen, Gliederungen:
+    // Extension for areas: not only link bookmarks/areas
+    // but also frames (text!), tables, outlines:
     if( STRING_NOTFOUND != nPos )
     {
         sal_Bool bWeiter = sal_False;
@@ -341,7 +341,7 @@ sal_Bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
         }
         else if( sCmp.EqualsAscii( pMarkToRegion ) )
         {
-            sItem = sName;              // wird unten behandelt !
+            sItem = sName;              // Is being dealt with further down!
             bWeiter = sal_True;
         }
         else if( sCmp.EqualsAscii( pMarkToOutline ) )
@@ -358,14 +358,14 @@ sal_Bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
                 rOutlNds.Seek_Entry( pNd, &nTmpPos );
                 rpRange = new SwNodeRange( aPos.nNode, 0, aPos.nNode );
 
-                // dann suche jetzt noch das Ende vom Bereich
+                // look for the area's end, now
                 for( ++nTmpPos;
                         nTmpPos < rOutlNds.Count() &&
                         nLvl < rOutlNds[ nTmpPos ]->GetTxtNode()->
                                 //GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
                                 GetAttrOutlineLevel()-1;//<-end,zhaojianwei
                     ++nTmpPos )
-                    ;       // es gibt keinen Block
+                    ;       // there is no block
 
                 if( nTmpPos < rOutlNds.Count() )
                     rpRange->aEnd = *rOutlNds[ nTmpPos ];
@@ -379,7 +379,7 @@ sal_Bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
             return sal_False;
     }
 
-    //search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
+    // search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
     bool bCaseSensitive = true;
     while( true )
     {

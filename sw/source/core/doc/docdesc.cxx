@@ -52,8 +52,8 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
-#include <pagefrm.hxx>  //Fuer DelPageDesc
-#include <rootfrm.hxx>  //Fuer DelPageDesc
+#include <pagefrm.hxx>  //For DelPageDesc
+#include <rootfrm.hxx>  //For DelPageDesc
 #include <ndtxt.hxx>
 #include <frmtool.hxx>
 #include <pagedesc.hxx>
@@ -92,10 +92,9 @@ static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
     const Size aPhysSize = SvxPaperInfo::GetDefaultPaperSize();
     aFrmSize.SetSize( aPhysSize );
 
-    //Auf Default-Raender vorbereiten.
-    //Raender haben eine defaultmaessige Mindestgroesse.
-    //wenn der Drucker einen groesseren Rand vorgibt, so
-    //ist mir dass auch recht.
+    // Prepare for default borders.
+    // Borders have a default minimum size.
+    // If the printer forces a larger border, that's ok too.
     // The HTML page desc had A4 as page size always.
     // This has been changed to take the page size from the printer.
     // Unfortunately, the margins of the HTML page desc are smaller than
@@ -110,15 +109,15 @@ static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
     }
     else if( MEASURE_METRIC == SvtSysLocale().GetLocaleData().getMeasurementSystemEnum() )
     {
-        nMinTop = nMinBottom = nMinLeft = nMinRight = 1134; //2 Zentimeter
+        nMinTop = nMinBottom = nMinLeft = nMinRight = 1134; // 2 centimetres
     }
     else
     {
-        nMinTop = nMinBottom = 1440;    //al la WW: 1Inch
+        nMinTop = nMinBottom = 1440;    //al la WW: 1 Inch
         nMinLeft = nMinRight = 1800;    //          1,25 Inch
     }
 
-    //Raender einstellen.
+    // Set borders.
     SvxLRSpaceItem aLR( RES_LR_SPACE );
     SvxULSpaceItem aUL( RES_UL_SPACE );
 
@@ -145,11 +144,10 @@ static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
 void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
                          const sal_Bool bPage = sal_True )
 {
-/////////////// !!!!!!!!!!!!!!!!
-// eigentlich sollte hier das Intersect von ItemSet benutzt werden, aber das
-// funktioniert nicht richtig, wenn man unterschiedliche WhichRanges hat.
-/////////////// !!!!!!!!!!!!!!!!
-    //Die interressanten Attribute uebernehmen.
+    // We should actually use ItemSet's Intersect here, but that doesn't work
+    // correctly if we have different WhichRanges.
+
+    // Take over the attributes which are of interest.
     sal_uInt16 const aIdArr[] = { RES_FRM_SIZE, RES_UL_SPACE,
                                         RES_BACKGROUND, RES_SHADOW,
                                         RES_COL, RES_COL,
@@ -183,7 +181,7 @@ void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
         }
     }
 
-    // auch Pool-, Hilfe-Id's uebertragen
+    // Transmit pool and help IDs too
     rDest.SetPoolFmtId( rSource.GetPoolFmtId() );
     rDest.SetPoolHelpId( rSource.GetPoolHelpId() );
     rDest.SetPoolHlpFileId( rSource.GetPoolHlpFileId() );
@@ -192,7 +190,7 @@ void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
 
 void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
 {
-    OSL_ENSURE( i < aPageDescs.Count(), "PageDescs ueberindiziert." );
+    OSL_ENSURE( i < aPageDescs.Count(), "PageDescs is out of range." );
 
     SwPageDesc *pDesc = aPageDescs[i];
     SwRootFrm* pTmpRoot = GetCurrentLayout();
@@ -204,26 +202,24 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     }
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
-    //Als erstes wird ggf. gespiegelt.
+    // Mirror at first if needed.
     if ( rChged.GetUseOn() == nsUseOnPage::PD_MIRROR )
         ((SwPageDesc&)rChged).Mirror();
     else
-        //sonst Werte aus Master nach Left uebertragen.
+        // Or else transfer values from Master to Left.
         ::lcl_DescSetAttr( ((SwPageDesc&)rChged).GetMaster(),
                        ((SwPageDesc&)rChged).GetLeft() );
 
-    //NumType uebernehmen.
+    // Take over NumType.
     if( rChged.GetNumType().GetNumberingType() != pDesc->GetNumType().GetNumberingType() )
     {
         pDesc->SetNumType( rChged.GetNumType() );
-        // den Seitennummernfeldern bescheid sagen,
-        //      das sich das Num-Format geaendert hat
+        // Notify page number fields, that NumFormat has changed
         GetSysFldType( RES_PAGENUMBERFLD )->UpdateFlds();
         GetSysFldType( RES_REFPAGEGETFLD )->UpdateFlds();
 
-        // Wenn sich die Numerierungsart geaendert hat, koennte es QuoVadis/
-        // ErgoSum-Texte geben, die sich auf eine geaenderte Seite beziehen,
-        // deshalb werden die Fussnoten invalidiert
+        // If the numbering scheme has changed we could have QuoVadis/ErgoSum texts
+        // that refer to a changed page, so we invalidate foot notes.
         SwFtnIdxs& rFtnIdxs = GetFtnIdxs();
         for( sal_uInt16 nPos = 0; nPos < rFtnIdxs.Count(); ++nPos )
         {
@@ -233,18 +229,18 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
         }
     }
 
-    //Orientierung uebernehmen
+    // Take over orientation
     pDesc->SetLandscape( rChged.GetLandscape() );
 
     // #i46909# no undo if header or footer changed
     bool bHeaderFooterChanged = false;
 
-    //Header abgleichen.
+    // Synch header.
     const SwFmtHeader &rHead = rChged.GetMaster().GetHeader();
     if (undoGuard.UndoWasEnabled())
     {
         // #i46909# no undo if header or footer changed
-        // hat sich an den Nodes etwas veraendert ?
+        // Did something change in the nodes?
         const SwFmtHeader &rOldHead = pDesc->GetMaster().GetHeader();
         bHeaderFooterChanged |=
             ( rHead.IsActive() != rOldHead.IsActive() ||
@@ -253,21 +249,20 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     pDesc->GetMaster().SetFmtAttr( rHead );
     if ( rChged.IsHeaderShared() || !rHead.IsActive() )
     {
-        //Left teilt sich den Header mit dem Master.
+        // Left shares the header with the Master.
         pDesc->GetLeft().SetFmtAttr( pDesc->GetMaster().GetHeader() );
     }
     else if ( rHead.IsActive() )
-    {   //Left bekommt einen eigenen Header verpasst wenn das Format nicht
-        //bereits einen hat.
-        //Wenn er bereits einen hat und dieser auf die gleiche Section
-        //wie der Rechte zeigt, so muss er einen eigenen bekommen. Der
-        //Inhalt wird sinnigerweise kopiert.
+    {   // Left gets it's own header if the Format doesn't alrady have one.
+        // If it already has one and it points to the same Section as the
+        // Right one, it needs to get an own Header.
+        // The content is evidently copied.
         const SwFmtHeader &rLeftHead = pDesc->GetLeft().GetHeader();
         if ( !rLeftHead.IsActive() )
         {
             SwFmtHeader aHead( MakeLayoutFmt( RND_STD_HEADERL, 0 ) );
             pDesc->GetLeft().SetFmtAttr( aHead );
-            //Weitere Attribute (Raender, Umrandung...) uebernehmen.
+            // Take over additional attributes (borders, border strips ...).
             ::lcl_DescSetAttr( *rHead.GetHeaderFmt(), *aHead.GetHeaderFmt(), sal_False);
         }
         else
@@ -282,9 +277,8 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
                 SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), "Header",
                                                 GetDfltFrmFmt() );
                 ::lcl_DescSetAttr( *pRight, *pFmt, sal_False );
-                //Der Bereich auf den das rechte Kopfattribut zeigt wird
-                //kopiert und der Index auf den StartNode in das linke
-                //Kopfattribut gehaengt.
+                // The area which the right header attribute is pointing to is copied,
+                // and the Index to the StartNode is set to the left header attribute.
                 SwNodeIndex aTmp( GetNodes().GetEndOfAutotext() );
                 SwStartNode* pSttNd = GetNodes().MakeEmptySection( aTmp, SwHeaderStartNode );
                 SwNodeRange aRange( aRCnt.GetCntntIdx()->GetNode(), 0,
@@ -303,12 +297,12 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     }
     pDesc->ChgHeaderShare( rChged.IsHeaderShared() );
 
-    //Footer abgleichen.
+    // Synch Footer.
     const SwFmtFooter &rFoot = rChged.GetMaster().GetFooter();
     if (undoGuard.UndoWasEnabled())
     {
         // #i46909# no undo if header or footer changed
-        // hat sich an den Nodes etwas veraendert ?
+        // Did something change in the Nodes?
         const SwFmtFooter &rOldFoot = pDesc->GetMaster().GetFooter();
         bHeaderFooterChanged |=
             ( rFoot.IsActive() != rOldFoot.IsActive() ||
@@ -316,20 +310,19 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     }
     pDesc->GetMaster().SetFmtAttr( rFoot );
     if ( rChged.IsFooterShared() || !rFoot.IsActive() )
-        //Left teilt sich den Header mit dem Master.
+        // Left shares the Header with the Master.
         pDesc->GetLeft().SetFmtAttr( pDesc->GetMaster().GetFooter() );
     else if ( rFoot.IsActive() )
-    {   //Left bekommt einen eigenen Footer verpasst wenn das Format nicht
-        //bereits einen hat.
-        //Wenn er bereits einen hat und dieser auf die gleiche Section
-        //wie der Rechte zeigt, so muss er einen eigenen bekommen. Der
-        //Inhalt wird sinnigerweise kopiert.
+    {   // Left gets it's own Footer if the Format does not already have one.
+        // If the Format already has a Footer and it points to the same section as the Right one,
+        // it needs to get an own one.
+        // The content is evidently copied.
         const SwFmtFooter &rLeftFoot = pDesc->GetLeft().GetFooter();
         if ( !rLeftFoot.IsActive() )
         {
             SwFmtFooter aFoot( MakeLayoutFmt( RND_STD_FOOTER, 0 ) );
             pDesc->GetLeft().SetFmtAttr( aFoot );
-            //Weitere Attribute (Raender, Umrandung...) uebernehmen.
+            // Take over additional attributes (borders, border strips ...).
             ::lcl_DescSetAttr( *rFoot.GetFooterFmt(), *aFoot.GetFooterFmt(), sal_False);
         }
         else
@@ -344,9 +337,8 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
                 SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), "Footer",
                                                 GetDfltFrmFmt() );
                 ::lcl_DescSetAttr( *pRight, *pFmt, sal_False );
-                //Der Bereich auf den das rechte Kopfattribut zeigt wird
-                //kopiert und der Index auf den StartNode in das linke
-                //Kopfattribut gehaengt.
+                // The Area to which the right header attribute is pointing to is being copied
+                // and the Index to the StartNode is set to the left header attribute.
                 SwNodeIndex aTmp( GetNodes().GetEndOfAutotext() );
                 SwStartNode* pSttNd = GetNodes().MakeEmptySection( aTmp, SwFooterStartNode );
                 SwNodeRange aRange( aRCnt.GetCntntIdx()->GetNode(), 0,
@@ -367,11 +359,10 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     if ( pDesc->GetName() != rChged.GetName() )
         pDesc->SetName( rChged.GetName() );
 
-    // Dadurch wird ein RegisterChange ausgeloest, wenn notwendig
+    // A RegisterChange is triggered, if necessary
     pDesc->SetRegisterFmtColl( rChged.GetRegisterFmtColl() );
 
-    //Wenn sich das UseOn oder der Follow aendern muessen die
-    //Absaetze das erfahren.
+    // If UseOn or the Follow change, the paragraphs need to know about it.
     sal_Bool bUseOn  = sal_False;
     sal_Bool bFollow = sal_False;
     if ( pDesc->GetUseOn() != rChged.GetUseOn() )
@@ -392,18 +383,17 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     }
 
     if ( (bUseOn || bFollow) && pTmpRoot)
-        //Layot benachrichtigen!
+        // Inform layout!
     {
         std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
         std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllCheckPageDescs));
     }
 
-    //Jetzt noch die Seiten-Attribute uebernehmen.
+    // Take over the page attributes.
     ::lcl_DescSetAttr( rChged.GetMaster(), pDesc->GetMaster() );
     ::lcl_DescSetAttr( rChged.GetLeft(), pDesc->GetLeft() );
 
-    //Wenn sich FussnotenInfo veraendert, so werden die Seiten
-    //angetriggert.
+    // If the FootnoteInfo changes, the pages are triggered.
     if( !(pDesc->GetFtnInfo() == rChged.GetFtnInfo()) )
     {
         pDesc->SetFtnInfo( rChged.GetFtnInfo() );
@@ -428,8 +418,8 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
 |*
 |*  SwDoc::DelPageDesc()
 |*
-|*  Beschreibung        Alle Descriptoren, deren Follow auf den zu loeschenden
-|*      zeigen muessen angepasst werden.
+|*  Description: All descriptors who's Follow point to the to-be-deleted
+|*  have to be adapted.
 |*
 |*************************************************************************/
 
@@ -497,8 +487,8 @@ void SwDoc::BroadcastStyleOperation(String rName, SfxStyleFamily eFamily,
 
 void SwDoc::DelPageDesc( sal_uInt16 i, sal_Bool bBroadcast )
 {
-    OSL_ENSURE( i < aPageDescs.Count(), "PageDescs ueberindiziert." );
-    OSL_ENSURE( i != 0, "Default Pagedesc loeschen is nicht." );
+    OSL_ENSURE( i < aPageDescs.Count(), "PageDescs is out of range." );
+    OSL_ENSURE( i != 0, "You cannot delete the default Pagedesc.");
     if ( i == 0 )
         return;
 
@@ -547,7 +537,7 @@ sal_uInt16 SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
     else
     {
         pNew = new SwPageDesc( rName, GetDfltFrmFmt(), this );
-        //Default-Seitenformat einstellen.
+        // Set the default page format.
         lcl_DefaultPageFmt( USHRT_MAX, pNew->GetMaster(), pNew->GetLeft() );
 
         SvxFrameDirection aFrameDirection = bRegardLanguage ?
@@ -589,17 +579,17 @@ SwPageDesc* SwDoc::FindPageDescByName( const String& rName, sal_uInt16* pPos ) c
 }
 
 /******************************************************************************
- *  Methode     :   void SwDoc::PrtDataChanged()
- *  Beschreibung:
+ *  Method      :   void SwDoc::PrtDataChanged()
+ *  Description :
  ******************************************************************************/
 
 void SwDoc::PrtDataChanged()
 {
-//!!!!!!!! Bei Aenderungen hier bitte ggf. InJobSetup im Sw3io mitpflegen
+// If you change this, also modify InJobSetup in Sw3io if appropriate.
 
     // #i41075#
     OSL_ENSURE( get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) ||
-            0 != getPrinter( sal_False ), "PrtDataChanged will be called recursive!" );
+            0 != getPrinter( sal_False ), "PrtDataChanged will be called recursively!" );
     SwRootFrm* pTmpRoot = GetCurrentLayout();
     SwWait *pWait = 0;
     sal_Bool bEndAction = sal_False;
@@ -659,11 +649,10 @@ void SwDoc::PrtDataChanged()
     delete pWait;
 }
 
-//Zur Laufzeit sammeln wir die GlobalNames der Server, die keine
-//Benachrichtigung zu Druckerwechseln wuenschen. Dadurch sparen wir
-//das Laden vieler Objekte (gluecklicherweise werden obendrein alle
-//Fremdobjekte unter einer ID abgebuildet). Init und DeInit vom Array
-//ist in init.cxx zu finden.
+// We collect the GlobalNames of the servers at runtime, who don't want to be notified
+// about printer changes. Thereby saving loading a lot of objects (luckily all foreign
+// objects are mapped to one ID).
+// Initialisation and deinitialisation can be found in init.cxx
 extern SvPtrarr *pGlobalOLEExcludeList;
 
 void SwDoc::PrtOLENotify( sal_Bool bAll )
@@ -683,11 +672,10 @@ void SwDoc::PrtOLENotify( sal_Bool bAll )
     }
     if ( !pShell )
     {
-        //Das hat ohne Shell und damit ohne Client keinen Sinn, weil nur darueber
-        //die Kommunikation bezueglich der Groessenaenderung implementiert ist.
-        //Da wir keine Shell haben, merken wir uns diesen unguenstigen
-        //Zustand am Dokument, dies wird dann beim Erzeugen der ersten Shell
-        //nachgeholt.
+        // This doesn't make sense without a Shell and thus without a client, because
+        // the communication about size changes is implemented by these components.
+        // Because we don't have a Shell we remember this unfortunate situtaion in the document,
+        // which is made up for later on when creating the first Shell.
         mbOLEPrtNotifyPending = sal_True;
         if ( bAll )
             mbAllOLENotify = sal_True;
@@ -713,14 +701,13 @@ void SwDoc::PrtOLENotify( sal_Bool bAll )
                 SwOLENode* pOLENd = (*pNodes)[i];
                 pOLENd->SetOLESizeInvalid( sal_False );
 
-                //Ersteinmal die Infos laden und festellen ob das Teil nicht
-                //schon in der Exclude-Liste steht
+                // At first load the Infos and see if it's not already in the exclude list.
                 SvGlobalName aName;
 
                 svt::EmbeddedObjectRef& xObj = pOLENd->GetOLEObj().GetObject();
                 if ( xObj.is() )
                     aName = SvGlobalName( xObj->getClassID() );
-                else  //Noch nicht geladen
+                else  // Not yet loaded
                 {
                         // TODO/LATER: retrieve ClassID of an unloaded object
                         // aName = ????
@@ -737,8 +724,8 @@ void SwDoc::PrtOLENotify( sal_Bool bAll )
                 if ( bFound )
                     continue;
 
-                //Kennen wir nicht, also muss das Objekt geladen werden.
-                //Wenn es keine Benachrichtigung wuenscht
+                // We don't know it, so the object has to be loaded.
+                // If it doesn't want to be informed
                 if ( xObj.is() )
                 {
                         pGlobalOLEExcludeList->Insert(
@@ -775,9 +762,9 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
                 SwOLENode* pOLENd = (*pNodes)[i];
                 pOLENd->SetOLESizeInvalid( sal_False );
 
-                //Kennen wir nicht, also muss das Objekt geladen werden.
-                //Wenn es keine Benachrichtigung wuenscht
-                if( pOLENd->GetOLEObj().GetOleRef().is() ) //Kaputt?
+                // We don't know it, so the object has to be loaded.
+                // If it doesn't want to be informed
+                if( pOLENd->GetOLEObj().GetOleRef().is() ) // Broken?
                 {
                     pOLENd->ModifyNotification( &aMsgHint, &aMsgHint );
                 }

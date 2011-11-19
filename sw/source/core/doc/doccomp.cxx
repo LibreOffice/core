@@ -1510,7 +1510,7 @@ void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
                     }
                     else
                     {
-                        // liegen hintereinander also zusammen fassen
+                        // are consecutive, so combine
                         rSttEnd = *((SwPaM*)pTmp->GetNext())->End();
                         delete pTmp->GetNext();
                     }
