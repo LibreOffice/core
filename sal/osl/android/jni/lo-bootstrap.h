@@ -42,6 +42,9 @@ void *lo_dlsym(void *handle,
 int lo_dladdr(void *addr,
               Dl_info *info);
 
+void *lo_apkentry(const char *filename,
+                  size_t *size);
+
 int lo_dlcall_argc_argv(void *function,
                         int argc,
                         const char **argv);

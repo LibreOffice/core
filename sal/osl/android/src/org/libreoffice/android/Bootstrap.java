@@ -45,10 +45,12 @@ public class Bootstrap extends NativeActivity
     private static String TAG = "lo-bootstrap";
 
     public native boolean setup(String dataDir,
+                                String apkFile,
                                 String[] ld_library_path);
 
     public native boolean setup(int lo_main_ptr,
-                                Object lo_main_argument);
+                                Object lo_main_argument,
+                                int lo_main_delay);
 
     // This is not just a wrapper for the C library dlopen(), but also
     // loads recursively dependent libraries.
@@ -56,6 +58,12 @@ public class Bootstrap extends NativeActivity
 
     // This is just a wrapper for the C library dlsym().
     public static native int dlsym(int handle, String symbol);
+
+    // Wrapper for getpid()
+    public static native int getpid();
+
+    // Wrapper for system()
+    public static native void system(String cmdline);
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -79,7 +87,7 @@ public class Bootstrap extends NativeActivity
 
         String[] llpa = llp.split(":");
 
-        if (!setup(dataDir, llpa))
+        if (!setup(dataDir, getApplication().getPackageResourcePath(), llpa))
             return;
 
         String mainLibrary = getIntent().getStringExtra("lo-main-library");
@@ -95,11 +103,21 @@ public class Bootstrap extends NativeActivity
         String cmdLine = getIntent().getStringExtra("lo-main-cmdline");
 
         if (cmdLine == null)
-            cmdLine = "cppunittester /data/data/org.libreoffice.android/lib/libqa_sal_types.so";
+            cmdLine = "/data/data/org.libreoffice.android/lib/libqa_sal_types.so";
+
+        // argv[0] will be replaced by android_main() in lo-bootstrap.c by the
+        // pathname of the mainLibrary.
+        cmdLine = "dummy-program-name " + cmdLine;
 
         Log.i(TAG, String.format("cmdLine=%s", cmdLine));
 
         String[] argv = cmdLine.split(" ");
+
+        // As we don't do any shell style quote handling, to enable
+        // having spaces in argv elements, they need to be entered as
+        // '~' characters which we here change into spaces...
+        for (int i = 0; i < argv.length; i++)
+            argv[i] = argv[i].replace('~', ' ');
 
         // Load the LO "program" here and look up lo_main
         int loLib = dlopen(mainLibrary);
@@ -115,8 +133,18 @@ public class Bootstrap extends NativeActivity
             return;
         }
 
-        // This saves lo_main and argv
-        if (!setup(lo_main, argv))
+        // Tell lo-bootstrap to Start a strace on itself if requested
+        String strace_args = getIntent().getStringExtra("lo-strace");
+        if (strace_args != null)
+            system("/system/xbin/strace -p " + getpid() + " " + (strace_args != "yes" ? strace_args : "" ) + " &");
+
+        int delay = 0;
+        String sdelay = getIntent().getStringExtra("lo-main-delay");
+        if (sdelay != null)
+            delay = Integer.parseInt(sdelay);
+
+        // Tell lo-bootstrap.c the stuff it needs to know
+        if (!setup(lo_main, argv, delay))
             return;
 
         // Finally, call our super-class, NativeActivity's onCreate(),

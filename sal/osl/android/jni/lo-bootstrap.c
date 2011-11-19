@@ -16,6 +16,9 @@
  * Copyright (C) 2011 Tor Lillqvist <tml@iki.fi> (initial developer)
  * Copyright (C) 2011 SUSE Linux http://suse.com (initial developer's employer)
  *
+ * Zip parsing code lifted from Mozilla's other-licenses/android/APKOpen.cpp,
+ * by Michael Wu <mwu@mozilla.com>.
+ *
  * All Rights Reserved.
  *
  * For minor contributions see the git repository.
@@ -35,6 +38,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <dlfcn.h>
+#include <sys/mman.h>
 
 #include <jni.h>
 
@@ -57,11 +61,68 @@ struct engine {
 };
 
 static struct android_app *app;
-static JNIEnv *jni_env;
 static const char **library_locations;
+static void *apk_file;
+static int apk_file_size;
 static int (*lo_main)(int, const char **);
 static int lo_main_argc;
 static const char **lo_main_argv;
+static int sleep_time = 0;
+
+/* compression methods */
+#define STORE    0
+#define DEFLATE  8
+#define LZMA    14
+
+struct local_file_header {
+    uint32_t signature;
+    uint16_t min_version;
+    uint16_t general_flag;
+    uint16_t compression;
+    uint16_t lastmod_time;
+    uint16_t lastmod_date;
+    uint32_t crc32;
+    uint32_t compressed_size;
+    uint32_t uncompressed_size;
+    uint16_t filename_size;
+    uint16_t extra_field_size;
+    char     data[0];
+} __attribute__((__packed__));
+
+struct cdir_entry {
+    uint32_t signature;
+    uint16_t creator_version;
+    uint16_t min_version;
+    uint16_t general_flag;
+    uint16_t compression;
+    uint16_t lastmod_time;
+    uint16_t lastmod_date;
+    uint32_t crc32;
+    uint32_t compressed_size;
+    uint32_t uncompressed_size;
+    uint16_t filename_size;
+    uint16_t extra_field_size;
+    uint16_t file_comment_size;
+    uint16_t disk_num;
+    uint16_t internal_attr;
+    uint32_t external_attr;
+    uint32_t offset;
+    char     data[0];
+} __attribute__((__packed__));
+
+#define CDIR_END_SIG 0x06054b50
+
+struct cdir_end {
+    uint32_t signature;
+    uint16_t disk_num;
+    uint16_t cdir_disk;
+    uint16_t disk_entries;
+    uint16_t cdir_entries;
+    uint32_t cdir_size;
+    uint32_t cdir_offset;
+    uint16_t comment_size;
+    char     comment[0];
+} __attribute__((__packed__));
 
 static void
 engine_handle_cmd(struct android_app* app,
@@ -225,16 +286,21 @@ Java_org_libreoffice_android_Bootstrap_dlcall(JNIEnv* env,
 }
 
 // public native boolean setup(String dataDir,
+//                             String apkFile,
 //                             String[] ld_library_path);
 
 jboolean
-Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2_3Ljava_lang_String_2(JNIEnv* env,
-                                                                                       jobject this,
-                                                                                       jstring dataDir,
-                                                                                       jobjectArray ld_library_path)
+Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_String_2_3Ljava_lang_String_2
+    (JNIEnv* env,
+     jobject this,
+     jstring dataDir,
+     jstring apkFile,
+     jobjectArray ld_library_path)
 {
-    int i, n;
+    struct stat st;
+    int i, n, fd;
     const jbyte *dataDirPath;
+    const jbyte *apkFilePath;
     char *lib_dir;
 
     n = (*env)->GetArrayLength(env, ld_library_path);
@@ -262,17 +328,45 @@ Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2_3Ljava_lang_St
     for (n = 0; library_locations[n] != NULL; n++)
         LOGI("library_locations[%d] = %s", n, library_locations[n]);
 
+    apkFilePath =  (*env)->GetStringUTFChars(env, apkFile, NULL);
+
+    fd = open(apkFilePath, O_RDONLY);
+    if (fd == -1) {
+        LOGI("Could not open %s", apkFilePath);
+        (*env)->ReleaseStringUTFChars(env, apkFile, apkFilePath);
+        return JNI_FALSE;
+    }
+    if (fstat(fd, &st) == -1) {
+        LOGI("Could not fstat %s", apkFilePath);
+        close(fd);
+        (*env)->ReleaseStringUTFChars(env, apkFile, apkFilePath);
+        return JNI_FALSE;
+    }
+    apk_file = mmap(NULL, st.st_size, PROT_READ, MAP_SHARED, fd, 0);
+    close(fd);
+
+    if (apk_file == MAP_FAILED) {
+        LOGI("Could not mmap %s", apkFilePath);
+        (*env)->ReleaseStringUTFChars(env, apkFile, apkFilePath);
+        return JNI_FALSE;
+    }
+    apk_file_size = st.st_size;
+
+    (*env)->ReleaseStringUTFChars(env, apkFile, apkFilePath);
+
     return JNI_TRUE;
 }
 
 // public native boolean setup(int lo_main_ptr,
-//                             Object lo_main_argument);
+//                             Object lo_main_argument,
+//                             int lo_main_delay);
 
 jboolean
-Java_org_libreoffice_android_Bootstrap_setup__ILjava_lang_Object_2(JNIEnv* env,
-                                                                   jobject this,
-                                                                   void *lo_main_ptr,
-                                                                   jobject lo_main_argument)
+Java_org_libreoffice_android_Bootstrap_setup__ILjava_lang_Object_2I(JNIEnv* env,
+                                                                    jobject this,
+                                                                    void *lo_main_ptr,
+                                                                    jobject lo_main_argument,
+                                                                    jint lo_main_delay)
 {
     jclass StringArray;
     int i;
@@ -301,7 +395,35 @@ Java_org_libreoffice_android_Bootstrap_setup__ILjava_lang_Object_2(JNIEnv* env,
     }
     lo_main_argv[lo_main_argc] = NULL;
 
+    sleep_time = lo_main_delay;
+
     return JNI_TRUE;
+}
+
+// public static native int getpid();
+
+jint
+Java_org_libreoffice_android_Bootstrap_getpid(JNIEnv* env,
+                                              jobject clazz)
+{
+    return getpid();
+}
+
+
+// public static native void system(String cmdline);
+
+jint
+Java_org_libreoffice_android_Bootstrap_system(JNIEnv* env,
+                                              jobject clazz,
+                                              jstring cmdline)
+{
+    const jbyte *s = (*env)->GetStringUTFChars(env, cmdline, NULL);
+
+    LOGI("system(%s)", s);
+
+    system(s);
+
+    (*env)->ReleaseStringUTFChars(env, cmdline, s);
 }
 
 char **
@@ -534,6 +656,7 @@ lo_dlopen(const char *library)
             return NULL;
         }
     }
+    free_ptrarray((void **) needed);
 
     p = dlopen(full_name, RTLD_LOCAL);
     LOGI("dlopen(%s) = %p", full_name, p);
@@ -569,14 +692,10 @@ lo_dladdr(void *addr,
     FILE *maps;
     char line[200];
     int result;
+    int found;
 
     result = dladdr(addr, info);
-    if (result != 0)
-        LOGI("dladdr(%p) = { %s:%p, %s:%p ]",
-             addr,
-             info->dli_fname, info->dli_fbase,
-             info->dli_sname ? info->dli_sname : "(none)", info->dli_saddr);
-    else {
+    if (result == 0) {
         LOGI("dladdr(%p) = 0", addr);
         return 0;
     }
@@ -586,6 +705,8 @@ lo_dladdr(void *addr,
         LOGI("lo_dladdr: Could not open /proc/self/maps: %s", strerror(errno));
         return 0;
     }
+
+    found = 0;
     while (fgets(line, sizeof(line), maps) != NULL &&
            line[strlen(line)-1] == '\n') {
         void *lo, *hi;
@@ -599,14 +720,91 @@ lo_dladdr(void *addr,
                     fclose(maps);
                     return 0;
                 }
+                LOGI("dladdr(%p) = { %s:%p, %s:%p }: %s",
+                     addr,
+                     info->dli_fname, info->dli_fbase,
+                     info->dli_sname ? info->dli_sname : "(none)", info->dli_saddr,
+                     file);
                 info->dli_fname = strdup(file);
+                found = 1;
                 break;
             }
         }
     }
+    if (!found)
+        LOGI("lo_dladdr: Did not find %p in /proc/self/maps", addr);
     fclose(maps);
 
     return result;
+}
+
+static uint32_t cdir_entry_size (struct cdir_entry *entry)
+{
+    return sizeof(*entry) +
+        letoh16(entry->filename_size) +
+        letoh16(entry->extra_field_size) +
+        letoh16(entry->file_comment_size);
+}
+
+static struct cdir_entry *
+find_cdir_entry (struct cdir_entry *entry, int count, const char *name)
+{
+    size_t name_size = strlen(name);
+    while (count--) {
+        if (letoh16(entry->filename_size) == name_size &&
+            !memcmp(entry->data, name, name_size))
+            return entry;
+        entry = (struct cdir_entry *)((char *)entry + cdir_entry_size(entry));
+    }
+    return NULL;
+}
+
+void *
+lo_apkentry(const char *filename,
+            size_t *size)
+{
+    struct cdir_end *dirend = (struct cdir_end *)((char *) apk_file + apk_file_size - sizeof(*dirend));
+    uint32_t cdir_offset;
+    uint16_t cdir_entries;
+    struct cdir_entry *cdir_start;
+    struct cdir_entry *entry;
+    struct local_file_header *file;
+    void *data;
+
+    while ((void *)dirend > apk_file &&
+           letoh32(dirend->signature) != CDIR_END_SIG)
+        dirend = (struct cdir_end *)((char *)dirend - 1);
+    if (letoh32(dirend->signature) != CDIR_END_SIG) {
+        LOGI("lo_apkentry: Could not find end of central directory record");
+        return;
+    }
+
+    cdir_offset = letoh32(dirend->cdir_offset);
+    cdir_entries = letoh16(dirend->cdir_entries);
+    cdir_start = (struct cdir_entry *)((char *)apk_file + cdir_offset);
+
+    if (*filename == '/')
+        filename++;
+
+    entry = find_cdir_entry(cdir_start, cdir_entries, filename);
+
+    if (entry == NULL) {
+        LOGI("lo_apkentry: Could not find %s", filename);
+        return NULL;
+    }
+    file = (struct local_file_header *)((char *)apk_file + letoh32(entry->offset));
+
+    if (letoh16(file->compression) != STORE) {
+        LOGI("lo_apkentry: File %s is compressed", filename);
+        return NULL;
+    }
+
+    data = ((char *)&file->data) + letoh16(file->filename_size) + letoh16(file->extra_field_size);
+    *size = file->uncompressed_size;
+
+    LOGI("lo_apkentry(%s): %p, %d", filename, data, *size);
+
+    return data;
 }
 
 int
@@ -623,12 +821,20 @@ lo_dlcall_argc_argv(void *function,
 void android_main(struct android_app* state)
 {
     struct engine engine;
+    Dl_info lo_main_info;
 
     app = state;
 
     memset(&engine, 0, sizeof(engine));
     state->userData = &engine;
     state->onAppCmd = engine_handle_cmd;
+
+    if (lo_dladdr(lo_main, &lo_main_info) != 0) {
+        lo_main_argv[0] = lo_main_info.dli_fname;
+    }
+
+    if (sleep_time != 0)
+        sleep(sleep_time);
 
     lo_main(lo_main_argc, lo_main_argv);
 
