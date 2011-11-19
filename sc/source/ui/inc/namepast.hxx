@@ -42,16 +42,12 @@ class ScRangeName;
 class ScNamePasteDlg : public ModalDialog
 {
     DECL_LINK( ButtonHdl, Button * );
-    DECL_LINK( ListSelHdl, ListBox * );
-    DECL_LINK( ListDblClickHdl, ListBox * );
 
 protected:
-    FixedText       aLabelText;
-    ListBox         aNameList;
-    OKButton        aOKButton;
-    CancelButton    aCancelButton;
-    HelpButton      aHelpButton;
-    PushButton      aInsListButton;
+    HelpButton      maHelpButton;
+    PushButton      maBtnClose;
+    PushButton      maBtnPaste;
+    PushButton      maBtnPasteAll;
 public:
     ScNamePasteDlg( Window * pParent, const ScRangeName* pList, const ScRangeName* pLocalList, bool bInsList=true );
 

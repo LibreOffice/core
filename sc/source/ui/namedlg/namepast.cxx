@@ -45,36 +45,15 @@
 
 ScNamePasteDlg::ScNamePasteDlg( Window * pParent, const ScRangeName* pList, const ScRangeName* pLocalList, bool bInsList )
     : ModalDialog( pParent, ScResId( RID_SCDLG_NAMES_PASTE ) ),
-    aLabelText      ( this, ScResId( FT_LABEL ) ),
-    aNameList       ( this, ScResId( LB_ENTRYLIST ) ),
-    aOKButton       ( this, ScResId( BTN_OK ) ),
-    aCancelButton   ( this, ScResId( BTN_CANCEL ) ),
-    aHelpButton     ( this, ScResId( BTN_HELP ) ),
-    aInsListButton  ( this, ScResId( BTN_ADD ) )
+    maHelpButton     ( this, ScResId( BTN_HELP ) ),
+    maBtnClose       ( this, ScResId( BTN_CLOSE ) ),
+    maBtnPaste       ( this, ScResId( BTN_PASTE ) ),
+    maBtnPasteAll    ( this, ScResId( BTN_PASTE_ALL ) )
 {
-    if( ! bInsList )
-        aInsListButton.Disable();
 
-    aInsListButton.SetClickHdl( LINK( this,ScNamePasteDlg,ButtonHdl) );
-    aOKButton.SetClickHdl( LINK( this,ScNamePasteDlg,ButtonHdl) );
-    aNameList.SetSelectHdl( LINK( this,ScNamePasteDlg,ListSelHdl) );
-    aNameList.SetDoubleClickHdl( LINK( this,ScNamePasteDlg,ListDblClickHdl) );
-
-    ScRangeName::const_iterator itr = pLocalList->begin(), itrEnd = pLocalList->end();
-    for (; itr != itrEnd; ++itr)
-    {
-        if (!itr->HasType(RT_DATABASE) && !itr->HasType(RT_SHARED))
-            aNameList.InsertEntry(itr->GetName());
-    }
-
-    itr = pList->begin(), itrEnd = pList->end();
-    for (; itr != itrEnd; ++itr)
-    {
-        if (!itr->HasType(RT_DATABASE) && !itr->HasType(RT_SHARED) && !pLocalList->findByName(itr->GetName()))
-            aNameList.InsertEntry(itr->GetName());
-    }
-
-    ListSelHdl( &aNameList );
+    maBtnPaste.SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl) );
+    maBtnPasteAll.SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl));
+    maBtnClose.SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl));
 
     FreeResource();
 }
@@ -83,49 +62,27 @@ ScNamePasteDlg::ScNamePasteDlg( Window * pParent, const ScRangeName* pList, cons
 
 IMPL_LINK( ScNamePasteDlg, ButtonHdl, Button *, pButton )
 {
-    if( pButton == &aInsListButton )
+    if( pButton == &maBtnPasteAll )
     {
         EndDialog( BTN_PASTE_LIST );
     }
-    else if( pButton == &aOKButton )
+    else if( pButton == &maBtnPaste )
     {
         EndDialog( BTN_PASTE_NAME );
     }
-    return 0;
-}
-
-//------------------------------------------------------------------
-
-IMPL_LINK( ScNamePasteDlg, ListSelHdl, ListBox *, pListBox )
-{
-    if( pListBox == &aNameList )
+    else if( pButton == &maBtnClose )
     {
-        if( aNameList.GetSelectEntryCount() )
-            aOKButton.Enable();
-        else
-            aOKButton.Disable();
+        EndDialog( BTN_PASTE_CLOSE );
     }
     return 0;
 }
-
-//------------------------------------------------------------------
-
-IMPL_LINK_INLINE_START( ScNamePasteDlg, ListDblClickHdl, ListBox *, pListBox )
-{
-    if( pListBox == &aNameList )
-    {
-        ButtonHdl( &aOKButton );
-    }
-    return 0;
-}
-IMPL_LINK_INLINE_END( ScNamePasteDlg, ListDblClickHdl, ListBox *, pListBox )
 
 //------------------------------------------------------------------
 
 std::vector<rtl::OUString> ScNamePasteDlg::GetSelectedNames() const
 {
     std::vector<rtl::OUString> aSelectedNames;
-    aSelectedNames.push_back(aNameList.GetSelectEntry());
+    //aSelectedNames.push_back(aNameList.GetSelectEntry());
     return aSelectedNames;
 }
 
