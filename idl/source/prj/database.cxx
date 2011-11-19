@@ -87,10 +87,10 @@ SvMetaTypeMemberList & SvIdlDataBase::GetTypeList()
     return aTypeList;
 }
 
-SvMetaModule * SvIdlDataBase::GetModule( const ByteString & rName )
+SvMetaModule * SvIdlDataBase::GetModule( const rtl::OString& rName )
 {
     for( sal_uLong n = 0; n < aModuleList.Count(); n++ )
-        if( aModuleList.GetObject( n )->GetName() == rName )
+        if( aModuleList.GetObject( n )->GetName().Equals(rName) )
             return aModuleList.GetObject( n );
     return NULL;
 }
@@ -169,7 +169,7 @@ void SvIdlDataBase::Save( SvStream & rStm, sal_uInt32 nFlags )
     aPStm << nUniqueId;
 }
 
-void SvIdlDataBase::SetError( const ByteString & rError, SvToken * pTok )
+void SvIdlDataBase::SetError( const rtl::OString& rError, SvToken * pTok )
 {
     if( pTok->GetLine() > 10000 )
         aError.SetText( "hgchcg" );
@@ -188,7 +188,7 @@ void SvIdlDataBase::Push( SvMetaObject * pObj )
 }
 
 #ifdef IDL_COMPILER
-sal_Bool SvIdlDataBase::FindId( const ByteString & rIdName, sal_uLong * pVal )
+sal_Bool SvIdlDataBase::FindId( const rtl::OString& rIdName, sal_uLong * pVal )
 {
     if( pIdTable )
     {
@@ -202,7 +202,7 @@ sal_Bool SvIdlDataBase::FindId( const ByteString & rIdName, sal_uLong * pVal )
     return sal_False;
 }
 
-sal_Bool SvIdlDataBase::InsertId( const ByteString & rIdName, sal_uLong nVal )
+sal_Bool SvIdlDataBase::InsertId( const rtl::OString& rIdName, sal_uLong nVal )
 {
     if( !pIdTable )
         pIdTable = new SvStringHashTable( 20003 );
@@ -364,10 +364,10 @@ SvMetaType * SvIdlDataBase::FindType( const SvMetaType * pPType,
     return pType;
 }
 
-SvMetaType * SvIdlDataBase::FindType( const ByteString & rName )
+SvMetaType * SvIdlDataBase::FindType( const rtl::OString& rName )
 {
     SvMetaType * pType = aTypeList.First();
-    while( pType && rName != pType->GetName() )
+    while( pType && !rName.equals(pType->GetName()) )
         pType = aTypeList.Next();
     return pType;
 }
@@ -544,14 +544,14 @@ void SvIdlDataBase::Write(const rtl::OString& rText)
         fprintf( stdout, "%s", rText.getStr() );
 }
 
-void SvIdlDataBase::WriteError( const ByteString & rErrWrn,
-                                const ByteString & rFileName,
+void SvIdlDataBase::WriteError( const rtl::OString& rErrWrn,
+                                const rtl::OString& rFileName,
                                 const rtl::OString& rErrorText,
                                 sal_uLong nRow, sal_uLong nColumn ) const
 {
     // error treatment
     fprintf( stderr, "\n%s --- %s: ( %ld, %ld )\n",
-             rFileName.GetBuffer(), rErrWrn.GetBuffer(), nRow, nColumn );
+             rFileName.getStr(), rErrWrn.getStr(), nRow, nColumn );
 
     if( !rErrorText.isEmpty() )
     { // error set
@@ -577,7 +577,7 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
     { // error set
         // search error token
         // error text
-        if( aError.GetText().Len() )
+        if( aError.GetText().getLength() )
         {
             aErrorText.append(RTL_CONSTASCII_STRINGPARAM("may be <"));
             aErrorText.append(aError.GetText());

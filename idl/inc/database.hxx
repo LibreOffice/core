@@ -32,6 +32,7 @@
 #include <module.hxx>
 #include <hash.hxx>
 #include <lex.hxx>
+#include <rtl/string.hxx>
 #include <tools/pstm.hxx>
 
 #ifdef IDL_COMPILER
@@ -45,7 +46,7 @@ class SvCommand;
 
 class SvIdlError
 {
-    ByteString  aText;
+    rtl::OString aText;
 public:
     sal_uInt32  nLine, nColumn;
 
@@ -53,8 +54,8 @@ public:
             SvIdlError( sal_uInt32 nL, sal_uInt32 nC )
                 : nLine(nL), nColumn(nC) {}
 
-    const ByteString &  GetText() const { return aText; }
-    void            SetText( const ByteString & rT ) { aText = rT; }
+    const rtl::OString&  GetText() const { return aText; }
+    void SetText( const rtl::OString& rT ) { aText = rT; }
     sal_Bool            IsError() const { return nLine != 0; }
     void            Clear() { nLine = nColumn = 0; }
     SvIdlError &    operator = ( const SvIdlError & rRef )
@@ -91,11 +92,11 @@ protected:
     SvMetaObjectMemberStack     aContextStack;
     String                      aPath;
     SvIdlError                  aError;
-    void                        WriteReset()
-                                {
-                                    aUsedTypes.Clear();
-                                    aIFaceName.Erase();
-                                }
+    void WriteReset()
+    {
+        aUsedTypes.Clear();
+        aIFaceName = rtl::OString();
+    }
 #endif
 public:
                 explicit SvIdlDataBase( const SvCommand& rCmd );
@@ -110,11 +111,11 @@ public:
     SvMetaTypeMemberList &    GetTypeList();
     SvMetaClassMemberList &   GetClassList()  { return aClassList; }
     SvMetaModuleMemberList &  GetModuleList() { return aModuleList; }
-    SvMetaModule *            GetModule( const ByteString & rName );
+    SvMetaModule *            GetModule( const rtl::OString& rName );
 
     // list of used types while writing
     SvMetaTypeMemberList    aUsedTypes;
-    ByteString                  aIFaceName;
+    rtl::OString            aIFaceName;
     SvNumberIdentifier      aStructSlotId;
 
 #ifdef IDL_COMPILER
@@ -130,12 +131,12 @@ public:
     SvMetaObjectMemberStack & GetStack()      { return aContextStack; }
 
     void                    Write(const rtl::OString& rText);
-    void                    WriteError( const ByteString & rErrWrn,
-                                    const ByteString & rFileName,
+    void                    WriteError(const rtl::OString& rErrWrn,
+                                    const rtl::OString& rFileName,
                                     const rtl::OString& rErrorText,
                                     sal_uLong nRow = 0, sal_uLong nColumn = 0 ) const;
     void                    WriteError( SvTokenStream & rInStm );
-    void                    SetError( const ByteString & rError, SvToken * pTok );
+    void                    SetError( const rtl::OString& rError, SvToken * pTok );
     void                    Push( SvMetaObject * pObj );
     sal_Bool                    Pop( sal_Bool bOk, SvTokenStream & rInStm, sal_uInt32 nTokPos )
                             {
@@ -147,11 +148,11 @@ public:
                                 return bOk;
                             }
     sal_uInt32              GetUniqueId() { return ++nUniqueId; }
-    sal_Bool                    FindId( const ByteString & rIdName, sal_uLong * pVal );
-    sal_Bool                    InsertId( const ByteString & rIdName, sal_uLong nVal );
+    sal_Bool                FindId( const rtl::OString& rIdName, sal_uLong * pVal );
+    sal_Bool                InsertId( const rtl::OString& rIdName, sal_uLong nVal );
     sal_Bool                    ReadIdFile( const String & rFileName );
 
-    SvMetaType *            FindType( const ByteString & rName );
+    SvMetaType *            FindType( const rtl::OString& rName );
     static SvMetaType *     FindType( const SvMetaType *, SvMetaTypeMemberList & );
 
     SvMetaType *            ReadKnownType( SvTokenStream & rInStm );

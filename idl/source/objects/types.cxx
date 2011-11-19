@@ -470,7 +470,7 @@ void SvMetaAttribute::WriteCSource( SvIdlDataBase & rBase, SvStream & rOutStm,
         << rtl::OString::valueOf(static_cast<sal_Int32>(MakeSlotValue(rBase, IsVariable()))).getStr();
     rOutStm << ',' << endl;
     WriteTab( rOutStm, 3 );
-    rOutStm << " h" << rBase.aIFaceName.GetBuffer() << " , ";
+    rOutStm << " h" << rBase.aIFaceName.getStr() << " , ";
 
     ByteString aParserStr;
     if( pBaseType->GetType() == TYPE_METHOD || bSet )
@@ -625,9 +625,9 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
                     // allocation
                     WriteTab( rOutStm, nTab );
                     rOutStm << "void ";
-                    rOutStm << rBase.aIFaceName.GetBuffer()
+                    rOutStm << rBase.aIFaceName.getStr()
                             << "Set" << name.GetBuffer() << "( " << C_PREF
-                            << "Object h" << rBase.aIFaceName.GetBuffer() << ", " << endl;
+                            << "Object h" << rBase.aIFaceName.getStr() << ", " << endl;
                     WriteTab( rOutStm, nTab+1 );
                     pBaseType->WriteTypePrefix( rBase, rOutStm, nTab, nT );
                     rOutStm << ' ' << name.GetBuffer() << " )";
@@ -641,9 +641,9 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
                 WriteTab( rOutStm, nTab );
                 pBaseType->WriteTypePrefix( rBase, rOutStm, nTab, nT );
                 rOutStm << ' ';
-                rOutStm << rBase.aIFaceName.GetBuffer()
+                rOutStm << rBase.aIFaceName.getStr()
                         << "Get" << name.GetBuffer() << "( " << C_PREF
-                        << "Object h" << rBase.aIFaceName.GetBuffer() << " )";
+                        << "Object h" << rBase.aIFaceName.getStr() << " )";
                 if( nT == WRITE_C_HEADER )
                     rOutStm << ';' << endl << endl;
                 else
@@ -1536,7 +1536,7 @@ void SvMetaType::WriteMethodArgs
         rOutStm << '(';
         if( nT == WRITE_C_HEADER || nT == WRITE_C_SOURCE )
         {
-            rOutStm << ' ' << C_PREF << "Object h" << rBase.aIFaceName.GetBuffer();
+            rOutStm << ' ' << C_PREF << "Object h" << rBase.aIFaceName.getStr();
             if( GetAttrCount() )
                 rOutStm << ',';
             else

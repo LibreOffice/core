@@ -99,8 +99,8 @@ SvToken & SvToken::operator = ( const SvToken & rObj )
 
 void SvTokenStream::InitCtor()
 {
-    aStrTrue    = "TRUE";
-    aStrFalse   = "FALSE";
+    aStrTrue = rtl::OString(RTL_CONSTASCII_STRINGPARAM("TRUE"));
+    aStrFalse = rtl::OString(RTL_CONSTASCII_STRINGPARAM("FALSE"));
     nLine       = nColumn = 0;
     nBufPos     = 0;
     nTabSize    = 4;

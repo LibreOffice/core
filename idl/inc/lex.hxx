@@ -134,8 +134,8 @@ class SvTokenStream
     int         nBufPos;
     int         c;          // next character
     sal_uInt16      nTabSize;   // length of tabulator
-    ByteString      aStrTrue;
-    ByteString      aStrFalse;
+    rtl::OString    aStrTrue;
+    rtl::OString    aStrFalse;
     sal_uLong       nMaxPos;
 
     SvFileStream *  pInStream;
