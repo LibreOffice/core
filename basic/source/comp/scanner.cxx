@@ -163,21 +163,17 @@ inline bool lclIsWhitespace( sal_Unicode cChar )
 
 void SbiScanner::scanGoto()
 {
-    const sal_Unicode* pTestLine = pLine;
     short nTestCol = nCol;
-    while( lclIsWhitespace( *pTestLine ) )
-    {
-        pTestLine++;
+    while(nTestCol < aLine.getLength() && lclIsWhitespace(aLine[nTestCol]))
         nTestCol++;
-    }
 
-    if( *pTestLine && *(pTestLine + 1) )
+    if(nTestCol + 1 < aLine.getLength())
     {
-        String aTestSym = aLine.copy( nTestCol, 2 );
-        if( aTestSym.EqualsIgnoreCaseAscii( "to" ) )
+        ::rtl::OUString aTestSym = aLine.copy(nTestCol, 2);
+        if(aTestSym.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("to")))
         {
-            aSym = String::CreateFromAscii( "goto" );
-            pLine = pTestLine + 2;
+            aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("goto"));
+            pLine = pLine + (nCol - nTestCol) + 2;
             nCol = nTestCol + 2;
         }
     }
