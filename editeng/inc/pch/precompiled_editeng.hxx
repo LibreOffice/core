@@ -785,7 +785,6 @@
 #include "tools/contnr.hxx"
 #include "tools/debug.hxx"
 #include "tools/diagnose_ex.h"
-#include "tools/dynary.hxx"
 #include "tools/errcode.hxx"
 #include "tools/errinf.hxx"
 #include "tools/fract.hxx"
