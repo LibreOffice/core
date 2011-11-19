@@ -76,11 +76,20 @@ private:
     DECL_LINK( CancelBtnHdl, void * );
     DECL_LINK( AddBtnHdl, void* );
     DECL_LINK( NameModifyHdl, void* );
+
+protected:
+    virtual void    RefInputDone( sal_Bool bForced = sal_False );
+
 public:
     ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                     ScDocument* pDoc, std::map<rtl::OUString, ScRangeName*> aRangeMap,
                     const ScAddress& aCursorPos, const bool bUndo);
 
+    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
+    virtual sal_Bool    IsRefInputMode() const;
+
+    virtual void    SetActive();
+    virtual sal_Bool    Close();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

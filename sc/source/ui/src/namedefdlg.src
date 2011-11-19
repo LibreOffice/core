@@ -1,7 +1,7 @@
 
 #include "namedefdlg.hrc"
 
-ModalDialog RID_SCDLG_NAMES_DEFINE
+ModelessDialog RID_SCDLG_NAMES_DEFINE
 {
     OutputSize = TRUE ;
     HelpId = CMD_FID_ADD_NAME ;

@@ -979,6 +979,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case FID_DEFINE_NAME:
             case FID_INSERT_NAME:
+            case FID_ADD_NAME:
             case SID_DEFINE_COLROWNAMERANGES:
                 {
                     if ( pDocSh && pDocSh->IsDocShared() )

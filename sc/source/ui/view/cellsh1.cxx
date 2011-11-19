@@ -143,6 +143,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         switch ( nSlot )
         {
             case FID_DEFINE_NAME:
+            case FID_ADD_NAME:
             case FID_USE_NAME:
             case FID_INSERT_NAME:
             case SID_SPELL_DIALOG:
@@ -1738,6 +1739,16 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             else
             {
                 sal_uInt16          nId  = ScNameDlgWrapper::GetChildWindowId();
+                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
+                SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+
+                pScMod->SetRefDialog( nId, pWnd ? false : sal_True );
+            }
+            break;
+        case FID_ADD_NAME:
+            {
+                std::cout << "temp" << std::endl;
+                sal_uInt16          nId  = ScNameDefDlgWrapper::GetChildWindowId();
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 

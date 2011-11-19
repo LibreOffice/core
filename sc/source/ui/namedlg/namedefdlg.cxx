@@ -6,6 +6,7 @@
 #include "document.hxx"
 #include "globalnames.hxx"
 #include "rangenam.hxx"
+#include "reffact.hxx"
 
 
 
@@ -163,6 +164,50 @@ void ScNameDefDlg::AddPushed()
     }
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
     Close();
+}
+
+sal_Bool ScNameDefDlg::IsRefInputMode() const
+{
+    /*
+    return maEdAssign.IsEnabled();
+    */
+    return true;
+}
+
+void ScNameDefDlg::RefInputDone( sal_Bool bForced)
+{
+    /*
+    ScAnyRefDlg::RefInputDone(bForced);
+    EdModifyHdl(&maEdAssign);
+    */
+}
+
+void ScNameDefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
+{
+    /**
+    if ( maEdAssign.IsEnabled() )
+    {
+        if ( rRef.aStart != rRef.aEnd )
+            RefInputStart(&maEdAssign);
+        String aRefStr;
+        rRef.Format( aRefStr, ABS_DREF3D, pDocP,
+                ScAddress::Details(pDocP->GetAddressConvention(), 0, 0) );
+        maEdAssign.SetRefString( aRefStr );
+    }
+    */
+}
+
+sal_Bool ScNameDefDlg::Close()
+{
+    return DoClose( ScNameDefDlgWrapper::GetChildWindowId() );
+}
+
+void ScNameDefDlg::SetActive()
+{
+    /*
+    maEdAssign.GrabFocus();
+    RefInputDone();
+    */
 }
 
 IMPL_LINK( ScNameDefDlg, CancelBtnHdl, void*, EMPTYARG)

@@ -45,6 +45,7 @@
 //==================================================================
 
 DECL_WRAPPER(ScNameDlgWrapper)
+DECL_WRAPPER(ScNameDefDlgWrapper)
 DECL_WRAPPER(ScSolverDlgWrapper)
 DECL_WRAPPER(ScOptSolverDlgWrapper)
 DECL_WRAPPER(ScPivotLayoutWrapper)

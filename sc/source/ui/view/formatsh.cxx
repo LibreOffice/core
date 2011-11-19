@@ -929,6 +929,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             case SID_NUMBER_INCDEC:
             case SID_NUMBER_DECDEC:
             case FID_DEFINE_NAME:
+            case FID_ADD_NAME:
             case FID_USE_NAME:
             case FID_INSERT_NAME:
             case SID_SPELL_DIALOG:

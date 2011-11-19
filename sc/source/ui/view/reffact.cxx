@@ -50,6 +50,7 @@
 // -----------------------------------------------------------------------
 
 SFX_IMPL_MODELESSDIALOG(ScNameDlgWrapper, FID_DEFINE_NAME )
+SFX_IMPL_MODELESSDIALOG(ScNameDefDlgWrapper, FID_ADD_NAME )
 SFX_IMPL_MODELESSDIALOG(ScSolverDlgWrapper, SID_OPENDLG_SOLVE )
 SFX_IMPL_MODELESSDIALOG(ScOptSolverDlgWrapper, SID_OPENDLG_OPTSOLVER )
 SFX_IMPL_MODELESSDIALOG(ScPivotLayoutWrapper, SID_OPENDLG_PIVOTTABLE )
@@ -120,6 +121,12 @@ namespace { ScTabViewShell * lcl_GetTabViewShell( SfxBindings *pBindings ); }
 //-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScNameDlgWrapper, FID_DEFINE_NAME )
+    //
+//-------------------------------------------------------------------------
+// ScNameDlgWrapper
+//-------------------------------------------------------------------------
+
+IMPL_CHILD_CTOR( ScNameDefDlgWrapper, FID_ADD_NAME )
 
 //-------------------------------------------------------------------------
 // ScSolverDlgWrapper

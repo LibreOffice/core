@@ -30,6 +30,7 @@ interface TableDrawText
 
     // alle Referenz-Eingabe-Dialoge:
     FID_DEFINE_NAME             [ StateMethod = StateDisableItems; Export = FALSE; ]
+    FID_ADD_NAME                [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_DEFINE_COLROWNAMERANGES [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_OPENDLG_SOLVE           [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_OPENDLG_OPTSOLVER       [ StateMethod = StateDisableItems; Export = FALSE; ]

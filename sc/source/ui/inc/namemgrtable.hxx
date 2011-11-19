@@ -39,7 +39,7 @@ struct ScRangeNameLine
 //TODO: cache the lines for performance improvements
 //otherwise handling of a large set of range names might get extremely slow
 //Need some sort of a filter to handle several range names
-SC_DLLPUBLIC class ScRangeManagerTable : public SvTabListBox
+class SC_DLLPUBLIC ScRangeManagerTable : public SvTabListBox
 {
 private:
     HeaderBar maHeaderBar;

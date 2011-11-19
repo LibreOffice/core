@@ -49,6 +49,7 @@
 #include "uiitems.hxx"
 #include "pivot.hxx"
 #include "namedlg.hxx"
+#include "namedefdlg.hxx"
 #include "solvrdlg.hxx"
 #include "optsolver.hxx"
 #include "tabopdlg.hxx"
@@ -69,6 +70,8 @@
 #include "simpref.hxx"
 #include "funcdesc.hxx"
 #include "dpobject.hxx"
+
+#include <iostream>
 
 //------------------------------------------------------------------
 
@@ -109,9 +112,21 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
     {
         case FID_DEFINE_NAME:
         pResult = new ScNameDlg( pB, pCW, pParent, GetViewData(),
-                                 ScAddress( GetViewData()->GetCurX(),
-                                            GetViewData()->GetCurY(),
-                                            GetViewData()->GetTabNo() ) );
+                             ScAddress( GetViewData()->GetCurX(),
+                                        GetViewData()->GetCurY(),
+                                        GetViewData()->GetTabNo() ) );
+        break;
+
+        case FID_ADD_NAME:
+        {
+            std::cout << "tabvwsh" << std::endl;
+            std::map<rtl::OUString, ScRangeName*> aRangeMap;
+            pDoc->GetRangeNameMap(aRangeMap);
+            pResult = new ScNameDefDlg( pB, pCW, pParent, GetViewData()->GetDocument(), aRangeMap,
+                            ScAddress( GetViewData()->GetCurX(),
+                                        GetViewData()->GetCurY(),
+                                        GetViewData()->GetTabNo() ), true );
+        }
         break;
 
         case SID_DEFINE_COLROWNAMERANGES:

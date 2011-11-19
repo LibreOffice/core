@@ -36,6 +36,7 @@ interface CellSelection
     ]
     // Slot's die in der DrawShell disabled werden. {
     FID_DEFINE_NAME             [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    FID_ADD_NAME                [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_DEFINE_COLROWNAMERANGES [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_OPENDLG_SOLVE           [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_OPENDLG_OPTSOLVER       [ ExecMethod = Execute; StateMethod = GetState; ]
@@ -178,7 +179,6 @@ interface CellSelection
 
     SID_TABOP               [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_CONSOLIDATE         [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
-    FID_ADD_NAME    [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     FID_INSERT_NAME [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     FID_USE_NAME    [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_CANCEL      [ ExecMethod = Execute; ]
