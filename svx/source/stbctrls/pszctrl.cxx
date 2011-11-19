@@ -62,21 +62,21 @@
 
 // -----------------------------------------------------------------------
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Funktion, mit der ein metrischer Wert in textueller Darstellung
-    umgewandelt wird.
+    Function used to create a text representation of
+    a metric value
 
-    nVal ist hier der metrische Wert in der Einheit eUnit.
+    nVal is the metric value in the unit eUnit.
 
-    [Querverweise]
+    [cross reference]
 
     <SvxPosSizeStatusBarControl::Paint(const UserDrawEvent&)>
 */
 
 String SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
 {
-    // Applikations-Metrik besorgen und setzen
+    // deliver and set the Metric of the application
     FieldUnit eOutUnit = SfxModule::GetModuleFieldUnit( getFrameInterface() );
     FieldUnit eInUnit = FUNIT_100TH_MM;
 
@@ -143,36 +143,36 @@ void FunctionPopup_Impl::Select()
 
 struct SvxPosSizeStatusBarControl_Impl
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Implementations-Struktur der Klasse SvxPosSizeStatusBarControl
-    dient der Entkopplung von "Anderungen vom exportierten Interface sowie
-    der Verringerung von extern sichtbaren Symbolen.
+    This implementation-structure of the class SvxPosSizeStatusBarControl
+    is done for the un-linking of the changes of the exported interface such as
+    the toning down of symbols that are visible externaly.
 
-    Eine Instanz exisitiert pro SvxPosSizeStatusBarControl-Instanz
-    f"ur deren Laufzeit.
+    One instance exists for each SvxPosSizeStatusBarControl-instance
+    during it's life time
 */
 
 {
-    Point   aPos;       // g"ultig, wenn eine Position angezeigt wird
-    Size    aSize;      // g"ultig, wenn eine Gr"o/se angezeigt wird
-    String  aStr;       // g"ultig, wenn ein Text angezeigt wird
-    sal_Bool    bPos;       // show position
-    sal_Bool    bSize;      // Gr"o/se anzeigen?
-    sal_Bool    bTable;     // Tabellenindex anzeigen?
-    sal_Bool    bHasMenu;   // StarCalc Popup-Menue anzeigen?
-    sal_uInt16  nFunction;  // selektierte StarCalc Funktion
-    Image   aPosImage;  // Image f"ur die Positionsanzeige
-    Image   aSizeImage; // Image f"ur die Gr"o/senanzeige
+    Point   aPos;       // valid when a position is shown
+    Size    aSize;      // valid when a size is shown
+    String  aStr;       // valid when a text is shown
+    sal_Bool    bPos;       // show position ?
+    sal_Bool    bSize;      // set size ?
+    sal_Bool    bTable;     // set table index ?
+    sal_Bool    bHasMenu;   // set StarCalc popup menu ?
+    sal_uInt16  nFunction;  // the selected StarCalc function
+    Image   aPosImage;  // Image to show the position
+    Image   aSizeImage; // Image to show the size
 };
 
 // class SvxPosSizeStatusBarControl ------------------------------------------
 
-/*  [Beschreibung]
+/*  [Description]
 
     Ctor():
-    Anlegen einer Impl-Klassen-Instanz, Default die Zeitanzeige enablen,
-    Images fu"r die Position und Gro"sse laden.
+    Create an intance of the implementation class, enable the page numbering by default
+    load the images for the position and size
 */
 
 #define STR_POSITION ".uno:Position"
@@ -200,10 +200,11 @@ SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( sal_uInt16 _nSlotId,
 
 // -----------------------------------------------------------------------
 
-/*  [Beschreibung]
+/*  [Description]
 
     Dtor():
-    Pointer auf die Impl-Klasse lo"schen, damit der Timer gestoppt wird.
+    remove the pointer to the implementation class, so that the timer is stopped
+
 */
 
 SvxPosSizeStatusBarControl::~SvxPosSizeStatusBarControl()
@@ -213,28 +214,28 @@ SvxPosSizeStatusBarControl::~SvxPosSizeStatusBarControl()
 
 // -----------------------------------------------------------------------
 
-/*  [Beschreibung]
+/*  [Description]
 
-    SID_PSZ_FUNCTION aktiviert das Popup-Menue fuer Calc, ansonsten:
+    SID_PSZ_FUNCTION activates the popup menu for Calc:
 
-    Statusbenachrichtigung;
-    Je nach Item-Typ wird eine bestimmte Anzeige enabled, die anderen disabled.
+    Status overview
+    Depending on the type of the item, a special setting is enabled, the others disabled.
 
                 NULL/Void   SfxPointItem    SvxSizeItem     SfxStringItem
     ------------------------------------------------------------------------
-    Zeit        sal_True        sal_False           sal_False           FALSE
+    Time        sal_True        sal_False           sal_False           FALSE
     Position    sal_False                                       FALSE
-    Gro"sse     FALSE                       TRUE            FALSE
+    Size        FALSE                       TRUE            FALSE
     Text        sal_False                       sal_False           TRUE
 
-    Ein anderes Item bewirkt einen Assert, die Zeitanzeige wird enabled.
+    Another item resulst in an assert, that enables showing of the time.
 */
 
 void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                                const SfxPoolItem* pState )
 {
-    // da Kombi-Controller, immer die aktuelle Id als HelpId setzen
-    // gecachten HelpText vorher l"oschen
+    // the combi-controller, always set the curent Id as HelpId
+    // first clean the cached HelpText
     GetStatusBar().SetHelpText( GetId(), String() );
 
     switch ( nSID )
@@ -258,7 +259,7 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     }
     else if ( SFX_ITEM_AVAILABLE != eState )
     {
-        // #i34458# don't switch to empty display before an empty state was
+        // don't switch to empty display before an empty state was
         // notified for all display types
 
         if ( nSID == SID_TABLE_CELL )
@@ -274,21 +275,21 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     }
     else if ( pState->ISA( SfxPointItem ) )
     {
-        // Position anzeigen
+        // show position
         pImp->aPos = ( (SfxPointItem*)pState )->GetValue();
         pImp->bPos = sal_True;
         pImp->bTable = sal_False;
     }
     else if ( pState->ISA( SvxSizeItem ) )
     {
-        // Groesse anzeigen
+        // show size
         pImp->aSize = ( (SvxSizeItem*)pState )->GetSize();
         pImp->bSize = sal_True;
         pImp->bTable = sal_False;
     }
     else if ( pState->ISA( SfxStringItem ) )
     {
-        // String anzeigen (Tabellen-Zelle oder anderes)
+        // show string (table cel or different)
         pImp->aStr = ( (SfxStringItem*)pState )->GetValue();
         pImp->bTable = sal_True;
         pImp->bPos = sal_False;
@@ -297,7 +298,7 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     else
     {
         DBG_ERRORFILE( "invalid item type" );
-        // trotzdem Datum und Zeit anzeigen
+        // nevertheless show date and time
         pImp->bPos = sal_False;
         pImp->bSize = sal_False;
         pImp->bTable = sal_False;
@@ -306,8 +307,8 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     if ( GetStatusBar().AreItemsVisible() )
         GetStatusBar().SetItemData( GetId(), 0 );
 
-    //  nur Strings auch als Text an der StatusBar setzen, damit Tip-Hilfe
-    //  funktioniert, wenn der Text zu lang ist.
+    //  set only strings as text at the statusBar, because the Help-Tips
+    //  functions, when the text is too long
     String aText;
     if ( pImp->bTable )
         aText = pImp->aStr;
@@ -316,9 +317,9 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
 
 // -----------------------------------------------------------------------
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Popup-Menue ausfuehren, wenn per Status enabled
+    execute popup menu, when the status enables this
 */
 
 void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
@@ -356,10 +357,10 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
 
 // -----------------------------------------------------------------------
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Je nach enableden Anzeigentyp, wird der Wert angezeigt. Vorher wird
-    das Rectangle u"bermalt (gelo"scht).
+    Depending on the type to be shown, the value us shown. First the
+    rectangle is repainted (removed).
 */
 
 void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
@@ -376,10 +377,10 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
 
     if ( pImp->bPos || pImp->bSize )
     {
-        // Position fuer Size-Anzeige berechnen
+        // count the position for showing the size
         long nSizePosX =
             rRect.Left() + rRect.GetWidth() / 2 + PAINT_OFFSET;
-        // Position zeichnen
+        // draw position
         Point aPnt = rRect.TopLeft();
         aPnt.Y() = aItemPos.Y();
         aPnt.X() += PAINT_OFFSET;
@@ -393,7 +394,7 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
             Rectangle( aPnt, Point( nSizePosX, rRect.Bottom() ) ) );
         pDev->DrawText( aPnt, aStr );
 
-        // falls verf"ugbar, Gr"osse zeichnen
+        // draw the size, when available
         aPnt.X() = nSizePosX;
 
         if ( pImp->bSize )

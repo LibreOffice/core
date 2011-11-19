@@ -32,27 +32,27 @@
  // Strings ---------------------------------------------------------------
 String RID_SVXSTR_INSERT_TEXT
 {
-     // 'Einf"ugen' bzw. 'Insert' abgek"urzt auf h"ochstens 5 Zeichen
+     //  'Insert' shortened to a maximum of 5 characters
     Text [ en-US ] = "INSRT" ;
 };
 String RID_SVXSTR_OVERWRITE_TEXT
 {
-     // '"Uberschreiben' bzw. 'Overwrite' abgek"urzt auf h"ochstens 5 Zeichen
+     // 'Overwrite' shortened to a maximum of 5 characters
     Text [ en-US ] = "OVER" ;
 };
 String RID_SVXSTR_SELMODE_STD
 {
-     // 'Standard' abgek"urzt auf h"ochstens 3 Zeichen
+     // 'Standard' shortened to a maximum of 3 characters
     Text [ en-US ] = "STD" ;
 };
 String RID_SVXSTR_SELMODE_ER
 {
-     // 'Erweitert' bzw. 'Extended' abgek"urzt auf h"ochstens 3 Zeichen
+     // 'Extended' shortened to a maximum of 3 characters
     Text [ en-US ] = "EXT" ;
 };
 String RID_SVXSTR_SELMODE_ERG
 {
-     // 'Erg"anzend' bzw. 'Added' abgek"urzt auf h"ochstens 3 Zeichen
+     // 'Added' shortened to a maximum of 3 characters
     Text [ en-US ] = "ADD" ;
 };
 
@@ -124,7 +124,7 @@ Menu RID_SVXMNU_ZOOM
         {
             Identifier = ZOOM_75 ;
             HelpId = HID_MNU_ZOOM_75 ;
-            Text = "75%" ;
+            text = "75%" ;
         };
         MenuItem
         {
@@ -152,7 +152,7 @@ Menu RID_SVXMNU_ZOOM
         };
     };
 };
- // Funktionsauswahl auf dem SvxPosSizeStatusBarControl fuer Calc
+ // Choice of functions on the SvxPosSizeStatusBarControl for Calc
 Menu RID_SVXMNU_PSZ_FUNC
 {
     ItemList =

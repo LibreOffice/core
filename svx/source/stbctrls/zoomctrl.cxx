@@ -138,22 +138,6 @@ void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
         if ( pState->ISA(SvxZoomItem) )
         {
             nValueSet = ((const SvxZoomItem*)pState)->GetValueSet();
-/*!!!
-            SvxZoomType eType = ((const SvxZoomItem*)pState)->GetType();
-
-            switch ( eType )
-            {
-                case SVX_ZOOM_OPTIMAL:
-                    GetStatusBar().SetItemText( GetId(), "Opt." );
-                    break;
-                case SVX_ZOOM_WHOLEPAGE:
-                    GetStatusBar().SetItemText( GetId(), "Page" );
-                    break;
-                case SVX_ZOOM_PAGEWIDTH:
-                    GetStatusBar().SetItemText( GetId(), "Width" );
-                    break;
-            }
-*/
         }
         else
         {
