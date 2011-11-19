@@ -1082,11 +1082,11 @@ SAL_CALL osl_syncFile(oslFileHandle Handle)
 {
     FileHandle_Impl* pImpl = static_cast<FileHandle_Impl*>(Handle);
 
+    if ((0 == pImpl) || ((pImpl->m_kind == FileHandle_Impl::KIND_FD) && (-1 == pImpl->m_fd)))
+        return osl_File_E_INVAL;
+
     if (pImpl->m_kind == FileHandle_Impl::KIND_MEM)
         return osl_File_E_None;
-
-    if ((0 == pImpl) || (-1 == pImpl->m_fd))
-        return osl_File_E_INVAL;
 
     FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
 
