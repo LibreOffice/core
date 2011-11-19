@@ -28,8 +28,6 @@
 #ifndef _RTFSDRIMPORT_HXX_
 #define _RTFSDRIMPORT_HXX_
 
-#include <com/sun/star/drawing/XDrawPage.hpp>
-
 #include <rtfdocumentimpl.hxx>
 
 namespace writerfilter {
