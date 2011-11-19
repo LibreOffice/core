@@ -86,18 +86,24 @@ private:
     PushButton      maBtnAdd;
     PushButton      maBtnDelete;
     PushButton      maBtnSelect;
-    OKButton        maBtnOk;
-    CancelButton    maBtnCancel;
+    PushButton      maBtnOk;
+    PushButton    maBtnCancel;
     MoreButton      maBtnMore;
+    FixedText       maFtInfo;
 
     const String    mErrMsgInvalidSym;
     const rtl::OUString maErrMsgModifiedFailed;
     const ::rtl::OUString maGlobalNameStr;
+    const rtl::OUString maErrInvalidNameStr;
+    const rtl::OUString maErrNameInUse;
+    const rtl::OUString maStrInfoDefault;
 
     ScViewData*     mpViewData;
     ScDocument*     mpDoc;
     const ScAddress maCursorPos;
     Selection       maCurSel;
+
+    std::map<rtl::OUString, ScRangeName*> maRangeMap;
 
 private:
     void Init();
@@ -105,6 +111,8 @@ private:
     void ShowOptions(const ScRangeNameLine& rLine);
     void UpdateNames();
     void CalcCurTableAssign( String& aAssign, ScRangeData* pRangeData );
+
+    bool IsNameValid();
 
 
     bool AddPushed();

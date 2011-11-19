@@ -46,37 +46,37 @@ ModelessDialog RID_SCDLG_NAMES
     {
         HelpID = "sc:PushButton:RID_SCDLG_NAMES:BTN_ADD";
         Pos = MAP_APPFONT ( 6 , 200 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 40 , 14 ) ;
         Text [ en-US ] = "Add" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     PushButton BTN_DELETE
     {
-        Pos = MAP_APPFONT( 168, 200) ;
-        Size = MAP_APPFONT ( 50, 14 ) ;
+        Pos = MAP_APPFONT( 50, 200) ;
+        Size = MAP_APPFONT ( 40, 14 ) ;
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
     };
-    PushButton BTN_CLOSE
+    PushButton BTN_NAME_OK
     {
-        Pos = MAP_APPFONT ( 108 , 225 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "Close" ;
+        Pos = MAP_APPFONT ( 128 , 225 ) ;
+        Size = MAP_APPFONT ( 40 , 14 ) ;
+        Text [ en-US ] = "OK" ;
         TabStop = TRUE ;
     };
-    PushButton BTN_CANCEL
+    PushButton BTN_NAME_CANCEL
     {
-        Pos = MAP_APPFONT ( 168 , 225 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "Close" ;
+        Pos = MAP_APPFONT ( 178 , 225 ) ;
+        Size = MAP_APPFONT ( 40 , 14 ) ;
+        Text [ en-US ] = "Cancel" ;
         TabStop = TRUE ;
     };
     PushButton BTN_SELECT
     {
-        Pos = MAP_APPFONT ( 108 , 200 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "Close" ;
+        Pos = MAP_APPFONT ( 128 , 200 ) ;
+        Size = MAP_APPFONT ( 90 , 14 ) ;
+        Text [ en-US ] = "Select Range" ;
         TabStop = TRUE ;
     };
 
@@ -191,10 +191,9 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ en-US ] = "Document (Global)" ;
     };
 
-    FixedText FT_INFO_LINE
+    FixedText FT_INFO
     {
-        Border = TRUE;
-        Pos = MAP_APPFONT( 6, 130 );
+        Pos = MAP_APPFONT( 6, 127 );
         Size = MAP_APPFONT( 210, 14 );
         TabStop = FALSE;
     };
@@ -217,5 +216,17 @@ ModelessDialog RID_SCDLG_NAMES
     String STR_HEADER_SCOPE
     {
         Text [en-US] = "Scope";
+    };
+    String STR_ERR_NAME_EXISTS
+    {
+        Text [ en-US ] = "Invalid name. Already in use for the selected scope.";
+    };
+    String STR_ERR_NAME_INVALID
+    {
+        Text [ en-US ] = "Invalid name. Only use letters, numbers and underscore and don't use names like cell addresses";
+    };
+    String STR_DEFAULT_INFO
+    {
+        Text [en-US] = "Select cells in the document to update the range.";
     };
 };

@@ -45,6 +45,8 @@
 #include "namedlg.hxx"
 #include "viewdata.hxx"
 
+#include "globalnames.hxx"
+
 #include "sfx2/app.hxx"
 
 #include <vcl/msgbox.hxx>
@@ -115,13 +117,17 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     maBtnAdd         ( this, ScResId( BTN_ADD ) ),
     maBtnDelete      ( this, ScResId( BTN_DELETE ) ),
     maBtnSelect      ( this, ScResId( BTN_SELECT ) ),
-    maBtnOk          ( this, ScResId( BTN_CLOSE ) ),
-    maBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
+    maBtnOk          ( this, ScResId( BTN_NAME_OK ) ),
+    maBtnCancel      ( this, ScResId( BTN_NAME_CANCEL ) ),
     maBtnMore        ( this, ScResId( BTN_MORE ) ),
+    maFtInfo         ( this, ScResId( FT_INFO ) ),
     //
     mErrMsgInvalidSym( ScResId( STR_INVALIDSYMBOL ) ),
     maErrMsgModifiedFailed( ResId::toString(ScResId( STR_MODIFYFAILED ) ) ),
-    maGlobalNameStr( ResId::toString(ScResId(STR_GLOBAL_SCOPE)) ),
+    maGlobalNameStr  ( ResId::toString(ScResId(STR_GLOBAL_SCOPE)) ),
+    maErrInvalidNameStr( ResId::toString(ScResId(STR_ERR_NAME_INVALID))),
+    maErrNameInUse   ( ResId::toString(ScResId(STR_ERR_NAME_EXISTS))),
+    maStrInfoDefault ( ResId::toString(ScResId(STR_DEFAULT_INFO))),
     //
     mpViewData       ( ptrViewData ),
     mpDoc            ( ptrViewData->GetDocument() ),
@@ -144,9 +150,8 @@ void ScNameDlg::Init()
     OSL_ENSURE( mpViewData && mpDoc, "ViewData oder Document nicht gefunden!" );
 
     //init UI
-    std::map<rtl::OUString,ScRangeName*> aTabRangeNameMap;
-    mpDoc->GetTabRangeNameMap(aTabRangeNameMap);
-    mpRangeManagerTable = new ScRangeManagerTable(&maNameMgrCtrl, mpDoc->GetRangeName(), aTabRangeNameMap);
+    mpDoc->GetRangeNameMap(maRangeMap);
+    mpRangeManagerTable = new ScRangeManagerTable(&maNameMgrCtrl, mpDoc->GetRangeName(), maRangeMap);
     mpRangeManagerTable->SetSelectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
     mpRangeManagerTable->SetDeselectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
 
@@ -182,6 +187,7 @@ void ScNameDlg::Init()
     }
 
     UpdateNames();
+    IsNameValid();
 
     mpViewData->GetSimpleArea( aRange );
     aRange.Format( aAreaStr, ABS_DREF3D, mpDoc,
@@ -242,6 +248,38 @@ void ScNameDlg::UpdateChecks(ScRangeData* pData)
     maBtnPrintArea.Check( pData->HasType( RT_PRINTAREA ) );
     maBtnColHeader.Check( pData->HasType( RT_COLHEADER ) );
     maBtnRowHeader.Check( pData->HasType( RT_ROWHEADER ) );
+}
+
+bool ScNameDlg::IsNameValid()
+{
+    rtl::OUString aScope = maLbScope.GetSelectEntry();
+    rtl::OUString aName = maEdName.GetText();
+
+    ScRangeName* pRangeName = NULL;
+    if(aScope == maGlobalNameStr)
+    {
+        pRangeName = maRangeMap.find(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME)))->second;
+    }
+    else
+    {
+        pRangeName = maRangeMap.find(aScope)->second;
+    }
+
+    if (!ScRangeData::IsNameValid( aName, mpDoc ))
+    {
+        maEdName.SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
+        maFtInfo.SetText(maErrInvalidNameStr);
+        return false;
+    }
+    else if (pRangeName && pRangeName->findByUpperName(ScGlobal::pCharClass->upper(aName)))
+    {
+        maEdName.SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
+        maFtInfo.SetText(maErrNameInUse);
+        return false;
+    }
+    maEdName.SetControlBackground(GetSettings().GetStyleSettings().GetFieldColor());
+    maFtInfo.SetText( maStrInfoDefault );
+    return true;
 }
 
 //updates the table and the buttons
@@ -366,6 +404,7 @@ void ScNameDlg::RemovePushed()
 
 void ScNameDlg::NameModified()
 {
+    IsNameValid();
     rtl::OUString aName = maEdName.GetText();
     aName = aName.trim();
     rtl::OUString aExpr = maEdAssign.GetText();
