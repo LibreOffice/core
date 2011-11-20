@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dtrans.hxx"
-
-
 #include <cppuhelper/factory.hxx>
 #include <clipboardmanager.hxx>
 #include <generic_clipboard.hxx>

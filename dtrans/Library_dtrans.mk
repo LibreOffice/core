@@ -28,13 +28,10 @@
 
 $(eval $(call gb_Library_Library,dtrans))
 
-$(eval $(call gb_Library_add_precompiled_header,dtrans,$(SRCDIR)/dtrans/inc/pch/precompiled_dtrans))
-
 $(eval $(call gb_Library_set_componentfile,dtrans,dtrans/source/generic/dtrans))
 
 $(eval $(call gb_Library_set_include,dtrans,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/dtrans/inc/pch) \
 ))
 
 $(eval $(call gb_Library_add_api,dtrans,\

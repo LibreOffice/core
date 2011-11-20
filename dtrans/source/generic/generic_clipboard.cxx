@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dtrans.hxx"
-
 #include <generic_clipboard.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/datatransfer/clipboard/RenderingCapabilities.hpp>

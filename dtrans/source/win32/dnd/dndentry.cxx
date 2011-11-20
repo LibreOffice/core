@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dtrans.hxx"
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/container/XSet.hpp>
 #include <osl/diagnose.h>

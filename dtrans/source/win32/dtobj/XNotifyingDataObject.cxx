@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dtrans.hxx"
 #include <osl/diagnose.h>
 #include "XNotifyingDataObject.hxx"
 #include "../clipb/WinClipbImpl.hxx"

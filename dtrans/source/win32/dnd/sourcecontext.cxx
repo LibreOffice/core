@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dtrans.hxx"
-
-
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 
 #include "sourcecontext.hxx"

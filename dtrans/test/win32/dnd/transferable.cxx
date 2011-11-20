@@ -26,15 +26,11 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dtrans.hxx"
 #include "transferable.hxx"
 
 //----------------------------------------------------------------
 //  ctor
 //----------------------------------------------------------------
-
-
 
 CTransferable::CTransferable( wchar_t* dataString ) :
     m_seqDFlv( 1 ),
