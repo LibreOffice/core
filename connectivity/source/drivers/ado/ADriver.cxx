@@ -54,6 +54,13 @@ ODriver::ODriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _
          ++h;
      }
 }
+// LEM TODO: this h business above is fishy. The value is incremented and nothing done with it?
+//           The return value of CoInitializeEx is not checked the second time?
+//           Will calls to CoInitializeEx and CoUninitialize be balanced?
+//           Why is CoInitialize called again in destructor?
+//           See http://msdn.microsoft.com/en-us/library/windows/desktop/ms695279(v=VS.85).aspx
+//           Need to understand what runs on which thread, since this initialisation business is per-thread
+// -------------------------------------------------------------------------
 
 ODriver::~ODriver()
 {
