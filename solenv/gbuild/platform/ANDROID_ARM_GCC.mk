@@ -65,4 +65,17 @@ $(call gb_Helper_abbreviate_dirs,\
 		-o $(1))
 endef
 
+# Prefix UNO library filenames with "lib"
+gb_Library_FILENAMES := \
+	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_OOOEXT)) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
+	$(foreach lib,$(gb_Library_RTLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_RTEXT)) \
+	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_RTEXT)) \
+	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_UNOEXT)) \
+	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_UNOEXT)) \
+	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(gb_Library_UNOVERPRE)$(lib)$(gb_Library_PLAINEXT)) \
+
+
 # vim: set noet sw=4:
