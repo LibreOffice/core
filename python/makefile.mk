@@ -52,7 +52,8 @@ PATCH_FILES=\
     Python-parallel-make.patch \
     Python-ssl.patch \
     Python-2.6.1-sysbase.patch\
-    Python-2.6.1-nohardlink.patch
+    Python-2.6.1-nohardlink.patch \
+    Python-disable-dbm.patch
 
 CONFIGURE_DIR=
 
