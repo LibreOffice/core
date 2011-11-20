@@ -27,7 +27,6 @@
  */
 
 #include <vcl/layout.hxx>
-#include <boost/bind.hpp>
 
 Size Box::calculateRequisition() const
 {
