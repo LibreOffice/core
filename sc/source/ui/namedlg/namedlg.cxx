@@ -53,6 +53,7 @@
 
 #include <map>
 #include <memory>
+#include <iostream>
 
 using ::std::auto_ptr;
 
@@ -282,6 +283,11 @@ bool ScNameDlg::IsNameValid()
     return true;
 }
 
+bool ScNameDlg::IsFormulaValid()
+{
+    return true;
+}
+
 //updates the table and the buttons
 void ScNameDlg::UpdateNames()
 {
@@ -376,69 +382,93 @@ bool ScNameDlg::AddPushed()
 
 void ScNameDlg::RemovePushed()
 {
-    ScRangeNameLine aLine;
-    mpRangeManagerTable->GetCurrentLine(aLine);
-    rtl::OUString aName = aLine.aName;
-    rtl::OUString aScope = aLine.aScope;
-    rtl::OUString aExpr = aLine.aExpression;
-    ScRangeName* pRangeName = GetRangeName(aScope, mpDoc);
-
-    ScRangeData* pData = pRangeName->findByName(aName);
-    if (pData)
+    std::vector<ScRangeNameLine> maEntries = mpRangeManagerTable->GetSelectedEntries();
+    mpRangeManagerTable->DeleteSelectedEntries();
+    for (std::vector<ScRangeNameLine>::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-        sal_Int32 nIndex = 0;
-        rtl::OUString aStrDelMsg = ScGlobal::GetRscString( STR_QUERY_DELENTRY );
-        rtl::OUStringBuffer aMsg = aStrDelMsg.getToken( 0, '#', nIndex );
-        aMsg.append(aName);
-        aMsg.append(aStrDelMsg.getToken( 1, '#', nIndex));
-
-        if (RET_YES ==
-                QueryBox( this, WinBits( WB_YES_NO | WB_DEF_YES ), aMsg.makeStringAndClear() ).Execute() )
-        {
+        ScRangeName* pRangeName = GetRangeName( itr->aScope, mpDoc );
+        std::cout << rtl::OUStringToOString(itr->aName, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+        std::cout << rtl::OUStringToOString(ScGlobal::pCharClass->upper(itr->aName), RTL_TEXTENCODING_UTF8).getStr() << std::endl;;
+        ScRangeData* pData = pRangeName->findByUpperName(ScGlobal::pCharClass->upper(itr->aName));
+        OSL_ENSURE(pData, "table and model should be in sync");
+        // be safe and check for possible problems
+        if (pData)
             pRangeName->erase(*pData);
-            UpdateNames();
-            SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
-        }
     }
 }
 
 void ScNameDlg::NameModified()
 {
-    IsNameValid();
-    rtl::OUString aName = maEdName.GetText();
-    aName = aName.trim();
-    rtl::OUString aExpr = maEdAssign.GetText();
-    rtl::OUString aScope = maLbScope.GetSelectEntry();
-
-    if (!aName.getLength() || !ScRangeData::IsNameValid(aName, mpDoc))
+    if (IsNameValid() && IsFormulaValid())
     {
-        maBtnAdd.Disable();
-    }
-    else
-    {
-        ScRangeName* pRangeName = GetRangeName(aScope, mpDoc);
-        if (pRangeName->findByName(aName))
-        {
-            maBtnAdd.Disable();
-        }
-        else
-        {
-            maBtnAdd.Enable();
-        }
         ScRangeNameLine aLine;
         mpRangeManagerTable->GetCurrentLine(aLine);
+
+        rtl::OUString aOldName = aLine.aName;
+        rtl::OUString aOldScope = aLine.aScope;
+        rtl::OUString aNewName = maEdName.GetText();
+        aNewName = aNewName.trim();
+        rtl::OUString aExpr = maEdAssign.GetText();
+        rtl::OUString aNewScope = maLbScope.GetSelectEntry();
+
+        ScRangeName* pOldRangeName = GetRangeName( aOldScope, mpDoc );
+        ScRangeData* pData = pOldRangeName->findByUpperName( ScGlobals::pCharClass->upper(aOldName) );
+        ScRangeName* pNewRangeName = GetRangeName( aNewScope, mpDoc );
+        OSL_ENSURE(pData, "model and table should be in sync");
+        // be safe and check for range data
+        if (pData)
+        {
+            pOldRangeName->erase(*pData);
+            mpRangeManagerTable->DeleteSelectedEntries();
+            RangeType nType = RT_NAME |
+                (maBtnRowHeader.IsChecked() ? RT_ROWHEADER : RangeType(0))
+                |(maBtnColHeader.IsChecked() ? RT_COLHEADER : RangeType(0))
+                |(maBtnPrintArea.IsChecked() ? RT_PRINTAREA : RangeType(0))
+                |(maBtnCriteria.IsChecked()  ? RT_CRITERIA  : RangeType(0));
+
+            ScRangeData* pNewEntry = new ScRangeData( mpDoc, aNewName, aExpr,
+                    maCursorPos, nType);
+            pNewRangeName->insert(pNewEntry);
+            ScRangeNameLine aLine;
+            aLine.aName = aNewName;
+            aLine.aExpression = aExpr;
+            aLine.aScope = aNewScope;
+            mpRangeManagerTable->addEntry(aLine);
+        }
     }
 }
 
 void ScNameDlg::SelectionChanged()
 {
-    ScRangeNameLine aLine;
-    mpRangeManagerTable->GetCurrentLine(aLine);
-    maEdAssign.SetText(aLine.aExpression);
-    maEdName.SetText(aLine.aName);
-    maLbScope.SelectEntry(aLine.aScope);
-    ShowOptions(aLine);
-    maBtnDelete.Enable();
+    if (mpRangeManagerTable->IsMultiSelection())
+    {
+        maEdName.Disable();
+        maEdAssign.Disable();
+        maLbScope.Disable();
+        maBtnSelect.Disable();
+        maBtnRowHeader.Disable();
+        maBtnColHeader.Disable();
+        maBtnPrintArea.Disable();
+        maBtnCriteria.Disable();
+    }
+    else
+    {
+        ScRangeNameLine aLine;
+        mpRangeManagerTable->GetCurrentLine(aLine);
+        maEdAssign.SetText(aLine.aExpression);
+        maEdName.SetText(aLine.aName);
+        maLbScope.SelectEntry(aLine.aScope);
+        ShowOptions(aLine);
+        maBtnDelete.Enable();
+        maEdName.Enable();
+        maEdAssign.Enable();
+        maLbScope.Enable();
+        maBtnSelect.Enable();
+        maBtnRowHeader.Enable();
+        maBtnColHeader.Enable();
+        maBtnPrintArea.Enable();
+        maBtnCriteria.Enable();
+    }
 }
 
 void ScNameDlg::ScopeChanged()

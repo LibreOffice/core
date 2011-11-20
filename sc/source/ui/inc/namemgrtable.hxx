@@ -28,6 +28,8 @@
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
 
+#include <vector>
+
 struct ScRangeNameLine
 {
     rtl::OUString aName;
@@ -46,14 +48,20 @@ private:
     ScRangeName* mpGlobalRangeName;
     std::map<rtl::OUString, ScRangeName*> maTabRangeNames;
     rtl::OUString maGlobalString;
+
+    void GetLine(ScRangeNameLine& aLine, SvLBoxEntry* pEntry);
+
 public:
     ScRangeManagerTable( Window* pParent, ScRangeName* pGlobalRangeName, std::map<rtl::OUString, ScRangeName*> aTabRangeNames );
     ~ScRangeManagerTable() {};
 
     void addEntry( const ScRangeNameLine& rLine );
+    void DeleteSelectedEntries();
 
     void GetCurrentLine(ScRangeNameLine& rLine);
     void UpdateEntries();
+    bool IsMultiSelection();
+    std::vector<ScRangeNameLine> GetSelectedEntries();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

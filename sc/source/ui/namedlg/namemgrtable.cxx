@@ -35,6 +35,7 @@
 #include "namedlg.hrc"
 #include "namedlg.hxx"
 #include "viewdata.hxx"
+#include "globalnames.hxx"
 
 #include "sfx2/app.hxx"
 
@@ -83,6 +84,7 @@ ScRangeManagerTable::ScRangeManagerTable( Window* pWindow, ScRangeName* pGlobalR
 
     Show();
     maHeaderBar.Show();
+    SetSelectionMode(MULTIPLE_SELECTION);
 }
 
 void ScRangeManagerTable::addEntry(const ScRangeNameLine& rLine)
@@ -94,32 +96,28 @@ void ScRangeManagerTable::addEntry(const ScRangeNameLine& rLine)
 void ScRangeManagerTable::GetCurrentLine(ScRangeNameLine& rLine)
 {
     SvLBoxEntry* pCurrentEntry = GetCurEntry();
-    rLine.aName = GetEntryText( pCurrentEntry, 0);
-    rLine.aExpression = GetEntryText(pCurrentEntry, 1);
-    rLine.aScope = GetEntryText(pCurrentEntry, 2);
+    GetLine(rLine, pCurrentEntry);
+}
+
+void ScRangeManagerTable::GetLine(ScRangeNameLine& rLine, SvLBoxEntry* pEntry)
+{
+    rLine.aName = GetEntryText( pEntry, 0);
+    rLine.aExpression = GetEntryText(pEntry, 1);
+    rLine.aScope = GetEntryText(pEntry, 2);
 }
 
 void ScRangeManagerTable::UpdateEntries()
 {
     Clear();
-    for (ScRangeName::iterator itr = mpGlobalRangeName->begin();
-            itr != mpGlobalRangeName->end(); ++itr)
-    {
-        if (!itr->HasType(RT_DATABASE) && !itr->HasType(RT_SHARED))
-        {
-            ScRangeNameLine aLine;
-            aLine.aName = itr->GetName();
-            aLine.aScope = maGlobalString;
-            itr->GetSymbol(aLine.aExpression);
-            addEntry(aLine);
-        }
-    }
     for (std::map<rtl::OUString, ScRangeName*>::iterator itr = maTabRangeNames.begin();
             itr != maTabRangeNames.end(); ++itr)
     {
         ScRangeName* pLocalRangeName = itr->second;
         ScRangeNameLine aLine;
-        aLine.aScope = itr->first;
+        if (itr->first == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME)))
+            aLine.aScope = maGlobalString;
+        else
+            aLine.aScope = itr->first;
         for (ScRangeName::iterator it = pLocalRangeName->begin();
                 it != pLocalRangeName->end(); ++it)
         {
@@ -133,6 +131,31 @@ void ScRangeManagerTable::UpdateEntries()
     }
 }
 
+void ScRangeManagerTable::DeleteSelectedEntries()
+{
+    RemoveSelection();
+}
+
+bool ScRangeManagerTable::IsMultiSelection()
+{
+    return GetSelectionCount() > 1;
+}
+
+std::vector<ScRangeNameLine> ScRangeManagerTable::GetSelectedEntries()
+{
+    std::vector<ScRangeNameLine> aSelectedEntries;
+    for (SvLBoxEntry* pEntry = FirstSelected(); pEntry != LastSelected(); pEntry = NextSelected(pEntry))
+    {
+        ScRangeNameLine aLine;
+        GetLine( aLine, pEntry );
+        aSelectedEntries.push_back(aLine);
+    }
+    SvLBoxEntry* pEntry = LastSelected();
+    ScRangeNameLine aLine;
+    GetLine( aLine, pEntry );
+    aSelectedEntries.push_back(aLine);
+    return aSelectedEntries;
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
