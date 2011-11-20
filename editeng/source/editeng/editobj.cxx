@@ -34,7 +34,6 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 
-#define ENABLE_STRING_STREAM_OPERATORS
 #include <tools/stream.hxx>
 
 #include <editobj2.hxx>
