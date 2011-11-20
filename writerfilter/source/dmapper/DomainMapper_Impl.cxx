@@ -2678,11 +2678,12 @@ void DomainMapper_Impl::CloseFieldCommand()
                         //extract macro name
                         sal_Int32 nIndex = sizeof(" MACROBUTTON ");
                         ::rtl::OUString sMacro = pContext->GetCommand().getToken( 0, ' ', nIndex);
-                        xFieldProperties->setPropertyValue(
-                                rPropNameSupplier.GetName(PROP_MACRO_NAME), uno::makeAny( sMacro ));
+                        if (xFieldProperties.is())
+                            xFieldProperties->setPropertyValue(
+                                    rPropNameSupplier.GetName(PROP_MACRO_NAME), uno::makeAny( sMacro ));
 
                         //extract quick help text
-                        if( pContext->GetCommand().getLength() > nIndex + 1)
+                        if(xFieldProperties.is() && pContext->GetCommand().getLength() > nIndex + 1)
                         {
                             xFieldProperties->setPropertyValue(
                                 rPropNameSupplier.GetName(PROP_HINT),
