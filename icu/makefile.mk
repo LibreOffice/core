@@ -54,6 +54,11 @@ PATCH_FILES=\
     icu4c-escapespace.patch \
     icu4c-strict-c.patch
 
+.IF "$(OS)"=="ANDROID"
+PATCH_FILES+=\
+    icu4c-android.patch
+.ENDIF
+
 .IF "$(GUI)"=="UNX"
 
 .IF "$(SYSBASE)"!=""

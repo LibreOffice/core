@@ -1,0 +1,11 @@
+--- misc/icu/source/config/mh-linux
++++ misc/build/icu/source/config/mh-linux
+@@ -30,7 +30,7 @@
+ 
+ ## Compiler switch to embed a library name
+ # The initial tab in the next line is to prevent icu-config from reading it.
+-	LD_SONAME = -Wl,-soname -Wl,$(notdir $(MIDDLE_SO_TARGET))
++#	LD_SONAME = -Wl,-soname -Wl,$(notdir $(MIDDLE_SO_TARGET))
+ #SH# # We can't depend on MIDDLE_SO_TARGET being set.
+ #SH# LD_SONAME=
+ 
