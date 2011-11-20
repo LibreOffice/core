@@ -39,9 +39,6 @@
 #define SC_EMPTYFIELDS      ((double)0x0042)
 #define SC_NONEMPTYFIELDS   ((double)0x0043)
 
-ScQueryEntry::Item::Item() :
-    meType(ByValue), mfVal(0.0) {}
-
 bool ScQueryEntry::Item::operator== (const Item& r) const
 {
     return meType == r.meType && mfVal == r.mfVal && maString.equals(r.maString);

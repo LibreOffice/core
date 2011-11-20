@@ -52,7 +52,8 @@ struct SC_DLLPUBLIC ScQueryEntry
         double        mfVal;
         rtl::OUString maString;
 
-        Item();
+        Item() : meType(ByValue), mfVal(0.0) {}
+
         bool operator== (const Item& r) const;
     };
     typedef std::vector<Item> QueryItemsType;
