@@ -59,7 +59,7 @@ struct ProviderRequest
         sal_Char const* pImplementationName
     )
     : xServiceManager(reinterpret_cast<XMultiServiceFactory*>(pServiceManager))
-    , sImplementationName(OUString(RTL_CONSTASCII_USTRINGPARAM(pImplementationName)))
+    , sImplementationName(OUString::createFromAscii(pImplementationName))
     {
     }
 
