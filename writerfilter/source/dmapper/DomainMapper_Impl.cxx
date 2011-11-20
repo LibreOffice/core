@@ -2150,7 +2150,8 @@ void DomainMapper_Impl::handleAuthor
         {
             sServiceName += sFieldServiceName;
         }
-        xFieldInterface = m_xTextFactory->createInstance(sServiceName);
+        if (m_xTextFactory.is())
+            xFieldInterface = m_xTextFactory->createInstance(sServiceName);
         xFieldProperties =
             uno::Reference< beans::XPropertySet >( xFieldInterface,
                 uno::UNO_QUERY_THROW);
