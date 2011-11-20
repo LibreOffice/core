@@ -32,7 +32,6 @@ $(eval $(call gb_Library_add_package_headers,drawinglayer,drawinglayer_inc))
 
 $(eval $(call gb_Library_set_include,drawinglayer,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/drawinglayer/inc/pch) \
     -I$(OUTDIR)/inc \
 ))
 
