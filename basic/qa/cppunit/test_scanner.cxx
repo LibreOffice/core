@@ -34,6 +34,7 @@ namespace
     void testAlphanum();
     void testComments();
     void testGoto();
+    void testGotoCompatible();
     void testExclamation();
     void testNumbers();
     void testDataType();
@@ -47,6 +48,7 @@ namespace
     CPPUNIT_TEST(testAlphanum);
     CPPUNIT_TEST(testComments);
     CPPUNIT_TEST(testGoto);
+    CPPUNIT_TEST(testGotoCompatible);
     CPPUNIT_TEST(testExclamation);
     CPPUNIT_TEST(testNumbers);
     CPPUNIT_TEST(testDataType);
@@ -62,10 +64,11 @@ namespace
   const static rtl::OUString goto_(RTL_CONSTASCII_USTRINGPARAM("goto"));
   const static rtl::OUString excl(RTL_CONSTASCII_USTRINGPARAM("!"));
 
-  std::vector<Symbol> getSymbols(const rtl::OUString& source)
+  std::vector<Symbol> getSymbols(const rtl::OUString& source, bool bCompatible = false)
   {
     std::vector<Symbol> symbols;
     SbiScanner scanner(source);
+    scanner.SetCompatible(bCompatible);
     while(scanner.NextSym())
     {
       Symbol symbol;
@@ -447,6 +450,32 @@ namespace
     CPPUNIT_ASSERT(symbols[2].type == SbxVARIANT);
     CPPUNIT_ASSERT(symbols[3].text == cr);
     CPPUNIT_ASSERT(symbols[3].type == SbxVARIANT);
+  }
+
+  void ScannerTest::testGotoCompatible()
+  {
+    const rtl::OUString source1(RTL_CONSTASCII_USTRINGPARAM("goto"));
+    const rtl::OUString source2(RTL_CONSTASCII_USTRINGPARAM("go  to"));
+    const rtl::OUString source3(RTL_CONSTASCII_USTRINGPARAM("go\nto"));
+
+    std::vector<Symbol> symbols;
+
+    symbols = getSymbols(source1, true);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == goto_);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+
+    symbols = getSymbols(source2, true);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == rtl::OUString(goto_));
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+
+    symbols = getSymbols(source3, true);
+    CPPUNIT_ASSERT(symbols.size() == 4);
+    CPPUNIT_ASSERT(symbols[0].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("go")));
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(symbols[2].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("to")));
+    CPPUNIT_ASSERT(symbols[3].text == cr);
   }
 
   void ScannerTest::testExclamation()
