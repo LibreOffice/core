@@ -131,12 +131,4 @@ sal_Bool GroupTable::GetNextGroupEntry()
 
 // ---------------------------------------------------------------------------------------------
 
-void GroupTable::SkipCurrentGroup()
-{
-    if ( mnCurrentGroupEntry )
-        delete ( mpGroupEntry[ --mnCurrentGroupEntry ] );
-}
-
-// ---------------------------------------------------------------------------------------------
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

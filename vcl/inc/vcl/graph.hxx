@@ -155,17 +155,10 @@ public:
     void                Draw( OutputDevice* pOutDev,
                               const Point& rDestPt,
                               const Size& rDestSize ) const;
-    static void         Draw( OutputDevice* pOutDev, const String& rText,
-                              Font& rFont, const Bitmap& rBitmap,
-                              const Point& rDestPt, const Size& rDestSize );
     static void         DrawEx( OutputDevice* pOutDev, const String& rText,
                               Font& rFont, const BitmapEx& rBitmap,
                               const Point& rDestPt, const Size& rDestSize );
 
-    void                StartAnimation( OutputDevice* pOutDev,
-                                        const Point& rDestPt,
-                                        long nExtraData = 0L,
-                                        OutputDevice* pFirstFrameOutDev = NULL );
     void                StartAnimation( OutputDevice* pOutDev,
                                         const Point& rDestPt,
                                         const Size& rDestSize,

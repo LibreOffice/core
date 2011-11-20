@@ -93,19 +93,6 @@ GraphicReader::~GraphicReader()
 
 // ------------------------------------------------------------------------
 
-sal_Bool GraphicReader::IsPreviewModeEnabled() const
-{
-    if( !mpReaderData )
-        return sal_False;
-    if( mpReaderData->maPreviewSize.Width() )
-        return sal_True;
-    if( mpReaderData->maPreviewSize.Height() )
-        return sal_True;
-    return sal_False;
-}
-
-// ------------------------------------------------------------------------
-
 void GraphicReader::DisablePreviewMode()
 {
     if( mpReaderData )

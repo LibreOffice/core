@@ -470,11 +470,6 @@ public:
                                          Rectangle &rNativeContentRegion,
                                          const OutputDevice *pOutDev );
 
-    static void AddDevFontSubstitute( OutputDevice* pOutDev,
-                                      const String& rFontName,
-                                      const String& rReplaceFontName,
-                                      sal_uInt16 nFlags = 0 );
-
     bool DrawAlphaBitmap( const SalTwoRect&,
                           const SalBitmap& rSourceBitmap,
                           const SalBitmap& rAlphaBitmap,

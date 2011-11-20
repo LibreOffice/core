@@ -72,7 +72,6 @@ class GroupTable
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > &
                                 GetCurrentGroupAccess() const { return mpGroupEntry[  mnCurrentGroupEntry - 1 ]->mXIndexAccess; };
         sal_uInt32              GetGroupsClosed();
-        void                    SkipCurrentGroup();
         void                    ResetGroupTable( sal_uInt32 nCount );
         void                    ClearGroupTable();
         sal_Bool                EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & rIndex );

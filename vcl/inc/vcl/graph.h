@@ -73,7 +73,6 @@ public:
 
     // TODO: when incompatible changes are possible again
     // the preview size hint should be redone
-    sal_Bool            IsPreviewModeEnabled() const;
     void            DisablePreviewMode();
     void            SetPreviewSize( const Size& );
     Size            GetPreviewSize() const;

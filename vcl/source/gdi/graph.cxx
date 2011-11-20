@@ -600,29 +600,11 @@ void Graphic::Draw( OutputDevice* pOutDev,
 
 // ------------------------------------------------------------------------
 
-void Graphic::Draw( OutputDevice* pOutDev, const String& rText,
-                    Font& rFont, const Bitmap& rBitmap,
-                    const Point& rDestPt, const Size& rDestSz )
-{
-    ImplDrawDefault( pOutDev, &rText, &rFont, &rBitmap, NULL, rDestPt, rDestSz );
-}
-
-// ------------------------------------------------------------------------
-
 void Graphic::DrawEx( OutputDevice* pOutDev, const String& rText,
                     Font& rFont, const BitmapEx& rBitmap,
                     const Point& rDestPt, const Size& rDestSz )
 {
     ImplDrawDefault( pOutDev, &rText, &rFont, NULL, &rBitmap, rDestPt, rDestSz );
-}
-
-// ------------------------------------------------------------------------
-
-void Graphic::StartAnimation( OutputDevice* pOutDev, const Point& rDestPt, long nExtraData,
-                              OutputDevice* pFirstFrameOutDev )
-{
-    ImplTestRefCount();
-    mpImpGraphic->ImplStartAnimation( pOutDev, rDestPt, nExtraData, pFirstFrameOutDev );
 }
 
 // ------------------------------------------------------------------------

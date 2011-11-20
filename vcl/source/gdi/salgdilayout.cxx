@@ -820,12 +820,4 @@ bool SalGraphics::filterText( const String&, String&, xub_StrLen, xub_StrLen&, x
     return false;
 }
 
-void SalGraphics::AddDevFontSubstitute( OutputDevice* pOutDev,
-                                        const String& rFontName,
-                                        const String& rReplaceFontName,
-                                        sal_uInt16 nFlags )
-{
-    pOutDev->ImplAddDevFontSubstitute( rFontName, rReplaceFontName, nFlags );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
