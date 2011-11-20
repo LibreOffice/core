@@ -34,6 +34,8 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 
+import fi.iki.tml.CommandLine;
+
 // We override NativeActivity so that we can get at the intent of the
 // activity and its extra parameters, that we use to tell us what
 // actual LibreOffice "program" to run. I.e. something that on desktop
@@ -111,13 +113,7 @@ public class Bootstrap extends NativeActivity
 
         Log.i(TAG, String.format("cmdLine=%s", cmdLine));
 
-        String[] argv = cmdLine.split(" ");
-
-        // As we don't do any shell style quote handling, to enable
-        // having spaces in argv elements, they need to be entered as
-        // '~' characters which we here change into spaces...
-        for (int i = 0; i < argv.length; i++)
-            argv[i] = argv[i].replace('~', ' ');
+        String[] argv = CommandLine.split(cmdLine);
 
         // Load the LO "program" here and look up lo_main
         int loLib = dlopen(mainLibrary);
