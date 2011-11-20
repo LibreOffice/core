@@ -40,7 +40,7 @@
 #include <wrtsh.hxx>
 
 //TODO, add asian/non-asian word count to UI when CJK mode is enabled.
-SwWordCountDialog::SwWordCountDialog(Window* pParent)
+SwWordCountDialog::SwWordCountDialog(Dialog* pParent)
     : dialog_vbox1(pParent)
     , box1(&dialog_vbox1)
     , aCurrentSelection(&box1)
@@ -166,6 +166,8 @@ SwWordCountDialog::SwWordCountDialog(Window* pParent)
     fprintf(stderr, "aCurrentSelectionText is is %p\n", &aCurrentSelectionText);
     fprintf(stderr, "aCurrentSelection is is %p\n", &aCurrentSelection);
     fprintf(stderr, "dialog_vbox1 is is %p\n", &dialog_vbox1);
+
+    pParent->SetMinOutputSizePixel(dialog_vbox1.GetOptimalSize(WINDOWSIZE_PREFERRED));
 }
 
 IMPL_LINK_NOARG(SwWordCountDialog, OkHdl)

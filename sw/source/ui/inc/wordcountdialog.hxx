@@ -79,7 +79,7 @@ class SwWordCountDialog
     void InitControls();
 
 public:
-    SwWordCountDialog(Window* pParent);
+    SwWordCountDialog(Dialog* pParent);
     ~SwWordCountDialog();
 
     void    SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc);
