@@ -53,7 +53,8 @@ PATCH_FILES=\
     Python-ssl.patch \
     Python-2.6.1-sysbase.patch\
     Python-2.6.1-nohardlink.patch \
-    Python-disable-dbm.patch
+    Python-disable-dbm.patch \
+    Python-linux3.patch
 
 CONFIGURE_DIR=
 
