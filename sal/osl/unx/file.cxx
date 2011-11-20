@@ -106,7 +106,7 @@ struct FileHandle_Impl
     size_t       m_bufsiz;
     sal_uInt8 *  m_buffer;
 
-    explicit FileHandle_Impl (int fd, char const * path = "<anon>");
+    explicit FileHandle_Impl (int fd, Kind kind = KIND_FD, char const * path = "<anon>");
     ~FileHandle_Impl();
 
     static void* operator new (size_t n);
@@ -245,10 +245,10 @@ FileHandle_Impl::Guard::~Guard()
     (void) pthread_mutex_unlock (m_mutex);
 }
 
-FileHandle_Impl::FileHandle_Impl (int fd, char const * path)
+FileHandle_Impl::FileHandle_Impl (int fd, enum Kind kind, char const * path)
     : m_strFilePath (0),
       m_fd      (fd),
-      m_kind    (KIND_FD),
+      m_kind    (kind),
       m_state   (STATE_SEEKABLE | STATE_READABLE),
       m_size    (0),
       m_offset  (0),
@@ -260,13 +260,16 @@ FileHandle_Impl::FileHandle_Impl (int fd, char const * path)
 {
     (void) pthread_mutex_init(&m_mutex, 0);
     rtl_string_newFromStr (&m_strFilePath, path);
-    Allocator::get().allocate (&m_buffer, &m_bufsiz);
-    if (0 != m_buffer)
-        memset (m_buffer, 0, m_bufsiz);
+    if (m_kind == KIND_FD) {
+        Allocator::get().allocate (&m_buffer, &m_bufsiz);
+        if (0 != m_buffer)
+            memset (m_buffer, 0, m_bufsiz);
+    }
 }
 FileHandle_Impl::~FileHandle_Impl()
 {
-    Allocator::get().deallocate (m_buffer), m_buffer = 0;
+    if (m_kind == KIND_FD)
+        Allocator::get().deallocate (m_buffer), m_buffer = 0;
     rtl_string_release (m_strFilePath), m_strFilePath = 0;
     (void) pthread_mutex_destroy(&m_mutex); // ignoring EBUSY ...
 }
@@ -856,7 +859,7 @@ static oslFileError
 SAL_CALL osl_openMemoryAsFile( void *address, size_t size, oslFileHandle *pHandle )
 {
     oslFileError eRet;
-    FileHandle_Impl * pImpl = new FileHandle_Impl (-1, "");
+    FileHandle_Impl * pImpl = new FileHandle_Impl (-1, FileHandle_Impl::KIND_MEM);
     if (!pImpl)
     {
         eRet = oslTranslateFileError (OSL_FET_ERROR, ENOMEM);
@@ -1017,7 +1020,7 @@ SAL_CALL osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uIn
     }
 
     /* allocate memory for impl structure */
-    FileHandle_Impl * pImpl = new FileHandle_Impl (fd, buffer);
+    FileHandle_Impl * pImpl = new FileHandle_Impl (fd, FileHandle_Impl::KIND_FD, buffer);
     if (!pImpl)
     {
         eRet = oslTranslateFileError (OSL_FET_ERROR, ENOMEM);
