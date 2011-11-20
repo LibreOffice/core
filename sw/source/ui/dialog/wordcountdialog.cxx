@@ -40,8 +40,6 @@
 #include <wrtsh.hxx>
 
 //TODO, add asian/non-asian word count to UI when CJK mode is enabled.
-const int nWCSpacing = 50;
-
 SwWordCountDialog::SwWordCountDialog(Dialog* pParent)
     : dialog_vbox1(pParent)
     , box1(&dialog_vbox1)
@@ -49,26 +47,26 @@ SwWordCountDialog::SwWordCountDialog(Dialog* pParent)
     , aCurrentSelectionText(&aCurrentSelection, SW_RES(FT_CURRENT))
     , aCurrentSelectionLine(&aCurrentSelection, SW_RES(FL_CURRENT))
     , aSelectionBox(&box1, false, 7)
-    , aSelectionRow1(&aSelectionBox, false, nWCSpacing)
+    , aSelectionRow1(&aSelectionBox)
     , aCurrentWordFT(&aSelectionRow1, SW_RES(FT_CURRENTWORD))
     , aCurrentWordFI(&aSelectionRow1, SW_RES(FI_CURRENTWORD))
-    , aSelectionRow2(&aSelectionBox, false, nWCSpacing)
+    , aSelectionRow2(&aSelectionBox)
     , aCurrentCharacterFT(&aSelectionRow2, SW_RES(FT_CURRENTCHARACTER))
     , aCurrentCharacterFI(&aSelectionRow2, SW_RES(FI_CURRENTCHARACTER))
-    , aSelectionRow3(&aSelectionBox, false, nWCSpacing)
+    , aSelectionRow3(&aSelectionBox)
     , aCurrentCharacterExcludingSpacesFT(&aSelectionRow3, SW_RES(FT_CURRENTCHARACTEREXCLUDINGSPACES))
     , aCurrentCharacterExcludingSpacesFI(&aSelectionRow3, SW_RES(FI_CURRENTCHARACTEREXCLUDINGSPACES))
     , aDoc(&box1, false, 3)
     , aDocText(&aDoc, SW_RES(FT_DOC))
     , aDocLine(&aDoc, SW_RES(FL_DOC))
     , aDocBox(&box1, false, 7)
-    , aDocRow1(&aDocBox, false, nWCSpacing)
+    , aDocRow1(&aDocBox)
     , aDocWordFT(&aDocRow1, SW_RES(FT_DOCWORD))
     , aDocWordFI(&aDocRow1, SW_RES(FI_DOCWORD))
-    , aDocRow2(&aDocBox, false, nWCSpacing)
+    , aDocRow2(&aDocBox)
     , aDocCharacterFT(&aDocRow2, SW_RES(FT_DOCCHARACTER))
     , aDocCharacterFI(&aDocRow2, SW_RES(FI_DOCCHARACTER))
-    , aDocRow3(&aDocBox, false, nWCSpacing)
+    , aDocRow3(&aDocBox)
     , aDocCharacterExcludingSpacesFT(&aDocRow3, SW_RES(FT_DOCCHARACTEREXCLUDINGSPACES))
     , aDocCharacterExcludingSpacesFI(&aDocRow3, SW_RES(FI_DOCCHARACTEREXCLUDINGSPACES))
     , aBottomFL(&dialog_vbox1, SW_RES(FL_BOTTOM))
@@ -77,6 +75,14 @@ SwWordCountDialog::SwWordCountDialog(Dialog* pParent)
     , aHelp(&dialog_action_area1, SW_RES(PB_HELP))
 {
     Size aSize;
+
+    rtl::OUString sForceInitialSize(RTL_CONSTASCII_USTRINGPARAM("00000000"));
+    aCurrentWordFI.SetText(sForceInitialSize);
+    aCurrentCharacterFI.SetText(sForceInitialSize);
+    aCurrentCharacterExcludingSpacesFI.SetText(sForceInitialSize);
+    aDocWordFI.SetText(sForceInitialSize);
+    aDocCharacterFI.SetText(sForceInitialSize);
+    aDocCharacterExcludingSpacesFI.SetText(sForceInitialSize);
 
     rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
     rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
@@ -170,6 +176,11 @@ SwWordCountDialog::SwWordCountDialog(Dialog* pParent)
     fprintf(stderr, "dialog_vbox1 is is %p\n", &dialog_vbox1);
 
     pParent->SetMinOutputSizePixel(dialog_vbox1.GetOptimalSize(WINDOWSIZE_PREFERRED));
+
+#if OSL_DEBUG_LEVEL > 2
+    aDocCharacterExcludingSpacesFT.SetControlBackground(Color(180,0,0));
+    aDocCharacterExcludingSpacesFI.SetControlBackground(Color(0,180,0));
+#endif
 }
 
 IMPL_LINK_NOARG(SwWordCountDialog, OkHdl)
