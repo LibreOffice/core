@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
 
-#include <ctype.h>
+#include "basiccharclass.hxx"
 #include "sbcomp.hxx"
 
 struct TokenTable { SbiToken t; const char *s; };
@@ -392,7 +392,7 @@ SbiToken SbiTokenizer::Next()
         } while( delta );
         // Symbol? if not >= token
         sal_Unicode ch = aSym[0];
-        if( !BasicSimpleCharClass::isAlpha( ch, bCompatible ) && !bSymbol )
+        if( !theBasicCharClass::get().isAlpha( ch, bCompatible ) && !bSymbol )
             return eCurTok = (SbiToken) (ch & 0x00FF);
         return eCurTok = SYMBOL;
     }

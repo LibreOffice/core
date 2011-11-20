@@ -80,6 +80,7 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/classes/sbintern \
 	basic/source/classes/sbunoobj \
 	basic/source/classes/sbxmod \
+	basic/source/comp/basiccharclass \
 	basic/source/comp/buffer \
 	basic/source/comp/codegen \
 	basic/source/comp/dim \

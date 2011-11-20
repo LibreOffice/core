@@ -103,46 +103,6 @@ public:
     double    GetDbl()              { return nVal;  }
 };
 
-class LetterTable
-{
-    bool        IsLetterTab[256];
-
-public:
-    LetterTable( void );
-
-    inline bool isLetter( sal_Unicode c )
-    {
-        bool bRet = (c < 256) ? IsLetterTab[c] : isLetterUnicode( c );
-        return bRet;
-    }
-    bool isLetterUnicode( sal_Unicode c );
-};
-
-class BasicSimpleCharClass
-{
-    static LetterTable aLetterTable;
-
-public:
-    static sal_Bool isAlpha( sal_Unicode c, bool bCompatible )
-    {
-        sal_Bool bRet = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
-                    || (bCompatible && aLetterTable.isLetter( c ));
-        return bRet;
-    }
-
-    static sal_Bool isDigit( sal_Unicode c )
-    {
-        sal_Bool bRet = (c >= '0' && c <= '9');
-        return bRet;
-    }
-
-    static sal_Bool isAlphaNumeric( sal_Unicode c, bool bCompatible )
-    {
-        sal_Bool bRet = isDigit( c ) || isAlpha( c, bCompatible );
-        return bRet;
-    }
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
