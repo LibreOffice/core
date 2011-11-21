@@ -39,8 +39,7 @@
 
 /*See: http://people.redhat.com/drepper/selinux-mem.html*/
 #if defined(LINUX) || defined(OPENBSD) || defined(FREEBSD) \
-    || defined(NETBSD) || defined(DRAGONFLY) \
-    || defined(ANDROID) /* Not sure about Android, but let's see... */
+    || defined(NETBSD) || defined(DRAGONFLY)
 #define USE_DOUBLE_MMAP
 #endif
 

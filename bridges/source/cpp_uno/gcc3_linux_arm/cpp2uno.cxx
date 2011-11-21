@@ -488,10 +488,16 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
 }
 
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
-    Slot ** slots, unsigned char * code, sal_PtrDiff writetoexecdiff,
+    Slot ** slots, unsigned char * code,
+#ifdef USE_DOUBLE_MMAP
+    sal_PtrDiff writetoexecdiff,
+#endif
     typelib_InterfaceTypeDescription const * type, sal_Int32 functionOffset,
     sal_Int32 functionCount, sal_Int32 vtableOffset)
 {
+#ifndef USE_DOUBLE_MMAP
+    const sal_PtrDiff writetoexecdiff = 0;
+#endif
     (*slots) -= functionCount;
     Slot * s = *slots;
     for (sal_Int32 i = 0; i < type->nMembers; ++i)
