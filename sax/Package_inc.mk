@@ -31,5 +31,6 @@ $(eval $(call gb_Package_add_file,sax_inc,inc/sax/dllapi.h,sax/dllapi.h))
 $(eval $(call gb_Package_add_file,sax_inc,inc/sax/fshelper.hxx,sax/fshelper.hxx))
 $(eval $(call gb_Package_add_file,sax_inc,inc/sax/fastattribs.hxx,sax/fastattribs.hxx))
 $(eval $(call gb_Package_add_file,sax_inc,inc/sax/tools/converter.hxx,sax/tools/converter.hxx))
+$(eval $(call gb_Package_add_file,sax_inc,inc/sax/tools/documenthandleradapter.hxx,sax/tools/documenthandleradapter.hxx))
 
 # vim: set noet sw=4 ts=4:
