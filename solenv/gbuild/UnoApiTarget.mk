@@ -74,6 +74,7 @@ $(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : $(foreach idl,$(3),$(SRCD
 
 endef
 
+# for interfaces, exceptions, structs, enums, constant groups
 define gb_UnoApiTarget_add_idlfile
 $(call gb_UnoApiTarget_get_target,$(1)) : $(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
 $(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd) : $(call gb_UnoApiPartTarget_get_target,$(2)/idl.done)
@@ -94,6 +95,7 @@ $(call gb_UnoApiPartTarget_get_target,$(2)/idl_noheader.done) : $(foreach idl,$(
 
 endef
 
+# for old-style services and modules
 define gb_UnoApiTarget_add_idlfile_noheader
 $(call gb_UnoApiTarget_get_target,$(1)) : $(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
 $(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd) : $(call gb_UnoApiPartTarget_get_target,$(2)/idl_noheader.done)
@@ -109,6 +111,7 @@ $(call gb_UnoApiPartTarget_get_target,$(2)/idl_nohdl.done) : $(foreach idl,$(3),
 
 endef
 
+# for new-style services
 define gb_UnoApiTarget_add_idlfile_nohdl
 $(call gb_UnoApiTarget_get_target,$(1)) : $(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
 $(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd) : $(call gb_UnoApiPartTarget_get_target,$(2)/idl_nohdl.done)
