@@ -1195,26 +1195,25 @@ const void * GrFontData::getTable(unsigned int name, size_t *len) const
 ImplWinFontData::ImplWinFontData( const ImplDevFontAttributes& rDFS,
     int nHeight, BYTE eWinCharSet, BYTE nPitchAndFamily )
 :   ImplFontData( rDFS, 0 ),
-    meWinCharSet( eWinCharSet ),
-    mnPitchAndFamily( nPitchAndFamily ),
-    mpFontCharSets( NULL ),
-    mpUnicodeMap( NULL ),
-    mbGsubRead( false ),
+    mnId( 0 ),
     mbDisableGlyphApi( false ),
     mbHasKoreanRange( false ),
     mbHasCJKSupport( false ),
 #ifdef ENABLE_GRAPHITE
+    mpGraphiteData(NULL),
     mbHasGraphiteSupport( false ),
 #endif
     mbHasArabicSupport ( false ),
     mbFontCapabilitiesRead( false ),
+    mpUnicodeMap( NULL ),
+    mpEncodingVector( NULL ),
+    mpFontCharSets( NULL ),
+    mnFontCharSetCount( 0 ),
+    meWinCharSet( eWinCharSet ),
+    mnPitchAndFamily( nPitchAndFamily ),
     mbAliasSymbolsLow( false ),
     mbAliasSymbolsHigh( false ),
-    mnId( 0 ),
-    mpEncodingVector( NULL )
-#ifdef ENABLE_GRAPHITE
-    ,mpGraphiteData(NULL)
-#endif
+    mbGsubRead( false )
 {
     SetBitmapSize( 0, nHeight );
 
