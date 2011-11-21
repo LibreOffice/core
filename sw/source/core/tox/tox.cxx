@@ -325,6 +325,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     SwFormTokens aTokens;
     if (TOX_CONTENT == eType)
     {
+        aTokens.push_back(SwFormToken(TOKEN_LINK_START));
         aTokens.push_back(SwFormToken(TOKEN_ENTRY_NO));
         aTokens.push_back(SwFormToken(TOKEN_ENTRY_TEXT));
     }
@@ -343,6 +344,9 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
         aTokens.push_back(aToken);
         aTokens.push_back(SwFormToken(TOKEN_PAGE_NUMS));
     }
+
+    if (TOX_CONTENT == eType)
+        aTokens.push_back(SwFormToken(TOKEN_LINK_END));
 
     SetTemplate( 0, SW_RESSTR( nPoolId++ ));
 
