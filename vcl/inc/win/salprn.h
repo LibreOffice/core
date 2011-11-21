@@ -59,9 +59,9 @@ class WinSalInfoPrinter : public SalInfoPrinter
 {
 public:
     WinSalGraphics*         mpGraphics;             // current Printer graphics
-    XubString               maDriverName;           // printer driver name
-    XubString               maDeviceName;           // printer device name
-    XubString               maPortName;             // printer port name
+    rtl::OUString               maDriverName;           // printer driver name
+    rtl::OUString               maDeviceName;           // printer device name
+    rtl::OUString               maPortName;             // printer port name
     HDC                     mhDC;                   // printer hdc
     sal_Bool                    mbGraphics;             // is Graphics used
 public:

@@ -194,7 +194,7 @@ void WinSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
             for ( i = 0; i < nInfoPrn4; i++ )
             {
                 SalPrinterQueueInfo* pInfo = new SalPrinterQueueInfo;
-                pInfo->maPrinterName = UniString( reinterpret_cast< const sal_Unicode* >(pWinInfo4[i].pPrinterName) );
+                pInfo->maPrinterName = rtl::OUString( reinterpret_cast< const sal_Unicode* >(pWinInfo4[i].pPrinterName) );
                 pInfo->mnStatus      = 0;
                 pInfo->mnJobs        = 0;
                 pInfo->mpSysData     = NULL;
@@ -297,8 +297,8 @@ static DWORD ImplDeviceCaps( WinSalInfoPrinter* pPrinter, WORD nCaps,
     else
         pDevMode = SAL_DEVMODE_W( pSetupData );
 
-    return DeviceCapabilitiesW( reinterpret_cast<LPCWSTR>(pPrinter->maDeviceName.GetBuffer()),
-                                reinterpret_cast<LPCWSTR>(pPrinter->maPortName.GetBuffer()),
+    return DeviceCapabilitiesW( reinterpret_cast<LPCWSTR>(pPrinter->maDeviceName.getStr()),
+                                reinterpret_cast<LPCWSTR>(pPrinter->maPortName.getStr()),
                                 nCaps, (LPWSTR)pOutput, pDevMode );
 }
 
@@ -330,7 +330,7 @@ static sal_Bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
             // #110800#, #111151#, #112381#, #i16580#, #i14173# and perhaps #112375#
             ByteString aPrinterNameA= ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE );
             HANDLE hPrn;
-            LPWSTR pPrinterNameW = reinterpret_cast<LPWSTR>(const_cast<sal_Unicode*>(pPrinter->maDeviceName.GetBuffer()));
+            LPWSTR pPrinterNameW = reinterpret_cast<LPWSTR>(const_cast<sal_Unicode*>(pPrinter->maDeviceName.getStr()));
             if ( !OpenPrinterW( pPrinterNameW, &hPrn, NULL ) )
                 return FALSE;
 
@@ -396,7 +396,7 @@ static sal_Bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup
 {
     ByteString aPrinterNameA = ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE );
     HANDLE hPrn;
-    LPWSTR pPrinterNameW = reinterpret_cast<LPWSTR>(const_cast<sal_Unicode*>(pPrinter->maDeviceName.GetBuffer()));
+    LPWSTR pPrinterNameW = reinterpret_cast<LPWSTR>(const_cast<sal_Unicode*>(pPrinter->maDeviceName.getStr()));
     if ( !OpenPrinterW( pPrinterNameW, &hPrn, NULL ) )
         return FALSE;
     // #131642# hPrn==HGDI_ERROR even though OpenPrinter() succeeded!
@@ -1072,14 +1072,14 @@ static HDC ImplCreateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetup
         pDevMode = NULL;
     // #95347 some buggy drivers (eg, OKI) write to those buffers in CreateIC, although declared const - so provide some space
     // pl: does this hold true for Unicode functions ?
-    if( pPrinter->maDriverName.Len() > 2048 || pPrinter->maDeviceName.Len() > 2048 )
+    if( pPrinter->maDriverName.getLength() > 2048 || pPrinter->maDeviceName.getLength() > 2048 )
         return 0;
     sal_Unicode pDriverName[ 4096 ];
     sal_Unicode pDeviceName[ 4096 ];
-    rtl_copyMemory( pDriverName, pPrinter->maDriverName.GetBuffer(), pPrinter->maDriverName.Len()*sizeof(sal_Unicode));
-    memset( pDriverName+pPrinter->maDriverName.Len(), 0, 32 );
-    rtl_copyMemory( pDeviceName, pPrinter->maDeviceName.GetBuffer(), pPrinter->maDeviceName.Len()*sizeof(sal_Unicode));
-    memset( pDeviceName+pPrinter->maDeviceName.Len(), 0, 32 );
+    rtl_copyMemory( pDriverName, pPrinter->maDriverName.getStr(), pPrinter->maDriverName.getLength()*sizeof(sal_Unicode));
+    memset( pDriverName+pPrinter->maDriverName.getLength(), 0, 32 );
+    rtl_copyMemory( pDeviceName, pPrinter->maDeviceName.getStr(), pPrinter->maDeviceName.getLength()*sizeof(sal_Unicode));
+    memset( pDeviceName+pPrinter->maDeviceName.getLength(), 0, 32 );
     hDC = ImplCreateICW_WithCatch( reinterpret_cast< LPWSTR >(pDriverName),
                                    reinterpret_cast< LPCWSTR >(pDeviceName),
                                    pDevMode );
@@ -1134,8 +1134,8 @@ SalInfoPrinter* WinSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
     pPrinter->maDriverName  = pQueueInfo->maDriver;
     pPrinter->maDeviceName  = pQueueInfo->maPrinterName;
     pPrinter->maPortName    = pQueueInfo->mpSysData ?
-                                *(String*)(pQueueInfo->mpSysData)
-                              : String();
+                                *pQueueInfo->mpSysData
+                              : rtl::OUString();
 
     // check if the provided setup data match the actual printer
     ImplTestSalJobSetup( pPrinter, pSetupData, TRUE );
@@ -1563,8 +1563,8 @@ sal_Bool WinSalPrinter::StartJob( const rtl::OUString* pFileName,
     // #95347 some buggy drivers (eg, OKI) write to those buffers in CreateDC, although declared const - so provide some space
     sal_Unicode aDrvBuf[4096];
     sal_Unicode aDevBuf[4096];
-    rtl_copyMemory( aDrvBuf, mpInfoPrinter->maDriverName.GetBuffer(), (mpInfoPrinter->maDriverName.Len()+1)*sizeof(sal_Unicode));
-    rtl_copyMemory( aDevBuf, mpInfoPrinter->maDeviceName.GetBuffer(), (mpInfoPrinter->maDeviceName.Len()+1)*sizeof(sal_Unicode));
+    rtl_copyMemory( aDrvBuf, mpInfoPrinter->maDriverName.getStr(), (mpInfoPrinter->maDriverName.getLength()+1)*sizeof(sal_Unicode));
+    rtl_copyMemory( aDevBuf, mpInfoPrinter->maDeviceName.getStr(), (mpInfoPrinter->maDeviceName.getLength()+1)*sizeof(sal_Unicode));
     hDC = CreateDCW( reinterpret_cast<LPCWSTR>(aDrvBuf),
                      reinterpret_cast<LPCWSTR>(aDevBuf),
                      NULL,
@@ -1619,7 +1619,7 @@ sal_Bool WinSalPrinter::StartJob( const rtl::OUString* pFileName,
 
     // bring up a file choser if printing to file port but no file name given
     OUString aOutFileName;
-    if( mpInfoPrinter->maPortName.EqualsIgnoreCaseAscii( "FILE:" ) && !(pFileName && !pFileName->isEmpty()) )
+    if( mpInfoPrinter->maPortName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "FILE:" ) ) && !(pFileName && !pFileName->isEmpty()) )
     {
 
         uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
