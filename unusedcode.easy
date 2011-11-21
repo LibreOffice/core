@@ -169,7 +169,6 @@ ImpSvtData::~ImpSvtData()
 ImplBorderWindow::ImplBorderWindow(Window*, long, unsigned short, com::sun::star::uno::Any const&)
 ImplBorderWindow::SetHelpButton(unsigned char)
 ImplDevFontList::ImplFindByLocale(com::sun::star::lang::Locale&) const
-ImplEncirclementOverlay::ImplEncirclementOverlay(SdrPaintView const&, basegfx::B2DPoint const&)
 ImplEntryList::IsEntrySelected(String const&) const
 ImplImageList::GetImageCount() const
 ImplListBox::GetEntryFlags(unsigned short) const

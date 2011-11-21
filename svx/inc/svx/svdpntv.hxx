@@ -133,9 +133,6 @@ class SVX_DLLPUBLIC SdrPaintView : public SfxListener, public SfxRepeatTarget, p
     friend class                SdrGrafObj;
 
 protected:
-    // #114409#-2 Migrate Encirclement
-    class ImplEncirclementOverlay*              mpEncirclementOverlay;
-
     SdrModel*                   pMod;
 #ifdef DBG_UTIL
     SdrItemBrowser*             pItemBrowser;
@@ -293,8 +290,6 @@ public:
     TYPEINFO();
 
     virtual void ClearPageView();
-//  virtual void ClearAll();
-//  virtual void Clear(); // PageViews loeschen, Markierungen weg, ...
     SdrModel* GetModel() const { return pMod; }
 
     virtual sal_Bool IsAction() const;
@@ -487,9 +482,6 @@ public:
     // werden soll. Wird NULL uebergeben, wird es in allen an der View
     // angemeldeten OutputDevices gleichzeitig dargestellt.
     void MovEncirclement(const Point& rPnt);
-    Rectangle EndEncirclement(sal_Bool bNoJustify = sal_False);
-    void BrkEncirclement();
-    sal_Bool IsEncirclement() const { return (0L != mpEncirclementOverlay); }
 
     // use this mode as mode to draw all internal GraphicManager objects with
     sal_uIntPtr GetGraphicManagerDrawMode() const { return nGraphicManagerDrawMode; }

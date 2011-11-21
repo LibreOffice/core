@@ -84,63 +84,6 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class ImplEncirclementOverlay
-{
-    // The OverlayObjects
-    ::sdr::overlay::OverlayObjectList               maObjects;
-
-    // The remembered second position in logical coodinates
-    basegfx::B2DPoint                               maSecondPosition;
-
-public:
-    ImplEncirclementOverlay(const SdrPaintView& rView, const basegfx::B2DPoint& rStartPos);
-    ~ImplEncirclementOverlay();
-
-    void SetSecondPosition(const basegfx::B2DPoint& rNewPosition);
-};
-
-ImplEncirclementOverlay::ImplEncirclementOverlay(const SdrPaintView& rView, const basegfx::B2DPoint& rStartPos)
-:   maSecondPosition(rStartPos)
-{
-    for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
-    {
-        SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
-        ::sdr::overlay::OverlayManager* pTargetOverlay = pCandidate->GetOverlayManager();
-
-        if(pTargetOverlay)
-        {
-            ::sdr::overlay::OverlayRollingRectangleStriped* aNew = new ::sdr::overlay::OverlayRollingRectangleStriped(
-                rStartPos, rStartPos, false);
-            pTargetOverlay->add(*aNew);
-            maObjects.append(*aNew);
-        }
-    }
-}
-
-ImplEncirclementOverlay::~ImplEncirclementOverlay()
-{
-    // The OverlayObjects are cleared using the destructor of OverlayObjectList.
-    // That destructor calls clear() at the list which removes all objects from the
-    // OverlayManager and deletes them.
-}
-
-void ImplEncirclementOverlay::SetSecondPosition(const basegfx::B2DPoint& rNewPosition)
-{
-    if(rNewPosition != maSecondPosition)
-    {
-        // apply to OverlayObjects
-        for(sal_uInt32 a(0L); a < maObjects.count(); a++)
-        {
-            ::sdr::overlay::OverlayRollingRectangleStriped& rCandidate = (::sdr::overlay::OverlayRollingRectangleStriped&)maObjects.getOverlayObject(a);
-            rCandidate.setSecondPosition(rNewPosition);
-        }
-
-        // remember new position
-        maSecondPosition = rNewPosition;
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 // interface to SdrPaintWindow
 
 SdrPaintWindow* SdrPaintView::FindPaintWindow(const OutputDevice& rOut) const
@@ -260,12 +203,10 @@ void SdrPaintView::ImpClearVars()
     aNam.ToUpperAscii();
 
     maGridColor = Color( COL_BLACK );
-    BrkEncirclement();
 }
 
 SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut)
-:   mpEncirclementOverlay(0L),
-    mpPageView(0L),
+:   mpPageView(0L),
     aDefaultAttr(pModel1->GetItemPool()),
     mbBufferedOutputAllowed(false),
     mbBufferedOverlayAllowed(false),
@@ -313,8 +254,6 @@ SdrPaintView::~SdrPaintView()
         delete maPaintWindows.back();
         maPaintWindows.pop_back();
     }
-
-    BrkEncirclement();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -408,41 +347,27 @@ void SdrPaintView::ModelHasChanged()
 
 sal_Bool SdrPaintView::IsAction() const
 {
-    return IsEncirclement();
+    return false;
 }
 
-void SdrPaintView::MovAction(const Point& rPnt)
+void SdrPaintView::MovAction(const Point&)
 {
-    if (IsEncirclement())
-    {
-        MovEncirclement(rPnt);
-    }
 }
 
 void SdrPaintView::EndAction()
 {
-    if(IsEncirclement())
-    {
-        EndEncirclement();
-    }
 }
 
 void SdrPaintView::BckAction()
 {
-    BrkEncirclement();
 }
 
 void SdrPaintView::BrkAction()
 {
-    BrkEncirclement();
 }
 
-void SdrPaintView::TakeActionRect(Rectangle& rRect) const
+void SdrPaintView::TakeActionRect(Rectangle&) const
 {
-    if(IsEncirclement())
-    {
-        rRect = Rectangle(aDragStat.GetStart(),aDragStat.GetNow());
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -504,49 +429,8 @@ void SdrPaintView::SetActualWin(const OutputDevice* pWin)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrPaintView::MovEncirclement(const Point& rPnt)
+void SdrPaintView::MovEncirclement(const Point&)
 {
-    if(IsEncirclement() && aDragStat.CheckMinMoved(rPnt))
-    {
-        aDragStat.NextMove(rPnt);
-
-        DBG_ASSERT(mpEncirclementOverlay, "SdrSnapView::MovSetPageOrg: no ImplPageOriginOverlay (!)");
-        basegfx::B2DPoint aNewPos(rPnt.X(), rPnt.Y());
-        mpEncirclementOverlay->SetSecondPosition(aNewPos);
-    }
-}
-
-Rectangle SdrPaintView::EndEncirclement(sal_Bool bNoJustify)
-{
-    Rectangle aRetval;
-
-    if(IsEncirclement())
-    {
-        if(aDragStat.IsMinMoved())
-        {
-            aRetval = Rectangle(aDragStat.GetStart(), aDragStat.GetNow());
-
-            if(!bNoJustify)
-            {
-                aRetval.Justify();
-            }
-        }
-
-        // cleanup
-        BrkEncirclement();
-    }
-
-    return aRetval;
-}
-
-void SdrPaintView::BrkEncirclement()
-{
-    if(IsEncirclement())
-    {
-        DBG_ASSERT(mpEncirclementOverlay, "SdrSnapView::MovSetPageOrg: no ImplPageOriginOverlay (!)");
-        delete mpEncirclementOverlay;
-        mpEncirclementOverlay = 0L;
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
