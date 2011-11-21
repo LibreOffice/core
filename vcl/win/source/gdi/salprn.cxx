@@ -236,7 +236,7 @@ void WinSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
                 pInfo->mnStatus      = ImplWinQueueStatusToSal( pWinInfo2->Status );
                 pInfo->mnJobs        = pWinInfo2->cJobs;
                 if( ! pInfo->mpSysData )
-                    pInfo->mpSysData     = new XubString( aPortName );
+                    pInfo->mpSysData = new rtl::OUString(aPortName);
             }
             rtl_freeMemory(pWinInfo2);
         }
@@ -248,7 +248,7 @@ void WinSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
 
 void WinSalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
 {
-    delete (String*)(pInfo->mpSysData);
+    delete pInfo->mpSysData;
     delete pInfo;
 }
 

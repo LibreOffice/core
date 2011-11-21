@@ -54,7 +54,7 @@ struct VCL_PLUGIN_PUBLIC SalPrinterQueueInfo
     rtl::OUString               maComment;
     sal_uLong                   mnStatus;
     sal_uLong                   mnJobs;
-    void*                   mpSysData;
+    rtl::OUString*              mpSysData;
 
                             SalPrinterQueueInfo();
                             ~SalPrinterQueueInfo();
