@@ -37,6 +37,7 @@
 
 class ScRangeName;
 class ScDocument;
+class ScDocShell;
 
 class ScNameDefDlg : public ScAnyRefDlg
 {
@@ -63,6 +64,7 @@ private:
 
     bool mbUndo; //if true we need to add an undo action after creating a range name
     ScDocument* mpDoc;
+    ScDocShell* mpDocShell;
 
     ScAddress maCursorPos;
     rtl::OUString maGlobalNameStr;
@@ -85,7 +87,7 @@ protected:
 
 public:
     ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                    ScDocument* pDoc, std::map<rtl::OUString, ScRangeName*> aRangeMap,
+                    ScDocShell* pDocShell, std::map<rtl::OUString, ScRangeName*> aRangeMap,
                     const ScAddress& aCursorPos, const bool bUndo);
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );

@@ -117,6 +117,7 @@ private:
     bool IsNameValid();
     bool IsFormulaValid();
 
+    ScRangeName* GetRangeName(const rtl::OUString& rScope);
 
     bool AddPushed();
     void RemovePushed();

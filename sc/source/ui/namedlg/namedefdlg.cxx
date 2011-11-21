@@ -7,6 +7,7 @@
 #include "globalnames.hxx"
 #include "rangenam.hxx"
 #include "reffact.hxx"
+#include "undorangename.hxx"
 
 // defines -------------------------------------------------------------------
 
@@ -18,7 +19,7 @@
 #define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
 
 ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-        ScDocument* pDoc, std::map<rtl::OUString, ScRangeName*> aRangeMap,
+        ScDocShell* pDocShell, std::map<rtl::OUString, ScRangeName*> aRangeMap,
         const ScAddress& aCursorPos, const bool bUndo ) :
     ScAnyRefDlg( pB, pCW, pParent, RID_SCDLG_NAMES_DEFINE ),
     maBtnAdd( this, ScResId( BTN_ADD ) ),
@@ -37,7 +38,8 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParen
     maBtnPrintArea( this, ScResId( BTN_PRINTAREA ) ),
     maBtnCriteria( this, ScResId( BTN_CRITERIA ) ),
     mbUndo( bUndo ),
-    mpDoc( pDoc ),
+    mpDoc( pDocShell->GetDocument() ),
+    mpDocShell ( pDocShell ),
     maCursorPos( aCursorPos ),
     maGlobalNameStr( ResId::toString( ScResId( STR_GLOBAL_SCOPE ) ) ),
     maRangeMap( aRangeMap )
@@ -45,11 +47,11 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParen
     // Initialize scope list.
     maLbScope.InsertEntry(maGlobalNameStr);
     maLbScope.SelectEntryPos(0);
-    SCTAB n = pDoc->GetTableCount();
+    SCTAB n = mpDoc->GetTableCount();
     for (SCTAB i = 0; i < n; ++i)
     {
         rtl::OUString aTabName;
-        pDoc->GetName(i, aTabName);
+        mpDoc->GetName(i, aTabName);
         maLbScope.InsertEntry(aTabName);
     }
 
@@ -159,11 +161,23 @@ void ScNameDefDlg::AddPushed()
 
                 if (mbUndo)
                 {
-                    //this means we called directly through the menu
-                    //add a new ScUndoInsertName entry to undo
-                    //
-                    //TODO:FIXME need to add the undo code here
+                    // this means we called directly through the menu
+
+                    SCTAB nTab;
+                    // if no table with that name is found, assume global range name
+                    if (!mpDoc->GetTable(aScope, nTab))
+                        nTab = -1;
+
+                    mpDocShell->GetUndoManager()->AddUndoAction(
+                            new ScUndoAddRangeData( mpDocShell, pNewEntry, nTab) );
+
+                    // set table stream invalid, otherwise RangeName won't be saved if no other
+                    // call invalidates the stream
+                    if (nTab != -1)
+                        mpDoc->SetStreamValid(nTab, false);
                 }
+                SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
+                Close();
             }
             else
             {
@@ -175,8 +189,6 @@ void ScNameDefDlg::AddPushed()
             }
         }
     }
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
-    Close();
 }
 
 sal_Bool ScNameDefDlg::IsRefInputMode() const

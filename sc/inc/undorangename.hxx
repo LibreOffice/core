@@ -61,6 +61,25 @@ private:
     boost::ptr_map<rtl::OUString, ScRangeName> maNewNames;
 };
 
+class ScUndoAddRangeData : public ScSimpleUndo
+{
+public:
+    // nTab = -1 for global range names
+    ScUndoAddRangeData(ScDocShell* pDocSh, ScRangeData* pRangeData, SCTAB nTab);
+
+    virtual ~ScUndoAddRangeData();
+
+    virtual void Undo();
+    virtual void Redo();
+    virtual void Repeat(SfxRepeatTarget& rTarget);
+    virtual sal_Bool CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual String GetComment() const;
+
+private:
+    ScRangeData* mpRangeData;
+    SCTAB mnTab;
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

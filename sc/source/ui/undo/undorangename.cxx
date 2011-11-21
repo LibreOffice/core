@@ -47,7 +47,6 @@ ScUndoAllRangeNames::ScUndoAllRangeNames(
     const boost::ptr_map<rtl::OUString, ScRangeName>& rNewNames) :
     ScSimpleUndo(pDocSh)
 {
-    // Copy sheet-local names.
     std::map<rtl::OUString, ScRangeName*>::const_iterator itr, itrEnd;
     for (itr = rOldNames.begin(), itrEnd = rOldNames.end(); itr != itrEnd; ++itr)
     {
@@ -106,6 +105,66 @@ void ScUndoAllRangeNames::DoChange(const boost::ptr_map<rtl::OUString, ScRangeNa
     rDoc.CompileNameFormula(true);
 
     SFX_APP()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
+}
+
+ScUndoAddRangeData::ScUndoAddRangeData(ScDocShell* pDocSh, ScRangeData* pRangeData, SCTAB nTab) :
+    ScSimpleUndo(pDocSh),
+    mpRangeData(new ScRangeData(*pRangeData)),
+    mnTab(nTab)
+{
+
+}
+
+ScUndoAddRangeData::~ScUndoAddRangeData()
+{
+    delete mpRangeData;
+}
+
+void ScUndoAddRangeData::Undo()
+{
+    ScDocument* pDoc = pDocShell->GetDocument();
+    ScRangeName* pRangeName = NULL;
+    if (mnTab == -1)
+    {
+        pRangeName = pDoc->GetRangeName();
+    }
+    else
+    {
+        pRangeName = pDoc->GetRangeName( mnTab );
+    }
+    pRangeName->erase(*mpRangeData);
+    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
+
+}
+
+void ScUndoAddRangeData::Redo()
+{
+    ScDocument* pDoc = pDocShell->GetDocument();
+    ScRangeName* pRangeName = NULL;
+    if (mnTab == -1)
+    {
+        pRangeName = pDoc->GetRangeName();
+    }
+    else
+    {
+        pRangeName = pDoc->GetRangeName( mnTab );
+    }
+    pRangeName->insert(new ScRangeData(*mpRangeData));
+    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
+}
+
+void ScUndoAddRangeData::Repeat(SfxRepeatTarget& /*rTarget*/)
+{
+}
+
+sal_Bool ScUndoAddRangeData::CanRepeat(SfxRepeatTarget& /*rTarget*/) const
+{
+    return sal_False;
+}
+
+String ScUndoAddRangeData::GetComment() const
+{
+    return ScGlobal::GetRscString(STR_UNDO_RANGENAMES);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

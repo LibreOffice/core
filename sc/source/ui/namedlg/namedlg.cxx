@@ -55,8 +55,6 @@
 #include <memory>
 #include <iostream>
 
-using ::std::auto_ptr;
-
 // defines -------------------------------------------------------------------
 
 #define ABS_SREF          SCA_VALID \
@@ -65,27 +63,6 @@ using ::std::auto_ptr;
     | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
 #define ABS_SREF3D      ABS_SREF | SCA_TAB_3D
 #define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
-
-//helper
-
-namespace {
-
-ScRangeName* GetRangeName(const rtl::OUString& rTableName, ScDocument* pDoc)
-{
-    ScRangeName* pRangeName;
-    SCTAB nTab;
-    if ( pDoc->GetTable(rTableName, nTab))
-    {
-        pRangeName = pDoc->GetRangeName(nTab);
-    }
-    else
-    {
-        pRangeName = pDoc->GetRangeName();
-    }
-    return pRangeName;
-}
-
-}
 
 //logic
 
@@ -153,11 +130,12 @@ void ScNameDlg::Init()
     //init UI
     std::map<rtl::OUString, ScRangeName*> aRangeMap;
     mpDoc->GetRangeNameMap(aRangeMap);
-    RangeNameContainer::iterator itr = maRangeMap.begin(), itrEnd = maRangeMap.end();
+    std::map<rtl::OUString, ScRangeName*>::iterator itr = aRangeMap.begin(), itrEnd = aRangeMap.end();
     for (; itr != itrEnd; ++itr)
     {
         rtl::OUString aTemp(itr->first);
         maRangeMap.insert(aTemp, new ScRangeName(*itr->second));
+        std::cout << "RangeName: " << rtl::OUStringToOString(aTemp, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
     }
 
     mpRangeManagerTable = new ScRangeManagerTable(&maNameMgrCtrl, maRangeMap);
@@ -237,6 +215,7 @@ void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 sal_Bool ScNameDlg::Close()
 {
+    std::cout << "Ok Pushed!" << std::endl;
     ScDocFunc aFunc(*mpViewData->GetDocShell());
     aFunc.ModifyAllRangeNames(maRangeMap);
     return DoClose( ScNameDlgWrapper::GetChildWindowId() );
@@ -265,16 +244,12 @@ bool ScNameDlg::IsNameValid()
 {
     rtl::OUString aScope = maLbScope.GetSelectEntry();
     rtl::OUString aName = maEdName.GetText();
+    aName = aName.trim();
 
-    ScRangeName* pRangeName = NULL;
-    if(aScope == maGlobalNameStr)
-    {
-        pRangeName = maRangeMap.find(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME)))->second;
-    }
-    else
-    {
-        pRangeName = maRangeMap.find(aScope)->second;
-    }
+    if (!aName.getLength())
+        return false;
+
+    ScRangeName* pRangeName = GetRangeName( aScope );
 
     if (!ScRangeData::IsNameValid( aName, mpDoc ))
     {
@@ -296,6 +271,14 @@ bool ScNameDlg::IsNameValid()
 bool ScNameDlg::IsFormulaValid()
 {
     return true;
+}
+
+ScRangeName* ScNameDlg::GetRangeName(const rtl::OUString& rScope)
+{
+    if (rScope == maGlobalNameStr)
+        return maRangeMap.find(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME)))->second;
+    else
+        return maRangeMap.find(rScope)->second;
 }
 
 //updates the table and the buttons
@@ -329,7 +312,7 @@ void ScNameDlg::CalcCurTableAssign( String& aAssign, ScRangeData* pRangeData )
 
 void ScNameDlg::ShowOptions(const ScRangeNameLine& rLine)
 {
-    ScRangeName* pRangeName = GetRangeName(rLine.aScope, mpDoc);
+    ScRangeName* pRangeName = GetRangeName(rLine.aScope);
     ScRangeData* pData = pRangeName->findByName(rLine.aName);
     if (pData)
     {
@@ -356,7 +339,7 @@ bool ScNameDlg::AddPushed()
 
     rtl::OUString aScope = maLbScope.GetSelectEntry();
     rtl::OUString aExpr = maEdAssign.GetText();
-    ScRangeName* pRangeName = GetRangeName(aScope, mpDoc);
+    ScRangeName* pRangeName = GetRangeName(aScope);
 
     RangeType nType = RT_NAME |
          (maBtnRowHeader.IsChecked() ? RT_ROWHEADER : RangeType(0))
@@ -394,7 +377,7 @@ void ScNameDlg::RemovePushed()
     mpRangeManagerTable->DeleteSelectedEntries();
     for (std::vector<ScRangeNameLine>::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-        ScRangeName* pRangeName = GetRangeName( itr->aScope, mpDoc );
+        ScRangeName* pRangeName = GetRangeName(itr->aScope);
         std::cout << rtl::OUStringToOString(itr->aName, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
         std::cout << rtl::OUStringToOString(ScGlobal::pCharClass->upper(itr->aName), RTL_TEXTENCODING_UTF8).getStr() << std::endl;;
         ScRangeData* pData = pRangeName->findByUpperName(ScGlobal::pCharClass->upper(itr->aName));
@@ -421,12 +404,15 @@ void ScNameDlg::NameModified()
     }
 
     rtl::OUString aOldScope = aLine.aScope;
+    //empty table
+    if (aOldScope.isEmpty())
+        return;
     rtl::OUString aExpr = maEdAssign.GetText();
     rtl::OUString aNewScope = maLbScope.GetSelectEntry();
 
-    ScRangeName* pOldRangeName = GetRangeName( aOldScope, mpDoc );
+    ScRangeName* pOldRangeName = GetRangeName( aOldScope );
     ScRangeData* pData = pOldRangeName->findByUpperName( ScGlobal::pCharClass->upper(aOldName) );
-    ScRangeName* pNewRangeName = GetRangeName( aNewScope, mpDoc );
+    ScRangeName* pNewRangeName = GetRangeName( aNewScope );
     OSL_ENSURE(pData, "model and table should be in sync");
     // be safe and check for range data
     if (pData)

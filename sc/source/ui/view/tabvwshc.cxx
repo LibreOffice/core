@@ -122,7 +122,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
             std::cout << "tabvwsh" << std::endl;
             std::map<rtl::OUString, ScRangeName*> aRangeMap;
             pDoc->GetRangeNameMap(aRangeMap);
-            pResult = new ScNameDefDlg( pB, pCW, pParent, GetViewData()->GetDocument(), aRangeMap,
+            pResult = new ScNameDefDlg( pB, pCW, pParent, GetViewData()->GetDocShell(), aRangeMap,
                             ScAddress( GetViewData()->GetCurX(),
                                         GetViewData()->GetCurY(),
                                         GetViewData()->GetTabNo() ), true );
