@@ -1302,8 +1302,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             break;
         case RTF_PAR:
             {
-                if (m_bNeedPap)
-                    checkChangedFrame();
+                checkNeedPap();
                 if (!m_pCurrentBuffer)
                     parBreak();
                 else if (m_aStates.top().nDestinationState != DESTINATION_SHAPETEXT)
