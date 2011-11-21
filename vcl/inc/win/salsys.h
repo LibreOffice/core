@@ -74,8 +74,8 @@ public:
     virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
     virtual Rectangle GetDisplayWorkAreaPosSizePixel( unsigned int nScreen );
     virtual rtl::OUString GetScreenName( unsigned int nScreen );
-    virtual int ShowNativeMessageBox( const String& rTitle,
-                                      const String& rMessage,
+    virtual int ShowNativeMessageBox( const rtl::OUString& rTitle,
+                                      const rtl::OUString& rMessage,
                                       int nButtonCombination,
                                       int nDefaultButton);
     bool initMonitors();

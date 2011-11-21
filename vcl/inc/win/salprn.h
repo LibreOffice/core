@@ -79,7 +79,7 @@ public:
                                                  long& rPageWidth, long& rPageHeight );
     virtual sal_uIntPtr                 GetCapabilities( const ImplJobSetup* pSetupData, sal_uInt16 nType );
     virtual sal_uIntPtr                 GetPaperBinCount( const ImplJobSetup* pSetupData );
-    virtual String                  GetPaperBinName( const ImplJobSetup* pSetupData, sal_uIntPtr nPaperBin );
+    virtual rtl::OUString                  GetPaperBinName( const ImplJobSetup* pSetupData, sal_uIntPtr nPaperBin );
     virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData );
     virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData );
 };
@@ -107,9 +107,9 @@ public:
     virtual ~WinSalPrinter();
 
     using SalPrinter::StartJob;
-    virtual sal_Bool                    StartJob( const XubString* pFileName,
-                                              const XubString& rJobName,
-                                              const XubString& rAppName,
+    virtual sal_Bool                    StartJob( const rtl::OUString* pFileName,
+                                              const rtl::OUString& rJobName,
+                                              const rtl::OUString& rAppName,
                                               sal_uIntPtr nCopies,
                                               bool bCollate,
                                               bool bDirect,

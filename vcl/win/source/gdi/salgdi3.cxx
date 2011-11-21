@@ -2344,7 +2344,7 @@ static bool ImplGetFontAttrFromFile( const String& rFontFileURL,
 // -----------------------------------------------------------------------
 
 bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
-    const String& rFontFileURL, const String& rFontName )
+    const rtl::OUString& rFontFileURL, const rtl::OUString& rFontName )
 {
     RTL_LOGFILE_TRACE1( "WinSalGraphics::AddTempDevFont(): %s", rtl::OUStringToOString( rFontFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 

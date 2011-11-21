@@ -1105,7 +1105,7 @@ sal_Bool WinSalFrame::PostEvent( void* pData )
 
 // -----------------------------------------------------------------------
 
-void WinSalFrame::SetTitle( const XubString& rTitle )
+void WinSalFrame::SetTitle( const rtl::OUString& rTitle )
 {
     DBG_ASSERT( sizeof( WCHAR ) == sizeof( xub_Unicode ), "WinSalFrame::SetTitle(): WCHAR != sal_Unicode" );
 
@@ -2449,7 +2449,7 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
 
 // -----------------------------------------------------------------------
 
-XubString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
+rtl::OUString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 {
     static const int nMaxKeyLen = 350;
     sal_Unicode aKeyBuf[ nMaxKeyLen ];
@@ -2644,14 +2644,14 @@ XubString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
     }
 
     if( !nKeyBufLen )
-        return XubString();
+        return rtl::OUString();
 
-    return XubString( aKeyBuf, sal::static_int_cast< sal_uInt16 >(nKeyBufLen) );
+    return rtl::OUString::createFromAscii( aKeyBuf, sal::static_int_cast< sal_uInt16 >(nKeyBufLen) );
 }
 
 // -----------------------------------------------------------------------
 
-XubString WinSalFrame::GetSymbolKeyName( const XubString&, sal_uInt16 nKeyCode )
+rtl::OUString WinSalFrame::GetSymbolKeyName( const rtl::OUString&, sal_uInt16 nKeyCode )
 {
     return GetKeyName( nKeyCode );
 }

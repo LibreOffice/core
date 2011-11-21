@@ -84,11 +84,11 @@
 
 // =======================================================================
 
-void SalAbort( const XubString& rErrorText, bool )
+void SalAbort( const rtl::OUString& rErrorText, bool )
 {
     ImplFreeSalGDI();
 
-    if ( !rErrorText.Len() )
+    if ( rErrorText.isEmpty() )
     {
         // #112255# make sure crash reporter is triggered
         RaiseException( 0, EXCEPTION_NONCONTINUABLE, 0, NULL );

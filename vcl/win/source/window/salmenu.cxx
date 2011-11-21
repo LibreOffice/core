@@ -323,7 +323,7 @@ void WinSalMenu::SetItemImage( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, con
     }
 }
 
-void WinSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const XubString& rText )
+void WinSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& rText )
 {
     if( pSalMenuItem )
     {
@@ -355,7 +355,7 @@ void WinSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const Xu
     }
 }
 
-void WinSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode&, const XubString& rKeyName )
+void WinSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode&, const rtl::OUString& rKeyName )
 {
     if( pSalMenuItem )
     {

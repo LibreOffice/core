@@ -253,7 +253,7 @@ void WinSalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
 }
 
 // -----------------------------------------------------------------------
-XubString WinSalInstance::GetDefaultPrinter()
+rtl::OUString WinSalInstance::GetDefaultPrinter()
 {
     DWORD   nChars = 0;
     GetDefaultPrinterW( NULL, &nChars );
@@ -283,7 +283,7 @@ XubString WinSalInstance::GetDefaultPrinter()
         return ImplSalGetUniString( pBuf, (xub_StrLen)(pTmp-pBuf) );
     }
     else
-        return XubString();
+        return rtl::OUString();
 }
 
 // =======================================================================
@@ -1297,7 +1297,7 @@ sal_uLong WinSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pSetupData )
 
 // -----------------------------------------------------------------------
 
-XubString WinSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pSetupData, sal_uLong nPaperBin )
+rtl::OUString WinSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pSetupData, sal_uLong nPaperBin )
 {
     XubString aPaperBinName;
 
@@ -1538,9 +1538,9 @@ static int lcl_StartDocW( HDC hDC, DOCINFOW* pInfo, WinSalPrinter* pPrt )
     return nRet;
 }
 
-sal_Bool WinSalPrinter::StartJob( const XubString* pFileName,
-                           const XubString& rJobName,
-                           const XubString&,
+sal_Bool WinSalPrinter::StartJob( const rtl::OUString* pFileName,
+                           const rtl::OUString& rJobName,
+                           const rtl::OUString&,
                            sal_uLong nCopies,
                            bool bCollate,
                            bool /*bDirect*/,
@@ -1656,12 +1656,12 @@ sal_Bool WinSalPrinter::StartJob( const XubString* pFileName,
     DOCINFOW aInfo;
     memset( &aInfo, 0, sizeof( DOCINFOW ) );
     aInfo.cbSize = sizeof( aInfo );
-    aInfo.lpszDocName = (LPWSTR)rJobName.GetBuffer();
+    aInfo.lpszDocName = (LPWSTR)rJobName.getStr();
     if ( pFileName || aOutFileName.getLength() )
     {
-        if ( (pFileName && pFileName->Len()) || aOutFileName.getLength() )
+        if ( (pFileName && !pFileName->isEmpty()) || aOutFileName.getLength() )
         {
-            aInfo.lpszOutput = (LPWSTR)( (pFileName && pFileName->Len()) ? pFileName->GetBuffer() : aOutFileName.getStr());
+            aInfo.lpszOutput = (LPWSTR)( (pFileName && !pFileName->isEmpty()) ? pFileName->getStr() : aOutFileName.getStr());
         }
         else
             aInfo.lpszOutput = L"FILE:";

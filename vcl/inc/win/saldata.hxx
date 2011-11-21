@@ -190,7 +190,7 @@ void ImplClearHDCCache( SalData* pData );
 HDC ImplGetCachedDC( sal_uLong nID, HBITMAP hBmp = 0 );
 void ImplReleaseCachedDC( sal_uLong nID );
 
-bool ImplAddTempFont( SalData&, const String& rFontFileURL );
+bool ImplAddTempFont( SalData&, const rtl::OUString& rFontFileURL );
 void ImplReleaseTempFonts( SalData& );
 
 // --------------------------------------------
