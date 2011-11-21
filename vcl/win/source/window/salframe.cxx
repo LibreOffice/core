@@ -2646,7 +2646,7 @@ rtl::OUString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
     if( !nKeyBufLen )
         return rtl::OUString();
 
-    return rtl::OUString::createFromAscii( aKeyBuf, sal::static_int_cast< sal_uInt16 >(nKeyBufLen) );
+    return rtl::OUString( aKeyBuf, sal::static_int_cast< sal_uInt16 >(nKeyBufLen) );
 }
 
 // -----------------------------------------------------------------------
