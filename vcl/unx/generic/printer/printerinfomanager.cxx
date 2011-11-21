@@ -1049,23 +1049,23 @@ void PrinterInfoManager::fillFontSubstitutions( PrinterInfo& rInfo ) const
                 if( nSubstitute != -1 )
                 {
                     rInfo.m_aFontSubstitutions[ it->m_nID ] = nSubstitute;
-                    #if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 2
                     FastPrintFontInfo aInfo;
                     rFontManager.getFontFastInfo( nSubstitute, aInfo );
                     fprintf( stderr,
                     "substitute %s %s %d %d\n"
                     " ->        %s %s %d %d\n",
                              rtl::OUStringToOString( it->m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-                    it->m_eItalic == italic::Upright ? "r" : it->m_eItalic == italic::Oblique ? "o" : it->m_eItalic == italic::Italic ? "i" : "u",
+                    it->m_eItalic == ITALIC_NONE ? "r" : it->m_eItalic == ITALIC_OBLIQUE ? "o" : it->m_eItalic == ITALIC_NORMAL ? "i" : "u",
                     it->m_eWeight,
                     it->m_eWidth,
 
                              rtl::OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-                    aInfo.m_eItalic == italic::Upright ? "r" : aInfo.m_eItalic == italic::Oblique ? "o" : aInfo.m_eItalic == italic::Italic ? "i" : "u",
+                    aInfo.m_eItalic == ITALIC_NONE ? "r" : aInfo.m_eItalic == ITALIC_OBLIQUE ? "o" : aInfo.m_eItalic == ITALIC_NORMAL ? "i" : "u",
                     aInfo.m_eWeight,
                     aInfo.m_eWidth
                     );
-                    #endif
+#endif
                 }
             }
         }
