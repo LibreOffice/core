@@ -384,6 +384,12 @@ endef
 
 else # !SYSTEM_ICU
 
+ifeq ($(OS),ANDROID)
+gb_ICU_suffix:=lo
+else
+gb_ICU_suffix:=
+endif
+
 # icudata and icui18n is called icudt and icuin when built with MSVC :-(
 ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
@@ -408,22 +414,22 @@ $(call gb_LinkTarget_add_linked_libs,$(1),\
 endef
 else
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	icudata \
-	icui18n \
-	icule \
-	icutu \
-	icuuc \
+	icudata$(gb_ICU_suffix) \
+	icui18n$(gb_ICU_suffix) \
+	icule$(gb_ICU_suffix) \
+	icutu$(gb_ICU_suffix) \
+	icuuc$(gb_ICU_suffix) \
 ))
 
 define gb_LinkTarget__use_icudata
 $(call gb_LinkTarget_add_linked_libs,$(1),\
-	icudata \
+	icudata$(gb_ICU_suffix) \
 )
 
 endef
 define gb_LinkTarget__use_icui18n
 $(call gb_LinkTarget_add_linked_libs,$(1),\
-	icui18n \
+	icui18n$(gb_ICU_suffix) \
 )
 
 endef
@@ -431,19 +437,19 @@ endif
 
 define gb_LinkTarget__use_icule
 $(call gb_LinkTarget_add_linked_libs,$(1),\
-	icule \
+	icule$(gb_ICU_suffix) \
 )
 
 endef
 define gb_LinkTarget__use_icutu
 $(call gb_LinkTarget_add_linked_libs,$(1),\
-	icutu \
+	icutu$(gb_ICU_suffix) \
 )
 
 endef
 define gb_LinkTarget__use_icuuc
 $(call gb_LinkTarget_add_linked_libs,$(1),\
-	icuuc \
+	icuuc$(gb_ICU_suffix) \
 )
 
 endef

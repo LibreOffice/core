@@ -62,9 +62,9 @@ ndk-build:
 		  gcc3_uno \
 		  i18nisolang1gcc3 \
 		  i18nutilgcc3 \
-		  icudata \
-		  icui18n \
-		  icuuc \
+		  icudatalo \
+		  icui18nlo \
+		  icuuclo \
 		  reg \
 		  store \
 		  ucbhelper4gcc3 \

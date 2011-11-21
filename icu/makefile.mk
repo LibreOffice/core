@@ -136,8 +136,12 @@ STATIC_OR_SHARED=--disable-static --enable-shared
 BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --with-cross-build=$(posix_PWD)/$(INPATH_FOR_BUILD)/misc/build/icu/source
 .ENDIF
 
+.IF "$(OS)"=="ANDROID"
+LIBRARY_SUFFIX= --with-library-suffix=lo
+.ENDIF
+
 CONFIGURE_ACTION+=sh -c 'CPPFLAGS="$(EXTRA_CDEFS)" CFLAGS="$(icu_CFLAGS)" CXXFLAGS="$(icu_CXXFLAGS)" LDFLAGS="$(icu_LDFLAGS) $(LDFLAGSADD)" \
-./configure --enable-layout $(STATIC_OR_SHARED) $(BUILD_AND_HOST) $(DISABLE_64BIT) $(DISABLE_STRICT) $(DISABLE_DYLOAD) '
+./configure --enable-layout $(STATIC_OR_SHARED) $(BUILD_AND_HOST) $(DISABLE_64BIT) $(DISABLE_STRICT) $(DISABLE_DYLOAD) $(LIBRARY_SUFFIX)'
 
 CONFIGURE_FLAGS=
 
@@ -159,11 +163,11 @@ OUT2LIB= \
     $(BUILD_DIR)$/lib$/libicutu.a
 .ELIF "$(OS)"=="ANDROID"
 OUT2LIB= \
-    $(BUILD_DIR)$/lib$/libicudata.so \
-    $(BUILD_DIR)$/lib$/libicuuc.so \
-    $(BUILD_DIR)$/lib$/libicui18n.so \
-    $(BUILD_DIR)$/lib$/libicule.so \
-    $(BUILD_DIR)$/lib$/libicutu.so
+    $(BUILD_DIR)$/lib$/libicudatalo.so \
+    $(BUILD_DIR)$/lib$/libicuuclo.so \
+    $(BUILD_DIR)$/lib$/libicui18nlo.so \
+    $(BUILD_DIR)$/lib$/libiculelo.so \
+    $(BUILD_DIR)$/lib$/libicutulo.so
 .ELSE
 OUT2LIB= \
     $(BUILD_DIR)$/lib$/libicudata$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR).$(ICU_MICRO) \

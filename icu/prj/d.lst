@@ -31,6 +31,12 @@ mkdir: %_DEST%\inc\external\unicode
 ..\%__SRC%\lib\libicuuc.so      %_DEST%\lib\
 ..\%__SRC%\lib\libicutu.so      %_DEST%\lib\
 
+..\%__SRC%\lib\libicudatalo.so    %_DEST%\lib\
+..\%__SRC%\lib\libicui18nlo.so    %_DEST%\lib\
+..\%__SRC%\lib\libiculelo.so      %_DEST%\lib\
+..\%__SRC%\lib\libicuuclo.so      %_DEST%\lib\
+..\%__SRC%\lib\libicutulo.so      %_DEST%\lib\
+
 ..\%__SRC%\lib\libicudata.a     %_DEST%\lib\
 ..\%__SRC%\lib\libicui18n.a     %_DEST%\lib\
 ..\%__SRC%\lib\libicule.a       %_DEST%\lib\
