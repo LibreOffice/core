@@ -74,11 +74,6 @@ void AtomProvider::overrideAtom( int atom, const ::rtl::OUString& description )
         m_nAtoms=atom+1;
 }
 
-sal_Bool AtomProvider::hasAtom( int atom ) const
-{
-    return m_aStringMap.find( atom ) != m_aStringMap.end() ? sal_True : sal_False;
-}
-
 // -----------------------------------------------------------------------
 
 MultiAtomProvider::MultiAtomProvider()
@@ -89,17 +84,6 @@ MultiAtomProvider::~MultiAtomProvider()
 {
     for( ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::iterator it = m_aAtomLists.begin(); it != m_aAtomLists.end(); ++it )
         delete it->second;
-}
-
-
-sal_Bool MultiAtomProvider::insertAtomClass( int atomClass )
-{
-    ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::iterator it =
-          m_aAtomLists.find( atomClass );
-    if( it != m_aAtomLists.end() )
-        return sal_False;
-    m_aAtomLists[ atomClass ] = new AtomProvider();
-    return sal_True;
 }
 
 int MultiAtomProvider::getAtom( int atomClass, const ::rtl::OUString& rString, sal_Bool bCreate )
@@ -118,14 +102,6 @@ int MultiAtomProvider::getAtom( int atomClass, const ::rtl::OUString& rString, s
     return INVALID_ATOM;
 }
 
-int MultiAtomProvider::getLastAtom( int atomClass ) const
-{
-    ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::const_iterator it =
-          m_aAtomLists.find( atomClass );
-
-    return it != m_aAtomLists.end() ? it->second->getLastAtom() : INVALID_ATOM;
-}
-
 const ::rtl::OUString& MultiAtomProvider::getString( int atomClass, int atom ) const
 {
     ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::const_iterator it =
@@ -135,12 +111,6 @@ const ::rtl::OUString& MultiAtomProvider::getString( int atomClass, int atom ) c
 
     static ::rtl::OUString aEmpty;
     return aEmpty;
-}
-
-sal_Bool MultiAtomProvider::hasAtom( int atomClass, int atom ) const
-{
-    ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::const_iterator it = m_aAtomLists.find( atomClass );
-    return it != m_aAtomLists.end() ? it->second->hasAtom( atom ) : sal_False;
 }
 
 void MultiAtomProvider::overrideAtom( int atomClass, int atom, const ::rtl::OUString& description )

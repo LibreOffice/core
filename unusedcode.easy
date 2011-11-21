@@ -2260,9 +2260,6 @@ unicode::isTitle(unsigned short)
 unicode::isUnicodeScriptType(unsigned short, short)
 unographic::GraphicDescriptor::isValid() const
 utl::AccessibleStateSetHelper::Compare(utl::AccessibleStateSetHelper const&, utl::AccessibleStateSetHelper&, utl::AccessibleStateSetHelper&)
-utl::MultiAtomProvider::getLastAtom(int) const
-utl::MultiAtomProvider::hasAtom(int, int) const
-utl::MultiAtomProvider::insertAtomClass(int)
 utl::MultiAtomProvider::overrideAtom(int, int, rtl::OUString const&)
 utl::NodeValueAccessor::bind(com::sun::star::uno::Any*)
 utl::OConfigurationNode::appendNode(rtl::OUString const&, utl::OConfigurationNode const&) const

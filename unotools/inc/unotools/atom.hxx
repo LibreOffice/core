@@ -57,12 +57,9 @@ namespace utl {
         ~AtomProvider();
 
         int getAtom( const ::rtl::OUString&, sal_Bool bCreate = sal_False );
-        int getLastAtom() const { return m_nAtoms-1; }
         const ::rtl::OUString& getString( int ) const;
 
         void overrideAtom( int atom, const ::rtl::OUString& description );
-
-        sal_Bool hasAtom( int atom ) const;
     };
 
 
@@ -73,10 +70,6 @@ namespace utl {
         MultiAtomProvider();
         ~MultiAtomProvider();
 
-        int getLastAtom( int atomClass ) const;
-
-        sal_Bool insertAtomClass( int atomClass );
-
         int getAtom( int atomClass, const ::rtl::OUString& rString, sal_Bool bCreate = sal_False );
 
         const ::rtl::OUString& getString( int atomClass, int atom ) const;
@@ -84,7 +77,6 @@ namespace utl {
         void overrideAtom( int atomClass, int atom, const ::rtl::OUString& description );
         void overrideAtom( int atomClass, const ::com::sun::star::util::AtomDescription& newDescription )
             { overrideAtom( atomClass, newDescription.atom, newDescription.description ); }
-        sal_Bool hasAtom( int atomClass, int atom ) const;
     };
 }
 
