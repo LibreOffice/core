@@ -50,24 +50,60 @@ const int TAG_CLOSING = 1 << 30;
 #define OPENING( token ) ( TAG_OPENING | token )
 #define CLOSING( token ) ( TAG_CLOSING | token )
 
+/**
+ Class for storing a stream of xml tokens.
+
+ A part of an XML file can be parsed and stored in this stream, from which it can be read
+ as if parsed linearly. The purpose of this class is to allow simpler handling of XML
+ files, unlike the usual LO way of using callbacks, context handlers and similar needlesly
+ complicated stuff (YMMV).
+
+ @since 3.5.0
+*/
 class OOX_DLLPUBLIC XmlStream
 {
 public:
     XmlStream();
-    bool nextIsEnd() const;
-    int peekNextToken() const;
-    int getNextToken();
-    oox::AttributeList getAttributes();
-    rtl::OUString getCharacters();
+    /**
+     Structure representing a tag, including its attributes and content text immediatelly following it.
+    */
+    struct Tag
+    {
+        Tag( int token = XML_TOKEN_INVALID,
+            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XFastAttributeList >& attributes = com::sun::star::uno::Reference< com::sun::star::xml::sax::XFastAttributeList >(),
+            const rtl::OUString& text = rtl::OUString());
+        int token; ///< tag type, or XML_TOKEN_INVALID
+        AttributeList attributes;
+        rtl::OUString text;
+    };
+    /**
+     @return true if current position is at the end of the XML stream
+    */
+    bool atEnd() const;
+    /**
+     @return data about the current tag
+    */
+    Tag currentTag() const;
+    /**
+     @return the token for the current tag
+    */
+    int currentToken() const;
+    /**
+     Moves position to the next tag.
+    */
+    void moveToNextTag();
 protected:
-    // TODO one list containing all 3?
-    std::vector< int > tokens;
-    std::vector< oox::AttributeList > attributes;
-    std::vector< rtl::OUString > characters;
-    int pos;
+    std::vector< Tag > tags;
+    unsigned int pos;
 };
 
-// use this to create the data and then cast to the base class for reading
+/**
+ This class is used for creating XmlStream.
+
+ Simply use this class and then pass it as XmlStream to the consumer.
+
+ @since 3.5.0
+*/
 class OOX_DLLPUBLIC XmlStreamBuilder
 : public XmlStream
 {
@@ -78,6 +114,13 @@ public:
     // appends the characters after the last appended token
     void appendCharacters( const rtl::OUString& characters );
 };
+
+inline XmlStream::Tag::Tag( int t, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XFastAttributeList >& a, const rtl::OUString& txt )
+: token( t )
+, attributes( a )
+, text( txt )
+{
+}
 
 } // namespace
 } // namespace

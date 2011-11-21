@@ -41,62 +41,51 @@ namespace formulaimport
 {
 
 XmlStream::XmlStream()
-: pos( -1 )
+: pos( 0 )
 {
     // make sure our extra bit does not conflict with values used by oox
     assert( TAG_OPENING > ( 1024 << NMSP_SHIFT ));
 }
 
-bool XmlStream::nextIsEnd() const
+bool XmlStream::atEnd() const
 {
-    return pos + 1 >= int( tokens.size());
+    return pos >= tags.size();
 }
 
-int XmlStream::getNextToken()
+XmlStream::Tag XmlStream::currentTag() const
 {
-    ++pos;
-    if( pos < int( tokens.size()))
-        return tokens[ pos ];
-    return XML_TOKEN_INVALID;
+    if( pos >= tags.size())
+        return Tag();
+    return tags[ pos ];
 }
 
-int XmlStream::peekNextToken() const
+int XmlStream::currentToken() const
 {
-    if( pos - 1 < int( tokens.size()))
-        return tokens[ pos + 1 ];
-    return XML_TOKEN_INVALID;
+    if( pos >= tags.size())
+        return XML_TOKEN_INVALID;
+    return tags[ pos ].token;
 }
 
-AttributeList XmlStream::getAttributes()
+void XmlStream::moveToNextTag()
 {
-    assert( pos < int( attributes.size()));
-    return attributes[ pos ];
-}
-
-rtl::OUString XmlStream::getCharacters()
-{
-    assert( pos < int( characters.size()));
-    return characters[ pos ];
+    if( pos < tags.size())
+        ++pos;
 }
 
 void XmlStreamBuilder::appendOpeningTag( int token, const uno::Reference< xml::sax::XFastAttributeList >& attrs )
 {
-    tokens.push_back( OPENING( token ));
-    attributes.push_back( AttributeList( attrs ));
-    characters.push_back( rtl::OUString());
+    tags.push_back( Tag( OPENING( token ), attrs ));
 }
 
 void XmlStreamBuilder::appendClosingTag( int token )
 {
-    tokens.push_back( CLOSING( token ));
-    attributes.push_back( AttributeList( uno::Reference< xml::sax::XFastAttributeList >()));
-    characters.push_back( rtl::OUString());
+    tags.push_back( Tag( CLOSING( token )));
 }
 
 void XmlStreamBuilder::appendCharacters( const rtl::OUString& chars )
 {
-    assert( !characters.empty());
-    characters.back() = chars;
+    assert( !tags.empty());
+    tags.back().text = chars;
 }
 
 } // namespace

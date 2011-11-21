@@ -70,16 +70,15 @@ OUString SmOoxmlImport::handleStream()
 {
     checkOpeningTag( M_TOKEN( oMath ));
     OUString ret;
-    bool out = false;
-    while( !out && !stream.nextIsEnd())
+    while( !stream.atEnd())
     {
-        switch( stream.peekNextToken())
+        XmlStream::Tag tag = stream.currentTag();
+        if( tag.token == CLOSING( M_TOKEN( oMath )))
+            break;
+        switch( tag.token )
         {
             case OPENING( M_TOKEN( f )):
                 ret += STR( " " ) + handleF();
-                break;
-            case CLOSING( M_TOKEN( oMath )):
-                out = true;
                 break;
             default:
                 handleUnexpectedTag();
@@ -94,7 +93,7 @@ OUString SmOoxmlImport::handleStream()
 OUString SmOoxmlImport::handleF()
 {
     checkOpeningTag( M_TOKEN( f ));
-    if( stream.peekNextToken() == OPENING_TAG( M_TOKEN( fPr )))
+    if( stream.currentToken() == OPENING_TAG( M_TOKEN( fPr )))
     {
         // TODO
     }
@@ -119,18 +118,18 @@ OUString SmOoxmlImport::readR()
 //    checkClosingTag( OOX_TOKEN( doc, rPr ));
 
     // TODO can there be more t's ?
-    checkOpeningTag( M_TOKEN( t ));
-    OUString text = stream.getCharacters();
-    if( !stream.getAttributes().getBool( OOX_TOKEN( xml, space ), false ))
+    XmlStream::Tag rtag = checkOpeningTag( M_TOKEN( t ));
+    OUString text = rtag.text;
+    if( !rtag.attributes.getBool( OOX_TOKEN( xml, space ), false ))
         text = text.trim();
     checkClosingTag( M_TOKEN( t ));
     checkClosingTag( M_TOKEN( r ));
     return text;
 }
 
-void SmOoxmlImport::checkOpeningTag( int token )
+XmlStream::Tag SmOoxmlImport::checkOpeningTag( int token )
 {
-    checkTag( OPENING( token ), "opening" );
+    return checkTag( OPENING( token ), "opening" );
 }
 
 void SmOoxmlImport::checkClosingTag( int token )
@@ -138,80 +137,69 @@ void SmOoxmlImport::checkClosingTag( int token )
     checkTag( CLOSING( token ), "closing" );
 }
 
-void SmOoxmlImport::checkTag( int token, const char* txt )
+XmlStream::Tag SmOoxmlImport::checkTag( int token, const char* txt )
 {
-    if( stream.peekNextToken() == token )
+    // either it's the following tag, or find it
+    if( stream.currentToken() == token || recoverAndFindTag( token ))
     {
-        stream.getNextToken(); // read it
-        return; // ok
-    }
-    if( recoverAndFindTag( token ))
-    {
-        stream.getNextToken(); // read it
-        return; // ok, skipped some tokens
+        XmlStream::Tag ret = stream.currentTag();
+        stream.moveToNextTag();
+        return ret; // ok
     }
     fprintf( stderr, "Expected %s tag %d not found.\n", txt, token );
+    return XmlStream::Tag();
 }
 
 bool SmOoxmlImport::recoverAndFindTag( int token )
 {
     int depth = 0;
-    for(;;)
+    for(;
+         !stream.atEnd();
+         stream.moveToNextTag())
     {
         if( depth > 0 ) // we're inside a nested element, skip those
         {
-            int next = stream.getNextToken();
-            if( next == OPENING( next ))
+            if( stream.currentToken() == OPENING( stream.currentToken()))
             {
-                fprintf( stderr, "Skipping opening tag %d\n", next );
+                fprintf( stderr, "Skipping opening tag %d\n", stream.currentToken());
                 ++depth;
             }
-            else if( next == CLOSING( next ))
+            else if( stream.currentToken() == CLOSING( stream.currentToken()))
             { // TODO debug output without the OPENING/CLOSING bits set
-                fprintf( stderr, "Skipping closing tag %d\n", next );
+                fprintf( stderr, "Skipping closing tag %d\n", stream.currentToken());
                 --depth;
-            }
-            else if( next == XML_TOKEN_INVALID ) // end of stream
-            {
-                fprintf( stderr, "Unexpected end of stream reached.\n" );
-                return false;
             }
             else
             {
-                fprintf( stderr, "Malformed token %d\n", next );
+                fprintf( stderr, "Malformed token %d\n", stream.currentToken());
                 abort();
             }
             continue;
         }
-        int next = stream.peekNextToken();
-        if( next == CLOSING( next ))
+        if( stream.currentToken() == CLOSING( stream.currentToken()))
             return false; // that would be leaving current element, so not found
-        if( next == token )
+        if( stream.currentToken() == token )
             return true; // ok, found
-        if( next == OPENING( next ))
+        if( stream.currentToken() == OPENING( stream.currentToken()))
         {
-            fprintf( stderr, "Skipping opening tag %d\n", next );
-            stream.getNextToken();
+            fprintf( stderr, "Skipping opening tag %d\n", stream.currentToken());
             ++depth;
-        }
-        else if( next == XML_TOKEN_INVALID )
-        {
-            fprintf( stderr, "Unexpected end of stream reached.\n" );
-            return false;
         }
         else
             abort();
     }
+    fprintf( stderr, "Unexpected end of stream reached.\n" );
+    return false;
 }
 
 void SmOoxmlImport::skipElement( int token )
 {
     int closing = ( token & ~TAG_OPENING ) | TAG_CLOSING; // make it a closing tag
-    assert( stream.peekNextToken() == OPENING( token ));
+    assert( stream.currentToken() == OPENING( token ));
     // just find the matching closing tag
     if( recoverAndFindTag( closing ))
     {
-        stream.getNextToken(); // read it
+        stream.moveToNextTag(); // and skip it too
         return;
     }
     fprintf( stderr, "Expected end of element %d not found.\n", token );
@@ -219,15 +207,14 @@ void SmOoxmlImport::skipElement( int token )
 
 void SmOoxmlImport::handleUnexpectedTag()
 {
-    int next = stream.peekNextToken();
-    if( next == XML_TOKEN_INVALID )
-        return; // end of stream
-    if( next == CLOSING( next ))
+    if( stream.atEnd())
+        return;
+    if( stream.currentToken() == CLOSING( stream.currentToken()))
     {
-        stream.getNextToken(); // just skip it
+        stream.moveToNextTag(); // just skip it
         return;
     }
-    skipElement( stream.peekNextToken());
+    skipElement( stream.currentToken()); // otherwise skip the entire element
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
