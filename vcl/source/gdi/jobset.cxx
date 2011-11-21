@@ -184,33 +184,27 @@ JobSetup::~JobSetup()
 
 // -----------------------------------------------------------------------
 
-XubString JobSetup::GetPrinterName() const
+rtl::OUString JobSetup::GetPrinterName() const
 {
     if ( mpData )
         return mpData->maPrinterName;
     else
-    {
-        XubString aName;
-        return aName;
-    }
+        return rtl::OUString();
 }
 
 // -----------------------------------------------------------------------
 
-XubString JobSetup::GetDriverName() const
+rtl::OUString JobSetup::GetDriverName() const
 {
     if ( mpData )
         return mpData->maDriver;
     else
-    {
-        XubString aDriver;
-        return aDriver;
-    }
+        return rtl::OUString();
 }
 
 // -----------------------------------------------------------------------
 
-void JobSetup::SetValue( const String& rKey, const String& rValue )
+void JobSetup::SetValue( const rtl::OUString& rKey, const rtl::OUString& rValue )
 {
     if( ! mpData )
         mpData = new ImplJobSetup();

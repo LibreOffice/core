@@ -145,7 +145,7 @@ public:
     virtual void            GetPrinterQueueInfo( ImplPrnQueueList* pList );
     virtual void            GetPrinterQueueState( SalPrinterQueueInfo* pInfo );
     virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo );
-    virtual String          GetDefaultPrinter();
+    virtual rtl::OUString   GetDefaultPrinter();
     virtual void            PostPrintersChanged();
 
     // SalTimer

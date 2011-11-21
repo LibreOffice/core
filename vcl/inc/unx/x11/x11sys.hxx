@@ -49,9 +49,9 @@ public:
     virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
     virtual Rectangle GetDisplayWorkAreaPosSizePixel( unsigned int nScreen );
     virtual rtl::OUString GetScreenName( unsigned int nScreen );
-    virtual int ShowNativeDialog( const String& rTitle,
-                                  const String& rMessage,
-                                  const std::list< String >& rButtons,
+    virtual int ShowNativeDialog( const rtl::OUString& rTitle,
+                                  const rtl::OUString& rMessage,
+                                  const std::list< rtl::OUString >& rButtons,
                                   int nDefButton );
 };
 

@@ -52,9 +52,9 @@ using ::rtl::OUStringToOString;
  *  static helpers
  */
 
-static String getPdfDir( const PrinterInfo& rInfo )
+static rtl::OUString getPdfDir( const PrinterInfo& rInfo )
 {
-    String aDir;
+    rtl::OUString aDir;
     sal_Int32 nIndex = 0;
     while( nIndex != -1 )
     {
@@ -63,8 +63,8 @@ static String getPdfDir( const PrinterInfo& rInfo )
         {
             sal_Int32 nPos = 0;
             aDir = aToken.getToken( 1, '=', nPos );
-            if( ! aDir.Len() )
-                aDir = String( ByteString( getenv( "HOME" ) ), osl_getThreadTextEncoding() );
+            if( aDir.isEmpty() )
+                aDir = rtl::OStringToOUString( rtl::OString( getenv( "HOME" ) ), osl_getThreadTextEncoding() );
             break;
         }
     }
@@ -277,7 +277,7 @@ void SvpSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* )
 {
 }
 
-String SvpSalInstance::GetDefaultPrinter()
+rtl::OUString SvpSalInstance::GetDefaultPrinter()
 {
     PrinterInfoManager& rManager( PrinterInfoManager::get() );
     return rManager.getDefaultPrinter();

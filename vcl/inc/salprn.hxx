@@ -29,7 +29,8 @@
 #ifndef _SV_SALPRN_HXX
 #define _SV_SALPRN_HXX
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
+
 #include <vcl/sv.h>
 #include <vcl/dllapi.h>
 #include <vcl/prntypes.hxx>
@@ -47,10 +48,10 @@ namespace vcl { class PrinterController; }
 
 struct VCL_PLUGIN_PUBLIC SalPrinterQueueInfo
 {
-    XubString               maPrinterName;
-    XubString               maDriver;
-    XubString               maLocation;
-    XubString               maComment;
+    rtl::OUString               maPrinterName;
+    rtl::OUString               maDriver;
+    rtl::OUString               maLocation;
+    rtl::OUString               maComment;
     sal_uLong                   mnStatus;
     sal_uLong                   mnJobs;
     void*                   mpSysData;
@@ -94,7 +95,7 @@ public:
                                                  long& rPageWidth, long& rPageHeight ) = 0;
     virtual sal_uLong                   GetCapabilities( const ImplJobSetup* pSetupData, sal_uInt16 nType ) = 0;
     virtual sal_uLong                   GetPaperBinCount( const ImplJobSetup* pSetupData ) = 0;
-    virtual String                  GetPaperBinName( const ImplJobSetup* pSetupData, sal_uLong nPaperBin ) = 0;
+    virtual rtl::OUString                  GetPaperBinName( const ImplJobSetup* pSetupData, sal_uLong nPaperBin ) = 0;
     // fills m_aPaperFormats and sets m_bPapersInit to true
     virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData ) = 0;
     // returns angle that a landscape page will be turned counterclockwise wrt to portrait
@@ -111,9 +112,9 @@ public:                     // public for Sal Implementation
     SalPrinter() {}
     virtual ~SalPrinter();
 
-    virtual sal_Bool                    StartJob( const String* pFileName,
-                                              const String& rJobName,
-                                              const String& rAppName,
+    virtual sal_Bool                    StartJob( const rtl::OUString* pFileName,
+                                              const rtl::OUString& rJobName,
+                                              const rtl::OUString& rAppName,
                                               sal_uLong nCopies,
                                               bool bCollate,
                                               bool bDirect,
@@ -121,9 +122,9 @@ public:                     // public for Sal Implementation
 
     // implement for pull model print systems only,
     // default implementations (see salvtables.cxx) just returns sal_False
-    virtual sal_Bool                    StartJob( const String* pFileName,
-                                              const String& rJobName,
-                                              const String& rAppName,
+    virtual sal_Bool                    StartJob( const rtl::OUString* pFileName,
+                                              const rtl::OUString& rJobName,
+                                              const rtl::OUString& rAppName,
                                               ImplJobSetup* pSetupData,
                                               vcl::PrinterController& rController );
 

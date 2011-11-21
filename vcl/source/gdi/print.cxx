@@ -298,10 +298,15 @@ SvStream& operator>>( SvStream& rIStream, QueueInfo& rInfo )
 {
     VersionCompat aCompat( rIStream, STREAM_READ );
 
-    rIStream.ReadByteString( rInfo.maPrinterName, RTL_TEXTENCODING_UTF8 );
-    rIStream.ReadByteString( rInfo.maDriver, RTL_TEXTENCODING_UTF8 );
-    rIStream.ReadByteString( rInfo.maLocation, RTL_TEXTENCODING_UTF8 );
-    rIStream.ReadByteString( rInfo.maComment, RTL_TEXTENCODING_UTF8 );
+    String aTmp;
+    rIStream.ReadByteString( aTmp, RTL_TEXTENCODING_UTF8 );
+    rInfo.maPrinterName = aTmp;
+    rIStream.ReadByteString( aTmp, RTL_TEXTENCODING_UTF8 );
+    rInfo.maDriver = aTmp;
+    rIStream.ReadByteString( aTmp, RTL_TEXTENCODING_UTF8 );
+    rInfo.maLocation = aTmp;
+    rIStream.ReadByteString( aTmp, RTL_TEXTENCODING_UTF8 );
+    rInfo.maComment = aTmp;
     rIStream >> rInfo.mnStatus;
     rIStream >> rInfo.mnJobs;
 
@@ -409,7 +414,7 @@ const std::vector<rtl::OUString>& Printer::GetPrinterQueues()
 }
 
 // -----------------------------------------------------------------------
-const QueueInfo* Printer::GetQueueInfo( const String& rPrinterName, bool bStatusUpdate )
+const QueueInfo* Printer::GetQueueInfo( const rtl::OUString& rPrinterName, bool bStatusUpdate )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -438,7 +443,7 @@ const QueueInfo* Printer::GetQueueInfo( const String& rPrinterName, bool bStatus
 
 // -----------------------------------------------------------------------
 
-XubString Printer::GetDefaultPrinterName()
+rtl::OUString Printer::GetDefaultPrinterName()
 {
     static const char* pEnv = getenv( "SAL_DISABLE_DEFAULTPRINTER" );
     if( !pEnv || !*pEnv )
@@ -447,7 +452,7 @@ XubString Printer::GetDefaultPrinterName()
 
         return pSVData->mpDefInst->GetDefaultPrinter();
     }
-    return XubString();
+    return rtl::OUString();
 }
 
 // =======================================================================
@@ -562,8 +567,8 @@ void Printer::ImplInitDisplay( const Window* pWindow )
 
 // -----------------------------------------------------------------------
 
-SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const XubString& rPrinterName,
-                                                const XubString* pDriver )
+SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const rtl::OUString& rPrinterName,
+                                                const rtl::OUString* pDriver )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maGDIData.mpPrinterQueueList )
@@ -580,7 +585,7 @@ SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const XubString& rPrinterName,
         // then search case insensitive
         for( unsigned int i = 0; i < pPrnList->m_aQueueInfos.size(); i++ )
         {
-            if( pPrnList->m_aQueueInfos[i].mpSalQueueInfo->maPrinterName.EqualsIgnoreCaseAscii( rPrinterName ) )
+            if( pPrnList->m_aQueueInfos[i].mpSalQueueInfo->maPrinterName.equalsIgnoreAsciiCase( rPrinterName ) )
                 return pPrnList->m_aQueueInfos[i].mpSalQueueInfo;
         }
 
@@ -699,7 +704,7 @@ Printer::Printer( const QueueInfo& rQueueInfo )
 
 // -----------------------------------------------------------------------
 
-Printer::Printer( const XubString& rPrinterName )
+Printer::Printer( const rtl::OUString& rPrinterName )
 {
     ImplInitData();
     SalPrinterQueueInfo* pInfo = ImplGetQueueInfo( rPrinterName, NULL );
@@ -967,7 +972,7 @@ sal_Bool Printer::SetPrinterProps( const Printer* pPrinter )
         }
 
         // Neuen Printer bauen
-        XubString aDriver = pPrinter->GetDriverName();
+        rtl::OUString aDriver = pPrinter->GetDriverName();
         SalPrinterQueueInfo* pInfo = ImplGetQueueInfo( pPrinter->GetName(), &aDriver );
         if ( pInfo )
         {
@@ -1388,7 +1393,7 @@ sal_uInt16 Printer::GetPaperBinCount() const
 
 // -----------------------------------------------------------------------
 
-XubString Printer::GetPaperBinName( sal_uInt16 nPaperBin ) const
+rtl::OUString Printer::GetPaperBinName( sal_uInt16 nPaperBin ) const
 {
     if ( IsDisplayPrinter() )
         return ImplGetSVEmptyStr();
@@ -1459,7 +1464,7 @@ sal_Bool Printer::EndJob()
 
         mbPrinting      = sal_False;
         mnCurPrintPage  = 0;
-        maJobName.Erase();
+        maJobName = rtl::OUString();
 
         mbDevOutput = sal_False;
         bRet = mpPrinter->EndJob();

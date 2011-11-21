@@ -48,9 +48,9 @@ class VCL_DLLPUBLIC GenPspGraphics : public SalGraphics
  protected:
     psp::JobData*               m_pJobData;
     psp::PrinterGfx*            m_pPrinterGfx;
-    String*                     m_pPhoneNr;
+    rtl::OUString*                     m_pPhoneNr;
     bool                        m_bSwallowFaxNo;
-    String                      m_aPhoneCollection;
+    rtl::OUString                      m_aPhoneCollection;
     bool                        m_bPhoneCollectionActive;
 
     ServerFont*                 m_pServerFont[ MAX_FALLBACK ];
@@ -61,7 +61,7 @@ public:
     virtual ~GenPspGraphics();
 
     void  Init( psp::JobData* pJob, psp::PrinterGfx* pGfx,
-                String* pPhone, bool bSwallow,
+                rtl::OUString* pPhone, bool bSwallow,
                 SalInfoPrinter* pInfoPrinter );
 
     // helper methods
@@ -104,7 +104,7 @@ public:
     virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     virtual void            GetDevFontList( ImplDevFontList* );
     virtual void            GetDevFontSubstList( OutputDevice* );
-    virtual bool            AddTempDevFont( ImplDevFontList*, const String& rFileURL, const String& rFontName );
+    virtual bool            AddTempDevFont( ImplDevFontList*, const rtl::OUString& rFileURL, const rtl::OUString& rFontName );
 
     virtual sal_Bool            CreateFontSubset( const rtl::OUString& rToFile,
                                               const ImplFontData*,
@@ -177,7 +177,7 @@ public:
     virtual void            invert( sal_uIntPtr nPoints, const SalPoint* pPtAry, SalInvert nFlags );
 
     virtual sal_Bool            drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uIntPtr nSize );
-    virtual bool            filterText( const String& rOrigText, String& rNewText, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop );
+    virtual bool            filterText( const rtl::OUString& rOrigText, rtl::OUString& rNewText, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop );
 
     virtual bool            drawAlphaBitmap( const SalTwoRect&,
                                              const SalBitmap& rSourceBitmap,

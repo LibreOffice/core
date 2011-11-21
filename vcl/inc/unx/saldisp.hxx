@@ -363,8 +363,8 @@ public:
     void            ModifierMapping();
     void            SimulateKeyPress( sal_uInt16 nKeyCode );
     sal_uInt16          GetIndicatorState() const;
-    String          GetKeyNameFromKeySym( KeySym keysym ) const;
-    XubString       GetKeyName( sal_uInt16 nKeyCode ) const;
+    rtl::OUString          GetKeyNameFromKeySym( KeySym keysym ) const;
+    rtl::OUString       GetKeyName( sal_uInt16 nKeyCode ) const;
     sal_uInt16          GetKeyCode( KeySym keysym, char*pcPrintable ) const;
     KeySym          GetKeySym( XKeyEvent      *pEvent,
                                unsigned char  *pPrintable,
@@ -474,7 +474,7 @@ public:
  */
 // get foreign key names
 namespace vcl_sal {
-    String getKeysymReplacementName(
+    rtl::OUString getKeysymReplacementName(
         const char* pKeyboard,
         KeySym nSymbol );
 }

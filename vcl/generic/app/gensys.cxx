@@ -50,11 +50,11 @@ SalGenericSystem::~SalGenericSystem()
 {
 }
 
-int SalGenericSystem::ShowNativeMessageBox( const String& rTitle, const String& rMessage,
+int SalGenericSystem::ShowNativeMessageBox( const rtl::OUString& rTitle, const rtl::OUString& rMessage,
                                             int nButtonCombination, int nDefaultButton )
 {
     int nDefButton = 0;
-    std::list< String > aButtons;
+    std::list< rtl::OUString > aButtons;
     int nButtonIds[5], nBut = 0;
 
     ImplHideSplash();

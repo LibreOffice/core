@@ -267,9 +267,9 @@ void DeInitSalMain()
 {
 }
 
-void SalAbort( const XubString& rErrorText, bool bDumpCore )
+void SalAbort( const rtl::OUString& rErrorText, bool bDumpCore )
 {
-    if( !rErrorText.Len() )
+    if( rErrorText.isEmpty() )
         std::fprintf( stderr, "Application Error\n" );
     else
         std::fprintf( stderr, "%s\n", rtl::OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );

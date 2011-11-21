@@ -146,7 +146,7 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
 
     Printer         ( rPrinterName ),
     pOptions        ( pTheOptions ),
-    bKnown          ( GetName() == rPrinterName )
+    bKnown          ( String( GetName() ) == rPrinterName )
 
 {
     pImpl = new SfxPrinter_Impl;

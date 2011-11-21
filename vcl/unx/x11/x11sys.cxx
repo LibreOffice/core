@@ -141,7 +141,7 @@ rtl::OUString X11SalSystem::GetScreenName( unsigned int nScreen )
     return aScreenName;
 }
 
-int X11SalSystem::ShowNativeDialog( const String& rTitle, const String& rMessage, const std::list< String >& rButtons, int nDefButton )
+int X11SalSystem::ShowNativeDialog( const rtl::OUString& rTitle, const rtl::OUString& rMessage, const std::list< rtl::OUString >& rButtons, int nDefButton )
 {
     int nRet = -1;
 
@@ -154,7 +154,7 @@ int X11SalSystem::ShowNativeDialog( const String& rTitle, const String& rMessage
     aWarn.Clear();
 
     sal_uInt16 nButton = 0;
-    for( std::list< String >::const_iterator it = rButtons.begin(); it != rButtons.end(); ++it )
+    for( std::list< rtl::OUString >::const_iterator it = rButtons.begin(); it != rButtons.end(); ++it )
     {
             aWarn.AddButton( *it, nButton+1, nButton == (sal_uInt16)nDefButton ? BUTTONDIALOG_DEFBUTTON : 0 );
             nButton++;

@@ -29,10 +29,13 @@
 #ifndef _SV_SALSYS_HXX
 #define _SV_SALSYS_HXX
 
-#include <tools/string.hxx>
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
 
+namespace rtl
+{
+    class OUString;
+}
 
 /* Button combinations for ShowNativeMessageBox
 */
@@ -136,8 +139,8 @@ public:
         See button identifier above. If the function fails the
         return value is 0.
     */
-    virtual int ShowNativeMessageBox( const String& rTitle,
-                                      const String& rMessage,
+    virtual int ShowNativeMessageBox( const rtl::OUString& rTitle,
+                                      const rtl::OUString& rMessage,
                                       int nButtonCombination,
                                       int nDefaultButton) = 0;
 };

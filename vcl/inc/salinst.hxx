@@ -38,12 +38,14 @@
 #include "vcl/displayconnectiondispatch.hxx"
 #include "vcl/dllapi.h"
 
-#include "tools/string.hxx"
-
 #include "rtl/ref.hxx"
-#include "rtl/string.hxx"
 
 #include <list>
+
+namespace rtl
+{
+    class OUString;
+}
 
 struct SystemParentData;
 struct SalPrinterQueueInfo;
@@ -113,7 +115,7 @@ public:
     virtual void                GetPrinterQueueInfo( ImplPrnQueueList* pList ) = 0;
     virtual void                GetPrinterQueueState( SalPrinterQueueInfo* pInfo ) = 0;
     virtual void                DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo ) = 0;
-    virtual String              GetDefaultPrinter() = 0;
+    virtual rtl::OUString              GetDefaultPrinter() = 0;
 
     // SalTimer
     virtual SalTimer*           CreateSalTimer() = 0;
@@ -195,7 +197,7 @@ void DestroySalInstance( SalInstance* pInst );
 // - SalInstance-Functions -
 // -------------------------
 
-void SalAbort( const XubString& rErrorText, bool bDumpCore );
+void SalAbort( const rtl::OUString& rErrorText, bool bDumpCore );
 
 VCL_PLUGIN_PUBLIC const ::rtl::OUString& SalGetDesktopEnvironment();
 

@@ -43,13 +43,13 @@ class VCL_DLLPUBLIC SalGenericSystem : public SalSystem
  public:
     SalGenericSystem();
     virtual ~SalGenericSystem();
-    virtual int ShowNativeDialog( const String& rTitle,
-                                  const String& rMessage,
-                                  const std::list< String >& rButtons,
+    virtual int ShowNativeDialog( const rtl::OUString& rTitle,
+                                  const rtl::OUString& rMessage,
+                                  const std::list< rtl::OUString >& rButtons,
                                   int nDefButton ) = 0;
 
-    virtual int ShowNativeMessageBox( const String& rTitle,
-                                      const String& rMessage,
+    virtual int ShowNativeMessageBox( const rtl::OUString& rTitle,
+                                      const rtl::OUString& rMessage,
                                       int nButtonCombination,
                                       int nDefaultButton);
 

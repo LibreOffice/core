@@ -532,7 +532,7 @@ X11SalGraphics::SetTextColor( SalColor nSalColor )
 // ----------------------------------------------------------------------------
 
 bool X11SalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
-    const String& rFileURL, const String& rFontName )
+    const rtl::OUString& rFileURL, const rtl::OUString& rFontName )
 {
     // inform PSP font manager
     rtl::OUString aUSystemPath;

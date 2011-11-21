@@ -2497,7 +2497,7 @@ sal_Bool X11SalFrame::PostEvent( void *pData )
 
 // Title
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalFrame::SetTitle( const XubString& rTitle )
+void X11SalFrame::SetTitle( const rtl::OUString& rTitle )
 {
     if( ! ( IsChildWindow() || (nStyle_ & SAL_FRAME_STYLE_FLOAT ) ) )
     {
@@ -2572,12 +2572,12 @@ void X11SalFrame::EndExtTextInput( sal_uInt16 nFlags )
 
 // -----------------------------------------------------------------------
 
-XubString X11SalFrame::GetKeyName( sal_uInt16 nKeyCode )
+rtl::OUString X11SalFrame::GetKeyName( sal_uInt16 nKeyCode )
 {
     return GetDisplay()->GetKeyName( nKeyCode );
 }
 
-XubString X11SalFrame::GetSymbolKeyName( const XubString&, sal_uInt16 nKeyCode )
+rtl::OUString X11SalFrame::GetSymbolKeyName( const rtl::OUString&, sal_uInt16 nKeyCode )
 {
   return GetKeyName( nKeyCode );
 }
@@ -2697,7 +2697,7 @@ void X11SalFrame::createNewWindow( XLIB_Window aNewParent, int nScreen )
     // update graphics if necessary
     updateGraphics(false);
 
-    if( m_aTitle.Len() )
+    if( ! m_aTitle.isEmpty() )
         SetTitle( m_aTitle );
 
     if( mpParent )

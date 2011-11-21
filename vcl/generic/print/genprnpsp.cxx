@@ -508,7 +508,7 @@ void SalGenericInstance::GetPrinterQueueState( SalPrinterQueueInfo* )
     mbPrinterInit = true;
 }
 
-String SalGenericInstance::GetDefaultPrinter()
+rtl::OUString SalGenericInstance::GetDefaultPrinter()
 {
     mbPrinterInit = true;
     PrinterInfoManager& rManager( PrinterInfoManager::get() );
@@ -811,7 +811,7 @@ sal_uLong PspSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )
     return pKey ? pKey->countValues() : 0;
 }
 
-String PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_uLong nPaperBin )
+rtl::OUString PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_uLong nPaperBin )
 {
     JobData aData;
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
@@ -911,7 +911,7 @@ PspSalPrinter::~PspSalPrinter()
 {
 }
 
-static String getTmpName()
+static rtl::OUString getTmpName()
 {
     rtl::OUString aTmp, aSys;
     osl_createTempFile( NULL, NULL, &aTmp.pData );
@@ -921,9 +921,9 @@ static String getTmpName()
 }
 
 sal_Bool PspSalPrinter::StartJob(
-    const XubString* pFileName,
-    const XubString& rJobName,
-    const XubString& rAppName,
+    const rtl::OUString* pFileName,
+    const rtl::OUString& rJobName,
+    const rtl::OUString& rAppName,
     sal_uLong nCopies,
     bool bCollate,
     bool bDirect,
@@ -933,8 +933,8 @@ sal_Bool PspSalPrinter::StartJob(
 
     m_bFax      = false;
     m_bPdf      = false;
-    m_aFileName = pFileName ? *pFileName : String();
-    m_aTmpFile  = String();
+    m_aFileName = pFileName ? *pFileName : rtl::OUString();
+    m_aTmpFile  = rtl::OUString();
     m_nCopies   = nCopies;
     m_bCollate  = bCollate;
 
@@ -977,12 +977,13 @@ sal_Bool PspSalPrinter::StartJob(
             m_aTmpFile = getTmpName();
             nMode = S_IRUSR | S_IWUSR;
 
-            if( ! m_aFileName.Len() )
+            if( m_aFileName.isEmpty() )
             {
-                m_aFileName = getPdfDir( rInfo );
-                m_aFileName.Append( '/' );
-                m_aFileName.Append( rJobName );
-                m_aFileName.AppendAscii( ".pdf" );
+                rtl::OUStringBuffer aFileName( getPdfDir( rInfo ) );
+                aFileName.append( '/' );
+                aFileName.append( rJobName );
+                aFileName.appendAscii( RTL_CONSTASCII_STRINGPARAM( ".pdf" ) );
+                m_aFileName = aFileName.makeStringAndClear();
             }
             break;
         }
@@ -1002,7 +1003,7 @@ sal_Bool PspSalPrinter::StartJob(
     }
     m_aPrinterGfx.setStrictSO52Compatibility( bStrictSO52Compatibility );
 
-    return m_aPrintJob.StartJob( m_aTmpFile.Len() ? m_aTmpFile : m_aFileName, nMode, rJobName, rAppName, m_aJobData, &m_aPrinterGfx, bDirect ) ? sal_True : sal_False;
+    return m_aPrintJob.StartJob( ! m_aTmpFile.isEmpty() ? m_aTmpFile : m_aFileName, nMode, rJobName, rAppName, m_aJobData, &m_aPrinterGfx, bDirect ) ? sal_True : sal_False;
 }
 
 sal_Bool PspSalPrinter::EndJob()
@@ -1107,7 +1108,7 @@ struct PDFPrintFile
     , maParameters( i_rNewParameters ) {}
 };
 
-sal_Bool PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJobName, const String& i_rAppName,
+sal_Bool PspSalPrinter::StartJob( const rtl::OUString* i_pFileName, const rtl::OUString& i_rJobName, const rtl::OUString& i_rAppName,
                               ImplJobSetup* i_pSetupData, vcl::PrinterController& i_rController )
 {
     OSL_TRACE( "StartJob with controller: pFilename = %s", i_pFileName ? rtl::OUStringToOString( *i_pFileName, RTL_TEXTENCODING_UTF8 ).getStr() : "<nil>" );
@@ -1308,7 +1309,7 @@ sal_Bool PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJo
                                     break;
                             }
                         } while( nBytesRead == buffer.size() );
-                        rtl::OUStringBuffer aBuf( i_rJobName.Len() + 8 );
+                        rtl::OUStringBuffer aBuf( i_rJobName.getLength() + 8 );
                         aBuf.append( i_rJobName );
                         if( i > 0 || nCurJob > 0 )
                         {

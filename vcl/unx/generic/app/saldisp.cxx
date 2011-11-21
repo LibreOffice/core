@@ -931,9 +931,9 @@ sal_uInt16 SalDisplay::GetIndicatorState() const
     return nState;
 }
 
-String SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
+rtl::OUString SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
 {
-    String aRet;
+    rtl::OUString aRet;
 
     // return an empty string for keysyms that are not bound to
     // any key code
@@ -941,18 +941,18 @@ String SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
     if( aKeyCode != 0 && aKeyCode != NoSymbol )
     {
         if( !nKeySym )
-            aRet = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "???" ) );
+            aRet = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "???" ) );
         else
         {
             aRet = ::vcl_sal::getKeysymReplacementName( const_cast<SalDisplay*>(this)->GetKeyboardName(), nKeySym );
-            if( ! aRet.Len() )
+            if( aRet.isEmpty() )
             {
                 const char *pString = XKeysymToString( nKeySym );
                 int n = strlen( pString );
                 if( n > 2 && pString[n-2] == '_' )
-                    aRet = String( pString, n-2, RTL_TEXTENCODING_ISO_8859_1 );
+                    aRet = rtl::OUString( pString, n-2, RTL_TEXTENCODING_ISO_8859_1 );
                 else
-                    aRet = String( pString, n, RTL_TEXTENCODING_ISO_8859_1 );
+                    aRet = rtl::OUString( pString, n, RTL_TEXTENCODING_ISO_8859_1 );
             }
         }
     }
@@ -998,7 +998,7 @@ void SalDisplay::ModifierMapping()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-XubString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
+rtl::OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
 {
     String aStrMap;
     String aCustomKeyName;

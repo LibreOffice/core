@@ -1761,7 +1761,7 @@ static rtl::OUString searchAndReplace( const rtl::OUString& i_rOrig, const char*
 
 void PrintDialog::updatePrinterText()
 {
-    String aDefPrt( Printer::GetDefaultPrinterName() );
+    const rtl::OUString aDefPrt( Printer::GetDefaultPrinterName() );
     const QueueInfo* pInfo = Printer::GetQueueInfo( maJobPage.maPrinters.GetSelectEntry(), true );
     if( pInfo )
     {

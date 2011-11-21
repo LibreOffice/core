@@ -101,8 +101,8 @@ rtl::OUString SvpSalSystem::GetScreenName( unsigned int nScreen )
    return aBuf.makeStringAndClear();
 }
 
-int SvpSalSystem::ShowNativeMessageBox( const String&,
-                                        const String&,
+int SvpSalSystem::ShowNativeMessageBox( const rtl::OUString&,
+                                        const rtl::OUString&,
                                         int,
                                         int )
 {

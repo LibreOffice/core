@@ -370,7 +370,7 @@ void SvpSalGraphics::GetDevFontSubstList( OutputDevice* )
 // ---------------------------------------------------------------------------
 
 bool SvpSalGraphics::AddTempDevFont( ImplDevFontList*,
-    const String&, const String& )
+    const rtl::OUString&, const rtl::OUString& )
 {
     return false;
 }

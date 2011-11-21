@@ -1846,10 +1846,9 @@ void ScStyleObj::SetOnePropertyValue( const ::rtl::OUString& rPropertyName, cons
                                             Printer* pPrinter = pDocShell->GetPrinter();
                                             if (pPrinter)
                                             {
-                                                String aNameStr = aName;
                                                 sal_uInt16 nCount = pPrinter->GetPaperBinCount();
                                                 for (sal_uInt16 i=0; i<nCount; i++)
-                                                    if ( aNameStr == pPrinter->GetPaperBinName(i) )
+                                                    if ( aName == pPrinter->GetPaperBinName(i) )
                                                     {
                                                         nTray = (sal_uInt8) i;
                                                         bFound = sal_True;

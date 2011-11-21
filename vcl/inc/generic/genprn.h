@@ -58,7 +58,7 @@ public:
                                                  long& rPageWidth, long& rPageHeight );
     virtual sal_uIntPtr                 GetCapabilities( const ImplJobSetup* pSetupData, sal_uInt16 nType );
     virtual sal_uIntPtr                 GetPaperBinCount( const ImplJobSetup* pSetupData );
-    virtual String                  GetPaperBinName( const ImplJobSetup* pSetupData, sal_uIntPtr nPaperBin );
+    virtual rtl::OUString                  GetPaperBinName( const ImplJobSetup* pSetupData, sal_uIntPtr nPaperBin );
     virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData );
     virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData );
 };
@@ -66,9 +66,9 @@ public:
 class VCL_DLLPUBLIC PspSalPrinter : public SalPrinter
 {
 public:
-    String                  m_aFileName;
-    String                  m_aTmpFile;
-    String                  m_aFaxNr;
+    rtl::OUString                  m_aFileName;
+    rtl::OUString                  m_aTmpFile;
+    rtl::OUString                  m_aFaxNr;
     bool                    m_bFax:1;
     bool                    m_bPdf:1;
     bool                    m_bSwallowFaxNo:1;
@@ -85,16 +85,16 @@ public:
     virtual ~PspSalPrinter();
 
     // overload all pure virtual methods
-    virtual sal_Bool                    StartJob( const XubString* pFileName,
-                                              const XubString& rJobName,
-                                              const XubString& rAppName,
+    virtual sal_Bool                    StartJob( const rtl::OUString* pFileName,
+                                              const rtl::OUString& rJobName,
+                                              const rtl::OUString& rAppName,
                                               sal_uIntPtr nCopies,
                                               bool bCollate,
                                               bool bDirect,
                                               ImplJobSetup* pSetupData );
-    virtual sal_Bool                    StartJob( const String*,
-                                              const String&,
-                                              const String&,
+    virtual sal_Bool                    StartJob( const rtl::OUString*,
+                                              const rtl::OUString&,
+                                              const rtl::OUString&,
                                               ImplJobSetup*,
                                               vcl::PrinterController& i_rController );
     virtual sal_Bool                    EndJob();

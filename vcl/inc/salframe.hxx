@@ -163,7 +163,7 @@ public:
     // When Event is called, SalInstance::Yield() must be returned
     virtual sal_Bool                PostEvent( void* pData ) = 0;
 
-    virtual void                SetTitle( const XubString& rTitle ) = 0;
+    virtual void                SetTitle( const rtl::OUString& rTitle ) = 0;
     virtual void                SetIcon( sal_uInt16 nIcon ) = 0;
     virtual void                SetRepresentedURL( const rtl::OUString& );
     virtual void                    SetMenu( SalMenu *pSalMenu ) = 0;
@@ -212,8 +212,8 @@ public:
     virtual void                SetInputContext( SalInputContext* pContext ) = 0;
     virtual void                EndExtTextInput( sal_uInt16 nFlags ) = 0;
 
-    virtual String              GetKeyName( sal_uInt16 nKeyCode ) = 0;
-    virtual String              GetSymbolKeyName( const XubString& rFontName, sal_uInt16 nKeyCode ) = 0;
+    virtual rtl::OUString              GetKeyName( sal_uInt16 nKeyCode ) = 0;
+    virtual rtl::OUString              GetSymbolKeyName( const rtl::OUString& rFontName, sal_uInt16 nKeyCode ) = 0;
 
     // returns in 'rKeyCode' the single keycode that translates to the given unicode when using a keyboard layout of language 'aLangType'
     // returns sal_False if no mapping exists or function not supported

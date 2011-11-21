@@ -589,7 +589,7 @@ void SpaPrinterController::jobFinished( com::sun::star::view::PrintableState )
 
 void PADialog::PrintTestPage()
 {
-    String sPrinter( getSelectedDevice() );
+    const rtl::OUString sPrinter( getSelectedDevice() );
 
     boost::shared_ptr<Printer> pPrinter( new Printer( sPrinter ) );
 

@@ -45,7 +45,7 @@ struct SalItemParams
     MenuItemType    eType;                  // MenuItem-Type
     MenuItemBits    nBits;                  // MenuItem-Bits
     Menu*           pMenu;                  // Pointer to Menu
-    XubString       aText;                  // Menu-Text
+    rtl::OUString   aText;                  // Menu-Text
     Image           aImage;                 // Image
 };
 
@@ -83,9 +83,9 @@ public:
     virtual void SetFrame( const SalFrame* pFrame ) = 0;
     virtual void CheckItem( unsigned nPos, sal_Bool bCheck ) = 0;
     virtual void EnableItem( unsigned nPos, sal_Bool bEnable ) = 0;
-    virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const XubString& rText )= 0;
+    virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& rText )= 0;
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage ) = 0;
-    virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& rKeyName ) = 0;
+    virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const rtl::OUString& rKeyName ) = 0;
     virtual void GetSystemMenuData( SystemMenuData* pData ) = 0;
     virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, sal_uLong nFlags);
     virtual bool AddMenuBarButton( const SalMenuButtonItem& ); // return false if not implemented or failure

@@ -116,7 +116,7 @@ XubString KeyCode::GetName( Window* pWindow ) const
 {
     if ( !pWindow )
         pWindow = ImplGetDefaultWindow();
-    return pWindow ? pWindow->ImplGetFrame()->GetKeyName( GetFullCode() ) : XubString();
+    return pWindow ? XubString( pWindow->ImplGetFrame()->GetKeyName( GetFullCode() ) ) : XubString();
 }
 
 // -----------------------------------------------------------------------
@@ -125,7 +125,7 @@ XubString KeyCode::GetSymbolName( const XubString& rFontName, Window* pWindow ) 
 {
     if ( !pWindow )
         pWindow = ImplGetDefaultWindow();
-    return pWindow ? pWindow->ImplGetFrame()->GetSymbolKeyName( rFontName, GetFullCode() ) : XubString();
+    return pWindow ? XubString( pWindow->ImplGetFrame()->GetSymbolKeyName( rFontName, GetFullCode() ) ) : XubString();
 }
 
 // -----------------------------------------------------------------------

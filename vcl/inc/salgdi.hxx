@@ -29,8 +29,6 @@
 #ifndef _SV_SALGDI_HXX
 #define _SV_SALGDI_HXX
 
-#include "tools/string.hxx"
-#include "rtl/ustring.hxx"
 #include "vcl/sv.h"
 #include "vcl/dllapi.h"
 #include "vcl/salgtype.hxx"
@@ -40,6 +38,11 @@
 #include "sallayout.hxx"
 
 #include <map>
+
+namespace rtl
+{
+    class OUString;
+}
 
 class ImplDevFontList;
 class SalBitmap;
@@ -242,7 +245,7 @@ public:
     // graphics should call ImplAddDevFontSubstitute on supplied
     // OutputDevice for all its device specific preferred font substitutions
     virtual void            GetDevFontSubstList( OutputDevice* ) = 0;
-    virtual bool            AddTempDevFont( ImplDevFontList*, const String& rFileURL, const String& rFontName ) = 0;
+    virtual bool            AddTempDevFont( ImplDevFontList*, const rtl::OUString& rFileURL, const rtl::OUString& rFontName ) = 0;
     // CreateFontSubset: a method to get a subset of glyhps of a font
     // inside a new valid font file
     // returns sal_True if creation of subset was successfull
@@ -335,7 +338,7 @@ public:
         true: a substitution has taken place and rNewText rLen, rCutStart and rCutStop have been filled accordingly
         false: no substitution has taken place, rNewText, rLen, rCutStart, rCutStop remain unchanged
      */
-    virtual bool            filterText( const String& rOrigText, String& rNewText, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop );
+    virtual bool            filterText( const rtl::OUString& rOrigText, rtl::OUString& rNewText, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop );
 
     virtual bool            supportsOperation( OutDevSupportType ) const = 0;
 

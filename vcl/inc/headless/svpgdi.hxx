@@ -106,7 +106,7 @@ public:
     virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     virtual void            GetDevFontList( ImplDevFontList* );
     virtual void            GetDevFontSubstList( OutputDevice* );
-    virtual bool            AddTempDevFont( ImplDevFontList*, const String& rFileURL, const String& rFontName );
+    virtual bool            AddTempDevFont( ImplDevFontList*, const rtl::OUString& rFileURL, const rtl::OUString& rFontName );
     virtual sal_Bool            CreateFontSubset( const rtl::OUString& rToFile,
                                               const ImplFontData*,
                                               sal_Int32* pGlyphIDs,

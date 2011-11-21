@@ -29,10 +29,14 @@
 #ifndef _SV_JOBSET_HXX
 #define _SV_JOBSET_HXX
 
-#include <tools/string.hxx>
 #include <vcl/sv.h>
 #include <vcl/dllapi.h>
 #include <vcl/prntypes.hxx>
+
+namespace rtl
+{
+    class OUString;
+}
 
 class SvStream;
 struct ImplJobSetup;
@@ -58,15 +62,15 @@ public:
                         JobSetup( const JobSetup& rJob );
                         ~JobSetup();
 
-    String              GetPrinterName() const;
-    String              GetDriverName() const;
+    rtl::OUString              GetPrinterName() const;
+    rtl::OUString              GetDriverName() const;
 
     /*  Get/SetValue are used to read/store additional
      *  Parameters in the job setup that may be used
      *  by the printer driver. One possible use are phone
      *  numbers for faxes (which disguise as printers)
      */
-    void                SetValue( const String& rKey, const String& rValue );
+    void                SetValue( const rtl::OUString& rKey, const rtl::OUString& rValue );
 
     JobSetup&           operator=( const JobSetup& rJob );
 

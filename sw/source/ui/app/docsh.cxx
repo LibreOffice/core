@@ -820,7 +820,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     // that would only lead to questionable results after expensive
     // reformatting (Preview!)
     JobSetup *pOrig = 0;
-    if ( rSetup.GetPrinterName().Len() && ASPECT_THUMBNAIL != nAspect )
+    if ( !rSetup.GetPrinterName().isEmpty() && ASPECT_THUMBNAIL != nAspect )
     {
         pOrig = const_cast<JobSetup*>(pDoc->getJobsetup());
         if( pOrig )         // then we copy that

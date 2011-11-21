@@ -29,7 +29,6 @@
 #ifndef _SV_JOBSET_H
 #define _SV_JOBSET_H
 
-#include <tools/string.hxx>
 #include <vcl/sv.h>
 #include <vcl/prntypes.hxx>
 #include <boost/unordered_map.hpp>
@@ -55,8 +54,8 @@ struct ImplJobSetup
 {
     sal_uInt16          mnRefCount;         // RefCount (only independ data)
     sal_uInt16          mnSystem;           // Sytem - JOBSETUP_SYSTEM_xxxx
-    String          maPrinterName;      // Printer-Name
-    String          maDriver;           // Driver-Name
+    rtl::OUString          maPrinterName;      // Printer-Name
+    rtl::OUString          maDriver;           // Driver-Name
     Orientation     meOrientation;      // Orientation
     DuplexMode      meDuplexMode;       // Duplex
     sal_uInt16          mnPaperBin;         // paper bin / in tray

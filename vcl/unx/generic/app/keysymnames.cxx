@@ -404,7 +404,7 @@ namespace vcl_sal {
         { "English", aImplReplacements_English, SAL_N_ELEMENTS(aImplReplacements_English) }
     };
 
-    String getKeysymReplacementName( const char* pKeyboard, KeySym nSymbol )
+    rtl::OUString getKeysymReplacementName( const char* pKeyboard, KeySym nSymbol )
     {
         for( unsigned int n = 0; n < SAL_N_ELEMENTS(aKeyboards); n++ )
         {
@@ -425,7 +425,7 @@ namespace vcl_sal {
             if( nSymbol == pRepl[--m].aSymbol )
                 return String( pRepl[m].pName, RTL_TEXTENCODING_UTF8 );
         }
-        return String();
+        return rtl::OUString();
     }
 
 }

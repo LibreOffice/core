@@ -310,7 +310,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     boost::shared_ptr<PrinterController> pController( i_pController );
 
     // check if there is a default printer; if not, show an error box (if appropriate)
-    if( GetDefaultPrinterName().Len() == 0  )
+    if( GetDefaultPrinterName().isEmpty() )
     {
         if(  pController->isShowDialogs()
              // && ! pController->isDirectPrint()
@@ -533,7 +533,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
         }
     }
 
-    XubString* pPrintFile = NULL;
+    rtl::OUString* pPrintFile = NULL;
     if ( mbPrintFile )
         pPrintFile = &maPrintFile;
     mpPrinterOptions->ReadFromConfig( mbPrintFile );

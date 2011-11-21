@@ -191,10 +191,9 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                         SfxPrinter* pPrinter = pDocShell->GetPrinter();
                         if (pPrinter)
                         {
-                            String aString(sPrinterName);
-                            if (pPrinter->GetName() != aString)
+                            if (pPrinter->GetName() != sPrinterName)
                             {
-                                SfxPrinter* pNewPrinter = new SfxPrinter( pPrinter->GetOptions().Clone(), aString );
+                                SfxPrinter* pNewPrinter = new SfxPrinter( pPrinter->GetOptions().Clone(), sPrinterName );
                                 if (pNewPrinter->IsKnown())
                                     pDocShell->SetPrinter( pNewPrinter, SFX_PRINTER_PRINTER );
                                 else

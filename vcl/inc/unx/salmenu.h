@@ -49,9 +49,9 @@ public:
     virtual void SetFrame( const SalFrame* pFrame );
     virtual void CheckItem( unsigned nPos, BOOL bCheck );
     virtual void EnableItem( unsigned nPos, BOOL bEnable );
-    virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const XubString& rText );
+    virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& rText );
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage);
-    virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& rKeyName );
+    virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const rtl::OUString& rKeyName );
     virtual void GetSystemMenuData( SystemMenuData* pData );
 };
 

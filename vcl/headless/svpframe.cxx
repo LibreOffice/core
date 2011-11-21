@@ -159,7 +159,7 @@ void SvpSalFrame::PostPaint() const
     }
 }
 
-void SvpSalFrame::SetTitle( const XubString& )
+void SvpSalFrame::SetTitle( const rtl::OUString& )
 {
 }
 
@@ -368,12 +368,12 @@ void SvpSalFrame::EndExtTextInput( sal_uInt16 )
 {
 }
 
-String SvpSalFrame::GetKeyName( sal_uInt16 )
+rtl::OUString SvpSalFrame::GetKeyName( sal_uInt16 )
 {
-    return String();
+    return rtl::OUString();
 }
 
-String SvpSalFrame::GetSymbolKeyName( const XubString&, sal_uInt16 )
+rtl::OUString SvpSalFrame::GetSymbolKeyName( const rtl::OUString&, sal_uInt16 )
 {
     return String();
 }

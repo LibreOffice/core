@@ -345,11 +345,10 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         // Name-Property?
         if ( rProp.Name.compareToAscii( "Name" ) == 0 )
         {
-            ::rtl::OUString sTemp;
-            if ( ( rProp.Value >>= sTemp ) == sal_False )
+            ::rtl::OUString aPrinterName;
+            if ( ! ( rProp.Value >>= aPrinterName ) )
                 throw ::com::sun::star::lang::IllegalArgumentException();
 
-            String aPrinterName( sTemp ) ;
             if ( aPrinterName != pPrinter->GetName() )
             {
                 pPrinter = new SfxPrinter( pPrinter->GetOptions().Clone(), aPrinterName );

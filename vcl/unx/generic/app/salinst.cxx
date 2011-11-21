@@ -214,7 +214,7 @@ static void getServerDirectories( std::list< rtl::OString >& o_rFontPaths )
     static const char* pCommands[] = {
         "/usr/sbin/chkfontpath 2>/dev/null", "chkfontpath 2>/dev/null"
     };
-    ::std::list< ByteString > aLines;
+    ::std::list< rtl::OString > aLines;
 
     for( unsigned int i = 0; i < SAL_N_ELEMENTS(pCommands); i++ )
     {
@@ -238,13 +238,13 @@ static void getServerDirectories( std::list< rtl::OString >& o_rFontPaths )
         }
     }
 
-    for( ::std::list< ByteString >::iterator it = aLines.begin(); it != aLines.end(); ++it )
+    for( ::std::list< rtl::OString >::iterator it = aLines.begin(); it != aLines.end(); ++it )
     {
-        if( ! access( it->GetBuffer(), F_OK ) )
+        if( ! access( it->getStr(), F_OK ) )
         {
             o_rFontPaths.push_back( *it );
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "adding fs dir %s\n", it->GetBuffer() );
+            fprintf( stderr, "adding fs dir %s\n", it->getStr() );
 #endif
         }
     }

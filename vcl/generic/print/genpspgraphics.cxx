@@ -286,7 +286,7 @@ GenPspGraphics::GenPspGraphics()
 }
 
 void GenPspGraphics::Init( psp::JobData* pJob, psp::PrinterGfx* pGfx,
-                           String* pPhone, bool bSwallow,
+                           rtl::OUString* pPhone, bool bSwallow,
                            SalInfoPrinter* pInfoPrinter )
 {
     m_pJobData = pJob;
@@ -886,7 +886,7 @@ void GenPspGraphics::SetTextColor( SalColor nSalColor )
     m_pPrinterGfx->SetTextColor (aColor);
 }
 
-bool GenPspGraphics::AddTempDevFont( ImplDevFontList*, const String&,const String& )
+bool GenPspGraphics::AddTempDevFont( ImplDevFontList*, const rtl::OUString&,const rtl::OUString& )
 {
     return false;
 }
@@ -1231,7 +1231,7 @@ void GenPspGraphics::AnnounceFonts( ImplDevFontList* pFontList, const psp::FastP
     pFontList->Add( pFD );
 }
 
-bool GenPspGraphics::filterText( const String& rOrig, String& rNewText, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop )
+bool GenPspGraphics::filterText( const rtl::OUString& rOrig, rtl::OUString& rNewText, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop )
 {
     if( ! m_pPhoneNr )
         return false;
@@ -1246,18 +1246,18 @@ bool GenPspGraphics::filterText( const String& rOrig, String& rNewText, xub_StrL
     bool bRet = false;
     bool bStarted = false;
     bool bStopped = false;
-    sal_uInt16 nPos;
-    sal_uInt16 nStart = 0;
-    sal_uInt16 nStop = rLen;
-    String aPhone = rOrig.Copy( nIndex, rLen );
+    sal_Int32 nPos;
+    sal_Int32 nStart = 0;
+    sal_Int32 nStop = rLen;
+    rtl::OUString aPhone = rOrig.copy( nIndex, rLen );
 
     if( ! m_bPhoneCollectionActive )
     {
-        if( ( nPos = aPhone.SearchAscii( FAX_PHONE_TOKEN ) ) != STRING_NOTFOUND )
+        if( ( nPos = aPhone.indexOfAsciiL( FAX_PHONE_TOKEN, FAX_PHONE_TOKEN_LENGTH ) ) != -1 )
         {
             nStart = nPos;
             m_bPhoneCollectionActive = true;
-            m_aPhoneCollection.Erase();
+            m_aPhoneCollection = rtl::OUString();
             bRet = true;
             bStarted = true;
         }
@@ -1266,7 +1266,7 @@ bool GenPspGraphics::filterText( const String& rOrig, String& rNewText, xub_StrL
     {
         bRet = true;
         nPos = bStarted ? nStart + FAX_PHONE_TOKEN_LENGTH : 0;
-        if( ( nPos = aPhone.SearchAscii( FAX_END_TOKEN, nPos ) ) != STRING_NOTFOUND )
+        if( ( nPos = aPhone.indexOfAsciiL( FAX_END_TOKEN, FAX_END_TOKEN_LENGTH, nPos ) ) != -1 )
         {
             m_bPhoneCollectionActive = false;
             nStop = nPos + FAX_END_TOKEN_LENGTH;
@@ -1274,19 +1274,21 @@ bool GenPspGraphics::filterText( const String& rOrig, String& rNewText, xub_StrL
         }
         int nTokenStart = nStart + (bStarted ? FAX_PHONE_TOKEN_LENGTH : 0);
         int nTokenStop = nStop - (bStopped ? FAX_END_TOKEN_LENGTH : 0);
-        m_aPhoneCollection += aPhone.Copy( nTokenStart, nTokenStop - nTokenStart );
+        m_aPhoneCollection += aPhone.copy( nTokenStart, nTokenStop - nTokenStart );
         if( ! m_bPhoneCollectionActive )
         {
-            m_pPhoneNr->AppendAscii( "<Fax#>" );
-            m_pPhoneNr->Append( m_aPhoneCollection );
-            m_pPhoneNr->AppendAscii( "</Fax#>" );
-            m_aPhoneCollection.Erase();
+            rtl::OUStringBuffer aPhoneNr;
+            aPhoneNr.appendAscii( RTL_CONSTASCII_STRINGPARAM( "<Fax#>" ) );
+            aPhoneNr.append( m_aPhoneCollection );
+            aPhoneNr.appendAscii( RTL_CONSTASCII_STRINGPARAM( "</Fax#>" ) );
+            *m_pPhoneNr = aPhoneNr.makeStringAndClear();
+            m_aPhoneCollection = rtl::OUString();
         }
     }
-    if( m_aPhoneCollection.Len() > 1024 )
+    if( m_aPhoneCollection.getLength() > 1024 )
     {
         m_bPhoneCollectionActive = false;
-        m_aPhoneCollection.Erase();
+        m_aPhoneCollection = rtl::OUString();
         bRet = false;
     }
 
@@ -1295,9 +1297,7 @@ bool GenPspGraphics::filterText( const String& rOrig, String& rNewText, xub_StrL
         rLen -= nStop - nStart;
         rCutStart = nStart+nIndex;
         rCutStop = nStop+nIndex;
-        if( rCutStart )
-            rNewText = rOrig.Copy( 0, rCutStart );
-        rNewText += rOrig.Copy( rCutStop );
+        rNewText = ( rCutStart ? rOrig.copy( 0, rCutStart ) : rtl::OUString() ) + rOrig.copy( rCutStop );
     }
 
     return bRet && m_bSwallowFaxNo;

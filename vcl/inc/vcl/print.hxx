@@ -29,6 +29,8 @@
 #ifndef _SV_PRINT_HXX
 #define _SV_PRINT_HXX
 
+#include <rtl/ustring.hxx>
+
 #include "tools/errcode.hxx"
 #include "vcl/sv.h"
 #include "vcl/dllapi.h"
@@ -106,10 +108,10 @@ class VCL_DLLPUBLIC QueueInfo
     friend class Printer;
 
 private:
-    XubString                   maPrinterName;
-    XubString                   maDriver;
-    XubString                   maLocation;
-    XubString                   maComment;
+    rtl::OUString                   maPrinterName;
+    rtl::OUString                   maDriver;
+    rtl::OUString                   maLocation;
+    rtl::OUString                   maComment;
     sal_uInt32                  mnStatus;
     sal_uInt32                  mnJobs;
 
@@ -118,10 +120,10 @@ public:
                                 QueueInfo( const QueueInfo& rInfo );
                                 ~QueueInfo();
 
-    const XubString&            GetPrinterName() const { return maPrinterName; }
-    const XubString&            GetDriver() const { return maDriver; }
-    const XubString&            GetLocation() const { return maLocation; }
-    const XubString&            GetComment() const { return maComment; }
+    const rtl::OUString&            GetPrinterName() const { return maPrinterName; }
+    const rtl::OUString&            GetDriver() const { return maDriver; }
+    const rtl::OUString&            GetLocation() const { return maLocation; }
+    const rtl::OUString&            GetComment() const { return maComment; }
     sal_uInt32                  GetStatus() const { return mnStatus; }
     sal_uInt32                  GetJobs() const { return mnJobs; }
 
@@ -233,10 +235,10 @@ private:
     Printer*                    mpNext;
     VirtualDevice*              mpDisplayDev;
     PrinterOptions*             mpPrinterOptions;
-    XubString                   maPrinterName;
-    XubString                   maDriver;
-    XubString                   maPrintFile;
-    XubString                   maJobName;
+    rtl::OUString                   maPrinterName;
+    rtl::OUString                   maDriver;
+    rtl::OUString                   maPrintFile;
+    rtl::OUString                   maJobName;
     JobSetup                    maJobSetup;
     Point                       maPageOffset;
     Size                        maPaperSize;
@@ -260,8 +262,8 @@ private:
     SAL_DLLPRIVATE void         ImplInitData();
     SAL_DLLPRIVATE void         ImplInit( SalPrinterQueueInfo* pInfo );
     SAL_DLLPRIVATE void         ImplInitDisplay( const Window* pWindow );
-    SAL_DLLPRIVATE static SalPrinterQueueInfo* ImplGetQueueInfo( const XubString& rPrinterName,
-                                                  const XubString* pDriver );
+    SAL_DLLPRIVATE static SalPrinterQueueInfo* ImplGetQueueInfo( const rtl::OUString& rPrinterName,
+                                                  const rtl::OUString* pDriver );
     SAL_DLLPRIVATE void         ImplUpdatePageData();
     SAL_DLLPRIVATE void         ImplUpdateFontList();
     SAL_DLLPRIVATE void         ImplFindPaperFormatForUserSize( JobSetup&, bool bMatchNearest );
@@ -289,17 +291,17 @@ public:
                                 Printer();
                                 Printer( const JobSetup& rJobSetup );
                                 Printer( const QueueInfo& rQueueInfo );
-                                Printer( const XubString& rPrinterName );
+                                Printer( const rtl::OUString& rPrinterName );
     virtual                     ~Printer();
 
     static const std::vector< rtl::OUString >& GetPrinterQueues();
-    static const QueueInfo*     GetQueueInfo( const String& rPrinterName, bool bStatusUpdate );
-    static XubString            GetDefaultPrinterName();
+    static const QueueInfo*     GetQueueInfo( const rtl::OUString& rPrinterName, bool bStatusUpdate );
+    static rtl::OUString            GetDefaultPrinterName();
 
     virtual void                Error();
 
-    const XubString&            GetName() const             { return maPrinterName; }
-    const XubString&            GetDriverName() const       { return maDriver; }
+    const rtl::OUString&            GetName() const             { return maPrinterName; }
+    const rtl::OUString&            GetDriverName() const       { return maDriver; }
     sal_Bool                        IsDefPrinter() const        { return mbDefPrinter; }
     sal_Bool                        IsDisplayPrinter() const    { return mpDisplayDev != NULL; }
     sal_Bool                        IsValid() const             { return !IsDisplayPrinter(); }
@@ -309,7 +311,7 @@ public:
 
     sal_Bool                        SetJobSetup( const JobSetup& rSetup );
     const JobSetup&             GetJobSetup() const { return maJobSetup; }
-    void                        SetJobValue( const String& rKey, const String& rValue ) { maJobSetup.SetValue( rKey, rValue ); }
+    void                        SetJobValue( const rtl::OUString& rKey, const rtl::OUString& rValue ) { maJobSetup.SetValue( rKey, rValue ); }
 
     sal_Bool                        Setup( Window* pWindow = NULL );
     sal_Bool                        SetPrinterProps( const Printer* pPrinter );
@@ -344,7 +346,7 @@ public:
     // returns info about paper format nPaper
     const PaperInfo&            GetPaperInfo( int nPaper ) const;
     sal_uInt16                      GetPaperBinCount() const;
-    XubString                   GetPaperBinName( sal_uInt16 nPaperBin ) const;
+    rtl::OUString                   GetPaperBinName( sal_uInt16 nPaperBin ) const;
 
     const Size&                 GetPaperSizePixel() const { return maPaperSize; }
     Size                        GetPaperSize() const { return PixelToLogic( maPaperSize ); }
@@ -357,7 +359,7 @@ public:
 
     sal_Bool                        IsPrinting() const { return mbPrinting; }
 
-    const XubString&            GetCurJobName() const { return maJobName; }
+    const rtl::OUString&            GetCurJobName() const { return maJobName; }
     sal_uInt16                      GetCurPage() const { return mnCurPage; }
     sal_Bool                        IsJobActive() const { return mbJobActive; }
 

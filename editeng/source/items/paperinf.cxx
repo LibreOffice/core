@@ -45,7 +45,7 @@
 
 inline sal_Bool IsValidPrinter( const Printer* pPtr )
 {
-    return pPtr->GetName().Len() ? sal_True : sal_False;
+    return pPtr->GetName().isEmpty() ? sal_False : sal_True;
 }
 
 //------------------------------------------------------------------------

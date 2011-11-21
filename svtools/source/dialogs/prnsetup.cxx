@@ -160,7 +160,7 @@ XubString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
     sal_uLong       nStatus = rInfo.GetStatus();
 
     // Default-Printer
-    if ( rInfo.GetPrinterName().Len() &&
+    if ( !rInfo.GetPrinterName().isEmpty() &&
          (rInfo.GetPrinterName() == Printer::GetDefaultPrinterName()) )
         ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_DEFPRINTER );
 
