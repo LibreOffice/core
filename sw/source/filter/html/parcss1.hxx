@@ -233,7 +233,6 @@ class CSS1Parser
 
     sal_uInt32 IncLineNr() { return ++nlLineNr; }
     sal_uInt32 IncLinePos() { return ++nlLinePos; }
-    inline sal_uInt32 SetLineNr( sal_uInt32 nlNum );            // inline unten
     inline sal_uInt32 SetLinePos( sal_uInt32 nlPos );           // inline unten
 
     // Parsen von Teilen der Grammatik
@@ -275,13 +274,6 @@ public:
     inline sal_uInt32   GetLineNr() const       { return nlLineNr; }
     inline sal_uInt32   GetLinePos() const      { return nlLinePos; }
 };
-
-inline sal_uInt32 CSS1Parser::SetLineNr( sal_uInt32 nlNum )
-{
-    sal_uInt32 nlOld = nlLineNr;
-    nlLineNr = nlNum;
-    return nlOld;
-}
 
 inline sal_uInt32 CSS1Parser::SetLinePos( sal_uInt32 nlPos )
 {
