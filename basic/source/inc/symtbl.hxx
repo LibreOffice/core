@@ -29,22 +29,13 @@
 #ifndef _SYMTBL_HXX
 #define _SYMTBL_HXX
 
-#include <svl/svarray.hxx>
-#include <tools/string.hxx>
-#include <basic/sbxdef.hxx>
-#include <basic/sbdef.hxx>
-
-class SbiSymDef;                    // base class
-class SbiProcDef;
 class SbiConstDef;
-class SbiSymPool;
-class SbiStringPool;
-
-class SvStream;
 class SbiParser;
+class SbiProcDef;
+class SbiStringPool;
+class SbiSymDef;                    // base class
 
 enum SbiSymScope { SbLOCAL, SbPARAM, SbPUBLIC, SbGLOBAL, SbRTL };
-
 
 // The string-pool collects string entries and
 // makes sure that they don't exist twice.
