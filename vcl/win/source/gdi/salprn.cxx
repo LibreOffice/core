@@ -368,7 +368,7 @@ static sal_Bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
         }
         SalDriverData* pSetupDriverData = (SalDriverData*)(pSetupData->mpDriverData);
         if ( (pSetupData->mnSystem == JOBSETUP_SYSTEM_WINDOWS) &&
-             (pPrinter->maDriverName == pSetupData->maDriver) &&
+             (OUString(pPrinter->maDriverName) == pSetupData->maDriver) &&
              (pSetupData->mnDriverDataLen > sizeof( SalDriverData )) &&
              (long)(pSetupData->mnDriverDataLen - pSetupDriverData->mnDriverOffset) == nSysJobSize &&
              pSetupDriverData->mnSysSignature == SAL_DRIVERDATA_SYSSIGN )
