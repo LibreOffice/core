@@ -120,16 +120,16 @@ $(eval $(call gb_CppunitTest_add_components,sc_filters_test,\
     xmlsecurity/util/xmlsecurity \
 ))
 
+ifeq ($(ENABLE_XMLSEC),YES)
 ifeq ($(OS),WNT)
 $(eval $(call gb_CppunitTest_add_components,sc_filters_test,\
     xmlsecurity/util/xsec_xmlsec.windows \
 ))
-
 else
 $(eval $(call gb_CppunitTest_add_components,sc_filters_test,\
     xmlsecurity/util/xsec_xmlsec \
 ))
-
+endif
 endif
 
 $(eval $(call gb_CppunitTest_add_old_components,sc_filters_test,\
