@@ -210,7 +210,7 @@ void WinSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 void WinSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
 {
     HANDLE hPrinter = 0;
-    LPWSTR pPrnName = reinterpret_cast<LPWSTR>(const_cast<sal_Unicode*>(pInfo->maPrinterName.GetBuffer()));
+    LPWSTR pPrnName = reinterpret_cast<LPWSTR>(const_cast<sal_Unicode*>(pInfo->maPrinterName.getStr()));
     if( OpenPrinterW( pPrnName, &hPrinter, NULL ) )
     {
         DWORD               nBytes = 0;

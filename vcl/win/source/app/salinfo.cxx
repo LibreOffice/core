@@ -246,8 +246,8 @@ int WinSalSystem::ShowNativeMessageBox(const rtl::OUString& rTitle, const rtl::O
     ImplHideSplash();
     return MessageBoxW(
         0,
-        reinterpret_cast<LPCWSTR>(rMessage.GetBuffer()),
-        reinterpret_cast<LPCWSTR>(rTitle.GetBuffer()),
+        reinterpret_cast<LPCWSTR>(rMessage.getStr()),
+        reinterpret_cast<LPCWSTR>(rTitle.getStr()),
         nFlags);
 }
 
