@@ -62,7 +62,7 @@
 <paragraph role="heading" id="hd_id2162236" xml-lang="en-US" level="2" l10n="NEW">Tables</paragraph>
 <paragraph role="paragraph" id="par_id3037202" xml-lang="en-US" l10n="NEW">Simple tables are supported well. Table headers are translated into corresponding Wiki style table headers. However, custom formatting of table borders, column sizes and background colors is ignored.</paragraph>
 <paragraph role="heading" id="hd_id2954496" xml-lang="en-US" level="3" l10n="NEW">Joined Cells</paragraph>
-<paragraph role="paragraph" id="par_id8253730" xml-lang="en-US" l10n="NEW">OpenDocument and especially OpenOffice.org represent tables that have joined cells that span rows as tables with nested tables. In contrast, the wiki model of table is to declare column and row spans for such joined cells. </paragraph>
+<paragraph role="paragraph" id="par_id8253730" xml-lang="en-US" l10n="NEW">OpenDocument and especially LibreOffice represent tables that have joined cells that span rows as tables with nested tables. In contrast, the wiki model of table is to declare column and row spans for such joined cells. </paragraph>
 <paragraph role="paragraph" id="par_id8163090" xml-lang="en-US" l10n="NEW">If only columns of the same row are joined, the result of the transformation resembles the source document very well.</paragraph>
 <paragraph role="heading" id="hd_id425122" xml-lang="en-US" level="3" l10n="NEW">Borders</paragraph>
 <paragraph role="paragraph" id="par_id1831110" xml-lang="en-US" l10n="NEW">Irrespective of custom table styles for border and background, a table is always exported as "<emph>prettytable"</emph>, which renders in the Wiki engine with simple borders and bold header.</paragraph>
