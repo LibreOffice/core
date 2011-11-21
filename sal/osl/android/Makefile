@@ -65,6 +65,8 @@ ndk-build:
 		  icudatalo \
 		  icui18nlo \
 		  icuuclo \
+		  localedata_en \
+		  localedata_others \
 		  reg \
 		  store \
 		  ucbhelper4gcc3 \
