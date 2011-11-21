@@ -268,9 +268,9 @@ SimpleWinLayout::SimpleWinLayout( HDC hDC, BYTE nCharSet,
     mpGlyphs2Chars( NULL ),
     mpGlyphRTLFlags( NULL ),
     mnWidth( 0 ),
+    mbDisableGlyphs( false )
     mnNotdefWidth( -1 ),
     mnCharSet( nCharSet ),
-    mbDisableGlyphs( false )
 {
     mbDisableGlyphs = true;
 }
@@ -1231,21 +1231,22 @@ static bool InitUSP()
 UniscribeLayout::UniscribeLayout( HDC hDC,
     const ImplWinFontData& rWinFontData, ImplWinFontEntry& rWinFontEntry )
 :   WinLayout( hDC, rWinFontData, rWinFontEntry ),
-    mnItemCount( 0 ),
     mpScriptItems( NULL ),
     mpVisualItems( NULL ),
+    mnItemCount( 0 ),
+    mnCharCapacity( 0 ),
     mpLogClusters( NULL ),
     mpCharWidths( NULL ),
-    mnCharCapacity( 0 ),
     mnSubStringMin( 0 ),
-    mnGlyphCapacity( 0 ),
     mnGlyphCount( 0 ),
-    mpOutGlyphs( NULL ),
+    mnGlyphCapacity( 0 ),
     mpGlyphAdvances( NULL ),
     mpJustifications( NULL ),
+    mpOutGlyphs( NULL ),
     mpGlyphOffsets( NULL ),
     mpVisualAttrs( NULL ),
     mpGlyphs2Chars( NULL ),
+    mnMinKashidaWidth( 0 ),
     mnMinKashidaGlyph( 0 ),
     mbDisableGlyphInjection( false )
 {}
@@ -3061,9 +3062,9 @@ int    WinSalGraphics::GetMinKashidaWidth()
 
 ImplWinFontEntry::ImplWinFontEntry( FontSelectPattern& rFSD )
 :   ImplFontEntry( rFSD )
-,   maWidthMap( 512 )
 ,   mpKerningPairs( NULL )
 ,   mnKerningPairs( -1 )
+,   maWidthMap( 512 )
 ,    mnMinKashidaWidth( -1 )
 ,    mnMinKashidaGlyph( -1 )
 {

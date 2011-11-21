@@ -1211,8 +1211,8 @@ ImplWinFontData::ImplWinFontData( const ImplDevFontAttributes& rDFS,
     mnFontCharSetCount( 0 ),
     meWinCharSet( eWinCharSet ),
     mnPitchAndFamily( nPitchAndFamily ),
-    mbAliasSymbolsLow( false ),
     mbAliasSymbolsHigh( false ),
+    mbAliasSymbolsLow( false ),
     mbGsubRead( false )
 {
     SetBitmapSize( 0, nHeight );
