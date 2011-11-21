@@ -38,7 +38,7 @@ module com { module sun { module star { module mail {
    recipients are invalid. E-mail addresses have to conform
    to <a href="http://www.ietf.org/rfc/rfc822.txt">RFC&nbsp;822</a>.
 
-   @see com::sun::star::mail::XMailServer
+   @see com::sun::star::mail::XMailService
 
    @since OOo 2.0
  */

@@ -37,7 +37,7 @@ module com { module sun { module star { module mail {
 /**
    Represents a mail message.
 
-   @see com::sun::star::mail::XMailServer
+   @see com::sun::star::mail::XMailService
 
    @since OOo 2.0
  */

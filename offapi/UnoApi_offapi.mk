@@ -138,7 +138,6 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,offapi,offapi/com/sun/star/logg
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,offapi,offapi/com/sun/star/mail,\
 	MailMessage \
-	MailServer \
 	MailServiceProvider \
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,offapi,offapi/com/sun/star/media,\
@@ -2778,7 +2777,6 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/mail,\
 	XAuthenticator \
 	XConnectionListener \
 	XMailMessage \
-	XMailServer \
 	XMailService \
 	XMailServiceProvider \
 	XSmtpService \
