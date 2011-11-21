@@ -480,7 +480,7 @@ sub update_property_table
 
     my $propertyfile = installer::files::read_file($properyfilename);
 
-    my $hasarpnomodify = false;
+    my $hasarpnomodify = 0;
 
     # Getting the new values
     # Some values (arpcomments, arpcontacts, ...) are inserted from the Property.mlf
@@ -506,7 +506,7 @@ sub update_property_table
         ${$propertyfile}[$i] =~ s/\bPRODUCTNAMETEMPLATE\b/$productname/;
         ${$propertyfile}[$i] =~ s/\bPRODUCTVERSIONTEMPLATE\b/$productversion/;
         ${$propertyfile}[$i] =~ s/\bQUICKSTARTERLINKNAMETEMPLATE\b/$quickstarterlinkname/;
-        if ( ${$propertyfile}[$i] =~ m/\bARPNOMODIFY\b/ ) { $hasarpnomodify = true; }
+        if ( ${$propertyfile}[$i] =~ m/\bARPNOMODIFY\b/ ) { $hasarpnomodify = 1; }
     }
 
     # Check if are building silent MSI
