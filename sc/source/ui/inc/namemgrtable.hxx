@@ -45,21 +45,19 @@ class SC_DLLPUBLIC ScRangeManagerTable : public SvTabListBox
 {
 private:
     HeaderBar maHeaderBar;
-    ScRangeName* mpGlobalRangeName;
-    std::map<rtl::OUString, ScRangeName*> maTabRangeNames;
     rtl::OUString maGlobalString;
 
     void GetLine(ScRangeNameLine& aLine, SvLBoxEntry* pEntry);
+    void Init( const boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap );
 
 public:
-    ScRangeManagerTable( Window* pParent, ScRangeName* pGlobalRangeName, std::map<rtl::OUString, ScRangeName*> aTabRangeNames );
+    ScRangeManagerTable( Window* pParent, boost::ptr_map<rtl::OUString, ScRangeName>& aTabRangeNames );
     ~ScRangeManagerTable() {};
 
     void addEntry( const ScRangeNameLine& rLine );
     void DeleteSelectedEntries();
 
     void GetCurrentLine(ScRangeNameLine& rLine);
-    void UpdateEntries();
     bool IsMultiSelection();
     std::vector<ScRangeNameLine> GetSelectedEntries();
 };

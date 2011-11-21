@@ -31,6 +31,7 @@
 
 #include "undobase.hxx"
 #include "rangenam.hxx"
+#include <boost/ptr_container/ptr_map.hpp>
 
 class ScDocShell;
 
@@ -41,10 +42,8 @@ class ScUndoAllRangeNames : public ScSimpleUndo
 {
 public:
     ScUndoAllRangeNames(ScDocShell* pDocSh,
-                        const ScRangeName* pOldGlobal,
-                        const ScRangeName* pNewGlobal,
-                        const ScRangeName::TabNameCopyMap& rOldLocal,
-                        const ScRangeName::TabNameCopyMap& rNewLocal);
+                        const std::map<rtl::OUString, ScRangeName*>& rOldNames,
+                        const boost::ptr_map<rtl::OUString, ScRangeName>& rNewNames);
 
     virtual ~ScUndoAllRangeNames();
 
@@ -55,13 +54,11 @@ public:
     virtual String GetComment() const;
 
 private:
-    void DoChange(const ScRangeName& rGlobal, const ScRangeName::TabNameMap& rLocal);
+    void DoChange(const boost::ptr_map<rtl::OUString, ScRangeName*>& rNames);
 
 private:
-    ScRangeName maOldGlobalNames;
-    ScRangeName maNewGlobalNames;
-    ScRangeName::TabNameMap maOldLocalNames;
-    ScRangeName::TabNameMap maNewLocalNames;
+    boost::ptr_map<rtl::OUString, ScRangeName> maOldNames;
+    boost::ptr_map<rtl::OUString, ScRangeName> maNewNames;
 };
 
 #endif

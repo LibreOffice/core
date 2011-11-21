@@ -103,7 +103,9 @@ private:
     const ScAddress maCursorPos;
     Selection       maCurSel;
 
-    std::map<rtl::OUString, ScRangeName*> maRangeMap;
+    typedef boost::ptr_map<rtl::OUString, ScRangeName> RangeNameContainer;
+
+    RangeNameContainer maRangeMap;
 
 private:
     void Init();

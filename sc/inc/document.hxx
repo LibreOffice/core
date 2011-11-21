@@ -466,6 +466,7 @@ public:
      */
     SC_DLLPUBLIC void GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rRangeNames) const;
     SC_DLLPUBLIC void SetAllTabRangeNames(const ScRangeName::TabNameCopyMap& rRangeNames);
+    SC_DLLPUBLIC void SetAllRangeNames( const boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap);
     void GetTabRangeNameMap(std::map<rtl::OUString, ScRangeName*>& rRangeName);
     void GetRangeNameMap(std::map<rtl::OUString, ScRangeName*>& rRangeName);
     SC_DLLPUBLIC ScRangeName* GetRangeName(SCTAB nTab) const;

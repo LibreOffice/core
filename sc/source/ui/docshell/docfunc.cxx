@@ -74,6 +74,7 @@
 #include "drwlayer.hxx"
 #include "editutil.hxx"
 #include "globstr.hrc"
+#include "globalnames.hxx"
 #include "olinetab.hxx"
 #include "patattr.hxx"
 #include "rangenam.hxx"
@@ -4526,6 +4527,30 @@ bool ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc, SCTA
     }
 
     return true;
+}
+
+void ScDocFunc::ModifyAllRangeNames( const boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap )
+{
+    ScDocShellModificator aModificator(rDocShell);
+    ScDocument* pDoc = rDocShell.GetDocument();
+
+    if (pDoc->IsUndoEnabled())
+    {
+        std::map<rtl::OUString, ScRangeName*> aOldRangeMap;
+        pDoc->GetRangeNameMap(aOldRangeMap);
+        rDocShell.GetUndoManager()->AddUndoAction(
+                new ScUndoAllRangeNames(&rDocShell, aOldRangeMap, rRangeMap));
+    }
+
+    pDoc->CompileNameFormula(true);
+
+    // set all range names
+    pDoc->SetAllRangeNames(rRangeMap);
+
+    pDoc->CompileNameFormula(false);
+
+    aModificator.SetDocumentModified();
+    SFX_APP()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
 }
 
 //------------------------------------------------------------------------

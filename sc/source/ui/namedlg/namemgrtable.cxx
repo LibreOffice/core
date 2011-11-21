@@ -55,11 +55,9 @@ String createEntryString(const ScRangeNameLine& rLine)
     return aRet;
 }
 
-ScRangeManagerTable::ScRangeManagerTable( Window* pWindow, ScRangeName* pGlobalRangeName, std::map<rtl::OUString, ScRangeName*> aTabRangeNames ):
+ScRangeManagerTable::ScRangeManagerTable( Window* pWindow, boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap ):
     SvTabListBox( pWindow, WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP ),
     maHeaderBar( pWindow, WB_BUTTONSTYLE | WB_BOTTOMBORDER ),
-    mpGlobalRangeName( pGlobalRangeName ),
-    maTabRangeNames( aTabRangeNames ),
     maGlobalString( ResId::toString(ScResId(STR_GLOBAL_SCOPE)))
 {
     Size aBoxSize( pWindow->GetOutputSizePixel() );
@@ -85,6 +83,7 @@ ScRangeManagerTable::ScRangeManagerTable( Window* pWindow, ScRangeName* pGlobalR
     Show();
     maHeaderBar.Show();
     SetSelectionMode(MULTIPLE_SELECTION);
+    Init(rRangeMap);
 }
 
 void ScRangeManagerTable::addEntry(const ScRangeNameLine& rLine)
@@ -106,13 +105,13 @@ void ScRangeManagerTable::GetLine(ScRangeNameLine& rLine, SvLBoxEntry* pEntry)
     rLine.aScope = GetEntryText(pEntry, 2);
 }
 
-void ScRangeManagerTable::UpdateEntries()
+void ScRangeManagerTable::Init(const boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap)
 {
     Clear();
-    for (std::map<rtl::OUString, ScRangeName*>::iterator itr = maTabRangeNames.begin();
-            itr != maTabRangeNames.end(); ++itr)
+    for (boost::ptr_map<rtl::OUString, ScRangeName>::const_iterator itr = rRangeMap.begin();
+            itr != rRangeMap.end(); ++itr)
     {
-        ScRangeName* pLocalRangeName = itr->second;
+        const ScRangeName* pLocalRangeName = itr->second;
         ScRangeNameLine aLine;
         if (itr->first == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME)))
             aLine.aScope = maGlobalString;

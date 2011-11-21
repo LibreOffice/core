@@ -151,8 +151,16 @@ void ScNameDlg::Init()
     OSL_ENSURE( mpViewData && mpDoc, "ViewData oder Document nicht gefunden!" );
 
     //init UI
-    mpDoc->GetRangeNameMap(maRangeMap);
-    mpRangeManagerTable = new ScRangeManagerTable(&maNameMgrCtrl, mpDoc->GetRangeName(), maRangeMap);
+    std::map<rtl::OUString, ScRangeName*> aRangeMap;
+    mpDoc->GetRangeNameMap(aRangeMap);
+    RangeNameContainer::iterator itr = maRangeMap.begin(), itrEnd = maRangeMap.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        rtl::OUString aTemp(itr->first);
+        maRangeMap.insert(aTemp, new ScRangeName(*itr->second));
+    }
+
+    mpRangeManagerTable = new ScRangeManagerTable(&maNameMgrCtrl, maRangeMap);
     mpRangeManagerTable->SetSelectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
     mpRangeManagerTable->SetDeselectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
 
@@ -229,6 +237,8 @@ void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 sal_Bool ScNameDlg::Close()
 {
+    ScDocFunc aFunc(*mpViewData->GetDocShell());
+    aFunc.ModifyAllRangeNames(maRangeMap);
     return DoClose( ScNameDlgWrapper::GetChildWindowId() );
 }
 
@@ -291,8 +301,6 @@ bool ScNameDlg::IsFormulaValid()
 //updates the table and the buttons
 void ScNameDlg::UpdateNames()
 {
-    mpRangeManagerTable->UpdateEntries();
-
     ScRangeNameLine aLine;
     mpRangeManagerTable->GetCurrentLine(aLine);
     if (aLine.aName.getLength())

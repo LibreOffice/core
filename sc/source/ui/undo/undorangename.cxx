@@ -43,31 +43,27 @@ using ::std::auto_ptr;
 
 ScUndoAllRangeNames::ScUndoAllRangeNames(
     ScDocShell* pDocSh,
-    const ScRangeName* pOldGlobal, const ScRangeName* pNewGlobal,
-    const ScRangeName::TabNameCopyMap &rOldLocal, const ScRangeName::TabNameCopyMap &rNewLocal) :
+    const std::map<rtl::OUString, ScRangeName*>& rOldNames,
+    const boost::ptr_map<rtl::OUString, ScRangeName>& rNewNames) :
     ScSimpleUndo(pDocSh)
 {
-    if (pOldGlobal)
-        maOldGlobalNames = *pOldGlobal;
-    if (pNewGlobal)
-        maNewGlobalNames = *pNewGlobal;
-
     // Copy sheet-local names.
-    ScRangeName::TabNameCopyMap::const_iterator itr, itrEnd;
-    for (itr = rOldLocal.begin(), itrEnd = rOldLocal.end(); itr != itrEnd; ++itr)
+    std::map<rtl::OUString, ScRangeName*>::const_iterator itr, itrEnd;
+    for (itr = rOldNames.begin(), itrEnd = rOldNames.end(); itr != itrEnd; ++itr)
     {
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         auto_ptr<ScRangeName> p(new ScRangeName(*itr->second));
         SAL_WNODEPRECATED_DECLARATIONS_POP
-        maOldLocalNames.insert(itr->first, p);
+        maOldNames.insert(itr->first, p);
     }
 
-    for (itr = rNewLocal.begin(), itrEnd = rNewLocal.end(); itr != itrEnd; ++itr)
+    boost::ptr_map<rtl::OUString, ScRangeName>::const_iterator it, itEnd;
+    for (it = rNewNames.begin(), itEnd = rNewNames.end(); it != itEnd; ++it)
     {
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        auto_ptr<ScRangeName> p(new ScRangeName(*itr->second));
+        auto_ptr<ScRangeName> p(new ScRangeName(*it->second));
         SAL_WNODEPRECATED_DECLARATIONS_POP
-        maNewLocalNames.insert(itr->first, p);
+        maNewNames.insert(it->first, p);
     }
 }
 
@@ -77,12 +73,12 @@ ScUndoAllRangeNames::~ScUndoAllRangeNames()
 
 void ScUndoAllRangeNames::Undo()
 {
-    DoChange(maOldGlobalNames, maOldLocalNames);
+    DoChange(maOldNames);
 }
 
 void ScUndoAllRangeNames::Redo()
 {
-    DoChange(maNewGlobalNames, maNewLocalNames);
+    DoChange(maNewNames);
 }
 
 void ScUndoAllRangeNames::Repeat(SfxRepeatTarget& /*rTarget*/)
@@ -99,21 +95,13 @@ String ScUndoAllRangeNames::GetComment() const
     return ScGlobal::GetRscString(STR_UNDO_RANGENAMES);
 }
 
-void ScUndoAllRangeNames::DoChange(const ScRangeName& rGlobal, const ScRangeName::TabNameMap& rLocal)
+void ScUndoAllRangeNames::DoChange(const boost::ptr_map<rtl::OUString, ScRangeName*>& rNames)
 {
     ScDocument& rDoc = *pDocShell->GetDocument();
 
     rDoc.CompileNameFormula(true);
 
-    // Global names.
-    if (rGlobal.empty())
-        rDoc.SetRangeName(NULL);
-    else
-        rDoc.SetRangeName(new ScRangeName(rGlobal));
-
-    ScRangeName::TabNameCopyMap aCopy;
-    ScRangeName::copyLocalNames(rLocal, aCopy);
-    rDoc.SetAllTabRangeNames(aCopy);
+    rDoc.SetAllRangeNames(rNames);
 
     rDoc.CompileNameFormula(true);
 
