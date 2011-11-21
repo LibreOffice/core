@@ -86,6 +86,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,offapi,offapi/com/sun/star/depl
 $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,offapi,offapi/com/sun/star/document,\
 	DocumentProperties \
 	DocumentRevisionListPersistence \
+	OOXMLDocumentPropertiesImporter \
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,offapi,offapi/com/sun/star/drawing,\
 	SlideRenderer \
@@ -122,6 +123,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,offapi,offapi/com/sun/star/insp
 	StringRepresentation \
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,offapi,offapi/com/sun/star/linguistic2,\
+	LanguageGuessing \
 	Proofreader \
 	ProofreadingIterator \
 ))
@@ -136,6 +138,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,offapi,offapi/com/sun/star/logg
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,offapi,offapi/com/sun/star/mail,\
 	MailMessage \
+	MailServer \
 	MailServiceProvider \
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,offapi,offapi/com/sun/star/media,\
@@ -296,6 +299,8 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,offapi/com/sun/star/a
 	AccessibleWindow \
 	AnimatedImagesControl \
 	AnimatedImagesControlModel \
+	MenuBar \
+	PopupMenu \
 	RoadmapItem \
 	SpinningProgressControlModel \
 	TabController \
@@ -358,6 +363,8 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,offapi/com/sun/star/a
 	UnoControlTimeFieldModel \
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,offapi/com/sun/star/awt/grid,\
+	DefaultGridColumnModel \
+	GridColumn \
 	UnoControlGrid \
 	UnoControlGridModel \
 ))
@@ -407,7 +414,49 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,offapi/com/sun/star/c
 	XYDiagram \
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,offapi/com/sun/star/chart2,\
+	Axis \
+	CandleStickChartType \
+	ChartDocument \
+	ChartDocumentWrapper \
+	ChartType \
+	ChartTypeManager \
+	ChartTypeTemplate\
+	CoordinateSystem \
+	CoordinateSystemType \
+	DataPoint \
+	DataPointProperties \
+	DataSeries \
+	Diagram \
+	ErrorBar \
+	ExponentialScaling \
+	FormattedString \
+	GridProperties \
+	Legend \
+	LinearScaling \
+	LogarithmicScaling \
+	LogicTargetModel \
+	MutableDataSequence \
+	PowerScaling \
+	PropertyPool \
+	RegressionCurve \
+	RegressionCurveEquation \
+	Scaling \
+	StandardDiagramCreationParameters \
+	TextAnchor \
+	Title \
 	XFastPropertyState \
+	XStyleSupplier \
+))
+$(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,offapi/com/sun/star/chart2/data,\
+	DataFilter \
+	DataProvider \
+	DataSequence \
+	DataSink \
+	DataSource \
+	LabeledDataSequence \
+	RangeHighlighter \
+	RangeHighlightListener \
+	TabularDataProviderArguments \
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,offapi/com/sun/star/configuration,\
 	AccessRootElement \
@@ -434,6 +483,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,offapi/com/sun/star/c
 	Backend \
 	BackendAdapter \
 	CopyImporter \
+	DefaultBackend \
 	DataImporter \
 	HierarchyBrowser \
 	Importer \
@@ -507,11 +557,16 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,offapi/com/sun/star/d
 	Settings \
 	StandaloneDocumentInfo \
 	TypeDetection \
+	XMLBasicExporter \
+	XMLBasicImporter \
+	XMLOasisBasicExporter \
+	XMLOasisBasicImporter \
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,offapi/com/sun/star/drawing,\
 	AccessibleDrawDocumentView \
 	AccessibleGraphControl \
 	AccessibleGraphicShape \
+	AccessibleImageBullet \
 	AccessibleOLEShape \
 	AccessibleShape \
 	AccessibleSlideView \
@@ -576,6 +631,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,offapi/com/sun/star/d
 	TextProperties \
 	TextShape \
 	TransparencyGradientTable \
+	modules \
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,offapi/com/sun/star/embed,\
 	BaseStorage \
@@ -714,6 +770,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,offapi/com/sun/star/f
 	FrameLoader \
 	FrameLoaderFactory \
 	FramesContainer \
+	GlobalEventBroadcaster \
 	LayoutManager \
 	MediaTypeDetectionHelper \
 	ModuleManager \
@@ -739,6 +796,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,offapi/com/sun/star/g
 	Graphic \
 	GraphicDescriptor \
 	GraphicProvider \
+	GraphicRasterizer \
 	GraphicRendererVCL \
 	MediaProperties \
 ))
@@ -1470,6 +1528,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,offapi/com/sun/star/x
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/dom,\
 	SAXDocumentBuilder \
+	DocumentBuilder \
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/input,\
 	SaxDocumentHandler \
@@ -2497,6 +2556,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/frame,\
 	XTitleChangeBroadcaster \
 	XTitleChangeListener \
 	XToolbarController \
+	XToolbarControllerListener \
 	XTransientDocumentsDocumentContentFactory \
 	XUIControllerRegistration \
 	XUntitledNumbers \
@@ -2716,10 +2776,12 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/mail,\
 	MailException \
 	MailServiceType \
 	NoMailServiceProviderException \
+	NoMailTransportProviderException \
 	SendMailMessageFailedException \
 	XAuthenticator \
 	XConnectionListener \
 	XMailMessage \
+	XMailServer \
 	XMailService \
 	XMailServiceProvider \
 	XSmtpService \
@@ -2912,11 +2974,13 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/rendering,
 	XVolatileBitmap \
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/report,\
+	Calculation \
 	ForceNewPage \
 	GroupKeepTogether \
 	GroupOn \
 	KeepTogether \
 	ReportPrintOption \
+	SectionPageBreak \
 	XFixedLine \
 	XFixedText \
 	XFormatCondition \
@@ -3422,6 +3486,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/style,\
 	BreakType \
 	CaseMap \
 	DropCapFormat \
+	FootnoteLineStyle \
 	GraphicLocation \
 	HorizontalAlignment \
 	LineNumberPosition \
@@ -3554,6 +3619,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/text,\
 	BibliographyDataType \
 	ChapterFormat \
 	CharacterCompressionType \
+	ColumnSeparatorStyle \
 	ControlCharacter \
 	DateDisplayFormat \
 	DocumentStatistic \
