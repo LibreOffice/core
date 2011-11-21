@@ -268,9 +268,9 @@ SimpleWinLayout::SimpleWinLayout( HDC hDC, BYTE nCharSet,
     mpGlyphs2Chars( NULL ),
     mpGlyphRTLFlags( NULL ),
     mnWidth( 0 ),
-    mbDisableGlyphs( false )
+    mbDisableGlyphs( false ),
     mnNotdefWidth( -1 ),
-    mnCharSet( nCharSet ),
+    mnCharSet( nCharSet )
 {
     mbDisableGlyphs = true;
 }
