@@ -37,5 +37,5 @@ solariscopyright = "solariscopyrightfile"
 vendor = "The Document Foundation"
 description = "Software Development Kit for LibreOffice %PRODUCTVERSION"
 destpath = "/opt"
-packageversion = "%ABOUTBOXPRODUCTVERSION"
+packageversion = "%PACKAGEVERSION"
 End
