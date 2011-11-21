@@ -442,10 +442,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,offapi/com/sun/star/c
 	RegressionCurveEquation \
 	Scaling \
 	StandardDiagramCreationParameters \
-	TextAnchor \
 	Title \
-	XFastPropertyState \
-	XStyleSupplier \
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,offapi/com/sun/star/chart2/data,\
 	DataFilter \
