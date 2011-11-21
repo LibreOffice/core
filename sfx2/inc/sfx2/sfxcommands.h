@@ -303,7 +303,6 @@
 #define CMD_SID_ADDONS                              ".uno:Addons"
 #define CMD_SID_SHOW_IME_STATUS_WINDOW              ".uno:ShowImeStatusWindow"
 #define CMD_SID_UPDATE_CONFIG                       ".uno:UpdateConfiguration"
-#define CMD_SID_HELP_SUPPORTPAGE                    ".uno:HelpSupport"
 #define CMD_SID_HELP_TUTORIALS                      ".uno:HelpTutorials"
 #define CMD_SID_ADDONHELP                           ".uno:AddonHelp"
 #define CMD_SID_FORMATMENUSTATE                     ".uno:FormatMenuState"

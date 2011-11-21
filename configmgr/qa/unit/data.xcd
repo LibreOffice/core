@@ -4148,11 +4148,6 @@
           <value xml:lang="x-no-translate"></value><value xml:lang="en-US">Optio~n Bar</value>
         </prop>
       </node>
-      <node oor:name=".uno:HelpSupport" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">~Support</value>
-        </prop>
-      </node>
       <node oor:name=".uno:StatusBarVisible" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="x-no-translate"></value><value xml:lang="en-US">Status ~Bar</value>
