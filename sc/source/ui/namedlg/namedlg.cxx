@@ -109,7 +109,8 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     //
     mpViewData       ( ptrViewData ),
     mpDoc            ( ptrViewData->GetDocument() ),
-    maCursorPos      ( aCursorPos )
+    maCursorPos      ( aCursorPos ),
+    mbNeedUpdate     ( true )
 {
     Init();
     FreeResource();
@@ -418,6 +419,7 @@ void ScNameDlg::NameModified()
     if (pData)
     {
         pOldRangeName->erase(*pData);
+        mbNeedUpdate = false;
         mpRangeManagerTable->DeleteSelectedEntries();
         RangeType nType = RT_NAME |
             (maBtnRowHeader.IsChecked() ? RT_ROWHEADER : RangeType(0))
@@ -432,11 +434,18 @@ void ScNameDlg::NameModified()
         aLine.aExpression = aExpr;
         aLine.aScope = aNewScope;
         mpRangeManagerTable->addEntry(aLine);
+        mbNeedUpdate = true;
     }
 }
 
 void ScNameDlg::SelectionChanged()
 {
+    //don't update if we have just modified due to user input
+    if (!mbNeedUpdate)
+    {
+        return;
+    }
+
     if (mpRangeManagerTable->IsMultiSelection())
     {
         maEdName.Disable();
