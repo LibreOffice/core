@@ -31,6 +31,7 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,dtobj))
 $(eval $(call gb_StaticLibrary_set_include,dtobj,\
 	$$(INCLUDE) \
 	-I$(realpath $(SRCDIR)/dtrans/inc/pch) \
+	-I$(SRCDIR)/solenv/inc \
 ))
 
 $(eval $(call gb_StaticLibrary_add_api,dtobj,\
