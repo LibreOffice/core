@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef __ooo_vba_excel_SheetObject_idl__
-#define __ooo_vba_excel_SheetObject_idl__
+#ifndef __ooo_vba_excel_Button_idl__
+#define __ooo_vba_excel_Button_idl__
 
 #include <ooo/vba/excel/XSheetObject.idl>
 
