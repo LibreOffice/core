@@ -5991,13 +5991,13 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         nLen = static_cast<xub_StrLen>(nNewLen);
     }
 
-    String aStr;
+    String aStr = rOrigStr;
 
     // filter out special markers
     if( bFilter )
     {
         xub_StrLen nCutStart, nCutStop, nOrgLen = nLen;
-        rtl::OUString aTmpStr(rOrigStr);
+        rtl::OUString aTmpStr(aStr);
         bool bFiltered = mpGraphics->filterText( rOrigStr, aTmpStr, nMinIndex, nLen, nCutStart, nCutStop );
         aStr = aTmpStr;
         if( !nLen )
