@@ -258,7 +258,7 @@ public:
                 ~RawFontData() { delete[] mpRawBytes; }
     const unsigned char*    get() const { return mpRawBytes; }
     const unsigned char*    steal() { unsigned char* p = mpRawBytes; mpRawBytes = NULL; return p; }
-    const int               size() const { return mnByteCount; }
+    int               size() const { return mnByteCount; }
 
 private:
     unsigned char*  mpRawBytes;
