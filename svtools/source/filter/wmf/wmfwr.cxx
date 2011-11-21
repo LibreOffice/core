@@ -457,10 +457,10 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const Font & rFont)
     }
     *pWMF << nPitchFamily;
 
-    ByteString aFontName( rFont.GetName(), eFontNameEncoding );
+    rtl::OString aFontName(rtl::OUStringToOString(rFont.GetName(), eFontNameEncoding));
     for ( i = 0; i < W_LF_FACESIZE; i++ )
     {
-        sal_Char nChar = ( i < aFontName.Len() ) ? aFontName.GetChar( i ) : 0;
+        sal_Char nChar = ( i < aFontName.getLength() ) ? aFontName[i] : 0;
         *pWMF << nChar;
     }
     UpdateRecordHeader();

@@ -1253,7 +1253,8 @@ void SgfFontLst::AssignFN(const String& rFName)
 
 void SgfFontLst::ReadList()
 {
-    if (!Tried) {
+    if (!Tried)
+    {
         Tried=sal_True;
         LastID=0;
         LastLn=NULL;
@@ -1262,7 +1263,8 @@ void SgfFontLst::ReadList()
         aCfg.SetGroup("SGV Fonts fuer StarView");
         sal_uInt16 Anz=aCfg.GetKeyCount();
         sal_uInt16 i;
-        ByteString FID,Dsc;
+        rtl::OString FID;
+        ByteString Dsc;
 
         for (i=0;i<Anz;i++)
         {

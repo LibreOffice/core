@@ -232,15 +232,15 @@ sal_Bool XBMReader::ParseData( SvStream* pInStm, const ByteString& aLastLine, XB
 
             for( sal_uInt16 i = 0; ( i < nCount ) && ( nRow < nHeight ); i++ )
             {
-                const ByteString    aToken( aLine.GetToken( i, ',' ) );
-                const xub_StrLen nLen = aToken.Len();
+                const rtl::OString aToken(aLine.GetToken(i, ','));
+                const sal_Int32 nLen = aToken.getLength();
                 sal_Bool                bProcessed = sal_False;
 
                 nBit = nDigits = nValue = 0;
 
-                for( xub_StrLen n = 0UL; n < nLen; n++ )
+                for (sal_Int32 n = 0; n < nLen; ++n)
                 {
-                    const unsigned char cChar = aToken.GetChar( n );
+                    const unsigned char cChar = aToken[n];
                     const short         nTable = pHexTable[ cChar ];
 
                     if( isxdigit( cChar ) || !nTable )

@@ -1881,7 +1881,7 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
     // ^<!
     //
     // where the underlined subexpression has to be a HTML token
-    ByteString sCmp;
+    rtl::OString sCmp;
     bool bUCS2B = false;
     if( bSwitchToUCS2 )
     {
@@ -1932,23 +1932,23 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
     }
     else
     {
-        sCmp = (sal_Char *)pHeader;
+        sCmp = pHeader;
     }
 
-    sCmp.ToUpperAscii();
+    sCmp = sCmp.toAsciiUpperCase();
 
     // A HTML document must have a '<' in the first line
-    xub_StrLen nStart = sCmp.Search( '<' );
-    if( STRING_NOTFOUND  == nStart )
+    sal_Int32 nStart = sCmp.indexOf('<');
+    if (nStart == -1)
         return false;
     nStart++;
 
     // followed by arbitrary characters followed by a blank or '>'
     sal_Char c;
-    xub_StrLen nPos;
-    for( nPos = nStart; nPos<sCmp.Len(); nPos++ )
+    sal_Int32 nPos;
+    for( nPos = nStart; nPos < sCmp.getLength(); ++nPos )
     {
-        if( '>'==(c=sCmp.GetChar(nPos)) || HTML_ISSPACE(c) )
+        if( '>'==(c=sCmp[nPos]) || HTML_ISSPACE(c) )
             break;
     }
 
@@ -1959,20 +1959,20 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
     // the string following '<' has to be a known HTML token.
     // <DIR> is not interpreted as HTML. Otherwise the output of the DOS command "DIR"
     // could be interpreted as HTML.
-    String sTest( sCmp.Copy( nStart, nPos-nStart ), RTL_TEXTENCODING_ASCII_US );
+    String sTest( sCmp.copy( nStart, nPos-nStart ), RTL_TEXTENCODING_ASCII_US );
     int nTok = GetHTMLToken( sTest );
     if( 0 != nTok && HTML_DIRLIST_ON != nTok )
         return true;
 
     // "<!" at the very beginning of the file?
-    if( nStart == 1 && '!' == sCmp.GetChar( 1 ) )
+    if( nStart == 1 && '!' == sCmp[1] )
         return true;
 
     // <HTML> somewhere in the first 80 characters of the document
-    nStart = sCmp.Search( OOO_STRING_SVTOOLS_HTML_html );
-    if( nStart!=STRING_NOTFOUND &&
-        nStart>0 && '<'==sCmp.GetChar(nStart-1) &&
-        nStart+4 < sCmp.Len() && '>'==sCmp.GetChar(nStart+4) )
+    nStart = comphelper::string::indexOfL(sCmp, RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_html));
+    if( nStart != -1 &&
+        nStart>0 && '<'==sCmp[nStart-1] &&
+        nStart+4 < sCmp.getLength() && '>'==sCmp[nStart+4] )
         return true;
 
     // Else it's rather not a HTML document
