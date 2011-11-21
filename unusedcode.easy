@@ -169,6 +169,7 @@ ImpSvtData::~ImpSvtData()
 ImplBorderWindow::ImplBorderWindow(Window*, long, unsigned short, com::sun::star::uno::Any const&)
 ImplBorderWindow::SetHelpButton(unsigned char)
 ImplDevFontList::ImplFindByLocale(com::sun::star::lang::Locale&) const
+ImplEncirclementOverlay::ImplEncirclementOverlay(SdrPaintView const&, basegfx::B2DPoint const&)
 ImplEntryList::IsEntrySelected(String const&) const
 ImplImageList::GetImageCount() const
 ImplListBox::GetEntryFlags(unsigned short) const
@@ -305,7 +306,6 @@ SVGExport::pushClip(basegfx::B2DPolyPolygon const&)
 SalColormap::SalColormap(BitmapPalette const&)
 SalColormap::SetPalette(BitmapPalette const&)
 SalDisplay::IsLocal()
-SalGraphics::AddDevFontSubstitute(OutputDevice*, String const&, String const&, unsigned short)
 SalGraphics::DrawBitmap(SalTwoRect const*, SalBitmap const&, unsigned int, OutputDevice const*)
 SalGraphics::drawAlphaBitmap(SalTwoRect const&, SalBitmap const&, SalBitmap const&)
 SalGraphics::drawPolyLine(basegfx::B2DPolygon const&, double, basegfx::B2DVector const&, basegfx::B2DLineJoin)
@@ -460,6 +460,8 @@ ScVbaShapes::AddShape(rtl::OUString const&, rtl::OUString const&, int, int, int,
 ScVbaWindows::ScVbaWindows(com::sun::star::uno::Reference<ooo::vba::XHelperInterface> const&, com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> const&)
 ScVbaWorksheet::ScVbaWorksheet(com::sun::star::uno::Reference<ooo::vba::XHelperInterface> const&, com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 ScXMLExportDDELinks::CellsEqual(bool, bool, String const&, double const&, bool, bool, String const&, double const&) const
+ScXMLFilterContext::SetCaseSensitive(bool)
+ScXMLFilterContext::SetUseRegularExpressions(bool)
 ScaList::Insert(void*, unsigned int)
 SchXMLExport::SetProgress(int)
 SchXMLExportHelper_Impl::getCellAddress(int, int)
@@ -2179,6 +2181,7 @@ sdr::Comment::SetText(rtl::OUString const&)
 sdr::Comment::SetUserName(rtl::OUString const&)
 sdr::animation::Scheduler::Reset(unsigned int)
 sdr::contact::ViewContactOfPageObj::GetReferencedPage() const
+sdr::contact::ViewContactOfSdrMediaObj::hasPreferredSize() const
 sdr::contact::ViewObjectContactOfUnoControl::isControlVisible() const
 sdr::overlay::OverlayBitmapEx::setBitmapEx(BitmapEx const&)
 sdr::overlay::OverlayBitmapEx::setCenterXY(unsigned short, unsigned short)

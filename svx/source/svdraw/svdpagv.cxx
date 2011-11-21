@@ -327,21 +327,6 @@ void SdrPageView::PrePaint()
     }
 }
 
-void SdrPageView::PostPaint()
-{
-    const sal_uInt32 nCount(PageWindowCount());
-
-    for(sal_uInt32 a(0); a < nCount; a++)
-    {
-        SdrPageWindow* pCandidate = GetPageWindow(a);
-
-        if(pCandidate)
-        {
-            pCandidate->PostPaint();
-        }
-    }
-}
-
 void SdrPageView::CompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector) const
 {
     if(GetPage())
@@ -695,19 +680,6 @@ sal_Bool SdrPageView::IsLayer(const XubString& rName, const SetOfByte& rBS) cons
     }
 
     return bRet;
-}
-
-void SdrPageView::SetAllLayers(SetOfByte& rB, sal_Bool bJa)
-{
-    if(bJa)
-    {
-        rB.SetAll();
-        rB.Clear(SDRLAYER_NOTFOUND);
-    }
-    else
-    {
-        rB.ClearAll();
-    }
 }
 
 sal_Bool SdrPageView::IsObjMarkable(SdrObject* pObj) const

@@ -291,18 +291,6 @@ sal_Bool SdrMarkView::MarkPoints(const Rectangle* pRect, sal_Bool bUnmark)
     return bChgd;
 }
 
-sal_Bool SdrMarkView::MarkNextPoint(sal_Bool /*bPrev*/)
-{
-    ForceUndirtyMrkPnt();
-    sal_Bool bChgd=sal_False;
-    SortMarkedObjects();
-    // ...
-    if (bChgd) {
-        MarkListHasChanged();
-    }
-    return bChgd;
-}
-
 sal_Bool SdrMarkView::MarkNextPoint(const Point& /*rPnt*/, sal_Bool /*bPrev*/)
 {
     ForceUndirtyMrkPnt();
@@ -642,18 +630,6 @@ SdrHdl* SdrMarkView::GetGluePointHdl(const SdrObject* pObj, sal_uInt16 nId) cons
             pHdl->GetObjHdlNum()==nId ) return pHdl;
     }
     return NULL;
-}
-
-sal_Bool SdrMarkView::MarkNextGluePoint(sal_Bool /*bPrev*/)
-{
-    ForceUndirtyMrkPnt();
-    sal_Bool bChgd=sal_False;
-    SortMarkedObjects();
-    // ...
-    if (bChgd) {
-        MarkListHasChanged();
-    }
-    return bChgd;
 }
 
 sal_Bool SdrMarkView::MarkNextGluePoint(const Point& /*rPnt*/, sal_Bool /*bPrev*/)

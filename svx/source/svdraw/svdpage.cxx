@@ -1815,17 +1815,6 @@ SfxStyleSheet* SdrPage::GetTextStyleSheetForObject( SdrObject* pObj ) const
     return pObj->GetStyleSheet();
 }
 
-bool SdrPage::HasTransparentObjects( bool bCheckForAlphaChannel ) const
-{
-    bool bRet = false;
-
-    for( sal_uIntPtr n = 0, nCount = GetObjCount(); ( n < nCount ) && !bRet; n++ )
-        if( GetObj( n )->IsTransparent( bCheckForAlphaChannel ) )
-            bRet = true;
-
-    return bRet;
-}
-
 /** returns an averaged background color of this page */
 // #i75566# GetBackgroundColor -> GetPageBackgroundColor and bScreenDisplay hint value
 Color SdrPage::GetPageBackgroundColor( SdrPageView* pView, bool bScreenDisplay ) const

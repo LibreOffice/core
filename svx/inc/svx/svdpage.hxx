@@ -549,8 +549,6 @@ public:
 
     virtual SfxStyleSheet* GetTextStyleSheetForObject( SdrObject* pObj ) const;
 
-    bool HasTransparentObjects( bool bCheckForAlphaChannel = false ) const;
-
     /** *deprecated* returns an averaged background color of this page */
     // #i75566# GetBackgroundColor -> GetPageBackgroundColor
     Color GetPageBackgroundColor() const;

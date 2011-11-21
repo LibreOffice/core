@@ -133,7 +133,6 @@ protected:
 protected:
     void SetLayer(const String& rName, SetOfByte& rBS, sal_Bool bJa);
     sal_Bool IsLayer(const String& rName, const SetOfByte& rBS) const;
-    void SetAllLayers(SetOfByte& rB, sal_Bool bJa);
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
@@ -181,9 +180,6 @@ public:
     // PrePaint call forwarded from app windows
     void PrePaint();
 
-    // PostPaint call forwarded from app windows
-    void PostPaint();
-
     // rReg bezieht sich auf's OutDev, nicht auf die Page
     void CompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) const;
 
@@ -215,15 +211,12 @@ public:
 
     void SetLayerVisible(const String& rName, sal_Bool bShow = sal_True) { SetLayer(rName, aLayerVisi, bShow); if(!bShow) AdjHdl(); InvalidateAllWin(); }
     sal_Bool IsLayerVisible(const String& rName) const { return IsLayer(rName, aLayerVisi); }
-    void SetAllLayersVisible(sal_Bool bShow = sal_True) { SetAllLayers(aLayerVisi, bShow); if(!bShow) AdjHdl(); InvalidateAllWin(); }
 
     void SetLayerLocked(const String& rName, sal_Bool bLock = sal_True) { SetLayer(rName, aLayerLock, bLock); if(bLock) AdjHdl(); }
     sal_Bool IsLayerLocked(const String& rName) const { return IsLayer(rName,aLayerLock); }
-    void SetAllLayersLocked(sal_Bool bLock = sal_True) { SetAllLayers(aLayerLock, bLock); if(bLock) AdjHdl(); }
 
     void SetLayerPrintable(const String& rName, sal_Bool bPrn = sal_True) { SetLayer(rName, aLayerPrn, bPrn); }
     sal_Bool IsLayerPrintable(const String& rName) const { return IsLayer(rName, aLayerPrn); }
-    void SetAllLayersPrintable(sal_Bool bPrn = sal_True) { SetAllLayers(aLayerPrn, bPrn); }
 
     // PV stellt eine RefPage oder eine SubList eines RefObj dar oder Model ist ReadOnly
     sal_Bool IsReadOnly() const;

@@ -1167,7 +1167,6 @@ public:
 
 private:
     SVX_DLLPRIVATE SdrObjFactory(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pNewPage, SdrModel* pNewModel);
-    SVX_DLLPRIVATE SdrObjFactory(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrObject* pObj1);
 
 public:
     static SdrObject* MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pPage, SdrModel* pModel=NULL);

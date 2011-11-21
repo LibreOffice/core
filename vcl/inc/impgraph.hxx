@@ -128,10 +128,6 @@ private:
 
     void                ImplStartAnimation( OutputDevice* pOutDev,
                                             const Point& rDestPt,
-                                            long nExtraData = 0,
-                                            OutputDevice* pFirstFrameOutDev = NULL );
-    void                ImplStartAnimation( OutputDevice* pOutDev,
-                                            const Point& rDestPt,
                                             const Size& rDestSize,
                                             long nExtraData = 0,
                                             OutputDevice* pFirstFrameOutDev = NULL );

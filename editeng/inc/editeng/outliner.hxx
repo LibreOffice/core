@@ -967,7 +967,6 @@ public:
 
     void            SetGlobalCharStretching( sal_uInt16 nX = 100, sal_uInt16 nY = 100 );
     void            GetGlobalCharStretching( sal_uInt16& rX, sal_uInt16& rY );
-    void            DoStretchChars( sal_uInt16 nX, sal_uInt16 nY );
     void            EraseVirtualDevice();
 
     sal_Bool            ShouldCreateBigTextObject() const;

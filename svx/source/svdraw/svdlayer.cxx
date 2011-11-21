@@ -349,17 +349,6 @@ SdrLayer* SdrLayerAdmin::NewStandardLayer(sal_uInt16 nPos)
     return pLay;
 }
 
-SdrLayer* SdrLayerAdmin::MoveLayer(sal_uInt16 nPos, sal_uInt16 nNewPos)
-{
-    SdrLayer* pLayer=(SdrLayer*)(aLayer.Remove(nPos));
-    if (pLayer!=NULL) {
-        aLayer.Insert(pLayer,nNewPos);
-    }
-
-    Broadcast();
-    return pLayer;
-}
-
 sal_uInt16 SdrLayerAdmin::GetLayerPos(SdrLayer* pLayer) const
 {
     sal_uIntPtr nRet=SDRLAYER_NOTFOUND;

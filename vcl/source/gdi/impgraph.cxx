@@ -851,17 +851,6 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev,
 
 // ------------------------------------------------------------------------
 
-void ImpGraphic::ImplStartAnimation( OutputDevice* pOutDev,
-                                     const Point& rDestPt,
-                                     long nExtraData,
-                                     OutputDevice* pFirstFrameOutDev )
-{
-    if( ImplIsSupportedGraphic() && !ImplIsSwapOut() && mpAnimation )
-        mpAnimation->Start( pOutDev, rDestPt, nExtraData, pFirstFrameOutDev );
-}
-
-// ------------------------------------------------------------------------
-
 void ImpGraphic::ImplStartAnimation( OutputDevice* pOutDev, const Point& rDestPt,
                                      const Size& rDestSize, long nExtraData,
                                      OutputDevice* pFirstFrameOutDev )

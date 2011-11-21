@@ -3034,17 +3034,6 @@ SdrObjFactory::SdrObjFactory(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pNe
     pNewData=NULL;
 }
 
-SdrObjFactory::SdrObjFactory(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrObject* pObj1)
-{
-    nInventor=nInvent;
-    nIdentifier=nIdent;
-    pNewObj=NULL;
-    pPage=NULL;
-    pModel=NULL;
-    pObj=pObj1;
-    pNewData=NULL;
-}
-
 SdrObject* SdrObjFactory::MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pPage, SdrModel* pModel)
 {
     if(pModel == NULL && pPage != NULL)

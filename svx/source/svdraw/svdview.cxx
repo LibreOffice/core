@@ -965,7 +965,7 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
 
         return mpCurrentSdrDragMethod->GetSdrDragPointer();
     }
-    if (IsMarkObj() || IsMarkPoints() || IsMarkGluePoints() || IsEncirclement() || IsSetPageOrg()) return Pointer(POINTER_ARROW);
+    if (IsMarkObj() || IsMarkPoints() || IsMarkGluePoints() || IsSetPageOrg()) return Pointer(POINTER_ARROW);
     if (IsDragHelpLine()) return GetDraggedHelpLinePointer();
     if (IsMacroObj()) {
         SdrObjMacroHitRec aHitRec;

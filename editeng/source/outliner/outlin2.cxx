@@ -608,13 +608,6 @@ void Outliner::GetGlobalCharStretching( sal_uInt16& rX, sal_uInt16& rY )
     pEditEngine->GetGlobalCharStretching( rX, rY );
 }
 
-
-void Outliner::DoStretchChars( sal_uInt16 nX, sal_uInt16 nY )
-{
-    DBG_CHKTHIS(Outliner,0);
-    pEditEngine->DoStretchChars( nX, nY );
-}
-
 void Outliner::EraseVirtualDevice()
 {
     DBG_CHKTHIS(Outliner,0);

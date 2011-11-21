@@ -359,13 +359,6 @@ public:
     sal_Bool UnmarkAllPoints() { return MarkPoints(NULL,sal_True); }
     sal_Bool UnMarkAllPoints() { return MarkPoints(NULL,sal_True); }
 
-    // Sucht sich den ersten markierten Punkt (P1) und sucht von dort
-    // aus in den ersten nichtmarkierte Punkt (P2).
-    // Bei Erfolg wird die Markierung von P1 entfernt, an P2 gesetzt und TRUE
-    // returniert. Mit dem Parameter bPrev=sal_True geht die Suche genau in die
-    // andere Richtung.
-    sal_Bool MarkNextPoint(sal_Bool bPrev=sal_False);
-
     // Sucht sich den ersten markierten Punkt (P1) das von rPnt
     // getroffen wird und sucht von dort aus den
     // ersten nichtmarkierten Punkt (P2). Bei Erfolg wird die Markierung von
@@ -427,13 +420,6 @@ public:
     sal_Bool UnmarkGluePoints(const Rectangle& rRect) { return MarkGluePoints(&rRect,sal_True); }
     sal_Bool MarkAllGluePoints() { return MarkGluePoints(NULL,sal_False); }
     sal_Bool UnmarkAllGluePoints() { return MarkGluePoints(NULL,sal_True); }
-
-    // Sucht sich den ersten markierten Klebepunkt (P1) und sucht von dort
-    // aus in den ersten nichtmarkierte Klebepunkt (P2).
-    // Bei Erfolg wird die Markierung von P1 entfernt, an P2 gesetzt und TRUE
-    // returniert. Mit dem Parameter bPrev=sal_True geht die Suche genau in die
-    // andere Richtung.
-    sal_Bool MarkNextGluePoint(sal_Bool bPrev=sal_False);
 
     // Sucht sich den ersten markierten Klebepunkt (P1) das von rPnt
     // getroffen wird und sucht von dort aus den
