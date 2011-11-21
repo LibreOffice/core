@@ -2169,7 +2169,7 @@ static int WINAPI __AddFontResourceExW( LPCWSTR lpszfileName, DWORD fl, PVOID pd
 }
 #endif
 
-bool ImplAddTempFont( SalData& rSalData, const String& rFontFileURL )
+bool ImplAddTempFont( SalData& rSalData, const rtl::OUString& rFontFileURL )
 {
     int nRet = 0;
     ::rtl::OUString aUSytemPath;
