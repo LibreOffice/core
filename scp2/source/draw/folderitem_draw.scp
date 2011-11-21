@@ -27,6 +27,7 @@
 
 #include "macros.inc"
 
+#ifndef ENABLE_SILENT_MSI
 FolderItem gid_Folderitem_Sdraw
     Name = "%PRODUCTNAME Draw";
     ModuleID = gid_Module_Prg_Draw_Bin;
@@ -39,3 +40,4 @@ FolderItem gid_Folderitem_Sdraw
     Styles = (NOWEB, NON_ADVERTISED);
     ALL_LANG(Tooltip, STR_FI_TOOLTIP_DRAW);
 End
+#endif

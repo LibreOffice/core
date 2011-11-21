@@ -8468,6 +8468,7 @@ if test "z$enable_silent_msi" = "z" -o "z$enable_silent_msi" = "zno" ; then
 else
     AC_MSG_RESULT([yes])
     ENABLE_SILENT_MSI="TRUE"
+    SCPDEFS="$SCPDEFS -DENABLE_SILENT_MSI"
 fi
 AC_SUBST(ENABLE_SILENT_MSI)
 

@@ -27,6 +27,7 @@
 
 #include "macros.inc"
 
+#ifndef ENABLE_SILENT_MSI
 FolderItem gid_Folderitem_Scalc
     Name = "%PRODUCTNAME Calc";
     ModuleID = gid_Module_Prg_Calc_Bin;
@@ -39,3 +40,4 @@ FolderItem gid_Folderitem_Scalc
     Styles = (NOWEB, NON_ADVERTISED);
     ALL_LANG(Tooltip, STR_FI_TOOLTIP_CALC);
 End
+#endif
