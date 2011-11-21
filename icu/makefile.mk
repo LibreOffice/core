@@ -112,6 +112,8 @@ icu_CFLAGS+=-DUCONFIG_NO_FILE_IO
 .IF "$(OS)"=="ANDROID"
 # Problems with uint64_t on Android unless disabling strictness
 DISABLE_STRICT=--disable-strict
+icu_CFLAGS+=-fno-omit-frame-pointer
+icu_CXXFLAGS+=-fno-omit-frame-pointer
 .ENDIF
 
 .IF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
