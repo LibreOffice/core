@@ -29,10 +29,6 @@
 #ifndef _PARCSS1_HXX
 #define _PARCSS1_HXX
 
-#include <tools/string.hxx>
-
-class Color;
-
 // Die Tokens des CSS1-Parsers
 enum CSS1Token
 {
