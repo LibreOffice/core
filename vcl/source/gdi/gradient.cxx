@@ -276,7 +276,6 @@ void Gradient::GetBoundRect( const Rectangle& rRect, Rectangle& rBoundRect, Poin
     }
     else
     {
-
         if( GetStyle() == GRADIENT_SQUARE || GetStyle() == GRADIENT_RECT )
         {
             const double    fAngle = nAngle * F_PI1800;
@@ -332,7 +331,7 @@ void Gradient::GetBoundRect( const Rectangle& rRect, Rectangle& rBoundRect, Poin
         aRect.Top() = rCenter.Y() - ( aSize.Height() >> 1 );
 
         aRect.SetSize( aSize );
-        rBoundRect = rRect;
+        rBoundRect = aRect;
     }
 }
 
