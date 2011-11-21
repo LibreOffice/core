@@ -434,7 +434,6 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,offapi/com/sun/star/c
 	LinearScaling \
 	LogarithmicScaling \
 	LogicTargetModel \
-	MutableDataSequence \
 	PowerScaling \
 	PropertyPool \
 	RegressionCurve \
