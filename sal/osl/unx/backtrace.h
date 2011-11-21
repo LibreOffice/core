@@ -62,8 +62,6 @@ struct frame {
 #include <execinfo.h>
 #endif
 
-#endif /* defined LINUX && SPARC */
-
 #if defined (MACOSX)
 
 #ifdef __cplusplus
