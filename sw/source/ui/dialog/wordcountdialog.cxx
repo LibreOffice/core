@@ -74,8 +74,6 @@ SwWordCountDialog::SwWordCountDialog(Dialog* pParent)
     , aOK(&dialog_action_area1, SW_RES(PB_OK))
     , aHelp(&dialog_action_area1, SW_RES(PB_HELP))
 {
-    Size aSize;
-
     rtl::OUString sForceInitialSize(RTL_CONSTASCII_USTRINGPARAM("00000000"));
     aCurrentWordFI.SetText(sForceInitialSize);
     aCurrentCharacterFI.SetText(sForceInitialSize);
@@ -151,16 +149,6 @@ SwWordCountDialog::SwWordCountDialog(Dialog* pParent)
 
     aBottomFL.setChildProperty(sFill, true);
     aBottomFL.setChildProperty(sFill, true);
-
-    aSize = dialog_vbox1.GetOptimalSize(WINDOWSIZE_PREFERRED);
-    dialog_vbox1.SetSizePixel(aSize);
-
-    aSize = pParent->GetOptimalSize(WINDOWSIZE_PREFERRED);
-    pParent->SetSizePixel(aSize);
-    fprintf(stderr, "size is %ld %ld on %p\n", aSize.Width(), aSize.Height(), pParent);
-
-    aSize = dialog_vbox1.GetOptimalSize(WINDOWSIZE_PREFERRED);
-    dialog_vbox1.SetSizePixel(aSize);
 
     aOK.setChildProperty<sal_Int32>(sPackType, VCL_PACK_END);
     aHelp.setChildProperty<sal_Int32>(sPackType, VCL_PACK_END);
