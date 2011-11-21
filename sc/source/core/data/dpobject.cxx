@@ -199,7 +199,8 @@ ScDPObject::ScDPObject( ScDocument* pD ) :
     mbHeaderLayout(false),
     bAllowMove(false),
     bAlive(false),
-    bSettingsChanged(false)
+    bSettingsChanged(false),
+    mbEnableGetPivotData(true)
 {
 }
 
@@ -219,7 +220,8 @@ ScDPObject::ScDPObject(const ScDPObject& r) :
     mbHeaderLayout( r.mbHeaderLayout ),
     bAllowMove(false),
     bAlive(false),
-    bSettingsChanged(false)
+    bSettingsChanged(false),
+    mbEnableGetPivotData(r.mbEnableGetPivotData)
 {
     if (r.pSaveData)
         pSaveData = new ScDPSaveData(*r.pSaveData);
@@ -240,6 +242,11 @@ ScDPObject::~ScDPObject()
     delete pImpDesc;
     delete pServDesc;
     ClearSource();
+}
+
+void ScDPObject::EnableGetPivotData(bool b)
+{
+    mbEnableGetPivotData = b;
 }
 
 void ScDPObject::SetAlive(bool bSet)
@@ -426,6 +433,26 @@ void ScDPObject::CreateOutput()
     }
 }
 
+namespace {
+
+class DisableGetPivotData
+{
+    ScDPObject& mrDPObj;
+    bool mbOldState;
+public:
+    DisableGetPivotData(ScDPObject& rObj, bool bOld) : mrDPObj(rObj), mbOldState(bOld)
+    {
+        mrDPObj.EnableGetPivotData(false);
+    }
+
+    ~DisableGetPivotData()
+    {
+        mrDPObj.EnableGetPivotData(mbOldState);
+    }
+};
+
+}
+
 ScDPTableData* ScDPObject::GetTableData()
 {
     if (!mpTableData)
@@ -444,9 +471,16 @@ ScDPTableData* ScDPObject::GetTableData()
                 OSL_FAIL("no source descriptor");
                 pSheetDesc = new ScSheetSourceDesc(pDoc);     // dummy defaults
             }
-            const ScDPCache* pCache = pSheetDesc->CreateCache();
-            if (pCache)
-                pData.reset(new ScSheetDPData(pDoc, *pSheetDesc, pCache));
+
+            {
+                // Temporarily disable GETPIVOTDATA to avoid having
+                // GETPIVOTDATA called onto itself from within the source
+                // range.
+                DisableGetPivotData aSwitch(*this, mbEnableGetPivotData);
+                const ScDPCache* pCache = pSheetDesc->CreateCache();
+                if (pCache)
+                    pData.reset(new ScSheetDPData(pDoc, *pSheetDesc, pCache));
+            }
         }
 
         // grouping (for cell or database data)
@@ -1047,8 +1081,10 @@ void ScDPObject::GetHeaderPositionData(const ScAddress& rPos, DataPilotTableHead
 bool ScDPObject::GetPivotData( ScDPGetPivotDataField& rTarget,
                                const std::vector< ScDPGetPivotDataField >& rFilters )
 {
-    CreateOutput();             // create xSource and pOutput if not already done
+    if (!mbEnableGetPivotData)
+        return false;
 
+    CreateOutput();             // create xSource and pOutput if not already done
     return pOutput->GetPivotData( rTarget, rFilters );
 }
 

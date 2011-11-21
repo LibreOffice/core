@@ -105,6 +105,7 @@ private:
     bool                    bAllowMove:1;
     bool                    bAlive:1;         // false if only used to hold settings
     bool                    bSettingsChanged:1;
+    bool                    mbEnableGetPivotData:1;
 
     SC_DLLPRIVATE ScDPTableData*    GetTableData();
     SC_DLLPRIVATE void              CreateObjects();
@@ -114,6 +115,8 @@ public:
     ScDPObject(ScDocument* pD);
     ScDPObject(const ScDPObject& r);
     ~ScDPObject();
+
+    void EnableGetPivotData(bool b);
 
     /**
      * When a DP object is "alive", it has table output on a sheet.  This flag
