@@ -260,6 +260,68 @@
         <Month>
           <MonthID>jan</MonthID>
           <DefaultAbbrvName>Sau</DefaultAbbrvName>
+          <DefaultFullName>sausis</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>Vas</DefaultAbbrvName>
+          <DefaultFullName>vasaris</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>Kov</DefaultAbbrvName>
+          <DefaultFullName>kovas</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>Bal</DefaultAbbrvName>
+          <DefaultFullName>balandis</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>Geg</DefaultAbbrvName>
+          <DefaultFullName>gegužė</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>Bir</DefaultAbbrvName>
+          <DefaultFullName>birželis</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>Lie</DefaultAbbrvName>
+          <DefaultFullName>liepa</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>Rgp</DefaultAbbrvName>
+          <DefaultFullName>rugpjūtis</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>Rgs</DefaultAbbrvName>
+          <DefaultFullName>rugsėjis</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>Spl</DefaultAbbrvName>
+          <DefaultFullName>spalis</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>Lap</DefaultAbbrvName>
+          <DefaultFullName>lapkritis</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>Grd</DefaultAbbrvName>
+          <DefaultFullName>gruodis</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <GenitiveMonths>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>Sau</DefaultAbbrvName>
           <DefaultFullName>sausio</DefaultFullName>
         </Month>
         <Month>
@@ -317,7 +379,7 @@
           <DefaultAbbrvName>Grd</DefaultAbbrvName>
           <DefaultFullName>gruodžio</DefaultFullName>
         </Month>
-      </MonthsOfYear>
+      </GenitiveMonths>
       <Eras>
         <Era>
           <EraID>bc</EraID>
