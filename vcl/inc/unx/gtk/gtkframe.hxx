@@ -205,7 +205,7 @@ class GtkSalFrame : public SalFrame
     bool                            m_bSendModChangeOnRelease;
     bool                            m_bWindowIsGtkPlug;
     bool                            m_bSetFocusOnMap;
-    String                          m_aTitle;
+    rtl::OUString                          m_aTitle;
     rtl::OUString                   m_sWMClass;
 
     IMHandler*                      m_pIMHandler;
@@ -340,7 +340,7 @@ public:
     // When Event is called, SalInstance::Yield() must be returned
     virtual sal_Bool                PostEvent( void* pData );
 
-    virtual void                SetTitle( const XubString& rTitle );
+    virtual void                SetTitle( const rtl::OUString& rTitle );
     virtual void                SetIcon( sal_uInt16 nIcon );
     virtual void                SetMenu( SalMenu *pSalMenu );
     virtual void                DrawMenuBar();
@@ -384,8 +384,8 @@ public:
     virtual void                SetInputContext( SalInputContext* pContext );
     virtual void                EndExtTextInput( sal_uInt16 nFlags );
 
-    virtual String              GetKeyName( sal_uInt16 nKeyCode );
-    virtual String              GetSymbolKeyName( const XubString& rFontName, sal_uInt16 nKeyCode );
+    virtual rtl::OUString              GetKeyName( sal_uInt16 nKeyCode );
+    virtual rtl::OUString              GetSymbolKeyName( const rtl::OUString& rFontName, sal_uInt16 nKeyCode );
     virtual sal_Bool            MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
 
     // returns the input language used for the last key stroke

@@ -30,6 +30,7 @@
 #include <string.h>
 #include <gmodule.h>
 #include <gtk/gtk.h>
+#include <comphelper/string.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtksys.hxx>
 
@@ -210,15 +211,16 @@ rtl::OUString GtkSalSystem::GetScreenName(unsigned int nScreen)
 }
 
 // convert ~ to indicate mnemonic to '_'
-static rtl::OString MapToGtkAccelerator(const String &rStr)
+static rtl::OString MapToGtkAccelerator(const rtl::OUString &rStr)
 {
-    String aRet( rStr );
-    aRet.SearchAndReplaceAscii("~", String::CreateFromAscii("_"));
-    return rtl::OUStringToOString(aRet, RTL_TEXTENCODING_UTF8);
+    const rtl::OUString aRep(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "_" )));
+    return rtl::OUStringToOString(
+            comphelper::string::searchAndReplaceAsciiL(
+                rStr, RTL_CONSTASCII_STRINGPARAM( "~" ), aRep), RTL_TEXTENCODING_UTF8);
 }
 
-int GtkSalSystem::ShowNativeDialog (const String& rTitle, const String& rMessage,
-                                    const std::list< String >& rButtonNames,
+int GtkSalSystem::ShowNativeDialog (const rtl::OUString& rTitle, const rtl::OUString& rMessage,
+                                    const std::list< rtl::OUString >& rButtonNames,
                                     int nDefaultButton)
 {
     rtl::OString aTitle (rtl::OUStringToOString (rTitle, RTL_TEXTENCODING_UTF8));
@@ -231,7 +233,7 @@ int GtkSalSystem::ShowNativeDialog (const String& rTitle, const String& rMessage
                       "text", aMessage.getStr(),
                       NULL));
     int nButton = 0;
-    std::list< String >::const_iterator it;
+    std::list< rtl::OUString >::const_iterator it;
     for (it = rButtonNames.begin(); it != rButtonNames.end(); ++it)
         gtk_dialog_add_button (pDialog, MapToGtkAccelerator(*it).getStr(), nButton++);
     gtk_dialog_set_default_response (pDialog, nDefaultButton);

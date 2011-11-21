@@ -1133,7 +1133,7 @@ sal_Bool GtkSalFrame::PostEvent( void* pData )
     return sal_True;
 }
 
-void GtkSalFrame::SetTitle( const String& rTitle )
+void GtkSalFrame::SetTitle( const rtl::OUString& rTitle )
 {
     m_aTitle = rTitle;
     if( m_pWindow && ! isChild() )
@@ -2358,25 +2358,25 @@ void GtkSalFrame::Sync()
     gdk_display_sync( getGdkDisplay() );
 }
 
-String GtkSalFrame::GetSymbolKeyName( const String&, sal_uInt16 nKeyCode )
+rtl::OUString GtkSalFrame::GetSymbolKeyName( const rtl::OUString&, sal_uInt16 nKeyCode )
 {
 #if !GTK_CHECK_VERSION(3,0,0)
   return getDisplay()->GetKeyName( nKeyCode );
 #else
   (void)nKeyCode;
 # warning FIXME - key names
-  return String();
+  return rtl::OUString();
 #endif
 }
 
-String GtkSalFrame::GetKeyName( sal_uInt16 nKeyCode )
+rtl::OUString GtkSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 {
 #if !GTK_CHECK_VERSION(3,0,0)
     return getDisplay()->GetKeyName( nKeyCode );
 #else
   (void)nKeyCode;
 # warning FIXME - key names
-  return String();
+  return rtl::OUString();
 #endif
 }
 
@@ -2621,7 +2621,7 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, int nSc
     }
 #endif
 
-    if( m_aTitle.Len() )
+    if( ! m_aTitle.isEmpty() )
         SetTitle( m_aTitle );
 
     if( bWasVisible )
