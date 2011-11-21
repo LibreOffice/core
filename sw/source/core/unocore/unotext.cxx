@@ -2501,7 +2501,8 @@ throw (uno::RuntimeException)
     }
     if(!aRef.is())
     {
-        throw uno::RuntimeException();
+        throw uno::RuntimeException( rtl::OUString::createFromAscii( "End of content node doesn't have the proper start node" ),
+               uno::Reference< uno::XInterface >( *this ) );
     }
     return aRef;
 }
