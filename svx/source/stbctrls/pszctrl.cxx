@@ -171,7 +171,7 @@ struct SvxPosSizeStatusBarControl_Impl
 /*  [Description]
 
     Ctor():
-    Create an intance of the implementation class, enable the page numbering by default
+    Create an instance of the implementation class,
     load the images for the position and size
 */
 
@@ -223,18 +223,16 @@ SvxPosSizeStatusBarControl::~SvxPosSizeStatusBarControl()
 
                 NULL/Void   SfxPointItem    SvxSizeItem     SfxStringItem
     ------------------------------------------------------------------------
-    Time        sal_True        sal_False           sal_False           FALSE
     Position    sal_False                                       FALSE
     Size        FALSE                       TRUE            FALSE
     Text        sal_False                       sal_False           TRUE
 
-    Another item resulst in an assert, that enables showing of the time.
 */
 
 void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                                const SfxPoolItem* pState )
 {
-    // the combi-controller, always set the curent Id as HelpId
+    // Because the combi-controller, always sets the curent Id as HelpId
     // first clean the cached HelpText
     GetStatusBar().SetHelpText( GetId(), String() );
 
@@ -298,7 +296,6 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     else
     {
         DBG_ERRORFILE( "invalid item type" );
-        // nevertheless show date and time
         pImp->bPos = sal_False;
         pImp->bSize = sal_False;
         pImp->bTable = sal_False;
@@ -307,8 +304,8 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     if ( GetStatusBar().AreItemsVisible() )
         GetStatusBar().SetItemData( GetId(), 0 );
 
-    //  set only strings as text at the statusBar, because the Help-Tips
-    //  functions, when the text is too long
+    //  set only strings as text at the statusBar, so that the Help-Tips
+    //  can work with the text, when it is too long for the statusBar
     String aText;
     if ( pImp->bTable )
         aText = pImp->aStr;
