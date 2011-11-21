@@ -29,6 +29,7 @@
 
 #include <com/sun/star/chart2/XLegend.idl>
 #include <com/sun/star/chart2/LegendPosition.idl>
+#include <com/sun/star/chart2/RelativePosition.idl>
 #include <com/sun/star/chart/ChartLegendExpansion.idl>
 #include <com/sun/star/beans/PropertySet.idl>
 #include <com/sun/star/drawing/LineProperties.idl>

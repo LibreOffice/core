@@ -29,6 +29,8 @@
 
 #include <com/sun/star/drawing/LineProperties.idl>
 #include <com/sun/star/chart/ErrorBarStyle.idl>
+#include <com/sun/star/chart2/data/XDataSink.idl>
+#include <com/sun/star/chart2/data/XDataSource.idl>
 
 module com
 {
@@ -50,15 +52,16 @@ service ErrorBar
     /** allows attaching data sequences to the error bars.
         @see data::DataSequenceRole
      */
-    optional interface data::XDataSink;
+    [optional] interface data::XDataSink;
 
     /** allows querying data sequences that were set at error bars.
         @see data::DataSequenceRole
      */
     [optional] interface data::XDataSource;
     /**
+        @see ::com::sun::star::chart::ErrorBarStyle
      */
-    [property] ::com::sun::star::chart::ErrorBarStyle ErrorBarStyle;
+    [property] long ErrorBarStyle;
 
     /**
      */

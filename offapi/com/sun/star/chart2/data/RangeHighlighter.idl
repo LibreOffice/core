@@ -27,7 +27,7 @@
 #ifndef com_sun_star_chart2_data_RangeHighlighter_idl
 #define com_sun_star_chart2_data_RangeHighlighter_idl
 
-#include <com/sun/star/chart2/XRangeHighlighter.idl>
+#include <com/sun/star/chart2/data/XRangeHighlighter.idl>
 
 module com
 {

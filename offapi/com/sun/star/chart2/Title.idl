@@ -28,11 +28,12 @@
 #define com_sun_star_chart_Title_idl
 
 #include <com/sun/star/style/ParagraphProperties.idl>
-#include <com/sun/star/layout/LayoutElement.idl>
 #include <com/sun/star/chart2/XTitle.idl>
+#include <com/sun/star/chart2/RelativePosition.idl>
 #include <com/sun/star/beans/PropertySet.idl>
 #include <com/sun/star/drawing/LineProperties.idl>
 #include <com/sun/star/drawing/FillProperties.idl>
+//FIXME does not exist <com/sun/star/layout/LayoutElement.idl>
 
 module com
 {
@@ -51,7 +52,7 @@ service Title
     service                ::com::sun::star::drawing::FillProperties;
     service                ::com::sun::star::drawing::LineProperties;
     service                ::com::sun::star::beans::PropertySet;
-    [optional] service     ::com::sun::star::layout::LayoutElement;
+//FIXME    [optional] service     ::com::sun::star::layout::LayoutElement;
 
     /**
      */

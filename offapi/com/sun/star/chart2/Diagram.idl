@@ -31,7 +31,7 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.idl>
 #include <com/sun/star/chart2/XTitled.idl>
 #include <com/sun/star/chart2/RelativePosition.idl>
-#include <com/sun/star/layout/RelativeSize.idl>
+#include <com/sun/star/chart2/RelativeSize.idl>
 #include <com/sun/star/chart/X3DDefaultSetter.idl>
 
 module com
@@ -72,7 +72,7 @@ service Diagram
 
     /** The size of the diagram as relative size of the page size.
      */
-    [property] ::com::sun::star::layout::RelativeSize RelativeSize;
+    [property] ::com::sun::star::chart2::RelativeSize RelativeSize;
 
     /** The attributes RelativePosition and RelativeSize should be used for the inner coordinate region without axis labels and without data labels.
      */

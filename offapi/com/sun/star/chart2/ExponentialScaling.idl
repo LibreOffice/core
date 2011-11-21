@@ -27,7 +27,7 @@
 #ifndef com_sun_star_chart2_ExponentialScaling_idl
 #define com_sun_star_chart2_ExponentialScaling_idl
 
-#include <com/sun/star/chart2/XScaling.idl>
+#include <com/sun/star/chart2/Scaling.idl>
 
 //=============================================================================
 

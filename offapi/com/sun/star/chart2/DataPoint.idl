@@ -28,7 +28,10 @@
 #define com_sun_star_chart2_DataPoint_idl
 
 #include <com/sun/star/style/CharacterProperties.idl>
+#include <com/sun/star/style/CharacterPropertiesAsian.idl>
+#include <com/sun/star/style/CharacterPropertiesComplex.idl>
 #include <com/sun/star/style/XStyle.idl>
+#include <com/sun/star/chart2/DataPointProperties.idl>
 
 module com
 {

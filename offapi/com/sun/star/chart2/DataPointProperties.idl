@@ -29,12 +29,14 @@
 
 #include <com/sun/star/beans/PropertySet.idl>
 #include <com/sun/star/awt/Gradient.idl>
+#include <com/sun/star/style/XStyle.idl>
 #include <com/sun/star/drawing/Hatch.idl>
 #include <com/sun/star/drawing/LineDash.idl>
-#include <com/sun/star/style/XStyle.idl>
-#include <com/sun/star/chart2/BitmapProperty.idl>
-#include <com/sun/star/chart2/TransparencyStyle.idl>
-#include <com/sun/star/chart2/DataCaptionStyle.idl>
+#include <com/sun/star/drawing/BitmapMode.idl>
+#include <com/sun/star/drawing/FillStyle.idl>
+#include <com/sun/star/drawing/LineStyle.idl>
+#include <com/sun/star/drawing/RectanglePoint.idl>
+#include <com/sun/star/chart2/DataPointLabel.idl>
 #include <com/sun/star/chart2/Symbol.idl>
 
 module com

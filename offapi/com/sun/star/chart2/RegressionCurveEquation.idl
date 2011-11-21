@@ -31,6 +31,7 @@
 #include <com/sun/star/drawing/LineProperties.idl>
 #include <com/sun/star/drawing/FillProperties.idl>
 #include <com/sun/star/style/CharacterProperties.idl>
+#include <com/sun/star/chart2/RelativePosition.idl>
 
 module com
 {
