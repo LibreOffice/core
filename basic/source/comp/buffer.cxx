@@ -29,9 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
 
-#include "sbcomp.hxx"
 #include "buffer.hxx"
-#include <string.h>
+#include "sbcomp.hxx"
 
 const static sal_uInt32 UP_LIMIT=0xFFFFFF00L;
 
