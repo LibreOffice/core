@@ -10,10 +10,6 @@ arm-linux-androideabi-strip --strip-debug $(SODEST)$(if $(2),/$(2),/$(notdir $(1
 cp $(1) $(OBJLOCAL)$(if $(2),/$(2))
 endef
 
-define CONDCOPY
-test -f $(1) && $(call COPY,$(1),$(2))
-endef
-
 # The default target just builds
 all: ndk-build
 	unset JAVA_HOME && ant debug
@@ -44,11 +40,11 @@ ndk-build:
 # this, these might not have been built yet.
 #
 	for F in $(SRC_ROOT)/cppu/$(INPATH)/lib/qa_*.so; do \
-	    $(call CONDCOPY,$${F},`basename $${F}`); \
+	    $(call COPY,$${F},`basename $${F}`); \
 	done
 #
 	for F in i18npool_test_breakiterator; do \
-	    $(call CONDCOPY,$(WORKDIR)/LinkTarget/CppunitTest/libtest_$${F}.so); \
+	    $(call COPY,$(WORKDIR)/LinkTarget/CppunitTest/libtest_$${F}.so); \
 	done
 
 #
@@ -78,7 +74,7 @@ ndk-build:
 		  xmlreader \
 		  bootstrap.uno \
 		  i18npool.uno); do \
-	    $(call CONDCOPY,$(OUTDIR)/lib/lib$${F}.so); \
+	    $(call COPY,$(OUTDIR)/lib/lib$${F}.so); \
 	done
 #
 # Then the shared GNU C++ library
