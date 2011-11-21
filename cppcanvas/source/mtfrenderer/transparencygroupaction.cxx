@@ -465,6 +465,21 @@ namespace cppcanvas
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::setRenderStateTransform(aLocalState, aTransform);
 
+#if OSL_DEBUG_LEVEL > 2
+                aLocalState.Clip.clear();
+                aLocalState.DeviceColor =
+                    ::vcl::unotools::colorToDoubleSequence(
+                        ::Color( 0x80FF0000 ),
+                        mpCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() );
+
+                if( maState.Clip.is() )
+                    mpCanvas->getUNOCanvas()->fillPolyPolygon( maState.Clip,
+                                                               mpCanvas->getViewState(),
+                                                               aLocalState );
+
+                aLocalState.DeviceColor = maState.DeviceColor;
+#endif
+
                 if( ::rtl::math::approxEqual(mnAlpha, 1.0) )
                 {
                     // no further alpha changes necessary -> draw directly
