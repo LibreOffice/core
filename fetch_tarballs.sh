@@ -106,9 +106,45 @@ start_dir=`pwd`
 logfile=$TARFILE_LOCATION/fetch.log
 date >> $logfile
 
-filelist=`cat $1`
+# Create and go to a temporary directory under the tar file destination.
 mkdir -p $TARFILE_LOCATION/tmp
 cd $TARFILE_LOCATION/tmp
+
+if [ -n "$DMAKE_URL" -a ! -x "$SOLARENV/$OUTPATH/bin/dmake$EXEEXT" ]; then
+    # Determine the name of the downloaded file.
+    dmake_package_name=`echo $DMAKE_URL | sed "s/^\(.*\/\)//"`
+
+    if [ ! -f "../$dmake_package_name" ]; then
+        # Fetch the dmake source
+        if [ ! -z "$wget" ]; then
+            echo fetching $DMAKE_URL with wget to $TARFILE_LOCATION/tmp
+            $wget -nv -N $DMAKE_URL 2>&1 | tee -a $logfile
+        else
+            echo fetching $DMAKE_URL with curl to $TARFILE_LOCATION/tmp
+            $curl $file_date_check -O $DMAKE_URL 2>&1 | tee -a $logfile
+        fi
+        wret=$?
+
+        # When the download failed then remove the remains, otherwise
+        # move the downloaded file up to TARFILE_LOCATION
+        if [ $wret -ne 0 ]; then
+            echo "download failed. removing $dmake_package_name"
+            rm "$dmake_package_name"
+            failed="$failed $i"
+            wret=0
+        else
+            mv "$dmake_package_name" ..
+            echo "successfully downloaded $dmake_package_name"
+        fi
+    else
+        echo "found $dmake_package_name, no need to download it again"
+    fi
+fi
+
+
+
+cd $TARFILE_LOCATION/tmp
+filelist=`cat $1`
 echo $$ > fetch-running
 for i in $filelist ; do
 #    echo $i

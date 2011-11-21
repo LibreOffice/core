@@ -1973,7 +1973,7 @@ ToFile( "DISABLE_XAW",       "@DISABLE_XAW@",      "e" );
 ToFile( "ENABLE_AGG",        "@ENABLE_AGG@",       "e" );
 ToFile( "SYSTEM_AGG",	     "@SYSTEM_AGG@",       "e" );
 ToFile( "AGG_VERSION",	     "@AGG_VERSION@",      "e" );
-ToFile( "BUILD_DMAKE",       "@BUILD_DMAKE@",      "e" );
+ToFile( "DMAKE_URL",         "@DMAKE_URL@",        "e" );
 ToFile( "BUILD_STAX",        "@BUILD_STAX@",       "e" );
 ToFile( "BUILD_UNOWINREG",   "@BUILD_UNOWINREG@",  "e" );
 ToFile( "USE_XINERAMA",      "@USE_XINERAMA@",     "e" );

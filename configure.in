@@ -16,6 +16,16 @@ AC_REVISION( $Revision: 1.290 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
+AC_ARG_WITH(dmake-path,
+[  --with-dmake-path=<PATH TO EXECUTABLE>   Specify the location of dmake ],
+[  DMAKE_PATH="$withval"
+])
+AC_ARG_WITH(dmake-url,
+[  --with-dmake-url=<URL>   Specify the location of downloadable dmake source code. For example:
+                          http://dmake.apache-extras.org.codespot.com/files/dmake-4.12.tar.bz2
+                          Note that dmake is under GPL license.],
+[  DMAKE_URL="$withval"
+])
 AC_ARG_WITH(gnu-patch,
 [  --with-gnu-patch        Specify location of GNU patch on Solaris or FreeBSD
 ],,)
@@ -1616,6 +1626,73 @@ else
    AC_MSG_ERROR([failed ($GNUMAKE version >= 3.81 needed])
 fi
 AC_SUBST(GNUMAKE)
+
+dnl ===================================================================
+dnl Search for a pre-installed dmake
+dnl ===================================================================
+AC_MSG_CHECKING([for dmake])
+AC_PATH_PROG(DMAKE, dmake, no)
+if test "$DMAKE" != "no"; then
+   AC_MSG_RESULT([using system dmake])
+else
+   # Did not find pre-installed dmake.
+   # Is it at a nonstandard location provided by --with-dmake-path ?
+   if test -n "$with_dmake_path" ; then
+      AC_PATH_PROG(DMAKE, dmake, no, "$with_dmake_path")
+      if test "$DMAKE" != "no"; then
+         AC_MSG_RESULT([using user provided dmake])
+      fi
+   fi
+fi
+
+DMAKE_URL=
+if test "$DMAKE" = "no"; then
+    AC_MSG_NOTICE([no system or user-provided dmake found])
+    # Check if a URL was supplied from which we can download the source and compile it.
+    if test -n "$with_dmake_url" ; then
+       # At this moment we can not verify the URL or the content that we want to download.
+       # Neither can we apply the test below for ruling out that it is the SunStudio dmake.
+       DMAKE_URL=$with_dmake_url
+       AC_MSG_RESULT([dmake will be downloaded and compiled in bootstrap])
+       DMAKE=
+    else
+       AC_MSG_WARN([no URL for dmake source code specified, either.])
+       BUILD_DMAKE=YES
+       AC_MSG_WARN([dmake will be built from internal sources but these will be removed in the future"])
+    fi
+else
+    AC_MSG_CHECKING([whether the found dmake is the right dmake])
+    # we need to find out whether that dmake we found is "our" dmake
+    # or the dmake from Sun's SunStudio Compiler which is something
+    # different
+    # This test _should_ work because the one accepts -V (ours) and one
+    # (the other) not...
+    $DMAKE -V 2>/dev/null | grep 'dmake .* Version .*' >/dev/null
+    if test $? -eq 0; then 
+       BUILD_DMAKE=NO
+       AC_MSG_RESULT([yes])
+       AC_MSG_CHECKING([the dmake version])
+       DMAKE_VERSION=`$DMAKE -V | $AWK '$3 == "Version" {print $4}'`
+       if test "`echo $DMAKE_VERSION | cut -d'.' -f1`" -gt "4"; then
+          AC_MSG_RESULT([OK, >= 4.11])
+       elif test "`echo $DMAKE_VERSION | cut -d'.' -f1`" = "4" && \
+	        test "`echo $DMAKE_VERSION | cut -d'.' -f2`" -ge "11"; then
+          AC_MSG_RESULT([OK, >= 4.11])
+       else
+          AC_MSG_ERROR([too old. >= 4.11 is needed])
+          DMAKE=no
+       fi
+    else
+       AC_MSG_WARN([no])
+       DMAKE=no
+    fi
+fi
+if test "$DMAKE" = "no"; then
+   AC_MSG_ERROR([please use --with-dmake-path or --with-dmake-url to specify dmake executable or source])
+fi
+AC_SUBST(DMAKE_URL)
+AC_SUBST(DMAKE)
+
 
 dnl ===================================================================
 dnl Search all the common names for GNU or BSD tar
@@ -3223,44 +3300,6 @@ dnl ===================================================================
 dnl ===================================================================
 dnl Checks for programs.
 dnl ===================================================================
-
-dnl ===================================================================
-dnl Check whether we already have dmake
-dnl ===================================================================
-AC_PATH_PROG(DMAKE, dmake, no)
-if test "$DMAKE" = "no"; then
-    BUILD_DMAKE=YES
-    echo "dmake will be built on ./bootstrap"
-else
-    AC_MSG_CHECKING([whether the found dmake is the right dmake])
-    # we need to find out whether that dmake we found is "our" dmake
-    # or the dmake from Sun's SunStudio Compiler which is something
-    # different
-    # This test _should_ work because the one accepts -V (ours) and one
-    # (the other) not...
-    $DMAKE -V 2>/dev/null | grep 'dmake .* Version .*' >/dev/null
-    if test $? -eq 0; then 
-       BUILD_DMAKE=NO
-       AC_MSG_RESULT([yes])
-       AC_MSG_CHECKING([the dmake version])
-       DMAKE_VERSION=`$DMAKE -V | $AWK '$3 == "Version" {print $4}'`
-       if test "`echo $DMAKE_VERSION | cut -d'.' -f1`" -gt "4"; then
-	 AC_MSG_RESULT([OK, >= 4.11])
-       elif test "`echo $DMAKE_VERSION | cut -d'.' -f1`" = "4" && \
-	    test "`echo $DMAKE_VERSION | cut -d'.' -f2`" -ge "11"; then
-	 AC_MSG_RESULT([OK, >= 4.11])
-       else
-	 AC_MSG_RESULT([too old. >= 4.11 is needed])
-	 echo "A newer dmake will be built on ./bootstrap"
-	 BUILD_DMAKE=YES
-       fi
-    else
-       AC_MSG_RESULT([no])
-       echo "dmake will be built on ./bootstrap"
-       BUILD_DMAKE=YES
-    fi
-fi
-AC_SUBST(BUILD_DMAKE)
 
 AC_MSG_CHECKING([whether to enable EPM for packing])
 if test "$enable_epm" = "yes"; then
