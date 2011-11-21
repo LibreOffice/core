@@ -685,11 +685,8 @@ void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
     rStream >> aChild;
 }
 
-union NodeData
-{
-    double aDbl;
-    char   aData[128];
-} aNodeData;
+char aData[128];
+
 //------------------------------------------------------------------
 void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
 {
@@ -703,22 +700,22 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
     {
         if (aKey.getValue().isNull())
         {
-            memset(aNodeData.aData,0,rIndex.getHeader().db_keylen);
-            rStream.Write((sal_uInt8*)aNodeData.aData,rIndex.getHeader().db_keylen);
+            memset(aData,0,rIndex.getHeader().db_keylen);
+            rStream.Write((sal_uInt8*)aData,rIndex.getHeader().db_keylen);
         }
         else
             rStream << (double) aKey.getValue();
     }
     else
     {
-        memset(aNodeData.aData,0x20,rIndex.getHeader().db_keylen);
+        memset(aData,0x20,rIndex.getHeader().db_keylen);
         if (!aKey.getValue().isNull())
         {
             ::rtl::OUString sValue = aKey.getValue();
             ByteString aText(sValue.getStr(), rIndex.m_pTable->getConnection()->getTextEncoding());
-            strncpy(aNodeData.aData,aText.GetBuffer(),std::min(rIndex.getHeader().db_keylen, aText.Len()));
+            strncpy(aData,aText.GetBuffer(),std::min(rIndex.getHeader().db_keylen, aText.Len()));
         }
-        rStream.Write((sal_uInt8*)aNodeData.aData,rIndex.getHeader().db_keylen);
+        rStream.Write((sal_uInt8*)aData,rIndex.getHeader().db_keylen);
     }
     rStream << aChild;
 }
