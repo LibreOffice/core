@@ -1,59 +1,87 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License version 2.1, as published by the Free Software Foundation.
+ *  Effective License of whole file:
  *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
  *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *  MA  02111-1307  USA
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
  *
- *  The Initial Developer of the Original Code is: Joerg Budischewski
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
  *
- *   Copyright: 2000 by Sun Microsystems, Inc.
- *              2011 Lionel Elie Mamane <lionel@mamane.lu>
+ *  Parts "Copyright by Sun Microsystems, Inc" prior to August 2011:
  *
- *   All Rights Reserved.
+ *    The Contents of this file are made available subject to the terms of
+ *    the GNU Lesser General Public License Version 2.1
  *
- *   Contributor(s): Joerg Budischewski
+ *    Copyright: 2000 by Sun Microsystems, Inc.
  *
+ *    Contributor(s): Joerg Budischewski
  *
- * Portions adapted from JDBC PostgreSQL driver:
+ *  All parts contributed on or after August 2011:
  *
- *  Copyright (c) 2004-2008, PostgreSQL Global Development Group
+ *    Version: MPL 1.1 / GPLv3+ / LGPLv2.1+
  *
- * Licence of original JDBC driver code:
+ *    The contents of this file are subject to the Mozilla Public License Version
+ *    1.1 (the "License"); you may not use this file except in compliance with
+ *    the License or as specified alternatively below. You may obtain a copy of
+ *    the License at http://www.mozilla.org/MPL/
  *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions are met:
+ *    Software distributed under the License is distributed on an "AS IS" basis,
+ *    WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ *    for the specific language governing rights and limitations under the
+ *    License.
  *
- *  1. Redistributions of source code must retain the above copyright notice,
- *     this list of conditions and the following disclaimer.
- *  2. Redistributions in binary form must reproduce the above copyright notice,
- *     this list of conditions and the following disclaimer in the documentation
- *     and/or other materials provided with the distribution.
- *  3. Neither the name of the PostgreSQL Global Development Group nor the names
- *     of its contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
+ *    Major Contributor(s):
+ *    [ Copyright (C) 2011 Lionel Elie Mamane <lionel@mamane.lu> ]
  *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
- *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
+ *    All Rights Reserved.
+ *
+ *    For minor contributions see the git repository.
+ *
+ *    Alternatively, the contents of this file may be used under the terms of
+ *    either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ *    the GNU Lesser General Public License Version 2.1 or later (the "LGPLv2.1+"),
+ *    in which case the provisions of the GPLv3+ or the LGPLv2.1+ are applicable
+ *    instead of those above.
+ *
+ *   Some portions were adapted from JDBC PostgreSQL driver:
+ *
+ *    Copyright (c) 2004-2008, PostgreSQL Global Development Group
+ *
+ *   Licence of original JDBC driver code:
+ *
+ *    Redistribution and use in source and binary forms, with or without
+ *    modification, are permitted provided that the following conditions are met:
+ *
+ *    1. Redistributions of source code must retain the above copyright notice,
+ *       this list of conditions and the following disclaimer.
+ *    2. Redistributions in binary form must reproduce the above copyright notice,
+ *       this list of conditions and the following disclaimer in the documentation
+ *       and/or other materials provided with the distribution.
+ *    3. Neither the name of the PostgreSQL Global Development Group nor the names
+ *       of its contributors may be used to endorse or promote products derived
+ *       from this software without specific prior written permission.
+ *
+ *    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ *    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ *    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ *    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ *    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ *    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ *    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ *    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ *    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *    POSSIBILITY OF SUCH DAMAGE.
  *
  ************************************************************************/
 
