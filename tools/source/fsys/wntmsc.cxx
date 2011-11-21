@@ -206,7 +206,7 @@ sal_Bool DirEntry::SetCWD( sal_Bool bSloppy ) const
 
     FSysFailOnErrorImpl();
 
-    if ( eFlag == FSYS_FLAG_CURRENT && !aName.Len() )
+    if ( eFlag == FSYS_FLAG_CURRENT && !aName.getLength() )
         return sal_True;
 
     if ( SetCurrentDirectory(rtl::OUStringToOString(GetFull(), osl_getThreadTextEncoding()).getStr()) )
@@ -659,7 +659,7 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
 
         // Sonderbehandlung falls es sich um eine Root ohne Laufwerk handelt
 
-        if ( !rDirEntry.aName.Len() && rDirEntry.eFlag == FSYS_FLAG_ABSROOT )
+        if ( !rDirEntry.aName.getLength() && rDirEntry.eFlag == FSYS_FLAG_ABSROOT )
         {
             nKindFlags = FSYS_KIND_DIR;
             nError = FSYS_ERR_OK;
@@ -701,7 +701,7 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
              aDirEntry.eFlag == FSYS_FLAG_ABSROOT )
         {
             if ( aDirEntry.eFlag == FSYS_FLAG_VOLUME )
-                nKindFlags = FSYS_KIND_DEV | ( aDirEntry.aName.Len() == 2
+                nKindFlags = FSYS_KIND_DEV | ( aDirEntry.aName.getLength() == 2
                                         ? FSYS_KIND_BLOCK
                                         : FSYS_KIND_CHAR );
             else
@@ -781,7 +781,7 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
                 // UNC-Volume?
                 DirEntry *pTop = aAbsEntry.ImpGetTopPtr();
                 if ( pTop->GetFlag() == FSYS_FLAG_ABSROOT &&
-                     ( pTop->aName.Len() > 1 && (pTop->aName.GetBuffer()[1] != ':' )) )
+                     ( pTop->aName.getLength() > 1 && (pTop->aName[1] != ':' )) )
                 {
                     if ( bForceAccess )
                     {

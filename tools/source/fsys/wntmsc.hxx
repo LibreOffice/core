@@ -70,7 +70,7 @@ typedef struct
 #define PATHDELIMITER   ";"
 #define DEFSTYLE        FSYS_STYLE_NTFS
 #define MKDIR( p )      mkdir( p )
-#define CMP_LOWER(s)    ( ByteString(s).ToLowerAscii() )
+#define CMP_LOWER(s)    ( s.toAsciiLowerCase() )
 
 #define START_DRV 'a'
 

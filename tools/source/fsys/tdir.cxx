@@ -247,15 +247,14 @@ void Dir::Construct( DirEntryKind nKindFlags )
     pSortLst = NULL;
     pStatLst = NULL;
     eAttrMask = nKindFlags;
-    ByteString aTempName( GetName(), osl_getThreadTextEncoding() );
-    if ( aTempName.Search( "*" ) != STRING_NOTFOUND ||
-         aTempName.Search( "?" ) != STRING_NOTFOUND )
+    rtl::OString aTempName(rtl::OUStringToOString(GetName(), osl_getThreadTextEncoding()));
+    if (aTempName.indexOf('*') != -1 || aTempName.indexOf('?') != -1)
     {
 #if defined( WNT )
-        ByteString aTStr(CutName(), osl_getThreadTextEncoding());
-        char* pBuffer = new char[aTStr.Len()+1];
-        strcpy( pBuffer, aTStr.GetBuffer() );
-        CharLowerBuff( pBuffer, aTStr.Len() );
+        rtl::OString aTStr(rtl::OUStringToOString(CutName(), osl_getThreadTextEncoding()));
+        char* pBuffer = new char[aTStr.getLength()+1];
+        strcpy( pBuffer, aTStr.getStr() );
+        CharLowerBuff( pBuffer, aTStr.getLength() );
         aNameMask = WildCard( String(pBuffer, osl_getThreadTextEncoding()), ';' );
         delete [] pBuffer;
 #else

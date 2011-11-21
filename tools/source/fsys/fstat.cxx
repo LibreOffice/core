@@ -140,16 +140,15 @@ sal_Bool FileStat::IsKind( DirEntryKind nKind ) const
 
 sal_Bool FileStat::GetReadOnlyFlag( const DirEntry &rEntry )
 {
-
-    ByteString aFPath(rEntry.GetFull(), osl_getThreadTextEncoding());
+    rtl::OString aFPath(rtl::OUStringToOString(rEntry.GetFull(), osl_getThreadTextEncoding()));
 #if defined WNT
-    DWORD nRes = GetFileAttributes( (LPCTSTR) aFPath.GetBuffer() );
+    DWORD nRes = GetFileAttributes( (LPCTSTR) aFPath.getStr() );
     return ULONG_MAX != nRes &&
            ( FILE_ATTRIBUTE_READONLY & nRes ) == FILE_ATTRIBUTE_READONLY;
 #elif defined UNX
     /* could we stat the object? */
     struct stat aBuf;
-    if (stat(aFPath.GetBuffer(), &aBuf))
+    if (stat(aFPath.getStr(), &aBuf))
         return sal_False;
     /* jupp, is writable for user? */
     return((aBuf.st_mode & S_IWUSR) != S_IWUSR);
@@ -167,19 +166,19 @@ sal_Bool FileStat::GetReadOnlyFlag( const DirEntry &rEntry )
 sal_uIntPtr FileStat::SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO )
 {
 
-    ByteString aFPath(rEntry.GetFull(), osl_getThreadTextEncoding());
+    rtl::OString aFPath(rtl::OUStringToOString(rEntry.GetFull(), osl_getThreadTextEncoding()));
 
 #if defined WNT
-    DWORD nRes = GetFileAttributes( (LPCTSTR) aFPath.GetBuffer() );
+    DWORD nRes = GetFileAttributes( (LPCTSTR) aFPath.getStr() );
     if ( ULONG_MAX != nRes )
-        nRes = SetFileAttributes( (LPCTSTR) aFPath.GetBuffer(),
+        nRes = SetFileAttributes( (LPCTSTR) aFPath.getStr(),
                     ( nRes & ~FILE_ATTRIBUTE_READONLY ) |
                     ( bRO ? FILE_ATTRIBUTE_READONLY : 0 ) );
     return ( ULONG_MAX == nRes ) ? ERRCODE_IO_UNKNOWN : 0;
 #elif defined UNX
     /* first, stat the object to get permissions */
     struct stat aBuf;
-    if (stat(aFPath.GetBuffer(), &aBuf))
+    if (stat(aFPath.getStr(), &aBuf))
         return ERRCODE_IO_NOTEXISTS;
     /* set or clear write bit for user */
     mode_t nMode;
@@ -192,7 +191,7 @@ sal_uIntPtr FileStat::SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO )
     else
         nMode = aBuf.st_mode | S_IWUSR;
     /* change it on fs */
-    if (chmod(aFPath.GetBuffer(), nMode))
+    if (chmod(aFPath.getStr(), nMode))
     {
         switch (errno)
         {

@@ -64,7 +64,7 @@ struct DirReader_Impl
     dirent*     pDosEntry;
     DirEntry*   pParent;
     String      aPath;
-    ByteString  aBypass;
+    rtl::OString aBypass;
     sal_Bool        bReady;
     sal_Bool        bInUse;
 
@@ -86,8 +86,8 @@ struct DirReader_Impl
 #if defined(UNX)    //for further eplanation see DirReader_Impl::Read() in unx.cxx
                     pDosDir = NULL;
 #else
-                    aBypass = ByteString(aPath, osl_getThreadTextEncoding());
-                    pDosDir = opendir( (char*) aBypass.GetBuffer() );
+                    aBypass = rtl::OUStringToOString(aPath, osl_getThreadTextEncoding());
+                    pDosDir = opendir( aBypass.getStr() );
 #endif
 
                     // Parent f"ur die neuen DirEntries ermitteln

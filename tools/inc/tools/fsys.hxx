@@ -223,13 +223,13 @@ friend class FileCopier;
 #ifdef FEAT_FSYS_DOUBLESPEED
     FileStat*           pStat;      // optional
 #endif
-    ByteString          aName;
+    rtl::OString        aName;
     DirEntry*           pParent;
     sal_uIntPtr             nError;
     DirEntryFlag        eFlag;
 
 private:
-    TOOLS_DLLPRIVATE            DirEntry( const ByteString& rInitName,
+    TOOLS_DLLPRIVATE            DirEntry( const rtl::OString& rInitName,
                                   DirEntryFlag aDirFlag,
                                   FSysPathStyle eStyle );
 
@@ -237,13 +237,13 @@ private:
     friend class FileStat;
     friend const char* ImpCheckDirEntry( const void* p );
 
-    TOOLS_DLLPRIVATE FSysError          ImpParseName( const ByteString& rIntiName,
+    TOOLS_DLLPRIVATE FSysError          ImpParseName( const rtl::OString& rIntiName,
                                       FSysPathStyle eParser );
 #if defined(WNT)
-    TOOLS_DLLPRIVATE FSysError          ImpParseOs2Name( const ByteString& rPfad,
+    TOOLS_DLLPRIVATE FSysError          ImpParseOs2Name( const rtl::OString& rPfad,
                                          FSysPathStyle eStyle );
 #else
-    TOOLS_DLLPRIVATE FSysError          ImpParseUnixName( const ByteString& rPfad,
+    TOOLS_DLLPRIVATE FSysError          ImpParseUnixName( const rtl::OString& rPfad,
                                           FSysPathStyle eStyle );
 #endif
     TOOLS_DLLPRIVATE const DirEntry*    ImpGetTopPtr() const;
@@ -251,7 +251,7 @@ private:
 
 protected:
     void                ImpTrim( FSysPathStyle eStyle );
-    const ByteString&   ImpTheName() const;
+    const rtl::OString& ImpTheName() const;
     DirEntryFlag        ImpTheFlag() const { return eFlag; };
     DirEntry*           ImpChangeParent( DirEntry* pNewParent, sal_Bool bNormalize = sal_True );
     DirEntry*           ImpGetParent() { return pParent; }
@@ -266,7 +266,7 @@ protected:
 public:
                         DirEntry( DirEntryFlag aDirFlag = FSYS_FLAG_CURRENT );
                         DirEntry( const DirEntry& rEntry );
-                        DirEntry( const ByteString& rInitName,
+                        DirEntry( const rtl::OString& rInitName,
                                    FSysPathStyle eParser = FSYS_STYLE_HOST );
                         DirEntry( const String& rInitName,
                                    FSysPathStyle eParser = FSYS_STYLE_HOST );
@@ -323,16 +323,16 @@ public:
     sal_Bool                operator !=( const DirEntry& rAnotherDir ) const
                             { return !(DirEntry::operator==( rAnotherDir )); }
 
-    inline StringCompare NameCompareDirect( const DirEntry &rWith ) const
-                        {
+    inline sal_Int32 NameCompareDirect( const DirEntry &rWith ) const
+    {
 #ifdef UNX
-                            return rWith.aName.CompareTo( aName );
+        return rWith.aName.compareTo(aName);
 #else
-                            rtl::OString aThis(rtl::OString(aName).toAsciiLowerCase());
-                            rtl::OString aWith(rtl::OString(rWith.aName).toAsciiLowerCase());
-                            return static_cast<StringCompare>(aWith.compareTo(aThis));
+        rtl::OString aThis(rtl::OString(aName).toAsciiLowerCase());
+        rtl::OString aWith(rtl::OString(rWith.aName).toAsciiLowerCase());
+        return aWith.compareTo(aThis);
 #endif
-                        }
+    }
 
     static String       GetAccessDelimiter( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
     static String       GetSearchDelimiter( FSysPathStyle eFormatter = FSYS_STYLE_HOST );

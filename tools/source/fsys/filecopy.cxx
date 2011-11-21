@@ -270,14 +270,14 @@ FSysError FileCopier::DoCopy_Impl(
     if ( FSYS_ERR_OK == ERRCODE_TOERROR(eRet) )
     {
         WIN32_FIND_DATA fdSource;
-        ByteString aFullSource(aSource.GetFull(), osl_getThreadTextEncoding());
-        ByteString aFullTarget(aTgt.GetFull(), osl_getThreadTextEncoding());
-        HANDLE  hFind = FindFirstFile( aFullSource.GetBuffer() , &fdSource );
+        rtl::OString aFullSource(rtl::OUStringToOString(aSource.GetFull(), osl_getThreadTextEncoding()));
+        rtl::OString aFullTarget(rtl::OUStringToOString(aTgt.GetFull(), osl_getThreadTextEncoding()));
+        HANDLE  hFind = FindFirstFile( aFullSource.getStr() , &fdSource );
         if ( hFind != INVALID_HANDLE_VALUE )
         {
             FindClose( hFind );
 
-            HANDLE hFile = CreateFile( aFullTarget.GetBuffer(), GENERIC_WRITE,
+            HANDLE hFile = CreateFile( aFullTarget.getStr(), GENERIC_WRITE,
                                        FILE_SHARE_READ | FILE_SHARE_WRITE, NULL,
                                        OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 
@@ -287,7 +287,7 @@ FSysError FileCopier::DoCopy_Impl(
                 CloseHandle( hFile );
             }
 
-            SetFileAttributes( aFullTarget.GetBuffer(), fdSource.dwFileAttributes );
+            SetFileAttributes( aFullTarget.getStr(), fdSource.dwFileAttributes );
         }
     }
 #endif

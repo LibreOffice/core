@@ -303,41 +303,41 @@ const char* ImpCheckDirEntry( const void* p )
 |*
 *************************************************************************/
 
-ByteString ImplCutPath( const ByteString& rStr, sal_uInt16 nMax, char cAccDel )
+rtl::OString ImplCutPath( const rtl::OString& rStr, sal_Int32 nMax, char cAccDel )
 {
-    sal_uInt16  nMaxPathLen = nMax;
-    ByteString  aCutPath( rStr );
-    sal_Bool    bInsertPrefix = sal_False;
-    sal_uInt16  nBegin = aCutPath.Search( cAccDel );
+    sal_Int32 nMaxPathLen = nMax;
+    sal_Bool bInsertPrefix = sal_False;
+    sal_Int32 nBegin = rStr.indexOf(cAccDel);
+    rtl::OStringBuffer aCutPath(rStr);
 
-    if( nBegin == STRING_NOTFOUND )
+    if( nBegin == -1 )
         nBegin = 0;
     else
         nMaxPathLen += 2;   // fuer Prefix <Laufwerk>:
 
-    while( aCutPath.Len() > nMaxPathLen )
+    while( aCutPath.getLength() > nMaxPathLen )
     {
-        sal_uInt16 nEnd = aCutPath.Search( cAccDel, nBegin + 1 );
-        sal_uInt16 nCount;
+        sal_Int32 nEnd = aCutPath.toString().indexOf(cAccDel, nBegin + 1);
+        sal_Int32 nCount;
 
-        if ( nEnd != STRING_NOTFOUND )
+        if ( nEnd != -1 )
         {
             nCount = nEnd - nBegin;
-            aCutPath.Erase( nBegin, nCount );
+            aCutPath.remove(nBegin, nCount);
             bInsertPrefix = sal_True;
         }
         else
             break;
     }
 
-    if ( aCutPath.Len() > nMaxPathLen )
+    if ( aCutPath.getLength() > nMaxPathLen )
     {
-        for ( sal_uInt16 n = nMaxPathLen; n > nMaxPathLen/2; --n )
+        for ( sal_Int32 n = nMaxPathLen; n > nMaxPathLen/2; --n )
         {
-            if (!comphelper::string::isalnumAscii(aCutPath.GetChar(n)))
+            if (!comphelper::string::isalnumAscii(aCutPath[n]))
             {
-                aCutPath.Erase( n );
-                aCutPath += "...";
+                comphelper::string::truncateToLength(aCutPath, n);
+                aCutPath.append(RTL_CONSTASCII_STRINGPARAM("..."));
                 break;
             }
         }
@@ -347,10 +347,10 @@ ByteString ImplCutPath( const ByteString& rStr, sal_uInt16 nMax, char cAccDel )
     {
         rtl::OStringBuffer aIns;
         aIns.append(cAccDel).append(RTL_CONSTASCII_STRINGPARAM("..."));
-        aCutPath.Insert(ByteString(aIns.makeStringAndClear()), nBegin);
+        aCutPath.insert(nBegin, aIns.makeStringAndClear());
     }
 
-    return aCutPath;
+    return aCutPath.makeStringAndClear();
 }
 
 #if defined(WNT)
@@ -360,7 +360,7 @@ ByteString ImplCutPath( const ByteString& rStr, sal_uInt16 nMax, char cAccDel )
 |*
 *************************************************************************/
 
-FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eStyle  )
+FSysError DirEntry::ImpParseOs2Name( const rtl::OString& rPfad, FSysPathStyle eStyle  )
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
@@ -391,7 +391,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
             for ( nPos = 2; aPfad.Len() > nPos; ++nPos )
                 if ( aPfad.GetChar(nPos) == '\\' || aPfad.GetChar(nPos) == '/' )
                     break;
-            aName = ByteString( aPfad.Copy( 2, nPos-2 ), osl_getThreadTextEncoding() );
+            aName = rtl::OUStringToOString(aPfad.Copy( 2, nPos-2 ), osl_getThreadTextEncoding());
             aStack.Push( new DirEntry( aName, FSYS_FLAG_ABSROOT, eStyle ) );
         }
         // ist der Name die Root des aktuellen Drives?
@@ -406,7 +406,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
             // ist der Name ein Drive?
             if ( nPos < aPfad.Len() && aPfad.GetChar(nPos) == ':' )
             {
-                aName = ByteString( aPfad.Copy( 0, nPos + 1 ), osl_getThreadTextEncoding() );
+                aName = rtl::OUStringToOString(aPfad.Copy( 0, nPos + 1 ), osl_getThreadTextEncoding());
 
                 // ist der Name die Root des Drives
                 if ( (nPos + 1) < aPfad.Len() &&
@@ -414,11 +414,11 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
                 {
                     // schon was auf dem Stack?
                     // oder Novell-Format? (not supported wegen URLs)
-                        if ( !aStack.Empty() || aName.Len() > 2 )
-                        {
-                            aName = rPfad;
-                            return FSYS_ERR_MISPLACEDCHAR;
-                        }
+                    if ( !aStack.Empty() || aName.getLength() > 2 )
+                    {
+                        aName = rPfad;
+                        return FSYS_ERR_MISPLACEDCHAR;
+                    }
                     // Root-Directory des Drive
                     aStack.Push( new DirEntry( aName, FSYS_FLAG_ABSROOT, eStyle ) );
                 }
@@ -445,7 +445,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
             else
             {
                 // den Namen ohne Trenner abspalten
-                aName = ByteString( aPfad.Copy( 0, nPos ), osl_getThreadTextEncoding() );
+                aName = rtl::OUStringToOString(aPfad.Copy( 0, nPos ), osl_getThreadTextEncoding());
 
                 // stellt der Name die aktuelle Directory dar?
                 if ( aName == "." )
@@ -502,7 +502,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
     if ( aStack.Empty() )
     {
         eFlag = FSYS_FLAG_CURRENT;
-        aName.Erase();
+        aName = rtl::OString();
     }
     else
     {
@@ -523,7 +523,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
     }
 
     // wird damit ein Volume beschrieben?
-    if ( !pParent && eFlag == FSYS_FLAG_RELROOT && aName.Len() )
+    if ( !pParent && eFlag == FSYS_FLAG_RELROOT && aName.getLength() )
         eFlag = FSYS_FLAG_VOLUME;
 
     // bei gesetztem ErrorCode den Namen komplett "ubernehmen
@@ -539,7 +539,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
 |*
 *************************************************************************/
 
-FSysError DirEntry::ImpParseName( const ByteString& rbInitName,
+FSysError DirEntry::ImpParseName( const rtl::OString& rbInitName,
                                   FSysPathStyle eStyle )
 {
     if ( eStyle == FSYS_STYLE_HOST )
@@ -580,22 +580,22 @@ static FSysPathStyle GetStyle( FSysPathStyle eStyle )
 void DirEntry::ImpTrim( FSysPathStyle /* eStyle */ )
 {
     // Wildcards werden nicht geclipt
-    if ( ( aName.Search( '*' ) != STRING_NOTFOUND ) ||
-         ( aName.Search( '?' ) != STRING_NOTFOUND ) ||
-         ( aName.Search( ';' ) != STRING_NOTFOUND ) )
+    if ( ( aName.indexOf( '*' ) != -1 ) ||
+         ( aName.indexOf( '?' ) != -1 ) ||
+         ( aName.indexOf( ';' ) != -1 ) )
         return;
 
 #if defined(WNT)
-    if ( aName.Len() > 254 )
+    if ( aName.getLength() > 254 )
     {
         nError = ERRCODE_IO_MISPLACEDCHAR|ERRCODE_WARNING_MASK;
-        aName.Erase( 254 );
+        aName = aName.copy(254);
     }
 #else
-    if ( aName.Len() > 250 )
+    if ( aName.getLength() > 250 )
     {
         nError = ERRCODE_IO_MISPLACEDCHAR|ERRCODE_WARNING_MASK;
-        aName.Erase( 250 );
+        aName = aName.copy(250);
     }
 #endif
 }
@@ -606,7 +606,7 @@ void DirEntry::ImpTrim( FSysPathStyle /* eStyle */ )
 |*
 *************************************************************************/
 
-DirEntry::DirEntry( const ByteString& rName, DirEntryFlag eDirFlag,
+DirEntry::DirEntry( const rtl::OString& rName, DirEntryFlag eDirFlag,
                     FSysPathStyle eStyle ) :
 #ifdef FEAT_FSYS_DOUBLESPEED
             pStat( 0 ),
@@ -672,8 +672,8 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
         return;
     }
 
-    ByteString aTmpName(rtl::OUStringToOString(rInitName, osl_getThreadTextEncoding()));
-    if( aTmpName.CompareIgnoreCaseToAscii("file:",5 ) == COMPARE_EQUAL )
+    rtl::OString aTmpName(rtl::OUStringToOString(rInitName, osl_getThreadTextEncoding()));
+    if (aTmpName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("file:")))
     {
 #ifndef BOOTSTRAP
         DBG_WARNING( "File URLs are not permitted but accepted" );
@@ -692,12 +692,11 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
         }
 
 #ifdef DBG_UTIL
-        if( eStyle == FSYS_STYLE_HOST &&
-            aTmpName.Search( "://" ) != STRING_NOTFOUND )
+        if (eStyle == FSYS_STYLE_HOST && aTmpName.indexOf( "://" ) != STRING_NOTFOUND)
         {
-            ByteString aErr = "DirEntries akzeptieren nur File URLS: ";
-            aErr += aTmpName;
-            DBG_WARNING( aErr.GetBuffer() );
+            rtl::OStringBuffer aErr(RTL_CONSTASCII_STRINGPARAM("DirEntries akzeptieren nur File URLS: "));
+            aErr.append(aTmpName);
+            DBG_WARNING(aErr.getStr());
         }
 #endif
     }
@@ -710,7 +709,7 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
 
 /*************************************************************************/
 
-DirEntry::DirEntry( const ByteString& rInitName, FSysPathStyle eStyle )
+DirEntry::DirEntry( const rtl::OString& rInitName, FSysPathStyle eStyle )
 #ifdef FEAT_FSYS_DOUBLESPEED
             : pStat( 0 )
 #endif
@@ -720,15 +719,15 @@ DirEntry::DirEntry( const ByteString& rInitName, FSysPathStyle eStyle )
     pParent         = NULL;
 
     // schnelle Loesung fuer Leerstring
-    if ( !rInitName.Len() )
+    if ( !rInitName.getLength() )
     {
         eFlag                   = FSYS_FLAG_CURRENT;
         nError                  = FSYS_ERR_OK;
         return;
     }
 
-    ByteString aTmpName( rInitName );
-    if( rInitName.CompareIgnoreCaseToAscii("file:",5 ) == COMPARE_EQUAL )
+    rtl::OString aTmpName( rInitName );
+    if (rInitName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("file:")))
     {
 #ifndef BOOTSTRAP
         DBG_WARNING( "File URLs are not permitted but accepted" );
@@ -738,13 +737,14 @@ DirEntry::DirEntry( const ByteString& rInitName, FSysPathStyle eStyle )
     }
 #ifdef DBG_UTIL
     else
-        if( eStyle == FSYS_STYLE_HOST &&
-            rInitName.Search( "://" ) != STRING_NOTFOUND )
+    {
+        if( eStyle == FSYS_STYLE_HOST && rInitName.indexOf("://") != -1 )
         {
-            ByteString aErr = "DirEntries akzeptieren nur File URLS: ";
-            aErr += rInitName;
-            DBG_WARNING( aErr.GetBuffer() );
+            rtl::OStringBuffer aErr(RTL_CONSTASCII_STRINGPARAM("DirEntries akzeptieren nur File URLS: "));
+            aErr.append(rInitName);
+            DBG_WARNING(aErr.getStr());
         }
+    }
 #endif
 
     nError  = ImpParseName( aTmpName, eStyle );
@@ -834,7 +834,7 @@ DirEntry* DirEntry::ImpChangeParent( DirEntry* pNewParent, sal_Bool bNormalize )
 
     DirEntry *pTemp = pParent;
     if ( bNormalize && pNewParent &&
-         pNewParent->eFlag == FSYS_FLAG_RELROOT && !pNewParent->aName.Len() )
+         pNewParent->eFlag == FSYS_FLAG_RELROOT && !pNewParent->aName.getLength() )
     {
         pParent = 0;
         delete pNewParent;
@@ -862,18 +862,18 @@ sal_Bool DirEntry::Exists( FSysAccess nAccess ) const
 
 #if defined WNT
     // spezielle Filenamen sind vom System da
-    if ( ( aName.CompareIgnoreCaseToAscii("CLOCK$") == COMPARE_EQUAL ||
-           aName.CompareIgnoreCaseToAscii("CON") == COMPARE_EQUAL ||
-           aName.CompareIgnoreCaseToAscii("AUX") == COMPARE_EQUAL ||
-           aName.CompareIgnoreCaseToAscii("COM1") == COMPARE_EQUAL ||
-           aName.CompareIgnoreCaseToAscii("COM2") == COMPARE_EQUAL ||
-           aName.CompareIgnoreCaseToAscii("COM3") == COMPARE_EQUAL ||
-           aName.CompareIgnoreCaseToAscii("COM4") == COMPARE_EQUAL ||
-           aName.CompareIgnoreCaseToAscii("LPT1") == COMPARE_EQUAL ||
-           aName.CompareIgnoreCaseToAscii("LPT2") == COMPARE_EQUAL ||
-           aName.CompareIgnoreCaseToAscii("LPT3") == COMPARE_EQUAL ||
-           aName.CompareIgnoreCaseToAscii("NUL") == COMPARE_EQUAL ||
-           aName.CompareIgnoreCaseToAscii("PRN") == COMPARE_EQUAL ) )
+    if ( aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("CLOCK$")) ||
+           aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("CON")) ||
+           aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("AUX")) ||
+           aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("COM1")) ||
+           aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("COM2")) ||
+           aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("COM3")) ||
+           aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("COM4")) ||
+           aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("LPT1")) ||
+           aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("LPT2")) ||
+           aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("LPT3")) ||
+           aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("NUL")) ||
+           aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("PRN")) )
         return sal_True;
 #endif
 
@@ -881,13 +881,13 @@ sal_Bool DirEntry::Exists( FSysAccess nAccess ) const
         DirEntryKind eKind = FileStat( *this, nAccess ).GetKind();
         if ( eKind & ( FSYS_KIND_FILE | FSYS_KIND_DIR ) )
         {
-                return sal_True;
+            return sal_True;
         }
 
 #if defined WNT
         if ( 0 != ( eKind & FSYS_KIND_DEV ) )
         {
-                return DRIVE_EXISTS( ImpGetTopPtr()->aName.GetChar(0) );
+            return DRIVE_EXISTS( ImpGetTopPtr()->aName[0] );
         }
 #endif
 
@@ -918,7 +918,7 @@ sal_Bool DirEntry::First()
                           pEntry;
                           pEntry = readdir( pDir ) )
                 {
-                        ByteString aFound(pEntry->d_name);
+                        rtl::OString aFound(pEntry->d_name);
                         if ( aWildeKarte.Matches( String(CMP_LOWER( aFound ), osl_getThreadTextEncoding())))
                         {
                                 aName = aFound;
@@ -1005,16 +1005,18 @@ String DirEntry::GetExtension( char cSep ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
-    const char *p0 = ( aName.GetBuffer() );
-    const char *p1 = p0 + aName.Len() - 1;
+    const char *p0 = aName.getStr();
+    const char *p1 = p0 + aName.getLength() - 1;
     while ( p1 >= p0 && *p1 != cSep )
     p1--;
 
     if ( p1 >= p0 )
+    {
         // es wurde ein cSep an der Position p1 gefunden
-        return String(
-            aName.Copy( static_cast< xub_StrLen >(p1 - p0 + 1) ),
+        return rtl::OStringToOUString(aName.copy(p1 - p0 + 1),
             osl_getThreadTextEncoding());
+    }
+
     return String();
 }
 
@@ -1028,20 +1030,20 @@ String DirEntry::GetBase( char cSep ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
-    const char *p0 = ( aName.GetBuffer() );
-    const char *p1 = p0 + aName.Len() - 1;
+    const char *p0 = aName.getStr();
+    const char *p1 = p0 + aName.getLength() - 1;
     while ( p1 >= p0 && *p1 != cSep )
         p1--;
 
     if ( p1 >= p0 )
+    {
         // es wurde ein cSep an der Position p1 gefunden
-        return String(
-            aName.Copy( 0, static_cast< xub_StrLen >(p1 - p0) ),
+        return rtl::OStringToOUString(aName.copy(0, p1 - p0),
             osl_getThreadTextEncoding());
 
-    else
-        // es wurde kein cSep gefunden
-        return String(aName, osl_getThreadTextEncoding());
+    }
+    // es wurde kein cSep gefunden
+    return rtl::OStringToOUString(aName, osl_getThreadTextEncoding());
 }
 
 /*************************************************************************
@@ -1078,7 +1080,7 @@ String DirEntry::GetName( FSysPathStyle eStyle ) const
         }
 
         case FSYS_FLAG_RELROOT:
-            if ( !aName.Len() )
+            if ( !aName.getLength() )
             {
                 aRet.append(ACTCURRENT(eStyle));
                 break;
@@ -1106,7 +1108,7 @@ bool DirEntry::IsAbs() const
 #ifdef UNX
     return ( pParent ? pParent->IsAbs() : eFlag == FSYS_FLAG_ABSROOT );
 #else
-    return ( pParent ? pParent->IsAbs() : eFlag == FSYS_FLAG_ABSROOT && aName.Len() > 0 );
+    return ( pParent ? pParent->IsAbs() : eFlag == FSYS_FLAG_ABSROOT && aName.getLength() > 0 );
 #endif
 }
 
@@ -1138,13 +1140,13 @@ String DirEntry::CutName( FSysPathStyle eStyle )
         else
         {
             eFlag = FSYS_FLAG_CURRENT;
-            aName.Erase();
+            aName = rtl::OString();
         }
     }
     else
     {
         eFlag = FSYS_FLAG_CURRENT;
-        aName.Erase();
+        aName = rtl::OString();
         delete pParent;
         pParent = NULL;
     }
@@ -1250,10 +1252,10 @@ DirEntry DirEntry::operator+( const DirEntry& rEntry ) const
 */
 
     if (
-        (eFlag == FSYS_FLAG_RELROOT && !aName.Len()) ||
+        (eFlag == FSYS_FLAG_RELROOT && !aName.getLength()) ||
         (
-         (pEntryTop->aName.Len()  ||
-          ((rEntry.Level()>1)?(rEntry[rEntry.Level()-2].aName.CompareIgnoreCaseToAscii(RFS_IDENTIFIER)==COMPARE_EQUAL):sal_False))
+         (pEntryTop->aName.getLength()  ||
+          ((rEntry.Level()>1)?(rEntry[rEntry.Level()-2].aName.equalsIgnoreAsciiCase(RFS_IDENTIFIER)):sal_False))
           &&
          (pEntryTop->eFlag == FSYS_FLAG_ABSROOT ||
           pEntryTop->eFlag == FSYS_FLAG_RELROOT ||
@@ -1265,10 +1267,10 @@ DirEntry DirEntry::operator+( const DirEntry& rEntry ) const
     }
 
     // irgendwas + "." (=> pEntryTop == &rEntry)
-    if ( pEntryTop->eFlag == FSYS_FLAG_RELROOT && !pEntryTop->aName.Len() )
+    if (pEntryTop->eFlag == FSYS_FLAG_RELROOT && !pEntryTop->aName.getLength())
     {
-                DBG_ASSERT( pEntryTop == &rEntry, "DirEntry::op+ buggy" );
-                return *this;
+        DBG_ASSERT( pEntryTop == &rEntry, "DirEntry::op+ buggy" );
+        return *this;
     }
 
     // root += ".." (=> unmoeglich)
@@ -1279,12 +1281,12 @@ DirEntry DirEntry::operator+( const DirEntry& rEntry ) const
         // irgendwas += abs (=> nur Device uebernehmen falls vorhanden)
         if ( pEntryTop->eFlag == FSYS_FLAG_ABSROOT )
         {
-                ByteString aDevice;
+                rtl::OString aDevice;
                 if ( pThisTop->eFlag == FSYS_FLAG_ABSROOT )
-                        aDevice = pThisTop->aName;
+                    aDevice = pThisTop->aName;
                 DirEntry aRet = rEntry;
-                if ( aDevice.Len() )
-                        aRet.ImpGetTopPtr()->aName = aDevice;
+                if ( aDevice.getLength() )
+                    aRet.ImpGetTopPtr()->aName = aDevice;
                 return aRet;
         }
 
@@ -1389,8 +1391,8 @@ void DirEntry::SetName( const String& rName, FSysPathStyle eFormatter )
     sal_Char cAccDelim(ACCESSDELIM_C(eFormatter));
 
     if ( (eFlag != FSYS_FLAG_NORMAL) ||
-         (aName.Search( ':' ) != STRING_NOTFOUND) ||
-         (aName.Search( cAccDelim ) != STRING_NOTFOUND) )
+         (aName.indexOf(':') != -1) ||
+         (aName.indexOf(cAccDelim) != -1) )
     {
         eFlag = FSYS_FLAG_INVALID;
     }
@@ -1409,42 +1411,43 @@ sal_Bool DirEntry::Find( const String& rPfad, char cDelim )
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
-        if ( ImpGetTopPtr()->eFlag == FSYS_FLAG_ABSROOT )
-                return sal_True;
+    if ( ImpGetTopPtr()->eFlag == FSYS_FLAG_ABSROOT )
+            return sal_True;
 
-        sal_Bool bWild = aName.Search( '*' ) != STRING_NOTFOUND ||
-                                 aName.Search( '?' ) != STRING_NOTFOUND;
-        if ( !cDelim )
-                cDelim = SEARCHDELIM(DEFSTYLE)[0];
+    sal_Bool bWild = aName.indexOf( '*' ) != -1 ||
+                     aName.indexOf( '?' ) != -1;
 
-        sal_uInt16 nTokenCount = rPfad.GetTokenCount( cDelim );
-        sal_Int32 nIndex = 0;
-        rtl::OString aThis = rtl::OStringBuffer()
-            .append(ACCESSDELIM_C(DEFSTYLE))
-            .append(rtl::OUStringToOString(GetFull(),
-                osl_getThreadTextEncoding()))
-            .makeStringAndClear();
-        for ( sal_uInt16 nToken = 0; nToken < nTokenCount; ++nToken )
+    if ( !cDelim )
+            cDelim = SEARCHDELIM(DEFSTYLE)[0];
+
+    sal_uInt16 nTokenCount = rPfad.GetTokenCount( cDelim );
+    sal_Int32 nIndex = 0;
+    rtl::OString aThis = rtl::OStringBuffer()
+        .append(ACCESSDELIM_C(DEFSTYLE))
+        .append(rtl::OUStringToOString(GetFull(),
+            osl_getThreadTextEncoding()))
+        .makeStringAndClear();
+    for ( sal_uInt16 nToken = 0; nToken < nTokenCount; ++nToken )
+    {
+        rtl::OStringBuffer aPath(rtl::OUStringToOString(rPfad,
+            osl_getThreadTextEncoding()).getToken( 0, cDelim, nIndex ));
+
+        if ( aPath.getLength() )
         {
-            rtl::OStringBuffer aPath(rtl::OUStringToOString(rPfad,
-                osl_getThreadTextEncoding()).getToken( 0, cDelim, nIndex ));
-
-            if ( aPath.getLength() )
+            if (aPath[aPath.getLength()-1] == ACCESSDELIM_C(DEFSTYLE))
+                aPath.remove(aPath.getLength()-1, 1);
+            aPath.append(aThis);
+            DirEntry aEntry(rtl::OStringToOUString(
+                aPath.makeStringAndClear(), osl_getThreadTextEncoding()));
+            if ( aEntry.ToAbs() &&
+                     ( ( !bWild && aEntry.Exists() ) || ( bWild && aEntry.First() ) ) )
             {
-                if (aPath[aPath.getLength()-1] == ACCESSDELIM_C(DEFSTYLE))
-                    aPath.remove(aPath.getLength()-1, 1);
-                aPath.append(aThis);
-                DirEntry aEntry(rtl::OStringToOUString(
-                    aPath.makeStringAndClear(), osl_getThreadTextEncoding()));
-                if ( aEntry.ToAbs() &&
-                         ( ( !bWild && aEntry.Exists() ) || ( bWild && aEntry.First() ) ) )
-                {
-                        (*this) = aEntry;
-                        return sal_True;
-                }
+                    (*this) = aEntry;
+                    return sal_True;
             }
         }
-        return sal_False;
+    }
+    return sal_False;
 }
 
 /*************************************************************************
@@ -1462,10 +1465,10 @@ DirEntry DirEntry::GetDevice() const
         const DirEntry *pTop = ImpGetTopPtr();
 
         if ( ( pTop->eFlag == FSYS_FLAG_ABSROOT || pTop->eFlag == FSYS_FLAG_RELROOT ) &&
-                 pTop->aName.Len() )
+                 pTop->aName.getLength() )
                 return DirEntry( pTop->aName, FSYS_FLAG_VOLUME, FSYS_STYLE_HOST );
         else
-                return DirEntry( ByteString(), FSYS_FLAG_INVALID, FSYS_STYLE_HOST );
+                return DirEntry( rtl::OString(), FSYS_FLAG_INVALID, FSYS_STYLE_HOST );
 }
 
 #endif
@@ -1480,16 +1483,16 @@ void DirEntry::SetBase( const String& rBase, char cSep )
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
-    const char *p0 = ( aName.GetBuffer() );
-    const char *p1 = p0 + aName.Len() - 1;
+    const char *p0 = aName.getStr();
+    const char *p1 = p0 + aName.getLength() - 1;
     while ( p1 >= p0 && *p1 != cSep )
         p1--;
 
     if ( p1 >= p0 )
     {
         // es wurde ein cSep an der Position p1 gefunden
-        aName.Erase( 0, static_cast< xub_StrLen >(p1 - p0) );
-        aName.Insert(ByteString(rBase, osl_getThreadTextEncoding()), 0 );
+        aName = rtl::OUStringToOString(rBase, osl_getThreadTextEncoding())
+            + aName.copy(p1 - p0);
     }
     else
         aName = rtl::OUStringToOString(rBase, osl_getThreadTextEncoding());
@@ -1503,7 +1506,7 @@ void DirEntry::SetBase( const String& rBase, char cSep )
 
 String DirEntry::GetSearchDelimiter( FSysPathStyle eFormatter )
 {
-    return String( ByteString(SEARCHDELIM( GetStyle( eFormatter ) ) ), osl_getThreadTextEncoding());
+    return rtl::OStringToOUString(rtl::OString(SEARCHDELIM(GetStyle(eFormatter))), osl_getThreadTextEncoding());
 }
 
 /*************************************************************************
@@ -1520,15 +1523,15 @@ const DirEntry& DirEntry::SetTempNameBase( const String &rBase )
         DirEntry aTempDir = DirEntry().TempName().GetPath();
         aTempDir += DirEntry( rBase );
 #ifdef UNX
-        ByteString aName(rtl::OUStringToOString(aTempDir.GetFull(), osl_getThreadTextEncoding()));
-        if ( access( aName.GetBuffer(), W_OK | X_OK | R_OK ) )
+        rtl::OString aName(rtl::OUStringToOString(aTempDir.GetFull(), osl_getThreadTextEncoding()));
+        if ( access( aName.getStr(), W_OK | X_OK | R_OK ) )
         {
             // Create the directory and only on success give all rights to
             // everyone. Use mkdir instead of DirEntry::MakeDir because
             // this returns sal_True even if directory already exists.
 
-            if ( !mkdir( aName.GetBuffer(), S_IRWXU | S_IRWXG | S_IRWXO ) )
-                chmod( aName.GetBuffer(), S_IRWXU | S_IRWXG | S_IRWXO );
+            if ( !mkdir( aName.getStr(), S_IRWXU | S_IRWXG | S_IRWXO ) )
+                chmod( aName.getStr(), S_IRWXU | S_IRWXG | S_IRWXO );
 
             // This will not create a directory but perhaps FileStat called
             // there modifies the DirEntry
@@ -1554,7 +1557,7 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
                 return aFactory.TempName();
         }
 
-        ByteString aDirName;
+        rtl::OString aDirName;
         char *ret_val;
         size_t i;
 
@@ -1562,16 +1565,16 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
         char pfx[6];
         char ext[5];
         const char *dir;
-        const char *pWild = strchr( aName.GetBuffer(), '*' );
+        const char *pWild = strchr( aName.getStr(), '*' );
         if ( !pWild )
-            pWild = strchr( aName.GetBuffer(), '?' );
+            pWild = strchr( aName.getStr(), '?' );
 
         if ( pWild )
         {
             if ( pParent )
                 aDirName = rtl::OUStringToOString(pParent->GetFull(), osl_getThreadTextEncoding());
-            strncpy( pfx, aName.GetBuffer(), Min( (int)5, (int)(pWild-aName.GetBuffer()) ) );
-            pfx[ pWild-aName.GetBuffer() ] = 0;
+            strncpy( pfx, aName.getStr(), Min( (int)5, (int)(pWild-aName.getStr()) ) );
+            pfx[ pWild-aName.getStr() ] = 0;
             const char *pExt = strchr( pWild, '.' );
             if ( pExt )
             {
@@ -1587,7 +1590,7 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
             strcpy( pfx, "lo" );
             strcpy( ext, ".tmp" );
         }
-        dir = aDirName.GetBuffer();
+        dir = aDirName.getStr();
 
         char sBuf[_MAX_PATH];
         if ( eFlag == FSYS_FLAG_CURRENT || ( !pParent && pWild ) )
@@ -1679,7 +1682,7 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
                                         }
 #else
                                         struct stat aStat;
-                                        if ( stat( ByteString(aRedirected, osl_getThreadTextEncoding()).GetBuffer(), &aStat ) )
+                                        if (stat(rtl::OUStringToOString(aRedirected, osl_getThreadTextEncoding()).getStr(), &aStat))
                                         {
                                             aRet = DirEntry( aRetVal );
                                             break;
@@ -1722,13 +1725,13 @@ const DirEntry &DirEntry::operator[]( sal_uInt16 nParentLevel ) const
 |*
 *************************************************************************/
 
-FSysError DirEntry::ImpParseUnixName( const ByteString& rPfad, FSysPathStyle eStyle )
+FSysError DirEntry::ImpParseUnixName( const rtl::OString& rPfad, FSysPathStyle eStyle )
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
     // die einzelnen Namen auf einen Stack packen
     DirEntryStack   aStack;
-    ByteString      aPfad( rPfad );
+    rtl::OString aPfad(rPfad);
     do
     {
         // den Namen vor dem ersten "/" abspalten,
@@ -1737,12 +1740,12 @@ FSysError DirEntry::ImpParseUnixName( const ByteString& rPfad, FSysPathStyle eSt
         // den ersten '/' suchen
         sal_uInt16 nPos;
         for ( nPos = 0;
-              nPos < aPfad.Len() && aPfad.GetChar(nPos) != '/';
+              nPos < aPfad.getLength() && aPfad[nPos] != '/';
               nPos++ )
             /* do nothing */;
 
             // ist der Name die Root des aktuellen Drives?
-        if ( nPos == 0 && aPfad.Len() > 0 && ( aPfad.GetChar(0) == '/' ) )
+        if ( nPos == 0 && aPfad.getLength() > 0 && ( aPfad[0] == '/' ) )
         {
             // Root-Directory des aktuellen Drives
             aStack.Push( new DirEntry( FSYS_FLAG_ABSROOT ) );
@@ -1750,7 +1753,7 @@ FSysError DirEntry::ImpParseUnixName( const ByteString& rPfad, FSysPathStyle eSt
         else
         {
             // den Namen ohne Trenner abspalten
-            aName = aPfad.Copy( 0, nPos );
+            aName = aPfad.copy(0, nPos);
 
                         // stellt der Name die aktuelle Directory dar?
             if ( aName == "." )
@@ -1774,7 +1777,7 @@ FSysError DirEntry::ImpParseUnixName( const ByteString& rPfad, FSysPathStyle eSt
                 if ( ( aStack.Empty() ) ||
                      ( aStack.Top()->eFlag == FSYS_FLAG_PARENT ) )
                     // fuehrende Parents kommen auf den Stack
-                    aStack.Push( new DirEntry( ByteString(), FSYS_FLAG_PARENT, eStyle ) );
+                    aStack.Push( new DirEntry(rtl::OString(), FSYS_FLAG_PARENT, eStyle) );
 
                 // ist es eine absolute Root
                 else if ( aStack.Top()->eFlag == FSYS_FLAG_ABSROOT ) {
@@ -1802,17 +1805,17 @@ FSysError DirEntry::ImpParseUnixName( const ByteString& rPfad, FSysPathStyle eSt
         }
 
         // den Restpfad bestimmen
-        aPfad.Erase( 0, nPos + 1 );
-        while ( aPfad.Len() && ( aPfad.GetChar(0) == '/' ) )
-            aPfad.Erase( 0, 1 );
+        aPfad = aPfad.copy(nPos + 1);
+        while ( aPfad.getLength() && ( aPfad[0] == '/' ) )
+            aPfad = aPfad.copy(1);
     }
-    while ( aPfad.Len() );
+    while (aPfad.getLength());
 
     // Haupt-Entry (selbst) zuweisen
     if ( aStack.Empty() )
     {
         eFlag = FSYS_FLAG_CURRENT;
-        aName.Erase();
+        aName = rtl::OString();
     }
     else
     {
@@ -1973,8 +1976,8 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
         FSysRedirector::DoRedirect(aTo);
 #endif
 
-        ByteString bFrom(rtl::OUStringToOString(aFrom, osl_getThreadTextEncoding()));
-        ByteString bTo(rtl::OUStringToOString(aTo, osl_getThreadTextEncoding()));
+        rtl::OString bFrom(rtl::OUStringToOString(aFrom, osl_getThreadTextEncoding()));
+        rtl::OString bTo(rtl::OUStringToOString(aTo, osl_getThreadTextEncoding()));
 
 #ifdef WNT
         // MoveTo nun atomar
@@ -1991,7 +1994,7 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
         if (aFromDevice==aToDevice)
         {
             // ja, also intra-device-move mit MoveFile
-            MoveFile( bFrom.GetBuffer(), bTo.GetBuffer() );
+            MoveFile( bFrom.getStr(), bTo.getStr() );
             // MoveFile ist buggy bei cross-device operationen.
             // Der R?ckgabewert ist auch dann sal_True, wenn nur ein Teil der Operation geklappt hat.
             // Zudem zeigt MoveFile unterschiedliches Verhalten bei unterschiedlichen NT-Versionen.
@@ -2031,7 +2034,7 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
         // #68639#
         // on some nfs connections rename with from == to
         // leads to destruction of file
-        if ( ( aFrom != aTo ) && ( 0 != rename( bFrom.GetBuffer(), bTo.GetBuffer() ) ) )
+        if ( ( aFrom != aTo ) && ( 0 != rename( bFrom.getStr(), bTo.getStr() ) ) )
 #if !defined(UNX)
             return Sys2SolarError_Impl( GetLastError() );
 #else
@@ -2039,8 +2042,8 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
                 if( errno == EXDEV )
 // cross device geht latuernich nicht mit rename
                 {
-                        FILE *fpIN  = fopen( bFrom.GetBuffer(), "r" );
-                        FILE *fpOUT = fopen( bTo.GetBuffer(), "w" );
+                        FILE *fpIN  = fopen( bFrom.getStr(), "r" );
+                        FILE *fpOUT = fopen( bTo.getStr(), "w" );
                         if( fpIN && fpOUT )
                         {
                                 char pBuf[ 16384 ];
@@ -2060,12 +2063,12 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
                                 fclose( fpOUT );
                                 if ( nErr )
                                 {
-                                    unlink( bTo.GetBuffer() );
+                                    unlink( bTo.getStr() );
                                     return Sys2SolarError_Impl( nErr );
                                 }
                                 else
                                 {
-                                    unlink( bFrom.GetBuffer() );
+                                    unlink( bFrom.getStr() );
                                 }
                         }
                         else
@@ -2113,11 +2116,11 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
 #ifndef BOOTSTRAP
         FSysRedirector::DoRedirect( aTmpName );
 #endif
-        ByteString bTmpName(rtl::OUStringToOString(aTmpName, osl_getThreadTextEncoding()));
+        rtl::OString bTmpName(rtl::OUStringToOString(aTmpName, osl_getThreadTextEncoding()));
 
-        char *pName = new char[bTmpName.Len()+2];
-        strcpy( pName, bTmpName.GetBuffer() );
-        pName[bTmpName.Len()+1] = (char) 0;
+        char *pName = new char[bTmpName.getLength()+2];
+        strcpy( pName, bTmpName.getStr() );
+        pName[bTmpName.getLength()+1] = (char) 0;
 
         //read-only files sollen auch geloescht werden koennen
         sal_Bool isReadOnly = FileStat::GetReadOnlyFlag(*this);
