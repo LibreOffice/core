@@ -260,7 +260,7 @@ sal_Bool ImplSVMainHook( int * pnInit )
 
 void SalAbort( const rtl::OUString& rErrorText, bool bDumpCore )
 {
-    if( !rErrorText.Len() )
+    if( rErrorText.isEmpty() )
         fprintf( stderr, "Application Error " );
     else
         fprintf( stderr, "%s ",
