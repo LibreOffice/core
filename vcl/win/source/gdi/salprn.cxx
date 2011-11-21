@@ -1619,7 +1619,7 @@ sal_Bool WinSalPrinter::StartJob( const rtl::OUString* pFileName,
 
     // bring up a file choser if printing to file port but no file name given
     OUString aOutFileName;
-    if( mpInfoPrinter->maPortName.EqualsIgnoreCaseAscii( "FILE:" ) && !(pFileName && pFileName->Len()) )
+    if( mpInfoPrinter->maPortName.EqualsIgnoreCaseAscii( "FILE:" ) && !(pFileName && !pFileName->isEmpty()) )
     {
 
         uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );

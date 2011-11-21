@@ -2354,7 +2354,7 @@ bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     aDFA.mbDevice     = true;
 
     // Search Font Name in Cache
-    if( !rFontName.Len() && mpFontAttrCache )
+    if( rFontName.isEmpty() && mpFontAttrCache )
         aDFA = mpFontAttrCache->GetFontAttr( rFontFileURL );
 
     // Retrieve font name from font resource

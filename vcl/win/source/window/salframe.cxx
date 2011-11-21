@@ -1109,7 +1109,7 @@ void WinSalFrame::SetTitle( const rtl::OUString& rTitle )
 {
     DBG_ASSERT( sizeof( WCHAR ) == sizeof( xub_Unicode ), "WinSalFrame::SetTitle(): WCHAR != sal_Unicode" );
 
-    if ( !SetWindowTextW( mhWnd, reinterpret_cast<LPCWSTR>(rTitle.GetBuffer()) ) )
+    if ( !SetWindowTextW( mhWnd, reinterpret_cast<LPCWSTR>(rTitle.getStr()) ) )
     {
         ByteString aAnsiTitle = ImplSalGetWinAnsiString( rTitle );
         SetWindowTextA( mhWnd, aAnsiTitle.GetBuffer() );
