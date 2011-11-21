@@ -375,7 +375,7 @@ sub get_folderitem_directory
 
     if ( $shortcut->{'FolderID'} eq "PREDEFINED_STARTMENU" )
     {
-        $directory = $installer::globals::startmenufolder;
+        $directory = $installer::globals::programmenufolder;
     }
 
     # saving the directory in the folderitems collector

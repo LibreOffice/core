@@ -30,7 +30,11 @@
 FolderItem gid_Folderitem_Soffice
     Name = "%PRODUCTNAME";
     ModuleID = gid_Module_Root;
+#ifdef ENABLE_SILENT_MSI
+    FolderID = PREDEFINED_STARTMENU;
+#else
     FolderID = gid_Folder_Staroffice51;
+#endif
     FileID = gid_Brand_File_Bin_Soffice;
     IconFile = gid_Brand_File_Bin_Soffice;
     IconID = 0;
