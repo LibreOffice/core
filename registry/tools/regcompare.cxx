@@ -630,6 +630,7 @@ static sal_uInt32 checkConstValue(Options_Impl const & options,
     return 0;
 }
 
+enum verbosity_t {SILENT, REPORT};
 static sal_uInt32 checkField(Options_Impl const & options,
                              const OUString& keyName,
                              RTTypeClass typeClass,
@@ -637,12 +638,13 @@ static sal_uInt32 checkField(Options_Impl const & options,
                              typereg::Reader& reader1,
                              typereg::Reader& reader2,
                              sal_uInt16 index1,
-                             sal_uInt16 index2)
+                             sal_uInt16 index2,
+                             verbosity_t const eVerbosity)
 {
     sal_uInt32 nError = 0;
     if ( reader1.getFieldName(index1) != reader2.getFieldName(index2) )
     {
-        if ( options.forceOutput() && !options.unoTypeCheck() )
+        if (options.forceOutput() && (REPORT == eVerbosity))
         {
             dumpTypeClass (bDump, typeClass, keyName);
             fprintf(stdout, "  Field %d: Name1 = %s  !=  Name2 = %s\n", index1,
@@ -652,7 +654,7 @@ static sal_uInt32 checkField(Options_Impl const & options,
     }
     if ( reader1.getFieldTypeName(index1) != reader2.getFieldTypeName(index2) )
     {
-        if ( options.forceOutput() && !options.unoTypeCheck() )
+        if (options.forceOutput() && (REPORT == eVerbosity))
         {
             dumpTypeClass (bDump, typeClass, keyName);
             fprintf(stdout, "  Field %d: Type1 = %s  !=  Type2 = %s\n", index1,
@@ -666,7 +668,7 @@ static sal_uInt32 checkField(Options_Impl const & options,
         RTConstValue constValue2 = reader2.getFieldValue(index2);
         if ( constValue1.m_type != constValue2.m_type )
         {
-            if ( options.forceOutput() && !options.unoTypeCheck() )
+            if (options.forceOutput() && (REPORT == eVerbosity))
             {
                 dumpTypeClass (bDump, typeClass, keyName);
                 fprintf(stdout, "  Field %d: Access1 = %s  !=  Access2 = %s\n", index1,
@@ -687,7 +689,7 @@ static sal_uInt32 checkField(Options_Impl const & options,
 
     if ( reader1.getFieldFlags(index1) != reader2.getFieldFlags(index2) )
     {
-        if ( options.forceOutput() && !options.unoTypeCheck() )
+        if (options.forceOutput() && (REPORT == eVerbosity))
         {
             dumpTypeClass (bDump, typeClass, keyName);
             fprintf(stdout, "  Field %d: FieldAccess1 = %s  !=  FieldAccess2 = %s\n", index1,
@@ -699,7 +701,7 @@ static sal_uInt32 checkField(Options_Impl const & options,
 
     if ( options.fullCheck() && (reader1.getFieldDocumentation(index1) != reader2.getFieldDocumentation(index2)) )
     {
-        if ( options.forceOutput() && !options.unoTypeCheck() )
+        if (options.forceOutput() && (REPORT == eVerbosity))
         {
             dumpTypeClass (bDump, typeClass, keyName);
             fprintf(stdout, "  Field %d: Doku1 = %s\n             Doku2 = %s\n", index1,
@@ -1000,7 +1002,7 @@ static sal_uInt32 checkFieldsWithoutOrder(Options_Impl const & options,
     {
         for (j=0; j < nFields2; j++)
         {
-            if (!checkField(options, keyName, typeClass, bDump, reader1, reader2, i, j))
+            if (!checkField(options, keyName, typeClass, bDump, reader1, reader2, i, j, SILENT))
             {
                 bFound =  sal_True;
                 moreProps.insert(j);
@@ -1162,7 +1164,7 @@ static sal_uInt32 checkBlob(
         sal_uInt16 i;
         for (i=0; i < nFields1 && i < nFields2; i++)
         {
-            nError += checkField(options, keyName, typeClass, bDump, reader1, reader2, i, i);
+            nError += checkField(options, keyName, typeClass, bDump, reader1, reader2, i, i, REPORT);
         }
         if ( i < nFields1 && options.forceOutput() )
         {
