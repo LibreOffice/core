@@ -206,8 +206,8 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
     aName += String::CreateFromAscii( "lu" );
 
     rName.Erase();
-    unsigned long nSeed = Time::GetSystemTicks() % nMax;
-    for ( unsigned long u = nSeed; ++u != nSeed; )
+    static unsigned long u = Time::GetSystemTicks() % nMax;
+    for ( unsigned long nSeed = u; ++u != nSeed; )
     {
         u %= nMax;
         String aTmp( aName );
