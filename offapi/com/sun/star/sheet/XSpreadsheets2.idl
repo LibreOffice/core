@@ -1,0 +1,75 @@
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ *
+ * Author(s): Laurent Godard <lgodard.libre@laposte.net>
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+
+#ifndef __com_sun_star_table_XSpreadsheets2_idl__
+#define __com_sun_star_table_XSpreadsheets2_idl__
+
+#include <com/sun/star/sheet/XSpreadsheets.idl>
+#include <com/sun/star/sheet/XSpreadsheetDocument.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/uno/RuntimeException.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** extends XSpreadsheets interface to import external sheets.
+
+    @see com::sun::star::sheet::Spreadsheets
+ */
+interface XSpreadsheets2: com::sun::star::sheet::XSpreadsheets
+{
+    /** copies a sheet from a source document.
+
+        @param srcDoc
+            a valid XSpreadsheetDocument reference to source doc
+
+        @param srcName
+            the source sheet name.
+
+        @param nDestPosition
+            the destination sheet position.
+
+        @returns the position of the imported sheet or -1 if not imported
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+        @throws ::com::sun::star::uno::RuntimeException
+
+        @since LibreOffice 3.5
+     */
+    long importSheet(
+            [in] com::sun::star::sheet::XSpreadsheetDocument srcDoc,
+            [in] string srcName,
+            [in] long  nDestPosition)
+            raises (com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::uno::RuntimeException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

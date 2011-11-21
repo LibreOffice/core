@@ -44,6 +44,7 @@
 #include <com/sun/star/sheet/XScenarios.hpp>
 #include <com/sun/star/sheet/XConsolidatable.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/sheet/XSpreadsheets2.hpp>
 #include <com/sun/star/sheet/XDocumentAuditing.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XProtectable.hpp>
@@ -371,7 +372,7 @@ public:
 
 
 class ScTableSheetsObj : public cppu::WeakImplHelper5<
-                                com::sun::star::sheet::XSpreadsheets,
+                                com::sun::star::sheet::XSpreadsheets2,
                                 com::sun::star::sheet::XCellRangesAccess,
                                 com::sun::star::container::XEnumerationAccess,
                                 com::sun::star::container::XIndexAccess,
@@ -398,6 +399,14 @@ public:
     virtual void SAL_CALL   copyByName( const ::rtl::OUString& aName,
                                 const ::rtl::OUString& aCopy, sal_Int16 nDestination )
                                     throw(::com::sun::star::uno::RuntimeException);
+
+                            // XSpreadsheets2
+    virtual sal_Int32 SAL_CALL importSheet(
+        const ::com::sun::star::uno::Reference <
+            ::com::sun::star::sheet::XSpreadsheetDocument > & xDocSrc,
+        const rtl::OUString& srcName,
+        const sal_Int32 nDestPosition)
+        throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
                             // XCellRangesAccess
 

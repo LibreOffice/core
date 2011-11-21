@@ -2433,8 +2433,7 @@ ScTableSheetObj* ScTableSheetsObj::GetObjectByName_Impl(const rtl::OUString& aNa
     if (pDocShell)
     {
         SCTAB nIndex;
-        String aString(aName);
-        if ( pDocShell->GetDocument()->GetTable( aString, nIndex ) )
+        if ( pDocShell->GetDocument()->GetTable( aName, nIndex ) )
             return new ScTableSheetObj( pDocShell, nIndex );
     }
     return NULL;
@@ -2462,9 +2461,8 @@ void SAL_CALL ScTableSheetsObj::moveByName( const rtl::OUString& aName, sal_Int1
     sal_Bool bDone = false;
     if (pDocShell)
     {
-        String aNamStr(aName);
         SCTAB nSource;
-        if ( pDocShell->GetDocument()->GetTable( aNamStr, nSource ) )
+        if ( pDocShell->GetDocument()->GetTable( aName, nSource ) )
             bDone = pDocShell->MoveTable( nSource, nDestination, false, sal_True );
     }
     if (!bDone)
@@ -2479,10 +2477,9 @@ void SAL_CALL ScTableSheetsObj::copyByName( const rtl::OUString& aName,
     sal_Bool bDone = false;
     if (pDocShell)
     {
-        String aNamStr(aName);
         String aNewStr(aCopy);
         SCTAB nSource;
-        if ( pDocShell->GetDocument()->GetTable( aNamStr, nSource ) )
+        if ( pDocShell->GetDocument()->GetTable( aName, nSource ) )
         {
             bDone = pDocShell->MoveTable( nSource, nDestination, sal_True, sal_True );
             if (bDone)
@@ -2572,14 +2569,14 @@ void SAL_CALL ScTableSheetsObj::replaceByName( const rtl::OUString& aName, const
             ScTableSheetObj* pSheetObj = ScTableSheetObj::getImplementation( xInterface );
             if ( pSheetObj && !pSheetObj->GetDocShell() )   // noch nicht eingefuegt?
             {
-                String aNamStr(aName);
                 SCTAB nPosition;
-                if ( pDocShell->GetDocument()->GetTable( aNamStr, nPosition ) )
+                if ( pDocShell->GetDocument()->GetTable( aName, nPosition ) )
                 {
                     ScDocFunc aFunc(*pDocShell);
                     if ( aFunc.DeleteTable( nPosition, sal_True, sal_True ) )
                     {
                         //  InsertTable kann jetzt eigentlich nicht schiefgehen...
+                        String aNamStr(aName);
                         bDone = aFunc.InsertTable( nPosition, aNamStr, sal_True, sal_True );
                         if (bDone)
                             pSheetObj->InitInsertSheet( pDocShell, nPosition );
@@ -2616,8 +2613,7 @@ void SAL_CALL ScTableSheetsObj::removeByName( const rtl::OUString& aName )
     if (pDocShell)
     {
         SCTAB nIndex;
-        String aString(aName);
-        if ( pDocShell->GetDocument()->GetTable( aString, nIndex ) )
+        if ( pDocShell->GetDocument()->GetTable( aName, nIndex ) )
         {
             ScDocFunc aFunc(*pDocShell);
             bDone = aFunc.DeleteTable( nIndex, sal_True, sal_True );
@@ -2631,6 +2627,47 @@ void SAL_CALL ScTableSheetsObj::removeByName( const rtl::OUString& aName )
 
     if (!bDone)
         throw uno::RuntimeException();      // NoSuchElementException is handled above
+}
+
+sal_Int32 ScTableSheetsObj::importSheet(
+    const uno::Reference < sheet::XSpreadsheetDocument > & xDocSrc,
+    const rtl::OUString& srcName, const sal_Int32 nDestPosition )
+        throw( lang::IllegalArgumentException, uno::RuntimeException )
+{
+    //pDocShell is the destination
+    ScDocument* pDocDest = pDocShell->GetDocument();
+
+    // Source document docShell
+    if ( !xDocSrc.is() )
+        throw uno::RuntimeException();
+    ScModelObj* pObj = ScModelObj::getImplementation(xDocSrc);
+    ScDocShell* pDocShellSrc = static_cast<ScDocShell*>(pObj->GetEmbeddedObject());
+
+    SCTAB nIndexDest;
+    nIndexDest = -1;
+
+    // SourceSheet Position and does srcName exists ?
+    SCTAB nIndexSrc;
+    if ( !pDocShellSrc->GetDocument()->GetTable( srcName, nIndexSrc ) )
+        throw lang::IllegalArgumentException();
+
+    // control nDestPosition < maxtab
+    SCTAB nCount = pDocDest->GetTableCount();
+    nIndexDest = static_cast<SCTAB>(nDestPosition);
+    if ( nIndexDest > nCount )
+        nIndexDest = nCount;
+
+    // control nDestPosition > 0
+    if ( nIndexDest < 0)
+        nIndexDest = 0;
+
+    // Transfert Tab
+    bool bInsertNew = true;
+    bool bNotifyAndPaint = true;
+    pDocShell->TransferTab(
+        *pDocShellSrc, nIndexSrc, nIndexDest, bInsertNew, bNotifyAndPaint );
+
+    return nIndexDest;
 }
 
 // XCellRangesAccess
@@ -2772,7 +2809,7 @@ sal_Bool SAL_CALL ScTableSheetsObj::hasByName( const rtl::OUString& aName )
     if (pDocShell)
     {
         SCTAB nIndex;
-        if ( pDocShell->GetDocument()->GetTable( String(aName), nIndex ) )
+        if ( pDocShell->GetDocument()->GetTable( aName, nIndex ) )
             return sal_True;
     }
     return false;

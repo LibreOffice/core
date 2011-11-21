@@ -3458,6 +3458,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/sheet,\
 	XSpreadsheetDocument \
 	XSpreadsheetView \
 	XSpreadsheets \
+	XSpreadsheets2 \
 	XSubTotalCalculatable \
 	XSubTotalDescriptor \
 	XSubTotalField \

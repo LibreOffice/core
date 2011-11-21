@@ -216,6 +216,7 @@
         <type>com.sun.star.sheet.XSpreadsheet</type>
         <type>com.sun.star.sheet.XSpreadsheetDocument</type>
         <type>com.sun.star.sheet.XSpreadsheets</type>
+        <type>com.sun.star.sheet.XSpreadsheets2</type>
         <type>com.sun.star.sheet.XSubTotalCalculatable</type>
         <type>com.sun.star.sheet.XSubTotalDescriptor</type>
         <type>com.sun.star.sheet.XSubTotalField</type>
