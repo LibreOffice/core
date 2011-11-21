@@ -29,6 +29,8 @@
 #ifndef _SYMTBL_HXX
 #define _SYMTBL_HXX
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 class SbiConstDef;
 class SbiParser;
 class SbiProcDef;
@@ -40,21 +42,19 @@ enum SbiSymScope { SbLOCAL, SbPARAM, SbPUBLIC, SbGLOBAL, SbRTL };
 // The string-pool collects string entries and
 // makes sure that they don't exist twice.
 
-SV_DECL_PTRARR_DEL(SbiStrings,String*,5,5)
-
 class SbiStringPool {
-    SbiStrings aData;
-    String     aEmpty;              // for convenience
+    const rtl::OUString aEmpty;
+    boost::ptr_vector<rtl::OUString> aData;
     SbiParser* pParser;
 public:
     SbiStringPool( SbiParser* );
    ~SbiStringPool();
-    sal_uInt16 GetSize() const { return aData.Count(); }
+    sal_uInt32 GetSize() const { return aData.size(); }
     // From 8.4.1999: default changed to sal_True because of #64236 -
     // change it back to sal_False when the bug is cleanly removed.
-    short Add( const String&, sal_Bool=sal_True );
+    short Add( const rtl::OUString&, sal_Bool=sal_True );
     short Add( double, SbxDataType );
-    const String& Find( sal_uInt16 ) const;
+    const rtl::OUString& Find( sal_uInt32 ) const;
     SbiParser* GetParser() { return pParser; }
 };
 

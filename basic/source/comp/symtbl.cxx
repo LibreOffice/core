@@ -34,7 +34,6 @@
 #include <string.h>
 #include <ctype.h>
 
-SV_IMPL_PTRARR(SbiStrings,String*)
 SV_IMPL_PTRARR(SbiSymbols,SbiSymDef*)
 
 // All symbol names are laid down int the symbol-pool's stringpool, so that
@@ -57,30 +56,27 @@ SbiStringPool::SbiStringPool( SbiParser* p )
 SbiStringPool::~SbiStringPool()
 {}
 
-
-const String& SbiStringPool::Find( sal_uInt16 n ) const
+const rtl::OUString& SbiStringPool::Find( sal_uInt32 n ) const
 {
-    if( !n || n > aData.Count() )
-        return aEmpty;
+    if( n == 0 || n > aData.size() )
+        return aEmpty; //hack, returning a reference to a simulation of null
     else
-        return *aData.GetObject( n-1 );
+        return aData[n - 1];
 }
 
-
-
-short SbiStringPool::Add( const String& rVal, sal_Bool bNoCase )
+short SbiStringPool::Add( const rtl::OUString& rVal, sal_Bool bNoCase )
 {
-    sal_uInt16 n = aData.Count();
-    for( sal_uInt16 i = 0; i < n; i++ )
+    sal_uInt32 n = aData.size();
+    for( sal_uInt32 i = 0; i < n; ++i )
     {
-        String* p = aData.GetObject( i );
-        if( (  bNoCase && p->Equals( rVal ) )
-         || ( !bNoCase && p->EqualsIgnoreCaseAscii( rVal ) ) )
+        rtl::OUString& p = aData[i];
+        if( (  bNoCase && p == rVal )
+            || ( !bNoCase && p.equalsIgnoreAsciiCase( rVal ) ) )
             return i+1;
     }
-    const String* pNew = new String( rVal );
-    aData.Insert( pNew, n++ );
-    return (short) n;
+
+    aData.push_back(new rtl::OUString(rVal));
+    return (short) ++n;
 }
 
 short SbiStringPool::Add( double n, SbxDataType t )
@@ -94,7 +90,7 @@ short SbiStringPool::Add( double n, SbxDataType t )
         case SbxDOUBLE:  snprintf( buf, sizeof(buf), "%.16g", n ); break;
         default: break;
     }
-    return Add( String::CreateFromAscii( buf ) );
+    return Add( rtl::OUString::createFromAscii( buf ) );
 }
 
 /***************************************************************************
