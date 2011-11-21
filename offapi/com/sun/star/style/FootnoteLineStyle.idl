@@ -24,10 +24,10 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef __com_sun_star_text_FootnoteLineStyle_idl__
-#define __com_sun_star_text_FootnoteLineStyle_idl__
+#ifndef __com_sun_star_style_FootnoteLineStyle_idl__
+#define __com_sun_star_style_FootnoteLineStyle_idl__
 
-module com {  module sun {  module star {  module text {
+module com {  module sun {  module star {  module style {
 
 published constants FootnoteLineStyle
 {
