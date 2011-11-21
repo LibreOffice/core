@@ -174,8 +174,6 @@ public:
     CancelButton&       GetCancelButton() { return aCancelBtn; }
     const HelpButton&   GetHelpButton() const { return aHelpBtn; }
     HelpButton&         GetHelpButton() { return aHelpBtn; }
-    const PushButton&   GetResetButton() const { return aResetBtn; }
-    PushButton&         GetResetButton() { return aResetBtn; }
 
     const PushButton*   GetUserButton() const { return pUserBtn; }
     PushButton*         GetUserButton() { return pUserBtn; }
