@@ -113,6 +113,7 @@ private:
     void CalcCurTableAssign( String& aAssign, ScRangeData* pRangeData );
 
     bool IsNameValid();
+    bool IsFormulaValid();
 
 
     bool AddPushed();

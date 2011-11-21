@@ -399,42 +399,45 @@ void ScNameDlg::RemovePushed()
 
 void ScNameDlg::NameModified()
 {
-    if (IsNameValid() && IsFormulaValid())
+    if (!IsFormulaValid())
+        return;
+    ScRangeNameLine aLine;
+    mpRangeManagerTable->GetCurrentLine(aLine);
+    rtl::OUString aOldName = aLine.aName;
+    rtl::OUString aNewName = maEdName.GetText();
+    aNewName = aNewName.trim();
+    if (aNewName != aOldName)
     {
-        ScRangeNameLine aLine;
-        mpRangeManagerTable->GetCurrentLine(aLine);
+        if (!IsNameValid())
+            return;
+    }
 
-        rtl::OUString aOldName = aLine.aName;
-        rtl::OUString aOldScope = aLine.aScope;
-        rtl::OUString aNewName = maEdName.GetText();
-        aNewName = aNewName.trim();
-        rtl::OUString aExpr = maEdAssign.GetText();
-        rtl::OUString aNewScope = maLbScope.GetSelectEntry();
+    rtl::OUString aOldScope = aLine.aScope;
+    rtl::OUString aExpr = maEdAssign.GetText();
+    rtl::OUString aNewScope = maLbScope.GetSelectEntry();
 
-        ScRangeName* pOldRangeName = GetRangeName( aOldScope, mpDoc );
-        ScRangeData* pData = pOldRangeName->findByUpperName( ScGlobals::pCharClass->upper(aOldName) );
-        ScRangeName* pNewRangeName = GetRangeName( aNewScope, mpDoc );
-        OSL_ENSURE(pData, "model and table should be in sync");
-        // be safe and check for range data
-        if (pData)
-        {
-            pOldRangeName->erase(*pData);
-            mpRangeManagerTable->DeleteSelectedEntries();
-            RangeType nType = RT_NAME |
-                (maBtnRowHeader.IsChecked() ? RT_ROWHEADER : RangeType(0))
-                |(maBtnColHeader.IsChecked() ? RT_COLHEADER : RangeType(0))
-                |(maBtnPrintArea.IsChecked() ? RT_PRINTAREA : RangeType(0))
-                |(maBtnCriteria.IsChecked()  ? RT_CRITERIA  : RangeType(0));
+    ScRangeName* pOldRangeName = GetRangeName( aOldScope, mpDoc );
+    ScRangeData* pData = pOldRangeName->findByUpperName( ScGlobal::pCharClass->upper(aOldName) );
+    ScRangeName* pNewRangeName = GetRangeName( aNewScope, mpDoc );
+    OSL_ENSURE(pData, "model and table should be in sync");
+    // be safe and check for range data
+    if (pData)
+    {
+        pOldRangeName->erase(*pData);
+        mpRangeManagerTable->DeleteSelectedEntries();
+        RangeType nType = RT_NAME |
+            (maBtnRowHeader.IsChecked() ? RT_ROWHEADER : RangeType(0))
+            |(maBtnColHeader.IsChecked() ? RT_COLHEADER : RangeType(0))
+            |(maBtnPrintArea.IsChecked() ? RT_PRINTAREA : RangeType(0))
+            |(maBtnCriteria.IsChecked()  ? RT_CRITERIA  : RangeType(0));
 
-            ScRangeData* pNewEntry = new ScRangeData( mpDoc, aNewName, aExpr,
-                    maCursorPos, nType);
-            pNewRangeName->insert(pNewEntry);
-            ScRangeNameLine aLine;
-            aLine.aName = aNewName;
-            aLine.aExpression = aExpr;
-            aLine.aScope = aNewScope;
-            mpRangeManagerTable->addEntry(aLine);
-        }
+        ScRangeData* pNewEntry = new ScRangeData( mpDoc, aNewName, aExpr,
+                maCursorPos, nType);
+        pNewRangeName->insert(pNewEntry);
+        aLine.aName = aNewName;
+        aLine.aExpression = aExpr;
+        aLine.aScope = aNewScope;
+        mpRangeManagerTable->addEntry(aLine);
     }
 }
 
