@@ -300,9 +300,9 @@ sal_uLong AquaSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* )
 
 // -----------------------------------------------------------------------
 
-XubString AquaSalInfoPrinter::GetPaperBinName( const ImplJobSetup*, sal_uLong )
+rtl::OUString AquaSalInfoPrinter::GetPaperBinName( const ImplJobSetup*, sal_uLong )
 {
-    return XubString();
+    return rtl::OUString();
 }
 
 // -----------------------------------------------------------------------
@@ -451,9 +451,9 @@ static Size getPageSize( vcl::PrinterController& i_rController, sal_Int32 i_nPag
     return aPageSize;
 }
 
-sal_Bool AquaSalInfoPrinter::StartJob( const String* i_pFileName,
-                                   const String& i_rJobName,
-                                   const String& /*i_rAppName*/,
+sal_Bool AquaSalInfoPrinter::StartJob( const rtl::OUString* i_pFileName,
+                                   const rtl::OUString& i_rJobName,
+                                   const rtl::OUString& /*i_rAppName*/,
                                    ImplJobSetup* i_pSetupData,
                                    vcl::PrinterController& i_rController
                                    )
@@ -693,9 +693,9 @@ AquaSalPrinter::~AquaSalPrinter()
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalPrinter::StartJob( const String* i_pFileName,
-                               const String& i_rJobName,
-                               const String& i_rAppName,
+sal_Bool AquaSalPrinter::StartJob( const rtl::OUString* i_pFileName,
+                               const rtl::OUString& i_rJobName,
+                               const rtl::OUString& i_rAppName,
                                ImplJobSetup* i_pSetupData,
                                vcl::PrinterController& i_rController )
 {
@@ -704,9 +704,9 @@ sal_Bool AquaSalPrinter::StartJob( const String* i_pFileName,
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalPrinter::StartJob( const XubString* /*i_pFileName*/,
-                               const XubString& /*i_rJobName*/,
-                               const XubString& /*i_rAppName*/,
+sal_Bool AquaSalPrinter::StartJob( const rtl::OUString* /*i_pFileName*/,
+                               const rtl::OUString& /*i_rJobName*/,
+                               const rtl::OUString& /*i_rAppName*/,
                                sal_uLong /*i_nCopies*/,
                                bool /*i_bCollate*/,
                                bool /*i_bDirect*/,

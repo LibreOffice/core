@@ -314,7 +314,7 @@ sal_Bool AquaSalFrame::PostEvent( void *pData )
 }
 
 // -----------------------------------------------------------------------
-void AquaSalFrame::SetTitle(const XubString& rTitle)
+void AquaSalFrame::SetTitle(const rtl::OUString& rTitle)
 {
     if ( !mpWindow )
         return;
@@ -1057,7 +1057,7 @@ void AquaSalFrame::EndExtTextInput( sal_uInt16 )
 
 // -----------------------------------------------------------------------
 
-XubString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
+rtl::OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 {
     static std::map< sal_uInt16, rtl::OUString > aKeyMap;
     if( aKeyMap.empty() )
@@ -1144,7 +1144,7 @@ XubString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 
 // -----------------------------------------------------------------------
 
-XubString AquaSalFrame::GetSymbolKeyName( const XubString&, sal_uInt16 nKeyCode )
+rtl::OUString AquaSalFrame::GetSymbolKeyName( const rtl::OUString&, sal_uInt16 nKeyCode )
 {
     return GetKeyName( nKeyCode );
 }

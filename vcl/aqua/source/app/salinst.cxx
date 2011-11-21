@@ -258,13 +258,13 @@ sal_Bool ImplSVMainHook( int * pnInit )
 
 // =======================================================================
 
-void SalAbort( const XubString& rErrorText, bool bDumpCore )
+void SalAbort( const rtl::OUString& rErrorText, bool bDumpCore )
 {
     if( !rErrorText.Len() )
         fprintf( stderr, "Application Error " );
     else
         fprintf( stderr, "%s ",
-            ByteString( rErrorText, gsl_getSystemTextEncoding() ).GetBuffer() );
+            rtl::OUStringToOString( rErrorText, gsl_getSystemTextEncoding() ).getStr() );
     if( bDumpCore )
         abort();
     else
@@ -997,7 +997,7 @@ void AquaSalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
 
 // -----------------------------------------------------------------------
 
-XubString AquaSalInstance::GetDefaultPrinter()
+rtl::OUString AquaSalInstance::GetDefaultPrinter()
 {
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();

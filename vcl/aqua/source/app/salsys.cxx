@@ -138,8 +138,8 @@ static NSString* getStandardString( int nButtonId )
     return aText.getLength() ? CreateNSString( aText) : nil;
 }
 
-int AquaSalSystem::ShowNativeMessageBox( const String& rTitle,
-                                        const String& rMessage,
+int AquaSalSystem::ShowNativeMessageBox( const rtl::OUString& rTitle,
+                                        const rtl::OUString& rMessage,
                                         int nButtonCombination,
                                         int nDefaultButton)
 {

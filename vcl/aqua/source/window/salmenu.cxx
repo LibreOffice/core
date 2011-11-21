@@ -677,7 +677,7 @@ void AquaSalMenu::SetItemImage( unsigned /*nPos*/, SalMenuItem* pSMI, const Imag
         [pImage release];
 }
 
-void AquaSalMenu::SetItemText( unsigned /*i_nPos*/, SalMenuItem* i_pSalMenuItem, const XubString& i_rText )
+void AquaSalMenu::SetItemText( unsigned /*i_nPos*/, SalMenuItem* i_pSalMenuItem, const rtl::OUString& i_rText )
 {
     if (!i_pSalMenuItem)
         return;
@@ -712,7 +712,7 @@ void AquaSalMenu::SetItemText( unsigned /*i_nPos*/, SalMenuItem* i_pSalMenuItem,
     }
 }
 
-void AquaSalMenu::SetAccelerator( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& /*rKeyName*/ )
+void AquaSalMenu::SetAccelerator( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const rtl::OUString& /*rKeyName*/ )
 {
     sal_uInt16 nModifier;
     sal_Unicode nCommandKey = 0;
