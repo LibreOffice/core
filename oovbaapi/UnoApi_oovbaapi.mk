@@ -56,6 +56,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,oovbaapi,oovbaapi/ooo/vba/ms
 	MSFormReturnTypes \
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,oovbaapi,oovbaapi/ooo/vba/excel,\
+	Button \
 	SheetObjects \
 ))
 
@@ -94,6 +95,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,oovbaapi/ooo/vba,\
 	XDocumentProperty \
 	XDocumentsBase \
 	XErrObject \
+	XExecutableDialog \
 	XFileDialog \
 	XFileDialogSelectedItems \
 	XFileSearch \
@@ -103,6 +105,8 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,oovbaapi/ooo/vba,\
 	XHelperInterface \
 	XPageSetupBase \
 	XPropValue \
+	XVBAAppService \
+	XVBADocService \
 	XVBAToOOEventDescGen \
 	XWindowBase \
 ))
@@ -1042,6 +1046,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/word,\
 	XBorders \
 	XCell \
 	XCells \
+	XCheckBox \
 	XColumn \
 	XColumns \
 	XDialog \

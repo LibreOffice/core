@@ -29,8 +29,7 @@
 #define __ooo_vba_excel_Button_idl__
 
 #include <ooo/vba/excel/XSheetObject.idl>
-
-#include <ooo/vba/excel/XCharacters.idl>
+#include <ooo/vba/excel/XControlObject.idl>
 #include <ooo/vba/excel/XButton.idl>
 
 //=============================================================================
