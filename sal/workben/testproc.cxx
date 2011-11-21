@@ -43,7 +43,6 @@
 int MAIN (void)
 {
     //oslProcess Process;
-    oslProcessError  ProcessError;
     sal_uInt32 nArgCount;
     sal_uInt32 index;
     rtl_uString* ustrExeFile=0;
@@ -62,17 +61,8 @@ int MAIN (void)
         fprintf(stderr,"done ...\n\n");
     }
 
-    ProcessError = osl_getExecutableFile(&ustrExeFile);
+    osl_getExecutableFile(&ustrExeFile);
 
-/*
-    osl_executeProcess( "e:\\test\\os2de202.exe",
-                        NULL,
-                        osl_Process_NORMAL,
-                        0L,
-                        NULL,
-                        NULL,
-                        NULL,
-                        &Process );*/
     return 0;
 }
 

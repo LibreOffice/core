@@ -45,7 +45,7 @@ int COUNT = 1;
 int COUNT = 10000000;
 #endif
 
-#if defined __GXX_EXPERIMENTAL_CXX0X__
+#if defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L
 #   define HAVE_CXX_Ox 1
 #endif
 
