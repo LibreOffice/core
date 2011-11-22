@@ -37,12 +37,6 @@
 
 #include "verinfo.hrc"
 
-#ifdef WIN32
-#define FOR_WIN_X " (32 Bit)"
-#else
-#define FOR_WIN_X ""
-#endif
-
 // -----------------------------------------------------------------------
 //                  language/character set specification table
 // -----------------------------------------------------------------------
