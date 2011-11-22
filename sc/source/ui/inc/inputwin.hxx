@@ -175,12 +175,21 @@ public:
     virtual void StopEditEngine( sal_Bool bAll );
     int GetLineCount();
     virtual void Resize();
+    long GetPixelTextHeight();
+    long GetPixelHeightForLines( long nLines );
+    long GetEditEngTxtHeight();
+    void DoScroll( ScrollBar* );
+    virtual void SetTextString( const String& rString );
+    void SetNumLines( long nLines );
 protected:
+    void SetScrollBarRange();
     void InitEditEngine(SfxObjectShell* pObjSh);
 
     virtual void Paint( const Rectangle& rRec );
+    DECL_LINK( NotifyHdl, EENotify* );
+    DECL_LINK( ModifyHdl, EENotify* );
 private:
-//    bool bIsMultiLine;
+    long mnLines;
 };
 
 class ScInputBarGroup : public ScTextWndBase
@@ -205,13 +214,12 @@ public:
     bool            IsFocus();
     void            MakeDialogEditView();
     sal_Bool            IsInputActive();
-
+    ScrollBar&      GetScrollBar() { return aScrollBar; }
 private:
 
     ScMultiTextWnd  aMultiTextWnd;
     PushButton      aButton;
     ScrollBar       aScrollBar;
-//    bool            bIsMultiLine;
 
     DECL_LINK( ClickHdl,	 PushButton* );
     DECL_LINK( Impl_ScrollHdl,  ScrollBar* );

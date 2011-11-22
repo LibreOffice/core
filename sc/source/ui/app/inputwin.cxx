@@ -88,6 +88,7 @@
 #define THESIZE             1000000 //!!! langt... :-)
 #define TBX_WINDOW_HEIGHT   22 // in Pixeln - fuer alle Systeme gleich?
 #define LEFT_OFFSET         5
+#define INPUTWIN_MULTILINES 10
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY;
@@ -515,23 +516,14 @@ void ScInputWindow::Select()
 
 void ScInputWindow::Resize()
 {
-    ToolBox::Resize();
 
     if ( lcl_isExperimentalMode() )
     {
         Size aSize = GetSizePixel();
-        //aTextWindow.SetSizePixel( aSize );
-        if( bIsMultiLine )
-        {
-        aSize.Height()=77;
-        }
-        else
-        {
-        aSize.Height()=38;
-        }
+        aTextWindow.Resize();
+        aSize.Height() = aTextWindow.GetSizePixel().Height() + 11;
         SetSizePixel(aSize);
         Invalidate();
-        aTextWindow.Resize();
     }
     else
     {
@@ -544,6 +536,7 @@ void ScInputWindow::Resize()
         aTextWindow.SetSizePixel( aSize );
         aTextWindow.Invalidate();
     }
+    ToolBox::Resize();
 }
 
 void ScInputWindow::SetFuncString( const String& rString, sal_Bool bDoEdit )
@@ -774,24 +767,26 @@ void ScInputWindow::SetMultiLineStatus(bool bMode)
 ScInputBarGroup::ScInputBarGroup(Window* pParent)
     :   ScTextWndBase        ( pParent, WinBits(WB_HIDE) ),
         aMultiTextWnd        ( this ),
-        aButton              ( this ),
-        aScrollBar           ( this, WB_VERT )
+        aButton              ( this, WB_RECTSTYLE ),
+        aScrollBar           ( this, WB_VERT | WB_DRAG )
 {
       aMultiTextWnd.Show();
       aMultiTextWnd.SetQuickHelpText( ScResId( SCSTR_QHELP_INPUTWND ) );
       aMultiTextWnd.SetHelpId		( HID_INSWIN_INPUT );
 
+      // Hmm we can't seem to increase the width of the scrollbar :-/
+      // seems locked to GetSettings().GetStyleSettings().GetScrollBarSize()
+      // But... I guess if needs be we can get around this somehow, doesn't look
+      // too bad at the size from 'Settings' for me
+      // set button width to scrollbar width then for the moment
       aButton.SetClickHdl	( LINK( this, ScInputBarGroup, ClickHdl ) );
-      aButton.SetSizePixel(Size(0.5*TBX_WINDOW_HEIGHT,TBX_WINDOW_HEIGHT));
+      aButton.SetSizePixel(Size(GetSettings().GetStyleSettings().GetScrollBarSize(), TBX_WINDOW_HEIGHT) );
       aButton.Enable();
+      aButton.SetSymbol( SYMBOL_SPIN_DOWN  );
       aButton.Show();
+      aScrollBar.SetSizePixel( aButton.GetSizePixel() );
 
-      aScrollBar.SetSizePixel( Size(0.5*TBX_WINDOW_HEIGHT,TBX_WINDOW_HEIGHT) );
-
-      aScrollBar.SetPageSize( 1 );
-      aScrollBar.SetVisibleSize( 1 );
-      aScrollBar.SetLineSize( 1 );
-      aScrollBar.Show();
+      aScrollBar.SetScrollHdl( LINK( this, ScInputBarGroup, Impl_ScrollHdl ) );
 }
 
 ScInputBarGroup::~ScInputBarGroup()
@@ -840,21 +835,47 @@ void ScInputBarGroup::Resize()
     Size aSize  = GetSizePixel();
     aSize.Width() = Max( ((long)(nWidth - nLeft - LEFT_OFFSET)), (long)0 );
 
+    aScrollBar.SetPosPixel(Point(aSize.Width()- ( aButton.GetSizePixel().Width() ) + 1, aButton.GetSizePixel().Height() - 1 ));
+
+    Size aTmpSize( aSize );
+    aTmpSize.Width() = aTmpSize.Width() - aButton.GetSizePixel().Width();
+    aMultiTextWnd.SetSizePixel(aTmpSize);
+
+    aMultiTextWnd.Resize();
+
+    aSize.Height() = aMultiTextWnd.GetSizePixel().Height();
+
+    SetSizePixel(aSize);
+
     if(pParent->GetMultiLineStatus())
     {
-        aSize.Height()=3*TBX_WINDOW_HEIGHT;
+        aButton.SetSymbol( SYMBOL_SPIN_UP  );
+        Size scrollSize = aButton.GetSizePixel();
+        scrollSize.Height() = aMultiTextWnd.GetSizePixel().Height() - aButton.GetSizePixel().Height();
+        aScrollBar.SetSizePixel( scrollSize );
+
+        Size aOutSz = aMultiTextWnd.GetOutputSize();
+
+        aScrollBar.SetVisibleSize( aOutSz.Height() );
+        aScrollBar.SetPageSize( aOutSz.Height() );
+        aScrollBar.SetLineSize( aMultiTextWnd.GetTextHeight() );
+        aScrollBar.SetRange( Range( 0, aMultiTextWnd.GetEditEngTxtHeight() ) );
+
+        if ( aMultiTextWnd.GetEditView() )
+            aScrollBar.SetThumbPos( 0 );
+
+        aScrollBar.Resize();
+        aScrollBar.Show();
     }
     else
     {
-        aSize.Height()=TBX_WINDOW_HEIGHT;
+        aButton.SetSymbol( SYMBOL_SPIN_DOWN  );
+        aScrollBar.Hide();
     }
-    SetSizePixel(aSize);
 
-    aScrollBar.SetPosPixel(Point(aSize.Width()-4*LEFT_OFFSET,0));
-    aButton.SetPosPixel(Point(aSize.Width()-2*LEFT_OFFSET,0));
+    aButton.SetPosPixel(Point(aSize.Width() - ( aButton.GetSizePixel().Width()  ) + 1 ,0));
 
     Invalidate();
-    aMultiTextWnd.Resize();
 }
 
 
@@ -911,12 +932,14 @@ IMPL_LINK( ScInputBarGroup, ClickHdl, PushButton*, EMPTYARG )
     if(!pParent->GetMultiLineStatus())
     {
         pParent->SetMultiLineStatus(true);
+        aMultiTextWnd.SetNumLines( INPUTWIN_MULTILINES );
     }
     else
     {
         pParent->SetMultiLineStatus(false);
+        aMultiTextWnd.SetNumLines( 1 );
     }
-    //pParent->CalcWindowSizePixel(); // TODO: changed from RecalcItems(). check if this does the same thing.
+
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if ( pViewFrm )
     {
@@ -931,7 +954,7 @@ IMPL_LINK( ScInputBarGroup, ClickHdl, PushButton*, EMPTYARG )
 
         if ( xLayoutManager.is() )
         {
-            xLayoutManager->lock(); // this will core
+            xLayoutManager->lock();
             pParent->Resize();
             DataChangedEvent aFakeUpdate( DATACHANGED_SETTINGS, NULL,  SETTINGS_STYLE );
             // this basically will trigger the reposititioning of the
@@ -948,8 +971,9 @@ IMPL_LINK( ScInputBarGroup, ClickHdl, PushButton*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScInputBarGroup, Impl_ScrollHdl, ScrollBar*, EMPTYARG )
+IMPL_LINK( ScInputBarGroup, Impl_ScrollHdl, ScrollBar*, pCurScrollBar )
 {
+    aMultiTextWnd.DoScroll( pCurScrollBar );
     return 0;
 }
 
@@ -961,6 +985,7 @@ IMPL_LINK( ScInputBarGroup, Impl_ScrollHdl, ScrollBar*, EMPTYARG )
 ScMultiTextWnd::ScMultiTextWnd( Window* pParen ) : ScTextWnd( pParen )
 {
     nTextStartPos = TEXT_MULTI_STARTPOS;
+    mnLines = 1;
 }
 
 int ScMultiTextWnd::GetLineCount()
@@ -985,68 +1010,96 @@ void ScMultiTextWnd::Paint( const Rectangle& rRec )
     }
 }
 
+long ScMultiTextWnd::GetPixelTextHeight()
+{
+    long height = ( LogicToPixel(Size(0,GetTextHeight())).Height() );
+    // need to figure out why GetTextHeight is not set up when I need it
+    // some initialisation timing issue ?
+    return Max ( long( 14 ), height );
+}
+
+
+long ScMultiTextWnd::GetPixelHeightForLines( long nLines )
+{
+    return nLines *  GetPixelTextHeight();
+}
+
+void ScMultiTextWnd::SetNumLines( long nLines )
+{
+    mnLines = nLines;
+}
+
 void ScMultiTextWnd::Resize()
 {
-    Window *w=GetParent()->GetParent();
-    ScInputWindow *pParent;
-    pParent=dynamic_cast<ScInputWindow*>(w);
-
-    if(pParent==NULL)
-    {
-        OSL_FAIL("The parent window pointer pParent is null");
-        return;
-    }
-
-
-    long nWidth = GetParent()->GetSizePixel().Width();
-    long nLeft  = GetPosPixel().X();
-
+    // Only Height is recalculated here, Width is applied from
+    // parent/container window
     Size aTextBoxSize  = GetSizePixel();
-    aTextBoxSize.Width() = Max( ((long)(nWidth - nLeft - 4*LEFT_OFFSET)), (long)0 );
 
-    if(pParent->GetMultiLineStatus())
+    aTextBoxSize.Height()=( GetPixelHeightForLines( mnLines ) ) + 8;
+
+    if(pEditView)
     {
-        aTextBoxSize.Height()=3*LogicToPixel(Size(0,GetTextHeight())).Height()+8;
+        Size aOutputSize = GetOutputSizePixel();
+        Size aLineSize = Size(0,GetPixelTextHeight());
+        int nDiff = (aOutputSize.Height() - ( mnLines *aLineSize.Height()))/2;
+        Point aPos1(TEXT_STARTPOS,nDiff);
+        Point aPos2(aOutputSize.Width(),aOutputSize.Height());
 
-        if(pEditView)
-        {
-            Size aOutputSize=GetOutputSizePixel();
-            Size aLineSize = LogicToPixel(Size(0,pEditEngine->GetLineHeight(0,0)));
+        pEditView->SetOutputArea(
+            PixelToLogic(Rectangle(aPos1, aPos2)));
 
-            int nDiff = (aOutputSize.Height() - 3*aLineSize.Height())/2;
+        pEditEngine->SetPaperSize( PixelToLogic(Size((aOutputSize.Width()-= 2 * nTextStartPos - 1), 10000 ) ));
 
-            Point aPos1(TEXT_STARTPOS,nDiff);
-            Point aPos2(aOutputSize.Width()-5,aOutputSize.Height()-2);
-
-            pEditView->SetOutputArea(
-                PixelToLogic(Rectangle(aPos1, aPos2)));
-
-           pEditEngine->SetPaperSize( PixelToLogic(Size(aOutputSize.Width() - 2*LEFT_OFFSET, 10000 ) ));
-
-        }
-
-    }
-
-    else
-    {
-        aTextBoxSize.Height()=TBX_WINDOW_HEIGHT;
-        if(pEditView)
-        {
-            Size aOutputSize=GetOutputSizePixel();
-            Size aLineSize = LogicToPixel(Size(0,pEditEngine->GetLineHeight(0,0)));
-
-            int nDiff = (aOutputSize.Height() - aLineSize.Height())/2;
-
-            Point aPos1(TEXT_STARTPOS,nDiff);
-            Point aPos2(aOutputSize.Width()-5,(aOutputSize.Height() - nDiff));
-
-            pEditView->SetOutputArea(
-                PixelToLogic(Rectangle(aPos1, aPos2)));
-
-            pEditEngine->SetPaperSize( PixelToLogic(Size(aOutputSize.Width() - 2*LEFT_OFFSET, 10000 ) ));
-        }
     }
     SetSizePixel(aTextBoxSize);
+}
+
+IMPL_LINK(ScMultiTextWnd, ModifyHdl, EENotify*, pNotify)
+{
+    ScTextWnd::NotifyHdl( pNotify );
+    return 0;
+}
+
+IMPL_LINK(ScMultiTextWnd, NotifyHdl, EENotify*, pNotify)
+{
+    // need to process EE_NOTIFY_TEXTVIEWSCROLLED here
+    if ( pNotify && pNotify->eNotificationType == EE_NOTIFY_TEXTVIEWSCROLLED )
+        SetScrollBarRange();
+    return 0;
+}
+
+long ScMultiTextWnd::GetEditEngTxtHeight()
+{
+    return pEditView ? pEditView->GetEditEngine()->GetTextHeight(0) : 0;
+}
+
+void ScMultiTextWnd::SetScrollBarRange()
+{
+    // #FIXME lets do better that this ( and ditto for the DoScroll
+    // method above ) probably need to pass in ScInputBarGroup* as parent
+    // in the ctor
+    ScInputBarGroup* pBarGroup = dynamic_cast<ScInputBarGroup*>( GetParent() );
+    if ( pBarGroup && pEditView )
+    {
+        ScrollBar& rVBar = pBarGroup->GetScrollBar();
+        rVBar.SetRange( Range( 0, GetEditEngTxtHeight() ) );
+        long currentDocPos = pEditView->GetVisArea().TopLeft().Y();
+        rVBar.SetThumbPos( currentDocPos );
+    }
+}
+
+void
+ScMultiTextWnd::DoScroll( ScrollBar* pCurScrollBar )
+{
+    if ( pEditView )
+    {
+        long currentDocPos = LogicToPixel(Size(0,pEditView->GetVisArea().TopLeft().Y() )).Height();
+        long nDiff = currentDocPos - pCurScrollBar->GetThumbPos();
+        Point aPos1(nDiff, nDiff);
+        pEditView->Scroll( 0, PixelToLogic(Rectangle(aPos1,aPos1) ).TopLeft().Y() );
+        currentDocPos = LogicToPixel(Size(0,pEditView->GetVisArea().TopLeft().Y() )).Height();
+        pCurScrollBar->SetThumbPos( currentDocPos );
+    }
 }
 
 void ScMultiTextWnd::StartEditEngine()
@@ -1130,7 +1183,6 @@ void ScMultiTextWnd::InitEditEngine(SfxObjectShell* pObjSh)
 
     Size barSize=GetSizePixel();
     barSize.Width() -= (2*nTextStartPos-4);
-    printf("bar size width %ld\n",barSize.Width());
     pEditEngine->SetUpdateMode( false );
     pEditEngine->SetPaperSize( PixelToLogic(Size(barSize.Width(),10000)) );
     pEditEngine->SetWordDelimiters(
@@ -1179,7 +1231,8 @@ void ScMultiTextWnd::InitEditEngine(SfxObjectShell* pObjSh)
     if ( bIsRTL )
         lcl_ModifyRTLVisArea( pEditView );
 
-    pEditEngine->SetModifyHdl(LINK(this, ScTextWnd, NotifyHdl));
+    pEditEngine->SetModifyHdl(LINK(this, ScMultiTextWnd, ModifyHdl));
+    pEditEngine->SetNotifyHdl(LINK(this, ScMultiTextWnd, NotifyHdl));
 
     if (!maAccTextDatas.empty())
         maAccTextDatas.back()->StartEdit();
@@ -1200,6 +1253,45 @@ void ScMultiTextWnd::StopEditEngine( sal_Bool /*bAll*/ )
 {
 }
 
+void ScMultiTextWnd::SetTextString( const String& rNewString )
+{
+    if ( rNewString != aString )
+    {
+        // #TODO - is it really necessary to do this here, the base
+        // class never seems to have it's own editengine set up
+        long nTextSize = 0;
+        xub_StrLen nDifPos;
+        if (rNewString.Len() > aString.Len())
+            nDifPos = rNewString.Match(aString);
+        else
+            nDifPos = aString.Match(rNewString);
+
+        long nSize1 = GetTextWidth(aString);
+        long nSize2 = GetTextWidth(rNewString);
+        if ( nSize1>0 && nSize2>0 )
+            nTextSize = Max( nSize1, nSize2 );
+        else
+            nTextSize = GetOutputSize().Width();
+
+        if (nDifPos == STRING_MATCH)
+            nDifPos = 0;
+
+        Point aLogicStart = PixelToLogic(Point(nTextStartPos-1,0));
+        long nStartPos = aLogicStart.X();
+        long nInvPos = nStartPos;
+        if (nDifPos)
+            nInvPos += GetTextWidth(aString,0,nDifPos);
+
+        sal_uInt16 nFlags = 0;
+        if ( nDifPos == aString.Len() )         // only new characters appended
+            nFlags = INVALIDATE_NOERASE;        // then background is already clear
+        Invalidate( Rectangle( nInvPos, 0,
+           nStartPos+nTextSize, GetOutputSize().Height()-1 ),
+           nFlags );
+    }
+    ScTextWnd::SetTextString( rNewString );
+    SetScrollBarRange();
+}
 //========================================================================
 // 							ScTextWnd
 //========================================================================
@@ -1670,7 +1762,6 @@ void ScTextWnd::SetTextString( const String& rNewString )
                 sal_uInt16 nFlags = 0;
                 if ( nDifPos == aString.Len() )         // only new characters appended
                     nFlags = INVALIDATE_NOERASE;        // then background is already clear
-
                 Invalidate( Rectangle( nInvPos, 0,
                                         nStartPos+nTextSize, GetOutputSize().Height()-1 ),
                             nFlags );
