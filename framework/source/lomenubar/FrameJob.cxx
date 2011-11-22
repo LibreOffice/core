@@ -153,7 +153,7 @@ on_registrar_available (GDBusConnection * /*connection*/,
     GError     *error = NULL;
     GDBusProxy *proxy;
 
-    FrameHelper *helper = (FrameHelper*)user_data;
+    FrameHelper *helper = static_cast<FrameHelper*>(user_data);
     unsigned long xid = helper->getXID();
 
     proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
@@ -207,7 +207,7 @@ on_registrar_unavailable (GDBusConnection * /*connection*/,
     //TODO: Unregister window?
 
     // Show menubar
-    FrameHelper *helper = (FrameHelper*)user_data;
+    FrameHelper *helper = static_cast<FrameHelper*>(user_data);
     Reference < XFrame > xFrame  = helper->getFrame ();
     Reference< XPropertySet > frameProps (xFrame, UNO_QUERY);
     Reference < XLayoutManager > xLayoutManager(frameProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager"))),
@@ -343,8 +343,9 @@ FrameJob::getRootMenuitem (Reference < XMenu > xMenu, gpointer helper)
 {
 
     DbusmenuMenuitem *root = dbusmenu_menuitem_new_with_id (0);
-    ((FrameHelper*)helper)->setRootItem(root);
-    ((FrameHelper*)helper)->rebuildMenu (xMenu, root);
+    FrameHelper* fHelper = static_cast<FrameHelper*>(helper);
+    fHelper->setRootItem(root);
+    fHelper->rebuildMenu (xMenu, root);
 
     return root;
 }
