@@ -90,7 +90,6 @@ uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl:
         }
         catch( const uno::Exception &e )
         {
-            (void)e;
             SAL_WARN_S(
                 "avmedia",
                 "couldn't create media player " AVMEDIA_MANAGER_SERVICE_NAME

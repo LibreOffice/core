@@ -822,13 +822,11 @@ sal_Bool SfxLibraryContainer::init_Impl(
             }
             catch ( xml::sax::SAXException& e )
             {
-                (void) e; // avoid warning
                 SAL_WARN_S("basic", e.Message);
                 return sal_False;
             }
             catch ( io::IOException& e )
             {
-                (void) e; // avoid warning
                 SAL_WARN_S("basic", e.Message);
                 return sal_False;
             }

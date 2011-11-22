@@ -681,7 +681,6 @@ void Package::processPackage_impl(
             }
         }
         catch (RuntimeException &e) {
-            (void) e; // avoid warnings
             SAL_WARN_S(
                 "basic", "unexpected RuntimeException \"" << e.Message << '"');
             throw;

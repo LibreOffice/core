@@ -1742,8 +1742,6 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
 
 sal_uInt16 SfxBindings::EnterRegistrations(const char *pFile, int nLine)
 {
-    (void)pFile;
-    (void)nLine;
     DBG_MEMTEST();
     SAL_INFO_S(
         "sfx2",
@@ -1787,8 +1785,6 @@ sal_uInt16 SfxBindings::EnterRegistrations(const char *pFile, int nLine)
 void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, const char *pFile, int nLine )
 {
     (void)nLevel; // unused variable
-    (void)pFile;
-    (void)nLine;
     DBG_MEMTEST();
     DBG_ASSERT( nRegLevel, "Leave without Enter" );
     DBG_ASSERT( nLevel == USHRT_MAX || nLevel == nRegLevel, "wrong Leave" );
@@ -1852,8 +1848,8 @@ void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, const char *pFile, int 
         "sfx2",
         std::setw(Min(nRegLevel, sal_uInt16(8))) << ' ' << "this = " << this
             << " Level = " << nRegLevel << " SfxBindings::LeaveRegistrations "
-            << "File: " << (pFile ? pFile : "--") << " Line: "
-            << (pFile ? nLine : 0));
+            << (pFile
+                ? SAL_STREAM("File: " << pFile << " Line: " << nLine) : ""));
 }
 
 //--------------------------------------------------------------------
