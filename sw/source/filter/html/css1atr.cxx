@@ -1381,8 +1381,7 @@ static sal_Bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const String& rSelector,
                      sal_Bool bCheckForPseudo  )
 {
     sal_Bool bScriptDependent = sal_False;
-    if( SwHTMLWriter::HasScriptDependentItems( rItemSet,
-                rHTMLWrt.IsHTMLMode(HTMLMODE_DROPCAPS) && bHasClass ) )
+    if( SwHTMLWriter::HasScriptDependentItems( rItemSet, bHasClass ) )
     {
         bScriptDependent = sal_True;
         String aSelector( rSelector );
@@ -1778,8 +1777,7 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
     // Drop-Caps ausgeben
     const SfxPoolItem *pItem;
-    if( rHTMLWrt.IsHTMLMode(HTMLMODE_DROPCAPS) &&
-        SFX_ITEM_SET==aItemSet.GetItemState( RES_PARATR_DROP, sal_False, &pItem ))
+    if( SFX_ITEM_SET==aItemSet.GetItemState( RES_PARATR_DROP, sal_False, &pItem ))
     {
         String sOut( aSelector );
         sOut.Append( ':');

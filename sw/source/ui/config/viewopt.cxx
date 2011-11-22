@@ -348,7 +348,6 @@ sal_uInt16      GetHtmlMode(const SwDocShell* pShell)
             break;
             case HTML_CFG_WRITER:
                 nRet |= HTMLMODE_FRM_COLUMNS|HTMLMODE_FULL_STYLES|
-                        HTMLMODE_DROPCAPS|
                         HTMLMODE_SOME_ABS_POS;
             break;
         }

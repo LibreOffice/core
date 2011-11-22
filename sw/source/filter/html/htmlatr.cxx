@@ -648,7 +648,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         pFmtInfo = new SwHTMLFmtInfo( &rFmt, rWrt.pDoc, rHWrt.pTemplate,
                                       rHWrt.bCfgOutStyles, rHWrt.eLang,
                                       rHWrt.nCSS1Script,
-                                      !rHWrt.IsHTMLMode(HTMLMODE_DROPCAPS) );
+                                      false );
         rHWrt.aTxtCollInfos.C40_PTR_INSERT( SwHTMLFmtInfo, pFmtInfo );
         String aName( rFmt.GetName() );
         if( 0 != rHWrt.aScriptParaStyles.count( aName ) )
