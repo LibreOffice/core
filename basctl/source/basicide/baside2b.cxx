@@ -769,7 +769,7 @@ void EditorWindow::ImpDoHighlight( sal_uLong nLine )
         for ( size_t i = 0; i < aPortions.size(); i++ )
         {
             HighlightPortion& r = aPortions[i];
-            const Color& rColor = ((ModulWindowLayout*)pModulWindow->GetLayoutWindow())->getSyntaxColor(r.tokenType);
+            const Color& rColor = dynamic_cast<ModulWindowLayout*>(pModulWindow->GetLayoutWindow())->getSyntaxColor(r.tokenType);
             pEditEngine->SetAttrib( TextAttribFontColor( rColor ), nLine, r.nBegin, r.nEnd, sal_True );
         }
 
@@ -960,10 +960,10 @@ void BreakPointWindow::Paint( const Rectangle& )
     Size aOutSz( GetOutputSize() );
     long nLineHeight = GetTextHeight();
 
-    Image aBrk1(((ModulWindowLayout *) pModulWindow->GetLayoutWindow())->
-                getImage(IMGID_BRKENABLED));
-    Image aBrk0(((ModulWindowLayout *) pModulWindow->GetLayoutWindow())->
-                getImage(IMGID_BRKDISABLED));
+    ModulWindowLayout* pModulWindowLayout = dynamic_cast<ModulWindowLayout*>(pModulWindow->GetLayoutWindow());
+
+    Image aBrk1(pModulWindowLayout->getImage(IMGID_BRKENABLED));
+    Image aBrk0(pModulWindowLayout->getImage(IMGID_BRKDISABLED));
     Size aBmpSz( aBrk1.GetSizePixel() );
     aBmpSz = PixelToLogic( aBmpSz );
     Point aBmpOff( 0, 0 );
@@ -1009,9 +1009,8 @@ void BreakPointWindow::ShowMarker( sal_Bool bShow )
     Size aOutSz( GetOutputSize() );
     long nLineHeight = GetTextHeight();
 
-    Image aMarker(((ModulWindowLayout*)pModulWindow->GetLayoutWindow())->
-                  getImage(bErrorMarker
-                           ? IMGID_ERRORMARKER : IMGID_STEPMARKER));
+    ModulWindowLayout* pModulWindowLayout = dynamic_cast<ModulWindowLayout*>(pModulWindow->GetLayoutWindow());
+    Image aMarker(pModulWindowLayout->getImage(bErrorMarker ? IMGID_ERRORMARKER : IMGID_STEPMARKER));
 
     Size aMarkerSz( aMarker.GetSizePixel() );
     aMarkerSz = PixelToLogic( aMarkerSz );

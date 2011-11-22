@@ -205,7 +205,7 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
             pWin->SetName( rNewName );
 
             // set new module in module window
-            ModulWindow* pModWin = (ModulWindow*)pWin;
+            ModulWindow* pModWin = dynamic_cast<ModulWindow*>(pWin);
             pModWin->SetSbModule( (SbModule*)pModWin->GetBasic()->FindModule( rNewName ) );
 
             // update tabwriter
@@ -308,7 +308,7 @@ namespace
             SbModule* pModule = pMethod->GetModule();
             ENSURE_OR_BREAK( pModule, "BasicIDE::ChooseMacro: No Module found!" );
 
-            StarBASIC* pBasic = (StarBASIC*)pModule->GetParent();
+            StarBASIC* pBasic = dynamic_cast<StarBASIC*>(pModule->GetParent());
             ENSURE_OR_BREAK( pBasic, "BasicIDE::ChooseMacro: No Basic found!" );
 
             BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );

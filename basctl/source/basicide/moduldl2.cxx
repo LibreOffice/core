@@ -182,7 +182,7 @@ BasicCheckBox::~BasicCheckBox()
     SvLBoxEntry* pEntry = First();
     while ( pEntry )
     {
-        delete (BasicLibUserData*)pEntry->GetUserData();
+        delete static_cast<BasicLibUserData*>(pEntry->GetUserData());
         pEntry = Next( pEntry );
     }
 }

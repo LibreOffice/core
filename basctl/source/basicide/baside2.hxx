@@ -148,7 +148,7 @@ public:
                     EditorWindow( Window* pParent );
                     ~EditorWindow();
 
-    ExtTextEngine*  GetEditEngine() const   { return (ExtTextEngine*)pEditEngine; }
+    ExtTextEngine*  GetEditEngine() const   { return pEditEngine; }
     ExtTextView*    GetEditView() const     { return pEditView; }
     ProgressInfo*   GetProgress() const     { return pProgress; }
 

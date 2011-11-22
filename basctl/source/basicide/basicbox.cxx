@@ -328,7 +328,7 @@ void BasicLibBox::Select()
 void BasicLibBox::NotifyIDE()
 {
     sal_uInt16 nSelPos = GetSelectEntryPos();
-    BasicLibEntry* pEntry = (BasicLibEntry*)GetEntryData( nSelPos );
+    BasicLibEntry* pEntry = static_cast<BasicLibEntry*>(GetEntryData( nSelPos ));
     if ( pEntry )
     {
         ScriptDocument aDocument( pEntry->GetDocument() );
@@ -352,7 +352,7 @@ void BasicLibBox::ClearBox()
     sal_uInt16 nCount = GetEntryCount();
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
-        BasicLibEntry* pEntry = (BasicLibEntry*)GetEntryData( i );
+        BasicLibEntry* pEntry = static_cast<BasicLibEntry*>(GetEntryData( i ));
         delete pEntry;
     }
     ListBox::Clear();
