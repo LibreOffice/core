@@ -33,6 +33,7 @@
 
 
 #include <basic/sbx.hxx>
+#include <vcl/msgbox.hxx>
 #include <vcl/cmdevt.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/sound.hxx>

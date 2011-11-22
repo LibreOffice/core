@@ -32,7 +32,7 @@
 #include <memory>
 
 #include <ide_pch.hxx>
-
+#include <vcl/msgbox.hxx>
 
 #include <moduldlg.hrc>
 #include <moduldlg.hxx>

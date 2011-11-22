@@ -31,6 +31,7 @@
 
 #include <ide_pch.hxx>
 
+#include <vcl/msgbox.hxx>
 #include <vector>
 #include <algorithm>
 #include <basic/sbx.hxx>

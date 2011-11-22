@@ -30,7 +30,7 @@
 #include "precompiled_basctl.hxx"
 
 #include <ide_pch.hxx>
-
+#include <vcl/msgbox.hxx>
 #include <sot/storinfo.hxx>
 
 #include <moduldlg.hrc>

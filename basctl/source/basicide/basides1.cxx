@@ -29,17 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
 
-#include "docsignature.hxx"
-
-#include <basic/sbx.hxx>
 #define _SVSTDARR_STRINGS
-#include <svl/svstdarr.hxx>
-#include <svl/visitem.hxx>
-#include <ide_pch.hxx>
+
+#include "ide_pch.hxx"
 
 #define _SOLAR__PRIVATE 1
-
-// #define _SVX_NOIDERESIDS
 
 #define SI_NOCONTROL
 #define SI_NOSBXCONTROLS
@@ -47,43 +41,29 @@
 #define SI_NODRW
 #define _VCTRLS_HXX
 
-#include <basidesh.hrc>
-#include <basidesh.hxx>
-#include <baside2.hxx>
-#include <baside3.hxx>
-#include <basobj.hxx>
-#include <iderdll.hxx>
-#include <iderdll2.hxx>
-#include <sbxitem.hxx>
-#include <managelang.hxx>
-#include <localizationmgr.hxx>
-#include <helpid.hrc>
-#include <moduldlg.hxx>
+#include "basidesh.hrc"
+#include "helpid.hrc"
 
-#include <svtools/texteng.hxx>
-#include <svtools/textview.hxx>
-#include <svtools/xtextedt.hxx>
-#include <tools/urlobj.hxx>
-#include <tools/diagnose_ex.h>
-#include <sfx2/minfitem.hxx>
-#include <sfx2/docfile.hxx>
-#include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
-#include <com/sun/star/script/XLibraryContainer.hpp>
-#include <com/sun/star/script/XLibraryContainerPassword.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include "baside2.hxx"
+#include "baside3.hxx"
+#include "basobj.hxx"
+#include "docsignature.hxx"
+#include "iderdll.hxx"
+#include "iderdll2.hxx"
+#include "localizationmgr.hxx"
+#include "managelang.hxx"
+#include "moduldlg.hxx"
+
 #include <com/sun/star/frame/XLayoutManager.hpp>
-
-#include <algorithm>
-#include <memory>
-
+#include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#include <svl/visitem.hxx>
+#include <svtools/xtextedt.hxx>
+#include <vcl/msgbox.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
-
-class SvxSearchItem;
-
 
 // until we have some configuration lets just keep
 // persist this value for the process lifetime

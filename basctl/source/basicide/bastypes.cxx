@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
 
-
+#include <vcl/msgbox.hxx>
 #include <vector>
 #include <algorithm>
 

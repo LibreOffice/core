@@ -50,6 +50,7 @@
 #include <framework/documentundoguard.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/moduleoptions.hxx>
+#include <vcl/msgbox.hxx>
 
 #include <vector>
 #include <algorithm>

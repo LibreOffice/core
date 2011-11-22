@@ -30,7 +30,7 @@
 #include "precompiled_basctl.hxx"
 
 #include <memory>
-
+#include <vcl/msgbox.hxx>
 #include <ide_pch.hxx>
 
 

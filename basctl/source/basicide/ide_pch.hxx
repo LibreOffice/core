@@ -25,12 +25,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <svheader.hxx>
 
 #define ITEMID_SEARCH           0
 #define ITEMID_SIZE             0
 
-#include <vcl/msgbox.hxx>
+//#include <vcl/msgbox.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/intitem.hxx>

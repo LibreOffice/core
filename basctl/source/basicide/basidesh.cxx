@@ -30,11 +30,8 @@
 #include "precompiled_basctl.hxx"
 
 // CLOOKS:
-//#define _MENUBTN_HXX
 #define _SPIN_HXX
 #define _PRVWIN_HXX
-//#define _FIELD_HXX ***
-//#define _TAB_HXX ***
 #define _DIALOGS_HXX
 #define _SVRTF_HXX
 #define _ISETBRW_HXX
@@ -47,20 +44,13 @@
 // if without PCH's:
 #include <ide_pch.hxx>
 
-
 #define _SOLAR__PRIVATE 1
-#include <basic/sbx.hxx>
-#include <svl/hint.hxx>
 #include <tools/diagnose_ex.h>
 #include <basidesh.hrc>
-#include <basidesh.hxx>
 #include <baside2.hxx>
 #include <basdoc.hxx>
-#include <basobj.hxx>
-#include <bastypes.hxx>
 #include <basicbox.hxx>
 #include <objdlg.hxx>
-#include <sbxitem.hxx>
 #include <tbxctl.hxx>
 #include <iderdll2.hxx>
 #include <basidectrlr.hxx>
@@ -74,16 +64,12 @@
 #include <svx/pszctrl.hxx>
 #include <svx/insctrl.hxx>
 #include <svx/srchdlg.hxx>
-#include <svx/lboxctrl.hxx>
 #include <svx/tbcontrl.hxx>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
-#include <com/sun/star/container/XContainerListener.hpp>
-#include <com/sun/star/script/XLibraryContainer.hpp>
-
 #include <svx/xmlsecctrl.hxx>
 #include <sfx2/viewfac.hxx>
+#include <vcl/msgbox.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;

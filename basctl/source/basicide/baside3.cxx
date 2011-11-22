@@ -37,47 +37,35 @@
 #define _SDR_NODRAGMETHODS
 #define _SDR_NOXOUTDEV
 
-#include <ide_pch.hxx>
+#include "ide_pch.hxx"
 
+#include "basidesh.hrc"
+#include "helpid.hrc"
 
-#include <vector>
-#include <basidesh.hrc>
-#include <baside3.hxx>
-#include <localizationmgr.hxx>
-#include <accessibledialogwindow.hxx>
-#include <dlged.hxx>
-#include <dlgedmod.hxx>
-#include <dlgedview.hxx>
-#include <dlgeddef.hxx>
-#include <propbrw.hxx>
+#include "accessibledialogwindow.hxx"
+#include "baside3.hxx"
+#include "basidesh.hxx"
+#include "bastype2.hxx"
+#include "dlged.hxx"
+#include "dlgeddef.hxx"
+#include "dlgedmod.hxx"
+#include "dlgedview.hxx"
+#include "iderdll.hxx"
+#include "idetemp.hxx"
+#include "localizationmgr.hxx"
+#include "propbrw.hxx"
 
-#include <basobj.hxx>
-#include <iderdll.hxx>
-#include <basidesh.hxx>
-#include <idetemp.hxx>
-#include <helpid.hrc>
-#include <bastype2.hxx>
-#include <svx/svdview.hxx>
-#include <editeng/unolingu.hxx>
-#include <tools/diagnose_ex.h>
-#include <tools/urlobj.hxx>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <xmlscript/xmldlg_imexp.hxx>
-#include <com/sun/star/script/XLibraryContainer2.hpp>
-#include <svtools/ehdl.hxx>
-#include <svtools/langtab.hxx>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/resource/StringResourceWithLocation.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
-#include <com/sun/star/resource/XStringResourceResolver.hpp>
-#include <com/sun/star/resource/StringResourceWithLocation.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/script/vba/XVBACompatibility.hpp>
+#include <comphelper/processfactory.hxx>
+#include <tools/diagnose_ex.h>
+#include <tools/urlobj.hxx>
+#include <vcl/msgbox.hxx>
+#include <xmlscript/xmldlg_imexp.hxx>
 
 using namespace comphelper;
 using namespace ::com::sun::star;

@@ -31,40 +31,28 @@
 
 #include <ide_pch.hxx>
 
-#include <svtools/texteng.hxx>
-#include <svtools/textview.hxx>
-#include <svtools/xtextedt.hxx>
-#include <basic/sbx.hxx>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include "baside2.hxx"
+#include "brkdlg.hxx"
+#include "iderdll.hxx"
+#include "iderdll2.hxx"
+
+#include "baside2.hrc"
+
+#include <basic/basrdll.hxx>
+#include <com/sun/star/script/ModuleType.hpp>
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#include <com/sun/star/script/XLibraryContainer2.hpp>
-#include <com/sun/star/document/MacroExecMode.hpp>
-#include <com/sun/star/script/ModuleType.hpp>
-#include <toolkit/helper/vclunohelper.hxx>
+#include <comphelper/processfactory.hxx>
 #include <sfx2/docfile.hxx>
-#include <basic/basrdll.hxx>
-
-#include <baside2.hrc>
-#include <baside2.hxx>
-#include <objdlg.hxx>
-#include <iderdll.hxx>
-#include <iderdll2.hxx>
-
-#include <basobj.hxx>
-#include <brkdlg.hxx>
-
+#include <svtools/xtextedt.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/msgbox.hxx>
 #include <vcl/sound.hxx>
-
-#include <unotools/textsearch.hxx>
-#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-
 
 #define SPLIT_MARGIN    5
 #define SPLIT_HEIGHT    2
