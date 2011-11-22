@@ -158,11 +158,6 @@ void ScNameDlg::Init()
     maBtnColHeader.Hide();
     maBtnRowHeader.Hide();
 
-    maBtnMore.AddWindow( &maBtnCriteria );
-    maBtnMore.AddWindow( &maBtnPrintArea );
-    maBtnMore.AddWindow( &maBtnColHeader );
-    maBtnMore.AddWindow( &maBtnRowHeader );
-
     // Initialize scope list.
     maLbScope.InsertEntry(maGlobalNameStr);
     maLbScope.SelectEntryPos(0);
@@ -495,12 +490,27 @@ void MoveWindow( Window& rButton, long nPixel)
 
 void ScNameDlg::MorePushed()
 {
+    Size nSize = GetSizePixel();
+
     //depending on the state of the button, move all elements below up/down
     long nPixel = 85;
     if (!maBtnMore.GetState())
     {
         nPixel *= -1;
+        maBtnRowHeader.Hide();
+        maBtnColHeader.Hide();
+        maBtnPrintArea.Hide();
+        maBtnCriteria.Hide();
     }
+    else
+    {
+        maBtnRowHeader.Show();
+        maBtnColHeader.Show();
+        maBtnPrintArea.Show();
+        maBtnCriteria.Show();
+    }
+    nSize.Height() += nPixel;
+    SetSizePixel(nSize);
     MoveWindow(maBtnAdd, nPixel);
     MoveWindow(maBtnDelete, nPixel);
     MoveWindow(maBtnHelp, nPixel);

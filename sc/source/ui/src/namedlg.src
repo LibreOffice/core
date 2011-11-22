@@ -131,14 +131,12 @@ ModelessDialog RID_SCDLG_NAMES
         TabStop = TRUE ;
         QuickHelpText [ en-US ] = "Shrink" ;
     };
-    MoreButton BTN_MORE
+    CheckBox BTN_MORE
     {
         HelpID = "sc:MoreButton:RID_SCDLG_NAMES:BTN_MORE";
         Pos = MAP_APPFONT ( 6 , 185 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        MapUnit = MAP_APPFONT ;
-        Delta = 41 ;
+        Text [en-US] = "Range Options";
     };
     FixedLine FL_DIV
     {

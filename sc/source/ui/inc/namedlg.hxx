@@ -78,8 +78,8 @@ private:
     PushButton      maBtnDelete;
     PushButton      maBtnSelect;
     PushButton      maBtnOk;
-    PushButton    maBtnCancel;
-    MoreButton      maBtnMore;
+    PushButton      maBtnCancel;
+    DisclosureButton maBtnMore;
     FixedText       maFtInfo;
 
     const String    mErrMsgInvalidSym;
