@@ -687,8 +687,9 @@ IMPL_LINK( SwGlossaryDlg, BibHdl, Button *, EMPTYARG )
                     bIsWritable = !*(sal_Bool*)aAny.getValue();
                 }
             }
-            catch(Exception&)
-            {}
+            catch (const Exception&)
+            {
+            }
             if(bIsWritable)
                 break;
         }

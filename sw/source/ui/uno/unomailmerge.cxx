@@ -134,13 +134,13 @@ static CloseResult CloseModelAndDocSh(
             //! I.e. now that object is responsible for closing the model and doc shell.
             xClose->close( sal_True );
         }
-        catch (util::CloseVetoException &)
+        catch (const util::CloseVetoException&)
         {
             //! here we have the problem that the temporary file that is
             //! currently being printed will never be deleted. :-(
             eResult = eVetoed;
         }
-        catch ( const uno::RuntimeException& )
+        catch (const uno::RuntimeException&)
         {
             eResult = eFailed;
         }
@@ -170,7 +170,7 @@ static sal_Bool LoadFromURL_impl(
         xTmpModel = Reference < XModel >( xDesktop->loadComponentFromURL(
                 rURL, C2U("_blank"), 0, aArgs ), UNO_QUERY );
     }
-    catch( Exception & )
+    catch (const Exception&)
     {
         return sal_False;
     }
@@ -260,7 +260,7 @@ namespace
                 OSL_FAIL("DelayedFileDeletion::DelayedFileDeletion: model is no component!" );
             }
         }
-        catch( const Exception& )
+        catch (const Exception&)
         {
             OSL_FAIL("DelayedFileDeletion::DelayedFileDeletion: could not register as event listener at the model!" );
         }
@@ -281,7 +281,7 @@ namespace
             m_xDocument->close( bDeliverOwnership );
             bSuccess = sal_True;
         }
-        catch( const util::CloseVetoException& )
+        catch (const util::CloseVetoException&)
         {
             // somebody vetoed -> next try
             if ( m_nPendingDeleteAttempts )
@@ -293,7 +293,7 @@ namespace
             else
                 bSuccess = sal_True;    // can't do anything here ...
         }
-        catch( const Exception& )
+        catch (const Exception&)
         {
             OSL_FAIL("DelayedFileDeletion::OnTryDeleteFile: caught a strange exception!" );
             bSuccess = sal_True;
@@ -317,7 +317,7 @@ namespace
         {
             m_xDocument->removeCloseListener( this );
         }
-        catch( const Exception & )
+        catch (const Exception&)
         {
             OSL_FAIL("DelayedFileDeletion::implTakeOwnership: could not revoke the listener!" );
         }
@@ -599,7 +599,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
                 if ( bEverythingsFine )
                     bValid = sal_True;
             }
-            catch( const Exception& )
+            catch (const Exception&)
             {
                 bValid = sal_False;
             }
@@ -805,7 +805,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             xStorable->storeAsURL( aTmpFileName, Sequence< PropertyValue >() );
             bStoredAsTemporary = sal_True;
         }
-        catch( const Exception& )
+        catch (const Exception&)
         {
         }
     }

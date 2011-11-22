@@ -318,7 +318,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
             ListboxControlActions::SET_SELECT_ITEM, aSelectPos );
     }
-    catch(Exception& )
+    catch (const Exception&)
     {
         OSL_FAIL("control acces failed");
     }
@@ -360,7 +360,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
                     aTemplateValue >>= sTmpl;
                     rReq.AppendItem( SfxStringItem( FN_PARAM_2, sTmpl) );
                 }
-                catch(Exception& )
+                catch (const Exception&)
                 {
                     OSL_FAIL("control access failed");
                 }

@@ -103,7 +103,7 @@ IMPL_LINK(SwRenameXNamedDlg, OkHdl, OKButton*, EMPTYARG)
     {
         xNamed->setName(aNewNameED.GetText());
     }
-    catch(uno::RuntimeException&)
+    catch (const uno::RuntimeException&)
     {
         OSL_FAIL("name wasn't changed");
     }

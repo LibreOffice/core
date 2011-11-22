@@ -835,7 +835,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         {
                             xFltMgr->setCurrentFilter( pOwnFlt->GetUIName() );
                         }
-                        catch( const uno::Exception& )
+                        catch (const uno::Exception&)
                         {
                             bError = true;
                         }
@@ -1250,7 +1250,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         {
                             xFltMgr->setCurrentFilter( pFlt->GetUIName() ) ;
                         }
-                        catch( const uno::Exception& )
+                        catch (const uno::Exception&)
                         {
                             bError = true;
                         }
@@ -1310,7 +1310,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             xCtrlAcc->setLabel( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
                                                     String(SW_RES( STR_FDLG_TEMPLATE_NAME )));
                         }
-                        catch(Exception& )
+                        catch (const Exception&)
                         {
                             OSL_FAIL("control acces failed");
                         }
@@ -1730,7 +1730,7 @@ sal_uLong SwDocShell::LoadStylesFromFile( const String& rURL,
                     xProps->getPropertyValue( aMediaTypePropName );
                     bImport = true;
                 }
-                catch( const uno::Exception& )
+                catch (const uno::Exception&)
                 {
                     bImport = false;
                 }

@@ -669,7 +669,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
                 if ( xSet.is() )
                     xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), uno::makeAny( ::rtl::OUString( SotExchange::GetFormatMimeType( nSaveClipId ) ) ) );
             }
-            catch ( uno::Exception& )
+            catch (const uno::Exception&)
             {
             }
         }

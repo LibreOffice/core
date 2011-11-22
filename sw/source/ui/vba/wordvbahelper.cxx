@@ -155,7 +155,7 @@ uno::Reference< text::XText > getCurrentXText( const uno::Reference< frame::XMod
     {
         xText.set( xTextRange->getText(), uno::UNO_QUERY );
     }
-    catch( uno::RuntimeException& )
+    catch (const uno::RuntimeException&)
     {
         //catch exception "no text selection"
     }

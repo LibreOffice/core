@@ -87,7 +87,7 @@ sal_Bool HeaderFooterHelper::isHeader( const uno::Reference< frame::XModel >& xM
         if( xTRC->compareRegionStarts( xTR1, xTR2 ) == 0 )
             return sal_True;
     }
-    catch( lang::IllegalArgumentException& )
+    catch (const lang::IllegalArgumentException&)
     {
         return sal_False;
     }
@@ -153,7 +153,7 @@ sal_Bool HeaderFooterHelper::isFooter( const uno::Reference< frame::XModel >& xM
         if( xTRC->compareRegionStarts( xTR1, xTR2 ) == 0 )
             return sal_True;
     }
-    catch( lang::IllegalArgumentException& )
+    catch (const lang::IllegalArgumentException&)
     {
         return sal_False;
     }

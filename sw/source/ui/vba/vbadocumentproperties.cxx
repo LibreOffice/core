@@ -138,7 +138,7 @@ public:
             // the model ( and addtionally these also update the statics object )
             return mxModelProps->getPropertyValue( rPropName );
         }
-        catch( uno::Exception& )
+        catch (const uno::Exception&)
         {
             OSL_TRACE("Got exception");
         }

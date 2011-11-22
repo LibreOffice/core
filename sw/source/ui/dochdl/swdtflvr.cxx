@@ -674,8 +674,9 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
                 xWorkStore = uno::Reference < embed::XStorage >();
                 xStream->Commit();
             }
-            catch ( uno::Exception& )
-            {}
+            catch (const uno::Exception&)
+            {
+            }
 
             bRet = ( xStream->GetError() == ERRCODE_NONE );
         }
@@ -1698,14 +1699,14 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                         xComp->dispose();
                         xStore = 0;
                     }
-                    catch ( uno::Exception& )
+                    catch (const uno::Exception&)
                     {
                     }
 
                     break;
             }
         }
-        catch ( uno::Exception& )
+        catch (const uno::Exception&)
         {
             // it wasn't a storage, but maybe it's a useful stream
         }
@@ -1764,8 +1765,9 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                         // for example whether the object should be an iconified one
                         xObj = aInfo.Object;
                     }
-                    catch( uno::Exception& )
-                    {}
+                    catch (const uno::Exception&)
+                    {
+                    }
                 }
             }
         }
@@ -1823,7 +1825,7 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                 {
                     aSz = xObj->getVisualAreaSize( aObjDesc.mnViewAspect );
                 }
-                catch( embed::NoVisualAreaSizeException& )
+                catch (const embed::NoVisualAreaSizeException&)
                 {
                     // in this case the provided size is used
                 }
@@ -1844,7 +1846,7 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                 {
                     xObj->getVisualAreaSize( aObjDesc.mnViewAspect );
                 }
-                catch( uno::Exception& )
+                catch (const uno::Exception&)
                 {
                 }
             }

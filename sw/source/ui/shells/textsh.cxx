@@ -317,7 +317,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                             xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginCommands")), uno::makeAny( aSeq ) );
                         }
                     }
-                    catch ( uno::Exception& )
+                    catch (const uno::Exception&)
                     {
                     }
                 }
@@ -388,7 +388,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                             uno::makeAny( sal_Int32( aMargin.Height() ) ) );
                     }
                 }
-                catch ( uno::Exception& )
+                catch (const uno::Exception&)
                 {
                 }
             }

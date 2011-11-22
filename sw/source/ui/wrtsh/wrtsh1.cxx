@@ -517,7 +517,7 @@ sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyF
                         xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Formula")), uno::makeAny( ::rtl::OUString( aMathData ) ) );
                         bActivate = sal_False;
                     }
-                    catch ( uno::Exception& )
+                    catch (const uno::Exception&)
                     {
                     }
                 }
@@ -648,8 +648,9 @@ void SwWrtShell::MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& 
             }
         }
     }
-    catch( uno::Exception& )
-    {}
+    catch (const uno::Exception&)
+    {
+    }
 }
 
 
@@ -728,7 +729,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
             bLinkingChart = ( xChartDocument.is() && !xChartDocument->hasInternalDataProvider() );
         }
     }
-    catch ( uno::Exception& )
+    catch (const uno::Exception&)
     {
         // TODO/LATER: handle the error
         return;
@@ -759,12 +760,12 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     {
         aSize = xObj->getVisualAreaSize( nAspect );
     }
-    catch( embed::NoVisualAreaSizeException& )
+    catch (const embed::NoVisualAreaSizeException&)
     {
         OSL_FAIL("Can't get visual area size!\n" );
         // the scaling will not be done
     }
-    catch( uno::Exception& )
+    catch (const uno::Exception&)
     {
         // TODO/LATER: handle the error
         OSL_FAIL("Can't get visual area size!\n" );

@@ -224,7 +224,9 @@ SwFilterDetect::~SwFilterDetect()
                                                                       ucbhelper::CONTINUATION_APPROVE ) );
                             xInteraction->handle( xRequest );
                         }
-                        catch ( Exception & ) {};
+                        catch (const Exception&)
+                        {
+                        }
                     }
                 }
                 else
@@ -247,7 +249,7 @@ SwFilterDetect::~SwFilterDetect()
 
                         aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pPreFilter ? pPreFilter->IsOwnTemplateFormat() : sal_False, &aFilterName );
                     }
-                    catch( lang::WrappedTargetException& aWrap )
+                    catch (const lang::WrappedTargetException& aWrap)
                     {
                         packages::zip::ZipIOException aZipException;
 
@@ -297,11 +299,11 @@ SwFilterDetect::~SwFilterDetect()
                             }
                         }
                     }
-                    catch( uno::RuntimeException& )
+                    catch (const uno::RuntimeException&)
                     {
                         throw;
                     }
-                    catch( uno::Exception& )
+                    catch (const uno::Exception&)
                     {
                         aTypeName.Erase();
                         aPreselectedFilterName.Erase();

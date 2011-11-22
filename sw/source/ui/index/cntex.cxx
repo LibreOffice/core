@@ -176,7 +176,7 @@ IMPL_LINK( SwMultiTOXTabDialog, CreateExample_Hdl, void*, EMPTYARG )
         }
         CreateOrUpdateExample(eCurrentTOXType.eType);
     }
-    catch(Exception&)
+    catch (const Exception&)
     {
         OSL_FAIL("::CreateExample() - exception caught");
     }
@@ -470,7 +470,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
         pxIndexSectionsArr[nTOXIndex]->xDocumentIndex->update();
 
     }
-    catch(Exception&)
+    catch (const Exception&)
     {
         OSL_FAIL("::CreateExample() - exception caught");
     }

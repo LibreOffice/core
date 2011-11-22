@@ -83,7 +83,7 @@ SwLinguServiceEventListener::SwLinguServiceEventListener()
                     xBC->addLinguServiceEventListener( (XLinguServiceEventListener *) this );
             }
         }
-        catch (uno::Exception &)
+        catch (const uno::Exception&)
         {
             OSL_FAIL("exception caught in SwLinguServiceEventListener c-tor" );
         }

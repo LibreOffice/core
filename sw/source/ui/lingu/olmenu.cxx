@@ -373,7 +373,7 @@ OUString RetrieveLabelFromCommand( const OUString& aCmdURL )
                 aLabel = aStr;
             }
         }
-        catch ( uno::Exception& )
+        catch (const uno::Exception&)
         {
         }
     }
@@ -853,7 +853,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             xSystemShellExecute->execute( sExplanationLink, rtl::OUString(),
                     com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
         }
-        catch ( uno::Exception& )
+        catch (const uno::Exception&)
         {
             uno::Any exc( ::cppu::getCaughtException() );
             rtl::OUString msg( ::comphelper::anyToString( exc ) );

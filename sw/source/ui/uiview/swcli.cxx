@@ -130,11 +130,11 @@ void SwOleClient::ViewChanged()
     {
         aSz = GetObject()->getVisualAreaSize( GetAspect() );
     }
-    catch( embed::NoVisualAreaSizeException& )
+    catch (const embed::NoVisualAreaSizeException&)
     {
         // Nothing will be done
     }
-    catch( uno::Exception& )
+    catch (const uno::Exception&)
     {
         // this is an error
         OSL_FAIL( "Something goes wrong on requesting object size!\n" );

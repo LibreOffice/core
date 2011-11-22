@@ -171,7 +171,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                                     xProp->getPropertyValue( C2U("IsUseCharacterVariants") ) >>= bUseVariants;
                                     xProp->getPropertyValue( C2U("IsTranslateCommonTerms") ) >>= bCommonTerms;
                                 }
-                                catch( Exception& )
+                                catch (const Exception&)
                                 {
                                 }
                             }
@@ -654,7 +654,7 @@ IMPL_STATIC_LINK_NOINSTANCE( AsyncExecute, ExecuteHdl_Impl, ExecuteInfo*, pExecu
         // elements if a component gets detached from its frame!
         pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
     }
-    catch ( Exception& )
+    catch (const Exception&)
     {
     }
 
@@ -790,7 +790,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                                     Application::PostUserEvent( STATIC_LINK(0, AsyncExecute , ExecuteHdl_Impl), pExecuteInfo );
                                 }
                             }
-                            catch (Exception &)
+                            catch (const Exception&)
                             {
                             }
                         }

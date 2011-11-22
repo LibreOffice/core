@@ -371,7 +371,7 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
                                         xProp->getPropertyValue( C2U("IsUseCharacterVariants") ) >>= bUseVariants;
                                         xProp->getPropertyValue( C2U("IsTranslateCommonTerms") ) >>= bCommonTerms;
                                     }
-                                    catch( Exception& )
+                                    catch (const Exception&)
                                     {
                                     }
                                 }

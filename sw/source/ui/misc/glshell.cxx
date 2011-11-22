@@ -272,8 +272,9 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
             uno::Reference< frame::XTitle > xTitle( xDocSh->GetModel(), uno::UNO_QUERY_THROW );
             xTitle->setTitle( aDocTitle );
         }
-        catch( uno::Exception& )
-        {}
+        catch (const uno::Exception&)
+        {
+        }
 
         xDocSh->GetDoc()->GetIDocumentUndoRedo().DoUndo( bDoesUndo );
         xDocSh->GetDoc()->ResetModified();

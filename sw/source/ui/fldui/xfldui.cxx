@@ -97,7 +97,9 @@ sal_Bool SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName
                 aTable >>= xPropSet;
                 xColsSupplier = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
             }
-            catch(Exception&){}
+            catch (const Exception&)
+            {
+            }
         }
     }
     else
@@ -114,7 +116,9 @@ sal_Bool SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName
                 aQuery >>= xPropSet;
                 xColsSupplier = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
             }
-            catch(Exception&){}
+            catch (const Exception&)
+            {
+            }
         }
     }
 
@@ -125,7 +129,7 @@ sal_Bool SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName
         {
             xCols = xColsSupplier->getColumns();
         }
-        catch(Exception& )
+        catch (const Exception&)
         {
             OSL_FAIL("Exception in getColumns()");
         }

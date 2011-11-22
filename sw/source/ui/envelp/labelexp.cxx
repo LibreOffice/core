@@ -94,7 +94,7 @@ void SwVisitingCardPage::InitFrameControl()
                 aAutoTextGroupLB.SetEntryData(nEntry, new String(sGroup));
             }
         }
-        catch(Exception&)
+        catch (const Exception&)
         {
         }
     }
@@ -117,7 +117,7 @@ void SwVisitingCardPage::InitFrameControl()
                 SetUserData( aBlockNames.getLength(), aTitles.getConstArray(),
                             aBlockNames.getConstArray() );
             }
-            catch( uno::RuntimeException& )
+            catch (const uno::RuntimeException&)
             {
                 // we'll be her if path settings were wrong
             }
@@ -258,7 +258,7 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, 
             }
         }
     }
-    catch( uno::RuntimeException&)
+    catch (const uno::RuntimeException&)
     {
         //
     }

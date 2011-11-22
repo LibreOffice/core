@@ -292,7 +292,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
                 xFrame->initialize( VCLUnoHelper::GetInterface ( pBeamerWin ) );
             }
         }
-        catch (Exception&)
+        catch (const Exception&)
         {
             xFrame.clear();
         }
@@ -464,7 +464,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
         }
         aFilterLB.SelectEntryPos( nODT );
     }
-    catch( const uno::Exception& )
+    catch (const uno::Exception&)
     {
     }
 }

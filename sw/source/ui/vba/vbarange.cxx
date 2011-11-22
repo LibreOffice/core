@@ -147,7 +147,7 @@ SwVbaRange::setText( const rtl::OUString& rText ) throw ( uno::RuntimeException 
             sName = xNamed->getName();
         }
     }
-    catch( uno::Exception& )
+    catch (const uno::Exception&)
     {
         // do nothing
     }

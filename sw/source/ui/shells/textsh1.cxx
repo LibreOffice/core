@@ -1260,7 +1260,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 xDialog->execute();
             }
         }
-        catch( uno::Exception& )
+        catch (const uno::Exception&)
         {
         }
         rReq.Ignore ();

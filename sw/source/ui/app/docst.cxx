@@ -326,7 +326,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         if ( aUIName.getLength() )
                             rReq.AppendItem( SfxStringItem( SID_STYLE_APPLY, aUIName ) );
                     }
-                    catch( uno::Exception& )
+                    catch (const uno::Exception&)
                     {
                     }
                 }

@@ -404,7 +404,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                     xDialog->execute();
                 }
             }
-            catch( uno::Exception& )
+            catch (const uno::Exception&)
             {
             }
             rReq.Ignore ();
@@ -1178,7 +1178,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
                                         xProp->getPropertyValue( C2U("IsUseCharacterVariants") ) >>= bUseVariants;
                                         xProp->getPropertyValue( C2U("IsTranslateCommonTerms") ) >>= bCommonTerms;
                                     }
-                                    catch( Exception& )
+                                    catch (const Exception&)
                                     {
                                     }
                                 }
