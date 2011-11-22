@@ -68,7 +68,12 @@ private:
     ScDocShell* mpDocShell;
 
     ScAddress maCursorPos;
-    rtl::OUString maGlobalNameStr;
+    const String    mErrMsgInvalidSym;
+    const rtl::OUString maErrMsgModifiedFailed;
+    const rtl::OUString maGlobalNameStr;
+    const rtl::OUString maErrInvalidNameStr;
+    const rtl::OUString maErrNameInUse;
+    const rtl::OUString maStrInfoDefault;
 
     std::map<rtl::OUString, ScRangeName*> maRangeMap;
 

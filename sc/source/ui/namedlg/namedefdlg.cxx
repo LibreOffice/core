@@ -42,7 +42,12 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParen
     mpDoc( pDocShell->GetDocument() ),
     mpDocShell ( pDocShell ),
     maCursorPos( aCursorPos ),
-    maGlobalNameStr( ResId::toString( ScResId( STR_GLOBAL_SCOPE ) ) ),
+
+    mErrMsgInvalidSym( ScResId( STR_INVALIDSYMBOL ) ),
+    maGlobalNameStr  ( ResId::toString(ScResId(STR_GLOBAL_SCOPE)) ),
+    maErrInvalidNameStr( ResId::toString(ScResId(STR_ERR_NAME_INVALID))),
+    maErrNameInUse   ( ResId::toString(ScResId(STR_ERR_NAME_EXISTS))),
+    maStrInfoDefault ( ResId::toString(ScResId(STR_DEFAULT_INFO))),
     maRangeMap( aRangeMap )
 {
     // Initialize scope list.
@@ -62,7 +67,7 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParen
     maEdName.SetModifyHdl( LINK( this, ScNameDefDlg, NameModifyHdl ));
     maEdRange.SetGetFocusHdl( LINK( this, ScNameDefDlg, AssignGetFocusHdl ) );
 
-    maFtInfo.SetText(ResId::toString( ScResId( STR_DEFAULT_INFO ) ));
+    maFtInfo.SetText(maStrInfoDefault);
 
     maBtnAdd.Disable(); // empty name is invalid
 
@@ -96,17 +101,17 @@ bool ScNameDefDlg::IsNameValid()
 
     if (!ScRangeData::IsNameValid( aName, mpDoc ))
     {
-        maFtInfo.SetText(ResId::toString(ScResId( STR_ERR_NAME_INVALID )));
+        maFtInfo.SetText(maErrInvalidNameStr);
         maBtnAdd.Disable();
         return false;
     }
     else if (pRangeName->findByUpperName(ScGlobal::pCharClass->upper(aName)))
     {
-        maFtInfo.SetText(ResId::toString(ScResId( STR_ERR_NAME_EXISTS )));
+        maFtInfo.SetText(maErrNameInUse);
         maBtnAdd.Disable();
         return false;
     }
-    maFtInfo.SetText(ResId::toString( ScResId( STR_DEFAULT_INFO ) ));
+    maFtInfo.SetText(maStrInfoDefault);
     maBtnAdd.Enable();
     return true;
 }

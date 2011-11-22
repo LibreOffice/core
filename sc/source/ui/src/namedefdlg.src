@@ -135,7 +135,7 @@ ModelessDialog RID_SCDLG_NAMES_DEFINE
     };
     String STR_ERR_NAME_INVALID
     {
-        Text [ en-US ] = "Invalid name. Only use letters, numbers and underscore and don't use names like cell addresses";
+        Text [ en-US ] = "Invalid name. Only use letters, numbers and underscore.";
     };
     String STR_DEFAULT_INFO
     {
