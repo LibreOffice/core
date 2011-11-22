@@ -114,7 +114,7 @@ COMPONENT_MANIFEST_GENERIC:=TRUE
 COMPONENT_MANIFEST_SEARCHDIR:=registry
 
 # make sure to add your custom files here
-EXTENSION_PACKDEPS=$(COMPONENT_EXTJARFILES) $(MISC)/$(TARGET).copied $(COMPONENT_HTMLFILES) $(COMPONENT_OTR_FILES) $(COMPONENT_DESCRIPTION) $(COMPONENT_IMAGES)
+EXTENSION_PACKDEPS=$(COMPONENT_EXTJARFILES) $(MISC)/$(TARGET).copied $(COMPONENT_HTMLFILES) $(COMPONENT_OTR_FILES) $(COMPONENT_DESCRIPTION) $(COMPONENT_IMAGES) $(EXTENSIONDIR)/components.rdb
 .ENDIF
 # --- Targets ----------------------------------
 
@@ -123,6 +123,10 @@ EXTENSION_PACKDEPS=$(COMPONENT_EXTJARFILES) $(MISC)/$(TARGET).copied $(COMPONENT
 .INCLUDE : extension_post.mk
 .IF "$(L10N_framework)"==""
 $(EXTENSIONDIR)$/%.jar : $(SOLARBINDIR)$/%.jar
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+
+$(EXTENSIONDIR)/components.rdb : components.rdb
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 

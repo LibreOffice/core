@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<components xmlns="http://openoffice.org/2010/uno-components">
+    <component loader="com.sun.star.loader.Java2" uri="./sun-report-builder.jar">
+        <implementation name="com.sun.star.report.pentaho.SOFormulaParser">
+            <service name="com.sun.star.report.meta.FormulaParser"/>
+        </implementation>
+        <implementation name="com.sun.star.report.pentaho.SOFunctionManager">
+            <service name="com.sun.star.report.meta.FunctionManager"/>
+        </implementation>
+        <implementation name="com.sun.star.report.pentaho.SOReportJobFactory$_SOReportJobFactory">
+            <service name="com.sun.star.report.pentaho.SOReportJobFactory"/>
+        </implementation>
+    </component>
+</components>
