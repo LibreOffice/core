@@ -170,6 +170,8 @@ SCTAB ScPrintFuncCache::GetTabForPage( long nPage ) const
     SCTAB nTab = 0;
     while ( nTab < nTabCount && nPage >= nPages[nTab] )
         nPage -= nPages[nTab++];
+    if (nTab >= nTabCount)
+        nTab = nTabCount - 1;
     return nTab;
 }
 
