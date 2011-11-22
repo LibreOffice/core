@@ -513,52 +513,6 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
 {
     switch( TKGet( rEvent.ActionCommand ) )
     {
-        case TK_btnNavHelp :
-        {
-            try
-            {
-                static Reference< XFrame > xHelpFrame;
-                if ( !xHelpFrame.is() )
-                {
-                    rtl::OUString sHelpFile( mrOptimizerDialog.getPath( TK_HelpFile ) );
-                    Reference< XDesktop > desktop( mrOptimizerDialog.GetComponentContext()->getServiceManager()->createInstanceWithContext(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")), mrOptimizerDialog.GetComponentContext() ), UNO_QUERY_THROW );
-                    Reference< XSimpleFileAccess > xSimpleFileAccess( mrOptimizerDialog.GetComponentContext()->getServiceManager()->createInstanceWithContext(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")), mrOptimizerDialog.GetComponentContext() ), UNO_QUERY_THROW );
-                    Reference< XInputStream > xInputStream( xSimpleFileAccess->openFileRead( sHelpFile ) );
-                    Reference< XDesktop > xDesktop( mrOptimizerDialog.GetComponentContext()->getServiceManager()->createInstanceWithContext(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")), mrOptimizerDialog.GetComponentContext() ), UNO_QUERY_THROW );
-                    Reference< XFrame > xDesktopFrame( xDesktop, UNO_QUERY_THROW );
-                    xHelpFrame = Reference< XFrame >( xDesktopFrame->findFrame( TKGet( TK__blank ), 0 ) );
-                    Reference< XCloseBroadcaster > xCloseBroadcaster( xHelpFrame, UNO_QUERY_THROW );
-                    xCloseBroadcaster->addCloseListener( new HelpCloseListener( xHelpFrame ) );
-                    Reference< XComponentLoader > xLoader( xHelpFrame, UNO_QUERY_THROW );
-
-                    Sequence< PropertyValue > aLoadProps( 2 );
-                    aLoadProps[ 0 ].Name = TKGet( TK_ReadOnly );
-                    aLoadProps[ 0 ].Value <<= (sal_Bool)( sal_True );
-                    aLoadProps[ 1 ].Name = TKGet( TK_InputStream );
-                    aLoadProps[ 1 ].Value <<= xInputStream;
-
-                    Reference< XComponent >( xLoader->loadComponentFromURL( OUString(RTL_CONSTASCII_USTRINGPARAM("private:stream")),
-                        TKGet( TK__self ), 0, aLoadProps ) );
-
-                    Reference< XPropertySet > xPropSet( xHelpFrame, UNO_QUERY_THROW );
-                    Reference< XLayoutManager > xLayoutManager;
-                    if ( xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager")) ) >>= xLayoutManager )
-                    {
-                        xLayoutManager->setVisible( sal_False );
-                        xLayoutManager->hideElement( OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/menubar/menubar")) );
-                        xLayoutManager->destroyElement( OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/statusbar/statusbar")) );
-                    }
-                }
-            }
-            catch( Exception& )
-            {
-
-            }
-        }
-        break;
         case TK_btnNavBack :    mrOptimizerDialog.SwitchPage( mrOptimizerDialog.mnCurrentStep - 1 ); break;
         case TK_btnNavNext :    mrOptimizerDialog.SwitchPage( mrOptimizerDialog.mnCurrentStep + 1 ); break;
         case TK_btnNavFinish :
@@ -567,7 +521,6 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
 
             mrOptimizerDialog.SwitchPage( ITEM_ID_SUMMARY );
             mrOptimizerDialog.DisablePage( ITEM_ID_SUMMARY );
-            mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavHelp ), TKGet( TK_Enabled ), Any( sal_False ) );
             mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavBack ), TKGet( TK_Enabled ), Any( sal_False ) );
             mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavNext ), TKGet( TK_Enabled ), Any( sal_False ) );
             mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavFinish ), TKGet( TK_Enabled ), Any( sal_False ) );
@@ -673,7 +626,6 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
             }
             else
             {
-                mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavHelp ), TKGet( TK_Enabled ), Any( sal_True ) );
                 mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavBack ), TKGet( TK_Enabled ), Any( sal_True ) );
                 mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavNext ), TKGet( TK_Enabled ), Any( sal_False ) );
                 mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavFinish ), TKGet( TK_Enabled ), Any( sal_True ) );

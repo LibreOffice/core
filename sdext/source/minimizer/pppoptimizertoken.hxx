@@ -36,7 +36,6 @@ enum PPPOptimizerTokenEnum
     TK_rdmNavi,
     TK_lnNavSep1,
     TK_lnNavSep2,
-    TK_btnNavHelp,
     TK_btnNavBack,
     TK_btnNavNext,
     TK_btnNavFinish,
@@ -127,7 +126,6 @@ enum PPPOptimizerTokenEnum
     TK_GraphicURL,
     TK_GraphicStreamURL,
     TK_Height,
-    TK_HelpFile,
     TK_Hidden,
     TK_ID,
     TK_ImageURL,
@@ -210,7 +208,6 @@ enum PPPOptimizerTokenEnum
 
     STR_SUN_OPTIMIZATION_WIZARD2,
     STR_STEPS,
-    STR_HELP,
     STR_BACK,
     STR_NEXT,
     STR_FINISH,

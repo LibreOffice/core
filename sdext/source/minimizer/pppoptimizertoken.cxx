@@ -68,7 +68,6 @@ static const TokenTable pTokenTableArray[] =
     { "rdmNavi",            TK_rdmNavi },
     { "lnNavSep1",          TK_lnNavSep1 },
     { "lnNavSep2",          TK_lnNavSep2 },
-    { "btnNavHelp",         TK_btnNavHelp },
     { "btnNavBack",         TK_btnNavBack },
     { "btnNavNext",         TK_btnNavNext },
     { "btnNavFinish",       TK_btnNavFinish },
@@ -159,7 +158,6 @@ static const TokenTable pTokenTableArray[] =
     { "GraphicURL",         TK_GraphicURL },
     { "GraphicStreamURL",   TK_GraphicStreamURL },
     { "Height",             TK_Height },
-    { "HelpFile",           TK_HelpFile },
     { "Hidden",             TK_Hidden },
     { "ID",                 TK_ID },
     { "ImageURL",           TK_ImageURL },
@@ -242,7 +240,6 @@ static const TokenTable pTokenTableArray[] =
 
     { "STR_SUN_OPTIMIZATION_WIZARD2",STR_SUN_OPTIMIZATION_WIZARD2 },
     { "STR_STEPS",                  STR_STEPS },
-    { "STR_HELP",                   STR_HELP },
     { "STR_BACK",                   STR_BACK },
     { "STR_NEXT",                   STR_NEXT },
     { "STR_FINISH",                 STR_FINISH },

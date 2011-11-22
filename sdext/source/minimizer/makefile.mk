@@ -100,18 +100,13 @@ COMPONENT_BITMAPS= \
 COMPONENT_IMAGES=\
     $(EXTENSIONDIR)$/bitmaps$/extension_32.png
 
-# rather freestyle or common to all?
-COMPONENT_HELP= \
-    $(EXTENSIONDIR)$/help$/help_de.odt \
-    $(EXTENSIONDIR)$/help$/help_en-US.odt
-
 DESCRIPTION_SRC:=$(MISC)/$(EXTENSIONNAME)_in/description.xml
 
 COMPONENT_DESCRIPTION= \
     $(foreach,lang,$(alllangiso) $(EXTENSIONDIR)$/description-$(lang).txt)
 
 # make sure to add your custom files here
-EXTENSION_PACKDEPS=$(COMPONENT_BITMAPS) $(COMPONENT_IMAGES) $(COMPONENT_HELP) $(COMPONENT_DESCRIPTION)
+EXTENSION_PACKDEPS=$(COMPONENT_BITMAPS) $(COMPONENT_IMAGES) $(COMPONENT_DESCRIPTION)
 
 ZIP2TARGET=     presentation_minimizer_develop
 .IF "$(WITH_LANG)"!=""
@@ -140,10 +135,6 @@ $(COMPONENT_BITMAPS) : $(SOLARSRC)$/$(RSCDEFIMG)$/minimizer$/$$(@:f)
     $(COPY) $< $@
 
 $(COMPONENT_IMAGES) : $(SOLARSRC)$/$(RSCDEFIMG)$/desktop$/res$/$$(@:f)
-    @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-
-$(COMPONENT_HELP) : help$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 

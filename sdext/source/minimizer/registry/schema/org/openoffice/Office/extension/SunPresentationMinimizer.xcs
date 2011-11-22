@@ -103,16 +103,12 @@
 	</templates>
 	<component>
         <prop oor:name="BitmapPath" oor:type="xs:string"/>
-        <prop oor:name="HelpFile" oor:type="xs:string"/>
 		<group oor:name="Strings">
 			<prop oor:name="STR_SUN_OPTIMIZATION_WIZARD2" oor:type="xs:string" oor:localized="true">
 				<value>Presentation Minimizer</value>
 			</prop>
 			<prop oor:name="STR_STEPS" oor:type="xs:string" oor:localized="true">
 				<value>Steps</value>
-			</prop>
-			<prop oor:name="STR_HELP" oor:type="xs:string" oor:localized="true">
-				<value>~Help</value>
 			</prop>
 			<prop oor:name="STR_BACK" oor:type="xs:string" oor:localized="true">
 				<value>&lt; ~Back</value>

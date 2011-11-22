@@ -390,7 +390,6 @@ void OptimizerDialog::InitNavigationBar()
     InsertSeparator( *this, TKGet( TK_lnNavSep1 ), 0, 0, DIALOG_HEIGHT - 26, OD_DIALOG_WIDTH, 1 );
     InsertSeparator( *this, TKGet( TK_lnNavSep2 ), 1, 85, 0, 1, BUTTON_POS_Y - 6 );
 
-    InsertButton( *this, TKGet( TK_btnNavHelp ), mxActionListener, 8, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, mnTabIndex++, sal_True, STR_HELP, PushButtonType_STANDARD );
     InsertButton( *this, TKGet( TK_btnNavBack ), mxActionListener, nBackPosX, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, mnTabIndex++, sal_False, STR_BACK, PushButtonType_STANDARD );
     InsertButton( *this, TKGet( TK_btnNavNext ), mxActionListener, nNextPosX, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, mnTabIndex++, sal_True, STR_NEXT, PushButtonType_STANDARD );
     InsertButton( *this, TKGet( TK_btnNavFinish ), mxActionListener, nFinishPosX, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, mnTabIndex++, sal_True, STR_FINISH, PushButtonType_STANDARD );

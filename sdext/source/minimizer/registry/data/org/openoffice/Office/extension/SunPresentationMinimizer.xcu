@@ -5,19 +5,12 @@
         <value>%origin%/../../../../../../bitmaps</value>
     </prop>
 
-    <prop oor:name="HelpFile" oor:type="xs:string">
-        <value xml:lang="en-US">%origin%/../../../../../../help/help_en-US.odt</value>
-    </prop>
-
     <node oor:name="Strings">
         <prop oor:name="STR_SUN_OPTIMIZATION_WIZARD2">
             <value xml:lang="en-US">Presentation Minimizer</value>
         </prop>
         <prop oor:name="STR_STEPS">
             <value xml:lang="en-US">Steps</value>
-        </prop>
-        <prop oor:name="STR_HELP">
-            <value xml:lang="en-US">~Help</value>
         </prop>
         <prop oor:name="STR_BACK">
             <value xml:lang="en-US">&lt; ~Back</value>
