@@ -820,12 +820,12 @@ sal_Bool SfxLibraryContainer::init_Impl(
                 xParser->setDocumentHandler( ::xmlscript::importLibraryContainer( pLibArray ) );
                 xParser->parseStream( source );
             }
-            catch ( xml::sax::SAXException& e )
+            catch ( const xml::sax::SAXException& e )
             {
                 SAL_WARN_S("basic", e.Message);
                 return sal_False;
             }
-            catch ( io::IOException& e )
+            catch ( const io::IOException& e )
             {
                 SAL_WARN_S("basic", e.Message);
                 return sal_False;

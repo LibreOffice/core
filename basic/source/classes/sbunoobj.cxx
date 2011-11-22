@@ -393,7 +393,7 @@ Any convertAny( const Any& rVal, const Type& aDestType )
             implGetExceptionMsg( ::cppu::getCaughtException() ) );
         return aConvertedVal;
     }
-    catch( CannotConvertException& e2 )
+    catch( const CannotConvertException& e2 )
     {
         ::rtl::OUString aCannotConvertExceptionName
             ( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.IllegalArgumentException" ) );
@@ -2480,7 +2480,7 @@ void SbUnoObject::doIntrospection( void )
     {
         mxUnoAccess = xIntrospection->inspect( maTmpUnoObj );
     }
-    catch( RuntimeException& e )
+    catch( const RuntimeException& e )
     {
         StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e ) );
     }
@@ -2728,7 +2728,7 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
                         unoToSbxValue( pRes, aAny );
                     }
                 }
-                catch( NoSuchElementException& e )
+                catch( const NoSuchElementException& e )
                 {
                     StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e ) );
                 }
@@ -2779,7 +2779,7 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
 
                 }
             }
-            catch( RuntimeException& e )
+            catch( const RuntimeException& e )
             {
                 // Establish so that the exeption error will not be overwriten
                 if( !pRes )
@@ -3476,9 +3476,8 @@ SbxVariable* SbUnoClass::Find( const XubString& rName, SbxClassType t )
                             unoToSbxValue( pRes, aValue );
                         }
                     }
-                    catch( NoSuchElementException& e1 )
+                    catch( const NoSuchElementException& )
                     {
-                        ::rtl::OUString aMsg = implGetExceptionMsg( e1 );
                     }
                 }
 
@@ -4306,7 +4305,7 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite
     {
         aRet = xTypeAccess->getByHierarchicalName( aTypeName );
     }
-    catch( NoSuchElementException& e1 )
+    catch( const NoSuchElementException& e1 )
     {
         ::rtl::OUString aNoSuchElementExceptionName
             ( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.container.NoSuchElementException" ) );

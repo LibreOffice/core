@@ -198,7 +198,7 @@ uno::Reference< XContentProviderManager > InitializeUCB( void )
             defaultBootstrap_InitialComponentContext()->getServiceManager(),
             UNO_QUERY_THROW);
     }
-    catch( com::sun::star::uno::Exception & exc )
+    catch( const com::sun::star::uno::Exception & exc )
     {
         fprintf( stderr, "Couldn't bootstrap uno servicemanager for reason : %s\n" ,
                  OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
@@ -328,7 +328,7 @@ int BasicApp::Main( )
     RemoveAccel( pMainAccel );
 
     }
-    catch( class Exception & rEx)
+    catch(const class Exception & rEx)
     {
         printf( "Exception not caught: %s\n", ByteString( String(rEx.Message), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
         String aMsg( String::CreateFromAscii( "Exception not caught: " ) );

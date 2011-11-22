@@ -151,13 +151,13 @@ void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Refere
                 *pRet = result;
             }
         }
-        catch ( RuntimeException& re )
+        catch ( const RuntimeException& re )
         {
             OSL_TRACE("SFURL_firing_impl() Caught RuntimeException reason %s.",
                 ::rtl::OUStringToOString( re.Message,
                     RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
-        catch ( Exception& e )
+        catch ( const Exception& e )
         {
             OSL_TRACE("SFURL_firing_impl() Caught Exception reason %s.",
                 ::rtl::OUStringToOString( e.Message,
