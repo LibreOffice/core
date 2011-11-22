@@ -1805,7 +1805,8 @@ FSysError DirEntry::ImpParseUnixName( const rtl::OString& rPfad, FSysPathStyle e
         }
 
         // den Restpfad bestimmen
-        aPfad = aPfad.copy(nPos + 1);
+        aPfad = nPos < aPfad.getLength()
+            ? aPfad.copy(nPos + 1) : rtl::OString();
         while ( aPfad.getLength() && ( aPfad[0] == '/' ) )
             aPfad = aPfad.copy(1);
     }
