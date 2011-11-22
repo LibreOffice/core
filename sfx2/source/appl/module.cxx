@@ -50,6 +50,7 @@
 #include "sfx2/taskpane.hxx"
 #include <tools/diagnose_ex.h>
 #include <rtl/strbuf.hxx>
+#include <sal/log.h>
 
 #define SfxModule
 #include "sfxslots.hxx"
@@ -208,7 +209,7 @@ void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
         if (pFact->nId ==  (*pImpl->pFactArr)[nFactory]->nId)
         {
             pImpl->pFactArr->Remove( nFactory );
-            OSL_FAIL("ChildWindow registered multiple times!");
+            SAL_WARN("sfx2", "ChildWindow registered multiple times!");
             return;
         }
     }
@@ -391,11 +392,10 @@ FieldUnit SfxModule::GetModuleFieldUnit( ::com::sun::star::uno::Reference< ::com
     SfxPoolItem const * pItem = pModule->GetItem( SID_ATTR_METRIC );
     if ( pItem == NULL )
     {
-        OSL_FAIL(
-            OSL_FORMAT(
-                ("SfxModule::GetFieldUnit: no metric item in the module"
-                 " implemented by '%s'!"),
-                typeid(*pModule).name()));
+        SAL_WARN_S(
+            "sfx2",
+            "SfxModule::GetFieldUnit: no metric item in the module implemented"
+                " by '" << typeid(*pModule).name() << "'!");
         return FUNIT_100TH_MM;
     }
     return (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();

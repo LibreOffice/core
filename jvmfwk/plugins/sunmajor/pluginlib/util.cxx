@@ -70,7 +70,6 @@ using ::rtl::OString;
 using ::rtl::OUStringBuffer;
 using ::rtl::OUStringToOString;
 
-#define CHAR_POINTER(oustr) ::rtl::OUStringToOString(oustr,RTL_TEXTENCODING_UTF8).pData->buffer
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #ifdef WNT
 #define HKEY_SUN_JRE L"Software\\JavaSoft\\Java Runtime Environment"
@@ -310,14 +309,13 @@ class AsynchReader: public Thread
 public:
 
     AsynchReader(oslFileHandle & rHandle);
-#if OSL_DEBUG_LEVEL >= 2
+
     /** only call this function after this thread has finished.
 
         That is, call join on this instance and then call getData.
 
      */
     OString getData();
-#endif
 };
 
 AsynchReader::AsynchReader(oslFileHandle & rHandle):
@@ -325,13 +323,11 @@ AsynchReader::AsynchReader(oslFileHandle & rHandle):
 {
 }
 
-#if OSL_DEBUG_LEVEL >= 2
 OString AsynchReader::getData()
 {
     OSL_ASSERT(isRunning() == sal_False );
     return OString(m_arData.get(), m_nDataSize);
 }
-#endif
 
 void AsynchReader::run()
 {
@@ -469,8 +465,7 @@ bool getJavaProps(const OUString & exePath,
         OUString sLine;
         if (!decodeOutput(aLine, &sLine))
             continue;
-        JFW_TRACE2(OString("[Java framework]:\" ")
-               + OString( CHAR_POINTER(sLine)) + OString(" \".\n"));
+        JFW_TRACE2("[Java framework]:\" " << sLine << " \".\n");
         sLine = sLine.trim();
         if (sLine.getLength() == 0)
             continue;
@@ -497,8 +492,8 @@ bool getJavaProps(const OUString & exePath,
 
     //process error stream data
     stderrReader.join();
-    JFW_TRACE2(OString("[Java framework]  Java wrote to stderr:\" ")
-               + stderrReader.getData() + OString(" \".\n"));
+    JFW_TRACE2("[Java framework]  Java wrote to stderr:\" "
+               << stderrReader.getData().getStr() << " \".\n");
 
     TimeValue waitMax= {5 ,0};
     procErr = osl_joinProcessWithTimeout(javaProcess, &waitMax);

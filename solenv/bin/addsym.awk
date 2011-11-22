@@ -36,9 +36,14 @@ END {
         print "# Weak RTTI symbols for C++ exceptions:"
         print "UDK_3_0_0 {"
         print "global:"
-        print "_ZTI*; _ZTS*; # weak RTTI symbols for C++ exceptions"
+        print "_ZTI*; _ZTS*;"
         print "};"
     }
+    print "# Unique libstdc++ symbols:"
+    print "GLIBCXX_3.4 {"
+    print "global:"
+    print "_ZGVNSt7num_put*; _ZNSt7num_put*;"
+    print "};"
 }
 state == 2 {
     print "_ZTI*; _ZTS*; # weak RTTI symbols for C++ exceptions"

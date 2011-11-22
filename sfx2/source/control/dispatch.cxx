@@ -476,25 +476,13 @@ void SfxDispatcher::Pop
 
     SfxApplication *pSfxApp = SFX_APP();
 
-#ifdef DBG_UTIL
-    rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("-SfxDispatcher("));
-    aMsg.append(reinterpret_cast<sal_Int64>(this));
-    if (bPush)
-        aMsg.append(RTL_CONSTASCII_STRINGPARAM(")::Push("));
-    else
-        aMsg.append(RTL_CONSTASCII_STRINGPARAM(")::Pop("));
-    if (rShell.GetInterface())
-        aMsg.append(rShell.GetInterface()->GetClassName());
-    else
-        aMsg.append(reinterpret_cast<sal_Int64>(&rShell));
-    if (bDelete)
-        aMsg.append(RTL_CONSTASCII_STRINGPARAM(") with delete"));
-    else
-        aMsg.append(')');
-    if (bUntil)
-        aMsg.append(RTL_CONSTASCII_STRINGPARAM(" (up to)"));
-    DbgTrace(aMsg.getStr());
-#endif
+    SAL_INFO_S(
+        "sfx2",
+        "-SfxDispatcher(" << this << (bPush ? ")::Push(" : ")::Pop(")
+            << (rShell.GetInterface()
+                ? rShell.GetInterface()->GetClassName() : SAL_STREAM(&rShell))
+            << (bDelete ? ") with delete" : ")")
+            << (bUntil ? " (up to)" : ""));
 
     // same shell as on top of the to-do stack?
     if ( pImp->aToDoStack.Count() && pImp->aToDoStack.Top().pCluster == &rShell )
@@ -1705,12 +1693,6 @@ void SfxDispatcher::FlushImpl()
 
     OSL_TRACE("Flushing dispatcher!");
 
-#ifdef DBG_UTIL
-    rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("SfxDispatcher("));
-    aMsg.append(reinterpret_cast<sal_Int64>(this));
-    aMsg.append(RTL_CONSTASCII_STRINGPARAM(")::Flush()"));
-#endif
-
     pImp->aTimer.Stop();
 
     if ( pImp->pParent )
@@ -1821,10 +1803,7 @@ void SfxDispatcher::FlushImpl()
     for (sal_uInt16 n=0; n<SFX_OBJECTBAR_MAX; n++)
         pImp->aFixedObjBars[n].nResId = 0;
 
-#ifdef DBG_UTIL
-    aMsg.append(RTL_CONSTASCII_STRINGPARAM("done"));
-    DbgTrace(aMsg.getStr());
-#endif
+    SAL_INFO_S("sfx2", "SfxDispatcher(" << this << ")::Flush() done");
 }
 
 //--------------------------------------------------------------------

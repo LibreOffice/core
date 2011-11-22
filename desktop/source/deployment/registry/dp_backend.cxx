@@ -31,8 +31,10 @@
 
 #include "dp_backend.h"
 #include "dp_ucb.h"
+#include "rtl/oustringostreaminserter.hxx"
 #include "rtl/uri.hxx"
 #include "rtl/bootstrap.hxx"
+#include "sal/log.h"
 #include "osl/file.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "comphelper/servicedecl.hxx"
@@ -73,7 +75,7 @@ void PackageRegistryBackend::disposing( lang::EventObject const & event )
     ::osl::MutexGuard guard( getMutex() );
     if ( m_bound.erase( url ) != 1 )
     {
-        OSL_ASSERT( false );
+        SAL_WARN_S("basic", "erase(" << url << ") != 1");
     }
 }
 
@@ -207,8 +209,9 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
         m_bound.insert( t_string2ref::value_type( url, xNewPackage ) ) );
     if (insertion.second)
     { // first insertion
-        OSL_ASSERT( Reference<XInterface>(insertion.first->second)
-                    == xNewPackage );
+        SAL_WARN_IF(
+            Reference<XInterface>(insertion.first->second) != xNewPackage,
+            "desktop", "mismatch");
     }
     else
     { // found existing entry
@@ -339,7 +342,7 @@ Package::Package( ::rtl::Reference<PackageRegistryBackend> const & myBackend,
     if (m_bRemoved)
     {
         //We use the last segment of the URL
-        OSL_ASSERT(m_name.getLength() == 0);
+        SAL_WARN_IF(!m_name.isEmpty(), "basic", "non-empty m_name");
         OUString name = m_url;
         rtl::Bootstrap::expandMacros(name);
         sal_Int32 index = name.lastIndexOf('/');
@@ -679,11 +682,8 @@ void Package::processPackage_impl(
         }
         catch (RuntimeException &e) {
             (void) e; // avoid warnings
-            OSL_FAIL(
-                OSL_FORMAT(
-                    "unexpected RuntimeException \"%s\"",
-                    (rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).
-                     getStr())));
+            SAL_WARN_S(
+                "basic", "unexpected RuntimeException \"" << e.Message << '"');
             throw;
         }
         catch (CommandFailedException &) {

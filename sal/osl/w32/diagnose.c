@@ -29,9 +29,6 @@
 #include "system.h"
 
 #include <osl/diagnose.h>
-#include <osl/thread.h>
-
-#include "printtrace.h"
 
 static pfunc_osl_printDebugMessage  _pPrintDebugMessage = NULL;
 static pfunc_osl_printDetailedDebugMessage  _pPrintDetailedDebugMessage = NULL;
@@ -61,24 +58,6 @@ void SAL_CALL osl_breakDebug(void)
         DebugBreak();
     else
         abort ();
-}
-
-void osl_trace(char const * pszFormat, ...) {
-    va_list args;
-    va_start(args, pszFormat);
-    if ( IsDebuggerPresent() )
-    {
-        sal_Char    szMessage[512];
-        int written = _vsnprintf(
-            szMessage, sizeof(szMessage) - 2, pszFormat, args );
-        if ( written == -1 )
-            written = sizeof(szMessage) - 2;
-        szMessage[ written++ ] = '\n';
-        szMessage[ written ] = 0;
-        OutputDebugString( szMessage );
-    }
-    printTrace((unsigned long) _getpid(), pszFormat, args);
-    va_end(args);
 }
 
 sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nLine, const sal_Char* pszMessage)

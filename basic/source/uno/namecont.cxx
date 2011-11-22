@@ -37,9 +37,10 @@
 #include <osl/mutex.hxx>
 #include <tools/errinf.hxx>
 #include <osl/mutex.hxx>
-#include <osl/diagnose.h>
+#include <rtl/oustringostreaminserter.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/anytostring.hxx>
 
@@ -382,24 +383,18 @@ SfxLibraryContainer::SfxLibraryContainer( void )
     DBG_CTOR( SfxLibraryContainer, NULL );
 
     mxMSF = comphelper::getProcessServiceFactory();
-    if( !mxMSF.is() )
-    {
-        OSL_FAIL( "couldn't get ProcessServiceFactory" );
-    }
+    SAL_WARN_IF(!mxMSF.is(), "basic", "couldn't get ProcessServiceFactory");
 
     mxSFI = Reference< XSimpleFileAccess >( mxMSF->createInstance
         ( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")) ), UNO_QUERY );
-    if( !mxSFI.is() )
-    {
-        OSL_FAIL( "couldn't create SimpleFileAccess component" );
-    }
+    SAL_WARN_IF(
+        !mxSFI.is(), "basic", "couldn't create SimpleFileAccess component");
 
     mxStringSubstitution = Reference< XStringSubstitution >( mxMSF->createInstance
         ( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.PathSubstitution")) ), UNO_QUERY );
-    if( !mxStringSubstitution.is() )
-    {
-        OSL_FAIL( "couldn't create PathSubstitution component" );
-    }
+    SAL_WARN_IF(
+        !mxStringSubstitution.is(), "basic",
+        "couldn't create PathSubstitution component");
 }
 
 SfxLibraryContainer::~SfxLibraryContainer()
@@ -432,7 +427,10 @@ BasicManager* SfxLibraryContainer::getBasicManager( void )
         return mpBasMgr;
 
     Reference< XModel > xDocument( mxOwnerDocument.get(), UNO_QUERY );
-    OSL_ENSURE( xDocument.is(), "SfxLibraryContainer::getBasicManager: cannot obtain a BasicManager without document!" );
+    SAL_WARN_IF(
+        !xDocument.is(), "basic",
+        ("SfxLibraryContainer::getBasicManager: cannot obtain a BasicManager"
+         " without document!"));
     if ( xDocument.is() )
         mpBasMgr = BasicManagerRepository::getDocumentBasicManager( xDocument );
 
@@ -673,7 +671,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser") ) ), UNO_QUERY );
     if( !xParser.is() )
     {
-        OSL_FAIL( "couldn't create sax parser component" );
+        SAL_WARN("basic", "couldn't create sax parser component");
         return sal_False;
     }
 
@@ -697,8 +695,9 @@ sal_Bool SfxLibraryContainer::init_Impl(
     {
         if( bStorage )
         {
-            OSL_ENSURE( meInitMode == DEFAULT || meInitMode == OFFICE_DOCUMENT,
-                "### Wrong InitMode for document\n" );
+            SAL_WARN_IF(
+                meInitMode != DEFAULT && meInitMode != OFFICE_DOCUMENT, "basic",
+                "Wrong InitMode for document");
             try
             {
                 uno::Reference< io::XStream > xStream;
@@ -824,13 +823,13 @@ sal_Bool SfxLibraryContainer::init_Impl(
             catch ( xml::sax::SAXException& e )
             {
                 (void) e; // avoid warning
-                OSL_FAIL( OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                SAL_WARN_S("basic", e.Message);
                 return sal_False;
             }
             catch ( io::IOException& e )
             {
                 (void) e; // avoid warning
-                OSL_FAIL( OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                SAL_WARN_S("basic", e.Message);
                 return sal_False;
             }
 
@@ -918,16 +917,11 @@ sal_Bool SfxLibraryContainer::init_Impl(
                         {
                         #if OSL_DEBUG_LEVEL > 0
                             Any aError( ::cppu::getCaughtException() );
-                            OSL_FAIL(
-                                OSL_FORMAT(
-                                    ("couldn't open sub storage for library"
-                                     " \"%s\". Exception: %s"),
-                                    (rtl::OUStringToOString(
-                                        rLib.aName, RTL_TEXTENCODING_UTF8).
-                                     getStr()),
-                                    rtl::OUStringToOString(
-                                        comphelper::anyToString(aError),
-                                        RTL_TEXTENCODING_UTF8).getStr()));
+                            SAL_WARN_S(
+                                "basic",
+                                "couldn't open sub storage for library \""
+                                    << rLib.aName << "\". Exception: "
+                                    << comphelper::anyToString(aError));
                         #endif
                         }
                     }
@@ -937,11 +931,10 @@ sal_Bool SfxLibraryContainer::init_Impl(
                     {
                         OUString aIndexFileName;
                         sal_Bool bLoaded = implLoadLibraryIndexFile( pImplLib, rLib, xLibraryStor, aIndexFileName );
-                        if( bLoaded && aLibName != rLib.aName )
-                        {
-                            OSL_FAIL( "Different library names in library"
-                                " container and library info files!" );
-                        }
+                        SAL_WARN_IF(
+                            bLoaded && aLibName != rLib.aName, "basic",
+                            ("Different library names in library container and"
+                             " library info files!"));
                         if( GbMigrationSuppressErrors && !bLoaded )
                             removeLibrary( aLibName );
                     }
@@ -989,7 +982,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
         catch(const uno::Exception& )
         {
             // TODO: error handling?
-            OSL_FAIL( "Cannot access extensions!" );
+            SAL_WARN("basic", "Cannot access extensions!");
         }
     }
 
@@ -1204,7 +1197,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
         // #i93163
         if( bCleanUp )
         {
-            OSL_FAIL( "Upgrade of Basic installation failed somehow" );
+            SAL_WARN("basic", "Upgrade of Basic installation failed somehow");
 
             static char strErrorSavFolderName[] = "__basic_80_err";
             INetURLObject aPrevUserBasicInetObj_Err( aUserBasicInetObj );
@@ -1414,11 +1407,9 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
 
             if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
             {
-                OSL_FAIL(
-                    OSL_FORMAT(
-                        "invalid library element \"%s\"",
-                        rtl::OUStringToOString(
-                            aElementName, RTL_TEXTENCODING_UTF8).getStr()));
+                SAL_WARN_S(
+                    "basic",
+                    "invalid library element \"" << aElementName << '"');
                 continue;
             }
             try {
@@ -1431,7 +1422,9 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                 OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
 
                 uno::Reference< beans::XPropertySet > xProps( xElementStream, uno::UNO_QUERY );
-                OSL_ENSURE( xProps.is(), "The StorageStream must implement XPropertySet interface!\n" );
+                SAL_WARN_IF(
+                    !xProps.is(), "basic",
+                    "The StorageStream must implement XPropertySet interface!");
                 //if ( !xProps.is() ) //TODO
 
                 if ( xProps.is() )
@@ -1449,7 +1442,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
             }
             catch(const uno::Exception& )
             {
-                OSL_FAIL( "Problem during storing of library!" );
+                SAL_WARN("basic", "Problem during storing of library!");
                 // TODO: error handling?
             }
         }
@@ -1496,11 +1489,9 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
 
                 if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
                 {
-                    OSL_FAIL(
-                        OSL_FORMAT(
-                            "invalid library element \"%s\"",
-                            rtl::OUStringToOString(
-                                aElementName, RTL_TEXTENCODING_UTF8).getStr()));
+                    SAL_WARN_S(
+                        "basic",
+                        "invalid library element \"" << aElementName << '"');
                     continue;
                 }
 
@@ -1552,7 +1543,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
             OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") ) ), UNO_QUERY );
     if( !xHandler.is() )
     {
-        OSL_FAIL( "couldn't create sax-writer component" );
+        SAL_WARN("basic", "couldn't create sax-writer component");
         return;
     }
 
@@ -1569,7 +1560,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
 
         try {
             xInfoStream = xStorage->openStreamElement( aStreamName, embed::ElementModes::READWRITE );
-            OSL_ENSURE( xInfoStream.is(), "No stream!\n" );
+            SAL_WARN_IF(!xInfoStream.is(), "basic", "No stream!");
             uno::Reference< beans::XPropertySet > xProps( xInfoStream, uno::UNO_QUERY );
             //    throw uno::RuntimeException(); // TODO
 
@@ -1588,7 +1579,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
         }
         catch(const uno::Exception& )
         {
-            OSL_FAIL( "Problem during storing of library index file!" );
+            SAL_WARN("basic", "Problem during storing of library index file!");
             // TODO: error handling?
         }
     }
@@ -1637,7 +1628,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
     }
     if( !xOut.is() )
     {
-        OSL_FAIL( "couldn't open output stream" );
+        SAL_WARN("basic", "couldn't open output stream");
         return;
     }
 
@@ -1655,7 +1646,7 @@ sal_Bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser") ) ), UNO_QUERY );
     if( !xParser.is() )
     {
-        OSL_FAIL( "couldn't create sax parser component" );
+        SAL_WARN("basic", "couldn't create sax parser component");
         return sal_False;
     }
 
@@ -1727,7 +1718,7 @@ sal_Bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
     }
     catch(const Exception& )
     {
-        OSL_FAIL( "Parsing error" );
+        SAL_WARN("basic", "Parsing error");
         SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aLibInfoPath );
         sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
         ErrorHandler::HandleError( nErrorCode );
@@ -1915,15 +1906,11 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                     {
                     #if OSL_DEBUG_LEVEL > 0
                         Any aError( ::cppu::getCaughtException() );
-                        OSL_FAIL(
-                            OSL_FORMAT(
-                                ("couldn't create sub storage for library"
-                                 " \"%s\". Exception: %s"),
-                                rtl::OUStringToOString(
-                                    rLib.aName, RTL_TEXTENCODING_UTF8).getStr(),
-                                rtl::OUStringToOString(
-                                    comphelper::anyToString(aError),
-                                    RTL_TEXTENCODING_UTF8).getStr()));
+                        SAL_WARN_S(
+                            "basic",
+                            "couldn't create sub storage for library \""
+                                << rLib.aName << "\". Exception: "
+                                << comphelper::anyToString(aError));
                     #endif
                         return;
                     }
@@ -1967,7 +1954,10 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     // then we need to clean up the temporary storage we used for this
     if ( bInplaceStorage && sTempTargetStorName.getLength() )
     {
-        OSL_ENSURE( xSourceLibrariesStor.is(), "SfxLibrariesContainer::storeLibraries_impl: unexpected: we should have a source storage here!" );
+        SAL_WARN_IF(
+            !xSourceLibrariesStor.is(), "basic",
+            ("SfxLibrariesContainer::storeLibraries_impl: unexpected: we should"
+             " have a source storage here!"));
         try
         {
             // for this, we first remove everything from the source storage, then copy the complete content
@@ -2028,7 +2018,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
             OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") ) ), UNO_QUERY );
     if( !xHandler.is() )
     {
-        OSL_FAIL( "couldn't create sax-writer component" );
+        SAL_WARN("basic", "couldn't create sax-writer component");
         return;
     }
 
@@ -2043,7 +2033,9 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         try {
             xInfoStream = xTargetLibrariesStor->openStreamElement( aStreamName, embed::ElementModes::READWRITE );
             uno::Reference< beans::XPropertySet > xProps( xInfoStream, uno::UNO_QUERY );
-            OSL_ENSURE ( xProps.is(), "The stream must implement XPropertySet!\n" );
+            SAL_WARN_IF(
+                !xProps.is(), "basic",
+                "The stream must implement XPropertySet!");
             if ( !xProps.is() )
                 throw uno::RuntimeException();
 
@@ -2088,7 +2080,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     }
     if( !xOut.is() )
     {
-        OSL_FAIL( "couldn't open output stream" );
+        SAL_WARN("basic", "couldn't open output stream");
         return;
     }
 
@@ -2101,7 +2093,9 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         if ( bStorage )
         {
             uno::Reference< embed::XTransactedObject > xTransact( xTargetLibrariesStor, uno::UNO_QUERY );
-            OSL_ENSURE( xTransact.is(), "The storage must implement XTransactedObject!\n" );
+            SAL_WARN_IF(
+                !xTransact.is(), "basic",
+                "The storage must implement XTransactedObject!");
             if ( !xTransact.is() )
                 throw uno::RuntimeException();
 
@@ -2110,7 +2104,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     }
     catch(const uno::Exception& )
     {
-        OSL_FAIL( "Problem during storing of libraries!" );
+        SAL_WARN("basic", "Problem during storing of libraries!");
         sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
         ErrorHandler::HandleError( nErrorCode );
     }
@@ -2326,12 +2320,18 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
         {
             try {
                 xLibrariesStor = mxStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READ );
-                OSL_ENSURE( xLibrariesStor.is(), "The method must either throw exception or return a storage!\n" );
+                SAL_WARN_IF(
+                    !xLibrariesStor.is(), "basic",
+                    ("The method must either throw exception or return a"
+                     " storage!"));
                 if ( !xLibrariesStor.is() )
                     throw uno::RuntimeException();
 
                 xLibraryStor = xLibrariesStor->openStorageElement( Name, embed::ElementModes::READ );
-                OSL_ENSURE( xLibraryStor.is(), "The method must either throw exception or return a storage!\n" );
+                SAL_WARN_IF(
+                    !xLibraryStor.is(), "basic",
+                    ("The method must either throw exception or return a"
+                     " storage!"));
                 if ( !xLibrariesStor.is() )
                     throw uno::RuntimeException();
             }
@@ -2339,15 +2339,11 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
             {
             #if OSL_DEBUG_LEVEL > 0
                 Any aError( ::cppu::getCaughtException() );
-                OSL_FAIL(
-                    OSL_FORMAT(
-                        ("couldn't open sub storage for library \"%s\"."
-                         " Exception: %s"),
-                        (rtl::OUStringToOString(Name, RTL_TEXTENCODING_UTF8).
-                         getStr()),
-                        rtl::OUStringToOString(
-                            comphelper::anyToString(aError),
-                            RTL_TEXTENCODING_UTF8).getStr()));
+                SAL_WARN_S(
+                    "basic",
+                    "couldn't open sub storage for library \"" << Name
+                        << "\". Exception: "
+                        << comphelper::anyToString(aError));
             #endif
                 return;
             }
@@ -2392,12 +2388,10 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
 
                 if ( !xInStream.is() )
                 {
-                    OSL_FAIL(
-                        OSL_FORMAT(
-                            ("couldn't open library element stream - attempted"
-                             " to open library \"%s\""),
-                            rtl::OUStringToOString(
-                                Name, RTL_TEXTENCODING_UTF8).getStr()));
+                    SAL_WARN_S(
+                        "basic",
+                        "couldn't open library element stream - attempted to"
+                            " open library \"" << Name << '"');
                     return;
                 }
             }
@@ -2664,7 +2658,9 @@ void SfxLibraryContainer::_disposing( const EventObject& _rSource )
 {
 #if OSL_DEBUG_LEVEL > 0
     Reference< XModel > xDocument( mxOwnerDocument.get(), UNO_QUERY );
-    OSL_ENSURE( ( xDocument == _rSource.Source ) && xDocument.is(), "SfxLibraryContainer::_disposing: where does this come from?" );
+    SAL_WARN_IF(
+        xDocument != _rSource.Source || !xDocument.is(), "basic",
+        "SfxLibraryContainer::_disposing: where does this come from?");
 #else
     (void)_rSource;
 #endif
@@ -2772,14 +2768,13 @@ OUString SfxLibraryContainer::expand_url( const OUString& url )
     {
         if( !mxMacroExpander.is() )
         {
-            Reference< XPropertySet > xProps( mxMSF, UNO_QUERY );
-            OSL_ASSERT( xProps.is() );
+            Reference< XPropertySet > xProps( mxMSF, UNO_QUERY_THROW );
             if( xProps.is() )
             {
                 Reference< XComponentContext > xContext;
                 xProps->getPropertyValue(
                     OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xContext;
-                OSL_ASSERT( xContext.is() );
+                SAL_WARN_IF(!xContext.is(), "basic", "no DefaultContext");
                 if( xContext.is() )
                 {
                     Reference< util::XMacroExpander > xExpander;
@@ -3085,7 +3080,9 @@ void SfxLibrary::replaceByName( const OUString& aName, const Any& aElement )
     impl_checkReadOnly();
     impl_checkLoaded();
 
-    OSL_ENSURE( isLibraryElementValid( aElement ), "SfxLibrary::replaceByName: replacing element is invalid!" );
+    SAL_WARN_IF(
+        !isLibraryElementValid(aElement), "basic",
+        "SfxLibrary::replaceByName: replacing element is invalid!");
 
     maNameContainer.replaceByName( aName, aElement );
     implSetModified( sal_True );
@@ -3099,7 +3096,9 @@ void SfxLibrary::insertByName( const OUString& aName, const Any& aElement )
     impl_checkReadOnly();
     impl_checkLoaded();
 
-    OSL_ENSURE( isLibraryElementValid( aElement ), "SfxLibrary::insertByName: to-be-inserted element is invalid!" );
+    SAL_WARN_IF(
+        !isLibraryElementValid(aElement), "basic",
+        "SfxLibrary::insertByName: to-be-inserted element is invalid!");
 
     maNameContainer.insertByName( aName, aElement );
     implSetModified( sal_True );
@@ -3226,13 +3225,12 @@ ScriptExtensionIterator::ScriptExtensionIterator( void )
     , m_pScriptSubPackageIterator( NULL )
 {
     Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
-    Reference< XPropertySet > xProps( xFactory, UNO_QUERY );
-    OSL_ASSERT( xProps.is() );
+    Reference< XPropertySet > xProps( xFactory, UNO_QUERY_THROW );
     if (xProps.is())
     {
         xProps->getPropertyValue(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= m_xContext;
-        OSL_ASSERT( m_xContext.is() );
+        SAL_WARN_IF(!m_xContext.is(), "basic", "no DefaultContext");
     }
     if( !m_xContext.is() )
     {
@@ -3282,7 +3280,10 @@ rtl::OUString ScriptExtensionIterator::nextBasicOrDialogLibrary( bool& rbPureDia
                 break;
             }
             case END_REACHED:
-                OSL_FAIL( "ScriptExtensionIterator::nextBasicOrDialogLibrary(): Invalid case END_REACHED" );
+                SAL_WARN(
+                    "basic",
+                    ("ScriptExtensionIterator::nextBasicOrDialogLibrary():"
+                     " Invalid case END_REACHED"));
                 break;
         }
     }
@@ -3477,7 +3478,10 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextUserScript
         {
             const Reference< deployment::XPackage >* pUserPackages = m_aUserPackagesSeq.getConstArray();
             Reference< deployment::XPackage > xPackage = pUserPackages[ m_iUserPackage ];
-            OSL_ENSURE( xPackage.is(), "ScriptExtensionIterator::implGetNextUserScriptPackage(): Invalid package" );
+            SAL_WARN_IF(
+                !xPackage.is(), "basic",
+                ("ScriptExtensionIterator::implGetNextUserScriptPackage():"
+                 " Invalid package"));
             m_pScriptSubPackageIterator = new ScriptSubPackageIterator( xPackage );
         }
 
@@ -3530,7 +3534,10 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextSharedScri
         {
             const Reference< deployment::XPackage >* pSharedPackages = m_aSharedPackagesSeq.getConstArray();
             Reference< deployment::XPackage > xPackage = pSharedPackages[ m_iSharedPackage ];
-            OSL_ENSURE( xPackage.is(), "ScriptExtensionIterator::implGetNextSharedScriptPackage(): Invalid package" );
+            SAL_WARN_IF(
+                !xPackage.is(), "basic",
+                ("ScriptExtensionIterator::implGetNextSharedScriptPackage():"
+                 " Invalid package"));
             m_pScriptSubPackageIterator = new ScriptSubPackageIterator( xPackage );
         }
 
@@ -3583,7 +3590,10 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextBundledScr
         {
             const Reference< deployment::XPackage >* pBundledPackages = m_aBundledPackagesSeq.getConstArray();
             Reference< deployment::XPackage > xPackage = pBundledPackages[ m_iBundledPackage ];
-            OSL_ENSURE( xPackage.is(), "ScriptExtensionIterator::implGetNextBundledScriptPackage(): Invalid package" );
+            SAL_WARN_IF(
+                !xPackage.is(), "basic",
+                ("ScriptExtensionIterator::implGetNextBundledScriptPackage():"
+                 " Invalid package"));
             m_pScriptSubPackageIterator = new ScriptSubPackageIterator( xPackage );
         }
 

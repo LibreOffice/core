@@ -1,6 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
-*
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 *
 * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -23,46 +22,40 @@
 * version 3 along with OpenOffice.org.  If not, see
 * <http://www.openoffice.org/license.html>
 * for a copy of the LGPLv3 License.
-*
 ************************************************************************/
 
-#include "precompiled_sal.hxx"
+#ifndef INCLUDED_RTL_OUSTRINGOSTREAMINSERTER_HXX
+#define INCLUDED_RTL_OUSTRINGOSTREAMINSERTER_HXX
 
 #include "sal/config.h"
 
-#include <cstdarg>
-#include <cstdio>
-#include <cstring>
+#include <ostream>
 
-#include <stdio.h> // snprintf, vsnprintf
+#include "rtl/textenc.h"
+#include "rtl/ustring.hxx"
 
-#include "osl/diagnose.h"
-#include "osl/thread.hxx"
-#include "rtl/string.h"
-#include "sal/types.h"
+/** Include this header to support rtl::OUString in std::ostream (and thus in
+    CPPUNIT_ASSERT macros, for example).
 
-#include "printtrace.h"
+    The rtl::OUString is converted to UTF-8.
 
-void printTrace(unsigned long pid, char const * format, std::va_list arguments)
+    @since LibreOffice 3.5.
+*/
+
+namespace rtl {
+
+template< typename charT, typename traits > std::basic_ostream<charT, traits> &
+operator <<(
+    std::basic_ostream<charT, traits> & stream, rtl::OUString const & string)
 {
-    char buf[1024];
-    int n1 = snprintf(
-        buf, sizeof buf, "Trace %lu/%" SAL_PRIuUINT32 ": \"", pid,
-        osl::Thread::getCurrentIdentifier());
-    OSL_ASSERT(
-        n1 >= 0 &&
-        (static_cast< unsigned int >(n1) <
-         sizeof buf - RTL_CONSTASCII_LENGTH("\"...\n")));
-    int n2 = sizeof buf - n1 - RTL_CONSTASCII_LENGTH("\"...\n");
-    int n3 = vsnprintf(buf + n1, n2, format, arguments);
-    if (n3 < 0) {
-        std::strcpy(buf + n1, "\"???\n");
-    } else if (n3 < n2) {
-        std::strcpy(buf + n1 + n3, "\"\n");
-    } else {
-        std::strcpy(buf + n1 + n2 - 1, "\"...\n");
-    }
-    std::fputs(buf, stderr);
+    return stream <<
+        rtl::OUStringToOString(string, RTL_TEXTENCODING_UTF8).getStr();
+        // best effort; potentially loses data due to conversion failures
+        // (stray surrogate halves) and embedded null characters
 }
+
+}
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

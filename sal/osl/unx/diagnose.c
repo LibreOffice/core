@@ -46,7 +46,6 @@
 #endif
 
 #endif  /* HAVE_DLFCN_H */
-#include "osl/thread.h"
 
 #ifndef INCLUDED_PTHREAD_H
 #include <pthread.h>
@@ -57,8 +56,6 @@
 #include <stddef.h>
 #define INCLUDED_STDDEF_H
 #endif
-
-#include "printtrace.h"
 
 /************************************************************************/
 /* Internal data structures and functions */
@@ -307,16 +304,6 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc (
     oslDetailedDebugMessageFunc pOldFunc = g_pDetailedDebugMessageFunc;
     g_pDetailedDebugMessageFunc = pNewFunc;
     return pOldFunc;
-}
-
-/************************************************************************/
-/* osl_trace */
-/************************************************************************/
-void osl_trace(char const * pszFormat, ...) {
-    va_list args;
-    va_start(args, pszFormat);
-    printTrace((unsigned long) getpid(), pszFormat, args);
-    va_end(args);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

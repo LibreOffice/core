@@ -70,7 +70,9 @@
 #include <ucbhelper/content.hxx>
 #include <unotools/syslocale.hxx>
 
+#include <rtl/oustringostreaminserter.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.h>
 
 using namespace comphelper;
 using namespace cppu;
@@ -241,8 +243,9 @@ int BasicApp::Main( )
     DbgSetPrintTestTool( DBG_TestToolDebugMessageFilter );
     DBG_INSTOUTERROR( DBG_OUT_TESTTOOL );
 
-    if ( osl_setDebugMessageFunc( osl_TestToolDebugMessageFilter ) )
-        OSL_FAIL("osl_setDebugMessageFunc returns non NULL pointer");
+    SAL_WARN_IF(
+        osl_setDebugMessageFunc(osl_TestToolDebugMessageFilter), "basic",
+        "osl_setDebugMessageFunc returns non NULL pointer");
 #endif
 
     ResMgr::SetReadStringHook( ReplaceStringHookProc );
@@ -1849,12 +1852,10 @@ String BasicFrame::GenRealString( const String &aResString )
         }
         else
         {
-            OSL_FAIL(
-                OSL_FORMAT(
-                    "Unknown replacement in String: %s",
-                    rtl::OUStringToOString(
-                        aResult.Copy(nStart, nEnd - nStart),
-                        RTL_TEXTENCODING_UTF8).getStr()));
+            SAL_WARN_S(
+                "basic",
+                "Unknown replacement in String: "
+                    << rtl::OUString(aResult.Copy(nStart, nEnd - nStart)));
             nStartPos = nStartPos + StartKenn.Len();
         }
     }

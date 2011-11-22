@@ -39,6 +39,7 @@
 #include <limits.h>
 
 #include "tools/debug.hxx"
+#include "sal/log.h"
 
 #include "vcl/svapp.hxx"
 #include "vcl/event.hxx"
@@ -1454,10 +1455,12 @@ void DbgDialogTest( Window* pWindow )
 
         if ( bButton )
         {
-            if ( !bOKCancelButton )
-                DbgError( "Dialogs should have a OK- or CancelButton" );
-            if ( !bDefPushButton )
-                DbgError( "Dialogs should have a Button with WB_DEFBUTTON" );
+            SAL_WARN_IF(
+                !bOKCancelButton, "vcl",
+                "Dialogs should have a OK- or CancelButton");
+            SAL_WARN_IF(
+                !bDefPushButton, "vcl",
+                "Dialogs should have a Button with WB_DEFBUTTON");
         }
     }
 
@@ -1626,15 +1629,12 @@ void DbgDialogTest( Window* pWindow )
                 }
             }
 
-            if ( pChild->GetType() == WINDOW_MULTILINEEDIT )
-            {
-                if  (   ( 0 == ( pChild->GetStyle() & WB_IGNORETAB ) )
-                    &&  ( 0 == ( pChild->GetStyle() & WB_READONLY ) )
-                    )
-                {
-                    DbgError( "editable MultiLineEdits in Dialogs should have the Style WB_IGNORETAB" );
-                }
-            }
+            SAL_WARN_IF(
+                (pChild->GetType() == WINDOW_MULTILINEEDIT
+                 && (pChild->GetStyle() & (WB_IGNORETAB | WB_READONLY)) == 0),
+                "vcl",
+                ("editable MultiLineEdits in Dialogs should have the Style"
+                 " WB_IGNORETAB"));
 
             if ( (pChild->GetType() == WINDOW_RADIOBUTTON) ||
                  (pChild->GetType() == WINDOW_IMAGERADIOBUTTON) ||

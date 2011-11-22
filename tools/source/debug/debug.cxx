@@ -50,6 +50,7 @@
 
 #include <tools/debug.hxx>
 #include <rtl/string.h>
+#include <sal/log.h>
 #include <sal/macros.h>
 
 #include <vector>
@@ -59,22 +60,6 @@
 // =======================================================================
 
 #ifdef DBG_UTIL
-
-// --- DbgErrors ---
-
-static sal_Char const DbgError_ProfEnd1[]   = "DBG_PROF...() without DBG_PROFSTART(): ";
-static sal_Char const DbgError_Xtor1[]      = "DBG_DTOR() or DBG_CHKTHIS() without DBG_CTOR(): ";
-
-static sal_Char const DbgError_CtorDtor1[]  = "this == NULL in class ";
-static sal_Char const DbgError_CtorDtor2[]  = "invalid this-Pointer %p in class ";
-static sal_Char const DbgError_CtorDtor3[]  = "Error-Msg from Object %p in class ";
-
-static sal_Char const DbgTrace_EnterCtor[]  = "Enter Ctor from class ";
-static sal_Char const DbgTrace_LeaveCtor[]  = "Leave Ctor from class ";
-static sal_Char const DbgTrace_EnterDtor[]  = "Enter Dtor from class ";
-static sal_Char const DbgTrace_LeaveDtor[]  = "Leave Dtor from class ";
-static sal_Char const DbgTrace_EnterMeth[]  = "Enter method from class ";
-static sal_Char const DbgTrace_LeaveMeth[]  = "Leave method from class ";
 
 // --- PointerList ---
 
@@ -1345,14 +1330,13 @@ void DbgProf( sal_uInt16 nAction, DbgDataType* pDbgData )
     if ( !(pData->aDbgData.nTestFlags & DBG_TEST_PROFILING) )
         return;
 
-    sal_Char    aBuf[DBG_BUF_MAXLEN];
     ProfType*   pProfData = (ProfType*)pDbgData->pData;
     sal_uIntPtr       nTime;
     if ( (nAction != DBG_PROF_START) && !pProfData )
     {
-        strcpy( aBuf, DbgError_ProfEnd1 );
-        strcat( aBuf, pDbgData->pName );
-        DbgError( aBuf );
+        SAL_WARN_S(
+            "tools.debug",
+            "DBG_PROF...() without DBG_PROFSTART(): " << pDbgData->pName);
         return;
     }
 
@@ -1387,7 +1371,8 @@ void DbgProf( sal_uInt16 nAction, DbgDataType* pDbgData )
 
             if ( pProfData->nStart == 0xFFFFFFFF )
             {
-                DbgError( DbgError_ProfEnd1 );
+                SAL_WARN(
+                    "tools.debug", "DBG_PROF...() without DBG_PROFSTART()");
                 return;
             }
 
@@ -1467,25 +1452,15 @@ void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
     if ( !pXtorData->bTest )
         return;
 
-    sal_Char    aBuf[DBG_BUF_MAXLEN];
     sal_uInt16      nAct = nAction & ~DBG_XTOR_DTOROBJ;
 
-    // Trace (Enter)
-    if ( (pData->aDbgData.nTestFlags & DBG_TEST_XTOR_TRACE) &&
-         !(nAction & DBG_XTOR_DTOROBJ) )
-    {
-        if ( nAct != DBG_XTOR_CHKOBJ )
-        {
-            if ( nAct == DBG_XTOR_CTOR )
-                strcpy( aBuf, DbgTrace_EnterCtor );
-            else if ( nAct == DBG_XTOR_DTOR )
-                strcpy( aBuf, DbgTrace_EnterDtor );
-            else
-                strcpy( aBuf, DbgTrace_EnterMeth );
-            strcat( aBuf, pDbgData->pName );
-            DbgTrace( aBuf );
-        }
-    }
+    SAL_INFO_IF_S(
+        ((pData->aDbgData.nTestFlags & DBG_TEST_XTOR_TRACE)
+         && !(nAction & DBG_XTOR_DTOROBJ) && nAct != DBG_XTOR_CHKOBJ),
+        "tools.debug",
+        (nAct == DBG_XTOR_CTOR ? "Enter Ctor from class "
+         : nAct == DBG_XTOR_DTOR ? "Enter Dtor from class "
+         : "Enter method from class ") << pDbgData->pName);
 
     // Sind noch Xtor-Tests als Trace an
     if ( pData->aDbgData.nTestFlags & DBG_TEST_XTOR_EXTRA )
@@ -1493,9 +1468,10 @@ void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
         // DBG_CTOR-Aufruf vor allen anderen DBG_XTOR-Aufrufen
         if ( ((nAction & ~DBG_XTOR_DTOROBJ) != DBG_XTOR_CTOR) && !pDbgData->pData )
         {
-            strcpy( aBuf, DbgError_Xtor1 );
-            strcat( aBuf, pDbgData->pName );
-            DbgError( aBuf );
+            SAL_WARN_S(
+                "tools.debug",
+                "DBG_DTOR() or DBG_CHKTHIS() without DBG_CTOR(): "
+                    << pDbgData->pName);
             return;
         }
 
@@ -1508,20 +1484,17 @@ void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
                 // This-Pointer == NULL
                 if ( !pThis )
                 {
-                    strcpy( aBuf, DbgError_CtorDtor1 );
-                    strcat( aBuf, pDbgData->pName );
-                    DbgError( aBuf );
+                    SAL_WARN_S(
+                        "tools.debug",
+                        "this == NULL in class " << pDbgData->pName);
                     return;
                 }
 
                 if ( (nAction & ~DBG_XTOR_DTOROBJ) != DBG_XTOR_CTOR )
                 {
-                    if ( !pXtorData->aThisList.IsIn( pThis ) )
-                    {
-                        sprintf( aBuf, DbgError_CtorDtor2, pThis );
-                        strcat( aBuf, pDbgData->pName );
-                        DbgError( aBuf );
-                    }
+                    SAL_WARN_IF_S(
+                        !pXtorData->aThisList.IsIn(pThis), "tools.debug",
+                        "invalid this-Pointer %p in class " << pDbgData->pName);
                 }
             }
         }
@@ -1585,32 +1558,21 @@ void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
         }
 
         // Gegebenenfalls Fehlermeldung ausgeben
-        if ( pMsg )
-        {
-            sprintf( aBuf, DbgError_CtorDtor3, pThis );
-            strcat( aBuf, pDbgData->pName );
-            strcat( aBuf, ": \n" );
-            strcat( aBuf, pMsg );
-            DbgError( aBuf );
-        }
+        SAL_WARN_IF_S(
+            pMsg, "tools.debug",
+            "Error-Msg from Object " << pThis << " in class "
+                << pDbgData->pName << ": " << pMsg);
     }
 
-    // Trace (Leave)
-    if ( (pData->aDbgData.nTestFlags & DBG_TEST_XTOR_TRACE) &&
-         (nAction & DBG_XTOR_DTOROBJ) )
-    {
-        if ( nAct != DBG_XTOR_CHKOBJ )
-        {
-            if ( nAct == DBG_XTOR_CTOR )
-                strcpy( aBuf, DbgTrace_LeaveCtor );
-            else if ( nAct == DBG_XTOR_DTOR )
-                strcpy( aBuf, DbgTrace_LeaveDtor );
-            else
-                strcpy( aBuf, DbgTrace_LeaveMeth );
-            strcat( aBuf, pDbgData->pName );
-            DbgTrace( aBuf );
-        }
-    }
+    SAL_INFO_IF_S(
+        ((pData->aDbgData.nTestFlags & DBG_TEST_XTOR_TRACE)
+         && (nAction & DBG_XTOR_DTOROBJ) && nAct != DBG_XTOR_CHKOBJ),
+        "tools.debug",
+        (nAct == DBG_XTOR_CTOR
+         ? "Leave Ctor from class "
+         : nAct == DBG_XTOR_DTOR
+         ? "Leave Dtor from class "
+         : "Leave method from class ") << pDbgData->pName);
 }
 
 // -----------------------------------------------------------------------

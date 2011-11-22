@@ -39,10 +39,12 @@
 #include <osl/time.h>
 #include <osl/mutex.hxx>
 #include <rtl/bootstrap.h>
+#include <rtl/oustringostreaminserter.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/alloc.h>
 #include <rtl/instance.hxx>
+#include <sal/log.h>
 #include "osl/thread.h"
 
 #include <algorithm>
@@ -107,7 +109,8 @@ OUString getFileUrl( const OUString &name )
     if ( osl_getFileURLFromSystemPath( name.pData, &aRet.pData )
          != osl_File_E_None )
     {
-        OSL_ASSERT( false );
+        SAL_WARN_S(
+            "sal", "osl_getFileURLFromSystemPath failed for \"" << name << '"');
     }
 
     OUString aWorkingDirectory;
@@ -182,7 +185,9 @@ void init() {
                 }
                 else
                 {
-                    OSL_TRACE( "Couldn't open logfile %s(%d)" , o.getStr(), e );
+                    SAL_WARN_S(
+                        "sal",
+                        "Couldn't open logfile " << o << '(' << e << ')');
                 }
             }
             g_bHasBeenCalled = sal_True;

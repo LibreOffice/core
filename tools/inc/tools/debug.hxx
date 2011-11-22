@@ -31,8 +31,23 @@
 
 #include "tools/toolsdllapi.h"
 
+#include <sal/log.h>
 #include <sal/types.h>
 #include <tools/solar.h>
+
+/** The facilities provided by this header are deprecated.  True assertions
+    (that detect broken program logic) should use standard assert (which aborts
+    if an assertion fails, and is controlled by the standard NDEBUG macro).
+    Logging of warnings (e.g., about malformed input) and traces (e.g., about
+    steps taken while executing some protocol) should use the facilities
+    provided by sal/log.h.
+
+    Because the assertion macros (DBG_ASSERTWARNING, DBG_ASSERT, DBG_BF_ASSERT)
+    have been used for true assertions as well as for logged warnings, they map
+    to SAL_WARN instead of standard assert.  The warning and error macros
+    (DBG_WARNING, DBG_WARNING1, ..., DBG_WARNING5, DBG_WARNINGFILE,
+    DBG_ERRORFILE) all map to SAL_WARN, too.
+*/
 
 // ------------
 // - DBG_UITL -
@@ -348,24 +363,6 @@ TOOLS_DLLPUBLIC void DbgOutTypef( sal_uInt16 nOutType, const sal_Char* pFStr, ..
 TOOLS_DLLPUBLIC void DbgOutf( const sal_Char* pFStr, ... );
 TOOLS_DLLPUBLIC void ImpDbgOutfBuf( sal_Char* pBuf, const sal_Char* pFStr, ... );
 
-inline void DbgTrace( const sal_Char* pMsg,
-                      const sal_Char* pFile = NULL, sal_uInt16 nLine = 0 )
-{
-    DbgOut( pMsg, DBG_OUT_TRACE, pFile, nLine );
-}
-
-inline void DbgWarning( const sal_Char* pMsg,
-                        const sal_Char* pFile = NULL, sal_uInt16 nLine = 0 )
-{
-    DbgOut( pMsg, DBG_OUT_WARNING, pFile, nLine );
-}
-
-inline void DbgError( const sal_Char* pMsg,
-                      const sal_Char* pFile = NULL, sal_uInt16 nLine = 0 )
-{
-    DbgOut( pMsg, DBG_OUT_ERROR, pFile, nLine );
-}
-
 // --- Dbg-Test-Functions ---
 
 inline void DbgMemTest( void* p = NULL )
@@ -469,110 +466,34 @@ public:
     DbgXtor( DBG_FUNC( aName ), DBG_XTOR_CHKOBJ,    \
              (const void*)pObj, (DbgUsr)fTest )
 
-#define DBG_ASSERTWARNING( sCon, aWarning )         \
-do                                                  \
-{                                                   \
-    if ( DbgIsAssertWarning() )                     \
-    {                                               \
-        if ( !( sCon ) )                            \
-        {                                           \
-            DbgWarning( aWarning, __FILE__,         \
-                        __LINE__ );                 \
-        }                                           \
-    }                                               \
-} while(0)
+#define DBG_ASSERTWARNING( sCon, aWarning ) \
+    SAL_WARN_IF(!(sCon), "legacy.tools", aWarning)
 
-#define DBG_ASSERT( sCon, aError )                  \
-do                                                  \
-{                                                   \
-    if ( DbgIsAssert() )                            \
-    {                                               \
-        if ( !( sCon ) )                            \
-        {                                           \
-            DbgError( aError,                       \
-                      __FILE__, __LINE__ );         \
-        }                                           \
-    }                                               \
-} while(0)
+#define DBG_ASSERT( sCon, aError ) \
+    SAL_WARN_IF(!(sCon), "legacy.tools", aError)
 
 #ifdef DBG_BINFILTER
-#define DBG_BF_ASSERT( sCon, aError )           \
-do                                              \
-{                                               \
-    if ( !( sCon ) )                            \
-    {                                           \
-        DbgError( aError,                       \
-                  __FILE__, __LINE__ );         \
-    }                                           \
-} while(0)
+#define DBG_BF_ASSERT( sCon, aError ) \
+    SAL_WARN_IF(!(sCon), "legacy.binfilter", aError)
 #else
 #define DBG_BF_ASSERT( sCon, aError ) ((void)0)
 #endif
 
-#define DBG_WARNING( aWarning )                     \
-do                                                  \
-{                                                   \
-    if ( DbgIsWarningOut() )                        \
-        DbgWarning( aWarning );                     \
-} while(0)
-#define DBG_WARNING1( aWarning, x1 )                \
-do                                                  \
-{                                                   \
-    if ( DbgIsWarningOut() )                        \
-    {                                               \
-        DbgOutTypef( DBG_OUT_WARNING, aWarning,     \
-                     x1 );                          \
-    }                                               \
-} while(0)
-#define DBG_WARNING2( aWarning, x1, x2 )            \
-do                                                  \
-{                                                   \
-    if ( DbgIsWarningOut() )                        \
-    {                                               \
-        DbgOutTypef( DBG_OUT_WARNING, aWarning,     \
-                     x1, x2 );                      \
-    }                                               \
-} while(0)
-#define DBG_WARNING3( aWarning, x1, x2, x3 )        \
-do                                                  \
-{                                                   \
-    if ( DbgIsWarningOut() )                        \
-    {                                               \
-        DbgOutTypef( DBG_OUT_WARNING, aWarning,     \
-                     x1, x2, x3 );                  \
-    }                                               \
-} while(0)
-#define DBG_WARNING4( aWarning, x1, x2, x3, x4 )    \
-do                                                  \
-{                                                   \
-    if ( DbgIsWarningOut() )                        \
-    {                                               \
-        DbgOutTypef( DBG_OUT_WARNING, aWarning,     \
-                     x1, x2, x3, x4 );              \
-    }                                               \
-} while(0)
-#define DBG_WARNING5( aWarning, x1, x2, x3, x4, x5 )\
-do                                                  \
-{                                                   \
-    if ( DbgIsWarningOut() )                        \
-    {                                               \
-        DbgOutTypef( DBG_OUT_WARNING, aWarning,     \
-                     x1, x2, x3, x4, x5 );          \
-    }                                               \
-} while(0)
-#define DBG_WARNINGFILE( aWarning )                 \
-do                                                  \
-{                                                   \
-    if ( DbgIsWarningOut() )                        \
-        DbgWarning( aWarning, __FILE__, __LINE__ ); \
-} while(0)
+#define DBG_WARNING( aWarning ) SAL_WARN("legacy.tools", aWarning)
+#define DBG_WARNING1( aWarning, x1 ) SAL_WARN("legacy.tools", aWarning, x1)
+#define DBG_WARNING2( aWarning, x1, x2 ) \
+    SAL_WARN("legacy.tools", aWarning, x1, x2)
+#define DBG_WARNING3( aWarning, x1, x2, x3 ) \
+    SAL_WARN("legacy.tools", aWarning, x1, x2, x3)
+#define DBG_WARNING4( aWarning, x1, x2, x3, x4 ) \
+    SAL_WARN("legacy.tools", aWarning, x1, x2, x3, x4)
+#define DBG_WARNING5( aWarning, x1, x2, x3, x4, x5 ) \
+    SAL_WARN("legacy.tools", aWarning, x1, x2, x3, x4, x5)
+#define DBG_WARNINGFILE( aWarning ) \
+    SAL_WARN("legacy.tools", aWarning, __FILE__, __LINE__)
 
-#define DBG_ERRORFILE( aError )                     \
-do                                                  \
-{                                                   \
-    if ( DbgIsErrorOut() )                          \
-        DbgError( aError, __FILE__, __LINE__ );     \
-} while(0)
+#define DBG_ERRORFILE( aError ) \
+    SAL_WARN("legacy.tools", aError, __FILE__, __LINE__)
 
 #define DBG_TESTSOLARMUTEX()                \
 do                                          \

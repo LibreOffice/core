@@ -30,9 +30,24 @@
 #ifndef _OSL_DIAGNOSE_H_
 #define _OSL_DIAGNOSE_H_
 
+#include "sal/config.h"
+
+#include <sal/log.h>
 #include <sal/types.h>
 
 /** provides simple diagnostic support
+
+    The facilities provided by this header are deprecated.  True assertions
+    (that detect broken program logic) should use standard assert (which aborts
+    if an assertion fails, and is controlled by the standard NDEBUG macro).
+    Logging of warnings (e.g., about malformed input) and traces (e.g., about
+    steps taken while executing some protocol) should use the facilities
+    provided by sal/log.h.
+
+    Because the assertion macros (OSL_ASSERT, OSL_ENSURE, OSL_FAIL, OSL_PRECOND,
+    and OSL_POSTCOND) have been used for true assertions as well as for logged
+    warnings, they map to SAL_WARN instead of standard assert.  OSL_TRACE maps
+    to SAL_INFO.
 
     The functions defined in this header are not intended to be used directly,
     but through defined macros. The macros can be divided into three categories:
@@ -122,14 +137,25 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 
 #define OSL_THIS_FILE       __FILE__
 
-/* the macro OSL_LOG_PREFIX is intended to be an office internal macro for now */
-#define OSL_LOG_PREFIX OSL_THIS_FILE ":" SAL_STRINGIFY( __LINE__ ) "; "
+/* the macro OSL_LOG_PREFIX is intended to be an office internal macro for now
+
+   it is deprecated and superseded by SAL_WHERE
+*/
+#define OSL_LOG_PREFIX SAL_WHERE
 
 #define OSL_DEBUG_ONLY(s)   _OSL_DEBUG_ONLY(s)
-#define OSL_TRACE           _OSL_TRACE
-#define OSL_ASSERT(c)       _OSL_ENSURE(c, OSL_THIS_FILE, __LINE__, 0)
-#define OSL_ENSURE(c, m)   _OSL_ENSURE(c, OSL_THIS_FILE, __LINE__, m)
-#define OSL_FAIL(m)        _OSL_ENSURE(0, OSL_THIS_FILE, __LINE__, m)
+
+#if OSL_DEBUG_LEVEL > 0
+#define OSL_TRACE(...) SAL_INFO("legacy.osl", __VA_ARGS__)
+#define OSL_ASSERT(c) SAL_WARN_IF(!(c), "legacy.osl", "OSL_ASSERT")
+#define OSL_ENSURE(c, m) SAL_WARN_IF(!(c), "legacy.osl", "%s", m)
+#define OSL_FAIL(m) SAL_WARN_IF(sal_True, "legacy.osl", "%s", m)
+#else
+#define OSL_TRACE(...) ((void) 0)
+#define OSL_ASSERT(c) ((void) 0)
+#define OSL_ENSURE(c, m) ((void) 0)
+#define OSL_FAIL(m) ((void) 0)
+#endif
 
 #define OSL_VERIFY(c) do { if (!(c)) OSL_ASSERT(0); } while (0)
 #define OSL_PRECOND(c, m)   OSL_ENSURE(c, m)
@@ -145,27 +171,10 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 #if OSL_DEBUG_LEVEL > 0
 
 #define _OSL_DEBUG_ONLY(f)  (f)
-#define _OSL_ENSURE(c, f, l, m) \
-    do \
-    {  \
-        if (!(c) && _OSL_GLOBAL osl_assertFailedLine(f, l, m)) \
-            _OSL_GLOBAL osl_breakDebug(); \
-    } while (0)
 
 #else
 
 #define _OSL_DEBUG_ONLY(f)          ((void)0)
-#define _OSL_ENSURE(c, f, l, m)     ((void)0)
-
-#endif /* OSL_DEBUG_LEVEL */
-
-#if OSL_DEBUG_LEVEL > 1
-
-#define _OSL_TRACE                  _OSL_GLOBAL osl_trace
-
-#else
-
-#define _OSL_TRACE                  1 ? ((void)0) : _OSL_GLOBAL osl_trace
 
 #endif /* OSL_DEBUG_LEVEL */
 
@@ -190,30 +199,6 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 #define OSL_THIS_FUNC __func__
 #else
 #define OSL_THIS_FUNC ""
-#endif
-
-#if defined __cplusplus
-
-#include "rtl/string.hxx"
-
-/** @internal */
-extern "C" struct _rtl_String * SAL_CALL osl_detail_formatString(
-    char const * format, ...) SAL_THROW_EXTERN_C();
-    // "struct _rtl_String" instead of "rtl_String" for the case where
-    // osl/diagnose.h is included in rtl/string.hxx
-
-/** A facility for printf-style messages in OSL_ENSURE, OSL_FAIL, etc.
-
-    Use like: OSL_ENSURE(i == 5, OSL_FORMAT("i should be 5 but is %d", i));
-*/
-#define OSL_FORMAT(format, ...) \
-    (::rtl::OString( \
-        ::osl_detail_formatString(format, __VA_ARGS__), \
-        ::SAL_NO_ACQUIRE).getStr())
-    // it appears that all relevant compilers (esp. GCC 4.0 and MS VS 2008
-    // Express) already support variadic macros in C++; see also
-    // <http://wiki.apache.org/stdcxx/C++0xCompilerSupport>
-
 #endif
 
 #endif /* _OSL_DIAGNOSE_H_ */

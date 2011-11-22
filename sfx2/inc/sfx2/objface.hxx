@@ -29,6 +29,8 @@
 #define _SFXOBJFACE_HXX
 
 #include "sal/config.h"
+
+#include "rtl/ustring.hxx"
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
 #include <tools/string.hxx>
@@ -79,7 +81,7 @@ public:
 
     const char*             GetClassName() const { return pName; }
     int                     HasName() const { return 0 != aNameResId.GetId(); }
-    String                  GetName() const
+    rtl::OUString           GetName() const
                             { return String(aNameResId); }
     ResMgr*                 GetResMgr() const
                             { return aNameResId.GetResMgr(); }

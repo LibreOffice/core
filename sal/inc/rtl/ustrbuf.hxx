@@ -29,11 +29,13 @@
 #ifndef _RTL_USTRBUF_HXX_
 #define _RTL_USTRBUF_HXX_
 
+#include "sal/config.h"
+
+#include <cassert>
+
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.h>
 #include <rtl/ustring.hxx>
-
-#ifdef __cplusplus
 
 namespace rtl
 {
@@ -233,7 +235,7 @@ public:
      */
     void setLength(sal_Int32 newLength)
     {
-        OSL_ASSERT(newLength >= 0);
+        assert(newLength >= 0);
         // Avoid modifications if pData points to const empty string:
         if( newLength != pData->length )
         {
@@ -260,7 +262,7 @@ public:
      */
     sal_Unicode charAt( sal_Int32 index ) const
     {
-        OSL_ASSERT(index >= 0 && index < pData->length);
+        assert(index >= 0 && index < pData->length);
         return pData->buffer[ index ];
     }
 
@@ -301,7 +303,7 @@ public:
      */
     OUStringBuffer & setCharAt(sal_Int32 index, sal_Unicode ch)
     {
-        OSL_ASSERT(index >= 0 && index < pData->length);
+        assert(index >= 0 && index < pData->length);
         pData->buffer[ index ] = ch;
         return *this;
     }
@@ -434,7 +436,7 @@ public:
      */
     OUStringBuffer & append(char c)
     {
-        OSL_ASSERT(static_cast< unsigned char >(c) <= 0x7F);
+        assert(static_cast< unsigned char >(c) <= 0x7F);
         return append(sal_Unicode(c));
     }
 
@@ -819,7 +821,6 @@ private:
 
 }
 
-#endif  /* __cplusplus */
 #endif  /* _RTL_USTRBUF_HXX_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

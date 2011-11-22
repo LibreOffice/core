@@ -14,7 +14,6 @@ mkdir: %_DEST%\inc\unotest\detail
 ..\inc\unotest\filters-test.hxx %_DEST%\inc\unotest\filters-test.hxx
 ..\inc\unotest\gettestargument.hxx %_DEST%\inc\unotest\gettestargument.hxx
 ..\inc\unotest\officeconnection.hxx %_DEST%\inc\unotest\officeconnection.hxx
-..\inc\unotest\oustringostreaminserter.hxx %_DEST%\inc\unotest\oustringostreaminserter.hxx
 ..\inc\unotest\toabsolutefileurl.hxx %_DEST%\inc\unotest\toabsolutefileurl.hxx
 ..\inc\unotest\uniquepipename.hxx %_DEST%\inc\unotest\uniquepipename.hxx
 ..\%__SRC%\class\test.jar %_DEST%\bin\test.jar

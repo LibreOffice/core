@@ -33,7 +33,9 @@
 #include <hintids.hxx>
 #include <cmdid.h>
 
-
+#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/log.h>
 #include <svtools/textview.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/scrbar.hxx>
@@ -161,10 +163,10 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                     else
                     {
                         // what was that?
-#if OSL_DEBUG_LEVEL > 1
-                        OSL_FAIL(OSL_FORMAT("Token %s not recognised!",
-                            rtl::OUStringToOString(sToken, osl_getThreadTextEncoding()).getStr()));
-#endif
+                        SAL_WARN_S(
+                            "sw.level2",
+                            "Token " << rtl::OUString(sToken)
+                                << " not recognised!");
                     }
 
                 }
@@ -539,7 +541,7 @@ IMPL_LINK(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll)
 IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
 {
     Time aSyntaxCheckStart;
-    OSL_ENSURE( pTextView, "Noch keine View, aber Syntax-Highlight ?!" );
+    SAL_WARN_IF(pTextView == 0, "sw", "No View yet, but syntax highlighting?!");
 
     bHighlighting = sal_True;
     sal_uInt16 nLine;
@@ -665,10 +667,9 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, sal_uInt16 nLineOff
         for ( size_t i = 0; i < nCount; i++ )
         {
             SwTextPortion& r = aPortionList[i];
-#if OSL_DEBUG_LEVEL > 1
-            sal_uInt16 nLine = aPortionList[0].nLine;
-            OSL_ENSURE( r.nLine == nLine, "doch mehrere Zeilen ?" );
-#endif
+            SAL_WARN_IF(
+                r.nLine != aPortionList[0].nLine, "sw.level2",
+                "multiple lines after all?");
             if ( r.nStart > r.nEnd )    // only until Bug from MD is resolved
                 continue;
 

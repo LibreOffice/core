@@ -31,6 +31,8 @@
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/embed/VerbAttributes.hpp>
 #include <basic/sbstar.hxx>
+#include <rtl/oustringostreaminserter.hxx>
+#include <sal/log.h>
 #include <svl/itempool.hxx>
 #include <svl/undo.hxx>
 #include <svtools/itemdel.hxx>
@@ -623,15 +625,10 @@ void SfxShell::DoActivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI )
     if ( !p_IF )
         return;
 #endif
-#ifdef DBG_UTIL_VB
-        String aMsg("SfxShell::DoActivate() ");
-        aMsg += (long)this;
-        aMsg += "  ";
-        aMsg += GetInterface()->GetName();
-        aMsg += " bMDI ";
-        if ( bMDI ) aMsg += "MDI";
-        DbgTrace( aMsg.GetBuffer() );
-#endif
+    SAL_INFO_S(
+        "sfx2.vb",
+        "SfxShell::DoActivate() " << this << "  " << GetInterface()->GetName()
+            << " bMDI " << (bMDI ? "MDI" : ""));
 
     if ( bMDI )
     {
@@ -664,15 +661,10 @@ void SfxShell::DoDeactivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI )
     if ( !p_IF )
         return;
 #endif
-#ifdef DBG_UTIL_VB
-        String aMsg("SfxShell::DoDeactivate()");
-        aMsg += (long)this;
-        aMsg += "  ";
-        aMsg += GetInterface()->GetName();
-        aMsg += " bMDI ";
-        if ( bMDI ) aMsg += "MDI";
-        DbgTrace( aMsg.GetBuffer() );
-#endif
+    SAL_INFO_S(
+        "sfx2.vb",
+        "SfxShell::DoDeactivate()" << this << "  " << GetInterface()->GetName()
+            << " bMDI " << (bMDI ? "MDI" : ""));
 
     // Only when it comes from a Frame
     // (not when for instance by poping BASIC-IDE from AppDisp)

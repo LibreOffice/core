@@ -38,7 +38,8 @@
 #include <basic/sbxbase.hxx>
 
 #include <rtl/instance.hxx>
-#include <rtl/strbuf.hxx>
+#include <rtl/oustringostreaminserter.hxx>
+#include <sal/log.h>
 
 // AppData-Structure for SBX:
 
@@ -212,19 +213,11 @@ SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
         if( pNew )
             break;
     }
-#ifdef DBG_UTIL
-    if( !pNew )
-    {
-        rtl::OStringBuffer aMsg(
-            RTL_CONSTASCII_STRINGPARAM("SBX: Keine Factory fuer SBX-ID "));
-        aMsg.append(static_cast<sal_Int32>(nSbxId));
-        DbgError(aMsg.getStr());
-    }
-#endif
+    SAL_WARN_IF_S(!pNew, "basic", "No factory for SBX ID " << nSbxId);
     return pNew;
 }
 
-SbxObject* SbxBase::CreateObject( const XubString& rClass )
+SbxObject* SbxBase::CreateObject( const rtl::OUString& rClass )
 {
     SbxAppData& r = GetSbxData_Impl();
     SbxObject* pNew = NULL;
@@ -234,15 +227,7 @@ SbxObject* SbxBase::CreateObject( const XubString& rClass )
         if( pNew )
             break;
     }
-#ifdef DBG_UTIL
-    if( !pNew )
-    {
-        ByteString aMsg( "SBX: Keine Factory fuer Objektklasse " );
-        ByteString aClassStr( (const UniString&)rClass, RTL_TEXTENCODING_ASCII_US );
-        aMsg += aClassStr;
-        DbgError( (const char*)aMsg.GetBuffer() );
-    }
-#endif
+    SAL_WARN_IF_S(!pNew, "basic", "No factory for object class " << rClass);
     return pNew;
 }
 

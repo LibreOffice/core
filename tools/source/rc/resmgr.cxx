@@ -43,8 +43,10 @@
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <osl/signal.h>
+#include <rtl/oustringostreaminserter.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/log.h>
 #include <tools/urlobj.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/bootstrap.hxx>
@@ -947,11 +949,7 @@ void ResMgr::Init( const OUString& rFileName )
             InternalResMgr::FreeGlobalRes( aResHandle, pVoid );
         else
         {
-            rtl::OStringBuffer aStr(
-                RTL_CONSTASCII_STRINGPARAM("Wrong version:\n"));
-            aStr.append(rtl::OUStringToOString(pImpRes->aFileName,
-                RTL_TEXTENCODING_UTF8));
-            DbgError(aStr.getStr());
+            SAL_WARN_S("tools", "Wrong version: " << pImpRes->aFileName);
         }
     }
 #endif

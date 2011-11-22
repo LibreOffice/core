@@ -154,17 +154,8 @@ struct SfxItemPool_Impl
 #endif
 
 #if defined(DBG_UTIL) && defined(MSC)
-#define SFX_TRACE(s,p) \
-        { \
-            ByteString aPtr(RTL_CONSTASCII_STRINGPARAM("0x0000:0x0000")); \
-            _snprintf(const_cast< sal_Char *>(aPtr.GetBuffer()), aPtr.Len(), \
-                       "%lp", p ); \
-            aPtr.Insert(s, 0); \
-            DbgTrace( aPtr.GetBuffer() ); \
-        }
 #define DBG(x) x
 #else
-#define SFX_TRACE(s,p)
 #define DBG(x)
 #endif
 

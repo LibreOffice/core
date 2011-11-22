@@ -29,12 +29,15 @@
 #ifndef _RTL_USTRING_HXX_
 #define _RTL_USTRING_HXX_
 
-#ifdef __cplusplus
+#include "sal/config.h"
+
+#include <cassert>
 
 #include "osl/diagnose.h"
 #include <rtl/ustring.h>
 #include <rtl/string.hxx>
 #include <rtl/memory.h>
+#include "sal/log.h"
 
 #if defined EXCEPTIONS_OFF
 #include <stdlib.h>
@@ -184,13 +187,13 @@ public:
     {
         pData = 0;
         rtl_string2UString( &pData, value, length, encoding, convertFlags );
-#if defined EXCEPTIONS_OFF
-        OSL_ASSERT(pData != NULL);
-#else
         if (pData == 0) {
+#if defined EXCEPTIONS_OFF
+            SAL_WARN("sal", "std::bad_alloc but EXCEPTIONS_OFF");
+#else
             throw std::bad_alloc();
-        }
 #endif
+        }
     }
 
     /** Create a new string from an array of Unicode code points.
@@ -967,7 +970,7 @@ public:
     */
     OUString copy( sal_Int32 beginIndex ) const SAL_THROW(())
     {
-        OSL_ASSERT(beginIndex >= 0 && beginIndex <= getLength());
+        assert(beginIndex >= 0 && beginIndex <= getLength());
         if ( beginIndex == 0 )
             return *this;
         else
@@ -991,7 +994,7 @@ public:
     */
     OUString copy( sal_Int32 beginIndex, sal_Int32 count ) const SAL_THROW(())
     {
-        OSL_ASSERT(beginIndex >= 0 && beginIndex <= getLength() && count >= 0);
+        assert(beginIndex >= 0 && beginIndex <= getLength() && count >= 0);
         if ( (beginIndex == 0) && (count == getLength()) )
             return *this;
         else
@@ -1243,13 +1246,13 @@ public:
     {
         rtl_uString * pNew = 0;
         rtl_uString_intern( &pNew, pData );
-#if defined EXCEPTIONS_OFF
-        OSL_ASSERT(pNew != NULL);
-#else
         if (pNew == 0) {
+#if defined EXCEPTIONS_OFF
+            SAL_WARN("sal", "std::bad_alloc but EXCEPTIONS_OFF");
+#else
             throw std::bad_alloc();
-        }
 #endif
+        }
         return OUString( pNew, (DO_NOT_ACQUIRE *)0 );
     }
 
@@ -1286,13 +1289,13 @@ public:
         rtl_uString * pNew = 0;
         rtl_uString_internConvert( &pNew, value, length, encoding,
                                    convertFlags, pInfo );
-#if defined EXCEPTIONS_OFF
-        OSL_ASSERT(pNew != NULL);
-#else
         if (pNew == 0) {
+#if defined EXCEPTIONS_OFF
+            SAL_WARN("sal", "std::bad_alloc but EXCEPTIONS_OFF");
+#else
             throw std::bad_alloc();
-        }
 #endif
+        }
         return OUString( pNew, (DO_NOT_ACQUIRE *)0 );
     }
 
@@ -1575,8 +1578,6 @@ inline OString OUStringToOString( const OUString & rUnicode,
 /* ======================================================================= */
 
 } /* Namespace */
-
-#endif /* __cplusplus */
 
 #endif /* _RTL_USTRING_HXX */
 

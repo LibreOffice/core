@@ -29,12 +29,11 @@
 #ifndef INCLUDED_CANVAS_VERBOSETRACE_HXX
 #define INCLUDED_CANVAS_VERBOSETRACE_HXX
 
-#if OSL_DEBUG_LEVEL > 2
-/// Wrap OSL_TRACE with a verbosity switch
-#define VERBOSE_TRACE     OSL_TRACE
-#else
-#define VERBOSE_TRACE     1 ? ((void)0) : OSL_TRACE
-#endif
+#include "sal/config.h"
+
+#include "sal/log.h"
+
+#define VERBOSE_TRACE(...) SAL_INFO("canvas.level2", __VA_ARGS__)
 
 #endif /* INCLUDED_CANVAS_VERBOSETRACE_HXX */
 

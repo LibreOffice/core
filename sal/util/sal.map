@@ -626,5 +626,6 @@ PRIVATE_1.1 {
 
 PRIVATE_1.2 { # LibreOffice 3.5
     global:
-        osl_detail_formatString;
+        sal_detail_log;
+        sal_detail_logFormat;
 } PRIVATE_1.1;

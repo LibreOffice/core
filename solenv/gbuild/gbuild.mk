@@ -212,10 +212,16 @@ gb_GLOBALDEFS += \
 	-DOPTIMIZE \
 	-DNDEBUG \
 
-else ifneq ($(gb_DEBUGLEVEL),1) # 2 or more
+else
+gb_GLOBALDEFS += \
+    -DSAL_LOG_INFO \
+    -DSAL_LOG_WARN \
+
+ifneq ($(gb_DEBUGLEVEL),1) # 2 or more
 gb_GLOBALDEFS += \
 	-DDEBUG \
 
+endif
 endif
 
 ifneq ($(strip $(ENABLE_GTK)),)

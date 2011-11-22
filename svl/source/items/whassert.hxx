@@ -28,29 +28,12 @@
 #ifndef _SFX_WHASSERT_HXX
 #define _SFX_WHASSERT_HXX
 
-#include <tools/debug.hxx>
-#include <rtl/strbuf.hxx>
+#include "sal/config.h"
 
-//------------------------------------------------------------------------
+#include "sal/log.h"
 
-#ifdef DBG_UTIL
-#define SFX_ASSERT( bCondition, nId, sMessage )                             \
-{                                                                           \
-    if ( DbgIsAssert() )                                                    \
-    {                                                                       \
-        if ( !(bCondition) )                                                \
-        {                                                                   \
-            rtl::OStringBuffer aMsg(sMessage);                              \
-            aMsg.append(RTL_CONSTASCII_STRINGPARAM("\nwith Id/Pos: "));     \
-            aMsg.append(static_cast<sal_Int32>(nId));                       \
-            DbgError(aMsg.getStr(), __FILE__, __LINE__);                    \
-        }                                                                   \
-    }                                                                       \
-}
-#else
-#define SFX_ASSERT( bCondition, nId, sMessage )
-#endif
-
+#define SFX_ASSERT( bCondition, nId, sMessage ) SAL_WARN_IF_S( \
+    !(bCondition), "svl", (sMessage) << ", with ID/pos " << (nId));
 
 #endif
 

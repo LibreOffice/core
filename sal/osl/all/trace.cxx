@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Version: MPL 1.1 / GPLv3+ / LGPLv3+
  *
@@ -12,8 +13,8 @@
  * License.
  *
  * Major Contributor(s):
- * [ Copyright (C) 2011 Stephan Bergmann, Red Hat Inc. <sbergman@redhat.com>
- *   (initial developer) ]
+ * [ Copyright (C) 2011 Stephan Bergmann, Red Hat <sbergman@redhat.com> (initial
+ *   developer) ]
  *
  * All Rights Reserved.
  *
@@ -30,32 +31,18 @@
 #include "sal/config.h"
 
 #include <cstdarg>
-#include <cstring>
-#include <stdio.h> // vsnprintf not in C++03 <cstdio>, only C99 <stdio.h>
 
 #include "osl/diagnose.h"
-#include "rtl/string.h"
-#include "rtl/string.hxx"
+#include "sal/log.h"
 
-rtl_String * osl_detail_formatString(char const * format, ...)
-    SAL_THROW_EXTERN_C()
-{
-    // Avoid the use of other sal code as much as possible, so that this code
-    // can be called from other sal code without causing endless recursion:
-    char buf[1024];
-    int n1 = sizeof buf - RTL_CONSTASCII_LENGTH("...");
+#include "logformat.hxx"
+
+void osl_trace(char const * pszFormat, ...) {
     std::va_list args;
-    va_start(args, format);
-    int n2 = vsnprintf(buf, n1, format, args);
+    va_start(args, pszFormat);
+    osl::detail::logFormat(
+        SAL_DETAIL_LOG_LEVEL_INFO, "legacy.osl", SAL_WHERE, pszFormat, args);
     va_end(args);
-    if (n2 < 0) {
-        std::strcpy(buf, "???");
-        n2 = RTL_CONSTASCII_LENGTH("???");
-    } else if (n2 >= n1) {
-        std::strcpy(buf + n1 - 1, "...");
-        n2 = sizeof buf - 1;
-    }
-    rtl::OString s(buf, n2);
-    rtl_string_acquire(s.pData);
-    return s.pData;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

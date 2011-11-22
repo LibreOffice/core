@@ -28,8 +28,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
+#include "sal/config.h"
+
+#include <iomanip>
 
 #include <boost/unordered_map.hpp>
+#include <sal/log.h>
 #include <svl/itempool.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/eitem.hxx>
@@ -1741,26 +1745,12 @@ sal_uInt16 SfxBindings::EnterRegistrations(const char *pFile, int nLine)
     (void)pFile;
     (void)nLine;
     DBG_MEMTEST();
-#ifdef DBG_UTIL
-    rtl::OStringBuffer aMsg;
-    sal_uInt16 nSpaces = Min(nRegLevel, sal_uInt16(8));
-    while (nSpaces--)
-        aMsg.append(' ');
-    aMsg.append(RTL_CONSTASCII_STRINGPARAM("this = "));
-    aMsg.append(reinterpret_cast<sal_Int64>(this));
-    aMsg.append(RTL_CONSTASCII_STRINGPARAM(" Level = "));
-    aMsg.append(static_cast<sal_Int32>(nRegLevel));
-    aMsg.append(RTL_CONSTASCII_STRINGPARAM(
-        " SfxBindings::EnterRegistrations "));
-    if (pFile)
-    {
-        aMsg.append(RTL_CONSTASCII_STRINGPARAM("File: "));
-        aMsg.append(pFile);
-        aMsg.append(RTL_CONSTASCII_STRINGPARAM(" Line: "));
-        aMsg.append(static_cast<sal_Int32>(nLine));
-    }
-    DbgTrace(aMsg.getStr());
-#endif
+    SAL_INFO_S(
+        "sfx2",
+        std::setw(Min(nRegLevel, sal_uInt16(8))) << ' ' << "this = " << this
+            << " Level = " << nRegLevel << " SfxBindings::EnterRegistrations "
+            << (pFile
+                ? SAL_STREAM("File: " << pFile << " Line: " << nLine) : ""));
 
     // When bindings are locked, also lock sub bindings.
     if ( pImp->pSubBindings )
@@ -1858,26 +1848,12 @@ void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, const char *pFile, int 
         }
     }
 
-#ifdef DBG_UTIL
-    rtl::OStringBuffer aMsg;
-    sal_uInt16 nSpaces = Min(nRegLevel, sal_uInt16(8));
-    while (nSpaces--)
-        aMsg.append(' ');
-    aMsg.append(RTL_CONSTASCII_STRINGPARAM("this = "));
-    aMsg.append(reinterpret_cast<sal_Int64>(this));
-    aMsg.append(RTL_CONSTASCII_STRINGPARAM(" Level = "));
-    aMsg.append(static_cast<sal_Int32>(nRegLevel));
-    aMsg.append(RTL_CONSTASCII_STRINGPARAM(
-        " SfxBindings::LeaveRegistrations "));
-    if (pFile)
-    {
-        aMsg.append(RTL_CONSTASCII_STRINGPARAM("File: "));
-        aMsg.append(pFile);
-        aMsg.append(RTL_CONSTASCII_STRINGPARAM(" Line: "));
-        aMsg.append(static_cast<sal_Int32>(nLine));
-    }
-    DbgTrace(aMsg.getStr());
-#endif
+    SAL_INFO_S(
+        "sfx2",
+        std::setw(Min(nRegLevel, sal_uInt16(8))) << ' ' << "this = " << this
+            << " Level = " << nRegLevel << " SfxBindings::LeaveRegistrations "
+            << "File: " << (pFile ? pFile : "--") << " Line: "
+            << (pFile ? nLine : 0));
 }
 
 //--------------------------------------------------------------------

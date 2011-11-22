@@ -25,27 +25,22 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#if ! defined(OSL_DIAGNOSE_HXX_INCLUDED)
+#ifndef OSL_DIAGNOSE_HXX_INCLUDED
 #define OSL_DIAGNOSE_HXX_INCLUDED
 
-#if ! defined(_OSL_DIAGNOSE_H_)
-#include "osl/diagnose.h"
-#endif
-#if ! defined(_OSL_INTERLOCK_H_)
-#include "osl/interlck.h"
-#endif
-#if ! defined(_OSL_MUTEX_HXX_)
-#include "osl/mutex.hxx"
-#endif
-#if ! defined(INCLUDED_RTL_ALLOCATOR_HXX)
-#include "rtl/allocator.hxx"
-#endif
-#if ! defined(_RTL_INSTANCE_HXX_)
-#include "rtl/instance.hxx"
-#endif
-#include <boost/unordered_set.hpp>
+#include "sal/config.h"
+
 #include <functional>
 #include <typeinfo>
+
+#include "boost/unordered_set.hpp"
+#include "osl/diagnose.h"
+#include "osl/interlck.h"
+#include "osl/mutex.hxx"
+#include "rtl/allocator.hxx"
+#include "rtl/instance.hxx"
+#include "sal/log.h"
+#include "sal/types.h"
 
 namespace osl {
 /// @internal
@@ -126,7 +121,7 @@ public:
             VoidPointerSet::const_iterator iPos(m_data.m_addresses.begin());
             VoidPointerSet::const_iterator const iEnd(m_data.m_addresses.end());
             for ( ; iPos != iEnd; ++iPos ) {
-                OSL_ASSERT( *iPos != 0 );
+                SAL_WARN_IF( *iPos == 0, "sal.debug", "null pointer" );
             }
         }
         return bRet;
@@ -179,7 +174,7 @@ public:
     static bool checkObjectCount( ::std::size_t = 0 ) { return true; }
 #else // OSL_DEBUG_LEVEL > 0
     /** @return whether the expected number of objects is alive,
-                else this function OSL_ASSERTs
+                else this function SAL_WARNs
     */
     static bool checkObjectCount( ::std::size_t nExpected = 0 ) {
         return StaticObjectRegistry::get().checkObjectCount(nExpected);

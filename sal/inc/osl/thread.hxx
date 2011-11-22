@@ -29,7 +29,9 @@
 #ifndef _THREAD_HXX_
 #define _THREAD_HXX_
 
-#ifdef __cplusplus
+#include "sal/config.h"
+
+#include <cassert>
 
 #include <osl/time.h>
 
@@ -71,7 +73,7 @@ public:
 
     sal_Bool SAL_CALL create()
     {
-        OSL_ASSERT(m_hThread == 0); // only one running thread per instance
+        assert(m_hThread == 0); // only one running thread per instance
            if (m_hThread)
             return sal_False;
 
@@ -84,7 +86,7 @@ public:
 
     sal_Bool SAL_CALL createSuspended()
     {
-        OSL_ASSERT(m_hThread == 0); // only one running thread per instance
+        assert(m_hThread == 0); // only one running thread per instance
         if( m_hThread)
             return sal_False;
         m_hThread= osl_createSuspendedThread( threadFunc,
@@ -233,7 +235,7 @@ private:
 };
 
 } // end namespace osl
-#endif
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

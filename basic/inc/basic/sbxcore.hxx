@@ -39,6 +39,7 @@
 class SvStream;
 class String;
 class UniString;
+namespace rtl { class OUString; }
 
 // The following Macro defines four (five) necessary methods within a
 // SBX object. LoadPrivateData() and StorePrivateData() must be implemented.
@@ -133,7 +134,7 @@ public:
     static void RemoveFactory( SbxFactory* );
 
     static SbxBase* Create( sal_uInt16, sal_uInt32=SBXCR_SBX );
-    static SbxObject* CreateObject( const String& );
+    static SbxObject* CreateObject( const rtl::OUString& );
 };
 
 #ifndef SBX_BASE_DECL_DEFINED

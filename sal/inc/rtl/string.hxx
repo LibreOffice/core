@@ -29,12 +29,15 @@
 #ifndef _RTL_STRING_HXX_
 #define _RTL_STRING_HXX_
 
-#ifdef __cplusplus
+#include "sal/config.h"
+
+#include <cassert>
 
 #include <osl/diagnose.h>
 #include <rtl/memory.h>
 #include <rtl/textenc.h>
 #include <rtl/string.h>
+#include "sal/log.h"
 
 #if !defined EXCEPTIONS_OFF
 #include <new>
@@ -183,13 +186,13 @@ public:
     {
         pData = 0;
         rtl_uString2String( &pData, value, length, encoding, convertFlags );
-#if defined EXCEPTIONS_OFF
-        OSL_ASSERT(pData != NULL);
-#else
         if (pData == 0) {
+#if defined EXCEPTIONS_OFF
+            SAL_WARN("sal", "std::bad_alloc but EXCEPTIONS_OFF");
+#else
             throw std::bad_alloc();
-        }
 #endif
+        }
     }
 
     /**
@@ -655,7 +658,7 @@ public:
     */
     OString copy( sal_Int32 beginIndex ) const SAL_THROW(())
     {
-        OSL_ASSERT(beginIndex >= 0 && beginIndex <= getLength());
+        assert(beginIndex >= 0 && beginIndex <= getLength());
         if ( beginIndex == 0 )
             return *this;
         else
@@ -679,8 +682,8 @@ public:
     */
     OString copy( sal_Int32 beginIndex, sal_Int32 count ) const SAL_THROW(())
     {
-        OSL_ASSERT(beginIndex >= 0 && beginIndex <= getLength()
-                   && count >= 0 && count <= getLength() - beginIndex);
+        assert(beginIndex >= 0 && beginIndex <= getLength()
+               && count >= 0 && count <= getLength() - beginIndex);
         if ( (beginIndex == 0) && (count == getLength()) )
             return *this;
         else
@@ -1033,8 +1036,6 @@ struct OStringHash
 /* ======================================================================= */
 
 } /* Namespace */
-
-#endif /* __cplusplus */
 
 #endif /* _RTL_STRING_HXX_ */
 
