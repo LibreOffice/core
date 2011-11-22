@@ -29,42 +29,24 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
 
-#include <sal/macros.h>
-#include "propbrw.hxx"
-#include "dlgedobj.hxx"
-
 #include "basidesh.hxx"
-#include <iderid.hxx>
+#include "dlgedobj.hxx"
+#include "iderid.hxx"
+#include "propbrw.hxx"
 
-#include <dlgresid.hrc>
-#include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
-#include <sfx2/bindings.hxx>
-#include <sfx2/childwin.hxx>
-#include <sfx2/objitem.hxx>
-
+#include "dlgresid.hrc"
 #include <svx/svxids.hrc>
-#include <tools/shl.hxx>
-#include <vcl/stdtext.hxx>
-#include <svx/svdview.hxx>
-#include <svx/svdogrp.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/svditer.hxx>
-#include <sfx2/viewsh.hxx>
 
-#include <toolkit/unohlp.hxx>
-#include <comphelper/property.hxx>
-#include <comphelper/stl_types.hxx>
-#include <comphelper/types.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/inspection/XObjectInspector.hpp>
-#include <comphelper/processfactory.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <comphelper/types.hxx>
 #include <cppuhelper/component_context.hxx>
-
-#include <sfx2/dispatch.hxx>
-#include <sfx2/viewfrm.hxx>
+#include <svx/svditer.hxx>
+#include <svx/svdview.hxx>
+#include <toolkit/unohlp.hxx>
+#include <tools/diagnose_ex.h>
+#include <vcl/stdtext.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -74,9 +56,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::comphelper;
 
-
 SFX_IMPL_FLOATINGWINDOW(PropBrwMgr, SID_SHOW_PROPERTYBROWSER)
-
 
 PropBrwMgr::PropBrwMgr( Window* _pParent, sal_uInt16 nId,
                         SfxBindings *pBindings, SfxChildWinInfo* pInfo)
