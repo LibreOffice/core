@@ -2812,6 +2812,22 @@ void ScInterpreter::ScT()
             }
         }
         break;
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+        {
+            ScMatrixRef pMat = GetMatrix();
+            if (!pMat || !pMat->GetElementCount())
+            {
+                SetError( errIllegalParameter);
+                break;
+            }
+
+            if (pMat->IsString(0, 0))
+                PushString(pMat->GetString(0, 0));
+            else
+                PushString(EMPTY_STRING);
+        }
+        break;
         case svDouble :
         {
             PopError();
