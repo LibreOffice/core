@@ -578,6 +578,11 @@ namespace cairocanvas
 
             cairo_set_font_matrix(pSCairo.get(), &m);
 
+    #if (defined CAIRO_HAS_WIN32_SURFACE) && (OSL_DEBUG_LEVEL > 1)
+        #define TEMP_TRACE_FONT ::rtl::OUStringToOString( reinterpret_cast<const sal_Unicode*> (logfont.lfFaceName), RTL_TEXTENCODING_UTF8 ).getStr()
+    #else
+        #define TEMP_TRACE_FONT ::rtl::OUStringToOString( aFont.GetName(), RTL_TEXTENCODING_UTF8 ).getStr()
+    #endif
             OSL_TRACE("\r\n:cairocanvas::TextLayout::draw(S,O,p,v,r): Size:(%d,%d), W:%d->%d, Pos (%d,%d), G(%d,%d,%d) %s%s%s%s || Name:%s - %s",
                       aFont.GetWidth(),
                       aFont.GetHeight(),
@@ -590,14 +595,11 @@ namespace cairocanvas
                       rSysFontData.bAntialias ? "AA " : "",
                       rSysFontData.bFakeBold ? "FB " : "",
                       rSysFontData.bFakeItalic ? "FI " : "",
-    #if (defined CAIRO_HAS_WIN32_SURFACE) && (OSL_DEBUG_LEVEL > 1)
-                      ::rtl::OUStringToOString( reinterpret_cast<const sal_Unicode*> (logfont.lfFaceName), RTL_TEXTENCODING_UTF8 ).getStr(),
-    #else
-                      ::rtl::OUStringToOString( aFont.GetName(), RTL_TEXTENCODING_UTF8 ).getStr(),
-    #endif
+                      TEMP_TRACE_FONT,
                       ::rtl::OUStringToOString( maText.Text.copy( maText.StartPosition, maText.Length ),
                                                 RTL_TEXTENCODING_UTF8 ).getStr()
                 );
+    #undef TEMP_TRACE_FONT
 
             cairo_show_glyphs(pSCairo.get(), &cairo_glyphs[0], cairo_glyphs.size());
 
