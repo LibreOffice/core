@@ -42,6 +42,7 @@
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
+#include <comphelper/string.hxx>
 #include <editeng/unolingu.hxx>
 #include <sfx2/bindings.hxx>
 #include <svtools/langtab.hxx>
@@ -63,7 +64,7 @@ bool localesAreEqual( const Locale& rLocaleLeft, const Locale& rLocaleRight )
 }
 
 namespace {
-    long getLongestWordWidth( const String& rText, const Window& rWin )
+    long getLongestWordWidth( const ::rtl::OUString& rText, const Window& rWin )
     {
         long nWidth = 0;
         Reference< XBreakIterator > xBreakIter( vcl::unohelper::CreateBreakIterator() );
@@ -75,9 +76,7 @@ namespace {
         while ( aBoundary.startPos != aBoundary.endPos )
         {
             nStartPos = aBoundary.endPos;
-            String sWord( rText.Copy(
-                (sal_uInt16)aBoundary.startPos,
-                (sal_uInt16)aBoundary.endPos - (sal_uInt16)aBoundary.startPos ) );
+            ::rtl::OUString sWord(rText.copy(aBoundary.startPos, aBoundary.endPos - aBoundary.startPos));
             long nTemp = rWin.GetCtrlTextWidth( sWord );
             if ( nTemp > nWidth )
                 nWidth = nTemp;
@@ -124,10 +123,10 @@ void ManageLanguageDialog::Init()
 {
     // get current IDE
     BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-    String sLibName = pIDEShell->GetCurLibName();
+    ::rtl::OUString sLibName = pIDEShell->GetCurLibName();
     // set dialog title with library name
-    String sText = GetText();
-    sText.SearchAndReplace( String::CreateFromAscii("$1"), sLibName );
+    ::rtl::OUString sText = GetText();
+    ::comphelper::string::replace(sText, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$1")), sLibName);
     SetText( sText );
     // set handler
     m_aAddPB.SetClickHdl( LINK( this, ManageLanguageDialog, AddHdl ) );
@@ -141,7 +140,7 @@ void ManageLanguageDialog::Init()
 
 void ManageLanguageDialog::CalcInfoSize()
 {
-    String sInfoStr = m_aInfoFT.GetText();
+    ::rtl::OUString sInfoStr = m_aInfoFT.GetText();
     long nInfoWidth = m_aInfoFT.GetSizePixel().Width();
     long nLongWord = getLongestWordWidth( sInfoStr, m_aInfoFT );
     long nTxtWidth = m_aInfoFT.GetCtrlTextWidth( sInfoStr ) + nLongWord;
@@ -183,12 +182,13 @@ void ManageLanguageDialog::FillLanguageBox()
         {
             bool bIsDefault = localesAreEqual( aDefaultLocale, pLocale[i] );
             LanguageType eLangType = SvxLocaleToLanguage( pLocale[i] );
-            String sLanguage = aLangTable.GetString( eLangType );
+            ::rtl::OUStringBuffer sLanguageBuf(aLangTable.GetString( eLangType ));
             if ( bIsDefault )
             {
-                sLanguage += ' ';
-                sLanguage += m_sDefLangStr;
+                sLanguageBuf.append(' ');
+                sLanguageBuf.append(m_sDefLangStr);
             }
+            ::rtl::OUString sLanguage(sLanguageBuf.makeStringAndClear());
             sal_uInt16 nPos = m_aLanguageLB.InsertEntry( sLanguage );
             m_aLanguageLB.SetEntryData( nPos, new LanguageEntry( sLanguage, pLocale[i], bIsDefault ) );
         }
@@ -315,9 +315,9 @@ SetDefaultLanguageDialog::SetDefaultLanguageDialog( Window* pParent, Localizatio
         // change to "Add Interface Language" mode
         SetHelpId( HID_BASICIDE_ADDNEW_LANGUAGE );
         m_pCheckLangLB = new SvxCheckListBox( this, IDEResId( LB_ADD_LANGUAGE ) );
-        SetText( String( IDEResId( STR_ADDLANG_TITLE ) ) );
-        m_aLanguageFT.SetText( String( IDEResId( STR_ADDLANG_LABEL ) ) );
-        m_aInfoFT.SetText( String( IDEResId( STR_ADDLANG_INFO ) ) );
+        SetText( ResId::toString( IDEResId( STR_ADDLANG_TITLE ) ) );
+        m_aLanguageFT.SetText( ResId::toString( IDEResId( STR_ADDLANG_LABEL ) ) );
+        m_aInfoFT.SetText( ResId::toString( IDEResId( STR_ADDLANG_INFO ) ) );
     }
 
     FreeResource();
@@ -362,7 +362,7 @@ void SetDefaultLanguageDialog::FillLanguageBox()
 
 void SetDefaultLanguageDialog::CalcInfoSize()
 {
-    String sInfoStr = m_aInfoFT.GetText();
+    ::rtl::OUString sInfoStr = m_aInfoFT.GetText();
     long nInfoWidth = m_aInfoFT.GetSizePixel().Width();
     long nLongWord = getLongestWordWidth( sInfoStr, m_aInfoFT );
     long nTxtWidth = m_aInfoFT.GetCtrlTextWidth( sInfoStr ) + nLongWord;
