@@ -426,23 +426,4 @@ public class SOReportJobFactory
 
         return xFactory;
     }
-
-    /**
-     * Writes the service information into the given registry key. This method is called by the <code>JavaLoader</code>
-     * <p/>
-     *
-     * @param regKey the registryKey
-     * @return returns true if the operation succeeded
-     * @see com.sun.star.comp.loader.JavaLoader
-     */
-    public static boolean __writeRegistryServiceInfo(final XRegistryKey regKey)
-    {
-        return Factory.writeRegistryServiceInfo(SOFunctionManager.class.getName(),
-                SOFunctionManager.getServiceNames(),
-                regKey) && Factory.writeRegistryServiceInfo(_SOReportJobFactory.class.getName(),
-                _SOReportJobFactory.getServiceNames(),
-                regKey) && Factory.writeRegistryServiceInfo(SOFormulaParser.class.getName(),
-                SOFormulaParser.getServiceNames(),
-                regKey);
-    }
 }

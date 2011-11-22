@@ -39,11 +39,6 @@ import org.pentaho.reporting.libraries.formula.function.FunctionCategory;
 import org.pentaho.reporting.libraries.formula.function.FunctionDescription;
 import org.pentaho.reporting.libraries.formula.function.FunctionRegistry;
 
-/**
- * This class capsulates the class, that implements the minimal component, a factory for creating the service
- * (<CODE>__getComponentFactory</CODE>) and a method, that writes the information into the given registry key
- * (<CODE>__writeRegistryServiceInfo</CODE>).
- */
 public final class SOFunctionManager extends ComponentBase implements XFunctionManager, XServiceInfo
 {
 
