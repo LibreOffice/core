@@ -1198,7 +1198,7 @@ void BackendImpl::extractComponentData(
         componentLoader,
     rtl::OUString const * componentUrl)
 {
-    OSL_ASSERT(context.is() && registry.is() && data != 0 && factories != 0);
+    OSL_ASSERT(context.is() && registry.is() && data != 0);
     rtl::OUString registryName(registry->getKeyName());
     sal_Int32 prefix = registryName.getLength();
     if (!registryName.endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM("/"))) {
@@ -1226,40 +1226,42 @@ void BackendImpl::extractComponentData(
                         singletonKeys[j]->getKeyName().copy(prefix2), name));
             }
         }
-        css::uno::Reference< css::loader::XImplementationLoader > loader;
-        if (componentLoader == 0) {
-            rtl::OUString activator(
-                openRegistryKey(
-                    keys[i],
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM("UNO/ACTIVATOR")))->
-                getAsciiValue());
-            loader.set(
-                smgr->createInstanceWithContext(activator, context),
-                css::uno::UNO_QUERY);
-            if (!loader.is()) {
-                throw css::deployment::DeploymentException(
-                    (rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "cannot instantiate loader ")) +
-                     activator),
-                    static_cast< OWeakObject * >(this), Any());
-            }
-        } else {
-            OSL_ASSERT(componentLoader->is());
-            loader = *componentLoader;
-        }
-        factories->push_back(
-            loader->activate(
-                name, rtl::OUString(),
-                (componentUrl == 0
-                 ? (openRegistryKey(
+        if (factories != 0) {
+            css::uno::Reference< css::loader::XImplementationLoader > loader;
+            if (componentLoader == 0) {
+                rtl::OUString activator(
+                    openRegistryKey(
                         keys[i],
                         rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM("UNO/LOCATION")))->
-                    getAsciiValue())
-                 : *componentUrl),
-                keys[i]));
+                            RTL_CONSTASCII_USTRINGPARAM("UNO/ACTIVATOR")))->
+                    getAsciiValue());
+                loader.set(
+                    smgr->createInstanceWithContext(activator, context),
+                    css::uno::UNO_QUERY);
+                if (!loader.is()) {
+                    throw css::deployment::DeploymentException(
+                        (rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
+                                "cannot instantiate loader ")) +
+                         activator),
+                        static_cast< OWeakObject * >(this), Any());
+                }
+            } else {
+                OSL_ASSERT(componentLoader->is());
+                loader = *componentLoader;
+            }
+            factories->push_back(
+                loader->activate(
+                    name, rtl::OUString(),
+                    (componentUrl == 0
+                     ? (openRegistryKey(
+                            keys[i],
+                            rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM("UNO/LOCATION")))->
+                        getAsciiValue())
+                     : *componentUrl),
+                    keys[i]));
+        }
     }
 }
 
@@ -1615,7 +1617,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
             data.javaTypeLibrary = true;
         }
         std::vector< css::uno::Reference< css::uno::XInterface > > factories;
-        getComponentInfo(&data, &factories, context);
+        getComponentInfo(&data, startup ? 0 : &factories, context);
         if (!startup) {
             that->componentLiveInsertion(data, factories);
         }
@@ -1956,7 +1958,7 @@ void BackendImpl::ComponentsPackageImpl::processPackage_(
             that->openRegistryKey(
                 registry->getRootKey(),
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IMPLEMENTATIONS"))),
-            &data, &factories, 0, 0);
+            &data, startup ? 0 : &factories, 0, 0);
         registry->close();
         if (!startup) {
             that->componentLiveInsertion(data, factories);
