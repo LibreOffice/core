@@ -1365,7 +1365,7 @@ namespace agg
         //---------------------------------------------------------------------
         void profile(const line_profile_aa& prof) { m_profile = &prof; }
         const line_profile_aa& profile() const { return *m_profile; }
-        line_profile_aa& profile() { return *m_profile; }
+        line_profile_aa& profile() { return const_cast<line_profile_aa&>(*m_profile); }
 
         //---------------------------------------------------------------------
         int subpixel_width() const { return m_profile->subpixel_width(); }
@@ -1562,11 +1562,11 @@ namespace agg
             {
                 if(li.vertical())
                 {
-                    while(li.step_ver());
+                    while(li.step_ver()) ;
                 }
                 else
                 {
-                    while(li.step_hor());
+                    while(li.step_hor()) ;
                 }
             }
         }
@@ -1617,11 +1617,11 @@ namespace agg
             line_interpolator_aa1<self_type> li(*this, lp, sx, sy);
             if(li.vertical())
             {
-                while(li.step_ver());
+                while(li.step_ver()) ;
             }
             else
             {
-                while(li.step_hor());
+                while(li.step_hor()) ;
             }
         }
 
@@ -1685,11 +1685,11 @@ namespace agg
             line_interpolator_aa2<self_type> li(*this, lp, ex, ey);
             if(li.vertical())
             {
-                while(li.step_ver());
+                while(li.step_ver()) ;
             }
             else
             {
-                while(li.step_hor());
+                while(li.step_hor()) ;
             }
         }
 
@@ -1756,11 +1756,11 @@ namespace agg
             line_interpolator_aa3<self_type> li(*this, lp, sx, sy, ex, ey);
             if(li.vertical())
             {
-                while(li.step_ver());
+                while(li.step_ver()) ;
             }
             else
             {
-                while(li.step_hor());
+                while(li.step_hor()) ;
             }
         }
 
