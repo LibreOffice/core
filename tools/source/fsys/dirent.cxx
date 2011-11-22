@@ -673,7 +673,7 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
     }
 
     rtl::OString aTmpName(rtl::OUStringToOString(rInitName, osl_getThreadTextEncoding()));
-    if (aTmpName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("file:")))
+    if (comphelper::string::matchIgnoreAsciiCaseL(aTmpName, RTL_CONSTASCII_STRINGPARAM("file:")))
     {
 #ifndef BOOTSTRAP
         DBG_WARNING( "File URLs are not permitted but accepted" );
@@ -692,7 +692,7 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
         }
 
 #ifdef DBG_UTIL
-        if (eStyle == FSYS_STYLE_HOST && aTmpName.indexOf( "://" ) != STRING_NOTFOUND)
+        if (eStyle == FSYS_STYLE_HOST && aTmpName.indexOf( "://" ) != -1)
         {
             rtl::OStringBuffer aErr(RTL_CONSTASCII_STRINGPARAM("DirEntries akzeptieren nur File URLS: "));
             aErr.append(aTmpName);
@@ -727,7 +727,7 @@ DirEntry::DirEntry( const rtl::OString& rInitName, FSysPathStyle eStyle )
     }
 
     rtl::OString aTmpName( rInitName );
-    if (rInitName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("file:")))
+    if (comphelper::string::matchIgnoreAsciiCaseL(aTmpName, RTL_CONSTASCII_STRINGPARAM("file:")))
     {
 #ifndef BOOTSTRAP
         DBG_WARNING( "File URLs are not permitted but accepted" );
@@ -1760,27 +1760,27 @@ FSysError DirEntry::ImpParseUnixName( const rtl::OString& rPfad, FSysPathStyle e
                 /* do nothing */;
 
 #ifdef UNX
-                        // stellt der Name das User-Dir dar?
-                        else if ( aName == "~" )
-                        {
-                                DirEntry aHome( String( (const char *) getenv( "HOME" ), osl_getThreadTextEncoding()) );
-                                for ( sal_uInt16 n = aHome.Level(); n; --n )
-                                        aStack.Push( new DirEntry( aHome[ (sal_uInt16) n-1 ] ) );
-                        }
+            // stellt der Name das User-Dir dar?
+            else if ( aName == "~" )
+            {
+                DirEntry aHome( String( (const char *) getenv( "HOME" ), osl_getThreadTextEncoding()) );
+                for ( sal_uInt16 n = aHome.Level(); n; --n )
+                    aStack.Push( new DirEntry( aHome[ (sal_uInt16) n-1 ] ) );
+            }
 #endif
-
-                // stellt der Name die Parent-Directory dar?
+            // stellt der Name die Parent-Directory dar?
             else if ( aName == ".." )
             {
                 // ist nichts, ein Parent oder eine relative Root
                 // auf dem Stack?
-                if ( ( aStack.Empty() ) ||
-                     ( aStack.Top()->eFlag == FSYS_FLAG_PARENT ) )
+                if ( ( aStack.Empty() ) || ( aStack.Top()->eFlag == FSYS_FLAG_PARENT ) )
+                {
                     // fuehrende Parents kommen auf den Stack
                     aStack.Push( new DirEntry(rtl::OString(), FSYS_FLAG_PARENT, eStyle) );
-
+                }
                 // ist es eine absolute Root
-                else if ( aStack.Top()->eFlag == FSYS_FLAG_ABSROOT ) {
+                else if ( aStack.Top()->eFlag == FSYS_FLAG_ABSROOT )
+                {
                     // die hat keine Parent-Directory
                     return FSYS_ERR_NOTEXISTS;
                 }
@@ -1792,16 +1792,16 @@ FSysError DirEntry::ImpParseUnixName( const rtl::OString& rPfad, FSysPathStyle e
             {
                 DirEntry *pNew = NULL;
                 // normalen Entries kommen auf den Stack
-                                pNew = new DirEntry( aName, FSYS_FLAG_NORMAL, eStyle );
-                                if ( !pNew->IsValid() )
-                                {
-                                        aName = rPfad;
-                                        ErrCode eErr = pNew->GetError();
-                                        delete pNew;
-                                        return eErr;
-                                }
+                pNew = new DirEntry( aName, FSYS_FLAG_NORMAL, eStyle );
+                if ( !pNew->IsValid() )
+                {
+                    aName = rPfad;
+                    ErrCode eErr = pNew->GetError();
+                    delete pNew;
+                    return eErr;
+                }
                 aStack.Push( pNew );
-                        }
+            }
         }
 
         // den Restpfad bestimmen

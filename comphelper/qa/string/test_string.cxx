@@ -55,6 +55,7 @@ public:
     void testIsalnumAsciiString();
     void testIsupperAsciiString();
     void testIndexOfL();
+    void testMatchIgnoreAsciiCaseL();
 
     CPPUNIT_TEST_SUITE(TestString);
     CPPUNIT_TEST(testSearchAndReplaceAsciiL);
@@ -67,6 +68,7 @@ public:
     CPPUNIT_TEST(testIsalnumAsciiString);
     CPPUNIT_TEST(testIsupperAsciiString);
     CPPUNIT_TEST(testIndexOfL);
+    CPPUNIT_TEST(testMatchIgnoreAsciiCaseL);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -166,6 +168,23 @@ void TestString::testIndexOfL()
 
     CPPUNIT_ASSERT_EQUAL(comphelper::string::indexOfL(s1,
         RTL_CONSTASCII_STRINGPARAM("two"), 5), static_cast<sal_Int32>(-1));
+}
+
+void TestString::testMatchIgnoreAsciiCaseL()
+{
+    rtl::OString s1(RTL_CONSTASCII_STRINGPARAM("one two three"));
+
+    CPPUNIT_ASSERT_EQUAL(comphelper::string::matchIgnoreAsciiCaseL(s1,
+        RTL_CONSTASCII_STRINGPARAM("one")), sal_True);
+
+    CPPUNIT_ASSERT_EQUAL(comphelper::string::matchIgnoreAsciiCaseL(s1,
+        RTL_CONSTASCII_STRINGPARAM("ONE")), sal_True);
+
+    CPPUNIT_ASSERT_EQUAL(comphelper::string::matchIgnoreAsciiCaseL(s1,
+        RTL_CONSTASCII_STRINGPARAM("two")), sal_False);
+
+    CPPUNIT_ASSERT_EQUAL(comphelper::string::matchIgnoreAsciiCaseL(s1,
+        RTL_CONSTASCII_STRINGPARAM("two"), 4), sal_True);
 }
 
 using namespace ::com::sun::star;

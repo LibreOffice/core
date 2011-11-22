@@ -272,6 +272,33 @@ COMPHELPER_DLLPUBLIC inline sal_Bool matchL(const rtl::OString& rStr, const char
 }
 
 /**
+  Match against a substring appearing in this string, ignoring the case of
+  ASCII letters.
+
+  The result is true if and only if the second string appears as a substring
+  of this string, at the given position.
+  Character values between 65 and 90 (ASCII A-Z) are interpreted as
+  values between 97 and 122 (ASCII a-z).
+  This function can't be used for language specific comparison.
+
+  @param    rStr        The string that pMatch will be compared to.
+  @param    pMatch      The substring rStr is to be compared against
+  @param    nMatchLen   The length of pMatch
+  @param    fromIndex   the index to start the comparion from.
+                        The index must be greater or equal than 0
+                        and less or equal as the string length.
+  @return   sal_True if str match with the characters in the string
+            at the given position;
+            sal_False, otherwise.
+*/
+COMPHELPER_DLLPUBLIC inline sal_Bool matchIgnoreAsciiCaseL(const rtl::OString& rStr, const char *pMatch, sal_Int32 nMatchLen, sal_Int32 fromIndex = 0) SAL_THROW(())
+{
+    return rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( rStr.pData->buffer+fromIndex, rStr.pData->length-fromIndex,
+                                                               pMatch, nMatchLen,
+                                                               nMatchLen ) == 0;
+}
+
+/**
   Returns the index within this string of the first occurrence of the
   specified substring, starting at the specified index.
 
