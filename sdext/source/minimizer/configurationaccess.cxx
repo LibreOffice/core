@@ -89,7 +89,7 @@ void OptimizerSettings::LoadSettingsFromConfiguration( const Reference< XNameAcc
                     default: break;
                 }
             }
-            catch( Exception& )
+            catch (const Exception&)
             {
             }
         }
@@ -142,7 +142,7 @@ void OptimizerSettings::SaveSettingsToConfiguration( const Reference< XNameRepla
             {
                 rSettings->replaceByName( pNames[ i ], pValues[ i ] );
             }
-            catch( Exception& /* rException */ )
+            catch (const Exception&)
             {
             }
         }
@@ -200,7 +200,7 @@ rtl::OUString ConfigurationAccess::getPath( const PPPOptimizerTokenEnum eToken )
             }
         }
     }
-    catch ( Exception& )
+    catch (const Exception&)
     {
     }
     return aPath;
@@ -233,7 +233,7 @@ void ConfigurationAccess::LoadStrings()
                         if ( xSet->getByName( aPropertyName ) >>= aString )
                             maStrings[ TKGet( aPropertyName ) ] = aString;
                     }
-                    catch( Exception& )
+                    catch (const Exception&)
                     {
                     }
                 }
@@ -241,7 +241,7 @@ void ConfigurationAccess::LoadStrings()
         }
         while( false );
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
     }
 }
@@ -277,7 +277,7 @@ void ConfigurationAccess::LoadConfiguration()
                             maSettings.back().LoadSettingsFromConfiguration( xTemplates );
                         }
                     }
-                    catch( Exception& /* rException */ )
+                    catch (const Exception&)
                     {
                     }
                 }
@@ -285,7 +285,7 @@ void ConfigurationAccess::LoadConfiguration()
         }
         while( false );
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
     }
 }
@@ -329,9 +329,8 @@ void ConfigurationAccess::SaveConfiguration()
         }
         while( false );
     }
-    catch( Exception& /* rException */ )
+    catch (const Exception&)
     {
-
     }
 }
 
@@ -363,7 +362,7 @@ Reference< XInterface > ConfigurationAccess::OpenConfiguration( bool bReadOnly )
                 sAccessService, aCreationArguments );
         }
     }
-    catch ( Exception& /* rException */ )
+    catch (const Exception&)
     {
     }
     return xRoot;
@@ -387,13 +386,14 @@ Reference< XInterface > ConfigurationAccess::GetConfigurationNode(
             }
         }
     }
-    catch ( Exception& rException )
+    catch (const Exception& rException)
     {
         OSL_TRACE ("caught exception while getting configuration node %s: %s",
             ::rtl::OUStringToOString(sPathToNode,
                 RTL_TEXTENCODING_UTF8).getStr(),
             ::rtl::OUStringToOString(rException.Message,
                 RTL_TEXTENCODING_UTF8).getStr());
+        (void)rException;
     }
     return xNode;
 }
@@ -426,7 +426,7 @@ com::sun::star::uno::Any ConfigurationAccess::GetConfigProperty( const PPPOptimi
                 break;
         }
     }
-    catch( Exception& /* rException */ )
+    catch (const Exception&)
     {
     }
     return aRetValue;
@@ -460,7 +460,7 @@ void ConfigurationAccess::SetConfigProperty( const PPPOptimizerTokenEnum eProper
                 break;
         }
     }
-    catch( Exception& /* rException */ )
+    catch (const Exception&)
     {
     }
 }
