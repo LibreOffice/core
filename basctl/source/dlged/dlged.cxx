@@ -1186,7 +1186,7 @@ void DlgEditor::ClearModifyFlag()
 #define BORDERPRN       300
 
 
-void lcl_PrintHeader( Printer* pPrinter, const String& rTitle ) // not working yet
+void lcl_PrintHeader( Printer* pPrinter, const ::rtl::OUString& rTitle ) // not working yet
 {
     pPrinter->Push();
 
@@ -1231,14 +1231,14 @@ sal_Int32 DlgEditor::countPages( Printer* )
     return 1;
 }
 
-void DlgEditor::printPage( sal_Int32 nPage, Printer* pPrinter, const String& rTitle )
+void DlgEditor::printPage( sal_Int32 nPage, Printer* pPrinter, const ::rtl::OUString& rTitle )
 {
     if( nPage == 0 )
         Print( pPrinter, rTitle );
 }
 
 
-void DlgEditor::Print( Printer* pPrinter, const String& rTitle )    // not working yet
+void DlgEditor::Print( Printer* pPrinter, const ::rtl::OUString& rTitle )    // not working yet
 {
     if( pDlgEdView )
     {

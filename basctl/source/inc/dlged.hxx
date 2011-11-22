@@ -99,7 +99,7 @@ private:
     DECL_LINK( PaintTimeout, Timer * );
     DECL_LINK( MarkTimeout, Timer * );
 
-    void Print( Printer* pPrinter, const String& rTitle );
+    void Print( Printer* pPrinter, const ::rtl::OUString& rTitle );
 
 protected:
     ScrollBar*          pHScroll;
@@ -201,7 +201,7 @@ public:
     void            UpdatePropertyBrowserDelayed();
 
     sal_Int32       countPages( Printer* pPrinter );
-    void            printPage( sal_Int32 nPage, Printer* pPrinter, const String& );
+    void            printPage( sal_Int32 nPage, Printer* pPrinter, const ::rtl::OUString& );
 
     bool            AdjustPageSize();
 
