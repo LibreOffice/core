@@ -20,3 +20,4 @@
 #define STR_ERR_NAME_INVALID 18
 #define STR_DEFAULT_INFO 19
 #define RB_RANGE 20
+#define BTN_MORE 21

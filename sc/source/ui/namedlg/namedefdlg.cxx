@@ -24,6 +24,7 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParen
     ScAnyRefDlg( pB, pCW, pParent, RID_SCDLG_NAMES_DEFINE ),
     maBtnAdd( this, ScResId( BTN_ADD ) ),
     maBtnCancel( this, ScResId( BTN_CANCEL ) ),
+    maBtnMore( this, ScResId( BTN_MORE ) ),
     maFtInfo( this, ScResId( FT_INFO ) ),
     maFtName( this, ScResId( FT_NAME ) ),
     maFtRange( this, ScResId( FT_RANGE ) ),
@@ -57,12 +58,20 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParen
 
     maBtnCancel.SetClickHdl( LINK( this, ScNameDefDlg, CancelBtnHdl));
     maBtnAdd.SetClickHdl( LINK( this, ScNameDefDlg, AddBtnHdl ));
+    maBtnMore.SetClickHdl( LINK( this, ScNameDefDlg, MoreBtnHdl ));
     maEdName.SetModifyHdl( LINK( this, ScNameDefDlg, NameModifyHdl ));
     maEdRange.SetGetFocusHdl( LINK( this, ScNameDefDlg, AssignGetFocusHdl ) );
 
     maFtInfo.SetText(ResId::toString( ScResId( STR_DEFAULT_INFO ) ));
 
     maBtnAdd.Disable(); // empty name is invalid
+
+    maBtnRowHeader.Hide();
+    maBtnColHeader.Hide();
+    maBtnCriteria.Hide();
+    maBtnPrintArea.Hide();
+
+    FreeResource();
 }
 
 void ScNameDefDlg::CancelPushed()
@@ -226,6 +235,45 @@ void ScNameDefDlg::SetActive()
     RefInputDone();
 }
 
+namespace {
+
+void MoveWindow( Window& rButton, long nPixel)
+{
+    Point aPoint = rButton.GetPosPixel();
+    aPoint.Y() += nPixel;
+    rButton.SetPosPixel(aPoint);
+}
+
+}
+
+void ScNameDefDlg::MorePushed()
+{
+    Size nSize = GetSizePixel();
+
+    //depending on the state of the button, move all elements below up/down
+    long nPixel = 85;
+    if (!maBtnMore.GetState())
+    {
+        nPixel *= -1;
+        maBtnRowHeader.Hide();
+        maBtnColHeader.Hide();
+        maBtnPrintArea.Hide();
+        maBtnCriteria.Hide();
+    }
+    else
+    {
+        maBtnRowHeader.Show();
+        maBtnColHeader.Show();
+        maBtnPrintArea.Show();
+        maBtnCriteria.Show();
+    }
+    nSize.Height() += nPixel;
+    SetSizePixel(nSize);
+    MoveWindow(maBtnAdd, nPixel);
+    MoveWindow(maBtnCancel, nPixel);
+    MoveWindow(maFlDiv, nPixel);
+}
+
 IMPL_LINK( ScNameDefDlg, CancelBtnHdl, void*, EMPTYARG)
 {
     CancelPushed();
@@ -253,5 +301,11 @@ IMPL_LINK( ScNameDefDlg, EdModifyHdl, void *, EMPTYARG )
 IMPL_LINK( ScNameDefDlg, AssignGetFocusHdl, void *, EMPTYARG )
 {
     EdModifyHdl( &maEdRange );
+    return 0;
+}
+
+IMPL_LINK( ScNameDefDlg, MoreBtnHdl, void*, EMPTYARG)
+{
+    MorePushed();
     return 0;
 }

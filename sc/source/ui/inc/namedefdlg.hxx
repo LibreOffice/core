@@ -44,6 +44,7 @@ class ScNameDefDlg : public ScAnyRefDlg
 private:
     PushButton maBtnAdd;
     PushButton maBtnCancel;
+    DisclosureButton maBtnMore;
     FixedText maFtInfo;
     FixedText maFtName;
     FixedText maFtRange;
@@ -73,6 +74,7 @@ private:
 
     void CancelPushed();
     void AddPushed();
+    void MorePushed();
 
     bool IsNameValid();
 
@@ -81,6 +83,7 @@ private:
     DECL_LINK( NameModifyHdl, void* );
     DECL_LINK( EdModifyHdl, void * );
     DECL_LINK( AssignGetFocusHdl, void * );
+    DECL_LINK( MoreBtnHdl, void* );
 
 protected:
     virtual void    RefInputDone( sal_Bool bForced = sal_False );

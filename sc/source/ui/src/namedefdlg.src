@@ -7,23 +7,29 @@ ModelessDialog RID_SCDLG_NAMES_DEFINE
     HelpId = CMD_FID_ADD_NAME ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 200 , 100 ) ;
+    Size = MAP_APPFONT ( 200 , 120 ) ;
     Text [ en-US ] = "Define Name" ;
     Moveable = TRUE ;
     Closeable = TRUE;
     PushButton BTN_ADD
     {
-        Pos = MAP_APPFONT( 110, 80 );
+        Pos = MAP_APPFONT( 110, 100 );
         Size = MAP_APPFONT( 40, 14 );
         TabStop = TRUE;
         Text [en-US] = "Add";
     };
     PushButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT( 155, 80 );
+        Pos = MAP_APPFONT( 155, 100 );
         Size = MAP_APPFONT ( 40, 14 );
         TabStop = TRUE;
         Text [en-US] = "Cancel";
+    };
+    CheckBox BTN_MORE
+    {
+        Pos = MAP_APPFONT( 6, 82 );
+        Size = MAP_APPFONT( 60, 14 );
+        Text [en-US] = "RangeOptions";
     };
     FixedText FT_INFO
     {
@@ -72,7 +78,7 @@ ModelessDialog RID_SCDLG_NAMES_DEFINE
     CheckBox BTN_PRINTAREA
     {
         HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_PRINTAREA";
-        Pos = MAP_APPFONT ( 6 , 208 ) ;
+        Pos = MAP_APPFONT ( 6 , 100 ) ;
         Size = MAP_APPFONT ( 80 , 14 ) ;
         Text [ en-US ] = "~Print range" ;
         TabStop = TRUE ;
@@ -80,7 +86,7 @@ ModelessDialog RID_SCDLG_NAMES_DEFINE
     CheckBox BTN_CRITERIA
     {
         HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_CRITERIA";
-        Pos = MAP_APPFONT ( 6 , 223 ) ;
+        Pos = MAP_APPFONT ( 6 , 118 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Filter" ;
         TabStop = TRUE ;
@@ -88,7 +94,7 @@ ModelessDialog RID_SCDLG_NAMES_DEFINE
     CheckBox BTN_ROWHEADER
     {
         HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_ROWHEADER";
-        Pos = MAP_APPFONT ( 110, 223 ) ;
+        Pos = MAP_APPFONT ( 110, 118 ) ;
         Size = MAP_APPFONT ( 82 , 14 ) ;
         Text [ en-US ] = "Repeat ~row" ;
         TabStop = TRUE ;
@@ -96,7 +102,7 @@ ModelessDialog RID_SCDLG_NAMES_DEFINE
     CheckBox BTN_COLHEADER
     {
         HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_COLHEADER";
-        Pos = MAP_APPFONT ( 110 , 208 ) ;
+        Pos = MAP_APPFONT ( 110 , 100 ) ;
         Size = MAP_APPFONT ( 82 , 14 ) ;
         Text [ en-US ] = "Repeat ~column" ;
         TabStop = TRUE ;
@@ -111,7 +117,7 @@ ModelessDialog RID_SCDLG_NAMES_DEFINE
     };
     FixedLine FL_DIV
     {
-        Pos = MAP_APPFONT( 0, 75 );
+        Pos = MAP_APPFONT( 0, 95 );
         Size = MAP_APPFONT(200, 3 );
     };
 
