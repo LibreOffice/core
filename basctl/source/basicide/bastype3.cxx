@@ -430,10 +430,9 @@ bool BasicTreeListBox::IsValidEntry( SvLBoxEntry* pEntry )
     {
         case OBJ_TYPE_DOCUMENT:
         {
-            bIsValid =  aDocument.isAlive()
-                    &&  (   aDocument.isApplication()
-                        ||  GetRootEntryName( aDocument, eLocation ) == GetEntryText( pEntry )
-                        );
+            bIsValid = aDocument.isAlive()
+                && (aDocument.isApplication()
+                    || GetRootEntryName(aDocument, eLocation).equals(GetEntryText(pEntry)));
         }
         break;
         case OBJ_TYPE_LIBRARY:

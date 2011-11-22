@@ -85,29 +85,29 @@ public:
 class BasicLibEntry : public BasicDocumentEntry
 {
 private:
-    String          m_aLibName;
+    ::rtl::OUString m_aLibName;
 
 public:
-                    BasicLibEntry( const ScriptDocument& rDocument, LibraryLocation eLocation, const String& rLibName, BasicEntryType eType = OBJ_TYPE_LIBRARY );
+    BasicLibEntry( const ScriptDocument& rDocument, LibraryLocation eLocation, const ::rtl::OUString& rLibName, BasicEntryType eType = OBJ_TYPE_LIBRARY );
     virtual         ~BasicLibEntry();
 
-    const String&   GetLibName() const { return m_aLibName; }
+    const ::rtl::OUString&   GetLibName() const { return m_aLibName; }
 };
 
 class BasicEntryDescriptor
 {
     ScriptDocument          m_aDocument;
     LibraryLocation         m_eLocation;
-    String                  m_aLibName;
-    String                  m_aLibSubName;  // for vba entry:  Document Objects, Class Modules, Forms and Normal Modules
-    String                  m_aName;
-    String                  m_aMethodName;
+    ::rtl::OUString         m_aLibName;
+    ::rtl::OUString         m_aLibSubName;  // for vba entry:  Document Objects, Class Modules, Forms and Normal Modules
+    ::rtl::OUString         m_aName;
+    ::rtl::OUString         m_aMethodName;
     BasicEntryType          m_eType;
 
 public:
                             BasicEntryDescriptor();
-                            BasicEntryDescriptor( const ScriptDocument& rDocument, LibraryLocation eLocation, const String& rLibName, const String& rLibSubName, const String& rName, BasicEntryType eType );
-                            BasicEntryDescriptor( const ScriptDocument& rDocument, LibraryLocation eLocation, const String& rLibName, const String& rLibSubName, const String& rName, const String& rMethodName, BasicEntryType eType );
+    BasicEntryDescriptor( const ScriptDocument& rDocument, LibraryLocation eLocation, const ::rtl::OUString& rLibName, const ::rtl::OUString& rLibSubName, const ::rtl::OUString& rName, BasicEntryType eType );
+    BasicEntryDescriptor( const ScriptDocument& rDocument, LibraryLocation eLocation, const ::rtl::OUString& rLibName, const ::rtl::OUString& rLibSubName, const ::rtl::OUString& rName, const ::rtl::OUString& rMethodName, BasicEntryType eType );
     virtual                 ~BasicEntryDescriptor();
 
                             BasicEntryDescriptor( const BasicEntryDescriptor& rDesc );
@@ -121,17 +121,17 @@ public:
     LibraryLocation         GetLocation() const { return m_eLocation; }
     void                    SetLocation( LibraryLocation eLocation ) { m_eLocation = eLocation; }
 
-    const String&           GetLibName() const { return m_aLibName; }
-    void                    SetLibName( const String& aLibName ) { m_aLibName = aLibName; }
+    const ::rtl::OUString&  GetLibName() const { return m_aLibName; }
+    void                    SetLibName( const ::rtl::OUString& aLibName ) { m_aLibName = aLibName; }
 
-    const String&           GetLibSubName() const { return m_aLibSubName; }
-    void                    SetLibSubName( const String& aLibSubName ) { m_aLibSubName = aLibSubName; }
+    const ::rtl::OUString&  GetLibSubName() const { return m_aLibSubName; }
+    void                    SetLibSubName( const ::rtl::OUString& aLibSubName ) { m_aLibSubName = aLibSubName; }
 
-    const String&           GetName() const { return m_aName; }
-    void                    SetName( const String& aName ) { m_aName = aName; }
+    const ::rtl::OUString&  GetName() const { return m_aName; }
+    void                    SetName( const ::rtl::OUString& aName ) { m_aName = aName; }
 
-    const String&           GetMethodName() const { return m_aMethodName; }
-    void                    SetMethodName( const String& aMethodName ) { m_aMethodName = aMethodName; }
+    const ::rtl::OUString&           GetMethodName() const { return m_aMethodName; }
+    void                    SetMethodName( const ::rtl::OUString& aMethodName ) { m_aMethodName = aMethodName; }
 
     BasicEntryType          GetType() const { return m_eType; }
     void                    SetType( BasicEntryType eType ) { m_eType = eType; }
@@ -165,10 +165,10 @@ protected:
     virtual long            ExpandingHdl();
 
     void                    ImpCreateLibEntries( SvLBoxEntry* pShellRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation );
-    void                    ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const String& rLibName );
-    void                    ImpCreateLibSubEntriesInVBAMode( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const String& rLibName );
-    void                    ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubRootEntry, const ScriptDocument& rDocument, const String& rLibName );
-    SvLBoxEntry*            ImpFindEntry( SvLBoxEntry* pParent, const String& rText );
+    void                    ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const ::rtl::OUString& rLibName );
+    void                    ImpCreateLibSubEntriesInVBAMode( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const ::rtl::OUString& rLibName );
+    void                    ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubRootEntry, const ScriptDocument& rDocument, const ::rtl::OUString& rLibName );
+    SvLBoxEntry*            ImpFindEntry( SvLBoxEntry* pParent, const ::rtl::OUString& rText );
 
     // DocumentEventListener
     virtual void onDocumentCreated( const ScriptDocument& _rDocument );
@@ -197,18 +197,18 @@ public:
     SbModule*       FindModule( SvLBoxEntry* pEntry );
     SbxVariable*    FindVariable( SvLBoxEntry* pEntry );
     SvLBoxEntry*    FindRootEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
-    SvLBoxEntry*    FindEntry( SvLBoxEntry* pParent, const String& rText, BasicEntryType eType );
+    SvLBoxEntry*    FindEntry( SvLBoxEntry* pParent, const ::rtl::OUString& rText, BasicEntryType eType );
 
     BasicEntryDescriptor    GetEntryDescriptor( SvLBoxEntry* pEntry );
 
     sal_uInt16          ConvertType( BasicEntryType eType );
     bool            IsValidEntry( SvLBoxEntry* pEntry );
 
-    SvLBoxEntry*    AddEntry( const String& rText, const Image& rImage,
+    SvLBoxEntry*    AddEntry( const ::rtl::OUString& rText, const Image& rImage,
                               SvLBoxEntry* pParent, bool bChildrenOnDemand,
                               std::auto_ptr< BasicEntry > aUserData );
 
-    String          GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation ) const;
+    ::rtl::OUString GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation ) const;
     void            GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& rImage );
 
     void            SetCurrentEntry( BasicEntryDescriptor& rDesc );

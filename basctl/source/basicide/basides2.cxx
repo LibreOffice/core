@@ -248,9 +248,9 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
     {
         // display a nice friendly name in the ObjectModule tab,
         // combining the objectname and module name, e.g. Sheet1 ( Financials )
-        String sObjName;
+        ::rtl::OUString sObjName;
         ModuleInfoHelper::getObjectName( xLib, rModName, sObjName );
-        if( sObjName.Len() )
+        if( !sObjName.isEmpty() )
         {
             aModName.AppendAscii(" (").Append(sObjName).AppendAscii(")");
         }

@@ -243,7 +243,7 @@ sal_Bool AccessibleDialogWindow::IsChildVisible( const ChildDescriptor& rDesc )
                 const SdrLayer* pSdrLayer = rLayerAdmin.GetLayerPerID( nLayerId );
                 if ( pSdrLayer )
                 {
-                    String aLayerName = pSdrLayer->GetName();
+                    ::rtl::OUString aLayerName = pSdrLayer->GetName();
                     SdrView* pSdrView = m_pDialogWindow->GetView();
                     if ( pSdrView && pSdrView->IsLayerVisible( aLayerName ) )
                     {

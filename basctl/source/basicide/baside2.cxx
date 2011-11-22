@@ -1350,9 +1350,9 @@ BasicEntryDescriptor ModulWindow::CreateEntryDescriptor()
                 uno::Reference< container::XNameContainer > xLib = aDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
                 if( xLib.is() )
                 {
-                    String sObjName;
+                    ::rtl::OUString sObjName;
                     ModuleInfoHelper::getObjectName( xLib, aModName, sObjName );
-                    if( sObjName.Len() )
+                    if( !sObjName.isEmpty() )
                     {
                         aModName.AppendAscii(" (").Append(sObjName).AppendAscii(")");
                     }
