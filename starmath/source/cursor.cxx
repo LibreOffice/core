@@ -31,6 +31,7 @@
 #include "document.hxx"
 #include "view.hxx"
 #include "accessibility.hxx"
+#include <comphelper/string.hxx>
 
 void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMoveAnchor){
     SmCaretPosGraphEntry* NewPos = NULL;
@@ -1112,7 +1113,7 @@ void SmCursor::InsertSpecial(XubString aString) {
     Delete();
 
     aString.EraseLeadingAndTrailingChars();
-    aString.EraseLeadingChars('%');
+    aString = comphelper::string::stripStart(aString, '%');
 
     //Create instance of special node
     SmToken token;

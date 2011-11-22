@@ -48,6 +48,7 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <vcl/toolbox.hxx>
 #include <osl/thread.hxx>
 #include <osl/mutex.hxx>
@@ -1162,7 +1163,7 @@ String SvtURLBox::GetURL()
 #ifdef WNT
     // erase trailing spaces on Windows since thay are invalid on this OS and
     // most of the time they are inserted by accident via copy / paste
-    aText.EraseTrailingChars();
+    aText = comphelper::string::stripEnd(aText, ' ');
     if ( !aText.Len() )
         return aText;
     // #i9739#
@@ -1327,7 +1328,7 @@ sal_Bool SvtURLBox_Impl::TildeParsing(
             else
             {
                 // "blabla/" path should be converted to "blabla"
-                aParseTilde.EraseTrailingChars( '/' );
+                aParseTilde = comphelper::string::stripEnd(aParseTilde, '/');
             }
         }
         else

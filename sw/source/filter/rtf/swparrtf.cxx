@@ -105,6 +105,7 @@
 #include <svx/svdoutl.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/paperinf.hxx>
 
@@ -1583,7 +1584,7 @@ sal_uInt16 SwRTFParser::ReadRevTbl()
             break;
 
         case RTF_TEXTTOKEN:
-            aToken.EraseTrailingChars(';');
+            aToken = comphelper::string::stripEnd(aToken, ';');
 
             sal_uInt16 nSWId = pDoc->InsertRedlineAuthor(aToken);
             // Store matchpair

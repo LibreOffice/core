@@ -49,8 +49,8 @@
 #include <sfx2/sfx.hrc>
 #include "bastyp.hrc"
 
-#include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -238,16 +238,17 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
             xUserDefinedProps->getPropertySetInfo();
         DBG_ASSERT(xPropInfo.is(), "UserDefinedProperties Info is null");
         uno::Sequence<beans::Property> props = xPropInfo->getProperties();
-        for (sal_Int32 i = 0; i < props.getLength(); ++i) {
-            try {
+        for (sal_Int32 i = 0; i < props.getLength(); ++i)
+        {
+            try
+            {
                 ::rtl::OUString name = props[i].Name;
-                ::rtl::OUString str;
                 uno::Any aStr = xConverter->convertToSimpleType(
                         xUserDefinedProps->getPropertyValue(name),
                         uno::TypeClass_STRING);
+                ::rtl::OUString str;
                 aStr >>= str;
-                String valstr(str);
-                valstr.EraseTrailingChars();
+                String valstr(comphelper::string::stripEnd(str, ' '));
                 OutMeta( rStrm, pIndent, name, valstr, sal_False,
                          eDestEnc, pNonConvertableChars );
             }

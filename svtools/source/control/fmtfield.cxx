@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/zformat.hxx>
@@ -1348,8 +1349,8 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
     if (getPrependCurrSym())
     {
         XubString sSymbol = getCurrencySymbol();
-        sSymbol.EraseLeadingChars(' ');
-        sSymbol.EraseTrailingChars(' ');
+        sSymbol = comphelper::string::stripStart(sSymbol, ' ');
+        sSymbol = comphelper::string::stripEnd(sSymbol, ' ');
 
         XubString sTemp = String::CreateFromAscii("[$");
         sTemp += sSymbol;
@@ -1370,8 +1371,8 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
     else
     {
         XubString sTemp = getCurrencySymbol();
-        sTemp.EraseLeadingChars(' ');
-        sTemp.EraseTrailingChars(' ');
+        sTemp = comphelper::string::stripStart(sTemp, ' ');
+        sTemp = comphelper::string::stripEnd(sTemp, ' ');
 
         sNewFormat += String::CreateFromAscii(" [$");
         sNewFormat += sTemp;

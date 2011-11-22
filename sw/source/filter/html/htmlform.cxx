@@ -2523,8 +2523,8 @@ void SwHTMLParser::EndSelect()
 
         for( i = 0; i < nEntryCnt; i++ )
         {
-            String sText( *pFormImpl->GetStringList()[i] );
-            sText.EraseTrailingChars();
+            rtl::OUString sText( *pFormImpl->GetStringList()[i] );
+            sText = comphelper::string::stripEnd(sText, ' ');
             pStrings[i] = sText;
 
             sText = *pFormImpl->GetValueList()[i];

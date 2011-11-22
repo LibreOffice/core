@@ -49,6 +49,10 @@ one go*/
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/uno/Any.h>
 
+#include <comphelper/genericpropertyset.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
+#include <comphelper/string.hxx>
 #include <rtl/math.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
@@ -58,7 +62,6 @@ one go*/
 #include <unotools/saveopt.hxx>
 #include <svl/stritem.hxx>
 #include <svl/itemprop.hxx>
-#include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -68,8 +71,6 @@ one go*/
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <osl/mutex.hxx>
-#include <comphelper/genericpropertyset.hxx>
-#include <comphelper/servicehelper.hxx>
 
 #include <memory>
 
@@ -572,7 +573,7 @@ void SmXMLImport::endDocument(void)
                 //Make up some editable text
                 aText = pDocShell->GetText();
                 pTree->CreateTextFromNode(aText);
-                aText.EraseTrailingChars();
+                aText = comphelper::string::stripEnd(aText, ' ');
                 if ((aText.GetChar(0) == '{') &&
                     (aText.GetChar(aText.Len()-1) == '}'))
                 {

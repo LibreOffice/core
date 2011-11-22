@@ -1079,8 +1079,8 @@ Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const String& rLine)
                 aSize.Width() = ((aSize.Width() / TabPos) + 1) * TabPos;
 
             aText = rLine.GetToken(i, '\t');
-            aText.EraseLeadingChars('\t');
-            aText.EraseTrailingChars('\t');
+            aText = comphelper::string::stripStart(aText, '\t');
+            aText = comphelper::string::stripEnd(aText, '\t');
             aSize.Width() += rDevice.GetTextWidth(aText);
         }
     }
@@ -1103,8 +1103,8 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const String& rText, long M
     {
         aLine = rText.GetToken(i, '\n');
         aLine = comphelper::string::remove(aLine, '\r');
-        aLine.EraseLeadingChars('\n');
-        aLine.EraseTrailingChars('\n');
+        aLine = comphelper::string::stripStart(aLine, '\n');
+        aLine = comphelper::string::stripEnd(aLine, '\n');
 
         aSize = GetTextLineSize(rDevice, aLine);
 
@@ -1134,9 +1134,9 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const String& rText, long M
                 TextSize.Height() += aSize.Height();
                 TextSize.Width() = Max(TextSize.Width(), Min(aSize.Width(), MaxWidth));
 
-                aLine.EraseLeadingChars(' ');
-                aLine.EraseLeadingChars('\t');
-                aLine.EraseLeadingChars(' ');
+                aLine = comphelper::string::stripStart(aLine, ' ');
+                aLine = comphelper::string::stripStart(aLine, '\t');
+                aLine = comphelper::string::stripStart(aLine, ' ');
             }
             while (aLine.Len() > 0);
         }
@@ -1169,8 +1169,8 @@ void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, co
                 aPoint.X() = ((aPoint.X() / TabPos) + 1) * TabPos;
 
             aText = rLine.GetToken(i, '\t');
-            aText.EraseLeadingChars('\t');
-            aText.EraseTrailingChars('\t');
+            aText = comphelper::string::stripStart(aText, '\t');
+            aText = comphelper::string::stripEnd(aText, '\t');
             rDevice.DrawText(aPoint, aText);
             aPoint.X() += rDevice.GetTextWidth(aText);
         }
@@ -1194,8 +1194,8 @@ void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const 
     {
         aLine = rText.GetToken(i, '\n');
         aLine = comphelper::string::remove(aLine, '\r');
-        aLine.EraseLeadingChars('\n');
-        aLine.EraseTrailingChars('\n');
+        aLine = comphelper::string::stripEnd(aLine, '\n');
+        aLine = comphelper::string::stripEnd(aLine, '\n');
         aSize = GetTextLineSize(rDevice, aLine);
         if (aSize.Width() > MaxWidth)
         {
@@ -1222,9 +1222,9 @@ void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const 
                 DrawTextLine(rDevice, aPoint, aText);
                 aPoint.Y() += aSize.Height();
 
-                aLine.EraseLeadingChars(' ');
-                aLine.EraseLeadingChars('\t');
-                aLine.EraseLeadingChars(' ');
+                aLine = comphelper::string::stripStart(aLine, ' ');
+                aLine = comphelper::string::stripStart(aLine, '\t');
+                aLine = comphelper::string::stripStart(aLine, ' ');
             }
             while (GetTextLineSize(rDevice, aLine).Width() > MaxWidth);
 

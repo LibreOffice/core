@@ -223,7 +223,7 @@ COMPHELPER_DLLPUBLIC rtl::OUString remove(const rtl::OUString &rIn,
 /** Strips occurrences of a character from the start of the source string
 
     @param rIn      The input OString
-    @param c        The character to be stripped from the beginning
+    @param c        The character to be stripped from the start
 
     @return         The resulting OString
  */
@@ -233,13 +233,32 @@ COMPHELPER_DLLPUBLIC rtl::OString stripStart(const rtl::OString &rIn,
 /** Strips occurrences of a character from the start of the source string
 
     @param rIn      The input OUString
-    @param c        The character to be stripped from the beginning
+    @param c        The character to be stripped from the start
 
     @return         The resulting OUString
  */
 COMPHELPER_DLLPUBLIC rtl::OUString stripStart(const rtl::OUString &rIn,
     sal_Unicode c);
 
+/** Strips occurrences of a character from the end of the source string
+
+    @param rIn      The input OString
+    @param c        The character to be stripped from the end
+
+    @return         The resulting OString
+ */
+COMPHELPER_DLLPUBLIC rtl::OString stripEnd(const rtl::OString &rIn,
+    sal_Char c);
+
+/** Strips occurrences of a character from the end of the source string
+
+    @param rIn      The input OUString
+    @param c        The character to be stripped from the end
+
+    @return         The resulting OUString
+ */
+COMPHELPER_DLLPUBLIC rtl::OUString stripEnd(const rtl::OUString &rIn,
+    sal_Unicode c);
 
 /** Returns a token in the OString
 

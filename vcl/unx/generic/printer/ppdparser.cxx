@@ -606,13 +606,13 @@ String PPDParser::getPPDPrinterName( const String& rFile )
             {
                 aCurLine.Erase( 0, 9 );
                 aCurLine = comphelper::string::stripStart(aCurLine, ' ');
-                aCurLine.EraseTrailingChars( ' ' );
+                aCurLine = comphelper::string::stripEnd(aCurLine, ' ');
                 aCurLine = comphelper::string::stripStart(aCurLine, '\t');
-                aCurLine.EraseTrailingChars( '\t' );
-                aCurLine.EraseTrailingChars( '\r' );
-                aCurLine.EraseTrailingChars( '\n' );
+                aCurLine = comphelper::string::stripEnd(aCurLine, '\t');
+                aCurLine = comphelper::string::stripEnd(aCurLine, '\r');
+                aCurLine = comphelper::string::stripEnd(aCurLine, '\n');
                 aCurLine = comphelper::string::stripStart(aCurLine, '"');
-                aCurLine.EraseTrailingChars( '"' );
+                aCurLine = comphelper::string::stripEnd(aCurLine, '"');
                 aStream.Close();
                 aStream.Open( getPPDFile( aCurLine ) );
                 continue;
@@ -705,13 +705,13 @@ PPDParser::PPDParser( const String& rFile ) :
                 {
                     aCurLine.Erase( 0, 9 );
                     aCurLine = comphelper::string::stripStart(aCurLine, ' ');
-                    aCurLine.EraseTrailingChars( ' ' );
+                    aCurLine = comphelper::string::stripEnd(aCurLine, ' ');
                     aCurLine = comphelper::string::stripStart(aCurLine, '\t');
-                    aCurLine.EraseTrailingChars( '\t' );
-                    aCurLine.EraseTrailingChars( '\r' );
-                    aCurLine.EraseTrailingChars( '\n' );
+                    aCurLine = comphelper::string::stripEnd(aCurLine, '\t');
+                    aCurLine = comphelper::string::stripEnd(aCurLine, '\r');
+                    aCurLine = comphelper::string::stripEnd(aCurLine, '\n');
                     aCurLine = comphelper::string::stripStart(aCurLine, '"');
-                    aCurLine.EraseTrailingChars( '"' );
+                    aCurLine = comphelper::string::stripEnd(aCurLine, '"');
                     aStream.Close();
                     aStream.Open( getPPDFile( String( aCurLine, m_aFileEncoding ) ) );
                     continue;

@@ -393,7 +393,7 @@ void GSIBlock::PrintList( ParserMessageList *pList, ByteString aPrefix,
                 aContext = pLine->GetText().Copy( 0, 300 );
             else
                 aContext = pLine->Copy( pMsg->GetTagBegin()-150, 300 );
-            aContext.EraseTrailingChars(' ');
+            aContext = comphelper::string::stripEnd(aContext, ' ');
             aContext = comphelper::string::stripStart(aContext, ' ');
         }
 

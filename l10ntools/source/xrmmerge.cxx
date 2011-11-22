@@ -442,7 +442,7 @@ void XRMResParser::ConvertStringToDBFormat( ByteString &rString )
         sResult = rString;
         rString = comphelper::string::stripStart(rString, _LF);
         rString = comphelper::string::stripStart(rString, '\t');
-        rString.EraseTrailingChars( '\t' );
+        rString = comphelper::string::stripEnd(rString, '\t');
     } while ( sResult != rString );
 
     rString.SearchAndReplaceAll( "\t", "\\t" );

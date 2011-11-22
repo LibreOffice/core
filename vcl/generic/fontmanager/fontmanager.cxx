@@ -2087,9 +2087,9 @@ void PrintFontManager::initFontsAlias()
 
             // remove eventual quotes
             aAlias = comphelper::string::stripStart(aAlias, '"');
-            aAlias.EraseTrailingChars( '"' );
+            aAlias = comphelper::string::stripEnd(aAlias, '"');
             aMap = comphelper::string::stripStart(aMap, '"');
-            aMap.EraseTrailingChars( '"' );
+            aMap = comphelper::string::stripEnd(aMap, '"');
 
             XLFDEntry aAliasEntry, aMapEntry;
             parseXLFD( aAlias, aAliasEntry );

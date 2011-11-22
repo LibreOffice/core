@@ -200,6 +200,37 @@ rtl::OUString stripStart(const rtl::OUString &rIn, sal_Unicode c)
     return tmpl_stripStart<rtl::OUString, sal_Unicode>(rIn, c);
 }
 
+namespace
+{
+    template <typename T, typename C> T tmpl_stripEnd(const T &rIn,
+        const C cRemove)
+    {
+        if (rIn.isEmpty())
+            return rIn;
+
+        sal_Int32 i = rIn.getLength();
+
+        while (i > 0)
+        {
+            if (rIn[i-1] != cRemove)
+                break;
+            --i;
+        }
+
+        return rIn.copy(0, i);
+    }
+}
+
+rtl::OString stripEnd(const rtl::OString &rIn, sal_Char c)
+{
+    return tmpl_stripEnd<rtl::OString, sal_Char>(rIn, c);
+}
+
+rtl::OUString stripEnd(const rtl::OUString &rIn, sal_Unicode c)
+{
+    return tmpl_stripEnd<rtl::OUString, sal_Unicode>(rIn, c);
+}
+
 sal_uInt32 decimalStringToNumber(
     ::rtl::OUString const & str )
 {

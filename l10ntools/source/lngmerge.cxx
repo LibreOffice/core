@@ -174,13 +174,13 @@ void LngParser::WriteSDF( SvFileStream &aSDFStream , ByteStringHashMap &rText_in
 bool LngParser::isNextGroup( ByteString &sGroup_out , ByteString &sLine_in )
 {
     sLine_in = comphelper::string::stripStart(sLine_in, ' ');
-    sLine_in.EraseTrailingChars( ' ' );
+    sLine_in = comphelper::string::stripEnd(sLine_in, ' ');
     if (( sLine_in.GetChar( 0 ) == '[' ) &&
            ( sLine_in.GetChar( sLine_in.Len() - 1 ) == ']' ))
     {
         sGroup_out = getToken(getToken(sLine_in, 1, '['), 0, ']');
         sGroup_out = comphelper::string::stripStart(sGroup_out, ' ');
-        sGroup_out.EraseTrailingChars( ' ' );
+        sGroup_out = comphelper::string::stripEnd(sGroup_out, ' ');
         return true;
     }
     return false;
@@ -226,13 +226,13 @@ sal_Bool LngParser::Merge(
     {
         ByteString sLine( *(*pLines)[ nPos ] );
         sLine = comphelper::string::stripStart(sLine, ' ');
-        sLine.EraseTrailingChars( ' ' );
+        sLine = comphelper::string::stripEnd(sLine, ' ');
         if (( sLine.GetChar( 0 ) == '[' ) &&
             ( sLine.GetChar( sLine.Len() - 1 ) == ']' ))
         {
             sGroup = getToken(getToken(sLine, 1, '['), 0, ']');
             sGroup = comphelper::string::stripStart(sGroup, ' ');
-            sGroup.EraseTrailingChars( ' ' );
+            sGroup = comphelper::string::stripEnd(sGroup, ' ');
             bGroup = sal_True;
         }
         nPos ++;
@@ -255,13 +255,13 @@ sal_Bool LngParser::Merge(
         {
             ByteString sLine( *(*pLines)[ nPos ] );
             sLine = comphelper::string::stripStart(sLine, ' ');
-            sLine.EraseTrailingChars( ' ' );
+            sLine = comphelper::string::stripEnd(sLine, ' ');
             if (( sLine.GetChar( 0 ) == '[' ) &&
                 ( sLine.GetChar( sLine.Len() - 1 ) == ']' ))
             {
                 sGroup = getToken(getToken(sLine, 1, '['), 0, ']');
                 sGroup = comphelper::string::stripStart(sGroup, ' ');
-                sGroup.EraseTrailingChars( ' ' );
+                sGroup = comphelper::string::stripEnd(sGroup, ' ');
                 bGroup = sal_True;
                 nPos ++;
                 sLanguagesDone = "";
@@ -270,7 +270,7 @@ sal_Bool LngParser::Merge(
             {
                 ByteString sLang = getToken(sLine, 0, '=');
                 sLang = comphelper::string::stripStart(sLang, ' ');
-                sLang.EraseTrailingChars( ' ' );
+                sLang = comphelper::string::stripEnd(sLang, ' ');
 
                 ByteString sSearch( ";" );
                 sSearch += sLang;

@@ -34,6 +34,7 @@
 
 #include <sal/macros.h>
 #include <com/sun/star/i18n/ScriptType.hdl>
+#include <comphelper/string.hxx>
 #include <vcl/graph.hxx>
 #include <svl/urihelper.hxx>
 #include <svtools/rtftoken.h>
@@ -159,7 +160,7 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
             nFndPos += nTokenStt + static_cast< xub_StrLen >(nLen);
             while( rNext.GetChar( nFndPos ) == ' ' )    ++nFndPos;
             rNext.Erase( 0, nFndPos );
-            rNext.EraseTrailingChars();
+            rNext = comphelper::string::stripEnd(rNext, ' ');
             return aFldNmArr[n].eFldType;
         }
     }
@@ -242,7 +243,7 @@ sal_Unicode RtfFieldSwitch::GetSwitch( String& rParam )
     rParam = sParam.GetToken( 0, c );
     sParam.Erase( 0, rParam.Len() + nOffset ).EraseLeadingChars();
     if( '\\' == c )
-        rParam.EraseTrailingChars();
+        rParam = comphelper::string::stripEnd(rParam, ' ');
     nCurPos = 0;
 
     return cKey;

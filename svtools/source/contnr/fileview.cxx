@@ -63,6 +63,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/datetime.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
@@ -1686,7 +1687,7 @@ String SvtFileView::GetConfigString() const
         sRet += ';';
     }
 
-    sRet.EraseTrailingChars( ';' );
+    sRet = comphelper::string::stripEnd(sRet, ';');
     return sRet;
 }
 

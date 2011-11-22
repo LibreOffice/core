@@ -382,12 +382,12 @@ long ImageMap::ImpReadCERNRadius( const char** ppStr )
 
 String ImageMap::ImpReadCERNURL( const char** ppStr, const String& rBaseURL )
 {
-    String  aStr( String::CreateFromAscii( *ppStr ) );
+    rtl::OUString aStr(rtl::OUString::createFromAscii(*ppStr));
 
-    aStr.EraseLeadingChars( ' ' );
-    aStr.EraseLeadingChars( '\t' );
-    aStr.EraseTrailingChars( ' ' );
-    aStr.EraseTrailingChars( '\t' );
+    aStr = comphelper::string::stripStart(aStr, ' ');
+    aStr = comphelper::string::stripStart(aStr, '\t');
+    aStr = comphelper::string::stripEnd(aStr, ' ');
+    aStr = comphelper::string::stripEnd(aStr, '\t');
 
     return INetURLObject::GetAbsURL( rBaseURL, aStr );
 }

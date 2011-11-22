@@ -2188,8 +2188,8 @@ bool SmSymDefineDialog::SelectSymbolSet(ComboBox &rComboBox,
 
     // 'Normalisieren' des SymbolNamens (ohne leading und trailing Leerzeichen)
     XubString  aNormName (rSymbolSetName);
-    aNormName.EraseLeadingChars(' ');
-    aNormName.EraseTrailingChars(' ');
+    aNormName = comphelper::string::stripStart(aNormName, ' ');
+    aNormName = comphelper::string::stripEnd(aNormName, ' ');
     // und evtl Abweichungen in der Eingabe beseitigen
     rComboBox.SetText(aNormName);
 

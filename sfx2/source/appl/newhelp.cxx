@@ -48,8 +48,9 @@
 
 #include <boost/unordered_map.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -1040,7 +1041,7 @@ SearchTabPage_Impl::~SearchTabPage_Impl()
         aUserData += ';';
     }
 
-    aUserData.EraseTrailingChars(';');
+    aUserData = comphelper::string::stripEnd(aUserData, ';');
     Any aUserItem = makeAny( ::rtl::OUString( aUserData ) );
     aViewOpt.SetUserItem( USERITEM_NAME, aUserItem );
 }

@@ -366,8 +366,8 @@ sal_Bool ResData::SetId( const ByteString &rId, sal_uInt16 nLevel )
         {
             YYWarning( "LocalId > 255 chars, truncating..." );
             sId.Erase( 255 );
-            sId.EraseTrailingChars( ' ' );
-            sId.EraseTrailingChars( '\t' );
+            sId = comphelper::string::stripEnd(sId, ' ');
+            sId = comphelper::string::stripEnd(sId, '\t');
         }
 
         return sal_True;
@@ -643,7 +643,7 @@ int Export::Execute( int nToken, const char * pToken )
             sToken = comphelper::string::remove(sToken, '\r');
             sToken = comphelper::string::remove(sToken, '{');
             while( sToken.SearchAndReplace( "\t", " " ) != STRING_NOTFOUND ) {};
-            sToken.EraseTrailingChars( ' ' );
+            sToken = comphelper::string::stripEnd(sToken, ' ');
             ByteString sT = getToken(sToken, 0, ' ');
             pResData->sResTyp = sT.ToLowerAscii();
             ByteString sId( sToken.Copy( pResData->sResTyp.Len() + 1 ));
@@ -1280,7 +1280,7 @@ ByteString Export::GetPairedListID( const ByteString& sText ){
     ByteString sIdent = getToken(sText, 1, ';');
     sIdent.ToUpperAscii();
     while( sIdent.SearchAndReplace( "\t", " " ) != STRING_NOTFOUND ) {};
-    sIdent.EraseTrailingChars( ' ' );
+    sIdent = comphelper::string::stripEnd(sIdent, ' ');
     sIdent = comphelper::string::stripStart(sIdent, ' ');
     return sIdent;
 }
@@ -1288,10 +1288,10 @@ ByteString Export::GetPairedListString( const ByteString& sText ){
 // < "STRING" ; IDENTIFIER ; > ;
     ByteString sString = getToken(sText, 0, ';');
     while( sString.SearchAndReplace( "\t", " " ) != STRING_NOTFOUND ) {};
-    sString.EraseTrailingChars( ' ' );
+    sString = comphelper::string::stripEnd(sString, ' ');
     ByteString s1 = sString.Copy( sString.Search( '\"' )+1 );
     sString = s1.Copy( 0 , s1.SearchBackward( '\"' ) );
-    sString.EraseTrailingChars( ' ' );
+    sString = comphelper::string::stripEnd(sString, ' ');
     sString = comphelper::string::stripStart(sString, ' ');
     return sString;
 }
@@ -1311,7 +1311,7 @@ sal_Bool Export::WriteExportList( ResData *pResData, ExportList *pExportList,
     else {
         sGID += ".";
         sGID += pResData->sId;
-        sGID.EraseTrailingChars( '.' );
+        sGID = comphelper::string::stripEnd(sGID, '.');
     }
 
     ByteString sTimeStamp( Export::GetTimeStamp());
@@ -1548,7 +1548,7 @@ ByteString Export::GetText( const ByteString &rSource, int nToken )
                         while( sToken.SearchAndReplace( "  ", " " ) !=
                             STRING_NOTFOUND ) {};
                         sToken = comphelper::string::stripStart(sToken, ' ');
-                        sToken.EraseTrailingChars( ' ' );
+                        sToken = comphelper::string::stripEnd(sToken, ' ');
                         if ( sToken.Len()) {
                             sReturn += "\\\" ";
                             sReturn += sToken;

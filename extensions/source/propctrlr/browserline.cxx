@@ -30,19 +30,17 @@
 #include "precompiled_extensions.hxx"
 #include "browserline.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
-/** === end UNO includes === **/
 
-#include <vcl/svapp.hxx>
+#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-
-#include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <vcl/svapp.hxx>
 
 //............................................................................
 namespace pcr
@@ -306,16 +304,16 @@ namespace pcr
     //------------------------------------------------------------------
     XubString OBrowserLine::GetTitle() const
     {
-        String sDisplayName = m_aFtTitle.GetText();
+        rtl::OUString sDisplayName = m_aFtTitle.GetText();
 
-    // for Issue 69452
-    if (Application::GetSettings().GetLayoutRTL())
-    {
-        sal_Unicode cRTL_mark = 0x200F;
-        sDisplayName.EraseTrailingChars(cRTL_mark);
-    }
+        // for Issue 69452
+        if (Application::GetSettings().GetLayoutRTL())
+        {
+            sal_Unicode cRTL_mark = 0x200F;
+            sDisplayName = comphelper::string::stripEnd(sDisplayName, cRTL_mark);
+        }
 
-        sDisplayName.EraseTrailingChars( '.' );
+        sDisplayName = comphelper::string::stripEnd(sDisplayName, '.');
 
         return sDisplayName;
     }

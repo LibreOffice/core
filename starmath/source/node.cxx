@@ -38,6 +38,7 @@
 #include "mathtype.hxx"
 #include "visitors.hxx"
 
+#include <comphelper/string.hxx>
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
 #include <rtl/math.hxx>
@@ -449,7 +450,7 @@ void SmNode::CreateTextFromNode(String &rText)
             pNode->CreateTextFromNode(rText);
     if (nSize > 1)
     {
-        rText.EraseTrailingChars();
+        rText = comphelper::string::stripEnd(rText, ' ');
         APPEND(rText,"} ");
     }
 }
@@ -824,7 +825,7 @@ void SmExpressionNode::CreateTextFromNode(String &rText)
 
     if (nSize > 1)
     {
-        rText.EraseTrailingChars();
+        rText = comphelper::string::stripEnd(rText, ' ');
         APPEND(rText,"} ");
     }
 }
@@ -1654,13 +1655,13 @@ void SmSubSupNode::CreateTextFromNode(String &rText)
     }
     if (NULL != (pNode = GetSubNode(RSUB+1)))
     {
-        rText.EraseTrailingChars();
+        rText = comphelper::string::stripEnd(rText, ' ');
         rText.Append('_');
         pNode->CreateTextFromNode(rText);
     }
     if (NULL != (pNode = GetSubNode(RSUP+1)))
     {
-        rText.EraseTrailingChars();
+        rText = comphelper::string::stripEnd(rText, ' ');
         rText.Append('^');
         pNode->CreateTextFromNode(rText);
     }
@@ -1677,7 +1678,7 @@ void SmBraceNode::CreateTextFromNode(String &rText)
         String aStr;
         GetSubNode(0)->CreateTextFromNode(aStr);
         aStr.EraseLeadingAndTrailingChars();
-        aStr.EraseLeadingChars('\\');
+        aStr = comphelper::string::stripStart(aStr, '\\');
         if (aStr.Len())
         {
             if (aStr.EqualsAscii("divides"))
@@ -1700,7 +1701,7 @@ void SmBraceNode::CreateTextFromNode(String &rText)
         String aStr;
         GetSubNode(2)->CreateTextFromNode(aStr);
         aStr.EraseLeadingAndTrailingChars();
-        aStr.EraseLeadingChars('\\');
+        aStr = comphelper::string::stripStart(aStr, '\\');
         if (aStr.Len())
         {
             if (aStr.EqualsAscii("divides"))
@@ -2521,7 +2522,7 @@ void SmMatrixNode::CreateTextFromNode(String &rText)
         if (i != nNumRows-1)
             APPEND(rText,"## ");
     }
-    rText.EraseTrailingChars();
+    rText = comphelper::string::stripEnd(rText, ' ');
     APPEND(rText,"} ");
 }
 
@@ -2817,7 +2818,7 @@ void SmAttributNode::CreateTextFromNode(String &rText)
         if (NULL != (pNode = GetSubNode(1)))
             pNode->CreateTextFromNode(rText);
 
-    rText.EraseTrailingChars();
+    rText = comphelper::string::stripEnd(rText, ' ');
 
     if (nLast == 0xE082)
         APPEND(rText," overbrace {}");

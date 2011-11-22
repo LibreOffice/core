@@ -43,6 +43,7 @@
 #include "tool.h"
 
 #include <math.h>
+#include <comphelper/string.hxx>
 
 extern WKTYP                eTyp;
 
@@ -77,7 +78,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
             if( n != STRING_NOTFOUND )
                 t.Erase( 0, n + s.Len() );
 
-            t.EraseTrailingChars( '(' );
+            t = comphelper::string::stripEnd(t, '(');
 
             eOc = lcl_KnownAddIn( t );
 

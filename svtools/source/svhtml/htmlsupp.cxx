@@ -31,11 +31,11 @@
 
 #include <ctype.h>
 #include <stdio.h>
-#include <tools/urlobj.hxx>
-
+#include <comphelper/string.hxx>
 #include <svtools/parhtml.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
+#include <tools/urlobj.hxx>
 
 // Table for converting option values into strings
 static HTMLOptionEnum const aScriptLangOptEnums[] =
@@ -135,7 +135,7 @@ void HTMLParser::RemoveSGMLComment( String &rString, sal_Bool bFull )
         if( bFull )
         {
             // "//" or "'", maybe preceding CR/LF
-            rString.EraseTrailingChars();
+            rString = comphelper::string::stripEnd(rString, ' ');
             xub_StrLen nDel = 0, nLen = rString.Len();
             if( nLen >= 2 &&
                 rString.Copy(nLen-2).CompareToAscii("//") == COMPARE_EQUAL )

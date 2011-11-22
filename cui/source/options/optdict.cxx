@@ -65,10 +65,9 @@ static long nStaticTabs[]=
 
 // static function -------------------------------------------------------
 
-static String getNormDicEntry_Impl( const String &rText )
+static String getNormDicEntry_Impl(const rtl::OUString &rText)
 {
-    String aTmp( rText );
-    aTmp.EraseTrailingChars( '.' );
+    rtl::OUString aTmp(comphelper::string::stripEnd(rText, '.'));
     return comphelper::string::remove(aTmp, '=');
 }
 

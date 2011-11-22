@@ -506,8 +506,8 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
 ByteString HelpParser::GetOutpath( const ByteString& rPathX , const ByteString& sCur , const ByteString& rPathY ){
     ByteString testpath = rPathX;
     static const ByteString sDelimiter( DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US );
-    testpath.EraseTrailingChars( '/' );
-    testpath.EraseTrailingChars( '\\' );
+    testpath = comphelper::string::stripEnd(testpath, '/');
+    testpath = comphelper::string::stripEnd(testpath, '\\');
     testpath += sDelimiter;
     testpath += sCur;
     testpath += sDelimiter;
