@@ -2288,8 +2288,23 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_TRRH:
             {
+                rtl::OUString hRule = rtl::OUString::createFromAscii("auto");
+                if ( nParam < 0 )
+                {
+                    RTFValue::Pointer_t pAbsValue(new RTFValue(-nParam));
+                    pIntValue.swap( pAbsValue );
+
+                    hRule = rtl::OUString::createFromAscii("exact");
+                }
+                else if ( nParam > 0 )
+                    hRule = rtl::OUString::createFromAscii("atLeast");
+
                 lcl_putNestedAttribute(m_aStates.top().aTableRowSprms,
                         NS_ooxml::LN_CT_TrPrBase_trHeight, NS_ooxml::LN_CT_Height_val, pIntValue);
+
+                RTFValue::Pointer_t pHRule(new RTFValue(hRule));
+                lcl_putNestedAttribute(m_aStates.top().aTableRowSprms,
+                    NS_ooxml::LN_CT_TrPrBase_trHeight, NS_ooxml::LN_CT_Height_hRule, pHRule);
             }
             break;
         case RTF_COLS:
