@@ -279,7 +279,7 @@ const ByteString SourceTreeLocalizer::GetProjectRootRel()
         DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US );
 
     sCur.SearchAndReplaceAll( sDelimiter, "/" );
-    sCur.EraseLeadingChars( '/' );
+    sCur = comphelper::string::stripStart(sCur, '/');
     sal_uLong nCount = sCur.GetTokenCount( '/' );
 
     ByteString sProjectRootRel;

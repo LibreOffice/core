@@ -49,6 +49,7 @@ public:
     void testNatural();
     void testReplace();
     void testRemove();
+    void testStripStart();
     void testToken();
     void testDecimalStringToNumber();
     void testIsdigitAsciiString();
@@ -62,6 +63,7 @@ public:
     CPPUNIT_TEST(testNatural);
     CPPUNIT_TEST(testReplace);
     CPPUNIT_TEST(testRemove);
+    CPPUNIT_TEST(testStripStart);
     CPPUNIT_TEST(testToken);
     CPPUNIT_TEST(testDecimalStringToNumber);
     CPPUNIT_TEST(testIsdigitAsciiString);
@@ -428,6 +430,26 @@ void TestString::testRemove()
 
     aOut = ::comphelper::string::remove(aIn, 'a');
     CPPUNIT_ASSERT(aOut.isEmpty());
+}
+
+void TestString::testStripStart()
+{
+    ::rtl::OString aIn(RTL_CONSTASCII_STRINGPARAM("abc"));
+    ::rtl::OString aOut;
+
+    aOut = ::comphelper::string::stripStart(aIn, 'b');
+    CPPUNIT_ASSERT(aOut.equalsL(RTL_CONSTASCII_STRINGPARAM("abc")));
+
+    aOut = ::comphelper::string::stripStart(aIn, 'a');
+    CPPUNIT_ASSERT(aOut.equalsL(RTL_CONSTASCII_STRINGPARAM("bc")));
+
+    aIn = rtl::OString(RTL_CONSTASCII_STRINGPARAM("aaa"));
+    aOut = ::comphelper::string::stripStart(aIn, 'a');
+    CPPUNIT_ASSERT(aOut.isEmpty());
+
+    aIn = rtl::OString(RTL_CONSTASCII_STRINGPARAM("aba"));
+    aOut = ::comphelper::string::stripStart(aIn, 'a');
+    CPPUNIT_ASSERT(aOut.equalsL(RTL_CONSTASCII_STRINGPARAM("ba")));
 }
 
 void TestString::testToken()

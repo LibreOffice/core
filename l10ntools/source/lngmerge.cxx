@@ -142,54 +142,59 @@ sal_Bool LngParser::CreateSDF(
     return true;
 }
 
- void LngParser::WriteSDF( SvFileStream &aSDFStream , ByteStringHashMap &rText_inout ,
-     const ByteString &rPrj , const ByteString &rRoot ,
-     const ByteString &sActFileName , const ByteString &sID )
- {
+void LngParser::WriteSDF( SvFileStream &aSDFStream , ByteStringHashMap &rText_inout ,
+    const ByteString &rPrj , const ByteString &rRoot ,
+    const ByteString &sActFileName , const ByteString &sID )
+{
 
-    sal_Bool bExport = true;
-    if ( bExport ) {
-           ByteString sTimeStamp( Export::GetTimeStamp());
-        ByteString sCur;
-        for( unsigned int n = 0; n < aLanguages.size(); n++ ){
-            sCur = aLanguages[ n ];
-            ByteString sAct = rText_inout[ sCur ];
-            if ( !sAct.Len() && sCur.Len() )
-                sAct = rText_inout[ ByteString("en-US") ];
+   sal_Bool bExport = true;
+   if ( bExport ) {
+          ByteString sTimeStamp( Export::GetTimeStamp());
+       ByteString sCur;
+       for( unsigned int n = 0; n < aLanguages.size(); n++ ){
+           sCur = aLanguages[ n ];
+           ByteString sAct = rText_inout[ sCur ];
+           if ( !sAct.Len() && sCur.Len() )
+               sAct = rText_inout[ ByteString("en-US") ];
 
-            ByteString sOutput( rPrj ); sOutput += "\t";
-            if ( rRoot.Len())
-                sOutput += sActFileName;
-            sOutput += "\t0\t";
-            sOutput += "LngText\t";
-            sOutput += sID; sOutput += "\t\t\t\t0\t";
-            sOutput += sCur; sOutput += "\t";
-            sOutput += sAct; sOutput += "\t\t\t\t";
-            sOutput += sTimeStamp;
-            aSDFStream.WriteLine( sOutput );
-        }
-    }
- }
- bool LngParser::isNextGroup( ByteString &sGroup_out , ByteString &sLine_in ){
-    sLine_in.EraseLeadingChars( ' ' );
+           ByteString sOutput( rPrj ); sOutput += "\t";
+           if ( rRoot.Len())
+               sOutput += sActFileName;
+           sOutput += "\t0\t";
+           sOutput += "LngText\t";
+           sOutput += sID; sOutput += "\t\t\t\t0\t";
+           sOutput += sCur; sOutput += "\t";
+           sOutput += sAct; sOutput += "\t\t\t\t";
+           sOutput += sTimeStamp;
+           aSDFStream.WriteLine( sOutput );
+       }
+   }
+}
+
+bool LngParser::isNextGroup( ByteString &sGroup_out , ByteString &sLine_in )
+{
+    sLine_in = comphelper::string::stripStart(sLine_in, ' ');
     sLine_in.EraseTrailingChars( ' ' );
     if (( sLine_in.GetChar( 0 ) == '[' ) &&
-            ( sLine_in.GetChar( sLine_in.Len() - 1 ) == ']' )){
+           ( sLine_in.GetChar( sLine_in.Len() - 1 ) == ']' ))
+    {
         sGroup_out = getToken(getToken(sLine_in, 1, '['), 0, ']');
-        sGroup_out.EraseLeadingChars( ' ' );
+        sGroup_out = comphelper::string::stripStart(sGroup_out, ' ');
         sGroup_out.EraseTrailingChars( ' ' );
         return true;
     }
     return false;
- }
- void LngParser::ReadLine( const ByteString &sLine_in , ByteStringHashMap &rText_inout){
-    ByteString sLang = getToken(sLine_in, 0, '=');
-    sLang.EraseLeadingChars( ' ' );
-    sLang.EraseTrailingChars( ' ' );
-    ByteString sText = getToken(getToken(sLine_in, 1, '\"'), 0, '\"');
-    if( sLang.Len() )
-        rText_inout[ sLang ] = sText;
- }
+}
+
+void LngParser::ReadLine( const ByteString &sLine_in , ByteStringHashMap &rText_inout)
+{
+   rtl::OString sLang = getToken(sLine_in, 0, '=');
+   sLang = comphelper::string::stripStart(sLang, ' ');
+   sLang = comphelper::string::stripStart(sLang, ' ');
+   rtl::OString sText = getToken(getToken(sLine_in, 1, '\"'), 0, '\"');
+   if (!sLang.isEmpty())
+       rText_inout[ sLang ] = sText;
+}
 
 /*****************************************************************************/
 sal_Bool LngParser::Merge(
@@ -217,15 +222,16 @@ sal_Bool LngParser::Merge(
     ByteString sGroup;
 
     // seek to next group
-    while ( nPos < pLines->size() && !bGroup ) {
+    while ( nPos < pLines->size() && !bGroup )
+    {
         ByteString sLine( *(*pLines)[ nPos ] );
-        sLine.EraseLeadingChars( ' ' );
+        sLine = comphelper::string::stripStart(sLine, ' ');
         sLine.EraseTrailingChars( ' ' );
         if (( sLine.GetChar( 0 ) == '[' ) &&
             ( sLine.GetChar( sLine.Len() - 1 ) == ']' ))
         {
             sGroup = getToken(getToken(sLine, 1, '['), 0, ']');
-            sGroup.EraseLeadingChars( ' ' );
+            sGroup = comphelper::string::stripStart(sGroup, ' ');
             sGroup.EraseTrailingChars( ' ' );
             bGroup = sal_True;
         }
@@ -245,23 +251,25 @@ sal_Bool LngParser::Merge(
 
         ByteString sLanguagesDone;
 
-        while ( nPos < pLines->size() && !bGroup ) {
+        while ( nPos < pLines->size() && !bGroup )
+        {
             ByteString sLine( *(*pLines)[ nPos ] );
-            sLine.EraseLeadingChars( ' ' );
+            sLine = comphelper::string::stripStart(sLine, ' ');
             sLine.EraseTrailingChars( ' ' );
             if (( sLine.GetChar( 0 ) == '[' ) &&
                 ( sLine.GetChar( sLine.Len() - 1 ) == ']' ))
             {
                 sGroup = getToken(getToken(sLine, 1, '['), 0, ']');
-                sGroup.EraseLeadingChars( ' ' );
+                sGroup = comphelper::string::stripStart(sGroup, ' ');
                 sGroup.EraseTrailingChars( ' ' );
                 bGroup = sal_True;
                 nPos ++;
                 sLanguagesDone = "";
             }
-            else if ( sLine.GetTokenCount( '=' ) > 1 ) {
+            else if ( sLine.GetTokenCount( '=' ) > 1 )
+            {
                 ByteString sLang = getToken(sLine, 0, '=');
-                sLang.EraseLeadingChars( ' ' );
+                sLang = comphelper::string::stripStart(sLang, ' ');
                 sLang.EraseTrailingChars( ' ' );
 
                 ByteString sSearch( ";" );

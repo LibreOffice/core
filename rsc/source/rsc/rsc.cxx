@@ -1196,8 +1196,8 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                         if( !aIStm.ReadLine( aLine ) )
                             break;
 
-                        aLine.EraseLeadingChars( ' ' );
-                        aLine.EraseLeadingChars( '\t' );
+                        aLine = comphelper::string::stripStart(aLine, ' ');
+                        aLine = comphelper::string::stripStart(aLine, '\t');
                         aLine = comphelper::string::remove(aLine, ';');
 
                         if (comphelper::string::isdigitAsciiString(aLine))

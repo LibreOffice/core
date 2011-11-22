@@ -394,7 +394,7 @@ void GSIBlock::PrintList( ParserMessageList *pList, ByteString aPrefix,
             else
                 aContext = pLine->Copy( pMsg->GetTagBegin()-150, 300 );
             aContext.EraseTrailingChars(' ');
-            aContext.EraseLeadingChars(' ');
+            aContext = comphelper::string::stripStart(aContext, ' ');
         }
 
         PrintMessage( pMsg->Prefix(), pMsg->GetErrorText(), aPrefix, aContext, pLine->GetLineNumber(), pLine->GetUniqId() );

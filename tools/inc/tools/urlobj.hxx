@@ -157,8 +157,8 @@ public:
     /** The way input strings that represent (parts of) URIs are interpreted
         in set-methods.
 
-        @descr  Most set-methods accept either a ByteString or a rtl::OUString
-        as input.  Using a ByteString, octets in the range 0x80--0xFF are
+        @descr  Most set-methods accept either a rtl::OString or a rtl::OUString
+        as input.  Using a rtl::OString, octets in the range 0x80--0xFF are
         replaced by single escape sequences.  Using a rtl::OUString , UTF-32
         characters in the range 0x80--0x10FFFF are replaced by sequences of
         escape sequences, representing the UTF-8 coded characters.
@@ -271,7 +271,7 @@ public:
     //========================================================================
     // Strict Parsing:
 
-    inline INetURLObject(ByteString const & rTheAbsURIRef,
+    inline INetURLObject(const rtl::OString& rTheAbsURIRef,
                          EncodeMechanism eMechanism = WAS_ENCODED,
                          rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
@@ -279,7 +279,7 @@ public:
                          EncodeMechanism eMechanism = WAS_ENCODED,
                          rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
-    inline bool SetURL(ByteString const & rTheAbsURIRef,
+    inline bool SetURL(const rtl::OString& rTheAbsURIRef,
                        EncodeMechanism eMechanism = WAS_ENCODED,
                        rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
@@ -404,7 +404,7 @@ public:
     { m_eSmartScheme = eTheSmartScheme; }
 
     inline bool
-    SetSmartURL(ByteString const & rTheAbsURIRef,
+    SetSmartURL(const rtl::OString& rTheAbsURIRef,
                 EncodeMechanism eMechanism = WAS_ENCODED,
                 rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
                 FSysStyle eStyle = FSYS_DETECT);
@@ -416,7 +416,7 @@ public:
                 FSysStyle eStyle = FSYS_DETECT);
 
     inline INetURLObject
-    smartRel2Abs(ByteString const & rTheRelURIRef,
+    smartRel2Abs(const rtl::OString& rTheRelURIRef,
                  bool & rWasAbsolute,
                  bool bIgnoreFragment = false,
                  EncodeMechanism eMechanism = WAS_ENCODED,
@@ -437,7 +437,7 @@ public:
     // Relative URLs:
 
     inline bool
-    GetNewAbsURL(ByteString const & rTheRelURIRef,
+    GetNewAbsURL(const rtl::OString& rTheRelURIRef,
                  INetURLObject * pTheAbsURIRef,
                  EncodeMechanism eMechanism = WAS_ENCODED,
                  rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
@@ -469,8 +469,8 @@ public:
               FSysStyle eStyle = FSYS_DETECT);
 
     static inline rtl::OUString
-    GetRelURL(ByteString const & rTheBaseURIRef,
-              ByteString const & rTheAbsURIRef,
+    GetRelURL(const rtl::OString& rTheBaseURIRef,
+              const rtl::OString& rTheAbsURIRef,
               EncodeMechanism eEncodeMechanism = WAS_ENCODED,
               DecodeMechanism eDecodeMechanism = DECODE_TO_IURI,
               rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
@@ -491,7 +491,7 @@ public:
                              rtl_TextEncoding eCharset
                                  = RTL_TEXTENCODING_UTF8) const;
 
-    static inline bool translateToExternal(ByteString const & rTheIntURIRef,
+    static inline bool translateToExternal(const rtl::OString& rTheIntURIRef,
                                            rtl::OUString & rTheExtURIRef,
                                            DecodeMechanism eDecodeMechanism
                                                = DECODE_TO_IURI,
@@ -505,7 +505,7 @@ public:
                                            rtl_TextEncoding eCharset
                                                = RTL_TEXTENCODING_UTF8);
 
-    static inline bool translateToInternal(ByteString const & rTheExtURIRef,
+    static inline bool translateToInternal(const rtl::OString& rTheExtURIRef,
                                            rtl::OUString & rTheIntURIRef,
                                            DecodeMechanism eDecodeMechanism
                                                = DECODE_TO_IURI,
@@ -534,7 +534,7 @@ public:
      */
     static rtl::OUString GetScheme(INetProtocol eTheScheme);
 
-    static inline INetProtocol CompareProtocolScheme(ByteString const &
+    static inline INetProtocol CompareProtocolScheme(const rtl::OString&
                                                          rTheAbsURIRef)
     { return CompareProtocolScheme(extend(rTheAbsURIRef)); }
 
@@ -559,7 +559,7 @@ public:
                                  = RTL_TEXTENCODING_UTF8) const
     { return decode(m_aAuth, getEscapePrefix(), eMechanism, eCharset); }
 
-    inline bool SetUser(ByteString const & rTheUser,
+    inline bool SetUser(const rtl::OString& rTheUser,
                         EncodeMechanism eMechanism = WAS_ENCODED,
                         rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
     { return setUser(extend(rTheUser), true, eMechanism, eCharset); }
@@ -569,7 +569,7 @@ public:
                         rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
     { return setUser(rTheUser, false, eMechanism, eCharset); }
 
-    inline bool SetPass(ByteString const & rThePassword,
+    inline bool SetPass(const rtl::OString& rThePassword,
                         EncodeMechanism eMechanism = WAS_ENCODED,
                         rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
@@ -577,8 +577,8 @@ public:
                         EncodeMechanism eMechanism = WAS_ENCODED,
                         rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
-    inline bool SetUserAndPass(ByteString const & rTheUser,
-                               ByteString const & rThePassword,
+    inline bool SetUserAndPass(const rtl::OString& rTheUser,
+                               const rtl:OString& rThePassword,
                                EncodeMechanism eMechanism = WAS_ENCODED,
                                rtl_TextEncoding eCharset
                                    = RTL_TEXTENCODING_UTF8);
@@ -604,7 +604,7 @@ public:
 
     sal_uInt32 GetPort() const;
 
-    inline bool SetHost(ByteString const & rTheHost,
+    inline bool SetHost(const rtl::OString& rTheHost,
                         EncodeMechanism eMechanism = WAS_ENCODED,
                         rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
     { return setHost(extend(rTheHost), true, eMechanism, eCharset); }
@@ -626,7 +626,7 @@ public:
                                     = RTL_TEXTENCODING_UTF8) const
     { return decode(m_aPath, getEscapePrefix(), eMechanism, eCharset); }
 
-    inline bool SetURLPath(ByteString const & rThePath,
+    inline bool SetURLPath(const rtl::OString& rThePath,
                            EncodeMechanism eMechanism = WAS_ENCODED,
                            rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
     { return setPath(extend(rThePath), true, eMechanism, eCharset); }
@@ -933,7 +933,7 @@ public:
                                   = RTL_TEXTENCODING_UTF8) const
     { return decode(m_aQuery, getEscapePrefix(), eMechanism, eCharset); }
 
-    inline bool SetParam(ByteString const & rTheQuery,
+    inline bool SetParam(const rtl::OString& rTheQuery,
                          EncodeMechanism eMechanism = WAS_ENCODED,
                          rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
@@ -951,7 +951,7 @@ public:
                                  = RTL_TEXTENCODING_UTF8) const
     { return decode(m_aFragment, getEscapePrefix(), eMechanism, eCharset); }
 
-    inline bool SetMark(ByteString const & rTheFragment,
+    inline bool SetMark(const rtl::OString& rTheFragment,
                         EncodeMechanism eMechanism = WAS_ENCODED,
                         rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
@@ -1073,7 +1073,7 @@ public:
         @return  The encoded representation of the text ('forbidden'
         characters replaced by escape sequences).
      */
-    static inline rtl::OUString encode(ByteString const & rText, Part ePart,
+    static inline rtl::OUString encode(const rtl::OString& rText, Part ePart,
                                    sal_Char cEscapePrefix,
                                    EncodeMechanism eMechanism,
                                    rtl_TextEncoding eCharset
@@ -1190,7 +1190,7 @@ public:
                                rtl_TextEncoding eCharset
                                    = RTL_TEXTENCODING_UTF8) const;
 
-    inline bool Append(ByteString const & rTheSegment,
+    inline bool Append(const rtl::OString& rTheSegment,
                        EncodeMechanism eMechanism = WAS_ENCODED,
                        rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
     { return appendSegment(extend(rTheSegment), true, eMechanism, eCharset); }
@@ -1426,7 +1426,7 @@ private:
 
     // Coding:
 
-    static inline rtl::OUString extend(ByteString const & rOctets)
+    static inline rtl::OUString extend(const rtl::OString& rOctets)
     {
         return rtl::OUString(rOctets.GetBuffer(), rOctets.Len(),
             RTL_TEXTENCODING_ISO_8859_1);
@@ -1495,7 +1495,7 @@ inline rtl::OUString INetURLObject::decode(SubString const & rSubString,
                rtl::OUString();
 }
 
-inline INetURLObject::INetURLObject(ByteString const & rTheAbsURIRef,
+inline INetURLObject::INetURLObject(const rtl::OString& rTheAbsURIRef,
                                     EncodeMechanism eMechanism,
                                     rtl_TextEncoding eCharset):
     m_eScheme(INET_PROT_NOT_VALID), m_eSmartScheme(INET_PROT_HTTP)
@@ -1513,7 +1513,7 @@ inline INetURLObject::INetURLObject(rtl::OUString const & rTheAbsURIRef,
                  FSysStyle(0));
 }
 
-inline bool INetURLObject::SetURL(ByteString const & rTheAbsURIRef,
+inline bool INetURLObject::SetURL(const rtl::OString& rTheAbsURIRef,
                                   EncodeMechanism eMechanism,
                                   rtl_TextEncoding eCharset)
 {
@@ -1539,7 +1539,7 @@ inline INetURLObject::INetURLObject(rtl::OUString const & rTheAbsURIRef,
     setAbsURIRef(rTheAbsURIRef, false, eMechanism, eCharset, true, eStyle);
 }
 
-inline bool INetURLObject::SetSmartURL(ByteString const & rTheAbsURIRef,
+inline bool INetURLObject::SetSmartURL(const rtl::OString& rTheAbsURIRef,
                                        EncodeMechanism eMechanism,
                                        rtl_TextEncoding eCharset,
                                        FSysStyle eStyle)
@@ -1558,7 +1558,7 @@ inline bool INetURLObject::SetSmartURL(rtl::OUString const & rTheAbsURIRef,
 }
 
 inline INetURLObject
-INetURLObject::smartRel2Abs(ByteString const & rTheRelURIRef,
+INetURLObject::smartRel2Abs(const rtl::OString& rTheRelURIRef,
                             bool & rWasAbsolute,
                             bool bIgnoreFragment,
                             EncodeMechanism eMechanism,
@@ -1589,7 +1589,7 @@ INetURLObject::smartRel2Abs(rtl::OUString const & rTheRelURIRef,
     return aTheAbsURIRef;
 }
 
-inline bool INetURLObject::GetNewAbsURL(ByteString const & rTheRelURIRef,
+inline bool INetURLObject::GetNewAbsURL(const rtl::OString& rTheRelURIRef,
                                         INetURLObject * pTheAbsURIRef,
                                         EncodeMechanism eMechanism,
                                         rtl_TextEncoding eCharset,
@@ -1626,8 +1626,8 @@ inline bool INetURLObject::GetNewAbsURL(rtl::OUString const & rTheRelURIRef,
 }
 
 // static
-inline rtl::OUString INetURLObject::GetRelURL(ByteString const & rTheBaseURIRef,
-                                          ByteString const & rTheAbsURIRef,
+inline rtl::OUString INetURLObject::GetRelURL(const rtl::OString& rTheBaseURIRef,
+                                          const rtl::OString& rTheAbsURIRef,
                                           EncodeMechanism eEncodeMechanism,
                                           DecodeMechanism eDecodeMechanism,
                                           rtl_TextEncoding eCharset,
@@ -1656,8 +1656,7 @@ inline rtl::OUString INetURLObject::GetRelURL(rtl::OUString const & rTheBaseURIR
 }
 
 // static
-inline bool INetURLObject::translateToExternal(ByteString const &
-                                                   rTheIntURIRef,
+inline bool INetURLObject::translateToExternal(const rtl::OString& rTheIntURIRef,
                                                rtl::OUString & rTheExtURIRef,
                                                DecodeMechanism
                                                    eDecodeMechanism,
@@ -1683,7 +1682,7 @@ inline bool INetURLObject::translateToExternal(rtl::OUString const &
 }
 
 // static
-inline bool INetURLObject::translateToInternal(ByteString const &
+inline bool INetURLObject::translateToInternal(const rtl::OString&
                                                    rTheExtURIRef,
                                                rtl::OUString & rTheIntURIRef,
                                                DecodeMechanism
@@ -1709,11 +1708,11 @@ inline bool INetURLObject::translateToInternal(rtl::OUString const &
                            eDecodeMechanism, eCharset);
 }
 
-inline bool INetURLObject::SetPass(ByteString const & rThePassword,
+inline bool INetURLObject::SetPass(const rtl::OString& rThePassword,
                                    EncodeMechanism eMechanism,
                                    rtl_TextEncoding eCharset)
 {
-    return rThePassword.Len() == 0 ?
+    return rThePassword.isEmpty() ?
                clearPassword() :
                setPassword(extend(rThePassword), true, eMechanism, eCharset);
 }
@@ -1722,18 +1721,18 @@ inline bool INetURLObject::SetPass(rtl::OUString const & rThePassword,
                                    EncodeMechanism eMechanism,
                                    rtl_TextEncoding eCharset)
 {
-    return rThePassword.getLength() == 0 ?
+    return rThePassword.isEmpty() ?
                clearPassword() :
                setPassword(rThePassword, false, eMechanism, eCharset);
 }
 
-inline bool INetURLObject::SetUserAndPass(ByteString const & rTheUser,
-                                          ByteString const & rThePassword,
+inline bool INetURLObject::SetUserAndPass(const rtl::OString& rTheUser,
+                                          const rtl::OString& rThePassword,
                                           EncodeMechanism eMechanism,
                                           rtl_TextEncoding eCharset)
 {
     return setUser(extend(rTheUser), true, eMechanism, eCharset)
-           && (rThePassword.Len() == 0 ?
+           && (rThePassword.isEmpty() ?
                    clearPassword() :
                    setPassword(extend(rThePassword), true, eMechanism,
                                eCharset));
@@ -1745,7 +1744,7 @@ inline bool INetURLObject::SetUserAndPass(rtl::OUString const & rTheUser,
                                           rtl_TextEncoding eCharset)
 {
     return setUser(rTheUser, false, eMechanism, eCharset)
-           && (rThePassword.getLength() == 0 ?
+           && (rThePassword.isEmpty() ?
                    clearPassword() :
                    setPassword(rThePassword, false, eMechanism, eCharset));
 }
@@ -1761,11 +1760,11 @@ inline bool INetURLObject::insertName(rtl::OUString const & rTheName,
                       bIgnoreFinalSlash, eMechanism, eCharset);
 }
 
-inline bool INetURLObject::SetParam(ByteString const & rTheQuery,
+inline bool INetURLObject::SetParam(const rtl::OString& rTheQuery,
                                     EncodeMechanism eMechanism,
                                     rtl_TextEncoding eCharset)
 {
-    return rTheQuery.Len() == 0 ?
+    return rTheQuery.isEmpty() ?
                clearQuery() :
                setQuery(extend(rTheQuery), true, eMechanism, eCharset);
 }
@@ -1774,16 +1773,16 @@ inline bool INetURLObject::SetParam(rtl::OUString const & rTheQuery,
                                     EncodeMechanism eMechanism,
                                     rtl_TextEncoding eCharset)
 {
-    return rTheQuery.getLength() == 0 ?
+    return rTheQuery.isEmpty() ?
                clearQuery() :
                setQuery(rTheQuery, false, eMechanism, eCharset);
 }
 
-inline bool INetURLObject::SetMark(ByteString const & rTheFragment,
+inline bool INetURLObject::SetMark(const rtl::OString& rTheFragment,
                                    EncodeMechanism eMechanism,
                                    rtl_TextEncoding eCharset)
 {
-    return rTheFragment.Len() == 0 ?
+    return rTheFragment.isEmpty() ?
                clearFragment() :
                setFragment(extend(rTheFragment), true, eMechanism, eCharset);
 }
@@ -1792,7 +1791,7 @@ inline bool INetURLObject::SetMark(rtl::OUString const & rTheFragment,
                                    EncodeMechanism eMechanism,
                                    rtl_TextEncoding eCharset)
 {
-    return rTheFragment.getLength() == 0 ?
+    return rTheFragment.isEmpty() ?
                clearFragment() :
                setFragment(rTheFragment, false, eMechanism, eCharset);
 }
@@ -1805,7 +1804,7 @@ inline INetURLObject::INetURLObject(rtl::OUString const & rFSysPath,
 }
 
 // static
-inline rtl::OUString INetURLObject::encode(ByteString const & rText, Part ePart,
+inline rtl::OUString INetURLObject::encode(const rtl::OString& rText, Part ePart,
                                        sal_Char cEscapePrefix,
                                        EncodeMechanism eMechanism,
                                        rtl_TextEncoding eCharset)

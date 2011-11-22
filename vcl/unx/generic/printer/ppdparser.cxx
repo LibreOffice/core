@@ -34,6 +34,7 @@
 
 #include <boost/unordered_map.hpp>
 
+#include <comphelper/string.hxx>
 #include "vcl/ppdparser.hxx"
 #include "vcl/strhelper.hxx"
 #include "vcl/helper.hxx"
@@ -604,13 +605,13 @@ String PPDParser::getPPDPrinterName( const String& rFile )
             if( aCurLine.CompareIgnoreCaseToAscii( "*include:", 9 ) == COMPARE_EQUAL )
             {
                 aCurLine.Erase( 0, 9 );
-                aCurLine.EraseLeadingChars( ' ' );
+                aCurLine = comphelper::string::stripStart(aCurLine, ' ');
                 aCurLine.EraseTrailingChars( ' ' );
-                aCurLine.EraseLeadingChars( '\t' );
+                aCurLine = comphelper::string::stripStart(aCurLine, '\t');
                 aCurLine.EraseTrailingChars( '\t' );
                 aCurLine.EraseTrailingChars( '\r' );
                 aCurLine.EraseTrailingChars( '\n' );
-                aCurLine.EraseLeadingChars( '"' );
+                aCurLine = comphelper::string::stripStart(aCurLine, '"');
                 aCurLine.EraseTrailingChars( '"' );
                 aStream.Close();
                 aStream.Open( getPPDFile( aCurLine ) );
@@ -703,13 +704,13 @@ PPDParser::PPDParser( const String& rFile ) :
                 if( aCurLine.CompareIgnoreCaseToAscii( "*include:", 9 ) == COMPARE_EQUAL )
                 {
                     aCurLine.Erase( 0, 9 );
-                    aCurLine.EraseLeadingChars( ' ' );
+                    aCurLine = comphelper::string::stripStart(aCurLine, ' ');
                     aCurLine.EraseTrailingChars( ' ' );
-                    aCurLine.EraseLeadingChars( '\t' );
+                    aCurLine = comphelper::string::stripStart(aCurLine, '\t');
                     aCurLine.EraseTrailingChars( '\t' );
                     aCurLine.EraseTrailingChars( '\r' );
                     aCurLine.EraseTrailingChars( '\n' );
-                    aCurLine.EraseLeadingChars( '"' );
+                    aCurLine = comphelper::string::stripStart(aCurLine, '"');
                     aCurLine.EraseTrailingChars( '"' );
                     aStream.Close();
                     aStream.Open( getPPDFile( String( aCurLine, m_aFileEncoding ) ) );

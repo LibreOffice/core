@@ -39,6 +39,7 @@ $(eval $(call gb_Library_add_api,scd,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,scd,\
+        comphelper \
         cppu \
         cppuhelper \
         sal \

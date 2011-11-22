@@ -83,7 +83,8 @@
 #include <valgrind/callgrind.h>
 #endif
 
-#include "comphelper/processfactory.hxx"
+#include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include "com/sun/star/beans/XMaterialHolder.hpp"
 #include "com/sun/star/beans/NamedValue.hpp"
 
@@ -2085,9 +2086,9 @@ void PrintFontManager::initFontsAlias()
             ByteString aMap     = GetCommandLineToken( 1, aLine );
 
             // remove eventual quotes
-            aAlias.EraseLeadingChars( '"' );
+            aAlias = comphelper::string::stripStart(aAlias, '"');
             aAlias.EraseTrailingChars( '"' );
-            aMap.EraseLeadingChars( '"' );
+            aMap = comphelper::string::stripStart(aMap, '"');
             aMap.EraseTrailingChars( '"' );
 
             XLFDEntry aAliasEntry, aMapEntry;

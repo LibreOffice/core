@@ -72,7 +72,7 @@ rtl::OString SimpleConfig::getNext()
 #pragma warning (pop)
 #endif
 
-    aStringBuffer.EraseLeadingChars( '\t' );
+    aStringBuffer = comphelper::string::stripStart(aStringBuffer, '\t');
 
     return aString;
 }

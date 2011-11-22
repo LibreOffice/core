@@ -1281,7 +1281,7 @@ ByteString Export::GetPairedListID( const ByteString& sText ){
     sIdent.ToUpperAscii();
     while( sIdent.SearchAndReplace( "\t", " " ) != STRING_NOTFOUND ) {};
     sIdent.EraseTrailingChars( ' ' );
-    sIdent.EraseLeadingChars( ' ' );
+    sIdent = comphelper::string::stripStart(sIdent, ' ');
     return sIdent;
 }
 ByteString Export::GetPairedListString( const ByteString& sText ){
@@ -1292,7 +1292,7 @@ ByteString Export::GetPairedListString( const ByteString& sText ){
     ByteString s1 = sString.Copy( sString.Search( '\"' )+1 );
     sString = s1.Copy( 0 , s1.SearchBackward( '\"' ) );
     sString.EraseTrailingChars( ' ' );
-    sString.EraseLeadingChars( ' ' );
+    sString = comphelper::string::stripStart(sString, ' ');
     return sString;
 }
 ByteString Export::StripList( const ByteString& sText ){
@@ -1547,7 +1547,7 @@ ByteString Export::GetText( const ByteString &rSource, int nToken )
                             STRING_NOTFOUND ) {};
                         while( sToken.SearchAndReplace( "  ", " " ) !=
                             STRING_NOTFOUND ) {};
-                        sToken.EraseLeadingChars( ' ' );
+                        sToken = comphelper::string::stripStart(sToken, ' ');
                         sToken.EraseTrailingChars( ' ' );
                         if ( sToken.Len()) {
                             sReturn += "\\\" ";

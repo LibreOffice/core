@@ -41,6 +41,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -729,7 +730,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                             }
                             else if ( bIsXLS && bMaybeText )
                             {
-                                aHeader.EraseLeadingChars();
+                                aHeader = comphelper::string::stripStart(aHeader, ' ');
                                 if( aHeader.CompareTo( "<?xml", 5 ) == COMPARE_EQUAL )
                                     pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilter2003XML) );
                                 else

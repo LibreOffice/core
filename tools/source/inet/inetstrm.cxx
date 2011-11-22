@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
+#include <comphelper/string.hxx>
 #include <sal/types.h>
 #include <rtl/memory.h>
 #include <rtl/strbuf.hxx>
@@ -510,7 +511,7 @@ int INetMessageOStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
                 aField.Copy (0, nPos));
             ByteString aValue (
                 aField.Copy (nPos + 1, aField.Len() - nPos + 1));
-            aValue.EraseLeadingChars (' ');
+            aValue = comphelper::string::stripStart(aValue, ' ');
 
             pTargetMsg->SetHeaderField (
                 INetMessageHeader (aName, aValue));
@@ -1298,8 +1299,8 @@ INetMIMEMessageStream::GetMsgEncoding (const String& rContentType)
             if (rContentType.GetTokenCount ('=') > 1)
             {
                 String aCharset (rContentType.GetToken (1, '='));
-                aCharset.EraseLeadingChars (' ');
-                aCharset.EraseLeadingChars ('"');
+                aCharset = comphelper::string::stripStart(aCharset, ' ');
+                aCharset = comphelper::string::stripStart(aCharset, '"');
 
                 if (aCharset.CompareIgnoreCaseToAscii ("us-ascii", 8) == 0)
                     return INETMSG_ENCODING_7BIT;

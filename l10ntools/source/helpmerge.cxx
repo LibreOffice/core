@@ -512,8 +512,8 @@ ByteString HelpParser::GetOutpath( const ByteString& rPathX , const ByteString& 
     testpath += sCur;
     testpath += sDelimiter;
     ByteString sRelativePath( rPathY );
-    sRelativePath.EraseLeadingChars( '/' );
-    sRelativePath.EraseLeadingChars( '\\' );
+    sRelativePath = comphelper::string::stripStart(sRelativePath, '/');
+    sRelativePath = comphelper::string::stripStart(sRelativePath, '\\');
     testpath += sRelativePath;
     testpath += sDelimiter;
     return testpath;

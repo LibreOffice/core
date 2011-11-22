@@ -130,8 +130,8 @@ void BmpCreator::ImplCreate( const ::std::vector< DirEntry >& rInDirs,
             if( !pSRS->ReadLine( aLine ) )
                 break;
 
-            aLine.EraseLeadingChars( ' ' );
-            aLine.EraseLeadingChars( '\t' );
+            aLine = comphelper::string::stripStart(aLine, ' ');
+            aLine = comphelper::string::stripStart(aLine, '\t');
             aLine = comphelper::string::remove(aLine, ';');
 
             if (comphelper::string::isdigitAsciiString(aLine))

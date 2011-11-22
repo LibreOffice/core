@@ -28,9 +28,9 @@
 #ifndef _NEWSTYLE_HXX
 #define _NEWSTYLE_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-
+#include <comphelper/string.hxx>
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
 #include <vcl/button.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/combobox.hxx>
@@ -57,7 +57,7 @@ public:
     SfxNewStyleDlg( Window* pParent, SfxStyleSheetBasePool& );
     ~SfxNewStyleDlg();
 
-    String                  GetName() const { return aColBox.GetText().EraseLeadingChars(); }
+    String                  GetName() const { return comphelper::string::stripStart(aColBox.GetText(), ' '); }
 };
 
 #endif
