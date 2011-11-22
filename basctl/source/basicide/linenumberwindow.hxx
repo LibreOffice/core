@@ -38,7 +38,6 @@ private:
     ModulWindow* m_pModulWindow;
     int m_nWidth;
     long m_nCurYOffset;
-    int m_nCharWidth;
     int m_nBaseWidth;
     virtual void DataChanged(DataChangedEvent const & rDCEvt);
 
