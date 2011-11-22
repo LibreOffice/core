@@ -494,8 +494,9 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
 #define REF_DAYS         0
 #define REF_MONTHS       1
 #define REF_GMONTHS      2
-#define REF_ERAS         3
-#define REF_OFFSET_COUNT 4
+#define REF_PMONTHS      3
+#define REF_ERAS         4
+#define REF_OFFSET_COUNT 5
 
 Sequence< CalendarItem2 > &LocaleData::getCalendarItemByName(const OUString& name,
         const Locale& rLocale, const Sequence< Calendar2 >& calendarsSeq, sal_Int16 item)
@@ -538,6 +539,8 @@ Sequence< CalendarItem2 > &LocaleData::getCalendarItemByName(const OUString& nam
             return ref_cal.Months;
         case REF_GMONTHS:
             return ref_cal.GenitiveMonths;
+        case REF_PMONTHS:
+            return ref_cal.PartitiveMonths;
         default:
             OSL_FAIL( "LocaleData::getCalendarItemByName: unhandled REF_* case");
             // fallthru
@@ -569,6 +572,7 @@ Sequence< CalendarItem2 > LocaleData::getCalendarItems(
             case REF_DAYS:
             case REF_MONTHS:
             case REF_GMONTHS:
+            case REF_PMONTHS:
                 for (sal_Int16 j = 0; j < nSize; ++j, ++pItem)
                 {
                     CalendarItem2 item( allCalendars[rnOffset], allCalendars[rnOffset+1],
@@ -620,13 +624,15 @@ LocaleData::getAllCalendars2( const Locale& rLocale ) throw(RuntimeException)
                     rLocale, calendarsSeq);
             Sequence< CalendarItem2 > gmonths = getCalendarItems( allCalendars, offset, REF_GMONTHS, i,
                     rLocale, calendarsSeq);
+            Sequence< CalendarItem2 > pmonths = getCalendarItems( allCalendars, offset, REF_PMONTHS, i,
+                    rLocale, calendarsSeq);
             Sequence< CalendarItem2 > eras = getCalendarItems( allCalendars, offset, REF_ERAS, i,
                     rLocale, calendarsSeq);
             OUString startOfWeekDay(allCalendars[offset]);
             offset++;
             sal_Int16 minimalDaysInFirstWeek = allCalendars[offset][0];
             offset++;
-            Calendar2 aCalendar(days, months, gmonths, eras, startOfWeekDay,
+            Calendar2 aCalendar(days, months, gmonths, pmonths, eras, startOfWeekDay,
                     minimalDaysInFirstWeek, defaultCalendar, calendarID);
             calendarsSeq[i] = aCalendar;
         }

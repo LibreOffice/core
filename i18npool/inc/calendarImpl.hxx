@@ -90,6 +90,7 @@ public:
     virtual com::sun::star::uno::Sequence < CalendarItem2 > SAL_CALL getDays2() throw(com::sun::star::uno::RuntimeException);
     virtual com::sun::star::uno::Sequence < CalendarItem2 > SAL_CALL getMonths2() throw(com::sun::star::uno::RuntimeException);
     virtual com::sun::star::uno::Sequence < CalendarItem2 > SAL_CALL getGenitiveMonths2() throw(com::sun::star::uno::RuntimeException);
+    virtual com::sun::star::uno::Sequence < CalendarItem2 > SAL_CALL getPartitiveMonths2() throw(com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException);

@@ -632,4 +632,25 @@ String CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_In
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > (0);
 }
 
+
+::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > CalendarWrapper::getPartitiveMonths() const
+{
+    try
+    {
+        if ( xC.is() )
+            return xC->getPartitiveMonths2();
+    }
+    catch ( Exception& e )
+    {
+#ifdef DBG_UTIL
+        ByteString aMsg( "getPartitiveMonths: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#else
+        (void)e;
+#endif
+    }
+    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > (0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

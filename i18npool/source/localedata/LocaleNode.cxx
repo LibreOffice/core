@@ -1204,6 +1204,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
     sal_Int16 * nbOfDays = new sal_Int16[nbOfCalendars];
     sal_Int16 * nbOfMonths = new sal_Int16[nbOfCalendars];
     sal_Int16 * nbOfGenitiveMonths = new sal_Int16[nbOfCalendars];
+    sal_Int16 * nbOfPartitiveMonths = new sal_Int16[nbOfCalendars];
     sal_Int16 * nbOfEras = new sal_Int16[nbOfCalendars];
     sal_Int16 j;
     sal_Int16 i;
@@ -1322,6 +1323,42 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         }
         ++nChild;
 
+        // Generate partitive Months of Year
+        // Optional, if not present fall back to genitive months, or nominative 
+        // months (nouns) if that isn't present either.
+        if (!calNode->getChildAt(nChild)->getName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PartitiveMonths")))
+            --nChild;
+        LocaleNode * partitiveMonthsNode = NULL;
+        ref_name = calNode->getChildAt(nChild)->getAttr().getValueByName("ref");
+        if (ref_name.getLength() > 0 && i > 0) {
+            for (j = 0; j < i; j++) {
+                str = getChildAt(j)->getAttr().getValueByName("unoid");
+                if (str.equals(ref_name))
+                    partitiveMonthsNode = getChildAt(j)->getChildAt(1);
+            }
+        }
+        if (ref_name.getLength() > 0 && partitiveMonthsNode == NULL) {
+            of.writeParameter("partitiveMonthRef", OUString(RTL_CONSTASCII_USTRINGPARAM("ref")), i);
+            of.writeParameter("partitiveMonthRefName", ref_name, i);
+            nbOfPartitiveMonths[i] = 0;
+        } else {
+            if (partitiveMonthsNode == NULL)
+                partitiveMonthsNode = calNode -> getChildAt(nChild);
+            nbOfPartitiveMonths[i] = sal::static_int_cast<sal_Int16>( partitiveMonthsNode->getNumberOfChildren() );
+            if (bGregorian && nbOfPartitiveMonths[i] != 12)
+                incErrorInt( "A Gregorian calendar must have 12 partitive months, this one has %d", nbOfPartitiveMonths[i]);
+            elementTag = "partitiveMonth";
+            for (j = 0; j < nbOfPartitiveMonths[i]; j++) {
+                LocaleNode *currNode = partitiveMonthsNode -> getChildAt(j);
+                OUString partitiveMonthID( currNode->getChildAt(0)->getValue());
+                of.writeParameter("partitiveMonthID", partitiveMonthID, i, j);
+                if (j == 0 && bGregorian && !partitiveMonthID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "jan")))
+                    incError( "First partitive month of a year of a Gregorian calendar must be <MonthID>jan</MonthID>");
+                lcl_writeAbbrFullNarrNames( of, currNode, elementTag, i, j);
+            }
+        }
+        ++nChild;
+
         // Generate Era name
         LocaleNode * erasNode = NULL;
         ref_name =   calNode -> getChildAt(nChild) ->getAttr().getValueByName("ref");
@@ -1411,6 +1448,14 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
     of.writeInt(nbOfGenitiveMonths[i]);
     of.writeAsciiString("};\n");
 
+    of.writeAsciiString("static const sal_Unicode nbOfPartitiveMonths[] = {");
+    for(i = 0; i < nbOfCalendars - 1; i++) {
+        of.writeInt(nbOfPartitiveMonths[i]);
+        of.writeAsciiString(", ");
+    };
+    of.writeInt(nbOfPartitiveMonths[i]);
+    of.writeAsciiString("};\n");
+
     of.writeAsciiString("static const sal_Unicode nbOfEras[] = {");
     for(i = 0; i < nbOfCalendars - 1; i++) {
         of.writeInt(nbOfEras[i]);
@@ -1424,6 +1469,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
     of.writeAsciiString("\tnbOfDays,\n");
     of.writeAsciiString("\tnbOfMonths,\n");
     of.writeAsciiString("\tnbOfGenitiveMonths,\n");
+    of.writeAsciiString("\tnbOfPartitiveMonths,\n");
     of.writeAsciiString("\tnbOfEras,\n");
     for(i = 0; i < nbOfCalendars; i++) {
         of.writeAsciiString("\tcalendarID");
@@ -1435,6 +1481,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         lcl_writeAbbrFullNarrArrays( of, nbOfDays[i], "day", i, true);
         lcl_writeAbbrFullNarrArrays( of, nbOfMonths[i], "month", i, true);
         lcl_writeAbbrFullNarrArrays( of, nbOfGenitiveMonths[i], "genitiveMonth", i, true);
+        lcl_writeAbbrFullNarrArrays( of, nbOfPartitiveMonths[i], "partitiveMonth", i, true);
         lcl_writeAbbrFullNarrArrays( of, nbOfEras[i], "era", i, false /*noNarrow*/);
         of.writeAsciiString("\tstartDayOfWeek");of.writeInt(i); of.writeAsciiString(",\n");
         of.writeAsciiString("\tminimalDaysInFirstWeek");of.writeInt(i); of.writeAsciiString(",\n");
@@ -1446,6 +1493,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
     delete []nbOfDays;
     delete []nbOfMonths;
     delete []nbOfGenitiveMonths;
+    delete []nbOfPartitiveMonths;
     delete []nbOfEras;
 }
 

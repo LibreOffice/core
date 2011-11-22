@@ -476,14 +476,25 @@ private:
 
     SVL_DLLPRIVATE bool ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const;
 
-    /** Whether to use possessive genitive case month name instead of noun.
+    /** Whether to use possessive genitive case month name, or partitive case 
+        month name, instead of nominative name (noun).
+
         @param io_nState
-            0: execute check, set to 1 if true is returned, set to 2 if false 
-               is returned <br>
-            1: don't execute check, return true <br>
-            2: don't execute check, return false <br>
+            0: execute check <br>
+               set to 1 if nominative case is returned, <br>
+               set to 2 if genitive case is returned, <br>
+               set to 3 if partitive case is returned <br>
+            1: don't execute check, return nominative case <br>
+            2: don't execute check, return genitive case <br>
+            3: don't execute check, return partitive case <br>
+
+        @param eCodeType
+            a NfKeywordIndex, must designate a month type code
+
+        @returns one of com::sun::star::i18n::CalendarDisplayCode values 
+            according to eCodeType and the check executed (or passed).
      */
-    SVL_DLLPRIVATE bool ImpUseGenitiveMonth( int & io_nState, const ImpSvNumFor& rNumFor ) const;
+    SVL_DLLPRIVATE sal_Int32 ImpUseMonthCase( int & io_nState, const ImpSvNumFor& rNumFor, NfKeywordIndex eCodeType ) const;
 
 #ifdef THE_FUTURE
     SVL_DLLPRIVATE bool ImpSwitchToSpecifiedCalendar( String& rOrgCalendar,

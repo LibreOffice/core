@@ -42,11 +42,15 @@ module com { module sun { module star { module i18n {
     <member>XLocaleData3::getAllCalendars2()</member>.
 
     <p> Similar to
-    <type scope="::com::sun::star::i18n">Calendar</type> this provides
-    an additional member with a sequence of possessive (genitive case) 
-    month names for locales that use them, for example Slavic locales. 
-    If a locale does not provide the possessive form, the names are 
-    identical to the nouns in <member>Calendar::Months</member> </p>
+    <type scope="::com::sun::star::i18n">Calendar</type> this provides 
+    additional members with a sequence of possessive (genitive case) and 
+    partitive case month names for locales that use them, for example 
+    Slavic locales. If a locale does not provide the possessive form in 
+    <member>GenitiveMonths</member>, the names are identical to the 
+    nominative case nouns in <member>Calendar::Months</member>. If a 
+    locale does not provide the partitive case in 
+    <member>PartitiveMonths</member>, the names are identical to 
+    <member>GenititiveMonths</member>. </p>
 
     <p> The sequences are of type
     <type scope="com::sun::star::i18n">CalendarItem2</type> instead of
@@ -69,6 +73,9 @@ published struct Calendar2
 
     /// The months of the year in possessive genitive case.
     sequence< CalendarItem2 >   GenitiveMonths;
+
+    /// The months of the year in partitive case.
+    sequence< CalendarItem2 >   PartitiveMonths;
 
     /// The possible eras.
     sequence< CalendarItem2 >   Eras;

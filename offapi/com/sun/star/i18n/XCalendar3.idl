@@ -75,6 +75,12 @@ published interface XCalendar3 : com::sun::star::i18n::XExtendedCalendar
      */
     sequence< CalendarItem2 >    getGenitiveMonths2();
 
+    //------------------------------------------------------------------------
+    /** returns a sequence of <type>CalendarItem2</type> describing the
+        partitive case month names.
+     */
+    sequence< CalendarItem2 >    getPartitiveMonths2();
+
 };
 
 //=============================================================================

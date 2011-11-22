@@ -322,6 +322,16 @@ CalendarImpl::getGenitiveMonths2() throw(RuntimeException)
 }
 
 
+Sequence< CalendarItem2 > SAL_CALL
+CalendarImpl::getPartitiveMonths2() throw(RuntimeException)
+{
+    if (xCalendar.is())
+        return xCalendar->getPartitiveMonths2();
+    else
+        throw ERROR ;
+}
+
+
 sal_Bool SAL_CALL
 CalendarImpl::isValid() throw(RuntimeException)
 {

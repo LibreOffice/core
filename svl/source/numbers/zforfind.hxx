@@ -75,6 +75,8 @@ private:
     String* pUpperAbbrevMonthText;              // Array of month names, abbreviated, uppercase
     String* pUpperGenitiveMonthText;            // Array of genitive month names, uppercase
     String* pUpperGenitiveAbbrevMonthText;      // Array of genitive month names, abbreviated, uppercase
+    String* pUpperPartitiveMonthText;           // Array of partitive month names, uppercase
+    String* pUpperPartitiveAbbrevMonthText;     // Array of partitive month names, abbreviated, uppercase
     String* pUpperDayText;                      // Array of day of week names, uppercase
     String* pUpperAbbrevDayText;                // Array of day of week names, abbreviated, uppercase
     String  aUpperCurrSymbol;                   // Currency symbol, uppercase

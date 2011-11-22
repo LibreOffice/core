@@ -87,6 +87,8 @@ ImpSvNumberInputScan::ImpSvNumberInputScan( SvNumberFormatter* pFormatterP )
         pUpperAbbrevMonthText( NULL ),
         pUpperGenitiveMonthText( NULL ),
         pUpperGenitiveAbbrevMonthText( NULL ),
+        pUpperPartitiveMonthText( NULL ),
+        pUpperPartitiveAbbrevMonthText( NULL ),
         pUpperDayText( NULL ),
         pUpperAbbrevDayText( NULL ),
         eScannedType( NUMBERFORMAT_UNDEFINED ),
@@ -111,6 +113,8 @@ ImpSvNumberInputScan::~ImpSvNumberInputScan()
     delete [] pUpperAbbrevMonthText;
     delete [] pUpperGenitiveMonthText;
     delete [] pUpperGenitiveAbbrevMonthText;
+    delete [] pUpperPartitiveMonthText;
+    delete [] pUpperPartitiveAbbrevMonthText;
     delete [] pUpperDayText;
     delete [] pUpperAbbrevDayText;
 }
@@ -570,6 +574,18 @@ short ImpSvNumberInputScan::GetMonth( const String& rString, xub_StrLen& nPos )
             else if ( StringContains( pUpperGenitiveAbbrevMonthText[i], rString, nPos ) )
             {                                           // genitive abbreviated
                 nPos = nPos + pUpperGenitiveAbbrevMonthText[i].Len();
+                res = sal::static_int_cast< short >(-(i+1)); // negative
+                break;  // for
+            }
+            else if ( StringContains( pUpperPartitiveMonthText[i], rString, nPos ) )
+            {                                           // partitive full names
+                nPos = nPos + pUpperPartitiveMonthText[i].Len();
+                res = i+1;
+                break;  // for
+            }
+            else if ( StringContains( pUpperPartitiveAbbrevMonthText[i], rString, nPos ) )
+            {                                           // partitive abbreviated
+                nPos = nPos + pUpperPartitiveAbbrevMonthText[i].Len();
                 res = sal::static_int_cast< short >(-(i+1)); // negative
                 break;  // for
             }
@@ -2453,6 +2469,18 @@ void ImpSvNumberInputScan::InitText()
     {
         pUpperGenitiveMonthText[j] = pChrCls->upper( xElems[j].FullName );
         pUpperGenitiveAbbrevMonthText[j] = pChrCls->upper( xElems[j].AbbrevName );
+    }
+
+    delete [] pUpperPartitiveMonthText;
+    delete [] pUpperPartitiveAbbrevMonthText;
+    xElems = pCal->getPartitiveMonths();
+    nElems = xElems.getLength();
+    pUpperPartitiveMonthText = new String[nElems];
+    pUpperPartitiveAbbrevMonthText = new String[nElems];
+    for ( j=0; j<nElems; j++ )
+    {
+        pUpperPartitiveMonthText[j] = pChrCls->upper( xElems[j].FullName );
+        pUpperPartitiveAbbrevMonthText[j] = pChrCls->upper( xElems[j].AbbrevName );
     }
 
     delete [] pUpperDayText;

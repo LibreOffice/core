@@ -112,6 +112,7 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > getDays() const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > getMonths() const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > getGenitiveMonths() const;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > getPartitiveMonths() const;
 
 
     // convenience methods

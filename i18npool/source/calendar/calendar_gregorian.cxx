@@ -850,6 +850,9 @@ static sal_Int32 SAL_CALL DisplayCode2FieldIndex(sal_Int32 nCalendarDisplayCode)
         case CalendarDisplayCode::SHORT_GENITIVE_MONTH_NAME:
         case CalendarDisplayCode::LONG_GENITIVE_MONTH_NAME:
         case CalendarDisplayCode::NARROW_GENITIVE_MONTH_NAME:
+        case CalendarDisplayCode::SHORT_PARTITIVE_MONTH_NAME:
+        case CalendarDisplayCode::LONG_PARTITIVE_MONTH_NAME:
+        case CalendarDisplayCode::NARROW_PARTITIVE_MONTH_NAME:
             return CalendarFieldIndex::MONTH;
         case CalendarDisplayCode::SHORT_YEAR:
         case CalendarDisplayCode::LONG_YEAR:
@@ -945,6 +948,13 @@ Calendar_gregorian::getGenitiveMonths2() throw(RuntimeException)
 }
 
 
+Sequence< CalendarItem2 > SAL_CALL
+Calendar_gregorian::getPartitiveMonths2() throw(RuntimeException)
+{
+        return aCalendar.PartitiveMonths;
+}
+
+
 OUString SAL_CALL
 Calendar_gregorian::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16 nameType ) throw(RuntimeException)
 {
@@ -975,6 +985,13 @@ Calendar_gregorian::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_I
                 if (nameType == 0) aStr = aCalendar.GenitiveMonths[idx].AbbrevName;
                 else if (nameType == 1) aStr = aCalendar.GenitiveMonths[idx].FullName;
                 else if (nameType == 2) aStr = aCalendar.GenitiveMonths[idx].NarrowName;
+                else throw ERROR;
+                break;
+            case CalendarDisplayIndex::PARTITIVE_MONTH:
+                if( idx >= aCalendar.PartitiveMonths.getLength() ) throw ERROR;
+                if (nameType == 0) aStr = aCalendar.PartitiveMonths[idx].AbbrevName;
+                else if (nameType == 1) aStr = aCalendar.PartitiveMonths[idx].FullName;
+                else if (nameType == 2) aStr = aCalendar.PartitiveMonths[idx].NarrowName;
                 else throw ERROR;
                 break;
             case CalendarDisplayIndex::ERA:
@@ -1069,6 +1086,12 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
                 return getDisplayName(CalendarDisplayIndex::GENITIVE_MONTH, value, 1);
             case CalendarDisplayCode::NARROW_GENITIVE_MONTH_NAME:
                 return getDisplayName(CalendarDisplayIndex::GENITIVE_MONTH, value, 2);
+            case CalendarDisplayCode::SHORT_PARTITIVE_MONTH_NAME:
+                return getDisplayName(CalendarDisplayIndex::PARTITIVE_MONTH, value, 0);
+            case CalendarDisplayCode::LONG_PARTITIVE_MONTH_NAME:
+                return getDisplayName(CalendarDisplayIndex::PARTITIVE_MONTH, value, 1);
+            case CalendarDisplayCode::NARROW_PARTITIVE_MONTH_NAME:
+                return getDisplayName(CalendarDisplayIndex::PARTITIVE_MONTH, value, 2);
             case CalendarDisplayCode::SHORT_ERA:
                 return getDisplayName(CalendarDisplayIndex::ERA, value, 0);
             case CalendarDisplayCode::LONG_ERA:
