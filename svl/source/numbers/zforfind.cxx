@@ -91,6 +91,9 @@ ImpSvNumberInputScan::ImpSvNumberInputScan( SvNumberFormatter* pFormatterP )
         pUpperPartitiveAbbrevMonthText( NULL ),
         pUpperDayText( NULL ),
         pUpperAbbrevDayText( NULL ),
+        bTextInitialized( false ),
+        bScanGenitiveMonths( false ),
+        bScanPartitiveMonths( false ),
         eScannedType( NUMBERFORMAT_UNDEFINED ),
         eSetType( NUMBERFORMAT_UNDEFINED )
 {
@@ -565,25 +568,25 @@ short ImpSvNumberInputScan::GetMonth( const String& rString, xub_StrLen& nPos )
         sal_Int16 nMonths = pFormatter->GetCalendar()->getNumberOfMonthsInYear();
         for ( sal_Int16 i = 0; i < nMonths; i++ )
         {
-            if ( StringContains( pUpperGenitiveMonthText[i], rString, nPos ) )
+            if ( bScanGenitiveMonths && StringContains( pUpperGenitiveMonthText[i], rString, nPos ) )
             {                                           // genitive full names first
                 nPos = nPos + pUpperGenitiveMonthText[i].Len();
                 res = i+1;
                 break;  // for
             }
-            else if ( StringContains( pUpperGenitiveAbbrevMonthText[i], rString, nPos ) )
+            else if ( bScanGenitiveMonths && StringContains( pUpperGenitiveAbbrevMonthText[i], rString, nPos ) )
             {                                           // genitive abbreviated
                 nPos = nPos + pUpperGenitiveAbbrevMonthText[i].Len();
                 res = sal::static_int_cast< short >(-(i+1)); // negative
                 break;  // for
             }
-            else if ( StringContains( pUpperPartitiveMonthText[i], rString, nPos ) )
+            else if ( bScanPartitiveMonths && StringContains( pUpperPartitiveMonthText[i], rString, nPos ) )
             {                                           // partitive full names
                 nPos = nPos + pUpperPartitiveMonthText[i].Len();
                 res = i+1;
                 break;  // for
             }
-            else if ( StringContains( pUpperPartitiveAbbrevMonthText[i], rString, nPos ) )
+            else if ( bScanPartitiveMonths && StringContains( pUpperPartitiveAbbrevMonthText[i], rString, nPos ) )
             {                                           // partitive abbreviated
                 nPos = nPos + pUpperPartitiveAbbrevMonthText[i].Len();
                 res = sal::static_int_cast< short >(-(i+1)); // negative
@@ -2462,6 +2465,7 @@ void ImpSvNumberInputScan::InitText()
     delete [] pUpperGenitiveMonthText;
     delete [] pUpperGenitiveAbbrevMonthText;
     xElems = pCal->getGenitiveMonths();
+    bScanGenitiveMonths = (nElems != xElems.getLength());
     nElems = xElems.getLength();
     pUpperGenitiveMonthText = new String[nElems];
     pUpperGenitiveAbbrevMonthText = new String[nElems];
@@ -2469,11 +2473,16 @@ void ImpSvNumberInputScan::InitText()
     {
         pUpperGenitiveMonthText[j] = pChrCls->upper( xElems[j].FullName );
         pUpperGenitiveAbbrevMonthText[j] = pChrCls->upper( xElems[j].AbbrevName );
+        if (!bScanGenitiveMonths &&
+                (pUpperGenitiveMonthText[j] != pUpperMonthText[j] ||
+                 pUpperGenitiveAbbrevMonthText[j] != pUpperAbbrevMonthText[j]))
+            bScanGenitiveMonths = true;
     }
 
     delete [] pUpperPartitiveMonthText;
     delete [] pUpperPartitiveAbbrevMonthText;
     xElems = pCal->getPartitiveMonths();
+    bScanPartitiveMonths = (nElems != xElems.getLength());
     nElems = xElems.getLength();
     pUpperPartitiveMonthText = new String[nElems];
     pUpperPartitiveAbbrevMonthText = new String[nElems];
@@ -2481,6 +2490,10 @@ void ImpSvNumberInputScan::InitText()
     {
         pUpperPartitiveMonthText[j] = pChrCls->upper( xElems[j].FullName );
         pUpperPartitiveAbbrevMonthText[j] = pChrCls->upper( xElems[j].AbbrevName );
+        if (!bScanPartitiveMonths &&
+                (pUpperPartitiveMonthText[j] != pUpperGenitiveMonthText[j] ||
+                 pUpperPartitiveAbbrevMonthText[j] != pUpperGenitiveAbbrevMonthText[j]))
+            bScanPartitiveMonths = true;
     }
 
     delete [] pUpperDayText;

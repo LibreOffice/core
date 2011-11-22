@@ -81,6 +81,8 @@ private:
     String* pUpperAbbrevDayText;                // Array of day of week names, abbreviated, uppercase
     String  aUpperCurrSymbol;                   // Currency symbol, uppercase
     bool    bTextInitialized;                   // Whether days and months are initialized
+    bool    bScanGenitiveMonths;                // Whether to scan an input for genitive months
+    bool    bScanPartitiveMonths;               // Whether to scan an input for partitive months
     Date* pNullDate;                            // 30Dec1899
                                                 // Variables for provisional results:
     String sStrArray[SV_MAX_ANZ_INPUT_STRINGS]; // Array of scanned substrings
