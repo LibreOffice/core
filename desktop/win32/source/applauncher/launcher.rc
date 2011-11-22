@@ -60,7 +60,7 @@ VS_VERSION_INFO VERSIONINFO
 				VALUE "ProductVersion",		PPS(VER_LEVEL) "\0"
 				VALUE "OriginalFilename",	PPS(RES_APP_NAME) ".exe\0"
 				VALUE "InternalName",		PPS(RES_APP_NAME) "\0"
-				VALUE "LegalCopyright", 	S_CRIGHT " Oracle and/or its affiliates. All rights reserved.\0"
+				VALUE "LegalCopyright", 	S_CRIGHT " LibreOffice contributors and/or their affiliates. All rights reserved.\0"
 			}
 		}
 
