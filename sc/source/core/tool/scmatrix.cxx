@@ -114,7 +114,8 @@ void compareMatrix(MatrixImplType& rMat)
         for (size_t j = 0; j < aDim.second; ++j)
         {
             matrix_element_t eType = rMat.get_type(i, j);
-            if (eType != mdds::element_numeric && eType == mdds::element_boolean)
+            if (eType != mdds::element_numeric && eType != mdds::element_boolean)
+                // must be of numeric type (boolean can be numeric).
                 continue;
 
             double fVal = rMat.get_numeric(i, j);
