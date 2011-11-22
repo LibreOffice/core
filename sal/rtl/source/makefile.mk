@@ -159,5 +159,5 @@ $(ALWAYSDBGFILES):
 ALLTAR : $(BOOTSTRAPMK)
 
 $(BOOTSTRAPMK) :
-    (echo '#include "macro.hxx"'; echo RTL_OS:=THIS_OS; echo RTL_ARCH:=THIS_ARCH) >$(BOOTSTRAPMK).c
-    $(CC) -E $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(BOOTSTRAPMK).c | $(GREP) '^RTL_' | $(SED) -e 's/"//g' >$@
+    (echo '#include "macro.hxx"'; echo RTL_OS:=THIS_OS; echo RTL_ARCH:=THIS_ARCH) >$(BOOTSTRAPMK).cxx
+    $(CXX) -E $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(BOOTSTRAPMK).cxx | $(GREP) '^RTL_' | $(SED) -e 's/"//g' >$@
