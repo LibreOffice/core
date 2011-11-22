@@ -1739,16 +1739,13 @@ void SvxNumberFormatTabPage::SetOkHdl( const Link& rOkHandler )
 void SvxNumberFormatTabPage::FillCurrencyBox()
 {
     SvStringsDtor   aList;
-    NfShCurrencyEntries rEntries;
-    XubString*      pEntry = NULL;
     sal_uInt16  nSelPos=0;
 
     pNumFmtShell->GetCurrencySymbols( aList, &nSelPos);
 
     for(sal_uInt16 i=1;i<aList.Count();i++)
     {
-        pEntry=aList[i];
-        aLbCurrency.InsertEntry( *pEntry);
+        aLbCurrency.InsertEntry( *aList[i] );
     }
     aLbCurrency.SelectEntryPos(nSelPos);
 }

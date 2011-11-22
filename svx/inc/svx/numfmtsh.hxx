@@ -78,10 +78,6 @@ enum SvxNumberValueType
 
 #define NUMBERFORMAT_ENTRY_NEW_CURRENCY     NUMBERFORMAT_ENTRY_NOT_FOUND-1
 
-typedef NfCurrencyEntry* NfShCurrencyEntryPtr;
-SV_DECL_PTRARR( NfShCurrencyEntries, NfShCurrencyEntryPtr, 8, 1 )
-
-
 class SvxDelStrgs: public SvStrings
 {
 

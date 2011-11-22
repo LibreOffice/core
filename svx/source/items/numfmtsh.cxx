@@ -53,8 +53,6 @@
 
 const double SvxNumberFormatShell::DEFAULT_NUMVALUE = 1234.56789;
 
-SV_IMPL_PTRARR( NfShCurrencyEntries, NfCurrencyEntry* );
-
 // -----------------------------------------------------------------------
 
 

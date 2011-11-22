@@ -241,7 +241,6 @@ NameNode::IsOrderTree() const
 NativeNumberWrapper::isValidNatNum(com::sun::star::lang::Locale const&, short) const
 NfCurrencyEntry::ApplyVariableInformation(NfCurrencyEntry const&)
 NfCurrencyEntry::NfCurrencyEntry()
-NfShCurrencyEntries::DeleteAndDestroy(unsigned short, unsigned short)
 NotificationSettings::CopyData()
 NotifyBrokenPackage::isAborted()
 NumberFormatCodeWrapper::getDefault(short, short) const
