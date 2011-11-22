@@ -433,6 +433,18 @@ void testFuncCOUNTIF(ScDocument* pDoc)
             CPPUNIT_ASSERT_MESSAGE("Unexpected result for COUNTIF", false);
         }
     }
+
+    // Don't count empty strings when searching for a number.
+
+    // Clear A1:A2.
+    clearRange(pDoc, ScRange(0, 0, 0, 0, 1, 0));
+
+    pDoc->SetString(0, 0, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=\"\"")));
+    pDoc->SetString(0, 1, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=COUNTIF(A1;1)")));
+    pDoc->CalcAll();
+
+    double result = pDoc->GetValue(0, 1, 0);
+    CPPUNIT_ASSERT_MESSAGE("We shouldn't count empty string as valid number.", result == 0.0);
 }
 
 void testFuncVLOOKUP(ScDocument* pDoc)
