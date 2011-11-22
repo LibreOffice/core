@@ -332,6 +332,8 @@ public:
     /** Returns the record ID of the following record. */
     sal_uInt16          GetNextRecId();
 
+    sal_uInt16          PeekRecId( sal_Size nPos );
+
     XclImpStream&       operator>>( sal_Int8& rnValue );
     XclImpStream&       operator>>( sal_uInt8& rnValue );
     XclImpStream&       operator>>( sal_Int16& rnValue );

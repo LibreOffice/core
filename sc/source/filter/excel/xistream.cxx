@@ -600,6 +600,19 @@ sal_uInt16 XclImpStream::GetNextRecId()
     return nRecId;
 }
 
+sal_uInt16 XclImpStream::PeekRecId( sal_Size nPos )
+{
+    sal_uInt16 nRecId = EXC_ID_UNKNOWN;
+    if (mbValidRec && nPos < mnStreamSize)
+    {
+        sal_Size nCurPos = mrStrm.Tell();
+        mrStrm.Seek(nPos);
+        mrStrm >> nRecId;
+        mrStrm.Seek(nCurPos);
+    }
+    return nRecId;
+}
+
 // ----------------------------------------------------------------------------
 
 XclImpStream& XclImpStream::operator>>( sal_Int8& rnValue )
