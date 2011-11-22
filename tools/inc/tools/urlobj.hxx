@@ -578,7 +578,7 @@ public:
                         rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
     inline bool SetUserAndPass(const rtl::OString& rTheUser,
-                               const rtl:OString& rThePassword,
+                               const rtl::OString& rThePassword,
                                EncodeMechanism eMechanism = WAS_ENCODED,
                                rtl_TextEncoding eCharset
                                    = RTL_TEXTENCODING_UTF8);
@@ -1428,8 +1428,7 @@ private:
 
     static inline rtl::OUString extend(const rtl::OString& rOctets)
     {
-        return rtl::OUString(rOctets.GetBuffer(), rOctets.Len(),
-            RTL_TEXTENCODING_ISO_8859_1);
+        return rtl::OStringToOUString(rOctets, RTL_TEXTENCODING_ISO_8859_1);
     }
 
     static inline sal_Char getEscapePrefix(INetProtocol eTheScheme)
