@@ -34,7 +34,6 @@
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/ctrl.hxx>
 
 #include "rangenam.hxx"
 #include "anyrefdg.hxx"
@@ -49,14 +48,6 @@
 class ScViewData;
 class ScDocument;
 
-
-
-class ScRangeManagerCtrl : public Control
-{
-public:
-    ScRangeManagerCtrl(Window* pParent, const ScResId& rResId):
-        Control( pParent, rResId) {}
-};
 
 //==================================================================
 

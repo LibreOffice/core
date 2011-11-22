@@ -37,25 +37,45 @@
 
 #include "namepast.hxx"
 #include "scresid.hxx"
+#include "docsh.hxx"
 #include "miscdlgs.hrc"
 #include "rangenam.hxx"
 
 
 //==================================================================
 
-ScNamePasteDlg::ScNamePasteDlg( Window * pParent, const ScRangeName* pList, const ScRangeName* pLocalList, bool bInsList )
+ScNamePasteDlg::ScNamePasteDlg( Window * pParent, ScDocShell* pShell, bool bInsList )
     : ModalDialog( pParent, ScResId( RID_SCDLG_NAMES_PASTE ) ),
     maHelpButton     ( this, ScResId( BTN_HELP ) ),
     maBtnClose       ( this, ScResId( BTN_CLOSE ) ),
     maBtnPaste       ( this, ScResId( BTN_PASTE ) ),
-    maBtnPasteAll    ( this, ScResId( BTN_PASTE_ALL ) )
+    maBtnPasteAll    ( this, ScResId( BTN_PASTE_ALL ) ),
+    maFlDiv          ( this, ScResId( FL_DIV ) ),
+    maCtrl           ( this, ScResId( CTRL_TABLE ) )
 {
+    ScDocument* pDoc = pShell->GetDocument();
+    std::map<rtl::OUString, ScRangeName*> aCopyMap;
+    boost::ptr_map<rtl::OUString, ScRangeName> aRangeMap;
+    pDoc->GetRangeNameMap(aCopyMap);
+    std::map<rtl::OUString, ScRangeName*>::iterator itr = aCopyMap.begin(), itrEnd = aCopyMap.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        rtl::OUString aTemp(itr->first);
+        aRangeMap.insert(aTemp, new ScRangeName(*itr->second));
+    }
+
+    mpTable = new ScRangeManagerTable(&maCtrl, aRangeMap);
 
     maBtnPaste.SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl) );
     maBtnPasteAll.SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl));
     maBtnClose.SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl));
 
     FreeResource();
+}
+
+ScNamePasteDlg::~ScNamePasteDlg()
+{
+    delete mpTable;
 }
 
 //------------------------------------------------------------------
@@ -68,6 +88,12 @@ IMPL_LINK( ScNamePasteDlg, ButtonHdl, Button *, pButton )
     }
     else if( pButton == &maBtnPaste )
     {
+        std::vector<ScRangeNameLine> aSelectedLines = mpTable->GetSelectedEntries();
+        for (std::vector<ScRangeNameLine>::const_iterator itr = aSelectedLines.begin();
+                itr != aSelectedLines.end(); ++itr)
+        {
+            maSelectedNames.push_back(itr->aName);
+        }
         EndDialog( BTN_PASTE_NAME );
     }
     else if( pButton == &maBtnClose )
@@ -81,9 +107,7 @@ IMPL_LINK( ScNamePasteDlg, ButtonHdl, Button *, pButton )
 
 std::vector<rtl::OUString> ScNamePasteDlg::GetSelectedNames() const
 {
-    std::vector<rtl::OUString> aSelectedNames;
-    //aSelectedNames.push_back(aNameList.GetSelectEntry());
-    return aSelectedNames;
+    return maSelectedNames;
 }
 
 bool ScNamePasteDlg::IsAllSelected() const

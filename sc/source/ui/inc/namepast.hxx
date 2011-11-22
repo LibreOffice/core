@@ -33,23 +33,34 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
+#include "namemgrtable.hxx"
 
 #include <vector>
 
 #include "scui_def.hxx"
 class ScRangeName;
+class ScDocShell;
 
 class ScNamePasteDlg : public ModalDialog
 {
     DECL_LINK( ButtonHdl, Button * );
 
-protected:
+private:
     HelpButton      maHelpButton;
     PushButton      maBtnClose;
     PushButton      maBtnPaste;
     PushButton      maBtnPasteAll;
+    FixedLine       maFlDiv;
+
+    ScRangeManagerCtrl maCtrl;
+
+    ScRangeManagerTable* mpTable;
+
+    std::vector<rtl::OUString> maSelectedNames;
 public:
-    ScNamePasteDlg( Window * pParent, const ScRangeName* pList, const ScRangeName* pLocalList, bool bInsList=true );
+    ScNamePasteDlg( Window * pParent, ScDocShell* pShell, bool bInsList=true );
+
+    virtual ~ScNamePasteDlg();
 
     std::vector<rtl::OUString> GetSelectedNames() const;
     bool            IsAllSelected() const;

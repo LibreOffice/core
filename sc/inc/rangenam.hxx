@@ -199,7 +199,7 @@ public:
     typedef DataType::iterator iterator;
 
     ScRangeName();
-    ScRangeName(const ScRangeName& r);
+    SC_DLLPUBLIC ScRangeName(const ScRangeName& r);
 
     SC_DLLPUBLIC const ScRangeData* findByRange(const ScRange& rRange) const;
     SC_DLLPUBLIC ScRangeData* findByName(const rtl::OUString& rName);

@@ -27,14 +27,30 @@
  */
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
+#include <vcl/ctrl.hxx>
+
+#include "scresid.hxx"
 
 #include <vector>
+#include <boost/ptr_container/ptr_map.hpp>
+
+class ScRangeName;
 
 struct ScRangeNameLine
 {
     rtl::OUString aName;
     rtl::OUString aExpression;
     rtl::OUString aScope;
+};
+
+/** Implements the Control behind the table
+ *  It controls the size of the table
+ */
+class ScRangeManagerCtrl : public Control
+{
+public:
+    ScRangeManagerCtrl(Window* pParent, const ScResId& rResId):
+        Control( pParent, rResId) {}
 };
 
 //Implements the table for the manage names dialog

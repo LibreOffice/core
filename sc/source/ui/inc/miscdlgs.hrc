@@ -94,6 +94,8 @@
 #define BTN_CLOSE       60
 #define BTN_PASTE       61
 #define BTN_PASTE_ALL   62
+#define CTRL_TABLE      63
+#define FL_DIV          64
 
 // Tabelle einfuegen/loeschen
 #define FT_DEST         1
