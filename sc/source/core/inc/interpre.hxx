@@ -80,7 +80,7 @@ enum ScIterFunc {
 struct FormulaTokenRef_less
 {
     bool operator () ( const formula::FormulaConstTokenRef& r1, const formula::FormulaConstTokenRef& r2 ) const
-        { return &r1 < &r2; }
+        { return r1.get() < r2.get(); }
 };
 typedef ::std::map< const formula::FormulaConstTokenRef, formula::FormulaTokenRef, FormulaTokenRef_less> ScTokenMatrixMap;
 
