@@ -145,13 +145,14 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 
 #define OSL_DEBUG_ONLY(s)   _OSL_DEBUG_ONLY(s)
 
+#define OSL_TRACE(...) \
+    SAL_INFO_IF(OSL_DEBUG_LEVEL > 0, "legacy.osl", __VA_ARGS__)
+
 #if OSL_DEBUG_LEVEL > 0
-#define OSL_TRACE(...) SAL_INFO("legacy.osl", __VA_ARGS__)
 #define OSL_ASSERT(c) SAL_WARN_IF(!(c), "legacy.osl", "OSL_ASSERT")
 #define OSL_ENSURE(c, m) SAL_WARN_IF(!(c), "legacy.osl", "%s", m)
 #define OSL_FAIL(m) SAL_WARN_IF(sal_True, "legacy.osl", "%s", m)
 #else
-#define OSL_TRACE(...) ((void) 0)
 #define OSL_ASSERT(c) ((void) 0)
 #define OSL_ENSURE(c, m) ((void) 0)
 #define OSL_FAIL(m) ((void) 0)

@@ -121,6 +121,18 @@ inline void SAL_CALL log(
 
 #endif
 
+/** @internal */
+#if defined SAL_LOG_INFO
+#define SAL_DETAIL_ENABLE_LOG_INFO sal_True
+#else
+#define SAL_DETAIL_ENABLE_LOG_INFO sal_False
+#endif
+#if defined SAL_LOG_WARN
+#define SAL_DETAIL_ENABLE_LOG_WARN sal_True
+#else
+#define SAL_DETAIL_ENABLE_LOG_WARN sal_False
+#endif
+
 /** A simple macro to create a "file and line number" string.
 
     Potentially not only useful within the log framework (where it is used
@@ -240,64 +252,47 @@ inline void SAL_CALL log(
     @since LibreOffice 3.5
 */
 
-#if defined SAL_LOG_INFO
-
 #define SAL_INFO(area, ...) \
     SAL_DETAIL_LOG_FORMAT( \
-        sal_True, SAL_DETAIL_LOG_LEVEL_INFO, area, SAL_WHERE, __VA_ARGS__)
+        SAL_DETAIL_ENABLE_LOG_INFO, SAL_DETAIL_LOG_LEVEL_INFO, area, \
+        SAL_WHERE, __VA_ARGS__)
+
 #define SAL_INFO_IF(condition, area, ...) \
     SAL_DETAIL_LOG_FORMAT( \
-        condition, SAL_DETAIL_LOG_LEVEL_INFO, area, SAL_WHERE, __VA_ARGS__)
-
-#if defined __cplusplus
-#define SAL_INFO_S(area, stream) \
-    SAL_DETAIL_LOG_STREAM( \
-        true, ::SAL_DETAIL_LOG_LEVEL_INFO, area, SAL_WHERE, stream)
-#define SAL_INFO_IF_S(condition, area, stream)  \
-    SAL_DETAIL_LOG_STREAM( \
-        condition, ::SAL_DETAIL_LOG_LEVEL_INFO, area, SAL_WHERE, stream)
-#endif
-
-#else
-
-#define SAL_INFO(area, format, ...) ((void) 0)
-#define SAL_INFO_IF(condition, area, format, ...) ((void) 0)
-
-#if defined __cplusplus
-#define SAL_INFO_S(area, stream) ((void) 0)
-#define SAL_INFO_IF_S(condition, area, stream) ((void) 0)
-#endif
-
-#endif
-
-#if defined SAL_LOG_WARN
+        SAL_DETAIL_ENABLE_LOG_INFO && (condition), SAL_DETAIL_LOG_LEVEL_INFO, \
+        area, SAL_WHERE, __VA_ARGS__)
 
 #define SAL_WARN(area, ...) \
     SAL_DETAIL_LOG_FORMAT( \
-        sal_True, SAL_DETAIL_LOG_LEVEL_WARN, area, SAL_WHERE, __VA_ARGS__)
+        SAL_DETAIL_ENABLE_LOG_WARN, SAL_DETAIL_LOG_LEVEL_WARN, area, \
+        SAL_WHERE, __VA_ARGS__)
+
 #define SAL_WARN_IF(condition, area, ...) \
     SAL_DETAIL_LOG_FORMAT( \
-        condition, SAL_DETAIL_LOG_LEVEL_WARN, area, SAL_WHERE, __VA_ARGS__)
+        SAL_DETAIL_ENABLE_LOG_WARN && (condition), SAL_DETAIL_LOG_LEVEL_WARN, \
+        area, SAL_WHERE, __VA_ARGS__)
 
 #if defined __cplusplus
+
+#define SAL_INFO_S(area, stream) \
+    SAL_DETAIL_LOG_STREAM( \
+        SAL_DETAIL_ENABLE_LOG_INFO, ::SAL_DETAIL_LOG_LEVEL_INFO, area, \
+        SAL_WHERE, stream)
+
+#define SAL_INFO_IF_S(condition, area, stream)  \
+    SAL_DETAIL_LOG_STREAM( \
+        SAL_DETAIL_ENABLE_LOG_INFO && (condition), \
+        ::SAL_DETAIL_LOG_LEVEL_INFO, area, SAL_WHERE, stream)
+
 #define SAL_WARN_S(area, stream) \
     SAL_DETAIL_LOG_STREAM( \
-        true, ::SAL_DETAIL_LOG_LEVEL_WARN, area, SAL_WHERE, stream)
+        SAL_DETAIL_ENABLE_LOG_WARN, ::SAL_DETAIL_LOG_LEVEL_WARN, area, \
+        SAL_WHERE, stream)
+
 #define SAL_WARN_IF_S(condition, area, stream)   \
     SAL_DETAIL_LOG_STREAM( \
-        condition, ::SAL_DETAIL_LOG_LEVEL_WARN, area, SAL_WHERE, stream)
-#endif
-
-#else
-
-#define SAL_WARN(area, format, ...) ((void) 0)
-#define SAL_WARN_IF(condition, area, format, ...) ((void) 0)
-
-#if defined __cplusplus
-#define SAL_WARN_S(area, stream) ((void) 0)
-#define SAL_WARN_IF_S(condition, area, stream) ((void) 0)
-#endif
-
+        SAL_DETAIL_ENABLE_LOG_WARN && (condition), \
+        ::SAL_DETAIL_LOG_LEVEL_WARN, area, SAL_WHERE, stream)
 #endif
 
 #endif

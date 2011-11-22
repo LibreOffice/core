@@ -665,7 +665,6 @@ XmlFilterBase& XmlFilterBase::exportDocumentProperties( Reference< XDocumentProp
                         ? OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr()
                         : "<unconvertable>",
                     OUStringToOString( aValue.getValueTypeName(), RTL_TEXTENCODING_UTF8 ).getStr());
-            (void) bHaveString; // avoid warnings
         }
     }
     return *this;
