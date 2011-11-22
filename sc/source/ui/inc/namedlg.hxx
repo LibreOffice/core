@@ -151,7 +151,7 @@ public:
                     ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                                ScViewData*      ptrViewData,
                                const ScAddress& aCursorPos );
-                    ~ScNameDlg();
+    virtual         ~ScNameDlg();
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
     virtual sal_Bool    IsRefInputMode() const;
