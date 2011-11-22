@@ -27,43 +27,34 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_basctl.hxx"
+//#include "precompiled_basctl.hxx"
+
+#include "basidesh.hxx"
 #include "dlged.hxx"
-#include "dlgedfunc.hxx"
+#include "dlgedclip.hxx"
+#include "dlgeddef.hxx"
 #include "dlgedfac.hxx"
-#include <dlgedmod.hxx>
+#include "dlgedfunc.hxx"
+#include "dlgedmod.hxx"
+#include "dlgedobj.hxx"
 #include "dlgedpage.hxx"
 #include "dlgedview.hxx"
-#include "dlgedobj.hxx"
-#include "dlgedclip.hxx"
-#include <dlgeddef.hxx>
+#include "iderdll.hxx"
+#include "localizationmgr.hxx"
 #include "propbrw.hxx"
-#include <localizationmgr.hxx>
 
-#include <basidesh.hxx>
-#include <iderdll.hxx>
-#include <vcl/scrbar.hxx>
-#include <tools/shl.hxx>
-#include <svl/itempool.hxx>
+#include <com/sun/star/awt/XDialog.hpp>
+#include <com/sun/star/resource/XStringResourcePersistence.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
+#include <comphelper/types.hxx>
 #include <sfx2/viewfrm.hxx>
-
+#include <svl/itempool.hxx>
+#include <svx/sdrpaintwindow.hxx>
 #include <svx/svxids.hrc>
-#include <svx/svdpagv.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/svapp.hxx>
 #include <xmlscript/xml_helper.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/Property.hpp>
-#include <com/sun/star/awt/XDialog.hpp>
-#include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/resource/XStringResourcePersistence.hpp>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/types.hxx>
-#include <vcl/svapp.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
-
-// #i74769#
-#include <svx/sdrpaintwindow.hxx>
 
 using namespace comphelper;
 using namespace ::com::sun::star;
