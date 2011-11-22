@@ -32,10 +32,6 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <tools/urlobj.hxx>
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_ULONGS
-#include <svl/svstdarr.hxx>
-#endif
 
 #include <svtools/parhtml.hxx>
 #include <svtools/htmltokn.h>
