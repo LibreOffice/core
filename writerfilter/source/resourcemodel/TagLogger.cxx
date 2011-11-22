@@ -235,10 +235,10 @@ namespace writerfilter
     class PropertySetDumpHandler : public Properties
     {
         IdToString::Pointer_t mpIdToString;
-        TagLogger::Pointer_t m_pLogger;
+        TagLogger* m_pLogger;
 
     public:
-        PropertySetDumpHandler(TagLogger::Pointer_t pLogger,
+        PropertySetDumpHandler(TagLogger* pLogger,
                 IdToString::Pointer_t pIdToString);
         virtual ~PropertySetDumpHandler();
 
@@ -248,11 +248,11 @@ namespace writerfilter
         virtual void sprm(Sprm & sprm);
     };
 
-    PropertySetDumpHandler::PropertySetDumpHandler(TagLogger::Pointer_t pLogger,
+    PropertySetDumpHandler::PropertySetDumpHandler(TagLogger* pLogger,
             IdToString::Pointer_t pIdToString) :
-        mpIdToString(pIdToString)
+        mpIdToString(pIdToString),
+        m_pLogger(pLogger)
     {
-        m_pLogger = pLogger;
     }
 
     PropertySetDumpHandler::~PropertySetDumpHandler()
@@ -302,8 +302,7 @@ namespace writerfilter
     {
         startElement( "propertySet" );
 
-        TagLogger::Pointer_t pLogger( this );
-        PropertySetDumpHandler handler( pLogger, pIdToString );
+        PropertySetDumpHandler handler( this, pIdToString );
         handler.resolve( props );
 
         endElement( );
