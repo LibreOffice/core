@@ -266,7 +266,19 @@ bool ScNameDlg::IsNameValid()
 
 bool ScNameDlg::IsFormulaValid()
 {
-    return true;
+    ScCompiler aComp( mpDoc, maCursorPos);
+    aComp.SetGrammar( mpDoc->GetGrammar() );
+    ScTokenArray* pCode = aComp.CompileString(maEdAssign.GetText());
+    if (pCode->GetCodeError())
+    {
+        delete pCode;
+        return false;
+    }
+    else
+    {
+        delete pCode;
+        return true;
+    }
 }
 
 ScRangeName* ScNameDlg::GetRangeName(const rtl::OUString& rScope)
@@ -387,7 +399,11 @@ void ScNameDlg::RemovePushed()
 void ScNameDlg::NameModified()
 {
     if (!IsFormulaValid())
+    {
+        //TODO: implement an info text
         return;
+    }
+
     ScRangeNameLine aLine;
     mpRangeManagerTable->GetCurrentLine(aLine);
     rtl::OUString aOldName = aLine.aName;
