@@ -455,7 +455,7 @@ void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
 
         if (nResId)
         {
-            aName += ::rtl::OUString( String(IDEResId(nResId)) );
+            aName += ResId::toString(IDEResId(nResId));
         }
     }
     else if (!_rxObject.is())    // no properties

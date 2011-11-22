@@ -564,7 +564,7 @@ void DlgEdObj::UpdateStep()
     sal_Int32 nStep = GetStep();
 
     SdrLayerAdmin& rLayerAdmin = GetModel()->GetLayerAdmin();
-    SdrLayerID nHiddenLayerId   = rLayerAdmin.GetLayerID( String( RTL_CONSTASCII_USTRINGPARAM( "HiddenLayer" ) ), sal_False );
+    SdrLayerID nHiddenLayerId   = rLayerAdmin.GetLayerID( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HiddenLayer" ) ), sal_False );
     SdrLayerID nControlLayerId   = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), sal_False );
 
     if( nCurStep )
@@ -793,7 +793,7 @@ sal_Bool DlgEdObj::supportsService( const sal_Char* _pServiceName ) const
 
     if (nResId)
     {
-        aDefaultName = ::rtl::OUString( String(IDEResId(nResId)) );
+        aDefaultName = ResId::toString(IDEResId(nResId));
     }
 
     return aDefaultName;
