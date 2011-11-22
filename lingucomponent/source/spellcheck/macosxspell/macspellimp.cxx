@@ -33,11 +33,8 @@
 #include <unotools/processfactory.hxx>
 #include <osl/mutex.hxx>
 
-//#include <hunspell.hxx>
-#include <dictmgr.hxx>
 #include <macspellimp.hxx>
 
-//#include <linguistic/lngprops.hxx>
 #include <linguistic/spelldta.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
@@ -54,43 +51,11 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
-///////////////////////////////////////////////////////////////////////////
-// dbg_dump for development
-#if OSL_DEBUG_LEVEL > 1
-#include <rtl/strbuf.hxx>
-#include <rtl/ustring.hxx>
 
-const sal_Char *dbg_dump(const rtl::OString &rStr)
-{
-    static rtl::OStringBuffer aStr;
-
-    aStr = rtl::OStringBuffer(rStr);
-    aStr.append(static_cast<char>(0));
-    return aStr.getStr();
-}
-
-const sal_Char *dbg_dump(const rtl::OUString &rStr)
-{
-    return dbg_dump(rtl::OUStringToOString(rStr, RTL_TEXTENCODING_UTF8));
-}
-
-const sal_Char *dbg_dump(rtl_String *pStr)
-{
-    return dbg_dump(rtl::OString(pStr));
-}
-
-const sal_Char *dbg_dump(rtl_uString *pStr)
-{
-    return dbg_dump(rtl::OUString(pStr));
-}
-
-#endif
-///////////////////////////////////////////////////////////////////////////
 
 MacSpellChecker::MacSpellChecker() :
     aEvtListeners   ( GetLinguMutex() )
 {
-//    aDicts = NULL;
     aDEncs = NULL;
     aDLocs = NULL;
     aDNames = NULL;
@@ -107,14 +72,6 @@ MacSpellChecker::MacSpellChecker() :
 
 MacSpellChecker::~MacSpellChecker()
 {
-  // if (aDicts) {
-  //    for (int i = 0; i < numdict; i++) {
-  //           if (aDicts[i]) delete aDicts[i];
-  //           aDicts[i] = NULL;
-  //    }
-  //    delete[] aDicts;
-  // }
-  // aDicts = NULL;
   numdict = 0;
   if (aDEncs) delete[] aDEncs;
   aDEncs = NULL;

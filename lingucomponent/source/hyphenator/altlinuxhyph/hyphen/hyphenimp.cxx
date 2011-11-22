@@ -51,8 +51,6 @@
 #include <unotools/lingucfg.hxx>
 #include <osl/file.hxx>
 
-#include "dictmgr.hxx"
-
 #include <stdio.h>
 #include <string.h>
 

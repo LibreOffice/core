@@ -54,7 +54,6 @@
 #include <string.h>
 
 #include <lingutil.hxx>
-#include <dictmgr.hxx>
 
 
 
@@ -120,9 +119,6 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
     rtl::OUString aSystemPrefix;
     rtl::OUString aSystemSuffix;
 #endif
-    bool bSpell = false;
-    bool bHyph  = false;
-    bool bThes  = false;
     if (strcmp( pDicType, "DICT" ) == 0)
     {
         aFormatName     = A2OU("DICT_SPELL");
@@ -131,7 +127,6 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
         aSystemDir      = A2OU( DICT_SYSTEM_DIR );
         aSystemSuffix       = aDicExtension;
 #endif
-        bSpell = true;
     }
     else if (strcmp( pDicType, "HYPH" ) == 0)
     {
@@ -142,7 +137,6 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
         aSystemPrefix       = A2OU( "hyph_" );
         aSystemSuffix       = aDicExtension;
 #endif
-        bHyph = true;
     }
     else if (strcmp( pDicType, "THES" ) == 0)
     {
@@ -153,7 +147,6 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
         aSystemPrefix       = A2OU( "th_" );
         aSystemSuffix       = A2OU( "_v2.dat" );
 #endif
-        bThes = true;
     }
 
 

@@ -32,7 +32,6 @@ TARGET	= lnth
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
-
 .IF "$(MYTHESLIB)"==""
 .IF "$(GUI)"=="UNX"
 MYTHESLIB=-lmythes
@@ -51,20 +50,14 @@ MYTHESLIB=libmythes.lib
 
 # --- Files --------------------------------------------------------
 
-.IF "$(DISABLE_HUNSPELL)" == ""
-
-.IF "$(SYSTEM_HUNSPELL)" != "YES"
-HUNSPELL_CFLAGS += -I$(SOLARINCDIR)$/hunspell
-.ENDIF
-
 .IF "$(SYSTEM_MYTHES)" != "YES"
 CXXFLAGS += -I..$/mythes
 CFLAGSCXX += -I..$/mythes
 CFLAGSCC += -I..$/mythes
 .ENDIF
-CXXFLAGS += -I$(PRJ)$/source$/lingutil $(HUNSPELL_CFLAGS)
-CFLAGSCXX += -I$(PRJ)$/source$/lingutil $(HUNSPELL_CFLAGS)
-CFLAGSCC += -I$(PRJ)$/source$/lingutil $(HUNSPELL_CFLAGS)
+CXXFLAGS += -I$(PRJ)$/source$/lingutil
+CFLAGSCXX += -I$(PRJ)$/source$/lingutil
+CFLAGSCC += -I$(PRJ)$/source$/lingutil
 
 EXCEPTIONSFILES=	\
         $(SLO)$/nthesimp.obj \
@@ -76,7 +69,8 @@ SLOFILES=	\
         $(SLO)$/nthesimp.obj
 
 
-SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
+REALNAME:=$(TARGET).uno
+SHL1TARGET= $(REALNAME)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
         $(CPPULIB) 	 \
@@ -88,12 +82,11 @@ SHL1STDLIBS= \
         $(UNOTOOLSLIB)	\
         $(LNGLIB) \
                 $(ULINGULIB) \
-        $(MYTHESLIB) \
-        $(HUNSPELLLIB)
+        $(MYTHESLIB)
 
 # build DLL
 SHL1LIBS=       $(SLB)$/$(TARGET).lib $(SLB)$/libulingu.lib
-SHL1IMPLIB=		i$(TARGET)
+SHL1IMPLIB=		i$(REALNAME)
 SHL1DEPN=		$(SHL1LIBS)
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
@@ -115,8 +108,3 @@ $(MISC)/lnth.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt lnth.component
-
-.ELSE
-all:
-    @echo "hunspell disabled"
-.ENDIF

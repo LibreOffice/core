@@ -42,7 +42,7 @@ HUNSPELL_CFLAGS += -I$(SOLARINCDIR)$/hunspell
 
 # --- Files --------------------------------------------------------
 
-.IF "$(DISABLE_HUNSPELL)" == ""
+.IF "$(ENABLE_HUNSPELL)" == "YES"
 
 CXXFLAGS += -I$(PRJ)$/source$/lingutil $(HUNSPELL_CFLAGS)
 CFLAGSCXX += -I$(PRJ)$/source$/lingutil $(HUNSPELL_CFLAGS)
@@ -55,8 +55,8 @@ SLOFILES=	\
         $(SLO)$/sreg.obj\
         $(SLO)$/sspellimp.obj
 
-
-SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
+REALNAME:=$(TARGET).uno
+SHL1TARGET= $(REALNAME)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
         $(CPPULIB) 	 \
@@ -73,7 +73,7 @@ SHL1STDLIBS= \
 
 # build DLL
 SHL1LIBS=       $(SLB)$/$(TARGET).lib $(SLB)$/libulingu.lib
-SHL1IMPLIB=		i$(TARGET)
+SHL1IMPLIB=		i$(REALNAME)
 SHL1DEPN=		$(SHL1LIBS)
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 

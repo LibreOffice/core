@@ -36,7 +36,7 @@ TARGET=hunspell
 
 # --- Files --------------------------------------------------------
 
-.IF "$(DISABLE_HUNSPELL)" == ""
+.IF "$(ENABLE_HUNSPELL)" == "YES"
 
 TARFILE_NAME=hunspell-1.2.9
 TARFILE_MD5=68dd2e8253d9a7930e9fd50e2d7220d0

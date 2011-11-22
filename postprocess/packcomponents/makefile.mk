@@ -109,6 +109,7 @@ my_components = \
     i18npool \
     i18nsearch \
     lng \
+    lnth \
     localebe1 \
     log \
     mcnttype \
@@ -196,14 +197,12 @@ my_components += XSLTFilter.jar \
     xsltfilter
 .END
 
-.IF "$(DISABLE_HYPHEN)" == ""
+.IF "$(ENABLE_HYPHEN)" == "YES"
 my_components += hyphen
 .END
 
-.IF "$(DISABLE_HUNSPELL)" == ""
-my_components += \
-    lnth \
-    spell
+.IF "$(ENABLE_HUNSPELL)" == "YES"
+my_components += spell
 .END
 
 .IF "$(SYSTEM_LIBWPD)" == "YES"

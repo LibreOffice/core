@@ -36,7 +36,6 @@ TARGET=mythes
 
 # --- Files --------------------------------------------------------
 
-.IF "$(DISABLE_HUNSPELL)" == ""
 
 TARFILE_NAME=mythes-1.2.0
 TARFILE_MD5=067201ea8b126597670b5eff72e1f66c
@@ -44,17 +43,13 @@ TARFILE_MD5=067201ea8b126597670b5eff72e1f66c
 ADDITIONAL_FILES += makefile.mk
 
 PATCH_FILES=mythes-1.2.0-vanilla-th-gen-idx.patch \
-    mythes-1.2.0-makefile-mk.diff
+    mythes-1.2.0-makefile-mk.diff \
+    mythes-1.2.0-disable-example.patch
 
 .IF "$(GUI)"=="UNX"
 CONFIGURE_DIR=$(BUILD_DIR)
 
 .IF "$(SYSTEM_MYTHES)" != "YES"
-
-.IF "$(SYSTEM_HUNSPELL)" != "YES"
-HUNSPELL_CFLAGS +:= -I$(SOLARINCDIR)$/hunspell
-HUNSPELL_LIBS +:= -L$(SOLARLIBDIR) -lhunspell-1.2
-.ENDIF
 
 #relative to CONFIGURE_DIR
 # still needed also in system-mythes case as it creates the makefile
@@ -87,9 +82,7 @@ OUT2INC += mythes.hxx
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
 CONFIGURE_ACTION=configure
-CONFIGURE_FLAGS= --disable-shared --with-pic \
-    HUNSPELL_CFLAGS=-I$(SOLARINCDIR)$/hunspell \
-    HUNSPELL_LIBS="-L$(SOLARLIBDIR) -lhunspell-1.2"
+CONFIGURE_FLAGS= --disable-shared --with-pic
 
 BUILD_ACTION=make
 
@@ -109,12 +102,3 @@ OUT2INC += mythes.hxx
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
-
-.IF "$(SYSTEM_HUNSPELL)" != "YES"
-.EXPORT: HUNSPELL_LIBS HUNSPELL_CFLAGS
-.ENDIF
-
-.ELSE
-all:
-    @echo "hunspell disabled"
-.ENDIF

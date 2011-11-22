@@ -1301,7 +1301,7 @@ End
 File gid_File_Lib_Spell
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Name = LIBNAME(spell);
+    Name = LIBNAME(spell.uno);
     Dir = SCP2_OOO_BIN_DIR;
 End
 #endif
@@ -1414,20 +1414,18 @@ SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpext, ucpext.uno)
 
 SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpexpand1, ucpexpand1.uno)
 
-#ifndef DISABLE_HUNSPELL
 File gid_File_Lib_Lnth
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Name = LIBNAME(lnth);
+    Name = LIBNAME(lnth.uno);
     Dir = SCP2_OOO_BIN_DIR;
 End
-#endif
 
 #ifndef DISABLE_HYPHEN
 File gid_File_Lib_Hyph
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Name = LIBNAME(hyphen);
+    Name = LIBNAME(hyphen.uno);
     Dir = SCP2_OOO_BIN_DIR;
 End
 #endif

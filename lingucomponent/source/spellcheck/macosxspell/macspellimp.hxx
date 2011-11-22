@@ -72,7 +72,6 @@ class MacSpellChecker :
     >
 {
     Sequence< Locale >      aSuppLocales;
-//        Hunspell **                         aDicts;
     rtl_TextEncoding *      aDEncs;
     Locale *                aDLocs;
     OUString *              aDNames;

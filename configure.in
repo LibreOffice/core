@@ -546,14 +546,32 @@ AC_ARG_WITH(system-neon,
 AC_ARG_WITH(system-agg,
 [  --with-system-agg       Use AGG already on system
 ],,)
+AC_ARG_ENABLE(hunspell,
+[  --enable-hunspell       Determines whether to enable the Hunspell library.
+                          If enabled, the library will be built unless you
+                          specify --with-system-hunspell to use the library
+                          already present on your system.
+                          If disabled, the Spell Checking component will also
+                          be disabled.
+                          (Default: hunspell disabled)
+],,enable_hunspell=no)
 AC_ARG_WITH(system-hunspell,
-[  --with-system-hunspell   Use libhunspell already on system
+[  --with-system-hunspell  Use libhunspell already on system
 ],,)
 AC_ARG_WITH(system-mythes,
 [  --with-system-mythes    Use mythes already on system
 ],,)
-AC_ARG_WITH(system-altlinuxhyph,
-[  --with-system-altlinuxhyph    Use ALTLinuxhyph already on system
+AC_ARG_ENABLE(hyphen,
+[  --enable-hyphen         Determines whether to enable the Hyphen library.
+                          If enabled, the library will be built unless you
+                          specify --with-system-hyphen to use the library
+                          already present on your system.
+                          If disabled, the Hyphenator component will also
+                          be disabled.
+                          (Default: hyphen disabled)
+],,enable_hyphen=no)
+AC_ARG_WITH(system-hyphen,
+[  --with-system-hyphen    Use libhypeh already on system
 ],,)
 AC_ARG_WITH(system-libtextcat,
 [  --with-system-libtextcat      Use libtextcat already on system
@@ -1248,8 +1266,6 @@ if test "$enable_copyleft" != "yes"; then
    enable_gstreamer="no"
    with_myspell_dicts="no"
 
-   DISABLE_HUNSPELL="TRUE"
-   DISABLE_HYPHEN="TRUE"
    DISABLE_SAXON="TRUE"
 
    BUILD_EPM="NO"
@@ -1258,15 +1274,11 @@ if test "$enable_copyleft" != "yes"; then
 
 else
 
-   DISABLE_HUNSPELL=
-   DISABLE_HYPHEN=
    DISABLE_SAXON=
 
    AC_MSG_RESULT([no])
 
 fi
-AC_SUBST(DISABLE_HUNSPELL)
-AC_SUBST(DISABLE_HYPHEN)
 AC_SUBST(DISABLE_SAXON)
 AC_SUBST(BUILD_EPM)
 
@@ -5155,68 +5167,82 @@ AC_SUBST(REDLAND_CFLAGS)
 AC_SUBST(REDLAND_LIBS)
 
 dnl ===================================================================
-dnl Check for system hunspell
+dnl Check for hunspell
 dnl ===================================================================
+AC_MSG_CHECKING([whether to build the Spell Checking component])
+ENABLE_HUNSPELL=
 
-if test -n "$enable_copyleft" -a "$enable_copyleft" != "no"; then
-
-AC_MSG_CHECKING([which libhunspell to use])
-if test -n "$with_system_hunspell" -o -n "$with_system_libs" && \
-	test "$with_system_hunspell" != "no"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_HUNSPELL=YES
-    AC_LANG_PUSH([C++])
-    PKG_CHECK_MODULES(HUNSPELL, hunspell, HUNSPELL_PC="TRUE", HUNSPELL_PC="" )
-    if test "$HUNSPELL_PC" != "TRUE"; then
-      AC_CHECK_HEADER(hunspell.hxx, [],
-      [
-      AC_CHECK_HEADER(hunspell/hunspell.hxx, [ HUNSPELL_CFLAGS=-I/usr/include/hunspell ],
-           [AC_MSG_ERROR(hunspell headers not found.)], [])
-         ], [])
-      AC_CHECK_LIB(hunspell, main, [],
-           [ AC_MSG_ERROR(hunspell library not found.) ], [])
-      HUNSPELL_LIBS=-lhunspell
-     fi
-    AC_LANG_POP([C++])
-else
-    AC_MSG_RESULT([internal])
-    SYSTEM_HUNSPELL=NO
-    BUILD_TYPE="$BUILD_TYPE HUNSPELL"
-fi
-AC_SUBST(SYSTEM_HUNSPELL)
-AC_SUBST(HUNSPELL_CFLAGS)
-AC_SUBST(HUNSPELL_LIBS)
-
-dnl ===================================================================
-dnl Checking for altlinuxhyph
-dnl ===================================================================
-AC_MSG_CHECKING([which altlinuxhyph to use])
-if test -n "$with_system_altlinuxhyph" -o -n "$with_system_libs" && \
-	test "$with_system_altlinuxhyph" != "no"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_HYPH=YES
-    AC_CHECK_HEADER(hyphen.h, [],
-       [ AC_MSG_ERROR(altlinuxhyph headers not found.)], [])
-    AC_CHECK_MEMBER(struct _HyphenDict.cset, [],
-       [ AC_MSG_ERROR(no. You are sure you have altlinuyhyph headers?)],
-       [#include <hyphen.h>])
-    AC_CHECK_LIB(hyphen, hnj_hyphen_hyphenate2, [HYPHEN_LIB=-lhyphen],
-        [ AC_MSG_ERROR(altlinuxhyph library not found or too old.)], [])
-    if test -z "$HYPHEN_LIB"; then
-       AC_CHECK_LIB(hyph, hnj_hyphen_hyphenate2, [HYPHEN_LIB=-lhyph],
-           [ AC_MSG_ERROR(altlinuxhyph library not found or too old.)], [])
+if test "x$enable_hunspell" != "xno" ; then
+    AC_MSG_CHECKING([which libhunspell to use])
+    if test -n "$with_system_hunspell" -o -n "$with_system_libs" && \
+        test "$with_system_hunspell" != "no"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_HUNSPELL=YES
+        AC_LANG_PUSH([C++])
+        PKG_CHECK_MODULES(HUNSPELL, hunspell, HUNSPELL_PC="TRUE", HUNSPELL_PC="" )
+        if test "$HUNSPELL_PC" != "TRUE"; then
+            AC_CHECK_HEADER(hunspell.hxx, [],
+            [AC_CHECK_HEADER(hunspell/hunspell.hxx, [ HUNSPELL_CFLAGS=-I/usr/include/hunspell ],
+                [AC_MSG_ERROR(hunspell headers not found.)], [])
+             ], [])
+            AC_CHECK_LIB(hunspell, main, [],
+            [ AC_MSG_ERROR(hunspell library not found.) ], [])
+            HUNSPELL_LIBS=-lhunspell
+        fi
+        AC_LANG_POP([C++])
+    else
+        AC_MSG_RESULT([internal])
+        SYSTEM_HUNSPELL=NO
+        BUILD_TYPE="$BUILD_TYPE HUNSPELL"
     fi
-    if test -z "$HYPHEN_LIB"; then
-       AC_CHECK_LIB(hnj, hnj_hyphen_hyphenate2, [HYPHEN_LIB=-lhnj],
-           [ AC_MSG_ERROR(altlinuxhyph library not found or too old.)], [])
-    fi
+    ENABLE_HUNSPELL=YES
+    AC_SUBST(SYSTEM_HUNSPELL)
+    AC_SUBST(HUNSPELL_CFLAGS)
+    AC_SUBST(HUNSPELL_LIBS)
 else
-    AC_MSG_RESULT([internal])
-    SYSTEM_HYPH=NO
-    BUILD_TYPE="$BUILD_TYPE HYPHEN"
+    AC_MSG_RESULT([no])
 fi
-AC_SUBST(SYSTEM_HYPH)
-AC_SUBST(HYPHEN_LIB)
+AC_SUBST(ENABLE_HUNSPELL)
+
+dnl ===================================================================
+dnl Checking for libhyphen
+dnl ===================================================================
+AC_MSG_CHECKING([whether to build the Hyphenator component])
+ENABLE_HYPHEN=
+
+if test "x$enable_hyphen" != "xno" ; then
+    AC_MSG_CHECKING([which libhyphen to use])
+    if test -n "$with_system_hyphen" -o -n "$with_system_libs" && \
+        test "$with_system_hyphen" != "no"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_HYPH=YES
+        AC_CHECK_HEADER(hyphen.h, [],
+        [ AC_MSG_ERROR(libhyphen headers not found.)], [])
+        AC_CHECK_MEMBER(struct _HyphenDict.cset, [],
+        [ AC_MSG_ERROR(no. You are sure you have libhyphen headers?)],
+        [#include <hyphen.h>])
+        AC_CHECK_LIB(hyphen, hnj_hyphen_hyphenate2, [HYPHEN_LIB=-lhyphen],
+            [ AC_MSG_ERROR(libhyphen not found or too old.)], [])
+        if test -z "$HYPHEN_LIB"; then
+        AC_CHECK_LIB(hyph, hnj_hyphen_hyphenate2, [HYPHEN_LIB=-lhyph],
+            [ AC_MSG_ERROR(libhyphen not found or too old.)], [])
+        fi
+        if test -z "$HYPHEN_LIB"; then
+        AC_CHECK_LIB(hnj, hnj_hyphen_hyphenate2, [HYPHEN_LIB=-lhnj],
+            [ AC_MSG_ERROR(libhyphen not found or too old.)], [])
+        fi
+    else
+        AC_MSG_RESULT([internal])
+        SYSTEM_HYPH=NO
+        BUILD_TYPE="$BUILD_TYPE HYPHEN"
+    fi
+    ENABLE_HYPHEN=YES
+    AC_SUBST(SYSTEM_HYPH)
+    AC_SUBST(HYPHEN_LIB)
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_HYPHEN)
 
 dnl ===================================================================
 dnl Checking for mythes
@@ -5251,7 +5277,6 @@ AC_SUBST(SYSTEM_MYTHES)
 AC_SUBST(MYTHES_CFLAGS)
 AC_SUBST(MYTHES_LIBS)
 
-fi
 
 dnl ===================================================================
 dnl Checking for libtextcat

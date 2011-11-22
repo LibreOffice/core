@@ -46,13 +46,10 @@ HNJLIB=hyphen.lib
 
 # --- Files --------------------------------------------------------
 
-.IF "$(DISABLE_HYPHEN)" == ""
+.IF "$(ENABLE_HYPHEN)" == "YES"
 
-.IF "$(SYSTEM_HUNSPELL)" != "YES"
-HUNSPELL_CFLAGS += -I$(SOLARINCDIR)$/hunspell
-.ENDIF
 
-CFLAGS += -I..$/..$/..$/lingutil $(HUNSPELL_CFLAGS)
+CFLAGS += -I..$/..$/..$/lingutil
 
 EXCEPTIONSFILES=	\
         $(SLO)$/hyphenimp.obj
@@ -61,7 +58,7 @@ SLOFILES=	\
         $(SLO)$/hreg.obj\
         $(SLO)$/hyphenimp.obj
 
-REALNAME:=hyphen
+REALNAME:=hyphen.uno
 SHL1TARGET= $(REALNAME)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
@@ -74,8 +71,7 @@ SHL1STDLIBS= \
         $(UNOTOOLSLIB)	\
         $(LNGLIB) \
         $(HNJLIB) \
-        $(ULINGULIB) \
-        $(HUNSPELLLIB)
+        $(ULINGULIB)
 
 # build DLL
 SHL1LIBS=       $(SLB)$/$(TARGET).lib $(SLB)$/libulingu.lib

@@ -43,7 +43,6 @@
 #include <linguistic/misc.hxx>
 #include <linguistic/lngprops.hxx>
 #include "nthesdta.hxx"
-#include <dictmgr.hxx>
 
 #include <list>
 #include <set>

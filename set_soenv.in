@@ -90,7 +90,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
 	 $PROEXT, $TARFILE_LOCATION,
-     $DISABLE_SAXON, $DISABLE_HUNSPELL, $DISABLE_HYPHEN,
+     $DISABLE_SAXON, $ENABLE_HUNSPELL, $ENABLE_HYPHEN,
      $SYSTEM_PYTHON, $SYSTEM_MOZILLA, $EPM_FLAGS);
 #
 #-------------------------------------------
@@ -1769,8 +1769,8 @@ if ( $platform =~ m/cygwin/ )
    ToFile( "TMPDIR",     $tmpdir,            "e" );
 }
 ToFile( "DISABLE_SAXON",	"@DISABLE_SAXON@", "e" );
-ToFile( "DISABLE_HUNSPELL",	"@DISABLE_HUNSPELL@", "e" );
-ToFile( "DISABLE_HYPHEN",	"@DISABLE_HYPHEN@", "e" );
+ToFile( "ENABLE_HUNSPELL",	"@ENABLE_HUNSPELL@", "e" );
+ToFile( "ENABLE_HYPHEN",	"@ENABLE_HYPHEN@", "e" );
 
 ToFile( "PERL",              $PERL,              "e" );
 ToFile( "RPM",               "@RPM@",            "e" );

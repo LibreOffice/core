@@ -38,17 +38,9 @@ USE_DEFFILE=TRUE
 
 .INCLUDE : settings.mk
 
-.IF "$(SYSTEM_HUNSPELL)" != "YES"
-HUNSPELL_CFLAGS += -I$(SOLARINCDIR)$/hunspell
-.ENDIF
-
-CXXFLAGS += $(HUNSPELL_CFLAGS)
-CFLAGSCXX += $(HUNSPELL_CFLAGS)
-CFLAGSCC += $(HUNSPELL_CFLAGS)
 
 # --- Files --------------------------------------------------------
 
-.IF "$(DISABLE_HUNSPELL)" == ""
 
 CFLAGSCXX+=$(OBJCXXFLAGS)
 CFLAGSCXX+=-I..$/..$/lingutil
@@ -89,10 +81,6 @@ SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 .INCLUDE : target.mk
 
-.ELSE
-all:
-    @echo "hunspell disabled"
-.ENDIF
 
 .ELSE
 dummy:

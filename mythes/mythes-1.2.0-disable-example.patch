@@ -1,0 +1,91 @@
+diff -uNrp misc/build/mythes-1.2.0/configure misc/mythes-1.2.0/configure
+--- misc/build/mythes-1.2.0/configure	2010-02-27 12:57:37.000000000 -0300
++++ misc/mythes-1.2.0/configure	2011-11-21 10:48:03.724435792 -0300
+@@ -748,6 +748,7 @@ LTLIBOBJS
+ LIBOBJS
+ HUNSPELL_LIBS
+ HUNSPELL_CFLAGS
++ENABLE_EXAMPLE
+ PKG_CONFIG
+ CXXCPP
+ CPP
+@@ -867,6 +868,7 @@ ac_subst_files=''
+ ac_user_opts='
+ enable_option_checking
+ enable_dependency_tracking
++enable_example
+ with_gnu_ld
+ enable_rpath
+ enable_shared
+@@ -1519,6 +1521,8 @@ Optional Features:
+                           optimize for fast installation [default=yes]
+   --disable-libtool-lock  avoid locking (might break parallel builds)
+ 
++  --enable-example        compiles the example (requires hunspell library)
++
+ Optional Packages:
+   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+@@ -3723,6 +3727,19 @@ fi
+ 
+ 
+ 
++# Check whether --enable-example was given.
++if test "${enable_example+set}" != set; then :
++  ENABLE_EXAMPLE=no;
++  $enable_example=no;
++else
++  ENABLE_EXAMPLE=$enable_example;
++fi
++
++
++
++
++
++
+ depcc="$CC"   am_compiler_list=
+ 
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking dependency style of $depcc" >&5
+@@ -14476,6 +14493,8 @@ $as_echo "no" >&6; }
+ 
+ fi
+ 
++
++if test "$ENABLE_EXAMPLE" != "no"; then
+ pkg_failed=no
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for HUNSPELL" >&5
+ $as_echo_n "checking for HUNSPELL... " >&6; }
+@@ -14561,6 +14580,9 @@ else
+ $as_echo "yes" >&6; }
+ 	:
+ fi
++fi
++export ENABLE_EXAMPLE
++
+ 
+ ac_config_files="$ac_config_files Makefile mythes.pc"
+ 
+diff -uNrp misc/build/mythes-1.2.0/Makefile.in misc/mythes-1.2.0/Makefile.in
+--- misc/build/mythes-1.2.0/Makefile.in	2010-02-27 12:57:35.000000000 -0300
++++ misc/mythes-1.2.0/Makefile.in	2011-11-21 10:48:03.713435791 -0300
+@@ -18,7 +18,7 @@
+ 
+ 
+ 
+-
++ENABLE_EXAMPLE=@ENABLE_EXAMPLE@
+ VPATH = @srcdir@
+ pkgdatadir = $(datadir)/@PACKAGE@
+ pkgincludedir = $(includedir)/@PACKAGE@
+@@ -85,7 +85,11 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
+ libmythes_1_2_la_LIBADD =
+ am_libmythes_1_2_la_OBJECTS = mythes.lo
+ libmythes_1_2_la_OBJECTS = $(am_libmythes_1_2_la_OBJECTS)
++ifeq "$(ENABLE_EXAMPLE)" "no"
++PROGRAMS=
++else
+ PROGRAMS = $(noinst_PROGRAMS)
++endif
+ am_example_OBJECTS = example.$(OBJEXT)
+ example_OBJECTS = $(am_example_OBJECTS)
+ example_DEPENDENCIES = libmythes-1.2.la
