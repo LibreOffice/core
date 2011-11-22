@@ -29,37 +29,25 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
 
-#include <vector>
-#include <dlgeddef.hxx>
-#include "dlgedobj.hxx"
 #include "dlged.hxx"
-#include "dlgedmod.hxx"
+#include "dlgeddef.hxx"
+#include "dlgedlist.hxx"
+#include "dlgedobj.hxx"
 #include "dlgedpage.hxx"
 #include "dlgedview.hxx"
-#include "dlgedlist.hxx"
-#include <iderid.hxx>
-#include <localizationmgr.hxx>
+#include "iderid.hxx"
+#include "localizationmgr.hxx"
 
-#include <dlgresid.hrc>
-#include <tools/resmgr.hxx>
-#include <tools/shl.hxx>
-#include <unotools/sharedunocomponent.hxx>
-#include <com/sun/star/awt/XTabControllerModel.hpp>
+#include "dlgresid.hrc"
+
 #include <com/sun/star/awt/XUnoControlContainer.hpp>
 #include <com/sun/star/awt/XVclContainerPeer.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/types.hxx>
-#include <vcl/svapp.hxx>
-
-#include <algorithm>
-#include <functional>
+#include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <o3tl/compat_functional.hxx>
+#include <unotools/sharedunocomponent.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -67,7 +55,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::script;
 using ::rtl::OUString;
-
 
 TYPEINIT1(DlgEdObj, SdrUnoObj);
 DBG_NAME(DlgEdObj);
