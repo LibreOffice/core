@@ -2971,6 +2971,7 @@ sal_Bool SwCollectTblLineBoxes::Resize( sal_uInt16 nOffset, sal_uInt16 nOldWidth
     if( aPosArr.size() )
     {
         for( n = 0; n < aPosArr.size(); ++n )
+        {
             if( aPosArr[ n ] == nOffset )
                 break;
             else if( aPosArr[ n ] > nOffset )
@@ -2979,8 +2980,9 @@ sal_Bool SwCollectTblLineBoxes::Resize( sal_uInt16 nOffset, sal_uInt16 nOldWidth
                     --n;
                 break;
             }
+        }
 
-        aPosArr.clear();
+        aPosArr.erase(aPosArr.begin(), aPosArr.begin()+n);
         aBoxes.Remove( 0, n );
 
         // dann die Positionen der neuen Size anpassen
