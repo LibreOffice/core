@@ -162,14 +162,6 @@ public:
     // sal_True: Cursor can be set to this position.
     virtual sal_Bool IsAtValidPos( sal_Bool bPoint = sal_True ) const;
 
-#ifdef DBG_UTIL
-    // For testing of UNO-Crsr behavior here the implementation at visible cursor.
-    virtual sal_Bool IsSelOvr( int eFlags =
-                                ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
-                                  nsSwCursorSelOverFlags::SELOVER_TOGGLE |
-                                  nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ));
-#endif
-
     virtual bool IsReadOnlyAvailable() const;
 
     DECL_FIXEDMEMPOOL_NEWDEL( SwShellCrsr )
@@ -204,16 +196,7 @@ public:
     // sal_True: Cursor can be set to this position.
     virtual sal_Bool IsAtValidPos( sal_Bool bPoint = sal_True ) const;
 
-#ifdef DBG_UTIL
-    // For testing of UNO-Crsr behavior here the implementation at visible cursor.
-    virtual sal_Bool IsSelOvr( int eFlags =
-                                ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
-                                  nsSwCursorSelOverFlags::SELOVER_TOGGLE |
-                                  nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ));
-#endif
 };
-
-
 
 #endif  // _VISCRS_HXX
 
