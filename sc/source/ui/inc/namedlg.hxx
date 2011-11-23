@@ -96,6 +96,7 @@ private:
     Selection       maCurSel;
 
     bool mbNeedUpdate;
+    bool mbDataChanged;
 
     typedef boost::ptr_map<rtl::OUString, ScRangeName> RangeNameContainer;
 

@@ -111,7 +111,8 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     mpViewData       ( ptrViewData ),
     mpDoc            ( ptrViewData->GetDocument() ),
     maCursorPos      ( aCursorPos ),
-    mbNeedUpdate     ( true )
+    mbNeedUpdate     ( true ),
+    mbDataChanged    ( false )
 {
     Init();
     FreeResource();
@@ -213,8 +214,11 @@ void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 sal_Bool ScNameDlg::Close()
 {
-    ScDocFunc aFunc(*mpViewData->GetDocShell());
-    aFunc.ModifyAllRangeNames(maRangeMap);
+    if (mbDataChanged)
+    {
+        ScDocFunc aFunc(*mpViewData->GetDocShell());
+        aFunc.ModifyAllRangeNames(maRangeMap);
+    }
     return DoClose( ScNameDlgWrapper::GetChildWindowId() );
 }
 
@@ -376,6 +380,8 @@ void ScNameDlg::RemovePushed()
         // be safe and check for possible problems
         if (pData)
             pRangeName->erase(*pData);
+
+        mbDataChanged = true;
     }
     CheckForEmptyTable();
 }
@@ -430,6 +436,7 @@ void ScNameDlg::NameModified()
         aLine.aScope = aNewScope;
         mpRangeManagerTable->addEntry(aLine);
         mbNeedUpdate = true;
+        mbDataChanged = true;
     }
 }
 
