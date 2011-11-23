@@ -35,6 +35,7 @@
 #include <unx/gtk/gtkframe.hxx>
 #include <unx/gtk/gtkobject.hxx>
 #include <unx/gtk/atkbridge.hxx>
+#include <unx/gtk/gtkprn.hxx>
 #include <headless/svpvd.hxx>
 #include <headless/svpbmp.hxx>
 #include <vcl/apptypes.hxx>
@@ -394,6 +395,24 @@ void GtkInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const r
 #if !GTK_CHECK_VERSION(3,0,0)
 #  define HORRIBLE_OBSOLETE_YIELDMUTEX_IMPL
 #endif
+
+SalInfoPrinter* GtkInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
+    ImplJobSetup* pSetupData )
+{
+    mbPrinterInit = true;
+    // create and initialize SalInfoPrinter
+    PspSalInfoPrinter* pPrinter = new GtkSalInfoPrinter;
+    configurePspInfoPrinter(pPrinter, pQueueInfo, pSetupData);
+    return pPrinter;
+}
+
+SalPrinter* GtkInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
+{
+    mbPrinterInit = true;
+    fprintf(stderr, "gtk printer\n");
+    return new GtkSalPrinter( pInfoPrinter );
+}
+
 
 GtkYieldMutex::GtkYieldMutex()
 {

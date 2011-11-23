@@ -398,13 +398,9 @@ static bool createPdf( const String& rToFile, const String& rFromFile, const Str
  *  SalInstance
  */
 
-SalInfoPrinter* SalGenericInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
-                                                   ImplJobSetup*        pJobSetup )
+void SalGenericInstance::configurePspInfoPrinter(PspSalInfoPrinter *pPrinter,
+    SalPrinterQueueInfo* pQueueInfo, ImplJobSetup* pJobSetup)
 {
-    mbPrinterInit = true;
-    // create and initialize SalInfoPrinter
-    PspSalInfoPrinter* pPrinter = new PspSalInfoPrinter();
-
     if( pJobSetup )
     {
         PrinterInfoManager& rManager( PrinterInfoManager::get() );
@@ -432,8 +428,15 @@ SalInfoPrinter* SalGenericInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQue
         }
         pPrinter->m_aPrinterGfx.setStrictSO52Compatibility( bStrictSO52Compatibility );
     }
+}
 
-
+SalInfoPrinter* SalGenericInstance::CreateInfoPrinter( SalPrinterQueueInfo*    pQueueInfo,
+                                                   ImplJobSetup*            pJobSetup )
+{
+    mbPrinterInit = true;
+    // create and initialize SalInfoPrinter
+    PspSalInfoPrinter* pPrinter = new PspSalInfoPrinter();
+    configurePspInfoPrinter(pPrinter, pQueueInfo, pJobSetup);
     return pPrinter;
 }
 
@@ -927,6 +930,7 @@ sal_Bool PspSalPrinter::StartJob(
     bool bDirect,
     ImplJobSetup* pJobSetup )
 {
+    OSL_TRACE("PspSalPrinter::StartJob");
     GetSalData()->m_pInstance->jobStartedPrinterUpdate();
 
     m_bFax      = false;
@@ -1012,6 +1016,7 @@ sal_Bool PspSalPrinter::EndJob()
     else
     {
         bSuccess = m_aPrintJob.EndJob();
+       OSL_TRACE("PspSalPrinter::EndJob %d", bSuccess);
 
         if( bSuccess )
         {
@@ -1042,6 +1047,8 @@ sal_Bool PspSalPrinter::AbortJob()
 
 SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, sal_Bool )
 {
+    OSL_TRACE("PspSalPrinter::StartPage");
+
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, m_aJobData );
     m_pGraphics = GetGenericInstance()->CreatePrintGraphics();
     m_pGraphics->Init( &m_aJobData, &m_aPrinterGfx, m_bFax ? &m_aFaxNr : NULL,
@@ -1064,6 +1071,7 @@ sal_Bool PspSalPrinter::EndPage()
 {
     sal_Bool bResult = m_aPrintJob.EndPage();
     m_aPrinterGfx.Clear();
+    OSL_TRACE("PspSalPrinter::EndPage");
     return bResult ? sal_True : sal_False;
 }
 

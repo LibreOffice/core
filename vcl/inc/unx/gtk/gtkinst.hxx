@@ -96,6 +96,8 @@ public:
     virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle );
     virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow = sal_True );
     virtual SalSystem*          CreateSalSystem();
+    virtual SalInfoPrinter*     CreateInfoPrinter(SalPrinterQueueInfo* pPrinterQueueInfo, ImplJobSetup* pJobSetup);
+    virtual SalPrinter*         CreatePrinter( SalInfoPrinter* pInfoPrinter );
     virtual SalTimer*           CreateSalTimer();
     virtual void                AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics*,

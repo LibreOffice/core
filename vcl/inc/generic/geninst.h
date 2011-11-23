@@ -114,6 +114,11 @@ public:
     // prolly belongs somewhere else ... just a font help
     static void RegisterFontSubstitutors( ImplDevFontList* pList );
     static int  FetchFontSubstitutionFlags();
+
+protected:
+    void configurePspInfoPrinter( PspSalInfoPrinter* pInfoPrinter,
+                           SalPrinterQueueInfo* pQueueInfo,
+                           ImplJobSetup* pSetupData );
 };
 
 inline SalGenericInstance *GetGenericInstance()

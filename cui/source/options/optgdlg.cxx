@@ -228,7 +228,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
         aFileDlgCB.Hide();
     }
 
-#if !defined(QUARTZ)
+#if !defined(QUARTZ) && !defined(ENABLE_GTK)
     aPrintDlgFL.Hide();
     aPrintDlgCB.Hide();
 #endif

@@ -28,12 +28,14 @@
 
 $(eval $(call gb_Library_Library,vclplug_gtk))
 
+# TODO: move the pkg-config stuff to configure
 $(eval $(call gb_Library_set_include,vclplug_gtk,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/unx \
     -I$(SRCDIR)/solenv/inc \
     -I$(OUTDIR)/inc \
+	$(shell pkg-config --cflags gtk+-unix-print-2.0) \
 ))
 
 $(eval $(call gb_Library_add_defs,vclplug_gtk,\
@@ -69,6 +71,10 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_gtk,\
     $(gb_STDLIBS) \
 ))
 
+$(eval $(call gb_Library_add_libs,vclplug_gtk,\
+	$(shell pkg-config --libs gtk+-unix-print-2.0) \
+))
+
 $(eval $(call gb_Library_use_externals,vclplug_gtk,\
 	dbus \
 	gtk \
@@ -99,6 +105,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk,\
     vcl/unx/gtk/app/gtkinst \
     vcl/unx/gtk/app/gtksys \
     vcl/unx/gtk/gdi/salnativewidgets-gtk \
+    vcl/unx/gtk/gdi/salprn-gtk \
     vcl/unx/gtk/window/gtkframe \
     vcl/unx/gtk/window/gtkobject \
 	vcl/unx/gtk/fpicker/resourceprovider \
