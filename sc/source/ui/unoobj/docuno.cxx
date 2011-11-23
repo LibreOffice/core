@@ -2643,22 +2643,15 @@ sal_Int32 ScTableSheetsObj::importSheet(
     ScModelObj* pObj = ScModelObj::getImplementation(xDocSrc);
     ScDocShell* pDocShellSrc = static_cast<ScDocShell*>(pObj->GetEmbeddedObject());
 
-    SCTAB nIndexDest;
-    nIndexDest = -1;
-
     // SourceSheet Position and does srcName exists ?
     SCTAB nIndexSrc;
     if ( !pDocShellSrc->GetDocument()->GetTable( srcName, nIndexSrc ) )
         throw lang::IllegalArgumentException();
 
-    // control nDestPosition < maxtab
+    // Check the validity of destination index.
     SCTAB nCount = pDocDest->GetTableCount();
-    nIndexDest = static_cast<SCTAB>(nDestPosition);
-    if ( nIndexDest > nCount )
-        throw lang::IndexOutOfBoundsException();
-
-    // control nDestPosition > 0
-    if (nIndexDest < 0)
+    SCTAB nIndexDest = static_cast<SCTAB>(nDestPosition);
+    if (nIndexDest > nCount || nIndexDest < 0)
         throw lang::IndexOutOfBoundsException();
 
     // Transfert Tab
