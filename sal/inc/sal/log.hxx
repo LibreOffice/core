@@ -91,25 +91,39 @@ template< typename T > inline StreamIgnore operator <<(
     StreamStart const &, T const &)
 {
     std::abort();
+#if defined _MSC_VER
+    return StreamIgnore();
+#endif
 }
 
 template< typename T > inline StreamIgnore operator <<(
     StreamString const &, T const &)
 {
     std::abort();
+#if defined _MSC_VER
+    return StreamIgnore();
+#endif
 }
 
 template< typename T > inline StreamIgnore operator <<(
     StreamIgnore const &, T const &)
 {
     std::abort();
+#if defined _MSC_VER
+    return StreamIgnore();
+#endif
 }
 
 template< typename T > typename T::Result getResult(T const &);
 
 inline char const * unwrapStream(StreamString const & s) { return s.string; }
 
-inline char const * unwrapStream(StreamIgnore const &) { std::abort(); }
+inline char const * unwrapStream(StreamIgnore const &) {
+    std::abort();
+#if defined _MSC_VER
+    return 0;
+#endif
+}
 
 } }
 
