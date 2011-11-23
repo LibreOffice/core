@@ -26,15 +26,12 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_embeddedobj.hxx"
 #include <com/sun/star/embed/XEmbedObjectCreator.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/EntryInitModes.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
-
 
 #include <osl/thread.h>
 #include <osl/file.hxx>

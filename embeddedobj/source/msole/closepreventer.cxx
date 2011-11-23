@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_embeddedobj.hxx"
-
 #include "closepreventer.hxx"
 
 void SAL_CALL OClosePreventer::queryClosing( const ::com::sun::star::lang::EventObject&, sal_Bool  )

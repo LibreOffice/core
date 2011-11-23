@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_embeddedobj.hxx"
-
-
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
 #include <cppuhelper/factory.hxx>

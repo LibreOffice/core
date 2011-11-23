@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_embeddedobj.hxx"
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <com/sun/star/embed/EmbedUpdateModes.hpp>

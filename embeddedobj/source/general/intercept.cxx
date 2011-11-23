@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_embeddedobj.hxx"
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <cppuhelper/weak.hxx>
 
@@ -36,7 +34,6 @@
 #include "commonembobj.hxx"
 
 using namespace ::com::sun::star;
-
 
 #define IUL 6
 
