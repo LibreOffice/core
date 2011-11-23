@@ -2346,8 +2346,8 @@ sal_Bool lcl_IsFormulaSelBoxes( const SwTable& rTbl, const SwTblBoxFormula& rFml
 {
     SwTblBoxFormula aTmp( rFml );
     SwSelBoxes aBoxes;
-    aTmp.GetBoxesOfFormula( rTbl,aBoxes );
-    for( SwSelBoxes::const_reverse_iterator it = aBoxes.rbegin(); it != aBoxes.rend(); ++it )
+    aTmp.GetBoxesOfFormula( rTbl, aBoxes );
+    for( SwSelBoxes::reverse_iterator it = aBoxes.rbegin(); it != aBoxes.rend(); ++it )
     {
         SwTableBox* pBox = it->second;
         sal_uInt16 i;
