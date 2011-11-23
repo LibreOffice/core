@@ -135,7 +135,6 @@ void ScNameDlg::Init()
     {
         rtl::OUString aTemp(itr->first);
         maRangeMap.insert(aTemp, new ScRangeName(*itr->second));
-        std::cout << "RangeName: " << rtl::OUStringToOString(aTemp, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
     }
 
     mpRangeManagerTable = new ScRangeManagerTable(&maNameMgrCtrl, maRangeMap);
@@ -178,6 +177,9 @@ void ScNameDlg::Init()
     {
         SelectionChanged();
     }
+
+    //TODO: fix the Add Button
+    maBtnAdd.Disable();
 }
 
 sal_Bool ScNameDlg::IsRefInputMode() const
@@ -206,7 +208,6 @@ void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 sal_Bool ScNameDlg::Close()
 {
-    std::cout << "Ok Pushed!" << std::endl;
     ScDocFunc aFunc(*mpViewData->GetDocShell());
     aFunc.ModifyAllRangeNames(maRangeMap);
     return DoClose( ScNameDlgWrapper::GetChildWindowId() );
@@ -326,52 +327,7 @@ void ScNameDlg::ShowOptions(const ScRangeNameLine& rLine)
 
 bool ScNameDlg::AddPushed()
 {
-    if (!mpDoc)
-        return false;
-
-    rtl::OUString aName = maEdName.GetText();
-    aName = aName.trim();
-    if (!aName.getLength())
-        return false;
-
-    if (!ScRangeData::IsNameValid( aName, mpDoc ))
-    {
-        ERRORBOX( ScGlobal::GetRscString(STR_INVALIDNAME));
-        return false;
-    }
-
-    rtl::OUString aScope = maLbScope.GetSelectEntry();
-    rtl::OUString aExpr = maEdAssign.GetText();
-    ScRangeName* pRangeName = GetRangeName(aScope);
-
-    RangeType nType = RT_NAME |
-         (maBtnRowHeader.IsChecked() ? RT_ROWHEADER : RangeType(0))
-        |(maBtnColHeader.IsChecked() ? RT_COLHEADER : RangeType(0))
-        |(maBtnPrintArea.IsChecked() ? RT_PRINTAREA : RangeType(0))
-        |(maBtnCriteria.IsChecked()  ? RT_CRITERIA  : RangeType(0));
-
-    ScRangeData* pNewEntry = new ScRangeData( mpDoc, aName, aExpr,
-                                            maCursorPos, nType);
-    if ( 0 == pNewEntry->GetErrCode() )
-    {
-        if (!pRangeName->insert( pNewEntry))
-        {
-            pNewEntry = NULL;
-        }
-        else
-        {
-            maEdName.SetText(EMPTY_STRING);
-            maBtnAdd.Disable();
-            UpdateNames();
-            SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
-        }
-    }
-    else
-    {
-        delete pNewEntry;
-        ERRORBOX( mErrMsgInvalidSym );
-    }
-    return true;
+    return false;
 }
 
 void ScNameDlg::RemovePushed()
@@ -381,8 +337,6 @@ void ScNameDlg::RemovePushed()
     for (std::vector<ScRangeNameLine>::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
         ScRangeName* pRangeName = GetRangeName(itr->aScope);
-        std::cout << rtl::OUStringToOString(itr->aName, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-        std::cout << rtl::OUStringToOString(ScGlobal::pCharClass->upper(itr->aName), RTL_TEXTENCODING_UTF8).getStr() << std::endl;;
         ScRangeData* pData = pRangeName->findByUpperName(ScGlobal::pCharClass->upper(itr->aName));
         OSL_ENSURE(pData, "table and model should be in sync");
         // be safe and check for possible problems
