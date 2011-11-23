@@ -114,3 +114,6 @@ run: install
 #
 # This doesn't work yet
 	adb shell am start -n org.libreoffice.android/.Bootstrap -e lo-main-library libunoexe -e lo-main-cmdline "-ro /assets/lib/uno_services.rdb -ro /assets/lib/uno_types.rdb -s com.sun.star.test.bridge.BridgeTest -- com.sun.star.test.bridge.CppTestObject" -e lo-main-delay 2
+
+clean:
+	rm -rf bin assets
