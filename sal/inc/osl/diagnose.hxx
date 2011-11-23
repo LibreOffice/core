@@ -39,7 +39,7 @@
 #include "osl/mutex.hxx"
 #include "rtl/allocator.hxx"
 #include "rtl/instance.hxx"
-#include "sal/log.h"
+#include "sal/log.hxx"
 #include "sal/types.h"
 
 namespace osl {

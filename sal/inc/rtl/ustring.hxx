@@ -37,7 +37,7 @@
 #include <rtl/ustring.h>
 #include <rtl/string.hxx>
 #include <rtl/memory.h>
-#include "sal/log.h"
+#include "sal/log.hxx"
 
 #if defined EXCEPTIONS_OFF
 #include <stdlib.h>

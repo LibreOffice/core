@@ -50,7 +50,7 @@
 
 #include <tools/debug.hxx>
 #include <rtl/string.h>
-#include <sal/log.h>
+#include <sal/log.hxx>
 #include <sal/macros.h>
 
 #include <vector>
@@ -1334,7 +1334,7 @@ void DbgProf( sal_uInt16 nAction, DbgDataType* pDbgData )
     sal_uIntPtr       nTime;
     if ( (nAction != DBG_PROF_START) && !pProfData )
     {
-        SAL_WARN_S(
+        SAL_WARN(
             "tools.debug",
             "DBG_PROF...() without DBG_PROFSTART(): " << pDbgData->pName);
         return;
@@ -1454,7 +1454,7 @@ void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
 
     sal_uInt16      nAct = nAction & ~DBG_XTOR_DTOROBJ;
 
-    SAL_INFO_IF_S(
+    SAL_INFO_IF(
         ((pData->aDbgData.nTestFlags & DBG_TEST_XTOR_TRACE)
          && !(nAction & DBG_XTOR_DTOROBJ) && nAct != DBG_XTOR_CHKOBJ),
         "tools.debug",
@@ -1468,7 +1468,7 @@ void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
         // DBG_CTOR-Aufruf vor allen anderen DBG_XTOR-Aufrufen
         if ( ((nAction & ~DBG_XTOR_DTOROBJ) != DBG_XTOR_CTOR) && !pDbgData->pData )
         {
-            SAL_WARN_S(
+            SAL_WARN(
                 "tools.debug",
                 "DBG_DTOR() or DBG_CHKTHIS() without DBG_CTOR(): "
                     << pDbgData->pName);
@@ -1484,7 +1484,7 @@ void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
                 // This-Pointer == NULL
                 if ( !pThis )
                 {
-                    SAL_WARN_S(
+                    SAL_WARN(
                         "tools.debug",
                         "this == NULL in class " << pDbgData->pName);
                     return;
@@ -1492,7 +1492,7 @@ void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
 
                 if ( (nAction & ~DBG_XTOR_DTOROBJ) != DBG_XTOR_CTOR )
                 {
-                    SAL_WARN_IF_S(
+                    SAL_WARN_IF(
                         !pXtorData->aThisList.IsIn(pThis), "tools.debug",
                         "invalid this-Pointer %p in class " << pDbgData->pName);
                 }
@@ -1558,13 +1558,13 @@ void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
         }
 
         // Gegebenenfalls Fehlermeldung ausgeben
-        SAL_WARN_IF_S(
+        SAL_WARN_IF(
             pMsg, "tools.debug",
             "Error-Msg from Object " << pThis << " in class "
                 << pDbgData->pName << ": " << pMsg);
     }
 
-    SAL_INFO_IF_S(
+    SAL_INFO_IF(
         ((pData->aDbgData.nTestFlags & DBG_TEST_XTOR_TRACE)
          && (nAction & DBG_XTOR_DTOROBJ) && nAct != DBG_XTOR_CHKOBJ),
         "tools.debug",

@@ -42,7 +42,8 @@
 
 #include "osl/thread.hxx"
 #include "rtl/string.h"
-#include "sal/log.h"
+#include "sal/detail/log.h"
+#include "sal/log.hxx"
 #include "sal/types.h"
 
 #include "logformat.hxx"

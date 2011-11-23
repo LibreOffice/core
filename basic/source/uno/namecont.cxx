@@ -40,7 +40,7 @@
 #include <rtl/oustringostreaminserter.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/strbuf.hxx>
-#include <sal/log.h>
+#include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/anytostring.hxx>
 
@@ -822,12 +822,12 @@ sal_Bool SfxLibraryContainer::init_Impl(
             }
             catch ( const xml::sax::SAXException& e )
             {
-                SAL_WARN_S("basic", e.Message);
+                SAL_WARN("basic", e.Message);
                 return sal_False;
             }
             catch ( const io::IOException& e )
             {
-                SAL_WARN_S("basic", e.Message);
+                SAL_WARN("basic", e.Message);
                 return sal_False;
             }
 
@@ -915,7 +915,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
                         {
                         #if OSL_DEBUG_LEVEL > 0
                             Any aError( ::cppu::getCaughtException() );
-                            SAL_WARN_S(
+                            SAL_WARN(
                                 "basic",
                                 "couldn't open sub storage for library \""
                                     << rLib.aName << "\". Exception: "
@@ -1405,7 +1405,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
 
             if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
             {
-                SAL_WARN_S(
+                SAL_WARN(
                     "basic",
                     "invalid library element \"" << aElementName << '"');
                 continue;
@@ -1487,7 +1487,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
 
                 if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
                 {
-                    SAL_WARN_S(
+                    SAL_WARN(
                         "basic",
                         "invalid library element \"" << aElementName << '"');
                     continue;
@@ -1904,7 +1904,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                     {
                     #if OSL_DEBUG_LEVEL > 0
                         Any aError( ::cppu::getCaughtException() );
-                        SAL_WARN_S(
+                        SAL_WARN(
                             "basic",
                             "couldn't create sub storage for library \""
                                 << rLib.aName << "\". Exception: "
@@ -2337,7 +2337,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
             {
             #if OSL_DEBUG_LEVEL > 0
                 Any aError( ::cppu::getCaughtException() );
-                SAL_WARN_S(
+                SAL_WARN(
                     "basic",
                     "couldn't open sub storage for library \"" << Name
                         << "\". Exception: "
@@ -2386,7 +2386,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
 
                 if ( !xInStream.is() )
                 {
-                    SAL_WARN_S(
+                    SAL_WARN(
                         "basic",
                         "couldn't open library element stream - attempted to"
                             " open library \"" << Name << '"');

@@ -32,7 +32,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#include <sal/log.h>
+#include <sal/log.hxx>
 #include <tools/solar.h>
 #include <svl/itempool.hxx>
 #include "whassert.hxx"
@@ -956,11 +956,11 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
                                 delete rpNewItem;
                                 rpNewItem = pOldItem;
                                 bFound = true;
-                                SAL_INFO_S("svl", "reusing item" << pOldItem);
+                                SAL_INFO("svl", "reusing item" << pOldItem);
                                 break;
                             }
                         }
-                        SAL_INFO_IF_S(
+                        SAL_INFO_IF(
                             !bFound, "svl", "item not found: " << pOldItem);
                     }
                 }

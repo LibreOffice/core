@@ -33,7 +33,8 @@
 #include <cstdarg>
 
 #include "osl/diagnose.h"
-#include "sal/log.h"
+#include "sal/detail/log.h"
+#include "sal/log.hxx"
 
 #include "logformat.hxx"
 

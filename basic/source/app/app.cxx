@@ -72,7 +72,7 @@
 
 #include <rtl/oustringostreaminserter.hxx>
 #include <rtl/strbuf.hxx>
-#include <sal/log.h>
+#include <sal/log.hxx>
 
 using namespace comphelper;
 using namespace cppu;
@@ -1852,7 +1852,7 @@ String BasicFrame::GenRealString( const String &aResString )
         }
         else
         {
-            SAL_WARN_S(
+            SAL_WARN(
                 "basic",
                 "Unknown replacement in String: "
                     << rtl::OUString(aResult.Copy(nStart, nEnd - nStart)));

@@ -31,7 +31,7 @@
 
 #include "tools/toolsdllapi.h"
 
-#include <sal/log.h>
+#include <sal/detail/log.h>
 #include <sal/types.h>
 #include <tools/solar.h>
 
@@ -40,7 +40,7 @@
     if an assertion fails, and is controlled by the standard NDEBUG macro).
     Logging of warnings (e.g., about malformed input) and traces (e.g., about
     steps taken while executing some protocol) should use the facilities
-    provided by sal/log.h.
+    provided by sal/log.hxx.
 
     Because the assertion macros (DBG_ASSERTWARNING, DBG_ASSERT, DBG_BF_ASSERT)
     have been used for true assertions as well as for logged warnings, they map
@@ -467,33 +467,36 @@ public:
              (const void*)pObj, (DbgUsr)fTest )
 
 #define DBG_ASSERTWARNING( sCon, aWarning ) \
-    SAL_WARN_IF(!(sCon), "legacy.tools", aWarning)
+    SAL_DETAIL_WARN_IF_FORMAT(!(sCon), "legacy.tools", aWarning)
 
 #define DBG_ASSERT( sCon, aError ) \
-    SAL_WARN_IF(!(sCon), "legacy.tools", aError)
+    SAL_DETAIL_WARN_IF_FORMAT(!(sCon), "legacy.tools", aError)
 
 #ifdef DBG_BINFILTER
 #define DBG_BF_ASSERT( sCon, aError ) \
-    SAL_WARN_IF(!(sCon), "legacy.binfilter", aError)
+    SAL_DETAIL_WARN_IF_FORMAT(!(sCon), "legacy.binfilter", aError)
 #else
 #define DBG_BF_ASSERT( sCon, aError ) ((void)0)
 #endif
 
-#define DBG_WARNING( aWarning ) SAL_WARN("legacy.tools", aWarning)
-#define DBG_WARNING1( aWarning, x1 ) SAL_WARN("legacy.tools", aWarning, x1)
+#define DBG_WARNING( aWarning ) \
+    SAL_DETAIL_WARN_IF_FORMAT(true, "legacy.tools", aWarning)
+#define DBG_WARNING1( aWarning, x1 ) \
+    SAL_DETAIL_WARN_IF_FORMAT(true, "legacy.tools", aWarning, x1)
 #define DBG_WARNING2( aWarning, x1, x2 ) \
-    SAL_WARN("legacy.tools", aWarning, x1, x2)
+    SAL_DETAIL_WARN_IF_FORMAT(true, "legacy.tools", aWarning, x1, x2)
 #define DBG_WARNING3( aWarning, x1, x2, x3 ) \
-    SAL_WARN("legacy.tools", aWarning, x1, x2, x3)
+    SAL_DETAIL_WARN_IF_FORMAT(true, "legacy.tools", aWarning, x1, x2, x3)
 #define DBG_WARNING4( aWarning, x1, x2, x3, x4 ) \
-    SAL_WARN("legacy.tools", aWarning, x1, x2, x3, x4)
+    SAL_DETAIL_WARN_IF_FORMAT(true, "legacy.tools", aWarning, x1, x2, x3, x4)
 #define DBG_WARNING5( aWarning, x1, x2, x3, x4, x5 ) \
-    SAL_WARN("legacy.tools", aWarning, x1, x2, x3, x4, x5)
-#define DBG_WARNINGFILE( aWarning ) \
-    SAL_WARN("legacy.tools", aWarning, __FILE__, __LINE__)
+    SAL_DETAIL_WARN_IF_FORMAT( \
+        true, "legacy.tools", aWarning, x1, x2, x3, x4, x5)
+#define DBG_WARNINGFILE( aWarning ) SAL_DETAIL_WARN_IF_FORMAT( \
+    true, "legacy.tools", aWarning, __FILE__, __LINE__)
 
 #define DBG_ERRORFILE( aError ) \
-    SAL_WARN("legacy.tools", aError, __FILE__, __LINE__)
+    SAL_DETAIL_WARN_IF_FORMAT(true, "legacy.tools", aError, __FILE__, __LINE__)
 
 #define DBG_TESTSOLARMUTEX()                \
 do                                          \

@@ -35,7 +35,7 @@
 
 #include <rtl/oustringostreaminserter.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/log.h>
+#include <sal/log.hxx>
 #include <svtools/textview.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/scrbar.hxx>
@@ -163,7 +163,7 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                     else
                     {
                         // what was that?
-                        SAL_WARN_S(
+                        SAL_WARN(
                             "sw.level2",
                             "Token " << rtl::OUString(sToken)
                                 << " not recognised!");

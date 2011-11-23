@@ -27,71 +27,30 @@
  * instead of those above.
  */
 
-#ifndef INCLUDED_SAL_LOG_H
-#define INCLUDED_SAL_LOG_H
+#ifndef INCLUDED_SAL_LOG_HXX
+#define INCLUDED_SAL_LOG_HXX
 
 #include "sal/config.h"
 
-#if defined __cplusplus
+#include <cstdlib>
 #include <sstream>
 #include <string>
-#endif
 
+#include "sal/detail/log.h"
 #include "sal/types.h"
 
-/* This header uses variadic macros in both C (where they are officially only
-   supported since C99) and C++ (where they are officially only supported since
-   C++11).  It appears that all relevant compilers (esp. GCC 4.0 and MS VS 2008
-   Express) already support them in their C and C++ dialects.  See also
-   <http://wiki.apache.org/stdcxx/C++0xCompilerSupport>.
+// Avoid the use of other sal code in this header as much as possible, so that
+// this code can be called from other sal code without causing endless
+// recursion.
 
-   Avoid the use of other sal code in this header as much as possible, so that
-   this code can be called from other sal code without causing endless
-   recursion.
-*/
-
-#if defined __cplusplus
-extern "C" {
-#endif
-
-/** @internal */
-enum sal_detail_LogLevel {
-    SAL_DETAIL_LOG_LEVEL_INFO, SAL_DETAIL_LOG_LEVEL_WARN,
-    SAL_DETAIL_MAKE_FIXED_SIZE = SAL_MAX_ENUM
-};
-
-/** @internal */
-void SAL_CALL sal_detail_log(
+/// @internal
+extern "C" void SAL_CALL sal_detail_log(
     enum sal_detail_LogLevel level, char const * area, char const * where,
     char const * message);
 
-/** @internal */
-void SAL_CALL sal_detail_logFormat(
-    enum sal_detail_LogLevel level, char const * area, char const * where,
-    char const * format, ...)
-/* TODO: enabling this will produce a huge amount of -Werror=format errors: */
-#if defined GCC && 0
-    __attribute__((format(printf, 4, 5)))
-#endif
-    ;
-
-#if defined __cplusplus
-}
-#endif
-
-/** @internal */
-#define SAL_DETAIL_LOG_FORMAT(condition, level, area, where, ...) \
-    do { \
-        if (condition) { \
-            sal_detail_logFormat((level), (area), (where), __VA_ARGS__); \
-        } \
-    } while (sal_False)
-
-#if defined __cplusplus
-
+/// @internal
 namespace sal { namespace detail {
 
-/// @internal
 inline void SAL_CALL log(
     sal_detail_LogLevel level, char const * area, char const * where,
     std::ostringstream const & stream)
@@ -107,31 +66,71 @@ inline void SAL_CALL log(
     sal_detail_log(level, area, where, stream.str().c_str());
 }
 
+// Special handling of the common case where the message consists of just a
+// string literal, to produce smaller call-site code:
+
+struct StreamStart {};
+
+struct StreamString {
+    StreamString(char const * s): string(s) {}
+
+    char const * string;
+
+    typedef char Result;
+};
+
+struct StreamIgnore {
+    typedef struct { char a[2]; } Result;
+};
+
+inline StreamString operator <<(StreamStart const &, char const * s) {
+    return StreamString(s);
+}
+
+template< typename T > inline StreamIgnore operator <<(
+    StreamStart const &, T const &)
+{
+    std::abort();
+}
+
+template< typename T > inline StreamIgnore operator <<(
+    StreamString const &, T const &)
+{
+    std::abort();
+}
+
+template< typename T > inline StreamIgnore operator <<(
+    StreamIgnore const &, T const &)
+{
+    std::abort();
+}
+
+template< typename T > typename T::Result getResult(T const &);
+
+inline char const * unwrapStream(StreamString const & s) { return s.string; }
+
+inline char const * unwrapStream(StreamIgnore const &) { std::abort(); }
+
 } }
 
 /// @internal
 #define SAL_DETAIL_LOG_STREAM(condition, level, area, where, stream) \
     do { \
         if (condition) { \
-            ::std::ostringstream sal_detail_stream; \
-            sal_detail_stream << stream; \
-            ::sal::detail::log((level), (area), (where), sal_detail_stream); \
+            if (sizeof getResult(::sal::detail::StreamStart() << stream) == 1) \
+            { \
+                ::sal_detail_log( \
+                    (level), (area), (where), \
+                    ::sal::detail::unwrapStream( \
+                        ::sal::detail::StreamStart() << stream)); \
+            } else { \
+                ::std::ostringstream sal_detail_stream; \
+                sal_detail_stream << stream; \
+                ::sal::detail::log( \
+                    (level), (area), (where), sal_detail_stream); \
+            } \
         } \
     } while (false)
-
-#endif
-
-/** @internal */
-#if defined SAL_LOG_INFO
-#define SAL_DETAIL_ENABLE_LOG_INFO sal_True
-#else
-#define SAL_DETAIL_ENABLE_LOG_INFO sal_False
-#endif
-#if defined SAL_LOG_WARN
-#define SAL_DETAIL_ENABLE_LOG_WARN sal_True
-#else
-#define SAL_DETAIL_ENABLE_LOG_WARN sal_False
-#endif
 
 /** A simple macro to create a "file and line number" string.
 
@@ -140,19 +139,16 @@ inline void SAL_CALL log(
 
     @since LibreOffice 3.5
 */
-#define SAL_WHERE __FILE__ ":" SAL_STRINGIFY(__LINE__) ": "
-
-#if defined __cplusplus
+#define SAL_WHERE SAL_DETAIL_WHERE
 
 /** A facility for generating temporary string messages by piping items into a
     C++ std::ostringstream.
 
-    This can be useful for example in a call to SAL_INFO_S when depending on
-    some boolean condition data of incompatible types shall be streamed into the
+    This can be useful for example in a call to SAL_INFO when depending on some
+    boolean condition data of incompatible types shall be streamed into the
     message, as in:
 
-      SAL_INFO_S(
-        "foo", "object: " << (hasName ? obj->name : SAL_STREAM(obj)));
+      SAL_INFO("foo", "object: " << (hasName ? obj->name : SAL_STREAM(obj)));
 
     @since LibreOffice 3.5
 */
@@ -160,28 +156,18 @@ inline void SAL_CALL log(
     (dynamic_cast< ::std::ostringstream & >(::std::ostringstream() << stream). \
      str())
 
-#endif
-
 /** Basic logging functionality.
 
-    SAL_INFO(char const * area, char const * format, ...),
-    SAL_INFO_IF(bool condition, char const * area, char const * format, ...),
-    SAL_WARN(char const * area, char const * format, ...), and
-    SAL_WARN_IF(bool condition, char const * area, char const * format, ...)
-    produce an info resp. warning log entry with a printf-style message.  The
-    given format argument and any following arguments must be so that that
-    sequence of arguments would be appropriate for a call to printf.
-
-    SAL_INFO_S(char const * area, expr),
-    SAL_INFO_IF_S(bool condition, char const * area, expr),
-    SAL_WARN_S(char const * area, expr), and
-    SAL_WARN_IF_S(bool condition, char const * area, expr) produce an info resp.
+    SAL_INFO(char const * area, expr),
+    SAL_INFO_IF(bool condition, char const * area, expr),
+    SAL_WARN(char const * area, expr), and
+    SAL_WARN_IF(bool condition, char const * area, expr) produce an info resp.
     warning log entry with a message produced by piping items into a C++
-    std::ostringstream (and are only available in C++).  The given expr must be
-    so that the full expression "stream << expr" is valid, where stream is a
-    variable of type std::ostringstream.
+    std::ostringstream.  The given expr must be so that the full expression
+    "stream << expr" is valid, where stream is a variable of type
+    std::ostringstream.
 
-      SAL_INFO_S("foo", "string " << s << " of length " << n)
+      SAL_INFO("foo", "string " << s << " of length " << n)
 
     would be an example of such a call; if the given s is of type rtl::OUString,
 
@@ -252,48 +238,25 @@ inline void SAL_CALL log(
     @since LibreOffice 3.5
 */
 
-#define SAL_INFO(area, ...) \
-    SAL_DETAIL_LOG_FORMAT( \
-        SAL_DETAIL_ENABLE_LOG_INFO, SAL_DETAIL_LOG_LEVEL_INFO, area, \
-        SAL_WHERE, __VA_ARGS__)
-
-#define SAL_INFO_IF(condition, area, ...) \
-    SAL_DETAIL_LOG_FORMAT( \
-        SAL_DETAIL_ENABLE_LOG_INFO && (condition), SAL_DETAIL_LOG_LEVEL_INFO, \
-        area, SAL_WHERE, __VA_ARGS__)
-
-#define SAL_WARN(area, ...) \
-    SAL_DETAIL_LOG_FORMAT( \
-        SAL_DETAIL_ENABLE_LOG_WARN, SAL_DETAIL_LOG_LEVEL_WARN, area, \
-        SAL_WHERE, __VA_ARGS__)
-
-#define SAL_WARN_IF(condition, area, ...) \
-    SAL_DETAIL_LOG_FORMAT( \
-        SAL_DETAIL_ENABLE_LOG_WARN && (condition), SAL_DETAIL_LOG_LEVEL_WARN, \
-        area, SAL_WHERE, __VA_ARGS__)
-
-#if defined __cplusplus
-
-#define SAL_INFO_S(area, stream) \
+#define SAL_INFO(area, stream) \
     SAL_DETAIL_LOG_STREAM( \
         SAL_DETAIL_ENABLE_LOG_INFO, ::SAL_DETAIL_LOG_LEVEL_INFO, area, \
         SAL_WHERE, stream)
 
-#define SAL_INFO_IF_S(condition, area, stream)  \
+#define SAL_INFO_IF(condition, area, stream)  \
     SAL_DETAIL_LOG_STREAM( \
         SAL_DETAIL_ENABLE_LOG_INFO && (condition), \
         ::SAL_DETAIL_LOG_LEVEL_INFO, area, SAL_WHERE, stream)
 
-#define SAL_WARN_S(area, stream) \
+#define SAL_WARN(area, stream) \
     SAL_DETAIL_LOG_STREAM( \
         SAL_DETAIL_ENABLE_LOG_WARN, ::SAL_DETAIL_LOG_LEVEL_WARN, area, \
         SAL_WHERE, stream)
 
-#define SAL_WARN_IF_S(condition, area, stream)   \
+#define SAL_WARN_IF(condition, area, stream)   \
     SAL_DETAIL_LOG_STREAM( \
         SAL_DETAIL_ENABLE_LOG_WARN && (condition), \
         ::SAL_DETAIL_LOG_LEVEL_WARN, area, SAL_WHERE, stream)
-#endif
 
 #endif
 

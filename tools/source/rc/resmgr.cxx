@@ -46,7 +46,7 @@
 #include <rtl/oustringostreaminserter.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
-#include <sal/log.h>
+#include <sal/log.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/bootstrap.hxx>
@@ -949,7 +949,7 @@ void ResMgr::Init( const OUString& rFileName )
             InternalResMgr::FreeGlobalRes( aResHandle, pVoid );
         else
         {
-            SAL_WARN_S("tools", "Wrong version: " << pImpRes->aFileName);
+            SAL_WARN("tools", "Wrong version: " << pImpRes->aFileName);
         }
     }
 #endif

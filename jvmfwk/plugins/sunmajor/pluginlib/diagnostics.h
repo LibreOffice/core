@@ -32,13 +32,13 @@
 #include "sal/config.h"
 
 #include "rtl/oustringostreaminserter.hxx"
-#include "sal/log.h"
+#include "sal/log.hxx"
 
-#define JFW_ENSURE(c, m) SAL_WARN_IF_S(!(c), "jfw", m)
+#define JFW_ENSURE(c, m) SAL_WARN_IF(!(c), "jfw", m)
 
-#define JFW_TRACE0(m) SAL_INFO_S("jfw.level1", m)
+#define JFW_TRACE0(m) SAL_INFO("jfw.level1", m)
 
-#define JFW_TRACE2(m) SAL_INFO_S("jfw.level2", m);
+#define JFW_TRACE2(m) SAL_INFO("jfw.level2", m);
 
 #endif
 

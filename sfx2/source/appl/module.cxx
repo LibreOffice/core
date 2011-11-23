@@ -50,7 +50,7 @@
 #include "sfx2/taskpane.hxx"
 #include <tools/diagnose_ex.h>
 #include <rtl/strbuf.hxx>
-#include <sal/log.h>
+#include <sal/log.hxx>
 
 #define SfxModule
 #include "sfxslots.hxx"
@@ -392,7 +392,7 @@ FieldUnit SfxModule::GetModuleFieldUnit( ::com::sun::star::uno::Reference< ::com
     SfxPoolItem const * pItem = pModule->GetItem( SID_ATTR_METRIC );
     if ( pItem == NULL )
     {
-        SAL_WARN_S(
+        SAL_WARN(
             "sfx2",
             "SfxModule::GetFieldUnit: no metric item in the module implemented"
                 " by '" << typeid(*pModule).name() << "'!");

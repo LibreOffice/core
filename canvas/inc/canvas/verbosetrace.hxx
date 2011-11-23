@@ -31,9 +31,10 @@
 
 #include "sal/config.h"
 
-#include "sal/log.h"
+#include "sal/detail/log.h"
 
-#define VERBOSE_TRACE(...) SAL_INFO("canvas.level2", __VA_ARGS__)
+#define VERBOSE_TRACE(...) \
+    SAL_DETAIL_INFO_IF_FORMAT(true, "canvas.level2", __VA_ARGS__)
 
 #endif /* INCLUDED_CANVAS_VERBOSETRACE_HXX */
 

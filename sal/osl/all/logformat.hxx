@@ -34,7 +34,7 @@
 
 #include <cstdarg>
 
-#include "sal/log.h"
+#include "sal/detail/log.h"
 
 namespace osl { namespace detail {
 

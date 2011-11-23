@@ -31,7 +31,7 @@
 #include "mediamisc.hxx"
 #include "mediawindow.hrc"
 #include <rtl/oustringostreaminserter.hxx>
-#include <sal/log.h>
+#include <sal/log.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -83,14 +83,14 @@ uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl:
                     xManager->createPlayer( rURL ), uno::UNO_QUERY );
             }
             else
-                SAL_WARN_S(
+                SAL_WARN(
                     "avmedia",
                     ("failed to create media player service "
                      AVMEDIA_MANAGER_SERVICE_NAME));
         }
         catch( const uno::Exception &e )
         {
-            SAL_WARN_S(
+            SAL_WARN(
                 "avmedia",
                 "couldn't create media player " AVMEDIA_MANAGER_SERVICE_NAME
                     ", exception '" << e.Message << '\'');

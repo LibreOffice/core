@@ -39,7 +39,7 @@
 #include <limits.h>
 
 #include "tools/debug.hxx"
-#include "sal/log.h"
+#include "sal/log.hxx"
 
 #include "vcl/svapp.hxx"
 #include "vcl/event.hxx"

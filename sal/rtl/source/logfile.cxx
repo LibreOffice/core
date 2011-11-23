@@ -44,7 +44,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/alloc.h>
 #include <rtl/instance.hxx>
-#include <sal/log.h>
+#include <sal/log.hxx>
 #include "osl/thread.h"
 
 #include <algorithm>
@@ -109,7 +109,7 @@ OUString getFileUrl( const OUString &name )
     if ( osl_getFileURLFromSystemPath( name.pData, &aRet.pData )
          != osl_File_E_None )
     {
-        SAL_WARN_S(
+        SAL_WARN(
             "sal", "osl_getFileURLFromSystemPath failed for \"" << name << '"');
     }
 
@@ -185,7 +185,7 @@ void init() {
                 }
                 else
                 {
-                    SAL_WARN_S(
+                    SAL_WARN(
                         "sal",
                         "Couldn't open logfile " << o << '(' << e << ')');
                 }

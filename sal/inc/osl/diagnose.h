@@ -32,7 +32,7 @@
 
 #include "sal/config.h"
 
-#include <sal/log.h>
+#include <sal/detail/log.h>
 #include <sal/types.h>
 
 /** provides simple diagnostic support
@@ -42,7 +42,7 @@
     if an assertion fails, and is controlled by the standard NDEBUG macro).
     Logging of warnings (e.g., about malformed input) and traces (e.g., about
     steps taken while executing some protocol) should use the facilities
-    provided by sal/log.h.
+    provided by (C++ only) sal/log.hxx.
 
     Because the assertion macros (OSL_ASSERT, OSL_ENSURE, OSL_FAIL, OSL_PRECOND,
     and OSL_POSTCOND) have been used for true assertions as well as for logged
@@ -139,19 +139,20 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 
 /* the macro OSL_LOG_PREFIX is intended to be an office internal macro for now
 
-   it is deprecated and superseded by SAL_WHERE
+   it is deprecated and superseded by (C++ only) SAL_WHERE
 */
-#define OSL_LOG_PREFIX SAL_WHERE
+#define OSL_LOG_PREFIX SAL_DETAIL_WHERE
 
 #define OSL_DEBUG_ONLY(s)   _OSL_DEBUG_ONLY(s)
 
 #define OSL_TRACE(...) \
-    SAL_INFO_IF(OSL_DEBUG_LEVEL > 0, "legacy.osl", __VA_ARGS__)
+    SAL_DETAIL_INFO_IF_FORMAT(OSL_DEBUG_LEVEL > 0, "legacy.osl", __VA_ARGS__)
 
 #if OSL_DEBUG_LEVEL > 0
-#define OSL_ASSERT(c) SAL_WARN_IF(!(c), "legacy.osl", "OSL_ASSERT")
-#define OSL_ENSURE(c, m) SAL_WARN_IF(!(c), "legacy.osl", "%s", m)
-#define OSL_FAIL(m) SAL_WARN_IF(sal_True, "legacy.osl", "%s", m)
+#define OSL_ASSERT(c) \
+    SAL_DETAIL_WARN_IF_FORMAT(!(c), "legacy.osl", "OSL_ASSERT")
+#define OSL_ENSURE(c, m) SAL_DETAIL_WARN_IF_FORMAT(!(c), "legacy.osl", "%s", m)
+#define OSL_FAIL(m) SAL_DETAIL_WARN_IF_FORMAT(sal_True, "legacy.osl", "%s", m)
 #else
 #define OSL_ASSERT(c) ((void) 0)
 #define OSL_ENSURE(c, m) ((void) 0)

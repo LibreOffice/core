@@ -32,7 +32,7 @@
 #include <com/sun/star/embed/VerbAttributes.hpp>
 #include <basic/sbstar.hxx>
 #include <rtl/oustringostreaminserter.hxx>
-#include <sal/log.h>
+#include <sal/log.hxx>
 #include <svl/itempool.hxx>
 #include <svl/undo.hxx>
 #include <svtools/itemdel.hxx>
@@ -625,7 +625,7 @@ void SfxShell::DoActivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI )
     if ( !p_IF )
         return;
 #endif
-    SAL_INFO_S(
+    SAL_INFO(
         "sfx2.vb",
         "SfxShell::DoActivate() " << this << "  " << GetInterface()->GetName()
             << " bMDI " << (bMDI ? "MDI" : ""));
@@ -661,7 +661,7 @@ void SfxShell::DoDeactivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI )
     if ( !p_IF )
         return;
 #endif
-    SAL_INFO_S(
+    SAL_INFO(
         "sfx2.vb",
         "SfxShell::DoDeactivate()" << this << "  " << GetInterface()->GetName()
             << " bMDI " << (bMDI ? "MDI" : ""));

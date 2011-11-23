@@ -34,7 +34,7 @@
 #include "rtl/oustringostreaminserter.hxx"
 #include "rtl/uri.hxx"
 #include "rtl/bootstrap.hxx"
-#include "sal/log.h"
+#include "sal/log.hxx"
 #include "osl/file.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "comphelper/servicedecl.hxx"
@@ -75,7 +75,7 @@ void PackageRegistryBackend::disposing( lang::EventObject const & event )
     ::osl::MutexGuard guard( getMutex() );
     if ( m_bound.erase( url ) != 1 )
     {
-        SAL_WARN_S("basic", "erase(" << url << ") != 1");
+        SAL_WARN("basic", "erase(" << url << ") != 1");
     }
 }
 
@@ -681,7 +681,7 @@ void Package::processPackage_impl(
             }
         }
         catch (RuntimeException &e) {
-            SAL_WARN_S(
+            SAL_WARN(
                 "basic", "unexpected RuntimeException \"" << e.Message << '"');
             throw;
         }

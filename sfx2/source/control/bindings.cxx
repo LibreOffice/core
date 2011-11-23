@@ -33,7 +33,7 @@
 #include <iomanip>
 
 #include <boost/unordered_map.hpp>
-#include <sal/log.h>
+#include <sal/log.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/eitem.hxx>
@@ -1743,7 +1743,7 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
 sal_uInt16 SfxBindings::EnterRegistrations(const char *pFile, int nLine)
 {
     DBG_MEMTEST();
-    SAL_INFO_S(
+    SAL_INFO(
         "sfx2",
         std::setw(Min(nRegLevel, sal_uInt16(8))) << ' ' << "this = " << this
             << " Level = " << nRegLevel << " SfxBindings::EnterRegistrations "
@@ -1844,7 +1844,7 @@ void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, const char *pFile, int 
         }
     }
 
-    SAL_INFO_S(
+    SAL_INFO(
         "sfx2",
         std::setw(Min(nRegLevel, sal_uInt16(8))) << ' ' << "this = " << this
             << " Level = " << nRegLevel << " SfxBindings::LeaveRegistrations "

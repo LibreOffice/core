@@ -39,7 +39,7 @@
 
 #include <rtl/instance.hxx>
 #include <rtl/oustringostreaminserter.hxx>
-#include <sal/log.h>
+#include <sal/log.hxx>
 
 // AppData-Structure for SBX:
 
@@ -213,7 +213,7 @@ SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
         if( pNew )
             break;
     }
-    SAL_WARN_IF_S(!pNew, "basic", "No factory for SBX ID " << nSbxId);
+    SAL_WARN_IF(!pNew, "basic", "No factory for SBX ID " << nSbxId);
     return pNew;
 }
 
@@ -227,7 +227,7 @@ SbxObject* SbxBase::CreateObject( const rtl::OUString& rClass )
         if( pNew )
             break;
     }
-    SAL_WARN_IF_S(!pNew, "basic", "No factory for object class " << rClass);
+    SAL_WARN_IF(!pNew, "basic", "No factory for object class " << rClass);
     return pNew;
 }
 

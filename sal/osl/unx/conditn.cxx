@@ -31,7 +31,7 @@
 #include <assert.h>
 
 #include "system.h"
-#include <sal/log.h>
+#include <sal/log.hxx>
 #include <sal/types.h>
 
 #include <osl/conditn.h>
@@ -69,8 +69,9 @@ oslCondition SAL_CALL osl_createCondition()
     if ( nRet != 0 )
     {
         SAL_WARN(
-            "sal", "pthread_cond_init failed, errno %d, \"%s\"", nRet,
-            strerror(nRet));
+            "sal",
+            "pthread_cond_init failed, errno " << nRet << ", \""
+                << strerror(nRet) << '"');
 
         free(pCond);
         return 0;
@@ -80,13 +81,15 @@ oslCondition SAL_CALL osl_createCondition()
     if ( nRet != 0 )
     {
         SAL_WARN(
-            "sal", "pthread_mutex_init failed, errno %d, \"%s\"", nRet,
-            strerror(nRet));
+            "sal",
+            "pthread_mutex_init failed, errno " << nRet << ", \""
+                << strerror(nRet) << '"');
 
         nRet = pthread_cond_destroy(&pCond->m_Condition);
         SAL_WARN_IF(
-            nRet != 0, "sal", "pthread_cond_destroy failed, errno %d, \"%s\"",
-            nRet, strerror(nRet));
+            nRet != 0, "sal",
+            "pthread_cond_destroy failed, errno " << nRet << ", \""
+                << strerror(nRet) << '"');
 
         free(pCond);
         pCond = 0;
@@ -109,12 +112,14 @@ void SAL_CALL osl_destroyCondition(oslCondition Condition)
 
         nRet = pthread_cond_destroy(&pCond->m_Condition);
         SAL_WARN_IF(
-            nRet != 0, "sal", "pthread_cond_destroy failed, errno %d, \"%s\"",
-            nRet, strerror(nRet));
+            nRet != 0, "sal",
+            "pthread_cond_destroy failed, errno " << nRet << ", \""
+                << strerror(nRet) << '"');
         nRet = pthread_mutex_destroy(&pCond->m_Lock);
         SAL_WARN_IF(
-            nRet != 0, "sal", "pthread_mutex_destroy failed, errno %d, \"%s\"",
-            nRet, strerror(nRet));
+            nRet != 0, "sal",
+            "pthread_mutex_destroy failed, errno " << nRet << ", \""
+                << strerror(nRet) << '"');
 
         free(Condition);
     }
@@ -142,8 +147,9 @@ sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
    if ( nRet != 0 )
    {
        SAL_WARN(
-           "sal", "pthread_mutex_lock failed, errno %d, \"%s\"", nRet,
-           strerror(nRet));
+           "sal",
+           "pthread_mutex_lock failed, errno " << nRet << ", \""
+               << strerror(nRet) << '"');
        return sal_False;
    }
 
@@ -152,8 +158,9 @@ sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
    if ( nRet != 0 )
    {
        SAL_WARN(
-           "sal", "pthread_cond_broadcast failed, errno %d, \"%s\"", nRet,
-           strerror(nRet));
+           "sal",
+           "pthread_cond_broadcast failed, errno " << nRet << ", \""
+               << strerror(nRet) << '"');
        return sal_False;
    }
 
@@ -161,8 +168,9 @@ sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
    if ( nRet != 0 )
    {
        SAL_WARN(
-           "sal", "pthread_mutex_unlock failed, errno %d, \"%s\"", nRet,
-           strerror(nRet));
+           "sal",
+           "pthread_mutex_unlock failed, errno " << nRet << ", \""
+               << strerror(nRet) << '"');
        return sal_False;
    }
 
@@ -191,8 +199,9 @@ sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition)
     if ( nRet != 0 )
     {
         SAL_WARN(
-            "sal", "pthread_mutex_lock failed, errno %d, \"%s\"", nRet,
-            strerror(nRet));
+            "sal",
+            "pthread_mutex_lock failed, errno " << nRet << ", \""
+                << strerror(nRet) << '"');
         return sal_False;
     }
 
@@ -202,8 +211,8 @@ sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition)
     if ( nRet != 0 )
     {
        SAL_WARN(
-           "sal", "pthread_mutex_unlock failed, errno %d, \"%s\"", nRet,
-           strerror(nRet));
+           "sal", "pthread_mutex_unlock failed, errno " << nRet <<", \""
+               << strerror(nRet) << '"');
         return sal_False;
     }
 
@@ -231,8 +240,8 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
     if ( nRet != 0 )
     {
         SAL_WARN(
-            "sal", "pthread_mutex_lock failed, errno %d, \"%s\"", nRet,
-            strerror(nRet));
+            "sal", "pthread_mutex_lock failed, errno " << nRet <<", \""
+                << strerror(nRet) << '"');
         return osl_cond_result_error;
     }
 
@@ -261,8 +270,8 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
                         nRet = pthread_mutex_unlock(&pCond->m_Lock);
                         SAL_WARN_IF(
                             nRet != 0, "sal",
-                            "pthread_mutex_unlock failed, errno %d, \"%s\"",
-                            nRet, strerror(nRet));
+                            "pthread_mutex_unlock failed, errno " << nRet
+                                << ", \"" << strerror(nRet) << '"');
 
                         return Result;
                     }
@@ -272,8 +281,8 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
                         nRet = pthread_mutex_unlock(&pCond->m_Lock);
                         SAL_WARN_IF(
                             nRet != 0, "sal",
-                            "pthread_mutex_unlock failed, errno %d, \"%s\"",
-                            nRet, strerror(nRet));
+                            "pthread_mutex_unlock failed, errno " << nRet
+                                << ", \"" << strerror(nRet) << '"');
                         return Result;
                     }
                 }
@@ -289,14 +298,15 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
             if ( nRet != 0 )
             {
                 SAL_WARN(
-                    "sal", "pthread_cond_wait failed, errno %d, \"%s\"", nRet,
-                    strerror(nRet));
+                    "sal",
+                    "pthread_cond_wait failed, errno " << nRet << ", \""
+                        << strerror(nRet) << '"');
                 Result = osl_cond_result_error;
                 nRet = pthread_mutex_unlock(&pCond->m_Lock);
                 SAL_WARN_IF(
                     nRet != 0, "sal",
-                    "pthread_mutex_unlock failed, errno %d, \"%s\"", nRet,
-                    strerror(nRet));
+                    "pthread_mutex_unlock failed, errno " << nRet << ", \""
+                        << strerror(nRet) << '"');
 
                 return Result;
             }
@@ -305,8 +315,9 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
 
     nRet = pthread_mutex_unlock(&pCond->m_Lock);
     SAL_WARN_IF(
-        nRet != 0, "sal", "pthread_mutex_unlock failed, errno %d, \"%s\"", nRet,
-        strerror(nRet));
+        nRet != 0, "sal",
+        "pthread_mutex_unlock failed, errno " << nRet << ", \""
+            << strerror(nRet) << '"');
 
     return Result;
 }
@@ -330,15 +341,17 @@ sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition)
 
     nRet = pthread_mutex_lock(&pCond->m_Lock);
     SAL_WARN_IF(
-        nRet != 0, "sal", "pthread_mutex_lock failed, errno %d, \"%s\"", nRet,
-        strerror(nRet));
+        nRet != 0, "sal",
+        "pthread_mutex_lock failed, errno " << nRet << ", \"" << strerror(nRet)
+            << '"');
 
     State = pCond->m_State;
 
     nRet = pthread_mutex_unlock(&pCond->m_Lock);
     SAL_WARN_IF(
-        nRet != 0, "sal", "pthread_mutex_unlock failed, errno %d, \"%s\"", nRet,
-        strerror(nRet));
+        nRet != 0, "sal",
+        "pthread_mutex_unlock failed, errno " << nRet << ", \""
+            << strerror(nRet) << '"');
 
     return State;
 }
