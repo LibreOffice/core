@@ -7565,7 +7565,7 @@ AC_SUBST(COMMONS_LOGGING_JAR)
 
 # scripting provider for BeanShell extension?
 AC_MSG_CHECKING([whether to build extension for support of scripts in BeanShell])
-if test "x$enable_ext_scripting_beanshell" = "xyes" -a "x$enable_extension_integration" != "xno"; then
+if test "x$enable_ext_scripting_beanshell" = "xyes" -a "x$enable_extension_integration" != "xno" -a "x$with_java" != "xno"; then
    AC_MSG_RESULT([yes])
    ENABLE_SCRIPTING_BEANSHELL=YES
 else
@@ -7577,7 +7577,7 @@ AC_SUBST(ENABLE_SCRIPTING_BEANSHELL)
 
 # scripting provider for JavaScript extension?
 AC_MSG_CHECKING([whether to build extension for support of scripts in JavaScript])
-if test "x$enable_ext_scripting_javascript" = "xyes" -a "x$enable_extension_integration" != "xno"; then
+if test "x$enable_ext_scripting_javascript" = "xyes" -a "x$enable_extension_integration" != "xno" -a "x$with_java" != "xno"; then
    AC_MSG_RESULT([yes])
    ENABLE_SCRIPTING_JAVASCRIPT=YES
 else
@@ -8196,7 +8196,7 @@ dnl ===================================================================
 dnl Test whether to include NLPSolver extension
 dnl ===================================================================
 AC_MSG_CHECKING([for NLPSolver extension integration])
-if test "x$enable_ext_nlpsolver" = "xyes" -a "x$enable_extension_integration" != "xno"; then
+if test "x$enable_ext_nlpsolver" = "xyes" -a "x$enable_extension_integration" != "xno" -a "x$with_java" != "no"; then
     BUILD_TYPE="$BUILD_TYPE NLPSOLVER"
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_NLPSOLVER"
     AC_MSG_RESULT([yes])
