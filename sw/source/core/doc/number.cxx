@@ -387,9 +387,6 @@ const SwFmtVertOrient*      SwNumFmt::GetGraphicOrientation() const
     }
 }
 
-#ifdef DBG_UTIL
-long int SwNumRule::s_nInstances = 0;
-#endif
 
 // handle new parameter <eDefaultNumberFormatPositionAndSpaceMode>
 SwNumRule::SwNumRule( const String& rNm,
@@ -412,10 +409,6 @@ SwNumRule::SwNumRule( const String& rNm,
     meDefaultNumberFormatPositionAndSpaceMode( eDefaultNumberFormatPositionAndSpaceMode ),
     msDefaultListId()
 {
-#ifdef DBG_UTIL
-    m_nSerial = s_nInstances++;
-#endif
-
     if( !nRefCount++ )          // zum erstmal, also initialisiern
     {
         SwNumFmt* pFmt;
@@ -514,10 +507,6 @@ SwNumRule::SwNumRule( const SwNumRule& rNumRule )
       meDefaultNumberFormatPositionAndSpaceMode( rNumRule.meDefaultNumberFormatPositionAndSpaceMode ),
       msDefaultListId( rNumRule.msDefaultListId )
 {
-#ifdef DBG_UTIL
-    m_nSerial = s_nInstances++;
-#endif
-
     ++nRefCount;
     memset( aFmts, 0, sizeof( aFmts ));
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )

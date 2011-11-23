@@ -35,10 +35,6 @@
 
 #include "index.hxx"
 
-#ifdef DBG_UTIL
-int SwIndex::s_nSerial = 0;
-#endif
-
 
 TYPEINIT0(SwIndexReg);  // rtti
 
@@ -58,10 +54,6 @@ SwIndex::SwIndex(SwIndexReg *const pArr, xub_StrLen const nIdx)
         ChgValue( *pArray->pLast, nIdx );
     else
         ChgValue( *pArray->pFirst, nIdx );
-
-#ifdef DBG_UTIL
-    m_nSerial = ++s_nSerial;
-#endif
 }
 
 
@@ -69,10 +61,6 @@ SwIndex::SwIndex( const SwIndex& rIdx, short nIdx )
     : pArray( rIdx.pArray ), pNext( 0 ), pPrev( 0 )
 {
     ChgValue( rIdx, rIdx.nIndex + nIdx );
-
-#ifdef DBG_UTIL
-    m_nSerial = ++s_nSerial;
-#endif
 }
 
 
@@ -80,9 +68,6 @@ SwIndex::SwIndex( const SwIndex& rIdx )
     : nIndex( rIdx.nIndex ), pArray( rIdx.pArray ), pNext( 0 ), pPrev( 0 )
 {
     ChgValue( rIdx, rIdx.nIndex );
-#ifdef DBG_UTIL
-    m_nSerial = ++s_nSerial;
-#endif
 }
 
 

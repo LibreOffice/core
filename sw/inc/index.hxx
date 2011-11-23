@@ -53,11 +53,6 @@ class SW_DLLPUBLIC SwIndex
 {
     friend class SwIndexReg;
 
-#ifdef DBG_UTIL
-    static int s_nSerial;
-    int m_nSerial;
-#endif
-
     xub_StrLen  nIndex;
     SwIndexReg* pArray;
     SwIndex *pNext, *pPrev;

@@ -36,9 +36,6 @@
 using std::vector;
 using std::find;
 
-#ifdef DBG_UTIL
-unsigned long SwNumberTreeNode::s_nInstances = 0;
-#endif
 
 SwNumberTreeNode::SwNumberTreeNode()
     : mChildren(),
@@ -49,11 +46,6 @@ SwNumberTreeNode::SwNumberTreeNode()
       mItLastValid()
 {
     mItLastValid = mChildren.end();
-
-#ifdef DBG_UTIL
-    m_nSerial = s_nInstances;
-    s_nInstances++;
-#endif
 }
 
 SwNumberTreeNode::~SwNumberTreeNode()
@@ -74,10 +66,6 @@ SwNumberTreeNode::~SwNumberTreeNode()
     }
 
     OSL_ENSURE( IsPhantom() || mpParent == NULL, ": I'm not supposed to have a parent.");
-
-#ifdef DBG_UTIL
-    s_nInstances--;
-#endif
 
     mpParent = (SwNumberTreeNode *) 0xdeadbeef;
 
@@ -996,18 +984,6 @@ SwNumberTreeNode::GetIterator(const SwNumberTreeNode * pChild) const
 
     return aItResult;
 }
-
-#ifdef DBG_UTIL
-unsigned long SwNumberTreeNode::GetInstances()
-{
-    return s_nInstances;
-}
-
-unsigned long SwNumberTreeNode::GetSerial()
-{
-    return m_nSerial;
-}
-#endif
 
 bool SwNumberTreeNodeLessThan(const SwNumberTreeNode * pA,
                               const SwNumberTreeNode * pB)

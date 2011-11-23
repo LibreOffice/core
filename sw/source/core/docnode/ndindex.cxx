@@ -31,10 +31,6 @@
 
 #include "ndindex.hxx"
 
-#ifdef DBG_UTIL
-int SwNodeIndex::s_nSerial = 0;
-#endif
-
 
 SwNodeRange::SwNodeRange( const SwNodeIndex &rS, const SwNodeIndex &rE )
     : aStart( rS ), aEnd( rE )
@@ -64,10 +60,6 @@ SwNodeIndex::SwNodeIndex( SwNodes& rNds, sal_uLong nIdx )
     : pNd( rNds[ nIdx ] ), pNext( 0 ), pPrev( 0 )
 {
     rNds.RegisterIndex( *this );
-
-#ifdef DBG_UTIL
-    m_nSerial = ++s_nSerial;
-#endif
 }
 
 
@@ -80,9 +72,6 @@ SwNodeIndex::SwNodeIndex( const SwNodeIndex& rIdx, long nDiff )
         pNd = rIdx.pNd;
 
     pNd->GetNodes().RegisterIndex( *this );
-#ifdef DBG_UTIL
-    m_nSerial = ++s_nSerial;
-#endif
 }
 
 
@@ -95,9 +84,6 @@ SwNodeIndex::SwNodeIndex( const SwNode& rNd, long nDiff )
         pNd = (SwNode*)&rNd;
 
     pNd->GetNodes().RegisterIndex( *this );
-#ifdef DBG_UTIL
-    m_nSerial = ++s_nSerial;
-#endif
 }
 
 

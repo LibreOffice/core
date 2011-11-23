@@ -347,11 +347,6 @@ public:
     */
     const SwNumberTreeNode* GetPrecedingNodeOf( const SwNumberTreeNode& rNode ) const;
 
-#ifdef DBG_UTIL
-    static unsigned long GetInstances();
-    unsigned long GetSerial();
-#endif
-
 #ifdef __SW_NUMBER_TREE_SANITY_CHECK
     /**
        Sanity check.
@@ -449,18 +444,6 @@ protected:
        greater than the referenced child are invalid.
      */
     mutable tSwNumberTreeChildren::const_iterator mItLastValid;
-
-#ifdef DBG_UTIL
-    /**
-       Counter for the number of created instances.
-     */
-    static unsigned long s_nInstances;
-
-    /**
-       Serial number.
-    */
-    unsigned long m_nSerial;
-#endif
 
     SwNumberTreeNode(const SwNumberTreeNode& );
     SwNumberTreeNode& operator=( const SwNumberTreeNode& );

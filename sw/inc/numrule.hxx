@@ -115,11 +115,6 @@ public:
 private:
     friend void _FinitCore();
 
-#if DBG_UTIL
-    long int m_nSerial;
-    static long int s_nInstances;
-#endif
-
     static SwNumFmt* aBaseFmts [ RULE_END ][ MAXLEVEL ];
     static sal_uInt16 aDefNumIndents[ MAXLEVEL ];
     // default list level properties for position-and-space mode LABEL_ALIGNMENT
