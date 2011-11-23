@@ -754,7 +754,6 @@ void ScInputWindow::MouseMove( const MouseEvent& rMEvt )
     if ( lcl_isExperimentalMode() )
     {
         Point aPosPixel = GetPointerPosPixel();
-        Point aPnt = PixelToLogic( aPosPixel );
 
         ScInputBarGroup* pGroupBar = dynamic_cast< ScInputBarGroup* > ( pRuntimeWindow.get() );
         if ( bInResize || ( GetOutputSizePixel().Height() - aPosPixel.Y() <= 4  ) )
