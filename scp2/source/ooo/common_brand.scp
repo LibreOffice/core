@@ -414,6 +414,12 @@ Directory gid_Brand_Dir_Share_Uno_Packages_Cache
     Styles = (CREATE);
 End
 
+Directory gid_Brand_Dir_Share_Uno_Packages_Cache_Uno_Packages
+    ParentID = gid_Brand_Dir_Share_Uno_Packages_Cache;
+    DosName = "uno_packages";
+    Styles = (CREATE);
+End
+
 Directory gid_Brand_Dir_Share_Registry
     ParentID = gid_Brand_Dir_Share;
     DosName = "registry";
