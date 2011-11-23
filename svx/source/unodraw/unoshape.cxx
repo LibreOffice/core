@@ -1720,10 +1720,12 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
             throw beans::UnknownPropertyException();
 
         if( (pMap->nFlags & beans::PropertyAttribute::READONLY ) != 0 )
-            throw beans::PropertyVetoException( rtl::OUString::createFromAscii(
-                        OSL_FORMAT( "Readonly property can't be set: %s",
-                            rtl::OUStringToOString( rPropertyName, RTL_TEXTENCODING_UTF8 ).getStr() ) ),
-                        uno::Reference< drawing::XShape >( this ) );
+            throw beans::PropertyVetoException(
+                ( rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "Readonly property can't be set: " ) )
+                  + rPropertyName ),
+                uno::Reference< drawing::XShape >( this ) );
 
         mpModel->SetChanged();
 
