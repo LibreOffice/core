@@ -137,7 +137,7 @@ ScRangeData* ScNamedRangeObj::GetRangeData_Impl()
             pNames = pDocShell->GetDocument()->GetRangeName();
         if (pNames)
         {
-            pRet = pNames->findByName(aName);
+            pRet = pNames->findByUpperName(ScGlobal::pCharClass->upper(aName));
             if (pRet)
                 pRet->ValidateTabRefs();        // adjust relative tab refs to valid tables
         }
@@ -180,7 +180,7 @@ void ScNamedRangeObj::Modify_Impl( const String* pNewName, const ScTokenArray* p
     if (!pNames)
         return;
 
-    const ScRangeData* pOld = pNames->findByName(aName);
+    const ScRangeData* pOld = pNames->findByUpperName(ScGlobal::pCharClass->upper(aName));
     if (!pOld)
         return;
 
@@ -556,7 +556,7 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const rtl::OUString& aName,
     {
         ScDocument* pDoc = pDocShell->GetDocument();
         ScRangeName* pNames = GetRangeName_Impl();
-        if (pNames && !pNames->findByName(aName))
+        if (pNames && !pNames->findByUpperName(ScGlobal::pCharClass->upper(aName)))
         {
             ScRangeName* pNewRanges = new ScRangeName( *pNames );
             // GRAM_PODF_A1 for API compatibility.
@@ -617,7 +617,7 @@ void SAL_CALL ScNamedRangesObj::removeByName( const rtl::OUString& aName )
         ScRangeName* pNames = GetRangeName_Impl();
         if (pNames)
         {
-            const ScRangeData* pData = pNames->findByName(aName);
+            const ScRangeData* pData = pNames->findByUpperName(ScGlobal::pCharClass->upper(aName));
             if (pData && lcl_UserVisibleName(*pData))
             {
                 ScRangeName* pNewRanges = new ScRangeName(*pNames);
@@ -779,7 +779,7 @@ sal_Bool SAL_CALL ScNamedRangesObj::hasByName( const rtl::OUString& aName )
         ScRangeName* pNames = GetRangeName_Impl();
         if (pNames)
         {
-            const ScRangeData* pData = pNames->findByName(aName);
+            const ScRangeData* pData = pNames->findByUpperName(ScGlobal::pCharClass->upper(aName));
             if (pData && lcl_UserVisibleName(*pData))
                 return sal_True;
         }

@@ -996,7 +996,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                     bool bInUse = ( aUsedNames.find(nOldIndex) != aUsedNames.end() );
                     if (bInUse)
                     {
-                        const ScRangeData* pExistingData = GetRangeName()->findByName(itr->GetName());
+                        const ScRangeData* pExistingData = GetRangeName()->findByUpperName(itr->GetUpperName());
                         if (pExistingData)
                         {
                             // the name exists already in the destination document

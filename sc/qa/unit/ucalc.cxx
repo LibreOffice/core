@@ -2709,12 +2709,12 @@ void Test::testCopyPaste()
     CPPUNIT_ASSERT_MESSAGE("copied value should be 1", aValue == 1);
 
     //chack local range name after copying
-    pLocal1 = m_pDoc->GetRangeName(1)->findByName(OUString(RTL_CONSTASCII_USTRINGPARAM("local1")));
+    pLocal1 = m_pDoc->GetRangeName(1)->findByUpperName(OUString(RTL_CONSTASCII_USTRINGPARAM("LOCAL1")));
     CPPUNIT_ASSERT_MESSAGE("local range name 1 should be copied", pLocal1);
     ScRange aRangeLocal1;
     pLocal1->IsValidReference(aRangeLocal1);
     CPPUNIT_ASSERT_MESSAGE("local range 1 should still point to Sheet1.A1",aRangeLocal1 == ScRange(0,0,0,0,0,0));
-    pLocal2 = m_pDoc->GetRangeName(1)->findByName(OUString(RTL_CONSTASCII_USTRINGPARAM("local2")));
+    pLocal2 = m_pDoc->GetRangeName(1)->findByUpperName(OUString(RTL_CONSTASCII_USTRINGPARAM("LOCAL2")));
     CPPUNIT_ASSERT_MESSAGE("local2 should not be copied", pLocal2 == NULL);
 
 

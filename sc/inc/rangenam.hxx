@@ -202,8 +202,6 @@ public:
     SC_DLLPUBLIC ScRangeName(const ScRangeName& r);
 
     SC_DLLPUBLIC const ScRangeData* findByRange(const ScRange& rRange) const;
-    SC_DLLPUBLIC ScRangeData* findByName(const rtl::OUString& rName);
-    SC_DLLPUBLIC const ScRangeData* findByName(const rtl::OUString& rName) const;
     SC_DLLPUBLIC ScRangeData* findByUpperName(const rtl::OUString& rName);
     SC_DLLPUBLIC const ScRangeData* findByUpperName(const rtl::OUString& rName) const;
     SC_DLLPUBLIC ScRangeData* findByIndex(sal_uInt16 i);

@@ -420,7 +420,7 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
                 bHasGraphics |= GraphicSize( nCol, nRow, nTab, pE );
             if ( pE->pName )
             {   // Anchor Name => RangeName
-                if (!pRangeNames->findByName(*pE->pName))
+                if (!pRangeNames->findByUpperName(ScGlobal::pCharClass->upper(*pE->pName)))
                 {
                     ScRangeData* pData = new ScRangeData( mpDoc, *pE->pName,
                         ScAddress( nCol, nRow, nTab ) );

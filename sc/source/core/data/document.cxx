@@ -2121,7 +2121,7 @@ void ScDocument::CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameDat
             A proper solution would ask the user how to proceed.
             The adjustment of the indices in the formulas is done later.
         */
-        const ScRangeData* pExistingData = GetRangeName()->findByName(itr->GetName());
+        const ScRangeData* pExistingData = GetRangeName()->findByUpperName(itr->GetUpperName());
         if (pExistingData)
         {
             sal_uInt16 nOldIndex = itr->GetIndex();

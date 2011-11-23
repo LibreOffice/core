@@ -307,9 +307,9 @@ sal_Bool ScRangeUtil::MakeRangeFromName (
         ScRangeName* pRangeNames = pDoc->GetRangeName( nTable );
         ScRangeData* pData = NULL;
         if ( pRangeNames )
-            pData = pRangeNames->findByName(aName);
+            pData = pRangeNames->findByUpperName(ScGlobal::pCharClass->upper(aName));
         if (!pData)
-            pData = pDoc->GetRangeName()->findByName(aName);
+            pData = pDoc->GetRangeName()->findByUpperName(ScGlobal::pCharClass->upper(aName));
         if (pData)
         {
             String       aStrArea;
@@ -1021,16 +1021,17 @@ ScRangeData* ScRangeStringConverter::GetRangeDataFromString(const rtl::OUString&
 {
     ScRangeName* pLocalRangeName = pDoc->GetRangeName(nTab);
     ScRangeData* pData = NULL;
+    rtl::OUString aUpperName = ScGlobal::pCharClass->upper(rString);
     if(pLocalRangeName)
     {
-        pData = pLocalRangeName->findByName(rString);
+        pData = pLocalRangeName->findByUpperName(aUpperName);
     }
     if (!pData)
     {
         ScRangeName* pGlobalRangeName = pDoc->GetRangeName();
         if (pGlobalRangeName)
         {
-            pData = pGlobalRangeName->findByName(rString);
+            pData = pGlobalRangeName->findByUpperName(aUpperName);
         }
     }
     return pData;

@@ -317,7 +317,7 @@ void ScNameDlg::CalcCurTableAssign( String& aAssign, ScRangeData* pRangeData )
 void ScNameDlg::ShowOptions(const ScRangeNameLine& rLine)
 {
     ScRangeName* pRangeName = GetRangeName(rLine.aScope);
-    ScRangeData* pData = pRangeName->findByName(rLine.aName);
+    ScRangeData* pData = pRangeName->findByUpperName(ScGlobal::pCharClass->upper(rLine.aName));
     if (pData)
     {
         UpdateChecks(pData);

@@ -208,7 +208,7 @@ void ScHTMLImport::WriteToDocument(
         if (!pTable->GetTableName().isEmpty())
         {
             String aName( ScfTools::GetNameFromHTMLName( pTable->GetTableName() ) );
-            if (!mpDoc->GetRangeName()->findByName(aName))
+            if (!mpDoc->GetRangeName()->findByUpperName(ScGlobal::pCharClass->upper(aName)))
                 InsertRangeName( mpDoc, aName, aNewRange );
         }
     }
@@ -238,7 +238,7 @@ String ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrig
             while( bLoop )
             {
                 aToken = ScfTools::GetNameFromHTMLIndex( nIndex++ );
-                const ScRangeData* pRangeData = pRangeNames->findByName(aToken);
+                const ScRangeData* pRangeData = pRangeNames->findByUpperName(ScGlobal::pCharClass->upper(aToken));
                 if (pRangeData)
                 {
                     ScRange aRange;

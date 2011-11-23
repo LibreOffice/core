@@ -1017,7 +1017,7 @@ bool lcl_GetRange( ScDocument* pDoc, sal_uInt16 nType, const String& rName, ScRa
         ScRangeName* pList = pDoc->GetRangeName();
         if (pList)
         {
-            const ScRangeData* p = pList->findByName(rName);
+            const ScRangeData* p = pList->findByUpperName(ScGlobal::pCharClass->upper(rName));
             if (p && p->IsValidReference(rRange))
                 bFound = true;
         }
@@ -1027,7 +1027,7 @@ bool lcl_GetRange( ScDocument* pDoc, sal_uInt16 nType, const String& rName, ScRa
         ScDBCollection* pList = pDoc->GetDBCollection();
         if (pList)
         {
-            const ScDBData* p = pList->getNamedDBs().findByName(rName);
+            const ScDBData* p = pList->getNamedDBs().findByUpperName(ScGlobal::pCharClass->upper(rName));
             if (p)
             {
                 SCTAB nTab;

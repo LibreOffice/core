@@ -4575,7 +4575,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
             ScRange( nX1, nY1, nTab, nX2, nY2, nTab ).Format( aContent, SCR_ABS_3D, pDoc );
 
             bool bInsert = false;
-            ScRangeData* pOld = rList.findByName(aName);
+            ScRangeData* pOld = rList.findByUpperName(ScGlobal::pCharClass->upper(aName));
             if (pOld)
             {
                 String aOldStr;
@@ -4738,7 +4738,7 @@ sal_Bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, sal_Bool bApi )
     for (ScRangeName::iterator itr = itrBeg; itr != itrEnd; ++itr)
     {
         const ScRangeData& r = *itr;
-        if (!r.HasType(RT_DATABASE) && !r.HasType(RT_SHARED) && !pLocalList->findByName(r.GetName()))
+        if (!r.HasType(RT_DATABASE) && !r.HasType(RT_SHARED) && !pLocalList->findByUpperName(r.GetUpperName()))
             ++nValidCount;
     }
 
@@ -4773,7 +4773,7 @@ sal_Bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, sal_Bool bApi )
             for (ScRangeName::iterator itr = itrBeg; itr != itrEnd; ++itr)
             {
                 ScRangeData& r = *itr;
-                if (!r.HasType(RT_DATABASE) && !r.HasType(RT_SHARED) && !pLocalList->findByName(r.GetName()))
+                if (!r.HasType(RT_DATABASE) && !r.HasType(RT_SHARED) && !pLocalList->findByUpperName(r.GetUpperName()))
                     ppSortArray[j++] = &r;
             }
 #ifndef ICC

@@ -2107,7 +2107,7 @@ long ScDocShell::DdeSetData( const String& rItem,
     ScRangeName* pRange = aDocument.GetRangeName();
     if( pRange )
     {
-        const ScRangeData* pData = pRange->findByName(aPos);
+        const ScRangeData* pData = pRange->findByUpperName(ScGlobal::pCharClass->upper(aPos));
         if (pData)
         {
             if( pData->HasType( RT_REFAREA )

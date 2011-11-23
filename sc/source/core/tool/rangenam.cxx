@@ -735,17 +735,6 @@ public:
     }
 };
 
-class MatchByName : public unary_function<ScRangeData, bool>
-{
-    const OUString& mrName;
-public:
-    MatchByName(const OUString& rName) : mrName(rName) {}
-    bool operator() (const ScRangeData& r) const
-    {
-        return mrName.equals(r.GetName());
-    }
-};
-
 class MatchByUpperName : public unary_function<ScRangeData, bool>
 {
     const OUString& mrName;
@@ -810,20 +799,6 @@ const ScRangeData* ScRangeName::findByRange(const ScRange& rRange) const
 {
     DataType::const_iterator itr = std::find_if(
         maData.begin(), maData.end(), MatchByRange(rRange));
-    return itr == maData.end() ? NULL : &(*itr);
-}
-
-ScRangeData* ScRangeName::findByName(const OUString& rName)
-{
-    DataType::iterator itr = std::find_if(
-        maData.begin(), maData.end(), MatchByName(rName));
-    return itr == maData.end() ? NULL : &(*itr);
-}
-
-const ScRangeData* ScRangeName::findByName(const OUString& rName) const
-{
-    DataType::const_iterator itr = std::find_if(
-        maData.begin(), maData.end(), MatchByName(rName));
     return itr == maData.end() ? NULL : &(*itr);
 }
 

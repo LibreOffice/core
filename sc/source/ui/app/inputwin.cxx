@@ -2240,7 +2240,7 @@ void ScPosWnd::DoEnter()
                 {
                     ScRangeName* pNames = pDoc->GetRangeName();
                     ScRange aSelection;
-                    if ( pNames && !pNames->findByName(aText) &&
+                    if ( pNames && !pNames->findByUpperName(ScGlobal::pCharClass->upper(aText)) &&
                             (pViewData->GetSimpleArea( aSelection ) == SC_MARK_SIMPLE) )
                     {
                         ScRangeName aNewRanges( *pNames );

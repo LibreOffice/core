@@ -1184,7 +1184,7 @@ bool getScRangeListForAddress( const rtl::OUString& sName, ScDocShell* pDocSh, S
                 ScRangeName* pRangeName = pDoc->GetRangeName(nCurTab);
                 if (pRangeName)
                 {
-                    bLocalName = pRangeName->findByName(sAddress) != NULL;
+                    bLocalName = pRangeName->findByUpperName(ScGlobal::pCharClass->upper(sAddress)) != NULL;
                     // TODO: Handle local names correctly.
                     (void)bLocalName;
                 }
