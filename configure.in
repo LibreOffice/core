@@ -8196,7 +8196,7 @@ dnl ===================================================================
 dnl Test whether to include NLPSolver extension
 dnl ===================================================================
 AC_MSG_CHECKING([for NLPSolver extension integration])
-if test "x$enable_ext_nlpsolver" = "xyes" -a "x$enable_extension_integration" != "xno" -a "x$with_java" != "no"; then
+if test "x$enable_ext_nlpsolver" = "xyes" -a "x$enable_extension_integration" != "xno" -a "x$with_java" != "xno"; then
     BUILD_TYPE="$BUILD_TYPE NLPSOLVER"
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_NLPSOLVER"
     AC_MSG_RESULT([yes])
