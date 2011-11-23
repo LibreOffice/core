@@ -84,7 +84,7 @@ OUT2INC += mythes.hxx
 CONFIGURE_ACTION=configure
 CONFIGURE_FLAGS= --disable-shared --with-pic
 
-BUILD_ACTION=gmake
+BUILD_ACTION=make
 
 .ELSE
 BUILD_ACTION=dmake
