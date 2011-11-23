@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <assert.h>
 #include <stdlib.h>             // fuer qsort
 #include <tools/solar.h>
 
@@ -72,7 +73,7 @@ void SwIndex::Init(xub_StrLen const nIdx)
     }
     else if (!m_pIndexReg->m_pFirst) // first Index?
     {
-        OSL_ASSERT(!m_pIndexReg->m_pLast);
+        assert(!m_pIndexReg->m_pLast);
         m_pIndexReg->m_pFirst = m_pIndexReg->m_pLast = this;
         m_nIndex = nIdx;
     }
@@ -89,7 +90,7 @@ void SwIndex::Init(xub_StrLen const nIdx)
 
 SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, xub_StrLen nNewValue )
 {
-    OSL_ASSERT(m_pIndexReg == rIdx.m_pIndexReg);
+    assert(m_pIndexReg == rIdx.m_pIndexReg);
     if (!m_pIndexReg)
     {
         return *this; // no IndexReg => no list to sort into; m_nIndex is 0
@@ -164,7 +165,7 @@ void SwIndex::Remove()
 {
     if (!m_pIndexReg)
     {
-        OSL_ASSERT(!m_pPrev && !m_pNext);
+        assert(!m_pPrev && !m_pNext);
         return;
     }
 
@@ -193,7 +194,7 @@ void SwIndex::Remove()
 SwIndex& SwIndex::operator=( const SwIndex& rIdx )
 {
     bool bEqual;
-    if (rIdx.m_pIndexReg != m_pIndexReg)         // im alten abmelden !!
+    if (rIdx.m_pIndexReg != m_pIndexReg) // unregister!
     {
         Remove();
         m_pIndexReg = rIdx.m_pIndexReg;
@@ -234,7 +235,7 @@ SwIndexReg::SwIndexReg()
 
 SwIndexReg::~SwIndexReg()
 {
-    OSL_ENSURE( !m_pFirst || !m_pLast, "There are still indices registered" );
+    assert(!m_pFirst && !m_pLast); // There are still indices registered
 }
 
 void SwIndexReg::Update( SwIndex const & rIdx, const xub_StrLen nDiff,
@@ -360,8 +361,8 @@ xub_StrLen SwIndex::operator-=( const SwIndex & rIndex )
 *************************************************************************/
 bool SwIndex::operator< ( const SwIndex & rIndex ) const
 {
-    OSL_ENSURE( m_pIndexReg == rIndex.m_pIndexReg,
-            "Attempt to compare indices into different arrays.");
+    // Attempt to compare indices into different arrays
+    assert(m_pIndexReg == rIndex.m_pIndexReg);
     return m_nIndex < rIndex.m_nIndex;
 }
 
@@ -370,8 +371,8 @@ bool SwIndex::operator< ( const SwIndex & rIndex ) const
 *************************************************************************/
 bool SwIndex::operator<=( const SwIndex & rIndex ) const
 {
-    OSL_ENSURE( m_pIndexReg == rIndex.m_pIndexReg,
-            "Attempt to compare indices into different arrays.");
+    // Attempt to compare indices into different arrays
+    assert(m_pIndexReg == rIndex.m_pIndexReg);
     return m_nIndex <= rIndex.m_nIndex;
 }
 
@@ -380,8 +381,8 @@ bool SwIndex::operator<=( const SwIndex & rIndex ) const
 *************************************************************************/
 bool SwIndex::operator> ( const SwIndex & rIndex ) const
 {
-    OSL_ENSURE( m_pIndexReg == rIndex.m_pIndexReg,
-            "Attempt to compare indices into different arrays.");
+    // Attempt to compare indices into different arrays
+    assert(m_pIndexReg == rIndex.m_pIndexReg);
     return m_nIndex > rIndex.m_nIndex;
 }
 
@@ -390,8 +391,8 @@ bool SwIndex::operator> ( const SwIndex & rIndex ) const
 *************************************************************************/
 bool SwIndex::operator>=( const SwIndex & rIndex ) const
 {
-    OSL_ENSURE( m_pIndexReg == rIndex.m_pIndexReg,
-            "Attempt to compare indices into different arrays.");
+    // Attempt to compare indices into different arrays
+    assert(m_pIndexReg == rIndex.m_pIndexReg);
     return m_nIndex >= rIndex.m_nIndex;
 }
 
