@@ -248,7 +248,7 @@ sub copy_dll($$$)
     -f "$src/$fname" || die "can't find $src";
     -d $dest || die "no directory $dest";
 
-	print STDERR "Copying $src/$fname to $dest\n";
+    print STDERR "Copying $src/$fname to $dest\n";
     copy ("$src/$fname", $dest) || die "copy failed: $!";
     chmod (0755, "$dest/$fname") || die "failed to set dll executable: $!";
 }
@@ -293,11 +293,16 @@ sub msvc_copy_msms($$)
     my $common_files_path = $ENV{"CommonProgramFiles(x86)"};
     if (!defined $common_files_path) {
         $common_files_path = $ENV{CommonProgramFiles};
+        if (!defined $common_files_path) {
+            $common_files_path = "C:\\Program Files\\Common Files";
+        }
     }
-    defined $common_files_path || return;
+
+    defined $common_files_path || die "Windows CommonProgramFiles not found";
+
     my $msm_path = (cygpath $common_files_path . "\\Merge Modules", 'w', $output_format);
     foreach $fname ("Microsoft_VC90_CRT_x86$postfix.msm", "policy_9_0_Microsoft_VC90_CRT_x86$postfix.msm") {
-	print STDERR "Copying $msm_path/$fname to $dest\n";
+        print STDERR "Copying $msm_path/$fname to $dest\n";
         copy ("$msm_path/$fname", $dest) || die "copy failed: $!";
     }
 }
