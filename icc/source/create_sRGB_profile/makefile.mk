@@ -29,7 +29,7 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..$/..$/..$/..$/..
+PRJ=..$/..$/
 
 PRJNAME=icc
 TARGET=create_sRGB_profile
@@ -37,19 +37,18 @@ LIBTARGET=NO
 TARGETTYPE=CUI
 
 ENABLE_EXCEPTIONS=TRUE
-
 EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
 
-CFLAGS+=-I..$/..$/..$/IccProfLib -I..$/..$/ICC_utils
-
-# This tool uses unaligned memory accesses which will lead
-# to SIGBUS on platforms who care, like Solaris LP64
-.IF "$(OS)$(CPU)"=="SOLARISU"
-LINKFLAGS+=-xmemalign=8i
+.IF "$(SYSTEM_SAMPLEICC)"=="YES"
+CFLAGS+=$(SAMPLEICC_CFLAGS)
+.ELSE
+CFLAGS+= \
+    -I$(PRJ)$(INPATH_FOR_BUILD)$/misc$/build$/SampleICC-1.3.2$/IccProfLib \
+    -I$(PRJ)$(INPATH_FOR_BUILD)$/misc$/build$/SampleICC-1.3.2$/Contrib$/ICC_utils
 .ENDIF
 
 # --- Files --------------------------------------------------------
@@ -58,21 +57,29 @@ OBJFILES= $(OBJ)$/create_sRGB_profile.obj
 
 # --- Targets ------------------------------------------------------
 
-# svdem
 APP1LIBSALCPPRT:=
 UWINAPILIB:=
-APP1NOSAL=		TRUE
+APP1NOSAL=	TRUE
 APP1TARGET= 	$(TARGET)
+.IF "$(SYSTEM_SAMPLEICC)"=="YES"
+APP1LIBS=
+APP1STDLIBS=\
+    $(SAMPLEICC_LIBS) \
+    -lICC_utils
+# this library is not in pkgconfig but in the same dir
+# so no need to cry for it and just hardcode it here
+.ELSE
 APP1LIBS=\
     $(SLB)$/proflib.lib \
     $(SLB)$/icutil.lib
-APP1OBJS= $(OBJFILES)
 APP1STDLIBS=
+.ENDIF
+APP1OBJS= $(OBJFILES)
 
 .INCLUDE :	target.mk
 
 ALLTAR: $(TARGET)$(EXECPOST)
 
-$(TARGET)$(EXECPOST): $(BIN)$/$(TARGET)$(EXECPOST) makefile.mk
-    rm -f $@
-    $(GNUCOPY) $(BIN)$/$(TARGET)$(EXECPOST) $@
+$(TARGET)$(EXECPOST): $(BIN)$/$(TARGET)$(EXECPOST)
+    rm -rf $@
+    cd $(BIN)$/ && $(BIN)$/$(TARGET)$(EXECPOST)

@@ -30,6 +30,11 @@ PRJ=.
 PRJNAME=icc
 TARGET=icc
 
+.IF "$(SYSTEM_SAMPLEICC)" == "YES"
+all:
+    @echo "Using system SampleICC, nothing to do here."
+.ELSE
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
@@ -49,14 +54,10 @@ CONVERTFILES= \
     Contrib$/ICC_utils$/Stubs.h \
     Contrib$/ICC_utils$/Vetters.cpp
 
-.IF "$(CROSS_COMPILING)"!="YES"
-CONFIGURE_ACTION= $(GNUCOPY) -r $(BACK_PATH)..$/source$/create_sRGB_profile Contrib$/CmdLine
-BUILD_ACTION=dmake &&  cd Contrib$/CmdLine$/create_sRGB_profile && $(AUGMENT_LIBRARY_PATH) .$/create_sRGB_profile
-.ELSE
-CONFIGURE_ACTION= 
-BUILD_ACTION = (cd $(BACK_PATH)../$(INPATH_FOR_BUILD)/misc/build/SampleICC* && tar cf - Contrib/CmdLine/create_sRGB_profile/sRGB*.hxx) | tar xvf -
-.ENDIF
+CONFIGURE_ACTION=
+BUILD_ACTION=dmake
 
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
