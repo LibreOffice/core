@@ -1,4 +1,4 @@
-ip     icc :	solenv external sal NULL
+ip	icc :	solenv external sal NULL
 ip	icc				usr1	-	all	ip_mkout 		NULL
 ip	icc				nmake	-	all	ip_icc			NULL
-ip      icc/source/create_sRGB_profile	nmake	-	all	ip_profile ip_icc	NULL 
+ip	icc/source/create_sRGB_profile	nmake	-	all	ip_profile ip_icc	NULL 

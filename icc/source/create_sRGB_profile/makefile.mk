@@ -68,6 +68,7 @@ APP1STDLIBS=\
     -lICC_utils
 # this library is not in pkgconfig but in the same dir
 # so no need to cry for it and just hardcode it here
+# bug also opened upstream about this
 .ELSE
 APP1LIBS=\
     $(SLB)$/proflib.lib \
@@ -81,5 +82,4 @@ APP1OBJS= $(OBJFILES)
 ALLTAR: $(TARGET)$(EXECPOST)
 
 $(TARGET)$(EXECPOST): $(BIN)$/$(TARGET)$(EXECPOST)
-    rm -rf $@
     cd $(BIN)$/ && $(BIN)$/$(TARGET)$(EXECPOST)
