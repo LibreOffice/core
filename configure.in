@@ -1644,16 +1644,18 @@ dnl Search for a pre-installed dmake
 dnl ===================================================================
 AC_MSG_CHECKING([for dmake])
 AC_PATH_PROG(DMAKE, dmake, no)
+IS_SYSTEM_DMAKE=NO
 if test "$DMAKE" != "no"; then
    AC_MSG_RESULT([using system dmake])
-else
+   DMAKE_PATH="$DMAKE"
+   IS_SYSTEM_DMAKE=YES
+elif test -n "$with_dmake_path" ; then
    # Did not find pre-installed dmake.
    # Is it at a nonstandard location provided by --with-dmake-path ?
-   if test -n "$with_dmake_path" ; then
-      AC_PATH_PROG(DMAKE, dmake, no, "$with_dmake_path")
-      if test "$DMAKE" != "no"; then
-         AC_MSG_RESULT([using user provided dmake])
-      fi
+   AC_MSG_NOTICE([looking for dmake at $DMAKE_PATH])
+   if test -x "$with_dmake_path" ; then
+      AC_MSG_RESULT([using user provided dmake])
+      DMAKE=$with_dmake_path
    fi
 fi
 
@@ -1668,9 +1670,8 @@ if test "$DMAKE" = "no"; then
        AC_MSG_RESULT([dmake will be downloaded and compiled in bootstrap])
        DMAKE=
     else
-       AC_MSG_WARN([no URL for dmake source code specified, either.])
+       AC_MSG_ERROR([no URL for dmake source code specified, either.])
        BUILD_DMAKE=YES
-       AC_MSG_WARN([dmake will be built from internal sources but these will be removed in the future"])
     fi
 else
     AC_MSG_CHECKING([whether the found dmake is the right dmake])
@@ -1703,7 +1704,8 @@ if test "$DMAKE" = "no"; then
    AC_MSG_ERROR([please use --with-dmake-path or --with-dmake-url to specify dmake executable or source])
 fi
 AC_SUBST(DMAKE_URL)
-AC_SUBST(DMAKE)
+AC_SUBST(DMAKE_PATH)
+AC_SUBST(IS_SYSTEM_DMAKE)
 
 
 dnl ===================================================================
