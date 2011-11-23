@@ -70,6 +70,12 @@ ScNamePasteDlg::ScNamePasteDlg( Window * pParent, ScDocShell* pShell, bool )
     maBtnPasteAll.SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl));
     maBtnClose.SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl));
 
+    if (!mpTable->GetEntryCount())
+    {
+        maBtnPaste.Disable();
+        maBtnPasteAll.Disable();
+    }
+
     FreeResource();
 }
 
