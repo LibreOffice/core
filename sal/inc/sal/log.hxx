@@ -131,7 +131,8 @@ inline char const * unwrapStream(StreamIgnore const &) {
 #define SAL_DETAIL_LOG_STREAM(condition, level, area, where, stream) \
     do { \
         if (condition) { \
-            if (sizeof getResult(::sal::detail::StreamStart() << stream) == 1) \
+            if (sizeof ::sal::detail::getResult( \
+                    ::sal::detail::StreamStart() << stream) == 1) \
             { \
                 ::sal_detail_log( \
                     (level), (area), (where), \
