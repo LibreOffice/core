@@ -1453,7 +1453,7 @@ ModalDialog RID_SCDLG_NAMES_PASTE
     FixedLine FL_DIV
     {
         Pos = MAP_APPFONT( 0, 132 );
-        Size = MAP_APPFONT( 228, 132 );
+        Size = MAP_APPFONT( 228, 3 );
     };
     Text [ en-US ] = "Paste Names" ;
 };

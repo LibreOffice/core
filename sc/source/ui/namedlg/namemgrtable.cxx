@@ -59,15 +59,15 @@ String createEntryString(const ScRangeNameLine& rLine)
 ScRangeManagerTable::ScRangeManagerTable( Window* pWindow, boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap ):
     SvTabListBox( pWindow, WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP ),
     maHeaderBar( pWindow, WB_BUTTONSTYLE | WB_BOTTOMBORDER ),
-    maGlobalString( ResId::toString(ScResId(STR_GLOBAL_SCOPE)))
+    maGlobalString( ScGlobal::GetRscString(STR_GLOBAL_SCOPE))
 {
     Size aBoxSize( pWindow->GetOutputSizePixel() );
 
     maHeaderBar.SetPosSizePixel( Point(0, 0), Size( aBoxSize.Width(), 16 ) );
 
-    String aNameStr(ScResId(STR_HEADER_NAME));
-    String aRangeStr(ScResId(STR_HEADER_RANGE));
-    String aScopeStr(ScResId(STR_HEADER_SCOPE));
+    String aNameStr(ScGlobal::GetRscString(STR_HEADER_NAME));
+    String aRangeStr(ScGlobal::GetRscString(STR_HEADER_RANGE));
+    String aScopeStr(ScGlobal::GetRscString(STR_HEADER_SCOPE));
 
     long nTabSize = aBoxSize.Width()/3;
     maHeaderBar.InsertItem( ITEMID_NAME, aNameStr, nTabSize, HIB_LEFT| HIB_VCENTER );

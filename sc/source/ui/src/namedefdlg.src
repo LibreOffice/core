@@ -148,10 +148,6 @@ ModelessDialog RID_SCDLG_NAMES_DEFINE
         Size = MAP_APPFONT(200, 3 );
     };
 
-    String STR_GLOBAL_SCOPE
-    {
-        Text [ en-US ] = "Document (Global)" ;
-    };
     String STR_INVALIDSYMBOL
     {
         Text [ en-US ] = "Invalid expression" ;

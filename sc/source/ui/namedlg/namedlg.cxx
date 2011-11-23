@@ -102,7 +102,7 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     //
     mErrMsgInvalidSym( ScResId( STR_INVALIDSYMBOL ) ),
     maErrMsgModifiedFailed( ResId::toString(ScResId( STR_MODIFYFAILED ) ) ),
-    maGlobalNameStr  ( ResId::toString(ScResId(STR_GLOBAL_SCOPE)) ),
+    maGlobalNameStr  ( ScGlobal::GetRscString(STR_GLOBAL_SCOPE) ),
     maErrInvalidNameStr( ResId::toString(ScResId(STR_ERR_NAME_INVALID))),
     maErrNameInUse   ( ResId::toString(ScResId(STR_ERR_NAME_EXISTS))),
     maStrInfoDefault ( ResId::toString(ScResId(STR_DEFAULT_INFO))),

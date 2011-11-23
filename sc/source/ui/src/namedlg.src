@@ -184,10 +184,7 @@ ModelessDialog RID_SCDLG_NAMES
     {
         Text [en-US ] = "Modifying range name failed" ;
     };
-    String STR_GLOBAL_SCOPE
-    {
-        Text [ en-US ] = "Document (Global)" ;
-    };
+
 
     FixedText FT_INFO
     {
@@ -202,18 +199,6 @@ ModelessDialog RID_SCDLG_NAMES
         Size = MAP_APPFONT( 210, 100 );
         Border = TRUE;
         DialogControl = TRUE;
-    };
-    String STR_HEADER_NAME
-    {
-        Text [en-US] = "Name";
-    };
-    String STR_HEADER_RANGE
-    {
-        Text [en-US] = "Range";
-    };
-    String STR_HEADER_SCOPE
-    {
-        Text [en-US] = "Scope";
     };
     String STR_ERR_NAME_EXISTS
     {

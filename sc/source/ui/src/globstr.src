@@ -1827,5 +1827,21 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Manage Names...";
     };
+    String STR_HEADER_NAME
+    {
+        Text [en-US] = "Name";
+    };
+    String STR_HEADER_RANGE
+    {
+        Text [en-US] = "Range";
+    };
+    String STR_HEADER_SCOPE
+    {
+        Text [en-US] = "Scope";
+    };
+    String STR_GLOBAL_SCOPE
+    {
+        Text [ en-US ] = "Document (Global)" ;
+    };
 };
 

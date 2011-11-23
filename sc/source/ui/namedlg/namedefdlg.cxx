@@ -32,6 +32,7 @@
 #include <sfx2/app.hxx>
 
 #include "document.hxx"
+#include "globstr.hrc"
 #include "globalnames.hxx"
 #include "rangenam.hxx"
 #include "reffact.hxx"
@@ -72,7 +73,7 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParen
     maCursorPos( aCursorPos ),
 
     mErrMsgInvalidSym( ScResId( STR_INVALIDSYMBOL ) ),
-    maGlobalNameStr  ( ResId::toString(ScResId(STR_GLOBAL_SCOPE)) ),
+    maGlobalNameStr  ( ScGlobal::GetRscString(STR_GLOBAL_SCOPE) ),
     maErrInvalidNameStr( ResId::toString(ScResId(STR_ERR_NAME_INVALID))),
     maErrNameInUse   ( ResId::toString(ScResId(STR_ERR_NAME_EXISTS))),
     maStrInfoDefault ( ResId::toString(ScResId(STR_DEFAULT_INFO))),

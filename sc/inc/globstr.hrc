@@ -592,7 +592,12 @@
 
 #define STR_MANAGE_NAMES            458
 
-#define STR_COUNT                   459
+#define STR_HEADER_NAME             459
+#define STR_HEADER_RANGE            460
+#define STR_HEADER_SCOPE            461
+#define STR_GLOBAL_SCOPE            462
+
+#define STR_COUNT                   463
 
 
 #endif

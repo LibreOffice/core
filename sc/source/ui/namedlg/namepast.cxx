@@ -44,7 +44,7 @@
 
 //==================================================================
 
-ScNamePasteDlg::ScNamePasteDlg( Window * pParent, ScDocShell* pShell, bool bInsList )
+ScNamePasteDlg::ScNamePasteDlg( Window * pParent, ScDocShell* pShell, bool )
     : ModalDialog( pParent, ScResId( RID_SCDLG_NAMES_PASTE ) ),
     maHelpButton     ( this, ScResId( BTN_HELP ) ),
     maBtnClose       ( this, ScResId( BTN_CLOSE ) ),
