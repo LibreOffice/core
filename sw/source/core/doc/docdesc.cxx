@@ -92,9 +92,9 @@ static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
     const Size aPhysSize = SvxPaperInfo::GetDefaultPaperSize();
     aFrmSize.SetSize( aPhysSize );
 
-    // Prepare for default borders.
-    // Borders have a default minimum size.
-    // If the printer forces a larger border, that's ok too.
+    // Prepare for default margins.
+    // Margins have a default minimum size.
+    // If the printer forces a larger margins, that's ok too.
     // The HTML page desc had A4 as page size always.
     // This has been changed to take the page size from the printer.
     // Unfortunately, the margins of the HTML page desc are smaller than
@@ -117,7 +117,7 @@ static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
         nMinLeft = nMinRight = 1800;    //          1,25 Inch
     }
 
-    // Set borders.
+    // set margins
     SvxLRSpaceItem aLR( RES_LR_SPACE );
     SvxULSpaceItem aUL( RES_UL_SPACE );
 
@@ -262,7 +262,7 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
         {
             SwFmtHeader aHead( MakeLayoutFmt( RND_STD_HEADERL, 0 ) );
             pDesc->GetLeft().SetFmtAttr( aHead );
-            // Take over additional attributes (borders, border strips ...).
+            // take over additional attributes (margins, borders ...)
             ::lcl_DescSetAttr( *rHead.GetHeaderFmt(), *aHead.GetHeaderFmt(), sal_False);
         }
         else
@@ -322,7 +322,7 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
         {
             SwFmtFooter aFoot( MakeLayoutFmt( RND_STD_FOOTER, 0 ) );
             pDesc->GetLeft().SetFmtAttr( aFoot );
-            // Take over additional attributes (borders, border strips ...).
+            // Take over additional attributes (margins, borders ...).
             ::lcl_DescSetAttr( *rFoot.GetFooterFmt(), *aFoot.GetFooterFmt(), sal_False);
         }
         else
