@@ -25,6 +25,7 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
+
 //ScRangeManagerTable
 #include "global.hxx"
 #include "reffact.hxx"
