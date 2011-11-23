@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
+#include <comphelper/string.hxx>
 #include <sot/object.hxx>
 #define _TOOLS_BIGINT
 #include <sot/factory.hxx>
@@ -154,7 +155,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
         return sal_False;
 
     // Fuehrende und nachfolgende Leerzeichen entfernen
-    aStr.EraseLeadingAndTrailingChars( ' ' );
+    aStr = comphelper::string::strip(aStr, ' ');
 
     // Position des Dezimalpunktes suchen
     nDecPos = aStr.Search( rLocaleDataWrapper.getNumDecimalSep() );

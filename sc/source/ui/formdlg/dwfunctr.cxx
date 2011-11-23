@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-// INCLUDE ---------------------------------------------------------------
+#include <comphelper/string.hxx>
 #include <editeng/editview.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -877,7 +877,7 @@ void ScFunctionDockWin::DoEnter(sal_Bool /* bOk */) //@@ ???
                 // NOTE: Theoretically the first parameter could have the
                 // suppress flag as well, but practically it doesn't.
                 aFirstArgStr = *(pDesc->ppDefArgNames[0]);
-                aFirstArgStr.EraseLeadingAndTrailingChars();
+                aFirstArgStr = comphelper::string::strip(aFirstArgStr, ' ');
                 aFirstArgStr.SearchAndReplaceAll(' ', '_');
                 aArgStr = aFirstArgStr;
                 if ( nArgs != VAR_ARGS )
@@ -891,7 +891,7 @@ void ScFunctionDockWin::DoEnter(sal_Bool /* bOk */) //@@ ???
                         {
                             aArgStr += aArgSep;
                             String sTmp(*(pDesc->ppDefArgNames[nArg]));
-                            sTmp.EraseLeadingAndTrailingChars();
+                            sTmp = comphelper::string::strip(sTmp, ' ');
                             sTmp.SearchAndReplaceAll(' ', '_');
                             aArgStr += sTmp;
                         }

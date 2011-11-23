@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
+#include <comphelper/string.hxx>
 #include <tools/table.hxx>
 #include <tools/debug.hxx>
 #include <tools/rc.h>
@@ -58,7 +59,7 @@ static void lcl_GetSelectedEntries( Table& rSelectedPos, const XubString& rText,
     for( xub_StrLen n = rText.GetTokenCount( cTokenSep ); n; )
     {
         XubString aToken = rText.GetToken( --n, cTokenSep );
-        aToken.EraseLeadingAndTrailingChars( ' ' );
+        aToken = comphelper::string::strip(aToken, ' ');
         sal_uInt16 nPos = pEntryList->FindEntry( aToken );
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
             rSelectedPos.Insert( ImplCreateKey( nPos ), (void*)sal_IntPtr(1L) );
@@ -402,7 +403,7 @@ IMPL_LINK( ComboBox, ImplSelectHdl, void*, EMPTYARG )
                 xub_StrLen  nPrevIndex = nIndex;
                 XubString   aToken = aText.GetToken( 0, mcMultiSep, nIndex );
                 xub_StrLen  nTokenLen = aToken.Len();
-                aToken.EraseLeadingAndTrailingChars( ' ' );
+                aToken = comphelper::string::strip(aToken, ' ');
                 sal_uInt16      nP = mpImplLB->GetEntryList()->FindEntry( aToken );
                 if ( (nP != LISTBOX_ENTRY_NOTFOUND) && (!mpImplLB->GetEntryList()->IsEntryPosSelected( nP )) )
                 {
@@ -414,7 +415,7 @@ IMPL_LINK( ComboBox, ImplSelectHdl, void*, EMPTYARG )
                         nIndex--;
                     }
                 }
-                aText.EraseLeadingAndTrailingChars( ' ' );
+                aText = comphelper::string::strip(aText, ' ');
             }
 
             // Fehlende Eintraege anhaengen...

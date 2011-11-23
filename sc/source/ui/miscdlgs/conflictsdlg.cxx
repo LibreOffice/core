@@ -31,6 +31,7 @@
 
 //-----------------------------------------------------------------------------
 
+#include <comphelper/string.hxx>
 #include <vcl/msgbox.hxx>
 
 #include "conflictsdlg.hxx"
@@ -503,8 +504,7 @@ String ScConflictsDlg::GetActionString( const ScChangeAction* pAction, ScDocumen
         aString += aDesc;
         aString += '\t';
 
-        String aUser = pAction->GetUser();
-        aUser.EraseLeadingAndTrailingChars();
+        String aUser = comphelper::string::strip(pAction->GetUser(), ' ');
         if ( aUser.Len() == 0 )
         {
             aUser = maStrUnknownUser;

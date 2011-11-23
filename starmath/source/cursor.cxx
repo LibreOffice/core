@@ -1112,7 +1112,7 @@ void SmCursor::InsertSpecial(XubString aString) {
     BeginEdit();
     Delete();
 
-    aString.EraseLeadingAndTrailingChars();
+    aString = comphelper::string::strip(aString, ' ');
     aString = comphelper::string::stripStart(aString, '%');
 
     //Create instance of special node

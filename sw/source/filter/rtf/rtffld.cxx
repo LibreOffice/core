@@ -408,7 +408,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
     case RTFFLD_IMPORT:
         {
 
-            aSaveStr.EraseLeadingAndTrailingChars();
+            aSaveStr = comphelper::string::strip(aSaveStr, ' ');
             if( aSaveStr.Len() )
             {
                 sal_Unicode c = aSaveStr.GetChar( 0 );

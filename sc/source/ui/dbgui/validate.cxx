@@ -33,6 +33,7 @@
 #undef SC_DLLIMPLEMENTATION
 #endif
 
+#include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/stritem.hxx>
@@ -293,7 +294,7 @@ bool lclGetStringListFromFormula( String& rStringList, const String& rFmlaStr, s
     for( xub_StrLen nToken = 0, nStringIx = 0; bIsStringList && (nToken < nTokenCnt); ++nToken )
     {
         String aToken( rFmlaStr.GetQuotedToken( 0, aQuotes, cFmlaSep, nStringIx ) );
-        aToken.EraseLeadingAndTrailingChars();
+        aToken = comphelper::string::strip(aToken, ' ');
         if( aToken.Len() )      // ignore empty tokens, i.e. "a";;"b"
         {
             bIsStringList = ScGlobal::IsQuoted( aToken, '"' );

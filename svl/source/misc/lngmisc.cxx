@@ -157,7 +157,7 @@ String GetThesaurusReplaceText( const String &rText )
 
     // remove any possible remaining ' ' that may confuse the thesaurus
     // when it gets called with the text
-    aText.EraseLeadingAndTrailingChars( sal_Unicode(' ') );
+    aText = comphelper::string::strip(aText, ' ');
 
     return aText;
 }

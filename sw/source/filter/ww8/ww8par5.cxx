@@ -3444,10 +3444,10 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, String& rStr )
 
     String sURL, sTarget, sMark;
     bool bDataImport = false;
-    //HYPERLINk "filename" [switches]
+    //HYPERLINK "filename" [switches]
     bool bOptions=false;
 
-    rStr.EraseTrailingChars( 1 );
+    rStr = comphelper::strip::stripEnd(rStr, 1);
 
     if (!bDataImport)
     {

@@ -73,6 +73,7 @@
 #include <com/sun/star/sheet/XDrillDownDataSupplier.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <sal/macros.h>
 #include <tools/debug.hxx>
@@ -1210,7 +1211,7 @@ bool lcl_ParseFunction( const String& rList, xub_StrLen nStartPos, xub_StrLen& r
 
     if ( bParsed )
     {
-        aFuncStr.EraseLeadingAndTrailingChars( ' ' );
+        aFuncStr = comphelper::string::strip(aFuncStr, ' ');
 
         const sal_Int32 nFuncCount = SAL_N_ELEMENTS(aFunctions);
         for ( sal_Int32 nFunc=0; nFunc<nFuncCount && !bFound; nFunc++ )
@@ -1429,8 +1430,7 @@ bool ScDPObject::ParseFilters( ScDPGetPivotDataField& rTarget,
 
     bool bError = false;
     bool bHasData = false;
-    String aRemaining( rFilterList );
-    aRemaining.EraseLeadingAndTrailingChars( ' ' );
+    String aRemaining(comphelper::string::strip(rFilterList, ' '));
     while ( aRemaining.Len() && !bError )
     {
         bool bUsed = false;

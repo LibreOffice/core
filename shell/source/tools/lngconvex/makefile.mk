@@ -54,9 +54,11 @@ APP1TARGET=$(TARGET)
 APP1OBJS=$(OBJ)$/$(TARGET).obj\
         $(OBJ)$/cmdline.obj
 APP1RPATH = NONE
-APP1STDLIBS= $(SALLIB)\
-            $(TOOLSLIB)\
-            $(I18NISOLANGLIB)
+APP1STDLIBS= \
+	$(COMPHELPERLIB)\
+	$(SALLIB)\
+        $(TOOLSLIB)\
+        $(I18NISOLANGLIB)
 
 # --- Targets ------------------------------------------------------
 

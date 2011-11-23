@@ -43,6 +43,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <com/sun/star/bridge/XBridgeFactory.hpp>
 #include <com/sun/star/connection/XConnector.hpp>
 #include <com/sun/star/connection/XConnection.hpp>
@@ -2897,8 +2898,8 @@ HACK("Ich gestehe alles: Ich war zu faul das richtig zu machen.")
         do
         {
             nOldLen = aSuffix.Len();
-            aSuffix.EraseLeadingAndTrailingChars( ' ' );
-            aSuffix.EraseLeadingAndTrailingChars( 0x09 );
+            aSuffix = comphelper::string::strip(aSuffix, ' ');
+            aSuffix = comphelper::string::strip(aSuffix, 0x09);
         } while ( nOldLen != aSuffix.Len() );
         aSource.Erase(nTestCase,nTcEnd-nTestCase);
         aSource.Insert(CUniString("Sub ").Append(aSuffix).AppendAscii(" CaseLog \"").Append(aSuffix).AppendAscii("\" : on error goto endcse : TestEnter "),nTestCase);

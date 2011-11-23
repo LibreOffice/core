@@ -30,6 +30,7 @@
 #include "precompiled_sc.hxx"
 
 #include <boost/shared_ptr.hpp>
+#include <comphelper/string.hxx>
 
 #define SC_HTMLPARS_CXX
 #include "scitems.hxx"
@@ -3052,8 +3053,7 @@ void ScHTMLQueryParser::FontOn( const ImportInfo& rInfo )
                 while( nPos != STRING_NOTFOUND )
                 {
                     // font list separator: VCL = ';' HTML = ','
-                    String aFName = rFace.GetToken( 0, ',', nPos );
-                    aFName.EraseLeadingAndTrailingChars();
+                    String aFName = comphelper::string::strip(rFace.GetToken(0, ',', nPos), ' ');
                     ScGlobal::AddToken( aFontName, aFName, ';' );
                 }
                 if ( aFontName.Len() )

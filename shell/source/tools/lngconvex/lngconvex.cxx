@@ -57,6 +57,7 @@ typedef unsigned short WORD;
 
 #include "cmdline.hxx"
 
+#include <comphelper/string.hxx>
 #include "osl/thread.h"
 #include "osl/process.h"
 #include "osl/file.hxx"
@@ -347,7 +348,7 @@ void add_group_entries(
         {
             Substitutor.set_language(iso_lang_identifier(iso_lang));
 
-            key_value_utf8.EraseLeadingAndTrailingChars('\"');
+            key_value_utf8 = comphelper::string::strip(key_value_utf8, '\"');
 
             OUString key_value_utf16 =
                 rtl::OStringToOUString(key_value_utf8, RTL_TEXTENCODING_UTF8);

@@ -53,6 +53,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/charclass.hxx>
+#include <comphelper/string.hxx>
 
 #include "eeimport.hxx"
 #include "global.hxx"
@@ -358,8 +359,7 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
                     }
                     else
                     {
-                        aStr = mpEngine->GetText( pE->aSel );
-                        aStr.EraseLeadingAndTrailingChars();
+                        aStr = comphelper::string::strip(mpEngine->GetText(pE->aSel), ' ');
                     }
 
                     bool bTextFormat = false;

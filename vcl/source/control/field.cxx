@@ -119,7 +119,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
         return sal_False;
 
     // Fuehrende und nachfolgende Leerzeichen entfernen
-    aStr.EraseLeadingAndTrailingChars( ' ' );
+    aStr = comphelper::string::strip(aStr, ' ');
 
     // Position des Dezimalpunktes suchen
     nDecPos = aStr.Search( rLocaleDataWrappper.getNumDecimalSep() );

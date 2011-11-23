@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
+#include <comphelper/string.hxx>
 #include <tools/debug.hxx>
 #include <tools/rc.h>
 
@@ -405,7 +406,7 @@ const XubString& ToolBox::ImplConvertMenuString( const XubString& rStr )
 {
     maCvtStr = rStr;
     if ( mbMenuStrings )
-        maCvtStr.EraseTrailingChars( '.' );
+        maCvtStr = comphelper::string::stripEnd(maCvtStr, '.');
     maCvtStr = MnemonicGenerator::EraseAllMnemonicChars( maCvtStr );
     return maCvtStr;
 }

@@ -33,6 +33,7 @@
 #undef SC_DLLIMPLEMENTATION
 #endif
 #include "editfield.hxx"
+#include <comphelper/string.hxx>
 #include <rtl/math.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include "global.hxx"
@@ -62,15 +63,14 @@ ScDoubleField::ScDoubleField( Window* pParent, const ResId& rResId ) :
 
 bool ScDoubleField::GetValue( double& rfValue ) const
 {
-    String aStr( GetText() );
-    aStr.EraseLeadingAndTrailingChars( ' ' );
-    bool bOk = aStr.Len() > 0;
+    rtl::OUString aStr(comphelper::string::strip(GetText(), ' '));
+    bool bOk = aStr.getLength() > 0;
     if( bOk )
     {
         rtl_math_ConversionStatus eStatus;
         sal_Int32 nEnd;
         rfValue = rtl::math::stringToDouble( aStr, lclGetDecSep(), lclGetGroupSep(), &eStatus, &nEnd );
-        bOk = (eStatus == rtl_math_ConversionStatus_Ok) && (nEnd == static_cast< sal_Int32 >( aStr.Len() ));
+        bOk = (eStatus == rtl_math_ConversionStatus_Ok) && (nEnd == aStr.getLength() );
     }
     return bOk;
 }
