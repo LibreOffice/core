@@ -145,9 +145,6 @@ public:
     void MoveTo( SwIndexReg& rArr );
 };
 
-// A global array for holding indices that need to be "swapped" temporarily or
-// do not know a valid array (SwPaM/SwPosition!):
-struct EmptyIndexArray: rtl::Static< SwIndexReg, EmptyIndexArray > {};
 
 #ifndef DBG_UTIL
 

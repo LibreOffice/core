@@ -44,12 +44,6 @@ SwIndex::SwIndex(SwIndexReg *const pReg, xub_StrLen const nIdx)
     , m_pNext( 0 )
     , m_pPrev( 0 )
 {
-    if (!m_pIndexReg)
-    {
-        m_pIndexReg = &EmptyIndexArray::get();
-        m_nIndex = 0; // always 0 if no IndexReg
-    }
-
     Init(m_nIndex);
 }
 
@@ -72,7 +66,11 @@ SwIndex::SwIndex( const SwIndex& rIdx )
 
 void SwIndex::Init(xub_StrLen const nIdx)
 {
-    if (!m_pIndexReg->m_pFirst) // first Index?
+    if (!m_pIndexReg)
+    {
+        m_nIndex = 0; // always 0 if no IndexReg
+    }
+    else if (!m_pIndexReg->m_pFirst) // first Index?
     {
         OSL_ASSERT(!m_pIndexReg->m_pLast);
         m_pIndexReg->m_pFirst = m_pIndexReg->m_pLast = this;
@@ -91,6 +89,11 @@ void SwIndex::Init(xub_StrLen const nIdx)
 
 SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, xub_StrLen nNewValue )
 {
+    OSL_ASSERT(m_pIndexReg == rIdx.m_pIndexReg);
+    if (!m_pIndexReg)
+    {
+        return *this; // no IndexReg => no list to sort into; m_nIndex is 0
+    }
     SwIndex* pFnd = const_cast<SwIndex*>(&rIdx);
     if (rIdx.m_nIndex > nNewValue) // move forwards
     {
@@ -146,7 +149,6 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, xub_StrLen nNewValue )
         else
             m_pNext->m_pPrev = this;
     }
-    m_pIndexReg = rIdx.m_pIndexReg;
 
     if (m_pIndexReg->m_pFirst == m_pNext)
         m_pIndexReg->m_pFirst = this;
@@ -160,6 +162,12 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, xub_StrLen nNewValue )
 
 void SwIndex::Remove()
 {
+    if (!m_pIndexReg)
+    {
+        OSL_ASSERT(!m_pPrev && !m_pNext);
+        return;
+    }
+
     if (m_pPrev)
     {
         m_pPrev->m_pNext = m_pNext;
@@ -205,12 +213,6 @@ SwIndex& SwIndex::operator=( const SwIndex& rIdx )
 *************************************************************************/
 SwIndex& SwIndex::Assign( SwIndexReg* pArr, xub_StrLen nIdx )
 {
-    if( !pArr )
-    {
-        pArr = &EmptyIndexArray::get();
-        nIdx = 0; // always 0 if no IndexReg
-    }
-
     if (pArr != m_pIndexReg) // unregister!
     {
         Remove();
