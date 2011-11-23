@@ -88,7 +88,7 @@
 #define THESIZE             1000000 //!!! langt... :-)
 #define TBX_WINDOW_HEIGHT   22 // in Pixeln - fuer alle Systeme gleich?
 #define LEFT_OFFSET         5
-#define INPUTWIN_MULTILINES 10
+#define INPUTWIN_MULTILINES 6
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY;
@@ -179,7 +179,8 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
         aTextSum        ( ScResId( SCSTR_QHELP_BTNSUM ) ),
         aTextEqual      ( ScResId( SCSTR_QHELP_BTNEQUAL ) ),
         bIsOkCancelMode ( false ),
-        bIsMultiLine    ( false )
+        bIsMultiLine    ( false ),
+        bInResize       ( false )
 {
     ScModule*        pScMod  = SC_MOD();
     SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
@@ -516,7 +517,7 @@ void ScInputWindow::Select()
 
 void ScInputWindow::Resize()
 {
-
+    ToolBox::Resize();
     if ( lcl_isExperimentalMode() )
     {
         Size aSize = GetSizePixel();
@@ -536,7 +537,6 @@ void ScInputWindow::Resize()
         aTextWindow.SetSizePixel( aSize );
         aTextWindow.Invalidate();
     }
-    ToolBox::Resize();
 }
 
 void ScInputWindow::SetFuncString( const String& rString, sal_Bool bDoEdit )
@@ -749,14 +749,72 @@ void ScInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
     ToolBox::DataChanged( rDCEvt );
 }
 
-bool ScInputWindow::GetMultiLineStatus()
+void ScInputWindow::MouseMove( const MouseEvent& rMEvt )
 {
-    return bIsMultiLine;
+    if ( lcl_isExperimentalMode() )
+    {
+        Point aPosPixel = GetPointerPosPixel();
+        Point aPnt = PixelToLogic( aPosPixel );
+
+        ScInputBarGroup* pGroupBar = dynamic_cast< ScInputBarGroup* > ( pRuntimeWindow.get() );
+        if ( bInResize || ( GetOutputSizePixel().Height() - aPosPixel.Y() <= 4  ) )
+        {
+            SetPointer( Pointer( POINTER_WINDOW_SSIZE ) );
+
+            if ( rMEvt.IsLeft() )
+            {
+                // Don't leave the mouse pointer leave *this* window
+                CaptureMouse();
+                bInResize = true;
+            }
+            else
+            {
+                ReleaseMouse();
+                bInResize = false;
+            }
+
+            if ( bInResize )
+            {
+                // Trigger resize
+                long nResizeThreshold = ( (long)TBX_WINDOW_HEIGHT * 0.7 );
+                bool bResetPointerPos = false;
+                if ( GetOutputSizePixel().Height() - aPosPixel.Y() < -nResizeThreshold  )
+                {
+                    pGroupBar->IncrementVerticalSize();
+                    bResetPointerPos = true;
+                }
+                else if ( ( GetOutputSizePixel().Height() - aPosPixel.Y()  ) > nResizeThreshold )
+                {
+                    bResetPointerPos = true;
+                    pGroupBar->DecrementVerticalSize();
+                }
+
+                if ( bResetPointerPos )
+                {
+                    aPosPixel.Y() =  GetOutputSizePixel().Height();
+                    SetPointerPosPixel( aPosPixel );
+                }
+
+            }
+        }
+        else
+        {
+            ReleaseMouse();
+            SetPointer( Pointer( POINTER_ARROW ) );
+        }
+    }
+    ToolBox::MouseMove( rMEvt );
 }
 
-void ScInputWindow::SetMultiLineStatus(bool bMode)
+void ScInputWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    bIsMultiLine=bMode;
+    if ( lcl_isExperimentalMode() )
+    {
+        ReleaseMouse();
+        if ( rMEvt.IsLeft() )
+            bInResize = false;
+    }
+    ToolBox::MouseButtonUp( rMEvt );
 }
 
 
@@ -783,9 +841,9 @@ ScInputBarGroup::ScInputBarGroup(Window* pParent)
       aButton.SetSizePixel(Size(GetSettings().GetStyleSettings().GetScrollBarSize(), TBX_WINDOW_HEIGHT) );
       aButton.Enable();
       aButton.SetSymbol( SYMBOL_SPIN_DOWN  );
+      aButton.SetQuickHelpText( ScResId( SCSTR_QHELP_EXPAND_FORMULA ) );
       aButton.Show();
       aScrollBar.SetSizePixel( aButton.GetSizePixel() );
-
       aScrollBar.SetScrollHdl( LINK( this, ScInputBarGroup, Impl_ScrollHdl ) );
 }
 
@@ -847,9 +905,10 @@ void ScInputBarGroup::Resize()
 
     SetSizePixel(aSize);
 
-    if(pParent->GetMultiLineStatus())
+    if( aMultiTextWnd.GetNumLines() > 1 )
     {
         aButton.SetSymbol( SYMBOL_SPIN_UP  );
+        aButton.SetQuickHelpText( ScResId( SCSTR_QHELP_COLLAPSE_FORMULA ) );
         Size scrollSize = aButton.GetSizePixel();
         scrollSize.Height() = aMultiTextWnd.GetSizePixel().Height() - aButton.GetSizePixel().Height();
         aScrollBar.SetSizePixel( scrollSize );
@@ -870,6 +929,7 @@ void ScInputBarGroup::Resize()
     else
     {
         aButton.SetSymbol( SYMBOL_SPIN_DOWN  );
+        aButton.SetQuickHelpText( ScResId( SCSTR_QHELP_EXPAND_FORMULA ) );
         aScrollBar.Hide();
     }
 
@@ -917,6 +977,21 @@ void ScInputBarGroup::SetFormulaMode(sal_Bool bSet)
     aMultiTextWnd.SetFormulaMode(bSet);
 }
 
+void ScInputBarGroup::IncrementVerticalSize()
+{
+    aMultiTextWnd.SetNumLines( aMultiTextWnd.GetNumLines() + 1 );
+    TriggerToolboxLayout();
+}
+
+void ScInputBarGroup::DecrementVerticalSize()
+{
+    if ( aMultiTextWnd.GetNumLines() > 1 )
+    {
+        aMultiTextWnd.SetNumLines( aMultiTextWnd.GetNumLines() - 1 );
+        TriggerToolboxLayout();
+    }
+}
+
 IMPL_LINK( ScInputBarGroup, ClickHdl, PushButton*, EMPTYARG )
 {
     Window *w=GetParent();
@@ -929,17 +1004,23 @@ IMPL_LINK( ScInputBarGroup, ClickHdl, PushButton*, EMPTYARG )
         return 1;
     }
 
-    if(!pParent->GetMultiLineStatus())
+    if( aMultiTextWnd.GetNumLines() > 1 )
     {
-        pParent->SetMultiLineStatus(true);
-        aMultiTextWnd.SetNumLines( INPUTWIN_MULTILINES );
+        aMultiTextWnd.SetNumLines( 1 );
     }
     else
     {
-        pParent->SetMultiLineStatus(false);
-        aMultiTextWnd.SetNumLines( 1 );
+        aMultiTextWnd.SetNumLines( aMultiTextWnd.GetLastNumExpandedLines() );
     }
+    TriggerToolboxLayout();
+    return 0;
+}
 
+void ScInputBarGroup::TriggerToolboxLayout()
+{
+    Window *w=GetParent();
+    ScInputWindow *pParent;
+    pParent=dynamic_cast<ScInputWindow*>(w);
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if ( pViewFrm )
     {
@@ -968,12 +1049,11 @@ IMPL_LINK( ScInputBarGroup, ClickHdl, PushButton*, EMPTYARG )
             xLayoutManager->unlock();
         }
     }
-    return 0;
 }
 
-IMPL_LINK( ScInputBarGroup, Impl_ScrollHdl, ScrollBar*, pCurScrollBar )
+IMPL_LINK( ScInputBarGroup, Impl_ScrollHdl, ScrollBar*, EMPTYARG )
 {
-    aMultiTextWnd.DoScroll( pCurScrollBar );
+    aMultiTextWnd.DoScroll();
     return 0;
 }
 
@@ -982,10 +1062,11 @@ IMPL_LINK( ScInputBarGroup, Impl_ScrollHdl, ScrollBar*, pCurScrollBar )
 //                      ScMultiTextWnd
 //========================================================================
 
-ScMultiTextWnd::ScMultiTextWnd( Window* pParen ) : ScTextWnd( pParen )
+ScMultiTextWnd::ScMultiTextWnd( ScInputBarGroup* pParen ) : ScTextWnd( pParen ), mrGroupBar(* pParen )
 {
     nTextStartPos = TEXT_MULTI_STARTPOS;
     mnLines = 1;
+    mnLastExpandedLines = INPUTWIN_MULTILINES;
 }
 
 int ScMultiTextWnd::GetLineCount()
@@ -1027,6 +1108,8 @@ long ScMultiTextWnd::GetPixelHeightForLines( long nLines )
 void ScMultiTextWnd::SetNumLines( long nLines )
 {
     mnLines = nLines;
+    if ( nLines > 1 )
+        mnLastExpandedLines = nLines;
 }
 
 void ScMultiTextWnd::Resize()
@@ -1049,8 +1132,8 @@ void ScMultiTextWnd::Resize()
             PixelToLogic(Rectangle(aPos1, aPos2)));
 
         pEditEngine->SetPaperSize( PixelToLogic(Size((aOutputSize.Width()-= 2 * nTextStartPos - 1), 10000 ) ));
-
     }
+    SetScrollBarRange();
     SetSizePixel(aTextBoxSize);
 }
 
@@ -1075,13 +1158,9 @@ long ScMultiTextWnd::GetEditEngTxtHeight()
 
 void ScMultiTextWnd::SetScrollBarRange()
 {
-    // #FIXME lets do better that this ( and ditto for the DoScroll
-    // method above ) probably need to pass in ScInputBarGroup* as parent
-    // in the ctor
-    ScInputBarGroup* pBarGroup = dynamic_cast<ScInputBarGroup*>( GetParent() );
-    if ( pBarGroup && pEditView )
+    if ( pEditView )
     {
-        ScrollBar& rVBar = pBarGroup->GetScrollBar();
+        ScrollBar& rVBar = mrGroupBar.GetScrollBar();
         rVBar.SetRange( Range( 0, GetEditEngTxtHeight() ) );
         long currentDocPos = pEditView->GetVisArea().TopLeft().Y();
         rVBar.SetThumbPos( currentDocPos );
@@ -1089,16 +1168,16 @@ void ScMultiTextWnd::SetScrollBarRange()
 }
 
 void
-ScMultiTextWnd::DoScroll( ScrollBar* pCurScrollBar )
+ScMultiTextWnd::DoScroll()
 {
     if ( pEditView )
     {
-        long currentDocPos = LogicToPixel(Size(0,pEditView->GetVisArea().TopLeft().Y() )).Height();
-        long nDiff = currentDocPos - pCurScrollBar->GetThumbPos();
-        Point aPos1(nDiff, nDiff);
-        pEditView->Scroll( 0, PixelToLogic(Rectangle(aPos1,aPos1) ).TopLeft().Y() );
-        currentDocPos = LogicToPixel(Size(0,pEditView->GetVisArea().TopLeft().Y() )).Height();
-        pCurScrollBar->SetThumbPos( currentDocPos );
+        ScrollBar& rVBar = mrGroupBar.GetScrollBar();
+        long currentDocPos = pEditView->GetVisArea().TopLeft().Y();
+        long nDiff = currentDocPos - rVBar.GetThumbPos();
+        pEditView->Scroll( 0, nDiff );
+        currentDocPos = pEditView->GetVisArea().TopLeft().Y();
+        rVBar.SetThumbPos( currentDocPos );
     }
 }
 
@@ -1291,6 +1370,7 @@ void ScMultiTextWnd::SetTextString( const String& rNewString )
     }
     ScTextWnd::SetTextString( rNewString );
     SetScrollBarRange();
+    DoScroll();
 }
 //========================================================================
 // 							ScTextWnd

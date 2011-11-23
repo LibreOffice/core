@@ -122,6 +122,17 @@ String SCSTR_QHELP_BTNEQUAL
     Text [ en-US ] = "Function" ;
 };
 
+
+String SCSTR_QHELP_EXPAND_FORMULA
+{
+    Text [ en-US ] = "Expand Formula Bar" ;
+};
+
+String SCSTR_QHELP_COLLAPSE_FORMULA
+{
+    Text [ en-US ] = "Collapse Formula Bar" ;
+};
+
 // Don't use this image list for normal toolbar images. We have now our commandimagelist
 // folder in default_images. This list is now only used for special toolboxes that are
 // used in floating windows.

@@ -166,11 +166,12 @@ private:
 };
 
 //========================================================================
+class ScInputBarGroup;
 
 class ScMultiTextWnd : public ScTextWnd
 {
 public:
-    ScMultiTextWnd( Window* pParent );
+    ScMultiTextWnd( ScInputBarGroup* pParent );
     virtual void StartEditEngine();
     virtual void StopEditEngine( sal_Bool bAll );
     int GetLineCount();
@@ -178,9 +179,11 @@ public:
     long GetPixelTextHeight();
     long GetPixelHeightForLines( long nLines );
     long GetEditEngTxtHeight();
-    void DoScroll( ScrollBar* );
+    void DoScroll();
     virtual void SetTextString( const String& rString );
     void SetNumLines( long nLines );
+    long GetNumLines() { return mnLines; }
+    long GetLastNumExpandedLines() { return mnLastExpandedLines; }
 protected:
     void SetScrollBarRange();
     void InitEditEngine(SfxObjectShell* pObjSh);
@@ -189,7 +192,9 @@ protected:
     DECL_LINK( NotifyHdl, EENotify* );
     DECL_LINK( ModifyHdl, EENotify* );
 private:
+    ScInputBarGroup& mrGroupBar;
     long mnLines;
+    long mnLastExpandedLines;
 };
 
 class ScInputBarGroup : public ScTextWndBase
@@ -215,8 +220,10 @@ public:
     void            MakeDialogEditView();
     sal_Bool            IsInputActive();
     ScrollBar&      GetScrollBar() { return aScrollBar; }
+    void            IncrementVerticalSize();
+    void            DecrementVerticalSize();
 private:
-
+    void            TriggerToolboxLayout();
     ScMultiTextWnd  aMultiTextWnd;
     PushButton      aButton;
     ScrollBar       aScrollBar;
@@ -266,9 +273,8 @@ public:
 
     void            StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-    void SetMultiLineStatus(bool bMode);
-    bool GetMultiLineStatus();
-
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void    MouseMove( const MouseEvent& rMEvt );
 protected:
     virtual void    SetText( const String& rString );
     virtual String  GetText() const;
@@ -287,6 +293,7 @@ private:
     String          aTextEqual;
     sal_Bool            bIsOkCancelMode;
     bool            bIsMultiLine;
+    bool            bInResize;
 };
 
 //==================================================================
