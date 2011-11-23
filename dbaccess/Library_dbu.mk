@@ -50,12 +50,6 @@ $(eval $(call gb_Library_add_defs,dbu,\
     $(if $(filter YES,$(SYSTEM_ODBC_HEADERS)),-DSYSTEM_ODBC_HEADERS) \
 ))
 
-ifeq (,$(strip $(PROF_EDITION)))
-$(eval $(call gb_Library_add_defs,dbu,\
-    -DWINDOWS_VISTA_PSDK \
-))
-endif
-
 ifeq ($(GUI)$(COM),WNTGCC) # for adoint.h
 $(eval $(call gb_Library_add_cxxflags,dbu,\
     -fpermissive \

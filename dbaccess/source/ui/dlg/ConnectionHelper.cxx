@@ -71,6 +71,10 @@
 #include <tools/diagnose_ex.h>
 #include <sfx2/docfilt.hxx>
 
+#if defined(WNT)
+#define _ADO_DATALINK_BROWSE_
+#endif
+
 #ifdef _ADO_DATALINK_BROWSE_
 #include <vcl/sysdata.hxx>
 #include "adodatalinks.hxx"

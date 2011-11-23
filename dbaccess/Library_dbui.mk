@@ -51,33 +51,16 @@ $(eval $(call gb_Library_add_cflags,dbui,\
 ))
 endif
 
-ifneq ($(WINDOWS_VISTA_PSDK),)
-ifeq ($(PROF_EDITION),)
-$(eval $(call gb_Library_add_defs,dbui,\
-	-DDBACCESS_DLLIMPLEMENTATION\
-	-DWINDOWS_VISTA_PSDK \
-))
-endif
-endif
-
 ifeq ($(GUI)$(COM),WNTGCC)
 $(eval $(call gb_Library_add_cflags,dbui,\
 	-fpermissive \
 ))
 endif
 
-ifeq ($(PROF_EDITION),)
-ifneq ($(WINDOWS_VISTA_PSDK),)
-DISABLE_ADO=TRUE
-endif
-endif
-
 ifeq ($(OS),WNT)
-ifeq ($(DISABLE_ADO),)
 $(eval $(call gb_Library_add_exception_objects,dbui,\
 	dbaccess/source/ui/dlg/adodatalinks \
 ))
-endif
 endif
 
 $(eval $(call gb_Library_add_defs,dbui,\
