@@ -50,10 +50,6 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
 {
     // Groessen vorberechnen
     long    nMin    = Min( rRect.GetWidth(), rRect.GetHeight() );
-    long    nSize   = nMin;
-
-    if ( nMin & 0x01 )
-        nMin--;
     Point   aCenter = rRect.Center();
     long    nCenterX = aCenter.X();
     long    nCenterY = aCenter.Y();
@@ -63,149 +59,107 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
     long    nTop;
     long    nRight;
     long    nBottom;
-    long    nTemp;
-    long    i;
+
+    const bool bMinSideIsOdd = nMin & 1;
 
     switch ( eType )
     {
         case SYMBOL_ARROW_UP:
+            if ( bMinSideIsOdd )
             {
-            if ( !(nMin & 0x01) )
-            {
-                n2--;
-                n4--;
+                // Make odd size for spearhead
+                n4 = --n2 / 2;
             }
             nTop = nCenterY-n2;
-            nBottom = nCenterY;
-            pDev->DrawRect( Rectangle( nCenterX, nTop, nCenterX, nBottom ) );
-            i = 1;
-            while ( i <= n2 )
+            pDev->DrawPixel( Point( nCenterX, nTop ) );
+            for ( long i = 1; i <= n2; ++i )
             {
                 nTop++;
-                nTemp = nCenterX-i;
-                pDev->DrawRect( Rectangle( nTemp, nTop, nTemp, nBottom ) );
-                nTemp = nCenterX+i;
-                pDev->DrawRect( Rectangle( nTemp, nTop, nTemp, nBottom ) );
-                i++;
+                pDev->DrawRect( Rectangle (Point( nCenterX-i, nTop ),
+                                Point( nCenterX+i, nTop ) ) );
             }
-            pDev->DrawRect( Rectangle( nCenterX-n4, nBottom,
-                                       nCenterX+n4, nBottom+n2 ) );
-            }
+            pDev->DrawRect( Rectangle( nCenterX-n4, nCenterY,
+                                       nCenterX+n4, nCenterY+n2 ) );
             break;
 
         case SYMBOL_ARROW_DOWN:
+            if ( bMinSideIsOdd )
             {
-            if ( !(nMin & 0x01) )
-            {
-                n2--;
-                n4--;
+                // Make odd size for spearhead
+                n4 = --n2 / 2;
             }
-            nTop = nCenterY;
             nBottom = nCenterY+n2;
-            pDev->DrawRect( Rectangle( nCenterX, nTop, nCenterX, nBottom ) );
-            i = 1;
-            while ( i <= n2 )
+            pDev->DrawPixel( Point( nCenterX, nBottom ) );
+            for ( long i = 1; i <= n2; ++i )
             {
                 nBottom--;
-                nTemp = nCenterX-i;
-                pDev->DrawRect( Rectangle( nTemp, nTop, nTemp, nBottom ) );
-                nTemp = nCenterX+i;
-                pDev->DrawRect( Rectangle( nTemp, nTop, nTemp, nBottom ) );
-                i++;
+                pDev->DrawLine( Point( nCenterX-i, nBottom ),
+                                Point( nCenterX+i, nBottom ) );
             }
-            pDev->DrawRect( Rectangle( nCenterX-n4, nTop-n2,
-                                       nCenterX+n4, nTop ) );
-            }
+            pDev->DrawRect( Rectangle( nCenterX-n4, nCenterY-n2,
+                                       nCenterX+n4, nCenterY ) );
             break;
 
         case SYMBOL_ARROW_LEFT:
+            if ( bMinSideIsOdd )
             {
-            if ( !(nMin & 0x01) )
-            {
-                n2--;
-                n4--;
+                // Make odd size for spearhead
+                n4 = --n2 / 2;
             }
             nLeft = nCenterX-n2;
-            nRight = nCenterX;
-            pDev->DrawRect( Rectangle( nLeft, nCenterY, nRight, nCenterY ) );
-            i = 1;
-            while ( i <= n2 )
+            pDev->DrawPixel( Point( nLeft, nCenterY ) );
+            for ( long i = 1; i <= n2; ++i )
             {
                 nLeft++;
-                nTemp = nCenterY-i;
-                pDev->DrawRect( Rectangle( nLeft, nTemp, nRight, nTemp ) );
-                nTemp = nCenterY+i;
-                pDev->DrawRect( Rectangle( nLeft, nTemp, nRight, nTemp ) );
-                i++;
+                pDev->DrawLine( Point( nLeft, nCenterY-i ),
+                                Point( nLeft, nCenterY+i ) );
             }
-            pDev->DrawRect( Rectangle( nRight, nCenterY-n4,
-                                       nRight+n2, nCenterY+n4 ) );
-            }
+            pDev->DrawRect( Rectangle( nCenterX, nCenterY-n4,
+                                       nCenterX+n2, nCenterY+n4 ) );
             break;
 
         case SYMBOL_ARROW_RIGHT:
+            if ( bMinSideIsOdd )
             {
-            if ( !(nMin & 0x01) )
-            {
-                n2--;
-                n4--;
+                // Make odd size for spearhead
+                n4 = --n2 / 2;
             }
-            nLeft = nCenterX;
             nRight = nCenterX+n2;
-            pDev->DrawRect( Rectangle( nLeft, nCenterY, nRight, nCenterY ) );
-            i = 1;
-            while ( i <= n2 )
+            pDev->DrawPixel( Point( nRight, nCenterY ) );
+            for ( long i = 1; i <= n2; ++i )
             {
                 nRight--;
-                nTemp = nCenterY-i;
-                pDev->DrawRect( Rectangle( nLeft, nTemp, nRight, nTemp ) );
-                nTemp = nCenterY+i;
-                pDev->DrawRect( Rectangle( nLeft, nTemp, nRight, nTemp ) );
-                i++;
+                pDev->DrawLine( Point( nRight, nCenterY-i ),
+                                Point( nRight, nCenterY+i ) );
             }
-            pDev->DrawRect( Rectangle( nLeft-n2, nCenterY-n4,
-                                       nLeft, nCenterY+n4 ) );
-            }
+            pDev->DrawRect( Rectangle( nCenterX-n2, nCenterY-n4,
+                                       nCenterX, nCenterY+n4 ) );
             break;
 
 
         case SYMBOL_SPIN_UP:
-            {
-            if ( !(nMin & 0x01) )
+            if ( bMinSideIsOdd )
                 n2--;
             nTop = nCenterY-n4;
-            nBottom = nTop+n2;
-            pDev->DrawRect( Rectangle( nCenterX, nTop, nCenterX, nBottom ) );
-            i = 1;
-            while ( i <= n2 )
+            pDev->DrawPixel( Point( nCenterX, nTop ) );
+            for ( long i = 1; i <= n2; ++i )
             {
                 nTop++;
-                nTemp = nCenterX-i;
-                pDev->DrawRect( Rectangle( nTemp, nTop, nTemp, nBottom ) );
-                nTemp = nCenterX+i;
-                pDev->DrawRect( Rectangle( nTemp, nTop, nTemp, nBottom ) );
-                i++;
-            }
+                pDev->DrawLine( Point( nCenterX-i, nTop ),
+                                Point( nCenterX+i, nTop ) );
             }
             break;
 
         case SYMBOL_SPIN_DOWN:
-            {
-            if ( !(nMin & 0x01) )
+            if ( bMinSideIsOdd )
                 n2--;
-            nTop = nCenterY-n4;
-            nBottom = nTop+n2;
-            pDev->DrawRect( Rectangle( nCenterX, nTop, nCenterX, nBottom ) );
-            i = 1;
-            while ( i <= n2 )
+            nBottom = nCenterY+n4;
+            pDev->DrawPixel( Point( nCenterX, nBottom ) );
+            for ( long i = 1; i <= n2; ++i )
             {
                 nBottom--;
-                nTemp = nCenterX-i;
-                pDev->DrawRect( Rectangle( nTemp, nTop, nTemp, nBottom ) );
-                nTemp = nCenterX+i;
-                pDev->DrawRect( Rectangle( nTemp, nTop, nTemp, nBottom ) );
-                i++;
-            }
+                pDev->DrawLine( Point( nCenterX-i, nBottom ),
+                                Point( nCenterX+i, nBottom ) );
             }
             break;
 
@@ -213,29 +167,21 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
         case SYMBOL_FIRST:
         case SYMBOL_PREV:
         case SYMBOL_REVERSEPLAY:
-            {
-            if ( !(nMin & 0x01) )
+            if ( bMinSideIsOdd )
                 n2--;
             nLeft = nCenterX-n4;
             if ( eType == SYMBOL_FIRST )
+            {
+                pDev->DrawLine( Point( nLeft-1, nCenterY-n2 ),
+                                Point( nLeft-1, nCenterY+n2 ) );
                 nLeft++;
-            nRight = nLeft+n2;
-            pDev->DrawRect( Rectangle( nLeft, nCenterY, nRight, nCenterY ) );
-            i = 1;
-            while ( i <= n2 )
+            }
+            pDev->DrawPixel( Point( nLeft, nCenterY ) );
+            for ( long i = 1; i <= n2; ++i )
             {
                 nLeft++;
-                nTemp = nCenterY-i;
-                pDev->DrawRect( Rectangle( nLeft, nTemp, nRight, nTemp ) );
-                nTemp = nCenterY+i;
-                pDev->DrawRect( Rectangle( nLeft, nTemp, nRight, nTemp ) );
-                i++;
-            }
-            if ( eType == SYMBOL_FIRST )
-            {
-                pDev->DrawRect( Rectangle( nCenterX-n4-1, nCenterY-n2,
-                                           nCenterX-n4-1, nCenterY+n2 ) );
-            }
+                pDev->DrawLine( Point( nLeft, nCenterY-i ),
+                                Point( nLeft, nCenterY+i ) );
             }
             break;
 
@@ -243,63 +189,73 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
         case SYMBOL_LAST:
         case SYMBOL_NEXT:
         case SYMBOL_PLAY:
-            {
-            if ( !(nMin & 0x01) )
+            if ( bMinSideIsOdd )
                 n2--;
-            nLeft = nCenterX-n4;
+            nRight = nCenterX+n4;
             if ( eType == SYMBOL_LAST )
-                nLeft--;
-            nRight = nLeft+n2;
-            pDev->DrawRect( Rectangle( nLeft, nCenterY, nRight, nCenterY ) );
-            i = 1;
-            while ( i <= n2 )
+            {
+                pDev->DrawLine( Point( nRight+1, nCenterY-n2 ),
+                                Point( nRight+1, nCenterY+n2 ) );
+                nRight--;
+            }
+            pDev->DrawPixel( Point( nRight, nCenterY ) );
+            for ( long i = 1; i <= n2; ++i )
             {
                 nRight--;
-                nTemp = nCenterY-i;
-                pDev->DrawRect( Rectangle( nLeft, nTemp, nRight, nTemp ) );
-                nTemp = nCenterY+i;
-                pDev->DrawRect( Rectangle( nLeft, nTemp, nRight, nTemp ) );
-                i++;
-            }
-            if ( eType == SYMBOL_LAST )
-            {
-                pDev->DrawRect( Rectangle( nCenterX+n4+1, nCenterY-n2,
-                                           nCenterX+n4+1, nCenterY+n2 ) );
-            }
+                pDev->DrawLine( Point( nRight, nCenterY-i ),
+                                Point( nRight, nCenterY+i ) );
             }
             break;
 
         case SYMBOL_PAGEUP:
-        case SYMBOL_PAGEDOWN:
-        {
-            if ( !( nSize & 0x01 ))
+            if ( bMinSideIsOdd )
             {
                 // An even rectangle size means we have to use a smaller size for
                 // our arrows as we want to use one pixel for the spearhead! Otherwise
                 // it will be clipped!
                 nCenterX++;
-                n2 = ( nMin-1 ) / 2;
-                n4 = ( nMin-1 ) / 4;
+                n4 = --n2 / 2;
             }
 
             nTop = nCenterY-n2;
-            nBottom = nCenterY-1;
-            pDev->DrawRect( Rectangle( nCenterX, nTop, nCenterX, nBottom ) );
-            pDev->DrawRect( Rectangle( nCenterX, nTop+n2+1, nCenterX, nBottom+n2+1 ) );
-            i = 1;
-            while ( i < n2 )
+            nBottom = nCenterY+1;
+            pDev->DrawPixel( Point( nCenterX, nTop ) );
+            pDev->DrawPixel( Point( nCenterX, nBottom ) );
+            for ( long i = 1; i < n2; ++i )
             {
-                ( eType == SYMBOL_PAGEUP ) ? nTop++ : nBottom--;
-                nTemp = nCenterX-i;
-                pDev->DrawRect( Rectangle( nTemp, nTop, nTemp, nBottom ) );
-                pDev->DrawRect( Rectangle( nTemp, nTop+n2+1, nTemp, nBottom+n2+1 ) );
-                nTemp = nCenterX+i;
-                pDev->DrawRect( Rectangle( nTemp, nTop, nTemp, nBottom ) );
-                pDev->DrawRect( Rectangle( nTemp, nTop+n2+1, nTemp, nBottom+n2+1 ) );
-                i++;
+                ++nTop;
+                ++nBottom;
+                pDev->DrawLine( Point( nCenterX-i, nTop ),
+                                Point( nCenterX+i, nTop ) );
+                pDev->DrawLine( Point( nCenterX-i, nBottom ),
+                                Point( nCenterX+i, nBottom ) );
             }
-        }
-        break;
+            break;
+
+        case SYMBOL_PAGEDOWN:
+            if ( bMinSideIsOdd )
+            {
+                // An even rectangle size means we have to use a smaller size for
+                // our arrows as we want to use one pixel for the spearhead! Otherwise
+                // it will be clipped!
+                nCenterX++;
+                n4 = --n2 / 2;
+            }
+
+            nTop = nCenterY-1;
+            nBottom = nCenterY+n2;
+            pDev->DrawPixel( Point( nCenterX, nTop ) );
+            pDev->DrawPixel( Point( nCenterX, nBottom ) );
+            for ( long i = 1; i < n2; ++i )
+            {
+                --nTop;
+                --nBottom;
+                pDev->DrawLine( Point( nCenterX-i, nTop ),
+                                Point( nCenterX+i, nTop ) );
+                pDev->DrawLine( Point( nCenterX-i, nBottom ),
+                                Point( nCenterX+i, nBottom ) );
+            }
+            break;
 
         case SYMBOL_RADIOCHECKMARK:
         case SYMBOL_RECORD:
@@ -326,77 +282,65 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
         break;
 
         case SYMBOL_STOP:
-            {
             nLeft = nCenterX-n2;
             nRight = nCenterX+n2;
             nTop = nCenterY-n2;
             nBottom = nCenterY+n2;
             pDev->DrawRect( Rectangle( nLeft, nTop, nRight, nBottom ) );
-            }
             break;
 
         case SYMBOL_PAUSE:
-            {
             nLeft = nCenterX-n2;
             nRight = nCenterX+n2-1;
             nTop = nCenterY-n2;
             nBottom = nCenterY+n2;
             pDev->DrawRect( Rectangle( nLeft, nTop, nCenterX-2, nBottom ) );
             pDev->DrawRect( Rectangle( nCenterX+1, nTop, nRight, nBottom ) );
-            }
             break;
 
         case SYMBOL_WINDSTART:
         case SYMBOL_WINDBACKWARD:
-            {
-            nLeft = nCenterX-n2+1;
-            nRight = nCenterX;
-            pDev->DrawRect( Rectangle( nLeft, nCenterY, nRight, nCenterY ) );
-            pDev->DrawRect( Rectangle( nLeft+n2, nCenterY, nRight+n2, nCenterY ) );
-            i = 1;
-            while ( i < n2 )
-            {
-                nLeft++;
-                nTemp = nCenterY-i;
-                pDev->DrawRect( Rectangle( nLeft, nTemp, nRight, nTemp ) );
-                pDev->DrawRect( Rectangle( nLeft+n2, nTemp, nRight+n2, nTemp ) );
-                nTemp = nCenterY+i;
-                pDev->DrawRect( Rectangle( nLeft, nTemp, nRight, nTemp ) );
-                pDev->DrawRect( Rectangle( nLeft+n2, nTemp, nRight+n2, nTemp ) );
-                i++;
-            }
+            nLeft = nCenterX-n2;
             if ( eType == SYMBOL_WINDSTART )
             {
-                pDev->DrawRect( Rectangle( nCenterX-n2, nCenterY-n2,
-                                           nCenterX-n2, nCenterY+n2 ) );
+                pDev->DrawLine( Point( nLeft, nCenterY-n2 ),
+                                Point( nLeft, nCenterY+n2 ) );
             }
+            ++nLeft;
+            nRight = nLeft+n2;
+            pDev->DrawPixel( Point( nLeft, nCenterY ) );
+            pDev->DrawPixel( Point( nRight, nCenterY ) );
+            for ( long i = 1; i < n2; ++i )
+            {
+                ++nLeft;
+                ++nRight;
+                pDev->DrawLine( Point( nLeft, nCenterY-i ),
+                                Point( nLeft, nCenterY+i ) );
+                pDev->DrawLine( Point( nRight, nCenterY-i ),
+                                Point( nRight, nCenterY+i ) );
             }
             break;
 
         case SYMBOL_WINDEND:
         case SYMBOL_WINDFORWARD:
-            {
-            nLeft = nCenterX-n2;
-            nRight = nCenterX-1;
-            pDev->DrawRect( Rectangle( nLeft, nCenterY, nRight, nCenterY ) );
-            pDev->DrawRect( Rectangle( nLeft+n2, nCenterY, nRight+n2, nCenterY ) );
-            i = 1;
-            while ( i < n2 )
-            {
-                nRight--;
-                nTemp = nCenterY-i;
-                pDev->DrawRect( Rectangle( nLeft, nTemp, nRight, nTemp ) );
-                pDev->DrawRect( Rectangle( nLeft+n2, nTemp, nRight+n2, nTemp ) );
-                nTemp = nCenterY+i;
-                pDev->DrawRect( Rectangle( nLeft, nTemp, nRight, nTemp ) );
-                pDev->DrawRect( Rectangle( nLeft+n2, nTemp, nRight+n2, nTemp ) );
-                i++;
-            }
+            nRight = nCenterX+n2;
             if ( eType == SYMBOL_WINDEND )
             {
-                pDev->DrawRect( Rectangle( nCenterX+n2, nCenterY-n2,
-                                           nCenterX+n2, nCenterY+n2 ) );
+                pDev->DrawLine( Point( nRight, nCenterY-n2 ),
+                                Point( nRight, nCenterY+n2 ) );
             }
+            --nRight;
+            nLeft = nRight-n2;
+            pDev->DrawPixel( Point( nLeft, nCenterY ) );
+            pDev->DrawPixel( Point( nRight, nCenterY ) );
+            for ( long i = 1; i < n2; ++i )
+            {
+                --nLeft;
+                --nRight;
+                pDev->DrawLine( Point( nLeft, nCenterY-i ),
+                                Point( nLeft, nCenterY+i ) );
+                pDev->DrawLine( Point( nRight, nCenterY-i ),
+                                Point( nRight, nCenterY+i ) );
             }
             break;
 
@@ -410,12 +354,10 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
             nLeft   = nCenterX-n2+1;
             nTop    = nCenterY-n2+1;
             nBottom = nCenterY-n2+nMin-aRectSize.Width()+1;
-            i = 0;
-            while ( i < nMin-aRectSize.Width()+1 )
+            for ( long i = 0; i < nMin-aRectSize.Width()+1; ++i )
             {
                 pDev->DrawRect( Rectangle( Point( nLeft+i, nTop+i ), aRectSize ) );
                 pDev->DrawRect( Rectangle( Point( nLeft+i, nBottom-i ), aRectSize ) );
-                i++;
             }
             }
             break;
@@ -480,33 +422,22 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
             break;
 
         case SYMBOL_SPIN_UPDOWN:
-            {
             nTop = nCenterY-n2-1;
-            nBottom = nTop+n2;
-            pDev->DrawRect( Rectangle( nCenterX, nTop, nCenterX, nBottom ) );
-            i = 1;
-            while ( i <= n2 )
+            nBottom = nCenterY+n2+1;
+            pDev->DrawPixel( Point( nCenterX, nTop ) );
+            pDev->DrawPixel( Point( nCenterX, nBottom ) );
+            nLeft = nCenterX;
+            nRight = nCenterX;
+            for ( long i = 1; i <= n2; ++i )
             {
-                nTop++;
-                nTemp = nCenterX-i;
-                pDev->DrawRect( Rectangle( nTemp, nTop, nTemp, nBottom ) );
-                nTemp = nCenterX+i;
-                pDev->DrawRect( Rectangle( nTemp, nTop, nTemp, nBottom ) );
-                i++;
-            }
-            nTop = nCenterY+1;
-            nBottom = nTop+n2;
-            pDev->DrawRect( Rectangle( nCenterX, nTop, nCenterX, nBottom ) );
-            i = 1;
-            while ( i <= n2 )
-            {
-                nBottom--;
-                nTemp = nCenterX-i;
-                pDev->DrawRect( Rectangle( nTemp, nTop, nTemp, nBottom ) );
-                nTemp = nCenterX+i;
-                pDev->DrawRect( Rectangle( nTemp, nTop, nTemp, nBottom ) );
-                i++;
-            }
+                ++nTop;
+                --nLeft;
+                --nBottom;
+                ++nRight;
+                pDev->DrawLine( Point( nLeft, nTop ),
+                                Point( nRight, nTop ) );
+                pDev->DrawLine( Point( nLeft, nBottom ),
+                                Point( nRight, nBottom ) );
             }
             break;
 
@@ -568,14 +499,12 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
             break;
 
         case SYMBOL_PLUS:
-            {
             nLeft = nCenterX-n2;
             nRight = nCenterX+n2;
             nTop = nCenterY-n2;
             nBottom = nCenterY+n2;
             pDev->DrawRect( Rectangle( nLeft, nCenterY - 1, nRight, nCenterY + 1 ) );
             pDev->DrawRect( Rectangle( nCenterX - 1, nTop, nCenterX + 1, nBottom ) );
-            }
             break;
     }
 }
