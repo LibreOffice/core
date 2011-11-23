@@ -176,7 +176,6 @@ ImplImageList::GetImageCount() const
 ImplListBox::GetEntryFlags(unsigned short) const
 ImplRegionBand::IsInside(long, long)
 ImplRegionBand::IsOver(long, long)
-IniParser::Dump()
 InsCapOptArr::Insert(InsCapOptArr const*, unsigned short, unsigned short)
 InsCapOptArr::Insert(InsCaptionOpt* const&, unsigned short&)
 InsCapOptArr::Insert(InsCaptionOpt* const*, unsigned short)

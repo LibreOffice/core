@@ -110,7 +110,8 @@ IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOExce
     }
 #endif
 }
-#if OSL_DEBUG_LEVEL > 0
+
+#if OSL_DEBUG_LEVEL > 1
 void IniParser::Dump()
 {
     IniSectionMap::iterator iBegin = mAllSection.begin();
