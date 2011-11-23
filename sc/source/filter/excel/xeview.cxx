@@ -368,8 +368,8 @@ XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nSc
         else
         {
             // split window: position is in twips
-            maData.mnSplitX = ulimit_cast< sal_uInt16 >( rTabSett.maSplitPos.X() );
-            maData.mnSplitY = ulimit_cast< sal_uInt32 >( rTabSett.maSplitPos.Y() );
+            maData.mnSplitX = static_cast<sal_uInt16>(rTabSett.maSplitPos.X());
+            maData.mnSplitY = static_cast<sal_uInt32>(rTabSett.maSplitPos.Y());
         }
 
         // selection
