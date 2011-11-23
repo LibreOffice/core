@@ -126,12 +126,36 @@ struct GtkSalPrinter_Impl
     rtl::OUString m_sJobName;
     GtkPrinter* m_pPrinter;
     GtkPrintSettings* m_pSettings;
+
+    GtkSalPrinter_Impl();
+    ~GtkSalPrinter_Impl();
 };
+
+
+GtkSalPrinter_Impl::GtkSalPrinter_Impl()
+    : m_pPrinter(0)
+    , m_pSettings(0)
+{
+}
+
+
+GtkSalPrinter_Impl::~GtkSalPrinter_Impl()
+{
+    if (m_pPrinter)
+    {
+        g_object_unref(G_OBJECT(m_pPrinter));
+        m_pPrinter = NULL;
+    }
+    if (m_pSettings)
+    {
+        g_object_unref(G_OBJECT(m_pSettings));
+        m_pSettings = NULL;
+    }
+}
 
 
 GtkSalPrinter::GtkSalPrinter(SalInfoPrinter* const i_pInfoPrinter)
     : PspSalPrinter(i_pInfoPrinter)
-    , m_pImpl(new GtkSalPrinter_Impl())
 {
 }
 
@@ -179,15 +203,13 @@ GtkSalPrinter::StartJob(
         ImplJobSetup* io_pSetupData,
         vcl::PrinterController& io_rController)
 {
-    if (!vcl::useSystemPrintDialog())
-    {
-        return impl_doJob(i_pFileName, i_rJobName, i_rAppName, io_pSetupData, 1, false, io_rController);
-    }
+    OSL_PRECOND(!m_pImpl, "there is a job running already");
 
-    m_pImpl->m_sSpoolFile = rtl::OString();
+    if (!vcl::useSystemPrintDialog())
+        return impl_doJob(i_pFileName, i_rJobName, i_rAppName, io_pSetupData, 1, false, io_rController);
+
+    m_pImpl.reset(new GtkSalPrinter_Impl());
     m_pImpl->m_sJobName = i_rJobName;
-    m_pImpl->m_pPrinter = NULL;
-    m_pImpl->m_pSettings = NULL;
 
     rtl::OString sFileName;
     if (i_pFileName)
@@ -235,12 +257,13 @@ GtkSalPrinter::StartJob(
 sal_Bool
 GtkSalPrinter::EndJob()
 {
+    OSL_PRECOND(m_pImpl, "there is no job running");
     sal_Bool bRet = PspSalPrinter::EndJob();
 
     if (!vcl::useSystemPrintDialog())
         return bRet;
 
-    if (!bRet || m_pImpl->m_sSpoolFile.isEmpty())
+    if (!bRet || !m_pImpl || m_pImpl->m_sSpoolFile.isEmpty())
         return bRet;
 
     GtkPageSetup* pPageSetup = gtk_page_setup_new();
@@ -270,8 +293,7 @@ GtkSalPrinter::EndJob()
     }
 
     g_object_unref(pPageSetup);
-    g_object_unref(m_pImpl->m_pSettings);
-    g_object_unref(m_pImpl->m_pPrinter);
+    m_pImpl.reset();
 
     //To-Do, remove temp spool file
 
@@ -949,7 +971,8 @@ GtkPrintDialog::updateControllerPrintRange()
                 }
             }
         }
-   }
+    }
+    g_object_unref(G_OBJECT(pSettings));
 }
 
 
