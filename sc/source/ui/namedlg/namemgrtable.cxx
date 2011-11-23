@@ -84,6 +84,13 @@ ScRangeManagerTable::ScRangeManagerTable( Window* pWindow, boost::ptr_map<rtl::O
     maHeaderBar.Show();
     SetSelectionMode(MULTIPLE_SELECTION);
     Init(rRangeMap);
+    if (GetEntryCount())
+        SetCurEntry(GetEntryOnPos(0));
+}
+
+ScRangeManagerTable::~ScRangeManagerTable()
+{
+    Clear();
 }
 
 void ScRangeManagerTable::addEntry(const ScRangeNameLine& rLine)

@@ -38,6 +38,7 @@
 class ScRangeName;
 class ScDocument;
 class ScDocShell;
+class ScViewData;
 
 class ScNameDefDlg : public ScAnyRefDlg
 {
@@ -95,7 +96,7 @@ protected:
 
 public:
     ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                    ScDocShell* pDocShell, std::map<rtl::OUString, ScRangeName*> aRangeMap,
+                    ScViewData* pViewData, std::map<rtl::OUString, ScRangeName*> aRangeMap,
                     const ScAddress& aCursorPos, const bool bUndo);
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );

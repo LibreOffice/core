@@ -19,7 +19,7 @@
 #define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
 
 ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-        ScDocShell* pDocShell, std::map<rtl::OUString, ScRangeName*> aRangeMap,
+        ScViewData* pViewData, std::map<rtl::OUString, ScRangeName*> aRangeMap,
         const ScAddress& aCursorPos, const bool bUndo ) :
     ScAnyRefDlg( pB, pCW, pParent, RID_SCDLG_NAMES_DEFINE ),
     maBtnAdd( this, ScResId( BTN_ADD ) ),
@@ -39,8 +39,8 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParen
     maBtnPrintArea( this, ScResId( BTN_PRINTAREA ) ),
     maBtnCriteria( this, ScResId( BTN_CRITERIA ) ),
     mbUndo( bUndo ),
-    mpDoc( pDocShell->GetDocument() ),
-    mpDocShell ( pDocShell ),
+    mpDoc( pViewData->GetDocument() ),
+    mpDocShell ( pViewData->GetDocShell() ),
     maCursorPos( aCursorPos ),
 
     mErrMsgInvalidSym( ScResId( STR_INVALIDSYMBOL ) ),
@@ -77,6 +77,18 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParen
     maBtnPrintArea.Hide();
 
     FreeResource();
+
+    String aAreaStr;
+    ScRange aRange;
+
+    pViewData->GetSimpleArea( aRange );
+    aRange.Format( aAreaStr, ABS_DREF3D, mpDoc,
+            ScAddress::Details(mpDoc->GetAddressConvention(), 0, 0) );
+
+    Selection aCurSel = Selection( 0, SELECTION_MAX );
+    maEdRange.GrabFocus();
+    maEdRange.SetText( aAreaStr );
+    maEdRange.SetSelection( aCurSel );
 }
 
 void ScNameDefDlg::CancelPushed()

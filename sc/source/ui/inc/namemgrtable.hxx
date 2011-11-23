@@ -68,7 +68,7 @@ private:
 
 public:
     ScRangeManagerTable( Window* pParent, boost::ptr_map<rtl::OUString, ScRangeName>& aTabRangeNames );
-    ~ScRangeManagerTable() {};
+    virtual ~ScRangeManagerTable();
 
     void addEntry( const ScRangeNameLine& rLine );
     void DeleteSelectedEntries();

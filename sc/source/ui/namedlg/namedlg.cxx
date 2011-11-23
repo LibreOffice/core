@@ -123,7 +123,6 @@ ScNameDlg::~ScNameDlg()
 
 void ScNameDlg::Init()
 {
-    String  aAreaStr;
     ScRange aRange;
 
     OSL_ENSURE( mpViewData && mpDoc, "ViewData oder Document nicht gefunden!" );
@@ -173,20 +172,12 @@ void ScNameDlg::Init()
         maLbScope.InsertEntry(aTabName);
     }
 
-    UpdateNames();
-    IsNameValid();
 
-    mpViewData->GetSimpleArea( aRange );
-    aRange.Format( aAreaStr, ABS_DREF3D, mpDoc,
-            ScAddress::Details(mpDoc->GetAddressConvention(), 0, 0) );
 
-    maCurSel = Selection( 0, SELECTION_MAX );
-    maEdAssign.GrabFocus();
-    maEdAssign.SetText( aAreaStr );
-    maEdAssign.SetSelection( maCurSel );
-
-    EdModifyHdl( 0 );
-
+    if (mpRangeManagerTable->GetSelectionCount())
+    {
+        SelectionChanged();
+    }
 }
 
 sal_Bool ScNameDlg::IsRefInputMode() const
