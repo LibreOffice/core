@@ -423,7 +423,6 @@ ScRTFColTwips_SAR::Replace(unsigned long const&, unsigned short)
 ScRTFColTwips_SAR::Replace(unsigned long const*, unsigned short, unsigned short)
 ScRTFColTwips_SAR::_ForEach(unsigned short, unsigned short, unsigned char (*)(unsigned long const&, void*), void*)
 ScRangeData::ScRangeData(unsigned short)
-ScRangeName::copyLocalNames(boost::ptr_map<short, ScRangeName, std::less<short>, boost::heap_clone_allocator, std::allocator<std::pair<short const, void*> > > const&, std::__debug::map<short, ScRangeName const*, std::less<short>, std::allocator<std::pair<short const, ScRangeName const*> > >&)
 ScRightFooterEditPage::GetRanges()
 ScRightHeaderEditPage::GetRanges()
 ScSheetSourceDesc::GetCacheId() const

@@ -193,8 +193,6 @@ public:
     /// Map that stores non-managed pointers to ScRangeName instances.
     typedef ::std::map<SCTAB, const ScRangeName*> TabNameCopyMap;
 
-    static void copyLocalNames(const TabNameMap& rNames, TabNameCopyMap& rCopy);
-
     typedef DataType::const_iterator const_iterator;
     typedef DataType::iterator iterator;
 
