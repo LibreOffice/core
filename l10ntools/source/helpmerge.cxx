@@ -174,7 +174,7 @@ bool HelpParser::CreateSDF(
             if( pXMLElement != NULL )
             {
                 OUString data = pXMLElement->ToOUString();
-                   String sTmp = String(data.getStr());
+                String sTmp = String(data.getStr());
                 sTmp.SearchAndReplaceAll(ret,ret_char);    // Remove \n
                 sTmp.SearchAndReplaceAll(tab,tab_char);    // Remove \t
 
@@ -384,10 +384,6 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
     LangHashMap*  aLangHM;
     static  ResData pResData( "","","");
     pResData.sResTyp   = "help";
-
-    ByteString sTmp             = Export::sLanguages;
-
-    sTmp.EraseLeadingAndTrailingChars();
 
     for(XMLHashMap::iterator pos=aXMLStrHM->begin();pos!=aXMLStrHM->end();++pos)    // Merge every l10n related string
     {
