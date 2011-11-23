@@ -205,6 +205,10 @@ int macxp_resolveAlias(char *path, int buflen)
 /* The linux kernel thread implemention, always return the pid of the
    thread subprocess and not of the main process. So we save the main
    pid at startup
+   FIXME: when our Linux base-line is above:
+        + Linux kernel version 2.6.18 or higher; -> clone() for NTPL
+        + glibc2 version 2.5 or higher; -> NPTL
+   Then we get a working getpid() and can remove this hack.
 */
 
 // Directly from libc.so.6, obviously missing from some unistd.h:
