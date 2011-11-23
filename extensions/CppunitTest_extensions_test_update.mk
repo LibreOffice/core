@@ -56,4 +56,26 @@ $(eval $(call gb_CppunitTest_add_api,extensions_test_update,\
 	udkapi \
 ))
 
+$(eval $(call gb_CppunitTest_uses_ure,extensions_test_update))
+
+$(eval $(call gb_CppunitTest_add_type_rdbs,extensions_test_update,\
+    types \
+))
+
+$(eval $(call gb_CppunitTest_add_components,extensions_test_update,\
+    unoxml/source/service/unoxml \
+))
+
+$(eval $(call gb_CppunitTest_add_old_components,extensions_test_update,\
+    configmgr \
+    ucb1 \
+    updatefeed \
+))
+
+$(eval $(call gb_CppunitTest_set_args,extensions_test_update,\
+    --headless \
+    --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
+    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry)" \
+))
+
 # vim:set shiftwidth=4 softtabstop=4 noexpandtab:
