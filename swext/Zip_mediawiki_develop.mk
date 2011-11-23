@@ -42,6 +42,7 @@ $(eval $(call gb_Zip_add_file,mediawiki_develop,WikiExtension.xcu,$(WIKISRC)/src
 $(eval $(call gb_Zip_add_file,mediawiki_develop,description.xml,$(WIKISRC)/src/description.xml))
 $(eval $(call gb_Zip_add_file,mediawiki_develop,mediawiki.jar,$(OUTDIR)/bin/mediawiki.jar))
 $(eval $(call gb_Zip_add_file,mediawiki_develop,META-INF/manifest.xml,$(WIKISRC)/src/manifest.xml))
+$(eval $(call gb_Zip_add_file,mediawiki_develop,components.rdb,$(WIKISRC)/src/components.rdb))
 $(eval $(call gb_Zip_add_file,mediawiki_develop,WikiEditor/EditSetting.xdl,$(WIKISRC)/dialogs/EditSetting.xdl))
 $(eval $(call gb_Zip_add_file,mediawiki_develop,WikiEditor/Settings.xdl,$(WIKISRC)/dialogs/Settings.xdl))
 $(eval $(call gb_Zip_add_file,mediawiki_develop,WikiEditor/Module1.xba,$(WIKISRC)/dialogs/Module1.xba))

@@ -46,6 +46,7 @@ $(eval $(call gb_Extension_add_file,wiki-publisher,Types.xcu,$(WIKISRC)/src/regi
 $(eval $(call gb_Extension_add_file,wiki-publisher,WikiExtension.xcs,$(WIKISRC)/src/registry/schema/org/openoffice/Office/Custom/WikiExtension.xcs))
 $(eval $(call gb_Extension_add_file,wiki-publisher,WikiExtension.xcu,$(WIKISRC)/src/registry/data/org/openoffice/Office/Custom/WikiExtension.xcu))
 $(eval $(call gb_Extension_add_file,wiki-publisher,mediawiki.jar,$(OUTDIR)/bin/mediawiki.jar))
+$(eval $(call gb_Extension_add_file,wiki-publisher,components.rdb,$(WIKISRC)/src/components.rdb))
 $(eval $(call gb_Extension_add_file,wiki-publisher,WikiEditor/EditSetting.xdl,$(WIKISRC)/dialogs/EditSetting.xdl))
 $(eval $(call gb_Extension_add_file,wiki-publisher,WikiEditor/Settings.xdl,$(WIKISRC)/dialogs/Settings.xdl))
 $(eval $(call gb_Extension_add_file,wiki-publisher,WikiEditor/Module1.xba,$(WIKISRC)/dialogs/Module1.xba))
