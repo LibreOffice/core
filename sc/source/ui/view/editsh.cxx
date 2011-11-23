@@ -440,9 +440,18 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 if ( nRet == BTN_PASTE_NAME )
                 {
                     std::vector<rtl::OUString> aNames = pDlg->GetSelectedNames();
-                    pTableView->InsertText(aNames.at(0));
-                    if (pTopView)
-                        pTopView->InsertText(aNames.at(0));
+                    if (aNames.size())
+                    {
+                        rtl::OUStringBuffer aBuffer;
+                        for (std::vector<rtl::OUString>::const_iterator itr = aNames.begin();
+                                itr != aNames.end(); ++itr)
+                        {
+                            aBuffer.append(*itr).append(' ');
+                        }
+                        pTableView->InsertText(aBuffer.toString());
+                        if (pTopView)
+                            pTopView->InsertText(aBuffer.makeStringAndClear());
+                    }
                 }
                 delete pDlg;
 

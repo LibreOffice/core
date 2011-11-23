@@ -140,7 +140,8 @@ void ScRangeManagerTable::Init(const boost::ptr_map<rtl::OUString, ScRangeName>&
 
 void ScRangeManagerTable::DeleteSelectedEntries()
 {
-    RemoveSelection();
+    if (GetSelectionCount())
+        RemoveSelection();
 }
 
 bool ScRangeManagerTable::IsMultiSelection()
@@ -151,16 +152,19 @@ bool ScRangeManagerTable::IsMultiSelection()
 std::vector<ScRangeNameLine> ScRangeManagerTable::GetSelectedEntries()
 {
     std::vector<ScRangeNameLine> aSelectedEntries;
-    for (SvLBoxEntry* pEntry = FirstSelected(); pEntry != LastSelected(); pEntry = NextSelected(pEntry))
+    if (GetSelectionCount())
     {
+        for (SvLBoxEntry* pEntry = FirstSelected(); pEntry != LastSelected(); pEntry = NextSelected(pEntry))
+        {
+            ScRangeNameLine aLine;
+            GetLine( aLine, pEntry );
+            aSelectedEntries.push_back(aLine);
+        }
+        SvLBoxEntry* pEntry = LastSelected();
         ScRangeNameLine aLine;
         GetLine( aLine, pEntry );
         aSelectedEntries.push_back(aLine);
     }
-    SvLBoxEntry* pEntry = LastSelected();
-    ScRangeNameLine aLine;
-    GetLine( aLine, pEntry );
-    aSelectedEntries.push_back(aLine);
     return aSelectedEntries;
 }
 

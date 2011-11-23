@@ -1838,7 +1838,16 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 pScMod->InputKeyEvent( KeyEvent('=',KeyCode()) );
 
                                 std::vector<rtl::OUString> aNames = pDlg->GetSelectedNames();
-                                pHdl->InsertFunction( aNames.at(0), false );       // without "()"
+                                if (aNames.size())
+                                {
+                                    rtl::OUStringBuffer aBuffer;
+                                    for (std::vector<rtl::OUString>::const_iterator itr = aNames.begin();
+                                            itr != aNames.end(); ++itr)
+                                    {
+                                        aBuffer.append(*itr).append(' ');
+                                    }
+                                    pHdl->InsertFunction( aBuffer.makeStringAndClear(), false );       // without "()"
+                                }
                             }
                         }
                         break;
