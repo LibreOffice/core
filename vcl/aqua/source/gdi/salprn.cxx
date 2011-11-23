@@ -30,7 +30,6 @@
 #include <boost/bind.hpp>
 
 #include "vcl/print.hxx"
-#include "vcl/unohelp.hxx"
 #include <sal/macros.h>
 
 #include "aqua/salinst.h"
@@ -42,8 +41,6 @@
 #include "jobset.h"
 #include "salptype.hxx"
 
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/awt/Size.hpp"
 
@@ -51,10 +48,7 @@
 
 using namespace vcl;
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
-using namespace com::sun::star::container;
 
 using ::rtl::OUString;
 using ::rtl::OStringToOUString;
@@ -305,68 +299,6 @@ rtl::OUString AquaSalInfoPrinter::GetPaperBinName( const ImplJobSetup*, sal_uLon
 
 // -----------------------------------------------------------------------
 
-static bool getUseNativeDialog()
-{
-    bool bNative = true;
-    try
-    {
-        // get service provider
-        uno::Reference< XMultiServiceFactory > xSMgr( unohelper::GetMultiServiceFactory() );
-        // create configuration hierachical access name
-        if( xSMgr.is() )
-        {
-            try
-            {
-                uno::Reference< XMultiServiceFactory > xConfigProvider(
-                   uno::Reference< XMultiServiceFactory >(
-                        xSMgr->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                        "com.sun.star.configuration.ConfigurationProvider" ))),
-                        UNO_QUERY )
-                    );
-                if( xConfigProvider.is() )
-                {
-                    Sequence< Any > aArgs(1);
-                    PropertyValue aVal;
-                    aVal.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
-                    aVal.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/Misc" ) );
-                    aArgs.getArray()[0] <<= aVal;
-                    uno::Reference< XNameAccess > xConfigAccess(
-                        uno::Reference< XNameAccess >(
-                            xConfigProvider->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                "com.sun.star.configuration.ConfigurationAccess" )),
-                                                                            aArgs ),
-                            UNO_QUERY )
-                        );
-                    if( xConfigAccess.is() )
-                    {
-                        try
-                        {
-                            sal_Bool bValue = sal_False;
-                            Any aAny = xConfigAccess->getByName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseSystemPrintDialog" ) ) );
-                            if( aAny >>= bValue )
-                                bNative = bValue;
-                        }
-                        catch( NoSuchElementException& )
-                        {
-                        }
-                        catch( WrappedTargetException& )
-                        {
-                        }
-                    }
-                }
-            }
-            catch( Exception& )
-            {
-            }
-        }
-    }
-    catch( WrappedTargetException& )
-    {
-    }
-
-    return bNative;
-}
-
 sal_uLong AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup*, sal_uInt16 i_nType )
 {
     switch( i_nType )
@@ -388,7 +320,7 @@ sal_uLong AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup*, sal_uInt16 i
         case PRINTER_CAPABILITIES_SETPAPER:
             return 1;
         case PRINTER_CAPABILITIES_EXTERNALDIALOG:
-            return getUseNativeDialog() ? 1 : 0;
+            return useSystemPrintDialog() ? 1 : 0;
         case PRINTER_CAPABILITIES_PDF:
             return 1;
         case PRINTER_CAPABILITIES_USEPULLMODEL:

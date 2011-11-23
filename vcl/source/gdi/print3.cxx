@@ -32,6 +32,7 @@
 #include "vcl/metaact.hxx"
 #include "vcl/msgbox.hxx"
 #include "vcl/configsettings.hxx"
+#include "vcl/unohelp.hxx"
 
 #include "printdlg.hxx"
 #include "svdata.hxx"
@@ -41,6 +42,7 @@
 
 #include "tools/urlobj.hxx"
 
+#include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/ui/dialogs/XFilePicker.hpp"
 #include "com/sun/star/ui/dialogs/XFilterManager.hpp"
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
@@ -1907,6 +1909,73 @@ Any PrinterOptionsHelper::getEditControlOpt( const rtl::OUString& i_rTitle,
                             &aVal,
                             i_rControlOptions
                             );
+}
+
+namespace vcl
+{
+
+bool useSystemPrintDialog()
+{
+    bool bNative = true;
+    try
+    {
+        // get service provider
+        uno::Reference< lang::XMultiServiceFactory > xSMgr( unohelper::GetMultiServiceFactory() );
+        // create configuration hierachical access name
+        if( xSMgr.is() )
+        {
+            try
+            {
+                uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
+                   uno::Reference< lang::XMultiServiceFactory >(
+                        xSMgr->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                        "com.sun.star.configuration.ConfigurationProvider" ))),
+                        UNO_QUERY )
+                    );
+                if( xConfigProvider.is() )
+                {
+                    uno::Sequence< uno::Any > aArgs(1);
+                    beans::PropertyValue aVal;
+                    aVal.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
+                    aVal.Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/Misc" ) );
+                    aArgs.getArray()[0] <<= aVal;
+                    uno::Reference< container::XNameAccess > xConfigAccess(
+                        uno::Reference< container::XNameAccess >(
+                            xConfigProvider->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                "com.sun.star.configuration.ConfigurationAccess" )),
+                                                                            aArgs ),
+                            UNO_QUERY )
+                        );
+                    if( xConfigAccess.is() )
+                    {
+                        try
+                        {
+                            sal_Bool bValue = sal_False;
+                            uno::Any aAny = xConfigAccess->getByName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseSystemPrintDialog" ) ) );
+                            if( aAny >>= bValue )
+                                bNative = bValue;
+                        }
+                        catch( const container::NoSuchElementException& )
+                        {
+                        }
+                        catch( const lang::WrappedTargetException& )
+                        {
+                        }
+                    }
+                }
+            }
+            catch( const uno::Exception& )
+            {
+            }
+        }
+    }
+    catch( const lang::WrappedTargetException& )
+    {
+    }
+
+    return bNative;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
