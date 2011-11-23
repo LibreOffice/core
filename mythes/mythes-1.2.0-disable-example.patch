@@ -67,25 +67,13 @@ diff -uNrp misc/build/mythes-1.2.0/configure misc/mythes-1.2.0/configure
  
 diff -uNrp misc/build/mythes-1.2.0/Makefile.in misc/mythes-1.2.0/Makefile.in
 --- misc/build/mythes-1.2.0/Makefile.in	2010-02-27 12:57:35.000000000 -0300
-+++ misc/mythes-1.2.0/Makefile.in	2011-11-21 10:48:03.713435791 -0300
-@@ -18,7 +18,7 @@
- 
- 
- 
--
-+ENABLE_EXAMPLE=@ENABLE_EXAMPLE@
- VPATH = @srcdir@
- pkgdatadir = $(datadir)/@PACKAGE@
- pkgincludedir = $(includedir)/@PACKAGE@
-@@ -85,7 +85,11 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
- libmythes_1_2_la_LIBADD =
- am_libmythes_1_2_la_OBJECTS = mythes.lo
- libmythes_1_2_la_OBJECTS = $(am_libmythes_1_2_la_OBJECTS)
-+ifeq "$(ENABLE_EXAMPLE)" "no"
-+PROGRAMS=
-+else
- PROGRAMS = $(noinst_PROGRAMS)
-+endif
- am_example_OBJECTS = example.$(OBJEXT)
- example_OBJECTS = $(am_example_OBJECTS)
- example_DEPENDENCIES = libmythes-1.2.la
++++ misc/mythes-1.2.0/Makefile.in	2011-11-22 20:39:45.589038536 -0300
+@@ -675,7 +675,7 @@ distcleancheck: distclean
+ 	       exit 1; } >&2
+ check-am: all-am
+ check: check-am
+-all-am: Makefile $(LTLIBRARIES) $(PROGRAMS) $(SCRIPTS) $(DATA) \
++all-am: Makefile $(LTLIBRARIES) $(SCRIPTS) $(DATA) \
+ 		$(HEADERS) config.h
+ installdirs:
+ 	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkgconfdir)" "$(DESTDIR)$(libmythes_1_2_includedir)"; do \
