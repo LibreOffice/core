@@ -349,10 +349,11 @@ void SwTableFormula::_MakeFormel( const SwTable& rTbl, String& rNewStr,
 
         rNewStr += '(';
         bool bDelim = false;
-        for( sal_uInt16 n = 0; n < aBoxes.Count() &&
-                           !pCalcPara->rCalc.IsCalcError(); ++n )
+        for( SwSelBoxes::const_iterator it = aBoxes.begin();
+             it != aBoxes.end() && !pCalcPara->rCalc.IsCalcError();
+             ++it )
         {
-            const SwTableBox* pTblBox = aBoxes[n];
+            const SwTableBox* pTblBox = it->second;
             if ( pTblBox->getRowSpan() >= 1 )
             {
                 if( bDelim )
@@ -875,12 +876,11 @@ String lcl_BoxNmToRel( const SwTable& rTbl, const SwTableNode& rTblNd,
 sal_uInt16 SwTableFormula::GetBoxesOfFormula( const SwTable& rTbl,
                                         SwSelBoxes& rBoxes )
 {
-    if( rBoxes.Count() )
-        rBoxes.Remove( sal_uInt16(0), rBoxes.Count() );
+    rBoxes.clear();
 
     BoxNmToPtr( &rTbl );
     ScanString( &SwTableFormula::_GetFmlBoxes, rTbl, &rBoxes );
-    return rBoxes.Count();
+    return rBoxes.size();
 }
 
 void SwTableFormula::_GetFmlBoxes( const SwTable& rTbl, String& ,
@@ -912,10 +912,10 @@ void SwTableFormula::_GetFmlBoxes( const SwTable& rTbl, String& ,
         // deren Werte
         SwSelBoxes aBoxes;
         GetBoxes( *pSttBox, *pEndBox, aBoxes );
-        pBoxes->Insert( &aBoxes );
+        pBoxes->insert( aBoxes.begin(), aBoxes.end() );
     }
     else if( pSttBox )          // nur die StartBox ?
-        pBoxes->Insert( pSttBox );
+        pBoxes->insert( pSttBox );
 }
 
 void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
@@ -960,14 +960,17 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
                 break;
 
             // dann mal die Tabellenkoepfe raus:
-            for( sal_uInt16 n = 0; n < rBoxes.Count(); ++n )
+            for( SwSelBoxes::const_iterator it = rBoxes.begin(); it != rBoxes.end(); ++it )
             {
-                pLine = rBoxes[n]->GetUpper();
+                pLine = it->second->GetUpper();
                 while( pLine->GetUpper() )
                     pLine = pLine->GetUpper()->GetUpper();
 
                 if( pTbl->IsHeadline( *pLine ) )
-                    rBoxes.Remove( n--, 1 );
+                {
+                    rBoxes.erase( it++ );
+                    --it;
+                }
             }
         } while( sal_False );
     }

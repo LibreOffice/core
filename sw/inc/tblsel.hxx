@@ -33,6 +33,8 @@
 #include <swrect.hxx>
 #include "swdllapi.h"
 
+#include <map>
+
 class SwCrsrShell;
 class SwCursor;
 class SwTableCursor;
@@ -48,7 +50,30 @@ class SwUndoTblMerge;
 class SwCellFrm;
 
 SV_DECL_PTRARR( SwCellFrms, SwCellFrm*, 16, 16 )
-SV_DECL_PTRARR_SORT( SwSelBoxes, SwTableBoxPtr, 10, 20 )
+
+
+class SwSelBoxes : public std::map<sal_uLong, SwTableBox*> {
+    typedef std::map<sal_uLong, SwTableBox*> Base;
+public:
+    using Base::insert;
+    using Base::find;
+    using Base::count;
+
+    std::pair<iterator, bool>
+    insert(SwTableBox* pBox) { return Base::insert(std::make_pair(pBox->GetSttIdx(), pBox)); }
+
+    iterator
+    insert(iterator it, SwTableBox* pBox) { return Base::insert(it, std::make_pair(pBox->GetSttIdx(), pBox)); }
+
+    size_type
+    count(const SwTableBox* pBox) const { return Base::count(pBox->GetSttIdx()); }
+
+    iterator
+    find(const SwTableBox* pBox) { return Base::find(pBox->GetSttIdx()); }
+
+    const_iterator
+    find(const SwTableBox* pBox) const { return Base::find(pBox->GetSttIdx()); }
+};
 
 
 // Collects all boxes in table that are selected.

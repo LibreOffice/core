@@ -524,8 +524,8 @@ SwRowFrm* GetRowFrm( SwTableLine& rLine )
 
 sal_Bool SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt, sal_Bool bBehind )
 {
-    OSL_ENSURE( rBoxes.Count() && nCnt, "keine gueltige Box-Liste" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+    OSL_ENSURE( !rBoxes.empty() && nCnt, "keine gueltige Box-Liste" );
+    SwTableNode* pTblNd = const_cast<SwTableNode*>( rBoxes.begin()->second->GetSttNd()->FindTableNode() );
     if( !pTblNd )
         return sal_False;
 
@@ -580,8 +580,8 @@ sal_Bool SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 n
 sal_Bool SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                         sal_uInt16 nCnt, sal_Bool bBehind )
 {
-    OSL_ENSURE( pDoc && rBoxes.Count() && nCnt, "keine gueltige Box-Liste" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+    OSL_ENSURE( pDoc && !rBoxes.empty() && nCnt, "keine gueltige Box-Liste" );
+    SwTableNode* pTblNd = const_cast<SwTableNode*>( rBoxes.begin()->second->GetSttNd()->FindTableNode() );
     if( !pTblNd )
         return sal_False;
 
@@ -790,7 +790,7 @@ void lcl_LastBoxSetWidth( SwTableBoxes &rBoxes, const long nOffset,
                                     bFirst, rShareFmts );
 
     //Die Box anpassen
-    SwFrmFmt *pBoxFmt = rBox.GetFrmFmt();
+    const SwFrmFmt *pBoxFmt = rBox.GetFrmFmt();
     SwFmtFrmSize aNew( pBoxFmt->GetFrmSize() );
     aNew.SetWidth( aNew.GetWidth() + nOffset );
     SwFrmFmt *pFmt = rShareFmts.GetFormat( *pBoxFmt, aNew );
@@ -944,7 +944,7 @@ void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo,
 SwTableBox* lcl_FndNxtPrvDelBox( const SwTableLines& rTblLns,
                                 SwTwips nBoxStt, SwTwips nBoxWidth,
                                 sal_uInt16 nLinePos, sal_Bool bNxt,
-                                SwSelBoxes* pAllDelBoxes, sal_uInt16* pCurPos )
+                                SwSelBoxes* pAllDelBoxes, SwSelBoxes::iterator* pCurPos )
 {
     SwTableBox* pFndBox = 0;
     do {
@@ -981,16 +981,16 @@ SwTableBox* lcl_FndNxtPrvDelBox( const SwTableLines& rTblLns,
         else if( pAllDelBoxes )
         {
             // falls der Vorganger auch geloscht wird, ist nicht zu tun
-            sal_uInt16 nFndPos;
-            if( !pAllDelBoxes->Seek_Entry( pFndBox, &nFndPos ) )
+            SwSelBoxes::iterator it = pAllDelBoxes->find( pFndBox );
+            if( it == pAllDelBoxes->end() )
                 break;
 
             // sonst noch mal weitersuchen
             // Die Box muessen wir aber nicht nochmal abpruefen
-            pFndBox = 0;
-            if( nFndPos <= *pCurPos )
+            if( pFndBox->GetSttIdx() <= (*pCurPos)->second->GetSttIdx() )
                 --*pCurPos;
-            pAllDelBoxes->Remove( nFndPos );
+            pFndBox = 0;
+            pAllDelBoxes->erase( it );
         }
     } while( bNxt ? ( nLinePos + 1 < rTblLns.Count() ) : nLinePos );
     return pFndBox;
@@ -999,7 +999,7 @@ SwTableBox* lcl_FndNxtPrvDelBox( const SwTableLines& rTblLns,
 void lcl_SaveUpperLowerBorder( SwTable& rTbl, const SwTableBox& rBox,
                                 SwShareBoxFmts& rShareFmts,
                                 SwSelBoxes* pAllDelBoxes = 0,
-                                sal_uInt16* pCurPos = 0 )
+                                SwSelBoxes::iterator* pCurPos = 0 )
 {
 //JP 16.04.97:  2.Teil fuer Bug 36271
     sal_Bool bChgd = sal_False;
@@ -1079,9 +1079,9 @@ sal_Bool SwTable::DeleteSel(
 {
     OSL_ENSURE( pDoc, "No doc?" );
     SwTableNode* pTblNd = 0;
-    if( rBoxes.Count() )
+    if( !rBoxes.empty() )
     {
-        pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+        pTblNd = const_cast<SwTableNode*>(rBoxes.begin()->second->GetSttNd()->FindTableNode());
         if( !pTblNd )
             return sal_False;
     }
@@ -1092,9 +1092,9 @@ sal_Bool SwTable::DeleteSel(
     _FndBox aFndBox( 0, 0 );
     if ( bDelMakeFrms )
     {
-        if( pMerged && pMerged->Count() )
+        if( pMerged && !pMerged->empty() )
             aFndBox.SetTableLines( *pMerged, *this );
-        else if( rBoxes.Count() )
+        else if( !rBoxes.empty() )
             aFndBox.SetTableLines( rBoxes, *this );
         aFndBox.DelFrms( *this );
     }
@@ -1104,11 +1104,10 @@ sal_Bool SwTable::DeleteSel(
     // erst die Umrandung umsetzen, dann loeschen
     if( bCorrBorder )
     {
-        SwSelBoxes aBoxes;
-        aBoxes.Insert( &rBoxes );
-        for( sal_uInt16 n = 0; n < aBoxes.Count(); ++n )
-            ::lcl_SaveUpperLowerBorder( *this, *rBoxes[ n ], aShareFmts,
-                                        &aBoxes, &n );
+        SwSelBoxes aBoxes( rBoxes );
+        for( SwSelBoxes::iterator it = aBoxes.begin(); it != aBoxes.end(); ++it )
+            ::lcl_SaveUpperLowerBorder( *this, *it->second, aShareFmts,
+                                        &aBoxes, &it );
     }
 
     PrepareDelBoxes( rBoxes );
@@ -1116,18 +1115,16 @@ sal_Bool SwTable::DeleteSel(
     SwChartDataProvider *pPCD = pDoc->GetChartDataProvider();
     //
     // delete boxes from last to first
-    for( sal_uInt16 n = 0; n < rBoxes.Count(); ++n )
+    for( SwSelBoxes::const_reverse_iterator it = rBoxes.rbegin(); it != rBoxes.rend(); ++it )
     {
-        sal_uInt16 nIdx = rBoxes.Count() - 1 - n;
-
         // first adapt the data-sequence for chart if necessary
         // (needed to move the implementation cursor properly to it's new
         // position which can't be done properly if the cell is already gone)
         if (pPCD && pTblNd)
-            pPCD->DeleteBox( &pTblNd->GetTable(), *rBoxes[nIdx] );
+            pPCD->DeleteBox( &pTblNd->GetTable(), *it->second );
 
         // ... then delete the boxes
-        _DeleteBox( *this, rBoxes[nIdx], pUndo, sal_True, bCorrBorder, &aShareFmts );
+        _DeleteBox( *this, it->second, pUndo, sal_True, bCorrBorder, &aShareFmts );
     }
 
     // dann raeume die Struktur aller Lines auf
@@ -1148,8 +1145,8 @@ sal_Bool SwTable::DeleteSel(
 sal_Bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
                         sal_Bool bSameHeight )
 {
-    OSL_ENSURE( pDoc && rBoxes.Count() && nCnt, "keine gueltigen Werte" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+    OSL_ENSURE( pDoc && !rBoxes.empty() && nCnt, "keine gueltigen Werte" );
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes.begin()->second->GetSttNd()->FindTableNode());
     if( !pTblNd )
         return sal_False;
 
@@ -1162,17 +1159,17 @@ sal_Bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16
 
     // If the rows should get the same (min) height, we first have
     // to store the old row heights before deleting the frames
-    long* pRowHeights = 0;
+    std::vector<long> aRowHeights;
     if ( bSameHeight )
     {
-        pRowHeights = new long[ rBoxes.Count() ];
-        for( sal_uInt16 n = 0; n < rBoxes.Count(); ++n )
+        aRowHeights.reserve(rBoxes.size());
+        for( SwSelBoxes::const_iterator it = rBoxes.begin(); it != rBoxes.end(); ++it )
         {
-            SwTableBox* pSelBox = *( rBoxes.GetData() + n );
+            SwTableBox* pSelBox = it->second;
             const SwRowFrm* pRow = GetRowFrm( *pSelBox->GetUpper() );
             OSL_ENSURE( pRow, "wo ist der Frm von der SwTableLine?" );
             SWRECTFN( pRow )
-            pRowHeights[ n ] = (pRow->Frm().*fnRect->fnGetHeight)();
+            aRowHeights.push_back((pRow->Frm().*fnRect->fnGetHeight)());
         }
     }
 
@@ -1181,9 +1178,10 @@ sal_Bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16
     aFndBox.SetTableLines( rBoxes, *this );
     aFndBox.DelFrms( *this );
 
-    for( sal_uInt16 n = 0; n < rBoxes.Count(); ++n )
+    sal_uInt16 n = 0;
+    for( SwSelBoxes::const_iterator it = rBoxes.begin(); it != rBoxes.end(); ++it, ++n )
     {
-        SwTableBox* pSelBox = *( rBoxes.GetData() + n );
+        SwTableBox* pSelBox = it->second;
         OSL_ENSURE( pSelBox, "Box steht nicht in der Tabelle" );
 
         // dann fuege in die Box nCnt neue Zeilen ein
@@ -1197,7 +1195,7 @@ sal_Bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16
 
         sal_Bool bChgLineSz = 0 != aFSz.GetHeight() || bSameHeight;
         if ( bChgLineSz )
-            aFSz.SetHeight( ( bSameHeight ? pRowHeights[ n ] : aFSz.GetHeight() ) /
+            aFSz.SetHeight( ( bSameHeight ? aRowHeights[ n ] : aFSz.GetHeight() ) /
                              (nCnt + 1) );
 
         SwTableBox* pNewBox = new SwTableBox( pFrmFmt, nCnt, pInsLine );
@@ -1278,8 +1276,6 @@ sal_Bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16
         pFrmFmt->ResetFmtAttr( RES_BOXATR_BEGIN, RES_BOXATR_END - 1 );
     }
 
-    delete[] pRowHeights;
-
     GCLines();
 
     aFndBox.MakeFrms( *this );
@@ -1291,8 +1287,8 @@ sal_Bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16
 
 sal_Bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
 {
-    OSL_ENSURE( pDoc && rBoxes.Count() && nCnt, "keine gueltigen Werte" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+    OSL_ENSURE( pDoc && !rBoxes.empty() && nCnt, "keine gueltigen Werte" );
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes.begin()->second->GetSttNd()->FindTableNode());
     if( !pTblNd )
         return sal_False;
 
@@ -1302,8 +1298,7 @@ sal_Bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nC
     pDoc->CreateChartInternalDataProviders( this );
 
     SetHTMLTableLayout( 0 );    // MIB 9.7.97: HTML-Layout loeschen
-    SwSelBoxes aSelBoxes;
-    aSelBoxes.Insert(rBoxes.GetData(), rBoxes.Count());
+    SwSelBoxes aSelBoxes( rBoxes );
     ExpandSelection( aSelBoxes );
 
     //Lines fuer das Layout-Update herausuchen.
@@ -1314,9 +1309,9 @@ sal_Bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nC
     _CpyTabFrms aFrmArr;
     SvPtrarr aLastBoxArr;
     sal_uInt16 nFndPos;
-    for( sal_uInt16 n = 0; n < aSelBoxes.Count(); ++n )
+    for( SwSelBoxes::const_iterator it = aSelBoxes.begin(); it != aSelBoxes.end(); ++it )
     {
-        SwTableBox* pSelBox = *( aSelBoxes.GetData() + n );
+        SwTableBox* pSelBox = it->second;
         OSL_ENSURE( pSelBox, "Box steht nicht in der Tabelle" );
 
         // We don't want to split small table cells into very very small cells
@@ -1730,8 +1725,8 @@ sal_Bool lcl_Merge_MoveLine( const _FndLine*& rpFndLine, void* pPara )
 sal_Bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                         SwTableBox* pMergeBox, SwUndoTblMerge* pUndo )
 {
-    OSL_ENSURE( rBoxes.Count() && pMergeBox, "keine gueltigen Werte" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+    OSL_ENSURE( !rBoxes.empty() && pMergeBox, "keine gueltigen Werte" );
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes.begin()->second->GetSttNd()->FindTableNode());
     if( !pTblNd )
         return sal_False;
 
@@ -2741,7 +2736,7 @@ sal_Bool lcl_InsSelBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                     return sal_False;
 
                 if( pBox->GetSttNd() )
-                    rParam.aBoxes.Insert( pBox );
+                    rParam.aBoxes.insert( pBox );
 
                 break;
             }
@@ -3138,7 +3133,7 @@ sal_Bool lcl_DeleteBox_Rekursiv( CR_SetBoxWidth& rParam, SwTableBox& rBox,
             else
             {
                 SwTableBox* pBox = &rBox;
-                rParam.aBoxes.Insert( pBox );
+                rParam.aBoxes.insert( pBox );
             }
         }
         else
@@ -3489,7 +3484,7 @@ _FndBox* lcl_SaveInsDelData( CR_SetBoxWidth& rParam, SwUndo** ppUndo,
     // suche alle Boxen / Lines
     SwTable& rTbl = rParam.pTblNd->GetTable();
 
-    if( !rParam.aBoxes.Count() )
+    if( rParam.aBoxes.empty() )
     {
         // erstmal die Boxen besorgen !
         if( rParam.bBigger )
@@ -3501,8 +3496,7 @@ _FndBox* lcl_SaveInsDelData( CR_SetBoxWidth& rParam, SwUndo** ppUndo,
     }
 
     // loeschen der gesamten Tabelle verhindern
-    if( rParam.bBigger && rParam.aBoxes.Count() ==
-        rTbl.GetTabSortBoxes().Count() )
+    if( rParam.bBigger && rParam.aBoxes.size() == rTbl.GetTabSortBoxes().Count() )
         return 0;
 
     _FndBox* pFndBox = new _FndBox( 0, 0 );
@@ -3645,8 +3639,7 @@ sal_Bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                 {
                     pFndBox = ::lcl_SaveInsDelData( aParam, ppUndo,
                                                     aTmpLst, nDistStt );
-                    if( aParam.bBigger && aParam.aBoxes.Count() ==
-                                    aSortCntBoxes.Count() )
+                    if( aParam.bBigger && aParam.aBoxes.size() == aSortCntBoxes.Count() )
                     {
                         // dies gesamte Tabelle soll geloescht werden!!
                         GetFrmFmt()->GetDoc()->DeleteRowCol( aParam.aBoxes );
@@ -4028,11 +4021,10 @@ _FndBox* lcl_SaveInsDelData( CR_SetLineHeight& rParam, SwUndo** ppUndo,
     // suche alle Boxen / Lines
     SwTable& rTbl = rParam.pTblNd->GetTable();
 
-    OSL_ENSURE( rParam.aBoxes.Count(), "ohne Boxen ist nichts zu machen!" );
+    OSL_ENSURE( !rParam.aBoxes.empty(), "ohne Boxen ist nichts zu machen!" );
 
     // loeschen der gesamten Tabelle verhindern
-    if( !rParam.bBigger && rParam.aBoxes.Count() ==
-        rTbl.GetTabSortBoxes().Count() )
+    if( !rParam.bBigger && rParam.aBoxes.size() == rTbl.GetTabSortBoxes().Count() )
         return 0;
 
     _FndBox* pFndBox = new _FndBox( 0, 0 );
@@ -4251,7 +4243,7 @@ sal_Bool lcl_InsDelSelLine( SwTableLine* pLine, CR_SetLineHeight& rParam,
                 return sal_False;
 
             if( pBox->GetSttNd() )
-                rParam.aBoxes.Insert( pBox );
+                rParam.aBoxes.insert( pBox );
             else
             {
                 for( sal_uInt16 i = pBox->GetTabLines().Count(); i; )
@@ -4346,7 +4338,7 @@ sal_Bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                 {
                     if( bInsDel )
                     {
-                        if( !aParam.aBoxes.Count() )
+                        if( aParam.aBoxes.empty() )
                             ::lcl_InsDelSelLine( (*pLines)[ nBaseLinePos ],
                                                     aParam, 0, sal_True );
 
@@ -4354,7 +4346,7 @@ sal_Bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
 
                         // delete complete table when last row is deleted
                         if( !bBigger &&
-                            aParam.aBoxes.Count() == aSortCntBoxes.Count() )
+                            aParam.aBoxes.size() == aSortCntBoxes.Count() )
                         {
                             GetFrmFmt()->GetDoc()->DeleteRowCol( aParam.aBoxes );
                             return sal_False;
@@ -4432,7 +4424,7 @@ sal_Bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                     // dann mal anpassen
                     if( bInsDel )
                     {
-                        if( !aParam.aBoxes.Count() )
+                        if( aParam.aBoxes.empty() )
                             ::lcl_InsDelSelLine( (*pLines)[ nBaseLinePos ],
                                                     aParam, 0, sal_True );
                         pFndBox = ::lcl_SaveInsDelData( aParam, ppUndo, aTmpLst );

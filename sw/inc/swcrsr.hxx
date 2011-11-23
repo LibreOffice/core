@@ -283,9 +283,12 @@ public:
     virtual sal_Bool GotoTable( const String& rName );
 
     void InsertBox( const SwTableBox& rTblBox );
-    void DeleteBox( sal_uInt16 nPos ) { aSelBoxes.Remove( nPos ); bChg = sal_True; }
-    sal_uInt16 GetBoxesCount() const { return aSelBoxes.Count(); }
+    void DeleteBox( SwSelBoxes::const_iterator it ) { aSelBoxes.erase( it ); bChg = sal_True; }
+    void DeleteBox( SwSelBoxes::const_iterator itFirst, SwSelBoxes::const_iterator itLast ) { aSelBoxes.erase( itFirst, itLast ); bChg = sal_True; }
+    void DeleteAllBoxes() { DeleteBox(aSelBoxes.begin(), aSelBoxes.end()); }
+    sal_uInt16 GetBoxesCount() const { return aSelBoxes.size(); }
     const SwSelBoxes& GetBoxes() const { return aSelBoxes; }
+    SwSelBoxes&       GetBoxes()       { return aSelBoxes; }
 
     // Creates cursor for all boxes.
     SwCursor* MakeBoxSels( SwCursor* pAktCrsr );

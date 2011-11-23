@@ -2132,35 +2132,6 @@ SwTableCursor::SwTableCursor( const SwPosition &rPos, SwPaM* pRing )
 SwTableCursor::~SwTableCursor() {}
 
 
-sal_Bool lcl_SeekEntry( const SwSelBoxes& rTmp, const SwStartNode* pSrch, sal_uInt16& rFndPos )
-{
-    sal_uLong nIdx = pSrch->GetIndex();
-
-    sal_uInt16 nO = rTmp.Count();
-    if( nO > 0 )
-    {
-        nO--;
-        sal_uInt16 nU = 0;
-        while( nU <= nO )
-        {
-            sal_uInt16 nM = nU + ( nO - nU ) / 2;
-            if( rTmp[ nM ]->GetSttNd() == pSrch )
-            {
-                rFndPos = nM;
-                return sal_True;
-            }
-            else if( rTmp[ nM ]->GetSttIdx() < nIdx )
-                nU = nM + 1;
-            else if( nM == 0 )
-                return sal_False;
-            else
-                nO = nM - 1;
-        }
-    }
-    return sal_False;
-}
-
-
 SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
 {
     if( bChg )      // ???
@@ -2179,12 +2150,10 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
 
         // temp Kopie anlegen, damit alle Boxen, fuer die schon Cursor
         // existieren, entfernt werden koennen.
-        SwSelBoxes aTmp;
-        aTmp.Insert( &aSelBoxes );
+        SwSelBoxes aTmp( aSelBoxes );
 
         //Jetzt die Alten und die neuen abgleichen.
         SwNodes& rNds = pAktCrsr->GetDoc()->GetNodes();
-        sal_uInt16 nPos;
         const SwStartNode* pSttNd;
         SwPaM* pCur = pAktCrsr;
         do {
@@ -2194,31 +2163,34 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
                 pSttNd != pCur->GetMark()->nNode.GetNode().FindTableBoxStartNode() )
                 bDel = sal_True;
 
-            else if( lcl_SeekEntry( aTmp, pSttNd, nPos ))
-            {
-                SwNodeIndex aIdx( *pSttNd, 1 );
-                const SwNode* pNd = &aIdx.GetNode();
-                if( !pNd->IsCntntNode() )
-                    pNd = rNds.GoNextSection( &aIdx, sal_True, sal_False );
-
-                SwPosition* pPos = pCur->GetMark();
-                if( pNd != &pPos->nNode.GetNode() )
-                    pPos->nNode = *pNd;
-                pPos->nContent.Assign( (SwCntntNode*)pNd, 0 );
-
-                aIdx.Assign( *pSttNd->EndOfSectionNode(), - 1 );
-                if( !( pNd = &aIdx.GetNode())->IsCntntNode() )
-                    pNd = rNds.GoPrevSection( &aIdx, sal_True, sal_False );
-
-                pPos = pCur->GetPoint();
-                if( pNd != &pPos->nNode.GetNode() )
-                    pPos->nNode = *pNd;
-                pPos->nContent.Assign( (SwCntntNode*)pNd, ((SwCntntNode*)pNd)->Len() );
-
-                aTmp.Remove( nPos );
-            }
             else
-                bDel = sal_True;
+            {
+                SwSelBoxes::const_iterator it = aTmp.find(pSttNd->GetIndex());
+                if( it != aTmp.end() ) {
+                    SwNodeIndex aIdx( *pSttNd, 1 );
+                    const SwNode* pNd = &aIdx.GetNode();
+                    if( !pNd->IsCntntNode() )
+                        pNd = rNds.GoNextSection( &aIdx, sal_True, sal_False );
+
+                    SwPosition* pPos = pCur->GetMark();
+                    if( pNd != &pPos->nNode.GetNode() )
+                        pPos->nNode = *pNd;
+                    pPos->nContent.Assign( (SwCntntNode*)pNd, 0 );
+
+                    aIdx.Assign( *pSttNd->EndOfSectionNode(), - 1 );
+                    if( !( pNd = &aIdx.GetNode())->IsCntntNode() )
+                        pNd = rNds.GoPrevSection( &aIdx, sal_True, sal_False );
+
+                    pPos = pCur->GetPoint();
+                    if( pNd != &pPos->nNode.GetNode() )
+                        pPos->nNode = *pNd;
+                    pPos->nContent.Assign( (SwCntntNode*)pNd, ((SwCntntNode*)pNd)->Len() );
+
+                    aTmp.erase( it );
+                }
+                else
+                    bDel = sal_True;
+            }
 
             pCur = (SwPaM*)pCur->GetNext();
             if( bDel )
@@ -2232,9 +2204,9 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
             }
         } while ( pAktCrsr != pCur );
 
-        for( nPos = 0; nPos < aTmp.Count(); ++nPos )
+        for( SwSelBoxes::const_iterator it = aTmp.begin(); it != aTmp.end(); ++it )
         {
-            pSttNd = aTmp[ nPos ]->GetSttNd();
+            pSttNd = it->second->GetSttNd();
 
             SwNodeIndex aIdx( *pSttNd, 1 );
             if( &aIdx.GetNodes() != &rNds )
@@ -2273,7 +2245,7 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
 void SwTableCursor::InsertBox( const SwTableBox& rTblBox )
 {
     SwTableBox* pBox = (SwTableBox*)&rTblBox;
-    aSelBoxes.Insert( pBox );
+    aSelBoxes.insert( pBox );
     bChg = sal_True;
 }
 
@@ -2289,8 +2261,7 @@ bool SwTableCursor::NewTableSelection()
             pTableNode->GetTable().IsNewModel() )
         {
             bRet = true;
-            SwSelBoxes aNew;
-            aNew.Insert( &aSelBoxes );
+            SwSelBoxes aNew( aSelBoxes );
             pTableNode->GetTable().CreateSelection( pStart, pEnd, aNew,
                 SwTable::SEARCH_NONE, false );
             ActualizeSelection( aNew );
@@ -2301,31 +2272,37 @@ bool SwTableCursor::NewTableSelection()
 
 void SwTableCursor::ActualizeSelection( const SwSelBoxes &rNew )
 {
-    sal_uInt16 nOld = 0, nNew = 0;
-    while ( nOld < aSelBoxes.Count() && nNew < rNew.Count() )
+    SwSelBoxes::const_iterator itOld = aSelBoxes.begin();
+    SwSelBoxes::const_iterator itNew = rNew.begin();
+    while ( itOld != aSelBoxes.end() && itNew != rNew.end() )
     {
-        const SwTableBox* pPOld = *( aSelBoxes.GetData() + nOld );
-        const SwTableBox* pPNew = *( rNew.GetData() + nNew );
+        const SwTableBox* pPOld = itOld->second;
+        const SwTableBox* pPNew = itNew->second;
         if( pPOld == pPNew )
         {   // this box will stay
-            ++nOld;
-            ++nNew;
+            ++itOld;
+            ++itNew;
         }
         else if( pPOld->GetSttIdx() < pPNew->GetSttIdx() )
-            DeleteBox( nOld ); // this box has to go
+        {
+            SwSelBoxes::const_iterator it = itOld;
+            ++itOld;
+            DeleteBox( it ); // this box has to go
+        }
         else
         {
             InsertBox( *pPNew ); // this is a new one
-            ++nOld;
-            ++nNew;
+            ++itOld;
+            ++itNew;
         }
     }
 
-    while( nOld < aSelBoxes.Count() )
-        DeleteBox( nOld ); // some more to delete
+    // some more to delete
+    DeleteBox( itOld, aSelBoxes.end() );
 
-    for( ; nNew < rNew.Count(); ++nNew ) // some more to insert
-        InsertBox( **( rNew.GetData() + nNew ) );
+    // some more to insert
+    for( ; itNew != rNew.end(); ++itNew )
+        InsertBox( *itNew->second );
 }
 
 sal_Bool SwTableCursor::IsCrsrMovedUpdt()
@@ -2364,14 +2341,12 @@ void SwTableCursor::ParkCrsr()
 
 sal_Bool SwTableCursor::HasReadOnlyBoxSel() const
 {
-    sal_Bool bRet = sal_False;
-    for( sal_uInt16 n = aSelBoxes.Count(); n;  )
-        if( aSelBoxes[ --n ]->GetFrmFmt()->GetProtect().IsCntntProtected() )
+    for( SwSelBoxes::const_reverse_iterator it = aSelBoxes.rbegin(); it != aSelBoxes.rend(); ++it )
+        if( it->second->GetFrmFmt()->GetProtect().IsCntntProtected() )
         {
-            bRet = sal_True;
-            break;
+            return sal_True;
         }
-    return bRet;
+    return sal_False;
 }
 
 

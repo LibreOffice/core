@@ -148,12 +148,12 @@ sal_Bool lcl_GetBoxSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
             {
                 SwTableBox* pBox = (SwTableBox*)pNd->FindTableNode()->GetTable().
                                             GetTblBox( pNd->GetIndex() );
-                rBoxes.Insert( pBox );
+                rBoxes.insert( pBox );
             }
         } while( bAllCrsr &&
                 pSttPam != ( pCurPam = (SwPaM*)pCurPam->GetNext()) );
     }
-    return 0 != rBoxes.Count();
+    return !rBoxes.empty();
 }
 
 /***********************************************************************
@@ -245,7 +245,7 @@ void lcl_CollectLines( SvPtrarr &rArr, const SwCursor& rCursor, bool bRemoveLine
         return ;
 
     //Die selektierte Struktur kopieren.
-    const SwTable &rTable = aBoxes[0]->GetSttNd()->FindTableNode()->GetTable();
+    const SwTable &rTable = aBoxes.begin()->second->GetSttNd()->FindTableNode()->GetTable();
     LinesAndTable aPara( rArr, rTable );
     _FndBox aFndBox( 0, 0 );
     {
@@ -1125,10 +1125,10 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
             GetIDocumentUndoRedo().AppendUndo( new SwUndoAttrTbl(*pTblNd) );
         }
 
-        SvPtrarr aFmtCmp( Max( sal_uInt8(255), sal_uInt8(aBoxes.Count()) ), 255 );
-        for ( sal_uInt16 i = 0; i < aBoxes.Count(); ++i )
+        SvPtrarr aFmtCmp( Max( sal_uInt8(255), sal_uInt8(aBoxes.size()) ), 255 );
+        for( SwSelBoxes::const_iterator it = aBoxes.begin(); it != aBoxes.end(); ++it )
         {
-            SwTableBox *pBox = aBoxes[i];
+            SwTableBox *pBox = it->second;
 
             SwFrmFmt *pNewFmt;
             if ( 0 != (pNewFmt = SwTblFmtCmp::FindNewFmt( aFmtCmp, pBox->GetFrmFmt(), 0 )))
@@ -1171,14 +1171,15 @@ sal_Bool SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) cons
         bRet = sal_True;
         sal_Bool bOneFound = sal_False;
         const sal_uInt16 nWhich = rToFill.Which();
-        for( sal_uInt16 i = 0; i < aBoxes.Count(); ++i )
+        for( SwSelBoxes::const_iterator it = aBoxes.begin(); it != aBoxes.end(); ++it )
         {
+            SwTableBox* pBox = it->second;
             switch ( nWhich )
             {
                 case RES_BACKGROUND:
                 {
                     const SvxBrushItem &rBack =
-                                    aBoxes[i]->GetFrmFmt()->GetBackground();
+                                    pBox->GetFrmFmt()->GetBackground();
                     if( !bOneFound )
                     {
                         (SvxBrushItem&)rToFill = rBack;
@@ -1192,7 +1193,7 @@ sal_Bool SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) cons
                 case RES_FRAMEDIR:
                 {
                     const SvxFrameDirectionItem& rDir =
-                                    aBoxes[i]->GetFrmFmt()->GetFrmDir();
+                                    pBox->GetFrmFmt()->GetFrmDir();
                     if( !bOneFound )
                     {
                         (SvxFrameDirectionItem&)rToFill = rDir;
@@ -1204,7 +1205,7 @@ sal_Bool SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) cons
                 case RES_VERT_ORIENT:
                 {
                     const SwFmtVertOrient& rOrient =
-                                    aBoxes[i]->GetFrmFmt()->GetVertOrient();
+                                    pBox->GetFrmFmt()->GetVertOrient();
                     if( !bOneFound )
                     {
                         (SwFmtVertOrient&)rToFill = rOrient;
@@ -1241,10 +1242,10 @@ sal_uInt16 SwDoc::GetBoxAlign( const SwCursor& rCursor ) const
     SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
     SwSelBoxes aBoxes;
     if( pTblNd && ::lcl_GetBoxSel( rCursor, aBoxes ))
-        for( sal_uInt16 i = 0; i < aBoxes.Count(); ++i )
+        for( SwSelBoxes::const_iterator it = aBoxes.begin(); it != aBoxes.end(); ++it )
         {
             const SwFmtVertOrient &rOri =
-                            aBoxes[i]->GetFrmFmt()->GetVertOrient();
+                            it->second->GetFrmFmt()->GetVertOrient();
             if( USHRT_MAX == nAlign )
                 nAlign = static_cast<sal_uInt16>(rOri.GetVertOrient());
             else if( rOri.GetVertOrient() != nAlign )

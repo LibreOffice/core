@@ -1665,7 +1665,7 @@ sal_Bool SwDoc::InsertCol( const SwCursor& rCursor, sal_uInt16 nCnt, sal_Bool bB
     ::GetTblSel( rCursor, aBoxes, nsSwTblSearchType::TBLSEARCH_COL );
 
     sal_Bool bRet = sal_False;
-    if( aBoxes.Count() )
+    if( !aBoxes.empty() )
         bRet = InsertCol( aBoxes, nCnt, bBehind );
     return bRet;
 }
@@ -1673,8 +1673,8 @@ sal_Bool SwDoc::InsertCol( const SwCursor& rCursor, sal_uInt16 nCnt, sal_Bool bB
 sal_Bool SwDoc::InsertCol( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, sal_Bool bBehind )
 {
     // uebers SwDoc fuer Undo !!
-    OSL_ENSURE( rBoxes.Count(), "keine gueltige Box-Liste" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+    OSL_ENSURE( !rBoxes.empty(), "keine gueltige Box-Liste" );
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes.begin()->second->GetSttNd()->FindTableNode());
     if( !pTblNd )
         return sal_False;
 
@@ -1728,7 +1728,7 @@ sal_Bool SwDoc::InsertRow( const SwCursor& rCursor, sal_uInt16 nCnt, sal_Bool bB
     GetTblSel( rCursor, aBoxes, nsSwTblSearchType::TBLSEARCH_ROW );
 
     sal_Bool bRet = sal_False;
-    if( aBoxes.Count() )
+    if( !aBoxes.empty() )
         bRet = InsertRow( aBoxes, nCnt, bBehind );
     return bRet;
 }
@@ -1736,8 +1736,8 @@ sal_Bool SwDoc::InsertRow( const SwCursor& rCursor, sal_uInt16 nCnt, sal_Bool bB
 sal_Bool SwDoc::InsertRow( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, sal_Bool bBehind )
 {
     // uebers SwDoc fuer Undo !!
-    OSL_ENSURE( rBoxes.Count(), "keine gueltige Box-Liste" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+    OSL_ENSURE( !rBoxes.empty(), "keine gueltige Box-Liste" );
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes.begin()->second->GetSttNd()->FindTableNode());
     if( !pTblNd )
         return sal_False;
 
@@ -1925,8 +1925,8 @@ sal_Bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
         return sal_False;
 
     // uebers SwDoc fuer Undo !!
-    OSL_ENSURE( rBoxes.Count(), "keine gueltige Box-Liste" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+    OSL_ENSURE( !rBoxes.empty(), "keine gueltige Box-Liste" );
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes.begin()->second->GetSttNd()->FindTableNode());
     if( !pTblNd )
         return sal_False;
 
@@ -1934,8 +1934,7 @@ sal_Bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
         return sal_False;
 
     ::ClearFEShellTabCols();
-    SwSelBoxes aSelBoxes;
-    aSelBoxes.Insert(rBoxes.GetData(), rBoxes.Count());
+    SwSelBoxes aSelBoxes( rBoxes );
     SwTable &rTable = pTblNd->GetTable();
     long nMin = 0;
     long nMax = 0;
@@ -1949,10 +1948,10 @@ sal_Bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
 
     // soll die gesamte Tabelle geloescht werden ??
     const sal_uLong nTmpIdx1 = pTblNd->GetIndex();
-    const sal_uLong nTmpIdx2 = aSelBoxes[ aSelBoxes.Count()-1 ]->GetSttNd()->
+    const sal_uLong nTmpIdx2 = aSelBoxes.rbegin()->second->GetSttNd()->
                                 EndOfSectionIndex()+1;
-    if( pTblNd->GetTable().GetTabSortBoxes().Count() == aSelBoxes.Count() &&
-        aSelBoxes[0]->GetSttIdx()-1 == nTmpIdx1 &&
+    if( pTblNd->GetTable().GetTabSortBoxes().Count() == aSelBoxes.size() &&
+        aSelBoxes.begin()->second->GetSttIdx()-1 == nTmpIdx1 &&
         nTmpIdx2 == pTblNd->EndOfSectionIndex() )
     {
         sal_Bool bNewTxtNd = sal_False;
@@ -2135,8 +2134,8 @@ sal_Bool SwDoc::SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert, sal_uInt16 n
                       sal_Bool bSameHeight )
 {
     // uebers SwDoc fuer Undo !!
-    OSL_ENSURE( rBoxes.Count() && nCnt, "keine gueltige Box-Liste" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+    OSL_ENSURE( !rBoxes.empty() && nCnt, "keine gueltige Box-Liste" );
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes.begin()->second->GetSttNd()->FindTableNode());
     if( !pTblNd )
         return sal_False;
 
@@ -2155,9 +2154,9 @@ sal_Bool SwDoc::SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert, sal_uInt16 n
         aTmpLst.Insert( &rTbl.GetTabSortBoxes(), 0, rTbl.GetTabSortBoxes().Count() );
         if( !bVert )
         {
-            for( sal_uInt16 n = 0; n < rBoxes.Count(); ++n )
+            for( SwSelBoxes::const_iterator it = rBoxes.begin(); it != rBoxes.end(); ++it)
             {
-                const SwStartNode* pSttNd = rBoxes[ n ]->GetSttNd();
+                const SwStartNode* pSttNd = it->second->GetSttNd();
                 aNdsCnts.push_back( pSttNd->EndOfSectionIndex() -
                                     pSttNd->GetIndex() );
             }
@@ -2531,13 +2530,7 @@ bool FuzzyCompare::operator() ( long s1, long s2 ) const
 
 bool lcl_IsFrmInColumn( const SwCellFrm& rFrm, SwSelBoxes& rBoxes )
 {
-    for( sal_uInt16 i = 0; i < rBoxes.Count(); ++i )
-    {
-        if ( rFrm.GetTabBox() == rBoxes[ i ] )
-            return true;
-    }
-
-    return false;
+    return 0 != rBoxes.count(rFrm.GetTabBox());
 }
 
 //
@@ -2933,8 +2926,7 @@ void SwCollectTblLineBoxes::AddToUndoHistory( const SwCntntNode& rNd )
 void SwCollectTblLineBoxes::AddBox( const SwTableBox& rBox )
 {
     aPosArr.push_back(nWidth);
-    SwTableBox* p = (SwTableBox*)&rBox;
-    aBoxes.Insert( p, aBoxes.Count() );
+    aBoxes.push_back( &rBox );
     nWidth = nWidth + (sal_uInt16)rBox.GetFrmFmt()->GetFrmSize().GetWidth();
 }
 
@@ -2966,10 +2958,10 @@ const SwTableBox* SwCollectTblLineBoxes::GetBoxOfPos( const SwTableBox& rBox )
 
 sal_Bool SwCollectTblLineBoxes::Resize( sal_uInt16 nOffset, sal_uInt16 nOldWidth )
 {
-    sal_uInt16 n;
-
-    if( aPosArr.size() )
+    if( !aPosArr.empty() )
     {
+        sal_uInt16 n;
+
         for( n = 0; n < aPosArr.size(); ++n )
         {
             if( aPosArr[ n ] == nOffset )
@@ -2983,7 +2975,7 @@ sal_Bool SwCollectTblLineBoxes::Resize( sal_uInt16 nOffset, sal_uInt16 nOldWidth
         }
 
         aPosArr.erase(aPosArr.begin(), aPosArr.begin()+n);
-        aBoxes.Remove( 0, n );
+        aBoxes.erase(aBoxes.begin(), aBoxes.begin()+n);
 
         // dann die Positionen der neuen Size anpassen
         for( n = 0; n < aPosArr.size(); ++n )
@@ -3709,8 +3701,8 @@ sal_Bool lcl_SetAFmtBox( const _FndBox*& rpBox, void *pPara )
         // AutoFormat fuer die Tabelle/TabellenSelection
 sal_Bool SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt& rNew )
 {
-    OSL_ENSURE( rBoxes.Count(), "keine gueltige Box-Liste" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+    OSL_ENSURE( !rBoxes.empty(), "keine gueltige Box-Liste" );
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes.begin()->second->GetSttNd()->FindTableNode());
     if( !pTblNd )
         return sal_False;
 
@@ -3787,8 +3779,8 @@ sal_Bool SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt&
         // Erfrage wie attributiert ist
 sal_Bool SwDoc::GetTableAutoFmt( const SwSelBoxes& rBoxes, SwTableAutoFmt& rGet )
 {
-    OSL_ENSURE( rBoxes.Count(), "keine gueltige Box-Liste" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+    OSL_ENSURE( !rBoxes.empty(), "keine gueltige Box-Liste" );
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes.begin()->second->GetSttNd()->FindTableNode());
     if( !pTblNd )
         return sal_False;
 
@@ -4232,7 +4224,7 @@ sal_Bool SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
 
     const SwTableNode* pSrcTblNd = pCpyTbl
             ? pCpyTbl->GetTableNode()
-            : rBoxes[ 0 ]->GetSttNd()->FindTableNode();
+            : rBoxes.begin()->second->GetSttNd()->FindTableNode();
 
     SwTableNode * pInsTblNd = rInsPos.nNode.GetNode().FindTableNode();
 
@@ -4317,7 +4309,7 @@ sal_Bool SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
 
         // no complex into complex, but copy into or from new model is welcome
         if( ( !pSrcTblNd->GetTable().IsTblComplex() || pInsTblNd->GetTable().IsNewModel() )
-            && ( bDelCpyDoc || rBoxes.Count() ) )
+            && ( bDelCpyDoc || !rBoxes.empty() ) )
         {
             // dann die Tabelle "relativ" kopieren
             const SwSelBoxes* pBoxes;
@@ -4328,7 +4320,7 @@ sal_Bool SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
                 SwTableBox* pBox = pInsTblNd->GetTable().GetTblBox(
                                         pSttNd->GetIndex() );
                 OSL_ENSURE( pBox, "Box steht nicht in dieser Tabelle" );
-                aBoxes.Insert( pBox );
+                aBoxes.insert( pBox );
                 pBoxes = &aBoxes;
             }
             else
@@ -4430,16 +4422,16 @@ sal_Bool SwDoc::UnProtectCells( const String& rName )
 sal_Bool SwDoc::UnProtectCells( const SwSelBoxes& rBoxes )
 {
     sal_Bool bChgd = sal_False;
-    if( rBoxes.Count() )
+    if( !rBoxes.empty() )
     {
         SwUndoAttrTbl *const pUndo = (GetIDocumentUndoRedo().DoesUndo())
-                ? new SwUndoAttrTbl( *rBoxes[0]->GetSttNd()->FindTableNode() )
+                ? new SwUndoAttrTbl( *rBoxes.begin()->second->GetSttNd()->FindTableNode() )
                 : 0;
 
         SvPtrarr aFmts( 16 ), aNewFmts( 16 );
-        for( sal_uInt16 i = rBoxes.Count(); i; )
+        for( SwSelBoxes::const_reverse_iterator it = rBoxes.rbegin(); it != rBoxes.rend(); ++it )
         {
-            SwTableBox* pBox = rBoxes[ --i ];
+            SwTableBox* pBox = it->second;
             SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
             if( pBoxFmt->GetProtect().IsCntntProtected() )
             {

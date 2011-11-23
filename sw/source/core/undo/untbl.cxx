@@ -1579,11 +1579,11 @@ SwUndoTblNdsChg::SwUndoTblNdsChg( SwUndoId nAction,
 
 void SwUndoTblNdsChg::ReNewBoxes( const SwSelBoxes& rBoxes )
 {
-    if( rBoxes.Count() != aBoxes.size() )
+    if( rBoxes.size() != aBoxes.size() )
     {
         aBoxes.clear();
-        for( sal_uInt16 n = 0; n < rBoxes.Count(); ++n )
-            aBoxes.insert( rBoxes[n]->GetSttIdx() );
+        for( SwSelBoxes::const_iterator it = rBoxes.begin(); it != rBoxes.end(); ++it )
+            aBoxes.insert( it->second->GetSttIdx() );
     }
 }
 
@@ -1656,7 +1656,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
     OSL_ENSURE( ! IsDelBox(), "falsche Action" );
     pNewSttNds.reset( new std::set<_BoxMove> );
 
-    OSL_ENSURE( rTbl.IsNewModel() || rOld.Count() + nCount * rBoxes.Count() == rTblBoxes.Count(),
+    OSL_ENSURE( rTbl.IsNewModel() || rOld.Count() + nCount * rBoxes.size() == rTblBoxes.Count(),
         "unexpected boxes" );
     OSL_ENSURE( rOld.Count() <= rTblBoxes.Count(), "more unexpected boxes" );
     for( sal_uInt16 n = 0, i = 0; i < rTblBoxes.Count(); ++i )
@@ -1681,9 +1681,9 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
             const SwTableLine* pBoxLine = pBox->GetUpper();
             sal_uInt16 nLineDiff = lcl_FindParentLines(rTbl,*pBox).C40_GETPOS(SwTableLine,pBoxLine);
             sal_uInt16 nLineNo = 0;
-            for( sal_uInt16 j = 0; j < rBoxes.Count(); ++j )
+            for( SwSelBoxes::const_iterator it = rBoxes.begin(); it != rBoxes.end(); ++it )
             {
-                pCheckBox = rBoxes[j];
+                pCheckBox = it->second;
                 if( pCheckBox->GetUpper()->GetUpper() == pBox->GetUpper()->GetUpper() )
                 {
                     const SwTableLine* pCheckLine = pCheckBox->GetUpper();
@@ -1704,8 +1704,12 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
             // find out how many nodes the source box used to have
             // (to help determine bNodesMoved flag below)
             sal_uInt16 nNdsPos = 0;
-            while( rBoxes[ nNdsPos ] != pSourceBox )
+            for( SwSelBoxes::const_iterator it = rBoxes.begin(); it != rBoxes.end(); ++it )
+            {
+                if( it->second == pSourceBox )
+                    break;
                 ++nNdsPos;
+            }
             sal_uLong nNodes = rNodeCnts[ nNdsPos ];
 
             // When a new table cell is created, it either gets a new
@@ -1873,7 +1877,7 @@ void SwUndoTblNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
     for( std::set<sal_uLong>::iterator it = aBoxes.begin(); it != aBoxes.end(); ++it )
     {
         SwTableBox* pBox = pTblNd->GetTable().GetTblBox( *it );
-        aSelBoxes.Insert( pBox );
+        aSelBoxes.insert( pBox );
     }
 
     // SelBoxes erzeugen und InsertCell/-Row/SplitTbl aufrufen
@@ -2033,7 +2037,7 @@ CHECKTABLE(pTblNd->GetTable())
                                 pCpyBox->GetUpper() );
         rLnBoxes.C40_INSERT( SwTableBox, pBox, rLnBoxes.Count() );
 
-        aSelBoxes.Insert( pBox );
+        aSelBoxes.insert( pBox );
     }
 
 CHECKTABLE(pTblNd->GetTable())
@@ -2171,16 +2175,16 @@ void SwUndoTblMerge::MoveBoxCntnt( SwDoc* pDoc, SwNodeRange& rRg, SwNodeIndex& r
 void SwUndoTblMerge::SetSelBoxes( const SwSelBoxes& rBoxes )
 {
     // die Selektion merken
-    for( sal_uInt16 n = 0; n < rBoxes.Count(); ++n )
-        aBoxes.insert( rBoxes[n]->GetSttIdx() );
+    for( SwSelBoxes::const_iterator it = rBoxes.begin(); it != rBoxes.end(); ++it )
+        aBoxes.insert( it->second->GetSttIdx() );
 
     // als Trennung fuers einfuegen neuer Boxen nach dem Verschieben!
     aNewSttNds.push_back( (sal_uLong)0 );
 
      // The new table model does not delete overlapped cells (by row span),
      // so the rBoxes array might be empty even some cells have been merged.
-    if( rBoxes.Count() )
-        nTblNode = rBoxes[ 0 ]->GetSttNd()->FindTableNode()->GetIndex();
+    if( !rBoxes.empty() )
+        nTblNode = rBoxes.begin()->second->GetSttNd()->FindTableNode()->GetIndex();
 }
 
 void SwUndoTblMerge::SaveCollection( const SwTableBox& rBox )

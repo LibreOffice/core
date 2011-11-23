@@ -223,10 +223,10 @@ sal_Bool SwFEShell::InsertRow( sal_uInt16 nCnt, sal_Bool bBehind )
     SwSelBoxes aBoxes;
     GetTblSel( *this, aBoxes, nsSwTblSearchType::TBLSEARCH_ROW );
 
-    TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.Count() );
+    TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.size() );
 
     sal_Bool bRet = sal_False;
-    if ( aBoxes.Count() )
+    if ( !aBoxes.empty() )
         bRet = GetDoc()->InsertRow( aBoxes, nCnt, bBehind );
 
     EndAllActionAndCall();
@@ -261,10 +261,10 @@ sal_Bool SwFEShell::InsertCol( sal_uInt16 nCnt, sal_Bool bBehind )
     SwSelBoxes aBoxes;
     GetTblSel( *this, aBoxes, nsSwTblSearchType::TBLSEARCH_COL );
 
-    TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.Count() );
+    TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.size() );
 
     sal_Bool bRet = sal_False;
-    if( aBoxes.Count() )
+    if( !aBoxes.empty() )
         bRet = GetDoc()->InsertCol( aBoxes, nCnt, bBehind );
 
     EndAllActionAndCall();
@@ -316,9 +316,9 @@ sal_Bool SwFEShell::DeleteCol()
     sal_Bool bRet;
     SwSelBoxes aBoxes;
     GetTblSel( *this, aBoxes, nsSwTblSearchType::TBLSEARCH_COL );
-    if ( aBoxes.Count() )
+    if ( !aBoxes.empty() )
     {
-        TblWait( aBoxes.Count(), pFrm, *GetDoc()->GetDocShell() );
+        TblWait( aBoxes.size(), pFrm, *GetDoc()->GetDocShell() );
 
         // die Crsr muessen noch aus dem Loesch Bereich entfernt
         // werden. Setze sie immer hinter/auf die Tabelle; ueber die
@@ -363,9 +363,9 @@ sal_Bool SwFEShell::DeleteRow()
     SwSelBoxes aBoxes;
     GetTblSel( *this, aBoxes, nsSwTblSearchType::TBLSEARCH_ROW );
 
-    if( aBoxes.Count() )
+    if( !aBoxes.empty() )
     {
-        TblWait( aBoxes.Count(), pFrm, *GetDoc()->GetDocShell() );
+        TblWait( aBoxes.size(), pFrm, *GetDoc()->GetDocShell() );
 
         // die Crsr aus dem Loeschbereich entfernen.
         // Der Cursor steht danach:
@@ -525,9 +525,9 @@ sal_Bool SwFEShell::SplitTab( sal_Bool bVert, sal_uInt16 nCnt, sal_Bool bSameHei
     sal_Bool bRet;
     SwSelBoxes aBoxes;
     GetTblSel( *this, aBoxes );
-    if( aBoxes.Count() )
+    if( !aBoxes.empty() )
     {
-        TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.Count() );
+        TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.size() );
 
         // dann loesche doch die Spalten
         bRet = GetDoc()->SplitTbl( aBoxes, bVert, nCnt, bSameHeight );
@@ -939,12 +939,12 @@ sal_Bool SwFEShell::HasWholeTabSelection() const
     {
         SwSelBoxes aBoxes;
         ::GetTblSelCrs( *this, aBoxes );
-        if( aBoxes.Count() )
+        if( !aBoxes.empty() )
         {
             const SwTableNode *pTblNd = IsCrsrInTbl();
-            return ( pTblNd && aBoxes[0]->GetSttIdx()-1 == pTblNd->
+            return ( pTblNd && aBoxes.begin()->second->GetSttIdx()-1 == pTblNd->
                 EndOfSectionNode()->StartOfSectionIndex() &&
-                aBoxes[aBoxes.Count()-1]->GetSttNd()->EndOfSectionIndex()+1
+                aBoxes.rbegin()->second->GetSttNd()->EndOfSectionIndex()+1
                 ==  pTblNd->EndOfSectionIndex() );
         }
     }
@@ -1032,12 +1032,12 @@ void SwFEShell::UnProtectCells()
         } while ( pFrm && !pFrm->IsCellFrm() );
         if( pFrm )
         {
-            SwTableBox *pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
-            aBoxes.Insert( pBox );
+            SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<SwCellFrm*>(pFrm)->GetTabBox());
+            aBoxes.insert( pBox );
         }
     }
 
-    if( aBoxes.Count() )
+    if( !aBoxes.empty() )
         GetDoc()->UnProtectCells( aBoxes );
 
     EndAllActionAndCall();
@@ -1075,11 +1075,11 @@ sal_Bool SwFEShell::CanUnProtectCells() const
             } while ( pFrm && !pFrm->IsCellFrm() );
             if( pFrm )
             {
-                SwTableBox *pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
-                aBoxes.Insert( pBox );
+                SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<SwCellFrm*>(pFrm)->GetTabBox());
+                aBoxes.insert( pBox );
             }
         }
-        if( aBoxes.Count() )
+        if( !aBoxes.empty() )
             bUnProtectAvailable = ::HasProtectedCells( aBoxes );
     }
     return bUnProtectAvailable;
@@ -1236,20 +1236,20 @@ sal_Bool SwFEShell::IsAdjustCellWidthAllowed( sal_Bool bBalance ) const
     ::GetTblSelCrs( *this, aBoxes );
 
     if ( bBalance )
-        return aBoxes.Count() > 1;
+        return aBoxes.size() > 1;
 
-    if ( !aBoxes.Count() )
+    if ( aBoxes.empty() )
     {
         do
         {   pFrm = pFrm->GetUpper();
         } while ( !pFrm->IsCellFrm() );
-        SwTableBox *pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
-        aBoxes.Insert( pBox );
+        SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<SwCellFrm*>(pFrm)->GetTabBox());
+        aBoxes.insert( pBox );
     }
 
-    for ( sal_uInt16 i = 0; i < aBoxes.Count(); ++i )
+    for( SwSelBoxes::const_iterator it = aBoxes.begin(); it != aBoxes.end(); ++it )
     {
-        SwTableBox *pBox = aBoxes[i];
+        SwTableBox *pBox = it->second;
         if ( pBox->GetSttNd() )
         {
             SwNodeIndex aIdx( *pBox->GetSttNd(), 1 );
@@ -1289,13 +1289,12 @@ sal_Bool SwFEShell::SetTableAutoFmt( const SwTableAutoFmt& rNew )
         const SwTableSortBoxes& rTBoxes = pTblNd->GetTable().GetTabSortBoxes();
         for( sal_uInt16 n = 0; n < rTBoxes.Count(); ++n )
         {
-            SwTableBox* pBox = rTBoxes[ n ];
-            aBoxes.Insert( pBox );
+            aBoxes.insert( rTBoxes[ n ] );
         }
     }
 
     sal_Bool bRet;
-    if( aBoxes.Count() )
+    if( !aBoxes.empty() )
     {
         SET_CURR_SHELL( this );
         StartAllAction();
@@ -1328,8 +1327,7 @@ sal_Bool SwFEShell::GetTableAutoFmt( SwTableAutoFmt& rGet )
         const SwTableSortBoxes& rTBoxes = pTblNd->GetTable().GetTabSortBoxes();
         for( sal_uInt16 n = 0; n < rTBoxes.Count(); ++n )
         {
-            SwTableBox* pBox = rTBoxes[ n ];
-            aBoxes.Insert( pBox );
+            aBoxes.insert( rTBoxes[ n ] );
         }
     }
 
@@ -1361,9 +1359,9 @@ sal_Bool SwFEShell::DeleteTblSel()
     sal_Bool bRet;
     SwSelBoxes aBoxes;
     GetTblSelCrs( *this, aBoxes );
-    if( aBoxes.Count() )
+    if( !aBoxes.empty() )
     {
-        TblWait( aBoxes.Count(), pFrm, *GetDoc()->GetDocShell() );
+        TblWait( aBoxes.size(), pFrm, *GetDoc()->GetDocShell() );
 
         // die Crsr muessen noch aus dem Loesch Bereich entfernt
         // werden. Setze sie immer hinter/auf die Tabelle; ueber die
@@ -2348,9 +2346,10 @@ sal_Bool lcl_IsFormulaSelBoxes( const SwTable& rTbl, const SwTblBoxFormula& rFml
 {
     SwTblBoxFormula aTmp( rFml );
     SwSelBoxes aBoxes;
-    for( sal_uInt16 nSelBoxes = aTmp.GetBoxesOfFormula( rTbl,aBoxes ); nSelBoxes; )
+    aTmp.GetBoxesOfFormula( rTbl,aBoxes );
+    for( SwSelBoxes::const_reverse_iterator it = aBoxes.rbegin(); it != aBoxes.rend(); ++it )
     {
-        SwTableBox* pBox = aBoxes[ --nSelBoxes ];
+        SwTableBox* pBox = it->second;
         sal_uInt16 i;
         for( i = 0; i < rCells.Count(); ++i )
             if( rCells[ i ]->GetTabBox() == pBox )

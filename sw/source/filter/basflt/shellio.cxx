@@ -803,7 +803,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
         // lasse ueber das Layout die Boxen suchen
         SwSelBoxes aBoxes;
         GetTblSel( *pShell, aBoxes );
-        SwTableNode* pTblNd = (SwTableNode*)aBoxes[0]->GetSttNd()->StartOfSectionNode();
+        SwTableNode* pTblNd = const_cast<SwTableNode*>( static_cast<const SwTableNode*>(aBoxes.begin()->second->GetSttNd()->StartOfSectionNode()) );
         SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfExtras(), 2 );
         SwCntntNode *pNd = aIdx.GetNode().GetCntntNode();
         OSL_ENSURE( pNd, "Node not found" );

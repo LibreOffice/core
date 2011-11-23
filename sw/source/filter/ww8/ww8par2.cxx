@@ -82,7 +82,7 @@
 using namespace ::com::sun::star;
 
 
-class WW8SelBoxInfo: public SwSelBoxes_SAR
+class WW8SelBoxInfo: public SwSelBoxes
 {
 private:
     WW8SelBoxInfo(const WW8SelBoxInfo&);
@@ -2752,18 +2752,20 @@ void WW8TabDesc::FinishSwTable()
         for (sal_uInt16 iGr = 0; iGr < pMergeGroups->Count(); ++iGr)
         {
             pActMGroup   = (*pMergeGroups)[ iGr ];
-            nActBoxCount = pActMGroup->Count();
+            nActBoxCount = pActMGroup->size();
 
-            if( ( 1 < nActBoxCount ) && pActMGroup && (*pActMGroup)[ 0 ] )
+            if( ( 1 < nActBoxCount ) && pActMGroup && pActMGroup->begin()->second )
             {
-                const sal_uInt16 nRowSpan = pActMGroup->Count();
-                for (sal_uInt16 n = 0; n < nRowSpan; ++n)
+                const sal_uInt16 nRowSpan = pActMGroup->size();
+                sal_uInt16 n = 0;
+                for( SwSelBoxes::const_iterator it = pActMGroup->begin(); it != pActMGroup->end(); ++it )
                 {
-                    SwTableBox* pCurrentBox = (*pActMGroup)[n];
+                    SwTableBox* pCurrentBox = it->second;
                     const long nRowSpanSet = n == 0 ?
                                                nRowSpan :
                                              ((-1) * (nRowSpan - n));
                     pCurrentBox->setRowSpan( nRowSpanSet );
+                    ++n;
                 }
             }
         }
@@ -3351,10 +3353,10 @@ SwTableBox* WW8TabDesc::UpdateTableMergeGroup(  WW8_TCell&     rCell,
         if( pTheMergeGroup )
         {
             // aktuelle Box der Merge-Gruppe hinzufuegen
-            pTheMergeGroup->Insert( pActBox, pTheMergeGroup->Count() );
+            pTheMergeGroup->insert( pTheMergeGroup->end(), pActBox );
 
             // Target-Box zurueckmelden
-            pResult = (*pTheMergeGroup)[ 0 ];
+            pResult = pTheMergeGroup->begin()->second;
         }
     }
     return pResult;

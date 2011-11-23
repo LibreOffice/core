@@ -795,7 +795,7 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
             SwPosition aPos( aIndex );
             aPos.nContent.Assign( pNode, 0 );
 
-            if( pSelBoxes && pSelBoxes->Count() )
+            if( pSelBoxes && !pSelBoxes->empty() )
             {
                 // Tabellenselection
                 // kopiere Teile aus einer Tabelle: lege eine Tabelle mit der
@@ -803,15 +803,14 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                 // selektierten Boxen. Die Groessen werden prozentual
                 // korrigiert.
 
-                SwTableNode* pTblNd = (SwTableNode*)(*pSelBoxes)[0]->
-                                                GetSttNd()->FindTableNode();
+                const SwTableNode* pTblNd = pSelBoxes->begin()->second->GetSttNd()->FindTableNode();
                 if( !pTblNd )
                     break;
 
-                SwTable& rTbl = pTblNd->GetTable();
+                const SwTable& rTbl = pTblNd->GetTable();
 
                 // ist die gesamte Tabelle selektiert ?
-                if( pSelBoxes->Count() == rTbl.GetTabSortBoxes().Count() )
+                if( pSelBoxes->size() == rTbl.GetTabSortBoxes().Count() )
                 {
                     // verschiebe die gesamte Tabelle
                     SwNodeRange aRg( *pTblNd, 0, *pTblNd->EndOfSectionNode(), 1 );

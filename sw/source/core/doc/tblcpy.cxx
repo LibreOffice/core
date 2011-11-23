@@ -55,8 +55,8 @@
 #include <fmtfsize.hxx>
 #include <list>
 
-sal_Bool _FndCntntLine( const SwTableLine*& rpLine, void* pPara );
-sal_Bool _FndCntntBox( const SwTableBox*& rpBox, void* pPara );
+static sal_Bool _FndCntntLine( const SwTableLine*& rpLine, void* pPara );
+static sal_Bool _FndCntntBox( const SwTableBox*& rpBox, void* pPara );
 void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
                     SwTable& rDstTbl, SwTableBox* pDstBox,
                     sal_Bool bDelCntnt, SwUndoTblCpyTbl* pUndo );
@@ -198,7 +198,7 @@ namespace
     {
         if( rFndBox.GetLines().Count() )
         {
-            bool bNoSelection = rSelBoxes.Count() < 2;
+            bool bNoSelection = rSelBoxes.size() < 2;
             _FndLines &rFndLines = rFndBox.GetLines();
             maCols.push_front(0);
             const SwTableLine* pLine = rFndLines[0]->GetLine();
@@ -323,13 +323,13 @@ namespace
     {
         BoxSpanInfo aInfo;
         if( pSelBoxes &&
-            USHRT_MAX != pSelBoxes->GetPos( pBox ) )
+            0 != pSelBoxes->count( pBox ) )
         {
             aInfo.mbSelected = true;
             if( mnStartCol == USHRT_MAX )
             {
                 mnStartCol = (sal_uInt16)maLines[nLine].size();
-                if( pSelBoxes->Count() < 2 )
+                if( pSelBoxes->size() < 2 )
                 {
                     pSelBoxes = 0;
                     aInfo.mbSelected = false;
@@ -698,7 +698,7 @@ sal_Bool SwTable::InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBox
     if( aTarget.mnAddLine && IsNewModel() )
     {
         SwSelBoxes aBoxes;
-        aBoxes.Insert( GetTabLines()[ GetTabLines().Count()-1 ]->GetTabBoxes()[0] );
+        aBoxes.insert( GetTabLines()[ GetTabLines().Count()-1 ]->GetTabBoxes()[0] );
         if( pUndo )
             pUndo->InsertRow( *this, aBoxes, aTarget.mnAddLine );
         else
@@ -825,7 +825,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
 sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                         SwUndoTblCpyTbl* pUndo )
 {
-    OSL_ENSURE( rSelBoxes.Count(), "Missing selection" );
+    OSL_ENSURE( !rSelBoxes.empty(), "Missing selection" );
 
     SetHTMLTableLayout( 0 );    // MIB 9.7.97: HTML-Layout loeschen
 
@@ -839,7 +839,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
 
     SwTblNumFmtMerge aTNFM( *pCpyDoc, *pDoc );
 
-    SwTableBox *pTmpBox, *pSttBox = (SwTableBox*)rSelBoxes[0];
+    SwTableBox *pTmpBox, *pSttBox = rSelBoxes.begin()->second;
 
     sal_uInt16 nLn, nBx;
     _FndLine *pFLine, *pInsFLine = 0;
@@ -878,7 +878,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                 // sollte nicht mehr soviele Lines vorhanden sein, dann
                 // teste, ob man durch einfuegen neuer zum Ziel kommt. Aber
                 // nur wenn die SSelection eine Box umfasst !!
-                if( 1 < rSelBoxes.Count() )
+                if( 1 < rSelBoxes.size() )
                     return sal_False;
 
                 sal_uInt16 nNewLns = rCpyTbl.GetTabLines().Count() -
@@ -1020,9 +1020,9 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
     if( 1 == rCpyTbl.GetTabSortBoxes().Count() )
     {
         SwTableBox *pTmpBx = rCpyTbl.GetTabSortBoxes()[0];
-        for( sal_uInt16 n = 0; n < rSelBoxes.Count(); ++n )
+        for( SwSelBoxes::const_iterator it = rSelBoxes.begin(); it != rSelBoxes.end(); ++it )
             lcl_CpyBox( rCpyTbl, pTmpBx, *this,
-                        (SwTableBox*)rSelBoxes[n], sal_True, pUndo );
+                        it->second, sal_True, pUndo );
     }
     else
         for( nLn = 0; nLn < aFndBox.GetLines().Count(); ++nLn )
@@ -1045,11 +1045,11 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
 
 sal_Bool _FndCntntBox( const SwTableBox*& rpBox, void* pPara )
 {
-    SwTableBox* pBox = (SwTableBox*)rpBox;
+    SwTableBox* pBox = const_cast<SwTableBox*>(rpBox);
     if( rpBox->GetTabLines().Count() )
         pBox->GetTabLines().ForEach( &_FndCntntLine, pPara );
     else
-        ((SwSelBoxes*)pPara)->Insert( pBox );
+        static_cast<SwSelBoxes*>(pPara)->insert( pBox );
     return sal_True;
 }
 
@@ -1069,7 +1069,7 @@ SwSelBoxes& SwTable::SelLineFromBox( const SwTableBox* pBox,
             pLine = pLine->GetUpper()->GetUpper();
 
     // alle alten loeschen
-    rBoxes.Remove( sal_uInt16(0), rBoxes.Count() );
+    rBoxes.clear();
     pLine->GetTabBoxes().ForEach( &_FndCntntBox, &rBoxes );
     return rBoxes;
 }

@@ -615,13 +615,13 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
     if( IsTableMode() )
     {
         GetTblSel( *this, aBoxes );
-        if( aBoxes.Count() )
+        if( !aBoxes.empty() )
         {
             // die Crsr muessen noch aus dem Loeschbereich entfernt
             // werden. Setze sie immer hinter/auf die Tabelle; ueber die
             // Dokument-Position werden sie dann immer an die alte
             // Position gesetzt.
-            ParkCrsr( SwNodeIndex( *aBoxes[0]->GetSttNd() ));
+            ParkCrsr( SwNodeIndex( *aBoxes.begin()->second->GetSttNd() ));
 
             // #i127787# pCurCrsr will be deleted in ParkCrsr,
             // we better get the current pCurCrsr instead of working with the
