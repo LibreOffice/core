@@ -568,6 +568,11 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
             mnCurPrintPage      = 0;
             mbPrinting          = sal_False;
             mpPrinter = NULL;
+            mbJobActive = sal_False;
+
+            GDIMetaFile aDummyFile;
+            i_pController->setLastPage(sal_True);
+            i_pController->getFilteredPageFile(0, aDummyFile);
 
             return false;
         }
