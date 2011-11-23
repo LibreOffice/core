@@ -27,7 +27,7 @@
 #include <com/sun/star/sheet/XSpreadsheets.idl>
 #include <com/sun/star/sheet/XSpreadsheetDocument.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/uno/RuntimeException.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 
 //=============================================================================
 
@@ -64,7 +64,7 @@ interface XSpreadsheets2: com::sun::star::sheet::XSpreadsheets
             [in] string srcName,
             [in] long  nDestPosition)
             raises (com::sun::star::lang::IllegalArgumentException,
-                    com::sun::star::uno::RuntimeException);
+                    com::sun::star::lang::IndexOutOfBoundsException);
 };
 
 //=============================================================================

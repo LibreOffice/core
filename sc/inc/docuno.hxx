@@ -406,7 +406,9 @@ public:
             ::com::sun::star::sheet::XSpreadsheetDocument > & xDocSrc,
         const rtl::OUString& srcName,
         const sal_Int32 nDestPosition)
-        throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::lang::IllegalArgumentException,
+              ::com::sun::star::lang::IndexOutOfBoundsException,
+              ::com::sun::star::uno::RuntimeException);
 
                             // XCellRangesAccess
 

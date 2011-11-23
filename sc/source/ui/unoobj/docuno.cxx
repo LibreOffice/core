@@ -2632,7 +2632,7 @@ void SAL_CALL ScTableSheetsObj::removeByName( const rtl::OUString& aName )
 sal_Int32 ScTableSheetsObj::importSheet(
     const uno::Reference < sheet::XSpreadsheetDocument > & xDocSrc,
     const rtl::OUString& srcName, const sal_Int32 nDestPosition )
-        throw( lang::IllegalArgumentException, uno::RuntimeException )
+        throw( lang::IllegalArgumentException, lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
     //pDocShell is the destination
     ScDocument* pDocDest = pDocShell->GetDocument();
@@ -2655,11 +2655,11 @@ sal_Int32 ScTableSheetsObj::importSheet(
     SCTAB nCount = pDocDest->GetTableCount();
     nIndexDest = static_cast<SCTAB>(nDestPosition);
     if ( nIndexDest > nCount )
-        nIndexDest = nCount;
+        throw lang::IndexOutOfBoundsException();
 
     // control nDestPosition > 0
-    if ( nIndexDest < 0)
-        nIndexDest = 0;
+    if (nIndexDest < 0)
+        throw lang::IndexOutOfBoundsException();
 
     // Transfert Tab
     bool bInsertNew = true;
