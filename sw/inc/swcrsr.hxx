@@ -283,8 +283,8 @@ public:
     virtual sal_Bool GotoTable( const String& rName );
 
     void InsertBox( const SwTableBox& rTblBox );
-    void DeleteBox( SwSelBoxes::const_iterator it ) { aSelBoxes.erase( it ); bChg = sal_True; }
-    void DeleteBox( SwSelBoxes::const_iterator itFirst, SwSelBoxes::const_iterator itLast ) { aSelBoxes.erase( itFirst, itLast ); bChg = sal_True; }
+    void DeleteBox( SwSelBoxes::iterator it ) { aSelBoxes.erase( it ); bChg = sal_True; }
+    void DeleteBox( SwSelBoxes::iterator itFirst, SwSelBoxes::iterator itLast ) { aSelBoxes.erase( itFirst, itLast ); bChg = sal_True; }
     void DeleteAllBoxes() { DeleteBox(aSelBoxes.begin(), aSelBoxes.end()); }
     sal_uInt16 GetBoxesCount() const { return aSelBoxes.size(); }
     const SwSelBoxes& GetBoxes() const { return aSelBoxes; }

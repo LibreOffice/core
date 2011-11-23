@@ -349,7 +349,7 @@ void SwTableFormula::_MakeFormel( const SwTable& rTbl, String& rNewStr,
 
         rNewStr += '(';
         bool bDelim = false;
-        for( SwSelBoxes::const_iterator it = aBoxes.begin();
+        for( SwSelBoxes::iterator it = aBoxes.begin();
              it != aBoxes.end() && !pCalcPara->rCalc.IsCalcError();
              ++it )
         {
@@ -960,7 +960,7 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
                 break;
 
             // dann mal die Tabellenkoepfe raus:
-            for( SwSelBoxes::const_iterator it = rBoxes.begin(); it != rBoxes.end(); ++it )
+            for( SwSelBoxes::iterator it = rBoxes.begin(); it != rBoxes.end(); ++it )
             {
                 pLine = it->second->GetUpper();
                 while( pLine->GetUpper() )

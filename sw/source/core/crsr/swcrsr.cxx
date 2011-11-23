@@ -2165,8 +2165,9 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
 
             else
             {
-                SwSelBoxes::const_iterator it = aTmp.find(pSttNd->GetIndex());
-                if( it != aTmp.end() ) {
+                SwSelBoxes::iterator it = aTmp.find(pSttNd->GetIndex());
+                if( it != aTmp.end() )
+                {
                     SwNodeIndex aIdx( *pSttNd, 1 );
                     const SwNode* pNd = &aIdx.GetNode();
                     if( !pNd->IsCntntNode() )
@@ -2272,7 +2273,7 @@ bool SwTableCursor::NewTableSelection()
 
 void SwTableCursor::ActualizeSelection( const SwSelBoxes &rNew )
 {
-    SwSelBoxes::const_iterator itOld = aSelBoxes.begin();
+    SwSelBoxes::iterator itOld = aSelBoxes.begin();
     SwSelBoxes::const_iterator itNew = rNew.begin();
     while ( itOld != aSelBoxes.end() && itNew != rNew.end() )
     {
@@ -2285,7 +2286,7 @@ void SwTableCursor::ActualizeSelection( const SwSelBoxes &rNew )
         }
         else if( pPOld->GetSttIdx() < pPNew->GetSttIdx() )
         {
-            SwSelBoxes::const_iterator it = itOld;
+            SwSelBoxes::iterator it = itOld;
             ++itOld;
             DeleteBox( it ); // this box has to go
         }
