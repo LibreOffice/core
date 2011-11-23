@@ -2465,6 +2465,7 @@ void ScExternalRefManager::breakLink(sal_uInt16 nFileId)
             removeRangeNamesBySrcDoc(*pRanges, nFileId);
     }
 
+    maRefCache.clearCache(nFileId);
     lcl_removeByFileId(nFileId, maDocShells);
 
     if (maDocShells.empty())
