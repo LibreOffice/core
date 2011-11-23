@@ -178,8 +178,12 @@ void ScNameDlg::Init()
         SelectionChanged();
     }
 
+    CheckForEmptyTable();
+
     //TODO: fix the Add Button
     maBtnAdd.Disable();
+    //TODO: discuss the Select Range button with UX
+    maBtnSelect.Disable();
 }
 
 sal_Bool ScNameDlg::IsRefInputMode() const
@@ -211,6 +215,35 @@ sal_Bool ScNameDlg::Close()
     ScDocFunc aFunc(*mpViewData->GetDocShell());
     aFunc.ModifyAllRangeNames(maRangeMap);
     return DoClose( ScNameDlgWrapper::GetChildWindowId() );
+}
+
+void ScNameDlg::CheckForEmptyTable()
+{
+    if (!mpRangeManagerTable->GetEntryCount())
+    {
+        maBtnDelete.Disable();
+        maEdAssign.Disable();
+        maEdName.Disable();
+        maLbScope.Disable();
+
+        maBtnCriteria.Disable();
+        maBtnPrintArea.Disable();
+        maBtnColHeader.Disable();
+        maBtnRowHeader.Disable();
+    }
+    else
+    {
+        maBtnDelete.Enable();
+        maEdAssign.Enable();
+        maEdName.Enable();
+        maLbScope.Enable();
+
+
+        maBtnCriteria.Enable();
+        maBtnPrintArea.Enable();
+        maBtnColHeader.Enable();
+        maBtnRowHeader.Enable();
+    }
 }
 
 void ScNameDlg::CancelPushed()
@@ -343,6 +376,7 @@ void ScNameDlg::RemovePushed()
         if (pData)
             pRangeName->erase(*pData);
     }
+    CheckForEmptyTable();
 }
 
 void ScNameDlg::NameModified()
@@ -400,6 +434,8 @@ void ScNameDlg::NameModified()
 
 void ScNameDlg::SelectionChanged()
 {
+
+
     //don't update if we have just modified due to user input
     if (!mbNeedUpdate)
     {

@@ -109,6 +109,7 @@ private:
 
     bool IsNameValid();
     bool IsFormulaValid();
+    void CheckForEmptyTable();
 
     ScRangeName* GetRangeName(const rtl::OUString& rScope);
 
