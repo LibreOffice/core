@@ -169,7 +169,7 @@ gb_COMPILERNOOPTFLAGS := -O0 -fstrict-aliasing -fstrict-overflow
 
 # Clang does not know -ggdb2 or some other options
 ifeq ($(HAVE_GCC_GGDB2),TRUE)
-gb_DEBUGINFO_FLAGS=-ggdb2
+gb_DEBUGINFO_FLAGS=-gdwarf-4 -g3 -fvar-tracking-assignments -fvar-tracking -fdebug-types-section
 else
 gb_DEBUGINFO_FLAGS=-g2
 endif
