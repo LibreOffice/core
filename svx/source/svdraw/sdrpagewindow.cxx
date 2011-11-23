@@ -193,10 +193,6 @@ void SdrPageWindow::PrePaint()
     }
 }
 
-void SdrPageWindow::PostPaint()
-{
-}
-
 void SdrPageWindow::PrepareRedraw(const Region& rReg)
 {
     // evtl. give OC the chance to do ProcessDisplay preparations

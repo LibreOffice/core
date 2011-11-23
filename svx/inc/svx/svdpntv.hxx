@@ -476,13 +476,6 @@ public:
     void SetNotPersistDefaultAttr(const SfxItemSet& rAttr, sal_Bool bReplaceAll);
     void MergeNotPersistDefaultAttr(SfxItemSet& rAttr, sal_Bool bOnlyHardAttr) const;
 
-    // Aufziehen eines animierten Rechtecks fuer Applikationsspeziefische
-    // Verwendung. Alle Positionsangaben in logischen View-Koordinaten.
-    // pOut bezeichnet das OutputDevice, in das animierte Rechteck dargestellt
-    // werden soll. Wird NULL uebergeben, wird es in allen an der View
-    // angemeldeten OutputDevices gleichzeitig dargestellt.
-    void MovEncirclement(const Point& rPnt);
-
     // use this mode as mode to draw all internal GraphicManager objects with
     sal_uIntPtr GetGraphicManagerDrawMode() const { return nGraphicManagerDrawMode; }
     void SetGraphicManagerDrawMode( sal_uIntPtr nMode ) { nGraphicManagerDrawMode = nMode; }

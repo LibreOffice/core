@@ -2734,59 +2734,6 @@ void SdrObject::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, S
     }
 }
 
-sal_Bool SdrObject::IsTransparent( sal_Bool /*bCheckForAlphaChannel*/) const
-{
-    bool bRet = false;
-
-    if( IsGroupObject() )
-    {
-        SdrObjListIter aIter( *GetSubList(), IM_DEEPNOGROUPS );
-
-        for( SdrObject* pO = aIter.Next(); pO && !bRet; pO = aIter.Next() )
-        {
-            const SfxItemSet& rAttr = pO->GetMergedItemSet();
-
-            if( ( ( (const XFillTransparenceItem&) rAttr.Get( XATTR_FILLTRANSPARENCE ) ).GetValue() ||
-                  ( (const XLineTransparenceItem&) rAttr.Get( XATTR_LINETRANSPARENCE ) ).GetValue() ) ||
-                ( ( rAttr.GetItemState( XATTR_FILLFLOATTRANSPARENCE ) == SFX_ITEM_SET ) &&
-                  ( (const XFillFloatTransparenceItem&) rAttr.Get( XATTR_FILLFLOATTRANSPARENCE ) ).IsEnabled() ) )
-            {
-                bRet = sal_True;
-            }
-            else if( pO->ISA( SdrGrafObj ) )
-            {
-                SdrGrafObj* pGrafObj = (SdrGrafObj*) pO;
-                if( ( (const SdrGrafTransparenceItem&) rAttr.Get( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ||
-                    ( pGrafObj->GetGraphicType() == GRAPHIC_BITMAP && pGrafObj->GetGraphic().GetBitmapEx().IsAlpha() ) )
-                {
-                    bRet = sal_True;
-                }
-            }
-        }
-    }
-    else
-    {
-        const SfxItemSet& rAttr = GetMergedItemSet();
-
-        if( ( ( (const XFillTransparenceItem&) rAttr.Get( XATTR_FILLTRANSPARENCE ) ).GetValue() ||
-              ( (const XLineTransparenceItem&) rAttr.Get( XATTR_LINETRANSPARENCE ) ).GetValue() ) ||
-            ( ( rAttr.GetItemState( XATTR_FILLFLOATTRANSPARENCE ) == SFX_ITEM_SET ) &&
-              ( (const XFillFloatTransparenceItem&) rAttr.Get( XATTR_FILLFLOATTRANSPARENCE ) ).IsEnabled() ) )
-        {
-            bRet = sal_True;
-        }
-        else if( ISA( SdrGrafObj ) )
-        {
-            SdrGrafObj* pGrafObj = (SdrGrafObj*) this;
-
-            // #i25616#
-            bRet = pGrafObj->IsObjectTransparent();
-        }
-    }
-
-    return bRet;
-}
-
 void SdrObject::impl_setUnoShape( const uno::Reference< uno::XInterface >& _rxUnoShape )
 {
     maWeakUnoShape = _rxUnoShape;

@@ -295,14 +295,6 @@ sal_uLong Animation::GetChecksum() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool Animation::Start( OutputDevice* pOut, const Point& rDestPt, long nExtraData,
-                       OutputDevice* pFirstFrameOutDev )
-{
-    return Start( pOut, rDestPt, pOut->PixelToLogic( maGlobalSize ), nExtraData, pFirstFrameOutDev );
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool Animation::Start( OutputDevice* pOut, const Point& rDestPt, const Size& rDestSz, long nExtraData,
                        OutputDevice* pFirstFrameOutDev )
 {

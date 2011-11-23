@@ -200,12 +200,6 @@ public:
     sal_Bool                Start(
                                 OutputDevice* pOutDev,
                                 const Point& rDestPt,
-                                long nExtraData = 0,
-                                OutputDevice* pFirstFrameOutDev = NULL
-                            );
-    sal_Bool                Start(
-                                OutputDevice* pOutDev,
-                                const Point& rDestPt,
                                 const Size& rDestSz,
                                 long nExtraData = 0,
                                 OutputDevice* pFirstFrameOutDev = NULL

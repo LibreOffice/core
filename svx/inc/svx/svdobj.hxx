@@ -1101,8 +1101,6 @@ public:
     // to use (0,0) as upper left and will be scaled to the given size in the matrix.
     virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
 
-    sal_Bool IsTransparent( sal_Bool bCheckForAlphaChannel = sal_False ) const;
-
     // #116168#
     // Give info if object is in destruction
     sal_Bool IsInDestruction() const;

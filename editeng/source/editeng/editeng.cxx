@@ -2030,12 +2030,6 @@ void EditEngine::GetGlobalCharStretching( sal_uInt16& rX, sal_uInt16& rY )
     pImpEditEngine->GetCharStretching( rX, rY );
 }
 
-void EditEngine::DoStretchChars( sal_uInt16 nX, sal_uInt16 nY )
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    pImpEditEngine->DoStretchChars( nX, nY );
-}
-
 sal_Bool EditEngine::ShouldCreateBigTextObject() const
 {
     DBG_CHKTHIS( EditEngine, 0 );
