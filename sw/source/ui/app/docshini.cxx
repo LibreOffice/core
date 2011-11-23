@@ -612,10 +612,6 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
                             pDoc->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);
                     }
                 }
-#if OSL_DEBUG_LEVEL > 0
-                else
-                    OSL_ENSURE( !this, "it won't do without Sw3Reader" );
-#endif
             }
             break;
 

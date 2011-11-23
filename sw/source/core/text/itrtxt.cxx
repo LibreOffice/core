@@ -45,10 +45,7 @@
 #include "itrtxt.hxx"
 #include "txtfrm.hxx"
 #include "porfly.hxx"
-
-#if OSL_DEBUG_LEVEL > 1
-#include "txtfrm.hxx"      // GetFrmID,
-#endif
+#include "txtfrm.hxx"
 
 /*************************************************************************
  *                      SwTxtIter::CtorInitTxtIter()

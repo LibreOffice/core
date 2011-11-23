@@ -364,11 +364,6 @@ protected:
     SwRect  aFrm;   //Absolute Dokumentposition und groesse des Frm
     SwRect  aPrt;   //Position der PrtArea rel zum Frm und groesse der PrtArea
 
-    sal_uInt16 bFlag01:         1;
-    sal_uInt16 bFlag02:         1;
-    sal_uInt16 bFlag03:         1;
-    sal_uInt16 bFlag04:         1;
-    sal_uInt16 bFlag05:         1;
     sal_uInt16 bReverse:        1; // Next line above/at the right side instead
                                // under/at the left side of the previous line.
     sal_uInt16 bInvalidR2L:     1;

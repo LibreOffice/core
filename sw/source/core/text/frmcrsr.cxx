@@ -58,9 +58,6 @@
 #include "swfntcch.hxx"     // SwFontAccess
 #include "flyfrm.hxx"
 
-#if OSL_DEBUG_LEVEL > 1
-#include "txtpaint.hxx"
-#endif
 
 #define MIN_OFFSET_STEP 10
 

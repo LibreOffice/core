@@ -660,7 +660,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
         }
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     if( !rNode.GetDoc()->IsInReading() )
         CHECK;
 #endif
@@ -2770,7 +2770,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
     {
         SwpHintsArray::Insert( pHint );
         CalcFlags();
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         if( !rNode.GetDoc()->IsInReading() )
             CHECK;
 #endif
@@ -2862,7 +2862,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
         rNode.ModifyNotification( 0, &aHint );
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     if( !bNoHintAdjustMode && !rNode.GetDoc()->IsInReading() )
         CHECK;
 #endif

@@ -52,9 +52,6 @@
 #include <crsskip.hxx>
 #include <wordcountdialog.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
-#include <pam.hxx>
-#endif
 
 namespace com { namespace sun { namespace star { namespace util {
     struct SearchOptions;

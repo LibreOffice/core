@@ -249,14 +249,14 @@ void Ww1SingleSprmPBrc::Start(
     Ww1Shell& rOut, sal_uInt8,
     W1_BRC10* pBrc,
     sal_uInt16
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     nSize
 #endif
     ,
     Ww1Manager& /*rMan*/,
     SvxBoxItem& aBox)
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE(sizeof(W1_BRC10) == nSize, "sizemissmatch");
 #endif
     if(pBrc->dxpSpaceGet())
@@ -446,14 +446,14 @@ void Ww1SingleSprmPFInTable::Start(
 
 void Ww1SingleSprmPFInTable::Stop(
     Ww1Shell&
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     rOut
 #endif
     ,
     sal_uInt8, sal_uInt8*, sal_uInt16,
     Ww1Manager& /*rMan*/)
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE(rOut.IsInTable(), "");
 #endif
 }

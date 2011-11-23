@@ -41,10 +41,6 @@
 
 #include <svx/svdoutl.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
-#include <svx/fmglob.hxx>
-#endif
-
 #include "fesh.hxx"
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"

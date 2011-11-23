@@ -2371,16 +2371,6 @@ void WW8Export::SectionBreaksAndFrames( const SwTxtNode& rNode )
         OutWW6FlyFrmsInCntnt( rNode );
 }
 
-#if OSL_DEBUG_LEVEL > 1
-struct SwNodeHash
-{
-    size_t operator()(SwNode * pNode) const { return reinterpret_cast<size_t>(pNode); }
-};
-
-typedef ::boost::unordered_set<SwNode *, SwNodeHash> SwNodeHashSet;
-typedef ::std::deque<SwNode *> SwNodeDeque;
-#endif
-
 void MSWordExportBase::WriteText()
 {
     while( pCurPam->GetPoint()->nNode < pCurPam->GetMark()->nNode ||

@@ -145,11 +145,9 @@ bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck,
         pCNd = GetCntntNode(pDoc, rRegion.GetPoint()->nNode, sal_False);
     }
     rRegion.GetPoint()->nContent.Assign(pCNd, rPtPos.m_nCntnt);
-#if OSL_DEBUG_LEVEL > 1
     OSL_ENSURE( CheckNodesRange( rRegion.Start()->nNode,
                              rRegion.End()->nNode, sal_True ),
-             "Attribut oder AEhnliches ueber Bereichs-Grenzen" );
-#endif
+             "atttribute or similar crosses section-boundaries" );
     if( bCheck )
         return CheckNodesRange( rRegion.Start()->nNode,
                                 rRegion.End()->nNode, sal_True );
@@ -432,11 +430,6 @@ static void MakeBookRegionOrPoint(const SwFltStackEntry& rEntry, SwDoc* pDoc,
         MakePoint(rEntry, pDoc, rRegion);
     }
 }
-
-#if OSL_DEBUG_LEVEL > 1
-extern sal_Bool CheckNodesRange( const SwNodeIndex& rStt,
-                    const SwNodeIndex& rEnd, sal_Bool bChkSection );
-#endif
 
 // IterateNumrulePiece() sucht von rTmpStart bis rEnd den ersten
 // fuer Numrules gueltigen Bereich heraus.

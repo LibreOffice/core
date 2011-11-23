@@ -103,10 +103,6 @@ SwFrm::SwFrm( SwModify *pMod, SwFrm* pSib ) :
     bInfFtn ( sal_False ),
     bInfSct ( sal_False )
 {
-#if OSL_DEBUG_LEVEL > 1
-    bFlag01 = bFlag02 = bFlag03 = bFlag04 = bFlag05 = 0;
-#endif
-
     OSL_ENSURE( pMod, "Kein Frameformat uebergeben." );
     bInvalidR2L = bInvalidVert = 1;
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
