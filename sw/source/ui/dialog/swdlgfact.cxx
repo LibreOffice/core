@@ -1652,7 +1652,7 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
             break;
         case RID_SW_TP_OPTTEST_PAGE :
         case TP_OPTTEST_PAGE :
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
             pRet = SwTestTabPage::Create;
 #endif
             break;

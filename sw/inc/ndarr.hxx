@@ -337,7 +337,7 @@ public:
     SwNode * DocumentSectionStartNode(SwNode * pNode) const;
     SwNode * DocumentSectionEndNode(SwNode * pNode) const;
 
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
     /**
      * Dumps the entire nodes structure to the given destination (file nodes.xml in the current directory by default)
      * @since 3.5

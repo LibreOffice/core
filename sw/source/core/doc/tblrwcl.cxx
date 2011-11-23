@@ -74,7 +74,7 @@ using namespace com::sun::star::uno;
 
 using namespace ::com::sun::star;
 
-#if OSL_DEBUG_LEVEL > 2
+#ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();
 #else
 #define CHECK_TABLE(t)
@@ -193,7 +193,7 @@ sal_Bool lcl_DelOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
 
 typedef sal_Bool (*FN_lcl_SetBoxWidth)(SwTableLine*, CR_SetBoxWidth&, SwTwips, sal_Bool );
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 
 void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize );
 
@@ -226,7 +226,7 @@ void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize );
 #define CHECKBOXWIDTH
 #define CHECKTABLELAYOUT
 
-#endif
+#endif // DBG_UTIL
 
 struct CR_SetLineHeight
 {
@@ -3452,8 +3452,7 @@ void lcl_AjustLines( SwTableLine* pLine, CR_SetBoxWidth& rParam )
     }
 }
 
-#if OSL_DEBUG_LEVEL > 1
-
+#ifdef DBG_UTIL
 void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize )
 {
     const SwTableBoxes& rBoxes = rLine.GetTabBoxes();
@@ -3475,7 +3474,6 @@ void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize )
         OSL_FAIL( "Boxen der Line zu klein/gross" );
     }
 }
-
 #endif
 
 _FndBox* lcl_SaveInsDelData( CR_SetBoxWidth& rParam, SwUndo** ppUndo,

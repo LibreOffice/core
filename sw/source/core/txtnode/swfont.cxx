@@ -78,9 +78,9 @@
 #define FNT_ATM_HACK
 #endif
 
-#if OSL_DEBUG_LEVEL > 1
-// globale Variable
-SvStatistics aSvStat;
+#ifdef DBG_UTIL
+// global Variable
+SvStatistics g_SvStat;
 #endif
 
 using namespace ::com::sun::star;
@@ -1169,9 +1169,9 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
 // used during painting of small capitals
 void SwDrawTextInfo::Shift( sal_uInt16 nDir )
 {
-#if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE( bPos, "DrawTextInfo: Undefined Position" );
-    OSL_ENSURE( bSize, "DrawTextInfo: Undefined Width" );
+#ifdef DBG_UTIL
+    OSL_ENSURE( m_bPos, "DrawTextInfo: Undefined Position" );
+    OSL_ENSURE( m_bSize, "DrawTextInfo: Undefined Width" );
 #endif
 
     const sal_Bool bBidiPor = ( GetFrm() && GetFrm()->IsRightToLeft() ) !=

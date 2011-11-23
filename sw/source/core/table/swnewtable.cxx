@@ -50,7 +50,7 @@
 #include <swtblfmt.hxx>
 #include <switerator.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();
 #else
 #define CHECK_TABLE(t)
@@ -2101,7 +2101,7 @@ void SwTable::CleanUpBottomRowSpan( sal_uInt16 nDelLines )
     }
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 
 struct RowSpanCheck
 {

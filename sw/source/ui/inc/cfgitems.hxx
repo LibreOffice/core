@@ -37,7 +37,7 @@
 
 class SwWriterApp;
 class SwModule;
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 class SwTestTabPage;
 #endif
 class SwAddPrinterTabPage;
@@ -203,7 +203,7 @@ public:
     void SetOn( sal_Bool bFlag )            { bOn = bFlag; }
 };
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 
 /*--------OS 12.01.95 -----------------------------------
 Item for settings dialog - test settings

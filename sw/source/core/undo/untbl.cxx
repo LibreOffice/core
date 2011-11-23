@@ -71,14 +71,14 @@
 #include <unochart.hxx>
 #include <switerator.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();
 #else
 #define CHECK_TABLE(t)
 #endif
 
-#if OSL_DEBUG_LEVEL > 1
-    void lcl_DebugRedline( const SwDoc* pDoc );
+#ifdef DBG_UTIL
+    void lcl_DebugRedline( const SwDoc* pDoc ); // docredln.cxx
     #define _DEBUG_REDLINE( pDoc ) lcl_DebugRedline( pDoc );
 #else
     #define _DEBUG_REDLINE( pDoc )

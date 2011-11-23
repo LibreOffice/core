@@ -257,7 +257,7 @@ public:
                            const SwLinePortion* _pDontConsiderPortion = NULL,
                            const bool _bNoFlyCntPorAndLinePor = false ) const;
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     void DebugPortions( SvStream &rOs, const XubString &rTxt,
                         const xub_StrLen nStart ); //$ ostream
 
@@ -371,7 +371,7 @@ public:
 
     const SwDropPortion *FindDropPortion() const;
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     void dumpAsXml( xmlTextWriter* writer, SwTxtFrm* pTxtFrm );
 #endif
 

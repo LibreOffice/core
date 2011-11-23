@@ -315,8 +315,8 @@ sal_uInt16 SwNode::GetSectionLevel() const
 |*
 *******************************************************************/
 
-#if OSL_DEBUG_LEVEL > 1
-long SwNode::nSerial = 0;
+#ifdef DBG_UTIL
+long SwNode::s_nSerial = 0;
 #endif
 
 SwNode::SwNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType )
@@ -347,9 +347,9 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType )
         pStartOfSection = (SwStartNode*)this;
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    nMySerial = nSerial;
-    nSerial++;
+#ifdef DBG_UTIL
+    m_nSerial = s_nSerial;
+    s_nSerial++;
 #endif
 }
 
@@ -380,9 +380,9 @@ SwNode::SwNode( SwNodes& rNodes, sal_uLong nPos, const sal_uInt8 nNdType )
         pStartOfSection = (SwStartNode*)this;
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    nMySerial = nSerial;
-    nSerial++;
+#ifdef DBG_UTIL
+    m_nSerial = s_nSerial;
+    s_nSerial++;
 #endif
 }
 

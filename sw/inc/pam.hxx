@@ -226,7 +226,7 @@ public:
             m_pMark = m_pPoint;
         }
     }
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     void Exchange();
 
 #else

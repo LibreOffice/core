@@ -136,7 +136,7 @@ SwAttrSetChg::~SwAttrSetChg()
 }
 
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 
 void SwAttrSetChg::ClearItem( sal_uInt16 nWhch )
 {

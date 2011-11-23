@@ -170,18 +170,18 @@ protected:
 
     sal_uInt8            nTblDest;      // Destination for table background.
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     // Corresponds to statements in ui/config/cfgvw.src.
-    sal_Bool  bTest1        :1;     // Test-flag  "Layout not loading"
-    sal_Bool  bTest2        :1;     // Test-flag  "WYSIWYG++"
-    sal_Bool  bTest3        :1;     // Test-flag  ""
-    sal_Bool  bTest4        :1;     // Test-flag  "WYSIWYG debug"
-    sal_Bool  bTest5        :1;     // Test-flag  "No idle format"
-    sal_Bool  bTest6        :1;     // Test-flag  "No screen adj"
-    sal_Bool  bTest7        :1;     // Test-flag  "win format"
-    sal_Bool  bTest8        :1;     // Test-flag  ""
-    static sal_Bool  bTest9;    // Test-Flag  "DrawingLayerNotLoading"
-    sal_Bool  bTest10       :1;     // Test-Flag  "Format by Input"
+    bool  m_bTest1        :1;     // Test-flag  "Layout not loading"
+    bool  m_bTest2        :1;     // Test-flag  "WYSIWYG++"
+    bool  m_bTest3        :1;     // Test-flag  ""
+    bool  m_bTest4        :1;     // Test-flag  "WYSIWYG debug"
+    bool  m_bTest5        :1;     // Test-flag  "No idle format"
+    bool  m_bTest6        :1;     // Test-flag  "No screen adj"
+    bool  m_bTest7        :1;     // Test-flag  "win format"
+    bool  m_bTest8        :1;     // Test-flag  ""
+    static bool  s_bTest9;    // Test-Flag  "DrawingLayerNotLoading"
+    bool  m_bTest10       :1;     // Test-Flag  "Format by Input"
 #endif
 
 public:
@@ -412,28 +412,28 @@ public:
     sal_uInt16 GetViewLayoutColumns() const { return mnViewLayoutColumns; }
     void   SetViewLayoutColumns( sal_uInt16 nNew ) { mnViewLayoutColumns = nNew; }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     // Correspond to statements in ui/config/cfgvw.src.
-    inline sal_Bool IsTest1() const     { return bTest1; }
-    inline void SetTest1( sal_Bool b )  { bTest1 = b; }
-    inline sal_Bool IsTest2() const     { return bTest2; }
-    inline void SetTest2( sal_Bool b )  { bTest2 = b; }
-    inline sal_Bool IsTest3() const     { return bTest3; }
-    inline void SetTest3( sal_Bool b )  { bTest3 = b; }
-    inline sal_Bool IsTest4() const     { return bTest4; }
-    inline void SetTest4( sal_Bool b )  { bTest4 = b; }
-    inline sal_Bool IsTest5() const     { return bTest5; }
-    inline void SetTest5( sal_Bool b )  { bTest5 = b; }
-    inline sal_Bool IsTest6() const     { return bTest6; }
-    inline void SetTest6( sal_Bool b )  { bTest6 = b; }
-    inline sal_Bool IsTest7() const     { return bTest7; }
-    inline void SetTest7( sal_Bool b )  { bTest7 = b; }
-    inline sal_Bool IsTest8() const     { return bTest8; }
-    inline void SetTest8( sal_Bool b )  { bTest8 = b; }
-    static inline sal_Bool IsTest9()            { return bTest9; }
-    static inline void SetTest9( sal_Bool b )   { bTest9 = b; }
-    inline sal_Bool IsTest10() const    { return bTest10; }
-    inline void SetTest10( sal_Bool b ) { bTest10 = b; }
+    inline bool IsTest1() const     { return m_bTest1; }
+    inline void SetTest1( bool b )  { m_bTest1 = b; }
+    inline bool IsTest2() const     { return m_bTest2; }
+    inline void SetTest2( bool b )  { m_bTest2 = b; }
+    inline bool IsTest3() const     { return m_bTest3; }
+    inline void SetTest3( bool b )  { m_bTest3 = b; }
+    inline bool IsTest4() const     { return m_bTest4; }
+    inline void SetTest4( bool b )  { m_bTest4 = b; }
+    inline bool IsTest5() const     { return m_bTest5; }
+    inline void SetTest5( bool b )  { m_bTest5 = b; }
+    inline bool IsTest6() const     { return m_bTest6; }
+    inline void SetTest6( bool b )  { m_bTest6 = b; }
+    inline bool IsTest7() const     { return m_bTest7; }
+    inline void SetTest7( bool b )  { m_bTest7 = b; }
+    inline bool IsTest8() const     { return m_bTest8; }
+    inline void SetTest8( bool b )  { m_bTest8 = b; }
+    static inline bool IsTest9()            { return s_bTest9; }
+    static inline void SetTest9( bool b )   { s_bTest9 = b; }
+    inline bool IsTest10() const    { return m_bTest10; }
+    inline void SetTest10( bool b ) { m_bTest10 = b; }
 #endif
 
     inline sal_uInt16 GetZoom() const    { return nZoom; }

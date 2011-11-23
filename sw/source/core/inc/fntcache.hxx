@@ -52,9 +52,8 @@ class SwFntCache : public SwCache
 public:
 
     inline SwFntCache() : SwCache(50,50
-#if OSL_DEBUG_LEVEL > 1
-    , rtl::OString( RTL_CONSTASCII_STRINGPARAM(
-                        "Globaler Font-Cache pFntCache" ))
+#ifdef DBG_UTIL
+    , rtl::OString(RTL_CONSTASCII_STRINGPARAM("Global Font-Cache pFntCache"))
 #endif
     ) {}
 

@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 
 #include <tools/string.hxx>
 #include <svl/poolitem.hxx>
@@ -552,7 +552,7 @@ String lcl_dbg_out(const SwNode & rNode)
     aTmpStr += String::CreateFromInt32(rNode.GetIndex());
     aTmpStr += String("\"", RTL_TEXTENCODING_ASCII_US);
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     aTmpStr += String(" serial=\"", RTL_TEXTENCODING_ASCII_US);
     aTmpStr += String::CreateFromInt32(rNode.GetSerial());
     aTmpStr += String("\"", RTL_TEXTENCODING_ASCII_US);

@@ -1158,7 +1158,7 @@ void SwCntntFrm::MakeAll()
     int nConsequetiveFormatsWithoutChange = 0;
     PROTOCOL_ENTER( this, PROT_MAKEALL, 0, 0 )
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     const SwDoc *pDoc = GetAttrSet()->GetDoc();
     if( pDoc )
     {

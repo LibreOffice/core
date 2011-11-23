@@ -89,7 +89,7 @@ public:
                                        const SwTxtFrm* pFrm,
                                        const long nXPos,
                                        const sal_Bool bRight );
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     void ShowContour( OutputDevice* pOut, const SdrObject* pObj,
                       const Color& rClosedColor, const Color& rOpenColor );
 #endif
@@ -190,7 +190,7 @@ public:
         mbIgnoreObjsInHeaderFooter = _bNew;
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     void ShowContour( OutputDevice* pOut );
 #endif
 };

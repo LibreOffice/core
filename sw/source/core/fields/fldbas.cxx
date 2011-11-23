@@ -178,7 +178,7 @@ SwField::SwField(SwFieldType* pTyp, sal_uInt32 nFmt, sal_uInt16 nLng) :
     bIsAutomaticLanguage(sal_True),
     nFormat(nFmt)
 {
-    OSL_ENSURE( pTyp, "SwField: ungueltiger SwFieldType" );
+    OSL_ENSURE( pTyp, "SwField: no SwFieldType" );
     pType = pTyp;
 }
 
@@ -190,10 +190,10 @@ SwField::~SwField()
     Beschreibung: Statt Umweg ueber den Typ
  --------------------------------------------------------------------*/
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 sal_uInt16 SwField::Which() const
 {
-    OSL_ENSURE(pType, "Kein Typ vorhanden");
+    OSL_ENSURE(pType, "SwField: No FieldType");
     return pType->Which();
 }
 #endif

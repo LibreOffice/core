@@ -1734,7 +1734,7 @@ void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
 }
 
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 
 void lcl_SetPosSize(Window& rWin, Point aPos, Size aSize)
 {

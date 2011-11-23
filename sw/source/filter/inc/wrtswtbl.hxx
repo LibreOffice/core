@@ -261,8 +261,8 @@ protected:
 
     sal_Bool bRelWidths : 1;        // Breiten relativ ausgeben?
     sal_Bool bUseLayoutHeights : 1; // Layout zur Hoehenbestimmung nehmen?
-#if OSL_DEBUG_LEVEL > 1
-    sal_Bool bGetLineHeightCalled : 1;
+#ifdef DBG_UTIL
+    sal_Bool m_bGetLineHeightCalled : 1;
 #endif
 
     sal_Bool bColsOption : 1;

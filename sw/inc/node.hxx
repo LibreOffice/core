@@ -88,13 +88,14 @@ class SwOLENodes;
 // --------------------
 // class SwNode
 // --------------------
-class SW_DLLPUBLIC SwNode : private /* public*/ BigPtrEntry
+class SW_DLLPUBLIC SwNode
+    : private BigPtrEntry
 {
     friend class SwNodes;
 
-#if OSL_DEBUG_LEVEL > 1
-    static long nSerial;
-    long nMySerial;
+#ifdef DBG_UTIL
+    static long s_nSerial;
+    long m_nSerial;
 #endif
 
     sal_uInt8 nNodeType;
@@ -115,8 +116,8 @@ protected:
 public:
     virtual ~SwNode();
 
-#if OSL_DEBUG_LEVEL > 1
-    long int GetSerial() const { return nMySerial; }
+#ifdef DBG_UTIL
+    long GetSerial() const { return m_nSerial; }
 #endif
 
     sal_uInt16 GetSectionLevel() const;
@@ -296,7 +297,7 @@ public:
 
     sal_uInt8 HasPrevNextLayNode() const;
 
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
     /**
      * Dumps the node structure to the given destination (file nodes.xml in the current directory by default)
      * @since 3.5
@@ -337,7 +338,7 @@ public:
     // Call ChkCondcoll to all ContentNodes of section.
     void CheckSectionCondColl() const;
 
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
     virtual void dumpAsXml( xmlTextWriterPtr writer = NULL );
 #endif
 

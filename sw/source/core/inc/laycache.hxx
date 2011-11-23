@@ -70,7 +70,7 @@ public:
           return pImpl; }
     void UnlockImpl() { --nLockCount; }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     sal_Bool CompareLayout( const SwDoc& rDoc ) const;
 #endif
 };

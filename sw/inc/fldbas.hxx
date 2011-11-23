@@ -316,7 +316,7 @@ public:
 
     // ResId
     sal_uInt16              Which() const
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         ;       // implemented in fldbas.cxx
 #else
         { return pType->Which(); }

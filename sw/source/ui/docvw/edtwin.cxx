@@ -1362,7 +1362,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     sal_Bool bChkInsBlank = pQuickHlpData->bChkInsBlank;
     pQuickHlpData->bChkInsBlank = sal_False;
 
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
     if (rKEvt.GetKeyCode().GetCode() == KEY_F12)
     {
         if( rKEvt.GetKeyCode().IsShift())

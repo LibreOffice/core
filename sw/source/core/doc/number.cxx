@@ -387,8 +387,8 @@ const SwFmtVertOrient*      SwNumFmt::GetGraphicOrientation() const
     }
 }
 
-#if OSL_DEBUG_LEVEL > 1
-long int SwNumRule::nInstances = 0;
+#ifdef DBG_UTIL
+long int SwNumRule::s_nInstances = 0;
 #endif
 
 // handle new parameter <eDefaultNumberFormatPositionAndSpaceMode>
@@ -412,8 +412,8 @@ SwNumRule::SwNumRule( const String& rNm,
     meDefaultNumberFormatPositionAndSpaceMode( eDefaultNumberFormatPositionAndSpaceMode ),
     msDefaultListId()
 {
-#if OSL_DEBUG_LEVEL > 1
-    nSerial = nInstances++;
+#ifdef DBG_UTIL
+    m_nSerial = s_nInstances++;
 #endif
 
     if( !nRefCount++ )          // zum erstmal, also initialisiern
@@ -514,8 +514,8 @@ SwNumRule::SwNumRule( const SwNumRule& rNumRule )
       meDefaultNumberFormatPositionAndSpaceMode( rNumRule.meDefaultNumberFormatPositionAndSpaceMode ),
       msDefaultListId( rNumRule.msDefaultListId )
 {
-#if OSL_DEBUG_LEVEL > 1
-    nSerial = nInstances++;
+#ifdef DBG_UTIL
+    m_nSerial = s_nInstances++;
 #endif
 
     ++nRefCount;

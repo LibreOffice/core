@@ -2282,9 +2282,7 @@ sal_Bool SwLayIdle::DoIdleJob( IdleJobType eJob, sal_Bool bVisAreaOnly )
     return sal_False;
 }
 
-
-#if OSL_DEBUG_LEVEL > 1
-
+#ifdef DBG_UTIL
 /*************************************************************************
 |*
 |*  void SwLayIdle::SwLayIdle()
@@ -2292,9 +2290,9 @@ sal_Bool SwLayIdle::DoIdleJob( IdleJobType eJob, sal_Bool bVisAreaOnly )
 |*************************************************************************/
 void SwLayIdle::ShowIdle( ColorData eColorData )
 {
-    if ( !bIndicator )
+    if ( !m_bIndicator )
     {
-        bIndicator = sal_True;
+        m_bIndicator = true;
         Window *pWin = pImp->GetShell()->GetWin();
         if ( pWin )
         {
@@ -2312,7 +2310,7 @@ void SwLayIdle::ShowIdle( ColorData eColorData )
 #define SHOW_IDLE( ColorData ) ShowIdle( ColorData )
 #else
 #define SHOW_IDLE( ColorData )
-#endif
+#endif // DBG_UTIL
 
 /*************************************************************************
 |*
@@ -2322,8 +2320,8 @@ void SwLayIdle::ShowIdle( ColorData eColorData )
 SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
     pRoot( pRt ),
     pImp( pI )
-#if OSL_DEBUG_LEVEL > 1
-    , bIndicator( sal_False )
+#ifdef DBG_UTIL
+    , m_bIndicator( false )
 #endif
 {
     pImp->pIdleAct = this;
@@ -2504,13 +2502,13 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
     if( pImp->IsAccessible() )
         pImp->FireAccessibleEvents();
 
-#if OSL_DEBUG_LEVEL > 1
-    if ( bIndicator && pImp->GetShell()->GetWin() )
+#ifdef DBG_UTIL
+    if ( m_bIndicator && pImp->GetShell()->GetWin() )
     {
         // #i75172# Do not invalidate indicator, this may cause a endless loop. Instead, just repaint it
         // This should be replaced by an overlay object in the future, anyways. Since it's only for debug
         // purposes, it is not urgent.
-            bIndicator = false; SHOW_IDLE( COL_LIGHTGREEN );
+            m_bIndicator = false; SHOW_IDLE( COL_LIGHTGREEN );
     }
 #endif
 }

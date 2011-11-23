@@ -1588,7 +1588,7 @@ bool SwScriptInfo::IsInHiddenRange( const SwTxtNode& rNode, xub_StrLen nPos )
 }
 
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 /*************************************************************************
  *                        SwScriptInfo::CompType(..)
  * returns the type of the compressed character
@@ -1680,7 +1680,7 @@ long SwScriptInfo::Compress( sal_Int32* pKernArray, xub_StrLen nIdx, xub_StrLen 
     do
     {
         sal_uInt16 nType = GetCompType( nCompIdx );
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         OSL_ENSURE( nType == CompType( nIdx ), "Gimme the right type!" );
 #endif
         nCompLen = nCompLen + nIdx;

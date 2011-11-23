@@ -126,7 +126,7 @@ public:
 
     inline SwAttrHandler& GetAttrHandler() { return aAttrHandler; }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     void Dump( SvStream &rOS ) const;
 #endif
 };

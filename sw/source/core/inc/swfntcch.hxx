@@ -47,8 +47,8 @@ class SwFontCache : public SwCache
 public:
 
     inline SwFontCache() : SwCache(50,50
-#if OSL_DEBUG_LEVEL > 1
-    , "Globaler AttributSet/Font-Cache pSwFontCache"
+#ifdef DBG_UTIL
+    , "Global AttributSet/Font-Cache pSwFontCache"
 #endif
     ) {}
 

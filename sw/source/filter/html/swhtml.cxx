@@ -302,8 +302,8 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     nContextStAttrMin( 0 ),
     nOpenParaToken( 0 ),
     eJumpTo( JUMPTO_NONE ),
-#if OSL_DEBUG_LEVEL > 1
-    nContinue( 0 ),
+#ifdef DBG_UTIL
+    m_nContinue( 0 ),
 #endif
     eParaAdjust( SVX_ADJUST_END ),
     bDocInitalized( sal_False ),
@@ -436,8 +436,8 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
 
 SwHTMLParser::~SwHTMLParser()
 {
-#if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE( !nContinue, "DTOR im Continue - Das geht schief!!!" );
+#ifdef DBG_UTIL
+    OSL_ENSURE( !m_nContinue, "DTOR im Continue!" );
 #endif
     sal_Bool bAsync = pDoc->IsInLoadAsynchron();
     pDoc->SetInLoadAsynchron( sal_False );
@@ -585,9 +585,9 @@ SvParserState SwHTMLParser::CallParser()
 
 void SwHTMLParser::Continue( int nToken )
 {
-#if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE( !nContinue, "Continue im Continue - Das sollte doch nicht sein, oder?" );
-    nContinue++;
+#ifdef DBG_UTIL
+    OSL_ENSURE(!m_nContinue, "Continue im Continue - not supposed to happen");
+    m_nContinue++;
 #endif
 
     // Wenn der Import (vom SFX) abgebrochen wurde, wird ein Fehler
@@ -611,8 +611,8 @@ void SwHTMLParser::Continue( int nToken )
         bViewCreated = sal_True;
         pDoc->SetInLoadAsynchron( sal_True );
 
-#if OSL_DEBUG_LEVEL > 1
-        nContinue--;
+#ifdef DBG_UTIL
+        m_nContinue--;
 #endif
 
         return;
@@ -920,8 +920,8 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
     // wieder rekonstruieren.
     CallEndAction( sal_True );
 
-#if OSL_DEBUG_LEVEL > 1
-    nContinue--;
+#ifdef DBG_UTIL
+    m_nContinue--;
 #endif
 }
 

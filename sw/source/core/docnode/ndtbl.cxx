@@ -96,7 +96,7 @@
 #include <rootfrm.hxx>
 #include <fldupde.hxx>
 #include <switerator.hxx>
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();
 #else
 #define CHECK_TABLE(t)

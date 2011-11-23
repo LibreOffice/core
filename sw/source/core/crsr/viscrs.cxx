@@ -594,16 +594,13 @@ sal_Bool SwShellCrsr::UpDown( sal_Bool bUp, sal_uInt16 nCnt )
                             &GetPtPos(), GetShell()->GetUpDownX() );
 }
 
-#if OSL_DEBUG_LEVEL > 1
-
+#ifdef DBG_UTIL
 // JP 05.03.98: To test the UNO-Crsr behavior here the implementation on the
 //              visible cursor.
-
 sal_Bool SwShellCrsr::IsSelOvr( int eFlags )
 {
     return SwCursor::IsSelOvr( eFlags );
 }
-
 #endif
 
 // TRUE: The cursor can be set to the position.
@@ -732,15 +729,13 @@ sal_Bool SwShellTableCrsr::IsInside( const Point& rPt ) const
     return sal_False;
 }
 
-#if OSL_DEBUG_LEVEL > 1
-
+#ifdef DBG_UTIL
 // JP 05.03.98: To test the UNO-Crsr behavior here the implementation on the
 //              visible cursor.
 sal_Bool SwShellTableCrsr::IsSelOvr( int eFlags )
 {
     return SwShellCrsr::IsSelOvr( eFlags );
 }
-
 #endif
 
 sal_Bool SwShellTableCrsr::IsAtValidPos( sal_Bool bPoint ) const

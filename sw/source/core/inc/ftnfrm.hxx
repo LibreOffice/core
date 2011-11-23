@@ -72,7 +72,7 @@ class SwFtnFrm: public SwLayoutFrm
                                 //nicht rueckwaerts fliessen.
     // #i49383# - control unlock of position of lower anchored objects.
     bool mbUnlockPosOfLowerObjs : 1;
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 protected:
     virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
     virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
@@ -89,7 +89,7 @@ public:
 
     sal_Bool operator<( const SwTxtFtn* pTxtFtn ) const;
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     // in a non pro version test if the attribute has the same
     // meaning which his reference is
     const SwCntntFrm *GetRef() const;

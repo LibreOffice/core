@@ -471,7 +471,7 @@ private:
     bool mbColumnSelection       : 1;    // TRUE: this content has bee created by a column selection
                                          //       (clipboard docs only)
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     bool mbXMLExport : 1;                // sal_True: during XML export
 #endif
 
@@ -1013,7 +1013,7 @@ public:
     inline void SetOLEPrtNotifyPending( bool bSet = true );
     void PrtOLENotify( sal_Bool bAll ); //All or only marked
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     bool InXMLExport() const            { return mbXMLExport; }
     void SetXMLExport( bool bFlag )     { mbXMLExport = bFlag; }
 #endif
@@ -2036,7 +2036,7 @@ public:
     ::sw::UndoManager const& GetUndoManager() const;
     SfxObjectShell* CreateCopy(bool bCallInitNew) const;
 
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
     /**
      * Dumps the entire nodes structure to the given destination (file nodes.xml in the current directory by default)
      * @since 3.5

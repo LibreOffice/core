@@ -402,7 +402,7 @@ public:
     inline sal_Bool IsSwapped() const { return bIsSwapped; }
 
     // Hat der Frm eine lokale Fussnote (in diesem Frm bzw. Follow)?
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     void CalcFtnFlag( xub_StrLen nStop = STRING_LEN );//For testing SplitFrm
 #else
     void CalcFtnFlag();
@@ -662,10 +662,9 @@ inline SwTwips SwTxtFrm::GrowTst( const SwTwips nGrow )
     return Grow( nGrow, sal_True );
 }
 
-#if OSL_DEBUG_LEVEL > 1
-// fragt auf WYSIWYG DBG ab
+#ifdef DBG_UTIL
+// query WYSIWYG DBG
 extern sal_Bool IsDbg( const SwTxtFrm *pFrm );
-#define DBTXTFRM aDbstream << "SwTxtFrm[" << GetFrmId() << "]"
 #endif
 
 inline sal_Bool SwTxtFrm::IsInside( const xub_StrLen nPos ) const

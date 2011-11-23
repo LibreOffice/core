@@ -28,7 +28,7 @@
 #ifndef __DBGOUTSW_HXX
 #define __DBGOUTSW_HXX
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 
 #include <boost/unordered_map.hpp>
 #include <tox.hxx>
@@ -124,7 +124,7 @@ const char * dbg_out(const boost::unordered_map<tKey, tMember, fHashFunction> & 
 }
 SW_DLLPUBLIC const char * dbg_out(const SwFormToken & rToken);
 SW_DLLPUBLIC const char * dbg_out(const SwFormTokens & rTokens);
-#endif // OSL_DEBUG_LEVEL > 1
+#endif // DBG_UTIL
 #endif // __DBGOUTSW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

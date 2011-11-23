@@ -85,11 +85,6 @@
 #include <IGrammarContact.hxx>
 #include <switerator.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
-#include <txtpaint.hxx>     // DbgRect
-extern const sal_Char *GetPrepName( const enum PrepareHint ePrep );
-#endif
-
 
 TYPEINIT1( SwTxtFrm, SwCntntFrm );
 

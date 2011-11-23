@@ -312,7 +312,7 @@ const SwRect & WW8TableNodeInfoInner::getRect() const
     return maRect;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 ::std::string WW8TableNodeInfoInner::toString() const
 {
     static char buffer[256];
@@ -350,7 +350,7 @@ WW8TableNodeInfo::~WW8TableNodeInfo()
 {
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 ::std::string WW8TableNodeInfo::toString() const
 {
     static char buffer[1024];
@@ -394,7 +394,7 @@ void WW8TableNodeInfo::setEndOfLine(bool bEndOfLine)
     WW8TableNodeInfoInner::Pointer_t pInner = getInnerForDepth(mnDepth);
     pInner->setEndOfLine(bEndOfLine);
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << "<endOfLine depth=\"" << mnDepth << "\">"
     << toString() << "</endOfLine>" << ::std::endl;
 #endif
@@ -405,7 +405,7 @@ void WW8TableNodeInfo::setEndOfCell(bool bEndOfCell)
     WW8TableNodeInfoInner::Pointer_t pInner = getInnerForDepth(mnDepth);
     pInner->setEndOfCell(bEndOfCell);
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << "<endOfCell depth=\"" << mnDepth << "\">"
     << toString() << "</endOfCell>" << ::std::endl;
 #endif
@@ -417,7 +417,7 @@ void WW8TableNodeInfo::setFirstInTable(bool bFirstInTable)
 
     pInner->setFirstInTable(bFirstInTable);
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << "<firstInTable depth=\"" << mnDepth << "\">"
     << toString() << "</firstInTable>" << ::std::endl;
 #endif
@@ -430,7 +430,7 @@ void WW8TableNodeInfo::setVertMerge(bool bVertMerge)
     pInner->setVertMerge(bVertMerge);
 
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << "<vertMerge depth=\"" << mnDepth << "\">"
     << toString() << "</vertMerge>" << ::std::endl;
 #endif
@@ -450,7 +450,7 @@ void WW8TableNodeInfo::setNext(WW8TableNodeInfo * pNext)
 {
     mpNext = pNext;
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << "<setnext><from>" << toString() << "</from><to>"
                 << pNext->toString() << "</to></setnext>"
                 << ::std::endl;
@@ -578,7 +578,7 @@ WW8TableInfo::processSwTableByLayout(const SwTable * pTable)
     {
         SwRect aRect = aTableCellInfo.getRect();
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         static char sBuffer[1024];
         ::std::clog << "<CellFrm>" << ::std::endl;
 
@@ -615,7 +615,7 @@ WW8TableInfo::processSwTableByLayout(const SwTable * pTable)
             while (!bDone);
         }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         ::std::clog << "</CellFrm>" << ::std::endl;
 #endif
     }
@@ -627,7 +627,7 @@ WW8TableInfo::processSwTableByLayout(const SwTable * pTable)
 
 void WW8TableInfo::processSwTable(const SwTable * pTable)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << "<processSwTable>" << ::std::endl;
 #endif
 
@@ -638,7 +638,7 @@ void WW8TableInfo::processSwTable(const SwTable * pTable)
     {
         pPrev = processSwTableByLayout(pTable);
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         WW8TableCellGrid::Pointer_t pCellGrid(getCellGridForTable(pTable));
         ::std::clog << pCellGrid->toString() << ::std::endl;
 #endif
@@ -663,7 +663,7 @@ void WW8TableInfo::processSwTable(const SwTable * pTable)
 
         pPrev->setNextNode(pEndNode);
     }
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << "</processSwTable>" << ::std::endl;
 #endif
 }
@@ -674,7 +674,7 @@ WW8TableInfo::processTableLine(const SwTable * pTable,
                                sal_uInt32 nRow,
                                sal_uInt32 nDepth, WW8TableNodeInfo * pPrev)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << "<processTableLine row=\"" << nRow << "\" depth=\""
     << nDepth << "\">" << ::std::endl;
 #endif
@@ -690,7 +690,7 @@ WW8TableInfo::processTableLine(const SwTable * pTable,
         pPrev = processTableBox(pTable, pBox, nRow, n, nDepth, n == rBoxes.Count() - 1, pPrev);
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << "</processTableLine>" << ::std::endl;
 #endif
 
@@ -705,7 +705,7 @@ WW8TableInfo::processTableBoxLines(const SwTableBox * pBox,
                                    sal_uInt32 nCell,
                                    sal_uInt32 nDepth)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << "<processTableBoxLines depth=\"" << nDepth
     << "\" row=\"" << nRow << "\" cell=\"" << nCell << "\">" << ::std::endl;
 #endif
@@ -745,7 +745,7 @@ WW8TableInfo::processTableBoxLines(const SwTableBox * pBox,
         }
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << "</processTableBoxLines>" << ::std::endl;
 #endif
 
@@ -761,7 +761,7 @@ WW8TableInfo::processTableBox(const SwTable * pTable,
                               bool bEndOfLine,
                               WW8TableNodeInfo * pPrev)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << "<processTableBox row=\"" << nRow << "\" cell=\"" << nCell
     << "\" depth=\"" << nDepth << "\">" << ::std::endl;
 #endif
@@ -840,7 +840,7 @@ WW8TableInfo::processTableBox(const SwTable * pTable,
         }
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << "</processTableBox>" << ::std::endl;
 #endif
 
@@ -891,7 +891,7 @@ WW8TableNodeInfo::Pointer_t WW8TableInfo::insertTableNodeInfo
         pNodeInfo->setRect(*pRect);
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << pNodeInfo->toString() << ::std::endl;
 #endif
 
@@ -1011,7 +1011,7 @@ bool CellInfo::operator < (const CellInfo & aCellInfo) const
     return aRet;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 ::std::string CellInfo::toString() const
 {
     static char sBuffer[256];
@@ -1037,7 +1037,7 @@ WW8TableNodeInfo * WW8TableInfo::reorderByLayout(const SwTable * pTable)
     WW8TableNodeInfo * pPrev = NULL;
     WW8TableCellGrid::Pointer_t pCellGrid = getCellGridForTable(pTable);
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << pCellGrid->toString() << ::std::endl;
 #endif
 
@@ -1111,7 +1111,7 @@ void WW8TableCellGrid::insert(const SwRect & rRect,
 
 void WW8TableCellGrid::addShadowCells()
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << "<addShadowCells>" << ::std::endl;
 #endif
 
@@ -1119,7 +1119,7 @@ void WW8TableCellGrid::addShadowCells()
 
     while (aTopsIt != getRowTopsEnd())
     {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         long nTop = *aTopsIt;
         (void) nTop;
 #endif
@@ -1184,7 +1184,7 @@ void WW8TableCellGrid::addShadowCells()
 
         ++aTopsIt;
     }
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << "</addShadowCells>" << ::std::endl;
 #endif
 }
@@ -1298,7 +1298,7 @@ WW8TableNodeInfo * WW8TableCellGrid::connectCells()
     return pLastNodeInfo;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 ::std::string WW8TableCellGrid::toString()
 {
     string sResult = "<WW8TableCellGrid>";
@@ -1440,7 +1440,7 @@ void WW8TableCellGridRow::insert(const CellInfo & rCellInfo)
 {
     m_pCellInfos->insert(rCellInfo);
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << "<gridRowInsert>"
                 << rCellInfo.toString()
                 << "</gridRowInsert>"

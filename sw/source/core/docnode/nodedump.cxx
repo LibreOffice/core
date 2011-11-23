@@ -29,7 +29,7 @@
 #include "doc.hxx"
 #include "ndtxt.hxx"
 
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
 
 namespace
 {
@@ -201,6 +201,6 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )
     writer.endElement();
 }
 
-#endif // OSL_DEBUG_LEVEL
+#endif // DBG_UTIL
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

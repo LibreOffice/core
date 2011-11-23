@@ -346,7 +346,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
     }
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
 {
     if( !pImpl )

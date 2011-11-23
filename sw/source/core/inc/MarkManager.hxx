@@ -45,7 +45,7 @@ namespace sw { namespace mark
     {
         public:
             MarkManager(/*[in/out]*/ SwDoc& rDoc);
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
             void dumpFieldmarks( ) const;
 #endif
             // IDocumentMarkAccess

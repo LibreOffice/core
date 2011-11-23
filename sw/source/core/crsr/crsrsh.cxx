@@ -316,7 +316,7 @@ void SwCrsrShell::EndAction( const sal_Bool bIdleEnd )
 }
 
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 
 void SwCrsrShell::SttCrsrMove()
 {
@@ -1254,14 +1254,13 @@ static void lcl_CheckHiddenSection( SwNodeIndex& rIdx )
     if( pSectNd && pSectNd->GetSection().IsHiddenFlag() )
     {
         SwNodeIndex aTmp( *pSectNd );
-#if OSL_DEBUG_LEVEL > 1
         const SwNode* pFrmNd =
-#endif
         rIdx.GetNodes().FindPrvNxtFrmNode( aTmp, pSectNd->EndOfSectionNode() );
 
-#if OSL_DEBUG_LEVEL > 1
+#ifndef DBG_UTIL
         (void) pFrmNd;
-        OSL_ENSURE( pFrmNd, "keinen Node mit Frames gefunden" );
+#else
+        OSL_ENSURE( pFrmNd, "found no Node with Frames" );
 #endif
         rIdx = aTmp;
     }

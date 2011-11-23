@@ -102,7 +102,7 @@ SwTxtFrm *SwTxtFrm::FindFtnRef( const SwTxtFtn *pFtn )
  *                              CalcFtnFlag()
  *************************************************************************/
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 void SwTxtFrm::CalcFtnFlag( xub_StrLen nStop )//For testing the SplitFrm
 #else
 void SwTxtFrm::CalcFtnFlag()
@@ -116,7 +116,7 @@ void SwTxtFrm::CalcFtnFlag()
 
     const sal_uInt16 nSize = pHints->Count();
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     const xub_StrLen nEnd = nStop != STRING_LEN ? nStop
                         : GetFollow() ? GetFollow()->GetOfst() : STRING_LEN;
 #else
@@ -1279,7 +1279,7 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
     // einen kleineren Font eingestellt als der vom QuoVadis-Text ...
     CalcAdjustLine( pCurr );
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     if( OPTDBG( rInf ) )
     {
 //        aDbstream << "FormatQuoVadis:" << endl;

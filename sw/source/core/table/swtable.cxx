@@ -69,7 +69,7 @@
 #include <list>
 #include <switerator.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();
 #else
 #define CHECK_TABLE(t)
@@ -1059,7 +1059,7 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
         }
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     {
 // steht im tblrwcl.cxx
 extern void _CheckBoxWidth( const SwTableLine&, SwTwips );
@@ -1954,8 +1954,7 @@ sal_Bool SwTableBox::IsInHeadline( const SwTable* pTbl ) const
     return pTbl->GetTabLines()[ 0 ] == pLine;
 }
 
-#if OSL_DEBUG_LEVEL > 1
-
+#ifdef DBG_UTIL
 sal_uLong SwTableBox::GetSttIdx() const
 {
     return pSttNd ? pSttNd->GetIndex() : 0;

@@ -764,7 +764,7 @@ void SwSectionFrm::MakeAll()
         return;
     if( !pSection ) // Durch DelEmpty
     {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         OSL_ENSURE( getRootFrm()->IsInDelList( this ), "SectionFrm without Section" );
 #endif
         if( !bValidPos )
@@ -1304,7 +1304,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
 {
     if( !pSection ) // Durch DelEmpty
     {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         OSL_ENSURE( getRootFrm()->IsInDelList( this ), "SectionFrm without Section" );
 #endif
         bValidSize = bValidPos = bValidPrtArea = sal_True;
@@ -2749,14 +2749,12 @@ void SwRootFrm::_RemoveFromList( SwSectionFrm* pSct )
         pDestroy->Remove( nPos );
 }
 
-#if OSL_DEBUG_LEVEL > 1
-
-sal_Bool SwRootFrm::IsInDelList( SwSectionFrm* pSct ) const
+#ifdef DBG_UTIL
+bool SwRootFrm::IsInDelList( SwSectionFrm* pSct ) const
 {
     sal_uInt16 nPos;
     return ( pDestroy && pDestroy->Seek_Entry( pSct, &nPos ) );
 }
-
 #endif
 
 bool SwSectionFrm::IsBalancedSection() const

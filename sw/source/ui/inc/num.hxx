@@ -139,7 +139,7 @@ public:
 
     void                SetOutlineTabDialog(SwOutlineTabDialog* pDlg){pOutlineDlg = pDlg;}
     void                SetWrtShell(SwWrtShell* pSh);
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     void                SetModified(sal_Bool bRepaint = sal_True);
 #else
     void                SetModified(sal_Bool bRepaint = sal_True)

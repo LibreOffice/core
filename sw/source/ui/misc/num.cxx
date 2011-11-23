@@ -916,7 +916,7 @@ IMPL_LINK( SwNumPositionTabPage, StandardHdl, PushButton *, EMPTYARG )
     return 0;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 void SwNumPositionTabPage::SetModified(sal_Bool bRepaint)
 {
     bModified = sal_True;
@@ -926,7 +926,6 @@ void SwNumPositionTabPage::SetModified(sal_Bool bRepaint)
         aPreviewWIN.Invalidate();
     }
 }
-
 #endif
 
 SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(Window* pParent,

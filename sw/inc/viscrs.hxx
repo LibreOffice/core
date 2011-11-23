@@ -162,8 +162,7 @@ public:
     // sal_True: Cursor can be set to this position.
     virtual sal_Bool IsAtValidPos( sal_Bool bPoint = sal_True ) const;
 
-#if OSL_DEBUG_LEVEL > 1
-
+#ifdef DBG_UTIL
     // For testing of UNO-Crsr behavior here the implementation at visible cursor.
     virtual sal_Bool IsSelOvr( int eFlags =
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
@@ -205,8 +204,7 @@ public:
     // sal_True: Cursor can be set to this position.
     virtual sal_Bool IsAtValidPos( sal_Bool bPoint = sal_True ) const;
 
-#if OSL_DEBUG_LEVEL > 1
-
+#ifdef DBG_UTIL
     // For testing of UNO-Crsr behavior here the implementation at visible cursor.
     virtual sal_Bool IsSelOvr( int eFlags =
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |

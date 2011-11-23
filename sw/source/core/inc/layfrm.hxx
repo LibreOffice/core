@@ -49,8 +49,8 @@ class SwLayoutFrm: public SwFrm
     friend SwFrm* SaveCntnt( SwLayoutFrm *, SwFrm * );
     friend void   RestoreCntnt( SwFrm *, SwLayoutFrm *, SwFrm *pSibling, bool bGrow );
 
-#if OSL_DEBUG_LEVEL > 1
-    //entfernt leere SwSectionFrms aus einer Kette
+#ifdef DBG_UTIL
+    //removes empty SwSectionFrms from a chain
     friend SwFrm* SwClearDummies( SwFrm* pFrm );
 #endif
 

@@ -114,7 +114,7 @@ void SwSaveClip::_ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
             const Region aClipRegion( aRect );
             pOut->SetClipRegion( aClipRegion );
         }
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         static sal_Bool bDbg = sal_False;
         if( bDbg )
         {

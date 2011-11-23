@@ -63,7 +63,7 @@
 #include <htmlnum.hxx>
 #include <wrthtml.hxx>
 #include <wrtswtbl.hxx>
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 #include <viewsh.hxx>
 #include <viewopt.hxx>
 #endif
@@ -1213,11 +1213,13 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
 
     const SwHTMLTableLayout *pLayout = rTbl.GetHTMLTableLayout();
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
+    {
     ViewShell *pSh;
     rWrt.pDoc->GetEditShell( &pSh );
     if ( pSh && pSh->GetViewOptions()->IsTest1() )
         pLayout = 0;
+    }
 #endif
 
     if( pLayout && pLayout->IsExportable() )

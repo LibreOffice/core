@@ -60,10 +60,6 @@
 
 #include <vector>
 
-#if OSL_DEBUG_LEVEL > 1
-#include <tools/string.hxx>
-#endif
-
 #ifndef _SVSTDARR_HXX
 #include <svl/svstdarr.hxx>
 #endif
@@ -91,29 +87,29 @@ class SwCache : public SwCacheObjArr
 
     void DeleteObj( SwCacheObj *pObj );
 
-#if OSL_DEBUG_LEVEL > 1
-    rtl::OString aName;
-    long nAppend;           //Anzahl der Eintragungen durch Erweiterung.
-    long nInsertFree;       //Anzahl der Eintragungen auf freie Plaetze.
-    long nReplace;          //Anzahl der Ersetzungen durch ein neues Objekt
-    long nGetSuccess;       //Anzahl der Erfolgreichen Get's
-    long nGetFail;          //Anzahl der nicht Erfolgreichen Get's
-    long nToTop;            //Anzahl der Umsortierungen (LRU)
-    long nDelete;           //Anzahl der Loeschungen (von Aussen)
-    long nGetSeek;          //Anzahl der Get's ohne Index
-    long nAverageSeekCnt;   //Anzahl der Seek's fuer alle Get's ohne Index
-    long nFlushCnt;         //Anzahl von Flush-Aufrufen.
-    long nFlushedObjects;   //Anzahl der wg. Flush vernichteten Objekte
-    long nIncreaseMax;      //Anzahl Cache-Erweiterungen
-    long nDecreaseMax;      //Anzahl Cache-Verkleinerungen
+#ifdef DBG_UTIL
+    rtl::OString m_aName;
+    long m_nAppend;           /// number of entries appended
+    long m_nInsertFree;       /// number of entries inserted on freed position
+    long m_nReplace;          /// number of LRU replacements
+    long m_nGetSuccess;
+    long m_nGetFail;
+    long m_nToTop;            /// number of reordering (LRU)
+    long m_nDelete;           /// number of explicit deletes
+    long m_nGetSeek;          /// number of gets without index
+    long m_nAverageSeekCnt;   /// number of seeks for all gets without index
+    long m_nFlushCnt;         /// number of flush calls
+    long m_nFlushedObjects;
+    long m_nIncreaseMax;      /// number of cache size increases
+    long m_nDecreaseMax;      /// number of cache size decreases
 
-    void Check();           //Wird bei swcache.cxx mit DEBUG aktiv!
+    void Check();
 #endif
 
 public:
 
     //nur sal_uInt8 hineinstecken!!!
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     SwCache( const sal_uInt16 nInitSize, const sal_uInt16 nGrowSize,
             const rtl::OString &rNm );
     ~SwCache();
@@ -194,7 +190,7 @@ public:
 
     inline sal_Bool IsLocked() const { return 0 != nLock; }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     void Lock();
     void Unlock();
 #else
@@ -246,16 +242,16 @@ public:
 inline void SwCache::IncreaseMax( const sal_uInt16 nAdd )
 {
     nCurMax = nCurMax + sal::static_int_cast< sal_uInt16 >(nAdd);
-#if OSL_DEBUG_LEVEL > 1
-    ++nIncreaseMax;
+#ifdef DBG_UTIL
+    ++m_nIncreaseMax;
 #endif
 }
 inline void SwCache::DecreaseMax( const sal_uInt16 nSub )
 {
     if ( nCurMax > nSub )
         nCurMax = nCurMax - sal::static_int_cast< sal_uInt16 >(nSub);
-#if OSL_DEBUG_LEVEL > 1
-    ++nDecreaseMax;
+#ifdef DBG_UTIL
+    ++m_nDecreaseMax;
 #endif
 }
 

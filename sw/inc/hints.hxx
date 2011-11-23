@@ -196,7 +196,7 @@ public:
 
     sal_uInt16 Count() const { return pChgSet->Count(); }
     void ClearItem( sal_uInt16 nWhichL = 0 )
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         ;
 #else
     { pChgSet->ClearItem( nWhichL ); }

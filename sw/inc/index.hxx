@@ -43,7 +43,7 @@ class SwIndex;
 class SwIndexReg;
 struct SwPosition;
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 #define INLINE
 #else
 #define INLINE inline
@@ -53,9 +53,9 @@ class SW_DLLPUBLIC SwIndex
 {
     friend class SwIndexReg;
 
-#if OSL_DEBUG_LEVEL > 1
-    static int nSerial;
-    int MySerial;
+#ifdef DBG_UTIL
+    static int s_nSerial;
+    int m_nSerial;
 #endif
 
     xub_StrLen  nIndex;
@@ -142,7 +142,7 @@ public:
 // do not know a valid array (SwPaM/SwPosition!):
 struct EmptyIndexArray: rtl::Static< SwIndexReg, EmptyIndexArray > {};
 
-#if !defined(OSL_DEBUG_LEVEL) || OSL_DEBUG_LEVEL < 2
+#ifndef DBG_UTIL
 
 inline xub_StrLen SwIndex::operator++()
 {

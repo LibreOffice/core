@@ -334,7 +334,7 @@ void SwShadowCursorItem::FillViewOptions( SwViewOption& rVOpt ) const
     rVOpt.SetShdwCrsrFillMode( eMode );
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 SwTestItem::SwTestItem( const SwTestItem& rTestItem ):
             SfxPoolItem(rTestItem)
 {

@@ -34,7 +34,7 @@
 
 SV_IMPL_PTRARR(SwCacheObjArr,SwCacheObj*);
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 #define INCREMENT( nVar )   ++nVar
 #else
 #define INCREMENT( nVar )
@@ -44,8 +44,7 @@ SV_IMPL_PTRARR(SwCacheObjArr,SwCacheObj*);
 |*  SwCache::Check()
 |*************************************************************************/
 
-#if OSL_DEBUG_LEVEL > 1
-
+#ifdef DBG_UTIL
 void SwCache::Check()
 {
     if ( !pRealFirst )
@@ -81,7 +80,7 @@ void SwCache::Check()
 }
 #endif
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 #define CHECK Check();
 #else
 #define CHECK
@@ -93,7 +92,7 @@ void SwCache::Check()
 
 
 SwCache::SwCache( const sal_uInt16 nInitSize, const sal_uInt16 nGrowSize
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     , const rtl::OString &rNm
 #endif
     ) :
@@ -103,83 +102,83 @@ SwCache::SwCache( const sal_uInt16 nInitSize, const sal_uInt16 nGrowSize
     pLast( 0 ),
     nMax( nInitSize ),
     nCurMax( nInitSize )
-#if OSL_DEBUG_LEVEL > 1
-    , aName( rNm ),
-    nAppend( 0 ),
-    nInsertFree( 0 ),
-    nReplace( 0 ),
-    nGetSuccess( 0 ),
-    nGetFail( 0 ),
-    nToTop( 0 ),
-    nDelete( 0 ),
-    nGetSeek( 0 ),
-    nAverageSeekCnt( 0 ),
-    nFlushCnt( 0 ),
-    nFlushedObjects( 0 ),
-    nIncreaseMax( 0 ),
-    nDecreaseMax( 0 )
+#ifdef DBG_UTIL
+    , m_aName( rNm )
+    , m_nAppend( 0 )
+    , m_nInsertFree( 0 )
+    , m_nReplace( 0 )
+    , m_nGetSuccess( 0 )
+    , m_nGetFail( 0 )
+    , m_nToTop( 0 )
+    , m_nDelete( 0 )
+    , m_nGetSeek( 0 )
+    , m_nAverageSeekCnt( 0 )
+    , m_nFlushCnt( 0 )
+    , m_nFlushedObjects( 0 )
+    , m_nIncreaseMax( 0 )
+    , m_nDecreaseMax( 0 )
 #endif
 {
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 SwCache::~SwCache()
 {
     {
-        rtl::OStringBuffer sOut(aName);
+        rtl::OStringBuffer sOut(m_aName);
 
         sOut.append('\n').
             append(RTL_CONSTASCII_STRINGPARAM(
                 "Number of new entries:                 ")).
-            append(static_cast<sal_Int32>(nAppend)).
+            append(static_cast<sal_Int32>(m_nAppend)).
             append('\n').
             append(RTL_CONSTASCII_STRINGPARAM(
                 "Number of insert on free places:       ")).
-            append(static_cast<sal_Int32>(nInsertFree)).
+            append(static_cast<sal_Int32>(m_nInsertFree)).
             append('\n').
             append(RTL_CONSTASCII_STRINGPARAM(
                 "Number of replacements:                ")).
-            append(static_cast<sal_Int32>(nReplace)).
+            append(static_cast<sal_Int32>(m_nReplace)).
             append('\n').
             append(RTL_CONSTASCII_STRINGPARAM(
                 "Number of successful Get's:            ")).
-            append(static_cast<sal_Int32>(nGetSuccess)).
+            append(static_cast<sal_Int32>(m_nGetSuccess)).
             append('\n').
             append(RTL_CONSTASCII_STRINGPARAM(
                 "Number of failed Get's:                ")).
-            append(static_cast<sal_Int32>(nGetFail)).
+            append(static_cast<sal_Int32>(m_nGetFail)).
             append('\n').
             append(RTL_CONSTASCII_STRINGPARAM(
                 "Number or reordering (LRU):            ")).
-            append(static_cast<sal_Int32>(nToTop)).
+            append(static_cast<sal_Int32>(m_nToTop)).
             append('\n').
             append(RTL_CONSTASCII_STRINGPARAM(
                 "Number of suppressions:                ")).
-            append(static_cast<sal_Int32>(nDelete)).
+            append(static_cast<sal_Int32>(m_nDelete)).
             append('\n').
             append(RTL_CONSTASCII_STRINGPARAM(
                 "Number of Get's without Index:         ")).
-            append(static_cast<sal_Int32>(nGetSeek)).
+            append(static_cast<sal_Int32>(m_nGetSeek)).
             append('\n').
             append(RTL_CONSTASCII_STRINGPARAM(
                 "Number of Seek for Get without Index:  ")).
-            append(static_cast<sal_Int32>(nAverageSeekCnt)).
+            append(static_cast<sal_Int32>(m_nAverageSeekCnt)).
             append('\n').
             append(RTL_CONSTASCII_STRINGPARAM(
                 "Number of Flush calls:                 " )).
-            append(static_cast<sal_Int32>(nFlushCnt)).
+            append(static_cast<sal_Int32>(m_nFlushCnt)).
             append('\n').
             append(RTL_CONSTASCII_STRINGPARAM(
                 "Number of flushed objects:             ")).
-            append(static_cast<sal_Int32>(nFlushedObjects)).
+            append(static_cast<sal_Int32>(m_nFlushedObjects)).
             append('\n').
             append(RTL_CONSTASCII_STRINGPARAM(
                 "Number of Cache expansions:            ")).
-            append(static_cast<sal_Int32>(nIncreaseMax)).
+            append(static_cast<sal_Int32>(m_nIncreaseMax)).
             append('\n').
             append(RTL_CONSTASCII_STRINGPARAM(
                 "Number of Cache reductions:            ")).
-            append(static_cast<sal_Int32>(nDecreaseMax)).
+            append(static_cast<sal_Int32>(m_nDecreaseMax)).
             append('\n');
 
         OSL_TRACE(sOut.getStr());
@@ -195,13 +194,13 @@ SwCache::~SwCache()
 
 void SwCache::Flush( const sal_uInt8 )
 {
-    INCREMENT( nFlushCnt );
+    INCREMENT( m_nFlushCnt );
     SwCacheObj *pObj = pRealFirst;
     pRealFirst = pFirst = pLast = 0;
     SwCacheObj *pTmp;
     while ( pObj )
     {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         if ( pObj->IsLocked() )
         {
             OSL_FAIL( "Flushing locked objects." );
@@ -229,7 +228,7 @@ void SwCache::Flush( const sal_uInt8 )
             aFreePositions.push_back( pTmp->GetCachePos() );
             *(pData + pTmp->GetCachePos()) = (void*)0;
             delete pTmp;
-            INCREMENT( nFlushedObjects );
+            INCREMENT( m_nFlushedObjects );
         }
     }
 }
@@ -241,7 +240,7 @@ void SwCache::Flush( const sal_uInt8 )
 
 void SwCache::ToTop( SwCacheObj *pObj )
 {
-    INCREMENT( nToTop );
+    INCREMENT( m_nToTop );
 
     //Objekt aus der LRU-Kette ausschneiden und am Anfang einfuegen.
     if ( pRealFirst == pObj )   //pFirst wurde vom Aufrufer geprueft!
@@ -316,11 +315,11 @@ SwCacheObj *SwCache::Get( const void *pOwner, const sal_uInt16 nIndex,
             ToTop( pRet );
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         if ( pRet )
-            ++nGetSuccess;
+            ++m_nGetSuccess;
         else
-            ++nGetFail;
+            ++m_nGetFail;
 #endif
 
     return pRet;
@@ -333,19 +332,19 @@ SwCacheObj *SwCache::Get( const void *pOwner, const sal_Bool bToTop )
     SwCacheObj *pRet = pRealFirst;
     while ( pRet && !pRet->IsOwner( pOwner ) )
     {
-        INCREMENT( nAverageSeekCnt );
+        INCREMENT( m_nAverageSeekCnt );
         pRet = pRet->GetNext();
     }
 
     if ( bToTop && pRet && pRet != pFirst )
         ToTop( pRet );
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     if ( pRet )
-        ++nGetSuccess;
+        ++m_nGetSuccess;
     else
-        ++nGetFail;
-    ++nGetSeek;
+        ++m_nGetFail;
+    ++m_nGetSeek;
 #endif
     return pRet;
 }
@@ -408,7 +407,7 @@ void SwCache::DeleteObj( SwCacheObj *pObj )
 
 void SwCache::Delete( const void *pOwner )
 {
-    INCREMENT( nDelete );
+    INCREMENT( m_nDelete );
     SwCacheObj *pObj;
     if ( 0 != (pObj = Get( pOwner, sal_Bool(sal_False) )) )
         DeleteObj( pObj );
@@ -429,14 +428,14 @@ sal_Bool SwCache::Insert( SwCacheObj *pNew )
     if ( Count() < nCurMax )
     {
         //Es ist noch Platz frei, also einfach einfuegen.
-        INCREMENT( nAppend );
+        INCREMENT( m_nAppend );
         nPos = Count();
         SwCacheObjArr::C40_INSERT( SwCacheObj, pNew, nPos );
     }
     else if ( !aFreePositions.empty() )
     {
         //Es exitieren Platzhalter, also den letzten benutzen.
-        INCREMENT( nInsertFree );
+        INCREMENT( m_nInsertFree );
         const sal_uInt16 nFreePos = aFreePositions.size() - 1;
         nPos = aFreePositions[ nFreePos ];
         *(pData + nPos) = pNew;
@@ -444,7 +443,7 @@ sal_Bool SwCache::Insert( SwCacheObj *pNew )
     }
     else
     {
-        INCREMENT( nReplace );
+        INCREMENT( m_nReplace );
         //Der letzte des LRU fliegt raus.
         SwCacheObj *pObj = pLast;
 
@@ -543,15 +542,12 @@ SwCacheObj::~SwCacheObj()
 |*  SwCacheObj::SetLock(), Unlock()
 |*************************************************************************/
 
-#if OSL_DEBUG_LEVEL > 1
-
+#ifdef DBG_UTIL
 void SwCacheObj::Lock()
 {
-    OSL_ENSURE( nLock < UCHAR_MAX, "To many Locks for CacheObject." );
+    OSL_ENSURE( nLock < UCHAR_MAX, "Too many Locks for CacheObject." );
     ++nLock;
 }
-
-
 
 void SwCacheObj::Unlock()
 {

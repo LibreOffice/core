@@ -309,7 +309,7 @@ SwDoc::SwDoc()
     mbInsOnlyTxtGlssry =
     mbContains_MSVBasic =
     mbKernAsianPunctuation =
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     mbXMLExport =
 #endif
     mbApplyWorkaroundForB6375613 =

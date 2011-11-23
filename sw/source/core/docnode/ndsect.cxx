@@ -1028,8 +1028,8 @@ SwSectionNode::SwSectionNode(SwNodeIndex const& rIdx,
     rFmt.UnlockModify();
 }
 
-#if OSL_DEBUG_LEVEL > 1
-//Hier werden ueberfluessige SectionFrms entfernt
+#ifdef DBG_UTIL
+//remove superfluous SectionFrms
 SwFrm* SwClearDummies( SwFrm* pFrm )
 {
     SwFrm* pTmp = pFrm;

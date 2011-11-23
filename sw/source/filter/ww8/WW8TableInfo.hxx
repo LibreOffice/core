@@ -117,7 +117,7 @@ public:
     GridColsPtr getGridColsOfRow(AttributeOutputBase & rBase);
     RowSpansPtr getRowSpansOfRow();
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::string toString() const;
 #endif
 };
@@ -180,7 +180,7 @@ public:
     sal_uInt32 getCell() const;
     sal_uInt32 getRow() const;
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::string toString() const;
 #endif
 
@@ -249,7 +249,7 @@ public:
     void addShadowCells();
     WW8TableNodeInfo * connectCells();
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::string toString();
 #endif
 
@@ -357,7 +357,7 @@ public:
         m_nFmtFrmWidth = nFmtFrmWidth;
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::string toString() const;
 #endif
 };

@@ -112,9 +112,9 @@ sal_uInt32 SwWriteTable::GetBoxWidth( const SwTableBox *pBox )
 
 long SwWriteTable::GetLineHeight( const SwTableLine *pLine )
 {
-#if OSL_DEBUG_LEVEL > 1
-    sal_Bool bOldGetLineHeightCalled = bGetLineHeightCalled;
-    bGetLineHeightCalled = sal_True;
+#ifdef DBG_UTIL
+    sal_Bool bOldGetLineHeightCalled = m_bGetLineHeightCalled;
+    m_bGetLineHeightCalled = sal_True;
 #endif
 
     long nHeight = 0;
@@ -132,7 +132,7 @@ long SwWriteTable::GetLineHeight( const SwTableLine *pLine )
         // ('hidden' rows)
         bUseLayoutHeights = bLayoutAvailable; /*sal_False;*/
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         OSL_ENSURE( bLayoutAvailable || !bOldGetLineHeightCalled, "Layout ungueltig?" );
 #endif
     }
@@ -766,8 +766,8 @@ SwWriteTable::SwWriteTable(const SwTableLines& rLines, long nWidth,
     nInnerBorder(0), nBaseWidth(nBWidth), nHeadEndRow(USHRT_MAX),
      nLeftSub(nLSub), nRightSub(nRSub), nTabWidth(nWidth), bRelWidths(bRel),
     bUseLayoutHeights(true),
-#if OSL_DEBUG_LEVEL > 1
-    bGetLineHeightCalled(false),
+#ifdef DBG_UTIL
+    m_bGetLineHeightCalled(false),
 #endif
     bColsOption(false), bColTags(true), bLayoutExport(false),
     bCollectBorderWidth(true)
@@ -793,8 +793,8 @@ SwWriteTable::SwWriteTable( const SwHTMLTableLayout *pLayoutInfo )
     nInnerBorder(0), nBaseWidth(pLayoutInfo->GetWidthOption()), nHeadEndRow(0),
     nLeftSub(0), nRightSub(0), nTabWidth(pLayoutInfo->GetWidthOption()),
     bRelWidths(pLayoutInfo->HasPrcWidthOption()), bUseLayoutHeights(false),
-#if OSL_DEBUG_LEVEL > 1
-    bGetLineHeightCalled(false),
+#ifdef DBG_UTIL
+    m_bGetLineHeightCalled(false),
 #endif
     bColsOption(pLayoutInfo->HasColsOption()),
     bColTags(pLayoutInfo->HasColTags()), bLayoutExport(true),

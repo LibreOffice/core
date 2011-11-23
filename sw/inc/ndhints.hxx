@@ -115,7 +115,7 @@ public:
         { return m_HintStarts[nIdx]; }
     inline sal_uInt16 Count() const { return m_HintStarts.Count(); }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     bool Check() const;
 #endif
 };

@@ -533,8 +533,7 @@ void SwFtnFrm::InvalidateNxtFtnCnts( SwPageFrm *pPage )
     }
 }
 
-#if OSL_DEBUG_LEVEL > 1
-
+#ifdef DBG_UTIL
 SwTwips SwFtnFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
     static sal_uInt16 nNum = USHRT_MAX;
@@ -3125,7 +3124,7 @@ SwSaveFtnHeight::~SwSaveFtnHeight()
 }
 
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 //JP 15.10.2001: in a non pro version test if the attribute has the same
 //              meaning which his reference is
 

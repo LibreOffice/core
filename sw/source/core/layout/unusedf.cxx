@@ -62,7 +62,7 @@ sal_Bool SwFrm::GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState*  ) const
     return sal_False;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 
 void SwRootFrm::Cut()
 {

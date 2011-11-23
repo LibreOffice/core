@@ -84,7 +84,7 @@
 #include <algorithm>
 #include <map>
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 #define CHECK    Check();
 #else
 #define CHECK

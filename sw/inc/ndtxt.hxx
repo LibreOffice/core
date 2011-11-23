@@ -801,7 +801,7 @@ public:
 
     bool IsCollapse() const;
 
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
     virtual void dumpAsXml( xmlTextWriterPtr writer = NULL );
 #endif
 

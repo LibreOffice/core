@@ -347,7 +347,7 @@ xub_StrLen SwAttrIter::GetNextAttr( ) const
     return nNext;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 /*************************************************************************
  *                      SwAttrIter::Dump()
  *************************************************************************/

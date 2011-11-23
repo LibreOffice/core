@@ -306,7 +306,7 @@ namespace sw { namespace mark
     MarkManager::MarkManager(SwDoc& rDoc)
         : m_pDoc(&rDoc)
     { }
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     void MarkManager::dumpFieldmarks( ) const
     {
         const_iterator_t pIt = m_vFieldmarks.begin();

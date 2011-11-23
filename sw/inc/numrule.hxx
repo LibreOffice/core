@@ -115,9 +115,9 @@ public:
 private:
     friend void _FinitCore();
 
-#if OSL_DEBUG_LEVEL > 1
-    long int nSerial;
-    static long int nInstances;
+#if DBG_UTIL
+    long int m_nSerial;
+    static long int s_nInstances;
 #endif
 
     static SwNumFmt* aBaseFmts [ RULE_END ][ MAXLEVEL ];

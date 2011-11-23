@@ -845,7 +845,7 @@ public:
  *                      class SvStatistics
  *************************************************************************/
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 
 class SvStatistics
 {
@@ -874,9 +874,9 @@ public:
 };
 
 // globale Variable, implementiert in swfont.cxx
-extern SvStatistics aSvStat;
+extern SvStatistics g_SvStat;
 
-#define SV_STAT(nWhich) ++(aSvStat.nWhich);
+#define SV_STAT(nWhich) ++(g_SvStat.nWhich);
 
 inline void SvStatistics::PrintOn( SvStream &rOS ) const //$ ostream
 {
@@ -893,7 +893,7 @@ inline void SvStatistics::PrintOn( SvStream &rOS ) const //$ ostream
         rOS << "\tnGetFontMetric: " << nGetFontMetric   << '\n';        rOS << "}"  << '\n';    }
 #else
 #define SV_STAT(nWhich)
-#endif  /*  DEBUG   */
+#endif  /* DBG_UTIL */
 
 #endif
 

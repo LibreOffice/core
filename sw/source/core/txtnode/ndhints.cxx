@@ -33,7 +33,7 @@
 #include "ndhints.hxx"
 #include <txtatr.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 #include <pam.hxx>
 #endif
 
@@ -234,7 +234,7 @@ void SwpHintsArray::DeleteAtPos( const sal_uInt16 nPos )
     m_HintEnds.Remove( nEndPos );
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 
 /*************************************************************************
  *                      SwpHintsArray::Check()
@@ -375,7 +375,7 @@ bool SwpHintsArray::Check() const
     return true;
 }
 
-#endif      /* PRODUCT */
+#endif      /* DBG_UTIL */
 
 /*************************************************************************
  *                          SwpHintsArray::Resort()

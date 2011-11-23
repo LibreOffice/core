@@ -36,8 +36,8 @@
 using std::vector;
 using std::find;
 
-#if OSL_DEBUG_LEVEL > 1
-unsigned long SwNumberTreeNode::nInstances = 0;
+#ifdef DBG_UTIL
+unsigned long SwNumberTreeNode::s_nInstances = 0;
 #endif
 
 SwNumberTreeNode::SwNumberTreeNode()
@@ -50,9 +50,9 @@ SwNumberTreeNode::SwNumberTreeNode()
 {
     mItLastValid = mChildren.end();
 
-#if OSL_DEBUG_LEVEL > 1
-    mnSerial = nInstances;
-    nInstances++;
+#ifdef DBG_UTIL
+    m_nSerial = s_nInstances;
+    s_nInstances++;
 #endif
 }
 
@@ -75,8 +75,8 @@ SwNumberTreeNode::~SwNumberTreeNode()
 
     OSL_ENSURE( IsPhantom() || mpParent == NULL, ": I'm not supposed to have a parent.");
 
-#if OSL_DEBUG_LEVEL > 1
-    nInstances--;
+#ifdef DBG_UTIL
+    s_nInstances--;
 #endif
 
     mpParent = (SwNumberTreeNode *) 0xdeadbeef;
@@ -997,15 +997,15 @@ SwNumberTreeNode::GetIterator(const SwNumberTreeNode * pChild) const
     return aItResult;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 unsigned long SwNumberTreeNode::GetInstances()
 {
-    return nInstances;
+    return s_nInstances;
 }
 
 unsigned long SwNumberTreeNode::GetSerial()
 {
-    return mnSerial;
+    return m_nSerial;
 }
 #endif
 

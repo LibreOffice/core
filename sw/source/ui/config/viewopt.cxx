@@ -52,8 +52,8 @@
 
 #include <editeng/acorrcfg.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
-sal_Bool   SwViewOption::bTest9 = sal_False;        //DrawingLayerNotLoading
+#ifdef DBG_UTIL
+bool SwViewOption::s_bTest9 = false;        //DrawingLayerNotLoading
 #endif
 Color SwViewOption::aDocBoundColor(COL_LIGHTGRAY);
 Color SwViewOption::aObjectBoundColor(COL_LIGHTGRAY);
@@ -105,17 +105,17 @@ sal_Bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
             && mbViewLayoutBookMode == rOpt.mbViewLayoutBookMode
             && bShowPlaceHolderFields == rOpt.bShowPlaceHolderFields
             && bIdle == rOpt.bIdle
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
             // correspond to the statements in ui/config/cfgvw.src
-            && bTest1 == rOpt.IsTest1()
-            && bTest2 == rOpt.IsTest2()
-            && bTest3 == rOpt.IsTest3()
-            && bTest4 == rOpt.IsTest4()
-            && bTest5 == rOpt.IsTest5()
-            && bTest6 == rOpt.IsTest6()
-            && bTest7 == rOpt.IsTest7()
-            && bTest8 == rOpt.IsTest8()
-            && bTest10 == rOpt.IsTest10()
+            && m_bTest1 == rOpt.IsTest1()
+            && m_bTest2 == rOpt.IsTest2()
+            && m_bTest3 == rOpt.IsTest3()
+            && m_bTest4 == rOpt.IsTest4()
+            && m_bTest5 == rOpt.IsTest5()
+            && m_bTest6 == rOpt.IsTest6()
+            && m_bTest7 == rOpt.IsTest7()
+            && m_bTest8 == rOpt.IsTest8()
+            && m_bTest10 == rOpt.IsTest10()
 #endif
             ;
 }
@@ -212,10 +212,10 @@ SwViewOption::SwViewOption() :
 
     bIdle = true;
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     // correspond to the statements in ui/config/cfgvw.src
-    bTest1 = bTest2 = bTest3 = bTest4 =
-             bTest5 = bTest6 = bTest7 = bTest8 = bTest10 = sal_False;
+    m_bTest1 = m_bTest2 = m_bTest3 = m_bTest4 =
+             m_bTest5 = m_bTest6 = m_bTest7 = m_bTest8 = m_bTest10 = false;
 #endif
 }
 
@@ -248,16 +248,16 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
     bIdle           = rVOpt.bIdle;
 
-#if OSL_DEBUG_LEVEL > 1
-    bTest1          = rVOpt.bTest1      ;
-    bTest2          = rVOpt.bTest2      ;
-    bTest3          = rVOpt.bTest3      ;
-    bTest4          = rVOpt.bTest4      ;
-    bTest5          = rVOpt.bTest5      ;
-    bTest6          = rVOpt.bTest6      ;
-    bTest7          = rVOpt.bTest7      ;
-    bTest8          = rVOpt.bTest8      ;
-    bTest10         = rVOpt.bTest10     ;
+#ifdef DBG_UTIL
+    m_bTest1  = rVOpt.m_bTest1;
+    m_bTest2  = rVOpt.m_bTest2;
+    m_bTest3  = rVOpt.m_bTest3;
+    m_bTest4  = rVOpt.m_bTest4;
+    m_bTest5  = rVOpt.m_bTest5;
+    m_bTest6  = rVOpt.m_bTest6;
+    m_bTest7  = rVOpt.m_bTest7;
+    m_bTest8  = rVOpt.m_bTest8;
+    m_bTest10 = rVOpt.m_bTest10;
 #endif
 }
 
@@ -289,16 +289,16 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
     bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
     bIdle           = rVOpt.bIdle;
 
-#if OSL_DEBUG_LEVEL > 1
-    bTest1          = rVOpt.bTest1      ;
-    bTest2          = rVOpt.bTest2      ;
-    bTest3          = rVOpt.bTest3      ;
-    bTest4          = rVOpt.bTest4      ;
-    bTest5          = rVOpt.bTest5      ;
-    bTest6          = rVOpt.bTest6      ;
-    bTest7          = rVOpt.bTest7      ;
-    bTest8          = rVOpt.bTest8      ;
-    bTest10         = rVOpt.bTest10     ;
+#ifdef DBG_UTIL
+    m_bTest1  = rVOpt.m_bTest1;
+    m_bTest2  = rVOpt.m_bTest2;
+    m_bTest3  = rVOpt.m_bTest3;
+    m_bTest4  = rVOpt.m_bTest4;
+    m_bTest5  = rVOpt.m_bTest5;
+    m_bTest6  = rVOpt.m_bTest6;
+    m_bTest7  = rVOpt.m_bTest7;
+    m_bTest8  = rVOpt.m_bTest8;
+    m_bTest10 = rVOpt.m_bTest10;
 #endif
     return *this;
 }

@@ -347,7 +347,7 @@ public:
     */
     const SwNumberTreeNode* GetPrecedingNodeOf( const SwNumberTreeNode& rNode ) const;
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     static unsigned long GetInstances();
     unsigned long GetSerial();
 #endif
@@ -450,16 +450,16 @@ protected:
      */
     mutable tSwNumberTreeChildren::const_iterator mItLastValid;
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     /**
        Counter for the number of created instances.
      */
-    static unsigned long nInstances;
+    static unsigned long s_nInstances;
 
     /**
        Serial number.
     */
-    unsigned long mnSerial;
+    unsigned long m_nSerial;
 #endif
 
     SwNumberTreeNode(const SwNumberTreeNode& );

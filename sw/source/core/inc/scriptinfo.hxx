@@ -146,7 +146,7 @@ public:
                            const sal_uInt8* pLevel = 0 ) const;
     sal_uInt8 DirType( const xub_StrLen nPos ) const;
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     sal_uInt8 CompType( const xub_StrLen nPos ) const;
 #endif
 

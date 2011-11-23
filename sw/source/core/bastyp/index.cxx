@@ -35,8 +35,8 @@
 
 #include "index.hxx"
 
-#if OSL_DEBUG_LEVEL > 1
-int SwIndex::nSerial = 0;
+#ifdef DBG_UTIL
+int SwIndex::s_nSerial = 0;
 #endif
 
 
@@ -59,8 +59,8 @@ SwIndex::SwIndex(SwIndexReg *const pArr, xub_StrLen const nIdx)
     else
         ChgValue( *pArray->pFirst, nIdx );
 
-#if OSL_DEBUG_LEVEL > 1
-    MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
+#ifdef DBG_UTIL
+    m_nSerial = ++s_nSerial;
 #endif
 }
 
@@ -70,8 +70,8 @@ SwIndex::SwIndex( const SwIndex& rIdx, short nIdx )
 {
     ChgValue( rIdx, rIdx.nIndex + nIdx );
 
-#if OSL_DEBUG_LEVEL > 1
-    MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
+#ifdef DBG_UTIL
+    m_nSerial = ++s_nSerial;
 #endif
 }
 
@@ -80,8 +80,8 @@ SwIndex::SwIndex( const SwIndex& rIdx )
     : nIndex( rIdx.nIndex ), pArray( rIdx.pArray ), pNext( 0 ), pPrev( 0 )
 {
     ChgValue( rIdx, rIdx.nIndex );
-#if OSL_DEBUG_LEVEL > 1
-    MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
+#ifdef DBG_UTIL
+    m_nSerial = ++s_nSerial;
 #endif
 }
 
@@ -306,7 +306,7 @@ void SwIndexReg::Update( SwIndex const & rIdx, const xub_StrLen nDiff,
     }
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 
 /*************************************************************************
 |*    SwIndex::operator++()

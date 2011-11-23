@@ -98,7 +98,7 @@ namespace ww8
 #endif
         }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         char sBuffer[256];
         snprintf(sBuffer, sizeof(sBuffer), "offset=\"%" SAL_PRIuUINT32 "\" count=\"%" SAL_PRIuUINT32 "\"",
                  nOffset, nCount);

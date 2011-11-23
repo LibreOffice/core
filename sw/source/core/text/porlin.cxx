@@ -297,12 +297,11 @@ SwPosSize SwLinePortion::GetTxtSize( const SwTxtSizeInfo & ) const
     return SwPosSize();
 }
 
-#if OSL_DEBUG_LEVEL > 1
-
 /*************************************************************************
  *                virtual SwLinePortion::Check()
  *************************************************************************/
 
+#ifdef DBG_UTIL
 sal_Bool SwLinePortion::Check( SvStream &, SwTxtSizeInfo & ) //$ ostream
 {
     return sal_True;

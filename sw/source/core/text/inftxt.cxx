@@ -108,15 +108,15 @@ namespace numfunc
     extern bool IsDefBulletFontUserDefined();
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 // Test2: WYSIWYG++
 // Test4: WYSIWYG debug
-static sal_Bool bDbgLow = sal_False;
+static bool g_bDbgLow = false;
 #endif
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 sal_Bool SwTxtSizeInfo::IsOptCalm() const { return !GetOpt().IsTest3(); }
-sal_Bool SwTxtSizeInfo::IsOptLow() const { return bDbgLow; }
+sal_Bool SwTxtSizeInfo::IsOptLow() const { return g_bDbgLow; }
 sal_Bool SwTxtSizeInfo::IsOptDbg() const { return GetOpt().IsTest4(); }
 sal_Bool SwTxtSizeInfo::IsOptTest1() const { return GetOpt().IsTest1(); }
 sal_Bool SwTxtSizeInfo::IsOptTest2() const { return GetOpt().IsTest2(); }

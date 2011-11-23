@@ -30,7 +30,7 @@
 
 #include "possiz.hxx"       // SwPosSize
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 #include <libxml/xmlwriter.h>
 #endif
 
@@ -44,7 +44,7 @@ class SwPortionHandler;
 // Das CLASSIO-Makro implementiert die 'freischwebende' Funktion.
 // Auf diese Weise erhaelt man beide Vorteile: virtuelle Ausgabeoperatoren
 // und allgemeine Verwendbarkeit.
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 #define OUTPUT_OPERATOR  virtual SvStream &operator<<( SvStream & aOs ) const;
 #else
 #define OUTPUT_OPERATOR
@@ -179,7 +179,7 @@ public:
     virtual void Paint( const SwTxtPaintInfo &rInf ) const = 0;
     void PrePaint( const SwTxtPaintInfo &rInf, const SwLinePortion *pLast ) const;
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     virtual sal_Bool Check( SvStream &rOs, SwTxtSizeInfo &rInfo ); //$ ostream
 #endif
 

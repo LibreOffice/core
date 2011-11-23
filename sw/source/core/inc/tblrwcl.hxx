@@ -65,7 +65,7 @@ sal_Bool lcl_BoxSetHeadCondColl( const SwTableBox*& rpBox, void* pPara );
 sal_Bool lcl_LineSetHeadCondColl( const SwTableLine*& rpLine, void* pPara );
 
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize );
 #endif
 

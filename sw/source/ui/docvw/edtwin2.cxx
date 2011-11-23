@@ -143,7 +143,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                     SwContentAtPos::SW_TOXMARK |
                                     SwContentAtPos::SW_REFMARK |
                                     SwContentAtPos::SW_SMARTTAG |
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
                                     SwContentAtPos::SW_TABLEBOXVALUE |
                         ( bBalloon ? SwContentAtPos::SW_CURR_ATTRS : 0) |
 #endif
@@ -158,7 +158,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 sTxt.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "= " ));
                 sTxt += ((SwTblBoxFormula*)aCntntAtPos.aFnd.pAttr)->GetFormula();
                 break;
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
             case SwContentAtPos::SW_TABLEBOXVALUE:
             {
                 sTxt = rtl::OStringToOUString(rtl::OString::valueOf(

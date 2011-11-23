@@ -3746,7 +3746,7 @@ void MSWordExportBase::OutputStartNode( const SwStartNode & rNode)
 
 void MSWordExportBase::OutputEndNode( const SwEndNode &rNode )
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 // whoever has need of the missing function should go and implement it!
 // This piece of code always breaks builds...
 //    ::std::clog << "<OutWW8_SwEndNode>" << dbg_out(&rNode) << ::std::endl;

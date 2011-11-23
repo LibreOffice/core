@@ -655,7 +655,7 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
         }
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     else if ( pFoll->GetValidPrtAreaFlag() ||
               pFoll->GetValidSizeFlag() )
     {
@@ -753,7 +753,7 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
         }
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     else
     {
         CalcFtnFlag( nTxtPos-1 );

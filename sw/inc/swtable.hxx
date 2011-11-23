@@ -36,14 +36,10 @@
 #include <swrect.hxx>
 #include <frmfmt.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
-class SwStartNode;
 #include <memory>
 #include <boost/noncopyable.hpp>
-#else
-#include <node.hxx>         // For StartNode->GetMyIndex.
-#endif
 
+class SwStartNode;
 class SwFmt;
 class Color;
 class SwTableFmt;
@@ -111,8 +107,9 @@ protected:
 
     sal_Bool        bModifyLocked   :1;
     sal_Bool        bNewModel       :1; // sal_False: old SubTableModel; sal_True: new RowSpanModel
-#if OSL_DEBUG_LEVEL > 1
-    bool bDontChangeModel;  // This is set by functions (like Merge()) to forbid a laet model change.
+#ifdef DBG_UTIL
+    /// This is set by functions (like Merge()) to forbid a late model change.
+    bool m_bDontChangeModel;
 #endif
 
     sal_Bool IsModifyLocked(){ return bModifyLocked;}
@@ -211,8 +208,8 @@ public:
     sal_Bool Merge( SwDoc* pDoc, const SwSelBoxes& rBoxes, const SwSelBoxes& rMerged,
                 SwTableBox* pMergeBox, SwUndoTblMerge* pUndo = 0 )
     {
-#if OSL_DEBUG_LEVEL > 1
-        bDontChangeModel = true;
+#ifdef DBG_UTIL
+        m_bDontChangeModel = true;
 #endif
         return bNewModel ? NewMerge( pDoc, rBoxes, rMerged, pMergeBox, pUndo ) :
                            OldMerge( pDoc, rBoxes, pMergeBox, pUndo );
@@ -220,8 +217,8 @@ public:
     sal_Bool SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt=1,
                    sal_Bool bSameHeight = sal_False )
     {
-#if OSL_DEBUG_LEVEL > 1
-        bDontChangeModel = true;
+#ifdef DBG_UTIL
+        m_bDontChangeModel = true;
 #endif
         return bNewModel ? NewSplitRow( pDoc, rBoxes, nCnt, bSameHeight ) :
                            OldSplitRow( pDoc, rBoxes, nCnt, bSameHeight );
@@ -326,7 +323,7 @@ public:
     sal_Bool SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo );
     void RegisterToFormat( SwFmt& rFmt );
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     void CheckConsistency() const;
 #endif
 };
@@ -415,7 +412,7 @@ public:
 
     const SwStartNode *GetSttNd() const { return pSttNd; }
     sal_uLong GetSttIdx() const
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         ;
 #else
         { return pSttNd ? pSttNd->GetIndex() : 0; }

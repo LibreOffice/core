@@ -366,7 +366,7 @@ void _FrmInit()
 {
     SwRootFrm::pVout = new SwLayVout();
     SwCache *pNew = new SwCache( 100, 100
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     , "static SwBorderAttrs::pCache"
 #endif
     );

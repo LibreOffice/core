@@ -58,7 +58,7 @@ using namespace com::sun::star;
 
 TYPEINIT1(SwRedlineHint, SfxHint);
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 
     #define _ERROR_PREFIX "redline table corrupted: "
 
