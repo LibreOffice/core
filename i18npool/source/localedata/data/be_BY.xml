@@ -285,6 +285,68 @@
           <DefaultFullName>Снежань</DefaultFullName>
         </Month>
       </MonthsOfYear>
+      <GenitiveMonths>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>сту</DefaultAbbrvName>
+          <DefaultFullName>студзеня</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>лют</DefaultAbbrvName>
+          <DefaultFullName>лютага</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>сак</DefaultAbbrvName>
+          <DefaultFullName>сакавіка</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>кра</DefaultAbbrvName>
+          <DefaultFullName>красавіка</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>тра</DefaultAbbrvName>
+          <DefaultFullName>траўня</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>чэр</DefaultAbbrvName>
+          <DefaultFullName>чэрвеня</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>ліп</DefaultAbbrvName>
+          <DefaultFullName>ліпеня</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>жні</DefaultAbbrvName>
+          <DefaultFullName>жніўня</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>вер</DefaultAbbrvName>
+          <DefaultFullName>верасня</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>кас</DefaultAbbrvName>
+          <DefaultFullName>кастрычніка</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>ліс</DefaultAbbrvName>
+          <DefaultFullName>лістапада</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>сне</DefaultAbbrvName>
+          <DefaultFullName>снежня</DefaultFullName>
+        </Month>
+      </GenitiveMonths>
       <Eras>
         <Era>
           <EraID>bc</EraID>
