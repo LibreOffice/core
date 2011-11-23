@@ -176,7 +176,7 @@ PPTWriterBase::~PPTWriterBase()
 
 // ---------------------------------------------------------------------------------------------
 
-void PPTWriterBase::exportPPT()
+void PPTWriterBase::exportPPT( const std::vector< com::sun::star::beans::PropertyValue >& rMediaData )
 {
     if ( !InitSOIface() )
         return;
@@ -211,7 +211,7 @@ void PPTWriterBase::exportPPT()
     maDestPageSize = MapSize( awt::Size( nWidth, nHeight ) );
 
     DBG(printf( "call exportDocumentPre()\n"));
-    exportPPTPre();
+    exportPPTPre(rMediaData);
 
     if ( !GetStyleSheets() )
         return;

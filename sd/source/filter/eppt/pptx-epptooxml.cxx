@@ -357,7 +357,14 @@ bool PowerPointExport::exportDocument() throw()
     mXModel.set( getModel(), UNO_QUERY );
     mXStatusIndicator.set( getStatusIndicator(), UNO_QUERY );
 
-    exportPPT();
+    rtl::OUString sBaseURI( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+    std::vector< PropertyValue > aProperties;
+    PropertyValue aProperty;
+    aProperty.Name = sBaseURI;
+    aProperty.Value = makeAny( getFileUrl() );
+    aProperties.push_back( aProperty );
+
+    exportPPT(aProperties);
 
     mPresentationFS->singleElementNS( XML_p, XML_sldSz,
                                       XML_cx, IS( PPTtoEMU( maDestPageSize.Width ) ),

@@ -378,7 +378,7 @@ protected:
     virtual void ImplWriteSlideMaster( sal_uInt32 /* nPageNum */, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > /* aXBackgroundPropSet */ ) {}
     virtual void ImplWriteLayout( sal_Int32 /* nOffset */, sal_uInt32 /* nMasterNum */ ) {}
 
-    virtual void exportPPTPre() {}
+    virtual void exportPPTPre( const std::vector< com::sun::star::beans::PropertyValue >& ) {}
     virtual void exportPPTPost() {}
 
     virtual sal_Bool ImplCreateDocument()=0;
@@ -402,7 +402,7 @@ public:
 
     virtual ~PPTWriterBase();
 
-    void exportPPT();
+    void exportPPT(const std::vector< com::sun::star::beans::PropertyValue >&);
 
     sal_Bool InitSOIface();
     sal_Bool GetPageByIndex( sal_uInt32 nIndex, PageType );

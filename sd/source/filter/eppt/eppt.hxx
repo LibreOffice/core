@@ -296,7 +296,7 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
 
         sal_Bool                IsValid() const { return mbStatus; };
 
-        virtual void        exportPPTPre();
+        virtual void        exportPPTPre( const std::vector< com::sun::star::beans::PropertyValue >& );
         virtual void        exportPPTPost( );
 };
 

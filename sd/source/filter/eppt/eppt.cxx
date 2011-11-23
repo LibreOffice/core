@@ -74,7 +74,7 @@ using ::com::sun::star::beans::XPropertySet;
 
 //============================ PPTWriter ==================================
 
-PPTWriter::PPTWriter( const std::vector< com::sun::star::beans::PropertyValue >& rMediaData, SvStorageRef& rSvStorage,
+PPTWriter::PPTWriter( SvStorageRef& rSvStorage,
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rXModel,
             ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rXStatInd,
             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags ) :
@@ -97,7 +97,7 @@ PPTWriter::PPTWriter( const std::vector< com::sun::star::beans::PropertyValue >&
 {
 }
 
-void PPTWriter::exportPPTPre()
+void PPTWriter::exportPPTPre( const std::vector< com::sun::star::beans::PropertyValue >& rMediaData )
 {
     if ( !mrStg.Is() )
         return;
@@ -132,7 +132,6 @@ void PPTWriter::exportPPTPre()
     {
         if ( (*aIter).Name.equals( sBaseURI ) )
         {
-            rtl::OUString sBaseURI;
             (*aIter).Value >>= maBaseURI;
             break;
         }
@@ -1498,10 +1497,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI ExportPPT( const std::v
     PPTWriter*  pPPTWriter;
     sal_Bool bStatus = sal_False;
 
-    pPPTWriter = new PPTWriter( rMediaData, rSvStorage, rXModel, rXStatInd, pVBA, nCnvrtFlags );
+    pPPTWriter = new PPTWriter( rSvStorage, rXModel, rXStatInd, pVBA, nCnvrtFlags );
     if ( pPPTWriter )
     {
-        pPPTWriter->exportPPT();
+        pPPTWriter->exportPPT(rMediaData);
         bStatus = ( pPPTWriter->IsValid() == sal_True );
         delete pPPTWriter;
     }

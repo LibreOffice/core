@@ -1411,7 +1411,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                         delete pIn;
                     }
                 }
-                if ( !aUniqueId.Len() )
+                if ( !aUniqueId.getLength() )
                 {
                     if ( pGraphicProvider )
                     {
