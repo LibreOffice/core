@@ -228,7 +228,7 @@ sal_Int32 ReadThroughComponent(
         if( bEncrypted )
             return ERRCODE_SFX_WRONGPASSWORD;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
             "SAX parse exception caught while importing:\n"));
         aError.append(rtl::OUStringToOString(r.Message,
@@ -264,7 +264,7 @@ sal_Int32 ReadThroughComponent(
         if( bEncrypted )
             return ERRCODE_SFX_WRONGPASSWORD;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
             "SAX exception caught while importing:\n"));
         aError.append(rtl::OUStringToOString(r.Message,
@@ -277,7 +277,7 @@ sal_Int32 ReadThroughComponent(
     catch( packages::zip::ZipIOException& r)
     {
         (void)r;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
             "Zip exception caught while importing:\n"));
         aError.append(rtl::OUStringToOString(r.Message,
@@ -289,7 +289,7 @@ sal_Int32 ReadThroughComponent(
     catch( io::IOException& r)
     {
         (void)r;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
             "IO exception caught while importing:\n"));
         aError.append(rtl::OUStringToOString(r.Message,
@@ -301,7 +301,7 @@ sal_Int32 ReadThroughComponent(
     catch( uno::Exception& r)
     {
         (void)r;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
             "uno exception caught while importing:\n"));
         aError.append(rtl::OUStringToOString(r.Message,

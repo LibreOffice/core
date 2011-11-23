@@ -64,7 +64,7 @@ sal_uInt16 SwFEShell::GetPageDescCnt() const
 
 void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     //Die SS veraendert keinen PageDesc, sondern setzt nur das Attribut.
     //Der Pagedesc muss im Dokument vorhanden sein!
     sal_Bool bFound = sal_False;

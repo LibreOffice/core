@@ -69,7 +69,7 @@
 #include <swerror.h>
 #include <mdiexp.hxx>
 #include <statstr.hrc>
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 #include <stdio.h>
 #endif
 
@@ -1771,28 +1771,28 @@ void Ww1Picture::WriteBmp(SvStream& rOut)
 
      p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
      p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     sal_uInt16 x = SVBT16ToShort(p);
     (void) x;
 #endif
     p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     sal_uInt16 y = SVBT16ToShort(p);
     (void) y;
 #endif
     p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     sal_uInt16 planes = SVBT16ToShort(p);
     (void) planes;
 #endif
     p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     sal_uInt16 bitcount = SVBT16ToShort(p);
     (void) bitcount;
 #endif
     p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE(x==maxx, "Ww1Picture");
     OSL_ENSURE(y==maxy, "Ww1Picture");
     OSL_ENSURE(planes==1, "Ww1Picture");

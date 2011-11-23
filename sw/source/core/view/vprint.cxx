@@ -463,9 +463,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
 {
 
     const sal_Int32 nMaxRenderer = rPrintData.GetRenderData().GetPagesToPrint().size() - 1;
-#if OSL_DEBUG_LEVEL > 1
     OSL_ENSURE( 0 <= nRenderer && nRenderer <= nMaxRenderer, "nRenderer out of bounds");
-#endif
     if (!pOutDev || nMaxRenderer < 0 || nRenderer < 0 || nRenderer > nMaxRenderer)
         return sal_False;
 

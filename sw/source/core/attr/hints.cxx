@@ -172,7 +172,7 @@ SfxPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const
  * Ist keines vorhanden, returnt ein 0-Pointer !!!
  * Used to be inlined (hintids.hxx) in PRODUCT.
  ******************************************************************************/
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich )
 {
     OSL_ASSERT( nWhich < POOLATTR_END && nWhich >= POOLATTR_BEGIN );

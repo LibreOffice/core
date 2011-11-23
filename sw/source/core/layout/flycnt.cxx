@@ -497,9 +497,7 @@ void SwFlyAtCntFrm::MakeAll()
                                 pFmt->SetFmtAttr( aSurround );
                                 pFmt->UnlockModify();
                                 bOsz = false;
-#if OSL_DEBUG_LEVEL > 1
                                 OSL_FAIL( "<SwFlyAtCntFrm::MakeAll()> - special loop prevention for dedicated document of b6403541 applied" );
-#endif
                             }
                         }
                     }

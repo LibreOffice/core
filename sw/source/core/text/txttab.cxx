@@ -339,12 +339,7 @@ SwTabPortion::SwTabPortion( const KSHORT nTabPosition, const xub_Unicode cFillCh
     : SwFixPortion( 0, 0 ), nTabPos(nTabPosition), cFill(cFillChar), bAutoTabStop( bAutoTab )
 {
     nLineLength = 1;
-#if OSL_DEBUG_LEVEL > 1
-    if( IsFilled() )
-    {
-        OSL_ENSURE( ' ' != cFill, "SwTabPortion::CTOR: blanks ?!" );
-    }
-#endif
+    OSL_ENSURE(!IsFilled() || ' ' != cFill, "SwTabPortion::CTOR: blanks ?!");
     SetWhichPor( POR_TAB );
 }
 
@@ -647,9 +642,7 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
         // Tabs mit Fuellung
         XubString aTxt( cFill );
         const KSHORT nCharWidth = rInf.GetTxtSize( aTxt ).Width();
-#if OSL_DEBUG_LEVEL > 1
         OSL_ENSURE( nCharWidth, "!SwTabPortion::Paint: sophisticated tabchar" );
-#endif
         // robust:
         if( nCharWidth )
         {

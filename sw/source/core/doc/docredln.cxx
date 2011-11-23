@@ -254,7 +254,7 @@ inline bool IsPrevPos( const SwPosition rPos1, const SwPosition rPos2 )
                 : false;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 bool CheckPosition( const SwPosition* pStt, const SwPosition* pEnd )
 {
     int nError = 0;
@@ -2716,7 +2716,7 @@ sal_Bool SwRedlineTbl::InsertWithValidRanges( SwRedlinePtr& p, sal_uInt16* pInsP
             }
             else
                 aNewStt = *pNew->GetPoint();
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             CheckPosition( pNew->GetPoint(), pNew->GetMark() );
 #endif
             if( *pNew->GetPoint() != *pNew->GetMark() &&
@@ -3674,10 +3674,10 @@ void SwRedline::SetContentIdx( const SwNodeIndex* pIdx )
         delete pCntntSect, pCntntSect = 0;
         bIsVisible = sal_False;
     }
-#if OSL_DEBUG_LEVEL > 1
     else
-        OSL_ENSURE( !this, "das ist keine gueltige Operation" );
-#endif
+    {
+        OSL_FAIL("SwRedline::SetContentIdx: invalid state");
+    }
 }
 
 sal_Bool SwRedline::CanCombine( const SwRedline& rRedl ) const

@@ -536,7 +536,7 @@ void ViewShell::MakeVisible( const SwRect &rRect )
                     EndAction();
                 } while( nOldH != pRoot->Frm().Height() && nLoopCnt-- );    //swmod 071108//swmod 071225
             }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             else
             {
                 OSL_ENSURE( !this, "MakeVisible fuer Drucker wird doch gebraucht?" );

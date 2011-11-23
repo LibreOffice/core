@@ -690,10 +690,7 @@ void SwLayAction::InternalAction()
 
                             if ( ++nLoopControlRuns_1 > nLoopControlMax )
                             {
-#if OSL_DEBUG_LEVEL > 1
                                 OSL_FAIL( "LoopControl_1 in SwLayAction::InternalAction" );
-
-#endif
                                 break;
                             }
 
@@ -877,9 +874,7 @@ void SwLayAction::InternalAction()
 
                     if ( ++nLoopControlRuns_3 > nLoopControlMax )
                     {
-#if OSL_DEBUG_LEVEL > 1
                         OSL_FAIL( "LoopControl_3 in Interrupt formatting in SwLayAction::InternalAction" );
-#endif
                         break;
                     }
 
@@ -900,9 +895,7 @@ void SwLayAction::InternalAction()
 
                     if ( ++nLoopControlRuns_2 > nLoopControlMax )
                     {
-#if OSL_DEBUG_LEVEL > 1
                         OSL_FAIL( "LoopControl_2 in Interrupt formatting in SwLayAction::InternalAction" );
-#endif
                         break;
                     }
 

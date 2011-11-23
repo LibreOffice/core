@@ -3788,7 +3788,7 @@ void lcl_InvalidateCntnt( SwCntntFrm *pCnt, sal_uInt8 nInv )
                 if( pLastSctCnt == pCnt )
                     pLastSctCnt = NULL;
             }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             else
                 OSL_ENSURE( !pLastSctCnt, "Where's the last SctCntnt?" );
 #endif
@@ -3816,7 +3816,7 @@ void lcl_InvalidateCntnt( SwCntntFrm *pCnt, sal_uInt8 nInv )
                     pLastSctCnt = NULL;
                 }
             }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             else
                 OSL_ENSURE( !pLastTabCnt, "Where's the last TabCntnt?" );
 #endif

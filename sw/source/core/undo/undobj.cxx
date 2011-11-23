@@ -64,7 +64,7 @@ public:
     SwNodeIndex* GetMvSttIdx() const
         { return SwUndoSaveSection::GetMvSttIdx(); }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     sal_uInt16 nRedlineCount;
 #endif
 };
@@ -1019,7 +1019,7 @@ SwRedlineSaveData::SwRedlineSaveData( SwComparePosition eCmpPos,
         OSL_ENSURE( !this, "keine gueltigen Daten!" );
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     nRedlineCount = rSttPos.nNode.GetNode().GetDoc()->GetRedlineTbl().Count();
 #endif
 }
@@ -1053,12 +1053,10 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
     if (rDoc.GetDocShell() && (pRedl->GetComment() != String()) )
         rDoc.GetDocShell()->Broadcast(SwRedlineHint(pRedl,SWREDLINE_INSERTED));
     //
-#if OSL_DEBUG_LEVEL > 0
-    bool const bSuccess =
-#endif
-        rDoc.AppendRedline( pRedl, true );
+    bool const bSuccess = rDoc.AppendRedline( pRedl, true );
     OSL_ENSURE(bSuccess,
         "SwRedlineSaveData::RedlineToDoc: insert redline failed");
+    (void) bSuccess; // unused in non-debug
     rDoc.SetRedlineMode_intern( eOld );
 }
 
@@ -1133,7 +1131,7 @@ void SwUndo::SetSaveData( SwDoc& rDoc, const SwRedlineSaveDatas& rSData )
     for( sal_uInt16 n = rSData.Count(); n; )
         rSData[ --n ]->RedlineToDoc( aPam );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     // check redline count against count saved in RedlineSaveData object
     OSL_ENSURE( (rSData.Count() == 0) ||
                 (rSData[0]->nRedlineCount == rDoc.GetRedlineTbl().Count()),

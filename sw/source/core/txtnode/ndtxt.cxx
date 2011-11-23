@@ -338,7 +338,7 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
                             ((SwTxtFrm*)pFrm)->SetFtn( sal_True );
                         }
                     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                     while( 0 != (pCntnt = aIter.Next()) )
                     {
                         SwFtnFrm *pDbgFtn = pCntnt->FindFtnFrm();
@@ -3500,10 +3500,8 @@ SwFmtColl* SwTxtNode::ChgFmtColl( SwFmtColl *pNewColl )
     {
         SetCalcHiddenCharFlags();
         SwCntntNode::ChgFmtColl( pNewColl );
-#if OSL_DEBUG_LEVEL > 1
         OSL_ENSURE( !mbInSetOrResetAttr,
                 "DEBUG OSL_ENSURE(ON - <SwTxtNode::ChgFmtColl(..)> called during <Set/ResetAttr(..)>" );
-#endif
         if ( !mbInSetOrResetAttr )
         {
             SwFmtChg aTmp1( pOldColl );

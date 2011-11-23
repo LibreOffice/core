@@ -2611,7 +2611,7 @@ void SwTabFrm::MakeAll()
                 bLowersFormatted = sal_True;
                 bCalcLowers = sal_False;
             }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             else
             {
                 OSL_FAIL( "debug assertion: <SwTabFrm::MakeAll()> - format of table lowers suppressed by fix i44910" );
@@ -3345,7 +3345,7 @@ SwCntntFrm *SwTabFrm::FindLastCntnt()
             // Spalten abklappern, dies erledigt SwSectionFrm::FindLastCntnt
             if( pRet->IsColBodyFrm() )
             {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                 SwSectionFrm* pSect = pRet->FindSctFrm();
                 OSL_ENSURE( pSect, "Wo kommt denn die Spalte her?");
                 OSL_ENSURE( IsAnLower( pSect ), "Gespaltene Zelle?" );
@@ -4267,7 +4267,7 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
     {
         bValidSize = sal_True;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         if ( HasFixSize() )
         {
             const SwFmtFrmSize &rFrmSize = GetFmt()->GetFrmSize();

@@ -278,22 +278,18 @@ const Graphic* SwEditShell::GetGraphic( sal_Bool bWait ) const
             if( pGrf->IsSwapOut() ||
                 ( pGrfNode->IsLinkedFile() && GRAPHIC_DEFAULT == pGrf->GetType() ) )
             {
-#if OSL_DEBUG_LEVEL > 1
-                OSL_ENSURE( pGrfNode->SwapIn( bWait ) || !bWait, "Grafik konnte nicht geladen werden" );
-#else
-                pGrfNode->SwapIn( bWait );
-#endif
+                bool const bResult = pGrfNode->SwapIn(bWait);
+                OSL_ENSURE(bResult || !bWait, "Graphic could not be loaded" );
+                (void) bResult; // unused in non-debug
             }
         }
         else
         {
             if ( pGrf->IsSwapOut() && !pGrfNode->IsLinkedFile() )
             {
-#if OSL_DEBUG_LEVEL > 1
-                OSL_ENSURE( pGrfNode->SwapIn( bWait ) || !bWait, "Grafik konnte nicht geladen werden" );
-#else
-                pGrfNode->SwapIn( bWait );
-#endif
+                bool const bResult = pGrfNode->SwapIn(bWait);
+                OSL_ENSURE(bResult || !bWait, "Graphic could not be loaded" );
+                (void) bResult; // unused in non-debug
             }
         }
     }
@@ -688,15 +684,14 @@ Graphic SwEditShell::GetIMapGraphic() const
         SwNode *pNd =pCrsr->GetNode();
         if( pNd->IsGrfNode() )
         {
-            const Graphic& rGrf = ((SwGrfNode*)pNd)->GetGrf();
-            if( rGrf.IsSwapOut() || ( ((SwGrfNode*)pNd)->IsLinkedFile() &&
+            SwGrfNode & rGrfNode(*static_cast<SwGrfNode*>(pNd));
+            const Graphic& rGrf = rGrfNode.GetGrf();
+            if( rGrf.IsSwapOut() || ( rGrfNode.IsLinkedFile() &&
                                     GRAPHIC_DEFAULT == rGrf.GetType() ) )
             {
-#if OSL_DEBUG_LEVEL > 1
-                OSL_ENSURE( ((SwGrfNode*)pNd)->SwapIn( sal_True ), "Grafik konnte nicht geladen werden" );
-#else
-                ((SwGrfNode*)pNd)->SwapIn( sal_True );
-#endif
+                bool const bResult = rGrfNode.SwapIn(true);
+                OSL_ENSURE(bResult, "Graphic could not be loaded" );
+                (void) bResult; // unused in non-debug
             }
             aRet = rGrf;
         }

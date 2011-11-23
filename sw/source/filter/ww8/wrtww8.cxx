@@ -766,7 +766,7 @@ sal_uLong SwWW8Writer::FillUntil( SvStream& rStrm, sal_uLong nEndPos )
 
     if( nEndPos > nCurPos )
         SwWW8Writer::FillCount( rStrm, nEndPos - nCurPos );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     else
         OSL_ENSURE( nEndPos == nCurPos, "Falsches FillUntil()" );
 #endif

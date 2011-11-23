@@ -48,7 +48,7 @@ sal_Bool SwOutlineNodes::Seek_Entry( const SwNodePtr rSrch, sal_uInt16* pFndPos 
 //JP 17.03.98: aufgrund des Bug 48592 - wo unter anderem nach Undo/Redo
 //              Nodes aus dem falschen NodesArray im OutlineArray standen,
 //              jetzt mal einen Check eingebaut.
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         {
             for( sal_uInt16 n = 1; n < nO; ++n )
                 if( &(*this)[ n-1 ]->GetNodes() !=

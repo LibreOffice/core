@@ -198,7 +198,7 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
         }
         break;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     case FLY_AT_PAGE:
     case FLY_AT_CHAR:
     case FLY_AT_FLY:
@@ -1658,7 +1658,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
         SwTxtAttr * const pHnt =
             pTxtNode->GetTxtAttrForCharAt( nIdx, RES_TXTATR_FLYCNT );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         OSL_ENSURE( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
                     "Missing FlyInCnt-Hint." );
         OSL_ENSURE( pHnt && ((SwFmtFlyCnt&)pHnt->GetFlyCnt()).

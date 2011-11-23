@@ -2299,7 +2299,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                 bSplit = 1UL == pCell->GetColSpan();
             }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             if( nCol == nRightCol-1UL )
             {
                 OSL_ENSURE( bSplit, "Split-Flag falsch" );
@@ -2880,9 +2880,7 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
         const SwEndNode *pEndNd = pPrevSttNd ? pPrevSttNd->EndOfSectionNode()
                                              : pTableNode->EndOfSectionNode();
         // #i78921# - make code robust
-#if OSL_DEBUG_LEVEL > 1
         OSL_ENSURE( pDoc, "<SwXMLTableContext::InsertTableSection(..)> - no <pDoc> at <SwXTextCursor> instance - <SwXTextCurosr> doesn't seem to be registered at a <SwUnoCrsr> instance." );
-#endif
         if ( !pDoc )
         {
             pDoc = const_cast<SwDoc*>(pEndNd->GetDoc());

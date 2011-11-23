@@ -1476,9 +1476,7 @@ sal_Bool SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
         // 4935: Seit der Trennung ueber Sonderbereiche sind Faelle
         // moeglich, in denen kein Frame zum Node vorliegt.
         // Also keinOSL_ENSURE
-#if OSL_DEBUG_LEVEL > 1
         OSL_ENSURE( pFrm, "!SwTxtNode::Hyphenate: can't find any frame" );
-#endif
         return sal_False;
     }
 

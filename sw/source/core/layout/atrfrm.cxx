@@ -706,23 +706,19 @@ void SwFmtPageDesc::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 //mich also bei meinem Format aus.
                 //Dabei werden ich Deletet!!!
             if( IS_TYPE( SwFmt, pDefinedIn ))
-#if OSL_DEBUG_LEVEL > 1
             {
-                sal_Bool bDel = ((SwFmt*)pDefinedIn)->ResetFmtAttr( RES_PAGEDESC );
-                OSL_ENSURE( bDel, ";-) FmtPageDesc nicht zerstoert." );
+                bool const bResult =
+                    static_cast<SwFmt*>(pDefinedIn)->ResetFmtAttr(RES_PAGEDESC);
+                OSL_ENSURE( bResult, "FmtPageDesc not deleted" );
+                (void) bResult; // unused in non-debug
             }
-#else
-                ((SwFmt*)pDefinedIn)->ResetFmtAttr( RES_PAGEDESC );
-#endif
             else if( IS_TYPE( SwCntntNode, pDefinedIn ))
-#if OSL_DEBUG_LEVEL > 1
             {
-                sal_Bool bDel = ((SwCntntNode*)pDefinedIn)->ResetAttr( RES_PAGEDESC );
-                OSL_ENSURE( bDel, ";-) FmtPageDesc nicht zerstoert." );
+                bool const bResult = static_cast<SwCntntNode*>(pDefinedIn)
+                        ->ResetAttr(RES_PAGEDESC);
+                OSL_ENSURE( bResult, "FmtPageDesc not deleted" );
+                (void) bResult; // unused in non-debug
             }
-#else
-                ((SwCntntNode*)pDefinedIn)->ResetAttr( RES_PAGEDESC );
-#endif
             break;
 
         default:

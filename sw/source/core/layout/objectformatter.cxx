@@ -396,9 +396,7 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
 
             if ( ++nLoopControlRuns >= nLoopControlMax )
             {
-#if OSL_DEBUG_LEVEL > 1
                 OSL_FAIL( "LoopControl in SwObjectFormatter::_FormatObj: Stage 3!!!" );
-#endif
                 rFlyFrm.ValidateThisAndAllLowers( 2 );
                 nLoopControlRuns = 0;
             }

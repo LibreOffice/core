@@ -360,7 +360,7 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
         SwTwips nTmp = (*fnRect->fnYDiff)( (pCont->*fnRect->fnGetPrtBottom)(),
                                            (Frm().*fnRect->fnGetTop)() );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         if( nTmp < 0 )
         {
             sal_Bool bInvalidPos = sal_False;

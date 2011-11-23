@@ -63,9 +63,7 @@ namespace TxtFmtCollFunc
         SwTxtFmtColl* pTxtFmtColl = dynamic_cast<SwTxtFmtColl*>(pFmt);
         if ( !pTxtFmtColl )
         {
-    #if OSL_DEBUG_LEVEL > 1
             OSL_FAIL( "<TxtFmtCollFunc::CheckTxtFmtCollFuncForDeletionOfAssignmentToOutlineStyle> - misuse of method - it's only for instances of <SwTxtFmtColl>" );
-    #endif
             return;
         }
 

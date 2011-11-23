@@ -1260,7 +1260,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             }
         }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         // do some extra sanity checking that the length of the sequences
         // matches their range representation
         {
@@ -1966,7 +1966,7 @@ SwChartDataSequence::SwChartDataSequence(
     }
     release();
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     OUString aRangeStr( getSourceRangeRepresentation() );
 
     // check if it can properly convert into a SwUnoTableCrsr
@@ -2016,7 +2016,7 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
     }
     release();
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     OUString aRangeStr( getSourceRangeRepresentation() );
 
     // check if it can properly convert into a SwUnoTableCrsr

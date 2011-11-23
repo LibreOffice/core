@@ -1727,15 +1727,10 @@ SfxItemSet* SwFltOutBase::NewFlyDefaults()
 
 sal_Bool SwFltOutBase::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
                            sal_Bool bAbsolutePos /*= sal_False*/,
-                           const SfxItemSet*
-#if OSL_DEBUG_LEVEL > 1
-                               pMoreAttrs /*= 0*/
-#endif
-                            )
+                           const SfxItemSet* pMoreAttrs /*= 0*/)
 {
-#if OSL_DEBUG_LEVEL > 1
+    (void) pMoreAttrs; // unused in non-debug
     OSL_ENSURE(!pMoreAttrs, "SwFltOutBase:BeginFly mit pMoreAttrs" );
-#endif
     eFlyAnchor = eAnchor;
     bFlyAbsPos = bAbsolutePos;      // Bloedsinn eigentlich
     return sal_True;

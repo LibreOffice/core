@@ -671,7 +671,7 @@ void SwFtnFrm::Paste(  SwFrm* pParent, SwFrm* pSibling )
         pDel->Cut();
         delete pDel;
     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     SwDoc *pDoc = GetFmt()->GetDoc();
     if ( GetPrev() )
     {
@@ -1109,7 +1109,7 @@ SwFtnContFrm *SwFtnBossFrm::FindFtnCont()
     while( pFrm && !pFrm->IsFtnContFrm() )
         pFrm = pFrm->GetNext();
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     if ( pFrm )
     {
         SwFrm *pFtn = pFrm->GetLower();

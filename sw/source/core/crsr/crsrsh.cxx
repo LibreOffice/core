@@ -1442,12 +1442,10 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                 Point aCentrPt( aCharRect.Center() );
                 aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
                 pTblFrm->GetCrsrOfst( pTblCrsr->GetPoint(), aCentrPt, &aTmpState );
-#if OSL_DEBUG_LEVEL > 1
-                if ( !pTblFrm->GetCharRect( aCharRect, *pTblCrsr->GetPoint() ) )
-                    OSL_ENSURE( !this, "GetCharRect failed." );
-#else
-                pTblFrm->GetCharRect( aCharRect, *pTblCrsr->GetPoint() );
-#endif
+                bool const bResult =
+                    pTblFrm->GetCharRect( aCharRect, *pTblCrsr->GetPoint() );
+                OSL_ENSURE( bResult, "GetCharRect failed." );
+                (void) bResult; // non-debug: unused
             }
 
             pVisCrsr->Hide();       // sichtbaren Cursor immer verstecken
@@ -1988,12 +1986,10 @@ void SwCrsrShell::Combine()
     SwCrsrSaveState aSaveState( *pCurCrsr );
     if( pCrsrStk->HasMark() )           // nur wenn GetMark gesetzt wurde
     {
-#if OSL_DEBUG_LEVEL > 1
-        if( !CheckNodesRange( pCrsrStk->GetMark()->nNode, pCurCrsr->GetPoint()->nNode, sal_True ))
-            OSL_ENSURE( !this, "StackCrsr & akt. Crsr nicht in gleicher Section." );
-#else
+        bool const bResult =
         CheckNodesRange( pCrsrStk->GetMark()->nNode, pCurCrsr->GetPoint()->nNode, sal_True );
-#endif
+        OSL_ENSURE(bResult, "StackCrsr & act. Crsr not in same Section.");
+        (void) bResult; // non-debug: unused
         // kopiere das GetMark
         if( !pCurCrsr->HasMark() )
             pCurCrsr->SetMark();

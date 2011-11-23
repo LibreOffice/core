@@ -2254,7 +2254,7 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
                 delete pNew;
                 return;
             }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             else
                 OSL_FAIL("Bibliography entries cannot be found here");
 #endif

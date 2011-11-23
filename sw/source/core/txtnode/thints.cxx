@@ -1414,13 +1414,9 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                 // FussNote im Redline-Bereich NICHT ins FtnArray einfuegen!
                 if( StartOfSectionIndex() > rNodes.GetEndOfRedlines().GetIndex() )
                 {
-#if OSL_DEBUG_LEVEL > 1
-                    const sal_Bool bSuccess =
-#endif
-                        pDoc->GetFtnIdxs().Insert( pTxtFtn );
-#if OSL_DEBUG_LEVEL > 1
-                    OSL_ENSURE( bSuccess, "FtnIdx nicht eingetragen." );
-#endif
+                    const bool bSuccess = pDoc->GetFtnIdxs().Insert(pTxtFtn);
+                    OSL_ENSURE( bSuccess, "FtnIdx not inserted." );
+                    (void) bSuccess; // unused in non-debug
                 }
                 SwNodeIndex aTmpIndex( *this );
                 pDoc->GetFtnIdxs().UpdateFtn( aTmpIndex);

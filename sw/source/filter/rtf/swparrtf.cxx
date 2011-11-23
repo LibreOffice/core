@@ -412,7 +412,7 @@ void SwRTFParser::Continue( int nToken )
                 pPam->GetPoint()->nContent.Assign( pTxtNode, nStt );
             }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             // !!! sollte nicht moeglich sein, oder ??
             OSL_ENSURE( pSttNdIdx->GetIndex()+1 != pPam->GetBound( sal_True ).nNode.GetIndex(),
                 "Pam.Bound1 steht noch im Node" );
@@ -2144,7 +2144,7 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 
     SwPaM aPam( *pPam->GetPoint() );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE( nSNd <= nENd, "Start groesser als Ende" );
     SwNode* pDebugNd = pDoc->GetNodes()[ nSNd ];
     OSL_ENSURE( pDebugNd->IsCntntNode(), "Start kein ContentNode" );

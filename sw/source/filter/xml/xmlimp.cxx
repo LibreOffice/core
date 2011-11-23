@@ -791,7 +791,7 @@ void SwXMLImport::endDocument( void )
                                             pTxtNode->GetTxt().Len() );
                 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                 // !!! This should be impossible !!!!
                 OSL_ENSURE( pSttNdIdx->GetIndex()+1 !=
                                         pPaM->GetBound( sal_True ).nNode.GetIndex(),

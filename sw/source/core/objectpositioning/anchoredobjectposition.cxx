@@ -65,7 +65,7 @@ SwAnchoredObjectPosition::SwAnchoredObjectPosition( SdrObject& _rDrawObj )
       mbFollowTextFlow( false ),
       mbDoNotCaptureAnchoredObj( false )
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     // assert, if object isn't of excepted type
     const bool bObjOfExceptedType =
             mrDrawObj.ISA(SwVirtFlyDrawObj) || // object representing fly frame

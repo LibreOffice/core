@@ -276,7 +276,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
         pDestShell->GetCrsr()->SetMark();
         pDestShell->GetCrsr()->DeleteMark();
     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 // pruefe ob die Indizies auch in den richtigen Nodes angemeldet sind
 {
     SwPaM* pCmp = (SwPaM*)pDestShell->GetCrsr();        // sicher den Pointer auf Cursor

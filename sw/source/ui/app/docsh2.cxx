@@ -923,12 +923,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             break;
                     }
                 }
-#if OSL_DEBUG_LEVEL > 1
-                {
-                    sal_Bool bWeb = 0 != dynamic_cast<SwWebDocShell*>(this);
-                    OSL_ENSURE(bWeb == sal_True, "SourceView only in WebDocShell");
-                }
-#endif
+
+                OSL_ENSURE(dynamic_cast<SwWebDocShell*>(this),
+                            "SourceView only in WebDocShell");
+
                 // the SourceView is not the 1 for SwWebDocShell
                 sal_uInt16 nSlot = SID_VIEWSHELL1;
                 sal_Bool bSetModified = sal_False;

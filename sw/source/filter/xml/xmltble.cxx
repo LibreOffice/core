@@ -137,7 +137,7 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
     pLines( &rLines ),
     nWidth( 0UL )
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     sal_uInt32 nEndCPos = 0U;
 #endif
     sal_uInt16 nLines = rLines.Count();
@@ -171,7 +171,7 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
             }
             else
             {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                 sal_uInt32 nCheckPos =
                     nCPos + SwWriteTable::GetBoxWidth( pBox );
                 if( !nEndCPos )
@@ -180,7 +180,7 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
                 }
 #endif
                 nCPos = nWidth;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                 SwXMLTableColumn_Impl aCol( nWidth );
                 OSL_ENSURE( aCols.Seek_Entry(&aCol), "couldn't find last column" );
                 OSL_ENSURE( SwXMLTableColumn_Impl(nCheckPos) ==
@@ -685,13 +685,9 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
             // Und ihren Index
             sal_uInt16 nOldCol = nCol;
             SwXMLTableColumn_Impl aCol( nCPos );
-#if OSL_DEBUG_LEVEL > 1
-            sal_Bool bFound =
-#endif
-                pLines->GetColumns().Seek_Entry( &aCol, &nCol );
-#if OSL_DEBUG_LEVEL > 1
+            bool const bFound = pLines->GetColumns().Seek_Entry( &aCol, &nCol );
             OSL_ENSURE( bFound, "couldn't find column" );
-#endif
+            (void) bFound; // unused in non-debug
 
             const SwStartNode *pBoxSttNd = pBox->GetSttNd();
             if( pBoxSttNd )
@@ -976,13 +972,10 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
             const sal_uInt16 nOldCol = nCol;
             {
                 SwXMLTableColumn_Impl aCol( nCPos );
-#if OSL_DEBUG_LEVEL > 1
-                const sal_Bool bFound =
-#endif
+                const bool bFound =
                     rLines.GetColumns().Seek_Entry( &aCol, &nCol );
-#if OSL_DEBUG_LEVEL > 1
                 OSL_ENSURE( bFound, "couldn't find column" );
-#endif
+                (void) bFound; // unused in non-debug
             }
 
             // #i95726# - Some fault tolerance, if table is somehow corrupted.

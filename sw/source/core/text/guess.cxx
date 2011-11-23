@@ -262,7 +262,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         xub_StrLen nOldIdx = rInf.GetIdx();
         xub_Unicode cFldChr = 0;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         XubString aDebugString;
 #endif
 
@@ -284,7 +284,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                 nCutPos = nCutPos + nFieldDiff;
                 nHyphPos = nHyphPos + nFieldDiff;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                 aDebugString = rInf.GetTxt();
 #endif
 
@@ -506,7 +506,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             rOldTxt.Insert( cFldChr, nOldIdx - 1 );
             rInf.SetIdx( nOldIdx );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             OSL_ENSURE( aDebugString == rInf.GetTxt(),
                     "Somebody, somebody, somebody put something in my string" );
 #endif

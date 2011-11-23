@@ -636,7 +636,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
             // Continue with next selected object and assert, if this isn't excepted.
             if ( !pContact )
             {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                 bool bNoUserCallExcepted =
                         pObj->ISA(SwDrawVirtObj) &&
                         !static_cast<SwDrawVirtObj*>(pObj)->IsConnected();

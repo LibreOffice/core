@@ -576,15 +576,13 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     pFld->CalcField( aPara );
                     if( aPara.IsStackOverFlow() )
                     {
-                        if( aPara.CalcWithStackOverflow() )
-                            pFld->CalcField( aPara );
-#if OSL_DEBUG_LEVEL > 1
-                        else
+                        bool const bResult = aPara.CalcWithStackOverflow();
+                        if (bResult)
                         {
-                            // at least one ASSERT
-                            OSL_ENSURE( !this, "the chained formula could no be calculated" );
+                            pFld->CalcField( aPara );
                         }
-#endif
+                        OSL_ENSURE(bResult,
+                                "the chained formula could no be calculated");
                     }
                     pCalc->SetCalcError( CALC_NOERR );
                 }
@@ -645,15 +643,13 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
 
                     if( aPara.IsStackOverFlow() )
                     {
-                        if( aPara.CalcWithStackOverflow() )
-                            pFml->Calc( aPara, nValue );
-#if OSL_DEBUG_LEVEL > 1
-                        else
+                        bool const bResult = aPara.CalcWithStackOverflow();
+                        if (bResult)
                         {
-                            // at least one ASSERT
-                            OSL_ENSURE( !this, "the chained formula could no be calculated" );
+                            pFml->Calc( aPara, nValue );
                         }
-#endif
+                        OSL_ENSURE(bResult,
+                                "the chained formula could no be calculated");
                     }
 
                     SwFrmFmt* pFmt = pBox->ClaimFrmFmt();
@@ -877,11 +873,9 @@ void _SetGetExpFld::SetBodyPos( const SwCntntFrm& rFrm )
         SwNodeIndex aIdx( *rFrm.GetNode() );
         SwDoc& rDoc = *aIdx.GetNodes().GetDoc();
         SwPosition aPos( aIdx );
-#if OSL_DEBUG_LEVEL > 1
-        OSL_ENSURE( ::GetBodyTxtNode( rDoc, aPos, rFrm ), "Where is the field?" );
-#else
-        ::GetBodyTxtNode( rDoc, aPos, rFrm );
-#endif
+        bool const bResult = ::GetBodyTxtNode( rDoc, aPos, rFrm );
+        OSL_ENSURE(bResult, "Where is the field?");
+        (void) bResult; // unused in non-debug
         nNode = aPos.nNode.GetIndex();
         nCntnt = aPos.nContent.GetIndex();
     }
@@ -2418,11 +2412,9 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, sal_uInt16 nFldWhich )
     {
         // create index to determine the TextNode
         SwPosition aPos( rDoc.GetNodes().GetEndOfPostIts() );
-#if OSL_DEBUG_LEVEL > 1
-        OSL_ENSURE( GetBodyTxtNode( rDoc, aPos, *pFrm ), "wo steht das Feld" );
-#else
-        GetBodyTxtNode( rDoc, aPos, *pFrm );
-#endif
+        bool const bResult = GetBodyTxtNode( rDoc, aPos, *pFrm );
+        OSL_ENSURE(bResult, "where is the Field");
+        (void) bResult; // unused in non-debug
         pNew = new _SetGetExpFld( aPos.nNode, &rTFld, &aPos.nContent );
     }
 
@@ -2466,11 +2458,9 @@ void SwDocUpdtFld::GetBodyNode( const SwSectionNode& rSectNd )
             if( !pFrm )
                 break;
 
-#if OSL_DEBUG_LEVEL > 1
-            OSL_ENSURE( GetBodyTxtNode( rDoc, aPos, *pFrm ), "wo steht das Feld" );
-#else
-            GetBodyTxtNode( rDoc, aPos, *pFrm );
-#endif
+            bool const bResult = GetBodyTxtNode( rDoc, aPos, *pFrm );
+            OSL_ENSURE(bResult, "where is the Field");
+            (void) bResult; // unused in non-debug
             pNew = new _SetGetExpFld( rSectNd, &aPos );
 
         } while( sal_False );

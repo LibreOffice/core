@@ -3817,7 +3817,7 @@ Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(short nWhich)
                     xDrawDefaults = (cppu::OWeakObject*)new SwSvxUnoDrawPool(m_pDoc);
                 xRet = xDrawDefaults;
             break;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             default: OSL_FAIL("which table?");
 #endif
         }

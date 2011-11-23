@@ -29,8 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 #include <tools/stream.hxx>
 #endif
 #include <stdlib.h>
@@ -289,13 +288,10 @@ void SwRect::SetUpperRightCorner(  const Point& rNew )
 void SwRect::SetLowerLeftCorner(  const Point& rNew )
     { m_Point = Point(rNew.nA, rNew.nB - m_Size.getHeight()); }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 /*************************************************************************
  *                  operator<<( ostream&, SwRect&)
  *************************************************************************/
-
-
-
 SvStream &operator<<( SvStream &rStream, const SwRect &rRect )
 {
     rStream << '[' << rRect.Top()   << '/' << rRect.Left()

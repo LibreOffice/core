@@ -380,9 +380,7 @@ void lcl_GetCellPosition( const String &rCellName,
             }
         }
     }
-#if OSL_DEBUG_LEVEL > 1
     OSL_ENSURE( rColumn != -1 && rRow != -1, "failed to get column or row index" );
-#endif
 }
 
 // arguments: must be non-empty strings with valid cell names
@@ -461,7 +459,7 @@ int lcl_CompareCellRanges(
 // (note that the indices nColumn and nRow are 0 based here)
 String lcl_GetCellName( sal_Int32 nColumn, sal_Int32 nRow )
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     {
         sal_Int32 nCol, nRow2;
         lcl_GetCellPosition( String::CreateFromAscii("z1"), nCol, nRow2);

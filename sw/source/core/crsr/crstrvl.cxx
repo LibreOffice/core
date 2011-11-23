@@ -1354,7 +1354,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                 if( pSttNd && 0 != ( pTblNd = pTxtNd->FindTableNode()) &&
                     0 != ( pBox = pTblNd->GetTable().GetTblBox(
                                     pSttNd->GetIndex() )) &&
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
                     ( SFX_ITEM_SET == pBox->GetFrmFmt()->GetItemState(
                         RES_BOXATR_FORMULA, sal_False, &pItem ) ||
                       SFX_ITEM_SET == pBox->GetFrmFmt()->GetItemState(

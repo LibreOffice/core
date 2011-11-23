@@ -299,7 +299,7 @@ void SwEndNoteOptionPage::SelectNumbering(int eNum)
         case FTNNUM_CHAPTER:
             sSelect = aNumChapter;
         break;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         default:
             OSL_FAIL("Which numbering type?");
 #endif

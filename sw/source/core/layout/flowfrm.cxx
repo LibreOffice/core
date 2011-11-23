@@ -2480,9 +2480,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                pNextNewUpper->GetType() != rThis.GetUpper()->GetType() ) )
         {
             pNewUpper = 0L;
-#if OSL_DEBUG_LEVEL > 1
             OSL_FAIL( "<SwFlowFrm::MoveBwd(..)> - layout loop control for layout action <Move Backward> applied!" );
-#endif
         }
     }
 

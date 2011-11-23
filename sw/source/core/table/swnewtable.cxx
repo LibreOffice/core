@@ -771,7 +771,7 @@ sal_Bool SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     }
 
     aFndBox.MakeFrms( *this );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     {
         const SwTableBoxes &rTabBoxes = aLines[0]->GetTabBoxes();
         long nNewWidth = 0;

@@ -231,9 +231,7 @@ void SwFlyFreeFrm::MakeAll()
         {
             ++nLoopControlRuns;
 
-#if OSL_DEBUG_LEVEL > 1
             OSL_ENSURE( nLoopControlRuns < nLoopControlMax, "LoopControl in SwFlyFreeFrm::MakeAll" );
-#endif
 
             if ( nLoopControlRuns < nLoopControlMax )
                 CheckClip( *pSz );
@@ -243,7 +241,7 @@ void SwFlyFreeFrm::MakeAll()
     }
     Unlock();
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     SWRECTFN( this )
     OSL_ENSURE( bHeightClipped || ( (Frm().*fnRect->fnGetHeight)() > 0 &&
             (Prt().*fnRect->fnGetHeight)() > 0),
@@ -639,14 +637,9 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
         if ( !pSortedObjs )
             pSortedObjs = new SwSortedObjs();
 
-#if OSL_DEBUG_LEVEL > 1
-        const bool bSucessInserted =
-#endif
-        pSortedObjs->Insert( *pNew );
-#if OSL_DEBUG_LEVEL > 1
-        OSL_ENSURE( bSucessInserted, "Fly nicht in Sorted eingetragen." );
+        const bool bSucessInserted = pSortedObjs->Insert( *pNew );
+        OSL_ENSURE( bSucessInserted, "Fly not inserted in Sorted." );
         (void) bSucessInserted;
-#endif
 
         // #i87493#
         OSL_ENSURE( pNew->GetPageFrm() == 0 || pNew->GetPageFrm() == this,
@@ -801,14 +794,9 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
     if ( !pDest->GetSortedObjs() )
         pDest->pSortedObjs = new SwSortedObjs();
 
-#if OSL_DEBUG_LEVEL > 1
-    const bool bSucessInserted =
-#endif
-    pDest->GetSortedObjs()->Insert( *pToMove );
-#if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE( bSucessInserted, "Fly nicht in Sorted eingetragen." );
+    const bool bSucessInserted = pDest->GetSortedObjs()->Insert( *pToMove );
+    OSL_ENSURE( bSucessInserted, "Fly not inserted in Sorted." );
     (void) bSucessInserted;
-#endif
 
     // #i28701# - use new method <SetPageFrm(..)>
     pToMove->SetPageFrm( pDest );
@@ -902,10 +890,8 @@ void SwPageFrm::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
     }
     if ( !pSortedObjs->Insert( _rNewObj ) )
     {
-#if OSL_DEBUG_LEVEL > 1
         OSL_ENSURE( pSortedObjs->Contains( _rNewObj ),
                 "Drawing object not appended into list <pSortedObjs>." );
-#endif
     }
     // #i87493#
     OSL_ENSURE( _rNewObj.GetPageFrm() == 0 || _rNewObj.GetPageFrm() == this,

@@ -148,7 +148,7 @@ sal_Int16   SwNumberingTypeListBox::GetSelectedNumberingType()
     sal_uInt16 nSelPos = GetSelectEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nSelPos)
         nRet = (sal_Int16)(sal_uLong)GetEntryData(nSelPos);
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     else
         OSL_FAIL("SwNumberingTypeListBox not selected");
 #endif

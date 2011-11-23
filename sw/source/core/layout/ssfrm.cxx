@@ -405,7 +405,7 @@ SwFrm::~SwFrm()
         delete pDrawObjs;
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     // JP 15.10.2001: for detection of access to deleted frames
     pDrawObjs = (SwSortedObjs*)0x33333333;
 #endif

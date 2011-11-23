@@ -1340,7 +1340,7 @@ void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg, const xub_StrLen nEndConte
 
     aRedlRest.Restore();
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     {
         //JP 17.06.99: Bug 66973 - check count only if the selection is in
         //              the same (or no) section. Becaus not full selected

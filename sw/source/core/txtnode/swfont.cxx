@@ -113,7 +113,7 @@ sal_uInt16 MapDirection( sal_uInt16 nDir, const sal_Bool bVertFormat )
         case 2700 :
             nDir = 1800;
             break;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         default :
             OSL_FAIL( "Unsupported direction" );
             break;
@@ -140,7 +140,7 @@ sal_uInt16 UnMapDirection( sal_uInt16 nDir, const sal_Bool bVertFormat )
         case 2700 :
             nDir = 0;
             break;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         default :
             OSL_FAIL( "Unsupported direction" );
             break;

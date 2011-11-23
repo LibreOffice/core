@@ -493,7 +493,7 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
 void SwHiddenTextPortion::Paint( const SwTxtPaintInfo & rInf) const
 {
     (void)rInf;
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     OutputDevice* pOut = (OutputDevice*)rInf.GetOut();
     Color aCol( SwViewOption::GetFieldShadingsColor() );
     Color aOldColor( pOut->GetFillColor() );

@@ -1730,7 +1730,7 @@ sal_uInt16  SwPagePreView::SetPrinter( SfxPrinter *pNew, sal_uInt16 nDiffFlags, 
             SID_ATTR_LONG_ULSPACE, SID_ATTR_LONG_LRSPACE,
             SID_RULER_BORDERS, SID_RULER_PAGE_POS, 0
         };
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     {
         const sal_uInt16* pPtr = aInval + 1;
         do {

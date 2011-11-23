@@ -564,10 +564,10 @@ sal_Bool SwEditShell::IsProtectedOutlinePara() const
             }
         }
     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     else
     {
-        OSL_ENSURE(!this, "Cursor not on an outline node" );
+        OSL_FAIL("Cursor not on an outline node");
     }
 #endif
     return bRet;

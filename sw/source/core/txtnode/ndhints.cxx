@@ -210,7 +210,7 @@ sal_Bool SwpHtEnd::Seek_Entry( const SwTxtAttr *pElement, sal_uInt16 *pPos ) con
 void SwpHintsArray::Insert( const SwTxtAttr *pHt )
 {
     Resort();
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     sal_uInt16 nPos;
     OSL_ENSURE(!m_HintStarts.Seek_Entry( pHt, &nPos ),
             "Insert: hint already in HtStart");

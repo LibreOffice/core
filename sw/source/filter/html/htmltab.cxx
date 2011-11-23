@@ -885,7 +885,7 @@ void HTMLTableRow::Shrink( sal_uInt16 nCells )
 {
     OSL_ENSURE( nCells < pCells->Count(), "Anzahl Zellen falsch" );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
      sal_uInt16 nEnd = pCells->Count();
 #endif
     // The colspan of empty cells at the end has to be fixed to the new
@@ -896,7 +896,7 @@ void HTMLTableRow::Shrink( sal_uInt16 nCells )
         HTMLTableCell *pCell = (*pCells)[--i];
         if( !pCell->GetContents() )
         {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             OSL_ENSURE( pCell->GetColSpan() == nEnd - i,
                     "invalid col span for empty cell at row end" );
 #endif
@@ -905,7 +905,7 @@ void HTMLTableRow::Shrink( sal_uInt16 nCells )
         else
             break;
     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     for( i=nCells; i<nEnd; i++ )
     {
         HTMLTableCell *pCell = (*pCells)[i];
@@ -1762,12 +1762,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
             HTMLTableCell *pCell = GetCell(nTopRow,nCol);
             const sal_Bool bSplit = 1 == pCell->GetColSpan();
 
-#if OSL_DEBUG_LEVEL > 1
-            if( nCol == nRightCol-1 )
-            {
-                OSL_ENSURE( bSplit, "Split-Flag falsch" );
-            }
-#endif
+            OSL_ENSURE((nCol != nRightCol-1) || bSplit, "Split-Flag wrong");
             if( bSplit )
             {
                 SwTableBox* pBox = 0;
@@ -3353,7 +3348,7 @@ void _CellSaveStruct::AddContents( HTMLTableCnts *pNewCnts )
 void _CellSaveStruct::InsertCell( SwHTMLParser& rParser,
                                   HTMLTable *pCurTable )
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     // Die Attribute muessen schon beim Auefrauemen des Kontext-Stacks
     // entfernt worden sein, sonst ist etwas schiefgelaufen. Das
     // Checken wir mal eben ...

@@ -1977,7 +1977,7 @@ lcl_ApplyRowProperties(
     }
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 //-->debug cell properties of all rows
 static void
 lcl_DebugCellProperties(
@@ -2077,7 +2077,7 @@ lcl_ApplyCellProperties(
                 {
                     std::vector<VerticallyMergedCell>::iterator aMergedIter =
                         rMergedCells.begin();
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                     bool bDbgFound = false;
 #endif
                     while (aMergedIter != rMergedCells.end())
@@ -2087,13 +2087,13 @@ lcl_ApplyCellProperties(
                                 nLeftPos))
                         {
                             aMergedIter->aCells.push_back( xCellPS );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                             bDbgFound = true;
 #endif
                         }
                         ++aMergedIter;
                     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                     OSL_ENSURE( bDbgFound,
                             "couldn't find first vertically merged cell" );
 #endif
@@ -2262,7 +2262,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
                 xRows->getByIndex(nRow), aRowSeparators[nRow]);
         }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         lcl_DebugCellProperties(rCellProperties);
 #endif
 

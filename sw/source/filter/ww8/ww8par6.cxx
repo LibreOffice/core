@@ -4657,16 +4657,10 @@ void SwWW8ImplReader::Read_ParaBackColor(sal_uInt16, const sal_uInt8* pData, sho
     }
 }
 
-sal_uInt32 SwWW8ImplReader::ExtractColour(const sal_uInt8* &rpData,
-    bool
-#if OSL_DEBUG_LEVEL > 1
-        bVer67
-#endif
-    )
+sal_uInt32 SwWW8ImplReader::ExtractColour(const sal_uInt8* &rpData, bool bVer67)
 {
-#if OSL_DEBUG_LEVEL > 1
+    (void) bVer67; // unused in non-debug
     OSL_ENSURE(bVer67 == false, "Impossible");
-#endif
     sal_uInt32 nFore = wwUtility::BGRToRGB(SVBT32ToUInt32(rpData));
     rpData+=4;
     sal_uInt32 nBack = wwUtility::BGRToRGB(SVBT32ToUInt32(rpData));
@@ -6146,9 +6140,7 @@ short SwWW8ImplReader::ImportSprm(const sal_uInt8* pPos,sal_uInt16 nId)
     if (!nId)
         nId = mpSprmParser->GetSprmId(pPos);
 
-#if OSL_DEBUG_LEVEL > 1
     OSL_ENSURE( nId != 0xff, "Sprm FF !!!!" );
-#endif
 
     const SprmReadInfo& rSprm = GetSprmReadInfo(nId);
 

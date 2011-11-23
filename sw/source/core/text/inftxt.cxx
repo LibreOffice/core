@@ -213,7 +213,7 @@ SwTxtInfo::SwTxtInfo( const SwTxtInfo &rInf )
 { }
 
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 /*************************************************************************
  *                      ChkOutDev()
  *************************************************************************/
@@ -266,7 +266,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
       bSnapToGrid( rNew.SnapToGrid() ),
       nDirection( rNew.GetDirection() )
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     ChkOutDev( *this );
 #endif
 }
@@ -303,7 +303,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
         pRef = pOut;
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     ChkOutDev( *this );
 #endif
 
@@ -379,7 +379,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
       bSnapToGrid( rNew.SnapToGrid() ),
       nDirection( rNew.GetDirection() )
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     ChkOutDev( *this );
 #endif
     SetLen( GetMinLen( *this ) );

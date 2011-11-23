@@ -2015,7 +2015,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
                         if (bSwapInPage)
                             (const_cast<SdrObject*>(pSdrObj))->SetPage(0);
                     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                     else
                         OSL_ENSURE( !this, "Where is the SDR-Object?" );
 #endif

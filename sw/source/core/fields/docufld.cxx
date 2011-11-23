@@ -2201,12 +2201,9 @@ sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
                 {
                     // einen sdbcx::Index fuers bestimmen vom TextNode anlegen
                     SwPosition aPos( pDoc->GetNodes().GetEndOfPostIts() );
-#if OSL_DEBUG_LEVEL > 1
-                    OSL_ENSURE( GetBodyTxtNode( *pDoc, aPos, *pFrm ),
-                            "wo steht das Feld" );
-#else
-                    GetBodyTxtNode( *pDoc, aPos, *pFrm );
-#endif
+                    bool const bResult = GetBodyTxtNode( *pDoc, aPos, *pFrm );
+                    OSL_ENSURE(bResult, "where is the Field?");
+                    (void) bResult; // unused in non-debug
                     pNew = new _SetGetExpFld( aPos.nNode, pTFld,
                                                 &aPos.nContent );
                 }

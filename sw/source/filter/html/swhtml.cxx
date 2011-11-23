@@ -35,7 +35,7 @@
 #include <comphelper/string.hxx>
 #include <sfx2/sfx.hrc>
 #include <svx/svxids.hrc>
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 #include <stdlib.h>
 #endif
 #include <hintids.hxx>
@@ -721,7 +721,7 @@ void SwHTMLParser::Continue( int nToken )
                     pPam->GetPoint()->nContent.Assign( pTxtNode, nStt );
                 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 // !!! sollte nicht moeglich sein, oder ??
 OSL_ENSURE( pSttNdIdx->GetIndex()+1 != pPam->GetBound( sal_True ).nNode.GetIndex(),
             "Pam.Bound1 steht noch im Node" );
@@ -975,7 +975,7 @@ void SwHTMLParser::NextToken( int nToken )
             return ;
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     if( pPendStack )
     {
         switch( nToken )
@@ -2481,11 +2481,11 @@ ViewShell *SwHTMLParser::CallStartAction( ViewShell *pVSh, sal_Bool bChkPtr )
 
     if( !pVSh || bChkPtr )
     {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         ViewShell *pOldVSh = pVSh;
 #endif
         pDoc->GetEditShell( &pVSh );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         OSL_ENSURE( !pVSh || !pOldVSh || pOldVSh == pVSh, "CallStartAction: Wer hat die ViewShell ausgetauscht?" );
         if( pOldVSh && !pVSh )
             pVSh = 0;
@@ -2512,7 +2512,7 @@ ViewShell *SwHTMLParser::CallEndAction( sal_Bool bChkAction, sal_Bool bChkPtr )
         pDoc->GetEditShell( &pVSh );
         OSL_ENSURE( !pVSh || pActionViewShell == pVSh,
                 "CallEndAction: Wer hat die ViewShell ausgetauscht?" );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         if( pActionViewShell && !pVSh )
             pVSh = 0;
 #endif
@@ -2578,7 +2578,7 @@ ViewShell *SwHTMLParser::CheckActionViewShell()
     pDoc->GetEditShell( &pVSh );
     OSL_ENSURE( !pVSh || pActionViewShell == pVSh,
             "CheckActionViewShell: Wer hat die ViewShell ausgetauscht?" );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     if( pActionViewShell && !pVSh )
         pVSh = 0;
 #endif
@@ -3883,7 +3883,7 @@ void SwHTMLParser::EndPara( sal_Bool bReal )
 {
     if( HTML_LI_ON==nOpenParaToken && pTable )
     {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         const SwNumRule *pNumRule = pPam->GetNode()->GetTxtNode()->GetNumRule();
         OSL_ENSURE( pNumRule, "Wo ist die Numrule geblieben" );
 #endif

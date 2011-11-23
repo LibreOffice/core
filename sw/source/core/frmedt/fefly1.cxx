@@ -217,7 +217,7 @@ sal_Bool lcl_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet )
 
     SwDoc* pDoc = (SwDoc*)rFmt.GetDoc();
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE( !(nNew == FLY_AT_PAGE &&
         (FLY_AT_PARA==nOld || FLY_AT_CHAR==nOld || FLY_AS_CHAR==nOld ) &&
         pDoc->IsInHeaderFooter( rOldAnch.GetCntntAnchor()->nNode )),
@@ -581,7 +581,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
             SwRect aTmpRect( aRet, rAbsPos );
             if( aTmpRect.HasArea() )
                 MakeVisible( aTmpRect );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             //TODO: That doesn't seem to be intended
             if( Color(COL_TRANSPARENT) != GetOut()->GetLineColor() )
             {
@@ -2113,7 +2113,7 @@ void SwFEShell::SetObjDescription( const String& rDescription )
 
 void SwFEShell::AlignFormulaToBaseline( const uno::Reference < embed::XEmbeddedObject >& xObj, SwFlyFrm * pFly )
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     SvGlobalName aCLSID( xObj->getClassID() );
     const bool bStarMath = ( SotExchange::IsMath( aCLSID ) != 0 );
     OSL_ENSURE( bStarMath, "AlignFormulaToBaseline should only be called for Math objects" );

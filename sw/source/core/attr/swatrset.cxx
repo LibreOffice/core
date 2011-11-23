@@ -374,9 +374,9 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
             pNewListIdItem = 0;
         }
     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     else
-        OSL_ENSURE( !this, "weder Format noch ContentNode - keine Attribute kopiert");
+        OSL_FAIL("neither Format nor ContentNode - no Attributes copied");
 #endif
 }
 

@@ -679,7 +679,7 @@ void SwRTFParser::RemoveUnusedNumRule( SwNumRule* pRule )
         }
         pDoc->DelNumRule( pRule->GetName() );
     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     else
     {
         OSL_ENSURE( pRule, "NumRulePointer 0 kann nicht geloescht werden" );

@@ -1382,7 +1382,7 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
         if ( pRetoucheFly && pRetoucheFly->IsLowerOf( pFly ) )
             continue;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         //Flys, die innerhalb des eigenen verankert sind, muessen eine
         //groessere OrdNum haben oder Zeichengebunden sein.
         if ( pSelfFly && bLowerOfSelf )
@@ -2039,7 +2039,7 @@ void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const OutputDevice &aOut )
 
     io_aSwRect = SwRect( aSizedRect );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     Rectangle aTestOrgPxRect = aOut.LogicToPixel( io_aSwRect.SVRect() );
     Rectangle aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
     OSL_ENSURE( aTestOrgPxRect == aTestNewPxRect,

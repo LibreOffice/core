@@ -1205,7 +1205,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields )
                 if ( pPage->GetFmt() != pFmtWish )
                     pPage->SetFrmFmt( pFmtWish );
             }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             else
             {
                 OSL_FAIL( "CheckPageDescs, missing solution" );
@@ -1248,7 +1248,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields )
         pDoc->UpdatePageFlds( &aMsgHnt );
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     //Ein paar Pruefungen muessen schon erlaubt sein.
 
     //1. Keine zwei EmptyPages hintereinander.

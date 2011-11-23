@@ -107,11 +107,6 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
     // angegeben ist. Dann muss der Doc. Name davor gesetzt werden!
 sal_Bool SwDoc::IsVisitedURL( const String& rURL ) const
 {
-#if OSL_DEBUG_LEVEL > 1
-    static long nTmp = 0;
-    ++nTmp;
-#endif
-
     sal_Bool bRet = sal_False;
     if( rURL.Len() )
     {

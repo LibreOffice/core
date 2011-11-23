@@ -83,7 +83,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
     if( eFamily != XML_TOKEN_INVALID )
         AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY, eFamily );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     // style:parent-style-name="..." (if its not the default only)
     const SwFmt* pParent = rFmt.DerivedFrom();
     // Parent-Namen nur uebernehmen, wenn kein Default

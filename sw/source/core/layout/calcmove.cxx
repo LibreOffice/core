@@ -840,14 +840,8 @@ void SwPageFrm::MakeAll()
     if ( Frm() != aOldRect && GetUpper() )
         static_cast<SwRootFrm*>(GetUpper())->CheckViewLayout( 0, 0 );
 
-#if OSL_DEBUG_LEVEL > 1
-    //Der Upper (Root) muss mindestens so breit
-    //sein, dass er die breiteste Seite aufnehmen kann.
-    if ( GetUpper() )
-    {
-        OSL_ENSURE( GetUpper()->Prt().Width() >= aFrm.Width(), "Rootsize" );
-    }
-#endif
+    OSL_ENSURE( !GetUpper() || GetUpper()->Prt().Width() >= aFrm.Width(),
+        "Upper (Root) must be wide enough to contain the widest page");
 }
 
 /*************************************************************************
@@ -1434,7 +1428,7 @@ void SwCntntFrm::MakeAll()
             {
                 Format();
             }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             else
             {
                 OSL_FAIL( "debug assertion: <SwCntntFrm::MakeAll()> - format of text frame suppressed by fix b6448963" );
@@ -1682,7 +1676,7 @@ void SwCntntFrm::MakeAll()
                       ( !bSct || !FindSctFrm()->IsColLocked() ) )
                     bMoveOrFit = sal_True;
             }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             else
             {
                 OSL_FAIL( "+TxtFrm hat WouldFit-Versprechen nicht eingehalten." );
@@ -1737,7 +1731,7 @@ void SwCntntFrm::MakeAll()
                 continue;
             }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             OSL_FAIL( "LoopControl in SwCntntFrm::MakeAll" );
 #endif
         }

@@ -1779,15 +1779,10 @@ sal_Bool SwHTMLParser::FileDownload( const String& rURL,
         pStream = 0;
     }
 
-    // View wieder anlgen
-#if OSL_DEBUG_LEVEL > 1
-    ViewShell *pVSh =
-#endif
-        CallStartAction( pOldVSh );
-#if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE( pOldVSh == pVSh, "FileDownload: ViewShell wurde ausgetauscht" );
+    // recreate View
+    ViewShell *const pVSh = CallStartAction( pOldVSh );
+    OSL_ENSURE( pOldVSh == pVSh, "FileDownload: ViewShell changed on us" );
     (void) pVSh;
-#endif
 
     return pStream!=0;
 }

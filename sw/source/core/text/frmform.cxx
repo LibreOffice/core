@@ -230,7 +230,7 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
         ( pMyFollow->IsVertical() && !pMyFollow->Prt().Width() ) ||
         ( ! pMyFollow->IsVertical() && !pMyFollow->Prt().Height() ) )
     {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         const SwFrm *pOldUp = GetUpper();
 #endif
 
@@ -359,7 +359,7 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
                 pPage->ValidateCntnt();
         }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         OSL_ENSURE( pOldUp == GetUpper(), "SwTxtFrm::CalcFollow: heavy follow" );
 #endif
 

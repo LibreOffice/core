@@ -1754,9 +1754,7 @@ void CalcCntnt( SwLayoutFrm *pLay,
                     if ( nLoopControlRuns < nLoopControlMax )
                         continue;
 
-#if OSL_DEBUG_LEVEL > 1
                     OSL_FAIL( "LoopControl in CalcCntnt" );
-#endif
                 }
             }
             if ( pFrm->IsTabFrm() )

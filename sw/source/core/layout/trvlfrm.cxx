@@ -1329,11 +1329,8 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
             break;
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE( pActual, "Keinen Cntnt gefunden." );
-    if ( bBodyOnly )
-        OSL_ENSURE( pActual->IsInDocBody(), "Cnt nicht im Body." );
-#endif
+    OSL_ENSURE( pActual, "no Cntnt found." );
+    OSL_ENSURE( !bBodyOnly || pActual->IsInDocBody(), "Cntnt not in Body." );
 
     //Spezialfall fuer das selektieren von Tabellen, nicht in wiederholte
     //TblHedlines.

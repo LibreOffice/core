@@ -95,12 +95,12 @@ class SwAccessibleContextMap_Impl: public _SwAccessibleContextMap_Impl
 {
 public:
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     sal_Bool mbLocked;
 #endif
 
     SwAccessibleContextMap_Impl()
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         : mbLocked( sal_False )
 #endif
     {}
@@ -185,7 +185,7 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
         catch( uno::RuntimeException const & r )
         {
             (void)r;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM("Runtime exception caught while notifying shape.:\n"));
             aError.append(rtl::OUStringToOString(r.Message, RTL_TEXTENCODING_ASCII_US));
             OSL_FAIL( aError.getStr() );
@@ -218,11 +218,11 @@ class SwAccessibleShapeMap_Impl: public _SwAccessibleShapeMap_Impl
 
 public:
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     sal_Bool mbLocked;
 #endif
     SwAccessibleShapeMap_Impl( SwAccessibleMap *pMap )
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         : mbLocked( sal_False )
 #endif
     {
@@ -1175,7 +1175,7 @@ SwAccessibleMap::~SwAccessibleMap()
 
     {
         osl::MutexGuard aGuard( maMutex );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         OSL_ENSURE( !mpFrmMap || mpFrmMap->empty(),
                 "Frame map should be empty after disposing the root frame" );
         if( mpFrmMap )
@@ -1226,7 +1226,7 @@ SwAccessibleMap::~SwAccessibleMap()
 
     {
         osl::MutexGuard aGuard( maEventMutex );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         OSL_ENSURE( !(mpEvents || mpEventMap), "pending events" );
         if( mpEvents )
         {
@@ -1265,12 +1265,12 @@ uno::Reference< XAccessible > SwAccessibleMap::_GetDocumentView(
         if( !mpFrmMap )
         {
             mpFrmMap = new SwAccessibleContextMap_Impl;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             mpFrmMap->mbLocked = sal_False;
 #endif
         }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         OSL_ENSURE( !mpFrmMap->mbLocked, "Map is locked" );
         mpFrmMap->mbLocked = sal_True;
 #endif
@@ -1302,7 +1302,7 @@ uno::Reference< XAccessible > SwAccessibleMap::_GetDocumentView(
             }
         }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         mpFrmMap->mbLocked = sal_False;
 #endif
     }

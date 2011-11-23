@@ -420,16 +420,10 @@ void SwMailMergeWizardExecutor::ExecuteWizard()
         LINK( this, SwMailMergeWizardExecutor, EndDialogHdl ) );
 }
 
-#if OSL_DEBUG_LEVEL > 1
 IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pDialog )
-#else
-IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, EMPTYARG )
-#endif
 {
-#if OSL_DEBUG_LEVEL > 1
     OSL_ENSURE( pDialog == m_pWizard, "wrong dialog passed to EndDialogHdl!" );
     (void) pDialog;
-#endif
 
     long nRet = m_pWizard->GetResult();
     sal_uInt16 nRestartPage = m_pWizard->GetRestartPage();

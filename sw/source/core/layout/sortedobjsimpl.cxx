@@ -216,9 +216,7 @@ bool SwSortedObjsImpl::Insert( SwAnchoredObject& _rAnchoredObj )
     if ( Contains( _rAnchoredObj ) )
     {
         // list already contains object
-#if OSL_DEBUG_LEVEL > 1
         OSL_FAIL( "<SwSortedObjsImpl::Insert()> - already contains object" );
-#endif
         return true;
     }
 
@@ -245,9 +243,7 @@ bool SwSortedObjsImpl::Remove( SwAnchoredObject& _rAnchoredObj )
     {
         // object not found.
         bRet = false;
-#if OSL_DEBUG_LEVEL > 1
         OSL_FAIL( "<SwSortedObjsImpl::Remove()> - object not found" );
-#endif
     }
     else
     {

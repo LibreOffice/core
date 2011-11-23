@@ -428,7 +428,7 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
     sal_Bool bSubExpanded = sal_False;
     sal_uInt16 nLines = rLines.Count();
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     sal_uInt32 nEndCPos = 0;
 #endif
 
@@ -464,11 +464,11 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
         }
         else
         {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             long nCheckPos = nRPos + GetLineHeight( pLine );
 #endif
             nRPos = nStartRPos + nParentLineHeight;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             SwWriteTableRow aRow( nStartRPos + nParentLineHeight, bUseLayoutHeights );
             OSL_ENSURE( aRows.Seek_Entry(&aRow),
                     "Parent-Zeile nicht gefunden" );
@@ -511,7 +511,7 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
             }
             else
             {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                 sal_uInt32 nCheckPos = nCPos + GetBoxWidth( pBox );
                 if( !nEndCPos )
                 {
@@ -525,7 +525,7 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
                 }
 #endif
                 nCPos = nStartCPos + nParentLineWidth;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                 SwWriteTableCol aCol( nStartCPos + nParentLineWidth );
                 OSL_ENSURE( aCols.Seek_Entry(&aCol),
                         "Parent-Zelle nicht gefunden" );
@@ -591,13 +591,9 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
         // Und ihren Index
         sal_uInt16 nOldRow = nRow;
         SwWriteTableRow aRow( nRPos,bUseLayoutHeights );
-#if OSL_DEBUG_LEVEL > 1
-        sal_Bool bFound =
-#endif
-            aRows.Seek_Entry( &aRow, &nRow );
-#if OSL_DEBUG_LEVEL > 1
-        OSL_ENSURE( bFound, "Wo ist die Zeile geblieben?" );
-#endif
+        bool const bFound = aRows.Seek_Entry( &aRow, &nRow );
+        OSL_ENSURE( bFound, "missing row" );
+        (void) bFound; // unused in non-debug
 
         OSL_ENSURE( nOldRow <= nRow, "Don't look back!" );
         if( nOldRow > nRow )
@@ -677,13 +673,9 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
             // Und ihren Index
             sal_uInt16 nOldCol = nCol;
             SwWriteTableCol aCol( nCPos );
-#if OSL_DEBUG_LEVEL > 1
-            sal_Bool bFound2 =
-#endif
-                aCols.Seek_Entry( &aCol, &nCol );
-#if OSL_DEBUG_LEVEL > 1
-            OSL_ENSURE( bFound2, "Wo ist die Spalte geblieben?" );
-#endif
+            bool const bFound2 = aCols.Seek_Entry( &aCol, &nCol );
+            OSL_ENSURE( bFound2, "missing column" );
+            (void) bFound2; // unused in non-debug
 
             if( !ShouldExpandSub( pBox, bSubExpanded, nDepth ) )
             {

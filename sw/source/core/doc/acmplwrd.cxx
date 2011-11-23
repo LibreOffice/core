@@ -56,7 +56,7 @@ class SwAutoCompleteClient : public SwClient
 {
     SwAutoCompleteWord* pAutoCompleteWord;
     SwDoc*              pDoc;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     static sal_uLong nSwAutoCompleteClientCount;
 #endif
 public:
@@ -67,7 +67,7 @@ public:
     SwAutoCompleteClient& operator=(const SwAutoCompleteClient& rClient);
 
     const SwDoc& GetDoc(){return *pDoc;}
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     static sal_uLong GetElementCount() {return nSwAutoCompleteClientCount;}
 #endif
 protected:
@@ -91,7 +91,7 @@ typedef const SwDoc* SwDocPtr;
 typedef std::vector<SwDocPtr> SwDocPtrVector;
 class SwAutoCompleteString : public String
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     static sal_uLong nSwAutoCompleteStringCount;
 #endif
     SwDocPtrVector aSourceDocs;
@@ -102,11 +102,11 @@ class SwAutoCompleteString : public String
         void        AddDocument(const SwDoc& rDoc);
         //returns true if last document reference has been removed
         sal_Bool     RemoveDocument(const SwDoc& rDoc);
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     static sal_uLong GetElementCount() {return nSwAutoCompleteStringCount;}
 #endif
 };
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     sal_uLong SwAutoCompleteClient::nSwAutoCompleteClientCount = 0;
     sal_uLong SwAutoCompleteString::nSwAutoCompleteStringCount = 0;
 #endif
@@ -116,7 +116,7 @@ SwAutoCompleteClient::SwAutoCompleteClient(SwAutoCompleteWord& rToTell, SwDoc& r
         pDoc(&rSwDoc)
 {
     pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     ++nSwAutoCompleteClientCount;
 #endif
 }
@@ -127,14 +127,14 @@ SwAutoCompleteClient::SwAutoCompleteClient(const SwAutoCompleteClient& rClient) 
     pDoc(rClient.pDoc)
 {
     pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     ++nSwAutoCompleteClientCount;
 #endif
 }
 
 SwAutoCompleteClient::~SwAutoCompleteClient()
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     --nSwAutoCompleteClientCount;
 #endif
 }
@@ -191,14 +191,14 @@ void SwAutoCompleteWord_Impl::RemoveDocument(const SwDoc& rDoc)
 SwAutoCompleteString::SwAutoCompleteString(const String& rStr, xub_StrLen nPos, xub_StrLen nLen) :
             String( rStr, nPos, nLen )
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     ++nSwAutoCompleteStringCount;
 #endif
 }
 
 SwAutoCompleteString::~SwAutoCompleteString()
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     --nSwAutoCompleteStringCount;
 #endif
 }
@@ -247,7 +247,7 @@ SwAutoCompleteWord::~SwAutoCompleteWord()
         delete pCurrent;
     }
     delete pImpl;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     sal_uLong nStrings = SwAutoCompleteString::GetElementCount();
     sal_uLong nClients = SwAutoCompleteClient::GetElementCount();
     OSL_ENSURE(!nStrings && !nClients, "AutoComplete: clients or string count mismatch");

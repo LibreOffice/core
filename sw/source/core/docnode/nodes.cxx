@@ -390,11 +390,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
             pFrmNd = rNds.GoPrevSection( &aFrmNdIdx, sal_True, sal_False );
             if( pFrmNd && !((SwCntntNode*)pFrmNd)->GetDepends() )
                 pFrmNd = 0;
-
-#if OSL_DEBUG_LEVEL > 1
-            if( !pFrmNd )
-                OSL_ENSURE( !this, "ChgNode() - kein FrameNode gefunden" );
-#endif
+            OSL_ENSURE( pFrmNd, "ChgNode() - no FrameNode found" );
         }
         if( pFrmNd )
             while( aIdx != rInsPos )

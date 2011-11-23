@@ -2685,7 +2685,7 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
 SwXGroupShape::SwXGroupShape(uno::Reference< XInterface > & xShape) :
         SwXShape(xShape)
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     uno::Reference<XShapes> xShapes(xShapeAgg, uno::UNO_QUERY);
     OSL_ENSURE(xShapes.is(), "no SvxShape found or shape is not a group shape");
 #endif

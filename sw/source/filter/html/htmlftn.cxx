@@ -349,7 +349,7 @@ void SwHTMLWriter::OutFootEndNotes()
     if( !pFootEndNotes )
         return;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     sal_uInt16 nFtn = nFootNote, nEn = nEndNote;
 #endif
     nFootNote = 0, nEndNote = 0;
@@ -415,7 +415,7 @@ void SwHTMLWriter::OutFootEndNotes()
         }
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE( nFtn == nFootNote,
             "SwHTMLWriter::OutFootEndNotes: Anzahl Fussnoten stimmt nicht" );
     OSL_ENSURE( nEn == nEndNote,

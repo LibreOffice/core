@@ -241,7 +241,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
             SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
 
             // #i53320#
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             SwAnchoredDrawObject* pAnchoredDrawObj =
                 static_cast<SwAnchoredDrawObject*>(pContact->GetAnchoredObj( pObj ));
             OSL_ENSURE( bGroupMembersNotPositioned == pAnchoredDrawObj->NotYetPositioned(),

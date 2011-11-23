@@ -722,12 +722,8 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             {
                 SfxItemSet aSet(GetPool(), RES_TXTATR_INETFMT, RES_TXTATR_INETFMT);
                 rSh.GetCurAttr(aSet);
-#if OSL_DEBUG_LEVEL > 1
                 const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, sal_True);
                 rSet.Put(rItem);
-#else
-                rSet.Put(aSet.Get( RES_TXTATR_INETFMT, sal_True));
-#endif
                 nSlot = 0;
             }
             break;

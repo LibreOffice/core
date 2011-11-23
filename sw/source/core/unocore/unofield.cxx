@@ -197,7 +197,7 @@ sal_uInt16 lcl_ServiceIdToResId(sal_uInt16 nServiceId)
     const ServiceIdResId* pMap = aServiceToRes;
     while( USHRT_MAX != pMap->nServiceId && nServiceId != pMap->nServiceId )
             ++pMap;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     if( USHRT_MAX == pMap->nServiceId )
         OSL_FAIL("service id not found");
 #endif
@@ -277,7 +277,7 @@ sal_uInt16 lcl_GetServiceForField( const SwField& rFld )
                 break;
             }
     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     if( USHRT_MAX == nSrvId )
         OSL_FAIL("resid not found");
 #endif

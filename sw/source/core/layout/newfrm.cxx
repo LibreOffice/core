@@ -377,7 +377,7 @@ void _FrmInit()
 
 void _FrmFinit()
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     // im Chache duerfen nur noch 0-Pointer stehen
     for( sal_uInt16 n = SwFrm::GetCachePtr()->Count(); n; )
         if( (*SwFrm::GetCachePtr())[ --n ] )

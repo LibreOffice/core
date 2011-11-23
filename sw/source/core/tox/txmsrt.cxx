@@ -186,12 +186,9 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
                 {
                     SwPosition aPos( *pNd );
                     const SwDoc& rDoc = *pNd->GetDoc();
-#if OSL_DEBUG_LEVEL > 1
-                    OSL_ENSURE( GetBodyTxtNode( rDoc, aPos, *pFrm ),
-                            "wo steht der Absatz" );
-#else
-                    GetBodyTxtNode( rDoc, aPos, *pFrm );
-#endif
+                    bool const bResult = GetBodyTxtNode( rDoc, aPos, *pFrm );
+                    OSL_ENSURE(bResult, "where is the text node");
+                    (void) bResult; // unused in non-debug
                     nPos = aPos.nNode.GetIndex();
                     nCntPos = aPos.nContent.GetIndex();
                 }

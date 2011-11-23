@@ -1406,13 +1406,9 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 }
                 else
                     rSh.GetCurAttr( aSet );
-#if OSL_DEBUG_LEVEL > 1
 
                 const SvxShadowItem& rShItem = (const SvxShadowItem&)aSet.Get(nWhich);
                 rSet.Put(rShItem);
-#else
-                rSet.Put((const SvxShadowItem&)aSet.Get(nWhich));
-#endif
             }
             break;
             case SID_IMAP:

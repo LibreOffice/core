@@ -234,7 +234,7 @@ void SwModify::Add(SwClient *pDepend)
 
     if(pDepend->pRegisteredIn != this )
     {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         SwClientIter* pTmp = pClientIters;
         while( pTmp )
         {

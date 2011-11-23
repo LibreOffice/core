@@ -279,11 +279,10 @@ void sw::util::RedlineStack::close( const SwPosition& rPos,
     {
         if( pTabDesc && pTabDesc->getOldRedlineStack() )
         {
-#if OSL_DEBUG_LEVEL > 1
-            OSL_ENSURE( pTabDesc->getOldRedlineStack()->close(rPos, eType), "close without open!");
-#else
-            pTabDesc->getOldRedlineStack()->close( rPos, eType );
-#endif
+            bool const bResult =
+                pTabDesc->getOldRedlineStack()->close(rPos, eType);
+            OSL_ENSURE( bResult, "close without open!");
+            (void) bResult; // unused in non-debug
         }
     }
 }
@@ -1483,7 +1482,7 @@ void WW8TabBandDesc::ProcessSpacing(const sal_uInt8* pParams)
     if (nLen != 6)
         return;
     mbHasSpacing=true;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     sal_uInt8 nWhichCell = *pParams;
     OSL_ENSURE(nWhichCell == 0, "Expected cell to be 0!");
 #endif
@@ -1537,10 +1536,9 @@ void WW8TabBandDesc::ProcessSpecificSpacing(const sal_uInt8* pParams)
 
     OSL_ENSURE(nOverrideSpacing[nWhichCell] < 0x10,
         "Unexpected value for nSideBits");
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     sal_uInt8 nUnknown2 = *pParams;
     OSL_ENSURE(nUnknown2 == 0x3, "Unexpected value for spacing2");
-
 #endif
     ++pParams;
     sal_uInt16 nValue =  SVBT16ToShort( pParams );

@@ -1582,13 +1582,13 @@ static sal_Bool lcl_ResizeBox( const SwTableBox*& rpBox, void* pPara )
 static sal_Bool lcl_ResizeLine( const SwTableLine*& rpLine, void* pPara )
 {
     sal_uInt16 *pWidth = (sal_uInt16 *)pPara;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     sal_uInt16 nOldWidth = *pWidth;
 #endif
     *pWidth = 0;
     ((SwTableLine *)rpLine)->GetTabBoxes().ForEach( &lcl_ResizeBox, pWidth );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE( !nOldWidth || Abs(*pWidth-nOldWidth) < COLFUZZY,
             "Zeilen einer Box sind unterschiedlich lang" );
 #endif
@@ -1699,7 +1699,7 @@ void SwHTMLTableLayout::SetWidths( sal_Bool bCallPass2, sal_uInt16 nAbsAvail,
             }
         }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         {
             // steht im tblrwcl.cxx
             extern void _CheckBoxWidth( const SwTableLine&, SwTwips );

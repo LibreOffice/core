@@ -356,7 +356,7 @@ sal_uInt16 SwFntObj::GetFontHeight( const ViewShell* pSh, const OutputDevice& rO
             ((OutputDevice&)rRefDev).SetFont( *pPrtFont );
             nPrtHeight = static_cast<sal_uInt16>(rRefDev.GetTextHeight());
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             // Check if vcl did not change the meading of GetTextHeight
             const FontMetric aOutMet( rRefDev.GetFontMetric() );
             long nTmpPrtHeight = (sal_uInt16)aOutMet.GetAscent() + aOutMet.GetDescent();
@@ -840,7 +840,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     // a window. Therefore bUseSrcFont is always 0 in this case.
     //
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 
     const sal_Bool bNoAdjust = bPrt ||
             (  pWin &&

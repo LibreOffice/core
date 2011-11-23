@@ -4909,7 +4909,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                                     }
                                     break;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                     default:
                         OSL_ENSURE( !this, "unknown speech command." );
 #endif
@@ -5177,7 +5177,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             }
         }
         break;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         default:
             OSL_ENSURE( !this, "unknown command." );
 #endif

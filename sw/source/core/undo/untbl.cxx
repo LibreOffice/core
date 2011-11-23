@@ -193,7 +193,7 @@ public:
 
 void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos = 0 );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 #include "shellio.hxx"
 void CheckTable( const SwTable& );
 #define CHECKTABLE(t) CheckTable( t );
@@ -3206,9 +3206,7 @@ void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt16* pIn
         *pInsPos = nU;
 }
 
-#if OSL_DEBUG_LEVEL > 1
-
-
+#if OSL_DEBUG_LEVEL > 0
 void CheckTable( const SwTable& rTbl )
 {
     const SwNodes& rNds = rTbl.GetFrmFmt()->GetDoc()->GetNodes();

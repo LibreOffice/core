@@ -113,12 +113,11 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
     aRowField.Enable(bEnable);
     aSynchronCB.Enable(!bEnable);
 
+    OSL_ENSURE(!bEnable || pButton == &aPageButton, "NewButton?" );
     if ( bEnable )
+    {
         aColField.GrabFocus();
-#if OSL_DEBUG_LEVEL > 1
-    else
-        OSL_ENSURE( pButton == &aPageButton, "NewButton?" );
-#endif
+    }
     return 0;
 }
 

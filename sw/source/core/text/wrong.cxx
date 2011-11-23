@@ -552,14 +552,14 @@ void SwWrongList::Remove(sal_uInt16 nIdx, sal_uInt16 nLen )
         ++iLoop;
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     const int nOldSize = Count();
     (void) nOldSize;
 #endif
 
     maList.erase(i1, i2);
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE( Count() + nLen == nOldSize, "SwWrongList::Remove() trouble" );
 #endif
 }

@@ -820,9 +820,7 @@ void SwDrawContact::SetMaster( SdrObject* _pNewMaster )
 {
     if ( _pNewMaster )
     {
-#if OSL_DEBUG_LEVEL > 1
         OSL_FAIL( "debug notification - master replaced!" );
-#endif
         maAnchoredDrawObj.SetDrawObj( *_pNewMaster );
     }
     else
@@ -1583,7 +1581,7 @@ void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         {
             // nothing to do
         }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         else
         {
             OSL_FAIL( "<SwDrawContact::Modify(..)> - unhandled attribute? - please inform od@openoffice.org" );

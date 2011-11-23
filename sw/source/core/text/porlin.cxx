@@ -39,7 +39,7 @@
 #include "pormulti.hxx"
 #include "porglue.hxx"
 #include "blink.hxx"
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 
 sal_Bool ChkChain( SwLinePortion *pStart )
 {
@@ -208,7 +208,7 @@ SwLinePortion *SwLinePortion::Insert( SwLinePortion *pIns )
 {
     pIns->FindLastPortion()->SetPortion( pPortion );
     SetPortion( pIns );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     ChkChain( this );
 #endif
     return pIns;
@@ -238,7 +238,7 @@ SwLinePortion *SwLinePortion::Append( SwLinePortion *pIns )
     SwLinePortion *pPos = FindLastPortion();
     pPos->SetPortion( pIns );
     pIns->SetPortion( 0 );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     ChkChain( this );
 #endif
     return pIns;

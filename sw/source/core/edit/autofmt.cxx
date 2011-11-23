@@ -313,7 +313,7 @@ void SwAutoFormat::_SetRedlineTxt( sal_uInt16 nActionId )
             break;
         }
     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     else
         sTxt = String::CreateFromAscii(
                             RTL_CONSTASCII_STRINGPARAM( "Action-Text fehlt" ));

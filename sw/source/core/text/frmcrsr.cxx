@@ -887,13 +887,13 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
                 aCharBox.Pos().X() = aCharBox.Pos().X() - 150;
 
                 // siehe Kommentar in SwTxtFrm::GetCrsrOfst()
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                 const sal_uLong nOldNode = pPam->GetPoint()->nNode.GetIndex();
 #endif
                 // Der Node soll nicht gewechselt werden
                 xub_StrLen nTmpOfst = aLine.GetCrsrOfst( pPam->GetPoint(),
                                                          aCharBox.Pos(), sal_False );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                 OSL_ENSURE( nOldNode == pPam->GetPoint()->nNode.GetIndex(),
                         "SwTxtFrm::UnitUp: illegal node change" );
 #endif
@@ -1255,7 +1255,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
             if( pNextLine || bFirstOfDouble )
             {
                 aCharBox.SSize().Width() /= 2;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                 // siehe Kommentar in SwTxtFrm::GetCrsrOfst()
                 const sal_uLong nOldNode = pPam->GetPoint()->nNode.GetIndex();
 #endif
@@ -1264,7 +1264,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
 
                 xub_StrLen nTmpOfst = aLine.GetCrsrOfst( pPam->GetPoint(),
                                  aCharBox.Pos(), sal_False );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                 OSL_ENSURE( nOldNode == pPam->GetPoint()->nNode.GetIndex(),
                     "SwTxtFrm::UnitDown: illegal node change" );
 #endif

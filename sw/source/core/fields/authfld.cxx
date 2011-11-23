@@ -130,7 +130,7 @@ SwFieldType*    SwAuthorityFieldType::Copy()  const
 
 void    SwAuthorityFieldType::RemoveField(long nHandle)
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     sal_Bool bRemoved = sal_False;
 #endif
     for(sal_uInt16 j = 0; j < m_pDataArr->Count(); j++)
@@ -139,7 +139,7 @@ void    SwAuthorityFieldType::RemoveField(long nHandle)
         long nRet = (long)(void*)pTemp;
         if(nRet == nHandle)
         {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
             bRemoved = sal_True;
 #endif
             pTemp->RemoveRef();
@@ -152,7 +152,7 @@ void    SwAuthorityFieldType::RemoveField(long nHandle)
             break;
         }
     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE(bRemoved, "Field unknown" );
 #endif
 }
@@ -307,7 +307,7 @@ long    SwAuthorityFieldType::GetHandle(sal_uInt16 nPos)
 sal_uInt16  SwAuthorityFieldType::GetSequencePos(long nHandle)
 {
     //find the field in a sorted array of handles,
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     sal_Bool bCurrentFieldWithoutTextNode = sal_False;
 #endif
     if(!m_SequArr.empty() && m_SequArr.size() != m_pDataArr->Count())
@@ -324,7 +324,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(long nHandle)
             const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
             if(!pTxtFld || !pTxtFld->GetpTxtNode())
             {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                 if(nHandle == ((SwAuthorityField*)pFmtFld->GetFld())->GetHandle())
                     bCurrentFieldWithoutTextNode = sal_True;
 #endif
@@ -396,7 +396,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(long nHandle)
             break;
         }
     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE(bCurrentFieldWithoutTextNode || nRet, "Handle not found");
 #endif
     return nRet;

@@ -58,12 +58,12 @@ IndexEntrySupplierWrapper::IndexEntrySupplierWrapper()
         }
     }
     catch ( UNO_NMSPC::Exception&
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         e
 #endif
         )
     {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("IndexEntrySupplierWrapper: Exception caught\n"));
         aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
         OSL_FAIL( aMsg.getStr() );
@@ -84,12 +84,12 @@ String IndexEntrySupplierWrapper::GetIndexKey( const String& rTxt,
         sRet = xIES->getIndexKey( rTxt, rTxtReading, rLocale );
     }
     catch ( UNO_NMSPC::Exception&
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         e
 #endif
         )
     {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("getIndexKey: Exception caught\n"));
         aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
         OSL_FAIL( aMsg.getStr() );
@@ -105,12 +105,12 @@ String IndexEntrySupplierWrapper::GetFollowingText( sal_Bool bMorePages ) const
         sRet = xIES->getIndexFollowPageWord( bMorePages, aLcl );
     }
     catch ( UNO_NMSPC::Exception&
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         e
 #endif
         )
     {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("getIndexFollowPageWord: Exception caught\n"));
         aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
         OSL_FAIL( aMsg.getStr() );
@@ -128,12 +128,12 @@ IndexEntrySupplierWrapper::GetAlgorithmList( const STAR_NMSPC::lang::Locale& rLc
         sRet = xIES->getAlgorithmList( rLcl );
     }
     catch ( UNO_NMSPC::Exception&
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         e
 #endif
         )
     {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("getAlgorithmList: Exception caught\n"));
         aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
         OSL_FAIL( aMsg.getStr() );
@@ -151,12 +151,12 @@ sal_Bool IndexEntrySupplierWrapper::LoadAlgorithm(
         bRet = xIES->loadAlgorithm( rLcl, sSortAlgorithm, nOptions );
     }
     catch ( UNO_NMSPC::Exception&
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         e
 #endif
         )
     {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("loadAlgorithm: Exception caught\n"));
         aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
         OSL_FAIL( aMsg.getStr() );
@@ -177,12 +177,12 @@ sal_Int16 IndexEntrySupplierWrapper::CompareIndexEntry(
                                         rTxt2, rTxtReading2, rLocale2 );
     }
     catch ( UNO_NMSPC::Exception&
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         e
 #endif
         )
     {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("compareIndexEntry: Exception caught\n"));
         aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
         OSL_FAIL( aMsg.getStr() );

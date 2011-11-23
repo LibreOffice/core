@@ -53,7 +53,7 @@ SwTabCols::SwTabCols( const SwTabCols& rCpy ) :
     bLastRowAllowedToChange( rCpy.IsLastRowAllowedToChange() ),
     aData( rCpy.GetData() )
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     for ( sal_uInt16 i = 0; i < Count(); ++i )
     {
         SwTabColsEntry aEntry1 = aData[i];
