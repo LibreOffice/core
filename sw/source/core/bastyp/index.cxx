@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <stdlib.h>             // fuer qsort
 #include <tools/solar.h>
 
@@ -39,254 +38,263 @@
 TYPEINIT0(SwIndexReg);  // rtti
 
 
-SwIndex::SwIndex(SwIndexReg *const pArr, xub_StrLen const nIdx)
-    : nIndex( nIdx ), pArray( pArr ), pNext( 0 ), pPrev( 0 )
+SwIndex::SwIndex(SwIndexReg *const pReg, xub_StrLen const nIdx)
+    : m_nIndex( nIdx )
+    , m_pIndexReg( pReg )
+    , m_pNext( 0 )
+    , m_pPrev( 0 )
 {
-    if( !pArray )
+    if (!m_pIndexReg)
     {
-        pArray = &EmptyIndexArray::get();
-        nIndex = 0;     // steht immer auf 0 !!!
+        m_pIndexReg = &EmptyIndexArray::get();
+        m_nIndex = 0; // always 0 if no IndexReg
     }
 
-    if( !pArray->pFirst || !pArray->pLast )         // 1. Index ??
-        pArray->pFirst = pArray->pLast = this;
-    else if( nIdx > ((pArray->pLast->nIndex - pArray->pFirst->nIndex) / 2) )
-        ChgValue( *pArray->pLast, nIdx );
+    if (!m_pIndexReg->m_pFirst || !m_pIndexReg->m_pLast) // first Index?
+    {
+        m_pIndexReg->m_pFirst = m_pIndexReg->m_pLast = this;
+    }
+    else if (nIdx > ((m_pIndexReg->m_pLast->m_nIndex
+                        - m_pIndexReg->m_pFirst->m_nIndex) / 2))
+    {
+        ChgValue( *m_pIndexReg->m_pLast, nIdx );
+    }
     else
-        ChgValue( *pArray->pFirst, nIdx );
+    {
+        ChgValue( *m_pIndexReg->m_pFirst, nIdx );
+    }
 }
 
-
-SwIndex::SwIndex( const SwIndex& rIdx, short nIdx )
-    : pArray( rIdx.pArray ), pNext( 0 ), pPrev( 0 )
+SwIndex::SwIndex( const SwIndex& rIdx, xub_StrLen const nDiff )
+    : m_pIndexReg( rIdx.m_pIndexReg )
+    , m_pNext( 0 )
+    , m_pPrev( 0 )
 {
-    ChgValue( rIdx, rIdx.nIndex + nIdx );
+    ChgValue( rIdx, rIdx.m_nIndex + nDiff );
 }
-
 
 SwIndex::SwIndex( const SwIndex& rIdx )
-    : nIndex( rIdx.nIndex ), pArray( rIdx.pArray ), pNext( 0 ), pPrev( 0 )
+    : m_nIndex( rIdx.m_nIndex )
+    , m_pIndexReg( rIdx.m_pIndexReg )
+    , m_pNext( 0 )
+    , m_pPrev( 0 )
 {
-    ChgValue( rIdx, rIdx.nIndex );
+    ChgValue( rIdx, rIdx.m_nIndex );
 }
-
 
 SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, xub_StrLen nNewValue )
 {
-    SwIndex* pFnd = (SwIndex*)&rIdx;
-    if( rIdx.nIndex > nNewValue )               // nach vorne versuchen
+    SwIndex* pFnd = const_cast<SwIndex*>(&rIdx);
+    if (rIdx.m_nIndex > nNewValue) // move forwards
     {
         SwIndex* pPrv;
-        while( 0 != ( pPrv = pFnd->pPrev ) && pPrv->nIndex > nNewValue )
+        while ((0 != (pPrv = pFnd->m_pPrev)) && (pPrv->m_nIndex > nNewValue))
             pFnd = pPrv;
 
         if( pFnd != this )
         {
-            // an alter Position ausketten
-            // erstmal an alter Position ausketten
-            if( pPrev )
-                pPrev->pNext = pNext;
-            else if( pArray->pFirst == this )
-                pArray->pFirst = pNext;
+            // remove from list at old position
+            if (m_pPrev)
+                m_pPrev->m_pNext = m_pNext;
+            else if (m_pIndexReg->m_pFirst == this)
+                m_pIndexReg->m_pFirst = m_pNext;
 
-            if( pNext )
-                pNext->pPrev = pPrev;
-            else if( pArray->pLast == this )
-                pArray->pLast = pPrev;
+            if (m_pNext)
+                m_pNext->m_pPrev = m_pPrev;
+            else if (m_pIndexReg->m_pLast == this)
+                m_pIndexReg->m_pLast = m_pPrev;
 
-            pNext = pFnd;
-            pPrev = pFnd->pPrev;
-            if( pPrev )
-                pPrev->pNext = this;
+            m_pNext = pFnd;
+            m_pPrev = pFnd->m_pPrev;
+            if (m_pPrev)
+                m_pPrev->m_pNext = this;
             else
-                pArray->pFirst = this;
-            pFnd->pPrev = this;
+                m_pIndexReg->m_pFirst = this;
+            pFnd->m_pPrev = this;
         }
     }
-    else if( rIdx.nIndex < nNewValue )
+    else if (rIdx.m_nIndex < nNewValue)
     {
         SwIndex* pNxt;
-        while( 0 != ( pNxt = pFnd->pNext ) && pNxt->nIndex < nNewValue )
+        while ((0 != (pNxt = pFnd->m_pNext)) && (pNxt->m_nIndex < nNewValue))
             pFnd = pNxt;
 
         if( pFnd != this )
         {
-            // erstmal an alter Position ausketten
-            if( pPrev )
-                pPrev->pNext = pNext;
-            else if( pArray->pFirst == this )
-                pArray->pFirst = pNext;
+            // remove from list at old position
+            if (m_pPrev)
+                m_pPrev->m_pNext = m_pNext;
+            else if (m_pIndexReg->m_pFirst == this)
+                m_pIndexReg->m_pFirst = m_pNext;
 
-            if( pNext )
-                pNext->pPrev = pPrev;
-            else if( pArray->pLast == this )
-                pArray->pLast = pPrev;
+            if (m_pNext)
+                m_pNext->m_pPrev = m_pPrev;
+            else if (m_pIndexReg->m_pLast == this)
+                m_pIndexReg->m_pLast = m_pPrev;
 
-            pPrev = pFnd;
-            pNext = pFnd->pNext;
-            if( pNext )
-                pNext->pPrev = this;
+            m_pPrev = pFnd;
+            m_pNext = pFnd->m_pNext;
+            if (m_pNext)
+                m_pNext->m_pPrev = this;
             else
-                pArray->pLast = this;
-            pFnd->pNext = this;
+                m_pIndexReg->m_pLast = this;
+            pFnd->m_pNext = this;
         }
     }
     else if( pFnd != this )
     {
-        // erstmal an alter Position ausketten
-        if( pPrev )
-            pPrev->pNext = pNext;
-        else if( pArray->pFirst == this )
-            pArray->pFirst = pNext;
+        // remove from list at old position
+        if (m_pPrev)
+            m_pPrev->m_pNext = m_pNext;
+        else if (m_pIndexReg->m_pFirst == this)
+            m_pIndexReg->m_pFirst = m_pNext;
 
-        if( pNext )
-            pNext->pPrev = pPrev;
-        else if( pArray->pLast == this )
-            pArray->pLast = pPrev;
+        if (m_pNext)
+            m_pNext->m_pPrev = m_pPrev;
+        else if (m_pIndexReg->m_pLast == this)
+            m_pIndexReg->m_pLast = m_pPrev;
 
-        pPrev = (SwIndex*)&rIdx;
-        pNext = rIdx.pNext;
-        pPrev->pNext = this;
+        m_pPrev = const_cast<SwIndex*>(&rIdx);
+        m_pNext = rIdx.m_pNext;
+        m_pPrev->m_pNext = this;
 
-        if( !pNext )            // im IndexArray als letzes
-            pArray->pLast = this;
+        if (!m_pNext) // last in the list
+            m_pIndexReg->m_pLast = this;
         else
-            pNext->pPrev = this;
+            m_pNext->m_pPrev = this;
     }
-    pArray = rIdx.pArray;
+    m_pIndexReg = rIdx.m_pIndexReg;
 
-    if( pArray->pFirst == pNext )
-        pArray->pFirst = this;
-    if( pArray->pLast == pPrev )
-        pArray->pLast = this;
+    if (m_pIndexReg->m_pFirst == m_pNext)
+        m_pIndexReg->m_pFirst = this;
+    if (m_pIndexReg->m_pLast == m_pPrev)
+        m_pIndexReg->m_pLast = this;
 
-    nIndex = nNewValue;
+    m_nIndex = nNewValue;
 
-    return *this; }
-
+    return *this;
+}
 
 void SwIndex::Remove()
 {
-    if( !pPrev )
-        pArray->pFirst = pNext;
+    if (!m_pPrev)
+        m_pIndexReg->m_pFirst = m_pNext;
     else
-        pPrev->pNext = pNext;
+        m_pPrev->m_pNext = m_pNext;
 
-    if( !pNext )
-        pArray->pLast = pPrev;
+    if (!m_pNext)
+        m_pIndexReg->m_pLast = m_pPrev;
     else
-        pNext->pPrev = pPrev;
+        m_pNext->m_pPrev = m_pPrev;
 }
 
 /*************************************************************************
 |*    SwIndex & SwIndex::operator=( const SwIndex & aSwIndex )
 *************************************************************************/
-
-
 SwIndex& SwIndex::operator=( const SwIndex& rIdx )
 {
-    int bEqual;
-    if( rIdx.pArray != pArray )         // im alten abmelden !!
+    bool bEqual;
+    if (rIdx.m_pIndexReg != m_pIndexReg)         // im alten abmelden !!
     {
         Remove();
-        pArray = rIdx.pArray;
-        pNext = pPrev = 0;
+        m_pIndexReg = rIdx.m_pIndexReg;
+        m_pNext = m_pPrev = 0;
         bEqual = sal_False;
     }
     else
-        bEqual = rIdx.nIndex == nIndex;
+        bEqual = rIdx.m_nIndex == m_nIndex;
 
     if( !bEqual )
-        ChgValue( rIdx, rIdx.nIndex );
+        ChgValue( rIdx, rIdx.m_nIndex );
     return *this;
 }
 
 /*************************************************************************
 |*    SwIndex &SwIndex::Assign
 *************************************************************************/
-
-
 SwIndex& SwIndex::Assign( SwIndexReg* pArr, xub_StrLen nIdx )
 {
     if( !pArr )
     {
         pArr = &EmptyIndexArray::get();
-        nIdx = 0;       // steht immer auf 0 !!!
+        nIdx = 0; // always 0 if no IndexReg
     }
 
-    if( pArr != pArray )            // im alten abmelden !!
+    if (pArr != m_pIndexReg) // unregister!
     {
         Remove();
-        pArray = pArr;
-        pNext = pPrev = 0;
-        if( !pArr->pFirst )         // 1. Index ??
+        m_pIndexReg = pArr;
+        m_pNext = m_pPrev = 0;
+        if (!pArr->m_pFirst) // first index?
         {
-            pArr->pFirst = pArr->pLast = this;
-            nIndex = nIdx;
+            pArr->m_pFirst = pArr->m_pLast = this;
+            m_nIndex = nIdx;
         }
-        else if( pArr->pLast && (nIdx > ((pArr->pLast->nIndex - pArr->pFirst->nIndex) / 2)) )
-            ChgValue( *pArr->pLast, nIdx );
+        else if (pArr->m_pLast && (nIdx > ((pArr->m_pLast->m_nIndex
+                                            - pArr->m_pFirst->m_nIndex) / 2)))
+        {
+            ChgValue( *pArr->m_pLast, nIdx );
+        }
         else
-            ChgValue( *pArr->pFirst, nIdx );
+        {
+            ChgValue( *pArr->m_pFirst, nIdx );
+        }
     }
-    else if( nIndex != nIdx )
+    else if (m_nIndex != nIdx)
         ChgValue( *this, nIdx );
     return *this;
 }
 
+// SwIndexReg ///////////////////////////////////////////////////////
 
 SwIndexReg::SwIndexReg()
-    : pFirst( 0 ), pLast( 0 )
+    : m_pFirst( 0 ), m_pLast( 0 )
 {
 }
-
-
 
 SwIndexReg::~SwIndexReg()
 {
-    OSL_ENSURE( !pFirst || !pLast, "There are still indices registered" );
+    OSL_ENSURE( !m_pFirst || !m_pLast, "There are still indices registered" );
 }
-
-
 
 void SwIndexReg::Update( SwIndex const & rIdx, const xub_StrLen nDiff,
     const bool bNeg, const bool /* argument is only used in derived class*/ )
 {
     SwIndex* pStt = const_cast<SwIndex*>(&rIdx);
-    xub_StrLen nNewVal = rIdx.nIndex;
+    xub_StrLen nNewVal = rIdx.m_nIndex;
     if( bNeg )
     {
         xub_StrLen nLast = rIdx.GetIndex() + nDiff;
-        while( pStt && pStt->nIndex == nNewVal )
+        while (pStt && pStt->m_nIndex == nNewVal)
         {
-            pStt->nIndex = nNewVal;
-            pStt = pStt->pPrev;
+            pStt->m_nIndex = nNewVal;
+            pStt = pStt->m_pPrev;
         }
-        pStt = rIdx.pNext;
-        while( pStt && pStt->nIndex >= nNewVal &&
-                pStt->nIndex <= nLast )
+        pStt = rIdx.m_pNext;
+        while (pStt && pStt->m_nIndex >= nNewVal
+                    && pStt->m_nIndex <= nLast)
         {
-            pStt->nIndex = nNewVal;
-            pStt = pStt->pNext;
+            pStt->m_nIndex = nNewVal;
+            pStt = pStt->m_pNext;
         }
         while( pStt )
         {
-            pStt->nIndex = pStt->nIndex - nDiff;
-            pStt = pStt->pNext;
+            pStt->m_nIndex = pStt->m_nIndex - nDiff;
+            pStt = pStt->m_pNext;
         }
     }
     else
     {
-        while( pStt && pStt->nIndex == nNewVal )
+        while (pStt && pStt->m_nIndex == nNewVal)
         {
-            pStt->nIndex = pStt->nIndex + nDiff;
-            pStt = pStt->pPrev;
+            pStt->m_nIndex = pStt->m_nIndex + nDiff;
+            pStt = pStt->m_pPrev;
         }
-        pStt = rIdx.pNext;
+        pStt = rIdx.m_pNext;
         while( pStt )
         {
-            pStt->nIndex = pStt->nIndex + nDiff;
-            pStt = pStt->pNext;
+            pStt->m_nIndex = pStt->m_nIndex + nDiff;
+            pStt = pStt->m_pNext;
         }
     }
 }
@@ -298,132 +306,122 @@ void SwIndexReg::Update( SwIndex const & rIdx, const xub_StrLen nDiff,
 *************************************************************************/
 xub_StrLen SwIndex::operator++(int)
 {
-    OSL_ASSERT( nIndex < INVALID_INDEX );
+    OSL_ASSERT( m_nIndex < INVALID_INDEX );
 
-    xub_StrLen nOldIndex = nIndex;
-    ChgValue( *this, nIndex+1 );
+    xub_StrLen nOldIndex = m_nIndex;
+    ChgValue( *this, m_nIndex+1 );
     return nOldIndex;
 }
 
-
 xub_StrLen SwIndex::operator++()
 {
-    OSL_ASSERT( nIndex < INVALID_INDEX );
+    OSL_ASSERT( m_nIndex < INVALID_INDEX );
 
-    ChgValue( *this, nIndex+1 );
-    return nIndex;
+    ChgValue( *this, m_nIndex+1 );
+    return m_nIndex;
 }
 
 /*************************************************************************
 |*    SwIndex::operator--()
 *************************************************************************/
-
-
 xub_StrLen SwIndex::operator--(int)
 {
-    OSL_ASSERT( nIndex );
+    OSL_ASSERT( m_nIndex );
 
-    xub_StrLen nOldIndex = nIndex;
-    ChgValue( *this, nIndex-1 );
+    xub_StrLen nOldIndex = m_nIndex;
+    ChgValue( *this, m_nIndex-1 );
     return nOldIndex;
 }
 
-
 xub_StrLen SwIndex::operator--()
 {
-    OSL_ASSERT( nIndex );
-    return ChgValue( *this, nIndex-1 ).nIndex;
+    OSL_ASSERT( m_nIndex );
+    return ChgValue( *this, m_nIndex-1 ).m_nIndex;
 }
 
 /*************************************************************************
 |*    SwIndex::operator+=( xub_StrLen )
 *************************************************************************/
-
-xub_StrLen SwIndex::operator+=( xub_StrLen nWert )
+xub_StrLen SwIndex::operator+=( xub_StrLen const nVal )
 {
-    OSL_ASSERT( nIndex < INVALID_INDEX - nWert );
-    return ChgValue( *this, nIndex + nWert ).nIndex;
+    OSL_ASSERT( m_nIndex < INVALID_INDEX - nVal );
+    return ChgValue( *this, m_nIndex + nVal ).m_nIndex;
 }
 
 /*************************************************************************
 |*    SwIndex::operator-=( xub_StrLen )
 *************************************************************************/
-
-xub_StrLen SwIndex::operator-=( xub_StrLen nWert )
+xub_StrLen SwIndex::operator-=( xub_StrLen const nVal )
 {
-    OSL_ASSERT( nIndex >= nWert );
-    return ChgValue( *this, nIndex - nWert ).nIndex;
+    OSL_ASSERT( m_nIndex >= nVal );
+    return ChgValue( *this, m_nIndex - nVal ).m_nIndex;
 }
 
 /*************************************************************************
 |*    SwIndex::operator+=( const SwIndex & )
 *************************************************************************/
-
 xub_StrLen SwIndex::operator+=( const SwIndex & rIndex )
 {
-    OSL_ASSERT( nIndex < INVALID_INDEX - rIndex.nIndex );
-    return ChgValue( *this, nIndex + rIndex.nIndex ).nIndex;
+    OSL_ASSERT( m_nIndex < INVALID_INDEX - rIndex.m_nIndex );
+    return ChgValue( *this, m_nIndex + rIndex.m_nIndex ).m_nIndex;
 }
 
 /*************************************************************************
 |*    SwIndex::operator-=( const SwIndex & )
 *************************************************************************/
-
 xub_StrLen SwIndex::operator-=( const SwIndex & rIndex )
 {
-    OSL_ASSERT( nIndex >= rIndex.nIndex );
-    return ChgValue( *this, nIndex - rIndex.nIndex ).nIndex;
+    OSL_ASSERT( m_nIndex >= rIndex.m_nIndex );
+    return ChgValue( *this, m_nIndex - rIndex.m_nIndex ).m_nIndex;
 }
 
 /*************************************************************************
 |*    SwIndex::operator<( const SwIndex & )
 *************************************************************************/
-
-sal_Bool SwIndex::operator<( const SwIndex & rIndex ) const
+bool SwIndex::operator< ( const SwIndex & rIndex ) const
 {
-    OSL_ENSURE( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
-    return nIndex < rIndex.nIndex;
+    OSL_ENSURE( m_pIndexReg == rIndex.m_pIndexReg,
+            "Attempt to compare indices into different arrays.");
+    return m_nIndex < rIndex.m_nIndex;
 }
 
 /*************************************************************************
 |*    SwIndex::operator<=( const SwIndex & )
 *************************************************************************/
-
-sal_Bool SwIndex::operator<=( const SwIndex & rIndex ) const
+bool SwIndex::operator<=( const SwIndex & rIndex ) const
 {
-    OSL_ENSURE( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
-    return nIndex <= rIndex.nIndex;
+    OSL_ENSURE( m_pIndexReg == rIndex.m_pIndexReg,
+            "Attempt to compare indices into different arrays.");
+    return m_nIndex <= rIndex.m_nIndex;
 }
 
 /*************************************************************************
 |*    SwIndex::operator>( const SwIndex & )
 *************************************************************************/
-
-sal_Bool SwIndex::operator>( const SwIndex & rIndex ) const
+bool SwIndex::operator> ( const SwIndex & rIndex ) const
 {
-    OSL_ENSURE( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
-    return nIndex > rIndex.nIndex;
+    OSL_ENSURE( m_pIndexReg == rIndex.m_pIndexReg,
+            "Attempt to compare indices into different arrays.");
+    return m_nIndex > rIndex.m_nIndex;
 }
 
 /*************************************************************************
 |*    SwIndex::operator>=( const SwIndex & )
 *************************************************************************/
-
-sal_Bool SwIndex::operator>=( const SwIndex & rIndex ) const
+bool SwIndex::operator>=( const SwIndex & rIndex ) const
 {
-    OSL_ENSURE( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
-    return nIndex >= rIndex.nIndex;
+    OSL_ENSURE( m_pIndexReg == rIndex.m_pIndexReg,
+            "Attempt to compare indices into different arrays.");
+    return m_nIndex >= rIndex.m_nIndex;
 }
 
 /*************************************************************************
 |*    SwIndex & SwIndex::operator=( xub_StrLen )
 *************************************************************************/
-
-SwIndex& SwIndex::operator=( xub_StrLen nWert )
+SwIndex& SwIndex::operator= ( xub_StrLen const nVal )
 {
-    // Werte kopieren und im neuen Array anmelden
-    if( nIndex != nWert )
-        ChgValue( *this, nWert );
+    if (m_nIndex != nVal)
+        ChgValue( *this, nVal );
 
     return *this;
 }
@@ -432,16 +430,17 @@ SwIndex& SwIndex::operator=( xub_StrLen nWert )
 
 void SwIndexReg::MoveTo( SwIndexReg& rArr )
 {
-    if( this != &rArr && pFirst )
+    if (this != &rArr && m_pFirst)
     {
-        SwIndex* pIdx = (SwIndex*)pFirst, *pNext;
+        SwIndex * pIdx = const_cast<SwIndex*>(m_pFirst);
+        SwIndex * pNext;
         while( pIdx )
         {
-            pNext = pIdx->pNext;
+            pNext = pIdx->m_pNext;
             pIdx->Assign( &rArr, pIdx->GetIndex() );
             pIdx = pNext;
         }
-        pFirst = 0, pLast = 0;
+        m_pFirst = 0, m_pLast = 0;
     }
 }
 

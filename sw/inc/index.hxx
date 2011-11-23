@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _INDEX_HXX
-#define _INDEX_HXX
+#ifndef SW_INDEX_HXX
+#define SW_INDEX_HXX
 
 #include <limits.h>
 
@@ -36,9 +36,9 @@
 #include <tools/string.hxx>             // for xub_StrLen
 #include <swdllapi.h>
 
+// Maximum index in IndexArray (for testing on overflows).
 #define INVALID_INDEX STRING_NOTFOUND
 
-// Maximal count of indices in IndexArray (for testing on overflows).
 class SwIndex;
 class SwIndexReg;
 struct SwPosition;
@@ -51,11 +51,14 @@ struct SwPosition;
 
 class SW_DLLPUBLIC SwIndex
 {
+private:
     friend class SwIndexReg;
 
-    xub_StrLen  nIndex;
-    SwIndexReg* pArray;
-    SwIndex *pNext, *pPrev;
+    xub_StrLen m_nIndex;
+    SwIndexReg * m_pIndexReg;
+    // doubly linked list of Indexes registered at m_pIndexReg
+    SwIndex * m_pNext;
+    SwIndex * m_pPrev;
 
     SwIndex& ChgValue( const SwIndex& rIdx, xub_StrLen nNewValue );
     void Remove();
@@ -63,46 +66,53 @@ class SW_DLLPUBLIC SwIndex
 public:
     explicit SwIndex(SwIndexReg *const pReg, xub_StrLen const nIdx = 0);
     SwIndex( const SwIndex & );
-    SwIndex( const SwIndex &, short nDiff );
+    SwIndex( const SwIndex &, xub_StrLen const nDiff );
     ~SwIndex() { Remove(); }
+
+    INLINE SwIndex& operator=( xub_StrLen const );
+    SwIndex& operator=( const SwIndex & );
 
     INLINE xub_StrLen operator++();
     INLINE xub_StrLen operator--();
     INLINE xub_StrLen operator++(int);
     INLINE xub_StrLen operator--(int);
 
-    INLINE xub_StrLen operator+=( xub_StrLen );
-    INLINE xub_StrLen operator-=( xub_StrLen );
+    INLINE xub_StrLen operator+=( xub_StrLen const );
+    INLINE xub_StrLen operator-=( xub_StrLen const );
     INLINE xub_StrLen operator+=( const SwIndex& );
     INLINE xub_StrLen operator-=( const SwIndex& );
 
-    INLINE sal_Bool operator<( const SwIndex& ) const;
-    INLINE sal_Bool operator<=( const SwIndex& ) const;
-    INLINE sal_Bool operator>( const SwIndex& ) const;
-    INLINE sal_Bool operator>=( const SwIndex& ) const;
-    sal_Bool operator==( const SwIndex& rSwIndex ) const
-    { return (nIndex == rSwIndex.nIndex) &&  (pArray == rSwIndex.pArray); }
+    INLINE bool operator< ( const SwIndex& ) const;
+    INLINE bool operator<=( const SwIndex& ) const;
+    INLINE bool operator> ( const SwIndex& ) const;
+    INLINE bool operator>=( const SwIndex& ) const;
 
-    sal_Bool operator!=( const SwIndex& rSwIndex ) const
-    { return (nIndex != rSwIndex.nIndex) ||  (pArray != rSwIndex.pArray); }
+    bool operator< ( xub_StrLen const nVal ) const { return m_nIndex <  nVal; }
+    bool operator<=( xub_StrLen const nVal ) const { return m_nIndex <= nVal; }
+    bool operator> ( xub_StrLen const nVal ) const { return m_nIndex >  nVal; }
+    bool operator>=( xub_StrLen const nVal ) const { return m_nIndex >= nVal; }
+    bool operator==( xub_StrLen const nVal ) const { return m_nIndex == nVal; }
+    bool operator!=( xub_StrLen const nVal ) const { return m_nIndex != nVal; }
 
-    sal_Bool operator<( xub_StrLen nWert ) const    { return nIndex <  nWert; }
-    sal_Bool operator<=( xub_StrLen nWert ) const   { return nIndex <= nWert; }
-    sal_Bool operator>( xub_StrLen nWert ) const    { return nIndex >  nWert; }
-    sal_Bool operator>=( xub_StrLen nWert ) const   { return nIndex >= nWert; }
-    sal_Bool operator==( xub_StrLen nWert ) const   { return nIndex == nWert; }
-    sal_Bool operator!=( xub_StrLen nWert ) const   { return nIndex != nWert; }
+    bool operator==( const SwIndex& rSwIndex ) const
+    {
+        return (m_nIndex    == rSwIndex.m_nIndex)
+            && (m_pIndexReg == rSwIndex.m_pIndexReg);
+    }
 
-    INLINE SwIndex& operator=( xub_StrLen );
-    SwIndex& operator=( const SwIndex & );
+    bool operator!=( const SwIndex& rSwIndex ) const
+    {
+        return (m_nIndex    != rSwIndex.m_nIndex)
+            || (m_pIndexReg != rSwIndex.m_pIndexReg);
+    }
 
-    xub_StrLen GetIndex() const { return nIndex; }
+    xub_StrLen GetIndex() const { return m_nIndex; }
 
     // Assignments without creating a temporary object.
     SwIndex &Assign(SwIndexReg *,xub_StrLen);
 
     // Returns pointer to IndexArray (for RTTI at SwIndexReg).
-    const SwIndexReg* GetIdxReg() const { return pArray; }
+    const SwIndexReg* GetIdxReg() const { return m_pIndexReg; }
 };
 
 #undef INLINE
@@ -112,7 +122,8 @@ class SwIndexReg
     friend class SwIndex;
     friend bool lcl_PosOk(const SwPosition & aPos);
 
-    const SwIndex *pFirst, *pLast, *pMiddle;
+    const SwIndex * m_pFirst;
+    const SwIndex * m_pLast;
 
 protected:
     virtual void Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
@@ -120,10 +131,10 @@ protected:
 
     void ChkArr();
 
-    sal_Bool HasAnyIndex() const { return 0 != pFirst; }
+    bool HasAnyIndex() const { return 0 != m_pFirst; }
 
 public:
-    SwIndexReg();
+    explicit SwIndexReg();
     virtual ~SwIndexReg();
 
     // rtti, abgeleitete moegens gleichtun oder nicht. Wenn sie es gleichtun
@@ -141,62 +152,64 @@ struct EmptyIndexArray: rtl::Static< SwIndexReg, EmptyIndexArray > {};
 
 inline xub_StrLen SwIndex::operator++()
 {
-    return ChgValue( *this, nIndex+1 ).nIndex;
+    return ChgValue( *this, m_nIndex+1 ).m_nIndex;
 }
 inline xub_StrLen SwIndex::operator--()
 {
-    return ChgValue( *this, nIndex-1 ).nIndex;
+    return ChgValue( *this, m_nIndex-1 ).m_nIndex;
 }
 inline xub_StrLen SwIndex::operator++(int)
 {
-    xub_StrLen nOldIndex = nIndex;
-    ChgValue( *this, nIndex+1 );
+    xub_StrLen const nOldIndex = m_nIndex;
+    ChgValue( *this, m_nIndex+1 );
     return nOldIndex;
 }
 inline xub_StrLen SwIndex::operator--(int)
 {
-    xub_StrLen nOldIndex = nIndex;
-    ChgValue( *this, nIndex-1 );
+    xub_StrLen const nOldIndex = m_nIndex;
+    ChgValue( *this, m_nIndex-1 );
     return nOldIndex;
 }
 
-inline xub_StrLen SwIndex::operator+=( xub_StrLen nWert )
+inline xub_StrLen SwIndex::operator+=( xub_StrLen const nVal )
 {
-    return ChgValue( *this, nIndex + nWert ).nIndex;
+    return ChgValue( *this, m_nIndex + nVal ).m_nIndex;
 }
-inline xub_StrLen SwIndex::operator-=( xub_StrLen nWert )
+inline xub_StrLen SwIndex::operator-=( xub_StrLen const nVal )
 {
-    return ChgValue( *this, nIndex - nWert ).nIndex;
+    return ChgValue( *this, m_nIndex - nVal ).m_nIndex;
 }
-inline xub_StrLen SwIndex::operator+=( const  SwIndex& rIndex )
+inline xub_StrLen SwIndex::operator+=( const SwIndex& rIndex )
 {
-    return ChgValue( *this, nIndex + rIndex.nIndex ).nIndex;
+    return ChgValue( *this, m_nIndex + rIndex.m_nIndex ).m_nIndex;
 }
 inline xub_StrLen SwIndex::operator-=( const SwIndex& rIndex )
 {
-    return ChgValue( *this, nIndex - rIndex.nIndex ).nIndex;
+    return ChgValue( *this, m_nIndex - rIndex.m_nIndex ).m_nIndex;
 }
 
-inline sal_Bool SwIndex::operator<( const SwIndex& rIndex ) const
+inline bool SwIndex::operator< ( const SwIndex& rIndex ) const
 {
-    return nIndex < rIndex.nIndex;
+    return m_nIndex <  rIndex.m_nIndex;
 }
-inline sal_Bool SwIndex::operator<=( const SwIndex& rIndex ) const
+inline bool SwIndex::operator<=( const SwIndex& rIndex ) const
 {
-    return nIndex <= rIndex.nIndex;
+    return m_nIndex <= rIndex.m_nIndex;
 }
-inline sal_Bool SwIndex::operator>( const SwIndex& rIndex ) const
+inline bool SwIndex::operator> ( const SwIndex& rIndex ) const
 {
-    return nIndex > rIndex.nIndex;
+    return m_nIndex >  rIndex.m_nIndex;
 }
-inline sal_Bool SwIndex::operator>=( const SwIndex& rIndex ) const
+inline bool SwIndex::operator>=( const SwIndex& rIndex ) const
 {
-    return nIndex >= rIndex.nIndex;
+    return m_nIndex >= rIndex.m_nIndex;
 }
-inline SwIndex& SwIndex::operator=( xub_StrLen nWert )
+inline SwIndex& SwIndex::operator= ( xub_StrLen const nVal )
 {
-    if( nIndex != nWert )
-        ChgValue( *this, nWert );
+    if (m_nIndex != nVal)
+    {
+        ChgValue( *this, nVal );
+    }
     return *this;
 }
 
