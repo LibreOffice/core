@@ -34,7 +34,7 @@
 <TimePM>PM</TimePM>
 <MeasurementSystem>Metric</MeasurementSystem>
 </LC_CTYPE>
-<LC_FORMAT>
+<LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$Esc.-816]">
 <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
 <FormatCode>DD-MM-AAAA</FormatCode>
 <DefaultName></DefaultName>
@@ -179,29 +179,23 @@
 <FormatCode>#.###,00</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
-<FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
-<FormatCode>#.##0 [$Esc.-816];-#.##0 [$Esc.-816]</FormatCode>
-<DefaultName></DefaultName>
+<FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">
+<FormatCode>#.##0 [CURRENCY];-#.##0 [CURRENCY]</FormatCode>
 </FormatElement>
-<FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY"  formatindex="13">
-<FormatCode>#.##0,00 [$Esc.-816];-#.##0,00 [$Esc.-816]</FormatCode>
-<DefaultName></DefaultName>
+<FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
+<FormatCode>#.##0,00 [CURRENCY];-#.##0,00 [CURRENCY]</FormatCode>
 </FormatElement>
-<FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY"  formatindex="14">
-<FormatCode>#.##0 [$Esc.-816];[RED]-#.##0 [$Esc.-816]</FormatCode>
-<DefaultName></DefaultName>
+<FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
+<FormatCode>#.##0 [CURRENCY];[RED]-#.##0 [CURRENCY]</FormatCode>
 </FormatElement>
-<FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY"  formatindex="15">
-<FormatCode>#.##0,00 [$Esc.-816];[RED]-#.##0,00 [$Esc.-816]</FormatCode>
-<DefaultName></DefaultName>
+<FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY" formatindex="15">
+<FormatCode>#.##0,00 [CURRENCY];[RED]-#.##0,00 [CURRENCY]</FormatCode>
 </FormatElement>
-<FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY"  formatindex="16">
+<FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
 <FormatCode>#.##0,00 CCC</FormatCode>
-<DefaultName></DefaultName>
 </FormatElement>
-<FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY"  formatindex="17">
-<FormatCode>#.##0,-- [$Esc.-816];[RED]-#.##0,-- [$Esc.-816]</FormatCode>
-<DefaultName></DefaultName>
+<FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
+<FormatCode>#.##0,-- [CURRENCY];[RED]-#.##0,-- [CURRENCY]</FormatCode>
 </FormatElement>
 <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER"  formatindex="8">
 <FormatCode>0%</FormatCode>
@@ -265,75 +259,75 @@
 <MonthsOfYear>
 <Month>
 <MonthID>jan</MonthID>
-<DefaultAbbrvName>Jan</DefaultAbbrvName>
-<DefaultFullName>Janeiro</DefaultFullName>
+<DefaultAbbrvName>jan</DefaultAbbrvName>
+<DefaultFullName>janeiro</DefaultFullName>
 </Month>
 <Month>
 <MonthID>feb</MonthID>
-<DefaultAbbrvName>Fev</DefaultAbbrvName>
-<DefaultFullName>Fevereiro</DefaultFullName>
+<DefaultAbbrvName>fev</DefaultAbbrvName>
+<DefaultFullName>fevereiro</DefaultFullName>
 </Month>
 <Month>
 <MonthID>mar</MonthID>
-<DefaultAbbrvName>Mar</DefaultAbbrvName>
-<DefaultFullName>Março</DefaultFullName>
+<DefaultAbbrvName>mar</DefaultAbbrvName>
+<DefaultFullName>março</DefaultFullName>
 </Month>
 <Month>
 <MonthID>apr</MonthID>
-<DefaultAbbrvName>Abr</DefaultAbbrvName>
-<DefaultFullName>Abril</DefaultFullName>
+<DefaultAbbrvName>abr</DefaultAbbrvName>
+<DefaultFullName>abril</DefaultFullName>
 </Month>
 <Month>
 <MonthID>may</MonthID>
-<DefaultAbbrvName>Mai</DefaultAbbrvName>
-<DefaultFullName>Maio</DefaultFullName>
+<DefaultAbbrvName>mai</DefaultAbbrvName>
+<DefaultFullName>maio</DefaultFullName>
 </Month>
 <Month>
 <MonthID>jun</MonthID>
-<DefaultAbbrvName>Jun</DefaultAbbrvName>
-<DefaultFullName>Junho</DefaultFullName>
+<DefaultAbbrvName>jun</DefaultAbbrvName>
+<DefaultFullName>junho</DefaultFullName>
 </Month>
 <Month>
 <MonthID>jul</MonthID>
-<DefaultAbbrvName>Jul</DefaultAbbrvName>
-<DefaultFullName>Julho</DefaultFullName>
+<DefaultAbbrvName>jul</DefaultAbbrvName>
+<DefaultFullName>julho</DefaultFullName>
 </Month>
 <Month>
 <MonthID>aug</MonthID>
-<DefaultAbbrvName>Ago</DefaultAbbrvName>
-<DefaultFullName>Agosto</DefaultFullName>
+<DefaultAbbrvName>ago</DefaultAbbrvName>
+<DefaultFullName>agosto</DefaultFullName>
 </Month>
 <Month>
 <MonthID>sep</MonthID>
-<DefaultAbbrvName>Set</DefaultAbbrvName>
-<DefaultFullName>Setembro</DefaultFullName>
+<DefaultAbbrvName>set</DefaultAbbrvName>
+<DefaultFullName>setembro</DefaultFullName>
 </Month>
 <Month>
 <MonthID>oct</MonthID>
-<DefaultAbbrvName>Out</DefaultAbbrvName>
-<DefaultFullName>Outubro</DefaultFullName>
+<DefaultAbbrvName>out</DefaultAbbrvName>
+<DefaultFullName>outubro</DefaultFullName>
 </Month>
 <Month>
 <MonthID>nov</MonthID>
-<DefaultAbbrvName>Nov</DefaultAbbrvName>
-<DefaultFullName>Novembro</DefaultFullName>
+<DefaultAbbrvName>nov</DefaultAbbrvName>
+<DefaultFullName>novembro</DefaultFullName>
 </Month>
 <Month>
 <MonthID>dec</MonthID>
-<DefaultAbbrvName>Dez</DefaultAbbrvName>
-<DefaultFullName>Dezembro</DefaultFullName>
+<DefaultAbbrvName>dez</DefaultAbbrvName>
+<DefaultFullName>dezembro</DefaultFullName>
 </Month>
 </MonthsOfYear>
 <Eras>
 <Era>
 <EraID>bc</EraID>
-<DefaultAbbrvName>BC</DefaultAbbrvName>
-<DefaultFullName>BC</DefaultFullName>
+<DefaultAbbrvName>a.c.</DefaultAbbrvName>
+<DefaultFullName>a.c.</DefaultFullName>
 </Era>
 <Era>
 <EraID>ad</EraID>
-<DefaultAbbrvName>AD</DefaultAbbrvName>
-<DefaultFullName>AD</DefaultFullName>
+<DefaultAbbrvName>d.c.</DefaultAbbrvName>
+<DefaultFullName>d.c.</DefaultFullName>
 </Era>
 </Eras>
 <StartDayOfWeek>
@@ -363,16 +357,16 @@
 <ReservedWords>
 <trueWord>verdadeiro</trueWord>
 <falseWord>falso</falseWord>
-<quarter1Word>1º trimestre</quarter1Word>
-<quarter2Word>2º trimestre</quarter2Word>
-<quarter3Word>3º trimestre</quarter3Word>
-<quarter4Word>4º trimestre</quarter4Word>
+<quarter1Word>1.º trimestre</quarter1Word>
+<quarter2Word>2.º trimestre</quarter2Word>
+<quarter3Word>3.º trimestre</quarter3Word>
+<quarter4Word>4.º trimestre</quarter4Word>
 <aboveWord>acima</aboveWord>
 <belowWord>abaixo</belowWord>
-<quarter1Abbreviation>T1</quarter1Abbreviation>
-<quarter2Abbreviation>T2</quarter2Abbreviation>
-<quarter3Abbreviation>T3</quarter3Abbreviation>
-<quarter4Abbreviation>T4</quarter4Abbreviation>
+<quarter1Abbreviation>1T</quarter1Abbreviation>
+<quarter2Abbreviation>2T</quarter2Abbreviation>
+<quarter3Abbreviation>3T</quarter3Abbreviation>
+<quarter4Abbreviation>4T</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
 <LC_NumberingLevel ref="en_US"/>
