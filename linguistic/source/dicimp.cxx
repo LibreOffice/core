@@ -41,6 +41,7 @@
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
@@ -88,7 +89,7 @@ static sal_Bool getTag(const ByteString &rLine,
     if (nPos == STRING_NOTFOUND)
         return sal_False;
 
-    rTagValue = rLine.Copy( nPos + sal::static_int_cast< xub_StrLen >(strlen( pTagName )) ).EraseLeadingAndTrailingChars();
+    rTagValue = comphelper::string::strip(rLine.Copy(nPos + sal::static_int_cast< xub_StrLen >(strlen( pTagName ))), ' ');
     return sal_True;
 }
 

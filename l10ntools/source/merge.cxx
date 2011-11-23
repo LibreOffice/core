@@ -216,7 +216,7 @@ MergeDataFile::MergeDataFile(
                 ByteString sPFO = sLine.GetToken( 1, '\t', rIdx ); // 7
                 sPFO = sHACK;
                 ByteString nLANG = sLine.GetToken( 1, '\t', rIdx ); // 9
-                nLANG.EraseLeadingAndTrailingChars();
+                nLANG = comphelper::string::strip(nLANG, ' ');
                 const ByteString sTEXT = sLine.GetToken( 0, '\t', rIdx ); // 10
                 const ByteString sQHTEXT = sLine.GetToken( 1, '\t', rIdx ); // 12
                 const ByteString sTITLE = sLine.GetToken( 0, '\t', rIdx );  // 13

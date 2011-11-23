@@ -231,6 +231,16 @@ rtl::OUString stripEnd(const rtl::OUString &rIn, sal_Unicode c)
     return tmpl_stripEnd<rtl::OUString, sal_Unicode>(rIn, c);
 }
 
+rtl::OString strip(const rtl::OString &rIn, sal_Char c)
+{
+    return stripEnd(stripStart(rIn, c), c);
+}
+
+rtl::OUString strip(const rtl::OUString &rIn, sal_Unicode c)
+{
+    return stripEnd(stripStart(rIn, c), c);
+}
+
 sal_uInt32 decimalStringToNumber(
     ::rtl::OUString const & str )
 {

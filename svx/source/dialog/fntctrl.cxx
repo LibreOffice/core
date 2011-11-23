@@ -682,7 +682,15 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
             if ( !pImpl->bSelection || pImpl->bUseFontNameAsText )
             {
                 using namespace com::sun::star::i18n::ScriptType;
-                pImpl->aText = rFont.GetName();
+
+                //If we're showing multiple sample texts, then they're all
+                //sample texts. If only showing Latin, continue to use
+                //the fontname as the preview
+                if ((pImpl->m_bCJKEnabled) || (pImpl->m_bCTLEnabled))
+                    pImpl->aText = makeRepresentativeTextForFont(LATIN, rFont);
+                else
+                    pImpl->aText = rFont.GetName();
+
                 if (pImpl->m_bCJKEnabled)
                 {
                     if (pImpl->aText.Len())

@@ -354,7 +354,7 @@ void Export::InitLanguages( bool bMergeMode ){
         ByteStringBoolHashMap aEnvLangs;
         for ( sal_uInt16 x = 0; x < sLanguages.GetTokenCount( ',' ); x++ ){
             sTmp = getToken(getToken(sLanguages, x, ','), 0, '=');
-            sTmp.EraseLeadingAndTrailingChars();
+            sTmp = comphelper::string::strip(sTmp, ' ');
             if( bMergeMode && !isAllowed( sTmp ) ){}
             else if( !( (sTmp.GetChar(0)=='x' || sTmp.GetChar(0)=='X') && sTmp.GetChar(1)=='-' ) ){
                 aLanguages.push_back( sTmp );
@@ -371,7 +371,7 @@ void Export::InitForcedLanguages( bool bMergeMode ){
     ByteStringBoolHashMap aEnvLangs;
     for ( sal_uInt16 x = 0; x < sForcedLanguages.GetTokenCount( ',' ); x++ ){
         sTmp = getToken(getToken(sForcedLanguages, x, ','), 0, '=');
-        sTmp.EraseLeadingAndTrailingChars();
+        sTmp = comphelper::string::strip(sTmp, ' ');
         if( bMergeMode && isAllowed( sTmp ) ){}
         else if( !( (sTmp.GetChar(0)=='x' || sTmp.GetChar(0)=='X') && sTmp.GetChar(1)=='-' ) )
             aForcedLanguages.push_back( sTmp );
