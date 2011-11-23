@@ -2948,37 +2948,64 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
 /** If a day of month occurs within the format, the month name is in possessive 
     genitive case if the day follows the month, and partitive case if the day 
     precedes the month. If there is no day of month the nominative case (noun) 
-    is returned.
+    is returned. Also if the month is immediately preceded or followed by a 
+    literal string other than space the nominative name is used, this prevents 
+    duplicated casing for MMMM\t\a and such in documents imported from (e.g. 
+    Finnish) Excel or older LibO/OOo releases.
  */
+
+// IDEA: instead of eCodeType pass the index to nTypeArray and restrict 
+// inspection of month name around that one, that would enable different month 
+// cases in one format. Though probably the most rare use case ever..
+
 sal_Int32 SvNumberformat::ImpUseMonthCase( int & io_nState, const ImpSvNumFor& rNumFor, NfKeywordIndex eCodeType ) const
 {
     using namespace ::com::sun::star::i18n;
     if (!io_nState)
     {
-        io_nState = 1;
         bool bMonthSeen = false;
+        bool bDaySeen = false;
         const ImpSvNumberformatInfo& rInfo = rNumFor.Info();
         const sal_uInt16 nCount = rNumFor.GetCount();
-        for ( sal_uInt16 i = 0; i < nCount && io_nState == 1; ++i )
+        for (sal_uInt16 i = 0; i < nCount && io_nState == 0; ++i)
         {
-            switch ( rInfo.nTypeArray[i] )
+            switch (rInfo.nTypeArray[i])
             {
                 case NF_KEY_D :
                 case NF_KEY_DD :
-                    io_nState = (bMonthSeen ? 2 : 3);   // and end loop
+                    if (bMonthSeen)
+                        io_nState = 2;
+                    else
+                        bDaySeen = true;
                     break;
                 case NF_KEY_MMM:
                 case NF_KEY_MMMM:
                 case NF_KEY_MMMMM:
-                    bMonthSeen = true;
+                    {
+                        xub_StrLen nLen;
+                        if ((i < nCount-1 &&
+                                    rInfo.nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
+                                    rInfo.sStrArray[i+1].GetChar(0) != ' ') ||
+                                (i > 0 &&
+                                 rInfo.nTypeArray[i-1] == NF_SYMBOLTYPE_STRING &&
+                                 ((nLen = rInfo.sStrArray[i-1].Len()) > 0) &&
+                                 rInfo.sStrArray[i-1].GetChar(nLen-1) != ' '))
+                            io_nState = 1;
+                        else if (bDaySeen)
+                            io_nState = 3;
+                        else
+                            bMonthSeen = true;
+                    }
                     break;
             }
         }
+        if (io_nState == 0)
+            io_nState = 1;      // no day of month
     }
     switch (io_nState)
     {
         case 1:
-            // no day of month
+            // no day of month or forced nominative
             switch (eCodeType)
             {
                 case NF_KEY_MMM:
@@ -3017,7 +3044,7 @@ sal_Int32 SvNumberformat::ImpUseMonthCase( int & io_nState, const ImpSvNumFor& r
                     ;   // nothing
             }
     }
-    OSL_FAIL( "ImpUseMonthCase: should not be reached");
+    OSL_FAIL( "ImpUseMonthCase: unhandled keyword index eCodeType");
     return CalendarDisplayCode::LONG_MONTH_NAME;
 }
 
