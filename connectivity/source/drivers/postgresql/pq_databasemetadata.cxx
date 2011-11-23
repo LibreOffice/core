@@ -1503,6 +1503,7 @@ static void columnMetaData2DatabaseTypeDescription(
     const OUString& columnNamePattern ) throw (SQLException, RuntimeException)
 {
     // LEM TODO: review in comparison with JDBC driver
+    //           OK, confirmed it does not return consecutive values in ORDINAL_POSITION; needs to be fixed.
     Statics &statics = getStatics();
 
     // continue !
