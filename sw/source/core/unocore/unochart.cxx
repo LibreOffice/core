@@ -1695,8 +1695,8 @@ void SwChartDataProvider::AddRowCols(
     if (nBoxes < 1 || nLines < 1)
         return;
 
-    SwTableBox* pFirstBox   = rBoxes.begin()->second;
-    SwTableBox* pLastBox    = rBoxes.rbegin()->second;
+    SwTableBox* pFirstBox = rBoxes.begin()->second;
+    SwTableBox* pLastBox = rBoxes.rbegin()->second;
 
     if (pFirstBox && pLastBox)
     {

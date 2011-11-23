@@ -52,12 +52,25 @@ class SwCellFrm;
 SV_DECL_PTRARR( SwCellFrms, SwCellFrm*, 16, 16 )
 
 
-class SwSelBoxes : public std::map<sal_uLong, SwTableBox*> {
+class SwSelBoxes : private std::map<sal_uLong, SwTableBox*>
+{
     typedef std::map<sal_uLong, SwTableBox*> Base;
 public:
-    using Base::insert;
-    using Base::find;
+    using Base::begin;
+    using Base::clear;
     using Base::count;
+    using Base::const_iterator;
+    using Base::const_reverse_iterator;
+    using Base::empty;
+    using Base::end;
+    using Base::erase;
+    using Base::find;
+    using Base::insert;
+    using Base::iterator;
+    using Base::rbegin;
+    using Base::rend;
+    using Base::reverse_iterator;
+    using Base::size;
 
     std::pair<iterator, bool>
     insert(SwTableBox* pBox) { return Base::insert(std::make_pair(pBox->GetSttIdx(), pBox)); }
