@@ -6251,7 +6251,7 @@ void lcl_checkFontname( String& sString )
     if( bFound )
     {
         sString = comphelper::string::remove(sString, 1);
-        sString = comphelper::string::strip(aString, ';');
+        sString = comphelper::string::strip(sString, ';');
     }
 }
 

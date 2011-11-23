@@ -1700,7 +1700,7 @@ void SmBraceNode::CreateTextFromNode(String &rText)
     {
         String aStr;
         GetSubNode(2)->CreateTextFromNode(aStr);
-        aStr = comphelper::string:strip(aStr, ' ');
+        aStr = comphelper::string::strip(aStr, ' ');
         aStr = comphelper::string::stripStart(aStr, '\\');
         if (aStr.Len())
         {

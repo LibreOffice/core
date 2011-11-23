@@ -3447,7 +3447,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, String& rStr )
     //HYPERLINK "filename" [switches]
     bool bOptions=false;
 
-    rStr = comphelper::strip::stripEnd(rStr, 1);
+    rStr = comphelper::string::stripEnd(rStr, 1);
 
     if (!bDataImport)
     {
