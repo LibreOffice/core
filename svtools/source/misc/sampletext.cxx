@@ -425,6 +425,9 @@ rtl::OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
             sSampleText = rtl::OUString(aTale, SAL_N_ELEMENTS(aTale));
             break;
         }
+        case USCRIPT_LATIN:
+            sSampleText = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Lorem ipsum"));
+            break;
         default:
             break;
     }
@@ -1010,17 +1013,11 @@ namespace
         return aMask;
     }
 
-    boost::dynamic_bitset<sal_uInt32> getGenericMask()
-    {
-        static boost::dynamic_bitset<sal_uInt32> aMask(getWeakMask() & getCommonLatnSubsetMask());
-        return aMask;
-    }
-
     UScriptCode getScript(const vcl::FontCapabilities &rFontCapabilities)
     {
         using vcl::UnicodeCoverage::UnicodeCoverageEnum;
 
-        boost::dynamic_bitset<sal_uInt32> aMasked = rFontCapabilities.maUnicodeRange & getGenericMask();
+        boost::dynamic_bitset<sal_uInt32> aMasked = rFontCapabilities.maUnicodeRange & getWeakMask();
 
         if (aMasked.count() == 1)
             return otCoverageToScript(static_cast<UnicodeCoverageEnum>(aMasked.find_first()));
@@ -1160,7 +1157,7 @@ rtl::OUString makeShortRepresentativeTextForSelectedFont(OutputDevice &rDevice)
     lcl_dump_codepage_coverage(aFontCapabilities.maCodePageRange);
 #endif
 
-    aFontCapabilities.maUnicodeRange &= getGenericMask();
+    aFontCapabilities.maUnicodeRange &= getCommonLatnSubsetMask();
 
     //If this font is probably tuned to display a single non-Latin
     //script and the font name is itself in Latin, then show a small
@@ -1551,6 +1548,8 @@ rtl::OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const Font &r
                         sRet = makeRepresentativeTextForScript(USCRIPT_ARABIC);
                 }
             }
+            else if (nScriptType == com::sun::star::i18n::ScriptType::LATIN)
+                sRet = makeRepresentativeTextForScript(USCRIPT_LATIN);
         }
     }
 
