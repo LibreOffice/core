@@ -50,19 +50,7 @@ SwIndex::SwIndex(SwIndexReg *const pReg, xub_StrLen const nIdx)
         m_nIndex = 0; // always 0 if no IndexReg
     }
 
-    if (!m_pIndexReg->m_pFirst || !m_pIndexReg->m_pLast) // first Index?
-    {
-        m_pIndexReg->m_pFirst = m_pIndexReg->m_pLast = this;
-    }
-    else if (nIdx > ((m_pIndexReg->m_pLast->m_nIndex
-                        - m_pIndexReg->m_pFirst->m_nIndex) / 2))
-    {
-        ChgValue( *m_pIndexReg->m_pLast, nIdx );
-    }
-    else
-    {
-        ChgValue( *m_pIndexReg->m_pFirst, nIdx );
-    }
+    Init(m_nIndex);
 }
 
 SwIndex::SwIndex( const SwIndex& rIdx, xub_StrLen const nDiff )
@@ -80,6 +68,25 @@ SwIndex::SwIndex( const SwIndex& rIdx )
     , m_pPrev( 0 )
 {
     ChgValue( rIdx, rIdx.m_nIndex );
+}
+
+void SwIndex::Init(xub_StrLen const nIdx)
+{
+    if (!m_pIndexReg->m_pFirst) // first Index?
+    {
+        OSL_ASSERT(!m_pIndexReg->m_pLast);
+        m_pIndexReg->m_pFirst = m_pIndexReg->m_pLast = this;
+        m_nIndex = nIdx;
+    }
+    else if (nIdx > ((m_pIndexReg->m_pLast->m_nIndex
+                        - m_pIndexReg->m_pFirst->m_nIndex) / 2))
+    {
+        ChgValue( *m_pIndexReg->m_pLast, nIdx );
+    }
+    else
+    {
+        ChgValue( *m_pIndexReg->m_pFirst, nIdx );
+    }
 }
 
 SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, xub_StrLen nNewValue )
@@ -209,20 +216,7 @@ SwIndex& SwIndex::Assign( SwIndexReg* pArr, xub_StrLen nIdx )
         Remove();
         m_pIndexReg = pArr;
         m_pNext = m_pPrev = 0;
-        if (!pArr->m_pFirst) // first index?
-        {
-            pArr->m_pFirst = pArr->m_pLast = this;
-            m_nIndex = nIdx;
-        }
-        else if (pArr->m_pLast && (nIdx > ((pArr->m_pLast->m_nIndex
-                                            - pArr->m_pFirst->m_nIndex) / 2)))
-        {
-            ChgValue( *pArr->m_pLast, nIdx );
-        }
-        else
-        {
-            ChgValue( *pArr->m_pFirst, nIdx );
-        }
+        Init(nIdx);
     }
     else if (m_nIndex != nIdx)
         ChgValue( *this, nIdx );

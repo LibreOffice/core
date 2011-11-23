@@ -61,6 +61,7 @@ private:
     SwIndex * m_pPrev;
 
     SwIndex& ChgValue( const SwIndex& rIdx, xub_StrLen nNewValue );
+    void Init(xub_StrLen const nIdx);
     void Remove();
 
 public:
