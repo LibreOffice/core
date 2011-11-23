@@ -596,6 +596,7 @@ public:
 
     const ::rtl::OUString* getRealTableName(sal_uInt16 nFileId, const ::rtl::OUString& rTabName) const;
     const ::rtl::OUString* getRealRangeName(sal_uInt16 nFileId, const ::rtl::OUString& rRangeName) const;
+    void clearCache(sal_uInt16 nFileId);
     void refreshNames(sal_uInt16 nFileId);
     void breakLink(sal_uInt16 nFileId);
     void switchSrcFile(sal_uInt16 nFileId, const ::rtl::OUString& rNewFile, const ::rtl::OUString& rNewFilter);

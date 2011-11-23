@@ -2421,10 +2421,14 @@ void lcl_removeByFileId(sal_uInt16 nFileId, MapContainer& rMap)
     }
 }
 
+void ScExternalRefManager::clearCache(sal_uInt16 nFileId)
+{
+    maRefCache.clearCache(nFileId);
+}
 
 void ScExternalRefManager::refreshNames(sal_uInt16 nFileId)
 {
-    maRefCache.clearCache(nFileId);
+    clearCache(nFileId);
     lcl_removeByFileId(nFileId, maDocShells);
 
     if (maDocShells.empty())
@@ -2465,7 +2469,7 @@ void ScExternalRefManager::breakLink(sal_uInt16 nFileId)
             removeRangeNamesBySrcDoc(*pRanges, nFileId);
     }
 
-    maRefCache.clearCache(nFileId);
+    clearCache(nFileId);
     lcl_removeByFileId(nFileId, maDocShells);
 
     if (maDocShells.empty())

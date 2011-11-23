@@ -1846,6 +1846,27 @@ void Test::testExternalRef()
     m_pDoc->DeleteTab(0);
 }
 
+void testExtRefFuncT(ScDocument* pDoc, ScDocument* pExtDoc)
+{
+    clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
+    clearRange(pExtDoc, ScRange(0, 0, 0, 1, 9, 0));
+
+    pExtDoc->SetString(0, 0, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'1.2")));
+    pExtDoc->SetString(0, 1, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Foo")));
+    pExtDoc->SetValue(0, 2, 0, 12.3);
+    pDoc->SetString(0, 0, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=T('file:///extdata.fake'#Data.A1)")));
+    pDoc->SetString(0, 1, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=T('file:///extdata.fake'#Data.A2)")));
+    pDoc->SetString(0, 2, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=T('file:///extdata.fake'#Data.A3)")));
+    pDoc->CalcAll();
+
+    rtl::OUString aRes = pDoc->GetString(0, 0, 0);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected result with T.", aRes.equalsAscii("1.2"));
+    aRes = pDoc->GetString(0, 1, 0);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected result with T.", aRes.equalsAscii("Foo"));
+    aRes = pDoc->GetString(0, 2, 0);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected result with T.", aRes.isEmpty());
+}
+
 void Test::testExternalRefFunctions()
 {
     ScDocShellRef xExtDocSh = new ScDocShell;
@@ -1854,6 +1875,13 @@ void Test::testExternalRefFunctions()
     xExtDocSh->DoInitNew(pMed);
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
                            findLoadedDocShellByName(aExtDocName) != NULL);
+
+    ScExternalRefManager* pRefMgr = m_pDoc->GetExternalRefManager();
+    CPPUNIT_ASSERT_MESSAGE("external reference manager doesn't exist.", pRefMgr);
+    sal_uInt16 nFileId = pRefMgr->getExternalFileId(aExtDocName);
+    const OUString* pFileName = pRefMgr->getExternalFileName(nFileId);
+    CPPUNIT_ASSERT_MESSAGE("file name registration has somehow failed.",
+                           pFileName && pFileName->equals(aExtDocName));
 
     // Populate the external source document.
     ScDocument* pExtDoc = xExtDocSh->GetDocument();
@@ -1891,6 +1919,9 @@ void Test::testExternalRefFunctions()
         m_pDoc->GetValue(0, 0, 0, val);
         CPPUNIT_ASSERT_MESSAGE("unexpected result involving external ranges.", val == aChecks[i].fResult);
     }
+
+    pRefMgr->clearCache(nFileId);
+    testExtRefFuncT(m_pDoc, pExtDoc);
 
     // Unload the external document shell.
     xExtDocSh->DoClose();
