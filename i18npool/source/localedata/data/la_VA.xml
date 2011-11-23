@@ -30,8 +30,8 @@
       <DoubleQuotationStart>“</DoubleQuotationStart>
       <DoubleQuotationEnd>”</DoubleQuotationEnd>
     </Markers>
-    <TimeAM>m.</TimeAM>
-    <TimePM>p.</TimePM>
+    <TimeAM>a.m.</TimeAM>
+    <TimePM>p.m.</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
   <LC_FORMAT>
@@ -182,124 +182,186 @@
     <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-Z</IndexKey>
     <UnicodeScript>0</UnicodeScript>
     <UnicodeScript>1</UnicodeScript>
-    <FollowPageWord> e seg.</FollowPageWord>
-    <FollowPageWord> e segg.</FollowPageWord>
+    <FollowPageWord> et seq.</FollowPageWord>
+    <FollowPageWord> et seqq.</FollowPageWord>
   </LC_INDEX>
   <LC_CALENDAR>
     <Calendar unoid="gregorian" default="true">
       <DaysOfWeek>
         <Day>
           <DayID>sun</DayID>
-          <DefaultAbbrvName>dom</DefaultAbbrvName>
-          <DefaultFullName>dominicus dies</DefaultFullName>
+          <DefaultAbbrvName>Dom</DefaultAbbrvName>
+          <DefaultFullName>Dominicus dies</DefaultFullName>
         </Day>
         <Day>
           <DayID>mon</DayID>
-          <DefaultAbbrvName>lun</DefaultAbbrvName>
-          <DefaultFullName>lunae dies</DefaultFullName>
+          <DefaultAbbrvName>Lun</DefaultAbbrvName>
+          <DefaultFullName>Lunae dies</DefaultFullName>
         </Day>
         <Day>
           <DayID>tue</DayID>
-          <DefaultAbbrvName>mar</DefaultAbbrvName>
-          <DefaultFullName>martis dies</DefaultFullName>
+          <DefaultAbbrvName>Mar</DefaultAbbrvName>
+          <DefaultFullName>Martis dies</DefaultFullName>
         </Day>
         <Day>
           <DayID>wed</DayID>
-          <DefaultAbbrvName>mer</DefaultAbbrvName>
-          <DefaultFullName>mercuri dies</DefaultFullName>
+          <DefaultAbbrvName>Mer</DefaultAbbrvName>
+          <DefaultFullName>Mercurii dies</DefaultFullName>
         </Day>
         <Day>
           <DayID>thu</DayID>
-          <DefaultAbbrvName>jov</DefaultAbbrvName>
-          <DefaultFullName>jovis dies</DefaultFullName>
+          <DefaultAbbrvName>Iov</DefaultAbbrvName>
+          <DefaultFullName>Iovis dies</DefaultFullName>
         </Day>
         <Day>
           <DayID>fri</DayID>
-          <DefaultAbbrvName>ven</DefaultAbbrvName>
-          <DefaultFullName>veneris dies</DefaultFullName>
+          <DefaultAbbrvName>Ven</DefaultAbbrvName>
+          <DefaultFullName>Veneris dies</DefaultFullName>
         </Day>
         <Day>
           <DayID>sat</DayID>
-          <DefaultAbbrvName>sab</DefaultAbbrvName>
-          <DefaultFullName>sabbatum</DefaultFullName>
+          <DefaultAbbrvName>Sab</DefaultAbbrvName>
+          <DefaultFullName>Sabbatum</DefaultFullName>
         </Day>
       </DaysOfWeek>
       <MonthsOfYear>
         <Month>
           <MonthID>jan</MonthID>
-          <DefaultAbbrvName>jan</DefaultAbbrvName>
-          <DefaultFullName>januarius</DefaultFullName>
+          <DefaultAbbrvName>Ian</DefaultAbbrvName>
+          <DefaultFullName>Ianuarius</DefaultFullName>
         </Month>
         <Month>
           <MonthID>feb</MonthID>
-          <DefaultAbbrvName>feb</DefaultAbbrvName>
-          <DefaultFullName>februarius</DefaultFullName>
+          <DefaultAbbrvName>Feb</DefaultAbbrvName>
+          <DefaultFullName>Februarius</DefaultFullName>
         </Month>
         <Month>
           <MonthID>mar</MonthID>
-          <DefaultAbbrvName>mar</DefaultAbbrvName>
-          <DefaultFullName>martius</DefaultFullName>
+          <DefaultAbbrvName>Mar</DefaultAbbrvName>
+          <DefaultFullName>Martius</DefaultFullName>
         </Month>
         <Month>
           <MonthID>apr</MonthID>
-          <DefaultAbbrvName>apr</DefaultAbbrvName>
-          <DefaultFullName>aprilis</DefaultFullName>
+          <DefaultAbbrvName>Apr</DefaultAbbrvName>
+          <DefaultFullName>Aprilis</DefaultFullName>
         </Month>
         <Month>
           <MonthID>may</MonthID>
-          <DefaultAbbrvName>mai</DefaultAbbrvName>
-          <DefaultFullName>maius</DefaultFullName>
+          <DefaultAbbrvName>Mai</DefaultAbbrvName>
+          <DefaultFullName>Maius</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jun</MonthID>
-          <DefaultAbbrvName>jun</DefaultAbbrvName>
-          <DefaultFullName>junius</DefaultFullName>
+          <DefaultAbbrvName>Iun</DefaultAbbrvName>
+          <DefaultFullName>Iunius</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jul</MonthID>
-          <DefaultAbbrvName>jul</DefaultAbbrvName>
-          <DefaultFullName>julius</DefaultFullName>
+          <DefaultAbbrvName>Iul</DefaultAbbrvName>
+          <DefaultFullName>Iulius</DefaultFullName>
         </Month>
         <Month>
           <MonthID>aug</MonthID>
-          <DefaultAbbrvName>aug</DefaultAbbrvName>
-          <DefaultFullName>augustus</DefaultFullName>
+          <DefaultAbbrvName>Aug</DefaultAbbrvName>
+          <DefaultFullName>Augustus</DefaultFullName>
         </Month>
         <Month>
           <MonthID>sep</MonthID>
-          <DefaultAbbrvName>sep</DefaultAbbrvName>
-          <DefaultFullName>septembris</DefaultFullName>
+          <DefaultAbbrvName>Sep</DefaultAbbrvName>
+          <DefaultFullName>September</DefaultFullName>
         </Month>
         <Month>
           <MonthID>oct</MonthID>
-          <DefaultAbbrvName>oct</DefaultAbbrvName>
-          <DefaultFullName>octobris</DefaultFullName>
+          <DefaultAbbrvName>Oct</DefaultAbbrvName>
+          <DefaultFullName>October</DefaultFullName>
         </Month>
         <Month>
           <MonthID>nov</MonthID>
-          <DefaultAbbrvName>nov</DefaultAbbrvName>
-          <DefaultFullName>novembris</DefaultFullName>
+          <DefaultAbbrvName>Nov</DefaultAbbrvName>
+          <DefaultFullName>November</DefaultFullName>
         </Month>
         <Month>
           <MonthID>dec</MonthID>
-          <DefaultAbbrvName>dec</DefaultAbbrvName>
-          <DefaultFullName>decembris</DefaultFullName>
+          <DefaultAbbrvName>Dec</DefaultAbbrvName>
+          <DefaultFullName>December</DefaultFullName>
         </Month>
       </MonthsOfYear>
+      <GenitiveMonths>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>Ian</DefaultAbbrvName>
+          <DefaultFullName>Ianuarii</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>Feb</DefaultAbbrvName>
+          <DefaultFullName>Februarii</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>Mar</DefaultAbbrvName>
+          <DefaultFullName>Martii</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>Apr</DefaultAbbrvName>
+          <DefaultFullName>Aprilis</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>Mai</DefaultAbbrvName>
+          <DefaultFullName>Maii</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>Iun</DefaultAbbrvName>
+          <DefaultFullName>Iunii</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>Iul</DefaultAbbrvName>
+          <DefaultFullName>Iulii</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>Aug</DefaultAbbrvName>
+          <DefaultFullName>Augusti</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>Sep</DefaultAbbrvName>
+          <DefaultFullName>Septembris</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>Oct</DefaultAbbrvName>
+          <DefaultFullName>Octobris</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>Nov</DefaultAbbrvName>
+          <DefaultFullName>Novembris</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>Dec</DefaultAbbrvName>
+          <DefaultFullName>Decembris</DefaultFullName>
+        </Month>
+      </GenitiveMonths>
       <Eras>
         <Era>
           <EraID>bc</EraID>
-          <DefaultAbbrvName>aC</DefaultAbbrvName>
-          <DefaultFullName>aC</DefaultFullName>
+          <DefaultAbbrvName>a.C.n.</DefaultAbbrvName>
+          <DefaultFullName>ante Christum natum</DefaultFullName>
         </Era>
         <Era>
           <EraID>ad</EraID>
-          <DefaultAbbrvName>dC</DefaultAbbrvName>
-          <DefaultFullName>dC</DefaultFullName>
+          <DefaultAbbrvName>p.C.n.</DefaultAbbrvName>
+          <DefaultFullName>post Christum natum</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
-        <DayID>mon</DayID>
+        <DayID>sun</DayID>
       </StartDayOfWeek>
       <MinimalDaysInFirstWeek>4</MinimalDaysInFirstWeek>
     </Calendar>
@@ -330,14 +392,14 @@
   <LC_TRANSLITERATION ref="en_US"/>
   <LC_MISC>
     <ReservedWords>
-      <trueWord>vero</trueWord>
-      <falseWord>falso</falseWord>
-      <quarter1Word>1. quarto</quarter1Word>
-      <quarter2Word>2. quarto</quarter2Word>
-      <quarter3Word>3. quarto</quarter3Word>
-      <quarter4Word>4. quarto</quarter4Word>
-      <aboveWord>sopra</aboveWord>
-      <belowWord>sotto</belowWord>
+      <trueWord>verum</trueWord>
+      <falseWord>falsum</falseWord>
+      <quarter1Word>prima quarta pars</quarter1Word>
+      <quarter2Word>secunda quarta pars</quarter2Word>
+      <quarter3Word>tertia quarta pars</quarter3Word>
+      <quarter4Word>quarta quarta pars</quarter4Word>
+      <aboveWord>supra</aboveWord>
+      <belowWord>infra</belowWord>
       <quarter1Abbreviation>Q1</quarter1Abbreviation>
       <quarter2Abbreviation>Q2</quarter2Abbreviation>
       <quarter3Abbreviation>Q3</quarter3Abbreviation>
