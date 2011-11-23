@@ -300,7 +300,7 @@ sal_Bool produceAllTypes(const OString& typeName,
 #if (defined UNX)
 int main( int argc, char * argv[] )
 #else
-int _cdecl main( int argc, char * argv[] )
+int __cdecl main( int argc, char * argv[] )
 #endif
 {
     RdbOptions options;

@@ -95,7 +95,7 @@ bool Options_Impl::initOptions_Impl (std::vector< std::string > & rArgs)
 #if (defined UNX)
 int main( int argc, char * argv[] )
 #else
-int _cdecl main( int argc, char * argv[] )
+int __cdecl main( int argc, char * argv[] )
 #endif
 {
     Options_Impl options(argv[0]);

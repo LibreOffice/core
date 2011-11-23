@@ -37,7 +37,7 @@
 
 int
 #ifdef WNT
-    _cdecl
+    __cdecl
 #endif
 main( int        argc,
       char *     argv[] )

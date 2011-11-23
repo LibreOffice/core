@@ -43,7 +43,7 @@ using namespace registry::tools;
 #if (defined UNX)
 int main( int argc, char * argv[] )
 #else
-int _cdecl main( int argc, char * argv[] )
+int __cdecl main( int argc, char * argv[] )
 #endif
 {
     RegHandle       hReg;

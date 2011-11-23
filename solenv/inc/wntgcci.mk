@@ -46,6 +46,11 @@ CFLAGS+=-fmessage-length=0 -c
 
 CFLAGSCC=-pipe $(ARCH_FLAGS)
 CFLAGSCXX=-pipe $(ARCH_FLAGS)
+
+.IF "$(HAVE_CXX0X)" == "TRUE"
+# FIXME still does not compile fully CFLAGSCXX+=-std=c++0x
+.ENDIF
+
 CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 PICSWITCH:=
