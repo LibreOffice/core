@@ -94,15 +94,7 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, xub_StrLen nNewValue )
         if( pFnd != this )
         {
             // remove from list at old position
-            if (m_pPrev)
-                m_pPrev->m_pNext = m_pNext;
-            else if (m_pIndexReg->m_pFirst == this)
-                m_pIndexReg->m_pFirst = m_pNext;
-
-            if (m_pNext)
-                m_pNext->m_pPrev = m_pPrev;
-            else if (m_pIndexReg->m_pLast == this)
-                m_pIndexReg->m_pLast = m_pPrev;
+            Remove();
 
             m_pNext = pFnd;
             m_pPrev = pFnd->m_pPrev;
@@ -122,15 +114,7 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, xub_StrLen nNewValue )
         if( pFnd != this )
         {
             // remove from list at old position
-            if (m_pPrev)
-                m_pPrev->m_pNext = m_pNext;
-            else if (m_pIndexReg->m_pFirst == this)
-                m_pIndexReg->m_pFirst = m_pNext;
-
-            if (m_pNext)
-                m_pNext->m_pPrev = m_pPrev;
-            else if (m_pIndexReg->m_pLast == this)
-                m_pIndexReg->m_pLast = m_pPrev;
+            Remove();
 
             m_pPrev = pFnd;
             m_pNext = pFnd->m_pNext;
@@ -144,17 +128,9 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, xub_StrLen nNewValue )
     else if( pFnd != this )
     {
         // remove from list at old position
-        if (m_pPrev)
-            m_pPrev->m_pNext = m_pNext;
-        else if (m_pIndexReg->m_pFirst == this)
-            m_pIndexReg->m_pFirst = m_pNext;
+        Remove();
 
-        if (m_pNext)
-            m_pNext->m_pPrev = m_pPrev;
-        else if (m_pIndexReg->m_pLast == this)
-            m_pIndexReg->m_pLast = m_pPrev;
-
-        m_pPrev = const_cast<SwIndex*>(&rIdx);
+        m_pPrev = pFnd; // == &rIdx here
         m_pNext = rIdx.m_pNext;
         m_pPrev->m_pNext = this;
 
@@ -177,15 +153,23 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, xub_StrLen nNewValue )
 
 void SwIndex::Remove()
 {
-    if (!m_pPrev)
-        m_pIndexReg->m_pFirst = m_pNext;
-    else
+    if (m_pPrev)
+    {
         m_pPrev->m_pNext = m_pNext;
+    }
+    else if (m_pIndexReg->m_pFirst == this)
+    {
+        m_pIndexReg->m_pFirst = m_pNext;
+    }
 
-    if (!m_pNext)
-        m_pIndexReg->m_pLast = m_pPrev;
-    else
+    if (m_pNext)
+    {
         m_pNext->m_pPrev = m_pPrev;
+    }
+    else if (m_pIndexReg->m_pLast == this)
+    {
+        m_pIndexReg->m_pLast = m_pPrev;
+    }
 }
 
 /*************************************************************************
@@ -199,7 +183,7 @@ SwIndex& SwIndex::operator=( const SwIndex& rIdx )
         Remove();
         m_pIndexReg = rIdx.m_pIndexReg;
         m_pNext = m_pPrev = 0;
-        bEqual = sal_False;
+        bEqual = false;
     }
     else
         bEqual = rIdx.m_nIndex == m_nIndex;
