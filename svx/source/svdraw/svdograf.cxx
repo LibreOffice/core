@@ -1312,18 +1312,6 @@ void SdrGrafObj::SetGrafAnimationAllowed(sal_Bool bNew)
     }
 }
 
-// #i25616#
-sal_Bool SdrGrafObj::IsObjectTransparent() const
-{
-    if(((const SdrGrafTransparenceItem&)GetObjectItem(SDRATTR_GRAFTRANSPARENCE)).GetValue()
-        || pGraphic->IsTransparent())
-    {
-        return sal_True;
-    }
-
-    return sal_False;
-}
-
 Reference< XInputStream > SdrGrafObj::getInputStream()
 {
     Reference< XInputStream > xStream;

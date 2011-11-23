@@ -978,7 +978,6 @@ public:
 
     void                SetCharStretching( sal_uInt16 nX, sal_uInt16 nY );
     inline void         GetCharStretching( sal_uInt16& rX, sal_uInt16& rY );
-    void                DoStretchChars( sal_uInt16 nX, sal_uInt16 nY );
 
     void                SetBigTextObjectStart( sal_uInt16 nStartAtPortionCount )    { nBigTextObjectStart = nStartAtPortionCount; }
     sal_uInt16          GetBigTextObjectStart() const                               { return nBigTextObjectStart; }

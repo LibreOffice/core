@@ -213,9 +213,6 @@ public:
     // Access to GrafAnimationAllowed flag
     void SetGrafAnimationAllowed(sal_Bool bNew);
 
-    // #i25616#
-    sal_Bool IsObjectTransparent() const;
-
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > getInputStream();
 
     // #i103116# FullDrag support
