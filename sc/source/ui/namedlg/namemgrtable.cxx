@@ -125,7 +125,7 @@ void ScRangeManagerTable::Init(const boost::ptr_map<rtl::OUString, ScRangeName>&
             aLine.aScope = maGlobalString;
         else
             aLine.aScope = itr->first;
-        for (ScRangeName::iterator it = pLocalRangeName->begin();
+        for (ScRangeName::const_iterator it = pLocalRangeName->begin();
                 it != pLocalRangeName->end(); ++it)
         {
             if (!it->HasType(RT_DATABASE) && !it->HasType(RT_SHARED))
