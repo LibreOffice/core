@@ -53,7 +53,7 @@ private:
     bool impl_doJob(
             const rtl::OUString* i_pFileName, const rtl::OUString& i_rJobName,
             const rtl::OUString& i_rAppName, ImplJobSetup* io_pSetupData,
-            bool i_bCollate, int i_nCopies, vcl::PrinterController& io_rController);
+            int i_nCopies, bool i_bCollate, vcl::PrinterController& io_rController);
 
 private:
     boost::scoped_ptr<GtkSalPrinter_Impl> m_pImpl;

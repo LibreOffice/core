@@ -29,6 +29,7 @@
 
 #include "unx/gtk/gtkprn.hxx"
 
+#include "vcl/configsettings.hxx"
 #include "vcl/print.hxx"
 #include "vcl/unohelp.hxx"
 
@@ -112,6 +113,9 @@ private:
     void impl_initCustomTab();
     void impl_initPrintRange();
 
+    void impl_readFromSettings();
+    void impl_storeToSettings() const;
+
 private:
     GtkWidget* m_pDialog;
     vcl::PrinterController& m_rController;
@@ -166,32 +170,31 @@ GtkSalPrinter::impl_doJob(
         const rtl::OUString& i_rJobName,
         const rtl::OUString& i_rAppName,
         ImplJobSetup* const io_pSetupData,
-        const bool i_bCollate, const int i_nCopies,
+        const int i_nCopies,
+        const bool i_bCollate,
         vcl::PrinterController& io_rController)
 {
     io_rController.setJobState(view::PrintableState_JOB_STARTED);
     io_rController.jobStarted();
-    const bool bRet = PspSalPrinter::StartJob(i_pFileName,
-        i_rJobName, i_rAppName, i_nCopies, i_bCollate, true, io_pSetupData);
+    const bool bJobStarted(
+            PspSalPrinter::StartJob(i_pFileName, i_rJobName, i_rAppName,
+                i_nCopies, i_bCollate, true, io_pSetupData))
+        ;
 
-    if (bRet)
+    if (bJobStarted)
     {
         io_rController.createProgressDialog();
-        int nPages = io_rController.getFilteredPageCount();
-//        int nRepeatCount = nCopies;
-        int nRepeatCount = 1;
-        for (int nIteration = 0; nIteration != nRepeatCount; nIteration++)
+        const int nPages(io_rController.getFilteredPageCount());
+        for (int nPage(0); nPage != nPages; ++nPage)
         {
-            for (int nPage = 0; nPage != nPages; nPage++)
-            {
-                if (nPage == nPages-1 && nIteration == nRepeatCount-1)
-                    io_rController.setLastPage(sal_True);
-                io_rController.printFilteredPage(nPage);
-            }
+            if (nPage == nPages - 1)
+                io_rController.setLastPage(sal_True);
+            io_rController.printFilteredPage(nPage);
         }
         io_rController.setJobState(view::PrintableState_JOB_COMPLETED);
     }
-    return bRet;
+
+    return bJobStarted;
 }
 
 
@@ -353,6 +356,7 @@ GtkPrintDialog::GtkPrintDialog(vcl::PrinterController& io_rController)
     impl_initDialog();
     impl_initCustomTab();
     impl_initPrintRange();
+    impl_readFromSettings();
 }
 
 
@@ -785,6 +789,7 @@ GtkPrintDialog::run()
         }
     }
     gtk_widget_hide(m_pDialog);
+    impl_storeToSettings();
     return bDoJob;
 }
 
@@ -979,6 +984,66 @@ GtkPrintDialog::updateControllerPrintRange()
 GtkPrintDialog::~GtkPrintDialog()
 {
     gtk_widget_destroy(m_pDialog);
+}
+
+
+void
+GtkPrintDialog::impl_readFromSettings()
+{
+    vcl::SettingsConfigItem* const pItem(vcl::SettingsConfigItem::get());
+    GtkPrintSettings* const pSettings(getSettings());
+
+    const rtl::OUString aPrintDialogStr(RTL_CONSTASCII_USTRINGPARAM("PrintDialog"));
+    const rtl::OUString aCopyCount(pItem->getValue(aPrintDialogStr,
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CopyCount"))));
+    const rtl::OUString aCollate(pItem->getValue(aPrintDialogStr,
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Collate"))));
+
+    bool bChanged(false);
+
+    const gint nOldCopyCount(gtk_print_settings_get_n_copies(pSettings));
+    const sal_Int32 nCopyCount(aCopyCount.toInt32());
+    if (nCopyCount > 0 && nOldCopyCount != nCopyCount)
+    {
+        bChanged = true;
+        gtk_print_settings_set_n_copies(pSettings, sal::static_int_cast<gint>(nCopyCount));
+    }
+
+    const gboolean bOldCollate(gtk_print_settings_get_collate(pSettings));
+    const bool bCollate(aCollate.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")));
+    if (bOldCollate != bCollate)
+    {
+        bChanged = true;
+        gtk_print_settings_set_collate(pSettings, bCollate);
+    }
+    // TODO: wth was this var. meant for?
+    (void) bChanged;
+
+    gtk_print_unix_dialog_set_settings(GTK_PRINT_UNIX_DIALOG(m_pDialog), pSettings);
+    g_object_unref(G_OBJECT(pSettings));
+}
+
+
+void
+GtkPrintDialog::impl_storeToSettings()
+const
+{
+    vcl::SettingsConfigItem* const pItem(vcl::SettingsConfigItem::get());
+    GtkPrintSettings* const pSettings(getSettings());
+
+    const rtl::OUString aPrintDialogStr(RTL_CONSTASCII_USTRINGPARAM("PrintDialog"));
+    pItem->setValue(aPrintDialogStr,
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CopyCount")),
+            rtl::OUString::valueOf(gtk_print_settings_get_n_copies(pSettings)));
+    pItem->setValue(aPrintDialogStr,
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Collate")),
+            gtk_print_settings_get_collate(pSettings)
+                ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true"))
+                : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("false")))
+        ;
+    // pItem->setValue(aPrintDialog, rtl::OUString::createFromAscii("ToFile"), );
+    g_object_unref(G_OBJECT(pSettings));
+    pItem->Commit();
 }
 
 
