@@ -30,5 +30,7 @@ $(eval $(call gb_Extension_Extension,script-provider-for-python,scripting/source
 
 $(eval $(call gb_Extension_add_file,script-provider-for-python,pythonscript.py,\
 	$(SRCDIR)/scripting/source/pyprov/pythonscript.py))
+$(eval $(call gb_Extension_add_file,script-provider-for-python,components.rdb,\
+	$(SRCDIR)/scripting/source/pyprov/components.rdb))
 
 # vim: set noet sw=4 ts=4:

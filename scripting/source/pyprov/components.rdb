@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<components xmlns="http://openoffice.org/2010/uno-components">
+    <component loader="com.sun.star.loader.Python" uri="./pythonscript.py">
+        <implementation name="org.openoffice.pyuno.LanguageScriptProviderForPython">
+            <service name="com.sun.star.script.provider.ScriptProviderForPython"/>
+            <service name="com.sun.star.script.provider.LanguageScriptProvider"/>
+        </implementation>
+    </component>
+</components>
