@@ -83,6 +83,7 @@ private:
     void MorePushed();
 
     bool IsNameValid();
+    bool IsFormulaValid();
 
     DECL_LINK( CancelBtnHdl, void * );
     DECL_LINK( AddBtnHdl, void* );

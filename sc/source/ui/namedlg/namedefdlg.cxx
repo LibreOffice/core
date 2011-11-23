@@ -125,6 +125,24 @@ void ScNameDefDlg::CancelPushed()
     Close();
 }
 
+bool ScNameDefDlg::IsFormulaValid()
+{
+    ScCompiler aComp( mpDoc, maCursorPos);
+    aComp.SetGrammar( mpDoc->GetGrammar() );
+    ScTokenArray* pCode = aComp.CompileString(maEdRange.GetText());
+    if (pCode->GetCodeError())
+    {
+        //TODO: info message
+        delete pCode;
+        return false;
+    }
+    else
+    {
+        delete pCode;
+        return true;
+    }
+}
+
 bool ScNameDefDlg::IsNameValid()
 {
     rtl::OUString aScope = maLbScope.GetSelectEntry();
@@ -152,6 +170,13 @@ bool ScNameDefDlg::IsNameValid()
         maBtnAdd.Disable();
         return false;
     }
+
+    if (!IsFormulaValid())
+    {
+        maBtnAdd.Disable();
+        return false;
+    }
+
     maFtInfo.SetText(maStrInfoDefault);
     maBtnAdd.Enable();
     return true;
