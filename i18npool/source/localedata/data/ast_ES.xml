@@ -20,7 +20,7 @@
       <Time100SecSeparator>,</Time100SecSeparator>
       <ListSeparator>;</ListSeparator>
       <LongDateDayOfWeekSeparator>, </LongDateDayOfWeekSeparator>
-      <LongDateDaySeparator>, </LongDateDaySeparator>
+      <LongDateDaySeparator> </LongDateDaySeparator>
       <LongDateMonthSeparator> </LongDateMonthSeparator>
       <LongDateYearSeparator> </LongDateYearSeparator>
     </Separators>
@@ -200,102 +200,164 @@
       <DaysOfWeek>
         <Day>
           <DayID>sun</DayID>
-          <DefaultAbbrvName>Dom</DefaultAbbrvName>
-          <DefaultFullName>Domingu</DefaultFullName>
+          <DefaultAbbrvName>dom</DefaultAbbrvName>
+          <DefaultFullName>domingu</DefaultFullName>
         </Day>
         <Day>
           <DayID>mon</DayID>
-          <DefaultAbbrvName>Llu</DefaultAbbrvName>
-          <DefaultFullName>Llunes</DefaultFullName>
+          <DefaultAbbrvName>llu</DefaultAbbrvName>
+          <DefaultFullName>llunes</DefaultFullName>
         </Day>
         <Day>
           <DayID>tue</DayID>
-          <DefaultAbbrvName>Mar</DefaultAbbrvName>
-          <DefaultFullName>Martes</DefaultFullName>
+          <DefaultAbbrvName>mar</DefaultAbbrvName>
+          <DefaultFullName>martes</DefaultFullName>
         </Day>
         <Day>
           <DayID>wed</DayID>
-          <DefaultAbbrvName>Mié</DefaultAbbrvName>
-          <DefaultFullName>Miércoles</DefaultFullName>
+          <DefaultAbbrvName>mié</DefaultAbbrvName>
+          <DefaultFullName>miércoles</DefaultFullName>
         </Day>
         <Day>
           <DayID>thu</DayID>
-          <DefaultAbbrvName>Xue</DefaultAbbrvName>
-          <DefaultFullName>Xueves</DefaultFullName>
+          <DefaultAbbrvName>xue</DefaultAbbrvName>
+          <DefaultFullName>xueves</DefaultFullName>
         </Day>
         <Day>
           <DayID>fri</DayID>
-          <DefaultAbbrvName>Vie</DefaultAbbrvName>
-          <DefaultFullName>Vienres</DefaultFullName>
+          <DefaultAbbrvName>vie</DefaultAbbrvName>
+          <DefaultFullName>vienres</DefaultFullName>
         </Day>
         <Day>
           <DayID>sat</DayID>
-          <DefaultAbbrvName>Sáb</DefaultAbbrvName>
-          <DefaultFullName>Sábadu</DefaultFullName>
+          <DefaultAbbrvName>sáb</DefaultAbbrvName>
+          <DefaultFullName>sábadu</DefaultFullName>
         </Day>
       </DaysOfWeek>
       <MonthsOfYear>
         <Month>
           <MonthID>jan</MonthID>
-          <DefaultAbbrvName>Xin</DefaultAbbrvName>
-          <DefaultFullName>Xineru</DefaultFullName>
+          <DefaultAbbrvName>xin</DefaultAbbrvName>
+          <DefaultFullName>xineru</DefaultFullName>
         </Month>
         <Month>
           <MonthID>feb</MonthID>
-          <DefaultAbbrvName>Feb</DefaultAbbrvName>
-          <DefaultFullName>Febreru</DefaultFullName>
+          <DefaultAbbrvName>feb</DefaultAbbrvName>
+          <DefaultFullName>febreru</DefaultFullName>
         </Month>
         <Month>
           <MonthID>mar</MonthID>
-          <DefaultAbbrvName>Mar</DefaultAbbrvName>
-          <DefaultFullName>Marzu</DefaultFullName>
+          <DefaultAbbrvName>mar</DefaultAbbrvName>
+          <DefaultFullName>marzu</DefaultFullName>
         </Month>
         <Month>
           <MonthID>apr</MonthID>
-          <DefaultAbbrvName>Abr</DefaultAbbrvName>
-          <DefaultFullName>Abril</DefaultFullName>
+          <DefaultAbbrvName>abr</DefaultAbbrvName>
+          <DefaultFullName>abril</DefaultFullName>
         </Month>
         <Month>
           <MonthID>may</MonthID>
-          <DefaultAbbrvName>May</DefaultAbbrvName>
-          <DefaultFullName>Mayu</DefaultFullName>
+          <DefaultAbbrvName>may</DefaultAbbrvName>
+          <DefaultFullName>mayu</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jun</MonthID>
-          <DefaultAbbrvName>Xun</DefaultAbbrvName>
-          <DefaultFullName>Xunu</DefaultFullName>
+          <DefaultAbbrvName>xun</DefaultAbbrvName>
+          <DefaultFullName>xunu</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jul</MonthID>
-          <DefaultAbbrvName>Xnt</DefaultAbbrvName>
-          <DefaultFullName>Xunetu</DefaultFullName>
+          <DefaultAbbrvName>xnt</DefaultAbbrvName>
+          <DefaultFullName>xunetu</DefaultFullName>
         </Month>
         <Month>
           <MonthID>aug</MonthID>
-          <DefaultAbbrvName>Ago</DefaultAbbrvName>
-          <DefaultFullName>Agostu</DefaultFullName>
+          <DefaultAbbrvName>ago</DefaultAbbrvName>
+          <DefaultFullName>agostu</DefaultFullName>
         </Month>
         <Month>
           <MonthID>sep</MonthID>
-          <DefaultAbbrvName>Set</DefaultAbbrvName>
-          <DefaultFullName>Setiembre</DefaultFullName>
+          <DefaultAbbrvName>set</DefaultAbbrvName>
+          <DefaultFullName>setiembre</DefaultFullName>
         </Month>
         <Month>
           <MonthID>oct</MonthID>
-          <DefaultAbbrvName>Och</DefaultAbbrvName>
-          <DefaultFullName>Ochobre</DefaultFullName>
+          <DefaultAbbrvName>och</DefaultAbbrvName>
+          <DefaultFullName>ochobre</DefaultFullName>
         </Month>
         <Month>
           <MonthID>nov</MonthID>
-          <DefaultAbbrvName>Pay</DefaultAbbrvName>
-          <DefaultFullName>Payares</DefaultFullName>
+          <DefaultAbbrvName>pay</DefaultAbbrvName>
+          <DefaultFullName>payares</DefaultFullName>
         </Month>
         <Month>
           <MonthID>dec</MonthID>
-          <DefaultAbbrvName>Avi</DefaultAbbrvName>
-          <DefaultFullName>Avientu</DefaultFullName>
+          <DefaultAbbrvName>avi</DefaultAbbrvName>
+          <DefaultFullName>avientu</DefaultFullName>
         </Month>
       </MonthsOfYear>
+      <GenitiveMonths>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>xin</DefaultAbbrvName>
+          <DefaultFullName>de xineru</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>feb</DefaultAbbrvName>
+          <DefaultFullName>de febreru</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>mar</DefaultAbbrvName>
+          <DefaultFullName>de marzu</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>abr</DefaultAbbrvName>
+          <DefaultFullName>d'abril</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>may</DefaultAbbrvName>
+          <DefaultFullName>de mayu</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>xun</DefaultAbbrvName>
+          <DefaultFullName>de xunu</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>xnt</DefaultAbbrvName>
+          <DefaultFullName>de xunetu</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>ago</DefaultAbbrvName>
+          <DefaultFullName>d'agostu</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>set</DefaultAbbrvName>
+          <DefaultFullName>de setiembre</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>och</DefaultAbbrvName>
+          <DefaultFullName>d'ochobre</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>pay</DefaultAbbrvName>
+          <DefaultFullName>de payares</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>avi</DefaultAbbrvName>
+          <DefaultFullName>d'avientu</DefaultFullName>
+        </Month>
+      </GenitiveMonths>
       <Eras>
         <Era>
           <EraID>bc</EraID>
@@ -332,10 +394,10 @@
     <ReservedWords>
       <trueWord>Braero</trueWord>
       <falseWord>Falso</falseWord>
-      <quarter1Word>1er Trimestre</quarter1Word>
-      <quarter2Word>2u Trimestre</quarter2Word>
-      <quarter3Word>3er Trimestre</quarter3Word>
-      <quarter4Word>4u Trimestre</quarter4Word>
+      <quarter1Word>1er trimestre</quarter1Word>
+      <quarter2Word>2u trimestre</quarter2Word>
+      <quarter3Word>3er trimestre</quarter3Word>
+      <quarter4Word>4u trimestre</quarter4Word>
       <aboveWord>arriba</aboveWord>
       <belowWord>abaxo</belowWord>
       <quarter1Abbreviation>T1</quarter1Abbreviation>
