@@ -237,6 +237,7 @@ public:
     ByteString&         EraseLeadingChars( sal_Char c = ' ' );
     ByteString&         EraseTrailingChars( sal_Char c = ' ' );
     ByteString&         EraseLeadingAndTrailingChars( sal_Char c = ' ' );
+
     ByteString&         ConvertLineEnd( LineEnd eLineEnd );
     ByteString&         ConvertLineEnd()
                             { return ConvertLineEnd( GetSystemLineEnd() ); }

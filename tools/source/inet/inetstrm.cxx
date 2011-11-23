@@ -1620,8 +1620,8 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
                     sal_uInt16 nPos = aLowerType.Search ("boundary=");
                     ByteString aBoundary(aType.copy(nPos + 9));
 
-                    aBoundary.EraseLeadingAndTrailingChars (' ');
-                    aBoundary.EraseLeadingAndTrailingChars ('"');
+                    aBoundary = comphelper::string::strip(aBoundary, ' ');
+                    aBoundary = comphelper::string::strip(aBoundary, '"');
 
                     // Save boundary.
                     pMsg->SetMultipartBoundary (aBoundary);
