@@ -152,6 +152,10 @@ void ScNameDlg::Init()
     maLbScope.SetSelectHdl( LINK(this, ScNameDlg, ScopeChangedHdl) );
     maBtnDelete.SetClickHdl ( LINK( this, ScNameDlg, RemoveBtnHdl ) );
     maBtnMore.SetClickHdl   ( LINK( this, ScNameDlg, MoreBtnHdl ) );
+    maBtnPrintArea.SetToggleHdl( LINK(this, ScNameDlg, EdModifyHdl ) );
+    maBtnCriteria.SetToggleHdl( LINK(this, ScNameDlg, EdModifyHdl ) );
+    maBtnRowHeader.SetToggleHdl( LINK(this, ScNameDlg, EdModifyHdl ) );
+    maBtnColHeader.SetToggleHdl( LINK(this, ScNameDlg, EdModifyHdl ) );
 
     maBtnCriteria .Hide();
     maBtnPrintArea.Hide();
