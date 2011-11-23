@@ -179,10 +179,6 @@ public:
     virtual void Paint( const SwTxtPaintInfo &rInf ) const = 0;
     void PrePaint( const SwTxtPaintInfo &rInf, const SwLinePortion *pLast ) const;
 
-#ifdef DBG_UTIL
-    virtual sal_Bool Check( SvStream &rOs, SwTxtSizeInfo &rInfo ); //$ ostream
-#endif
-
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     // wird fuer die letzte Portion der Zeile extra gerufen
     virtual void FormatEOL( SwTxtFormatInfo &rInf );

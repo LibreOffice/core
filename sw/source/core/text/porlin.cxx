@@ -298,17 +298,6 @@ SwPosSize SwLinePortion::GetTxtSize( const SwTxtSizeInfo & ) const
 }
 
 /*************************************************************************
- *                virtual SwLinePortion::Check()
- *************************************************************************/
-
-#ifdef DBG_UTIL
-sal_Bool SwLinePortion::Check( SvStream &, SwTxtSizeInfo & ) //$ ostream
-{
-    return sal_True;
-}
-#endif
-
-/*************************************************************************
  *                 virtual SwLinePortion::Format()
  *************************************************************************/
 
