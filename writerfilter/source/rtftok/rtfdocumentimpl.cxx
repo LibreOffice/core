@@ -597,7 +597,7 @@ int RTFDocumentImpl::resolvePict(bool bInline)
                     m_xContext),
                 uno::UNO_QUERY_THROW);
         uno::Reference<graphic::XGraphic> xGraphic = xGraphicProvider->queryGraphic(aMediaProperties);
-        xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Bitmap")), uno::Any(xGraphic));
+        xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Graphic")), uno::Any(xGraphic));
 
         RTFValue::Pointer_t pShapeValue(new RTFValue(xShape));
         m_aObjectAttributes->push_back(make_pair(NS_ooxml::LN_shape, pShapeValue));
