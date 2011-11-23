@@ -106,6 +106,7 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     maErrInvalidNameStr( ResId::toString(ScResId(STR_ERR_NAME_INVALID))),
     maErrNameInUse   ( ResId::toString(ScResId(STR_ERR_NAME_EXISTS))),
     maStrInfoDefault ( ResId::toString(ScResId(STR_DEFAULT_INFO))),
+    maStrMultiSelect ( ResId::toString(ScResId(STR_MULTI_SELECT))),
     //
     mpViewData       ( ptrViewData ),
     mpDoc            ( ptrViewData->GetDocument() ),
@@ -444,6 +445,9 @@ void ScNameDlg::SelectionChanged()
 
     if (mpRangeManagerTable->IsMultiSelection())
     {
+        maEdName.SetText(maStrMultiSelect);
+        maEdAssign.SetText(maStrMultiSelect);
+
         maEdName.Disable();
         maEdAssign.Disable();
         maLbScope.Disable();

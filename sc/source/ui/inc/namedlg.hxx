@@ -88,6 +88,7 @@ private:
     const rtl::OUString maErrInvalidNameStr;
     const rtl::OUString maErrNameInUse;
     const rtl::OUString maStrInfoDefault;
+    const rtl::OUString maStrMultiSelect;
 
     ScViewData*     mpViewData;
     ScDocument*     mpDoc;

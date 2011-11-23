@@ -56,5 +56,6 @@
 #define STR_ERR_NAME_EXISTS 73
 #define STR_ERR_NAME_INVALID 74
 #define STR_DEFAULT_INFO    75
+#define STR_MULTI_SELECT    76
 
 #define FT_INFO 72

@@ -212,4 +212,8 @@ ModelessDialog RID_SCDLG_NAMES
     {
         Text [en-US] = "Select cells in the document to update the range.";
     };
+    String STR_MULTI_SELECT
+    {
+        Text [en-US] = "(multiple)";
+    };
 };
