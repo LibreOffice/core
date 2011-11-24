@@ -503,14 +503,14 @@ int INetMessageOStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
     // Check for header or body.
     if (!IsHeaderParsed())
     {
-        ByteString aField (pData);
-        sal_uInt16 nPos = aField.Search (':');
-        if (nPos != STRING_NOTFOUND)
+        rtl::OString aField(pData);
+        sal_Int32 nPos = aField.indexOf(':');
+        if (nPos != -1)
         {
-            ByteString aName (
-                aField.Copy (0, nPos));
-            ByteString aValue (
-                aField.Copy (nPos + 1, aField.Len() - nPos + 1));
+            rtl::OString aName(
+                aField.copy(0, nPos));
+            rtl::OString aValue(
+                aField.copy(nPos + 1, aField.getLength() - nPos + 1));
             aValue = comphelper::string::stripStart(aValue, ' ');
 
             pTargetMsg->SetHeaderField (
@@ -1614,11 +1614,11 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
                     // Determine boundary.
                     rtl::OString aType(rtl::OUStringToOString(
                         pMsg->GetContentType(), RTL_TEXTENCODING_ASCII_US));
-                    ByteString aLowerType(aType);
-                    aLowerType.ToLowerAscii();
+                    rtl::OString aLowerType(aType.toAsciiLowerCase());
 
-                    sal_uInt16 nPos = aLowerType.Search ("boundary=");
-                    ByteString aBoundary(aType.copy(nPos + 9));
+                    sal_Int32 nPos = comphelper::string::indexOfL(aLowerType,
+                        RTL_CONSTASCII_STRINGPARAM("boundary="));
+                    rtl::OString aBoundary(aType.copy(nPos + 9));
 
                     aBoundary = comphelper::string::strip(aBoundary, ' ');
                     aBoundary = comphelper::string::strip(aBoundary, '"');
