@@ -6041,7 +6041,7 @@ else
     BUILD_TYPE="$BUILD_TYPE NSS"
     AC_MSG_RESULT([internal])
     if test "$build_os" = "cygwin"; then
-        AC_MSG_CHECKING([for Mozilla build tooling])
+        AC_MSG_CHECKING([for Mozilla build tooling. Required for nss and/or mozilla])
         if test -z "$MOZILLABUILD" ; then
             AC_MSG_ERROR([Mozilla build tooling not found.
 Use the --with-mozilla-build option after installing the tools obtained
