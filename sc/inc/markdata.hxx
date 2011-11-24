@@ -50,11 +50,11 @@ private:
     ScRange         aMultiRange;            // maximum area altogether
     ScMarkArray*    pMultiSel;              // multi selection
     ::std::set<SCTAB> maTabMarked;
-    sal_Bool            bMarked;                // rectangle marked
-    sal_Bool            bMultiMarked;
+    bool            bMarked:1;                // rectangle marked
+    bool            bMultiMarked:1;
 
-    sal_Bool            bMarking;               // area is being marked -> no MarkToMulti
-    sal_Bool            bMarkIsNeg;             // cancel if multi selection
+    bool            bMarking:1;               // area is being marked -> no MarkToMulti
+    bool            bMarkIsNeg:1;             // cancel if multi selection
 
 public:
                 ScMarkData();
@@ -66,13 +66,13 @@ public:
     void        ResetMark();
     void        SetMarkArea( const ScRange& rRange );
 
-    void        SetMultiMarkArea( const ScRange& rRange, sal_Bool bMark = sal_True );
+    void        SetMultiMarkArea( const ScRange& rRange, bool bMark = true );
 
     void        MarkToMulti();
     void        MarkToSimple();
 
-    sal_Bool        IsMarked() const                { return bMarked; }
-    sal_Bool        IsMultiMarked() const           { return bMultiMarked; }
+    bool        IsMarked() const                { return bMarked; }
+    bool        IsMultiMarked() const           { return bMultiMarked; }
 
     void        GetMarkArea( ScRange& rRange ) const;
     void        GetMultiMarkArea( ScRange& rRange ) const;
@@ -87,31 +87,31 @@ public:
     SCTAB       GetFirstSelected() const;
     SCTAB       GetLastSelected() const;
 
-    void        SetMarkNegative( sal_Bool bFlag )   { bMarkIsNeg = bFlag; }
-    sal_Bool        IsMarkNegative() const          { return bMarkIsNeg;  }
-    void        SetMarking( sal_Bool bFlag )        { bMarking = bFlag;   }
-    sal_Bool        GetMarkingFlag() const          { return bMarking;    }
+    void        SetMarkNegative( bool bFlag )   { bMarkIsNeg = bFlag; }
+    bool        IsMarkNegative() const          { return bMarkIsNeg;  }
+    void        SetMarking( bool bFlag )        { bMarking = bFlag;   }
+    bool        GetMarkingFlag() const          { return bMarking;    }
 
     //  for FillInfo / Document etc.
     const ScMarkArray* GetArray() const         { return pMultiSel; }
 
-    sal_Bool        IsCellMarked( SCCOL nCol, SCROW nRow, sal_Bool bNoSimple = false ) const;
-    void        FillRangeListWithMarks( ScRangeList* pList, sal_Bool bClear ) const;
+    bool        IsCellMarked( SCCOL nCol, SCROW nRow, bool bNoSimple = false ) const;
+    void        FillRangeListWithMarks( ScRangeList* pList, bool bClear ) const;
     void        ExtendRangeListTables( ScRangeList* pList ) const;
 
-    void        MarkFromRangeList( const ScRangeList& rList, sal_Bool bReset );
+    void        MarkFromRangeList( const ScRangeList& rList, bool bReset );
 
     SCCOLROW    GetMarkColumnRanges( SCCOLROW* pRanges );
     SCCOLROW    GetMarkRowRanges( SCCOLROW* pRanges );
 
-    sal_Bool        IsColumnMarked( SCCOL nCol ) const;
-    sal_Bool        IsRowMarked( SCROW nRow ) const;
-    sal_Bool        IsAllMarked( const ScRange& rRange ) const;     // Multi
+    bool        IsColumnMarked( SCCOL nCol ) const;
+    bool        IsRowMarked( SCROW nRow ) const;
+    bool        IsAllMarked( const ScRange& rRange ) const;     // Multi
 
                 /// May return -1
-    SCsROW      GetNextMarked( SCCOL nCol, SCsROW nRow, sal_Bool bUp ) const;
-    sal_Bool        HasMultiMarks( SCCOL nCol ) const;
-    sal_Bool        HasAnyMultiMarks() const;
+    SCsROW      GetNextMarked( SCCOL nCol, SCsROW nRow, bool bUp ) const;
+    bool        HasMultiMarks( SCCOL nCol ) const;
+    bool        HasAnyMultiMarks() const;
 
     //  adjust table marking:
     void        InsertTab( SCTAB nTab );
