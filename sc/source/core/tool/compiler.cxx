@@ -82,33 +82,6 @@ using namespace ::com::sun::star;
 using rtl::OUString;
 using ::std::vector;
 
-#if OSL_DEBUG_LEVEL > 1
-// For some unknown reason the identical dbg_dump utilities in
-// tools/source/string/debugprint.cxx tend to crash when called from within
-// gdb. Having them here also comes handy as libtl*.so doesn't have to be
-// replaced.
-const char* dbg_sc_dump( const ByteString & rStr )
-{
-    static ByteString aStr;
-    aStr = rStr;
-    aStr.Append(static_cast<char>(0));
-    return aStr.GetBuffer();
-}
-const char* dbg_sc_dump( const UniString & rStr )
-{
-    return dbg_sc_dump(ByteString(rStr, RTL_TEXTENCODING_UTF8));
-}
-const char* dbg_sc_dump( const sal_Unicode * pBuf )
-{
-    return dbg_sc_dump( UniString( pBuf));
-}
-const char* dbg_sc_dump( const sal_Unicode c )
-{
-    return dbg_sc_dump( UniString( c));
-}
-#endif
-
-
 
 CharClass*                          ScCompiler::pCharClassEnglish = NULL;
 const ScCompiler::Convention*       ScCompiler::pConventions[ ]   = { NULL, NULL, NULL, NULL, NULL, NULL };

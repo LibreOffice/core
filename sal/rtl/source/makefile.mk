@@ -58,14 +58,6 @@ CXXFLAGS+= $(LFS_CFLAGS)
 
 .IF "$(header)" == ""
 
-.IF "$(OS)" != "AIX"
-ALWAYSDBGFILES=$(SLO)$/debugprint.obj
-.ENDIF
-
-.IF "$(ALWAYSDBGFILES)" != ""
-ALWAYSDBGTARGET=do_it_alwaysdebug
-.ENDIF
-
 SLOFILES=   \
             $(SLO)$/memory.obj      \
             $(SLO)$/cipher.obj      \
@@ -87,7 +79,6 @@ SLOFILES=   \
             $(SLO)$/cmdargs.obj		\
             $(SLO)$/unload.obj		\
             $(SLO)$/logfile.obj     \
-            $(SLO)$/debugprint.obj  \
             $(SLO)$/math.obj        \
             $(SLO)$/alloc_global.obj\
             $(SLO)$/alloc_cache.obj \
@@ -121,7 +112,6 @@ OBJFILES=   \
             $(OBJ)$/alloc_arena.obj \
             $(OBJ)$/alloc_fini.obj
 
-
 .ENDIF
 
 # --- Makefile snippet  --------------------------------------------
@@ -131,30 +121,7 @@ BOOTSTRAPMK = $(OUT)$/inc$/rtlbootstrap.mk
 
 # --- Targets ------------------------------------------------------
 
-.IF "$(ALWAYSDBG_FLAG)"==""
-TARGETDEPS+=$(ALWAYSDBGTARGET)
-.ENDIF
-
 .INCLUDE :  target.mk
-
-.IF "$(ALWAYSDBGTARGET)" != ""
-.IF "$(ALWAYSDBG_FLAG)" == ""
-# --------------------------------------------------
-# - ALWAYSDBG - files always compiled with debugging
-# --------------------------------------------------
-$(ALWAYSDBGTARGET):
-    @echo --- ALWAYSDBGFILES ---
-    @dmake $(MFLAGS) $(MAKEFILE) debug=true $(ALWAYSDBGFILES) ALWAYSDBG_FLAG=TRUE $(CALLMACROS)
-    @echo --- ALWAYSDBGFILES OVER ---
-
-$(ALWAYSDBGFILES):
-    @echo --- ALWAYSDBG ---
-    @dmake $(MFLAGS) $(MAKEFILE) debug=true ALWAYSDBG_FLAG=TRUE $(CALLMACROS) $@
-    @echo --- ALWAYSDBG OVER ---
-
-.ENDIF
-.ENDIF
-
 
 ALLTAR : $(BOOTSTRAPMK)
 

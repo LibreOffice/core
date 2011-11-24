@@ -61,37 +61,6 @@ using ::rtl::OUStringBuffer;
 using ::rtl::OUStringToOString;
 
 ///////////////////////////////////////////////////////////////////////////
-// dbg_dump for development
-#if OSL_DEBUG_LEVEL > 1
-#include <rtl/strbuf.hxx>
-#include <rtl/ustring.hxx>
-
-const sal_Char *dbg_dump(const rtl::OString &rStr)
-{
-    static rtl::OStringBuffer aStr;
-
-    aStr = rtl::OStringBuffer(rStr);
-    aStr.append(static_cast<char>(0));
-    return aStr.getStr();
-}
-
-const sal_Char *dbg_dump(const rtl::OUString &rStr)
-{
-    return dbg_dump(rtl::OUStringToOString(rStr, RTL_TEXTENCODING_UTF8));
-}
-
-const sal_Char *dbg_dump(rtl_String *pStr)
-{
-    return dbg_dump(rtl::OString(pStr));
-}
-
-const sal_Char *dbg_dump(rtl_uString *pStr)
-{
-    return dbg_dump(rtl::OUString(pStr));
-}
-
-#endif
-///////////////////////////////////////////////////////////////////////////
 
 MacSpellChecker::MacSpellChecker() :
     aEvtListeners   ( GetLinguMutex() )
