@@ -1954,12 +1954,10 @@ sal_Bool SwTableBox::IsInHeadline( const SwTable* pTbl ) const
     return pTbl->GetTabLines()[ 0 ] == pLine;
 }
 
-#ifdef DBG_UTIL
 sal_uLong SwTableBox::GetSttIdx() const
 {
     return pSttNd ? pSttNd->GetIndex() : 0;
 }
-#endif
 
     // erfrage vom Client Informationen
 sal_Bool SwTable::GetInfo( SfxPoolItem& rInfo ) const

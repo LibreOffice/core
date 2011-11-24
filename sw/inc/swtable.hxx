@@ -411,12 +411,7 @@ public:
     void ChgFrmFmt( SwTableBoxFmt *pNewFmt );
 
     const SwStartNode *GetSttNd() const { return pSttNd; }
-    sal_uLong GetSttIdx() const
-#ifdef DBG_UTIL
-        ;
-#else
-        { return pSttNd ? pSttNd->GetIndex() : 0; }
-#endif
+    sal_uLong GetSttIdx() const;
 
     // Search next/previous box with content.
     SwTableBox* FindNextBox( const SwTable&, const SwTableBox* =0,
