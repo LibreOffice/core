@@ -495,8 +495,11 @@ namespace xmloff
     {
         // no optimization here. If this method gets called, the XML stream did not contain a name for the
         // element, which is a heavy error. So in this case we don't care for performance
-        Sequence< ::rtl::OUString > aNames = m_xParentContainer->getElementNames();
         static const ::rtl::OUString sUnnamedName(RTL_CONSTASCII_USTRINGPARAM("unnamed"));
+        OSL_ENSURE(m_xParentContainer.is(), "OElementImport::implGetDefaultName: no parent container!");
+        if (!m_xParentContainer.is())
+            return sUnnamedName;
+        Sequence< ::rtl::OUString > aNames = m_xParentContainer->getElementNames();
 
         ::rtl::OUString sReturn;
         const ::rtl::OUString* pNames = NULL;
