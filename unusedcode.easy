@@ -227,7 +227,6 @@ MetricBox::RemoveValue(long, FieldUnit)
 MetricField::ConvertValue(long, unsigned short, FieldUnit, MapUnit)
 MiscSettings::SetDisablePrinting(unsigned char)
 MiscSettings::SetEnableATToolSupport(unsigned char)
-ModulWindow::LinkStubBasicErrorHdl(void*, void*)
 MoreButton::RemoveWindow(Window*)
 MultiLineEdit::GetHScrollBar() const
 MultiLineEdit::GetLeftMargin() const

@@ -326,7 +326,7 @@ private:
     String              aCurPath;
     ::rtl::OUString     m_aModule;
 
-    DECL_LINK( BasicErrorHdl, StarBASIC * );
+    long                BasicErrorHdl( StarBASIC* pBasic );
     long                BasicBreakHdl( StarBASIC* pBasic );
 
     void                CheckCompileBasic();

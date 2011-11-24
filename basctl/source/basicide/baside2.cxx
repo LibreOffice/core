@@ -659,7 +659,7 @@ void ModulWindow::ManageBreakPoints()
 }
 
 
-IMPL_LINK( ModulWindow, BasicErrorHdl, StarBASIC *, pBasic )
+long ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     GoOnTop();
