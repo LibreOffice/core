@@ -56,6 +56,8 @@
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "lo-bootstrap", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "lo-bootstrap", __VA_ARGS__))
 
+#define ROUND_DOWN(ptr,multiple) (void *)(((unsigned) (ptr)) & ~((multiple)-1))
+
 struct engine {
     int dummy;
 };
@@ -68,6 +70,8 @@ static int (*lo_main)(int, const char **);
 static int lo_main_argc;
 static const char **lo_main_argv;
 static int sleep_time = 0;
+
+/* Zip data structures */
 
 /* compression methods */
 #define STORE    0
@@ -123,6 +127,8 @@ struct cdir_end {
     uint16_t comment_size;
     char     comment[0];
 } __attribute__((__packed__));
+
+/* End of Zip data structures */
 
 static void
 engine_handle_cmd(struct android_app* app,
@@ -818,7 +824,119 @@ lo_dlcall_argc_argv(void *function,
     return result;
 }
 
-void android_main(struct android_app* state)
+/* Replacement std::type_info::operator== */
+
+static void
+dummy_patched_operator_equals_arm(void)
+{
+    __asm("    .arm\n"
+          "    .global patched_operator_equals_arm\n"
+          "patched_operator_equals_arm:\n"
+          "    push {lr}\n"
+
+          /* Load name pointers into r0 and r1 */
+          "    ldr r0, [r0, #4]\n"
+          "    ldr r1, [r1, #4]\n"
+
+          /* First compare pointers */
+          "    cmp r0, r1\n"
+
+          /* If equal, return true */
+          "    beq .Lx1\n"
+
+          /* Otherwise call strcmp */
+          "    bl strcmp\n"
+
+          /* And return true or false */
+          "    cmp r0, #0\n"
+          "    moveq r0, #1\n"
+          "    movne r0, #0\n"
+          "    b .Lx9\n"
+
+          ".Lx1:\n"
+          "    mov r0, #1\n"
+
+          ".Lx9:\n"
+          "    pop {pc}\n"
+          );
+}
+
+extern unsigned int patched_operator_equals_arm;
+
+static void
+patch_type_info_operator_equals(void)
+{
+    /* There is a bug in std::type_info::operator== in
+     * libgnustl_shared.so in NDK r7 at least. It compares the type
+     * name pointers instead of comparing the type name strings. See
+     * http://code.google.com/p/android/issues/detail?id=22165 . So
+     * patch it, poke in a jump to our own code above instead.
+     */
+
+    void *libgnustl_shared;
+    void *operator_equals;
+
+    void *base;
+    size_t size;
+
+    /* ARM (not Thumb) code of the operator as in NDK r7 */
+    static unsigned int expected_r7_code[] = {
+        0xe5903004, /* ldr r3, [r0, #4] */
+        0xe5910004, /* ldr r0, [r1, #4] */
+        0xe1530000, /* cmp r3, r0 */
+        0x13a00000, /* movne, #0 */
+        0x03a00001, /* moveq r0, #1 */
+        0xe12fff1e  /* bx lr */
+    };
+
+    /* libgnustl_shared.so should be already loaded as we build
+     * all LO code against it, so as we have loaded the .so
+     * containing lo_main() already, libgnustl_shared.so will have
+     * been brought in, too.
+     */
+    libgnustl_shared = dlopen("libgnustl_shared.so", RTLD_LOCAL);
+    if (libgnustl_shared == NULL) {
+        LOGI("android_main: libgnustl_shared.so not mapped??");
+        exit(0);
+    }
+
+    operator_equals = dlsym(libgnustl_shared, "_ZNKSt9type_infoeqERKS_");
+    if (operator_equals == NULL) {
+        LOGI("android_main: std::type_info::operator== not found!?");
+        exit(0);
+    }
+    LOGI("std::type_info::operator== is at %p", operator_equals);
+
+    if (memcmp(operator_equals, expected_r7_code, sizeof(expected_r7_code)) != 0) {
+        LOGI("android_main: Code for std::type_info::operator== does not match that in NDK r7; not patching it");
+        return;
+    }
+
+    base = ROUND_DOWN(operator_equals, getpagesize());
+    size = operator_equals + sizeof(expected_r7_code) - ROUND_DOWN(operator_equals, getpagesize());
+    if (mprotect(base, size, PROT_READ|PROT_WRITE|PROT_EXEC) == -1) {
+        LOGI("android_main: mprotect() failed: %s", strerror(errno));
+        return;
+    }
+
+    if ((((unsigned) operator_equals) & 0x03) != 0) {
+        LOGI("android_main: Address of operator== is not at word boundary, huh?");
+        return;
+    }
+
+    if ((((unsigned) &patched_operator_equals_arm) & 0x03) != 0) {
+        LOGI("android_main: Address of patched_operator_equals_arm is not at word boundary, huh?");
+        return;
+    }
+
+    /* Poke a "b patched_operator_equals_arm" into it instead */
+    *((unsigned *) operator_equals) =
+        (0xEA000000  |
+         ((((int) &patched_operator_equals_arm - ((int) operator_equals + 8)) / 4) & 0x00FFFFFF));
+}
+
+void
+android_main(struct android_app* state)
 {
     struct engine engine;
     Dl_info lo_main_info;
@@ -835,6 +953,8 @@ void android_main(struct android_app* state)
 
     if (sleep_time != 0)
         sleep(sleep_time);
+
+    patch_type_info_operator_equals();
 
     lo_main(lo_main_argc, lo_main_argv);
 

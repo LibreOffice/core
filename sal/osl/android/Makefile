@@ -107,12 +107,10 @@ install: ndk-build
 run: install
 # Note: these are just examples. 
 #
-# The first two ones should work
 	adb shell am start -n org.libreoffice.android/.Bootstrap -e lo-main-library libcppunittester -e lo-main-cmdline "$(APP_DATA_PATH)/lib/libqa_sal_types.so"
 #
 	adb shell am start -n org.libreoffice.android/.Bootstrap -e lo-main-library libcppunittester -e lo-main-cmdline "$(APP_DATA_PATH)/lib/libtest_i18npool_test_breakiterator.so --protector libunoexceptionprotector.so unoexceptionprotector '-env:UNO_TYPES=file:///assets/bin/udkapi.rdb file:///assets/bin/types.rdb'  '-env:UNO_SERVICES=file:///assets/xml/ure/services.rdb  file:///assets/ComponentTarget/i18npool/util/i18npool.component' -env:LO_LIB_DIR=file://$(APP_DATA_PATH)/lib" 
 #
-# This doesn't work yet
 	adb shell am start -n org.libreoffice.android/.Bootstrap -e lo-main-library libunoexe -e lo-main-cmdline "-ro /assets/lib/uno_services.rdb -ro /assets/lib/uno_types.rdb -s com.sun.star.test.bridge.BridgeTest -- com.sun.star.test.bridge.CppTestObject" -e lo-main-delay 2
 
 clean:
