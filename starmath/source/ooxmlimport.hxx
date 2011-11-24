@@ -46,34 +46,6 @@ private:
     rtl::OUString handleStream();
     rtl::OUString handleF();
     rtl::OUString readR();
-    /**
-     Checks that the current tag is the given opening token, if not, writes out a warning
-     and tries to recover (skips tags until found or until the current element would end).
-     In both cases the position is moved to the next tag.
-     @return the matching found opening tag, or empty tag
-    */
-    oox::formulaimport::XmlStream::Tag checkOpeningTag( int token );
-    /**
-     Checks that the current tag is the given opening token, if not, writes out a warning
-     and tries to recover (skips tags until found or until the current element would end).
-     In both cases the position is moved to the next tag.
-    */
-    void checkClosingTag( int token );
-    // helper for the two above
-    oox::formulaimport::XmlStream::Tag checkTag( int token, const char* txt );
-    /**
-     Tries to find the given token, until either found (returns true) or end of current element.
-     Position in the stream is set to make the tag current.
-    */
-    bool recoverAndFindTag( int token );
-    /**
-     Skips the given element (i.e. reads up to and including the matching closing tag).
-    */
-    void skipElement( int token );
-    /**
-     Handle the current (unexpected) tag.
-    */
-    void handleUnexpectedTag();
     oox::formulaimport::XmlStream& stream;
 };
 

@@ -40,6 +40,11 @@ namespace oox
 namespace formulaimport
 {
 
+XmlStream::XmlStream::Tag::operator bool() const
+{
+    return token != XML_TOKEN_INVALID;
+}
+
 XmlStream::XmlStream()
 : pos( 0 )
 {
@@ -71,6 +76,108 @@ void XmlStream::moveToNextTag()
     if( pos < tags.size())
         ++pos;
 }
+
+XmlStream::Tag XmlStream::ensureOpeningTag( int token )
+{
+    return checkTag( OPENING( token ), true, "opening" );
+}
+
+XmlStream::Tag XmlStream::checkOpeningTag( int token )
+{
+    return checkTag( OPENING( token ), false, "opening" );
+}
+
+void XmlStream::ensureClosingTag( int token )
+{
+    checkTag( CLOSING( token ), true, "closing" );
+}
+
+XmlStream::Tag XmlStream::checkTag( int token, bool optional, const char* txt )
+{
+    // either it's the following tag, or find it
+    int savedPos = pos;
+    if( currentToken() == token || recoverAndFindTag( token ))
+    {
+        Tag ret = currentTag();
+        moveToNextTag();
+        return ret; // ok
+    }
+    if( optional )
+    { // not a problem, just rewind
+        pos = savedPos;
+        return Tag();
+    }
+    fprintf( stderr, "Expected %s tag %d not found.\n", txt, token );
+    return Tag();
+}
+
+bool XmlStream::recoverAndFindTag( int token )
+{
+    int depth = 0;
+    for(;
+         !atEnd();
+         moveToNextTag())
+    {
+        if( depth > 0 ) // we're inside a nested element, skip those
+        {
+            if( currentToken() == OPENING( currentToken()))
+            {
+                fprintf( stderr, "Skipping opening tag %d\n", currentToken());
+                ++depth;
+            }
+            else if( currentToken() == CLOSING( currentToken()))
+            { // TODO debug output without the OPENING/CLOSING bits set
+                fprintf( stderr, "Skipping closing tag %d\n", currentToken());
+                --depth;
+            }
+            else
+            {
+                fprintf( stderr, "Malformed token %d\n", currentToken());
+                abort();
+            }
+            continue;
+        }
+        if( currentToken() == token )
+            return true; // ok, found
+        if( currentToken() == CLOSING( currentToken()))
+            return false; // that would be leaving current element, so not found
+        if( currentToken() == OPENING( currentToken()))
+        {
+            fprintf( stderr, "Skipping opening tag %d\n", currentToken());
+            ++depth;
+        }
+        else
+            abort();
+    }
+    fprintf( stderr, "Unexpected end of stream reached.\n" );
+    return false;
+}
+
+void XmlStream::skipElement( int token )
+{
+    int closing = ( token & ~TAG_OPENING ) | TAG_CLOSING; // make it a closing tag
+    assert( currentToken() == OPENING( token ));
+    // just find the matching closing tag
+    if( recoverAndFindTag( closing ))
+    {
+        moveToNextTag(); // and skip it too
+        return;
+    }
+    fprintf( stderr, "Expected end of element %d not found.\n", token );
+}
+
+void XmlStream::handleUnexpectedTag()
+{
+    if( atEnd())
+        return;
+    if( currentToken() == CLOSING( currentToken()))
+    {
+        moveToNextTag(); // just skip it
+        return;
+    }
+    skipElement( currentToken()); // otherwise skip the entire element
+}
+
 
 void XmlStreamBuilder::appendOpeningTag( int token, const uno::Reference< xml::sax::XFastAttributeList >& attrs )
 {

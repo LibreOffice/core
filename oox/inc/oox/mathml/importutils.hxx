@@ -75,6 +75,11 @@ public:
         int token; ///< tag type, or XML_TOKEN_INVALID
         AttributeList attributes;
         rtl::OUString text;
+        /**
+         Converts to true if the tag has a valid token, false otherwise. Allows simple
+         usage in if(), for example 'if( XmlStream::Tag foo = stream.checkOpeningTag( footoken ))'.
+        */
+        operator bool() const;
     };
     /**
      @return true if current position is at the end of the XML stream
@@ -92,7 +97,41 @@ public:
      Moves position to the next tag.
     */
     void moveToNextTag();
+    /**
+     Ensures that an opening tag with the given token is read. If the current tag does not match,
+     writes out a warning and tries to recover by skipping tags until found (or until the current element would end).
+     If found, the position in the stream is afterwards moved to the next tag.
+     @return the matching found opening tag, or empty tag if not found
+    */
+    Tag ensureOpeningTag( int token );
+    /**
+     Tries to find an opening tag with the given token. Works similarly like ensureOpeningTag(),
+     but if a matching tag is not found, the position in the stream is not altered. The primary
+     use of this function is to check for optional elements.
+     @return the matching found opening tag, or empty tag if not found
+    */
+    Tag checkOpeningTag( int token );
+    /**
+     Ensures that a closing tag with the given token is read. Like ensureOpeningTag(),
+     if not, writes out a warning and tries to recover by skiping tags until found (or until the current element would end).
+     If found, the position in the stream is afterwards moved to the next tag.
+    */
+    void ensureClosingTag( int token );
+    /**
+     Tries to find the given token, until either found (returns true) or end of current element.
+     Position in the stream is set to make the tag current.
+    */
+    bool recoverAndFindTag( int token );
+    /**
+     Skips the given element (i.e. reads up to and including the matching closing tag).
+    */
+    void skipElement( int token );
+    /**
+     Handle the current (unexpected) tag.
+    */
+    void handleUnexpectedTag();
 protected:
+    Tag checkTag( int token, bool optional, const char* txt );
     std::vector< Tag > tags;
     unsigned int pos;
 };
