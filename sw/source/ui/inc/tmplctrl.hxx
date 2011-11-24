@@ -30,7 +30,6 @@
 
 // include ---------------------------------------------------------------
 #include <sfx2/stbitem.hxx>
-#include <tools/string.hxx>
 
 // class BookmarkToolBoxControl -------------------------------------------
 class SwTemplateControl : public SfxStatusBarControl

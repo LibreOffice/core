@@ -30,7 +30,6 @@
 #include "precompiled_sw.hxx"
 // System - Includes -----------------------------------------------------
 
-#include <tools/string.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include "swdll.hxx"
