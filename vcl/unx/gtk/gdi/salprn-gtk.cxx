@@ -655,7 +655,10 @@ GtkPrintDialog::impl_initCustomTab()
                 {
                     pRow = aPropertyToDependencyRowMap[aDependsOnName + rtl::OUString::valueOf(nDependsOnValue)];
                     if (!pRow)
+                    {
                         gtk_widget_destroy(pWidget);
+                        pWidget = NULL;
+                    }
                 }
             }
             if (pWidget)
