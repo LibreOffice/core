@@ -228,6 +228,7 @@ void ScNameDlg::CheckForEmptyTable()
     {
         maBtnDelete.Disable();
         maEdAssign.Disable();
+        aRbAssign.Disable();
         maEdName.Disable();
         maLbScope.Disable();
 
@@ -240,6 +241,7 @@ void ScNameDlg::CheckForEmptyTable()
     {
         maBtnDelete.Enable();
         maEdAssign.Enable();
+        aRbAssign.Enable();
         maEdName.Enable();
         maLbScope.Enable();
 
@@ -321,21 +323,6 @@ ScRangeName* ScNameDlg::GetRangeName(const rtl::OUString& rScope)
         return maRangeMap.find(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME)))->second;
     else
         return maRangeMap.find(rScope)->second;
-}
-
-//updates the table and the buttons
-void ScNameDlg::UpdateNames()
-{
-    ScRangeNameLine aLine;
-    mpRangeManagerTable->GetCurrentLine(aLine);
-    if (aLine.aName.getLength())
-    {
-        maBtnDelete.Enable();
-    }
-    else
-    {
-        maBtnDelete.Disable();
-    }
 }
 
 void ScNameDlg::CalcCurTableAssign( String& aAssign, ScRangeData* pRangeData )
@@ -457,6 +444,7 @@ void ScNameDlg::SelectionChanged()
 
         maEdName.Disable();
         maEdAssign.Disable();
+        aRbAssign.Disable();
         maLbScope.Disable();
         maBtnSelect.Disable();
         maBtnRowHeader.Disable();
@@ -475,6 +463,7 @@ void ScNameDlg::SelectionChanged()
         maBtnDelete.Enable();
         maEdName.Enable();
         maEdAssign.Enable();
+        aRbAssign.Disable();
         maLbScope.Enable();
         maBtnSelect.Enable();
         maBtnRowHeader.Enable();
