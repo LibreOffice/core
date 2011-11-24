@@ -127,13 +127,16 @@ OUString SmOoxmlImport::handleAcc()
             acc = STR( "circle" );
             break;
         case MS_VEC:
-            acc = STR( "vec" );
+            // prefer wide variants for these 3, .docx can't seem to differentiate
+            // between e.g. 'vec' and 'widevec', if whatever the accent is above is short, this
+            // shouldn't matter, but short above a longer expression doesn't look right
+            acc = STR( "widevec" );
             break;
         case MS_TILDE:
-            acc = STR( "tilde" );
+            acc = STR( "widetilde" );
             break;
         case MS_HAT:
-            acc = STR( "hat" );
+            acc = STR( "widehat" );
             break;
         case MS_DOT:
             acc = STR( "dot" );
@@ -144,16 +147,6 @@ OUString SmOoxmlImport::handleAcc()
         case MS_DDDOT:
             acc = STR( "dddot" );
             break;
-// these characters do not exist it seems
-//        case MS_WIDETILDE:
-//            acc = STR( "widetilde" );
-//            break;
-//        case TWIDEHAT:
-//            acc = STR( "widehat" );
-//            break;
-//        case TWIDEVEC:
-//            acc = STR( "widevec" );
-//            break;
         default:
             acc = STR( "acute" );
             break;
