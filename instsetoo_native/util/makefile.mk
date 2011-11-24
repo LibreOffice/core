@@ -182,6 +182,7 @@ MSILANGPACKTEMPLATESOURCE=$(PRJ)$/inc_ooolangpack$/windows$/msi_templates
 MSIHELPPACKTEMPLATESOURCE=$(PRJ)$/inc_ooohelppack$/windows$/msi_templates
 MSIURETEMPLATESOURCE=$(PRJ)$/inc_ure$/windows$/msi_templates
 MSISDKOOTEMPLATESOURCE=$(PRJ)$/inc_sdkoo$/windows$/msi_templates
+MSICOMMONTEMPLATESOURCE=$(PRJ)$/inc_common$/windows$/msi_templates
 
 NOLOGOSPLASH:=$(BIN)$/intro.zip
 DEVNOLOGOSPLASH:=$(BIN)$/dev$/intro.zip
@@ -350,21 +351,11 @@ hack_msitemplates .PHONY:
     $(GNUCOPY) -u $(MSIHELPPACKTEMPLATESOURCE)$/*.* $(MSIHELPPACKTEMPLATEDIR)
     $(GNUCOPY) -u $(MSIURETEMPLATESOURCE)$/*.* $(MSIURETEMPLATEDIR)
     $(GNUCOPY) -u $(MSISDKOOTEMPLATESOURCE)$/*.* $(MSISDKOOTEMPLATEDIR)
-    $(GNUCOPY) -u $(MSIOFFICETEMPLATESOURCE)$/Binary$/*.* $(MSIOFFICETEMPLATEDIR)$/Binary
-    $(GNUCOPY) -u $(MSILANGPACKTEMPLATESOURCE)$/Binary$/*.* $(MSILANGPACKTEMPLATEDIR)$/Binary
-    $(GNUCOPY) -u $(MSIHELPPACKTEMPLATESOURCE)$/Binary$/*.* $(MSIHELPPACKTEMPLATEDIR)$/Binary
-    $(GNUCOPY) -u $(MSIURETEMPLATESOURCE)$/Binary$/*.* $(MSIURETEMPLATEDIR)$/Binary
-    $(GNUCOPY) -u $(MSISDKOOTEMPLATESOURCE)$/Binary$/*.* $(MSISDKOOTEMPLATEDIR)$/Binary
-    $(RM) $(MSIOFFICETEMPLATEDIR)$/Binary$/Image.bmp
-    $(RM) $(MSILANGPACKTEMPLATEDIR)$/Binary$/Image.bmp
-    $(RM) $(MSIHELPPACKTEMPLATEDIR)$/Binary$/Image.bmp
-    $(RM) $(MSIURETEMPLATEDIR)$/Binary$/Image.bmp
-    $(RM) $(MSISDKOOTEMPLATEDIR)$/Binary$/Image.bmp
-    $(RM) $(MSIOFFICETEMPLATEDIR)$/Binary$/Banner.bmp
-    $(RM) $(MSILANGPACKTEMPLATEDIR)$/Binary$/Banner.bmp
-    $(RM) $(MSIHELPPACKTEMPLATEDIR)$/Binary$/Banner.bmp
-    $(RM) $(MSIURETEMPLATEDIR)$/Binary$/Banner.bmp
-    $(RM) $(MSISDKOOTEMPLATEDIR)$/Binary$/Banner.bmp
+    $(GNUCOPY) -u $(MSICOMMONTEMPLATESOURCE)$/Binary$/*.* $(MSIOFFICETEMPLATEDIR)$/Binary
+    $(GNUCOPY) -u $(MSICOMMONTEMPLATESOURCE)$/Binary$/*.* $(MSILANGPACKTEMPLATEDIR)$/Binary
+    $(GNUCOPY) -u $(MSICOMMONTEMPLATESOURCE)$/Binary$/*.* $(MSIHELPPACKTEMPLATEDIR)$/Binary
+    $(GNUCOPY) -u $(MSICOMMONTEMPLATESOURCE)$/Binary$/*.* $(MSIURETEMPLATEDIR)$/Binary
+    $(GNUCOPY) -u $(MSICOMMONTEMPLATESOURCE)$/Binary$/*.* $(MSISDKOOTEMPLATEDIR)$/Binary
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIOFFICETEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSILANGPACKTEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIHELPPACKTEMPLATEDIR)$/Binary$/Image.bmp
