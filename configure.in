@@ -1346,7 +1346,7 @@ AC_ARG_WITH(system-mozilla,
         [Use Mozilla already on system. Note that some components cannot be built
          against a contemporary Mozilla. The flavour used can be specified by
          --with-system-mozilla=<flavour>. Supported are: libxul (default),
-         xulrunner, firefox, seamonkey, mozilla.]),
+         xulrunner, firefox, seamonkey, mozilla, iceape.]),
     WITH_SYSTEM_MOZILLA=$withval ,
 WITH_SYSTEM_MOZILLA=no)
 
@@ -5838,6 +5838,8 @@ if test -n "$with_system_mozilla" && test "$with_system_mozilla" != "no"; then
         MOZ_FLAVOUR=xulrunner
     elif test -n "$with_system_mozilla" && test "$with_system_mozilla" = "seamonkey"; then
         MOZ_FLAVOUR=seamonkey
+    elif test -n "$with_system_mozilla" && test "$with_system_mozilla" = "iceape"; then
+        MOZ_FLAVOUR=iceape
     elif test -n "$with_system_mozilla" && test "$with_system_mozilla" = "firefox"; then
         MOZ_FLAVOUR=firefox
     elif test -n "$with_system_mozilla" && test "$with_system_mozilla" = "mozilla"; then
