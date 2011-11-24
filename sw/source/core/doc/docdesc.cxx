@@ -113,7 +113,7 @@ static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
     }
     else
     {
-        nMinTop = nMinBottom = 1440;    //al la WW: 1 Inch
+        nMinTop = nMinBottom = 1440;    // is like: 1 Inch
         nMinLeft = nMinRight = 1800;    //          1,25 Inch
     }
 
