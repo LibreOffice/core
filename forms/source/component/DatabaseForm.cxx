@@ -1043,7 +1043,7 @@ void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, const ::rtl::OUStr
     pChild->SetContentDisposition( aContentDisp );
     pChild->SetContentType( UniString::CreateFromAscii("text/plain") );
 
-    rtl_TextEncoding eSystemEncoding = gsl_getSystemTextEncoding();
+    rtl_TextEncoding eSystemEncoding = osl_getThreadTextEncoding();
     const sal_Char* pBestMatchingEncoding = rtl_getBestMimeCharsetFromTextEncoding( eSystemEncoding );
     UniString aBestMatchingEncoding = UniString::CreateFromAscii( pBestMatchingEncoding );
     pChild->SetContentTransferEncoding(aBestMatchingEncoding);

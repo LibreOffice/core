@@ -121,7 +121,7 @@ XPlugin_Impl::XPlugin_Impl( const uno::Reference< com::sun::star::lang::XMultiSe
         PluginControl_Impl(),
         m_xSMgr( rSMgr ),
         m_pPluginComm( NULL ),
-        m_aEncoding( gsl_getSystemTextEncoding() ),
+        m_aEncoding( osl_getThreadTextEncoding() ),
         m_pArgv( NULL ),
         m_pArgn( NULL ),
         m_nArgs( 0 ),

@@ -220,7 +220,7 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
     rStream << nLSpace;
 
     rStream << nCharTextDistance;
-    rtl_TextEncoding eEnc = gsl_getSystemTextEncoding();
+    rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
     rStream.WriteByteString(sPrefix, eEnc);
     rStream.WriteByteString(sSuffix, eEnc);
     rStream.WriteByteString(sCharStyleName, eEnc);

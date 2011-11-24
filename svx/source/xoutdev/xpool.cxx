@@ -47,7 +47,7 @@ XOutdevItemPool::XOutdevItemPool(
     sal_uInt16 nAttrStart,
     sal_uInt16 nAttrEnd,
     sal_Bool bLoadRefCounts)
-:   SfxItemPool(String("XOutdevItemPool", gsl_getSystemTextEncoding()), nAttrStart, nAttrEnd, 0L, 0L, bLoadRefCounts)
+:   SfxItemPool(String("XOutdevItemPool", osl_getThreadTextEncoding()), nAttrStart, nAttrEnd, 0L, 0L, bLoadRefCounts)
 {
     // prepare some defaults
     const XubString aNullStr;

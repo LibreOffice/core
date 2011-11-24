@@ -236,7 +236,7 @@ const SwNumRulesWithName& SwNumRulesWithName::operator=(const SwNumRulesWithName
 
 SwNumRulesWithName::SwNumRulesWithName( SvStream &rStream, sal_uInt16 nVersion )
 {
-    CharSet eEncoding = gsl_getSystemTextEncoding();
+    CharSet eEncoding = osl_getThreadTextEncoding();
     rStream.ReadByteString(aName, eEncoding);
 
     char c;
@@ -275,7 +275,7 @@ void SwNumRulesWithName::MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const
 
 void SwNumRulesWithName::Store( SvStream &rStream )
 {
-    CharSet eEncoding = gsl_getSystemTextEncoding();
+    CharSet eEncoding = osl_getThreadTextEncoding();
     rStream.WriteByteString(aName, eEncoding);
 
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
@@ -332,7 +332,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
                                                         sal_uInt16 nVersion )
     : nCharPoolId( USHRT_MAX )
 {
-    CharSet eEncoding = gsl_getSystemTextEncoding();
+    CharSet eEncoding = osl_getThreadTextEncoding();
     {
         sal_uInt16 nUS;
         sal_Char cChar;
@@ -466,7 +466,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::~_SwNumFmtGlobal()
 
 void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
 {
-    CharSet eEncoding = gsl_getSystemTextEncoding();
+    CharSet eEncoding = osl_getThreadTextEncoding();
     {
         String aName;
         sal_uInt16 nFamily = FAMILY_DONTKNOW, nCharSet = 0, nPitch = 0;

@@ -387,7 +387,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     // independent document linkage.
     aLbCharSet.InsertTextEncoding( RTL_TEXTENCODING_DONTKNOW, aCharSetUser );
     aLbCharSet.SelectTextEncoding( ePreselectUnicode == RTL_TEXTENCODING_DONTKNOW ?
-            gsl_getSystemTextEncoding() : ePreselectUnicode );
+            osl_getThreadTextEncoding() : ePreselectUnicode );
 
     if( nCharSet >= 0 && ePreselectUnicode == RTL_TEXTENCODING_DONTKNOW )
         aLbCharSet.SelectEntryPos( static_cast<sal_uInt16>(nCharSet) );
@@ -563,7 +563,7 @@ void ScImportAsciiDlg::SetSelectedCharSet()
     meCharSet = aLbCharSet.GetSelectTextEncoding();
     mbCharSetSystem = (meCharSet == RTL_TEXTENCODING_DONTKNOW);
     if( mbCharSetSystem )
-        meCharSet = gsl_getSystemTextEncoding();
+        meCharSet = osl_getThreadTextEncoding();
 }
 
 String ScImportAsciiDlg::GetSeparators() const

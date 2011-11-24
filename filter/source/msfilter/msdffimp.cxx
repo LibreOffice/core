@@ -7061,7 +7061,7 @@ sal_Bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
             {
                 sal_Char * pBuf = new sal_Char[ nStrLen ];
                 rStm.Read( pBuf, nStrLen );
-                aSvrName.Assign( String( pBuf, (sal_uInt16) nStrLen-1, gsl_getSystemTextEncoding() ) );
+                aSvrName.Assign( String( pBuf, (sal_uInt16) nStrLen-1, osl_getThreadTextEncoding() ) );
                 delete[] pBuf;
             }
             else

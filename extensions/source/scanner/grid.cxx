@@ -350,7 +350,7 @@ void GridWindow::drawGrid()
         // draw tickmarks
         Point aPt = transform( fX, m_fMinY );
         std::sprintf( pBuf, "%g", fX );
-        String aMark( pBuf, gsl_getSystemTextEncoding() );
+        String aMark( pBuf, osl_getThreadTextEncoding() );
         Size aTextSize( GetTextWidth( aMark ), GetTextHeight() );
         aPt.X() -= aTextSize.Width()/2;
         aPt.Y() += aTextSize.Height()/2;
@@ -363,7 +363,7 @@ void GridWindow::drawGrid()
         // draw tickmarks
         Point aPt = transform( m_fMinX, fY );
         std::sprintf( pBuf, "%g", fY );
-        String aMark( pBuf, gsl_getSystemTextEncoding() );
+        String aMark( pBuf, osl_getThreadTextEncoding() );
         Size aTextSize( GetTextWidth( aMark ), GetTextHeight() );
         aPt.X() -= aTextSize.Width() + 2;
         aPt.Y() -= aTextSize.Height()/2;

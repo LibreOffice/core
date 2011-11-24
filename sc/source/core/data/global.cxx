@@ -697,7 +697,7 @@ CharSet ScGlobal::GetCharsetValue( const String& rCharSet )
     {
         sal_Int32 nVal = rCharSet.ToInt32();
         if ( !nVal || nVal == RTL_TEXTENCODING_DONTKNOW )
-            return gsl_getSystemTextEncoding();
+            return osl_getThreadTextEncoding();
         return (CharSet) nVal;
     }
     // old CharSet values for compatibility
@@ -710,7 +710,7 @@ CharSet ScGlobal::GetCharsetValue( const String& rCharSet )
     else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_861")) return RTL_TEXTENCODING_IBM_861;
     else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_863")) return RTL_TEXTENCODING_IBM_863;
     else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_865")) return RTL_TEXTENCODING_IBM_865;
-    else return gsl_getSystemTextEncoding();
+    else return osl_getThreadTextEncoding();
 }
 
 //------------------------------------------------------------------------

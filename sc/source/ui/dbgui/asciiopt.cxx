@@ -56,7 +56,7 @@ ScAsciiOptions::ScAsciiOptions() :
     bQuotedFieldAsText(false),
     bDetectSpecialNumber(false),
     cTextSep        ( cDefaultTextSep ),
-    eCharSet        ( gsl_getSystemTextEncoding() ),
+    eCharSet        ( osl_getThreadTextEncoding() ),
     eLang           ( LANGUAGE_SYSTEM ),
     bCharSetSystem  ( false ),
     nStartRow       ( 1 ),

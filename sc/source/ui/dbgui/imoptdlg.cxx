@@ -113,7 +113,7 @@ String ScImportOptions::BuildString() const
 void ScImportOptions::SetTextEncoding( rtl_TextEncoding nEnc )
 {
     eCharSet = (nEnc == RTL_TEXTENCODING_DONTKNOW ?
-        gsl_getSystemTextEncoding() : nEnc);
+        osl_getThreadTextEncoding() : nEnc);
     aStrFont = ScGlobal::GetCharsetString( nEnc );
 }
 

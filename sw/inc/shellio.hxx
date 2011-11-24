@@ -97,7 +97,7 @@ public:
     {
         sFont.Erase();
         eCRLF_Flag = GetSystemLineEnd();
-        eCharSet = ::gsl_getSystemTextEncoding();
+        eCharSet = ::osl_getThreadTextEncoding();
         nLanguage = 0;
     }
     // for the automatic conversion (mail/news/...)

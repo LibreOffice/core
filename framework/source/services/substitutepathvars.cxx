@@ -779,7 +779,7 @@ rtl::OUString SubstitutePathVariables::GetPathVariableValue() const
     if ( pEnv )
     {
         rtl::OUString       aTmp;
-        rtl::OUString       aPathList( pEnv, strlen( pEnv ), gsl_getSystemTextEncoding() );
+        rtl::OUString       aPathList( pEnv, strlen( pEnv ), osl_getThreadTextEncoding() );
         rtl::OUStringBuffer aPathStrBuffer( aPathList.getLength() * PATH_EXTEND_FACTOR / 100 );
 
         bool      bAppendSep = false;

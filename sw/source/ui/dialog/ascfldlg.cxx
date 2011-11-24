@@ -372,7 +372,7 @@ IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, SvxTextEncodingBox*, pBox )
                 nOldLng = nLng;
 
     rtl_TextEncoding nChrSet = pBox->GetSelectTextEncoding();
-    if( nChrSet == gsl_getSystemTextEncoding() )
+    if( nChrSet == osl_getThreadTextEncoding() )
         eEnd = GetSystemLineEnd();
     else
     {

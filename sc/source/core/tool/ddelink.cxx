@@ -45,7 +45,7 @@
 
 TYPEINIT2(ScDdeLink,::sfx2::SvBaseLink,SfxBroadcaster);
 
-#define DDE_TXT_ENCODING    gsl_getSystemTextEncoding()
+#define DDE_TXT_ENCODING    osl_getThreadTextEncoding()
 
 sal_Bool ScDdeLink::bIsInUpdate = false;
 

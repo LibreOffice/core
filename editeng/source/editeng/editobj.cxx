@@ -1040,7 +1040,7 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
     }
 
     // Store Current text encoding ...
-    rtl_TextEncoding eEncoding = GetSOStoreTextEncoding( gsl_getSystemTextEncoding(), (sal_uInt16) rOStream.GetVersion() );
+    rtl_TextEncoding eEncoding = GetSOStoreTextEncoding( osl_getThreadTextEncoding(), (sal_uInt16) rOStream.GetVersion() );
     rOStream << (sal_uInt16) eEncoding;
 
     // The number of paragraphs ...

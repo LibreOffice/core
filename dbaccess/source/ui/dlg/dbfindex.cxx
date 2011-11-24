@@ -395,7 +395,7 @@ void ODbaseIndexDialog::Init()
                 // yes -> add to the tables index list
                 if (aNDX == "NDX" )
                 {
-                    aEntry = rtl::OStringToOUString(aInfFile.ReadKey(aKeyName), gsl_getSystemTextEncoding());
+                    aEntry = rtl::OStringToOUString(aInfFile.ReadKey(aKeyName), osl_getThreadTextEncoding());
                     rTabInfo.aIndexList.push_back( OTableIndex( aEntry ) );
 
                     // and remove it from the free index list
@@ -527,7 +527,7 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
         aInfFile.WriteKey(
             aKeyName.makeStringAndClear(),
             rtl::OUStringToOString(aIndex->GetIndexFileName(),
-                gsl_getSystemTextEncoding()));
+                osl_getThreadTextEncoding()));
     }
 
     aInfFile.Flush();

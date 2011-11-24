@@ -1084,7 +1084,7 @@ XFFrame* LwpDrawTextBox::CreateDrawObj(const rtl::OUString& rStyleName )
     rtl_TextEncoding aEncoding;
     if (!m_aTextRec.nTextCharacterSet)
     {
-        aEncoding = gsl_getSystemTextEncoding();
+        aEncoding = osl_getThreadTextEncoding();
     }
     else
     {
@@ -1283,7 +1283,7 @@ XFFrame* LwpDrawTextArt::CreateDrawObj(const rtl::OUString& rStyleName)
     rtl_TextEncoding aEncoding;
     if (!m_aTextArtRec.nTextCharacterSet)
     {
-        aEncoding = gsl_getSystemTextEncoding();
+        aEncoding = osl_getThreadTextEncoding();
     }
     else
     {

@@ -186,7 +186,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
                     aControlProps = *(Sequence< ::com::sun::star::beans::PropertyValue>*)pArguments->Value.getValue();
             }
             else
-                OSL_FAIL(rtl::OStringBuffer("SbaExternalSourceBrowser::dispatch(AddGridColumn) : unknown argument (").append(rtl::OUStringToOString(pArguments->Name, gsl_getSystemTextEncoding())).append(") !").getStr());
+                OSL_FAIL(rtl::OStringBuffer("SbaExternalSourceBrowser::dispatch(AddGridColumn) : unknown argument (").append(rtl::OUStringToOString(pArguments->Name, osl_getThreadTextEncoding())).append(") !").getStr());
         }
         if (!sControlType.getLength())
         {

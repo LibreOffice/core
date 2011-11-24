@@ -235,7 +235,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
     }
 
     aLbFont.SelectTextEncoding( pOptions ? pOptions->eCharSet :
-        gsl_getSystemTextEncoding() );
+        osl_getThreadTextEncoding() );
 
     // optionaler Titel:
     if ( pStrTitle )

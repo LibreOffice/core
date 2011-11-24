@@ -430,7 +430,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         CharSet eChrSet = pFontItem->GetCharSet();
         DBG_ASSERT( eChrSet != 9, "SystemCharSet?!" );
         if( RTL_TEXTENCODING_DONTKNOW == eChrSet )
-            eChrSet = gsl_getSystemTextEncoding();
+            eChrSet = osl_getThreadTextEncoding();
         rOutput << OOO_STRING_SVTOOLS_RTF_FCHARSET;
         rOutput.WriteNumber( static_cast<sal_uInt32>( rtl_getBestWindowsCharsetFromTextEncoding( eChrSet ) ) );
 

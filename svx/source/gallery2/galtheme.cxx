@@ -1363,7 +1363,7 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
 
     rOStm << (sal_uInt16) 0x0004;
     rOStm.WriteByteString(rtl::OUStringToOString(GetRealName(), RTL_TEXTENCODING_UTF8));
-    rOStm << nCount << (sal_uInt16) gsl_getSystemTextEncoding();
+    rOStm << nCount << (sal_uInt16) osl_getThreadTextEncoding();
 
     for( sal_uInt32 i = 0; i < nCount; i++ )
     {
@@ -1488,7 +1488,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
             rIStm >> pObj->nOffset;
             rIStm >> nTemp; pObj->eObjKind = (SgaObjKind) nTemp;
 
-            aFileName = rtl::OStringToOUString(aTempFileName, gsl_getSystemTextEncoding());
+            aFileName = rtl::OStringToOUString(aTempFileName, osl_getThreadTextEncoding());
 
             if( bRel )
             {

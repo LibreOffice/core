@@ -4090,7 +4090,7 @@ void    SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
 {
     AutoMarkEntry* pToInsert = 0;
     const String sZero('0');
-    rtl_TextEncoding  eTEnc = gsl_getSystemTextEncoding();
+    rtl_TextEncoding  eTEnc = osl_getThreadTextEncoding();
     while( !rInStr.GetError() && !rInStr.IsEof() )
     {
         String sLine;
@@ -4151,7 +4151,7 @@ void    SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
     if(pController ->IsModified())
         GoToColumnId(nCol < ITEM_CASE ? ++nCol : --nCol );
 
-    rtl_TextEncoding  eTEnc = gsl_getSystemTextEncoding();
+    rtl_TextEncoding  eTEnc = osl_getThreadTextEncoding();
     for(sal_uInt16 i = 0; i < aEntryArr.Count();i++)
     {
         AutoMarkEntry* pEntry = aEntryArr[i];

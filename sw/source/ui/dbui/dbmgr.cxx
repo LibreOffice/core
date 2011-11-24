@@ -848,7 +848,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
 
     ::rtl::Reference< MailDispatcher >          xMailDispatcher;
     ::rtl::OUString sBodyMimeType;
-    rtl_TextEncoding eEncoding = ::gsl_getSystemTextEncoding();
+    rtl_TextEncoding eEncoding = ::osl_getThreadTextEncoding();
 
     if(bEMail)
     {

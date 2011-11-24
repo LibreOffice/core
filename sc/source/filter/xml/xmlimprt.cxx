@@ -1923,7 +1923,7 @@ SvXMLImportContext *ScXMLImport::CreateFontDeclsContext(const sal_uInt16 nPrefix
                                                         const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
     XMLFontStylesContext *pFSContext = new XMLFontStylesContext(
-        *this, nPrefix, rLocalName, xAttrList, gsl_getSystemTextEncoding());
+        *this, nPrefix, rLocalName, xAttrList, osl_getThreadTextEncoding());
     SetFontDecls(pFSContext);
     SvXMLImportContext* pContext = pFSContext;
     return pContext;

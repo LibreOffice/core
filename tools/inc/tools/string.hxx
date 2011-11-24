@@ -80,13 +80,6 @@ typedef rtl_TextEncoding CharSet;
 
 #endif // ENUM_CHARSET_DECLARED
 
-inline rtl_TextEncoding gsl_getSystemTextEncoding()
-{
-    return osl_getThreadTextEncoding();
-}
-
-// -----------------------------------------------------------------------
-
 // -----------
 // - LineEnd -
 // -----------

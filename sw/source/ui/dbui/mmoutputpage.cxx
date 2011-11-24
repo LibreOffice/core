@@ -1044,7 +1044,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
             nEnd = rConfigItem.GetMergedDocumentCount();
     }
     bool bAsBody = false;
-    rtl_TextEncoding eEncoding = ::gsl_getSystemTextEncoding();
+    rtl_TextEncoding eEncoding = ::osl_getThreadTextEncoding();
     SfxFilterContainer* pFilterContainer = SwDocShell::Factory().GetFilterContainer();
     const SfxFilter *pSfxFlt = 0;
     sal_uLong nDocType = (sal_uLong)m_aSendAsLB.GetEntryData(m_aSendAsLB.GetSelectEntryPos());

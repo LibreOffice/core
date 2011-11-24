@@ -378,7 +378,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
         if( pHeaderAttrs )
             SetEncodingByHTTPHeader( pHeaderAttrs );
     }
-    pCSS1Parser->SetDfltEncoding( gsl_getSystemTextEncoding() );
+    pCSS1Parser->SetDfltEncoding( osl_getThreadTextEncoding() );
 
     // Timer nur bei ganz normalen Dokumenten aufsetzen!
     SwDocShell* pDocSh = pDoc->GetDocShell();
@@ -3684,7 +3684,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
     String aFontName, aStyleName;
     FontFamily eFamily = FAMILY_DONTKNOW;   // Family und Pitch,
     FontPitch ePitch = PITCH_DONTKNOW;      // falls nicht gefunden
-    rtl_TextEncoding eEnc = gsl_getSystemTextEncoding();
+    rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
 
     if( aFace.Len() && !pCSS1Parser->IsIgnoreFontFamily() )
     {

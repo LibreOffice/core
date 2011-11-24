@@ -388,7 +388,7 @@ void implChr( SbxArray& rPar, bool bChrW )
         if( !bChrW && SbiRuntime::isVBAEnabled() )
         {
             sal_Char c = static_cast<sal_Char>(pArg->GetByte());
-            aStr = rtl::OUString(&c, 1, gsl_getSystemTextEncoding());
+            aStr = rtl::OUString(&c, 1, osl_getThreadTextEncoding());
         }
         else
         {
@@ -1716,7 +1716,7 @@ RTLFUNC(Val)
                 nRadix = 8;
             if ( nRadix != 10 )
             {
-                ByteString aByteStr( aStr, gsl_getSystemTextEncoding() );
+                ByteString aByteStr( aStr, osl_getThreadTextEncoding() );
                 sal_Int16 nlResult = (sal_Int16)strtol( aByteStr.GetBuffer()+2, &pEndPtr, nRadix);
                 nResult = (double)nlResult;
             }
@@ -2840,7 +2840,7 @@ RTLFUNC(GetAttr)
             aEntry.ToAbs();
 
             // #57064 extract the real-path for virtual URLs
-            ByteString aByteStrFullPath( aEntry.GetFull(), gsl_getSystemTextEncoding() );
+            ByteString aByteStrFullPath( aEntry.GetFull(), osl_getThreadTextEncoding() );
             DWORD nRealFlags = GetFileAttributes (aByteStrFullPath.GetBuffer());
             if (nRealFlags != 0xffffffff)
             {

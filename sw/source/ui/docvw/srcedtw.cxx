@@ -230,7 +230,7 @@ SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
 
     nCurTextWidth(0),
     nStartLine(USHRT_MAX),
-    eSourceEncoding(gsl_getSystemTextEncoding()),
+    eSourceEncoding(osl_getThreadTextEncoding()),
     bDoSyntaxHighlight(sal_True),
     bHighlighting(sal_False)
 {

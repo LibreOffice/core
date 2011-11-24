@@ -382,7 +382,7 @@ sal_Bool ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVe
     }
 
     //  adjust charset in font
-    CharSet eSysSet = gsl_getSystemTextEncoding();
+    CharSet eSysSet = osl_getThreadTextEncoding();
     CharSet eSrcSet = rStream.GetStreamCharSet();
     if( eSrcSet != eSysSet && aFont.GetCharSet() == eSrcSet )
         aFont.SetCharSet(eSysSet);
@@ -1130,7 +1130,7 @@ sal_Bool ScAutoFormat::Save()
         rStream << nVal
                 << (sal_uInt8)2         // Anzahl von Zeichen des Headers incl. diesem
                 << (sal_uInt8)::GetSOStoreTextEncoding(
-                    gsl_getSystemTextEncoding(), sal::static_int_cast<sal_uInt16>(rStream.GetVersion()) );
+                    osl_getThreadTextEncoding(), sal::static_int_cast<sal_uInt16>(rStream.GetVersion()) );
         ScAfVersions::Write(rStream);           // Item-Versionen
 
         bRet = (rStream.GetError() == 0);

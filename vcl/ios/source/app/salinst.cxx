@@ -148,7 +148,7 @@ void SalAbort( const XubString& rErrorText, bool bDumpCore )
         fprintf( stderr, "Application Error " );
     else
         fprintf( stderr, "%s ",
-            ByteString( rErrorText, gsl_getSystemTextEncoding() ).GetBuffer() );
+            ByteString( rErrorText, osl_getThreadTextEncoding() ).GetBuffer() );
     if( bDumpCore )
         abort();
     else

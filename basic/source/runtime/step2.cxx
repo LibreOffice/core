@@ -901,7 +901,7 @@ void SbiRuntime::StepOPEN( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     SbxVariableRef pLen  = PopVar();
     short nBlkLen = pLen->GetInteger();
     short nChan   = pChan->GetInteger();
-    ByteString aName( pName->GetString(), gsl_getSystemTextEncoding() );
+    ByteString aName( pName->GetString(), osl_getThreadTextEncoding() );
     pIosys->Open( nChan, aName, static_cast<short>( nOp1 ),
         static_cast<short>( nOp2 ), nBlkLen );
     Error( pIosys->GetError() );

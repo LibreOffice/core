@@ -768,7 +768,7 @@ void OHTMLImportExport::WriteBody()
     IncIndent(1); TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_style );
 
     (*m_pStream) << sMyBegComment; OUT_LF();
-    (*m_pStream) << OOO_STRING_SVTOOLS_HTML_body " { " << sFontFamily << '"' << ::rtl::OUStringToOString(m_aFont.Name, gsl_getSystemTextEncoding()).getStr() << '\"';
+    (*m_pStream) << OOO_STRING_SVTOOLS_HTML_body " { " << sFontFamily << '"' << ::rtl::OUStringToOString(m_aFont.Name, osl_getThreadTextEncoding()).getStr() << '\"';
         // TODO : think about the encoding of the font name
     (*m_pStream) << "; " << sFontSize;
     m_pStream->WriteNumber(static_cast<sal_Int32>(m_aFont.Height));
@@ -848,7 +848,7 @@ void OHTMLImportExport::WriteTables()
     TAG_ON( OOO_STRING_SVTOOLS_HTML_caption );
     TAG_ON( OOO_STRING_SVTOOLS_HTML_bold );
 
-    (*m_pStream)    << ::rtl::OUStringToOString(m_sName, gsl_getSystemTextEncoding()).getStr();
+    (*m_pStream)    << ::rtl::OUStringToOString(m_sName, osl_getThreadTextEncoding()).getStr();
         // TODO : think about the encoding of the name
     TAG_OFF( OOO_STRING_SVTOOLS_HTML_bold );
     TAG_OFF( OOO_STRING_SVTOOLS_HTML_caption );
@@ -1060,7 +1060,7 @@ void OHTMLImportExport::FontOn()
     aStrOut  = aStrOut + OOO_STRING_SVTOOLS_HTML_O_face;
     aStrOut  = aStrOut + "=";
     aStrOut  = aStrOut + "\"";
-    aStrOut  = aStrOut + ::rtl::OUStringToOString(m_aFont.Name,gsl_getSystemTextEncoding());
+    aStrOut  = aStrOut + ::rtl::OUStringToOString(m_aFont.Name,osl_getThreadTextEncoding());
         // TODO : think about the encoding of the font name
     aStrOut  = aStrOut + "\"";
     aStrOut  = aStrOut + " ";

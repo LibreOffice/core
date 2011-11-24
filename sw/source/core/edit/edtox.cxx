@@ -346,7 +346,7 @@ void SwEditShell::ApplyAutoMark()
         SvStream& rStrm = *aMedium.GetInStream();
         const String sZero('0');
         Push();
-        rtl_TextEncoding eChrSet = ::gsl_getSystemTextEncoding();
+        rtl_TextEncoding eChrSet = ::osl_getThreadTextEncoding();
 
         //
         // SearchOptions to be used in loop below

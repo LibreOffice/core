@@ -256,7 +256,7 @@ void _SdrItemBrowserControl::ImpCtor()
     bShowWhichIds = sal_True;   // not implemented yet
     bShowRealValues = sal_True; // not implemented yet
 
-    rtl_TextEncoding aTextEncoding = gsl_getSystemTextEncoding();
+    rtl_TextEncoding aTextEncoding = osl_getThreadTextEncoding();
 
     InsertDataColumn(
         ITEMBROWSER_WHICHCOL_ID,
@@ -329,7 +329,7 @@ String _SdrItemBrowserControl::GetCellText(long _nRow, sal_uInt16 _nColId) const
             }
             else
             {
-                rtl_TextEncoding aTextEncoding = gsl_getSystemTextEncoding();
+                rtl_TextEncoding aTextEncoding = osl_getThreadTextEncoding();
 
                 sRet = XubString("???", aTextEncoding);
                 switch (_nColId)
@@ -927,7 +927,7 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
 {
     SetMode(MYBROWSEMODE & ~BROWSER_KEEPHIGHLIGHT);
     if (pSet!=NULL) {
-        rtl_TextEncoding aTextEncoding = gsl_getSystemTextEncoding();
+        rtl_TextEncoding aTextEncoding = osl_getThreadTextEncoding();
         sal_uInt16 nEntryNum=0;
         SfxWhichIter aIter(*pSet);
         const SfxItemPool* pPool=pSet->GetPool();
@@ -1074,7 +1074,7 @@ _SdrItemBrowserWindow::_SdrItemBrowserWindow(Window* pParent, WinBits nBits):
     aBrowse(this)
 {
     SetOutputSizePixel(aBrowse.GetSizePixel());
-    SetText(String("Joe's ItemBrowser", gsl_getSystemTextEncoding()));
+    SetText(String("Joe's ItemBrowser", osl_getThreadTextEncoding()));
     aBrowse.Show();
 }
 

@@ -316,8 +316,8 @@ rtl_TextEncoding PictReader::GetTextEncoding (sal_uInt16 fId) {
   static bool first = true;
   static rtl_TextEncoding enc = RTL_TEXTENCODING_APPLE_ROMAN;
   if (first) {
-    rtl_TextEncoding def = gsl_getSystemTextEncoding();
-    // we keep gsl_getSystemTextEncoding only if it is a mac encoding
+    rtl_TextEncoding def = osl_getThreadTextEncoding();
+    // we keep osl_getThreadTextEncoding only if it is a mac encoding
     switch(def) {
     case RTL_TEXTENCODING_APPLE_ROMAN:
     case RTL_TEXTENCODING_APPLE_ARABIC:
@@ -1502,7 +1502,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         *pPict >> nByteLen; nLen=((sal_uInt16)nByteLen)&0x00ff;
         pPict->Read( &sFName, nLen );
         sFName[ nLen ] = 0;
-        String aString( (const sal_Char*)&sFName, gsl_getSystemTextEncoding() );
+        String aString( (const sal_Char*)&sFName, osl_getThreadTextEncoding() );
         aActFont.SetName( aString );
         eActMethod=PDM_UNDEFINED;
         break;

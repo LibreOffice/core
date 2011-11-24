@@ -142,7 +142,7 @@ SdrObjUserData* ImpSdrObjTextLinkUserData::Clone(SdrObject* pObj1) const
 void SdrTextObj::SetTextLink(const String& rFileName, const String& rFilterName, rtl_TextEncoding eCharSet)
 {
     if(eCharSet == RTL_TEXTENCODING_DONTKNOW)
-        eCharSet = gsl_getSystemTextEncoding();
+        eCharSet = osl_getThreadTextEncoding();
 
     ImpSdrObjTextLinkUserData* pData=GetLinkUserData();
     if (pData!=NULL) {

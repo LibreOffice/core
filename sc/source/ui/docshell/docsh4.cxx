@@ -2034,7 +2034,7 @@ long ScDocShell::DdeGetData( const String& rItem,
             aDdeTextFmt.EqualsAscii( "FSYLK" ) )
         {
             rtl::OString aData;
-            if( aObj.ExportByteString( aData, gsl_getSystemTextEncoding(),
+            if( aObj.ExportByteString( aData, osl_getThreadTextEncoding(),
                                         SOT_FORMATSTR_ID_SYLK ) )
             {
                 rValue <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
@@ -2067,7 +2067,7 @@ long ScDocShell::DdeSetData( const String& rItem,
     {
         if( rItem.EqualsIgnoreCaseAscii( "Format" ) )
         {
-            if ( ScByteSequenceToString::GetString( aDdeTextFmt, rValue, gsl_getSystemTextEncoding() ) )
+            if ( ScByteSequenceToString::GetString( aDdeTextFmt, rValue, osl_getThreadTextEncoding() ) )
             {
                 aDdeTextFmt.ToUpperAscii();
                 return 1;
@@ -2081,7 +2081,7 @@ long ScDocShell::DdeSetData( const String& rItem,
             aDdeTextFmt.EqualsAscii( "FSYLK" ) )
         {
             String aData;
-            if ( ScByteSequenceToString::GetString( aData, rValue, gsl_getSystemTextEncoding() ) )
+            if ( ScByteSequenceToString::GetString( aData, rValue, osl_getThreadTextEncoding() ) )
             {
                 return aObj.ImportString( aData, SOT_FORMATSTR_ID_SYLK ) ? 1 : 0;
             }

@@ -325,7 +325,7 @@ sal_Bool ScImportExport::ImportString( const ::rtl::OUString& rText, sal_uLong n
         //break;
         default:
         {
-            rtl_TextEncoding eEnc = gsl_getSystemTextEncoding();
+            rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
             ::rtl::OString aTmp( rText.getStr(), rText.getLength(), eEnc );
             SvMemoryStream aStrm( (void*)aTmp.getStr(), aTmp.getLength() * sizeof(sal_Char), STREAM_READ );
             aStrm.SetStreamCharSet( eEnc );
@@ -341,7 +341,7 @@ sal_Bool ScImportExport::ExportString( ::rtl::OUString& rText, sal_uLong nFmt )
     OSL_ENSURE( nFmt == FORMAT_STRING, "ScImportExport::ExportString: Unicode not supported for other formats than FORMAT_STRING" );
     if ( nFmt != FORMAT_STRING )
     {
-        rtl_TextEncoding eEnc = gsl_getSystemTextEncoding();
+        rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
         rtl::OString aTmp;
         sal_Bool bOk = ExportByteString( aTmp, eEnc, nFmt );
         rText = rtl::OStringToOUString( aTmp, eEnc );
@@ -372,7 +372,7 @@ sal_Bool ScImportExport::ExportByteString( rtl::OString& rText, rtl_TextEncoding
 {
     OSL_ENSURE( eEnc != RTL_TEXTENCODING_UNICODE, "ScImportExport::ExportByteString: Unicode not supported" );
     if ( eEnc == RTL_TEXTENCODING_UNICODE )
-        eEnc = gsl_getSystemTextEncoding();
+        eEnc = osl_getThreadTextEncoding();
 
     if (!nSizeLimit)
         nSizeLimit = STRING_MAXLEN;

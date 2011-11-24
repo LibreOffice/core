@@ -46,7 +46,7 @@
 using rtl::OUString;
 using namespace ::com::sun::star;
 
-#define DDE_TXT_ENCODING    gsl_getSystemTextEncoding()
+#define DDE_TXT_ENCODING    osl_getThreadTextEncoding()
 
 /*--------------------------------------------------------------------
     Beschreibung: Globale Variablen

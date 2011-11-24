@@ -402,7 +402,7 @@ SvStream& operator>>( SvStream& rIn, PptFontEntityAtom& rAtom )
         break;
 
         default :
-            rAtom.eCharSet = gsl_getSystemTextEncoding();
+            rAtom.eCharSet = osl_getThreadTextEncoding();
     }
     switch ( lfPitchAndFamily & 0xf0 )
     {
@@ -526,7 +526,7 @@ SdrEscherImport::SdrEscherImport( PowerPointImportParam& rParam, const String& r
     pFonts                  ( NULL ),
     nStreamLen              ( 0 ),
     nTextStylesIndex        ( 0xffff ),
-    eCharSetSystem          ( gsl_getSystemTextEncoding() ),
+    eCharSetSystem          ( osl_getThreadTextEncoding() ),
     bWingdingsChecked       ( sal_False ),
     bWingdingsAvailable     ( sal_False ),
     bMonotypeSortsChecked   ( sal_False ),

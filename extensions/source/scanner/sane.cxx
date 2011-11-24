@@ -990,7 +990,7 @@ String Sane::GetOptionUnitName( int n )
     if( nUnitAsSize > SAL_N_ELEMENTS( ppUnits ) )
         aText = String::CreateFromAscii( "[unknown units]" );
     else
-        aText = String( ppUnits[ nUnit ], gsl_getSystemTextEncoding() );
+        aText = String( ppUnits[ nUnit ], osl_getThreadTextEncoding() );
     return aText;
 }
 

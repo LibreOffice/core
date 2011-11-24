@@ -573,7 +573,7 @@ SbError SbiStream::Open
     nExpandOnWriteTo = 0;
     if( ( nStrmMode & ( STREAM_READ|STREAM_WRITE ) ) == STREAM_READ )
         nStrmMode |= STREAM_NOCREATE;
-    String aStr( rName, gsl_getSystemTextEncoding() );
+    String aStr( rName, osl_getThreadTextEncoding() );
     String aNameStr = getFullPath( aStr );
 
     if( hasUno() )
@@ -815,7 +815,7 @@ void SbiIoSystem::Shutdown()
     // anything left to PRINT?
     if( aOut.Len() )
     {
-        String aOutStr( aOut, gsl_getSystemTextEncoding() );
+        String aOutStr( aOut, osl_getThreadTextEncoding() );
 #if defined GCC
         Window* pParent = Application::GetDefDialogParent();
         MessBox( pParent, WinBits( WB_OK ), String(), aOutStr ).Execute();
@@ -912,10 +912,10 @@ void SbiIoSystem::CloseAll(void)
 
 void SbiIoSystem::ReadCon( ByteString& rIn )
 {
-    String aPromptStr( aPrompt, gsl_getSystemTextEncoding() );
+    String aPromptStr( aPrompt, osl_getThreadTextEncoding() );
     SbiInputDialog aDlg( NULL, aPromptStr );
     if( aDlg.Execute() )
-        rIn = ByteString( aDlg.GetInput(), gsl_getSystemTextEncoding() );
+        rIn = ByteString( aDlg.GetInput(), osl_getThreadTextEncoding() );
     else
         nError = SbERR_USER_ABORT;
     aPrompt.Erase();
@@ -938,7 +938,7 @@ void SbiIoSystem::WriteCon( const ByteString& rText )
         aOut.Erase( 0, n1 );
         while( aOut.GetBuffer()[0] == '\n' || aOut.GetBuffer()[0] == '\r' )
             aOut.Erase( 0, 1 );
-        String aStr( s, gsl_getSystemTextEncoding() );
+        String aStr( s, osl_getThreadTextEncoding() );
         {
             SolarMutexGuard aSolarGuard;
             if( !MessBox( GetpApp()->GetDefDialogParent(),

@@ -264,7 +264,7 @@ void SalAbort( const rtl::OUString& rErrorText, bool bDumpCore )
         fprintf( stderr, "Application Error " );
     else
         fprintf( stderr, "%s ",
-            rtl::OUStringToOString( rErrorText, gsl_getSystemTextEncoding() ).getStr() );
+            rtl::OUStringToOString( rErrorText, osl_getThreadTextEncoding() ).getStr() );
     if( bDumpCore )
         abort();
     else

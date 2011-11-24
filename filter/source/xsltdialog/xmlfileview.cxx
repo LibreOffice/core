@@ -146,7 +146,7 @@ XMLFileWindow::XMLFileWindow( Window* pParent ) :
     pVScrollbar(0),
     nCurTextWidth(0),
     nStartLine(USHRT_MAX),
-    eSourceEncoding(gsl_getSystemTextEncoding()),
+    eSourceEncoding(osl_getThreadTextEncoding()),
     bHighlighting(false)
 {
     CreateTextEngine();

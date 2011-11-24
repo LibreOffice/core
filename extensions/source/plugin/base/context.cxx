@@ -111,7 +111,7 @@ Reference< ::com::sun::star::plugin::XPluginContext >  XPluginManager_Impl::crea
 
 XPluginContext_Impl::XPluginContext_Impl( const Reference< ::com::sun::star::lang::XMultiServiceFactory >  & rSMgr )
     : m_xSMgr( rSMgr ),
-      m_aEncoding( gsl_getSystemTextEncoding() )
+      m_aEncoding( osl_getThreadTextEncoding() )
 {
 }
 
@@ -285,7 +285,7 @@ FileSink::FileSink( const Reference< ::com::sun::star::lang::XMultiServiceFactor
 {
     DirEntry aEntry;
     m_aFileName = aEntry.TempName().GetFull();
-    ::rtl::OString aFile = ::rtl::OUStringToOString( m_aFileName, gsl_getSystemTextEncoding() );
+    ::rtl::OString aFile = ::rtl::OUStringToOString( m_aFileName, osl_getThreadTextEncoding() );
     fp = fopen( aFile.getStr() , "wb" );
 
     Reference< ::com::sun::star::io::XActiveDataControl >  xControl( source, UNO_QUERY );

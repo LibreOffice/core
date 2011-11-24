@@ -3105,7 +3105,7 @@ NaviContentBookmark::NaviContentBookmark( const String &rUrl,
 
 void NaviContentBookmark::Copy( TransferDataContainer& rData ) const
 {
-    rtl_TextEncoding eSysCSet = gsl_getSystemTextEncoding();
+    rtl_TextEncoding eSysCSet = osl_getThreadTextEncoding();
 
     rtl::OStringBuffer sStrBuf(rtl::OUStringToOString(aUrl, eSysCSet));
     sStrBuf.append(static_cast<char>(NAVI_BOOKMARK_DELIM));

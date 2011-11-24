@@ -125,7 +125,7 @@ sal_Bool LwpFormulaInfo::ReadText()
     *(pBuf.get()+nStrLen)='\0';
     String aText;
     aText += String::CreateFromAscii("\"");
-    aText.Append(String(pBuf.get(),nStrLen,gsl_getSystemTextEncoding()));
+    aText.Append(String(pBuf.get(),nStrLen,osl_getThreadTextEncoding()));
     aText += String::CreateFromAscii("\"");
 
     m_aStack.push_back(new LwpFormulaText(aText));

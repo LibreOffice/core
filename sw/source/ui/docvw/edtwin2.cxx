@@ -163,7 +163,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
             {
                 sTxt = rtl::OStringToOUString(rtl::OString::valueOf(
                             ((SwTblBoxValue*)aCntntAtPos.aFnd.pAttr)->GetValue()),
-                            gsl_getSystemTextEncoding());
+                            osl_getThreadTextEncoding());
             }
             break;
             case SwContentAtPos::SW_CURR_ATTRS:

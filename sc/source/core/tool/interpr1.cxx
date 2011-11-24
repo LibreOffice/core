@@ -2951,7 +2951,7 @@ void ScInterpreter::ScCode()
         RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT |
         RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT |
         RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE;
-    PushInt( (sal_uChar) rtl::OUStringToOString(rtl::OUString(rStr.GetChar(0)), gsl_getSystemTextEncoding(), convertFlags).toChar() );
+    PushInt( (sal_uChar) rtl::OUStringToOString(rtl::OUString(rStr.GetChar(0)), osl_getThreadTextEncoding(), convertFlags).toChar() );
 }
 
 
@@ -2971,7 +2971,7 @@ void ScInterpreter::ScChar()
             RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT;
 
         sal_Char cEncodedChar = static_cast<sal_Char>(fVal);
-        rtl::OUString aStr(&cEncodedChar, 1,  gsl_getSystemTextEncoding(), convertFlags);
+        rtl::OUString aStr(&cEncodedChar, 1,  osl_getThreadTextEncoding(), convertFlags);
         PushString(aStr);
     }
 }

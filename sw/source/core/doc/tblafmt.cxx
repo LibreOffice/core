@@ -337,7 +337,7 @@ sal_Bool SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, s
     READ( aFont,        SvxFontItem            , rVersions.nFontVersion)
 
     if( rStream.GetStreamCharSet() == aFont.GetCharSet() )
-        aFont.SetCharSet(::gsl_getSystemTextEncoding());
+        aFont.SetCharSet(::osl_getThreadTextEncoding());
 
     READ( aHeight,      SvxFontHeightItem  , rVersions.nFontHeightVersion)
     READ( aWeight,      SvxWeightItem      , rVersions.nWeightVersion)
@@ -425,7 +425,7 @@ sal_Bool SwBoxAutoFmt::LoadOld( SvStream& rStream, sal_uInt16 aLoadVer[] )
     READ( aFont,        SvxFontItem         , 0)
 
     if( rStream.GetStreamCharSet() == aFont.GetCharSet() )
-        aFont.SetCharSet(::gsl_getSystemTextEncoding());
+        aFont.SetCharSet(::osl_getThreadTextEncoding());
 
     READ( aHeight,      SvxFontHeightItem   , 1)
     READ( aWeight,      SvxWeightItem       , 2)
@@ -1079,7 +1079,7 @@ sal_Bool SwTableAutoFmtTbl::Save( SvStream& rStream ) const
         sal_uInt16 nVal = AUTOFORMAT_ID;
         rStream << nVal
                 << (sal_uInt8)2         // Anzahl von Zeichen des Headers incl. diesem
-                << (sal_uInt8)GetStoreCharSet( ::gsl_getSystemTextEncoding() );
+                << (sal_uInt8)GetStoreCharSet( ::osl_getThreadTextEncoding() );
 
         bRet = 0 == rStream.GetError();
 

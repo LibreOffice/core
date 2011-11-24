@@ -597,7 +597,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 
                 if (pDlg->IsLink())
                 {
-                    pTO->SetTextLink(aFile, aFilterName, gsl_getSystemTextEncoding() );
+                    pTO->SetTextLink(aFile, aFilterName, osl_getThreadTextEncoding() );
                 }
 
                 if( bUndo )

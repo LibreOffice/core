@@ -676,7 +676,7 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
     sal_Int32 nSeqLen = aSequence.getLength();
     const char* p = reinterpret_cast<const char*>(aSequence.getConstArray());
 
-    rtl_TextEncoding eSysEnc = gsl_getSystemTextEncoding();
+    rtl_TextEncoding eSysEnc = osl_getThreadTextEncoding();
 
     // char array delimited by \0.
     // app \0 topic \0 item \0 (extra \0) where the extra is optional.

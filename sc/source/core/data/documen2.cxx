@@ -225,7 +225,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
 {
     SetStorageGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT);
 
-    eSrcSet = gsl_getSystemTextEncoding();
+    eSrcSet = osl_getThreadTextEncoding();
 
     if ( eMode == SCDOCMODE_DOCUMENT )
     {

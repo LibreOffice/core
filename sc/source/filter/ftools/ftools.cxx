@@ -128,7 +128,7 @@ SEEEEEEE EEEEEEEE IMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM
 
 rtl_TextEncoding ScfTools::GetSystemTextEncoding()
 {
-    return gsl_getSystemTextEncoding();
+    return osl_getThreadTextEncoding();
 }
 
 String ScfTools::GetHexStr( sal_uInt16 nValue )

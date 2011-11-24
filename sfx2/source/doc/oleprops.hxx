@@ -108,7 +108,7 @@ class SfxOleTextEncoding
 {
 public:
     inline explicit     SfxOleTextEncoding() :
-                            mxTextEnc( new rtl_TextEncoding( gsl_getSystemTextEncoding() ) ) {}
+                            mxTextEnc( new rtl_TextEncoding( osl_getThreadTextEncoding() ) ) {}
     inline explicit     SfxOleTextEncoding( rtl_TextEncoding eTextEnc ) :
                             mxTextEnc( new rtl_TextEncoding( eTextEnc ) ) {}
     inline explicit     SfxOleTextEncoding( sal_Int16 nCodePage ) :

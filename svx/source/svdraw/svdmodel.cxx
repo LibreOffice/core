@@ -305,7 +305,7 @@ SdrModel::~SdrModel()
     {
         rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
             "Im Dtor des SdrModel steht noch ein offenes Undo rum: \""));
-        aStr.append(rtl::OUStringToOString(pAktUndoGroup->GetComment(), gsl_getSystemTextEncoding()))
+        aStr.append(rtl::OUStringToOString(pAktUndoGroup->GetComment(), osl_getThreadTextEncoding()))
             .append('\"');
         OSL_FAIL(aStr.getStr());
     }

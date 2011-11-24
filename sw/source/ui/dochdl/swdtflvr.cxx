@@ -154,7 +154,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::datatransfer;
 using namespace nsTransferBufferType;
 
-#define DDE_TXT_ENCODING    gsl_getSystemTextEncoding()
+#define DDE_TXT_ENCODING    osl_getThreadTextEncoding()
 
 class SwTrnsfrDdeLink : public ::sfx2::SvBaseLink
 {

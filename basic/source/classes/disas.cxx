@@ -396,7 +396,7 @@ sal_Bool SbiDisas::DisasLine( String& rText )
             SbMethod* pMeth = PTR_CAST(SbMethod,pMod->GetMethods()->Get( i ));
             if( pMeth )
             {
-                aByteMethName = ByteString( pMeth->GetName(), gsl_getSystemTextEncoding() );
+                aByteMethName = ByteString( pMeth->GetName(), osl_getThreadTextEncoding() );
                 if( pMeth->GetId() == nPC )
                 {
                     p = aByteMethName.GetBuffer();
