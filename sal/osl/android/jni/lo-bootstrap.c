@@ -55,6 +55,8 @@
 
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "lo-bootstrap", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "lo-bootstrap", __VA_ARGS__))
+#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "lo-bootstrap", __VA_ARGS__))
+#define LOGF(...) ((void)__android_log_print(ANDROID_LOG_FATAL, "lo-bootstrap", __VA_ARGS__))
 
 #define ROUND_DOWN(ptr,multiple) (void *)(((unsigned) (ptr)) & ~((multiple)-1))
 
@@ -209,14 +211,14 @@ Java_org_libreoffice_android_Bootstrap_dlneeds(JNIEnv* env,
 
     String = (*env)->FindClass(env, "java/lang/String");
     if (String == NULL) {
-        LOGI("Could not find the String class");
+        LOGE("Could not find the String class");
         free_ptrarray((void **) needed);
         return NULL;
     }
 
     result = (*env)->NewObjectArray(env, n_needed, String, NULL);
     if (result == NULL) {
-        LOGI("Could not create the String array");
+        LOGE("Could not create the String array");
         free_ptrarray((void **) needed);
         return NULL;
     }
@@ -265,7 +267,7 @@ Java_org_libreoffice_android_Bootstrap_dlcall(JNIEnv* env,
     jclass StringArray = (*env)->FindClass(env, "[Ljava/lang/String;");
 
     if (StringArray == NULL) {
-        LOGI("Could not find String[] class");
+        LOGE("Could not find String[] class");
         return 0;
     }
 
@@ -275,7 +277,7 @@ Java_org_libreoffice_android_Bootstrap_dlcall(JNIEnv* env,
         int i, result;
         for (i = 0; i < argc; i++) {
             argv[i] = (*env)->GetStringUTFChars(env, (*env)->GetObjectArrayElement(env, argument, i), NULL);
-            LOGI("argv[%d] = %s", i, argv[i]);
+            /* LOGI("argv[%d] = %s", i, argv[i]); */
         }
         argv[argc] = NULL;
 
@@ -338,12 +340,12 @@ Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_Stri
 
     fd = open(apkFilePath, O_RDONLY);
     if (fd == -1) {
-        LOGI("Could not open %s", apkFilePath);
+        LOGE("Could not open %s", apkFilePath);
         (*env)->ReleaseStringUTFChars(env, apkFile, apkFilePath);
         return JNI_FALSE;
     }
     if (fstat(fd, &st) == -1) {
-        LOGI("Could not fstat %s", apkFilePath);
+        LOGE("Could not fstat %s", apkFilePath);
         close(fd);
         (*env)->ReleaseStringUTFChars(env, apkFile, apkFilePath);
         return JNI_FALSE;
@@ -352,7 +354,7 @@ Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_Stri
     close(fd);
 
     if (apk_file == MAP_FAILED) {
-        LOGI("Could not mmap %s", apkFilePath);
+        LOGE("Could not mmap %s", apkFilePath);
         (*env)->ReleaseStringUTFChars(env, apkFile, apkFilePath);
         return JNI_FALSE;
     }
@@ -381,12 +383,12 @@ Java_org_libreoffice_android_Bootstrap_setup__ILjava_lang_Object_2I(JNIEnv* env,
 
     StringArray = (*env)->FindClass(env, "[Ljava/lang/String;");
     if (StringArray == NULL) {
-        LOGI("Could not find String[] class");
+        LOGE("Could not find String[] class");
         return JNI_FALSE;
     }
 
     if (!(*env)->IsInstanceOf(env, lo_main_argument, StringArray)) {
-        LOGI("lo_main_argument is not a String[]?");
+        LOGE("lo_main_argument is not a String[]?");
         return JNI_FALSE;
     }
 
@@ -397,7 +399,7 @@ Java_org_libreoffice_android_Bootstrap_setup__ILjava_lang_Object_2I(JNIEnv* env,
         const jbyte *s = (*env)->GetStringUTFChars(env, (*env)->GetObjectArrayElement(env, lo_main_argument, i), NULL);
         lo_main_argv[i] = strdup(s);
         (*env)->ReleaseStringUTFChars(env, (*env)->GetObjectArrayElement(env, lo_main_argument, i), s);
-        LOGI("argv[%d] = %s", i, lo_main_argv[i]);
+        /* LOGI("argv[%d] = %s", i, lo_main_argv[i]); */
     }
     lo_main_argv[lo_main_argc] = NULL;
 
@@ -448,12 +450,12 @@ lo_dlneeds(const char *library)
     fd = open(library, O_RDONLY);
 
     if (fd == -1) {
-        LOGI("lo_dlneeds: Could not open library %s: %s", library, strerror(errno));
+        LOGE("lo_dlneeds: Could not open library %s: %s", library, strerror(errno));
         return NULL;
     }
 
     if (read(fd, &hdr, sizeof(hdr)) < sizeof(hdr)) {
-        LOGI("lo_dlneeds: Could not read ELF header of %s", library);
+        LOGE("lo_dlneeds: Could not read ELF header of %s", library);
         close(fd);
         return NULL;
     }
@@ -461,12 +463,12 @@ lo_dlneeds(const char *library)
     /* Read in .shstrtab */
 
     if (lseek(fd, hdr.e_shoff + hdr.e_shstrndx * sizeof(shdr), SEEK_SET) < 0) {
-        LOGI("lo_dlneeds: Could not seek to .shstrtab section header of %s", library);
+        LOGE("lo_dlneeds: Could not seek to .shstrtab section header of %s", library);
         close(fd);
         return NULL;
     }
     if (read(fd, &shdr, sizeof(shdr)) < sizeof(shdr)) {
-        LOGI("lo_dlneeds: Could not read section header of %s", library);
+        LOGE("lo_dlneeds: Could not read section header of %s", library);
         close(fd);
         return NULL;
     }
@@ -478,13 +480,13 @@ lo_dlneeds(const char *library)
     /* Read section headers, looking for .dynstr section */
 
     if (lseek(fd, hdr.e_shoff, SEEK_SET) < 0) {
-        LOGI("lo_dlneeds: Could not seek to section headers of %s", library);
+        LOGE("lo_dlneeds: Could not seek to section headers of %s", library);
         close(fd);
         return NULL;
     }
     for (i = 0; i < hdr.e_shnum; i++) {
         if (read(fd, &shdr, sizeof(shdr)) < sizeof(shdr)) {
-            LOGI("lo_dlneeds: Could not read section header of %s", library);
+            LOGE("lo_dlneeds: Could not read section header of %s", library);
             close(fd);
             return NULL;
         }
@@ -500,7 +502,7 @@ lo_dlneeds(const char *library)
     }
 
     if (i == hdr.e_shnum) {
-        LOGI("lo_dlneeds: No .dynstr section in %s", library);
+        LOGE("lo_dlneeds: No .dynstr section in %s", library);
         close(fd);
         return NULL;
     }
@@ -508,13 +510,13 @@ lo_dlneeds(const char *library)
     /* Read section headers, looking for .dynamic section */
 
     if (lseek(fd, hdr.e_shoff, SEEK_SET) < 0) {
-        LOGI("lo_dlneeds: Could not seek to section headers of %s", library);
+        LOGE("lo_dlneeds: Could not seek to section headers of %s", library);
         close(fd);
         return NULL;
     }
     for (i = 0; i < hdr.e_shnum; i++) {
         if (read(fd, &shdr, sizeof(shdr)) < sizeof(shdr)) {
-            LOGI("lo_dlneeds: Could not read section header of %s", library);
+            LOGE("lo_dlneeds: Could not read section header of %s", library);
             close(fd);
             return NULL;
         }
@@ -525,13 +527,13 @@ lo_dlneeds(const char *library)
             /* Count number of DT_NEEDED entries */
             n_needed = 0;
             if (lseek(fd, shdr.sh_offset, SEEK_SET) < 0) {
-                LOGI("lo_dlneeds: Could not seek to .dynamic section of %s", library);
+                LOGE("lo_dlneeds: Could not seek to .dynamic section of %s", library);
                 close(fd);
                 return NULL;
             }
             for (dynoff = 0; dynoff < shdr.sh_size; dynoff += sizeof(dyn)) {
                 if (read(fd, &dyn, sizeof(dyn)) < sizeof(dyn)) {
-                    LOGI("lo_dlneeds: Could not read .dynamic entry of %s", library);
+                    LOGE("lo_dlneeds: Could not read .dynamic entry of %s", library);
                     close(fd);
                     return NULL;
                 }
@@ -545,14 +547,14 @@ lo_dlneeds(const char *library)
 
             n_needed = 0;
             if (lseek(fd, shdr.sh_offset, SEEK_SET) < 0) {
-                LOGI("lo_dlneeds: Could not seek to .dynamic section of %s", library);
+                LOGE("lo_dlneeds: Could not seek to .dynamic section of %s", library);
                 close(fd);
                 free(result);
                 return NULL;
             }
             for (dynoff = 0; dynoff < shdr.sh_size; dynoff += sizeof(dyn)) {
                 if (read(fd, &dyn, sizeof(dyn)) < sizeof(dyn)) {
-                    LOGI("lo_dlneeds: Could not read .dynamic entry in %s", library);
+                    LOGE("lo_dlneeds: Could not read .dynamic entry in %s", library);
                     close(fd);
                     free(result);
                     return NULL;
@@ -572,7 +574,7 @@ lo_dlneeds(const char *library)
         }
     }
 
-    LOGI("lo_dlneeds: Could not find .dynamic section in %s", library);
+    LOGE("lo_dlneeds: Could not find .dynamic section in %s", library);
     close(fd);
     return NULL;
 }
@@ -645,7 +647,7 @@ lo_dlopen(const char *library)
     }
 
     if (!found) {
-        LOGI("lo_dlopen: Library %s not found", library);
+        LOGE("lo_dlopen: Library %s not found", library);
         return NULL;
     }
 
@@ -668,7 +670,7 @@ lo_dlopen(const char *library)
     LOGI("dlopen(%s) = %p", full_name, p);
     free(full_name);
     if (p == NULL)
-        LOGI("lo_dlopen: Error from dlopen(%s): %s", library, dlerror());
+        LOGE("lo_dlopen: Error from dlopen(%s): %s", library, dlerror());
 
     new_loaded_lib = malloc(sizeof(*new_loaded_lib));
     new_loaded_lib->name = strdup(library);
@@ -687,7 +689,7 @@ lo_dlsym(void *handle,
     void *p = dlsym(handle, symbol);
     /* LOGI("dlsym(%p, %s) = %p", handle, symbol, p); */
     if (p == NULL)
-        LOGI("lo_dlsym: %s", dlerror());
+        LOGE("lo_dlsym: %s", dlerror());
     return p;
 }
 
@@ -702,13 +704,13 @@ lo_dladdr(void *addr,
 
     result = dladdr(addr, info);
     if (result == 0) {
-        LOGI("dladdr(%p) = 0", addr);
+        /* LOGI("dladdr(%p) = 0", addr); */
         return 0;
     }
 
     maps = fopen("/proc/self/maps", "r");
     if (maps == NULL) {
-        LOGI("lo_dladdr: Could not open /proc/self/maps: %s", strerror(errno));
+        LOGE("lo_dladdr: Could not open /proc/self/maps: %s", strerror(errno));
         return 0;
     }
 
@@ -722,15 +724,15 @@ lo_dladdr(void *addr,
             /* LOGI("got %p-%p: %s", lo, hi, file); */
             if (addr >= lo && addr < hi) {
                 if (info->dli_fbase != lo) {
-                    LOGI("lo_dladdr: Base for %s in /proc/self/maps %p doesn't match what dladdr() said", file, lo);
+                    LOGE("lo_dladdr: Base for %s in /proc/self/maps %p doesn't match what dladdr() said", file, lo);
                     fclose(maps);
                     return 0;
                 }
-                LOGI("dladdr(%p) = { %s:%p, %s:%p }: %s",
+                /* LOGI("dladdr(%p) = { %s:%p, %s:%p }: %s",
                      addr,
                      info->dli_fname, info->dli_fbase,
                      info->dli_sname ? info->dli_sname : "(none)", info->dli_saddr,
-                     file);
+                     file); */
                 info->dli_fname = strdup(file);
                 found = 1;
                 break;
@@ -738,7 +740,7 @@ lo_dladdr(void *addr,
         }
     }
     if (!found)
-        LOGI("lo_dladdr: Did not find %p in /proc/self/maps", addr);
+        LOGE("lo_dladdr: Did not find %p in /proc/self/maps", addr);
     fclose(maps);
 
     return result;
@@ -781,7 +783,7 @@ lo_apkentry(const char *filename,
            letoh32(dirend->signature) != CDIR_END_SIG)
         dirend = (struct cdir_end *)((char *)dirend - 1);
     if (letoh32(dirend->signature) != CDIR_END_SIG) {
-        LOGI("lo_apkentry: Could not find end of central directory record");
+        LOGE("lo_apkentry: Could not find end of central directory record");
         return;
     }
 
@@ -795,20 +797,20 @@ lo_apkentry(const char *filename,
     entry = find_cdir_entry(cdir_start, cdir_entries, filename);
 
     if (entry == NULL) {
-        LOGI("lo_apkentry: Could not find %s", filename);
+        LOGE("lo_apkentry: Could not find %s", filename);
         return NULL;
     }
     file = (struct local_file_header *)((char *)apk_file + letoh32(entry->offset));
 
     if (letoh16(file->compression) != STORE) {
-        LOGI("lo_apkentry: File %s is compressed", filename);
+        LOGE("lo_apkentry: File %s is compressed", filename);
         return NULL;
     }
 
     data = ((char *)&file->data) + letoh16(file->filename_size) + letoh16(file->extra_field_size);
     *size = file->uncompressed_size;
 
-    LOGI("lo_apkentry(%s): %p, %d", filename, data, *size);
+    /* LOGI("lo_apkentry(%s): %p, %d", filename, data, *size); */
 
     return data;
 }
@@ -896,36 +898,36 @@ patch_type_info_operator_equals(void)
      */
     libgnustl_shared = dlopen("libgnustl_shared.so", RTLD_LOCAL);
     if (libgnustl_shared == NULL) {
-        LOGI("android_main: libgnustl_shared.so not mapped??");
+        LOGF("android_main: libgnustl_shared.so not mapped??");
         exit(0);
     }
 
     operator_equals = dlsym(libgnustl_shared, "_ZNKSt9type_infoeqERKS_");
     if (operator_equals == NULL) {
-        LOGI("android_main: std::type_info::operator== not found!?");
+        LOGF("android_main: std::type_info::operator== not found!?");
         exit(0);
     }
-    LOGI("std::type_info::operator== is at %p", operator_equals);
+    /* LOGI("std::type_info::operator== is at %p", operator_equals); */
 
     if (memcmp(operator_equals, expected_r7_code, sizeof(expected_r7_code)) != 0) {
-        LOGI("android_main: Code for std::type_info::operator== does not match that in NDK r7; not patching it");
+        LOGE("android_main: Code for std::type_info::operator== does not match that in NDK r7; not patching it");
         return;
     }
 
     base = ROUND_DOWN(operator_equals, getpagesize());
     size = operator_equals + sizeof(expected_r7_code) - ROUND_DOWN(operator_equals, getpagesize());
     if (mprotect(base, size, PROT_READ|PROT_WRITE|PROT_EXEC) == -1) {
-        LOGI("android_main: mprotect() failed: %s", strerror(errno));
+        LOGE("android_main: mprotect() failed: %s", strerror(errno));
         return;
     }
 
     if ((((unsigned) operator_equals) & 0x03) != 0) {
-        LOGI("android_main: Address of operator== is not at word boundary, huh?");
+        LOGE("android_main: Address of operator== is not at word boundary, huh?");
         return;
     }
 
     if ((((unsigned) &patched_operator_equals_arm) & 0x03) != 0) {
-        LOGI("android_main: Address of patched_operator_equals_arm is not at word boundary, huh?");
+        LOGE("android_main: Address of patched_operator_equals_arm is not at word boundary, huh?");
         return;
     }
 
