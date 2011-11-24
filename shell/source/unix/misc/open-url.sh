@@ -58,7 +58,7 @@ if echo $1 | grep '^mailto:' > /dev/null; then
     exit 0
   fi
   # mozilla derivates may need -remote semantics
-  for i in thunderbird mozilla netscape; do
+  for i in thunderbird mozilla netscape icedove iceape; do
     mailer=`which $i`
     if [ ! -z "$mailer" ]; then
       run_mozilla "$mailer" "$1"
@@ -80,7 +80,7 @@ else
     exit 0
   fi
   # mozilla derivates may need -remote semantics
-  for i in chrome seamonkey firefox; do
+  for i in chrome seamonkey firefox iceweasel iceape; do
     browser=`which $i`
     if [ ! -z "$browser" ]; then
       run_mozilla "$browser" "$1"
