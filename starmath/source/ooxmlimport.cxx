@@ -77,6 +77,9 @@ OUString SmOoxmlImport::handleStream()
             break;
         switch( tag.token )
         {
+            case OPENING( M_TOKEN( acc )):
+                ret += STR( " " ) + handleAcc();
+                break;
             case OPENING( M_TOKEN( f )):
                 ret += STR( " " ) + handleF();
                 break;
@@ -87,6 +90,79 @@ OUString SmOoxmlImport::handleStream()
     }
     stream.ensureClosingTag( M_TOKEN( oMath ));
     return ret;
+}
+
+OUString SmOoxmlImport::handleAcc()
+{
+    stream.ensureOpeningTag( M_TOKEN( acc ));
+    OUString acc;
+    if( XmlStream::Tag accPr = stream.checkOpeningTag( M_TOKEN( accPr )))
+    {
+        if( XmlStream::Tag chr = stream.checkOpeningTag( M_TOKEN( chr )))
+        {
+            acc = chr.attributes.getString( M_TOKEN( val ), STR( "" ));
+            stream.ensureClosingTag( M_TOKEN( chr ));
+        }
+        stream.ensureClosingTag( M_TOKEN( accPr ));
+    }
+    // see aTokenTable in parse.cxx
+    switch( acc.isEmpty() ? sal_Unicode( MS_ACUTE ) : acc[ 0 ] )
+    {
+        case MS_CHECK:
+            acc = STR( "check" );
+            break;
+        case MS_ACUTE:
+            acc = STR( "acute" );
+            break;
+        case MS_GRAVE:
+            acc = STR( "grave" );
+            break;
+        case MS_BREVE:
+            acc = STR( "breve" );
+            break;
+        case MS_CIRCLE:
+            acc = STR( "circle" );
+            break;
+        case MS_VEC:
+            acc = STR( "vec" );
+            break;
+        case MS_TILDE:
+            acc = STR( "tilde" );
+            break;
+        case MS_HAT:
+            acc = STR( "hat" );
+            break;
+        case MS_DOT:
+            acc = STR( "dot" );
+            break;
+        case MS_DDOT:
+            acc = STR( "ddot" );
+            break;
+        case MS_DDDOT:
+            acc = STR( "dddot" );
+            break;
+// these characters do not exist it seems
+//        case MS_WIDETILDE:
+//            acc = STR( "widetilde" );
+//            break;
+//        case TWIDEHAT:
+//            acc = STR( "widehat" );
+//            break;
+//        case TWIDEVEC:
+//            acc = STR( "widevec" );
+//            break;
+        default:
+            acc = STR( "acute" );
+            break;
+    }
+    OUString e = handleE();
+    stream.ensureClosingTag( M_TOKEN( acc ));
+    return acc + STR( " { " ) + e + STR( " }" );
+}
+
+OUString SmOoxmlImport::handleE()
+{
+// TODO
 }
 
 // NOT complete

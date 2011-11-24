@@ -44,6 +44,8 @@ public:
     rtl::OUString ConvertToStarMath();
 private:
     rtl::OUString handleStream();
+    rtl::OUString handleAcc();
+    rtl::OUString handleE();
     rtl::OUString handleF();
     rtl::OUString readR();
     oox::formulaimport::XmlStream& stream;
