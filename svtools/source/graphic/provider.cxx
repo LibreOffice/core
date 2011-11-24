@@ -40,6 +40,7 @@
 #include <tools/resmgr.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svtools/filter.hxx>
+#include <svtools/wmf.hxx>
 #include <svl/solar.hrc>
 #include <vcl/salbtype.hxx>
 #include <vcl/virdev.hxx>
@@ -443,6 +444,8 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     uno::Reference< io::XInputStream > xIStm;
     uno::Reference< awt::XBitmap >xBtm;
 
+    uno::Sequence< ::beans::PropertyValue > aFilterData;
+
     for( sal_Int32 i = 0; ( i < rMediaProperties.getLength() ) && !pIStm && !xRet.is(); ++i )
     {
         const ::rtl::OUString   aName( rMediaProperties[ i ].Name );
@@ -461,6 +464,33 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
         else if( COMPARE_EQUAL == aName.compareToAscii( "Bitmap" ) )
         {
             aValue >>= xBtm;
+        }
+        else if( COMPARE_EQUAL == aName.compareToAscii( "FilterData" ) )
+        {
+            aValue >>= aFilterData;
+        }
+    }
+
+    // Check for the goal width and height if they are defined
+    sal_uInt16 nExtWidth = 0;
+    sal_uInt16 nExtHeight = 0;
+    sal_uInt16 nExtMapMode = 0;
+    for( sal_Int32 i = 0; i < aFilterData.getLength(); ++i )
+    {
+        const ::rtl::OUString   aName( aFilterData[ i ].Name );
+        const uno::Any          aValue( aFilterData[ i ].Value );
+
+        if( COMPARE_EQUAL == aName.compareToAscii( "ExternalWidth" ) )
+        {
+            aValue >>= nExtWidth;
+        }
+        else if( COMPARE_EQUAL == aName.compareToAscii( "ExternalHeight" ) )
+        {
+            aValue >>= nExtHeight;
+        }
+        else if( COMPARE_EQUAL == aName.compareToAscii( "ExternalMapMode" ) )
+        {
+            aValue >>= nExtMapMode;
         }
     }
 
@@ -499,7 +529,17 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
         {
             ::Graphic aVCLGraphic;
 
-            if( ( rFilter.ImportGraphic( aVCLGraphic, aPath, *pIStm ) == GRFILTER_OK ) &&
+            // Define APM Header if goal height and width are defined
+            WMF_EXTERNALHEADER aExtHeader;
+            aExtHeader.xExt = nExtWidth;
+            aExtHeader.yExt = nExtHeight;
+            aExtHeader.mapMode = nExtMapMode;
+            WMF_EXTERNALHEADER *pExtHeader = NULL;
+            if ( nExtMapMode > 0 )
+                pExtHeader = &aExtHeader;
+
+            if( ( rFilter.ImportGraphic( aVCLGraphic, aPath, *pIStm,
+                                         GRFILTER_FORMAT_DONTKNOW, NULL, 0, pExtHeader ) == GRFILTER_OK ) &&
                 ( aVCLGraphic.GetType() != GRAPHIC_NONE ) )
             {
                 ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic;

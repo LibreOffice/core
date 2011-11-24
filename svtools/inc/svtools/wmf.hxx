@@ -32,30 +32,36 @@
 #include "svtools/svtdllapi.h"
 #include <svtools/fltcall.hxx>
 
-struct WMF_APMFILEHEADER {
-  sal_uInt32 key;
-  sal_uInt16 hmf;
-  sal_uInt16 left;
-  sal_uInt16 top;
-  sal_uInt16 right;
-  sal_uInt16 bottom;
-  sal_uInt16 inch;
-  sal_uInt32 reserved;
-  sal_uInt16 checksum;
+struct WMF_EXTERNALHEADER
+{
+    sal_uInt16 xExt;
+    sal_uInt16 yExt;
 
-  WMF_APMFILEHEADER() : key(0x9ac6cdd7L),
-            hmf(0),
-            left(0),
-            top(0),
-            right(0),
-            bottom(0),
-            inch(96),
-            reserved(0),
-            checksum(0) {
-  }
+    /** One of the following values:
+        <ul>
+            <li>MM_TEXT</li>
+            <li>MM_LOMETRIC</li>
+            <li>MM_HIMETRIC</li>
+            <li>MM_LOENGLISH</li>
+            <li>MM_HIENGLISH</li>
+            <li>MM_TWIPS</li>
+            <li>MM_ISOTROPIC</li>
+            <li>MM_ANISOTROPIC</li>
+        </ul>
+        If this value is 0, then no external mapmode has been defined,
+        the internal one should then be used.
+     */
+    sal_uInt16 mapMode;
+
+    WMF_EXTERNALHEADER() :
+        xExt( 0 ),
+        yExt( 0 ),
+        mapMode( 0 )
+    {
+    }
 };
 
-sal_Bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, FilterConfigItem* pConfigItem = NULL, WMF_APMFILEHEADER *pAPMHeader = NULL );
+sal_Bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, FilterConfigItem* pConfigItem = NULL, WMF_EXTERNALHEADER *pExtHeader = NULL );
 
 SVT_DLLPUBLIC sal_Bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem* pConfigItem );
 

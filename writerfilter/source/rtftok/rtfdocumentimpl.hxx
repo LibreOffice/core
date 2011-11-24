@@ -182,6 +182,7 @@ namespace writerfilter {
                 sal_uInt16 nGoalWidth, nGoalHeight;
                 sal_uInt16 nScaleX, nScaleY;
                 short nCropT, nCropB, nCropL, nCropR;
+                sal_uInt16 eWMetafile;
         };
 
         /// Stores the properties of a frame

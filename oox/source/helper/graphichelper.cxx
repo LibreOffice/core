@@ -39,6 +39,7 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <comphelper/seqstream.hxx>
+#include <svtools/wmf.hxx>
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/token/tokens.hxx"
@@ -47,7 +48,8 @@ namespace oox {
 
 // ============================================================================
 
-using namespace ::com::sun::star::awt;
+
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::graphic;
@@ -130,7 +132,7 @@ GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, c
     maDeviceInfo.PixelPerMeterX = maDeviceInfo.PixelPerMeterY = 3500.0; // some default just in case
     if( xFrame.is() ) try
     {
-        Reference< XDevice > xDevice( xFrame->getContainerWindow(), UNO_QUERY_THROW );
+        Reference< awt::XDevice > xDevice( xFrame->getContainerWindow(), UNO_QUERY_THROW );
         mxUnitConversion.set( xDevice, UNO_QUERY );
         OSL_ENSURE( mxUnitConversion.is(), "GraphicHelper::GraphicHelper - cannot get unit converter" );
         maDeviceInfo = xDevice->getInfo();
@@ -168,7 +170,7 @@ sal_Int32 GraphicHelper::getPaletteColor( sal_Int32 /*nPaletteIdx*/ ) const
 
 // Device info and device dependent unit conversion ---------------------------
 
-const DeviceInfo& GraphicHelper::getDeviceInfo() const
+const awt::DeviceInfo& GraphicHelper::getDeviceInfo() const
 {
     return maDeviceInfo;
 }
@@ -183,14 +185,14 @@ sal_Int32 GraphicHelper::convertScreenPixelYToHmm( double fPixelY ) const
     return lclConvertScreenPixelToHmm( fPixelY, mfPixelPerHmmY );
 }
 
-Point GraphicHelper::convertScreenPixelToHmm( const Point& rPixel ) const
+awt::Point GraphicHelper::convertScreenPixelToHmm( const awt::Point& rPixel ) const
 {
-    return Point( convertScreenPixelXToHmm( rPixel.X ), convertScreenPixelYToHmm( rPixel.Y ) );
+    return awt::Point( convertScreenPixelXToHmm( rPixel.X ), convertScreenPixelYToHmm( rPixel.Y ) );
 }
 
-Size GraphicHelper::convertScreenPixelToHmm( const Size& rPixel ) const
+awt::Size GraphicHelper::convertScreenPixelToHmm( const awt::Size& rPixel ) const
 {
-    return Size( convertScreenPixelXToHmm( rPixel.Width ), convertScreenPixelYToHmm( rPixel.Height ) );
+    return awt::Size( convertScreenPixelXToHmm( rPixel.Width ), convertScreenPixelYToHmm( rPixel.Height ) );
 }
 
 double GraphicHelper::convertHmmToScreenPixelX( sal_Int32 nHmmX ) const
@@ -203,49 +205,50 @@ double GraphicHelper::convertHmmToScreenPixelY( sal_Int32 nHmmY ) const
     return nHmmY * mfPixelPerHmmY;
 }
 
-Point GraphicHelper::convertHmmToScreenPixel( const Point& rHmm ) const
+awt::Point GraphicHelper::convertHmmToScreenPixel( const awt::Point& rHmm ) const
 {
-    return Point(
+    return awt::Point(
         static_cast< sal_Int32 >( convertHmmToScreenPixelX( rHmm.X ) + 0.5 ),
         static_cast< sal_Int32 >( convertHmmToScreenPixelY( rHmm.Y ) + 0.5 ) );
 }
 
-Size GraphicHelper::convertHmmToScreenPixel( const Size& rHmm ) const
+awt::Size GraphicHelper::convertHmmToScreenPixel( const awt::Size& rHmm ) const
 {
-    return Size(
+    return awt::Size(
         static_cast< sal_Int32 >( convertHmmToScreenPixelX( rHmm.Width ) + 0.5 ),
         static_cast< sal_Int32 >( convertHmmToScreenPixelY( rHmm.Height ) + 0.5 ) );
 }
 
-Point GraphicHelper::convertHmmToAppFont( const Point& rHmm ) const
+awt::Point GraphicHelper::convertHmmToAppFont( const awt::Point& rHmm ) const
 {
     if( mxUnitConversion.is() ) try
     {
-        Point aPixel = convertHmmToScreenPixel( rHmm );
+        awt::Point aPixel = convertHmmToScreenPixel( rHmm );
         return mxUnitConversion->convertPointToLogic( aPixel, ::com::sun::star::util::MeasureUnit::APPFONT );
     }
     catch( Exception& )
     {
     }
-    return Point( 0, 0 );
+    return awt::Point( 0, 0 );
 }
 
-Size GraphicHelper::convertHmmToAppFont( const Size& rHmm ) const
+awt::Size GraphicHelper::convertHmmToAppFont( const awt::Size& rHmm ) const
 {
     if( mxUnitConversion.is() ) try
     {
-        Size aPixel = convertHmmToScreenPixel( rHmm );
+        awt::Size aPixel = convertHmmToScreenPixel( rHmm );
         return mxUnitConversion->convertSizeToLogic( aPixel, ::com::sun::star::util::MeasureUnit::APPFONT );
     }
     catch( Exception& )
     {
     }
-    return Size( 0, 0 );
+    return awt::Size( 0, 0 );
 }
 
 // Graphics and graphic objects  ----------------------------------------------
 
-Reference< XGraphic > GraphicHelper::importGraphic( const Reference< XInputStream >& rxInStrm ) const
+Reference< XGraphic > GraphicHelper::importGraphic( const Reference< XInputStream >& rxInStrm,
+        const WMF_EXTERNALHEADER* pExtHeader ) const
 {
     Reference< XGraphic > xGraphic;
     if( rxInStrm.is() && mxGraphicProvider.is() ) try
@@ -253,6 +256,21 @@ Reference< XGraphic > GraphicHelper::importGraphic( const Reference< XInputStrea
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[ 0 ].Name = CREATE_OUSTRING( "InputStream" );
         aArgs[ 0 ].Value <<= rxInStrm;
+
+        if ( pExtHeader->mapMode > 0 )
+        {
+            aArgs.realloc( aArgs.getLength() + 1 );
+            Sequence< PropertyValue > aFilterData( 3 );
+            aFilterData[ 0 ].Name = CREATE_OUSTRING( "ExternalWidth" );
+            aFilterData[ 0 ].Value <<= pExtHeader->xExt;
+            aFilterData[ 1 ].Name = CREATE_OUSTRING( "ExternalHeight" );
+            aFilterData[ 1 ].Value <<= pExtHeader->yExt;
+            aFilterData[ 2 ].Name = CREATE_OUSTRING( "ExternalMapMode" );
+            aFilterData[ 2 ].Value <<= pExtHeader->mapMode;
+            aArgs[ 1 ].Name = CREATE_OUSTRING( "FilterData" );
+            aArgs[ 1 ].Value <<= aFilterData;
+        }
+
         xGraphic = mxGraphicProvider->queryGraphic( aArgs );
     }
     catch( Exception& )
@@ -307,9 +325,10 @@ OUString GraphicHelper::createGraphicObject( const Reference< XGraphic >& rxGrap
     return aGraphicObjUrl;
 }
 
-OUString GraphicHelper::importGraphicObject( const Reference< XInputStream >& rxInStrm ) const
+OUString GraphicHelper::importGraphicObject( const Reference< XInputStream >& rxInStrm,
+        const WMF_EXTERNALHEADER* pExtHeader ) const
 {
-    return createGraphicObject( importGraphic( rxInStrm ) );
+    return createGraphicObject( importGraphic( rxInStrm, pExtHeader ) );
 }
 
 OUString GraphicHelper::importGraphicObject( const StreamDataSequence& rGraphicData ) const
@@ -323,13 +342,13 @@ OUString GraphicHelper::importEmbeddedGraphicObject( const OUString& rStreamName
     return xGraphic.is() ? createGraphicObject( xGraphic ) : OUString();
 }
 
-Size GraphicHelper::getOriginalSize( const Reference< XGraphic >& xGraphic ) const
+awt::Size GraphicHelper::getOriginalSize( const Reference< XGraphic >& xGraphic ) const
 {
-    Size aSizeHmm;
+    awt::Size aSizeHmm;
     PropertySet aPropSet( xGraphic );
     if( aPropSet.getProperty( aSizeHmm, PROP_Size100thMM ) && (aSizeHmm.Width == 0) && (aSizeHmm.Height == 0) )     // MAPMODE_PIXEL used?
     {
-        Size aSizePixel( 0, 0 );
+        awt::Size aSizePixel( 0, 0 );
         if( aPropSet.getProperty( aSizePixel, PROP_SizePixel ) )
             aSizeHmm = convertScreenPixelToHmm( aSizePixel );
     }

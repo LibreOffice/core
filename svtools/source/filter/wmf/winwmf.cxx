@@ -117,6 +117,27 @@
 #define W_META_CREATEBITMAP         0x06FE
 #define W_META_CREATEREGION         0x06FF
 
+static void GetWinExtMax( const Point& rSource, Rectangle& rPlaceableBound, const sal_Int16 nMapMode )
+{
+    Point aSource( rSource );
+    if ( nMapMode == MM_HIMETRIC )
+        aSource.Y() = -rSource.Y();
+    if ( aSource.X() < rPlaceableBound.Left() )
+        rPlaceableBound.Left() = aSource.X();
+    if ( aSource.X() > rPlaceableBound.Right() )
+        rPlaceableBound.Right() = aSource.X();
+    if ( aSource.Y() < rPlaceableBound.Top() )
+        rPlaceableBound.Top() = aSource.Y();
+    if ( aSource.Y() > rPlaceableBound.Bottom() )
+        rPlaceableBound.Bottom() = aSource.Y();
+}
+
+static void GetWinExtMax( const Rectangle& rSource, Rectangle& rPlaceableBound, const sal_Int16 nMapMode )
+{
+    GetWinExtMax( rSource.TopLeft(), rPlaceableBound, nMapMode );
+    GetWinExtMax( rSource.BottomRight(), rPlaceableBound, nMapMode );
+}
+
 //=================== Methods of WMFReader ==============================
 
 inline Point WMFReader::ReadPoint()
@@ -998,7 +1019,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
 // ------------------------------------------------------------------------
 
-sal_Bool WMFReader::ReadHeader(WMF_APMFILEHEADER *pAPMHeader)
+sal_Bool WMFReader::ReadHeader()
 {
     sal_Size nStrmPos = pWMF->Tell();
 
@@ -1038,17 +1059,19 @@ sal_Bool WMFReader::ReadHeader(WMF_APMFILEHEADER *pAPMHeader)
     }
     else
     {
-        nUnitsPerInch = (pAPMHeader!=NULL?pAPMHeader->inch:96);
+        nUnitsPerInch = 96;
         pWMF->Seek( nStrmPos + 18 );    // set the streampos to the start of the the metaactions
         GetPlaceableBound( aPlaceableBound, pWMF );
         pWMF->Seek( nStrmPos );
-        if (pAPMHeader!=NULL)
+        if ( pExternalHeader != NULL && ( pExternalHeader->mapMode == MM_ISOTROPIC
+                                        || pExternalHeader->mapMode == MM_ANISOTROPIC ) )
         {
             // #n417818#: If we have an external header then overwrite the bounds!
-            aPlaceableBound=Rectangle(pAPMHeader->left*567*nUnitsPerInch/1440/1000,
-                          pAPMHeader->top*567*nUnitsPerInch/1440/1000,
-                          pAPMHeader->right*567*nUnitsPerInch/1440/1000,
-                          pAPMHeader->bottom*567*nUnitsPerInch/1440/1000);
+            Rectangle aExtRect(0, 0,
+                          pExternalHeader->xExt*567*nUnitsPerInch/1440/1000,
+                          pExternalHeader->yExt*567*nUnitsPerInch/1440/1000);
+            GetWinExtMax( aExtRect, aPlaceableBound, pExternalHeader->mapMode );
+            pOut->SetMapMode( pExternalHeader->mapMode );
         }
     }
 
@@ -1087,7 +1110,7 @@ sal_Bool WMFReader::ReadHeader(WMF_APMFILEHEADER *pAPMHeader)
     return pWMF->good();
 }
 
-void WMFReader::ReadWMF(WMF_APMFILEHEADER *pAPMHeader)
+void WMFReader::ReadWMF()
 {
     sal_uInt16  nFunction;
     sal_uLong   nPos, nPercent, nLastPercent;
@@ -1112,7 +1135,7 @@ void WMFReader::ReadWMF(WMF_APMFILEHEADER *pAPMHeader)
     pWMF->Seek( nStartPos );
     Callback( (sal_uInt16) ( nLastPercent = 0 ) );
 
-    if ( ReadHeader( pAPMHeader ) )
+    if ( ReadHeader( ) )
     {
 
         nPos = pWMF->Tell();
@@ -1206,27 +1229,6 @@ void WMFReader::ReadWMF(WMF_APMFILEHEADER *pAPMHeader)
 }
 
 // ------------------------------------------------------------------------
-
-static void GetWinExtMax( const Point& rSource, Rectangle& rPlaceableBound, const sal_Int16 nMapMode )
-{
-    Point aSource( rSource );
-    if ( nMapMode == MM_HIMETRIC )
-        aSource.Y() = -rSource.Y();
-    if ( aSource.X() < rPlaceableBound.Left() )
-        rPlaceableBound.Left() = aSource.X();
-    if ( aSource.X() > rPlaceableBound.Right() )
-        rPlaceableBound.Right() = aSource.X();
-    if ( aSource.Y() < rPlaceableBound.Top() )
-        rPlaceableBound.Top() = aSource.Y();
-    if ( aSource.Y() > rPlaceableBound.Bottom() )
-        rPlaceableBound.Bottom() = aSource.Y();
-}
-
-static void GetWinExtMax( const Rectangle& rSource, Rectangle& rPlaceableBound, const sal_Int16 nMapMode )
-{
-    GetWinExtMax( rSource.TopLeft(), rPlaceableBound, nMapMode );
-    GetWinExtMax( rSource.BottomRight(), rPlaceableBound, nMapMode );
-}
 
 sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
 {

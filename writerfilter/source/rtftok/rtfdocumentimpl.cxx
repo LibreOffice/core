@@ -36,6 +36,7 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <editeng/borderline.hxx>
 #include <rtl/tencinfo.h>
+#include <svtools/wmf.hxx>
 #include <svl/lngmisc.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
@@ -570,7 +571,11 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     // Store, and get its URL.
     aStream.Seek(0);
     uno::Reference<io::XInputStream> xInputStream(new utl::OInputStreamWrapper(&aStream));
-    OUString aGraphicUrl = m_pGraphicHelper->importGraphicObject(xInputStream);
+    WMF_EXTERNALHEADER aExtHeader;
+    aExtHeader.mapMode = m_aStates.top().aPicture.eWMetafile;
+    aExtHeader.xExt = m_aStates.top().aPicture.nWidth;
+    aExtHeader.yExt = m_aStates.top().aPicture.nHeight;
+    OUString aGraphicUrl = m_pGraphicHelper->importGraphicObject(xInputStream, &aExtHeader);
 
     // Wrap it in an XShape.
     uno::Reference<drawing::XShape> xShape;
@@ -598,6 +603,12 @@ int RTFDocumentImpl::resolvePict(bool bInline)
                 uno::UNO_QUERY_THROW);
         uno::Reference<graphic::XGraphic> xGraphic = xGraphicProvider->queryGraphic(aMediaProperties);
         xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Graphic")), uno::Any(xGraphic));
+
+        // Set the object size
+        awt::Size aSize;
+        aSize.Width = (m_aStates.top().aPicture.nGoalWidth ? m_aStates.top().aPicture.nGoalWidth : m_aStates.top().aPicture.nWidth);
+        aSize.Height = (m_aStates.top().aPicture.nGoalHeight ? m_aStates.top().aPicture.nGoalHeight : m_aStates.top().aPicture.nHeight);
+        xShape->setSize( aSize );
 
         RTFValue::Pointer_t pShapeValue(new RTFValue(xShape));
         m_aObjectAttributes->push_back(make_pair(NS_ooxml::LN_shape, pShapeValue));
@@ -2524,6 +2535,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_FLYANCHOR:
             m_aStates.top().aFrame.nAnchorType = nParam;
             break;
+        case RTF_WMETAFILE:
+            m_aStates.top().aPicture.eWMetafile = nParam;
+            break;
         default:
 #if OSL_DEBUG_LEVEL > 1
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
@@ -3227,7 +3241,8 @@ RTFPicture::RTFPicture()
     nCropT(0),
     nCropB(0),
     nCropL(0),
-    nCropR(0)
+    nCropR(0),
+    eWMetafile(0)
 {
 }
 

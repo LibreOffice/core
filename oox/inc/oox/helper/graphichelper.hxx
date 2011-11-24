@@ -37,6 +37,8 @@
 #include "oox/helper/binarystreambase.hxx"
 #include "oox/helper/storagebase.hxx"
 
+struct WMF_EXTERNALHEADER;
+
 namespace com { namespace sun { namespace star {
     namespace awt { struct Point; }
     namespace awt { struct Size; }
@@ -115,7 +117,8 @@ public:
     /** Imports a graphic from the passed input stream. */
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
                         importGraphic(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm ) const;
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm,
+                            const WMF_EXTERNALHEADER* pExtHeader = NULL ) const;
 
     /** Imports a graphic from the passed binary memory block. */
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
@@ -133,7 +136,8 @@ public:
     /** Creates a persistent graphic object from the passed input stream.
         @return  The URL of the created and internally cached graphic object. */
     ::rtl::OUString     importGraphicObject(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm ) const;
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm,
+                            const WMF_EXTERNALHEADER* pExtHeader = NULL ) const;
 
     /** Creates a persistent graphic object from the passed binary memory block.
         @return  The URL of the created and internally cached graphic object. */
