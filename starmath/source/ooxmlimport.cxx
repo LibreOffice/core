@@ -162,12 +162,19 @@ OUString SmOoxmlImport::handleAcc()
 
 OUString SmOoxmlImport::handleE()
 {
-    OUString ret;
     stream.ensureOpeningTag( M_TOKEN( e ));
+    OUString ret = readOMathArg( M_TOKEN( e ));
+    stream.ensureClosingTag( M_TOKEN( e ));
+    return ret;
+}
+
+OUString SmOoxmlImport::readOMathArg( int endtoken )
+{
+    OUString ret;
     while( !stream.atEnd())
     { // TODO can there really be more or just one sub-elements?
         XmlStream::Tag tag = stream.currentTag();
-        if( tag.token == CLOSING( M_TOKEN( e )))
+        if( tag.token == CLOSING( endtoken ))
             break;
         switch( tag.token )
         {
@@ -185,7 +192,6 @@ OUString SmOoxmlImport::handleE()
                 break;
         }
     }
-    stream.ensureClosingTag( M_TOKEN( e ));
     return ret;
 }
 
@@ -193,18 +199,38 @@ OUString SmOoxmlImport::handleE()
 OUString SmOoxmlImport::handleF()
 {
     stream.ensureOpeningTag( M_TOKEN( f ));
-    if( stream.currentToken() == OPENING_TAG( M_TOKEN( fPr )))
+    enum operation_t { bar, lin, noBar } operation = bar;
+    OUString oper = STR( "over" );
+    if( stream.checkOpeningTag( M_TOKEN( fPr )))
     {
-        // TODO
+        if( XmlStream::Tag type = stream.checkOpeningTag( M_TOKEN( type )))
+        {
+            if( type.attributes.attribute( M_TOKEN( val )) == STR( "bar" ))
+                operation = bar;
+            else if( type.attributes.attribute( M_TOKEN( val )) == STR( "lin" ))
+                operation = lin;
+            else if( type.attributes.attribute( M_TOKEN( val )) == STR( "noBar" ))
+                operation = noBar;
+            stream.ensureClosingTag( M_TOKEN( type ));
+        }
+        stream.ensureClosingTag( M_TOKEN( fPr ));
     }
     stream.ensureOpeningTag( M_TOKEN( num ));
-    OUString num = handleR();
+    OUString num = readOMathArg( M_TOKEN( num ));
     stream.ensureClosingTag( M_TOKEN( num ));
     stream.ensureOpeningTag( M_TOKEN( den ));
-    OUString den = handleR();
+    OUString den = readOMathArg( M_TOKEN( den ));
     stream.ensureClosingTag( M_TOKEN( den ));
     stream.ensureClosingTag( M_TOKEN( f ));
-    return STR( "{" ) + num + STR( "} over {" ) + den + STR( "}" );
+    if( operation == bar )
+        return STR( "{" ) + num + STR( "} over {" ) + den + STR( "}" );
+    else if( operation == lin )
+        return STR( "{" ) + num + STR( "} / {" ) + den + STR( "}" );
+    else // noBar
+    { // TODO we write out stack of 3 items as recursive m:f, so merge here back
+      // to 'stack { x # y # z }'
+        return STR( "binom { " ) + num + STR( " } { " ) + den + STR( " }" );
+    }
 }
 
 // NOT complete

@@ -48,6 +48,7 @@ private:
     rtl::OUString handleE();
     rtl::OUString handleF();
     rtl::OUString handleR();
+    rtl::OUString readOMathArg( int endtoken );
     oox::formulaimport::XmlStream& stream;
 };
 
