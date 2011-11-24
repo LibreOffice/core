@@ -83,7 +83,7 @@ ALLTAR: $(TARGET)$(EXECPOST)
 
 $(TARGET)$(EXECPOST): $(BIN)$/$(TARGET)$(EXECPOST)
 .IF "$(CROSS_COMPILING)" != "YES"
-    cd $(BIN)$/ && $(BIN)$/$(TARGET)$(EXECPOST)
+    cd $(BIN)$/ && $(AUGMENT_LIBRARY_PATH) $(BIN)$/$(TARGET)$(EXECPOST)
 .ELSE
     cd $(BIN)$/ && $(SRC_ROOT)$/icc$/$(INPATH_FOR_BUILD)$/bin$/$(TARGET)
 .ENDIF
