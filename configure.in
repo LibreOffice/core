@@ -4197,7 +4197,7 @@ if test "$SOLAR_JAVA" != ""; then
         fi
         dnl now that we have the path to the real javac, make a JAVA_HOME out of it..
         if test "$JAVA_HOME" != "/usr"; then
-            if test "$_os" = "Darwin"; then
+            if test "$_os" = "Darwin" -o "$OS_FOR_BUILD" = MACOSX; then
                 dnl Leopard returns a non-suitable path with readlink - points to "Current" only
                 JAVA_HOME=$(echo $JAVA_HOME | $SED -e s,/Current/Commands/javac$,/CurrentJDK/Home,)
                 dnl Tiger already returns a JDK path..
@@ -4254,7 +4254,7 @@ _ACEOF
     dnl second sanity check JAVA_HOME if possible
     if test "$JDK" != "gcj" -o "$_gij_longver" -ge "40200"; then
         # now check if $JAVA_HOME is really valid
-        if test "$_os" = "Darwin"; then
+        if test "$_os" = "Darwin" -o "$OS_FOR_BUILD" = MACOSX; then
             if test ! -f "$JAVA_HOME/lib/jvm.cfg" -a "x$with_jdk_home" = "x"; then
                 JAVA_HOME_OK="NO"
             fi
