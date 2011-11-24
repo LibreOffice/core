@@ -284,7 +284,7 @@ void Comment::finalizeImport()
         // insert text and convert text formatting
         maModel.mxText->finalizeImport();
         Reference< XText > xAnnoText( xAnnoShape, UNO_QUERY_THROW );
-        maModel.mxText->convert( xAnnoText );
+        maModel.mxText->convert( xAnnoText, true );
     }
     catch( Exception& )
     {
