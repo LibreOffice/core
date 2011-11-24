@@ -354,8 +354,6 @@ class SwFrm: public SwClient, public SfxBroadcaster
     SwFrm* _GetIndNext();
     void SetDirFlags( sal_Bool bVert );
 
-    SwFrm( SwFrm & );       //Kopieren ist nicht erlaubt.
-
     const SwLayoutFrm* ImplGetNextLayoutLeaf( bool bFwd ) const;
 
 protected:
