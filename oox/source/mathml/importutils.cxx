@@ -222,7 +222,8 @@ void XmlStream::skipElement( int token )
 {
     int closing = ( token & ~TAG_OPENING ) | TAG_CLOSING; // make it a closing tag
     assert( currentToken() == OPENING( token ));
-    // just find the matching closing tag
+    moveToNextTag();
+    // and just find the matching closing tag
     if( recoverAndFindTag( closing ))
     {
         moveToNextTag(); // and skip it too
