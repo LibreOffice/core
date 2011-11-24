@@ -132,6 +132,7 @@ private:
     std::vector<ScDPLevel*> aColLevelList;
     std::vector<ScDPLevel*> aRowLevelList;
     sal_Bool                    bResultOverflow;
+    bool                    bPageFiltered;      // set if page field filters have been applied to cache table
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<rtl::OUString> mpGrandTotalName;

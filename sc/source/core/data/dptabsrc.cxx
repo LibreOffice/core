@@ -139,6 +139,7 @@ ScDPSource::ScDPSource( ScDPTableData* pD ) :
     pColResults( NULL ),
     pRowResults( NULL ),
     bResultOverflow( false ),
+    bPageFiltered( false ),
     mpGrandTotalName(NULL)
 {
     pData->SetEmptyFlags( bIgnoreEmptyRows, bRepeatIfEmpty );
@@ -576,6 +577,7 @@ void ScDPSource::disposeData()
     nColDimCount = nRowDimCount = nDataDimCount = nPageDimCount = 0;
 
     pData->DisposeData();   // cached entries etc.
+    bPageFiltered = false;
     bResultOverflow = false;
 }
 
@@ -728,6 +730,19 @@ void ScDPSource::GetCategoryDimensionIndices(boost::unordered_set<sal_Int32>& rC
 
 void ScDPSource::FilterCacheTableByPageDimensions()
 {
+    // #i117661# Repeated calls to ScDPCacheTable::filterByPageDimension are invalid because
+    // rows are only hidden, never shown again. If FilterCacheTableByPageDimensions is called
+    // again, the cache table must be re-initialized. Currently, CreateRes_Impl always uses
+    // a fresh cache because ScDBDocFunc::DataPilotUpdate calls InvalidateData.
+
+    if (bPageFiltered)
+    {
+        DBG_ERRORFILE("tried to apply page field filters several times");
+
+        pData->DisposeData();
+        pData->CreateCacheTable();  // re-initialize the cache table
+        bPageFiltered = false;
+    }
 
     // filter table by page dimensions.
     vector<ScDPCacheTable::Criterion> aCriteria;
@@ -774,6 +789,7 @@ void ScDPSource::FilterCacheTableByPageDimensions()
         boost::unordered_set<sal_Int32> aCatDims;
         GetCategoryDimensionIndices(aCatDims);
         pData->FilterCacheTable(aCriteria, aCatDims);
+        bPageFiltered = true;
     }
 }
 
