@@ -757,59 +757,6 @@ STRING& STRING::Erase( xub_StrLen nIndex, xub_StrLen nCount )
 
 // -----------------------------------------------------------------------
 
-STRING& STRING::EraseLeadingChars( STRCODE c )
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    if ( mpData->maStr[0] != c )
-        return *this;
-
-    xub_StrLen nStart = 0;
-    while ( mpData->maStr[nStart] == c )
-        ++nStart;
-
-    return Erase( 0, nStart );
-}
-
-// -----------------------------------------------------------------------
-
-STRING& STRING::EraseTrailingChars( STRCODE c )
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    sal_Int32 nEnd = mpData->mnLen;
-    while ( nEnd && (mpData->maStr[nEnd-1] == c) )
-        nEnd--;
-
-    if ( nEnd != mpData->mnLen )
-        Erase( static_cast< xub_StrLen >(nEnd) );
-
-    return *this;
-}
-
-// -----------------------------------------------------------------------
-
-STRING& STRING::EraseLeadingAndTrailingChars( STRCODE c )
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    xub_StrLen nStart = 0;
-    while ( mpData->maStr[nStart] == c )
-        ++nStart;
-    if ( nStart )
-        Erase( 0, nStart );
-
-    sal_Int32 nEnd = mpData->mnLen;
-    while ( nEnd && (mpData->maStr[nEnd-1] == c) )
-        nEnd--;
-    if ( nEnd != mpData->mnLen )
-        Erase( static_cast< xub_StrLen >(nEnd) );
-
-    return *this;
-}
-
-// -----------------------------------------------------------------------
-
 STRING& STRING::ToLowerAscii()
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );

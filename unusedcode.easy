@@ -7,8 +7,6 @@ AtomPubSession::~AtomPubSession()
 BufferNode::childAt(int) const
 ByteString::Assign(char const*, unsigned short)
 ByteString::Assign(char)
-ByteString::EraseLeadingChars(char)
-ByteString::EraseTrailingChars(char)
 CIccCLUT::Interp3dTetra(float*, float const*)
 CIccCLUT::Iterate(IIccCLUTExec*)
 CIccFormulaCurveSegment::SetFunction(unsigned short, unsigned char, float*)
