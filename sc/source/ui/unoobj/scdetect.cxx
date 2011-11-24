@@ -117,8 +117,7 @@ static const sal_Char pFilterExcel95[]  = "MS Excel 95";
 static const sal_Char pFilterEx95Temp[] = "MS Excel 95 Vorlage/Template";
 static const sal_Char pFilterExcel97[]  = "MS Excel 97";
 static const sal_Char pFilterEx97Temp[] = "MS Excel 97 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterExcelXML[]  = "MS Excel 2003 XML";
-static const sal_Char pFilter2003XML[]   = "MS Excel 2003 XML";
+static const sal_Char pFilterExcelXML[] = "MS Excel 2003 XML";
 static const sal_Char pFilterDBase[]        = "dBase";
 static const sal_Char pFilterDif[]      = "DIF";
 static const sal_Char pFilterSylk[]     = "SYLK";
@@ -761,16 +760,11 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                             else if ( bIsXLS && bMaybeText )
                             {
                                 aHeader = comphelper::string::stripStart(aHeader, ' ');
-                                if( aHeader.CompareTo( "<?xml", 5 ) == COMPARE_EQUAL )
-                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilter2003XML) );
-                                else
-                                {
-                                    // Detect Excel 2003 XML here only if XLS was preselected.
-                                    // The configured detection for Excel 2003 XML is still in XMLFilterDetect.
-                                    pFilter = lcl_DetectExcelXML( rStr, aMatcher );
-                                    if (!pFilter)
-                                        pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterAscii) );
-                                }
+                                // Detect Excel 2003 XML here only if XLS was preselected.
+                                // The configured detection for Excel 2003 XML is still in XMLFilterDetect.
+                                pFilter = lcl_DetectExcelXML( rStr, aMatcher );
+                                if (!pFilter)
+                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterAscii) );
                                 bFakeXLS = true;
                             }
                             else if ( pPreselectedFilter->GetName().EqualsAscii(pFilterDBase) && lcl_MayBeDBase( rStr ) )
