@@ -44,6 +44,7 @@
 #define ITEMID_RANGE 2
 #define ITEMID_SCOPE 3
 
+#define MINSIZE 50
 
 
 String createEntryString(const ScRangeNameLine& rLine)
@@ -80,6 +81,8 @@ ScRangeManagerTable::ScRangeManagerTable( Window* pWindow, boost::ptr_map<rtl::O
     //pParent->SetFocusControl( this );
     SetPosSizePixel( Point( 0, aHeadSize.Height() ), Size( aBoxSize.Width(), aBoxSize.Height() - aHeadSize.Height() ) );
     SetTabs( &nTabs[0], MAP_PIXEL );
+
+    maHeaderBar.SetEndDragHdl( LINK( this, ScRangeManagerTable, HeaderEndDragHdl ) );
 
     Show();
     maHeaderBar.Show();
@@ -166,6 +169,67 @@ std::vector<ScRangeNameLine> ScRangeManagerTable::GetSelectedEntries()
         aSelectedEntries.push_back(aLine);
     }
     return aSelectedEntries;
+}
+
+namespace {
+
+void CalculateItemSize(const long& rTableSize, long& rItemNameSize, long& rItemRangeSize)
+{
+    long aItemScopeSize = rTableSize - rItemNameSize - rItemRangeSize;
+
+    if (rItemNameSize >= MINSIZE && rItemRangeSize >= MINSIZE && aItemScopeSize >= MINSIZE)
+        return;
+
+    if (rItemNameSize < MINSIZE)
+    {
+        long aDiffSize = MINSIZE - rItemNameSize;
+        if (rItemRangeSize > aItemScopeSize)
+            rItemRangeSize -= aDiffSize;
+        else
+            aItemScopeSize -= aDiffSize;
+        rItemNameSize = MINSIZE;
+    }
+
+    if (rItemRangeSize < MINSIZE)
+    {
+        long aDiffSize = MINSIZE - rItemRangeSize;
+        if (rItemNameSize > aItemScopeSize)
+            rItemNameSize -= aDiffSize;
+        else
+            aItemScopeSize -= aDiffSize;
+        rItemRangeSize = MINSIZE;
+    }
+
+    if (aItemScopeSize < MINSIZE)
+    {
+        long aDiffSize = MINSIZE - aItemScopeSize;
+        if (rItemNameSize > rItemRangeSize)
+            rItemNameSize -= aDiffSize;
+        else
+            rItemRangeSize -= aDiffSize;
+    }
+}
+
+}
+
+IMPL_LINK( ScRangeManagerTable, HeaderEndDragHdl, void*, EMPTYARG)
+{
+    long aTableSize = maHeaderBar.GetSizePixel().Width();
+    long aItemNameSize = maHeaderBar.GetItemSize(ITEMID_NAME);
+    long aItemRangeSize = maHeaderBar.GetItemSize(ITEMID_RANGE);
+
+    CalculateItemSize(aTableSize, aItemNameSize, aItemRangeSize);
+    long aItemScopeSize = aTableSize - aItemNameSize - aItemRangeSize;
+
+    Size aSz;
+    aSz.Width() = aItemNameSize;
+    SetTab( ITEMID_NAME, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
+    aSz.Width() += aItemRangeSize;
+    SetTab( ITEMID_RANGE, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
+    aSz.Width() += aItemScopeSize;
+    SetTab( ITEMID_SCOPE, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
+
+    return 0;
 }
 
 

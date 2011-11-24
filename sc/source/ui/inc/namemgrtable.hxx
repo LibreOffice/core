@@ -77,6 +77,8 @@ public:
     void GetCurrentLine(ScRangeNameLine& rLine);
     bool IsMultiSelection();
     std::vector<ScRangeNameLine> GetSelectedEntries();
+
+    DECL_LINK( HeaderEndDragHdl, void*);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
