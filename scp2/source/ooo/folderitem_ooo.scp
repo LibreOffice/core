@@ -45,7 +45,11 @@ FolderItem gid_Folderitem_Soffice
 End
 
 FolderItem gid_Folderitem_Soffice_Desktop
+#ifdef ENABLE_SILENT_MSI
+    Name = "%PRODUCTNAME";
+#else
     Name = "%PRODUCTNAME %PRODUCTVERSION";
+#endif
     ModuleID = gid_Module_Root;
     FolderID = PREDEFINED_DESKTOP;
     FileID = gid_Brand_File_Bin_Soffice;
@@ -54,7 +58,7 @@ FolderItem gid_Folderitem_Soffice_Desktop
     ComponentIDFile = "gid_Brand_File_Desktophelper_Txt";
     WkDir = gid_Brand_Dir_Program;
     Parameter = "";
-	Styles = (NOWEB,NON_ADVERTISED,USE_HELPER_FILENAME);
+    Styles = (NOWEB,NON_ADVERTISED,USE_HELPER_FILENAME);
     ALL_LANG(Tooltip, STR_FI_TOOLTIP_SOFFICE);
     ComponentCondition = "CREATEDESKTOPLINK=1";
 End
