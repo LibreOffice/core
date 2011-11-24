@@ -30,7 +30,9 @@
 #include "unx/gtk/gtkprn.hxx"
 
 #include "vcl/configsettings.hxx"
+#include "vcl/help.hxx"
 #include "vcl/print.hxx"
+#include "vcl/svapp.hxx"
 #include "vcl/unohelp.hxx"
 
 #include <gtk/gtkprinter.h>
@@ -348,6 +350,22 @@ lcl_makeFrame(
     return pFrame;
 }
 
+void
+lcl_extractHelpTextsOrIds(
+        const beans::PropertyValue& rEntry,
+        uno::Sequence<rtl::OUString>& rHelpStrings)
+{
+    if (!(rEntry.Value >>= rHelpStrings))
+    {
+        rtl::OUString aHelpString;
+        if ((rEntry.Value >>= aHelpString))
+        {
+            rHelpStrings.realloc(1);
+            *rHelpStrings.getArray() = aHelpString;
+        }
+    }
+}
+
 }
 
 GtkPrintDialog::GtkPrintDialog(vcl::PrinterController& io_rController)
@@ -441,18 +459,23 @@ GtkPrintDialog::impl_initCustomTab()
                 rEntry.Value >>= nMinValue;
             else if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MaxValue")))
                 rEntry.Value >>= nMaxValue;
-            else if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HelpText")))
+            else if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HelpId")))
             {
-                if (!(rEntry.Value >>= aHelpTexts))
+                uno::Sequence<rtl::OUString> aHelpIds;
+                lcl_extractHelpTextsOrIds(rEntry, aHelpIds);
+                Help* const pHelp = Application::GetHelp();
+                if (pHelp)
                 {
-                    rtl::OUString aHelpText;
-                    if ((rEntry.Value >>= aHelpText))
-                    {
-                        aHelpTexts.realloc(1);
-                        *aHelpTexts.getArray() = aHelpText;
-                    }
+                    const int nLen = aHelpIds.getLength();
+                    aHelpTexts.realloc(nLen);
+                    for (int j = 0; j != nLen; ++j)
+                        aHelpTexts[j] = pHelp->GetHelpText(aHelpIds[j], 0);
                 }
+                else // fallback
+                    aHelpTexts = aHelpIds;
             }
+            else if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HelpText")))
+                lcl_extractHelpTextsOrIds(rEntry, aHelpTexts);
             else if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("InternalUIOnly")))
                 rEntry.Value >>= bIgnore;
             else if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Enabled")))
