@@ -108,16 +108,6 @@ public final class WikiEditorImpl extends WeakBase
         return xFactory;
     }
 
-    public static boolean __writeRegistryServiceInfo( XRegistryKey xRegistryKey )
-    {
-        boolean bResult = Factory.writeRegistryServiceInfo( m_implementationName,
-                                                            m_serviceNames,
-                                                            xRegistryKey );
-        return ( bResult && Factory.writeRegistryServiceInfo( WikiOptionsEventHandlerImpl.m_sImplementationName,
-                                                              WikiOptionsEventHandlerImpl.m_pServiceNames,
-                                                              xRegistryKey ) );
-    }
-
     // com.sun.star.lang.XServiceInfo:
     public String getImplementationName()
     {
