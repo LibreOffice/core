@@ -30,18 +30,10 @@
 #ifndef _RTFATTRIBUTEOUTPUT_HXX_
 #define _RTFATTRIBUTEOUTPUT_HXX_
 
-#include <set>
 #include "attributeoutputbase.hxx"
-#include "fields.hxx"
 #include "rtfexport.hxx"
 
-#include <vcl/vclenum.hxx>
-
-#include <fldbas.hxx>
 #include <rtl/strbuf.hxx>
-
-#include <vector>
-
 
 class SwGrfNode;
 class SwOLENode;

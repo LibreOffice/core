@@ -28,24 +28,12 @@
  ************************************************************************/
 
 #include "rtfattributeoutput.hxx"
-#include "rtfexport.hxx"
 #include "rtfsdrexport.hxx"
 #include "writerwordglue.hxx"
-#include "wrtww8.hxx"
 #include "ww8par.hxx"
 #include "fmtcntnt.hxx"
-#include "fmtsrnd.hxx"
 #include "fchrfmt.hxx"
-#include "tgrditem.hxx"
-#include "fmtruby.hxx"
-#include "charfmt.hxx"
-#include "breakit.hxx"
 
-#include <i18npool/mslangid.hxx>
-
-#include <hintids.hxx>
-
-#include <svl/poolitem.hxx>
 #include <svtools/rtfkeywd.hxx>
 
 #include <editeng/fontitem.hxx>
@@ -53,9 +41,7 @@
 #include <editeng/adjitem.hxx>
 #include <editeng/spltitem.hxx>
 #include <editeng/widwitem.hxx>
-#include <editeng/lspcitem.hxx>
 #include <editeng/keepitem.hxx>
-#include <editeng/shaditem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/wghtitem.hxx>
@@ -69,77 +55,50 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/hyznitem.hxx>
-#include <editeng/brkitem.hxx>
-#include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/cntritem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/akrnitem.hxx>
-#include <editeng/pbinitem.hxx>
 #include <editeng/emphitem.hxx>
 #include <editeng/twolinesitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/paravertalignitem.hxx>
-#include <editeng/pgrditem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/blnkitem.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/svdobj.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
 #include <filter/msfilter/msoleexp.hxx>
 #include <svtools/miscopt.hxx>
 
 #include <docufld.hxx>
-#include <flddropdown.hxx>
-#include <format.hxx>
 #include <fmtclds.hxx>
 #include <fmtinfmt.hxx>
-#include <fmtfld.hxx>
-#include <fmtfsize.hxx>
 #include <fmtftn.hxx>
 #include <fmtrowsplt.hxx>
 #include <fmtline.hxx>
 #include <fmtanchr.hxx>
-#include <frmfmt.hxx>
 #include <frmatr.hxx>
-#include <ftninfo.hxx>
 #include <htmltbl.hxx>
 #include <ndgrf.hxx>
 #include <ndtxt.hxx>
-#include <node.hxx>
 #include <pagedesc.hxx>
-#include <paratr.hxx>
 #include <swmodule.hxx>
 #include <swtable.hxx>
 #include <txtftn.hxx>
 #include <txtinet.hxx>
-#include <numrule.hxx>
 #include <grfatr.hxx>
 #include <ndole.hxx>
 #include <lineinfo.hxx>
 #include <rtf.hxx>
 
-#include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.hxx>
-
-#include <tools/color.hxx>
-
 #include <vcl/cvtgrf.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hdl>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XNamed.hpp>
-
-#include <osl/diagnose.h>
 
 using ::editeng::SvxBorderLine;
 using rtl::OString;
