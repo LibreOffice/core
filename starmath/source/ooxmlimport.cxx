@@ -80,6 +80,9 @@ OUString SmOoxmlImport::handleStream()
             case OPENING( M_TOKEN( acc )):
                 ret += STR( " " ) + handleAcc();
                 break;
+            case OPENING( M_TOKEN( bar )):
+                ret += STR( " " ) + handleBar();
+                break;
             case OPENING( M_TOKEN( f )):
                 ret += STR( " " ) + handleF();
                 break;
@@ -158,6 +161,30 @@ OUString SmOoxmlImport::handleAcc()
     OUString e = handleE();
     stream.ensureClosingTag( M_TOKEN( acc ));
     return acc + STR( " { " ) + e + STR( " }" );
+}
+
+OUString SmOoxmlImport::handleBar()
+{
+    stream.ensureOpeningTag( M_TOKEN( bar ));
+    enum pos_t { top, bot } topbot = bot;
+    if( stream.checkOpeningTag( M_TOKEN( barPr )))
+    {
+        if( XmlStream::Tag pos = stream.checkOpeningTag( M_TOKEN( pos )))
+        {
+            if( pos.attributes.attribute( M_TOKEN( val )) == STR( "top" ))
+                topbot = top;
+            else if( pos.attributes.attribute( M_TOKEN( val )) == STR( "bot" ))
+                topbot = bot;
+            stream.ensureClosingTag( M_TOKEN( pos ));
+        }
+        stream.ensureClosingTag( M_TOKEN( barPr ));
+    }
+    OUString e = handleE();
+    stream.ensureClosingTag( M_TOKEN( bar ));
+    if( topbot == top )
+        return STR( "bar { " ) + e + STR( " }" );
+    else
+        return STR( "underline { " ) + e + STR( " }" );
 }
 
 OUString SmOoxmlImport::handleE()
