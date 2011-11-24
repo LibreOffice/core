@@ -30,7 +30,6 @@
 #define SC_TABLE_HXX
 
 #include <vector>
-#include <memory>
 #include <utility>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
@@ -38,11 +37,10 @@
 #include "column.hxx"
 #include "sortparam.hxx"
 #include "compressedarray.hxx"
-#include "dbdata.hxx"
 
-#include <memory>
 #include <set>
-#include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
+#include <boost/noncopyable.hpp>
 
 namespace utl {
     class TextSearch;
@@ -89,28 +87,25 @@ struct ScSetStringParam;
 struct ScColWidthParam;
 struct ScColWidthParam;
 class ScRangeName;
+class ScDBData;
 
-typedef boost::unordered_map< ::rtl::OUString, rtl::OUString, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > NameToNameMap;
-
-class ScTable
+class ScTable : boost::noncopyable
 {
 private:
     typedef ::std::vector< ScRange > ScRangeVec;
     typedef ::std::pair< SCCOL, SCROW > ScAddress2D;
     typedef ::std::vector< ScAddress2D > ScAddress2DVec;
-    typedef ::std::auto_ptr< ScAddress2DVec > ScAddress2DVecPtr;
 
-                                            //  data per table
     ScColumn        aCol[MAXCOLCOUNT];
 
     rtl::OUString aName;
     rtl::OUString aCodeName;
     rtl::OUString aComment;
 
-    rtl::OUString          aLinkDoc;
-    rtl::OUString          aLinkFlt;
-    rtl::OUString          aLinkOpt;
-    rtl::OUString          aLinkTab;
+    rtl::OUString       aLinkDoc;
+    rtl::OUString       aLinkFlt;
+    rtl::OUString       aLinkOpt;
+    rtl::OUString       aLinkTab;
     sal_uLong           nLinkRefreshDelay;
     sal_uInt8           nLinkMode;
 
@@ -122,17 +117,17 @@ private:
     SCROW           nRepeatStartY;
     SCROW           nRepeatEndY;
 
-    ::std::auto_ptr<ScTableProtection> pTabProtection;
+    boost::scoped_ptr<ScTableProtection> pTabProtection;
 
     sal_uInt16*         pColWidth;
-    ::boost::shared_ptr<ScFlatUInt16RowSegments> mpRowHeights;
+    boost::scoped_ptr<ScFlatUInt16RowSegments> mpRowHeights;
 
     sal_uInt8*          pColFlags;
     ScBitMaskCompressedArray< SCROW, sal_uInt8>*     pRowFlags;
-    ::boost::shared_ptr<ScFlatBoolColSegments>  mpHiddenCols;
-    ::boost::shared_ptr<ScFlatBoolRowSegments>  mpHiddenRows;
-    ::boost::shared_ptr<ScFlatBoolColSegments>  mpFilteredCols;
-    ::boost::shared_ptr<ScFlatBoolRowSegments>  mpFilteredRows;
+    boost::scoped_ptr<ScFlatBoolColSegments>  mpHiddenCols;
+    boost::scoped_ptr<ScFlatBoolRowSegments>  mpHiddenRows;
+    boost::scoped_ptr<ScFlatBoolColSegments>  mpFilteredCols;
+    boost::scoped_ptr<ScFlatBoolRowSegments>  mpFilteredRows;
 
     ::std::set<SCROW>                      maRowPageBreaks;
     ::std::set<SCROW>                      maRowManualBreaks;
@@ -153,7 +148,7 @@ private:
 
     mutable rtl::OUString aUpperName;             // #i62977# filled only on demand, reset in SetName
 
-    ScAddress2DVecPtr mxUninitNotes;
+    boost::scoped_ptr<ScAddress2DVec> mxUninitNotes;
 
     // sort parameter to minimize stack size of quicksort
     ScSortParam     aSortParam;

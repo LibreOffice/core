@@ -62,6 +62,7 @@
 #include "segmenttree.hxx"
 #include "queryparam.hxx"
 #include "queryentry.hxx"
+#include "dbdata.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 

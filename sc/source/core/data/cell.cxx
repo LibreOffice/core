@@ -53,6 +53,8 @@
 #include "postit.hxx"
 #include "externalrefmgr.hxx"
 #include "macromgr.hxx"
+#include "dbdata.hxx"
+
 #include <editeng/editobj.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/flditem.hxx>

@@ -55,6 +55,7 @@
 #include "tabprotection.hxx"
 #include "sheetevents.hxx"
 #include "segmenttree.hxx"
+#include "dbdata.hxx"
 
 #include <vector>
 

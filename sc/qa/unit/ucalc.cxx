@@ -46,6 +46,7 @@
 #include "queryentry.hxx"
 #include "postit.hxx"
 #include "attrib.hxx"
+#include "dbdata.hxx"
 
 #include "docsh.hxx"
 #include "docfunc.hxx"

@@ -109,6 +109,7 @@
 #include "vbasheetobjects.hxx"
 #include "viewuno.hxx"
 #include "markdata.hxx"
+#include "dbdata.hxx"
 
 #include "attrib.hxx"
 
