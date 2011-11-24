@@ -35,6 +35,10 @@
 # include <windows.h>
 #endif
 
+#ifdef ANDROID
+# include <dlfcn.h>
+#endif
+
 #if OSL_DEBUG_LEVEL > 0
 #include <stdio.h>
 #endif
@@ -581,6 +585,8 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     rtl::OUString sRuntimeLib = getRuntimeLib(pInfo->arVendorData);
     JFW_TRACE2(OUSTR("[Java framework] Using Java runtime library: ")
               + sRuntimeLib + OUSTR(".\n"));
+
+#ifndef ANDROID
     // On linux we load jvm with RTLD_GLOBAL. This is necessary for debugging, because
     // libjdwp.so need a symbol (fork1) from libjvm which it only gets if the jvm is loaded
     // witd RTLD_GLOBAL. On Solaris libjdwp.so is correctly linked with libjvm.so
@@ -749,7 +755,16 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         *ppVm = pJavaVM;
         JFW_TRACE2("[Java framework] sunjavaplugin"SAL_DLLEXTENSION " has created a VM.\n");
     }
-
+#else
+    (void) arOptions;
+    (void) cOptions;
+    // On Android we always have a Java VM as we only expect this code
+    // to be run in an Android app anyway.
+    struct JNIInvokeInterface* * (*lo_get_javavm)(void) = (struct JNIInvokeInterface* * (*)(void)) dlsym(RTLD_DEFAULT, "lo_get_javavm");
+    fprintf(stderr, "Got lo_get_javavm = %p", lo_get_javavm);
+    *ppVm = (JavaVM *) (*lo_get_javavm)();
+    fprintf(stderr, "lo_get_javavm returns %p", (*lo_get_javavm)());
+#endif
 
    return errcode;
 }
