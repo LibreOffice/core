@@ -334,14 +334,15 @@ void ScDocument::CreateValidTabName(rtl::OUString& rName) const
 
         for ( SCTAB i = static_cast<SCTAB>(maTabs.size())+1; !bOk ; i++ )
         {
-            rName  = aStrTable;
-            rName += rtl::OUString::valueOf(static_cast<sal_Int32>(i));
+            rtl::OUStringBuffer aBuf;
+            aBuf.append(aStrTable);
+            aBuf.append(static_cast<sal_Int32>(i));
+            rName = aBuf.makeStringAndClear();
             if (bPrefix)
                 bOk = ValidNewTabName( rName );
             else
                 bOk = !GetTable( rName, nDummy );
         }
-
     }
     else
     {
@@ -398,11 +399,13 @@ void ScDocument::CreateValidTabNames(std::vector<rtl::OUString>& aNames, SCTAB n
 void ScDocument::AppendTabOnLoad(const rtl::OUString& rName)
 {
     SCTAB nTabCount = static_cast<SCTAB>(maTabs.size());
+    if (!ValidTab(nTabCount))
+        // max table count reached.  No more tables.
+        return;
 
-    if (ValidTab(nTabCount) && ValidNewTabName(rName))
-    {
-        maTabs.push_back( new ScTable(this, nTabCount, rName) );
-    }
+    rtl::OUString aName = rName;
+    CreateValidTabName(aName);
+    maTabs.push_back( new ScTable(this, nTabCount, aName) );
 }
 
 

@@ -648,20 +648,6 @@ void ScMyTables::DeleteTable()
         pProtect->setOption(ScTableProtection::SELECT_UNLOCKED_CELLS, maProtectionData.mbSelectUnprotectedCells);
         rImport.GetDocument()->SetTabProtection(nCurrentSheet, pProtect.get());
     }
-
-    //#95582#; find out whether it was possible to set the sheet name
-    // test it here, because if it is a linked table the name is changed by importing
-    // the linking informations
-    uno::Reference < container::XNamed > xNamed(xCurrentSheet, uno::UNO_QUERY );
-    if ( xNamed.is() )
-    {
-        rtl::OUString sCurrentName(xNamed->getName());
-        if (sCurrentName != sCurrentSheetName && rImport.GetDocument())
-        {
-            rImport.GetDocument()->RenameTab( nCurrentSheet,
-                sCurrentSheetName, false, true);
-        }
-    }
 }
 
 table::CellAddress ScMyTables::GetRealCellPos()
