@@ -983,6 +983,11 @@ patch(const char *symbol,
          ((((int) replacement_code - ((int) code + 8)) / 4) & 0x00FFFFFF));
 }
 
+JavaVM *
+lo_get_javavm(void)
+{
+    return app->activity->vm;
+}
 
 void
 android_main(struct android_app* state)

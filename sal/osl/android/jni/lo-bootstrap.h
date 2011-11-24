@@ -29,12 +29,16 @@
 
 #if defined(ANDROID)
 
+#include <jni.h>
 #include <dlfcn.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 char **lo_dlneeds(const char *library);
 
 void *lo_dlopen(const char *library);
-
 
 void *lo_dlsym(void *handle,
                const char *symbol);
@@ -48,6 +52,13 @@ void *lo_apkentry(const char *filename,
 int lo_dlcall_argc_argv(void *function,
                         int argc,
                         const char **argv);
+
+JavaVM *lo_get_javavm(void);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
