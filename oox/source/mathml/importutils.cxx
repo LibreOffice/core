@@ -79,17 +79,17 @@ void XmlStream::moveToNextTag()
 
 XmlStream::Tag XmlStream::ensureOpeningTag( int token )
 {
-    return checkTag( OPENING( token ), true, "opening" );
+    return checkTag( OPENING( token ), false, "opening" );
 }
 
 XmlStream::Tag XmlStream::checkOpeningTag( int token )
 {
-    return checkTag( OPENING( token ), false, "opening" );
+    return checkTag( OPENING( token ), true, "opening" );
 }
 
 void XmlStream::ensureClosingTag( int token )
 {
-    checkTag( CLOSING( token ), true, "closing" );
+    checkTag( CLOSING( token ), false, "closing" );
 }
 
 XmlStream::Tag XmlStream::checkTag( int token, bool optional, const char* txt )
