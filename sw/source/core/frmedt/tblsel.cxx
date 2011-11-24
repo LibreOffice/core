@@ -2122,7 +2122,7 @@ sal_Bool _FndBoxCopyCol( const SwTableBox*& rpBox, void* pPara )
     }
     else
     {
-        if( 0 != pFndPara->rBoxes.count( rpBox ) )
+        if( 0 == pFndPara->rBoxes.count( rpBox ) )
         {
             delete pFndBox;
             return sal_True;
