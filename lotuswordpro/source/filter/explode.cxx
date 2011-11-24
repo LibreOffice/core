@@ -349,7 +349,7 @@ void Decompression::ToString(sal_uInt32 nBits, sal_Char *pChar, sal_uInt32 nLen)
  */
 sal_uInt32 Decompression::Decode(HuffmanTreeNode * pRoot)
 {
-    sal_uInt32 nRet;
+    sal_uInt32 nRet(0);
     sal_uInt32 nRead, nReadAlready;
 
     if( 0 != ReadBits(1, nReadAlready))
