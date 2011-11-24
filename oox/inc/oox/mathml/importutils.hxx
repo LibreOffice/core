@@ -29,8 +29,8 @@
 #define _STARMATHIMPORTUTILS_HXX
 
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
+#include <oox/token/tokens.hxx>
 #include <map>
-#include <oox/helper/attributelist.hxx>
 #include <vector>
 
 #include <oox/dllapi.h>
