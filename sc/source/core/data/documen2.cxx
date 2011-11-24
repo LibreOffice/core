@@ -992,11 +992,11 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                 ScRangeName::const_iterator itr = pSrcDoc->pRangeName->begin(), itrEnd = pSrcDoc->pRangeName->end();
                 for (; itr != itrEnd; ++itr)        //! DB-Bereiche Pivot-Bereiche auch !!!
                 {
-                    sal_uInt16 nOldIndex = itr->GetIndex();
+                    sal_uInt16 nOldIndex = itr->second->GetIndex();
                     bool bInUse = ( aUsedNames.find(nOldIndex) != aUsedNames.end() );
                     if (bInUse)
                     {
-                        const ScRangeData* pExistingData = GetRangeName()->findByUpperName(itr->GetUpperName());
+                        const ScRangeData* pExistingData = GetRangeName()->findByUpperName(itr->second->GetUpperName());
                         if (pExistingData)
                         {
                             // the name exists already in the destination document
@@ -1013,7 +1013,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                         }
                         else
                         {
-                            ScRangeData* pData = new ScRangeData( *itr );
+                            ScRangeData* pData = new ScRangeData( *itr->second );
                             pData->SetDocument(this);
                             if ( pRangeName->findByIndex( pData->GetIndex() ) )
                                 pData->SetIndex(0);     // need new index, done in Insert

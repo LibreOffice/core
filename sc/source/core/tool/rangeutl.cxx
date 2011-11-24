@@ -1112,7 +1112,7 @@ bool ScAreaNameIterator::Next( String& rName, ScRange& rRange )
         {
             if ( pRangeName && maRNPos != maRNEnd )
             {
-                const ScRangeData& rData = *maRNPos;
+                const ScRangeData& rData = *maRNPos->second;
                 ++maRNPos;
                 bool bValid = rData.IsValidReference(rRange);
                 if (bValid)

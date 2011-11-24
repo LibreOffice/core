@@ -3758,24 +3758,24 @@ void ScXMLExport::WriteNamedRange(ScRangeName* pRangeName)
     SvXMLElementExport aElemNEs(*this, XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSIONS, true, true);
     for (ScRangeName::iterator it = pRangeName->begin(); it != pRangeName->end(); ++it)
     {
-        AddAttribute(sAttrName, it->GetName());
+        AddAttribute(sAttrName, it->second->GetName());
 
         rtl::OUString sBaseCellAddress;
-        ScRangeStringConverter::GetStringFromAddress( sBaseCellAddress, it->GetPos(), pDoc,
+        ScRangeStringConverter::GetStringFromAddress( sBaseCellAddress, it->second->GetPos(), pDoc,
                             FormulaGrammar::CONV_OOO, ' ', false, SCA_ABS_3D);
         AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, sBaseCellAddress);
 
         String sSymbol;
-        it->GetSymbol(sSymbol, pDoc->GetStorageGrammar());
+        it->second->GetSymbol(sSymbol, pDoc->GetStorageGrammar());
         rtl::OUString sTempSymbol(sSymbol);
         ScRange aRange;
-        if (it->IsReference(aRange))
+        if (it->second->IsReference(aRange))
         {
 
             rtl::OUString sContent(sTempSymbol.copy(1, sTempSymbol.getLength() -2 ));
             AddAttribute(XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, sContent);
 
-            sal_Int32 nRangeType = it->GetUnoType();
+            sal_Int32 nRangeType = it->second->GetUnoType();
             rtl::OUStringBuffer sBufferRangeType;
             if ((nRangeType & sheet::NamedRangeFlag::COLUMN_HEADER) == sheet::NamedRangeFlag::COLUMN_HEADER)
                 sBufferRangeType.append(GetXMLToken(XML_REPEAT_COLUMN));

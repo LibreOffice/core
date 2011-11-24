@@ -131,10 +131,10 @@ void ScRangeManagerTable::Init(const boost::ptr_map<rtl::OUString, ScRangeName>&
         for (ScRangeName::const_iterator it = pLocalRangeName->begin();
                 it != pLocalRangeName->end(); ++it)
         {
-            if (!it->HasType(RT_DATABASE) && !it->HasType(RT_SHARED))
+            if (!it->second->HasType(RT_DATABASE) && !it->second->HasType(RT_SHARED))
             {
-                aLine.aName = it->GetName();
-                it->GetSymbol(aLine.aExpression);
+                aLine.aName = it->second->GetName();
+                it->second->GetSymbol(aLine.aExpression);
                 addEntry(aLine);
             }
         }

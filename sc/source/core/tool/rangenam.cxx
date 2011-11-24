@@ -729,20 +729,10 @@ class MatchByRange : public unary_function<ScRangeData, bool>
     const ScRange& mrRange;
 public:
     MatchByRange(const ScRange& rRange) : mrRange(rRange) {}
-    bool operator() (const ScRangeData& r) const
+    template < typename Pair >
+    bool operator() ( Pair const& r) const
     {
-        return r.IsRangeAtBlock(mrRange);
-    }
-};
-
-class MatchByUpperName : public unary_function<ScRangeData, bool>
-{
-    const OUString& mrName;
-public:
-    MatchByUpperName(const OUString& rName) : mrName(rName) {}
-    bool operator() (const ScRangeData& r) const
-    {
-        return mrName.equals(r.GetUpperName());
+        return r.second->IsRangeAtBlock(mrRange);
     }
 };
 
@@ -770,13 +760,13 @@ ScRangeName::ScRangeName(const ScRangeName& r) :
     DataType::const_iterator itr = maData.begin(), itrEnd = maData.end();
     for (; itr != itrEnd; ++itr)
     {
-        size_t nPos = itr->GetIndex() - 1;
+        size_t nPos = itr->second->GetIndex() - 1;
         if (nPos >= maIndexToData.size())
         {
             OSL_FAIL( "ScRangeName copy-ctor: maIndexToData size doesn't fit");
             maIndexToData.resize(nPos+1, NULL);
         }
-        maIndexToData[nPos] = const_cast<ScRangeData*>(&(*itr));
+        maIndexToData[nPos] = const_cast<ScRangeData*>(itr->second);
     }
 }
 
@@ -784,21 +774,19 @@ const ScRangeData* ScRangeName::findByRange(const ScRange& rRange) const
 {
     DataType::const_iterator itr = std::find_if(
         maData.begin(), maData.end(), MatchByRange(rRange));
-    return itr == maData.end() ? NULL : &(*itr);
+    return itr == maData.end() ? NULL : itr->second;
 }
 
 ScRangeData* ScRangeName::findByUpperName(const OUString& rName)
 {
-    DataType::iterator itr = std::find_if(
-        maData.begin(), maData.end(), MatchByUpperName(rName));
-    return itr == maData.end() ? NULL : &(*itr);
+    DataType::iterator itr = maData.find(rName);
+    return itr == maData.end() ? NULL : itr->second;
 }
 
 const ScRangeData* ScRangeName::findByUpperName(const OUString& rName) const
 {
-    DataType::const_iterator itr = std::find_if(
-        maData.begin(), maData.end(), MatchByUpperName(rName));
-    return itr == maData.end() ? NULL : &(*itr);
+    DataType::const_iterator itr = maData.find(rName);
+    return itr == maData.end() ? NULL : itr->second;
 }
 
 ScRangeData* ScRangeName::findByIndex(sal_uInt16 i)
@@ -816,35 +804,35 @@ void ScRangeName::UpdateReference(
 {
     DataType::iterator itr = maData.begin(), itrEnd = maData.end();
     for (; itr != itrEnd; ++itr)
-        itr->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz);
+        itr->second->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz);
 }
 
 void ScRangeName::UpdateTabRef(SCTAB nTable, sal_uInt16 nFlag, SCTAB nNewTable, SCTAB nNewSheets)
 {
     DataType::iterator itr = maData.begin(), itrEnd = maData.end();
     for (; itr != itrEnd; ++itr)
-        itr->UpdateTabRef(nTable, nFlag, nNewTable, nNewSheets);
+        itr->second->UpdateTabRef(nTable, nFlag, nNewTable, nNewSheets);
 }
 
 void ScRangeName::UpdateTranspose(const ScRange& rSource, const ScAddress& rDest)
 {
     DataType::iterator itr = maData.begin(), itrEnd = maData.end();
     for (; itr != itrEnd; ++itr)
-        itr->UpdateTranspose(rSource, rDest);
+        itr->second->UpdateTranspose(rSource, rDest);
 }
 
 void ScRangeName::UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY)
 {
     DataType::iterator itr = maData.begin(), itrEnd = maData.end();
     for (; itr != itrEnd; ++itr)
-        itr->UpdateGrow(rArea, nGrowX, nGrowY);
+        itr->second->UpdateGrow(rArea, nGrowX, nGrowY);
 }
 
 void ScRangeName::CompileUnresolvedXML()
 {
     DataType::iterator itr = maData.begin(), itrEnd = maData.end();
     for (; itr != itrEnd; ++itr)
-        itr->CompileUnresolvedXML();
+        itr->second->CompileUnresolvedXML();
 }
 
 ScRangeName::const_iterator ScRangeName::begin() const
@@ -898,7 +886,8 @@ bool ScRangeName::insert(ScRangeData* p)
             p->SetIndex(maIndexToData.size() + 1);
     }
 
-    pair<DataType::iterator, bool> r = maData.insert(p);
+    rtl::OUString aName(p->GetUpperName());
+    pair<DataType::iterator, bool> r = maData.insert(aName, p);
     if (r.second)
     {
         // Data inserted.  Store its index for mapping.
@@ -912,14 +901,14 @@ bool ScRangeName::insert(ScRangeData* p)
 
 void ScRangeName::erase(const ScRangeData& r)
 {
-    DataType::iterator itr = maData.find(r);
+    DataType::iterator itr = maData.find(r.GetUpperName());
     if (itr != maData.end())
         erase(itr);
 }
 
 void ScRangeName::erase(const iterator& itr)
 {
-    sal_uInt16 nIndex = itr->GetIndex();
+    sal_uInt16 nIndex = itr->second->GetIndex();
     maData.erase(itr);
     OSL_ENSURE( 0 < nIndex && nIndex <= maIndexToData.size(), "ScRangeName::erase: bad index");
     if (0 < nIndex && nIndex <= maIndexToData.size())

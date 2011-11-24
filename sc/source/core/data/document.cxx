@@ -1986,8 +1986,8 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, sal_uInt16 nFlags, bool 
         ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
         for (; itr != itrEnd; ++itr)
         {
-            sal_uInt16 nIndex = itr->GetIndex();
-            ScRangeData* pData = new ScRangeData(*itr);
+            sal_uInt16 nIndex = itr->second->GetIndex();
+            ScRangeData* pData = new ScRangeData(*itr->second);
             if (pTransClip->pRangeName->insert(pData))
                 pData->SetIndex(nIndex);
         }
@@ -2045,12 +2045,12 @@ void copyUsedNamesToClip(ScRangeName* pClipRangeName, ScRangeName* pRangeName, c
     ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
     for (; itr != itrEnd; ++itr)        //! DB-Bereiche Pivot-Bereiche auch !!!
     {
-        sal_uInt16 nIndex = itr->GetIndex();
+        sal_uInt16 nIndex = itr->second->GetIndex();
         bool bInUse = (rUsedNames.count(nIndex) > 0);
         if (!bInUse)
             continue;
 
-        ScRangeData* pData = new ScRangeData(*itr);
+        ScRangeData* pData = new ScRangeData(*itr->second);
         if (pClipRangeName->insert(pData))
             pData->SetIndex(nIndex);
     }
@@ -2134,10 +2134,10 @@ void ScDocument::CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameDat
             A proper solution would ask the user how to proceed.
             The adjustment of the indices in the formulas is done later.
         */
-        const ScRangeData* pExistingData = GetRangeName()->findByUpperName(itr->GetUpperName());
+        const ScRangeData* pExistingData = GetRangeName()->findByUpperName(itr->first);
         if (pExistingData)
         {
-            sal_uInt16 nOldIndex = itr->GetIndex();
+            sal_uInt16 nOldIndex = itr->second->GetIndex();
             sal_uInt16 nNewIndex = pExistingData->GetIndex();
             aClipRangeNames.insert(nOldIndex, nNewIndex);
             if ( !aClipRangeNames.mbReplace )
@@ -2145,14 +2145,14 @@ void ScDocument::CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameDat
         }
         else
         {
-            ScRangeData* pData = new ScRangeData( *itr );
+            ScRangeData* pData = new ScRangeData( *itr->second );
             pData->SetDocument(this);
             if ( pRangeName->findByIndex( pData->GetIndex() ) )
                 pData->SetIndex(0);     // need new index, done in Insert
             if ( pRangeName->insert(pData) )
             {
                 aClipRangeNames.mpRangeNames.push_back(pData);
-                sal_uInt16 nOldIndex = itr->GetIndex();
+                sal_uInt16 nOldIndex = itr->second->GetIndex();
                 sal_uInt16 nNewIndex = pData->GetIndex();
                 aClipRangeNames.insert(nOldIndex, nNewIndex);
                 if ( !aClipRangeNames.mbReplace )
@@ -2161,7 +2161,7 @@ void ScDocument::CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameDat
             else
             {   // must be an overflow
                 pData = NULL;
-                aClipRangeNames.insert(itr->GetIndex(), 0);
+                aClipRangeNames.insert(itr->second->GetIndex(), 0);
                 aClipRangeNames.mbReplace = true;
             }
         }

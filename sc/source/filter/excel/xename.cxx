@@ -674,8 +674,8 @@ void XclExpNameManagerImpl::CreateUserNames()
     for (; itr != itrEnd; ++itr)
     {
         // skip definitions of shared formulas
-        if (!itr->HasType(RT_SHARED) && !FindNamedExpIndex(SCTAB_GLOBAL, itr->GetIndex()))
-            CreateName(SCTAB_GLOBAL, *itr);
+        if (!itr->second->HasType(RT_SHARED) && !FindNamedExpIndex(SCTAB_GLOBAL, itr->second->GetIndex()))
+            CreateName(SCTAB_GLOBAL, *itr->second);
     }
     //look at every sheet for local range names
     ScRangeName::TabNameCopyMap rLocalNames;
@@ -687,8 +687,8 @@ void XclExpNameManagerImpl::CreateUserNames()
         for (; itr != itrEnd; ++itr)
         {
             // skip definitions of shared formulas
-            if (!itr->HasType(RT_SHARED) && !FindNamedExpIndex(tabIt->first, itr->GetIndex()))
-                CreateName(tabIt->first, *itr);
+            if (!itr->second->HasType(RT_SHARED) && !FindNamedExpIndex(tabIt->first, itr->second->GetIndex()))
+                CreateName(tabIt->first, *itr->second);
         }
     }
 }

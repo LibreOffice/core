@@ -6125,9 +6125,9 @@ uno::Any SAL_CALL ScVbaRange::AdvancedFilter( sal_Int32 Action, const uno::Any& 
             ScRangeName::const_iterator itr = pRangeNames->begin(), itrEnd = pRangeNames->end();
             for (; itr != itrEnd; ++itr)
             {
-                if (itr->HasType(RT_CRITERIA))
+                if (itr->second->HasType(RT_CRITERIA))
                 {
-                    itr->GetSymbol( aBuiltInCriteria, formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
+                    itr->second->GetSymbol( aBuiltInCriteria, formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
                     break;
                 }
             }

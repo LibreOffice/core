@@ -1541,7 +1541,7 @@ bool ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
         ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
         for (; itr != itrEnd; ++itr)
         {
-            TypedStrData* pNew = new TypedStrData(itr->GetName(), 0.0, SC_STRTYPE_NAMES);
+            TypedStrData* pNew = new TypedStrData(itr->second->GetName(), 0.0, SC_STRTYPE_NAMES);
             if (!rStrings.Insert(pNew))
                 delete pNew;
         }

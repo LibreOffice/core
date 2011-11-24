@@ -176,12 +176,12 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
             sal_uInt16 nInsert = 0;
             for (; itr != itrEnd; ++itr)
             {
-                if (!itr->HasType(RT_CRITERIA))
+                if (!itr->second->HasType(RT_CRITERIA))
                     continue;
 
-                nInsert = aLbFilterArea.InsertEntry(itr->GetName());
+                nInsert = aLbFilterArea.InsertEntry(itr->second->GetName());
                 rtl::OUString aSymbol;
-                itr->GetSymbol(aSymbol);
+                itr->second->GetSymbol(aSymbol);
                 aLbFilterArea.SetEntryData(nInsert, new String(aSymbol));
             }
         }

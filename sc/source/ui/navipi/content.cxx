@@ -683,8 +683,8 @@ void ScContentTree::GetAreaNames()
         ScRangeName::const_iterator itrBeg = pRangeNames->begin(), itrEnd = pRangeNames->end();
         for (ScRangeName::const_iterator itr = itrBeg; itr != itrEnd; ++itr)
         {
-            if (itr->IsValidReference(aDummy))
-                aSet.insert(itr->GetName());
+            if (itr->second->IsValidReference(aDummy))
+                aSet.insert(itr->second->GetName());
         }
     }
     for (SCTAB i = 0; i < pDoc->GetTableCount(); ++i)
@@ -696,8 +696,8 @@ void ScContentTree::GetAreaNames()
             pDoc->GetName(i, aTableName);
             for (ScRangeName::const_iterator itr = pLocalRangeName->begin(); itr != pLocalRangeName->end(); ++itr)
             {
-                if (itr->IsValidReference(aDummy))
-                    aSet.insert(createLocalRangeName(itr->GetName(), aTableName));
+                if (itr->second->IsValidReference(aDummy))
+                    aSet.insert(createLocalRangeName(itr->second->GetName(), aTableName));
             }
         }
     }

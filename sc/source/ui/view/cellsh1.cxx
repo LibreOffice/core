@@ -2218,7 +2218,7 @@ void ScCellShell::ExecuteDataPilotDialog()
         {
             ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
             for (; itr != itrEnd; ++itr)
-                pTypeDlg->AppendNamedRange(itr->GetName());
+                pTypeDlg->AppendNamedRange(itr->second->GetName());
         }
 
         OSL_ENSURE(pTypeDlg, "Dialog create fail!");

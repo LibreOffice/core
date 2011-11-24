@@ -247,7 +247,7 @@ void removeRangeNamesBySrcDoc(ScRangeName& rRanges, sal_uInt16 nFileId)
     vector<ScRangeName::iterator> v;
     for (; itr != itrEnd; ++itr)
     {
-        if (hasRefsToSrcDoc(*itr, nFileId))
+        if (hasRefsToSrcDoc(*itr->second, nFileId))
             v.push_back(itr);
     }
     for_each(v.begin(), v.end(), EraseRangeByIterator(rRanges));

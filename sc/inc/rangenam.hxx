@@ -183,7 +183,7 @@ class ScRangeName
 {
 private:
     typedef std::vector<ScRangeData*> IndexDataType;
-    typedef ::boost::ptr_set<ScRangeData> DataType;
+    typedef ::boost::ptr_map<rtl::OUString, ScRangeData> DataType;
     DataType maData;
     IndexDataType maIndexToData;
 

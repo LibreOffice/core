@@ -667,7 +667,7 @@ sal_Int32 SAL_CALL ScNamedRangesObj::getCount() throw(uno::RuntimeException)
         {
             ScRangeName::const_iterator itr = pNames->begin(), itrEnd = pNames->end();
             for (; itr != itrEnd; ++itr)
-                if (lcl_UserVisibleName(*itr))
+                if (lcl_UserVisibleName(*itr->second))
                     ++nRet;
         }
     }
@@ -761,8 +761,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScNamedRangesObj::getElementNames()
             ScRangeName::const_iterator itr = pNames->begin(), itrEnd = pNames->end();
             for (; itr != itrEnd; ++itr)
             {
-                if (lcl_UserVisibleName(*itr))
-                    pAry[nVisPos++] = itr->GetName();
+                if (lcl_UserVisibleName(*itr->second))
+                    pAry[nVisPos++] = itr->second->GetName();
             }
             return aSeq;
         }
@@ -894,10 +894,10 @@ ScNamedRangeObj* ScGlobalNamedRangesObj::GetObjectByIndex_Impl(sal_uInt16 nIndex
     sal_uInt16 nPos = 0;
     for (; itr != itrEnd; ++itr)
     {
-        if (lcl_UserVisibleName(*itr))
+        if (lcl_UserVisibleName(*itr->second))
         {
             if (nPos == nIndex)
-                return new ScNamedRangeObj(this, pDocShell, itr->GetName());
+                return new ScNamedRangeObj(this, pDocShell, itr->second->GetName());
         }
         ++nPos;
     }
@@ -961,10 +961,10 @@ ScNamedRangeObj* ScLocalNamedRangesObj::GetObjectByIndex_Impl( sal_uInt16 nIndex
     sal_uInt16 nPos = 0;
     for (; itr != itrEnd; ++itr)
     {
-        if (lcl_UserVisibleName(*itr))
+        if (lcl_UserVisibleName(*itr->second))
         {
             if (nPos == nIndex)
-                return new ScNamedRangeObj(this, pDocShell, itr->GetName(), mxSheet);
+                return new ScNamedRangeObj(this, pDocShell, itr->second->GetName(), mxSheet);
         }
         ++nPos;
     }

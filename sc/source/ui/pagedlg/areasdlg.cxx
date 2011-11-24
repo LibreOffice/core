@@ -484,15 +484,15 @@ void ScPrintAreasDlg::Impl_FillLists()
     ScRangeName::const_iterator itr = pRangeNames->begin(), itrEnd = pRangeNames->end();
     for (; itr != itrEnd; ++itr)
     {
-        if (!itr->HasType(RT_ABSAREA) && !itr->HasType(RT_REFAREA) && !itr->HasType(RT_ABSPOS))
+        if (!itr->second->HasType(RT_ABSAREA) && !itr->second->HasType(RT_REFAREA) && !itr->second->HasType(RT_ABSPOS))
             continue;
 
-        OUString aName = itr->GetName();
+        OUString aName = itr->second->GetName();
         OUString aSymbol;
-        itr->GetSymbol(aSymbol);
+        itr->second->GetSymbol(aSymbol);
         if (aRange.ParseAny(aSymbol, pDoc, eConv) & SCA_VALID)
         {
-            if (itr->HasType(RT_PRINTAREA))
+            if (itr->second->HasType(RT_PRINTAREA))
             {
                 aRange.Format(aSymbol, SCR_ABS, pDoc, eConv);
                 aLbPrintArea.SetEntryData(
@@ -500,7 +500,7 @@ void ScPrintAreasDlg::Impl_FillLists()
                     new String(aSymbol) );
             }
 
-            if (itr->HasType(RT_ROWHEADER))
+            if (itr->second->HasType(RT_ROWHEADER))
             {
                 lcl_GetRepeatRangeString(&aRange, pDoc, true, aSymbol);
                 aLbRepeatRow.SetEntryData(
@@ -508,7 +508,7 @@ void ScPrintAreasDlg::Impl_FillLists()
                     new String(aSymbol) );
             }
 
-            if (itr->HasType(RT_COLHEADER))
+            if (itr->second->HasType(RT_COLHEADER))
             {
                 lcl_GetRepeatRangeString(&aRange, pDoc, false, aSymbol);
                 aLbRepeatCol.SetEntryData(
