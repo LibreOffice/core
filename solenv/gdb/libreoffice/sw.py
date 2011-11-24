@@ -36,7 +36,7 @@ class SwPositionPrinter(object):
 
     def to_string(self):
         node = self.value['nNode']['pNd'].dereference();
-        offset = self.value['nContent']['nIndex']
+        offset = self.value['nContent']['m_nIndex']
         return "%s (node %d, offset %d)" % (self.typename, node['nOffset'], offset)
 
 class SwPaMPrinter(object):
