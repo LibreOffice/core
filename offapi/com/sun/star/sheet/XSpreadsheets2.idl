@@ -47,15 +47,15 @@ interface XSpreadsheets2: com::sun::star::sheet::XSpreadsheets
             a valid XSpreadsheetDocument reference to source doc
 
         @param srcName
-            the source sheet name.
+            the source sheet name. Throw IllegalArgumentException if not valid
 
         @param nDestPosition
-            the destination sheet position.
+            the destination sheet position. Throw IndexOutOfBoundsException if not valid
 
-        @returns the position of the imported sheet or -1 if not imported
+        @returns the position of the imported sheet
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-        @throws ::com::sun::star::uno::RuntimeException
+        @throws com::sun::star::lang::IndexOutOfBoundsException
 
         @since LibreOffice 3.5
      */
