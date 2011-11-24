@@ -108,7 +108,9 @@ namespace CPPU_CURRENT_NAMESPACE
         t_rtti_map m_rttis;
         t_rtti_map m_generatedRttis;
 
+#ifndef ANDROID
         void * m_hApp;
+#endif
 
     public:
         RTTI() SAL_THROW( () );
@@ -118,13 +120,17 @@ namespace CPPU_CURRENT_NAMESPACE
     };
     //____________________________________________________________________
     RTTI::RTTI() SAL_THROW( () )
+#ifndef ANDROID
         : m_hApp( dlopen( 0, RTLD_LAZY ) )
+#endif
     {
     }
     //____________________________________________________________________
     RTTI::~RTTI() SAL_THROW( () )
     {
+#ifndef ANDROID
         dlclose( m_hApp );
+#endif
     }
 
     //____________________________________________________________________
@@ -153,7 +159,14 @@ namespace CPPU_CURRENT_NAMESPACE
             buf.append( 'E' );
 
             OString symName( buf.makeStringAndClear() );
+#ifndef ANDROID
             rtti = (type_info *)dlsym( m_hApp, symName.getStr() );
+#else
+            rtti = (type_info *)dlsym( RTLD_DEFAULT, symName.getStr() );
+            // Unfortunately dlsym for weak symbols doesn't work in
+            // Android 4.0 at least, sigh, so we will always take the
+            // else branch below.
+#endif
 
             if (rtti)
             {
@@ -165,11 +178,22 @@ namespace CPPU_CURRENT_NAMESPACE
             {
                 // try to lookup the symbol in the generated rtti map
                 t_rtti_map::const_iterator iFind2( m_generatedRttis.find( unoName ) );
+
                 if (iFind2 == m_generatedRttis.end())
                 {
                     // we must generate it !
                     // symbol and rtti-name is nearly identical,
                     // the symbol is prefixed with _ZTI
+
+#ifdef ANDROID
+                    // This code is supposed to be used only used for
+                    // inter-process UNO, says sberg. Thus it should
+                    // be unnecessary and never reached for
+                    // Android. But see above...
+
+                    // OSL_ASSERT (iFind2 != m_generatedRttis.end());
+                    // return NULL;
+#endif
                     char const * rttiName = symName.getStr() +4;
 #if OSL_DEBUG_LEVEL > 1
                     fprintf( stderr,"generated rtti for %s\n", rttiName );
