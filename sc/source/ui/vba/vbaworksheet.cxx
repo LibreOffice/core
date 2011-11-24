@@ -108,6 +108,7 @@
 #include "vbahyperlinks.hxx"
 #include "vbasheetobjects.hxx"
 #include "viewuno.hxx"
+#include "markdata.hxx"
 
 #include "attrib.hxx"
 

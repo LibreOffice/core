@@ -138,6 +138,7 @@
 #include "uiitems.hxx"
 #include "cellsuno.hxx"
 #include "dpobject.hxx"
+#include "markdata.hxx"
 
 #include <vector>
 #include <boost/shared_ptr.hpp>

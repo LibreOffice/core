@@ -80,6 +80,7 @@
 #include "inputhdl.hxx"
 #include "conflictsdlg.hxx"
 #include "globstr.hrc"
+#include "markdata.hxx"
 
 //------------------------------------------------------------------
 

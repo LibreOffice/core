@@ -73,6 +73,7 @@
 #include "rangeutl.hxx"
 #include "docfunc.hxx"
 #include "funcdesc.hxx"
+#include "markdata.hxx"
 #include <editeng/fontitem.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include "AccessibleEditObject.hxx"

@@ -60,6 +60,7 @@
 #include "dpshttab.hxx"
 #include "hints.hxx"
 #include "queryentry.hxx"
+#include "markdata.hxx"
 
 // -----------------------------------------------------------------
 

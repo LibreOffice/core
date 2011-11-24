@@ -56,7 +56,7 @@
 #include "attrdlg.hrc"      // TP_ALIGNMENT
 #include "inputhdl.hxx"
 #include "editable.hxx"
-
+#include "markdata.hxx"
 #include "scabstdlg.hxx"
 
 #define IS_EDITMODE() GetViewData()->HasEditView( GetViewData()->GetActivePart() )

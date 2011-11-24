@@ -49,6 +49,7 @@
 #include "transobj.hxx"
 #include "clipparam.hxx"
 #include "dragdata.hxx"
+#include "markdata.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 

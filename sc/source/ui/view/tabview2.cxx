@@ -55,6 +55,7 @@
 #include "globstr.hrc"
 #include "scmod.hxx"
 #include "tabprotection.hxx"
+#include "markdata.hxx"
 
 namespace {
 

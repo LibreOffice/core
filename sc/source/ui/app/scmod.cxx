@@ -106,6 +106,7 @@
 #include "preview.hxx"
 #include "dragdata.hxx"
 #include "clipdata.hxx"
+#include "markdata.hxx"
 
 #include <svx/xmlsecctrl.hxx>
 

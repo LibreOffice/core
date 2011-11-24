@@ -46,6 +46,7 @@
 #include "transobj.hxx"
 #include "docsh.hxx"
 #include "tabprotection.hxx"
+#include "markdata.hxx"
 
 #define SC_SELENG_REFMODE_UPDATE_INTERVAL_MIN 65
 

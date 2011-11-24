@@ -70,6 +70,7 @@
 #include "simpref.hxx"
 #include "funcdesc.hxx"
 #include "dpobject.hxx"
+#include "markdata.hxx"
 
 #include <iostream>
 

@@ -56,6 +56,7 @@
 #include "sc.hrc"
 #include "chgtrack.hxx"  // Amelia Wang
 #include "refundo.hxx"  // Amelia Wang
+#include "markdata.hxx"
 
 // -----------------------------------------------------------------------
 
@@ -2030,7 +2031,7 @@ ScUndoDataForm::ScUndoDataForm( ScDocShell* pNewDocShell,
                                 void* /*pFill1*/, void* /*pFill2*/, void* /*pFill3*/,
                                 sal_Bool bRedoIsFilled ) :
         ScBlockUndo( pNewDocShell, ScRange( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ), SC_UNDO_SIMPLE ),
-        aMarkData( rMark ),
+        mpMarkData(new ScMarkData(rMark)),
         pUndoDoc( pNewUndoDoc ),
         pRedoDoc( pNewRedoDoc ),
         nFlags( nNewFlags ),
@@ -2042,8 +2043,8 @@ ScUndoDataForm::ScUndoDataForm( ScDocShell* pNewDocShell,
         //      don't have to be changed and branched for 641.
         //      They can be removed later.
 
-        if ( !aMarkData.IsMarked() )                            // no cell marked:
-                aMarkData.SetMarkArea( aBlockRange );   //  mark paste block
+        if (!mpMarkData->IsMarked())                            // no cell marked:
+                mpMarkData->SetMarkArea(aBlockRange);   //  mark paste block
 
         if ( pRefUndoData )
                 pRefUndoData->DeleteUnchanged( pDocShell->GetDocument() );
@@ -2136,7 +2137,7 @@ void ScUndoDataForm::DoChange( const sal_Bool bUndo )
             sal_Bool bRowInfo = ( aBlockRange.aStart.Col()==0 && aBlockRange.aEnd.Col()==MAXCOL );
 
             pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pRedoDoc->InitUndoSelected( pDoc, aMarkData, bColInfo, bRowInfo );
+            pRedoDoc->InitUndoSelected( pDoc, *mpMarkData, bColInfo, bRowInfo );
         }
         //  read "redo" data from the document in the first undo
             //  all sheets - CopyToDocument skips those that don't exist in pRedoDoc

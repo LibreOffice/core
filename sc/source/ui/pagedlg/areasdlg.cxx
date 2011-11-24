@@ -52,6 +52,7 @@
 #include "globstr.hrc"
 #include "pagedlg.hrc"
 #include "compiler.hxx"
+#include "markdata.hxx"
 
 // STATIC DATA ---------------------------------------------------------------
 

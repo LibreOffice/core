@@ -54,6 +54,7 @@
 #include "vbaworksheet.hxx"
 #include "vbaworkbook.hxx"
 #include "unonames.hxx"
+#include "markdata.hxx"
 
 #include <vector>
 

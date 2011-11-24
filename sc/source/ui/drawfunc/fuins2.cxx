@@ -93,6 +93,7 @@ using namespace ::com::sun::star;
 #include "uiitems.hxx"
 #include "globstr.hrc"
 #include "drawview.hxx"
+#include "markdata.hxx"
 
 extern SdrObject* pSkipPaintObj;            // output.cxx - dieses Objekt nicht zeichnen
 

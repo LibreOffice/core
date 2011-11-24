@@ -30,7 +30,6 @@
 #define SC_UNDOTAB_HXX
 
 #include "undobase.hxx"
-#include "markdata.hxx"
 #include "formula/grammar.hxx"
 #include <tools/color.hxx>
 #include "tabbgcolor.hxx"
@@ -45,6 +44,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
+
 #include <memory>
 #include <vector>
 
@@ -55,6 +56,7 @@ class ScPrintRangeSaver;
 class SdrObject;
 class ScDocProtection;
 class ScTableProtection;
+class ScMarkData;
 
 //----------------------------------------------------------------------------
 
@@ -277,13 +279,13 @@ public:
     virtual String  GetComment() const;
 
 private:
+    boost::scoped_ptr<ScMarkData> mpMarkData;
     SCTAB       nSrcTab;
     SCTAB       nDestTab;
     String      aName;
     String      aComment;
     Color       aColor;
     sal_uInt16      nFlags;
-    ScMarkData  aMarkData;
     SdrUndoAction* pDrawUndo;
 };
 

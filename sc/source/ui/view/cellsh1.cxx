@@ -101,6 +101,7 @@
 #include "dbdata.hxx"
 #include "docsh.hxx"
 #include "cliputil.hxx"
+#include "markdata.hxx"
 
 #include "globstr.hrc"
 #include "scui_def.hxx"

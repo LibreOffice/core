@@ -43,6 +43,7 @@
 #include "docsh.hxx"
 #include "appoptio.hxx"
 #include "globstr.hrc"
+#include "markdata.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 

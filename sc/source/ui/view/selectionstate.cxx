@@ -32,6 +32,7 @@
 
 #include <editeng/editview.hxx>
 #include "viewdata.hxx"
+#include "markdata.hxx"
 
 // ============================================================================
 

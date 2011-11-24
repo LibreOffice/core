@@ -46,6 +46,7 @@
 #include "inputopt.hxx"     // Optionen
 #include "gridmerg.hxx"
 #include "document.hxx"
+#include "markdata.hxx"
 
 // -----------------------------------------------------------------------
 

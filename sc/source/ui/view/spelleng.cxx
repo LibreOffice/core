@@ -51,7 +51,7 @@
 #include "patattr.hxx"
 #include "waitoff.hxx"
 #include "globstr.hrc"
-
+#include "markdata.hxx"
 
 using namespace ::com::sun::star;
 

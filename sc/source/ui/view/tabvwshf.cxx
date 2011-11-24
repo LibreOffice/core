@@ -59,6 +59,7 @@
 #include "tabbgcolor.hxx"
 #include "tabbgcolordlg.hxx"
 #include "sccommands.h"
+#include "markdata.hxx"
 
 #include <vector>
 

@@ -178,6 +178,7 @@
 #include "olinetab.hxx"
 #include "transobj.hxx"
 #include "queryentry.hxx"
+#include "markdata.hxx"
 #include <comphelper/anytostring.hxx>
 
 #include <global.hxx>

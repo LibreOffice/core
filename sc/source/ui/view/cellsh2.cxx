@@ -76,6 +76,7 @@
 #include "impex.hxx"
 #include "asciiopt.hxx"
 #include "queryentry.hxx"
+#include "markdata.hxx"
 
 using namespace com::sun::star;
 

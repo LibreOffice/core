@@ -34,7 +34,6 @@
 #include <vcl/timer.hxx>
 #include <svl/lstner.hxx>
 #include "global.hxx"       // ScInputMode
-#include "markdata.hxx"     // ScMarkData
 #include "shellids.hxx"
 #include <unotools/options.hxx>
 #include <tools/shl.hxx>
@@ -79,6 +78,7 @@ class ScTransferObj;
 class ScDrawTransferObj;
 class ScSelectionTransferObj;
 class ScFormEditData;
+class ScMarkData;
 struct ScDragData;
 struct ScClipData;
 

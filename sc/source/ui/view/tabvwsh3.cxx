@@ -71,6 +71,7 @@
 #include "shtabdlg.hxx"
 #include "tabprotection.hxx"
 #include "protectiondlg.hxx"
+#include "markdata.hxx"
 
 #include <svl/ilstitem.hxx>
 #include <vector>

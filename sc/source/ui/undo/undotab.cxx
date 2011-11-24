@@ -50,6 +50,7 @@
 #include "tabprotection.hxx"
 #include "viewdata.hxx"
 #include "progress.hxx"
+#include "markdata.hxx"
 
 // for ScUndoRenameObject - might me moved to another file later
 #include <svx/svditer.hxx>
@@ -857,13 +858,13 @@ ScUndoMakeScenario::ScUndoMakeScenario( ScDocShell* pNewDocShell,
                         const Color& rCol, sal_uInt16 nF,
                         const ScMarkData& rMark ) :
     ScSimpleUndo( pNewDocShell ),
+    mpMarkData(new ScMarkData(rMark)),
     nSrcTab( nSrc ),
     nDestTab( nDest ),
     aName( rN ),
     aComment( rC ),
     aColor( rCol ),
     nFlags( nF ),
-    aMarkData( rMark ),
     pDrawUndo( NULL )
 {
     pDrawUndo = GetSdrUndoAction( pDocShell->GetDocument() );
@@ -906,14 +907,14 @@ void ScUndoMakeScenario::Undo()
 
 void ScUndoMakeScenario::Redo()
 {
-    SetViewMarkData( aMarkData );
+    SetViewMarkData(*mpMarkData);
 
     RedoSdrUndoAction( pDrawUndo );             // Draw Redo first
 
     pDocShell->SetInUndo( sal_True );
     bDrawIsInUndo = sal_True;
 
-    pDocShell->MakeScenario( nSrcTab, aName, aComment, aColor, nFlags, aMarkData, false );
+    pDocShell->MakeScenario( nSrcTab, aName, aComment, aColor, nFlags, *mpMarkData, false );
 
     bDrawIsInUndo = false;
     pDocShell->SetInUndo( false );

@@ -44,6 +44,8 @@
 #include "userdat.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
+#include "markdata.hxx"
+
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>

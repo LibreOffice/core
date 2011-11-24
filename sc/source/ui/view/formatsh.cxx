@@ -100,6 +100,7 @@
 #include "scresid.hxx"
 #include "tabvwsh.hxx"
 #include "undostyl.hxx"
+#include "markdata.hxx"
 
 
 #define ScFormatShell

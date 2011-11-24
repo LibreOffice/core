@@ -32,11 +32,12 @@
 #include "undobase.hxx"
 #include "rangeutl.hxx"     // ScArea
 #include "rangelst.hxx"     // ScRangeListRef
-#include "markdata.hxx"
 #include "sortparam.hxx"
 #include "queryparam.hxx"
 #include "subtotalparam.hxx"
 #include "pivot.hxx"
+
+#include <boost/scoped_ptr.hpp>
 
 class ScDocShell;
 class ScDocument;
@@ -46,6 +47,7 @@ class ScDBData;
 class ScDBCollection;
 class ScDPObject;
 class SdrUndoAction;
+class ScMarkData;
 
 //----------------------------------------------------------------------------
 
@@ -497,7 +499,6 @@ private:
     void                Init();
 };
 
-// amelia
 class ScUndoDataForm: public ScBlockUndo
 {
 public:
@@ -521,7 +522,7 @@ public:
     virtual String  GetComment() const;
 
 private:
-    ScMarkData      aMarkData;
+    boost::scoped_ptr<ScMarkData> mpMarkData;
     ScDocument*     pUndoDoc;
     ScDocument*     pRedoDoc;
     sal_uInt16          nFlags;

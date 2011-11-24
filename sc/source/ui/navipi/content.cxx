@@ -70,6 +70,7 @@
 #include "navsett.hxx"
 #include "postit.hxx"
 #include "clipparam.hxx"
+#include "markdata.hxx"
 
 using namespace com::sun::star;
 

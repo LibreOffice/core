@@ -66,6 +66,7 @@
 #include "unonames.hxx"
 #include "inputopt.hxx"
 #include "viewutil.hxx"
+#include "markdata.hxx"
 #include "stlalgorithm.hxx"
 #include "ViewSettingsSequenceDefines.hxx"
 #include <rtl/ustrbuf.hxx>
@@ -298,6 +299,7 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
 }
 
 ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
+        mpMarkData(new ScMarkData),
         pDocShell   ( pDocSh ),
         pDoc        ( NULL ),
         pView       ( pViewSh ),
@@ -462,7 +464,7 @@ void ScViewData::InsertTab( SCTAB nTab )
     CreateTabData( nTab );
 
     UpdateCurrentTab();
-    aMarkData.InsertTab( nTab );
+    mpMarkData->InsertTab( nTab );
 }
 
 void ScViewData::InsertTabs( SCTAB nTab, SCTAB nNewSheets )
@@ -476,7 +478,7 @@ void ScViewData::InsertTabs( SCTAB nTab, SCTAB nNewSheets )
     for (SCTAB i = nTab; i < nTab + nNewSheets; ++i)
     {
         CreateTabData( i );
-        aMarkData.InsertTab( i );
+        mpMarkData->InsertTab( i );
     }
     UpdateCurrentTab();
 }
@@ -487,14 +489,14 @@ void ScViewData::DeleteTab( SCTAB nTab )
 
     maTabData.erase(maTabData.begin() + nTab);
     UpdateCurrentTab();
-    aMarkData.DeleteTab( nTab );
+    mpMarkData->DeleteTab( nTab );
 }
 
 void ScViewData::DeleteTabs( SCTAB nTab, SCTAB nSheets )
 {
     for (SCTAB i = 0; i < nSheets; ++i)
     {
-        aMarkData.DeleteTab( nTab + i );
+        mpMarkData->DeleteTab( nTab + i );
         delete maTabData.at(nTab + i);
     }
 
@@ -524,7 +526,7 @@ void ScViewData::CopyTab( SCTAB nSrcTab, SCTAB nDestTab )
         maTabData.insert(maTabData.begin() + nDestTab, NULL);
 
     UpdateCurrentTab();
-    aMarkData.InsertTab( nDestTab );
+    mpMarkData->InsertTab( nDestTab );
 }
 
 void ScViewData::MoveTab( SCTAB nSrcTab, SCTAB nDestTab )
@@ -547,8 +549,8 @@ void ScViewData::MoveTab( SCTAB nSrcTab, SCTAB nDestTab )
     }
 
     UpdateCurrentTab();
-    aMarkData.DeleteTab( nSrcTab );
-    aMarkData.InsertTab( nDestTab );            // ggf. angepasst
+    mpMarkData->DeleteTab( nSrcTab );
+    mpMarkData->InsertTab( nDestTab );            // ggf. angepasst
 }
 
 void ScViewData::CreateTabData( std::vector< SCTAB >& rvTabs )
@@ -592,7 +594,7 @@ void ScViewData::SetZoomType( SvxZoomType eNew, sal_Bool bAll )
     std::vector< SCTAB > vTabs; // Empty for all tabs
     if ( !bAll ) // get selected tabs
     {
-        ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
+        ScMarkData::iterator itr = mpMarkData->begin(), itrEnd = mpMarkData->end();
         vTabs.insert(vTabs.begin(), itr, itrEnd);
     }
     SetZoomType( eNew, vTabs );
@@ -677,7 +679,7 @@ void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, sal_Bool
     std::vector< SCTAB > vTabs;
     if ( !bAll ) // get selected tabs
     {
-        ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
+        ScMarkData::iterator itr = mpMarkData->begin(), itrEnd = mpMarkData->end();
         vTabs.insert(vTabs.begin(), itr, itrEnd);
     }
     SetZoom( rNewX, rNewY, vTabs );
@@ -747,7 +749,7 @@ ScMarkType ScViewData::GetSimpleArea( SCCOL& rStartCol, SCROW& rStartRow, SCTAB&
     //  handling itself)
 
     ScRange aRange;
-    ScMarkData aNewMark( aMarkData );       // use a local copy for MarkToSimple
+    ScMarkData aNewMark(*mpMarkData);       // use a local copy for MarkToSimple
     ScMarkType eMarkType = GetSimpleArea( aRange, aNewMark);
     aRange.GetVars( rStartCol, rStartRow, rStartTab, rEndCol, rEndRow, rEndTab);
     return eMarkType;
@@ -757,7 +759,7 @@ ScMarkType ScViewData::GetSimpleArea( ScRange& rRange ) const
 {
     //  parameter bMergeMark is no longer needed, see above
 
-    ScMarkData aNewMark( aMarkData );       // use a local copy for MarkToSimple
+    ScMarkData aNewMark(*mpMarkData);       // use a local copy for MarkToSimple
     return GetSimpleArea( rRange, aNewMark);
 }
 
@@ -765,7 +767,7 @@ void ScViewData::GetMultiArea( ScRangeListRef& rRange ) const
 {
     //  parameter bMergeMark is no longer needed, see GetSimpleArea
 
-    ScMarkData aNewMark( aMarkData );       // use a local copy for MarkToSimple
+    ScMarkData aNewMark(*mpMarkData);       // use a local copy for MarkToSimple
 
     sal_Bool bMulti = aNewMark.IsMultiMarked();
     if (bMulti)
@@ -1427,7 +1429,7 @@ void ScViewData::CreateTabData( SCTAB nNewTab )
 
 void ScViewData::CreateSelectedTabData()
 {
-    ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
+    ScMarkData::iterator itr = mpMarkData->begin(), itrEnd = mpMarkData->end();
     for (; itr != itrEnd; ++itr)
         CreateTabData(*itr);
 }
@@ -2074,6 +2076,16 @@ SfxDispatcher& ScViewData::GetDispatcher()
 {
     OSL_ENSURE( pViewShell, "GetDispatcher() without ViewShell" );
     return *pViewShell->GetViewFrame()->GetDispatcher();
+}
+
+ScMarkData& ScViewData::GetMarkData()
+{
+    return *mpMarkData;
+}
+
+const ScMarkData& ScViewData::GetMarkData() const
+{
+    return *mpMarkData;
 }
 
 Window* ScViewData::GetDialogParent()

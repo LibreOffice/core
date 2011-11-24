@@ -81,6 +81,7 @@
 #include "cell.hxx"
 #include "userlist.hxx"
 #include "queryentry.hxx"
+#include "markdata.hxx"
 
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>

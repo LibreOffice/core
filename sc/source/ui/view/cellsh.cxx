@@ -67,6 +67,7 @@
 #include "postit.hxx"
 #include "cliputil.hxx"
 #include "clipparam.hxx"
+#include "markdata.hxx"
 
 //------------------------------------------------------------------
 

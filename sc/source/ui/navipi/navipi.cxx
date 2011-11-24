@@ -59,6 +59,7 @@
 #include "navipi.hrc"
 #include "navipi.hxx"
 #include "navsett.hxx"
+#include "markdata.hxx"
 
 //  Timeout, um Notizen zu suchen
 #define SC_CONTENT_TIMEOUT  1000

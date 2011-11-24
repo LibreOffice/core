@@ -51,6 +51,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/wrkwin.hxx>
 #include "unonames.hxx"
+#include "markdata.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;

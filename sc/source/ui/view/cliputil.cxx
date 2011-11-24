@@ -36,6 +36,7 @@
 #include "clipparam.hxx"
 #include "rangelst.hxx"
 #include "viewutil.hxx"
+#include "markdata.hxx"
 
 #include "vcl/waitobj.hxx"
 

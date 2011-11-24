@@ -51,6 +51,7 @@
 #include "dbdocfun.hxx"
 #include "editable.hxx"
 #include "queryentry.hxx"
+#include "markdata.hxx"
 
 //==================================================================
 

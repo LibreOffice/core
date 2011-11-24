@@ -51,6 +51,7 @@
 #include "docsh.hxx"
 #include "drawview.hxx"
 #include "drwlayer.hxx"
+#include "markdata.hxx"
 
 using namespace com::sun::star;
 

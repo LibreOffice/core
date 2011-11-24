@@ -31,8 +31,8 @@
 #include <svx/zoomitem.hxx>
 #include "scdllapi.h"
 #include "viewopti.hxx"
-#include "markdata.hxx"
 
+#include <boost/scoped_ptr.hpp>
 
 // ---------------------------------------------------------------------------
 
@@ -111,6 +111,7 @@ class ScPatternAttr;
 class ScRangeListRef;
 class ScExtDocOptions;
 class ScViewData;
+class ScMarkData;
 
 //--------------------------------------------------------------------------
 
@@ -171,6 +172,7 @@ private:
     double              nPPTX, nPPTY;               // Scaling-Faktoren
 
     ::std::vector<ScViewDataTable*> maTabData;
+    boost::scoped_ptr<ScMarkData> mpMarkData;
     ScViewDataTable*    pThisTab;                   // Daten der angezeigten Tabelle
     ScDocShell*         pDocShell;
     ScDocument*         pDoc;
@@ -179,8 +181,6 @@ private:
     EditView*           pEditView[4];               // gehoert dem Fenster
     ScViewOptions*      pOptions;
     EditView*           pSpellingView;
-
-    ScMarkData          aMarkData;
 
     long                nEditMargin;
 
@@ -253,8 +253,8 @@ public:
     SfxBindings&    GetBindings();          // from ViewShell's ViewFrame
     SfxDispatcher&  GetDispatcher();        // from ViewShell's ViewFrame
 
-    ScMarkData&     GetMarkData()           { return aMarkData; }
-    const ScMarkData& GetMarkData() const   { return aMarkData; }
+    ScMarkData&     GetMarkData();
+    const ScMarkData& GetMarkData() const;
 
     Window*         GetDialogParent();          // von tabvwsh weitergeleitet
     Window*         GetActiveWin();             // von View

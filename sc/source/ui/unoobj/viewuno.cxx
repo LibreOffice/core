@@ -72,6 +72,7 @@
 #include "appoptio.hxx"
 #include "gridwin.hxx"
 #include "sheetevents.hxx"
+#include "markdata.hxx"
 #include "AccessibilityHints.hxx"
 #include <svx/sdrhittesthelper.hxx>
 

@@ -51,6 +51,7 @@
 #include "inputopt.hxx"     // GetExpandRefs
 #include "patattr.hxx"
 #include "hints.hxx"
+#include "markdata.hxx"
 
 #include "globstr.hrc"
 

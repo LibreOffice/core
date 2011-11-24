@@ -44,6 +44,7 @@
 #include "globstr.hrc"
 #include "globalnames.hxx"
 #include "global.hxx"
+#include "markdata.hxx"
 
 void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
                                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,

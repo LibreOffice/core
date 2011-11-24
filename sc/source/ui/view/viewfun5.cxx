@@ -78,6 +78,7 @@
 #include "asciiopt.hxx"
 #include "scabstdlg.hxx"
 #include "clipparam.hxx"
+#include "markdata.hxx"
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/dbaexchange.hxx>

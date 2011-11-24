@@ -89,6 +89,7 @@
 #include "compiler.hxx"         // fuer Formel-Preview
 #include "editable.hxx"
 #include "funcdesc.hxx"
+#include "markdata.hxx"
 
 #define _INPUTHDL_CXX
 #include "inputhdl.hxx"

@@ -66,6 +66,7 @@
 #include "dwfunctr.hxx"
 #include "scabstdlg.hxx"
 #include "compiler.hxx"
+#include "markdata.hxx"
 
 
 sal_Bool ScTabViewShell::GetFunction( String& rFuncStr, sal_uInt16 nErrCode )

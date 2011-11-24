@@ -35,6 +35,7 @@
 #include "document.hxx"
 #include "viewfunc.hxx"
 #include "globstr.hrc"
+#include "markdata.hxx"
 
 //------------------------------------------------------------------
 

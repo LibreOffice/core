@@ -60,6 +60,7 @@
 #include "undostyl.hxx"
 #include "drwlayer.hxx"
 #include "scmod.hxx"
+#include "markdata.hxx"
 #include "globstr.hrc"
 #include "sc.hrc"           // fuer ShellInvalidate
 #include "AccessibleDocumentPagePreview.hxx"

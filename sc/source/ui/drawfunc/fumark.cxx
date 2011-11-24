@@ -40,6 +40,7 @@
 #include "document.hxx"
 #include "scresid.hxx"
 #include "drawview.hxx"
+#include "markdata.hxx"
 
 //------------------------------------------------------------------
 

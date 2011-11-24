@@ -53,6 +53,7 @@
 #include "reftokenhelper.hxx"
 #include "externalrefmgr.hxx"
 #include "cell.hxx"
+#include "markdata.hxx"
 
 #include <vector>
 

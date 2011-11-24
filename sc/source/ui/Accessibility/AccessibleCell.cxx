@@ -44,6 +44,7 @@
 #include "editsrc.hxx"
 #include "dociter.hxx"
 #include "cell.hxx"
+#include "markdata.hxx"
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
