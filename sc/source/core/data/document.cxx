@@ -408,6 +408,16 @@ void ScDocument::AppendTabOnLoad(const rtl::OUString& rName)
     maTabs.push_back( new ScTable(this, nTabCount, aName) );
 }
 
+void ScDocument::SetTabNameOnLoad(SCTAB nTab, const rtl::OUString& rName)
+{
+    if (!ValidTab(nTab) || static_cast<SCTAB>(maTabs.size()) <= nTab)
+        return;
+
+    if (!ValidTabName(rName))
+        return;
+
+    maTabs[nTab]->SetName(rName);
+}
 
 bool ScDocument::InsertTab( SCTAB nPos, const rtl::OUString& rName,
             bool bExternalDocument )

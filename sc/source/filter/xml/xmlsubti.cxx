@@ -186,10 +186,12 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
         maProtectionData = rProtectData;
         ScDocument *pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
 
+        // The document contains one sheet when created. So for the first
+        // sheet, we only need to set its name.
         if (nCurrentSheet > 0)
-        {
             pDoc->AppendTabOnLoad(sTableName);
-        }
+        else
+            pDoc->SetTabNameOnLoad(nCurrentSheet, sTableName);
 
         rImport.SetTableStyle(sStyleName);
         SetTableStyle(sStyleName);
