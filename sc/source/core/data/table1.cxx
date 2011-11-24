@@ -1792,6 +1792,7 @@ void ScTable::RestorePrintRanges( const ScPrintSaverTab& rSaveTab )
     SetRepeatColRange( rSaveTab.GetRepeatCol() );
     SetRepeatRowRange( rSaveTab.GetRepeatRow() );
 
+    InvalidatePageBreaks();     // #i117952# forget page breaks for an old print range
     UpdatePageBreaks(NULL);
 }
 
