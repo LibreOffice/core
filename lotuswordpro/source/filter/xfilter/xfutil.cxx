@@ -131,7 +131,7 @@ rtl::OUString   DateTimeToOUString(XFDateTime& dt)
 
 rtl::OUString   GetTableColName(sal_Int32 col)
 {
-    int     remain;
+    int     remain = 0;
     char    ch;
     std::string strOut;
 
