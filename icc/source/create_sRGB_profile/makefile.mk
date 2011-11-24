@@ -47,8 +47,8 @@ EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
 CFLAGS+=$(SAMPLEICC_CFLAGS)
 .ELSE
 CFLAGS+= \
-    -I$(PRJ)$(INPATH_FOR_BUILD)$/misc$/build$/SampleICC-1.3.2$/IccProfLib \
-    -I$(PRJ)$(INPATH_FOR_BUILD)$/misc$/build$/SampleICC-1.3.2$/Contrib$/ICC_utils
+    -I$(PRJ)$(INPATH)$/misc$/build$/SampleICC-1.3.2$/IccProfLib \
+    -I$(PRJ)$(INPATH)$/misc$/build$/SampleICC-1.3.2$/Contrib$/ICC_utils
 .ENDIF
 
 # --- Files --------------------------------------------------------
@@ -82,4 +82,8 @@ APP1OBJS= $(OBJFILES)
 ALLTAR: $(TARGET)$(EXECPOST)
 
 $(TARGET)$(EXECPOST): $(BIN)$/$(TARGET)$(EXECPOST)
+.IF "$(CROSS_COMPILING)" != "YES"
     cd $(BIN)$/ && $(BIN)$/$(TARGET)$(EXECPOST)
+.ELSE
+    cd $(BIN)$/ && $(SRC_ROOT)$/icc$/$(INPATH_FOR_BUILD)$/bin$/$(TARGET)
+.ENDIF
