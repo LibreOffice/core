@@ -105,7 +105,16 @@ JNIEnv * VirtualMachine::attachThread(bool * pAttached) const
     }
     if (pEnv == 0)
     {
-        if (m_pVm->AttachCurrentThread(reinterpret_cast< void ** >(&pEnv), 0)
+        if (m_pVm->AttachCurrentThread
+            (
+#ifndef ANDROID
+             reinterpret_cast< void ** >(&pEnv),
+#else
+             // The Android <jni.h> has AttachCurrentThread() taking a
+             // JNIEnv** and not void **
+             &pEnv,
+#endif
+             0)
             != JNI_OK)
             return 0;
         *pAttached = true;
