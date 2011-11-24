@@ -53,12 +53,12 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <docsh.hxx>
-#include <rootfrm.hxx>  //Damit der RootDtor gerufen wird.
+#include <rootfrm.hxx>          // So that the RootDtor is called.
 #include <poolfmt.hxx>
-#include <viewsh.hxx>           // fuer MakeDrawView
+#include <viewsh.hxx>           // for MakeDrawView
 #include <drawdoc.hxx>
 #include <UndoDraw.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>           // for the UndoIds
 #include <dcontact.hxx>
 #include <dview.hxx>
 #include <mvsave.hxx>
@@ -219,7 +219,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
     SwDrawContact* pNewContact = 0;
     if( bNoGroup )
     {
-        //Ankerattribut aufheben.
+        // Revoke anchor attribute.
         SwDrawContact *pMyContact = (SwDrawContact*)GetUserCall(pObj);
         const SwFmtAnchor aAnch( pMyContact->GetFmt()->GetAnchor() );
 
@@ -234,7 +234,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
                 static_cast<SwAnchoredDrawObject*>(pMyContact->GetAnchoredObj( pObj ));
             bGroupMembersNotPositioned = pAnchoredDrawObj->NotYetPositioned();
         }
-        //ContactObjekte und Formate vernichten.
+        // Destroy ContactObjects and formats.
         for( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
@@ -249,7 +249,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
 #endif
 
             pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
-            //loescht sich selbst!
+            // Deletes itself!
             pContact->Changed(*pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
             pObj->SetUserCall( 0 );
 
@@ -458,13 +458,13 @@ sal_Bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
                         ? 0
                             : new SwUndoDrawDelete( (sal_uInt16)rMrkList.GetMarkCount() );
 
-                //ContactObjekte vernichten, Formate sicherstellen.
+                // Destroy ContactObjects, save formats.
                 for( i = 0; i < rMrkList.GetMarkCount(); ++i )
                 {
                     const SdrMark& rMark = *rMrkList.GetMark( i );
                     pObj = rMark.GetMarkedSdrObj();
                     SwDrawContact *pContact = (SwDrawContact*)pObj->GetUserCall();
-                    if( pContact ) // natuerlich nicht bei gruppierten Objekten
+                    if( pContact ) // of course not for grouped objects
                     {
                         SwDrawFrmFmt *pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
                         // before delete of selection is performed, marked
@@ -475,7 +475,7 @@ sal_Bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
                         {
                             OSL_FAIL( "<SwDrawVirtObj> is still marked for delete. application will crash!" );
                         }
-                        //loescht sich selbst!
+                        // Deletes itself!
                         pContact->Changed(*pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
                         pObj->SetUserCall( 0 );
 
@@ -518,14 +518,14 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
     {
         if( pFmt->getIDocumentLayoutAccess()->GetCurrentViewShell() )   //swmod 071107//swmod 071225
         {
-            // Schauen, ob es ein SdrObject dafuer gibt
+            // See if there is an SdrObject for it
             SwFlyFrm* pFly = SwIterator<SwFlyFrm,SwFmt>::FirstElement( *pFrmFmt );
             if( pFly )
                 nOrdNum = pFly->GetVirtDrawObj()->GetOrdNum();
         }
         else
         {
-            // Schauen, ob es ein SdrObject dafuer gibt
+            // See if there is an SdrObject for it
             SwFlyDrawContact* pContact = SwIterator<SwFlyDrawContact,SwFmt>::FirstElement( *pFrmFmt );
             if( pContact )
                 nOrdNum = pContact->GetMaster()->GetOrdNum();
@@ -533,7 +533,7 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
     }
     else if( RES_DRAWFRMFMT == pFmt->Which() )
     {
-        // Schauen, ob es ein SdrObject dafuer gibt
+            // See if there is an SdrObject for it
             SwDrawContact* pContact = SwIterator<SwDrawContact,SwFmt>::FirstElement( *pFrmFmt );
             if( pContact )
                 nOrdNum = pContact->GetMaster()->GetOrdNum();
@@ -544,9 +544,9 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
 }
 
 /*************************************************************************/
-// Wird auch vom Sw3-Reader gerufen, wenn ein Fehler beim Einlesen
-// des Drawing Layers auftrat. In diesem Fall wird der Layer komplett
-// neu aufgebaut.
+// Is also called by the Sw3 Reader, if there was an error when reading the
+// drawing layer. If it is called by the Sw3 Reader the layer is rebuilt
+// from scratch.
 
 #include <svx/sxenditm.hxx>
 
@@ -554,14 +554,14 @@ void SwDoc::InitDrawModel()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::InitDrawModel" );
 
-    //!!Achtung im sw3-Reader (sw3imp.cxx) gibt es aehnlichen Code, der
-    //mitgepfelgt werden muss.
+    // !! Attention: there is similar code in the Sw3 Reader (sw3imp.cxx) that
+    // also has to be maintained!!
     if ( pDrawModel )
         ReleaseDrawModel();
 
-    //DrawPool und EditEnginePool anlegen, diese gehoeren uns und werden
-    //dem Drawing nur mitgegeben. Im ReleaseDrawModel werden die Pools wieder
-    //zerstoert.
+    // Setup DrawPool and EditEnginePool. Ownership is ours and only gets passed
+    // to the Drawing.
+    // The pools are destroyed in the ReleaseDrawModel.
     // for loading the drawing items. This must be loaded without RefCounts!
     SfxItemPool *pSdrPool = new SdrItemPool( &GetAttrPool() );
     // change DefaultItems for the SdrEdgeObj distance items to TWIPS.
@@ -589,8 +589,7 @@ void SwDoc::InitDrawModel()
      GetAttrPool().SetPoolDefaultItem(SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT ));
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create DrawDocument" );
-    //Das SdrModel gehoert dem Dokument, wir haben immer zwei Layer und eine
-    //Seite.
+    // The document owns the SdrModel. We always have two layers and one page.
     pDrawModel = new SwDrawDocument( this );
 
     pDrawModel->EnableUndo( GetIDocumentUndoRedo().DoesUndo() );
@@ -632,9 +631,8 @@ void SwDoc::InitDrawModel()
     SetCalcFieldValueHdl(&rOutliner);
     SetCalcFieldValueHdl(&pDrawModel->GetHitTestOutliner());
 
-    //JP 16.07.98: Bug 50193 - Linkmanager am Model setzen, damit
-    //          dort ggfs. verlinkte Grafiken eingefuegt werden koennen
-    //JP 28.01.99: der WinWord Import benoetigt ihn auch
+    // Set the LinkManager in the model so that linked graphics can be inserted.
+    // The WinWord import needs it too.
     pDrawModel->SetLinkManager( &GetLinkManager() );
     pDrawModel->SetAddExtLeading( get(IDocumentSettingAccess::ADD_EXT_LEADING) );
 
@@ -788,18 +786,18 @@ void SwDoc::ReleaseDrawModel()
 {
     if ( pDrawModel )
     {
-        //!!Den code im sw3io fuer Einfuegen Dokument mitpflegen!!
+        // !! Also maintain the code in the sw3io for inserting documents!!
 
         delete pDrawModel; pDrawModel = 0;
         SfxItemPool *pSdrPool = GetAttrPool().GetSecondaryPool();
 
-        OSL_ENSURE( pSdrPool, "missing Pool" );
+        OSL_ENSURE( pSdrPool, "missing pool" );
         SfxItemPool *pEEgPool = pSdrPool->GetSecondaryPool();
-        OSL_ENSURE( !pEEgPool->GetSecondaryPool(), "i don't accept additional pools");
-        pSdrPool->Delete();                 //Erst die Items vernichten lassen,
-                                            //dann erst die Verkettung loesen
-        GetAttrPool().SetSecondaryPool( 0 );    //Der ist ein muss!
-        pSdrPool->SetSecondaryPool( 0 );    //Der ist sicherer
+        OSL_ENSURE( !pEEgPool->GetSecondaryPool(), "I don't accept additional pools");
+        pSdrPool->Delete();                 // First have the items destroyed,
+                                            // then destroy the chain!
+        GetAttrPool().SetSecondaryPool( 0 );    // This one's a must!
+        pSdrPool->SetSecondaryPool( 0 );    // That one's safer
         SfxItemPool::Free(pSdrPool);
         SfxItemPool::Free(pEEgPool);
     }
@@ -821,7 +819,7 @@ SdrModel* SwDoc::_MakeDrawModel()
             pTmp = (ViewShell*) pTmp->GetNext();
         } while ( pTmp != pCurrentView );
 
-        //Broadcast, damit die FormShell mit der DrawView verbunden werden kann
+        // Broadcast, so that the FormShell can be connected to the DrawView
         if( GetDocShell() )
         {
             SfxSimpleHint aHnt( SW_BROADCAST_DRAWVIEWS_CREATED );
@@ -840,7 +838,7 @@ void SwDoc::DrawNotifyUndoHdl()
 
 /*************************************************************************
 *
-* Am Outliner Link auf Methode fuer Felddarstellung in Editobjekten setzen
+* In the Outliner, set a link to the method for field display in edit objects.
 *
 *************************************************************************/
 
@@ -851,7 +849,7 @@ void SwDoc::SetCalcFieldValueHdl(Outliner* pOutliner)
 
 /*************************************************************************
 |*
-|* Felder bzw URLs im Outliner erkennen und Darstellung festlegen
+|* Recognise fields/URLs in the Outliner and set how they are displayed.
 |*
 \************************************************************************/
 
@@ -865,7 +863,7 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
         if (pField && pField->ISA(SvxDateField))
         {
             /******************************************************************
-            * Date-Field
+            * Date field
             ******************************************************************/
             pInfo->SetRepresentation(
                 ((const SvxDateField*) pField)->GetFormatted(
@@ -874,12 +872,12 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
         else if (pField && pField->ISA(SvxURLField))
         {
             /******************************************************************
-            * URL-Field
+            * URL field
             ******************************************************************/
 
             switch ( ((const SvxURLField*) pField)->GetFormat() )
             {
-                case SVXURLFORMAT_APPDEFAULT: //!!! einstellbar an App???
+                case SVXURLFORMAT_APPDEFAULT: //!!! Can be set in App???
                 case SVXURLFORMAT_REPR:
                 {
                     pInfo->SetRepresentation(
@@ -913,14 +911,14 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
         else if (pField && pField->ISA(SdrMeasureField))
         {
             /******************************************************************
-            * Measure-Field
+            * Measure field
             ******************************************************************/
             pInfo->ClearFldColor();
         }
         else if ( pField && pField->ISA(SvxExtTimeField))
         {
             /******************************************************************
-            * Time-Field
+            * Time field
             ******************************************************************/
             pInfo->SetRepresentation(
                 ((const SvxExtTimeField*) pField)->GetFormatted(
@@ -928,7 +926,7 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
         }
         else
         {
-            OSL_FAIL("unbekannter Feldbefehl");
+            OSL_FAIL("unknown field command");
             pInfo->SetRepresentation( String( '?' ) );
         }
     }

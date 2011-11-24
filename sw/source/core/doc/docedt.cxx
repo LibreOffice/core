@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <string.h>         // fuer strchr()
+#include <string.h>         // for strchr()
 #include <hintids.hxx>
 
 #include <vcl/sound.hxx>
@@ -44,26 +44,26 @@
 #include <fmtcntnt.hxx>
 #include <fmtpdsc.hxx>
 #include <txtftn.hxx>
-#include <acorrect.hxx>     // Autokorrektur
-#include <IMark.hxx>        // fuer SwBookmark
-#include <cntfrm.hxx>           // fuers Spell
+#include <acorrect.hxx>     // AutoCorrect
+#include <IMark.hxx>        // for SwBookmark
+#include <cntfrm.hxx>       // for Spell
 #include <crsrsh.hxx>
 #include <doc.hxx>
 #include <UndoManager.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
-#include <doctxm.hxx>       // beim Move: Verzeichnisse korrigieren
+#include <doctxm.hxx>       // when moving: correct directories
 #include <ftnidx.hxx>
 #include <ftninfo.hxx>
-#include <mdiexp.hxx>       // Statusanzeige
-#include <mvsave.hxx>       // Strukturen zum Sichern beim Move/Delete
+#include <mdiexp.hxx>       // status bar
+#include <mvsave.hxx>       // structures to save when moving/deleting
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <redline.hxx>
-#include <rootfrm.hxx>          // fuers UpdateFtn
-#include <splargs.hxx>      // fuer Spell
+#include <rootfrm.hxx>      // for UpdateFtn
+#include <splargs.hxx>      // for Spell
 #include <swtable.hxx>
-#include <swundo.hxx>       // fuer die UndoIds
+#include <swundo.hxx>       // for the UndoIds
 #include <txtfrm.hxx>
 #include <hints.hxx>
 #include <UndoSplitMove.hxx>
@@ -179,9 +179,9 @@ void lcl_SkipAttr( const SwTxtNode *pNode, SwIndex &rIdx, xub_StrLen &rStart )
 {
     if( !lcl_MayOverwrite( pNode, rStart ) )
     {
-        // ueberspringe alle SonderAttribute
+        // skip all special attributes
         do {
-            // "Beep" bei jedem ausgelassenen
+            // "Beep" for every single one we skip
             Sound::Beep(SOUND_ERROR);
             rIdx++;
         } while( (rStart = rIdx.GetIndex()) < pNode->GetTxt().Len()
@@ -195,7 +195,7 @@ void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
     SwPosition aPos( rSttIdx );
     for( sal_uInt16 n = 0; n < rArr.Count(); ++n )
     {
-        // neuen Anker anlegen
+        // create new anchor
         _SaveFly& rSave = rArr[n];
         SwFrmFmt* pFmt = rSave.pFrmFmt;
 
@@ -272,18 +272,18 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
         if (pAPos &&
             ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
              (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
-            // nicht verschieben, wenn die InsPos im CntntBereich vom Fly ist
+            // do not move, if the InsPos is in the CntntArea of the Fly
             ( 0 == ( pCntntIdx = pFmt->GetCntnt().GetCntntIdx() ) ||
               !( *pCntntIdx < rInsPos &&
                 rInsPos < pCntntIdx->GetNode().EndOfSectionIndex() )) )
         {
             if( !bMoveAllFlys && rEndNdIdx == pAPos->nNode )
             {
-                // wenn nur teil vom EndNode oder der EndNode und SttNode
-                // identisch sind, chaos::Anchor nicht anfassen
+                // Do not touch chaos::Anchor, if only a part of the EndNode
+                // or the whole EndNode is identical with the SttNode
                 if( rSttNdIdx != pAPos->nNode )
                 {
-                    // Anker nur an Anfang/Ende haengen
+                    // Only attach an anchor to the beginning or end
                     SwPosition aPos( rSttNdIdx );
                     SwFmtAnchor aAnchor( *pAnchor );
                     aAnchor.SetAnchor( &aPos );
@@ -305,8 +305,8 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
     }
 }
 
-// loesche und verschiebe alle "Fly's am Absatz", die in der SSelection
-// liegen. Steht am SPoint ein Fly, wird dieser auf den Mark verschoben.
+// Delete and move all Flys at the paragraph, that are within the selection.
+// If there is a Fly at the SPoint, it is moved onto the Mark.
 void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                     const SwNodeIndex& rPtNdIdx )
 {
@@ -326,7 +326,7 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                 ? rMkNdIdx < pAPos->nNode && pAPos->nNode <= rPtNdIdx
                 : rPtNdIdx <= pAPos->nNode && pAPos->nNode < rMkNdIdx ))
         {
-            // nur den Anker verschieben ??
+            // Only move the Anchor??
             if( rPtNdIdx == pAPos->nNode )
             {
                 SwFmtAnchor aAnch( pFmt->GetAnchor() );
@@ -336,15 +336,14 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
             }
             else
             {
-                // wird der Fly geloescht muss auch im seinem Inhalt alle
-                // Flys geloescht werden !!
+                // If the Fly is deleted, all Flys in it's content have to be deleted too.
                 const SwFmtCntnt &rCntnt = pFmt->GetCntnt();
                 if( rCntnt.GetCntntIdx() )
                 {
                     DelFlyInRange( *rCntnt.GetCntntIdx(),
                                     SwNodeIndex( *rCntnt.GetCntntIdx()->
                                             GetNode().EndOfSectionNode() ));
-                    // Position kann sich verschoben haben !
+                    // Position could have been moved!
                     if( i > rTbl.Count() )
                         i = rTbl.Count();
                     else if( pFmt != rTbl[i] )
@@ -380,7 +379,7 @@ bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
         SwTxtFtn* pSrch;
         const SwNode* pFtnNd;
 
-        // loesche/sicher erstmal alle, die dahinter stehen
+        // Delete/save all that come after it
         while( nPos < rFtnArr.Count() && ( pFtnNd =
             &( pSrch = rFtnArr[ nPos ] )->GetTxtNode())->GetIndex()
                     <= rEndNd.GetIndex() )
@@ -393,11 +392,11 @@ bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                     nFtnSttIdx >= pEndCnt->GetIndex() ))
                 : ( &rEndNd.GetNode() == pFtnNd ))
             {
-                ++nPos;     // weiter suchen
+                ++nPos;     // continue searching
             }
             else
             {
-                // dann weg damit
+                // delete it
                 if( bDelFtn )
                 {
                     SwTxtNode& rTxtNd = (SwTxtNode&)pSrch->GetTxtNode();
@@ -427,7 +426,7 @@ bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
             {
                 if( bDelFtn )
                 {
-                    // dann weg damit
+                    // delete it
                     SwTxtNode& rTxtNd = (SwTxtNode&)pSrch->GetTxtNode();
                     SwIndex aIdx( &rTxtNd, nFtnSttIdx );
                     rTxtNd.EraseText( aIdx, 1 );
@@ -585,8 +584,8 @@ void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
         {
             if( pREnd->nNode > rRg.aStart && pREnd->nNode < rRg.aEnd )
             {
-                // Kopie erzeugen und Ende vom Original ans Ende des
-                // MoveBereiches setzen. Die Kopie wird mit verschoben
+                // Create a copy and set the end of the original to the end of the MoveArea.
+                // The copy is moved too.
                 SwRedline* pNewRedl = new SwRedline( *pTmp );
                 SwPosition* pTmpPos = pNewRedl->Start();
                 pTmpPos->nNode = rRg.aStart;
@@ -615,13 +614,13 @@ void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
             if( pREnd->nNode < rRg.aEnd ||
                 ( pREnd->nNode == rRg.aEnd && !pREnd->nContent.GetIndex()) )
             {
-                // gesamt verschieben
+                // move everything
                 _SaveRedline* pSave = new _SaveRedline( pTmp, rRg.aStart );
                 rArr.C40_INSERT( _SaveRedline, pSave, rArr.Count() );
             }
             else
             {
-                // aufsplitten
+                // split
                 SwRedline* pNewRedl = new SwRedline( *pTmp );
                 SwPosition* pTmpPos = pNewRedl->End();
                 pTmpPos->nNode = rRg.aEnd;
@@ -709,22 +708,22 @@ void _SaveRedlEndPosForRestore::_Restore()
     }
 }
 
-// Loeschen einer vollstaendigen Section des NodesArray.
-// Der uebergebene Node steht irgendwo in der gewuenschten Section
+// Delete a full Section of the NodeArray.
+// The passed Node is located somewhere in the designated Section.
 void SwDoc::DeleteSection( SwNode *pNode )
 {
-    OSL_ENSURE( pNode, "Kein Node uebergeben." );
+    OSL_ENSURE( pNode, "Didn't pass a Node." );
     SwStartNode* pSttNd = pNode->IsStartNode() ? (SwStartNode*)pNode
                                                : pNode->StartOfSectionNode();
     SwNodeIndex aSttIdx( *pSttNd ), aEndIdx( *pNode->EndOfSectionNode() );
 
-    // dann loesche mal alle Fly's, text::Bookmarks, ...
+    // delete all Flys, text::Bookmarks, ...
     DelFlyInRange( aSttIdx, aEndIdx );
     DeleteRedline( *pSttNd, true, USHRT_MAX );
     _DelBookmarks(aSttIdx, aEndIdx);
 
     {
-        // alle Crsr/StkCrsr/UnoCrsr aus dem Loeschbereich verschieben
+        // move all Crsr/StkCrsr/UnoCrsr out of the to-be-deleted area
         SwNodeIndex aMvStt( aSttIdx, 1 );
         CorrAbs( aMvStt, aEndIdx, SwPosition( aSttIdx ), sal_True );
     }
@@ -739,12 +738,12 @@ void SwDoc::SetModified(SwPaM &rPaM)
 }
 
 /*************************************************************************
- *                SwDoc::Overwrite()
+ * SwDoc::Overwrite()
  ************************************************************************/
 bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
 {
     SwPosition& rPt = *(SwPosition*)rRg.GetPoint();
-    if( pACEWord )                  // Aufnahme in die Autokorrektur
+    if( pACEWord )                  // Add to AutoCorrect
     {
         if( 1 == rStr.Len() )
             pACEWord->CheckChar( rPt, rStr.GetChar( 0 ) );
@@ -774,7 +773,7 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
 
     for( xub_StrLen nCnt = 0; nCnt < rStr.Len(); ++nCnt )
     {
-        // hinter das Zeichen (zum aufspannen der Attribute !!)
+        // start behind the characters (to fix the attributes!)
         nStart = rIdx.GetIndex();
         if ( nStart < pNode->GetTxt().Len() )
         {
@@ -803,7 +802,7 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
         }
         else
         {
-            // hinter das Zeichen (zum Aufspannen der Attribute !!)
+            // start behind the characters (to fix the attributes!)
             if( nStart < pNode->GetTxt().Len() )
                 rIdx++;
             pNode->InsertText( c, rIdx, INS_EMPTYEXPAND );
@@ -848,7 +847,7 @@ bool SwDoc::MoveAndJoin( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
     SwNodeIndex aIdx( rPaM.Start()->nNode );
     sal_Bool bJoinTxt = aIdx.GetNode().IsTxtNode();
     sal_Bool bOneNode = rPaM.GetPoint()->nNode == rPaM.GetMark()->nNode;
-    aIdx--;             // vor den Move Bereich !!
+    aIdx--;             // in front of the move area!
 
     bool bRet = MoveRange( rPaM, rPos, eMvFlags );
     if( bRet && !bOneNode )
@@ -859,7 +858,7 @@ bool SwDoc::MoveAndJoin( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         SwNodeIndex aNxtIdx( aIdx );
         if( pTxtNd && pTxtNd->CanJoinNext( &aNxtIdx ) )
         {
-            {   // Block wegen SwIndex in den Node !!
+            {   // Add Block to the Node, because of SwIndex
                 CorrRel( aNxtIdx, SwPosition( aIdx, SwIndex( pTxtNd,
                             pTxtNd->GetTxt().Len() ) ), 0, sal_True );
             }
@@ -869,17 +868,17 @@ bool SwDoc::MoveAndJoin( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
     return bRet;
 }
 
-// mst: it seems that this is mostly used by SwDoc internals; the only
+// It seems that this is mostly used by SwDoc internals; the only
 // way to call this from the outside seems to be the special case in
-// SwDoc::CopyRange (but i have not managed to actually hit that case)
+// SwDoc::CopyRange (but I have not managed to actually hit that case).
 bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
 {
-    // keine Moves-Abfangen
+    // do not intercept moves
     const SwPosition *pStt = rPaM.Start(), *pEnd = rPaM.End();
     if( !rPaM.HasMark() || *pStt >= *pEnd || (*pStt <= rPos && rPos < *pEnd))
         return false;
 
-    // sicher die absatzgebundenen Flys, damit sie verschoben werden koennen.
+    // Save the paragraph-bound Flys, so that they can be moved.
     _SaveFlyArr aSaveFlyArr;
     _SaveFlyInRange( rPaM, rPos.nNode, aSaveFlyArr, 0 != ( DOC_MOVEALLFLYS & eMvFlags ) );
 
@@ -906,7 +905,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
     int bUpdateFtn = sal_False;
     SwFtnIdxs aTmpFntIdx;
 
-    // falls Undo eingeschaltet, erzeuge das UndoMove-Objekt
+    // if Undo is switched on, create the UndoMove object
     SwUndoMove * pUndoMove = 0;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -924,21 +923,17 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
     sal_Bool bSplit = sal_False;
     SwPaM aSavePam( rPos, rPos );
 
-    // stelle den SPoint an den Anfang vom Bereich (Definition)
+    // Move the SPoint to the beginning of the area (according to it's definition)
     if( rPaM.GetPoint() == pEnd )
         rPaM.Exchange();
 
-    // in der EditShell wird nach dem Move ein JoinNext erzeugt, wenn
-    // vor und nach dem Move ein Text-Node steht.
+    // If there is a TextNode before and after the Move, create a JoinNext in the EditShell.
     SwTxtNode* pSrcNd = rPaM.GetPoint()->nNode.GetNode().GetTxtNode();
     sal_Bool bCorrSavePam = pSrcNd && pStt->nNode != pEnd->nNode;
 
-    // werden ein oder mehr TextNodes bewegt, so wird
-    // im SwNodes::Move ein SplitNode erzeugt. Dieser Updated aber nicht
-    // den Cursor. Um das zu verhindern, wird hier ein TextNode angelegt,
-    // um die Updaterei der Indizies zu erhalten. Nach dem Move wird
-    // evt. der Node geloescht.
-
+    // If one ore more TextNodes are moved, create a SplitNode in the SwNodes::Move.
+    // However, this does not update the cursor. So we create a TextNode to keep
+    // updating the indices. After the Move the Node is optionally deleted.
     SwTxtNode * pTNd = rPos.nNode.GetNode().GetTxtNode();
     if( pTNd && rPaM.GetPoint()->nNode != rPaM.GetMark()->nNode &&
         ( rPos.nContent.GetIndex() || ( pTNd->Len() && bCorrSavePam  )) )
@@ -955,7 +950,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         if( !aBkmkArr.empty() )
             _RestoreCntntIdx( this, aBkmkArr, rPos.nNode.GetIndex()-1, 0, sal_True );
 
-        // jetzt noch den Pam berichtigen !!
+        // correct the PaM!
         if( rPos.nNode == rPaM.GetMark()->nNode )
         {
             rPaM.GetMark()->nNode = rPos.nNode.GetIndex()-1;
@@ -963,18 +958,18 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         }
     }
 
-    // setze den Pam um einen "Inhalt" zurueck; dadurch steht er immer
-    // ausserhalb des manipulierten Bereiches. Falls kein Inhalt mehr vor-
-    // handen, dann auf den StartNode (es ist immer einer vorhanden !!!)
+    // Put back the Pam by one "content"; so that it's always outside of
+    // the manipulated area.
+    // If there's no content anymore, set it to the StartNode (that's
+    // always there).
     sal_Bool bNullCntnt = !aSavePam.Move( fnMoveBackward, fnGoCntnt );
     if( bNullCntnt )
     {
         aSavePam.GetPoint()->nNode--;
     }
 
-    // kopiere alle Bookmarks, die im Move Bereich stehen in ein
-    // Array, das alle Angaben auf die Position als Offset speichert.
-    // Die neue Zuordung erfolgt nach dem Moven.
+    // Copy all Bookmarks that are within the Move area into an array,
+    // that saves the positon as an offset.
     ::std::vector< ::sw::mark::SaveBookmark> aSaveBkmks;
     _DelBookmarks(
         pStt->nNode,
@@ -983,8 +978,8 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         &pStt->nContent,
         &pEnd->nContent);
 
-    // falls durch die vorherigen Loeschungen (z.B. der Fussnoten) kein
-    // Bereich mehr existiert, ist das immernoch ein gueltiger Move!
+    // If there is no area anymore due to the above deletions (e.g. the footnotes
+    //  got deleted), it's still a valid Move!
     if( *rPaM.GetPoint() != *rPaM.GetMark() )
     {
         // now do the actual move
@@ -1002,39 +997,39 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
 
     OSL_ENSURE( *aSavePam.GetMark() == rPos ||
             ( aSavePam.GetMark()->nNode.GetNode().GetCntntNode() == NULL ),
-            "PaM wurde nicht verschoben, am Anfang/Ende keine ContentNodes?" );
+            "PaM was not moved. Aren't there ContentNodes at the beginning/end?" );
     *aSavePam.GetMark() = rPos;
 
-    rPaM.SetMark();         // um den neuen Bereich eine Sel. aufspannen
+    rPaM.SetMark();         // create a Sel. around the new area
     pTNd = aSavePam.GetNode()->GetTxtNode();
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        // korrigiere erstmal den Content vom SavePam
+        // correct the SavePam's Content first
         if( bNullCntnt )
         {
             aSavePam.GetPoint()->nContent = 0;
         }
 
-        // die Methode SwEditShell::Move() fuegt nach dem Move den Text-Node
-        // zusammen, in dem der rPaM steht. Wurde der Inhalt nach hinten
-        // geschoben und liegt der SPoint vom SavePam im naechsten Node, so
-        // muss beim Speichern vom Undo-Object das beachtet werden !!
+        // The method SwEditShell::Move() merges the TextNode after the Move,
+        // where the rPaM is located.
+        // If the Content was moved to the back and the SavePam's SPoint is
+        // in the next Node, we have to deal with this when saving the Undo object!
         SwTxtNode * pPamTxtNd = 0;
 
-        // wird ans SwUndoMove weitergegeben, das dann beim Undo JoinNext
-        // aufruft. (falls es hier nicht moeglich ist).
+        // Is passed to SwUndoMove, which happens when subsequently calling Undo JoinNext.
+        // If it's not possible to call Undo JoinNext here.
         sal_Bool bJoin = bSplit && pTNd;
         bCorrSavePam = bCorrSavePam &&
                         0 != ( pPamTxtNd = rPaM.GetNode()->GetTxtNode() )
                         && pPamTxtNd->CanJoinNext()
                         && (*rPaM.GetPoint() <= *aSavePam.GetPoint());
 
-        // muessen am SavePam 2 Nodes zusammengefasst werden ??
+        // Do two Nodes have to be joined at the SavePam?
         if( bJoin && pTNd->CanJoinNext() )
         {
             pTNd->JoinNext();
-            // kein temp. sdbcx::Index bei &&
-            // es sollten wohl nur die Indexwerte verglichen werden.
+            // No temporary sdbcx::Index when using &&.
+            // We probably only want to compare the indices.
             if( bCorrSavePam && rPaM.GetPoint()->nNode.GetIndex()+1 ==
                                 aSavePam.GetPoint()->nNode.GetIndex() )
             {
@@ -1047,7 +1042,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
             aSavePam.GetPoint()->nNode++;
         }
 
-        // zwischen SPoint und GetMark steht jetzt der neu eingefuegte Bereich
+        // The newly inserted area is now inbetween SPoint and GetMark.
         pUndoMove->SetDestRange( aSavePam, *rPaM.GetPoint(),
                                     bJoin, bCorrSavePam );
         GetIDocumentUndoRedo().AppendUndo( pUndoMove );
@@ -1055,7 +1050,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
     else
     {
         bool bRemove = true;
-        // muessen am SavePam 2 Nodes zusammengefasst werden ??
+        // Do two Nodes have to be joined at the SavePam?
         if( bSplit && pTNd )
         {
             if( pTNd->CanJoinNext())
@@ -1077,7 +1072,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         }
     }
 
-    // setze jetzt wieder die text::Bookmarks in das Dokument
+    // Insert the text::Bookmarks back into the Document.
     *rPaM.GetMark() = *aSavePam.Start();
     for(
         ::std::vector< ::sw::mark::SaveBookmark>::iterator pBkmk = aSaveBkmks.begin();
@@ -1089,7 +1084,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
             &rPaM.GetMark()->nContent);
     *rPaM.GetPoint() = *aSavePam.End();
 
-    // verschiebe die Flys an die neue Position
+    // Move the Flys to the new position.
     _RestFlyInRange( aSaveFlyArr, rPaM.Start()->nNode, &(rPos.nNode) );
 
     // restore redlines (if DOC_MOVEREDLINES is used)
@@ -1116,17 +1111,14 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
 bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
         SwMoveFlags eMvFlags )
 {
-    // bewegt alle Nodes an die neue Position. Dabei werden die
-    // text::Bookmarks mit verschoben !! (zur Zeit ohne Undo)
+    // Moves all Nodes to the new position.
+    // text::Bookmarks is moved too (currently without Undo support)
 
-    // falls durchs Move Fussnoten in den Sonderbereich kommen sollten,
-    // dann entferne sie jetzt.
-    //JP 13.07.95:
-    // ansonsten bei allen Fussnoten, die verschoben werden, die Frames
-    // loeschen und nach dem Move wieder aufbauen lassen (Fussnoten koennen
-    // die Seite wechseln). Zusaetzlich muss natuerlich die Sortierung
-    // der FtnIdx-Array wieder korrigiert werden.
-
+    // If footnotes are being introduced to the special area, remove them now.
+    //
+    // Or else delete the Frames for all footnotes that are being moved
+    // and have it rebuild after the Move (footnotes can change pages).
+    // Additionally we have to correct the FtnIdx array's sorting.
     int bUpdateFtn = sal_False;
     SwFtnIdxs aTmpFntIdx;
 
@@ -1147,8 +1139,8 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
     {
         lcl_SaveRedlines( rRange, aSaveRedl );
 
-        // suche alle Redlines, die an der InsPos aufhoeren. Diese muessen
-        // nach dem Move wieder an die "alte" Position verschoben werden
+        // Find all RedLines that end at the InsPos.
+        // These have to be moved back to the "old" position after the Move.
         sal_uInt16 nRedlPos = GetRedlinePos( rPos.GetNode(), USHRT_MAX );
         if( USHRT_MAX != nRedlPos )
         {
@@ -1166,29 +1158,29 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
         }
     }
 
-    // kopiere alle Bookmarks, die im Move Bereich stehen in ein
-    // Array, das alle Angaben auf die Position als Offset speichert.
-    // Die neue Zuordung erfolgt nach dem Moven.
+    // Copy all Bookmarks that are within the Move area into an array
+    // that stores all references to positions as an offset.
+    // The final mapping happens after the Move.
     ::std::vector< ::sw::mark::SaveBookmark> aSaveBkmks;
     _DelBookmarks(rRange.aStart, rRange.aEnd, &aSaveBkmks);
 
-    // sicher die absatzgebundenen Flys, damit verschoben werden koennen.
+    // Save the paragraph-bound Flys, so that they can be moved.
     _SaveFlyArr aSaveFlyArr;
     if( GetSpzFrmFmts()->Count() )
         _SaveFlyInRange( rRange, aSaveFlyArr );
 
-    // vor die Position setzen, damit er nicht weitergeschoben wird
+    // Set it to before the Position, so that it cannot be moved further.
     SwNodeIndex aIdx( rPos, -1 );
 
     SwNodeIndex* pSaveInsPos = 0;
     if( pUndo )
         pSaveInsPos = new SwNodeIndex( rRange.aStart, -1 );
 
-    // verschiebe die Nodes
+    // move the Nodes
     sal_Bool bNoDelFrms = 0 != (DOC_NO_DELFRMS & eMvFlags);
     if( GetNodes()._MoveNodes( rRange, GetNodes(), rPos, !bNoDelFrms ) )
     {
-        aIdx++;     // wieder auf alte Position
+        aIdx++;     // again back to old position
         if( pSaveInsPos )
             (*pSaveInsPos)++;
     }
@@ -1198,11 +1190,11 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
         delete pUndo, pUndo = 0;
     }
 
-    // verschiebe die Flys an die neue Position
+    // move the Flys to the new position
     if( aSaveFlyArr.Count() )
         _RestFlyInRange( aSaveFlyArr, aIdx, NULL );
 
-    // setze jetzt wieder die text::Bookmarks in das Dokument
+    // Add the text::Bookmarks back to the Document
     for(
         ::std::vector< ::sw::mark::SaveBookmark>::iterator pBkmk = aSaveBkmks.begin();
         pBkmk != aSaveBkmks.end();
@@ -1332,22 +1324,20 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
         SwDoc* pDoc = rPam.GetDoc();
         if( bJoinPrev )
         {
-            // N.B.: we do not need to handle xmlids in this case, because
+            // We do not need to handle xmlids in this case, because
             // it is only invoked if one paragraph is completely empty
             // (see lcl_GetJoinFlags)
             {
-                // falls PageBreaks geloescht / gesetzt werden, darf das
-                // nicht in die Undo-History aufgenommen werden !!
-                // (das loeschen vom Node geht auch am Undo vorbei !!!)
+                // If PageBreaks are deleted/set, it must not be added to the Undo history!
+                // Also, deleteing the Node is not added to the Undo histroy!
                 ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
                 /* PageBreaks, PageDesc, ColumnBreaks */
-                // Sollte an der Logik zum Kopieren der PageBreak's ...
-                // etwas geaendert werden, muss es auch im SwUndoDelete
-                // geandert werden. Dort wird sich das AUTO-PageBreak
-                // aus dem GetMarkNode kopiert.!!!
+                // If we need to change something about the logic to copy the PageBreaks,
+                // PageDesc, etc. we also have to change SwUndoDelete.
+                // There, we copy the AUTO PageBreak from the GetMarkNode!
 
-                /* Der GetMarkNode */
+                /* The GetMarkNode */
                 if( ( pTxtNd = aIdx.GetNode().GetTxtNode())->HasSwAttrSet() )
                 {
                     const SfxPoolItem* pItem;
@@ -1360,7 +1350,7 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
                         pTxtNd->ResetAttr( RES_PAGEDESC );
                 }
 
-                /* Der PointNode */
+                /* The PointNode */
                 if( pOldTxtNd->HasSwAttrSet() )
                 {
                     const SfxPoolItem* pItem;
@@ -1387,18 +1377,18 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
                 SwPosition aAlphaPos( aIdx, aAlphaIdx );
                 pDoc->CorrRel( rPam.GetPoint()->nNode, aAlphaPos, 0, sal_True );
 
-                // verschiebe noch alle Bookmarks/TOXMarks
+                // move all Bookmarks/TOXMarks
                 if( !aBkmkArr.empty() )
                     ::_RestoreCntntIdx( pDoc, aBkmkArr, aIdx.GetIndex() );
 
-                // falls der uebergebene PaM nicht im Crsr-Ring steht,
-                // gesondert behandeln (z.B. Aufruf aus dem Auto-Format)
+                // If the passed PaM is not in the Crsr ring,
+                // treat it seperately (e.g. when it's being called from AutoFormat)
                 if( pOldTxtNd == rPam.GetBound( sal_True ).nContent.GetIdxReg() )
                     rPam.GetBound( sal_True ) = aAlphaPos;
                 if( pOldTxtNd == rPam.GetBound( sal_False ).nContent.GetIdxReg() )
                     rPam.GetBound( sal_False ) = aAlphaPos;
             }
-            // jetzt nur noch den Node loeschen
+            // delete the Node, at last!
             pDoc->GetNodes().Delete( aOldIdx, 1 );
         }
         else
@@ -1426,7 +1416,7 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
 
                 if( pDelNd->HasSwAttrSet() )
                 {
-                    // nur die Zeichenattribute kopieren
+                    // only copy the character attributes
                     SfxItemSet aTmpSet( pDoc->GetAttrPool(), aCharFmtSetRange );
                     aTmpSet.Put( *pDelNd->GetpSwAttrSet() );
                     pTxtNd->SetAttr( aTmpSet );
@@ -1488,7 +1478,7 @@ bool lcl_DoWithBreaks(SwDoc & rDoc, SwPaM & rPam,
         return (rDoc.*pFunc)(rPam, bForceJoinNext);
     }
 
-    // N.B.: deletion must be split into several parts if the text node
+    // Deletion must be split into several parts if the text node
     // contains a text attribute with end and with dummy character
     // and the selection does not contain the text attribute completely,
     // but overlaps its start (left), where the dummy character is.
@@ -1533,7 +1523,7 @@ bool SwDoc::DeleteAndJoinWithRedlineImpl( SwPaM & rPam, const bool )
         if (GetIDocumentUndoRedo().DoesUndo())
         {
 
-    //JP 06.01.98: MUSS noch optimiert werden!!!
+    // Still needs to be optimised!
     SetRedlineMode(
            (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE ));
 
@@ -1571,7 +1561,7 @@ bool SwDoc::DeleteAndJoinWithRedlineImpl( SwPaM & rPam, const bool )
                     }
                 }
             }
-//JP 06.01.98: MUSS noch optimiert werden!!!
+// Still needs to be optimised!
 SetRedlineMode( eOld );
         }
         return true;
@@ -1605,9 +1595,8 @@ bool SwDoc::DeleteAndJoinImpl( SwPaM & rPam,
 
 bool SwDoc::DeleteRangeImpl(SwPaM & rPam, const bool)
 {
-    // move all cursors out of the deleted range.
-    // but first copy the given PaM, because it could be a cursor that
-    // would be moved!
+    // Move all cursors out of the deleted range, but first copy the
+    // passed PaM, because it could be a cursor that would be moved!
     SwPaM aDelPam( *rPam.GetMark(), *rPam.GetPoint() );
     ::PaMCorrAbs( aDelPam, *aDelPam.GetPoint() );
 
@@ -1629,7 +1618,7 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
 
     if( pACEWord )
     {
-        // ggfs. das gesicherte Word fuer die Ausnahme
+        // if necessary the saved Word for the exception
         if( pACEWord->IsDeleted() ||  pStt->nNode != pEnd->nNode ||
             pStt->nContent.GetIndex() + 1 != pEnd->nContent.GetIndex() ||
             !pACEWord->CheckDelChar( *pStt ))
@@ -1637,7 +1626,7 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
     }
 
     {
-        // loesche alle leeren TextHints an der Mark-Position
+        // Delete all empty TextHints at the Mark's position
         SwTxtNode* pTxtNd = rPam.GetMark()->nNode.GetNode().GetTxtNode();
         SwpHints* pHts;
         if( pTxtNd &&  0 != ( pHts = pTxtNd->GetpSwpHints()) && pHts->Count() )
@@ -1659,9 +1648,9 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
     }
 
     {
-        // Bug 26675:   DataChanged vorm loeschen verschicken, dann bekommt
-        //          man noch mit, welche Objecte sich im Bereich befinden.
-        //          Danach koennen sie vor/hinter der Position befinden.
+        // Send DataChanged before deletion, so that we still know
+        // which objects are in the area.
+        // Afterwards they could be before/after the Position.
         SwDataChanged aTmp( rPam, 0 );
     }
 
@@ -1694,8 +1683,7 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
     if( !IsIgnoreRedline() && GetRedlineTbl().Count() )
         DeleteRedline( rPam, true, USHRT_MAX );
 
-    // loesche und verschiebe erstmal alle "Fly's am Absatz", die in der
-    // Selection liegen
+    // Delete and move all "Flys at the paragraph", which are within the Selection
     DelFlyInRange(rPam.GetMark()->nNode, rPam.GetPoint()->nNode);
     _DelBookmarks(
         pStt->nNode,
@@ -1713,13 +1701,13 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
             SwTxtNode * pStartTxtNode( pCNd->GetTxtNode() );
             if ( pStartTxtNode )
             {
-                // verschiebe jetzt noch den Inhalt in den neuen Node
+                // now move the Content to the new Node
                 sal_Bool bOneNd = pStt->nNode == pEnd->nNode;
                 xub_StrLen nLen = ( bOneNd ? pEnd->nContent.GetIndex()
                                            : pCNd->Len() )
                                         - pStt->nContent.GetIndex();
 
-                // falls schon leer, dann nicht noch aufrufen
+                // Don't call again, if already empty
                 if( nLen )
                 {
                     pStartTxtNode->EraseText( pStt->nContent, nLen );
@@ -1731,15 +1719,15 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
                     }
                 }
 
-                if( bOneNd )        // das wars schon
+                if( bOneNd )        // that's it
                     break;
 
                 aSttIdx++;
             }
             else
             {
-                // damit beim loeschen keine Indizies mehr angemeldet sind,
-                // wird hier der SwPaM aus dem Content entfernt !!
+                // So that there are no indices left registered when deleted,
+                // we remove a SwPaM from the Content here.
                 pStt->nContent.Assign( 0, 0 );
             }
         }
@@ -1750,7 +1738,7 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
             SwTxtNode * pEndTxtNode( pCNd->GetTxtNode() );
             if( pEndTxtNode )
             {
-                // falls schon leer, dann nicht noch aufrufen
+                // if already empty, don't call again
                 if( pEnd->nContent.GetIndex() )
                 {
                     SwIndex aIdx( pCNd, 0 );
@@ -1765,8 +1753,8 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
             }
             else
             {
-                // damit beim Loeschen keine Indizies mehr angemeldet sind,
-                // wird hier der SwPaM aus dem Content entfernt !!
+                // So that there are no indices left registered when deleted,
+                // we remove a SwPaM from the Content here.
                 pEnd->nContent.Assign( 0, 0 );
             }
         }
@@ -1778,18 +1766,18 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
 
         if( aSttIdx != nEnde )
         {
-            // loesche jetzt die Nodes in das NodesArary
+            // delete the Nodes into the NodesArary
             GetNodes().Delete( aSttIdx, nEnde - aSttIdx.GetIndex() );
         }
 
-        // falls der Node geloescht wurde, in dem der Cursor stand, so
-        // muss der Content im akt. Content angemeldet werden !!!
+        // If the Node that contained the Cursor has been deleted,
+        // the Content has to be assigned to the current Content.
         pStt->nContent.Assign( pStt->nNode.GetNode().GetCntntNode(),
                                 pStt->nContent.GetIndex() );
 
-        // der PaM wird korrigiert, denn falls ueber Nodegrenzen geloescht
-        // wurde, so stehen sie in unterschieden Nodes. Auch die Selektion
-        // wird aufgehoben !
+        // If we deleted across Node boundaries we have to correct the PaM,
+        // because they are in different Nodes now.
+        // Also, the Selection is revoked.
         *pEnd = *pStt;
         rPam.DeleteMark();
 
@@ -1883,8 +1871,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
             case ND_TEXTNODE:
                 if( 0 != ( pCntFrm = ((SwTxtNode*)pNd)->getLayoutFrm( GetCurrentLayout() )) )
                 {
-                    // geschutze Cellen/Flys ueberspringen, ausgeblendete
-                    //ebenfalls
+                    // skip protected and hidden Cells and Flys
                     if( pCntFrm->IsProtected() )
                     {
                         nCurrNd = pNd->EndOfSectionIndex();
@@ -1935,7 +1922,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             ( pConvArgs &&
                                 ((SwTxtNode*)pNd)->Convert( *pConvArgs )))
                         {
-                            // Abbrechen und Position merken
+                            // Cancel and remember position
                             pSttPos->nNode = nCurrNd;
                             pEndPos->nNode = nCurrNd;
                             nCurrNd = nEndNd;
@@ -2057,8 +2044,8 @@ SwHyphArgs::SwHyphArgs( const SwPaM *pPam, const Point &rCrsrPos,
      : SwInterHyphInfo( rCrsrPos ), pNode(0),
      pPageCnt( pPageCount ), pPageSt( pPageStart )
 {
-    // Folgende Bedingungen muessen eingehalten werden:
-    // 1) es gibt mindestens eine Selektion
+    // The following constraints have to be met:
+    // 1) there is at least one Selection
     // 2) SPoint() == Start()
     OSL_ENSURE( pPam->HasMark(), "SwDoc::Hyphenate: blowing in the wind");
     OSL_ENSURE( *pPam->GetPoint() <= *pPam->GetMark(),
@@ -2067,11 +2054,11 @@ SwHyphArgs::SwHyphArgs( const SwPaM *pPam, const Point &rCrsrPos,
     const SwPosition *pPoint = pPam->GetPoint();
     nNode = pPoint->nNode.GetIndex();
 
-    // Start einstellen
+    // Set start
     pStart = pPoint->nNode.GetNode().GetTxtNode();
     nPamStart = pPoint->nContent.GetIndex();
 
-    // Ende und Laenge einstellen.
+    // Set End and Length
     const SwPosition *pMark = pPam->GetMark();
     pEnd = pMark->nNode.GetNode().GetTxtNode();
     nPamLen = pMark->nContent.GetIndex();
@@ -2097,15 +2084,14 @@ void SwHyphArgs::SetPam( SwPaM *pPam ) const
         pPam->GetMark()->nContent.Assign( pNode->GetCntntNode(),
                                           nWordStart + nWordLen );
         OSL_ENSURE( nNode == pNode->GetIndex(),
-                "SwHyphArgs::SetPam: Pam desaster" );
+                "SwHyphArgs::SetPam: Pam disaster" );
     }
 }
 
-// liefert sal_True zurueck, wenn es weitergehen soll.
+// Returns sal_True if we can proceed.
 sal_Bool lcl_HyphenateNode( const SwNodePtr& rpNd, void* pArgs )
 {
-    // Hyphenate liefert sal_True zurueck, wenn eine Trennstelle anliegt
-    // und stellt pPam ein.
+    // Hyphenate returns sal_True, if there is a disconnection point and set pPam.
     SwTxtNode *pNode = rpNd->GetTxtNode();
     SwHyphArgs *pHyphArgs = (SwHyphArgs*)pArgs;
     if( pNode )
@@ -2167,7 +2153,7 @@ sal_Bool lcl_GetTokenToParaBreak( String& rStr, String& rRet, sal_Bool bRegExpRp
                                     RTL_CONSTASCII_STRINGPARAM( "\\n" )));
         while( STRING_NOTFOUND != ( nPos = rStr.Search( sPara, nPos )) )
         {
-            // wurde das escaped?
+            // Has this been escaped?
             if( nPos && '\\' == rStr.GetChar( nPos-1 ))
             {
                 if( ++nPos >= rStr.Len() )
@@ -2225,7 +2211,7 @@ bool SwDoc::ReplaceRange( SwPaM& rPam, const String& rStr,
         return ReplaceRangeImpl(rPam, rStr, bRegExReplace); // original pam!
     }
 
-    // N.B.: deletion must be split into several parts if the text node
+    // Deletion must be split into several parts if the text node
     // contains a text attribute with end and with dummy character
     // and the selection does not contain the text attribute completely,
     // but overlaps its start (left), where the dummy character is.
@@ -2266,7 +2252,7 @@ bool SwDoc::ReplaceRange( SwPaM& rPam, const String& rStr,
     return bRet;
 }
 
-// N.B.: it is possible to call Replace with a PaM that spans 2 paragraphs:
+// It's possible to call Replace with a PaM that spans 2 paragraphs:
 // search with regex for "$", then replace _all_
 bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
         const bool bRegExReplace )
@@ -2278,9 +2264,9 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
     lcl_GetJoinFlags( rPam, bJoinTxt, bJoinPrev );
 
     {
-        // dann eine Kopie vom Cursor erzeugen um alle Pams aus den
-        // anderen Sichten aus dem Loeschbereich zu verschieben
-        // ABER NICHT SICH SELBST !!
+        // Create a copy of the Cursor in order to move all Pams from
+        // the other views out of the deletion area.
+        // Except for itself!
         SwPaM aDelPam( *rPam.GetMark(), *rPam.GetPoint() );
         ::PaMCorrAbs( aDelPam, *aDelPam.GetPoint() );
 
@@ -2292,7 +2278,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
                 "invalid range: Point and Mark on different nodes" );
         sal_Bool bOneNode = pStt->nNode == pEnd->nNode;
 
-        // eigenes Undo ????
+        // Own Undo?
         String sRepl( rStr );
         SwTxtNode* pTxtNd = pStt->nNode.GetNode().GetTxtNode();
         xub_StrLen nStt = pStt->nContent.GetIndex(),
@@ -2309,10 +2295,10 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
             {
                 GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
-                // Bug 68584 - if any Redline will change (split!) the node
+                // If any Redline will change (split!) the node
                 const ::sw::mark::IMark* pBkmk = getIDocumentMarkAccess()->makeMark( aDelPam, ::rtl::OUString(), IDocumentMarkAccess::UNO_BOOKMARK );
 
-                //JP 06.01.98: MUSS noch optimiert werden!!!
+                // Needs to be optimised!
                 SetRedlineMode(
                     (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE ));
 
@@ -2327,7 +2313,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
 
             if( sRepl.Len() )
             {
-                // Attribute des 1. Zeichens ueber den ReplaceText setzen
+                // Apply the first character's attributes to the ReplaceText
                 SfxItemSet aSet( GetAttrPool(),
                             RES_CHRATR_BEGIN,     RES_TXTATR_WITHEND_END - 1,
                             RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
@@ -2344,7 +2330,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
                 if( aDelPam.GetPoint() != aDelPam.End() )
                     aDelPam.Exchange();
 
-                // das Ende merken
+                // Remember the End
                 SwNodeIndex aPtNd( aDelPam.GetPoint()->nNode, -1 );
                 xub_StrLen nPtCnt = aDelPam.GetPoint()->nContent.GetIndex();
 
@@ -2401,7 +2387,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
                 *aDelPam.GetPoint() = *rPam.GetPoint();
                 GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
 
-                // Bug 68584 - if any Redline will change (split!) the node
+                // If any Redline will change (split!) the node
                 const ::sw::mark::IMark* pBkmk = getIDocumentMarkAccess()->makeMark( aDelPam, ::rtl::OUString(), IDocumentMarkAccess::UNO_BOOKMARK );
 
                 SwIndex& rIdx = aDelPam.GetPoint()->nContent;
@@ -2410,8 +2396,8 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
                 rPam.GetPoint()->nNode = 0;
                 rPam.GetPoint()->nContent = rIdx;
                 *rPam.GetMark() = *rPam.GetPoint();
-//JP 06.01.98: MUSS noch optimiert werden!!!
-SetRedlineMode( eOld );
+                // Needs to be optimised!
+                SetRedlineMode( eOld );
 
                 *rPam.GetPoint() = pBkmk->GetMarkPos();
                 if(pBkmk->IsExpanded())
@@ -2440,8 +2426,7 @@ SetRedlineMode( eOld );
             SwNodeIndex aPtNd( pStt->nNode, -1 );
             xub_StrLen nPtCnt = pStt->nContent.GetIndex();
 
-            // die Werte nochmal setzen, falls schohn Rahmen oder Fussnoten
-            // auf dem Text entfernt wurden!
+            // Set the values again, if Frames or footnotes on the Text have been removed.
             nStt = nPtCnt;
             nEnd = bOneNode ? pEnd->nContent.GetIndex()
                             : pTxtNd->GetTxt().Len();
@@ -2500,8 +2485,7 @@ SetRedlineMode( eOld );
     return true;
 }
 
-// speicher die akt. Werte fuer die automatische Aufnahme von Ausnahmen
-// in die Autokorrektur
+// Save the current values to add them as automatic entries to to AutoCorrect.
 void SwDoc::SetAutoCorrExceptWord( SwAutoCorrExceptWord* pNew )
 {
     if( pNew != pACEWord )
@@ -2524,11 +2508,10 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
         return sal_False;
     }
 
-    // harte SeitenUmbrueche am nachfolgenden Node verschieben
+    // Move hard page brakes to the following Node.
     sal_Bool bSavePageBreak = sal_False, bSavePageDesc = sal_False;
 
-    /* #i9185# This whould lead to a segmentation fault if not catched
-       above. */
+    /* #i9185# This whould lead to a segmentation fault if not caught above. */
     sal_uLong nNextNd = rEnd.nNode.GetIndex() + 1;
     SwTableNode *const pTblNd = GetNodes()[ nNextNd ]->GetTableNode();
 
@@ -2595,14 +2578,14 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
         if( rPam.GetPoint() != &rEnd )
             rPam.Exchange();
 
-        // versuche hinters Ende zu verschieben
+        // Try to move past the End
         if( !rPam.Move( fnMoveForward, fnGoNode ) )
         {
-            // na gut, dann an den Anfang
+            // Fair enough, at the Beginning then
             rPam.Exchange();
             if( !rPam.Move( fnMoveBackward, fnGoNode ))
             {
-                OSL_FAIL( "kein Node mehr vorhanden" );
+                OSL_FAIL( "no more Nodes" );
                 return sal_False;
             }
         }
@@ -2616,9 +2599,9 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
             CorrAbs( aRg.aStart, aRg.aEnd, *rPam.GetPoint(), sal_True );
         }
 
-            // was ist mit Fly's ??
+            // What's with Flys?
         {
-            // stehen noch FlyFrames rum, loesche auch diese
+            // If there are FlyFrames left, delete these too
             for( sal_uInt16 n = 0; n < GetSpzFrmFmts()->Count(); ++n )
             {
                 SwFrmFmt* pFly = (*GetSpzFrmFmts())[n];
