@@ -1596,6 +1596,7 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     meAlign           = WINDOWALIGN_TOP;
     meLastStyle       = POINTER_ARROW;
     mnWinStyle        = nStyle;
+    meLayoutMode      = TBX_LAYOUT_NORMAL;
     mnLastFocusItemId          = 0;
     mnKeyModifier      = 0;
     mnActivateCount   = 0;
@@ -2720,7 +2721,10 @@ void ToolBox::ImplFormat( sal_Bool bResize )
                     if ( mbHorz )
                     {
                         it->maCalcRect.Left()     = nX;
-                        it->maCalcRect.Top()      = nY+(nLineSize-aCurrentItemSize.Height())/2;
+                        if ( meLayoutMode == TBX_LAYOUT_TOP && mnLines )
+                            it->maCalcRect.Top()      = nY/2;
+                        else
+                            it->maCalcRect.Top()      = nY+(nLineSize-aCurrentItemSize.Height())/2;
                         it->maCalcRect.Right()    = nX+aCurrentItemSize.Width()-1;
                         it->maCalcRect.Bottom()   = it->maCalcRect.Top()+aCurrentItemSize.Height()-1;
                         nX += aCurrentItemSize.Width();
@@ -6012,6 +6016,17 @@ void ToolBox::ImplDisableFlatButtons()
     if( bValue )
         mnOutStyle &= ~TOOLBOX_STYLE_FLAT;
 #endif
+}
+
+ToolBoxLayoutMode ToolBox::GetToolbarLayoutMode()
+{
+    return meLayoutMode;
+}
+
+void ToolBox::SetToolbarLayoutMode( ToolBoxLayoutMode eLayout )
+{
+    if ( meLayoutMode != eLayout )
+       meLayoutMode  = eLayout;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

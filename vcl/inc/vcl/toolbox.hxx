@@ -160,6 +160,12 @@ enum ToolBoxButtonSize { TOOLBOX_BUTTONSIZE_DONTCARE, TOOLBOX_BUTTONSIZE_SMALL, 
 // used for internal sizing calculations
 enum FloatingSizeMode { FSMODE_AUTO, FSMODE_FAVOURWIDTH, FSMODE_FAVOURHEIGHT };
 
+// TBX_LAYOUT_NORMAL - traditional layout, items are centered in the toolbar
+// TBX_LAYOUT_TOP    - special mode (currently used for calc input/formula bar)
+//                   where items are aligned with the top of highest item
+//                  ( currently only valid for docked, single line,  horizontal
+//                  toolbars )
+enum ToolBoxLayoutMode { TBX_LAYOUT_NORMAL, TBX_LAYOUT_TOP };
 // -----------
 // - ToolBox -
 // -----------
@@ -239,6 +245,7 @@ private:
     ButtonType          meButtonType;
     PointerStyle        meLastStyle;
     WinBits             mnWinStyle;
+    ToolBoxLayoutMode   meLayoutMode;
     Link                maClickHdl;
     Link                maDoubleClickHdl;
     Link                maActivateHdl;
@@ -606,6 +613,8 @@ public:
     void                ChangeHighlight( sal_uInt16 nPos );
 
     void SetImageListProvider(vcl::IImageListProvider* _pProvider);
+    ToolBoxLayoutMode GetToolbarLayoutMode();
+    void SetToolbarLayoutMode( ToolBoxLayoutMode eLayout );
 };
 
 inline void ToolBox::CheckItem( sal_uInt16 nItemId, sal_Bool bCheck )

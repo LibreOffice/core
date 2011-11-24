@@ -179,6 +179,7 @@ public:
     long GetPixelTextHeight();
     long GetPixelHeightForLines( long nLines );
     long GetEditEngTxtHeight();
+
     void DoScroll();
     virtual void SetTextString( const String& rString );
     void SetNumLines( long nLines );
@@ -274,13 +275,14 @@ public:
     void            StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
     virtual void    MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    MouseMove( const MouseEvent& rMEvt );
 protected:
     virtual void    SetText( const String& rString );
     virtual String  GetText() const;
 
     bool UseSubTotal( ScRangeList* pRangeList ) const;
-
+    bool IsPointerAtResizePos();
 private:
     ScPosWnd        aWndPos;
     std::auto_ptr<ScTextWndBase> pRuntimeWindow;
@@ -291,6 +293,7 @@ private:
     String          aTextCancel;
     String          aTextSum;
     String          aTextEqual;
+    long            mnMaxY;
     sal_Bool            bIsOkCancelMode;
     bool            bIsMultiLine;
     bool            bInResize;

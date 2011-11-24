@@ -179,6 +179,7 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
         aTextCancel     ( ScResId( SCSTR_QHELP_BTNCANCEL ) ),
         aTextSum        ( ScResId( SCSTR_QHELP_BTNSUM ) ),
         aTextEqual      ( ScResId( SCSTR_QHELP_BTNEQUAL ) ),
+        mnMaxY          (0),
         bIsOkCancelMode ( false ),
         bIsMultiLine    ( false ),
         bInResize       ( false )
@@ -750,6 +751,14 @@ void ScInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
     ToolBox::DataChanged( rDCEvt );
 }
 
+bool ScInputWindow::IsPointerAtResizePos()
+{
+    if ( GetOutputSizePixel().Height() - GetPointerPosPixel().Y() <= 4  )
+        return true;
+    else
+        return false;
+}
+
 void ScInputWindow::MouseMove( const MouseEvent& rMEvt )
 {
     if ( lcl_isExperimentalMode() )
@@ -757,62 +766,79 @@ void ScInputWindow::MouseMove( const MouseEvent& rMEvt )
         Point aPosPixel = GetPointerPosPixel();
 
         ScInputBarGroup* pGroupBar = dynamic_cast< ScInputBarGroup* > ( pRuntimeWindow.get() );
-        if ( bInResize || ( GetOutputSizePixel().Height() - aPosPixel.Y() <= 4  ) )
-        {
+
+        if ( bInResize || IsPointerAtResizePos() )
             SetPointer( Pointer( POINTER_WINDOW_SSIZE ) );
-
-            if ( rMEvt.IsLeft() )
-            {
-                // Don't leave the mouse pointer leave *this* window
-                CaptureMouse();
-                bInResize = true;
-            }
-            else
-            {
-                ReleaseMouse();
-                bInResize = false;
-            }
-
-            if ( bInResize )
-            {
-                // Trigger resize
-                long nResizeThreshold = ( (long)TBX_WINDOW_HEIGHT * 0.7 );
-                bool bResetPointerPos = false;
-                if ( GetOutputSizePixel().Height() - aPosPixel.Y() < -nResizeThreshold  )
-                {
-                    pGroupBar->IncrementVerticalSize();
-                    bResetPointerPos = true;
-                }
-                else if ( ( GetOutputSizePixel().Height() - aPosPixel.Y()  ) > nResizeThreshold )
-                {
-                    bResetPointerPos = true;
-                    pGroupBar->DecrementVerticalSize();
-                }
-
-                if ( bResetPointerPos )
-                {
-                    aPosPixel.Y() =  GetOutputSizePixel().Height();
-                    SetPointerPosPixel( aPosPixel );
-                }
-
-            }
-        }
         else
-        {
-            ReleaseMouse();
             SetPointer( Pointer( POINTER_ARROW ) );
+
+        if ( bInResize )
+        {
+            // detect direction
+            long nResizeThreshold = ( (long)TBX_WINDOW_HEIGHT * 0.7 );
+            bool bResetPointerPos = false;
+
+            // Detect attempt to expand toolbar too much
+            if ( aPosPixel.Y() >= mnMaxY )
+            {
+                bResetPointerPos = true;
+                aPosPixel.Y() = mnMaxY;
+            } // or expanding down
+            else if ( GetOutputSizePixel().Height() - aPosPixel.Y() < -nResizeThreshold  )
+            {
+                pGroupBar->IncrementVerticalSize();
+                bResetPointerPos = true;
+            } // or shrinking up
+            else if ( ( GetOutputSizePixel().Height() - aPosPixel.Y()  ) > nResizeThreshold )
+            {
+                bResetPointerPos = true;
+                pGroupBar->DecrementVerticalSize();
+            }
+
+            if ( bResetPointerPos )
+            {
+                aPosPixel.Y() =  GetOutputSizePixel().Height();
+                SetPointerPosPixel( aPosPixel );
+            }
         }
     }
     ToolBox::MouseMove( rMEvt );
 }
 
+void ScInputWindow::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    if ( lcl_isExperimentalMode() )
+    {
+        if ( rMEvt.IsLeft() )
+        {
+            if ( IsPointerAtResizePos() )
+            {
+                // Don't leave the mouse pointer leave *this* window
+                CaptureMouse();
+                bInResize = true;
+                // find the height of the gridwin, we don't wan't to be
+                // able to expand the toolbar too far so we need to
+                // caculate an upper limit
+                // I'd prefer to leave at least a single column header and a
+                // row but I don't know how to get that value in pixels.
+                // Use TBX_WINDOW_HEIGHT for the moment
+                ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
+                mnMaxY =  GetOutputSizePixel().Height() + ( pViewSh->GetGridHeight(SC_SPLIT_TOP) + pViewSh->GetGridHeight(SC_SPLIT_BOTTOM) ) - TBX_WINDOW_HEIGHT;
+            }
+        }
+    }
+    ToolBox::MouseButtonDown( rMEvt );
+}
 void ScInputWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if ( lcl_isExperimentalMode() )
     {
         ReleaseMouse();
         if ( rMEvt.IsLeft() )
+        {
             bInResize = false;
+            mnMaxY = 0;
+        }
     }
     ToolBox::MouseButtonUp( rMEvt );
 }
@@ -823,10 +849,10 @@ void ScInputWindow::MouseButtonUp( const MouseEvent& rMEvt )
 //========================================================================
 
 ScInputBarGroup::ScInputBarGroup(Window* pParent)
-    :   ScTextWndBase        ( pParent, WinBits(WB_HIDE) ),
+    :   ScTextWndBase        ( pParent, WinBits(WB_HIDE |  WB_TABSTOP ) ),
         aMultiTextWnd        ( this ),
-        aButton              ( this, WB_RECTSTYLE ),
-        aScrollBar           ( this, WB_VERT | WB_DRAG )
+        aButton              ( this, WB_TABSTOP | WB_RECTSTYLE ),
+        aScrollBar           ( this, WB_TABSTOP | WB_VERT | WB_DRAG )
 {
       aMultiTextWnd.Show();
       aMultiTextWnd.SetQuickHelpText( ScResId( SCSTR_QHELP_INPUTWND ) );
@@ -1035,6 +1061,10 @@ void ScInputBarGroup::TriggerToolboxLayout()
 
         if ( xLayoutManager.is() )
         {
+            if ( aMultiTextWnd.GetNumLines() > 1)
+                pParent->SetToolbarLayoutMode( TBX_LAYOUT_TOP );
+            else
+                pParent->SetToolbarLayoutMode( TBX_LAYOUT_NORMAL );
             xLayoutManager->lock();
             pParent->Resize();
             DataChangedEvent aFakeUpdate( DATACHANGED_SETTINGS, NULL,  SETTINGS_STYLE );
@@ -1062,7 +1092,7 @@ IMPL_LINK( ScInputBarGroup, Impl_ScrollHdl, ScrollBar*, EMPTYARG )
 //                      ScMultiTextWnd
 //========================================================================
 
-ScMultiTextWnd::ScMultiTextWnd( ScInputBarGroup* pParen ) : ScTextWnd( pParen ), mrGroupBar(* pParen )
+ScMultiTextWnd::ScMultiTextWnd( ScInputBarGroup* pParen ) : ScTextWnd( pParen/*, WB_TABSTOP*/ ), mrGroupBar(* pParen )
 {
     nTextStartPos = TEXT_MULTI_STARTPOS;
     mnLines = 1;
