@@ -83,6 +83,9 @@ OUString SmOoxmlImport::handleStream()
             case OPENING( M_TOKEN( bar )):
                 ret += STR( " " ) + handleBar();
                 break;
+            case OPENING( M_TOKEN( borderBox )):
+                ret += STR( " " ) + handleBorderBox();
+                break;
             case OPENING( M_TOKEN( f )):
                 ret += STR( " " ) + handleF();
                 break;
@@ -178,6 +181,28 @@ OUString SmOoxmlImport::handleBar()
         return STR( "bar { " ) + e + STR( " }" );
     else
         return STR( "underline { " ) + e + STR( " }" );
+}
+
+OUString SmOoxmlImport::handleBorderBox()
+{
+    stream.ensureOpeningTag( M_TOKEN( borderBox ));
+    bool isStrikeH = false;
+    if( stream.checkOpeningTag( M_TOKEN( borderBoxPr )))
+    {
+        if( XmlStream::Tag strikeH = stream.checkOpeningTag( M_TOKEN( strikeH )))
+        {
+            if( strikeH.attributes.attribute( M_TOKEN( val ), false ))
+                isStrikeH = true;
+            stream.ensureClosingTag( M_TOKEN( strikeH ));
+        }
+        stream.ensureClosingTag( M_TOKEN( borderBoxPr ));
+    }
+    OUString e = handleE();
+    stream.ensureClosingTag( M_TOKEN( borderBox ));
+    if( isStrikeH )
+        return STR( "overstrike { " ) + e + STR( " }" );
+    // LO does not seem to implement anything for handling the other cases
+    return e;
 }
 
 OUString SmOoxmlImport::handleE()
