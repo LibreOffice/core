@@ -162,7 +162,31 @@ OUString SmOoxmlImport::handleAcc()
 
 OUString SmOoxmlImport::handleE()
 {
-// TODO
+    OUString ret;
+    stream.ensureOpeningTag( M_TOKEN( e ));
+    while( !stream.atEnd())
+    { // TODO can there really be more or just one sub-elements?
+        XmlStream::Tag tag = stream.currentTag();
+        if( tag.token == CLOSING( M_TOKEN( e )))
+            break;
+        switch( tag.token )
+        {
+            case OPENING( M_TOKEN( acc )):
+                ret += STR( " " ) + handleAcc();
+                break;
+            case OPENING( M_TOKEN( f )):
+                ret += STR( " " ) + handleF();
+                break;
+            case OPENING( M_TOKEN( r )):
+                ret += STR( " " ) + handleR();
+                break;
+            default:
+                stream.handleUnexpectedTag();
+                break;
+        }
+    }
+    stream.ensureClosingTag( M_TOKEN( e ));
+    return ret;
 }
 
 // NOT complete
@@ -174,17 +198,17 @@ OUString SmOoxmlImport::handleF()
         // TODO
     }
     stream.ensureOpeningTag( M_TOKEN( num ));
-    OUString num = readR();
+    OUString num = handleR();
     stream.ensureClosingTag( M_TOKEN( num ));
     stream.ensureOpeningTag( M_TOKEN( den ));
-    OUString den = readR();
+    OUString den = handleR();
     stream.ensureClosingTag( M_TOKEN( den ));
     stream.ensureClosingTag( M_TOKEN( f ));
     return STR( "{" ) + num + STR( "} over {" ) + den + STR( "}" );
 }
 
 // NOT complete
-OUString SmOoxmlImport::readR()
+OUString SmOoxmlImport::handleR()
 {
     stream.ensureOpeningTag( M_TOKEN( r ));
     if( XmlStream::Tag rPr = stream.checkOpeningTag( OOX_TOKEN( doc, rPr )))

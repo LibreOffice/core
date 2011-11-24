@@ -47,7 +47,7 @@ private:
     rtl::OUString handleAcc();
     rtl::OUString handleE();
     rtl::OUString handleF();
-    rtl::OUString readR();
+    rtl::OUString handleR();
     oox::formulaimport::XmlStream& stream;
 };
 
