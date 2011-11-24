@@ -466,6 +466,7 @@ gb_Library_PLAINLIBS_NONE += \
     uwinapi \
     winspool \
     z \
+    cppunit
 
 gb_Library_LAYER := \
     $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \

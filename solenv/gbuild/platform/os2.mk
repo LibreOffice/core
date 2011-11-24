@@ -389,7 +389,8 @@ gb_Library_PLAINLIBS_NONE += \
 	jpeg \
 	m \
 	z \
-	pthread
+	pthread \
+	cppunit
 
 gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \

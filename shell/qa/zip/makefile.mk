@@ -34,6 +34,17 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(WITH_CPPUNIT)" != "YES" || "$(GUI)" == "OS2"
+
+@all:
+.IF "$(GUI)" == "OS2"
+    @echo "Skipping, cppunit broken."
+.ELIF "$(WITH_CPPUNIT)" != "YES"
+    @echo "cppunit disabled. nothing do do."
+.END
+
+.ELSE
+
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 SHL1OBJS = $(SLOFILES)
@@ -44,6 +55,8 @@ SHL1TARGET = $(TARGET)
 SHL1VERSIONMAP = $(PRJ)/qa/zip/export.map
 DEF1NAME=$(SHL1TARGET)
 SLOFILES=$(SLO)$/ziptest.obj  
+
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 

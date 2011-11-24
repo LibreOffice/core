@@ -32,6 +32,17 @@ VISIBILITY_HIDDEN = TRUE
 
 .INCLUDE: settings.mk
 
+.IF "$(WITH_CPPUNIT)" != "YES" || "$(GUI)" == "OS2"
+
+@all:
+.IF "$(GUI)" == "OS2"
+    @echo "Skipping, cppunit broken."
+.ELIF "$(WITH_CPPUNIT)" != "YES"
+    @echo "cppunit disabled. nothing do do."
+.END
+
+.ELSE
+
 DLLPRE =
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
@@ -54,3 +65,5 @@ SHL1USE_EXPORTS = name
 DEF1NAME = $(SHL1TARGET)
 
 .INCLUDE: target.mk
+
+.ENDIF

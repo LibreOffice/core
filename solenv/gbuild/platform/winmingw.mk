@@ -151,7 +151,7 @@ gb_PrecompiledHeader_EXCEPTIONFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS)
 gb_LinkTarget_NOEXCEPTIONFLAGS := \
     -DEXCEPTIONS_OFF \
     -fno-exceptions \
-    
+
 gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
 
 gb_LinkTarget_LDFLAGS := \
@@ -490,6 +490,7 @@ gb_Library_PLAINLIBS_NONE += \
     uwinapi \
     winspool \
     z \
+    cppunit
 
 gb_Library_LAYER := \
     $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \

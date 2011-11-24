@@ -3727,6 +3727,9 @@ if test -n "$with_system_libwpd" -o -n "$with_system_libs" && \
     AC_MSG_RESULT([external])
     SYSTEM_LIBWPD=YES
     PKG_CHECK_MODULES( LIBWPD, libwpd-0.8 )
+else
+    AC_MSG_RESULT([no])
+    SYSTEM_LIBWPD=
 fi
 AC_SUBST(SYSTEM_LIBWPD)
 AC_SUBST(LIBWPD_CFLAGS)
@@ -3735,21 +3738,30 @@ AC_SUBST(LIBWPD_LIBS)
 dnl ===================================================================
 dnl Check for system cppunit
 dnl ===================================================================
+WITH_CPPUNIT=
 AC_MSG_CHECKING([which cppunit to use])
 if test -n "$with_system_cppunit" -o -n "$with_system_libs" && \
         test "$with_system_cppunit" != "no"; then
-    AC_MSG_RESULT([external])
     SYSTEM_CPPUNIT=YES
     # might work for earlier, too but go sure:
-    PKG_CHECK_MODULES( CPPUNIT, cppunit >= 1.12.0 )
+    PKG_CHECK_MODULES( CPPUNIT, 
+                       cppunit >= 1.12.0,
+                       WITH_CPPUNIT="YES",
+                       WITH_CPPUNIT=")
+    if test -n "$WITH_CPPUNIT"; then
+       AC_MSG_RESULT([found system cppunit $CPPUNIT])
+    else
+       AC_MSG_WARN([dit not find system cppunit version 1.12.0 or later])
+    fi
+
 else
-    AC_MSG_RESULT([internal])
+    AC_MSG_WARN([not using cppunit])
     SYSTEM_CPPUNIT=NO
-    BUILD_TYPE="$BUILD_TYPE CPPUNIT"
 fi
 AC_SUBST(SYSTEM_CPPUNIT)
 AC_SUBST(CPPUNIT_CFLAGS)
 AC_SUBST(CPPUNIT_LIBS)
+AC_SUBST(WITH_CPPUNIT)
 
 dnl ===================================================================
 dnl Check whether freetype is available

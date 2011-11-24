@@ -25,12 +25,16 @@
 #
 #*************************************************************************
 
-.IF "$(GUI)" == "OS2"
+.IF "$(WITH_CPPUNIT)" != "YES" || "$(GUI)" == "OS2"
 
 @all:
+.IF "$(GUI)" == "OS2"
     @echo "Skipping, cppunit broken."
+.ELIF "$(WITH_CPPUNIT)" != "YES"
+    @echo "cppunit disabled. nothing do do."
+.END
 
-.ENDIF # "$(GUI)" == "OS2"
+.ELSE # "$(WITH_CPPUNIT)" != "YES" || "$(GUI)" == "OS2"
 
 PRJ=..
 
@@ -89,3 +93,4 @@ SLOFILES=$(SHL1OBJS)
 .INCLUDE : _cppunit.mk
 .ENDIF 		# L10N_framework
 
+.ENDIF # "$(WITH_CPPUNIT)" != "YES" || "$(GUI)" == "OS2"

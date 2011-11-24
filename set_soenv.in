@@ -1923,6 +1923,7 @@ ToFile( "LIBWPD_LIBS",       "@LIBWPD_LIBS@",      "e" );
 ToFile( "SYSTEM_CPPUNIT",    "@SYSTEM_CPPUNIT@",   "e" );
 ToFile( "CPPUNIT_CFLAGS",    "@CPPUNIT_CFLAGS@",   "e" );
 ToFile( "CPPUNIT_LIBS",      "@CPPUNIT_LIBS@",     "e" );
+ToFile( "WITH_CPPUNIT",      "@WITH_CPPUNIT@",     "e" );
 ToFile( "SYSTEM_LIBXML",     "@SYSTEM_LIBXML@",    "e" );
 ToFile( "USE_FT_EMBOLDEN",   "@USE_FT_EMBOLDEN@",  "e" );
 ToFile( "LIBXML_CFLAGS",     "@LIBXML_CFLAGS@",    "e" );

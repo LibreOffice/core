@@ -44,4 +44,9 @@ $(eval $(call gb_CppunitTest_set_include,sfx2_metadatable,\
     -I$(OUTDIR)/inc \
 ))
 
+$(eval $(call gb_CppunitTest_set_ldflags,sfx2_metadatable,\
+    $$(LDFLAGS) \
+    -lcppunit \
+))
+
 # vim: set noet sw=4 ts=4:

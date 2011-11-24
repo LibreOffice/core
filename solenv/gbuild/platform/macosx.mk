@@ -328,6 +328,7 @@ gb_Library_PLAINLIBS_NONE += \
     m \
     pthread \
     z \
+    cppunit
 
 gb_Library_FILENAMES := \
     $(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_OOOEXT)) \

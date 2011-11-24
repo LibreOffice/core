@@ -25,12 +25,16 @@
 #
 #*************************************************************************
 
-.IF "$(GUI)" == "OS2"
+.IF "$(WITH_CPPUNIT)" != "YES" || "$(GUI)" == "OS2"
 
 @all:
+.IF "$(GUI)" == "OS2"
     @echo "Skipping, cppunit broken."
+.ELIF "$(WITH_CPPUNIT)" != "YES"
+    @echo "cppunit disabled. nothing do do."
+.END
 
-.ENDIF # "$(GUI)" == "OS2"
+.ENDIF "$(WITH_CPPUNIT)" != "YES" || "$(GUI)" == "OS2"
 
 PRJ := ..$/..
 PRJNAME := desktop
