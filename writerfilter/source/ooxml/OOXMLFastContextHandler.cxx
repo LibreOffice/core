@@ -1905,7 +1905,6 @@ OOXMLFastContextHandlerShape::OOXMLFastContextHandlerShape
                    (RTL_CONSTASCII_USTRINGPARAM
                     ("com.sun.star.xml.sax.FastShapeContextHandler")), xContext),
                   uno::UNO_QUERY);
-            fprintf(stderr," XXX %s\n", typeid(*mrShapeContext.get()).name());
             getDocument()->setShapeContext( mrShapeContext );
         }
 

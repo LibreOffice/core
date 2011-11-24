@@ -1196,7 +1196,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_blip: // contains the binary graphic
         case NS_ooxml::LN_shape:
         {
-            fprintf(stderr,"SHAPE3\n");
             //looks a bit like a hack - and it is. The graphic import is split into the inline_inline part and
             //afterwards the adding of the binary data.
             m_pImpl->GetGraphicImport( IMPORT_AS_DETECTED_INLINE )->attribute(nName, val);
@@ -1204,11 +1203,8 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         }
         break;
         case NS_ooxml::LN_starmath:
-        {
-            fprintf(stderr,"STARMATH3\n");
             m_pImpl->appendStarMath( val );
-        break;
-        }
+            break;
         case NS_ooxml::LN_CT_FramePr_dropCap:
         case NS_ooxml::LN_CT_FramePr_lines:
         case NS_ooxml::LN_CT_FramePr_hAnchor:
