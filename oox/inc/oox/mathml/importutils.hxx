@@ -29,6 +29,7 @@
 #define _STARMATHIMPORTUTILS_HXX
 
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
+#include <map>
 #include <oox/helper/attributelist.hxx>
 #include <vector>
 
@@ -64,6 +65,20 @@ class OOX_DLLPUBLIC XmlStream
 {
 public:
     XmlStream();
+    /**
+     Structure representing a list of attributes.
+    */
+    // One could theoretically use oox::AttributeList, but that complains if the passed reference is empty,
+    // which would be complicated to avoid here. Also, parsers apparently reuse the same instance of XFastAttributeList,
+    // which means using oox::AttributeList would make them all point to the one instance.
+    struct AttributeList
+    {
+        bool hasAttribute( int token ) const;
+        rtl::OUString attribute( int token, const rtl::OUString& def = rtl::OUString()) const;
+        bool attribute( int token, bool def ) const;
+    protected:
+        std::map< int, rtl::OUString > attrs;
+    };
     /**
      Structure representing a tag, including its attributes and content text immediatelly following it.
     */
@@ -153,13 +168,6 @@ public:
     // appends the characters after the last appended token
     void appendCharacters( const rtl::OUString& characters );
 };
-
-inline XmlStream::Tag::Tag( int t, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XFastAttributeList >& a, const rtl::OUString& txt )
-: token( t )
-, attributes( a )
-, text( txt )
-{
-}
 
 } // namespace
 } // namespace

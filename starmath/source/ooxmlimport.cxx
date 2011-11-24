@@ -100,7 +100,7 @@ OUString SmOoxmlImport::handleAcc()
     {
         if( XmlStream::Tag chr = stream.checkOpeningTag( M_TOKEN( chr )))
         {
-            acc = chr.attributes.getString( M_TOKEN( val ), STR( "" ));
+            acc = chr.attributes.attribute( M_TOKEN( val ));
             stream.ensureClosingTag( M_TOKEN( chr ));
         }
         stream.ensureClosingTag( M_TOKEN( accPr ));
@@ -197,7 +197,7 @@ OUString SmOoxmlImport::readR()
     XmlStream::Tag rtag = stream.ensureOpeningTag( M_TOKEN( t ));
     // TODO bail out if failure?
     OUString text = rtag.text;
-    if( !rtag.attributes.getBool( OOX_TOKEN( xml, space ), false ))
+    if( rtag.attributes.attribute( OOX_TOKEN( xml, space )) != STR( "preserve" ))
         text = text.trim();
     stream.ensureClosingTag( M_TOKEN( t ));
     stream.ensureClosingTag( M_TOKEN( r ));

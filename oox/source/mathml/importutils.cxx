@@ -40,6 +40,71 @@ namespace oox
 namespace formulaimport
 {
 
+namespace
+{
+// a class that inherits from AttributeList, builds the internal data and then will be sliced off
+// during conversion to the base class
+class AttributeListBuilder
+    : public XmlStream::AttributeList
+{
+public:
+    AttributeListBuilder( const uno::Reference< xml::sax::XFastAttributeList >& a );
+};
+
+AttributeListBuilder::AttributeListBuilder( const uno::Reference< xml::sax::XFastAttributeList >& a )
+{
+    if( a.get() == NULL )
+        return;
+    uno::Sequence< xml::FastAttribute > aFastAttrSeq = a->getFastAttributes();
+    const xml::FastAttribute* pFastAttr = aFastAttrSeq.getConstArray();
+    sal_Int32 nFastAttrLength = aFastAttrSeq.getLength();
+    for( int i = 0;
+         i < nFastAttrLength;
+         ++i )
+    {
+        attrs[ pFastAttr[ i ].Token ] = pFastAttr[ i ].Value;
+    }
+}
+} // namespace
+
+bool XmlStream::AttributeList::hasAttribute( int token ) const
+{
+    return attrs.find( token ) != attrs.end();
+}
+
+rtl::OUString XmlStream::AttributeList::attribute( int token, const rtl::OUString& def ) const
+{
+    std::map< int, rtl::OUString >::const_iterator find = attrs.find( token );
+    if( find != attrs.end())
+        return find->second;
+    return def;
+}
+
+bool XmlStream::AttributeList::attribute( int token, bool def ) const
+{
+    std::map< int, rtl::OUString >::const_iterator find = attrs.find( token );
+    if( find != attrs.end())
+    {
+        if( find->second.equalsIgnoreAsciiCaseAscii( "true" ) || find->second.equalsIgnoreAsciiCaseAscii( "on" )
+            || find->second.equalsIgnoreAsciiCaseAscii( "t" ) || find->second.equalsIgnoreAsciiCaseAscii( "1" ))
+            return true;
+        if( find->second.equalsIgnoreAsciiCaseAscii( "false" ) || find->second.equalsIgnoreAsciiCaseAscii( "off" )
+            || find->second.equalsIgnoreAsciiCaseAscii( "f" ) || find->second.equalsIgnoreAsciiCaseAscii( "0" ))
+            return false;
+        fprintf( stderr, "Cannot convert \'%s\' to bool.\n",
+            rtl::OUStringToOString( find->second, RTL_TEXTENCODING_UTF8 ).getStr());
+    }
+    return def;
+}
+
+XmlStream::Tag::Tag( int t, const uno::Reference< xml::sax::XFastAttributeList >& a, const rtl::OUString& txt )
+: token( t )
+, attributes( AttributeListBuilder( a ))
+, text( txt )
+{
+}
+
+
 XmlStream::XmlStream::Tag::operator bool() const
 {
     return token != XML_TOKEN_INVALID;
