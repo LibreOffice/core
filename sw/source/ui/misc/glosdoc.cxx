@@ -220,6 +220,8 @@ void SwGlossaries::PutGroupDoc(SwTextBlocks *pBlock) {
 sal_Bool SwGlossaries::NewGroupDoc(String& rGroupName, const String& rTitle)
 {
     sal_uInt16 nNewPath = (sal_uInt16)rGroupName.GetToken(1, GLOS_DELIM).ToInt32();
+    if(nNewPath >= m_pPathArr->Count())
+        return sal_False;
     String sNewFilePath(*(*m_pPathArr)[nNewPath]);
     String sNewGroup = lcl_CheckFileName(sNewFilePath, rGroupName.GetToken(0, GLOS_DELIM));
     sNewGroup += GLOS_DELIM;
