@@ -291,8 +291,8 @@ CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
 --without-myspell-dicts
 
 And here for the iOS simulator:
-CXX=ccache /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/g++ -arch i386 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.3.sdk
-CC=ccache /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc -arch i386 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.3.sdk
+CXX=ccache /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/g++ -arch i386 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk
+CC=ccache /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc -arch i386 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk
 CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0 -mmacosx-version-min=10.4
 CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
 --with-distro=LibreOfficeiOS
