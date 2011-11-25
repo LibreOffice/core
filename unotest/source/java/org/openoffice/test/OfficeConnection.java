@@ -34,6 +34,7 @@ import com.sun.star.lang.DisposedException;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -60,6 +61,7 @@ public final class OfficeConnection {
                 "--accept=" + description + ";urp",
                 "-env:UserInstallation=" + Argument.get("user"),
                 "-env:UNO_JAVA_JFW_ENV_JREHOME=true");
+            pb.directory(new File(Argument.get("workdir")));
             String envArg = Argument.get("env");
             if (envArg != null) {
                 Map<String, String> env = pb.environment();
@@ -110,36 +112,58 @@ public final class OfficeConnection {
     public void tearDown()
         throws InterruptedException, com.sun.star.uno.Exception
     {
-        boolean desktopTerminated = true;
-        if (process != null) {
-            if (context != null) {
-                XMultiComponentFactory factory = context.getServiceManager();
-                assertNotNull(factory);
-                XDesktop desktop = UnoRuntime.queryInterface(
-                    XDesktop.class,
-                    factory.createInstanceWithContext(
-                        "com.sun.star.frame.Desktop", context));
-                context = null;
-                try {
-                    desktopTerminated = desktop.terminate();
-                } catch (DisposedException e) {}
-                    // it appears that DisposedExceptions can already happen
-                    // while receiving the response of the terminate call
-                desktop = null;
-            } else {
-                process.destroy();
+        try {
+            boolean desktopTerminated = true;
+            if (process != null) {
+                if (context != null) {
+                    XMultiComponentFactory factory = context.getServiceManager();
+                    assertNotNull(factory);
+                    XDesktop desktop = UnoRuntime.queryInterface(
+                        XDesktop.class,
+                        factory.createInstanceWithContext(
+                            "com.sun.star.frame.Desktop", context));
+                    context = null;
+                    try {
+                        desktopTerminated = desktop.terminate();
+                    } catch (DisposedException e) {}
+                        // it appears that DisposedExceptions can already happen
+                        // while receiving the response of the terminate call
+                    desktop = null;
+                } else {
+                    process.destroy();
+                }
             }
+            int code = 0;
+            if (process != null) {
+                code = process.waitFor();
+            }
+            boolean outTerminated = outForward == null || outForward.terminated();
+            boolean errTerminated = errForward == null || errForward.terminated();
+            assertTrue(desktopTerminated);
+            assertEquals(0, code);
+            assertTrue(outTerminated);
+            assertTrue(errTerminated);
+        } finally {
+            try {
+                String sofficeArg = Argument.get("soffice");
+                String workdir = Argument.get("workdir");
+                String postprocesscommand = Argument.get("postprocesscommand");
+                if(sofficeArg.startsWith("path:") && workdir != null && postprocesscommand != null) {
+                    ProcessBuilder pb = new ProcessBuilder(
+                        postprocesscommand,
+                        sofficeArg.substring("path:".length()),
+                        workdir);
+                    Process postprocess = pb.start();
+                    Forward ppoutForward = new Forward(postprocess.getInputStream(), System.out);
+                    ppoutForward.start();
+                    Forward pperrForward = new Forward(postprocess.getErrorStream(), System.err);
+                    pperrForward.start();
+                    postprocess.waitFor();
+                    assertEquals(0, postprocess.exitValue());
+                }
+            }
+            catch(IOException e) {}
         }
-        int code = 0;
-        if (process != null) {
-            code = process.waitFor();
-        }
-        boolean outTerminated = outForward == null || outForward.terminated();
-        boolean errTerminated = errForward == null || errForward.terminated();
-        assertTrue(desktopTerminated);
-        assertEquals(0, code);
-        assertTrue(outTerminated);
-        assertTrue(errTerminated);
     }
 
     /** Obtain the component context of the running OOo instance.
@@ -227,3 +251,4 @@ public final class OfficeConnection {
     private Forward errForward = null;
     private XComponentContext context = null;
 }
+// vim:set et sw=4 sts=4:
