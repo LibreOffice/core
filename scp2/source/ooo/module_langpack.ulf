@@ -193,34 +193,16 @@ en-US = "Punjabi"
 [STR_DESC_MODULE_LANGPACK_PA_IN]
 en-US = "Installs the Punjabi user interface"
 
-[STR_NAME_MODULE_LANGPACK_GU_IN]
-en-US = "Gujarati"
-
-[STR_DESC_MODULE_LANGPACK_GU_IN]
-en-US = "Installs the Gujarati user interface"
-
 [STR_NAME_MODULE_LANGPACK_TA]
 en-US = "Tamil"
 
 [STR_DESC_MODULE_LANGPACK_TA]
 en-US = "Installs the Tamil user interface"
 
-[STR_NAME_MODULE_LANGPACK_TA_IN]
-en-US = "Tamil"
-
-[STR_DESC_MODULE_LANGPACK_TA_IN]
-en-US = "Installs the Tamil user interface"
-
 [STR_NAME_MODULE_LANGPACK_HI]
 en-US = "Hindi"
 
 [STR_DESC_MODULE_LANGPACK_HI]
-en-US = "Installs the Hindi user interface"
-
-[STR_NAME_MODULE_LANGPACK_HI_IN]
-en-US = "Hindi"
-
-[STR_DESC_MODULE_LANGPACK_HI_IN]
 en-US = "Installs the Hindi user interface"
 
 [STR_NAME_MODULE_LANGPACK_ST]
@@ -253,12 +235,6 @@ en-US = "Afrikaans"
 [STR_DESC_MODULE_LANGPACK_AF]
 en-US = "Installs the Afrikaans user interface"
 
-[STR_NAME_MODULE_LANGPACK_SW]
-en-US = "Swahili"
-
-[STR_DESC_MODULE_LANGPACK_SW]
-en-US = "Installs the Swahili user interface"
-
 [STR_NAME_MODULE_LANGPACK_SW_TZ]
 en-US = "Swahili"
 
@@ -289,40 +265,16 @@ en-US = "Bengali"
 [STR_DESC_MODULE_LANGPACK_BN]
 en-US = "Installs the Bengali user interface"
 
-[STR_NAME_MODULE_LANGPACK_BN_BD]
-en-US = "Bengali (Bangladesh)"
-
-[STR_DESC_MODULE_LANGPACK_BN_BD]
-en-US = "Installs the Bengali (Bangladesh) user interface"
-
-[STR_NAME_MODULE_LANGPACK_BN_IN]
-en-US = "Bengali (India)"
-
-[STR_DESC_MODULE_LANGPACK_BN_IN]
-en-US = "Installs the Bengali (India) user interface"
-
 [STR_NAME_MODULE_LANGPACK_OR]
 en-US = "Oriya"
 
 [STR_DESC_MODULE_LANGPACK_OR]
 en-US = "Installs the Oriya user interface"
 
-[STR_NAME_MODULE_LANGPACK_OR_IN]
-en-US = "Oriya"
-
-[STR_DESC_MODULE_LANGPACK_OR_IN]
-en-US = "Installs the Oriya user interface"
-
 [STR_NAME_MODULE_LANGPACK_MR]
 en-US = "Marathi"
 
 [STR_DESC_MODULE_LANGPACK_MR]
-en-US = "Installs the Marathi user interface"
-
-[STR_NAME_MODULE_LANGPACK_MR_IN]
-en-US = "Marathi"
-
-[STR_DESC_MODULE_LANGPACK_MR_IN]
 en-US = "Installs the Marathi user interface"
 
 [STR_NAME_MODULE_LANGPACK_NE]
@@ -335,12 +287,6 @@ en-US = "Installs the Nepali user interface"
 en-US = "Arabic"
 
 [STR_DESC_MODULE_LANGPACK_AR]
-en-US = "Installs the Arabic user interface"
-
-[STR_NAME_MODULE_LANGPACK_AR_SA]
-en-US = "Arabic"
-
-[STR_DESC_MODULE_LANGPACK_AR_SA]
 en-US = "Installs the Arabic user interface"
 
 [STR_NAME_MODULE_LANGPACK_CA]
@@ -391,12 +337,6 @@ en-US = "Norwegian (Nynorsk)"
 [STR_DESC_MODULE_LANGPACK_NN]
 en-US = "Installs the Norwegian (Nynorsk) user interface"
 
-[STR_NAME_MODULE_LANGPACK_RM]
-en-US = "Rhaeto-Romance"
-
-[STR_DESC_MODULE_LANGPACK_RM]
-en-US = "Installs the Rhaeto-Romance user interface"
-
 [STR_NAME_MODULE_LANGPACK_RO]
 en-US = "Romanian"
 
@@ -408,12 +348,6 @@ en-US = "Albanian"
 
 [STR_DESC_MODULE_LANGPACK_SQ]
 en-US = "Installs the Albanian user interface"
-
-[STR_NAME_MODULE_LANGPACK_UR]
-en-US = "Urdu"
-
-[STR_DESC_MODULE_LANGPACK_UR]
-en-US = "Installs the Urdu user interface"
 
 [STR_NAME_MODULE_LANGPACK_ID]
 en-US = "Indonesian"
@@ -451,12 +385,6 @@ en-US = "Lithuanian"
 [STR_DESC_MODULE_LANGPACK_LT]
 en-US = "Installs the Lithuanian user interface"
 
-[STR_NAME_MODULE_LANGPACK_HY]
-en-US = "Armenian"
-
-[STR_DESC_MODULE_LANGPACK_HY]
-en-US = "Installs the Armenian user interface"
-
 [STR_NAME_MODULE_LANGPACK_EU]
 en-US = "Basque"
 
@@ -468,12 +396,6 @@ en-US = "Macedonian"
 
 [STR_DESC_MODULE_LANGPACK_MK]
 en-US = "Installs the Macedonian user interface"
-
-[STR_NAME_MODULE_LANGPACK_MT]
-en-US = "Maltese"
-
-[STR_DESC_MODULE_LANGPACK_MT]
-en-US = "Installs the Maltese user interface"
 
 [STR_NAME_MODULE_LANGPACK_CY]
 en-US = "Welsh"
@@ -487,12 +409,6 @@ en-US = "Galician"
 [STR_DESC_MODULE_LANGPACK_GL]
 en-US = "Installs the Galician user interface"
 
-[STR_NAME_MODULE_LANGPACK_SH_YU]
-en-US = "Serbian (Latin)"
-
-[STR_DESC_MODULE_LANGPACK_SH_YU]
-en-US = "Installs the Serbian (Latin) user interface"
-
 [STR_NAME_MODULE_LANGPACK_SH]
 en-US = "Serbian (Latin)"
 
@@ -504,12 +420,6 @@ en-US = "Irish"
 
 [STR_DESC_MODULE_LANGPACK_GA]
 en-US = "Installs the Irish user interface"
-
-[STR_NAME_MODULE_LANGPACK_SR_CS]
-en-US = "Serbian (Cyrillic)"
-
-[STR_DESC_MODULE_LANGPACK_SR_CS]
-en-US = "Installs the Serbian (Cyrillic) user interface"
 
 [STR_NAME_MODULE_LANGPACK_SR]
 en-US = "Serbian (Cyrillic)"
@@ -523,12 +433,6 @@ en-US = "Bosnian"
 [STR_DESC_MODULE_LANGPACK_BS]
 en-US = "Installs the Bosnian user interface"
 
-[STR_NAME_MODULE_LANGPACK_AS_IN]
-en-US = "Assamese"
-
-[STR_DESC_MODULE_LANGPACK_AS_IN]
-en-US = "Installs the Assamese user interface"
-
 [STR_NAME_MODULE_LANGPACK_AST]
 en-US = "Asturian"
 
@@ -541,29 +445,11 @@ en-US = "Kinyarwanda"
 [STR_DESC_MODULE_LANGPACK_RW]
 en-US = "Installs the Kinyarwanda user interface"
 
-[STR_NAME_MODULE_LANGPACK_SA]
-en-US = "Sanskrit"
-
-[STR_DESC_MODULE_LANGPACK_SA]
-en-US = "Installs the Sanskrit user interface"
-
 [STR_NAME_MODULE_LANGPACK_FA]
 en-US = "Farsi"
 
 [STR_DESC_MODULE_LANGPACK_FA]
 en-US = "Installs the Farsi user interface"
-
-[STR_NAME_MODULE_LANGPACK_FO]
-en-US = "Faroese"
-
-[STR_DESC_MODULE_LANGPACK_FO]
-en-US = "Installs the Faroese user interface"
-
-[STR_NAME_MODULE_LANGPACK_SB]
-en-US = "Sorbian"
-
-[STR_DESC_MODULE_LANGPACK_SB]
-en-US = "Installs the Sorbian user interface"
 
 [STR_NAME_MODULE_LANGPACK_TT]
 en-US = "Tatar"
@@ -576,12 +462,6 @@ en-US = "Tsonga"
 
 [STR_DESC_MODULE_LANGPACK_TS]
 en-US = "Installs the Tsonga user interface"
-
-[STR_NAME_MODULE_LANGPACK_YI]
-en-US = "Yiddish"
-
-[STR_DESC_MODULE_LANGPACK_YI]
-en-US = "Installs the Yiddish user interface"
 
 [STR_NAME_MODULE_LANGPACK_BR]
 en-US = "Breton"
@@ -612,12 +492,6 @@ en-US = "Kannada"
 
 [STR_DESC_MODULE_LANGPACK_KN]
 en-US = "Installs the Kannada user interface"
-
-[STR_NAME_MODULE_LANGPACK_MS]
-en-US = "Malay (Malaysian)"
-
-[STR_DESC_MODULE_LANGPACK_MS]
-en-US = "Installs the Malay (Malaysian) user interface"
 
 [STR_NAME_MODULE_LANGPACK_TG]
 en-US = "Tajik"
@@ -666,30 +540,6 @@ en-US = "English (United Kingdom)"
 
 [STR_DESC_MODULE_LANGPACK_EN_GB]
 en-US = "Installs the English (United Kingdom) user interface"
-
-[STR_NAME_MODULE_LANGPACK_UR_IN]
-en-US = "Urdu"
-
-[STR_DESC_MODULE_LANGPACK_UR_IN]
-en-US = "Installs the Urdu user interface"
-
-[STR_NAME_MODULE_LANGPACK_ML_IN]
-en-US = "Malayalam"
-
-[STR_DESC_MODULE_LANGPACK_ML_IN]
-en-US = "Installs the Malayalam user interface"
-
-[STR_NAME_MODULE_LANGPACK_TE_IN]
-en-US = "Telugu"
-
-[STR_DESC_MODULE_LANGPACK_TE_IN]
-en-US = "Installs the Telugu user interface"
-
-[STR_NAME_MODULE_LANGPACK_TI_ER]
-en-US = "Tigrinya"
-
-[STR_DESC_MODULE_LANGPACK_TI_ER]
-en-US = "Installs the Tigrinya user interface"
 
 [STR_NAME_MODULE_LANGPACK_UZ]
 en-US = "Uzbek"
@@ -775,12 +625,6 @@ en-US = "Kashmiri"
 [STR_DESC_MODULE_LANGPACK_KS]
 en-US = "Installs the Kashmiri user interface"
 
-[STR_NAME_MODULE_LANGPACK_KY]
-en-US = "Kyrgyz"
-
-[STR_DESC_MODULE_LANGPACK_KY]
-en-US = "Installs the Kyrgyz user interface"
-
 [STR_NAME_MODULE_LANGPACK_MAI]
 en-US = "Maithili"
 
@@ -799,18 +643,6 @@ en-US = "Manipuri"
 [STR_DESC_MODULE_LANGPACK_MNI]
 en-US = "Installs the Manipuri user interface"
 
-[STR_NAME_MODULE_LANGPACK_PAP]
-en-US = "Papiamento"
-
-[STR_DESC_MODULE_LANGPACK_PAP]
-en-US = "Installs the Papiamento user interface"
-
-[STR_NAME_MODULE_LANGPACK_PS]
-en-US = "Pashto"
-
-[STR_DESC_MODULE_LANGPACK_PS]
-en-US = "Installs the Pashto user interface"
-
 [STR_NAME_MODULE_LANGPACK_SA_IN]
 en-US = "Sanskrit (India)"
 
@@ -823,12 +655,6 @@ en-US = "Santali"
 [STR_DESC_MODULE_LANGPACK_SAT]
 en-US = "Installs the Santali user interface"
 
-[STR_NAME_MODULE_LANGPACK_SC]
-en-US = "Sardinian"
-
-[STR_DESC_MODULE_LANGPACK_SC]
-en-US = "Installs the Sardinian user interface"
-
 [STR_NAME_MODULE_LANGPACK_SD]
 en-US = "Sindhi"
 
@@ -840,12 +666,6 @@ en-US = "Telugu"
 
 [STR_DESC_MODULE_LANGPACK_TE]
 en-US = "Installs the Telugu user interface"
-
-[STR_NAME_MODULE_LANGPACK_TI]
-en-US = "Tigrinya"
-
-[STR_DESC_MODULE_LANGPACK_TI]
-en-US = "Installs the Tigrinya user interface"
 
 [STR_NAME_MODULE_LANGPACK_LB]
 en-US = "Luxembourgish"
