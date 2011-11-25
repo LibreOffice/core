@@ -112,24 +112,24 @@ sal_uInt16 WildCard::ImpMatch( const char *pWild, const char *pStr ) const
 
 sal_Bool WildCard::Matches( const String& rString ) const
 {
-    ByteString aTmpWild = aWildString;
+    rtl::OString aTmpWild = aWildString;
     rtl::OString aString(rtl::OUStringToOString(rString, osl_getThreadTextEncoding()));
 
-    sal_uInt16  nSepPos;
+    sal_Int32 nSepPos;
 
     if ( cSepSymbol != '\0' )
     {
-        while ( (nSepPos = aTmpWild.Search( cSepSymbol )) != STRING_NOTFOUND )
+        while ( (nSepPos = aTmpWild.indexOf(cSepSymbol)) != -1 )
         {
             // alle getrennten WildCard's pruefen
-            if ( ImpMatch( aTmpWild.Copy( 0, nSepPos ).GetBuffer(), aString.getStr() ) )
+            if ( ImpMatch( aTmpWild.copy( 0, nSepPos ).getStr(), aString.getStr() ) )
                 return sal_True;
-            aTmpWild.Erase( 0, nSepPos + 1 ); // Trennsymbol entfernen
+            aTmpWild = aTmpWild.copy(nSepPos + 1); // Trennsymbol entfernen
         }
         // und noch den hinter dem letzen Trennsymbol bzw. den einzigen
     }
 
-    if ( ImpMatch( aTmpWild.GetBuffer(), aString.getStr() ) )
+    if ( ImpMatch( aTmpWild.getStr(), aString.getStr() ) )
         return sal_True;
     else
         return sal_False;

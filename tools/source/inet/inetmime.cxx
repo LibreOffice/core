@@ -117,25 +117,25 @@ namespace unnamed_tools_inetmime {
 struct Parameter
 {
     Parameter * m_pNext;
-    ByteString m_aAttribute;
-    ByteString m_aCharset;
-    ByteString m_aLanguage;
-    ByteString m_aValue;
+    rtl::OString m_aAttribute;
+    rtl::OString m_aCharset;
+    rtl::OString m_aLanguage;
+    rtl::OString m_aValue;
     sal_uInt32 m_nSection;
     bool m_bExtended;
 
-    inline Parameter(Parameter * pTheNext, ByteString const & rTheAttribute,
-                     ByteString const & rTheCharset,
-                     ByteString const & rTheLanguage,
-                     ByteString const & rTheValue, sal_uInt32 nTheSection,
+    inline Parameter(Parameter * pTheNext, const rtl::OString& rTheAttribute,
+                     const rtl::OString& rTheCharset,
+                     const rtl::OString& rTheLanguage,
+                     const rtl::OString& rTheValue, sal_uInt32 nTheSection,
                      bool bTheExtended);
 };
 
 inline Parameter::Parameter(Parameter * pTheNext,
-                            ByteString const & rTheAttribute,
-                            ByteString const & rTheCharset,
-                            ByteString const & rTheLanguage,
-                            ByteString const & rTheValue,
+                            const rtl::OString& rTheAttribute,
+                            const rtl::OString& rTheCharset,
+                            const rtl::OString& rTheLanguage,
+                            const rtl::OString& rTheValue,
                             sal_uInt32 nTheSection, bool bTheExtended):
     m_pNext(pTheNext),
     m_aAttribute(rTheAttribute),
@@ -155,7 +155,7 @@ struct ParameterList
 
     inline ~ParameterList();
 
-    Parameter ** find(ByteString const & rAttribute, sal_uInt32 nSection,
+    Parameter ** find(const rtl::OString& rAttribute, sal_uInt32 nSection,
                       bool & rPresent);
 };
 
@@ -261,16 +261,16 @@ void INetMIMECharsetList_Impl::reset()
 //
 //============================================================================
 
-Parameter ** ParameterList::find(ByteString const & rAttribute,
+Parameter ** ParameterList::find(const rtl::OString& rAttribute,
                                  sal_uInt32 nSection, bool & rPresent)
 {
     Parameter ** p = &m_pList;
     for (; *p; p = &(*p)->m_pNext)
     {
-        StringCompare eCompare = rAttribute.CompareTo((*p)->m_aAttribute);
-        if (eCompare == COMPARE_GREATER)
+        sal_Int32 nCompare = rAttribute.compareTo((*p)->m_aAttribute);
+        if (nCompare > 0)
             break;
-        else if (eCompare == COMPARE_EQUAL)
+        else if (nCompare == 0)
         {
             if (nSection > (*p)->m_nSection)
                 break;
@@ -313,15 +313,15 @@ bool parseParameters(ParameterList const & rInput,
     if (pOutput)
         for (Parameter * p = rInput.m_pList; p;)
         {
-            bool bCharset = p->m_aCharset.Len() != 0;
+            bool bCharset = p->m_aCharset.getLength() != 0;
             rtl_TextEncoding eEncoding = RTL_TEXTENCODING_DONTKNOW;
             if (bCharset)
                 eEncoding
-                    = INetMIME::getCharsetEncoding(p->m_aCharset.GetBuffer(),
-                                                   p->m_aCharset.GetBuffer()
+                    = INetMIME::getCharsetEncoding(p->m_aCharset.getStr(),
+                                                   p->m_aCharset.getStr()
                                                        + rInput.m_pList->
                                                              m_aCharset.
-                                                                 Len());
+                                                                 getLength());
             UniString aValue;
             bool bBadEncoding = false;
             Parameter * pNext = p;
@@ -329,18 +329,18 @@ bool parseParameters(ParameterList const & rInput,
             {
                 sal_Size nSize;
                 sal_Unicode * pUnicode
-                    = INetMIME::convertToUnicode(pNext->m_aValue.GetBuffer(),
-                                                 pNext->m_aValue.GetBuffer()
-                                                     + pNext->m_aValue.Len(),
+                    = INetMIME::convertToUnicode(pNext->m_aValue.getStr(),
+                                                 pNext->m_aValue.getStr()
+                                                     + pNext->m_aValue.getLength(),
                                                  bCharset && p->m_bExtended ?
                                                      eEncoding :
                                                      RTL_TEXTENCODING_UTF8,
                                                  nSize);
                 if (!pUnicode && !(bCharset && p->m_bExtended))
                     pUnicode = INetMIME::convertToUnicode(
-                                   pNext->m_aValue.GetBuffer(),
-                                   pNext->m_aValue.GetBuffer()
-                                       + pNext->m_aValue.Len(),
+                                   pNext->m_aValue.getStr(),
+                                   pNext->m_aValue.getStr()
+                                       + pNext->m_aValue.getLength(),
                                    RTL_TEXTENCODING_ISO_8859_1, nSize);
                 if (!pUnicode)
                 {
@@ -358,17 +358,18 @@ bool parseParameters(ParameterList const & rInput,
                 for (pNext = p;;)
                 {
                     if (pNext->m_bExtended)
-                        for (xub_StrLen i = 0; i < pNext->m_aValue.Len(); ++i)
+                    {
+                        for (sal_Int32 i = 0; i < pNext->m_aValue.getLength(); ++i)
                             aValue += sal_Unicode(
                                 sal_Unicode(
-                                    sal_uChar(pNext->m_aValue.GetChar(i)))
+                                    sal_uChar(pNext->m_aValue[i]))
                                 | 0xF800);
+                    }
                     else
-                        for (xub_StrLen i = 0; i < pNext->m_aValue.Len(); ++i)
-                            aValue
-                                += sal_Unicode(sal_uChar
-                                                   (pNext->
-                                                        m_aValue.GetChar(i)));
+                    {
+                        for (sal_Int32 i = 0; i < pNext->m_aValue.getLength(); ++i)
+                            aValue += sal_Unicode(sal_uChar(pNext->m_aValue[i]));
+                    }
                     pNext = pNext->m_pNext;
                     if (!pNext || pNext->m_nSection == 0)
                         break;
@@ -913,10 +914,9 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
         }
         if (p == pAttributeBegin)
             break;
-        ByteString aAttribute(
-            pAttributeBegin, static_cast< xub_StrLen >(p - pAttributeBegin));
+        rtl::OString aAttribute(pAttributeBegin, (p - pAttributeBegin));
         if (bDowncaseAttribute)
-            aAttribute.ToLowerAscii();
+            aAttribute = aAttribute.toAsciiLowerCase();
 
         sal_uInt32 nSection = 0;
         if (p != pEnd && *p == '*')
@@ -944,8 +944,8 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
 
         p = skipLinearWhiteSpaceComment(p + 1, pEnd);
 
-        ByteString aCharset;
-        ByteString aLanguage;
+        rtl::OString aCharset;
+        rtl::OString aLanguage;
         rtl::OStringBuffer aValue;
         if (bExtended)
         {
@@ -962,11 +962,10 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
                     break;
                 if (pParameters)
                 {
-                    aCharset = ByteString(
-                        pCharsetBegin,
-                        static_cast< xub_StrLen >(p - pCharsetBegin));
+                    aCharset = rtl::OString(
+                        pCharsetBegin, p - pCharsetBegin);
                     if (bDowncaseCharset)
-                        aCharset.ToLowerAscii();
+                        aCharset = aCharset.toAsciiLowerCase();
                 }
 
                 if (p == pEnd || *p != '\'')
@@ -996,11 +995,10 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
                     break;
                 if (pParameters)
                 {
-                    aLanguage = ByteString(
-                        pLanguageBegin,
-                        static_cast< xub_StrLen >(p - pLanguageBegin));
+                    aLanguage = rtl::OString(
+                        pLanguageBegin, p - pLanguageBegin);
                     if (bDowncaseLanguage)
-                        aLanguage.ToLowerAscii();
+                        aLanguage = aLanguage.toAsciiLowerCase();
                 }
 
                 if (p == pEnd || *p != '\'')
@@ -1122,11 +1120,11 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
         }
         if (p == pAttributeBegin)
             break;
-        ByteString aAttribute = rtl::OString(
+        rtl::OString aAttribute = rtl::OString(
             pAttributeBegin, p - pAttributeBegin,
             RTL_TEXTENCODING_ASCII_US);
         if (bDowncaseAttribute)
-            aAttribute.ToLowerAscii();
+            aAttribute = aAttribute.toAsciiLowerCase();
 
         sal_uInt32 nSection = 0;
         if (p != pEnd && *p == '*')
@@ -1156,9 +1154,9 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
 
         p = skipLinearWhiteSpaceComment(p + 1, pEnd);
 
-        ByteString aCharset;
-        ByteString aLanguage;
-         ByteString aValue;
+        rtl::OString aCharset;
+        rtl::OString aLanguage;
+        rtl::OString aValue;
         if (bExtended)
         {
             if (nSection == 0)
@@ -1179,7 +1177,7 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
                         p - pCharsetBegin,
                         RTL_TEXTENCODING_ASCII_US);
                     if (bDowncaseCharset)
-                        aCharset.ToLowerAscii();
+                        aCharset = aCharset.toAsciiLowerCase();
                 }
 
                 if (p == pEnd || *p != '\'')
@@ -1214,7 +1212,7 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
                         p - pLanguageBegin,
                         RTL_TEXTENCODING_ASCII_US);
                     if (bDowncaseLanguage)
-                        aLanguage.ToLowerAscii();
+                        aLanguage = aLanguage.toAsciiLowerCase();
                 }
 
                 if (p == pEnd || *p != '\'')

@@ -28,21 +28,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
-#include <stdlib.h>
-#include <stdio.h>
-#include <osl/mutex.hxx>
-
-#include <tools/stream.hxx>
-#include <comphelper/string.hxx>
 #include "bootstrp/prj.hxx"
-
-#if defined(WNT)
-#define LIST_DELIMETER ';'
-#define PATH_DELIMETER '\\'
-#elif defined UNX
-#define LIST_DELIMETER ':'
-#define PATH_DELIMETER '/'
-#endif
+#include <comphelper/string.hxx>
 
 SimpleConfig::SimpleConfig(const String &rSimpleConfigFileName)
 {
@@ -56,21 +43,14 @@ SimpleConfig::~SimpleConfig()
 
 rtl::OString SimpleConfig::getNext()
 {
-    if (aStringBuffer == "")
+    if (aStringBuffer.isEmpty())
       while ((aStringBuffer = GetNextLine()) == "\t") ; //solange bis != "\t"
-    if ( aStringBuffer == "" )
+    if (aStringBuffer.isEmpty())
         return rtl::OString();
 
     rtl::OString aString = comphelper::string::getToken(aStringBuffer, 0, '\t');
 
-#ifdef _MSC_VER
-#pragma warning (push)
-#pragma warning (disable:4244)
-#endif
-    aStringBuffer.Erase(0, aString.getLength()+1);
-#ifdef _MSC_VER
-#pragma warning (pop)
-#endif
+    aStringBuffer = aStringBuffer.copy(aString.getLength()+1);
 
     aStringBuffer = comphelper::string::stripStart(aStringBuffer, '\t');
 
