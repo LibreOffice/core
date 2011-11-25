@@ -48,7 +48,13 @@ import static org.junit.Assert.*;
     org.openoffice.test.arg.... system properties.
 */
 
+
 public final class OfficeConnection {
+    private final class PostprocessFailedException extends java.lang.RuntimeException {
+        PostprocessFailedException() {
+            super("This likely means that soffice crashed during the test.");
+        }
+    };
     /** Start up an OOo instance.
     */
     public void setUp() throws Exception {
@@ -159,7 +165,14 @@ public final class OfficeConnection {
                     Forward pperrForward = new Forward(postprocess.getErrorStream(), System.err);
                     pperrForward.start();
                     postprocess.waitFor();
-                    assertEquals(0, postprocess.exitValue());
+                    if(postprocess.exitValue() != 0)
+                    {
+                        // no ugly long java stacktrace needed here
+                        PostprocessFailedException e = new PostprocessFailedException();
+                        StackTraceElement[] newStackTrace = new StackTraceElement[0];
+                        e.setStackTrace(newStackTrace);
+                        throw e;
+                    }
                 }
             }
             catch(IOException e) {}
