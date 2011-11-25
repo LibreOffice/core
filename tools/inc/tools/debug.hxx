@@ -46,7 +46,7 @@
     have been used for true assertions as well as for logged warnings, they map
     to SAL_WARN instead of standard assert.  The warning and error macros
     (DBG_WARNING, DBG_WARNING1, ..., DBG_WARNING5, DBG_WARNINGFILE,
-    DBG_ERRORFILE) all map to SAL_WARN, too.
+    DBG_ERRORFILE) all map to SAL_INFO.
 */
 
 // ------------
@@ -480,23 +480,23 @@ public:
 #endif
 
 #define DBG_WARNING( aWarning ) \
-    SAL_DETAIL_WARN_IF_FORMAT(true, "legacy.tools", aWarning)
+    SAL_DETAIL_INFO_IF_FORMAT(true, "legacy.tools", aWarning)
 #define DBG_WARNING1( aWarning, x1 ) \
-    SAL_DETAIL_WARN_IF_FORMAT(true, "legacy.tools", aWarning, x1)
+    SAL_DETAIL_INFO_IF_FORMAT(true, "legacy.tools", aWarning, x1)
 #define DBG_WARNING2( aWarning, x1, x2 ) \
-    SAL_DETAIL_WARN_IF_FORMAT(true, "legacy.tools", aWarning, x1, x2)
+    SAL_DETAIL_INFO_IF_FORMAT(true, "legacy.tools", aWarning, x1, x2)
 #define DBG_WARNING3( aWarning, x1, x2, x3 ) \
-    SAL_DETAIL_WARN_IF_FORMAT(true, "legacy.tools", aWarning, x1, x2, x3)
+    SAL_DETAIL_INFO_IF_FORMAT(true, "legacy.tools", aWarning, x1, x2, x3)
 #define DBG_WARNING4( aWarning, x1, x2, x3, x4 ) \
-    SAL_DETAIL_WARN_IF_FORMAT(true, "legacy.tools", aWarning, x1, x2, x3, x4)
+    SAL_DETAIL_INFO_IF_FORMAT(true, "legacy.tools", aWarning, x1, x2, x3, x4)
 #define DBG_WARNING5( aWarning, x1, x2, x3, x4, x5 ) \
-    SAL_DETAIL_WARN_IF_FORMAT( \
+    SAL_DETAIL_INFO_IF_FORMAT( \
         true, "legacy.tools", aWarning, x1, x2, x3, x4, x5)
-#define DBG_WARNINGFILE( aWarning ) SAL_DETAIL_WARN_IF_FORMAT( \
+#define DBG_WARNINGFILE( aWarning ) SAL_DETAIL_INFO_IF_FORMAT( \
     true, "legacy.tools", aWarning, __FILE__, __LINE__)
 
 #define DBG_ERRORFILE( aError ) \
-    SAL_DETAIL_WARN_IF_FORMAT(true, "legacy.tools", aError, __FILE__, __LINE__)
+    SAL_DETAIL_INFO_IF_FORMAT(true, "legacy.tools", aError, __FILE__, __LINE__)
 
 #define DBG_TESTSOLARMUTEX()                \
 do                                          \
