@@ -2721,7 +2721,7 @@ void ToolBox::ImplFormat( sal_Bool bResize )
                     if ( mbHorz )
                     {
                         it->maCalcRect.Left()     = nX;
-                        if ( meLayoutMode == TBX_LAYOUT_TOP && mnLines )
+                        if ( meLayoutMode == TBX_LAYOUT_TOP && mnLines == 1 )
                             it->maCalcRect.Top()      = nY/2;
                         else
                             it->maCalcRect.Top()      = nY+(nLineSize-aCurrentItemSize.Height())/2;
