@@ -54,7 +54,12 @@ $(call gb_JunitTest_get_target,%) :
                 '-Dorg.openoffice.test.arg.debugcommand=$(gb_JunitTest_DEBUGCOMMAND)') \
             $(DEFS) \
             org.junit.runner.JUnitCore \
-            $(CLASSES) 2>&1 > $@.log || (cat $@.log && false)) && \
+            $(CLASSES) 2>&1 > $@.log || \
+		(grep -v -e 'at org.junit.' \
+			-e 'at com.sun.star.lib.uno.' \
+			-e 'at java.lang.reflect.' \
+			-e 'at sun.reflect.' $@.log \
+		&& echo "see full error log at $@.log" && false)) && \
         rm -rf $(call gb_JunitTest_get_userdir,$*))
 	$(CLEAN_CMD)
 
