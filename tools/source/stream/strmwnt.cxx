@@ -397,7 +397,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nMode )
     //    !!! DirEntry aDirEntry( rFilename );
     //    !!! aFilename = aDirEntry.GetFull();
     aFilename = aParsedFilename;
-    ByteString aFileNameA( aFilename, osl_getThreadTextEncoding());
+    rtl::OString aFileNameA(rtl::OUStringToOString(aFilename, osl_getThreadTextEncoding()));
 #ifndef BOOTSTRAP
     FSysRedirector::DoRedirect( aFilename );
 #endif
@@ -442,7 +442,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nMode )
     }
 
     pInstanceData->hFile = CreateFile(
-        aFileNameA.GetBuffer(),
+        aFileNameA.getStr(),
         nAccessMode,
         nShareMode,
         (LPSECURITY_ATTRIBUTES)NULL,
@@ -476,7 +476,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nMode )
             nOpenAction = OPEN_EXISTING;
             SetLastError( ERROR_SUCCESS );
             pInstanceData->hFile = CreateFile(
-                aFileNameA.GetBuffer(),
+                aFileNameA.getStr(),
                 GENERIC_READ,
                 nShareMode,
                 (LPSECURITY_ATTRIBUTES)NULL,

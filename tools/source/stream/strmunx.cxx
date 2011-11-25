@@ -503,7 +503,7 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
     {
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "InternalLock on %s [ %ld ... %ld ] failed\n",
-                 ByteString(aFilename, osl_getThreadTextEncoding()).GetBuffer(), nByteOffset, nByteOffset+nBytes );
+                 rtl::OUStringToOStroug(aFilename, osl_getThreadTextEncoding()).getStr(), nByteOffset, nByteOffset+nBytes );
 #endif
         return sal_False;
     }
