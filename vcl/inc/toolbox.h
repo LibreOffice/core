@@ -47,7 +47,6 @@
 
 #define TB_LARGEIMAGESIZE            26
 #define TB_LARGEIMAGESIZE_INDUSTRIAL 24
-#define TB_LARGEIMAGESIZE_CRYSTAL    22
 
 class Window;
 
