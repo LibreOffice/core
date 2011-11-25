@@ -1,0 +1,61 @@
+#!/bin/sh
+
+# Version: MPL 1.1 / GPLv3+ / LGPLv3+
+#
+# The contents of this file are subject to the Mozilla Public License Version
+# 1.1 (the "License"); you may not use this file except in compliance with
+# the License or as specified alternatively below. You may obtain a copy of
+# the License at http://www.mozilla.org/MPL/
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+# Major Contributor(s):
+# [ Copyright (C) 2011 Petr Mladek <pmladek@suse.cz> (initial developer) ]
+# [ Copyright (C) 2011 Yifan Jiang <yfjiang@suse.com> ]
+#
+# All Rights Reserved.
+#
+# For minor contributions see the git repository.
+#
+# Alternatively, the contents of this file may be used under the terms of
+# either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+# the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+# in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+# instead of those above.
+
+
+# resolve installation directory
+sd_cwd=`pwd`
+sd_res=$0
+while [ -h "$sd_res" ] ; do
+    cd "`dirname "$sd_res"`"
+    sd_basename=`basename "$sd_res"`
+    sd_res=`ls -l "$sd_basename" | sed "s/.*$sd_basename -> //g"`
+done
+cd "`dirname "$sd_res"`"
+sd_prog=`pwd`
+cd "$sd_cwd"
+
+user_conf_dir=`grep UserInstallation $sd_prog/bootstraprc | sed -e "s|UserInstallation=||" -e "s|\\$SYSUSERCONFIG|$HOME/.config|"`
+
+case "`uname -s`" in
+Linux)
+    sd_prog1="$sd_prog"
+    sd_prog2="$sd_prog/../ure/lib"
+    LD_LIBRARY_PATH=$sd_prog1:$sd_prog2${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+    export LD_LIBRARY_PATH
+    ;;
+esac
+
+exec $sd_prog/cppunittester \
+	-env:UNO_SERVICES=file://$sd_prog/../ure/share/misc/services.rdb \
+	-env:UNO_TYPES=file://$sd_prog/../ure/share/misc/test/types.rdb \
+	-env:arg-soffice=path:$sd_prog/soffice \
+	-env:arg-user=$user_conf_dir \
+	-env:arg-env=$LD_LIBRARY_PATH \
+	-env:arg-testarg.smoketest.doc=$sd_prog/../share/test/smoketestdoc.sxw  \
+	--protector $sd_prog/unoexceptionprotector.so unoexceptionprotector \
+	$sd_prog/libsmoketest.so

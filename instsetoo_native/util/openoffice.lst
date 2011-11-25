@@ -371,6 +371,104 @@ LibreOffice_Dev_SDK
     }
 }
 
+LibreOffice_Test
+{
+    Settings
+    {
+        downloadname LO-Test_{packageversion}_{os}_install_{languages}
+        variables
+        {
+            PRODUCTNAME LibreOffice
+            PRODUCTVERSION 3.5
+            PRODUCTEXTENSION
+            LONG_PRODUCTEXTENSION
+            SHORT_PRODUCTEXTENSION alpha0
+            POSTVERSIONEXTENSION TEST
+            POSTVERSIONEXTENSIONUNIX test
+            BRANDPACKAGEVERSION 3.5
+            PACKAGEVERSION 3.5.0
+            PACKAGEREVISION {buildid}
+            PACK_INSTALLED 1
+            POOLPRODUCT 0
+            DMG_VOLUMEEXTENSION TEST
+            DATABASENAME libreoffice35test
+            NO_README_IN_ROOTDIR 1
+            LICENSENAME LGPL
+            IGNOREDIRECTORYLAYER 1
+            NOVERSIONINDIRNAME 0
+            NOSPACEINDIRECTORYNAME 1
+            NOSHORTDIRECTORYNAMES 1
+            CHANGETARGETDIR 1
+            DOWNLOADBANNER ooobanner.bmp
+	    DOWNLOADBITMAP ooobitmap.bmp
+	    DOWNLOADSETUPICO ooosetup.ico
+            DONTUSESTARTMENUFOLDER 1
+            RELATIVE_PATHES_IN_DDF 1
+            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
+            STARTCENTER_INFO_URL http://www.libreoffice.org/
+            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
+            STARTCENTER_LAYOUT_STYLE 0
+            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+        }
+        active 1
+        compression 5
+        script test
+        include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/cppunit,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor}
+    }
+}
+
+LibreOffice_Dev_Test
+{
+    Settings
+    {
+        downloadname LO-Dev-Test_{packageversion}_{os}_install_{languages}
+        variables
+        {
+            PRODUCTNAME LibO-dev
+            PRODUCTVERSION 3.5
+            PRODUCTEXTENSION
+            LONG_PRODUCTEXTENSION
+            SHORT_PRODUCTEXTENSION alpha0
+            UNIXBASISROOTNAME lo-dev
+            POSTVERSIONEXTENSION TEST
+            POSTVERSIONEXTENSIONUNIX test
+            BRANDPACKAGEVERSION 3.5
+            PACKAGEVERSION 3.5.0
+            PACKAGEREVISION {buildid}
+            BASISPACKAGEPREFIX libobasis-dev
+            UREPACKAGEPREFIX lodev
+            SOLSUREPACKAGEPREFIX lodev
+            REGISTRYLAYERNAME LayerDev
+			DEVELOPMENTPRODUCT 1
+            PACK_INSTALLED 1
+            POOLPRODUCT 0
+            DMG_VOLUMEEXTENSION TEST
+            DATABASENAME libreoffice35devtest
+            NO_README_IN_ROOTDIR 1
+            LICENSENAME LGPL
+            IGNOREDIRECTORYLAYER 1
+            NOVERSIONINDIRNAME 0
+            NOSPACEINDIRECTORYNAME 1
+            NOSHORTDIRECTORYNAMES 1
+            CHANGETARGETDIR 1
+            DOWNLOADBANNER ooobanner.bmp
+	    DOWNLOADBITMAP ooobitmap.bmp
+            DOWNLOADSETUPICO ooosetup.ico
+            DONTUSESTARTMENUFOLDER 1
+            RELATIVE_PATHES_IN_DDF 1
+            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
+            STARTCENTER_INFO_URL http://www.libreoffice.org/
+            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
+            STARTCENTER_LAYOUT_STYLE 0
+            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+        }
+        active 1
+        compression 5
+        script test
+        include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/cppunit,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor}
+    }
+}
+
 OxygenOffice
 {
 	Settings

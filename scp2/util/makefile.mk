@@ -253,5 +253,12 @@ SCP4LINK_PRODUCT_TYPE = osl
 SCP4TARGET = sdkoo
 SCP4FILES = sdkoo.par
 
+# ------------------------------------------------------------------------
+# Test
+
+SCP5LINK_PRODUCT_TYPE = osl
+SCP5TARGET = test
+SCP5FILES = smoketest.par
+
 # --- target -------------------------------------------------------------
 .INCLUDE :  target.mk

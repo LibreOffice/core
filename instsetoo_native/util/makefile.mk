@@ -104,7 +104,7 @@ ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) 
 .IF "$(GUI)"=="WNT"
 ALLTAR : openofficeall ooohelppack sdkooall
 .ELSE
-ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) ooohelppack) sdkoo_en-US
+ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) ooohelppack) sdkoo_en-US $(eq,$(OS),MACOSX $(NULL) lotest_en-US)
 .ENDIF
 .ENDIF
 .ELSE # "$(ENABLE_RELEASE_BUILD)"=="TRUE"
@@ -118,7 +118,7 @@ ALLTAR : openofficedev_$(defaultlangiso) ooodevlanguagepack $(eq,$(OS),MACOSX $(
 .IF "$(GUI)"=="WNT"
 ALLTAR : openofficedevall ooodevhelppack sdkoodevall
 .ELSE
-ALLTAR : openofficedev_$(defaultlangiso) ooodevlanguagepack $(eq,$(OS),MACOSX $(NULL) ooodevhelppack) sdkoodev_en-US
+ALLTAR : openofficedev_$(defaultlangiso) ooodevlanguagepack $(eq,$(OS),MACOSX $(NULL) ooodevhelppack) sdkoodev_en-US $(eq,$(OS),MACOSX $(NULL) lodevtest_en-US)
 .ENDIF
 .ENDIF
 .ENDIF # "$(ENABLE_RELEASE_BUILD)"=="TRUE"
@@ -167,6 +167,10 @@ sdkoo: $(foreach,i,$(alllangiso) sdkoo_$i)
 
 sdkoodev: $(foreach,i,$(alllangiso) sdkoodev_$i)
 
+lotest: $(foreach,i,$(alllangiso) lotest_$i)
+
+lodevtest: $(foreach,i,$(alllangiso) lodevtest_$i)
+
 ure: $(foreach,i,$(alllangiso) ure_$i)
 
 oxygenoffice: $(foreach,i,$(alllangiso) oxygenoffice_$i)
@@ -182,6 +186,7 @@ MSILANGPACKTEMPLATESOURCE=$(PRJ)$/inc_ooolangpack$/windows$/msi_templates
 MSIHELPPACKTEMPLATESOURCE=$(PRJ)$/inc_ooohelppack$/windows$/msi_templates
 MSIURETEMPLATESOURCE=$(PRJ)$/inc_ure$/windows$/msi_templates
 MSISDKOOTEMPLATESOURCE=$(PRJ)$/inc_sdkoo$/windows$/msi_templates
+MSITESTTEMPLATESOURCE=$(PRJ)$/inc_lotest$/windows$/msi_templates
 MSICOMMONTEMPLATESOURCE=$(PRJ)$/inc_common$/windows$/msi_templates
 
 NOLOGOSPLASH:=$(BIN)$/intro.zip
@@ -191,6 +196,7 @@ MSILANGPACKTEMPLATEDIR=$(MISC)$/ooolangpack$/msi_templates
 MSIHELPPACKTEMPLATEDIR=$(MISC)$/ooohelppack$/msi_templates
 MSIURETEMPLATEDIR=$(MISC)$/ure$/msi_templates
 MSISDKOOTEMPLATEDIR=$(MISC)$/sdkoo$/msi_templates
+MSITESTTEMPLATEDIR=$(MISC)$/lotest$/msi_templates
 
 ADDDEPS=$(NOLOGOSPLASH) $(DEVNOLOGOSPLASH)
 .IF "$(OS)" == "WNT"
@@ -215,6 +221,10 @@ $(foreach,i,$(allhelplangiso) ooodevhelppack_$i) : $(ADDDEPS)
 $(foreach,i,$(alllangiso) sdkoo_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) sdkoodev_$i) : $(ADDDEPS)
+
+$(foreach,i,$(alllangiso) lotest_$i) : $(ADDDEPS)
+
+$(foreach,i,$(alllangiso) lodevtest_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) ure_$i) : $(ADDDEPS)
 
@@ -274,6 +284,15 @@ $(foreach,i,$(alllangiso) sdkoodev_$i) : $$@{$(PKGFORMAT:^".")}
 sdkoodev_%{$(PKGFORMAT:^".")} :
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p LibreOffice_Dev_SDK -u $(OUT) -buildid $(BUILD) -msitemplate $(MSISDKOOTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -dontstrip -format $(@:e:s/.//) $(VERBOSESWITCH)
 
+$(foreach,i,$(alllangiso) lotest_$i) : $$@{$(PKGFORMAT:^".")}
+lotest_%{$(PKGFORMAT:^".")} :
+    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p LibreOffice_Test -u $(OUT) -buildid $(BUILD) -msitemplate $(MSITESTTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -dontstrip -format $(@:e:s/.//) $(VERBOSESWITCH)
+
+$(foreach,i,$(alllangiso) lodevtest_$i) : $$@{$(PKGFORMAT:^".")}
+lodevtest_%{$(PKGFORMAT:^".")} :
+    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p LibreOffice_Dev_Test -u $(OUT) -buildid $(BUILD) -msitemplate $(MSITESTTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -dontstrip -format $(@:e:s/.//) $(VERBOSESWITCH)
+
+
 $(foreach,i,$(alllangiso) ure_$i) : $$@{$(PKGFORMAT:^".")}
 ure_%{$(PKGFORMAT:^".")} :
 .IF "$(OS)" == "MACOSX"
@@ -316,7 +335,7 @@ openoffice:
 
 .IF "$(DISABLE_PYTHON)" != "TRUE"
 .IF "$(LOCALPYFILES)"!=""
-$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".") .archive} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")} oxygenoffice_$i{$(PKGFORMAT:^".") .archive} oxygenofficewithjre_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES)
+$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".") .archive} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")} lotest_$i{$(PKGFORMAT:^".")} oxygenoffice_$i{$(PKGFORMAT:^".") .archive} oxygenofficewithjre_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES)
 .ENDIF			# "$(LOCALPYFILES)"!=""
 
 .IF "$(GUI)"!="WNT"
@@ -341,11 +360,13 @@ hack_msitemplates .PHONY:
     -$(MKDIRHIER) $(MSIHELPPACKTEMPLATEDIR)
     -$(MKDIRHIER) $(MSIURETEMPLATEDIR)
     -$(MKDIRHIER) $(MSISDKOOTEMPLATEDIR)
+    -$(MKDIRHIER) $(MSITESTTEMPLATEDIR)
     -$(MKDIRHIER) $(MSIOFFICETEMPLATEDIR)$/Binary
     -$(MKDIRHIER) $(MSILANGPACKTEMPLATEDIR)$/Binary
     -$(MKDIRHIER) $(MSIHELPPACKTEMPLATEDIR)$/Binary
     -$(MKDIRHIER) $(MSIURETEMPLATEDIR)$/Binary
     -$(MKDIRHIER) $(MSISDKOOTEMPLATEDIR)$/Binary
+    -$(MKDIRHIER) $(MSITESTTEMPLATEDIR)$/Binary
     $(GNUCOPY) -u $(MSIOFFICETEMPLATESOURCE)$/*.* $(MSIOFFICETEMPLATEDIR)
     $(GNUCOPY) -u $(MSILANGPACKTEMPLATESOURCE)$/*.* $(MSILANGPACKTEMPLATEDIR)
     $(GNUCOPY) -u $(MSIHELPPACKTEMPLATESOURCE)$/*.* $(MSIHELPPACKTEMPLATEDIR)
@@ -356,16 +377,19 @@ hack_msitemplates .PHONY:
     $(GNUCOPY) -u $(MSICOMMONTEMPLATESOURCE)$/Binary$/*.* $(MSIHELPPACKTEMPLATEDIR)$/Binary
     $(GNUCOPY) -u $(MSICOMMONTEMPLATESOURCE)$/Binary$/*.* $(MSIURETEMPLATEDIR)$/Binary
     $(GNUCOPY) -u $(MSICOMMONTEMPLATESOURCE)$/Binary$/*.* $(MSISDKOOTEMPLATEDIR)$/Binary
+    $(GNUCOPY) -u $(MSICOMMONTEMPLATESOURCE)$/Binary$/*.* $(MSITESTTEMPLATEDIR)$/Binary
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIOFFICETEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSILANGPACKTEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIHELPPACKTEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIURETEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSISDKOOTEMPLATEDIR)$/Binary$/Image.bmp
+    $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSITESTTEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologobanner.bmp $(MSIOFFICETEMPLATEDIR)$/Binary$/Banner.bmp
     $(COPY) $(PRJ)$/res$/nologobanner.bmp $(MSILANGPACKTEMPLATEDIR)$/Binary$/Banner.bmp
     $(COPY) $(PRJ)$/res$/nologobanner.bmp $(MSIHELPPACKTEMPLATEDIR)$/Binary$/Banner.bmp
     $(COPY) $(PRJ)$/res$/nologobanner.bmp $(MSIURETEMPLATEDIR)$/Binary$/Banner.bmp
     $(COPY) $(PRJ)$/res$/nologobanner.bmp $(MSISDKOOTEMPLATEDIR)$/Binary$/Banner.bmp
+    $(COPY) $(PRJ)$/res$/nologobanner.bmp $(MSITESTTEMPLATEDIR)$/Binary$/Banner.bmp
 
 .IF "$(OS)" == "WNT"
 
@@ -378,6 +402,10 @@ openofficedevall: hack_msitemplates $(LOCALPYFILES) openofficedev_$(ALLLANGSTRIN
 sdkooall: hack_msitemplates $(LOCALPYFILES) sdkoo_$(ALLLANGSTRING:s/ /,/)$(PKGFORMAT:^".")
 
 sdkoodevall: hack_msitemplates $(LOCALPYFILES) sdkoodev_$(ALLLANGSTRING:s/ /,/)$(PKGFORMAT:^".")
+
+lotestall: hack_msitemplates $(LOCALPYFILES) lotest_$(ALLLANGSTRING:s/ /,/)$(PKGFORMAT:^".")
+
+lodevtestall: hack_msitemplates $(LOCALPYFILES) lodevtest_$(ALLLANGSTRING:s/ /,/)$(PKGFORMAT:^".")
 
 .ENDIF			# "$(OS)" == "WNT"
 

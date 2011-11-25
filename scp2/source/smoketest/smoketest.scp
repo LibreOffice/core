@@ -1,0 +1,204 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License or as specified alternatively below. You may obtain a copy of
+ * the License at http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * Major Contributor(s):
+ * [ Copyright (C) 2011 Petr Mladek <pmladek@suse.cz> (initial developer) ]
+ *
+ * All Rights Reserved.
+ *
+ * For minor contributions see the git repository.
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+
+#include "macros.inc"
+
+Installation gid_Installation_Test
+    ProductName = "${PRODUCTNAME}";
+    ProductVersion = "${PRODUCTVERSION}";
+    ProductExtension = "${PRODUCTEXTENSION}";
+#if defined WNT
+    DefaultDestPath = "<winprogpath>\%PRODUCTNAME";
+#else
+    DefaultDestPath = "/opt/%PRODUCTNAME";
+#endif
+End
+
+Module gid_Module_Root_Smoketest
+    Name = "smoketest";
+    Description = "smoketest";
+    PackageInfo = "packinfo_test.txt";
+End
+
+#ifndef MACOSX
+Directory gid_Test_Dir_Brand_Root
+    ParentID = PREDEFINED_PROGDIR;
+  #ifdef WNT
+    HostName = "${PRODUCTNAME} ${BRANDPACKAGEVERSION}";
+  #else
+    HostName = ".";
+  #endif
+    Styles = (OFFICEDIRECTORY,ISINSTALLLOCATION,CREATE);
+End
+#endif
+
+Directory gid_Test_Brand_Dir_Program
+#if defined MACOSX
+    ParentID = gid_Test_Dir_Bundle_Contents;
+    DosName = "MacOS";
+#else
+    ParentID = gid_Test_Dir_Brand_Root;
+    DosName = "program";
+#endif
+End
+
+Directory gid_Test_Brand_Dir_Share
+#if defined MACOSX
+    ParentID = gid_Test_Dir_Bundle_Contents;
+#else
+    ParentID = gid_Test_Dir_Brand_Root;
+#endif
+    DosName = "share";
+End
+
+Directory gid_Test_Brand_Dir_Share_Test
+    ParentID = gid_Test_Brand_Dir_Share;
+    DosName = "test";
+End
+
+Directory gid_Test_Dir_Common_Ure
+    ParentID = gid_Test_Dir_Brand_Root;
+    HostName = "ure";
+    Styles = (UREDIRECTORY);
+End
+
+Directory gid_Test_Dir_Ure_Share
+    ParentID = gid_Test_Dir_Common_Ure;
+    DosName = "share";
+End
+
+Directory gid_Test_Dir_Ure_Misc
+    ParentID = gid_Test_Dir_Ure_Share;
+    DosName = "misc";
+End
+
+Directory gid_Test_Dir_Ure_Misc_Test
+    ParentID = gid_Test_Dir_Ure_Misc;
+    DosName = "test";
+End
+
+
+File gid_Test_File_Txt_License
+    TXT_FILE_BODY;
+    Dir = gid_Test_Brand_Dir_Share_Test;
+  #ifdef UNX
+    Name = "LICENSE";
+  #endif
+  #ifdef WNT
+    Name = "license.txt";
+  #endif
+    Styles = (PACKED, SCPZIP_REPLACE);
+End
+
+File gid_Test_File_Txt_Readme
+    TXT_FILE_BODY;
+    Dir = gid_Test_Brand_Dir_Share_Test;
+  #ifdef UNX
+    Name = "README_en-US";
+  #endif
+  #ifdef WNT
+    Name = "readme_en-US.txt";
+  #endif
+    Styles = (PACKED, SCPZIP_REPLACE);
+End
+
+File gid_Test_File_Misc_Smoketestdoc
+    TXT_FILE_BODY;
+    Dir = gid_Test_Brand_Dir_Share_Test;
+    Name = "smoketestdoc.sxw";
+    Styles = (PACKED, SCPZIP_REPLACE);
+End
+
+File gid_Test_File_Misc_TypesRdb
+    TXT_FILE_BODY;
+    Dir = gid_Test_Dir_Ure_Misc_Test;
+    Name = "types.rdb";
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+End
+
+File gid_Test_File_Bin_LOSmoketest
+    BIN_FILE_BODY;
+    Dir = gid_Test_Brand_Dir_Program;
+    Name = "losmoketest";
+    Styles = (PACKED);
+End
+
+File gid_Test_File_Exe_Cppunittester
+    BIN_FILE_BODY;
+    Dir = gid_Test_Brand_Dir_Program;
+    Name = "cppunittester";
+    Styles = (PACKED);
+End
+
+File gid_Test_File_Lib_Cppunit
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Test_Brand_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT3(libcppunit-1.12,UNXSUFFIX,.1));
+  #endif
+End
+
+File gid_Test_File_Lib_Smoketest
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Test_Brand_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT2(libsmoketest,UNXSUFFIX));
+  #endif
+End
+
+File gid_Test_File_Lib_Test
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Test_Brand_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT2(libtest,UNXSUFFIX));
+  #endif
+End
+
+File gid_Test_File_Lib_Unotest
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Test_Brand_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT2(libunotest,UNXSUFFIX));
+  #endif
+End
+
+File gid_Test_File_Lib_Unoexceptionprotector
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Test_Brand_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT2(unoexceptionprotector,UNXSUFFIX));
+  #endif
+End
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

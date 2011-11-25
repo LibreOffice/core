@@ -1,0 +1,50 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License or as specified alternatively below. You may obtain a copy of
+ * the License at http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * Major Contributor(s):
+ * [ Copyright (C) 2011 Petr Mladek <pmladek@suse.cz> (initial developer) ]
+ *
+ * All Rights Reserved.
+ *
+ * For minor contributions see the git repository.
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+
+#include "macros.inc"
+
+Module gid_Module_Optional_Smoketest
+    PackageInfo = "packinfo_test.txt";
+    MOD_NAME_DESC ( MODULE_OPTIONAL_SMOKETEST );
+    Sortkey = "630";
+    ParentID = gid_Module_Optional;
+    Default = NO;
+    Files = (gid_Test_File_Txt_License,
+             gid_Test_File_Txt_Readme,
+             gid_Test_File_Misc_Smoketestdoc,
+             gid_Test_File_Misc_TypesRdb,
+             gid_Test_File_Bin_LOSmoketest,
+             gid_Test_File_Exe_Cppunittester,
+             gid_Test_File_Lib_Cppunit,
+             gid_Test_File_Lib_Smoketest,
+             gid_Test_File_Lib_Test,
+             gid_Test_File_Lib_Unotest,
+             gid_Test_File_Lib_Unoexceptionprotector);
+End
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

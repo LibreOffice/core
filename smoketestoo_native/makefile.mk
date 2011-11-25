@@ -49,10 +49,12 @@ DEF1NAME = $(SHL1TARGET)
 .INCLUDE: target.mk
 .INCLUDE: installationtest.mk
 
-.IF "$(depend)" == ""
+.IF "$(depend)" == "" && "$(RUN_SMOKETEST)" == "YES"
 # disable smoketest when cross-compiling for now; we can use wine at some stage (?)
 .IF "$(CROSS_COMPILING)" != "YES"
 ALLTAR : cpptest
+.ELSE
+ALLTAR : 
 .END
 .END
 
