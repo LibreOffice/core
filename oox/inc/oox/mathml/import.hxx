@@ -40,13 +40,6 @@ namespace formulaimport
 class XmlStream;
 }
 
-class OOX_DLLPUBLIC FormulaImportHelper
-{
-public:
-    FormulaImportHelper();
-    virtual void addFormula( com::sun::star::uno::Reference< com::sun::star::embed::XEmbeddedObject > ) = 0;
-};
-
 class OOX_DLLPUBLIC FormulaImportBase
 {
 public:
