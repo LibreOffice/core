@@ -1101,7 +1101,7 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
             uno::Reference< text::XTextContent > xStarMath( m_xTextFactory->createInstance(sEmbeddedService), uno::UNO_QUERY_THROW );
             uno::Reference< beans::XPropertySet > xStarMathProperties(xStarMath, uno::UNO_QUERY_THROW);
 
-            xStarMathProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_STREAM_NAME ),
+            xStarMathProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_EMBEDDED_OBJECT ),
                 val.getAny());
 
             uno::Reference< uno::XInterface > xInterface( formula->getComponent(), uno::UNO_QUERY );

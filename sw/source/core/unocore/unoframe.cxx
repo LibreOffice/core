@@ -2287,7 +2287,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                         pDoc->SetFlyName((SwFlyFrmFmt&)*pFmt2, sName);
                 }
             }
-            else if( pStreamName && false )
+            else if( pStreamName )
             {
                 ::rtl::OUString sStreamName;
                 (*pStreamName) >>= sStreamName;
@@ -2303,8 +2303,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             else if( pEmbeddedObject || pStreamName )
             {
                 uno::Reference< embed::XEmbeddedObject > obj;
-//                (*pEmbeddedObject) >>= obj;
-                (*pStreamName) >>= obj;
+                (*pEmbeddedObject) >>= obj;
                 svt::EmbeddedObjectRef xObj;
                 xObj.Assign( obj, embed::Aspects::MSOLE_CONTENT );
 
