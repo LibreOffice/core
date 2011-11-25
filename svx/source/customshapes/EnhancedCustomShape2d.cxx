@@ -694,6 +694,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     nCoordTop           ( 0 ),
     nCoordWidth         ( 21600 ),
     nCoordHeight        ( 21600 ),
+    bOOXMLShape         ( sal_False ),
     nXRef               ( 0x80000000 ),
     nYRef               ( 0x80000000 ),
     nFlags              ( 0 ),
