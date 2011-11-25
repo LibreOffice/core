@@ -62,7 +62,7 @@ check : allcheck
 	@true
 
 %check:
-	@ @GNUMAKE@ -f $(dir $(realpath $(firstword $)MAKEFILE_LIST))))/GNUmakefile.mk -r \
+	@ @GNUMAKE@ -f $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/GNUmakefile.mk -r \
 		$(if @VERBOSE@,,-s) --jobs="$(if \
 		   $(CHECK_PARALLELISM),$(CHECK_PARALLELISM),@GMAKE_PARALLELISM@)" \
 		$(patsubst allcheck,check,$@)
