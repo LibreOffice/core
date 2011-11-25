@@ -337,6 +337,12 @@ void LocaleNode::incErrorStr( const char* pStr, const ::rtl::OUString& rVal ) co
     fprintf( stderr, prepareErrorFormat( pStr, ": %s"), OSTR( rVal));
 }
 
+void LocaleNode::incErrorStrStr( const char* pStr, const ::rtl::OUString& rVal1, const ::rtl::OUString& rVal2 ) const
+{
+    ++nError;
+    fprintf( stderr, prepareErrorFormat( pStr, ": %s %s"), OSTR( rVal1), OSTR( rVal2));
+}
+
 void LCInfoNode::generateCode (const OFileWriter &of) const
 {
 
@@ -590,13 +596,17 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
 }
 
 
+static OUString sTheCompatibleCurrency;
+
 sal_Int16 LCFormatNode::mnSection = 0;
 sal_Int16 LCFormatNode::mnFormats = 0;
 
 void LCFormatNode::generateCode (const OFileWriter &of) const
 {
     OUString str;
-    if (mnSection >= 2)
+    if (mnSection == 0)
+        sTheCompatibleCurrency = OUString();
+    else if (mnSection >= 2)
         incError("more than 2 LC_FORMAT sections");
     OUString strFrom( getAttr().getValueByName("replaceFrom"));
     of.writeParameter("replaceFrom", strFrom, mnSection);
@@ -607,6 +617,13 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
     if (str.endsWithIgnoreAsciiCaseAsciiL( "-FFFF]", 6))
         incErrorStr("replaceTo=\"%s\" needs FFFF to be adapted to the real LangID value.", str);
     of.writeParameter("replaceTo", str, mnSection);
+    // Remember the currency symbol if present.
+    if (str.indexOfAsciiL( "[$", 2) == 0)
+    {
+        sal_Int32 nHyphen = str.indexOf( '-');
+        if (nHyphen >= 3)
+            sTheCompatibleCurrency = str.copy( 2, nHyphen - 2);
+    }
     ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
     if (useLocale.getLength() > 0) {
         switch (mnSection)
@@ -710,14 +727,27 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                         }
                     }
                     break;
-                // Currency formats should be something like [C]###0;-[C]###0
-                // and not parenthesized [C]###0;([C]###0) if not en_US.
+                case cssi::NumberFormatIndex::CURRENCY_1000DEC2 :
+                    // Remember the currency symbol if present.
+                    {
+                        sal_Int32 nStart;
+                        if (sTheCompatibleCurrency.isEmpty() &&
+                                ((nStart = n->getValue().indexOfAsciiL( "[$", 2)) >= 0))
+                        {
+                            OUString aCode( n->getValue());
+                            sal_Int32 nHyphen = aCode.indexOf( '-', nStart);
+                            if (nHyphen >= nStart + 3)
+                                sTheCompatibleCurrency = aCode.copy( nStart + 2, nHyphen - nStart - 2);
+                        }
+                    }
+                    // fallthru
                 case cssi::NumberFormatIndex::CURRENCY_1000INT :
                 case cssi::NumberFormatIndex::CURRENCY_1000INT_RED :
-                case cssi::NumberFormatIndex::CURRENCY_1000DEC2 :
                 case cssi::NumberFormatIndex::CURRENCY_1000DEC2_RED :
                 case cssi::NumberFormatIndex::CURRENCY_1000DEC2_CCC :
                 case cssi::NumberFormatIndex::CURRENCY_1000DEC2_DASHED :
+                    // Currency formats should be something like [C]###0;-[C]###0
+                    // and not parenthesized [C]###0;([C]###0) if not en_US.
                     if (strcmp( of.getLocale(), "en_US") != 0)
                     {
                         OUString aCode( n->getValue());
@@ -1549,6 +1579,12 @@ void LCCurrencyNode :: generateCode (const OFileWriter &of) const
             incError( "CurrencyID is not ISO 4217");
         str = currencyNode -> findNode ("CurrencySymbol") -> getValue();
         of.writeParameter("currencySymbol", str, nbOfCurrencies);
+        // Check if this currency really is the one used in number format 
+        // codes. In case of ref=... mechanisms it may be that TheCurrency 
+        // couldn't had been determined from the current locale (i.e. is 
+        // empty), silently assume the referred locale has things right.
+        if (bCompatible && !sTheCompatibleCurrency.isEmpty() && sTheCompatibleCurrency != str)
+            incErrorStrStr( "CurrencySymbol \"%s\" flagged as usedInCompatibleFormatCodes doesn't match \"%s\" determined from format codes.", str, sTheCompatibleCurrency);
         str = currencyNode -> findNode ("BankSymbol") -> getValue();
         of.writeParameter("bankSymbol", str, nbOfCurrencies);
         // BankSymbol currently must be ISO 4217. May change later if

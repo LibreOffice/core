@@ -387,6 +387,13 @@
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
       <CurrencyID>MMK</CurrencyID>
+      <CurrencySymbol>ကျပ်</CurrencySymbol>
+      <BankSymbol>MMK</BankSymbol>
+      <CurrencyName>Kyat</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+    <Currency default="false" usedInCompatibleFormatCodes="false" legacyOnly="true">
+      <CurrencyID>MMK</CurrencyID>
       <CurrencySymbol>K</CurrencySymbol>
       <BankSymbol>MMK</BankSymbol>
       <CurrencyName>Kyat</CurrencyName>

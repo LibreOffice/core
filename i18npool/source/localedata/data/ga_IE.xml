@@ -149,14 +149,14 @@
       <CurrencyName>Euro</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
     </Currency>
-    <Currency default="false" usedInCompatibleFormatCodes="true">
+    <Currency default="false" usedInCompatibleFormatCodes="false">
       <CurrencyID>IEP</CurrencyID>
       <CurrencySymbol>IR£</CurrencySymbol>
       <BankSymbol>IEP</BankSymbol>
       <CurrencyName>Punt Éireannach</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
     </Currency>
-    <Currency default="false" usedInCompatibleFormatCodes="false">
+    <Currency default="false" usedInCompatibleFormatCodes="true">
       <CurrencyID>GBP</CurrencyID>
       <CurrencySymbol>£</CurrencySymbol>
       <BankSymbol>GBP</BankSymbol>
