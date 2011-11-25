@@ -53,6 +53,10 @@
 #include <stdio.h>
 #include <sal/macros.h>
 
+// works with Windows XP as well as with Windows 7
+#define PSAPI_VERSION 1
+#include <psapi.h>
+
 #include <systools/win32/uwinapi.h>
 #include <../tools/seterror.hxx>
 
@@ -90,133 +94,42 @@ static std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sPro
     return  result;
 }
 
-static inline bool IsSetMsiProperty(MSIHANDLE handle, const std::_tstring& sProperty)
-{
-    std::_tstring value = GetMsiProperty(handle, sProperty);
-    return (value.length() > 0);
-}
-
-static inline void UnsetMsiProperty(MSIHANDLE handle, const std::_tstring& sProperty)
-{
-    MsiSetProperty(handle, sProperty.c_str(), NULL);
-}
-
-static inline void SetMsiProperty(MSIHANDLE handle, const std::_tstring& sProperty)
-{
-    MsiSetProperty(handle, sProperty.c_str(), TEXT("1"));
-}
-
 extern "C" UINT __stdcall IsOfficeRunning( MSIHANDLE handle )
 {
-    OSVERSIONINFO   osverinfo;
-    osverinfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-    GetVersionEx( &osverinfo );
+    std::_tstring sOfficeInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
+    // Property empty -> no office installed
+    if ( sOfficeInstallPath.length() == 0 )
+        return ERROR_SUCCESS;
 
-    // renaming the vcl resource doesn't work reliable with OS >= Windows Vista
-    if (osverinfo.dwMajorVersion < 6 )
+    DWORD aProcesses[1024], cbNeeded, cProcesses; /* 1024 processses ought to be enough for anybody */
+
+    if ( !EnumProcesses( aProcesses, sizeof(aProcesses), &cbNeeded ) )
+        return ERROR_INSTALL_FAILURE;
+
+    cProcesses = cbNeeded / sizeof(DWORD);
+
+    // Check if there is "soffice.bin" among the processes
+    for ( unsigned int i = 0; i < cProcesses; i++ )
     {
-        std::_tstring sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
-        // Property empty -> no office installed
-        if ( sInstDir.length() == 0 )
-            return ERROR_SUCCESS;
-
-        std::_tstring sResourceDir = sInstDir + TEXT("Basis\\program\\resource\\");
-        std::_tstring sPattern = sResourceDir + TEXT("vcl*.res");
-
-//        std::_tstring mystr;
-//        mystr = "IsOfficeRunning start. Checking file in dir: " + sResourceDir;
-//        MessageBox( NULL, mystr.c_str(), "IsOfficeRunning", MB_OK );
-
-        WIN32_FIND_DATA aFindFileData;
-        HANDLE  hFind = FindFirstFile( sPattern.c_str(), &aFindFileData );
-
-        if ( IsValidHandle(hFind) )
+        if( aProcesses[i] != 0 )
         {
-            BOOL    fSuccess = false;
-            bool    fRenameSucceeded;
-
-            do
+            TCHAR szProcessName[MAX_PATH] = TEXT("<unknown>");
+            HANDLE hProcess = OpenProcess( PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE,  aProcesses[i] );
+            if (NULL != hProcess )
             {
-                std::_tstring   sResourceFile = sResourceDir + aFindFileData.cFileName;
-                std::_tstring   sIntermediate = sResourceFile + TEXT(".tmp");
-
-                fRenameSucceeded = MoveFileExA( sResourceFile.c_str(), sIntermediate.c_str(), MOVEFILE_REPLACE_EXISTING );
-                if ( fRenameSucceeded )
-                {
-                    MoveFileExA( sIntermediate.c_str(), sResourceFile.c_str(), 0 );
-                    fSuccess = FindNextFile( hFind, &aFindFileData );
-                }
-            } while ( fSuccess && fRenameSucceeded );
-
-            if ( !fRenameSucceeded )
+                HMODULE hMod;
+                if ( EnumProcessModules( hProcess, &hMod, sizeof(hMod), &cbNeeded) )
+                    GetModuleBaseName( hProcess, hMod, szProcessName, sizeof(szProcessName)/sizeof(TCHAR) );
+            }
+            CloseHandle( hProcess );
+            if ( _tcscmp( szProcessName, TEXT("soffice.bin") ) == 0 )
             {
-                MsiSetProperty(handle, TEXT("OFFICERUNS"), TEXT("1"));
+                MsiSetProperty( handle, TEXT("OFFICERUNS"), TEXT("1") );
                 SetMsiErrorCode( MSI_ERROR_OFFICE_IS_RUNNING );
-
-//                mystr = "Office is running";
-//                MessageBox( NULL, mystr.c_str(), "IsOfficeRunning", MB_OK );
             }
-
-            FindClose( hFind );
-        }
-//        mystr = "IsOfficeRunning end";
-//        MessageBox( NULL, mystr.c_str(), "IsOfficeRunning", MB_OK );
-    }
-    else
-    {
-        std::_tstring sOfficeInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
-        // Property empty -> no office installed
-        if ( sOfficeInstallPath.length() == 0 )
-            return ERROR_SUCCESS;
-
-        std::_tstring sRenameSrc = sOfficeInstallPath + TEXT("program");
-        std::_tstring sRenameDst = sOfficeInstallPath + TEXT("program_test");
-
-        bool bSuccess = MoveFile( sRenameSrc.c_str(), sRenameDst.c_str() );
-
-        if ( bSuccess )
-        {
-            MoveFile( sRenameDst.c_str(), sRenameSrc.c_str() );
-        }
-        else
-        {
-            DWORD  dwError = GetLastError();
-            LPVOID lpMsgBuf;
-            // When there is no program folder, there could be no running office
-            if ( dwError == ERROR_FILE_NOT_FOUND )
-                return ERROR_SUCCESS;
-            if ( dwError == ERROR_PATH_NOT_FOUND )
-                return ERROR_SUCCESS;
-
-            // The destination folder should never exist, don't know what to do here
-            if ( dwError == ERROR_ALREADY_EXISTS )
-                return ERROR_SUCCESS;
-
-            if ( FormatMessage(
-                FORMAT_MESSAGE_ALLOCATE_BUFFER |
-                FORMAT_MESSAGE_FROM_SYSTEM |
-                FORMAT_MESSAGE_IGNORE_INSERTS,
-                NULL,
-                GetLastError(),
-                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
-                (LPTSTR) &lpMsgBuf,
-                0,
-                NULL ))
-            {
-                OutputDebugStringFormat( TEXT("Error Code %d: %s"), dwError, lpMsgBuf );
-                LocalFree( lpMsgBuf );
-            }
-            else
-                OutputDebugStringFormat( TEXT("Error Code %d: Unknown"), dwError );
-
-            MsiSetProperty( handle, TEXT("OFFICERUNS"), TEXT("1") );
-            SetMsiErrorCode( MSI_ERROR_OFFICE_IS_RUNNING );
         }
     }
-
     return ERROR_SUCCESS;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
