@@ -1,11 +1,13 @@
 
-dummy:
-	@if test -f ./config.mk; then . ./config.mk; else if test -f ../config.mk ; then . ../config.mk; fi; fi && \
-	if test -f ./Env.Host.sh; then . ./Env.Host.sh; else if test -f ../Env.Host.sh; then . ../Env.Host.sh; fi ; fi && \
+gb_MAKEFILEDIR:=$(dir $(realpath $(firstword $(MAKEFILE_LIST))))
+
+source-env-and-recurse:
+	@if test -f $(gb_MAKEFILEDIR)/config.mk; then . $(gb_MAKEFILEDIR)/config.mk; else if test -f $(gb_MAKEFILEDIR)/../config.mk ; then . $(gb_MAKEFILEDIR)/../config.mk; fi; fi && \
+	if test -f $(gb_MAKEFILEDIR)/Env.Host.sh; then . $(gb_MAKEFILEDIR)/Env.Host.sh; else if test -f $(gb_MAKEFILEDIR)/../Env.Host.sh; then . $(gb_MAKEFILEDIR)/../Env.Host.sh; fi ; fi && \
 	if test -z "$${SOLARENV}"; then echo "No environment set!" 2>&1; exit 1; fi && \
-	$(MAKE) $(MAKECMDGOALS)
+	$(MAKE) -f $(firstword $(MAKEFILE_LIST)) $(MAKECMDGOALS)
 
 ifneq ($(strip $(MAKECMDGOALS)),)
-$(eval $(MAKECMDGOALS) : dummy)
+$(eval $(MAKECMDGOALS) : source-env-and-recurse)
 endif
 

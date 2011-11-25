@@ -1,8 +1,9 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2011 Oracle and/or its affiliates.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -26,7 +27,7 @@
 #*************************************************************************
 
 ifeq ($(strip $(SOLARENV)),)
-include ../solenv/gbuild/source_and_rerun.mk
+include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../solenv/gbuild/source_and_rerun.mk
 else
 
 gb_PARTIALBUILD := T

@@ -62,7 +62,7 @@ $(call gb_JunitTest_get_target,%) :
 		&& echo "see full error log at $@.log" \
 		&& echo "to rerun just this failed test without all others, run either:" \
 		&& echo "cd \$$MODULE && make $@" \
-		&& echo "make -f ${SRCDIR}/GNUmakefile.mk $@" && false)) && \
+		&& echo "make -f $(SRCDIR)/GNUmakefile.mk $@" && false)) && \
         rm -rf $(call gb_JunitTest_get_userdir,$*))
 	$(CLEAN_CMD)
 

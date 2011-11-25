@@ -27,11 +27,12 @@
 #*************************************************************************
 
 ifeq ($(strip $(SOLARENV)),)
-include ./solenv/gbuild/source_and_rerun.mk
+include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/solenv/gbuild/source_and_rerun.mk
+else
+include $(SOLARENV)/gbuild/gbuild.mk
+$(eval $(call gb_Module_make_global_targets,$(wildcard $(SRCDIR)/RepositoryModule_*.mk)))
 endif
 
-include $(SOLARENV)/gbuild/gbuild.mk
 
-$(eval $(call gb_Module_make_global_targets,$(wildcard $(SRCDIR)/RepositoryModule_*.mk)))
 
 # vim: set noet sw=4 ts=4:

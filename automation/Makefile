@@ -27,7 +27,7 @@
 #*************************************************************************
 
 ifeq ($(strip $(SOLARENV)),)
-include ../solenv/gbuild/source_and_rerun.mk
+include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../solenv/gbuild/source_and_rerun.mk
 else
 
 gb_PARTIALBUILD := T

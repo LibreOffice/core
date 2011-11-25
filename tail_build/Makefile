@@ -1,8 +1,9 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2009 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,14 +26,14 @@
 #
 #*************************************************************************
 
-# if no environment is set, try to find one, source it and re-exec
 ifeq ($(strip $(SOLARENV)),)
-include ./solenv/gbuild/source_and_rerun.mk
+include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../solenv/gbuild/source_and_rerun.mk
 else
 
+gb_PARTIALBUILD := T
 include $(SOLARENV)/gbuild/gbuild.mk
 
-$(eval $(call gb_Module_make_global_targets,$(SRC_ROOT)/Module_tail_build.mk))
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
 endif
 # vim: set noet sw=4 ts=4:
