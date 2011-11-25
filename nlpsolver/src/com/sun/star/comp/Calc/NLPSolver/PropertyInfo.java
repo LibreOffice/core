@@ -55,7 +55,7 @@ public class PropertyInfo<PropType> {
     public String getDescription() {
         return m_description;
     }
-    
+
     public void setValue(Object value) throws IllegalArgumentException {
         if (m_property.Type == Type.LONG) {
             if (!(value instanceof Integer))
@@ -97,8 +97,9 @@ public class PropertyInfo<PropType> {
     public void localize(ResourceManager resourceManager) {
         try {
             m_description = resourceManager.getLocalizedString("Properties." + m_property.Name);
+	    System.out.println("Localised description to " + m_description);
         } catch (com.sun.star.resource.MissingResourceException ex) {
-            
+	    System.out.println("No properties file !");
         }
     }
 

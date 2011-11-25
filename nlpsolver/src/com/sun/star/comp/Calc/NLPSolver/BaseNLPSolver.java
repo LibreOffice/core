@@ -99,7 +99,7 @@ public abstract class BaseNLPSolver extends WeakBase
         }
 
         resourceManager = new ResourceManager(xContext, "com.sun.star.comp.Calc.NLPSolver", "/locale", "NLPSolverCommon");
-        
+
         registerProperty(m_assumeNonNegative);
     }
 

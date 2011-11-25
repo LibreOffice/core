@@ -238,7 +238,7 @@ File gid_File_Oxt_NLPSolver
     TXT_FILE_BODY;
     Styles = (PACKED, ARCHIVE);
     Dir = gid_Brand_Dir_Share_Extensions_NLPSolver;
-    Name = "NLPSolver.oxt";
+    Name = "nlpsolver.oxt";
 End
 
 #endif

@@ -207,7 +207,7 @@ End
 
 Directory gid_Brand_Dir_Share_Extensions_NLPSolver
 	ParentID = gid_Brand_Dir_Share_Extensions;
-	DosName = "NLPSolver";
+	DosName = "nlpsolver";
 End
 
 #endif

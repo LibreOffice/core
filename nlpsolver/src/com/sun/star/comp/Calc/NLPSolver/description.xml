@@ -7,16 +7,11 @@
         <name lang="en">Solver for Nonlinear Programming</name>
     </display-name>
     <publisher>
-        <name lang="en" xlink:href="http://www.sun.com/software/star/staroffice/extensions.jsp?cid=925095">Sun Microsystems</name>
+        <name lang="en" xlink:href="http://www.documentfoundation.org">The Document Foundation</name>
     </publisher>
     <extension-description>
-        <src lang="en" xlink:href="description/extensiondescription.txt"/>
+        <src lang="en" xlink:href="description-en-US.txt"/>
     </extension-description>
-    <registration>
-        <simple-license accept-by="admin" default-license-id="en">
-            <license-text lang="en" license-id="en" xlink:href="licenses/lgpl-3.0.txt"/>
-        </simple-license>
-    </registration>
     <dependencies>
         <OpenOffice.org-minimal-version xmlns:d="http://openoffice.org/extensions/description/2006" d:name="OpenOffice.org 3.0" value="3.0"/>
     </dependencies>

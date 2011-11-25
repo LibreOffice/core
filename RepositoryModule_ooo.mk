@@ -58,6 +58,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     lotuswordpro \
     MathMLDTD \
     Mesa \
+    nlpsolver \
     o3tl \
     offapi \
     oovbaapi \
