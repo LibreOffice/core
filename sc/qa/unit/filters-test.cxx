@@ -200,7 +200,8 @@ public:
     CPPUNIT_TEST(testBugFixesXLS);
     CPPUNIT_TEST(testBugFixesXLSX);
     //disable testPassword on MacOSX due to problems with libsqlite3
-#if !defined(MACOSX)
+    //also crashes on DragonFly due to problems with nss/nspr headers
+#if !defined(MACOSX) && !defined(DRAGONFLY)
     CPPUNIT_TEST(testPassword);
 #endif
 
