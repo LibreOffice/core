@@ -49,6 +49,6 @@
 #pragma warning(pop)
 #endif
 
-#endif // INCLUDED_WARNINGS_GUARD_NE_LOCKS_H
+#endif // INCLUDED_WARNINGS_GUARD_QHASH_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
