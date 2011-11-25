@@ -300,7 +300,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Lv
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_LV );
-    Files = (gid_File_Extension_Dictionary_Lt);
+    Files = (gid_File_Extension_Dictionary_Lv);
     InstallOrder = "2000";
     Sortkey = "635";
     Spellcheckerlanguage = "lv";
