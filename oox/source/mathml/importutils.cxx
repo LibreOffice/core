@@ -107,7 +107,7 @@ XmlStream::Tag::Tag( int t, const uno::Reference< xml::sax::XFastAttributeList >
 }
 
 
-XmlStream::XmlStream::Tag::operator bool() const
+XmlStream::Tag::operator bool() const
 {
     return token != XML_TOKEN_INVALID;
 }
