@@ -119,11 +119,6 @@ static int sal_main(void);
 
 #elif defined ANDROID
 
-#include <android/log.h>
-
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "lo-bootstrap", __VA_ARGS__))
-#define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "lo-bootstrap", __VA_ARGS__))
-
 #ifdef __cplusplus
 extern "C" void lo_main(int argc, char **argv);
 #endif
@@ -131,7 +126,6 @@ extern "C" void lo_main(int argc, char **argv);
 #define SAL_MAIN_WITH_ARGS_IMPL \
 void lo_main(int argc, char **argv) \
 { \
-    LOGI("in lo_main, argc=%d, argv[0]=%s, argv[1]=%s", argc, argv[0], argv[1]); \
     sal_detail_initialize(argc, argv); \
     sal_main_with_args(argc, argv); \
     sal_detail_deinitialize(); \
@@ -140,7 +134,6 @@ void lo_main(int argc, char **argv) \
 #define SAL_MAIN_IMPL \
 void lo_main(int argc, char **argv) \
 { \
-    LOGI("in lo_main, argc=%d, argv[0]=%s, argv[1]=%s", argc, argv[0], argv[1]); \
     sal_detail_initialize(argc, argv); \
     sal_main(); \
     sal_detail_deinitialize(); \
