@@ -4,6 +4,7 @@ AtomDocument::AtomDocument(AtomPubSession*, std::basic_string<char, std::char_tr
 AtomFolder::AtomFolder(AtomPubSession*, std::basic_string<char, std::char_traits<char>, std::allocator<char> >)
 AtomPubSession::getCollectionUrl(Collection::Type)
 AtomPubSession::~AtomPubSession()
+BitmapWriteAccess::DrawPolygon(Polygon const&)
 BufferNode::childAt(int) const
 ByteString::Assign(char const*, unsigned short)
 ByteString::Assign(char)
@@ -535,7 +536,6 @@ SfxShell::RemoveItem(unsigned short)
 SfxSlotPool::NextInterface()
 SfxStyleSheet::SfxStyleSheet()
 SfxTabDialog::GetApplyHandler() const
-SfxTabPage::SfxTabPage(Window*, long, SfxItemSet const&)
 SfxThesSubMenuControl::RegisterControl(unsigned short, SfxModule*)
 SfxToDoStack_Implarr_::Contains(SfxToDo_Impl const&) const
 SfxToDoStack_Implarr_::Insert(unsigned short, SfxToDo_Impl const&, unsigned short)
@@ -885,6 +885,7 @@ SvxUnoTextBase::InsertField(SvxFieldItem const&)
 SvxUnoTextBase::SvxUnoTextBase(SvxEditSource const*, SvxItemPropertySet const*)
 SvxUnoTextContent::SvxUnoTextContent()
 SvxZoomStatusBarControl::GetDefItemWidth(StatusBar const&)
+SwAttrIter::Dump(SvStream&) const
 SwBlinkList::Insert(SwBlinkList const*, unsigned short, unsigned short)
 SwBlinkList::Insert(SwBlinkPortion* const&, unsigned short&)
 SwBlinkList::Insert(SwBlinkPortion* const*, unsigned short)
@@ -939,6 +940,7 @@ SwLRects::Insert(SwLRects const*, unsigned short, unsigned short, unsigned short
 SwLRects::Replace(SwLineRect const&, unsigned short)
 SwLRects::Replace(SwLineRect const*, unsigned short, unsigned short)
 SwLRects::_ForEach(unsigned short, unsigned short, unsigned char (*)(SwLineRect const&, void*), void*)
+SwLineLayout::DebugPortions(SvStream&, String const&, unsigned short)
 SwMailMergeChildWindow::GetChildWindowId()
 SwModify::GetClientCount() const
 SwOutlineNodes::Insert(SwNode* const&, unsigned short&)
@@ -952,6 +954,8 @@ SwPosFlyFrms::Insert(SwPosFlyFrm* const*, unsigned short)
 SwPosFlyFrms::Insert(SwPosFlyFrms const*, unsigned short, unsigned short)
 SwPosFlyFrms::Remove(SwPosFlyFrm* const&, unsigned short)
 SwPosFlyFrms::Remove(unsigned short, unsigned short)
+SwProtocol::GetVar(unsigned short, long&)
+SwProtocol::SnapShot(SwFrm const*, unsigned long)
 SwRects::Replace(SwRect const&, unsigned short)
 SwRects::Replace(SwRect const*, unsigned short, unsigned short)
 SwRects::_ForEach(unsigned short, unsigned short, unsigned char (*)(SwRect const&, void*), void*)
@@ -983,6 +987,17 @@ SwTabFrm::GetLeaf(MakePageType, unsigned char)
 SwTableSortBoxes::DeleteAndDestroy(unsigned short, unsigned short)
 SwTableSortBoxes::Insert(SwTableBox* const&, unsigned short&)
 SwTableSortBoxes::Insert(SwTableBox* const*, unsigned short)
+SwTxtFly::ShowContour(OutputDevice*)
+SwTxtSizeInfo::IsOptCalm() const
+SwTxtSizeInfo::IsOptLow() const
+SwTxtSizeInfo::IsOptTest1() const
+SwTxtSizeInfo::IsOptTest2() const
+SwTxtSizeInfo::IsOptTest3() const
+SwTxtSizeInfo::IsOptTest4() const
+SwTxtSizeInfo::IsOptTest5() const
+SwTxtSizeInfo::IsOptTest6() const
+SwTxtSizeInfo::IsOptTest7() const
+SwTxtSizeInfo::IsOptTest8() const
 SwVbaColumn::calculateAbsoluteColumnWidth(int, com::sun::star::uno::Sequence<com::sun::star::text::TableColumnSeparator> const&, double*)
 SwVbaColumn::calculateRelativeColumnWidth(double const*, double*, int)
 SwVbaStyle::getOOoStyleTypeFromMSWord(int)
@@ -1039,6 +1054,7 @@ TaskStatusFieldItem::TaskStatusFieldItem()
 TempFile::IsValid() const
 TextObj::TextObj(TextObj&)
 TextObj::Write(SvStream*)
+ToolBox::GetToolbarLayoutMode()
 TransferableDataHelper::GetInterface(com::sun::star::datatransfer::DataFlavor const&, com::sun::star::uno::Reference<com::sun::star::uno::XInterface>&)
 UCBStorage::IsStorageFile(String const&)
 UCBStream::UCBStream(com::sun::star::uno::Reference<com::sun::star::io::XOutputStream>&)
@@ -2020,6 +2036,7 @@ oox::dump::TextStreamObjectBase::construct(oox::dump::InputObjectBase const&, un
 oox::dump::XmlStreamObject::XmlStreamObject(oox::dump::OutputObjectBase const&, oox::dump::BinaryInputStreamRef const&)
 oox::dump::biff::BiffObjectBase::dumpRowRange(oox::dump::String const&, bool)
 oox::dump::biff::FormulaObject::dumpCellFormula(oox::dump::String const&, unsigned short)
+oox::formulaimport::XmlStream::AttributeList::hasAttribute(int) const
 oox::ole::VbaHelper::getBasicScriptUrl(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
 oox::ole::VbaProject::hasDialog(rtl::OUString const&) const
 oox::ole::VbaProject::hasModule(rtl::OUString const&) const
@@ -2230,6 +2247,7 @@ svxform::SvLBoxEntrySortedArray::Insert(SvLBoxEntry* const&, unsigned short&)
 svxform::SvLBoxEntrySortedArray::Insert(SvLBoxEntry* const*, unsigned short)
 svxform::SvLBoxEntrySortedArray::Insert(svxform::SvLBoxEntrySortedArray const*, unsigned short, unsigned short)
 svxform::SvLBoxEntrySortedArray::Remove(SvLBoxEntry* const&, unsigned short)
+sw::mark::MarkManager::dumpFieldmarks() const
 sw::util::AuthorInfos::Insert(sw::util::AuthorInfo* const&, unsigned short&)
 sw::util::AuthorInfos::Insert(sw::util::AuthorInfo* const*, unsigned short)
 sw::util::AuthorInfos::Insert(sw::util::AuthorInfos const*, unsigned short, unsigned short)
