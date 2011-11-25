@@ -55,7 +55,7 @@ dev-install: build
                     "@abs_builddir@"; \
             fi
 
-debugrun : dev-install
+debugrun:
 	@. ./Env.Host.sh && $$GNUMAKE -f "$$SRC_ROOT"/GNUmakefile.mk debugrun
 
 check : allcheck
@@ -173,3 +173,4 @@ findunusedcode:
 unitcheck: build
 subsequentcheck: dev-install
 allcheck : dev-install
+debugrun : dev-install
