@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Created with OpenOffice.org API plug-in for NetBeans Version 2.0.3-->
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <version value="0.9"/>
+    <identifier value="com.sun.star.comp.Calc.NLPSolver"/>
+    <display-name>
+        <name lang="en">Solver for Nonlinear Programming</name>
+    </display-name>
+    <publisher>
+        <name lang="en" xlink:href="http://www.sun.com/software/star/staroffice/extensions.jsp?cid=925095">Sun Microsystems</name>
+    </publisher>
+    <extension-description>
+        <src lang="en" xlink:href="description/extensiondescription.txt"/>
+    </extension-description>
+    <registration>
+        <simple-license accept-by="admin" default-license-id="en">
+            <license-text lang="en" license-id="en" xlink:href="licenses/lgpl-3.0.txt"/>
+        </simple-license>
+    </registration>
+    <dependencies>
+        <OpenOffice.org-minimal-version xmlns:d="http://openoffice.org/extensions/description/2006" d:name="OpenOffice.org 3.0" value="3.0"/>
+    </dependencies>
+</description>
