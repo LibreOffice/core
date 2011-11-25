@@ -69,7 +69,7 @@ sal_Bool ImplAccelManager::InsertAccel( Accelerator* pAccel )
 
 void ImplAccelManager::RemoveAccel( Accelerator* pAccel )
 {
-    // Haben wir ueberhaupt eine Liste ?
+    // do we have a list ?
     if ( !mpAccelList )
         return;
 
@@ -90,7 +90,7 @@ void ImplAccelManager::RemoveAccel( Accelerator* pAccel )
         }
     }
 
-    // Raus damit
+    // throw it away
     for ( ImplAccelList::iterator it = mpAccelList->begin();
           it < mpAccelList->end();
           ++it
@@ -106,11 +106,11 @@ void ImplAccelManager::RemoveAccel( Accelerator* pAccel )
 
 void ImplAccelManager::EndSequence( sal_Bool bCancel )
 {
-    // Sind wir ueberhaupt in einer Sequenz ?
+    // are we in a list ?
     if ( !mpSequenceList )
         return;
 
-    // Alle Deactivate-Handler der Acceleratoren in der Sequenz rufen
+    // call all deactivate-handler of the accelerators in the list
     for ( size_t i = 0, n = mpSequenceList->size(); i < n; ++i )
     {
         Accelerator* pTempAccel = (*mpSequenceList)[ i ];
@@ -125,7 +125,7 @@ void ImplAccelManager::EndSequence( sal_Bool bCancel )
         }
     }
 
-    // Sequenz-Liste loeschen
+    // delete sequence-list
     delete mpSequenceList;
     mpSequenceList = NULL;
 }
@@ -136,53 +136,53 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
 {
     Accelerator* pAccel;
 
-    // Haben wir ueberhaupt Acceleratoren ??
+    // do we have accelerators ??
     if ( !mpAccelList )
         return sal_False;
     if ( mpAccelList->empty() )
         return sal_False;
 
-    // Sind wir in einer Sequenz ?
+    // are we in a sequence ?
     if ( mpSequenceList )
     {
         pAccel = mpSequenceList->empty() ? NULL : (*mpSequenceList)[ 0 ];
         DBG_CHKOBJ( pAccel, Accelerator, NULL );
 
-        // Nicht Gefunden ?
+        // not found ?
         if ( !pAccel )
         {
-            // Sequenz abbrechen
+            // abort sequence
             FlushAccel();
             return sal_False;
         }
 
-        // Ist der Eintrag da drin ?
+        // can the entry be found ?
         ImplAccelEntry* pEntry = pAccel->ImplGetAccelData( rKeyCode );
         if ( pEntry )
         {
             Accelerator* pNextAccel = pEntry->mpAccel;
 
-            // Ist da ein Accelerator hinter ?
+            // is an accelerator coupled ?
             if ( pNextAccel )
             {
                 DBG_CHKOBJ( pNextAccel, Accelerator, NULL );
 
                 mpSequenceList->insert( mpSequenceList->begin(), pNextAccel );
 
-                // Activate-Handler vom Neuen rufen
+                // call Activate-Handler of the new one
                 pNextAccel->Activate();
                 return sal_True;
             }
             else
             {
-                // Hat ihn schon !
+                // it is there already !
                 if ( pEntry->mbEnabled )
                 {
-                    // Sequence beenden (Deactivate-Handler vorher rufen)
+                    // stop sequence (first call deactivate-handler)
                     EndSequence();
 
-                    // Dem Accelerator das aktuelle Item setzen
-                    // und Handler rufen
+                    // set accelerator of the actuel item
+                    // and call the handler
                     sal_Bool bDel = sal_False;
                     pAccel->maCurKeyCode    = rKeyCode;
                     pAccel->mnCurId         = pEntry->mnId;
@@ -190,7 +190,7 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
                     pAccel->mpDel           = &bDel;
                     pAccel->Select();
 
-                    // Hat Accel den Aufruf ueberlebt
+                    // did the accelerator survive the call
                     if ( !bDel )
                     {
                         DBG_CHKOBJ( pAccel, Accelerator, NULL );
@@ -204,8 +204,8 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
                 }
                 else
                 {
-                    // Sequenz abbrechen, weil Acceleraor disabled
-                    // Taste wird weitergeleitet (ans System)
+                    // stop sequence as the accelerator was disbled
+                    // transfer the key (to the system)
                     FlushAccel();
                     return sal_False;
                 }
@@ -213,50 +213,50 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
         }
         else
         {
-            // Sequenz abbrechen wegen falscher Taste
+            // wrong key => stop sequence
             FlushAccel();
             return sal_False;
         }
     }
 
-    // Durch die Liste der Acceleratoren wuehlen
+    // step through the list of accelerators
     for ( size_t i = 0, n = mpAccelList->size(); i < n; ++i )
     {
         pAccel = (*mpAccelList)[ i ];
         DBG_CHKOBJ( pAccel, Accelerator, NULL );
 
-        // Ist der Eintrag da drin ?
+        // is the entry contained ?
         ImplAccelEntry* pEntry = pAccel->ImplGetAccelData( rKeyCode );
         if ( pEntry )
         {
             Accelerator* pNextAccel = pEntry->mpAccel;
 
-            // Ist da ein Accelerator hinter ?
+            // is an accelerator assigned ?
             if ( pNextAccel )
             {
                 DBG_CHKOBJ( pNextAccel, Accelerator, NULL );
 
-                // Sequenz-Liste erzeugen
+                // create sequence list
                 mpSequenceList = new ImplAccelList;
                 mpSequenceList->insert( mpSequenceList->begin(), pAccel     );
                 mpSequenceList->insert( mpSequenceList->begin(), pNextAccel );
 
-                // Activate-Handler vom Neuen rufen
+                // call activate-Handler of the new one
                 pNextAccel->Activate();
 
                 return sal_True;
             }
             else
             {
-                // Hat ihn schon !
+                // already assigned !
                 if ( pEntry->mbEnabled )
                 {
-                    // Activate/Deactivate-Handler vorher rufen
+                    // first call activate/aeactivate-Handler
                     pAccel->Activate();
                     pAccel->Deactivate();
 
-                    // Dem Accelerator das aktuelle Item setzen
-                    // und Handler rufen
+                    // define accelerator of the actual item
+                    // and call the handler
                     sal_Bool bDel = sal_False;
                     pAccel->maCurKeyCode    = rKeyCode;
                     pAccel->mnCurId         = pEntry->mnId;
@@ -264,7 +264,7 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
                     pAccel->mpDel           = &bDel;
                     pAccel->Select();
 
-                    // Hat Accel den Aufruf ueberlebt
+                    // if the accelerator did survive the call
                     if ( !bDel )
                     {
                         DBG_CHKOBJ( pAccel, Accelerator, NULL );

@@ -50,7 +50,7 @@ typedef ::std::vector< ImplAccelEntry* > ImplAccelList;
 class ImplAccelData
 {
 public:
-    ImplAccelTable  maKeyTable;     // Fuer KeyCodes, die mit einem Code erzeugt wurden
+    ImplAccelTable  maKeyTable;     // for keycodes, generated with a code
     ImplAccelList   maIdList;       // Id-List
 };
 
@@ -69,7 +69,7 @@ sal_uInt16 ImplAccelEntryGetIndex( ImplAccelList* pList, sal_uInt16 nId,
     size_t  nCount = pList->size();
     sal_uInt16  nCompareId;
 
-    // Abpruefen, ob der erste Key groesser als der Vergleichskey ist
+    // check if first key is larger then the key to compare
     if ( !nCount || (nId < (*pList)[ 0 ]->mnId) )
     {
         if ( pIndex )
@@ -77,7 +77,7 @@ sal_uInt16 ImplAccelEntryGetIndex( ImplAccelList* pList, sal_uInt16 nId,
         return ACCELENTRY_NOTFOUND;
     }
 
-    // Binaeres Suchen
+    // Binairy search
     nLow  = 0;
     nHigh = nCount-1;
     do
@@ -188,12 +188,12 @@ ImplAccelEntry* Accelerator::ImplGetAccelData( const KeyCode& rKeyCode ) const
 
 void Accelerator::ImplCopyData( ImplAccelData& rAccelData )
 {
-    // Tabellen kopieren
+    // copy table
     for ( size_t i = 0, n = rAccelData.maIdList.size(); i < n; ++i )
     {
         ImplAccelEntry* pEntry = new ImplAccelEntry( *rAccelData.maIdList[ i ] );
 
-        // Folge-Accelerator, dann auch kopieren
+        // sequence accelerator, then copy also
         if ( pEntry->mpAccel )
         {
             pEntry->mpAccel = new Accelerator( *(pEntry->mpAccel) );
@@ -211,7 +211,7 @@ void Accelerator::ImplCopyData( ImplAccelData& rAccelData )
 
 void Accelerator::ImplDeleteData()
 {
-    // Accelerator-Eintraege ueber die Id-Tabelle loeschen
+    // delete accelerator-entries using the id-table
     for ( size_t i = 0, n = mpData->maIdList.size(); i < n; ++i ) {
         ImplAccelEntry* pEntry = mpData->maIdList[ i ];
         if ( pEntry->mpAutoAccel ) {
@@ -254,7 +254,7 @@ void Accelerator::ImplInsertAccel( sal_uInt16 nItemId, const KeyCode& rKeyCode,
         return;
     }
 
-    // Neuen Eintrag holen und fuellen
+    // fetch and fill new entries
     ImplAccelEntry* pEntry  = new ImplAccelEntry;
     pEntry->mnId            = nItemId;
     pEntry->maKeyCode       = rKeyCode;
@@ -262,7 +262,7 @@ void Accelerator::ImplInsertAccel( sal_uInt16 nItemId, const KeyCode& rKeyCode,
     pEntry->mpAutoAccel     = pAutoAccel;
     pEntry->mbEnabled       = bEnable;
 
-    // Ab in die Tabellen
+    // now into the tables
     sal_uLong nCode = rKeyCode.GetFullKeyCode();
     if ( !nCode )
     {
@@ -337,7 +337,7 @@ Accelerator::~Accelerator()
 {
     DBG_DTOR( Accelerator, NULL );
 
-    // AccelManager benachrichtigen, das Accelrator geloescht wurde
+    // inform AccelManager about deleting the Accelerator
     if ( mpDel )
         *mpDel = sal_True;
 
@@ -392,7 +392,7 @@ void Accelerator::InsertItem( const ResId& rResId )
 
     if ( nObjMask & ACCELITEM_KEY )
     {
-        // es wird ein neuer Kontext aufgespannt
+        // new context was created
         RSHEADER_TYPE * pKeyCodeRes = (RSHEADER_TYPE *)GetClassRes();
         ResId aResId( pKeyCodeRes, *rResId.GetResMgr());
         aKeyCode = KeyCode( aResId );
@@ -463,14 +463,14 @@ Accelerator& Accelerator::operator=( const Accelerator& rAccel )
     DBG_CHKTHIS( Accelerator, NULL );
     DBG_CHKOBJ( &rAccel, Accelerator, NULL );
 
-    // Neue Daten zuweisen
+    // assign new data
     maHelpStr       = rAccel.maHelpStr;
     maCurKeyCode    = KeyCode();
     mnCurId         = 0;
     mnCurRepeat     = 0;
     mbIsCancel      = sal_False;
 
-    // Tabellen loeschen und kopieren
+    // delete and copy tables
     ImplDeleteData();
     mpData->maKeyTable.Clear();
     ImplCopyData( *((ImplAccelData*)(rAccel.mpData)) );
