@@ -78,4 +78,15 @@ gb_Library_FILENAMES := \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(gb_Library_UNOVERPRE)$(lib)$(gb_Library_PLAINEXT)) \
 
 
+# No DT_RPATH or DT_RUNPATH support in the Bionic dynamic linker so
+# don't bother generating such.
+
+define gb_Library_get_rpath
+endef
+
+define gb_Executable_get_rpath
+endef
+
+gb_LinkTarget_LDFLAGS := $(subst -Wl$(COMMA)-rpath-link$(COMMA)$(SYSBASE)/lib:$(SYSBASE)/usr/lib,,$(gb_LinkTarget_LDFLAGS))
+
 # vim: set noet sw=4:

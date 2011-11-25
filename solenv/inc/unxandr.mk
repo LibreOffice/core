@@ -52,5 +52,13 @@ STDSHLCUIMT+=-llog -landroid -lgnustl_shared
 
 # All shared libraries we build must start with "lib" because
 # otherwise the Android package installer will not unpack them from
-# the .apk into the app's lib directory
+# the .apk into the app's lib directory.
 ENFORCEDSHLPREFIX=lib
+
+# No DT_RPATH or DT_RUNPATH support in the Bionic dynamic linker so
+# don't bother generating such.
+
+LINKFLAGSRUNPATH_URELIB=
+LINKFLAGSRUNPATH_UREBIN=
+LINKFLAGSRUNPATH_OOO=
+LINKFLAGSRUNPATH_SDK=
