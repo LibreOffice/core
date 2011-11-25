@@ -75,6 +75,9 @@ STDSHL += \
 STDSHL+=	\
     $(KERNEL32LIB)\
     -lmsvcrt
+.ELSE
+STDSHL+=    \
+    psapi.lib
 .ENDIF
 
 SHL1OBJS = $(SLOFILES) \
