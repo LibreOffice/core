@@ -34,18 +34,33 @@
 OFFICEFILE=${1}
 WORKDIR=${2}
 
-if test -e ${WORKDIR}/core
+if test -n "`which gdb`"
 then
-    STORELOCATION=`mktemp --tmpdir=${WORKDIR} core.XXXX`
-    echo "Found a core dump at ${WORKDIR}, moving it to ${STORELOCATION}"
-    mv ${WORKDIR}/core ${STORELOCATION}
-    echo "Stacktrace:"
-    GDBCOMMANDFILE=`mktemp`
-    echo "bt" > ${GDBCOMMANDFILE}
-    gdb -x $GDBCOMMANDFILE --batch ${OFFICEFILE}.bin ${STORELOCATION}
-    rm ${GDBCOMMANDFILE}
-    exit 1
+    if test -e ${WORKDIR}/core
+    then
+        STORELOCATION=`mktemp --tmpdir=${WORKDIR} core.XXXX`
+        echo
+        echo "It seems like soffice.bin crashed during the test excution!"
+        echo "Found a core dump at ${WORKDIR}, moving it to ${STORELOCATION}"
+        mv ${WORKDIR}/core ${STORELOCATION}
+        echo "Stacktrace:"
+        GDBCOMMANDFILE=`mktemp`
+        echo "bt" > ${GDBCOMMANDFILE}
+        gdb -x $GDBCOMMANDFILE --batch ${OFFICEFILE}.bin ${STORELOCATION}
+        rm ${GDBCOMMANDFILE}
+        echo
+        exit 1
+    else
+        echo
+        echo "No core dump at ${WORKDIR}, to create core dumps (and stack traces)"
+        echo "for crashed soffice instances, enable core dumps with:"
+        echo
+        echo "   ulimit -c unlimited"
+        echo
+        exit 0
+    fi
 else
+    echo "You need gdb in you path to general stacktraces."
     exit 0
 fi
 
