@@ -142,6 +142,49 @@ if [ -n "$DMAKE_URL" -a ! -x "$SOLARENV/$OUTPATH/bin/dmake$EXEEXT" ]; then
 fi
 
 
+#Special handling of epm
+if [ -n "$EPM_URL" -a ! -x "$SOLARENV/$OUTPATH/bin/epm$EXEEXT" ]; then
+    # Determine the name of the downloaded file.
+    epm_package_name=`echo $EPM_URL | sed "s/^\(.*\/\)//"`
+    epm_package=`echo $epm_package_name | sed "s/-source//"`
+    epm_wildcard_package_name="*-$epm_package"
+
+    # check with wildcard for the renamed package, md5
+    if [ ! -f "../$epm_wildcard_package_name" ]; then
+        # Fetch the epm source
+        if [ ! -z "$wget" ]; then
+            echo fetching $EPM_URL with wget to $TARFILE_LOCATION/tmp
+            $wget -nv -N $EPM_URL 2>&1 | tee -a $logfile
+        else
+            echo fetching $EPM_URL with curl to $TARFILE_LOCATION/tmp
+            $curl $file_date_check -O $EPM_URL 2>&1 | tee -a $logfile
+        fi
+        wret=$?
+
+        # When the download failed then remove the remains, otherwise
+        # move the downloaded file up to TARFILE_LOCATION and rename it
+    # according our naing convention for external tar balls.
+        if [ $wret -ne 0 ]; then
+            echo "download failed. removing $epm_package_name"
+            rm "$epm_package_name"
+            failed="$failed $i"
+            wret=0
+        else
+            #mv "$epm_package_name" ..
+        epm_md5_sum=`$md5sum $md5special $epm_package_name | sed "s/ .*//"`
+        epm_md5_package_name="$epm_md5_sum-$epm_package"
+
+        rm -f ../$epm_md5_package_name && \
+        cp -pRP $epm_package_name ../$epm_md5_package_name && \
+        rm -rf $epm_package_name
+            echo "successfully downloaded $epm_package_name and renamed to $epm_md5_package_name"
+        fi
+    else
+        echo "found $epm_package_name, no need to download it again"
+    fi
+fi
+# end special
+
 
 cd $TARFILE_LOCATION/tmp
 filelist=`cat $1`

@@ -1881,6 +1881,7 @@ if ( '@ENABLE_RPATH@' eq "no" ) {
   ToFile( "LINKFLAGSRUNPATH",'',                   "e" );
 }
 ToFile( "EPM",               "@EPM@",              "e" );
+ToFile( "EPM_URL",           "@EPM_URL@",	   "e" );
 ToFile( "EPM_FLAGS",         $EPM_FLAGS,           "e" );
 ToFile( "BUILD_EPM",         "@BUILD_EPM@",        "e" );
 ToFile( "PKGFORMAT",         "@PKGFORMAT@",        "e" );

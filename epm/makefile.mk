@@ -34,13 +34,20 @@ TARGET=epm
 
 .INCLUDE :	settings.mk
 
+.IF "$(BUILD_EPM)" == "NO"
+
+@all:
+    @echo "epm disabled or system epm used ...."
+
+.ELSE
+
 # --- Files --------------------------------------------------------
+
+.IF "$(GUI)"=="UNX"
 
 TARFILE_NAME=epm-3.7
 TARFILE_MD5=3ade8cfe7e59ca8e65052644fed9fca4
 PATCH_FILES=epm-3.7.patch
-
-.IF "$(GUI)"=="UNX" && "$(BUILD_EPM)" != "NO"
 
 CONFIGURE_ACTION=.$/configure
 CONFIGURE_FLAGS=--disable-fltk
@@ -51,6 +58,8 @@ CONFIGURE_FLAGS+=CFLAGS="$(EXTRA_CFLAGS)" LDFLAGS="$(EXTRA_LINKFLAGS)" CPP="gcc 
 .ENDIF
 BUILD_ACTION=make
 OUT2BIN=epm epminstall mkepmlist
+
+.ENDIF
 
 .ENDIF
 
