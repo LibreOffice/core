@@ -105,12 +105,6 @@ public final class OfficeConnection {
                 assertNull(waitForProcess(process, 1000)); // 1 sec
             }
         }
-        try {
-            ProcessBuilder debugbp = new ProcessBuilder(
-                Argument.get("debugcommand").split(" "));
-            debugbp.start();
-            Thread.sleep(1000);
-        } catch(Exception e) {}
     }
 
     /** Shut down the OOo instance.
