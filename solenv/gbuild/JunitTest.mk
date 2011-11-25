@@ -50,8 +50,6 @@ $(call gb_JunitTest_get_target,%) :
 		mkdir -p $(call gb_JunitTest_get_userdir,$*) && \
         ($(gb_JunitTest_JAVACOMMAND) \
             -cp "$(CLASSPATH)" \
-            $(if $(strip $(gb_JunitTest_DEBUGCOMMAND)),\
-                '-Dorg.openoffice.test.arg.debugcommand=$(gb_JunitTest_DEBUGCOMMAND)') \
             $(DEFS) \
             org.junit.runner.JUnitCore \
             $(CLASSES) 2>&1 > $@.log || \

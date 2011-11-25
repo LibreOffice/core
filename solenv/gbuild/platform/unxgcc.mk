@@ -377,15 +377,39 @@ endef
 
 # JunitTest class
 
+ifneq ($(OOO_TEST_SOFFICE),)
+gb_JunitTest_SOFFICEARG:=$(OOO_TEST_SOFFICE) 
+else
+ifneq ($(gb_JunitTest_DEBUGRUN),)
+gb_JunitTest_SOFFICEARG:=connect:pipe,name=$(USER)
+else
+gb_JunitTest_SOFFICEARG:=$(OUTDIR)/installation/opt/program/soffice" 
+endif
+endif
+
 define gb_JunitTest_JunitTest_platform
 $(call gb_JunitTest_get_target,$(1)) : DEFS := \
-	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:$(OUTDIR)/installation/opt/program/soffice}" \
 	-Dorg.openoffice.test.arg.env=$(gb_Helper_LIBRARY_PATH_VAR) \
 	-Dorg.openoffice.test.arg.user=file://$(call gb_JunitTest_get_userdir,$(1)) \
 	-Dorg.openoffice.test.arg.workdir=$(call gb_JunitTest_get_userdir,$(1)) \
 	-Dorg.openoffice.test.arg.postprocesscommand=$(GBUILDDIR)/platform/unxgcc_gdbforjunit.sh \
+	-Dorg.openoffice.test.arg.soffice="$(gb_JunitTest_SOFFICEARG)" \
 
 endef
+
+# Module class
+
+define gb_Module_DEBUGRUNCOMMAND
+OFFICESCRIPT=`mktemp` && \
+echo ". $(OUTDIR)/installation/opt/program/ooenv" > $${OFFICESCRIPT} && \
+echo "$(OUTDIR)/installation/opt/program/soffice.bin --norestore --nologo \"--accept=pipe,name=$(USER);urp;\" -env:UserInstallation=file://$(OUTDIR)/installation/ &" >> $${OFFICESCRIPT} && \
+echo "OFFICEPID=\$$!" >> $${OFFICESCRIPT} && \
+echo "echo \"office started as \$${OFFICEPID}\"" >> $${OFFICESCRIPT} && \
+echo "gdb -ex \"at \$${OFFICEPID}\" -ex \"c\"" >> $${OFFICESCRIPT} && \
+$(SHELL) $${OFFICESCRIPT} && \
+rm $${OFFICESCRIPT}
+endef
+
 
 # Python
 gb_PYTHON_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME=$(OUTDIR)/lib/python PYTHONPATH=$(OUTDIR)/lib/python:$(OUTDIR)/lib/python/lib-dynload

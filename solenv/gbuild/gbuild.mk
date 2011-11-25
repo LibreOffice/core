@@ -123,7 +123,7 @@ gb_ENABLE_PCH := $(false)
 endif
 
 # for clean, setuplocal and removelocal goals we switch off dependencies
-ifneq ($(filter cleanpackmodule clean setuplocal removelocal showdeliverables help,$(MAKECMDGOALS)),)
+ifneq ($(filter cleanpackmodule clean setuplocal removelocal showdeliverables help debugrun,$(MAKECMDGOALS)),)
 gb_FULLDEPS := $(false)
 else
 gb_FULLDEPS := $(true)
@@ -377,6 +377,8 @@ AVAILABLE TARGETS
        check            run unit tests and if in toplevel subsequentcheck
        clean            remove all generated files
        showdeliverables show the targets delivered to OUTDIR and their source
+       debugrun         starts the dev-install instance and allows tests to be run
+                        against it
 
 INTERACTIVE VARIABLES:
        DEBUG / debug   If not empty, build with DBGLEVEL=1 (see below).

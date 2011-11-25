@@ -112,6 +112,10 @@ check : unitcheck
 	$(call gb_Output_announce_title,all tests checked.)
 	$(call gb_Output_announce_bell)
 	
+debugrun : build
+	$(call gb_Module_DEBUGRUNCOMMAND)
+
+
 
 ifeq ($(strip $(gb_PARTIALBUILD)),)
 check : subsequentcheck
@@ -148,6 +152,10 @@ $$(eval $$(call gb_Output_error,No $(3) registered while reading $(patsubst $(1)
 endif
 
 endef
+
+# Dont recurse in subdirs for help an debugrun
+
+ifeq ($(filter help debugrun,$(MAKECMDGOALS)),)
 
 define gb_Module_add_target
 $(call gb_Module__read_targetfile,$(1),$(2),target)
@@ -186,6 +194,8 @@ $(call gb_Module_get_subsequentcheck_target,$(1)) : $$(gb_Module_CURRENTTARGET)
 $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
+
+endif
 
 define gb_Module_add_moduledir
 include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2)/Module_$(2).mk
