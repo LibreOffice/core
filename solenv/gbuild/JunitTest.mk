@@ -52,7 +52,7 @@ $(call gb_JunitTest_get_target,%) :
             -cp "$(CLASSPATH)" \
             $(DEFS) \
             org.junit.runner.JUnitCore \
-            $(CLASSES) 2>&1 > $@.log || \
+            $(CLASSES) > $@.log 2>&1 || \
 		(grep -v -e 'at org.junit.' \
 			-e 'at com.sun.star.lib.uno.' \
 			-e 'at java.lang.reflect.' \
