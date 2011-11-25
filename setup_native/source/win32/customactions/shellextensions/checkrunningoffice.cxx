@@ -56,9 +56,6 @@
 #include <systools/win32/uwinapi.h>
 #include <../tools/seterror.hxx>
 
-#define WININIT_FILENAME    "wininit.ini"
-#define RENAME_SECTION      "rename"
-
 #ifdef DEBUG
 inline void OutputDebugStringFormat( LPCTSTR pFormat, ... )
 {
