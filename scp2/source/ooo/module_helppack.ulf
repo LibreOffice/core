@@ -193,34 +193,16 @@ en-US = "Punjabi"
 [STR_DESC_MODULE_HELPPACK_PA_IN]
 en-US = "Installs Punjabi help in %PRODUCTNAME %PRODUCTVERSION"
 
-[STR_NAME_MODULE_HELPPACK_GU_IN]
-en-US = "Gujarati"
-
-[STR_DESC_MODULE_HELPPACK_GU_IN]
-en-US = "Installs Gujarati help in %PRODUCTNAME %PRODUCTVERSION"
-
 [STR_NAME_MODULE_HELPPACK_TA]
 en-US = "Tamil"
 
 [STR_DESC_MODULE_HELPPACK_TA]
 en-US = "Installs Tamil help in %PRODUCTNAME %PRODUCTVERSION"
 
-[STR_NAME_MODULE_HELPPACK_TA_IN]
-en-US = "Tamil"
-
-[STR_DESC_MODULE_HELPPACK_TA_IN]
-en-US = "Installs Tamil help in %PRODUCTNAME %PRODUCTVERSION"
-
 [STR_NAME_MODULE_HELPPACK_HI]
 en-US = "Hindi"
 
 [STR_DESC_MODULE_HELPPACK_HI]
-en-US = "Installs Hindi help in %PRODUCTNAME %PRODUCTVERSION"
-
-[STR_NAME_MODULE_HELPPACK_HI_IN]
-en-US = "Hindi"
-
-[STR_DESC_MODULE_HELPPACK_HI_IN]
 en-US = "Installs Hindi help in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_HELPPACK_ST]
@@ -253,12 +235,6 @@ en-US = "Afrikaans"
 [STR_DESC_MODULE_HELPPACK_AF]
 en-US = "Installs Afrikaans help in %PRODUCTNAME %PRODUCTVERSION"
 
-[STR_NAME_MODULE_HELPPACK_SW]
-en-US = "Swahili"
-
-[STR_DESC_MODULE_HELPPACK_SW]
-en-US = "Installs Swahili help in %PRODUCTNAME %PRODUCTVERSION"
-
 [STR_NAME_MODULE_HELPPACK_SW_TZ]
 en-US = "Swahili"
 
@@ -283,40 +259,16 @@ en-US = "Bengali"
 [STR_DESC_MODULE_HELPPACK_BN]
 en-US = "Installs Bengali help in %PRODUCTNAME %PRODUCTVERSION"
 
-[STR_NAME_MODULE_HELPPACK_BN_BD]
-en-US = "Bengali (Bangladesh)"
-
-[STR_DESC_MODULE_HELPPACK_BN_BD]
-en-US = "Installs Bengali (Bangladesh) help in %PRODUCTNAME %PRODUCTVERSION"
-
-[STR_NAME_MODULE_HELPPACK_BN_IN]
-en-US = "Bengali (India)"
-
-[STR_DESC_MODULE_HELPPACK_BN_IN]
-en-US = "Installs Bengali (India) help in %PRODUCTNAME %PRODUCTVERSION"
-
 [STR_NAME_MODULE_HELPPACK_OR]
 en-US = "Oriya"
 
 [STR_DESC_MODULE_HELPPACK_OR]
 en-US = "Installs Oriya help in %PRODUCTNAME %PRODUCTVERSION"
 
-[STR_NAME_MODULE_HELPPACK_OR_IN]
-en-US = "Oriya"
-
-[STR_DESC_MODULE_HELPPACK_OR_IN]
-en-US = "Installs Oriya help in %PRODUCTNAME %PRODUCTVERSION"
-
 [STR_NAME_MODULE_HELPPACK_MR]
 en-US = "Marathi"
 
 [STR_DESC_MODULE_HELPPACK_MR]
-en-US = "Installs Marathi help in %PRODUCTNAME %PRODUCTVERSION"
-
-[STR_NAME_MODULE_HELPPACK_MR_IN]
-en-US = "Marathi"
-
-[STR_DESC_MODULE_HELPPACK_MR_IN]
 en-US = "Installs Marathi help in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_HELPPACK_NE]
@@ -329,12 +281,6 @@ en-US = "Installs Nepali help in %PRODUCTNAME %PRODUCTVERSION"
 en-US = "Arabic"
 
 [STR_DESC_MODULE_HELPPACK_AR]
-en-US = "Installs Arabic help in %PRODUCTNAME %PRODUCTVERSION"
-
-[STR_NAME_MODULE_HELPPACK_AR_SA]
-en-US = "Arabic"
-
-[STR_DESC_MODULE_HELPPACK_AR_SA]
 en-US = "Installs Arabic help in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_HELPPACK_CA]
@@ -385,12 +331,6 @@ en-US = "Norwegian (Nynorsk)"
 [STR_DESC_MODULE_HELPPACK_NN]
 en-US = "Installs Norwegian (Nynorsk) help in %PRODUCTNAME %PRODUCTVERSION"
 
-[STR_NAME_MODULE_HELPPACK_RM]
-en-US = "Rhaeto-Romance"
-
-[STR_DESC_MODULE_HELPPACK_RM]
-en-US = "Installs Rhaeto-Romance help in %PRODUCTNAME %PRODUCTVERSION"
-
 [STR_NAME_MODULE_HELPPACK_RO]
 en-US = "Romanian"
 
@@ -402,12 +342,6 @@ en-US = "Albanian"
 
 [STR_DESC_MODULE_HELPPACK_SQ]
 en-US = "Installs Albanian help in %PRODUCTNAME %PRODUCTVERSION"
-
-[STR_NAME_MODULE_HELPPACK_UR]
-en-US = "Urdu"
-
-[STR_DESC_MODULE_HELPPACK_UR]
-en-US = "Installs Urdu help in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_HELPPACK_ID]
 en-US = "Indonesian"
@@ -445,12 +379,6 @@ en-US = "Lithuanian"
 [STR_DESC_MODULE_HELPPACK_LT]
 en-US = "Installs Lithuanian help in %PRODUCTNAME %PRODUCTVERSION"
 
-[STR_NAME_MODULE_HELPPACK_HY]
-en-US = "Armenian"
-
-[STR_DESC_MODULE_HELPPACK_HY]
-en-US = "Installs Armenian help in %PRODUCTNAME %PRODUCTVERSION"
-
 [STR_NAME_MODULE_HELPPACK_EU]
 en-US = "Basque"
 
@@ -462,12 +390,6 @@ en-US = "Macedonian"
 
 [STR_DESC_MODULE_HELPPACK_MK]
 en-US = "Installs Macedonian help in %PRODUCTNAME %PRODUCTVERSION"
-
-[STR_NAME_MODULE_HELPPACK_MT]
-en-US = "Maltese"
-
-[STR_DESC_MODULE_HELPPACK_MT]
-en-US = "Installs Maltese help in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_HELPPACK_CY]
 en-US = "Welsh"
@@ -481,12 +403,6 @@ en-US = "Galician"
 [STR_DESC_MODULE_HELPPACK_GL]
 en-US = "Installs Galician help in %PRODUCTNAME %PRODUCTVERSION"
 
-[STR_NAME_MODULE_HELPPACK_SH_YU]
-en-US = "Serbian (Latin)"
-
-[STR_DESC_MODULE_HELPPACK_SH_YU]
-en-US = "Installs Serbian (Latin) help in %PRODUCTNAME %PRODUCTVERSION"
-
 [STR_NAME_MODULE_HELPPACK_SH]
 en-US = "Serbian (Latin)"
 
@@ -498,12 +414,6 @@ en-US = "Irish"
 
 [STR_DESC_MODULE_HELPPACK_GA]
 en-US = "Installs Irish help in %PRODUCTNAME %PRODUCTVERSION"
-
-[STR_NAME_MODULE_HELPPACK_SR_CS]
-en-US = "Serbian (Cyrillic)"
-
-[STR_DESC_MODULE_HELPPACK_SR_CS]
-en-US = "Installs Serbian (Cyrillic) help in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_HELPPACK_SR]
 en-US = "Serbian (Cyrillic)"
@@ -517,12 +427,6 @@ en-US = "Bosnian"
 [STR_DESC_MODULE_HELPPACK_BS]
 en-US = "Installs Bosnian help in %PRODUCTNAME %PRODUCTVERSION"
 
-[STR_NAME_MODULE_HELPPACK_AS_IN]
-en-US = "Assamese"
-
-[STR_DESC_MODULE_HELPPACK_AS_IN]
-en-US = "Installs Assamese help in %PRODUCTNAME %PRODUCTVERSION"
-
 [STR_NAME_MODULE_HELPPACK_AST]
 en-US = "Asturian"
 
@@ -535,29 +439,11 @@ en-US = "Kinyarwanda"
 [STR_DESC_MODULE_HELPPACK_RW]
 en-US = "Installs Kinyarwanda help in %PRODUCTNAME %PRODUCTVERSION"
 
-[STR_NAME_MODULE_HELPPACK_SA]
-en-US = "Sanskrit"
-
-[STR_DESC_MODULE_HELPPACK_SA]
-en-US = "Installs Sanskrit help in %PRODUCTNAME %PRODUCTVERSION"
-
 [STR_NAME_MODULE_HELPPACK_FA]
 en-US = "Farsi"
 
 [STR_DESC_MODULE_HELPPACK_FA]
 en-US = "Installs Farsi help in %PRODUCTNAME %PRODUCTVERSION"
-
-[STR_NAME_MODULE_HELPPACK_FO]
-en-US = "Faroese"
-
-[STR_DESC_MODULE_HELPPACK_FO]
-en-US = "Installs Faroese help in %PRODUCTNAME %PRODUCTVERSION"
-
-[STR_NAME_MODULE_HELPPACK_SB]
-en-US = "Sorbian"
-
-[STR_DESC_MODULE_HELPPACK_SB]
-en-US = "Installs Sorbian help in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_HELPPACK_TT]
 en-US = "Tatar"
@@ -570,12 +456,6 @@ en-US = "Tsonga"
 
 [STR_DESC_MODULE_HELPPACK_TS]
 en-US = "Installs Tsonga help in %PRODUCTNAME %PRODUCTVERSION"
-
-[STR_NAME_MODULE_HELPPACK_YI]
-en-US = "Yiddish"
-
-[STR_DESC_MODULE_HELPPACK_YI]
-en-US = "Installs Yiddish help in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_HELPPACK_BR]
 en-US = "Breton"
@@ -606,12 +486,6 @@ en-US = "Kannada"
 
 [STR_DESC_MODULE_HELPPACK_KN]
 en-US = "Installs Kannada help in %PRODUCTNAME %PRODUCTVERSION"
-
-[STR_NAME_MODULE_HELPPACK_MS]
-en-US = "Malay (Malaysian)"
-
-[STR_DESC_MODULE_HELPPACK_MS]
-en-US = "Installs Malay (Malaysian) help in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_HELPPACK_TG]
 en-US = "Tajik"
@@ -660,30 +534,6 @@ en-US = "English (United Kingdom)"
 
 [STR_DESC_MODULE_HELPPACK_EN_GB]
 en-US = "Installs English (United Kingdom) help in %PRODUCTNAME %PRODUCTVERSION"
-
-[STR_NAME_MODULE_HELPPACK_UR_IN]
-en-US = "Urdu"
-
-[STR_DESC_MODULE_HELPPACK_UR_IN]
-en-US = "Installs Urdu help in %PRODUCTNAME %PRODUCTVERSION"
-
-[STR_NAME_MODULE_HELPPACK_ML_IN]
-en-US = "Malayalam"
-
-[STR_DESC_MODULE_HELPPACK_ML_IN]
-en-US = "Installs Malayalam help in %PRODUCTNAME %PRODUCTVERSION"
-
-[STR_NAME_MODULE_HELPPACK_TE_IN]
-en-US = "Telugu"
-
-[STR_DESC_MODULE_HELPPACK_TE_IN]
-en-US = "Installs Telugu help in %PRODUCTNAME %PRODUCTVERSION"
-
-[STR_NAME_MODULE_HELPPACK_TI_ER]
-en-US = "Tigrinya"
-
-[STR_DESC_MODULE_HELPPACK_TI_ER]
-en-US = "Installs Tigrinya help in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_HELPPACK_UZ]
 en-US = "Uzbek"
@@ -775,12 +625,6 @@ en-US = "Kashmiri"
 [STR_DESC_MODULE_HELPPACK_KS]
 en-US = "Installs Kashmiri help in %PRODUCTNAME %PRODUCTVERSION"
 
-[STR_NAME_MODULE_HELPPACK_KY]
-en-US = "Kyrgyz"
-
-[STR_DESC_MODULE_HELPPACK_KY]
-en-US = "Installs Kyrgyz help in %PRODUCTNAME %PRODUCTVERSION"
-
 [STR_NAME_MODULE_HELPPACK_MAI]
 en-US = "Maithili"
 
@@ -799,18 +643,6 @@ en-US = "Manipuri"
 [STR_DESC_MODULE_HELPPACK_MNI]
 en-US = "Installs Manipuri help in %PRODUCTNAME %PRODUCTVERSION"
 
-[STR_NAME_MODULE_HELPPACK_PAP]
-en-US = "Papiamento"
-
-[STR_DESC_MODULE_HELPPACK_PAP]
-en-US = "Installs Papiamento help in %PRODUCTNAME %PRODUCTVERSION"
-
-[STR_NAME_MODULE_HELPPACK_PS]
-en-US = "Pashto"
-
-[STR_DESC_MODULE_HELPPACK_PS]
-en-US = "Installs Pashto help in %PRODUCTNAME %PRODUCTVERSION"
-
 [STR_NAME_MODULE_HELPPACK_SA_IN]
 en-US = "Sanskrit (India)"
 
@@ -823,12 +655,6 @@ en-US = "Santali"
 [STR_DESC_MODULE_HELPPACK_SAT]
 en-US = "Installs Santali help in %PRODUCTNAME %PRODUCTVERSION"
 
-[STR_NAME_MODULE_HELPPACK_SC]
-en-US = "Sardinian"
-
-[STR_DESC_MODULE_HELPPACK_SC]
-en-US = "Installs Sardinian help in %PRODUCTNAME %PRODUCTVERSION"
-
 [STR_NAME_MODULE_HELPPACK_SD]
 en-US = "Sindhi"
 
@@ -840,12 +666,6 @@ en-US = "Telugu"
 
 [STR_DESC_MODULE_HELPPACK_TE]
 en-US = "Installs Telugu help in %PRODUCTNAME %PRODUCTVERSION"
-
-[STR_NAME_MODULE_HELPPACK_TI]
-en-US = "Tigrinya"
-
-[STR_DESC_MODULE_HELPPACK_TI]
-en-US = "Installs Tigrinya help in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_HELPPACK_QTZ]
 en-US = "KeyID"
