@@ -29,6 +29,7 @@
 #define _STARMATHIMPORT_HXX
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <tools/gen.hxx>
 
 #include <oox/dllapi.h>
 
@@ -40,11 +41,17 @@ namespace formulaimport
 class XmlStream;
 }
 
+/**
+ Interface class, StarMath will implement readFormulaOoxml() to read OOXML
+ representing the formula and getFormulaSize() to provide the size of the resulting
+ formula.
+ */
 class OOX_DLLPUBLIC FormulaImportBase
 {
 public:
     FormulaImportBase();
     virtual void readFormulaOoxml( oox::formulaimport::XmlStream& stream ) = 0;
+    virtual Size getFormulaSize() const = 0;
 };
 
 } // namespace

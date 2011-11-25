@@ -75,6 +75,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/string.h>
 #include "FieldTypes.hxx"
+#include <oox/mathml/import.hxx>
 
 #include <tools/string.hxx>
 #ifdef DEBUG_DOMAINMAPPER
@@ -1102,6 +1103,15 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
 
             xStarMathProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_STREAM_NAME ),
                 val.getAny());
+
+            uno::Reference< uno::XInterface > xInterface( formula->getComponent(), uno::UNO_QUERY );
+            Size size( 1000, 1000 );
+            if( oox::FormulaImportBase* formulaimport = dynamic_cast< oox::FormulaImportBase* >( xInterface.get()))
+                size = formulaimport->getFormulaSize();
+            xStarMathProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_WIDTH ),
+                uno::makeAny( int(size.Width())));
+            xStarMathProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_HEIGHT ),
+                uno::makeAny( int(size.Height())));
             // mimic the treatment of graphics here.. it seems anchoring as character
             // gives a better ( visually ) result
             xStarMathProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_ANCHOR_TYPE ),
