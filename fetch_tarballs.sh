@@ -149,8 +149,10 @@ if [ -n "$EPM_URL" -a ! -x "$SOLARENV/$OUTPATH/bin/epm$EXEEXT" ]; then
     epm_package=`echo $epm_package_name | sed "s/-source//"`
     epm_wildcard_package_name="*-$epm_package"
 
+    epmtest=$(find .. -type f -name "$epm_wildcard_package_name")
+
     # check with wildcard for the renamed package, md5
-    if [ ! -f "../$epm_wildcard_package_name" ]; then
+    if [ -z "$epmtest" ]; then
         # Fetch the epm source
         if [ ! -z "$wget" ]; then
             echo fetching $EPM_URL with wget to $TARFILE_LOCATION/tmp
@@ -180,7 +182,7 @@ if [ -n "$EPM_URL" -a ! -x "$SOLARENV/$OUTPATH/bin/epm$EXEEXT" ]; then
             echo "successfully downloaded $epm_package_name and renamed to $epm_md5_package_name"
         fi
     else
-        echo "found $epm_package_name, no need to download it again"
+        echo "found $epmtest, no need to download it again"
     fi
 fi
 # end special
