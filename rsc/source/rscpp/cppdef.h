@@ -220,17 +220,6 @@
 #endif
 
 /*
- * BIG_ENDIAN is set TRUE on machines (such as the IBM 360 series)
- * where 'ab' stores 'a' in the high-bits and 'b' in the low-bits.
- * It is set FALSE on machines (such as the PDP-11 and Vax-11)
- * where 'ab' stores 'a' in the low-bits and 'b' in the high-bits.
- * (Or is it the other way around?) -- Warning: BIG_ENDIAN code is untested.
- */
-#ifndef BIG_ENDIAN
-#define BIG_ENDIAN              FALSE
-#endif
-
-/*
  * COMMENT_INVISIBLE may be defined to allow "old-style" comment
  * processing, whereby the comment becomes a zero-length token
  * delimiter.  This permitted tokens to be concatenated in macro

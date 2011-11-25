@@ -750,19 +750,11 @@ evalchar(int skip)
      * We warn on multi-byte constants and try to hack
      * (big|little)endian machines.
      */
-#if BIG_ENDIAN
-    count = 0;
-#endif
     while ((c = get()) != '\'' && c != EOF_CHAR && c != '\n') {
         if (!skip)
         ciwarn("multi-byte constant '%c' isn't portable", c);
-#if BIG_ENDIAN
-        count += BITS_CHAR;
-        value += (c << count);
-#else
         value <<= BITS_CHAR;
         value += c;
-#endif
     }
     instring = FALSE;
     return (value);
