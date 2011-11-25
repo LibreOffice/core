@@ -58,9 +58,15 @@ $(call gb_JunitTest_get_target,%) :
 			-e 'at java.lang.reflect.' \
 			-e 'at sun.reflect.' $@.log \
 		&& echo "see full error log at $@.log" \
-		&& echo "to rerun just this failed test without all others, run either:" \
-		&& echo "cd \$$MODULE && make $@" \
-		&& echo "make -f $(SRCDIR)/GNUmakefile.mk $@" && false)) && \
+		&& echo "to rerun just this failed test without all others, run:" \
+		&& echo && echo "    make $@" && echo \
+		&& echo "add \"-f $(SRCDIR)/GNUmakefile.mk\" if you are not in the module dir" \
+		&& echo "Or to do interactive debugging, run two shells with (Linux only):" \
+		&& echo \
+		&& echo "    make debugrun" \
+		&& echo "    make gb_JunitTest_DEBUGRUN=T $@" \
+		&& echo \
+		&& false)) && \
         rm -rf $(call gb_JunitTest_get_userdir,$*))
 	$(CLEAN_CMD)
 

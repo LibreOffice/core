@@ -46,12 +46,17 @@ dev-install: build
             printf \
                 '\nDeveloper installation finished, you can now execute:\n\n' \
                 && \
-            if test `uname -s` = Darwin; then \
+            if test `uname -s` = Linux; then \
+                printf 'make debugrun\n'; \
+            elif test `uname -s` = Darwin; then \
                 printf 'open %s/install/LibreOffice.app\n' "@abs_builddir@"; \
             else \
                 printf 'cd %s/install/program\n. ./ooenv\n./soffice.bin\n' \
                     "@abs_builddir@"; \
             fi
+
+debugrun : dev-install
+	@. ./Env.Host.sh && $$GNUMAKE -f "$$SRC_ROOT"/GNUmakefile.mk debugrun
 
 check : allcheck
 	@true
