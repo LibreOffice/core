@@ -35,6 +35,11 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(OS)" == "IOS"
+ALL:
+    @echo Nothing done for $(OS)
+.ENDIF
+
 UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb 
 UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 
