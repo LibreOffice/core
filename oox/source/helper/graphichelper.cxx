@@ -257,7 +257,7 @@ Reference< XGraphic > GraphicHelper::importGraphic( const Reference< XInputStrea
         aArgs[ 0 ].Name = CREATE_OUSTRING( "InputStream" );
         aArgs[ 0 ].Value <<= rxInStrm;
 
-        if ( pExtHeader->mapMode > 0 )
+        if ( pExtHeader && pExtHeader->mapMode > 0 )
         {
             aArgs.realloc( aArgs.getLength() + 1 );
             Sequence< PropertyValue > aFilterData( 3 );
