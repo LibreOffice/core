@@ -89,8 +89,6 @@
 #               ifndef _BIG_ENDIAN
 #               define _BIG_ENDIAN
 #               endif
-#   elif __BYTE_ORDER == __PDP_ENDIAN
-#       define _PDP_ENDIAN
 #   endif
 #   define  IORESOURCE_TRANSFER_BSD
 #   define  IOCHANNEL_TRANSFER_BSD_RENO
@@ -142,8 +140,6 @@
 #       define _LITTLE_ENDIAN_OO
 #   elif BYTE_ORDER == BIG_ENDIAN
 #       define _BIG_ENDIAN_OO
-#   elif BYTE_ORDER == PDP_ENDIAN
-#       define _PDP_ENDIAN_OO
 #   endif
 #   define  IORESOURCE_TRANSFER_BSD
 #   define  IOCHANNEL_TRANSFER_BSD_RENO
@@ -179,8 +175,6 @@
 #       define _LITTLE_ENDIAN
 #   elif BYTE_ORDER == BIG_ENDIAN
 #       define _BIG_ENDIAN
-#   elif BYTE_ORDER == PDP_ENDIAN
-#       define _PDP_ENDIAN
 #   endif
 #endif
 #   define  NO_PTHREAD_RTL
@@ -248,8 +242,6 @@
 #       ifndef _BIG_ENDIAN
 #           define _BIG_ENDIAN
 #       endif
-#   elif BYTE_ORDER == PDP_ENDIAN
-#       define _PDP_ENDIAN
 #   endif
 #   define  SLEEP_TIMESPEC(timespec)    nsleep(&timespec, 0)
 #   define  LIBPATH "LIBPATH"
@@ -301,10 +293,6 @@
 #       ifndef _BIG_ENDIAN
 #       define _BIG_ENDIAN
 #       endif
-#   elif BYTE_ORDER == PDP_ENDIAN
-#       ifndef _PDP_ENDIAN
-#       define _PDP_ENDIAN
-#       endif
 #   endif
 #   define  IOCHANNEL_TRANSFER_BSD_RENO
 #   define  NO_PTHREAD_RTL
@@ -340,10 +328,6 @@ int macxp_resolveAlias(char *path, int buflen);
 #   elif BYTE_ORDER == BIG_ENDIAN
 #       ifndef _BIG_ENDIAN
 #       define _BIG_ENDIAN
-#       endif
-#   elif BYTE_ORDER == PDP_ENDIAN
-#       ifndef _PDP_ENDIAN
-#       define _PDP_ENDIAN
 #       endif
 #   endif
 #   define  IOCHANNEL_TRANSFER_BSD_RENO

@@ -61,8 +61,6 @@ extern "C" {
 #           ifndef _BIG_ENDIAN
 #       define _BIG_ENDIAN
 #           endif
-#   elif __BYTE_ORDER == __PDP_ENDIAN
-#       define _PDP_ENDIAN
 #   endif
 #endif
 
@@ -76,8 +74,6 @@ extern "C" {
 #           ifndef _BIG_ENDIAN
 #       define _BIG_ENDIAN
 #           endif
-#   elif __BYTE_ORDER == __PDP_ENDIAN
-#       define _PDP_ENDIAN
 #   endif
 #endif
 
@@ -85,13 +81,8 @@ extern "C" {
 #   include <machine/endian.h>
 #   if BYTE_ORDER == LITTLE_ENDIAN
 #   undef _BIG_ENDIAN
-#   undef _PDP_ENDIAN
 #   elif BYTE_ORDER == BIG_ENDIAN
 #   undef _LITTLE_ENDIAN
-#   undef _PDP_ENDIAN
-#   elif BYTE_ORDER == PDP_ENDIAN
-#   undef _LITTLE_ENDIAN
-#   undef _BIG_ENDIAN
 #   endif
 #endif
 
@@ -103,8 +94,6 @@ extern "C" {
 #       define _LITTLE_ENDIAN
 #   elif BYTE_ORDER == BIG_ENDIAN
 #       define _BIG_ENDIAN
-#   elif BYTE_ORDER == PDP_ENDIAN
-#       define _PDP_ENDIAN
 #   endif
 #endif
 #endif
@@ -119,8 +108,6 @@ extern "C" {
 #       ifndef _BIG_ENDIAN
 #           define _BIG_ENDIAN
 #       endif
-#   elif BYTE_ORDER == PDP_ENDIAN
-#       define _PDP_ENDIAN
 #   endif
 #endif
 
@@ -138,10 +125,6 @@ extern "C" {
 #       ifndef _BIG_ENDIAN
 #       define _BIG_ENDIAN
 #       endif
-#   elif BYTE_ORDER == PDP_ENDIAN
-#       ifndef _PDP_ENDIAN
-#       define _PDP_ENDIAN
-#       endif
 #   endif
 #endif
 
@@ -154,10 +137,6 @@ extern "C" {
 #   elif BYTE_ORDER == BIG_ENDIAN
 #       ifndef _BIG_ENDIAN
 #       define _BIG_ENDIAN
-#       endif
-#   elif BYTE_ORDER == PDP_ENDIAN
-#       ifndef _PDP_ENDIAN
-#       define _PDP_ENDIAN
 #       endif
 #   endif
 #endif
