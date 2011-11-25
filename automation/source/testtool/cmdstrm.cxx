@@ -372,8 +372,8 @@ void CmdStream::GenCmdSlot( sal_uInt16 nNr, SbxArray* rPar )
                     break;
             }
 
-            /// #59513# nicht mehr ben�tigt ( siehe oben )
-//          rPar->Get( 2*n-1 )->SetUserData(nUserData); // Und wieder zur�cksetzen, so da� auch alles sauber ist.
+            /// #59513# //don't need this anymore (see prior comment?)
+//          rPar->Get( 2*n-1 )->SetUserData(nUserData); // Set it back, so everything's clean.
         }
     }
     else

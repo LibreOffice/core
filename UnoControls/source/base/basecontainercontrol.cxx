@@ -208,8 +208,8 @@ Reference< XControlModel > SAL_CALL BaseContainerControl::getModel() throw( Runt
 
 void SAL_CALL BaseContainerControl::dispose() throw( RuntimeException )
 {
-    // Zuerst der Welt mitteilen, da� der Container wegfliegt. Dieses ist um einiges
-    // schneller wenn die Welt sowohl an den Controls als auch am Container horcht
+    // Tell everything that this container is now gone.
+    // It's faster if you listen to both the control and the container.
 
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );

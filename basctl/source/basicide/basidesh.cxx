@@ -242,8 +242,7 @@ BasicIDEShell::~BasicIDEShell()
 
     BasicIDEGlobals::ShellDestroyed(this);
 
-    // Damit bei einem Basic-Fehler beim Speichern die Shell nicht sofort
-    // wieder hoch kommt:
+    // so that on a basic saving error, the shell doesn't pop right up again
     BasicIDEGlobals::GetExtraData()->ShellInCriticalSection() = sal_True;
 
     SetWindow( 0 );

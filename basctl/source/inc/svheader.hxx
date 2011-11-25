@@ -38,7 +38,7 @@
 //#define _SELENG_HXX
 #define _VIRTDEV_HXX
 
-// Wenn Brkdlg ohne PCH:
+// For Brkdlg without PCH:
 // #define _SPIN_HXX
 // #define _FIELD_HXX
 

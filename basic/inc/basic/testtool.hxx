@@ -62,7 +62,7 @@ sal_Bool IsTTSignatureForUnicodeTextfile( String aLine );
     }                                                                   \
     P_FEHLERLISTE->C40_INSERT(ErrorEntry, pErr, P_FEHLERLISTE->Count());\
 }
-// ??? Irgendwann noch was mit der UID anfangen !!
+// ??? Either way, start with the UID
 #define ADD_ERROR(nNr, aStr) { \
         if ( !SbxBase::IsError() )              \
             SbxBase::SetError( nNr );           \

@@ -455,7 +455,7 @@ void SbiProcDef::Match( SbiProcDef* pOld )
     }
     if( !pIn && pOld->pIn )
     {
-        // Alten Eintrag durch neuen ersetzen
+        // Replace old entry with the new one
         SbiSymDef** pData = (SbiSymDef**) pOld->pIn->aData.GetData();
         pData[ pOld->nPos ] = this;
         nPos = pOld->nPos;

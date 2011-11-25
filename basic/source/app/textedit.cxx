@@ -255,9 +255,9 @@ void TextEditImp::ImpDoHighlight( const String& rSource, sal_uIntPtr nLineOff )
         for ( i = 0; i < nCount; i++ )
         {
             SbTextPortion& r = aPortionList[i];
-            DBG_ASSERT( r.nLine == nLine1, "doch mehrere Zeilen ?" );
+            DBG_ASSERT( r.nLine == nLine1, "still more lines ?" );
             DBG_ASSERT( r.nStart <= r.nEnd, "Highlight: Start > End?" );
-            if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoben
+            if ( r.nStart > r.nEnd )    // only fix Bug until MD
                 continue;
 
             if ( r.nStart > nLastEnd )

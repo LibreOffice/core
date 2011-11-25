@@ -115,7 +115,7 @@ typedef WeakImplHelper1< XAllListener > BasicAllListenerHelper;
 //#define INVOCATION_ONLY
 
 
-// Identifier fuer die dbg_-Properies als Strings anlegen
+// Identifiers for creating the strings for dbg_Properties
 static char const ID_DBG_SUPPORTEDINTERFACES[] = "Dbg_SupportedInterfaces";
 static char const ID_DBG_PROPERTIES[] = "Dbg_Properties";
 static char const ID_DBG_METHODS[] = "Dbg_Methods";

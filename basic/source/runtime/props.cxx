@@ -90,7 +90,7 @@ RTLFUNC(Nothing)
     (void)pBasic;
     (void)bWrite;
 
-    // liefert eine leere Objekt-Variable.
+    // return an empty object
     rPar.Get( 0 )->PutObject( NULL );
 }
 

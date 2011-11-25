@@ -52,7 +52,7 @@ SFX_IMPL_TOOLBOX_CONTROL( TbxControls, SfxAllEnumItem )
 
 /*************************************************************************
 |*
-|* Klasse fuer Toolbox
+|* Toolbox Class
 |*
 \************************************************************************/
 
@@ -67,7 +67,7 @@ TbxControls::TbxControls( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
 
 /*************************************************************************
 |*
-|* Wenn man ein PopupWindow erzeugen will
+|* If you want to create a pop-up window
 |*
 \************************************************************************/
 SfxPopupWindowType TbxControls::GetPopupWindowType() const

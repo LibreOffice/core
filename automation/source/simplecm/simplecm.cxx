@@ -376,7 +376,7 @@ ByteString CommunicationManager::GetMyName( CM_NameType )
 
 void CommunicationManager::CallConnectionOpened( CommunicationLink* pCL )
 {
-    pCL->StartCallback();       // Sollte bereits vor dem Aufruf gerufen werden
+    pCL->StartCallback();       // This should already have been called.
     pCL->aStart = DateTime();
     pCL->aLastAccess = pCL->aStart;
     bIsCommunicationRunning = sal_True;
@@ -385,7 +385,7 @@ void CommunicationManager::CallConnectionOpened( CommunicationLink* pCL )
     xLastNewLink = pCL;
 
     INFO_MSG( CByteString("C+:").Append( pCL->GetCommunicationPartner( CM_FQDN ) ),
-        CByteString("Verbindung aufgebaut: ").Append( pCL->GetCommunicationPartner( CM_FQDN ) ),
+        CByteString("Connection established: ").Append( pCL->GetCommunicationPartner( CM_FQDN ) ),
         CM_OPEN, pCL );
     ConnectionOpened( pCL );
     pCL->FinishCallback();
@@ -393,11 +393,11 @@ void CommunicationManager::CallConnectionOpened( CommunicationLink* pCL )
 
 void CommunicationManager::CallConnectionClosed( CommunicationLink* pCL )
 {
-    pCL->StartCallback();       // Sollte bereits vor dem Aufruf gerufen werden
+    pCL->StartCallback();       // This should already have been called.
     pCL->aLastAccess = DateTime();
 
     INFO_MSG( CByteString("C-:").Append( pCL->GetCommunicationPartner( CM_FQDN ) ),
-        CByteString("Verbindung abgebrochen: ").Append( pCL->GetCommunicationPartner( CM_FQDN ) ),
+        CByteString("Connection broken: ").Append( pCL->GetCommunicationPartner( CM_FQDN ) ),
         CM_CLOSE, pCL );
     ConnectionClosed( pCL );
 
@@ -410,9 +410,9 @@ void CommunicationManager::CallConnectionClosed( CommunicationLink* pCL )
 
 void CommunicationManager::CallDataReceived( CommunicationLink* pCL )
 {
-    pCL->StartCallback();       // Sollte bereits vor dem Aufruf gerufen werden
+    pCL->StartCallback();       // Should have already been called
     pCL->aLastAccess = DateTime();
-    CommunicationLinkRef rHold(pCL);    // H�lt den Zeiger bis zum Ende des calls
+    CommunicationLinkRef rHold(pCL);    // Keep the pointer for a bit.
 
     // should be impossible but happens for mysterious reasons
     if ( !pCL->pServiceData )
@@ -494,7 +494,7 @@ void CommunicationManager::CallDataReceived( CommunicationLink* pCL )
 
 void CommunicationManager::CallInfoMsg( InfoString aMsg )
 {
-    // Hier wird es wohl kein Housekeeping geben
+    // Probably no housekeeping here.
     InfoMsg( aMsg );
 }
 
