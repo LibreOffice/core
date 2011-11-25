@@ -224,6 +224,8 @@ public:
     virtual OOle2Obj* Clone() const;
     virtual void initializeOle();
 
+    OOle2Obj& operator=(const OOle2Obj& rObj);
+
     void initializeChart( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& _xModel);
 };
 
@@ -274,6 +276,8 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual sal_uInt32 GetObjInventor() const;
     virtual OUnoObject* Clone() const;
+
+    OUnoObject& operator=(const OUnoObject& rObj);
 
 private:
     void    impl_setReportComponent_nothrow();
