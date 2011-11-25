@@ -72,6 +72,10 @@ APP1TARGET=$(TARGET)
 APP1OBJS=$(DEPOBJFILES)  
 APP1RPATH=UREBIN
 
+.IF "$(OS)" == "IOS"
+CFLAGSCXX += $(OBJCXXFLAGS)
+.ENDIF
+
 # Include all relevant (see ure/source/README) dynamic libraries, so that C++
 # UNO components running in the uno executable have a defined environment
 # (stlport, unxlngi6 libstdc++.so.6, and wntmsci10 uwinapi.dll are already
