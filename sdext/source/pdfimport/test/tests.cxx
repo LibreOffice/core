@@ -29,6 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sdext.hxx"
 
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
+
 #define BASEGFX_STATICLIBRARY
 
 #ifdef SYSTEM_ZLIB
@@ -47,12 +50,17 @@
 #include <rtl/math.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
-#include <testshl/simpleheader.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/processfactory.hxx>
 
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
+#include <test/bootstrapfixture.hxx>
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XColorSpace.hpp>
@@ -471,58 +479,17 @@ namespace
         bool                      m_bDashedLineSeen;
     };
 
-    class PDFITest : public CppUnit::TestFixture
+    class PDFITest : public test::BootstrapFixture
     {
-        uno::Reference<uno::XComponentContext> mxCtx;
-        rtl::OUString                          msBaseDir;
-        bool                                   mbUnoInitialized;
-
     public:
-        PDFITest() : mxCtx(),msBaseDir(),mbUnoInitialized(false)
-        {}
-
-        void setUp()
-        {
-            if( !mbUnoInitialized )
-            {
-                const char* pArgs( getForwardString() );
-                CPPUNIT_ASSERT_MESSAGE("Test file parameter", pArgs);
-
-                msBaseDir = rtl::OUString::createFromAscii(pArgs);
-
-                // bootstrap UNO
-                try
-                {
-                    ::rtl::OUString aIniUrl;
-                    CPPUNIT_ASSERT_MESSAGE(
-                        "Converting ini file to URL",
-                        osl_getFileURLFromSystemPath(
-                            (msBaseDir+rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pdfi_unittest_test.ini"))).pData,
-                            &aIniUrl.pData ) == osl_File_E_None );
-
-                    mxCtx = ::cppu::defaultBootstrap_InitialComponentContext(aIniUrl);
-                    CPPUNIT_ASSERT_MESSAGE("Getting component context", mxCtx.is());
-                }
-                catch( uno::Exception& )
-                {
-                    CPPUNIT_ASSERT_MESSAGE("Bootstrapping UNO", false);
-                }
-
-                mbUnoInitialized = true;
-            }
-        }
-        void tearDown()
-        {
-        }
-
         void testXPDFParser()
         {
             pdfi::ContentSinkSharedPtr pSink( new TestSink() );
-            pdfi::xpdf_ImportFromFile( msBaseDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pdfi_unittest_test.pdf")),
+            pdfi::xpdf_ImportFromFile( getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
                                        pSink,
                                        uno::Reference< task::XInteractionHandler >(),
                                        rtl::OUString(),
-                                       mxCtx );
+                                       getComponentContext() );
 
             // make destruction explicit, a bunch of things are
             // checked in the destructor
@@ -531,32 +498,32 @@ namespace
 
         void testOdfDrawExport()
         {
-            pdfi::PDFIRawAdaptor aAdaptor( mxCtx );
+            pdfi::PDFIRawAdaptor aAdaptor( getComponentContext() );
             aAdaptor.setTreeVisitorFactory( createDrawTreeVisitorFactory() );
 
             ::rtl::OUString aURL, aAbsURL, aBaseURL;
-            osl_getFileURLFromSystemPath( (msBaseDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pdfi_unittest_draw.xml"))).pData,
+            osl_getFileURLFromSystemPath( (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pdfi_unittest_draw.xml"))).pData,
                                           &aURL.pData );
             osl_getProcessWorkingDir(&aBaseURL.pData);
             osl_getAbsoluteFileURL(aBaseURL.pData,aURL.pData,&aAbsURL.pData);
             CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
-                                   aAdaptor.odfConvert( msBaseDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pdfi_unittest_test.pdf")),
+                                   aAdaptor.odfConvert( getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
                                                         new OutputWrap(aAbsURL),
                                                         NULL ));
         }
 
         void testOdfWriterExport()
         {
-            pdfi::PDFIRawAdaptor aAdaptor( mxCtx );
+            pdfi::PDFIRawAdaptor aAdaptor( getComponentContext() );
             aAdaptor.setTreeVisitorFactory( createWriterTreeVisitorFactory() );
 
             ::rtl::OUString aURL, aAbsURL, aBaseURL;
-            osl_getFileURLFromSystemPath( (msBaseDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pdfi_unittest_writer.xml"))).pData,
+            osl_getFileURLFromSystemPath( (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pdfi_unittest_writer.xml"))).pData,
                                           &aURL.pData );
             osl_getProcessWorkingDir(&aBaseURL.pData);
             osl_getAbsoluteFileURL(aBaseURL.pData,aURL.pData,&aAbsURL.pData);
             CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
-                                   aAdaptor.odfConvert( msBaseDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pdfi_unittest_test.pdf")),
+                                   aAdaptor.odfConvert( getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
                                                         new OutputWrap(aAbsURL),
                                                         NULL ));
         }
@@ -570,15 +537,8 @@ namespace
 
 }
 
-// =======================================================================
+CPPUNIT_TEST_SUITE_REGISTRATION(PDFITest);
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PDFITest, "PDFITest");
-
-
-// -----------------------------------------------------------------------------
-
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

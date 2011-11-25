@@ -70,6 +70,8 @@ SHL1STDLIBS=\
     $(CPPUNITLIB)		\
     $(ZLIB3RDLIB)	    \
     $(CPPULIB)			\
+    $(UNOTESTLIB)       \
+    $(TESTLIB)          \
     $(SALLIB)
 
 
@@ -135,27 +137,5 @@ APP2STDLIBS=\
 
 # --- Targets ------------------------------------------------------
 
-  .INCLUDE : target.mk
-  .INCLUDE : _cppunit.mk
-
-# --- Fake uno bootstrap & copy testfile ------------------------
-
-  $(BIN)$/pdfi_unittest_test.pdf : testinput.pdf
-      rm -f $@
-      $(GNUCOPY) testinput.pdf $@
-
-  $(BIN)$/pdfi_unittest_test.ini : makefile.mk
-      rm -f $@
-      @echo UNO_SERVICES= > $@
-      @echo UNO_TYPES=$(UNOUCRRDB:s/\/\\/) >> $@
-
-# --- Enable testshl2 execution in normal build ------------------------
-
-  $(MISC)$/pdfi_unittest_succeeded : $(SHL1TARGETN) $(BIN)$/pdfi_unittest_test.pdf $(BIN)$/pdfi_unittest_test.ini
-          rm -f $(BIN)$/pdfi_unittest_draw.xml
-          rm -f $(BIN)$/pdfi_unittest_writer.xml
-          @echo ----------------------------------------------------------
-          @echo - start unit test on library $(SHL1TARGETN)
-          @echo ----------------------------------------------------------
-          testshl2 -forward $(BIN)$/ $(SHL1TARGETN)
-           $(TOUCH) $@
+.INCLUDE : target.mk
+.INCLUDE : _cppunit.mk
