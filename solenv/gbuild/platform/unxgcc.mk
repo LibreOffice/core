@@ -383,7 +383,7 @@ else
 ifneq ($(gb_JunitTest_DEBUGRUN),)
 gb_JunitTest_SOFFICEARG:=connect:pipe,name=$(USER)
 else
-gb_JunitTest_SOFFICEARG:=$(OUTDIR)/installation/opt/program/soffice" 
+gb_JunitTest_SOFFICEARG:=path:$(OUTDIR)/installation/opt/program/soffice
 endif
 endif
 
