@@ -89,7 +89,7 @@ public:
 
     // Determines the extended symbol type for syntax highlighting
     virtual SbTextType GetSymbolType( const String &Symbol, sal_Bool bWasTTControl );
-    virtual const String GetSpechialErrorText();
+    virtual const String GetSpecialErrorText();
     virtual void ReportRuntimeError( AppBasEd *pEditWin );
     virtual void DebugFindNoErrors( sal_Bool bDebugFindNoErrors );
 

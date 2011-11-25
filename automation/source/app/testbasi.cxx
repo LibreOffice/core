@@ -114,7 +114,7 @@ sal_Bool TTBasic::Compile( SbModule* p )
     return MyBasic::Compile( p );
 }
 
-const String TTBasic::GetSpechialErrorText()
+const String TTBasic::GetSpecialErrorText()
 {
     String nErrorText;
     if ( pTestObject && IS_ERROR() && GetErrorCode() == GET_ERROR()->nError )

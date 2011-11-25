@@ -222,7 +222,7 @@ sal_Bool MyBasic::ErrorHdl()
 void MyBasic::ReportRuntimeError( AppBasEd *pEditWin )
 {
     String nErrorText;
-    nErrorText = GetSpechialErrorText();
+    nErrorText = GetSpecialErrorText();
 
     if ( pEditWin )     // just in case the focus is not right
         pEditWin->ToTop();
@@ -237,7 +237,7 @@ void MyBasic::DebugFindNoErrors( sal_Bool bDebugFindNoErrors )
     (void) bDebugFindNoErrors; /* avoid warning about unused parameter */
 }
 
-const String MyBasic::GetSpechialErrorText()
+const String MyBasic::GetSpecialErrorText()
 {
     return GetErrorText();
 }

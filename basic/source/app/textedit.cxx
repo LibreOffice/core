@@ -148,44 +148,44 @@ void TextEditImp::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
 }
 
-#define TEXTATTR_SPECHIAL   55
-class TextAttribSpechial : public TextAttrib
+#define TEXTATTR_SPECIAL   55
+class TextAttribSpecial : public TextAttrib
 {
 private:
     FontWeight  maFontWeight;
 
 public:
-    TextAttribSpechial( const FontWeight& rFontWeight );
-    TextAttribSpechial( const TextAttribSpechial& rAttr );
-    ~TextAttribSpechial() {;}
+    TextAttribSpecial( const FontWeight& rFontWeight );
+    TextAttribSpecial( const TextAttribSpecial& rAttr );
+    ~TextAttribSpecial() {;}
 
     virtual void            SetFont( Font& rFont ) const;
     virtual TextAttrib*     Clone() const;
     virtual int             operator==( const TextAttrib& rAttr ) const;
 };
 
-TextAttribSpechial::TextAttribSpechial( const FontWeight& rFontWeight )
-    : TextAttrib( TEXTATTR_SPECHIAL ), maFontWeight( rFontWeight )
+TextAttribSpecial::TextAttribSpecial( const FontWeight& rFontWeight )
+    : TextAttrib( TEXTATTR_SPECIAL ), maFontWeight( rFontWeight )
 {}
 
-TextAttribSpechial::TextAttribSpechial( const TextAttribSpechial& rAttr )
+TextAttribSpecial::TextAttribSpecial( const TextAttribSpecial& rAttr )
     : TextAttrib( rAttr ), maFontWeight( rAttr.maFontWeight )
 {}
 
-void TextAttribSpechial::SetFont( Font& rFont ) const
+void TextAttribSpecial::SetFont( Font& rFont ) const
 {
     rFont.SetWeight( maFontWeight );
 }
 
-TextAttrib* TextAttribSpechial::Clone() const
+TextAttrib* TextAttribSpecial::Clone() const
 {
-    return new TextAttribSpechial( *this );
+    return new TextAttribSpecial( *this );
 }
 
-int TextAttribSpechial::operator==( const TextAttrib& rAttr ) const
+int TextAttribSpecial::operator==( const TextAttrib& rAttr ) const
 {
     return ( ( TextAttrib::operator==(rAttr ) ) &&
-                ( maFontWeight == ((const TextAttribSpechial&)rAttr).maFontWeight ) );
+                ( maFontWeight == ((const TextAttribSpecial&)rAttr).maFontWeight ) );
 }
 
 void TextEditImp::ImpDoHighlight( const String& rSource, sal_uIntPtr nLineOff )
@@ -318,7 +318,7 @@ void TextEditImp::ImpDoHighlight( const String& rSource, sal_uIntPtr nLineOff )
             case TT_NOMETHOD:
                 {
                     aColor = Color( COL_RED );
-                    pTextEngine->SetAttrib( TextAttribSpechial( WEIGHT_BOLD ), nLine, r.nStart, r.nEnd+1 );
+                    pTextEngine->SetAttrib( TextAttribSpecial( WEIGHT_BOLD ), nLine, r.nStart, r.nEnd+1 );
                 }
                 break;
             default:
