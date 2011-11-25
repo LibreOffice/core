@@ -29,6 +29,8 @@
 #include "oox/mathml/importutils.hxx"
 
 #include <assert.h>
+#include <stdio.h>
+
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
 
