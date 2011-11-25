@@ -56,16 +56,16 @@ dev-install: build
             fi
 
 debugrun:
-	@. ./Env.Host.sh && $$GNUMAKE -f "$$SRC_ROOT"/GNUmakefile.mk debugrun
+	@ @GNUMAKE@ -f $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/GNUmakefile.mk debugrun
 
 check : allcheck
 	@true
 
 %check:
-	@. ./Env.Host.sh && $$GNUMAKE -f "$$SRC_ROOT"/GNUmakefile.mk -r \
-			$(if @VERBOSE@,,-s) --jobs="$(if \
-			   $(CHECK_PARALLELISM),$(CHECK_PARALLELISM),@GMAKE_PARALLELISM@)" \
-			$(patsubst allcheck,check,$@)
+	@ @GNUMAKE@ -f $(dir $(realpath $(firstword $)MAKEFILE_LIST))))/GNUmakefile.mk -r \
+		$(if @VERBOSE@,,-s) --jobs="$(if \
+		   $(CHECK_PARALLELISM),$(CHECK_PARALLELISM),@GMAKE_PARALLELISM@)" \
+		$(patsubst allcheck,check,$@)
 
 cross-build-toolset:
 	@. ./Env.Build.sh && \
