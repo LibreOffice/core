@@ -47,7 +47,7 @@ SLOFILES=\
     $(SLO)$/localebecdef.obj \
     $(SLO)$/localebackend.obj
 
-SHL1TARGET=$(TARGET)1.uno   
+SHL1TARGET=$(ENFORCEDSHLPREFIX)$(TARGET)1.uno   
 SHL1OBJS=$(SLOFILES)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
