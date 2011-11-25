@@ -1304,6 +1304,15 @@ End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Be
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Be;
+	Name = "dict-be.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Bg
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Bg;
 	Name = "dict-bg.oxt";
@@ -1376,6 +1385,15 @@ End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_El
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_El;
+	Name = "dict-el.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Es
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Es;
 	Name = "dict-es.oxt";
@@ -1397,6 +1415,15 @@ End
 File gid_File_Extension_Dictionary_Fr
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Fr;
 	Name = "dict-fr.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Gd
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Gd;
+	Name = "dict-gd.oxt";
 	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
@@ -1613,6 +1640,15 @@ End
 File gid_File_Extension_Dictionary_Sw
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Sw;
 	Name = "dict-sw.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Te
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Te;
+	Name = "dict-te.oxt";
 	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End

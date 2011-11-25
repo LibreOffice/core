@@ -202,6 +202,11 @@ Directory gid_Brand_Dir_Share_Extensions_Dict_Ar
     DosName = "dict-ar";
 End
 
+Directory gid_Brand_Dir_Share_Extensions_Dict_Be
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-be";
+End
+
 Directory gid_Brand_Dir_Share_Extensions_Dict_Bg
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "dict-bg";
@@ -242,6 +247,11 @@ Directory gid_Brand_Dir_Share_Extensions_Dict_En
     DosName = "dict-en";
 End
 
+Directory gid_Brand_Dir_Share_Extensions_Dict_El
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-el";
+End
+
 Directory gid_Brand_Dir_Share_Extensions_Dict_Es
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "dict-es";
@@ -255,6 +265,11 @@ End
 Directory gid_Brand_Dir_Share_Extensions_Dict_Fr
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "dict-fr";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Gd
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-gd";
 End
 
 Directory gid_Brand_Dir_Share_Extensions_Dict_Gl
@@ -375,6 +390,11 @@ End
 Directory gid_Brand_Dir_Share_Extensions_Dict_Sw
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "dict-sw";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Te
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-te";
 End
 
 Directory gid_Brand_Dir_Share_Extensions_Dict_Th
