@@ -37,6 +37,11 @@ UNIXVERSIONNAMES = UDK
 
 .INCLUDE: settings.mk
 
+.IF "$(OS)" == "IOS"
+ALL:
+    @echo Nothing done for $(OS)
+.ENDIF
+
 .IF "$(UNIXVERSIONNAMES)" == ""
 SHL1TARGET = $(TARGET)$(UDK_MAJOR)$(COMID)
 .ELSE # UNIXVERSIONNAMES

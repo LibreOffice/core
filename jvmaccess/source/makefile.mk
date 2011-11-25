@@ -33,6 +33,11 @@ ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
 
+.IF "$(OS)" == "IOS"
+ALL:
+    @echo Nothing done for $(OS)
+.ENDIF
+
 SLOFILES = \
     $(SLO)$/classpath.obj \
     $(SLO)$/unovirtualmachine.obj \
