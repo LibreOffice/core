@@ -35,11 +35,11 @@ class String;
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define SVT_SOFT_HYPHEN ((sal_Unicode) 0x00AD)
-#define SVT_HARD_HYPHEN ((sal_Unicode) 0x2011)
+#define SVT_SOFT_HYPHEN (static_cast<sal_Unicode>(0x00AD))
+#define SVT_HARD_HYPHEN (static_cast<sal_Unicode>(0x2011))
 
 // the non-breaking space
-#define SVT_HARD_SPACE  ((sal_Unicode) 0x00A0)
+#define SVT_HARD_SPACE  (static_cast<sal_Unicode>(0x00A0))
 
 namespace linguistic
 {
@@ -52,9 +52,8 @@ inline sal_Bool IsHyphen( sal_Unicode cChar )
 
 inline sal_Bool IsControlChar( sal_Unicode cChar )
 {
-    return cChar < (sal_Unicode) ' ';
+    return cChar < static_cast<sal_Unicode>(' ');
 }
-
 
 inline sal_Bool HasHyphens( const rtl::OUString &rTxt )
 {
