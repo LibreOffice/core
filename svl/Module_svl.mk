@@ -36,6 +36,10 @@ $(eval $(call gb_Module_add_targets,svl,\
     Package_inc \
 ))
 
+$(eval $(call gb_Module_add_check_targets,svl,\
+	CppunitTest_svl_lngmisc \
+))
+
 $(eval $(call gb_Module_add_subsequentcheck_targets,svl,\
     JunitTest_svl_complex \
 ))

@@ -58,14 +58,10 @@ sal_Int32 GetNumControlChars( const OUString &rTxt )
 
 sal_Bool RemoveHyphens( OUString &rTxt )
 {
-    sal_Bool bModified = sal_False;
-    if (HasHyphens(rTxt))
-    {
-        rTxt = comphelper::string::remove(rTxt, SVT_SOFT_HYPHEN);
-        rTxt = comphelper::string::remove(rTxt, SVT_HARD_HYPHEN);
-        bModified = sal_True;
-    }
-    return bModified;
+    sal_Int32 n = rTxt.getLength();
+    rTxt = comphelper::string::remove(rTxt, SVT_SOFT_HYPHEN);
+    rTxt = comphelper::string::remove(rTxt, SVT_HARD_HYPHEN);
+    return n != rTxt.getLength();
 }
 
 sal_Bool RemoveControlChars( OUString &rTxt )
