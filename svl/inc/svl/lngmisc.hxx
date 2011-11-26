@@ -46,22 +46,22 @@ class String;
 namespace linguistic
 {
 
-inline sal_Bool IsHyphen( sal_Unicode cChar )
+inline bool IsHyphen( sal_Unicode cChar )
 {
     return cChar == SVT_SOFT_HYPHEN  ||  cChar == SVT_HARD_HYPHEN;
 }
 
 
-inline sal_Bool IsControlChar( sal_Unicode cChar )
+inline bool IsControlChar( sal_Unicode cChar )
 {
     return cChar < static_cast<sal_Unicode>(' ');
 }
 
 SVL_DLLPRIVATE sal_Int32 GetNumControlChars( const rtl::OUString &rTxt );
-SVL_DLLPUBLIC sal_Bool  RemoveHyphens( rtl::OUString &rTxt );
-SVL_DLLPUBLIC sal_Bool  RemoveControlChars( rtl::OUString &rTxt );
+SVL_DLLPUBLIC bool  RemoveHyphens( rtl::OUString &rTxt );
+SVL_DLLPUBLIC bool  RemoveControlChars( rtl::OUString &rTxt );
 
-SVL_DLLPUBLIC sal_Bool  ReplaceControlChars( rtl::OUString &rTxt, sal_Char aRplcChar = ' ' );
+SVL_DLLPUBLIC bool  ReplaceControlChars( rtl::OUString &rTxt, sal_Char aRplcChar = ' ' );
 
 SVL_DLLPUBLIC String GetThesaurusReplaceText( const String &rText );
 

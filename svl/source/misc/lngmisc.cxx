@@ -56,7 +56,7 @@ sal_Int32 GetNumControlChars( const OUString &rTxt )
     return nCnt;
 }
 
-sal_Bool RemoveHyphens( OUString &rTxt )
+bool RemoveHyphens( OUString &rTxt )
 {
     sal_Int32 n = rTxt.getLength();
     rTxt = comphelper::string::remove(rTxt, SVT_SOFT_HYPHEN);
@@ -64,9 +64,9 @@ sal_Bool RemoveHyphens( OUString &rTxt )
     return n != rTxt.getLength();
 }
 
-sal_Bool RemoveControlChars( OUString &rTxt )
+bool RemoveControlChars( OUString &rTxt )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     sal_Int32 nCtrlChars = GetNumControlChars( rTxt );
     if (nCtrlChars)
     {
@@ -86,7 +86,7 @@ sal_Bool RemoveControlChars( OUString &rTxt )
         }
         DBG_ASSERT( nCnt == nSize, "wrong size" );
         rTxt = aBuf.makeStringAndClear();
-        bModified = sal_True;
+        bModified = true;
     }
     return bModified;
 }
@@ -95,13 +95,13 @@ sal_Bool RemoveControlChars( OUString &rTxt )
 // non breaking field character
 #define CH_TXTATR_INWORD    ((sal_Char) 0x02)
 
-sal_Bool ReplaceControlChars( rtl::OUString &rTxt, sal_Char /*aRplcChar*/ )
+bool ReplaceControlChars( rtl::OUString &rTxt, sal_Char /*aRplcChar*/ )
 {
     // the resulting string looks like this:
     // 1. non breaking field characters get removed
     // 2. remaining control characters will be replaced by ' '
 
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     sal_Int32 nCtrlChars = GetNumControlChars( rTxt );
     if (nCtrlChars)
     {
@@ -121,7 +121,7 @@ sal_Bool ReplaceControlChars( rtl::OUString &rTxt, sal_Char /*aRplcChar*/ )
         }
         aBuf.setLength( nCnt );
         rTxt = aBuf.makeStringAndClear();
-        bModified = sal_True;
+        bModified = true;
     }
     return bModified;
 }
