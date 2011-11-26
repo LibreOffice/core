@@ -147,14 +147,14 @@ void adjustRangeName(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOl
         pOldRangeData = pOldDoc->GetRangeName(aOldTab)->findByIndex(nOldIndex);
         if (!pOldRangeData)
             return;     //might be an error in the formula array
-        aRangeName = pOldRangeData->GetName();
+        aRangeName = pOldRangeData->GetUpperName();
     }
     else
     {
         pOldRangeData = pOldDoc->GetRangeName()->findByIndex(nOldIndex);
         if (!pOldRangeData)
             return;     //might be an error in the formula array
-        aRangeName = pOldRangeData->GetName();
+        aRangeName = pOldRangeData->GetUpperName();
     }
 
     //find corresponding range name in new document
@@ -166,7 +166,7 @@ void adjustRangeName(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOl
     //search local range names
     if (pRangeName)
     {
-        pRangeData = pRangeName->findByUpperName(ScGlobal::pCharClass->upper(aRangeName));
+        pRangeData = pRangeName->findByUpperName(aRangeName);
     }
     //search global range names
     if (!pRangeData)
@@ -174,7 +174,7 @@ void adjustRangeName(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOl
         bNewGlobal = true;
         pRangeName = rNewDoc.GetRangeName();
         if (pRangeName)
-            pRangeData = pRangeName->findByUpperName(ScGlobal::pCharClass->upper(aRangeName));
+            pRangeData = pRangeName->findByUpperName(aRangeName);
     }
     //if no range name was found copy it
     if (!pRangeData)
