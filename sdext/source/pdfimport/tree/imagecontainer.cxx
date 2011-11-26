@@ -73,16 +73,16 @@ rtl::OUString encodeBase64( const sal_Int8* i_pBuffer, const sal_uInt32 i_nBuffe
         aBuf.appendAscii("====");
 
         sal_uInt8 nIndex (static_cast<sal_uInt8>((nBinary & 0xFC0000) >> 18));
-        aBuf.setCharAt(nBufPos, aBase64EncodeTable [nIndex]);
+        aBuf[nBufPos] = aBase64EncodeTable [nIndex];
 
         nIndex = static_cast<sal_uInt8>((nBinary & 0x3F000) >> 12);
-        aBuf.setCharAt(nBufPos+1, aBase64EncodeTable [nIndex]);
+        aBuf[nBufPos+1] = aBase64EncodeTable [nIndex];
 
         nIndex = static_cast<sal_uInt8>((nBinary & 0xFC0) >> 6);
-        aBuf.setCharAt(nBufPos+2, aBase64EncodeTable [nIndex]);
+        aBuf[nBufPos+2] = aBase64EncodeTable [nIndex];
 
         nIndex = static_cast<sal_uInt8>((nBinary & 0x3F));
-        aBuf.setCharAt(nBufPos+3, aBase64EncodeTable [nIndex]);
+        aBuf[nBufPos+3] = aBase64EncodeTable [nIndex];
     }
     if( nRemain > 0 )
     {
@@ -98,15 +98,15 @@ rtl::OUString encodeBase64( const sal_Int8* i_pBuffer, const sal_uInt32 i_nBuffe
                 break;
         }
         sal_uInt8 nIndex (static_cast<sal_uInt8>((nBinary & 0xFC0000) >> 18));
-        aBuf.setCharAt(nBufPos, aBase64EncodeTable [nIndex]);
+        aBuf[nBufPos] = aBase64EncodeTable [nIndex];
 
         nIndex = static_cast<sal_uInt8>((nBinary & 0x3F000) >> 12);
-        aBuf.setCharAt(nBufPos+1, aBase64EncodeTable [nIndex]);
+        aBuf[nBufPos+1] = aBase64EncodeTable [nIndex];
 
         if( nRemain == 2 )
         {
             nIndex = static_cast<sal_uInt8>((nBinary & 0xFC0) >> 6);
-            aBuf.setCharAt(nBufPos+2, aBase64EncodeTable [nIndex]);
+            aBuf[nBufPos+2] = aBase64EncodeTable [nIndex];
         }
     }
 

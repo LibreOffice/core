@@ -85,13 +85,13 @@ static rtl::OUString ImpCurrencyToString( const sal_Int64 &rVal )
     for ( sal_Int32 charCpyIndex = aAbsStr.getLength() - 1; nInsertIndex >= nEndIndex;  ++nDigitCount )
     {
         if ( nDigitCount == 4 )
-            aBuf.setCharAt( nInsertIndex--, cDecimalSep );
+            aBuf[nInsertIndex--] = cDecimalSep;
 #if MAYBEFUTURE
         if ( nDigitCount > 4 && ! ( ( nDigitCount - 4  ) % 3) )
-            aBuf.setCharAt( nInsertIndex--, cThousandSep );
+            aBuf[nInsertIndex--] = cThousandSep;
 #endif
         if ( nDigitCount < initialLen )
-            aBuf.setCharAt( nInsertIndex--, aAbsStr[ charCpyIndex-- ] );
+            aBuf[nInsertIndex--] = aAbsStr[ charCpyIndex-- ];
         else
         // Handle leading 0's to right of decimal point
         // Note: in VBA the stringification is a little more complex
@@ -104,10 +104,10 @@ static rtl::OUString ImpCurrencyToString( const sal_Int64 &rVal )
         // 0     0.0000     0
         // 0.1   0.1000     0.1
 
-            aBuf.setCharAt( nInsertIndex--, (sal_Unicode)'0' );
+            aBuf[nInsertIndex--] = (sal_Unicode)'0';
     }
     if ( isNeg )
-            aBuf.setCharAt( nInsertIndex, (sal_Unicode)'-' );
+            aBuf[nInsertIndex] = (sal_Unicode)'-';
 
     aAbsStr = aBuf.makeStringAndClear();
     return aAbsStr;

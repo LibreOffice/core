@@ -224,9 +224,9 @@ void lcl_SwapQuotesInField(::rtl::OUString &rFmt)
     for (sal_Int32 nI = 0; nI < nLen; ++nI)
     {
         if ((pFmt[nI] == '\"') && (!nI || pFmt[nI-1] != '\\'))
-            aBuffer.setCharAt(nI, '\'');
+            aBuffer[nI] = '\'';
         else if ((pFmt[nI] == '\'') && (!nI || pFmt[nI-1] != '\\'))
-            aBuffer.setCharAt(nI, '\"');
+            aBuffer[nI] = '\"';
     }
     rFmt = aBuffer.makeStringAndClear();
 }
@@ -235,8 +235,8 @@ bool lcl_IsNotAM(::rtl::OUString& rFmt, sal_Int32 nPos)
     return (
             (nPos == rFmt.getLength() - 1) ||
             (
-            (rFmt.getStr()[nPos+1] != 'M') &&
-            (rFmt.getStr()[nPos+1] != 'm')
+            (rFmt[nPos+1] != 'M') &&
+            (rFmt[nPos+1] != 'm')
             )
         );
 }
@@ -253,34 +253,34 @@ bool lcl_IsNotAM(::rtl::OUString& rFmt, sal_Int32 nPos)
     sal_Int32 nLen = sFormat.getLength();
     sal_Int32 nI = 0;
 //    const sal_Unicode* pFormat = sFormat.getStr();
-    ::rtl::OUStringBuffer aNewFormat( sFormat.getStr() );
+    ::rtl::OUStringBuffer aNewFormat( sFormat );
     while (nI < nLen)
     {
-        if (aNewFormat.charAt(nI) == '\\')
+        if (aNewFormat[nI] == '\\')
             nI++;
-        else if (aNewFormat.charAt(nI) == '\"')
+        else if (aNewFormat[nI] == '\"')
         {
             ++nI;
             //While not at the end and not at an unescaped end quote
-            while ((nI < nLen) && (!(aNewFormat.charAt(nI) == '\"') && (aNewFormat.charAt(nI-1) != '\\')))
+            while ((nI < nLen) && (!(aNewFormat[nI] == '\"') && (aNewFormat[nI-1] != '\\')))
                 ++nI;
         }
         else //normal unquoted section
         {
-            sal_Unicode nChar = aNewFormat.charAt(nI);
+            sal_Unicode nChar = aNewFormat[nI];
             if (nChar == 'O')
             {
-                aNewFormat.setCharAt(nI, 'M');
+                aNewFormat[nI] = 'M';
                 bForceNatNum = true;
             }
             else if (nChar == 'o')
             {
-                aNewFormat.setCharAt(nI, 'm');
+                aNewFormat[nI] = 'm';
                 bForceNatNum = true;
             }
             else if ((nChar == 'A') && lcl_IsNotAM(sFormat, nI))
             {
-                aNewFormat.setCharAt(nI, 'D');
+                aNewFormat[nI] = 'D';
                 bForceNatNum = true;
             }
             else if ((nChar == 'g') || (nChar == 'G'))
@@ -289,11 +289,11 @@ bool lcl_IsNotAM(::rtl::OUString& rFmt, sal_Int32 nPos)
                 bForceJapanese = true;
             else if (nChar == 'E')
             {
-                if ((nI != nLen-1) && (aNewFormat.charAt(nI+1) == 'E'))
+                if ((nI != nLen-1) && (aNewFormat[nI+1] == 'E'))
                 {
                     //todo: this cannot be the right way to replace a part of the string!
-                    aNewFormat.setCharAt( nI, 'Y' );
-                    aNewFormat.setCharAt( nI + 1, 'Y' );
+                    aNewFormat[nI] = 'Y';
+                    aNewFormat[nI + 1] = 'Y';
                     aNewFormat.insert(nI + 2, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("YY")));
                     nLen+=2;
                     nI+=3;
@@ -302,11 +302,11 @@ bool lcl_IsNotAM(::rtl::OUString& rFmt, sal_Int32 nPos)
             }
             else if (nChar == 'e')
             {
-                if ((nI != nLen-1) && (aNewFormat.charAt(nI+1) == 'e'))
+                if ((nI != nLen-1) && (aNewFormat[nI+1] == 'e'))
                 {
                     //todo: this cannot be the right way to replace a part of the string!
-                    aNewFormat.setCharAt( nI, 'y' );
-                    aNewFormat.setCharAt( nI + 1, 'y' );
+                    aNewFormat[nI] = 'y';
+                    aNewFormat[nI + 1] = 'y';
                     aNewFormat.insert(nI + 2, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("yy")));
                     nLen+=2;
                     nI+=3;
@@ -317,7 +317,7 @@ bool lcl_IsNotAM(::rtl::OUString& rFmt, sal_Int32 nPos)
             {
                 // MM We have to escape '/' in case it's used as a char
                 //todo: this cannot be the right way to replace a part of the string!
-                aNewFormat.setCharAt( nI, '\\' );
+                aNewFormat[nI] = '\\';
                 aNewFormat.insert(nI + 1, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")));
                 nI++;
                 nLen++;
