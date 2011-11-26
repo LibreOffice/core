@@ -284,8 +284,8 @@ namespace connectivity
                                 {
                                     if ( sLine.Len() == 0 )
                                         continue;
-                                    const ByteString sIniKey = sLine.GetToken( 0, '=' );
-                                    const ByteString sValue = sLine.GetToken( 1, '=' );
+                                    const ByteString sIniKey = comphelper::string::getToken(sLine, 0, '=');
+                                    const ByteString sValue = comphelper::string::getToken(sLine, 1, '=');
                                     if ( sIniKey.Equals( "hsqldb.compatible_version" ) )
                                     {
                                         sVersionString = sValue;

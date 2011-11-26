@@ -33,6 +33,7 @@
 #include <set>
 #include <map>
 
+#include <comphelper/string.hxx>
 #include <rtl/crc.h>
 #include <rtl/strbuf.hxx>
 #include <tools/stream.hxx>
@@ -431,11 +432,11 @@ void BmpSum::ProcessFileList( const String& rInFileList,
 
                     for( sal_uInt16 n = 0; ( n < nTokenCount - 1 ); n++ )
                     {
-                        aNewDir += DirEntry( aFileName.GetToken( n, '/' ) );
+                        aNewDir += DirEntry( comphelper::string::getToken(aFileName, n, '/') );
                         aNewDir.MakeDir();
                     }
 
-                    aNewDir += DirEntry( aFileName.GetToken( nTokenCount - 1, '/' ) );
+                    aNewDir += DirEntry( comphelper::string::getToken(aFileName, nTokenCount - 1, '/') );
                     aSrcFile.CopyTo( aNewDir, FSYS_ACTION_COPYFILE );
                 }
             }

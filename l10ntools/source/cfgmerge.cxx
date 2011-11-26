@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include <stdio.h>
+#include <comphelper/string.hxx>
 #include <tools/string.hxx>
 #include <tools/fsys.hxx>
 
@@ -34,6 +35,8 @@
 #include "export.hxx"
 #include "cfgmerge.hxx"
 #include "tokens.h"
+
+using comphelper::string::getToken;
 
 extern "C" { int yyerror( char * ); }
 extern "C" { int YYWarning( char * ); }
@@ -405,7 +408,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
         case ANYTOKEN:
         case CFG_TEXT_START:
         {
-            sTokenName = sToken.GetToken( 1, '<' ).GetToken( 0, '>' ).GetToken( 0, ' ' );
+            sTokenName = getToken(getToken(getToken(sToken, 1, '<'), 0, '>'), 0, ' ');
 
               if ( !IsTokenClosed( sToken )) {
                 ByteString sSearch;
@@ -441,7 +444,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                         sCurrentResTyp = sTokenName;
 
                         ByteString sTemp = sToken.Copy( sToken.Search( "xml:lang=" ));
-                        sCurrentIsoLang = sTemp.GetToken( 1, '\"' ).GetToken( 0, '\"' );
+                        sCurrentIsoLang = getToken(getToken(sTemp, 1, '\"'), 0, '\"');
 
                         if ( sCurrentIsoLang == NO_TRANSLATE_ISO )
                             bLocalize = sal_False;
@@ -452,9 +455,10 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                     }
                     break;
                 }
-                if ( sSearch.Len()) {
-                    ByteString sTemp = sToken.Copy( sToken.Search( sSearch ));
-                    sTokenId = sTemp.GetToken( 1, '\"' ).GetToken( 0, '\"' );
+                if ( sSearch.Len())
+                {
+                    rtl::OString sTemp = sToken.Copy( sToken.Search( sSearch ));
+                    sTokenId = getToken(getToken(sTemp, 1, '\"'), 0, '\"');
                 }
                 pStackData = aStack.Push( sTokenName, sTokenId );
 
@@ -479,7 +483,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
         }
         break;
         case CFG_CLOSETAG:
-            sTokenName = sToken.GetToken( 1, '/' ).GetToken( 0, '>' ).GetToken( 0, ' ' );
+            sTokenName = getToken(getToken(getToken(sToken, 1, '/'), 0, '>'), 0, ' ');
                if ( aStack.GetStackData() && ( aStack.GetStackData()->GetTagType() == sTokenName )) {
                 if ( ! sCurrentText.Len())
                     WorkOnRessourceEnd();
@@ -804,12 +808,12 @@ void CfgMerge::WorkOnRessourceEnd()
                     ByteString sTextTag = pStackData->sTextTag;
                     ByteString sTemp = sTextTag.Copy( sTextTag.Search( "xml:lang=" ));
 
-                    ByteString sSearch = sTemp.GetToken( 0, '\"' );
+                    ByteString sSearch = getToken(sTemp, 0, '\"');
                     sSearch += "\"";
-                    sSearch += sTemp.GetToken( 1, '\"' );
+                    sSearch += getToken(sTemp, 1, '\"');
                     sSearch += "\"";
 
-                    ByteString sReplace = sTemp.GetToken( 0, '\"' );
+                    ByteString sReplace = getToken(sTemp, 0, '\"');
                     sReplace += "\"";
                     sReplace += sCur;
                     sReplace += "\"";

@@ -30,6 +30,7 @@
 #include "psputil.hxx"
 #include "glyphset.hxx"
 
+#include <comphelper/string.hxx>
 #include "generic/printergfx.hxx"
 #include "generic/printerjob.hxx"
 #include "vcl/fontmanager.hxx"
@@ -1205,7 +1206,7 @@ PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize
             {
                 if( aLine.CompareIgnoreCaseToAscii( "%%BoundingBox:", 14 ) == COMPARE_EQUAL )
                 {
-                    aLine = WhitespaceToSpace( aLine.GetToken( 1, ':' ) );
+                    aLine = WhitespaceToSpace( comphelper::string::getToken(aLine, 1, ':') );
                     if( aLine.Len() && aLine.Search( "atend" ) == STRING_NOTFOUND )
                     {
                         fLeft   = StringToDouble( GetCommandLineToken( 0, aLine ) );

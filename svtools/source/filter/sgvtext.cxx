@@ -1188,7 +1188,7 @@ void SgfFontOne::ReadOne( const rtl::OString& rID, ByteString& Dsc )
     n=Dsc.GetTokenCount(' ');
     for (i=0;i<n;i++)
     {
-        s = Dsc.GetToken( i,' ' );
+        s = comphelper::string::getToken(Dsc, i,' ');
         if (!s.isEmpty())
         {
             s = s.toAsciiUpperCase();

@@ -415,9 +415,10 @@ ByteString XRMResParser::GetAttribute( const ByteString &rToken, const ByteStrin
     sSearch += "=";
     sal_uInt16 nPos = sTmp.Search( sSearch );
 
-    if ( nPos != STRING_NOTFOUND ) {
+    if ( nPos != STRING_NOTFOUND )
+    {
         sTmp = sTmp.Copy( nPos );
-        ByteString sId = sTmp.GetToken( 1, '\"' );
+        ByteString sId = comphelper::string::getToken(sTmp, 1, '\"');
         return sId;
     }
     return "";

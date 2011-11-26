@@ -978,7 +978,7 @@ void PPDParser::parse( ::std::list< rtl::OString >& rLines )
         if( aCurrentLine.GetChar(1) == '%' )
             continue;
 
-        ByteString aKey = GetCommandLineToken( 0, aCurrentLine.GetToken( 0, ':' ) );
+        ByteString aKey = GetCommandLineToken( 0, comphelper::string::getToken(aCurrentLine, 0, ':') );
         int nPos = aKey.Search( '/' );
         if( nPos != STRING_NOTFOUND )
             aKey.Erase( nPos );

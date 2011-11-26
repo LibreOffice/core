@@ -102,6 +102,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 
+using ::comphelper::string::getToken;
 using ::rtl::OUString;
 using ::rtl::OString;
 using ::rtl::OStringHash;
@@ -2991,8 +2992,8 @@ OUString PrintFontManager::getFontXLFD( fontID nFontID ) const
     OUString aRet;
     if( pFont )
     {
-        ByteString aXLFD( getXLFD( pFont ) );
-        rtl_TextEncoding aEncoding = aXLFD.GetToken( 6, '-' ).Search( "utf8" ) != STRING_NOTFOUND ? RTL_TEXTENCODING_UTF8 : RTL_TEXTENCODING_ISO_8859_1;
+        OString aXLFD( getXLFD( pFont ) );
+        rtl_TextEncoding aEncoding = getToken(aXLFD, 6, '-').indexOf( "utf8" ) != -1 ? RTL_TEXTENCODING_UTF8 : RTL_TEXTENCODING_ISO_8859_1;
         aRet = OStringToOUString( aXLFD, aEncoding );
     }
     return aRet;
@@ -3383,7 +3384,7 @@ bool PrintFontManager::checkChangeFontPropertiesPossible( fontID /*nFontID*/ ) c
 bool PrintFontManager::changeFontProperties( fontID nFontID, const ::rtl::OUString& rXLFD )
 {
     ByteString aXLFD( OUStringToOString( rXLFD, RTL_TEXTENCODING_UTF8 ) );
-    ByteString aAddStyle = aXLFD.GetToken( '-', 6 );
+    ByteString aAddStyle = comphelper::string::getToken(aXLFD, '-', 6);
     if( aAddStyle.Search( "utf8" ) == STRING_NOTFOUND )
     {
         aAddStyle.Append( aAddStyle.Len() ? ";utf8" : "utf8" );

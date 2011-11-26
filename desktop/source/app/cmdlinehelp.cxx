@@ -31,6 +31,7 @@
 #ifdef UNX
 #include <stdio.h>
 #endif
+#include <comphelper/string.hxx>
 #include <sal/types.h>
 #include <tools/string.hxx>
 #include <vcl/msgbox.hxx>
@@ -149,16 +150,19 @@ namespace desktop
 #ifdef UNX
         // on unix use console for output
         fprintf(stdout, "%s%s",
-                ByteString(aHelpMessage_version, RTL_TEXTENCODING_ASCII_US).GetBuffer(),
-                ByteString(aHelpMessage_head, RTL_TEXTENCODING_ASCII_US).GetBuffer());
+                rtl::OUStringToOString(aHelpMessage_version, RTL_TEXTENCODING_ASCII_US).getStr(),
+                rtl::OUStringToOString(aHelpMessage_head, RTL_TEXTENCODING_ASCII_US).getStr());
         // merge left and right column
-        int n = aHelpMessage_left.GetTokenCount ('\n');
-        ByteString bsLeft(aHelpMessage_left, RTL_TEXTENCODING_ASCII_US);
-        ByteString bsRight(aHelpMessage_right, RTL_TEXTENCODING_ASCII_US);
-        for ( int i = 0; i < n; i++ )
+        sal_Int32 n = aHelpMessage_left.GetTokenCount ('\n');
+        rtl::OString bsLeft(rtl::OUStringToOString(aHelpMessage_left,
+            RTL_TEXTENCODING_ASCII_US));
+        ByteString bsRight(rtl::OUStringToOString(aHelpMessage_right,
+            RTL_TEXTENCODING_ASCII_US));
+        for ( sal_Int32 i = 0; i < n; ++i )
         {
-            fprintf(stdout, "%s", bsLeft.GetToken(i, '\n').GetBuffer());
-            fprintf(stdout, "%s\n", bsRight.GetToken(i, '\n').GetBuffer());
+            using comphelper::string::getToken;
+            fprintf(stdout, "%s", getToken(bsLeft, i, '\n').getStr());
+            fprintf(stdout, "%s\n", getToken(bsRight, i, '\n').getStr());
         }
         fprintf(stdout, "%s", ByteString(aHelpMessage_bottom,
                     RTL_TEXTENCODING_ASCII_US).GetBuffer());

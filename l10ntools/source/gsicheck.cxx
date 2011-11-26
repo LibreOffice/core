@@ -148,17 +148,17 @@ GSILine::GSILine( const ByteString &rLine, sal_uLong nLine )
     {
         aFormat = FORMAT_SDF;
         aUniqId = getToken(rLine, 0, '\t');
-        aUniqId.Append("/").Append( rLine.GetToken( 1, '\t' ) ).Append("/").Append( rLine.GetToken( 3, '\t' ) ).Append("/").Append( rLine.GetToken( 4, '\t' ) ).Append("/").Append( rLine.GetToken( 5, '\t' ) ).Append("/").Append( rLine.GetToken( 6, '\t' ) ).Append("/").Append( rLine.GetToken( 7, '\t' ) );
+        aUniqId.Append("/").Append( getToken(rLine, 1, '\t') ).Append("/").Append( getToken(rLine, 3, '\t') ).Append("/").Append( getToken(rLine, 4, '\t') ).Append("/").Append( getToken(rLine, 5, '\t') ).Append("/").Append( getToken(rLine, 6, '\t') ).Append("/").Append( getToken(rLine, 7, '\t') );
         aLineType = "";
-        aLangId = rLine.GetToken( 9, '\t' );
-        aText = rLine.GetToken( 10, '\t' );
-        aQuickHelpText = rLine.GetToken( 12, '\t' );
-        aTitle = rLine.GetToken( 13, '\t' );
+        aLangId = getToken(rLine, 9, '\t');
+        aText = getToken(rLine, 10, '\t');
+        aQuickHelpText = getToken(rLine, 12, '\t');
+        aTitle = getToken(rLine, 13, '\t');
 
         // do some more format checks here
-        if (!comphelper::string::isdigitAsciiString(rLine.GetToken(8, '\t')))
+        if (!comphelper::string::isdigitAsciiString(getToken(rLine, 8, '\t')))
         {
-            PrintError( "The length field does not contain a number!", "Line format", rLine.GetToken( 8, '\t' ), sal_True, GetLineNumber(), GetUniqId() );
+            PrintError( "The length field does not contain a number!", "Line format", getToken(rLine, 8, '\t'), sal_True, GetLineNumber(), GetUniqId() );
             NotOK();
         }
         if ( !LanguageOK( aLangId ) )
@@ -167,7 +167,7 @@ GSILine::GSILine( const ByteString &rLine, sal_uLong nLine )
             NotOK();
         }
         // limit GID and LID to MAX_GID_LID_LEN chars each for database conformity, see #137575#
-        if ( rLine.GetToken( 4, '\t' ).Len() > MAX_GID_LID_LEN || rLine.GetToken( 5, '\t' ).Len() > MAX_GID_LID_LEN )
+        if ( getToken(rLine, 4, '\t').getLength() > MAX_GID_LID_LEN || getToken(rLine, 5, '\t').getLength() > MAX_GID_LID_LEN )
         {
             PrintError(rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("GID and LID may only be "))
                  .append(static_cast<sal_Int32>(MAX_GID_LID_LEN))

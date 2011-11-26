@@ -33,8 +33,10 @@
 #include "RtfReader.hxx"
 #include "HtmlReader.hxx"
 #include "dbustrings.hrc"
-#include <connectivity/dbtools.hxx>
+#include <comphelper/componentcontext.hxx>
+#include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
+#include <connectivity/dbtools.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
@@ -61,7 +63,6 @@
 #include <svtools/htmlcfg.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
 #include <unotools/syslocale.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <rtl/logfile.hxx>
 
 using namespace dbaui;
@@ -426,7 +427,7 @@ sal_Bool ORTFImportExport::Write()
         (*m_pStream) << "\\f";
         m_pStream->WriteNumber(static_cast<sal_Int32>(j));
         (*m_pStream) << "\\fcharset0\\fnil ";
-        (*m_pStream) << aFonts.GetToken(j).GetBuffer();
+        (*m_pStream) << comphelper::string::getToken(aFonts, j, ';').getStr();
         (*m_pStream) << ';';
     }
     (*m_pStream) << '}' ;

@@ -31,6 +31,7 @@
 
 #define _XBMPRIVATE
 #include <ctype.h>
+#include <comphelper/string.hxx>
 #include "xbmread.hxx"
 
 // -------------
@@ -230,7 +231,7 @@ sal_Bool XBMReader::ParseData( SvStream* pInStm, const ByteString& aLastLine, XB
 
             for( sal_uInt16 i = 0; ( i < nCount ) && ( nRow < nHeight ); i++ )
             {
-                const rtl::OString aToken(aLine.GetToken(i, ','));
+                const rtl::OString aToken(comphelper::string::getToken(aLine,i, ','));
                 const sal_Int32 nLen = aToken.getLength();
                 sal_Bool                bProcessed = sal_False;
 
