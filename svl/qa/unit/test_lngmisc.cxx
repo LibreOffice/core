@@ -16,14 +16,14 @@ namespace
   {
   private:
     void testRemoveHyphens();
-    //    void testRemoveControlChars();
+    void testRemoveControlChars();
     //    void testReplaceControlChars();
     //    void testGetThesaurusReplaceText();
 
     CPPUNIT_TEST_SUITE(LngMiscTest);
 
     CPPUNIT_TEST(testRemoveHyphens);
-    //    CPPUNIT_TEST(testRemoveControlChars);
+    CPPUNIT_TEST(testRemoveControlChars);
     //    CPPUNIT_TEST(testReplaceControlChars);
     //    CPPUNIT_TEST(testGetThesaurusReplaceText);
 
@@ -61,12 +61,38 @@ namespace
     CPPUNIT_ASSERT(str4.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("asdf")));
   }
 
-  /*
   void LngMiscTest::testRemoveControlChars()
   {
-    CPPUNIT_ASSERT(true);
+    ::rtl::OUString str1(RTL_CONSTASCII_USTRINGPARAM(""));
+    ::rtl::OUString str2(RTL_CONSTASCII_USTRINGPARAM("asdf"));
+    ::rtl::OUString str3(RTL_CONSTASCII_USTRINGPARAM("asdf\nasdf"));
+
+    ::rtl::OUStringBuffer str4Buf(33);
+    str4Buf.setLength(33);
+    for(int i = 0; i < 33; i++)
+      str4Buf[i] = static_cast<sal_Unicode>(i);
+    //    TODO: is this a bug? shouldn't RemoveControlChars remove this?
+    //    str4Buf[33] = static_cast<sal_Unicode>(0x7F);
+    ::rtl::OUString str4(str4Buf.makeStringAndClear());
+
+    bool bModified = linguistic::RemoveControlChars(str1);
+    CPPUNIT_ASSERT(!bModified);
+    CPPUNIT_ASSERT(str1.isEmpty());
+
+    bModified = linguistic::RemoveControlChars(str2);
+    CPPUNIT_ASSERT(!bModified);
+    CPPUNIT_ASSERT(str2.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("asdf")));
+
+    bModified = linguistic::RemoveControlChars(str3);
+    CPPUNIT_ASSERT(bModified);
+    CPPUNIT_ASSERT(str3.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("asdfasdf")));
+
+    bModified = linguistic::RemoveControlChars(str4);
+    CPPUNIT_ASSERT(bModified);
+    CPPUNIT_ASSERT(str4.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(" ")));
   }
 
+  /*
   void LngMiscTest::testReplaceControlChars()
   {
     CPPUNIT_ASSERT(true);

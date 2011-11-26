@@ -54,6 +54,7 @@ inline bool IsHyphen( sal_Unicode cChar )
 
 inline bool IsControlChar( sal_Unicode cChar )
 {
+    // TODO: why doesn't this include 0x0F DEL?
     return cChar < static_cast<sal_Unicode>(' ');
 }
 

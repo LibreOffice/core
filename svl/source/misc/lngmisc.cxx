@@ -47,12 +47,9 @@ namespace linguistic
 sal_Int32 GetNumControlChars( const OUString &rTxt )
 {
     sal_Int32 nCnt = 0;
-    sal_Int32 nLen = rTxt.getLength();
-    for (sal_Int32 i = 0;  i < nLen;  ++i)
-    {
-        if (IsControlChar( rTxt[i] ))
+    for (sal_Int32 i = 0; i < rTxt.getLength(); ++i)
+        if (IsControlChar(rTxt[i]))
             ++nCnt;
-    }
     return nCnt;
 }
 
@@ -66,31 +63,21 @@ bool RemoveHyphens( OUString &rTxt )
 
 bool RemoveControlChars( OUString &rTxt )
 {
-    bool bModified = false;
-    sal_Int32 nCtrlChars = GetNumControlChars( rTxt );
-    if (nCtrlChars)
-    {
-        sal_Int32 nLen  = rTxt.getLength();
-        sal_Int32 nSize = nLen - nCtrlChars;
-        OUStringBuffer aBuf( nSize );
-        aBuf.setLength( nSize );
-        sal_Int32 nCnt = 0;
-        for (sal_Int32 i = 0;  i < nLen;  ++i)
-        {
-            sal_Unicode cChar = rTxt[i];
-            if (!IsControlChar( cChar ))
-            {
-                DBG_ASSERT( nCnt < nSize, "index out of range" );
-                aBuf.setCharAt( nCnt++, cChar );
-            }
-        }
-        DBG_ASSERT( nCnt == nSize, "wrong size" );
-        rTxt = aBuf.makeStringAndClear();
-        bModified = true;
-    }
-    return bModified;
-}
+    sal_Int32 nSize = rTxt.getLength() - GetNumControlChars(rTxt);
+    if(nSize == rTxt.getLength())
+        return false;
 
+    OUStringBuffer aBuf(nSize);
+    aBuf.setLength(nSize);
+    for (sal_Int32 i = 0, j = 0; i < rTxt.getLength() && j < nSize; ++i)
+        if (!IsControlChar(rTxt[i]))
+            aBuf[j++] = rTxt[i];
+
+    rTxt = aBuf.makeStringAndClear();
+    DBG_ASSERT(rTxt.getLength() == nSize, "GetNumControlChars returned a different number of control characters than were actually removed.");
+
+    return true;
+}
 
 // non breaking field character
 #define CH_TXTATR_INWORD    ((sal_Char) 0x02)
