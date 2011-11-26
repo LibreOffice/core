@@ -401,11 +401,10 @@ endef
 
 define gb_Module_DEBUGRUNCOMMAND
 OFFICESCRIPT=`mktemp` && \
-echo ". $(OUTDIR)/installation/opt/program/ooenv" > $${OFFICESCRIPT} && \
-echo "$(OUTDIR)/installation/opt/program/soffice.bin --norestore --nologo \"--accept=pipe,name=$(USER);urp;\" -env:UserInstallation=file://$(OUTDIR)/installation/ &" >> $${OFFICESCRIPT} && \
-echo "OFFICEPID=\$$!" >> $${OFFICESCRIPT} && \
-echo "echo \"office started as \$${OFFICEPID}\"" >> $${OFFICESCRIPT} && \
-echo "gdb -ex \"at \$${OFFICEPID}\" -ex \"c\"" >> $${OFFICESCRIPT} && \
+printf ". $(OUTDIR)/installation/opt/program/ooenv\\n" > $${OFFICESCRIPT} && \
+printf "gdb $(OUTDIR)/installation/opt/program/soffice.bin" >> $${OFFICESCRIPT} && \
+printf " -ex \"set args --norestore --nologo \\\"--accept=pipe,name=$(USER);urp;\\\" -env:UserInstallation=file://$(OUTDIR)/installation/\"" >> $${OFFICESCRIPT} && \
+printf " -ex \"r\"\\n" >> $${OFFICESCRIPT} && \
 $(SHELL) $${OFFICESCRIPT} && \
 rm $${OFFICESCRIPT}
 endef
