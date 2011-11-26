@@ -32,69 +32,69 @@ ModelessDialog RID_SCDLG_NAMES
     HelpId = CMD_FID_DEFINE_NAME ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 220 , 250 ) ;
+    Size = MAP_APPFONT ( 220 , 247 ) ;
     Text [ en-US ] = "Manage Names" ;
     Moveable = TRUE ;
     Closeable = TRUE;
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 6 , 225 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 5 , 227 ) ;
+        Size = MAP_APPFONT ( 50 , 15 ) ;
         TabStop = TRUE ;
     };
     PushButton BTN_ADD
     {
         HelpID = "sc:PushButton:RID_SCDLG_NAMES:BTN_ADD";
-        Pos = MAP_APPFONT ( 6 , 200 ) ;
-        Size = MAP_APPFONT ( 40 , 14 ) ;
+        Pos = MAP_APPFONT ( 5 , 200 ) ;
+        Size = MAP_APPFONT ( 50 , 15 ) ;
         Text [ en-US ] = "Add" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     PushButton BTN_DELETE
     {
-        Pos = MAP_APPFONT( 50, 200) ;
-        Size = MAP_APPFONT ( 40, 14 ) ;
+        Pos = MAP_APPFONT( 60, 200) ;
+        Size = MAP_APPFONT ( 50, 15 ) ;
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
     };
     PushButton BTN_NAME_OK
     {
-        Pos = MAP_APPFONT ( 128 , 225 ) ;
-        Size = MAP_APPFONT ( 40 , 14 ) ;
+        Pos = MAP_APPFONT ( 110 , 227 ) ;
+        Size = MAP_APPFONT ( 50 , 15 ) ;
         Text [ en-US ] = "OK" ;
         TabStop = TRUE ;
     };
     PushButton BTN_NAME_CANCEL
     {
-        Pos = MAP_APPFONT ( 178 , 225 ) ;
-        Size = MAP_APPFONT ( 40 , 14 ) ;
+        Pos = MAP_APPFONT ( 165 , 227 ) ;
+        Size = MAP_APPFONT ( 50 , 15 ) ;
         Text [ en-US ] = "Cancel" ;
         TabStop = TRUE ;
     };
     PushButton BTN_SELECT
     {
         Pos = MAP_APPFONT ( 128 , 200 ) ;
-        Size = MAP_APPFONT ( 90 , 14 ) ;
+        Size = MAP_APPFONT ( 90 , 15 ) ;
         Text [ en-US ] = "Select Range" ;
         TabStop = TRUE ;
     };
 
     FixedText FT_SCOPE
     {
-        Pos = MAP_APPFONT( 6, 170 );
+        Pos = MAP_APPFONT( 5, 172 );
         Size = MAP_APPFONT( 40, 8 );
         Text [ en-US ] = "Scope" ;
     };
     FixedText FT_RANGE
     {
-        Pos = MAP_APPFONT( 6, 155 );
+        Pos = MAP_APPFONT( 5, 157 );
         Size = MAP_APPFONT( 40, 8 );
         Text [ en-US ] = "Range" ;
     };
     FixedText FT_NAME
     {
-        Pos = MAP_APPFONT( 6, 140 );
+        Pos = MAP_APPFONT( 5, 142 );
         Size = MAP_APPFONT( 40, 8 );
         Text [ en-US ] = "Name" ;
     };
@@ -134,8 +134,8 @@ ModelessDialog RID_SCDLG_NAMES
     CheckBox BTN_MORE
     {
         HelpID = "sc:MoreButton:RID_SCDLG_NAMES:BTN_MORE";
-        Pos = MAP_APPFONT ( 6 , 185 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 5 , 185 ) ;
+        Size = MAP_APPFONT ( 50 , 15 ) ;
         Text [en-US] = "Range Options";
     };
     FixedLine FL_DIV
@@ -146,7 +146,7 @@ ModelessDialog RID_SCDLG_NAMES
     CheckBox BTN_PRINTAREA
     {
         HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_PRINTAREA";
-        Pos = MAP_APPFONT ( 6 , 208 ) ;
+        Pos = MAP_APPFONT ( 5 , 200 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         Text [ en-US ] = "~Print range" ;
         TabStop = TRUE ;
@@ -154,7 +154,7 @@ ModelessDialog RID_SCDLG_NAMES
     CheckBox BTN_CRITERIA
     {
         HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_CRITERIA";
-        Pos = MAP_APPFONT ( 6 , 223 ) ;
+        Pos = MAP_APPFONT ( 5 , 215 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text [ en-US ] = "~Filter" ;
         TabStop = TRUE ;
@@ -162,7 +162,7 @@ ModelessDialog RID_SCDLG_NAMES
     CheckBox BTN_ROWHEADER
     {
         HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_ROWHEADER";
-        Pos = MAP_APPFONT ( 110, 223 ) ;
+        Pos = MAP_APPFONT ( 110, 215 ) ;
         Size = MAP_APPFONT ( 82 , 10 ) ;
         Text [ en-US ] = "Repeat ~row" ;
         TabStop = TRUE ;
@@ -170,7 +170,7 @@ ModelessDialog RID_SCDLG_NAMES
     CheckBox BTN_COLHEADER
     {
         HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_COLHEADER";
-        Pos = MAP_APPFONT ( 110 , 208 ) ;
+        Pos = MAP_APPFONT ( 110 , 200 ) ;
         Size = MAP_APPFONT ( 82 , 10 ) ;
         Text [ en-US ] = "Repeat ~column" ;
         TabStop = TRUE ;
@@ -188,15 +188,15 @@ ModelessDialog RID_SCDLG_NAMES
 
     FixedText FT_INFO
     {
-        Pos = MAP_APPFONT( 6, 127 );
-        Size = MAP_APPFONT( 210, 14 );
+        Pos = MAP_APPFONT( 5, 127 );
+        Size = MAP_APPFONT( 210, 15 );
         TabStop = FALSE;
     };
 
     Control CTRL_MANAGENAMES
     {
-        Pos = MAP_APPFONT( 6, 20 );
-        Size = MAP_APPFONT( 210, 100 );
+        Pos = MAP_APPFONT( 5, 5 );
+        Size = MAP_APPFONT( 210, 115 );
         Border = TRUE;
         DialogControl = TRUE;
     };
