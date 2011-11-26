@@ -233,7 +233,7 @@ void lclAppendHex( OUStringBuffer& orBuffer, Type nValue )
     static const sal_Unicode spcHexChars[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
     orBuffer.setLength( orBuffer.getLength() + nWidth );
     for( sal_Int32 nCharIdx = orBuffer.getLength() - 1, nCharEnd = nCharIdx - nWidth; nCharIdx > nCharEnd; --nCharIdx, nValue >>= 4 )
-        orBuffer.setCharAt( nCharIdx, spcHexChars[ nValue & 0xF ] );
+        orBuffer[nCharIdx] = spcHexChars[ nValue & 0xF ];
 }
 
 OUString lclReadStdHlinkString( BinaryInputStream& rInStrm, bool bUnicode )

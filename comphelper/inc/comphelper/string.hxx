@@ -426,7 +426,7 @@ namespace detail
         {
             rBuffer.setLength(nLen);
             for (sal_Int32 i = nOrigLen; i < nLen; ++i)
-                rBuffer.setCharAt(i, cFill);
+                rBuffer[i] = cFill;
         }
         return rBuffer;
     }

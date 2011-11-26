@@ -952,7 +952,7 @@ OUString SAL_CALL ScaDateAddIn::getRot13( const OUString& aSrcString ) throw( un
         if( ((cChar >= 'a') && (cChar <= 'z') && ((cChar += 13) > 'z')) ||
             ((cChar >= 'A') && (cChar <= 'Z') && ((cChar += 13) > 'Z')) )
             cChar -= 26;
-        aBuffer.setCharAt( nIndex, cChar );
+        aBuffer[nIndex] = cChar;
     }
     return aBuffer.makeStringAndClear();
 }

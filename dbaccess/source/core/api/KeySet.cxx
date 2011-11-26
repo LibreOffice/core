@@ -697,8 +697,8 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
     if ( !bModified )
         ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_VALUE_CHANGED ), SQL_GENERAL_ERROR, m_xConnection );
 
-    aSql.setCharAt(aSql.getLength()-1,')');
-    aValues.setCharAt(aValues.getLength()-1,')');
+    aSql[aSql.getLength() - 1] = ')';
+    aValues[aValues.getLength() - 1] = ')';
     aSql.append(aValues.makeStringAndClear());
     // now create,fill and execute the prepared statement
     ::rtl::OUString sEmpty;

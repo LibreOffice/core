@@ -1259,7 +1259,7 @@ namespace dbmm
                 for ( sal_Int32 i=0; i<nBaseNameLen; ++i )
                 {
                     if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( pReplacement + i, 1, sal_False ) )
-                        aReplacement.setCharAt( i, '_' );
+                        aReplacement[i] = '_';
                 }
                 sBaseName = aReplacement.makeStringAndClear();
 

@@ -292,11 +292,11 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
     sal_Unicode c;
     for (sal_Int32 ix=0; ix < n; ix++)
     {
-        c = rBuf.charAt(ix);
+        c = rBuf[ix];
         if ((c == 0x201C) || (c == 0x201D))
-            rBuf.setCharAt(ix,(sal_Unicode)0x0022);
+            rBuf[ix] = (sal_Unicode)0x0022;
         if ((c == 0x2018) || (c == 0x2019))
-            rBuf.setCharAt(ix,(sal_Unicode)0x0027);
+            rBuf[ix] = (sal_Unicode)0x0027;
     }
     OUString nWord(rBuf.makeStringAndClear());
 
@@ -428,11 +428,11 @@ Reference< XSpellAlternatives >
     sal_Unicode c;
     for (sal_Int32 ix=0; ix < n; ix++)
     {
-        c = rBuf.charAt(ix);
+        c = rBuf[ix];
         if ((c == 0x201C) || (c == 0x201D))
-            rBuf.setCharAt(ix,(sal_Unicode)0x0022);
+            rBuf[ix] = (sal_Unicode)0x0022;
         if ((c == 0x2018) || (c == 0x2019))
-            rBuf.setCharAt(ix,(sal_Unicode)0x0027);
+            rBuf[ix] = (sal_Unicode)0x0027;
     }
     OUString nWord(rBuf.makeStringAndClear());
 

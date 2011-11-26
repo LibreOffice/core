@@ -188,8 +188,8 @@ void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connecti
         aValues.append(aPara);
     }
 
-    aSql.setCharAt(aSql.getLength()-1,')');
-    aValues.setCharAt(aValues.getLength()-1,')');
+    aSql[aSql.getLength() - 1] = ')';
+    aValues[aValues.getLength() - 1] = ')';
 
     aSql.append(aValues.makeStringAndClear());
     // now create end execute the prepared statement
@@ -311,7 +311,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     ::rtl::OUStringBuffer aCondition;
     ::std::list< sal_Int32> aOrgValues;
     fillParameters(_rInsertRow,_xTable,aCondition,aSql,aOrgValues);
-    aSql.setCharAt(aSql.getLength()-1,' ');
+    aSql[aSql.getLength() - 1] = ' ';
     if ( aCondition.getLength() )
     {
         aCondition.setLength(aCondition.getLength()-5);

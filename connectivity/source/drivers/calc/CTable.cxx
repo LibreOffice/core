@@ -452,8 +452,8 @@ void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& xSheet,
     {
         ::rtl::OUStringBuffer aBuffer(2);
         aBuffer.setLength( 2 );
-        aBuffer.setCharAt( 0, (sal_Unicode) ( 'A' + ( nColumn / 26 ) - 1 ) );
-        aBuffer.setCharAt( 1, (sal_Unicode) ( 'A' + ( nColumn % 26 ) ) );
+        aBuffer[0] = (sal_Unicode) ( 'A' + ( nColumn / 26 ) - 1 );
+        aBuffer[1] = (sal_Unicode) ( 'A' + ( nColumn % 26 ) );
         return aBuffer.makeStringAndClear();
     }
 }

@@ -141,16 +141,16 @@ rtl::OString GraphicID::GetIDString() const
     aHexStr.setLength(32);
 
     for( nShift = 28; nShift >= 0; nShift -= 4 )
-        aHexStr.setCharAt(nIndex++, aHexData[ ( mnID1 >> (sal_uInt32) nShift ) & 0xf ]);
+        aHexStr[nIndex++] = aHexData[ ( mnID1 >> (sal_uInt32) nShift ) & 0xf ];
 
     for( nShift = 28; nShift >= 0; nShift -= 4 )
-        aHexStr.setCharAt(nIndex++, aHexData[ ( mnID2 >> (sal_uInt32) nShift ) & 0xf ]);
+        aHexStr[nIndex++] = aHexData[ ( mnID2 >> (sal_uInt32) nShift ) & 0xf ];
 
     for( nShift = 28; nShift >= 0; nShift -= 4 )
-        aHexStr.setCharAt(nIndex++, aHexData[ ( mnID3 >> (sal_uInt32) nShift ) & 0xf ]);
+        aHexStr[nIndex++] = aHexData[ ( mnID3 >> (sal_uInt32) nShift ) & 0xf ];
 
     for( nShift = 28; nShift >= 0; nShift -= 4 )
-        aHexStr.setCharAt(nIndex++, aHexData[ ( mnID4 >> (sal_uInt32) nShift ) & 0xf ]);
+        aHexStr[nIndex++] = aHexData[ ( mnID4 >> (sal_uInt32) nShift ) & 0xf ];
 
     return aHexStr.makeStringAndClear();
 }

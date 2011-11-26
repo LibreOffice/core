@@ -190,7 +190,7 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const ::rtl::OUString& _rForName
                 }
                 aSql.appendAscii(",");
             }
-            aSql.setCharAt(aSql.getLength()-1,')');
+            aSql[aSql.getLength() - 1] = ')';
         }
         else
         {

@@ -1535,7 +1535,7 @@ bool PrintFontManager::parseXLFD( const OString& rXLFD, XLFDEntry& rEntry )
             aFirst = aFirst - 'a' + 'A';
         OStringBuffer aNewToken( aToken.getLength() );
         aNewToken.append( aToken );
-        aNewToken.setCharAt( 0, aFirst );
+        aNewToken[0] = aFirst;
         if( aFamilyName.getLength() > 0 )
             aFamilyName.append( ' ' );
         aFamilyName.append( aNewToken.makeStringAndClear() );

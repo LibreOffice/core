@@ -358,11 +358,11 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const ::rtl::OUStri
         sal_Unicode ch;
         for (sal_Int32 ix=0; ix < nc; ix++)
         {
-            ch = rBuf.charAt(ix);
+            ch = rBuf[ix];
             if ((ch == 0x201C) || (ch == 0x201D))
-                rBuf.setCharAt(ix,(sal_Unicode)0x0022);
+                rBuf[ix] = (sal_Unicode)0x0022;
             if ((ch == 0x2018) || (ch == 0x2019))
-                rBuf.setCharAt(ix,(sal_Unicode)0x0027);
+                rBuf[ix] = (sal_Unicode)0x0027;
         }
         OUString nWord(rBuf.makeStringAndClear());
 
@@ -617,11 +617,11 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         sal_Unicode ch;
         for (sal_Int32 ix=0; ix < nc; ix++)
         {
-            ch = rBuf.charAt(ix);
+            ch = rBuf[ix];
             if ((ch == 0x201C) || (ch == 0x201D))
-                rBuf.setCharAt(ix,(sal_Unicode)0x0022);
+                rBuf[ix] = (sal_Unicode)0x0022;
             if ((ch == 0x2018) || (ch == 0x2019))
-                rBuf.setCharAt(ix,(sal_Unicode)0x0027);
+                rBuf[ix] = (sal_Unicode)0x0027;
         }
         OUString nWord(rBuf.makeStringAndClear());
 

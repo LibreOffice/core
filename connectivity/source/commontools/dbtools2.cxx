@@ -355,8 +355,8 @@ namespace
 
     if ( aSql.getLength() )
     {
-        if ( aSql.charAt(aSql.getLength()-1) == ',' )
-            aSql.setCharAt(aSql.getLength()-1,')');
+        if ( aSql[aSql.getLength() - 1] == ',' )
+            aSql[aSql.getLength() - 1] = ')';
         else
             aSql.appendAscii(")");
     }

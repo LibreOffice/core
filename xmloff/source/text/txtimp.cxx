@@ -1316,12 +1316,12 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
             }
             if( (rFlags & CONV_FROM_STAR_BATS ) != 0 )
             {
-                sChars.setCharAt( j, rImport.ConvStarBatsCharToStarSymbol( c ) );
+                sChars[j] = rImport.ConvStarBatsCharToStarSymbol( c );
                 bConverted = sal_True;
             }
             else if( (rFlags & CONV_FROM_STAR_MATH ) != 0 )
             {
-                sChars.setCharAt( j, rImport.ConvStarMathCharToStarSymbol( c ) );
+                sChars[j] = rImport.ConvStarMathCharToStarSymbol( c );
                 bConverted = sal_True;
             }
         }

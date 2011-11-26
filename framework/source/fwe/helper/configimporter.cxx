@@ -58,7 +58,7 @@ sal_Bool UIConfigurationImporterOOo1x::ImportCustomToolbars(
             {
                 rtl::OUStringBuffer aCustomTbxName( 20 );
                 aCustomTbxName.appendAscii( USERDEFTOOLBOX );
-                aCustomTbxName.setCharAt( 14, aCustomTbxName.charAt( 14 ) + i );
+                aCustomTbxName[14] = aCustomTbxName[14] + i;
 
                 rtl::OUString aTbxStreamName( aCustomTbxName.makeStringAndClear() );
                 uno::Reference< io::XStream > xStream = rToolbarStorage->openStreamElement( aTbxStreamName, embed::ElementModes::READ );

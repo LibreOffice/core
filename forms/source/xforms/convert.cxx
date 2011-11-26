@@ -592,7 +592,7 @@ Convert::Any_t Convert::toAny( const rtl::OUString& rValue,
         if( c == sal_Unicode(0x08) ||
             c == sal_Unicode(0x0A) ||
             c == sal_Unicode(0x0D) )
-            aBuffer.setCharAt( i, sal_Unicode(0x20) );
+            aBuffer[i] = sal_Unicode(0x20);
     }
     return aBuffer.makeStringAndClear();
 }
