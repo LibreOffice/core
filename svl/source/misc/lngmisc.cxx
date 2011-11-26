@@ -82,29 +82,27 @@ namespace linguistic
         // 1. non breaking field characters get removed
         // 2. remaining control characters will be replaced by ' '
 
-        bool bModified = false;
-        sal_Int32 nCtrlChars = GetNumControlChars( rTxt );
-        if (nCtrlChars)
+        if (GetNumControlChars(rTxt) == 0)
+            return false;
+
+        sal_Int32 n = rTxt.getLength();
+
+        rtl::OUStringBuffer aBuf(n);
+        aBuf.setLength(n);
+
+        sal_Int32 j = 0;
+        for (sal_Int32 i = 0; i < n && j < n; ++i)
         {
-            sal_Int32 nLen  = rTxt.getLength();
-            rtl::OUStringBuffer aBuf( nLen );
-            sal_Int32 nCnt = 0;
-            for (sal_Int32 i = 0;  i < nLen;  ++i)
-            {
-                sal_Unicode cChar = rTxt[i];
-                if (CH_TXTATR_INWORD != cChar)
-                {
-                    if (IsControlChar( cChar ))
-                        cChar = ' ';
-                    DBG_ASSERT( nCnt < nLen, "index out of range" );
-                    aBuf.setCharAt( nCnt++, cChar );
-                }
-            }
-            aBuf.setLength( nCnt );
-            rTxt = aBuf.makeStringAndClear();
-            bModified = true;
+            if (CH_TXTATR_INWORD == rTxt[i])
+                continue;
+
+            aBuf[j++] = IsControlChar(rTxt[i]) ? ' ' : rTxt[i];
         }
-        return bModified;
+
+        aBuf.setLength(j);
+        rTxt = aBuf.makeStringAndClear();
+
+        return true;
     }
 
     String GetThesaurusReplaceText(const String &rText)
