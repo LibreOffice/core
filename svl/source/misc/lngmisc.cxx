@@ -28,125 +28,115 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
-#include <comphelper/string.hxx>
-#include <svl/lngmisc.hxx>
-#include <tools/solar.h>
-#include <tools/string.hxx>
-#include <tools/debug.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
+#include "svl/lngmisc.hxx"
+
+#include <comphelper/string.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <tools/debug.hxx>
+#include <tools/string.hxx>
 
 namespace linguistic
 {
+    sal_Int32 GetNumControlChars(const rtl::OUString &rTxt)
+    {
+        sal_Int32 nCnt = 0;
+        for (sal_Int32 i = 0; i < rTxt.getLength(); ++i)
+            if (IsControlChar(rTxt[i]))
+                ++nCnt;
+        return nCnt;
+    }
 
-///////////////////////////////////////////////////////////////////////////
+    bool RemoveHyphens(rtl::OUString &rTxt)
+    {
+        sal_Int32 n = rTxt.getLength();
+        rTxt = comphelper::string::remove(rTxt, SVT_SOFT_HYPHEN);
+        rTxt = comphelper::string::remove(rTxt, SVT_HARD_HYPHEN);
+        return n != rTxt.getLength();
+    }
 
-sal_Int32 GetNumControlChars( const OUString &rTxt )
-{
-    sal_Int32 nCnt = 0;
-    for (sal_Int32 i = 0; i < rTxt.getLength(); ++i)
-        if (IsControlChar(rTxt[i]))
-            ++nCnt;
-    return nCnt;
-}
+    bool RemoveControlChars(rtl::OUString &rTxt)
+    {
+        sal_Int32 nSize = rTxt.getLength() - GetNumControlChars(rTxt);
+        if(nSize == rTxt.getLength())
+            return false;
 
-bool RemoveHyphens( OUString &rTxt )
-{
-    sal_Int32 n = rTxt.getLength();
-    rTxt = comphelper::string::remove(rTxt, SVT_SOFT_HYPHEN);
-    rTxt = comphelper::string::remove(rTxt, SVT_HARD_HYPHEN);
-    return n != rTxt.getLength();
-}
+        rtl::OUStringBuffer aBuf(nSize);
+        aBuf.setLength(nSize);
+        for (sal_Int32 i = 0, j = 0; i < rTxt.getLength() && j < nSize; ++i)
+            if (!IsControlChar(rTxt[i]))
+                aBuf[j++] = rTxt[i];
 
-bool RemoveControlChars( OUString &rTxt )
-{
-    sal_Int32 nSize = rTxt.getLength() - GetNumControlChars(rTxt);
-    if(nSize == rTxt.getLength())
-        return false;
+        rTxt = aBuf.makeStringAndClear();
+        DBG_ASSERT(rTxt.getLength() == nSize, "GetNumControlChars returned a different number of control characters than were actually removed.");
 
-    OUStringBuffer aBuf(nSize);
-    aBuf.setLength(nSize);
-    for (sal_Int32 i = 0, j = 0; i < rTxt.getLength() && j < nSize; ++i)
-        if (!IsControlChar(rTxt[i]))
-            aBuf[j++] = rTxt[i];
+        return true;
+    }
 
-    rTxt = aBuf.makeStringAndClear();
-    DBG_ASSERT(rTxt.getLength() == nSize, "GetNumControlChars returned a different number of control characters than were actually removed.");
-
-    return true;
-}
-
-// non breaking field character
+    // non breaking field character
 #define CH_TXTATR_INWORD    ((sal_Char) 0x02)
 
-bool ReplaceControlChars( rtl::OUString &rTxt, sal_Char /*aRplcChar*/ )
-{
-    // the resulting string looks like this:
-    // 1. non breaking field characters get removed
-    // 2. remaining control characters will be replaced by ' '
-
-    bool bModified = false;
-    sal_Int32 nCtrlChars = GetNumControlChars( rTxt );
-    if (nCtrlChars)
+    bool ReplaceControlChars( rtl::OUString &rTxt, sal_Char /*aRplcChar*/ )
     {
-        sal_Int32 nLen  = rTxt.getLength();
-        OUStringBuffer aBuf( nLen );
-        sal_Int32 nCnt = 0;
-        for (sal_Int32 i = 0;  i < nLen;  ++i)
+        // the resulting string looks like this:
+        // 1. non breaking field characters get removed
+        // 2. remaining control characters will be replaced by ' '
+
+        bool bModified = false;
+        sal_Int32 nCtrlChars = GetNumControlChars( rTxt );
+        if (nCtrlChars)
         {
-            sal_Unicode cChar = rTxt[i];
-            if (CH_TXTATR_INWORD != cChar)
+            sal_Int32 nLen  = rTxt.getLength();
+            rtl::OUStringBuffer aBuf( nLen );
+            sal_Int32 nCnt = 0;
+            for (sal_Int32 i = 0;  i < nLen;  ++i)
             {
-                if (IsControlChar( cChar ))
-                    cChar = ' ';
-                DBG_ASSERT( nCnt < nLen, "index out of range" );
-                aBuf.setCharAt( nCnt++, cChar );
+                sal_Unicode cChar = rTxt[i];
+                if (CH_TXTATR_INWORD != cChar)
+                {
+                    if (IsControlChar( cChar ))
+                        cChar = ' ';
+                    DBG_ASSERT( nCnt < nLen, "index out of range" );
+                    aBuf.setCharAt( nCnt++, cChar );
+                }
             }
+            aBuf.setLength( nCnt );
+            rTxt = aBuf.makeStringAndClear();
+            bModified = true;
         }
-        aBuf.setLength( nCnt );
-        rTxt = aBuf.makeStringAndClear();
-        bModified = true;
+        return bModified;
     }
-    return bModified;
-}
 
-
-String GetThesaurusReplaceText( const String &rText )
-{
-    // The strings for synonyms returned by the thesaurus sometimes have some
-    // explanation text put in between '(' and ')' or a trailing '*'.
-    // These parts should not be put in the ReplaceEdit Text that may get
-    // inserted into the document. Thus we strip them from the text.
-
-    String aText( rText );
-
-    xub_StrLen nPos = aText.Search( sal_Unicode('(') );
-    while (STRING_NOTFOUND != nPos)
+    String GetThesaurusReplaceText(const String &rText)
     {
-        xub_StrLen nEnd = aText.Search( sal_Unicode(')'), nPos );
-        if (STRING_NOTFOUND != nEnd)
-            aText.Erase( nPos, nEnd-nPos+1 );
-        else
-            break;
-        nPos = aText.Search( sal_Unicode('(') );
+        // The strings for synonyms returned by the thesaurus sometimes have some
+        // explanation text put in between '(' and ')' or a trailing '*'.
+        // These parts should not be put in the ReplaceEdit Text that may get
+        // inserted into the document. Thus we strip them from the text.
+
+        String aText( rText );
+
+        xub_StrLen nPos = aText.Search( sal_Unicode('(') );
+        while (STRING_NOTFOUND != nPos)
+        {
+            xub_StrLen nEnd = aText.Search( sal_Unicode(')'), nPos );
+            if (STRING_NOTFOUND != nEnd)
+                aText.Erase( nPos, nEnd-nPos+1 );
+            else
+                break;
+            nPos = aText.Search( sal_Unicode('(') );
+        }
+
+        nPos = aText.Search( sal_Unicode('*') );
+        if (STRING_NOTFOUND != nPos)
+            aText.Erase( nPos );
+
+        // remove any possible remaining ' ' that may confuse the thesaurus
+        // when it gets called with the text
+        aText = comphelper::string::strip(aText, ' ');
+
+        return aText;
     }
-
-    nPos = aText.Search( sal_Unicode('*') );
-    if (STRING_NOTFOUND != nPos)
-        aText.Erase( nPos );
-
-    // remove any possible remaining ' ' that may confuse the thesaurus
-    // when it gets called with the text
-    aText = comphelper::string::strip(aText, ' ');
-
-    return aText;
-}
-
-///////////////////////////////////////////////////////////////////////////
-
 } // namespace linguistic
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
