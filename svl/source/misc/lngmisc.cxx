@@ -73,7 +73,7 @@ namespace linguistic
         return true;
     }
 
-    bool ReplaceControlChars( rtl::OUString &rTxt, sal_Char /*aRplcChar*/ )
+    bool ReplaceControlChars(rtl::OUString &rTxt)
     {
         // non breaking field character
         static const sal_Char CH_TXTATR_INWORD = static_cast<sal_Char>(0x02);

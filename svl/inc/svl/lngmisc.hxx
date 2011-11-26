@@ -62,7 +62,7 @@ SVL_DLLPRIVATE sal_Int32 GetNumControlChars( const rtl::OUString &rTxt );
 SVL_DLLPUBLIC bool  RemoveHyphens( rtl::OUString &rTxt );
 SVL_DLLPUBLIC bool  RemoveControlChars( rtl::OUString &rTxt );
 
-SVL_DLLPUBLIC bool  ReplaceControlChars( rtl::OUString &rTxt, sal_Char aRplcChar = ' ' );
+SVL_DLLPUBLIC bool ReplaceControlChars(rtl::OUString &rTxt);
 
 SVL_DLLPUBLIC String GetThesaurusReplaceText( const String &rText );
 
