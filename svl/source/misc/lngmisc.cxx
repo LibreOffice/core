@@ -73,11 +73,11 @@ namespace linguistic
         return true;
     }
 
-    // non breaking field character
-#define CH_TXTATR_INWORD    ((sal_Char) 0x02)
-
     bool ReplaceControlChars( rtl::OUString &rTxt, sal_Char /*aRplcChar*/ )
     {
+        // non breaking field character
+        static const sal_Char CH_TXTATR_INWORD = static_cast<sal_Char>(0x02);
+
         // the resulting string looks like this:
         // 1. non breaking field characters get removed
         // 2. remaining control characters will be replaced by ' '
