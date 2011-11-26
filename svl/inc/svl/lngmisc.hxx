@@ -30,10 +30,8 @@
 #define _SVTOOLS_LNGMISC_HXX_
 
 #include "svl/svldllapi.h"
-#include <tools/solar.h>
-#include <sal/types.h>
-#include <rtl/ustring.hxx>
-#include <tools/string.hxx>
+
+class String;
 
 ///////////////////////////////////////////////////////////////////////////
 
