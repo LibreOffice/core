@@ -3875,7 +3875,12 @@ AC_SUBST(SOLAR_JAVA)
 dnl SOLAR_JAVA="YES" (yes, silly name, should rename) indicates whether we
 dnl want there to be *run-time* (and build-time) support for Java extensions in the
 dnl built LibreOffice.
-dnl SOLAR_JAVA="BUILD" indicate build-time only support (no runtime support)
+
+dnl SOLAR_JAVA="BUILD" is claimed to indicate build-time only support
+dnl (no runtime support). It doesn't seem to ever be set to this
+dnl value, though, and everywhere SOLAR_JAVA is only checked for being
+dnl empty or non-empty.
+
 dnl SOLAR_JAVA="" indicate no java support at all
 
 if test "$_os" = "Linux" && test "$host_cpu" = "powerpc"; then
