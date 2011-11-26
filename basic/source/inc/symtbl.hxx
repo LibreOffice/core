@@ -29,8 +29,6 @@
 #ifndef _SYMTBL_HXX
 #define _SYMTBL_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 class SbiConstDef;
 class SbiParser;
 class SbiProcDef;
@@ -44,7 +42,7 @@ enum SbiSymScope { SbLOCAL, SbPARAM, SbPUBLIC, SbGLOBAL, SbRTL };
 
 class SbiStringPool {
     const rtl::OUString aEmpty;
-    boost::ptr_vector<rtl::OUString> aData;
+    std::vector<rtl::OUString> aData;
     SbiParser* pParser;
 public:
     SbiStringPool( SbiParser* );

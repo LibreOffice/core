@@ -75,7 +75,7 @@ short SbiStringPool::Add( const rtl::OUString& rVal, sal_Bool bNoCase )
             return i+1;
     }
 
-    aData.push_back(new rtl::OUString(rVal));
+    aData.push_back(rVal);
     return (short) ++n;
 }
 
