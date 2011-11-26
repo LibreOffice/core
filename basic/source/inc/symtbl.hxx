@@ -111,16 +111,16 @@ protected:
     sal_uInt16     nProcId;
     sal_uInt16     nPos;
     sal_uInt32     nChain;
-    sal_Bool       bNew     : 1;        // sal_True: Dim As New...
-    sal_Bool       bChained : 1;        // sal_True: symbol is defined in code
-    sal_Bool       bByVal   : 1;        // sal_True: ByVal-parameter
-    sal_Bool       bOpt     : 1;        // sal_True: optional parameter
-    sal_Bool       bStatic  : 1;        // sal_True: STATIC variable
-    sal_Bool       bAs      : 1;        // sal_True: data type defined per AS XXX
-    sal_Bool       bGlobal  : 1;        // sal_True: global variable
-    sal_Bool       bParamArray : 1;     // sal_True: ParamArray parameter
-    sal_Bool       bWithEvents : 1;     // sal_True: Declared WithEvents
-    sal_Bool       bWithBrackets : 1;   // sal_True: Followed by ()
+    bool       bNew     : 1;        // true: Dim As New...
+    bool       bChained : 1;        // true: symbol is defined in code
+    bool       bByVal   : 1;        // true: ByVal-parameter
+    bool       bOpt     : 1;        // true: optional parameter
+    bool       bStatic  : 1;        // true: STATIC variable
+    bool       bAs      : 1;        // true: data type defined per AS XXX
+    bool       bGlobal  : 1;        // true: global variable
+    bool       bParamArray : 1;     // true: ParamArray parameter
+    bool       bWithEvents : 1;     // true: Declared WithEvents
+    bool       bWithBrackets : 1;   // true: Followed by ()
     sal_uInt16     nDefaultId;          // Symbol number of default value
     short      nFixedStringLength;  // String length in: Dim foo As String*Length
 public:
@@ -143,28 +143,28 @@ public:
     short      GetLen() const   { return nLen;      }
     void       SetDims( short n ) { nDims = n;      }
     short      GetDims() const  { return nDims;     }
-    sal_Bool       IsDefined() const{ return bChained;  }
-    void       SetOptional()    { bOpt = sal_True;      }
-    void       SetParamArray()  { bParamArray = sal_True;       }
-    void       SetWithEvents()  { bWithEvents = sal_True;       }
-    void       SetWithBrackets(){ bWithBrackets = sal_True;     }
-    void       SetByVal( sal_Bool bByVal_ = sal_True )
+    bool       IsDefined() const{ return bChained;  }
+    void       SetOptional()    { bOpt = true;      }
+    void       SetParamArray()  { bParamArray = true;       }
+    void       SetWithEvents()  { bWithEvents = true;       }
+    void       SetWithBrackets(){ bWithBrackets = true;     }
+    void       SetByVal( bool bByVal_ = true )
                 { bByVal = bByVal_; }
-    void       SetStatic( sal_Bool bAsStatic = sal_True )       { bStatic = bAsStatic;  }
+    void       SetStatic( bool bAsStatic = true )      { bStatic = bAsStatic;  }
     void       SetNew()         { bNew = sal_True;      }
     void       SetDefinedAs()   { bAs = sal_True;       }
-    void       SetGlobal(sal_Bool b){ bGlobal = b;  }
+    void       SetGlobal(bool b){ bGlobal = b;  }
     void       SetDefaultId( sal_uInt16 n ) { nDefaultId = n; }
     sal_uInt16     GetDefaultId( void ) { return nDefaultId; }
-    sal_Bool       IsOptional() const{ return bOpt;     }
-    sal_Bool       IsParamArray() const{ return bParamArray; }
-    sal_Bool       IsWithEvents() const{ return bWithEvents; }
-    sal_Bool       IsWithBrackets() const{ return bWithBrackets; }
-    sal_Bool       IsByVal() const  { return bByVal;    }
-    sal_Bool       IsStatic() const { return bStatic;   }
-    sal_Bool       IsNew() const    { return bNew;      }
-    sal_Bool       IsDefinedAs() const { return bAs;    }
-    sal_Bool       IsGlobal() const { return bGlobal;   }
+    bool       IsOptional() const{ return bOpt;     }
+    bool       IsParamArray() const{ return bParamArray; }
+    bool       IsWithEvents() const{ return bWithEvents; }
+    bool       IsWithBrackets() const{ return bWithBrackets; }
+    bool       IsByVal() const  { return bByVal;    }
+    bool       IsStatic() const { return bStatic;   }
+    bool       IsNew() const    { return bNew;      }
+    bool       IsDefinedAs() const { return bAs;    }
+    bool       IsGlobal() const { return bGlobal;   }
     short      GetFixedStringLength( void ) const { return nFixedStringLength; }
     void       SetFixedStringLength( short n ) { nFixedStringLength = n; }
 
