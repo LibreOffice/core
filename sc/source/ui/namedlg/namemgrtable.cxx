@@ -44,7 +44,7 @@
 #define ITEMID_RANGE 2
 #define ITEMID_SCOPE 3
 
-#define MINSIZE 50
+#define MINSIZE 80
 
 
 String createEntryString(const ScRangeNameLine& rLine)
@@ -173,6 +173,7 @@ std::vector<ScRangeNameLine> ScRangeManagerTable::GetSelectedEntries()
 
 namespace {
 
+//ensure that the minimum column size is respected
 void CalculateItemSize(const long& rTableSize, long& rItemNameSize, long& rItemRangeSize)
 {
     long aItemScopeSize = rTableSize - rItemNameSize - rItemRangeSize;
@@ -218,16 +219,20 @@ IMPL_LINK( ScRangeManagerTable, HeaderEndDragHdl, void*, EMPTYARG)
     long aItemNameSize = maHeaderBar.GetItemSize(ITEMID_NAME);
     long aItemRangeSize = maHeaderBar.GetItemSize(ITEMID_RANGE);
 
+    //calculate column size based on user input and minimum size
     CalculateItemSize(aTableSize, aItemNameSize, aItemRangeSize);
     long aItemScopeSize = aTableSize - aItemNameSize - aItemRangeSize;
 
     Size aSz;
     aSz.Width() = aItemNameSize;
     SetTab( ITEMID_NAME, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
+    maHeaderBar.SetItemSize(ITEMID_NAME, aItemNameSize);
     aSz.Width() += aItemRangeSize;
     SetTab( ITEMID_RANGE, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
+    maHeaderBar.SetItemSize(ITEMID_RANGE, aItemRangeSize);
     aSz.Width() += aItemScopeSize;
     SetTab( ITEMID_SCOPE, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
+    maHeaderBar.SetItemSize(ITEMID_SCOPE, aItemScopeSize);
 
     return 0;
 }
