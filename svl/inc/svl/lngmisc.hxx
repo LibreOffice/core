@@ -57,12 +57,6 @@ inline sal_Bool IsControlChar( sal_Unicode cChar )
     return cChar < static_cast<sal_Unicode>(' ');
 }
 
-inline sal_Bool HasHyphens( const rtl::OUString &rTxt )
-{
-    return  rTxt.indexOf( SVT_SOFT_HYPHEN ) != -1  ||
-            rTxt.indexOf( SVT_HARD_HYPHEN ) != -1;
-}
-
 SVL_DLLPUBLIC sal_Int32 GetNumControlChars( const rtl::OUString &rTxt );
 SVL_DLLPUBLIC sal_Bool  RemoveHyphens( rtl::OUString &rTxt );
 SVL_DLLPUBLIC sal_Bool  RemoveControlChars( rtl::OUString &rTxt );
