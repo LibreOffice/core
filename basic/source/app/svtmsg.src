@@ -123,11 +123,11 @@ String S_WIN_DISABLED
 };
 String S_NUMBER_TOO_BIG
 {
-    Text[ en-US ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
+    Text[ en-US ] = "Entry number ($Arg2) is too large in ($Arg1). Maximum allowed is ($Arg3)";
 };
 String S_NUMBER_TOO_SMALL
 {
-    Text[ en-US ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
+    Text[ en-US ] = "The entry number ($Arg2) is too small in ($Arg1). Minimum allowed is ($Arg3)";
 };
 String S_WINDOW_DISAPPEARED
 {
