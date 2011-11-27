@@ -27,8 +27,6 @@
  ************************************************************************/
 
 // NO PCH here - breaks the purpose of this file
-// MARKER(update_precomp.py): autogen include statement, do not remove
-//#include "precompiled_soltools.hxx"
 
 // This is just a dummy file; see the makefile.mk for the real work.
 
