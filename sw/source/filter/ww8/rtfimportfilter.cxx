@@ -32,17 +32,10 @@
 
 #include <docsh.hxx>
 #include <doc.hxx>
-#include <pam.hxx>
 #include <unotxdoc.hxx>
-#include <swerror.h>
 
-#include <cppuhelper/factory.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-
-#include <com/sun/star/frame/XDesktop.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 
 using namespace ::comphelper;
 using namespace ::com::sun::star;

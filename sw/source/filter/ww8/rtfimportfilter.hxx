@@ -34,8 +34,6 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase2.hxx>
-#include <tools/stream.hxx>
-#include <shellio.hxx>
 
 /// The physical access to the RTF document (for reading).
 class RtfImportFilter : public cppu::WeakImplHelper2
