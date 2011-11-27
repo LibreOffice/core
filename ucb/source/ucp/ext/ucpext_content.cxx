@@ -25,7 +25,6 @@
  *
 ************************************************************************/
 
-#include "precompiled_ucb.hxx"
 
 #include "ucpext_content.hxx"
 

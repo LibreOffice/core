@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_ucb.hxx"
 #include "cachemapobject1.hxx"
 #include "osl/diagnose.h"
 #include "osl/interlck.h"

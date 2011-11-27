@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_ucb.hxx"
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include "ftpdynresultset.hxx"
 #include "ftpresultsetfactory.hxx"

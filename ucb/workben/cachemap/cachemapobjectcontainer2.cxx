@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_ucb.hxx"
 #include "cachemapobjectcontainer2.hxx"
 #include "cachemapobject2.hxx"
 #include "com/sun/star/uno/Reference.hxx"
