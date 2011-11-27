@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_rsc.hxx"
 /****************** I N C L U D E S **************************************/
 // C and C++ Includes.
 #include <string.h>

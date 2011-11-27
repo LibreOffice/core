@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): Generated on 2006-09-01 17:49:55.014369
 
 #ifdef PRECOMPILED_HEADERS
 #endif
