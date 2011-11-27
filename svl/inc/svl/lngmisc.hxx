@@ -33,10 +33,6 @@
 
 #include <rtl/ustring.hxx>
 
-class String;
-
-///////////////////////////////////////////////////////////////////////////
-
 #define SVT_SOFT_HYPHEN (static_cast<sal_Unicode>(0x00AD))
 #define SVT_HARD_HYPHEN (static_cast<sal_Unicode>(0x2011))
 

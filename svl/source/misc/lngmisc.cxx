@@ -34,7 +34,6 @@
 #include <comphelper/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
-#include <tools/string.hxx>
 
 namespace linguistic
 {
