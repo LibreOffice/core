@@ -31,7 +31,7 @@
 #include <math.h>
 
 #include <svx/svdundo.hxx>
-#include "svx/svdstr.hrc"   // Namen aus der Resource
+#include "svx/svdstr.hrc"   // names taken from the resource
 #include "svx/svdglob.hxx"  // StringCache
 #include <svx/svdpagv.hxx>
 #include <svx/svdglue.hxx>
@@ -302,10 +302,10 @@ void SdrGlueEditView::ImpCopyMarkedGluePoints()
                 sal_uInt16 nGlueIdx=pGPL->FindGluePoint(nPtId);
                 if (nGlueIdx!=SDRGLUEPOINT_NOTFOUND)
                 {
-                    SdrGluePoint aNewGP((*pGPL)[nGlueIdx]);  // GluePoint klonen
-                    sal_uInt16 nNewIdx=pGPL->Insert(aNewGP);     // und einfuegen
-                    sal_uInt16 nNewId=(*pGPL)[nNewIdx].GetId();  // Id des neuen GluePoints ermitteln
-                    pPts->Replace(nNewId,nPtNum);            // und diesen markieren (anstelle des alten)
+                    SdrGluePoint aNewGP((*pGPL)[nGlueIdx]);  // clone GluePoint
+                    sal_uInt16 nNewIdx=pGPL->Insert(aNewGP);     // and insert it
+                    sal_uInt16 nNewId=(*pGPL)[nNewIdx].GetId();  // retrieve ID of new GluePoints
+                    pPts->Replace(nNewId,nPtNum);            // select it (instead of the old one)
                 }
             }
         }

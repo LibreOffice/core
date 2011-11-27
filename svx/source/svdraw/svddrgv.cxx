@@ -53,15 +53,7 @@ using namespace sdr;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  @@@@@  @@@@@   @@@@   @@@@   @@ @@ @@ @@@@@ @@   @@
-//  @@  @@ @@  @@ @@  @@ @@  @@  @@ @@ @@ @@    @@   @@
-//  @@  @@ @@  @@ @@  @@ @@      @@ @@ @@ @@    @@ @ @@
-//  @@  @@ @@@@@  @@@@@@ @@ @@@  @@@@@ @@ @@@@  @@@@@@@
-//  @@  @@ @@  @@ @@  @@ @@  @@   @@@  @@ @@    @@@@@@@
-//  @@  @@ @@  @@ @@  @@ @@  @@   @@@  @@ @@    @@@ @@@
-//  @@@@@  @@  @@ @@  @@  @@@@@    @   @@ @@@@@ @@   @@
-//
+// DragView
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -189,20 +181,20 @@ sal_Bool SdrDragView::TakeDragObjAnchorPos(Point& rPos, sal_Bool bTR ) const
     Rectangle aR;
     TakeActionRect(aR);
     rPos = bTR ? aR.TopRight() : aR.TopLeft();
-    if (GetMarkedObjectCount()==1 && IsDragObj() && // nur bei Einzelselektion
-        !IsDraggingPoints() && !IsDraggingGluePoints() && // nicht beim Punkteschieben
-        !mpCurrentSdrDragMethod->ISA(SdrDragMovHdl)) // nicht beim Handlesschieben
+    if (GetMarkedObjectCount()==1 && IsDragObj() && // only on single selection
+        !IsDraggingPoints() && !IsDraggingGluePoints() && // not when moving points
+        !mpCurrentSdrDragMethod->ISA(SdrDragMovHdl)) // not when moving handles
     {
         SdrObject* pObj=GetMarkedObjectByIndex(0);
         if (pObj->ISA(SdrCaptionObj))
         {
             Point aPt(((SdrCaptionObj*)pObj)->GetTailPos());
-            sal_Bool bTail=eDragHdl==HDL_POLY; // Schwanz wird gedraggt (nicht so ganz feine Abfrage hier)
-            sal_Bool bOwn=mpCurrentSdrDragMethod->ISA(SdrDragObjOwn); // Objektspeziefisch
+            sal_Bool bTail=eDragHdl==HDL_POLY; // drag tail
+            sal_Bool bOwn=mpCurrentSdrDragMethod->ISA(SdrDragObjOwn); // specific to object
             if (!bTail)
-            { // bei bTail liefert TakeActionRect schon das richtige
+            { // for bTail, TakeActionRect already does the right thing
                 if (bOwn)
-                { // bOwn kann sein MoveTextFrame, ResizeTextFrame aber eben nicht mehr DragTail
+                { // bOwn may be MoveTextFrame, ResizeTextFrame, but may not (any more) be DragTail
                     rPos=aPt;
                 }
                 else
@@ -265,7 +257,7 @@ sal_Bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* 
         }
 
         aDragStat.SetView((SdrView*)this);
-        aDragStat.SetPageView(pMarkedPV);  // <<-- hier muss die DragPV rein!!!
+        aDragStat.SetPageView(pMarkedPV);  // <<-- DragPV has to go here!!!
         aDragStat.SetMinMove(ImpGetMinMovLogic(nMinMov,pOut));
         aDragStat.SetHdl(pHdl);
         aDragStat.NextPoint();
@@ -274,7 +266,7 @@ sal_Bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* 
         eDragHdl= pHdl==NULL ? HDL_MOVE : pHdl->GetKind();
         bDragHdl=eDragHdl==HDL_REF1 || eDragHdl==HDL_REF2 || eDragHdl==HDL_MIRX;
 
-        // #103894# Expand test for HDL_ANCHOR_TR
+        // Expand test for HDL_ANCHOR_TR
         sal_Bool bNotDraggable = (HDL_ANCHOR == eDragHdl || HDL_ANCHOR_TR == eDragHdl);
 
         if(pHdl && (pHdl->GetKind() == HDL_SMARTTAG) && pForcedMeth )
@@ -296,7 +288,7 @@ sal_Bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* 
                         case HDL_LEFT:  case HDL_RIGHT:
                         case HDL_UPPER: case HDL_LOWER:
                         {
-                            // Sind 3D-Objekte selektiert?
+                            // are 3D objects selected?
                             sal_Bool b3DObjSelected = sal_False;
                             for(sal_uInt32 a=0;!b3DObjSelected && a<GetMarkedObjectCount();a++)
                             {
@@ -304,9 +296,8 @@ sal_Bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* 
                                 if(pObj && pObj->ISA(E3dObject))
                                     b3DObjSelected = sal_True;
                             }
-                            // Falls ja, Shear auch bei !IsShearAllowed zulassen,
-                            // da es sich bei 3D-Objekten um eingeschraenkte
-                            // Rotationen handelt
+                            // If yes, allow shear even when !IsShearAllowed,
+                            // because 3D objects are limited rotations
                             if (!b3DObjSelected && !IsShearAllowed())
                                 return sal_False;
                             mpCurrentSdrDragMethod = new SdrDragShear(*this,eDragMode==SDRDRAG_ROTATE);
@@ -328,7 +319,7 @@ sal_Bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* 
                         default:
                         {
                             if (IsMarkedHitMovesAlways() && eDragHdl==HDL_MOVE)
-                            { // HDL_MOVE ist auch wenn Obj direkt getroffen
+                            { // HDL_MOVE is true, even if Obj is hit directly
                                 if (!IsMoveAllowed()) return sal_False;
                                 mpCurrentSdrDragMethod = new SdrDragMove(*this);
                             }
@@ -514,7 +505,7 @@ sal_Bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* 
             {
                 if (pHdl==NULL && IS_TYPE(SdrDragObjOwn,mpCurrentSdrDragMethod))
                 {
-                    // Aha, Obj kann nicht Move SpecialDrag, also MoveFrameDrag versuchen
+                    // Obj may not Move SpecialDrag, so try with MoveFrameDrag
                     delete mpCurrentSdrDragMethod;
                     mpCurrentSdrDragMethod = 0;
                     bDragSpecial=sal_False;
@@ -554,7 +545,7 @@ sal_Bool SdrDragView::EndDragObj(sal_Bool bCopy)
 {
     bool bRet(false);
 
-    // #i73341# If insert GluePoint, do not insist on last points being different
+    // #i73341# If inserting GluePoint, do not insist on last points being different
     if(mpCurrentSdrDragMethod && aDragStat.IsMinMoved() && (IsInsertGluePoint() || aDragStat.GetNow() != aDragStat.GetPrev()))
     {
         sal_uIntPtr nHdlAnzMerk=0;
@@ -604,7 +595,7 @@ sal_Bool SdrDragView::EndDragObj(sal_Bool bCopy)
 
         if (!bSomeObjChgdFlag)
         {
-            // Aha, Obj hat nicht gebroadcastet (z.B. Writer FlyFrames)
+            // Obj did not broadcast (e. g. Writer FlyFrames)
             if(!bDragHdl)
             {
                 AdjustMarkHdl();
@@ -633,7 +624,7 @@ void SdrDragView::BrkDragObj()
 
         if (bInsPolyPoint)
         {
-            pInsPointUndo->Undo(); // Den eingefuegten Punkt wieder raus
+            pInsPointUndo->Undo(); // delete inserted point again
             delete pInsPointUndo;
             pInsPointUndo=NULL;
             SetMarkHandles();
@@ -642,7 +633,7 @@ void SdrDragView::BrkDragObj()
 
         if (IsInsertGluePoint())
         {
-            pInsPointUndo->Undo(); // Den eingefuegten Klebepunkt wieder raus
+            pInsPointUndo->Undo(); // delete inserted glue point again
             delete pInsPointUndo;
             pInsPointUndo=NULL;
             SetInsertGluePoint(sal_False);
@@ -699,7 +690,7 @@ sal_Bool SdrDragView::ImpBegInsObjPoint(sal_Bool bIdxZwang, sal_uInt32 nIdx, con
 
         if(bClosed0 != pMarkedPath->IsClosedObj())
         {
-            // Obj was closed implicit
+            // Obj was closed implicitly
             // object changed
             pMarkedPath->SetChanged();
             pMarkedPath->BroadcastObjectChange();
@@ -738,7 +729,7 @@ sal_Bool SdrDragView::EndInsObjPoint(SdrCreateCmd eCmd)
         sal_Bool bOk=EndDragObj(sal_False);
         if (bOk==sal_True && eCmd!=SDRCREATE_FORCEEND)
         {
-            // Ret=True bedeutet: Action ist vorbei.
+            // Ret=True means: Action is over.
             bOk=!(ImpBegInsObjPoint(sal_True, nNextPnt, aPnt, eCmd == SDRCREATE_NEXTOBJECT, pDragWin));
         }
 
@@ -753,7 +744,7 @@ sal_Bool SdrDragView::IsInsGluePointPossible() const
     {
         if (GetMarkedObjectCount()==1)
         {
-            // sal_False liefern, wenn 1 Objekt und dieses ein Verbinder ist.
+            // return sal_False, if only 1 object which is a connector.
             const SdrObject* pObj=GetMarkedObjectByIndex(0);
             if (!HAS_BASE(SdrEdgeObj,pObj))
             {
@@ -817,12 +808,12 @@ sal_Bool SdrDragView::BegInsGluePoint(const Point& rPnt)
             }
             else
             {
-                OSL_FAIL("BegInsGluePoint(): GluePoint-Handle nicht gefunden");
+                OSL_FAIL("BegInsGluePoint(): GluePoint handle not found.");
             }
         }
         else
         {
-            // Keine Klebepunkte moeglich bei diesem Objekt (z.B. Edge)
+            // no glue points possible for this object (e. g. Edge)
             SetInsertGluePoint(sal_False);
             delete pInsPointUndo;
             pInsPointUndo=NULL;

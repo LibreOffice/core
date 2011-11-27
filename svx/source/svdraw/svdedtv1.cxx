@@ -37,19 +37,19 @@
 #include <svl/itemiter.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/rectenum.hxx>
-#include <svx/svxids.hrc>   // fuer SID_ATTR_TRANSFORM_...
-#include <svx/svdattr.hxx>  // fuer Get/SetGeoAttr
+#include <svx/svxids.hrc>   // for SID_ATTR_TRANSFORM_...
+#include <svx/svdattr.hxx>  // for Get/SetGeoAttr
 #include "svx/svditext.hxx"
 #include "svx/svditer.hxx"
 #include <svx/svdtrans.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/svdlayer.hxx> // fuer MergeNotPersistAttr
-#include <svx/svdattrx.hxx> // fuer MergeNotPersistAttr
-#include <svx/svdetc.hxx>   // fuer SearchOutlinerItems
-#include <svx/svdopath.hxx>  // fuer Crook
-#include "svx/svdstr.hrc"   // Namen aus der Resource
+#include <svx/svdlayer.hxx> // for MergeNotPersistAttr
+#include <svx/svdattrx.hxx> // for MergeNotPersistAttr
+#include <svx/svdetc.hxx>   // for SearchOutlinerItems
+#include <svx/svdopath.hxx>  // for Crook
+#include "svx/svdstr.hrc"   // names taken from the resource
 #include "svx/svdglob.hxx"  // StringCache
 #include <editeng/eeitem.hxx>
 #include <svl/aeitem.hxx>
@@ -61,17 +61,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  @@@@@ @@@@@  @@ @@@@@@  @@ @@ @@ @@@@@ @@   @@
-//  @@    @@  @@ @@   @@    @@ @@ @@ @@    @@   @@
-//  @@    @@  @@ @@   @@    @@ @@ @@ @@    @@ @ @@
-//  @@@@  @@  @@ @@   @@    @@@@@ @@ @@@@  @@@@@@@
-//  @@    @@  @@ @@   @@     @@@  @@ @@    @@@@@@@
-//  @@    @@  @@ @@   @@     @@@  @@ @@    @@@ @@@
-//  @@@@@ @@@@@  @@   @@      @   @@ @@@@@ @@   @@
-//
+// EditView
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -119,7 +109,7 @@ void SdrEditView::SetMarkedObjRect(const Rectangle& rRect, sal_Bool bCopy)
                 aR1=rRect;
             }
             else
-            { // aR1 von aR0 nach rRect transformieren
+            { // transform aR1 to aR0 after rRect
                 aR1.Move(-x0,-y0);
                 BigInt l(aR1.Left());
                 BigInt r(aR1.Right());
@@ -145,7 +135,7 @@ void SdrEditView::SetMarkedObjRect(const Rectangle& rRect, sal_Bool bCopy)
             }
             pO->SetSnapRect(aR1);
         } else {
-            OSL_FAIL("SetMarkedObjRect(): pObj->GetSnapRect() liefert leeres Rect");
+            OSL_FAIL("SetMarkedObjRect(): pObj->GetSnapRect() returns empty Rect");
         }
     }
     if( bUndo )
@@ -195,7 +185,7 @@ void SdrEditView::MoveMarkedObj(const Size& rSiz, bool bCopy)
         XubString aStr(ImpGetResStr(STR_EditMove));
         if (bCopy)
             aStr+=ImpGetResStr(STR_EditWithCopy);
-        // benoetigt eigene UndoGroup wegen Parameter
+        // meeds its own UndoGroup because of its parameters
         BegUndo(aStr,GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_MOVE);
     }
 
@@ -300,7 +290,7 @@ void SdrEditView::RotateMarkedObj(const Point& rRef, long nWink, bool bCopy)
 
             if( bUndo )
             {
-                // extra undo actions for changed connector which now may hold it's layouted path (SJ)
+                // extra undo actions for changed connector which now may hold its layed out path (SJ)
                 std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pO ) );
                 AddUndoActions( vConnectorUndoActions );
 
@@ -360,7 +350,7 @@ void SdrEditView::MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool b
 
             if( bUndo )
             {
-                // extra undo actions for changed connector which now may hold it's layouted path (SJ)
+                // extra undo actions for changed connector which now may hold its layed out path (SJ)
                 std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pO ) );
                 AddUndoActions( vConnectorUndoActions );
 
@@ -479,7 +469,7 @@ void SdrEditView::ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRa
 
     if(!bDone && !pPath && pO->IsPolyObj() && 0L != pO->GetPointCount())
     {
-        // FuerPolyObj's, aber NICHT fuer SdrPathObj's, z.B. fuer's Bemassungsobjekt
+        // for PolyObj's, but NOT for SdrPathObj's, e.g. the measurement object
         sal_uInt32 nPtAnz(pO->GetPointCount());
         XPolygon aXP((sal_uInt16)nPtAnz);
         sal_uInt32 nPtNum;
@@ -499,8 +489,8 @@ void SdrEditView::ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRa
 
         for(nPtNum = 0L; nPtNum < nPtAnz; nPtNum++)
         {
-            // hier koennte man vieleicht auch mal das Broadcasting optimieren
-            // ist aber z.Zt. bei den 2 Punkten des Bemassungsobjekts noch nicht so tragisch
+            // broadcasting could be optimized here, but for the
+            // current two points of the measurement object, it's fine
             pO->SetPoint(aXP[(sal_uInt16)nPtNum],nPtNum);
         }
 
@@ -509,7 +499,7 @@ void SdrEditView::ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRa
 
     if(!bDone)
     {
-        // Fuer alle anderen oder wenn bNoContortion
+        // for all others or if bNoContortion
         Point aCtr0(pO->GetSnapRect().Center());
         Point aCtr1(aCtr0);
         sal_Bool bRotOk(sal_False);
@@ -593,7 +583,7 @@ void SdrEditView::ImpDistortObj(SdrObject* pO, const Rectangle& rRef, const XPol
     }
     else if(pO->IsPolyObj())
     {
-        // z.B. fuer's Bemassungsobjekt
+        // e. g. for the mesurement object
         sal_uInt32 nPtAnz(pO->GetPointCount());
         XPolygon aXP((sal_uInt16)nPtAnz);
         sal_uInt32 nPtNum;
@@ -608,8 +598,8 @@ void SdrEditView::ImpDistortObj(SdrObject* pO, const Rectangle& rRef, const XPol
 
         for(nPtNum = 0L; nPtNum < nPtAnz; nPtNum++)
         {
-            // hier koennte man vieleicht auch mal das Broadcasting optimieren
-            // ist aber z.Zt. bei den 2 Punkten des Bemassungsobjekts noch nicht so tragisch
+            // broadcasting could be optimized here, but for the
+            // current two points of the measurement object, it's fine
             pO->SetPoint(aXP[(sal_uInt16)nPtNum],nPtNum);
         }
     }
@@ -660,7 +650,7 @@ void SdrEditView::DistortMarkedObj(const Rectangle& rRef, const XPolygon& rDisto
 
 void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, sal_Bool /*bReplaceAll*/)
 {
-    // bReplaceAll hat hier keinerlei Wirkung
+    // bReplaceAll has no effect here
     Rectangle aAllSnapRect(GetMarkedObjRect());
     const SfxPoolItem *pPoolItem=NULL;
     if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1X,sal_True,&pPoolItem)==SFX_ITEM_SET) {
@@ -701,7 +691,7 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, sal_Bool /*
         bAllHgt=sal_True; bDoIt=sal_True;
     }
     if (bDoIt) {
-        Rectangle aRect(aAllSnapRect); // !!! fuer PolyPt's und GluePt's aber bitte noch aendern !!!
+        Rectangle aRect(aAllSnapRect); // TODO: change this for PolyPt's and GluePt's!!!
         if (bAllPosX) aRect.Move(nAllPosX-aRect.Left(),0);
         if (bAllPosY) aRect.Move(0,nAllPosY-aRect.Top());
         if (bAllWdt)  aRect.Right()=aAllSnapRect.Left()+nAllWdt;
@@ -731,7 +721,7 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, sal_Bool /*
 
     const bool bUndo = IsUndoEnabled();
 
-    // Todo: WhichRange nach Notwendigkeit ueberpruefen.
+    // TODO: check if WhichRange is necessary.
     sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
     for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
     {
@@ -747,15 +737,14 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, sal_Bool /*
 
 void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, sal_Bool /*bOnlyHardAttr*/) const
 {
-    // bOnlyHardAttr hat hier keinerlei Wirkung
-    // Hier muss ausserdem noch der Nullpunkt und
-    // die PvPos berueksichtigt werden.
-    Rectangle aAllSnapRect(GetMarkedObjRect()); // !!! fuer PolyPt's und GluePt's aber bitte noch aendern !!!
+    // bOnlyHardAttr has no effect here.
+    // TODO: Take into account the origin and PvPos.
+    Rectangle aAllSnapRect(GetMarkedObjRect()); // TODO: change this for PolyPt's and GluePt's!!!
     long nAllSnapPosX=aAllSnapRect.Left();
     long nAllSnapPosY=aAllSnapRect.Top();
     long nAllSnapWdt=aAllSnapRect.GetWidth()-1;
     long nAllSnapHgt=aAllSnapRect.GetHeight()-1;
-    // koennte mal zu CheckPossibilities mit rein
+    // TODO: could go into CheckPossibilities
     sal_Bool bMovProtect=sal_False,bMovProtectDC=sal_False;
     sal_Bool bSizProtect=sal_False,bSizProtectDC=sal_False;
     sal_Bool bPrintable =sal_True ,bPrintableDC=sal_False;
@@ -831,7 +820,7 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, sal_Bool /*bO
     if (bSnapWdtDC  || nAllSnapWdt !=nSnapWdt ) rAttr.Put(SdrAllSizeWidthItem(nAllSnapWdt));
     if (bSnapHgtDC  || nAllSnapHgt !=nSnapHgt ) rAttr.Put(SdrAllSizeHeightItem(nAllSnapHgt));
 
-    // Items fuer reine Transformationen
+    // items for pure transformations
     rAttr.Put(SdrMoveXItem());
     rAttr.Put(SdrMoveYItem());
     rAttr.Put(SdrResizeXOneItem());
@@ -953,11 +942,11 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
             }
         }
 
-        // Joe, 2.7.98: Damit Undo nach Format.Standard auch die Textattribute korrekt restauriert
+        // To make Undo reconstruct text attributes correctly after Format.Standard
         sal_Bool bHasEEItems=SearchOutlinerItems(rAttr,bReplaceAll);
 
-        // AW 030100: save additional geom info when para or char attributes
-        // are changed and the geom form of the text object might be changed
+        // save additional geometry information when paragraph or character attributes
+        // are changed and the geometrical shape of the text object might be changed
         sal_Bool bPossibleGeomChange(sal_False);
         SfxWhichIter aIter(rAttr);
         sal_uInt16 nWhich = aIter.FirstWhich();
@@ -991,7 +980,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
         std::vector< E3DModifySceneSnapRectUpdater* > aUpdaters;
 
         // create ItemSet without SFX_ITEM_DONTCARE. Put()
-        // uses it's second parameter (bInvalidAsDefault) to
+        // uses its second parameter (bInvalidAsDefault) to
         // remove all such items to set them to default.
         SfxItemSet aAttr(*rAttr.GetPool(), rAttr.GetRanges());
         aAttr.Put(rAttr, sal_True);
@@ -1037,7 +1026,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj,sal_False,bHasEEItems || bPossibleGeomChange || bRescueText));
             }
 
-            // set up a scxene updater if object is a 3d object
+            // set up a scene updater if object is a 3d object
             if(dynamic_cast< E3dObject* >(pObj))
             {
                 aUpdaters.push_back(new E3DModifySceneSnapRectUpdater(pObj));
@@ -1057,7 +1046,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
                     // #110094#-14 pTextObj->SendRepaintBroadcast(pTextObj->GetBoundRect());
                     pTextObj->RemoveOutlinerCharacterAttribs( aCharWhichIds );
 
-                    // object has changed, should be called form
+                    // object has changed, should be called from
                     // RemoveOutlinerCharacterAttribs. This will change when the text
                     // object implementation changes.
                     pTextObj->SetChanged();
@@ -1090,9 +1079,9 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
             SetAnimationTimer(0L);
         }
 
-        // besser vorher checken, was gemacht werden soll:
-        // pObj->SetAttr() oder SetNotPersistAttr()
-        // !!! fehlende Implementation !!!
+        // better check before what to do:
+        // pObj->SetAttr() or SetNotPersistAttr()
+        // TODO: missing implementation!
         SetNotPersistAttrToMarked(rAttr,bReplaceAll);
 
         if( bUndo )
@@ -1109,7 +1098,7 @@ SfxStyleSheet* SdrEditView::GetStyleSheetFromMarked() const
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SfxStyleSheet* pSS=pM->GetMarkedSdrObj()->GetStyleSheet();
         if (b1st) pRet=pSS;
-        else if (pRet!=pSS) return NULL; // verschiedene StyleSheets
+        else if (pRet!=pSS) return NULL; // different stylesheets
         b1st=sal_False;
     }
     return pRet;
@@ -1150,7 +1139,6 @@ void SdrEditView::SetStyleSheetToMarked(SfxStyleSheet* pStyleSheet, sal_Bool bDo
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/* new interface src537 */
 sal_Bool SdrEditView::GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr) const
 {
     if(GetMarkedObjectCount())
@@ -1198,13 +1186,13 @@ sal_Bool SdrEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRe
 
 SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
 {
-    SfxItemSet aRetSet(pMod->GetItemPool(),   // SID_ATTR_TRANSFORM_... aus s:svxids.hrc
+    SfxItemSet aRetSet(pMod->GetItemPool(),   // SID_ATTR_TRANSFORM_... from s:svxids.hrc
                        SID_ATTR_TRANSFORM_POS_X,SID_ATTR_TRANSFORM_ANGLE,
                        SID_ATTR_TRANSFORM_PROTECT_POS,SID_ATTR_TRANSFORM_AUTOHEIGHT,
                        SDRATTR_ECKENRADIUS,SDRATTR_ECKENRADIUS,
                        0);
     if (AreObjectsMarked()) {
-        SfxItemSet aMarkAttr(GetAttrFromMarked(sal_False)); // wg. AutoGrowHeight und Eckenradius
+        SfxItemSet aMarkAttr(GetAttrFromMarked(sal_False)); // because of AutoGrowHeight and corner radius
         Rectangle aRect(GetMarkedObjRect());
 
         if(GetSdrPageView())
@@ -1212,14 +1200,14 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
             GetSdrPageView()->LogicToPagePos(aRect);
         }
 
-        // Position
+        // position
         aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_POS_X,aRect.Left()));
         aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_POS_Y,aRect.Top()));
 
-        // Groesse
+        // size
         long nResizeRefX=aRect.Left();
         long nResizeRefY=aRect.Top();
-        if (eDragMode==SDRDRAG_ROTATE) { // Drehachse auch als Referenz fuer Resize
+        if (eDragMode==SDRDRAG_ROTATE) { // use rotation axis as a reference for resizing, too
             nResizeRefX=aRef1.X();
             nResizeRefY=aRef1.Y();
         }
@@ -1235,7 +1223,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
             GetSdrPageView()->LogicToPagePos(aRotateAxe);
         }
 
-        // Drehung
+        // rotation
         long nRotateRefX=aRect.Center().X();
         long nRotateRefY=aRect.Center().Y();
         if (eDragMode==SDRDRAG_ROTATE) {
@@ -1246,10 +1234,10 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_ROT_X,nRotateRefX));
         aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_ROT_Y,nRotateRefY));
 
-        // Shear
+        // shearing
         long nShearRefX=aRect.Left();
         long nShearRefY=aRect.Bottom();
-        if (eDragMode==SDRDRAG_ROTATE) { // Drehachse auch als Referenz fuer Shear
+        if (eDragMode==SDRDRAG_ROTATE) { // use rotation axis as a reference for shearing, too
             nShearRefX=aRotateAxe.X();
             nShearRefY=aRotateAxe.Y();
         }
@@ -1257,7 +1245,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_X,nShearRefX));
         aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_Y,nShearRefY));
 
-        // Pruefen der einzelnen Objekte, ob Objekte geschuetzt sind
+        // check every object whether it is protected
         const SdrMarkList& rMarkList=GetMarkedObjectList();
         sal_uIntPtr nMarkCount=rMarkList.GetMarkCount();
         SdrObject* pObj=rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -1271,7 +1259,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
             if (bSizProt!=pObj->IsResizeProtect()) bSizProtDontCare=sal_True;
         }
 
-        // InvalidateItem setzt das Item auf DONT_CARE
+        // InvalidateItem sets item to DONT_CARE
         if (bPosProtDontCare) {
             aRetSet.InvalidateItem(SID_ATTR_TRANSFORM_PROTECT_POS);
         } else {
@@ -1324,7 +1312,7 @@ Point ImpGetPoint(Rectangle aRect, RECT_POINT eRP)
         case RP_MB: return aRect.BottomCenter();
         case RP_RB: return aRect.BottomRight();
     }
-    return Point(); // Sollte nicht vorkommen !
+    return Point(); // Should not happen!
 }
 
 void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
@@ -1349,7 +1337,6 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     long nSizY=0;
     long nRotateAngle=0;
 
-    // #86909#
     sal_Bool bModeIsRotate(eDragMode == SDRDRAG_ROTATE);
     long nRotateX(0);
     long nRotateY(0);
@@ -1383,7 +1370,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
     const SfxPoolItem* pPoolItem=NULL;
 
-    // Position
+    // position
     if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_POS_X,sal_True,&pPoolItem)) {
         nPosDX=((const SfxInt32Item*)pPoolItem)->GetValue()-aRect.Left();
         bChgPos=sal_True;
@@ -1392,7 +1379,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
         nPosDY=((const SfxInt32Item*)pPoolItem)->GetValue()-aRect.Top();
         bChgPos=sal_True;
     }
-    // Groesse
+    // size
     if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_WIDTH,sal_True,&pPoolItem)) {
         nSizX=((const SfxUInt32Item*)pPoolItem)->GetValue();
         bChgSiz=sal_True;
@@ -1405,21 +1392,21 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
         eSizePoint=(RECT_POINT)((const SfxAllEnumItem&)rAttr.Get(SID_ATTR_TRANSFORM_SIZE_POINT)).GetValue();
     }
 
-    // Rotation
+    // rotation
     if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ANGLE,sal_True,&pPoolItem)) {
         nRotateAngle=((const SfxInt32Item*)pPoolItem)->GetValue()-nOldRotateAngle;
         bRotate = (nRotateAngle != 0);
     }
 
-    // #86909# pos rot point x
+    // position rotation point x
     if(bRotate || SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ROT_X, sal_True ,&pPoolItem))
         nRotateX = ((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_ROT_X)).GetValue();
 
-    // #86909# pos rot point y
+    // position rotation point y
     if(bRotate || SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ROT_Y, sal_True ,&pPoolItem))
         nRotateY = ((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_ROT_Y)).GetValue();
 
-    // Shear
+    // shearing
     if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_SHEAR,sal_True,&pPoolItem)) {
         long nNewShearAngle=((const SfxInt32Item*)pPoolItem)->GetValue();
         if (nNewShearAngle>SDRMAXSHEAR) nNewShearAngle=SDRMAXSHEAR;
@@ -1430,7 +1417,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
                 nShearAngle=nNewShearAngle;
             } else {
                 if (nNewShearAngle!=0 && nOldShearAngle!=0) {
-                    // Bugfix #25714#.
+                    // bug fix
                     double nOld=tan((double)nOldShearAngle*nPi180);
                     double nNew=tan((double)nNewShearAngle*nPi180);
                     nNew-=nOld;
@@ -1461,7 +1448,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
         bSetAttr=sal_True;
     }
 
-    // Eckenradius
+    // corner radius
     if (bEdgeRadiusAllowed && SFX_ITEM_SET==rAttr.GetItemState(SDRATTR_ECKENRADIUS,sal_True,&pPoolItem)) {
         long nRadius=((SdrEckenradiusItem*)pPoolItem)->GetValue();
         aSetAttr.Put(SdrEckenradiusItem(nRadius));
@@ -1476,7 +1463,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
         SetAttrToMarked(aSetAttr,sal_False);
     }
 
-    // Groesse und Hoehe aendern
+    // change size and height
     if (bChgSiz && (bResizeFreeAllowed || bResizePropAllowed)) {
         Fraction aWdt(nSizX,aRect.Right()-aRect.Left());
         Fraction aHgt(nSizY,aRect.Bottom()-aRect.Top());
@@ -1490,7 +1477,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
         ResizeMarkedObj(aRef,aWdt,aHgt);
     }
 
-    // Rotieren
+    // rotate
     if (bRotate && (bRotateFreeAllowed || bRotate90Allowed)) {
         Point aRef(nRotateX,nRotateY);
 
@@ -1502,7 +1489,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
         RotateMarkedObj(aRef,nRotateAngle);
     }
 
-    // #86909# set rotation point position
+    // set rotation point position
     if(bModeIsRotate && (nRotateX != nOldRotateX || nRotateY != nOldRotateY))
     {
         Point aNewRef1(nRotateX, nRotateY);
@@ -1515,7 +1502,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
         SetRef1(aNewRef1);
     }
 
-    // Shear
+    // shear
     if (bShear && bShearAllowed) {
         Point aRef(nShearX,nShearY);
 
@@ -1534,7 +1521,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
         // or not. Taking out.
     }
 
-    // Position aendern
+    // change position
     if (bChgPos && bMoveAllowed) {
         MoveMarkedObj(Size(nPosDX,nPosDY));
     }
@@ -1613,12 +1600,12 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 sal_Bool SdrEditView::IsAlignPossible() const
-{  // Mindestens 2 markierte Objekte, davon mind. 1 beweglich
+{  // at least two selected objects, at least one of them movable
     ForcePossibilities();
     sal_uIntPtr nAnz=GetMarkedObjectCount();
-    if (nAnz==0) return sal_False;         // Nix markiert!
-    if (nAnz==1) return bMoveAllowed;  // einzelnes Obj an der Seite ausrichten
-    return bOneOrMoreMovable;          // ansonsten ist MarkCount>=2
+    if (nAnz==0) return sal_False;         // nothing selected!
+    if (nAnz==1) return bMoveAllowed;  // align single object to page
+    return bOneOrMoreMovable;          // otherwise: MarkCount>=2
 }
 
 void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, sal_Bool bBoundRects)
@@ -1685,7 +1672,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, sal_B
     if (!bHasFixed)
     {
         if (nMarkAnz==1)
-        {   // einzelnes Obj an der Seite ausrichten
+        {   // align single object to page
             const SdrObject* pObj=GetMarkedObjectByIndex(0L);
             const SdrPage* pPage=pObj->GetPage();
             const SdrPageGridFrameList* pGFL=pPage->GetGridFrameList(GetSdrPageViewOfMarkedByIndex(0),&(pObj->GetSnapRect()));
@@ -1743,7 +1730,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, sal_B
             }
             if (nXMov!=0 || nYMov!=0)
             {
-                // #104104# SdrEdgeObj needs an extra SdrUndoGeoObj since the
+                // SdrEdgeObj needs an extra SdrUndoGeoObj since the
                 // connections may need to be saved
                 if( bUndo )
                 {

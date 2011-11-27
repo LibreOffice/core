@@ -512,7 +512,7 @@ bool _SdrItemBrowserControl::BegChangeEntry(sal_uIntPtr nPos)
         SetMode(MYBROWSEMODE & ~BROWSER_KEEPHIGHLIGHT);
         pEditControl=new ImpItemEdit(&GetDataWindow(),this,0/*|WB_BORDER|WB_3DLOOK*/);
         Rectangle aRect(GetFieldRectPixel(nPos,ITEMBROWSER_VALUECOL_ID,sal_False));
-        aRect.Left()+=2; // Kleiner Offset fuer's Edit, damit's pixelgenau stimmt
+        aRect.Left()+=2; // little offset for the Edit, so it's exact to the pixel
         aRect.Right()--;
         pEditControl->SetPosSizePixel(aRect.TopLeft(),aRect.GetSize());
         pEditControl->SetText(pEntry->aValue);
@@ -583,7 +583,7 @@ void _SdrItemBrowserControl::ImpSetEntry(const ImpItemListRow& rEntry, sal_uIntP
         bool bValueDiff=!rEntry.aValue.Equals(pAktEntry->aValue);
         bool bAllDiff = true;
         if (bStateDiff || bValueDiff) {
-            // Checken, ob nur State und/oder Value geaendert
+            // check whether only state and/or value have changed
             ImpItemListRow aTest(rEntry);
             aTest.eState=pAktEntry->eState;
             aTest.aValue=pAktEntry->aValue;
@@ -646,18 +646,18 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
                 }
             }
         } break;
-        case XATTR_FILLCOLOR           : /*nur bei Style=Color*/
-        case XATTR_FILLGRADIENT        : /*nur bei Style=Gradient*/
-        case XATTR_FILLHATCH           : /*nur bei Style=Hatch*/
-        case XATTR_FILLTRANSPARENCE    : /*nur bei Style=Color*/
-        case XATTR_GRADIENTSTEPCOUNT   : /*nur bei Style=Gradient*/
-        case XATTR_FILLBACKGROUND      : /*nur bei Style=Hatch*/
+        case XATTR_FILLCOLOR           : /* only for Style=Color */
+        case XATTR_FILLGRADIENT        : /* only for Style=Gradient */
+        case XATTR_FILLHATCH           : /* only for Style=Hatch */
+        case XATTR_FILLTRANSPARENCE    : /* only for Style=Color */
+        case XATTR_GRADIENTSTEPCOUNT   : /* only for Style=Gradient */
+        case XATTR_FILLBACKGROUND      : /* only for Style=Hatch */
         {
             rIndent=1;
             if (ImpGetItem(*pSet,XATTR_FILLSTYLE,pItem)) {
                 XFillStyle eFillStyle=((const XFillStyleItem*)pItem)->GetValue();
                 if (eFillStyle==XFILL_NONE) return sal_True;
-                // Transparenz z.Zt. nur fuer SolidFill
+                // transparency currently only for SolidFill
                 if (eFillStyle!=XFILL_SOLID && (nWhich==XATTR_FILLCOLOR || nWhich==XATTR_FILLTRANSPARENCE)) return sal_True;
                 if (eFillStyle!=XFILL_GRADIENT && (nWhich==XATTR_FILLGRADIENT || nWhich==XATTR_GRADIENTSTEPCOUNT)) return sal_True;
                 if (eFillStyle!=XFILL_HATCH && (nWhich==XATTR_FILLHATCH || nWhich==XATTR_FILLBACKGROUND)) return sal_True;
@@ -665,22 +665,22 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
         } break;
         case XATTR_FILLBITMAP          :
         case XATTR_FILLBMP_TILE        :
-        case XATTR_FILLBMP_POS         : /* z.Zt. nur wenn TILE=sal_True */
-        case XATTR_FILLBMP_SIZEX       : /* nur wenn nicht Stretch */
-        case XATTR_FILLBMP_SIZEY       : /* nur wenn nicht Stretch */
-        case XATTR_FILLBMP_SIZELOG     : /* nur wenn SIZELOG=sal_False zum ruecksetzen auf sal_True (alt) -> doch noch in Gebrauch */
-        case XATTR_FILLBMP_TILEOFFSETX : /* nur wenn TILE=sal_True */
-        case XATTR_FILLBMP_TILEOFFSETY : /* nur wenn TILE=sal_True */
-        case XATTR_FILLBMP_STRETCH     : /* nur wenn TILE=sal_False */
-        case XATTR_FILLBMP_POSOFFSETX  : /* nur wenn TILE=sal_True*/
-        case XATTR_FILLBMP_POSOFFSETY  : { /* nur wenn TILE=sal_True*/
+        case XATTR_FILLBMP_POS         : /* currently only if TILE=sal_True */
+        case XATTR_FILLBMP_SIZEX       : /* only if not Stretch */
+        case XATTR_FILLBMP_SIZEY       : /* only if not Stretch */
+        case XATTR_FILLBMP_SIZELOG     : /* only if SIZELOG=sal_False to reset to sal_True (old) -> but is still in use */
+        case XATTR_FILLBMP_TILEOFFSETX : /* only if TILE=sal_True */
+        case XATTR_FILLBMP_TILEOFFSETY : /* only if TILE=sal_True */
+        case XATTR_FILLBMP_STRETCH     : /* only if TILE=sal_False */
+        case XATTR_FILLBMP_POSOFFSETX  : /* only if TILE=sal_True*/
+        case XATTR_FILLBMP_POSOFFSETY  : { /* only if TILE=sal_True*/
             rIndent=1;
             if (ImpGetItem(*pSet,XATTR_FILLSTYLE,pItem)) {
                 XFillStyle eFillStyle=((const XFillStyleItem*)pItem)->GetValue();
                 if (eFillStyle!=XFILL_BITMAP) return sal_True;
             }
             if (nWhich==XATTR_FILLBITMAP || nWhich==XATTR_FILLBMP_TILE) {
-                return sal_False; // immer anwaehlbar
+                return sal_False; // always selectable
             }
             bool bTileTRUE = false;
             bool bTileFALSE = false;
@@ -692,21 +692,21 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
             if (ImpGetItem(*pSet,XATTR_FILLBMP_STRETCH,pItem)) {
                 bStretchTRUE=((const XFillBmpStretchItem*)pItem)->GetValue();
             }
-            // Stretch nicht anwaehlbar, wenn Tile=TRUE
+            // Stretch not selectable if Tile=TRUE
             if (nWhich==XATTR_FILLBMP_STRETCH) return bTileTRUE;
-            // und uebrig bleiben 7+1 Item (Unterattribute)
+            // and 7+1 items (sub-attributes) remain
             rIndent=2;
-            // Pos (enum) nicht anwaehlbar, wenn Tile=FALSE
+            // Pos (enum) not selectable if Tile=FALSE
             if (nWhich==XATTR_FILLBMP_POS) return bTileFALSE;
-            // SizeXY nicht anwaehlbar bei Stretch=TRUE
+            // SizeXY not selectable if Stretch=TRUE
             if (nWhich==XATTR_FILLBMP_SIZEX || nWhich==XATTR_FILLBMP_SIZEY) {
                 return bTileFALSE && bStretchTRUE;
             }
-            // 2 Items speziell fuer Tile
+            // 2 items specially for Tile
             if (nWhich==XATTR_FILLBMP_POSOFFSETX  || nWhich==XATTR_FILLBMP_POSOFFSETY) {
                 return bTileFALSE;
             }
-            // Noch 2 Items speziell fuer Tile die sich jedoch gegenseitig ausschliessen
+            // another 2 items specially for Tile -- however, these exclude each other
             if (nWhich==XATTR_FILLBMP_TILEOFFSETX || nWhich==XATTR_FILLBMP_TILEOFFSETY) {
                 if (bTileFALSE) return sal_True;
                 sal_uInt16 nX=0,nY=0;
@@ -727,10 +727,10 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
                     if (nX!=0) return sal_True;
                 }
             }
-            // SizeLog nicht anwaehlbar bei Stretch=TRUE
-            // und sonst auch nur wenn es auf SizeLog=sal_False gesetzt ist.
-            // -> wohl doch noch in Gebrauch
-            // (sal_True ist der statische PoolDefault)
+            // SizeLog not selectable if Stretch=TRUE and/or
+            // if SizeLog=sal_False.
+            // -> apparently still in use
+            // (sal_True is the static PoolDefault)
             if (nWhich==XATTR_FILLBMP_SIZELOG) {
                 if (bTileFALSE && bStretchTRUE) return sal_True;
             }
@@ -932,9 +932,9 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
         sal_uInt16 nWhich0=0;
         sal_uInt16 nWhich=aIter.FirstWhich();
         while (nWhich!=0) {
-            // Nun erstmal etwas umsortieren
-            // Geht nur, solange keine InvalidItems, d.h. keine Luecken
-            // an dieser Stelle im Set sind
+            // Now sort this a little bit differently.
+            // Only works as long as there are no InvalidItems, i. e. no gaps
+            // at this position in the Set.
             if (!bDontSortItems) nWhich=ImpSortWhich(nWhich);
             SfxItemState eState=pSet->GetItemState(nWhich);
             if (p2ndSet!=NULL) {
@@ -1050,7 +1050,7 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
             nWhich=aIter.NextWhich();
         } // while
 
-        if (aList.Count()>nEntryNum) { // evtl. noch zuviele Eintraege
+        if (aList.Count()>nEntryNum) { // maybe still too many entries
             sal_uIntPtr nTooMuch=aList.Count()-nEntryNum;
             for (sal_uIntPtr nNum=0; nNum<nTooMuch; nNum++) {
                 delete ImpGetEntry(nEntryNum);
@@ -1059,7 +1059,7 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
             RowRemoved(nEntryNum,nTooMuch);
         }
     } else {
-        Clear(); // wenn pSet==NULL
+        Clear(); // if pSet==NULL
     }
     ImpRestoreWhich();
     SetMode(MYBROWSEMODE);

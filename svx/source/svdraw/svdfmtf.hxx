@@ -34,7 +34,7 @@
 #include <svx/svdobj.hxx>
 
 //************************************************************
-//   Vorausdeklarationen
+// Forward Declarations
 //************************************************************
 
 class SfxItemSet;
@@ -45,7 +45,7 @@ class SdrObject;
 class SvdProgressInfo;
 
 //************************************************************
-//   Hilfsklasse SdrObjRefList
+// Helper Class SdrObjRefList
 //************************************************************
 
 class SdrObjRefList
@@ -66,7 +66,7 @@ public:
 };
 
 //************************************************************
-//   Hilfsklasse ImpSdrGDIMetaFileImport
+// Helper Class ImpSdrGDIMetaFileImport
 //************************************************************
 
 class ImpSdrGDIMetaFileImport
@@ -75,7 +75,7 @@ protected:
     SdrObjRefList               aTmpList;
     VirtualDevice               aVD;
     Rectangle                   aScaleRect;
-    sal_uLong                       nMapScalingOfs; // ab hier nocht nicht mit MapScaling bearbeitet
+    sal_uLong                       nMapScalingOfs; // from here on, not edited with MapScaling
     SfxItemSet*                 pLineAttr;
     SfxItemSet*                 pFillAttr;
     SfxItemSet*                 pTextAttr;
@@ -97,12 +97,12 @@ protected:
 
     sal_Bool                    bFntDirty;
 
-    // fuer Optimierung von (PenNULL,Brush,DrawPoly),(Pen,BrushNULL,DrawPoly) -> aus 2 mach ein
+    // to optimize (PenNULL,Brush,DrawPoly),(Pen,BrushNULL,DrawPoly) -> two-in-one
     sal_Bool                    bLastObjWasPolyWithoutLine;
     sal_Bool                    bNoLine;
     sal_Bool                    bNoFill;
 
-    // fuer Optimierung mehrerer Linien zu einer Polyline
+    // to optimize multiple lines into a Polyline
     sal_Bool                    bLastObjWasLine;
 
 protected:

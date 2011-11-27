@@ -100,9 +100,9 @@ private:
     long                        nWink0;
     long                        nWink;
     double                      nTan;
-    bool                        bVertical;   // Vertikales verzerren
-    bool                        bResize;     // Shear mit Resize
-    bool                        bUpSideDown; // Beim Shear/Slant gespiegelt
+    bool                        bVertical;   // contort vertically
+    bool                        bResize;     // shear and resize
+    bool                        bUpSideDown; // mirror and shear/slant
     bool                        bSlant;
 
 public:
@@ -155,7 +155,7 @@ private:
     // Handles to work on
     SdrHdlGradient*             pIAOHandle;
 
-    // is this for gradient (or for transparence) ?
+    // is this for gradient (or for transparency)?
     unsigned                    bIsGradient : 1;
 
 public:

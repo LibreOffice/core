@@ -52,11 +52,11 @@
 #include "editeng/xmlcnitm.hxx"
 
 #include <svx/svxids.hrc>
-#include <svx/xtable.hxx>    // fuer RGB_Color()
+#include <svx/xtable.hxx>    // for RGB_Color()
 #include "svx/svditext.hxx"
-#include <svx/svdmodel.hxx>  // fuer DEGREE_CHAR
+#include <svx/svdmodel.hxx>  // for DEGREE_CHAR
 #include <svx/svdtrans.hxx>
-#include "svx/svdglob.hxx"  // Stringcache
+#include "svx/svdglob.hxx"  // string cache
 #include "svx/svdstr.hrc"
 #include <svx/sdgcpitm.hxx>
 #include <editeng/adjitem.hxx>
@@ -85,7 +85,7 @@ using namespace ::com::sun::star;
 
 /*************************************************************************
 |*
-|* Konstruktor
+|* Constructor
 |*
 \************************************************************************/
 
@@ -94,10 +94,10 @@ SdrItemPool::SdrItemPool(
     sal_Bool bLoadRefCounts)
 :   XOutdevItemPool(_pMaster, SDRATTR_START, SDRATTR_END, bLoadRefCounts)
 {
-    // preapare some constants
+    // prepare some constants
     const Color aNullCol(RGB_Color(COL_BLACK));
     const XubString aEmptyStr;
-    const sal_Int32 nDefEdgeDist(500L); // Erstmal hart defaulted fuer Draw (100TH_MM). hier muss noch der MapMode beruecksichtigt werden.
+    const sal_Int32 nDefEdgeDist(500L); // Defaulting hard for Draw (100TH_MM) currently. MapMode will have to be taken into account in the future.
 
     // init the non-persistent items
     for(sal_uInt16 i(SDRATTR_NOTPERSIST_FIRST); i <= SDRATTR_NOTPERSIST_LAST; i++)
@@ -299,10 +299,8 @@ SdrItemPool::SdrItemPool(
     SvxBoxInfoItem* pBoxInfoItem = new SvxBoxInfoItem( SDRATTR_TABLE_BORDER_INNER );
 
     pBoxInfoItem->SetTable( sal_True );
-    pBoxInfoItem->SetDist( sal_True);        // Abstandsfeld immer anzeigen
-//  pBoxInfoItem->SetMinDist( sal_True );// Minimalgroesse in Tabellen und Absaetzen setzen
-//  pBoxInfoItem->SetDefDist( MIN_BORDER_DIST );// Default-Abstand immer setzen
-    pBoxInfoItem->SetValid( VALID_DISABLE, sal_True ); // Einzelne Linien koennen nur in Tabellen DontCare-Status haben
+    pBoxInfoItem->SetDist( sal_True);        // always show margin field
+    pBoxInfoItem->SetValid( VALID_DISABLE, sal_True ); // some lines may have DontCare state only in tables
 
     mppLocalPoolDefaults[ SDRATTR_TABLE_BORDER_INNER - SDRATTR_START ] =  pBoxInfoItem;
 //  mppLocalPoolDefaults[ SDRATTR_TABLE_BORDER_SHADOW - SDRATTR_START ] = new SvxShadowItem( SDRATTR_TABLE_BORDER_SHADOW );
@@ -327,7 +325,7 @@ SdrItemPool::SdrItemPool(
 
 /*************************************************************************
 |*
-|* copy ctor, sorgt dafuer, dass die static defaults gecloned werden
+|* copy ctor, so that static defaults are cloned
 |*            (Parameter 2 = sal_True)
 |*
 \************************************************************************/
@@ -350,7 +348,7 @@ SfxItemPool* SdrItemPool::Clone() const
 
 /*************************************************************************
 |*
-|* Destruktor
+|* Destructor
 |*
 \************************************************************************/
 
@@ -897,7 +895,7 @@ SfxItemPresentation SdrAngleItem::GetPresentation(
 
         if(bNull2)
         {
-            // keine Nachkommastellen
+            // no decimal place(s)
             rText.Erase(nLen-2);
         }
         else
@@ -960,7 +958,7 @@ bool SdrMetricItem::ScaleMetrics(long nMul, long nDiv)
     if (GetValue()!=0) {
         BigInt aVal(GetValue());
         aVal*=nMul;
-        aVal+=nDiv/2; // fuer korrektes Runden
+        aVal+=nDiv/2; // to round accurately
         aVal/=nDiv;
         SetValue(long(aVal));
     }
@@ -987,7 +985,7 @@ SfxItemPresentation SdrMetricItem::GetPresentation(SfxItemPresentation ePres,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// Items des Legendenobjekts
+// items of the legend object
 ////////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1_AUTOFACTORY(SdrCaptionTypeItem,SfxEnumItem);
@@ -1348,7 +1346,7 @@ bool SdrTextAniAmountItem::ScaleMetrics(long nMul, long nDiv)
     if (GetValue()>0) {
         BigInt aVal(GetValue());
         aVal*=nMul;
-        aVal+=nDiv/2; // fuer korrektes Runden
+        aVal+=nDiv/2; // to round accurately
         aVal/=nDiv;
         SetValue(short(aVal));
         return sal_True;
@@ -1802,7 +1800,6 @@ bool SdrEdgeLine3DeltaItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberI
 // Measure
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-// MeasureKind
 TYPEINIT1_AUTOFACTORY(SdrMeasureKindItem,SfxEnumItem);
 
 SfxPoolItem* SdrMeasureKindItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrMeasureKindItem(*this); }
@@ -2004,7 +2001,6 @@ bool SdrMeasureUnitItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
 // Circ
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-// CircKind
 TYPEINIT1_AUTOFACTORY(SdrCircKindItem,SfxEnumItem);
 
 SfxPoolItem* SdrCircKindItem::Clone(SfxItemPool* /*pPool*/) const          { return new SdrCircKindItem(*this); }

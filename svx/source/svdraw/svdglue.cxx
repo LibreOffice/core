@@ -83,7 +83,7 @@ Point SdrGluePoint::GetAbsolutePos(const SdrObject& rObj) const
         }
     }
     aPt+=aOfs;
-    // Und nun auf's BoundRect des Objekts begrenzen
+    // Now limit to the BoundRect ofthe object
     if (aPt.X()<aBound.Left  ()) aPt.X()=aBound.Left  ();
     if (aPt.X()>aBound.Right ()) aPt.X()=aBound.Right ();
     if (aPt.Y()<aBound.Top   ()) aPt.Y()=aBound.Top   ();
@@ -183,12 +183,12 @@ void SdrGluePoint::Rotate(const Point& rRef, long nWink, double sn, double cs, c
 {
     Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
     RotatePoint(aPt,rRef,sn,cs);
-    // Bezugskante drehen
+    // rotate reference edge
     if(nAlign != (SDRHORZALIGN_CENTER|SDRVERTALIGN_CENTER))
     {
         SetAlignAngle(GetAlignAngle()+nWink);
     }
-    // Austrittsrichtungen drehen
+    // rotate exit directions
     sal_uInt16 nEscDir0=nEscDir;
     sal_uInt16 nEscDir1=0;
     if ((nEscDir0&SDRESC_LEFT  )!=0) nEscDir1|=EscAngleToDir(EscDirToAngle(SDRESC_LEFT  )+nWink);
@@ -203,14 +203,14 @@ void SdrGluePoint::Mirror(const Point& rRef1, const Point& rRef2, long nWink, co
 {
     Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
     MirrorPoint(aPt,rRef1,rRef2);
-    // Bezugskante spiegeln
+    // mirror reference edge
     if(nAlign != (SDRHORZALIGN_CENTER|SDRVERTALIGN_CENTER))
     {
         long nAW=GetAlignAngle();
         nAW+=2*(nWink-nAW);
         SetAlignAngle(nAW);
     }
-    // Austrittsrichtungen spiegeln
+    // mirror exit directions
     sal_uInt16 nEscDir0=nEscDir;
     sal_uInt16 nEscDir1=0;
     if ((nEscDir0&SDRESC_LEFT)!=0) {
@@ -250,9 +250,8 @@ void SdrGluePoint::Invalidate(Window& rWin, const SdrObject* pObj) const
     Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
     aPt=rWin.LogicToPixel(aPt);
     rWin.EnableMapMode(sal_False);
-    long x=aPt.X(),y=aPt.Y(); // Groesse erstmal fest auf 7 Pixel
+    long x=aPt.X(),y=aPt.Y(); // Size fixed to 7 pixels for now
 
-    // #111096#
     // do not erase background, that causes flicker (!)
     rWin.Invalidate(Rectangle(Point(x-3,y-3),Point(x+3,y+3)), INVALIDATE_NOERASE);
 
@@ -287,9 +286,8 @@ void SdrGluePointList::operator=(const SdrGluePointList& rSrcList)
     }
 }
 
-// Die Id's der Klebepunkte in der Liste sind stets streng monoton steigend!
-// Ggf. wird dem neuen Klebepunkt eine neue Id zugewiesen (wenn diese bereits
-// vergeben ist). Die Id 0 ist reserviert.
+// The ID's of the glue points always increase monotonously!
+// If an ID is taken already, the new glue point gets a new ID. ID 0 is reserved.
 sal_uInt16 SdrGluePointList::Insert(const SdrGluePoint& rGP)
 {
     SdrGluePoint* pGP=new SdrGluePoint(rGP);
@@ -308,11 +306,11 @@ sal_uInt16 SdrGluePointList::Insert(const SdrGluePoint& rGP)
                 const SdrGluePoint* pGP2=GetObject(nNum);
                 sal_uInt16 nTmpId=pGP2->GetId();
                 if (nTmpId==nId) {
-                    nId=nLastId+1; // bereits vorhanden
+                    nId=nLastId+1; // already in use
                     bBrk = true;
                 }
                 if (nTmpId>nId) {
-                    nInsPos=nNum; // Hier einfuegen (einsortieren)
+                    nInsPos=nNum; // insert here (sort)
                     bBrk = true;
                 }
             }
@@ -333,8 +331,8 @@ void SdrGluePointList::Invalidate(Window& rWin, const SdrObject* pObj) const
 
 sal_uInt16 SdrGluePointList::FindGluePoint(sal_uInt16 nId) const
 {
-    // Hier noch einen optimaleren Suchalgorithmus implementieren.
-    // Die Liste sollte stets sortiert sein!!!!
+    // TODO: Implement a better search algorithm
+    // List should be sorted at all times!
     sal_uInt16 nAnz=GetCount();
     sal_uInt16 nRet=SDRGLUEPOINT_NOTFOUND;
     for (sal_uInt16 nNum=0; nNum<nAnz && nRet==SDRGLUEPOINT_NOTFOUND; nNum++) {

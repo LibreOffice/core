@@ -30,7 +30,7 @@
 #include <svx/svdcrtv.hxx>
 #include "svx/xattr.hxx"
 #include <svx/svdundo.hxx>
-#include <svx/svdocapt.hxx> // Spezialbehandlung: Nach dem Create transparente Fuellung
+#include <svx/svdocapt.hxx> // special case: transparent filling after Create
 #include <svx/svdoedge.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
@@ -87,7 +87,7 @@ ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, S
             pTargetOverlay->add(*pNew);
             maObjects.append(*pNew);
 
-            // gluepoints
+            // glue points
             if(rView.IsAutoVertexConnectors())
             {
                 for(sal_uInt16 i(0); i < 4; i++)
@@ -186,15 +186,7 @@ void ImpSdrCreateViewExtraData::HideOverlay()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//   @@@@  @@@@@  @@@@@  @@@@  @@@@@@ @@@@@  @@ @@ @@ @@@@@ @@   @@
-//  @@  @@ @@  @@ @@    @@  @@   @@   @@     @@ @@ @@ @@    @@   @@
-//  @@     @@  @@ @@    @@  @@   @@   @@     @@ @@ @@ @@    @@ @ @@
-//  @@     @@@@@  @@@@  @@@@@@   @@   @@@@   @@@@@ @@ @@@@  @@@@@@@
-//  @@     @@  @@ @@    @@  @@   @@   @@      @@@  @@ @@    @@@@@@@
-//  @@  @@ @@  @@ @@    @@  @@   @@   @@      @@@  @@ @@    @@@ @@@
-//   @@@@  @@  @@ @@@@@ @@  @@   @@   @@@@@    @   @@ @@@@@ @@   @@
-//
+// CreateView
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -295,7 +287,7 @@ sal_Bool SdrCreateView::CheckEdgeMode()
 {
     if (pAktCreate!=NULL)
     {
-        // wird vom EdgeObj gemanaged
+        // is managed by EdgeObj
         if (nAktInvent==SdrInventor && nAktIdent==OBJ_EDGE) return sal_False;
     }
 
@@ -306,7 +298,7 @@ sal_Bool SdrCreateView::CheckEdgeMode()
     }
     else
     {
-        // sal_True heisst: MouseMove soll Connect checken
+        // sal_True, if MouseMove should check Connect
         return !IsAction();
     }
 }
@@ -347,7 +339,7 @@ sal_Bool SdrCreateView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
 
         if(pPV)
         {
-            // Defaultete Hit-Toleranz bei IsMarkedHit() mal aendern !!!!
+            // TODO: Change default hit tolerance at IsMarkedHit() some time!
             Point aPos(pWin->PixelToLogic(rMEvt.GetPosPixel()));
             sal_Bool bMarkHit=PickHandle(aPos)!=NULL || IsMarkedObjHit(aPos);
             SdrObjConnection aCon;
@@ -383,12 +375,11 @@ void SdrCreateView::SetCurrentObj(sal_uInt16 nIdent, sal_uInt32 nInvent)
 
         if(pObj)
         {
-            // Auf pers. Wunsch von Marco:
-            // Mauszeiger bei Textwerkzeug immer I-Beam. Fadenkreuz
-            // mit kleinem I-Beam erst bai MouseButtonDown
+            // Using text tool, mouse cursor is usually I-Beam,
+            // crosshairs with tiny I-Beam appears only on MouseButtonDown.
             if(IsTextTool())
             {
-                // #81944# AW: Here the correct pointer needs to be used
+                // Here the correct pointer needs to be used
                 // if the default is set to vertical writing
                 aAktCreatePointer = POINTER_TEXT;
             }
@@ -425,7 +416,7 @@ sal_Bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, c
         pCreatePV = GetSdrPageView();
     }
     if (pCreatePV!=NULL)
-    { // ansonsten keine Seite angemeldet!
+    { // otherwise no side registered!
         String aLay(aAktLayer);
 
         if(nInvent == SdrInventor && nIdent == OBJ_MEASURE && aMeasureLayer.Len())
@@ -465,7 +456,7 @@ sal_Bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, c
             {
                 if (pDefaultStyleSheet!=NULL) pAktCreate->NbcSetStyleSheet(pDefaultStyleSheet, sal_False);
 
-                // #101618# SW uses a naked SdrObject for frame construction. Normally, such an
+                // SW uses a naked SdrObject for frame construction. Normally, such an
                 // object should not be created. Since it is possible to use it as a helper
                 // object (e.g. in letting the user define an area with the interactive
                 // construction) at least no items should be set at that object.
@@ -485,18 +476,18 @@ sal_Bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, c
                 if (nInvent==SdrInventor && (nIdent==OBJ_TEXT || nIdent==OBJ_TEXTEXT ||
                     nIdent==OBJ_TITLETEXT || nIdent==OBJ_OUTLINETEXT))
                 {
-                    // Fuer alle Textrahmen default keinen Hintergrund und keine Umrandung
+                    // default for all text frames: no background, no border
                     SfxItemSet aSet(pMod->GetItemPool());
-                    aSet.Put(XFillColorItem(String(),Color(COL_WHITE))); // Falls einer auf Solid umschaltet
+                    aSet.Put(XFillColorItem(String(),Color(COL_WHITE))); // in case someone turns on Solid
                     aSet.Put(XFillStyleItem(XFILL_NONE));
-                    aSet.Put(XLineColorItem(String(),Color(COL_BLACK))); // Falls einer auf Solid umschaltet
+                    aSet.Put(XLineColorItem(String(),Color(COL_BLACK))); // in case someone turns on Solid
                     aSet.Put(XLineStyleItem(XLINE_NONE));
 
                     pAktCreate->SetMergedItemSet(aSet);
                 }
                 if (!rLogRect.IsEmpty()) pAktCreate->NbcSetLogicRect(rLogRect);
 
-                // #90129# make sure drag start point is inside WorkArea
+                // make sure drag start point is inside WorkArea
                 const Rectangle& rWorkArea = ((SdrDragView*)this)->GetWorkArea();
 
                 if(!rWorkArea.IsEmpty())
@@ -584,7 +575,7 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
             else if (aDragStat.IsOrtho4Possible()) OrthoDistance4(aDragStat.GetPrev(),aPnt,IsBigOrtho());
         }
 
-        // #77734# If the drag point was limited and Ortho is active, do
+        // If the drag point was limited and Ortho is active, do
         // the small ortho correction (reduction) -> last parameter to FALSE.
         sal_Bool bDidLimit(ImpLimitToWorkArea(aPnt));
         if(bDidLimit && IsOrtho())
@@ -626,8 +617,8 @@ sal_Bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
 
         if (nAnz<=1 && eCmd==SDRCREATE_FORCEEND)
         {
-            BrkCreateObj(); // Objekte mit nur einem Punkt gibt's nicht (zumindest noch nicht)
-            return sal_False; // sal_False=Event nicht ausgewertet
+            BrkCreateObj(); // objects with only a single point don't exist (at least today)
+            return sal_False; // sal_False = event not interpreted
         }
 
         sal_Bool bPntsEq=nAnz>1;
@@ -641,7 +632,7 @@ sal_Bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
 
             if (!bPntsEq)
             {
-                // sonst Brk, weil alle Punkte gleich sind.
+                // otherwise Brk, because all points are equal
                 SdrObject* pObj=pAktCreate;
                 pAktCreate=NULL;
 
@@ -666,7 +657,7 @@ sal_Bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
 
                 pObj->SetLayer(nLayer);
 
-                // #83403# recognize creation of a new 3D object inside a 3D scene
+                // recognize creation of a new 3D object inside a 3D scene
                 sal_Bool bSceneIntoScene(sal_False);
 
                 if(pObjMerk
@@ -695,7 +686,7 @@ sal_Bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                 }
 
                 pCreatePV=NULL;
-                bRet=sal_True; // sal_True=Event ausgewertet
+                bRet=sal_True; // sal_True = event interpreted
             }
             else
             {
@@ -703,10 +694,10 @@ sal_Bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
             }
         }
         else
-        { // Mehr Punkte
-            if (eCmd==SDRCREATE_FORCEEND || // nix da, Ende erzwungen
-                nAnz==0 ||                             // keine Punkte da (kann eigentlich nicht vorkommen)
-                (nAnz<=1 && !aDragStat.IsMinMoved())) { // MinMove nicht erfuellt
+        { // more points
+            if (eCmd==SDRCREATE_FORCEEND || // nothing there -- force ending
+                nAnz==0 ||                             // no existing points (should never happen)
+                (nAnz<=1 && !aDragStat.IsMinMoved())) { // MinMove not met
                 BrkCreateObj();
             }
             else
@@ -714,7 +705,7 @@ sal_Bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                 // replace for DrawCreateObjDiff
                 HideCreateObj();
                 ShowCreateObj();
-                aDragStat.ResetMinMoved(); // NextPoint gibt's bei MovCreateObj()
+                aDragStat.ResetMinMoved(); // NextPoint is at MovCreateObj()
                 bRet=sal_True;
             }
         }
@@ -776,8 +767,8 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
             // overlay objects instead.
             sal_Bool bUseSolidDragging(IsSolidDragging());
 
-            // #i101648# check if dragged object is a naked SdrObject (no
-            // derivation of). This is e.g. used in SW Frame construction
+            // #i101648# check if dragged object is a naked SdrObject (not
+            // a derivation). This is e.g. used in SW Frame construction
             // as placeholder. Do not use SolidDragging for naked SDrObjects,
             // they cannot have a valid optical representation
             if(bUseSolidDragging && OBJ_NONE == pAktCreate->GetObjIdentifier())
@@ -854,7 +845,7 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
                     aDragPolyPolygon = rPathObj.getDragPolyPolygon(aDragStat);
                 }
 
-                // use directly the SdrObject for overlay
+                // use the SdrObject directly for overlay
                 mpCreateViewExtraData->CreateAndShowOverlay(*this, pAktCreate, aDragPolyPolygon);
             }
             else
@@ -894,7 +885,6 @@ void SdrCreateView::HideCreateObj()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/* new interface src537 */
 sal_Bool SdrCreateView::GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr) const
 {
     if(pAktCreate)

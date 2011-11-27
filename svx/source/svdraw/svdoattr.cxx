@@ -145,7 +145,7 @@ void SdrAttrObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
         SetBoundRectDirty();
         SetRectsDirty(sal_True);
 
-        // This may have lead to object change
+        // This may have led to object change
         SetChanged();
         BroadcastObjectChange();
         SendUserCall(SDRUSERCALL_CHGATTR, aBoundRect);

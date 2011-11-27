@@ -99,7 +99,7 @@ using namespace ::com::sun::star;
         }
         else
         {
-            // Printer und VirtualDevice, bzw. kein OutDev
+            // Printer and VirtualDevice, or rather: no OutDev
             uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
             if( xFactory.is() )
             {
@@ -136,7 +136,7 @@ SdrPageWindow::SdrPageWindow(SdrPageView& rPageView, SdrPaintWindow& rPaintWindo
 
 SdrPageWindow::~SdrPageWindow()
 {
-    // #110094#, #i26631#
+    // #i26631#
     ResetObjectContact();
 
     if (mxControlContainer.is())
@@ -154,13 +154,13 @@ SdrPageWindow::~SdrPageWindow()
     }
 }
 
-// #110094# ObjectContact section
+// ObjectContact section
 sdr::contact::ObjectContact* SdrPageWindow::CreateViewSpecificObjectContact()
 {
     return new sdr::contact::ObjectContactOfPageView(*this);
 }
 
-// OVERLAYMANAGER
+// OVERLAY MANAGER
 ::sdr::overlay::OverlayManager* SdrPageWindow::GetOverlayManager() const
 {
     return GetPaintWindow().GetOverlayManager();
@@ -305,13 +305,13 @@ void SdrPageWindow::RedrawAll(sdr::contact::ViewObjectContactRedirector* pRedire
     const sal_Bool bPrinter(GetPaintWindow().OutputToPrinter());
     SetOfByte aProcessLayers = bPrinter ? mrPageView.GetPrintableLayers() : mrPageView.GetVisibleLayers();
 
-    // create PaintInfoRec, #114359# use Rectangle only temporarily
+    // create PaintInfoRec; use Rectangle only temporarily
     const Region& rRegion = GetPaintWindow().GetRedrawRegion();
 
     // create processing data
     sdr::contact::DisplayInfo aDisplayInfo;
 
-    // Draw all layers. do NOT draw form layer from CompleteRedraw, this is done separate
+    // Draw all layers. do NOT draw form layer from CompleteRedraw, this is done separately
     // as a single layer paint
     const SdrLayerAdmin& rLayerAdmin = rModel.GetLayerAdmin();
     const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), sal_False);
@@ -423,7 +423,7 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
     }
 }
 
-// #110094# ObjectContact section
+// ObjectContact section
 sdr::contact::ObjectContact& SdrPageWindow::GetObjectContact() const
 {
     if(!mpObjectContact)

@@ -74,7 +74,7 @@
 using namespace ::com::sun::star;
 
 /******************************************************************************
-* Globale Daten der DrawingEngine
+* Global data of the DrawingEngine
 ******************************************************************************/
 
 SdrGlobalData::SdrGlobalData() :
@@ -223,7 +223,7 @@ sal_Bool OLEObjCache::UnloadObj(SdrOle2Obj* pObj)
         // case since no one ever used this option.
         //
         // A much better (and working) criteria would be the VOC contact count.
-        // The quesion is what will happen whe i make it work now suddenly? I
+        // The question is what will happen when i make it work now suddenly? I
         // will try it for 2.4.
         const sdr::contact::ViewContact& rViewContact = pObj->GetViewContact();
         const bool bVisible(rViewContact.HasViewObjectContacts(true));
@@ -328,10 +328,10 @@ void SdrLinkList::InsertLink(const Link& rLink, unsigned nPos)
         if (rLink.IsSet()) {
             aList.Insert(new Link(rLink),nPos);
         } else {
-            OSL_FAIL("SdrLinkList::InsertLink(): Versuch, einen nicht gesetzten Link einzufuegen");
+            OSL_FAIL("SdrLinkList::InsertLink(): Tried to insert a link that was not set already.");
         }
     } else {
-        OSL_FAIL("SdrLinkList::InsertLink(): Link schon vorhanden");
+        OSL_FAIL("SdrLinkList::InsertLink(): Link already in place.");
     }
 }
 
@@ -342,12 +342,11 @@ void SdrLinkList::RemoveLink(const Link& rLink)
         Link* pLink=(Link*)aList.Remove(nFnd);
         delete pLink;
     } else {
-        OSL_FAIL("SdrLinkList::RemoveLink(): Link nicht gefunden");
+        OSL_FAIL("SdrLinkList::RemoveLink(): Link not found.");
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// #98988# Re-implement GetDraftFillColor(...)
 
 bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
 {
@@ -368,7 +367,7 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
             Color aCol1(((XFillHatchItem&)rSet.Get(XATTR_FILLHATCH)).GetHatchValue().GetColor());
             Color aCol2(COL_WHITE);
 
-            // #97870# when hatch background is activated, use object fill color as hatch color
+            // when hatched background is activated, use object fill color as hatch color
             sal_Bool bFillHatchBackground = ((const XFillBackgroundItem&)(rSet.Get(XATTR_FILLBACKGROUND))).GetValue();
             if(bFillHatchBackground)
             {
@@ -544,9 +543,9 @@ sal_Bool SearchOutlinerItems(const SfxItemSet& rSet, sal_Bool bInklDefaults, sal
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich=aIter.FirstWhich();
     while (((bLookOnly && bOnly) || !bHas) && nWhich!=0) {
-        // bei bInklDefaults ist der gesamte Which-Range
-        // ausschlaggebend, ansonsten nur die gesetzten Items
-        // Disabled und DontCare wird als Loch im Which-Range betrachtet
+        // For bInklDefaults, the entire Which range is decisive,
+        // in other cases only the set items are.
+        // Disabled and DontCare are regarded as holes in the Which range.
         SfxItemState eState=rSet.GetItemState(nWhich);
         if ((eState==SFX_ITEM_DEFAULT && bInklDefaults) || eState==SFX_ITEM_SET) {
             if (nWhich<EE_ITEMS_START || nWhich>EE_ITEMS_END) bOnly=sal_False;
@@ -561,17 +560,17 @@ sal_Bool SearchOutlinerItems(const SfxItemSet& rSet, sal_Bool bInklDefaults, sal
 
 sal_uInt16* RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRangeBeg, sal_uInt16 nRangeEnd)
 {
-    // insgesamt sind 6 Faelle moeglich (je Range):
-    //         [Beg..End]          zu entfernender Range
-    // [b..e]    [b..e]    [b..e]  Fall 1,3,2: egal, ganz weg, egal  + Ranges
-    // [b........e]  [b........e]  Fall 4,5  : Bereich verkleinern   | in
-    // [b......................e]  Fall 6    : Splitting             + pOldWhichTable
+    // Six possible cases (per range):
+    //         [Beg..End]          Range, to delete
+    // [b..e]    [b..e]    [b..e]  Cases 1,3,2: doesn't matter, delete, doesn't matter  + Ranges
+    // [b........e]  [b........e]  Cases 4,5  : shrink range                            | in
+    // [b......................e]  Case  6    : splitting                               + pOldWhichTable
     sal_uInt16 nAnz=0;
     while (pOldWhichTable[nAnz]!=0) nAnz++;
-    nAnz++; // nAnz muesste nun in jedem Fall eine ungerade Zahl sein (0 am Ende des Arrays)
-    DBG_ASSERT((nAnz&1)==1,"Joe: RemoveWhichRange: WhichTable hat keine ungerade Anzahl von Eintraegen");
+    nAnz++; // nAnz should now be an odd number (0 for end of array)
+    DBG_ASSERT((nAnz&1)==1,"RemoveWhichRange: WhichTable doesn't have an odd number of entries.");
     sal_uInt16 nAlloc=nAnz;
-    // benoetigte Groesse des neuen Arrays ermitteln
+    // check necessary size of new array
     sal_uInt16 nNum=nAnz-1;
     while (nNum!=0) {
         nNum-=2;
@@ -587,8 +586,8 @@ sal_uInt16* RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRange
 
     sal_uInt16* pNewWhichTable=new sal_uInt16[nAlloc];
     memcpy(pNewWhichTable,pOldWhichTable,nAlloc*sizeof(sal_uInt16));
-    pNewWhichTable[nAlloc-1]=0; // im Falle 3 fehlt die 0 am Ende
-    // nun die unerwuenschten Ranges entfernen
+    pNewWhichTable[nAlloc-1]=0; // in case 3, there's no 0 at the end.
+    // now remove the unwanted ranges
     nNum=nAlloc-1;
     while (nNum!=0) {
         nNum-=2;
@@ -605,14 +604,14 @@ sal_uInt16* RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRange
             case 3: {
                 unsigned nTailBytes=(nAnz-(nNum+2))*sizeof(sal_uInt16);
                 memcpy(&pNewWhichTable[nNum],&pNewWhichTable[nNum+2],nTailBytes);
-                nAnz-=2; // Merken: Array hat sich verkleinert
+                nAnz-=2; // remember: array is now smaller
             } break;
             case 4: pNewWhichTable[nNum+1]=nRangeBeg-1; break;
             case 5: pNewWhichTable[nNum]=nRangeEnd+1;     break;
             case 6: {
                 unsigned nTailBytes=(nAnz-(nNum+2))*sizeof(sal_uInt16);
                 memcpy(&pNewWhichTable[nNum+4],&pNewWhichTable[nNum+2],nTailBytes);
-                nAnz+=2; // Merken: Array hat sich vergroessert
+                nAnz+=2; // remember:array is now larger
                 pNewWhichTable[nNum+2]=nRangeEnd+1;
                 pNewWhichTable[nNum+3]=pNewWhichTable[nNum+1];
                 pNewWhichTable[nNum+1]=nRangeBeg-1;
@@ -626,7 +625,7 @@ sal_uInt16* RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRange
 
 SvdProgressInfo::SvdProgressInfo( Link *_pLink )
 {
-    DBG_ASSERT(_pLink!=NULL,"SvdProgressInfo(): Kein Link angegeben!!");
+    DBG_ASSERT(_pLink!=NULL,"SvdProgressInfo(): No Link stated!");
 
     pLink = _pLink;
     nSumActionCount = 0;
@@ -700,7 +699,7 @@ void SvdProgressInfo::ReportError()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// #i101872# isolate GetTextEditBackgroundColor to tooling; it woll anyways only be used as long
+// #i101872# isolate GetTextEditBackgroundColor to tooling; it will anyways only be used as long
 // as text edit is not running on overlay
 
 namespace
@@ -733,7 +732,7 @@ namespace
             {
                 SdrTextObj* pText = dynamic_cast< SdrTextObj * >(pObj);
 
-                // #108867# Exclude zero master page object (i.e. background shape) from color query
+                // Exclude zero master page object (i.e. background shape) from color query
                 if(pText
                     && pObj->IsClosedObj()
                     && (!bMaster || (!pObj->IsNotVisibleAsMaster() && 0 != no))
@@ -770,7 +769,7 @@ namespace
                 aSet &= rPage.TRG_GetMasterPageVisibleLayers();
                 SdrPage& rMasterPage = rPage.TRG_GetMasterPage();
 
-                // #108867# Don't fall back to background shape on
+                // Don't fall back to background shape on
                 // master pages. This is later handled by
                 // GetBackgroundColor, and is necessary to cater for
                 // the silly ordering: 1. shapes, 2. master page
@@ -780,7 +779,7 @@ namespace
             }
         }
 
-        // #108867# Only now determine background color from background shapes
+        // Only now determine background color from background shapes
         if(!bRet && !bSkipBackgroundShape)
         {
             rCol = rPage.GetPageBackgroundColor();

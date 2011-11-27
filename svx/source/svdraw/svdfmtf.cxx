@@ -201,7 +201,7 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
         if(pProgrInfo != NULL)
         {
           nActionsToReport++;
-          if(nActionsToReport >= 16) // Alle 16 Action updaten
+          if(nActionsToReport >= 16) // update all 16 actions
           {
             if(!pProgrInfo->ReportActions(nActionsToReport))
               break;
@@ -216,19 +216,18 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
         nActionsToReport = 0;
     }
 
-    // MapMode-Scaling  vornehmen
+    // MapMode scaling
     MapScaling();
-    // Objekte in vorgegebenes Rechteck hineinskalieren
+    // scale objects to predetermined rectangle
     sal_uIntPtr nAnz=aTmpList.GetObjCount();
 
-    // Beim berechnen der Fortschrittsanzeige wird GetActionSize()*3 benutzt.
-    // Da in aTmpList allerdings weniger eintraege als GetActionSize()
-    // existieren koennen, muessen hier die zuviel vermuteten Actionen wieder
-    // hinzugefuegt werden.
+    // To calculate the progress meter, we use GetActionSize()*3.
+    // However, aTmpList has a lower entry count limit than GetActionSize(),
+    // so the actions that were assumed were too much have to be re-added.
     nActionsToReport = (pMtf->GetActionSize() - nAnz)*2;
 
 
-    // Alle noch nicht gemeldeten Rescales melden
+    // announce all currently unannounced rescales
     if(pProgrInfo)
     {
         pProgrInfo->ReportRescales(nActionsToReport);
@@ -236,7 +235,7 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     }
     nActionsToReport = 0;
 
-    // alle in aTmpList zwischengespeicherten Objekte nun in rOL ab der Position nInsPos einfuegen
+    // insert all objects cached in aTmpList zwischengespeicherten Objekte now into rOL from nInsPos
     if (nInsPos>rOL.GetObjCount()) nInsPos=rOL.GetObjCount();
     SdrInsertReason aReason(SDRREASON_VIEWCALL);
     for (sal_uIntPtr i=0; i<nAnz; i++)
@@ -248,7 +247,7 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
         if(pProgrInfo != NULL)
         {
             nActionsToReport++;
-            if(nActionsToReport >= 32) // Alle 32 Action updaten
+            if(nActionsToReport >= 32) // update all 32 actions
             {
                 pProgrInfo->ReportInserts(nActionsToReport);
                 nActionsToReport = 0;
@@ -257,7 +256,7 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     }
     if (pTmpMtf!=NULL) delete pTmpMtf;
 
-    // ein letztesmal alle verbliebennen Inserts reporten
+    // report all remaining inserts for the last time
     if(pProgrInfo != NULL)
     {
         pProgrInfo->ReportInserts(nActionsToReport);
@@ -987,7 +986,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pM
 
                     if(aVD.IsLineColor())
                     {
-                        // switch line off; when there was one there will be a
+                        // switch line off; if there was one, there will be a
                         // META_POLYLINE_ACTION following creating another object
                         const Color aLineColor(aVD.GetLineColor());
                         aVD.SetLineColor();

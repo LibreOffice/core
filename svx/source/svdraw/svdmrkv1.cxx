@@ -36,17 +36,7 @@
 #include "svddrgm1.hxx"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  @@@@@  @@  @@ @@  @@ @@  @@ @@@@@@ @@   @@  @@@@  @@@@@  @@  @@ @@ @@@@@ @@@@@  @@  @@ @@  @@  @@@@
-//  @@  @@ @@  @@ @@@ @@ @@  @@   @@   @@@ @@@ @@  @@ @@  @@ @@  @@ @@ @@    @@  @@ @@  @@ @@@ @@ @@  @@
-//  @@  @@ @@  @@ @@@@@@ @@ @@    @@   @@@@@@@ @@  @@ @@  @@ @@ @@  @@ @@    @@  @@ @@  @@ @@@@@@ @@
-//  @@@@@  @@  @@ @@@@@@ @@@@     @@   @@@@@@@ @@@@@@ @@@@@  @@@@   @@ @@@@  @@@@@  @@  @@ @@@@@@ @@ @@@
-//  @@     @@  @@ @@ @@@ @@ @@    @@   @@ @ @@ @@  @@ @@  @@ @@ @@  @@ @@    @@  @@ @@  @@ @@ @@@ @@  @@
-//  @@     @@  @@ @@  @@ @@  @@   @@   @@   @@ @@  @@ @@  @@ @@  @@ @@ @@    @@  @@ @@  @@ @@  @@ @@  @@
-//  @@      @@@@  @@  @@ @@  @@   @@   @@   @@ @@  @@ @@  @@ @@  @@ @@ @@@@@ @@  @@  @@@@  @@  @@  @@@@@
-//
+// Point Selection
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 sal_Bool SdrMarkView::HasMarkablePoints() const
@@ -200,7 +190,6 @@ sal_Bool SdrMarkView::ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, sal_Bool bUnmar
         }
     }
 
-    // #97016# II: Sort handles. This was missing in ImpMarkPoint all the time.
     aHdl.Sort();
 
     return sal_True;
@@ -246,13 +235,13 @@ sal_Bool SdrMarkView::MarkPoints(const Rectangle* pRect, sal_Bool bUnmark)
         if (IsPointMarkable(*pHdl) && pHdl->IsSelected()==bUnmark) {
             const SdrObject* pObj=pHdl->GetObj();
             const SdrPageView* pPV=pHdl->GetPageView();
-            if (pObj!=pObj0 || pPV!=pPV0 || pM==NULL) { // Dieser Abschnitt dient zur Optimierung,
+            if (pObj!=pObj0 || pPV!=pPV0 || pM==NULL) { // This section is for optimization,
                 if (pM!=NULL) {
                     SdrUShortCont* pPts=pM->GetMarkedPoints();
                     if (pPts!=NULL) pPts->ForceSort();
                 }
-                sal_uIntPtr nMarkNum=TryToFindMarkedObject(pObj);  // damit ImpMarkPoint() nicht staendig das
-                if (nMarkNum!=CONTAINER_ENTRY_NOTFOUND) { // Objekt in der MarkList suchen muss.
+                sal_uIntPtr nMarkNum=TryToFindMarkedObject(pObj);  // so ImpMarkPoint() doesn't always
+                if (nMarkNum!=CONTAINER_ENTRY_NOTFOUND) { // have to search the object in the MarkList.
                     pM=GetSdrMarkByIndex(nMarkNum);
                     pObj0=pObj;
                     pPV0=pPV;
@@ -261,7 +250,7 @@ sal_Bool SdrMarkView::MarkPoints(const Rectangle* pRect, sal_Bool bUnmark)
                 } else {
 #ifdef DBG_UTIL
                     if (pObj->IsInserted()) {
-                        OSL_FAIL("SdrMarkView::MarkPoints(const Rectangle* pRect): Markiertes Objekt nicht gefunden");
+                        OSL_FAIL("SdrMarkView::MarkPoints(const Rectangle* pRect): Selected object not found.");
                     }
 #endif
                     pM=NULL;
@@ -277,11 +266,10 @@ sal_Bool SdrMarkView::MarkPoints(const Rectangle* pRect, sal_Bool bUnmark)
             }
         }
     }
-    if (pM!=NULL) { // Den zuletzt geaenderten MarkEntry ggf. noch aufraeumen
+    if (pM!=NULL) { // Clean up the last selected MarkEntry, if necessary
         SdrUShortCont* pPts=pM->GetMarkedPoints();
         if (pPts!=NULL) pPts->ForceSort();
     }
-    //HMHif (bHideHdl) ShowMarkHdl(); // #36987#
     if (bChgd) {
         MarkListHasChanged();
     }
@@ -309,7 +297,7 @@ const Rectangle& SdrMarkView::GetMarkedPointsRect() const
 }
 
 void SdrMarkView::SetPlusHandlesAlwaysVisible(sal_Bool bOn)
-{ // HandlePaint optimieren !!!!!!!
+{ // TODO: Optimize HandlePaint!
     ForceUndirtyMrkPnt();
     if (bOn!=bPlusHdlAlways) {
         //HMHBOOL bVis=IsMarkHdlShown();
@@ -322,7 +310,7 @@ void SdrMarkView::SetPlusHandlesAlwaysVisible(sal_Bool bOn)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// ImpSetPointsRects() ist fuer PolyPoints und GluePoints!
+// ImpSetPointsRects() is for PolyPoints and GluePoints!
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrMarkView::ImpSetPointsRects() const
@@ -352,7 +340,7 @@ void SdrMarkView::ImpSetPointsRects() const
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// UndirtyMrkPnt() ist fuer PolyPoints und GluePoints!
+// UndirtyMrkPnt() is for PolyPoints and GluePoints!
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrMarkView::UndirtyMrkPnt() const
@@ -366,8 +354,8 @@ void SdrMarkView::UndirtyMrkPnt() const
         SdrUShortCont* pPts=pM->GetMarkedPoints();
         if (pPts!=NULL) {
             if (pObj->IsPolyObj()) {
-                // Ungueltig markierte Punkte entfernen, also alle
-                // Eintraege die groesser sind als die Punktanzahl des Objekts
+                // Remove invalid selected points, that is, all
+                // entries above the number of points in the object.
                 sal_uInt32 nMax(pObj->GetPointCount());
                 sal_uInt32 nPtNum(0xffffffff);
 
@@ -387,7 +375,7 @@ void SdrMarkView::UndirtyMrkPnt() const
             }
             else
             {
-                OSL_FAIL("SdrMarkView::UndirtyMrkPnt(): Markierte Punkte an einem Objekt, dass kein PolyObj ist!");
+                OSL_FAIL("SdrMarkView::UndirtyMrkPnt(): Selected points on an object that is not a PolyObj!");
                 if(pPts && pPts->GetCount())
                 {
                     pPts->Clear();
@@ -401,9 +389,9 @@ void SdrMarkView::UndirtyMrkPnt() const
         const SdrGluePointList* pGPL=pObj->GetGluePointList();
         if (pPts!=NULL) {
             if (pGPL!=NULL) {
-                // Ungueltig markierte Klebepunkte entfernen, also alle
-                // Eintraege (Id's) die nicht in der GluePointList des
-                // Objekts enthalten sind
+                // Remove invalid selected glue points, that is, all entries
+                // (IDs) that aren't contained in the GluePointList of the
+                // object
                 pPts->ForceSort();
                 for (sal_uIntPtr nIndex=pPts->GetCount(); nIndex>0;) {
                     nIndex--;
@@ -415,7 +403,7 @@ void SdrMarkView::UndirtyMrkPnt() const
                 }
             } else {
                 if (pPts!=NULL && pPts->GetCount()!=0) {
-                    pPts->Clear(); // Objekt hat keine Klebepunkte (mehr)
+                    pPts->Clear(); // object doesn't have any glue points (any more)
                     bChg=sal_True;
                 }
             }
@@ -425,8 +413,6 @@ void SdrMarkView::UndirtyMrkPnt() const
     ((SdrMarkView*)this)->bMrkPntDirty=sal_False;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 sal_Bool SdrMarkView::HasMarkableGluePoints() const
@@ -563,7 +549,7 @@ sal_Bool SdrMarkView::PickGluePoint(const Point& rPnt, SdrObject*& rpObj, sal_uI
                 }
             }
         }
-        bNext=sal_False; // HitNextGluePoint nur beim ersten Obj
+        bNext=sal_False; // HitNextGluePoint only for the first Obj
         if (bBack) nMarkNum++;
     }
     return sal_False;
@@ -591,8 +577,7 @@ sal_Bool SdrMarkView::MarkGluePoint(const SdrObject* pObj, sal_uInt16 nId, const
                 }
             }
         } else {
-            // Objekt implizit markieren ...
-            // ... fehlende Implementation
+            // TODO: implement implicit selection of objects
         }
     }
     if (bChgd) {
@@ -606,7 +591,7 @@ sal_Bool SdrMarkView::IsGluePointMarked(const SdrObject* pObj, sal_uInt16 nId) c
 {
     ForceUndirtyMrkPnt();
     sal_Bool bRet=sal_False;
-    sal_uIntPtr nPos=((SdrMarkView*)this)->TryToFindMarkedObject(pObj); // casting auf NonConst
+    sal_uIntPtr nPos=((SdrMarkView*)this)->TryToFindMarkedObject(pObj); // casting to NonConst
     if (nPos!=CONTAINER_ENTRY_NOTFOUND) {
         const SdrMark* pM=GetSdrMarkByIndex(nPos);
         const SdrUShortCont* pPts=pM->GetMarkedGluePoints();

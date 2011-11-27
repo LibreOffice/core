@@ -35,10 +35,10 @@
 #include <svx/svdpage.hxx>
 #include "svx/svditer.hxx"
 #include <svx/svdpagv.hxx>
-#include <svx/svdopath.hxx> // zur Abschaltung
-#include <svx/svdogrp.hxx>  // des Cache bei
-#include <svx/svdorect.hxx> // GetMarkDescription
-#include "svx/svdstr.hrc"   // Namen aus der Resource
+#include <svx/svdopath.hxx> // To turn off
+#include <svx/svdogrp.hxx>  // the cache at
+#include <svx/svdorect.hxx> // GetMarkDescription.
+#include "svx/svdstr.hrc"   // names taken from the resource
 #include "svx/svdglob.hxx"  // StringCache
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -191,7 +191,7 @@ void SdrMark::ObjectInDestruction(const SdrObject& rObject)
 {
     (void) rObject; // avoid warnings
     OSL_ENSURE(mpSelectedSdrObject && mpSelectedSdrObject == &rObject, "SdrMark::ObjectInDestruction: called form object different from hosted one (!)");
-    OSL_ENSURE(mpSelectedSdrObject, "SdrMark::ObjectInDestruction: still seleceted SdrObject is deleted, deselect first (!)");
+    OSL_ENSURE(mpSelectedSdrObject, "SdrMark::ObjectInDestruction: still selected SdrObject is deleted, deselect first (!)");
     mpSelectedSdrObject = 0L;
 }
 
@@ -401,7 +401,7 @@ void SdrMarkList::ImpForceSort()
                         if(pCmp->IsCon2())
                             pAkt->SetCon2(sal_True);
 
-                        // pCmp loeschen.
+                        // delete pCmp
                         maList.Remove();
 
                         delete pCmp;
@@ -452,8 +452,6 @@ void SdrMarkList::operator=(const SdrMarkList& rLst)
 
 sal_uLong SdrMarkList::FindObject(const SdrObject* pObj) const
 {
-    // #109658#
-    //
     // Since relying on OrdNums is not allowed for the selection because objects in the
     // selection may not be inserted in a list if they are e.g. modified ATM, i changed
     // this loop to just look if the object pointer is in the selection.
@@ -497,7 +495,7 @@ void SdrMarkList::InsertEntry(const SdrMark& rMark, sal_Bool bChkSort)
 
         if(pLastObj == pNeuObj)
         {
-            // Aha, den gibt's schon
+            // This one already exists.
             // Con1/Con2 Merging
             if(rMark.IsCon1())
                 pLast->SetCon1(sal_True);
@@ -510,7 +508,7 @@ void SdrMarkList::InsertEntry(const SdrMark& rMark, sal_Bool bChkSort)
             SdrMark* pKopie = new SdrMark(rMark);
             maList.Insert(pKopie, CONTAINER_APPEND);
 
-            // und nun checken, ob die Sortierung noch ok ist
+            // now check if the sort is ok
             const SdrObjList* pLastOL = pLastObj!=0L ? pLastObj->GetObjList() : 0L;
             const SdrObjList* pNeuOL = pNeuObj !=0L ? pNeuObj ->GetObjList() : 0L;
 
@@ -521,13 +519,13 @@ void SdrMarkList::InsertEntry(const SdrMark& rMark, sal_Bool bChkSort)
 
                 if(nNeuNum < nLastNum)
                 {
-                    // irgendwann muss mal sortiert werden
+                    // at some point, we have to sort
                     mbSorted = sal_False;
                 }
             }
             else
             {
-                // irgendwann muss mal sortiert werden
+                // at some point, we have to sort
                 mbSorted = sal_False;
             }
         }
@@ -539,7 +537,7 @@ void SdrMarkList::InsertEntry(const SdrMark& rMark, sal_Bool bChkSort)
 void SdrMarkList::DeleteMark(sal_uLong nNum)
 {
     SdrMark* pMark = GetMark(nNum);
-    DBG_ASSERT(pMark!=0L,"DeleteMark: MarkEntry nicht gefunden");
+    DBG_ASSERT(pMark!=0L,"DeleteMark: MarkEntry not found.");
 
     if(pMark)
     {
@@ -552,7 +550,7 @@ void SdrMarkList::DeleteMark(sal_uLong nNum)
 void SdrMarkList::ReplaceMark(const SdrMark& rNewMark, sal_uLong nNum)
 {
     SdrMark* pMark = GetMark(nNum);
-    DBG_ASSERT(pMark!=0L,"ReplaceMark: MarkEntry nicht gefunden");
+    DBG_ASSERT(pMark!=0L,"ReplaceMark: MarkEntry not found.");
 
     if(pMark)
     {
@@ -570,7 +568,7 @@ void SdrMarkList::Merge(const SdrMarkList& rSrcList, sal_Bool bReverse)
 
     if(rSrcList.mbSorted)
     {
-        // Merging ohne ein Sort bei rSrcList zu erzwingen
+        // merge without forcing a Sort in rSrcList
         bReverse = sal_False;
     }
 
@@ -617,7 +615,7 @@ sal_Bool SdrMarkList::DeletePageView(const SdrPageView& rPV)
 sal_Bool SdrMarkList::InsertPageView(const SdrPageView& rPV)
 {
     sal_Bool bChgd(sal_False);
-    DeletePageView(rPV); // erstmal alle raus, dann die ganze Seite hinten dran
+    DeletePageView(rPV); // delete all of them, then append the entire page
     SdrObject* pObj;
     const SdrObjList* pOL = rPV.GetObjList();
     sal_uLong nObjAnz(pOL->GetObjCount());
@@ -645,7 +643,7 @@ const XubString& SdrMarkList::GetMarkDescription() const
 
     if(mbNameOk && 1L == nAnz)
     {
-        // Bei Einfachselektion nur Textrahmen cachen
+        // if it's a single selection, cache only text frame
         const SdrObject* pObj = GetMark(0)->GetMarkedSdrObj();
         const SdrTextObj* pTextObj = PTR_CAST(SdrTextObj, pObj);
 
@@ -731,14 +729,14 @@ const XubString& SdrMarkList::GetPointMarkDescription(sal_Bool bGlue) const
 
         if(nMarkPtObjAnz > 1 && rNameOk)
         {
-            // vorzeitige Entscheidung
+            // preliminary decision
             return rName;
         }
     }
 
     if(rNameOk && 1L == nMarkPtObjAnz)
     {
-        // Bei Einfachselektion nur Textrahmen cachen
+        // if it's a single selection, cache only text frame
         const SdrObject* pObj = GetMark(0)->GetMarkedSdrObj();
         const SdrTextObj* pTextObj = PTR_CAST(SdrTextObj,pObj);
 
@@ -961,7 +959,7 @@ namespace sdr
             maMarkedEdgesOfMarkedNodes.Clear();
             maAllMarkedObjects.clear();
 
-            // #126320# GetMarkCount after ForceSort
+            // GetMarkCount after ForceSort
             const sal_uLong nMarkAnz(maMarkedObjectList.GetMarkCount());
 
             for(sal_uLong a(0L); a < nMarkAnz; a++)
@@ -1003,7 +1001,7 @@ namespace sdr
 
                                     if(CONTAINER_ENTRY_NOTFOUND == maMarkedObjectList.FindObject(pEdge))
                                     {
-                                        // nachsehen, ob er selbst markiert ist
+                                        // check if it itself is selected
                                         maEdgesOfMarkedNodes.InsertEntry(aM);
                                     }
                                     else

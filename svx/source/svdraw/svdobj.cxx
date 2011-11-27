@@ -30,7 +30,7 @@
 
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include <vcl/metaact.hxx>   // fuer TakeContour
+#include <vcl/metaact.hxx>   // for TakeContour
 #include <vcl/cvtsvm.hxx>
 #include <tools/line.hxx>
 #include <tools/bigint.hxx>
@@ -44,10 +44,10 @@
 #include <svx/svddrag.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svdovirt.hxx>  // Fuer Add/Del Ref
-#include <svx/svdview.hxx>   // fuer Dragging (Ortho abfragen)
+#include <svx/svdovirt.hxx>  // for Add/Del Ref
+#include <svx/svdview.hxx>   // for Dragging (check Ortho)
 #include "svx/svdglob.hxx"   // StringCache
-#include <svx/svdstr.hrc>    // Objektname
+#include <svx/svdstr.hrc>    // the object's name
 #include <svx/svdogrp.hxx>   // Factory
 #include <svx/svdopath.hxx>  // Factory
 #include <svx/svdoedge.hxx>  // Factory
@@ -260,13 +260,13 @@ SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
                 if (pNeuUserData!=NULL) {
                     pNeuPlusData->pUserDataList->InsertUserData(pNeuUserData);
                 } else {
-                    OSL_FAIL("SdrObjPlusData::Clone(): UserData.Clone() liefert NULL");
+                    OSL_FAIL("SdrObjPlusData::Clone(): UserData.Clone() returns NULL.");
                 }
             }
         }
     }
     if (pGluePoints!=NULL) pNeuPlusData->pGluePoints=new SdrGluePointList(*pGluePoints);
-    // MtfAnimator wird auch nicht mitkopiert
+    // MtfAnimator isn't copied either
 
     // #i68101#
     // copy object name, title and description
@@ -481,7 +481,7 @@ void SdrObject::SetModel(SdrModel* pNewModel)
         }
     }
 
-    // update listeners at possible api wrapper object
+    // update listeners at possible API wrapper object
     if( pModel != pNewModel )
     {
         SvxShape* pShape = getSvxShape();
@@ -806,8 +806,8 @@ void SdrObject::SetNavigationPosition (const sal_uInt32 nNewPosition)
 
 
 // To make clearer that this method may trigger RecalcBoundRect and thus may be
-// expensive and somtimes problematic (inside a bigger object change You will get
-// non-useful BoundRects sometimes) i rename that method from GetBoundRect() to
+// expensive and sometimes problematic (inside a bigger object change you will get
+// non-useful BoundRects sometimes) I rename that method from GetBoundRect() to
 // GetCurrentBoundRect().
 const Rectangle& SdrObject::GetCurrentBoundRect() const
 {
@@ -821,7 +821,7 @@ const Rectangle& SdrObject::GetCurrentBoundRect() const
 
 // To have a possibility to get the last calculated BoundRect e.g for producing
 // the first rectangle for repaints (old and new need to be used) without forcing
-// a RecalcBoundRect (which may be problematical and expensive sometimes) i add here
+// a RecalcBoundRect (which may be problematical and expensive sometimes) I add here
 // a new method for accessing the last BoundRect.
 const Rectangle& SdrObject::GetLastBoundRect() const
 {
@@ -882,7 +882,7 @@ void SdrObject::BroadcastObjectChange() const
 
 void SdrObject::SetChanged()
 {
-    // For test purposes, use the new ViewContact for change
+    // For testing purposes, use the new ViewContact for change
     // notification now.
     ActionChanged();
 
@@ -892,7 +892,7 @@ void SdrObject::SetChanged()
     }
 }
 
-// Tooling for painting a single object to a OutputDevice.
+// tooling for painting a single object to an OutputDevice.
 sal_Bool SdrObject::SingleObjectPainter(OutputDevice& rOut) const
 {
     sdr::contact::SdrObjectVector aObjectVector;
@@ -901,7 +901,6 @@ sal_Bool SdrObject::SingleObjectPainter(OutputDevice& rOut) const
     sdr::contact::ObjectContactOfObjListPainter aPainter(rOut, aObjectVector, GetPage());
     sdr::contact::DisplayInfo aDisplayInfo;
 
-    // do processing
     aPainter.ProcessDisplay(aDisplayInfo);
 
     return sal_True;
@@ -937,7 +936,7 @@ SdrObject& SdrObject::operator=(const SdrObject& rObj)
 
     // The Clone() method uses the local copy constructor from the individual
     // sdr::properties::BaseProperties class. Since the target class maybe for another
-    // draw object a SdrObject needs to be provided, as in the nromal constructor.
+    // draw object, an SdrObject needs to be provided, as in the normal constructor.
     mpProperties = &rObj.GetProperties().Clone(*this);
 
     pModel  =rObj.pModel;
@@ -951,9 +950,7 @@ SdrObject& SdrObject::operator=(const SdrObject& rObj)
     bNoPrint=rObj.bNoPrint;
     mbVisible=rObj.mbVisible;
     bMarkProt=rObj.bMarkProt;
-    //EmptyPresObj wird nicht kopiert: nun doch!
     bEmptyPresObj =rObj.bEmptyPresObj;
-    //NotVisibleAsMaster wird nicht kopiert: nun doch!
     bNotVisibleAsMaster=rObj.bNotVisibleAsMaster;
     bSnapRectDirty=sal_True;
     bNotMasterCachable=rObj.bNotMasterCachable;
@@ -963,7 +960,7 @@ SdrObject& SdrObject::operator=(const SdrObject& rObj)
         pPlusData=rObj.pPlusData->Clone(this);
     }
     if (pPlusData!=NULL && pPlusData->pBroadcast!=NULL) {
-        delete pPlusData->pBroadcast; // der Broadcaster wird nicht mitkopiert
+        delete pPlusData->pBroadcast; // broadcaster isn't copied
         pPlusData->pBroadcast=NULL;
     }
     return *this;
@@ -1085,7 +1082,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
         SfxItemSet aNewSet(*GetObjectItemPool());
 
         // #i101980# ignore LineWidth; that's what the old implementation
-        // did. With linewidth, the result may be huge due to fat/thick
+        // did. With line width, the result may be huge due to fat/thick
         // line decompositions
         aNewSet.Put(XLineWidthItem(0));
 
@@ -1110,7 +1107,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
             const std::vector< basegfx::B2DPolyPolygon >& rResult(aExtractor.getExtractedContour());
             const sal_uInt32 nSize(rResult.size());
 
-            // when count is one, it is implied that the object has only it's normal
+            // when count is one, it is implied that the object has only its normal
             // contour anyways and TakeCountour() is to return an empty PolyPolygon
             // (see old implementation for historical reasons)
             if(nSize > 1)
@@ -1140,14 +1137,14 @@ SdrHdl* SdrObject::GetHdl(sal_uInt32 nHdlNum) const
     SdrHdl* pH=NULL;
     const Rectangle& rR=GetSnapRect();
     switch (nHdlNum) {
-        case 0: pH=new SdrHdl(rR.TopLeft(),     HDL_UPLFT); break; // Oben links
-        case 1: pH=new SdrHdl(rR.TopCenter(),   HDL_UPPER); break; // Oben
-        case 2: pH=new SdrHdl(rR.TopRight(),    HDL_UPRGT); break; // Oben rechts
-        case 3: pH=new SdrHdl(rR.LeftCenter(),  HDL_LEFT ); break; // Links
-        case 4: pH=new SdrHdl(rR.RightCenter(), HDL_RIGHT); break; // Rechts
-        case 5: pH=new SdrHdl(rR.BottomLeft(),  HDL_LWLFT); break; // Unten links
-        case 6: pH=new SdrHdl(rR.BottomCenter(),HDL_LOWER); break; // Unten
-        case 7: pH=new SdrHdl(rR.BottomRight(), HDL_LWRGT); break; // Unten rechts
+        case 0: pH=new SdrHdl(rR.TopLeft(),     HDL_UPLFT); break;
+        case 1: pH=new SdrHdl(rR.TopCenter(),   HDL_UPPER); break;
+        case 2: pH=new SdrHdl(rR.TopRight(),    HDL_UPRGT); break;
+        case 3: pH=new SdrHdl(rR.LeftCenter(),  HDL_LEFT ); break;
+        case 4: pH=new SdrHdl(rR.RightCenter(), HDL_RIGHT); break;
+        case 5: pH=new SdrHdl(rR.BottomLeft(),  HDL_LWLFT); break;
+        case 6: pH=new SdrHdl(rR.BottomCenter(),HDL_LOWER); break;
+        case 7: pH=new SdrHdl(rR.BottomRight(), HDL_LWRGT); break;
     }
     return pH;
 }
@@ -1204,13 +1201,13 @@ Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
         nYMul=Abs(nYMul);
         nXDiv=Abs(nXDiv);
         nYDiv=Abs(nYDiv);
-        Fraction aXFact(nXMul,nXDiv); // Fractions zum kuerzen
-        Fraction aYFact(nYMul,nYDiv); // und zum vergleichen
+        Fraction aXFact(nXMul,nXDiv); // fractions for canceling
+        Fraction aYFact(nYMul,nYDiv); // and for comparing
         nXMul=aXFact.GetNumerator();
         nYMul=aYFact.GetNumerator();
         nXDiv=aXFact.GetDenominator();
         nYDiv=aYFact.GetDenominator();
-        if (bEcke) { // Eckpunkthandles
+        if (bEcke) { // corner point handles
             bool bUseX=(aXFact<aYFact) != bBigOrtho;
             if (bUseX) {
                 long nNeed=long(BigInt(nHgt0)*BigInt(nXMul)/BigInt(nXDiv));
@@ -1223,7 +1220,7 @@ Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
                 if (bLft) aTmpRect.Left()=aTmpRect.Right()-nNeed;
                 if (bRgt) aTmpRect.Right()=aTmpRect.Left()+nNeed;
             }
-        } else { // Scheitelpunkthandles
+        } else { // apex handles
             if ((bLft || bRgt) && nXDiv!=0) {
                 long nHgt0b=aRect.Bottom()-aRect.Top();
                 long nNeed=long(BigInt(nHgt0b)*BigInt(nXMul)/BigInt(nXDiv));
@@ -1366,7 +1363,7 @@ Pointer SdrObject::GetCreatePointer() const
     return Pointer(POINTER_CROSS);
 }
 
-// Transformationen
+// transformations
 void SdrObject::NbcMove(const Size& rSiz)
 {
     MoveRect(aOutRect,rSiz);
@@ -1416,7 +1413,7 @@ void SdrObject::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
         aOutRect.Bottom()=-R.Left();
     }
     aOutRect.Move(rRef.X(),rRef.Y());
-    aOutRect.Justify(); // Sicherheitshalber
+    aOutRect.Justify(); // just in case
     SetRectsDirty();
     NbcRotateGluePoints(rRef,nWink,sn,cs);
     SetGlueReallyAbsolute(sal_False);
@@ -1429,25 +1426,25 @@ void SdrObject::NbcMirror(const Point& rRef1, const Point& rRef2)
     Rectangle R(aOutRect);
     long dx=rRef2.X()-rRef1.X();
     long dy=rRef2.Y()-rRef1.Y();
-    if (dx==0) {          // Vertikale Achse
+    if (dx==0) {          // vertical axis
         aOutRect.Left() =-R.Right();
         aOutRect.Right()=-R.Left();
-    } else if (dy==0) {   // Horizontale Achse
+    } else if (dy==0) {   // horizontal axis
         aOutRect.Top()   =-R.Bottom();
         aOutRect.Bottom()=-R.Top();
-    } else if (dx==dy) {  /* 45 Grad Achse \ */
+    } else if (dx==dy) {  // 45deg axis
         aOutRect.Left()  =R.Top();
         aOutRect.Right() =R.Bottom();
         aOutRect.Top()   =R.Left();
         aOutRect.Bottom()=R.Right();
-    } else if (dx==-dy) { // 45 Grad Achse /
+    } else if (dx==-dy) { // 45deg axis
         aOutRect.Left()  =-R.Bottom();
         aOutRect.Right() =-R.Top();
         aOutRect.Top()   =-R.Right();
         aOutRect.Bottom()=-R.Left();
     }
     aOutRect.Move(rRef1.X(),rRef1.Y());
-    aOutRect.Justify(); // Sicherheitshalber
+    aOutRect.Justify(); // just in case
     SetRectsDirty();
     NbcMirrorGluePoints(rRef1,rRef2);
     SetGlueReallyAbsolute(sal_False);
@@ -1517,7 +1514,7 @@ void SdrObject::NbcSetRelativePos(const Point& rPnt)
 {
     Point aRelPos0(GetSnapRect().TopLeft()-aAnchor);
     Size aSiz(rPnt.X()-aRelPos0.X(),rPnt.Y()-aRelPos0.Y());
-    NbcMove(aSiz); // Der ruft auch das SetRectsDirty()
+    NbcMove(aSiz); // This also calls SetRectsDirty()
 }
 
 void SdrObject::SetRelativePos(const Point& rPnt)
@@ -1540,7 +1537,7 @@ void SdrObject::NbcSetAnchorPos(const Point& rPnt)
 {
     Size aSiz(rPnt.X()-aAnchor.X(),rPnt.Y()-aAnchor.Y());
     aAnchor=rPnt;
-    NbcMove(aSiz); // Der ruft auch das SetRectsDirty()
+    NbcMove(aSiz); // This also calls SetRectsDirty()
 }
 
 void SdrObject::SetAnchorPos(const Point& rPnt)
@@ -1816,7 +1813,7 @@ void SdrObject::SaveGeoData(SdrObjGeoData& rGeo) const
     rGeo.bClosedObj    =bClosedObj    ;
     rGeo.mnLayerID = mnLayerID;
 
-    // Benutzerdefinierte Klebepunkte
+    // user-defined glue points
     if (pPlusData!=NULL && pPlusData->pGluePoints!=NULL) {
         if (rGeo.pGPL!=NULL) {
             *rGeo.pGPL=*pPlusData->pGluePoints;
@@ -1843,7 +1840,7 @@ void SdrObject::RestGeoData(const SdrObjGeoData& rGeo)
     bClosedObj    =rGeo.bClosedObj    ;
     mnLayerID = rGeo.mnLayerID;
 
-    // Benutzerdefinierte Klebepunkte
+    // user-defined glue points
     if (rGeo.pGPL!=NULL) {
         ImpForcePlusData();
         if (pPlusData->pGluePoints!=NULL) {
@@ -2171,7 +2168,7 @@ void SdrObject::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRe
     GetProperties().SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
 }
 
-// Das Broadcasting beim Setzen der Attribute wird vom AttrObj gemanagt
+// Broadcasting while setting attributes is managed by the AttrObj.
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool SdrObject::IsNode() const
@@ -2234,9 +2231,8 @@ SdrGluePointList* SdrObject::ForceGluePointList()
 
 void SdrObject::SetGlueReallyAbsolute(bool bOn)
 {
-    // erst Const-Aufruf um zu sehen, ob
-    // ueberhaupt Klebepunkte da sind
-    // const-Aufruf erzwingen!
+    // First a const call to see whether there are any glue points.
+    // Force const call!
     if (GetGluePointList()!=NULL) {
         SdrGluePointList* pGPL=ForceGluePointList();
         pGPL->SetReallyAbsolute(bOn,*this);
@@ -2245,9 +2241,8 @@ void SdrObject::SetGlueReallyAbsolute(bool bOn)
 
 void SdrObject::NbcRotateGluePoints(const Point& rRef, long nWink, double sn, double cs)
 {
-    // erst Const-Aufruf um zu sehen, ob
-    // ueberhaupt Klebepunkte da sind
-    // const-Aufruf erzwingen!
+    // First a const call to see whether there are any glue points.
+    // Force const call!
     if (GetGluePointList()!=NULL) {
         SdrGluePointList* pGPL=ForceGluePointList();
         pGPL->Rotate(rRef,nWink,sn,cs,this);
@@ -2256,9 +2251,8 @@ void SdrObject::NbcRotateGluePoints(const Point& rRef, long nWink, double sn, do
 
 void SdrObject::NbcMirrorGluePoints(const Point& rRef1, const Point& rRef2)
 {
-    // erst Const-Aufruf um zu sehen, ob
-    // ueberhaupt Klebepunkte da sind
-    // const-Aufruf erzwingen!
+    // First a const call to see whether there are any glue points.
+    // Force const call!
     if (GetGluePointList()!=NULL) {
         SdrGluePointList* pGPL=ForceGluePointList();
         pGPL->Mirror(rRef1,rRef2,this);
@@ -2267,9 +2261,8 @@ void SdrObject::NbcMirrorGluePoints(const Point& rRef1, const Point& rRef2)
 
 void SdrObject::NbcShearGluePoints(const Point& rRef, long nWink, double tn, bool bVShear)
 {
-    // erst Const-Aufruf um zu sehen, ob
-    // ueberhaupt Klebepunkte da sind
-    // const-Aufruf erzwingen!
+    // First a const call to see whether there are any glue points.
+    // Force const call!
     if (GetGluePointList()!=NULL) {
         SdrGluePointList* pGPL=ForceGluePointList();
         pGPL->Shear(rRef,nWink,tn,bVShear,this);
@@ -2548,7 +2541,7 @@ void SdrObject::SetInserted(sal_Bool bIns)
         if (bIns) SendUserCall(SDRUSERCALL_INSERTED,aBoundRect0);
         else SendUserCall(SDRUSERCALL_REMOVED,aBoundRect0);
 
-        if (pPlusData!=NULL && pPlusData->pBroadcast!=NULL) { // #42522#
+        if (pPlusData!=NULL && pPlusData->pBroadcast!=NULL) {
             SdrHint aHint(*this);
             aHint.SetKind(bIns?HINT_OBJINSERTED:HINT_OBJREMOVED);
             pPlusData->pBroadcast->Broadcast(aHint);
@@ -2627,7 +2620,7 @@ void SdrObject::InsertUserData(SdrObjUserData* pData, sal_uInt16 nPos)
         if (pPlusData->pUserDataList==NULL) pPlusData->pUserDataList=new SdrObjUserDataList;
         pPlusData->pUserDataList->InsertUserData(pData,nPos);
     } else {
-        OSL_FAIL("SdrObject::InsertUserData(): pData ist NULL-Pointer");
+        OSL_FAIL("SdrObject::InsertUserData(): pData is NULL pointer.");
     }
 }
 
@@ -2641,7 +2634,7 @@ void SdrObject::DeleteUserData(sal_uInt16 nNum)
             pPlusData->pUserDataList=NULL;
         }
     } else {
-        OSL_FAIL("SdrObject::DeleteUserData(): ungueltiger Index");
+        OSL_FAIL("SdrObject::DeleteUserData(): Invalid Index.");
     }
 }
 
@@ -2659,7 +2652,7 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundR
 
     while( pGroup )
     {
-        // Gruppe benachrichtigen
+        // broadcast to group
         if( pGroup->GetUserCall() )
         {
             SdrUserCallType eChildUserType = SDRUSERCALL_CHILD_CHGATTR;
@@ -2723,7 +2716,7 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundR
     }
 }
 
-// ItemPool fuer dieses Objekt wechseln
+// change ItemPool for this object
 void SdrObject::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel)
 {
     if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
@@ -2808,7 +2801,7 @@ void SdrObject::notifyShapePropertyChange( const ::svx::ShapeProperty _eProperty
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // transformation interface for StarOfficeAPI. This implements support for
-// homogen 3x3 matrices containing the transformation of the SdrObject. At the
+// homogeneous 3x3 matrices containing the transformation of the SdrObject. At the
 // moment it contains a shearX, rotation and translation, but for setting all linear
 // transforms like Scale, ShearX, ShearY, Rotate and Translate are supported.
 //
@@ -2841,7 +2834,7 @@ sal_Bool SdrObject::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B
         {
             case SFX_MAPUNIT_TWIP :
             {
-                // postion
+                // position
                 aTranslate.setX(ImplTwipsToMM(aTranslate.getX()));
                 aTranslate.setY(ImplTwipsToMM(aTranslate.getY()));
 
@@ -2864,7 +2857,7 @@ sal_Bool SdrObject::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B
     return sal_False;
 }
 
-// sets the base geometry of the object using infos contained in the homogen 3x3 matrix.
+// sets the base geometry of the object using infos contained in the homogeneous 3x3 matrix.
 // If it's an SdrPathObj it will use the provided geometry information. The Polygon has
 // to use (0,0) as upper left and will be scaled to the given size in the matrix.
 void SdrObject::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& /*rPolyPolygon*/)
@@ -3039,7 +3032,7 @@ SdrObject* SdrObjFactory::MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, S
 
     if(pObj == NULL)
     {
-        // Na wenn's denn keiner will ...
+        // Well, if no one wants it...
     }
 
     if(pObj != NULL)

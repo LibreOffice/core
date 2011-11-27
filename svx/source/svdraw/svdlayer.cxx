@@ -29,9 +29,9 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <svx/svdlayer.hxx>
-#include <svx/svdmodel.hxx> // fuer Broadcasting
+#include <svx/svdmodel.hxx> // for Broadcasting
 #include "svx/svdglob.hxx"  // StringCache
-#include "svx/svdstr.hrc"   // Namen aus der Resource
+#include "svx/svdstr.hrc"   // names taken from the resource
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // SetOfByte
@@ -213,7 +213,7 @@ void SdrLayer::SetName(const XubString& rNewName)
     if(!rNewName.Equals(aName))
     {
         aName = rNewName;
-        nType = 0; // Userdefined
+        nType = 0; // user defined
 
         if(pModel)
         {
@@ -399,9 +399,9 @@ const SdrLayer* SdrLayerAdmin::GetLayerPerID(sal_uInt16 nID) const
     return pLay;
 }
 
-// Globale LayerID's beginnen mit 0 aufsteigend.
-// Lokale LayerID's beginnen mit 254 absteigend.
-// 255 ist reserviert fuer SDRLAYER_NOTFOUND
+// Global LayerIDs begin at 0 and increase,
+// local LayerIDs begin at 254 and decrease;
+// 255 is reserved for SDRLAYER_NOTFOUND.
 
 SdrLayerID SdrLayerAdmin::GetUniqueLayerID() const
 {

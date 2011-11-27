@@ -93,7 +93,7 @@ void SdrDragStat::NextPoint(bool bSaveReal)
 
 void SdrDragStat::PrevPoint()
 {
-    if (aPnts.Count()>=2) { // einer muss immer da bleiben
+    if (aPnts.Count()>=2) { // one has to remain at all times
         Point* pPnt=(Point*)(aPnts.GetObject(aPnts.Count()-2));
         aPnts.Remove(aPnts.Count()-2);
         delete pPnt;

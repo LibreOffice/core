@@ -68,22 +68,22 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // #i15222#
-// Due to the ressource problems in Win95/98 with bitmap ressources i
-// will change this handle bitmap provinging class. Old version was splitting
+// Due to the resource problems in Win95/98 with bitmap resources I
+// will change this handle bitmap providing class. Old version was splitting
 // and preparing all small handle bitmaps in device bitmap format, now this will
-// be done on the fly. Thus, tehre is only the one big bitmap remembered. With
-// three source bitmaps, this will be 3 system bitmap ressources instead of hundreds.
+// be done on the fly. Thus, there is only one big bitmap in memory. With
+// three source bitmaps, this will be 3 system bitmap resources instead of hundreds.
 // The price for that needs to be evaluated. Maybe we will need another change here
 // if this is too expensive.
 class SdrHdlBitmapSet
 {
-    // the bitmap holding all infos
+    // the bitmap holding all information
     BitmapEx                    maMarkersBitmap;
 
     // the cropped Bitmaps for reusage
     ::std::vector< BitmapEx >   maRealMarkers;
 
-    // elpers
+    // helpers
     BitmapEx& impGetOrCreateTargetBitmap(sal_uInt16 nIndex, const Rectangle& rRectangle);
 
 public:
@@ -122,7 +122,7 @@ BitmapEx& SdrHdlBitmapSet::impGetOrCreateTargetBitmap(sal_uInt16 nIndex, const R
     return rTargetBitmap;
 }
 
-// change getting of bitmap to use the big ressource bitmap
+// change getting of bitmap to use the big resource bitmap
 const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd)
 {
     // fill in size and source position in maMarkersBitmap
@@ -132,7 +132,7 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
     {
         default:
         {
-            OSL_FAIL( "unknown kind of marker" );
+            OSL_FAIL( "Unknown kind of marker." );
             // no break here, return Rect_7x7 as default
         }
         case Rect_7x7:
@@ -249,13 +249,13 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
             return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 1, Rectangle(Point(15, 67), Size(9, 9)));
         }
 
-        case Anchor: // #101688# AnchorTR for SW
+        case Anchor: // AnchorTR for SW
         case AnchorTR:
         {
             return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 2, Rectangle(Point(24, 67), Size(24, 24)));
         }
 
-        // #98388# add AnchorPressed to be able to aninate anchor control
+        // add AnchorPressed to be able to animate anchor control
         case AnchorPressed:
         case AnchorPressedTR:
         {
@@ -418,7 +418,7 @@ void SdrHdl::CreateB2dIAObject()
             eColIndex = (bSelect) ? Cyan : LightCyan;
         if(bRot)
         {
-            // Drehhandles in Rot
+            // red rotation handles
             if(pObj && bSelect)
                 eColIndex = Red;
             else
@@ -523,7 +523,7 @@ void SdrHdl::CreateB2dIAObject()
             {
                 break;
             }
-            // #101688# top right anchor for SW
+            // top right anchor for SW
             case HDL_ANCHOR_TR:
             {
                 eKindOfMarker = AnchorTR;
@@ -613,10 +613,10 @@ BitmapMarkerKind SdrHdl::GetNextBigger(BitmapMarkerKind eKnd) const
         case RectPlus_7x7:      eRetval = RectPlus_9x9;     break;
         case RectPlus_9x9:      eRetval = RectPlus_11x11;   break;
 
-        // #98388# let anchor blink with it's pressed state
+        // let anchor blink with its pressed state
         case Anchor:            eRetval = AnchorPressed;    break;
 
-        // #101688# same for AnchorTR
+        // same for AnchorTR
         case AnchorTR:          eRetval = AnchorPressedTR;  break;
         default:
             break;
@@ -683,7 +683,7 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
             }
         }
 
-        // create animated hdl
+        // create animated handle
         BitmapEx aBmpEx1 = ImpGetBitmapEx( eKindOfMarker, (sal_uInt16)eColIndex );
         BitmapEx aBmpEx2 = ImpGetBitmapEx( eNextBigger,   (sal_uInt16)eColIndex );
 
@@ -783,7 +783,7 @@ Pointer SdrHdl::GetPointer() const
                 break;
         }
     } else {
-        // Fuer Resize von gedrehten Rechtecken die Mauszeiger etwas mitdrehen
+        // When resizing rotated rectangles, rotate the mouse cursor slightly, too
         if (bSize && nDrehWink!=0) {
             long nHdlWink=0;
             switch (eKind) {
@@ -798,7 +798,7 @@ Pointer SdrHdl::GetPointer() const
                 default:
                     break;
             }
-            nHdlWink+=nDrehWink+2249; // und etwas drauf (zum runden)
+            nHdlWink+=nDrehWink+2249; // a little bit more (for rounding)
             while (nHdlWink<0) nHdlWink+=36000;
             while (nHdlWink>=36000) nHdlWink-=36000;
             nHdlWink/=4500;
@@ -838,40 +838,39 @@ Pointer SdrHdl::GetPointer() const
     return Pointer(ePtr);
 }
 
-// #97016# II
 sal_Bool SdrHdl::IsFocusHdl() const
 {
     switch(eKind)
     {
-        case HDL_UPLFT:     // Oben links
-        case HDL_UPPER:     // Oben
-        case HDL_UPRGT:     // Oben rechts
-        case HDL_LEFT:      // Links
-        case HDL_RIGHT:     // Rechts
-        case HDL_LWLFT:     // Unten links
-        case HDL_LOWER:     // Unten
-        case HDL_LWRGT:     // Unten rechts
+        case HDL_UPLFT:
+        case HDL_UPPER:
+        case HDL_UPRGT:
+        case HDL_LEFT:
+        case HDL_RIGHT:
+        case HDL_LWLFT:
+        case HDL_LOWER:
+        case HDL_LWRGT:
         {
-            // if it's a activated TextEdit, it's moved to extended points
+            // if it's an activated TextEdit, it's moved to extended points
             if(pHdlList && pHdlList->IsMoveOutside())
                 return sal_False;
             else
                 return sal_True;
         }
 
-        case HDL_MOVE:      // Handle zum Verschieben des Objekts
-        case HDL_POLY:      // Punktselektion an Polygon oder Bezierkurve
-        case HDL_BWGT:      // Gewicht an einer Bezierkurve
-        case HDL_CIRC:      // Winkel an Kreissegmenten, Eckenradius am Rect
-        case HDL_REF1:      // Referenzpunkt 1, z.B. Rotationsmitte
-        case HDL_REF2:      // Referenzpunkt 2, z.B. Endpunkt der Spiegelachse
-        //case HDL_MIRX:        // Die Spiegelachse selbst
-        case HDL_GLUE:      // GluePoint
-        case HDL_GLUE_DESELECTED:      // formerly a little blue cross
-        // #98388# do NOT activate here, let SW implement their own SdrHdl and
+        case HDL_MOVE:      // handle to move object
+        case HDL_POLY:      // selected point of polygon or curve
+        case HDL_BWGT:      // weight at a curve
+        case HDL_CIRC:      // angle of circle segments, corner radius of rectangles
+        case HDL_REF1:      // reference point 1, e. g. center of rotation
+        case HDL_REF2:      // reference point 2, e. g. endpoint of reflection axis
+        //case HDL_MIRX:        // reflection axis itself
+        case HDL_GLUE:      // glue point
+        case HDL_GLUE_DESELECTED:      // deselected glue point, used to be a little blue cross
+        // do NOT activate here, let SW implement their own SdrHdl and
         // overload IsFocusHdl() there to make the anchor accessible
         //case HDL_ANCHOR:      // anchor symbol (SD, SW)
-        // #101688# same for AnchorTR
+        // same for AnchorTR
         //case HDL_ANCHOR_TR:   // anchor symbol (SD, SW)
 
         //case HDL_TRNS:        // interactive transparence
@@ -977,7 +976,7 @@ Bitmap SdrHdlColor::CreateColorDropper(Color aCol)
 
     // get write access
     BitmapWriteAccess* pWrite = aRetval.AcquireWriteAccess();
-    DBG_ASSERT(pWrite, "Got NO write access to a new Bitmap !!!");
+    DBG_ASSERT(pWrite, "Got NO write access to a new Bitmap!");
 
     if(pWrite)
     {
@@ -1603,7 +1602,7 @@ Pointer ImpMeasureHdl::GetPointer() const
     {
         case 0: case 1: return Pointer(POINTER_HAND);
         case 2: case 3: return Pointer(POINTER_MOVEPOINT);
-        case 4: case 5: return SdrHdl::GetPointer(); // wird dann entsprechend gedreht
+        case 4: case 5: return SdrHdl::GetPointer(); // will then be rotated appropriately
     } // switch
     return Pointer(POINTER_NOTALLOWED);
 }
@@ -1680,7 +1679,7 @@ int ImpSdrHdlListSorter::Compare(const void* pElem1, const void* pElem2) const
 {
     SdrHdlKind eKind1=((SdrHdl*)pElem1)->GetKind();
     SdrHdlKind eKind2=((SdrHdl*)pElem2)->GetKind();
-    // Level 1: Erst normale Handles, dann Glue, dann User, dann Plushandles, dann Retpunkt-Handles
+    // Level 1: first normal handles, then Glue, then User, then Plus handles, then reference point handles
     unsigned n1=1;
     unsigned n2=1;
     if (eKind1!=eKind2)
@@ -1711,9 +1710,9 @@ int ImpSdrHdlListSorter::Compare(const void* pElem1, const void* pElem2) const
                 sal_uInt32 nNum1=((SdrHdl*)pElem1)->GetObjHdlNum();
                 sal_uInt32 nNum2=((SdrHdl*)pElem2)->GetObjHdlNum();
                 if (nNum1==nNum2)
-                { // #48763#
+                {
                     if (eKind1==eKind2)
-                        return (long)pElem1<(long)pElem2 ? -1 : 1; // Notloesung, um immer die gleiche Sortierung zu haben
+                        return (long)pElem1<(long)pElem2 ? -1 : 1; // Hack, to always get to the same sorting
                     return (sal_uInt16)eKind1<(sal_uInt16)eKind2 ? -1 : 1;
                 }
                 else
@@ -1740,14 +1739,14 @@ SdrMarkView* SdrHdlList::GetView() const
     return pView;
 }
 
-// #105678# Help struct for re-sorting handles
+// Helper struct for re-sorting handles
 struct ImplHdlAndIndex
 {
     SdrHdl*                     mpHdl;
     sal_uInt32                  mnIndex;
 };
 
-// #105678# Help method for sorting handles taking care of OrdNums, keeping order in
+// Helper method for sorting handles taking care of OrdNums, keeping order in
 // single objects and re-sorting polygon handles intuitively
 extern "C" int __LOADONCALLAPI ImplSortHdlFunc( const void* pVoid1, const void* pVoid2 )
 {
@@ -1824,7 +1823,6 @@ extern "C" int __LOADONCALLAPI ImplSortHdlFunc( const void* pVoid1, const void* 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// #97016# II
 
 void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
 {
@@ -1847,10 +1845,10 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
             //SDObRefresh = sal_True;
         }
 
-        // #105678# Alloc pointer array for sorted handle list
+        // allocate pointer array for sorted handle list
         ImplHdlAndIndex* pHdlAndIndex = new ImplHdlAndIndex[aList.Count()];
 
-        // #105678# build sorted handle list
+        // build sorted handle list
         sal_uInt32 a;
         for( a = 0; a < aList.Count(); a++)
         {
@@ -1858,10 +1856,9 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
             pHdlAndIndex[a].mnIndex = a;
         }
 
-        // #105678# qsort all entries
         qsort(pHdlAndIndex, aList.Count(), sizeof(ImplHdlAndIndex), ImplSortHdlFunc);
 
-        // #105678# look for old num in sorted array
+        // look for old num in sorted array
         sal_uIntPtr nOldHdl(nOldHdlNum);
 
         if(nOldHdlNum != CONTAINER_ENTRY_NOTFOUND)
@@ -1876,10 +1873,10 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
             }
         }
 
-        // #105678# build new HdlNum
+        // build new HdlNum
         sal_uIntPtr nNewHdl(nOldHdl);
 
-        // #105678# do the focus travel
+        // do the focus travel
         if(bForward)
         {
             if(nOldHdl != CONTAINER_ENTRY_NOTFOUND)
@@ -1924,7 +1921,7 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
             }
         }
 
-        // #105678# build new HdlNum
+        // build new HdlNum
         sal_uInt32 nNewHdlNum(nNewHdl);
 
         // look for old num in sorted array
@@ -1955,7 +1952,7 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
             }
         }
 
-        // #105678# free mem again
+        // free memory again
         delete [] pHdlAndIndex;
     }
 }
@@ -2099,13 +2096,13 @@ void SdrHdlList::Clear()
 
 void SdrHdlList::Sort()
 {
-    // #97016# II: remember current focused handle
+    // remember currently focused handle
     SdrHdl* pPrev = GetFocusHdl();
 
     ImpSdrHdlListSorter aSort(aList);
     aSort.DoSort();
 
-    // #97016# II: get now and compare
+    // get now and compare
     SdrHdl* pNow = GetFocusHdl();
 
     if(pPrev != pNow)

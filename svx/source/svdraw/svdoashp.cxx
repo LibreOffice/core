@@ -55,9 +55,9 @@
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdattrx.hxx>  // NotPersistItems
-#include <svx/svdoedge.hxx>  // Die Verbinder nach Move nochmal anbroadcasten
+#include <svx/svdoedge.hxx>  // for broadcasting connectors to Move
 #include "svx/svdglob.hxx"   // StringCache
-#include "svx/svdstr.hrc"    // Objektname
+#include "svx/svdstr.hrc"    // the object's name
 #include <editeng/eeitem.hxx>
 #include "editeng/editstat.hxx"
 #include <svx/svdoutl.hxx>
@@ -346,7 +346,7 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
             aTempSet.Put(XFillTransparenceItem(nShadowTransparence));
         }
 
-        // hatch and transparence like shadow
+        // hatch and transparency like shadow
         if(bHatchFillUsed)
         {
             XHatch aHatch(((XFillHatchItem&)(rOriginalSet.Get(XATTR_FILLHATCH))).GetHatchValue());
@@ -355,7 +355,7 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
             aTempSet.Put(XFillTransparenceItem(nShadowTransparence));
         }
 
-        // bitmap and transparence like shadow
+        // bitmap and transparency like shadow
         if(bBitmapFillUsed)
         {
             XOBitmap aFillBitmap(((XFillBitmapItem&)(rOriginalSet.Get(XATTR_FILLBITMAP))).GetBitmapValue());
@@ -1830,8 +1830,8 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
                     }
                 }
 
-                // copy new list to local. This is NOT very convenient behaviour, the local
-                // GluePointList should not be set, but be delivered by using GetGluePointList(),
+                // copy new list to local. This is NOT very convenient behavior, the local
+                // GluePointList should not be set, but we delivered by using GetGluePointList(),
                 // maybe on demand. Since the local object is changed here, this is assumed to
                 // be a result of GetGluePointList and thus the list is copied
                 if(pPlusData)
@@ -2212,7 +2212,7 @@ bool SdrObjCustomShape::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
             if (nWdt==1) nWdt=0;
             NbcSetMinTextFrameWidth( nWdt );
         }
-        // Textrahmen neu berechnen
+        // re-calculate text frame
         NbcAdjustTextFrameWidthAndHeight();
     }
     SetRectsDirty();
@@ -2264,7 +2264,7 @@ void SdrObjCustomShape::SetVerticalWriting( sal_Bool bVertical )
             // get item settings
             const SfxItemSet& rSet = GetObjectItemSet();
 
-            // Also exchange hor/ver adjust items
+            // Also exchange horizontal and vertical adjust items
             SdrTextHorzAdjust eHorz = ((SdrTextHorzAdjustItem&)(rSet.Get(SDRATTR_TEXT_HORZADJUST))).GetValue();
             SdrTextVertAdjust eVert = ((SdrTextVertAdjustItem&)(rSet.Get(SDRATTR_TEXT_VERTADJUST))).GetValue();
 
@@ -2274,14 +2274,14 @@ void SdrObjCustomShape::SetVerticalWriting( sal_Bool bVertical )
             // prepare ItemSet to set exchanged width and height items
             SfxItemSet aNewSet(*rSet.GetPool(),
                 SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
-                // Expanded item ranges to also support hor and ver adjust.
+                // Expanded item ranges to also support horizontal and vertical adjust.
                 SDRATTR_TEXT_VERTADJUST, SDRATTR_TEXT_VERTADJUST,
                 SDRATTR_TEXT_AUTOGROWWIDTH, SDRATTR_TEXT_HORZADJUST,
                 0, 0);
 
             aNewSet.Put(rSet);
 
-            // Exchange horz and vert adjusts
+            // Exchange horizontal and vertical adjusts
             switch(eVert)
             {
                 case SDRTEXTVERTADJUST_TOP: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT)); break;
@@ -2344,9 +2344,9 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, 
             aSiz.Width()-=nHDist;
             aSiz.Height()-=nVDist;
             if ( aSiz.Width() < 2 )
-                aSiz.Width() = 2;   // Mindestgroesse 2
+                aSiz.Width() = 2;   // minimum size=2
             if ( aSiz.Height() < 2 )
-                aSiz.Height() = 2; // Mindestgroesse 2
+                aSiz.Height() = 2; // minimum size=2
 
             if(pEdtOutl)
             {
@@ -2354,11 +2354,11 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, 
                 if (bWdtGrow)
                 {
                     Size aSiz2(pEdtOutl->CalcTextSize());
-                    nWdt=aSiz2.Width()+1; // lieber etwas Tolleranz
-                    if (bHgtGrow) nHgt=aSiz2.Height()+1; // lieber etwas Tolleranz
+                    nWdt=aSiz2.Width()+1; // a little more tolerance
+                    if (bHgtGrow) nHgt=aSiz2.Height()+1; // a little more tolerance
                 } else
                 {
-                    nHgt=pEdtOutl->GetTextHeight()+1; // lieber etwas Tolleranz
+                    nHgt=pEdtOutl->GetTextHeight()+1; // a little more tolerance
                 }
             }
             else
@@ -2366,8 +2366,7 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, 
                 Outliner& rOutliner=ImpGetDrawOutliner();
                 rOutliner.SetPaperSize(aSiz);
                 rOutliner.SetUpdateMode(sal_True);
-                // !!! hier sollte ich wohl auch noch mal die Optimierung mit
-                // bPortionInfoChecked usw einbauen
+                // TODO: add the optimization with bPortionInfoChecked again.
                 OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
                 if( pOutlinerParaObject != NULL )
                 {
@@ -2377,12 +2376,12 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, 
                 if ( bWdtGrow )
                 {
                     Size aSiz2(rOutliner.CalcTextSize());
-                    nWdt=aSiz2.Width()+1; // lieber etwas Tolleranz
+                    nWdt=aSiz2.Width()+1; // a little more tolerance
                     if ( bHgtGrow )
-                        nHgt=aSiz2.Height()+1; // lieber etwas Tolleranz
+                        nHgt=aSiz2.Height()+1; // a little more tolerance
                 }
                 else
-                    nHgt = rOutliner.GetTextHeight()+1; // lieber etwas Tolleranz
+                    nHgt = rOutliner.GetTextHeight()+1; // a little more tolerance
                 rOutliner.Clear();
             }
             if ( nWdt < nMinWdt )
@@ -2391,14 +2390,14 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, 
                 nWdt = nMaxWdt;
             nWdt += nHDist;
             if ( nWdt < 1 )
-                nWdt = 1; // nHDist kann auch negativ sein
+                nWdt = 1; // nHDist may also be negative
             if ( nHgt < nMinHgt )
                 nHgt = nMinHgt;
             if ( nHgt > nMaxHgt )
                 nHgt = nMaxHgt;
             nHgt+=nVDist;
             if ( nHgt < 1 )
-                nHgt = 1; // nVDist kann auch negativ sein
+                nHgt = 1; // nVDist may also be negative
             long nWdtGrow = nWdt-(rR.Right()-rR.Left());
             long nHgtGrow = nHgt-(rR.Bottom()-rR.Top());
             if ( nWdtGrow == 0 )
@@ -2567,7 +2566,7 @@ void SdrObjCustomShape::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Recta
         aViewInit.Move(aCenter.X(),aCenter.Y());
     }
     Size aAnkSiz(aViewInit.GetSize());
-    aAnkSiz.Width()--; aAnkSiz.Height()--; // weil GetSize() ein draufaddiert
+    aAnkSiz.Width()--; aAnkSiz.Height()--; // because GetSize() adds 1
     Size aMaxSiz(1000000,1000000);
     if (pModel!=NULL) {
         Size aTmpSiz(pModel->GetMaxObjSize());
@@ -2634,7 +2633,7 @@ void SdrObjCustomShape::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Recta
     if( eHAdj != SDRTEXTHORZADJUST_BLOCK )
         aPaperMin.Width()=0;
 
-    // For complete ver adjust support, set paper min height to 0, here.
+    // For complete vertical adjust support, set paper min height to 0, here.
     if(SDRTEXTVERTADJUST_BLOCK != eVAdj )
         aPaperMin.Height() = 0;
 
@@ -2675,7 +2674,7 @@ void SdrObjCustomShape::TakeTextAnchorRect( Rectangle& rAnchorRect ) const
 void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText,
                                Rectangle* pAnchorRect, bool /*bLineWidth*/) const
 {
-    Rectangle aAnkRect; // Rect innerhalb dem geankert wird
+    Rectangle aAnkRect; // Rect in which we anchor
     TakeTextAnchorRect(aAnkRect);
     SdrTextVertAdjust eVAdj=GetTextVerticalAdjust();
     SdrTextHorzAdjust eHAdj=GetTextHorizontalAdjust();
@@ -2709,7 +2708,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
     rOutliner.SetMaxAutoPaperSize( Size( nMaxAutoPaperWidth, nMaxAutoPaperHeight ) );
     rOutliner.SetPaperSize( aNullSize );
 
-    // Text in den Outliner stecken - ggf. den aus dem EditOutliner
+    // put text into the Outliner - if necessary the use the text from the EditOutliner
     OutlinerParaObject* pPara= GetOutlinerParaObject();
     if (pEdtOutl && !bNoEditText)
         pPara=pEdtOutl->CreateParaObject();
@@ -2746,11 +2745,11 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
         pText->CheckPortionInfo( rOutliner );
 
     Point aTextPos(aAnkRect.TopLeft());
-    Size aTextSiz(rOutliner.GetPaperSize()); // GetPaperSize() hat etwas Toleranz drauf, oder?
+    Size aTextSiz(rOutliner.GetPaperSize()); // GetPaperSize() has a little added tolerance, no?
 
-    // For draw objects containing text correct hor/ver alignment if text is bigger
+    // For draw objects containing text correct horizontal/vertical alignment if text is bigger
     // than the object itself. Without that correction, the text would always be
-        // formatted to the left edge (or top edge when vertical) of the draw object.
+    // formatted to the left edge (or top edge when vertical) of the draw object.
 
     if( !IsTextFrame() )
     {
@@ -2797,7 +2796,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
     if (pAnchorRect)
         *pAnchorRect=aAnkRect;
 
-    // rTextRect ist bei ContourFrame in einigen Faellen nicht korrekt
+    // using rTextRect together with ContourFrame doesn't always work correctly
     rTextRect=Rectangle(aTextPos,aTextSiz);
 }
 
@@ -3081,7 +3080,7 @@ sal_Bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, ba
             {
                 MirrorPoint(aPol[i],aRef1,aRef2);
             }
-            // Polygon wenden und etwas schieben
+            // mirror polygon and move it a bit
             Polygon aPol0(aPol);
             aPol[0]=aPol0[1];
             aPol[1]=aPol0[0];
@@ -3103,7 +3102,7 @@ sal_Bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, ba
             {
                 MirrorPoint(aPol[i],aRef1,aRef2);
             }
-            // Polygon wenden und etwas schieben
+            // mirror polygon and move it a bit
             Polygon aPol0(aPol);
             aPol[0]=aPol0[1];
             aPol[1]=aPol0[0];
@@ -3118,7 +3117,7 @@ sal_Bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, ba
     basegfx::B2DTuple aScale(aRectangle.GetWidth(), aRectangle.GetHeight());
     basegfx::B2DTuple aTranslate(aRectangle.Left(), aRectangle.Top());
 
-    // position maybe relative to anchorpos, convert
+    // position may be relative to anchorpos, convert
     if( pModel && pModel->IsWriter() )
     {
         if(GetAnchorPos().X() || GetAnchorPos().Y())
@@ -3135,7 +3134,7 @@ sal_Bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, ba
         {
             case SFX_MAPUNIT_TWIP :
             {
-                // postion
+                // position
                 aTranslate.setX(ImplTwipsToMM(aTranslate.getX()));
                 aTranslate.setY(ImplTwipsToMM(aTranslate.getY()));
 

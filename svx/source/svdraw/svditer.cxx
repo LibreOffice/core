@@ -31,8 +31,6 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdmark.hxx>
-
-// #99190#
 #include <svx/scene3d.hxx>
 
 SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode, bool bReverse)
@@ -92,7 +90,7 @@ void SdrObjListIter::ImpProcessMarkList( const SdrMarkList& rMarkList, SdrIterMo
 void SdrObjListIter::ImpProcessObj(SdrObject* pObj, SdrIterMode eMode, bool bUseZOrder)
 {
     bool bIsGroup = pObj->IsGroupObject();
-    // #99190# 3D objects are no group objects, IsGroupObject()
+    // 3D objects are not group objects, IsGroupObject()
     // only tests if pSub is not null ptr :-(
     if( bIsGroup && pObj->ISA( E3dObject ) && !pObj->ISA( E3dScene ) )
         bIsGroup = false;

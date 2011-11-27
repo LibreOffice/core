@@ -130,10 +130,10 @@ void SdrPaintWindow::impCreateOverlayManager(const bool bUseBuffer)
             // decide which OverlayManager to use
             if(GetPaintView().IsBufferedOverlayAllowed() && mbUseBuffer)
             {
-                // buffered OverlayManager, buffers it's background and refreshes from there
+                // buffered OverlayManager, buffers its background and refreshes from there
                 // for pure overlay changes (no system redraw). The 3rd parameter specifies
-                // if that refresh itself will use a 2nd vdev to avoid flickering.
-                // Also hand over the evtl. existing old OverlayManager; this means to take over
+                // whether that refresh itself will use a 2nd vdev to avoid flickering.
+                // Also hand over the old OverlayManager if existent; this means to take over
                 // the registered OverlayObjects from it
                 mpOverlayManager = new ::sdr::overlay::OverlayManagerBuffered(GetOutputDevice(), pOldOverlayManager, true);
             }
@@ -141,7 +141,7 @@ void SdrPaintWindow::impCreateOverlayManager(const bool bUseBuffer)
             {
                 // unbuffered OverlayManager, just invalidates places where changes
                 // take place
-                // Also hand over the evtl. existing old OverlayManager; this means to take over
+                // Also hand over the old OverlayManager if existent; this means to take over
                 // the registered OverlayObjects from it
                 mpOverlayManager = new ::sdr::overlay::OverlayManager(GetOutputDevice(), pOldOverlayManager);
             }
@@ -170,11 +170,11 @@ void SdrPaintWindow::impCreateOverlayManager(const bool bUseBuffer)
         }
     }
 
-    // OverlayObjects are transfered for the evtl. newly created OverlayManager by handing over
+    // OverlayObjects are transfered for the in some cases newly created OverlayManager by handing over
     // at construction time
     if(pOldOverlayManager)
     {
-        // The old overlay manager is not used anymore and can be (has to be) deleted.
+        // The old overlay manager is not used any more and can be (has to be) deleted.
         delete pOldOverlayManager;
     }
 }
