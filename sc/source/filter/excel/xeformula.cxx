@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sc.hxx"
 
 // XXX xelink.hxx MUST be included before xeformula.hxx because of the
 // redifinition of the CREATE_OUSTRING() macro, which is in oox/helper.hxx

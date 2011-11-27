@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): Generated on 2006-07-11 15:52:42.937361
 
 #ifdef PRECOMPILED_HEADERS
 #include <sal/config.h>

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
@@ -38,7 +37,6 @@
 #include <sax/fshelper.hxx>
 #include <unotools/streamwrap.hxx>
 
-#include "precompiled_sc.hxx"
 #include "docuno.hxx"
 #include "xestream.hxx"
 #include "xladdress.hxx"

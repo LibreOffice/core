@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sc.hxx"
 #include "xistyle.hxx"
 #include <sfx2/printer.hxx>
 #include <sfx2/objsh.hxx>

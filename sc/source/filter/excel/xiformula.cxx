@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sc.hxx"
 #include "xiformula.hxx"
 #include "rangelst.hxx"
 #include "xistream.hxx"

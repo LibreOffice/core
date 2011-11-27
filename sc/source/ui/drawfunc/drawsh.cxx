@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sc.hxx"
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>

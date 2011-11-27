@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sc.hxx"
 
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>

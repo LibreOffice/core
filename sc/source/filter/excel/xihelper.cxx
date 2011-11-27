@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sc.hxx"
 #include "xihelper.hxx"
 #include <svl/itemset.hxx>
 #include <editeng/editobj.hxx>

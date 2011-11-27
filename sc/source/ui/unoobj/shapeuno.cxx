@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sc.hxx"
 
 #include <comphelper/uno3.hxx>
 #include <comphelper/stl_types.hxx>

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sc.hxx"
 #include "xistring.hxx"
 #include "xlstyle.hxx"
 #include "xistream.hxx"

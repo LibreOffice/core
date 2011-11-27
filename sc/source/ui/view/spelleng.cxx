@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sc.hxx"
 #include "spelleng.hxx"
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 

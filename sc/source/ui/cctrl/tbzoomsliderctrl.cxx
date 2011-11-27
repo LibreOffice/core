@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
 ************************************************************************/
-#include "precompiled_sc.hxx"
 #include "tbzoomsliderctrl.hxx"
 #include <vcl/image.hxx>
 #include <vcl/toolbox.hxx>
