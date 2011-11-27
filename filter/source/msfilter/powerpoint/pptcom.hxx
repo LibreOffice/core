@@ -30,11 +30,6 @@
 #define _PPTCOM_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/debug.hxx>
-#include <tools/stream.hxx>
-#include <tools/string.hxx>
-#include <tools/urlobj.hxx>
-#include <tools/stack.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/RuntimeException.hpp>
