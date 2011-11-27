@@ -26,7 +26,6 @@
  */
 
 #include <rtfreferenceproperties.hxx>
-#include <rtfsprm.hxx>
 
 namespace writerfilter {
 namespace rtftok {

@@ -28,8 +28,6 @@
 #ifndef _RTFREFERENCEPROPERTIES_HXX_
 #define _RTFREFERENCEPROPERTIES_HXX_
 
-#include <map>
-#include <resourcemodel/WW8ResourceModel.hxx>
 #include <rtfsprm.hxx>
 
 class SvStream;
