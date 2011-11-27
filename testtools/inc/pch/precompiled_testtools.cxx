@@ -26,6 +26,5 @@
  *
  ************************************************************************/
 
-#include "precompiled_testtools.hxx"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
