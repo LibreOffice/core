@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_sw.hxx"
 #include <threadlistener.hxx>
 
 /** helper class to observe threads

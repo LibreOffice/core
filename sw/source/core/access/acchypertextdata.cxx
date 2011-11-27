@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sw.hxx"
 #include <acchyperlink.hxx>
 #include <acchypertextdata.hxx>
 

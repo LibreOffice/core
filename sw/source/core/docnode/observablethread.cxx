@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_sw.hxx"
 #include <observablethread.hxx>
 
 #include <boost/shared_ptr.hpp>

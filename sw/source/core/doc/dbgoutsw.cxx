@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sw.hxx"
 #ifdef DBG_UTIL
 
 #include <tools/string.hxx>

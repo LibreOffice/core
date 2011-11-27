@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sw.hxx"
 
 #include <parachangetrackinginfo.hxx>
 

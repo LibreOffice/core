@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sw.hxx"
 #include <numberingtypelistbox.hxx>
 #include <misc.hrc>
 #include <cnttab.hxx>

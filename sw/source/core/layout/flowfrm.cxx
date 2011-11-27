@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sw.hxx"
 #include "pam.hxx"
 #include "swtable.hxx"
 #include "frame.hxx"

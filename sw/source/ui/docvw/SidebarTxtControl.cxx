@@ -27,7 +27,6 @@
  ************************************************************************/
 
 
-#include "precompiled_sw.hxx"
 
 #include <SidebarTxtControl.hxx>
 

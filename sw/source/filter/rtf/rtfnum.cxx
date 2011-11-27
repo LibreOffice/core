@@ -1,7 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sw.hxx"
 #include <hintids.hxx>
 #include <tools/stream.hxx>
 #include <svtools/rtftoken.h>

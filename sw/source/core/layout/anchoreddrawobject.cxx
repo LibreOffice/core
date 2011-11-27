@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sw.hxx"
 #include <anchoreddrawobject.hxx>
 #include <svx/svdobj.hxx>
 #include <dcontact.hxx>

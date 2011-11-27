@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sw.hxx"
 #include <SwXMLBlockImport.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>

@@ -26,7 +26,6 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#include "precompiled_sw.hxx"
 
 #include "frame.hxx"
 #include "sectfrm.hxx"

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sw.hxx"
 
 #include <textmarkuphelper.hxx>
 #include <accportions.hxx>

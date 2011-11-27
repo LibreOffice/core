@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sw.hxx"
 #define ROLBCK_HISTORY_ONLY     // Der Kampf gegen die CLOOK's
 #include <doc.hxx>
 #include <dcontact.hxx>

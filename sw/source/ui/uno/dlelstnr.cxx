@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sw.hxx"
 
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>

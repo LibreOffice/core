@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_sw.hxx"
 #include <swthreadmanager.hxx>
 #include <swthreadjoiner.hxx>
 #include <observablethread.hxx>

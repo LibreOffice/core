@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sw.hxx"
 #include <objectformatter.hxx>
 #include <objectformattertxtfrm.hxx>
 #include <objectformatterlayfrm.hxx>

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sw.hxx"
 
 #include <SidebarWin.hxx>
 #include <SidebarWinAcc.hxx>

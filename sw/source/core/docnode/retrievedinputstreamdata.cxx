@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_sw.hxx"
 #include <retrievedinputstreamdata.hxx>
 #include <retrieveinputstreamconsumer.hxx>
 #include <vcl/svapp.hxx>

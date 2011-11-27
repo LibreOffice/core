@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_sw.hxx"
 #include <retrieveinputstream.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <com/sun/star/io/XStream.hpp>

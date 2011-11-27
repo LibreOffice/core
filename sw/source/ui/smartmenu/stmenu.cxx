@@ -28,8 +28,6 @@
 
 // SMARTTAGS
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sw.hxx"
 #include <stmenu.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svl/eitem.hxx>

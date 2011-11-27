@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sw.hxx"
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>

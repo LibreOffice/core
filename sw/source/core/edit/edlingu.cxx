@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sw.hxx"
 
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
 #include <com/sun/star/linguistic2/XProofreader.hpp>

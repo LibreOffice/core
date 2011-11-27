@@ -22,7 +22,6 @@
  * instead of those above.
  */
 
-#include "precompiled_sw.hxx"
 #include <extedit.hxx>
 #include <view.hxx>
 #include <sfx2/viewfrm.hxx>
