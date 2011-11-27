@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_lingucomponent.hxx"
 
 #include <com/sun/star/uno/Reference.h>
 #include <cppuhelper/factory.hxx>   // helper for factories

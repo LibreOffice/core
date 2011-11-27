@@ -36,8 +36,6 @@
   * - Not init h when implicit constructor is launched
   */
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_lingucomponent.hxx"
 
 #include <string.h>
 #include <sstream>
