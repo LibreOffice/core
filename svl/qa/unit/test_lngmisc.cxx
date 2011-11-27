@@ -9,6 +9,7 @@
 #include "svl/lngmisc.hxx"
 
 #include <rtl/ustrbuf.hxx>
+#include <tools/string.hxx>
 
 namespace
 {
@@ -18,14 +19,14 @@ namespace
     void testRemoveHyphens();
     void testRemoveControlChars();
     void testReplaceControlChars();
-    //    void testGetThesaurusReplaceText();
+    void testGetThesaurusReplaceText();
 
     CPPUNIT_TEST_SUITE(LngMiscTest);
 
     CPPUNIT_TEST(testRemoveHyphens);
     CPPUNIT_TEST(testRemoveControlChars);
     CPPUNIT_TEST(testReplaceControlChars);
-    //    CPPUNIT_TEST(testGetThesaurusReplaceText);
+    CPPUNIT_TEST(testGetThesaurusReplaceText);
 
     CPPUNIT_TEST_SUITE_END();
   };
@@ -125,12 +126,41 @@ namespace
       CPPUNIT_ASSERT(str4[i] == ' ');
   }
 
-  /*
   void LngMiscTest::testGetThesaurusReplaceText()
   {
-    CPPUNIT_ASSERT(true);
+    const static String str1(RTL_CONSTASCII_USTRINGPARAM(""));
+    const static String str2(RTL_CONSTASCII_USTRINGPARAM("asdf"));
+    const static String str3(RTL_CONSTASCII_USTRINGPARAM("asdf (abc)"));
+    const static String str4(RTL_CONSTASCII_USTRINGPARAM("asdf*"));
+    const static String str5(RTL_CONSTASCII_USTRINGPARAM("asdf * "));
+    const static String str6(RTL_CONSTASCII_USTRINGPARAM("asdf (abc) *"));
+    const static String str7(RTL_CONSTASCII_USTRINGPARAM("asdf asdf * (abc)"));
+    const static String str8(RTL_CONSTASCII_USTRINGPARAM(" * (abc) asdf *"));
+
+    String r = linguistic::GetThesaurusReplaceText(str1);
+    CPPUNIT_ASSERT(!r.Len());
+
+    r = linguistic::GetThesaurusReplaceText(str2);
+    CPPUNIT_ASSERT(r == str2);
+
+    r = linguistic::GetThesaurusReplaceText(str3);
+    CPPUNIT_ASSERT(r == str2);
+
+    r = linguistic::GetThesaurusReplaceText(str4);
+    CPPUNIT_ASSERT(r == str2);
+
+    r = linguistic::GetThesaurusReplaceText(str5);
+    CPPUNIT_ASSERT(r == str2);
+
+    r = linguistic::GetThesaurusReplaceText(str6);
+    CPPUNIT_ASSERT(r == str2);
+
+    r = linguistic::GetThesaurusReplaceText(str7);
+    CPPUNIT_ASSERT(r == String::CreateFromAscii("asdf asdf"));
+
+    r = linguistic::GetThesaurusReplaceText(str8);
+    CPPUNIT_ASSERT(!r.Len());
   }
-  */
 
   CPPUNIT_TEST_SUITE_REGISTRATION(LngMiscTest);
 }
