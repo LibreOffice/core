@@ -1268,13 +1268,13 @@ if test "$enable_copyleft" != "yes"; then
 
    DISABLE_SAXON="TRUE"
 
-   AC_MSG_RESULT([yes])
+   AC_MSG_RESULT([no])
 
 else
 
    DISABLE_SAXON=
 
-   AC_MSG_RESULT([no])
+   AC_MSG_RESULT([yes])
 
 fi
 AC_SUBST(DISABLE_SAXON)
