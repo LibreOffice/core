@@ -42,6 +42,7 @@ SLOFILES = \
     $(SLO)/filters-test.obj \
     $(SLO)/getargument.obj \
     $(SLO)/gettestargument.obj \
+    $(SLO)/macros_test.obj \
     $(SLO)/officeconnection.obj \
     $(SLO)/toabsolutefileurl.obj \
     $(SLO)/uniquepipename.obj

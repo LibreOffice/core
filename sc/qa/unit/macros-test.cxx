@@ -29,16 +29,10 @@
  */
 
 #include <sal/config.h>
-#include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
+#include <unotest/macros_test.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
-
-#include <com/sun/star/frame/XDesktop.hpp>
-
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/document/MacroExecMode.hpp>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
@@ -80,12 +74,10 @@ FileFormat aFileFormats[] = {
 
 /* Implementation of Macros test */
 
-class ScMacrosTest : public test::BootstrapFixture
+class ScMacrosTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
 public:
     ScMacrosTest();
-
-    uno::Reference< com::sun::star::lang::XComponent > loadFromDesktop(const rtl::OUString& rURL);
 
     void createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath);
 
@@ -106,25 +98,8 @@ public:
 
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
-    uno::Reference<frame::XDesktop> mxDesktop;
-    ::rtl::OUString m_aBaseString;
+    rtl::OUString m_aBaseString;
 };
-
-
-uno::Reference< com::sun::star::lang::XComponent > ScMacrosTest::loadFromDesktop(const rtl::OUString& rURL)
-{
-    uno::Reference< com::sun::star::frame::XComponentLoader> xLoader = uno::Reference< com::sun::star::frame::XComponentLoader >( mxDesktop, UNO_QUERY );
-    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > args(1);
-    args[0].Name = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("MacroExecutionMode"));
-    args[0].Handle = -1;
-    args[0].Value <<=
-        com::sun::star::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
-    args[0].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
-    uno::Reference< com::sun::star::lang::XComponent> xComponent= xLoader->loadComponentFromURL(rURL, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")), 0, args);
-    CPPUNIT_ASSERT_MESSAGE("loading failed", xComponent.is());
-    return xComponent;
-}
 
 
 void ScMacrosTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
@@ -170,11 +145,7 @@ void ScMacrosTest::testStarBasic()
     xDocSh->DoClose();
 }
 
-struct TestMacroInfo
-{
-    rtl::OUString sFileBaseName;
-    rtl::OUString sMacroUrl;
-};
+
 void ScMacrosTest::testVba()
 {
     TestMacroInfo testInfo[] = {

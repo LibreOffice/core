@@ -12,6 +12,7 @@ mkdir: %_DEST%\inc\unotest\detail
 ..\inc\unotest\detail\unotestdllapi.hxx %_DEST%\inc\unotest\detail\unotestdllapi.hxx
 ..\inc\unotest\bootstrapfixturebase.hxx %_DEST%\inc\unotest\bootstrapfixturebase.hxx
 ..\inc\unotest\filters-test.hxx %_DEST%\inc\unotest\filters-test.hxx
+..\inc\unotest\macros_test.hxx %_DEST%\inc\unotest\macros_test.hxx
 ..\inc\unotest\gettestargument.hxx %_DEST%\inc\unotest\gettestargument.hxx
 ..\inc\unotest\officeconnection.hxx %_DEST%\inc\unotest\officeconnection.hxx
 ..\inc\unotest\toabsolutefileurl.hxx %_DEST%\inc\unotest\toabsolutefileurl.hxx
