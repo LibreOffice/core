@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
 #include "docrecovery.hxx"
 #include "osl/file.hxx"
 #include "rtl/bootstrap.hxx"

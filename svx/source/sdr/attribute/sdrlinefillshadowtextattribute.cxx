@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_svx.hxx"
 
 #include <svx/sdr/attribute/sdrlinefillshadowtextattribute.hxx>
 

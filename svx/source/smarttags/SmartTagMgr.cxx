@@ -28,8 +28,6 @@
 
 // SMARTTAGS
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
 #include <svx/SmartTagMgr.hxx>
 
 #include <osl/mutex.hxx>

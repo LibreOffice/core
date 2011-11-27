@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_svx.hxx"
 
 #include <svx/sdr/attribute/sdrformtextoutlineattribute.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>

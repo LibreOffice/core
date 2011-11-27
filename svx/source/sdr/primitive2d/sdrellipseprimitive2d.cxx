@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_svx.hxx"
 #include <svx/sdr/primitive2d/sdrellipseprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

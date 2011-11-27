@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
 
 // #i13033#
 // New mechanism to hold a ist of all original and cloned objects for later

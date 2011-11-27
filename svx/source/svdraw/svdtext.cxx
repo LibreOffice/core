@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
 
 #define ITEMID_FONTHEIGHT   EE_CHAR_FONTHEIGHT
 

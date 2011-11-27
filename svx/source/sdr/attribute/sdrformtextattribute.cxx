@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_svx.hxx"
 
 #include <svx/sdr/attribute/sdrformtextattribute.hxx>
 #include <basegfx/vector/b2enums.hxx>

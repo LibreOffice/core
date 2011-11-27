@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <svx/svdlayer.hxx>

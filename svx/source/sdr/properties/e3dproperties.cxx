@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
 #include <svx/sdr/properties/e3dproperties.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svddef.hxx>

@@ -25,7 +25,6 @@
  *
 ************************************************************************/
 
-#include "precompiled_svx.hxx"
 
 #include "delayedevent.hxx"
 

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_svx.hxx"
 #include "sal/config.h"
 
 #include "boost/noncopyable.hpp"

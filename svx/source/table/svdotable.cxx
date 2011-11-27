@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
 
 #define ITEMID_BOX SDRATTR_TABLE_BORDER
 #define ITEMID_BOXINFO SDRATTR_TABLE_BORDER_INNER

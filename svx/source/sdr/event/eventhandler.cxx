@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
 #include <svx/sdr/event/eventhandler.hxx>
 
 // for SOLARIS compiler include of algorithm part of _STL is necesary to

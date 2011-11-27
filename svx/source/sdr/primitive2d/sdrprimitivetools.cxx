@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_svx.hxx"
 #include <svx/sdr/primitive2d/sdrprimitivetools.hxx>
 #include <vcl/bmpacc.hxx>
 #include <osl/mutex.hxx>

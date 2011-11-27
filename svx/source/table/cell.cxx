@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
 
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/style/XStyle.hpp>

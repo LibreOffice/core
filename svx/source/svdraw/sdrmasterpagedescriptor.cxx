@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
 #include <svx/sdrmasterpagedescriptor.hxx>
 #include <svx/sdr/contact/viewcontactofmasterpagedescriptor.hxx>
 #include <svx/svdpage.hxx>

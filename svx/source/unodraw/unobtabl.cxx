@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
 #include <svl/itempool.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <svl/itemset.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
 #include <svx/sdr/overlay/overlaymanagerbuffered.hxx>
 #include <vcl/outdev.hxx>
 #include <basegfx/point/b2dpoint.hxx>

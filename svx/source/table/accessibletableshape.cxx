@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
 
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>

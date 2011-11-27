@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
 #include <comphelper/stl_types.hxx>
 #include <svx/svdobj.hxx>
 #include "svx/fmtools.hxx"

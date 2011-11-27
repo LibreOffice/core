@@ -28,8 +28,6 @@
 
 /** this file contains the uno service registrations for all services in the svxcore lib */
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
 
 #include "sal/types.h"
 #include "osl/diagnose.h"

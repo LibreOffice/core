@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/bindings.hxx>

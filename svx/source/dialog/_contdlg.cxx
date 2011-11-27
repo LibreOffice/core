@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
 #include <vcl/wrkwin.hxx>
 #include <sot/factory.hxx>
 #include <tools/shl.hxx>

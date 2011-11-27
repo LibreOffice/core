@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
 
 #include <svx/sdr/contact/viewobjectcontactofe3d.hxx>
 #include <svx/sdr/contact/viewcontactofe3d.hxx>

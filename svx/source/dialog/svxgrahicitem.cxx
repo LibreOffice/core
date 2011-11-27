@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
 #include "svx/svxgrahicitem.hxx"
 TYPEINIT1(SvxGraphicItem,SfxPoolItem);
 SvxGraphicItem::SvxGraphicItem( sal_uInt16 _nWhich, const Graphic& rGraphic )

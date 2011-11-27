@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
 
 #define _SVX_USE_UNOGLOBALS_
 #include <com/sun/star/lang/DisposedException.hpp>

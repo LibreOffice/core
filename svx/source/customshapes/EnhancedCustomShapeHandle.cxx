@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
 #include "EnhancedCustomShapeHandle.hxx"
 #include "svx/EnhancedCustomShape2d.hxx"
 #include "svx/unoapi.hxx"
