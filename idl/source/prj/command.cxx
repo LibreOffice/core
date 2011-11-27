@@ -333,10 +333,9 @@ SvCommand::SvCommand( int argc, char ** argv )
             }
             else if( aParam.EqualsIgnoreCaseAscii( "rsc", 0, 3 ) )
             { // first line in *.srs file
+                OSL_ENSURE(false, "does anything use this option, doesn't look like it belong here");
                 if( aList[ i + 1 ] )
                 {
-                    aSrsLine = rtl::OUStringToOString(*aList[ i +1 ],
-                        RTL_TEXTENCODING_UTF8);
                     i++;
                 }
             }

@@ -57,7 +57,6 @@ public:
     String      aCHeaderFile;
     String      aCSourceFile;
     String      aTargetFile;
-    ByteString      aSrsLine;
     String      aHelpIdFile;
     String      aCSVFile;
     String      aExportFile;
