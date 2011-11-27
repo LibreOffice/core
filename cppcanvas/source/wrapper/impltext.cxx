@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cppcanvas.hxx"
 
 #include <impltext.hxx>
 #include <canvas/canvastools.hxx>
