@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <tools/stack.hxx>
 
 #include <boost/unordered_set.hpp>
 #include <rtl/strbuf.hxx>
