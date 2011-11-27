@@ -1420,7 +1420,11 @@ void XclExpFmlaCompImpl::PrepareFunction( XclExpFuncData& rFuncData )
 {
     switch( rFuncData.GetOpCode() )
     {
+        case ocCosecant:                // simulate CSC(x) by (1/SIN(x))
+        case ocSecant:                  // simulate SEC(x) by (1/COS(x))
         case ocCot:                     // simulate COT(x) by (1/TAN(x))
+        case ocCosecantHyp:             // simulate CSCH(x) by (1/SINH(x))
+        case ocSecantHyp:               // simulate SECH(x) by (1/COSH(x))
         case ocCotHyp:                  // simulate COTH(x) by (1/TANH(x))
             AppendIntToken( 1 );
         break;
@@ -1470,7 +1474,11 @@ void XclExpFmlaCompImpl::FinishFunction( XclExpFuncData& rFuncData, sal_uInt8 nC
                 FinishChooseFunction( rFuncData );
             break;
 
+            case ocCosecant:                // simulate CSC(x) by (1/SIN(x))
+            case ocSecant:                  // simulate SEC(x) by (1/COS(x))
             case ocCot:                     // simulate COT(x) by (1/TAN(x))
+            case ocCosecantHyp:             // simulate CSCH(x) by (1/SINH(x))
+            case ocSecantHyp:               // simulate SECH(x) by (1/COSH(x))
             case ocCotHyp:                  // simulate COTH(x) by (1/TANH(x))
                 AppendBinaryOperatorToken( EXC_TOKID_DIV, true );
                 AppendParenToken();
