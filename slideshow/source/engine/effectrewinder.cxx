@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_slideshow.hxx"
 
 #include "effectrewinder.hxx"
 #include "eventqueue.hxx"

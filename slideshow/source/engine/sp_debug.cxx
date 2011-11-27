@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_slideshow.hxx"
 //
 //  sp_collector.cpp
 //

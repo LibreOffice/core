@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_slideshow.hxx"
 
 #include <boost/current_function.hpp>
 #include <basegfx/numeric/ftools.hxx>

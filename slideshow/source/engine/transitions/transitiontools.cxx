@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_slideshow.hxx"
 
 #include "transitiontools.hxx"
 #include <basegfx/point/b2dpoint.hxx>

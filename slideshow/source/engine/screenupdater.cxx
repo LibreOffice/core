@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_slideshow.hxx"
 
 #include "screenupdater.hxx"
 #include "listenercontainer.hxx"

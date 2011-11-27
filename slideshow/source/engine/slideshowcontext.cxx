@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_slideshow.hxx"
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
