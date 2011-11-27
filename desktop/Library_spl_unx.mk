@@ -25,8 +25,6 @@
 
 $(eval $(call gb_Library_Library,spl_unx))
 
-$(eval $(call gb_Library_add_precompiled_header,spl_unx,desktop/inc/pch/precompiled_desktop.hxx))
-
 $(eval $(call gb_Library_add_api,spl_unx,\
     offapi \
     udkapi \

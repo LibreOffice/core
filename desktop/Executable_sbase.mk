@@ -27,8 +27,6 @@ $(eval $(call gb_Executable_Executable,sbase))
 
 $(eval $(call gb_Executable_set_targettype_gui,sbase,YES))
 
-$(eval $(call gb_Executable_add_precompiled_header,sbase,desktop/inc/pch/precompiled_desktop.hxx))
-
 $(eval $(call gb_Executable_set_include,sbase,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc/pch \

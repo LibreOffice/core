@@ -25,8 +25,6 @@
 
 $(eval $(call gb_Library_Library,sofficeapp))
 
-$(eval $(call gb_Library_add_precompiled_header,sofficeapp,desktop/inc/pch/precompiled_desktop.hxx))
-
 $(eval $(call gb_Library_set_include,sofficeapp,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc \

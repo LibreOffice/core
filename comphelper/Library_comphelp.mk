@@ -30,8 +30,6 @@ $(eval $(call gb_Library_Library,comphelper))
 
 $(eval $(call gb_Library_add_package_headers,comphelper,comphelper_inc))
 
-$(eval $(call gb_Library_add_precompiled_header,comphelper,$(SRCDIR)/comphelper/inc/pch/precompiled_comphelper))
-
 $(eval $(call gb_Library_set_componentfile,comphelper,comphelper/util/comphelp))
 
 $(eval $(call gb_Library_set_include,comphelper,\

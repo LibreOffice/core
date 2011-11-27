@@ -25,8 +25,6 @@
 
 $(eval $(call gb_Executable_Executable,officeloader))
 
-$(eval $(call gb_Executable_add_precompiled_header,officeloader,desktop/inc/pch/precompiled_desktop.hxx))
-
 $(eval $(call gb_Executable_set_include,officeloader,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc/pch \

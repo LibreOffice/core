@@ -32,8 +32,6 @@ $(eval $(call gb_Library_add_package_headers,sdbt,\
 	dbaccess_inc \
 ))
 
-$(eval $(call gb_Library_add_precompiled_header,sdbt,$(SRCDIR)/dbaccess/inc/pch/precompiled_dbaccess))
-
 $(eval $(call gb_Library_set_include,sdbt,\
     $$(INCLUDE) \
 	-I$(realpath $(SRCDIR)/dbaccess/inc) \

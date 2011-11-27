@@ -32,8 +32,6 @@ $(eval $(call gb_Library_add_package_headers,dba,\
 	dbaccess_inc \
 ))
 
-$(eval $(call gb_Library_add_precompiled_header,dba,$(SRCDIR)/dbaccess/inc/pch/precompiled_dbaccess))
-
 $(eval $(call gb_Library_set_include,dba,\
     $$(INCLUDE) \
 	-I$(realpath $(SRCDIR)/dbaccess/inc) \

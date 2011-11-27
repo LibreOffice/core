@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,smd))
 
-$(eval $(call gb_Library_add_precompiled_header,sm,$(SRCDIR)/starmath/inc/pch/precompiled_starmath))
-
 $(eval $(call gb_Library_set_componentfile,smd,starmath/util/smd))
 
 $(eval $(call gb_Library_set_include,smd,\

@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,OGLTrans))
 
-$(eval $(call gb_Library_add_precompiled_header,OGLTrans,$(SRCDIR)/sd/inc/pch/precompiled_sd))
-
 $(eval $(call gb_Library_set_include,OGLTrans,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/slideshow/inc/pch) \

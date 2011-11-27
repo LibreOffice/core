@@ -204,13 +204,8 @@ gb_LinkTarget_EXCEPTIONFLAGS := \
 	-DEXCEPTIONS_ON \
 	-EHa \
 
-gb_PrecompiledHeader_EXCEPTIONFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS)
-
-
 gb_LinkTarget_NOEXCEPTIONFLAGS := \
 	-DEXCEPTIONS_OFF \
-
-gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
 
 gb_LinkTarget_LDFLAGS := \
 	-MACHINE:IX86 \
@@ -294,7 +289,6 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(DEFS) \
 		$(T_CFLAGS) \
 		-Fd$(PDBFILE) \
-		$(PCHFLAGS) \
 		$(gb_COMPILERDEPFLAGS) \
 		-I$(realpath $(dir $(3))) \
 		$(INCLUDE) \
@@ -313,7 +307,6 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(DEFS) \
 		$(T_CXXFLAGS) \
 		-Fd$(PDBFILE) \
-		$(PCHFLAGS) \
 		$(gb_COMPILERDEPFLAGS) \
 		-I$(realpath $(dir $(3))) \
 		$(INCLUDE_STL) $(INCLUDE) \
@@ -321,42 +314,6 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		-Fo$(1)) $(call gb_create_deps,$(1),$(4),$(realpath $(3)))
 endef
 
-
-# PrecompiledHeader class
-
-gb_PrecompiledHeader_get_enableflags = -Yu$(1).hxx \
-	-Fp$(call gb_PrecompiledHeader_get_target,$(1))
-
-define gb_PrecompiledHeader__command
-$(call gb_Output_announce,$(2),$(true),PCH,1)
-$(call gb_Helper_abbreviate_dirs_native,\
-	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2))) && \
-	$(gb_CXX) \
-		$(4) $(5) -Fd$(PDBFILE) \
-		$(gb_COMPILERDEPFLAGS) \
-		-I$(realpath $(dir $(3))) \
-		$(6) \
-		-c $(realpath $(3)) \
-		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj) $(call gb_create_deps,$(1),$(call gb_PrecompiledHeader_get_dep_target,$(2)),$(realpath $(3)))
-endef
-
-# NoexPrecompiledHeader class
-
-gb_NoexPrecompiledHeader_get_enableflags = -Yu$(1).hxx \
-	-Fp$(call gb_NoexPrecompiledHeader_get_target,$(1))
-
-define gb_NoexPrecompiledHeader__command
-$(call gb_Output_announce,$(2),$(true),PCH,1)
-$(call gb_Helper_abbreviate_dirs_native,\
-	mkdir -p $(dir $(1)) $(dir $(call gb_NoexPrecompiledHeader_get_dep_target,$(2))) && \
-	$(gb_CXX) \
-		$(4) $(5) -Fd$(PDBFILE) \
-		$(gb_COMPILERDEPFLAGS) \
-		-I$(realpath $(dir $(3))) \
-		$(6) \
-		-c $(realpath $(3)) \
-		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj) $(call gb_create_deps,$(1),$(call gb_NoexPrecompiledHeader,$(2)),$(realpath $(3)))
-endef
 
 # AsmObject class
 
@@ -396,7 +353,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),$(shell cat $(extraobjectlist))) \
-		$(PCHOBJS) $(NATIVERES))) && \
+		$(NATIVERES))) && \
 	$(gb_LINK) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \

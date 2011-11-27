@@ -30,8 +30,6 @@ $(eval $(call gb_Library_Library,svl))
 
 $(eval $(call gb_Library_add_package_headers,svl,svl_inc))
 
-$(eval $(call gb_Library_add_precompiled_header,svl,$(SRCDIR)/svl/inc/pch/precompiled_svl))
-
 $(eval $(call gb_Library_set_componentfile,svl,svl/util/svl))
 
 $(eval $(call gb_Library_set_include,svl,\

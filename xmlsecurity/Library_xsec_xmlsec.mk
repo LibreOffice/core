@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,xsec_xmlsec))
 
-$(eval $(call gb_Library_add_precompiled_header,xsec_xmlsec,$(SRCDIR)/xmlsecurity/inc/pch/precompiled_xmlsecurity))
-
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_set_componentfile,xsec_xmlsec,xmlsecurity/util/xsec_xmlsec.windows))
 else

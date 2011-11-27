@@ -30,8 +30,6 @@ $(eval $(call gb_Library_Library,ucbhelper))
 
 $(eval $(call gb_Library_add_package_headers,ucbhelper,ucbhelper_inc))
 
-$(eval $(call gb_Library_add_precompiled_header,ucbhelper,$(SRCDIR)/ucbhelper/inc/pch/precompiled_ucbhelper))
-
 $(eval $(call gb_Library_set_include,ucbhelper,\
 	$$(INCLUDE) \
 	-I$(realpath $(SRCDIR)/ucbhelper/inc) \

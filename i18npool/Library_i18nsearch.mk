@@ -30,8 +30,6 @@ $(eval $(call gb_Library_Library,i18nsearch))
 
 $(eval $(call gb_Library_add_package_headers,i18nsearch,i18npool_inc))
 
-$(eval $(call gb_Library_add_precompiled_header,i18nsearch,$(SRCDIR)/i18npool/inc/pch/precompiled_i18npool))
-
 $(eval $(call gb_Library_set_componentfile,i18nsearch,i18npool/source/search/i18nsearch))
 
 $(eval $(call gb_Library_set_include,i18nsearch,\

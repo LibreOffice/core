@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,rpt))
 
-$(eval $(call gb_Library_add_precompiled_header,rpt,$(SRCDIR)/reportdesign/inc/pch/precompiled_reportdesign))
-
 $(eval $(call gb_Library_set_include,rpt,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/reportdesign/inc) \

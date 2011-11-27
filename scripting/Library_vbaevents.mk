@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,vbaevents))
 
-$(eval $(call gb_Library_add_precompiled_header,vbaevents,$(SRCDIR)/scripting/inc/pch/precompiled_scripting))
-
 $(eval $(call gb_Library_set_componentfile,vbaevents,scripting/source/vbaevents/vbaevents))
 
 $(eval $(call gb_Library_set_include,vbaevents,\

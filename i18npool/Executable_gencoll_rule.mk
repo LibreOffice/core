@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Executable_Executable,gencoll_rule))
 
-$(eval $(call gb_Executable_add_precompiled_header,gencoll_rule,$(SRCDIR)/i18npool/inc/pch/precompiled_i18npool))
-
 $(eval $(call gb_Executable_set_include,gencoll_rule,\
 	$$(INCLUDE) \
 	-I$(realpath $(SRCDIR)/i18npool/inc) \

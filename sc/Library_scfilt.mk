@@ -22,8 +22,6 @@
 
 $(eval $(call gb_Library_Library,scfilt))
 
-$(eval $(call gb_Library_add_precompiled_header,sc,$(SRCDIR)/sc/source/filter/inc/filt_pch))
-
 $(eval $(call gb_Library_set_componentfile,scfilt,sc/util/scfilt))
 
 $(eval $(call gb_Library_set_include,scfilt,\

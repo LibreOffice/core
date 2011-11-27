@@ -25,8 +25,6 @@
 
 $(eval $(call gb_Library_Library,deploymentmisc))
 
-$(eval $(call gb_Library_add_precompiled_header,deploymentmisc,$(SRCDIR)/desktop/inc/pch/precompiled_desktop))
-
 $(eval $(call gb_Library_set_include,deploymentmisc,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc \

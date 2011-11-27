@@ -113,7 +113,6 @@ $(eval $(foreach method,\
 	use_externals \
 	add_package_headers \
 	add_sdi_headers \
-	add_precompiled_header \
 ,\
 	$(call gb_StaticLibrary_forward_to_Linktarget,$(method))\
 ))

@@ -116,12 +116,6 @@ ifneq ($(gb_DEBUGLEVEL),0)
 gb_SYMBOL := $(true)
 endif
 
-ifneq ($(strip $(ENABLE_PCH)),)
-gb_ENABLE_PCH := $(true)
-else
-gb_ENABLE_PCH := $(false)
-endif
-
 # for clean, setuplocal and removelocal goals we switch off dependencies
 ifneq ($(filter cleanpackmodule clean setuplocal removelocal showdeliverables help debugrun,$(MAKECMDGOALS)),)
 gb_FULLDEPS := $(false)
@@ -282,7 +276,6 @@ include $(foreach class, \
 	Package \
 	CustomTarget \
 	ExternalLib \
-	PrecompiledHeaders \
 	Pyuno \
 	RdbTarget \
 	CppunitTest \
@@ -396,7 +389,6 @@ INTERACTIVE VARIABLES:
                        3... = symbols + no optimizations + extra debug output (usually
                               extremely verbose). Levels > 2 are not used very much.
 
-       ENABLE_PCH      If not empty, use precompiled headers (Windows only).
        YACCFLAGS       Add as flags for YACC parser generator invocation.
        CPPFLAGS        Add as preprocessor flags for C/C++/ObjC/ObjC++ compilation.
        CFLAGS          Add as compiler flags for plain C compilation.

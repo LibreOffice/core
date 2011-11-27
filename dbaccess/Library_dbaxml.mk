@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,dbaxml))
 
-$(eval $(call gb_Library_add_precompiled_header,dbaxml,$(SRCDIR)/dbaccess/inc/pch/precompiled_dbaccess))
-
 $(eval $(call gb_Library_set_include,dbaxml,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/dbaccess/inc/pch) \

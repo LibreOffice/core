@@ -30,8 +30,6 @@ $(eval $(call gb_Library_Library,cui))
 
 $(eval $(call gb_Library_set_componentfile,cui,cui/util/cui))
 
-$(eval $(call gb_Library_add_precompiled_header,cui,$(SRCDIR)/cui/inc/pch/precompiled_cui))
-
 $(eval $(call gb_Library_set_include,cui,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/cui/source/inc) \

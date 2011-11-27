@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Executable_Executable,genindex_data))
 
-$(eval $(call gb_Executable_add_precompiled_header,genindex_data,$(SRCDIR)/i18npool/inc/pch/precompiled_i18npool))
-
 $(eval $(call gb_Executable_set_include,genindex_data,\
 	$$(INCLUDE) \
 	-I$(realpath $(SRCDIR)/i18npool/inc/pch) \

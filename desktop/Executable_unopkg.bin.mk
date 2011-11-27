@@ -33,8 +33,6 @@ $(eval $(call gb_Executable_Executable,$(unopkgbin)))
 
 $(eval $(call gb_Executable_set_targettype_gui,$(unopkgbin),YES))
 
-$(eval $(call gb_Executable_add_precompiled_header,$(unopkgbin),desktop/inc/pch/precompiled_desktop.hxx))
-
 $(eval $(call gb_Executable_set_include,$(unopkgbin),\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc/pch \

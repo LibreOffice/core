@@ -30,10 +30,6 @@ $(eval $(call gb_Library_Library,vbahelper))
 
 $(eval $(call gb_Library_add_package_headers,vbahelper,vbahelper_inc))
 
-# for platforms supporting PCH: declare the location of the pch file
-# this is the name of the cxx file (without extension)
-#$(eval $(call gb_Library_add_precompiled_header,vbahelper,$(SRCDIR)/vbahelper/PCH_FILE))
-
 # in case UNO services are exported: declare location of component file
 #$(eval $(call gb_Library_set_componentfile,vbahelper,vbahelper/COMPONENT_FILE))
 

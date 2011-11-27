@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,stringresource))
 
-$(eval $(call gb_Library_add_precompiled_header,stringresource,$(SRCDIR)/scripting/inc/pch/precompiled_scripting))
-
 $(eval $(call gb_Library_set_componentfile,stringresource,scripting/source/stringresource/stringresource))
 
 $(eval $(call gb_Library_set_include,stringresource,\

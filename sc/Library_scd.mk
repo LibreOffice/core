@@ -22,8 +22,6 @@
 
 $(eval $(call gb_Library_Library,scd))
 
-$(eval $(call gb_Library_add_precompiled_header,scd,$(SRCDIR)/sc/inc/pch/precompiled_sc))
-
 $(eval $(call gb_Library_set_componentfile,scd,sc/util/scd))
 
 $(eval $(call gb_Library_set_include,scd,\

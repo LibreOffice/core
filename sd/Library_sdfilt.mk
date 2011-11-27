@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,sdfilt))
 
-$(eval $(call gb_Library_add_precompiled_header,sdfilt,$(SRCDIR)/sd/inc/pch/precompiled_sd))
-
 $(eval $(call gb_Library_set_include,sdfilt,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/sd/inc) \

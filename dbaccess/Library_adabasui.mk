@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,adabasui))
 
-$(eval $(call gb_Library_add_precompiled_header,adabasui,$(SRCDIR)/dbaccess/inc/pch/precompiled_dbaccess))
-
 $(eval $(call gb_Library_set_include,adabasui,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/dbaccess/inc/pch) \

@@ -25,8 +25,6 @@
 
 $(eval $(call gb_Library_Library,sts))
 
-$(eval $(call gb_Library_add_precompiled_header,sts,automation/inc/pch/precompiled_automation.hxx))
-
 $(eval $(call gb_Library_set_include,sts,\
     $$(INCLUDE) \
     -I$(WORKDIR)/CustomTarget/automation/source/testtool \

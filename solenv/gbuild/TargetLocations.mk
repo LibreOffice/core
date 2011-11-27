@@ -99,14 +99,10 @@ gb_LinkTarget_get_objects_list = $(WORKDIR)/LinkTarget/$(1).objectlist
 gb_Module_get_check_target = $(WORKDIR)/Module/check/$(1)
 gb_Module_get_subsequentcheck_target = $(WORKDIR)/Module/subsequentcheck/$(1)
 gb_Module_get_target = $(WORKDIR)/Module/$(1)
-gb_NoexPrecompiledHeader_get_dep_target = $(WORKDIR)/Dep/NoexPrecompiledHeader/$(gb_NoexPrecompiledHeader_DEBUGDIR)/$(1).hxx.pch.d
-gb_NoexPrecompiledHeader_get_target = $(WORKDIR)/NoexPrecompiledHeader/$(gb_NoexPrecompiledHeader_DEBUGDIR)/$(1).hxx.pch
 gb_ObjCxxObject_get_target = $(WORKDIR)/ObjCxxObject/$(1).o
 gb_ObjCObject_get_target = $(WORKDIR)/ObjCObject/$(1).o
 gb_Package_get_preparation_target = $(WORKDIR)/Package/prepared/$(1)
 gb_Package_get_target = $(WORKDIR)/Package/$(1)
-gb_PrecompiledHeader_get_dep_target = $(WORKDIR)/Dep/PrecompiledHeader/$(gb_PrecompiledHeader_DEBUGDIR)/$(1).hxx.pch.d
-gb_PrecompiledHeader_get_target = $(WORKDIR)/PrecompiledHeader/$(gb_PrecompiledHeader_DEBUGDIR)/$(1).hxx.pch
 gb_Pyuno_get_target = $(WORKDIR)/Pyuno/$(1)
 gb_RdbTarget_get_target = $(WORKDIR)/RdbTarget/$(1).rdb
 gb_ResTarget_get_imagelist_target = $(WORKDIR)/ResTarget/$(1).ilst
@@ -161,10 +157,8 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	JunitTest \
 	LinkTarget \
 	Module \
-	NoexPrecompiledHeader \
 	PackagePart \
 	Package \
-	PrecompiledHeader \
 	Pyuno \
 	RdbTarget \
 	ResTarget \

@@ -28,9 +28,6 @@
 
 $(eval $(call gb_Library_Library,basctl))
 
-$(eval $(call gb_Library_add_precompiled_header,basctl,$(SRCDIR)/basctl/inc/pch/precompiled_basctl))
-$(eval $(call gb_Library_add_precompiled_header,basctl,$(SRCDIR)/basctl/source/basicide/ide_pch))
-
 $(eval $(call gb_Library_set_componentfile,basctl,basctl/util/basctl))
 
 $(eval $(call gb_Library_set_include,basctl,\

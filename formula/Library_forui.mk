@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,forui))
 
-$(eval $(call gb_Library_add_precompiled_header,forui,$(SRCDIR)/formula/inc/pch/precompiled_formula))
-
 $(eval $(call gb_Library_set_include,forui,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/formula/inc) \

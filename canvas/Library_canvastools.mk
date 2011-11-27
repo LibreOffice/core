@@ -30,8 +30,6 @@ $(eval $(call gb_Library_Library,canvastools))
 
 $(eval $(call gb_Library_add_package_headers,canvastools,canvas_inc))
 
-$(eval $(call gb_Library_add_precompiled_header,canvastools,$(SRCDIR)/canvas/inc/pch/precompiled_canvas))
-
 $(eval $(call gb_Library_set_include,canvastools,\
 	$$(INCLUDE) \
 	-I$(realpath $(SRCDIR)/canvas/inc) \

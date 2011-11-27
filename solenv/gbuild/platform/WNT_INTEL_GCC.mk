@@ -88,11 +88,6 @@ endif
 gb_LinkTarget_EXCEPTIONFLAGS += \
 	-fno-enforce-eh-specs \
 
-gb_PrecompiledHeader_EXCEPTIONFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS)
-
-
-gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
-
 gb_LinkTarget_LDFLAGS := \
 	-Wl,--export-all-symbols \
 	-Wl,--enable-stdcall-fixup \
@@ -138,94 +133,6 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_YACC) $(T_YACCFLAGS) --defines=$(4) -o $(3) $(1) )
 
 endef
-
-# PrecompiledHeader class
-
-gb_PrecompiledHeader_EXT := .gch
-
-gb_PrecompiledHeader_get_enableflags = -I$(WORKDIR)/PrecompiledHeader/$(gb_PrecompiledHeader_DEBUGDIR) \
-					-DPRECOMPILED_HEADERS \
-					-Winvalid-pch \
-
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_PrecompiledHeader__command_deponcompile
-$(call gb_Helper_abbreviate_dirs,\
-	$(OUTDIR_FOR_BUILD)/bin/makedepend \
-		$(4) $(5) \
-		-I$(dir $(3)) \
-		$(filter-out -I$(COMPATH)% -I$(JAVA_HOME),$(6)) \
-		$(3) \
-		-f - \
-	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-		-v OBJECTFILE=$(1) \
-		-v OUTDIR=$(OUTDIR)/ \
-		-v WORKDIR=$(WORKDIR)/ \
-		-v SRCDIR=$(SRCDIR)/ \
-		-v REPODIR=$(REPODIR)/ \
-	> $(call gb_PrecompiledHeader_get_dep_target,$(2)))
-endef
-else
-gb_PrecompiledHeader__command_deponcompile =
-endif
-
-define gb_PrecompiledHeader__command
-$(call gb_Output_announce,$(2),$(true),PCH,1)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2))) && \
-	$(gb_CXX) \
-		-x c++-header \
-		$(4) $(5) \
-		-I$(dir $(3)) \
-		$(6) \
-		-c $(3) \
-		-o$(1))
-$(call gb_PrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
-
-endef
-
-# NoexPrecompiledHeader class
-
-gb_NoexPrecompiledHeader_EXT := .gch
-
-gb_NoexPrecompiledHeader_get_enableflags = -I$(WORKDIR)/NoexPrecompiledHeader/$(gb_NoexPrecompiledHeader_DEBUGDIR) \
-					-Winvalid-pch \
-
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_NoexPrecompiledHeader__command_deponcompile
-$(call gb_Helper_abbreviate_dirs,\
-	$(OUTDIR_FOR_BUILD)/bin/makedepend \
-		$(4) $(5) \
-		-I$(dir $(3)) \
-		$(filter-out -I$(COMPATH)% -I$(JAVA_HOME),$(6)) \
-		$(3) \
-		-f - \
-	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-		-v OBJECTFILE=$(1) \
-		-v OUTDIR=$(OUTDIR)/ \
-		-v WORKDIR=$(WORKDIR)/ \
-		-v SRCDIR=$(SRCDIR)/ \
-		-v REPODIR=$(REPODIR)/ \
-	> $(call gb_NoexPrecompiledHeader_get_dep_target,$(2)))
-endef
-else
-gb_NoexPrecompiledHeader__command_deponcompile =
-endif
-
-define gb_NoexPrecompiledHeader__command
-$(call gb_Output_announce,$(2),$(true),PCH,1)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) $(dir $(call gb_NoexPrecompiledHeader_get_dep_target,$(2))) && \
-	$(gb_CXX) \
-		-x c++-header \
-		$(4) $(5) \
-		-I$(dir $(3)) \
-		$(6) \
-		-c $(3) \
-		-o$(1))
-$(call gb_NoexPrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
-
-endef
-
 
 # AsmObject class
 

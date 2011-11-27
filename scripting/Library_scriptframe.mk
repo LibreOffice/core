@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,scriptframe))
 
-$(eval $(call gb_Library_add_precompiled_header,scriptframe,$(SRCDIR)/scripting/inc/pch/precompiled_scripting))
-
 $(eval $(call gb_Library_set_componentfile,scriptframe,scripting/util/scriptframe))
 
 $(eval $(call gb_Library_set_include,scriptframe,\

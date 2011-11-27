@@ -32,8 +32,6 @@ $(eval $(call gb_Executable_add_defs,i18npool_cppunittester_all,\
 	$(gb_OBJCXXFLAGS) \
 ))
 
-$(eval $(call gb_Executable_add_precompiled_header,i18npool_cppunittester_all,$(SRCDIR)/i18npool/inc/pch/precompiled_i18npool))
-
 $(eval $(call gb_Executable_set_include,i18npool_cppunittester_all,\
 	$$(INCLUDE) \
 	-I$(realpath $(SRCDIR)/i18npool/inc) \

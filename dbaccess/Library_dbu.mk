@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,dbu))
 
-$(eval $(call gb_Library_add_precompiled_header,dbu,$(SRCDIR)/dbaccess/inc/pch/precompiled_dbaccess))
-
 $(eval $(call gb_Library_set_include,dbu,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/dbaccess/inc) \

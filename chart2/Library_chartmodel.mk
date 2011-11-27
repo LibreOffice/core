@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,chartmodel))
 
-$(eval $(call gb_Library_add_precompiled_header,chartmodel,$(SRCDIR)/chart2/inc/pch/precompiled_chart2))
-
 $(eval $(call gb_Library_set_include,chartmodel,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/chart2/inc/pch) \

@@ -29,8 +29,6 @@ $(eval $(call gb_Library_add_package_headers,communi,\
     automation_inc \
 ))
 
-$(eval $(call gb_Library_add_precompiled_header,communi,automation/inc/pch/precompiled_automation.hxx))
-
 $(eval $(call gb_Library_set_include,communi,\
     $$(INCLUDE) \
     -I$(SRCDIR)/automation/inc/pch \

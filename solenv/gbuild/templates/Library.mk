@@ -35,10 +35,6 @@ $(eval $(call gb_Library_Library,LIB))
 # learn more about TYPE in the Package.mk template
 $(eval $(call gb_Library_add_package_headers,LIB,MODULE_TYPE))
 
-# for platforms supporting PCH: declare the location of the pch file
-# this is the name of the cxx file (without extension)
-$(eval $(call gb_Library_add_precompiled_header,LIB,$(SRCDIR)/MODULE/PCH_FILE))
-
 # in case UNO services are exported: declare location of component file
 $(eval $(call gb_Library_set_componentfile,LIB,MODULE/COMPONENT_FILE))
 

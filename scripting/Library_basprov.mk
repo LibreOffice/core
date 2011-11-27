@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,basprov))
 
-$(eval $(call gb_Library_add_precompiled_header,basprov,$(SRCDIR)/scripting/inc/pch/precompiled_scripting))
-
 $(eval $(call gb_Library_set_componentfile,basprov,scripting/source/basprov/basprov))
 
 $(eval $(call gb_Library_set_include,basprov,\

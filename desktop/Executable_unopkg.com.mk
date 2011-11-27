@@ -27,8 +27,6 @@ $(eval $(call gb_Executable_Executable,unopkg_com))
 
 $(eval $(call gb_Executable_set_targettype_gui,unopkg_com,NO))
 
-$(eval $(call gb_Executable_add_precompiled_header,unopkg_com,desktop/inc/pch/precompiled_desktop.hxx))
-
 $(eval $(call gb_Executable_set_include,unopkg_com,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc/pch \

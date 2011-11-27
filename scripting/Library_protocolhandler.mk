@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,protocolhandler))
 
-$(eval $(call gb_Library_add_precompiled_header,protocolhandler,$(SRCDIR)/scripting/inc/pch/precompiled_scripting))
-
 $(eval $(call gb_Library_set_componentfile,protocolhandler,scripting/source/protocolhandler/protocolhandler))
 
 $(eval $(call gb_Library_set_include,protocolhandler,\

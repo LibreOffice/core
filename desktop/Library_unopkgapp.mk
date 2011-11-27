@@ -25,8 +25,6 @@
 
 $(eval $(call gb_Library_Library,unopkgapp))
 
-$(eval $(call gb_Library_add_precompiled_header,unopkgapp,desktop/inc/pch/precompiled_desktop.hxx))
-
 $(eval $(call gb_Library_set_include,unopkgapp,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc \

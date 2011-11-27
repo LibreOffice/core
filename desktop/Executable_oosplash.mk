@@ -27,8 +27,6 @@ $(eval $(call gb_Executable_Executable,oosplash))
 
 $(eval $(call gb_Executable_set_targettype_gui,oosplash,YES))
 
-$(eval $(call gb_Executable_add_precompiled_header,oosplash,desktop/inc/pch/precompiled_desktop.hxx))
-
 $(eval $(call gb_Executable_set_include,oosplash,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc/pch \

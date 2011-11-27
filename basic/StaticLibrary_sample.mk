@@ -30,8 +30,6 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,sample))
 
 $(eval $(call gb_StaticLibrary_add_package_headers,sample,basic_inc))
 
-$(eval $(call gb_StaticLibrary_add_precompiled_header,sample,$(SRCDIR)/basic/inc/pch/precompiled_basic))
-
 $(eval $(call gb_StaticLibrary_set_include,sample,\
 	$$(INCLUDE) \
 	-I$(realpath $(SRCDIR)/basic/inc/pch) \

@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,xsec_fw))
 
-$(eval $(call gb_Library_add_precompiled_header,xsec_fw,$(SRCDIR)/xmlsecurity/inc/pch/precompiled_xmlsecurity))
-
 $(eval $(call gb_Library_set_componentfile,xsec_fw,xmlsecurity/util/xsec_fw))
 
 $(eval $(call gb_Library_set_include,xsec_fw,\

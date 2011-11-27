@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,fwk))
 
-$(eval $(call gb_Library_add_precompiled_header,fwk,$(SRCDIR)/framework/inc/pch/precompiled_framework))
-
 $(eval $(call gb_Library_set_componentfile,fwk,framework/util/fwk))
 
 $(eval $(call gb_Library_set_include,fwk,\

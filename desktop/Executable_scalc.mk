@@ -27,8 +27,6 @@ $(eval $(call gb_Executable_Executable,scalc))
 
 $(eval $(call gb_Executable_set_targettype_gui,scalc,YES))
 
-$(eval $(call gb_Executable_add_precompiled_header,scalc,desktop/inc/pch/precompiled_desktop.hxx))
-
 $(eval $(call gb_Executable_set_include,scalc,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc/pch \

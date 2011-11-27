@@ -27,8 +27,6 @@ $(eval $(call gb_Executable_Executable,crashrep_com))
 
 $(eval $(call gb_Executable_set_targettype_gui,crashrep_com,NO))
 
-$(eval $(call gb_Executable_add_precompiled_header,crashrep_com,desktop/inc/pch/precompiled_desktop.hxx))
-
 $(eval $(call gb_Executable_set_include,crashrep_com,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc/pch \

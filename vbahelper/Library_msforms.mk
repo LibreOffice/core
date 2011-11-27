@@ -32,10 +32,6 @@
 # LIB is the name of the library as it is found in Repository.mk
 $(eval $(call gb_Library_Library,msforms))
 
-# for platforms supporting PCH: declare the location of the pch file
-# this is the name of the cxx file (without extension)
-#$(eval $(call gb_Library_add_precompiled_header,msforms,$(SRCDIR)/vbahelper/PCH_FILE))
-
 # in case UNO services are exported: declare location of component file
 $(eval $(call gb_Library_set_componentfile,msforms,vbahelper/util/msforms))
 

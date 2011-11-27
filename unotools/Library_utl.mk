@@ -34,10 +34,6 @@ $(eval $(call gb_Library_Library,utl))
 # learn more about TYPE in the Package.mk template
 $(eval $(call gb_Library_add_package_headers,utl,unotools_inc))
 
-# for platforms supporting PCH: declare the location of the pch file
-# this is the name of the cxx file (without extension)
-$(eval $(call gb_Library_add_precompiled_header,utl,$(SRCDIR)/unotools/inc/pch/precompiled_unotools))
-
 # in case UNO services are exported: declare location of component file
 $(eval $(call gb_Library_set_componentfile,utl,unotools/util/utl))
 

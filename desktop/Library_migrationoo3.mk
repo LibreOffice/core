@@ -25,8 +25,6 @@
 
 $(eval $(call gb_Library_Library,migrationoo3))
 
-$(eval $(call gb_Library_add_precompiled_header,migrationoo3,$(SRCDIR)/desktop/inc/pch/precompiled_desktop))
-
 $(eval $(call gb_Library_set_include,migrationoo3,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc/pch \

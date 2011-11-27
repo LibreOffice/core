@@ -32,8 +32,6 @@ $(eval $(call gb_Library_set_componentfile,xo,xmloff/util/xo))
 
 $(eval $(call gb_Library_add_package_headers,xo,xmloff_inc))
 
-$(eval $(call gb_Library_add_precompiled_header,xo,$(SRCDIR)/xmloff/inc/pch/precompiled_xmloff))
-
 $(eval $(call gb_Library_set_include,xo,\
     $$(SOLARINC) \
     -I$(realpath $(SRCDIR)/xmloff/inc) \

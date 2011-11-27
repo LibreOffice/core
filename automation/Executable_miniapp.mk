@@ -29,8 +29,6 @@ $(eval $(call gb_Executable_Executable,miniapp))
 
 $(eval $(call gb_Executable_set_targettype_gui,miniapp,YES))
 
-$(eval $(call gb_Executable_add_precompiled_header,miniapp,automation/inc/pch/precompiled_automation.hxx))
-
 $(eval $(call gb_Executable_set_include,miniapp,\
     $$(INCLUDE) \
     -I$(SRCDIR)/automation/inc/pch \

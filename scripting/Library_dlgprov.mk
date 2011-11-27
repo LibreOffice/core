@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,dlgprov))
 
-$(eval $(call gb_Library_add_precompiled_header,dlgprov,$(SRCDIR)/scripting/inc/pch/precompiled_scripting))
-
 $(eval $(call gb_Library_set_componentfile,dlgprov,scripting/source/dlgprov/dlgprov))
 
 $(eval $(call gb_Library_set_include,dlgprov,\

@@ -30,8 +30,6 @@ $(eval $(call gb_Library_Library,lng))
 
 $(eval $(call gb_Library_add_package_headers,lng,linguistic_inc))
 
-$(eval $(call gb_Library_add_precompiled_header,lng,$(SRCDIR)/linguistic/inc/pch/precompiled_linguistic))
-
 $(eval $(call gb_Library_set_componentfile,lng,linguistic/source/lng))
 
 $(eval $(call gb_Library_set_include,lng,\

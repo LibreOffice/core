@@ -31,8 +31,6 @@ $(eval $(call gb_Executable_add_package_headers,testtool,\
     automation_testtool \
 ))
 
-$(eval $(call gb_Executable_add_precompiled_header,testtool,automation/inc/pch/precompiled_automation.hxx))
-
 $(eval $(call gb_Executable_set_include,testtool,\
     $$(INCLUDE) \
     -I$(call gb_CustomTarget_get_workdir,automation/source/testtool) \

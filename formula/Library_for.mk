@@ -32,8 +32,6 @@ $(eval $(call gb_Library_add_package_headers,for,\
 	formula_inc \
 ))
 
-$(eval $(call gb_Library_add_precompiled_header,for,$(SRCDIR)/formula/inc/pch/precompiled_formula))
-
 $(eval $(call gb_Library_set_include,for,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/formula/inc/pch) \

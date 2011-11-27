@@ -25,8 +25,6 @@
 
 $(eval $(call gb_Library_Library,simplecm))
 
-$(eval $(call gb_Library_add_precompiled_header,simplecm,automation/inc/pch/precompiled_automation.hxx))
-
 $(eval $(call gb_Library_set_include,simplecm,\
     $$(INCLUDE) \
     -I$(SRCDIR)/automation/inc \

@@ -33,8 +33,6 @@ $(eval $(call gb_Executable_Executable,$(sofficebin)))
 
 $(eval $(call gb_Executable_set_targettype_gui,$(sofficebin),YES))
 
-$(eval $(call gb_Executable_add_precompiled_header,$(sofficebin),desktop/inc/pch/precompiled_desktop.hxx))
-
 $(eval $(call gb_Executable_set_include,$(sofficebin),\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc/pch \

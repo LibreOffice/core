@@ -24,8 +24,6 @@ $(eval $(call gb_Library_Library,sc))
 
 $(eval $(call gb_Library_add_sdi_headers,sc,sc/sdi/scslots))
 
-$(eval $(call gb_Library_add_precompiled_header,sc,$(SRCDIR)/sc/inc/pch/precompiled_sc))
-
 $(eval $(call gb_Library_set_componentfile,sc,sc/util/sc))
 
 $(eval $(call gb_Library_set_include,sc,\

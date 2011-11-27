@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Executable_Executable,saxparser))
 
-$(eval $(call gb_Executable_add_precompiled_header,saxparser,$(SRCDIR)/i18npool/inc/pch/precompiled_i18npool))
-
 $(eval $(call gb_Executable_set_include,saxparser,\
 	$$(INCLUDE) \
 	-I$(realpath $(SRCDIR)/i18npool/inc/pch) \

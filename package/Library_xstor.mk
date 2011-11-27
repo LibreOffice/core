@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,xstor))
 
-$(eval $(call gb_Library_add_precompiled_header,xstor,$(SRCDIR)/package/inc/pch/precompiled_package))
-
 $(eval $(call gb_Library_set_componentfile,xstor,package/source/xstor/xstor))
 
 $(eval $(call gb_Library_set_include,xstor,\

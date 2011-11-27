@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,slideshow))
 
-$(eval $(call gb_Library_add_precompiled_header,slideshow,$(SRCDIR)/slideshow/inc/pch/precompiled_slideshow))
-
 $(eval $(call gb_Library_set_include,slideshow,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/slideshow/inc/pch) \
