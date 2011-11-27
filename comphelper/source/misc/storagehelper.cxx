@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_comphelper.hxx"
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>

@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_comphelper.hxx"
 
 #include "comphelper/anycompare.hxx"
 

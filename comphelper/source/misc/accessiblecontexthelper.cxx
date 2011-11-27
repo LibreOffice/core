@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_comphelper.hxx"
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/weakref.hxx>

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_comphelper.hxx"
 #include "sal/config.h"
 
 #include <cstddef>

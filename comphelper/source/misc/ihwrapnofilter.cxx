@@ -26,7 +26,6 @@
  *
 ************************************************************************/
 
-#include "precompiled_comphelper.hxx"
 
 #include "comphelper/ihwrapnofilter.hxx"
 #include <com/sun/star/document/NoSuchFilterRequest.hpp>

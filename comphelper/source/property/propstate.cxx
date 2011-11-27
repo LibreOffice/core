@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_comphelper.hxx"
 #include <comphelper/propstate.hxx>
 #include <com/sun/star/uno/genfunc.h>
 #include <cppuhelper/queryinterface.hxx>

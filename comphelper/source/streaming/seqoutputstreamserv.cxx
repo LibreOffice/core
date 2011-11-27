@@ -26,7 +26,6 @@
  *
 ************************************************************************/
 
-#include "precompiled_comphelper.hxx"
 
 #include "comphelper_module.hxx"
 

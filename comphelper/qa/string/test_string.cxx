@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_comphelper.hxx"
 #include "sal/precppunit.hxx"
 
 #include <comphelper/string.hxx>
