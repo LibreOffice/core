@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sdext.hxx"
 
 #include "PresenterAccessibility.hxx"
 #include "PresenterTextView.hxx"

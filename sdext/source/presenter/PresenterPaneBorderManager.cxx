@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sdext.hxx"
 
 // The body of this file is only used when PresenterWindowManager defines
 // the preprocessor symbol ENABLE_PANE_RESIZING, which by default is not the

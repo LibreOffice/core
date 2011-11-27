@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sdext.hxx"
 
 #include "optimizationstats.hxx"
 #include <com/sun/star/awt/Size.hpp>

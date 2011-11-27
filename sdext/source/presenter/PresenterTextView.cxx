@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sdext.hxx"
 
 #include "PresenterTextView.hxx"
 #include "PresenterCanvasHelper.hxx"

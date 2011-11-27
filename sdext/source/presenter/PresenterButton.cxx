@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sdext.hxx"
 
 #include "PresenterButton.hxx"
 #include "PresenterCanvasHelper.hxx"

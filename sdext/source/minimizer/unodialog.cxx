@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sdext.hxx"
 
 #include "unodialog.hxx"
 #include <com/sun/star/text/XTextRange.hpp>
