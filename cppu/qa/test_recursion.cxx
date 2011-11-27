@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_cppu.hxx"
 #include "sal/config.h"
 #include "sal/precppunit.hxx"
 

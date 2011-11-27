@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cppu.hxx"
 
 #include "rtl/uuid.h"
 #include "osl/thread.h"
