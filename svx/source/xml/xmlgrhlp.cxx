@@ -548,7 +548,8 @@ String SvXMLGraphicHelper::ImplGetGraphicMimeType( const String& rFileName ) con
 
     if( ( rFileName.Len() >= 4 ) && ( rFileName.GetChar( rFileName.Len() - 4 ) == '.' ) )
     {
-        const ByteString aExt( rFileName.Copy( rFileName.Len() - 3 ), RTL_TEXTENCODING_ASCII_US );
+        const ByteString aExt(rtl::OUStringToOString(rFileName.Copy(rFileName.Len() - 3),
+            RTL_TEXTENCODING_ASCII_US));
 
         for( long i = 0, nCount = SAL_N_ELEMENTS( aMapper ); ( i < nCount ) && !aMimeType.Len(); i++ )
             if( aExt == aMapper[ i ].pExt )

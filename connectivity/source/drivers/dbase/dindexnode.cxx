@@ -710,8 +710,8 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
         if (!aKey.getValue().isNull())
         {
             ::rtl::OUString sValue = aKey.getValue();
-            ByteString aText(sValue.getStr(), rIndex.m_pTable->getConnection()->getTextEncoding());
-            strncpy(aData,aText.GetBuffer(),std::min(rIndex.getHeader().db_keylen, aText.Len()));
+            rtl::OString aText(rtl::OUStringToOString(sValue, rIndex.m_pTable->getConnection()->getTextEncoding()));
+            strncpy(aData, aText.getStr(), std::min<size_t>(rIndex.getHeader().db_keylen, aText.getLength()));
         }
         rStream.Write((sal_uInt8*)aData,rIndex.getHeader().db_keylen);
     }

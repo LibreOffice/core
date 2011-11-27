@@ -330,7 +330,7 @@ void TestToolObj::LoadIniFile()
 
     NEWOLD( "LogBaseDir", "LogBasisverzeichnis" )
     String aLFB;
-    GETSET( aLFB, "LogBaseDir", ByteString( aFB, RTL_TEXTENCODING_UTF8 ) );
+    GETSET( aLFB, "LogBaseDir", rtl::OUStringToOString(aFB, RTL_TEXTENCODING_UTF8) );
     pImpl->aLogFileBase = DirEntry(aLFB);
 
     NEWOLD( "HIDDir", "HIDVerzeichnis" )
@@ -2344,10 +2344,10 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             String aSource,aDest;
                             aSource = rPar->Get(1)->GetString();
 #ifdef UNX
-                            ByteString aByteSource( aSource, osl_getThreadTextEncoding() );
+                            rtl::OString aByteSource(rtl::OUStringToOString(aSource, osl_getThreadTextEncoding()));
                             char cDest[1024];
                             int nLen = 0;
-                            if ( ( nLen = readlink( aByteSource.GetBuffer(), cDest, sizeof(cDest) ) ) >= 0 )
+                            if ( ( nLen = readlink( aByteSource.getStr(), cDest, sizeof(cDest) ) ) >= 0 )
                             {
                                 aDest = String( cDest, nLen, osl_getThreadTextEncoding() );
                             }
@@ -2391,7 +2391,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         {
                             if ( !pImpl->pHttpRequest )
                                 pImpl->pHttpRequest = new HttpRequest;
-                            pImpl->pHttpRequest->SetRequest( ByteString( rPar->Get(1)->GetString(), RTL_TEXTENCODING_ASCII_US ), ByteString( rPar->Get(2)->GetString(), RTL_TEXTENCODING_ASCII_US ), rPar->Get(3)->GetUShort() );
+                            pImpl->pHttpRequest->SetRequest( rtl::OUStringToOString( rPar->Get(1)->GetString(), RTL_TEXTENCODING_ASCII_US ), rtl::OUStringToOString( rPar->Get(2)->GetString(), RTL_TEXTENCODING_ASCII_US ), rPar->Get(3)->GetUShort() );
 
                             if ( pImpl->pHttpRequest->Execute() )
                             {
@@ -2418,7 +2418,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         {
                             if ( !pImpl->pHttpRequest )
                                 pImpl->pHttpRequest = new HttpRequest;
-                            pImpl->pHttpRequest->SetProxy( ByteString( rPar->Get(1)->GetString(), RTL_TEXTENCODING_ASCII_US ), rPar->Get(2)->GetUShort() );
+                            pImpl->pHttpRequest->SetProxy( rtl::OUStringToOString( rPar->Get(1)->GetString(), RTL_TEXTENCODING_ASCII_US ), rPar->Get(2)->GetUShort() );
                         }
                         else
                             SetError( SbERR_BAD_NUMBER_OF_ARGS );

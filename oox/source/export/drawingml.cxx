@@ -169,7 +169,7 @@ bool DrawingML::GetProperty( Reference< XPropertySet > rXPropSet, String aName )
         mAny = rXPropSet->getPropertyValue( aName );
         if ( mAny.hasValue() )
             bRetValue = true;
-    } catch( const Exception& ) { /* printf ("exception when trying to get value of property: %s\n", ST(aName)); */ }
+    } catch( const Exception& ) { /* printf ("exception when trying to get value of property: %s\n", USS(aName)); */ }
 
     return bRetValue;
 }
@@ -184,7 +184,7 @@ bool DrawingML::GetPropertyAndState( Reference< XPropertySet > rXPropSet, Refere
             bRetValue = true;
             eState = rXPropState->getPropertyState( aName );
         }
-    } catch( const Exception& ) { /* printf ("exception when trying to get value of property: %s\n", ST(aName)); */ }
+    } catch( const Exception& ) { /* printf ("exception when trying to get value of property: %s\n", USS(aName)); */ }
 
     return bRetValue;
 }
@@ -447,7 +447,7 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
 
 OUString DrawingML::WriteImage( const OUString& rURL )
 {
-    ByteString aURLBS( UniString( rURL ), RTL_TEXTENCODING_UTF8 );
+    ByteString aURLBS(rtl::OUStringToOString(rURL, RTL_TEXTENCODING_UTF8));
 
     const char aURLBegin[] = "vnd.sun.star.GraphicObject:";
     int index = aURLBS.Search( aURLBegin );
@@ -805,7 +805,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
         mAny >>= usTypeface;
         String aSubstName( GetSubsFontName( usTypeface, SUBSFONT_ONLYONE | SUBSFONT_MS ) );
         if( aSubstName.Len() )
-            typeface = ST( aSubstName );
+            typeface = USS( aSubstName );
         else
             typeface = USS( usTypeface );
 
@@ -825,7 +825,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
         mAny >>= usTypeface;
         String aSubstName( GetSubsFontName( usTypeface, SUBSFONT_ONLYONE | SUBSFONT_MS ) );
         if( aSubstName.Len() )
-            typeface = ST( aSubstName );
+            typeface = USS( aSubstName );
         else
             typeface = USS( usTypeface );
 
@@ -870,7 +870,7 @@ const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::su
 
     if( GETA( TextPortionType ) ) {
         aFieldType = String( *(::rtl::OUString*)mAny.getValue() );
-        DBG(printf ("field type: %s\n", ST(aFieldType) ));
+        DBG(printf ("field type: %s\n", USS(aFieldType) ));
     }
 
     if( aFieldType == S( "TextField" ) ) {
@@ -881,7 +881,7 @@ const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::su
             rXPropSet.set( rXTextField, UNO_QUERY );
             if( rXPropSet.is() ) {
                 String aFieldKind( rXTextField->getPresentation( sal_True ) );
-                DBG(printf ("field kind: %s\n", ST(aFieldKind) ));
+                DBG(printf ("field kind: %s\n", USS(aFieldKind) ));
                 if( aFieldKind == S( "Page" ) ) {
                     return "slidenum";
                 }

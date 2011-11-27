@@ -708,14 +708,15 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                     }
                     if (bOk)
                     {
-                        ByteString aTmp( aStr, osl_getThreadTextEncoding() );
+                        rtl::OString aTmp(rtl::OUStringToOString(aStr,
+                            osl_getThreadTextEncoding()));
                         // In case the xub_StrLen will be longer than USHORT
                         // one day, and room for pad byte check.
-                        if ( aTmp.Len() > ((sal_uInt16)(~0)) - 2 )
+                        if ( aTmp.getLength() > ((sal_uInt16)(~0)) - 2 )
                             return false;
                         // Append a 0-pad-byte if string length is not even
                         //! MUST be sal_uInt16 and not xub_StrLen
-                        sal_uInt16 nStrLen = (sal_uInt16) aTmp.Len();
+                        sal_uInt16 nStrLen = (sal_uInt16) aTmp.getLength();
                         sal_uInt16 nLen = ( nStrLen + 2 ) & ~1;
 
                         if (((sal_uLong)nPos + (5 * sizeof(sal_uInt16)) + nLen) > MAXARRSIZE)
@@ -725,7 +726,7 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                         *p++ = static_cast<sal_uInt16>(nTab);
                         *p++ = nErr;
                         *p++ = nLen;
-                        memcpy( p, aTmp.GetBuffer(), nStrLen + 1);
+                        memcpy( p, aTmp.getStr(), nStrLen + 1);
                         nPos += 10 + nStrLen + 1;
                         sal_uInt8* q = ( pCellArr + nPos );
                         if( !nStrLen & 1 )
@@ -833,19 +834,20 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                         }
                         else
                         {
-                            ByteString aTmp( aStr, osl_getThreadTextEncoding() );
+                            rtl::OString aTmp(rtl::OUStringToOString(aStr,
+                                osl_getThreadTextEncoding()));
                             // In case the xub_StrLen will be longer than USHORT
                             // one day, and room for pad byte check.
-                            if ( aTmp.Len() > ((sal_uInt16)(~0)) - 2 )
+                            if ( aTmp.getLength() > ((sal_uInt16)(~0)) - 2 )
                                 return false;
                             // Append a 0-pad-byte if string length is not even
                             //! MUST be sal_uInt16 and not xub_StrLen
-                            sal_uInt16 nStrLen = (sal_uInt16) aTmp.Len();
+                            sal_uInt16 nStrLen = (sal_uInt16) aTmp.getLength();
                             sal_uInt16 nLen = ( nStrLen + 2 ) & ~1;
                             if ( ((sal_uLong)nPos + 2 + nLen) > MAXARRSIZE)
                                 return false;
                             *p++ = nLen;
-                            memcpy( p, aTmp.GetBuffer(), nStrLen + 1);
+                            memcpy( p, aTmp.getStr(), nStrLen + 1);
                             nPos += 2 + nStrLen + 1;
                             sal_uInt8* q = ( pCellArr + nPos );
                             if( !nStrLen & 1 )
@@ -2516,13 +2518,14 @@ void ScInterpreter::ScExternal()
                         break;
                     case PTR_STRING :
                         {
-                            ByteString aStr( GetString(), osl_getThreadTextEncoding() );
-                            if ( aStr.Len() >= ADDIN_MAXSTRLEN )
+                            rtl::OString aStr(rtl::OUStringToOString(GetString(),
+                                osl_getThreadTextEncoding()));
+                            if ( aStr.getLength() >= ADDIN_MAXSTRLEN )
                                 SetError( errStringOverflow );
                             else
                             {
                                 pStr[i-1] = new sal_Char[ADDIN_MAXSTRLEN];
-                                strncpy( pStr[i-1], aStr.GetBuffer(), ADDIN_MAXSTRLEN );
+                                strncpy( pStr[i-1], aStr.getStr(), ADDIN_MAXSTRLEN );
                                 pStr[i-1][ADDIN_MAXSTRLEN-1] = 0;
                                 ppParam[i] = pStr[i-1];
                             }

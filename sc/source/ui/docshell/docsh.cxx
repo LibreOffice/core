@@ -1688,8 +1688,8 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     }
     else
     {
-        aStrDelimEncoded = ByteString( cStrDelim, eCharSet );
-        aDelimEncoded = ByteString( cDelim, eCharSet );
+        aStrDelimEncoded = rtl::OString(&cStrDelim, 1, eCharSet);
+        aDelimEncoded = rtl::OString(&cDelim, 1, eCharSet);
         rtl_TextEncodingInfo aInfo;
         aInfo.StructSize = sizeof(aInfo);
         if ( rtl_getTextEncodingInfo( eCharSet, &aInfo ) )
@@ -1965,9 +1965,9 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                         if ( bContextOrNotAsciiEncoding )
                         {
                             // to byte encoding
-                            ByteString aStrEnc( aUniString, eCharSet );
+                            rtl::OString aStrEnc(rtl::OUStringToOString(aUniString, eCharSet));
                             // back to Unicode
-                            UniString aStrDec( aStrEnc, eCharSet );
+                            UniString aStrDec(rtl::OStringToOUString(aStrEnc, eCharSet));
                             // search on re-decoded string
                             xub_StrLen nPos = aStrDec.Search( aStrDelimDecoded );
                             bool bNeedQuotes = rAsciiOpt.bQuoteAllText ||
@@ -1989,7 +1989,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                         }
                         else
                         {
-                            ByteString aStrEnc( aUniString, eCharSet );
+                            ByteString aStrEnc(rtl::OUStringToOString(aUniString, eCharSet));
                             // search on encoded string
                             xub_StrLen nPos = aStrEnc.Search( aStrDelimEncoded );
                             bool bNeedQuotes = rAsciiOpt.bQuoteAllText ||

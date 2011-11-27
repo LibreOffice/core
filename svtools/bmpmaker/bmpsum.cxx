@@ -133,9 +133,9 @@ void BmpSum::Message( const String& rText, sal_uInt8 nExitCode )
     if( EXIT_NOERROR != nExitCode )
         SetExitCode( nExitCode );
 
-    ByteString aText( rText, RTL_TEXTENCODING_UTF8 );
-    aText.Append( "\r\n" );
-    fprintf( stderr, "%s", aText.GetBuffer() );
+    rtl::OStringBuffer aText(rtl::OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
+    aText.append(RTL_CONSTASCII_STRINGPARAM("\r\n"));
+    fprintf(stderr, "%s", aText.getStr());
 }
 
 // -----------------------------------------------------------------------------

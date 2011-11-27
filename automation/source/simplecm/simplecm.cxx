@@ -195,7 +195,7 @@ ByteString SimpleCommunicationLinkViaSocket::GetCommunicationPartner( CM_NameTyp
                     pStreamSocket->getPeerAddr( *pPeerAdr );
                     osl_getDottedInetAddrOfSocketAddr( pPeerAdr->getHandle(), &aDotted.pData);
                     delete pPeerAdr;
-                    return ByteString( UniString(aDotted), RTL_TEXTENCODING_UTF8 );
+                    return rtl::OUStringToOString(aDotted, RTL_TEXTENCODING_UTF8);
                 }
                 //break;
             case CM_FQDN:
@@ -203,7 +203,7 @@ ByteString SimpleCommunicationLinkViaSocket::GetCommunicationPartner( CM_NameTyp
                     if ( !aCommunicationPartner.Len() )
                     {
                         rtl::OUString aFQDN( pStreamSocket->getPeerHost());
-                        aCommunicationPartner = ByteString( UniString(aFQDN), RTL_TEXTENCODING_UTF8 );
+                        aCommunicationPartner = rtl::OUStringToOString(aFQDN, RTL_TEXTENCODING_UTF8);
                     }
                     return aCommunicationPartner;
                 }
@@ -226,7 +226,7 @@ ByteString SimpleCommunicationLinkViaSocket::GetMyName( CM_NameType eType )
                     pStreamSocket->getPeerAddr( *pPeerAdr );
                     osl_getDottedInetAddrOfSocketAddr( pPeerAdr->getHandle(), &aDotted.pData);
                     delete pPeerAdr;
-                    return ByteString( UniString(aDotted), RTL_TEXTENCODING_UTF8 );
+                    return rtl::OUStringToOString(aDotted, RTL_TEXTENCODING_UTF8);
                 }
                 //break;
             case CM_FQDN:
@@ -234,7 +234,7 @@ ByteString SimpleCommunicationLinkViaSocket::GetMyName( CM_NameType eType )
                     if ( !aMyName.Len() )
                     {
                         rtl::OUString aFQDN(pStreamSocket->getLocalHost());
-                        aMyName = ByteString( UniString(aFQDN), RTL_TEXTENCODING_UTF8 );
+                        aMyName = rtl::OUStringToOString(aFQDN, RTL_TEXTENCODING_UTF8);
                     }
                     return aMyName;
                 }
@@ -368,8 +368,8 @@ sal_Bool CommunicationManager::StartCommunication( ByteString aHost, sal_uLong n
 
 ByteString CommunicationManager::GetMyName( CM_NameType )
 {
-    rtl::OUString aHostname( osl::SocketAddr::getLocalHostname());
-    return ByteString( UniString(aHostname), RTL_TEXTENCODING_UTF8 );
+    rtl::OUString aHostname(osl::SocketAddr::getLocalHostname());
+    return rtl::OUStringToOString(aHostname, RTL_TEXTENCODING_UTF8);
 }
 
 void CommunicationManager::CallConnectionOpened( CommunicationLink* pCL )

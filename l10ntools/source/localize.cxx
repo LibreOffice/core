@@ -247,9 +247,9 @@ const ByteString SourceTreeLocalizer::GetProjectName( sal_Bool bAbs )
         if ( aTest.Exists() )
         {
             if ( bAbs )
-                return ByteString( aCur.GetFull(), RTL_TEXTENCODING_ASCII_US );
+                return rtl::OUStringToOString(aCur.GetFull(), RTL_TEXTENCODING_ASCII_US);
             else
-                return ByteString( aCur.GetName(), RTL_TEXTENCODING_ASCII_US );
+                return rtl::OUStringToOString(aCur.GetName(), RTL_TEXTENCODING_ASCII_US);
         }
     }
 
@@ -268,13 +268,13 @@ const ByteString SourceTreeLocalizer::GetProjectRootRel()
     ByteString sProjectRoot( GetProjectName( sal_True ));
     DirEntry aCur;
     aCur.ToAbs();
-    ByteString sCur( aCur.GetFull(), RTL_TEXTENCODING_ASCII_US );
+    ByteString sCur(rtl::OUStringToOString(aCur.GetFull(), RTL_TEXTENCODING_ASCII_US));
 
     if( sCur.SearchAndReplace( sProjectRoot, "" ) == STRING_NOTFOUND )
         return "";
 
-    ByteString sDelimiter(
-        DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US );
+    rtl::OString sDelimiter(rtl::OUStringToOString(
+        DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US));
 
     sCur.SearchAndReplaceAll( sDelimiter, "/" );
     sCur = comphelper::string::stripStart(sCur, '/');
@@ -314,7 +314,7 @@ void SourceTreeLocalizer::WorkOnFile(
 {
         String sFull( rFileName, RTL_TEXTENCODING_ASCII_US );
         DirEntry aEntry( sFull );
-        ByteString sFileName( aEntry.GetName(), RTL_TEXTENCODING_ASCII_US );
+        rtl::OString sFileName(rtl::OUStringToOString(aEntry.GetName(), RTL_TEXTENCODING_ASCII_US));
 
         // set current working directory
         DirEntry aPath( aEntry.GetPath());
@@ -327,7 +327,7 @@ void SourceTreeLocalizer::WorkOnFile(
             ByteString sRoot( GetProjectRootRel());
 
             DirEntry aTemp( Export::GetTempFile());
-            ByteString sTempFile( aTemp.GetFull(), RTL_TEXTENCODING_ASCII_US );
+            rtl::OString sTempFile(rtl::OUStringToOString(aTemp.GetFull(), RTL_TEXTENCODING_ASCII_US));
 
             ByteString sDel;
 #if defined(WNT)
@@ -395,8 +395,8 @@ sal_Bool SourceTreeLocalizer::CheckNegativeList( const ByteString &rFileName )
     sal_uLong nIndex = 0;
     sal_Bool bReturn  = sal_True;
 
-    ByteString sDelimiter(
-        DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US );
+    rtl::OString sDelimiter(rtl::OUStringToOString(
+        DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US));
 
     ByteString sFileName( rFileName );
     sFileName.ToLowerAscii();
@@ -424,8 +424,8 @@ sal_Bool SourceTreeLocalizer::CheckPositiveList( const ByteString &rFileName )
     sal_uLong nIndex = 0;
     sal_Bool bReturn  = sal_False;
 
-    ByteString sDelimiter(
-        DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US );
+    rtl::OString sDelimiter(rtl::OUStringToOString(
+        DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US));
 
     ByteString sFileName( rFileName );
     sFileName.ToLowerAscii();
@@ -462,9 +462,10 @@ void SourceTreeLocalizer::WorkOnFileType(
     DirEntry aEntry( sWild );
     Dir aDir( sWild, FSYS_KIND_FILE );
 
-    for ( sal_uInt16 i = 0; i < aDir.Count(); i++ ) {
+    for ( sal_uInt16 i = 0; i < aDir.Count(); i++ )
+    {
         DirEntry aFile( aDir[ i ] );
-        ByteString sFile( aFile.GetFull(), RTL_TEXTENCODING_ASCII_US );
+        rtl::OString sFile(rtl::OUStringToOString(aFile.GetFull(), RTL_TEXTENCODING_ASCII_US));
 
         sal_Bool bAllowed = sal_True;
 
@@ -603,7 +604,7 @@ int _cdecl main( int argc, char *argv[] )
     DirEntry aEntry( String( sFileName , RTL_TEXTENCODING_ASCII_US ));
     aEntry.ToAbs();
     String sFullEntry = aEntry.GetFull();
-    ByteString sFileABS(aEntry.GetFull(), osl_getThreadTextEncoding());
+    rtl::OString sFileABS(rtl::OUStringToOString(aEntry.GetFull(), osl_getThreadTextEncoding()));
     sFileName = sFileABS;
 
     string pwd;

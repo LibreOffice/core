@@ -395,18 +395,17 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
     return pStream->GetError();
 }
 
-
-static ByteString formatForSave(
-        const uno::Reference< XDictionaryEntry > &xEntry, rtl_TextEncoding eEnc )
+static rtl::OString formatForSave(const uno::Reference< XDictionaryEntry > &xEntry,
+    rtl_TextEncoding eEnc )
 {
-   ByteString aStr(xEntry->getDictionaryWord().getStr(), eEnc);
+   rtl::OStringBuffer aStr(rtl::OUStringToOString(xEntry->getDictionaryWord(), eEnc));
 
    if (xEntry->isNegative())
    {
-       aStr += "==";
-       aStr += ByteString(xEntry->getReplacementText().getStr(), eEnc);
+       aStr.append(RTL_CONSTASCII_STRINGPARAM("=="));
+       aStr.append(rtl::OUStringToOString(xEntry->getReplacementText(), eEnc));
    }
-   return aStr;
+   return aStr.makeStringAndClear();
 }
 
 
@@ -450,9 +449,9 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
         pStream->WriteLine(ByteString("lang: <none>"));
     else
     {
-        ByteString aLine("lang: ");
-        aLine += ByteString( String( MsLangId::convertLanguageToIsoString( nLanguage ) ), eEnc);
-        pStream->WriteLine( aLine );
+        rtl::OStringBuffer aLine(RTL_CONSTASCII_STRINGPARAM("lang: "));
+        aLine.append(rtl::OUStringToOString(MsLangId::convertLanguageToIsoString(nLanguage), eEnc));
+        pStream->WriteLine(aLine.makeStringAndClear());
     }
     if (0 != (nErr = pStream->GetError()))
         return nErr;
@@ -468,7 +467,7 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
     const uno::Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();
     for (sal_Int32 i = 0;  i < nCount;  i++)
     {
-        ByteString aOutStr = formatForSave(pEntry[i], eEnc);
+        rtl::OString aOutStr = formatForSave(pEntry[i], eEnc);
         pStream->WriteLine (aOutStr);
         if (0 != (nErr = pStream->GetError()))
             return nErr;

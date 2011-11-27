@@ -132,16 +132,15 @@ void GalleryThemeEntry::SetId( sal_uInt32 nNewId, sal_Bool bResetThemeName )
 
 SvStream& operator<<( SvStream& rOut, const GalleryImportThemeEntry& rEntry )
 {
-    rOut.WriteByteString(ByteString(rEntry.aThemeName, RTL_TEXTENCODING_UTF8));
+    rOut.WriteByteString(rtl::OUStringToOString(rEntry.aThemeName, RTL_TEXTENCODING_UTF8));
 
-    rOut.WriteByteString(ByteString(rEntry.aUIName, RTL_TEXTENCODING_UTF8));
+    rOut.WriteByteString(rtl::OUStringToOString(rEntry.aUIName, RTL_TEXTENCODING_UTF8));
 
-    rOut.WriteByteString(ByteString(String(rEntry.aURL.GetMainURL( INetURLObject::NO_DECODE )), RTL_TEXTENCODING_UTF8));
+    rOut.WriteByteString(rtl::OUStringToOString(String(rEntry.aURL.GetMainURL( INetURLObject::NO_DECODE )), RTL_TEXTENCODING_UTF8));
 
-    rOut.WriteByteString(ByteString(rEntry.aImportName, RTL_TEXTENCODING_UTF8));
+    rOut.WriteByteString(rtl::OUStringToOString(rEntry.aImportName, RTL_TEXTENCODING_UTF8));
 
-    ByteString aDummy;
-    rOut.WriteByteString(aDummy);
+    rOut.WriteByteString(rtl::OUString());
 
     return rOut;
 }

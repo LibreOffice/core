@@ -109,10 +109,11 @@ sal_Bool LngParser::CreateSDF(
     String sFullEntry = aEntry.GetFull();
     aEntry += DirEntry( String( "..", RTL_TEXTENCODING_ASCII_US ));
     aEntry += DirEntry( rRoot );
-    ByteString sPrjEntry( aEntry.GetFull(), osl_getThreadTextEncoding());
-    ByteString sActFileName(
-        sFullEntry.Copy( sPrjEntry.Len() + 1 ), osl_getThreadTextEncoding());
-    sActFileName.SearchAndReplaceAll( "/", "\\" );
+    rtl::OString sPrjEntry(rtl::OUStringToOString(aEntry.GetFull(),
+        osl_getThreadTextEncoding()));
+    rtl::OString sActFileName(rtl::OUStringToOString(
+        sFullEntry.Copy( sPrjEntry.getLength() + 1 ), osl_getThreadTextEncoding()));
+    sActFileName = sActFileName.replace('/', '\\');
 
     size_t nPos  = 0;
     sal_Bool bStart = true;

@@ -168,7 +168,7 @@ void SgaObject::WriteData( SvStream& rOut, const String& rDestDir ) const
 
     String aURLWithoutDestDir = String(aURL.GetMainURL( INetURLObject::NO_DECODE ));
     aURLWithoutDestDir.SearchAndReplace(rDestDir, String());
-    rOut.WriteByteString(ByteString(aURLWithoutDestDir, RTL_TEXTENCODING_UTF8));
+    rOut.WriteByteString(rtl::OUStringToOString(aURLWithoutDestDir, RTL_TEXTENCODING_UTF8));
 }
 
 // ------------------------------------------------------------------------

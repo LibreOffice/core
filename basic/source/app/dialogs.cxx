@@ -172,7 +172,7 @@ void ConfEdit::Save( Config &aConf )
     aConf.SetGroup("Misc");
     ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Path" );
     aConf.SetGroup( aCurrentProfile );
-    aConf.WriteKey( aKeyName, ByteString( aEdit.GetText(), RTL_TEXTENCODING_UTF8 ) );
+    aConf.WriteKey( aKeyName, rtl::OUStringToOString(aEdit.GetText(), RTL_TEXTENCODING_UTF8) );
 }
 
 void ConfEdit::Reload( Config &aConf )
@@ -408,7 +408,7 @@ IMPL_LINK( ProfileOptions, Select, ComboBox*, EMPTYARG )
     if ( aCbProfile.GetEntryPos( aCbProfile.GetText() ) == LISTBOX_ENTRY_NOTFOUND )
         return 1;
     Save();
-    ByteString aProfileKey( ByteString( ProfilePrefix ).Append( ByteString( aCbProfile.GetText(), RTL_TEXTENCODING_UTF8 ) ) );
+    ByteString aProfileKey( ByteString( ProfilePrefix ).Append( rtl::OUStringToOString(aCbProfile.GetText(), RTL_TEXTENCODING_UTF8) ) );
     rConf.SetGroup( "Misc" );
     rConf.WriteKey( "CurrentProfile", aProfileKey );
     ReloadProfile();
@@ -439,7 +439,7 @@ void ProfileOptions::ReloadProfile()
 IMPL_LINK( ProfileOptions, DelProfile, Button*, EMPTYARG )
 {
     String aProfile = aCbProfile.GetText();
-    ByteString aProfileKey( ByteString( ProfilePrefix ).Append( ByteString( aProfile, RTL_TEXTENCODING_UTF8 ) ) );
+    ByteString aProfileKey( ByteString( ProfilePrefix ).Append( rtl::OUStringToOString(aProfile, RTL_TEXTENCODING_UTF8) ) );
     if ( aCbProfile.GetEntryPos( aProfile ) != COMBOBOX_ENTRY_NOTFOUND )
     {
         aCbProfile.RemoveEntry( aProfile );
@@ -448,7 +448,7 @@ IMPL_LINK( ProfileOptions, DelProfile, Button*, EMPTYARG )
     // Set first remaining profile as current profile
     aCbProfile.SetText( aCbProfile.GetEntry( 0 ) );
     aProfile = aCbProfile.GetText();
-    aProfileKey = ByteString( ProfilePrefix ).Append( ByteString( aProfile, RTL_TEXTENCODING_UTF8 ) );
+    aProfileKey = ByteString( ProfilePrefix ).Append( rtl::OUStringToOString(aProfile, RTL_TEXTENCODING_UTF8) );
     rConf.SetGroup( "Misc" );
     rConf.WriteKey( "CurrentProfile", aProfileKey );
     ReloadProfile();
@@ -460,7 +460,7 @@ IMPL_LINK( ProfileOptions, DelProfile, Button*, EMPTYARG )
 IMPL_LINK( ProfileOptions, NewProfile, Button*, EMPTYARG )
 {
     aCbProfile.InsertEntry( aCbProfile.GetText() );
-    ByteString aProfileKey( ByteString( ProfilePrefix ).Append( ByteString( aCbProfile.GetText(), RTL_TEXTENCODING_UTF8 ) ) );
+    ByteString aProfileKey( ByteString( ProfilePrefix ).Append( rtl::OUStringToOString(aCbProfile.GetText(), RTL_TEXTENCODING_UTF8) ) );
     rConf.SetGroup( "Misc" );
     rConf.WriteKey( "CurrentProfile", aProfileKey );
     // save last profile as new data for new profile
@@ -553,7 +553,7 @@ void CrashreportOptions::Save( Config &aConfig )
     else
         aConfig.WriteKey( "UseProxy", "false" );
 
-    aConfig.WriteKey( "ProxyServer", ByteString( aEDCRHost.GetText(), RTL_TEXTENCODING_UTF8 ) );
+    aConfig.WriteKey( "ProxyServer", rtl::OUStringToOString(aEDCRHost.GetText(), RTL_TEXTENCODING_UTF8) );
     aConfig.WriteKey("ProxyPort",
         rtl::OString::valueOf(static_cast<sal_Int64>(aNFCRPort.GetValue())));
 
@@ -562,7 +562,7 @@ void CrashreportOptions::Save( Config &aConfig )
     else
         aConfig.WriteKey( "AllowContact", "false" );
 
-    aConfig.WriteKey( "ReturnAddress", ByteString( aEDEMail.GetText(), RTL_TEXTENCODING_UTF8 ) );
+    aConfig.WriteKey( "ReturnAddress", rtl::OUStringToOString(aEDEMail.GetText(), RTL_TEXTENCODING_UTF8) );
 }
 
 IMPL_LINK( CrashreportOptions, CheckProxy, void*, EMPTYARG )
@@ -644,7 +644,7 @@ IMPL_LINK( MiscOptions, Click, void*, EMPTYARG )
 void MiscOptions::Save( Config &aConfig )
 {
     aConfig.SetGroup("Communication");
-    aConfig.WriteKey( "Host", ByteString( aEDHost.GetText(), RTL_TEXTENCODING_UTF8 ) );
+    aConfig.WriteKey( "Host", rtl::OUStringToOString(aEDHost.GetText(), RTL_TEXTENCODING_UTF8) );
     aConfig.WriteKey("TTPort",
         rtl::OString::valueOf(static_cast<sal_Int64>(aNFTTPort.GetValue())));
     aConfig.WriteKey("UnoPort",
@@ -668,7 +668,7 @@ void MiscOptions::Save( Config &aConfig )
         rtl::OString::valueOf(static_cast<sal_Int64>(aTFMaxLRU.GetValue())));
 
     aConfig.SetGroup("OOoProgramDir");
-    aConfig.WriteKey( C_KEY_AKTUELL, ByteString( aEDProgDir.GetText(), RTL_TEXTENCODING_UTF8 ) );
+    aConfig.WriteKey( C_KEY_AKTUELL, rtl::OUStringToOString(aEDProgDir.GetText(), RTL_TEXTENCODING_UTF8) );
     aConfig.WriteKey( C_KEY_TYPE, ByteString( "PATH" ) );
 }
 
@@ -743,9 +743,9 @@ void FontOptions::UpdatePreview()
 void FontOptions::Save( Config &aConfig )
 {
     aConfig.SetGroup("Misc");
-    aConfig.WriteKey( "ScriptFontName", ByteString(aFontName.GetText(), RTL_TEXTENCODING_UTF8) );
-    aConfig.WriteKey( "ScriptFontStyle", ByteString(aFontStyle.GetText(), RTL_TEXTENCODING_UTF8) );
-    aConfig.WriteKey( "ScriptFontSize", ByteString(aFontSize.GetText(), RTL_TEXTENCODING_UTF8) );
+    aConfig.WriteKey( "ScriptFontName", rtl::OUStringToOString(aFontName.GetText(), RTL_TEXTENCODING_UTF8) );
+    aConfig.WriteKey( "ScriptFontStyle", rtl::OUStringToOString(aFontStyle.GetText(), RTL_TEXTENCODING_UTF8) );
+    aConfig.WriteKey( "ScriptFontSize", rtl::OUStringToOString(aFontSize.GetText(), RTL_TEXTENCODING_UTF8) );
 }
 
 
@@ -812,7 +812,7 @@ void GenericOptions::LoadData()
     for ( size_t i = 0, n = pGroups->size(); i < n; ++i )
     {
         String* pGroup = pGroups->at( i );
-        aConf.SetGroup( ByteString( *pGroup, RTL_TEXTENCODING_UTF8 ) );
+        aConf.SetGroup( rtl::OUStringToOString(*pGroup, RTL_TEXTENCODING_UTF8) );
         if ( aConf.ReadKey( C_KEY_AKTUELL ).getLength() > 0 )
             aCbArea.InsertEntry( *pGroup );
         delete pGroup;
@@ -896,7 +896,7 @@ IMPL_LINK( GenericOptions, LoadGroup, ComboBox*, EMPTYARG )
         }
 
         aConf.SetGroup( aLastGroupName );
-        aConf.WriteKey( C_KEY_AKTUELL, ByteString( aCurrentValue, RTL_TEXTENCODING_UTF8 ) );
+        aConf.WriteKey( C_KEY_AKTUELL, rtl::OUStringToOString(aCurrentValue, RTL_TEXTENCODING_UTF8) );
         sal_uInt16 i;
         for ( i=0 ; i < aCbValue.GetEntryCount() ; i++ )
         {
@@ -904,12 +904,12 @@ IMPL_LINK( GenericOptions, LoadGroup, ComboBox*, EMPTYARG )
                 aAllValues += ';';
             aAllValues += aCbValue.GetEntry( i );
         }
-        aConf.WriteKey( C_KEY_ALLE, ByteString( aAllValues, RTL_TEXTENCODING_UTF8 ) );
+        aConf.WriteKey( C_KEY_ALLE, rtl::OUStringToOString(aAllValues, RTL_TEXTENCODING_UTF8) );
     }
 
     aCbValue.Clear();
 
-    ByteString aGroupName = ByteString( aCbArea.GetText(), RTL_TEXTENCODING_UTF8 );
+    rtl::OString aGroupName = rtl::OUStringToOString(aCbArea.GetText(), RTL_TEXTENCODING_UTF8);
     aCurrentValue = ReadKey( aGroupName, C_KEY_AKTUELL );
     aAllValues = ReadKey( aGroupName, C_KEY_ALLE );
     aType = ReadKey( aGroupName, C_KEY_TYPE );
@@ -934,7 +934,7 @@ IMPL_LINK( GenericOptions, DelGroup, Button*, EMPTYARG )
     if ( aCbArea.GetEntryPos( aGroup ) != COMBOBOX_ENTRY_NOTFOUND )
     {
         aCbArea.RemoveEntry( aGroup );
-        ByteString aByteGroup( aGroup, RTL_TEXTENCODING_UTF8 );
+        rtl::OString aByteGroup(rtl::OUStringToOString(aGroup, RTL_TEXTENCODING_UTF8));
         aConf.DeleteGroup( aByteGroup );
     }
 

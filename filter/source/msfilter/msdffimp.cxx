@@ -4361,7 +4361,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
             if( bLinkGrf && !bGrfRead )     // sj: #i55484# if the graphic was embedded ( bGrfRead == true ) then
             {                               // we do not need to set a link. TODO: not to lose the information where the graphic is linked from
                 INetURLObject aAbsURL;
-                if ( !INetURLObject( maBaseURL ).GetNewAbsURL( ByteString( aFileName, RTL_TEXTENCODING_UTF8 ), &aAbsURL ) )
+                if ( !INetURLObject( maBaseURL ).GetNewAbsURL( rtl::OUStringToOString(aFileName, RTL_TEXTENCODING_UTF8), &aAbsURL ) )
                 {
                     String aValidURL;
                     if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aFileName, aValidURL ) )

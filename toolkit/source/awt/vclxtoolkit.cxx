@@ -365,10 +365,9 @@ sal_uInt16 ImplGetComponentType( const String& rServiceName )
 
 
     ComponentInfo aSearch;
-    ByteString aServiceName( rServiceName, osl_getThreadTextEncoding() );
-    aServiceName.ToLowerAscii();
-    if ( aServiceName.Len() )
-        aSearch.pName = aServiceName.GetBuffer();
+    rtl::OString aServiceName(rtl::OUStringToOString(rServiceName, osl_getThreadTextEncoding()).toAsciiLowerCase());
+    if ( aServiceName.getLength() )
+        aSearch.pName = aServiceName.getStr();
     else
         aSearch.pName = "window";
 

@@ -214,12 +214,12 @@ SbxVariable* SbxObject::Find( const XubString& rName, SbxClassType t )
     static sal_uInt16 nLvl = 0;
     static const char* pCls[] =
     { "DontCare","Array","Value","Variable","Method","Property","Object" };
-    ByteString aNameStr1( (const UniString&)rName, RTL_TEXTENCODING_ASCII_US );
-    ByteString aNameStr2( (const UniString&)SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US );
+    rtl::OString aNameStr1(rtl::OUStringToOString(rName, RTL_TEXTENCODING_ASCII_US));
+    rtl::OString aNameStr2(rtl::OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
     DbgOutf( "SBX: Search %.*s %s %s in %s",
         nLvl++, "                              ",
         ( t >= SbxCLASS_DONTCARE && t <= SbxCLASS_OBJECT )
-         ? pCls[ t-1 ] : "Unknown class", aNameStr1.GetBuffer(), aNameStr1.GetBuffer() );
+         ? pCls[ t-1 ] : "Unknown class", aNameStr1.getStr(), aNameStr1.getStr() );
 #endif
 
     if( !GetAll( t ) )
@@ -276,10 +276,10 @@ SbxVariable* SbxObject::Find( const XubString& rName, SbxClassType t )
     nLvl--;
     if( pRes )
     {
-        ByteString aNameStr3( (const UniString&)rName, RTL_TEXTENCODING_ASCII_US );
-        ByteString aNameStr4( (const UniString&)SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US );
+        rtl::OString aNameStr3(rtl::OUStringToOString(rName, RTL_TEXTENCODING_ASCII_US));
+        rtl::OString aNameStr4(rtl::OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
         DbgOutf( "SBX: Found %.*s %s in %s",
-            nLvl, "                              ", aNameStr3.GetBuffer(), aNameStr4.GetBuffer() );
+            nLvl, "                              ", aNameStr3.getStr(), aNameStr4.getStr() );
     }
 #endif
     return pRes;
@@ -489,12 +489,12 @@ void SbxObject::Insert( SbxVariable* pVar )
     XubString aVarName( pVar->GetName() );
     if ( !aVarName.Len() && pVar->ISA(SbxObject) )
         aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
-    ByteString aNameStr1( (const UniString&)aVarName, RTL_TEXTENCODING_ASCII_US );
-    ByteString aNameStr2( (const UniString&)SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US );
+    rtl::OString aNameStr1(rtl::OUStringToOString(aVarName, RTL_TEXTENCODING_ASCII_US));
+    rtl::OString aNameStr2(rtl::OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
     DbgOutf( "SBX: Insert %s %s in %s",
         ( pVar->GetClass() >= SbxCLASS_DONTCARE &&
           pVar->GetClass() <= SbxCLASS_OBJECT )
-            ? pCls[ pVar->GetClass()-1 ] : "Unknown class", aNameStr1.GetBuffer(), aNameStr1.GetBuffer() );
+            ? pCls[ pVar->GetClass()-1 ] : "Unknown class", aNameStr1.getStr(), aNameStr1.getStr() );
 #endif
     }
 }
@@ -529,12 +529,12 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
     XubString aVarName( pVar->GetName() );
     if ( !aVarName.Len() && pVar->ISA(SbxObject) )
         aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
-    ByteString aNameStr1( (const UniString&)aVarName, RTL_TEXTENCODING_ASCII_US );
-    ByteString aNameStr2( (const UniString&)SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US );
+    rtl::OString aNameStr1(rtl::OUStringToOString(aVarName, RTL_TEXTENCODING_ASCII_US));
+    rtl::OString aNameStr2(rtl::OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
     DbgOutf( "SBX: Insert %s %s in %s",
         ( pVar->GetClass() >= SbxCLASS_DONTCARE &&
           pVar->GetClass() <= SbxCLASS_OBJECT )
-            ? pCls[ pVar->GetClass()-1 ] : "Unknown class", aNameStr1.GetBuffer(), aNameStr1.GetBuffer() );
+            ? pCls[ pVar->GetClass()-1 ] : "Unknown class", aNameStr1.getStr(), aNameStr1.getStr() );
 #endif
     }
 }
@@ -554,8 +554,8 @@ void SbxObject::Remove( SbxVariable* pVar )
     XubString aVarName( pVar->GetName() );
     if ( !aVarName.Len() && pVar->ISA(SbxObject) )
         aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
-    ByteString aNameStr1( (const UniString&)aVarName, RTL_TEXTENCODING_ASCII_US );
-    ByteString aNameStr2( (const UniString&)SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US );
+    rtl::OString aNameStr1(rtl::OUStringToOString(aVarName, RTL_TEXTENCODING_ASCII_US));
+    rtl::OString aNameStr2(rtl::OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
 #endif
         SbxVariableRef pVar_ = pArray->Get( nIdx );
         if( pVar_->IsBroadcaster() )
@@ -766,38 +766,38 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
         GetAll( SbxCLASS_DONTCARE );
 
     // Output the data of the object itself
-    ByteString aNameStr( (const UniString&)GetName(), RTL_TEXTENCODING_ASCII_US );
-    ByteString aClassNameStr( (const UniString&)aClassName, RTL_TEXTENCODING_ASCII_US );
+    rtl::OString aNameStr(rtl::OUStringToOString(GetName(), RTL_TEXTENCODING_ASCII_US));
+    rtl::OString aClassNameStr(rtl::OUStringToOString(aClassName, RTL_TEXTENCODING_ASCII_US));
     rStrm << "Object( "
           << rtl::OString::valueOf(reinterpret_cast<sal_Int64>(this)).getStr()<< "=='"
-          << ( aNameStr.Len() ? aNameStr.GetBuffer() : "<unnamed>" ) << "', "
-          << "of class '" << aClassNameStr.GetBuffer() << "', "
+          << ( aNameStr.getLength() ? aNameStr.getStr() : "<unnamed>" ) << "', "
+          << "of class '" << aClassNameStr.getStr() << "', "
           << "counts "
           << rtl::OString::valueOf(static_cast<sal_Int64>(GetRefCount())).getStr()
           << " refs, ";
     if ( GetParent() )
     {
-        ByteString aParentNameStr( (const UniString&)GetName(), RTL_TEXTENCODING_ASCII_US );
+        rtl::OString aParentNameStr(rtl::OUStringToOString(GetName(), RTL_TEXTENCODING_ASCII_US));
         rStrm << "in parent "
               << rtl::OString::valueOf(reinterpret_cast<sal_Int64>(GetParent())).getStr()
-              << "=='" << ( aParentNameStr.Len() ? aParentNameStr.GetBuffer() : "<unnamed>" ) << "'";
+              << "=='" << ( aParentNameStr.getLength() ? aParentNameStr.getStr() : "<unnamed>" ) << "'";
     }
     else
         rStrm << "no parent ";
     rStrm << " )" << endl;
-    ByteString aIndentNameStr( (const UniString&)aIndent, RTL_TEXTENCODING_ASCII_US );
-    rStrm << aIndentNameStr.GetBuffer() << "{" << endl;
+    rtl::OString aIndentNameStr(rtl::OUStringToOString(aIndent, RTL_TEXTENCODING_ASCII_US));
+    rStrm << aIndentNameStr.getStr() << "{" << endl;
 
     // Flags
     XubString aAttrs;
     if( CollectAttrs( this, aAttrs ) )
     {
-        ByteString aAttrStr( (const UniString&)aAttrs, RTL_TEXTENCODING_ASCII_US );
-        rStrm << aIndentNameStr.GetBuffer() << "- Flags: " << aAttrStr.GetBuffer() << endl;
+        rtl::OString aAttrStr(rtl::OUStringToOString(aAttrs, RTL_TEXTENCODING_ASCII_US));
+        rStrm << aIndentNameStr.getStr() << "- Flags: " << aAttrStr.getStr() << endl;
     }
 
     // Methods
-    rStrm << aIndentNameStr.GetBuffer() << "- Methods:" << endl;
+    rStrm << aIndentNameStr.getStr() << "- Methods:" << endl;
     for( sal_uInt16 i = 0; i < pMethods->Count(); i++ )
     {
         SbxVariableRef& r = pMethods->GetRef( i );
@@ -829,7 +829,7 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
     }
 
     // Properties
-    rStrm << aIndentNameStr.GetBuffer() << "- Properties:" << endl;
+    rStrm << aIndentNameStr.getStr() << "- Properties:" << endl;
     {
         for( sal_uInt16 i = 0; i < pProps->Count(); i++ )
         {
@@ -863,7 +863,7 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
     }
 
     // Objects
-    rStrm << aIndentNameStr.GetBuffer() << "- Objects:" << endl;
+    rStrm << aIndentNameStr.getStr() << "- Objects:" << endl;
     {
         for( sal_uInt16 i = 0; i < pObjs->Count(); i++ )
         {
@@ -871,7 +871,7 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
             SbxVariable* pVar = r;
             if ( pVar )
             {
-                rStrm << aIndentNameStr.GetBuffer() << "  - Sub";
+                rStrm << aIndentNameStr.getStr() << "  - Sub";
                 if ( pVar->ISA(SbxObject) )
                     ((SbxObject*) pVar)->Dump( rStrm, bFill );
                 else if ( pVar->ISA(SbxVariable) )
@@ -880,7 +880,7 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
         }
     }
 
-    rStrm << aIndentNameStr.GetBuffer() << "}" << endl << endl;
+    rStrm << aIndentNameStr.getStr() << "}" << endl << endl;
     --nLevel;
 }
 

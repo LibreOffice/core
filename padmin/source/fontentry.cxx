@@ -384,7 +384,7 @@ FontImportDialog::~FontImportDialog()
 {
     Config& rPadminRC( getPadminRC() );
     rPadminRC.SetGroup( "FontImport" );
-    rPadminRC.WriteKey( "FromPath", ByteString( m_aFromDirEdt.GetText(), RTL_TEXTENCODING_UTF8 ) );
+    rPadminRC.WriteKey( "FromPath", rtl::OUStringToOString(m_aFromDirEdt.GetText(), RTL_TEXTENCODING_UTF8) );
 }
 
 void FontImportDialog::importFontsFailed( ::psp::PrintFontManager::ImportFontCallback::FailCondition eReason )

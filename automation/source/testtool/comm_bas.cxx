@@ -334,7 +334,7 @@ void CommunicationWrapper::Events( String aType, CommunicationLink* pLink )
 void CommunicationWrapper::MStartCommunication( SbxVariable* pVar, SbxArray* pPar, sal_Bool /*bWrite*/ )
 { //    CommunicationLink StartCommunication( Host, Port )
     m_bCatchOpen = sal_True;
-    if ( m_pManager->StartCommunication( ByteString( pPar->Get( 1 )->GetString(), RTL_TEXTENCODING_UTF8 ), pPar->Get( 2 )->GetULong() ) )
+    if ( m_pManager->StartCommunication( rtl::OUStringToOString( pPar->Get( 1 )->GetString(), RTL_TEXTENCODING_UTF8 ), pPar->Get( 2 )->GetULong() ) )
     {
         while ( !m_pNewLink )
             GetpApp()->Reschedule();

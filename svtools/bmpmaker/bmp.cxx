@@ -28,6 +28,7 @@
 
 
 #include <rtl/math.hxx>
+#include <rtl/strbuf.hxx>
 
 #include <math.h>
 #include <stdio.h>
@@ -155,9 +156,9 @@ void BmpApp::Message( const String& rText, sal_uInt8 cExit )
     if( EXIT_NOERROR != cExit )
         SetExitCode( cExit );
 
-    ByteString aText( rText, RTL_TEXTENCODING_UTF8 );
-    aText.Append( "\r\n" );
-    fprintf( stderr, "%s", aText.GetBuffer() );
+    rtl::OStringBuffer aText(rtl::OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
+    aText.append(RTL_CONSTASCII_STRINGPARAM("\r\n"));
+    fprintf(stderr, "%s", aText.getStr());
 }
 
 // -----------------------------------------------------------------------------
@@ -187,14 +188,13 @@ int BmpApp::Start( const ::std::vector< String >& rArgs )
         sal_uInt16                  nCurCmd = 0;
         const String            aSrsName( rArgs[ nCurCmd++ ] );
         ::std::vector< String > aInDirVector;
-        ByteString              aLangDir;
 
         aOutName = rArgs[ nCurCmd++ ];
 
-        aLangDir = ByteString( rArgs[ nCurCmd++ ], RTL_TEXTENCODING_ASCII_US );
+        rtl::OString aLangDir(rtl::OUStringToOString(rArgs[nCurCmd++], RTL_TEXTENCODING_ASCII_US));
         aLangInfo.mnLangNum = static_cast< sal_uInt16 >( rArgs[ nCurCmd++ ].ToInt32() );
 
-        memcpy( aLangInfo.maLangDir, aLangDir.GetBuffer(), aLangDir.Len() + 1 );
+        memcpy( aLangInfo.maLangDir, aLangDir.getStr(), aLangDir.getLength() + 1 );
 
         GetCommandOption( rArgs, 'f', aOutputFileName );
         GetCommandOptions( rArgs, 'i', aInDirVector );
@@ -210,9 +210,9 @@ int BmpApp::Start( const ::std::vector< String >& rArgs )
     if( ( EXIT_NOERROR == cExitCode ) && aOutputFileName.Len() && aOutName.Len() )
     {
         SvFileStream    aOStm( aOutputFileName, STREAM_WRITE | STREAM_TRUNC );
-        ByteString      aStr( "Successfully generated ImageList(s) in: " );
-
-        aOStm.WriteLine( aStr.Append( ByteString( aOutName, RTL_TEXTENCODING_UTF8 ) ) );
+        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Successfully generated ImageList(s) in: "));
+        aStr.append(rtl::OUStringToOString(aOutName, RTL_TEXTENCODING_UTF8));
+        aOStm.WriteLine(aStr.makeStringAndClear());
         aOStm.Close();
     }
 

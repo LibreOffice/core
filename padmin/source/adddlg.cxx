@@ -295,8 +295,8 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                         int nPos = file->SearchBackward( '.' );
                         if( file->Copy( 0, nPos ) == String( aPPD ) )
                         {
-                            ByteString aSysPath( aFile, aEncoding );
-                            if( unlink( aSysPath.GetBuffer() ) )
+                            rtl::OString aSysPath(rtl::OUStringToOString(aFile, aEncoding));
+                            if (unlink(aSysPath.getStr()))
                             {
                                 String aText( PaResId( RID_ERR_REMOVEDRIVERFAILED ) );
                                 aText.SearchAndReplace( String::CreateFromAscii( "%s1" ), m_aDriverBox.GetSelectEntry( i ) );

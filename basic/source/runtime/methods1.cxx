@@ -997,8 +997,8 @@ sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
                 {
                     // without any length information! without end-identifier!
                     // What does that mean for Unicode?! Choosing conversion to ByteString...
-                    ByteString aByteStr( rStr, osl_getThreadTextEncoding() );
-                    *pStrm << (const char*)aByteStr.GetBuffer();
+                    rtl::OString aByteStr(rtl::OUStringToOString(rStr, osl_getThreadTextEncoding()));
+                    *pStrm << (const char*)aByteStr.getStr();
                 }
                 }
                 break;
@@ -1252,8 +1252,9 @@ RTLFUNC(Environ)
     }
     String aResult;
     // should be ANSI but that's not possible under Win16 in the DLL
-    ByteString aByteStr( rPar.Get(1)->GetString(), osl_getThreadTextEncoding() );
-    const char* pEnvStr = getenv( aByteStr.GetBuffer() );
+    rtl::OString aByteStr(rtl::OUStringToOString(rPar.Get(1)->GetString(),
+        osl_getThreadTextEncoding()));
+    const char* pEnvStr = getenv(aByteStr.getStr());
     if ( pEnvStr )
         aResult = String::CreateFromAscii( pEnvStr );
     rPar.Get(0)->PutString( aResult );

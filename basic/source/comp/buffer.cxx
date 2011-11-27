@@ -224,8 +224,8 @@ sal_Bool SbiBuffer::operator +=( const String& n )
     sal_uInt16 l = n.Len() + 1;
     if( Check( l ) )
     {
-        ByteString aByteStr( n, osl_getThreadTextEncoding() );
-        memcpy( pCur, aByteStr.GetBuffer(), l );
+        rtl::OString aByteStr(rtl::OUStringToOString(n, osl_getThreadTextEncoding()));
+        memcpy( pCur, aByteStr.getStr(), l );
         pCur += l;
         nOff = nOff + l;
         return sal_True;

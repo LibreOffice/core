@@ -196,7 +196,8 @@ void BmpCreator::ImplCreate( const ::std::vector< DirEntry >& rInDirs,
 
                         if( pCollectStm && !aBmpEx.IsEmpty() )
                         {
-                            const ByteString aCollectString( aFileName, RTL_TEXTENCODING_ASCII_US );
+                            const rtl::OString aCollectString(rtl::OUStringToOString(
+                                aFileName, RTL_TEXTENCODING_ASCII_US));
                             pCollectStm->WriteLine( aCollectString );
                         }
                     }

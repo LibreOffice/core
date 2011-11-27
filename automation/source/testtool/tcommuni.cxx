@@ -52,7 +52,7 @@ CommunicationManagerClientViaSocketTT::CommunicationManagerClientViaSocketTT()
 sal_Bool CommunicationManagerClientViaSocketTT::StartCommunication()
 {
     bApplicationStarted = sal_False;
-    return CommunicationManagerClientViaSocket::StartCommunication( ByteString( GetHostConfig(), RTL_TEXTENCODING_UTF8 ), GetTTPortConfig() );
+    return CommunicationManagerClientViaSocket::StartCommunication( rtl::OUStringToOString( GetHostConfig(), RTL_TEXTENCODING_UTF8 ), GetTTPortConfig() );
 }
 
 

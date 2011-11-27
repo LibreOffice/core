@@ -416,7 +416,7 @@ void ODbaseIndex::createINFEntry()
             }
         }
     }
-    aInfFile.WriteKey(aNewEntry,ByteString(sEntry,m_pTable->getConnection()->getTextEncoding()));
+    aInfFile.WriteKey(aNewEntry, rtl::OUStringToOString(sEntry, m_pTable->getConnection()->getTextEncoding()));
 }
 // -------------------------------------------------------------------------
 sal_Bool ODbaseIndex::DropImpl()
@@ -563,8 +563,8 @@ sal_Bool ODbaseIndex::CreateImpl()
 
     m_pFileStream->SetStreamSize(PAGE_SIZE);
 
-    ByteString aCol(aName,m_pTable->getConnection()->getTextEncoding());
-    strncpy(m_aHeader.db_name,aCol.GetBuffer(),std::min((sal_uInt16)sizeof(m_aHeader.db_name), aCol.Len()));
+    rtl::OString aCol(rtl::OUStringToOString(aName, m_pTable->getConnection()->getTextEncoding()));
+    strncpy(m_aHeader.db_name, aCol.getStr(), std::min<size_t>(sizeof(m_aHeader.db_name), aCol.getLength()));
     m_aHeader.db_unique  = m_IsUnique ? 1: 0;
     m_aHeader.db_keyrec  = m_aHeader.db_keylen + 8;
 

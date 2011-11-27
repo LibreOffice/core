@@ -913,7 +913,7 @@ void SbiIoSystem::ReadCon( ByteString& rIn )
     String aPromptStr( aPrompt, osl_getThreadTextEncoding() );
     SbiInputDialog aDlg( NULL, aPromptStr );
     if( aDlg.Execute() )
-        rIn = ByteString( aDlg.GetInput(), osl_getThreadTextEncoding() );
+        rIn = rtl::OUStringToOString(aDlg.GetInput(), osl_getThreadTextEncoding());
     else
         nError = SbERR_USER_ABORT;
     aPrompt.Erase();

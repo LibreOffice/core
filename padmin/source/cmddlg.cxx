@@ -176,7 +176,7 @@ void CommandStore::setCommands(
         nWritten--;
     }
     for( nWritten = 0, it = aWriteList.begin(); it != aWriteList.end(); ++it, ++nWritten )
-        rConfig.WriteKey( rtl::OString::valueOf(nWritten), ByteString( *it, RTL_TEXTENCODING_UTF8 ) );
+        rConfig.WriteKey( rtl::OString::valueOf(nWritten), rtl::OUStringToOString(*it, RTL_TEXTENCODING_UTF8) );
 }
 
 

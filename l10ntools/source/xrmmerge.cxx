@@ -210,8 +210,8 @@ extern FILE *GetXrmFile()
             DirEntry aSourceFile( String( sInputFileName , RTL_TEXTENCODING_ASCII_US ) );
             aSourceFile.CopyTo( aTempFile , FSYS_ACTION_COPYFILE );
             String sTempFile = aTempFile.GetFull();
-            Export::RemoveUTF8ByteOrderMarkerFromFile( ByteString( sTempFile , RTL_TEXTENCODING_ASCII_US ) );
-            pFile = fopen( ByteString( sTempFile , RTL_TEXTENCODING_ASCII_US ).GetBuffer(), "r" );
+            Export::RemoveUTF8ByteOrderMarkerFromFile(rtl::OUStringToOString(sTempFile , RTL_TEXTENCODING_ASCII_US) );
+            pFile = fopen(rtl::OUStringToOString(sTempFile , RTL_TEXTENCODING_ASCII_US).getStr(), "r");
             sUsedTempFile = sTempFile;
         }else{
             // able to open file?
@@ -227,14 +227,14 @@ extern FILE *GetXrmFile()
             // create path to project root
             DirEntry aEntry( String( sInputFileName, RTL_TEXTENCODING_ASCII_US ));
             aEntry.ToAbs();
-            ByteString sFullEntry( aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
+            rtl::OString sFullEntry(rtl::OUStringToOString(aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US));
             aEntry += DirEntry( String( "..", RTL_TEXTENCODING_ASCII_US ));
             aEntry += DirEntry( sPrjRoot );
-            ByteString sPrjEntry( aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
+            rtl::OString sPrjEntry(rtl::OUStringToOString(aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US));
 
             // create file name, beginnig with project root
             // (e.g.: source\ui\src\menue.src)
-            sActFileName = sFullEntry.Copy( sPrjEntry.Len() + 1 );
+            sActFileName = sFullEntry.copy(sPrjEntry.getLength() + 1);
 
 
             sActFileName.SearchAndReplaceAll( "/", "\\" );
@@ -529,7 +529,7 @@ void XRMResExport::WorkOnDesc(
 {
     DirEntry aEntry( String( sInputFileName, RTL_TEXTENCODING_ASCII_US ));
     aEntry.ToAbs();
-    ByteString sDescFileName( aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
+    ByteString sDescFileName(rtl::OUStringToOString(aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US));
     sDescFileName.SearchAndReplaceAll( "description.xml", "" );
     sDescFileName += GetAttribute( rOpenTag, "xlink:href" );
     int size;
@@ -699,8 +699,8 @@ void XRMResMerge::WorkOnDesc(
 
                     DirEntry aEntry( String( sOutputFile, RTL_TEXTENCODING_ASCII_US ));
                     aEntry.ToAbs();
-                    ByteString sOutputDescFile( aEntry.GetPath().GetFull(), RTL_TEXTENCODING_ASCII_US );
-                    ByteString sDel( DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US );
+                    ByteString sOutputDescFile(rtl::OUStringToOString(aEntry.GetPath().GetFull(), RTL_TEXTENCODING_ASCII_US));
+                    rtl::OString sDel(rtl::OUStringToOString(DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US));
                     sOutputDescFile += sDel;
                     sOutputDescFile += sLocDescFilename;
                     sText.SearchAndReplaceAll( "\\n", "\n" );

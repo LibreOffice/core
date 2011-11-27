@@ -225,9 +225,9 @@ void BreakpointWindow::SaveBreakpoints( String aFilename )
     aConfig.SetGroup("Breakpoints");
 
     if (aBreakpoints.getLength())
-        aConfig.WriteKey( ByteString( aFilename, RTL_TEXTENCODING_UTF8 ), aBreakpoints.makeStringAndClear() );
+        aConfig.WriteKey( rtl::OUStringToOString(aFilename, RTL_TEXTENCODING_UTF8), aBreakpoints.makeStringAndClear() );
     else
-        aConfig.DeleteKey( ByteString( aFilename, RTL_TEXTENCODING_UTF8 ) );
+        aConfig.DeleteKey( rtl::OUStringToOString(aFilename, RTL_TEXTENCODING_UTF8) );
 }
 
 

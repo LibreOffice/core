@@ -394,7 +394,7 @@ CommunicationManagerClient::CommunicationManagerClient( sal_Bool bUseMultiChanne
 : MultiCommunicationManager( bUseMultiChannel )
 {
     ByteString aApplication("Something inside ");
-    aApplication.Append( ByteString( DirEntry( Application::GetAppFileName() ).GetName(), osl_getThreadTextEncoding() ) );
+    aApplication.Append( rtl::OUStringToOString( DirEntry( Application::GetAppFileName() ).GetName(), osl_getThreadTextEncoding() ) );
     SetApplication( aApplication );
 }
 

@@ -1045,7 +1045,8 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
     sal_uInt16 nParagraphs = GetContents().Count();
     rOStream << nParagraphs;
 
-    char cFeatureConverted = ByteString( CH_FEATURE, eEncoding ).GetChar(0);
+    sal_Unicode nUniChar = CH_FEATURE;
+    char cFeatureConverted = rtl::OString(&nUniChar, 1, eEncoding).toChar();
 
     // The individual paragraphs ...
     for ( sal_uInt16 nPara = 0; nPara < nParagraphs; nPara++ )
@@ -1053,7 +1054,7 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
         ContentInfo* pC = GetContents().GetObject( nPara );
 
         // Text...
-        ByteString aText( pC->GetText(), eEncoding );
+        ByteString aText(rtl::OUStringToOString(pC->GetText(), eEncoding));
 
         // Symbols?
         sal_Bool bSymbolPara = sal_False;
@@ -1062,7 +1063,7 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
             const SvxFontItem& rFontItem = (const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO );
             if ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
             {
-                aText = ByteString( pC->GetText(), RTL_TEXTENCODING_SYMBOL );
+                aText = rtl::OUStringToOString(pC->GetText(), RTL_TEXTENCODING_SYMBOL);
                 bSymbolPara = sal_True;
             }
         }
@@ -1078,7 +1079,7 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
                 {
                     // Not correctly converted
                     String aPart( pC->GetText(), pAttr->GetStart(), pAttr->GetEnd() - pAttr->GetStart() );
-                    ByteString aNew( aPart, rFontItem.GetCharSet() );
+                    rtl::OString aNew(rtl::OUStringToOString(aPart, rFontItem.GetCharSet()));
                     aText.Erase( pAttr->GetStart(), pAttr->GetEnd() - pAttr->GetStart() );
                     aText.Insert( aNew, pAttr->GetStart() );
                 }
@@ -1133,7 +1134,7 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
         rOStream.WriteByteString( aText );
 
         // StyleName and Family...
-        rOStream.WriteByteString( ByteString( pC->GetStyle(), eEncoding ) );
+        rOStream.WriteByteString( rtl::OUStringToOString(pC->GetStyle(), eEncoding) );
         rOStream << (sal_uInt16)pC->GetFamily();
 
         // Paragraph attributes ...

@@ -2502,10 +2502,10 @@ sal_Bool StatementCommand::Execute()
         case RC_Assert:
             {
                 ByteString aAssertion( "Diese Assertion wurde vom Testtool per Befehl ausgel�st" );
-                aAssertion = ByteString( String( aAssertion, RTL_TEXTENCODING_MS_1252 ), RTL_TEXTENCODING_UTF8 );
-                DBG_ASSERT( !aString1.Len(), ByteString( aString1, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                aAssertion = rtl::OUStringToOString(String(aAssertion, RTL_TEXTENCODING_MS_1252), RTL_TEXTENCODING_UTF8 );
+                DBG_ASSERT( !aString1.Len(), rtl::OUStringToOString( aString1, RTL_TEXTENCODING_UTF8 ).getStr() );
                 DBG_ASSERT(  aString1.Len(), aAssertion.GetBuffer() );
-                OSL_ENSURE( !aString1.Len(), ByteString( aString1, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                OSL_ENSURE( !aString1.Len(), rtl::OUStringToOString( aString1, RTL_TEXTENCODING_UTF8 ).getStr() );
                 OSL_ENSURE(  aString1.Len(), aAssertion.GetBuffer() );
             }
             break;

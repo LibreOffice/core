@@ -223,7 +223,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                             {
                                 if ( !IsPropertyValueValid( aName, aValue ) )
                                 {
-                                    rErrorList.AddError( 25, ByteString("Property '").Append(aName).Append("' has invalid value '").Append(ByteString( aValue, RTL_TEXTENCODING_UTF8 )).Append("' "), *this );
+                                    rErrorList.AddError( 25, ByteString("Property '").Append(aName).Append("' has invalid value '").Append(rtl::OUStringToOString(aValue, RTL_TEXTENCODING_UTF8)).Append("' "), *this );
                                     bIsBroken = sal_True;
                                 }
                                 aProperties[ aName ] = aValue;
@@ -334,7 +334,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
             }
             else
             {
-                aName = ByteString( aPortion, RTL_TEXTENCODING_UTF8 );
+                aName = rtl::OUStringToOString(aPortion, RTL_TEXTENCODING_UTF8);
                 // "a-zA-Z_-.0-9"
                 xub_StrLen nCount;
                 sal_Bool bBroken = sal_False;
@@ -364,7 +364,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
         {
             if ( aPortion.Len() )
             {
-                rErrorList.AddError( 25, ByteString("Found displaced characters '").Append(ByteString( aPortion, RTL_TEXTENCODING_UTF8 )).Append("' in Tag "), *this );
+                rErrorList.AddError( 25, ByteString("Found displaced characters '").Append(rtl::OUStringToOString(aPortion, RTL_TEXTENCODING_UTF8)).Append("' in Tag "), *this );
                 bIsBroken = sal_True;
             }
             bCheckEmpty = sal_False;
@@ -1323,7 +1323,7 @@ sal_Bool TokenParser::match( const TokenInfo &aCurrentToken, const TokenInfo &rE
     else
     {
         sTmp += ": ";
-        sTmp += ByteString( aParser.GetLexem( aExpectedToken ), RTL_TEXTENCODING_UTF8 );
+        sTmp += rtl::OUStringToOString(aParser.GetLexem( aExpectedToken ), RTL_TEXTENCODING_UTF8);
         sTmp += " near ";
         ParseError( 7, sTmp, aCurrentToken );
     }

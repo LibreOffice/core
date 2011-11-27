@@ -326,9 +326,9 @@ int BasicApp::Main( )
     RemoveAccel( pMainAccel );
 
     }
-    catch(const class Exception & rEx)
+    catch (const class Exception & rEx)
     {
-        printf( "Exception not caught: %s\n", ByteString( String(rEx.Message), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+        printf( "Exception not caught: %s\n", rtl::OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
         String aMsg( String::CreateFromAscii( "Exception not caught: " ) );
         aMsg.Append( String( rEx.Message ) );
         InfoBox( NULL, aMsg ).Execute();
@@ -1078,7 +1078,7 @@ void BasicFrame::AddToLRU(String const& aFile)
                 pPopup->SetItemText(IDM_FILE_LRU1 + i-1,FILENAME2MENU( i, MENU2FILENAME( pPopup->GetItemText(IDM_FILE_LRU1 + i-1-1) ) ));
         }
     }
-    aConfig.WriteKey(LRUNr(1), ByteString( aFile, RTL_TEXTENCODING_UTF8 ) );
+    aConfig.WriteKey(LRUNr(1), rtl::OUStringToOString(aFile, RTL_TEXTENCODING_UTF8) );
     if ( pPopup->GetItemPos( IDM_FILE_LRU1 ) == MENU_ITEM_NOTFOUND )
          pPopup->InsertItem(IDM_FILE_LRU1,FILENAME2MENU( 1, aFile));
     else
@@ -1657,7 +1657,7 @@ class NewFileDialog : public FileDialog
 private:
     String aLastPath;
 public:
-    ByteString aFilterType;
+    rtl::OString aFilterType;
     NewFileDialog( Window* pParent, WinBits nWinStyle ):FileDialog( pParent, nWinStyle ){};
     virtual short   Execute();
     virtual void    FilterSelect();
@@ -1677,7 +1677,7 @@ void NewFileDialog::FilterSelect()
     {
         nFilterNr++;
     }
-    aFilterType = ByteString( GetFilterType( nFilterNr ), RTL_TEXTENCODING_UTF8 );
+    aFilterType = rtl::OUStringToOString(GetFilterType(nFilterNr), RTL_TEXTENCODING_UTF8);
 
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
     aConf.SetGroup( "Misc" );
@@ -1696,8 +1696,8 @@ short NewFileDialog::Execute()
         aConf.SetGroup( "Misc" );
         ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Path" );
         aConf.SetGroup( aCurrentProfile );
-        aConf.WriteKey( aFilterType, ByteString( DirEntry( GetPath() ).GetPath().GetFull(), RTL_TEXTENCODING_UTF8 ) );
-        aConf.WriteKey( "LastFilterName", ByteString( GetCurFilter(), RTL_TEXTENCODING_UTF8 ) );
+        aConf.WriteKey( aFilterType, rtl::OUStringToOString(DirEntry(GetPath()).GetPath().GetFull(), RTL_TEXTENCODING_UTF8) );
+        aConf.WriteKey( "LastFilterName", rtl::OUStringToOString(GetCurFilter(), RTL_TEXTENCODING_UTF8) );
     }
     return bRet;
 }

@@ -235,8 +235,8 @@ static bool passFileToCommandLine( const String& rFilename, const String& rComma
     bool bSuccess = false;
 
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    ByteString aCmdLine( rCommandLine, aEncoding );
-    ByteString aFilename( rFilename, aEncoding );
+    ByteString aCmdLine(rtl::OUStringToOString(rCommandLine, aEncoding));
+    rtl::OString aFilename(rtl::OUStringToOString(rFilename, aEncoding));
 
     bool bPipe = aCmdLine.Search( "(TMP)" ) != STRING_NOTFOUND ? false : true;
 
@@ -250,9 +250,9 @@ static bool passFileToCommandLine( const String& rFilename, const String& rComma
              bPipe ? "piping to" : "executing",
              aCmdLine.GetBuffer() );
     struct stat aStat;
-    if( stat( aFilename.GetBuffer(), &aStat ) )
-        fprintf( stderr, "stat( %s ) failed\n", aFilename.GetBuffer() );
-    fprintf( stderr, "Tmp file %s has modes: 0%03lo\n", aFilename.GetBuffer(), (long)aStat.st_mode );
+    if( stat( aFilename.getStr(), &aStat ) )
+        fprintf( stderr, "stat( %s ) failed\n", aFilename.getStr() );
+    fprintf( stderr, "Tmp file %s has modes: 0%03lo\n", aFilename.getStr(), (long)aStat.st_mode );
 #endif
     const char* argv[4];
     if( ! ( argv[ 0 ] = getenv( "SHELL" ) ) )
@@ -272,7 +272,7 @@ static bool passFileToCommandLine( const String& rFilename, const String& rComma
         {
             close( fd[0] );
             char aBuffer[ 2048 ];
-            FILE* fp = fopen( aFilename.GetBuffer(), "r" );
+            FILE* fp = fopen( aFilename.getStr(), "r" );
             while (fp && !feof(fp))
             {
                 size_t nBytesRead = fread(aBuffer, 1, sizeof( aBuffer ), fp);
@@ -309,7 +309,7 @@ static bool passFileToCommandLine( const String& rFilename, const String& rComma
 
     // clean up the mess
     if( bRemoveFile )
-        unlink( aFilename.GetBuffer() );
+        unlink( aFilename.getStr() );
 
     return bSuccess;
 }
@@ -372,7 +372,7 @@ static bool sendAFax( const String& rFaxNumber, const String& rFileName, const S
         bSuccess = false;
 
     // clean up temp file
-    unlink( ByteString( rFileName, osl_getThreadTextEncoding() ).GetBuffer() );
+    unlink(rtl::OUStringToOString(rFileName, osl_getThreadTextEncoding()).getStr());
 
     return bSuccess;
 #else

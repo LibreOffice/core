@@ -30,14 +30,13 @@
 #define _OOX_EXPORT_UTILS_HXX_
 
 #define S(x) String( RTL_CONSTASCII_USTRINGPARAM( x ) )
-#define US(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ))
-#define I32S(x) OString::valueOf( (sal_Int32) x ).getStr()
-#define I64S(x) OString::valueOf( (sal_Int64) x ).getStr()
-#define H32S(x) OString::valueOf( (sal_Int32) x, 16 ).getStr()
-#define H64S(x) OString::valueOf( (sal_Int64) x, 16 ).getStr()
-#define IS(x) OString::valueOf( x ).getStr()
-#define USS(x) OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
-#define ST(x) ByteString( x, RTL_TEXTENCODING_UTF8 ).GetBuffer()
+#define US(x) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( x ))
+#define I32S(x) rtl::OString::valueOf( (sal_Int32) x ).getStr()
+#define I64S(x) rtl::OString::valueOf( (sal_Int64) x ).getStr()
+#define H32S(x) rtl::OString::valueOf( (sal_Int32) x, 16 ).getStr()
+#define H64S(x) rtl::OString::valueOf( (sal_Int64) x, 16 ).getStr()
+#define IS(x) rtl::OString::valueOf( x ).getStr()
+#define USS(x) rtl::OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
 
 #ifndef DBG
 #  if OSL_DEBUG_LEVEL > 0

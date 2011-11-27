@@ -1285,7 +1285,7 @@ void SbiRuntime::StepPRINT()        // print TOS
     if( p->GetType() >= SbxINTEGER && p->GetType() <= SbxDOUBLE )
         s = ' ';    // one blank before
     s += s1;
-    ByteString aByteStr( s, osl_getThreadTextEncoding() );
+    rtl::OString aByteStr(rtl::OUStringToOString(s, osl_getThreadTextEncoding()));
     pIosys->Write( aByteStr );
     Error( pIosys->GetError() );
 }
@@ -1299,7 +1299,7 @@ void SbiRuntime::StepPRINTF()       // print TOS in field
         s = ' ';
     s += s1;
     s.Expand( 14, ' ' );
-    ByteString aByteStr( s, osl_getThreadTextEncoding() );
+    rtl::OString aByteStr(rtl::OUStringToOString(s, osl_getThreadTextEncoding()));
     pIosys->Write( aByteStr );
     Error( pIosys->GetError() );
 }
@@ -1323,7 +1323,7 @@ void SbiRuntime::StepWRITE()        // write TOS
     s += p->GetString();
     if( ch )
         s += ch;
-    ByteString aByteStr( s, osl_getThreadTextEncoding() );
+    rtl::OString aByteStr(rtl::OUStringToOString(s, osl_getThreadTextEncoding()));
     pIosys->Write( aByteStr );
     Error( pIosys->GetError() );
 }
@@ -1350,7 +1350,7 @@ void SbiRuntime::StepRENAME()       // Rename Tos+1 to Tos
 void SbiRuntime::StepPROMPT()
 {
     SbxVariableRef p = PopVar();
-    ByteString aStr( p->GetString(), osl_getThreadTextEncoding() );
+    rtl::OString aStr(rtl::OUStringToOString(p->GetString(), osl_getThreadTextEncoding()));
     pIosys->SetPrompt( aStr );
 }
 

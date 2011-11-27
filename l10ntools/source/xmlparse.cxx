@@ -160,23 +160,29 @@ int XMLParentNode::GetPosition( ByteString id ){
 /*****************************************************************************/
     XMLElement* a;
 
-    static const ByteString sEnusStr = ByteString(String::CreateFromAscii(ENGLISH_US_ISO).ToLowerAscii() , RTL_TEXTENCODING_ASCII_US ).ToLowerAscii();
-    static const ByteString sDeStr   = ByteString(String::CreateFromAscii(GERMAN_ISO2).ToLowerAscii()    , RTL_TEXTENCODING_ASCII_US ).ToLowerAscii();
+    static const rtl::OString sEnusStr = rtl::OString(RTL_CONSTASCII_STRINGPARAM(ENGLISH_US_ISO)).toAsciiLowerCase();
+    static const rtl::OString sDeStr   = rtl::OString(RTL_CONSTASCII_STRINGPARAM(GERMAN_ISO2)).toAsciiLowerCase();
 
-    if ( pChildList ){
-        for ( size_t i = 0; i < pChildList->size(); i++ ) {
+    if ( pChildList )
+    {
+        for (size_t i = 0; i < pChildList->size(); ++i)
+        {
             XMLChildNode *pChild = (*pChildList)[ i ];
-            if ( pChild->GetNodeType() == XML_NODE_TYPE_ELEMENT ){
+            if ( pChild->GetNodeType() == XML_NODE_TYPE_ELEMENT )
+            {
                 a = static_cast<XMLElement* >(pChild);
                 ByteString elemid( a->GetId() );
                 elemid.ToLowerAscii();
-                if (   elemid.Equals( id.ToLowerAscii() ) ){
+                if (   elemid.Equals( id.ToLowerAscii() ) )
+                {
                     ByteString elemLID( a->GetLanguageId() );
                     elemLID.ToLowerAscii();
-                    if( elemLID.Equals( sEnusStr) ) {
+                    if( elemLID.Equals( sEnusStr) )
+                    {
                         return i;
                     }
-                    else if( elemLID.Equals( sDeStr) ) {
+                    else if( elemLID.Equals( sDeStr) )
+                    {
                         return i;
                     }
                 }
@@ -318,14 +324,11 @@ sal_Bool XMLFile::Write( ByteString &aFilename )
     exit( -1 );
 }
 
-
-
 void XMLFile::WriteString( ofstream &rStream, const String &sString )
 {
-    ByteString sText( sString, RTL_TEXTENCODING_UTF8 );
-    rStream << sText.GetBuffer();
+    rtl::OString sText(rtl::OUStringToOString(sString, RTL_TEXTENCODING_UTF8));
+    rStream << sText.getStr();
 }
-
 
 sal_Bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
 {
@@ -408,41 +411,46 @@ void XMLFile::Print( XMLNode *pCur, sal_uInt16 nLevel )
             case XML_NODE_TYPE_ELEMENT: {
                 XMLElement *pElement = ( XMLElement * ) pCur;
 
-                fprintf( stdout, "<%s", ByteString( pElement->GetName(), RTL_TEXTENCODING_UTF8 ).GetBuffer());
+                fprintf( stdout, "<%s", rtl::OUStringToOString(pElement->GetName(), RTL_TEXTENCODING_UTF8).getStr());
                 if ( pElement->GetAttributeList())
-                    for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ ){
-                        ByteString aAttrName( *(*pElement->GetAttributeList())[ j ], RTL_TEXTENCODING_UTF8 );
-                        if( !aAttrName.EqualsIgnoreCaseAscii( XML_LANG ) ) {
+                {
+                    for (size_t j = 0; j < pElement->GetAttributeList()->size(); ++j)
+                    {
+                        rtl::OString aAttrName(rtl::OUStringToOString(*(*pElement->GetAttributeList())[j],
+                            RTL_TEXTENCODING_UTF8));
+                        if (!aAttrName.equalsIgnoreAsciiCase(XML_LANG))
+                        {
                             fprintf( stdout, " %s=\"%s\"",
-                                aAttrName.GetBuffer(),
-                                ByteString( (*pElement->GetAttributeList())[ j ]->GetValue(),
-                                    RTL_TEXTENCODING_UTF8 ).GetBuffer());
+                                aAttrName.getStr(),
+                                rtl::OUStringToOString( (*pElement->GetAttributeList())[ j ]->GetValue(),
+                                    RTL_TEXTENCODING_UTF8).getStr());
                         }
                     }
+                }
                 if ( !pElement->GetChildList())
                     fprintf( stdout, "/>" );
                 else {
                     fprintf( stdout, ">" );
                     for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ )
                         Print( (*pElement->GetChildList())[ k ], nLevel + 1 );
-                    fprintf( stdout, "</%s>", ByteString( pElement->GetName(), RTL_TEXTENCODING_UTF8 ).GetBuffer());
+                    fprintf( stdout, "</%s>", rtl::OUStringToOString(pElement->GetName(), RTL_TEXTENCODING_UTF8).getStr());
                 }
             }
             break;
             case XML_NODE_TYPE_DATA: {
                 XMLData *pData = ( XMLData * ) pCur;
                 String sData = pData->GetData();
-                fprintf( stdout, "%s", ByteString( sData, RTL_TEXTENCODING_UTF8 ).GetBuffer());
+                fprintf( stdout, "%s", rtl::OUStringToOString(sData, RTL_TEXTENCODING_UTF8).getStr());
             }
             break;
             case XML_NODE_TYPE_COMMENT: {
                 XMLComment *pComment = ( XMLComment * ) pCur;
-                fprintf( stdout, "<!--%s-->", ByteString( pComment->GetComment(), RTL_TEXTENCODING_UTF8 ).GetBuffer());
+                fprintf( stdout, "<!--%s-->", rtl::OUStringToOString(pComment->GetComment(), RTL_TEXTENCODING_UTF8).getStr());
             }
             break;
             case XML_NODE_TYPE_DEFAULT: {
                 XMLDefault *pDefault = ( XMLDefault * ) pCur;
-                fprintf( stdout, "%s", ByteString( pDefault->GetDefault(), RTL_TEXTENCODING_UTF8 ).GetBuffer());
+                fprintf( stdout, "%s", rtl::OUStringToOString(pDefault->GetDefault(), RTL_TEXTENCODING_UTF8).getStr());
             }
             break;
         }
@@ -470,13 +478,13 @@ XMLFile::XMLFile( const String &rFileName ) // the file name, empty if created f
                   XMLStrings   ( NULL )
 
 {
-    nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("bookmark"),RTL_TEXTENCODING_ASCII_US) , sal_True) );
-    nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("variable"),RTL_TEXTENCODING_ASCII_US) , sal_True) );
-    nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("paragraph"),RTL_TEXTENCODING_ASCII_US) , sal_True) );
-    nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("alt"),RTL_TEXTENCODING_ASCII_US) , sal_True) );
-    nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("caption"),RTL_TEXTENCODING_ASCII_US) , sal_True) );
-    nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("title"),RTL_TEXTENCODING_ASCII_US) , sal_True) );
-    nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("link"),RTL_TEXTENCODING_ASCII_US) , sal_True) );
+    nodes_localize.insert( TagMap::value_type(rtl::OString(RTL_CONSTASCII_STRINGPARAM("bookmark")) , sal_True) );
+    nodes_localize.insert( TagMap::value_type(rtl::OString(RTL_CONSTASCII_STRINGPARAM("variable")) , sal_True) );
+    nodes_localize.insert( TagMap::value_type(rtl::OString(RTL_CONSTASCII_STRINGPARAM("paragraph")) , sal_True) );
+    nodes_localize.insert( TagMap::value_type(rtl::OString(RTL_CONSTASCII_STRINGPARAM("alt")) , sal_True) );
+    nodes_localize.insert( TagMap::value_type(rtl::OString(RTL_CONSTASCII_STRINGPARAM("caption")) , sal_True) );
+    nodes_localize.insert( TagMap::value_type(rtl::OString(RTL_CONSTASCII_STRINGPARAM("title")) , sal_True) );
+    nodes_localize.insert( TagMap::value_type(rtl::OString(RTL_CONSTASCII_STRINGPARAM("link")) , sal_True) );
 }
 /*****************************************************************************/
 void XMLFile::Extract( XMLFile *pCur )
@@ -501,13 +509,14 @@ void XMLFile::InsertL10NElement( XMLElement* pElement ){
     LangHashMap* elem;
 
     if( pElement->GetAttributeList() != NULL ){
-        for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ ){
-            tmpStr=ByteString( *(*pElement->GetAttributeList())[ j ], RTL_TEXTENCODING_UTF8 );
+        for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ )
+        {
+            tmpStr=rtl::OUStringToOString(*(*pElement->GetAttributeList())[ j ], RTL_TEXTENCODING_UTF8);
             if( tmpStr.CompareTo(ID)==COMPARE_EQUAL  ){ // Get the "id" Attribute
-                id = ByteString( (*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8 );
+                id = rtl::OUStringToOString((*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8);
             }
             if( tmpStr.CompareTo( XML_LANG ) == COMPARE_EQUAL ){    // Get the "xml-lang" Attribute
-                language = ByteString( (*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8 );
+                language = rtl::OUStringToOString((*pElement->GetAttributeList())[j]->GetValue(),RTL_TEXTENCODING_UTF8);
             }
 
         }
@@ -528,7 +537,7 @@ void XMLFile::InsertL10NElement( XMLElement* pElement ){
         elem=pos->second;
         if ( (*elem)[ language ] )
         {
-            fprintf(stdout,"Error: Duplicated entry. ID = %s  LANG = %s in File %s\n", id.GetBuffer(), language.GetBuffer(), ByteString( sFullName,RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+            fprintf(stdout,"Error: Duplicated entry. ID = %s  LANG = %s in File %s\n", id.GetBuffer(), language.GetBuffer(), rtl::OUStringToOString(sFullName, RTL_TEXTENCODING_ASCII_US).getStr() );
             exit( -1 );
         }
         (*elem)[ language ]=pElement;
@@ -606,22 +615,24 @@ void XMLFile::SearchL10NElements( XMLParentNode *pCur , int pos)
             break;
             case XML_NODE_TYPE_ELEMENT: {
                 XMLElement *pElement = ( XMLElement * ) pCur;
-                ByteString sName(pElement->GetName(),RTL_TEXTENCODING_ASCII_US);
+                rtl::OString sName(rtl::OUStringToOString(pElement->GetName(), RTL_TEXTENCODING_ASCII_US).toAsciiLowerCase());
                 ByteString language,tmpStrVal,oldref;
-                if ( pElement->GetAttributeList()){
-                    for ( size_t j = 0 , cnt = pElement->GetAttributeList()->size(); j < cnt && bInsert; j++ ){
-                        const ByteString tmpStr( *(*pElement->GetAttributeList())[ j ],RTL_TEXTENCODING_UTF8 );
+                if ( pElement->GetAttributeList())
+                {
+                    for ( size_t j = 0 , cnt = pElement->GetAttributeList()->size(); j < cnt && bInsert; ++j )
+                    {
+                        const ByteString tmpStr = rtl::OUStringToOString(*(*pElement->GetAttributeList())[j], RTL_TEXTENCODING_UTF8);
                         if( tmpStr.CompareTo(THEID)==COMPARE_EQUAL  ){  // Get the "id" Attribute
-                            tmpStrVal=ByteString( (*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8 );
+                            tmpStrVal=rtl::OUStringToOString( (*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8 );
                         }
                         if( tmpStr.CompareTo(LOCALIZE)==COMPARE_EQUAL  ){   // Get the "localize" Attribute
                             bInsert=false;
                         }
                         if( tmpStr.CompareTo(XML_LANG)==COMPARE_EQUAL ){    // Get the "xml-lang" Attribute
-                            language=ByteString( (*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8 );
+                            language=rtl::OUStringToOString( (*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8 );
                         }
                         if( tmpStr.CompareTo(OLDREF)==COMPARE_EQUAL ){  // Get the "oldref" Attribute
-                            oldref=ByteString( (*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8 );
+                            oldref=rtl::OUStringToOString( (*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8 );
                         }
                     }
                     pElement->SetLanguageId ( language );
@@ -630,7 +641,7 @@ void XMLFile::SearchL10NElements( XMLParentNode *pCur , int pos)
                     pElement->SetPos( pos );
                 }
 
-                if ( bInsert && ( nodes_localize.find( sName.ToLowerAscii() ) != nodes_localize.end() ) )
+                if ( bInsert && ( nodes_localize.find( sName ) != nodes_localize.end() ) )
                     InsertL10NElement(pElement);
                 else if ( bInsert && pElement->GetChildList() ){
                     for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ )
@@ -657,11 +668,11 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
 {
     static bool bStatusExport = true;
     const ByteString LOCALIZE("localize");
-    const ByteString STATUS("status");
-    const ByteString PUBLISH("PUBLISH");
-    const ByteString DEPRECATED("DEPRECATED");
+    const rtl::OString STATUS(RTL_CONSTASCII_STRINGPARAM("status"));
+    const rtl::OString PUBLISH(RTL_CONSTASCII_STRINGPARAM("PUBLISH"));
+    const rtl::OString DEPRECATED(RTL_CONSTASCII_STRINGPARAM("DEPRECATED"));
+    const rtl::OString TOPIC(RTL_CONSTASCII_STRINGPARAM("topic"));
 
-    const ByteString TOPIC("topic");
     bool bInsert    = true;
     if ( !pCur )
         CheckExportStatus( this );
@@ -679,15 +690,22 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
             break;
             case XML_NODE_TYPE_ELEMENT: {
                 XMLElement *pElement = ( XMLElement * ) pCur;
-                ByteString sName(pElement->GetName(),RTL_TEXTENCODING_ASCII_US);
-                if( sName.EqualsIgnoreCaseAscii( TOPIC ) ){
-                    if ( pElement->GetAttributeList()){
-                        for ( size_t j = 0 , cnt = pElement->GetAttributeList()->size(); j < cnt && bInsert; j++ ){
-                            const ByteString tmpStr( *(*pElement->GetAttributeList())[ j ],RTL_TEXTENCODING_UTF8 );
-                            if( tmpStr.EqualsIgnoreCaseAscii( STATUS ) ){
-                                ByteString tmpStrVal=ByteString( (*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8 );
-                                if( !tmpStrVal.EqualsIgnoreCaseAscii( PUBLISH )  &&
-                                    !tmpStrVal.EqualsIgnoreCaseAscii( DEPRECATED )){
+                rtl::OString sName(rtl::OUStringToOString(pElement->GetName(), RTL_TEXTENCODING_ASCII_US));
+                if (sName.equalsIgnoreAsciiCase(TOPIC))
+                {
+                    if ( pElement->GetAttributeList())
+                    {
+                        for (size_t j = 0 , cnt = pElement->GetAttributeList()->size(); j < cnt && bInsert; ++j)
+                        {
+                            const rtl::OString tmpStr(rtl::OUStringToOString(*(*pElement->GetAttributeList())[j],
+                                RTL_TEXTENCODING_UTF8));
+                            if (tmpStr.equalsIgnoreAsciiCase(STATUS))
+                            {
+                                rtl::OString tmpStrVal(rtl::OUStringToOString( (*pElement->GetAttributeList())[j]->GetValue(),
+                                    RTL_TEXTENCODING_UTF8));
+                                if (!tmpStrVal.equalsIgnoreAsciiCase(PUBLISH) &&
+                                    !tmpStrVal.equalsIgnoreAsciiCase(DEPRECATED))
+                                {
                                     bStatusExport = false;
                                 }
                             }
@@ -695,9 +713,10 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
                         }
                     }
                 }
-                else if ( pElement->GetChildList() ){
-                    for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ )
-                        CheckExportStatus( (XMLParentNode*)(*pElement->GetChildList())[ k ] );
+                else if ( pElement->GetChildList() )
+                {
+                    for (size_t k = 0; k < pElement->GetChildList()->size(); ++k)
+                        CheckExportStatus( (XMLParentNode*)(*pElement->GetChildList())[k] );
                 }
             }
             break;
@@ -774,28 +793,32 @@ void XMLElement::AddAttribute( const String &rAttribute, const String &rValue )
 }
 
 /*****************************************************************************/
-void XMLElement::ChangeLanguageTag( const String &rValue ){
-/*****************************************************************************/
+void XMLElement::ChangeLanguageTag( const String &rValue )
+{
     static const String rName = String::CreateFromAscii("xml-lang");
-    SetLanguageId( ByteString(rValue,RTL_TEXTENCODING_UTF8) );
-    if ( pAttributes ){
-        for ( size_t i = 0; i < pAttributes->size(); i++ ){
-            if ( *(*pAttributes)[ i ] == rName ){
+    SetLanguageId(rtl::OUStringToOString(rValue, RTL_TEXTENCODING_UTF8));
+    if ( pAttributes )
+    {
+        for (size_t i = 0; i < pAttributes->size(); ++i)
+        {
+            if ( *(*pAttributes)[ i ] == rName )
                 (*pAttributes)[ i ]->setValue(rValue);
-            }
         }
     }
     XMLChildNode* pNode  = NULL;
     XMLElement*   pElem  = NULL;
     XMLChildNodeList* pCList = GetChildList();
 
-    if( pCList != NULL ){
-        for ( size_t i = 0; i < pCList->size(); i++ ){
+    if( pCList != NULL )
+    {
+        for ( size_t i = 0; i < pCList->size(); i++ )
+        {
             pNode = (*pCList)[ i ];
-            if( pNode != NULL && pNode->GetNodeType() == XML_NODE_TYPE_ELEMENT ){
+            if( pNode != NULL && pNode->GetNodeType() == XML_NODE_TYPE_ELEMENT )
+            {
                 pElem = static_cast< XMLElement* >(pNode);
                 pElem->ChangeLanguageTag( rValue );
-                pElem->SetLanguageId( ByteString(rValue,RTL_TEXTENCODING_UTF8) );
+                pElem->SetLanguageId(rtl::OUStringToOString(rValue, RTL_TEXTENCODING_UTF8));
                 pElem  = NULL;
                 pNode  = NULL;
             }
@@ -1339,10 +1362,12 @@ void XMLUtil::UnQuotHTML( String &rString ){
     UnQuotData( rString );
 }
 
-void XMLUtil::UnQuotData( String &rString_in ){
+void XMLUtil::UnQuotData( String &rString_in )
+{
     rtl::OStringBuffer sReturn;
-    ByteString sString( rString_in , RTL_TEXTENCODING_UTF8 );
-    while ( sString.Len()) {
+    ByteString sString(rtl::OUStringToOString(rString_in , RTL_TEXTENCODING_UTF8));
+    while (sString.Len())
+    {
         if ( sString.Copy( 0, 1 ) == "\\" ) {
             sReturn.append("\\\\");
             sString.Erase( 0, 1 );

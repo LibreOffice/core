@@ -3637,9 +3637,9 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 {
                     DELETEZ( pStrLink );
                     String sTmp( sLink );
-                    ByteString sId( sTmp.Copy(
-                                        sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX)-1),
-                                    RTL_TEXTENCODING_ASCII_US );
+                    rtl::OString sId(rtl::OUStringToOString(sTmp.Copy(
+                        sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX)-1),
+                        RTL_TEXTENCODING_ASCII_US));
                     GraphicObject *pOldGrfObj = pImpl->pGraphicObject;
                     pImpl->pGraphicObject = new GraphicObject( sId );
                     ApplyGraphicTransparency_Impl();

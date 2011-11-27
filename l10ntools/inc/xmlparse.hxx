@@ -245,7 +245,7 @@ protected:
     String      sFileName;
     String      sFullName;
 
-    const ByteString ID,OLDREF,XML_LANG;
+    const rtl::OString ID, OLDREF, XML_LANG;
 
     TagMap      nodes_localize;
     XMLHashMap* XMLStrings;

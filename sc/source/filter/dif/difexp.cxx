@@ -82,7 +82,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
     }
     else
     {
-        aStrDelimEncoded = ByteString( cStrDelim, eCharSet );
+        aStrDelimEncoded = rtl::OString(&cStrDelim, 1, eCharSet);
         rtl_TextEncodingInfo aInfo;
         aInfo.StructSize = sizeof(aInfo);
         if ( rtl_getTextEncodingInfo( eCharSet, &aInfo ) )
@@ -261,9 +261,9 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                 else if ( bContextOrNotAsciiEncoding )
                 {
                     // to byte encoding
-                    ByteString aStrEnc( aTmpStr, eCharSet );
+                    rtl::OString aStrEnc(rtl::OUStringToOString(aTmpStr, eCharSet));
                     // back to Unicode
-                    UniString aStrDec( aStrEnc, eCharSet );
+                    UniString aStrDec(rtl::OStringToOUString(aStrEnc, eCharSet));
                     // search on re-decoded string
                     xub_StrLen nPos = aStrDec.Search( aStrDelimDecoded );
                     while ( nPos != STRING_NOTFOUND )
@@ -279,7 +279,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                 }
                 else
                 {
-                    ByteString aStrEnc( aTmpStr, eCharSet );
+                    ByteString aStrEnc(rtl::OUStringToOString(aTmpStr, eCharSet));
                     // search on encoded string
                     xub_StrLen nPos = aStrEnc.Search( aStrDelimEncoded );
                     while ( nPos != STRING_NOTFOUND )

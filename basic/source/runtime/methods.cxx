@@ -1714,8 +1714,8 @@ RTLFUNC(Val)
                 nRadix = 8;
             if ( nRadix != 10 )
             {
-                ByteString aByteStr( aStr, osl_getThreadTextEncoding() );
-                sal_Int16 nlResult = (sal_Int16)strtol( aByteStr.GetBuffer()+2, &pEndPtr, nRadix);
+                rtl::OString aByteStr(rtl::OUStringToOString(aStr, osl_getThreadTextEncoding()));
+                sal_Int16 nlResult = (sal_Int16)strtol( aByteStr.getStr()+2, &pEndPtr, nRadix);
                 nResult = (double)nlResult;
             }
         }
@@ -2838,8 +2838,9 @@ RTLFUNC(GetAttr)
             aEntry.ToAbs();
 
             // #57064 extract the real-path for virtual URLs
-            ByteString aByteStrFullPath( aEntry.GetFull(), osl_getThreadTextEncoding() );
-            DWORD nRealFlags = GetFileAttributes (aByteStrFullPath.GetBuffer());
+            rtl::OString aByteStrFullPath(rtl::OUStringToOString(aEntry.GetFull(),
+                osl_getThreadTextEncoding()));
+            DWORD nRealFlags = GetFileAttributes (aByteStrFullPath.getStr());
             if (nRealFlags != 0xffffffff)
             {
                 if (nRealFlags == FILE_ATTRIBUTE_NORMAL)

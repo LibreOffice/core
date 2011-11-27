@@ -1151,14 +1151,15 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
                             if ( aText.Len() != nLen )
                             {
-                                sal_uInt16 i, j, k;
+                                sal_uInt16 i, j;
                                 sal_Int32* pOldDx = pDX;
                                 pDX = new sal_Int32[ aText.Len() ];
                                 for ( i = 0, j = 0; i < aText.Len(); i++ )
                                 {
-                                    ByteString aCharacter( aText.GetChar( i ), pOut->GetCharSet() );
+                                    sal_Unicode cUniChar = aText.GetChar(i);
+                                    rtl::OString aCharacter(&cUniChar, 1, pOut->GetCharSet());
                                     pDX[ i ] = 0;
-                                    for ( k = 0; ( k < aCharacter.Len() ) && ( j < nLen ) && ( i < aText.Len() ); k++ )
+                                    for (sal_Int32 k = 0; ( k < aCharacter.getLength() ) && ( j < nLen ) && ( i < aText.Len() ); ++k)
                                         pDX[ i ] += pOldDx[ j++ ];
                                 }
                                 delete[] pOldDx;

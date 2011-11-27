@@ -197,9 +197,9 @@ namespace svx{
             {
                 fprintf( fp, "[Options]\n" );
                 fprintf( fp, "UseProxy=%s\n", 2 == maParams.miHTTPConnectionType ? "true" : "false" );
-                fprintf( fp, "ProxyServer=%s\n", ByteString( maParams.maHTTPProxyServer, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
-                fprintf( fp, "ProxyPort=%s\n", ByteString( maParams.maHTTPProxyPort, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
-                fprintf( fp, "ReturnAddress=%s\n", ByteString( GetEMailAddress(), RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                fprintf( fp, "ProxyServer=%s\n", rtl::OUStringToOString( maParams.maHTTPProxyServer, RTL_TEXTENCODING_UTF8 ).getStr() );
+                fprintf( fp, "ProxyPort=%s\n", rtl::OUStringToOString( maParams.maHTTPProxyPort, RTL_TEXTENCODING_UTF8 ).getStr() );
+                fprintf( fp, "ReturnAddress=%s\n", rtl::OUStringToOString( GetEMailAddress(), RTL_TEXTENCODING_UTF8 ).getStr() );
                 fprintf( fp, "AllowContact=%s\n", IsContactAllowed() ? "true" : "false" );
                 fclose( fp );
             }
@@ -209,14 +209,14 @@ namespace svx{
 
         bool ErrorRepSendDialog::SendReport()
         {
-            ByteString  strSubject( GetDocType(), RTL_TEXTENCODING_UTF8 );
+            rtl::OString strSubject(rtl::OUStringToOString(GetDocType(), RTL_TEXTENCODING_UTF8));
 
 #if defined( LINUX ) || defined (MACOSX )
-            setenv( "ERRORREPORT_SUBJECT", strSubject.GetBuffer(), 1 );
+            setenv( "ERRORREPORT_SUBJECT", strSubject.getStr(), 1 );
 #else
-            static ::rtl::OString   strEnvSubject = "ERRORREPORT_SUBJECT";
+            static ::rtl::OString strEnvSubject = "ERRORREPORT_SUBJECT";
             strEnvSubject += "=";
-            strEnvSubject += strSubject.GetBuffer();
+            strEnvSubject += strSubject;
             putenv( (char *)strEnvSubject.getStr() );
 #endif
 
@@ -225,10 +225,10 @@ namespace svx{
 
             if ( fp )
             {
-                ByteString strUTF8( GetUsing(), RTL_TEXTENCODING_UTF8 );
+                rtl::OString strUTF8(rtl::OUStringToOString(GetUsing(), RTL_TEXTENCODING_UTF8));
 
-                size_t nWritten = fwrite(strUTF8.GetBuffer(), 1, strUTF8.Len(), fp);
-                OSL_VERIFY(nWritten == strUTF8.Len());
+                size_t nWritten = fwrite(strUTF8.getStr(), 1, strUTF8.getLength(), fp);
+                OSL_VERIFY(nWritten == static_cast<size_t>(strUTF8.getLength()));
                 fclose( fp );
 #if defined( LINUX ) || defined (MACOSX)
                 setenv("ERRORREPORT_BODYFILE", szBodyFile, 1);

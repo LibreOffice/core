@@ -1797,7 +1797,7 @@ void DbPatternField::implAdjustGenericFieldSetting( const Reference< XPropertySe
         _rxModel->getPropertyValue( FM_PROP_EDITMASK ) >>= aEditMask;
         _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) >>= bStrict;
 
-        ByteString aAsciiEditMask( aEditMask.getStr(), RTL_TEXTENCODING_ASCII_US );
+        rtl::OString aAsciiEditMask(rtl::OUStringToOString(aEditMask, RTL_TEXTENCODING_ASCII_US));
 
         static_cast< PatternField* >( m_pWindow )->SetMask( aAsciiEditMask, aLitMask );
         static_cast< PatternField* >( m_pPainter )->SetMask( aAsciiEditMask, aLitMask );

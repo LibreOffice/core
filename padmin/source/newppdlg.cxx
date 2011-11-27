@@ -109,7 +109,7 @@ void PPDImportDialog::Import()
 
     Config& rConfig = getPadminRC();
     rConfig.SetGroup( PPDIMPORT_GROUP );
-    rConfig.WriteKey( "LastDir", ByteString( aImportPath, RTL_TEXTENCODING_UTF8 ) );
+    rConfig.WriteKey( "LastDir", rtl::OUStringToOString(aImportPath, RTL_TEXTENCODING_UTF8) );
 
     int nEntries = m_aPathBox.GetEntryCount();
     while( nEntries-- )
@@ -118,7 +118,7 @@ void PPDImportDialog::Import()
     if( nEntries < 0 )
     {
         sal_Int32 nNextEntry = rConfig.ReadKey("NextEntry").toInt32();
-        rConfig.WriteKey( rtl::OString::valueOf(nNextEntry), ByteString( aImportPath, RTL_TEXTENCODING_UTF8 ) );
+        rConfig.WriteKey( rtl::OString::valueOf(nNextEntry), rtl::OUStringToOString(aImportPath, RTL_TEXTENCODING_UTF8) );
         nNextEntry = nNextEntry < 10 ? nNextEntry+1 : 0;
         rConfig.WriteKey( "NextEntry", rtl::OString::valueOf(nNextEntry) );
         m_aPathBox.InsertEntry( aImportPath );
@@ -221,8 +221,8 @@ IMPL_LINK( PPDImportDialog, ModifyHdl, ComboBox*, pListBox )
 {
     if( pListBox == &m_aPathBox )
     {
-        ByteString aDir( m_aPathBox.GetText(), osl_getThreadTextEncoding() );
-        if( ! access( aDir.GetBuffer(), F_OK ) )
+        rtl::OString aDir(rtl::OUStringToOString(m_aPathBox.GetText(), osl_getThreadTextEncoding()));
+        if (!access( aDir.getStr(), F_OK))
             Import();
     }
     return 0;

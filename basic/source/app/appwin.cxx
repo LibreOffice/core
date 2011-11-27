@@ -459,7 +459,7 @@ sal_Bool AppWin::Load( const String& aName )
         aMsg.AppendAscii("\"");
         if ( pFrame->IsAutoRun() )
         {
-            printf( "%s\n", ByteString( aMsg, osl_getThreadTextEncoding() ).GetBuffer() );
+            printf( "%s\n", rtl::OUStringToOString(aMsg, osl_getThreadTextEncoding()).getStr() );
         }
         else
         {

@@ -557,7 +557,7 @@ sal_Bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const String&
         {
             const sal_Unicode* pBuf = rUniStr.GetBuffer();
             const rtl_TextEncoding aTextEncodingOrg = aSrcFont.GetCharSet();
-            ByteString aByteStr( rUniStr, aTextEncodingOrg );
+            rtl::OString aByteStr(rtl::OUStringToOString(rUniStr, aTextEncodingOrg));
             String     aUniStr2( aByteStr, aTextEncodingOrg );
             const sal_Unicode* pConversion = aUniStr2.GetBuffer();  // this is the unicode array after bytestring <-> unistring conversion
             for ( i = 0; i < nStringLen; i++ )
@@ -579,7 +579,7 @@ sal_Bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const String&
                     aTextEncoding = getBestMSEncodingByChar(*pCheckChar); // try the next character
                 }
 
-                aByteStr = ByteString ( rUniStr,  aTextEncoding );
+                aByteStr = rtl::OUStringToOString(rUniStr,  aTextEncoding);
                 aUniStr2 = String ( aByteStr, aTextEncoding );
                 pConversion = aUniStr2.GetBuffer(); // this is the unicode array after bytestring <-> unistring conversion
                 for ( i = 0; i < nStringLen; i++ )
@@ -654,7 +654,7 @@ void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint,
         return;
     }
     rtl_TextEncoding eChrSet = aSrcFont.GetCharSet();
-    ByteString aByteString(rString, eChrSet);
+    rtl::OString aByteString(rtl::OUStringToOString(rString, eChrSet));
     TrueExtTextOut(rPoint,rString,aByteString,pDXAry);
 }
 
@@ -686,8 +686,9 @@ void WMFWriter::TrueExtTextOut( const Point & rPoint, const String & rString,
         *pWMF << nDx;
         if ( nOriginalTextLen < nNewTextLen )
         {
-            ByteString aTemp( rString.GetChar( i ), aSrcFont.GetCharSet());
-            j = aTemp.Len();
+            sal_Unicode nUniChar = rString.GetChar(i);
+            rtl::OString aTemp(&nUniChar, 1, aSrcFont.GetCharSet());
+            j = aTemp.getLength();
             while ( --j > 0 )
                 *pWMF << (sal_uInt16)0;
         }
@@ -943,7 +944,7 @@ void WMFWriter::WMFRecord_StretchDIB( const Point & rPoint, const Size & rSize,
 void WMFWriter::WMFRecord_TextOut(const Point & rPoint, const String & rStr)
 {
     rtl_TextEncoding eChrSet = aSrcFont.GetCharSet();
-    ByteString aString( rStr, eChrSet );
+    rtl::OString aString(rtl::OUStringToOString(rStr, eChrSet));
     TrueTextOut(rPoint, aString);
 }
 

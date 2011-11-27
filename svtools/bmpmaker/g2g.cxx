@@ -31,6 +31,7 @@
 #include <signal.h>
 #include <ctype.h>
 
+#include <rtl/strbuf.hxx>
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
@@ -120,9 +121,9 @@ void G2GApp::Message( const String& rText, sal_uInt8 nExitCode )
     if( EXIT_NOERROR != nExitCode )
         SetExitCode( nExitCode );
 
-    ByteString aText( rText, RTL_TEXTENCODING_UTF8 );
-    aText.Append( "\r\n" );
-    fprintf( stderr, "%s", aText.GetBuffer() );
+    rtl::OStringBuffer aText(rtl::OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
+    aText.append(RTL_CONSTASCII_STRINGPARAM("\r\n"));
+    fprintf(stderr, "%s", aText.getStr());
 }
 
 // -----------------------------------------------------------------------------
@@ -184,20 +185,19 @@ int G2GApp::Start( const ::std::vector< String >& rArgs )
 
                         if( ( aTransColStr.Len() == 6 ) && aFilter.IsExportPixelFormat( nExportFilter ) )
                         {
-                            ByteString  aHexStr( aTransColStr, RTL_TEXTENCODING_ASCII_US );
+                            rtl::OString aHexStr(rtl::OUStringToOString(aTransColStr, RTL_TEXTENCODING_ASCII_US).
+                                toAsciiLowerCase());
                             sal_Bool    bHex = sal_True;
 
-                            aHexStr.ToLowerAscii();
-
                             for( sal_uInt16 i = 0; ( i < 6 ) && bHex; i++ )
-                                if( !isxdigit( aHexStr.GetChar( i ) ) )
+                                if( !isxdigit( aHexStr[i] ) )
                                     bHex = sal_False;
 
                             if( bHex )
                             {
-                                const sal_uInt8 cTransR = ( LOWERHEXTONUM( aHexStr.GetChar( 0 ) ) << 4 ) | LOWERHEXTONUM( aHexStr.GetChar( 1 ) );
-                                const sal_uInt8 cTransG = ( LOWERHEXTONUM( aHexStr.GetChar( 2 ) ) << 4 ) | LOWERHEXTONUM( aHexStr.GetChar( 3 ) );
-                                const sal_uInt8 cTransB = ( LOWERHEXTONUM( aHexStr.GetChar( 4 ) ) << 4 ) | LOWERHEXTONUM( aHexStr.GetChar( 5 ) );
+                                const sal_uInt8 cTransR = ( LOWERHEXTONUM( aHexStr[0] ) << 4 ) | LOWERHEXTONUM( aHexStr[1] );
+                                const sal_uInt8 cTransG = ( LOWERHEXTONUM( aHexStr[2] ) << 4 ) | LOWERHEXTONUM( aHexStr[3] );
+                                const sal_uInt8 cTransB = ( LOWERHEXTONUM( aHexStr[4] ) << 4 ) | LOWERHEXTONUM( aHexStr[5] );
 
                                 BitmapEx    aBmpEx( aGraphic.GetBitmapEx() );
                                 Bitmap      aOldBmp( aBmpEx.GetBitmap() );

@@ -1734,8 +1734,8 @@ void GeneratePackageName ( const String& rShort, String& rPackageName )
     rPackageName = rShort;
     xub_StrLen nPos = 0;
     sal_Unicode pDelims[] = { '!', '/', ':', '.', '\\', 0 };
-    ByteString sByte ( rPackageName, RTL_TEXTENCODING_UTF7);
-    rPackageName = String (sByte, RTL_TEXTENCODING_ASCII_US);
+    rtl::OString sByte(rtl::OUStringToOString(rPackageName, RTL_TEXTENCODING_UTF7));
+    rPackageName = rtl::OStringToOUString(sByte, RTL_TEXTENCODING_ASCII_US);
     while( STRING_NOTFOUND != ( nPos = rPackageName.SearchChar( pDelims, nPos )))
     {
         rPackageName.SetChar( nPos, '_' );

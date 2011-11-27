@@ -95,15 +95,18 @@ bool HelpParser::CreateSDF(
     String sUsedTempFile;
     String sXmlFile;
 
-    if( Export::fileHasUTF8ByteOrderMarker( sHelpFile ) ){
+    if( Export::fileHasUTF8ByteOrderMarker( sHelpFile ) )
+    {
         DirEntry aTempFile = Export::GetTempFile();
         DirEntry aSourceFile( String( sHelpFile , RTL_TEXTENCODING_ASCII_US ) );
         aSourceFile.CopyTo( aTempFile , FSYS_ACTION_COPYFILE );
         String sTempFile = aTempFile.GetFull();
-        Export::RemoveUTF8ByteOrderMarkerFromFile( ByteString( sTempFile , RTL_TEXTENCODING_ASCII_US ) );
+        Export::RemoveUTF8ByteOrderMarkerFromFile(rtl::OUStringToOString(sTempFile , RTL_TEXTENCODING_ASCII_US));
         sUsedTempFile = sTempFile;
         sXmlFile = sTempFile;
-    }else{
+    }
+    else
+    {
         sUsedTempFile = String::CreateFromAscii("");
         sXmlFile = String( sHelpFile , RTL_TEXTENCODING_ASCII_US );
     }
@@ -121,8 +124,9 @@ bool HelpParser::CreateSDF(
     //printf( "%s\n", fullFilePath.GetBuffer() );
     std::auto_ptr <XMLFile> file ( aParser.Execute( strFullPath , sXmlFile, pXmlFile ) );
 
-    if(file.get() == NULL){
-        printf("%s\n",ByteString(aParser.GetError().sMessage,RTL_TEXTENCODING_ASCII_US).GetBuffer());
+    if(file.get() == NULL)
+    {
+        printf("%s\n", rtl::OUStringToOString(aParser.GetError().sMessage, RTL_TEXTENCODING_ASCII_US).getStr());
         exit(-1);
     }
     file->Extract();
@@ -195,8 +199,9 @@ bool HelpParser::CreateSDF(
                 sBuffer.append( data );
                   sBuffer.append( GSI_SEQUENCE4 );      //"\t\t\t\t";
                 sBuffer.append( sOUTimeStamp );
-                ByteString sOut( sBuffer.makeStringAndClear().getStr() , RTL_TEXTENCODING_UTF8 );
-                if( data.getLength() > 0 ) aSDFStream.WriteLine( sOut );
+                rtl::OString sOut(rtl::OUStringToOString(sBuffer.makeStringAndClear().getStr() , RTL_TEXTENCODING_UTF8));
+                if( data.getLength() > 0 )
+                    aSDFStream.WriteLine( sOut );
                 pXMLElement=NULL;
             }else fprintf(stdout,"\nDBG: NullPointer in HelpParser::CreateSDF , Language %s\n",sCur.GetBuffer() );
         }
@@ -213,18 +218,18 @@ bool HelpParser::CreateSDF(
 
 ByteString HelpParser::makeAbsolutePath( const ByteString& sHelpFile , const ByteString& rRoot_in )
 {
-      DirEntry aEntry( String( sHelpFile, RTL_TEXTENCODING_ASCII_US ));
+    DirEntry aEntry( String( sHelpFile, RTL_TEXTENCODING_ASCII_US ));
     aEntry.ToAbs();
     String sFullEntry = aEntry.GetFull();
     aEntry += DirEntry( String( "..", RTL_TEXTENCODING_ASCII_US ));
     aEntry += DirEntry( rRoot_in );
-    ByteString sPrjEntry( aEntry.GetFull(), osl_getThreadTextEncoding());
-    ByteString sActFileName(
-    sFullEntry.Copy( sPrjEntry.Len() + 1 ), osl_getThreadTextEncoding());
+    rtl::OString sPrjEntry(rtl::OUStringToOString(aEntry.GetFull(), osl_getThreadTextEncoding()));
+    rtl::OString sActFileName(rtl::OUStringToOString(
+        sFullEntry.Copy(sPrjEntry.getLength() + 1), osl_getThreadTextEncoding()));
 
-    sActFileName.SearchAndReplaceAll( "/", "\\" );
-    return sActFileName;
+    return sActFileName.replace('/', '\\');
 }
+
 bool HelpParser::Merge( const ByteString &rSDFFile, const ByteString &rDestinationFile  ,
         ByteString& sLanguage , MergeDataFile& aMergeDataFile )
 {
@@ -242,7 +247,7 @@ bool HelpParser::Merge( const ByteString &rSDFFile, const ByteString &rDestinati
         DirEntry aSourceFile( String( sHelpFile , RTL_TEXTENCODING_ASCII_US ) );
         aSourceFile.CopyTo( aTempFile , FSYS_ACTION_COPYFILE );
         String sTempFile = aTempFile.GetFull();
-        Export::RemoveUTF8ByteOrderMarkerFromFile( ByteString( sTempFile , RTL_TEXTENCODING_ASCII_US ) );
+        Export::RemoveUTF8ByteOrderMarkerFromFile(rtl::OUStringToOString(sTempFile, RTL_TEXTENCODING_ASCII_US));
         sUsedTempFile = sTempFile;
         sXmlFile = sTempFile;
     }else{
@@ -322,7 +327,7 @@ bool HelpParser::Merge(
         DirEntry aSourceFile( String( sHelpFile , RTL_TEXTENCODING_ASCII_US ) );
         aSourceFile.CopyTo( aTempFile , FSYS_ACTION_COPYFILE );
         String sTempFile = aTempFile.GetFull();
-        Export::RemoveUTF8ByteOrderMarkerFromFile( ByteString( sTempFile , RTL_TEXTENCODING_ASCII_US ) );
+        Export::RemoveUTF8ByteOrderMarkerFromFile(rtl::OUStringToOString(sTempFile , RTL_TEXTENCODING_ASCII_US));
         sUsedTempFile = sTempFile;
         sXmlFile = sTempFile;
     }
@@ -342,7 +347,7 @@ bool HelpParser::Merge(
 
     if( xmlfile == NULL)
     {
-        printf("%s\n",ByteString(aParser.GetError().sMessage,RTL_TEXTENCODING_UTF8).GetBuffer());
+        printf("%s\n", rtl::OUStringToOString(aParser.GetError().sMessage, RTL_TEXTENCODING_UTF8).getStr());
         exit(-1);
     }
 
@@ -497,9 +502,10 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
     return true;
 }
 
-ByteString HelpParser::GetOutpath( const ByteString& rPathX , const ByteString& sCur , const ByteString& rPathY ){
+ByteString HelpParser::GetOutpath( const ByteString& rPathX , const ByteString& sCur , const ByteString& rPathY )
+{
     ByteString testpath = rPathX;
-    static const ByteString sDelimiter( DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US );
+    static const rtl::OString sDelimiter(rtl::OUStringToOString(DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US));
     testpath = comphelper::string::stripEnd(testpath, '/');
     testpath = comphelper::string::stripEnd(testpath, '\\');
     testpath += sDelimiter;
@@ -512,13 +518,15 @@ ByteString HelpParser::GetOutpath( const ByteString& rPathX , const ByteString& 
     testpath += sDelimiter;
     return testpath;
 }
-void HelpParser::MakeDir( const ByteString& sPath ){
+
+void HelpParser::MakeDir( const ByteString& sPath )
+{
     ByteString sTPath( sPath );
-    ByteString sDelimiter( DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US );
+    rtl::OString sDelimiter(rtl::OUStringToOString(DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US));
     sTPath.SearchAndReplaceAll( sDelimiter , rtl::OString('/') );
     sal_uInt16 cnt = sTPath.GetTokenCount( '/' );
     rtl::OStringBuffer sCreateDir;
-    for( sal_uInt16 i = 0 ; i < cnt ; i++ )
+    for (sal_uInt16 i = 0; i < cnt; ++i)
     {
         sCreateDir.append(comphelper::string::getToken(sTPath, i , '/'));
         sCreateDir.append(sDelimiter);

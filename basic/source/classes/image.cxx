@@ -358,8 +358,8 @@ sal_Bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         for( i = 0; i < nStrings; i++ )
         {
             sal_uInt16 nOff = (sal_uInt16) pStringOff[ i ];
-            ByteString aStr( pStrings + nOff, eCharSet );
-            memcpy( pByteStrings + nOff, aStr.GetBuffer(), (aStr.Len() + 1) * sizeof( char ) );
+            rtl::OString aStr(rtl::OUStringToOString(rtl::OUString(pStrings + nOff), eCharSet));
+            memcpy( pByteStrings + nOff, aStr.getStr(), (aStr.getLength() + 1) * sizeof( char ) );
         }
         r << (sal_uInt32) nStringSize;
         r.Write( pByteStrings, nStringSize );

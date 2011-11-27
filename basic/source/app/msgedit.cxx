@@ -165,7 +165,7 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
             {
                 String aSave = VERSION_STRING.Append( UniString::CreateFromInt32( 3 ) ).AppendAscii("\n");      // Version 3
                 aSave.ConvertLineEnd(LINEEND_CRLF);
-                aStrm << ByteString( aSave, RTL_TEXTENCODING_IBM_850 ).GetBuffer();
+                aStrm << rtl::OUStringToOString(aSave, RTL_TEXTENCODING_IBM_850).getStr();
             }
 
             String aLogMsg = Impl_MakeSaveText( LogMsg->aDebugData ).AppendAscii("\n");
@@ -174,7 +174,7 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
             {
                 aLogMsg.ConvertLineEnd(LINEEND_CRLF);
                 aStrm.Seek(STREAM_SEEK_TO_END);
-                aStrm << ByteString( aLogMsg, RTL_TEXTENCODING_UTF8 ).GetBuffer();
+                aStrm << rtl::OUStringToOString(aLogMsg, RTL_TEXTENCODING_UTF8).getStr();
                 aStrm.Close();
             }
             if ( !bFileWasChanged )
@@ -195,7 +195,7 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
                 // restore Original Msg
                 LogMsg->aDebugData.aMsg = aOriginalMsg;
 
-                printf( "%s", ByteString( aPrintMsg, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                printf( "%s", rtl::OUStringToOString(aPrintMsg, RTL_TEXTENCODING_UTF8).getStr() );
             }
         }
     }
@@ -676,7 +676,7 @@ sal_Bool MsgEdit::Save( const String& aName )
         {
             String aSave = GetText();
             aSave.ConvertLineEnd(LINEEND_CRLF);
-            aStrm << ByteString( aSave, RTL_TEXTENCODING_UTF8 ).GetBuffer();
+            aStrm << rtl::OUStringToOString(aSave, RTL_TEXTENCODING_UTF8).getStr();
         }
         else
         {
@@ -687,7 +687,7 @@ sal_Bool MsgEdit::Save( const String& aName )
                 pRun = aEditTree.NextSibling( pRun );
 
             aSave.ConvertLineEnd(LINEEND_CRLF);
-            aStrm << ByteString( aSave, RTL_TEXTENCODING_IBM_850 ).GetBuffer();
+            aStrm << rtl::OUStringToOString(aSave, RTL_TEXTENCODING_IBM_850).getStr();
 
             SvLBoxEntry *pEntry;
             while ( pRun )
@@ -698,7 +698,7 @@ sal_Bool MsgEdit::Save( const String& aName )
                     aSave = Impl_MakeSaveText( pEntry );
                     aSave += '\n';
                     aSave.ConvertLineEnd(LINEEND_CRLF);
-                    aStrm << ByteString( aSave, RTL_TEXTENCODING_UTF8 ).GetBuffer();
+                    aStrm << rtl::OUStringToOString(aSave, RTL_TEXTENCODING_UTF8).getStr();
                     pEntry = aEditTree.Next( pEntry );
                 }
                 pRun = aEditTree.PrevSibling( pRun );

@@ -6457,7 +6457,7 @@ void VCLXPatternField::setMasks( const ::rtl::OUString& EditMask, const ::rtl::O
     PatternField* pPatternField = (PatternField*) GetWindow();
     if ( pPatternField )
     {
-        pPatternField->SetMask( ByteString( UniString( EditMask ), RTL_TEXTENCODING_ASCII_US ), LiteralMask );
+        pPatternField->SetMask( rtl::OUStringToOString(EditMask, RTL_TEXTENCODING_ASCII_US), LiteralMask );
     }
 }
 

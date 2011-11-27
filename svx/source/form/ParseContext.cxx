@@ -128,9 +128,9 @@ OSystemParseContext::~OSystemParseContext()
 
     OSL_ENSURE( nIndex < m_aLocalizedKeywords.size(), "OSystemParseContext::getIntlKeywordAscii: invalid index!" );
 
-    ByteString sKeyword;
+    rtl::OString sKeyword;
     if ( nIndex < m_aLocalizedKeywords.size() )
-        sKeyword = ByteString( m_aLocalizedKeywords[nIndex], RTL_TEXTENCODING_UTF8 );
+        sKeyword = rtl::OUStringToOString(m_aLocalizedKeywords[nIndex], RTL_TEXTENCODING_UTF8);
     return sKeyword;
 }
 

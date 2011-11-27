@@ -228,8 +228,8 @@ void Export::RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename )
         if( hasUTF8ByteOrderMarker( sLine ) )
         {
             DirEntry aTempFile = Export::GetTempFile();
-            ByteString sTempFile = ByteString( aTempFile.GetFull() , RTL_TEXTENCODING_ASCII_US );
-            SvFileStream aNewFile( String( sTempFile , RTL_TEXTENCODING_ASCII_US ) , STREAM_WRITE );
+            rtl::OString sTempFile = rtl::OUStringToOString(aTempFile.GetFull() , RTL_TEXTENCODING_ASCII_US);
+            SvFileStream aNewFile(rtl::OStringToOUString(sTempFile , RTL_TEXTENCODING_ASCII_US) , STREAM_WRITE);
             // Remove header
             RemoveUTF8ByteOrderMarker( sLine );
             aNewFile.WriteLine( sLine );
@@ -431,7 +431,7 @@ ByteString Export::GetNativeFile( ByteString sSource )
 /*****************************************************************************/
 {
     DirEntry aTemp( GetTempFile());
-    ByteString sReturn( aTemp.GetFull(), RTL_TEXTENCODING_ASCII_US );
+    rtl::OString sReturn(rtl::OUStringToOString(aTemp.GetFull(), RTL_TEXTENCODING_ASCII_US));
 
     for ( sal_uInt16 i = 0; i < 10; i++ )
         if ( ConvertLineEnds( sSource, sReturn ))
@@ -509,20 +509,24 @@ DirEntry Export::GetTempFile()
 
     INetURLObject::DecodeMechanism eMechanism = INetURLObject::DECODE_TO_IURI;
     String sDecodedStr = INetURLObject::decode( strTmp , '%' , eMechanism );
-    ByteString sTmp( sDecodedStr , RTL_TEXTENCODING_UTF8 );
+    rtl::OString sTmp(rtl::OUStringToOString(sDecodedStr , RTL_TEXTENCODING_UTF8));
 
 #if defined(WNT)
-    sTmp.SearchAndReplace("file:///","");
-    sTmp.SearchAndReplaceAll('/','\\');
+    sTmp = comphelper::string::replace(sTmp,
+        rtl::OString(RTL_CONSTASCII_STRINGPARAM("file:///")),
+        rtl::OString());
+    sTmp = sTmp.replace('/', '\\');
 #else
     // Set file permission to 644
-     const sal_uInt64 nPerm = osl_File_Attribute_OwnRead | osl_File_Attribute_OwnWrite |
+    const sal_uInt64 nPerm = osl_File_Attribute_OwnRead | osl_File_Attribute_OwnWrite |
                              osl_File_Attribute_GrpRead | osl_File_Attribute_OthRead ;
 
     nRC = osl::File::setAttributes( *sTempFilename , nPerm );
     if( nRC ) printf(" osl::File::setAttributes RC = %d",nRC);
 
-    sTmp.SearchAndReplace("file://","");
+    sTmp = comphelper::string::replace(sTmp,
+        rtl::OString(RTL_CONSTASCII_STRINGPARAM("file://")),
+        rtl::OString());
 #endif
     DirEntry aDirEntry( sTmp );
     delete sTempFilename;

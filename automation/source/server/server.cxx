@@ -206,7 +206,7 @@ sal_uLong RemoteControlCommunicationManager::GetPort()
         Config aConf(Config::GetConfigName( aIniFileDir, CUniString("testtool") ));
         aConf.SetGroup("Communication");
 
-        ByteString aNoTesttoolKey( ByteString("Exclude_").Append( ByteString( Application::GetAppFileName(), RTL_TEXTENCODING_UTF8 ) ) );
+        rtl::OString aNoTesttoolKey( ByteString("Exclude_").Append( rtl::OUStringToOString(Application::GetAppFileName(), RTL_TEXTENCODING_UTF8) ) );
 // -notesttool
         for ( i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
         {

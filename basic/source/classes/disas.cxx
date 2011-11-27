@@ -388,16 +388,16 @@ sal_Bool SbiDisas::DisasLine( String& rText )
     if( cLabels[ nPC >> 3 ] & ( 1 << ( nPC & 7 ) ) )
     {
         // Public?
-        ByteString aByteMethName;
+        rtl::OString aByteMethName;
         for( sal_uInt16 i = 0; i < pMod->GetMethods()->Count(); i++ )
         {
             SbMethod* pMeth = PTR_CAST(SbMethod,pMod->GetMethods()->Get( i ));
             if( pMeth )
             {
-                aByteMethName = ByteString( pMeth->GetName(), osl_getThreadTextEncoding() );
+                aByteMethName = rtl::OUStringToOString(pMeth->GetName(), osl_getThreadTextEncoding());
                 if( pMeth->GetId() == nPC )
                 {
-                    p = aByteMethName.GetBuffer();
+                    p = aByteMethName.getStr();
                     break;
                 }
                 if( pMeth->GetId() >= nPC )
@@ -446,8 +446,8 @@ sal_Bool SbiDisas::DisasLine( String& rText )
 void SbiDisas::StrOp( String& rText )
 {
     String aStr = rImg.GetString( (sal_uInt16)nOp1 );
-    ByteString aByteString( aStr, RTL_TEXTENCODING_ASCII_US );
-    const char* p = aByteString.GetBuffer();
+    rtl::OString aByteString(rtl::OUStringToOString(aStr, RTL_TEXTENCODING_ASCII_US));
+    const char* p = aByteString.getStr();
     if( p )
     {
         rText += '"';

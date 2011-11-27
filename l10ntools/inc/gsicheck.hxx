@@ -70,7 +70,7 @@ public:
     ByteString  const GetQuickHelpText() const { return aQuickHelpText; }
     ByteString  const GetTitle()      const    { return aTitle; }
 
-          void        SetUText( String &aNew ) { aText = ByteString( aNew, RTL_TEXTENCODING_UTF8 ); ReassembleLine(); }
+    void SetUText( String &aNew ) { aText = rtl::OUStringToOString(aNew, RTL_TEXTENCODING_UTF8); ReassembleLine(); }
           void        SetText( ByteString &aNew ) { aText = aNew; ReassembleLine(); }
           void        SetQuickHelpText( ByteString &aNew ) { aQuickHelpText = aNew; ReassembleLine(); }
           void        SetTitle( ByteString &aNew ) { aTitle = aNew; ReassembleLine(); }

@@ -124,7 +124,8 @@ void LazySvFileStream::LazyOpen()
         Open( aFileName, eOpenMode );
         if ( !IsOpen())
         {
-            fprintf( stderr, "\nERROR: Could not open Output-File %s!\n\n", ByteString( aFileName, RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+            fprintf( stderr, "\nERROR: Could not open Output-File %s!\n\n",
+                rtl::OUStringToOString(aFileName, RTL_TEXTENCODING_ASCII_US).getStr() );
             exit ( 4 );
         }
         bOpened = sal_True;
@@ -403,8 +404,8 @@ void GSIBlock::PrintList( ParserMessageList *pList, ByteString aPrefix,
 sal_Bool GSIBlock::IsUTF8( const ByteString &aTestee, sal_Bool bFixTags, sal_uInt16 &nErrorPos, ByteString &aErrorMsg, sal_Bool &bHasBeenFixed, ByteString &aFixed ) const
 /*****************************************************************************/
 {
-    String aUTF8Tester( aTestee, RTL_TEXTENCODING_UTF8 );
-    if ( STRING_MATCH != (nErrorPos = ByteString( aUTF8Tester, RTL_TEXTENCODING_UTF8 ).Match( aTestee )) )
+    String aUTF8Tester(rtl::OStringToOUString(aTestee, RTL_TEXTENCODING_UTF8));
+    if ( STRING_MATCH != (nErrorPos = ByteString(rtl::OUStringToOString(aUTF8Tester, RTL_TEXTENCODING_UTF8)).Match( aTestee )) )
     {
         aUTF8Tester = String( aTestee.GetBuffer(), nErrorPos, RTL_TEXTENCODING_UTF8 );
         nErrorPos = aUTF8Tester.Len();
@@ -446,23 +447,23 @@ sal_Bool GSIBlock::IsUTF8( const ByteString &aTestee, sal_Bool bFixTags, sal_uIn
             }
         }
 
-        ByteString aDelimiter( (String)String( sal_Unicode(0x2016) ), RTL_TEXTENCODING_UTF8 );
+        rtl::OString aDelimiter(rtl::OUStringToOString(String( sal_Unicode(0x2016) ), RTL_TEXTENCODING_UTF8));
 
-        if ( aID.Equals( aDelimiter, 6, aDelimiter.Len() ) )
+        if ( aID.Equals( aDelimiter, 6, aDelimiter.getLength() ) )
         {   // New KeyId     6 Letters, digits and spechial chars followed by delimiter
             bNewId = sal_True;
             nErrorPos = 1;
             aID = aID.Copy( 0, 6 );
             nAfterID += 6;
-            nAfterID = nAfterID + aDelimiter.Len();
+            nAfterID = nAfterID + aDelimiter.getLength();
         }
-        else if ( ( aID.GetChar(6) == '*' ) && aID.Equals( aDelimiter, 7, aDelimiter.Len() ) )
+        else if ( ( aID.GetChar(6) == '*' ) && aID.Equals( aDelimiter, 7, aDelimiter.getLength() ) )
         {   // New KeyId     6 Letters, digits and spechial chars followed by '*delimiter' to indicate translation in progress
             bNewId = sal_True;
             nErrorPos = 1;
             aID = aID.Copy( 0, 6 );
             nAfterID += 7;
-            nAfterID = nAfterID + aDelimiter.Len();
+            nAfterID = nAfterID + aDelimiter.getLength();
         }
         else if ( aID.GetTokenCount( '.' ) > 1 )
         {   // test for old KeyIDs       5 to 6 digits followed by a dot   '44373.'

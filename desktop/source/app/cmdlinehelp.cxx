@@ -164,8 +164,8 @@ namespace desktop
             fprintf(stdout, "%s", getToken(bsLeft, i, '\n').getStr());
             fprintf(stdout, "%s\n", getToken(bsRight, i, '\n').getStr());
         }
-        fprintf(stdout, "%s", ByteString(aHelpMessage_bottom,
-                    RTL_TEXTENCODING_ASCII_US).GetBuffer());
+        fprintf(stdout, "%s", rtl::OUStringToOString(aHelpMessage_bottom,
+                    RTL_TEXTENCODING_ASCII_US).getStr());
 #else
         // rest gets a dialog box
         CmdlineHelpDialog aDlg;

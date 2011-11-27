@@ -818,7 +818,7 @@ DBG_CHKTHIS(TextEdit,0);
         }
         String aSave = GetText();
         aSave.ConvertLineEnd(LINEEND_LF);
-        aStrm << ByteString( aSave, aFileEncoding ).GetBuffer();
+        aStrm << rtl::OUStringToOString(aSave, aFileEncoding).getStr();
         if( aStrm.GetError() != SVSTREAM_OK )
             bOk = sal_False;
         else
