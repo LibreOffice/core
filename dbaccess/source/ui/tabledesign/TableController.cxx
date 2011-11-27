@@ -945,7 +945,7 @@ void OTableController::loadData()
     if(aTypeIter == m_aTypeInfo.end())
         aTypeIter = m_aTypeInfo.begin();
 
-    OSL_ENSURE(aTypeIter != m_aTypeInfo.end(),"We have no type infomation!");
+    OSL_ENSURE(aTypeIter != m_aTypeInfo.end(),"We have no type information!");
 
     bool bReadRow = !isAddAllowed();
     for(sal_Int32 i=m_vRowList.size(); i < NEWCOLS; i++ )

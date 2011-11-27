@@ -796,7 +796,7 @@
 +
 +/**
 + * xmlSecNssAppliedKeysMngrCreate:
-+ * @slot:			array of pointers to NSS PKCS#11 slot infomation.
++ * @slot:			array of pointers to NSS PKCS#11 slot information.
 + * @cSlots:			number of slots in the array
 + * @handler:		the pointer to NSS certificate database.
 + *

@@ -114,7 +114,7 @@ ULONG STDMETHODCALLTYPE CInfoTip::Release( void)
 
 //********************helper functions for GetInfoTip functions**********************
 
-/** get file type infomation from registry.
+/** get file type information from registry.
 */
 std::wstring getFileTypeInfo(const std::string& file_extension)
 {
@@ -191,7 +191,7 @@ std::wstring formatSizeOfFile( DWORD dwSize )
 }
 
 
-/** get file size infomation.
+/** get file size information.
 */
 std::wstring getFileSizeInfo(char* FileName)
 {
@@ -279,7 +279,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
     {
     }
 
-    //display file size, no matter other infomation is loaded successfully or not.
+    //display file size, no matter other information is loaded successfully or not.
     std::wstring tmpSizeStr = getFileSizeInfo( m_szFileName );
     if ( tmpSizeStr != EMPTY_STRING )
     {

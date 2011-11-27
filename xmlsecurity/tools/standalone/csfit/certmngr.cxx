@@ -142,7 +142,7 @@ int SAL_CALL main( int argc, char **argv )
         Sequence < Reference< XCertificate > > xPersonalCerts = pSecEnv->getPersonalCertificates() ;
         Sequence < Reference< XCertificate > > xCertPath ;
         for( int i = 0; i < xPersonalCerts.getLength(); i ++ ) {
-            //Print the certificate infomation.
+            //Print the certificate information.
             fprintf( stdout, "\nPersonal Certificate Info\n" ) ;
             fprintf( stdout, "\tCertificate Issuer[%s]\n", OUStringToOString( xPersonalCerts[i]->getIssuerName(), RTL_TEXTENCODING_ASCII_US ).getStr() ) ;
             fprintf( stdout, "\tCertificate Serial Number[%s]\n", OUStringToOString( bigIntegerToNumericString( xPersonalCerts[i]->getSerialNumber() ), RTL_TEXTENCODING_ASCII_US ).getStr() ) ;
