@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmlhelp.hxx"
 #include <rtl/memory.h>
 #include "bufferedinputstream.hxx"
 

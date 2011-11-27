@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmlhelp.hxx"
 #include <rtl/string.hxx>
 #include <osl/file.hxx>
 #include <db/Block.hxx>

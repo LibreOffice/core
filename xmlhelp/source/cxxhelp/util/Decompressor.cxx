@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmlhelp.hxx"
 #include <util/Decompressor.hxx>
 #include <util/CompressorIterator.hxx>
 

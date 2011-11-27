@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmlhelp.hxx"
 #include <ucbhelper/contentidentifier.hxx>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/uno/Reference.h>
