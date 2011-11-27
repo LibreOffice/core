@@ -78,12 +78,12 @@ public:
     const ::rtl::OUString& GetName() const
         { return aName; }
 
-    bool HasIsVisible() const;
+    SC_DLLPUBLIC bool HasIsVisible() const;
     SC_DLLPUBLIC void SetIsVisible(bool bSet);
     bool GetIsVisible() const
         { return bool(nVisibleMode); }
 
-    bool HasShowDetails() const;
+    SC_DLLPUBLIC bool HasShowDetails() const;
     SC_DLLPUBLIC void SetShowDetails(bool bSet);
     bool GetShowDetails() const
         { return bool(nShowDetailsMode); }
