@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_automation.hxx"
 
 #if OSL_DEBUG_LEVEL > 1
 #include <vcl/svapp.hxx>

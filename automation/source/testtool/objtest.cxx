@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_automation.hxx"
 
 #include "sysdir_win.hxx"
 #include "registry_win.hxx"

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_automation.hxx"
 #include <svtools/filedlg.hxx>
 #include <stdio.h>
 #include <vcl/msgbox.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_automation.hxx"
 #include <stdio.h>
 #if OSL_DEBUG_LEVEL > 1
 #define DEBUGPRINTF(x) { printf(x); fflush( stdout ); }

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_automation.hxx"
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
