@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/bin/sh
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -204,6 +204,11 @@ for i in $filelist ; do
         echo fetching $i
         $fetch_bin $fetch_args $tarurl/$i 2>&1 | tee -a $logfile
                 wret=$?
+                if [ $wret -ne 0 ]; then
+                    mv $i ${i}_broken
+                    failed="$failed $i"
+                    wret=0
+                fi
                 if [ -f $i -a -n "$md5sum" ]; then
                     sum=`$md5sum $md5special $i | sed "s/ .*//"`
                     sum2=`echo $i | sed "s/-.*//"`
