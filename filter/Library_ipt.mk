@@ -25,7 +25,6 @@ $(eval $(call gb_Library_add_api,ipt,\
 ))
 
 $(eval $(call gb_Library_set_include,ipt,\
-	-I$(SRCDIR)/filter/inc/pch \
 	$$(INCLUDE) \
 ))
 

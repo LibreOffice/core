@@ -29,7 +29,6 @@ $(eval $(call gb_Executable_set_targettype_gui,sbase,YES))
 
 $(eval $(call gb_Executable_set_include,sbase,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/desktop/inc/pch \
 ))
 
 $(eval $(call gb_Executable_add_defs,sbase,\

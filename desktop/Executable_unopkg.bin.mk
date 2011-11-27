@@ -35,7 +35,6 @@ $(eval $(call gb_Executable_set_targettype_gui,$(unopkgbin),YES))
 
 $(eval $(call gb_Executable_set_include,$(unopkgbin),\
     $$(INCLUDE) \
-    -I$(SRCDIR)/desktop/inc/pch \
     -I$(SRCDIR)/desktop/source/inc \
 ))
 

@@ -35,7 +35,6 @@ $(eval $(call gb_Library_add_package_headers,tk,toolkit_inc))
 $(eval $(call gb_Library_set_include,tk,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/toolkit/inc) \
-    -I$(realpath $(SRCDIR)/toolkit/inc/pch) \
     -I$(realpath $(SRCDIR)/toolkit/source) \
 ))
 

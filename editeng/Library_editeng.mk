@@ -32,7 +32,6 @@ $(eval $(call gb_Library_add_package_headers,editeng,editeng_inc))
 
 $(eval $(call gb_Library_set_include,editeng,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/editeng/inc/pch) \
     -I$(realpath $(SRCDIR)/editeng/inc) \
 ))
 
@@ -46,7 +45,6 @@ $(eval $(call gb_Library_add_api,editeng,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,editeng,\
-    editeng/inc/pch/precompiled_editeng \
     editeng/source/accessibility/AccessibleComponentBase \
     editeng/source/accessibility/AccessibleContextBase \
     editeng/source/accessibility/AccessibleEditableTextPara \

@@ -29,7 +29,6 @@ $(eval $(call gb_Executable_set_targettype_gui,unopkg,YES))
 
 $(eval $(call gb_Executable_set_include,unopkg,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/desktop/inc/pch \
 ))
 
 $(eval $(call gb_Executable_add_linked_static_libs,unopkg,\

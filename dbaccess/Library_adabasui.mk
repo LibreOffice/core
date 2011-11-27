@@ -30,7 +30,6 @@ $(eval $(call gb_Library_Library,adabasui))
 
 $(eval $(call gb_Library_set_include,adabasui,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/dbaccess/inc/pch) \
     -I$(OUTDIR)/inc \
 ))
 

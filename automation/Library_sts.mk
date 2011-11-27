@@ -28,7 +28,6 @@ $(eval $(call gb_Library_Library,sts))
 $(eval $(call gb_Library_set_include,sts,\
     $$(INCLUDE) \
     -I$(WORKDIR)/CustomTarget/automation/source/testtool \
-    -I$(SRCDIR)/automation/inc/pch \
     -I$(SRCDIR)/automation/source/inc \
     -I$(SRCDIR)/automation/inc \
 ))

@@ -32,7 +32,6 @@ $(eval $(call gb_Library_set_componentfile,protocolhandler,scripting/source/prot
 
 $(eval $(call gb_Library_set_include,protocolhandler,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/scripting/inc/pch) \
 	-I$(realpath $(SRCDIR)/scripting/source/inc) \
 ))
 

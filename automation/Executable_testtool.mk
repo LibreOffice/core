@@ -34,7 +34,6 @@ $(eval $(call gb_Executable_add_package_headers,testtool,\
 $(eval $(call gb_Executable_set_include,testtool,\
     $$(INCLUDE) \
     -I$(call gb_CustomTarget_get_workdir,automation/source/testtool) \
-    -I$(SRCDIR)/automation/inc/pch \
     -I$(SRCDIR)/automation/inc \
     -I$(SRCDIR)/automation/source/inc \
 ))

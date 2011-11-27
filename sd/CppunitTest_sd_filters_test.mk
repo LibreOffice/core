@@ -70,7 +70,6 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sd_filters_test, \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sd_filters_test,\
-    -I$(realpath $(SRCDIR)/sd/inc/pch) \
     -I$(realpath $(SRCDIR)/sd/source/ui/inc) \
     -I$(realpath $(SRCDIR)/sd/inc) \
     $$(INCLUDE) \

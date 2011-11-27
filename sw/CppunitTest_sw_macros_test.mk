@@ -72,7 +72,6 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sw_macros_test, \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sw_macros_test,\
-    -I$(realpath $(SRCDIR)/sw/inc/pch) \
     -I$(realpath $(SRCDIR)/sw/source/ui/inc) \
     -I$(realpath $(SRCDIR)/sw/inc) \
     $$(INCLUDE) \

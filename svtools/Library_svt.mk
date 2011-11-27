@@ -45,7 +45,6 @@ $(eval $(call gb_Library_set_include,svt,\
     -I$(OUTDIR)/inc/ \
     -I$(realpath $(SRCDIR)/svtools/inc/svtools) \
     -I$(realpath $(SRCDIR)/svtools/source/inc) \
-    -I$(realpath $(SRCDIR)/svtools/inc/pch) \
     -I$(realpath $(SRCDIR)/svtools/inc) \
 ))
 

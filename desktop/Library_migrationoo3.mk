@@ -27,7 +27,6 @@ $(eval $(call gb_Library_Library,migrationoo3))
 
 $(eval $(call gb_Library_set_include,migrationoo3,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/desktop/inc/pch \
 ))
 
 $(eval $(call gb_Library_add_api,migrationoo3,\

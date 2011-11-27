@@ -33,7 +33,6 @@ $(eval $(call gb_Library_add_package_headers,sot,sot_inc))
 $(eval $(call gb_Library_set_componentfile,sot,sot/util/sot))
 
 $(eval $(call gb_Library_set_include,sot,\
-    -I$(realpath $(SRCDIR)/sot/inc/pch) \
     $$(INCLUDE) \
 ))
 

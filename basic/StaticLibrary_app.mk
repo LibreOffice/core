@@ -33,7 +33,6 @@ $(eval $(call gb_StaticLibrary_add_package_headers,app,basic_inc))
 $(eval $(call gb_StaticLibrary_set_include,app,\
 	$$(INCLUDE) \
 	-I$(realpath $(SRCDIR)/basic/inc) \
-	-I$(realpath $(SRCDIR)/basic/inc/pch) \
 	-I$(realpath $(SRCDIR)/basic/source/inc) \
 ))
 

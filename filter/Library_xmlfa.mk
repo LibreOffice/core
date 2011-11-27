@@ -27,7 +27,6 @@ $(eval $(call gb_Library_add_api,xmlfa,\
 ))
 
 $(eval $(call gb_Library_set_include,xmlfa,\
-	-I$(SRCDIR)/filter/inc/pch \
 	$$(INCLUDE) \
 ))
 

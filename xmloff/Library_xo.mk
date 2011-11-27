@@ -35,7 +35,6 @@ $(eval $(call gb_Library_add_package_headers,xo,xmloff_inc))
 $(eval $(call gb_Library_set_include,xo,\
     $$(SOLARINC) \
     -I$(realpath $(SRCDIR)/xmloff/inc) \
-    -I$(realpath $(SRCDIR)/xmloff/inc/pch) \
 ))
 
 $(eval $(call gb_Library_add_defs,xo,\

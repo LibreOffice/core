@@ -33,7 +33,6 @@ $(eval $(call gb_Library_set_componentfile,xmlsecurity,xmlsecurity/util/xmlsecur
 $(eval $(call gb_Library_set_include,xmlsecurity,\
 	$$(INCLUDE) \
 	-I$(realpath $(SRCDIR)/xmlsecurity/inc) \
-	-I$(realpath $(SRCDIR)/xmlsecurity/inc/pch) \
 ))
 
 $(eval $(call gb_Library_add_api,xmlsecurity,\

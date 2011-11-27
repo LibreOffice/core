@@ -29,7 +29,6 @@ $(eval $(call gb_Executable_set_targettype_gui,quickstart,YES))
 
 $(eval $(call gb_Executable_set_include,quickstart,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/desktop/inc/pch \
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,quickstart,\

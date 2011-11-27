@@ -31,7 +31,6 @@ $(eval $(call gb_Executable_set_targettype_gui,miniapp,YES))
 
 $(eval $(call gb_Executable_set_include,miniapp,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/automation/inc/pch \
 ))
 
 $(eval $(call gb_Executable_add_api,miniapp,\

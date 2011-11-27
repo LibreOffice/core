@@ -32,7 +32,6 @@ $(eval $(call gb_Library_set_componentfile,stringresource,scripting/source/strin
 
 $(eval $(call gb_Library_set_include,stringresource,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/scripting/inc/pch) \
 	-I$(realpath $(SRCDIR)/scripting/source/inc) \
 ))
 

@@ -33,7 +33,6 @@ $(eval $(call gb_Executable_Executable,tools_cppunittester_all))
 $(eval $(call gb_Executable_set_include,tools_cppunittester_all,\
     $$(INCLUDE) \
     -I$(SRCDIR)/tools/inc \
-    -I$(SRCDIR)/tools/inc/pch \
 ))
 
 $(eval $(call gb_Executable_add_defs,tools_cppunittester_all,\

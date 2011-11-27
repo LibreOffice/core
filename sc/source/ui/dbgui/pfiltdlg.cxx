@@ -31,9 +31,7 @@
 
 
 
-#ifndef PCH
 #include <vcl/waitobj.hxx>
-#endif
 
 // INCLUDE ---------------------------------------------------------------
 

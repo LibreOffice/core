@@ -709,7 +709,6 @@ COMMONBIN=$(LOCAL_COMMON_OUT)/bin
 # Include-Pfad
 # still without -I here s.a. target.mk INCLUDE
 INC=$(PRJ)/inc
-INCPCH=$(PRJ)/inc/pch
 INCLOCAL=../inc
 INCGUI=$(PRJ)/$(GUIBASE)/inc
 INCCOM=$(OUT)/inc

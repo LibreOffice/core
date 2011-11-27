@@ -32,7 +32,6 @@ $(eval $(call gb_Executable_set_include,g2g,\
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/ \
     -I$(realpath $(SRCDIR)/svtools/inc) \
-    -I$(realpath $(SRCDIR)/svtools/inc/pch) \
     -I$(realpath $(SRCDIR)/svtools/inc/svtools) \
 ))
 

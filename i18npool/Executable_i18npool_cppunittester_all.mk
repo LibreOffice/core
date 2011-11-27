@@ -35,7 +35,6 @@ $(eval $(call gb_Executable_add_defs,i18npool_cppunittester_all,\
 $(eval $(call gb_Executable_set_include,i18npool_cppunittester_all,\
 	$$(INCLUDE) \
 	-I$(realpath $(SRCDIR)/i18npool/inc) \
-	-I$(realpath $(SRCDIR)/i18npool/inc/pch) \
 ))
 
 $(eval $(call gb_Executable_add_api,i18npool_cppunittester_all,\

@@ -28,7 +28,6 @@ $(eval $(call gb_Library_Library,simplecm))
 $(eval $(call gb_Library_set_include,simplecm,\
     $$(INCLUDE) \
     -I$(SRCDIR)/automation/inc \
-    -I$(SRCDIR)/automation/inc/pch \
     -I$(SRCDIR)/automation/source/inc \
 ))
 

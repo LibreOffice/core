@@ -52,7 +52,6 @@ $(eval $(call gb_Library_add_sdi_headers,sd,\
 $(eval $(call gb_Library_set_include,sd,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/sd/inc) \
-    -I$(realpath $(SRCDIR)/sd/inc/pch) \
     -I$(realpath $(SRCDIR)/sd/sdi) \
     -I$(realpath $(SRCDIR)/sd/source/ui/inc) \
     -I$(realpath $(SRCDIR)/sd/source/ui/slidesorter/inc) \

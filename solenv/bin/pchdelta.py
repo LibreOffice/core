@@ -14,7 +14,6 @@
 #
 # Examples:
 #
-# pchdelta.py inc/pch/precompiled_sfx2.hxx inc source/dialog
 #
 #  Run pchdelta inside sfx2 first building the pch files and then files in
 # source/dialog

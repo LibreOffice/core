@@ -31,13 +31,11 @@
 
 
 
-#ifndef PCH
 #include "scitems.hxx"
 
 #include <svx/pageitem.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/linkmgr.hxx>
-#endif
 
 // INCLUDE ---------------------------------------------------------------
 

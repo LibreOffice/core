@@ -33,7 +33,6 @@ $(eval $(call gb_Library_set_componentfile,smd,starmath/util/smd))
 $(eval $(call gb_Library_set_include,smd,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/starmath/inc \
-	-I$(SRCDIR)/starmath/inc/pch \
 ))
 
 $(eval $(call gb_Library_add_api,smd,\

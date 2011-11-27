@@ -31,7 +31,6 @@ $(eval $(call gb_Library_Library,forui))
 $(eval $(call gb_Library_set_include,forui,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/formula/inc) \
-    -I$(realpath $(SRCDIR)/formula/inc/pch) \
     -I$(realpath $(SRCDIR)/formula/source/ui/inc) \
     -I$(OUTDIR)/inc \
 ))

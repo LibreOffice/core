@@ -32,7 +32,6 @@ $(eval $(call gb_Library_set_componentfile,dlgprov,scripting/source/dlgprov/dlgp
 
 $(eval $(call gb_Library_set_include,dlgprov,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/scripting/inc/pch) \
 	-I$(realpath $(SRCDIR)/scripting/source/inc) \
 ))
 

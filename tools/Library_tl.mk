@@ -34,7 +34,6 @@ $(eval $(call gb_Library_add_package_headers,tl,tools_reversemap))
 $(eval $(call gb_Library_set_include,tl,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/tools/inc) \
-    -I$(realpath $(SRCDIR)/tools/inc/pch) \
     -I$(SRCDIR)/solenv/inc \
     -I$(WORKDIR)/CustomTarget/tools/source/reversemap \
 ))

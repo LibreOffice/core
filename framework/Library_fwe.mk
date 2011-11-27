@@ -29,7 +29,6 @@
 $(eval $(call gb_Library_Library,fwe))
 
 $(eval $(call gb_Library_set_include,fwe,\
-    -I$(realpath $(SRCDIR)/framework/inc/pch) \
     -I$(realpath $(SRCDIR)/framework/source/inc) \
     -I$(realpath $(SRCDIR)/framework/inc) \
     -I$(WORKDIR)/inc/framework/ \

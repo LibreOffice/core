@@ -35,7 +35,6 @@ $(eval $(call gb_Executable_set_targettype_gui,$(sofficebin),YES))
 
 $(eval $(call gb_Executable_set_include,$(sofficebin),\
     $$(INCLUDE) \
-    -I$(SRCDIR)/desktop/inc/pch \
     -I$(SRCDIR)/desktop/source/inc \
 ))
 

@@ -33,7 +33,6 @@ $(eval $(call gb_Library_add_package_headers,vcl,vcl_kde4moc))
 $(eval $(call gb_Library_set_include,vclplug_kde4,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
-    -I$(SRCDIR)/vcl/inc/pch \
     -I$(SRCDIR)/solenv/inc \
     -I$(OUTDIR)/inc \
     -I$(WORKDIR)/CustomTarget/vcl/unx/kde4 \

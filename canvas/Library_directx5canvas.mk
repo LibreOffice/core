@@ -33,7 +33,6 @@ $(eval $(call gb_Library_set_componentfile,directx5canvas,canvas/source/directx/
 $(eval $(call gb_Library_set_include,directx5canvas,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/canvas/inc \
-	-I$(SRCDIR)/canvas/inc/pch \
 	-I$(SRCDIR)/canvas/source/directx \
 ))
 

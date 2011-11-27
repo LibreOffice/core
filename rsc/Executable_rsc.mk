@@ -31,7 +31,6 @@ $(eval $(call gb_Executable_Executable,rsc))
 $(eval $(call gb_Executable_set_include,rsc,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/rsc/inc \
-	-I$(SRCDIR)/rsc/inc/pch \
 	-I$(WORKDIR)/YaccTarget/rsc/source/parser \
 ))
 

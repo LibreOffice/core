@@ -37,7 +37,6 @@ endif
 $(eval $(call gb_StaticLibrary_set_include,vclmain,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/vcl/inc) \
-    -I$(realpath $(SRCDIR)/vcl/inc/pch) \
     -I$(SRCDIR)/solenv/inc \
     -I$(OUTDIR)/inc \
 ))

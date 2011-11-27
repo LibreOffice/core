@@ -29,7 +29,14 @@
 #define CSV_PRECOMP_H
 
 
-#include <cosv/csv_precomp.h>
+#define CSV_USE_CSV_ASSERTIONS
+#include <cosv/csv_env.hxx>
+
+#include <cosv/comfunc.hxx>
+#include <cosv/string.hxx>
+#include <cosv/streamstr.hxx>
+#include <cosv/std_outp.hxx>
+#include <cosv/tpl/dyn.hxx>
 
 
 

@@ -30,7 +30,6 @@ $(eval $(call gb_Library_Library,frm))
 
 $(eval $(call gb_Library_set_include,frm,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/forms/inc/pch) \
     -I$(realpath $(SRCDIR)/forms/source/inc) \
     -I$(realpath $(SRCDIR)/forms/source/solar/inc) \
     -I$(OUTDIR)/inc \

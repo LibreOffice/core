@@ -32,7 +32,6 @@ $(eval $(call gb_Library_add_package_headers,i18nisolang1,i18npool_inc))
 
 $(eval $(call gb_Library_set_include,i18nisolang1,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/i18npool/inc/pch) \
 ))
 
 $(eval $(call gb_Library_add_api,i18nisolang1,\

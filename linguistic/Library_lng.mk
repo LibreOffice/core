@@ -35,7 +35,6 @@ $(eval $(call gb_Library_set_componentfile,lng,linguistic/source/lng))
 $(eval $(call gb_Library_set_include,lng,\
 	$$(INCLUDE) \
 	-I$(realpath $(SRCDIR)/linguistic/inc) \
-	-I$(realpath $(SRCDIR)/linguistic/inc/pch) \
 ))
 
 $(eval $(call gb_Library_add_api,lng,\

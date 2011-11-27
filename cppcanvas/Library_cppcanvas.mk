@@ -32,7 +32,6 @@ $(eval $(call gb_Library_add_package_headers,cppcanvas,cppcanvas_inc))
 
 $(eval $(call gb_Library_set_include,cppcanvas,\
 	-I$(realpath $(SRCDIR)/cppcanvas/inc) \
-	-I$(realpath $(SRCDIR)/cppcanvas/inc/pch) \
 	-I$(realpath $(SRCDIR)/cppcanvas/source/inc) \
 	$$(INCLUDE) \
 ))

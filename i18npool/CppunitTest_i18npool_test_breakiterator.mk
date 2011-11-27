@@ -30,7 +30,6 @@ $(eval $(call gb_CppunitTest_CppunitTest,i18npool_test_breakiterator))
 
 $(eval $(call gb_CppunitTest_set_include,i18npool_test_breakiterator,\
     $$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/i18npool/inc/pch) \
 ))
 
 $(eval $(call gb_CppunitTest_add_api,i18npool_test_breakiterator,\

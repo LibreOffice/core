@@ -35,7 +35,6 @@ $(eval $(call gb_Library_add_api,odfflatxml,\
 ))
 
 $(eval $(call gb_Library_set_include,odfflatxml,\
-	-I$(SRCDIR)/filter/inc/pch \
 	$$(INCLUDE) \
 	-I$(SRCDIR)/filter/inc \
 ))

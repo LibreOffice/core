@@ -30,7 +30,6 @@ $(eval $(call gb_CppunitTest_CppunitTest,xmlsecurity_qa_certext))
 
 $(eval $(call gb_CppunitTest_set_include,xmlsecurity_qa_certext,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/xmlsecurity/inc/pch) \
 ))
 
 $(eval $(call gb_CppunitTest_add_api,xmlsecurity_qa_certext,\

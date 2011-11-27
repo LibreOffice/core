@@ -34,7 +34,6 @@ $(eval $(call gb_Library_set_componentfile,xcr,xmlscript/util/xcr))
 
 $(eval $(call gb_Library_set_include,xcr,\
 	-I$(realpath $(SRCDIR)/xmlscript/source/inc) \
-	-I$(realpath $(SRCDIR)/xmlscript/inc/pch) \
 	$$(INCLUDE) \
 ))
 

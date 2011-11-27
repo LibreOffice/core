@@ -33,7 +33,6 @@ $(eval $(call gb_Library_add_api,svgfilter,\
 ))
 
 $(eval $(call gb_Library_set_include,svgfilter,\
-	-I$(SRCDIR)/filter/inc/pch \
 	$$(INCLUDE) \
 	-I$(WORKDIR)/CustomTarget/filter/source/svg \
 ))

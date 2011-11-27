@@ -28,7 +28,6 @@ $(eval $(call gb_Library_Library,sofficeapp))
 $(eval $(call gb_Library_set_include,sofficeapp,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc \
-    -I$(SRCDIR)/desktop/inc/pch \
     -I$(SRCDIR)/desktop/source/inc \
 ))
 

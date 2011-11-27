@@ -27,7 +27,6 @@ $(eval $(call gb_Executable_Executable,unoinfo))
 
 $(eval $(call gb_Executable_set_include,unoinfo,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/desktop/inc/pch \
 ))
 
 $(eval $(call gb_Executable_add_linked_static_libs,unoinfo,\

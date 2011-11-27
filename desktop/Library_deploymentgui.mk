@@ -28,7 +28,6 @@ $(eval $(call gb_Library_Library,deploymentgui))
 $(eval $(call gb_Library_set_include,deploymentgui,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc \
-    -I$(SRCDIR)/desktop/inc/pch \
     -I$(SRCDIR)/desktop/source/deployment/inc \
     -I$(SRCDIR)/desktop/source/inc \
 ))

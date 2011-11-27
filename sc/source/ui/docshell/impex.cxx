@@ -33,9 +33,7 @@ class StarBASIC;
 
 
 
-#ifndef PCH
 #include "sc.hrc"
-#endif
 
 #include <stdio.h>
 #include <ctype.h>

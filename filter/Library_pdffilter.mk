@@ -27,7 +27,6 @@ $(eval $(call gb_Library_add_api,pdffilter,\
 ))
 
 $(eval $(call gb_Library_set_include,pdffilter,\
-	-I$(SRCDIR)/filter/inc/pch \
 	-I$(SRCDIR)/filter/inc \
 	$$(INCLUDE) \
 ))

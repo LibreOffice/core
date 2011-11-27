@@ -29,7 +29,6 @@ $(eval $(call gb_Executable_set_targettype_gui,oosplash,YES))
 
 $(eval $(call gb_Executable_set_include,oosplash,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/desktop/inc/pch \
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,oosplash,\

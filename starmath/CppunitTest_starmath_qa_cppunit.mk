@@ -31,7 +31,6 @@ $(eval $(call gb_CppunitTest_CppunitTest,starmath_qa_cppunit))
 $(eval $(call gb_CppunitTest_set_include,starmath_qa_cppunit,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/starmath/inc) \
-    -I$(realpath $(SRCDIR)/starmath/inc/pch) \
     -I$(OUTDIR)/inc \
 ))
 

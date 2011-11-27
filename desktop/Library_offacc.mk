@@ -27,7 +27,6 @@ $(eval $(call gb_Library_Library,offacc))
 
 $(eval $(call gb_Library_set_include,offacc,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/desktop/inc/pch \
 ))
 
 $(eval $(call gb_Library_add_api,offacc,\

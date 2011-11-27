@@ -33,7 +33,6 @@ $(eval $(call gb_Library_add_package_headers,basegfx,basegfx_inc))
 $(eval $(call gb_Library_set_include,basegfx,\
 	-I$(realpath $(SRCDIR)/basegfx/inc) \
 	-I$(realpath $(SRCDIR)/basegfx/source/inc) \
-	-I$(realpath $(SRCDIR)/basegfx/inc/pch) \
 	$$(INCLUDE) \
 ))
 

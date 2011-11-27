@@ -31,9 +31,7 @@
 
 
 
-#ifndef PCH
 #include "scitems.hxx"              // SearchItem
-#endif
 
 // INCLUDE ---------------------------------------------------------------
 

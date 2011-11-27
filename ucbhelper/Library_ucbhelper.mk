@@ -33,7 +33,6 @@ $(eval $(call gb_Library_add_package_headers,ucbhelper,ucbhelper_inc))
 $(eval $(call gb_Library_set_include,ucbhelper,\
 	$$(INCLUDE) \
 	-I$(realpath $(SRCDIR)/ucbhelper/inc) \
-	-I$(realpath $(SRCDIR)/ucbhelper/inc/pch) \
 ))
 
 $(eval $(call gb_Library_add_defs,ucbhelper,\

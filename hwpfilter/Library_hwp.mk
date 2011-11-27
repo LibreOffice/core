@@ -30,7 +30,6 @@ $(eval $(call gb_Library_Library,hwp))
 
 $(eval $(call gb_Library_set_include,hwp,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/hwpfilter/inc/pch) \
 ))
 
 $(eval $(call gb_Library_add_api,hwp,\

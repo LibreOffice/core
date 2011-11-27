@@ -27,7 +27,6 @@ $(eval $(call gb_Library_add_api,xsltdlg,\
 ))
 
 $(eval $(call gb_Library_set_include,xsltdlg,\
-	-I$(SRCDIR)/filter/inc/pch \
 	$$(INCLUDE) \
 	-I$(SRCDIR)/filter/inc \
 ))

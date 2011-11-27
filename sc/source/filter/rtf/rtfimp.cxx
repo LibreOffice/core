@@ -29,11 +29,9 @@
 
 
 
-#ifndef PCH
 #include "global.hxx"
 #include "document.hxx"
 #include "filter.hxx"
-#endif
 #include "editutil.hxx"
 #include "rtfimp.hxx"
 #include "rtfparse.hxx"

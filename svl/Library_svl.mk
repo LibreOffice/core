@@ -35,8 +35,6 @@ $(eval $(call gb_Library_set_componentfile,svl,svl/util/svl))
 $(eval $(call gb_Library_set_include,svl,\
     $$(SOLARINC) \
     -I$(realpath $(SRCDIR)/svl/source/inc) \
-    -I$(realpath $(SRCDIR)/svl/inc/pch) \
-	-I$(SRCDIR)/svl/inc/pch \
 ))
 
 $(eval $(call gb_Library_add_api,svl,\
@@ -65,7 +63,6 @@ $(eval $(call gb_Library_add_linked_libs,svl,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,svl,\
-    svl/inc/pch/precompiled_svl \
     svl/source/config/asiancfg \
     svl/source/config/cjkoptions \
     svl/source/config/ctloptions \

@@ -35,7 +35,6 @@ $(eval $(call gb_Library_set_include,swd,\
     -I$(WORKDIR)/inc/sw/sdi \
     -I$(WORKDIR)/inc/sw \
     -I$(realpath $(SRCDIR)/sw/inc) \
-    -I$(realpath $(SRCDIR)/sw/inc/pch) \
     -I$(realpath $(SRCDIR)/sw/source/core/inc) \
     -I$(realpath $(SRCDIR)/sw/source/filter/inc) \
     -I$(realpath $(SRCDIR)/sw/source/ui/inc) \

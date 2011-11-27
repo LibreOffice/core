@@ -44,14 +44,13 @@ $(eval $(call gb_Library_add_api,svxcore,\
 
 $(eval $(call gb_Library_set_include,svxcore,\
     -I$(realpath $(SRCDIR)/svx/inc) \
-    -I$(realpath $(SRCDIR)/svx/inc/pch) \
     -I$(realpath $(SRCDIR)/svx/source/inc) \
     $$(INCLUDE) \
     -I$(WORKDIR)/SdiTarget/svx/sdi \
 ))
 
 #BOOST switch in customshapes
-#dialog: 
+#dialog:
 #.IF "$(GUI)"=="WNT"
 #CFLAGS+= -DUNICODE -D_UNICODE
 #.ENDIF

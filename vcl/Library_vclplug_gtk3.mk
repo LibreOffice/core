@@ -31,7 +31,6 @@ $(eval $(call gb_Library_Library,vclplug_gtk3))
 $(eval $(call gb_Library_set_include,vclplug_gtk3,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
-    -I$(SRCDIR)/vcl/inc/pch \
     -I$(SRCDIR)/vcl/unx \
     -I$(SRCDIR)/solenv/inc \
     -I$(OUTDIR)/inc \

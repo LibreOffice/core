@@ -37,7 +37,6 @@ endif
 $(eval $(call gb_Library_set_include,xsec_xmlsec,\
 	$$(INCLUDE) \
 	-I$(realpath $(SRCDIR)/xmlsecurity/inc) \
-	-I$(realpath $(SRCDIR)/xmlsecurity/inc/pch) \
 	-I$(realpath $(SRCDIR)/xmlsecurity/source/xmlsec) \
 ))
 

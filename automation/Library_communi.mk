@@ -31,7 +31,6 @@ $(eval $(call gb_Library_add_package_headers,communi,\
 
 $(eval $(call gb_Library_set_include,communi,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/automation/inc/pch \
     -I$(SRCDIR)/automation/inc \
 ))
 

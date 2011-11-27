@@ -32,7 +32,6 @@ $(eval $(call gb_Executable_Executable,basegfx_cppunittester_all))
 
 $(eval $(call gb_Executable_set_include,basegfx_cppunittester_all,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/basegfx/inc/pch \
 ))
 
 $(eval $(call gb_Executable_add_defs,basegfx_cppunittester_all,\

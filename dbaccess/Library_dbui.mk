@@ -35,7 +35,6 @@ $(eval $(call gb_Library_set_include,dbui,\
 	-I$(SRCDIR)/dbaccess/source/ui/inc \
 	-I$(SRCDIR)/dbaccess/source/ui/dlg \
 	-I$(SRCDIR)/dbaccess/source/inc \
-	-I$(SRCDIR)/dbaccess/inc/pch \
 	$$(SOLARINC) \
 ))
 

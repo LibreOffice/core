@@ -55,7 +55,6 @@ $(eval $(call gb_CppunitTest_add_linked_static_libs,tools_test, \
 $(eval $(call gb_CppunitTest_set_include,tools_test,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/tools/inc) \
-    -I$(realpath $(SRCDIR)/tools/inc/pch) \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -30,7 +30,6 @@ $(eval $(call gb_Executable_Executable,saxparser))
 
 $(eval $(call gb_Executable_set_include,saxparser,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/i18npool/inc/pch) \
 ))
 
 $(eval $(call gb_Executable_add_api,saxparser,\

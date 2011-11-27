@@ -33,7 +33,6 @@ $(eval $(call gb_Library_set_componentfile,svx,svx/util/svx))
 $(eval $(call gb_Library_set_include,svx,\
     -I$(realpath $(SRCDIR)/svx/inc) \
     -I$(realpath $(SRCDIR)/svx/source/inc) \
-    -I$(realpath $(SRCDIR)/svx/inc/pch) \
     $$(SOLARINC) \
 ))
 

@@ -35,7 +35,6 @@ $(eval $(call gb_Library_set_componentfile,sb,basic/util/sb))
 $(eval $(call gb_Library_set_include,sb,\
 	$$(INCLUDE) \
 	-I$(realpath $(SRCDIR)/basic/inc) \
-	-I$(realpath $(SRCDIR)/basic/inc/pch) \
 	-I$(realpath $(SRCDIR)/basic/source/inc) \
 ))
 

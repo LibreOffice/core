@@ -32,7 +32,6 @@ $(eval $(call gb_Library_set_componentfile,textconversiondlgs,svx/util/textconve
 
 $(eval $(call gb_Library_set_include,textconversiondlgs,\
     -I$(realpath $(SRCDIR)/svx/inc) \
-    -I$(realpath $(SRCDIR)/svx/inc/pch) \
     $$(INCLUDE) \
 ))
 

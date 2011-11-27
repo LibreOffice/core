@@ -26,7 +26,14 @@
  *
  ************************************************************************/
 
-#include <precomp.h>
+#define CSV_USE_CSV_ASSERTIONS
+#include <cosv/csv_env.hxx>
+
+#include <cosv/comfunc.hxx>
+#include <cosv/string.hxx>
+#include <cosv/streamstr.hxx>
+#include <cosv/std_outp.hxx>
+#include <cosv/tpl/dyn.hxx>
 #include <cosv/csv_ostream.hxx>
 
 // NOT FULLY DECLARED SERVICES

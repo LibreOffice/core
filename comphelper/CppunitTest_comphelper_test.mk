@@ -48,7 +48,6 @@ $(eval $(call gb_CppunitTest_add_linked_libs,comphelper_test, \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,comphelper_test,\
-    -I$(realpath $(SRCDIR)/comphelper/inc/pch) \
     -I$(realpath $(SRCDIR)/comphelper/inc) \
     $$(INCLUDE) \
 ))

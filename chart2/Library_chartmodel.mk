@@ -30,7 +30,6 @@ $(eval $(call gb_Library_Library,chartmodel))
 
 $(eval $(call gb_Library_set_include,chartmodel,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/chart2/inc/pch) \
     -I$(realpath $(SRCDIR)/chart2/source/model/inc) \
     -I$(realpath $(SRCDIR)/chart2/source/inc) \
     -I$(OUTDIR)/inc \

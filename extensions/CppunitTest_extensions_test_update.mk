@@ -48,7 +48,6 @@ $(eval $(call gb_CppunitTest_add_linked_libs,extensions_test_update, \
 $(eval $(call gb_CppunitTest_set_include,extensions_test_update,\
 	$$(INCLUDE) \
 	-I$(realpath $(SRCDIR)/extensions/inc) \
-	-I$(realpath $(SRCDIR)/extensions/inc/pch) \
 	-I$(OUTDIR)/inc \
 ))
 

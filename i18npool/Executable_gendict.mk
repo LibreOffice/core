@@ -30,7 +30,6 @@ $(eval $(call gb_Executable_Executable,gendict))
 
 $(eval $(call gb_Executable_set_include,gendict,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/i18npool/inc/pch) \
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,gendict,\

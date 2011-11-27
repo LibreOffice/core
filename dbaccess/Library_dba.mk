@@ -35,7 +35,6 @@ $(eval $(call gb_Library_add_package_headers,dba,\
 $(eval $(call gb_Library_set_include,dba,\
     $$(INCLUDE) \
 	-I$(realpath $(SRCDIR)/dbaccess/inc) \
-	-I$(realpath $(SRCDIR)/dbaccess/inc/pch) \
 	-I$(realpath $(SRCDIR)/dbaccess/source/inc) \
 	-I$(realpath $(SRCDIR)/dbaccess/source/core/inc) \
     -I$(OUTDIR)/inc \

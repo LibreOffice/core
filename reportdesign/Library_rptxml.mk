@@ -31,7 +31,6 @@ $(eval $(call gb_Library_Library,rptxml))
 $(eval $(call gb_Library_set_include,rptxml,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/reportdesign/inc) \
-    -I$(realpath $(SRCDIR)/reportdesign/inc/pch) \
     -I$(realpath $(SRCDIR)/reportdesign/source/inc) \
     -I$(OUTDIR)/inc \
 ))

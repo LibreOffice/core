@@ -30,7 +30,6 @@ $(eval $(call gb_Library_Library,OGLTrans))
 
 $(eval $(call gb_Library_set_include,OGLTrans,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/slideshow/inc/pch) \
     -I$(OUTDIR)/inc \
 ))
 

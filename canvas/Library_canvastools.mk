@@ -33,7 +33,6 @@ $(eval $(call gb_Library_add_package_headers,canvastools,canvas_inc))
 $(eval $(call gb_Library_set_include,canvastools,\
 	$$(INCLUDE) \
 	-I$(realpath $(SRCDIR)/canvas/inc) \
-	-I$(realpath $(SRCDIR)/canvas/inc/pch) \
 ))
 
 $(eval $(call gb_Library_add_api,canvastools,\

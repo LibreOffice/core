@@ -34,7 +34,6 @@ $(eval $(call gb_Library_set_componentfile,i18nsearch,i18npool/source/search/i18
 
 $(eval $(call gb_Library_set_include,i18nsearch,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/i18npool/inc/pch) \
 ))
 
 $(eval $(call gb_Library_add_api,i18nsearch,\

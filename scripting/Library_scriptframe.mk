@@ -32,7 +32,6 @@ $(eval $(call gb_Library_set_componentfile,scriptframe,scripting/util/scriptfram
 
 $(eval $(call gb_Library_set_include,scriptframe,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/scripting/inc/pch) \
 	-I$(realpath $(SRCDIR)/scripting/source/inc) \
 ))
 

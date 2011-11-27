@@ -49,7 +49,6 @@ $(eval $(call gb_CppunitTest_add_linked_libs,basegfx_test, \
 
 $(eval $(call gb_CppunitTest_set_include,basegfx_test,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/basegfx/inc/pch) \
 	-I$(OUTDIR)/inc/offuh \
 ))
 

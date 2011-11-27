@@ -28,9 +28,7 @@
 
 
 
-#ifndef PCH
 #include <string.h>
-#endif
 
 #include "compiler.hxx"
 #include "tokstack.hxx"

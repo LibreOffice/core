@@ -28,7 +28,6 @@ $(eval $(call gb_Library_Library,spl))
 $(eval $(call gb_Library_set_include,spl,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc \
-    -I$(SRCDIR)/desktop/inc/pch \
 ))
 
 $(eval $(call gb_Library_add_api,spl,\

@@ -63,7 +63,7 @@ nojava:
 
 $(BIN)$/unowinreg.dll : unowinreg.cxx
     $(MINGWCXX) -Wall -D_JNI_IMPLEMENTATION_ $(JAVA_INCLUDES) \
-        -I$(PRJ)/inc/pch -shared -o $(BIN)$/unowinreg.dll unowinreg.cxx \
+        -shared -o $(BIN)$/unowinreg.dll unowinreg.cxx \
             -Wl,--kill-at -lkernel32 -ladvapi32
     $(MINGWSTRIP) $(BIN)$/unowinreg.dll
 
