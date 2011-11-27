@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -x
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,39 +46,49 @@ if [ -z "$1" ]; then
     exit
 fi
 
-# check for wget and md5sum
-wget=
-md5sum=
-curl=
+# Downloader method selection
+fetch_bin=
+#fetch_args=
 
-for i in wget /usr/bin/wget /usr/local/bin/wget /usr/sfw/bin/wget /opt/sfw/bin/wget /opt/local/bin/wget; do
+#Look for FreeBSD's fetch(1) first
+if [ -x /usr/bin/fetch ]; then
+    fetch_bin=/usr/bin/fetch
+    fetch_args="-AFpr"
+    echo found FreeBSD fetch: $fetch_bin
+    break 2
+else
+  for wg in wget /usr/bin/wget /usr/local/bin/wget /usr/sfw/bin/wget /opt/sfw/bin/wget /opt/local/bin/wget; do
     eval "$i --version" > /dev/null 2>&1
     ret=$?
     if [ $ret -eq 0 ]; then
-        wget=$i
-        echo found wget: $wget
+        fetch_bin=$wg
+    fetch_args="-nv -N"
+        echo found wget: $fetch_bin
         break 2
     fi
-done
-
-if [ -z "$wget" ]; then
-    for i in curl /usr/bin/curl /usr/local/bin/curl /usr/sfw/bin/curl /opt/sfw/bin/curl /opt/local/bin/curl; do
+  done
+  if [ -z "$fetch_bin" ]; then
+    for c in curl /usr/bin/curl /usr/local/bin/curl /usr/sfw/bin/curl /opt/sfw/bin/curl /opt/local/bin/curl; do
     # mac curl returns "2" on --version
     #    eval "$i --version" > /dev/null 2>&1
     #    ret=$?
     #    if [ $ret -eq 0 ]; then
         if [ -x $i ]; then
-            curl=$i
-            echo found curl: $curl
+            fetch_bin=$c
+        fetch_args="$file_date_check -O"
+            echo found curl: $fetch_bin
             break 2
         fi
     done
+  fi
+  if [ -z "$fetch_bin"]; then
+    echo "ERROR: neither wget nor curl found!"
+    exit
+  fi
 fi
 
-if [ -z "$wget" -a -z "$curl" ]; then
-    echo "ERROR: neither  wget nor curl found!"
-    exit
-fi
+#Checksummer selection
+md5sum=
 
 for i in md5 md5sum /usr/local/bin/md5sum gmd5sum /usr/sfw/bin/md5sum /opt/sfw/bin/gmd5sum /opt/local/bin/md5sum; do
     if [ "$i" = "md5" ]; then
@@ -116,13 +126,8 @@ if [ -n "$DMAKE_URL" -a ! -x "$SOLARENV/$OUTPATH/bin/dmake$EXEEXT" ]; then
 
     if [ ! -f "../$dmake_package_name" ]; then
         # Fetch the dmake source
-        if [ ! -z "$wget" ]; then
-            echo fetching $DMAKE_URL with wget to $TARFILE_LOCATION/tmp
-            $wget -nv -N $DMAKE_URL 2>&1 | tee -a $logfile
-        else
-            echo fetching $DMAKE_URL with curl to $TARFILE_LOCATION/tmp
-            $curl $file_date_check -O $DMAKE_URL 2>&1 | tee -a $logfile
-        fi
+        echo fetching $DMAKE_URL to $TARFILE_LOCATION/tmp
+        $fetch_bin $fetch_args $DMAKE_URL 2>&1 | tee -a $logfile
         wret=$?
 
         # When the download failed then remove the remains, otherwise
@@ -154,13 +159,9 @@ if [ -n "$EPM_URL" -a ! -x "$SOLARENV/$OUTPATH/bin/epm$EXEEXT" ]; then
     # check with wildcard for the renamed package, md5
     if [ -z "$epmtest" ]; then
         # Fetch the epm source
-        if [ ! -z "$wget" ]; then
-            echo fetching $EPM_URL with wget to $TARFILE_LOCATION/tmp
-            $wget -nv -N $EPM_URL 2>&1 | tee -a $logfile
-        else
-            echo fetching $EPM_URL with curl to $TARFILE_LOCATION/tmp
-            $curl $file_date_check -O $EPM_URL 2>&1 | tee -a $logfile
-        fi
+          echo fetching $EPM_URL to $TARFILE_LOCATION/tmp
+          $fetch_bin $fetch_args $EPM_URL 2>&1 | tee -a $logfile
+
         wret=$?
 
         # When the download failed then remove the remains, otherwise
@@ -200,18 +201,9 @@ for i in $filelist ; do
         if [ "$tarurl" != "" ]; then
             if [ ! -f "../$i" ]; then
                 echo $i
-                if [ ! -z "$wget" ]; then
-                    $wget -nv -N $tarurl/$i 2>&1 | tee -a $logfile
-                else
-                    echo fetching $i
-                    $curl $file_date_check -O $tarurl/$i 2>&1 | tee -a $logfile
-                fi
+        echo fetching $i
+        $fetch_bin $fetch_args $tarurl/$i 2>&1 | tee -a $logfile
                 wret=$?
-                if [ $wret -ne 0 ]; then
-                    mv $i ${i}_broken
-                    failed="$failed $i"
-                    wret=0
-                fi
                 if [ -f $i -a -n "$md5sum" ]; then
                     sum=`$md5sum $md5special $i | sed "s/ .*//"`
                     sum2=`echo $i | sed "s/-.*//"`
