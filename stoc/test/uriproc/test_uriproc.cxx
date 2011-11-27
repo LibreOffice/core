@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_stoc.hxx"
 #include "sal/config.h"
 #include "sal/precppunit.hxx"
 

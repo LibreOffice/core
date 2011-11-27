@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_stoc.hxx"
 #include <rtl/strbuf.hxx>
 
 #include <com/sun/star/reflection/XIdlField.hpp>

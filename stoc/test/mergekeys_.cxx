@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_stoc.hxx"
 #include "../source/implementationregistration/mergekeys.cxx"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

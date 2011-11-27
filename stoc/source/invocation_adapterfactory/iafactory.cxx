@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_stoc.hxx"
 
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>

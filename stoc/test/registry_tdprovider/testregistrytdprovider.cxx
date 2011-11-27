@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_stoc.hxx"
 
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/container/XHierarchicalNameAccess.hpp"

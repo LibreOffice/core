@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): Generated on 2006-09-01 17:50:03.092339
 
 // breaks some builds (e.g. pyuno and i18npool on Mac OS X)
 #if 0

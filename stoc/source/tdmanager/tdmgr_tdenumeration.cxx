@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_stoc.hxx"
 #include <osl/diagnose.h>
 #include "tdmgr_common.hxx"
 #include "tdmgr_tdenumeration.hxx"

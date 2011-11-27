@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_stoc.hxx"
 #include <rtl/alloc.h>
 #include <osl/security.h>
 #include <osl/thread.h>

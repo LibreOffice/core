@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_stoc.hxx"
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
