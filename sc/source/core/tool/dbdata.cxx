@@ -548,7 +548,7 @@ void ScDBData::ExtendDataArea(ScDocument* pDoc)
     // Extend the DB area to include data rows immediately below.
     SCCOL nCol1a = nStartCol, nCol2a = nEndCol;
     SCROW nRow1a = nStartRow, nRow2a = nEndRow;
-    pDoc->GetDataArea(nTable, nCol1a, nRow1a, nCol2a, nRow2a, false, false);
+    pDoc->GetDataArea(nTable, nCol1a, nRow1a, nCol2a, nRow2a, true, true);
     nEndRow = nRow2a;
 }
 

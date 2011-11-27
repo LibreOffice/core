@@ -741,9 +741,12 @@ bool ScTable::GetDataStart( SCCOL& rStartCol, SCROW& rStartRow ) const
 void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow,
                            bool bIncludeOld, bool bOnlyDown ) const
 {
-    bool bLeft       = false;
+    // bIncludeOld = true ensure that the returned area contains at least the initial area,
+    //              independently of the case if this area has empty rows / columns at its borders
+    // bOnlyDown = true means extend the inputed area only down, i.e increase only rEndRow
+    bool bLeft = false;
     bool bRight  = false;
-    bool bTop        = false;
+    bool bTop = false;
     bool bBottom = false;
     bool bChanged;
     bool bFound;
