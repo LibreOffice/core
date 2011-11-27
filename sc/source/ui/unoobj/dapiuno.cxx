@@ -107,6 +107,7 @@ const SfxItemPropertyMapEntry* lcl_GetDataPilotDescriptorBaseMap()
     {
         {MAP_CHAR_LEN(SC_UNO_COLGRAND),     0,  &getBooleanCppuType(),  0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DRILLDOWN),    0,  &getBooleanCppuType(),  0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_GRANDTOTAL_NAME),0,&getCppuType((rtl::OUString*)0), beans::PropertyAttribute::MAYBEVOID, 0 },
         {MAP_CHAR_LEN(SC_UNO_IGNEMPROWS),   0,  &getBooleanCppuType(),  0, 0 },
         {MAP_CHAR_LEN(SC_UNO_IMPORTDESC),   0,  &getCppuType((uno::Sequence<beans::PropertyValue>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_RPTEMPTY),     0,  &getBooleanCppuType(),  0, 0 },
@@ -342,8 +343,6 @@ ScDataPilotTableObj* ScDataPilotTablesObj::GetObjectByIndex_Impl( sal_Int32 nInd
         if ( pColl )
         {
             //  count tables on this sheet
-            //  api only handles sheet data at this time
-            //! allow all data sources!!!
             sal_Int32 nFound = 0;
             size_t nCount = pColl->GetCount();
             for (size_t i=0; i<nCount; ++i)
@@ -493,8 +492,6 @@ sal_Int32 SAL_CALL ScDataPilotTablesObj::getCount() throw(RuntimeException)
         if ( pColl )
         {
             //  count tables on this sheet
-            //  api only handles sheet data at this time
-            //! allow all data sources!!!
 
             sal_uInt16 nFound = 0;
             size_t nCount = pColl->GetCount();
@@ -556,8 +553,6 @@ Sequence<OUString> SAL_CALL ScDataPilotTablesObj::getElementNames()
         if ( pColl )
         {
             //  count tables on this sheet
-            //  api only handles sheet data at this time
-            //! allow all data sources!!!
 
             sal_uInt16 nFound = 0;
             size_t nCount = pColl->GetCount();
@@ -598,9 +593,6 @@ sal_Bool SAL_CALL ScDataPilotTablesObj::hasByName( const OUString& aName )
             size_t nCount = pColl->GetCount();
             for (size_t i=0; i<nCount; ++i)
             {
-                //  api only handles sheet data at this time
-                //! allow all data sources!!!
-
                 ScDPObject* pDPObj = (*pColl)[i];
                 if ( pDPObj->GetOutRange().aStart.Tab() == nTab &&
                      pDPObj->GetName() == aName )
@@ -824,6 +816,12 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
             {
                 aNewData.SetDrillDown(::cppu::any2bool( aValue ));
             }
+            else if ( aNameString.EqualsAscii( SC_UNO_GRANDTOTAL_NAME ) )
+            {
+                rtl::OUString aStrVal;
+                if ( aValue >>= aStrVal )
+                    aNewData.SetGrandTotalName(aStrVal);
+            }
             else if ( aNameString.EqualsAscii( SC_UNO_IMPORTDESC ) )
             {
                 uno::Sequence<beans::PropertyValue> aArgSeq;
@@ -966,6 +964,12 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
             else if ( aNameString.EqualsAscii( SC_UNO_DRILLDOWN ) )
             {
                 aRet = ::cppu::bool2any( aNewData.GetDrillDown() );
+            }
+            else if ( aNameString.EqualsAscii( SC_UNO_GRANDTOTAL_NAME ) )
+            {
+                const rtl::OUString* pGrandTotalName = aNewData.GetGrandTotalName();
+                if (pGrandTotalName)
+                    aRet <<= *pGrandTotalName;      // same behavior as in ScDPSource
             }
             else if ( aNameString.EqualsAscii( SC_UNO_IMPORTDESC ) )
             {

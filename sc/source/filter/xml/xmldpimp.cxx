@@ -273,6 +273,7 @@ SvXMLImportContext *ScXMLDataPilotTableContext::CreateChildContext( sal_uInt16 n
         }
         break;
         case XML_TOK_DATA_PILOT_TABLE_ELEM_GRAND_TOTAL:
+        case XML_TOK_DATA_PILOT_TABLE_ELEM_GRAND_TOTAL_EXT:
         {
             pContext = new ScXMLDataPilotGrandTotalContext(GetScImport(), nPrefix, rLName, xAttrList, this);
         }
@@ -806,9 +807,9 @@ ScXMLDataPilotGrandTotalContext::~ScXMLDataPilotGrandTotalContext()
 }
 
 SvXMLImportContext* ScXMLDataPilotGrandTotalContext::CreateChildContext(
-    sal_uInt16 /*nPrefix*/, const ::rtl::OUString& /*rLocalName*/, const Reference<XAttributeList>& /*xAttrList*/ )
+    sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const Reference<XAttributeList>& /*xAttrList*/ )
 {
-    return NULL;
+    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 }
 
 void ScXMLDataPilotGrandTotalContext::EndElement()
