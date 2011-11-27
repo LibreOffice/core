@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_canvas.hxx"
 
 #include "dx_surfacebitmap.hxx"
 #include "dx_impltools.hxx"

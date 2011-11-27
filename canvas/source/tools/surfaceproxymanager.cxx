@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_canvas.hxx"
 
 #include <canvas/rendering/isurfaceproxymanager.hxx>
 #include <canvas/rendering/isurfaceproxy.hxx>

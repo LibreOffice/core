@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_canvas.hxx"
 
 #include <ctype.h> // don't ask. msdev breaks otherwise...
 #include "dx_winstuff.hxx"

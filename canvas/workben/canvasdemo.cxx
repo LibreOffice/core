@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_canvas.hxx"
 // This code strongly inspired by Miguel / Federico's Gnome Canvas demo code.
 
 #include <comphelper/processfactory.hxx>

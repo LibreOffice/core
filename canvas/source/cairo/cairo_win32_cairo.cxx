@@ -28,8 +28,6 @@
 
 #define _WIN32_WINNT 0x0500
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_canvas.hxx"
 
 #ifdef WNT
 /************************************************************************
