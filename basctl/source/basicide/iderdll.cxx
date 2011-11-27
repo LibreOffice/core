@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_basctl.hxx"
 
 #include <comphelper/scoped_disposing_ptr.hxx>
 #include <comphelper/processfactory.hxx>

@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_basctl.hxx"
 
 #include "basicrenderable.hxx"
 #include "bastypes.hxx"

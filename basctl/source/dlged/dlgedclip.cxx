@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_basctl.hxx"
 #include "dlgedclip.hxx"
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): Generated on 2006-09-01 17:49:30.436716
 
 #ifdef PRECOMPILED_HEADERS
 #include "com/sun/star/accessibility/AccessibleEventId.hpp"

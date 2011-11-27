@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_basctl.hxx"
 #include <ide_pch.hxx>
 
 #include <basidesh.hxx>
