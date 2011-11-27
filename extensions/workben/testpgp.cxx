@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_extensions.hxx"
 #include <sal/types.h>
 #include <rtl/memory.h>
 #ifndef _RTL_WSTRING_

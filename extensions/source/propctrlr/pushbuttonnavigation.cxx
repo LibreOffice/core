@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_extensions.hxx"
 #include "pushbuttonnavigation.hxx"
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>

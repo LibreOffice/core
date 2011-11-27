@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_extensions.hxx"
 #include "xsdvalidationhelper.hxx"
 #include "xsddatatypes.hxx"
 #include "formstrings.hxx"

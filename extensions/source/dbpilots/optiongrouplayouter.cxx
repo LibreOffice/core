@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_extensions.hxx"
 #include "optiongrouplayouter.hxx"
 #include <tools/debug.hxx>
 #include <tools/string.hxx>

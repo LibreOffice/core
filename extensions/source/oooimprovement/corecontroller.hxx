@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 
 
 #ifndef EXTENSIONS_OOOIMPROVEMENT_CORECONTROLLER_HXX

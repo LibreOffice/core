@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_extensions.hxx"
 #include "selectlabeldialog.hxx"
 #include "formresid.hrc"
 #include "formbrowsertools.hxx"

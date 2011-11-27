@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_extensions.hxx"
 #if defined _MSC_VER && ( _MSC_VER >= 1200 )
 #define _WIN32_WINNT  0x0400
 #endif

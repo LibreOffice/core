@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_extensions.hxx"
 #include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>

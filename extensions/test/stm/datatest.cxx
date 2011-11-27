@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_extensions.hxx"
 #include <smart/com/sun/star/test/XSimpleTest.hxx>
 #include <smart/com/sun/star/io/XObjectOutputStream.hxx>
 #include <smart/com/sun/star/io/XObjectInputStream.hxx>

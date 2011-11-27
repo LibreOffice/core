@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_extensions.hxx"
 #include "controlwizard.hxx"
 #include <tools/debug.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>

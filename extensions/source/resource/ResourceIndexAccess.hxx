@@ -31,7 +31,6 @@
 #ifndef EXTENSIONS_RESOURCE_RESOURCESTRINGINDEXACCESS_HXX
 #define EXTENSIONS_RESOURCE_RESOURCESTRINGINDEXACCESS_HXX
 
-#include "precompiled_extensions.hxx"
 
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

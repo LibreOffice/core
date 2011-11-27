@@ -28,7 +28,6 @@
  * instead of those above.
  */
 
-#include "precompiled_extensions.hxx"
 
 #include <ResourceIndexAccess.hxx>
 #include <oooresourceloader.hxx>

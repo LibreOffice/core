@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_extensions.hxx"
 #include <grid.hrc>
 #include <cstdio>
 #include <math.h> // for M_LN10 and M_E

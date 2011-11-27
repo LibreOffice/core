@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_extensions.hxx"
 
 #ifndef _EXTENSIONS_FORMSCTRLR_FORMSTRINGS_HXX_
 #define PCR_IMPLEMENT_STRINGS

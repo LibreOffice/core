@@ -25,8 +25,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_extensions.hxx"
 
 #include "onlogrotate_job.hxx"
 #include "config.hxx"

@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_extensions.hxx"
 #include "osl/getglobalmutex.hxx"
 #include "rtl/instance.hxx"
 #include "ole2uno.hxx"

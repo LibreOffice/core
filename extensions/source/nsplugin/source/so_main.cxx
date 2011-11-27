@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_extensions.hxx"
 #ifdef UNIX
 #include <sys/stat.h>
 #include <sys/socket.h>

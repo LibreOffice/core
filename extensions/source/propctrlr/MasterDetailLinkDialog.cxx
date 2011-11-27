@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
- #include "precompiled_extensions.hxx"
  #include "MasterDetailLinkDialog.hxx"
  #include "formlinkdialog.hxx"
 

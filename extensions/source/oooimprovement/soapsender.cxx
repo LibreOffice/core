@@ -25,8 +25,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_extensions.hxx"
 
 #include "soapsender.hxx"
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>

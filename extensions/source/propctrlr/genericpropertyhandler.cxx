@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_extensions.hxx"
 #include "genericpropertyhandler.hxx"
 #include "formmetadata.hxx"
 #include "handlerhelper.hxx"

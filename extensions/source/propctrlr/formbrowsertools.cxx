@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_extensions.hxx"
 #include "formbrowsertools.hxx"
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

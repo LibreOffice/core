@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_extensions.hxx"
 #include <vcl/waitobj.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/util/URL.hpp>
