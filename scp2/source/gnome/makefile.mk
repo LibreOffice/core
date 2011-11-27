@@ -27,8 +27,6 @@
 
 PRJ=..$/..
 
-PRJPCH=
-
 PRJNAME=scp2
 TARGET=gnome
 TARGETTYPE=CUI

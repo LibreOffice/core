@@ -39,17 +39,3 @@ CFLAGS+= -GR
     "$(OS)"=="DRAGONFLY" || $(COM) == "GCC"
 CFLAGSCXX+= -frtti
 .ENDIF
-
-
-
-# Precompiled Headers
-.IF "$(NP_LOCALBUILD)"!="" && "$(GUI)"=="WNT"
-
-PCH_NAME=autodoc
-.IF "$(debug)"==""
-CFLAGS+= -YX"precomp.h" -Fp$(PRJ)$/$(INPATH)$/misc$/$(PCH_NAME).pch
-.ELSE
-CFLAGS+= -YX"precomp.h" -Fp$(PRJ)$/$(INPATH)$/misc$/$(PCH_NAME).pcd
-.ENDIF
-
-.ENDIF  # "$(NP_LOCALBUILD)"!="" && "$(GUI)"=="WNT"

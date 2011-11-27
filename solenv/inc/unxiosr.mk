@@ -106,8 +106,6 @@ LINKFLAGSDEFS*=-Wl,-multiply_defined,suppress
 DLLPRE=lib
 # We don't use dynamic shared libraries on iOS
 DLLPOST=.a
-# Precompiled header file extension
-PCHPOST=.gch
 
 STDLIBCUIMT=-framework UIKit -framework Foundation -framework CoreText -framework CoreGraphics -framework CoreFoundation -Xlinker -objc_abi_version -Xlinker 2
 STDLIBGUIMT=$(STDLIBCUIMT)

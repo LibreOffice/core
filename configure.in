@@ -2639,7 +2639,7 @@ AC_SUBST(HYPH_SYSTEM_DIR)
 AC_SUBST(THES_SYSTEM_DIR)
 
 dnl ===================================================================
-dnl Set the ENABLE_PCH variable. (Activate --enable-pch)
+dnl ENABLE_PCH i now a no-op
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable pch feature])
 AC_MSG_RESULT([no, obsolete])

@@ -33,6 +33,3 @@ VISIBILITY_HIDDEN = TRUE
 .INCLUDE: settings.mk
 .INCLUDE: target.mk
 
-.IF "$(ENABLE_PCH)" != ""
-ALLTAR: $(SLO)/precompiled.pch $(SLO)/precompiled_ex.pch
-.ENDIF

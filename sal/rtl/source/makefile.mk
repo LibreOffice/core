@@ -32,10 +32,6 @@ TARGET=cpprtl
 ENABLE_EXCEPTIONS=TRUE
 USE_LDUMP2=TRUE
 
-PROJECTPCH4DLL=TRUE
-PROJECTPCH=cont_pch
-PROJECTPCHSOURCE=cont_pch
-
 TARGETTYPE=CUI
 
 # --- Settings -----------------------------------------------------

@@ -124,16 +124,6 @@ CFLAGS_NO_EXCEPTIONS=
 CDEFS+=-DBOOST_MEM_FN_ENABLE_CDECL
 .ENDIF
 
-# with the current debug switches PCH won't work
-# anyway. so keep the existing .pch intact and don't
-# touch it
-.IF "$(debug)"!=""
-ENABLE_PCH:=
-.ENDIF "$(debug)"!=""
-
-CFLAGS_CREATE_PCH=-I$(INCPCH) -Fo$(SLO)/pchname.obj -Ycprecompiled_$(PRJNAME).hxx -DPRECOMPILED_HEADERS
-CFLAGS_USE_PCH=-I$(INCPCH) -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)/pch/precompiled_$(PRJNAME).hxx$(PCHPOST) -DPRECOMPILED_HEADERS
-CFLAGS_USE_EXCEPTIONS_PCH=-I$(INCPCH) -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)/pch_ex/precompiled_$(PRJNAME).hxx$(PCHPOST) -DPRECOMPILED_HEADERS
 .IF "$(CALL_CDECL)"=="TRUE"
 CFLAGSCALL=-Gd
 .ELSE			# "$(CALL_CDECL)"=="TRUE"
@@ -332,8 +322,6 @@ RCSETVERSION=
 MT=mt.exe
 MTFLAGS=$(NOLOGO)
 
-
-PCHPOST=.pch
 
 CSC*=$(FLIPCMD) csc
 VBC*=vbc

@@ -99,10 +99,6 @@ CFLAGSCXX+=-Wno-deprecated-declarations
 CFLAGSCXX += -D_GLIBCXX_DEBUG
 .ENDIF # !PRODUCT
 
-CFLAGS_CREATE_PCH=-x c++-header -I$(INCPCH) -DPRECOMPILED_HEADERS
-CFLAGS_USE_PCH=-I$(SLO)$/pch -DPRECOMPILED_HEADERS -Winvalid-pch
-CFLAGS_USE_EXCEPTIONS_PCH=-I$(SLO)$/pch_ex -DPRECOMPILED_HEADERS -Winvalid-pch
-
 # Compiler flags for compiling static object in multi threaded environment with graphical user interface
 CFLAGSOBJGUIMT=
 # Compiler flags for compiling static object in multi threaded environment with character user interface
@@ -268,4 +264,3 @@ RCSETVERSION=
 # platform specific identifier for shared libs
 DLLPRE=lib
 DLLPOST=.so
-PCHPOST=.gch

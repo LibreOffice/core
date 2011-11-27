@@ -32,10 +32,6 @@ TARGET=oslall
 ENABLE_EXCEPTIONS=TRUE
 USE_LDUMP2=TRUE
 
-PROJECTPCH4DLL=TRUE
-PROJECTPCH=cont_pch
-PROJECTPCHSOURCE=cont_pch
-
 MULTITHREAD_OBJ=TRUE
 
 # --- Settings -----------------------------------------------------

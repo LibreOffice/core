@@ -31,27 +31,11 @@
 # Has to be included AFTER settings.mk !
 
 
-# Precompiled header:
-
-
 .IF "$(GUI)"=="WNT"
 
 # RTTI
 .IF "$(COM)"=="MSC"
 CFLAGS+= -GR
-.ENDIF
-
-.IF "$(NP_LOCALBUILD)"!=""
-
-
-# Precompiled Headers
-PCH_NAME=  udm
-.IF "$(DBG_LEVEL)"<"2"
-CFLAGS+= -YX"precomp.h" /Fp$(PRJ)$/$(INPATH)$/misc$/$(PCH_NAME).pch
-.ELSE
-CFLAGS+= -YX"precomp.h" /Fp$(PRJ)$/$(INPATH)$/misc$/$(PCH_NAME).pcd -DNP_LOCALBUILD
-.ENDIF
-
 .ENDIF
 
 .ENDIF

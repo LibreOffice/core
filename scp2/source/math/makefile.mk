@@ -27,8 +27,6 @@
 
 PRJ=..$/..
 
-PRJPCH=
-
 PRJNAME=scp2
 TARGET=math
 TARGETTYPE=CUI

@@ -132,11 +132,6 @@ CFLAGSDBGUTIL=
 # Flag to specify output file to compiler/linker
 CFLAGSOUTOBJ=-o
 
-# Flags to enable precompiled headers
-CFLAGS_CREATE_PCH=-x c++-header -I$(INCPCH) -DPRECOMPILED_HEADERS
-CFLAGS_USE_PCH=-I$(SLO)/pch -DPRECOMPILED_HEADERS -Winvalid-pch
-CFLAGS_USE_EXCEPTIONS_PCH=-I$(SLO)/pch_ex -DPRECOMPILED_HEADERS -Winvalid-pch
-
 # ---------------------------------
 #  Optimization flags
 # ---------------------------------
@@ -216,8 +211,6 @@ LINKFLAGSOPT=
 DLLPRE=lib
 # File extension to identify dynamic shared libraries on MacOS X
 DLLPOST=.dylib
-# Precompiled header file extension
-PCHPOST=.gch
 
 # We don't use mapping on MacOS X
 #LINKVERSIONMAPFLAG=-Wl,--version-script

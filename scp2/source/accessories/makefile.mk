@@ -28,8 +28,6 @@
 
 PRJ=..$/..
 
-PRJPCH=
-
 PRJNAME=scp2
 TARGET=accessories
 TARGETTYPE=CUI

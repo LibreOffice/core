@@ -38,10 +38,6 @@ force_dmake_to_error
 
 # --- common tool makros --------------------------------------
 
-.IF "$(USE_PCH)"!=""
-ENABLE_PCH=TRUE
-.ENDIF			# "$(USE_PCH)"!=""
-
 .INCLUDE : unitools.mk
 
 .INCLUDE : minor.mk
