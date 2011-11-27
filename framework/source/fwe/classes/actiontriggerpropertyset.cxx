@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_framework.hxx"
 
 #include <classes/actiontriggerpropertyset.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

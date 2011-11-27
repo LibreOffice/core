@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_framework.hxx"
 
 #include <rtl/logfile.hxx>
 #include <uiconfiguration/moduleimagemanager.hxx>

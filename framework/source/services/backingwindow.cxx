@@ -27,7 +27,6 @@
  ************************************************************************/
 
 // autogen include statement, do not remove
-#include "precompiled_framework.hxx"
 
 #include "backingwindow.hxx"
 #include "classes/resource.hrc"

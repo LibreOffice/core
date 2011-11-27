@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_framework.hxx"
 
 /*TODO
     - change "singleton" behaviour by using new helper ::comhelper::SingletonRef

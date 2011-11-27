@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_framework.hxx"
 
 #include "framework/undomanagerhelper.hxx"
 

@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_framework.hxx"
 
 #include "framework/documentundoguard.hxx"
 

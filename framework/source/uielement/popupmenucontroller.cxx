@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_framework.hxx"
 
 #include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>

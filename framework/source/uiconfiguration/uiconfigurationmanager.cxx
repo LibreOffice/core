@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_framework.hxx"
 #include <uiconfiguration/uiconfigurationmanager.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <services.h>
