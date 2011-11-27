@@ -735,7 +735,7 @@ int RTFDocumentImpl::resolveChars(char ch)
         // set components back to zero
         m_aStates.top().aCurrentColor = RTFColorTableEntry();
     }
-    else
+    else if (!aOUStr.isEmpty())
         text(aOUStr);
 
     return 0;
