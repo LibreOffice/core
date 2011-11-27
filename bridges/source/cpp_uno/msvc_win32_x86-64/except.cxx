@@ -242,8 +242,6 @@ void
 
 #endif // 0
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_bridges.hxx"
 
 #pragma warning( disable : 4237 )
 #include <boost/unordered_map.hpp>

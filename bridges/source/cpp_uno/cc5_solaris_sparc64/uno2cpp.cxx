@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_bridges.hxx"
 #include "sal/config.h"
 
 #include <algorithm>

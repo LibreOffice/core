@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_bridges.hxx"
 
 #include <stdio.h>
 #include <math.h>

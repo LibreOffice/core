@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_bridges.hxx"
 
 #include "com/sun/star/bridge/XBridge.hpp"
 #include "com/sun/star/bridge/XBridgeFactory.hpp"

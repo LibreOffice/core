@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_bridges.hxx"
 
 // This is an implementation of the x86-64 ABI as described in 'System V
 // Application Binary Interface, AMD64 Architecture Processor Supplement'
