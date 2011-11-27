@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_accessibility.hxx"
 
 #include "accessibility/extended/AccessibleToolPanelDeckTabBar.hxx"
 #include "accessibility/extended/AccessibleToolPanelDeckTabBarItem.hxx"

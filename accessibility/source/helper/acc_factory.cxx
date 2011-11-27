@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_accessibility.hxx"
 #include <accessibility/helper/acc_factory.hxx>
 
 #include <toolkit/awt/vclxwindows.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_accessibility.hxx"
 #include <accessibility/standard/vclxaccessibletextfield.hxx>
 #include <vcl/lstbox.hxx>
 #include <accessibility/helper/listboxhelper.hxx>

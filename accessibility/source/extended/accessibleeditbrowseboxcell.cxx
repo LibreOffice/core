@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_accessibility.hxx"
 #include <accessibility/extended/accessibleeditbrowseboxcell.hxx>
 #include <svtools/editbrowsebox.hxx>
 #include <comphelper/processfactory.hxx>
