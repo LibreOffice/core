@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_ucbhelper.hxx"
 #include <ucbhelper/fileidentifierconverter.hxx>
 #include <com/sun/star/ucb/ContentProviderInfo.hpp>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>

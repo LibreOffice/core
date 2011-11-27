@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_ucbhelper.hxx"
 #include <com/sun/star/task/XMasterPasswordHandling.hpp>
 #include <com/sun/star/ucb/URLAuthenticationRequest.hpp>
 #include <ucbhelper/simpleauthenticationrequest.hxx>
