@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_forms.hxx"
 #include "frm_module.hxx"
 
 #define FORMS_MODULE_IMPLEMENTATION_INCLUDE_CONTEXT

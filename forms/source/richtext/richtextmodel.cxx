@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_forms.hxx"
 
 #ifndef FORMS_SOURCE_RICHTEXT_RICHTEXTMODEL_CXX
 #include "richtextmodel.hxx"

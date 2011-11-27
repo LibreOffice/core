@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_forms.hxx"
 #include "richtextvclcontrol.hxx"
 #include "richtextimplcontrol.hxx"
 #include <svl/itempool.hxx>

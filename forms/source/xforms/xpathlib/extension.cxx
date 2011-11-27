@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_forms.hxx"
 #include <stdio.h>
 #include <com/sun/star/xml/xpath/Libxml2ExtensionHandle.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>

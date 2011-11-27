@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_forms.hxx"
 #include "Date.hxx"
 #include <tools/debug.hxx>
 #include <tools/date.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_forms.hxx"
 #include "GroupManager.hxx"
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
