@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmlsecurity.hxx"
 
 //todo before commit:  nssrenam.h is not delivered!!!
 #include "nssrenam.h"

@@ -1,8 +1,6 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /** -- C++ Source File -- **/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmlsecurity.hxx"
 #include <stdio.h>
 #include "helper.hxx"
 

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_xmlsecurity.hxx"
 #include <certificatecontainer.hxx>
 
 #include <sal/config.h>

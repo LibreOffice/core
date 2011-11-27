@@ -26,7 +26,6 @@
 *
 ************************************************************************/
 
-#include "precompiled_xmlsecurity.hxx"
 #include "sal/config.h"
 #include "sal/precppunit.hxx"
 

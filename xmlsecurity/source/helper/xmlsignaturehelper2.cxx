@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmlsecurity.hxx"
 
 #include <xmlsecurity/xmlsignaturehelper.hxx>
 #include <xmlsignaturehelper2.hxx>

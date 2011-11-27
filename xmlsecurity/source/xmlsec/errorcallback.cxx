@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmlsecurity.hxx"
 
 /*
  * Implementation of the I/O interfaces based on stream and URI binding

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <precompiled_xmlsecurity.hxx>
 
 #include <pk11pub.h>
 #include "digestcontext.hxx"

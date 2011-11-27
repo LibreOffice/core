@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <precompiled_xmlsecurity.hxx>
 
 #include <osl/time.h>
 #include <rtl/random.h>
