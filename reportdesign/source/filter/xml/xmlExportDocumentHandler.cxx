@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_rptxml.hxx"
 
 #include "xmlExportDocumentHandler.hxx"
 #include <com/sun/star/sdb/CommandType.hpp>

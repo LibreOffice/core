@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_rptui.hxx"
 #include "statusbarcontroller.hxx"
 
 #include <svx/zoomsliderctrl.hxx>

@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_reportdesign.hxx"
 #include "Tools.hxx"
 #include "core_resource.hrc"
 #include "core_resource.hxx"

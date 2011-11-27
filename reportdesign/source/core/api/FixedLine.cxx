@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_reportdesign.hxx"
 #include "FixedLine.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include "corestrings.hrc"

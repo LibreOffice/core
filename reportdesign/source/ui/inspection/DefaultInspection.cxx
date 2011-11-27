@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_rptui.hxx"
 #include "DefaultInspection.hxx"
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>

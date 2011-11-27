@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_rptui.hxx"
 #include "EndMarker.hxx"
 #include "ColorChanger.hxx"
 #include "SectionWindow.hxx"

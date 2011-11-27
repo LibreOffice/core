@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_rptui.hxx"
 #include "SectionView.hxx"
 #include "DesignView.hxx"
 #include <RptPage.hxx>

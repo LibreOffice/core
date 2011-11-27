@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_rptui.hxx"
 #include "dlgedfac.hxx"
 #include "uistrings.hrc"
 #include "RptObject.hxx"

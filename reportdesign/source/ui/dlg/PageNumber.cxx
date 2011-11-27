@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_rptui.hxx"
 #include "PageNumber.hxx"
 #include "PageNumber.hrc"
 #include <com/sun/star/beans/XPropertySet.hpp>

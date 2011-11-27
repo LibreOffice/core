@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_reportdesign.hxx"
 #include "RptPage.hxx"
 #include "RptModel.hxx"
 #include "Section.hxx"

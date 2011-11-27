@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_rptui.hxx"
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/seleng.hxx>

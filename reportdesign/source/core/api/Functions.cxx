@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_reportdesign.hxx"
 #include "Functions.hxx"
 #include "Function.hxx"
 #include <tools/debug.hxx>

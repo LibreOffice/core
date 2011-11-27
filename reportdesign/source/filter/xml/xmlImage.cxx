@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_rptxml.hxx"
 #include "xmlImage.hxx"
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>

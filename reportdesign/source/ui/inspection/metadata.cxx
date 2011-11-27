@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_rptui.hxx"
 #include "metadata.hxx"
 #include <svtools/localresaccess.hxx>
 #include "com/sun/star/inspection/XPropertyHandler.hpp"

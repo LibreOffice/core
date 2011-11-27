@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_reportdesign.hxx"
 #include "RptObjectListener.hxx"
 #include "RptObject.hxx"
 #include "RptDef.hxx"

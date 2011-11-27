@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_reportdesign.hxx"
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include "ReportEngineJFree.hxx"
 #include <comphelper/enumhelper.hxx>

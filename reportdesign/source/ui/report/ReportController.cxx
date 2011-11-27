@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_rptui.hxx"
 
 #define RPTUI_ID_LRSPACE    1
 #define RPTUI_ID_ULSPACE    2
