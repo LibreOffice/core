@@ -15,62 +15,71 @@ else
 gb_MAKETARGET=all
 endif
 
-.PHONY : build dev-install all cross-build-toolset install distro-pack-install clean clean-host clean-build distclean findunusedcode
+.PHONY : build dev-install all cross-build-toolset install distro-pack-install clean clean-host clean-build distclean findunusedcode bootstrap
+
+define forward_to_gbuild
+@GNUMAKE@ -f $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/GNUmakefile.mk \
+	$(if @VERBOSE@,,-s) \
+	--jobs="@GMAKE_PARALLELISM@" \
+	$(patsubst allcheck,check,$(1))
+endef
+
+define forward_to_buildpl
+. ./Env.Host.sh && cd $(1) && gb_MAKETARGET=$(gb_MAKETARGET) build.pl -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@
+endef
+
+ifeq (@CROSS_COMPILING@,YES)
+define all_install
+To install, issue: @GNUMAKE@ install
+Developers might prefer this way: @GNUMAKE@ dev-install -o build
+To run smoketest, issue: @GNUMAKE@ check
+endef
+else
+allinstall=For crosscompiles, please consult README.cross how to install it.
+endif
+
+UNAMESYSTEM=$(shell uname -s)
+
+ifeq ($(UNAMESYSTEM),Linux)
+devinstall_run=make debugrun
+else
+ifeq ($(UNAMESYSTEM),Linux)
+devinstall_run=open @abs_builddir@/install/LibreOffice.app
+else
+define devinstall_run
+cd @abs_builddir@/install/program
+. ./ooenv
+./soffice.bin
+endef
+endif
+endif
 
 all: build unitcheck
-	@echo
-	@echo "LibreOffice build succesfully finished :-)"
-	@echo
-ifeq (@CROSS_COMPILING@,YES)
-	@echo "Please consult README.cross how to install it."
-else
-	@echo "To install, issue: @GNUMAKE@ install"
-	@echo "Developers might prefer this way: @GNUMAKE@ dev-install -o build"
-	@echo "To run smoketest, issue: @GNUMAKE@ check"
-endif
-	@echo
+	$(info)
+	$(info LibreOffice build succesfully finished.)
+	$(info)
+	$(info $(all_install))
+	$(info)
 
-build: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ src.downloaded $(CROSS_TOOLSET_RULE)
-	@. ./Env.Host.sh && \
-		cd instsetoo_native && \
-		gb_MAKETARGET=$(gb_MAKETARGET) build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+build: Makefile bootstrap src.downloaded $(CROSS_TOOLSET_RULE)
+	@$(call forward_to_buildpl,instsetoo_native)
 
-dev-install: build
-	@. ./Env.Host.sh && \
-            cd smoketestoo_native && \
-            build.pl -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && \
+smoketest: Makefile bootstrap src.downloaded $(CROSS_TOOLSET_RULE)
+	@$(call forward_to_buildpl,smoketestoo_native) && \
             rm -f "@abs_builddir@"/install && \
-            ln -s "$$SOLARVER/$$INPATH"/installation/opt/ \
-                "@abs_builddir@"/install && \
-            printf '\n' && \
-            printf \
-                '\nDeveloper installation finished, you can now execute:\n\n' \
-                && \
-            if test `uname -s` = Linux; then \
-                printf 'make debugrun\n'; \
-            elif test `uname -s` = Darwin; then \
-                printf 'open %s/install/LibreOffice.app\n' "@abs_builddir@"; \
-            else \
-                printf 'cd %s/install/program\n. ./ooenv\n./soffice.bin\n' \
-                    "@abs_builddir@"; \
-            fi
+            ln -s "$$SOLARVER/$$INPATH"/installation/opt/ "@abs_builddir@"/install
 
-debugrun:
-	@ @GNUMAKE@ -f $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/GNUmakefile.mk debugrun
+dev-install: smoketest
+	$(info)
+	$(info Developer installation finished, you can now execute:)
+	$(info)
+	$(info $(devinstall_run))
 
 check : allcheck
 	@true
 
-%check:
-	@ @GNUMAKE@ -f $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/GNUmakefile.mk -r \
-		$(if @VERBOSE@,,-s) --jobs="$(if \
-		   $(CHECK_PARALLELISM),$(CHECK_PARALLELISM),@GMAKE_PARALLELISM@)" \
-		$(patsubst allcheck,check,$@)
-
 cross-build-toolset:
-	@. ./Env.Build.sh && \
-	cd cross_toolset && \
-	build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+	$(call forward_to_buildpl,cross_toolset)
 
 install: build
 	@. ./Env.Host.sh && \
@@ -79,12 +88,6 @@ install: build
 	echo "" && \
 	echo "Installation finished, you can now execute:" && \
 	echo "@INSTALLDIR@/program/soffice"
-
-distro-pack-install: install
-	./bin/distro-install-clean-up
-	./bin/distro-install-desktop-integration
-	./bin/distro-install-sdk
-	./bin/distro-install-file-lists
 
 distclean: clean
 ifeq (@BUILD_DMAKE@,YES)
@@ -113,37 +116,39 @@ ifeq (@CROSS_COMPILING@,YES)
 	rm -rf */$$INPATH_FOR_BUILD
 endif
 
-dmake/dmake@EXEEXT_FOR_BUILD@:
-	./bootstrap
-
-src.downloaded: ooo.lst download
 ifeq (@DO_FETCH_TARBALLS@,YES)
-	@. ./Env.Host.sh && \
-	$$SRC_ROOT/download $$SRC_ROOT/ooo.lst && touch $@
+fetch: src.downloaded
+	$(call forward_to_gbuild,$@)
 else
+fetch:
 	@echo "Automatic fetching of external tarballs is disabled."
 endif
 
-fetch: src.downloaded
-
-ifneq ($(MAKECMDGOALS),clean)
-ifneq ($(MAKECMDGOALS),distclean)
+ifeq ($(filter clean distclean,$(MAKECMDGOALS)),)
 Makefile: autogen.lastrun configure.in ooo.lst.in set_soenv.in Makefile.in
 	./autogen.sh
 endif
-endif
+
+bootstrap:
+	$(call forward_to_gbuild,$@)
+
+debugrun:
+	@$(call forward_to_gbuild,$@)
+
+%check:
+	@$(call forward_to_gbuild,$@)
+
+distro-pack-install: install
+	@$(call forward_to_gbuild,$@)
 
 id:
-	@. ./Env.Host.sh && \
-		create-ids
+	@$(call forward_to_gbuild,$@)
 
 tags:
-	@. ./Env.Host.sh && \
-		create-tags
+	@$(call forward_to_gbuild,$@)
 
 docs:
-	@. ./Env.Host.sh && \
-		mkdocs.sh $$SRC_ROOT/docs $$SOLARENV/inc/doxygen.cfg
+	@$(call forward_to_gbuild,$@)
 
 findunusedcode:
 # experimental callcatcher target

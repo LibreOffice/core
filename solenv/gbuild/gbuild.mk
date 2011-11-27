@@ -403,7 +403,7 @@ INTERACTIVE VARIABLES:
 endef
 
 .PHONY: help
-help :
+help:
 	$(info $(gb_HelpMessage))
 	@true
 
