@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <vcl/settings.hxx>
-#include <tools/poly.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/window.hxx>
