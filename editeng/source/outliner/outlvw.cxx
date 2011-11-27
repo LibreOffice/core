@@ -26,9 +26,7 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 
-#include "precompiled_editeng.hxx"
 
 #include <com/sun/star/i18n/WordType.hpp>
 

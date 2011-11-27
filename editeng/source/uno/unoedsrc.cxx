@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_editeng.hxx"
 #include <svl/brdcst.hxx>
 
 #include <editeng/unoedsrc.hxx>

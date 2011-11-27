@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_editeng.hxx"
 #include <tools/shl.hxx>
 #include <tools/resid.hxx>
 #include <tools/stream.hxx>

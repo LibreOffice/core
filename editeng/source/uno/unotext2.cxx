@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_editeng.hxx"
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>

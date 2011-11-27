@@ -26,6 +26,5 @@
  *
  ************************************************************************/
 
-#include "precompiled_editeng.hxx"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

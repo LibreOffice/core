@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_editeng.hxx"
 #include <outl_pch.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
