@@ -25,8 +25,6 @@
  *
 ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/sdb/XDatabaseRegistrations.hpp>

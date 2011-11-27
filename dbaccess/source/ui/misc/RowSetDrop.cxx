@@ -27,8 +27,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
 
 #include "TokenWriter.hxx"
 #include <com/sun/star/sdbc/XColumnLocate.hpp>

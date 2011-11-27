@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
 #include <statement.hxx>
 #include <resultset.hxx>
 #include "dbastrings.hrc"

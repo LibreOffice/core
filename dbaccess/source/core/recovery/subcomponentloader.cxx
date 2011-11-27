@@ -24,7 +24,6 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#include "precompiled_dbaccess.hxx"
 
 #include "subcomponentloader.hxx"
 

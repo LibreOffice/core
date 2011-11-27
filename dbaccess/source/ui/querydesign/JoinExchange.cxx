@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
 #include "JoinExchange.hxx"
 #include <sot/formats.hxx>
 #include <svx/dbexch.hrc>

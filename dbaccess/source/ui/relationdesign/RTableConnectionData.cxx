@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
 #include "RTableConnectionData.hxx"
 #include <tools/debug.hxx>
 #include <com/sun/star/sdbc/KeyRule.hpp>

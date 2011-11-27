@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
 #include "sqledit.hxx"
 #include "QueryTextView.hxx"
 #include "querycontainerwindow.hxx"

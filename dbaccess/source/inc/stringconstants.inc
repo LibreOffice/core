@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-// no include "precompiled_dbaccess.hxx" because this file is meant to
 // be included itself
 
 //============================================================

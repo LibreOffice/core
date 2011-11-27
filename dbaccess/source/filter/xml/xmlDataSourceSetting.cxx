@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
 #include "xmlDataSourceSetting.hxx"
 #include "xmlDataSource.hxx"
 #include <sax/tools/converter.hxx>

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-// no include "precompiled_dbaccess.hxx" because this file is meant to
 // be included in other cxx files
 
 #ifndef _REGISTRATIONHELPER_CXX_INCLUDED_INDIRECTLY_

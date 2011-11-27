@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
 #include "TableWindowData.hxx"
 #include <tools/debug.hxx>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>

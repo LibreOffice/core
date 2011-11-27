@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
 
 #include "exsrcbrw.hxx"
 #include <com/sun/star/form/FormComponentType.hpp>
