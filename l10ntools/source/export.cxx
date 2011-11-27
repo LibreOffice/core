@@ -473,7 +473,7 @@ void Export::Init()
     bNextMustBeDefineEOL = sal_False;
     nLevel = 0;
     nList = LIST_NON;
-    m_sListLang = ByteString( String::CreateFromAscii(""),RTL_TEXTENCODING_ASCII_US );
+    m_sListLang = rtl::OString();
     nListIndex = 0;
     for ( size_t i = 0, n = aResStack.size(); i < n;  ++i )
         delete aResStack[ i ];
