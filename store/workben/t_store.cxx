@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_store.hxx"
 
 #define _T_STORE_CXX
 #include <sal/types.h>
