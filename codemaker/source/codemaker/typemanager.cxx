@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_codemaker.hxx"
 
 #include "rtl/alloc.h"
 #include "codemaker/typemanager.hxx"
