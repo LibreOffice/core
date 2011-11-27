@@ -1054,7 +1054,7 @@ void SwWrtShell::SplitNode( sal_Bool bAutoFmt, sal_Bool bCheckTableStart )
 // cursor position in the document.
 void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
 {
-    // determine numbering rule found at current cursor position in the docment.
+    // determine numbering rule found at current cursor position in the document.
     const SwNumRule* pCurRule = GetCurNumRule();
 
     StartUndo(UNDO_NUMORNONUM);
@@ -1106,7 +1106,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
                             GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
                 if ( pTxtNode && !pTxtNode->IsCountedInList() )
                 {
-                    // check, if numbering of the outline level of the pararaph
+                    // check, if numbering of the outline level of the paragraph
                     // style is active. If not, activate this outline level.
                     nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();
                     OSL_ENSURE( pColl->IsAssignedToListLevelOfOutlineStyle(),
@@ -1154,7 +1154,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
             }
             else
             {
-                // check, if numbering of the outline level of the pararaph
+                // check, if numbering of the outline level of the paragraph
                 // style is active. If not, activate this outline level.
                 nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();
                 OSL_ENSURE( pColl->IsAssignedToListLevelOfOutlineStyle(),

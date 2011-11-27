@@ -75,7 +75,7 @@ OpenJDK at least, but probably not true for Lemotes JDK */
 #elif defined AXP
 #define JFW_PLUGIN_ARCH "alpha"
 #else // SPARC, INTEL, POWERPC, MIPS, ARM, IA64, M68K, HPPA, ALPHA
-#error unknown plattform
+#error unknown platform
 #endif // SPARC, INTEL, POWERPC, MIPS, ARM, IA64, M68K, HPPA, ALPHA
 
 

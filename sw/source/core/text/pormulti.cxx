@@ -2186,7 +2186,7 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
  * has to be set. Normally this happens during the formatting of the first
  * part of the fieldportion.
  * But sometimes the formatting starts at the line with the following part,
- * exspecally when the following part is on the next page.
+ * especially when the following part is on the next page.
  * In this case the MakeRestPortion-function has to create the following part.
  * The first parameter is the line that contains possibly a first part
  * of a field. When the function finds such field part, it creates the right

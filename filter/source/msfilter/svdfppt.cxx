@@ -6634,7 +6634,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
 
                                                 case PPT_PST_RTFDateTimeMCAtom:
                                                 {
-                                                    // Rude workaround for one specal case reported
+                                                    // Rude workaround for one special case reported
                                                     // by a customer. (#i75203#)
 
                                                     // Don't even attempt to handle the general use

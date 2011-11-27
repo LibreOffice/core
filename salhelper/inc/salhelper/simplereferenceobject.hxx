@@ -77,7 +77,7 @@ public:
     /** @ATTENTION
         The results are undefined if, for any individual instance of
         SimpleReferenceObject, the total number of calls to acquire() exceeds
-        the total number of calls to release() by a plattform dependent amount
+        the total number of calls to release() by a platform dependent amount
         (which, hopefully, is quite large).
      */
     inline void acquire() SAL_THROW(())

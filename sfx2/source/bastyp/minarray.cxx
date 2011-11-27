@@ -220,7 +220,7 @@ void SfxPtrArr::Insert( sal_uInt16 nPos, void* rElem )
 {
     DBG_MEMTEST();
     DBG_ASSERT( sal::static_int_cast< unsigned >(nUsed+1) < ( USHRT_MAX / sizeof(void*) ), "array too large" );
-    // Does the Array have o be copied?
+    // Does the Array have to be copied?
     if ( nUnused == 0 )
     {
         // increase (rounded up ) to the next Grow-border

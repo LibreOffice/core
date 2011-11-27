@@ -301,7 +301,7 @@ public:
     {
         /* If Dest is set to a valid link destination,
            Then pressing the button will act as a goto
-           action within the docuemnt.
+           action within the document.
 
            Else:
            An empty URL means this button will reset the form.

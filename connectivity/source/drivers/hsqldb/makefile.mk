@@ -88,7 +88,7 @@ SLOFILES=\
 SHL1VERSIONMAP=$(HSQLDB_TARGET).map
 
 # --- Library -----------------------------------
-# NO $(DLLPOSTFIX) otherwise we have to find on which plattform we are for the java files
+# NO $(DLLPOSTFIX) otherwise we have to find on which platform we are for the java files
 SHL1TARGET=	$(HSQLDB_TARGET)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\

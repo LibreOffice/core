@@ -210,7 +210,7 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 #elif defined UNX
   #define __DLLEXTENSION "lo.so"
 #else
-  #error unknown plattform
+  #error unknown platform
 #endif
 
 // -----------------------------------------------------------------------
