@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_linguistic.hxx"
 
 #include <sal/macros.h>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_linguistic.hxx"
 #include <unicode/uscript.h>
 #include <i18npool/lang.h>
 #include <tools/urlobj.hxx>

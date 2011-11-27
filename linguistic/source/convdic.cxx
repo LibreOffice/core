@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_linguistic.hxx"
 
 #include <cppuhelper/factory.hxx>
 #include <i18npool/lang.h>
