@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cppuhelper.hxx"
 
 #ifdef DIAG
 #define CONTEXT_DIAG

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cppuhelper.hxx"
 
 // starting the executable:
 // -env:UNO_CFG_URL=local;<absolute_path>..\\..\\test\\cfg_data;<absolute_path>\\cfg_update

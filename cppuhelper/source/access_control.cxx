@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cppuhelper.hxx"
 
 #include <cppuhelper/access_control.hxx>
 

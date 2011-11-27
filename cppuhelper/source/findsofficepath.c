@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_cppuhelper.hxx"
 #include "sal/config.h"
 
 #include <stdlib.h>
