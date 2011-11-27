@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmlscript.hxx"
 #include "exp_share.hxx"
 
 #include <rtl/ustrbuf.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmlscript.hxx"
 
 #include <xmlscript/xmllib_imexp.hxx>
 #include <xmlscript/xml_helper.hxx>
