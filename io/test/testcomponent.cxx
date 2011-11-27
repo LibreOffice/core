@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_io.hxx"
 
 //------------------------------------------------------
 // testcomponent - Loads a service and its testcomponent from dlls performs a test.

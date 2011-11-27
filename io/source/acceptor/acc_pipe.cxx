@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_io.hxx"
 #include "osl/security.hxx"
 #include "acceptor.hxx"
 #include <com/sun/star/connection/ConnectionSetupException.hpp>
