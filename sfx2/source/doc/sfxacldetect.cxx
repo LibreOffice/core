@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sfx2.hxx"
 
 
 
@@ -97,8 +95,6 @@ sal_Bool IsReadonlyAccordingACL( const sal_Unicode* pFilePath )
 }
 
 #else // this is UNX
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sfx2.hxx"
 
 
 #include <sal/types.h>

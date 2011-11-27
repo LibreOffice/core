@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sfx2.hxx"
 #include <tools/cachestr.hxx>
 #include <tools/config.hxx>
 #include <svl/inetstrm.hxx>

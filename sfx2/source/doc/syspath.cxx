@@ -26,9 +26,7 @@
 *
 ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 // Comment out precompiled statement due to redefinition errors
-#include "precompiled_sfx2.hxx"
 
 #include "syspath.hxx"
 

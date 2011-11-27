@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sfx2.hxx"
 #include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/msgbox.hxx>

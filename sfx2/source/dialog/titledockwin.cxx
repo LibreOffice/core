@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sfx2.hxx"
 
 #include "sfx2/titledockwin.hxx"
 #include "sfx2/bindings.hxx"

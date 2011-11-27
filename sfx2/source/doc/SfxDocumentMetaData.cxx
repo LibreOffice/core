@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sfx2.hxx"
 
 #include "sal/config.h"
 #include "cppuhelper/factory.hxx"

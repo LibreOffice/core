@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sfx2.hxx"
 
 #include <sfx2/Metadatable.hxx>
 #include <sfx2/XmlIdRegistry.hxx>
