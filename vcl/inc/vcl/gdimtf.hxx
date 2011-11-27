@@ -37,7 +37,6 @@
 #include <vector>
 
 class OutputDevice;
-class ImpLabelList;
 class MetaAction;
 class MetaCommentAction;
 class SvStream;
@@ -114,7 +113,6 @@ private:
     GDIMetaFile*    pPrev;
     GDIMetaFile*    pNext;
     OutputDevice*   pOutDev;
-    ImpLabelList*   pLabelList;
     sal_Bool            bPause;
     sal_Bool            bRecord;
     sal_Bool            bUseCanvas;
@@ -215,7 +213,6 @@ public:
     void            WindNext();
 
     size_t          GetActionSize() const;
-    size_t          GetActionPos( const String& rLabel );
 
     void            AddAction( MetaAction* pAction );
     void            AddAction( MetaAction* pAction, size_t nPos );
@@ -225,15 +222,8 @@ public:
     MetaAction*     FirstAction();
     MetaAction*     NextAction();
     MetaAction*     GetAction( size_t nAction ) const;
-    MetaAction*     CopyAction( size_t nPos ) const;
     MetaAction*     GetCurAction() const { return GetAction( nCurrentActionElement ); }
     MetaAction*     ReplaceAction( MetaAction* pAction, size_t nAction );
-
-    sal_Bool        InsertLabel( const String& rLabel, size_t nActionPos );
-    void            RemoveLabel( const String& rLabel );
-    void            RenameLabel( const String& rLabel, const String& rNewLabel );
-    size_t          GetLabelCount() const;
-    String          GetLabel( size_t nLabel );
 
     sal_Bool        SaveStatus();
 

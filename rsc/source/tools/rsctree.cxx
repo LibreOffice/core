@@ -381,12 +381,6 @@ IMPL_LINK_INLINE_START( OrderCtrl, CallBackFunc, NameNode *, pNext )
 }
 IMPL_LINK_INLINE_END( OrderCtrl, CallBackFunc, NameNode *, pNext )
 
-sal_Bool NameNode::IsOrderTree() const{
-    OrderCtrl aOrder;
-
-    return aOrder.IsOrder( this );
-}
-
 /****************** I d N o d e ******************************************/
 /*************************************************************************
 |*

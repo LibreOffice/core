@@ -132,106 +132,6 @@ struct ImplBmpReplaceParam
     const sal_uLong*    pTols;
 };
 
-
-// ---------
-// - Label -
-// ---------
-
-struct ImpLabel
-{
-    String  aLabelName;
-    sal_uLong   nActionPos;
-
-            ImpLabel( const String& rLabelName, sal_uLong _nActionPos ) :
-                aLabelName( rLabelName ),
-                nActionPos( _nActionPos ) {}
-};
-
-// -------------
-// - LabelList -
-// -------------
-
-typedef ::std::vector< ImpLabel* > ImpLabelVector;
-
-class ImpLabelList
-{
-private:
-    ImpLabelVector  aList;
-    size_t          nListPos;
-
-public:
-
-                   ImpLabelList() {}
-                    ImpLabelList( const ImpLabelList& rList );
-                    ~ImpLabelList();
-
-    void            ImplInsert( ImpLabel* p ) { aList.push_back( p ); }
-
-    ImpLabel*       ImplGetLabel( size_t nPos ) const;
-    ImpLabel*       ImplRemove( size_t nPos );
-
-    size_t          ImplGetLabelPos( const String& rLabelName );
-    size_t          ImplCount() const { return aList.size(); }
-};
-
-// ------------------------------------------------------------------------
-
-ImpLabelList::ImpLabelList( const ImpLabelList& rList )
-{
-    for( size_t i = 0, n = rList.ImplCount(); i < n; ++i )
-        aList.push_back( new ImpLabel( *rList.ImplGetLabel( i ) ) );
-    nListPos = 0;
-}
-
-// ------------------------------------------------------------------------
-
-ImpLabelList::~ImpLabelList()
-{
-    for( size_t i = 0, n = aList.size(); i < n; ++i )
-        delete aList[ i ];
-    aList.clear();
-}
-
-// ------------------------------------------------------------------------
-
-ImpLabel* ImpLabelList::ImplGetLabel( size_t nPos ) const
-{
-    return ( nPos < aList.size() ) ? aList[ nPos ] : NULL;
-}
-
-// ------------------------------------------------------------------------
-
-ImpLabel* ImpLabelList::ImplRemove( size_t nPos )
-{
-    ImpLabel* return_value = NULL;
-    if ( nPos < aList.size() )
-    {
-        ImpLabelVector::iterator it = aList.begin();
-        ::std::advance( it, nPos );
-        return_value = *it;
-        aList.erase( it );
-    }
-    return return_value;
-}
-
-// ------------------------------------------------------------------------
-
-size_t ImpLabelList::ImplGetLabelPos( const String& rLabelName )
-{
-    size_t nLabelPos = METAFILE_LABEL_NOTFOUND;
-
-    for ( size_t i = 0, n = aList.size(); i < n; ++i )
-    {
-        if ( rLabelName == aList[ i ]->aLabelName )
-        {
-            nLabelPos = i;
-            break;
-        }
-    }
-
-    return nLabelPos;
-}
-
 // ---------------
 // - GDIMetaFile -
 // ---------------
@@ -242,7 +142,6 @@ GDIMetaFile::GDIMetaFile() :
     pPrev       ( NULL ),
     pNext       ( NULL ),
     pOutDev     ( NULL ),
-    pLabelList  ( NULL ),
     bPause      ( sal_False ),
     bRecord     ( sal_False ),
     bUseCanvas  ( sal_False )
@@ -268,11 +167,6 @@ GDIMetaFile::GDIMetaFile( const GDIMetaFile& rMtf ) :
         rMtf.GetAction( i )->Duplicate();
         aList.push_back( rMtf.GetAction( i ) );
     }
-
-    if( rMtf.pLabelList )
-        pLabelList = new ImpLabelList( *rMtf.pLabelList );
-    else
-        pLabelList = NULL;
 
     if( rMtf.bRecord )
     {
@@ -345,11 +239,6 @@ GDIMetaFile& GDIMetaFile::operator=( const GDIMetaFile& rMtf )
             rMtf.GetAction( i )->Duplicate();
             aList.push_back( rMtf.GetAction( i ) );
         }
-
-        if( rMtf.pLabelList )
-            pLabelList = new ImpLabelList( *rMtf.pLabelList );
-        else
-           pLabelList = NULL;
 
         aPrefMapMode = rMtf.aPrefMapMode;
         aPrefSize = rMtf.aPrefSize;
@@ -439,9 +328,6 @@ void GDIMetaFile::Clear()
     for( size_t i = 0, n = aList.size(); i < n; ++i )
         aList[ i ]->Delete();
     aList.clear();
-
-    delete pLabelList;
-    pLabelList = NULL;
 }
 
 // ------------------------------------------------------------------------
@@ -939,95 +825,6 @@ void GDIMetaFile::RemoveAction( size_t nPos )
 
     if( pPrev )
         pPrev->RemoveAction( nPos );
-}
-
-// ------------------------------------------------------------------------
-
-MetaAction* GDIMetaFile::CopyAction( size_t nPos ) const
-{
-    return ( nPos < aList.size() ) ? aList[ nPos ]->Clone() : NULL;
-}
-
-// ------------------------------------------------------------------------
-
-size_t GDIMetaFile::GetActionPos( const String& rLabel )
-{
-    ImpLabel* pLabel = NULL;
-
-    if( pLabelList )
-        pLabel = pLabelList->ImplGetLabel( pLabelList->ImplGetLabelPos( rLabel ) );
-    else
-        pLabel = NULL;
-
-    return( pLabel ? pLabel->nActionPos : METAFILE_LABEL_NOTFOUND );
-}
-
-// ------------------------------------------------------------------------
-
-sal_Bool GDIMetaFile::InsertLabel( const String& rLabel, size_t nActionPos )
-{
-    sal_Bool bRet = sal_False;
-
-    if( !pLabelList )
-        pLabelList = new ImpLabelList;
-
-    if( pLabelList->ImplGetLabelPos( rLabel ) == METAFILE_LABEL_NOTFOUND )
-    {
-        pLabelList->ImplInsert( new ImpLabel( rLabel, nActionPos ) );
-        bRet = sal_True;
-    }
-
-    return bRet;
-}
-
-// ------------------------------------------------------------------------
-
-void GDIMetaFile::RemoveLabel( const String& rLabel )
-{
-    if( pLabelList )
-    {
-        const sal_uLong nLabelPos = pLabelList->ImplGetLabelPos( rLabel );
-
-        if( nLabelPos != METAFILE_LABEL_NOTFOUND )
-            delete pLabelList->ImplRemove( nLabelPos );
-    }
-}
-
-// ------------------------------------------------------------------------
-
-void GDIMetaFile::RenameLabel( const String& rLabel, const String& rNewLabel )
-{
-    if( pLabelList )
-    {
-        const sal_uLong nLabelPos = pLabelList->ImplGetLabelPos( rLabel );
-
-        if ( nLabelPos != METAFILE_LABEL_NOTFOUND )
-            pLabelList->ImplGetLabel( nLabelPos )->aLabelName = rNewLabel;
-    }
-}
-
-// ------------------------------------------------------------------------
-
-size_t GDIMetaFile::GetLabelCount() const
-{
-    return( pLabelList ? pLabelList->ImplCount() : 0UL );
-}
-
-// ------------------------------------------------------------------------
-
-String GDIMetaFile::GetLabel( size_t nLabel )
-{
-    String aString;
-
-    if( pLabelList )
-    {
-        const ImpLabel* pLabel = pLabelList->ImplGetLabel( nLabel );
-
-        if( pLabel )
-            aString = pLabel->aLabelName;
-    }
-
-    return aString;
 }
 
 // ------------------------------------------------------------------------

@@ -79,8 +79,6 @@ public:
                         // return ist neue Root
             NameNode*   Remove( NameNode * );
             void        OrderTree();
-            sal_Bool        IsOrderTree() const;
-
 };
 
 /*************************************************************************/

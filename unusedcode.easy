@@ -114,7 +114,6 @@ FileStream::FileStream(rtl::OString const&, FileAccessMode)
 FixedBorder::FixedBorder(Window*, long)
 FixedBorder::SetBorderType(unsigned short)
 FixedBorder::SetTransparent(unsigned char)
-FixedImage::CalcImagePos(Point const&, Size const&, Size const&)
 FmEntryDataArray::DeleteAndDestroy(unsigned short, unsigned short)
 FmEntryDataArray::Insert(FmEntryData* const&, unsigned short&)
 FmEntryDataArray::Insert(FmEntryData* const*, unsigned short)
@@ -132,14 +131,7 @@ FontStyleMenu::Fill(String const&, FontList const*)
 FontStyleMenu::FontStyleMenu()
 FormattedField::SetValidateText(String const&, String const*)
 FormatterBase::SetFieldText(String const&, unsigned char)
-GDIMetaFile::CopyAction(unsigned long) const
-GDIMetaFile::GetActionPos(String const&)
-GDIMetaFile::GetLabel(unsigned long)
-GDIMetaFile::GetLabelCount() const
-GDIMetaFile::InsertLabel(String const&, unsigned long)
 GDIMetaFile::IsEqual(GDIMetaFile const&) const
-GDIMetaFile::RemoveLabel(String const&)
-GDIMetaFile::RenameLabel(String const&, String const&)
 GDIMetaFile::ReplaceColors(Color const&, Color const&, unsigned long)
 GDIMetaFile::SaveStatus()
 GDIMetaFile::Wind(unsigned long)
@@ -236,7 +228,6 @@ MultiLineEdit::IsFocusSelectionHideEnabled() const
 MultiLineEdit::IsRightToLeft() const
 MultiSelection::Append(long)
 MultiSelection::PrevSelected()
-NameNode::IsOrderTree() const
 NativeNumberWrapper::isValidNatNum(com::sun::star::lang::Locale const&, short) const
 NfCurrencyEntry::ApplyVariableInformation(NfCurrencyEntry const&)
 NfCurrencyEntry::NfCurrencyEntry()

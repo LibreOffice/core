@@ -1138,12 +1138,4 @@ const Image& FixedImage::GetModeImage( ) const
     return maImage;
 }
 
-// -----------------------------------------------------------------------
-
-Point FixedImage::CalcImagePos( const Point& rPos,
-                                const Size& rObjSize, const Size& rWinSize )
-{
-    return ImplCalcPos( GetStyle(), rPos, rObjSize, rWinSize );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
