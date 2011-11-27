@@ -64,7 +64,7 @@ SVL_DLLPUBLIC bool  RemoveControlChars( rtl::OUString &rTxt );
 
 SVL_DLLPUBLIC bool ReplaceControlChars(rtl::OUString &rTxt);
 
-SVL_DLLPUBLIC String GetThesaurusReplaceText( const String &rText );
+SVL_DLLPUBLIC ::rtl::OUString GetThesaurusReplaceText( const ::rtl::OUString &rText );
 
 } // namespace linguistic
 

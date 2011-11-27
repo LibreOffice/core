@@ -105,35 +105,39 @@ namespace linguistic
         return true;
     }
 
-    String GetThesaurusReplaceText(const String &rText)
+    ::rtl::OUString GetThesaurusReplaceText(const ::rtl::OUString &rText)
     {
         // The strings for synonyms returned by the thesaurus sometimes have some
         // explanation text put in between '(' and ')' or a trailing '*'.
         // These parts should not be put in the ReplaceEdit Text that may get
         // inserted into the document. Thus we strip them from the text.
 
-        String aText( rText );
+        ::rtl::OUString aText(rText);
 
-        xub_StrLen nPos = aText.Search( sal_Unicode('(') );
-        while (STRING_NOTFOUND != nPos)
+        sal_Int32 nPos = aText.indexOf(sal_Unicode('('));
+        while (nPos >= 0)
         {
-            xub_StrLen nEnd = aText.Search( sal_Unicode(')'), nPos );
-            if (STRING_NOTFOUND != nEnd)
-                aText.Erase( nPos, nEnd-nPos+1 );
+            sal_Int32 nEnd = aText.indexOf(sal_Unicode(')'), nPos);
+            if (nEnd >= 0)
+            {
+                ::rtl::OUStringBuffer aTextBuf(aText);
+                aTextBuf.remove(nPos, nEnd - nPos + 1);
+                aText = aTextBuf.makeStringAndClear();
+            }
             else
                 break;
-            nPos = aText.Search( sal_Unicode('(') );
+            nPos = aText.indexOf(sal_Unicode('('));
         }
 
-        nPos = aText.Search( sal_Unicode('*') );
-        if (STRING_NOTFOUND != nPos)
-            aText.Erase( nPos );
+        nPos = aText.indexOf(sal_Unicode('*'));
+        if(nPos == 0)
+            aText = ::rtl::OUString();
+        else if(nPos > 0)
+            aText = aText.copy(0, nPos);
 
         // remove any possible remaining ' ' that may confuse the thesaurus
         // when it gets called with the text
-        aText = comphelper::string::strip(aText, ' ');
-
-        return aText;
+        return comphelper::string::strip(aText, ' ');
     }
 } // namespace linguistic
 
