@@ -26,7 +26,6 @@
 *
 ************************************************************************/
 
-#include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
 #include "com/sun/star/container/NoSuchElementException.hpp"

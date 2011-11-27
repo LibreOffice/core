@@ -26,7 +26,6 @@
 *
 ************************************************************************/
 
-#include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
 #include <set>
