@@ -87,7 +87,7 @@
       <FormatCode>P.K.VVVV</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
-      <FormatCode>P. KKKK"ta" VVVV</FormatCode>
+      <FormatCode>P. KKKK VVVV</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey8" default="true" type="medium" usage="DATE" formatindex="20">
       <FormatCode>PP.KK.VV</FormatCode>
@@ -105,22 +105,22 @@
       <FormatCode>P. KKK. VVVV</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="25">
-      <FormatCode>P. KKKK"ta" VVVV</FormatCode>
+      <FormatCode>P. KKKK VVVV</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="26">
       <FormatCode>P. KKKK VVVV</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="27">
-      <FormatCode>NN P. KKK"ta" VV</FormatCode>
+      <FormatCode>NN P. KKK VV</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="28">
       <FormatCode>NN PP. KKK VV</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="29">
-      <FormatCode>NN P. KKKK"ta" VVVV</FormatCode>
+      <FormatCode>NN P. KKKK VVVV</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="30">
-      <FormatCode>NNNNP. KKKK"ta" VVVV</FormatCode>
+      <FormatCode>NNNNP. KKKK VVVV</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="31">
       <FormatCode>KK-PP</FormatCode>
@@ -286,6 +286,130 @@
           <DefaultFullName>joulukuu</DefaultFullName>
         </Month>
       </MonthsOfYear>
+      <GenitiveMonths>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>tammi</DefaultAbbrvName>
+          <DefaultFullName>tammikuun</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>helmi</DefaultAbbrvName>
+          <DefaultFullName>helmikuun</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>maalis</DefaultAbbrvName>
+          <DefaultFullName>maaliskuun</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>huhti</DefaultAbbrvName>
+          <DefaultFullName>huhtikuun</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>touko</DefaultAbbrvName>
+          <DefaultFullName>toukokuun</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>kesä</DefaultAbbrvName>
+          <DefaultFullName>kesäkuun</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>heinä</DefaultAbbrvName>
+          <DefaultFullName>heinäkuun</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>elo</DefaultAbbrvName>
+          <DefaultFullName>elokuun</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>syys</DefaultAbbrvName>
+          <DefaultFullName>syyskuun</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>loka</DefaultAbbrvName>
+          <DefaultFullName>lokakuun</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>marras</DefaultAbbrvName>
+          <DefaultFullName>marraskuun</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>joulu</DefaultAbbrvName>
+          <DefaultFullName>joulukuun</DefaultFullName>
+        </Month>
+      </GenitiveMonths>
+      <PartitiveMonths>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>tammi</DefaultAbbrvName>
+          <DefaultFullName>tammikuuta</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>helmi</DefaultAbbrvName>
+          <DefaultFullName>helmikuuta</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>maalis</DefaultAbbrvName>
+          <DefaultFullName>maaliskuuta</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>huhti</DefaultAbbrvName>
+          <DefaultFullName>huhtikuuta</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>touko</DefaultAbbrvName>
+          <DefaultFullName>toukokuuta</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>kesä</DefaultAbbrvName>
+          <DefaultFullName>kesäkuuta</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>heinä</DefaultAbbrvName>
+          <DefaultFullName>heinäkuuta</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>elo</DefaultAbbrvName>
+          <DefaultFullName>elokuuta</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>syys</DefaultAbbrvName>
+          <DefaultFullName>syyskuuta</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>loka</DefaultAbbrvName>
+          <DefaultFullName>lokakuuta</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>marras</DefaultAbbrvName>
+          <DefaultFullName>marraskuuta</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>joulu</DefaultAbbrvName>
+          <DefaultFullName>joulukuuta</DefaultFullName>
+        </Month>
+      </PartitiveMonths>
       <Eras>
         <Era>
           <EraID>bc</EraID>
