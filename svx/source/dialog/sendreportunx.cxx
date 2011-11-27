@@ -29,6 +29,7 @@
 
 #include "docrecovery.hxx"
 #include "osl/file.hxx"
+#include "osl/process.h"
 #include "rtl/bootstrap.hxx"
 #include "rtl/strbuf.hxx"
 #include "tools/appendunixshellword.hxx"
@@ -209,16 +210,9 @@ namespace svx{
 
         bool ErrorRepSendDialog::SendReport()
         {
-            rtl::OString strSubject(rtl::OUStringToOString(GetDocType(), RTL_TEXTENCODING_UTF8));
-
-#if defined( LINUX ) || defined (MACOSX )
-            setenv( "ERRORREPORT_SUBJECT", strSubject.getStr(), 1 );
-#else
-            static ::rtl::OString strEnvSubject = "ERRORREPORT_SUBJECT";
-            strEnvSubject += "=";
-            strEnvSubject += strSubject;
-            putenv( (char *)strEnvSubject.getStr() );
-#endif
+            rtl::OUString sSubEnvVar(RTL_CONSTASCII_USTRINGPARAM("ERRORREPORT_SUBJECT"));
+            rtl::OUString strSubject(GetDocType());
+            osl_setEnvironment(sSubEnvVar.pData, strSubject.pData);
 
             char szBodyFile[L_tmpnam] = "";
             FILE *fp = fopen( tmpnam( szBodyFile ), "w" );
@@ -230,14 +224,11 @@ namespace svx{
                 size_t nWritten = fwrite(strUTF8.getStr(), 1, strUTF8.getLength(), fp);
                 OSL_VERIFY(nWritten == static_cast<size_t>(strUTF8.getLength()));
                 fclose( fp );
-#if defined( LINUX ) || defined (MACOSX)
-                setenv("ERRORREPORT_BODYFILE", szBodyFile, 1);
-#else
-                static ::rtl::OString strEnvBodyFile = "ERRORREPORT_BODYFILE";
-                strEnvBodyFile += "=";
-                strEnvBodyFile += szBodyFile;
-                putenv((char *)strEnvBodyFile.getStr());
-#endif
+
+                rtl::OUString sBodyEnvVar(RTL_CONSTASCII_USTRINGPARAM("ERRORREPORT_BODYFILE"));
+                rtl::OUString strBodyFile(rtl::OStringToOUString(rtl::OString(szBodyFile),
+                    osl_getThreadTextEncoding()));
+                osl_setEnvironment(sBodyEnvVar.pData, strBodyFile.pData);
             }
 
             int ret = -1;
