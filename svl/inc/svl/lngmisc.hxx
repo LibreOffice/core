@@ -45,27 +45,23 @@ class String;
 
 namespace linguistic
 {
+    inline bool IsHyphen(sal_Unicode cChar)
+    {
+        return cChar == SVT_SOFT_HYPHEN  ||  cChar == SVT_HARD_HYPHEN;
+    }
 
-inline bool IsHyphen( sal_Unicode cChar )
-{
-    return cChar == SVT_SOFT_HYPHEN  ||  cChar == SVT_HARD_HYPHEN;
-}
+    inline bool IsControlChar(sal_Unicode cChar)
+    {
+        // TODO: why doesn't this include 0x0F DEL?
+        return cChar < static_cast<sal_Unicode>(' ');
+    }
 
+    SVL_DLLPRIVATE sal_Int32 GetNumControlChars( const rtl::OUString &rTxt );
 
-inline bool IsControlChar( sal_Unicode cChar )
-{
-    // TODO: why doesn't this include 0x0F DEL?
-    return cChar < static_cast<sal_Unicode>(' ');
-}
-
-SVL_DLLPRIVATE sal_Int32 GetNumControlChars( const rtl::OUString &rTxt );
-SVL_DLLPUBLIC bool  RemoveHyphens( rtl::OUString &rTxt );
-SVL_DLLPUBLIC bool  RemoveControlChars( rtl::OUString &rTxt );
-
-SVL_DLLPUBLIC bool ReplaceControlChars(rtl::OUString &rTxt);
-
-SVL_DLLPUBLIC ::rtl::OUString GetThesaurusReplaceText( const ::rtl::OUString &rText );
-
+    SVL_DLLPUBLIC bool RemoveHyphens(rtl::OUString &rTxt);
+    SVL_DLLPUBLIC bool RemoveControlChars(rtl::OUString &rTxt);
+    SVL_DLLPUBLIC bool ReplaceControlChars(rtl::OUString &rTxt);
+    SVL_DLLPUBLIC ::rtl::OUString GetThesaurusReplaceText(const ::rtl::OUString &rText);
 } // namespace linguistic
 
 #endif
