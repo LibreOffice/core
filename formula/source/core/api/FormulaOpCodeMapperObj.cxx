@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_formula.hxx"
 #include "formula/FormulaOpCodeMapperObj.hxx"
 #include "formula/opcode.hxx"
 #include <comphelper/sequence.hxx>

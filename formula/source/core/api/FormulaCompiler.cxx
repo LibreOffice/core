@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_formula.hxx"
 #include <sal/macros.h>
 #include "formula/FormulaCompiler.hxx"
 #include "formula/errorcodes.hxx"

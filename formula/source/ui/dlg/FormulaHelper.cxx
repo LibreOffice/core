@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_formula.hxx"
 
 #include "formula/formulahelper.hxx"
 #include <unotools/charclass.hxx>
