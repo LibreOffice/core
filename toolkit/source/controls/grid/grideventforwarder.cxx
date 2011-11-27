@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_toolkit.hxx"
 
 #include "grideventforwarder.hxx"
 #include "gridcontrol.hxx"

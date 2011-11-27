@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_toolkit.hxx"
 
 #include <boost/ptr_container/ptr_vector.hpp>
 

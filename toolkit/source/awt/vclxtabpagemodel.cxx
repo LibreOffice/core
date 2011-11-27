@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_toolkit.hxx"
 
 #include <toolkit/awt/vclxtabpagemodel.hxx>
 #include <vcl/tabpage.hxx>

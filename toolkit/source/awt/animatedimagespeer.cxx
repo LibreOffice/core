@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_toolkit.hxx"
 
 #include "toolkit/awt/animatedimagespeer.hxx"
 #include "toolkit/helper/property.hxx"

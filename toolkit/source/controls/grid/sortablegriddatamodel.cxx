@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_toolkit.hxx"
 
 #include "sortablegriddatamodel.hxx"
 #include "toolkit/helper/servicenames.hxx"

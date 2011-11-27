@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_toolkit.hxx"
 #include "toolkit/awt/xthrobber.hxx"
 #include "toolkit/helper/property.hxx"
 #include <toolkit/helper/tkresmgr.hxx>

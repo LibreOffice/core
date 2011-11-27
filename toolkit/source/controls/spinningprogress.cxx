@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_toolkit.hxx"
 
 #include "toolkit/controls/spinningprogress.hxx"
 #include "toolkit/helper/servicenames.hxx"

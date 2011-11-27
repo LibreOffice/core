@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_toolkit.hxx"
 #include "gridcolumn.hxx"
 
 #include <comphelper/sequence.hxx>

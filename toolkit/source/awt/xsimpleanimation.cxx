@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_toolkit.hxx"
 #include "toolkit/awt/xsimpleanimation.hxx"
 #include "toolkit/helper/property.hxx"
 #include <tools/debug.hxx>

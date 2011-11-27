@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_toolkit.hxx"
 
 #include "stylesettings.hxx"
 #include <toolkit/awt/vclxwindow.hxx>
