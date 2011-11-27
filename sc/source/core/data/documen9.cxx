@@ -698,4 +698,11 @@ void ScDocument::SetAsianKerning(bool bNew)
         pDrawLayer->SetKernAsianPunctuation( static_cast<bool>( nAsianKerning ) );
 }
 
+void ScDocument::ApplyAsianEditSettings( ScEditEngineDefaulter& rEngine )
+{
+    rEngine.SetForbiddenCharsTable( xForbiddenCharacters );
+    rEngine.SetAsianCompressionMode( GetAsianCompression() );
+    rEngine.SetKernAsianPunctuation( GetAsianKerning() );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

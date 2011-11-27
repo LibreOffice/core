@@ -121,6 +121,7 @@ class ScViewOptions;
 class ScStrCollection;
 class TypedScStrCollection;
 class ScChangeTrack;
+class ScEditEngineDefaulter;
 class ScFieldEditEngine;
 class ScNoteEditEngine;
 struct ScConsolidateParam;
@@ -1583,6 +1584,7 @@ public:
     bool            GetAsianKerning() const;
     bool            IsValidAsianKerning() const;
     void            SetAsianKerning(bool bNew);
+    void            ApplyAsianEditSettings(ScEditEngineDefaulter& rEngine);
 
     sal_uInt8           GetEditTextDirection(SCTAB nTab) const; // EEHorizontalTextDirection values
 

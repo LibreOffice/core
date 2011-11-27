@@ -51,6 +51,7 @@ struct ScTableInfo;
 class ScTabViewShell;
 class ScPageBreakData;
 class FmFormView;
+class ScFieldEditEngine;
 
 // #i74769# SdrPaintWindow predefine
 class SdrPaintWindow;
@@ -255,6 +256,8 @@ private:
     void DrawEditTopBottom(DrawEditParam& rParam);
     void DrawEditStacked(DrawEditParam& rParam);
     void DrawEditAsianVertical(DrawEditParam& rParam);
+
+    ScFieldEditEngine* CreateOutputEditEngine();
 
 public:
                     ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,

@@ -522,7 +522,7 @@ ScFieldEditEngine& ScDocument::GetEditEngine()
         pEditEngine->SetUpdateMode( false );
         pEditEngine->EnableUndo( false );
         pEditEngine->SetRefMapMode( MAP_100TH_MM );
-        pEditEngine->SetForbiddenCharsTable( xForbiddenCharacters );
+        ApplyAsianEditSettings( *pEditEngine );
     }
     return *pEditEngine;
 }
@@ -535,11 +535,11 @@ ScNoteEditEngine& ScDocument::GetNoteEngine()
         pNoteEngine->SetUpdateMode( false );
         pNoteEngine->EnableUndo( false );
         pNoteEngine->SetRefMapMode( MAP_100TH_MM );
-        pNoteEngine->SetForbiddenCharsTable( xForbiddenCharacters );
-                const SfxItemSet& rItemSet = GetDefPattern()->GetItemSet();
-                SfxItemSet* pEEItemSet = new SfxItemSet( pNoteEngine->GetEmptyItemSet() );
-                ScPatternAttr::FillToEditItemSet( *pEEItemSet, rItemSet );
-                pNoteEngine->SetDefaults( pEEItemSet );      // edit engine takes ownership
+        ApplyAsianEditSettings( *pNoteEngine );
+        const SfxItemSet& rItemSet = GetDefPattern()->GetItemSet();
+        SfxItemSet* pEEItemSet = new SfxItemSet( pNoteEngine->GetEmptyItemSet() );
+        ScPatternAttr::FillToEditItemSet( *pEEItemSet, rItemSet );
+        pNoteEngine->SetDefaults( pEEItemSet );      // edit engine takes ownership
     }
     return *pNoteEngine;
 }

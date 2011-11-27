@@ -1671,6 +1671,7 @@ void ScPrintFunc::MakeEditEngine()
         pEditEngine->SetWordDelimiters(
                 ScEditUtil::ModifyDelimiters( pEditEngine->GetWordDelimiters() ) );
         pEditEngine->SetControlWord( pEditEngine->GetControlWord() & ~EE_CNTRL_RTFSTYLESHEETS );
+        pDoc->ApplyAsianEditSettings( *pEditEngine );
         pEditEngine->EnableAutoColor( bUseStyleColor );
 
         //  Default-Set fuer Ausrichtung
@@ -2357,9 +2358,8 @@ void ScPrintFunc::SetExclusivelyDrawOleAndDrawObjects()
     aTableParam.bNotes = false;
     aTableParam.bGrid = false;
     aTableParam.bHeaders = false;
-    aTableParam.bFormulas = false;;
-    aTableParam.bNullVals = false;;
-    aTableParam.bNullVals = false;;
+    aTableParam.bFormulas = false;
+    aTableParam.bNullVals = false;
 }
 
 //

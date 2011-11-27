@@ -1923,6 +1923,26 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
 
 //  -------------------------------------------------------------------------------
 
+ScFieldEditEngine* ScOutputData::CreateOutputEditEngine()
+{
+    ScFieldEditEngine* pEngine = new ScFieldEditEngine( pDoc->GetEnginePool() );
+    pEngine->SetUpdateMode( false );
+    // a RefDevice always has to be set, otherwise EditEngine would create a VirtualDevice
+    pEngine->SetRefDevice( pFmtDevice );
+    sal_uLong nCtrl = pEngine->GetControlWord();
+    if ( bShowSpellErrors )
+        nCtrl |= EE_CNTRL_ONLINESPELLING;
+    if ( eType == OUTTYPE_PRINTER )
+        nCtrl &= ~EE_CNTRL_MARKFIELDS;
+    if ( eType == OUTTYPE_WINDOW && pRefDevice == pFmtDevice )
+        nCtrl &= ~EE_CNTRL_FORMAT100;       // use the actual MapMode
+    pEngine->SetControlWord( nCtrl );
+    pDoc->ApplyAsianEditSettings( *pEngine );
+    pEngine->EnableAutoColor( bUseStyleColor );
+    pEngine->SetDefaultHorizontalTextDirection( (EEHorizontalTextDirection)pDoc->GetEditTextDirection( nTab ) );
+    return pEngine;
+}
+
 void lcl_ClearEdit( EditEngine& rEngine )       // Text und Attribute
 {
     rEngine.SetUpdateMode( false );
@@ -4440,38 +4460,6 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
     rParam.adjustForHyperlinkInPDF(aURLStart, pDev);
 }
 
-namespace {
-
-void initEditEngine(
-    ScFieldEditEngine*& pEngine, ScDocument* pDoc, SCTAB nTab, OutputDevice* pFmtDevice,
-    ScOutputType eType, bool bShowSpellErrors, bool bUseStyleColor)
-{
-    if (!pEngine)
-    {
-        //  Ein RefDevice muss auf jeden Fall gesetzt werden,
-        //  sonst legt sich die EditEngine ein VirtualDevice an!
-        pEngine = new ScFieldEditEngine( pDoc->GetEnginePool() );
-        pEngine->SetUpdateMode( false );
-        pEngine->SetRefDevice( pFmtDevice );    // always set
-        sal_uLong nCtrl = pEngine->GetControlWord();
-        if ( bShowSpellErrors )
-            nCtrl |= EE_CNTRL_ONLINESPELLING;
-        if ( eType == OUTTYPE_PRINTER )
-            nCtrl &= ~EE_CNTRL_MARKFIELDS;
-        pEngine->SetControlWord( nCtrl );
-        pEngine->SetForbiddenCharsTable( pDoc->GetForbiddenCharacters() );
-        pEngine->SetAsianCompressionMode( pDoc->GetAsianCompression() );
-        pEngine->SetKernAsianPunctuation( pDoc->GetAsianKerning() );
-        pEngine->EnableAutoColor( bUseStyleColor );
-        pEngine->SetDefaultHorizontalTextDirection(
-            (EEHorizontalTextDirection)pDoc->GetEditTextDirection( nTab ) );
-    }
-    else
-        lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(sal_False)
-}
-
-}
-
 void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
 {
     ScFieldEditEngine* pEngine = NULL;
@@ -4577,7 +4565,10 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                     }
                     if (bDoCell)
                     {
-                        initEditEngine(pEngine, pDoc, nTab, pFmtDevice, eType, bShowSpellErrors, bUseStyleColor);
+                        if (!pEngine)
+                            pEngine = CreateOutputEditEngine();
+                        else
+                            lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(sal_False)
 
                         DrawEditParam aParam(pPattern, pCondSet, lcl_SafeIsValue(pCell));
                         aParam.mbPixelToLogic = bPixelToLogic;
@@ -4692,7 +4683,10 @@ void ScOutputData::DrawRotated(sal_Bool bPixelToLogic)
 
                     if (!bHidden)
                     {
-                        initEditEngine(pEngine, pDoc, nTab, pFmtDevice, eType, bShowSpellErrors, bUseStyleColor);
+                        if (!pEngine)
+                            pEngine = CreateOutputEditEngine();
+                        else
+                            lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(sal_False)
 
                         long nPosY = nRowPosY;
                         sal_Bool bVisChanged = false;
