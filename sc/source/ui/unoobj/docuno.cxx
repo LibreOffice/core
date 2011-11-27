@@ -88,6 +88,7 @@
 #include "rangeutl.hxx"
 #include "markdata.hxx"
 #include "docoptio.hxx"
+#include "scextopt.hxx"
 #include "unonames.hxx"
 #include "shapeuno.hxx"
 #include "viewuno.hxx"
@@ -901,6 +902,16 @@ sal_Bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
             ScTabViewShell* pViewSh = pViewObj->GetViewShell();
             if (pViewSh)
             {
+                // #i95280# when printing from the shell, the view is never activated,
+                // so Excel view settings must also be evaluated here.
+                ScExtDocOptions* pExtOpt = pDocShell->GetDocument()->GetExtDocOptions();
+                if ( pExtOpt && pExtOpt->IsChanged() )
+                {
+                    pViewSh->GetViewData()->ReadExtOptions(*pExtOpt);        // Excel view settings
+                    pViewSh->SetTabNo( pViewSh->GetViewData()->GetTabNo(), true );
+                    pExtOpt->SetChanged( false );
+                }
+
                 const ScMarkData& rViewMark = pViewSh->GetViewData()->GetMarkData();
                 SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
                 for (SCTAB nTab = 0; nTab < nTabCount; nTab++)
