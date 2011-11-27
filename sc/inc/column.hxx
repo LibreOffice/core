@@ -115,6 +115,7 @@ private:
 friend class ScDocument;                                       // for FillInfo
 friend class ScDocumentIterator;
 friend class ScValueIterator;
+friend class ScHorizontalValueIterator;
 friend class ScDBQueryDataIterator;
 friend class ScColumnIterator;
 friend class ScQueryCellIterator;
