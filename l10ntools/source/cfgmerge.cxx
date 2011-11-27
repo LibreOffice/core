@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_l10ntools.hxx"
 #include <stdio.h>
 #include <tools/string.hxx>
 #include <tools/fsys.hxx>

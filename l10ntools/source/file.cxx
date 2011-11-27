@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_l10ntools.hxx"
 #include <l10ntools/file.hxx>
 
 namespace transex
