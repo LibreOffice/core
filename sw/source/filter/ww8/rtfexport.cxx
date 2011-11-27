@@ -27,61 +27,39 @@
  *
  ************************************************************************/
 
-#include "rtfexport.hxx"
 #include "rtfexportfilter.hxx"
 #include "rtfsdrexport.hxx"
 #include "rtfattributeoutput.hxx"
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/i18n/ScriptType.hdl>
-#include <com/sun/star/frame/XModel.hpp>
 
-#include <map>
-#include <algorithm>
-#include <iostream>
-#include <iomanip>
-#include <string>
-#include <sstream>
-
-#include <IMark.hxx>
 #include <docsh.hxx>
 #include <ndtxt.hxx>
-#include <wrtww8.hxx>
-#include <fltini.hxx>
-#include <fmtline.hxx>
 #include <fmtpdsc.hxx>
-#include <frmfmt.hxx>
 #include <section.hxx>
 #include <pagedesc.hxx>
 #include <swtable.hxx>
-#include <fmtfsize.hxx>
 #include <frmatr.hxx>
 #include <ftninfo.hxx>
 #include <fmthdft.hxx>
-#include <editeng/fontitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/shaditem.hxx>
-#include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/protitem.hxx>
 
 #include <docary.hxx>
 #include <numrule.hxx>
-#include <charfmt.hxx>
 #include <lineinfo.hxx>
 #include <swmodule.hxx>
 
 #include "ww8par.hxx"
-#include "ww8scan.hxx"
 
 #include <comphelper/string.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <vcl/font.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <unotools/configmgr.hxx>
 

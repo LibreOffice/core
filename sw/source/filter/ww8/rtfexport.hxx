@@ -30,13 +30,7 @@
 #ifndef _RTFEXPORT_HXX_
 #define _RTFEXPORT_HXX_
 
-#include <set>
 #include "wrtww8.hxx"
-
-#include <rtl/ustring.hxx>
-
-#include <cstdio>
-#include <map>
 
 class RtfAttributeOutput;
 class RtfExportFilter;
