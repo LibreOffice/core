@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_hwpfilter.hxx"
 
 #include <assert.h>
 #include <vector>
