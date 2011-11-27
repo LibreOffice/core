@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sal.hxx"
 
 // LLA:
 // this file is converted to use with testshl2

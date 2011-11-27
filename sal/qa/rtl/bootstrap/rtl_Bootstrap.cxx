@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sal.hxx"
 
 // Documentation about bootstraping can be found at:
 // http://udk.openoffice.org/common/man/concept/micro_deployment.html

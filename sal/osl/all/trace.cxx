@@ -27,7 +27,6 @@
  * instead of those above.
  */
 
-#include "precompiled_sal.hxx"
 #include "sal/config.h"
 
 #include <cstdarg>

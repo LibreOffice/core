@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sal.hxx"
 #include "sal/config.h"
 
 #include "osl/process.h"

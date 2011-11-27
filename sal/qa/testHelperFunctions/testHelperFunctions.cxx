@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sal.hxx"
 // This is a test of helperfunctions
 
 #include <osl/time.h>

@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sal.hxx"
 
 #include<osl/module.hxx>
 #include <osl/time.h>
