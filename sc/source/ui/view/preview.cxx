@@ -112,6 +112,7 @@ ScPreview::ScPreview( Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pView
     pDrawView( NULL ),
     nCurTab ( ScDocShell::GetCurTab() ),
     bInPaint( false ),
+    bInSetZoom( false ),
     bInGetState( false ),
     pDocShell( pDocSh ),
     pViewShell( pViewSh ),
@@ -490,6 +491,9 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 //Issue51656 Add resizeable margin on page preview from maoyg
 void ScPreview::Paint( const Rectangle& /* rRect */ )
 {
+    bool bWasInPaint = bInPaint;        // nested calls shouldn't be necessary, but allow for now
+    bInPaint = true;
+
     if (!bValid)
     {
         CalcPages(0);
@@ -673,6 +677,8 @@ void ScPreview::Paint( const Rectangle& /* rRect */ )
         }
     }
     pViewShell->UpdateScrollBars();
+
+    bInPaint = bWasInPaint;
 }
 //Issue51656 Add resizeable margin on page preview from maoyg
 
@@ -791,9 +797,9 @@ void ScPreview::SetZoom(sal_uInt16 nNewZoom)
         MapMode aMMMode( MAP_100TH_MM, Point(), aHorPrevZoom, aPreviewZoom );
         SetMapMode( aMMMode );
 
-        bInPaint = sal_True;                // don't scroll during SetYOffset in UpdateScrollBars
+        bInSetZoom = true;              // don't scroll during SetYOffset in UpdateScrollBars
         pViewShell->UpdateScrollBars();
-        bInPaint = false;
+        bInSetZoom = false;
 
         bStateValid = false;
         InvalidateLocationData( SC_HINT_ACC_VISAREACHANGED );
@@ -902,7 +908,7 @@ void ScPreview::SetXOffset( long nX )
     {
         long nDif = LogicToPixel(aOffset).X() - LogicToPixel(Point(nX,0)).X();
         aOffset.X() = nX;
-        if (nDif && !bInPaint)
+        if (nDif && !bInSetZoom)
         {
             MapMode aOldMode = GetMapMode(); SetMapMode(MAP_PIXEL);
             Scroll( nDif, 0 );
@@ -912,7 +918,7 @@ void ScPreview::SetXOffset( long nX )
     else
     {
         aOffset.X() = nX;
-        if (!bInPaint)
+        if (!bInSetZoom)
             Invalidate();
     }
     InvalidateLocationData( SC_HINT_ACC_VISAREACHANGED );
@@ -929,7 +935,7 @@ void ScPreview::SetYOffset( long nY )
     {
         long nDif = LogicToPixel(aOffset).Y() - LogicToPixel(Point(0,nY)).Y();
         aOffset.Y() = nY;
-        if (nDif && !bInPaint)
+        if (nDif && !bInSetZoom)
         {
             MapMode aOldMode = GetMapMode(); SetMapMode(MAP_PIXEL);
             Scroll( 0, nDif );
@@ -939,7 +945,7 @@ void ScPreview::SetYOffset( long nY )
     else
     {
         aOffset.Y() = nY;
-        if (!bInPaint)
+        if (!bInSetZoom)
             Invalidate();
     }
     InvalidateLocationData( SC_HINT_ACC_VISAREACHANGED );
@@ -1003,15 +1009,19 @@ void ScPreview::DataChanged( const DataChangedEvent& rDCEvt )
         if ( rDCEvt.GetType() == DATACHANGED_FONTS )
             pDocShell->UpdateFontList();
 
-        if ( rDCEvt.GetType() == DATACHANGED_SETTINGS &&
-              (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+        // #i114518# Paint of form controls may modify the window's settings.
+        // Ignore the event if it is called from within Paint.
+        if ( !bInPaint )
         {
-            //  scroll bar size may have changed
-            pViewShell->InvalidateBorder();     // calls OuterResizePixel
+            if ( rDCEvt.GetType() == DATACHANGED_SETTINGS &&
+                  (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+            {
+                //  scroll bar size may have changed
+                pViewShell->InvalidateBorder();     // calls OuterResizePixel
+            }
+            Invalidate();
+            InvalidateLocationData( SC_HINT_DATACHANGED );
         }
-
-        Invalidate();
-        InvalidateLocationData( SC_HINT_DATACHANGED );
     }
 }
 

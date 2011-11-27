@@ -69,7 +69,8 @@ private:
     SCTAB           nCurTab;
 
                                         // intern:
-    sal_Bool            bInPaint;
+    bool            bInPaint;
+    bool            bInSetZoom;
     sal_Bool            bInGetState;
     ScDocShell*     pDocShell;
     ScPreviewShell* pViewShell;
