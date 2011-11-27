@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_desktop.hxx"
 #include "wordbookmigration.hxx"
 #include <tools/urlobj.hxx>
 #include <unotools/bootstrap.hxx>

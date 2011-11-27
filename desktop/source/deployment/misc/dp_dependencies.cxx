@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_desktop.hxx"
 #include "sal/config.h"
 
 #include "com/sun/star/uno/Reference.hxx"

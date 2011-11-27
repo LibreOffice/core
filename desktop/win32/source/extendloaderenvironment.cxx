@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_desktop.hxx"
 #include "sal/config.h"
 
 #include <cstddef>

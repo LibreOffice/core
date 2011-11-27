@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_desktop.hxx"
 
 #include <vcl/scrbar.hxx>
 #include <svtools/txtattr.hxx>

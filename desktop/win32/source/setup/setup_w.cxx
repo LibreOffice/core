@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_desktop.hxx"
 
 #define  UNICODE    1
 #define _UNICODE    1

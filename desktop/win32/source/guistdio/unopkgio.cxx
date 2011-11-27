@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_desktop.hxx"
 
 #define UNOPKG
 #include "guistdio.inc"

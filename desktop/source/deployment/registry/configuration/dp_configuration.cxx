@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_desktop.hxx"
 
 //TODO: Large parts of this file were copied from dp_component.cxx; those parts
 // should be consolidated.

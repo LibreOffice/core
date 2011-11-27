@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_desktop.hxx"
 
 #include "dp_interact.h"
 #include "cppuhelper/exc_hlp.hxx"
