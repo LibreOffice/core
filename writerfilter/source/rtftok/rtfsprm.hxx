@@ -28,8 +28,6 @@
 #ifndef _RTFSPRM_HXX_
 #define _RTFSPRM_HXX_
 
-#include <string>
-#include <resourcemodel/WW8ResourceModel.hxx>
 #include <rtfcontrolwords.hxx>
 #include <rtfvalue.hxx>
 
