@@ -9,7 +9,6 @@
 #include "svl/lngmisc.hxx"
 
 #include <rtl/ustrbuf.hxx>
-#include <tools/string.hxx>
 
 namespace
 {
@@ -128,17 +127,17 @@ namespace
 
   void LngMiscTest::testGetThesaurusReplaceText()
   {
-    const static String str1(RTL_CONSTASCII_USTRINGPARAM(""));
-    const static String str2(RTL_CONSTASCII_USTRINGPARAM("asdf"));
-    const static String str3(RTL_CONSTASCII_USTRINGPARAM("asdf (abc)"));
-    const static String str4(RTL_CONSTASCII_USTRINGPARAM("asdf*"));
-    const static String str5(RTL_CONSTASCII_USTRINGPARAM("asdf * "));
-    const static String str6(RTL_CONSTASCII_USTRINGPARAM("asdf (abc) *"));
-    const static String str7(RTL_CONSTASCII_USTRINGPARAM("asdf asdf * (abc)"));
-    const static String str8(RTL_CONSTASCII_USTRINGPARAM(" * (abc) asdf *"));
+    const static ::rtl::OUString str1(RTL_CONSTASCII_USTRINGPARAM(""));
+    const static ::rtl::OUString str2(RTL_CONSTASCII_USTRINGPARAM("asdf"));
+    const static ::rtl::OUString str3(RTL_CONSTASCII_USTRINGPARAM("asdf (abc)"));
+    const static ::rtl::OUString str4(RTL_CONSTASCII_USTRINGPARAM("asdf*"));
+    const static ::rtl::OUString str5(RTL_CONSTASCII_USTRINGPARAM("asdf * "));
+    const static ::rtl::OUString str6(RTL_CONSTASCII_USTRINGPARAM("asdf (abc) *"));
+    const static ::rtl::OUString str7(RTL_CONSTASCII_USTRINGPARAM("asdf asdf * (abc)"));
+    const static ::rtl::OUString str8(RTL_CONSTASCII_USTRINGPARAM(" * (abc) asdf *"));
 
-    String r = linguistic::GetThesaurusReplaceText(str1);
-    CPPUNIT_ASSERT(!r.Len());
+    ::rtl::OUString r = linguistic::GetThesaurusReplaceText(str1);
+    CPPUNIT_ASSERT(r.isEmpty());
 
     r = linguistic::GetThesaurusReplaceText(str2);
     CPPUNIT_ASSERT(r == str2);
@@ -156,10 +155,10 @@ namespace
     CPPUNIT_ASSERT(r == str2);
 
     r = linguistic::GetThesaurusReplaceText(str7);
-    CPPUNIT_ASSERT(r == String::CreateFromAscii("asdf asdf"));
+    CPPUNIT_ASSERT(r == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("asdf asdf")));
 
     r = linguistic::GetThesaurusReplaceText(str8);
-    CPPUNIT_ASSERT(!r.Len());
+    CPPUNIT_ASSERT(r.isEmpty());
   }
 
   CPPUNIT_TEST_SUITE_REGISTRATION(LngMiscTest);
