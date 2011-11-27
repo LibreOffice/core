@@ -29,14 +29,10 @@
 
 #include <rtfexportfilter.hxx>
 #include <rtfexport.hxx>
-#include <rtfimportfilter.hxx>
 
 #include <docsh.hxx>
-#include <doc.hxx>
-#include <pam.hxx>
 #include <unotxdoc.hxx>
 
-#include <cppuhelper/factory.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 

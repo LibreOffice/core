@@ -34,7 +34,6 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase2.hxx>
-#include <tools/stream.hxx>
 #include <shellio.hxx>
 
 /// Dummy Writer implementation to be able to use the string format methods of the base class
