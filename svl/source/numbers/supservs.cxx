@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svl.hxx"
 #include "supservs.hxx"
 #include <com/sun/star/lang/Locale.hpp>
 #include <comphelper/sharedmutex.hxx>

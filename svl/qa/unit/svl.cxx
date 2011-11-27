@@ -26,7 +26,6 @@
  * instead of those above.
  */
 
-#include "precompiled_svl.hxx"
 #include "sal/config.h"
 #include "sal/precppunit.hxx"
 

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svl.hxx"
 
 // ACHTUNG: es wird angenommen, dass StarView-Clipboard-Foamatnummern
 // und Windows-Formatnummern identisch sind! Ist dies einmal nicht der

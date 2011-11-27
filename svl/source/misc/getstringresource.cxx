@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_svl.hxx"
 #include "sal/config.h"
 
 #include <map>

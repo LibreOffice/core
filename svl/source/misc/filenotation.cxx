@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svl.hxx"
 #include <svl/filenotation.hxx>
 #include <osl/file.h>
 #include <osl/diagnose.h>

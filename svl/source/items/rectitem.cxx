@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svl.hxx"
 
 #include <svl/rectitem.hxx>
 #include <com/sun/star/uno/Any.hxx>

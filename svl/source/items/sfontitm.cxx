@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svl.hxx"
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <svl/sfontitm.hxx>
