@@ -272,16 +272,20 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
                 }
                 else
                 {
-                    ByteString aStr = "cannot open file: ";
-                    aStr += ByteString( aFullName.GetFull(), RTL_TEXTENCODING_UTF8 );
-                    rBase.SetError( aStr, pTok );
+                    rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                        "cannot open file: "));
+                    aStr.append(rtl::OUStringToOString(aFullName.GetFull(),
+                        RTL_TEXTENCODING_UTF8));
+                    rBase.SetError(aStr.makeStringAndClear(), pTok);
                 }
             }
             else
             {
-                ByteString aStr = "cannot find file: ";
-                aStr += ByteString( aFullName.GetFull(), RTL_TEXTENCODING_UTF8 );
-                rBase.SetError( aStr, pTok );
+                rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                    "cannot find file:"));
+                aStr.append(rtl::OUStringToOString(aFullName.GetFull(),
+                    RTL_TEXTENCODING_UTF8));
+                rBase.SetError(aStr.makeStringAndClear(), pTok);
             }
         }
         if( !bOk )

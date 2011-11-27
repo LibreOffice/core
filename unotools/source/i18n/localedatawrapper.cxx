@@ -145,12 +145,12 @@ void LocaleDataWrapper::invalidateData()
         if ( xLD.is() )
             return xLD->getLanguageCountryInfo( getLocale() );
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getLanguageCountryInfo: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg( "getLanguageCountryInfo: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -166,12 +166,12 @@ void LocaleDataWrapper::invalidateData()
         if ( xLD.is() )
             return xLD->getLocaleItem( getLocale() );
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getLocaleItem: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("getLocaleItem: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -187,12 +187,12 @@ void LocaleDataWrapper::invalidateData()
         if ( xLD.is() )
             return xLD->getAllCurrencies2( getLocale() );
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getAllCurrencies: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("getAllCurrencies: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -208,12 +208,12 @@ void LocaleDataWrapper::invalidateData()
         if ( xLD.is() )
             return xLD->getAllFormats( getLocale() );
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getAllFormats: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("getAllFormats: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -229,12 +229,12 @@ void LocaleDataWrapper::invalidateData()
         if ( xLD.is() )
             return xLD->getCollatorImplementations( getLocale() );
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getCollatorImplementations: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("getCollatorImplementations: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -250,12 +250,12 @@ void LocaleDataWrapper::invalidateData()
         if ( xLD.is() )
             return xLD->getTransliterations( getLocale() );
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getTransliterations: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("getTransliterations: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -271,12 +271,12 @@ void LocaleDataWrapper::invalidateData()
         if ( xLD.is() )
             return xLD->getForbiddenCharacters( getLocale() );
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getForbiddenCharacters: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("getForbiddenCharacters: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -295,9 +295,9 @@ void LocaleDataWrapper::invalidateData()
     catch ( Exception& e )
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getReservedWord: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("getReservedWord: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -321,9 +321,9 @@ void LocaleDataWrapper::invalidateData()
     catch ( Exception& e )
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getAllInstalledLocaleNames: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("getAllInstalledLocaleNames: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -1882,7 +1882,7 @@ rtl::OUString LocaleDataWrapper::appendLocaleInfo(const rtl::OUString& rDebugMsg
 // static
 void LocaleDataWrapper::outputCheckMessage( const String& rMsg )
 {
-    outputCheckMessage( ByteString( rMsg, RTL_TEXTENCODING_UTF8).GetBuffer());
+    outputCheckMessage(rtl::OUStringToOString(rMsg, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 
@@ -1937,12 +1937,12 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
         if ( xLD.is() )
             return xLD->getAllCalendars2( getLocale() );
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getAllCalendars: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("getAllCalendars: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif

@@ -39,50 +39,31 @@
 
 CppDep::CppDep()
 {
-    pSources = new ByteStringList;
-    pSearchPath = new ByteStringList;
-    pFileList = new ByteStringList;
 }
 
 CppDep::~CppDep()
 {
-    for ( size_t i = 0, n = pSources->size(); i < n; ++i ) {
-        delete (*pSources)[ i ];
-    }
-    delete pSources;
-
-    for ( size_t i = 0, n = pSearchPath->size(); i < n; ++i ) {
-        delete (*pSearchPath)[ i ];
-    }
-    delete pSearchPath;
-
-    for ( size_t i = 0, n = pFileList->size(); i < n; ++i ) {
-        delete (*pFileList)[ i ];
-    }
-    delete pFileList;
 }
 
 void CppDep::Execute()
 {
-    size_t nCount = pSources->size();
-    for ( size_t n = 0; n < nCount; n++ )
+    size_t nCount = m_aSources.size();
+    for ( size_t n = 0; n < nCount; ++n )
     {
-        ByteString *pStr = (*pSources)[ n ];
-        Search( *pStr );
+        const rtl::OString &rStr = m_aSources[n];
+        Search(rStr);
     }
 }
 
-sal_Bool CppDep::AddSearchPath( const char* aPath )
+sal_Bool CppDep::AddSearchPath( const char* pPath )
 {
-    ByteString *pStr = new ByteString( aPath );
-    pSearchPath->push_back( pStr );
+    m_aSearchPath.push_back( rtl::OString(pPath) );
     return sal_False;
 }
 
-sal_Bool CppDep::AddSource( const char* aSource )
+sal_Bool CppDep::AddSource( const char* pSource )
 {
-    ByteString *pStr = new ByteString( aSource );
-    pSources->push_back( pStr );
+    m_aSources.push_back( rtl::OString(pSource) );
     return sal_False;
 }
 
@@ -114,16 +95,16 @@ sal_Bool CppDep::Search( ByteString aFileName )
             fprintf( stderr, "Result : %s\n", aResult.GetBuffer() );
 #endif
 
-            ByteString aNewFile;
+            rtl::OString aNewFile;
             if ( aResult !="")
-            if ( (aNewFile = Exists( aResult )) != "" )
+            if ( (aNewFile = Exists( aResult )).getLength() )
             {
                 sal_Bool bFound = sal_False;
-                size_t nCount = pFileList->size();
-                for ( size_t i = 0; i < nCount; i++ )
+                size_t nCount = m_aFileList.size();
+                for ( size_t i = 0; i < nCount; ++i )
                 {
-                    ByteString *pStr = (*pFileList)[ i ];
-                    if ( *pStr == aNewFile )
+                    const rtl::OString &rStr = m_aFileList[i];
+                    if ( rStr == aNewFile )
                         bFound = sal_True;
                 }
 #ifdef DEBUG_VERBOSE
@@ -131,9 +112,9 @@ sal_Bool CppDep::Search( ByteString aFileName )
 #endif
                 if ( !bFound )
                 {
-                    pFileList->push_back( new ByteString( aNewFile ) );
+                    m_aFileList.push_back(aNewFile);
 #ifdef DEBUG_VERBOSE
-                    fprintf( stderr, " CppDep %s\\\n", aNewFile.GetBuffer() );
+                    fprintf( stderr, " CppDep %s\\\n", aNewFile.getStr() );
 #endif
                     Search(aNewFile);
                 }
@@ -145,24 +126,23 @@ sal_Bool CppDep::Search( ByteString aFileName )
     return bRet;
 }
 
-ByteString CppDep::Exists( ByteString aFileName )
+rtl::OString CppDep::Exists( rtl::OString aFileName )
 {
     char pFullName[1023];
-    ByteString aString;
 
 #ifdef DEBUG_VERBOSE
-    fprintf( stderr, "Searching %s \n", aFileName.GetBuffer() );
+    fprintf( stderr, "Searching %s \n", aFileName.getStr() );
 #endif
 
-    size_t nCount = pSearchPath->size();
-    for ( size_t n = 0; n < nCount; n++ )
+    size_t nCount = m_aSearchPath.size();
+    for ( size_t n = 0; n < nCount; ++n )
     {
         struct stat aBuf;
-        ByteString *pPathName = (*pSearchPath)[ n ];
+        const rtl::OString &rPathName = m_aSearchPath[n];
 
-        strcpy( pFullName, pPathName->GetBuffer());
+        strcpy( pFullName, rPathName.getStr());
         strcat( pFullName, DIR_SEP );
-        strcat( pFullName, aFileName.GetBuffer());
+        strcat( pFullName, aFileName.getStr());
 
 #ifdef DEBUG_VERBOSE
         fprintf( stderr, "looking for %s\t ", pFullName );
@@ -176,10 +156,10 @@ ByteString CppDep::Exists( ByteString aFileName )
             fprintf( stderr, "%s \\\n", pFullName );
 #endif
 
-            return ByteString(pFullName);
+            return rtl::OString(pFullName);
         }
     }
-    return aString;
+    return rtl::OString();
 }
 
 rtl::OString CppDep::IsIncludeStatement(rtl::OString aLine)

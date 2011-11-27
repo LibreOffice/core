@@ -47,7 +47,7 @@
 /*************************************************************************
 |*    RscTypCont::InsWinBit()
 *************************************************************************/
-void RscTypCont::InsWinBit( RscTop * pClass, const ByteString & rName,
+void RscTypCont::InsWinBit( RscTop * pClass, const rtl::OString& rName,
                             Atom nVal )
 {
     RscClient * pClient;
@@ -56,7 +56,7 @@ void RscTypCont::InsWinBit( RscTop * pClass, const ByteString & rName,
     aBaseLst.push_back(
         pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, &aWinBits, nVal )
     );
-    Atom nId = aNmTb.Put( rName.GetBuffer(), VARNAME );
+    Atom nId = aNmTb.Put( rName.getStr(), VARNAME );
     pClass->SetVariable( nId, pClient, NULL,
                          VAR_NODATAINST, 0, nWinBitVarId );
 }

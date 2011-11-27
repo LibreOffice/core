@@ -1444,7 +1444,7 @@ int INetMIMEMessageStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
                             rtl::OStringBuffer aDelim(
                                 RTL_CONSTASCII_STRINGPARAM("--"));
                             aDelim.append(pMsg->GetMultipartBoundary());
-                            aDelim.append("\r\n");
+                            aDelim.append(RTL_CONSTASCII_STRINGPARAM("\r\n"));
 
                             rtl_copyMemory(pData, aDelim.getStr(),
                                 aDelim.getLength());
@@ -1460,13 +1460,14 @@ int INetMIMEMessageStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
                         if (pMsg->IsMultipart())
                         {
                             // Insert close delimiter.
-                            ByteString aDelim ("--");
-                            aDelim += pMsg->GetMultipartBoundary();
-                            aDelim += "--\r\n";
+                            rtl::OStringBuffer aDelim(
+                                RTL_CONSTASCII_STRINGPARAM("--"));
+                            aDelim.append(pMsg->GetMultipartBoundary());
+                            aDelim.append(RTL_CONSTASCII_STRINGPARAM("--\r\n"));
 
-                            rtl_copyMemory (
-                                pData, aDelim.GetBuffer(), aDelim.Len());
-                            return aDelim.Len();
+                            rtl_copyMemory (pData, aDelim.getStr(),
+                                aDelim.getLength());
+                            return aDelim.getLength();
                         }
                     }
                 }
@@ -1626,14 +1627,18 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
                 }
 
                 ByteString aPlainDelim (pMsg->GetMultipartBoundary());
-                ByteString aDelim ("--");
-                aDelim += aPlainDelim;
-
-                ByteString aPlainClose (aPlainDelim);
-                aPlainClose += "--";
-
-                ByteString aClose (aDelim);
-                aClose += "--";
+                ByteString aDelim = rtl::OStringBuffer(
+                    RTL_CONSTASCII_STRINGPARAM("--")).
+                    append(aPlainDelim).
+                    makeStringAndClear();
+                ByteString aPlainClose = rtl::OStringBuffer(
+                    aPlainDelim).
+                    append(RTL_CONSTASCII_STRINGPARAM("--")).
+                    makeStringAndClear();
+                ByteString aClose = rtl::OStringBuffer(
+                    aDelim).
+                    append(RTL_CONSTASCII_STRINGPARAM("--")).
+                    makeStringAndClear();
 
                 if (pMsgBuffer == NULL) pMsgBuffer = new SvMemoryStream;
                 pMsgBuffer->Write (pData, nSize);

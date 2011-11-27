@@ -583,7 +583,7 @@ void SvMetaExtern::WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm,
     WriteTab( rOutStm, nTab );
     rOutStm << "// class SvMetaExtern" << endl;
     WriteTab( rOutStm, nTab );
-    rOutStm << "uuid(" << ByteString( GetUUId().GetHexName(), RTL_TEXTENCODING_UTF8 ).GetBuffer() << ")," << endl;
+    rOutStm << "uuid(" << rtl::OUStringToOString(GetUUId().GetHexName(), RTL_TEXTENCODING_UTF8).getStr() << ")," << endl;
     WriteTab( rOutStm, nTab );
     rOutStm << "version("
         << rtl::OString::valueOf(static_cast<sal_Int32>(aVersion.GetMajorVersion())).getStr()

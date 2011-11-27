@@ -389,7 +389,7 @@ resource_definition
 
 		if( $4.IsNumber() ){
 			if( !pTC->aFileTab.NewDef( pFI->GetFileIndex(),
-									   ByteString( $3 ),
+									   rtl::OString( $3 ),
 									   $4.GetLong(), ULONG_MAX ) )
 				bError = sal_True;
 		}
@@ -403,12 +403,12 @@ resource_definition
 			pExpr = new RscExpression( aExpType, '+', $4 );
 
 			if( !pTC->aFileTab.NewDef( pFI->GetFileIndex(),
-									   ByteString( $3 ), pExpr, ULONG_MAX ) )
+									   rtl::OString( $3 ), pExpr, ULONG_MAX ) )
 				bError = sal_True;
 		}
 		else if( $4.IsExpression() ){
 			if( !pTC->aFileTab.NewDef( pFI->GetFileIndex(),
-									   ByteString( $3 ), $4.aExp.pExp,
+									   rtl::OString( $3 ), $4.aExp.pExp,
 									   ULONG_MAX ) )
 				bError = sal_True;
 		}
@@ -1334,7 +1334,7 @@ line_number
 		RscFile * pFName;
 
 		pFI->SetLineNo( $3 );
-		pFI->SetFileIndex( pTC->aFileTab.NewCodeFile( ByteString( $4 ) ) );
+		pFI->SetFileIndex( pTC->aFileTab.NewCodeFile( rtl::OString( $4 ) ) );
 		pFName = pTC->aFileTab.Get( pFI->GetFileIndex() );
 		pFName->bLoaded = sal_True;
 		pFName->bScanned = sal_True;
@@ -1344,7 +1344,7 @@ line_number
 		RscFile * pFName;
 
 		pFI->SetLineNo( $2 );
-		pFI->SetFileIndex( pTC->aFileTab.NewCodeFile( ByteString( $3 ) ) );
+		pFI->SetFileIndex( pTC->aFileTab.NewCodeFile( rtl::OString( $3 ) ) );
 		pFName = pTC->aFileTab.Get( pFI->GetFileIndex() );
 		pFName->bLoaded = sal_True;
 		pFName->bScanned = sal_True;

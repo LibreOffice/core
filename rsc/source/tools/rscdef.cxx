@@ -854,7 +854,7 @@ void RscFileTab :: DeleteFileContext( sal_uLong lFileKey ){
 |*    RscFileTab::NewCodeFile()
 |*
 *************************************************************************/
-sal_uLong  RscFileTab :: NewCodeFile( const ByteString & rName )
+sal_uLong  RscFileTab :: NewCodeFile( const rtl::OString& rName )
 {
     sal_uLong       lKey;
     RscFile *   pFName;

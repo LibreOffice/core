@@ -36,6 +36,7 @@
 
 #include "bootstrp/prj.hxx"
 
+#include <rtl/strbuf.hxx>
 #include <tools/string.hxx>
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
@@ -215,22 +216,21 @@ int main( int argc, char** argv )
     aFileName += String(".dprr", osl_getThreadTextEncoding());
     aOutStream.Open( aFileName, STREAM_WRITE );
 
-    ByteString aString;
+    rtl::OStringBuffer aString;
     if ( optind < argc )
     {
 #ifdef DEBUG_VERBOSE
         printf("further arguments : ");
 #endif
-        aString = ByteString( pSrsFileName );
-        aString.SearchAndReplaceAll('\\', cDelim);
-        aString += ByteString(" : " );
+        aString.append(rtl::OString(pSrsFileName).replace('\\', cDelim));
+        aString.append(RTL_CONSTASCII_STRINGPARAM(" : " ));
 
         while ( optind < argc )
         {
             if (!bSource )
             {
-                aString += ByteString(" " );
-                aString += ByteString( argv[optind]);
+                aString.append(' ');
+                aString.append(argv[optind]);
                 pDep->AddSource( argv[optind++]);
             }
             else
@@ -239,27 +239,20 @@ int main( int argc, char** argv )
             }
         }
     }
-    aString += aRespArg;
+    aString.append(aRespArg);
     pDep->Execute();
-    ByteStringList *pLst = pDep->GetDepList();
-    size_t nCount = pLst->size();
-    if ( nCount == 0 )
-    {
-        aOutStream.WriteLine( aString );
-    }
-    else
-    {
-        aString += ByteString( "\\" );
-        aOutStream.WriteLine( aString );
-    }
+    std::vector<rtl::OString>& rLst = pDep->GetDepList();
+    size_t nCount = rLst.size();
+    if ( nCount != 0 )
+        aString.append('\\');
+    aOutStream.WriteLine( aString.makeStringAndClear() );
 
-    for ( size_t j = 0; j < nCount; j++ )
+    for ( size_t j = 0; j < nCount; ++j )
     {
-        ByteString *pStr = (*pLst)[ j ];
-        pStr->SearchAndReplaceAll('\\', cDelim);
+        rtl::OStringBuffer aStr(rLst[j].replace('\\', cDelim));
         if ( j != (nCount-1) )
-            *pStr += ByteString( "\\" );
-        aOutStream.WriteLine( *pStr );
+            aStr.append('\\');
+        aOutStream.WriteLine(aStr.makeStringAndClear());
     }
     delete pDep;
     aOutStream.Close();

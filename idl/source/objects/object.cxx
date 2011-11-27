@@ -695,7 +695,7 @@ void SvMetaClass::WriteHxx( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16 )
     << "\tvirtual void          Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) = 0;" << endl
     << "public:" << endl
     << "\t static SvGlobalName  ClassName()" << endl
-    << "\t                      { return SvGlobalName( " << ByteString( GetUUId().GetctorName(), RTL_TEXTENCODING_UTF8 ).GetBuffer() << " ); }" << endl
+    << "\t                      { return SvGlobalName( " << rtl::OUStringToOString(GetUUId().GetctorName(), RTL_TEXTENCODING_UTF8).getStr() << " ); }" << endl
     << "};" << endl;
 }
 
@@ -719,7 +719,7 @@ void SvMetaClass::WriteCxx( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16 )
     << "\t                               sal_uInt16 * pMajor," << endl
     << "\t                               sal_uInt16 * pMinor ) const" << endl
     << '{' << endl
-    << "\tSvGlobalName aN( " << ByteString( pMod->GetUUId().GetctorName(), RTL_TEXTENCODING_UTF8 ).GetBuffer() << " );" << endl;
+    << "\tSvGlobalName aN( " << rtl::OUStringToOString(pMod->GetUUId().GetctorName(), RTL_TEXTENCODING_UTF8).getStr() << " );" << endl;
     rOutStm << "\t*pGN = aN;" << endl
     << "\t*pMajor = "
     << rtl::OString::valueOf(static_cast<sal_Int32>(pMod->GetVersion().GetMajorVersion())).getStr()

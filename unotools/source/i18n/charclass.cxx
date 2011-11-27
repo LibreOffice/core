@@ -448,9 +448,9 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
     catch ( const Exception& e )
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "parseAnyToken: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("parseAnyToken: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -480,9 +480,9 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
     catch ( const Exception& e )
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "parsePredefinedToken: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("parsePredefinedToken: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif

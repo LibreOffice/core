@@ -104,7 +104,7 @@ MkLine::MkLine()
 
 class MkFilter : public TextFilter
 {
-    static ByteString   aTnr;
+    static rtl::OString aTnr;
     ByteStringList      *pLst;
     ByteStringList      *pTnrLst;
 protected:
@@ -133,7 +133,7 @@ MkFilter::~MkFilter()
     delete pLst;
 }
 
-ByteString MkFilter::aTnr="$(TNR)";
+rtl::OString MkFilter::aTnr(RTL_CONSTASCII_STRINGPARAM("$(TNR)"));
 
 void MkFilter::Filter()
 {
@@ -142,14 +142,14 @@ void MkFilter::Filter()
 
     while(( fgets(aLineBuf, LINE_LEN, pIn)) != NULL )
     {
-        ByteString aLine( aLineBuf );
-        if ( aLine.Search("mkfilter1" ) != STRING_NOTFOUND )
+        rtl::OString aLine(aLineBuf);
+        if (aLine.indexOf(rtl::OString(RTL_CONSTASCII_STRINGPARAM("mkfilter1"))) != -1)
         {
             // Zeilen unterdruecken
             fprintf( stderr, "mkfilter1\n" );
             nState = 0;
         }
-        else if ( aLine.Search("unroll begin" ) != STRING_NOTFOUND )
+        else if (aLine.indexOf(rtl::OString(RTL_CONSTASCII_STRINGPARAM("unroll begin"))) != -1)
         {
             // Zeilen raus schreiben mit ersetzen von $(TNR) nach int n
             fprintf( stderr, "\nunroll begin\n" );
@@ -170,7 +170,7 @@ void MkFilter::Filter()
             sal_Bool bInTnrList = sal_True;
             fprintf( stderr, ":" );
             MkLine *pMkLine = new MkLine();
-            if ( aLine.Search("unroll end") != STRING_NOTFOUND )
+            if (aLine.indexOf(rtl::OString(RTL_CONSTASCII_STRINGPARAM("unroll end"))) != -1)
             {
                 fprintf( stderr, ";\nunroll end\n" );
                 MkLine *p_MkLine = new MkLine();

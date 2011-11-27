@@ -265,7 +265,7 @@ class RscTypCont
                                              RscTop * pStyleFamily );
     RscTop *    InitClassSfxSlotInfo( RscTop * pSuper );
 
-    void        InsWinBit( RscTop * pClass, const ByteString & rName,
+    void        InsWinBit( RscTop * pClass, const rtl::OString& rName,
                            Atom nVal );
     void        WriteInc( FILE * fOutput, sal_uLong lKey );
 

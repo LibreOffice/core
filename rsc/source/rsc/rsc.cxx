@@ -101,7 +101,7 @@ void RscCmdLine::Init()
     nByteOrder      = RSC_BIGENDIAN;
 
     DirEntry aEntry;
-    aPath = ByteString( aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US ); //Immer im Aktuellen Pfad suchen
+    aPath = rtl::OUStringToOString(aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US); //Immer im Aktuellen Pfad suchen
     m_aOutputFiles.clear();
     m_aOutputFiles.push_back( OutputFile() );
 }
@@ -181,7 +181,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                     DirEntry            aSDir( String( aSPath, RTL_TEXTENCODING_ASCII_US ) );
 
                     m_aReplacements.push_back( std::pair< OString, OString >( OString( (*ppStr)+4, pEqual - *ppStr - 4 ),
-                                                                              ByteString( aSDir.GetFull(), RTL_TEXTENCODING_ASCII_US ) ) );
+                        rtl::OUStringToOString(aSDir.GetFull(), RTL_TEXTENCODING_ASCII_US) ) );
                 }
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "PreLoad" ) )
@@ -207,9 +207,11 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
             else if( !rsc_strnicmp( (*ppStr) + 1, "i", 1 ) )
             { // Include-Pfade definieren
                 nCommands |= INCLUDE_FLAG;
-                if( aPath.Len() )
-                    aPath += ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
-                aPath += (*ppStr) + 2;
+                rtl::OStringBuffer aBuffer(aPath);
+                if (aBuffer.getLength())
+                    aBuffer.append(rtl::OUStringToOString(DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US));
+                aBuffer.append((*ppStr) + 2);
+                aPath = aBuffer.makeStringAndClear();
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fs=", 3 ) )
             { // anderer Name fuer .rc-file
@@ -226,10 +228,12 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                 {
                     DirEntry aSysDir( String( aSysSearchDir, RTL_TEXTENCODING_ASCII_US ) );
                     m_aOutputFiles.back().aSysSearchDirs.push_back(
-                        ByteString( aSysDir.GetFull(), RTL_TEXTENCODING_ASCII_US ) );
+                        rtl::OUStringToOString(aSysDir.GetFull(), RTL_TEXTENCODING_ASCII_US) );
                     if( m_aOutputFiles.back().aLangSearchPath.Len() )
+                    {
                         m_aOutputFiles.back().aLangSearchPath.Append(
-                        ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US ) );
+                        rtl::OUStringToOString(DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US) );
+                    }
                     m_aOutputFiles.back().aLangSearchPath.Append( aSysSearchDir );
                 }
             }
@@ -286,7 +290,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
             {
                 if( m_aOutputFiles.back().aLangName.Len() )
                     m_aOutputFiles.push_back( OutputFile() );
-                m_aOutputFiles.back().aLangName = ByteString( (*ppStr)+3 );
+                m_aOutputFiles.back().aLangName = rtl::OString((*ppStr)+3);
             }
             else
                 pEH->FatalError( ERR_UNKNOWNSW, RscId(), *ppStr );
@@ -652,7 +656,10 @@ ERRTYPE RscCompiler :: IncludeParser( sal_uLong lFileKey )
                     UniString aUniFileName( pFNTmp->aFileName, RTL_TEXTENCODING_ASCII_US );
                     DirEntry aFullName( aUniFileName );
                     if ( aFullName.Find( UniString( pCL->aPath, RTL_TEXTENCODING_ASCII_US ) ) )
-                        pFNTmp->aPathName = ByteString( aFullName.GetFull(), RTL_TEXTENCODING_ASCII_US );
+                    {
+                        pFNTmp->aPathName = rtl::OUStringToOString(
+                            aFullName.GetFull(), RTL_TEXTENCODING_ASCII_US);
+                    }
                     else
                         aError = ERR_OPENFILE;
                 }
@@ -707,8 +714,9 @@ ERRTYPE RscCompiler :: ParseOneFile( sal_uLong lFileKey,
             else
                 aSrsPath.CopyTo( aTmpPath, FSYS_ACTION_COPYFILE );
 
-            ByteString aParseFile( aTmpPath.GetFull(), RTL_TEXTENCODING_ASCII_US );
-            finput = fopen( aParseFile.GetBuffer(), "r" );
+            rtl::OString aParseFile(rtl::OUStringToOString(aTmpPath.GetFull(),
+                RTL_TEXTENCODING_ASCII_US));
+            finput = fopen(aParseFile.getStr(), "r");
 
             if( !finput )
             {
@@ -720,7 +728,7 @@ ERRTYPE RscCompiler :: ParseOneFile( sal_uLong lFileKey,
                 RscFileInst aFileInst( pTC, lFileKey, lFileKey, finput );
 
                 pTC->pEH->StdOut( "reading file ", RscVerbosityVerbose );
-                pTC->pEH->StdOut( aParseFile.GetBuffer(), RscVerbosityVerbose );
+                pTC->pEH->StdOut( aParseFile.getStr(), RscVerbosityVerbose );
                 pTC->pEH->StdOut( " ", RscVerbosityVerbose );
 
                 aError = ::parser( &aFileInst );
@@ -844,8 +852,8 @@ ERRTYPE RscCompiler::Link()
                 pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aRcTmp.getStr() );
 
             // Schreibe Datei
-            sal_Char cSearchDelim = ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US ).GetChar( 0 );
-            sal_Char cAccessDelim = ByteString( DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US ).GetChar( 0 );
+            sal_Char cSearchDelim = rtl::OUStringToOString(DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US)[0];
+            sal_Char cAccessDelim = rtl::OUStringToOString(DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US)[0];
             pTC->ChangeLanguage( it->aLangName );
             pTC->SetSourceCharSet( RTL_TEXTENCODING_UTF8 );
             pTC->ClearSysNames();
@@ -973,7 +981,7 @@ ERRTYPE RscCompiler::Link()
         if( !aHxx.Len() )
         {
             UniString aUniOutputCxx( pCL->aOutputCxx, RTL_TEXTENCODING_ASCII_US );
-            aHxx = ByteString( DirEntry( aUniOutputCxx ).GetBase(), RTL_TEXTENCODING_ASCII_US );
+            aHxx = rtl::OUStringToOString(DirEntry( aUniOutputCxx ).GetBase(), RTL_TEXTENCODING_ASCII_US);
             aHxx += ".hxx";
         }
 

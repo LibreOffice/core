@@ -135,9 +135,10 @@ int cdecl main ( int argc, char ** argv)
             if( !pDataBase->WriteDocumentation( aOutStm ) )
             {
                 nExit = -1;
-                ByteString aStr = "cannot write documentation file: ";
-                aStr += ByteString( aCommand.aDocuFile, RTL_TEXTENCODING_UTF8 );
-                fprintf( stderr, "%s\n", aStr.GetBuffer() );
+                rtl::OStringBuffer aStr("cannot write documentation file: ");
+                aStr.append(rtl::OUStringToOString(aCommand.aDocuFile,
+                    RTL_TEXTENCODING_UTF8));
+                fprintf(stderr, "%s\n", aStr.getStr());
             }
         }
         if( nExit == 0 && aCommand.aListFile.Len() )
@@ -149,9 +150,10 @@ int cdecl main ( int argc, char ** argv)
             if( !pDataBase->WriteSvIdl( aOutStm ) )
             {
                 nExit = -1;
-                ByteString aStr = "cannot write list file: ";
-                aStr += ByteString( aCommand.aListFile, RTL_TEXTENCODING_UTF8 );
-                fprintf( stderr, "%s\n", aStr.GetBuffer() );
+                rtl::OStringBuffer aStr("cannot write list file: ");
+                aStr.append(rtl::OUStringToOString(aCommand.aListFile,
+                    RTL_TEXTENCODING_UTF8));
+                fprintf(stderr, "%s\n", aStr.getStr());
             }
         }
         if( nExit == 0 && aCommand.aSlotMapFile.Len() )
@@ -163,9 +165,10 @@ int cdecl main ( int argc, char ** argv)
             if( !pDataBase->WriteSfx( aOutStm ) )
             {
                 nExit = -1;
-                ByteString aStr = "cannot write slotmap file: ";
-                aStr += ByteString( aCommand.aSlotMapFile, RTL_TEXTENCODING_UTF8 );
-                fprintf( stderr, "%s\n", aStr.GetBuffer() );
+                rtl::OStringBuffer aStr("cannot write slotmap file: ");
+                aStr.append(rtl::OUStringToOString(aCommand.aSlotMapFile,
+                    RTL_TEXTENCODING_UTF8));
+                fprintf(stderr, "%s\n", aStr.getStr());
             }
         }
         if( nExit == 0 && aCommand.aHelpIdFile.Len() )
@@ -177,9 +180,10 @@ int cdecl main ( int argc, char ** argv)
             if (!pDataBase->WriteHelpIds( aStm ) )
             {
                 nExit = -1;
-                ByteString aStr = "cannot write help ID file: ";
-                aStr += ByteString( aCommand.aHelpIdFile, RTL_TEXTENCODING_UTF8 );
-                fprintf( stderr, "%s\n", aStr.GetBuffer() );
+                rtl::OStringBuffer aStr("cannot write help ID file: ");
+                aStr.append(rtl::OUStringToOString(aCommand.aHelpIdFile,
+                    RTL_TEXTENCODING_UTF8));
+                fprintf(stderr, "%s\n", aStr.getStr());
             }
         }
         if( nExit == 0 && aCommand.aCSVFile.Len() )
@@ -191,9 +195,10 @@ int cdecl main ( int argc, char ** argv)
             if (!pDataBase->WriteCSV( aStm ) )
             {
                 nExit = -1;
-                ByteString aStr = "cannot write CSV file: ";
-                aStr += ByteString( aCommand.aCSVFile, RTL_TEXTENCODING_UTF8 );
-                fprintf( stderr, "%s\n", aStr.GetBuffer() );
+                rtl::OStringBuffer aStr("cannot write CSV file: ");
+                aStr.append(rtl::OUStringToOString(aCommand.aCSVFile,
+                    RTL_TEXTENCODING_UTF8));
+                fprintf(stderr, "%s\n", aStr.getStr());
             }
         }
         if( nExit == 0 && aCommand.aSfxItemFile.Len() )
@@ -205,9 +210,10 @@ int cdecl main ( int argc, char ** argv)
             if( !pDataBase->WriteSfxItem( aOutStm ) )
             {
                 nExit = -1;
-                ByteString aStr = "cannot write item file: ";
-                aStr += ByteString( aCommand.aSfxItemFile, RTL_TEXTENCODING_UTF8 );
-                fprintf( stderr, "%s\n", aStr.GetBuffer() );
+                rtl::OStringBuffer aStr("cannot write item file: ");
+                aStr.append(rtl::OUStringToOString(aCommand.aSfxItemFile,
+                    RTL_TEXTENCODING_UTF8));
+                fprintf(stderr, "%s\n", aStr.getStr());
             }
         }
         if( nExit == 0 && aCommand.aDataBaseFile.Len() )
@@ -220,9 +226,10 @@ int cdecl main ( int argc, char ** argv)
             if( aOutStm.GetError() != SVSTREAM_OK )
             {
                 nExit = -1;
-                ByteString aStr = "cannot write database file: ";
-                aStr += ByteString( aCommand.aDataBaseFile, RTL_TEXTENCODING_UTF8 );
-                fprintf( stderr, "%s\n", aStr.GetBuffer() );
+                rtl::OStringBuffer aStr("cannot write database file: ");
+                aStr.append(rtl::OUStringToOString(aCommand.aDataBaseFile,
+                    RTL_TEXTENCODING_UTF8));
+                fprintf(stderr, "%s\n", aStr.getStr());
             }
         }
         if (nExit == 0 && aCommand.m_DepFile.getLength())
@@ -341,11 +348,13 @@ int cdecl main ( int argc, char ** argv)
         if( bErr )
         {
             nExit = -1;
-            ByteString aStr = "cannot move file from: ";
-            aStr += ByteString( aErrFile2, RTL_TEXTENCODING_UTF8 );
-            aStr += "\n              to file: ";
-            aStr += ByteString( aErrFile, RTL_TEXTENCODING_UTF8 );
-            fprintf( stderr, "%s\n", aStr.GetBuffer() );
+            rtl::OStringBuffer aStr("cannot move file from: ");
+            aStr.append(rtl::OUStringToOString(aErrFile2,
+                RTL_TEXTENCODING_UTF8));
+            aStr.append("\n              to file: ");
+            aStr.append(rtl::OUStringToOString(aErrFile,
+                RTL_TEXTENCODING_UTF8));
+            fprintf( stderr, "%s\n", aStr.getStr() );
         }
         else
         {

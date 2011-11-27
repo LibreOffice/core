@@ -601,7 +601,8 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
         aError = SvIdlError();
     }
 
-    WriteError( "error", ByteString( aFileName, RTL_TEXTENCODING_UTF8 ), aErrorText.makeStringAndClear(), nRow, nColumn );
+    WriteError("error", rtl::OUStringToOString(aFileName,
+        RTL_TEXTENCODING_UTF8), aErrorText.makeStringAndClear(), nRow, nColumn);
 
     DBG_ASSERT( pTok, "token must be found" );
     if( !pTok )
@@ -650,9 +651,10 @@ sal_Bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, sal_Bool bImported
                     {
                         if( aStm.GetError() == SVSTREAM_WRONGVERSION )
                         {
-                            ByteString aStr( "wrong version, file " );
-                            aStr += ByteString( aFullName.GetFull(), RTL_TEXTENCODING_UTF8 );
-                            SetError( aStr, pTok );
+                            rtl::OStringBuffer aStr("wrong version, file ");
+                            aStr.append(rtl::OUStringToOString(
+                                aFullName.GetFull(), RTL_TEXTENCODING_UTF8));
+                            SetError(aStr.makeStringAndClear(), pTok);
                             WriteError( rInStm );
                             bOk = sal_False;
                         }

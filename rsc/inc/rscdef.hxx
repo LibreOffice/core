@@ -257,7 +257,7 @@ public:
 
            // Alle Defines die in dieser Datei Definiert sind loeschen
     void   DeleteFileContext( sal_uLong lKey );
-    sal_uLong  NewCodeFile( const ByteString & rName );
+    sal_uLong  NewCodeFile( const rtl::OString& rName );
     sal_uLong  NewIncFile( const ByteString & rName, const ByteString & rPath );
     RscFile * GetFile( sal_uLong lFileKey ){ return Get( lFileKey ); }
 };

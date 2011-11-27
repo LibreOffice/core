@@ -31,19 +31,17 @@
 #define PATH_SEP ":"
 #define DIR_SEP "/"
 
-typedef ::std::vector< ByteString* > ByteStringList;
-
 class CppDep
 {
     ByteString          aSourceFile;
-    ByteStringList      *pSearchPath;
+    std::vector<rtl::OString> m_aSearchPath;
 
 protected:
-    ByteStringList      *pFileList;
-    ByteStringList      *pSources;
+    std::vector<rtl::OString> m_aFileList;
+    std::vector<rtl::OString> m_aSources;
 
     sal_Bool            Search( ByteString aFileName );
-    ByteString      Exists( ByteString aFileName );
+    rtl::OString Exists( rtl::OString aFileName );
 
     rtl::OString IsIncludeStatement(rtl::OString aLine);
 public:
@@ -51,7 +49,7 @@ public:
                     virtual ~CppDep();
     virtual void    Execute();
 
-    ByteStringList*     GetDepList(){return pFileList;}
+    std::vector<rtl::OString>& GetDepList() { return m_aFileList; }
     sal_Bool            AddSearchPath( const char* aPath );
     sal_Bool            AddSource( const char * aSource );
 };

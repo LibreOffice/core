@@ -252,14 +252,16 @@ extern FILE *GetNextFile()
             // create path to project root
             DirEntry aEntry( String( sOrigFile, RTL_TEXTENCODING_ASCII_US ));
             aEntry.ToAbs();
-            ByteString sFullEntry( aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
+            rtl::OString sFullEntry(rtl::OUStringToOString(aEntry.GetFull(),
+                RTL_TEXTENCODING_ASCII_US));
             aEntry += DirEntry( String( "..", RTL_TEXTENCODING_ASCII_US ));
             aEntry += DirEntry( sPrjRoot );
-            ByteString sPrjEntry( aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
+            rtl::OString sPrjEntry(rtl::OUStringToOString(aEntry.GetFull(),
+                RTL_TEXTENCODING_ASCII_US));
 
             // create file name, beginnig with project root
             // (e.g.: source\ui\src\menue.src)
-            sActFileName = sFullEntry.Copy( sPrjEntry.Len() + 1 );
+            sActFileName = sFullEntry.copy(sPrjEntry.getLength() + 1);
 
 
             sActFileName.SearchAndReplaceAll( "/", "\\" );

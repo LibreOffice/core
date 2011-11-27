@@ -144,8 +144,8 @@ void RscLangEnum::Init( RscNameTable& rNames )
         nIndex++;
     }
 
-    ByteString aEnvIsoTokens = getenv( "RSC_LANG_ISO" );
-    if ( aEnvIsoTokens.Len() )
+    rtl::OString aEnvIsoTokens = getenv( "RSC_LANG_ISO" );
+    if ( aEnvIsoTokens.getLength() )
     {
         ByteString aIsoToken;
         sal_uInt16 nTokenCounter = 0;

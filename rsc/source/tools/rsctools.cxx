@@ -190,7 +190,7 @@ ByteString OutputFile ( ByteString aInput, const char * pExt )
     UniString aExt( pExt, RTL_TEXTENCODING_ASCII_US );
     aFileName.SetExtension( aExt );
 
-    return ByteString( aFileName.GetFull(), RTL_TEXTENCODING_ASCII_US );
+    return rtl::OUStringToOString(aFileName.GetFull(), RTL_TEXTENCODING_ASCII_US);
 }
 
 /*************************************************************************

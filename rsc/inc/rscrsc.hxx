@@ -51,7 +51,7 @@ class RscCmdLine
 public:
 
     RscStrList          aInputList;     // Liste der Quelldateien
-    ByteString          aPath;          // Liste der Pfade
+    rtl::OString        aPath;          // Liste der Pfade
     RSCBYTEORDER_TYPE   nByteOrder;
     unsigned short      nCommands;      // Steuerbits
     ByteString          aOutputLst;     // Name der List-Ausgabedatei

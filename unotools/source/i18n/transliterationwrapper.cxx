@@ -172,9 +172,9 @@ void TransliterationWrapper::loadModuleImpl() const
     catch ( Exception& e )
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "loadModuleImpl: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("loadModuleImpl: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -199,9 +199,9 @@ void TransliterationWrapper::loadModuleByImplName(
     catch ( Exception& e )
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "loadModuleByImplName: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("loadModuleByImplName: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -225,9 +225,9 @@ sal_Bool TransliterationWrapper::equals(
     catch ( Exception& e )
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "equals: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("equals: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -247,12 +247,12 @@ sal_Int32 TransliterationWrapper::compareSubstring(
         if ( xTrans.is() )
             return xTrans->compareSubstring( rStr1, nOff1, nLen1, rStr2, nOff2, nLen2 );
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "compareSubstring: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("compareSubstring: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -270,12 +270,12 @@ sal_Int32 TransliterationWrapper::compareString( const String& rStr1, const Stri
         if ( xTrans.is() )
             return xTrans->compareString( rStr1, rStr2 );
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "compareString: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("compareString: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif

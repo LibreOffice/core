@@ -153,15 +153,16 @@ sal_Bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
                 pDataBase->Load( aStm );
                 if( aStm.GetError() != SVSTREAM_OK )
                 {
-                    ByteString aStr;
+                    rtl::OStringBuffer aStr;
                     if( aStm.GetError() == SVSTREAM_FILEFORMAT_ERROR )
-                        aStr = "error: incompatible format, file ";
+                        aStr.append("error: incompatible format, file ");
                     else if( aStm.GetError() == SVSTREAM_WRONGVERSION )
-                        aStr = "error: wrong version, file ";
+                        aStr.append("error: wrong version, file ");
                     else
-                        aStr = "error during load, file ";
-                    aStr += ByteString( aFileName, RTL_TEXTENCODING_UTF8 );
-                    fprintf( stderr, "%s\n", aStr.GetBuffer() );
+                        aStr.append("error during load, file ");
+                    aStr.append(rtl::OUStringToOString(aFileName,
+                        RTL_TEXTENCODING_UTF8));
+                    fprintf( stderr, "%s\n", aStr.getStr() );
                     return sal_False;
                 }
             }
@@ -174,8 +175,9 @@ sal_Bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
         }
         else
         {
-            const ByteString aStr( aFileName, RTL_TEXTENCODING_UTF8 );
-            fprintf( stderr, "unable to read input file: %s\n", aStr.GetBuffer() );
+            const rtl::OString aStr(rtl::OUStringToOString(aFileName,
+                RTL_TEXTENCODING_UTF8));
+            fprintf( stderr, "unable to read input file: %s\n", aStr.getStr() );
             return sal_False;
         }
     }
@@ -333,7 +335,8 @@ SvCommand::SvCommand( int argc, char ** argv )
             { // first line in *.srs file
                 if( aList[ i + 1 ] )
                 {
-                    aSrsLine = ByteString( *aList[ i +1 ], RTL_TEXTENCODING_UTF8 );
+                    aSrsLine = rtl::OUStringToOString(*aList[ i +1 ],
+                        RTL_TEXTENCODING_UTF8);
                     i++;
                 }
             }

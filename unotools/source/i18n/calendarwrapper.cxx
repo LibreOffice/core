@@ -27,9 +27,10 @@
  ************************************************************************/
 
 
-#include <unotools/calendarwrapper.hxx>
+#include <rtl/strbuf.hxx>
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
+#include <unotools/calendarwrapper.hxx>
 #include <instance.hxx>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <com/sun/star/i18n/XCalendar3.hpp>
@@ -67,12 +68,12 @@ void CalendarWrapper::loadDefaultCalendar( const ::com::sun::star::lang::Locale&
         if ( xC.is() )
             xC->loadDefaultCalendar( rLocale );
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "loadDefaultCalendar: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("loadDefaultCalendar: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -112,12 +113,12 @@ void CalendarWrapper::loadCalendar( const ::rtl::OUString& rUniqueID, const ::co
         if ( xC.is() )
             return xC->getAllCalendars( rLocale );
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getAllCalendars: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("getAllCalendars: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -133,12 +134,12 @@ void CalendarWrapper::loadCalendar( const ::rtl::OUString& rUniqueID, const ::co
         if ( xC.is() )
             return xC->getUniqueID();
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getUniqueID: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("getUniqueID: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -154,12 +155,12 @@ void CalendarWrapper::setDateTime( double nTimeInDays )
         if ( xC.is() )
             xC->setDateTime( nTimeInDays );
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "setDateTime: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("setDateTime: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -174,12 +175,12 @@ double CalendarWrapper::getDateTime() const
         if ( xC.is() )
             return xC->getDateTime();
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getDateTime: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("getDateTime: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -204,12 +205,12 @@ sal_Int32 CalendarWrapper::getCombinedOffsetInMillis(
                 nOffset += static_cast<sal_uInt16>( nSecondMillis);
         }
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "setLocalDateTime: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("setLocalDateTime: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -276,12 +277,12 @@ void CalendarWrapper::setLocalDateTime( double nTimeInDays )
             }
         }
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "setLocalDateTime: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("setLocalDateTime: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -302,12 +303,12 @@ double CalendarWrapper::getLocalDateTime() const
             return nTimeInDays;
         }
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getLocalDateTime: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("getLocalDateTime: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -323,12 +324,12 @@ void CalendarWrapper::setValue( sal_Int16 nFieldIndex, sal_Int16 nValue )
         if ( xC.is() )
             xC->setValue( nFieldIndex, nValue );
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "setValue: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("setValue: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -343,12 +344,12 @@ sal_Bool CalendarWrapper::isValid() const
         if ( xC.is() )
             return xC->isValid();
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "isValid: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("isValid: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -364,12 +365,12 @@ sal_Int16 CalendarWrapper::getValue( sal_Int16 nFieldIndex ) const
         if ( xC.is() )
             return xC->getValue( nFieldIndex );
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getValue: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("getValue: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -385,12 +386,12 @@ void CalendarWrapper::addValue( sal_Int16 nFieldIndex, sal_Int32 nAmount )
         if ( xC.is() )
             xC->addValue( nFieldIndex, nAmount );
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "addValue: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("addValue: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -405,12 +406,12 @@ sal_Int16 CalendarWrapper::getFirstDayOfWeek() const
         if ( xC.is() )
             return xC->getFirstDayOfWeek();
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getFirstDayOfWeek: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("getFirstDayOfWeek: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -426,12 +427,12 @@ void CalendarWrapper::setFirstDayOfWeek( sal_Int16 nDay )
         if ( xC.is() )
             xC->setFirstDayOfWeek( nDay );
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "setFirstDayOfWeek: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("setFirstDayOfWeek: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -446,12 +447,12 @@ void CalendarWrapper::setMinimumNumberOfDaysForFirstWeek( sal_Int16 nDays )
         if ( xC.is() )
             xC->setMinimumNumberOfDaysForFirstWeek( nDays );
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "setMinimumNumberOfDaysForFirstWeek: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("setMinimumNumberOfDaysForFirstWeek: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -466,12 +467,12 @@ sal_Int16 CalendarWrapper::getNumberOfMonthsInYear() const
         if ( xC.is() )
             return xC->getNumberOfMonthsInYear();
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getNumberOfMonthsInYear: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("getNumberOfMonthsInYear: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -487,12 +488,12 @@ sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
         if ( xC.is() )
             return xC->getNumberOfDaysInWeek();
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getNumberOfDaysInWeek: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("getNumberOfDaysInWeek: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -508,12 +509,12 @@ sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
         if ( xC.is() )
             return xC->getMonths2();
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getMonths: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("getMonths: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -529,12 +530,12 @@ sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
         if ( xC.is() )
             return xC->getDays2();
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getDays: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("getDays: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -550,12 +551,12 @@ String CalendarWrapper::getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_Int
         if ( xC.is() )
             return xC->getDisplayName( nCalendarDisplayIndex, nIdx, nNameType );
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getDisplayName: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("getDisplayName: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -573,12 +574,12 @@ String CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_In
         if ( xC.is() )
             return xC->getDisplayString( nCalendarDisplayCode, nNativeNumberMode );
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getDisplayString: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("getDisplayString: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -596,12 +597,12 @@ String CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_In
         if ( xC.is() )
             return xC->getLoadedCalendar2();
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getLoadedCalendar2: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg( "getLoadedCalendar2: Exception caught\n" );
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -617,12 +618,12 @@ String CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_In
         if ( xC.is() )
             return xC->getGenitiveMonths2();
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getGenitiveMonths: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("getGenitiveMonths: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
@@ -638,12 +639,12 @@ String CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_In
         if ( xC.is() )
             return xC->getPartitiveMonths2();
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "getPartitiveMonths: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg("getPartitiveMonths: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif

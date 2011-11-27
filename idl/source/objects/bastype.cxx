@@ -398,7 +398,7 @@ sal_Bool SvUUId::WriteSvIdl( SvStream & rOutStm )
 {
     // write global id
     rOutStm << SvHash_uuid()->GetName().GetBuffer() << "(\"";
-    rOutStm << ByteString( GetHexName(), RTL_TEXTENCODING_UTF8 ).GetBuffer() << "\")";
+    rOutStm << rtl::OUStringToOString(GetHexName(), RTL_TEXTENCODING_UTF8).getStr() << "\")";
     return sal_True;
 }
 

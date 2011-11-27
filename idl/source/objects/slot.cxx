@@ -519,14 +519,14 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     bOk |= aDisableFlags.ReadSvIdl( SvHash_DisableFlags(), rInStm );
     if( aGet.ReadSvIdl( SvHash_Get(), rInStm ) )
     {
-        rBase.WriteError( "warning", ByteString( rInStm.GetFileName(), RTL_TEXTENCODING_UTF8 ),
+        rBase.WriteError( "warning", rtl::OUStringToOString(rInStm.GetFileName(), RTL_TEXTENCODING_UTF8),
                     "<Get> old style, use Readonly",
                     rInStm.GetToken()->GetLine(),
                     rInStm.GetToken()->GetColumn() );
     }
     if( aSet.ReadSvIdl( SvHash_Set(), rInStm ) )
     {
-        rBase.WriteError( "warning", ByteString( rInStm.GetFileName(), RTL_TEXTENCODING_UTF8 ),
+        rBase.WriteError( "warning", rtl::OUStringToOString(rInStm.GetFileName(), RTL_TEXTENCODING_UTF8),
                     "<Set> old style, use method declaration",
                     rInStm.GetToken()->GetLine(),
                     rInStm.GetToken()->GetColumn() );
