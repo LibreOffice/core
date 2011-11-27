@@ -311,60 +311,6 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell,
 
     Construct( pOptions );
 }
-ScPrintFunc::ScPrintFunc( ScDocShell* pShell, Window* pWindow, SCTAB nTab,
-                            long nPage, long nDocP, const ScRange* pArea,
-                            const ScPrintOptions* pOptions )
-    :   pDocShell           ( pShell ),
-        pPrinter            ( NULL ),
-        pDrawView           ( NULL ),
-        nPrintTab           ( nTab ),
-        nPageStart          ( nPage ),
-        nDocPages           ( nDocP ),
-        pUserArea           ( pArea ),
-        bState              ( false ),
-        bPrintCurrentTable  ( false ),
-        bMultiArea          ( false ),
-        nTabPages           ( 0 ),
-        nTotalPages         ( 0 ),
-        nPagesX(0),
-        nPagesY(0),
-        nTotalY(0),
-        pPageData           ( NULL )
-{
-    pDev = pWindow;
-    Construct( pOptions );
-}
-ScPrintFunc::ScPrintFunc( ScDocShell* pShell, Window* pWindow,
-                             const ScPrintState& rState, const ScPrintOptions* pOptions )
-    :   pDocShell           ( pShell ),
-        pPrinter            ( NULL ),
-        pDrawView           ( NULL ),
-        pUserArea           ( NULL ),
-        bPrintCurrentTable  ( false ),
-        bMultiArea          ( false ),
-        nPagesX(0),
-        nPagesY(0),
-        nTotalY(0),
-        pPageData           ( NULL )
-{
-    pDev = pWindow;
-
-    nPrintTab   = rState.nPrintTab;
-    nStartCol   = rState.nStartCol;
-    nStartRow   = rState.nStartRow;
-    nEndCol     = rState.nEndCol;
-    nEndRow     = rState.nEndRow;
-    nZoom       = rState.nZoom;
-    nPagesX     = rState.nPagesX;
-    nPagesY     = rState.nPagesY;
-    nTabPages   = rState.nTabPages;
-    nTotalPages = rState.nTotalPages;
-    nPageStart  = rState.nPageStart;
-    nDocPages   = rState.nDocPages;
-    bState      = sal_True;
-
-    Construct( pOptions );
-}
 
 void ScPrintFunc::GetPrintState( ScPrintState& rState )
 {
@@ -2662,7 +2608,7 @@ void ScPrintFunc::ApplyPrintSettings()
 //  nDisplayStart = continious number for displaying the page number
 
 long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
-                                long nStartPage, long nDisplayStart, sal_Bool bDoPrint,
+                                long nStartPage, long nDisplayStart, bool bDoPrint,
                                 SfxProgress* pProgress, ScPreviewLocationData* pLocationData )
 {
     OSL_ENSURE(pDev,"Device == NULL");
