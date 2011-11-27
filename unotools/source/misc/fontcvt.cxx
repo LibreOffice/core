@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_unotools.hxx"
 #include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
 #include <sal/macros.h>

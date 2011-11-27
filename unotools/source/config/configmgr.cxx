@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_unotools.hxx"
 #include "sal/config.h"
 
 #include <list>

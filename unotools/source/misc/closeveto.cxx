@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_unotools.hxx"
 
 #include <unotools/closeveto.hxx>
 

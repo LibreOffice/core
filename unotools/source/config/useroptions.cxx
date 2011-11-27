@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_unotools.hxx"
 
 #include <unotools/useroptions.hxx>
 #include <unotools/useroptions_const.hxx>

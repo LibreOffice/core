@@ -26,8 +26,6 @@
  * instead of those above.
  */
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_unotools.hxx"
 
 #include "unotools/caserotate.hxx"
 #include <com/sun/star/i18n/TransliterationModules.hpp>

@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_unotools.hxx"
 #include <XTempFile.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/typeprovider.hxx>
