@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-// no include "precompiled_tools.hxx" because this is included in other cxx files.
 
 static sal_Int32 ImplStringCompare( const STRCODE* pStr1, const STRCODE* pStr2,
                                     xub_StrLen nCount )

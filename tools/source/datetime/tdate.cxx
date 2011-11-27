@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_tools.hxx"
 
 #if defined( WNT )
 #include <windows.h>

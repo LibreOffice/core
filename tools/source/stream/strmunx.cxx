@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-// don't include "precompiled_tools.hxx" because this file is included in strmsys.cxx
 
 #include <stdio.h>
 #include <string.h>

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-// no include "precompiled_tools.hxx" because this file is included in strmsys.cxx
 
 /*
     Todo: StreamMode <-> AllocateMemory

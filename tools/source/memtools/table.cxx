@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_tools.hxx"
 
 #define _TOOLS_TABLE_CXX
 

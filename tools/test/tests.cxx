@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_tools.hxx"
 #include "sal/config.h"
 #include "sal/precppunit.hxx"
 
