@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmloff.hxx"
 #include <tools/debug.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <com/sun/star/table/BorderLine2.hpp>

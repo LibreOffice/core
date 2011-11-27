@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmloff.hxx"
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 
 using ::com::sun::star::uno::Reference;

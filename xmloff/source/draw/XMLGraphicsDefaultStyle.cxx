@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmloff.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <tools/debug.hxx>
 #include <xmloff/xmlimp.hxx>

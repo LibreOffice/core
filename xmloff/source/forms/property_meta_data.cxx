@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_xmloff.hxx"
 
 #include "property_description.hxx"
 #include "forms/form_handler_factory.hxx"

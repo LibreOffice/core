@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmloff.hxx"
 #include "eventimport.hxx"
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

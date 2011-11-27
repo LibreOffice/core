@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmloff.hxx"
 #include "XMLAutoMarkFileContext.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <rtl/ustring.hxx>

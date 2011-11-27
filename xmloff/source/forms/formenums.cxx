@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmloff.hxx"
 #include "formenums.hxx"
 #include <osl/diagnose.h>
 #include <com/sun/star/form/FormSubmitEncoding.hpp>

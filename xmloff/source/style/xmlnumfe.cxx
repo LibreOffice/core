@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmloff.hxx"
 
 #define _SVSTDARR_ULONGS
 #define _ZFORLIST_DECLARE_TABLE

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmloff.hxx"
 #include <osl/mutex.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <rtl/memory.h>

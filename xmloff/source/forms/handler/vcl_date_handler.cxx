@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_xmloff.hxx"
 
 #include "vcl_date_handler.hxx"
 

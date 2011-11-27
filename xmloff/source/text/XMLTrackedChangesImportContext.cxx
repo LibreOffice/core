@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmloff.hxx"
 #include "XMLTrackedChangesImportContext.hxx"
 #include "XMLChangedRegionImportContext.hxx"
 #include <com/sun/star/uno/Reference.h>

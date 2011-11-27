@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmloff.hxx"
 #include <xmloff/NamedBoolPropertyHdl.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <comphelper/extract.hxx>

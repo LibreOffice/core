@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmloff.hxx"
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <xmloff/xmlimp.hxx>
 #include "xmloff/xmlnmspe.hxx"

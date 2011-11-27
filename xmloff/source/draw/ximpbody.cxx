@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmloff.hxx"
 #include "ximpbody.hxx"
 #include <xmloff/prstylei.hxx>
 #include "ximpnote.hxx"

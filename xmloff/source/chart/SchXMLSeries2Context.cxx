@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmloff.hxx"
 
 #include "SchXMLSeries2Context.hxx"
 #include "SchXMLPlotAreaContext.hxx"

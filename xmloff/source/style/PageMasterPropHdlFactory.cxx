@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmloff.hxx"
 #include "PageMasterPropHdlFactory.hxx"
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmltoken.hxx>

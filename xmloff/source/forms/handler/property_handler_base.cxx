@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_xmloff.hxx"
 
 #include "property_handler_base.hxx"
 

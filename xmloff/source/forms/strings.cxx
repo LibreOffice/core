@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmloff.hxx"
 
 #ifndef _XMLOFF_FORMS_STRINGS_HXX_
 #define XMLFORM_IMPLEMENT_STRINGS

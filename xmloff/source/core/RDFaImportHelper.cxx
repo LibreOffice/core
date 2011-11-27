@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_xmloff.hxx"
 
 #include "RDFaImportHelper.hxx"
 

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmloff.hxx"
 #include "xmloff/ImageStyle.hxx"
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <xmloff/attrlist.hxx>
