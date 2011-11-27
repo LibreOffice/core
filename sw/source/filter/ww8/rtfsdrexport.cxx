@@ -28,23 +28,11 @@
  ************************************************************************/
 
 #include "rtfsdrexport.hxx"
-#include "rtfexport.hxx"
-#include "writerhelper.hxx"
 #include "rtfattributeoutput.hxx"
 
-#include <com/sun/star/i18n/ScriptType.hdl>
-#include <osl/diagnose.h>
-#include <rtl/strbuf.hxx>
-#include <rtl/ustring.hxx>
-#include <svl/itemiter.hxx>
 #include <svtools/rtfkeywd.hxx>
-#include <editeng/editdata.hxx>
 #include <editeng/editobj.hxx>
-#include <editeng/flditem.hxx>
-#include <editeng/fontitem.hxx>
 #include <svx/svdotext.hxx>
-#include <tools/stream.hxx>
-#include <breakit.hxx>
 
 using rtl::OString;
 using rtl::OStringBuffer;
