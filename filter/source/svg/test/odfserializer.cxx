@@ -15,8 +15,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_filter.hxx"
 
 #include "odfserializer.hxx"
 #include <osl/diagnose.h>

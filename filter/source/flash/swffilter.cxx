@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_filter.hxx"
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/document/XFilter.hpp>

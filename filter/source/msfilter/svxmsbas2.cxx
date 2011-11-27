@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_filter.hxx"
 
 #include <basic/basmgr.hxx>
 #include <sfx2/objsh.hxx>

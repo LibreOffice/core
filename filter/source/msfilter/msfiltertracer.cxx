@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_filter.hxx"
 #include <filter/msfilter/msfiltertracer.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>

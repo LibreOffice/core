@@ -26,10 +26,8 @@
  * instead of those above.
  */
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #ifndef __LIBXSLTTRANSFORMER_HXX__
 #define __LIBXSLTTRANSFORMER_HXX__
-#include "precompiled_filter.hxx"
 
 #include <stdio.h>
 

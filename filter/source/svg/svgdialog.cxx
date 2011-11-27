@@ -27,8 +27,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_filter.hxx"
 
 #include "svgdialog.hxx"
 #include "impsvgdialog.hxx"

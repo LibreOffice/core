@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_filter.hxx"
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>

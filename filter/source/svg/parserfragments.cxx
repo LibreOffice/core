@@ -24,8 +24,6 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_filter.hxx"
 
 #include "parserfragments.hxx"
 #include "spirit_supplements.hxx"

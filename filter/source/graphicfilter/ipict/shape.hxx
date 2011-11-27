@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include <vcl/virdev.hxx>
 
 namespace PictReaderShape {

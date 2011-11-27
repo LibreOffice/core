@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_filter.hxx"
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
