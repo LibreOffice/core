@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_chart2.hxx"
 #include "Scaling.hxx"
 #include <rtl/math.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"

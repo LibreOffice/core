@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_chart2.hxx"
 
 #include "res_DataLabel.hxx"
 #include "res_DataLabel_IDs.hrc"

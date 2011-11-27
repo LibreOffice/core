@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_chart2.hxx"
 
 #include "Splines.hxx"
 #include <rtl/math.hxx>

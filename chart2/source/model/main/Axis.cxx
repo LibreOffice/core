@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_chart2.hxx"
 #include "Axis.hxx"
 #include "GridProperties.hxx"
 #include "macros.hxx"

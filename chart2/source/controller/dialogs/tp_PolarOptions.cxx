@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_chart2.hxx"
 #include "tp_PolarOptions.hxx"
 #include "tp_PolarOptions.hrc"
 #include "ResId.hxx"

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_chart2.hxx"
 #include "PieChartTypeTemplate.hxx"
 #include "macros.hxx"
 #include "CommonConverters.hxx"

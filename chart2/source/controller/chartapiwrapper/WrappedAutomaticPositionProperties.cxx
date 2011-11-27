@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_chart2.hxx"
 
 #include "WrappedAutomaticPositionProperties.hxx"
 #include "FastPropertyIdRanges.hxx"

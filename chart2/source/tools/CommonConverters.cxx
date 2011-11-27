@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_chart2.hxx"
 #include "CommonConverters.hxx"
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>

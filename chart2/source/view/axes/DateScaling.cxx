@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_chart2.hxx"
 #include "DateScaling.hxx"
 #include <com/sun/star/chart/TimeUnit.hpp>
 #include <rtl/math.hxx>

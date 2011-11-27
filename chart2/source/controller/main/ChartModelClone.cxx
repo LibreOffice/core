@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_chart2.hxx"
 
 #include "ChartModelClone.hxx"
 #include "ChartModelHelper.hxx"

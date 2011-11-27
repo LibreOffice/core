@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_chart2.hxx"
 
 #include "WrappedScaleTextProperties.hxx"
 #include "FastPropertyIdRanges.hxx"
