@@ -29,10 +29,6 @@
 #ifndef _ENHANCED_CUSTOMSHAPE_ENGINE_HXX
 #define _ENHANCED_CUSTOMSHAPE_ENGINE_HXX
 
-#include <tools/debug.hxx>
-#include <tools/string.hxx>
-#include <tools/stack.hxx>
-
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
