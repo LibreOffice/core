@@ -80,7 +80,6 @@ common
 		DRIVE_O
 		DRIVE_S
 		DYNAMIC_CRT
-		ENABLE_AGG
 		ENABLE_CRASHDUMP
 		ENABLE_CUPS
         ENABLE_DIRECTX
@@ -265,7 +264,6 @@ common
         XSLTPROC
         ZIPDEP
 		ZIPSOURCE
-        AGG_VERSION
         ANT_HOME
         ANT_LIB
         ANT

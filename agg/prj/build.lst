@@ -1,5 +1,0 @@
-ag      agg     :       soltools stlport NULL
-ag	agg										usr1	-	all	ag_mkout NULL
-ag	agg\inc									get		-	all	ag_inc NULL
-ag	agg\prj									get		-	all	ag_prj NULL
-ag	agg\source								nmake	-	all	ag_agg NULL
