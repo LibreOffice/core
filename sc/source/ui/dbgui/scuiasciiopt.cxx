@@ -200,7 +200,7 @@ static void save_Separators(
 // ----------------------------------------------------------------------------
 
 ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
-                                    SvStream* pInStream, sal_Unicode /*cSep*/ ) :
+                                    SvStream* pInStream, sal_Unicode cSep ) :
         ModalDialog ( pParent, ScResId( RID_SCDLG_ASCII ) ),
         mpDatStream  ( pInStream ),
         mnStreamPos( pInStream ? pInStream->Tell() : 0 ),
@@ -281,6 +281,12 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         // load separators only when importing csv files.
         load_Separators (sFieldSeparators, sTextSeparators, bMergeDelimiters,
                          bQuotedFieldAsText, bDetectSpecialNum, bFixedWidth, nFromRow, nCharSet, nLanguage);
+    else
+    {
+        // #i115474# otherwise use sensible defaults
+        sFieldSeparators = OUString( cSep );
+        sTextSeparators = OUString( ScAsciiOptions::cDefaultTextSep );
+    }
     maFieldSeparators = String(sFieldSeparators);
 
     if( bMergeDelimiters )
