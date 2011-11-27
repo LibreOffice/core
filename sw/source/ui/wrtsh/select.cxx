@@ -421,9 +421,13 @@ void SwWrtShell::EndSelect()
     if(bInSelect && !bExtMode)
     {
         bInSelect = sal_False;
-        (this->*fnLeaveSelect)(0,sal_False);
-        if(!bAddMode)
+        if (bAddMode)
         {
+            AddLeaveSelect(0, sal_False);
+        }
+        else
+        {
+            SttLeaveSelect(0, sal_False);
             fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
             fnKillSel = &SwWrtShell::ResetSelect;
         }
@@ -651,7 +655,6 @@ void SwWrtShell::EnterAddMode()
     if(IsTableMode()) return;
     if(bBlockMode)
         LeaveBlockMode();
-    fnLeaveSelect = &SwWrtShell::AddLeaveSelect;
     fnKillSel = &SwWrtShell::Ignore;
     fnSetCrsr = &SwWrtShell::SetCrsr;
     bAddMode = sal_True;
@@ -666,7 +669,6 @@ void SwWrtShell::EnterAddMode()
 
 void SwWrtShell::LeaveAddMode()
 {
-    fnLeaveSelect = &SwWrtShell::SttLeaveSelect;
     fnKillSel = &SwWrtShell::ResetSelect;
     fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
     bAddMode = sal_False;

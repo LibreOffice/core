@@ -104,16 +104,21 @@ private:
     using SwEditShell::AutoCorrect;
     using SwCrsrShell::GotoMark;
 
-public:
-
-    using SwEditShell::Insert;
-
     typedef long (SwWrtShell::*SELECTFUNC)(const Point *, sal_Bool bProp );
 
     SELECTFUNC  fnDrag;
     SELECTFUNC  fnSetCrsr;
     SELECTFUNC  fnEndDrag;
     SELECTFUNC  fnKillSel;
+
+public:
+
+    using SwEditShell::Insert;
+
+    long SetCursor    (const Point* pPt, bool bProp) { return (this->*fnSetCrsr)(pPt, bProp); }
+    long Drag         (const Point* pPt, bool bProp) { return (this->*fnDrag)(pPt, bProp); }
+    long EndDrag      (const Point* pPt, bool bProp) { return (this->*fnEndDrag)(pPt, bProp); }
+    long KillSelection(const Point* pPt, bool bProp) { return (this->*fnKillSel)(pPt, bProp); }
 
     // reset all selections
     long ResetSelect( const Point *, sal_Bool );
@@ -582,8 +587,6 @@ private:
 
     Point   aStart;
     Link    aSelTblLink;
-
-    SELECTFUNC  fnLeaveSelect;
 
     // resets the cursor stack after movement by PageUp/-Down
     SW_DLLPRIVATE void  _ResetCursorStack();

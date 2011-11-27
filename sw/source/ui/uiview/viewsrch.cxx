@@ -299,7 +299,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                     {
                         // bestehende Selektionen aufheben,
                         // wenn nicht in selektierten Bereichen gesucht werden soll
-                        (pWrtShell->*pWrtShell->fnKillSel)(0, sal_False);
+                        pWrtShell->KillSelection(0, false);
                         if( DOCPOS_START == aOpts.eEnd )
                             pWrtShell->EndDoc();
                         else
@@ -449,7 +449,7 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
         // falls in selektierten Bereichen gesucht werden soll, duerfen sie
         // nicht aufgehoben werden
     if (!pSrchItem->GetSelection())
-        (pWrtShell->*pWrtShell->fnKillSel)(0, sal_False);
+        pWrtShell->KillSelection(0, false);
 
     SwWait *pWait = new SwWait( *GetDocShell(), sal_True );
     if( FUNC_Search( aOpts ) )
@@ -559,7 +559,7 @@ sal_Bool SwView::SearchAll(sal_uInt16* pFound)
     {
         // bestehende Selektionen aufheben,
         // wenn nicht in selektierten Bereichen gesucht werden soll
-        (pWrtShell->*pWrtShell->fnKillSel)(0, sal_False);
+        pWrtShell->KillSelection(0, false);
 
         if( DOCPOS_START == aOpts.eEnd )
             pWrtShell->EndDoc();

@@ -127,8 +127,7 @@ using namespace com::sun::star;
         pCrsrStack(0),  \
         rView(rShell),\
         aNavigationMgr(this), \
-        bDestOnStack(sal_False), \
-        fnLeaveSelect(&SwWrtShell::SttLeaveSelect)
+        bDestOnStack(sal_False)
 
 #define BITFLD_INI_LIST \
         bClearMark = \
