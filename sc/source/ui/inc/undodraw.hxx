@@ -38,6 +38,8 @@ class ScUndoDraw: public SfxUndoAction
     SfxUndoAction*  pDrawUndo;
     ScDocShell*     pDocShell;
 
+    void            UpdateSubShell();
+
 public:
                             TYPEINFO();
                             ScUndoDraw( SfxUndoAction* pUndo, ScDocShell* pDocSh );

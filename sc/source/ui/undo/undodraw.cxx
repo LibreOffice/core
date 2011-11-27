@@ -27,68 +27,13 @@
  ************************************************************************/
 
 
-
-
-//------------------------------------------------------------------
-
-// TOOLS
-#define _BIGINT_HXX
-#define _SFXMULTISEL_HXX
-#define _STACK_HXX
-#define _QUEUE_HXX
-#define _DYNARR_HXX
-#define _TREELIST_HXX
-#define _CACHESTR_HXX
-#define _NEW_HXX
-#define _DYNARY_HXX
-#define _SVMEMPOOL_HXX
-#define _CACHESTR_HXX
-#define _SV_MULTISEL_HXX
-
-//SV
-#define _CONFIG_HXX
-#define _CURSOR_HXX
-#define _FONTDLG_HXX
-#define _PRVWIN_HXX
-#define _HELP_HXX
-#define _MDIWIN_HXX
-#define _SPIN_HXX
-#define _FILDLG_HXX
-#define _COLDLG_HXX
-#define _SOUND_HXX
-
-
-#define SI_NOITEMS
-#define _SI_NOSBXCONTROLS
-#define _SI_NOOTHERFORMS
-#define _SI_NOCONTROL
-#define _SI_NOSBXCONTROLS
-#define _SIDLL_HXX
-
-// SFX
-#define _SFXAPPWIN_HXX
-#define _SFX_SAVEOPT_HXX
-#define _SFXPRNMON_HXX
-#define _INTRO_HXX
-#define _SFXMSGDESCR_HXX
-#define _SFXMSGPOOL_HXX
-#define _SFXFILEDLG_HXX
-#define _PASSWD_HXX
-#define _SFXTBXCTRL_HXX
-#define _SFXSTBITEM_HXX
-#define _SFXMNUITEM_HXX
-#define _SFXIMGMGR_HXX
-#define _SFXTBXMGR_HXX
-#define _SFXSTBMGR_HXX
-#define _SFX_MINFITEM_HXX
-#define _SFXEVENT_HXX
-
 // INCLUDE ---------------------------------------------------------------
 
 #include <svx/svdundo.hxx>
 
 #include "undodraw.hxx"
 #include "docsh.hxx"
+#include "tabvwsh.hxx"
 
 
 // -----------------------------------------------------------------------
@@ -159,12 +104,21 @@ sal_Bool  ScUndoDraw::Merge( SfxUndoAction* pNextAction )
         return false;
 }
 
+void ScUndoDraw::UpdateSubShell()
+{
+    // #i26822# remove the draw shell if the selected object has been removed
+    ScTabViewShell* pViewShell = pDocShell->GetBestViewShell();
+    if (pViewShell)
+        pViewShell->UpdateDrawShell();
+}
+
 void ScUndoDraw::Undo()
 {
     if (pDrawUndo)
     {
         pDrawUndo->Undo();
         pDocShell->SetDrawModified();
+        UpdateSubShell();
     }
 }
 
@@ -174,6 +128,7 @@ void ScUndoDraw::Redo()
     {
         pDrawUndo->Redo();
         pDocShell->SetDrawModified();
+        UpdateSubShell();
     }
 }
 
