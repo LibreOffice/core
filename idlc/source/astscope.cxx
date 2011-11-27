@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_idlc.hxx"
 #include <idlc/astscope.hxx>
 #include <idlc/astbasetype.hxx>
 #include <idlc/astinterface.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_idlc.hxx"
 #include <idlc/fehelper.hxx>
 #include <idlc/errorhandler.hxx>
 #include <idlc/astarray.hxx>
