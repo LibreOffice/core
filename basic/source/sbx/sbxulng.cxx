@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_basic.hxx"
 #include <tools/errcode.hxx>
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"

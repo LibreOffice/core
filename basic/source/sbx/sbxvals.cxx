@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_basic.hxx"
 
 #define _TLBIGINT_INT64
 #include <tools/bigint.hxx>

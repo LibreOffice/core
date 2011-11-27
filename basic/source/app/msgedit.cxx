@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_basic.hxx"
 /*************************************************************************
 File Versions so far:
 No Version          Initial Implementation without Version Information

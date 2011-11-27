@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_basic.hxx"
 #include "sal/config.h"
 
 #if defined(WNT)

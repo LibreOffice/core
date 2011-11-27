@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_basic.hxx"
 #include <tools/stream.hxx>
 #include <vcl/sound.hxx>
 #include <basic/sbx.hxx>

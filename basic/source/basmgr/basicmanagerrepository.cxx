@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_basic.hxx"
 #include <basic/basicmanagerrepository.hxx>
 #include <basic/basmgr.hxx>
 #include "scriptcont.hxx"

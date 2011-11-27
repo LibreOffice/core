@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_basic.hxx"
 
 #include "sbcomp.hxx"
 #include <basic/sbx.hxx>        // because of ...IMPL_REF(...sbxvariable)

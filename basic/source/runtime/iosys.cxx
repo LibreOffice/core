@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_basic.hxx"
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/button.hxx>

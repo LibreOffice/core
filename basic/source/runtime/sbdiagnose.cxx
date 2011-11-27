@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_basic.hxx"
 
 #include "rtlproto.hxx"
 #include "sbdiagnose.hxx"
