@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_jvmfwk.hxx"
 
 #include "osl/file.hxx"
 #include "osl/thread.h"

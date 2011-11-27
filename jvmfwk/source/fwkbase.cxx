@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_jvmfwk.hxx"
 #include "rtl/ustring.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/uri.hxx"

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_jvmfwk.hxx"
 #include "boost/scoped_array.hpp"
 #include "rtl/ustring.hxx"
 #include "rtl/bootstrap.hxx"
