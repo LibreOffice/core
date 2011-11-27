@@ -100,6 +100,8 @@ public:
                     ScViewData* pViewData, std::map<rtl::OUString, ScRangeName*> aRangeMap,
                     const ScAddress& aCursorPos, const bool bUndo);
 
+    virtual ~ScNameDefDlg() {};
+
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
     virtual sal_Bool    IsRefInputMode() const;
 
