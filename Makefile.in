@@ -8,13 +8,6 @@ else
 CROSS_TOOLSET_RULE:=
 endif
 
-ifeq ($(filter all check unitcheck,$(MAKECMDGOALS)),)
-gb_MAKETARGET=build
-else
-# fail early
-gb_MAKETARGET=all
-endif
-
 .PHONY : build dev-install all cross-build-toolset install distro-pack-install clean clean-host clean-build distclean findunusedcode bootstrap
 
 define forward_to_gbuild
@@ -24,62 +17,10 @@ define forward_to_gbuild
 	$(patsubst allcheck,check,$(1))
 endef
 
-define forward_to_buildpl
-. ./Env.Host.sh && cd $(1) && gb_MAKETARGET=$(gb_MAKETARGET) build.pl -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@
-endef
-
-ifeq (@CROSS_COMPILING@,YES)
-define all_install
-To install, issue: @GNUMAKE@ install
-Developers might prefer this way: @GNUMAKE@ dev-install -o build
-To run smoketest, issue: @GNUMAKE@ check
-endef
-else
-allinstall=For crosscompiles, please consult README.cross how to install it.
-endif
-
-UNAMESYSTEM=$(shell uname -s)
-
-ifeq ($(UNAMESYSTEM),Linux)
-devinstall_run=make debugrun
-else
-ifeq ($(UNAMESYSTEM),Linux)
-devinstall_run=open @abs_builddir@/install/LibreOffice.app
-else
-define devinstall_run
-cd @abs_builddir@/install/program
-. ./ooenv
-./soffice.bin
-endef
-endif
-endif
-
 all: build unitcheck
-	$(info)
-	$(info LibreOffice build succesfully finished.)
-	$(info)
-	$(info $(all_install))
-	$(info)
-
-build: Makefile bootstrap src.downloaded $(CROSS_TOOLSET_RULE)
-	@$(call forward_to_buildpl,instsetoo_native)
-
-smoketest: Makefile bootstrap src.downloaded $(CROSS_TOOLSET_RULE)
-	@$(call forward_to_buildpl,smoketestoo_native) && \
-            rm -f "@abs_builddir@"/install && \
-            ln -s "$$SOLARVER/$$INPATH"/installation/opt/ "@abs_builddir@"/install
-
-dev-install: smoketest
-	$(info)
-	$(info Developer installation finished, you can now execute:)
-	$(info)
-	$(info $(devinstall_run))
 
 check : allcheck
 	@true
-
-cross-build-toolset:
-	$(call forward_to_buildpl,cross_toolset)
 
 install: build
 	@. ./Env.Host.sh && \
@@ -149,6 +90,15 @@ tags:
 
 docs:
 	@$(call forward_to_gbuild,$@)
+
+build: Makefile bootstrap src.downloaded $(CROSS_TOOLSET_RULE)
+	@$(call forward_to_gbuild,$@)
+
+dev-install: Makefile bootstrap src.downloaded $(CROSS_TOOLSET_RULE)
+	$(call forward_to_gbuild,$@)
+
+cross-build-toolset:
+	$(call forward_to_gbuild,$@)
 
 findunusedcode:
 # experimental callcatcher target

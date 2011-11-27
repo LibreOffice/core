@@ -25,33 +25,36 @@
 #   in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 #   instead of those above.
 
-.PHONY: id tags docs distro-pack-install fetch
+ifeq ($(strip $(gb_PARTIALBUILD)),)
 
-id:
-	@create-ids
+ifeq ($(filter-out build,$(MAKECMDSEQUENCE)),)
+gb_MAKETARGET=build
+else
+gb_MAKETARGET=all
+endif
 
-tags:
-	@create-tags
+define gb_BuildplTarget_command
+cd $(SRCDIR)/$(1) && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl --all gb_MAKETARGET=$(gb_MAKETARGET)
+endef
 
-docs:
-	@mkdocs.sh $(SRCDIR)/docs $(SOLARENV)/inc/doxygen.cfg
+.PHONY: smoketestoo_native instsetoo_native cross-build-toolset dev-install all build
 
-distro-pack-install: install
-	$(SRCDIR)/bin/distro-install-clean-up
-	$(SRCDIR)/bin/distro-install-desktop-integration
-	$(SRCDIR)/bin/distro-install-sdk
-	$(SRCDIR)/bin/distro-install-file-lists
+smoketestoo_native:
+	$(call gb_BuildplTarget_command,$@)
 
-$(SRCDIR)/src.downloaded: $(SRCDIR)/ooo.lst $(SRCDIR)/download
-	@$(SRCDIR)/download $(SRCDIR)/ooo.lst && touch $@
+instsetoo_native:
+	$(call gb_BuildplTarget_command,$@)
 
-fetch: $(SRCDIR)/src.downloaded
+cross-build-toolset:
+	$(call gb_BuildplTarget_command,$@)
 
-$(WORKDIR)/bootstrap:
-	@cd $(SRCDIR) && ./bootstrap
-	@mkdir -p $(dir $@) && touch $@
+dev-install: smoketestoo_native
+	
+all: instsetoo_native
 
-bootstrap: $(WORKDIR)/bootstrap
+build: instsetoo_native
 
+endif # gb_PARTIALBUILD
+    
 # vim:set shiftwidth=4 softtabstop=4 noexpandtab:
 

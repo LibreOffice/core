@@ -25,33 +25,14 @@
 #   in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 #   instead of those above.
 
-.PHONY: id tags docs distro-pack-install fetch
+ifeq ($(strip $(gb_PARTIALBUILD)),)
 
-id:
-	@create-ids
+gb_Module_add_target=
+gb_Module_add_check_target=
+gb_Module_add_subsequentcheck_target=
+gb_FULLDEPS=
 
-tags:
-	@create-tags
-
-docs:
-	@mkdocs.sh $(SRCDIR)/docs $(SOLARENV)/inc/doxygen.cfg
-
-distro-pack-install: install
-	$(SRCDIR)/bin/distro-install-clean-up
-	$(SRCDIR)/bin/distro-install-desktop-integration
-	$(SRCDIR)/bin/distro-install-sdk
-	$(SRCDIR)/bin/distro-install-file-lists
-
-$(SRCDIR)/src.downloaded: $(SRCDIR)/ooo.lst $(SRCDIR)/download
-	@$(SRCDIR)/download $(SRCDIR)/ooo.lst && touch $@
-
-fetch: $(SRCDIR)/src.downloaded
-
-$(WORKDIR)/bootstrap:
-	@cd $(SRCDIR) && ./bootstrap
-	@mkdir -p $(dir $@) && touch $@
-
-bootstrap: $(WORKDIR)/bootstrap
-
+endif # gb_PARTIALBUILD
+    
 # vim:set shiftwidth=4 softtabstop=4 noexpandtab:
 
