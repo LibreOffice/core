@@ -35,21 +35,13 @@
 
 #include <sot/object.hxx>
 #include <boost/shared_ptr.hpp>
-#include <tools/debug.hxx>
-#include <tools/stack.hxx>
-#include <tools/table.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/virdev.hxx>
-#include <tools/poly.hxx>
 #include <basegfx/tools/b2dclipstate.hxx>
 #include <vcl/font.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/lineinfo.hxx>
 #include <svtools/fltcall.hxx>
-
-#include <vector>
-#include <math.h>
-#include <stdlib.h>
 
 #define ERROR                   0
 #define NULLREGION              1
