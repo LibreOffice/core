@@ -114,10 +114,10 @@ namespace linguistic
 
         ::rtl::OUString aText(rText);
 
-        sal_Int32 nPos = aText.indexOf(sal_Unicode('('));
+        sal_Int32 nPos = aText.indexOf('(');
         while (nPos >= 0)
         {
-            sal_Int32 nEnd = aText.indexOf(sal_Unicode(')'), nPos);
+            sal_Int32 nEnd = aText.indexOf(')', nPos);
             if (nEnd >= 0)
             {
                 ::rtl::OUStringBuffer aTextBuf(aText);
@@ -126,12 +126,12 @@ namespace linguistic
             }
             else
                 break;
-            nPos = aText.indexOf(sal_Unicode('('));
+            nPos = aText.indexOf('(');
         }
 
-        nPos = aText.indexOf(sal_Unicode('*'));
+        nPos = aText.indexOf('*');
         if(nPos == 0)
-            aText = ::rtl::OUString();
+            return ::rtl::OUString();
         else if(nPos > 0)
             aText = aText.copy(0, nPos);
 
