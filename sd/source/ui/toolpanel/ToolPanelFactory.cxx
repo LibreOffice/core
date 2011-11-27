@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "taskpane/ToolPanelViewShell.hxx"
 #include "framework/FrameworkHelper.hxx"

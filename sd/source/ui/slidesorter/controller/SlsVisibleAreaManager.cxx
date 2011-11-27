@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "controller/SlsVisibleAreaManager.hxx"
 #include "controller/SlideSorterController.hxx"

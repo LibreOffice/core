@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "ChangeRequestQueueProcessor.hxx"
 #include "ConfigurationTracer.hxx"

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "view/SlsInsertAnimator.hxx"
 #include "controller/SlideSorterController.hxx"

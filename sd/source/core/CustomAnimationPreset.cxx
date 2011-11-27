@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sd.hxx"
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>

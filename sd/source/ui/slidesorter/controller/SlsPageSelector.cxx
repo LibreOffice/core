@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "controller/SlsPageSelector.hxx"
 

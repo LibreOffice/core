@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sd.hxx"
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>

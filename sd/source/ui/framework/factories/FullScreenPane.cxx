@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "FullScreenPane.hxx"
 #include "ViewShellBase.hxx"

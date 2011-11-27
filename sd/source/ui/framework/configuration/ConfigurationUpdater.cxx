@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "ConfigurationUpdater.hxx"
 #include "ConfigurationTracer.hxx"

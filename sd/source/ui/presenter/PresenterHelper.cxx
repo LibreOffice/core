@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "PresenterHelper.hxx"
 #include "CanvasUpdateRequester.hxx"

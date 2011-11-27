@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sd.hxx"
 
 #include "tools/SlotStateListener.hxx"
 #include <com/sun/star/frame/XStatusListener.hpp>

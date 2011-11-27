@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "SlideSorterViewShell.hxx"
 #include "ViewShellImplementation.hxx"

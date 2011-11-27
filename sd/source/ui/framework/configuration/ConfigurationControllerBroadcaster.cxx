@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "ConfigurationControllerBroadcaster.hxx"
 #include <com/sun/star/lang/IllegalArgumentException.hpp>

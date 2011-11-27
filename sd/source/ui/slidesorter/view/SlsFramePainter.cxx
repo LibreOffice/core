@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "SlsFramePainter.hxx"
 #include <vcl/outdev.hxx>

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "ResourceFactoryManager.hxx"
 #include <tools/wldcrd.hxx>

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include <com/sun/star/presentation/XPresentation2.hpp>
 

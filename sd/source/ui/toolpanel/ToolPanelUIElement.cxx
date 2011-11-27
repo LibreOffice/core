@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "ToolPanelUIElement.hxx"
 #include "MethodGuard.hxx"

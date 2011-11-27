@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sd.hxx"
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <com/sun/star/frame/XModel.hpp>

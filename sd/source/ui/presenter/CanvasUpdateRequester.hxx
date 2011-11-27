@@ -29,7 +29,6 @@
 #ifndef SD_PRESENTER_CANVAS_UPDATE_REQUESTER_HEADER
 #define SD_PRESENTER_CANVAS_UPDATE_REQUESTER_HEADER
 
-#include "precompiled_sd.hxx"
 
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <boost/noncopyable.hpp>

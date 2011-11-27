@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "presenter/PresenterCanvasFactory.hxx"
 #include "PresenterCanvas.hxx"

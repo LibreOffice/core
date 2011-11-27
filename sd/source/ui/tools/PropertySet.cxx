@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "tools/PropertySet.hxx"
 #include <boost/bind.hpp>

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 #include "TaskPanelFactory.hxx"
 #include "taskpane/ToolPanelViewShell.hxx"
 #include "DrawController.hxx"

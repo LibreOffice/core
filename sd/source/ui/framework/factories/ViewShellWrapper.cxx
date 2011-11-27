@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "framework/ViewShellWrapper.hxx"
 #include "framework/Pane.hxx"

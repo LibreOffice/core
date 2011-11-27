@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sd.hxx"
 #include <rtl/logfile.hxx>
 #include <rtl/strbuf.hxx>
 #include <com/sun/star/container/XChild.hpp>

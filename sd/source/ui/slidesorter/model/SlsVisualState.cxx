@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "model/SlsVisualState.hxx"
 #include "model/SlsPageDescriptor.hxx"

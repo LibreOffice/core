@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "view/SlsLayouter.hxx"
 #include "model/SlideSorterModel.hxx"

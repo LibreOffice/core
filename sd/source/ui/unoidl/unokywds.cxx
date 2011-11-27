@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sd.hxx"
 
 #ifndef _SD_UNOKYWDS_HXX_
 #define SD_DEFINE_KEYWORDS

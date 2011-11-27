@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "controller/SlsProperties.hxx"
 #include <vcl/svapp.hxx>

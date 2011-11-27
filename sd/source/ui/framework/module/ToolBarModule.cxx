@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "ToolBarModule.hxx"
 #include "ViewShellBase.hxx"

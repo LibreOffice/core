@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "SlideShowRestarter.hxx"
 #include "framework/ConfigurationController.hxx"

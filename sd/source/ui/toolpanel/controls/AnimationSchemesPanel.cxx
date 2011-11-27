@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sd.hxx"
 #include "AnimationSchemesPanel.hxx"
 
 #include "strings.hrc"
@@ -83,8 +81,6 @@ bool AnimationSchemesPanel::IsExpandable() const
 
 
 } } } // end of namespace ::sd::toolpanel::controls
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sd.hxx"
 #include "AnimationSchemesPanel.hxx"
 
 #include "strings.hrc"

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 #include "PaneShells.hxx"
 
 #include "PaneChildWindows.hxx"

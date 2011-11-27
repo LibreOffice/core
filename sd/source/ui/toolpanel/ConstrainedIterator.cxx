@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sd.hxx"
 
 // This is a definition file of a template class.  It is therefore
 // included by other files and thus has to be guarded against multiple

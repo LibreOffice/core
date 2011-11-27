@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "framework/ResourceId.hxx"
 #include "framework/FrameworkHelper.hxx"

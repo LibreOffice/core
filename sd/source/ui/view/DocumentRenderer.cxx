@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 

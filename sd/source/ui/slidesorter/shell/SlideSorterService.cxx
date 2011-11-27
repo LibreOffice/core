@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "SlideSorterService.hxx"
 #include "controller/SlideSorterController.hxx"

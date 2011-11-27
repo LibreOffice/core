@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include <editeng/fontitem.hxx>
 #include <editeng/eeitem.hxx>

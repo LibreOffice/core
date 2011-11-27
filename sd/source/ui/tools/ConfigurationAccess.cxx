@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "tools/ConfigurationAccess.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

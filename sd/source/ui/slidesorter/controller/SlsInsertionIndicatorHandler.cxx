@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "controller/SlsInsertionIndicatorHandler.hxx"
 #include "controller/SlsProperties.hxx"

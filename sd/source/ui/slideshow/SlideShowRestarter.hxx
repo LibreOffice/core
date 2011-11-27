@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "slideshow.hxx"
 #include "ViewShellBase.hxx"

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_sd.hxx"
 
 #include "SlideRenderer.hxx"
 #include "sdpage.hxx"
