@@ -30,8 +30,6 @@
 #    undef _THREAD_SAFE
 #endif
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_shell.hxx"
 
 #ifdef WNT
 #include <tools/presys.h>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_shell.hxx"
 
 #ifndef INCLUDED_RECENTLY_USED_FILE
 #include "recently_used_file.hxx"

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_shell.hxx"
 #include <osl/diagnose.h>
 #include <osl/process.h>
 #include <rtl/bootstrap.hxx>

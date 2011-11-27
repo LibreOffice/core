@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_shell.hxx"
 #include "internal/iso8601_converter.hxx"
 #include "internal/utilities.hxx"
 

@@ -28,8 +28,6 @@
 
 #ifndef DONT_HAVE_GDIPLUS
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_shell.hxx"
 
 #include "internal/global.hxx"
 

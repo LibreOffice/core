@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_shell.hxx"
 #include "internal/global.hxx"
 #include "internal/infotips.hxx"
 #include "internal/shlxthdl.hxx"

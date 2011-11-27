@@ -28,8 +28,6 @@
 
 #undef OSL_DEBUG_LEVEL
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_shell.hxx"
 
 #include <osl/diagnose.h>
 

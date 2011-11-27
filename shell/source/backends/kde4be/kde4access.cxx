@@ -26,7 +26,6 @@
 *
 ************************************************************************/
 
-#include "precompiled_shell.hxx"
 #include "sal/config.h"
 
 #include "QFont"
