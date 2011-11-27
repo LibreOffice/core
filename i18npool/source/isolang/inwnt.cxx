@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-// no include "precompiled_i18npool.hxx" because this file is included in insys.cxx
 
 #include <sal/config.h>
 

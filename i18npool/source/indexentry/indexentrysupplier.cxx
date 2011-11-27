@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_i18npool.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <indexentrysupplier.hxx>
 #include <localedata.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_i18npool.hxx"
 
 #define TRANSLITERATION_ALL
 #include <texttonum.hxx>

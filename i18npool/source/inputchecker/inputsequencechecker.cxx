@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_i18npool.hxx"
 
 #include <inputsequencechecker.hxx>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>

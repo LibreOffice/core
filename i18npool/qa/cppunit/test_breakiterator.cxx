@@ -25,7 +25,6 @@
  * instead of those above.
  */
 
-#include "precompiled_i18npool.hxx"
 #include "sal/config.h"
 #include "sal/precppunit.hxx"
 
