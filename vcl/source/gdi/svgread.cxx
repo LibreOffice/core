@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include <tools/stream.hxx>
 #include <vcl/svgread.hxx>
 #include <vcl/gdimtf.hxx>

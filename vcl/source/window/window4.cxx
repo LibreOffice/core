@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_vcl.hxx"
 
 #include "vcl/window.hxx"
 #include "vcl/arrange.hxx"

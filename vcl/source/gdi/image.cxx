@@ -25,8 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_vcl.hxx"
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>

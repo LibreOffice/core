@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_vcl.hxx"
 
 // i72022: ad-hoc to forcibly enable reconversion
 #if WINVER < 0x0500

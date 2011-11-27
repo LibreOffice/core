@@ -25,8 +25,6 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_vcl.hxx"
 
 #include <rtl/ustring.hxx>
 #include <rtl/bootstrap.hxx>

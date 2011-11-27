@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_vcl.hxx"
 
 #include "vcl/print.hxx"
 #include "vcl/svapp.hxx"

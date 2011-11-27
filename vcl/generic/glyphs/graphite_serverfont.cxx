@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_vcl.hxx"
 
 // We need this to enable namespace support in libgrengine headers.
 #define GR_NAMESPACE

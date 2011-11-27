@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_vcl.hxx"
 
 #include "pdffontcache.hxx"
 #include <salgdi.hxx>

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_vcl.hxx"
 
 #include "printdlg.hxx"
 #include "svdata.hxx"

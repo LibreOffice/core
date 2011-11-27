@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_vcl.hxx"
 #include <rtl/memory.h>
 #include <vcl/bmpacc.hxx>
 #include <vcl/salbtype.hxx>

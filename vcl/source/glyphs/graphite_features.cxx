@@ -31,8 +31,6 @@
 // e.g.
 // 1001=1&2002=2&fav1=0
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_vcl.hxx"
 
 #include <sal/types.h>
 

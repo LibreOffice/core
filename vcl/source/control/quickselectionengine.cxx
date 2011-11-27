@@ -24,8 +24,6 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_vcl.hxx"
 
 #include "vcl/quickselectionengine.hxx"
 #include "vcl/event.hxx"
