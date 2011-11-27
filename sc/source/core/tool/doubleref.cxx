@@ -321,11 +321,8 @@ OUString ScDBInternalRange::getString(SCCOL nCol, SCROW nRow) const
 {
     OUString aStr;
     const ScAddress& s = maRange.aStart;
-    ScBaseCell* pCell = getDoc()->GetCell(ScAddress(s.Col() + nCol, s.Row() + nRow, maRange.aStart.Tab()));
-    if (!pCell)
-        return aStr;
-
-    getCellString(aStr, pCell);
+    // GetStringForFormula is not used here, to allow querying for date values.
+    getDoc()->GetInputString(s.Col() + nCol, s.Row() + nRow, s.Tab(), aStr);
     return aStr;
 }
 
@@ -343,54 +340,6 @@ SCCOL ScDBInternalRange::findFieldColumn(SCCOL nIndex) const
 
     // Don't handle out-of-bound condition here.  We'll do that later.
     return nIndex + nDBCol1 - 1;
-}
-
-sal_uInt16 ScDBInternalRange::getCellString(OUString& rStr, ScBaseCell* pCell) const
-{
-    sal_uInt16 nErr = 0;
-    String aStr;
-    if (pCell)
-    {
-        SvNumberFormatter* pFormatter = getDoc()->GetFormatTable();
-        switch (pCell->GetCellType())
-        {
-            case CELLTYPE_STRING:
-                ((ScStringCell*) pCell)->GetString(aStr);
-            break;
-            case CELLTYPE_EDIT:
-                ((ScEditCell*) pCell)->GetString(aStr);
-            break;
-            case CELLTYPE_FORMULA:
-            {
-                ScFormulaCell* pFCell = (ScFormulaCell*) pCell;
-                nErr = pFCell->GetErrCode();
-                if (pFCell->IsValue())
-                {
-                    double fVal = pFCell->GetValue();
-                    sal_uLong nIndex = pFormatter->GetStandardFormat(
-                                        NUMBERFORMAT_NUMBER,
-                                        ScGlobal::eLnge);
-                    pFormatter->GetInputLineString(fVal, nIndex, aStr);
-                }
-                else
-                    pFCell->GetString(aStr);
-            }
-            break;
-            case CELLTYPE_VALUE:
-            {
-                double fVal = ((ScValueCell*) pCell)->GetValue();
-                sal_uLong nIndex = pFormatter->GetStandardFormat(
-                                        NUMBERFORMAT_NUMBER,
-                                        ScGlobal::eLnge);
-                pFormatter->GetInputLineString(fVal, nIndex, aStr);
-            }
-            break;
-            default:
-                ;
-        }
-    }
-    rStr = aStr;
-    return nErr;
 }
 
 SCCOL ScDBInternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr) const
@@ -413,8 +362,7 @@ SCCOL ScDBInternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr)
     ScAddress aLook( nDBCol1, nDBRow1, nDBTab1 );
     while (!bFound && (aLook.Col() <= nDBCol2))
     {
-        ScBaseCell* pCell = getDoc()->GetCell( aLook );
-        sal_uInt16 nErr = getCellString( aCellStr, pCell );
+        sal_uInt16 nErr = getDoc()->GetStringForFormula( aLook, aCellStr );
         if (pErr)
             *pErr = nErr;
         lcl_toUpper(aCellStr);

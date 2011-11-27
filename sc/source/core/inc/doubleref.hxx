@@ -138,9 +138,6 @@ public:
     virtual bool isRangeEqual(const ScRange& rRange) const;
 
 private:
-    sal_uInt16 getCellString(::rtl::OUString& rStr, ScBaseCell* pCell) const;
-
-private:
     ScRange maRange;
 };
 
