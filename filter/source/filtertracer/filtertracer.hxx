@@ -29,13 +29,6 @@
 #ifndef _FILTERTRACER_HXX
 #define _FILTERTRACER_HXX
 
-#include <rtl/ustring.hxx>
-#include <tools/debug.hxx>
-#include <tools/stream.hxx>
-#include <tools/string.hxx>
-#include <tools/urlobj.hxx>
-#include <tools/stack.hxx>
-
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -53,6 +46,8 @@
 #include <com/sun/star/util/XTextSearch.hpp>
 #include <com/sun/star/util/SearchResult.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+
+class SvStream;
 
 // -----------------------------------------------------------------------------
 
