@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sot.hxx"
 #define _SOT_EXCHANGE_CXX
 #define SOT_STRING_LIST
 #define _SOT_FORMATS_INCLUDE_SYSTEMFORMATS
