@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_starmath.hxx"
 
 /*todo: Change characters and tcharacters to accumulate the characters together
 into one string, xml parser hands them to us line by line rather than all in

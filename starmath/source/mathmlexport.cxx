@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_starmath.hxx"
 
 /*
  Warning: The SvXMLElementExport helper class creates the beginning and
