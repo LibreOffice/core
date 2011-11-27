@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_scripting.hxx"
 #include "stringresource.hxx"
 #include <com/sun/star/io/XTextInputStream.hpp>
 #include <com/sun/star/io/XTextOutputStream.hpp>

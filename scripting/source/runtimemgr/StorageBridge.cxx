@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_scripting.hxx"
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <drafts/com/sun/star/script/framework/storage/XScriptStorageManager.hpp>

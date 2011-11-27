@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_scripting.hxx"
 
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implementationentry.hxx>
