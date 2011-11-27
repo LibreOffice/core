@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_package.hxx"
 #include <ZipEnumeration.hxx>
 
 /** Provides an Enumeration over the contents of a Zip file */

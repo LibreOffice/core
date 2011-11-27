@@ -27,7 +27,6 @@
  ************************************************************************/
 
 // MARKER( update_precomp.py ): autogen include statement, do not remove
-#include "precompiled_package.hxx"
 #include <ManifestImport.hxx>
 #include <ManifestDefines.hxx>
 #include <Base64Codec.hxx>

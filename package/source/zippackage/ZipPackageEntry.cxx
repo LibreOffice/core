@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_package.hxx"
 #include <ZipPackageEntry.hxx>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <osl/diagnose.h>

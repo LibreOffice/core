@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_package.hxx"
 #include <package/Inflater.hxx>
 #ifndef _ZLIB_H
 #ifdef SYSTEM_ZLIB

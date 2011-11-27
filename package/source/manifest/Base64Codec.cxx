@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_package.hxx"
 #include "Base64Codec.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>

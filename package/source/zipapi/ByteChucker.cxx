@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_package.hxx"
 #include <ByteChucker.hxx>
 #include <PackageConstants.hxx>
 #include <com/sun/star/io/XSeekable.hpp>
