@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include "mysql/YUsers.hxx"
 #include "mysql/YUser.hxx"
 #include "mysql/YTable.hxx"

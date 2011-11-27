@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include "dbase/DIndexes.hxx"
 #include "dbase/DIndex.hxx"
 #include <connectivity/dbexception.hxx>

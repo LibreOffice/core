@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include "ado/ADatabaseMetaData.hxx"
 #include "ado/ADatabaseMetaDataResultSet.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>

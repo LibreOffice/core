@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include "connectivity/sdbcx/VCatalog.hxx"
 #include "connectivity/sdbcx/VCollection.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>

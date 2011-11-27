@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
 #include "dbase/DResultSet.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>

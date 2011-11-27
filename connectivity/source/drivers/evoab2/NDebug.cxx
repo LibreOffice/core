@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include "NDebug.hxx"
 #include <osl/diagnose.h>
 #if OSL_DEBUG_LEVEL > 1

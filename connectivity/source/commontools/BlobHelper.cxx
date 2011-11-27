@@ -25,8 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include "connectivity/BlobHelper.hxx"
 #include <comphelper/seqstream.hxx>
 #include "connectivity/dbexception.hxx"

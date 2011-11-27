@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include "java/math/BigDecimal.hxx"
 #include "java/tools.hxx"
 #include "resource/jdbc_log.hrc"

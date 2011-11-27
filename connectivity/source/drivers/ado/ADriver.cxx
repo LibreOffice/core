@@ -28,8 +28,6 @@
 
 #define _WIN32_WINNT 0x0501
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include "ado/ADriver.hxx"
 #include "ado/AConnection.hxx"
 #include "ado/Awrapadox.hxx"

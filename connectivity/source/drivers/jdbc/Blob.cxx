@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include "java/sql/Blob.hxx"
 #include "java/tools.hxx"
 #include "java/io/InputStream.hxx"

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include "dbase/DIndexIter.hxx"
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include "ado/AIndexes.hxx"
 #include "ado/AIndex.hxx"
 #include "ado/AConnection.hxx"

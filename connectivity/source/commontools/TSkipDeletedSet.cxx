@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include "TSkipDeletedSet.hxx"
 #include <osl/diagnose.h>
 #include <rtl/logfile.hxx>

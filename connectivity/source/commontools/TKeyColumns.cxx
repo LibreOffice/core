@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include "connectivity/TKeyColumns.hxx"
 #include "connectivity/sdbcx/VKeyColumn.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>

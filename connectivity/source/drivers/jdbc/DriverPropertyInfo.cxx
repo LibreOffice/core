@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include "java/sql/DriverPropertyInfo.hxx"
 #include "java/lang/Boolean.hxx"
 #include "java/tools.hxx"

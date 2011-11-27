@@ -25,8 +25,6 @@
  *
 ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 
 #include <rtl/strbuf.hxx>
     // keep this include at the beginning. Some of the other includes seems to inject a symbol "l" into the

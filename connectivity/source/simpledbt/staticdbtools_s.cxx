@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include <connectivity/virtualdbtools.hxx>
 #include "staticdbtools_s.hxx"
 #include "connectivity/dbconversion.hxx"

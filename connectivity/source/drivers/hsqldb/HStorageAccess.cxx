@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include "hsqldb/HStorageAccess.hxx"
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/embed/XStorage.hpp>

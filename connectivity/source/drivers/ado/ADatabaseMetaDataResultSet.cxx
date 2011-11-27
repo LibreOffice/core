@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include <comphelper/sequence.hxx>
 #include "ado/ADatabaseMetaDataResultSet.hxx"
 #include "ado/ADatabaseMetaDataResultSetMetaData.hxx"

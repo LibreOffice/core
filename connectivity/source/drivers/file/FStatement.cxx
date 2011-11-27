@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include <osl/diagnose.h>
 #include "file/FStatement.hxx"
 #include "file/FConnection.hxx"

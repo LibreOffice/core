@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include "odbc/ODriver.hxx"
 #include "odbc/OConnection.hxx"
 #include "odbc/OFunctions.hxx"

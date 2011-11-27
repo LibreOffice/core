@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include "java/lang/String.hxx"
 #include "java/lang/Boolean.hxx"
 #include "java/sql/ResultSet.hxx"

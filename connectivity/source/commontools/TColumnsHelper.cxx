@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include "connectivity/TColumnsHelper.hxx"
 #include "connectivity/sdbcx/VColumn.hxx"
 #include "connectivity/sdbcx/VColumn.hxx"

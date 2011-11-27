@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include "dbase/dindexnode.hxx"
 #include "connectivity/CommonTools.hxx"
 #include <osl/thread.h>

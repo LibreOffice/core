@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_connectivity.hxx"
 #include "ParameterSubstitution.hxx"
 #include "connectivity/sqlparse.hxx"
 #include <comphelper/sequenceashashmap.hxx>

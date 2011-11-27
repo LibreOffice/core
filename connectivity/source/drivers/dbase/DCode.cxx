@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include "dbase/DCode.hxx"
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include "dbase/DIndex.hxx"

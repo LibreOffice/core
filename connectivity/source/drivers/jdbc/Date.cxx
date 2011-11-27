@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_connectivity.hxx"
 #include "java/util/Date.hxx"
 #include "java/tools.hxx"
 #include "connectivity/dbconversion.hxx"
