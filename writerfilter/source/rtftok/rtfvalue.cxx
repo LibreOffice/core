@@ -25,10 +25,7 @@
  * instead of those above.
  */
 
-#include <rtfvalue.hxx>
 #include <rtfreferenceproperties.hxx>
-#include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
 
 namespace writerfilter {
 namespace rtftok {

@@ -28,9 +28,6 @@
 #ifndef _RTFVALUE_HXX_
 #define _RTFVALUE_HXX_
 
-#include <string>
-#include <map>
-#include <rtl/ustrbuf.hxx>
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 
