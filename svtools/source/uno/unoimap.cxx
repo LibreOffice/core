@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svtools.hxx"
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

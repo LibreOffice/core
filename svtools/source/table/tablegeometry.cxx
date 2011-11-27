@@ -25,8 +25,6 @@
  *
 ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svtools.hxx"
 
 #include "tablegeometry.hxx"
 #include "tablecontrol_impl.hxx"

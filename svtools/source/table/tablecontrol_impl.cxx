@@ -25,8 +25,6 @@
  *
 ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svtools.hxx"
 
 #include "svtools/table/tablecontrol.hxx"
 #include "svtools/table/defaultinputhandler.hxx"

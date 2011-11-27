@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_svtools.hxx"
 
 #include "paneltabbarpeer.hxx"
 #include "svtools/toolpanel/paneltabbar.hxx"

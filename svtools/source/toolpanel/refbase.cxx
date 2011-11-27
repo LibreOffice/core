@@ -25,7 +25,6 @@
  *
 ************************************************************************/
 
-#include "precompiled_svtools.hxx"
 
 #include "svtools/toolpanel/refbase.hxx"
 

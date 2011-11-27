@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_svtools.hxx"
 
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>

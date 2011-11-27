@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svtools.hxx"
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/svxbox.hxx>

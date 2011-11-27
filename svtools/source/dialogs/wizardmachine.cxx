@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svtools.hxx"
 #include <svtools/wizardmachine.hxx>
 #include <svtools/helpid.hrc>
 #include <tools/debug.hxx>

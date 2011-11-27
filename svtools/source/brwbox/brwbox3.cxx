@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svtools.hxx"
 #include <svtools/brwbox.hxx>
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
 #include <tools/debug.hxx>

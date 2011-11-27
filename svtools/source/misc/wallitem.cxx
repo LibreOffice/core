@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svtools.hxx"
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>

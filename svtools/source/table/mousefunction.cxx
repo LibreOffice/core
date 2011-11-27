@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_svtools.hxx"
 
 #include "mousefunction.hxx"
 #include "svtools/table/tablecontrolinterface.hxx"

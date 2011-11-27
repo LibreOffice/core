@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svtools.hxx"
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>

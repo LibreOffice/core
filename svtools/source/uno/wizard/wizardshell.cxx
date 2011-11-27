@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_svtools.hxx"
 
 #include "wizardshell.hxx"
 #include "wizardpagecontroller.hxx"

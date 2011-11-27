@@ -25,7 +25,6 @@
  *
 ************************************************************************/
 
-#include "precompiled_svtools.hxx"
 
 #include "toolpanelcollection.hxx"
 #include "paneldecklisteners.hxx"

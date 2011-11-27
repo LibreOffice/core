@@ -25,7 +25,6 @@
  *
 ************************************************************************/
 
-#include "precompiled_svtools.hxx"
 
 #include "svtools/toolpanel/tablayouter.hxx"
 #include "svtools/toolpanel/toolpaneldeck.hxx"

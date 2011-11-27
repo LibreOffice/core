@@ -25,7 +25,6 @@
  *
 ************************************************************************/
 
-#include "precompiled_svtools.hxx"
 
 #include "dummypanel.hxx"
 #include "toolpanelcollection.hxx"

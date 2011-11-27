@@ -24,8 +24,6 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svtools.hxx"
 
 #include "ctrlbox.hxx"
 #include "svtools/toolpanel/toolpaneldeck.hxx"

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svtools.hxx"
 
 #ifndef INCLUDE_CONFIGITEMS_ACCESSIBILITYOPTIONS_CONST_HXX
 #define INCLUDE_CONFIGITEMS_ACCESSIBILITYOPTIONS_CONST_HXX

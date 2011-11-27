@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svtools.hxx"
 
 // this file contains code from filectrl.cxx which needs to be compiled with enabled exception hanling
 #include <svtools/filectrl.hxx>

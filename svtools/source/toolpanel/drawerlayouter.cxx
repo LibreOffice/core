@@ -25,7 +25,6 @@
  *
 ************************************************************************/
 
-#include "precompiled_svtools.hxx"
 
 #include "svtools/toolpanel/drawerlayouter.hxx"
 #include "toolpaneldrawer.hxx"

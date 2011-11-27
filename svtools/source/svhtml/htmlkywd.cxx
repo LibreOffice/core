@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svtools.hxx"
 
 #include <limits.h>                     // for USHRT_MAX
 #include <sal/types.h>                  // for sal_Char, sal_Unicode, etc
