@@ -1217,7 +1217,7 @@ ThreeDLookScheme ThreeDHelper::detectScheme( const uno::Reference< XDiagram >& x
         if( xDiagramProps.is() )
             xDiagramProps->getPropertyValue( C2U( "D3DSceneShadeMode" ) )>>= aShadeMode;
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -1267,7 +1267,7 @@ void ThreeDHelper::setScheme( const uno::Reference< XDiagram >& xDiagram, ThreeD
 
         lcl_setLightsForScheme( xProp, aScheme );
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -1324,7 +1324,7 @@ void ThreeDHelper::setDefaultIllumination( const uno::Reference< beans::XPropert
         xSceneProperties->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_7 ), uno::makeAny( sal_False ) );
         xSceneProperties->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_8 ), uno::makeAny( sal_False ) );
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -1371,7 +1371,7 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
                         , aPercentDiagonalPropertyName, uno::makeAny(nPercentDiagonal) ) )
                         bDifferentRoundedEdges = true;
                 }
-                catch( uno::Exception& e )
+                catch( const uno::Exception& e )
                 {
                     ASSERT_EXCEPTION( e );
                     bDifferentRoundedEdges = true;
@@ -1384,7 +1384,7 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
                         , aBorderStylePropertyName, uno::makeAny(aLineStyle) ) )
                         bDifferentObjectLines = true;
                 }
-                catch( uno::Exception& e )
+                catch( const uno::Exception& e )
                 {
                     ASSERT_EXCEPTION( e );
                     bDifferentObjectLines = true;
@@ -1427,7 +1427,7 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
         else if( aLineStyle == drawing::LineStyle_SOLID )
             rnObjectLines = 1;
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         ASSERT_EXCEPTION( e );
     }

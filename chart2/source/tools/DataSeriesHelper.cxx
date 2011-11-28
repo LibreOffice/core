@@ -191,7 +191,7 @@ void lcl_insertOrDeleteDataLabelsToSeriesAndAllPoints( const Reference< chart2::
             }
         }
     }
-    catch( uno::Exception &e)
+    catch(const uno::Exception &e)
     {
         ASSERT_EXCEPTION( e );
     }
@@ -422,7 +422,7 @@ void setStackModeAtSeries(
                 aAxisIndexSet.insert(nAxisIndex);
             }
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -473,7 +473,7 @@ sal_Int32 getAttachedAxisIndex( const Reference< chart2::XDataSeries > & xSeries
             xProp->getPropertyValue( C2U("AttachedAxisIndex") ) >>= nRet;
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -543,7 +543,7 @@ void deleteSeries(
             xSeriesCnt->setDataSeries( ContainerHelper::ContainerToSequence( aSeries ));
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -703,9 +703,8 @@ bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDataSeque
             if( !aHiddenValues.getLength() )
                 return true;
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            (void)e; // avoid warning
             return true;
         }
     }
@@ -790,7 +789,7 @@ bool hasDataLabelsAtSeries( const Reference< chart2::XDataSeries >& xSeries )
                 bRet = aLabel.ShowNumber || aLabel.ShowNumberInPercent || aLabel.ShowCategoryName;
         }
     }
-    catch( uno::Exception &e)
+    catch(const uno::Exception &e)
     {
         ASSERT_EXCEPTION( e );
     }
@@ -823,7 +822,7 @@ bool hasDataLabelsAtPoints( const Reference< chart2::XDataSeries >& xSeries )
             }
         }
     }
-    catch( uno::Exception &e)
+    catch(const uno::Exception &e)
     {
         ASSERT_EXCEPTION( e );
     }
@@ -857,7 +856,7 @@ bool hasDataLabelAtPoint( const Reference< chart2::XDataSeries >& xSeries, sal_I
             }
         }
     }
-    catch( uno::Exception &e)
+    catch(const uno::Exception &e)
     {
         ASSERT_EXCEPTION( e );
     }
@@ -887,7 +886,7 @@ void insertDataLabelToPoint( const Reference< beans::XPropertySet >& xPointProp 
             xPointProp->setPropertyValue( C2U( "Label" ), uno::makeAny( aLabel ) );
         }
     }
-    catch( uno::Exception &e)
+    catch(const uno::Exception &e)
     {
         ASSERT_EXCEPTION( e );
     }
@@ -907,7 +906,7 @@ void deleteDataLabelsFromPoint( const Reference< beans::XPropertySet >& xPointPr
             xPointProp->setPropertyValue( C2U( "Label" ), uno::makeAny( aLabel ) );
         }
     }
-    catch( uno::Exception &e)
+    catch(const uno::Exception &e)
     {
         ASSERT_EXCEPTION( e );
     }

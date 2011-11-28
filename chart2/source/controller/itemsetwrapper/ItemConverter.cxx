@@ -138,7 +138,7 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                             delete pItem;
                         }
                     }
-                    catch( beans::UnknownPropertyException &ex )
+                    catch( const beans::UnknownPropertyException &ex )
                     {
                         delete pItem;
                         (void)ex;
@@ -149,9 +149,8 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                                                              " - unknown Property: " )) + aProperty.first,
                                         RTL_TEXTENCODING_ASCII_US ).getStr());
                     }
-                    catch( uno::Exception &ex )
+                    catch( const uno::Exception &ex )
                     {
-                        (void)ex;
                         ASSERT_EXCEPTION( ex );
                     }
                 }
@@ -162,7 +161,7 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                 {
                     FillSpecialItem( nWhich, rOutItemSet );
                 }
-                catch( uno::Exception &ex )
+                catch( const uno::Exception &ex )
                 {
                     ASSERT_EXCEPTION( ex );
                 }
@@ -212,7 +211,7 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
                         bItemsChanged = true;
                     }
                 }
-                catch( beans::UnknownPropertyException &ex )
+                catch( const beans::UnknownPropertyException &ex )
                 {
                     (void)ex;
                     OSL_FAIL(
@@ -222,7 +221,7 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
                                                          " - unknown Property: " )) + aProperty.first,
                                     RTL_TEXTENCODING_ASCII_US).getStr());
                 }
-                catch( uno::Exception &ex )
+                catch( const uno::Exception &ex )
                 {
                     (void)ex;
                     OSL_FAIL( ::rtl::OUStringToOString(

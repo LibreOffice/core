@@ -181,7 +181,7 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
                     a_Size = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
                 }
             }
-            catch( uno::Exception& e )
+            catch( const uno::Exception& e )
             {
                 ASSERT_EXCEPTION( e );
             }

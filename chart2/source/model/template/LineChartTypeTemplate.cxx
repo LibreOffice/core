@@ -262,7 +262,7 @@ sal_Bool SAL_CALL LineChartTypeTemplate::matchesTemplate(
                     break;
                 }
             }
-            catch( uno::Exception & ex )
+            catch( const uno::Exception & ex )
             {
                 ASSERT_EXCEPTION( ex );
             }
@@ -291,7 +291,7 @@ sal_Bool SAL_CALL LineChartTypeTemplate::matchesTemplate(
             setFastPropertyValue_NoBroadcast( PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION, xChartTypeProp->getPropertyValue(C2U("CurveResolution" )) );
             setFastPropertyValue_NoBroadcast( PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER, xChartTypeProp->getPropertyValue(C2U("SplineOrder" )) );
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -322,7 +322,7 @@ Reference< chart2::XChartType > LineChartTypeTemplate::getChartTypeForIndex( sal
                 C2U( "SplineOrder" ), getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER ));
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -356,7 +356,7 @@ Reference< chart2::XChartType > SAL_CALL LineChartTypeTemplate::getChartTypeForN
                 C2U( "SplineOrder" ), getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER ));
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -381,7 +381,7 @@ void SAL_CALL LineChartTypeTemplate::applyStyle(
         DataSeriesHelper::switchLinesOnOrOff( xProp, m_bHasLines );
         DataSeriesHelper::makeLinesThickOrThin( xProp, m_nDim==2 );
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }

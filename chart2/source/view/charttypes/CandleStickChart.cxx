@@ -168,7 +168,7 @@ void CandleStickChart::createShapes()
             PropertyMapper::getMultiPropertyListsFromValueMap( aBlackBox_Names, aBlackBox_Values, aBlackBox_Map );
         }
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         ASSERT_EXCEPTION( e );
     }

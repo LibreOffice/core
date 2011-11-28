@@ -183,7 +183,7 @@ uno::Reference< XDiagram > SAL_CALL ChartTypeTemplate::createDiagramByDataSource
         Sequence< Reference< XChartType > > aOldChartTypesSeq;
         FillDiagram( xDia, aData.Series, aData.Categories, aOldChartTypesSeq, true );
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -266,7 +266,7 @@ void SAL_CALL ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >
 
         FillDiagram( xDiagram, aSeriesSeq, aData.Categories, aOldChartTypesSeq, false );
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -323,7 +323,7 @@ void SAL_CALL ChartTypeTemplate::changeDiagramData(
     ::chart::debug::ChartDebugTraceDiagram( xDiagram );
 #endif
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -376,7 +376,7 @@ sal_Bool SAL_CALL ChartTypeTemplate::matchesTemplate(
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -888,7 +888,7 @@ void ChartTypeTemplate::createChartTypes(
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }

@@ -295,7 +295,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
                     rOutItemSet.Put( aItem );
                 }
             }
-            catch( uno::Exception & ex )
+            catch( const uno::Exception & ex )
             {
                 ASSERT_EXCEPTION( ex );
             }
@@ -556,7 +556,7 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
                     }
                 }
             }
-            catch( uno::Exception & ex )
+            catch( const uno::Exception & ex )
             {
                 ASSERT_EXCEPTION( ex );
             }

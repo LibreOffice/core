@@ -173,7 +173,7 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
             }
         }
     }
-    catch( uno::Exception &ex )
+    catch( const uno::Exception &ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -346,7 +346,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                             bChanged = true;
                         }
                     }
-                    catch( uno::Exception& e )
+                    catch( const uno::Exception& e )
                     {
                         ASSERT_EXCEPTION( e );
                     }

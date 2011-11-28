@@ -133,7 +133,7 @@ void LegendPositionResources::writeToResources( const uno::Reference< frame::XMo
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -176,7 +176,7 @@ void LegendPositionResources::writeToModel( const ::com::sun::star::uno::Referen
             xProp->setPropertyValue( C2U( "RelativePosition" ), uno::Any());
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }

@@ -165,7 +165,7 @@ bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSe
                         bChanged = true;
                     }
                 }
-                catch( uno::Exception & ex )
+                catch( const uno::Exception & ex )
                 {
                     ASSERT_EXCEPTION( ex );
                 }

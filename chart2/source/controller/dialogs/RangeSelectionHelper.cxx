@@ -78,7 +78,7 @@ Reference< sheet::XRangeSelection > RangeSelectionHelper::getRangeSelection()
             if( xDataProvider.is())
                 m_xRangeSelection.set( xDataProvider->getRangeSelection());
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
 
@@ -109,7 +109,7 @@ void RangeSelectionHelper::raiseRangeSelectionDocument()
                 }
             }
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -155,7 +155,7 @@ bool RangeSelectionHelper::chooseRange(
             xRangeSel->startRangeSelection( aArgs );
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         bResult = false;
         ASSERT_EXCEPTION( ex );

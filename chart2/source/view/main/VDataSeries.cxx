@@ -246,7 +246,7 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
                 else if( aRole.equals(C2U("values-size")) )
                     m_aValues_Bubble_Size.init( xDataSequence );
             }
-            catch( uno::Exception& e )
+            catch( const uno::Exception& e )
             {
                 ASSERT_EXCEPTION( e );
             }
@@ -282,7 +282,7 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
             if(m_nAxisIndex<0)
                 m_nAxisIndex=0;
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -622,7 +622,7 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Refe
 
         OSL_FAIL("no label placement supported");
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         ASSERT_EXCEPTION( e );
     }
@@ -757,7 +757,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
         else
             apSymbolProps.reset();
     }
-    catch( uno::Exception &e)
+    catch(const uno::Exception &e)
     {
         ASSERT_EXCEPTION( e );
     }
@@ -837,7 +837,7 @@ bool VDataSeries::hasPointOwnColor( sal_Int32 index ) const
         uno::Reference< beans::XPropertyState > xPointState( this->getPropertiesOfPoint(index), uno::UNO_QUERY_THROW );
         return (xPointState->getPropertyState( C2U("Color")) != beans::PropertyState_DEFAULT_VALUE );
     }
-    catch( uno::Exception& e)
+    catch(const uno::Exception& e)
     {
         ASSERT_EXCEPTION( e );
     }
@@ -888,7 +888,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
         if( !(xProp->getPropertyValue( C2U( "Label" ) ) >>= *apLabel) )
             apLabel.reset();
     }
-    catch( uno::Exception &e)
+    catch(const uno::Exception &e)
     {
         ASSERT_EXCEPTION( e );
     }

@@ -115,7 +115,7 @@ void WrappedStockProperty::setPropertyValue( const ::com::sun::star::uno::Any& r
                 ControllerLockGuard aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
                 xTemplate->changeDiagram( xDiagram );
             }
-            catch( uno::Exception & ex )
+            catch( const uno::Exception & ex )
             {
                 ASSERT_EXCEPTION( ex );
             }

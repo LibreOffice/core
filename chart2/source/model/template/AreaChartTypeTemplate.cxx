@@ -181,7 +181,7 @@ sal_Int32 AreaChartTypeTemplate::getDimension() const
         const_cast< AreaChartTypeTemplate * >( this )->
             getFastPropertyValue( PROP_AREA_TEMPLATE_DIMENSION ) >>= nDim;
     }
-    catch( beans::UnknownPropertyException & ex )
+    catch( const beans::UnknownPropertyException & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -238,7 +238,7 @@ Reference< chart2::XChartType > AreaChartTypeTemplate::getChartTypeForIndex( sal
         xResult.set( xFact->createInstance(
                          CHART2_SERVICE_NAME_CHARTTYPE_AREA ), uno::UNO_QUERY_THROW );
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }

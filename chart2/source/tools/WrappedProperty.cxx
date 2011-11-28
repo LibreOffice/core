@@ -135,7 +135,7 @@ beans::PropertyState WrappedProperty::getPropertyState( const Reference< beans::
                     aState = beans::PropertyState_DEFAULT_VALUE;
             }
         }
-        catch( beans::UnknownPropertyException& ex )
+        catch( const beans::UnknownPropertyException& ex )
         {
             ASSERT_EXCEPTION( ex );
         }

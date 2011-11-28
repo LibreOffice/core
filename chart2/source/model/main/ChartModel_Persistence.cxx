@@ -138,7 +138,7 @@ Reference< embed::XStorage > lcl_createStorage(
             xStorageFact->createInstanceWithArguments( aStorageArgs ), uno::UNO_QUERY_THROW );
         OSL_ENSURE( xStorage.is(), "No Storage" );
     }
-    catch( ::com::sun::star::ucb::ContentCreationException & rEx )
+    catch( const ::com::sun::star::ucb::ContentCreationException & rEx )
     {
         ASSERT_EXCEPTION( rEx );
     }
@@ -187,7 +187,7 @@ Reference< document::XFilter > ChartModel::impl_createFilter(
                 }
             }
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -365,7 +365,7 @@ void ChartModel::impl_store(
             xExporter->setSourceDocument( Reference< lang::XComponent >( this ));
             xFilter->filter( aMD );
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -390,7 +390,7 @@ void ChartModel::impl_store(
             xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "SavedObject" )),
                 uno::makeAny( aMDHelper.HierarchicalDocumentName ) );
         }
-        catch ( uno::Exception& )
+        catch ( const uno::Exception& )
         {
         }
     }
@@ -484,14 +484,14 @@ void SAL_CALL ChartModel::initNew()
 
                 }
             }
-            catch( uno::Exception & ex )
+            catch( const uno::Exception & ex )
             {
                 ASSERT_EXCEPTION( ex );
             }
         }
         ChartModelHelper::setIncludeHiddenCells( false, this );
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -568,7 +568,7 @@ void SAL_CALL ChartModel::load(
         if( aMDHelper.ISSET_URL )
             aURL = aMDHelper.URL;
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -666,7 +666,7 @@ void ChartModel::impl_loadGraphics(
             }
         }
     }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {
     }
 }

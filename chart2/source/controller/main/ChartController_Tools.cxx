@@ -236,7 +236,7 @@ void ChartController::executeDispatch_NewArrangement()
             aUndoGuard.commit();
         }
     }
-    catch( uno::RuntimeException & ex )
+    catch( const uno::RuntimeException & ex )
     {
         ASSERT_EXCEPTION( ex );
     }

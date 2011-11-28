@@ -58,7 +58,7 @@ void ChartViewHelper::setViewToDirtyState( const uno::Reference< frame::XModel >
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }

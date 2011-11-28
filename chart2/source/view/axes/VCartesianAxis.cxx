@@ -1531,7 +1531,7 @@ void VCartesianAxis::updatePositions()
                         {
                             xProp->setPropertyValue( C2U( "Transformation" ), aATransformation );
                         }
-                        catch( uno::Exception& e )
+                        catch( const uno::Exception& e )
                         {
                             ASSERT_EXCEPTION( e );
                         }

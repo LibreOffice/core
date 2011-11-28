@@ -135,7 +135,7 @@ bool ChartRenderer::DoPaint(OutputDevice* pOutDev, const Rectangle& rLogicObject
 
         pOutDev->SetMapMode(aOldMapMode);
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }

@@ -108,7 +108,7 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
                     SetRole( aData[nDataIdx]->getValues(), C2U("values-y"));
             }
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -233,7 +233,7 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::reinterpretDataSeries(
                 xSink->setData( aNewSequences );
             }
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -257,7 +257,7 @@ sal_Bool SAL_CALL XYDataInterpreter::isDataCompatible(
             if( aSeq.getLength() != 2 )
                 return sal_False;
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }

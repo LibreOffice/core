@@ -317,7 +317,7 @@ uno::Reference< XChartTypeTemplate > ChartTypeDialogController::getCurrentTempla
                 {
                     this->setTemplateProperties( xTemplateProps );
                 }
-                catch( uno::Exception & ex )
+                catch( const uno::Exception & ex )
                 {
                     ASSERT_EXCEPTION( ex );
                 }
@@ -1195,7 +1195,7 @@ void CombiColumnLineChartDialogController::fillExtraControls( const ChartTypePar
     {
         xTemplateProps->getPropertyValue( C2U("NumberOfLines") ) >>= nNumLines;
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }

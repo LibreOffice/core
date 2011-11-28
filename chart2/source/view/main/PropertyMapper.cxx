@@ -101,7 +101,7 @@ void PropertyMapper::getValueMap(
             if( aAny.hasValue() )
                 rValueMap.insert( tPropertyNameValueMap::value_type( aTarget, aAny ) );
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -373,7 +373,7 @@ void PropertyMapper::setMultiProperties(
             bSuccess = true;
         }
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         ASSERT_EXCEPTION( e ); //if this occurs more often think of removing the XMultiPropertySet completly for better performance
     }
@@ -393,13 +393,13 @@ void PropertyMapper::setMultiProperties(
             {
                 xTarget->setPropertyValue( aPropName, aValue );
             }
-            catch( uno::Exception& e )
+            catch( const uno::Exception& e )
             {
                 ASSERT_EXCEPTION( e );
             }
         }
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         ASSERT_EXCEPTION( e );
     }

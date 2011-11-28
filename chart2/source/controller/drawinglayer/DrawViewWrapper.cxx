@@ -96,7 +96,7 @@ SfxObjectShell * lcl_GetParentObjectShell( const uno::Reference< frame::XModel >
             }
         }
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         // TODO: error handling
     }

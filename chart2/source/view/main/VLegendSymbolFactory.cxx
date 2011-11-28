@@ -200,7 +200,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }

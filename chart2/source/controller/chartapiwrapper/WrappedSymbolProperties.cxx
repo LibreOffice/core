@@ -442,7 +442,7 @@ void lcl_correctSymbolSizeForBitmaps( chart2::Symbol& rSymbol )
                         bFoundSize = true;
                 }
             }
-            catch( uno::Exception& e )
+            catch( const uno::Exception& e )
             {
                 ASSERT_EXCEPTION( e );
             }
@@ -463,7 +463,7 @@ void lcl_correctSymbolSizeForBitmaps( chart2::Symbol& rSymbol )
         }
         rSymbol.Size = aSize;
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         ASSERT_EXCEPTION( e );
     }

@@ -391,7 +391,7 @@ bool DataPointItemConverter::ApplySpecialItem(
                     bChanged = true;
                 }
             }
-            catch( uno::Exception& e )
+            catch( const uno::Exception& e )
             {
                 ASSERT_EXCEPTION( e );
             }
@@ -426,7 +426,7 @@ bool DataPointItemConverter::ApplySpecialItem(
                     bChanged = true;
                 }
             }
-            catch( uno::Exception& e )
+            catch( const uno::Exception& e )
             {
                 ASSERT_EXCEPTION( e );
             }
@@ -613,7 +613,7 @@ void DataPointItemConverter::FillSpecialItem(
                 GetPropertySet()->getPropertyValue( C2U( "LabelSeparator" ) ) >>= aValue;
                 rOutItemSet.Put( SfxStringItem( nWhichId, aValue ));
             }
-            catch( uno::Exception& e )
+            catch( const uno::Exception& e )
             {
                 ASSERT_EXCEPTION( e );
             }
@@ -630,7 +630,7 @@ void DataPointItemConverter::FillSpecialItem(
                 else if( m_aAvailableLabelPlacements.getLength() )
                     rOutItemSet.Put( SfxInt32Item( nWhichId, m_aAvailableLabelPlacements[0] ));
             }
-            catch( uno::Exception& e )
+            catch( const uno::Exception& e )
             {
                 ASSERT_EXCEPTION( e );
             }

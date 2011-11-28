@@ -186,7 +186,7 @@ struct lcl_DataSeriesContainerAppend : public
                 }
             }
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -244,7 +244,7 @@ struct lcl_RolesWithRangeAppend : public
                 }
             }
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -443,7 +443,7 @@ Reference< data::XDataProvider > DialogModel::getDataProvider() const
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -496,7 +496,7 @@ DialogModel::tRolesWithRanges DialogModel::getRolesWithRanges(
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -567,7 +567,7 @@ Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
 
         ThreeDHelper::setScheme( xDiagram, e3DScheme );
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -595,7 +595,7 @@ Reference< data::XLabeledDataSequence > DialogModel::getCategories() const
             xResult.set( DiagramHelper::getCategoriesFromDiagram( xDiagram ));
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -660,7 +660,7 @@ void DialogModel::detectArguments(
                 Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY_THROW ),
                 rOutRangeString, aSequenceMapping, rOutUseColumns, rOutFirstCellAsLabel, rOutHasCategories );
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -714,7 +714,7 @@ bool DialogModel::setData(
             ThreeDHelper::setScheme( xDiagram, e3DScheme );
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
         return false;
@@ -811,7 +811,7 @@ void DialogModel::applyInterpretedData(
                 OSL_ASSERT( (*aDestIt).is());
                 (*aDestIt)->setDataSeries( *aSrcIt );
             }
-            catch( uno::Exception & ex )
+            catch( const uno::Exception & ex )
             {
                 ASSERT_EXCEPTION( ex );
             }

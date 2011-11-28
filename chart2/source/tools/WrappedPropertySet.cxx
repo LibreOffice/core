@@ -126,27 +126,27 @@ void SAL_CALL WrappedPropertySet::setPropertyValue( const OUString& rPropertyNam
 #endif
         }
     }
-    catch( beans::UnknownPropertyException& ex )
+    catch( const beans::UnknownPropertyException& ex )
     {
         throw ex;
     }
-    catch( beans::PropertyVetoException& ex )
+    catch( const beans::PropertyVetoException& ex )
     {
         throw ex;
     }
-    catch( lang::IllegalArgumentException& ex )
+    catch( const lang::IllegalArgumentException& ex )
     {
         throw ex;
     }
-    catch( lang::WrappedTargetException& ex )
+    catch( const lang::WrappedTargetException& ex )
     {
         throw ex;
     }
-    catch( uno::RuntimeException& ex )
+    catch( const uno::RuntimeException& ex )
     {
         throw ex;
     }
-    catch( uno::Exception& ex )
+    catch( const uno::Exception& ex )
     {
         OSL_FAIL("invalid exception caught in WrappedPropertySet::setPropertyValue");
         lang::WrappedTargetException aWrappedException;
@@ -175,19 +175,19 @@ Any SAL_CALL WrappedPropertySet::getPropertyValue( const OUString& rPropertyName
 #endif
         }
     }
-    catch( beans::UnknownPropertyException& ex )
+    catch( const beans::UnknownPropertyException& ex )
     {
         throw ex;
     }
-    catch( lang::WrappedTargetException& ex )
+    catch( const lang::WrappedTargetException& ex )
     {
         throw ex;
     }
-    catch( uno::RuntimeException& ex )
+    catch( const uno::RuntimeException& ex )
     {
         throw ex;
     }
-    catch( uno::Exception& ex )
+    catch( const uno::Exception& ex )
     {
         OSL_FAIL("invalid exception caught in WrappedPropertySet::setPropertyValue");
         lang::WrappedTargetException aWrappedException;
@@ -264,7 +264,7 @@ void SAL_CALL WrappedPropertySet::setPropertyValues( const Sequence< OUString >&
         {
             this->setPropertyValue( aPropertyName, rValueSeq[nN] );
         }
-        catch( beans::UnknownPropertyException& ex )
+        catch( const beans::UnknownPropertyException& ex )
         {
             ASSERT_EXCEPTION( ex );
             bUnknownProperty = true;
@@ -290,11 +290,11 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyValues( const Sequence< 
                 ::rtl::OUString aPropertyName( rNameSeq[nN] );
                 aRetSeq[nN] = this->getPropertyValue( aPropertyName );
             }
-            catch( beans::UnknownPropertyException& ex )
+            catch( const beans::UnknownPropertyException& ex )
             {
                 ASSERT_EXCEPTION( ex );
             }
-            catch( lang::WrappedTargetException& ex )
+            catch( const lang::WrappedTargetException& ex )
             {
                 ASSERT_EXCEPTION( ex );
             }

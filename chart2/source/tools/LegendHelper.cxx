@@ -114,7 +114,7 @@ uno::Reference< chart2::XLegend > LegendHelper::getLegend(
                 OSL_FAIL("need diagram for creation of legend");
             }
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }

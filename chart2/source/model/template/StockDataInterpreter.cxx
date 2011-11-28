@@ -258,7 +258,7 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
                 xSink->setData( aSequences[nGroupIndex][nSeriesIdx] );
                 aResultSeries[nGroupIndex][nSeriesIdx].set( xSeries );
             }
-            catch( uno::Exception & ex )
+            catch( const uno::Exception & ex )
             {
                 ASSERT_EXCEPTION( ex );
             }
@@ -317,7 +317,7 @@ sal_Bool SAL_CALL StockDataInterpreter::isDataCompatible(
                 if( aSeq.getLength() != nNumberOfNecessarySequences )
                     return sal_False;
             }
-            catch( uno::Exception & ex )
+            catch( const uno::Exception & ex )
             {
                 ASSERT_EXCEPTION( ex );
             }

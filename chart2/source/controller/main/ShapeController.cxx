@@ -642,7 +642,7 @@ SdrObject* ShapeController::getFirstAdditionalShape()
             }
         }
     }
-    catch ( uno::Exception& ex )
+    catch ( const uno::Exception& ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -682,7 +682,7 @@ SdrObject* ShapeController::getLastAdditionalShape()
             }
         }
     }
-    catch ( uno::Exception& ex )
+    catch ( const uno::Exception& ex )
     {
         ASSERT_EXCEPTION( ex );
     }

@@ -852,7 +852,7 @@ ChartTypeTabPage::ChartTypeTabPage( Window* pParent
         {
             xProps->getPropertyValue( C2U( "DisableComplexChartTypes" ) ) >>= bDisableComplexChartTypes;
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }

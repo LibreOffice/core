@@ -294,7 +294,7 @@ void AxisProperties::initAxisPositioning( const uno::Reference< beans::XProperty
             m_eTickmarkPos = ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS;
         }
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         ASSERT_EXCEPTION( e );
     }
@@ -379,7 +379,7 @@ void AxisProperties::init( bool bCartesian )
             this->m_aTickmarkPropertiesList.push_back( aTickmarkProperties );
         }
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         ASSERT_EXCEPTION( e );
     }
@@ -433,7 +433,7 @@ void AxisLabelProperties::init( const uno::Reference< XAxis >& xAxisModel )
                     break;
             }
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }

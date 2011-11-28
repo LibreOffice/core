@@ -206,7 +206,7 @@ awt::Size lcl_createTextShapes(
 
             rOutTextShapes.push_back( xEntry );
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -788,7 +788,7 @@ bool lcl_shouldSymbolsBePlacedOnTheLeftSide( const Reference< beans::XPropertySe
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -839,7 +839,7 @@ bool VLegend::isVisible( const Reference< XLegend > & xLegend )
         Reference< beans::XPropertySet > xLegendProp( xLegend, uno::UNO_QUERY_THROW );
         xLegendProp->getPropertyValue( C2U( "Show" )) >>= bShow;
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -963,7 +963,7 @@ void VLegend::createShapes(
                 xBorder->setSize( aLegendSize );
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -1017,7 +1017,7 @@ void VLegend::changePosition(
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }

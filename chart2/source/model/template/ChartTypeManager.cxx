@@ -258,7 +258,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
                 aServiceSpecifier, m_xContext );
         }
 //         catch( registry::InvalidValueException & ex )
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             // couldn't create service via factory
 

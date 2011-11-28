@@ -68,7 +68,7 @@ BarChart::BarChart( const uno::Reference<XChartType>& xChartTypeModel
             m_xChartTypeModelProps->getPropertyValue( C2U( "GapwidthSequence" ) ) >>= m_aGapwidthSequence;
         }
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         ASSERT_EXCEPTION( e );
     }
@@ -292,7 +292,7 @@ uno::Reference< drawing::XShape > BarChart::createDataPoint3D_Bar(
                 bRoundedEdges = false;
         }
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         ASSERT_EXCEPTION( e );
     }
@@ -653,7 +653,7 @@ void BarChart::createShapes()
                     {
                         xDataPointProperties->getPropertyValue( C2U( "Geometry3D" )) >>= nGeometry3D;
                     }
-                    catch( uno::Exception& e )
+                    catch( const uno::Exception& e )
                     {
                         ASSERT_EXCEPTION( e );
                     }

@@ -94,7 +94,7 @@ void SAL_CALL NetChartTypeTemplate::applyStyle(
         DataSeriesHelper::switchLinesOnOrOff( xProp, m_bHasLines );
         DataSeriesHelper::makeLinesThickOrThin( xProp, true );
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -159,7 +159,7 @@ sal_Bool SAL_CALL NetChartTypeTemplate::matchesTemplate(
                     break;
                 }
             }
-            catch( uno::Exception & ex )
+            catch( const uno::Exception & ex )
             {
                 ASSERT_EXCEPTION( ex );
             }
@@ -195,7 +195,7 @@ Reference< chart2::XChartType > NetChartTypeTemplate::getChartTypeForIndex( sal_
             xResult.set( xFact->createInstance(
                              CHART2_SERVICE_NAME_CHARTTYPE_NET ), uno::UNO_QUERY_THROW );
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }

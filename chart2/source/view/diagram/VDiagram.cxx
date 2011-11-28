@@ -219,7 +219,7 @@ void VDiagram::createShapes_2d()
                     xProp->setPropertyValue( C2U( UNO_NAME_MISC_OBJ_NAME ), uno::makeAny( aWallCID ) );
                 }
             }
-            catch( uno::Exception& e )
+            catch( const uno::Exception& e )
             {
                 ASSERT_EXCEPTION( e );
             }
@@ -465,7 +465,7 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
             m_xAspectRatio3D->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
                 , uno::makeAny(BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aResult )) );
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -694,7 +694,7 @@ void VDiagram::createShapes_3d()
                 xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
                     , uno::makeAny(BaseGFXHelper::B3DHomMatrixToHomogenMatrix(aM)) );
             }
-            catch( uno::Exception& e )
+            catch( const uno::Exception& e )
             {
                 ASSERT_EXCEPTION( e );
             }

@@ -97,7 +97,7 @@ void WrappedScaleTextProperty::setPropertyValue( const Any& rOuterValue, const R
             else
                 xInnerPropertySet->setPropertyValue( aRefSizeName, Any() );
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }

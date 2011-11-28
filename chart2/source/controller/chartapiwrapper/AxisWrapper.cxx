@@ -626,7 +626,7 @@ Reference< chart2::XAxis > AxisWrapper::getAxis()
                 xProp->setPropertyValue( C2U( "Show" ), uno::makeAny( sal_False ) );
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }

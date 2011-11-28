@@ -65,7 +65,7 @@ Sequence< Reference< chart2::XFormattedString > >
                 xTextProperties, Reference< beans::XPropertySet >( xFormStr, uno::UNO_QUERY ) );
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }

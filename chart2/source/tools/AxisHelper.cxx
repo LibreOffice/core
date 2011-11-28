@@ -389,7 +389,7 @@ Reference< XAxis > AxisHelper::createAxis(
             if( pRefSizeProvider )
                 pRefSizeProvider->setValuesAtPropertySet( xProp );
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -654,7 +654,7 @@ Reference< XAxis > AxisHelper::getParallelAxis( const Reference< XAxis >& xAxis
             return getAxis( nDimensionIndex, nParallelAxisIndex, getCoordinateSystemByIndex( xDiagram, nCooSysIndex ) );
         }
     }
-    catch( uno::RuntimeException& )
+    catch( const uno::RuntimeException& )
     {
     }
     return 0;
@@ -1108,7 +1108,7 @@ void AxisHelper::setRTLAxisLayout( const Reference< XCoordinateSystem >& xCooSys
                     xVerticalMainAxis->setScaleData(aScale);
                 }
             }
-            catch( uno::Exception & ex )
+            catch( const uno::Exception & ex )
             {
                 ASSERT_EXCEPTION( ex );
             }
@@ -1133,7 +1133,7 @@ void AxisHelper::setRTLAxisLayout( const Reference< XCoordinateSystem >& xCooSys
                     xVerticalSecondaryAxis->setScaleData(aScale);
                 }
             }
-            catch( uno::Exception & ex )
+            catch( const uno::Exception & ex )
             {
                 ASSERT_EXCEPTION( ex );
             }

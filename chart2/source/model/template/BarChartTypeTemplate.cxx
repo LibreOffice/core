@@ -224,7 +224,7 @@ Reference< chart2::XChartType > BarChartTypeTemplate::getChartTypeForIndex( sal_
         xResult.set( xFact->createInstance(
                          CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ), uno::UNO_QUERY_THROW );
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -283,7 +283,7 @@ void SAL_CALL BarChartTypeTemplate::applyStyle(
             this->getFastPropertyValue( aAGeometry3D, PROP_BAR_TEMPLATE_GEOMETRY3D );
             DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "Geometry3D" ), aAGeometry3D );
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }

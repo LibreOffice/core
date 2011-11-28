@@ -207,7 +207,7 @@ void RegressionCurveHelper::initializeCurveCalculator(
                 }
             }
         }
-        catch( Exception & ex )
+        catch( const Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -261,7 +261,7 @@ bool RegressionCurveHelper::hasMeanValueLine(
                 return true;
         }
     }
-    catch( Exception & ex )
+    catch( const Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -296,7 +296,7 @@ uno::Reference< chart2::XRegressionCurve >
                     return aCurves[i];
             }
         }
-        catch( Exception & ex )
+        catch( const Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -352,7 +352,7 @@ void RegressionCurveHelper::removeMeanValueLine(
             }
         }
     }
-    catch( Exception & ex )
+    catch( const Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -435,7 +435,7 @@ bool RegressionCurveHelper::removeAllExceptMeanValueLine(
                 bRemovedSomething = true;
             }
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -469,7 +469,7 @@ void RegressionCurveHelper::removeEquations(
                 }
             }
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -517,7 +517,7 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getFirstCurveN
             }
         }
     }
-    catch( Exception & ex )
+    catch( const Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -564,7 +564,7 @@ RegressionCurveHelper::tRegressionType RegressionCurveHelper::getRegressionType(
             }
         }
     }
-    catch( Exception & ex )
+    catch( const Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }

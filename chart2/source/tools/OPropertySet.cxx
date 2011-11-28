@@ -300,7 +300,7 @@ void SAL_CALL OPropertySet::setFastPropertyValue_NoBroadcast
     {
         aDefault = GetDefaultValue( nHandle );
     }
-    catch( beans::UnknownPropertyException& )
+    catch( const beans::UnknownPropertyException& )
     {
         aDefault.clear();
     }
@@ -381,7 +381,7 @@ void SAL_CALL OPropertySet::getFastPropertyValue
             {
                 rValue = GetDefaultValue( nHandle );
             }
-            catch( beans::UnknownPropertyException& )
+            catch( const beans::UnknownPropertyException& )
             {
                 rValue.clear();
             }

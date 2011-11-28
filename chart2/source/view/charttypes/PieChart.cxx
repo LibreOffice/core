@@ -141,7 +141,7 @@ PieChart::PieChart( const uno::Reference<XChartType>& xChartTypeModel
                 m_pPosHelper->m_fRingDistance = 0.1;
         }
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         ASSERT_EXCEPTION( e );
     }
@@ -415,7 +415,7 @@ void PieChart::createShapes()
                 {
                     xPointProperties->getPropertyValue( C2U( "Offset" )) >>= fExplodePercentage;
                 }
-                catch( uno::Exception& e )
+                catch( const uno::Exception& e )
                 {
                     ASSERT_EXCEPTION( e );
                 }
@@ -533,7 +533,7 @@ void PieChart::createShapes()
                     ShapeFactory::setShapeName( xPointShape
                                 , ObjectIdentifier::createPointCID( aPointCIDStub, nPointIndex ) );
                 }
-                catch( uno::Exception& e )
+                catch( const uno::Exception& e )
                 {
                     ASSERT_EXCEPTION( e );
                 }

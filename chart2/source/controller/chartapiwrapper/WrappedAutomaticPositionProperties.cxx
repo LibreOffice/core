@@ -86,7 +86,7 @@ void WrappedAutomaticPositionProperty::setPropertyValue( const Any& rOuterValue,
                     xInnerPropertySet->setPropertyValue( C2U( "RelativePosition" ), Any() );
             }
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }

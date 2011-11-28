@@ -509,7 +509,7 @@ void ImplObjectHierarchy::createDataSeriesTree(
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -538,7 +538,7 @@ void ImplObjectHierarchy::createAdditionalShapesTree( ObjectHierarchy::tChildCon
             }
         }
     }
-    catch ( uno::Exception& ex )
+    catch ( const uno::Exception& ex )
     {
         ASSERT_EXCEPTION( ex );
     }
