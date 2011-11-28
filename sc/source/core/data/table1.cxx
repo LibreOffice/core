@@ -815,14 +815,16 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
     }
     while( bChanged );
 
-    if ( !bIncludeOld )
+    if ( !bIncludeOld && !bOnlyDown )
     {
         if ( !bLeft && rStartCol < MAXCOL && rStartCol < rEndCol )
             if ( aCol[rStartCol].IsEmptyBlock(rStartRow,rEndRow) )
                 ++rStartCol;
+
         if ( !bRight && rEndCol > 0 && rStartCol < rEndCol )
             if ( aCol[rEndCol].IsEmptyBlock(rStartRow,rEndRow) )
                 --rEndCol;
+
         if ( !bTop && rStartRow < MAXROW && rStartRow < rEndRow )
         {
             bFound = false;
@@ -832,6 +834,10 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
             if (!bFound)
                 ++rStartRow;
         }
+    }
+
+    if ( !bIncludeOld )
+    {
         if ( !bBottom && rEndRow > 0 && rStartRow < rEndRow )
         {
             bFound = false;
