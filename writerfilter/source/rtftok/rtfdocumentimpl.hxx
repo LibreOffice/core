@@ -341,6 +341,8 @@ namespace writerfilter {
                 /// If we got tokens indicating we're in a frame.
                 bool inFrame();
                 void checkChangedFrame();
+                /// If we have some unicode characters to send.
+                void checkUnicode();
 
                 uno::Reference<uno::XComponentContext> const& m_xContext;
                 uno::Reference<io::XInputStream> const& m_xInputStream;
@@ -425,6 +427,8 @@ namespace writerfilter {
                 bool m_bWasInFrame;
                 /// If a frame start token is already sent to dmapper (nesting them is not OK).
                 bool m_bIsInFrame;
+                // Unicode characters are collected here so we don't have to send them one by one.
+                rtl::OUStringBuffer m_aUnicodeBuffer;
 
         };
     } // namespace rtftok
