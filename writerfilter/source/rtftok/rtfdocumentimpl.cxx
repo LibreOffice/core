@@ -3206,7 +3206,6 @@ void RTFDocumentImpl::checkUnicode()
 {
     if (m_aUnicodeBuffer.getLength() > 0)
     {
-        OSL_TRACE("debug, sending collected unicode chars");
         OUString aString = m_aUnicodeBuffer.makeStringAndClear();
         text(aString);
     }
