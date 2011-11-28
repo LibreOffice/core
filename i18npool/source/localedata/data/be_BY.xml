@@ -227,62 +227,62 @@
         <Month>
           <MonthID>jan</MonthID>
           <DefaultAbbrvName>сту</DefaultAbbrvName>
-          <DefaultFullName>Студзень</DefaultFullName>
+          <DefaultFullName>студзень</DefaultFullName>
         </Month>
         <Month>
           <MonthID>feb</MonthID>
           <DefaultAbbrvName>лют</DefaultAbbrvName>
-          <DefaultFullName>Люты</DefaultFullName>
+          <DefaultFullName>люты</DefaultFullName>
         </Month>
         <Month>
           <MonthID>mar</MonthID>
           <DefaultAbbrvName>сак</DefaultAbbrvName>
-          <DefaultFullName>Сакавік</DefaultFullName>
+          <DefaultFullName>сакавік</DefaultFullName>
         </Month>
         <Month>
           <MonthID>apr</MonthID>
           <DefaultAbbrvName>кра</DefaultAbbrvName>
-          <DefaultFullName>Красавік</DefaultFullName>
+          <DefaultFullName>красавік</DefaultFullName>
         </Month>
         <Month>
           <MonthID>may</MonthID>
           <DefaultAbbrvName>тра</DefaultAbbrvName>
-          <DefaultFullName>Травень</DefaultFullName>
+          <DefaultFullName>травень</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jun</MonthID>
           <DefaultAbbrvName>чэр</DefaultAbbrvName>
-          <DefaultFullName>Чэрвень</DefaultFullName>
+          <DefaultFullName>чэрвень</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jul</MonthID>
           <DefaultAbbrvName>ліп</DefaultAbbrvName>
-          <DefaultFullName>Ліпень</DefaultFullName>
+          <DefaultFullName>ліпень</DefaultFullName>
         </Month>
         <Month>
           <MonthID>aug</MonthID>
           <DefaultAbbrvName>жні</DefaultAbbrvName>
-          <DefaultFullName>Жнівень</DefaultFullName>
+          <DefaultFullName>жнівень</DefaultFullName>
         </Month>
         <Month>
           <MonthID>sep</MonthID>
           <DefaultAbbrvName>вер</DefaultAbbrvName>
-          <DefaultFullName>Верасень</DefaultFullName>
+          <DefaultFullName>верасень</DefaultFullName>
         </Month>
         <Month>
           <MonthID>oct</MonthID>
           <DefaultAbbrvName>кас</DefaultAbbrvName>
-          <DefaultFullName>Кастрычнік</DefaultFullName>
+          <DefaultFullName>кастрычнік</DefaultFullName>
         </Month>
         <Month>
           <MonthID>nov</MonthID>
           <DefaultAbbrvName>ліс</DefaultAbbrvName>
-          <DefaultFullName>Лістапад</DefaultFullName>
+          <DefaultFullName>лістапад</DefaultFullName>
         </Month>
         <Month>
           <MonthID>dec</MonthID>
           <DefaultAbbrvName>сне</DefaultAbbrvName>
-          <DefaultFullName>Снежань</DefaultFullName>
+          <DefaultFullName>снежань</DefaultFullName>
         </Month>
       </MonthsOfYear>
       <GenitiveMonths>
