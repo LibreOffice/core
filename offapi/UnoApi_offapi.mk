@@ -1675,7 +1675,6 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/awt,\
 	KeyModifier \
 	KeyStroke \
 	LineEndFormat \
-	MaxChildrenException \
 	MenuEvent \
 	MenuItemStyle \
 	MenuItemType \
