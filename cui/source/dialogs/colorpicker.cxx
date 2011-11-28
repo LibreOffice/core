@@ -1151,12 +1151,6 @@ ColorPickerDialog::ColorPickerDialog( Window* pParent, sal_Int32 nColor, sal_Int
 {
     FreeResource();
 
-    String sUnitText;
-    sUnitText.Append( ' ' );
-    sUnitText.Append( (sal_Unicode) 0xb0 );
-
-    maMFHue.SetCustomUnitText( sUnitText );
-
     Link aLink( LINK( this, ColorPickerDialog, ColorModifyHdl ) );
     maColorField.SetModifyHdl( aLink );
     maColorSlider.SetModifyHdl( aLink );

@@ -71,7 +71,7 @@ ModalDialog RID_SVXDLG_ZOOM
         HelpID = "cui:RadioButton:RID_SVXDLG_ZOOM:BTN_100";
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 105, 10 ) ;
-        Text = "~100 %" ;
+        Text = "~100%" ;
     };
     RadioButton BTN_USER
     {
