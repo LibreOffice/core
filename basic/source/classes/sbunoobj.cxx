@@ -109,10 +109,6 @@ TYPEINIT1(SbUnoSingleton,SbxObject)
 
 typedef WeakImplHelper1< XAllListener > BasicAllListenerHelper;
 
-// Flag to go via invocation
-//#define INVOCATION_ONLY
-
-
 // Identifiers for creating the strings for dbg_Properties
 static char const ID_DBG_SUPPORTEDINTERFACES[] = "Dbg_SupportedInterfaces";
 static char const ID_DBG_PROPERTIES[] = "Dbg_Properties";
@@ -2345,11 +2341,6 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 }
 
 
-#ifdef INVOCATION_ONLY
-// From USR
-Reference< XInvocation > createDynamicInvocationFor( const Any& aAny );
-#endif
-
 SbUnoObject::SbUnoObject( const rtl::OUString& aName_, const Any& aUnoObj_ )
     : SbxObject( aName_ )
     , bNeedIntrospection( sal_True )
@@ -2373,15 +2364,10 @@ SbUnoObject::SbUnoObject( const rtl::OUString& aName_, const Any& aUnoObj_ )
     }
 
     Reference< XTypeProvider > xTypeProvider;
-#ifdef INVOCATION_ONLY
-    // get the invocation
-    mxInvocation = createDynamicInvocationFor( aUnoObj_ );
-#else
     // Did the object have an invocation itself?
     mxInvocation = Reference< XInvocation >( x, UNO_QUERY );
 
     xTypeProvider = Reference< XTypeProvider >( x, UNO_QUERY );
-#endif
 
     if( mxInvocation.is() )
     {

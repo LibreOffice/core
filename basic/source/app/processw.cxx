@@ -74,8 +74,6 @@
 #define _RWPROP     0x2300  // Mask Read/Write-Property
 #define _COLLPROP   0x4100  // Mask Read-Collection-Element
 
-#define COLLNAME    "Elements"  // Name of the collection, hard coded
-
 
 ProcessWrapper::Methods ProcessWrapper::aProcessMethods[] = {
 // Imagefile of the Executable

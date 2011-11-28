@@ -82,8 +82,6 @@ using namespace osl;
 
 using ::rtl::OUString;
 
-using ::rtl::OUString;
-
 //============================================================================
 // Implementation class SfxScriptLibraryContainer
 
