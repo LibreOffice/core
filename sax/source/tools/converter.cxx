@@ -1966,6 +1966,49 @@ double Converter::GetConversionFactor(::rtl::OUStringBuffer& rUnit, sal_Int16 nS
                 }
                 break;
             }
+            case MeasureUnit::CM:
+            {
+                switch(nTargetUnit)
+                {
+                    case MeasureUnit::MM_100TH:
+                    {
+                        fRetval = .001;
+                        break;
+                    }
+                    case MeasureUnit::MM_10TH:
+                    {
+                        fRetval = .01;
+                        break;
+                    }
+                    case MeasureUnit::MM:
+                    {
+                        fRetval = .1;
+                        psUnit = gpsMM;
+                        break;
+                    }
+                    case MeasureUnit::CM:
+                    {
+                        break;
+                    }
+                    case MeasureUnit::POINT:
+                    {
+                        // 0.01pt = 0.35 mm/100 (exactly)
+                        fRetval = 2.54 / 72.0;
+                        psUnit = gpsPT;
+                        break;
+                    }
+                    case MeasureUnit::INCH:
+                    default:
+                    {
+                        OSL_ENSURE( MeasureUnit::INCH == nTargetUnit, "output unit not supported for cm values");
+                        // 0.0001in = 0.254 mm/100 (exactly)
+                        fRetval = 2.54;
+                        psUnit = gpsINCH;
+                        break;
+                    }
+                }
+                break;
+            }
             default:
                 OSL_ENSURE(false, "sax::Converter::GetConversionFactor(): "
                         "source unit not supported");
