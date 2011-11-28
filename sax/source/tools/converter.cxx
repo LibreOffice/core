@@ -1972,17 +1972,17 @@ double Converter::GetConversionFactor(::rtl::OUStringBuffer& rUnit, sal_Int16 nS
                 {
                     case MeasureUnit::MM_100TH:
                     {
-                        fRetval = .001;
+                        fRetval = 1000.0;
                         break;
                     }
                     case MeasureUnit::MM_10TH:
                     {
-                        fRetval = .01;
+                        fRetval = 100.0;
                         break;
                     }
                     case MeasureUnit::MM:
                     {
-                        fRetval = .1;
+                        fRetval = 10.0;
                         psUnit = gpsMM;
                         break;
                     }
@@ -1992,8 +1992,7 @@ double Converter::GetConversionFactor(::rtl::OUStringBuffer& rUnit, sal_Int16 nS
                     }
                     case MeasureUnit::POINT:
                     {
-                        // 0.01pt = 0.35 mm/100 (exactly)
-                        fRetval = 2.54 / 72.0;
+                        fRetval = 72.0 / 2.54;
                         psUnit = gpsPT;
                         break;
                     }
@@ -2001,8 +2000,7 @@ double Converter::GetConversionFactor(::rtl::OUStringBuffer& rUnit, sal_Int16 nS
                     default:
                     {
                         OSL_ENSURE( MeasureUnit::INCH == nTargetUnit, "output unit not supported for cm values");
-                        // 0.0001in = 0.254 mm/100 (exactly)
-                        fRetval = 2.54;
+                        fRetval = 1 / 2.54;
                         psUnit = gpsINCH;
                         break;
                     }
