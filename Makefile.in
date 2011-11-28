@@ -7,7 +7,6 @@ SHELL=/usr/bin/env bash
 define forward_to_gbuild
 @GNUMAKE@ -f $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/GNUmakefile.mk \
 	$(if @VERBOSE@,,-s) \
-	--jobs="@GMAKE_PARALLELISM@" \
 	$(1)
 endef
 

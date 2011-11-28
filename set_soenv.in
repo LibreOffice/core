@@ -1771,6 +1771,7 @@ else
    ToFile( "SOLARLIB_FOR_BUILD", $SOLARLIB,      "e" );
    ToFile( "WORKDIR_FOR_BUILD", $WORKDIR,        "e" );
 }
+ToFile( "BUILD_NCPUS",          "@BUILD_NCPUS@", "e" );
 ToFile( "GMAKE_PARALLELISM",    "@GMAKE_PARALLELISM@", "e" );
 ToFile( "GMAKE_MODULE_PARALLELISM","@GMAKE_MODULE_PARALLELISM@", "e" );
 ToFile( "SIZEOF_SHORT",         "@SIZEOF_SHORT@", "e" );

@@ -50,7 +50,7 @@ gb_MAKETARGET=all
 endif
 
 define gb_BuildplTarget_command
-cd $(SRCDIR)/$(1) && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl --all gb_MAKETARGET=$(gb_MAKETARGET)
+cd $(SRCDIR)/$(1) && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -P$(GMAKE_PARALLELISM) gb_MAKETARGET=$(gb_MAKETARGET)
 endef
 
 .PHONY: smoketestoo_native instsetoo_native cross-build-toolset dev-install all build
