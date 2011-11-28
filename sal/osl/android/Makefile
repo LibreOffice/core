@@ -15,13 +15,14 @@ arm-linux-androideabi-strip --strip-debug $(SODEST)$(if $(2),/$(2),/$(notdir $(1
 cp $(1) $(OBJLOCAL)$(if $(2),/$(2))
 endef
 
-# The default target just builds
-all: ndk-build
-	unset JAVA_HOME && ant debug
-	@echo 'Install it on the device with ant debug install'
-	@echo 'Then run it with something like what "make run" does (see Makefile)'
+# The default target just builds.
 
-ndk-build:
+# lo-bootstrap.jar is used from other LO apps than the test ones we
+# include in the .apk here.
+
+all: build-ant lo-bootstrap.jar
+
+build-ndk:
 	ndk-build V=1
 #
 # Copy shared libraries we need to libs/armeabi-v7a so that ant will
@@ -51,7 +52,6 @@ ndk-build:
 	for F in i18npool_test_breakiterator; do \
 	    $(call COPY,$(WORKDIR)/LinkTarget/CppunitTest/libtest_$${F}.so); \
 	done
-
 #
 # Other "programs"
 	$(call COPY,$(OUTDIR)/bin/uno,libunoexe.so)
@@ -101,8 +101,17 @@ ndk-build:
 		sed -e 's!uri="./!uri="$(APP_DATA_PATH)/lib/!g' <$(SRC_ROOT)/testtools/$(INPATH)/lib/$${F}.rdb >assets/lib/$${F}.rdb; \
 	done
 
-install: ndk-build
+build-ant: build-ndk
+	unset JAVA_HOME && ant debug
+
+install: build-ndk
 	unset JAVA_HOME && ant debug install
+	@echo
+	@echo 'Run it with something like what "make run" does (see Makefile)'
+	@echo
+
+lo-bootstrap.jar: build-ant
+	cd bin/classes && jar cvf ../../lo-bootstrap.jar fi/iki/tml org/libreoffice/android/Bootstrap.class
 
 run: install
 # Note: these are just examples. 
