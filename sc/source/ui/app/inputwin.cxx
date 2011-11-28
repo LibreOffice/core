@@ -520,9 +520,9 @@ void ScInputWindow::Resize()
     ToolBox::Resize();
     if ( lcl_isExperimentalMode() )
     {
-        Size aSize = GetSizePixel();
         aTextWindow.Resize();
-        aSize.Height() = aTextWindow.GetSizePixel().Height() + 11;
+        Size aSize = GetSizePixel();
+        aSize.Height() = CalcWindowSizePixel().Height();
         SetSizePixel(aSize);
         Invalidate();
     }
@@ -1027,7 +1027,6 @@ IMPL_LINK( ScInputBarGroup, ClickHdl, PushButton*, EMPTYARG )
         OSL_FAIL("The parent window pointer pParent is null");
         return 1;
     }
-
     if( aMultiTextWnd.GetNumLines() > 1 )
     {
         aMultiTextWnd.SetNumLines( 1 );
@@ -1064,7 +1063,6 @@ void ScInputBarGroup::TriggerToolboxLayout()
             else
                 pParent->SetToolbarLayoutMode( TBX_LAYOUT_NORMAL );
             xLayoutManager->lock();
-            pParent->Resize();
             DataChangedEvent aFakeUpdate( DATACHANGED_SETTINGS, NULL,  SETTINGS_STYLE );
             // this basically will trigger the reposititioning of the
             // items in the toolbar from ImplFormat ( which is controlled by
@@ -1073,6 +1071,10 @@ void ScInputBarGroup::TriggerToolboxLayout()
             // controlled via mbFormat. It seems the easiest way to get these
             // booleans set is to send in the fake event below.
             pParent->DataChanged( aFakeUpdate);
+            // highest item in toolbar will have been calculated via the
+            // event above. Call resize on InputBar to pick up the height
+            // change
+            pParent->Resize();
             // unlock relayouts the toolbars in the 4 quadrants
             xLayoutManager->unlock();
         }
@@ -1137,7 +1139,10 @@ void ScMultiTextWnd::SetNumLines( long nLines )
 {
     mnLines = nLines;
     if ( nLines > 1 )
+    {
         mnLastExpandedLines = nLines;
+        Resize();
+    }
 }
 
 void ScMultiTextWnd::Resize()
@@ -1161,6 +1166,7 @@ void ScMultiTextWnd::Resize()
 
         pEditEngine->SetPaperSize( PixelToLogic(Size((aOutputSize.Width()-= 2 * nTextStartPos - 1), 10000 ) ));
     }
+
     SetScrollBarRange();
     SetSizePixel(aTextBoxSize);
 }
