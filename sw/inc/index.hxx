@@ -67,7 +67,7 @@ private:
 public:
     explicit SwIndex(SwIndexReg *const pReg, xub_StrLen const nIdx = 0);
     SwIndex( const SwIndex & );
-    SwIndex( const SwIndex &, xub_StrLen const nDiff );
+    SwIndex( const SwIndex &, short nDiff );
     ~SwIndex() { Remove(); }
 
     INLINE SwIndex& operator=( xub_StrLen const );

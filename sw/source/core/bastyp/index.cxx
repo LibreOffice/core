@@ -46,7 +46,7 @@ SwIndex::SwIndex(SwIndexReg *const pReg, xub_StrLen const nIdx)
     Init(m_nIndex);
 }
 
-SwIndex::SwIndex( const SwIndex& rIdx, xub_StrLen const nDiff )
+SwIndex::SwIndex( const SwIndex& rIdx, short nDiff )
     : m_pIndexReg( rIdx.m_pIndexReg )
     , m_pNext( 0 )
     , m_pPrev( 0 )
