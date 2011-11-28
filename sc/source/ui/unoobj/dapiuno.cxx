@@ -1585,6 +1585,9 @@ ScDataPilotFieldsObj::~ScDataPilotFieldsObj()
 
 sal_Int32 lcl_GetFieldCount( const Reference<XDimensionsSupplier>& rSource, const Any& rOrient )
 {
+    if (!rSource.is())
+        throw RuntimeException();
+
     sal_Int32 nRet = 0;
 
     Reference<XNameAccess> xDimsName(rSource->getDimensions());
@@ -1620,6 +1623,9 @@ sal_Int32 lcl_GetFieldCount( const Reference<XDimensionsSupplier>& rSource, cons
 sal_Bool lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& rSource,
                                 const Any& rOrient, SCSIZE nIndex, ScFieldIdentifier& rFieldId )
 {
+    if (!rSource.is())
+        throw RuntimeException();
+
     sal_Bool bOk = false;
     SCSIZE nPos = 0;
     sal_Int32 nDimIndex = 0;
