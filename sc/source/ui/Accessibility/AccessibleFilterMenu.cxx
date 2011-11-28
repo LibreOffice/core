@@ -325,7 +325,7 @@ Rectangle ScAccessibleFilterMenu::GetBoundingBox() const
 
 void ScAccessibleFilterMenu::appendMenuItem(const OUString& rName, bool bEnabled, size_t nMenuPos)
 {
-    // Check weather this menu item is a sub menu or a regular menu item.
+    // Check whether this menu item is a sub menu or a regular menu item.
     ScMenuFloatingWindow* pSubMenu = mpWindow->getSubMenuWindow(nMenuPos);
     Reference<XAccessible> xAccessible;
     if (pSubMenu)

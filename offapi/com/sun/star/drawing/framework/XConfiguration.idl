@@ -84,7 +84,7 @@ published interface XConfiguration
         [in] string sTargetURLPrefix,
         [in] AnchorBindingMode eSearchMode);
 
-    /** <p>Returns weather the specified resource is part of the
+    /** <p>Returns whether the specified resource is part of the
         configuration.</p>
         This is independent of whether the resource does really exist and is
         active, i.e. has a visible representation in the GUI.

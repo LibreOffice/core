@@ -180,7 +180,7 @@ bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
     bool bForwardWasEnabled = forwardEnabled();
 
     bool bRet = false; // return value of the function.
-                       // Indicates weather the index should be decremented before jumping back or not
+                       // Indicates whether the index should be decremented before jumping back or not
 #if SMART
     /* If any forward history exists, twist the tail of the list from the current position to the end */
     if (bForwardWasEnabled) {

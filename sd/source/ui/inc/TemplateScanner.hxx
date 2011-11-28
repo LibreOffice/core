@@ -190,7 +190,7 @@ private:
     */
      std::vector<TemplateDir*> maFolderList;
 
-    /** Weather the template entries have to be sorted.
+    /** Whether the template entries have to be sorted.
     */
     bool mbEntrySortingEnabled;
 

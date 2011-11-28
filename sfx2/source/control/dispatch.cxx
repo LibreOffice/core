@@ -1554,7 +1554,7 @@ void SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, sal_Bo
             if ( bReadOnlyShell && !( nPos & SFX_VISIBILITY_READONLYDOC ) )
                 continue;
 
-            // check weather toolbar needs activation of a special feature
+            // check whether toolbar needs activation of a special feature
             sal_uInt32 nFeature = pIFace->GetObjectBarFeature(nNo);
             if ( nFeature && !pShell->HasUIFeature( nFeature ) )
                 continue;

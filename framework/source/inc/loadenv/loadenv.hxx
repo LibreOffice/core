@@ -658,7 +658,7 @@ class LoadEnv : private ThreadHelpBase
 
         //_______________________________________
 
-        /** @short  checks weather a frame is already used for another load request or not.
+        /** @short  checks whether a frame is already used for another load request or not.
 
             @descr  Such frames cant be used for our "recycle feature"!
 
