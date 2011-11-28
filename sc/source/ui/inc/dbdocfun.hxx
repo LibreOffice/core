@@ -41,7 +41,6 @@ struct ScSortParam;
 struct ScSubTotalParam;
 
 class SfxViewFrame;
-class SbaSelectionList;
 class ScDBData;
 class ScDocShell;
 class ScAddress;
@@ -52,10 +51,11 @@ namespace com { namespace sun { namespace star {
     namespace beans {
         struct PropertyValue;
     }
-    namespace sdbc {
-        class XResultSet;
-    }
 } } }
+
+namespace svx {
+    class ODataAccessDescriptor;
+}
 
 class ScDBDocFunc
 {
@@ -68,16 +68,11 @@ public:
                     ScDBDocFunc( ScDocShell& rDocSh ): rDocShell(rDocSh) {}
                     ~ScDBDocFunc() {}
 
-    void            UpdateImport( const String& rTarget, const String& rDBName,
-                        const String& rTableName, const String& rStatement,
-                        bool bNative, sal_uInt8 nType,
-                        const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::sdbc::XResultSet >& xResultSet,
-                        const std::vector<sal_Int32> *pSelection );
+    void            UpdateImport( const String& rTarget, const svx::ODataAccessDescriptor& rDescriptor );
 
     bool DoImport( SCTAB nTab, const ScImportParam& rParam,
-                   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xResultSet,
-                   const std::vector<sal_Int32> *pSelection, bool bRecord,
+                   const svx::ODataAccessDescriptor* pDescriptor,      // used for selection and existing ResultSet
+                   bool bRecord,
                    bool bAddrInsert = false );
 
     bool DoImportUno( const ScAddress& rPos,

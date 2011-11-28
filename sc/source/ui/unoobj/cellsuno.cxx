@@ -5911,12 +5911,11 @@ void SAL_CALL ScCellRangeObj::doImport( const uno::Sequence<beans::PropertyValue
         aParam.nRow2 = aRange.aEnd.Row();
 
         //! TODO: could we get passed a valid result set by any means?
-        uno::Reference< sdbc::XResultSet > xResultSet;
 
         pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );       // ggf. Bereich anlegen
 
         ScDBDocFunc aFunc(*pDocSh);                         // Bereich muss angelegt sein
-        aFunc.DoImport( nTab, aParam, xResultSet, NULL, sal_True, false );  //! Api-Flag als Parameter
+        aFunc.DoImport( nTab, aParam, NULL, true );         //! Api-Flag as parameter
     }
 }
 

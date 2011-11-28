@@ -1850,8 +1850,7 @@ void SAL_CALL ScDatabaseRangeObj::refresh() throw(uno::RuntimeException)
             SCCOL nDummyCol;
             SCROW nDummyRow;
             pData->GetArea( nTab, nDummyCol,nDummyRow,nDummyCol,nDummyRow );
-            uno::Reference< sdbc::XResultSet > xResultSet;
-            bContinue = aFunc.DoImport( nTab, aImportParam, xResultSet, NULL, sal_True, false );    //! Api-Flag als Parameter
+            bContinue = aFunc.DoImport( nTab, aImportParam, NULL, true );   //! Api-Flag as parameter
         }
 
         // interne Operationen (sort, query, subtotal) nur, wenn kein Fehler
