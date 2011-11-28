@@ -27,11 +27,13 @@
 
 
 # speed up if no target need to parse all modules
+ifneq ($(strip $(MAKECMDGOALS)),)
 ifeq ($(filter-out id tags docs distro-pack-install fetch help debugrun,$(MAKECMDGOALS)),)
 gb_Module_add_target=
 gb_Module_add_check_target=
 gb_Module_add_subsequentcheck_target=
 gb_FULLDEPS=
+endif
 endif
 
 # vim:set shiftwidth=4 softtabstop=4 noexpandtab:
