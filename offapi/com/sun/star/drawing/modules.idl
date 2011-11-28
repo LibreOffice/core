@@ -32,13 +32,6 @@ module com { module sun { module star { module drawing {
 
 /** The drawing framework is responsible for managing the resources used by
     the UI of the drawing applications.
-    <p>The framework is implemented by a set of sub controllers that are
-    responsible for its different resources: <type
-    scope="com::sun::star::drawing::framework">XModuleController</type>,
-    <type scope="com::sun::star::drawing::framework">XPaneController</type>,
-    <type scope="com::sun::star::drawing::framework">XViewController</type>,
-    <type scope="com::sun::star::drawing::framework">XToolbarController</type>,
-    <type scope="com::sun::star::drawing::framework">XCommandController</type>.
     The set of active resources is represented by the <type
     scope="com::sun::star::drawing::framework">XConfiguration</type>.</p>
     <p>The <type
