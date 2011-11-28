@@ -586,10 +586,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
         InitClipPtrs(pSourceDoc);
         if (nTab >= static_cast<SCTAB>(maTabs.size()))
         {
-            if( nTab > static_cast<SCTAB>(maTabs.size()) )
-            {
-                maTabs.resize(nTab+1, NULL );
-            }
+            maTabs.resize(nTab+1, NULL );
         }
         maTabs[nTab] = new ScTable(this, nTab,
                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("baeh")));
