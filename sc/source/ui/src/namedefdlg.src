@@ -56,7 +56,7 @@ ModelessDialog RID_SCDLG_NAMES_DEFINE
     {
         Pos = MAP_APPFONT( 5, 82 );
         Size = MAP_APPFONT( 60, 15 );
-        Text [en-US] = "RangeOptions";
+        Text [en-US] = "Range Options";
     };
     FixedText FT_INFO
     {
