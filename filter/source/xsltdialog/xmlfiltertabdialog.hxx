@@ -29,7 +29,9 @@
 #define _XMLFILTERTABDIALOG_HXX_
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <sfx2/tabdlg.hxx>
+#include <vcl/tabctrl.hxx>
+#include <vcl/tabdlg.hxx>
+#include <vcl/button.hxx>
 
 class Window;
 class ResMgr;
