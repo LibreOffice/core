@@ -578,6 +578,7 @@ public:
     void SetCustomFtnMark(bool bSet) { m_bIsCustomFtnMark = bSet; }
     bool IsCustomFtnMark() const { return m_bIsCustomFtnMark;  }
 
+    void CheckUnregisteredFrameConversion( );
     void RegisterFrameConversion(
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xFrameStartRange,
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xFrameEndRange,

@@ -3233,6 +3233,7 @@ void DomainMapper::lcl_startParagraphGroup()
 
 void DomainMapper::lcl_endParagraphGroup()
 {
+    m_pImpl->CheckUnregisteredFrameConversion();
     m_pImpl->PopProperties(CONTEXT_PARAGRAPH);
     m_pImpl->getTableManager().endParagraphGroup();
     //frame conversion has to be executed after table conversion
