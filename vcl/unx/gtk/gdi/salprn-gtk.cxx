@@ -27,6 +27,7 @@
  * instead of those above.
  */
 
+#include "unx/gtk/gtkframe.hxx"
 #include "unx/gtk/gtkprn.hxx"
 
 #include "vcl/configsettings.hxx"
@@ -34,6 +35,7 @@
 #include "vcl/print.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/unohelp.hxx"
+#include "vcl/window.hxx"
 
 #include <gtk/gtkprinter.h>
 #include <gtk/gtkprintsettings.h>
@@ -381,12 +383,20 @@ GtkPrintDialog::GtkPrintDialog(vcl::PrinterController& io_rController)
 void
 GtkPrintDialog::impl_initDialog()
 {
-    //To-Do, get best parent
     //To-Do, like fpicker, set UI language
     m_pDialog = gtk_print_unix_dialog_new(NULL, NULL);
 
-    //To-Do
-    //gtk_window_set_transient_for(GTK_WINDOW(m_pDialog), parent);
+    Window* const pTopWindow(Application::GetActiveTopWindow());
+    if (pTopWindow)
+    {
+        GtkSalFrame* const pFrame(dynamic_cast<GtkSalFrame*>(pTopWindow->ImplGetFrame()));
+        if (pFrame)
+        {
+            GtkWindow* const pParent(GTK_WINDOW(pFrame->getWindow()));
+            if (pParent)
+                gtk_window_set_transient_for(GTK_WINDOW(m_pDialog), pParent);
+        }
+    }
 
     gtk_print_unix_dialog_set_manual_capabilities(GTK_PRINT_UNIX_DIALOG(m_pDialog),
         GtkPrintCapabilities(GTK_PRINT_CAPABILITY_COPIES | GTK_PRINT_CAPABILITY_COLLATE |
