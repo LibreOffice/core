@@ -71,7 +71,7 @@ public:
     // One could theoretically use oox::AttributeList, but that complains if the passed reference is empty,
     // which would be complicated to avoid here. Also, parsers apparently reuse the same instance of XFastAttributeList,
     // which means using oox::AttributeList would make them all point to the one instance.
-    struct AttributeList
+    struct OOX_DLLPUBLIC AttributeList
     {
         bool hasAttribute( int token ) const;
         rtl::OUString attribute( int token, const rtl::OUString& def = rtl::OUString()) const;
@@ -82,7 +82,7 @@ public:
     /**
      Structure representing a tag, including its attributes and content text immediatelly following it.
     */
-    struct Tag
+    struct OOX_DLLPUBLIC Tag
     {
         Tag( int token = XML_TOKEN_INVALID,
             const com::sun::star::uno::Reference< com::sun::star::xml::sax::XFastAttributeList >& attributes = com::sun::star::uno::Reference< com::sun::star::xml::sax::XFastAttributeList >(),
