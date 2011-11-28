@@ -541,14 +541,12 @@ File gid_File_Lib_Fps_Aqua
     Name = SPECIAL_COMPONENT_LIB_NAME(fps_aqua.uno);
 End
 
-#ifndef DISABLE_HUNSPELL
 File gid_File_Lib_MacOSXSpell
 	TXT_FILE_BODY;
 	Styles = (PACKED);
 	Name = LIBNAME(MacOSXSpell);
 	Dir = SCP2_OOO_BIN_DIR;
 End
-#endif
 
 File gid_File_Lib_avmediaQuickTime
 	TXT_FILE_BODY;

@@ -52,7 +52,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-
 MacSpellChecker::MacSpellChecker() :
     aEvtListeners   ( GetLinguMutex() )
 {
@@ -110,14 +109,15 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
 
         int numusr;          // number of user dictionary entries
         int numshr;          // number of shared dictionary entries
-        dictentry * spdict;  // shared dict entry pointer
-        dictentry * updict;  // user dict entry pointer
+        // dictentry * spdict;  // shared dict entry pointer
+        // dictentry * updict;  // user dict entry pointer
         SvtPathOptions aPathOpt;
         rtl_TextEncoding aEnc = RTL_TEXTENCODING_UTF8;
 
         std::vector<objc_object *> postspdict;
+        std::vector<objc_object *> postupdict;
         //std::vector<dictentry *> postspdict;
-        std::vector<dictentry *> postupdict;
+        //std::vector<dictentry *> postupdict;
 
 
     if (!numdict) {
@@ -199,8 +199,8 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
             }
 
             /* de-allocation of memory is handled inside the DictMgr */
-            updict = NULL;
-            spdict = NULL;
+            // updict = NULL;
+            // spdict = NULL;
 
         }
 

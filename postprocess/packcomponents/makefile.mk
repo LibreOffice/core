@@ -297,13 +297,8 @@ my_components += \
     avmediaQuickTime \
     fps_aqua \
     macab1 \
-    macbe1
-
-.IF "$(DISABLE_HUNSPELL)" == ""
-my_components += \
+    macbe1 \
     MacOSXSpell
-.END
-
 .END
 
 .IF "$(OS)" == "WNT"
