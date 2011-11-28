@@ -97,7 +97,7 @@
          </tablerow>
          <tablerow>
             <tablecell>
-               <paragraph xml-lang="en-US" id="par_id0503200917103794" role="tablecontent" l10n="NEW">Stagnation Limit</paragraph>
+               <paragraph xml-lang="en-US" id="par_id0504200917103794" role="tablecontent" l10n="NEW">Stagnation Limit</paragraph>
             </tablecell>
             <tablecell>
                <paragraph xml-lang="en-US" id="par_id050320091710377" role="tablecontent" l10n="NEW">If this number of individuals found solutions within a close range, the iteration is stopped and the best of these values is chosen as optimal.</paragraph>
@@ -165,7 +165,7 @@
          </tablerow>
          <tablerow>
             <tablecell>
-               <paragraph xml-lang="en-US" id="par_id0603200910394232" role="tablecontent" l10n="NEW">PS: Social Constant</paragraph>
+               <paragraph xml-lang="en-US" id="par_id0603200910394292" role="tablecontent" l10n="NEW">PS: Social Constant</paragraph>
             </tablecell>
             <tablecell>
                <paragraph xml-lang="en-US" id="par_id0603200910394284" role="tablecontent" l10n="NEW">… sets the importance of the global best point between all particles/individuals.</paragraph>
