@@ -78,8 +78,6 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
         long nThisTab = 0;
         if ( rMark.GetTableSelect( nTab ) )
         {
-            pDoc->InvalidatePageBreaks( nTab );                 // user print area (selection) may be different
-
             ScPrintFunc aFunc( pDocSh, pPrinter, nTab, nAttrPage, 0, pSelRange, &aSelection.GetOptions() );
             nThisTab = aFunc.GetTotalPages();
             nFirstAttr.push_back( aFunc.GetFirstPageNo() );         // from page style or previous sheet
@@ -131,7 +129,7 @@ void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDe
             aPage.Select( aPageRange );
 
             ScPreviewLocationData aLocData( pDoc, pDev );
-            aFunc.DoPrint( aPage, nTabStart, nDisplayStart, false, NULL, &aLocData );
+            aFunc.DoPrint( aPage, nTabStart, nDisplayStart, false, &aLocData );
 
             ScRange aCellRange;
             Rectangle aPixRect;

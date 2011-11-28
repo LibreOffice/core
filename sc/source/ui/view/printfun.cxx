@@ -51,7 +51,6 @@
 #include <editeng/ulspitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/printer.hxx>
-#include <sfx2/progress.hxx>
 #include <tools/multisel.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
@@ -2609,7 +2608,7 @@ void ScPrintFunc::ApplyPrintSettings()
 
 long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
                                 long nStartPage, long nDisplayStart, bool bDoPrint,
-                                SfxProgress* pProgress, ScPreviewLocationData* pLocationData )
+                                ScPreviewLocationData* pLocationData )
 {
     OSL_ENSURE(pDev,"Device == NULL");
     if (!pParamSet)
@@ -2628,9 +2627,6 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
     }
 
     MakeTableString();
-
-    if ( pProgress )
-        pProgress->SetText( String( ScResId( SCSTR_STAT_PRINT ) ) );
 
     //--------------------------------------------------------------------
 
@@ -2672,12 +2668,6 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
                         {
                             PrintPage( nPageNo+nDisplayStart, nX1, nY1, nX2, nY2,
                                         bDoPrint, pLocationData );
-
-                            if ( pProgress )
-                            {
-                                pProgress->SetState( nPageNo+nStartPage+1, nEndPage );
-                                pProgress->Reschedule(); //does the user want to continue
-                            }
                             ++nPrinted;
                         }
                         ++nPageNo;
@@ -2702,13 +2692,6 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
                         {
                             PrintPage( nPageNo+nDisplayStart, nX1, nY1, nX2, nY2,
                                         bDoPrint, pLocationData );
-
-                            if ( pProgress )
-                            {
-                                pProgress->SetState( nPageNo+nStartPage+1, nEndPage );
-                                pProgress->Reschedule(); //does the user want to continue
-
-                            }
                             ++nPrinted;
                         }
                         ++nPageNo;
@@ -2733,11 +2716,6 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
             if ( nNoteAdd )
             {
                 nNoteNr += nNoteAdd;
-                if ( pProgress && bPageSelected )
-                {
-                    pProgress->SetState( nPageNo+nStartPage+1, nEndPage );
-                    pProgress->Reschedule(); //does the user want to continue
-                }
                 if (bPageSelected)
                 {
                     ++nPrinted;

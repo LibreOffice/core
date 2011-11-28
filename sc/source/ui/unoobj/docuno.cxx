@@ -1063,7 +1063,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
     long nTabStart = pPrintFuncCache->GetTabStart( nTab );
 
-    (void)aFunc.DoPrint( aPage, nTabStart, nDisplayStart, false, NULL, NULL );
+    (void)aFunc.DoPrint( aPage, nTabStart, nDisplayStart, false, NULL );
 
     ScRange aCellRange;
     sal_Bool bWasCellRange = aFunc.GetLastSourceRange( aCellRange );
@@ -1193,7 +1193,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         }
     }
 
-    (void)aFunc.DoPrint( aPage, nTabStart, nDisplayStart, sal_True, NULL, NULL );
+    (void)aFunc.DoPrint( aPage, nTabStart, nDisplayStart, true, NULL );
 
     //  resolve the hyperlinks for PDF export
 
