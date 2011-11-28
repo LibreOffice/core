@@ -292,15 +292,15 @@ namespace writerfilter {
                 Stream& Mapper();
                 void setSubstream(bool bIsSubtream);
                 void setAuthor(rtl::OUString& rAuthor);
-                bool isSubstream();
+                bool isSubstream() const;
                 void finishSubstream();
                 void setIgnoreFirst(rtl::OUString& rIgnoreFirst);
                 void seek(sal_uInt32 nPos);
                 uno::Reference<lang::XMultiServiceFactory> getModelFactory();
                 RTFParserState& getState();
                 /// If the stack of states is empty.
-                bool isEmpty();
-                int getGroup();
+                bool isEmpty() const;
+                int getGroup() const;
                 void setDestinationText(rtl::OUString& rString);
                 /// Resolve a picture: If not inline, then anchored.
                 int resolvePict(bool bInline);

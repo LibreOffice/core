@@ -332,7 +332,7 @@ void RTFDocumentImpl::setAuthor(rtl::OUString& rAuthor)
     m_aAuthor = rAuthor;
 }
 
-bool RTFDocumentImpl::isSubstream()
+bool RTFDocumentImpl::isSubstream() const
 {
     return m_bIsSubstream;
 }
@@ -3153,12 +3153,12 @@ RTFParserState& RTFDocumentImpl::getState()
     return m_aStates.top();
 }
 
-int RTFDocumentImpl::getGroup()
+int RTFDocumentImpl::getGroup() const
 {
     return m_nGroup;
 }
 
-bool RTFDocumentImpl::isEmpty()
+bool RTFDocumentImpl::isEmpty() const
 {
     return m_aStates.empty();
 }
