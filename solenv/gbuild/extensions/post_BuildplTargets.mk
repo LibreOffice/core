@@ -35,18 +35,21 @@ gb_FULLDEPS=
 
 clean: clean-host clean-build
 
-subsequentcheck: dev-install
-	@$(MAKE) -f $(realpath $(firstword $(MAKEFILE_LIST))) $@ gb_PARTIALBUILD=
+subsequentcheck: smoketestoo_native
+	@$(MAKE) -f $(realpath $(firstword $(MAKEFILE_LIST))) $@ gb_PARTIALBUILD=T
 
-unitcheck: dev-install
-	@$(MAKE) -f $(realpath $(firstword $(MAKEFILE_LIST))) $@ gb_PARTIALBUILD=
+# instsetoo_native via build.pl already runs unittests
+unitcheck: instsetoo_native
+	@true
 
 all:
 
+gb_MAKETARGET=all
+# if we have only build as target use build instead of all
+ifneq ($(strip $(MAKECMDGOALS)),)
 ifeq ($(filter-out build,$(MAKECMDGOALS)),)
 gb_MAKETARGET=build
-else
-gb_MAKETARGET=all
+endif
 endif
 
 define gb_BuildplTarget_command
