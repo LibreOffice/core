@@ -34,19 +34,11 @@ svl/qa/unit/test_lngmisc \
 
 # add a list of all needed libraries here
 $(eval $(call gb_CppunitTest_add_linked_libs,svl_lngmisc, \
-    comphelper \
     cppu \
     cppuhelper \
     sal \
     salhelper \
-    sb \
-    sot \
     svl \
-    svt \
-    tl \
-    utl \
-    vcl \
-    xcr \
     $(gb_STDLIBS) \
 ))
 
