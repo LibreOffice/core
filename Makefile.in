@@ -2,13 +2,7 @@
 
 SHELL=/usr/bin/env bash
 
-ifeq (@CROSS_COMPILING@,YES)
-CROSS_TOOLSET_RULE:=cross-build-toolset
-else
-CROSS_TOOLSET_RULE:=
-endif
-
-.PHONY : build dev-install all cross-build-toolset install distro-pack-install clean clean-host clean-build distclean findunusedcode bootstrap
+.PHONY : build dev-install all cross_toolset install distro-pack-install clean clean-host clean-build distclean findunusedcode bootstrap
 
 define forward_to_gbuild
 @GNUMAKE@ -f $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/GNUmakefile.mk \
@@ -50,7 +44,7 @@ build: Makefile
 dev-install: Makefile
 	@$(call forward_to_gbuild,$@)
 
-cross-build-toolset:
+cross_toolset:
 	@$(call forward_to_gbuild,$@)
 
 clean:

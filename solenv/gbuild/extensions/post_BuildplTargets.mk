@@ -55,13 +55,13 @@ endef
 
 .PHONY: smoketestoo_native instsetoo_native cross-build-toolset dev-install all build
 
-smoketestoo_native: $(WORKDIR)/bootstrap  $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-build-toolset)
+smoketestoo_native: $(WORKDIR)/bootstrap  $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset)
 	$(call gb_BuildplTarget_command,$@)
 
-instsetoo_native: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-build-toolset)
+instsetoo_native: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset)
 	$(call gb_BuildplTarget_command,$@)
 
-cross-build-toolset: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded
+cross_toolset: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded
 	$(call gb_BuildplTarget_command,$@)
 
 dev-install: smoketestoo_native
