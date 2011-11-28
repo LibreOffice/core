@@ -28,6 +28,7 @@
 
 #include "sal/config.h"
 
+#include <cassert>
 #include <vector>
 
 #include "boost/noncopyable.hpp"
@@ -36,7 +37,6 @@
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppu/unotype.hxx"
-#include "osl/diagnose.h"
 #include "rtl/byteseq.hxx"
 #include "rtl/string.hxx"
 #include "rtl/textcvt.h"
@@ -84,7 +84,7 @@ void writeCompressed(std::vector< unsigned char > * buffer, sal_uInt32 value) {
 void writeString(
     std::vector< unsigned char > * buffer, rtl::OUString const & value)
 {
-    OSL_ASSERT(buffer != 0);
+    assert(buffer != 0);
     rtl::OString v;
     if (!value.convertToString(
             &v, RTL_TEXTENCODING_UTF8,
@@ -106,13 +106,13 @@ void writeString(
 Marshal::Marshal(rtl::Reference< Bridge > const & bridge, WriterState & state):
     bridge_(bridge), state_(state)
 {
-    OSL_ASSERT(bridge.is());
+    assert(bridge.is());
 }
 
 Marshal::~Marshal() {}
 
 void Marshal::write8(std::vector< unsigned char > * buffer, sal_uInt8 value) {
-    OSL_ASSERT(buffer != 0);
+    assert(buffer != 0);
     buffer->push_back(value);
 }
 
@@ -132,7 +132,7 @@ void Marshal::writeValue(
     std::vector< unsigned char > * buffer,
     css::uno::TypeDescription const & type, BinaryAny const & value)
 {
-    OSL_ASSERT(
+    assert(
         type.is() &&
         (type.get()->eTypeClass == typelib_TypeClass_ANY ||
          value.getType().equals(type)));
@@ -144,7 +144,7 @@ void Marshal::writeType(
     css::uno::TypeDescription const & value)
 {
     value.makeComplete();
-    OSL_ASSERT(value.is());
+    assert(value.is());
     typelib_TypeClass tc = value.get()->eTypeClass;
     if (tc <= typelib_TypeClass_ANY) {
         write8(buffer, static_cast< sal_uInt8 >(tc));
@@ -202,13 +202,13 @@ void Marshal::writeValue(
     std::vector< unsigned char > * buffer,
     css::uno::TypeDescription const & type, void const * value)
 {
-    OSL_ASSERT(buffer != 0 && type.is());
+    assert(buffer != 0 && type.is());
     type.makeComplete();
     switch (type.get()->eTypeClass) {
     case typelib_TypeClass_VOID:
         break;
     case typelib_TypeClass_BOOLEAN:
-        OSL_ASSERT(*static_cast< sal_uInt8 const * >(value) <= 1);
+        assert(*static_cast< sal_uInt8 const * >(value) <= 1);
         // fall through
     case typelib_TypeClass_BYTE:
         write8(buffer, *static_cast< sal_uInt8 const * >(value));
@@ -257,7 +257,7 @@ void Marshal::writeValue(
                 reinterpret_cast< typelib_IndirectTypeDescription * >(
                     type.get())->
                 pType);
-            OSL_ASSERT(ctd.is());
+            assert(ctd.is());
             if (ctd.get()->eTypeClass == typelib_TypeClass_BYTE) {
                 buffer->insert(
                     buffer->end(), p->elements, p->elements + p->nElements);
@@ -281,7 +281,7 @@ void Marshal::writeValue(
                 type));
         break;
     default:
-        OSL_ASSERT(false); // this cannot happen
+        assert(false); // this cannot happen
         break;
     }
 }
@@ -290,7 +290,7 @@ void Marshal::writeMemberValues(
     std::vector< unsigned char > * buffer,
     css::uno::TypeDescription const & type, void const * aggregateValue)
 {
-    OSL_ASSERT(
+    assert(
         type.is() &&
         (type.get()->eTypeClass == typelib_TypeClass_STRUCT ||
          type.get()->eTypeClass == typelib_TypeClass_EXCEPTION) &&

@@ -29,6 +29,7 @@
 #include "sal/config.h"
 
 #include <algorithm>
+#include <cassert>
 #include <cstddef>
 #include <limits>
 #include <memory>
@@ -50,16 +51,16 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/weak.hxx"
-#include "osl/diagnose.h"
 #include "osl/mutex.hxx"
 #include "osl/thread.hxx"
 #include "rtl/byteseq.hxx"
+#include "rtl/oustringostreaminserter.hxx"
 #include "rtl/random.h"
 #include "rtl/ref.hxx"
-#include "rtl/textenc.h"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
+#include "sal/log.hxx"
 #include "sal/types.h"
 #include "typelib/typeclass.h"
 #include "typelib/typedescription.h"
@@ -92,14 +93,20 @@ sal_Int32 random() {
     return n;
 }
 
+rtl::OUString toString(css::uno::TypeDescription const & type) {
+    typelib_TypeDescription * d = type.get();
+    assert(d != 0 && d->pTypeName != 0);
+    return rtl::OUString(d->pTypeName);
+}
+
 extern "C" void SAL_CALL freeProxyCallback(uno_ExtEnvironment *, void * pProxy)
 {
-    OSL_ASSERT(pProxy != 0);
+    assert(pProxy != 0);
     static_cast< Proxy * >(pProxy)->do_free();
 }
 
 void joinThread(osl::Thread * thread) {
-    OSL_ASSERT(thread != 0);
+    assert(thread != 0);
     if (thread->getIdentifier() != osl::Thread::getCurrentIdentifier()) {
         thread->join();
     }
@@ -210,7 +217,7 @@ Bridge::Bridge(
     normalCall_(false), activeCalls_(0), terminated_(false),
     mode_(MODE_REQUESTED)
 {
-    OSL_ASSERT(factory.is() && connection.is());
+    assert(factory.is() && connection.is());
     if (!binaryUno_.is()) {
         throw css::uno::RuntimeException(
             rtl::OUString(
@@ -227,9 +234,9 @@ Bridge::Bridge(
 }
 
 void Bridge::start() {
-    OSL_ASSERT(threadPool_ == 0 && !writer_.is() && !reader_.is());
+    assert(threadPool_ == 0 && !writer_.is() && !reader_.is());
     threadPool_ = uno_threadpool_create();
-    OSL_ASSERT(threadPool_ != 0);
+    assert(threadPool_ != 0);
     writer_.set(new Writer(this));
     writer_->create();
     reader_.set(new Reader(this));
@@ -253,15 +260,13 @@ void Bridge::terminate() {
     try {
         connection_->close();
     } catch (css::io::IOException & e) {
-        OSL_TRACE(
-            OSL_LOG_PREFIX "caught IO exception '%s'",
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        SAL_INFO("binaryurp", "caught IO exception '" << e.Message << '\'');
     }
-    OSL_ASSERT(w.is());
+    assert(w.is());
     w->stop();
     joinThread(r.get());
     joinThread(w.get());
-    OSL_ASSERT(threadPool_ != 0);
+    assert(threadPool_ != 0);
     uno_threadpool_dispose(threadPool_);
     Stubs s;
     {
@@ -270,6 +275,10 @@ void Bridge::terminate() {
     }
     for (Stubs::iterator i(s.begin()); i != s.end(); ++i) {
         for (Stub::iterator j(i->second.begin()); j != i->second.end(); ++j) {
+            SAL_INFO(
+                "binaryurp",
+                "stub '" << i->first << "', '" << toString(j->first)
+                    << "' still mapped at Bridge::terminate");
             binaryUno_.get()->pExtEnv->revokeInterface(
                 binaryUno_.get()->pExtEnv, j->second.object.get());
         }
@@ -281,10 +290,8 @@ void Bridge::terminate() {
                 css::lang::EventObject(
                     static_cast< cppu::OWeakObject * >(this)));
         } catch (css::uno::RuntimeException & e) {
-            OSL_TRACE(
-                OSL_LOG_PREFIX "caught runtime exception '%s'",
-                rtl::OUStringToOString(
-                    e.Message, RTL_TEXTENCODING_UTF8).getStr());
+            SAL_WARN(
+                "binaryurp", "caught runtime exception '" << e.Message << '\'');
         }
     }
 }
@@ -317,7 +324,7 @@ BinaryAny Bridge::mapCppToBinaryAny(css::uno::Any const & cppAny) {
 }
 
 uno_ThreadPool Bridge::getThreadPool() const {
-    OSL_ASSERT(threadPool_ != 0);
+    assert(threadPool_ != 0);
     return threadPool_;
 }
 
@@ -330,14 +337,14 @@ rtl::Reference< Writer > Bridge::getWriter() {
                     "Binary URP bridge already disposed")),
             static_cast< cppu::OWeakObject * >(this));
     }
-    OSL_ASSERT(writer_.is());
+    assert(writer_.is());
     return writer_;
 }
 
 css::uno::UnoInterfaceReference Bridge::registerIncomingInterface(
     rtl::OUString const & oid, css::uno::TypeDescription const & type)
 {
-    OSL_ASSERT(type.is());
+    assert(type.is());
     if (oid.getLength() == 0) {
         return css::uno::UnoInterfaceReference();
     }
@@ -353,8 +360,7 @@ css::uno::UnoInterfaceReference Bridge::registerIncomingInterface(
             obj.set(new Proxy(this, oid, type), SAL_NO_ACQUIRE);
             {
                 osl::MutexGuard g(mutex_);
-                OSL_ASSERT(
-                    proxies_ < std::numeric_limits< std::size_t >::max());
+                assert(proxies_ < std::numeric_limits< std::size_t >::max());
                 ++proxies_;
             }
             binaryUno_.get()->pExtEnv->registerProxyInterface(
@@ -372,7 +378,7 @@ rtl::OUString Bridge::registerOutgoingInterface(
     css::uno::UnoInterfaceReference const & object,
     css::uno::TypeDescription const & type)
 {
-    OSL_ASSERT(type.is());
+    assert(type.is());
     if (!object.is()) {
         return rtl::OUString();
     }
@@ -393,7 +399,7 @@ rtl::OUString Bridge::registerOutgoingInterface(
                 i = stubs_.insert(Stubs::value_type(oid, Stub())).first;
                 std::swap(i->second, newStub);
                 j = i->second.find(type);
-                OSL_ASSERT(j !=  i->second.end());
+                assert(j !=  i->second.end());
             }
             j->second.object = object;
             j->second.references = 1;
@@ -404,7 +410,7 @@ rtl::OUString Bridge::registerOutgoingInterface(
                 reinterpret_cast< typelib_InterfaceTypeDescription * >(
                     type.get()));
         } else {
-            OSL_ASSERT(stub != &newStub);
+            assert(stub != &newStub);
             if (j->second.references == SAL_MAX_UINT32) {
                 throw css::uno::RuntimeException(
                     rtl::OUString(
@@ -421,7 +427,7 @@ rtl::OUString Bridge::registerOutgoingInterface(
 css::uno::UnoInterfaceReference Bridge::findStub(
     rtl::OUString const & oid, css::uno::TypeDescription const & type)
 {
-    OSL_ASSERT(oid.getLength() != 0 && type.is());
+    assert(oid.getLength() != 0 && type.is());
     osl::MutexGuard g(mutex_);
     Stubs::iterator i(stubs_.find(oid));
     if (i != stubs_.end()) {
@@ -443,7 +449,7 @@ css::uno::UnoInterfaceReference Bridge::findStub(
 void Bridge::releaseStub(
     rtl::OUString const & oid, css::uno::TypeDescription const & type)
 {
-    OSL_ASSERT(oid.getLength() != 0 && type.is());
+    assert(oid.getLength() != 0 && type.is());
     css::uno::UnoInterfaceReference obj;
     bool unused;
     {
@@ -462,7 +468,7 @@ void Bridge::releaseStub(
                     RTL_CONSTASCII_USTRINGPARAM("URP: release unknown stub")),
                 css::uno::Reference< css::uno::XInterface >());
         }
-        OSL_ASSERT(j->second.references > 0);
+        assert(j->second.references > 0);
         --j->second.references;
         if (j->second.references == 0) {
             obj = j->second.object;
@@ -488,7 +494,7 @@ void Bridge::resurrectProxy(Proxy & proxy) {
         proxy.getOid().pData,
         reinterpret_cast< typelib_InterfaceTypeDescription * >(
             proxy.getType().get()));
-    OSL_ASSERT(p == &proxy);
+    assert(p == &proxy);
 }
 
 void Bridge::revokeProxy(Proxy & proxy) {
@@ -500,16 +506,15 @@ void Bridge::freeProxy(Proxy & proxy) {
     try {
         makeReleaseCall(proxy.getOid(), proxy.getType());
     } catch (css::uno::RuntimeException & e) {
-        OSL_TRACE(
-            OSL_LOG_PREFIX "caught runtime exception '%s'",
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        SAL_WARN(
+            "binaryurp", "caught runtime exception '" << e.Message << '\'');
     } catch (std::exception & e) {
-        OSL_TRACE(OSL_LOG_PREFIX "caught C++ exception '%s'", e.what());
+        SAL_WARN("binaryurp", "caught C++ exception '" << e.what() << '\'');
     }
     bool unused;
     {
         osl::MutexGuard g(mutex_);
-        OSL_ASSERT(proxies_ > 0);
+        assert(proxies_ > 0);
         --proxies_;
         unused = becameUnused();
     }
@@ -518,7 +523,7 @@ void Bridge::freeProxy(Proxy & proxy) {
 
 void Bridge::incrementCalls(bool normalCall) throw () {
     osl::MutexGuard g(mutex_);
-    OSL_ASSERT(calls_ < std::numeric_limits< std::size_t >::max());
+    assert(calls_ < std::numeric_limits< std::size_t >::max());
     ++calls_;
     normalCall_ |= normalCall;
 }
@@ -527,7 +532,7 @@ void Bridge::decrementCalls() {
     bool unused;
     {
         osl::MutexGuard g(mutex_);
-        OSL_ASSERT(calls_ > 0);
+        assert(calls_ > 0);
         --calls_;
         unused = becameUnused();
     }
@@ -536,7 +541,7 @@ void Bridge::decrementCalls() {
 
 void Bridge::incrementActiveCalls() throw () {
     osl::MutexGuard g(mutex_);
-    OSL_ASSERT(
+    assert(
         activeCalls_ <= calls_ &&
         activeCalls_ < std::numeric_limits< std::size_t >::max());
     ++activeCalls_;
@@ -545,7 +550,7 @@ void Bridge::incrementActiveCalls() throw () {
 
 void Bridge::decrementActiveCalls() throw () {
     osl::MutexGuard g(mutex_);
-    OSL_ASSERT(activeCalls_ <= calls_ && activeCalls_ > 0);
+    assert(activeCalls_ <= calls_ && activeCalls_ > 0);
     --activeCalls_;
     if (activeCalls_ == 0) {
         passive_.set();
@@ -590,7 +595,7 @@ bool Bridge::makeCall(
 }
 
 void Bridge::sendRequestChangeRequest() {
-    OSL_ASSERT(mode_ == MODE_REQUESTED);
+    assert(mode_ == MODE_REQUESTED);
     random_ = random();
     std::vector< BinaryAny > a;
     a.push_back(
@@ -622,7 +627,7 @@ void Bridge::handleRequestChangeReply(
         mode_ = MODE_WAIT;
         break;
     default:
-        OSL_ASSERT(false); // this cannot happen
+        assert(false); // this cannot happen
         break;
     }
     if (n != exp) {
@@ -644,7 +649,7 @@ void Bridge::handleRequestChangeReply(
         sendCommitChangeRequest();
         break;
     default:
-        OSL_ASSERT(false); // this cannot happen
+        assert(false); // this cannot happen
         break;
     }
 }
@@ -661,7 +666,7 @@ void Bridge::handleCommitChangeReply(
     if (ccMode) {
         setCurrentContextMode();
     }
-    OSL_ASSERT(mode_ == MODE_REQUESTED || mode_ == MODE_REPLY_1);
+    assert(mode_ == MODE_REQUESTED || mode_ == MODE_REPLY_1);
     mode_ = MODE_NORMAL;
     getWriter()->unblock();
     decrementCalls();
@@ -670,7 +675,7 @@ void Bridge::handleCommitChangeReply(
 void Bridge::handleRequestChangeRequest(
     rtl::ByteSequence const & tid, std::vector< BinaryAny > const & inArguments)
 {
-    OSL_ASSERT(inArguments.size() == 1);
+    assert(inArguments.size() == 1);
     switch (mode_) {
     case MODE_REQUESTED:
         {
@@ -726,9 +731,11 @@ void Bridge::handleCommitChangeRequest(
     bool ccMode = false;
     bool exc = false;
     BinaryAny ret;
-    OSL_ASSERT(inArguments.size() == 1);
+    assert(inArguments.size() == 1);
     css::uno::Sequence< css::bridge::ProtocolProperty > s;
-    OSL_VERIFY(mapBinaryToCppAny(inArguments[0]) >>= s);
+    bool ok = (mapBinaryToCppAny(inArguments[0]) >>= s);
+    assert(ok);
+    (void) ok; // avoid warnings
     for (sal_Int32 i = 0; i != s.getLength(); ++i) {
         if (s[i].Name.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM("CurrentContext")))
@@ -874,7 +881,7 @@ void Bridge::addEventListener(
     css::uno::Reference< css::lang::XEventListener > const & xListener)
     throw (css::uno::RuntimeException)
 {
-    OSL_ASSERT(xListener.is());
+    assert(xListener.is());
     {
         osl::MutexGuard g(mutex_);
         if (!terminated_) {
@@ -899,7 +906,7 @@ void Bridge::removeEventListener(
 }
 
 void Bridge::sendCommitChangeRequest() {
-    OSL_ASSERT(mode_ == MODE_REQUESTED || mode_ == MODE_REPLY_1);
+    assert(mode_ == MODE_REQUESTED || mode_ == MODE_REPLY_1);
     css::uno::Sequence< css::bridge::ProtocolProperty > s(1);
     s[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CurrentContext"));
     std::vector< BinaryAny > a;
@@ -910,7 +917,7 @@ void Bridge::sendCommitChangeRequest() {
 void Bridge::sendProtPropRequest(
     OutgoingRequest::Kind kind, std::vector< BinaryAny > const & inArguments)
 {
-    OSL_ASSERT(
+    assert(
         kind == OutgoingRequest::KIND_REQUEST_CHANGE ||
         kind == OutgoingRequest::KIND_COMMIT_CHANGE);
     incrementCalls(false);

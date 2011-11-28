@@ -28,7 +28,8 @@
 
 #include "sal/config.h"
 
-#include "osl/diagnose.h"
+#include <cassert>
+
 #include "typelib/typeclass.h"
 #include "typelib/typedescription.hxx"
 #include "uno/any2.h"
@@ -50,12 +51,12 @@ BinaryAny::BinaryAny() throw () {
 BinaryAny::BinaryAny(css::uno::TypeDescription const & type, void * value)
     throw ()
 {
-    OSL_ASSERT(type.is());
+    assert(type.is());
     uno_any_construct(&data_, value, type.get(), 0);
 }
 
 BinaryAny::BinaryAny(uno_Any const & raw) throw () {
-    OSL_ASSERT(raw.pType != 0);
+    assert(raw.pType != 0);
     data_.pType = raw.pType;
     typelib_typedescriptionreference_acquire(data_.pType);
     data_.pData = raw.pData == &raw.pReserved ? &data_.pReserved : raw.pData;
@@ -88,7 +89,7 @@ css::uno::TypeDescription BinaryAny::getType() const throw () {
 void * BinaryAny::getValue(css::uno::TypeDescription const & type) const
     throw ()
 {
-    OSL_ASSERT(
+    assert(
         type.is() &&
         (type.get()->eTypeClass == typelib_TypeClass_ANY ||
          type.equals(css::uno::TypeDescription(data_.pType))));

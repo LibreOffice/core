@@ -31,11 +31,11 @@
 
 #include "sal/config.h"
 
+#include <cassert>
 #include <cstddef>
 #include <map>
 
 #include "boost/noncopyable.hpp"
-#include "osl/diagnose.h"
 #include "sal/types.h"
 
 namespace binaryurp {
@@ -51,11 +51,11 @@ public:
     explicit Cache(std::size_t size):
         size_(size), first_(map_.end()), last_(map_.end())
     {
-        OSL_ASSERT(size < cache::ignore);
+        assert(size < cache::ignore);
     }
 
     sal_uInt16 add(T const & content, bool * found) {
-        OSL_ASSERT(found != 0);
+        assert(found != 0);
         typename Map::iterator i(map_.find(content));
         *found = i != map_.end();
         if (i == map_.end()) {

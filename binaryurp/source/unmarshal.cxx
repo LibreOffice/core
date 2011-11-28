@@ -28,6 +28,7 @@
 
 #include "sal/config.h"
 
+#include <cassert>
 #include <cstdlib>
 #include <new>
 #include <vector>
@@ -39,7 +40,6 @@
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppu/unotype.hxx"
-#include "osl/diagnose.h"
 #include "rtl/byteseq.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/textcvt.h"
@@ -78,7 +78,7 @@ std::vector< BinaryAny >::iterator copyMemberValues(
     css::uno::TypeDescription const & type,
     std::vector< BinaryAny >::iterator const & it, void * buffer) throw ()
 {
-    OSL_ASSERT(
+    assert(
         type.is() &&
         (type.get()->eTypeClass == typelib_TypeClass_STRUCT ||
          type.get()->eTypeClass == typelib_TypeClass_EXCEPTION) &&
@@ -292,7 +292,7 @@ rtl::ByteSequence Unmarshal::readTid() {
 }
 
 BinaryAny Unmarshal::readValue(css::uno::TypeDescription const & type) {
-    OSL_ASSERT(type.is());
+    assert(type.is());
     switch (type.get()->eTypeClass) {
     default:
         std::abort(); // this cannot happen
@@ -486,8 +486,7 @@ rtl::OUString Unmarshal::readString() {
 }
 
 BinaryAny Unmarshal::readSequence(css::uno::TypeDescription const & type) {
-    OSL_ASSERT(
-        type.is() && type.get()->eTypeClass == typelib_TypeClass_SEQUENCE);
+    assert(type.is() && type.get()->eTypeClass == typelib_TypeClass_SEQUENCE);
     sal_uInt32 n = readCompressed();
     if (n > SAL_MAX_INT32) {
         throw css::uno::RuntimeException(
@@ -515,7 +514,7 @@ BinaryAny Unmarshal::readSequence(css::uno::TypeDescription const & type) {
     for (sal_uInt32 i = 0; i != n; ++i) {
         as.push_back(readValue(ctd));
     }
-    OSL_ASSERT(ctd.get()->nSize >= 0);
+    assert(ctd.get()->nSize >= 0);
     sal_uInt64 size = static_cast< sal_uInt64 >(n) *
         static_cast< sal_uInt64 >(ctd.get()->nSize);
         // sal_uInt32 * sal_Int32 -> sal_uInt64 cannot overflow
@@ -542,7 +541,7 @@ BinaryAny Unmarshal::readSequence(css::uno::TypeDescription const & type) {
 void Unmarshal::readMemberValues(
     css::uno::TypeDescription const & type, std::vector< BinaryAny > * values)
 {
-    OSL_ASSERT(
+    assert(
         type.is() &&
         (type.get()->eTypeClass == typelib_TypeClass_STRUCT ||
          type.get()->eTypeClass == typelib_TypeClass_EXCEPTION) &&
