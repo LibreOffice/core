@@ -285,6 +285,68 @@
           <DefaultFullName>Декабрь</DefaultFullName>
         </Month>
       </MonthsOfYear>
+      <GenitiveMonths>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>янв</DefaultAbbrvName>
+          <DefaultFullName>января</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>фев</DefaultAbbrvName>
+          <DefaultFullName>февраля</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>мар</DefaultAbbrvName>
+          <DefaultFullName>марта</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>апр</DefaultAbbrvName>
+          <DefaultFullName>апреля</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>май</DefaultAbbrvName>
+          <DefaultFullName>мая</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>июн</DefaultAbbrvName>
+          <DefaultFullName>июня</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>июл</DefaultAbbrvName>
+          <DefaultFullName>июля</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>авг</DefaultAbbrvName>
+          <DefaultFullName>августа</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>сен</DefaultAbbrvName>
+          <DefaultFullName>сентября</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>окт</DefaultAbbrvName>
+          <DefaultFullName>октября</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>ноя</DefaultAbbrvName>
+          <DefaultFullName>ноября</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>дек</DefaultAbbrvName>
+          <DefaultFullName>декабря</DefaultFullName>
+        </Month>
+      </GenitiveMonths>
       <Eras>
         <Era>
           <EraID>bc</EraID>
