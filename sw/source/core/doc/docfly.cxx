@@ -216,16 +216,16 @@ Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
 
 sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, sal_Bool bNewFrms )
 {
-    //Ankerwechsel sind fast immer in alle 'Richtungen' erlaubt.
-    //Ausnahme: Absatz- bzw. Zeichengebundene Rahmen duerfen wenn sie in
-    //Kopf-/Fusszeilen stehen nicht Seitengebunden werden.
+    // Changing anchors is almost always allowed.
+    // Exception: Paragraph and character bound frames must not become
+    // page bound, if they are located in the header or footer.
     const SwFmtAnchor &rOldAnch = rFmt.GetAnchor();
     const RndStdIds nOld = rOldAnch.GetAnchorId();
 
     SwFmtAnchor aNewAnch( (SwFmtAnchor&)rSet.Get( RES_ANCHOR ) );
     RndStdIds nNew = aNewAnch.GetAnchorId();
 
-    // ist der neue ein gueltiger Anker?
+    // Is the new anchor valid?
     if( !aNewAnch.GetCntntAnchor() && (FLY_AT_FLY == nNew ||
         (FLY_AT_PARA == nNew) || (FLY_AS_CHAR == nNew) ||
         (FLY_AT_CHAR == nNew) ))
@@ -240,16 +240,17 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, sal_Bool bNew
     Point aOldAnchorPos( ::lcl_FindAnchorLayPos( *this, rOldAnch, &rFmt ));
     Point aNewAnchorPos( ::lcl_FindAnchorLayPos( *this, aNewAnch, 0 ));
 
-    //Die alten Frms vernichten. Dabei werden die Views implizit gehidet und
-    //doppeltes hiden waere so eine art Show!
+    // Destroy the old Frames.
+    // The Views are hidden implicitly, so hiding them another time would be
+    // kind of a show!
     rFmt.DelFrms();
 
     if ( FLY_AS_CHAR == nOld )
     {
-        //Bei InCntnt's wird es spannend: Das TxtAttribut muss vernichtet
-        //werden. Leider reisst dies neben den Frms auch noch das Format mit
-        //in sein Grab. Um dass zu unterbinden loesen wir vorher die
-        //Verbindung zwischen Attribut und Format.
+        // We need to handle InCntnts in a special way:
+        // The TxtAttribut needs to be destroyed which, unfortunately, also
+        // destroys the format. To avoid that, we disconnect the format from
+        // the attribute.
         const SwPosition *pPos = rOldAnch.GetCntntAnchor();
         SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
         OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
@@ -262,27 +263,25 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, sal_Bool bNew
                     "Wrong TxtFlyCnt-Hint." );
         const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt();
 
-        //Die Verbindung ist geloest, jetzt muss noch das Attribut vernichtet
-        //werden.
+        // They are disconnected. We now have to destroy the attribute.
         pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx, nIdx );
     }
 
-    //Endlich kann das Attribut gesetzt werden. Es muss das erste Attribut
-    //sein; Undo depends on it!
+    // We can finally set the attribute. It needs to be the first one!
+    // Undo depends on it!
     rFmt.SetFmtAttr( aNewAnch );
 
-    //Positionskorrekturen
+    // Correct the position
     const SfxPoolItem* pItem;
     switch( nNew )
     {
     case FLY_AS_CHAR:
-            //Wenn keine Positionsattribute hereinkommen, dann muss dafuer
-            //gesorgt werden, das keine unerlaubte automatische Ausrichtung
-            //bleibt.
+            // If no position attributes are received, we have to make sure
+            // that no forbidden automatic alignment is left.
         {
             const SwPosition *pPos = aNewAnch.GetCntntAnchor();
             SwTxtNode *pNd = pPos->nNode.GetNode().GetTxtNode();
-            OSL_ENSURE( pNd, "Crsr steht nicht auf TxtNode." );
+            OSL_ENSURE( pNd, "Crsr does not point to TxtNode." );
 
             SwFmtFlyCnt aFmt( static_cast<SwFlyFrmFmt*>(&rFmt) );
             pNd->InsertItem( aFmt, pPos->nContent.GetIndex(), 0 );
@@ -307,16 +306,14 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, sal_Bool bNew
         break;
 
     case FLY_AT_PARA:
-    case FLY_AT_CHAR: // LAYER_IMPL
-    case FLY_AT_FLY: // LAYER_IMPL
+    case FLY_AT_CHAR:   // LAYER_IMPL
+    case FLY_AT_FLY:    // LAYER_IMPL
     case FLY_AT_PAGE:
         {
-            //Wenn keine Positionsattribute hereinschneien korrigieren wir
-            //die Position so, dass die Dokumentkoordinaten des Flys erhalten
-            //bleiben.
-            //Chg: Wenn sich in den Positionsattributen lediglich die
-            //Ausrichtung veraendert (text::RelOrientation::FRAME vs. text::RelOrientation::PRTAREA), dann wird die
-            //Position ebenfalls korrigiert.
+            // If no position attributes are coming in, we correct the position in a way
+            // such that the fly's document coordinates are preserved.
+            // If only the alignment changes in the position attributes (text::RelOrientation::FRAME
+            // vs. text::RelOrientation::PRTAREA), we also correct the position.
             if( SFX_ITEM_SET != rSet.GetItemState( RES_HORI_ORIENT, sal_False, &pItem ))
                 pItem = 0;
 
@@ -379,9 +376,9 @@ lcl_SetFlyFrmAttr(SwDoc & rDoc,
     // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
-    //Ist das Ankerattribut dabei? Falls ja ueberlassen wir die Verarbeitung
-    //desselben einer Spezialmethode. Sie Returnt sal_True wenn der Fly neu
-    //erzeugt werden muss (z.B. weil ein Wechsel des FlyTyps vorliegt).
+    // Is the anchor attribute included?
+    // If so, we pass it to a special method, which returns sal_True
+    // if the Fly needs to be created anew, because we e.g change the FlyType.
     sal_Int8 const nMakeFrms =
         (SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, sal_False ))
              ?  (rDoc.*pSetFlyFrmAnchor)( rFlyFmt, rSet, sal_False )
@@ -399,8 +396,8 @@ lcl_SetFlyFrmAttr(SwDoc & rDoc,
         case RES_PAGEDESC:
         case RES_CNTNT:
         case RES_FOOTER:
-            OSL_FAIL( ":-) Unbekanntes Attribut fuer Fly." );
-            // kein break;
+            OSL_FAIL( "Unknown Fly attribute." );
+            // no break;
         case RES_CHAIN:
             rSet.ClearItem( nWhich );
             break;
@@ -527,8 +524,8 @@ sal_Bool SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
     // 2 objects of type SwUndoFrmFmt on the undo stack. We don't want them.
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
-    //Erstmal die Spalten setzen, sonst gibts nix als Aerger mit dem
-    //Set/Reset/Abgleich usw.
+    // Set the column first, or we'll have trouble with
+    //Set/Reset/Synch. and so on
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET != rNewFmt.GetAttrSet().GetItemState( RES_COL ))
         rFmt.ResetFmtAttr( RES_COL );
@@ -537,8 +534,8 @@ sal_Bool SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
     {
         rFmt.SetDerivedFrom( &rNewFmt );
 
-        // 1. wenn nicht automatisch -> ignorieren, sonst -> wech
-        // 2. wech damit, MB!
+        // 1. If not automatic = ignore; else = dispose
+        // 2. Dispose of it!
         if( SFX_ITEM_SET == rNewFmt.GetAttrSet().GetItemState( RES_FRM_SIZE, sal_False ))
         {
             rFmt.ResetFmtAttr( RES_FRM_SIZE );
@@ -555,8 +552,8 @@ sal_Bool SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
                 bChgAnchor = MAKEFRMS == SetFlyFrmAnchor( rFmt, *pSet, sal_False );
             else
             {
-                //JP 23.04.98: muss den FlyFmt-Range haben, denn im SetFlyFrmAnchor
-                //              werden Attribute in diesen gesetzt!
+                // Needs to have the FlyFmt range, because we set attributes in it,
+                // in SetFlyFrmAnchor.
                 SfxItemSet aFlySet( *rNewFmt.GetAttrSet().GetPool(),
                                     rNewFmt.GetAttrSet().GetRanges() );
                 aFlySet.Put( *pItem );
@@ -565,11 +562,10 @@ sal_Bool SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
         }
     }
 
-    //Hori und Vert nur dann resetten, wenn in der Vorlage eine
-    //automatische Ausrichtung eingestellt ist, anderfalls den alten Wert
-    //wieder hineinstopfen.
-    // beim Update der RahmenVorlage sollte der Fly NICHT
-    //              seine Orientierng verlieren (diese wird nicht geupdatet!)
+    // Only reset vertical and horizontal orientation, if we have automatic alignment
+    // set in the template. Otherwise use the old value.
+    // If we update the frame template the Fly should NOT lose its orientation (which
+    // is not being updated!).
     // text::HoriOrientation::NONE and text::VertOrientation::NONE are allowed now
     if (!bKeepOrient)
     {
@@ -610,7 +606,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                            const sal_Bool _bSameOnly,
                            const sal_Bool _bPosCorr )
 {
-    OSL_ENSURE( GetCurrentLayout(), "Ohne Layout geht gar nichts" );
+    OSL_ENSURE( GetCurrentLayout(), "No layout!" );
 
     if ( !_rMrkList.GetMarkCount() ||
          _rMrkList.GetMark( 0 )->GetMarkedSdrObj()->GetUpGroup() )
@@ -698,8 +694,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
 
             case FLY_AT_FLY: // LAYER_IMPL
                 {
-                    //Ausgehend von der linken oberen Ecke des Fly den
-                    //dichtesten SwFlyFrm suchen.
+                    // Search the closest SwFlyFrm starting from the upper left corner.
                     SwFrm *pTxtFrm;
                     {
                         SwCrsrMoveState aState( MV_SETONLYTEXT );
@@ -738,7 +733,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                 }
                 break;
             case FLY_AS_CHAR:
-                if( _bSameOnly )    // Positions/Groessenaenderung
+                if( _bSameOnly )    // Change of position/size
                 {
                     if( !pOldAnchorFrm )
                     {
@@ -747,7 +742,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     }
                     ((SwTxtFrm*)pOldAnchorFrm)->Prepare();
                 }
-                else            // Ankerwechsel
+                else            // Change of anchors
                 {
                     // allow drawing objects in header/footer
                     pNewAnchorFrm = ::FindAnchor( pOldAnchorFrm, aPt, false );
@@ -759,13 +754,13 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
 
                     bUnmark = ( 0 != i );
                     Point aPoint( aPt );
-                    aPoint.X() -= 1;    // nicht im DrawObj landen!!
+                    aPoint.X() -= 1;    // Do not load in the DrawObj!
                     aNewAnch.SetType( FLY_AS_CHAR );
                     SwPosition aPos( *((SwCntntFrm*)pNewAnchorFrm)->GetNode() );
                     if ( pNewAnchorFrm->Frm().IsInside( aPoint ) )
                     {
-                    // es muss ein TextNode gefunden werden, denn nur dort
-                    // ist ein inhaltsgebundenes DrawObjekt zu verankern
+                    // We need to find a TextNode, because only there we can anchor a
+                    // content-bound DrawObject.
                         SwCrsrMoveState aState( MV_SETONLYTEXT );
                         GetCurrentLayout()->GetCrsrOfst( &aPos, aPoint, &aState );  //swmod 080218
                     }
@@ -826,10 +821,10 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
             // #i54336#
             if ( pNewAnchorFrm && pOldAsCharAnchorPos )
             {
-                //Bei InCntnt's wird es spannend: Das TxtAttribut muss vernichtet
-                //werden. Leider reisst dies neben den Frms auch noch das Format mit
-                //in sein Grab. Um dass zu unterbinden loesen wir vorher die
-                //Verbindung zwischen Attribut und Format.
+                // We need to handle InCntnts in a special way:
+                // The TxtAttribut needs to be destroyed which, unfortunately, also
+                // destroys the format. To avoid that, we disconnect the format from
+                // the attribute.
                 const xub_StrLen nIndx( pOldAsCharAnchorPos->nContent.GetIndex() );
                 SwTxtNode* pTxtNode( pOldAsCharAnchorPos->nNode.GetNode().GetTxtNode() );
                 OSL_ENSURE( pTxtNode, "<SwDoc::ChgAnchor(..)> - missing previous anchor text node for as-character anchored object" );
@@ -838,8 +833,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     pTxtNode->GetTxtAttrForCharAt( nIndx, RES_TXTATR_FLYCNT );
                 const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt();
 
-                //Die Verbindung ist geloest, jetzt muss noch das Attribut vernichtet
-                //werden.
+                // They are disconnected. We now have to destroy the attribute.
                 pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIndx, nIndx );
                 delete pOldAsCharAnchorPos;
             }
@@ -854,13 +848,12 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
 
 int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
 {
-    //Die Source darf noch keinen Follow haben.
+    // The Source must not yet have a Follow.
     const SwFmtChain &rOldChain = rSource.GetChain();
     if ( rOldChain.GetNext() )
         return SW_CHAIN_SOURCE_CHAINED;
 
-    //Ziel darf natuerlich nicht gleich Source sein und es
-    //darf keine geschlossene Kette entstehen.
+    // Target must not be equal to Source and we also must not have a closed chain.
     const SwFrmFmt *pFmt = &rDest;
     do {
         if( pFmt == &rSource )
@@ -868,17 +861,16 @@ int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
         pFmt = pFmt->GetChain().GetNext();
     } while ( pFmt );
 
-    //Auch eine Verkettung von Innen nach aussen oder von aussen
-    //nach innen ist nicht zulaessig.
+    // There must not be a chaining from outside to inside or the other way around.
     if( rDest.IsLowerOf( rSource ) || rSource .IsLowerOf( rDest ) )
         return SW_CHAIN_SELF;
 
-    //Das Ziel darf noch keinen Master haben.
+    // The Target must not yet have a Master.
     const SwFmtChain &rChain = rDest.GetChain();
     if( rChain.GetPrev() )
         return SW_CHAIN_IS_IN_CHAIN;
 
-    //Das Ziel muss leer sein.
+    // Target must be empty.
     const SwNodeIndex* pCntIdx = rDest.GetCntnt().GetCntntIdx();
     if( !pCntIdx )
         return SW_CHAIN_NOT_FOUND;
@@ -910,11 +902,10 @@ int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
         }
     }
 
-    //Auf die richtige Area muessen wir auch noch einen Blick werfen.
-    //Beide Flys muessen im selben Bereich (Body, Head/Foot, Fly) sitzen
-    //Wenn die Source nicht der selektierte Rahmen ist, so reicht es
-    //Wenn ein passender gefunden wird (Der Wunsch kann z.B. von der API
-    //kommen).
+    // We also need to consider the right area.
+    // Both Flys need to be located in the same area (Body, Header/Footer, Fly).
+    // If the Source is not the selected frame, it's enough to find a suitable
+    // one. e.g. if it's requested by the API.
 
     // both in the same fly, header, footer or on the page?
     const SwFmtAnchor &rSrcAnchor = rSource.GetAnchor(),
@@ -960,7 +951,7 @@ int SwDoc::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
 
         SwFlyFrmFmt& rDestFmt = (SwFlyFrmFmt&)rDest;
 
-        //Follow an den Master haengen.
+        // Attach Follow to the Master.
         SwFmtChain aChain = rDestFmt.GetChain();
         aChain.SetPrev( &(SwFlyFrmFmt&)rSource );
         SetAttr( aChain, rDestFmt );
@@ -968,12 +959,12 @@ int SwDoc::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
         SfxItemSet aSet( GetAttrPool(), RES_FRM_SIZE, RES_FRM_SIZE,
                                         RES_CHAIN,  RES_CHAIN, 0 );
 
-        //Follow an den Master haengen.
+        // Attach Follow to the Master.
         aChain.SetPrev( &(SwFlyFrmFmt&)rSource );
         SetAttr( aChain, rDestFmt );
 
-        //Master an den Follow haengen und dafuer sorgen, dass der Master
-        //eine fixierte Hoehe hat.
+        // Attach Master to the Follow.
+        // Make sure that the Master has a fixed height.
         aChain = rSource.GetChain();
         aChain.SetNext( &rDestFmt );
         aSet.Put( aChain );
