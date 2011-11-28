@@ -62,7 +62,7 @@ instsetoo_native: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded $(if $(filter $(
 	$(call gb_BuildplTarget_command,$@)
 
 cross_toolset: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded
-	$(call gb_BuildplTarget_command,$@)
+	source $(SRCDIR)/Env.Build.sh && $(call gb_BuildplTarget_command,$@)
 
 dev-install: smoketestoo_native
 
