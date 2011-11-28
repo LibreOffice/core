@@ -42,7 +42,34 @@ unitcheck: dev-install
 	@$(MAKE) -f $(realpath $(firstword $(MAKEFILE_LIST))) $@ gb_PARTIALBUILD=
 
 all:
-	
+
+ifeq ($(filter-out build,$(MAKECMDGOALS)),)
+gb_MAKETARGET=build
+else
+gb_MAKETARGET=all
+endif
+
+define gb_BuildplTarget_command
+cd $(SRCDIR)/$(1) && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl --all gb_MAKETARGET=$(gb_MAKETARGET)
+endef
+
+.PHONY: smoketestoo_native instsetoo_native cross-build-toolset dev-install all build
+
+smoketestoo_native: $(WORKDIR)/bootstrap  $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-build-toolset)
+	$(call gb_BuildplTarget_command,$@)
+
+instsetoo_native: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-build-toolset)
+	$(call gb_BuildplTarget_command,$@)
+
+cross-build-toolset: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded
+	$(call gb_BuildplTarget_command,$@)
+
+dev-install: smoketestoo_native
+
+all: instsetoo_native
+
+build: instsetoo_native
+
 endif # gb_PARTIALBUILD
     
 # vim:set shiftwidth=4 softtabstop=4 noexpandtab:
