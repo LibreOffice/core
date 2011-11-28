@@ -85,7 +85,7 @@ public:
 
     virtual Size    GetOptimalSize(WindowSizeType eType) const;
     virtual void    Resize();
-
+    bool            isLayoutEnabled() const;
 
     virtual sal_Bool    Close();
 

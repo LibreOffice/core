@@ -36,6 +36,7 @@
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 
+#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <vcl/wrkwin.hxx>
@@ -944,12 +945,18 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal
     pDev->Pop();
 }
 
+bool Dialog::isLayoutEnabled() const
+{
+    //Has one child, and that child is a container => we're layout enabled
+    return (GetChildCount() == 1 && dynamic_cast<const Box*>(GetChild(0)));
+}
+
 Size Dialog::GetOptimalSize(WindowSizeType eType) const
 {
     if (eType == WINDOWSIZE_MAXIMUM)
         return SystemWindow::GetOptimalSize(eType);
     Size aSize;
-    if (GetChildCount() == 1)
+    if (isLayoutEnabled())
         aSize = GetChild(0)->GetOptimalSize(eType);
     return Window::CalcWindowSize(aSize);
 }
@@ -957,7 +964,7 @@ Size Dialog::GetOptimalSize(WindowSizeType eType) const
 void Dialog::Resize()
 {
     fprintf(stderr, "Dialog::Resize\n");
-    if (GetChildCount() == 1)
+    if (isLayoutEnabled())
     {
         Size aSize = GetSizePixel();
         aSize.Width() -= mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder;

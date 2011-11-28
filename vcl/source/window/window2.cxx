@@ -32,6 +32,7 @@
 #include <tools/poly.hxx>
 
 #include <vcl/bitmap.hxx>
+#include <vcl/dialog.hxx>
 #include <vcl/event.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/metric.hxx>
@@ -1436,7 +1437,7 @@ WindowType Window::GetType() const
     return mpWindowImpl->mnType;
 }
 
-Window* Window::GetParentDialog() const
+Dialog* Window::GetParentDialog() const
 {
     const Window *pWindow = this;
 
@@ -1448,7 +1449,7 @@ Window* Window::GetParentDialog() const
         pWindow = pWindow->GetParent();
     }
 
-    return const_cast<Window *>(pWindow);
+    return const_cast<Dialog *>(dynamic_cast<const Dialog*>(pWindow));
 }
 
 sal_Bool Window::IsSystemWindow() const

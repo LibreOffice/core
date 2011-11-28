@@ -9576,9 +9576,9 @@ Selection Window::GetSurroundingTextSelection() const
 void Window::queueResize()
 {
     fprintf(stderr, "Window::queueResize called\n");
-    Window *pParent = GetParentDialog();
+    Dialog *pParent = GetParentDialog();
     fprintf(stderr, "parent dialog is %p\n", pParent);
-    if (pParent && pParent->IsReallyShown() && pParent->GetChildCount() == 1)
+    if (pParent && pParent->IsReallyShown() && pParent->isLayoutEnabled())
     {
         //To-Do: integrate with mpWindowImpl->mpFrameData->maResizeTimer.SetTimeout( 50 );
         fprintf(stderr, "suitable, so call resize\n");
