@@ -28,7 +28,7 @@
 
 // Gross inclusion hacks for now ...
 
-#include "../../headless/svpgdi.cxx"
+#include "../../../headless/svpgdi.cxx"
 #include <unx/gtk/gtkframe.hxx>
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>

@@ -611,7 +611,7 @@ GenPspGraphics *GtkInstance::CreatePrintGraphics()
 }
 
 #if GTK_CHECK_VERSION(3,0,0)
-#include "../../headless/svpinst.cxx"
+#include "../../../headless/svpinst.cxx"
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
