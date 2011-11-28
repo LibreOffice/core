@@ -37,7 +37,7 @@ struct SwDocStat;
 
 class SwWordCountDialog
 {
-    VBox dialog_vbox1;
+    VBox dialog_vbox;
     VBox box1;
 
     HBox aCurrentSelection;
@@ -72,7 +72,7 @@ class SwWordCountDialog
 
     FixedLine aBottomFL;
 
-    HButtonBox dialog_action_area1;
+    HButtonBox dialog_action_area;
     OKButton aOK;
     HelpButton aHelp;
 

@@ -41,8 +41,8 @@
 
 //TODO, add asian/non-asian word count to UI when CJK mode is enabled.
 SwWordCountDialog::SwWordCountDialog(Dialog* pParent)
-    : dialog_vbox1(pParent)
-    , box1(&dialog_vbox1)
+    : dialog_vbox(pParent)
+    , box1(&dialog_vbox)
     , aCurrentSelection(&box1, false, 3)
     , aCurrentSelectionText(&aCurrentSelection, SW_RES(FT_CURRENT))
     , aCurrentSelectionLine(&aCurrentSelection, SW_RES(FL_CURRENT))
@@ -69,10 +69,10 @@ SwWordCountDialog::SwWordCountDialog(Dialog* pParent)
     , aDocRow3(&aDocBox)
     , aDocCharacterExcludingSpacesFT(&aDocRow3, SW_RES(FT_DOCCHARACTEREXCLUDINGSPACES))
     , aDocCharacterExcludingSpacesFI(&aDocRow3, SW_RES(FI_DOCCHARACTEREXCLUDINGSPACES))
-    , aBottomFL(&dialog_vbox1, SW_RES(FL_BOTTOM))
-    , dialog_action_area1(&dialog_vbox1)
-    , aOK(&dialog_action_area1, SW_RES(PB_OK))
-    , aHelp(&dialog_action_area1, SW_RES(PB_HELP))
+    , aBottomFL(&dialog_vbox, SW_RES(FL_BOTTOM))
+    , dialog_action_area(&dialog_vbox)
+    , aOK(&dialog_action_area, SW_RES(PB_OK))
+    , aHelp(&dialog_action_area, SW_RES(PB_HELP))
 {
     rtl::OUString sForceInitialSize(RTL_CONSTASCII_USTRINGPARAM("00000000"));
     aCurrentWordFI.SetText(sForceInitialSize);
@@ -87,12 +87,12 @@ SwWordCountDialog::SwWordCountDialog(Dialog* pParent)
     rtl::OString sPackType(RTL_CONSTASCII_STRINGPARAM("pack-type"));
     rtl::OString sBorderWidth(RTL_CONSTASCII_STRINGPARAM("border-width"));
 
-    dialog_vbox1.setChildProperty(sFill, true);
+    dialog_vbox.setChildProperty(sFill, true);
     //TO-DO, when vbox1 belongs to dialog via builder, this becomes
     //content-area-border on the dialog
-    dialog_vbox1.setChildProperty(sBorderWidth, sal_Int32(7));
+    dialog_vbox.setChildProperty(sBorderWidth, sal_Int32(7));
 
-    dialog_action_area1.setChildProperty(sFill, true);
+    dialog_action_area.setChildProperty(sFill, true);
 
     box1.setChildProperty(sFill, true);
     box1.setChildProperty(sExpand, true);
@@ -157,13 +157,13 @@ SwWordCountDialog::SwWordCountDialog(Dialog* pParent)
 
     fprintf(stderr, "aOk is %p\n", &aOK);
     fprintf(stderr, "aHelp is %p\n", &aHelp);
-    fprintf(stderr, "dialog_action_area1 is is %p\n", &dialog_action_area1);
+    fprintf(stderr, "dialog_action_area is is %p\n", &dialog_action_area);
     fprintf(stderr, "aCurrentSelectionLine is is %p\n", &aCurrentSelectionLine);
     fprintf(stderr, "aCurrentSelectionText is is %p\n", &aCurrentSelectionText);
     fprintf(stderr, "aCurrentSelection is is %p\n", &aCurrentSelection);
-    fprintf(stderr, "dialog_vbox1 is is %p\n", &dialog_vbox1);
+    fprintf(stderr, "dialog_vbox is is %p\n", &dialog_vbox);
 
-    pParent->SetMinOutputSizePixel(dialog_vbox1.GetOptimalSize(WINDOWSIZE_PREFERRED));
+    pParent->SetMinOutputSizePixel(dialog_vbox.GetOptimalSize(WINDOWSIZE_PREFERRED));
 
 #if OSL_DEBUG_LEVEL > 2
     aDocCharacterExcludingSpacesFT.SetControlBackground(Color(180,0,0));
