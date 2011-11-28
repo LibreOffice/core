@@ -28,10 +28,21 @@
 ifeq ($(strip $(gb_PARTIALBUILD)),)
 
 gb_Module_add_target=
+gb_Module_add_moduledir=
 gb_Module_add_check_target=
 gb_Module_add_subsequentcheck_target=
 gb_FULLDEPS=
 
+clean: clean-host clean-build
+
+subsequentcheck: dev-install
+	@$(MAKE) -f $(realpath $(firstword $(MAKEFILE_LIST))) $@ gb_PARTIALBUILD=
+
+unitcheck: dev-install
+	@$(MAKE) -f $(realpath $(firstword $(MAKEFILE_LIST))) $@ gb_PARTIALBUILD=
+
+all:
+	
 endif # gb_PARTIALBUILD
     
 # vim:set shiftwidth=4 softtabstop=4 noexpandtab:

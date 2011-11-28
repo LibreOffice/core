@@ -25,7 +25,7 @@
 #   in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 #   instead of those above.
 
-.PHONY: id tags docs distro-pack-install fetch
+.PHONY: id tags docs distro-pack-install fetch clean-host clean-build bootstrap
 
 id:
 	@create-ids
@@ -53,5 +53,25 @@ $(WORKDIR)/bootstrap:
 
 bootstrap: $(WORKDIR)/bootstrap
 
-# vim:set shiftwidth=4 softtabstop=4 noexpandtab:
+ifeq ($(strip $(gb_PARTIALBUILD)),)
 
+clean-host:
+	rm -rf $(SRCDIR)/*/$(INPATH)
+	rm -rf install
+
+clean-build:
+	if [ -f $(SRCDIR)/dmake/Makefile ] ; then $(GNUMAKE) -C $(SRCDIR)/dmake clean; fi
+	rm -f solenv/*/bin/dmake*
+	rm -rf $(SRCDIR)*/$(INPATH_FOR_BUILD)
+
+distclean: clean
+	if [ -f $(SRCDIR)/dmake/Makefile ] ; then $(GNUMAKE) -C $(SRCDIR)/dmake clean; fi
+	cd $(SRCDIR) && rm -rf Env.Host.sh Makefile aclocal.m4 autogen.lastrun autom4te.cache \
+	bin/repo-list build_env config.log config.status configure \
+	desktop/scripts/soffice.sh ooo.lst post_download post_download.log \
+	set_soenv set_soenv.last set_soenv.stamp src.downloaded warn
+
+endif
+
+
+# vim:set shiftwidth=4 softtabstop=4 noexpandtab:

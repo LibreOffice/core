@@ -14,64 +14,17 @@ define forward_to_gbuild
 @GNUMAKE@ -f $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/GNUmakefile.mk \
 	$(if @VERBOSE@,,-s) \
 	--jobs="@GMAKE_PARALLELISM@" \
-	$(patsubst allcheck,check,$(1))
+	$(1)
 endef
 
-all: build unitcheck
+all:
+	@$(call forward_to_gbuild,$@)
 
-check : allcheck
-	@true
-
-install: build
-	@. ./Env.Host.sh && \
-	echo "Installing in @INSTALLDIR@..." && \
-	ooinstall "@INSTALLDIR@" && \
-	echo "" && \
-	echo "Installation finished, you can now execute:" && \
-	echo "@INSTALLDIR@/program/soffice"
-
-distclean: clean
-ifeq (@BUILD_DMAKE@,YES)
-	-test -f dmake/Makefile && $(MAKE) -C dmake distclean
-endif
-	rm -rf Env.Host.sh Makefile aclocal.m4 autogen.lastrun autom4te.cache \
-	bin/repo-list build_env config.log config.status configure \
-	desktop/scripts/soffice.sh ooo.lst post_download post_download.log \
-	set_soenv set_soenv.last set_soenv.stamp src.downloaded warn
-
-clean: clean-host clean-build
-
-clean-host:
-	. ./Env.Host.sh && \
-	rm -rf */$$INPATH && \
-	rm -rf install
-
-clean-build:
-ifeq (@BUILD_DMAKE@,YES)
-	. ./Env.Host.sh && \
-	(if [ -f dmake/Makefile ] ; then $$GNUMAKE -C dmake clean; fi) && \
-	rm -f solenv/*/bin/dmake*
-endif
-ifeq (@CROSS_COMPILING@,YES)
-	. ./Env.Host.sh && \
-	rm -rf */$$INPATH_FOR_BUILD
-endif
-
-ifeq (@DO_FETCH_TARBALLS@,YES)
-fetch: src.downloaded
-	$(call forward_to_gbuild,$@)
-else
-fetch:
-	@echo "Automatic fetching of external tarballs is disabled."
-endif
-
-ifeq ($(filter clean distclean,$(MAKECMDGOALS)),)
-Makefile: autogen.lastrun configure.in ooo.lst.in set_soenv.in Makefile.in
-	./autogen.sh
-endif
+check:
+	@$(call forward_to_gbuild,$@)
 
 bootstrap:
-	$(call forward_to_gbuild,$@)
+	@$(call forward_to_gbuild,$@)
 
 debugrun:
 	@$(call forward_to_gbuild,$@)
@@ -91,14 +44,45 @@ tags:
 docs:
 	@$(call forward_to_gbuild,$@)
 
-build: Makefile bootstrap src.downloaded $(CROSS_TOOLSET_RULE)
+build: Makefile
 	@$(call forward_to_gbuild,$@)
 
-dev-install: Makefile bootstrap src.downloaded $(CROSS_TOOLSET_RULE)
-	$(call forward_to_gbuild,$@)
+dev-install: Makefile
+	@$(call forward_to_gbuild,$@)
 
 cross-build-toolset:
-	$(call forward_to_gbuild,$@)
+	@$(call forward_to_gbuild,$@)
+
+clean:
+	@$(call forward_to_gbuild,$@)
+
+clean-host:
+	@$(call forward_to_gbuild,$@)
+
+clean-build:
+	@$(call forward_to_gbuild,$@)
+
+distclean:
+	@$(call forward_to_gbuild,$@)
+
+fetch:
+	@$(call forward_to_gbuild,$@)
+
+unitcheck:
+	@$(call forward_to_gbuild,$@)
+
+install: build
+	@. ./Env.Host.sh && \
+	echo "Installing in @INSTALLDIR@..." && \
+	ooinstall "@INSTALLDIR@" && \
+	echo "" && \
+	echo "Installation finished, you can now execute:" && \
+	echo "@INSTALLDIR@/program/soffice"
+
+ifeq ($(filter clean distclean,$(MAKECMDGOALS)),)
+Makefile: autogen.lastrun configure.in ooo.lst.in set_soenv.in Makefile.in
+	./autogen.sh
+endif
 
 findunusedcode:
 # experimental callcatcher target
