@@ -346,8 +346,42 @@ String STR_MEDIAOBJECTBARSHELL
 
 String STR_TABLEOBJECTBARSHELL
 {
-    Text [ de ] = "Tabelle" ;
     Text [ en-US ] = "Table" ;
+};
+
+String STR_SLIDESORTERVIEWSHELL
+{
+    Text [ en-US ] = "Slide Sorter" ;
+};
+
+String STR_TOOL_PANEL_SHELL
+{
+    Text [ en-US ] = "Tool Panel" ;
+};
+
+String STR_LEFT_IMPRESS_PANE_SHELL
+{
+    Text [ en-US ] = "Slides" ;
+};
+
+String STR_LEFT_DRAW_PANE_SHELL
+{
+    Text [ en-US ] = "Pages" ;
+};
+
+String STR_TASKPANEVIEWSHELL
+{
+    Text [ en-US ] = "Tasks" ;
+};
+
+String STR_MASTERPAGESSELECTOR
+{
+    Text [ en-US ] = "Master Pages" ;
+};
+
+String STR_TASKPANELAYOUTMENU
+{
+    Text [ en-US ] = "Layout" ;
 };
 
 String STR_POWERPOINT_IMPORT

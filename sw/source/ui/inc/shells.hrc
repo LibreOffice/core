@@ -94,10 +94,6 @@
 #define STR_REDLINE_EDIT            (RC_SHELLS_BEGIN + 56)
 #define STR_REDLINE_AUTOFMT         (RC_SHELLS_BEGIN + 57)
 
-// #i68101# no longer needed
-// #define STR_NAME_SHAPE_LABEL        (RC_SHELLS_BEGIN + 58)
-// #define STR_NAME_SHAPE_DIALOG       (RC_SHELLS_BEGIN + 59)
-
 #define RID_MODULE_TOOLBOX          (RC_SHELLS_BEGIN + 60)
 
 #define RID_MEDIA_TOOLBOX           (RC_SHELLS_BEGIN + 61)
