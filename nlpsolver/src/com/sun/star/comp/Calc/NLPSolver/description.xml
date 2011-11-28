@@ -4,13 +4,13 @@
     <version value="0.9"/>
     <identifier value="com.sun.star.comp.Calc.NLPSolver"/>
     <display-name>
-        <name lang="en">Solver for Nonlinear Programming</name>
+        <name lang="en-US">Solver for Nonlinear Programming</name>
     </display-name>
     <publisher>
-        <name lang="en" xlink:href="http://www.documentfoundation.org">The Document Foundation</name>
+        <name lang="en-US" xlink:href="http://www.documentfoundation.org">The Document Foundation</name>
     </publisher>
     <extension-description>
-        <src lang="en" xlink:href="description-en-US.txt"/>
+        <src lang="en-US" xlink:href="description-en-US.txt"/>
     </extension-description>
     <dependencies>
         <OpenOffice.org-minimal-version xmlns:d="http://openoffice.org/extensions/description/2006" d:name="OpenOffice.org 3.0" value="3.0"/>
