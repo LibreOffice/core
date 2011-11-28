@@ -42,6 +42,7 @@ $(eval $(call gb_Executable_add_api,bmpsum,\
 
 $(eval $(call gb_Executable_add_linked_libs,bmpsum,\
     sal \
+    comphelper \
     tl \
     vcl \
     $(gb_STDLIBS) \
