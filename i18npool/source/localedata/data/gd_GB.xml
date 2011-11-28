@@ -347,7 +347,7 @@
 <DefaultFullName>Dùbhlachd</DefaultFullName>
 </Month>
 </MonthsOfYear>
-<GenitiveMonths>
+<PartitiveMonths>
 <Month>
 <MonthID>jan</MonthID>
 <DefaultAbbrvName>Faoi</DefaultAbbrvName>
@@ -408,7 +408,7 @@
 <DefaultAbbrvName>Dùbh</DefaultAbbrvName>
 <DefaultFullName>dhen Dùbhlachd</DefaultFullName>
 </Month>
-</GenitiveMonths>
+</PartitiveMonths>
 <Eras>
 <Era>
 <EraID>bc</EraID>
