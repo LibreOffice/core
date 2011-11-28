@@ -297,6 +297,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
 void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
 {
     ScDocument& rDoc = GetDoc();
+    rDoc.IncSizeRecalcLevel( nScTab );      // #i116460# performance with many hidden rows
 
     // hide the columns
     for( SCCOL nScCol = 0; nScCol <= MAXCOL; ++nScCol )
@@ -340,7 +341,7 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
         {
             if (bPrevHidden)
             {
-                rDoc.ShowRows(nPrevRow, nRow-1, nScTab, false);
+                rDoc.SetRowHidden(nPrevRow, nRow-1, nScTab, true);        // #i116460# SetRowHidden instead of ShowRow
                 // #i38093# rows hidden by filter need extra flag
                 if (nFirstFilterScRow <= nPrevRow && nPrevRow <= nLastFilterScRow)
                 {
@@ -357,6 +358,8 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
     // #i47438# if default row format is hidden, hide remaining rows
     if( ::get_flag( mnDefRowFlags, EXC_DEFROW_HIDDEN ) && (mnLastScRow < MAXROW) )
         rDoc.ShowRows( mnLastScRow + 1, MAXROW, nScTab, false );
+
+    rDoc.DecSizeRecalcLevel( nScTab );      // #i116460# performance with many hidden rows
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

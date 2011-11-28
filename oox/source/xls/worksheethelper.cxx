@@ -1243,7 +1243,9 @@ void WorksheetGlobals::convertRows( OutlineLevelVec& orRowLevels,
     if( rModel.mbHidden )
     {
         PropertySet aPropSet( getRows( rRowRange ) );
-        aPropSet.setProperty( PROP_IsVisible, false );
+        // #i116460# Use VisibleFlag instead of IsVisible: directly set the flag,
+        // without drawing layer update etc. (only possible before shapes are inserted)
+        aPropSet.setProperty( PROP_VisibleFlag, false );
     }
 
     // outline settings for this row range

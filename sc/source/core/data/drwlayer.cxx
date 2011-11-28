@@ -959,6 +959,15 @@ void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCR
     if (!bAdjustEnabled)
         return;
 
+    SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
+    OSL_ENSURE(pPage,"Page not found");
+    if (!pPage)
+        return;
+
+    // for an empty page, there's no need to calculate the row heights
+    if (!pPage->GetObjCount())
+        return;
+
     sal_Bool bNegativePage = pDoc->IsNegativePage( nTab );
 
     Rectangle aRect = pDoc->GetMMRect( nCol1, nRow1, nCol2, nRow2, nTab );
@@ -1003,6 +1012,15 @@ sal_Bool ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndR
     if ( !pDoc )
         return false;
 
+    SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
+    OSL_ENSURE(pPage,"Page not found");
+    if (!pPage)
+        return sal_False;
+
+    // for an empty page, there's no need to calculate the row heights
+    if (!pPage->GetObjCount())
+        return sal_False;
+
     Rectangle aTestRect;
 
     aTestRect.Top() += pDoc->GetRowHeight( 0, nStartRow-1, nTab);
@@ -1024,11 +1042,6 @@ sal_Bool ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndR
     sal_Bool bNegativePage = pDoc->IsNegativePage( nTab );
     if ( bNegativePage )
         MirrorRectRTL( aTestRect );
-
-    SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
-    OSL_ENSURE(pPage,"Page nicht gefunden");
-    if (!pPage)
-        return false;
 
     sal_Bool bFound = false;
 
