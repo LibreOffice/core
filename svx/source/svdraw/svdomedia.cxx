@@ -200,8 +200,7 @@ void SdrMediaObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly /
     {
         Point aPos( rMaxRect.TopLeft() );
 
-        // Falls Grafik zu gross, wird die Grafik
-        // in die Seite eingepasst
+        // if graphic is too large, fit it to the page
         if ( (!bShrinkOnly                          ||
              ( aSize.Height() > aMaxSize.Height() ) ||
              ( aSize.Width()  > aMaxSize.Width()  ) )&&
@@ -212,7 +211,7 @@ void SdrMediaObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly /
             float fWinWH =  (float)aMaxSize.Width() /
                             (float)aMaxSize.Height();
 
-            // Grafik an Pagesize anpassen (skaliert)
+            // scale graphic to page size
             if ( fGrfWH < fWinWH )
             {
                 aSize.Width() = (long)(aMaxSize.Height() * fGrfWH);

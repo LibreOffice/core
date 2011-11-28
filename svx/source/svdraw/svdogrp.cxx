@@ -49,9 +49,9 @@
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdattrx.hxx>  // NotPersistItems
-#include <svx/svdoedge.hxx>  // Die Verbinder nach Move nochmal anbroadcasten
+#include <svx/svdoedge.hxx>  // broadcast connectors to Move
 #include "svx/svdglob.hxx"   // StringCache
-#include "svx/svdstr.hrc"    // Objektname
+#include "svx/svdstr.hrc"    // the object's name
 
 #include <svx/svxids.hrc>
 #include <svl/whiter.hxx>
@@ -299,7 +299,7 @@ SdrObjGroup& SdrObjGroup::operator=(const SdrObjGroup& rObj)
     pSub->SetModel(rSourceSubList.GetModel());
     pSub->CopyObjects(*rObj.GetSubList());
 
-    // copy local paremeters
+    // copy local parameters
     nDrehWink  = rObj.nDrehWink;
     nShearWink = rObj.nShearWink;
     aRefPoint  = rObj.aRefPoint;
@@ -343,7 +343,7 @@ void SdrObjGroup::TakeObjNamePlural(XubString& rName) const
 
 void SdrObjGroup::RecalcSnapRect()
 {
-    // nicht erforderlich, da die Rects von der SubList verwendet werden.
+    // TODO: unnecessary, because we use the Rects from the SubList
 }
 
 basegfx::B2DPolyPolygon SdrObjGroup::TakeXorPoly() const
@@ -484,7 +484,7 @@ void SdrObjGroup::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
 void SdrObjGroup::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
     SetGlueReallyAbsolute(sal_True);
-    MirrorPoint(aRefPoint,rRef1,rRef2); // fehlende Implementation in SvdEtc !!!
+    MirrorPoint(aRefPoint,rRef1,rRef2); // implementation missing in SvdEtc!
     SdrObjList* pOL=pSub;
     sal_uIntPtr nObjAnz=pOL->GetObjCount();
     for (sal_uIntPtr i=0; i<nObjAnz; i++) {
@@ -563,7 +563,7 @@ void SdrObjGroup::Move(const Size& rSiz)
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         MovePoint(aRefPoint,rSiz);
         if (pSub->GetObjCount()!=0) {
-            // Erst die Verbinder verschieben, dann den Rest
+            // first move the connectors, then everything else
             SdrObjList* pOL=pSub;
             sal_uIntPtr nObjAnz=pOL->GetObjCount();
             sal_uIntPtr i;
@@ -608,7 +608,7 @@ void SdrObjGroup::Resize(const Point& rRef, const Fraction& xFact, const Fractio
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         ResizePoint(aRefPoint,rRef,xFact,yFact);
         if (pSub->GetObjCount()!=0) {
-            // Erst die Verbinder verschieben, dann den Rest
+            // move the connectors first, everything else afterwards
             SdrObjList* pOL=pSub;
             sal_uIntPtr nObjAnz=pOL->GetObjCount();
             sal_uIntPtr i;
@@ -639,7 +639,7 @@ void SdrObjGroup::Rotate(const Point& rRef, long nWink, double sn, double cs)
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         nDrehWink=NormAngle360(nDrehWink+nWink);
         RotatePoint(aRefPoint,rRef,sn,cs);
-        // Erst die Verbinder verschieben, dann den Rest
+        // move the connectors first, everything else afterwards
         SdrObjList* pOL=pSub;
         sal_uIntPtr nObjAnz=pOL->GetObjCount();
         sal_uIntPtr i;
@@ -664,8 +664,8 @@ void SdrObjGroup::Mirror(const Point& rRef1, const Point& rRef2)
 {
     SetGlueReallyAbsolute(sal_True);
     Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-    MirrorPoint(aRefPoint,rRef1,rRef2); // fehlende Implementation in SvdEtc !!!
-    // Erst die Verbinder verschieben, dann den Rest
+    MirrorPoint(aRefPoint,rRef1,rRef2); // implementation missing in SvdEtc!
+    // move the connectors first, everything else afterwards
     SdrObjList* pOL=pSub;
     sal_uIntPtr nObjAnz=pOL->GetObjCount();
     sal_uIntPtr i;
@@ -692,7 +692,7 @@ void SdrObjGroup::Shear(const Point& rRef, long nWink, double tn, bool bVShear)
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         nShearWink+=nWink;
         ShearPoint(aRefPoint,rRef,tn);
-        // Erst die Verbinder verschieben, dann den Rest
+        // move the connectors first, everything else afterwards
         SdrObjList* pOL=pSub;
         sal_uIntPtr nObjAnz=pOL->GetObjCount();
         sal_uIntPtr i;
@@ -720,7 +720,7 @@ void SdrObjGroup::SetAnchorPos(const Point& rPnt)
     aAnchor=rPnt;
     Size aSiz(rPnt.X()-aAnchor.X(),rPnt.Y()-aAnchor.Y());
     MovePoint(aRefPoint,aSiz);
-    // Erst die Verbinder verschieben, dann den Rest
+    // move the connectors first, everything else afterwards
     SdrObjList* pOL=pSub;
     sal_uIntPtr nObjAnz=pOL->GetObjCount();
     sal_uIntPtr i;
@@ -745,14 +745,14 @@ void SdrObjGroup::NbcSetRelativePos(const Point& rPnt)
 {
     Point aRelPos0(GetSnapRect().TopLeft()-aAnchor);
     Size aSiz(rPnt.X()-aRelPos0.X(),rPnt.Y()-aRelPos0.Y());
-    NbcMove(aSiz); // Der ruft auch das SetRectsDirty()
+    NbcMove(aSiz); // this also calls SetRectsDirty()
 }
 
 void SdrObjGroup::SetRelativePos(const Point& rPnt)
 {
     Point aRelPos0(GetSnapRect().TopLeft()-aAnchor);
     Size aSiz(rPnt.X()-aRelPos0.X(),rPnt.Y()-aRelPos0.Y());
-    if (aSiz.Width()!=0 || aSiz.Height()!=0) Move(aSiz); // Der ruft auch das SetRectsDirty() und Broadcast, ...
+    if (aSiz.Width()!=0 || aSiz.Height()!=0) Move(aSiz); // this also calls SetRectsDirty() and Broadcast, ...
 }
 
 void SdrObjGroup::NbcReformatText()

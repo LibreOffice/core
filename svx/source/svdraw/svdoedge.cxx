@@ -43,7 +43,7 @@
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
 #include "svx/svdglob.hxx"   // StringCache
-#include "svx/svdstr.hrc"    // Objektname
+#include "svx/svdstr.hrc"    // the object's name
 #include <svl/style.hxx>
 #include <svl/smplhint.hxx>
 #include <editeng/eeitem.hxx>
@@ -77,7 +77,7 @@ void SdrObjConnection::ResetVars()
 bool SdrObjConnection::TakeGluePoint(SdrGluePoint& rGP, bool bSetAbsPos) const
 {
     bool bRet = false;
-    if (pObj!=NULL) { // Ein Obj muss schon angedockt sein!
+    if (pObj!=NULL) { // one object has to be docked already!
         if (bAutoVertex) {
             rGP=pObj->GetVertexGluePoint(nConId);
             bRet = true;
@@ -450,12 +450,12 @@ SdrGluePoint SdrEdgeObj::GetCornerGluePoint(sal_uInt16 nNum) const
 
 const SdrGluePointList* SdrEdgeObj::GetGluePointList() const
 {
-    return NULL; // Keine benutzerdefinierten Klebepunkte fuer Verbinder
+    return NULL; // no user defined glue points for connectors
 }
 
 SdrGluePointList* SdrEdgeObj::ForceGluePointList()
 {
-    return NULL; // Keine benutzerdefinierten Klebepunkte fuer Verbinder
+    return NULL; // no user defined glue points for connectors
 }
 
 bool SdrEdgeObj::IsEdge() const
@@ -552,7 +552,7 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
 
     if(IsBoundRectCalculationRunning())
     {
-        // this object is involved into another ImpRecalcEdgeTrack() call
+        // This object is involved into another ImpRecalcEdgeTrack() call
         // from another SdrEdgeObj. Do not calculate again to avoid loop.
         // Also, do not change bEdgeTrackDirty so that it gets recalculated
         // later at the first non-looping call.
@@ -561,7 +561,7 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
     else if(GetModel() && GetModel()->isLocked())
     {
         // avoid re-layout during imports/API call sequences
-        // #i45294# but calc EdgeTrack and secure properties there
+        // #i45294# but calculate EdgeTrack and secure properties there
         ((SdrEdgeObj*)this)->mbBoundRectCalculationRunning = sal_True;
         *pEdgeTrack=ImpCalcEdgeTrack(*pEdgeTrack,aCon1,aCon2,&aEdgeInfo);
         ImpSetAttrToEdgeInfo();
@@ -570,14 +570,14 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
     }
     else
     {
-        // To not run in a depth loop, use a coloring algorythm on
+        // To not run in a depth loop, use a coloring algorithm on
         // SdrEdgeObj BoundRect calculations
         ((SdrEdgeObj*)this)->mbBoundRectCalculationRunning = sal_True;
 
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         SetRectsDirty();
         *pEdgeTrack=ImpCalcEdgeTrack(*pEdgeTrack,aCon1,aCon2,&aEdgeInfo);
-        ImpSetEdgeInfoToAttr(); // Die Werte aus aEdgeInfo in den Pool kopieren
+        ImpSetEdgeInfoToAttr(); // copy values from aEdgeInfo into the pool
         bEdgeTrackDirty=sal_False;
 
         // Only redraw here, no object change
@@ -602,25 +602,25 @@ sal_uInt16 SdrEdgeObj::ImpCalcEscAngle(SdrObject* pObj, const Point& rPt) const
     long dx=Min(dxl,dxr);
     long dy=Min(dyo,dyu);
     bool bDiag=Abs(dx-dy)<2;
-    if (bxMitt && byMitt) return SDRESC_ALL; // In der Mitte
-    if (bDiag) {  // diagonal
+    if (bxMitt && byMitt) return SDRESC_ALL; // in the center
+    if (bDiag) {  // diagonally
         sal_uInt16 nRet=0;
         if (byMitt) nRet|=SDRESC_VERT;
         if (bxMitt) nRet|=SDRESC_HORZ;
-        if (dxl<dxr) { // Links
+        if (dxl<dxr) { // left
             if (dyo<dyu) nRet|=SDRESC_LEFT | SDRESC_TOP;
             else nRet|=SDRESC_LEFT | SDRESC_BOTTOM;
-        } else {       // Rechts
+        } else {       // right
             if (dyo<dyu) nRet|=SDRESC_RIGHT | SDRESC_TOP;
             else nRet|=SDRESC_RIGHT | SDRESC_BOTTOM;
         }
         return nRet;
     }
-    if (dx<dy) { // waagerecht
+    if (dx<dy) { // horizontal
         if (bxMitt) return SDRESC_HORZ;
         if (dxl<dxr) return SDRESC_LEFT;
         else return SDRESC_RIGHT;
-    } else {     // senkrecht
+    } else {     // vertical
         if (byMitt) return SDRESC_VERT;
         if (dyo<dyu) return SDRESC_TOP;
         else return SDRESC_BOTTOM;
@@ -636,13 +636,13 @@ XPolygon SdrEdgeObj::ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, cons
     bool bLks=nEscAngle==18000;
     bool bUnt=nEscAngle==27000;
 
-    Point aP1(rStPt); // erstmal den Pflichtabstand
+    Point aP1(rStPt); // mandatory difference first,...
     if (bLks) aP1.X()=rRect.Left();
     if (bRts) aP1.X()=rRect.Right();
     if (bObn) aP1.Y()=rRect.Top();
     if (bUnt) aP1.Y()=rRect.Bottom();
 
-    Point aP2(aP1); // Und nun den Pflichtabstand ggf. bis auf Meetinghoehe erweitern
+    Point aP2(aP1); // ...now increase to Meeting height, if necessary
     if (bLks && rMeeting.X()<=aP2.X()) aP2.X()=rMeeting.X();
     if (bRts && rMeeting.X()>=aP2.X()) aP2.X()=rMeeting.X();
     if (bObn && rMeeting.Y()<=aP2.Y()) aP2.Y()=rMeeting.Y();
@@ -650,7 +650,7 @@ XPolygon SdrEdgeObj::ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, cons
     aXP.Insert(XPOLY_APPEND,aP2,XPOLY_NORMAL);
 
     Point aP3(aP2);
-    if ((bLks && rMeeting.X()>aP2.X()) || (bRts && rMeeting.X()<aP2.X())) { // Aussenrum
+    if ((bLks && rMeeting.X()>aP2.X()) || (bRts && rMeeting.X()<aP2.X())) { // around
         if (rMeeting.Y()<aP2.Y()) {
             aP3.Y()=rRect.Top();
             if (rMeeting.Y()<aP3.Y()) aP3.Y()=rMeeting.Y();
@@ -664,7 +664,7 @@ XPolygon SdrEdgeObj::ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, cons
             aXP.Insert(XPOLY_APPEND,aP3,XPOLY_NORMAL);
         }
     }
-    if ((bObn && rMeeting.Y()>aP2.Y()) || (bUnt && rMeeting.Y()<aP2.Y())) { // Aussenrum
+    if ((bObn && rMeeting.Y()>aP2.Y()) || (bUnt && rMeeting.Y()<aP2.Y())) { // around
         if (rMeeting.X()<aP2.X()) {
             aP3.X()=rRect.Left();
             if (rMeeting.X()<aP3.X()) aP3.X()=rMeeting.X();
@@ -680,7 +680,7 @@ XPolygon SdrEdgeObj::ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, cons
     }
 #ifdef DBG_UTIL
     if (aXP.GetPointCount()>4) {
-        OSL_FAIL("SdrEdgeObj::ImpCalcObjToCenter(): Polygon hat mehr als 4 Punkte!");
+        OSL_FAIL("SdrEdgeObj::ImpCalcObjToCenter(): Polygon has more than 4 points!");
     }
 #endif
     return aXP;
@@ -695,7 +695,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
     Rectangle aBoundRect2;
     Rectangle aBewareRect1;
     Rectangle aBewareRect2;
-    // Erstmal die alten Endpunkte wiederholen
+    // first, get the old corner points
     if (rTrack0.GetPointCount()!=0) {
         aPt1=rTrack0[0];
         sal_uInt16 nSiz=rTrack0.GetPointCount();
@@ -714,7 +714,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
     if (bCon1) {
         if (rCon1.pObj==(SdrObject*)this)
         {
-            // sicherheitshalber Abfragen
+            // check, just in case
             aBoundRect1=aOutRect;
         }
         else
@@ -737,7 +737,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
         aBewareRect1=aBoundRect1;
     }
     if (bCon2) {
-        if (rCon2.pObj==(SdrObject*)this) { // sicherheitshalber Abfragen
+        if (rCon2.pObj==(SdrObject*)this) { // check, just in case
             aBoundRect2=aOutRect;
         }
         else
@@ -893,12 +893,12 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         Point aC1(aBewareRect1.Center());
         Point aC2(aBewareRect2.Center());
         if (aBewareRect1.Left()<=aBewareRect2.Right() && aBewareRect1.Right()>=aBewareRect2.Left()) {
-            // Ueberschneidung auf der X-Achse
+            // overlapping on the x axis
             long n1=Max(aBewareRect1.Left(),aBewareRect2.Left());
             long n2=Min(aBewareRect1.Right(),aBewareRect2.Right());
             aMeeting.X()=(n1+n2+1)/2;
         } else {
-            // Ansonsten den Mittelpunkt des Freiraums
+            // otherwise the center point of the empty space
             if (aC1.X()<aC2.X()) {
                 aMeeting.X()=(aBewareRect1.Right()+aBewareRect2.Left()+1)/2;
             } else {
@@ -906,22 +906,22 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
             }
         }
         if (aBewareRect1.Top()<=aBewareRect2.Bottom() && aBewareRect1.Bottom()>=aBewareRect2.Top()) {
-            // Ueberschneidung auf der Y-Achse
+            // overlapping on the x axis
             long n1=Max(aBewareRect1.Top(),aBewareRect2.Top());
             long n2=Min(aBewareRect1.Bottom(),aBewareRect2.Bottom());
             aMeeting.Y()=(n1+n2+1)/2;
         } else {
-            // Ansonsten den Mittelpunkt des Freiraums
+            // otherwise the center point of the empty space
             if (aC1.Y()<aC2.Y()) {
                 aMeeting.Y()=(aBewareRect1.Bottom()+aBewareRect2.Top()+1)/2;
             } else {
                 aMeeting.Y()=(aBewareRect1.Top()+aBewareRect2.Bottom()+1)/2;
             }
         }
-        // Im Prinzip gibt es 3 zu unterscheidene Faelle:
-        //   1. Beide in die selbe Richtung
-        //   2. Beide in genau entgegengesetzte Richtungen
-        //   3. Einer waagerecht und der andere senkrecht
+        // Here, there are three cases:
+        //   1. both go into the same direction
+        //   2. both go into opposite directions
+        //   3. one is vertical, the other is horizontal
         long nXMin=Min(aBewareRect1.Left(),aBewareRect2.Left());
         long nXMax=Max(aBewareRect1.Right(),aBewareRect2.Right());
         long nYMin=Min(aBewareRect1.Top(),aBewareRect2.Top());
@@ -931,10 +931,10 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         unsigned nMainCase=3;
         if (nAngle1==nAngle2) nMainCase=1;
         else if ((bHor1 && bHor2) || (bVer1 && bVer2)) nMainCase=2;
-        if (nMainCase==1) { // Fall 1: Beide in eine Richtung moeglich.
-            if (bVer1) aMeeting.X()=(aPt1.X()+aPt2.X()+1)/2; // ist hier besser, als der
-            if (bHor1) aMeeting.Y()=(aPt1.Y()+aPt2.Y()+1)/2; // Mittelpunkt des Freiraums
-            // bX1Ok bedeutet, dass die Vertikale, die aus Obj1 austritt, keinen Konflikt mit Obj2 bildet, ...
+        if (nMainCase==1) { // case 1 (both go in one direction) is possible
+            if (bVer1) aMeeting.X()=(aPt1.X()+aPt2.X()+1)/2; // Here, this is better than
+            if (bHor1) aMeeting.Y()=(aPt1.Y()+aPt2.Y()+1)/2; // using center point of empty space
+            // bX1Ok means that the vertical exiting Obj1 doesn't conflict with Obj2, ...
             bool bX1Ok=aPt1.X()<=aBewareRect2.Left() || aPt1.X()>=aBewareRect2.Right();
             bool bX2Ok=aPt2.X()<=aBewareRect1.Left() || aPt2.X()>=aBewareRect1.Right();
             bool bY1Ok=aPt1.Y()<=aBewareRect2.Top() || aPt1.Y()>=aBewareRect2.Bottom();
@@ -952,49 +952,69 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                 aMeeting.Y()=nYMax;
             }
         } else if (nMainCase==2) {
-            // Fall 2:
-            if (bHor1) { // beide waagerecht
-                /* 9 Moeglichkeiten:                   � � �                    */
-                /*   2.1 Gegenueber, Ueberschneidung   � � �                    */
-                /*       nur auf der Y-Achse           � � �                    */
-                /*   2.2, 2.3 Gegenueber, vertikal versetzt. � � �   � � �      */
-                /*            Ueberschneidung weder auf der  � � �   � � �      */
-                /*            X- noch auf der Y-Achse        � � �   � � �      */
-                /*   2.4, 2.5 Untereinander,   � � �   � � �                    */
-                /*            Ueberschneidung  � � �   � � �                    */
-                /*            nur auf X-Achse  � � �   � � �                    */
-                /*   2.6, 2.7 Gegeneinander, vertikal versetzt. � � �   � � �   */
-                /*            Ueberschneidung weder auf der     � � �   � � �   */
-                /*            X- noch auf der Y-Achse.          � � �   � � �   */
-                /*   2.8 Gegeneinander.       � � �                             */
-                /*       Ueberschneidung nur  � � �                             */
-                /*       auf der Y-Achse.     � � �                             */
-                /*   2.9 Die BewareRects der Objekte ueberschneiden             */
-                /*       sich auf X- und Y-Achse.                               */
-                /* Die Faelle gelten entsprechend umgesetzt auch fuer           */
-                /* senkrechte Linienaustritte.                                  */
-                /* Die Faelle 2.1-2.7 werden mit dem Default-Meeting ausreichend*/
-                /* gut behandelt. Spezielle MeetingPoints werden hier also nur  */
-                /* fuer 2.8 und 2.9 bestimmt.                                   */
+            // case 2:
+            if (bHor1) { // both horizontal
+                /* 9 sub-cases:
+               (legend: line exits to the left (-|), right (|-))
 
-                // Normalisierung. aR1 soll der nach rechts und
-                // aR2 der nach links austretende sein.
+                    2.1: Facing; overlap only on y axis
+                         *  *  *
+                         |--|  *
+                         *  *  *
+
+                    2.2, 2.3: Facing, offset vertically; no overlap on either
+                             axis
+                         |- *  *       *  *  *
+                         * -|  *       * -|  *
+                         *  *  *  ,    *  *  *
+
+                    2.4, 2.5: One below the other; overlap only on y axis
+                         *  |- *       *  *  *
+                         * -|  *       * -|  *
+                         *  *  *  ,    *  |- *
+
+                    2.6, 2.7: Not facing, offset vertically; no overlap on either
+                             axis
+                         *  *  |-      *  *  *
+                         * -|  *       * -|  *
+                         *  *  *  ,    *  *  |-
+
+                    2.8: Not facing; overlap only on y axis
+                         *  *  *
+                         * -|  |-
+                         *  *  *
+
+                    2.9: The objects's BewareRects overlap on x and y axis
+
+                   These cases, with some modifications are also valid for
+                   horizontal line exits.
+                   Cases 2.1 through 2.7 are covered well enough with the
+                   default meetings. Only for cases 2.8 and 2.9 do we determine
+                   special meeting points here.
+                */
+
+                // normalization; be aR1 the one exiting to the right,
+                // be aR2 the one exiting to the left
                 Rectangle aBewR1(bRts1 ? aBewareRect1 : aBewareRect2);
                 Rectangle aBewR2(bRts1 ? aBewareRect2 : aBewareRect1);
                 Rectangle aBndR1(bRts1 ? aBoundRect1 : aBoundRect2);
                 Rectangle aBndR2(bRts1 ? aBoundRect2 : aBoundRect1);
                 if (aBewR1.Bottom()>aBewR2.Top() && aBewR1.Top()<aBewR2.Bottom()) {
-                    // Ueberschneidung auf der Y-Achse. Faelle 2.1, 2.8, 2.9
+                    // overlap on y axis; cases 2.1, 2.8, 2.9
                     if (aBewR1.Right()>aBewR2.Left()) {
-                        // Faelle 2.8, 2.9
-                        // Fall 2.8 ist immer Aussenrumlauf (bDirect=sal_False).
-                        // Fall 2.9 kann auch Direktverbindung sein (bei geringer
-                        // Ueberschneidung der BewareRects ohne Ueberschneidung der
-                        // Boundrects wenn die Linienaustritte sonst das BewareRect
-                        // des jeweils anderen Objekts verletzen wuerden.
+                        /* Cases 2.8, 2.9:
+                             Case 2.8: always going around on the outside
+                             (bDirect=sal_False).
+
+                             Case 2.9 could also be a direct connection (in the
+                             case that the BewareRects overlap only slightly and
+                             the BoundRects don't overlap at all and if the
+                             line exits would otherwise violate the respective
+                             other object's BewareRect).
+                        */
                         bool bCase29Direct = false;
                         bool bCase29=aBewR1.Right()>aBewR2.Left();
-                        if (aBndR1.Right()<=aBndR2.Left()) { // Fall 2.9 und keine Boundrectueberschneidung
+                        if (aBndR1.Right()<=aBndR2.Left()) { // case 2.9 without BoundRect overlap
                             if ((aPt1.Y()>aBewareRect2.Top() && aPt1.Y()<aBewareRect2.Bottom()) ||
                                 (aPt2.Y()>aBewareRect1.Top() && aPt2.Y()<aBewareRect1.Bottom())) {
                                bCase29Direct = true;
@@ -1008,8 +1028,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                                 aMeeting.Y()=nYMax;
                             }
                             if (bCase29) {
-                                // und nun noch dafuer sorgen, dass das
-                                // umzingelte Obj nicht durchquert wird
+                                // now make sure that the surrounded object
+                                // isn't traversed
                                 if ((aBewR1.Center().Y()<aBewR2.Center().Y()) != bObenLang) {
                                     aMeeting.X()=aBewR2.Right();
                                 } else {
@@ -1017,42 +1037,45 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                                 }
                             }
                         } else {
-                            // Direkte Verbindung (3-Linien Z-Verbindung), da
-                            // Verletzung der BewareRects unvermeidlich ist.
-                            // Via Dreisatz werden die BewareRects nun verkleinert.
-                            long nWant1=aBewR1.Right()-aBndR1.Right(); // Abstand bei Obj1
-                            long nWant2=aBndR2.Left()-aBewR2.Left();   // Abstand bei Obj2
-                            long nSpace=aBndR2.Left()-aBndR1.Right(); // verfuegbarer Platz
+                            // We need a direct connection (3-line Z connection),
+                            // because we have to violate the BewareRects.
+                            // Use rule of three to scale down the BewareRects.
+                            long nWant1=aBewR1.Right()-aBndR1.Right(); // distance at Obj1
+                            long nWant2=aBndR2.Left()-aBewR2.Left();   // distance at Obj2
+                            long nSpace=aBndR2.Left()-aBndR1.Right(); // available space
                             long nGet1=BigMulDiv(nWant1,nSpace,nWant1+nWant2);
                             long nGet2=nSpace-nGet1;
-                            if (bRts1) { // Normalisierung zurueckwandeln
+                            if (bRts1) { // revert normalization
                                 aBewareRect1.Right()+=nGet1-nWant1;
                                 aBewareRect2.Left()-=nGet2-nWant2;
                             } else {
                                 aBewareRect2.Right()+=nGet1-nWant1;
                                 aBewareRect1.Left()-=nGet2-nWant2;
                             }
-                            nIntersections++; // Qualitaet herabsetzen
+                            nIntersections++; // lower quality
                         }
                     }
                 }
-            } else if (bVer1) { // beide senkrecht
+            } else if (bVer1) { // both horizontal
                 Rectangle aBewR1(bUnt1 ? aBewareRect1 : aBewareRect2);
                 Rectangle aBewR2(bUnt1 ? aBewareRect2 : aBewareRect1);
                 Rectangle aBndR1(bUnt1 ? aBoundRect1 : aBoundRect2);
                 Rectangle aBndR2(bUnt1 ? aBoundRect2 : aBoundRect1);
                 if (aBewR1.Right()>aBewR2.Left() && aBewR1.Left()<aBewR2.Right()) {
-                    // Ueberschneidung auf der Y-Achse. Faelle 2.1, 2.8, 2.9
+                    // overlap on y axis; cases 2.1, 2.8, 2.9
                     if (aBewR1.Bottom()>aBewR2.Top()) {
-                        // Faelle 2.8, 2.9
-                        // Fall 2.8 ist immer Aussenrumlauf (bDirect=sal_False).
-                        // Fall 2.9 kann auch Direktverbindung sein (bei geringer
-                        // Ueberschneidung der BewareRects ohne Ueberschneidung der
-                        // Boundrects wenn die Linienaustritte sonst das BewareRect
-                        // des jeweils anderen Objekts verletzen wuerden.
+                        /* Cases 2.8, 2.9
+                           Case 2.8 always going around on the outside (bDirect=sal_False).
+
+                           Case 2.9 could also be a direct connection (in the
+                           case that the BewareRects overlap only slightly and
+                           the BoundRects don't overlap at all and if the
+                           line exits would otherwise violate the respective
+                           other object's BewareRect).
+                        */
                         bool bCase29Direct = false;
                         bool bCase29=aBewR1.Bottom()>aBewR2.Top();
-                        if (aBndR1.Bottom()<=aBndR2.Top()) { // Fall 2.9 und keine Boundrectueberschneidung
+                        if (aBndR1.Bottom()<=aBndR2.Top()) { // case 2.9 without BoundRect overlap
                             if ((aPt1.X()>aBewareRect2.Left() && aPt1.X()<aBewareRect2.Right()) ||
                                 (aPt2.X()>aBewareRect1.Left() && aPt2.X()<aBewareRect1.Right())) {
                                bCase29Direct = true;
@@ -1066,8 +1089,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                                 aMeeting.X()=nXMax;
                             }
                             if (bCase29) {
-                                // und nun noch dafuer sorgen, dass das
-                                // umzingelte Obj nicht durchquert wird
+                                // now make sure that the surrounded object
+                                // isn't traversed
                                 if ((aBewR1.Center().X()<aBewR2.Center().X()) != bLinksLang) {
                                     aMeeting.Y()=aBewR2.Bottom();
                                 } else {
@@ -1075,66 +1098,80 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                                 }
                             }
                         } else {
-                            // Direkte Verbindung (3-Linien Z-Verbindung), da
-                            // Verletzung der BewareRects unvermeidlich ist.
-                            // Via Dreisatz werden die BewareRects nun verkleinert.
-                            long nWant1=aBewR1.Bottom()-aBndR1.Bottom(); // Abstand bei Obj1
-                            long nWant2=aBndR2.Top()-aBewR2.Top();   // Abstand bei Obj2
-                            long nSpace=aBndR2.Top()-aBndR1.Bottom(); // verfuegbarer Platz
+                            // We need a direct connection (3-line Z connection),
+                            // because we have to violate the BewareRects.
+                            // Use rule of three to scale down the BewareRects.
+                            long nWant1=aBewR1.Bottom()-aBndR1.Bottom(); // difference at Obj1
+                            long nWant2=aBndR2.Top()-aBewR2.Top();   // difference at Obj2
+                            long nSpace=aBndR2.Top()-aBndR1.Bottom(); // available space
                             long nGet1=BigMulDiv(nWant1,nSpace,nWant1+nWant2);
                             long nGet2=nSpace-nGet1;
-                            if (bUnt1) { // Normalisierung zurueckwandeln
+                            if (bUnt1) { // revert normalization
                                 aBewareRect1.Bottom()+=nGet1-nWant1;
                                 aBewareRect2.Top()-=nGet2-nWant2;
                             } else {
                                 aBewareRect2.Bottom()+=nGet1-nWant1;
                                 aBewareRect1.Top()-=nGet2-nWant2;
                             }
-                            nIntersections++; // Qualitaet herabsetzen
+                            nIntersections++; // lower quality
                         }
                     }
                 }
             }
-        } else if (nMainCase==3) { // Fall 3: Einer waagerecht und der andere senkrecht. Sehr viele Fallunterscheidungen
-            /* Kleine Legende: � � � � � -> Ohne Ueberschneidung, maximal Beruehrung.                   */
-            /*                 � � � � � -> Ueberschneidung                                             */
-            /*                 � � � � � -> Selbe Hoehe                                                 */
-            /*                 � � � � � -> Ueberschneidung                                             */
-            /*                 � � � � � -> Ohne Ueberschneidung, maximal Beruehrung.                   */
-            /* Linienaustritte links �, rechts �, oben � und unten �.                                   */
-            /* Insgesamt sind 96 Konstellationen moeglich, wobei einige nicht einmal                    */
-            /* eindeutig einem Fall und damit einer Behandlungsmethode zugeordnet werden                */
-            /* koennen.                                                                                 */
-            /* 3.1: Hierzu moegen alle Konstellationen zaehlen, die durch den                           */
-            /*      Default-MeetingPoint zufriedenstellend abgedeckt sind (20+12).                      */
-            /*   � � � � �    � � � � �   Diese 12  � � � � �    � � � � �    � � � � �    � � � � �    */
-            /*   � � � � �    � � � � �   Konstel.  � � � � �    � � � � �    � � � � �    � � � � �    */
-            /*   � � � � �    � � � � �   jedoch    � � � � �    � � � � �    � � � � �    � � � � �    */
-            /*   � � � � �    � � � � �   nur zum   � � � � �    � � � � �    � � � � �    � � � � �    */
-            /*   � � � � �    � � � � �   Teil:     � � � � �    � � � � �    � � � � �    � � � � �    */
-            /*   Letztere 16 Faelle scheiden aus, sobald sich die Objekte offen                         */
-            /*   gegenueberstehen (siehe Fall 3.2).                                                     */
-            /* 3.2: Die Objekte stehen sich offen gegenueber und somit ist eine                         */
-            /*      Verbindung mit lediglich 2 Linien moeglich (4+20).                                  */
-            /*      Dieser Fall hat 1. Prioritaet.                                                      */
-            /*   � � � � �   � � � � �   Diese 20  � � � � �   � � � � �   � � � � �   � � � � �        */
-            /*   � � � � �   � � � � �   Konstel.  � � � � �   � � � � �   � � � � �   � � � � �        */
-            /*   � � � � �   � � � � �   jedoch    � � � � �   � � � � �   � � � � �   � � � � �        */
-            /*   � � � � �   � � � � �   nur zum   � � � � �   � � � � �   � � � � �   � � � � �        */
-            /*   � � � � �   � � � � �   Teil:     � � � � �   � � � � �   � � � � �   � � � � �        */
-            /* 3.3: Die Linienaustritte zeigen vom anderen Objekt weg bzw. hinter                       */
-            /*      dessen Ruecken vorbei (52+4).                                                       */
-            /*   � � � � �   � � � � �   � � � � �   � � � � �   Diese 4   � � � � �   � � � � �        */
-            /*   � � � � �   � � � � �   � � � � �   � � � � �   Konstel.  � � � � �   � � � � �        */
-            /*   � � � � �   � � � � �   � � � � �   � � � � �   jedoch    � � � � �   � � � � �        */
-            /*   � � � � �   � � � � �   � � � � �   � � � � �   nur zum   � � � � �   � � � � �        */
-            /*   � � � � �   � � � � �   � � � � �   � � � � �   Teil:     � � � � �   � � � � �        */
+        } else if (nMainCase==3) { // case 3: one horizontal, the other vertical
+            /* legend:
+               The line exits to the:
+               -|       left
 
-            // Fall 3.2
+                |-      right
+
+               _|_      top
+
+                T       bottom
+
+               *  .  *  .  * -- no overlap, at most might touch
+               .  .  .  .  . -- overlap
+               *  .  |- .  * -- same height
+               .  .  .  .  . -- overlap
+               *  .  *  .  * -- no overlap, at most might touch
+
+               Overall, there are 96 possible constellations, some of these can't even
+               be unambiguously assigned to a certain case/method of handling.
+
+
+               3.1: All those constellations that are covered reasonably well
+               by the default MeetingPoint (20+12).
+
+               T  T  T  . _|_    _|_ .  T  T  T     these 12     *  .  *  T  *      *  .  *  .  *      *  T  *  .  *      *  .  *  .  *
+               .  .  .  . _|_    _|_ .  .  .  .  constellations  .  .  .  .  .      .  .  .  .  T      .  .  .  .  .      T  .  .  .  .
+               *  .  |- .  *      *  . -|  .  *   are covered    *  .  |- . _|_     *  .  |- .  T     _|_ . -|  .  *      T  . -|  .  *
+               .  .  .  .  T      T  .  .  .  .     only in      .  .  .  . _|_     .  .  .  .  .     _|_ .  .  .  .      .  .  .  .  .
+              _|__|__|_ .  T      T  . _|__|__|_     part:       *  .  * _|_ *      *  .  *  .  *      * _|_ *  .  *      *  .  *  .  *
+
+              The last 16 of these cases can be excluded, if the objects face each other openly.
+
+
+              3.2: The objects face each other openly, thus a connection using only two lines is possible (4+20);
+              This case is priority #1.
+               *  .  *  .  T      T  .  *  .  *     these 20     *  .  *  T  *      *  T  *  .  *      *  .  *  .  *      *  .  *  .  *
+               .  .  .  .  .      .  .  .  .  .  constellations  .  .  .  T  T      T  T  .  .  .      .  .  .  .  .      .  .  .  .  .
+               *  .  |- .  *      *  . -|  .  *    are covered   *  .  |-_|__|_    _|__|_-|  .  *      *  .  |- T  T      T  T -|  .  *
+               .  .  .  .  .      .  .  .  .  .     only in      .  .  . _|__|_    _|__|_ .  .  .      .  .  .  .  .      .  .  .  .  .
+               *  .  *  . _|_    _|_ .  *  .  *      part:       *  .  * _|_ *      * _|_ *  .  *      *  .  *  .  *      *  .  *  .  *
+
+               3.3: The line exits point away from the other object or or miss its back (52+4).
+              _|__|__|__|_ *      * _|__|__|__|_     *  .  .  .  *      *  .  *  .  *     these 4      *  .  *  .  *      *  .  *  .  *
+              _|__|__|__|_ .      . _|__|__|__|_     T  T  T  .  .      .  .  T  T  T  constellations  .  .  .  T  .      .  T  .  .  .
+              _|__|_ |- .  *      *  . -| _|__|_     T  T  |- .  *      *  . -|  T  T    are covered   *  .  |- .  *      *  . -|  .  *
+              _|__|__|_ .  .      .  . _|__|__|_     T  T  T  T  .      .  T  T  T  T     only in      .  .  . _|_ .      . _|_ .  .  .
+               *  .  *  .  *      *  .  *  .  *      T  T  T  T  *      *  T  T  T  T      part:       *  .  *  .  *      *  .  *  .  *
+            */
+
+            // case 3.2
             Rectangle aTmpR1(aBewareRect1);
             Rectangle aTmpR2(aBewareRect2);
             if (bBewareOverlap) {
-                // Ueberschneidung der BewareRects: BoundRects fuer Check auf Fall 3.2 verwenden.
+                // overlapping BewareRects: use BoundRects for checking for case 3.2
                 aTmpR1=aBoundRect1;
                 aTmpR2=aBoundRect2;
             }
@@ -1142,7 +1179,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                  ((bUnt2 && aTmpR2.Bottom()<=aPt1.Y()) || (bObn2 && aTmpR2.Top ()>=aPt1.Y()))) ||
                 (((bRts2 && aTmpR2.Right ()<=aPt1.X()) || (bLks2 && aTmpR2.Left()>=aPt1.X())) &&
                  ((bUnt1 && aTmpR1.Bottom()<=aPt2.Y()) || (bObn1 && aTmpR1.Top ()>=aPt2.Y())))) {
-                // Fall 3.2 trifft zu: Verbindung mit lediglich 2 Linien
+                // case 3.2 applies: connector with only 2 lines
                 if (bHor1) {
                     aMeeting.X()=aPt2.X();
                     aMeeting.Y()=aPt1.Y();
@@ -1150,7 +1187,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                     aMeeting.X()=aPt1.X();
                     aMeeting.Y()=aPt2.Y();
                 }
-                // Falls Ueberschneidung der BewareRects:
+                // in the case of overlapping BewareRects:
                 aBewareRect1=aTmpR1;
                 aBewareRect2=aTmpR2;
             } else if ((((bRts1 && aBewareRect1.Right ()>aBewareRect2.Left  ()) ||
@@ -1161,7 +1198,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                          (bLks2 && aBewareRect2.Left  ()<aBewareRect1.Right ())) &&
                         ((bUnt1 && aBewareRect1.Bottom()>aBewareRect2.Top   ()) ||
                          (bObn1 && aBewareRect1.Top   ()<aBewareRect2.Bottom())))) {
-                // Fall 3.3
+                // case 3.3
                 if (bRts1 || bRts2) { aMeeting.X()=nXMax; }
                 if (bLks1 || bLks2) { aMeeting.X()=nXMin; }
                 if (bUnt1 || bUnt2) { aMeeting.Y()=nYMax; }
@@ -1181,18 +1218,18 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
     Point aEP1(aXP1[nXP1Anz-1]);
     Point aEP2(aXP2[nXP2Anz-1]);
     bool bInsMeetingPoint=aEP1.X()!=aEP2.X() && aEP1.Y()!=aEP2.Y();
-    bool bHorzE1=aEP1.Y()==aXP1[nXP1Anz-2].Y(); // letzte Linie von XP1 horizontal?
-    bool bHorzE2=aEP2.Y()==aXP2[nXP2Anz-2].Y(); // letzte Linie von XP2 horizontal?
+    bool bHorzE1=aEP1.Y()==aXP1[nXP1Anz-2].Y(); // is last line of XP1 horizontal?
+    bool bHorzE2=aEP2.Y()==aXP2[nXP2Anz-2].Y(); // is last line of XP2 horizontal?
     if (aEP1==aEP2 && ((bHorzE1 && bHorzE2 && aEP1.Y()==aEP2.Y()) || (!bHorzE1 && !bHorzE2 && aEP1.X()==aEP2.X()))) {
-        // Sonderbehandlung fuer 'I'-Verbinder
+        // special casing 'I' connectors
         nXP1Anz--; aXP1.Remove(nXP1Anz,1);
         nXP2Anz--; aXP2.Remove(nXP2Anz,1);
     }
     if (bInsMeetingPoint) {
         aXP1.Insert(XPOLY_APPEND,aMeeting,XPOLY_NORMAL);
         if (bInfo) {
-            // Durch einfuegen des MeetingPoints kommen 2 weitere Linie hinzu.
-            // Evtl. wird eine von diesen die Mittellinie.
+            // Inserting a MeetingPoint adds 2 new lines,
+            // either might become the center line.
             if (pInfo->nObj1Lines==pInfo->nObj2Lines) {
                 pInfo->nObj1Lines++;
                 pInfo->nObj2Lines++;
@@ -1207,8 +1244,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
             }
         }
     } else if (bInfo && aEP1!=aEP2 && nXP1Anz+nXP2Anz>=4) {
-        // Durch Verbinden der beiden Enden kommt eine weitere Linie hinzu.
-        // Dies wird die Mittellinie.
+        // By connecting both ends, another line is added, this becomes the center line.
         pInfo->nMiddleLine=nXP1Anz-1;
     }
     sal_uInt16 nNum=aXP2.GetPointCount();
@@ -1223,27 +1259,27 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         cForm='?';
         if (nPntAnz==2) cForm='I';
         else if (nPntAnz==3) cForm='L';
-        else if (nPntAnz==4) { // Z oder U
+        else if (nPntAnz==4) { // Z or U
             if (nAngle1==nAngle2) cForm='U';
             else cForm='Z';
-        } else if (nPntAnz==6) { // S oder C oder ...
+        } else if (nPntAnz==6) { // S or C or ...
             if (nAngle1!=nAngle2) {
-                // Fuer Typ S hat Linie2 dieselbe Richtung wie Linie4.
-                // Bei Typ C sind die beiden genau entgegengesetzt.
+                // For type S, line 2 has the same direction as line 4.
+                // For type C, the opposite is true.
                 Point aP1(aXP1[1]);
                 Point aP2(aXP1[2]);
                 Point aP3(aXP1[3]);
                 Point aP4(aXP1[4]);
-                if (aP1.Y()==aP2.Y()) { // beide Linien Horz
+                if (aP1.Y()==aP2.Y()) { // else both lines are horizontal
                     if ((aP1.X()<aP2.X())==(aP3.X()<aP4.X())) cForm='S';
                     else cForm='C';
-                } else { // sonst beide Linien Vert
+                } else { // else both lines are vertical
                     if ((aP1.Y()<aP2.Y())==(aP3.Y()<aP4.Y())) cForm='S';
                     else cForm='C';
                 }
-            } else cForm='4'; // sonst der 3. Fall mit 5 Linien
+            } else cForm='4'; // else is case 3 with 5 lines
         } else cForm='?';  //
-        // Weitere Formen:
+        // more shapes:
         if (bInfo) {
             pInfo->cOrthoForm=cForm;
             if (cForm=='I' || cForm=='L' || cForm=='Z' || cForm=='U') {
@@ -1263,7 +1299,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
     }
     if (pnQuality!=NULL) {
         sal_uIntPtr nQual=0;
-        sal_uIntPtr nQual0=nQual; // Ueberlaeufe vorbeugen
+        sal_uIntPtr nQual0=nQual; // prevent overruns
         bool bOverflow = false;
         Point aPt0(aXP1[0]);
         for (sal_uInt16 nPntNum=1; nPntNum<nPntAnz; nPntNum++) {
@@ -1276,18 +1312,18 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
 
         sal_uInt16 nTmp=nPntAnz;
         if (cForm=='Z') {
-            nTmp=2; // Z-Form hat gute Qualitaet (nTmp=2 statt 4)
+            nTmp=2; // Z shape with good quality (nTmp=2 instead of 4)
             sal_uIntPtr n1=Abs(aXP1[1].X()-aXP1[0].X())+Abs(aXP1[1].Y()-aXP1[0].Y());
             sal_uIntPtr n2=Abs(aXP1[2].X()-aXP1[1].X())+Abs(aXP1[2].Y()-aXP1[1].Y());
             sal_uIntPtr n3=Abs(aXP1[3].X()-aXP1[2].X())+Abs(aXP1[3].Y()-aXP1[2].Y());
-            // fuer moeglichst gleichlange Linien sorgen
+            // try to make lines lengths similar
             sal_uIntPtr nBesser=0;
             n1+=n3;
             n3=n2/4;
             if (n1>=n2) nBesser=6;
             else if (n1>=3*n3) nBesser=4;
             else if (n1>=2*n3) nBesser=2;
-            if (aXP1[0].Y()!=aXP1[1].Y()) nBesser++; // Senkrechte Startlinie kriegt auch noch einen Pluspunkt (fuer H/V-Prio)
+            if (aXP1[0].Y()!=aXP1[1].Y()) nBesser++; // vertical starting line gets a plus (for H/V-Prio)
             if (nQual>nBesser) nQual-=nBesser; else nQual=0;
         }
         if (nTmp>=3) {
@@ -1295,20 +1331,20 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
             nQual+=(sal_uIntPtr)nTmp*0x01000000;
             if (nQual<nQual0 || nTmp>15) bOverflow = true;
         }
-        if (nPntAnz>=2) { // Austrittswinkel nochmal pruefen
+        if (nPntAnz>=2) { // check exit angle again
             Point aP1(aXP1[1]); aP1-=aXP1[0];
             Point aP2(aXP1[nPntAnz-2]); aP2-=aXP1[nPntAnz-1];
             long nAng1=0; if (aP1.X()<0) nAng1=18000; if (aP1.Y()>0) nAng1=27000;
-            if (aP1.Y()<0) nAng1=9000; if (aP1.X()!=0 && aP1.Y()!=0) nAng1=1; // Schraeg!?!
+            if (aP1.Y()<0) nAng1=9000; if (aP1.X()!=0 && aP1.Y()!=0) nAng1=1; // slant?!
             long nAng2=0; if (aP2.X()<0) nAng2=18000; if (aP2.Y()>0) nAng2=27000;
-            if (aP2.Y()<0) nAng2=9000; if (aP2.X()!=0 && aP2.Y()!=0) nAng2=1; // Schraeg!?!
+            if (aP2.Y()<0) nAng2=9000; if (aP2.X()!=0 && aP2.Y()!=0) nAng2=1; // slant?!
             if (nAng1!=nAngle1) nIntersections++;
             if (nAng2!=nAngle2) nIntersections++;
         }
 
-        // Fuer den Qualitaetscheck wieder die Original-Rects verwenden und
-        // gleichzeitig checken, ob eins fuer die Edge-Berechnung verkleinert
-        // wurde (z.B. Fall 2.9)
+        // For the quality check, use the original Rects and at the same time
+        // check whether one them was scaled down for the calculation of the
+        // Edges (e. g. case 2.9)
         aBewareRect1=rBewareRect1;
         aBewareRect2=rBewareRect2;
 
@@ -1325,16 +1361,16 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                 if (b1) nIntersections++;
                 if (b2) nIntersections++;
             }
-            // und nun noch auf Ueberschneidungen checken
+            // check for overlaps
             if (i>0 && nInt0==nIntersections) {
-                if (aPt0.Y()==aPt1b.Y()) { // Horizontale Linie
+                if (aPt0.Y()==aPt1b.Y()) { // horizontal line
                     if (aPt0.Y()>aBewareRect1.Top() && aPt0.Y()<aBewareRect1.Bottom() &&
                         ((aPt0.X()<=aBewareRect1.Left() && aPt1b.X()>=aBewareRect1.Right()) ||
                          (aPt1b.X()<=aBewareRect1.Left() && aPt0.X()>=aBewareRect1.Right()))) nIntersections++;
                     if (aPt0.Y()>aBewareRect2.Top() && aPt0.Y()<aBewareRect2.Bottom() &&
                         ((aPt0.X()<=aBewareRect2.Left() && aPt1b.X()>=aBewareRect2.Right()) ||
                          (aPt1b.X()<=aBewareRect2.Left() && aPt0.X()>=aBewareRect2.Right()))) nIntersections++;
-                } else { // Vertikale Linie
+                } else { // vertical line
                     if (aPt0.X()>aBewareRect1.Left() && aPt0.X()<aBewareRect1.Right() &&
                         ((aPt0.Y()<=aBewareRect1.Top() && aPt1b.Y()>=aBewareRect1.Bottom()) ||
                          (aPt1b.Y()<=aBewareRect1.Top() && aPt0.Y()>=aBewareRect1.Bottom()))) nIntersections++;
@@ -1353,7 +1389,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         if (bOverflow || nQual==0xFFFFFFFF) nQual=0xFFFFFFFE;
         *pnQuality=nQual;
     }
-    if (bInfo) { // nun die Linienversaetze auf aXP1 anwenden
+    if (bInfo) { // now apply line offsets to aXP1
         if (pInfo->nMiddleLine!=0xFFFF) {
             sal_uInt16 nIdx=pInfo->ImpGetPolyIdx(MIDDLELINE,aXP1);
             if (pInfo->ImpIsHorzLine(MIDDLELINE,aXP1)) {
@@ -1405,7 +1441,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
             }
         }
     }
-    // Nun mache ich ggf. aus dem Verbinder eine Bezierkurve
+    // make the connector a bezier curve, if appropriate
     if (eKind==SDREDGE_BEZIER && nPntAnz>2) {
         Point* pPt1=&aXP1[0];
         Point* pPt2=&aXP1[1];
@@ -1428,20 +1464,18 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
             pPt2->Y()-=dy1/3;
             pPt3->X()-=dx2/3;
             pPt3->Y()-=dy2/3;
-        } else if (nPntAnz>=4 && nPntAnz<=6) { // Z oder U oder ...
-            // fuer Alle Anderen werden die Endpunkte der Ausgangslinien
-            // erstmal zu Kontrollpunkten. Bei nPntAnz>4 ist also noch
-            // Nacharbeit erforderlich!
+        } else if (nPntAnz>=4 && nPntAnz<=6) { // Z or U or ...
+            // To all others, the end points of the original lines become control
+            // points for now. Thus, we need to do some more work for nPntAnz>4!
             aXP1.SetFlags(1,XPOLY_CONTROL);
             aXP1.SetFlags(nPntAnz-2,XPOLY_CONTROL);
-            // Distanz x1.5
+            // distance x1.5
             pPt2->X()+=dx1/2;
             pPt2->Y()+=dy1/2;
             pPt3->X()+=dx2/2;
             pPt3->Y()+=dy2/2;
             if (nPntAnz==5) {
-                // Vor und hinter dem Mittelpunkt jeweils
-                // noch einen Kontrollpunkt einfuegen
+                // add a control point before and after center
                 Point aCenter(aXP1[2]);
                 long dx1b=aCenter.X()-aXP1[1].X();
                 long dy1b=aCenter.Y()-aXP1[1].Y();
@@ -1469,7 +1503,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                 aXP1.SetFlags(3,XPOLY_SYMMTR);
                 //aXP1[4].X()+=dx/2;
                 //aXP1[4].Y()+=dy/2;
-                aXP1.Remove(4,1); // weil identisch mit aXP1[3]
+                aXP1.Remove(4,1); // because it's identical with aXP1[3]
             }
         }
     }
@@ -1477,37 +1511,48 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
 }
 
 /*
-Nach einer einfachen Rechnung koennte es max. 64 unterschiedliche Verlaeufe mit
-5 Linien, 32 mit 4 Linien, 16 mit 3, 8 mit 2 Linien und 4 mit 1 Linie geben=124.
-Normalisiert auf 1. Austrittswinkel nach rechts bleiben dann noch 31.
-Dann noch eine vertikale Spiegelung wegnormalisiert bleiben noch 16
-characteristische Verlaufszuege mit 1-5 Linien:
-Mit 1 Linie (Typ 'I'):  --
-Mit 2 Linien (Typ 'L'): -�
-Mit 3 Linien (Typ 'U'):  -�  (Typ 'Z'):  �-
-                         -�             -�
-Mit 4 Linien: 1 ist nicht plausibel, 3 ist=2 (90deg Drehung). Verbleibt 2,4
-     �-�  ڿ  �  ڿ                               ڿ  �-�
-    -�   -�   -�  -�                              -�    -�
-Mit 5 Linien: nicht plausibel sind 1,2,4,5. 7 ist identisch mit 3 (Richtungsumkehr)
-              Bleibt also 3,6 und 8.              '4'  'S'  'C'
-       �    �             -�   �-  �-�                  �-
-     �-�  �-�  �-�   �-�   �  � -� � �-�         �-�  �  �-�
-    -�   -�   -� �  -� �-  -�  -�  --� � �        -� �  -�  � �
-Insgesamt sind also 9 Grundtypen zu unterscheiden die den 400 Konstellationen
-aus Objektposition und Austrittswinkeln zuzuordnen sind.
-4 der 9 Grundtypen haben eine 'Mittellinie'. Die Anzahl der zu Objektabstaende
-je Objekt variiert von 0-3:
-     Mi   O1   O2   Anmerkung
-'I':  n   0    0
-'L':  n   0    0
-'U':  n  0-1  0-1
-'Z':  j   0    0
-4.1:  j   0    1    = U+1 bzw. 1+U
-4.2:  n  0-2  0-2   = Z+1
-'4':  j   0    2    = Z+2
-'S':  j   1    1    = 1+Z+1
-'C':  n  0-3  0-3   = 1+U+1
+There could be a maximum of 64 different developments with with 5 lines, a
+maximum of 32 developments with 4 lines, a maximum of 16 developments with
+3 lines, a maximum of 8 developments with 2 lines.
+This gives us a total of 124 possibilities.
+Normalized for the 1st exit angle to the right, there remain 31 possibilities.
+Now, normalizing away the vertical mirroring, we get to a total of 16
+characteristic developments with 1 through 5 lines:
+
+1 line  (type "I")  --
+
+2 lines (type "L")  __|
+
+3 lines (type "U")  __          (type "Z")      _
+                    __|                       _|
+                                     _                              _
+4 lines          #1   _|        #2  | |         #3 |_          #4  | |
+                    _|             _|               _|              _|
+    Of these, #1 is implausible, #2 is a rotated version of #3. This leaves
+    #2 (from now on referred to as 4.1) and #4 (from now on referred to as 4.2).
+                      _                _
+5 lines          #1   _|        #2   _|         #3   ___       #4   _
+                    _|             _|              _|  _|         _| |_
+                    _               _                _
+                 #5  |_         #6 |_           #7 _| |        #8  ____
+                      _|            _|               _|           |_  _|
+    Of these, 5.1, 5.2, 5.4 and 5.5 are implausible, 5.7 is a reversed version
+    of 5.3. This leaves 5.3 (type "4"), 5.6 (type "S") and 5.8 (type "C").
+
+We now have discerned the 9 basic types to cover all 400 possible constellations
+of object positions and exit angles. 4 of the 9 types have got a center
+line (CL). The number of object margins per object varies between 0 and 3:
+
+        CL      O1      O2      Note
+"I":    n       0       0
+"L":    n       0       0
+"U":    n       0-1     0-1
+"Z":    y       0       0
+4.2:    y       0       1       = U+1, respectively 1+U
+4.4:    n       0-2     0-2     = Z+1
+"4":    y       0       2       = Z+2
+"S":    y       1       1       = 1+Z+1
+"C":    n       0-3     0-3     = 1+U+1
 */
 
 void SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
@@ -1519,33 +1564,33 @@ void SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     bool bObj1=aCon1.pObj!=NULL && aCon1.pObj->GetBroadcaster()==&rBC;
     bool bObj2=aCon2.pObj!=NULL && aCon2.pObj->GetBroadcaster()==&rBC;
     if (bDying && (bObj1 || bObj2)) {
-        // Dying vorher abfangen, damit AttrObj nicht
-        // wg. vermeintlicher Vorlagenaenderung rumbroadcastet
+        // catch Dying, so AttrObj doesn't start broadcasting
+        // about an alleged change of template
         if (bObj1) aCon1.pObj=NULL;
         if (bObj2) aCon2.pObj=NULL;
-        return; // Und mehr braucht hier nicht getan werden.
+        return;
     }
     if ( bObj1 || bObj2 )
     {
         bEdgeTrackUserDefined = sal_False;
     }
     SdrTextObj::Notify(rBC,rHint);
-    if (nNotifyingCount==0) { // Hier nun auch ein VerriegelungsFlag
+    if (nNotifyingCount==0) { // a locking flag
         ((SdrEdgeObj*)this)->nNotifyingCount++;
         SdrHint* pSdrHint=PTR_CAST(SdrHint,&rHint);
-        if (bDataChg) { // StyleSheet geaendert
-            ImpSetAttrToEdgeInfo(); // Werte bei Vorlagenaenderung vom Pool nach aEdgeInfo kopieren
+        if (bDataChg) { // StyleSheet changed
+            ImpSetAttrToEdgeInfo(); // when changing templates, copy values from Pool to aEdgeInfo
         }
         if (bDataChg                                ||
             (bObj1 && aCon1.pObj->GetPage()==pPage) ||
             (bObj2 && aCon2.pObj->GetPage()==pPage) ||
             (pSdrHint && pSdrHint->GetKind()==HINT_OBJREMOVED))
         {
-            // Broadcasting nur, wenn auf der selben Page
+            // broadcasting only, if on the same page
             Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
             ImpDirtyEdgeTrack();
 
-            // only redraw here, no objectchange
+            // only redraw here, object hasn't actually changed
             ActionChanged();
 
             SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
@@ -1555,7 +1600,7 @@ void SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 }
 
 /** updates edges that are connected to the edges of this object
-    as if the connected objects send a repaint broadcast
+    as if the connected objects sent a repaint broadcast
 */
 void SdrEdgeObj::Reformat()
 {
@@ -1641,7 +1686,7 @@ void SdrEdgeObj::SetEdgeTrackPath( const basegfx::B2DPolyPolygon& rPoly )
         bEdgeTrackDirty = sal_False;
         bEdgeTrackUserDefined = sal_True;
 
-        // #i110629# also set aRect and maSnapeRect dependent from pEdgeTrack
+        // #i110629# also set aRect and maSnapeRect depending on pEdgeTrack
         const Rectangle aPolygonBounds(pEdgeTrack->GetBoundRect());
         aRect = aPolygonBounds;
         maSnapRect = aPolygonBounds;
@@ -1868,7 +1913,7 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
         aEdgeInfo.ImpSetLineVersatz(eLineCode, *pEdgeTrack, nDist);
     }
 
-    // force recalc EdgeTrack
+    // force recalculation of EdgeTrack
     *pEdgeTrack = ImpCalcEdgeTrack(*pEdgeTrack, aCon1, aCon2, &aEdgeInfo);
     bEdgeTrackDirty=sal_False;
 
@@ -2007,7 +2052,7 @@ bool SdrEdgeObj::EndCreate(SdrDragStat& rDragStat, SdrCreateCmd eCmd)
         if (rDragStat.GetView()!=NULL) {
             rDragStat.GetView()->HideConnectMarker();
         }
-        ImpSetEdgeInfoToAttr(); // Die Werte aus aEdgeInfo in den Pool kopieren
+        ImpSetEdgeInfoToAttr(); // copy values from aEdgeInfo into the pool
     }
     SetRectsDirty();
     return bOk;
@@ -2047,7 +2092,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
     if (pOut==NULL) return sal_False;
     SdrObjList* pOL=rPV.GetObjList();
     const SetOfByte& rVisLayer=rPV.GetVisibleLayers();
-    // Sensitiver Bereich der Konnektoren ist doppelt so gross wie die Handles:
+    // sensitive area of connectors is twice as large as the one of the handles
     sal_uInt16 nMarkHdSiz=rPV.GetView().GetMarkHdlSizePixel();
     Size aHalfConSiz(nMarkHdSiz,nMarkHdSiz);
     aHalfConSiz=pOut->PixelToLogic(aHalfConSiz);
@@ -2064,20 +2109,20 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
     SdrObjConnection aBestCon;
 
     while (no>0 && !bFnd) {
-        // Problem: Gruppenobjekt mit verschiedenen Layern liefert LayerID 0 !!!!
+        // issue: group objects on different layers return LayerID=0!
         no--;
         SdrObject* pObj=pOL->GetObj(no);
         if (rVisLayer.IsSet(pObj->GetLayer()) && pObj->IsVisible() &&      // only visible objects
-            (pThis==NULL || pObj!=(SdrObject*)pThis) && // nicht an mich selbst connecten
+            (pThis==NULL || pObj!=(SdrObject*)pThis) && // don't connect it to itself
             pObj->IsNode())
         {
             Rectangle aObjBound(pObj->GetCurrentBoundRect());
             if (aObjBound.IsOver(aMouseRect)) {
                 aTestCon.ResetVars();
-                bool bEdge=HAS_BASE(SdrEdgeObj,pObj); // kein BestCon fuer Edge
-                // Die Userdefined Konnektoren haben absolute Prioritaet.
-                // Danach kommt Vertex, Corner und Mitte(Best) gleich priorisiert.
-                // Zum Schluss kommt noch ein HitTest aufs Obj.
+                bool bEdge=HAS_BASE(SdrEdgeObj,pObj); // no BestCon for Edge
+                // User-defined connectors have absolute priority.
+                // After those come Vertex, Corner and center (Best), all prioritized equally.
+                // Finally, a HitTest for the object.
                 const SdrGluePointList* pGPL=pObj->GetGluePointList();
                 sal_uInt16 nConAnz=pGPL==NULL ? 0 : pGPL->GetCount();
                 sal_uInt16 nGesAnz=nConAnz+9;
@@ -2117,7 +2162,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
                         // Suppress default connect at object center
                         if(!pThis || !pThis->GetSuppressDefaultConnect())
                         {
-                            // Edges nicht!
+                            // not the edges!
                             nConNum=0;
                             aConPos=aObjBound.Center();
                             bOk = true;
@@ -2138,8 +2183,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
                         }
                     }
                 }
-                // Falls kein Konnektor getroffen wird nochmal
-                // HitTest versucht fuer BestConnector (=bCenter)
+                // if no connector is hit, try HitTest again, for BestConnector (=bCenter)
                 if(!bFnd &&
                     !bEdge &&
                     SdrObjectPrimitiveHit(*pObj, rPt, nBoundHitTol, rPV, &rVisLayer, false))
@@ -2264,7 +2308,7 @@ Point SdrEdgeObj::GetPoint(sal_uInt32 i) const
 
 void SdrEdgeObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)
 {
-    // ToDo: Umconnekten fehlt noch
+    // TODO: Need an implementation to connect differently.
     ImpUndirtyEdgeTrack();
     sal_uInt16 nAnz=pEdgeTrack->GetPointCount();
     if (0L == i)
@@ -2354,9 +2398,9 @@ void SdrEdgeObj::SetTailPoint( sal_Bool bTail, const Point& rPt )
 }
 
 /** this method is used by the api to set a glue point for a connection
-    nId == -1 :     The best default point is automaticly choosen
-    0 <= nId <= 3 : One of the default points is choosen
-    nId >= 4 :      A user defined glue point is choosen
+    nId == -1 :     The best default point is automatically chosen
+    0 <= nId <= 3 : One of the default points is chosen
+    nId >= 4 :      A user defined glue point is chosen
 */
 void SdrEdgeObj::setGluePointIndex( sal_Bool bTail, sal_Int32 nIndex /* = -1 */ )
 {
@@ -2424,7 +2468,7 @@ sal_Bool SdrEdgeObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::
 
 void SdrEdgeObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
-    // evtl. take care for existing connections. For now, just use the
+    // where appropriate take care for existing connections. For now, just use the
     // implementation from SdrObject.
     SdrObject::TRSetBaseGeometry(rMatrix, rPolyPolygon);
 }

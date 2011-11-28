@@ -39,9 +39,9 @@
 #include <svx/svdhdl.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/svdview.hxx>   // fuer RectSnap
+#include <svx/svdview.hxx>   // for RectSnap
 #include "svx/svdglob.hxx"   // StringCache
-#include "svx/svdstr.hrc"    // Objektname
+#include "svx/svdstr.hrc"    // the object's name
 #include <svx/svdogrp.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/xflhtit.hxx>
@@ -99,7 +99,7 @@ public:
 
 void ImpCaptParams::CalcEscPos(const Point& rTailPt, const Rectangle& rRect, Point& rPt, EscDir& rDir) const
 {
-    Point aTl(rTailPt); // lokal kopieren wg. Performance
+    Point aTl(rTailPt); // copy locally for performance reasons
     long nX,nY;
     if (bEscRel) {
         nX=rRect.Right()-rRect.Left();
@@ -199,7 +199,7 @@ TYPEINIT1(SdrCaptionObj,SdrRectObj);
 
 SdrCaptionObj::SdrCaptionObj():
     SdrRectObj(OBJ_TEXT),
-    aTailPoly(3),  // Default Groesse: 3 Punkte = 2 Linien
+    aTailPoly(3),  // default size: 3 points = 2 lines
     mbSpecialTextBoxShadow(sal_False),
     mbFixedTail(sal_False)
 {
@@ -207,7 +207,7 @@ SdrCaptionObj::SdrCaptionObj():
 
 SdrCaptionObj::SdrCaptionObj(const Rectangle& rRect, const Point& rTail):
     SdrRectObj(OBJ_TEXT,rRect),
-    aTailPoly(3),  // Default Groesse: 3 Punkte = 2 Linien
+    aTailPoly(3),  // default size: 3 points = 2 lines
     mbSpecialTextBoxShadow(sal_False),
     mbFixedTail(sal_False)
 {
@@ -276,7 +276,7 @@ basegfx::B2DPolyPolygon SdrCaptionObj::TakeXorPoly() const
 sal_uInt32 SdrCaptionObj::GetHdlCount() const
 {
     sal_uInt32 nAnz1(SdrRectObj::GetHdlCount());
-    // Derzeit ist nur das Draggen des Schwanzendes implementiert
+    // Currently only dragging the tail's end is implemented.
     return nAnz1 + 1L;
 }
 
@@ -453,8 +453,8 @@ void SdrCaptionObj::ImpRecalcTail()
 // Changed this method to not do that.
 // Also found why this has been done: For interactive dragging of the
 // tail end pos for SDRCAPT_TYPE1. This sure was the simplest method
-// to achieve this, for the cost to make a whole group of const methods
-// of this object implicitly chainging the object's position.
+// to achieve this, at the cost of making a whole group of const methods
+// of this object implicitly change the object's position.
 void SdrCaptionObj::ImpCalcTail1(const ImpCaptParams& rPara, Polygon& rPoly, Rectangle& rRect) const
 {
     Polygon aPol(2);
@@ -493,7 +493,7 @@ void SdrCaptionObj::ImpCalcTail2(const ImpCaptParams& rPara, Polygon& rPoly, Rec
     aPol[1]=aEscPos;
 
     if (!rPara.bFixedAngle) {
-        // fehlende Implementation
+        // TODO: Implementation missing.
     }
     rPoly=aPol;
 }
@@ -526,7 +526,7 @@ void SdrCaptionObj::ImpCalcTail3(const ImpCaptParams& rPara, Polygon& rPoly, Rec
         }
     }
     if (!rPara.bFixedAngle) {
-        // fehlende Implementation
+        // TODO: Implementation missing.
     }
     rPoly=aPol;
 }
@@ -548,7 +548,7 @@ void SdrCaptionObj::ImpCalcTail(const ImpCaptParams& rPara, Polygon& rPoly, Rect
 
 bool SdrCaptionObj::BegCreate(SdrDragStat& rStat)
 {
-    if (aRect.IsEmpty()) return sal_False; // Create z.Zt. nur mit vorgegebenen Rect
+    if (aRect.IsEmpty()) return sal_False; // Create currently only works with the given Rect
 
     ImpCaptParams aPara;
     ImpGetCaptParams(aPara);
@@ -625,7 +625,7 @@ void SdrCaptionObj::NbcSetRelativePos(const Point& rPnt)
 {
     Point aRelPos0(aTailPoly.GetPoint(0)-aAnchor);
     Size aSiz(rPnt.X()-aRelPos0.X(),rPnt.Y()-aRelPos0.Y());
-    NbcMove(aSiz); // Der ruft auch das SetRectsDirty()
+    NbcMove(aSiz); // This also calls SetRectsDirty()
 }
 
 Point SdrCaptionObj::GetRelativePos() const
@@ -636,12 +636,12 @@ Point SdrCaptionObj::GetRelativePos() const
 void SdrCaptionObj::NbcSetAnchorPos(const Point& rPnt)
 {
     SdrRectObj::NbcSetAnchorPos(rPnt);
-    // !!!!! fehlende Impl.
+    // TODO: Implementation missing.
 }
 
 const Point& SdrCaptionObj::GetAnchorPos() const
 {
-    // !!!!! fehlende Impl.
+    // TODO: Implementation missing.
     return SdrRectObj::GetAnchorPos();
 }
 
@@ -649,7 +649,7 @@ void SdrCaptionObj::RecalcSnapRect()
 {
     SdrRectObj::RecalcSnapRect();
     // #i32599#
-    // !!!!! fehlende Impl.
+    // TODO: Implementation missing.
 }
 
 const Rectangle& SdrCaptionObj::GetSnapRect() const
@@ -701,13 +701,13 @@ void SdrCaptionObj::NbcSetTailPos(const Point& rPos)
 
 sal_uInt32 SdrCaptionObj::GetSnapPointCount() const
 {
-    // !!!!! fehlende Impl.
+    // TODO: Implementation missing.
     return 0L;
 }
 
 Point SdrCaptionObj::GetSnapPoint(sal_uInt32 /*i*/) const
 {
-    // !!!!! fehlende Impl.
+    // TODO: Implementation missing.
     return Point(0,0);
 }
 

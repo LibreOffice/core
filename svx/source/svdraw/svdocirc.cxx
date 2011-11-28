@@ -44,10 +44,10 @@
 #include <svx/svddrag.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svdopath.hxx> // fuer die Objektkonvertierung
-#include <svx/svdview.hxx>  // Zum Draggen (Ortho)
+#include <svx/svdopath.hxx> // for the object conversion
+#include <svx/svdview.hxx>  // for dragging (Ortho)
 #include "svx/svdglob.hxx"   // StringCache
-#include "svx/svdstr.hrc"    // Objektname
+#include "svx/svdstr.hrc"    // the object's name
 #include <editeng/eeitem.hxx>
 #include <svx/sdr/properties/circleproperties.hxx>
 #include <svx/sdr/contact/viewcontactofsdrcircobj.hxx>
@@ -74,7 +74,7 @@ Point GetWinkPnt(const Rectangle& rR, long nWink)
     if (nWdt!=nHgt) {
         if (nWdt>nHgt) {
             if (nWdt!=0) {
-                // eventuelle Ueberlaeufe bei sehr grossen Objekten abfangen
+                // stop possible overruns for very large objects
                 if (Abs(nHgt)>32767 || Abs(aRetval.Y())>32767) {
                     aRetval.Y()=BigMulDiv(aRetval.Y(),nHgt,nWdt);
                 } else {
@@ -83,7 +83,7 @@ Point GetWinkPnt(const Rectangle& rR, long nWink)
             }
         } else {
             if (nHgt!=0) {
-                // eventuelle Ueberlaeufe bei sehr grossen Objekten abfangen
+                // stop possible overruns for very large objects
                 if (Abs(nWdt)>32767 || Abs(aRetval.X())>32767) {
                     aRetval.X()=BigMulDiv(aRetval.X(),nWdt,nHgt);
                 } else {
@@ -139,7 +139,7 @@ SdrCircObj::SdrCircObj(SdrObjKind eNewKind, const Rectangle& rRect, long nNewSta
     long nWinkDif=nNewEndWink-nNewStartWink;
     nStartWink=NormAngle360(nNewStartWink);
     nEndWink=NormAngle360(nNewEndWink);
-    if (nWinkDif==36000) nEndWink+=nWinkDif; // Vollkreis
+    if (nWinkDif==36000) nEndWink+=nWinkDif; // full circle
     meCircleKind=eNewKind;
     bClosedObj=eNewKind!=OBJ_CARC;
 }
@@ -164,42 +164,42 @@ sal_uInt16 SdrCircObj::GetObjIdentifier() const
 
 bool SdrCircObj::PaintNeedsXPolyCirc() const
 {
-    // XPoly ist notwendig fuer alle gedrehten Ellipsenobjekte,
-    // fuer alle Kreis- und Ellipsenabschnitte
-    // und wenn nicht WIN dann (erstmal) auch fuer Kreis-/Ellipsenausschnitte
-    // und Kreis-/Ellipsenboegen (wg. Genauigkeit)
+    // XPoly is necessary for all rotated ellipse objects, circle and
+    // ellipse segments.
+    // If not WIN, then (for now) also for circle/ellipse segments and circle/
+    // ellipse arcs (for precision)
     bool bNeed=aGeo.nDrehWink!=0 || aGeo.nShearWink!=0 || meCircleKind==OBJ_CCUT;
-    // Wenn nicht Win, dann fuer alle ausser Vollkreis (erstmal!!!)
+    // If not WIN, then for everything except full circle (for now!)
     if (meCircleKind!=OBJ_CIRC) bNeed = true;
 
     const SfxItemSet& rSet = GetObjectItemSet();
     if(!bNeed)
     {
-        // XPoly ist notwendig fuer alles was nicht LineSolid oder LineNone ist
+        // XPoly is necessary for everything that isn't LineSolid or LineNone
         XLineStyle eLine = ((XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
         bNeed = eLine != XLINE_NONE && eLine != XLINE_SOLID;
 
-        // XPoly ist notwendig fuer dicke Linien
+        // XPoly is necessary for thick lines
         if(!bNeed && eLine != XLINE_NONE)
             bNeed = ((XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue() != 0;
 
-        // XPoly ist notwendig fuer Kreisboegen mit Linienenden
+        // XPoly is necessary for circle arcs with line ends
         if(!bNeed && meCircleKind == OBJ_CARC)
         {
-            // Linienanfang ist da, wenn StartPolygon und StartWidth!=0
+            // start of the line is here if StartPolygon, StartWidth!=0
             bNeed=((XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetLineStartValue().count() != 0L &&
                   ((XLineStartWidthItem&)(rSet.Get(XATTR_LINESTARTWIDTH))).GetValue() != 0;
 
             if(!bNeed)
             {
-                // Linienende ist da, wenn EndPolygon und EndWidth!=0
+                // end of the line is here if EndPolygon, EndWidth!=0
                 bNeed = ((XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetLineEndValue().count() != 0L &&
                         ((XLineEndWidthItem&)(rSet.Get(XATTR_LINEENDWIDTH))).GetValue() != 0;
             }
         }
     }
 
-    // XPoly ist notwendig, wenn Fill !=None und !=Solid
+    // XPoly is necessary if Fill !=None and !=Solid
     if(!bNeed && meCircleKind != OBJ_CARC)
     {
         XFillStyle eFill=((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
@@ -207,7 +207,7 @@ bool SdrCircObj::PaintNeedsXPolyCirc() const
     }
 
     if(!bNeed && meCircleKind != OBJ_CIRC && nStartWink == nEndWink)
-        bNeed = true; // Weil sonst Vollkreis gemalt wird
+        bNeed = true; // otherwise we're drawing a full circle
 
     return bNeed;
 }
@@ -370,7 +370,7 @@ struct ImpCircUser : public SdrDragStatUserData
     long                        nStart;
     long                        nEnd;
     long                        nWink;
-    bool                        bRight; // noch nicht implementiert
+    bool                        bRight; // not yet implemented
 
 public:
     ImpCircUser()
@@ -644,7 +644,7 @@ void ImpCircUser::SetCreateParams(SdrDragStat& rStat)
         nStart=NormAngle360(GetAngle(aP));
         if (rStat.GetView()!=NULL && rStat.GetView()->IsAngleSnapEnabled()) {
             long nSA=rStat.GetView()->GetSnapAngle();
-            if (nSA!=0) { // Winkelfang
+            if (nSA!=0) { // angle snapping
                 nStart+=nSA/2;
                 nStart/=nSA;
                 nStart*=nSA;
@@ -665,7 +665,7 @@ void ImpCircUser::SetCreateParams(SdrDragStat& rStat)
         nEnd=NormAngle360(GetAngle(aP));
         if (rStat.GetView()!=NULL && rStat.GetView()->IsAngleSnapEnabled()) {
             long nSA=rStat.GetView()->GetSnapAngle();
-            if (nSA!=0) { // Winkelfang
+            if (nSA!=0) { // angle snapping
                 nEnd+=nSA/2;
                 nEnd/=nSA;
                 nEnd*=nSA;
@@ -702,7 +702,7 @@ bool SdrCircObj::MovCreate(SdrDragStat& rStat)
     ImpSetCreateParams(rStat);
     ImpCircUser* pU=(ImpCircUser*)rStat.GetUser();
     rStat.SetActionRect(pU->aR);
-    aRect=pU->aR; // fuer ObjName
+    aRect=pU->aR; // for ObjName
     ImpJustifyRect(aRect);
     nStartWink=pU->nStart;
     nEndWink=pU->nEnd;
@@ -826,21 +826,20 @@ void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
         bool bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
         bool bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
         if (bXMirr || bYMirr) {
-            // bei bXMirr!=bYMirr muessten eigentlich noch die beiden
-            // Linienende vertauscht werden. Das ist jedoch mal wieder
-            // schlecht (wg. zwangslaeufiger harter Formatierung).
-            // Alternativ koennte ein bMirrored-Flag eingefuehrt werden
-            // (Vielleicht ja mal grundsaetzlich, auch fuer gepiegelten Text, ...).
+            // At bXMirr!=bYMirr we should actually swap both line ends.
+            // That, however, is pretty bad (because of forced "hard" formatting).
+            // Alternatively, we could implement a bMirrored flag (maybe even
+            // a more general one, e. g. for mirrored text, ...).
             long nS0=nStartWink;
             long nE0=nEndWink;
             if (bNoShearRota) {
-                // Das RectObj spiegelt bei VMirror bereits durch durch 180deg Drehung.
+                // the RectObj already mirrors at VMirror because of a 180deg rotation
                 if (! (bXMirr && bYMirr)) {
                     long nTmp=nS0;
                     nS0=18000-nE0;
                     nE0=18000-nTmp;
                 }
-            } else { // Spiegeln fuer verzerrte Ellipsen
+            } else { // mirror contorted ellipses
                 if (bXMirr!=bYMirr) {
                     nS0+=nWink0;
                     nE0+=nWink0;
@@ -861,7 +860,7 @@ void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
             long nWinkDif=nE0-nS0;
             nStartWink=NormAngle360(nS0);
             nEndWink  =NormAngle360(nE0);
-            if (nWinkDif==36000) nEndWink+=nWinkDif; // Vollkreis
+            if (nWinkDif==36000) nEndWink+=nWinkDif; // full circle
         }
     }
     SetXPolyDirty();
@@ -880,19 +879,19 @@ void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     bool bFreeMirr=meCircleKind!=OBJ_CIRC;
     Point aTmpPt1;
     Point aTmpPt2;
-    if (bFreeMirr) { // bei freier Spiegelachse einige Vorbereitungen Treffen
+    if (bFreeMirr) { // some preparations for using an arbitrary axis of reflection
         Point aCenter(aRect.Center());
         long nWdt=aRect.GetWidth()-1;
         long nHgt=aRect.GetHeight()-1;
         long nMaxRad=((nWdt>nHgt ? nWdt : nHgt)+1) /2;
         double a;
-        // Startpunkt
+        // starting point
         a=nStartWink*nPi180;
         aTmpPt1=Point(Round(cos(a)*nMaxRad),-Round(sin(a)*nMaxRad));
         if (nWdt==0) aTmpPt1.X()=0;
         if (nHgt==0) aTmpPt1.Y()=0;
         aTmpPt1+=aCenter;
-        // Endpunkt
+        // finishing point
         a=nEndWink*nPi180;
         aTmpPt2=Point(Round(cos(a)*nMaxRad),-Round(sin(a)*nMaxRad));
         if (nWdt==0) aTmpPt2.X()=0;
@@ -908,29 +907,29 @@ void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         }
     }
     SdrTextObj::NbcMirror(rRef1,rRef2);
-    if (meCircleKind!=OBJ_CIRC) { // Anpassung von Start- und Endwinkel
+    if (meCircleKind!=OBJ_CIRC) { // adapt starting and finishing angle
         MirrorPoint(aTmpPt1,rRef1,rRef2);
         MirrorPoint(aTmpPt2,rRef1,rRef2);
-        // Unrotate:
+        // unrotate:
         if (aGeo.nDrehWink!=0) {
-            RotatePoint(aTmpPt1,aRect.TopLeft(),-aGeo.nSin,aGeo.nCos); // -sin fuer Umkehrung
-            RotatePoint(aTmpPt2,aRect.TopLeft(),-aGeo.nSin,aGeo.nCos); // -sin fuer Umkehrung
+            RotatePoint(aTmpPt1,aRect.TopLeft(),-aGeo.nSin,aGeo.nCos); // -sin for reversion
+            RotatePoint(aTmpPt2,aRect.TopLeft(),-aGeo.nSin,aGeo.nCos); // -sin for reversion
         }
-        // Unshear:
+        // unshear:
         if (aGeo.nShearWink!=0) {
-            ShearPoint(aTmpPt1,aRect.TopLeft(),-aGeo.nTan); // -tan fuer Umkehrung
-            ShearPoint(aTmpPt2,aRect.TopLeft(),-aGeo.nTan); // -tan fuer Umkehrung
+            ShearPoint(aTmpPt1,aRect.TopLeft(),-aGeo.nTan); // -tan for reversion
+            ShearPoint(aTmpPt2,aRect.TopLeft(),-aGeo.nTan); // -tan for reversion
         }
         Point aCenter(aRect.Center());
         aTmpPt1-=aCenter;
         aTmpPt2-=aCenter;
-        // Weil gespiegelt sind die Winkel nun auch noch vertauscht
+        // because it's mirrored, the angles are swapped, too
         nStartWink=GetAngle(aTmpPt2);
         nEndWink  =GetAngle(aTmpPt1);
         long nWinkDif=nEndWink-nStartWink;
         nStartWink=NormAngle360(nStartWink);
         nEndWink  =NormAngle360(nEndWink);
-        if (nWinkDif==36000) nEndWink+=nWinkDif; // Vollkreis
+        if (nWinkDif==36000) nEndWink+=nWinkDif; // full circle
     }
     SetXPolyDirty();
     ImpSetCircInfoToAttr();
