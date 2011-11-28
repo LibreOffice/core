@@ -1559,7 +1559,7 @@ void WW8AttributeOutput::FormatDrop( const SwTxtNode& rNode, const SwFmtDrop &rS
 
     if ( pTextNodeInfo.get() != NULL )
     {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         ::std::clog << pTextNodeInfo->toString() << ::std::endl;
 #endif
 
@@ -1742,7 +1742,7 @@ void MSWordExportBase::GetSortedBookmarks( const SwTxtNode& rNode, xub_StrLen nA
 
 void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << "<OutWW8_SwTxtNode>" << ::std::endl;
 #endif
 
@@ -2044,7 +2044,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
     if ( pTextNodeInfo.get() != NULL )
     {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         ::std::clog << pTextNodeInfo->toString() << ::std::endl;
 #endif
 
@@ -2346,7 +2346,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
     AttrOutput().EndParagraph( pTextNodeInfoInner );
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << "</OutWW8_SwTxtNode>" << ::std::endl;
 #endif
 }

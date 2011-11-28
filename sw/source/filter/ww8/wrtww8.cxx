@@ -3622,7 +3622,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
     SVBT16 nStyle;
     ShortToSVBT16( m_rWW8Export.nStyleBeforeFly, nStyle );
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << "<OutWW8_TableNodeInfoInner>" << pNodeInfoInner->toString();
 #endif
 
@@ -3652,7 +3652,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
 
     if (pNodeInfoInner->isEndOfCell())
     {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         ::std::clog << "<endOfCell/>" << ::std::endl;
 #endif
         m_rWW8Export.WriteCR(pNodeInfoInner);
@@ -3687,7 +3687,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
 
     if (pNodeInfoInner->isEndOfLine())
     {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         ::std::clog << "<endOfLine/>" << ::std::endl;
 #endif
         TableRowEnd(pNodeInfoInner->getDepth());
@@ -3699,7 +3699,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
 
         m_rWW8Export.pO->clear();
     }
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << "</OutWW8_TableNodeInfoInner>" << ::std::endl;
 #endif
 }
@@ -3712,7 +3712,7 @@ void MSWordExportBase::OutputStartNode( const SwStartNode & rNode)
 
     if (pNodeInfo.get() != NULL)
     {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         ::std::clog << pNodeInfo->toString() << ::std::endl;
 #endif
 
@@ -3727,7 +3727,7 @@ void MSWordExportBase::OutputStartNode( const SwStartNode & rNode)
             ++aIt;
         }
     }
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << "</OutWW8_SwStartNode>" << ::std::endl;
 #endif
 }
@@ -3744,7 +3744,7 @@ void MSWordExportBase::OutputEndNode( const SwEndNode &rNode )
 
     if (pNodeInfo.get() != NULL)
      {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         ::std::clog << pNodeInfo->toString() << ::std::endl;
 #endif
 
@@ -3758,7 +3758,7 @@ void MSWordExportBase::OutputEndNode( const SwEndNode &rNode )
             ++aIt;
          }
      }
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     ::std::clog << "</OutWW8_SwEndNode>" << ::std::endl;
 #endif
 }
