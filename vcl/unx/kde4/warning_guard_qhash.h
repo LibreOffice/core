@@ -37,6 +37,8 @@
     Silence down this WaE:
     /usr/include/qt4/QtCore/qscopedpointer.h:83:47: error: declaration of ‘pointer’
     shadows a global declaration [-Werror=shadow]
+
+    Reported upstream as <https://bugreports.qt.nokia.com/browse/QTBUG-22908>.
 */
 
 #ifdef _MSC_VER
