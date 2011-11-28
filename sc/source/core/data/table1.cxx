@@ -817,22 +817,25 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
 
     if ( !bIncludeOld && !bOnlyDown )
     {
-        if ( !bLeft && rStartCol < MAXCOL && rStartCol < rEndCol )
-            if ( aCol[rStartCol].IsEmptyBlock(rStartRow,rEndRow) )
+        if ( !bLeft )
+            while ( aCol[rStartCol].IsEmptyBlock(rStartRow,rEndRow) && rStartCol < MAXCOL && rStartCol < rEndCol)
                 ++rStartCol;
 
-        if ( !bRight && rEndCol > 0 && rStartCol < rEndCol )
-            if ( aCol[rEndCol].IsEmptyBlock(rStartRow,rEndRow) )
+        if ( !bRight )
+            while ( aCol[rEndCol].IsEmptyBlock(rStartRow,rEndRow) && rEndCol > 0 && rStartCol < rEndCol)
                 --rEndCol;
 
         if ( !bTop && rStartRow < MAXROW && rStartRow < rEndRow )
         {
-            bFound = false;
-            for (i=rStartCol; i<=rEndCol && !bFound; i++)
-                if (aCol[i].HasDataAt(rStartRow))
-                    bFound = true;
-            if (!bFound)
-                ++rStartRow;
+            bool shrink = true;
+            do
+            {
+                for (i=rStartCol; i<=rEndCol && shrink; i++)
+                    if (aCol[i].HasDataAt(rStartRow))
+                        shrink = false;
+                if (shrink)
+                    ++rStartRow;
+            }while( shrink && rStartRow < MAXROW && rStartRow < rEndRow);
         }
     }
 
@@ -840,12 +843,15 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
     {
         if ( !bBottom && rEndRow > 0 && rStartRow < rEndRow )
         {
-            bFound = false;
-            for (i=rStartCol; i<=rEndCol && !bFound; i++)
-                if (aCol[i].HasDataAt(rEndRow))
-                    bFound = true;
-            if (!bFound)
-                --rEndRow;
+            bool shrink = true;
+            do
+            {
+                for (i=rStartCol; i<=rEndCol && shrink; i++)
+                    if (aCol[i].HasDataAt(rEndRow))
+                        shrink = false;
+                if (shrink)
+                    --rEndRow;
+            }while( shrink && rEndRow > 0 && rStartRow < rEndRow );
         }
     }
 }
