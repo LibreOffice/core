@@ -164,6 +164,10 @@ bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTxtIte
         xub_StrLen nKashidasInAttr = rSI.KashidaJustify ( 0, 0, nIdx, nNext - nIdx );
         if ( nKashidasInAttr )
         {
+            // Kashida glyph looks suspicious, skip Kashida justification
+            if ( rInf.GetOut()->GetMinKashida() <= 0 )
+                return false;
+
             xub_StrLen nKashidasDropped = 0;
             if ( !SwScriptInfo::IsArabicText( rInf.GetTxt(), nIdx, nNext - nIdx ) )
             {

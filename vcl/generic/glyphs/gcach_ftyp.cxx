@@ -1097,7 +1097,6 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
 
     // initialize kashida width
     // TODO: what if there are different versions of this glyph available
-    rTo.mnMinKashida = rTo.mnAscent / 4; // a reasonable default
     const int nKashidaGlyphId = GetRawGlyphIndex( 0x0640 );
     if( nKashidaGlyphId )
     {
