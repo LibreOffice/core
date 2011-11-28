@@ -28,6 +28,7 @@
 
 package org.libreoffice.android;
 
+import android.app.Activity;
 import android.app.NativeActivity;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -46,13 +47,13 @@ public class Bootstrap extends NativeActivity
 {
     private static String TAG = "lo-bootstrap";
 
-    public native boolean setup(String dataDir,
-                                String apkFile,
-                                String[] ld_library_path);
+    private static native boolean setup(String dataDir,
+                                        String apkFile,
+                                        String[] ld_library_path);
 
-    public native boolean setup(int lo_main_ptr,
-                                Object lo_main_argument,
-                                int lo_main_delay);
+    public static native boolean setup(int lo_main_ptr,
+                                       Object lo_main_argument,
+                                       int lo_main_delay);
 
     // This is not just a wrapper for the C library dlopen(), but also
     // loads recursively dependent libraries.
@@ -61,27 +62,23 @@ public class Bootstrap extends NativeActivity
     // This is just a wrapper for the C library dlsym().
     public static native int dlsym(int handle, String symbol);
 
+    // To be called after you are sure libgnustl_shared.so
+    // has been loaded
+    public static native void patch_libgnustl_shared();
+
     // Wrapper for getpid()
     public static native int getpid();
 
     // Wrapper for system()
     public static native void system(String cmdline);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
+    public static void setup(Activity activity)
     {
         String dataDir = null;
 
-        try {
-            ApplicationInfo ai = this.getPackageManager().getApplicationInfo
-                ("org.libreoffice.android",
-                 PackageManager.GET_META_DATA);
-            dataDir = ai.dataDir;
-            Log.i(TAG, String.format("dataDir=%s\n", dataDir));
-        }
-        catch (PackageManager.NameNotFoundException e) {
-            return;
-        }
+        ApplicationInfo ai = activity.getApplicationInfo();
+        dataDir = ai.dataDir;
+        Log.i(TAG, String.format("dataDir=%s\n", dataDir));
 
         String llp = System.getenv("LD_LIBRARY_PATH");
         if (llp == null)
@@ -89,8 +86,15 @@ public class Bootstrap extends NativeActivity
 
         String[] llpa = llp.split(":");
 
-        if (!setup(dataDir, getApplication().getPackageResourcePath(), llpa))
+        if (!setup(dataDir, activity.getApplication().getPackageResourcePath(), llpa))
             return;
+
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        setup(this);
 
         String mainLibrary = getIntent().getStringExtra("lo-main-library");
 
