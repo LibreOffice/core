@@ -135,6 +135,7 @@ const char *ModuleList[] = {
     "helpcontent2",
     "instsetoo_native",
     "mysqlc",
+    "nlpsolver",
     "officecfg",
     "padmin",
     "readlicense_oo",
