@@ -261,7 +261,7 @@ void ViewShellBase::InitFactory()
 
 
 
-SFX_IMPL_INTERFACE(ViewShellBase, SfxViewShell, SdResId(STR_VIEWSHELLBASE))
+SFX_IMPL_INTERFACE(ViewShellBase, SfxViewShell, SdResId(0))
 {
 }
 
