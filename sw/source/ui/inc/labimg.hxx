@@ -68,7 +68,7 @@ public:
     sal_Int32       nRows;   // number of rows (user)
     sal_Int32       nCol;    // column for single print
     sal_Int32       nRow;    // row for single print
-    sal_Bool        bAddr;// adress as label?
+    sal_Bool        bAddr;// address as label?
     sal_Bool        bCont;// continuous paper?
     sal_Bool        bPage;// whole page or single labels?
     sal_Bool        bSynchron;// synchronise all labels

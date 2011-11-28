@@ -512,7 +512,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
             return sal_False;
         }
 
-        //!! applying view options and formatting the dcoument should now only be done in getRendererCount!
+        //!! applying view options and formatting the document should now only be done in getRendererCount!
 
         ::SetSwVisArea( pViewSh2, pStPage->Frm() );
 

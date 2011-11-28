@@ -267,7 +267,7 @@ getCurrentDoc( const rtl::OUString& sKey ) throw (uno::RuntimeException)
             !xModel.is() )
         {
             throw uno::RuntimeException(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can't extract model from basic ( its obviously not set yet ) therefore don't know the current documet context") ), uno::Reference< uno::XInterface >() );
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can't extract model from basic ( it's obviously not set yet ) therefore don't know the current document context") ), uno::Reference< uno::XInterface >() );
         }
         else
         {

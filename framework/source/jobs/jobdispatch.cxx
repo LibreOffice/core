@@ -332,8 +332,8 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const ::rtl::OUString&             
         // Special mode for listener.
         // We dont notify it directly here. We delegate that
         // to the job implementation. But we must set ourself there too.
-        // Because this job must fake the source adress of the event.
-        // Otherwhise the listener may will ignore it.
+        // Because this job must fake the source address of the event.
+        // Otherwise the listener may ignore it.
         if (xListener.is())
             pJob->setDispatchResultFake(xListener, xThis);
         pJob->execute(Converter::convert_seqPropVal2seqNamedVal(lArgs));
@@ -394,8 +394,8 @@ void JobDispatch::impl_dispatchService( /*IN*/ const ::rtl::OUString&           
     // Special mode for listener.
     // We dont notify it directly here. We delegate that
     // to the job implementation. But we must set ourself there too.
-    // Because this job must fake the source adress of the event.
-    // Otherwhise the listener may will ignore it.
+    // Because this job must fake the source address of the event.
+    // Otherwise the listener may ignore it.
     if (xListener.is())
         pJob->setDispatchResultFake(xListener, xThis);
     pJob->execute(Converter::convert_seqPropVal2seqNamedVal(lArgs));
@@ -445,8 +445,8 @@ void JobDispatch::impl_dispatchAlias( /*IN*/ const ::rtl::OUString&             
     // Special mode for listener.
     // We dont notify it directly here. We delegate that
     // to the job implementation. But we must set ourself there too.
-    // Because this job must fake the source adress of the event.
-    // Otherwhise the listener may will ignore it.
+    // Because this job must fake the source address of the event.
+    // Otherwise the listener may ignore it.
     if (xListener.is())
         pJob->setDispatchResultFake(xListener, xThis);
     pJob->execute(Converter::convert_seqPropVal2seqNamedVal(lArgs));

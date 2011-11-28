@@ -113,7 +113,7 @@ void ViewShell::PrintProspect(
 
     aShell.PrepareForPrint( rPrintData );
 
-    //!! applying view options and formatting the dcoument should now only be done in getRendererCount!
+    //!! applying view options and formatting the document should now only be done in getRendererCount!
 
     MapMode aMapMode( MAP_TWIP );
     Size aPrtSize( pPrinter->PixelToLogic( pPrinter->GetPaperSizePixel(), aMapMode ) );
@@ -226,7 +226,7 @@ void ViewShell::PrintProspect(
 
     SwPaintQueue::Repaint();
 
-    //!! applying/modifying view options and formatting the dcoument should now only be done in getRendererCount!
+    //!! applying/modifying view options and formatting the document should now only be done in getRendererCount!
 
     pFntCache->Flush();
 

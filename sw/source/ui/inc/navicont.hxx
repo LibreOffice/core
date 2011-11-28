@@ -43,7 +43,7 @@ class NaviContentBookmark
 {
     String          aUrl;       // URL including jump mark
     String          aDescr;     // description
-    long            nDocSh;     // adress of DocShell
+    long            nDocSh;     // address of DocShell
     sal_uInt16          nDefDrag;   // description contains defaultDragType
 
 public:
