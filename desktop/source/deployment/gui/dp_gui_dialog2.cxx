@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "dp_gui.hrc"
 #include "svtools/controldims.hrc"
 #include "svtools/svtools.hrc"
@@ -97,6 +96,10 @@ namespace dp_gui {
 #define LINE_SIZE            4
 #define PROGRESS_WIDTH      60
 #define PROGRESS_HEIGHT     14
+
+#define USER_PACKAGE_MANAGER    OUSTR("user")
+#define SHARED_PACKAGE_MANAGER  OUSTR("shared")
+#define BUNDLED_PACKAGE_MANAGER OUSTR("bundled")
 
 //------------------------------------------------------------------------------
 struct StrAllFiles : public rtl::StaticWithInit< OUString, StrAllFiles >
@@ -588,7 +591,7 @@ String DialogHelper::getResourceString( sal_uInt16 id )
 //------------------------------------------------------------------------------
 bool DialogHelper::IsSharedPkgMgr( const uno::Reference< deployment::XPackage > &xPackage )
 {
-    if ( xPackage->getRepositoryName().equals( OUSTR("shared") ) )
+    if ( xPackage->getRepositoryName().equals( SHARED_PACKAGE_MANAGER ) )
         return true;
     else
         return false;
@@ -705,6 +708,11 @@ ExtMgrDialog::ExtMgrDialog( Window *pParent, TheExtensionManager *pManager ) :
     m_aCloseBtn( this,      getResId( RID_EM_BTN_CLOSE ) ),
     m_aHelpBtn( this,       getResId( RID_EM_BTN_HELP ) ),
     m_aDivider( this ),
+    m_aDivider2(this),
+    m_aTypeOfExtTxt( this , getResId( RID_EM_FT_TYPE_EXTENSIONS ) ),
+    m_aBundledCbx(this,     getResId (RID_EM_CBX_BUNDLED)),
+    m_aSharedCbx(this,      getResId (RID_EM_CBX_SHARED)),
+    m_aUserCbx (this,       getResId (RID_EM_CBX_USER)),
     m_aGetExtensions( this, getResId( RID_EM_FT_GET_EXTENSIONS ) ),
     m_aProgressText( this,  getResId( RID_EM_FT_PROGRESS ) ),
     m_aProgressBar( this,   WB_BORDER + WB_3DLOOK ),
@@ -732,6 +740,10 @@ ExtMgrDialog::ExtMgrDialog( Window *pParent, TheExtensionManager *pManager ) :
     m_aGetExtensions.SetClickHdl( LINK( this, ExtMgrDialog, HandleHyperlink ) );
     m_aCancelBtn.SetClickHdl( LINK( this, ExtMgrDialog, HandleCancelBtn ) );
 
+    m_aBundledCbx.SetClickHdl( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
+    m_aSharedCbx.SetClickHdl( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
+    m_aUserCbx.SetClickHdl( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
+
     // resize update button
     Size aBtnSize = m_aUpdateBtn.GetSizePixel();
     String sTitle = m_aUpdateBtn.GetText();
@@ -750,9 +762,15 @@ ExtMgrDialog::ExtMgrDialog( Window *pParent, TheExtensionManager *pManager ) :
               (1 * m_aHelpBtn.GetSizePixel().Height()) +
               (1 * m_aGetExtensions.GetSizePixel().Height()) +
               (1 * m_pExtensionBox->GetMinOutputSizePixel().Height()) +
-              (3 * RSC_SP_DLG_INNERBORDER_LEFT) ) );
+              (3 * RSC_SP_DLG_INNERBORDER_TOP) ) );
 
     m_aDivider.Show();
+    m_aDivider2.Show();
+
+    m_aBundledCbx.Check( true );
+    m_aSharedCbx.Check( true );
+    m_aUserCbx.Check( true );
+
     m_aProgressBar.Hide();
 
     m_aUpdateBtn.Enable( false );
@@ -778,9 +796,29 @@ void ExtMgrDialog::setGetExtensionsURL( const ::rtl::OUString &rURL )
 long ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,
                                      bool bLicenseMissing )
 {
+
     const SolarMutexGuard aGuard;
     m_aUpdateBtn.Enable( true );
-    return m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
+
+    m_pExtensionBox->removeEntry(xPackage);
+
+    if (m_aBundledCbx.IsChecked() && xPackage->getRepositoryName().equals( BUNDLED_PACKAGE_MANAGER ))
+    {
+       return m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
+    }
+    else if (m_aSharedCbx.IsChecked() && xPackage->getRepositoryName().equals( SHARED_PACKAGE_MANAGER ))
+    {
+        return m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
+    }
+    else if (m_aUserCbx.IsChecked() && xPackage->getRepositoryName().equals( USER_PACKAGE_MANAGER ))
+    {
+        return m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
+    }
+    else
+    {
+    //OSL_FAIL("Package will not be displayed");
+        return 0;
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -1070,6 +1108,13 @@ IMPL_LINK( ExtMgrDialog, HandleAddBtn, void*, EMPTYARG )
 }
 
 // -----------------------------------------------------------------------
+IMPL_LINK( ExtMgrDialog, HandleExtTypeCbx, void*, EMPTYARG )
+{
+	// re-creates the list of packages with addEntry selecting the packages
+	m_pManager->createPackageList();
+    return 1;
+}
+// -----------------------------------------------------------------------
 IMPL_LINK( ExtMgrDialog, HandleUpdateBtn, void*, EMPTYARG )
 {
     m_pManager->checkUpdates( false, true );
@@ -1130,6 +1175,7 @@ void ExtMgrDialog::Resize()
     Size aTotalSize( GetOutputSizePixel() );
     Size aBtnSize( m_aHelpBtn.GetSizePixel() );
     Size aUpdBtnSize( m_aUpdateBtn.GetSizePixel() );
+    long offsetX;
 
     Point aPos( RSC_SP_DLG_INNERBORDER_LEFT,
                 aTotalSize.Height() - RSC_SP_DLG_INNERBORDER_BOTTOM - aBtnSize.Height() );
@@ -1142,7 +1188,7 @@ void ExtMgrDialog::Resize()
     aPos.X() -= ( RSC_SP_CTRL_X + aUpdBtnSize.Width() );
     m_aUpdateBtn.SetPosPixel( aPos );
 
-    aPos.X() -= ( RSC_SP_CTRL_GROUP_Y + aBtnSize.Width() );
+    aPos.X() -= ( RSC_SP_CTRL_GROUP_X + aBtnSize.Width() );
     m_aAddBtn.SetPosPixel( aPos );
 
     Size aDivSize( aTotalSize.Width(), LINE_SIZE );
@@ -1154,8 +1200,30 @@ void ExtMgrDialog::Resize()
 
     m_aGetExtensions.SetPosSizePixel( aPos, aFTSize );
 
+    Size aCBSize(m_aBundledCbx.GetSizePixel());
+
+    offsetX = 0.5*(aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT - 3*(aCBSize.Width() + RSC_SP_CTRL_GROUP_X) );
+
+    aPos = Point(offsetX, aPos.Y() - RSC_CD_CHECKBOX_HEIGHT - 2*RSC_SP_DLG_INNERBORDER_BOTTOM);
+    m_aBundledCbx.SetPosSizePixel(aPos, aCBSize);
+    aPos.X() = aPos.X() + aCBSize.Width() + 2 * RSC_SP_CTRL_GROUP_X;
+    m_aSharedCbx.SetPosSizePixel(aPos, aCBSize);
+    aPos.X() = aPos.X() + aCBSize.Width() + 2 * RSC_SP_CTRL_GROUP_X;
+    m_aUserCbx.SetPosSizePixel(aPos, aCBSize);
+
+    Size aFTTypeOfExtSize(m_aTypeOfExtTxt.GetSizePixel());
+    aPos = Point(RSC_SP_DLG_INNERBORDER_LEFT , aPos.Y() - RSC_CD_FIXEDTEXT_HEIGHT - 2*RSC_SP_DLG_INNERBORDER_BOTTOM);
+
+    m_aTypeOfExtTxt.SetPosSizePixel(aPos, aFTTypeOfExtSize);
+
+    aPos.X() = RSC_SP_DLG_INNERBORDER_LEFT + aFTTypeOfExtSize.Width();
+    aPos.Y() = aPos.Y() + RSC_CD_FIXEDTEXT_HEIGHT;
+    aDivSize.Width() = aTotalSize.Width() - aFTTypeOfExtSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT;
+    m_aDivider2.SetPosSizePixel( aPos , aDivSize );
+
     aPos.X() = aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_RIGHT - aBtnSize.Width();
     m_aCancelBtn.SetPosPixel( Point( aPos.X(), aPos.Y() - ((aBtnSize.Height()-aFTSize.Height())/2) ) );
+
 
     // Calc progress height
     long nProgressHeight = aFTSize.Height();
@@ -1188,10 +1256,13 @@ void ExtMgrDialog::Resize()
     m_aProgressText.SetPosSizePixel( aPos, aFTSize );
 
     Size aSize( aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT,
-                aTotalSize.Height() - 2*aBtnSize.Height() - LINE_SIZE -
+                aTotalSize.Height() - 3.3*aBtnSize.Height() - LINE_SIZE -
                 RSC_SP_DLG_INNERBORDER_TOP - 3*RSC_SP_DLG_INNERBORDER_BOTTOM );
 
     m_pExtensionBox->SetSizePixel( aSize );
+
+
+
 }
 //------------------------------------------------------------------------------
 // VCL::Window / Dialog
@@ -1582,6 +1653,7 @@ void UpdateRequiredDialog::Resize()
     Size aDivSize( aTotalSize.Width(), LINE_SIZE );
     aPos = Point( 0, aPos.Y() - LINE_SIZE - RSC_SP_DLG_INNERBORDER_BOTTOM );
     m_aDivider.SetPosSizePixel( aPos, aDivSize );
+    aPos = Point( 0, 5 );
 
     // Calc fixed text size
     aPos = Point( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP );
