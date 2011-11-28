@@ -42,7 +42,6 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
-#include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
@@ -52,7 +51,6 @@
 #include <unotools/securityoptions.hxx>
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/security/SerialNumberAdapter.hpp>
-#include <ucbhelper/contentbroker.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/componentcontext.hxx>
 #include "comphelper/documentconstants.hxx"
@@ -434,22 +432,11 @@ void DocumentDigitalSignatures::showCertificate(
     INetURLObject aLocObj( Location );
     INetURLObject aLocObjLowCase( Location.toAsciiLowerCase() ); // will be used for case insensitive comparing
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProvider > xContentProvider;
-    ::ucbhelper::ContentBroker* pBroker = NULL;
-
-    //warning free code
-    if ( aLocObj.GetProtocol() == INET_PROT_FILE)
-    {
-        pBroker = ::ucbhelper::ContentBroker::get();
-        if (pBroker)
-            xContentProvider = pBroker->getContentProviderInterface();
-    }
-
     Sequence< ::rtl::OUString > aSecURLs = SvtSecurityOptions().GetSecureURLs();
     const ::rtl::OUString* pSecURLs = aSecURLs.getConstArray();
     const ::rtl::OUString* pSecURLsEnd = pSecURLs + aSecURLs.getLength();
     for ( ; pSecURLs != pSecURLsEnd && !bFound; ++pSecURLs )
-        bFound = ::utl::UCBContentHelper::IsSubPath( *pSecURLs, Location, xContentProvider );
+        bFound = ::utl::UCBContentHelper::IsSubPath( *pSecURLs, Location );
 
     return bFound;
 }

@@ -25,55 +25,58 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "unotools/unotoolsdllapi.h"
 
 #ifndef _UNOTOOLS_UCBHELPER_HXX
 #define _UNOTOOLS_UCBHELPER_HXX
 
-// include ---------------------------------------------------------------
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/ucb/NameClash.hpp>
-#include <com/sun/star/ucb/XContentProvider.hpp>
+#include "sal/config.h"
 
-#include <tools/string.hxx>
+#include "com/sun/star/uno/Sequence.hxx"
+#include "sal/types.h"
+#include "unotools/unotoolsdllapi.h"
 
-namespace ucbhelper
-{
-    class Content;
-}
+namespace com { namespace sun { namespace star { namespace uno {
+    class Any;
+} } } }
+namespace rtl { class OUString; }
+namespace ucbhelper { class Content; }
 
-namespace utl
-{
-    class UNOTOOLS_DLLPUBLIC UCBContentHelper
-    {
-    public:
-        static sal_Bool             IsDocument( const String& rContent );
-        static sal_Bool             IsFolder( const String& rContent );
-        static sal_Bool             GetTitle( const String& rContent, String& rTitle );
-        static sal_Bool             Kill( const String& rContent );
+namespace utl { namespace UCBContentHelper {
 
-        static ::com::sun::star::uno::Any GetProperty( const String& rURL, const ::rtl::OUString& rName );
+UNOTOOLS_DLLPUBLIC bool IsDocument(rtl::OUString const & url);
 
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString >
-                                    GetFolderContents( const String& rFolder, sal_Bool bFolder, sal_Bool bSorted = sal_False );
+UNOTOOLS_DLLPUBLIC bool IsFolder(rtl::OUString const & url);
 
-        static sal_Bool             MakeFolder( const String& rFolder, sal_Bool bNewOnly = sal_False );
-        static sal_Bool             MakeFolder( ::ucbhelper::Content& rParent,
-                                                const String& rTitle,
-                                                ::ucbhelper::Content& rNewFolder,
-                                                sal_Bool bNewOnly = sal_False );
+UNOTOOLS_DLLPUBLIC bool GetTitle(
+    rtl::OUString const & url, rtl::OUString * title);
 
-        static sal_uLong                GetSize( const String& rContent );
-        static sal_Bool             IsYounger( const String& rIsYoung, const String& rIsOlder );
+UNOTOOLS_DLLPUBLIC bool Kill(rtl::OUString const & url);
 
-        static sal_Bool             Exists( const String& rContent );
-        static sal_Bool             IsSubPath( const ::rtl::OUString& rPath, const ::rtl::OUString& rChildCandidate, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProvider >& xContentProvider = ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProvider >() );
-        static sal_Bool             EqualURLs( const ::rtl::OUString& aFirstURL, const ::rtl::OUString& aSecondURL );
-    };
-}
+UNOTOOLS_DLLPUBLIC com::sun::star::uno::Any GetProperty(
+    rtl::OUString const & url, rtl::OUString const & property);
+
+UNOTOOLS_DLLPUBLIC bool MakeFolder(
+    rtl::OUString const & url, bool exclusive = false);
+
+UNOTOOLS_DLLPUBLIC bool MakeFolder(
+    ucbhelper::Content & parent, rtl::OUString const & title,
+    ucbhelper::Content & result, bool exclusive = false);
+
+UNOTOOLS_DLLPUBLIC sal_Int64 GetSize(rtl::OUString const & url);
+
+UNOTOOLS_DLLPUBLIC bool IsYounger(
+    rtl::OUString const & younger, rtl::OUString const & older);
+
+UNOTOOLS_DLLPUBLIC bool Exists(rtl::OUString const & url);
+
+UNOTOOLS_DLLPUBLIC bool IsSubPath(
+    rtl::OUString const & parent, rtl::OUString const & child);
+
+UNOTOOLS_DLLPUBLIC bool EqualURLs(
+    rtl::OUString const & url1, rtl::OUString const & url2);
+
+} }
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

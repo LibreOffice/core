@@ -1200,7 +1200,7 @@ String SvtURLBox::GetURL()
             Any aAny =
                 UCBContentHelper::GetProperty(aURL,aPropName);
             sal_Bool success = (aAny >>= aFileURL);
-            String aTitle;
+            rtl::OUString aTitle;
             if(success)
                 aTitle = String(
                     INetURLObject(aFileURL).getName(
@@ -1209,12 +1209,11 @@ String SvtURLBox::GetURL()
                         INetURLObject::DECODE_WITH_CHARSET ));
             else
                 success =
-                    UCBContentHelper::GetTitle(aURL,aTitle);
+                    UCBContentHelper::GetTitle(aURL,&aTitle);
 
             if( success &&
-                ( aTitle.Len() > 1 ||
-                  (aTitle.CompareToAscii("/") != 0 &&
-                  aTitle.CompareToAscii(".") != 0) ) )
+                !(aTitle.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("/"))
+                  || aTitle.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("."))) )
             {
                     aObj.SetName( aTitle );
                     if ( bSlash )

@@ -32,6 +32,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>

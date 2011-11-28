@@ -236,10 +236,9 @@ void ODocumentInfoPreview::fill(
     // size
     if ( i_rURL.Len() > 0 )
     {
-        sal_uLong nDocSize = ::utl::UCBContentHelper::GetSize( i_rURL );
         m_pEditWin->InsertEntry(
             m_pInfoTable->GetString( DI_SIZE ),
-            CreateExactSizeText_Impl( nDocSize ) );
+            CreateExactSizeText_Impl( utl::UCBContentHelper::GetSize( i_rURL ) ) );
     }
 
     // MIMEType
@@ -749,8 +748,8 @@ sal_Bool SvtFileViewWindow_Impl::HasPreviousLevel( String& rURL ) const
 
 String SvtFileViewWindow_Impl::GetFolderTitle() const
 {
-    String aTitle;
-    ::utl::UCBContentHelper::GetTitle( aFolderURL, aTitle );
+    rtl::OUString aTitle;
+    ::utl::UCBContentHelper::GetTitle( aFolderURL, &aTitle );
     return aTitle;
 }
 
