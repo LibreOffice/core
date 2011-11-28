@@ -77,7 +77,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdmodel.hxx>
 #include "svx/svdglob.hxx"  // Stringcache
-#include "svx/svdstr.hrc"   // Objektname
+#include "svx/svdstr.hrc"   // the object's name
 #include <svx/svdetc.hxx>
 #include <svx/svdview.hxx>
 #include "unomlstr.hxx"
@@ -234,7 +234,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
 
     SolarMutexGuard aGuard;
 
-    // the code currently makes sence only in case there is no other client
+    // the code currently makes sense only in case there is no other client
     if ( mpObj && mpObj->GetAspect() != embed::Aspects::MSOLE_ICON && aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnVisAreaChanged"))
       && mpObj->GetObjRef().is() && mpObj->GetObjRef()->getClientSite() == uno::Reference< embed::XEmbeddedClient >( this ) )
     {
@@ -309,7 +309,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::saveObject()
         if ( !mpObj )
             throw embed::ObjectSaveVetoException();
 
-        // the common persistance is supported by objects and links
+        // the common persistence is supported by objects and links
         xPersist = uno::Reference< embed::XCommonEmbedPersist >( mpObj->GetObjRef(), uno::UNO_QUERY_THROW );
         xModifiable = uno::Reference< util::XModifiable >( mpObj->GetParentXModel(), uno::UNO_QUERY );
     }
@@ -1211,8 +1211,8 @@ void SdrOle2Obj::Disconnect_Impl()
                 // TODO/LATER: here we must assume that the destruction of the model is enough to make clear that we will not
                 // remove the object from the container, even if the DrawingObject itself is not destroyed (unfortunately this
                 // There is no real need to do the following removing of the object from the container
-                // in case the model has correct persistance, but in case of problems such a removing
-                // would make the behaviour of the office more stable
+                // in case the model has correct persistence, but in case of problems such a removing
+                // would make the behavior of the office more stable
 
                 comphelper::EmbeddedObjectContainer* pContainer = xObjRef.GetContainer();
                 if ( pContainer )
@@ -1250,7 +1250,7 @@ void SdrOle2Obj::Disconnect_Impl()
                     {
                         pContainer->RemoveEmbeddedObject( xObjRef.GetObject(), sal_False);
 
-                        // TODO/LATER: mpImpl->aPersistName contains outdated information, to have it uptodate
+                        // TODO/LATER: mpImpl->aPersistName contains outdated information, to keep it updated
                         // it should be returned from RemoveEmbeddedObject call. Currently it is no problem,
                         // since no container is adjusted, actually the empty string could be provided as a name here
                         xObjRef.AssignToContainer( NULL, mpImpl->aPersistName );
@@ -1293,7 +1293,7 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
 
     if ( pNewModel == pModel )
     {
-        // don't know if this is necessary or if it will ever happen, but who know?!
+        // don't know if this is necessary or if it will ever happen, but who knows?!
         SdrRectObj::SetModel( pNewModel );
         return;
     }
@@ -1315,7 +1315,7 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
     {
         try
         {
-            // move the objects' storage; ObjectRef remains the same, but PersistName may change
+            // move the object's storage; ObjectRef remains the same, but PersistName may change
             ::rtl::OUString aTmp;
             comphelper::EmbeddedObjectContainer& rContainer = pSrcPers->getEmbeddedObjectContainer();
             uno::Reference < embed::XEmbeddedObject > xObj = rContainer.GetEmbeddedObject( mpImpl->aPersistName );
@@ -1343,7 +1343,7 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
     SdrRectObj::SetModel( pNewModel );
 
     // #i43086#
-    // #i85304 redo the change for charts for the above bugfix, as #i43086# does not ocur anymore
+    // #i85304 redo the change for charts for the above bugfix, as #i43086# does not occur anymore
     //so maybe the ImpSetVisAreaSize call can be removed here completely
     //Nevertheless I leave it in for other objects as I am not sure about the side effects when removing now
     if( pModel && !pModel->isLocked() && !IsChart() )
@@ -1352,7 +1352,7 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
     if( pDestPers && !IsEmptyPresObj() )
     {
         if ( !pSrcPers || IsEmptyPresObj() )
-            // object wasn't connected, now it should
+            // object wasn't connected, now it should be
             Connect_Impl();
         else
             Reconnect_Impl();
@@ -1386,7 +1386,7 @@ void SdrOle2Obj::SetObjRef( const com::sun::star::uno::Reference < com::sun::sta
         return;
 
     // the caller of the method is responsible to control the old object, it will not be closed here
-    // Otherwise WW8 import crashes because it tranfers control to OLENode by this method
+    // Otherwise WW8 import crashes because it transfers control to OLENode by this method
     if ( xObjRef.GetObject().is() )
         xObjRef.Lock( sal_False );
 
@@ -1636,7 +1636,7 @@ void SdrOle2Obj::ImpSetVisAreaSize()
 
         if ( pClient || bHasOwnClient )
         {
-            // TODO/LATER: IMHO we need to do similar things when object is UIActive or OutplaceActive?! (MBA)
+            // TODO: IMHO we need to do similar things when object is UIActive or OutplaceActive?!
             if ( ((nMiscStatus & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) &&
                     svt::EmbeddedObjectRef::TryRunningState( xObjRef.GetObject() ))
                     || xObjRef->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE
@@ -1760,7 +1760,7 @@ void SdrOle2Obj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     }
 
     SdrRectObj::NbcResize(rRef,xFact,yFact);
-    if (aGeo.nShearWink!=0 || aGeo.nDrehWink!=0) { // kleine Korrekturen
+    if (aGeo.nShearWink!=0 || aGeo.nDrehWink!=0) { // little correctures
         if (aGeo.nDrehWink>=9000 && aGeo.nDrehWink<27000) {
             aRect.Move(aRect.Left()-aRect.Right(),aRect.Top()-aRect.Bottom());
         }
@@ -1911,7 +1911,7 @@ sal_Bool SdrOle2Obj::Unload()
     {
         //TODO/LATER: no refcounting tricks anymore!
         //"customers" must register as state change listeners
-        //Nicht notwendig im Doc DTor (MM)
+        // Not necessary in Doc DTor (MM)
         //sal_uIntPtr nRefCount = (*ppObjRef)->GetRefCount();
         // prevent Unload if there are external references
         //if( nRefCount > 2 )

@@ -29,7 +29,7 @@
 
 #include <svx/svdopage.hxx>
 #include "svx/svdglob.hxx"  // Stringcache
-#include "svx/svdstr.hrc"   // Objektname
+#include "svx/svdstr.hrc"   // the object's name
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdmodel.hxx>

@@ -109,9 +109,9 @@ const Graphic ImpLoadLinkedGraphic( const String aFileName, const String aFilter
         String aEmptyStr;
         com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aFilterData( 1 );
 
-        // Room for improvment:
+        // TODO: Room for improvement:
         // As this is a linked graphic the GfxLink is not needed if saving/loading our own format.
-        // But this link is required by some filters to access the native graphic (pdf export/ms export),
+        // But this link is required by some filters to access the native graphic (PDF export/MS export),
         // there we should create a new service to provide this data if needed
         aFilterData[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CreateNativeLink" ) );
         aFilterData[ 0 ].Value = Any( sal_True );
@@ -258,7 +258,7 @@ void SdrGraphicLink::RemoveGraphicUpdater()
         }
         else if( SotExchange::GetFormatIdFromMimeType( rMimeType ) != sfx2::LinkManager::RegisterStatusInfoId() )
         {
-            // broadcasting, to update slidesorter
+            // broadcasting, to update slide sorter
             pGrafObj->BroadcastObjectChange();
         }
     }
@@ -269,7 +269,7 @@ void SdrGraphicLink::RemoveGraphicUpdater()
 
 void SdrGraphicLink::Closed()
 {
-    // Die Verbindung wird aufgehoben; pLink des Objekts auf NULL setzen, da die Link-Instanz ja gerade destruiert wird.
+    // close connection; set pLink of the object to NULL, as link instance is just about getting destructed.
     pGrafObj->ForceSwapIn();
     pGrafObj->pGraphicLink=NULL;
     pGrafObj->ReleaseGraphicLink();
@@ -614,7 +614,7 @@ void SdrGrafObj::ImpLinkAbmeldung()
 
     if( pLinkManager != NULL && pGraphicLink!=NULL)
     {
-        // Bei Remove wird *pGraphicLink implizit deleted
+        // When using Remove, the *pGraphicLink is implicitly deleted
         pLinkManager->Remove( pGraphicLink );
         pGraphicLink=NULL;
     }
@@ -960,7 +960,7 @@ void SdrGrafObj::SetPage( SdrPage* pNewPage )
 
     if( bRemove )
     {
-        // hier kein SwapIn noetig, weil wenn nicht geladen, dann auch nicht animiert.
+        // No SwapIn necessary here, because if something's not loaded, it can't be animated either.
         if( pGraphic->IsAnimated())
             pGraphic->StopAnimation();
 
@@ -992,7 +992,7 @@ void SdrGrafObj::SetModel( SdrModel* pNewModel )
             ImpLinkAbmeldung();
     }
 
-    // Model umsetzen
+    // realize model
     SdrRectObj::SetModel(pNewModel);
 
     if( bChg && aFileName.Len() )
@@ -1023,7 +1023,7 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(sal_Bool bBezier) const
     {
         case GRAPHIC_GDIMETAFILE:
         {
-            // NUR die aus dem MetaFile erzeugbaren Objekte in eine Gruppe packen und zurueckliefern
+            // Sort into group and return ONLY those objects that can be created from the MetaFile.
             SdrObjGroup*            pGrp = new SdrObjGroup();
             ImpSdrGDIMetaFileImport aFilter(*GetModel());
             Point                   aOutPos( aRect.TopLeft() );
@@ -1065,13 +1065,13 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(sal_Bool bBezier) const
         }
         case GRAPHIC_BITMAP:
         {
-            // Grundobjekt kreieren und Fuellung ergaenzen
+            // create basic object and add fill
             pRetval = SdrRectObj::DoConvertToPolyObj(bBezier);
 
-            // Bitmap als Attribut retten
+            // save bitmap as an attribute
             if(pRetval)
             {
-                // Bitmap als Fuellung holen
+                // retrieve bitmap for the fill
                 SfxItemSet aSet(GetObjectItemSet());
 
                 aSet.Put(XFillStyleItem(XFILL_BITMAP));
@@ -1142,8 +1142,7 @@ void SdrGrafObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly )
     {
         Point aPos( rMaxRect.TopLeft() );
 
-        // Falls Grafik zu gross, wird die Grafik
-        // in die Seite eingepasst
+        // if the graphic is too large, fit it to page
         if ( (!bShrinkOnly                          ||
              ( aSize.Height() > aMaxSize.Height() ) ||
              ( aSize.Width()  > aMaxSize.Width()  ) )&&
@@ -1154,7 +1153,7 @@ void SdrGrafObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly )
             float fWinWH =  (float)aMaxSize.Width() /
                             (float)aMaxSize.Height();
 
-            // Grafik an Pagesize anpassen (skaliert)
+            // Scale graphic to page size
             if ( fGrfWH < fWinWH )
             {
                 aSize.Width() = (long)(aMaxSize.Height() * fGrfWH);
@@ -1217,7 +1216,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
     }
     else if( pO->IsInSwapIn() )
     {
-        // kann aus dem original Doc-Stream nachgeladen werden...
+        // can be loaded from the original document stream later
         if( pModel != NULL )
         {
             if( pGraphic->HasUserData() )
@@ -1305,7 +1304,7 @@ Reference< XInputStream > SdrGrafObj::getInputStream()
 
     if( pModel )
     {
-        // kann aus dem original Doc-Stream nachgeladen werden...
+        // can be loaded from the original document stream later
         if( pGraphic->HasUserData() )
         {
             ::comphelper::LifecycleProxy proxy;
