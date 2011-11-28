@@ -1033,6 +1033,11 @@ AC_ARG_WITH(system-libcmis,
         [Use libcmis already on system.]),,
     [with_system_libcmis="$with_system_libs"])
 
+AC_ARG_WITH(system-libcdr,
+    AS_HELP_STRING([--with-system-libcdr],
+        [Use libvisio already on system.]),,
+    [with_system_libcdr="no"])
+
 AC_ARG_WITH(system-libvisio,
     AS_HELP_STRING([--with-system-libvisio],
         [Use libvisio already on system.]),,
@@ -4717,6 +4722,23 @@ else
     BUILD_TYPE="$BUILD_TYPE EXPAT"
 fi
 AC_SUBST(SYSTEM_EXPAT)
+
+dnl ===================================================================
+dnl Check for system libcdr
+dnl ===================================================================
+AC_MSG_CHECKING([which libcdr to use])
+if test "$with_system_libcdr" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_LIBCDR=YES
+    PKG_CHECK_MODULES( CDR, libcdr-0.0 )
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_LIBCDR=NO
+    BUILD_TYPE="$BUILD_TYPE LIBCDR"
+fi
+AC_SUBST(SYSTEM_LIBCDR)
+AC_SUBST(CDR_CFLAGS)
+AC_SUBST(CDR_LIBS)
 
 dnl ===================================================================
 dnl Check for system libvisio

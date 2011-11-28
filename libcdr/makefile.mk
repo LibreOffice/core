@@ -1,9 +1,8 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2000, 2011 Oracle and/or its affiliates.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -26,15 +25,43 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,writerperfect))
+PRJ=.
 
-$(eval $(call gb_Module_add_targets,writerperfect,\
-	Library_cdrimport \
-	Library_msworks \
-	Library_visioimport \
-	Library_wpft \
-	Library_wpgimport \
-	StaticLibrary_writerperfect \
-))
+PRJNAME=visio
+TARGET=visio
 
-# vim: set noet sw=4 ts=4:
+# --- Settings -----------------------------------------------------
+
+.INCLUDE : settings.mk
+
+# --- Files --------------------------------------------------------
+
+.IF "$(SYSTEM_LIBCDR)" == "YES"
+@all:
+    @echo "Using system libcdr..."
+.ENDIF
+
+# libcdr depends on the libwpd and libwpg
+.IF "$(SYSTEM_LIBWPD)" == "YES"
+INCPRE+=$(WPD_CFLAGS)
+.ELSE
+INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpd
+INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpd-stream
+.ENDIF
+.IF "$(SYSTEM_LIBWPG)" == "YES"
+INCPRE+=$(WPG_CFLAGS)
+.ELSE
+INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpg
+.ENDIF
+
+TARFILE_NAME=libcdr-0.0.0
+TARFILE_MD5=9c9811817dccbd517ff25af8b2e8a86e
+
+BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
+BUILD_DIR=src$/lib
+
+# --- Targets ------------------------------------------------------
+
+.INCLUDE : set_ext.mk
+.INCLUDE : target.mk
+.INCLUDE : tg_ext.mk

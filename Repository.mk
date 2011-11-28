@@ -229,6 +229,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     vclplug_kde \
     vclplug_kde4 \
     vclplug_svp \
+	cdrimport \
 	visioimport \
 	wpft \
 	wpgimport \

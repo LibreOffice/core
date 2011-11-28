@@ -506,6 +506,33 @@ endef
 endif # SYSTEM_OPENSSL
 
 
+ifeq ($(SYSTEM_LIBCDR),YES)
+
+define gb_LinkTarget__use_cdr
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(CDR_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(CDR_LIBS))
+
+endef
+
+else # !SYSTEM_LIBCDR
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	cdrlib \
+))
+
+define gb_LinkTarget__use_cdr
+$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+	cdrlib \
+)
+
+endef
+
+endif # SYSTEM_LIBCDR
+
+
 ifeq ($(SYSTEM_LIBVISIO),YES)
 
 define gb_LinkTarget__use_visio

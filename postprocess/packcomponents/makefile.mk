@@ -131,6 +131,7 @@ my_components = \
     component/writerperfect/util/visiofilter \
     component/writerperfect/util/wpft \
     component/writerperfect/util/wpgfilter \
+    component/writerperfect/util/cdrfilter \
     component/xmloff/source/transform/xof \
     component/xmloff/util/xo \
     component/xmlscript/util/xcr \

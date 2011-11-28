@@ -26,15 +26,43 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,writerperfect))
+$(eval $(call gb_Library_Library,cdrimport))
 
-$(eval $(call gb_Module_add_targets,writerperfect,\
-	Library_cdrimport \
-	Library_msworks \
-	Library_visioimport \
-	Library_wpft \
-	Library_wpgimport \
-	StaticLibrary_writerperfect \
+$(eval $(call gb_Library_set_componentfile,cdrimport,writerperfect/util/cdrfilter))
+
+$(eval $(call gb_Library_set_include,cdrimport,\
+	$$(INCLUDE) \
+    -I$(realpath $(SRCDIR)/writerperfect/source) \
+))
+
+$(eval $(call gb_Library_add_api,cdrimport,\
+    offapi \
+    udkapi \
+))
+
+$(eval $(call gb_Library_add_linked_libs,cdrimport,\
+	cppu \
+	cppuhelper \
+	sal \
+	sot \
+	tl \
+	utl \
+	xo \
+))
+
+$(eval $(call gb_Library_add_linked_static_libs,cdrimport,\
+	writerperfect \
+))
+
+$(eval $(call gb_Library_use_externals,cdrimport,\
+	wpd \
+	wpg \
+	cdr \
+))
+
+$(eval $(call gb_Library_add_exception_objects,cdrimport,\
+	writerperfect/source/cdrimp/CDRImportFilter \
+	writerperfect/source/cdrimp/cdrimport_genericfilter \
 ))
 
 # vim: set noet sw=4 ts=4:

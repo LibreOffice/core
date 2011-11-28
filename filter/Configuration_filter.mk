@@ -545,6 +545,7 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,filter/s
 	draw8_template \
 	draw_WordPerfect_Graphics \
 	draw_Visio_Document \
+	draw_CDR_Document \
 )
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.xcu,filter/source/config/fragments/filters,\
@@ -555,6 +556,7 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.xcu,filt
 	draw8_template \
 	WordPerfectGraphics \
 	VisioDocument \
+	CorelDrawDocument \
 )
 
 $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
