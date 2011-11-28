@@ -123,6 +123,13 @@ my %replaceable = (
     $win_ure_lib_dir => "(\\.dll|\\.exe|\\.bin|\\.com)\$",
     $brand_program_dir . '/resource' => '\.res$',
     $brand_program_dir . '/classes' => '\.jar$',
+    'ure-link/share/java' => '\.jar$',
+    'share/extensions/nlpsolver' => '\.jar$',
+    'share/extensions/report-builder' => '\.jar$',
+    'share/extensions/wiki-publisher' => '\.jar$',
+    'share/extensions/pdf-import' => "(\\.so|\\.dll|\\.exe|\\.com$bin)\$",
+    'share/extensions/presenter-screen' => "(\\.so|\\.dll|\\.exe|\\.com$bin)\$",
+    'share/extensions/presentation-minimizer' => "(\\.so|\\.dll|\\.exe|\\.com$bin)\$",
     'share/config' => '\.zip$',
 #    'share/uno_packages' => '\.zip$'
 );
