@@ -80,9 +80,9 @@ public:
     const SfxSlot*          GetSlot( const String& rCommand ) const;
 
     const char*             GetClassName() const { return pName; }
-    int                     HasName() const { return 0 != aNameResId.GetId(); }
+    bool                    HasName() const { return 0 != aNameResId.GetId(); }
     rtl::OUString           GetName() const
-                            { return String(aNameResId); }
+                            { return HasName() ? ResId::toString(aNameResId) : rtl::OUString(); }
     ResMgr*                 GetResMgr() const
                             { return aNameResId.GetResMgr(); }
 
