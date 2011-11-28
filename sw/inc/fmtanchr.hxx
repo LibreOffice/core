@@ -34,6 +34,9 @@
 #include <format.hxx>
 #include <svl/poolitem.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
+
 struct SwPosition;
 class IntlWrapper;
 #define IVER_FMTANCHOR_LONGIDX ((sal_uInt16)1)
@@ -41,7 +44,7 @@ class IntlWrapper;
 // FlyAnchors
 class SW_DLLPUBLIC SwFmtAnchor: public SfxPoolItem
 {
-    SwPosition *pCntntAnchor;   // 0 for page-bound frames.
+    ::boost::scoped_ptr<SwPosition> m_pCntntAnchor; // 0 for page-bound frames.
                                 // Index for paragraph-bound frames.
                                 // Position for character-bound frames.
     RndStdIds  nAnchorId;
@@ -72,7 +75,7 @@ public:
 
     RndStdIds GetAnchorId() const { return nAnchorId; }
     sal_uInt16 GetPageNum() const { return nPageNum; }
-    const SwPosition *GetCntntAnchor() const { return pCntntAnchor; }
+    const SwPosition *GetCntntAnchor() const { return m_pCntntAnchor.get(); }
     // #i28701#
     sal_uInt32 GetOrder() const;
 
