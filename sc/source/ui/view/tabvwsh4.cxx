@@ -94,6 +94,8 @@
 #include "scabstdlg.hxx"
 #include "externalrefmgr.hxx"
 #include "docoptio.hxx"
+#include "markdata.hxx"
+#include "preview.hxx"
 
 void ActivateOlk( ScViewData* pViewData );
 void DeActivateOlk( ScViewData* pViewData );
@@ -1725,6 +1727,9 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     {
         ScPreviewShell* pPreviewShell = ((ScPreviewShell*)pOldSh);
         nForceDesignMode = pPreviewShell->GetSourceDesignMode();
+        ScPreview* p = pPreviewShell->GetPreview();
+        if (p)
+            GetViewData()->GetMarkData().SetSelectedTabs(p->GetSelectedTabs());
     }
 
     Construct( nForceDesignMode );
