@@ -171,7 +171,7 @@ public:
     /** Imports settings from the CFHEADER record. */
     void                importCfHeader( BiffInputStream& rStrm );
 
-    /** Creates all conditional formattings in the Calc document. */
+    /** Creates all conditional formatting in the Calc document. */
     void                finalizeImport();
 
     /** Converts an OOXML condition operator token to the API constant. */
@@ -182,7 +182,7 @@ private:
 
 private:
     typedef RefVector< CondFormat > CondFormatVec;
-    CondFormatVec       maCondFormats;      /// All conditional formattings in a sheet.
+    CondFormatVec       maCondFormats;      /// All conditional formatting in a sheet.
 };
 
 // ============================================================================

@@ -90,7 +90,7 @@ namespace drawinglayer
                             // needs to be expressed in the MapMode for the PrettyPainter;
                             // else it would call ChartModelHelper::setPageSize(...) with the
                             // changed size what really will change the chart model and leads
-                            // to re-layouts and re-formattings
+                            // to re-layouts and re-formatting
                             const MapMode aOldMapMode(rOutputDevice.GetMapMode());
                             basegfx::B2DVector aVTScale, aScale, aTranslate;
                             double fRotate, fShearX;

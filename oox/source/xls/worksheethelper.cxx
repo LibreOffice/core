@@ -277,7 +277,7 @@ public:
 
     /** Returns the buffer for cell contents and cell formatting. */
     inline SheetDataBuffer& getSheetData() { return maSheetData; }
-    /** Returns the conditional formattings in this sheet. */
+    /** Returns the conditional formatting in this sheet. */
     inline CondFormatBuffer& getCondFormats() { return maCondFormats; }
     /** Returns the buffer for all cell comments in this sheet. */
     inline CommentsBuffer& getComments() { return maComments; }
@@ -396,7 +396,7 @@ private:
     ValidationModelList maValidations;      /// Cell ranges containing data validation settings.
     ValueRangeSet       maManualRowHeights; /// Rows that need manual height independent from own settings.
     SheetDataBuffer     maSheetData;        /// Buffer for cell contents and cell formatting.
-    CondFormatBuffer    maCondFormats;      /// Buffer for conditional formattings.
+    CondFormatBuffer    maCondFormats;      /// Buffer for conditional formatting.
     CommentsBuffer      maComments;         /// Buffer for all cell comments in this sheet.
     AutoFilterBuffer    maAutoFilters;      /// Sheet auto filters (not associated to a table).
     QueryTableBuffer    maQueryTables;      /// Buffer for all web query tables in this sheet.

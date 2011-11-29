@@ -255,7 +255,7 @@ public:
 
     /** Returns the buffer for cell contents and cell formatting. */
     SheetDataBuffer&    getSheetData() const;
-    /** Returns the conditional formattings in this sheet. */
+    /** Returns the conditional formatting in this sheet. */
     CondFormatBuffer&   getCondFormats() const;
     /** Returns the buffer for all cell comments in this sheet. */
     CommentsBuffer&     getComments() const;

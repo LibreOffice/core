@@ -132,7 +132,7 @@ testcase tToolsNumbering13
 
     Dim i as integer, iCounter as integer
     '/// #i73790 Regression testing 
-    '/// This testcase loads a Worddocument that lost all formattings
+    '/// This testcase loads a Worddocument that lost all formatting
     printlog "#i73790 regression testing"
     '/// Load document 'writer\\optional\\input\\number\\regression\\73790.doc'
     hFileOpenLocally(  gTesttoolPath + "writer\optional\input\number\regression\73790.doc" )

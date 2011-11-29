@@ -239,10 +239,10 @@ testcase tToolsOutlineNumbering1
     for i = 1 to 2
         Select Case i
             Case 1
-                printlog "- Load sxw and check formattings"
+                printlog "- Load sxw and check formatting"
                 hFileOpen( gOfficePath & "user\work\tToolsOutlineNumbering1.sxw" )
             Case 2
-                printlog "- Load odt and check formattings"
+                printlog "- Load odt and check formatting"
                 hFileOpen( gOfficePath & "user\work\tToolsOutlineNumbering1.odt" )
         end select
         call wTypeKeys "<PageUp>", 8
