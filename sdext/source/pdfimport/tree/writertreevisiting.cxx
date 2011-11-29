@@ -759,9 +759,10 @@ void WriterXmlOptimizer::optimizeTextElements(Element& rParent)
                 if( !bRotatedFrame
                     && ! rCurGC.isRotatedOrSkewed()
                     && ! rNextGC.isRotatedOrSkewed()
-                    && pNext->Text.charAt( 0 ) != sal_Unicode(' ')
+                    && pNext->Text.gerLength() > 0
+                    && pNext->Text[0] != sal_Unicode(' ')
                     && pCur->Text.getLength() >  0
-                    && pCur->Text.charAt( pCur->Text.getLength()-1 ) != sal_Unicode(' ')
+                    && pCur->Text[pCur->Text.getLength() - 1] != sal_Unicode(' ')
                     )
                 {
                     // check for new line in paragraph
@@ -769,7 +770,7 @@ void WriterXmlOptimizer::optimizeTextElements(Element& rParent)
                     {
                         // new line begins
                         // check whether a space would should be inserted or a hyphen removed
-                        sal_Unicode aLastCode = pCur->Text.charAt( pCur->Text.getLength()-1 );
+                        sal_Unicode aLastCode = pCur->Text[pCur->Text.getLength() - 1];
                         if( aLastCode == '-'
                             || aLastCode == 0x2010
                             || (aLastCode >= 0x2012 && aLastCode <= 0x2015)

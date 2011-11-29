@@ -124,10 +124,10 @@ rtl::OUString X11SalSystem::GetScreenName( unsigned int nScreen )
         int nPos = aBuf.getLength();
         if( nPos > 0 )
             nPos--;
-        while( nPos > 0 && aBuf.charAt( nPos ) != ':' )
+        while( nPos > 0 && aBuf[nPos] != ':' )
             nPos--;
         // search forward to '.'
-        while( nPos < aBuf.getLength() && aBuf.charAt( nPos ) != '.' )
+        while( nPos < aBuf.getLength() && aBuf[nPos] != '.' )
             nPos++;
         if( nPos < aBuf.getLength() )
             aBuf.setLength( nPos+1 );

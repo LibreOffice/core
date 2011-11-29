@@ -2464,15 +2464,15 @@ void OSQLParseNode::parseLeaf(::rtl::OUStringBuffer& rString, const SQLParseNode
             rString.append(SetQuotation(m_aNodeValue,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\'")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\'\'"))));
             break;
         case SQL_NODE_NAME:
-            if (rString.getLength())
+            if (rString.getLength() > 0)
             {
-                switch(rString.charAt(rString.getLength()-1) )
+                switch(rString[rString.getLength()-1])
                 {
                     case ' ' :
                     case '.' : break;
                     default  :
                         if  (   !rParam.aMetaData.getCatalogSeparator().getLength()
-                            ||  rString.charAt( rString.getLength()-1 ) != rParam.aMetaData.getCatalogSeparator().toChar()
+                                || rString[rString.getLength() - 1] != rParam.aMetaData.getCatalogSeparator().toChar()
                             )
                             rString.appendAscii(" "); break;
                 }
@@ -2520,15 +2520,15 @@ void OSQLParseNode::parseLeaf(::rtl::OUStringBuffer& rString, const SQLParseNode
             }
             // fall through
         default:
-            if (rString.getLength() && m_aNodeValue.toChar() != '.' && m_aNodeValue.toChar() != ':' )
+            if (rString.getLength() > 0 && m_aNodeValue.toChar() != '.' && m_aNodeValue.toChar() != ':' )
             {
-                switch( rString.charAt(rString.getLength()-1) )
+                switch( rString[rString.getLength() - 1] )
                 {
                     case ' ' :
                     case '.' : break;
                     default  :
                         if  (   !rParam.aMetaData.getCatalogSeparator().getLength()
-                            ||  rString.charAt( rString.getLength()-1 ) != rParam.aMetaData.getCatalogSeparator().toChar()
+                            ||  rString[rString.getLength() - 1] != rParam.aMetaData.getCatalogSeparator().toChar()
                             )
                             rString.appendAscii(" "); break;
                 }

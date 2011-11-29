@@ -183,7 +183,7 @@ OUString lclQuoteName( const OUString& rName )
     OUStringBuffer aBuffer( rName );
     // duplicate all quote characters
     for( sal_Int32 nPos = aBuffer.getLength() - 1; nPos >= 0; --nPos )
-        if( aBuffer.charAt( nPos ) == '\'' )
+        if( aBuffer[nPos] == '\'' )
             aBuffer.insert( nPos, sal_Unicode( '\'' ) );
     // add outer quotes and return
     return aBuffer.insert( 0, sal_Unicode( '\'' ) ).append( sal_Unicode( '\'' ) ).makeStringAndClear();

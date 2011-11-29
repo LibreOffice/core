@@ -823,10 +823,10 @@ void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, const SvXMLNumFormat
     sal_Int32 nLength = rContent.getLength();
 
     if ( ( nLength == 1 &&
-            lcl_ValidChar( rContent.charAt(0), rParent ) ) ||
+            lcl_ValidChar( rContent[0], rParent ) ) ||
          ( nLength == 2 &&
-             lcl_ValidChar( rContent.charAt(0), rParent ) &&
-             rContent.charAt(1) == ' ' ) )
+             lcl_ValidChar( rContent[0], rParent ) &&
+             rContent[1] == ' ' ) )
     {
         //  don't quote single separator characters like space or percent,
         //  or separator characters followed by space (used in date formats)
@@ -843,7 +843,7 @@ void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, const SvXMLNumFormat
         {
             if ( nPos + 1 < nLength )
             {
-                if ( nPos + 2 == nLength && lcl_ValidChar( rContent.charAt(nPos + 1), rParent ) )
+                if ( nPos + 2 == nLength && lcl_ValidChar( rContent[nPos + 1], rParent ) )
                 {
                     //  single character that doesn't need quoting
                 }
@@ -856,7 +856,7 @@ void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, const SvXMLNumFormat
             }
             if ( nPos > 0 )
             {
-                if ( nPos == 1 && lcl_ValidChar( rContent.charAt(0), rParent ) )
+                if ( nPos == 1 && lcl_ValidChar( rContent[0], rParent ) )
                 {
                     //  single character that doesn't need quoting
                 }
@@ -886,7 +886,7 @@ void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, const SvXMLNumFormat
             sal_Int32 nPos = 0;
             while ( nPos < rContent.getLength() )
             {
-                if ( rContent.charAt( nPos ) == (sal_Unicode) '"' )
+                if ( rContent[nPos] == (sal_Unicode) '"' )
                 {
                     rContent.insert( nPos, aInsert );
                     nPos += aInsert.getLength();
@@ -903,8 +903,8 @@ void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, const SvXMLNumFormat
         if ( bEscape )
         {
             if ( rContent.getLength() > 2 &&
-                 rContent.charAt(0) == (sal_Unicode) '"' &&
-                 rContent.charAt(1) == (sal_Unicode) '"' )
+                 rContent[0] == (sal_Unicode) '"' &&
+                 rContent[1] == (sal_Unicode) '"' )
             {
                 String aTrimmed( rContent.makeStringAndClear().copy(2) );
                 rContent = rtl::OUStringBuffer( aTrimmed );
@@ -912,8 +912,8 @@ void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, const SvXMLNumFormat
 
             sal_Int32 nLen = rContent.getLength();
             if ( nLen > 2 &&
-                 rContent.charAt(nLen-1) == (sal_Unicode) '"' &&
-                 rContent.charAt(nLen-2) == (sal_Unicode) '"' )
+                 rContent[nLen - 1] == (sal_Unicode) '"' &&
+                 rContent[nLen - 2] == (sal_Unicode) '"' )
             {
                 String aTrimmed( rContent.makeStringAndClear().copy( 0, nLen - 2 ) );
                 rContent = rtl::OUStringBuffer( aTrimmed );
@@ -1873,14 +1873,14 @@ void SvXMLNumFormatContext::AddCurrency( const rtl::OUString& rContent, Language
         //  otherwise the currency symbol isn't recognized (#94048#)
 
         sal_Int32 nLength = aFormatCode.getLength();
-        if ( nLength > 1 && aFormatCode.charAt( nLength-1 ) == '"' )
+        if ( nLength > 1 && aFormatCode[nLength - 1] == '"' )
         {
             //  find start of quoted string
             //  When SvXMLNumFmtElementContext::EndElement creates escaped quotes,
             //  they must be handled here, too.
 
             sal_Int32 nFirst = nLength - 2;
-            while ( nFirst >= 0 && aFormatCode.charAt( nFirst ) != '"' )
+            while ( nFirst >= 0 && aFormatCode[nFirst] != '"' )
                 --nFirst;
             if ( nFirst >= 0 )
             {
@@ -1982,7 +1982,7 @@ sal_Bool lcl_IsAtEnd( rtl::OUStringBuffer& rBuffer, const String& rToken )
 
     sal_Int32 nStartPos = nBufLen - nTokLen;
     for ( xub_StrLen nTokPos = 0; nTokPos < nTokLen; nTokPos++ )
-        if ( rToken.GetChar( nTokPos ) != rBuffer.charAt( nStartPos + nTokPos ) )
+        if ( rToken.GetChar( nTokPos ) != rBuffer[nStartPos + nTokPos] )
             return sal_False;
 
     return sal_True;

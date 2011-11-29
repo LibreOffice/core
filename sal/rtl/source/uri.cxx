@@ -495,7 +495,7 @@ rtl::OUString joinPaths(Component const & rBasePath, Component const & rRelPath)
                 }
                 else
                 {
-                    while (aBuffer.charAt(i - 1) != '/')
+                    while (i > 0 && aBuffer[i - 1] != '/')
                         --i;
                     aBuffer.setLength(i);
                 }

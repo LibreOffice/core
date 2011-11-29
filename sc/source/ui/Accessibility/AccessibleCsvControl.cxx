@@ -464,7 +464,7 @@ sal_Unicode SAL_CALL ScAccessibleCsvRuler::getCharacter( sal_Int32 nIndex )
     SolarMutexGuard aGuard;
     ensureAlive();
     ensureValidIndex( nIndex );
-    return maBuffer.charAt( nIndex );
+    return maBuffer[nIndex];
 }
 
 Sequence< PropertyValue > SAL_CALL ScAccessibleCsvRuler::getCharacterAttributes( sal_Int32 nIndex,
@@ -579,7 +579,7 @@ TextSegment SAL_CALL ScAccessibleCsvRuler::getTextAtIndex( sal_Int32 nIndex, sal
         case AccessibleTextType::CHARACTER:
         {
             aResult.SegmentStart = nIndex;
-            aResultText.append( maBuffer.charAt( nIndex ) );
+            aResultText.append(maBuffer[nIndex]);
         }
         break;
 
@@ -588,7 +588,7 @@ TextSegment SAL_CALL ScAccessibleCsvRuler::getTextAtIndex( sal_Int32 nIndex, sal
         case AccessibleTextType::GLYPH:
             aResult.SegmentStart = nIndex;
             if( nRulerPos % 10 )
-                aResultText.append( maBuffer.charAt( nIndex ) );
+                aResultText.append(maBuffer[nIndex]);
             else
                 aResultText.append( nRulerPos );    // string representation of sal_Int32!!!
         break;

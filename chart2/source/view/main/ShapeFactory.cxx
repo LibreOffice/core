@@ -2245,7 +2245,6 @@ rtl::OUString ShapeFactory::getStackedString( const rtl::OUString& rString, bool
         return rString;
 
     rtl::OUStringBuffer aStackStr;
-    rtl::OUStringBuffer aSource(rString);
 
     //add a newline after each letter
     //as we do not no letters here add a newline after each char
@@ -2253,7 +2252,7 @@ rtl::OUString ShapeFactory::getStackedString( const rtl::OUString& rString, bool
     {
         if( nPosSrc )
             aStackStr.append( sal_Unicode('\r') );
-        aStackStr.append( aSource.charAt( nPosSrc ) );
+        aStackStr.append(rString[nPosSrc]);
     }
     return aStackStr.makeStringAndClear();
 }

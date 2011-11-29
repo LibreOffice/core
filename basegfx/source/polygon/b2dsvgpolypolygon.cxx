@@ -190,9 +190,9 @@ namespace basegfx
                     fValue -= fOldValue;
 
                 const sal_Int32 aLen( rStr.getLength() );
-                if(aLen)
+                if(aLen > 0)
                 {
-                    if( lcl_isOnNumberChar(rStr.charAt(aLen - 1), false) &&
+                    if( lcl_isOnNumberChar(rStr[aLen - 1], false) &&
                         fValue >= 0.0 )
                     {
                         rStr.append( sal_Unicode(' ') );

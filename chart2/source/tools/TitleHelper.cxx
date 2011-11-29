@@ -285,7 +285,7 @@ void TitleHelper::setCompleteString( const rtl::OUString& rNewText
         sal_Int32 nLen = rNewText.getLength();
         for( sal_Int32 nPos = 0; nPos < nLen; ++nPos )
         {
-            sal_Unicode aChar = aSource.charAt( nPos );
+            sal_Unicode aChar = aSource[nPos];
             if( aChar != '\n' )
             {
                 aUnstackedStr.append( aChar );

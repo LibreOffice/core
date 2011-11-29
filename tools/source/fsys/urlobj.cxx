@@ -1777,7 +1777,7 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
         sal_Int32 nPathBegin = aSynAbsURIRef.getLength();
         aSynAbsURIRef.append(pBasePathBegin, pBasePathEnd - pBasePathBegin);
         DBG_ASSERT(aSynAbsURIRef.getLength() > nPathBegin
-                 && aSynAbsURIRef.charAt(aSynAbsURIRef.getLength() - 1) == '/',
+                 && aSynAbsURIRef[aSynAbsURIRef.getLength() - 1] == '/',
                  "INetURLObject::convertRelToAbs(): Bad base path");
 
         while (p != pEnd && *p != nQueryDelimiter && *p != nFragmentDelimiter)
@@ -1807,13 +1807,12 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
                         ++p;
 
                     sal_Int32 i = aSynAbsURIRef.getLength() - 2;
-                    while (i > nPathBegin && aSynAbsURIRef.charAt(i) != '/')
+                    while (i > nPathBegin && aSynAbsURIRef[i] != '/')
                         --i;
                     aSynAbsURIRef.setLength(i + 1);
                     DBG_ASSERT(
                         aSynAbsURIRef.getLength() > nPathBegin
-                        && aSynAbsURIRef.charAt(aSynAbsURIRef.getLength() - 1)
-                               == '/',
+                        && aSynAbsURIRef[aSynAbsURIRef.getLength() - 1] == '/',
                         "INetURLObject::convertRelToAbs(): Bad base path");
                     continue;
                 }
@@ -2275,8 +2274,8 @@ sal_Int32 INetURLObject::getAuthorityBegin() const
     else
         nBegin = m_aPath.getBegin();
     nBegin -= RTL_CONSTASCII_LENGTH("//");
-    DBG_ASSERT(m_aAbsURIRef.charAt(nBegin) == '/'
-               && m_aAbsURIRef.charAt(nBegin + 1) == '/',
+    DBG_ASSERT(m_aAbsURIRef.getStr()[nBegin] == '/'
+               && m_aAbsURIRef.getStr()[nBegin + 1] == '/',
                "INetURLObject::getAuthority(): Bad authority");
     return nBegin;
 }
@@ -3044,7 +3043,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                                  || *pPos == nSegmentDelimiter
                                  || *pPos == nAltSegmentDelimiter)
                              && aTheSynPath.getLength() == 2
-                             && INetMIME::isAlpha(aTheSynPath.charAt(1)))
+                             && INetMIME::isAlpha(aTheSynPath[1]))
                     {
                         // A first segment of <ALPHA "|"> is translated to
                         // <ALPHA ":">:

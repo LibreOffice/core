@@ -265,7 +265,7 @@ rtl::OUString normalize(
                 if (preCount == i - 1) {
                     buf.append(static_cast< sal_Unicode >('/'));
                 } else if (preCount - 1 == i && buf.getLength() > 0
-                           && buf.charAt(buf.getLength() - 1) == '/')
+                           && buf[buf.getLength() - 1] == '/')
                 {
                     buf.setLength(buf.getLength() - 1);
                 } else {
