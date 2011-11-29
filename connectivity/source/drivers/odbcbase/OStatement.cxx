@@ -446,11 +446,11 @@ Reference< XResultSet > OStatement_Base::getResultSet (sal_Bool checkCount) thro
 // Invoke SQLGetStmtOption with the given option.
 //--------------------------------------------------------------------
 
-sal_Int32 OStatement_Base::getStmtOption (short fOption) const
+template < typename T, SQLINTEGER BufferLength > T OStatement_Base::getStmtOption (short fOption) const
 {
-    sal_Int32   result = 0;
+    T result = 0;
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    N3SQLGetStmtAttr(m_aStatementHandle, fOption,&result,SQL_IS_INTEGER,NULL);
+    N3SQLGetStmtAttr(m_aStatementHandle, fOption, &result, BufferLength, NULL);
     return result;
 }
 // -------------------------------------------------------------------------
@@ -669,14 +669,15 @@ void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeExce
 }
 // -------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-sal_Int32 OStatement_Base::getQueryTimeOut() const
+sal_Int64 OStatement_Base::getQueryTimeOut() const
 {
-    return getStmtOption(SQL_ATTR_QUERY_TIMEOUT);
+    return getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_QUERY_TIMEOUT);
 }
 //------------------------------------------------------------------------------
-sal_Int32 OStatement_Base::getMaxRows() const
+sal_Int64 OStatement_Base::getMaxRows() const
 {
-    return getStmtOption(SQL_ATTR_MAX_ROWS);
+    // How do I say I want a SQLULEN??
+    return getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_MAX_ROWS);
 }
 //------------------------------------------------------------------------------
 sal_Int32 OStatement_Base::getResultSetConcurrency() const
@@ -745,9 +746,9 @@ sal_Int32 OStatement_Base::getFetchSize() const
     return nValue;
 }
 //------------------------------------------------------------------------------
-sal_Int32 OStatement_Base::getMaxFieldSize() const
+sal_Int64 OStatement_Base::getMaxFieldSize() const
 {
-    return getStmtOption(SQL_ATTR_MAX_LENGTH);
+    return getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_MAX_LENGTH);
 }
 //------------------------------------------------------------------------------
 ::rtl::OUString OStatement_Base::getCursorName() const

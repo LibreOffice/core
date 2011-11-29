@@ -87,9 +87,9 @@ namespace connectivity
 
         protected:
 
-            sal_Int32 getQueryTimeOut()         const;
-            sal_Int32 getMaxFieldSize()         const;
-            sal_Int32 getMaxRows()              const;
+            sal_Int64 getQueryTimeOut()         const;
+            sal_Int64 getMaxFieldSize()         const;
+            sal_Int64 getMaxRows()              const;
             sal_Int32 getResultSetConcurrency() const;
             sal_Int32 getResultSetType()        const;
             sal_Int32 getFetchDirection()       const;
@@ -97,7 +97,7 @@ namespace connectivity
             ::rtl::OUString getCursorName()     const;
             sal_Bool isUsingBookmarks()         const;
             sal_Bool getEscapeProcessing()      const;
-            sal_Int32 getStmtOption (short fOption) const;
+            template < typename T, SQLINTEGER BufferLength > T getStmtOption (short fOption) const;
 
             void setQueryTimeOut(sal_Int32 _par0)           ;
             void setMaxFieldSize(sal_Int32 _par0)           ;
