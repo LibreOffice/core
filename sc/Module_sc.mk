@@ -41,6 +41,7 @@ $(eval $(call gb_Module_add_check_targets,sc,\
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
     CppunitTest_sc_macros_test \
+    JunitTest_sc_complex \
     JunitTest_sc_unoapi \
 ))
 
