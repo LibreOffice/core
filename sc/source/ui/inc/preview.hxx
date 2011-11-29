@@ -31,6 +31,7 @@
 
 #include <vcl/window.hxx>
 #include "printfun.hxx"     // ScPrintState
+#include "markdata.hxx"
 
 #include <vector>
 
@@ -41,6 +42,7 @@ class FmFormView;
 class ScPreview : public Window
 {
 private:
+    ScMarkData::MarkedTabsType maSelectedTabs;
                                         // eingestellt:
     long            nPageNo;            // Seite im Dokument
     sal_uInt16          nZoom;              // eingestellter Zoom
@@ -167,6 +169,8 @@ public:
     static void StaticInvalidate();
 
     FmFormView* GetDrawView() { return pDrawView; }
+
+    void SetSelectedTabs(const ScMarkData& rMark);
 };
 
 

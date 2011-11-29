@@ -1545,6 +1545,10 @@ void ScPreview::DrawInvert( long nDragPos, sal_uInt16 nFlags )
         Invert( aRect,INVERT_50 );
     }
 }
-//Issue51656 Add resizeable margin on page preview from maoyg
+
+void ScPreview::SetSelectedTabs(const ScMarkData& rMark)
+{
+    rMark.GetSelectedTabs(maSelectedTabs);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
