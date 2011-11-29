@@ -18,7 +18,7 @@
  * @References:
  * [1] Storn R, Price K. Differential evolution - a simple and efficient
  *     heuristic for global optimization over continuous spaces. Journal of
- *     Global Optimization, 1997, 11: 341 C359
+ *     Global Optimization, 1997, 11: 341-359
  *     @ The original differential evolution idea
  * [2] X F Xie, W J Zhang. SWAF: swarm algorithm framework for numerical
  *     optimization. Genetic and Evolutionary Computation Conference (GECCO),
