@@ -743,17 +743,19 @@ bool ScTable::GetDataStart( SCCOL& rStartCol, SCROW& rStartRow ) const
 void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow,
                            bool bIncludeOld, bool bOnlyDown ) const
 {
-    // bIncludeOld = true ensure that the returned area contains at least the initial area,
-    //              independently of the case if this area has empty rows / columns at its borders
-    // bOnlyDown = true means extend the inputed area only down, i.e increase only rEndRow
+    // return the smallest area containing at least all contiguous cells having data. This area
+    // is a square containing also empty cells. It may shrink or extend the area given as input
+    // Flags as modifiers:
+    //
+    //     bIncludeOld = true ensure that the returned area contains at least the initial area,
+    //                   independently of the emptniess of rows / columns (i.e. does not allow shrinking)
+    //     bOnlyDown = true means extend / shrink the inputed area only down, i.e modifiy only rEndRow
+
     bool bLeft = false;
     bool bRight  = false;
     bool bTop = false;
     bool bBottom = false;
-    bool bChanged;
-    bool bFound;
-    SCCOL i;
-    SCROW nTest;
+    bool bChanged = false;
 
     do
     {
@@ -784,12 +786,12 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
 
             if (rStartRow > 0)
             {
-                nTest = rStartRow-1;
-                bFound = false;
-                for (i=rStartCol; i<=rEndCol && !bFound; i++)
+                SCROW nTest = rStartRow-1;
+                bool needExtend = false;
+                for ( SCCOL i = rStartCol; i<=rEndCol && !needExtend; i++)
                     if (aCol[i].HasDataAt(nTest))
-                        bFound = true;
-                if (bFound)
+                        needExtend = true;
+                if (needExtend)
                 {
                     --rStartRow;
                     bChanged = true;
@@ -800,12 +802,12 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
 
         if (rEndRow < MAXROW)
         {
-            nTest = rEndRow+1;
-            bFound = false;
-            for (i=rStartCol; i<=rEndCol && !bFound; i++)
+            SCROW nTest = rEndRow+1;
+            bool needExtend = false;
+            for ( SCCOL i = rStartCol; i<=rEndCol && !needExtend; i++)
                 if (aCol[i].HasDataAt(nTest))
-                    bFound = true;
-            if (bFound)
+                    needExtend = true;
+            if (needExtend)
             {
                 ++rEndRow;
                 bChanged = true;
@@ -830,7 +832,7 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
             bool shrink = true;
             do
             {
-                for (i=rStartCol; i<=rEndCol && shrink; i++)
+                for ( SCCOL i = rStartCol; i<=rEndCol && shrink; i++)
                     if (aCol[i].HasDataAt(rStartRow))
                         shrink = false;
                 if (shrink)
@@ -846,7 +848,7 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
             bool shrink = true;
             do
             {
-                for (i=rStartCol; i<=rEndCol && shrink; i++)
+                for ( SCCOL i = rStartCol; i<=rEndCol && shrink; i++)
                     if (aCol[i].HasDataAt(rEndRow))
                         shrink = false;
                 if (shrink)
