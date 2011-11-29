@@ -50,6 +50,9 @@ private:
     rtl::OUString handleD();
     rtl::OUString handleE();
     rtl::OUString handleF();
+    rtl::OUString handleFunc();
+    enum LimLowUpp_t { LimLow, LimUpp };
+    rtl::OUString handleLimLowUpp( LimLowUpp_t limlowupp );
     rtl::OUString handleR();
     rtl::OUString readOMathArg();
     oox::formulaimport::XmlStream& stream;

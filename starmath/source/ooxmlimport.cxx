@@ -102,6 +102,12 @@ OUString SmOoxmlImport::readOMathArg()
                 return handleD();
             case OPENING( M_TOKEN( f )):
                 return handleF();
+            case OPENING( M_TOKEN( func )):
+                return handleFunc();
+            case OPENING( M_TOKEN( limLow )):
+                return handleLimLowUpp( LimLow );
+            case OPENING( M_TOKEN( limUpp )):
+                return handleLimLowUpp( LimUpp );
             case OPENING( M_TOKEN( r )):
                 return handleR();
             default:
@@ -304,6 +310,30 @@ OUString SmOoxmlImport::handleF()
       // to 'stack { x # y # z }'
         return STR( "binom { " ) + num + STR( " } { " ) + den + STR( " }" );
     }
+}
+
+OUString SmOoxmlImport::handleFunc()
+{
+//lim from{x rightarrow 1} x
+    stream.ensureOpeningTag( M_TOKEN( func ));
+    stream.ensureOpeningTag( M_TOKEN( fName ));
+    OUString fname = readOMathArg();
+    stream.ensureClosingTag( M_TOKEN( fName ));
+    OUString ret = fname + STR( " {" ) + handleE() + STR( "}" );
+    stream.ensureClosingTag( M_TOKEN( func ));
+    return ret;
+}
+
+OUString SmOoxmlImport::handleLimLowUpp( LimLowUpp_t limlowupp )
+{
+    int token = limlowupp == LimLow ? M_TOKEN( limLow ) : M_TOKEN( limUpp );
+    stream.ensureOpeningTag( token );
+    OUString e = handleE();
+    stream.ensureOpeningTag( M_TOKEN( lim ));
+    OUString lim = readOMathArg();
+    stream.ensureClosingTag( M_TOKEN( lim ));
+    stream.ensureClosingTag( token );
+    return e + STR( " from {" ) + lim + STR( "}" );
 }
 
 // NOT complete
