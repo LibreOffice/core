@@ -27,10 +27,11 @@
  ************************************************************************/
 #ifndef _SORTEDOBJS_HXX
 #define _SORTEDOBJS_HXX
-class SwSortedObjsImpl;
-class SwAnchoredObject;
 
 #include <sal/types.h>
+#include <vector>
+
+class SwAnchoredObject;
 
 /** class for collecting anchored objects
 
@@ -56,7 +57,7 @@ class SwAnchoredObject;
 class SwSortedObjs
 {
     private:
-        SwSortedObjsImpl* mpImpl;
+        std::vector< SwAnchoredObject* > maSortedObjLst;
 
     public:
         SwSortedObjs();
