@@ -289,7 +289,6 @@ OUString SmOoxmlImport::readOMathArg( int endtoken )
     return ret;
 }
 
-// NOT complete
 OUString SmOoxmlImport::handleF()
 {
     stream.ensureOpeningTag( M_TOKEN( f ));
