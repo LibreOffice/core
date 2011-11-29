@@ -483,6 +483,9 @@ bool utl::UCBContentHelper::IsSubPath(
 bool utl::UCBContentHelper::EqualURLs(
     rtl::OUString const & url1, rtl::OUString const & url2)
 {
+    if (url1.isEmpty() || url2.isEmpty()) {
+        return false;
+    }
     ucbhelper::ContentBroker * broker = ucbhelper::ContentBroker::get();
     if (broker == 0) {
         throw css::uno::RuntimeException(
