@@ -899,8 +899,13 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
     {
         uno::Sequence<sal_Int32> aSelected = xSelectedSheets->getSelectedSheets();
         ScMarkData::MarkedTabsType aSelectedTabs;
+        SCTAB nMaxTab = pDocShell->GetDocument()->GetTableCount() -1;
         for (sal_Int32 i = 0, n = aSelected.getLength(); i < n; ++i)
-            aSelectedTabs.insert(static_cast<SCTAB>(aSelected[i]));
+        {
+            SCTAB nSelected = static_cast<SCTAB>(aSelected[i]);
+            if (ValidTab(nSelected, nMaxTab))
+                aSelectedTabs.insert(static_cast<SCTAB>(aSelected[i]));
+        }
         rMark.SetSelectedTabs(aSelectedTabs);
     }
 
