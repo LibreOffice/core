@@ -1180,7 +1180,10 @@ IMPL_LINK(ScMultiTextWnd, ModifyHdl, EENotify*, pNotify)
 IMPL_LINK(ScMultiTextWnd, NotifyHdl, EENotify*, pNotify)
 {
     // need to process EE_NOTIFY_TEXTVIEWSCROLLED here
-    if ( pNotify && pNotify->eNotificationType == EE_NOTIFY_TEXTVIEWSCROLLED )
+    // sometimes when pasting we don't seem to get EE_NOTIFY_TEXTVIEWSCROLLED
+    // but we always seem to get EE_NOTIFY_TEXTMODIFIED
+    if ( pNotify && ( pNotify->eNotificationType == EE_NOTIFY_TEXTVIEWSCROLLED
+                 ||   pNotify->eNotificationType == EE_NOTIFY_TEXTMODIFIED ) )
         SetScrollBarRange();
     return 0;
 }
@@ -1362,8 +1365,9 @@ void ScMultiTextWnd::InitEditEngine(SfxObjectShell* pObjSh)
     }
 }
 
-void ScMultiTextWnd::StopEditEngine( sal_Bool /*bAll*/ )
+void ScMultiTextWnd::StopEditEngine( sal_Bool bAll )
 {
+    ScTextWnd::StopEditEngine( bAll );
 }
 
 void ScMultiTextWnd::SetTextString( const String& rNewString )
