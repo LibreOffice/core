@@ -937,7 +937,6 @@ void ScPreview::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-//Issue51656 Add resizeable margin on page preview from maoyg
 void ScPreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
     Fraction  aPreviewZoom( nZoom, 100 );
@@ -1471,7 +1470,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
         }
     }
 }
-//Issue51656 Add resizeable margin on page preview from maoyg
+
 void ScPreview::InvalidateLocationData(sal_uLong nId)
 {
     bLocationValid = false;
