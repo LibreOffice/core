@@ -1484,6 +1484,7 @@ ToFile( "LIBDIR",            "@LIBDIR@",         "e" );
 ToFile( "DATADIR",           "@DATADIR@",        "e" );
 ToFile( "MANDIR",            "@MANDIR@",         "e" );
 ToFile( "DOCDIR",            "@DOCDIR@",          "e" );
+ToFile( "DO_FETCH_TARBALLS", "@DO_FETCH_TARBALLS", "e" );
 ToFile( "BUILD_MOZAB",       "@BUILD_MOZAB@",    "e" );
 ToFile( "PREBUILD_MOZAB",    $PREBUILD_MOZAB,    "e" );
 ToFile( "MOZILLA_VERSION",   $MOZILLA_VERSION,   "e" );

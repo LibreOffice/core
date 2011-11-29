@@ -2553,6 +2553,7 @@ if test "z$enable_fetch_external" != "zno" ; then
     DO_FETCH_TARBALLS="YES"
 else
     AC_MSG_RESULT([no])
+    DO_FETCH_TARBALLS="NO"
 fi
 AC_SUBST(DO_FETCH_TARBALLS)
 
