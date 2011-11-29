@@ -88,36 +88,49 @@ OUString SmOoxmlImport::handleStream()
 
 OUString SmOoxmlImport::readOMathArg()
 {
+    OUString ret;
     while( stream.currentToken() != CLOSING( stream.currentToken()))
     {
+        if( !ret.isEmpty())
+            ret += STR( " " );
         switch( stream.currentToken())
         {
             case OPENING( M_TOKEN( acc )):
-                return handleAcc();
+                ret += handleAcc();
+                break;
             case OPENING( M_TOKEN( bar )):
-                return handleBar();
+                ret += handleBar();
+                break;
             case OPENING( M_TOKEN( borderBox )):
-                return handleBorderBox();
+                ret += handleBorderBox();
+                break;
             case OPENING( M_TOKEN( d )):
-                return handleD();
+                ret += handleD();
+                break;
             case OPENING( M_TOKEN( f )):
-                return handleF();
+                ret += handleF();
+                break;
             case OPENING( M_TOKEN( func )):
-                return handleFunc();
+                ret += handleFunc();
+                break;
             case OPENING( M_TOKEN( limLow )):
-                return handleLimLowUpp( LimLow );
+                ret += handleLimLowUpp( LimLow );
+                break;
             case OPENING( M_TOKEN( limUpp )):
-                return handleLimLowUpp( LimUpp );
+                ret += handleLimLowUpp( LimUpp );
+                break;
             case OPENING( M_TOKEN( groupChr )):
-                return handleGroupChr();
+                ret += handleGroupChr();
+                break;
             case OPENING( M_TOKEN( r )):
-                return handleR();
+                ret += handleR();
+                break;
             default:
                 stream.handleUnexpectedTag();
                 break;
         }
     }
-    return OUString();
+    return ret;
 }
 
 OUString SmOoxmlImport::handleAcc()
