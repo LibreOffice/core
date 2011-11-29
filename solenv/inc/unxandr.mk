@@ -34,6 +34,11 @@ CFLAGS+=-fno-omit-frame-pointer
 
 # Override some macros set by unxgcc.mk
 
+# _PTHREADS and _REENTRANT are meaningful in glibc headers only, and
+# in the NDK in stlport, which we don't use.
+CDEFS !:= $(subst,-D_PTHREADS, $(CDEFS))
+CDEFS !:= $(subst,-D_REENTRANT, $(CDEFS))
+
 # We don't build any "tool" style programs for non-desktop OSes like
 # Android. Just unit tests and GUI programs. (Well, that is in
 # theory. In reality any actual "app" with a GUI for Android would be
