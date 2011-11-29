@@ -49,7 +49,6 @@ private:
     Point           aOffset;            // positiv
 
                                         // berechnet:
-    sal_Bool            bValid;             // folgende Werte gueltig
     SCTAB           nTabCount;
     SCTAB           nTabsTested;        // fuer wieviele Tabellen ist nPages gueltig?
     std::vector<long>       nPages;
@@ -62,8 +61,6 @@ private:
     Time            aTime;
     long            nTotalPages;
     Size            aPageSize;          // fuer GetOptimalZoom
-    sal_Bool            bStateValid;
-    sal_Bool            bLocationValid;
     ScPrintState    aState;
     ScPreviewLocationData* pLocationData;   // stores table layout for accessibility API
     FmFormView*     pDrawView;
@@ -71,27 +68,30 @@ private:
     SCTAB           nCurTab;
 
                                         // intern:
-    bool            bInPaint;
-    bool            bInSetZoom;
-    sal_Bool            bInGetState;
     ScDocShell*     pDocShell;
     ScPreviewShell* pViewShell;
 
-    sal_Bool            bLeftRulerMove;
-    sal_Bool            bRightRulerMove;
-    sal_Bool            bTopRulerMove;
-    sal_Bool            bBottomRulerMove;
-    sal_Bool            bHeaderRulerMove;
-    sal_Bool            bFooterRulerMove;
+    bool            bInGetState:1;
+    bool            bValid:1;             // folgende Werte gueltig
+    bool            bStateValid:1;
+    bool            bLocationValid:1;
+    bool            bInPaint:1;
+    bool            bInSetZoom:1;
+    bool            bLeftRulerMove:1;
+    bool            bRightRulerMove:1;
+    bool            bTopRulerMove:1;
+    bool            bBottomRulerMove:1;
+    bool            bHeaderRulerMove:1;
+    bool            bFooterRulerMove:1;
+    bool            bLeftRulerChange:1;
+    bool            bRightRulerChange:1;
+    bool            bTopRulerChange:1;
+    bool            bBottomRulerChange:1;
+    bool            bHeaderRulerChange:1;
+    bool            bFooterRulerChange:1;
+    bool            bPageMargin:1;
+    bool            bColRulerMove:1;
 
-    sal_Bool            bLeftRulerChange;
-    sal_Bool            bRightRulerChange;
-    sal_Bool            bTopRulerChange;
-    sal_Bool            bBottomRulerChange;
-    sal_Bool            bHeaderRulerChange;
-    sal_Bool            bFooterRulerChange;
-    sal_Bool            bPageMargin;
-    sal_Bool            bColRulerMove;
     ScRange         aPageArea;
     long            nRight[ MAXCOL+1 ];
     long            nLeftPosition;
@@ -132,7 +132,7 @@ public:
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
-    void    DataChanged(sal_Bool bNewTime = false);             // statt Invalidate rufen
+    void    DataChanged(bool bNewTime = false);             // statt Invalidate rufen
     void    DoInvalidate();
 
     void    SetXOffset( long nX );
@@ -140,8 +140,8 @@ public:
     void    SetZoom(sal_uInt16 nNewZoom);
     void    SetPageNo( long nPage );
 
-    sal_Bool    GetPageMargins()const { return bPageMargin; }
-    void    SetPageMargins( sal_Bool bVal )  { bPageMargin = bVal; }
+    bool    GetPageMargins() const { return bPageMargin; }
+    void    SetPageMargins( bool bVal )  { bPageMargin = bVal; }
     void    DrawInvert( long nDragPos, sal_uInt16 nFlags );
     void    DragMove( long nDragMovePos, sal_uInt16 nFlags );
 
@@ -157,13 +157,13 @@ public:
     SCTAB   GetTab()            { if (!bValid) { CalcPages(0); RecalcPages(); } return nTab; }
     long    GetTotalPages()     { if (!bValid) { CalcPages(0); RecalcPages(); } return nTotalPages; }
 
-    sal_Bool    AllTested() const   { return bValid && nTabsTested >= nTabCount; }
+    bool    AllTested() const   { return bValid && nTabsTested >= nTabCount; }
 
-    sal_uInt16  GetOptimalZoom(sal_Bool bWidthOnly);
+    sal_uInt16  GetOptimalZoom(bool bWidthOnly);
     long    GetFirstPage(SCTAB nTab);
 
     void    CalcAll()           { CalcPages(MAXTAB); }
-    void    SetInGetState(sal_Bool bSet) { bInGetState = bSet; }
+    void    SetInGetState(bool bSet) { bInGetState = bSet; }
 
     DECL_STATIC_LINK( ScPreview, InvalidateHdl, void* );
     static void StaticInvalidate();
