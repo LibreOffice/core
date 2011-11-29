@@ -152,8 +152,10 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     fwk \
     fwl \
     fwm \
+	guesslang \
     helplinker \
     hwp \
+	hyphen \
     i18npaper \
     i18nregexp \
 	icd \
@@ -169,7 +171,9 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	itg \
 	iti \
     lng \
+	lnth \
     lwpft \
+	MacOSXSpell \
     merged \
     msfilter \
     msword \
@@ -203,6 +207,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	solver \
     sot \
     spa \
+	spell \
     spl \
     sts \
 	svgfilter \
@@ -372,6 +377,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     ooopathutils \
 	sample \
     salcpprt \
+	ulingu \
 	vclmain \
 	writerperfect \
 ))

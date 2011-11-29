@@ -55,6 +55,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     i18npool \
     i18nutil \
     idl \
+    lingucomponent \
     linguistic \
     lotuswordpro \
     MathMLDTD \

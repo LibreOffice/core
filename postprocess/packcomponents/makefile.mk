@@ -76,6 +76,10 @@ my_components = \
     component/hwpfilter/source/hwp \
     component/i18npool/source/search/i18nsearch \
     component/i18npool/util/i18npool \
+    component/lingucomponent/source/hyphenator/altlinuxhyph/hyphen/hyphen \
+    component/lingucomponent/source/languageguessing/guesslang \
+    component/lingucomponent/source/spellcheck/spell/spell \
+    component/lingucomponent/source/thesaurus/libnth/lnth \
     component/linguistic/source/lng \
     component/lotuswordpro/util/lwpfilter \
     component/oox/util/oox \
@@ -144,14 +148,10 @@ my_components = \
     dbtools \
     embobj \
     flat \
-    guesslang \
-    hyphen \
-    lnth \
     localebe1 \
     mysql \
     odbc \
     sdbc2 \
-    spell \
     srtrs1 \
     ucb1 \
     ucpexpand1 \
@@ -285,7 +285,6 @@ my_components += component/xmlsecurity/util/xsec_xmlsec
 
 .IF "$(OS)" == "MACOSX"
 my_components += \
-    MacOSXSpell \
     fps_aqua \
     macab1 \
     macbe1 \
@@ -293,7 +292,9 @@ my_components += \
 .END
 
 .IF "$(GUIBASE)" == "aqua"
-my_components += component/avmedia/source/quicktime/avmediaQuickTime
+my_components += \
+    component/avmedia/source/quicktime/avmediaQuickTime \
+    component/lingucomponent/source/spellcheck/macosxspell/MacOSXSpell
 .END
 
 .IF "$(OS)" == "WNT"
