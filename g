@@ -220,14 +220,19 @@ while shift ; do
                 exit 1
             }
         fi
-
-        # make the paths absolute
-        FILES[$FILESNUM]=$(perl -e 'use Cwd "abs_path"; print abs_path(shift);' "$PARAM")
-        if [ -z "${FILES[$FILESNUM]}" -o ! -e "${FILES[$FILESNUM]}" ] ; then
-            # it is probably not a file, but a tag name, or something
+        if [ "$COMMAND" == "rev-parse" ] ; then
+            # this is not a file
             FILES[$FILESNUM]="$PARAM"
-        fi
-        FILESNUM=$(($FILESNUM+1))
+            FILESNUM=$(($FILESNUM+1))
+        else
+            # make the paths absolute
+            FILES[$FILESNUM]=$(perl -e 'use Cwd "abs_path"; print abs_path(shift);' "$PARAM")
+            if [ -z "${FILES[$FILESNUM]}" -o ! -e "${FILES[$FILESNUM]}" ] ; then
+                # it is probably not a file, but a tag name, or something
+                FILES[$FILESNUM]="$PARAM"
+            fi
+            FILESNUM=$(($FILESNUM+1))
+       fi
     fi
 done
 
