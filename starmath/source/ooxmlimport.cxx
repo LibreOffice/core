@@ -35,6 +35,7 @@
 using namespace oox;
 using namespace oox::formulaimport;
 using rtl::OUString;
+using rtl::OUStringBuffer;
 
 /*
 The primary internal data structure for the formula is the text representation
@@ -84,6 +85,9 @@ OUString SmOoxmlImport::handleStream()
             case OPENING( M_TOKEN( borderBox )):
                 ret += STR( " " ) + handleBorderBox();
                 break;
+            case OPENING( M_TOKEN( d )):
+                ret += STR( " " ) + handleD();
+                break;
             case OPENING( M_TOKEN( f )):
                 ret += STR( " " ) + handleF();
                 break;
@@ -93,6 +97,7 @@ OUString SmOoxmlImport::handleStream()
         }
     }
     stream.ensureClosingTag( M_TOKEN( oMath ));
+    fprintf(stderr, "FORMULA: %s\n", rtl::OUStringToOString( ret, RTL_TEXTENCODING_UTF8 ).getStr());
     return ret;
 }
 
@@ -201,6 +206,48 @@ OUString SmOoxmlImport::handleBorderBox()
         return STR( "overstrike { " ) + e + STR( " }" );
     // LO does not seem to implement anything for handling the other cases
     return e;
+}
+
+OUString SmOoxmlImport::handleD()
+{
+    stream.ensureOpeningTag( M_TOKEN( d ));
+    sal_Unicode opening = '(';
+    sal_Unicode closing = ')';
+    sal_Unicode separator = '|';
+    if( XmlStream::Tag dPr = stream.checkOpeningTag( M_TOKEN( dPr )))
+    {
+        if( XmlStream::Tag begChr = stream.checkOpeningTag( M_TOKEN( begChr )))
+        {
+            opening = begChr.attribute( M_TOKEN( val ), opening );
+            stream.ensureClosingTag( M_TOKEN( begChr ));
+        }
+        if( XmlStream::Tag sepChr = stream.checkOpeningTag( M_TOKEN( sepChr )))
+        {
+            separator = sepChr.attribute( M_TOKEN( val ), separator );
+            stream.ensureClosingTag( M_TOKEN( sepChr ));
+        }
+        if( XmlStream::Tag endChr = stream.checkOpeningTag( M_TOKEN( endChr )))
+        {
+            closing = endChr.attribute( M_TOKEN( val ), closing );
+            stream.ensureClosingTag( M_TOKEN( endChr ));
+        }
+        stream.ensureClosingTag( M_TOKEN( dPr ));
+    }
+    OUStringBuffer ret;
+    ret.append( opening );
+    bool first = true;
+    while( stream.currentToken() == OPENING( M_TOKEN( e )))
+    {
+        if( !first )
+        { // plain "|" would be actually "V" (logical or)
+            ret.append( separator == '|' ? STR( " mline " ) : STR( "|" ));
+        }
+        first = false;
+        ret.append( handleE());
+    }
+    ret.append( closing );
+    stream.ensureClosingTag( M_TOKEN( d ));
+    return ret.makeStringAndClear();
 }
 
 OUString SmOoxmlImport::handleE()

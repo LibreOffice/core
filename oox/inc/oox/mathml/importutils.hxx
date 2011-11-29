@@ -76,6 +76,8 @@ public:
         bool hasAttribute( int token ) const;
         rtl::OUString attribute( int token, const rtl::OUString& def = rtl::OUString()) const;
         bool attribute( int token, bool def ) const;
+        sal_Unicode attribute( int token, sal_Unicode def ) const;
+        // when adding more attribute() overloads, add also to XmlStream itself
     protected:
         std::map< int, rtl::OUString > attrs;
     };
@@ -99,6 +101,11 @@ public:
          @overload
         */
         bool attribute( int token, bool def ) const;
+        /**
+         @overload
+        */
+        sal_Unicode attribute( int token, sal_Unicode def ) const;
+        // when adding more attribute() overloads, add also to XmlStream::AttributeList and inline below
         /**
          Converts to true if the tag has a valid token, false otherwise. Allows simple
          usage in if(), for example 'if( XmlStream::Tag foo = stream.checkOpeningTag( footoken ))'.
@@ -186,6 +193,12 @@ rtl::OUString XmlStream::Tag::attribute( int t, const rtl::OUString& def ) const
 
 inline
 bool XmlStream::Tag::attribute( int t, bool def ) const
+{
+    return attributes.attribute( t, def );
+}
+
+inline
+sal_Unicode XmlStream::Tag::attribute( int t, sal_Unicode def ) const
 {
     return attributes.attribute( t, def );
 }

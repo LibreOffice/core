@@ -99,6 +99,22 @@ bool XmlStream::AttributeList::attribute( int token, bool def ) const
     return def;
 }
 
+sal_Unicode XmlStream::AttributeList::attribute( int token, sal_Unicode def ) const
+{
+    std::map< int, rtl::OUString >::const_iterator find = attrs.find( token );
+    if( find != attrs.end())
+    {
+        if( find->second.getLength() >= 1 )
+        {
+            if( find->second.getLength() != 1 )
+                fprintf( stderr, "Cannot convert \'%s\' to sal_Unicode, stripping.\n",
+                    rtl::OUStringToOString( find->second, RTL_TEXTENCODING_UTF8 ).getStr());
+            return find->second[ 0 ];
+        }
+    }
+    return def;
+}
+
 XmlStream::Tag::Tag( int t, const uno::Reference< xml::sax::XFastAttributeList >& a, const rtl::OUString& txt )
 : token( t )
 , attributes( AttributeListBuilder( a ))
