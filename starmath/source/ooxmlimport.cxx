@@ -74,22 +74,24 @@ OUString SmOoxmlImport::handleStream()
         XmlStream::Tag tag = stream.currentTag();
         if( tag.token == CLOSING( M_TOKEN( oMath )))
             break;
+        if( !ret.isEmpty())
+            ret += STR( " " );
         switch( tag.token )
         {
             case OPENING( M_TOKEN( acc )):
-                ret += STR( " " ) + handleAcc();
+                ret += handleAcc();
                 break;
             case OPENING( M_TOKEN( bar )):
-                ret += STR( " " ) + handleBar();
+                ret += handleBar();
                 break;
             case OPENING( M_TOKEN( borderBox )):
-                ret += STR( " " ) + handleBorderBox();
+                ret += handleBorderBox();
                 break;
             case OPENING( M_TOKEN( d )):
-                ret += STR( " " ) + handleD();
+                ret += handleD();
                 break;
             case OPENING( M_TOKEN( f )):
-                ret += STR( " " ) + handleF();
+                ret += handleF();
                 break;
             default:
                 stream.handleUnexpectedTag();
@@ -266,16 +268,18 @@ OUString SmOoxmlImport::readOMathArg( int endtoken )
         XmlStream::Tag tag = stream.currentTag();
         if( tag.token == CLOSING( endtoken ))
             break;
+        if( !ret.isEmpty())
+            ret += STR( " " );
         switch( tag.token )
         {
             case OPENING( M_TOKEN( acc )):
-                ret += STR( " " ) + handleAcc();
+                ret += handleAcc();
                 break;
             case OPENING( M_TOKEN( f )):
-                ret += STR( " " ) + handleF();
+                ret += handleF();
                 break;
             case OPENING( M_TOKEN( r )):
-                ret += STR( " " ) + handleR();
+                ret += handleR();
                 break;
             default:
                 stream.handleUnexpectedTag();
