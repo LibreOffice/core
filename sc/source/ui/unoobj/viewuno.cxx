@@ -614,6 +614,7 @@ uno::Any SAL_CALL ScTabViewObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( sheet::XRangeSelection )
     SC_QUERYINTERFACE( lang::XUnoTunnel )
     SC_QUERYINTERFACE( datatransfer::XTransferableSupplier )
+    SC_QUERYINTERFACE( sheet::XSelectedSheetsSupplier )
 
     uno::Any aRet(ScViewPaneBase::queryInterface( rType ));
     if (!aRet.hasValue())
@@ -2371,6 +2372,12 @@ void SAL_CALL ScTabViewObj::insertTransferable( const ::com::sun::star::uno::Ref
     }
 }
 
+uno::Sequence<sal_Int32> ScTabViewObj::getSelectedSheets()
+    throw (uno::RuntimeException)
+{
+    return uno::Sequence<sal_Int32>();
+}
+
 ScPreviewObj::ScPreviewObj(ScPreviewShell* pViewSh) :
     SfxBaseController(pViewSh),
     mpViewShell(pViewSh)
@@ -2385,11 +2392,34 @@ ScPreviewObj::~ScPreviewObj()
         EndListening(*mpViewShell);
 }
 
+uno::Any ScPreviewObj::queryInterface(const uno::Type& rType)
+    throw(uno::RuntimeException)
+{
+    SC_QUERYINTERFACE(sheet::XSelectedSheetsSupplier)
+    return SfxBaseController::queryInterface(rType);
+}
+
+void ScPreviewObj::acquire() throw()
+{
+    SfxBaseController::acquire();
+}
+
+void ScPreviewObj::release() throw()
+{
+    SfxBaseController::release();
+}
+
 void ScPreviewObj::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
     const SfxSimpleHint* p = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if (p && p->GetId() == SFX_HINT_DYING)
         mpViewShell = NULL;
+}
+
+uno::Sequence<sal_Int32> ScPreviewObj::getSelectedSheets()
+    throw (uno::RuntimeException)
+{
+    return uno::Sequence<sal_Int32>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

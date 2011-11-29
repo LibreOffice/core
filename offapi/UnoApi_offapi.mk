@@ -3428,6 +3428,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/sheet,\
 	XScenarioEnhanced \
 	XScenarios \
 	XScenariosSupplier \
+	XSelectedSheetsSupplier \
 	XSheetAnnotation \
 	XSheetAnnotationAnchor \
 	XSheetAnnotationShapeSupplier \
