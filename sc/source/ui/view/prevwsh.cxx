@@ -159,8 +159,8 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
         ScTabViewShell* pTabViewShell = ((ScTabViewShell*)pOldSh);
         const ScViewData* pData = pTabViewShell->GetViewData();
         pData->WriteUserDataSequence( aSourceData );
-        InitStartTable( pData->GetTabNo() );
         pPreview->SetSelectedTabs(pData->GetMarkData());
+        InitStartTable( pData->GetTabNo() );
 
         //  also have to store the TabView's DesignMode state
         //  (only if draw view exists)

@@ -65,8 +65,6 @@ private:
     ScPreviewLocationData* pLocationData;   // stores table layout for accessibility API
     FmFormView*     pDrawView;
 
-    SCTAB           nCurTab;
-
                                         // intern:
     ScDocShell*     pDocShell;
     ScPreviewShell* pViewShell;
