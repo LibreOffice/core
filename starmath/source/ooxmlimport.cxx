@@ -69,10 +69,30 @@ OUString SmOoxmlImport::handleStream()
 {
     stream.ensureOpeningTag( M_TOKEN( oMath ));
     OUString ret;
+    while( !stream.atEnd() && stream.currentToken() != CLOSING( M_TOKEN( oMath )))
+    {
+        // strictly speaking, it is not OMathArg here, but currently supported
+        // functionality is the same like OMathArg, in the future this may need improving
+        OUString item = readOMathArg( M_TOKEN( oMath ));
+        if( item.isEmpty())
+            continue;
+        if( !ret.isEmpty())
+            ret += STR( " " );
+        ret += item;
+    }
+    stream.ensureClosingTag( M_TOKEN( oMath ));
+    fprintf(stderr, "FORMULA: %s\n", rtl::OUStringToOString( ret, RTL_TEXTENCODING_UTF8 ).getStr());
+    return ret;
+}
+
+
+OUString SmOoxmlImport::readOMathArg( int endtoken )
+{
+    OUString ret;
     while( !stream.atEnd())
     {
         XmlStream::Tag tag = stream.currentTag();
-        if( tag.token == CLOSING( M_TOKEN( oMath )))
+        if( tag.token == CLOSING( endtoken ))
             break;
         if( !ret.isEmpty())
             ret += STR( " " );
@@ -93,13 +113,14 @@ OUString SmOoxmlImport::handleStream()
             case OPENING( M_TOKEN( f )):
                 ret += handleF();
                 break;
+            case OPENING( M_TOKEN( r )):
+                ret += handleR();
+                break;
             default:
                 stream.handleUnexpectedTag();
                 break;
         }
     }
-    stream.ensureClosingTag( M_TOKEN( oMath ));
-    fprintf(stderr, "FORMULA: %s\n", rtl::OUStringToOString( ret, RTL_TEXTENCODING_UTF8 ).getStr());
     return ret;
 }
 
@@ -257,35 +278,6 @@ OUString SmOoxmlImport::handleE()
     stream.ensureOpeningTag( M_TOKEN( e ));
     OUString ret = readOMathArg( M_TOKEN( e ));
     stream.ensureClosingTag( M_TOKEN( e ));
-    return ret;
-}
-
-OUString SmOoxmlImport::readOMathArg( int endtoken )
-{
-    OUString ret;
-    while( !stream.atEnd())
-    { // TODO can there really be more or just one sub-elements?
-        XmlStream::Tag tag = stream.currentTag();
-        if( tag.token == CLOSING( endtoken ))
-            break;
-        if( !ret.isEmpty())
-            ret += STR( " " );
-        switch( tag.token )
-        {
-            case OPENING( M_TOKEN( acc )):
-                ret += handleAcc();
-                break;
-            case OPENING( M_TOKEN( f )):
-                ret += handleF();
-                break;
-            case OPENING( M_TOKEN( r )):
-                ret += handleR();
-                break;
-            default:
-                stream.handleUnexpectedTag();
-                break;
-        }
-    }
     return ret;
 }
 
