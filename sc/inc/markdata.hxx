@@ -89,7 +89,9 @@ public:
     SCTAB       GetSelectCount() const;
     SCTAB       GetFirstSelected() const;
     SCTAB       GetLastSelected() const;
-    void        GetSelectedTabs(MarkedTabsType& rTabs) const;
+
+    const MarkedTabsType& GetSelectedTabs() const;
+    void SetSelectedTabs(const MarkedTabsType& rTabs);
 
     void        SetMarkNegative( bool bFlag )   { bMarkIsNeg = bFlag; }
     bool        IsMarkNegative() const          { return bMarkIsNeg;  }

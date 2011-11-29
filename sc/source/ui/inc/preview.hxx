@@ -171,6 +171,7 @@ public:
     FmFormView* GetDrawView() { return pDrawView; }
 
     void SetSelectedTabs(const ScMarkData& rMark);
+    const ScMarkData::MarkedTabsType& GetSelectedTabs() const;
 };
 
 

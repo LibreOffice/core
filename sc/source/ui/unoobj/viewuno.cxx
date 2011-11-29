@@ -73,6 +73,8 @@
 #include "sheetevents.hxx"
 #include "markdata.hxx"
 #include "AccessibilityHints.hxx"
+#include "scextopt.hxx"
+#include "preview.hxx"
 #include <svx/sdrhittesthelper.hxx>
 
 using namespace com::sun::star;
@@ -2372,10 +2374,42 @@ void SAL_CALL ScTabViewObj::insertTransferable( const ::com::sun::star::uno::Ref
     }
 }
 
+namespace {
+
+uno::Sequence<sal_Int32> toSequence(const ScMarkData::MarkedTabsType& rSelected)
+{
+    uno::Sequence<sal_Int32> aRet(rSelected.size());
+    ScMarkData::MarkedTabsType::const_iterator itr = rSelected.begin(), itrEnd = rSelected.end();
+    for (size_t i = 0; itr != itrEnd; ++itr, ++i)
+        aRet[i] = static_cast<sal_Int32>(*itr);
+
+    return aRet;
+}
+
+}
+
 uno::Sequence<sal_Int32> ScTabViewObj::getSelectedSheets()
     throw (uno::RuntimeException)
 {
-    return uno::Sequence<sal_Int32>();
+    ScTabViewShell* pViewSh = GetViewShell();
+    if (!pViewSh)
+        return uno::Sequence<sal_Int32>();
+
+    ScViewData* pViewData = pViewSh->GetViewData();
+    if (!pViewData)
+        return uno::Sequence<sal_Int32>();
+
+    // #i95280# when printing from the shell, the view is never activated,
+    // so Excel view settings must also be evaluated here.
+    ScExtDocOptions* pExtOpt = pViewData->GetDocument()->GetExtDocOptions();
+    if (pExtOpt && pExtOpt->IsChanged())
+    {
+        pViewSh->GetViewData()->ReadExtOptions(*pExtOpt);        // Excel view settings
+        pViewSh->SetTabNo(pViewSh->GetViewData()->GetTabNo(), true);
+        pExtOpt->SetChanged(false);
+    }
+
+    return toSequence(pViewData->GetMarkData().GetSelectedTabs());
 }
 
 ScPreviewObj::ScPreviewObj(ScPreviewShell* pViewSh) :
@@ -2419,7 +2453,11 @@ void ScPreviewObj::Notify(SfxBroadcaster&, const SfxHint& rHint)
 uno::Sequence<sal_Int32> ScPreviewObj::getSelectedSheets()
     throw (uno::RuntimeException)
 {
-    return uno::Sequence<sal_Int32>();
+    ScPreview* p = mpViewShell->GetPreview();
+    if (!p)
+        return uno::Sequence<sal_Int32>();
+
+    return toSequence(p->GetSelectedTabs());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

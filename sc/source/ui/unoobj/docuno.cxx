@@ -54,6 +54,7 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
+#include <com/sun/star/sheet/XSelectedSheetsSupplier.hpp>
 #include <com/sun/star/sheet/XUnnamedDatabaseRanges.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
@@ -88,7 +89,6 @@
 #include "rangeutl.hxx"
 #include "markdata.hxx"
 #include "docoptio.hxx"
-#include "scextopt.hxx"
 #include "unonames.hxx"
 #include "shapeuno.hxx"
 #include "viewuno.hxx"
@@ -894,31 +894,14 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
     }
 
     // restrict to selected sheets if a view is available
-    if ( bSelectedSheetsOnly && xView.is() )
+    uno::Reference<sheet::XSelectedSheetsSupplier> xSelectedSheets(xView, uno::UNO_QUERY);
+    if (bSelectedSheetsOnly && xSelectedSheets.is())
     {
-        ScTabViewObj* pViewObj = ScTabViewObj::getImplementation( xView );
-        if (pViewObj)
-        {
-            ScTabViewShell* pViewSh = pViewObj->GetViewShell();
-            if (pViewSh)
-            {
-                // #i95280# when printing from the shell, the view is never activated,
-                // so Excel view settings must also be evaluated here.
-                ScExtDocOptions* pExtOpt = pDocShell->GetDocument()->GetExtDocOptions();
-                if ( pExtOpt && pExtOpt->IsChanged() )
-                {
-                    pViewSh->GetViewData()->ReadExtOptions(*pExtOpt);        // Excel view settings
-                    pViewSh->SetTabNo( pViewSh->GetViewData()->GetTabNo(), true );
-                    pExtOpt->SetChanged( false );
-                }
-
-                const ScMarkData& rViewMark = pViewSh->GetViewData()->GetMarkData();
-                SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
-                for (SCTAB nTab = 0; nTab < nTabCount; nTab++)
-                    if (!rViewMark.GetTableSelect(nTab))
-                        rMark.SelectTable( nTab, false );
-            }
-        }
+        uno::Sequence<sal_Int32> aSelected = xSelectedSheets->getSelectedSheets();
+        ScMarkData::MarkedTabsType aSelectedTabs;
+        for (sal_Int32 i = 0, n = aSelected.getLength(); i < n; ++i)
+            aSelectedTabs.insert(static_cast<SCTAB>(aSelected[i]));
+        rMark.SetSelectedTabs(aSelectedTabs);
     }
 
     ScPrintOptions aNewOptions;

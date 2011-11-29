@@ -1548,7 +1548,12 @@ void ScPreview::DrawInvert( long nDragPos, sal_uInt16 nFlags )
 
 void ScPreview::SetSelectedTabs(const ScMarkData& rMark)
 {
-    rMark.GetSelectedTabs(maSelectedTabs);
+    maSelectedTabs = rMark.GetSelectedTabs();
+}
+
+const ScMarkData::MarkedTabsType& ScPreview::GetSelectedTabs() const
+{
+    return maSelectedTabs;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

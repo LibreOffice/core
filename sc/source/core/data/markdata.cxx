@@ -228,10 +228,15 @@ SCTAB ScMarkData::GetLastSelected() const
     return 0;
 }
 
-void ScMarkData::GetSelectedTabs(MarkedTabsType& rTabs) const
+const ScMarkData::MarkedTabsType& ScMarkData::GetSelectedTabs() const
 {
-    MarkedTabsType aTabs(maTabMarked.begin(), maTabMarked.end());
-    rTabs.swap(aTabs);
+    return maTabMarked;
+}
+
+void ScMarkData::SetSelectedTabs(const MarkedTabsType& rTabs)
+{
+    MarkedTabsType aTabs(rTabs.begin(), rTabs.end());
+    maTabMarked.swap(aTabs);
 }
 
 void ScMarkData::MarkToMulti()
