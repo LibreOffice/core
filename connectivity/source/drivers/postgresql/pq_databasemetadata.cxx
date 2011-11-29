@@ -1872,7 +1872,7 @@ static void columnMetaData2DatabaseTypeDescription(
 
     SequenceAnyVector::iterator ii = vec.begin();
     OUString lastTableOid;
-    sal_Int32 index;
+    sal_Int32 index = 0;
     Sequence< Sequence< Any > > ret( vec.size() );
     int elements = 0;
     for( ; ii != vec.end() ; ++ ii )
