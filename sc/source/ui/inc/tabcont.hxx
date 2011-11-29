@@ -79,7 +79,6 @@ public:
 
     void            UpdateInputContext();
     void            UpdateStatus();
-    void            ActivateView(sal_Bool bActivate);
 
     void            SetSheetLayoutRTL( sal_Bool bSheetRTL );
 };
