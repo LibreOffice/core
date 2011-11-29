@@ -1,5 +1,4 @@
 mkdir: %_DEST%\bin%_EXT%\osl
-mkdir: %_DEST%\bin%_EXT%\broffice
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\bin\*.exe %_DEST%\bin%_EXT%\*.exe
 ..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*.jar
@@ -36,11 +35,7 @@ mkdir: %_DEST%\bin%_EXT%\osolsmf
 ..\source\mac\ooo\osxdndinstall_nologo.png %_DEST%\bin%_EXT%\osl\osxdndinstall_nologo.png
 ..\source\mac\ooo\DS_Store %_DEST%\bin%_EXT%\osl\DS_Store
 ..\source\mac\ooo\DS_Store_Langpack %_DEST%\bin%_EXT%\osl\DS_Store_Langpack
-..\source\mac\broffice\osxdndinstall.png %_DEST%\bin%_EXT%\broffice\osxdndinstall.png
-..\source\mac\broffice\osxdndinstall_nologo.png %_DEST%\bin%_EXT%\broffice\osxdndinstall_nologo.png
-..\source\mac\broffice\DS_Store %_DEST%\bin%_EXT%\broffice\DS_Store
 ..\source\java\openofficeorg_setup.gif %_DEST%\bin%_EXT%\osl\Setup.gif
-..\source\java\brofficeorg_setup.gif %_DEST%\bin%_EXT%\broffice\Setup.gif
 ..\source\java\javaversion.dat %_DEST%\bin%_EXT%\javaversion.dat
 ..\source\java\javaversion2.dat %_DEST%\bin%_EXT%\javaversion2.dat
 ..\source\opensolaris\bundledextensions\installed %_DEST%\bin%_EXT%\osolsmf\installed

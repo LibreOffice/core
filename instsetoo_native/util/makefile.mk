@@ -134,14 +134,6 @@ sdkoodev: $(foreach,i,$(alllangiso) sdkoodev_$i)
 
 ure: $(foreach,i,$(alllangiso) ure_$i)
 
-broffice: $(foreach,i,$(alllangiso) broffice_$i)
-
-brofficedev: $(foreach,i,$(alllangiso) brofficedev_$i)
-
-brofficewithjre: $(foreach,i,$(alllangiso) brofficewithjre_$i)
-
-broolanguagepack : $(foreach,i,$(alllangiso) broolanguagepack_$i)
-
 MSIOFFICETEMPLATESOURCE=$(PRJ)$/inc_openoffice$/windows$/msi_templates
 MSILANGPACKTEMPLATESOURCE=$(PRJ)$/inc_ooolangpack$/windows$/msi_templates
 MSIURETEMPLATESOURCE=$(PRJ)$/inc_ure$/windows$/msi_templates
@@ -155,17 +147,13 @@ MSISDKOOTEMPLATEDIR=$(MSISDKOOTEMPLATESOURCE)
 .ELSE			# "$(BUILD_SPECIAL)"!=""
 NOLOGOSPLASH:=$(BIN)$/intro.zip
 DEVNOLOGOSPLASH:=$(BIN)$/dev$/intro.zip
-BROFFICENOLOGOSPLASH:=$(BIN)$/broffice$/intro.zip
-BROFFICENOLOGOBRAND:=$(BIN)$/broffice$/images_brand.zip
-BROFFICEDEVNOLOGOSPLASH:=$(BIN)$/broffice_dev$/intro.zip
-BROFFICENDEVOLOGOBRAND:=$(BIN)$/broffice_dev$/images_brand.zip
 MSIOFFICETEMPLATEDIR=$(MISC)$/openoffice$/msi_templates
 MSILANGPACKTEMPLATEDIR=$(MISC)$/ooolangpack$/msi_templates
 MSIURETEMPLATEDIR=$(MISC)$/ure$/msi_templates
 MSISDKOOTEMPLATEDIR=$(MISC)$/sdkoo$/msi_templates
 
-ADDDEPS=$(NOLOGOSPLASH) $(DEVNOLOGOSPLASH) $(BROFFICENOLOGOSPLASH) $(BROFFICEDEVNOLOGOSPLASH) \
-    $(BROFFICENOLOGOBRAND) $(BROFFICEDEVNOLOGOBRAND)
+ADDDEPS=$(NOLOGOSPLASH) $(DEVNOLOGOSPLASH)
+
 .IF "$(OS)" == "WNT"
 ADDDEPS+=hack_msitemplates
 .ENDIF
@@ -186,14 +174,6 @@ $(foreach,i,$(alllangiso) sdkoo_$i) : $(ADDDEPS)
 $(foreach,i,$(alllangiso) sdkoodev_$i) : $(ADDDEPS)
              
 $(foreach,i,$(alllangiso) ure_$i) : $(ADDDEPS)
-
-$(foreach,i,$(alllangiso) broffice_$i) : $(ADDDEPS)
-
-$(foreach,i,$(alllangiso) brofficedev_$i) : $(ADDDEPS)
-
-$(foreach,i,$(alllangiso) brofficewithjre_$i) : $(ADDDEPS)
-
-$(foreach,i,$(alllangiso) broolanguagepack_$i) : $(ADDDEPS)
 
 .IF "$(MAKETARGETS)"!=""
 $(MAKETARGETS) : $(ADDDEPS)
@@ -248,29 +228,13 @@ ure_%{$(PKGFORMAT:^".")} :
         -msilanguage $(MISC)$/win_ulffiles
 .ENDIF
 
-$(foreach,i,$(alllangiso) broffice_$i) : $$@{$(PKGFORMAT:^".")}
+$(foreach,i,$(alllangiso)) : $$@{$(PKGFORMAT:^".")}
 .IF "$(MAKETARGETS)"!=""
 .IF "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)"
 $(MAKETARGETS) : $$@{$(PKGFORMAT:^".")}
 $(MAKETARGETS){$(PKGFORMAT:^".")} : $(ADDDEPS)
 .ENDIF			# "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)"
 .ENDIF			# "$(MAKETARGETS)"!=""
-broffice_%{$(PKGFORMAT:^".")} :
-    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(MISC)$/win_ulffiles -format $(@:e:s/.//) $(VERBOSESWITCH)
-    $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product BrOffice --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
-
-$(foreach,i,$(alllangiso) brofficewithjre_$i) : $$@{$(PKGFORMAT:^".")}
-brofficewithjre_%{$(PKGFORMAT:^".")} :
-    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice_wJRE -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(MISC)$/win_ulffiles -format $(@:e:s/.//) $(VERBOSESWITCH)
-
-$(foreach,i,$(alllangiso) brofficedev_$i) : $$@{$(PKGFORMAT:^".")}
-brofficedev_%{$(PKGFORMAT:^".")} :
-    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice_Dev -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(MISC)$/win_ulffiles -format $(@:e:s/.//) $(VERBOSESWITCH)
-    $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product BrOffice_Dev --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
-
-$(foreach,i,$(alllangiso) broolanguagepack_$i) : $$@{$(PKGFORMAT:^".")}
-broolanguagepack_%{$(PKGFORMAT:^".")} :
-    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSILANGPACKTEMPLATEDIR) -msilanguage $(MISC)$/win_ulffiles -languagepack -format $(@:e:s/.//) $(VERBOSESWITCH)
 
 .ELSE			# "$(alllangiso)"!=""
 openoffice:

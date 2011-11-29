@@ -33,7 +33,7 @@ TARGET=zipintro
 
 .INCLUDE :  settings.mk
 
-DEFAULT_FLAVOURS=dev dev_nologo nologo broffice dev_broffice nologo_broffice nologo_dev_broffice intro
+DEFAULT_FLAVOURS=dev dev_nologo nologo intro
 
 ZIP1LIST= \
     $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/dev$/introabout$/intro.png $(INTRO_BITMAPS)) \
@@ -47,18 +47,6 @@ ZIP3LIST= \
 ZIP4LIST= \
     $(null,$(INTRO_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/introabout$/intro.png $(INTRO_BITMAPS)) \
     $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/introabout$/about.png $(ABOUT_BITMAPS))
-ZIP5LIST= \
-    $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/dev_broffice$/introabout$/intro.png $(INTRO_BITMAPS)) \
-    $(null,$(ABOUT_BITMAPS) $(MISC)$/ooo_custom_images$/broffice$/introabout$/about.png $(ABOUT_BITMAPS))
-ZIP6LIST= \
-    $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/broffice$/introabout$/intro.png $(INTRO_BITMAPS)) \
-    $(null,$(ABOUT_BITMAPS) $(MISC)$/ooo_custom_images$/broffice$/introabout$/about.png $(ABOUT_BITMAPS))
-ZIP7LIST= \
-    $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/nologo_broffice$/introabout$/intro.png $(INTRO_BITMAPS)) \
-    $(null,$(ABOUT_BITMAPS) $(MISC)$/ooo_custom_images$/broffice$/introabout$/about.png $(ABOUT_BITMAPS))
-ZIP8LIST= \
-    $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/dev_nologo_broffice$/introabout$/intro.png $(INTRO_BITMAPS)) \
-    $(null,$(ABOUT_BITMAPS) $(MISC)$/ooo_custom_images$/broffice$/introabout$/about.png $(ABOUT_BITMAPS))
 
 ZIP1TARGET=dev_intro
 ZIP1DEPS=$(ZIP1LIST)
@@ -71,18 +59,6 @@ ZIP3DEPS=$(ZIP3LIST)
 
 ZIP4TARGET=intro_intro
 ZIP4DEPS=$(ZIP4LIST)
-
-ZIP5TARGET=dev_broffice_intro
-ZIP5DEPS=$(ZIP5LIST)
-
-ZIP6TARGET=broffice_intro
-ZIP6DEPS=$(ZIP6LIST)
-
-ZIP7TARGET=nologo_broffice_intro
-ZIP7DEPS=$(ZIP7LIST)
-
-ZIP8TARGET=nologo_dev_broffice_intro
-ZIP8DEPS=$(ZIP8LIST)
 
 .INCLUDE :  target.mk
 
@@ -104,22 +80,6 @@ $(COMMONBIN)$/dev_nologo$/intro.zip : $(COMMONBIN)$/dev_nologo_intro.zip
 $(COMMONBIN)$/nologo$/intro.zip : $(COMMONBIN)$/nologo_intro.zip
     @@-$(MKDIR) $(@:d)
     @$(COPY) $< $@
-
-$(COMMONBIN)$/broffice$/intro.zip : $(COMMONBIN)$/broffice_intro.zip
-    @@-$(MKDIR) $(@:d)
-    @$(COPY) $< $@
-
-$(COMMONBIN)$/dev_broffice$/intro.zip : $(COMMONBIN)$/dev_broffice_intro.zip
-        @@-$(MKDIR) $(@:d)
-        @$(COPY) $< $@
-
-$(COMMONBIN)$/nologo_broffice$/intro.zip : $(COMMONBIN)$/nologo_broffice_intro.zip
-        @@-$(MKDIR) $(@:d)
-        @$(COPY) $< $@
-
-$(COMMONBIN)$/nologo_dev_broffice$/intro.zip : $(COMMONBIN)$/nologo_dev_broffice_intro.zip
-        @@-$(MKDIR) $(@:d)
-        @$(COPY) $< $@
 
 $(COMMONBIN)$/intro$/intro.zip : $(COMMONBIN)$/intro_intro.zip
     @@-$(MKDIR) $(@:d)

@@ -43,7 +43,7 @@ RPMMACROS= \
 PKGDIR=$(BIN)
 .ENDIF
 
-PRODUCTLIST = openoffice.org broffice.org
+PRODUCTLIST = openoffice.org
 
 # default values to minimize maintainance effort 
 PRODUCTVERSION = 3.4
@@ -67,12 +67,4 @@ PRODUCTVERSIONSHORT.openoffice.org = $(PRODUCTVERSIONSHORT)
 PKGVERSION.openoffice.org = $(PKGVERSION)
 UNIXFILENAME.openoffice.org = $(PRODUCTNAME.openoffice.org:l)$(PRODUCTVERSIONSHORT.openoffice.org)
 ICONPREFIX.openoffice.org = $(UNIXFILENAME.openoffice.org:s/.//g)
-
-PRODUCTNAME.broffice.org = BrOffice.org
-PRODUCTVERSION.broffice.org = $(PRODUCTVERSION)
-PRODUCTVERSIONSHORT.broffice.org = $(PRODUCTVERSIONSHORT)
-PKGVERSION.broffice.org = $(PKGVERSION)
-UNIXFILENAME.broffice.org = $(PRODUCTNAME.broffice.org:l)$(PRODUCTVERSIONSHORT.broffice.org)
-ICONPREFIX.broffice.org = $(UNIXFILENAME.broffice.org:s/.//g)
-
 

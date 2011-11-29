@@ -479,14 +479,6 @@ sub get_downloadname_productname
 
     if ( $allvariables->{'PRODUCTNAME'} eq "URE" ) { $start = "OOo-URE"; }
 
-    if ( $allvariables->{'PRODUCTNAME'} eq "BrOffice.org" ) { $start = "BrOo"; }
-
-    if ( $allvariables->{'PRODUCTNAME'} eq "BrOo-dev" ) { $start = "BrOo-Dev"; }
-
-    if (( $allvariables->{'PRODUCTNAME'} eq "BrOffice.org" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )) { $start = "BrOo-SDK"; }
-
-    if (( $allvariables->{'PRODUCTNAME'} eq "BrOo-dev" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )) { $start = "BrOo-Dev-SDK"; }
-
     return $start;
 }
 
