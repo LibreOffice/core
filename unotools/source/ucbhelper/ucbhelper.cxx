@@ -483,9 +483,6 @@ bool utl::UCBContentHelper::IsSubPath(
 bool utl::UCBContentHelper::EqualURLs(
     rtl::OUString const & url1, rtl::OUString const & url2)
 {
-    if (url1.isEmpty() || url2.isEmpty()) {
-        return false;
-    }
     ucbhelper::ContentBroker * broker = ucbhelper::ContentBroker::get();
     if (broker == 0) {
         throw css::uno::RuntimeException(
@@ -493,11 +490,13 @@ bool utl::UCBContentHelper::EqualURLs(
                 RTL_CONSTASCII_USTRINGPARAM("no ucbhelper::ContentBroker")),
             css::uno::Reference<css::uno::XInterface>());
     }
-    return 0 == broker->getContentProviderInterface()->compareContentIds(
-        (broker->getContentIdentifierFactoryInterface()->
-         createContentIdentifier(canonic(url1))),
-        (broker->getContentIdentifierFactoryInterface()->
-         createContentIdentifier(canonic(url2))));
+    return
+        broker->getContentProviderInterface()->compareContentIds(
+            (broker->getContentIdentifierFactoryInterface()->
+             createContentIdentifier(canonic(url1))),
+            (broker->getContentIdentifierFactoryInterface()->
+             createContentIdentifier(canonic(url2))))
+        == 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
