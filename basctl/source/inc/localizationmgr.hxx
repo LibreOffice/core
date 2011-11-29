@@ -75,7 +75,7 @@ class LocalizationMgr
     void implEnableDisableResourceForAllLibraryDialogs( HandleResourceMode eMode );
 
 public:
-    LocalizationMgr( BasicIDEShell* pIDEShell, const ScriptDocument& rDocument, String aLibName,
+    LocalizationMgr( BasicIDEShell* pIDEShell, const ScriptDocument& rDocument, ::rtl::OUString aLibName,
         const ::com::sun::star::uno::Reference
             < ::com::sun::star::resource::XStringResourceManager >& xStringResourceManager );
     ::com::sun::star::uno::Reference
@@ -111,13 +111,13 @@ public:
     static void deleteControlResourceIDsForDeletedEditorObject( DlgEditor* pEditor,
         ::com::sun::star::uno::Any aControlAny, const ::rtl::OUString& aCtrlName );
 
-    static void setStringResourceAtDialog( const ScriptDocument& rDocument, const String& aLibName, const String& aDlgName,
+    static void setStringResourceAtDialog( const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aDlgName,
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel );
 
-    static void renameStringResourceIDs( const ScriptDocument& rDocument, const String& aLibName, const String& aDlgName,
+    static void renameStringResourceIDs( const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aDlgName,
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel );
 
-    static void removeResourceForDialog( const ScriptDocument& rDocument, const String& aLibName, const String& aDlgName,
+    static void removeResourceForDialog( const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aDlgName,
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel );
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager >
