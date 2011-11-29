@@ -211,6 +211,7 @@ void IndexColumns::dropByName( const ::rtl::OUString& elementName )
            ::com::sun::star::container::NoSuchElementException,
            ::com::sun::star::uno::RuntimeException)
 {
+    (void) elementName;
     throw com::sun::star::sdbc::SQLException(
         ASCII_STR( "SDBC-POSTGRESQL: IndexesColumns.dropByName not yet implemented" ),
         *this, OUString(), 1, Any() );
@@ -236,6 +237,7 @@ void IndexColumns::dropByIndex( sal_Int32 index )
            ::com::sun::star::lang::IndexOutOfBoundsException,
            ::com::sun::star::uno::RuntimeException)
 {
+    (void) index;
     throw com::sun::star::sdbc::SQLException(
         ASCII_STR( "SDBC-POSTGRESQL: IndexesColumns.dropByIndex not yet implemented" ),
         *this, OUString(), 1, Any() );

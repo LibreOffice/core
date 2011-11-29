@@ -261,7 +261,7 @@ void ReflectionBase::copyValuesFrom( const Reference< XPropertySet > & set )
 }
 
 
-void ReflectionBase::setName( const ::rtl::OUString& aName )
+void ReflectionBase::setName( const ::rtl::OUString& /* aName */ )
     throw (::com::sun::star::uno::RuntimeException)
 {
     throw RuntimeException(

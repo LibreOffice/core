@@ -476,6 +476,7 @@ Reference< XConnection > PreparedStatement::getConnection(  )
 void PreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 sqlType )
     throw (SQLException, RuntimeException)
 {
+    (void)sqlType;
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     checkColumnIndex( parameterIndex );
@@ -486,6 +487,7 @@ void PreparedStatement::setObjectNull(
     sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName )
     throw (SQLException, RuntimeException)
 {
+    (void) sqlType; (void) typeName;
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     checkColumnIndex( parameterIndex );
@@ -638,6 +640,7 @@ void PreparedStatement::setBinaryStream(
     sal_Int32 length )
     throw (SQLException, RuntimeException)
 {
+    (void) parameterIndex; (void)x; (void) length;
     throw SQLException(
         ASCII_STR( "pq_preparedstatement: setBinaryStream not implemented" ),
         *this, OUString(), 1, Any () );
@@ -649,6 +652,7 @@ void PreparedStatement::setCharacterStream(
     sal_Int32 length )
     throw (SQLException, RuntimeException)
 {
+    (void) parameterIndex; (void)x; (void) length;
     throw SQLException(
         ASCII_STR( "pq_preparedstatement: setCharacterStream not implemented" ),
         *this, OUString(), 1, Any () );
@@ -673,6 +677,7 @@ void PreparedStatement::setObjectWithInfo(
     sal_Int32 scale )
     throw (SQLException, RuntimeException)
 {
+    (void) scale;
     if( com::sun::star::sdbc::DataType::DECIMAL == targetSqlType ||
         com::sun::star::sdbc::DataType::NUMERIC == targetSqlType )
     {
@@ -712,10 +717,10 @@ void PreparedStatement::setRef(
     const Reference< XRef >& x )
     throw (SQLException, RuntimeException)
 {
+    (void) parameterIndex; (void)x;
     throw SQLException(
         ASCII_STR( "pq_preparedstatement: setRef not implemented" ),
         *this, OUString(), 1, Any () );
-
 }
 
 void PreparedStatement::setBlob(
@@ -723,6 +728,7 @@ void PreparedStatement::setBlob(
     const Reference< XBlob >& x )
     throw (SQLException, RuntimeException)
 {
+    (void) parameterIndex; (void)x;
     throw SQLException(
         ASCII_STR( "pq_preparedstatement: setBlob not implemented" ),
         *this, OUString(), 1, Any () );
@@ -733,6 +739,7 @@ void PreparedStatement::setClob(
     const Reference< XClob >& x )
     throw (SQLException, RuntimeException)
 {
+    (void) parameterIndex; (void)x;
     throw SQLException(
         ASCII_STR( "pq_preparedstatement: setClob not implemented" ),
         *this, OUString(), 1, Any () );
@@ -744,10 +751,6 @@ void PreparedStatement::setArray(
     throw (SQLException, RuntimeException)
 {
     setString( parameterIndex, array2String( x->getArray( 0 ) ) );
-
-//     throw SQLException(
-//         ASCII_STR( "pq_preparedstatement: setArray not implemented" ),
-//         *this, OUString(), 1, Any () );
 }
 
 void PreparedStatement::clearParameters(  )

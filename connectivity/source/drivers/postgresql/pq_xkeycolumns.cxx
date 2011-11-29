@@ -315,6 +315,7 @@ void KeyColumns::appendByDescriptor(
            ::com::sun::star::container::ElementExistException,
            ::com::sun::star::uno::RuntimeException)
 {
+    (void) future;
     throw com::sun::star::sdbc::SQLException(
         ASCII_STR( "KeyColumns::appendByDescriptor not implemented yet" ),
         *this, OUString(), 1, Any() );
@@ -334,6 +335,7 @@ void KeyColumns::dropByIndex( sal_Int32 index )
            ::com::sun::star::lang::IndexOutOfBoundsException,
            ::com::sun::star::uno::RuntimeException)
 {
+    (void) index;
     throw com::sun::star::sdbc::SQLException(
         ASCII_STR( "KeyColumns::dropByIndex not implemented yet" ),
         *this, OUString(), 1, Any() );

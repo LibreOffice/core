@@ -171,6 +171,7 @@ void User::changePassword(
     const ::rtl::OUString& oldPassword, const ::rtl::OUString& newPassword )
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    (void) oldPassword;
     rtl::OUStringBuffer buf(128);
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER USER " ) );
     bufferQuoteIdentifier( buf, extractStringProperty( this, getStatics().NAME ), m_pSettings );
@@ -207,6 +208,7 @@ sal_Int32 User::getPrivileges( const ::rtl::OUString& objName, sal_Int32 objType
 sal_Int32 User::getGrantablePrivileges( const ::rtl::OUString& objName, sal_Int32 objType )
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    (void) objName; (void) objType;
     // all privileges
     return 0xffffffff;
 }
@@ -214,6 +216,7 @@ sal_Int32 User::getGrantablePrivileges( const ::rtl::OUString& objName, sal_Int3
 void User::grantPrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges )
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    (void) objName; (void) objType; (void) objPrivileges;
     throw com::sun::star::sdbc::SQLException(
         ASCII_STR( "pq_driver: privilege change not implemented yet" ),
         *this, OUString(), 1, Any() );
@@ -222,6 +225,7 @@ void User::grantPrivileges( const ::rtl::OUString& objName, sal_Int32 objType, s
 void User::revokePrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges )
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    (void) objName; (void) objType; (void) objPrivileges;
     throw com::sun::star::sdbc::SQLException(
         ASCII_STR( "pq_driver: privilege change not implemented yet" ),
         *this, OUString(), 1, Any() );

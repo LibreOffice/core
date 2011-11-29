@@ -583,39 +583,39 @@ Sequence< sal_Int8 > BaseResultSet::getBytes( sal_Int32 columnIndex )
 }
 
   // LEM TODO: these look like they are missing an actual implementation
-Reference< ::com::sun::star::io::XInputStream > BaseResultSet::getBinaryStream( sal_Int32 columnIndex )
+Reference< ::com::sun::star::io::XInputStream > BaseResultSet::getBinaryStream( sal_Int32 /* columnIndex */ )
         throw (SQLException, RuntimeException)
 {
     return 0;
 }
 
-Reference< ::com::sun::star::io::XInputStream > BaseResultSet::getCharacterStream( sal_Int32 columnIndex )
+Reference< ::com::sun::star::io::XInputStream > BaseResultSet::getCharacterStream( sal_Int32 /* columnIndex */ )
         throw (SQLException, RuntimeException)
 {
     return 0;
 }
 
 Any BaseResultSet::getObject(
-        sal_Int32 columnIndex,
-        const Reference< ::com::sun::star::container::XNameAccess >& typeMap )
+        sal_Int32 /* columnIndex */,
+        const Reference< ::com::sun::star::container::XNameAccess >& /* typeMap */ )
         throw (SQLException, RuntimeException)
 {
     return Any();
 }
 
-Reference< ::com::sun::star::sdbc::XRef > BaseResultSet::getRef( sal_Int32 columnIndex )
+Reference< ::com::sun::star::sdbc::XRef > BaseResultSet::getRef( sal_Int32 /* columnIndex */ )
         throw (SQLException, RuntimeException)
 {
     return Reference< com::sun::star::sdbc::XRef > ();
 }
 
-Reference< ::com::sun::star::sdbc::XBlob > BaseResultSet::getBlob( sal_Int32 columnIndex )
+Reference< ::com::sun::star::sdbc::XBlob > BaseResultSet::getBlob( sal_Int32 /* columnIndex */ )
         throw (SQLException, RuntimeException)
 {
     return Reference< com::sun::star::sdbc::XBlob > ();
 }
 
-Reference< ::com::sun::star::sdbc::XClob > BaseResultSet::getClob( sal_Int32 columnIndex )
+Reference< ::com::sun::star::sdbc::XClob > BaseResultSet::getClob( sal_Int32 /* columnIndex */ )
         throw (SQLException, RuntimeException)
 {
     return Reference< com::sun::star::sdbc::XClob > ();
@@ -627,15 +627,13 @@ Reference< ::com::sun::star::sdbc::XArray > BaseResultSet::getArray( sal_Int32 c
     return new Array( m_refMutex, parseArray( getString( columnIndex ) ), *this, m_tc );
 }
 
-
 ::cppu::IPropertyArrayHelper & BaseResultSet::getInfoHelper()
 {
     return getResultSetPropertyArrayHelper();
 }
 
-
 sal_Bool BaseResultSet::convertFastPropertyValue(
-        Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue )
+        Any & /* rConvertedValue */, Any & /* rOldValue */, sal_Int32 nHandle, const Any& rValue )
         throw (IllegalArgumentException)
 {
     sal_Bool bRet;

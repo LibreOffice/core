@@ -335,12 +335,13 @@ sal_Bool ResultSetMetaData::isAutoIncrement( sal_Int32 column )
 sal_Bool ResultSetMetaData::isCaseSensitive( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
-
+    (void) column;
     return sal_True; // ??? hmm, numeric types or
 }
 
 sal_Bool ResultSetMetaData::isSearchable( sal_Int32 column ) throw (SQLException, RuntimeException)
 {
+    (void) column;
     return sal_True; // mmm, what types are not searchable ?
 }
 
@@ -359,7 +360,8 @@ sal_Int32 ResultSetMetaData::isNullable( sal_Int32 column )
 sal_Bool ResultSetMetaData::isSigned( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
-    return sal_True; //
+    (void) column;
+    return sal_True;
 }
 
 sal_Int32 ResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
@@ -388,10 +390,9 @@ sal_Int32 ResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
 
 ::rtl::OUString ResultSetMetaData::getSchemaName( sal_Int32 column ) throw (SQLException, RuntimeException)
 {
+    (void) column;
     return m_schemaName;
 }
-
-
 
 sal_Int32 ResultSetMetaData::getPrecision( sal_Int32 column )
     throw (SQLException, RuntimeException)
@@ -414,6 +415,7 @@ sal_Int32 ResultSetMetaData::getScale( sal_Int32 column )
 ::rtl::OUString ResultSetMetaData::getTableName( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
+    (void) column;
 // LEM TODO This is very fishy.. Should probably return the table to which that column belongs!
     rtl::OUString ret;
     if( m_tableName.getLength() )
@@ -430,6 +432,7 @@ sal_Int32 ResultSetMetaData::getScale( sal_Int32 column )
 ::rtl::OUString ResultSetMetaData::getCatalogName( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
+    (void) column;
     // can do this through XConnection.getCatalog() !
     return OUString();
 }
@@ -477,6 +480,7 @@ sal_Int32 ResultSetMetaData::getColumnType( sal_Int32 column )
 sal_Bool ResultSetMetaData::isReadOnly( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
+    (void) column;
     return sal_False;
 }
 
@@ -494,6 +498,7 @@ sal_Bool ResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
 ::rtl::OUString ResultSetMetaData::getColumnServiceName( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
+    (void) column;
     return OUString();
 }
 

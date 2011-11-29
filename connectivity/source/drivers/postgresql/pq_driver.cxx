@@ -152,6 +152,7 @@ Sequence< DriverPropertyInfo > Driver::getPropertyInfo(
     const OUString& url,const Sequence< PropertyValue >& info )
     throw (SQLException, RuntimeException)
 {
+    (void)url; (void)info;
     return Sequence< DriverPropertyInfo > ();
 }
 
@@ -282,6 +283,7 @@ Reference< XInterface > OOneInstanceComponentFactory::createInstanceWithArgument
     Sequence< Any > const &rArguments, const Reference< XComponentContext > & ctx )
     throw( RuntimeException, Exception )
 {
+    (void)rArguments;
     return createInstanceWithContext( ctx );
 }
 
@@ -344,7 +346,7 @@ extern "C"
 
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -356,7 +358,7 @@ sal_Bool SAL_CALL component_writeInfo(
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * )
 {
     // need to extract the defaultcontext, because the way, sdbc
     // bypasses the servicemanager, does not allow to use the
