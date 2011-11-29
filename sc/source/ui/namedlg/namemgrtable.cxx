@@ -60,7 +60,8 @@ String createEntryString(const ScRangeNameLine& rLine)
 ScRangeManagerTable::ScRangeManagerTable( Window* pWindow, boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap ):
     SvTabListBox( pWindow, WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP ),
     maHeaderBar( pWindow, WB_BUTTONSTYLE | WB_BOTTOMBORDER ),
-    maGlobalString( ScGlobal::GetRscString(STR_GLOBAL_SCOPE))
+    maGlobalString( ScGlobal::GetRscString(STR_GLOBAL_SCOPE)),
+    mrRangeMap( rRangeMap )
 {
     Size aBoxSize( pWindow->GetOutputSizePixel() );
 
@@ -84,12 +85,16 @@ ScRangeManagerTable::ScRangeManagerTable( Window* pWindow, boost::ptr_map<rtl::O
 
     maHeaderBar.SetEndDragHdl( LINK( this, ScRangeManagerTable, HeaderEndDragHdl ) );
 
+    Init();
     Show();
     maHeaderBar.Show();
     SetSelectionMode(MULTIPLE_SELECTION);
-    Init(rRangeMap);
     if (GetEntryCount())
+    {
         SetCurEntry(GetEntryOnPos(0));
+        CheckForFormulaString();
+    }
+    SetScrolledHdl( LINK( this, ScRangeManagerTable, ScrollHdl ) );
 }
 
 ScRangeManagerTable::~ScRangeManagerTable()
@@ -116,11 +121,11 @@ void ScRangeManagerTable::GetLine(ScRangeNameLine& rLine, SvLBoxEntry* pEntry)
     rLine.aScope = GetEntryText(pEntry, 2);
 }
 
-void ScRangeManagerTable::Init(const boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap)
+void ScRangeManagerTable::Init()
 {
     Clear();
-    for (boost::ptr_map<rtl::OUString, ScRangeName>::const_iterator itr = rRangeMap.begin();
-            itr != rRangeMap.end(); ++itr)
+    for (boost::ptr_map<rtl::OUString, ScRangeName>::const_iterator itr = mrRangeMap.begin();
+            itr != mrRangeMap.end(); ++itr)
     {
         const ScRangeName* pLocalRangeName = itr->second;
         ScRangeNameLine aLine;
@@ -134,10 +139,41 @@ void ScRangeManagerTable::Init(const boost::ptr_map<rtl::OUString, ScRangeName>&
             if (!it->second->HasType(RT_DATABASE) && !it->second->HasType(RT_SHARED))
             {
                 aLine.aName = it->second->GetName();
-                it->second->GetSymbol(aLine.aExpression);
                 addEntry(aLine);
             }
         }
+    }
+}
+
+const ScRangeData* ScRangeManagerTable::findRangeData(const ScRangeNameLine& rLine)
+{
+    const ScRangeName* pRangeName;
+    if (rLine.aScope == maGlobalString)
+        pRangeName = mrRangeMap.find(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME)))->second;
+    else
+        pRangeName = mrRangeMap.find(rLine.aScope)->second;
+
+    return pRangeName->findByUpperName(ScGlobal::pCharClass->upper(rLine.aName));
+}
+
+
+
+void ScRangeManagerTable::CheckForFormulaString()
+{
+    for (SvLBoxEntry* pEntry = GetFirstEntryInView(); pEntry ; pEntry = GetNextEntryInView(pEntry))
+    {
+        std::map<SvLBoxEntry*, bool>::const_iterator itr = maCalculatedFormulaEntries.find(pEntry);
+        if (itr == maCalculatedFormulaEntries.end() || itr->second == false)
+        {
+            ScRangeNameLine aLine;
+            GetLine( aLine, pEntry);
+            const ScRangeData* pData = findRangeData( aLine );
+            rtl::OUString aFormulaString;
+            pData->GetSymbol(aFormulaString);
+            SetEntryText(aFormulaString, pEntry, 1);
+            maCalculatedFormulaEntries.insert( std::pair<SvLBoxEntry*, bool>(pEntry, true) );
+        }
+
     }
 }
 
@@ -234,6 +270,12 @@ IMPL_LINK( ScRangeManagerTable, HeaderEndDragHdl, void*, EMPTYARG)
     SetTab( ITEMID_SCOPE, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
     maHeaderBar.SetItemSize(ITEMID_SCOPE, aItemScopeSize);
 
+    return 0;
+}
+
+IMPL_LINK( ScRangeManagerTable, ScrollHdl, void*, EMPTYARG)
+{
+    CheckForFormulaString();
     return 0;
 }
 

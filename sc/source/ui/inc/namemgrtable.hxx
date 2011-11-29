@@ -36,6 +36,7 @@
 #include <boost/ptr_container/ptr_map.hpp>
 
 class ScRangeName;
+class ScRangeData;
 
 struct ScRangeNameLine
 {
@@ -64,8 +65,17 @@ private:
     HeaderBar maHeaderBar;
     rtl::OUString maGlobalString;
 
+    // should be const because we should not modify it here
+    const boost::ptr_map<rtl::OUString, ScRangeName>& mrRangeMap;
+    // for performance, save which entries already have the formula entry
+    // otherwise opening the dialog with a lot of range names is extremelly slow because
+    // we would calculate all formula strings during opening
+    std::map<SvLBoxEntry*, bool> maCalculatedFormulaEntries;
+
     void GetLine(ScRangeNameLine& aLine, SvLBoxEntry* pEntry);
-    void Init( const boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap );
+    void Init();
+    void CheckForFormulaString();
+    const ScRangeData* findRangeData(const ScRangeNameLine& rLine);
 
 public:
     ScRangeManagerTable( Window* pParent, boost::ptr_map<rtl::OUString, ScRangeName>& aTabRangeNames );
@@ -78,6 +88,7 @@ public:
     bool IsMultiSelection();
     std::vector<ScRangeNameLine> GetSelectedEntries();
 
+    DECL_LINK( ScrollHdl, void*);
     DECL_LINK( HeaderEndDragHdl, void*);
 };
 
