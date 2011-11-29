@@ -506,7 +506,7 @@ void Bridge::freeProxy(Proxy & proxy) {
     try {
         makeReleaseCall(proxy.getOid(), proxy.getType());
     } catch (css::uno::RuntimeException & e) {
-        SAL_WARN(
+        SAL_INFO(
             "binaryurp", "caught runtime exception '" << e.Message << '\'');
     } catch (std::exception & e) {
         SAL_WARN("binaryurp", "caught C++ exception '" << e.what() << '\'');
