@@ -168,7 +168,7 @@ Reference< beans::XPropertySet > GridWrapper::getInnerPropertySet()
         sal_Int32 nSubGridIndex = bSubGrid ? 0 : -1;
         xRet.set( AxisHelper::getGridProperties( xCooSys , nDimensionIndex, MAIN_AXIS_INDEX, nSubGridIndex ) );
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }

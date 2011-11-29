@@ -232,7 +232,7 @@ void ChartController::TheModel::tryTermination()
                 m_bOwnership                = false;
                 m_bOwnershipIsWellKnown = sal_True;
             }
-            catch( util::CloseVetoException& )
+            catch( const util::CloseVetoException& )
             {
                 //since we have indicated to give up the ownership with paramter true in close call
                 //the one who has thrown the CloseVetoException is the new owner
@@ -255,7 +255,7 @@ void ChartController::TheModel::tryTermination()
             return;
         }
     }
-    catch( uno::Exception& ex)
+    catch(const uno::Exception& ex)
     {
         (void)(ex); // no warning in non-debug builds
         OSL_FAIL( ( rtl::OString("Termination of model failed: ")
@@ -453,7 +453,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartController,CHART_CONTROLLER_SERVICE_IMPLEMENTAT
                         m_xLayoutManagerEventBroadcaster->addLayoutManagerEventListener( this );
                 }
             }
-            catch( uno::Exception & ex )
+            catch( const uno::Exception & ex )
             {
                 ASSERT_EXCEPTION( ex );
             }
@@ -917,7 +917,7 @@ void ChartController::impl_deleteDrawViewController()
                 xFrameCloseable->close( sal_False /* DeliverOwnership */ );
                 m_xFrame.clear();
             }
-            catch( util::CloseVetoException & )
+            catch( const util::CloseVetoException & )
             {
                 // closing was vetoed
             }

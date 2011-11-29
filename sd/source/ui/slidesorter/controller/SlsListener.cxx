@@ -363,6 +363,7 @@ void Listener::Notify (
         {
             case SFX_HINT_DOCCHANGED:
                 mrController.CheckForMasterPageAssignment();
+                mrController.CheckForSlideTransitionAssignment();
                 break;
         }
     }
@@ -421,6 +422,14 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
         case tools::EventMultiplexerEvent::EID_SHAPE_INSERTED:
         case tools::EventMultiplexerEvent::EID_SHAPE_REMOVED:
             HandleShapeModification(static_cast<const SdrPage*>(pEvent->mpUserData));
+            break;
+
+        case tools::EventMultiplexerEvent::EID_END_TEXT_EDIT:
+            if (pEvent->mpUserData != NULL)
+            {
+                const SdrObject* pObject = static_cast<const SdrObject*>(pEvent->mpUserData);
+                HandleShapeModification(pObject->GetPage());
+            }
             break;
 
         default:
@@ -496,7 +505,6 @@ void SAL_CALL Listener::propertyChange (
                     String(RTL_CONSTASCII_USTRINGPARAM("Number")));
                 sal_Int32 nCurrentPage = 0;
                 aPageNumber >>= nCurrentPage;
-                mrController.GetPageSelector().GetCoreSelection();
                 // The selection is already set but we call SelectPage()
                 // nevertheless in order to make the new current page the
                 // last recently selected page of the PageSelector.  This is

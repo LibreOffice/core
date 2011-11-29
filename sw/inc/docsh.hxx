@@ -143,8 +143,6 @@ protected:
 public:
     using SotObject::GetInterface;
 
-    void addFormula( com::sun::star::uno::Reference< com::sun::star::embed::XEmbeddedObject > p);
-
     // but we implement this ourselves.
     SFX_DECL_INTERFACE(SW_DOCSHELL)
     SFX_DECL_OBJECTFACTORY()

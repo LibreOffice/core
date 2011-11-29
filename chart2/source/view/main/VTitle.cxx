@@ -112,7 +112,7 @@ void VTitle::changePosition( const awt::Point& rPos )
         aM.translate( m_nXPos, m_nYPos);
         xShapeProp->setPropertyValue( C2U( "Transformation" ), uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM) ) );
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         ASSERT_EXCEPTION( e );
     }
@@ -184,7 +184,7 @@ void VTitle::createShapes(
         {
             xTitleProperties->getPropertyValue( C2U( "StackCharacters" ) ) >>= bStackCharacters;
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -265,7 +265,7 @@ void VTitle::createShapes(
             xTitleProperties->getPropertyValue( C2U( "TextRotation" ) ) >>= fAngleDegree;
             m_fRotationAngleDegree += fAngleDegree;
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -279,7 +279,7 @@ void VTitle::createShapes(
         aM.translate( m_nXPos, m_nYPos );
         xShapeProp->setPropertyValue( C2U( "Transformation" ), uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM) ) );
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         ASSERT_EXCEPTION( e );
     }

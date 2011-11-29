@@ -189,7 +189,7 @@ ScDPItemData::ScDPItemData(const String& rS, double fV, bool bHV, const sal_uLon
 {
 }
 
-ScDPItemData::ScDPItemData(ScDocument* pDoc, SCROW nRow, sal_uInt16 nCol, sal_uInt16 nDocTab) :
+ScDPItemData::ScDPItemData(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nDocTab, bool bLabel) :
     nNumFormat( 0 ), fValue(0.0), mbFlag( 0 )
 {
     String aDocStr;
@@ -217,8 +217,24 @@ ScDPItemData::ScDPItemData(ScDocument* pDoc, SCROW nRow, sal_uInt16 nCol, sal_uI
         nNumFormat = pDoc->GetNumberFormat( ScAddress( nCol, nRow, nDocTab ) );
         isDate( nFormat ) ? ( mbFlag |= MK_DATE ) : (mbFlag &= ~MK_DATE);
     }
-    else if ( pDoc->HasData( nCol,nRow, nDocTab ) )
-        SetString ( aDocStr );
+    else if (bLabel || pDoc->HasData(nCol, nRow, nDocTab))
+    {
+        if (bLabel && !aDocStr.Len())
+        {
+            // Replace an empty label string with column name.
+            rtl::OUStringBuffer aBuf;
+            aBuf.append(ScGlobal::GetRscString(STR_COLUMN));
+            aBuf.append(sal_Unicode(' '));
+
+            ScAddress aColAddr(nCol, 0, 0);
+            rtl::OUString aColStr;
+            aColAddr.Format(aColStr, SCA_VALID_COL, NULL);
+            aBuf.append(aColStr);
+            aDocStr = aBuf.makeStringAndClear();
+        }
+
+        SetString(aDocStr);
+    }
 }
 
 bool ScDPItemData::IsCaseInsEqual( const ScDPItemData& r ) const
@@ -484,13 +500,12 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
         maGlobalOrder.push_back(new vector<SCROW>());
         maIndexOrder.push_back(new vector<SCROW>());
     }
-    //check valid
 
     for (sal_uInt16 nCol = nStartCol; nCol <= nEndCol; ++nCol)
     {
-        AddLabel(new ScDPItemData(pDoc, nStartRow, nCol, nDocTab));
+        AddLabel(new ScDPItemData(pDoc, nCol, nStartRow, nDocTab, true));
         for (SCROW nRow = nStartRow + 1; nRow <= nEndRow; ++nRow)
-            AddData(nCol - nStartCol, new ScDPItemData(pDoc, nRow, nCol, nDocTab));
+            AddData(nCol - nStartCol, new ScDPItemData(pDoc, nCol, nRow, nDocTab, false));
     }
     return true;
 }

@@ -28,11 +28,11 @@
 
 #include "sal/config.h"
 
+#include <cassert>
 #include <exception>
 #include <vector>
 
 #include "cppuhelper/exc_hlp.hxx"
-#include "osl/diagnose.h"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -53,12 +53,12 @@ namespace {
 namespace css = com::sun::star;
 
 extern "C" void SAL_CALL proxy_acquireInterface(uno_Interface * pInterface) {
-    OSL_ASSERT(pInterface != 0);
+    assert(pInterface != 0);
     static_cast< Proxy * >(pInterface)->do_acquire();
 }
 
 extern "C" void SAL_CALL proxy_releaseInterface(uno_Interface * pInterface) {
-    OSL_ASSERT(pInterface != 0);
+    assert(pInterface != 0);
     static_cast< Proxy * >(pInterface)->do_release();
 }
 
@@ -66,7 +66,7 @@ extern "C" void SAL_CALL proxy_dispatchInterface(
     uno_Interface * pUnoI, typelib_TypeDescription const * pMemberType,
     void * pReturn, void ** pArgs, uno_Any ** ppException)
 {
-    OSL_ASSERT(pUnoI != 0);
+    assert(pUnoI != 0);
     static_cast< Proxy * >(pUnoI)->do_dispatch(
         pMemberType, pReturn, pArgs, ppException);
 }
@@ -78,7 +78,7 @@ Proxy::Proxy(
     css::uno::TypeDescription const & type):
     bridge_(bridge), oid_(oid), type_(type), references_(1)
 {
-    OSL_ASSERT(bridge.is());
+    assert(bridge.is());
     acquire = &proxy_acquireInterface;
     release = &proxy_releaseInterface;
     pDispatcher = &proxy_dispatchInterface;
@@ -139,7 +139,7 @@ bool Proxy::isProxy(
     rtl::Reference< Bridge > const & bridge,
     css::uno::UnoInterfaceReference const & object, rtl::OUString * oid)
 {
-    OSL_ASSERT(object.is());
+    assert(object.is());
     return object.m_pUnoI->acquire == &proxy_acquireInterface &&
         static_cast< Proxy * >(object.m_pUnoI)->isProxy(bridge, oid);
 }
@@ -151,7 +151,7 @@ void Proxy::do_dispatch_throw(
     void ** arguments, uno_Any ** exception) const
 {
     //TODO: Optimize queryInterface:
-    OSL_ASSERT(member != 0);
+    assert(member != 0);
     bool setter = false;
     std::vector< BinaryAny > inArgs;
     switch (member->eTypeClass) {
@@ -184,7 +184,7 @@ void Proxy::do_dispatch_throw(
             break;
         }
     default:
-        OSL_ASSERT(false); // this cannot happen
+        assert(false); // this cannot happen
         break;
     }
     BinaryAny ret;
@@ -195,8 +195,7 @@ void Proxy::do_dispatch_throw(
                 const_cast< typelib_TypeDescription * >(member)),
             setter, inArgs, &ret, &outArgs))
     {
-        OSL_ASSERT(
-            ret.getType().get()->eTypeClass == typelib_TypeClass_EXCEPTION);
+        assert(ret.getType().get()->eTypeClass == typelib_TypeClass_EXCEPTION);
         uno_any_construct(
             *exception, ret.getValue(ret.getType()), ret.getType().get(), 0);
     } else {
@@ -235,11 +234,11 @@ void Proxy::do_dispatch_throw(
                         }
                     }
                 }
-                OSL_ASSERT(i == outArgs.end());
+                assert(i == outArgs.end());
                 break;
             }
         default:
-            OSL_ASSERT(false); // this cannot happen
+            assert(false); // this cannot happen
             break;
         }
         *exception = 0;
@@ -249,7 +248,7 @@ void Proxy::do_dispatch_throw(
 bool Proxy::isProxy(
     rtl::Reference< Bridge > const & bridge, rtl::OUString * oid) const
 {
-    OSL_ASSERT(oid != 0);
+    assert(oid != 0);
     if (bridge == bridge_) {
         *oid = oid_;
         return true;

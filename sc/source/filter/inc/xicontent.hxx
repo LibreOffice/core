@@ -168,12 +168,12 @@ public:
     /** Reads a CF record and inserts the formatting data to the current conditional format. */
     void                ReadCF( XclImpStream& rStrm );
 
-    /** Inserts the conditional formattings into the document. */
+    /** Inserts the conditional formatting into the document. */
     void                Apply();
 
 private:
     typedef boost::ptr_vector< XclImpCondFormat > XclImpCondFmtList;
-    XclImpCondFmtList   maCondFmtList;      /// List with all conditional formattings.
+    XclImpCondFmtList   maCondFmtList;      /// List with all conditional formatting.
 };
 
 // Data Validation ============================================================

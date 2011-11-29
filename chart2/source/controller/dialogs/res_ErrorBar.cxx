@@ -202,7 +202,7 @@ void ErrorBarResources::SetChartDocumentForRangeChoosing(
             {
                 xProps->getPropertyValue( C2U( "DisableDataTableDialog" ) ) >>= m_bDisableDataTableDialog;
             }
-            catch( uno::Exception& e )
+            catch( const uno::Exception& e )
             {
                 ASSERT_EXCEPTION( e );
             }

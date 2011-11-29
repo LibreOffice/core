@@ -256,11 +256,10 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
             }
         }
     }
-    catch( uno::Exception& ex )
+    catch( const uno::Exception& )
     {
         //no mutex is acquired
         g_close_endTryClose(bDeliverOwnership, sal_False);
-        (void)(ex);
         throw;
     }
     return sal_True;
@@ -384,7 +383,7 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
             }
         }
     }
-    catch( uno::Exception& ex )
+    catch( const uno::Exception& ex )
     {
         ASSERT_EXCEPTION( ex );
     }

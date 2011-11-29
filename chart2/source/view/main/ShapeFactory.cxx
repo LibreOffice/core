@@ -90,7 +90,7 @@ void ShapeFactory::setShapeName( const uno::Reference< drawing::XShape >& xShape
             xProp->setPropertyValue( C2U( UNO_NAME_MISC_OBJ_NAME )
                 , uno::makeAny( rName ) );
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -111,7 +111,7 @@ rtl::OUString ShapeFactory::getShapeName( const uno::Reference< drawing::XShape 
         {
             xProp->getPropertyValue( C2U( UNO_NAME_MISC_OBJ_NAME ) ) >>= aRet;
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -457,7 +457,7 @@ uno::Reference<drawing::XShape>
                     bRounded = false;
             }
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -521,7 +521,7 @@ uno::Reference<drawing::XShape>
                     , uno::makeAny(aHM) );
             }
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -771,7 +771,7 @@ uno::Reference<drawing::XShape>
             xProp->setPropertyValue( C2U( UNO_NAME_3D_REDUCED_LINE_GEOMETRY )
                 , uno::makeAny((sal_Bool)sal_True) );
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -993,7 +993,7 @@ uno::Reference< drawing::XShape >
 
             xProp->setPropertyValue( C2U( "PolyPolygonBezier" ), uno::makeAny( aCoords ) );
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -1077,7 +1077,7 @@ uno::Reference< drawing::XShape >
             xProp->setPropertyValue( C2U( UNO_NAME_3D_TEXTURE_PROJ_Y )
                 , uno::makeAny( drawing::TextureProjectionMode_OBJECTSPECIFIC ) );
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -1141,7 +1141,7 @@ uno::Reference< drawing::XShape >
             if( xSourceProp.is())
                 PropertyMapper::setMappedProperties( xProp, xSourceProp, rPropertyNameMap );
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -1205,7 +1205,7 @@ uno::Reference< drawing::XShape >
                     , uno::makeAny(aHM) );
             }
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -1245,7 +1245,7 @@ uno::Reference< drawing::XShape >
             xProp->setPropertyValue( C2U( UNO_NAME_MISC_OBJ_ZORDER )
                 , uno::makeAny( sal_Int32(0) ) );
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -1821,7 +1821,7 @@ uno::Reference< drawing::XShape >
             xProp->setPropertyValue( C2U( UNO_NAME_FILLCOLOR )
                 , uno::makeAny( nFillColor ) );
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -1870,7 +1870,7 @@ uno::Reference< drawing::XShape >
         {
             xProp->setPropertyValue( C2U("Graphic"), uno::makeAny( xGraphic ));
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -1906,7 +1906,7 @@ uno::Reference< drawing::XShapes >
             uno::Reference<drawing::XShapes>( xShape, uno::UNO_QUERY );
         return xShapes;
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         ASSERT_EXCEPTION( e );
     }
@@ -1943,7 +1943,7 @@ uno::Reference< drawing::XShapes >
                     xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
                         , uno::makeAny(B3DHomMatrixToHomogenMatrix(aM)) );
                 }
-                catch( uno::Exception& e )
+                catch( const uno::Exception& e )
                 {
                     ASSERT_EXCEPTION( e );
                 }
@@ -1959,7 +1959,7 @@ uno::Reference< drawing::XShapes >
                 uno::Reference<drawing::XShapes>( xShape, uno::UNO_QUERY );
         return xShapes;
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         ASSERT_EXCEPTION( e );
     }
@@ -2005,7 +2005,7 @@ uno::Reference< drawing::XShape >
             xProp->setPropertyValue( C2U( UNO_NAME_CIRCKIND )
                 , uno::makeAny( eKind ) );
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -2066,7 +2066,7 @@ uno::Reference< drawing::XShape >
                     , rLineProperties.Color );
                     //, uno::makeAny( sal_Int32( Color(COL_RED).GetColor()) ) );
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -2130,7 +2130,7 @@ uno::Reference< drawing::XShape >
                         , pLineProperties->DashName );
             }
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -2161,7 +2161,7 @@ void ShapeFactory::makeShapeInvisible( const uno::Reference< drawing::XShape >& 
             xShapeProp->setPropertyValue( C2U("LineStyle"), uno::makeAny( drawing::LineStyle_NONE ));
             xShapeProp->setPropertyValue( C2U("FillStyle"), uno::makeAny( drawing::FillStyle_NONE ));
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -2187,7 +2187,7 @@ uno::Reference< drawing::XShape > ShapeFactory::createInvisibleRectangle(
         }
         return xShape;
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -2230,7 +2230,7 @@ uno::Reference< drawing::XShape >
         {
             xProp->setPropertyValue( C2U( "Transformation" ), rATransformation );
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }

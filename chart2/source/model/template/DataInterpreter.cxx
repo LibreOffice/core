@@ -116,7 +116,7 @@ InterpretedData SAL_CALL DataInterpreter::interpretDataSource(
                     SetRole( aData[i]->getValues(), C2U("values-y"));
             }
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -198,7 +198,7 @@ InterpretedData SAL_CALL DataInterpreter::reinterpretDataSeries(
                 xSink->setData( aNewSequences );
             }
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -222,7 +222,7 @@ sal_Bool SAL_CALL DataInterpreter::isDataCompatible(
             if( aSeq.getLength() != 1 )
                 return sal_False;
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -317,7 +317,7 @@ Reference< data::XDataSource > SAL_CALL DataInterpreter::mergeInterpretedData(
                 }
             }
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -339,7 +339,7 @@ OUString DataInterpreter::GetRole( const Reference< data::XDataSequence > & xSeq
         Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY_THROW );
         xProp->getPropertyValue( C2U("Role")) >>= aResult;
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -355,7 +355,7 @@ void DataInterpreter::SetRole( const Reference< data::XDataSequence > & xSeq, co
         Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY_THROW );
         xProp->setPropertyValue( C2U("Role"), uno::makeAny( rRole ));
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }

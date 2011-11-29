@@ -125,7 +125,7 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::interpretDataSource(
                 bNextIsYValues = (nDataSeqCount-(nDataIdx+1)) >= 2;//two or more left
             }
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -273,7 +273,7 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::reinterpretDataSeries(
                 xSink->setData( aNewSequences );
             }
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -296,7 +296,7 @@ sal_Bool SAL_CALL BubbleDataInterpreter::isDataCompatible(
             if( aSeq.getLength() != 3 )
                 return sal_False;
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }

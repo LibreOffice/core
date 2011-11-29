@@ -113,6 +113,11 @@ class ExtMgrDialog : public ModelessDialog,
     OKButton             m_aCloseBtn;
     HelpButton           m_aHelpBtn;
     FixedLine            m_aDivider;
+    FixedLine            m_aDivider2;
+    FixedText            m_aTypeOfExtTxt;
+    CheckBox             m_aBundledCbx;
+    CheckBox             m_aSharedCbx;
+    CheckBox             m_aUserCbx;
     svt::FixedHyperlink  m_aGetExtensions;
     FixedText            m_aProgressText;
     ProgressBar          m_aProgressBar;
@@ -140,6 +145,7 @@ class ExtMgrDialog : public ModelessDialog,
     DECL_DLLPRIVATE_LINK( HandleAddBtn, void * );
     DECL_DLLPRIVATE_LINK( HandleUpdateBtn, void * );
     DECL_DLLPRIVATE_LINK( HandleCancelBtn, void * );
+    DECL_DLLPRIVATE_LINK( HandleExtTypeCbx, void * );
     DECL_DLLPRIVATE_LINK( HandleHyperlink, svt::FixedHyperlink * );
     DECL_DLLPRIVATE_LINK( TimeOutHdl, Timer* );
     DECL_DLLPRIVATE_LINK( startProgress, void * );

@@ -155,18 +155,6 @@ SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
     return pDlg;
 }
 
-void SwDocShell::addFormula( uno::Reference< embed::XEmbeddedObject > p )
-{
-    SfxObjectShell& mrPers = *GetDoc()->GetPersist();
-    uno::Reference < container::XChild > xChild( p, uno::UNO_QUERY );
-    if ( xChild.is() )
-        xChild->setParent( mrPers.GetModel() );
-    ::rtl::OUString rName;
-    bool bSuccess = mrPers.GetEmbeddedObjectContainer().InsertEmbeddedObject( p, rName );
-    if (bSuccess)
-        {}
-}
-
 // Disable "multiple layout"
 
 void    SwDocShell::ToggleBrowserMode(sal_Bool bSet, SwView* _pView )

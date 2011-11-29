@@ -36,17 +36,16 @@ WORKDIR=${2}
 
 if test -n "`which gdb`"
 then
-    if test -e ${WORKDIR}/core
+    if test `ls "${WORKDIR}"/core* 2>/dev/null | wc -l` -eq 1
     then
-        STORELOCATION=`mktemp --tmpdir=${WORKDIR} core.XXXX`
+        COREFILE=`ls "${WORKDIR}"/core*`
         echo
         echo "It seems like soffice.bin crashed during the test excution!"
-        echo "Found a core dump at ${WORKDIR}, moving it to ${STORELOCATION}"
-        mv ${WORKDIR}/core ${STORELOCATION}
+        echo "Found a core dump at ${COREFILE}"
         echo "Stacktrace:"
         GDBCOMMANDFILE=`mktemp`
         echo "bt" > ${GDBCOMMANDFILE}
-        gdb -x $GDBCOMMANDFILE --batch ${OFFICEFILE}.bin ${STORELOCATION}
+        gdb -x $GDBCOMMANDFILE --batch ${OFFICEFILE}.bin ${COREFILE}
         rm ${GDBCOMMANDFILE}
         echo
         exit 1
@@ -60,7 +59,7 @@ then
         exit 0
     fi
 else
-    echo "You need gdb in you path to general stacktraces."
+    echo "You need gdb in your path to generate stacktraces."
     exit 0
 fi
 

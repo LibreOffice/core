@@ -60,6 +60,7 @@
 #include "cellsuno.hxx"
 #include "miscuno.hxx"
 #include "tabvwsh.hxx"
+#include "prevwsh.hxx"
 #include "docsh.hxx"
 #include "drwlayer.hxx"
 #include "drawview.hxx"
@@ -72,6 +73,8 @@
 #include "sheetevents.hxx"
 #include "markdata.hxx"
 #include "AccessibilityHints.hxx"
+#include "scextopt.hxx"
+#include "preview.hxx"
 #include <svx/sdrhittesthelper.hxx>
 
 using namespace com::sun::star;
@@ -562,23 +565,24 @@ ScTabViewObj::ScTabViewObj( ScTabViewShell* pViewSh ) :
     nPreviousTab( 0 ),
     bDrawSelModeSet(false)
 {
-    if (pViewSh)
-    {
-        nPreviousTab = pViewSh->GetViewData()->GetTabNo();
+    if (!pViewSh)
+        return;
+
+    nPreviousTab = pViewSh->GetViewData()->GetTabNo();
     ScViewData* pViewData = pViewSh->GetViewData();
-    if( pViewData )
-    {
-            uno::Reference< script::vba::XVBAEventProcessor > xVbaEventsHelper (pViewData->GetDocument()->GetVbaEventProcessor(), uno::UNO_QUERY );
-            if ( xVbaEventsHelper.is() )
-            {
-                ScTabViewEventListener* pEventListener = new ScTabViewEventListener( this, xVbaEventsHelper );
-                uno::Reference< awt::XEnhancedMouseClickHandler > aMouseClickHandler( *pEventListener, uno::UNO_QUERY );
-                addEnhancedMouseClickHandler( aMouseClickHandler );
-                uno::Reference< view::XSelectionChangeListener > aSelectionChangeListener( *pEventListener, uno::UNO_QUERY );
-                addSelectionChangeListener( aSelectionChangeListener );
-            }
-    }
-    }
+    if (!pViewData)
+        return;
+
+    uno::Reference< script::vba::XVBAEventProcessor > xVbaEventsHelper(
+        pViewData->GetDocument()->GetVbaEventProcessor(), uno::UNO_QUERY );
+    if (!xVbaEventsHelper.is())
+        return;
+
+    ScTabViewEventListener* pEventListener = new ScTabViewEventListener( this, xVbaEventsHelper );
+    uno::Reference< awt::XEnhancedMouseClickHandler > aMouseClickHandler( *pEventListener, uno::UNO_QUERY );
+    addEnhancedMouseClickHandler( aMouseClickHandler );
+    uno::Reference< view::XSelectionChangeListener > aSelectionChangeListener( *pEventListener, uno::UNO_QUERY );
+    addSelectionChangeListener( aSelectionChangeListener );
 }
 
 ScTabViewObj::~ScTabViewObj()
@@ -612,6 +616,7 @@ uno::Any SAL_CALL ScTabViewObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( sheet::XRangeSelection )
     SC_QUERYINTERFACE( lang::XUnoTunnel )
     SC_QUERYINTERFACE( datatransfer::XTransferableSupplier )
+    SC_QUERYINTERFACE( sheet::XSelectedSheetsSupplier )
 
     uno::Any aRet(ScViewPaneBase::queryInterface( rType ));
     if (!aRet.hasValue())
@@ -2369,9 +2374,90 @@ void SAL_CALL ScTabViewObj::insertTransferable( const ::com::sun::star::uno::Ref
     }
 }
 
-//------------------------------------------------------------------------
+namespace {
 
+uno::Sequence<sal_Int32> toSequence(const ScMarkData::MarkedTabsType& rSelected)
+{
+    uno::Sequence<sal_Int32> aRet(rSelected.size());
+    ScMarkData::MarkedTabsType::const_iterator itr = rSelected.begin(), itrEnd = rSelected.end();
+    for (size_t i = 0; itr != itrEnd; ++itr, ++i)
+        aRet[i] = static_cast<sal_Int32>(*itr);
 
+    return aRet;
+}
 
+}
+
+uno::Sequence<sal_Int32> ScTabViewObj::getSelectedSheets()
+    throw (uno::RuntimeException)
+{
+    ScTabViewShell* pViewSh = GetViewShell();
+    if (!pViewSh)
+        return uno::Sequence<sal_Int32>();
+
+    ScViewData* pViewData = pViewSh->GetViewData();
+    if (!pViewData)
+        return uno::Sequence<sal_Int32>();
+
+    // #i95280# when printing from the shell, the view is never activated,
+    // so Excel view settings must also be evaluated here.
+    ScExtDocOptions* pExtOpt = pViewData->GetDocument()->GetExtDocOptions();
+    if (pExtOpt && pExtOpt->IsChanged())
+    {
+        pViewSh->GetViewData()->ReadExtOptions(*pExtOpt);        // Excel view settings
+        pViewSh->SetTabNo(pViewSh->GetViewData()->GetTabNo(), true);
+        pExtOpt->SetChanged(false);
+    }
+
+    return toSequence(pViewData->GetMarkData().GetSelectedTabs());
+}
+
+ScPreviewObj::ScPreviewObj(ScPreviewShell* pViewSh) :
+    SfxBaseController(pViewSh),
+    mpViewShell(pViewSh)
+{
+    if (mpViewShell)
+        StartListening(*mpViewShell);
+}
+
+ScPreviewObj::~ScPreviewObj()
+{
+    if (mpViewShell)
+        EndListening(*mpViewShell);
+}
+
+uno::Any ScPreviewObj::queryInterface(const uno::Type& rType)
+    throw(uno::RuntimeException)
+{
+    SC_QUERYINTERFACE(sheet::XSelectedSheetsSupplier)
+    return SfxBaseController::queryInterface(rType);
+}
+
+void ScPreviewObj::acquire() throw()
+{
+    SfxBaseController::acquire();
+}
+
+void ScPreviewObj::release() throw()
+{
+    SfxBaseController::release();
+}
+
+void ScPreviewObj::Notify(SfxBroadcaster&, const SfxHint& rHint)
+{
+    const SfxSimpleHint* p = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if (p && p->GetId() == SFX_HINT_DYING)
+        mpViewShell = NULL;
+}
+
+uno::Sequence<sal_Int32> ScPreviewObj::getSelectedSheets()
+    throw (uno::RuntimeException)
+{
+    ScPreview* p = mpViewShell->GetPreview();
+    if (!p)
+        return uno::Sequence<sal_Int32>();
+
+    return toSequence(p->GetSelectedTabs());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

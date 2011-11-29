@@ -104,7 +104,7 @@ OUString SmOoxmlImport::handleAcc()
     {
         if( XmlStream::Tag chr = stream.checkOpeningTag( M_TOKEN( chr )))
         {
-            acc = chr.attributes.attribute( M_TOKEN( val ));
+            acc = chr.attribute( M_TOKEN( val ));
             stream.ensureClosingTag( M_TOKEN( chr ));
         }
         stream.ensureClosingTag( M_TOKEN( accPr ));
@@ -165,9 +165,9 @@ OUString SmOoxmlImport::handleBar()
     {
         if( XmlStream::Tag pos = stream.checkOpeningTag( M_TOKEN( pos )))
         {
-            if( pos.attributes.attribute( M_TOKEN( val )) == STR( "top" ))
+            if( pos.attribute( M_TOKEN( val )) == STR( "top" ))
                 topbot = top;
-            else if( pos.attributes.attribute( M_TOKEN( val )) == STR( "bot" ))
+            else if( pos.attribute( M_TOKEN( val )) == STR( "bot" ))
                 topbot = bot;
             stream.ensureClosingTag( M_TOKEN( pos ));
         }
@@ -189,7 +189,7 @@ OUString SmOoxmlImport::handleBorderBox()
     {
         if( XmlStream::Tag strikeH = stream.checkOpeningTag( M_TOKEN( strikeH )))
         {
-            if( strikeH.attributes.attribute( M_TOKEN( val ), false ))
+            if( strikeH.attribute( M_TOKEN( val ), false ))
                 isStrikeH = true;
             stream.ensureClosingTag( M_TOKEN( strikeH ));
         }
@@ -248,11 +248,11 @@ OUString SmOoxmlImport::handleF()
     {
         if( XmlStream::Tag type = stream.checkOpeningTag( M_TOKEN( type )))
         {
-            if( type.attributes.attribute( M_TOKEN( val )) == STR( "bar" ))
+            if( type.attribute( M_TOKEN( val )) == STR( "bar" ))
                 operation = bar;
-            else if( type.attributes.attribute( M_TOKEN( val )) == STR( "lin" ))
+            else if( type.attribute( M_TOKEN( val )) == STR( "lin" ))
                 operation = lin;
-            else if( type.attributes.attribute( M_TOKEN( val )) == STR( "noBar" ))
+            else if( type.attribute( M_TOKEN( val )) == STR( "noBar" ))
                 operation = noBar;
             stream.ensureClosingTag( M_TOKEN( type ));
         }
@@ -290,7 +290,7 @@ OUString SmOoxmlImport::handleR()
     XmlStream::Tag rtag = stream.ensureOpeningTag( M_TOKEN( t ));
     // TODO bail out if failure?
     OUString text = rtag.text;
-    if( rtag.attributes.attribute( OOX_TOKEN( xml, space )) != STR( "preserve" ))
+    if( rtag.attribute( OOX_TOKEN( xml, space )) != STR( "preserve" ))
         text = text.trim();
     stream.ensureClosingTag( M_TOKEN( t ));
     stream.ensureClosingTag( M_TOKEN( r ));

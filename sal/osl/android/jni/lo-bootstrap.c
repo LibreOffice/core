@@ -293,14 +293,14 @@ Java_org_libreoffice_android_Bootstrap_dlcall(JNIEnv* env,
     return 0;
 }
 
-// public native boolean setup(String dataDir,
-//                             String apkFile,
-//                             String[] ld_library_path);
+// public static native boolean setup(String dataDir,
+//                                    String apkFile,
+//                                    String[] ld_library_path);
 
 jboolean
 Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_String_2_3Ljava_lang_String_2
     (JNIEnv* env,
-     jobject this,
+     jobject clazz,
      jstring dataDir,
      jstring apkFile,
      jobjectArray ld_library_path)
@@ -365,13 +365,13 @@ Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_Stri
     return JNI_TRUE;
 }
 
-// public native boolean setup(int lo_main_ptr,
-//                             Object lo_main_argument,
-//                             int lo_main_delay);
+// public statuc native boolean setup(int lo_main_ptr,
+//                                    Object lo_main_argument,
+//                                    int lo_main_delay);
 
 jboolean
 Java_org_libreoffice_android_Bootstrap_setup__ILjava_lang_Object_2I(JNIEnv* env,
-                                                                    jobject this,
+                                                                    jobject clazz,
                                                                     void *lo_main_ptr,
                                                                     jobject lo_main_argument,
                                                                     jint lo_main_delay)
@@ -983,6 +983,29 @@ patch(const char *symbol,
          ((((int) replacement_code - ((int) code + 8)) / 4) & 0x00FFFFFF));
 }
 
+static void
+patch_libgnustl_shared(void)
+{
+    patch("_ZNKSt9type_infoeqERKS_",
+          "std::type_info::operator==",
+          expected_operator_equals_r7_code,
+          sizeof(expected_operator_equals_r7_code),
+          &replacement_operator_equals_arm);
+
+    patch("_ZNKSt9type_info6beforeERKS_",
+          "std::type_info::before()",
+          expected_method_before_r7_code,
+          sizeof(expected_method_before_r7_code),
+          &replacement_method_before_arm);
+}
+
+void
+Java_org_libreoffice_android_Bootstrap_patch_libgnustl_shared(JNIEnv* env,
+                                                              jobject clazz)
+{
+    patch_libgnustl_shared();
+}
+
 JavaVM *
 lo_get_javavm(void)
 {
@@ -1008,17 +1031,7 @@ android_main(struct android_app* state)
     if (sleep_time != 0)
         sleep(sleep_time);
 
-    patch("_ZNKSt9type_infoeqERKS_",
-          "std::type_info::operator==",
-          expected_operator_equals_r7_code,
-          sizeof(expected_operator_equals_r7_code),
-          &replacement_operator_equals_arm);
-
-    patch("_ZNKSt9type_info6beforeERKS_",
-          "std::type_info::before()",
-          expected_method_before_r7_code,
-          sizeof(expected_method_before_r7_code),
-          &replacement_method_before_arm);
+    patch_libgnustl_shared();
 
     lo_main(lo_main_argc, lo_main_argv);
 

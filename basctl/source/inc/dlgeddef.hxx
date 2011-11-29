@@ -61,6 +61,7 @@ const sal_uInt32 DlgInventor = sal_uInt32('D')*0x00000001+
 #define OBJ_DLG_PATTERNFIELD    ((sal_uInt16)22)
 #define OBJ_DLG_FILECONTROL     ((sal_uInt16)23)
 #define OBJ_DLG_TREECONTROL     ((sal_uInt16)24)
+#define OBJ_DLG_SPINBUTTON      ((sal_uInt16)25)
 
 // control properties
 #define DLGED_PROP_BACKGROUNDCOLOR      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BackgroundColor" ) )

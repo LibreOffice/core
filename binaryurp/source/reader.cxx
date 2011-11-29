@@ -28,6 +28,7 @@
 
 #include "sal/config.h"
 
+#include <cassert>
 #include <exception>
 #include <memory>
 #include <vector>
@@ -43,12 +44,11 @@
 #include "com/sun/star/uno/XCurrentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppu/unotype.hxx"
-#include "osl/diagnose.h"
 #include "rtl/byteseq.h"
-#include "rtl/string.h"
-#include "rtl/textenc.h"
+#include "rtl/oustringostreaminserter.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
+#include "sal/log.hxx"
 #include "sal/types.h"
 #include "typelib/typeclass.h"
 #include "typelib/typedescription.h"
@@ -76,7 +76,7 @@ css::uno::Sequence< sal_Int8 > read(
     css::uno::Reference< css::connection::XConnection > const & connection,
     sal_uInt32 size, bool eofOk)
 {
-    OSL_ASSERT(connection.is());
+    assert(connection.is());
     if (size > SAL_MAX_INT32) {
         throw css::uno::RuntimeException(
             rtl::OUString(
@@ -96,12 +96,12 @@ css::uno::Sequence< sal_Int8 > read(
                     "binaryurp::Reader: premature end of input")),
             css::uno::Reference< css::uno::XInterface >());
     }
-    OSL_ASSERT(buf.getLength() == static_cast< sal_Int32 >(size));
+    assert(buf.getLength() == static_cast< sal_Int32 >(size));
     return buf;
 }
 
 extern "C" void SAL_CALL request(void * pThreadSpecificData) {
-    OSL_ASSERT(pThreadSpecificData != 0);
+    assert(pThreadSpecificData != 0);
     boost::scoped_ptr< IncomingRequest >(
         static_cast< IncomingRequest * >(pThreadSpecificData))->
         execute();
@@ -110,7 +110,7 @@ extern "C" void SAL_CALL request(void * pThreadSpecificData) {
 }
 
 Reader::Reader(rtl::Reference< Bridge > const & bridge): bridge_(bridge) {
-    OSL_ASSERT(bridge.is());
+    assert(bridge.is());
     acquire();
 }
 
@@ -146,11 +146,9 @@ void Reader::run() {
             block.done();
         }
     } catch (css::uno::Exception & e) {
-        OSL_TRACE(
-            OSL_LOG_PREFIX "caught UNO exception '%s'",
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        SAL_WARN("binaryurp", "caught UNO exception '" << e.Message << '\'');
     } catch (std::exception & e) {
-        OSL_TRACE(OSL_LOG_PREFIX "caught C++ exception '%s'", e.what());
+        SAL_WARN("binaryurp", "caught C++ exception '" << e.what() << '\'');
     }
     bridge_->terminate();
 }
@@ -259,7 +257,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
     sal_Int32 memberId = itd->pMapFunctionIndexToMemberIndex[functionId];
     css::uno::TypeDescription memberTd(itd->ppAllMembers[memberId]);
     memberTd.makeComplete();
-    OSL_ASSERT(memberTd.is());
+    assert(memberTd.is());
     bool protProps = bridge_->isProtocolPropertiesRequest(oid, type);
     bool ccMode = !protProps && functionId != SPECIAL_FUNCTION_ID_RELEASE &&
         bridge_->isCurrentContextMode();
@@ -323,7 +321,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
             break;
         }
     default:
-        OSL_ASSERT(false); // this cannot happen
+        assert(false); // this cannot happen
         break;
     }
     bridge_->incrementCalls(
@@ -350,7 +348,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
         case SPECIAL_FUNCTION_ID_QUERY_INTERFACE:
             obj = bridge_->findStub(oid, type);
             if (!obj.is()) {
-                OSL_ASSERT(
+                assert(
                     inArgs.size() == 1
                     && inArgs[0].getType().equals(
                         css::uno::TypeDescription(
@@ -457,7 +455,7 @@ void Reader::readReplyMessage(Unmarshal & unmarshal, sal_uInt8 flags1) {
                     break;
                 }
             default:
-                OSL_ASSERT(false); // this cannot happen
+                assert(false); // this cannot happen
                 break;
             }
             bool ok = false;
@@ -511,7 +509,7 @@ void Reader::readReplyMessage(Unmarshal & unmarshal, sal_uInt8 flags1) {
                 break;
             }
         default:
-            OSL_ASSERT(false); // this cannot happen
+            assert(false); // this cannot happen
             break;
         }
     }
@@ -529,15 +527,15 @@ void Reader::readReplyMessage(Unmarshal & unmarshal, sal_uInt8 flags1) {
             break;
         }
     case OutgoingRequest::KIND_REQUEST_CHANGE:
-        OSL_ASSERT(outArgs.empty());
+        assert(outArgs.empty());
         bridge_->handleRequestChangeReply(exc, ret);
         break;
     case OutgoingRequest::KIND_COMMIT_CHANGE:
-        OSL_ASSERT(outArgs.empty());
+        assert(outArgs.empty());
         bridge_->handleCommitChangeReply(exc, ret);
         break;
     default:
-        OSL_ASSERT(false); // this cannot happen
+        assert(false); // this cannot happen
         break;
     }
 }

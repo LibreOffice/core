@@ -29,8 +29,8 @@
 #include "sal/config.h"
 
 #include <algorithm>
+#include <cassert>
 
-#include "osl/diagnose.h"
 #include "rtl/byteseq.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -42,7 +42,7 @@
 namespace com { namespace sun { namespace star { namespace uno {
 
 bool operator <(TypeDescription const & left, TypeDescription const & right) {
-    OSL_ASSERT(left.is() && right.is());
+    assert(left.is() && right.is());
     typelib_TypeClass tc1 = left.get()->eTypeClass;
     typelib_TypeClass tc2 = right.get()->eTypeClass;
     return tc1 < tc2 ||

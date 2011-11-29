@@ -158,13 +158,13 @@ endef
 
 .PHONY : $(call gb_UnoApiOutTarget_get_clean_target,%)
 $(call gb_UnoApiOutTarget_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),UNOAPI,1)
+	$(call gb_Output_announce,$*,$(false),UNO,1)
 	-$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_UnoApiOutTarget_get_target,$*)) 
 
 .PHONY : $(call gb_UnoApiTarget_get_clean_target,%)
 $(call gb_UnoApiTarget_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),UNOAPI,1)
+	$(call gb_Output_announce,$*,$(false),UNO,1)
 	-$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_UnoApiTarget_get_target,$*)) 
 	-rm -rf $(call gb_UnoApiTarget_get_header_target,$*)\
@@ -213,7 +213,7 @@ $(call gb_UnoApiTarget_get_target,%):
 	$(if $(gb_UnoApiTarget_IDLFILES_$*),$(call gb_UnoApiTarget__command,$@,$*,$<,UCR,$(addprefix $(call gb_UnoApiPartTarget_get_target,),$(patsubst %.idl,%.urd,$(gb_UnoApiTarget_IDLFILES_$*)))))
 	$(if $(UNOAPI_MERGE),$(call gb_UnoApiTarget__command,$@,$*,$<,/,$(UNOAPI_MERGE)))
 	$(if $(UNOAPI_REFERENCE), \
-		$(call gb_Output_announce,$*,$(true),RDBCHEK,4) \
+		$(call gb_Output_announce,$*,$(true),DBc,4) \
 	    $(gb_UnoApiTarget_REGCOMPARECOMMAND) -f -t -r1 $(call gb_Helper_convert_native,$(UNOAPI_REFERENCE)) -r2 $(call gb_Helper_convert_native,$@))
 	$(if $(gb_UnoApiTarget_IDLFILES_$*), \
 		$(call gb_Output_announce,$*,$(true),HPP,4) \

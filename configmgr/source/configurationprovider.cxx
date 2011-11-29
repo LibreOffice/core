@@ -28,6 +28,7 @@
 
 #include "sal/config.h"
 
+#include <cassert>
 #include <vector>
 
 #include "boost/noncopyable.hpp"
@@ -58,7 +59,6 @@
 #include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/interfacecontainer.hxx"
 #include "cppuhelper/weak.hxx"
-#include "osl/diagnose.h"
 #include "osl/mutex.hxx"
 #include "sal/types.h"
 #include "rtl/ref.hxx"
@@ -109,7 +109,7 @@ public:
         locale_(locale)
     {
         lock_ = lock();
-        OSL_ASSERT(context.is());
+        assert(context.is());
     }
 
 private:

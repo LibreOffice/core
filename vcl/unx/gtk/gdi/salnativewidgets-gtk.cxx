@@ -2910,6 +2910,12 @@ sal_Bool GtkSalGraphics::NWPaintGTKPopupMenu(
             else
                 nShadowType = GTK_SHADOW_OUT;
 
+            GtkArrowType eArrow;
+            if( Application::GetSettings().GetLayoutRTL() )
+                eArrow = GTK_ARROW_LEFT;
+            else
+                eArrow = GTK_ARROW_RIGHT;
+
             gtk_paint_arrow( gWidgetData[m_nScreen].gMenuItemMenuWidget->style,
                              gdkDrawable,
                              nStateType,
@@ -2917,7 +2923,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKPopupMenu(
                              &clipRect,
                              gWidgetData[m_nScreen].gMenuItemMenuWidget,
                              "menuitem",
-                             GTK_ARROW_RIGHT, TRUE,
+                             eArrow, TRUE,
                              x, y, w, h);
         }
     }

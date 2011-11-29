@@ -79,16 +79,46 @@ $(call gb_Module_get_target,%) :
 		mkdir -p $(dir $@) && \
 		touch $@)
 
-.PHONY : build all clean unitcheck subsequentcheck
+.PHONY : build all clean unitcheck subsequentcheck dev-install
 .DEFAULT_GOAL := all
 
+ifeq ($(strip $(gb_PARTIALBUILD)),)
+check : subsequentcheck
+
+define gb_Module_BUILDHINT
+
+LibreOffice build succesfully finished.
+
+To install, issue: $(MAKE) install
+Developers might prefer this way: $(MAKE) dev-install -o build
+To run smoketest, issue: $(MAKE) check
+For crosscompiles, please consult README.cross how to install it.
+
+endef
+
+define gb_Module_DEVINSTALLHINT
+
+Developer installation finished, you can now execute:
+
+make debugrun # on Linux
+dopen $(SRCDIR)/install/LibreOffice.app # on OSX
+
+endef
+else
+gb_Module_BUILDHINT=
+gb_Module_DEVINSTALLHINT=
+
+endif
+
 all : build unitcheck
+	$(info $(gb_Module_BUILDHINT))
 
 build : 
 	$(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog,$^),$(notdir $(module))),$(true),ALL,6)
 	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),ALL,6)
 	$(call gb_Output_announce_title,build done.)
 	$(call gb_Output_announce_bell)
+	$(info $(gb_Module_BUILDHINT))
 
 unitcheck :
 	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),CHK,6)
@@ -115,12 +145,10 @@ check : unitcheck
 debugrun : build
 	$(call gb_Module_DEBUGRUNCOMMAND)
 
-
-
-ifeq ($(strip $(gb_PARTIALBUILD)),)
-check : subsequentcheck
-endif
-
+dev-install :
+	@rm -f $(SRCDIR)/install && \
+	ln -s $(OUTDIR)/installation/opt/ $(SRCDIR)/install
+	$(info $(gb_Module_DEVINSTALLHINT))
 
 define gb_Module_Module
 gb_Module_ALLMODULES += $(1)
@@ -152,10 +180,6 @@ $$(eval $$(call gb_Output_error,No $(3) registered while reading $(patsubst $(1)
 endif
 
 endef
-
-# Dont recurse in subdirs for help an debugrun
-
-ifeq ($(filter help debugrun,$(MAKECMDGOALS)),)
 
 define gb_Module_add_target
 $(call gb_Module__read_targetfile,$(1),$(2),target)
@@ -194,8 +218,6 @@ $(call gb_Module_get_subsequentcheck_target,$(1)) : $$(gb_Module_CURRENTTARGET)
 $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
-
-endif
 
 define gb_Module_add_moduledir
 include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2)/Module_$(2).mk

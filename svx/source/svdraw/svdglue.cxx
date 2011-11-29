@@ -32,7 +32,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdtrans.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+static const Size aGlueHalfSize(4,4);
 
 void SdrGluePoint::SetReallyAbsolute(bool bOn, const SdrObject& rObj)
 {
@@ -250,10 +250,13 @@ void SdrGluePoint::Invalidate(Window& rWin, const SdrObject* pObj) const
     Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
     aPt=rWin.LogicToPixel(aPt);
     rWin.EnableMapMode(sal_False);
-    long x=aPt.X(),y=aPt.Y(); // Size fixed to 7 pixels for now
+
+    Size aSiz( aGlueHalfSize );
+    Rectangle aRect(aPt.X()-aSiz.Width(),aPt.Y()-aSiz.Height(),
+                    aPt.X()+aSiz.Width(),aPt.Y()+aSiz.Height());
 
     // do not erase background, that causes flicker (!)
-    rWin.Invalidate(Rectangle(Point(x-3,y-3),Point(x+3,y+3)), INVALIDATE_NOERASE);
+    rWin.Invalidate(aRect, INVALIDATE_NOERASE);
 
     rWin.EnableMapMode(bMapMerk);
 }
@@ -261,7 +264,7 @@ void SdrGluePoint::Invalidate(Window& rWin, const SdrObject* pObj) const
 bool SdrGluePoint::IsHit(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj) const
 {
     Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
-    Size aSiz=rOut.PixelToLogic(Size(3,3));
+    Size aSiz=rOut.PixelToLogic(aGlueHalfSize);
     Rectangle aRect(aPt.X()-aSiz.Width(),aPt.Y()-aSiz.Height(),aPt.X()+aSiz.Width(),aPt.Y()+aSiz.Height());
     return aRect.IsInside(rPnt);
 }

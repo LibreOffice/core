@@ -78,7 +78,6 @@ public:
     sal_Bool Load( SvStream&, sal_uInt32& nVer );
                             // nVer is set to version
                             // of image
-    sal_Bool Load( SvStream& );
     sal_Bool Save( SvStream&, sal_uInt32 = B_CURVERSION );
     sal_Bool IsError()                  { return bError;    }
 

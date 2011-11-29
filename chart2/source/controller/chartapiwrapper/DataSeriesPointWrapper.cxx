@@ -693,9 +693,8 @@ Any SAL_CALL DataSeriesPointWrapper::getPropertyDefault( const ::rtl::OUString& 
             }
         }
     }
-    catch( beans::UnknownPropertyException& ex )
+    catch( const beans::UnknownPropertyException& )
     {
-        (void)(ex);
         aRet = WrappedPropertySet::getPropertyDefault( rPropertyName );
     }
     return aRet;

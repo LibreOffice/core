@@ -130,7 +130,7 @@ DiagramHelper::tTemplateWithServiceName
                 }
             }
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -210,7 +210,7 @@ void DiagramHelper::setVertical(
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -338,7 +338,7 @@ void DiagramHelper::setStackMode(
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -460,7 +460,7 @@ StackMode DiagramHelper::getStackModeFromChartType(
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -492,7 +492,7 @@ sal_Int32 DiagramHelper::getDimension( const Reference< XDiagram > & xDiagram )
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -554,7 +554,7 @@ void DiagramHelper::setDimension(
         else if( nNewDimensionCount==2 && eStackMode == StackMode_Z_STACKED )
             DiagramHelper::setStackMode( xDiagram, StackMode_NONE );
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -588,7 +588,7 @@ void DiagramHelper::replaceCoordinateSystem(
             if( xCategories.is() )
                 DiagramHelper::setCategoriesToDiagram( xCategories, xDiagram );
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -728,7 +728,7 @@ uno::Reference< XChartType > DiagramHelper::getChartTypeOfSeries(
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -836,7 +836,7 @@ std::vector< Reference< XAxis > > lcl_getAxisHoldingCategoriesFromDiagram(
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -879,7 +879,7 @@ bool DiagramHelper::isCategoryDiagram(
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -947,7 +947,7 @@ Reference< data::XLabeledDataSequence >
                         {
                             xProp->setPropertyValue( C2U( "Role" ), uno::makeAny( C2U("categories") ) );
                         }
-                        catch( uno::Exception & ex )
+                        catch( const uno::Exception & ex )
                         {
                             ASSERT_EXCEPTION( ex );
                         }
@@ -956,7 +956,7 @@ Reference< data::XLabeledDataSequence >
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -1079,7 +1079,7 @@ void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, c
                 {
                     xKeyProps = xNumberFormats->getByKey( nNumberFormat );
                 }
-                catch( uno::Exception & ex )
+                catch( const uno::Exception & ex )
                 {
                     ASSERT_EXCEPTION( ex );
                 }
@@ -1244,7 +1244,7 @@ Sequence< Reference< XChartType > >
                          ::std::back_inserter( aResult ));
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -1424,10 +1424,10 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                                     }
                                 }
                             }
-                            catch( util::CloseVetoException& )
+                            catch( const util::CloseVetoException& )
                             {
                             }
-                            catch( uno::RuntimeException& )
+                            catch( const uno::RuntimeException& )
                             {
                             }
                         }
@@ -1437,10 +1437,10 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
             }
         }
     }
-    catch( util::CloseVetoException& )
+    catch( const util::CloseVetoException& )
     {
     }
-    catch( uno::RuntimeException& )
+    catch( const uno::RuntimeException& )
     {
     }
     return bMovedOrMoveAllowed;
@@ -1548,7 +1548,7 @@ sal_Int32 DiagramHelper::getGeometry3D(
                 }
             }
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }

@@ -109,7 +109,7 @@ struct XclImpRootData : public XclRootData
     XclImpLinkMgrRef    mxLinkMgr;          /// Manager for internal/external links.
 
     XclImpObjectMgrRef  mxObjMgr;           /// All drawing objects.
-    XclImpCondFmtMgrRef mxCondFmtMgr;       /// Conditional formattings.
+    XclImpCondFmtMgrRef mxCondFmtMgr;       /// Conditional formatting.
     XclImpValidationMgrRef mxValidMgr;      /// Data validation
     XclImpWebQueryBfrRef mxWebQueryBfr;     /// All web queries.
     XclImpPTableMgrRef  mxPTableMgr;        /// All pivot tables and pivot caches.
@@ -185,7 +185,7 @@ public:
     XclImpObjectManager& GetObjectManager() const;
     /** Returns the drawing container of the current sheet. */
     XclImpSheetDrawing& GetCurrSheetDrawing() const;
-    /** Returns the conditional formattings manager. */
+    /** Returns the conditional formatting manager. */
     XclImpCondFormatManager& GetCondFormatManager() const;
 
     XclImpValidationManager& GetValidationManager() const;

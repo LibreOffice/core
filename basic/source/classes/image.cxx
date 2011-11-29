@@ -109,13 +109,6 @@ void SbiCloseRecord( SvStream& r, sal_uIntPtr nOff )
 *
 **************************************************************************/
 
-// If the version number does not find, binary parts are omitted, but not
-// source, comments and name
-sal_Bool SbiImage::Load( SvStream& r )
-{
-    sal_uInt32 nVersion = 0;        // Versionsnumber
-    return Load( r, nVersion );
-}
 sal_Bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
 {
 

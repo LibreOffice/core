@@ -197,3 +197,21 @@ sc.ScDataPilotTableObj::com::sun::star::sheet::XDataPilotTable
 
 ### i111032 ###
 sc.ScAccessibleCell::com::sun::star::accessibility::XAccessibleText
+
+### fdo43308 ###
+sc.ScAccessiblePreviewCell::com::sun::star::accessibility::XAccessibleComponent
+sc.ScAutoFormatFieldObj::com::sun::star::sheet::TableAutoFormatField
+sc.ScCellCursorObj::com::sun::star::table::CellProperties
+sc.ScCellCursorObj::com::sun::star::sheet::XCellRangesQuery
+sc.ScCellObj::com::sun::star::table::CellProperties
+sc.ScCellObj::com::sun::star::style::CharacterProperties
+sc.ScCellObj::com::sun::star::beans::XPropertySet
+sc.ScCellRangeObj::com::sun::star::table::CellProperties
+sc.ScCellRangeObj::com::sun::star::util::XReplaceable
+sc.ScCellRangeObj::com::sun::star::sheet::XCellRangesQuery
+sc.ScCellRangesObj::com::sun::star::table::CellProperties
+sc.ScCellRangesObj::com::sun::star::beans::XPropertySet
+sc.ScDataPilotFieldObj::com::sun::star::sheet::DataPilotField
+
+### fdo43309 ###
+sc.ScCellRangeObj::com::sun::star::chart::XChartData

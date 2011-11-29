@@ -404,7 +404,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
         //datapoint?
         //Gridproperties
     }
-    catch( uno::Exception& ex)
+    catch(const uno::Exception& ex)
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -1298,7 +1298,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                     break;
         }
     }
-    catch( uno::Exception& ex)
+    catch(const uno::Exception& ex)
     {
         ASSERT_EXCEPTION( ex );
     }

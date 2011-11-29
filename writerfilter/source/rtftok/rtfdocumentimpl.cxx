@@ -291,7 +291,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_nCurrentStyleIndex(0),
     m_bEq(false),
     m_bWasInFrame(false),
-    m_bIsInFrame(false)
+    m_bIsInFrame(false),
+    m_aUnicodeBuffer()
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream.reset(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
@@ -332,13 +333,14 @@ void RTFDocumentImpl::setAuthor(rtl::OUString& rAuthor)
     m_aAuthor = rAuthor;
 }
 
-bool RTFDocumentImpl::isSubstream()
+bool RTFDocumentImpl::isSubstream() const
 {
     return m_bIsSubstream;
 }
 
 void RTFDocumentImpl::finishSubstream()
 {
+    checkUnicode();
     // At the end of a footnote stream, we need to emit a run break when importing from Word.
     // We can't do so unconditionally, as Writer already writes a \par at the end of the footnote.
     if (m_bNeedCr)
@@ -697,12 +699,20 @@ int RTFDocumentImpl::resolveChars(char ch)
 {
     OStringBuffer aBuf;
 
+    bool bUnicodeChecked = false;
     while(!Strm().IsEof() && ch != '{' && ch != '}' && ch != '\\')
     {
         if (ch != 0x0d && ch != 0x0a)
         {
             if (m_aStates.top().nCharsToSkip == 0)
+            {
+                if (!bUnicodeChecked)
+                {
+                    checkUnicode();
+                    bUnicodeChecked = true;
+                }
                 aBuf.append(ch);
+            }
             else
                 m_aStates.top().nCharsToSkip--;
         }
@@ -989,6 +999,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer)
 
 int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
 {
+    checkUnicode();
     RTFSkipDestination aSkip(*this);
     switch (nKeyword)
     {
@@ -1277,6 +1288,8 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
 
 int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 {
+    if (nKeyword != RTF_HEXCHAR)
+        checkUnicode();
     RTFSkipDestination aSkip(*this);
     sal_uInt8 cCh = 0;
 
@@ -1450,6 +1463,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 
 int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 {
+    checkUnicode();
     RTFSkipDestination aSkip(*this);
     int nParam = -1;
 
@@ -1905,6 +1919,8 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 
 int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 {
+    if (nKeyword != RTF_U)
+        checkUnicode();
     RTFSkipDestination aSkip(*this);
     int nSprm = 0;
     RTFValue::Pointer_t pIntValue(new RTFValue(nParam));
@@ -2231,8 +2247,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_U:
             if ((SAL_MIN_INT16 <= nParam) && (nParam <= SAL_MAX_INT16))
             {
-                OUString aStr(static_cast<sal_Unicode>(nParam));
-                text(aStr);
+                m_aUnicodeBuffer.append(static_cast<sal_Unicode>(nParam));
                 m_aStates.top().nCharsToSkip = m_aStates.top().nUc;
             }
             break;
@@ -2550,6 +2565,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 
 int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam)
 {
+    checkUnicode();
     RTFSkipDestination aSkip(*this);
     int nSprm = -1;
     RTFValue::Pointer_t pBoolValue(new RTFValue(!bParam || nParam != 0));
@@ -2650,6 +2666,7 @@ int RTFDocumentImpl::pushState()
 {
     //OSL_TRACE("%s before push: %d", OSL_THIS_FUNC, m_nGroup);
 
+    checkUnicode();
     m_nGroupStartPos = Strm().Tell();
     RTFParserState aState;
     if (m_aStates.empty())
@@ -2728,6 +2745,7 @@ int RTFDocumentImpl::popState()
 {
     //OSL_TRACE("%s before pop: m_nGroup %d, dest state: %d", OSL_THIS_FUNC, m_nGroup, m_aStates.top().nDestinationState);
 
+    checkUnicode();
     RTFSprms aSprms;
     RTFSprms aAttributes;
     OUStringBuffer aDestinationText;
@@ -3153,12 +3171,12 @@ RTFParserState& RTFDocumentImpl::getState()
     return m_aStates.top();
 }
 
-int RTFDocumentImpl::getGroup()
+int RTFDocumentImpl::getGroup() const
 {
     return m_nGroup;
 }
 
-bool RTFDocumentImpl::isEmpty()
+bool RTFDocumentImpl::isEmpty() const
 {
     return m_aStates.empty();
 }
@@ -3182,6 +3200,15 @@ bool RTFDocumentImpl::getSkipUnknown()
 void RTFDocumentImpl::setSkipUnknown(bool bSkipUnknown)
 {
     m_bSkipUnknown = bSkipUnknown;
+}
+
+void RTFDocumentImpl::checkUnicode()
+{
+    if (m_aUnicodeBuffer.getLength() > 0)
+    {
+        OUString aString = m_aUnicodeBuffer.makeStringAndClear();
+        text(aString);
+    }
 }
 
 RTFParserState::RTFParserState()

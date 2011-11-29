@@ -287,7 +287,7 @@ void ControllerState::update(
                     if( xEqProp.is())
                         xEqProp->getPropertyValue( C2U("ShowCorrelationCoefficient") ) >>= bHasR2Value;
                 }
-                catch( uno::RuntimeException& e)
+                catch(const uno::RuntimeException& e)
                 {
                     ASSERT_EXCEPTION( e );
                 }
@@ -537,7 +537,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
             {
                 xProps->getPropertyValue( C2U( "DisableDataTableDialog" ) ) >>= bDisableDataTableDialog;
             }
-            catch( uno::Exception& e )
+            catch( const uno::Exception& e )
             {
                 ASSERT_EXCEPTION( e );
             }

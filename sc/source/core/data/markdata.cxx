@@ -40,17 +40,17 @@
 //------------------------------------------------------------------------
 
 ScMarkData::ScMarkData() :
-    pMultiSel( NULL ),
-    maTabMarked()
+    maTabMarked(),
+    pMultiSel( NULL )
 {
     ResetMark();
 }
 
 ScMarkData::ScMarkData(const ScMarkData& rData) :
+    maTabMarked( rData.maTabMarked ),
     aMarkRange( rData.aMarkRange ),
     aMultiRange( rData.aMultiRange ),
-    pMultiSel( NULL ),
-    maTabMarked( rData.maTabMarked )
+    pMultiSel( NULL )
 {
     bMarked      = rData.bMarked;
     bMultiMarked = rData.bMultiMarked;
@@ -226,6 +226,17 @@ SCTAB ScMarkData::GetLastSelected() const
 
     OSL_FAIL("GetLastSelected: keine markiert");
     return 0;
+}
+
+const ScMarkData::MarkedTabsType& ScMarkData::GetSelectedTabs() const
+{
+    return maTabMarked;
+}
+
+void ScMarkData::SetSelectedTabs(const MarkedTabsType& rTabs)
+{
+    MarkedTabsType aTabs(rTabs.begin(), rTabs.end());
+    maTabMarked.swap(aTabs);
 }
 
 void ScMarkData::MarkToMulti()

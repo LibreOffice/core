@@ -494,7 +494,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                 xPointProps->getPropertyValue( C2U( "TextRotation" ) ) >>= fRotationDegrees;
             }
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -611,7 +611,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             xTextShape->setPosition( aNewTextPos );
         }
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         ASSERT_EXCEPTION( e );
     }
@@ -700,7 +700,7 @@ double lcl_getErrorBarLogicLength(
             break;
         }
     }
-    catch( uno::Exception & e )
+    catch( const uno::Exception & e )
     {
         ASSERT_EXCEPTION( e );
     }
@@ -912,7 +912,7 @@ void VSeriesPlotter::createErrorBar(
         uno::Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D( xTarget, PolyToPointSequence( aPoly) );
         this->setMappedProperties( xShape, xErrorBarProperties, PropertyMapper::getPropertyNameMapForLineProperties() );
     }
-    catch( uno::Exception & e )
+    catch( const uno::Exception & e )
     {
         ASSERT_EXCEPTION( e );
     }
@@ -2205,7 +2205,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }

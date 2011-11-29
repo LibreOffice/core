@@ -28,13 +28,13 @@
 
 #include "sal/config.h"
 
+#include <cassert>
 #include <cstddef>
 
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "osl/diagnose.h"
 #include "rtl/ref.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.h"
@@ -67,7 +67,7 @@ void merge(
     rtl::Reference< Node > const & original,
     rtl::Reference< Node > const & update)
 {
-    OSL_ASSERT(
+    assert(
         original.is() && update.is() && original->kind() == update->kind() &&
         update->getFinalized() == Data::NO_LAYER);
     if (update->getLayer() >= original->getLayer() &&
@@ -155,7 +155,7 @@ bool XcsParser::startElement(
               name.equals(RTL_CONSTASCII_STRINGPARAM("uses")) ||
               name.equals(RTL_CONSTASCII_STRINGPARAM("constraints")))))
         {
-            OSL_ASSERT(ignoring_ < LONG_MAX);
+            assert(ignoring_ < LONG_MAX);
             ++ignoring_;
             return true;
         }
@@ -173,7 +173,7 @@ bool XcsParser::startElement(
                 name.equals(RTL_CONSTASCII_STRINGPARAM("component")))
             {
                 state_ = STATE_COMPONENT;
-                OSL_ASSERT(elements_.empty());
+                assert(elements_.empty());
                 elements_.push(
                     Element(
                         new GroupNode(
@@ -200,7 +200,7 @@ bool XcsParser::startElement(
             }
             // fall through
         case STATE_COMPONENT:
-            OSL_ASSERT(!elements_.empty());
+            assert(!elements_.empty());
             switch (elements_.top().node->kind()) {
             case Node::KIND_PROPERTY:
             case Node::KIND_LOCALIZED_PROPERTY:
@@ -248,14 +248,14 @@ bool XcsParser::startElement(
                 }
                 break;
             default: // Node::KIND_LOCALIZED_VALUE
-                OSL_ASSERT(false); // this cannot happen
+                assert(false); // this cannot happen
                 break;
             }
             break;
         case STATE_COMPONENT_DONE:
             break;
         default: // STATE_START
-            OSL_ASSERT(false); // this cannot happen
+            assert(false); // this cannot happen
             break;
         }
     }
@@ -302,7 +302,7 @@ void XcsParser::endElement(xmlreader::XmlReader const & reader) {
                     }
                     break;
                 default:
-                    OSL_ASSERT(false);
+                    assert(false);
                     throw css::uno::RuntimeException(
                         rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
@@ -338,7 +338,7 @@ void XcsParser::endElement(xmlreader::XmlReader const & reader) {
         case STATE_COMPONENT_DONE:
             break;
         default:
-            OSL_ASSERT(false); // this cannot happen
+            assert(false); // this cannot happen
         }
     }
 }

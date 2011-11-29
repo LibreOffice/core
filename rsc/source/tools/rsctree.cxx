@@ -353,34 +353,6 @@ void NameNode::SubOrderTree( NameNode * pOrderNode ){
     }
 }
 
-/*************************************************************************
-|*
-|*    NameNode::IdOrderTree()
-|*
-*************************************************************************/
-class OrderCtrl {
-    sal_Bool       bOrder;
-    NameNode * pName;
-    DECL_LINK( CallBackFunc, NameNode * );
-public:
-            OrderCtrl() { bOrder = sal_False; pName = NULL; }
-    sal_Bool    IsOrder( const NameNode * pRoot )
-    {
-            bOrder = sal_True;
-            pName  = NULL;
-            pRoot->EnumNodes( LINK( this, OrderCtrl, CallBackFunc ) );
-            return bOrder;
-    };
-};
-IMPL_LINK_INLINE_START( OrderCtrl, CallBackFunc, NameNode *, pNext )
-{
-    if( pName && pName->Compare( pNext ) != LESS )
-        bOrder = sal_False;
-    pName = pNext;
-    return 0;
-}
-IMPL_LINK_INLINE_END( OrderCtrl, CallBackFunc, NameNode *, pNext )
-
 /****************** I d N o d e ******************************************/
 /*************************************************************************
 |*

@@ -40,5 +40,8 @@ $(eval $(call gb_Module_add_check_targets,sc,\
 	CppunitTest_sc_ucalc \
 ))
 
+$(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
+    JunitTest_sc_unoapi \
+))
 
 # vim: set noet sw=4 ts=4:

@@ -486,7 +486,7 @@ QueryBox MSG_XMLSEC_QUERY_SAVESIGNEDBEFORESIGN
 
 String STR_QRYTEMPL_MESSAGE
 {
-    Text [ en-US ] = "The template '$(ARG1)' on which this document is based, has been modified. Do you want to update style based formattings according to the modified template?";
+    Text [ en-US ] = "The template '$(ARG1)' on which this document is based, has been modified. Do you want to update style based formatting according to the modified template?";
 };
 
 String STR_QRYTEMPL_UPDATE_BTN

@@ -148,7 +148,7 @@ void ChartController::executeDispatch_InsertAxes()
                 aUndoGuard.commit();
         }
     }
-    catch( uno::RuntimeException& e)
+    catch(const uno::RuntimeException& e)
     {
         ASSERT_EXCEPTION( e );
     }
@@ -182,7 +182,7 @@ void ChartController::executeDispatch_InsertGrid()
                 aUndoGuard.commit();
         }
     }
-    catch( uno::RuntimeException& e)
+    catch(const uno::RuntimeException& e)
     {
         ASSERT_EXCEPTION( e );
     }
@@ -216,7 +216,7 @@ void ChartController::executeDispatch_InsertTitles()
                 aUndoGuard.commit();
         }
     }
-    catch( uno::RuntimeException& e)
+    catch(const uno::RuntimeException& e)
     {
         ASSERT_EXCEPTION( e );
     }
@@ -266,7 +266,7 @@ void ChartController::executeDispatch_OpenLegendDialog()
                 aUndoGuard.commit();
         }
     }
-    catch( uno::RuntimeException& e)
+    catch(const uno::RuntimeException& e)
     {
         ASSERT_EXCEPTION( e );
     }
@@ -332,7 +332,7 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
                 aUndoGuard.commit();
         }
     }
-    catch( uno::RuntimeException& e)
+    catch(const uno::RuntimeException& e)
     {
         ASSERT_EXCEPTION( e );
     }
@@ -382,7 +382,7 @@ void ChartController::executeDispatch_InsertMenu_YErrorBars()
                 aUndoGuard.commit();
         }
     }
-    catch( uno::RuntimeException& e)
+    catch(const uno::RuntimeException& e)
     {
         ASSERT_EXCEPTION( e );
     }
@@ -462,7 +462,7 @@ void ChartController::executeDispatch_InsertMenu_Trendlines()
                 aUndoGuard.commit();
         }
     }
-    catch( uno::RuntimeException& e)
+    catch(const uno::RuntimeException& e)
     {
         ASSERT_EXCEPTION( e );
     }
@@ -789,7 +789,7 @@ void ChartController::executeDispatch_InsertAxisTitle()
             aUndoGuard.commit();
         }
     }
-    catch( uno::RuntimeException& e)
+    catch(const uno::RuntimeException& e)
     {
         ASSERT_EXCEPTION( e );
     }
@@ -811,7 +811,7 @@ void ChartController::executeDispatch_InsertAxis()
             aUndoGuard.commit();
         }
     }
-    catch( uno::RuntimeException& e)
+    catch(const uno::RuntimeException& e)
     {
         ASSERT_EXCEPTION( e );
     }
@@ -833,7 +833,7 @@ void ChartController::executeDispatch_DeleteAxis()
             aUndoGuard.commit();
         }
     }
-    catch( uno::RuntimeException& e)
+    catch(const uno::RuntimeException& e)
     {
         ASSERT_EXCEPTION( e );
     }
@@ -855,7 +855,7 @@ void ChartController::executeDispatch_InsertMajorGrid()
             aUndoGuard.commit();
         }
     }
-    catch( uno::RuntimeException& e)
+    catch(const uno::RuntimeException& e)
     {
         ASSERT_EXCEPTION( e );
     }
@@ -877,7 +877,7 @@ void ChartController::executeDispatch_DeleteMajorGrid()
             aUndoGuard.commit();
         }
     }
-    catch( uno::RuntimeException& e)
+    catch(const uno::RuntimeException& e)
     {
         ASSERT_EXCEPTION( e );
     }
@@ -901,7 +901,7 @@ void ChartController::executeDispatch_InsertMinorGrid()
             aUndoGuard.commit();
         }
     }
-    catch( uno::RuntimeException& e)
+    catch(const uno::RuntimeException& e)
     {
         ASSERT_EXCEPTION( e );
     }
@@ -925,7 +925,7 @@ void ChartController::executeDispatch_DeleteMinorGrid()
             aUndoGuard.commit();
         }
     }
-    catch( uno::RuntimeException& e)
+    catch(const uno::RuntimeException& e)
     {
         ASSERT_EXCEPTION( e );
     }

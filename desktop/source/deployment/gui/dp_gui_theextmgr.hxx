@@ -69,8 +69,6 @@ private:
 
     ::rtl::OUString          m_sGetExtensionsURL;
 
-    void createPackageList();
-
 public:
     static ::rtl::Reference<TheExtensionManager> s_ExtMgr;
 
@@ -94,6 +92,7 @@ public:
     //-----------------
     bool checkUpdates( bool showUpdateOnly, bool parentVisible );
     bool installPackage( const ::rtl::OUString &rPackageURL, bool bWarnUser = false );
+    void createPackageList();
 
     bool queryTermination();
     void terminateDialog();

@@ -266,7 +266,7 @@ void SAL_CALL UpDownBarWrapper::setPropertyValues( const uno::Sequence< ::rtl::O
         {
             this->setPropertyValue( aPropertyName, rValueSeq[nN] );
         }
-        catch( beans::UnknownPropertyException& ex )
+        catch( const beans::UnknownPropertyException& ex )
         {
             ASSERT_EXCEPTION( ex );
         }

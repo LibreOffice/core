@@ -108,7 +108,20 @@ sal_Bool SwPosition::operator<(const SwPosition &rPos) const
     if( nNode < rPos.nNode )
         return sal_True;
     if( nNode == rPos.nNode )
-        return ( nContent < rPos.nContent );
+    {
+        // note that positions with text node but no SwIndex registered are
+        // created for text frames anchored at para (see SwXFrame::getAnchor())
+        SwIndexReg const*const pThisReg(nContent.GetIdxReg());
+        SwIndexReg const*const pOtherReg(rPos.nContent.GetIdxReg());
+        if (pThisReg && pOtherReg)
+        {
+            return (nContent < rPos.nContent);
+        }
+        else // by convention position with no index is smaller
+        {
+            return (pOtherReg) ? sal_True : sal_False;
+        }
+    }
     return sal_False;
 }
 
@@ -118,7 +131,20 @@ sal_Bool SwPosition::operator>(const SwPosition &rPos) const
     if(nNode > rPos.nNode )
         return sal_True;
     if( nNode == rPos.nNode )
-        return ( nContent > rPos.nContent );
+    {
+        // note that positions with text node but no SwIndex registered are
+        // created for text frames anchored at para (see SwXFrame::getAnchor())
+        SwIndexReg const*const pThisReg(nContent.GetIdxReg());
+        SwIndexReg const*const pOtherReg(rPos.nContent.GetIdxReg());
+        if (pThisReg && pOtherReg)
+        {
+            return (nContent > rPos.nContent);
+        }
+        else // by convention position with no index is smaller
+        {
+            return (pThisReg) ? sal_True : sal_False;
+        }
+    }
     return sal_False;
 }
 
@@ -128,7 +154,20 @@ sal_Bool SwPosition::operator<=(const SwPosition &rPos) const
     if(nNode < rPos.nNode )
         return sal_True;
     if( nNode == rPos.nNode )
-        return ( nContent <= rPos.nContent );
+    {
+        // note that positions with text node but no SwIndex registered are
+        // created for text frames anchored at para (see SwXFrame::getAnchor())
+        SwIndexReg const*const pThisReg(nContent.GetIdxReg());
+        SwIndexReg const*const pOtherReg(rPos.nContent.GetIdxReg());
+        if (pThisReg && pOtherReg)
+        {
+            return (nContent <= rPos.nContent);
+        }
+        else // by convention position with no index is smaller
+        {
+            return (pThisReg) ? sal_False : sal_True;
+        }
+    }
     return sal_False;
 }
 
@@ -138,24 +177,39 @@ sal_Bool SwPosition::operator>=(const SwPosition &rPos) const
     if(nNode > rPos.nNode )
         return sal_True;
     if( nNode == rPos.nNode )
-        return ( nContent >= rPos.nContent );
+    {
+        // note that positions with text node but no SwIndex registered are
+        // created for text frames anchored at para (see SwXFrame::getAnchor())
+        SwIndexReg const*const pThisReg(nContent.GetIdxReg());
+        SwIndexReg const*const pOtherReg(rPos.nContent.GetIdxReg());
+        if (pThisReg && pOtherReg)
+        {
+            return (nContent >= rPos.nContent);
+        }
+        else // by convention position with no index is smaller
+        {
+            return (pOtherReg) ? sal_False : sal_True;
+        }
+    }
     return sal_False;
 }
 
 
 sal_Bool SwPosition::operator==(const SwPosition &rPos) const
 {
-    return
-        ( ( nNode == rPos.nNode ) && ( nContent == rPos.nContent ) ?
-            sal_True: sal_False);
+    return (nNode == rPos.nNode)
+        // GetIndexReg may be null for FLY_AT_PARA frame anchor position
+        && (nContent.GetIdxReg() == rPos.nContent.GetIdxReg())
+        && (nContent == rPos.nContent);
 }
 
 
 sal_Bool SwPosition::operator!=(const SwPosition &rPos) const
 {
-    if( nNode != rPos.nNode )
-        return sal_True;
-    return ( nContent != rPos.nContent );
+    return (nNode != rPos.nNode)
+        // GetIndexReg may be null for FLY_AT_PARA frame anchor position
+        || (nContent.GetIdxReg() != rPos.nContent.GetIdxReg())
+        || (nContent != rPos.nContent);
 }
 
 SwDoc * SwPosition::GetDoc() const

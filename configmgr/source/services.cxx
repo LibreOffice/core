@@ -28,13 +28,14 @@
 
 #include "sal/config.h"
 
+#include <cassert>
+
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implementationentry.hxx"
-#include "osl/diagnose.h"
 #include "uno/lbnames.h"
 #include "sal/types.h"
 
@@ -51,7 +52,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL dummy(
     css::uno::Reference< css::uno::XComponentContext > const &)
     SAL_THROW((css::uno::Exception))
 {
-    OSL_ASSERT(false);
+    assert(false);
     return css::uno::Reference< css::uno::XInterface >();
 }
 

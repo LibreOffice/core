@@ -29,8 +29,8 @@
 #include "sal/config.h"
 
 #include <algorithm>
+#include <cassert>
 
-#include "osl/diagnose.h"
 #include "rtl/ustring.hxx"
 
 #include "node.hxx"
@@ -39,7 +39,7 @@
 namespace configmgr {
 
 void cloneNodeMap(NodeMap const & source, NodeMap * target) {
-    OSL_ASSERT(target != 0 && target->empty());
+    assert(target != 0 && target->empty());
     NodeMap clone(source);
     for (NodeMap::iterator i(clone.begin()); i != clone.end(); ++i) {
         i->second = i->second->clone(true);

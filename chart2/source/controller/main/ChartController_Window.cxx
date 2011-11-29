@@ -539,7 +539,7 @@ void ChartController::execute_Paint( const Rectangle& rRect )
                 pDrawViewWrapper->CompleteRedraw(m_pChartWindow, Region(rRect) );
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -890,7 +890,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                         }
                     }
                 }
-                catch( uno::Exception & ex )
+                catch( const uno::Exception & ex )
                 {
                     ASSERT_EXCEPTION( ex );
                 }

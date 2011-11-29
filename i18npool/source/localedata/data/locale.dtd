@@ -198,6 +198,10 @@
         This isn't necessary to be technically correct and isn't done in many
         locales yet, but will certainly help.
 
+        If you want to define yet more formats than the preset and reserved
+        0..49 range that's fine, only make sure those formatindex="..." values
+        are each >=50 and all values are unique within one locale.
+
     Of usage="FIXED_NUMBER":
         formatindex="0" MUST be the format containing the 'General' keyword.
         The keyword itself may be localized, it is good practice though to

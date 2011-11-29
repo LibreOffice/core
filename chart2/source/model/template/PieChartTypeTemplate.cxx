@@ -217,7 +217,7 @@ sal_Int32 PieChartTypeTemplate::getDimension() const
         const_cast< PieChartTypeTemplate * >( this )->
             getFastPropertyValue( PROP_PIE_TEMPLATE_DIMENSION ) >>= nDim;
     }
-    catch( beans::UnknownPropertyException & ex )
+    catch( const beans::UnknownPropertyException & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -312,7 +312,7 @@ void PieChartTypeTemplate::createChartTypes(
                 aFlatSeriesSeq, rCoordSys[0], getStackMode( 0 ));
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -383,7 +383,7 @@ sal_Bool SAL_CALL PieChartTypeTemplate::matchesTemplate(
 
             bResult = ( eOffsetMode == ePieOffsetMode );
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
             bResult = false;
@@ -423,7 +423,7 @@ Reference< chart2::XChartType > PieChartTypeTemplate::getChartTypeForIndex( sal_
         }
 
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -452,7 +452,7 @@ Reference< chart2::XChartType > SAL_CALL PieChartTypeTemplate::getChartTypeForNe
         }
 
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -545,7 +545,7 @@ void SAL_CALL PieChartTypeTemplate::applyStyle(
         // vary colors by point
         xProp->setPropertyValue( C2U("VaryColorsByPoint"), uno::makeAny( true ));
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }

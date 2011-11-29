@@ -331,18 +331,6 @@ sal_uLong ScSheetSourceDesc::CheckSourceRange() const
     if (!mpDoc)
         return STR_ERR_DATAPILOTSOURCE;
 
-    const ScRange& aSrcRange = GetSourceRange();
-    const ScAddress& s = aSrcRange.aStart;
-    const ScAddress& e = aSrcRange.aEnd;
-    for (SCCOL nCol = aSrcRange.aStart.Col(); nCol <= e.Col(); ++nCol)
-    {
-        if (mpDoc->IsBlockEmpty(s.Tab(), nCol, s.Row(), nCol, s.Row()))
-            return STR_PIVOT_FIRSTROWEMPTYERR;
-    }
-
-    if (mpDoc->IsBlockEmpty(s.Tab(), s.Col(), s.Row()+1, e.Col(), e.Row()))
-        return STR_PIVOT_ONLYONEROWERR;
-
     return 0;
 }
 

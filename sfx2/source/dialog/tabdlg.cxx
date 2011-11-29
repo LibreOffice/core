@@ -518,6 +518,7 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText )
 
 {
     aOKBtn.SetClickHdl( LINK( this, SfxTabDialog, OkHdl ) );
+    aCancelBtn.SetClickHdl( LINK( this, SfxTabDialog, CancelHdl ) );
     aResetBtn.SetClickHdl( LINK( this, SfxTabDialog, ResetHdl ) );
     aResetBtn.SetText( String( SfxResId( STR_RESET ) ) );
     aTabCtrl.SetActivatePageHdl(
@@ -601,7 +602,6 @@ void SfxTabDialog::StartExecuteModal( const Link& rEndDialogHdl )
 
 void SfxTabDialog::Start( sal_Bool bShow )
 {
-    aCancelBtn.SetClickHdl( LINK( this, SfxTabDialog, CancelHdl ) );
     pImpl->bModal = sal_False;
     Start_Impl();
 
@@ -956,10 +956,9 @@ short SfxTabDialog::Ok()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SfxTabDialog, CancelHdl, Button*, pButton )
+IMPL_LINK( SfxTabDialog, CancelHdl, Button*, EMPTYARG )
 {
-    (void)pButton; //unused
-    Close();
+    EndDialog( RET_USER_CANCEL );
     return 0;
 }
 

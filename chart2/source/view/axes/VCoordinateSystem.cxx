@@ -571,7 +571,7 @@ bool VCoordinateSystem::getPropertySwapXAndYAxis() const
     {
         xProp->getPropertyValue( C2U( "SwapXAndYAxis" ) ) >>= bSwapXAndY;
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         ASSERT_EXCEPTION( e );
     }

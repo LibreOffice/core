@@ -799,16 +799,16 @@ enum SwPropNameIds
 /* 0736 */  UNO_NAME_OUTLINE_LEVEL,
 
 /* 0737 */  UNO_NAME_DESCRIPTION,
-/* 0740 */  UNO_NAME_EMBEDDED_OBJECT,
-
-// FIXME: these number comments cannot be right post merge - fix them up ...
 /* 0738 */  UNO_NAME_META,
 /* 0739 */  UNO_NAME_IS_TEMPLATE,
 /* 0740 */  UNO_NAME_VBA_DOCOBJ,
 /* 0741 */  UNO_NAME_NESTED_TEXT_CONTENT,
 /* 0742 */  UNO_NAME_SEPARATOR_LINE_STYLE,
 /* 0743 */  UNO_NAME_FOOTNOTE_LINE_STYLE,
-/* 0744 */  SW_PROPNAME_END
+/* 0744 */  UNO_NAME_EMBEDDED_OBJECT,
+/* 0745 */  SW_PROPNAME_END
+
+// new items in this array must match SwPropNameTab aPropNameTab
 };
 
 struct SwPropNameLen

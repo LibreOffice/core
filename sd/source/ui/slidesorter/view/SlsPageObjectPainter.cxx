@@ -113,7 +113,8 @@ PageObjectPainter::PageObjectPainter (
       maMouseOverBackground(),
       maMouseOverFocusedBackground(),
       msUnhideString(mpTheme->GetString(Theme::String_Unhide)),
-      mrButtonBar(rSlideSorter.GetView().GetButtonBar())
+      mrButtonBar(rSlideSorter.GetView().GetButtonBar()),
+      maSize()
 {
     // Replace the color (not the alpha values) in the focus border with a
     // color derived from the current selection color.
@@ -166,7 +167,26 @@ void PageObjectPainter::PaintPageObject (
 
 void PageObjectPainter::NotifyResize (const bool bForce)
 {
-    (void)bForce;
+    if (bForce || ! mpPageObjectLayouter)
+        InvalidateBitmaps();
+    else
+    {
+        const Size aSize (mpPageObjectLayouter->GetSize(
+                PageObjectLayouter::FocusIndicator,
+                PageObjectLayouter::WindowCoordinateSystem));
+        if ( maSize!=aSize)
+        {
+            maSize = aSize;
+            InvalidateBitmaps();
+        }
+    }
+}
+
+
+
+
+void PageObjectPainter::InvalidateBitmaps (void)
+{
     maNormalBackground.SetEmpty();
     maSelectionBackground.SetEmpty();
     maFocusedSelectionBackground.SetEmpty();
@@ -485,7 +505,6 @@ Bitmap PageObjectPainter::CreateBackgroundBitmap(
 
     // Fill the background with the background color of the slide sorter.
     const Color aBackgroundColor (mpTheme->GetColor(Theme::Color_Background));
-    OSL_TRACE("filling background of page object bitmap with color %x", aBackgroundColor.GetColor());
     aBitmapDevice.SetFillColor(aBackgroundColor);
     aBitmapDevice.SetLineColor(aBackgroundColor);
     aBitmapDevice.DrawRect(Rectangle(Point(0,0), aSize));

@@ -50,7 +50,7 @@ static ::rtl::OUString aSemi( RTL_CONSTASCII_USTRINGPARAM( ";" ));
 
 
 LocalizationMgr::LocalizationMgr( BasicIDEShell* pIDEShell,
-    const ScriptDocument& rDocument, String aLibName,
+    const ScriptDocument& rDocument, ::rtl::OUString aLibName,
     const Reference< XStringResourceManager >& xStringResourceManager )
         : m_xStringResourceManager( xStringResourceManager )
         , m_pIDEShell( pIDEShell )
@@ -927,8 +927,8 @@ void LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject( DlgEditor*
         BasicIDE::MarkDocumentModified( aDocument );
 }
 
-void LocalizationMgr::setStringResourceAtDialog( const ScriptDocument& rDocument, const String& aLibName,
-    const String& aDlgName, Reference< container::XNameContainer > xDialogModel )
+void LocalizationMgr::setStringResourceAtDialog( const ScriptDocument& rDocument, const ::rtl::OUString& aLibName,
+    const ::rtl::OUString& aDlgName, Reference< container::XNameContainer > xDialogModel )
 {
     static ::rtl::OUString aResourceResolverPropName( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ));
 
@@ -959,8 +959,8 @@ void LocalizationMgr::setStringResourceAtDialog( const ScriptDocument& rDocument
     }
 }
 
-void LocalizationMgr::renameStringResourceIDs( const ScriptDocument& rDocument, const String& aLibName,
-    const String& aDlgName, Reference< container::XNameContainer > xDialogModel )
+void LocalizationMgr::renameStringResourceIDs( const ScriptDocument& rDocument, const ::rtl::OUString& aLibName,
+    const ::rtl::OUString& aDlgName, Reference< container::XNameContainer > xDialogModel )
 {
     // Get library
     Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, sal_True ) );
@@ -990,8 +990,8 @@ void LocalizationMgr::renameStringResourceIDs( const ScriptDocument& rDocument, 
     }
 }
 
-void LocalizationMgr::removeResourceForDialog( const ScriptDocument& rDocument, const String& aLibName,
-    const String& aDlgName, Reference< container::XNameContainer > xDialogModel )
+void LocalizationMgr::removeResourceForDialog( const ScriptDocument& rDocument, const ::rtl::OUString& aLibName,
+    const ::rtl::OUString& aDlgName, Reference< container::XNameContainer > xDialogModel )
 {
     // Get library
     Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, sal_True ) );

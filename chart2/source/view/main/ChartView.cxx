@@ -894,7 +894,7 @@ void SeriesPlotterContainer::setNumberFormatsFromAxes()
                             }
                         }
                     }
-                    catch( lang::IndexOutOfBoundsException& e )
+                    catch( const lang::IndexOutOfBoundsException& e )
                     {
                         ASSERT_EXCEPTION( e );
                     }
@@ -1305,7 +1305,7 @@ void lcl_setDefaultWritingMode( ::boost::shared_ptr< DrawModelWrapper > pDrawMod
                     pDrawModelWrapper->GetItemPool().SetPoolDefaultItem(SfxInt32Item(EE_PARA_WRITINGDIR, nWritingMode) );
             }
         }
-        catch( uno::Exception& ex )
+        catch( const uno::Exception& ex )
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -1785,7 +1785,7 @@ bool lcl_getPropertySwapXAndYAxis( const uno::Reference< XDiagram >& xDiagram )
             {
                 xProp->getPropertyValue( C2U( "SwapXAndYAxis" ) ) >>= bSwapXAndY;
             }
-            catch( uno::Exception& e )
+            catch( const uno::Exception& e )
             {
                 ASSERT_EXCEPTION( e );
             }
@@ -2348,7 +2348,7 @@ void formatPage(
             PropertyMapper::setMultiProperties( aNames, aValues, xPageProp );
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -2407,7 +2407,7 @@ void ChartView::impl_refreshAddIn()
                 xAddIn->refresh();
         }
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         ASSERT_EXCEPTION( e );
     }
@@ -2674,7 +2674,7 @@ void ChartView::impl_updateView()
             m_bViewUpdatePending = false;
             m_bInViewUpdate = false;
         }
-        catch( uno::Exception& ex)
+        catch( const uno::Exception& ex)
         {
             m_bViewDirty = m_bViewUpdatePending;
             m_bViewUpdatePending = false;
@@ -2786,7 +2786,7 @@ void ChartView::impl_notifyModeChangeListener( const rtl::OUString& rNewMode )
             }
         }
     }
-    catch( uno::Exception& ex)
+    catch( const uno::Exception& ex)
     {
         ASSERT_EXCEPTION( ex );
     }

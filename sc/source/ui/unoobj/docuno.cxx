@@ -54,6 +54,7 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
+#include <com/sun/star/sheet/XSelectedSheetsSupplier.hpp>
 #include <com/sun/star/sheet/XUnnamedDatabaseRanges.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
@@ -88,7 +89,6 @@
 #include "rangeutl.hxx"
 #include "markdata.hxx"
 #include "docoptio.hxx"
-#include "scextopt.hxx"
 #include "unonames.hxx"
 #include "shapeuno.hxx"
 #include "viewuno.hxx"
@@ -752,7 +752,7 @@ bool lcl_ParseTarget( const String& rTarget, ScRange& rTargetRange, Rectangle& r
     return bRangeValid;
 }
 
-sal_Bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
+bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
                                      const uno::Sequence< beans::PropertyValue >& rOptions,
                                      ScMarkData& rMark,
                                      ScPrintSelectionStatus& rStatus, String& rPagesStr ) const
@@ -760,13 +760,13 @@ sal_Bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
     OSL_ENSURE( !rMark.IsMarked() && !rMark.IsMultiMarked(), "FillRenderMarkData: MarkData must be empty" );
     OSL_ENSURE( pDocShell, "FillRenderMarkData: DocShell must be set" );
 
-    sal_Bool bDone = false;
+    bool bDone = false;
 
     uno::Reference<frame::XController> xView;
 
     // defaults when no options are passed: all sheets, include empty pages
     sal_Bool bSelectedSheetsOnly = false;
-    sal_Bool bIncludeEmptyPages = sal_True;
+    sal_Bool bIncludeEmptyPages = true;
 
     bool bHasPrintContent = false;
     sal_Int32 nPrintContent = 0;        // all sheets / selected sheets / selected cells
@@ -813,8 +813,8 @@ sal_Bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
         uno::Reference< drawing::XShapes > xShapes( xInterface, uno::UNO_QUERY );
         if ( pSelObj && pSelObj->GetDocShell() == pDocShell )
         {
-            sal_Bool bSheet = ( ScTableSheetObj::getImplementation( xInterface ) != NULL );
-            sal_Bool bCursor = pSelObj->IsCursorOnly();
+            bool bSheet = ( ScTableSheetObj::getImplementation( xInterface ) != NULL );
+            bool bCursor = pSelObj->IsCursorOnly();
             const ScRangeList& rRanges = pSelObj->GetRangeList();
 
             rMark.MarkFromRangeList( rRanges, false );
@@ -843,7 +843,7 @@ sal_Bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
                     rStatus.SetMode( SC_PRINTSEL_RANGE );
 
                 rStatus.SetRanges( rRanges );
-                bDone = sal_True;
+                bDone = true;
             }
             // multi selection isn't supported
         }
@@ -872,7 +872,7 @@ sal_Bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
                             if( rMark.IsMarked() && !rMark.IsMultiMarked() )
                             {
                                 rStatus.SetMode( SC_PRINTSEL_RANGE_EXCLUSIVELY_OLE_AND_DRAW_OBJECTS );
-                                bDone = sal_True;
+                                bDone = true;
                             }
                         }
                     }
@@ -888,37 +888,25 @@ sal_Bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
             for (SCTAB nTab = 0; nTab < nTabCount; nTab++)
                 rMark.SelectTable( nTab, sal_True );
             rStatus.SetMode( SC_PRINTSEL_DOCUMENT );
-            bDone = sal_True;
+            bDone = true;
         }
         // other selection types aren't supported
     }
 
     // restrict to selected sheets if a view is available
-    if ( bSelectedSheetsOnly && xView.is() )
+    uno::Reference<sheet::XSelectedSheetsSupplier> xSelectedSheets(xView, uno::UNO_QUERY);
+    if (bSelectedSheetsOnly && xSelectedSheets.is())
     {
-        ScTabViewObj* pViewObj = ScTabViewObj::getImplementation( xView );
-        if (pViewObj)
+        uno::Sequence<sal_Int32> aSelected = xSelectedSheets->getSelectedSheets();
+        ScMarkData::MarkedTabsType aSelectedTabs;
+        SCTAB nMaxTab = pDocShell->GetDocument()->GetTableCount() -1;
+        for (sal_Int32 i = 0, n = aSelected.getLength(); i < n; ++i)
         {
-            ScTabViewShell* pViewSh = pViewObj->GetViewShell();
-            if (pViewSh)
-            {
-                // #i95280# when printing from the shell, the view is never activated,
-                // so Excel view settings must also be evaluated here.
-                ScExtDocOptions* pExtOpt = pDocShell->GetDocument()->GetExtDocOptions();
-                if ( pExtOpt && pExtOpt->IsChanged() )
-                {
-                    pViewSh->GetViewData()->ReadExtOptions(*pExtOpt);        // Excel view settings
-                    pViewSh->SetTabNo( pViewSh->GetViewData()->GetTabNo(), true );
-                    pExtOpt->SetChanged( false );
-                }
-
-                const ScMarkData& rViewMark = pViewSh->GetViewData()->GetMarkData();
-                SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
-                for (SCTAB nTab = 0; nTab < nTabCount; nTab++)
-                    if (!rViewMark.GetTableSelect(nTab))
-                        rMark.SelectTable( nTab, false );
-            }
+            SCTAB nSelected = static_cast<SCTAB>(aSelected[i]);
+            if (ValidTab(nSelected, nMaxTab))
+                aSelectedTabs.insert(static_cast<SCTAB>(aSelected[i]));
         }
+        rMark.SetSelectedTabs(aSelectedTabs);
     }
 
     ScPrintOptions aNewOptions;

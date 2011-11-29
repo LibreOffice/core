@@ -1484,6 +1484,7 @@ ToFile( "LIBDIR",            "@LIBDIR@",         "e" );
 ToFile( "DATADIR",           "@DATADIR@",        "e" );
 ToFile( "MANDIR",            "@MANDIR@",         "e" );
 ToFile( "DOCDIR",            "@DOCDIR@",          "e" );
+ToFile( "DO_FETCH_TARBALLS", "@DO_FETCH_TARBALLS@", "e" );
 ToFile( "BUILD_MOZAB",       "@BUILD_MOZAB@",    "e" );
 ToFile( "PREBUILD_MOZAB",    $PREBUILD_MOZAB,    "e" );
 ToFile( "MOZILLA_VERSION",   $MOZILLA_VERSION,   "e" );
@@ -1771,6 +1772,7 @@ else
    ToFile( "SOLARLIB_FOR_BUILD", $SOLARLIB,      "e" );
    ToFile( "WORKDIR_FOR_BUILD", $WORKDIR,        "e" );
 }
+ToFile( "BUILD_NCPUS",          "@BUILD_NCPUS@", "e" );
 ToFile( "GMAKE_PARALLELISM",    "@GMAKE_PARALLELISM@", "e" );
 ToFile( "GMAKE_MODULE_PARALLELISM","@GMAKE_MODULE_PARALLELISM@", "e" );
 ToFile( "SIZEOF_SHORT",         "@SIZEOF_SHORT@", "e" );
@@ -1940,10 +1942,12 @@ ToFile( "USE_FT_EMBOLDEN",   "@USE_FT_EMBOLDEN@",  "e" );
 ToFile( "LIBXML_CFLAGS",     "@LIBXML_CFLAGS@",    "e" );
 ToFile( "LIBXML_LIBS",       "@LIBXML_LIBS@",      "e" );
 ToFile( "SYSTEM_EXPAT",      "@SYSTEM_EXPAT@",     "e" );
-ToFile( "WITH_EXTRA_GALLERY",       "@WITH_EXTRA_GALLERY@",      "e" );
-ToFile( "WITH_EXTRA_TEMPLATE",       "@WITH_EXTRA_TEMPLATE@",      "e" );
-ToFile( "WITH_EXTRA_SAMPLE",       "@WITH_EXTRA_SAMPLE@",      "e" );
-ToFile( "WITH_EXTRA_FONT",       "@WITH_EXTRA_FONT@",      "e" );
+ToFile( "WITH_EXTRA_GALLERY","@WITH_EXTRA_GALLERY@",      "e" );
+ToFile( "WITH_EXTRA_TEMPLATE","@WITH_EXTRA_TEMPLATE@",      "e" );
+ToFile( "WITH_EXTRA_SAMPLE", "@WITH_EXTRA_SAMPLE@",      "e" );
+ToFile( "WITH_EXTRA_FONT",   "@WITH_EXTRA_FONT@",      "e" );
+ToFile( "ENABLE_OXYGENOFFICE","@ENABLE_OXYGENOFFICE@","e" );
+ToFile( "OXYGENOFFICE_PACK","@OXYGENOFFICE_PACK@","e" );
 ToFile( "SYSTEM_DB",         "@SYSTEM_DB@",        "e" );
 ToFile( "SYSTEM_DB_CFLAGS",  "@SYSTEM_DB_CFLAGS@", "e" );
 ToFile( "DB_LIB",            "@DB_LIB@",           "e" );
@@ -2038,7 +2042,7 @@ if ($platform !~ m/cygwin/) {
    }
 }
 ToFile( "SOLARSRC",           $SOLARSRC,           "e" );
-ToFile( "gb_REPOS",           $gb_REPOS,           "e" );
+ToFile( "SRCDIR",           $SOLARSRC,           "e" );
 
 if ( $platform =~ m/cygwin/ )
 {

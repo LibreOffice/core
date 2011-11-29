@@ -176,7 +176,6 @@ CXX_FOR_BUILD=ccache g++
 --with-system-libwpg
 --with-system-libwps
 --with-system-libxml
---with-system-libxslt
 --with-system-lpsolve
 --with-system-mythes
 --with-system-neon

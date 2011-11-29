@@ -33,13 +33,42 @@ ModelessDialog RID_DLG_EXTENSION_MANAGER
     HelpId = HID_PACKAGE_MANAGER;
     Text [ en-US ] = "Extension Manager";
 
-    Size = MAP_APPFONT( 300, 200 );
+    Size = MAP_APPFONT( 300, 250 );
     OutputSize = TRUE;
     SVLook = TRUE;
     Moveable = TRUE;
     Closeable = TRUE;
     Sizeable = TRUE;
     Hide = TRUE;
+
+    FixedText RID_EM_FT_TYPE_EXTENSIONS
+    {
+        NoLabel = FALSE;
+        TabStop = TRUE;
+        Text [ en-US ] = "Type of Extension";
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_FIXEDTEXT_HEIGHT );
+    };
+    CheckBox RID_EM_CBX_BUNDLED
+    {
+        HelpID = "desktop:CheckBox:RID_DLG_EXTENSION_MANAGER:RID_EM_CBX_BUNDLED";
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Installation" ;
+    };
+    CheckBox RID_EM_CBX_SHARED
+    {
+        HelpID = "desktop:CheckBox:RID_DLG_EXTENSION_MANAGER:RID_EM_CBX_SHARED";
+        TabStop = TRUE ;
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ en-US ] = "~Shared" ;
+    };
+    CheckBox RID_EM_CBX_USER
+    {
+        HelpID = "desktop:CheckBox:RID_DLG_EXTENSION_MANAGER:RID_EM_CBX_USER";
+        TabStop = TRUE ;
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ en-US ] = "~User" ;
+    };
 
     PushButton RID_EM_BTN_ADD
     {
@@ -53,7 +82,7 @@ ModelessDialog RID_DLG_EXTENSION_MANAGER
     {
         HelpID = "desktop:PushButton:RID_DLG_EXTENSION_MANAGER:RID_EM_BTN_CHECK_UPDATES";
         TabStop = TRUE;
-        Text [ en-US ] = "Check for ~Updates...";
+        Text [ en-US ] = "~Check for Updates...";
         Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
     };
 

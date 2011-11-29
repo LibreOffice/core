@@ -377,22 +377,6 @@ void ScTabControl::UpdateStatus()
     }
 }
 
-void ScTabControl::ActivateView(sal_Bool bActivate)
-{
-    ScMarkData& rMark = pViewData->GetMarkData();
-
-    sal_uInt16 nCurId = GetCurPageId();
-    if (!nCurId) return;            // kann vorkommen, wenn bei Excel-Import alles versteckt ist
-    sal_uInt16 nPage = nCurId - 1;
-
-    if (bActivate)
-    {
-        SelectPage( nPage+1, sal_True );
-        rMark.SelectTable( static_cast<SCTAB>(nPage), sal_True );
-    }
-    Invalidate();
-}
-
 void ScTabControl::SetSheetLayoutRTL( sal_Bool bSheetRTL )
 {
     SetEffectiveRTL( bSheetRTL );

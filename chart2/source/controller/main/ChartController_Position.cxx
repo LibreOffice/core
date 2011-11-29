@@ -183,7 +183,7 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
         }
         delete pDlg;
     }
-    catch( uno::Exception& e)
+    catch(const uno::Exception& e)
     {
         delete pDlg;
         ASSERT_EXCEPTION( e );

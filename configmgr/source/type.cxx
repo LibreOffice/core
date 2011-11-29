@@ -28,6 +28,8 @@
 
 #include "sal/config.h"
 
+#include <cassert>
+
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -36,7 +38,6 @@
 #include "com/sun/star/uno/TypeClass.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppu/unotype.hxx"
-#include "osl/diagnose.h"
 #include "rtl/string.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
@@ -73,7 +74,7 @@ Type elementType(Type type) {
     case TYPE_HEXBINARY_LIST:
         return TYPE_HEXBINARY;
     default:
-        OSL_ASSERT(false);
+        assert(false);
         throw css::uno::RuntimeException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
             css::uno::Reference< css::uno::XInterface >());
@@ -114,7 +115,7 @@ css::uno::Type mapType(Type type) {
         return cppu::UnoType<
             css::uno::Sequence< css::uno::Sequence< sal_Int8 > > >::get();
     default:
-        OSL_ASSERT(false);
+        assert(false);
         throw css::uno::RuntimeException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
             css::uno::Reference< css::uno::XInterface >());

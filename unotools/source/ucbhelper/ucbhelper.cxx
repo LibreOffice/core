@@ -493,7 +493,7 @@ bool utl::UCBContentHelper::EqualURLs(
                 RTL_CONSTASCII_USTRINGPARAM("no ucbhelper::ContentBroker")),
             css::uno::Reference<css::uno::XInterface>());
     }
-    return broker->getContentProviderInterface()->compareContentIds(
+    return 0 == broker->getContentProviderInterface()->compareContentIds(
         (broker->getContentIdentifierFactoryInterface()->
          createContentIdentifier(canonic(url1))),
         (broker->getContentIdentifierFactoryInterface()->

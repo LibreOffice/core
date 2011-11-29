@@ -23,6 +23,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
+gb_PARTIALBUILD:=T
 include $(GBUILDDIR)/gbuild_simple.mk
 
 DESTDIR := $(WORKDIR)/CustomTarget/desktop/win32/source/setup

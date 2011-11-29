@@ -298,7 +298,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                     }
                 }
             }
-            catch( beans::UnknownPropertyException &ex )
+            catch( const beans::UnknownPropertyException &ex )
             {
                 ASSERT_EXCEPTION( ex );
             }
@@ -542,7 +542,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                     }
                 }
             }
-            catch( beans::UnknownPropertyException &ex )
+            catch( const beans::UnknownPropertyException &ex )
             {
                 ASSERT_EXCEPTION( ex );
             }

@@ -818,10 +818,10 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl:
             }
         }
     }
-    catch( util::CloseVetoException& )
+    catch( const util::CloseVetoException& )
     {
     }
-    catch( uno::RuntimeException& )
+    catch( const uno::RuntimeException& )
     {
     }
     return bRet;
@@ -842,7 +842,7 @@ void SAL_CALL ChartController::executeDispatch_View3D()
         if( aDlg.Execute() == RET_OK )
             aUndoGuard.commit();
     }
-    catch( uno::RuntimeException& e)
+    catch(const uno::RuntimeException& e)
     {
         ASSERT_EXCEPTION( e );
     }

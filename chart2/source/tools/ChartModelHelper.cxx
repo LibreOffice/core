@@ -77,7 +77,7 @@ uno::Reference< XDiagram > ChartModelHelper::findDiagram( const uno::Reference< 
         if( xChartDoc.is())
             return xChartDoc->getFirstDiagram();
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -244,7 +244,7 @@ bool ChartModelHelper::setIncludeHiddenCells( bool bIncludeHiddenCells, const un
             xDiagramProperties->setPropertyValue( C2U("IncludeHiddenCells"), aNewValue);
         }
     }
-    catch (uno::Exception& e)
+    catch (const uno::Exception& e)
     {
         ASSERT_EXCEPTION(e);
     }

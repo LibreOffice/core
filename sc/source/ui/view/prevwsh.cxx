@@ -67,6 +67,7 @@
 #include "ViewSettingsSequenceDefines.hxx"
 #include "tpprint.hxx"
 #include "printopt.hxx"
+#include "viewuno.hxx"
 #include <sax/tools/converter.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -156,8 +157,9 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
         //! or completely forget aSourceData on ScTablesHint?
 
         ScTabViewShell* pTabViewShell = ((ScTabViewShell*)pOldSh);
-        ScViewData* pData = pTabViewShell->GetViewData();
+        const ScViewData* pData = pTabViewShell->GetViewData();
         pData->WriteUserDataSequence( aSourceData );
+        pPreview->SetSelectedTabs(pData->GetMarkData());
         InitStartTable( pData->GetTabNo() );
 
         //  also have to store the TabView's DesignMode state
@@ -166,6 +168,8 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
         if ( pDrawView )
             nSourceDesignMode = pDrawView->IsDesignMode();
     }
+
+    new ScPreviewObj(this);
 }
 
 ScPreviewShell::~ScPreviewShell()

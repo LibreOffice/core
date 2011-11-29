@@ -84,9 +84,6 @@
 #define _RWPROP     0x2300  // mask Read/Write-Property
 #define _COLLPROP   0x4100  // mask Read-Collection-Element
 
-#define COLLNAME    "Elements"  // the collection's name, here wired hard
-
-
 
 CommunicationWrapper::Methods CommunicationWrapper::aManagerMethods[] = {
 

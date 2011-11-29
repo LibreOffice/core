@@ -38,6 +38,7 @@
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/XViewSplitable.hpp>
 #include <com/sun/star/sheet/XViewFreezable.hpp>
+#include <com/sun/star/sheet/XSelectedSheetsSupplier.hpp>
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
 #include <com/sun/star/sheet/XEnhancedMouseClickBroadcaster.hpp>
 #include <com/sun/star/sheet/XActivationBroadcaster.hpp>
@@ -52,6 +53,7 @@
 #include "address.hxx"
 
 class ScTabViewShell;
+class ScPreviewShell;
 
 #define SC_VIEWPANE_ACTIVE  0xFFFF
 
@@ -188,7 +190,8 @@ class ScTabViewObj : public ScViewPaneBase,
                      public com::sun::star::sheet::XViewFreezable,
                      public com::sun::star::sheet::XRangeSelection,
                      public com::sun::star::lang::XUnoTunnel,
-                     public com::sun::star::datatransfer::XTransferableSupplier
+                     public com::sun::star::datatransfer::XTransferableSupplier,
+                     public com::sun::star::sheet::XSelectedSheetsSupplier
 {
 private:
     SfxItemPropertySet                      aPropSet;
@@ -394,11 +397,37 @@ public:
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
                                 throw(::com::sun::star::uno::RuntimeException);
 
-    //XTransferableSupplier
+    // XTransferableSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getTransferable(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL insertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans ) throw (::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::uno::RuntimeException);
+
+    // XSelectedSheetsSupplier
+    virtual ::com::sun::star::uno::Sequence<sal_Int32> SAL_CALL getSelectedSheets()
+        throw(::com::sun::star::uno::RuntimeException);
 };
 
+class ScPreviewObj : public SfxBaseController,
+                     public SfxListener,
+                     public com::sun::star::sheet::XSelectedSheetsSupplier
+{
+    ScPreviewShell* mpViewShell;
+public:
+    ScPreviewObj(ScPreviewShell* pViewSh);
+    virtual ~ScPreviewObj();
+
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
+        const ::com::sun::star::uno::Type & rType)
+            throw(::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL acquire() throw();
+    virtual void SAL_CALL release() throw();
+
+    virtual void Notify(SfxBroadcaster&, const SfxHint& rHint);
+
+    // XSelectedSheetsSupplier
+    virtual ::com::sun::star::uno::Sequence<sal_Int32> SAL_CALL getSelectedSheets()
+        throw(::com::sun::star::uno::RuntimeException);
+};
 
 #endif
 

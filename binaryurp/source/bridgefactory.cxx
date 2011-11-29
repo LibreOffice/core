@@ -29,6 +29,7 @@
 #include "sal/config.h"
 
 #include <algorithm>
+#include <cassert>
 
 #include "com/sun/star/connection/XConnection.hpp"
 #include "com/sun/star/uno/Exception.hpp"
@@ -38,7 +39,6 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implementationentry.hxx"
-#include "osl/diagnose.h"
 #include "rtl/ref.hxx"
 #include "sal/types.h"
 #include "uno/lbnames.h"
@@ -77,7 +77,7 @@ BridgeFactory::static_getSupportedServiceNames() {
 void BridgeFactory::removeBridge(
     css::uno::Reference< css::bridge::XBridge > const & bridge)
 {
-    OSL_ASSERT(bridge.is());
+    assert(bridge.is());
     rtl::OUString n(bridge->getName());
     osl::MutexGuard g(*this);
     if (n.getLength() == 0) {
@@ -98,7 +98,7 @@ BridgeFactory::BridgeFactory(
     css::uno::Reference< css::uno::XComponentContext > const & context):
     BridgeFactoryBase(*static_cast< osl::Mutex * >(this)), context_(context)
 {
-    OSL_ASSERT(context.is());
+    assert(context.is());
 }
 
 BridgeFactory::~BridgeFactory() {}

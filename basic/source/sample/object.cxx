@@ -79,8 +79,6 @@
 #define _RWPROP     0x2300  // mask Read/Write-Property
 #define _COLLPROP   0x4100  // mask Read-Collection-Element
 
-#define COLLNAME    "Elements"  // the collection's name, wired hard here
-
 SampleObject::Methods SampleObject::aMethods[] = {
 // a sample-method (the return value is SbxNULL)
 { "Display", SbxEMPTY, &SampleObject::Display, 1 | _FUNCTION },

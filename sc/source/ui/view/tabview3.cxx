@@ -2291,7 +2291,7 @@ void ScTabView::ActivateView( bool bActivate, bool bFirst )
                 pHdl->EnterHandler();
         }
     }
-    pTabControl->ActivateView(bActivate);
+
     PaintExtras();
 
     aViewData.Activate(bActivate);

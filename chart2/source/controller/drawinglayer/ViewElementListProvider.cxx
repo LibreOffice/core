@@ -161,7 +161,7 @@ SdrObjList* ViewElementListProvider::GetSymbolList() const
                 m_pSymbolList = pSdrObject->GetSubList();
         }
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         ASSERT_EXCEPTION( e );
     }

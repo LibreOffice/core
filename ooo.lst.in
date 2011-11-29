@@ -81,13 +81,13 @@ debc62758716a169df9f62e6ab2bc634-zlib-1.2.3.tar.gz
 0f63ee487fda8f21fafa767b3c447ac9-ixion-0.2.0.tar.gz
 71474203939fafbe271e1263e61d083e-nss-3.12.8-with-nspr-4.8.6.tar.gz
 9d283e02441d8cebdcd1e5d9df227d67-libwpg-0.2.1.tar.bz2
-d6447e3ae278800c58ae40b740c861c0-libwpd-0.9.3.tar.bz2
-9717505e864a16173afa681bda4bc910-libwps-0.2.3.tar.bz2
+c01351d7db2b205de755d58769288224-libwpd-0.9.4.tar.bz2
+34dd7951abbda99b7a75a09993a37965-libwps-0.2.4.tar.bz2
 0ff7d225d087793c8c2c680d77aac3e7-mdds_0.5.3.tar.bz2
 f02578f5218f217a9f20e9c30e119c6a-boost_1_44_0.tar.bz2
 3121aaf3e13e5d88dfff13fb4a5f1ab8-hunspell-1.3.2.tar.gz
 3bf481ca95109b14435125c0dd1f2217-graphite2-1.0.3.tgz
-8f107ffb3fc9d9b920b7bbd0bc79c7e8-libvisio-0.0.10.tar.bz2
+a8b25a0bf696fd126a08319d88998492-libvisio-0.0.11.tar.bz2
 30c468d0c27ae4784195b53f78bc6f64-LinLibertineG-20110922.zip
 7c2549f6b0a8bb604e6c4c729ffdcfe6-libcmis-0.1.0.tar.gz
 @GOOGLE_DOCS_EXTENSION_PACK@
@@ -98,6 +98,7 @@ http://ooo.itc.hu/oxygenoffice/download/libreoffice/
 @OOOP_TEMPLATES_PACK@
 @OOOP_FONTS_PACK@
 @OOOP_SAMPLES_PACK@
+@OXYGENOFFICE_PACK@
 @CT2N_EXTENSION_PACK@
 @BARCODE_EXTENSION_PACK@
 @DIAGRAM_EXTENSION_PACK@

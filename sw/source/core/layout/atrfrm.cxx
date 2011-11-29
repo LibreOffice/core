@@ -1476,7 +1476,6 @@ bool SwFmtHoriOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 SwFmtAnchor::SwFmtAnchor( RndStdIds nRnd, sal_uInt16 nPage )
     : SfxPoolItem( RES_ANCHOR ),
-    pCntntAnchor( 0 ),
     nAnchorId( nRnd ),
     nPageNum( nPage ),
     // OD 2004-05-05 #i28701# - get always new increased order number
@@ -1484,30 +1483,28 @@ SwFmtAnchor::SwFmtAnchor( RndStdIds nRnd, sal_uInt16 nPage )
 {}
 
 SwFmtAnchor::SwFmtAnchor( const SwFmtAnchor &rCpy )
-    : SfxPoolItem( RES_ANCHOR ),
-    nAnchorId( rCpy.GetAnchorId() ),
-    nPageNum( rCpy.GetPageNum() ),
+    : SfxPoolItem( RES_ANCHOR )
+    , m_pCntntAnchor( (rCpy.GetCntntAnchor())
+            ?  new SwPosition( *rCpy.GetCntntAnchor() ) : 0 )
+    , nAnchorId( rCpy.GetAnchorId() )
+    , nPageNum( rCpy.GetPageNum() )
     // OD 2004-05-05 #i28701# - get always new increased order number
-    mnOrder( ++mnOrderCounter )
+    , mnOrder( ++mnOrderCounter )
 {
-    pCntntAnchor = rCpy.GetCntntAnchor() ?
-                        new SwPosition( *rCpy.GetCntntAnchor() ) : 0;
 }
 
- SwFmtAnchor::~SwFmtAnchor()
+SwFmtAnchor::~SwFmtAnchor()
 {
-    delete pCntntAnchor;
 }
 
 void SwFmtAnchor::SetAnchor( const SwPosition *pPos )
 {
-    delete pCntntAnchor;
-    pCntntAnchor = pPos ? new SwPosition( *pPos ) : 0;
-        //AM Absatz gebundene Flys sollten nie in den Absatz hineinzeigen.
-    if (pCntntAnchor &&
+    m_pCntntAnchor .reset( (pPos) ? new SwPosition( *pPos ) : 0 );
+    // Flys anchored AT paragraph should not point into the paragraph content
+    if (m_pCntntAnchor &&
         ((FLY_AT_PARA == nAnchorId) || (FLY_AT_FLY == nAnchorId)))
     {
-        pCntntAnchor->nContent.Assign( 0, 0 );
+        m_pCntntAnchor->nContent.Assign( 0, 0 );
     }
 }
 
@@ -1518,24 +1515,24 @@ SwFmtAnchor& SwFmtAnchor::operator=(const SwFmtAnchor& rAnchor)
     // OD 2004-05-05 #i28701# - get always new increased order number
     mnOrder = ++mnOrderCounter;
 
-    delete pCntntAnchor;
-    pCntntAnchor = rAnchor.pCntntAnchor ?
-                                    new SwPosition(*(rAnchor.pCntntAnchor)) : 0;
+    m_pCntntAnchor.reset( (rAnchor.GetCntntAnchor())
+        ? new SwPosition(*(rAnchor.GetCntntAnchor()))
+        : 0 );
     return *this;
 }
 
 int  SwFmtAnchor::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    SwFmtAnchor const& rFmtAnchor(static_cast<SwFmtAnchor const&>(rAttr));
     // OD 2004-05-05 #i28701# - Note: <mnOrder> hasn't to be considered.
-    return ( nAnchorId == ((SwFmtAnchor&)rAttr).GetAnchorId() &&
-             nPageNum == ((SwFmtAnchor&)rAttr).GetPageNum()   &&
-                    //Anker vergleichen. Entweder zeigen beide auf das gleiche
-                    //Attribut bzw. sind 0 oder die SwPosition* sind beide
-                    //gueltig und die SwPositions sind gleich.
-             (pCntntAnchor == ((SwFmtAnchor&)rAttr).GetCntntAnchor() ||
-              (pCntntAnchor && ((SwFmtAnchor&)rAttr).GetCntntAnchor() &&
-               *pCntntAnchor == *((SwFmtAnchor&)rAttr).GetCntntAnchor())));
+    return ( nAnchorId == rFmtAnchor.GetAnchorId() &&
+             nPageNum == rFmtAnchor.GetPageNum()   &&
+                // compare anchor: either both do not point into a textnode or
+                // both do (valid m_pCntntAnchor) and the positions are equal
+             ((m_pCntntAnchor.get() == rFmtAnchor.m_pCntntAnchor.get()) ||
+              (m_pCntntAnchor && rFmtAnchor.GetCntntAnchor() &&
+               (*m_pCntntAnchor == *rFmtAnchor.GetCntntAnchor()))));
 }
 
 SfxPoolItem*  SwFmtAnchor::Clone( SfxItemPool* ) const
@@ -1587,9 +1584,9 @@ bool SwFmtAnchor::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_ANCHOR_ANCHORFRAME:
         {
-            if(pCntntAnchor && FLY_AT_FLY == nAnchorId)
+            if (m_pCntntAnchor && FLY_AT_FLY == nAnchorId)
             {
-                SwFrmFmt* pFmt = pCntntAnchor->nNode.GetNode().GetFlyFmt();
+                SwFrmFmt* pFmt = m_pCntntAnchor->nNode.GetNode().GetFlyFmt();
                 if(pFmt)
                 {
                     uno::Reference<container::XNamed> xNamed = SwXFrames::GetObject( *pFmt, FLYCNTTYPE_FRM );
@@ -1628,8 +1625,7 @@ bool SwFmtAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                         // If the anchor type is page and a valid page number
                         // has been set, the content position isn't required
                         // any longer.
-                        delete pCntntAnchor;
-                        pCntntAnchor = 0;
+                        m_pCntntAnchor.reset();
                     }
                     break;
                 case  text::TextContentAnchorType_AT_FRAME:
@@ -1659,8 +1655,7 @@ bool SwFmtAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     // confuse the layout (frmtool.cxx). However, if the
                     // anchor type is not page, any content position will
                     // be kept.
-                    delete pCntntAnchor;
-                    pCntntAnchor = 0;
+                    m_pCntntAnchor.reset();
                 }
             }
             else

@@ -113,7 +113,7 @@ ScViewDataTable::~ScViewDataTable()
 {
 }
 
-void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSettings, const ScViewData& /*rViewData*/, SCTAB /*nTab*/)
+void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSettings, const ScViewData& /*rViewData*/, SCTAB /*nTab*/) const
 {
     rSettings.realloc(SC_TABLE_VIEWSETTINGS_COUNT);
     beans::PropertyValue* pSettings = rSettings.getArray();
@@ -2615,7 +2615,7 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
     // RecalcPixPos oder so - auch nMPos - auch bei ReadUserData ??!?!
 }
 
-void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSettings)
+void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSettings) const
 {
     rSettings.realloc(SC_VIEWSETTINGS_COUNT);
     // + 1, because we have to put the view id in the sequence

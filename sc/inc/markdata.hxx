@@ -45,11 +45,14 @@ class ScRangeList;
 
 class SC_DLLPUBLIC ScMarkData
 {
+public:
+    typedef std::set<SCTAB> MarkedTabsType;
 private:
+    MarkedTabsType  maTabMarked;
+
     ScRange         aMarkRange;             // area
     ScRange         aMultiRange;            // maximum area altogether
     ScMarkArray*    pMultiSel;              // multi selection
-    ::std::set<SCTAB> maTabMarked;
     bool            bMarked:1;                // rectangle marked
     bool            bMultiMarked:1;
 
@@ -86,6 +89,9 @@ public:
     SCTAB       GetSelectCount() const;
     SCTAB       GetFirstSelected() const;
     SCTAB       GetLastSelected() const;
+
+    const MarkedTabsType& GetSelectedTabs() const;
+    void SetSelectedTabs(const MarkedTabsType& rTabs);
 
     void        SetMarkNegative( bool bFlag )   { bMarkIsNeg = bFlag; }
     bool        IsMarkNegative() const          { return bMarkIsNeg;  }

@@ -91,6 +91,15 @@ public:
         AttributeList attributes;
         rtl::OUString text;
         /**
+         This function returns value of the given attribute, or the passed default value if not found.
+         The type of the default value selects the return type (OUString here).
+        */
+        rtl::OUString attribute( int token, const rtl::OUString& def = rtl::OUString()) const;
+        /**
+         @overload
+        */
+        bool attribute( int token, bool def ) const;
+        /**
          Converts to true if the tag has a valid token, false otherwise. Allows simple
          usage in if(), for example 'if( XmlStream::Tag foo = stream.checkOpeningTag( footoken ))'.
         */
@@ -168,6 +177,18 @@ public:
     // appends the characters after the last appended token
     void appendCharacters( const rtl::OUString& characters );
 };
+
+inline
+rtl::OUString XmlStream::Tag::attribute( int t, const rtl::OUString& def ) const
+{
+    return attributes.attribute( t, def );
+}
+
+inline
+bool XmlStream::Tag::attribute( int t, bool def ) const
+{
+    return attributes.attribute( t, def );
+}
 
 } // namespace
 } // namespace

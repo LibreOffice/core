@@ -63,7 +63,7 @@ void VLineProperties::initFromPropertySet( const uno::Reference< beans::XPropert
             this->Width = xProp->getPropertyValue( C2U( "BorderWidth" ) );
             this->DashName = xProp->getPropertyValue( C2U( "BorderDashName" ) );
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
@@ -75,7 +75,7 @@ void VLineProperties::initFromPropertySet( const uno::Reference< beans::XPropert
             this->Width = xProp->getPropertyValue( C2U( "LineWidth" ) );
             this->DashName = xProp->getPropertyValue( C2U( "LineDashName" ) );
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }

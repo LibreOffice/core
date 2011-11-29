@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-#include <oox/mathml/import.hxx>
-
 #include <DomainMapper_Impl.hxx>
 #include <ConversionHelper.hxx>
 #include <DomainMapperTableHandler.hxx>
@@ -77,6 +75,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/string.h>
 #include "FieldTypes.hxx"
+#include <oox/mathml/import.hxx>
 
 #include <tools/string.hxx>
 #ifdef DEBUG_DOMAINMAPPER
@@ -1092,32 +1091,39 @@ void DomainMapper_Impl::appendOLE( const ::rtl::OUString& rStreamName, OLEHandle
 
 void DomainMapper_Impl::appendStarMath( const Value& val )
 {
-            uno::Reference< embed::XEmbeddedObject > formula;
-            val.getAny() >>= formula;
-            if( formula.is() )
-            {
-                if( oox::FormulaImportHelper* import = dynamic_cast< oox::FormulaImportHelper* >( GetTextDocument().get()))
-                    import->addFormula( formula );
-    static const rtl::OUString sEmbeddedService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextEmbeddedObject"));
-    try
+    uno::Reference< embed::XEmbeddedObject > formula;
+    val.getAny() >>= formula;
+    if( formula.is() )
     {
-        uno::Reference< text::XTextContent > xOLE( m_xTextFactory->createInstance(sEmbeddedService), uno::UNO_QUERY_THROW );
-        uno::Reference< beans::XPropertySet > xOLEProperties(xOLE, uno::UNO_QUERY_THROW);
+        static const rtl::OUString sEmbeddedService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextEmbeddedObject"));
+        try
+        {
+            uno::Reference< text::XTextContent > xStarMath( m_xTextFactory->createInstance(sEmbeddedService), uno::UNO_QUERY_THROW );
+            uno::Reference< beans::XPropertySet > xStarMathProperties(xStarMath, uno::UNO_QUERY_THROW);
 
-        xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_STREAM_NAME ),
-                        val.getAny());
-        // mimic the treatment of graphics here.. it seems anchoring as character
-        // gives a better ( visually ) result
-        xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_ANCHOR_TYPE ),  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) );
-        appendTextContent( xOLE, uno::Sequence< beans::PropertyValue >() );
+            xStarMathProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_EMBEDDED_OBJECT ),
+                val.getAny());
 
+            uno::Reference< uno::XInterface > xInterface( formula->getComponent(), uno::UNO_QUERY );
+            Size size( 1000, 1000 );
+            if( oox::FormulaImportBase* formulaimport = dynamic_cast< oox::FormulaImportBase* >( xInterface.get()))
+                size = formulaimport->getFormulaSize();
+            xStarMathProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_WIDTH ),
+                uno::makeAny( sal_Int32(size.Width())));
+            xStarMathProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_HEIGHT ),
+                uno::makeAny( sal_Int32(size.Height())));
+            // mimic the treatment of graphics here.. it seems anchoring as character
+            // gives a better ( visually ) result
+            xStarMathProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_ANCHOR_TYPE ),
+                uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) );
+            appendTextContent( xStarMath, uno::Sequence< beans::PropertyValue >() );
+        }
+        catch( const uno::Exception& rEx )
+        {
+            (void)rEx;
+            OSL_FAIL( "Exception in creation of StarMath object" );
+        }
     }
-    catch( const uno::Exception& rEx )
-    {
-        (void)rEx;
-        OSL_FAIL( "Exception in creation of OLE object" );
-    }
-            }
 }
 
 uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(

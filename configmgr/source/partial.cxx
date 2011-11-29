@@ -28,13 +28,13 @@
 
 #include "sal/config.h"
 
+#include <cassert>
 #include <map>
 #include <set>
 
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "osl/diagnose.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -51,7 +51,7 @@ namespace css = com::sun::star;
 bool parseSegment(
     rtl::OUString const & path, sal_Int32 * index, rtl::OUString * segment)
 {
-    OSL_ASSERT(
+    assert(
         index != 0 && *index >= 0 && *index <= path.getLength() &&
         segment != 0);
     if (path[(*index)++] == '/') {

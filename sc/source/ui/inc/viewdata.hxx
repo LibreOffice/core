@@ -155,7 +155,7 @@ private:
 
     void            WriteUserDataSequence(
                         com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings,
-                        const ScViewData& rViewData, SCTAB nTab );
+                        const ScViewData& rViewData, SCTAB nTab ) const;
 
     void            ReadUserDataSequence(
                         const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings,
@@ -267,7 +267,7 @@ public:
     void            ReadUserData(const String& rData);
     void            WriteExtOptions( ScExtDocOptions& rOpt ) const;
     void            ReadExtOptions( const ScExtDocOptions& rOpt );
-    void            WriteUserDataSequence(com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings);
+    void            WriteUserDataSequence(com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings) const;
     void            ReadUserDataSequence(const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings);
 
     ScDocument*     GetDocument() const;

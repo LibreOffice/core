@@ -1042,7 +1042,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
 
                 lcl_UpdateCurrentRange( m_aLB_ROLE, aSelectedRole, aRange );
             }
-            catch( uno::Exception & ex )
+            catch( const uno::Exception & ex )
             {
                 bResult = false;
                 ASSERT_EXCEPTION( ex );
@@ -1060,7 +1060,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
             if( xModifiable.is() )
                 xModifiable->setModified( sal_True );
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }

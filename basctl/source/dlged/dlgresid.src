@@ -117,6 +117,10 @@ String RID_STR_CLASS_TREECONTROL
 {
     Text = "TreeControl" ;
 };
+String RID_STR_CLASS_SPINCONTROL
+{
+    Text = "SpinButton" ;
+};
 
 
 // Property Browser Headline ----------------------------------------------------------------

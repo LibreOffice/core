@@ -28,6 +28,7 @@
 
 #include "sal/config.h"
 
+#include <cassert>
 #include <vector>
 
 #include "com/sun/star/lang/DisposedException.hpp"
@@ -48,7 +49,6 @@
 #include "cppu/unotype.hxx"
 #include "cppuhelper/queryinterface.hxx"
 #include "cppuhelper/weak.hxx"
-#include "osl/diagnose.h"
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.h"
@@ -89,7 +89,7 @@ Path RootAccess::getAbsolutePath() {
 void RootAccess::initBroadcaster(
     Modifications::Node const & modifications, Broadcaster * broadcaster)
 {
-    OSL_ASSERT(broadcaster != 0);
+    assert(broadcaster != 0);
     comphelper::SequenceAsVector< css::util::ElementChange > changes;
     initBroadcasterAndChanges(
         modifications, broadcaster, changesListeners_.empty() ? 0 : &changes);
@@ -166,7 +166,7 @@ rtl::Reference< Node > RootAccess::getNode() {
                 // RuntimeException.Context is left null here
         }
         pathRepresentation_ = canonic;
-        OSL_ASSERT(!path_.empty());
+        assert(!path_.empty());
         name_ = path_.back();
         finalized_ = finalizedLayer != Data::NO_LAYER;
     }
@@ -192,7 +192,7 @@ rtl::Reference< Access > RootAccess::getParentAccess() {
 }
 
 void RootAccess::addTypes(std::vector< css::uno::Type > * types) const {
-    OSL_ASSERT(types != 0);
+    assert(types != 0);
     types->push_back(cppu::UnoType< css::util::XChangesNotifier >::get());
     types->push_back(cppu::UnoType< css::util::XChangesBatch >::get());
 }
@@ -200,7 +200,7 @@ void RootAccess::addTypes(std::vector< css::uno::Type > * types) const {
 void RootAccess::addSupportedServiceNames(
     std::vector< rtl::OUString > * services)
 {
-    OSL_ASSERT(services != 0);
+    assert(services != 0);
     services->push_back(
         rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM(
@@ -214,7 +214,7 @@ void RootAccess::addSupportedServiceNames(
 }
 
 void RootAccess::initDisposeBroadcaster(Broadcaster * broadcaster) {
-    OSL_ASSERT(broadcaster != 0);
+    assert(broadcaster != 0);
     for (ChangesListeners::iterator i(changesListeners_.begin());
          i != changesListeners_.end(); ++i)
     {
@@ -233,9 +233,7 @@ void RootAccess::clearListeners() throw() {
 css::uno::Any RootAccess::queryInterface(css::uno::Type const & aType)
     throw (css::uno::RuntimeException)
 {
-#if OSL_DEBUG_LEVEL > 0
-    OSL_ASSERT(thisIs(IS_ANY));
-#endif
+    assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     css::uno::Any res(Access::queryInterface(aType));
@@ -258,9 +256,7 @@ void RootAccess::addChangesListener(
     css::uno::Reference< css::util::XChangesListener > const & aListener)
     throw (css::uno::RuntimeException)
 {
-#if OSL_DEBUG_LEVEL > 0
-    OSL_ASSERT(thisIs(IS_ANY));
-#endif
+    assert(thisIs(IS_ANY));
     {
         osl::MutexGuard g(*lock_);
         checkLocalizedPropertyAccess();
@@ -284,9 +280,7 @@ void RootAccess::removeChangesListener(
     css::uno::Reference< css::util::XChangesListener > const & aListener)
     throw (css::uno::RuntimeException)
 {
-#if OSL_DEBUG_LEVEL > 0
-    OSL_ASSERT(thisIs(IS_ANY));
-#endif
+    assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     ChangesListeners::iterator i(changesListeners_.find(aListener));
@@ -298,9 +292,7 @@ void RootAccess::removeChangesListener(
 void RootAccess::commitChanges()
     throw (css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
-#if OSL_DEBUG_LEVEL > 0
-    OSL_ASSERT(thisIs(IS_UPDATE));
-#endif
+    assert(thisIs(IS_UPDATE));
     if (!alive_)
     {
         return;
@@ -325,9 +317,7 @@ void RootAccess::commitChanges()
 }
 
 sal_Bool RootAccess::hasPendingChanges() throw (css::uno::RuntimeException) {
-#if OSL_DEBUG_LEVEL > 0
-    OSL_ASSERT(thisIs(IS_UPDATE));
-#endif
+    assert(thisIs(IS_UPDATE));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     //TODO: Optimize:
@@ -339,9 +329,7 @@ sal_Bool RootAccess::hasPendingChanges() throw (css::uno::RuntimeException) {
 css::util::ChangesSet RootAccess::getPendingChanges()
     throw (css::uno::RuntimeException)
 {
-#if OSL_DEBUG_LEVEL > 0
-    OSL_ASSERT(thisIs(IS_UPDATE));
-#endif
+    assert(thisIs(IS_UPDATE));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     comphelper::SequenceAsVector< css::util::ElementChange > changes;
@@ -351,9 +339,7 @@ css::util::ChangesSet RootAccess::getPendingChanges()
 
 rtl::OUString RootAccess::getImplementationName() throw (css::uno::RuntimeException)
 {
-#if OSL_DEBUG_LEVEL > 0
-    OSL_ASSERT(thisIs(IS_ANY));
-#endif
+    assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "configmgr.RootAccess" ) );

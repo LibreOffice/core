@@ -68,7 +68,7 @@ void lcl_getErrorValues( const uno::Reference< beans::XPropertySet > & xErrorBar
         xErrorBarProp->getPropertyValue( C2U( "PositiveError" )) >>= rOutPosError;
         xErrorBarProp->getPropertyValue( C2U( "NegativeError" )) >>= rOutNegError;
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -86,7 +86,7 @@ void lcl_getErrorIndicatorValues(
         xErrorBarProp->getPropertyValue( C2U( "ShowPositiveError" )) >>= rOutShowPosError;
         xErrorBarProp->getPropertyValue( C2U( "ShowNegativeError" )) >>= rOutShowNegError;
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }

@@ -29,7 +29,7 @@
  */
 
 #include <sal/config.h>
-#include <unotest/filters-test.hxx>
+#include <unotest/macros_test.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
@@ -58,14 +58,13 @@ using namespace ::com::sun::star::uno;
 
 /* Implementation of Macros test */
 
-class SwMacrosTest : public test::BootstrapFixture
+class SwMacrosTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
 public:
     SwMacrosTest();
 
     SwDocShellRef load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
         const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType=0);
-    uno::Reference< com::sun::star::lang::XComponent > loadFromDesktop(const rtl::OUString& rURL);
 
     void createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath);
 
@@ -85,25 +84,9 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference<uno::XInterface> m_xCalcComponent;
-    uno::Reference<frame::XDesktop> mxDesktop;
+    uno::Reference<uno::XInterface> m_xWriterComponent;
     ::rtl::OUString m_aBaseString;
 };
-
-uno::Reference< com::sun::star::lang::XComponent > SwMacrosTest::loadFromDesktop(const rtl::OUString& rURL)
-{
-    uno::Reference< com::sun::star::frame::XComponentLoader> xLoader = uno::Reference< com::sun::star::frame::XComponentLoader >( mxDesktop, UNO_QUERY );
-    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > args(1);
-    args[0].Name = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("MacroExecutionMode"));
-    args[0].Handle = -1;
-    args[0].Value <<=
-        com::sun::star::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
-    args[0].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
-    uno::Reference< com::sun::star::lang::XComponent> xComponent= xLoader->loadComponentFromURL(rURL, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")), 0, args);
-    CPPUNIT_ASSERT_MESSAGE("loading failed", xComponent.is());
-    return xComponent;
-}
 
 void SwMacrosTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
 {
@@ -143,11 +126,6 @@ void SwMacrosTest::testStarBasic()
 
 #endif
 
-struct TestMacroInfo
-{
-    rtl::OUString sFileBaseName;
-    rtl::OUString sMacroUrl;
-};
 void SwMacrosTest::testVba()
 {
     TestMacroInfo testInfo[] = {
@@ -195,10 +173,10 @@ void SwMacrosTest::setUp()
 
     // This is a bit of a fudge, we do this to ensure that SwGlobals::ensure,
     // which is a private symbol to us, gets called
-    m_xCalcComponent =
+    m_xWriterComponent =
         getMultiServiceFactory()->createInstance(rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.TextDocument")));
-    CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
+    CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xWriterComponent.is());
     mxDesktop = Reference<com::sun::star::frame::XDesktop>( getMultiServiceFactory()->createInstance(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
     CPPUNIT_ASSERT_MESSAGE("", mxDesktop.is());
@@ -206,7 +184,7 @@ void SwMacrosTest::setUp()
 
 void SwMacrosTest::tearDown()
 {
-    uno::Reference< lang::XComponent >( m_xCalcComponent, UNO_QUERY_THROW )->dispose();
+    uno::Reference< lang::XComponent >( m_xWriterComponent, UNO_QUERY_THROW )->dispose();
     test::BootstrapFixture::tearDown();
 }
 

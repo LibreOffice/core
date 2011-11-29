@@ -1323,17 +1323,6 @@ void Test::testDataPilot()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
-    // Now, intentionally delete one of the field header names from the source range.
-    ScMarkData aMarkData;
-    aMarkData.SelectOneTable(0);
-    m_pDoc->DeleteArea(1, 0, 1, 0, aMarkData, IDF_CONTENTS);
-    printRange(m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), "Data sheet content (header removed)");
-
-    // An attempt to clear the cache whose original data now has an invalid
-    // field name (empty name) should not succeed.
-    nErrId = pDPs->ClearCache(pDPObj2);
-    CPPUNIT_ASSERT_MESSAGE("Clearing the cache while the source data is invalid should not be allowed.", nErrId != 0);
-
     pDPs->FreeTable(pDPObj2);
     CPPUNIT_ASSERT_MESSAGE("There shouldn't be any data pilot table stored with the document.",
                            pDPs->GetCount() == 0);

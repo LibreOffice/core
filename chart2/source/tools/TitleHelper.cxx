@@ -237,7 +237,7 @@ uno::Reference< XTitle > TitleHelper::createTitle(
                         }
                     }
                 }
-                catch( uno::Exception & ex )
+                catch( const uno::Exception & ex )
                 {
                     ASSERT_EXCEPTION( ex );
                 }
@@ -329,7 +329,7 @@ void TitleHelper::setCompleteString( const rtl::OUString& rNewText
                     xProp->setPropertyValue( C2U("CharHeightAsian"), aFontSize );
                     xProp->setPropertyValue( C2U("CharHeightComplex"), aFontSize );
                 }
-                catch( uno::Exception & ex )
+                catch( const uno::Exception & ex )
                 {
                     ASSERT_EXCEPTION( ex );
                 }

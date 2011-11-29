@@ -110,7 +110,6 @@ public:
     OdtGeneratorPrivate(OdfDocumentHandler *pHandler, const OdfStreamType streamType);
     ~OdtGeneratorPrivate();
     bool _writeTargetDocument(OdfDocumentHandler *pHandler);
-    void _writeBegin();
     void _writeDefaultStyles(OdfDocumentHandler *pHandler);
     void _writeMasterPages(OdfDocumentHandler *pHandler);
     void _writePageLayouts(OdfDocumentHandler *pHandler);
@@ -349,11 +348,6 @@ void OdtGeneratorPrivate::_writeDefaultStyles(OdfDocumentHandler *pHandler)
         (*iter)->write(pHandler);
 
     pHandler->endElement("office:styles");
-}
-
-// writes everything up to the automatic styles declarations..
-void OdtGeneratorPrivate::_writeBegin()
-{
 }
 
 void OdtGeneratorPrivate::_writeMasterPages(OdfDocumentHandler *pHandler)

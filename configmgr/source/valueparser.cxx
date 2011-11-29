@@ -28,13 +28,14 @@
 
 #include "sal/config.h"
 
+#include <cassert>
+
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "comphelper/sequenceasvector.hxx"
-#include "osl/diagnose.h"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
 #include "rtl/ustring.h"
@@ -59,7 +60,7 @@ namespace {
 namespace css = com::sun::star;
 
 bool parseHexDigit(char c, int * value) {
-    OSL_ASSERT(value != 0);
+    assert(value != 0);
     if (c >= '0' && c <= '9') {
         *value = c - '0';
         return true;
@@ -76,7 +77,7 @@ bool parseHexDigit(char c, int * value) {
 }
 
 bool parseValue(xmlreader::Span const & text, sal_Bool * value) {
-    OSL_ASSERT(text.is() && value != 0);
+    assert(text.is() && value != 0);
     if (text.equals(RTL_CONSTASCII_STRINGPARAM("true")) ||
         text.equals(RTL_CONSTASCII_STRINGPARAM("1")))
     {
@@ -93,7 +94,7 @@ bool parseValue(xmlreader::Span const & text, sal_Bool * value) {
 }
 
 bool parseValue(xmlreader::Span const & text, sal_Int16 * value) {
-    OSL_ASSERT(text.is() && value != 0);
+    assert(text.is() && value != 0);
     // For backwards compatibility, support hexadecimal values:
     sal_Int32 n =
         rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
@@ -112,7 +113,7 @@ bool parseValue(xmlreader::Span const & text, sal_Int16 * value) {
 }
 
 bool parseValue(xmlreader::Span const & text, sal_Int32 * value) {
-    OSL_ASSERT(text.is() && value != 0);
+    assert(text.is() && value != 0);
     // For backwards compatibility, support hexadecimal values:
     *value =
         rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
@@ -127,7 +128,7 @@ bool parseValue(xmlreader::Span const & text, sal_Int32 * value) {
 }
 
 bool parseValue(xmlreader::Span const & text, sal_Int64 * value) {
-    OSL_ASSERT(text.is() && value != 0);
+    assert(text.is() && value != 0);
     // For backwards compatibility, support hexadecimal values:
     *value =
         rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
@@ -142,14 +143,14 @@ bool parseValue(xmlreader::Span const & text, sal_Int64 * value) {
 }
 
 bool parseValue(xmlreader::Span const & text, double * value) {
-    OSL_ASSERT(text.is() && value != 0);
+    assert(text.is() && value != 0);
     *value = rtl::OString(text.begin, text.length).toDouble();
         //TODO: check valid lexical representation
     return true;
 }
 
 bool parseValue(xmlreader::Span const & text, rtl::OUString * value) {
-    OSL_ASSERT(text.is() && value != 0);
+    assert(text.is() && value != 0);
     *value = text.convertFromUtf8();
     return true;
 }
@@ -157,7 +158,7 @@ bool parseValue(xmlreader::Span const & text, rtl::OUString * value) {
 bool parseValue(
     xmlreader::Span const & text, css::uno::Sequence< sal_Int8 > * value)
 {
-    OSL_ASSERT(text.is() && value != 0);
+    assert(text.is() && value != 0);
     if ((text.length & 1) != 0) {
         return false;
     }
@@ -260,7 +261,7 @@ css::uno::Any parseValue(
         return parseListValue< css::uno::Sequence< sal_Int8 > >(
             separator, text);
     default:
-        OSL_ASSERT(false);
+        assert(false);
         throw css::uno::RuntimeException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
             css::uno::Reference< css::uno::XInterface >());
@@ -400,7 +401,7 @@ bool ValueParser::endElement() {
                     value = convertItems< css::uno::Sequence< sal_Int8 > >();
                     break;
                 default:
-                    OSL_ASSERT(false); // this cannot happen
+                    assert(false); // this cannot happen
                     break;
                 }
                 items_.clear();
@@ -426,7 +427,7 @@ bool ValueParser::endElement() {
                 }
                 break;
             default:
-                OSL_ASSERT(false); // this cannot happen
+                assert(false); // this cannot happen
                 break;
             }
             separator_ = rtl::OString();
@@ -449,7 +450,7 @@ bool ValueParser::endElement() {
 
 void ValueParser::characters(xmlreader::Span const & text) {
     if (node_.is()) {
-        OSL_ASSERT(state_ == STATE_TEXT || state_ == STATE_IT);
+        assert(state_ == STATE_TEXT || state_ == STATE_IT);
         pad_.add(text.begin, text.length);
     }
 }
@@ -457,7 +458,7 @@ void ValueParser::characters(xmlreader::Span const & text) {
 void ValueParser::start(
     rtl::Reference< Node > const & node, rtl::OUString const & localizedName)
 {
-    OSL_ASSERT(node.is() && !node_.is());
+    assert(node.is() && !node_.is());
     node_ = node;
     localizedName_ = localizedName;
     state_ = STATE_TEXT;
@@ -470,7 +471,9 @@ int ValueParser::getLayer() const {
 template< typename T > css::uno::Any ValueParser::convertItems() {
     css::uno::Sequence< T > seq(items_.size());
     for (sal_Int32 i = 0; i < seq.getLength(); ++i) {
-        OSL_VERIFY(items_[i] >>= seq[i]);
+        bool ok = (items_[i] >>= seq[i]);
+        assert(ok);
+        (void) ok; // avoid warnings
     }
     return css::uno::makeAny(seq);
 }

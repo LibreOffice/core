@@ -20,8 +20,8 @@
       <Time100SecSeparator>,</Time100SecSeparator>
       <ListSeparator>;</ListSeparator>
       <LongDateDayOfWeekSeparator>, </LongDateDayOfWeekSeparator>
-      <LongDateDaySeparator>, </LongDateDaySeparator>
-      <LongDateMonthSeparator> de</LongDateMonthSeparator>
+      <LongDateDaySeparator> </LongDateDaySeparator>
+      <LongDateMonthSeparator> de </LongDateMonthSeparator>
       <LongDateYearSeparator> </LongDateYearSeparator>
     </Separators>
     <Markers>
@@ -87,7 +87,7 @@
       <FormatCode>D/MM/YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey14" default="true" type="long" usage="DATE" formatindex="19">
-      <FormatCode>NNNNDD, MMMM deYYYY</FormatCode>
+      <FormatCode>NNNNDD MMMM "de" YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey6" default="true" type="medium" usage="DATE" formatindex="20">
       <FormatCode>DD/MM/YY</FormatCode>
@@ -96,34 +96,34 @@
       <FormatCode>DD/MM/YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="22">
-      <FormatCode>D, MMM deYY</FormatCode>
+      <FormatCode>D MMM YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="23">
-      <FormatCode>D, MMM deYYYY</FormatCode>
+      <FormatCode>D MMM "de" YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey21" default="false" type="long" usage="DATE" formatindex="24">
-      <FormatCode>D, MMM deYYYY</FormatCode>
+      <FormatCode>D MMM "de" YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="25">
-      <FormatCode>D, MMMM deYYYY</FormatCode>
+      <FormatCode>D MMMM "de" YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey22" default="false" type="long" usage="DATE" formatindex="26">
-      <FormatCode>D, MMMM deYY</FormatCode>
+      <FormatCode>D MMMM "de" YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey10" default="false" type="medium" usage="DATE" formatindex="27">
       <FormatCode>NN, DD/MMM/YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey18" default="false" type="long" usage="DATE" formatindex="28">
-      <FormatCode>NN, D, MMM deYY</FormatCode>
+      <FormatCode>NN, D MMM deYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey19" default="false" type="long" usage="DATE" formatindex="29">
-      <FormatCode>NN, D, MMMM deYYYY</FormatCode>
+      <FormatCode>NN, D MMMM "de" YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey20" default="false" type="long" usage="DATE" formatindex="30">
-      <FormatCode>NNNND, MMMM deYYYY</FormatCode>
+      <FormatCode>NNNND MMMM "de" YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey12" default="false" type="short" usage="DATE" formatindex="31">
-      <FormatCode>MM/DD</FormatCode>
+      <FormatCode>DD/MM</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="32">
       <FormatCode>YY-MM-DD</FormatCode>
@@ -137,13 +137,13 @@
       <FormatCode>MM/YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="35">
-      <FormatCode>MMM/DD</FormatCode>
+      <FormatCode>DD/MMM</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="36">
       <FormatCode>MMMM</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="37">
-      <FormatCode>QQ YY</FormatCode>
+      <FormatCode>QQ "de" YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey9" default="false" type="medium" usage="DATE" formatindex="38">
       <FormatCode>WW</FormatCode>
@@ -188,7 +188,7 @@
     </SearchOptions>
   </LC_SEARCH>
   <LC_INDEX>
-    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-Z</IndexKey>
+    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A Á B-E É F-I Í J-O Ó P-U Ú Ü V-Z</IndexKey>
     <UnicodeScript>0</UnicodeScript>
     <UnicodeScript>1</UnicodeScript>
     <FollowPageWord>p.</FollowPageWord>
@@ -261,12 +261,12 @@
         </Month>
         <Month>
           <MonthID>jun</MonthID>
-          <DefaultAbbrvName>chun</DefaultAbbrvName>
+          <DefaultAbbrvName>chn</DefaultAbbrvName>
           <DefaultFullName>chunio</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jul</MonthID>
-          <DefaultAbbrvName>chul</DefaultAbbrvName>
+          <DefaultAbbrvName>chl</DefaultAbbrvName>
           <DefaultFullName>chulio</DefaultFullName>
         </Month>
         <Month>
@@ -282,7 +282,7 @@
         <Month>
           <MonthID>oct</MonthID>
           <DefaultAbbrvName>oct</DefaultAbbrvName>
-          <DefaultFullName>octubre</DefaultFullName>
+          <DefaultFullName>octobre</DefaultFullName>
         </Month>
         <Month>
           <MonthID>nov</MonthID>
@@ -295,6 +295,67 @@
           <DefaultFullName>aviento</DefaultFullName>
         </Month>
       </MonthsOfYear>
+      <GenitiveMonths>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>chi</DefaultAbbrvName>
+          <DefaultFullName>de chinero</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>feb</DefaultAbbrvName>
+          <DefaultFullName>de febrero</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>mar</DefaultAbbrvName>
+          <DefaultFullName>de marzo</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>abr</DefaultAbbrvName>
+          <DefaultFullName>d'abril</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>may</DefaultAbbrvName>
+          <DefaultFullName>de mayo</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>chn</DefaultAbbrvName>
+          <DefaultFullName>de chunio</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>chl</DefaultAbbrvName>
+          <DefaultFullName>de chulio</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>ago</DefaultAbbrvName>
+          <DefaultFullName>d'agosto</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>set</DefaultAbbrvName>
+          <DefaultFullName>de setiembre</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>oct</DefaultAbbrvName>
+          <DefaultFullName>d'octobre</DefaultFullName></Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>oct</DefaultAbbrvName>
+          <DefaultFullName>d'octobre</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>avi</DefaultAbbrvName>
+          <DefaultFullName>d'aviento</DefaultFullName>
+        </Month>
+      </GenitiveMonths>
       <Eras>
         <Era>
           <EraID>bc</EraID>
