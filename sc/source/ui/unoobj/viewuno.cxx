@@ -60,6 +60,7 @@
 #include "cellsuno.hxx"
 #include "miscuno.hxx"
 #include "tabvwsh.hxx"
+#include "prevwsh.hxx"
 #include "docsh.hxx"
 #include "drwlayer.hxx"
 #include "drawview.hxx"
@@ -562,23 +563,24 @@ ScTabViewObj::ScTabViewObj( ScTabViewShell* pViewSh ) :
     nPreviousTab( 0 ),
     bDrawSelModeSet(false)
 {
-    if (pViewSh)
-    {
-        nPreviousTab = pViewSh->GetViewData()->GetTabNo();
+    if (!pViewSh)
+        return;
+
+    nPreviousTab = pViewSh->GetViewData()->GetTabNo();
     ScViewData* pViewData = pViewSh->GetViewData();
-    if( pViewData )
-    {
-            uno::Reference< script::vba::XVBAEventProcessor > xVbaEventsHelper (pViewData->GetDocument()->GetVbaEventProcessor(), uno::UNO_QUERY );
-            if ( xVbaEventsHelper.is() )
-            {
-                ScTabViewEventListener* pEventListener = new ScTabViewEventListener( this, xVbaEventsHelper );
-                uno::Reference< awt::XEnhancedMouseClickHandler > aMouseClickHandler( *pEventListener, uno::UNO_QUERY );
-                addEnhancedMouseClickHandler( aMouseClickHandler );
-                uno::Reference< view::XSelectionChangeListener > aSelectionChangeListener( *pEventListener, uno::UNO_QUERY );
-                addSelectionChangeListener( aSelectionChangeListener );
-            }
-    }
-    }
+    if (!pViewData)
+        return;
+
+    uno::Reference< script::vba::XVBAEventProcessor > xVbaEventsHelper(
+        pViewData->GetDocument()->GetVbaEventProcessor(), uno::UNO_QUERY );
+    if (!xVbaEventsHelper.is())
+        return;
+
+    ScTabViewEventListener* pEventListener = new ScTabViewEventListener( this, xVbaEventsHelper );
+    uno::Reference< awt::XEnhancedMouseClickHandler > aMouseClickHandler( *pEventListener, uno::UNO_QUERY );
+    addEnhancedMouseClickHandler( aMouseClickHandler );
+    uno::Reference< view::XSelectionChangeListener > aSelectionChangeListener( *pEventListener, uno::UNO_QUERY );
+    addSelectionChangeListener( aSelectionChangeListener );
 }
 
 ScTabViewObj::~ScTabViewObj()
@@ -2369,9 +2371,25 @@ void SAL_CALL ScTabViewObj::insertTransferable( const ::com::sun::star::uno::Ref
     }
 }
 
-//------------------------------------------------------------------------
+ScPreviewObj::ScPreviewObj(ScPreviewShell* pViewSh) :
+    SfxBaseController(pViewSh),
+    mpViewShell(pViewSh)
+{
+    if (mpViewShell)
+        StartListening(*mpViewShell);
+}
 
+ScPreviewObj::~ScPreviewObj()
+{
+    if (mpViewShell)
+        EndListening(*mpViewShell);
+}
 
-
+void ScPreviewObj::Notify(SfxBroadcaster&, const SfxHint& rHint)
+{
+    const SfxSimpleHint* p = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if (p && p->GetId() == SFX_HINT_DYING)
+        mpViewShell = NULL;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

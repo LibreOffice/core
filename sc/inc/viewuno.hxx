@@ -52,6 +52,7 @@
 #include "address.hxx"
 
 class ScTabViewShell;
+class ScPreviewShell;
 
 #define SC_VIEWPANE_ACTIVE  0xFFFF
 
@@ -399,6 +400,15 @@ public:
     virtual void SAL_CALL insertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans ) throw (::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::uno::RuntimeException);
 };
 
+class ScPreviewObj : public SfxBaseController, SfxListener
+{
+    ScPreviewShell* mpViewShell;
+public:
+    ScPreviewObj(ScPreviewShell* pViewSh);
+    virtual ~ScPreviewObj();
+
+    virtual void Notify(SfxBroadcaster&, const SfxHint& rHint);
+};
 
 #endif
 
