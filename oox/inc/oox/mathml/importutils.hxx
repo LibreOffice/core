@@ -162,7 +162,7 @@ public:
     */
     void handleUnexpectedTag();
 protected:
-    Tag checkTag( int token, bool optional, const char* txt );
+    Tag checkTag( int token, bool optional );
     std::vector< Tag > tags;
     unsigned int pos;
 };
