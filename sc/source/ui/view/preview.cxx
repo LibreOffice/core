@@ -581,7 +581,6 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     }
 }
 
-//Issue51656 Add resizeable margin on page preview from maoyg
 void ScPreview::Paint( const Rectangle& /* rRect */ )
 {
     bool bWasInPaint = bInPaint;        // nested calls shouldn't be necessary, but allow for now
@@ -594,7 +593,6 @@ void ScPreview::Paint( const Rectangle& /* rRect */ )
 
     bInPaint = bWasInPaint;
 }
-//Issue51656 Add resizeable margin on page preview from maoyg
 
 void ScPreview::Command( const CommandEvent& rCEvt )
 {
@@ -1502,7 +1500,6 @@ com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> ScPre
     return xAccessible;
 }
 
-//Issue51656 Add resizeable margin on page preview from maoyg
 void ScPreview::DragMove( long nDragMovePos, sal_uInt16 nFlags )
 {
     Fraction aPreviewZoom( nZoom, 100 );
