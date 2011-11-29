@@ -104,5 +104,4 @@ findunusedcode:
 #as long as we are not completely gbuildified we need to explicitly depend on the build/install
 unitcheck: build
 subsequentcheck: dev-install
-allcheck : dev-install
 #debugrun : dev-install # disabled for now, this dep seems to poison the debugrun !?
