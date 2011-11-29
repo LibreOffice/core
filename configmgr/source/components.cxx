@@ -29,6 +29,7 @@
 #include "sal/config.h"
 
 #include <algorithm>
+#include <cassert>
 #include <cstddef>
 #include <list>
 
@@ -45,18 +46,18 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "osl/conditn.hxx"
-#include "osl/diagnose.h"
 #include "osl/file.hxx"
 #include "osl/mutex.hxx"
 #include "osl/thread.hxx"
 #include "rtl/bootstrap.hxx"
 #include "rtl/logfile.h"
+#include "rtl/oustringostreaminserter.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/string.h"
-#include "rtl/textenc.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "rtl/instance.hxx"
+#include "sal/log.hxx"
 #include "sal/types.h"
 #include "salhelper/simplereferenceobject.hxx"
 
@@ -99,11 +100,12 @@ void parseXcsFile(
     SAL_THROW((
         css::container::NoSuchElementException, css::uno::RuntimeException))
 {
-    OSL_ASSERT(partial == 0 && modifications == 0 && additions == 0);
+    assert(partial == 0 && modifications == 0 && additions == 0);
     (void) partial; (void) modifications; (void) additions;
-    OSL_VERIFY(
-        rtl::Reference< ParseManager >(
-            new ParseManager(url, new XcsParser(layer, data)))->parse());
+    bool ok = rtl::Reference< ParseManager >(
+        new ParseManager(url, new XcsParser(layer, data)))->parse();
+    assert(ok);
+    (void) ok; // avoid warnings
 }
 
 void parseXcuFile(
@@ -112,13 +114,13 @@ void parseXcuFile(
     SAL_THROW((
         css::container::NoSuchElementException, css::uno::RuntimeException))
 {
-    OSL_VERIFY(
-        rtl::Reference< ParseManager >(
-            new ParseManager(
-                url,
-                new XcuParser(
-                    layer, data, partial, modifications, additions)))->
-        parse());
+    bool ok = rtl::Reference< ParseManager >(
+        new ParseManager(
+            url,
+            new XcuParser(layer, data, partial, modifications, additions)))->
+        parse();
+    assert(ok);
+    (void) ok; // avoid warnings
 }
 
 rtl::OUString expand(rtl::OUString const & str) {
@@ -128,7 +130,7 @@ rtl::OUString expand(rtl::OUString const & str) {
 }
 
 bool canRemoveFromLayer(int layer, rtl::Reference< Node > const & node) {
-    OSL_ASSERT(node.is());
+    assert(node.is());
     if (node->getLayer() > layer && node->getLayer() < Data::NO_LAYER) {
         return false;
     }
@@ -189,7 +191,7 @@ Components::WriteThread::WriteThread(
     reference_(reference), components_(components), url_(url), data_(data)
 {
     lock_ = lock();
-    OSL_ASSERT(reference != 0);
+    assert(reference != 0);
     acquire();
 }
 
@@ -201,11 +203,10 @@ void Components::WriteThread::run() {
         try {
             writeModFile(components_, url_, data_);
         } catch (css::uno::RuntimeException & e) {
-            // Silently ignore write errors, instead of aborting:
-            OSL_TRACE(
-                "configmgr error writing modifications: %s",
-                rtl::OUStringToOString(
-                    e.Message, RTL_TEXTENCODING_UTF8).getStr());
+            // Ignore write errors, instead of aborting:
+            SAL_WARN(
+                "configmgr",
+                "error writing modifications: \"" << e.Message << '"');
         }
     } catch (...) {
         reference_->clear();
@@ -225,7 +226,7 @@ class theComponentsSingleton :
 Components & Components::getSingleton(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
-    OSL_ASSERT(context.is());
+    assert(context.is());
     return theComponentsSingleton::get(context);
 }
 
@@ -344,7 +345,7 @@ void Components::insertExtensionXcsFile(
 void Components::insertExtensionXcuFile(
     bool shared, rtl::OUString const & fileUri, Modifications * modifications)
 {
-    OSL_ASSERT(modifications != 0);
+    assert(modifications != 0);
     int layer = getExtensionLayer(shared) + 1;
     Additions * adds = data_.addExtensionXcuAdditions(fileUri, layer);
     try {
@@ -376,7 +377,7 @@ void Components::removeExtensionXcuFile(
     // item->additions records all additions of set members in textual order,
     // the latter check works well when iterating through item->additions in
     // reverse order.
-    OSL_ASSERT(modifications != 0);
+    assert(modifications != 0);
     rtl::Reference< Data::ExtensionXcu > item(
         data_.removeExtensionXcuAdditions(fileUri));
     if (item.is()) {
@@ -395,9 +396,9 @@ void Components::removeExtensionXcuFile(
                 map = &node->getMembers();
             }
             if (node.is()) {
-                OSL_ASSERT(parent.is());
+                assert(parent.is());
                 if (parent->kind() == Node::KIND_SET) {
-                    OSL_ASSERT(
+                    assert(
                         node->kind() == Node::KIND_GROUP ||
                         node->kind() == Node::KIND_SET);
                     if (canRemoveFromLayer(item->layer, node)) {
@@ -418,17 +419,17 @@ void Components::insertModificationXcuFile(
     std::set< rtl::OUString > const & excludedPaths,
     Modifications * modifications)
 {
-    OSL_ASSERT(modifications != 0);
+    assert(modifications != 0);
     Partial part(includedPaths, excludedPaths);
     try {
         parseFileLeniently(
             &parseXcuFile, fileUri, Data::NO_LAYER, data_, &part, modifications,
             0);
     } catch (css::container::NoSuchElementException & e) {
-        OSL_TRACE(
-            "configmgr error inserting non-existing %s: %s",
-            rtl::OUStringToOString(fileUri, RTL_TEXTENCODING_UTF8).getStr(),
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        SAL_WARN(
+            "configmgr",
+            "error inserting non-existing \"" << fileUri << "\": \""
+                << e.Message << '"');
     }
 }
 
@@ -458,11 +459,10 @@ css::beans::Optional< css::uno::Any > Components::getExternalValue(
         } catch (css::uno::Exception & e) {
             // Assuming these exceptions indicate that the service is not
             // installed:
-            OSL_TRACE(
-                "createInstance(%s) failed with %s",
-                rtl::OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr(),
-                rtl::OUStringToOString(
-                    e.Message, RTL_TEXTENCODING_UTF8).getStr());
+            SAL_WARN(
+                "configmgr",
+                "createInstance(" << name << ") failed with \"" << e.Message
+                    << '"');
         }
         css::uno::Reference< css::beans::XPropertySet > propset;
         if (service.is()) {
@@ -508,7 +508,7 @@ Components::Components(
     css::uno::Reference< css::uno::XComponentContext > const & context):
     context_(context), sharedExtensionLayer_(-1), userExtensionLayer_(-1)
 {
-    OSL_ASSERT(context.is());
+    assert(context.is());
     lock_ = lock();
     rtl::OUString conf(
         expand(
@@ -624,18 +624,17 @@ void Components::parseFileLeniently(
     Partial const * partial, Modifications * modifications,
     Additions * additions)
 {
-    OSL_ASSERT(parseFile != 0);
+    assert(parseFile != 0);
     try {
         (*parseFile)(url, layer, data, partial, modifications, additions);
     } catch (css::container::NoSuchElementException &) {
         throw;
     } catch (css::uno::Exception & e) { //TODO: more specific exception catching
-        // Silently ignore invalid XML files, instead of completely preventing
-        // OOo from starting:
-        OSL_TRACE(
-            "configmgr error reading %s: %s",
-            rtl::OUStringToOString(url, RTL_TEXTENCODING_UTF8).getStr(),
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        // Ignore invalid XML files, instead of completely preventing OOo from
+        // starting:
+        SAL_WARN(
+            "configmgr",
+            "error reading \"" << url << "\": \"" << e.Message << '"');
     }
 }
 
@@ -720,10 +719,8 @@ void Components::parseFileList(
             try {
                 parseFileLeniently(parseFile, url, layer, data_, 0, 0, adds);
             } catch (css::container::NoSuchElementException & e) {
-                OSL_TRACE(
-                    "configmgr file does not exist: %s",
-                    rtl::OUStringToOString(
-                        e.Message, RTL_TEXTENCODING_UTF8).getStr());
+                SAL_WARN(
+                    "configmgr", "file does not exist: \"" << e.Message << '"');
                 if (adds != 0) {
                     data_.removeExtensionXcuAdditions(url);
                 }
@@ -874,8 +871,8 @@ void Components::parseModificationLayer(rtl::OUString const & url) {
     try {
         parseFileLeniently(&parseXcuFile, url, Data::NO_LAYER, data_, 0, 0, 0);
     } catch (css::container::NoSuchElementException &) {
-        OSL_TRACE(
-            "configmgr user registrymodifications.xcu does not (yet) exist");
+        SAL_INFO(
+            "configmgr", "user registrymodifications.xcu does not (yet) exist");
         // Migrate old user layer data (can be removed once migration is no
         // longer relevant, probably OOo 4; also see hack for xsi namespace in
         // xmlreader::XmlReader::registerNamespaceIri):

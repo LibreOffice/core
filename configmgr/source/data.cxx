@@ -29,17 +29,18 @@
 #include "sal/config.h"
 
 #include <algorithm>
+#include <cassert>
 
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "osl/diagnose.h"
+#include "rtl/oustringostreaminserter.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/string.h"
-#include "rtl/textenc.h"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
+#include "sal/log.hxx"
 #include "sal/types.h"
 
 #include "additions.hxx"
@@ -59,7 +60,7 @@ bool decode(
     rtl::OUString const & encoded, sal_Int32 begin, sal_Int32 end,
     rtl::OUString * decoded)
 {
-    OSL_ASSERT(
+    assert(
         begin >= 0 && begin <= end && end <= encoded.getLength() &&
         decoded != 0);
     rtl::OUStringBuffer buf;
@@ -83,7 +84,7 @@ bool decode(
             } else {
                 return false;
             }
-            OSL_ASSERT(begin <= end);
+            assert(begin <= end);
         } else {
             buf.append(c);
         }
@@ -128,7 +129,7 @@ sal_Int32 Data::parseSegment(
     rtl::OUString const & path, sal_Int32 index, rtl::OUString * name,
     bool * setElement, rtl::OUString * templateName)
 {
-    OSL_ASSERT(
+    assert(
         index >= 0 && index <= path.getLength() && name != 0 &&
         setElement != 0);
     sal_Int32 i = index;
@@ -187,7 +188,7 @@ bool Data::equalTemplateNames(
 {
     if (shortName.indexOf(':') == -1) {
         sal_Int32 i = longName.indexOf(':') + 1;
-        OSL_ASSERT(i > 0);
+        assert(i > 0);
         return
             rtl_ustr_compare_WithLength(
                 shortName.getStr(), shortName.getLength(),
@@ -308,7 +309,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
                     css::uno::Reference< css::uno::XInterface >());
             }
             if (templateName.getLength() != 0 && p != 0) {
-                OSL_ASSERT(p->getTemplateName().getLength() != 0);
+                assert(p->getTemplateName().getLength() != 0);
                 if (!equalTemplateNames(templateName, p->getTemplateName())) {
                     throw css::uno::RuntimeException(
                         (rtl::OUString(
@@ -359,9 +360,9 @@ rtl::Reference< Data::ExtensionXcu > Data::removeExtensionXcuAdditions(
         // extension xcu files that are never added via addExtensionXcuAdditions
         // (also, there might be url spelling differences between calls to
         // addExtensionXcuAdditions and removeExtensionXcuAdditions?):
-        OSL_TRACE(
-            "unknown configmgr::Data::removeExtensionXcuAdditions(%s)",
-            rtl::OUStringToOString(url, RTL_TEXTENCODING_UTF8).getStr());
+        SAL_INFO(
+            "configmgr",
+            "unknown Data::removeExtensionXcuAdditions(" << url << ")");
         return rtl::Reference< ExtensionXcu >();
     }
     rtl::Reference< ExtensionXcu > item(i->second);

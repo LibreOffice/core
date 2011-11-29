@@ -564,7 +564,7 @@ private:
 
     boost::shared_ptr<osl::Mutex> lock_;
 
-#if OSL_DEBUG_LEVEL > 0
+#if !defined NDEBUG
 protected:
     enum {
         IS_ANY = 0, IS_GROUP = 0x01, IS_SET = 0x02, IS_EXTENSIBLE = 0x04,

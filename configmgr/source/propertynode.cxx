@@ -28,9 +28,10 @@
 
 #include "sal/config.h"
 
+#include <cassert>
+
 #include "com/sun/star/beans/Optional.hpp"
 #include "com/sun/star/uno/Any.hxx"
-#include "osl/diagnose.h"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
@@ -86,7 +87,7 @@ void PropertyNode::setValue(int layer, css::uno::Any const & value) {
 }
 
 void PropertyNode::setExternal(int layer, rtl::OUString const & descriptor) {
-    OSL_ASSERT(descriptor.getLength() != 0);
+    assert(!descriptor.isEmpty());
     setLayer(layer);
     externalDescriptor_ = descriptor;
 }

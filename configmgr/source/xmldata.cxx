@@ -28,6 +28,7 @@
 
 #include "sal/config.h"
 
+#include <cassert>
 #include <climits>
 #include <stack>
 
@@ -35,7 +36,6 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "osl/diagnose.h"
 #include "osl/file.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/strbuf.hxx"
@@ -72,7 +72,7 @@ namespace css = com::sun::star;
 Type parseType(
     xmlreader::XmlReader const & reader, xmlreader::Span const & text)
 {
-    OSL_ASSERT(text.is());
+    assert(text.is());
     sal_Int32 i = rtl_str_indexOfChar_WithLength(text.begin, text.length, ':');
     if (i >= 0) {
         switch (reader.getNamespaceId(xmlreader::Span(text.begin, i))) {
@@ -166,7 +166,7 @@ Type parseType(
 }
 
 bool parseBoolean(xmlreader::Span const & text) {
-    OSL_ASSERT(text.is());
+    assert(text.is());
     if (text.equals(RTL_CONSTASCII_STRINGPARAM("true"))) {
         return true;
     }

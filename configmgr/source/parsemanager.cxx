@@ -28,9 +28,10 @@
 
 #include "sal/config.h"
 
+#include <cassert>
+
 #include "com/sun/star/container/NoSuchElementException.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
-#include "osl/diagnose.h"
 #include "sal/types.h"
 #include "xmlreader/span.hxx"
 #include "xmlreader/xmlreader.hxx"
@@ -52,21 +53,21 @@ ParseManager::ParseManager(
         css::container::NoSuchElementException, css::uno::RuntimeException)):
     reader_(url), parser_(parser)
 {
-    OSL_ASSERT(parser.is());
+    assert(parser.is());
     int id;
     id = reader_.registerNamespaceIri(
         xmlreader::Span(
             RTL_CONSTASCII_STRINGPARAM("http://openoffice.org/2001/registry")));
-    OSL_ASSERT(id == NAMESPACE_OOR);
+    assert(id == NAMESPACE_OOR);
     id = reader_.registerNamespaceIri(
         xmlreader::Span(
             RTL_CONSTASCII_STRINGPARAM("http://www.w3.org/2001/XMLSchema")));
-    OSL_ASSERT(id == NAMESPACE_XS);
+    assert(id == NAMESPACE_XS);
     id = reader_.registerNamespaceIri(
         xmlreader::Span(
             RTL_CONSTASCII_STRINGPARAM(
                 "http://www.w3.org/2001/XMLSchema-instance")));
-    OSL_ASSERT(id == NAMESPACE_XSI);
+    assert(id == NAMESPACE_XSI);
     (void)id;
 }
 

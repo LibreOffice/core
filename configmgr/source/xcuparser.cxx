@@ -29,18 +29,20 @@
 #include "sal/config.h"
 
 #include <algorithm>
+#include <cassert>
 
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "osl/diagnose.h"
+#include "rtl/oustringostreaminserter.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
+#include "sal/log.hxx"
 #include "xmlreader/span.hxx"
 #include "xmlreader/xmlreader.hxx"
 
@@ -201,10 +203,10 @@ bool XcuParser::startElement(
             } else if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
                        name.equals(RTL_CONSTASCII_STRINGPARAM("prop")))
             {
-                OSL_TRACE(
-                    "configmgr bad set node <prop> member in %s",
-                    rtl::OUStringToOString(
-                        reader.getUrl(), RTL_TEXTENCODING_UTF8).getStr());
+                SAL_WARN(
+                    "configmgr",
+                    "bad set node <prop> member in \"" << reader.getUrl()
+                        << '"');
                 state_.push(State(true)); // ignored
             } else {
                 throw css::uno::RuntimeException(
@@ -225,18 +227,18 @@ void XcuParser::endElement(xmlreader::XmlReader const &) {
     if (valueParser_.endElement()) {
         return;
     }
-    OSL_ASSERT(!state_.empty());
+    assert(!state_.empty());
     bool pop = state_.top().pop;
     rtl::Reference< Node > insert;
     rtl::OUString name;
     if (state_.top().insert) {
         insert = state_.top().node;
-        OSL_ASSERT(insert.is());
+        assert(insert.is());
         name = state_.top().name;
     }
     state_.pop();
     if (insert.is()) {
-        OSL_ASSERT(!state_.empty() && state_.top().node.is());
+        assert(!state_.empty() && state_.top().node.is());
         state_.top().node->getMembers()[name] = insert;
     }
     if (pop && !path_.empty()) {
@@ -251,7 +253,7 @@ void XcuParser::characters(xmlreader::Span const & text) {
 }
 
 XcuParser::Operation XcuParser::parseOperation(xmlreader::Span const & text) {
-    OSL_ASSERT(text.is());
+    assert(text.is());
     if (text.equals(RTL_CONSTASCII_STRINGPARAM("modify"))) {
         return OPERATION_MODIFY;
     }
@@ -341,7 +343,7 @@ void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
     componentName_ = xmlreader::Span(buf.getStr(), buf.getLength()).
         convertFromUtf8();
     if (trackPath_) {
-        OSL_ASSERT(path_.empty());
+        assert(path_.empty());
         path_.push_back(componentName_);
         if (partial_ != 0 && partial_->contains(path_) == Partial::CONTAINS_NOT)
         {
@@ -353,12 +355,10 @@ void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
         Data::findNode(
             valueParser_.getLayer(), data_.components, componentName_));
     if (!node.is()) {
-        OSL_TRACE(
-            "configmgr unknown component %s in %s",
-            rtl::OUStringToOString(
-                componentName_, RTL_TEXTENCODING_UTF8).getStr(),
-            rtl::OUStringToOString(
-                reader.getUrl(), RTL_TEXTENCODING_UTF8).getStr());
+        SAL_WARN(
+            "configmgr",
+            "unknown component \"" << componentName_ << "\" in \""
+                << reader.getUrl() << '"');
         state_.push(State(true)); // ignored
         return;
     }
@@ -408,15 +408,13 @@ void XcuParser::handleItem(xmlreader::XmlReader & reader) {
         data_.resolvePathRepresentation(
             path, 0, &path_, &finalizedLayer));
     if (!node.is()) {
-        OSL_TRACE(
-            "configmgr unknown item %s in %s",
-            rtl::OUStringToOString(path, RTL_TEXTENCODING_UTF8).getStr(),
-            rtl::OUStringToOString(
-                reader.getUrl(), RTL_TEXTENCODING_UTF8).getStr());
+        SAL_WARN(
+            "configmgr",
+            "unknown item \"" << path << "\" in \"" << reader.getUrl() << '"');
         state_.push(State(true)); // ignored
         return;
     }
-    OSL_ASSERT(!path_.empty());
+    assert(!path_.empty());
     componentName_ = path_.front();
     if (trackPath_) {
         if (partial_ != 0 && partial_->contains(path_) == Partial::CONTAINS_NOT)
@@ -430,11 +428,10 @@ void XcuParser::handleItem(xmlreader::XmlReader & reader) {
     switch (node->kind()) {
     case Node::KIND_PROPERTY:
     case Node::KIND_LOCALIZED_VALUE:
-        OSL_TRACE(
-            "configmgr item of bad type %s in %s",
-            rtl::OUStringToOString(path, RTL_TEXTENCODING_UTF8).getStr(),
-            rtl::OUStringToOString(
-                reader.getUrl(), RTL_TEXTENCODING_UTF8).getStr());
+        SAL_WARN(
+            "configmgr",
+            "item of bad type \"" << path << "\" in \"" << reader.getUrl()
+                << '"');
         state_.push(State(true)); // ignored
         return;
     case Node::KIND_LOCALIZED_PROPERTY:
@@ -761,11 +758,10 @@ void XcuParser::handleUnknownGroupProp(
         }
         // fall through
     default:
-        OSL_TRACE(
-            "configmgr unknown property %s in %s",
-            rtl::OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr(),
-            rtl::OUStringToOString(
-                reader.getUrl(), RTL_TEXTENCODING_UTF8).getStr());
+        SAL_WARN(
+            "configmgr",
+            "unknown property \"" << name << "\" in \"" << reader.getUrl()
+                << '"');
         state_.push(State(true)); // ignored
         break;
     }
@@ -929,11 +925,9 @@ void XcuParser::handleGroupNode(
     rtl::Reference< Node > child(
         Data::findNode(valueParser_.getLayer(), group->getMembers(), name));
     if (!child.is()) {
-        OSL_TRACE(
-            "configmgr unknown node %s in %s",
-            rtl::OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr(),
-            rtl::OUStringToOString(
-                reader.getUrl(), RTL_TEXTENCODING_UTF8).getStr());
+        SAL_WARN(
+            "configmgr",
+            "unknown node \"" << name << "\" in \"" << reader.getUrl() << '"');
         state_.push(State(true)); // ignored
         return;
     }
@@ -1055,7 +1049,10 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
     switch (op) {
     case OPERATION_MODIFY:
         if (i == set->getMembers().end()) {
-            OSL_TRACE("ignoring modify of unknown set member node");
+            SAL_WARN(
+                "configmgr",
+                "ignoring modify of unknown set member node \"" << name
+                    << "\" in \"" << reader.getUrl() << '"');
             state_.push(State(true)); // ignored
         } else {
             state_.push(

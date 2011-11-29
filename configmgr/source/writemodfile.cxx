@@ -28,15 +28,17 @@
 
 #include "sal/config.h"
 
+#include <cassert>
+
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "osl/diagnose.h"
 #include "osl/file.h"
 #include "osl/file.hxx"
+#include "rtl/oustringostreaminserter.hxx"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
 #include "rtl/textcvt.h"
@@ -44,6 +46,7 @@
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
+#include "sal/log.hxx"
 #include "sal/types.h"
 #include "xmlreader/span.hxx"
 
@@ -69,8 +72,7 @@ namespace css = com::sun::star;
 rtl::OString convertToUtf8(
     rtl::OUString const & text, sal_Int32 offset, sal_Int32 length)
 {
-    OSL_ASSERT(
-        offset <= text.getLength() && text.getLength() - offset >= length);
+    assert(offset <= text.getLength() && text.getLength() - offset >= length);
     rtl::OString s;
     if (!rtl_convertUStringToString(
             &s.pData, text.pData->buffer + offset, length,
@@ -101,19 +103,20 @@ TempFile::~TempFile() {
         if (!closed) {
             oslFileError e = osl_closeFile(handle);
             if (e != osl_File_E_None) {
-                OSL_TRACE(
-                    "osl_closeFile failed with %ld", static_cast< long >(e));
+                SAL_WARN("configmgr", "osl_closeFile failed with " << +e);
             }
         }
         osl::FileBase::RC e = osl::File::remove(url);
         if (e != osl::FileBase::E_None) {
-            OSL_TRACE("osl_removeFile failed with %ld", static_cast< long >(e));
+            SAL_WARN(
+                "configmgr",
+                "osl::File::remove(" << url << ") failed with " << +e);
         }
     }
 }
 
 void writeData(oslFileHandle handle, char const * begin, sal_Int32 length) {
-    OSL_ASSERT(length >= 0);
+    assert(length >= 0);
     sal_uInt64 n;
     if ((osl_writeFile(handle, begin, static_cast< sal_uInt32 >(length), &n) !=
          osl_File_E_None) ||
@@ -133,7 +136,7 @@ void writeAttributeValue(oslFileHandle handle, rtl::OUString const & value) {
     sal_Int32 i = 0;
     sal_Int32 j = i;
     for (; j < value.getLength(); ++j) {
-        OSL_ASSERT(
+        assert(
             value[j] == 0x0009 || value[j] == 0x000A || value[j] == 0x000D ||
             (value[j] >= 0x0020 && value[j] != 0xFFFE && value[j] != 0xFFFF));
         switch(value[j]) {
@@ -332,7 +335,7 @@ void writeValue(oslFileHandle handle, Type type, css::uno::Any const & value) {
         writeItemListValue< css::uno::Sequence< sal_Int8 > >(handle, value);
         break;
     default: // TYPE_ERROR, TYPE_NIL, TYPE_ANY
-        OSL_ASSERT(false); // this cannot happen
+        assert(false); // this cannot happen
     }
 }
 
@@ -367,7 +370,7 @@ void writeNode(
             writeData(handle, RTL_CONSTASCII_STRINGPARAM("\" oor:op=\"fuse\""));
             Type type = prop->getStaticType();
             Type dynType = getDynamicType(prop->getValue(components));
-            OSL_ASSERT(dynType != TYPE_ERROR);
+            assert(dynType != TYPE_ERROR);
             if (type == TYPE_ANY) {
                 type = dynType;
                 if (type != TYPE_NIL) {
@@ -412,7 +415,7 @@ void writeNode(
             css::uno::Any value(
                 dynamic_cast< LocalizedValueNode * >(node.get())->getValue());
             Type dynType = getDynamicType(value);
-            OSL_ASSERT(dynType != TYPE_ERROR);
+            assert(dynType != TYPE_ERROR);
             if (type == TYPE_ANY) {
                 type = dynType;
                 if (type != TYPE_NIL) {
@@ -460,7 +463,7 @@ void writeModifications(
     // It is never necessary to write oor:finalized or oor:mandatory attributes,
     // as they cannot be set via the UNO API.
     if (modifications.children.empty()) {
-        OSL_ASSERT(parent.is());
+        assert(parent.is());
             // components themselves have no parent but must have children
         writeData(handle, RTL_CONSTASCII_STRINGPARAM("<item oor:path=\""));
         writeAttributeValue(handle, parentPathRepresentation);
@@ -481,7 +484,7 @@ void writeModifications(
                     handle, RTL_CONSTASCII_STRINGPARAM(" oor:op=\"remove\"/>"));
                 break;
             case Node::KIND_GROUP:
-                OSL_ASSERT(
+                assert(
                     dynamic_cast< GroupNode * >(parent.get())->isExtensible());
                 writeData(
                     handle, RTL_CONSTASCII_STRINGPARAM("<prop oor:name=\""));
@@ -499,13 +502,13 @@ void writeModifications(
                     RTL_CONSTASCII_STRINGPARAM("\" oor:op=\"remove\"/>"));
                 break;
             default:
-                OSL_ASSERT(false); // this cannot happen
+                assert(false); // this cannot happen
                 break;
             }
         }
         writeData(handle, RTL_CONSTASCII_STRINGPARAM("</item>"));
     } else {
-        OSL_ASSERT(node.is());
+        assert(node.is());
         rtl::OUString pathRep(
             parentPathRepresentation +
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
@@ -527,16 +530,17 @@ void writeModFile(
     Components & components, rtl::OUString const & url, Data const & data)
 {
     sal_Int32 i = url.lastIndexOf('/');
-    OSL_ASSERT(i != -1);
+    assert(i != -1);
     rtl::OUString dir(url.copy(0, i));
     switch (osl::Directory::createPath(dir)) {
     case osl::FileBase::E_None:
     case osl::FileBase::E_EXIST:
         break;
     case osl::FileBase::E_ACCES:
-        OSL_TRACE(
-            "cannot create registrymodifications.xcu path (E_ACCES); changes"
-            " will be lost");
+        SAL_INFO(
+            "configmgr",
+            ("cannot create registrymodifications.xcu path (E_ACCES); changes"
+             " will be lost"));
         return;
     default:
         throw css::uno::RuntimeException(
@@ -550,9 +554,10 @@ void writeModFile(
     case osl::FileBase::E_None:
         break;
     case osl::FileBase::E_ACCES:
-        OSL_TRACE(
-            "cannot create temp registrymodifications.xcu (E_ACCES); changes"
-            " will be lost");
+        SAL_INFO(
+            "configmgr",
+            ("cannot create temp registrymodifications.xcu (E_ACCES); changes"
+             " will be lost"));
         return;
     default:
         throw css::uno::RuntimeException(

@@ -28,6 +28,7 @@
 
 #include "sal/config.h"
 
+#include <cassert>
 #include <vector>
 
 #include "com/sun/star/container/XChild.hpp"
@@ -43,7 +44,6 @@
 #include "cppuhelper/queryinterface.hxx"
 #include "cppuhelper/weak.hxx"
 #include "comphelper/servicehelper.hxx"
-#include "osl/diagnose.h"
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/string.h"
@@ -94,7 +94,7 @@ ChildAccess::ChildAccess(
     inTransaction_(false)
 {
     lock_ = lock();
-    OSL_ASSERT(root.is() && parent.is() && node.is());
+    assert(root.is() && parent.is() && node.is());
 }
 
 ChildAccess::ChildAccess(
@@ -103,11 +103,11 @@ ChildAccess::ChildAccess(
     Access(components), root_(root), node_(node), inTransaction_(false)
 {
     lock_ = lock();
-    OSL_ASSERT(root.is() && node.is());
+    assert(root.is() && node.is());
 }
 
 Path ChildAccess::getAbsolutePath() {
-    OSL_ASSERT(getParentAccess().is());
+    assert(getParentAccess().is());
     Path path(getParentAccess()->getAbsolutePath());
     path.push_back(name_);
     return path;
@@ -168,7 +168,7 @@ void ChildAccess::release() throw () {
 css::uno::Reference< css::uno::XInterface > ChildAccess::getParent()
     throw (css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_ANY));
+    assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     return static_cast< cppu::OWeakObject * >(parent_.get());
@@ -177,7 +177,7 @@ css::uno::Reference< css::uno::XInterface > ChildAccess::getParent()
 void ChildAccess::setParent(css::uno::Reference< css::uno::XInterface > const &)
     throw (css::lang::NoSupportException, css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_ANY));
+    assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     throw css::lang::NoSupportException(
@@ -189,7 +189,7 @@ sal_Int64 ChildAccess::getSomething(
     css::uno::Sequence< sal_Int8 > const & aIdentifier)
     throw (css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_ANY));
+    assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     return aIdentifier == getTunnelId()
@@ -201,15 +201,14 @@ void ChildAccess::bind(
     rtl::Reference< Access > const & parent, rtl::OUString const & name)
     throw ()
 {
-    OSL_ASSERT(
-        !parent_.is() && root.is() && parent.is() && name.getLength() != 0);
+    assert(!parent_.is() && root.is() && parent.is() && name.getLength() != 0);
     root_ = root;
     parent_ = parent;
     name_ = name;
 }
 
 void ChildAccess::unbind() throw () {
-    OSL_ASSERT(parent_.is());
+    assert(parent_.is());
     parent_->releaseChild(name_);
     parent_.clear();
     inTransaction_ = true;
@@ -226,7 +225,7 @@ void ChildAccess::setNode(rtl::Reference< Node > const & node) {
 void ChildAccess::setProperty(
     css::uno::Any const & value, Modifications * localModifications)
 {
-    OSL_ASSERT(localModifications != 0);
+    assert(localModifications != 0);
     Type type = TYPE_ERROR;
     bool nillable = false;
     switch (node_->kind()) {
@@ -366,7 +365,7 @@ css::uno::Any ChildAccess::asValue() {
 
 void ChildAccess::commitChanges(bool valid, Modifications * globalModifications)
 {
-    OSL_ASSERT(globalModifications != 0);
+    assert(globalModifications != 0);
     commitChildChanges(valid, globalModifications);
     if (valid && changedValue_.get() != 0) {
         Path path(getAbsolutePath());
@@ -382,7 +381,7 @@ void ChildAccess::commitChanges(bool valid, Modifications * globalModifications)
                 Data::NO_LAYER, *changedValue_);
             break;
         default:
-            OSL_ASSERT(false); // this cannot happen
+            assert(false); // this cannot happen
             break;
         }
     }
@@ -397,7 +396,7 @@ ChildAccess::~ChildAccess() {
 }
 
 void ChildAccess::addTypes(std::vector< css::uno::Type > * types) const {
-    OSL_ASSERT(types != 0);
+    assert(types != 0);
     types->push_back(cppu::UnoType< css::container::XChild >::get());
     types->push_back(cppu::UnoType< css::lang::XUnoTunnel >::get());
 }
@@ -405,7 +404,7 @@ void ChildAccess::addTypes(std::vector< css::uno::Type > * types) const {
 void ChildAccess::addSupportedServiceNames(
     std::vector< rtl::OUString > * services)
 {
-    OSL_ASSERT(services != 0);
+    assert(services != 0);
     services->push_back(
         getParentNode()->kind() == Node::KIND_GROUP
         ? rtl::OUString(
@@ -419,7 +418,7 @@ void ChildAccess::addSupportedServiceNames(
 css::uno::Any ChildAccess::queryInterface(css::uno::Type const & aType)
     throw (css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_ANY));
+    assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     css::uno::Any res(Access::queryInterface(aType));

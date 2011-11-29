@@ -26,6 +26,8 @@
 
 #include "sal/config.h"
 
+#include <cassert>
+
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/beans/NamedValue.hpp"
 #include "com/sun/star/beans/Property.hpp"
@@ -58,7 +60,6 @@
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase3.hxx"
 #include "cppuhelper/weak.hxx"
-#include "osl/diagnose.h"
 #include "osl/mutex.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
@@ -326,7 +327,7 @@ private:
 Service::Service(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
-    OSL_ASSERT(context.is());
+    assert(context.is());
     try {
         provider_ = css::uno::Reference< css::lang::XMultiServiceFactory >(
             (css::uno::Reference< css::lang::XMultiComponentFactory >(
