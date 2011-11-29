@@ -52,20 +52,23 @@ gb_MAKETARGET=build
 endif
 endif
 
+gb_BuildplTarget_COMPLETEDTARGETS=
 define gb_BuildplTarget_command
-cd $(SRCDIR)/$(1) && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -P$(GMAKE_PARALLELISM) gb_MAKETARGET=$(gb_MAKETARGET)
+cd $(SRCDIR)/$(1) && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) $(2) -P$(GMAKE_PARALLELISM) gb_MAKETARGET=$(gb_MAKETARGET)
+$(eval gb_BuildplTarget_COMPLETEDTARGETS+=$(1))
 endef
 
 .PHONY: smoketestoo_native instsetoo_native cross-build-toolset dev-install all build
 
-smoketestoo_native: $(WORKDIR)/bootstrap  $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset)
-	$(call gb_BuildplTarget_command,$@)
+smoketestoo_native: $(WORKDIR)/bootstrap  $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset) | instsetoo_native
+	$(call gb_BuildplTarget_command,$@,$(if $(filter instsetoo_native,$(gb_BuildplTarget_COMPLETEDTARGETS)),--from instsetoo_native,--all))
+	echo $@
 
 instsetoo_native: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset)
-	$(call gb_BuildplTarget_command,$@)
+	$(call gb_BuildplTarget_command,$@,--all)
 
 cross_toolset: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded
-	source $(SRCDIR)/Env.Build.sh && $(call gb_BuildplTarget_command,$@)
+	source $(SRCDIR)/Env.Build.sh && $(call gb_BuildplTarget_command,$@,--all)
 
 dev-install: smoketestoo_native
 
