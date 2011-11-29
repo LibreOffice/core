@@ -36,11 +36,11 @@ $(eval $(call gb_Module_add_targets,sc,\
 
 $(eval $(call gb_Module_add_check_targets,sc,\
 	CppunitTest_sc_filters_test \
-	CppunitTest_sc_macros_test \
 	CppunitTest_sc_ucalc \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
+    CppunitTest_sc_macros_test \
     JunitTest_sc_unoapi \
 ))
 
