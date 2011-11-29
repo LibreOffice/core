@@ -119,8 +119,7 @@ sal_Bool SwPosition::operator<(const SwPosition &rPos) const
         }
         else // by convention position with no index is smaller
         {
-            return (pThisReg) ? sal_False :
-                     ((pOtherReg) ? sal_True : (this < &rPos));
+            return (pOtherReg) ? sal_True : sal_False;
         }
     }
     return sal_False;
@@ -143,8 +142,7 @@ sal_Bool SwPosition::operator>(const SwPosition &rPos) const
         }
         else // by convention position with no index is smaller
         {
-            return (pThisReg) ? sal_True:
-                     ((pOtherReg) ? sal_False: (this > &rPos));
+            return (pThisReg) ? sal_True : sal_False;
         }
     }
     return sal_False;
@@ -167,8 +165,7 @@ sal_Bool SwPosition::operator<=(const SwPosition &rPos) const
         }
         else // by convention position with no index is smaller
         {
-            return (pThisReg) ? sal_False :
-                     ((pOtherReg) ? sal_True : (this <= &rPos));
+            return (pThisReg) ? sal_False : sal_True;
         }
     }
     return sal_False;
@@ -191,8 +188,7 @@ sal_Bool SwPosition::operator>=(const SwPosition &rPos) const
         }
         else // by convention position with no index is smaller
         {
-            return (pThisReg) ? sal_True:
-                     ((pOtherReg) ? sal_False: (this >= &rPos));
+            return (pOtherReg) ? sal_False : sal_True;
         }
     }
     return sal_False;
