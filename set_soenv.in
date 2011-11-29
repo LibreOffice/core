@@ -2042,7 +2042,7 @@ if ($platform !~ m/cygwin/) {
    }
 }
 ToFile( "SOLARSRC",           $SOLARSRC,           "e" );
-ToFile( "gb_REPOS",           $gb_REPOS,           "e" );
+ToFile( "SRCDIR",           $SOLARSRC,           "e" );
 
 if ( $platform =~ m/cygwin/ )
 {

@@ -28,7 +28,7 @@
 
 # speed up if no target need to parse all modules
 ifneq ($(strip $(MAKECMDGOALS)),)
-ifeq ($(filter-out id tags docs distro-pack-install fetch help debugrun,$(MAKECMDGOALS)),)
+ifeq ($(filter-out id tags docs distro-pack-install fetch help debugrun Env.Host.sh,$(MAKECMDGOALS)),)
 gb_Module_add_target=
 gb_Module_add_check_target=
 gb_Module_add_subsequentcheck_target=

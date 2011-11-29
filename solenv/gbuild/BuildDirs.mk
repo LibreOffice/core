@@ -31,11 +31,9 @@ SOLARINC += $(JDKINCS)
 
 OUTDIR := $(SOLARVERSION)/$(INPATH)
 OUTDIR_FOR_BUILD := $(SOLARVERSION)/$(INPATH_FOR_BUILD)
-ifeq ($(strip $(WORKDIR)),)
-$(error WORKDIR variable is empty, no environment set, aborting)
+ifeq ($(strip $(SOLARENV)),)
+$(error SOLARENV variable is empty, no environment set, aborting)
 endif
-
-SRCDIR := $(SOLARSRC)
 
 # HACK
 # unixify windoze paths

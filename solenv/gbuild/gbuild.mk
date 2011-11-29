@@ -26,7 +26,7 @@
 #
 #*************************************************************************
 
-GBUILDDIR:=$(SRC_ROOT)/solenv/gbuild
+GBUILDDIR:=$(SRCDIR)/solenv/gbuild
 
 # vars needed from the env/calling makefile
 
@@ -151,7 +151,9 @@ $(eval $(call gb_Helper_collect_libtargets))
 gb_Library_DLLPOSTFIX := lo
 
 # Include platform/cpu/compiler specific config/definitions
+ifneq ($(strip $(OS)),)
 include $(GBUILDDIR)/platform/$(OS)_$(CPUNAME)_$(COM).mk
+endif
 
 ifeq ($(CROSS_COMPILING),YES)
 # We can safely Assume all cross-compilation is from Unix systems.

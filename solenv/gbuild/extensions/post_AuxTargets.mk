@@ -48,6 +48,10 @@ $(SRCDIR)/src.downloaded: $(SRCDIR)/ooo.lst $(SRCDIR)/download
 
 fetch: $(SRCDIR)/src.downloaded
 
+# fixme: can we prevent these exports in the first place?
+$(SRCDIR)/Env.Host.sh: autogen.lastrun configure.in ooo.lst.in set_soenv.in Makefile.in
+	$(if $(gb_MINISOLARENV),unset GBUILDDIR gb_Helper_execute gb_XSLTPROC gb_Helper_set_ld_path gb_AWK DBGSV_ERROR_OUT && $(SRCDIR)/autogen.sh,@echo "cannot reconfigure from within solarenv" && rm -f $(SRCDIR)/Env.Host.sh && exit 2)
+
 $(WORKDIR)/bootstrap:
 	@cd $(SRCDIR) && ./bootstrap
 	@mkdir -p $(dir $@) && touch $@
