@@ -223,7 +223,7 @@ void ScPreview::TestLastPage()
 }
 
 
-void ScPreview::CalcPages( SCTAB /*nToWhichTab*/ )
+void ScPreview::CalcPages()
 {
     WaitObject( this );
 
@@ -314,7 +314,7 @@ void ScPreview::RecalcPages()                   // nur nPageNo geaendert
     bool bDone = false;
     while (nPageNo >= nTotalPages && nTabsTested < nTabCount)
     {
-        CalcPages( nTabsTested );
+        CalcPages();
         bDone = true;
     }
 
@@ -351,7 +351,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 {
     if (!bValid)
     {
-        CalcPages(0);
+        CalcPages();
         RecalcPages();
         UpdateDrawView();       // Tabelle evtl. geaendert
     }
@@ -674,7 +674,7 @@ String ScPreview::GetPosString()
 {
     if (!bValid)
     {
-        CalcPages(nTab);
+        CalcPages();
         UpdateDrawView();       // Tabelle evtl. geaendert
     }
 
@@ -742,7 +742,7 @@ long ScPreview::GetFirstPage(SCTAB nTabP)
     long nPage = 0;
     if (nTabP>0)
     {
-        CalcPages( nTabP );
+        CalcPages();
         UpdateDrawView();       // Tabelle evtl. geaendert
 
         for (SCTAB i=0; i<nTabP; i++)

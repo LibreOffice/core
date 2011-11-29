@@ -104,7 +104,7 @@ private:
     long            nFooterHeight;
 
     void    TestLastPage();
-    void    CalcPages( SCTAB nToWhichTab );
+    void    CalcPages();
     void    RecalcPages();
     void    UpdateDrawView();
     void    DoPrint( ScPreviewLocationData* pFillLocation );
@@ -154,15 +154,15 @@ public:
     sal_uInt16  GetZoom() const     { return nZoom; }
     Point   GetOffset() const   { return aOffset; }
 
-    SCTAB   GetTab()            { if (!bValid) { CalcPages(0); RecalcPages(); } return nTab; }
-    long    GetTotalPages()     { if (!bValid) { CalcPages(0); RecalcPages(); } return nTotalPages; }
+    SCTAB   GetTab()            { if (!bValid) { CalcPages(); RecalcPages(); } return nTab; }
+    long    GetTotalPages()     { if (!bValid) { CalcPages(); RecalcPages(); } return nTotalPages; }
 
     bool    AllTested() const   { return bValid && nTabsTested >= nTabCount; }
 
     sal_uInt16  GetOptimalZoom(bool bWidthOnly);
     long    GetFirstPage(SCTAB nTab);
 
-    void    CalcAll()           { CalcPages(MAXTAB); }
+    void    CalcAll()           { CalcPages(); }
     void    SetInGetState(bool bSet) { bInGetState = bSet; }
 
     DECL_STATIC_LINK( ScPreview, InvalidateHdl, void* );
