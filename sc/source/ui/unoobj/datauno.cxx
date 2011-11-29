@@ -1181,6 +1181,43 @@ void convertQueryEntryToUno(const ScQueryEntry& rEntry, T& rField)
     }
 }
 
+template<typename T>
+void convertUnoToQueryEntry(const T& rField, ScQueryEntry& rEntry)
+{
+    rEntry.bDoQuery = true;
+    rEntry.eConnect = (rField.Connection == sheet::FilterConnection_AND) ? SC_AND : SC_OR;
+    rEntry.nField   = rField.Field;
+
+    switch (rField.Operator)           // FilterOperator
+    {
+    case sheet::FilterOperator2::EQUAL:                 rEntry.eOp = SC_EQUAL;              break;
+    case sheet::FilterOperator2::LESS:                  rEntry.eOp = SC_LESS;               break;
+    case sheet::FilterOperator2::GREATER:               rEntry.eOp = SC_GREATER;            break;
+    case sheet::FilterOperator2::LESS_EQUAL:            rEntry.eOp = SC_LESS_EQUAL;         break;
+    case sheet::FilterOperator2::GREATER_EQUAL:         rEntry.eOp = SC_GREATER_EQUAL;      break;
+    case sheet::FilterOperator2::NOT_EQUAL:             rEntry.eOp = SC_NOT_EQUAL;          break;
+    case sheet::FilterOperator2::TOP_VALUES:            rEntry.eOp = SC_TOPVAL;             break;
+    case sheet::FilterOperator2::BOTTOM_VALUES:         rEntry.eOp = SC_BOTVAL;             break;
+    case sheet::FilterOperator2::TOP_PERCENT:           rEntry.eOp = SC_TOPPERC;            break;
+    case sheet::FilterOperator2::BOTTOM_PERCENT:        rEntry.eOp = SC_BOTPERC;            break;
+    case sheet::FilterOperator2::CONTAINS:              rEntry.eOp = SC_CONTAINS;           break;
+    case sheet::FilterOperator2::DOES_NOT_CONTAIN:      rEntry.eOp = SC_DOES_NOT_CONTAIN;   break;
+    case sheet::FilterOperator2::BEGINS_WITH:           rEntry.eOp = SC_BEGINS_WITH;        break;
+    case sheet::FilterOperator2::DOES_NOT_BEGIN_WITH:   rEntry.eOp = SC_DOES_NOT_BEGIN_WITH;break;
+    case sheet::FilterOperator2::ENDS_WITH:             rEntry.eOp = SC_ENDS_WITH;          break;
+    case sheet::FilterOperator2::DOES_NOT_END_WITH:     rEntry.eOp = SC_DOES_NOT_END_WITH;  break;
+    case sheet::FilterOperator2::EMPTY:
+        rEntry.SetQueryByEmpty();
+        break;
+    case sheet::FilterOperator2::NOT_EMPTY:
+        rEntry.SetQueryByNonEmpty();
+        break;
+    default:
+        OSL_FAIL("Unknown filter operator type.");
+        rEntry.eOp = SC_EQUAL;
+    }
+}
+
 void fillQueryParam(
     ScQueryParam& rParam, ScDocument* pDoc,
     const uno::Sequence<sheet::TableFilterField2>& aFilterFields)
@@ -1192,39 +1229,7 @@ void fillQueryParam(
     for (size_t i = 0; i < nCount; ++i)
     {
         ScQueryEntry& rEntry = rParam.GetEntry(i);
-
-        rEntry.bDoQuery = true;
-        rEntry.eConnect = (pAry[i].Connection == sheet::FilterConnection_AND) ? SC_AND : SC_OR;
-        rEntry.nField   = pAry[i].Field;
-
-        switch (pAry[i].Operator)           // FilterOperator
-        {
-        case sheet::FilterOperator2::EQUAL:                 rEntry.eOp = SC_EQUAL;              break;
-        case sheet::FilterOperator2::LESS:                  rEntry.eOp = SC_LESS;               break;
-        case sheet::FilterOperator2::GREATER:               rEntry.eOp = SC_GREATER;            break;
-        case sheet::FilterOperator2::LESS_EQUAL:            rEntry.eOp = SC_LESS_EQUAL;         break;
-        case sheet::FilterOperator2::GREATER_EQUAL:         rEntry.eOp = SC_GREATER_EQUAL;      break;
-        case sheet::FilterOperator2::NOT_EQUAL:             rEntry.eOp = SC_NOT_EQUAL;          break;
-        case sheet::FilterOperator2::TOP_VALUES:            rEntry.eOp = SC_TOPVAL;             break;
-        case sheet::FilterOperator2::BOTTOM_VALUES:         rEntry.eOp = SC_BOTVAL;             break;
-        case sheet::FilterOperator2::TOP_PERCENT:           rEntry.eOp = SC_TOPPERC;            break;
-        case sheet::FilterOperator2::BOTTOM_PERCENT:        rEntry.eOp = SC_BOTPERC;            break;
-        case sheet::FilterOperator2::CONTAINS:              rEntry.eOp = SC_CONTAINS;           break;
-        case sheet::FilterOperator2::DOES_NOT_CONTAIN:      rEntry.eOp = SC_DOES_NOT_CONTAIN;   break;
-        case sheet::FilterOperator2::BEGINS_WITH:           rEntry.eOp = SC_BEGINS_WITH;        break;
-        case sheet::FilterOperator2::DOES_NOT_BEGIN_WITH:   rEntry.eOp = SC_DOES_NOT_BEGIN_WITH;break;
-        case sheet::FilterOperator2::ENDS_WITH:             rEntry.eOp = SC_ENDS_WITH;          break;
-        case sheet::FilterOperator2::DOES_NOT_END_WITH:     rEntry.eOp = SC_DOES_NOT_END_WITH;  break;
-        case sheet::FilterOperator2::EMPTY:
-            rEntry.SetQueryByEmpty();
-            break;
-        case sheet::FilterOperator2::NOT_EMPTY:
-            rEntry.SetQueryByNonEmpty();
-            break;
-        default:
-            OSL_FAIL("Falscher Query-enum");
-            rEntry.eOp = SC_EQUAL;
-        }
+        convertUnoToQueryEntry(pAry[i], rEntry);
 
         if (pAry[i].Operator != sheet::FilterOperator2::EMPTY && pAry[i].Operator != sheet::FilterOperator2::NOT_EMPTY)
         {
@@ -1254,39 +1259,7 @@ void fillQueryParam(
     for (size_t i = 0; i < nCount; ++i)
     {
         ScQueryEntry& rEntry = rParam.GetEntry(i);
-
-        rEntry.bDoQuery = true;
-        rEntry.eConnect = (pAry[i].Connection == sheet::FilterConnection_AND) ? SC_AND : SC_OR;
-        rEntry.nField   = pAry[i].Field;
-
-        switch (pAry[i].Operator)           // FilterOperator
-        {
-        case sheet::FilterOperator2::EQUAL:                 rEntry.eOp = SC_EQUAL;              break;
-        case sheet::FilterOperator2::LESS:                  rEntry.eOp = SC_LESS;               break;
-        case sheet::FilterOperator2::GREATER:               rEntry.eOp = SC_GREATER;            break;
-        case sheet::FilterOperator2::LESS_EQUAL:            rEntry.eOp = SC_LESS_EQUAL;         break;
-        case sheet::FilterOperator2::GREATER_EQUAL:         rEntry.eOp = SC_GREATER_EQUAL;      break;
-        case sheet::FilterOperator2::NOT_EQUAL:             rEntry.eOp = SC_NOT_EQUAL;          break;
-        case sheet::FilterOperator2::TOP_VALUES:            rEntry.eOp = SC_TOPVAL;             break;
-        case sheet::FilterOperator2::BOTTOM_VALUES:         rEntry.eOp = SC_BOTVAL;             break;
-        case sheet::FilterOperator2::TOP_PERCENT:           rEntry.eOp = SC_TOPPERC;            break;
-        case sheet::FilterOperator2::BOTTOM_PERCENT:        rEntry.eOp = SC_BOTPERC;            break;
-        case sheet::FilterOperator2::CONTAINS:              rEntry.eOp = SC_CONTAINS;           break;
-        case sheet::FilterOperator2::DOES_NOT_CONTAIN:      rEntry.eOp = SC_DOES_NOT_CONTAIN;   break;
-        case sheet::FilterOperator2::BEGINS_WITH:           rEntry.eOp = SC_BEGINS_WITH;        break;
-        case sheet::FilterOperator2::DOES_NOT_BEGIN_WITH:   rEntry.eOp = SC_DOES_NOT_BEGIN_WITH;break;
-        case sheet::FilterOperator2::ENDS_WITH:             rEntry.eOp = SC_ENDS_WITH;          break;
-        case sheet::FilterOperator2::DOES_NOT_END_WITH:     rEntry.eOp = SC_DOES_NOT_END_WITH;  break;
-        case sheet::FilterOperator2::EMPTY:
-            rEntry.SetQueryByEmpty();
-            break;
-        case sheet::FilterOperator2::NOT_EMPTY:
-            rEntry.SetQueryByNonEmpty();
-            break;
-        default:
-            OSL_FAIL("Unknown filter operator type.");
-            rEntry.eOp = SC_EQUAL;
-        }
+        convertUnoToQueryEntry(pAry[i], rEntry);
 
         if (pAry[i].Operator != sheet::FilterOperator2::EMPTY && pAry[i].Operator != sheet::FilterOperator2::NOT_EMPTY)
         {
