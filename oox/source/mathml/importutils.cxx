@@ -229,7 +229,7 @@ XmlStream::Tag XmlStream::checkTag( int token, bool optional )
     if( optional )
     { // avoid printing debug messages about skipping tags if the optional one
       // will not be found and the position will be reset back
-        if( currentToken() != token && !recoverAndFindTagHelper( token, true ))
+        if( currentToken() != token && !recoverAndFindTagInternal( token, true ))
         {
             pos = savedPos;
             return Tag();
@@ -253,10 +253,10 @@ XmlStream::Tag XmlStream::checkTag( int token, bool optional )
 
 bool XmlStream::recoverAndFindTag( int token )
 {
-    return recoverAndFindTagHelper( token, false );
+    return recoverAndFindTagInternal( token, false );
 }
 
-bool XmlStream::recoverAndFindTagHelper( int token, bool silent )
+bool XmlStream::recoverAndFindTagInternal( int token, bool silent )
 {
     int depth = 0;
     for(;
@@ -305,15 +305,25 @@ bool XmlStream::recoverAndFindTagHelper( int token, bool silent )
 
 void XmlStream::skipElement( int token )
 {
+    return skipElementInternal( token, true ); // no debug about skipping if called from outside
+}
+
+void XmlStream::skipElementInternal( int token, bool silent )
+{
     int closing = ( token & ~TAG_OPENING ) | TAG_CLOSING; // make it a closing tag
     assert( currentToken() == OPENING( token ));
+    if( !silent )
+        fprintf( stderr, "Skipping unexpected element %s\n", CSTR( tokenToString( currentToken())));
     moveToNextTag();
     // and just find the matching closing tag
     if( recoverAndFindTag( closing ))
     {
+        if( !silent )
+            fprintf( stderr, "Skipped unexpected element %s\n", CSTR( tokenToString( token )));
         moveToNextTag(); // and skip it too
         return;
     }
+    // this one is an unexpected problem, do not silent it
     fprintf( stderr, "Expected end of element %s not found.\n", CSTR( tokenToString( token )));
 }
 
@@ -323,10 +333,11 @@ void XmlStream::handleUnexpectedTag()
         return;
     if( currentToken() == CLOSING( currentToken()))
     {
+        fprintf( stderr, "Skipping unexpected tag %s\n", CSTR( tokenToString( currentToken())));
         moveToNextTag(); // just skip it
         return;
     }
-    skipElement( currentToken()); // otherwise skip the entire element
+    skipElementInternal( currentToken(), false ); // otherwise skip the entire element
 }
 
 
