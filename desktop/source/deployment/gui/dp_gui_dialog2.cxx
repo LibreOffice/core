@@ -1221,6 +1221,8 @@ void ExtMgrDialog::Resize()
     aDivSize.Width() = aTotalSize.Width() - aFTTypeOfExtSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT;
     m_aDivider2.SetPosSizePixel( aPos , aDivSize );
 
+
+
     aPos.X() = aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_RIGHT - aBtnSize.Width();
     m_aCancelBtn.SetPosPixel( Point( aPos.X(), aPos.Y() - ((aBtnSize.Height()-aFTSize.Height())/2) ) );
 
@@ -1256,12 +1258,11 @@ void ExtMgrDialog::Resize()
     m_aProgressText.SetPosSizePixel( aPos, aFTSize );
 
     Size aSize( aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT,
-                aTotalSize.Height() - 3.3*aBtnSize.Height() - LINE_SIZE -
-                RSC_SP_DLG_INNERBORDER_TOP - 3*RSC_SP_DLG_INNERBORDER_BOTTOM );
+                aTotalSize.Height() - aBtnSize.Height() - LINE_SIZE - aFTSize.Height()
+                - aCBSize.Height() - aFTTypeOfExtSize.Height()
+                - RSC_SP_DLG_INNERBORDER_TOP - 5*RSC_SP_DLG_INNERBORDER_BOTTOM );
 
-    m_pExtensionBox->SetSizePixel( aSize );
-
-
+    m_pExtensionBox->SetSizePixel(aSize );
 
 }
 //------------------------------------------------------------------------------
@@ -1653,7 +1654,6 @@ void UpdateRequiredDialog::Resize()
     Size aDivSize( aTotalSize.Width(), LINE_SIZE );
     aPos = Point( 0, aPos.Y() - LINE_SIZE - RSC_SP_DLG_INNERBORDER_BOTTOM );
     m_aDivider.SetPosSizePixel( aPos, aDivSize );
-    aPos = Point( 0, 5 );
 
     // Calc fixed text size
     aPos = Point( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP );

@@ -48,7 +48,6 @@
 #define RID_EM_FT_GET_EXTENSIONS               20
 #define RID_EM_FT_PROGRESS                     21
 #define RID_EM_FT_MSG                          22
-#define RID_EM_BTN_SELECT                      23
 
 // local RIDs:
 #define PB_LICENSE_DOWN                         50
