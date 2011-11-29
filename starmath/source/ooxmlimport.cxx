@@ -89,7 +89,7 @@ OUString SmOoxmlImport::handleStream()
 OUString SmOoxmlImport::readOMathArg()
 {
     OUString ret;
-    while( stream.currentToken() != CLOSING( stream.currentToken()))
+    while( !stream.atEnd() && stream.currentToken() != CLOSING( stream.currentToken()))
     {
         if( !ret.isEmpty())
             ret += STR( " " );
@@ -409,7 +409,7 @@ OUString SmOoxmlImport::handleR()
         stream.ensureClosingTag( OOX_TOKEN( doc, rPr ));
     }
     OUString text;
-    while( stream.currentToken() != CLOSING( stream.currentToken()))
+    while( !stream.atEnd() && stream.currentToken() != CLOSING( stream.currentToken()))
     {
         switch( stream.currentToken())
         {
