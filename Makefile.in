@@ -67,34 +67,13 @@ unitcheck:
 install:
 	@$(call forward_to_gbuild,$@)
 
+findunusedcode:
+	@$(call forward_to_gbuild,$@)
+
 ifeq ($(filter clean distclean,$(MAKECMDGOALS)),)
 Makefile: autogen.lastrun configure.in ooo.lst.in set_soenv.in Makefile.in
 	./autogen.sh
 endif
-
-findunusedcode:
-# experimental callcatcher target
-# http://www.skynet.ie/~caolan/Packages/callcatcher.html
-	@which callcatcher > /dev/null 2>&1 || \
-	 (echo "callcatcher not installed" && false)
-	@. ./Env.Host.sh && \
-           mkdir -p $$SRC_ROOT/solenv/callcatcher/bin && \
-	   ln -sf $$SRC_ROOT/solenv/$$INPATH/bin/dmake \
-                  $$SRC_ROOT/solenv/callcatcher/bin/dmake && \
-	   source <(sed -e s,$$INPATH,callcatcher,g ./Env.Host.sh) && \
-	   . ./solenv/bin/callcatchEnv.Set.sh && \
-	   cd instsetoo_native && \
-	   build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
-	@. ./Env.Host.sh && \
-	   source <(sed -e s,$$INPATH,callcatcher,g ./Env.Host.sh) && \
-	   callanalyse \
-		   $$WORKDIR/LinkTarget/*/* \
-		   */$$OUTPATH/bin/* \
-		   */$$OUTPATH/lib/* > unusedcode.all
-#because non-c++ symbols could be dlsymed lets make a list of class level
-#unused methods which don't require much effort to determine if they need
-#to be just removed, or put behind appropiate platform or debug level ifdefs
-	@grep ::.*\( unusedcode.all | grep -v ^cppu:: > unusedcode.easy
 
 #as long as we are not completely gbuildified we need to explicitly depend on the build/install
 #debugrun : dev-install # disabled for now, this dep seems to poison the debugrun !?

@@ -58,7 +58,7 @@ cd $(SRCDIR)/$(1) && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS
 $(eval gb_BuildplTarget_COMPLETEDTARGETS+=$(1))
 endef
 
-.PHONY: smoketestoo_native instsetoo_native cross-build-toolset dev-install all build
+.PHONY: smoketestoo_native instsetoo_native cross-build-toolset dev-install all build findunusedcode
 
 smoketestoo_native: $(WORKDIR)/bootstrap  $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset) | instsetoo_native
 	$(call gb_BuildplTarget_command,$@,$(if $(filter instsetoo_native,$(gb_BuildplTarget_COMPLETEDTARGETS)),--from instsetoo_native,--all))
@@ -69,6 +69,27 @@ instsetoo_native: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded $(if $(filter $(
 
 cross_toolset: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded
 	source $(SRCDIR)/Env.Build.sh && $(call gb_BuildplTarget_command,$@,--all)
+
+# experimental callcatcher target
+# http://www.skynet.ie/~caolan/Packages/callcatcher.html
+findunusedcode:
+	@which callcatcher > /dev/null 2>&1 || \
+	    (echo "callcatcher not installed" && false)
+	@mkdir -p $(SRCDIR)/solenv/callcatcher/bin && \
+	    ln -sf $(SRCDIR)/solenv/$(INPATH)/bin/dmake \
+		$(SRCDIR)/solenv/callcatcher/bin/dmake && \
+	    source <(sed -e s,$(INPATH),callcatcher,g $(SRCDIR)/Env.Host.sh) && \
+	    source $(SRCDIR)/solenv/bin/callcatchEnv.Set.sh && \
+	    $(call gb_BuildplTarget_command,instsetoo_native,--all)
+	@source <(sed -e s,$(INPATH),callcatcher,g $(SRCDIR)/Env.Host.sh) && \
+	    callanalyse \
+		$(WORKDIR)/LinkTarget/*/* \
+		*/$(OUTPATH)/bin/* \
+		*/$(OUTPATH)/lib/* > unusedcode.all
+#because non-c++ symbols could be dlsymed lets make a list of class level
+#unused methods which don't require much effort to determine if they need
+#to be just removed, or put behind appropiate platform or debug level ifdefs
+	@grep ::.*\( unusedcode.all | grep -v ^cppu:: > unusedcode.easy
 
 dev-install: smoketestoo_native
 
