@@ -260,12 +260,6 @@ private:
                                                          // to propagate it when applying reference shape
 };
 
-// ---------------------------------------------------------------------
-
-/** Get custom shape preset string from xml token id
- */
-::rtl::OUString GetShapePresetType( sal_Int32 nType );
-
 // ============================================================================
 
 } }
