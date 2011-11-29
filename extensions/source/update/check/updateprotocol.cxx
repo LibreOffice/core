@@ -109,6 +109,23 @@ checkForUpdates(
     if( ! ( getBootstrapData(aRepositoryList, aBuildID, aInstallSetID) && (aRepositoryList.getLength() > 0) ) )
         return false;
 
+    return checkForUpdates( o_rUpdateInfo, rxContext, rxInteractionHandler, rUpdateInfoProvider,
+            myOS, myArch,
+            aRepositoryList, aBuildID, aInstallSetID );
+}
+
+bool
+checkForUpdates(
+    UpdateInfo& o_rUpdateInfo,
+    const uno::Reference< uno::XComponentContext > & rxContext,
+    const uno::Reference< task::XInteractionHandler > & rxInteractionHandler,
+    const uno::Reference< deployment::XUpdateInformationProvider >& rUpdateInfoProvider,
+    const rtl::OUString &rOS,
+    const rtl::OUString &rArch,
+    const uno::Sequence< rtl::OUString > &rRepositoryList,
+    const rtl::OUString &rBuildID,
+    const rtl::OUString &rInstallSetID )
+{
     if( !rxContext.is() )
         throw uno::RuntimeException(
             UNISTRING( "checkForUpdates: empty component context" ), uno::Reference< uno::XInterface >() );
@@ -120,7 +137,7 @@ checkForUpdates(
         rxContext->getServiceManager()->createInstanceWithContext( UNISTRING( "com.sun.star.xml.xpath.XPathAPI" ), rxContext ),
         uno::UNO_QUERY_THROW);
 
-    xXPath->registerNS( UNISTRING("inst"), UNISTRING("http://installation.openoffice.org/description") );
+    xXPath->registerNS( UNISTRING("inst"), UNISTRING("http://update.libreoffice.org/description") );
 
     if( rxInteractionHandler.is() )
         rUpdateInfoProvider->setInteractionHandler(rxInteractionHandler);
@@ -128,18 +145,18 @@ checkForUpdates(
     try
     {
         uno::Reference< container::XEnumeration > aUpdateInfoEnumeration =
-            rUpdateInfoProvider->getUpdateInformationEnumeration( aRepositoryList, aInstallSetID );
+            rUpdateInfoProvider->getUpdateInformationEnumeration( rRepositoryList, rInstallSetID );
 
         if ( !aUpdateInfoEnumeration.is() )
             return false; // something went wrong ..
 
         rtl::OUStringBuffer aBuffer;
         aBuffer.appendAscii("/child::inst:description[inst:os=\'");
-        aBuffer.append( myOS );
+        aBuffer.append( rOS );
         aBuffer.appendAscii("\' and inst:arch=\'");
-        aBuffer.append( myArch );
+        aBuffer.append( rArch );
         aBuffer.appendAscii("\' and inst:buildid>");
-        aBuffer.append( aBuildID );
+        aBuffer.append( rBuildID );
         aBuffer.appendAscii("]");
 
         rtl::OUString aXPathExpression = aBuffer.makeStringAndClear();

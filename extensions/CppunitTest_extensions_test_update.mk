@@ -42,6 +42,8 @@ $(eval $(call gb_CppunitTest_add_linked_libs,extensions_test_update, \
 	cppuhelper \
 	curl \
 	sal \
+	test \
+	unotest \
 	$(gb_STDLIBS) \
 ))
 
@@ -69,6 +71,7 @@ $(eval $(call gb_CppunitTest_add_components,extensions_test_update,\
 $(eval $(call gb_CppunitTest_add_old_components,extensions_test_update,\
     configmgr \
     ucb1 \
+    ucpfile1 \
     updatefeed \
 ))
 
