@@ -783,7 +783,10 @@ sal_Bool DlgEdObj::supportsService( const sal_Char* _pServiceName ) const
     {
         nResId = RID_STR_CLASS_TREECONTROL;
     }
-
+    else if ( supportsService( "com.sun.star.awt.UnoControlSpinButtonModel" ) )
+    {
+        nResId = RID_STR_CLASS_SPINCONTROL;
+    }
     else
     {
         nResId = RID_STR_CLASS_CONTROL;

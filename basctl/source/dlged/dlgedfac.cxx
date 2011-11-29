@@ -70,7 +70,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
 
     if( (pObjFactory->nInventor == DlgInventor) &&
         (pObjFactory->nIdentifier >= OBJ_DLG_PUSHBUTTON) &&
-        (pObjFactory->nIdentifier <= OBJ_DLG_TREECONTROL)    )
+        (pObjFactory->nIdentifier <= OBJ_DLG_SPINBUTTON)    )
     {
         switch( pObjFactory->nIdentifier )
         {
@@ -182,6 +182,9 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                  break;
             case OBJ_DLG_FILECONTROL:
                  pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlFileControlModel" )) , xDialogSFact );
+                 break;
+            case OBJ_DLG_SPINBUTTON:
+                 pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlSpinButtonModel") , xDialogSFact );
                  break;
             case OBJ_DLG_TREECONTROL:
                  DlgEdObj* pNew = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.tree.TreeControlModel" )) , xDialogSFact );

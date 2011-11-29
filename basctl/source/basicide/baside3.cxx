@@ -361,6 +361,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
                             case OBJ_DLG_FORMATTEDFIELD:    nObj = SVX_SNAP_FORMATTEDFIELD; break;
                             case OBJ_DLG_PATTERNFIELD:      nObj = SVX_SNAP_PATTERNFIELD; break;
                             case OBJ_DLG_FILECONTROL:       nObj = SVX_SNAP_FILECONTROL; break;
+                            case OBJ_DLG_SPINBUTTON:        nObj = SVX_SNAP_SPINBUTTON; break;
                             case OBJ_DLG_TREECONTROL:       nObj = SVX_SNAP_TREECONTROL; break;
                             default:                        nObj = 0;
                         }
@@ -561,6 +562,12 @@ void DialogWindow::ExecuteCommand( SfxRequest& rReq )
                 {
                     GetEditor()->SetMode( DLGED_INSERT );
                     GetEditor()->SetInsertObj( OBJ_DLG_FILECONTROL );
+                }
+                break;
+                case SVX_SNAP_SPINBUTTON:
+                {
+                    GetEditor()->SetMode( DLGED_INSERT );
+                    GetEditor()->SetInsertObj( OBJ_DLG_SPINBUTTON );
                 }
                 break;
                 case SVX_SNAP_TREECONTROL:
