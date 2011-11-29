@@ -1109,9 +1109,9 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
             if( oox::FormulaImportBase* formulaimport = dynamic_cast< oox::FormulaImportBase* >( xInterface.get()))
                 size = formulaimport->getFormulaSize();
             xStarMathProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_WIDTH ),
-                uno::makeAny( int(size.Width())));
+                uno::makeAny( sal_Int32(size.Width())));
             xStarMathProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_HEIGHT ),
-                uno::makeAny( int(size.Height())));
+                uno::makeAny( sal_Int32(size.Height())));
             // mimic the treatment of graphics here.. it seems anchoring as character
             // gives a better ( visually ) result
             xStarMathProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_ANCHOR_TYPE ),
