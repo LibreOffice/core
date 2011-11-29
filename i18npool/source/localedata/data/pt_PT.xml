@@ -40,7 +40,7 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="28">
-<FormatCode>NN DD-MMM AA</FormatCode>
+<FormatCode>NN, DD-MMM-AA</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="34">
@@ -56,7 +56,7 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey6" default="false" type="medium" usage="DATE" formatindex="37">
-<FormatCode>QQ AA</FormatCode>
+<FormatCode>QQ "de" AA</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="21">
@@ -96,11 +96,11 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="24">
-<FormatCode>D. MMM. AAAA</FormatCode>
+<FormatCode>D.MMM.AAAA</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="26">
-<FormatCode>D. MMMM AAAA</FormatCode>
+<FormatCode>D.MMMM.AAAA</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="31">
@@ -117,6 +117,26 @@
 </FormatElement>
 <FormatElement msgid="DateFormatskey21" default="false" type="medium" usage="DATE" formatindex="38">
 <FormatCode>WW</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+<FormatElement msgid="DateFormatskey22" default="false" type="medium" usage="DATE" formatindex="50">
+<FormatCode>QQ "de" AAAA</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+<FormatElement msgid="DateFormatskey23" default="false" type="medium" usage="DATE" formatindex="51">
+<FormatCode>Q "de" AA</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+<FormatElement msgid="DateFormatskey24" default="false" type="medium" usage="DATE" formatindex="52">
+<FormatCode>Q "de" AAAA</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+<FormatElement msgid="DateFormatskey25" default="false" type="medium" usage="DATE" formatindex="53">
+<FormatCode>DD-MMM-AA</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+<FormatElement msgid="DateFormatskey26" default="false" type="medium" usage="DATE" formatindex="54">
+<FormatCode>DD-MMM-AAAA</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey1" default="true" type="short" usage="TIME"  formatindex="39">
