@@ -1,7 +1,6 @@
 
 gb_MAKEFILEDIR:=$(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
-$(info gb_PARTIALBUILD $(gb_PARTIALBUILD))
 ifneq ($(strip $(gb_PARTIALBUILD)),)
 
 SRCDIR:=$(realpath $(gb_MAKEFILEDIR)/..)
