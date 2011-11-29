@@ -30,25 +30,6 @@ $ARGV1 = shift @ARGV;
 $ARGV2 = shift @ARGV;
 $ARGV3 = shift @ARGV;
 
-open( INFILE, $ARGV0 ) or die "Error: cannot open input file: $!";
-my %tokens;
-while ( <INFILE> )
-{
-    # trim newline
-    chomp( $_ );
-    # trim leading/trailing whitespace
-    $_ =~ s/^\s*//g;
-    $_ =~ s/\s*$//g;
-    # check for valid characters
-    $_ =~ /^[a-zA-Z0-9-_]+$/ or die "Error: invalid character in token '$_'";
-    $id = "XML_$_";
-    $id =~ s/-/_/g;
-    $tokens{$_} = $id;
-}
-close ( INFILE );
-
-# generate output files
-
 open ( IDFILE, ">$ARGV1" ) or die "Error: cannot open output file: $!";
 open ( NAMEFILE, ">$ARGV2" ) or die "Error: cannot open output file: $!";
 open ( GPERFFILE, ">$ARGV3" ) or die "Error: cannot open output file: $!";
@@ -63,14 +44,27 @@ print( GPERFFILE "    sal_Int32 nToken;\n" );
 print( GPERFFILE "};\n" );
 print( GPERFFILE "%%\n" );
 
+open( INFILE, $ARGV0 ) or die "Error: cannot open input file: $!";
+
 $i = 0;
-foreach( sort( keys( %tokens ) ) )
+while ( <INFILE> )
 {
-    print( IDFILE "const sal_Int32 $tokens{$_} = $i;\n" );
+    # trim newline
+    chomp( $_ );
+    # trim leading/trailing whitespace
+    $_ =~ s/^\s*//g;
+    $_ =~ s/\s*$//g;
+    # check for valid characters
+    $_ =~ /^[a-zA-Z0-9-_]+$/ or die "Error: invalid character in token '$_'";
+    $id = "XML_$_";
+    $id =~ s/-/_/g;
+    $tokens{$_} = $id;
+    print( IDFILE "const sal_Int32 $id = $i;\n" );
     print( NAMEFILE "\"$_\",\n" );
-    print( GPERFFILE "$_,$tokens{$_}\n" );
+    print( GPERFFILE "$_,$id\n" );
     ++$i;
 }
+close ( INFILE );
 
 print( IDFILE "const sal_Int32 XML_TOKEN_COUNT = $i;\n" );
 print( GPERFFILE "%%\n" );
