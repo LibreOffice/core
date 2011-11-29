@@ -2547,8 +2547,12 @@ if test -z "$TARFILE_LOCATION"; then
 fi
 AC_SUBST(TARFILE_LOCATION)
 
+AC_MSG_CHECKING([whether we want to fetch tarballs])
 if test "z$enable_fetch_external" != "zno" ; then
+    AC_MSG_RESULT([yes])
     DO_FETCH_TARBALLS="YES"
+else
+    AC_MSG_RESULT([no])
 fi
 AC_SUBST(DO_FETCH_TARBALLS)
 
