@@ -42,6 +42,11 @@
 #define CSTR( str ) ( rtl::OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr())
 
 
+// HACK - TODO convert to the real debug stuff
+#undef SAL_LOG_LEVEL
+#define SAL_LOG_LEVEL 2
+
+
 using namespace com::sun::star;
 using rtl::OUString;
 
@@ -220,6 +225,17 @@ XmlStream::Tag XmlStream::checkTag( int token, bool optional )
 {
     // either it's the following tag, or find it
     int savedPos = pos;
+#if SAL_LOG_LEVEL >= 2
+    if( optional )
+    { // avoid printing debug messages about skipping tags if the optional one
+      // will not be found and the position will be reset back
+        if( currentToken() != token && !recoverAndFindTagHelper( token, true ))
+        {
+            pos = savedPos;
+            return Tag();
+        }
+    }
+#endif
     if( currentToken() == token || recoverAndFindTag( token ))
     {
         Tag ret = currentTag();
@@ -237,6 +253,11 @@ XmlStream::Tag XmlStream::checkTag( int token, bool optional )
 
 bool XmlStream::recoverAndFindTag( int token )
 {
+    return recoverAndFindTagHelper( token, false );
+}
+
+bool XmlStream::recoverAndFindTagHelper( int token, bool silent )
+{
     int depth = 0;
     for(;
          !atEnd();
@@ -246,17 +267,20 @@ bool XmlStream::recoverAndFindTag( int token )
         {
             if( currentToken() == OPENING( currentToken()))
             {
-                fprintf( stderr, "Skipping tag %s\n", CSTR( tokenToString( currentToken())));
+                if( !silent )
+                    fprintf( stderr, "Skipping tag %s\n", CSTR( tokenToString( currentToken())));
                 ++depth;
             }
             else if( currentToken() == CLOSING( currentToken()))
-            { // TODO debug output without the OPENING/CLOSING bits set
-                fprintf( stderr, "Skipping tag %s\n", CSTR( tokenToString( currentToken())));
+            {
+                if( !silent )
+                    fprintf( stderr, "Skipping tag %s\n", CSTR( tokenToString( currentToken())));
                 --depth;
             }
             else
             {
-                fprintf( stderr, "Malformed token %d (%s)\n", currentToken(), CSTR( tokenToString( currentToken())));
+                if( !silent )
+                    fprintf( stderr, "Malformed token %d (%s)\n", currentToken(), CSTR( tokenToString( currentToken())));
                 abort();
             }
             continue;
@@ -267,13 +291,15 @@ bool XmlStream::recoverAndFindTag( int token )
             return false; // that would be leaving current element, so not found
         if( currentToken() == OPENING( currentToken()))
         {
-            fprintf( stderr, "Skipping tag %s\n", CSTR( tokenToString( currentToken())));
+            if( !silent )
+                fprintf( stderr, "Skipping tag %s\n", CSTR( tokenToString( currentToken())));
             ++depth;
         }
         else
             abort();
     }
-    fprintf( stderr, "Unexpected end of stream reached.\n" );
+    if( !silent )
+        fprintf( stderr, "Unexpected end of stream reached.\n" );
     return false;
 }
 

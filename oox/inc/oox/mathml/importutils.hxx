@@ -163,6 +163,7 @@ public:
     void handleUnexpectedTag();
 protected:
     Tag checkTag( int token, bool optional );
+    bool recoverAndFindTagHelper( int token, bool silent );
     std::vector< Tag > tags;
     unsigned int pos;
 };
