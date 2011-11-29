@@ -122,6 +122,9 @@ OUString SmOoxmlImport::readOMathArg()
             case OPENING( M_TOKEN( groupChr )):
                 ret += handleGroupChr();
                 break;
+            case OPENING( M_TOKEN( m )):
+                ret += handleM();
+                break;
             case OPENING( M_TOKEN( r )):
                 ret += handleR();
                 break;
@@ -396,6 +399,29 @@ OUString SmOoxmlImport::handleGroupChr()
     OUString ret = STR( "{ " ) + handleE() + ( pos == top ? STR( "} overbrace" ) : STR( "} underbrace" ));
     stream.ensureClosingTag( M_TOKEN( groupChr ));
     return ret;
+}
+
+OUString SmOoxmlImport::handleM()
+{
+    stream.ensureOpeningTag( M_TOKEN( m ));
+    OUString allrows;
+    do // there must be at least one m:mr
+    {
+        stream.ensureOpeningTag( M_TOKEN( mr ));
+        OUString row;
+        do // there must be at least one m:e
+        {
+            if( !row.isEmpty())
+                row += STR( " # " );
+            row += handleE();
+        } while( !stream.atEnd() && stream.currentToken() == OPENING( M_TOKEN( e )));
+        if( !allrows.isEmpty())
+            allrows += STR( " ## " );
+        allrows += row;
+        stream.ensureClosingTag( M_TOKEN( mr ));
+    } while( !stream.atEnd() && stream.currentToken() == OPENING( M_TOKEN( mr )));
+    stream.ensureClosingTag( M_TOKEN( m ));
+    return STR( "matrix {" ) + allrows + STR( "}" );
 }
 
 // NOT complete
