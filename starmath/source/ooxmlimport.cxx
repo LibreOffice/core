@@ -243,9 +243,9 @@ OUString SmOoxmlImport::handleBorderBox()
 OUString SmOoxmlImport::handleD()
 {
     stream.ensureOpeningTag( M_TOKEN( d ));
-    sal_Unicode opening = '(';
-    sal_Unicode closing = ')';
-    sal_Unicode separator = '|';
+    OUString opening = STR( "(" );
+    OUString closing = STR( ")" );
+    OUString separator = STR( "|" );
     if( XmlStream::Tag dPr = stream.checkOpeningTag( M_TOKEN( dPr )))
     {
         if( XmlStream::Tag begChr = stream.checkOpeningTag( M_TOKEN( begChr )))
@@ -265,15 +265,40 @@ OUString SmOoxmlImport::handleD()
         }
         stream.ensureClosingTag( M_TOKEN( dPr ));
     }
+    if( opening == STR( "{" ))
+        opening = STR( "left lbrace " );
+    if( closing == STR( "}" ))
+        closing = STR( " right rbrace" );
+    if( opening == OUString( sal_Unicode( 0x27e6 )))
+        opening = STR( "left ldbracket " );
+    if( closing == OUString( sal_Unicode( 0x27e7 )))
+        closing = STR( " right rdbracket" );
+    if( opening == STR( "|" ))
+        opening = STR( "left lline " );
+    if( closing == STR( "|" ))
+        closing = STR( " right rline" );
+    if( opening == OUString( sal_Unicode( 0x2225 )))
+        opening = STR( "left ldline " );
+    if( closing == OUString( sal_Unicode( 0x2225 )))
+        closing = STR( " right rdline" );
+    if( opening == OUString( sal_Unicode( 0x2329 )))
+        opening = STR( "left langle " );
+    if( closing == OUString( sal_Unicode( 0x232a )))
+        closing = STR( " right rangle" );
+    // use scalable brackets (the explicit "left" or "right")
+    if( opening == STR( "(" ) || opening == STR( "[" ))
+        opening = STR( "left " ) + opening;
+    if( closing == STR( ")" ) || closing == STR( "]" ))
+        closing = STR( " right " ) + closing;
+    if( separator == STR( "|" )) // plain "|" would be actually "V" (logical or)
+        separator = STR( " mline " );
     OUStringBuffer ret;
     ret.append( opening );
     bool first = true;
     while( stream.currentToken() == OPENING( M_TOKEN( e )))
     {
         if( !first )
-        { // plain "|" would be actually "V" (logical or)
-            ret.append( separator == '|' ? STR( " mline " ) : STR( "|" ));
-        }
+            ret.append( separator );
         first = false;
         ret.append( handleE());
     }
