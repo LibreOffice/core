@@ -198,11 +198,6 @@ sc.ScDataPilotTableObj::com::sun::star::sheet::XDataPilotTable
 ### i111032 ###
 sc.ScAccessibleCell::com::sun::star::accessibility::XAccessibleText
 
-### fdo43304 ###
-sc.ScDataPilotFieldsObj::com::sun::star::container::XNameAccess
-sc.ScDataPilotFieldsObj::com::sun::star::container::XIndexAccess
-sc.ScDataPilotFieldsObj::com::sun::star::container::XElementAccess
-
 ### fdo43308 ###
 sc.ScAccessiblePreviewCell::com::sun::star::accessibility::XAccessibleComponent
 sc.ScAutoFormatFieldObj::com::sun::star::sheet::TableAutoFormatField
