@@ -28,6 +28,7 @@
 
 all : $(patsubst %.xml,localedata_%.cxx,$(notdir $(wildcard $(SRC_ROOT)/i18npool/source/localedata/data/*.xml)))
 
+gb_PARTIALBUILD:=T
 include $(GBUILDDIR)/gbuild_simple.mk
 
 my_file := file://$(if $(filter $(OS_FOR_BUILD),WNT),/)

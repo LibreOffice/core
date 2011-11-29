@@ -28,6 +28,7 @@
 
 all : $(subst .txt,.cxx,$(notdir $(wildcard $(SRC_ROOT)/i18npool/source/indexentry/data/*.txt)))
 
+gb_PARTIALBUILD:=T
 include $(GBUILDDIR)/gbuild_simple.mk
 
 %.cxx : %_invis.cxx

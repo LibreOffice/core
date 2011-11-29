@@ -28,6 +28,7 @@
 SRCDIR_FILTER := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 WORKDIR_FILTER := .
 
+gb_PARTIALBUILD:=T
 include $(GBUILDDIR)/gbuild.mk
 
 filter_SRC_svg_Tokens := $(SRCDIR_FILTER)/tokens.txt

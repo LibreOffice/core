@@ -27,6 +27,8 @@
 
 WFDIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
+
+gb_PARTIALBUILD:=T
 include $(WFDIR)generated.mk
 include $(GBUILDDIR)/gbuild_simple.mk
 

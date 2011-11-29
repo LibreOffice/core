@@ -28,6 +28,7 @@
 
 all : $(subst .dic,.cxx,$(notdir $(wildcard $(SRC_ROOT)/i18npool/source/textconversion/data/*.dic)))
 
+gb_PARTIALBUILD:=T
 include $(GBUILDDIR)/gbuild_simple.mk
 
 %.cxx : %_invis.cxx

@@ -28,6 +28,7 @@
 
 all : OpenOffice_dat.c data/dict_ja.cxx data/dict_zh.cxx
 
+gb_PARTIALBUILD:=T
 include $(GBUILDDIR)/gbuild_simple.mk
 
 data:
