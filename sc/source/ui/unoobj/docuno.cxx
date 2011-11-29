@@ -752,7 +752,7 @@ bool lcl_ParseTarget( const String& rTarget, ScRange& rTargetRange, Rectangle& r
     return bRangeValid;
 }
 
-sal_Bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
+bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
                                      const uno::Sequence< beans::PropertyValue >& rOptions,
                                      ScMarkData& rMark,
                                      ScPrintSelectionStatus& rStatus, String& rPagesStr ) const
@@ -760,13 +760,13 @@ sal_Bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
     OSL_ENSURE( !rMark.IsMarked() && !rMark.IsMultiMarked(), "FillRenderMarkData: MarkData must be empty" );
     OSL_ENSURE( pDocShell, "FillRenderMarkData: DocShell must be set" );
 
-    sal_Bool bDone = false;
+    bool bDone = false;
 
     uno::Reference<frame::XController> xView;
 
     // defaults when no options are passed: all sheets, include empty pages
     sal_Bool bSelectedSheetsOnly = false;
-    sal_Bool bIncludeEmptyPages = sal_True;
+    sal_Bool bIncludeEmptyPages = true;
 
     bool bHasPrintContent = false;
     sal_Int32 nPrintContent = 0;        // all sheets / selected sheets / selected cells
@@ -813,8 +813,8 @@ sal_Bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
         uno::Reference< drawing::XShapes > xShapes( xInterface, uno::UNO_QUERY );
         if ( pSelObj && pSelObj->GetDocShell() == pDocShell )
         {
-            sal_Bool bSheet = ( ScTableSheetObj::getImplementation( xInterface ) != NULL );
-            sal_Bool bCursor = pSelObj->IsCursorOnly();
+            bool bSheet = ( ScTableSheetObj::getImplementation( xInterface ) != NULL );
+            bool bCursor = pSelObj->IsCursorOnly();
             const ScRangeList& rRanges = pSelObj->GetRangeList();
 
             rMark.MarkFromRangeList( rRanges, false );
@@ -843,7 +843,7 @@ sal_Bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
                     rStatus.SetMode( SC_PRINTSEL_RANGE );
 
                 rStatus.SetRanges( rRanges );
-                bDone = sal_True;
+                bDone = true;
             }
             // multi selection isn't supported
         }
@@ -872,7 +872,7 @@ sal_Bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
                             if( rMark.IsMarked() && !rMark.IsMultiMarked() )
                             {
                                 rStatus.SetMode( SC_PRINTSEL_RANGE_EXCLUSIVELY_OLE_AND_DRAW_OBJECTS );
-                                bDone = sal_True;
+                                bDone = true;
                             }
                         }
                     }
@@ -888,7 +888,7 @@ sal_Bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
             for (SCTAB nTab = 0; nTab < nTabCount; nTab++)
                 rMark.SelectTable( nTab, sal_True );
             rStatus.SetMode( SC_PRINTSEL_DOCUMENT );
-            bDone = sal_True;
+            bDone = true;
         }
         // other selection types aren't supported
     }
