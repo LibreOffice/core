@@ -53,7 +53,6 @@
 /config.parms
 /configure
 /desktop/scripts/soffice.sh
-/Makefile
 /makefile.mk
 /set_soenv
 /post_download

@@ -9721,7 +9721,7 @@ else
     echo > set_soenv.last
 fi
 
-AC_CONFIG_FILES([ooo.lst set_soenv Makefile bin/repo-list desktop/scripts/soffice.sh build_env])
+AC_CONFIG_FILES([ooo.lst set_soenv bin/repo-list desktop/scripts/soffice.sh build_env])
 AC_OUTPUT
 
 # make sure this is executable
