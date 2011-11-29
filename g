@@ -12,6 +12,7 @@ if [ "$#" -eq "0" ] ; then
     echo "Usage: g [options] [git commands]"
     echo "   -f         Force - act on all the repos, not only the changed ones"
     echo "   -s         Silent - do not report the repo names."
+    echo "   -v         Verbose - Print git commands."
     echo "   -1         report the repos name on the first line of the output as <repo>:"
     echo "   -z         just to some house cleaning (hooks mostly). this is a stand-alone option as in ./g -z"
     echo "   --set-push-user     [username] re-write an existing tree's config with an fd.o commit account name"
@@ -119,6 +120,7 @@ SET_LAST_WORKING=
 ALLOW_EMPTY=
 KEEP_GOING=0
 REPORT_REPOS=1
+REPORT_COMMANDS=0
 REPORT_COMPACT=0
 DO_HOOK_REFRESH=false
 
@@ -127,6 +129,8 @@ while [ "${COMMAND:0:1}" = "-" ] ; do
         -f) KEEP_GOING=1
             ;;
         -s) REPORT_REPOS=0
+            ;;
+        -v) REPORT_COMMANDS=1
             ;;
         -1) REPORT_COMPACT=1
             ;;
@@ -335,6 +339,9 @@ for REPO in $DIRS ; do
                     else
                         echo "===== $NAME ====="
                     fi
+                fi
+                if [ "$REPORT_COMMANDS" = "1" ] ; then
+                    echo "+ git $PAGER $COMMAND $EXTRA ${FILES[@]}"
                 fi
                 git $PAGER "$COMMAND" $EXTRA "${FILES[@]}"
                 RETURN=$?
