@@ -128,14 +128,14 @@ protected:
         rtl::Reference< UpdateCheck > aController( UpdateCheck::get() );
 
         if ( checkForUpdates( aInfo, m_xContext, aController->getInteractionHandler(), m_xProvider,
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OS" ) ),
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Arch" ) ),
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Linux" ) ),
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "x86" ) ),
                     m_aRepositoryList,
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BuildID" ) ),
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "100" ) ),
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InstallSetID" ) ) ) )
         {
-            //aController->setUpdateInfo( aInfo );
-            // TODO check the result
+            CPPUNIT_ASSERT( aInfo.Sources.size() == 1 );
+            CPPUNIT_ASSERT( aInfo.Sources[0].URL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "http://www.libreoffice.org/download/" ) ) );
         }
         else
             CPPUNIT_FAIL( "Calling checkForUpdates() failed." );
