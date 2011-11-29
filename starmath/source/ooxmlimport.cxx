@@ -108,6 +108,8 @@ OUString SmOoxmlImport::readOMathArg()
                 return handleLimLowUpp( LimLow );
             case OPENING( M_TOKEN( limUpp )):
                 return handleLimLowUpp( LimUpp );
+            case OPENING( M_TOKEN( groupChr )):
+                return handleGroupChr();
             case OPENING( M_TOKEN( r )):
                 return handleR();
             default:
@@ -319,6 +321,9 @@ OUString SmOoxmlImport::handleFunc()
     stream.ensureOpeningTag( M_TOKEN( fName ));
     OUString fname = readOMathArg();
     stream.ensureClosingTag( M_TOKEN( fName ));
+    // fix the various functions
+    if( fname.match( STR( "lim {" ), 0 )) // startsWith()
+        fname = STR( "lim from {" ) + fname.copy( 5 );
     OUString ret = fname + STR( " {" ) + handleE() + STR( "}" );
     stream.ensureClosingTag( M_TOKEN( func ));
     return ret;
@@ -333,7 +338,26 @@ OUString SmOoxmlImport::handleLimLowUpp( LimLowUpp_t limlowupp )
     OUString lim = readOMathArg();
     stream.ensureClosingTag( M_TOKEN( lim ));
     stream.ensureClosingTag( token );
-    return e + STR( " from {" ) + lim + STR( "}" );
+    return e + STR( " {" ) + lim + STR( "}" );
+}
+
+OUString SmOoxmlImport::handleGroupChr()
+{
+    stream.ensureOpeningTag( M_TOKEN( groupChr ));
+    enum pos_t { top, bot } pos = bot;
+    if( stream.checkOpeningTag( M_TOKEN( groupChrPr )))
+    {
+        if( XmlStream::Tag posTag = stream.checkOpeningTag( M_TOKEN( pos )))
+        {
+            if( posTag.attribute( M_TOKEN( val ), STR( "bot" )) == STR( "top" ))
+                pos = top;
+            stream.ensureClosingTag( M_TOKEN( pos ));
+        }
+        stream.ensureClosingTag( M_TOKEN( groupChrPr ));
+    }
+    OUString ret = STR( "{ " ) + handleE() + ( pos == top ? STR( "} overbrace" ) : STR( "} underbrace" ));
+    stream.ensureClosingTag( M_TOKEN( groupChr ));
+    return ret;
 }
 
 // NOT complete
