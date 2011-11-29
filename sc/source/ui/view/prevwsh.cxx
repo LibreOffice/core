@@ -156,7 +156,7 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
         //! or completely forget aSourceData on ScTablesHint?
 
         ScTabViewShell* pTabViewShell = ((ScTabViewShell*)pOldSh);
-        ScViewData* pData = pTabViewShell->GetViewData();
+        const ScViewData* pData = pTabViewShell->GetViewData();
         pData->WriteUserDataSequence( aSourceData );
         InitStartTable( pData->GetTabNo() );
         pPreview->SetSelectedTabs(pData->GetMarkData());
