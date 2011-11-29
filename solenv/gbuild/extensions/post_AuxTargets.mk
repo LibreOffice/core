@@ -25,7 +25,7 @@
 #   in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 #   instead of those above.
 
-.PHONY: id tags docs distro-pack-install fetch clean-host clean-build bootstrap
+.PHONY: id tags docs distro-pack-install install fetch clean-host clean-build bootstrap
 
 id:
 	@create-ids
@@ -71,6 +71,13 @@ distclean: clean
 	bin/repo-list build_env config.log config.status configure \
 	desktop/scripts/soffice.sh ooo.lst post_download post_download.log \
 	set_soenv set_soenv.last set_soenv.stamp src.downloaded warn
+
+install: build
+	echo "Installing in $(INSTALLDIR)..." && \
+	ooinstall "$(INSTALLDIR)" && \
+	echo "" && \
+	echo "Installation finished, you can now execute:" && \
+	echo "$(INSTALLDIR)/program/soffice"
 
 endif
 

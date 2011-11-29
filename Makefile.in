@@ -64,13 +64,8 @@ fetch:
 unitcheck:
 	@$(call forward_to_gbuild,$@)
 
-install: build
-	@. ./Env.Host.sh && \
-	echo "Installing in @INSTALLDIR@..." && \
-	ooinstall "@INSTALLDIR@" && \
-	echo "" && \
-	echo "Installation finished, you can now execute:" && \
-	echo "@INSTALLDIR@/program/soffice"
+install:
+	@$(call forward_to_gbuild,$@)
 
 ifeq ($(filter clean distclean,$(MAKECMDGOALS)),)
 Makefile: autogen.lastrun configure.in ooo.lst.in set_soenv.in Makefile.in
