@@ -10,18 +10,6 @@ export EXEEXT
 
 mkdir -p "$SOLARENV/$OUTPATH/bin"
 
-if test "$GUI" = "WNT" -a ! -x "$SOLARENV/$OUTPATH/bin/guw$EXEEXT"; then
-  echo ""
-  echo "Calling $GNUMAKE in guw"
-  cd "$SRC_ROOT/guw" || exit
-  $GNUMAKE || exit
-  echo ""
-  echo "guw has been successfully made"
-  cp -f "$SRC_ROOT/guw/guw$EXEEXT" "$SOLARENV/$OUTPATH/bin/guw$EXEEXT" || exit
-  echo ""
-  echo "guw copied to $SOLARENV/$OUTPATH/bin/guw$EXEEXT"
-fi
-
 #make sure build.pl is executable 
 
 chmod +x "$SRC_ROOT/solenv/bin/build.pl"

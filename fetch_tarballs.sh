@@ -48,7 +48,7 @@ fi
 
 # Downloader method selection
 fetch_bin=
-#fetch_args=
+fetch_args=
 
 #Look for FreeBSD's fetch(1) first
 if [ -x /usr/bin/fetch ]; then
@@ -58,11 +58,11 @@ if [ -x /usr/bin/fetch ]; then
     break 2
 else
   for wg in wget /usr/bin/wget /usr/local/bin/wget /usr/sfw/bin/wget /opt/sfw/bin/wget /opt/local/bin/wget; do
-    eval "$i --version" > /dev/null 2>&1
+    eval "$wg --version" > /dev/null 2>&1
     ret=$?
     if [ $ret -eq 0 ]; then
         fetch_bin=$wg
-    fetch_args="-nv -N"
+        fetch_args="-nv -N"
         echo found wget: $fetch_bin
         break 2
     fi
@@ -73,15 +73,15 @@ else
     #    eval "$i --version" > /dev/null 2>&1
     #    ret=$?
     #    if [ $ret -eq 0 ]; then
-        if [ -x $i ]; then
+        if [ -x $c ]; then
             fetch_bin=$c
-        fetch_args="$file_date_check -O"
+            fetch_args="$file_date_check -O"
             echo found curl: $fetch_bin
             break 2
         fi
     done
   fi
-  if [ -z "$fetch_bin"]; then
+  if [ -z "$fetch_bin" ]; then
     echo "ERROR: neither wget nor curl found!"
     exit
   fi
