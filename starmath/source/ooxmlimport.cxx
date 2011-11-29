@@ -370,13 +370,26 @@ OUString SmOoxmlImport::handleR()
 //        stream.ensureClosingTag( OOX_TOKEN( doc, rFonts ));
         stream.ensureClosingTag( OOX_TOKEN( doc, rPr ));
     }
-    // TODO can there be more t's ?
-    XmlStream::Tag rtag = stream.ensureOpeningTag( M_TOKEN( t ));
-    // TODO bail out if failure?
-    OUString text = rtag.text;
-    if( rtag.attribute( OOX_TOKEN( xml, space )) != STR( "preserve" ))
-        text = text.trim();
-    stream.ensureClosingTag( M_TOKEN( t ));
+    OUString text;
+    while( stream.currentToken() != CLOSING( stream.currentToken()))
+    {
+        switch( stream.currentToken())
+        {
+            case OPENING( M_TOKEN( t )):
+            {
+                XmlStream::Tag rtag = stream.ensureOpeningTag( M_TOKEN( t ));
+                if( rtag.attribute( OOX_TOKEN( xml, space )) != STR( "preserve" ))
+                    text += rtag.text.trim();
+                else
+                    text += rtag.text;
+                stream.ensureClosingTag( M_TOKEN( t ));
+                break;
+            }
+            default:
+                stream.handleUnexpectedTag();
+                break;
+        }
+    }
     stream.ensureClosingTag( M_TOKEN( r ));
     return text;
 }
