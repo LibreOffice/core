@@ -73,7 +73,7 @@ OUString SmOoxmlImport::handleStream()
     {
         // strictly speaking, it is not OMathArg here, but currently supported
         // functionality is the same like OMathArg, in the future this may need improving
-        OUString item = readOMathArg( M_TOKEN( oMath ));
+        OUString item = readOMathArg();
         if( item.isEmpty())
             continue;
         if( !ret.isEmpty())
@@ -86,42 +86,30 @@ OUString SmOoxmlImport::handleStream()
 }
 
 
-OUString SmOoxmlImport::readOMathArg( int endtoken )
+OUString SmOoxmlImport::readOMathArg()
 {
-    OUString ret;
-    while( !stream.atEnd())
+    while( stream.currentToken() != CLOSING( stream.currentToken()))
     {
-        XmlStream::Tag tag = stream.currentTag();
-        if( tag.token == CLOSING( endtoken ))
-            break;
-        if( !ret.isEmpty())
-            ret += STR( " " );
-        switch( tag.token )
+        switch( stream.currentToken())
         {
             case OPENING( M_TOKEN( acc )):
-                ret += handleAcc();
-                break;
+                return handleAcc();
             case OPENING( M_TOKEN( bar )):
-                ret += handleBar();
-                break;
+                return handleBar();
             case OPENING( M_TOKEN( borderBox )):
-                ret += handleBorderBox();
-                break;
+                return handleBorderBox();
             case OPENING( M_TOKEN( d )):
-                ret += handleD();
-                break;
+                return handleD();
             case OPENING( M_TOKEN( f )):
-                ret += handleF();
-                break;
+                return handleF();
             case OPENING( M_TOKEN( r )):
-                ret += handleR();
-                break;
+                return handleR();
             default:
                 stream.handleUnexpectedTag();
                 break;
         }
     }
-    return ret;
+    return OUString();
 }
 
 OUString SmOoxmlImport::handleAcc()
@@ -276,7 +264,7 @@ OUString SmOoxmlImport::handleD()
 OUString SmOoxmlImport::handleE()
 {
     stream.ensureOpeningTag( M_TOKEN( e ));
-    OUString ret = readOMathArg( M_TOKEN( e ));
+    OUString ret = readOMathArg();
     stream.ensureClosingTag( M_TOKEN( e ));
     return ret;
 }
@@ -301,10 +289,10 @@ OUString SmOoxmlImport::handleF()
         stream.ensureClosingTag( M_TOKEN( fPr ));
     }
     stream.ensureOpeningTag( M_TOKEN( num ));
-    OUString num = readOMathArg( M_TOKEN( num ));
+    OUString num = readOMathArg();
     stream.ensureClosingTag( M_TOKEN( num ));
     stream.ensureOpeningTag( M_TOKEN( den ));
-    OUString den = readOMathArg( M_TOKEN( den ));
+    OUString den = readOMathArg();
     stream.ensureClosingTag( M_TOKEN( den ));
     stream.ensureClosingTag( M_TOKEN( f ));
     if( operation == bar )
