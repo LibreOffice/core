@@ -499,7 +499,8 @@ IMPL_LINK( MediaControl, implSelectHdl, ToolBox*, p )
             {
                 ::rtl::OUString aURL;
 
-                 if( ::avmedia::MediaWindow::executeMediaURLDialog( GetParent(), aURL, false ) )
+                 if (::avmedia::MediaWindow::executeMediaURLDialog(
+                             GetParent(), aURL, 0))
                  {
                      if( !::avmedia::MediaWindow::isMediaURL( aURL, true ) )
                         ::avmedia::MediaWindow::executeFormatErrorBox( this );

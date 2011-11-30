@@ -39,7 +39,9 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/media/XManager.hpp>
+#include "com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp"
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include "com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp"
 
 #define AVMEDIA_FRAMEGRABBER_DEFAULTFRAME_MEDIATIME 3.0
 
@@ -251,15 +253,19 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
 
 // -------------------------------------------------------------------------
 
-bool MediaWindow::executeMediaURLDialog( Window* /* pParent */, ::rtl::OUString& rURL, bool bInsertDialog )
+bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
+        ::rtl::OUString& rURL, bool *const o_pbLink)
 {
-    ::sfx2::FileDialogHelper        aDlg( com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
+    ::sfx2::FileDialogHelper        aDlg( (o_pbLink)
+            ? ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW
+            : ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
     static const ::rtl::OUString    aWildcard( RTL_CONSTASCII_USTRINGPARAM( "*." ) );
     FilterNameVector                aFilters;
     const ::rtl::OUString           aSeparator( RTL_CONSTASCII_USTRINGPARAM( ";" ) );
     ::rtl::OUString                 aAllTypes;
 
-    aDlg.SetTitle( AVMEDIA_RESID( bInsertDialog ? AVMEDIA_STR_INSERTMEDIA_DLG : AVMEDIA_STR_OPENMEDIA_DLG ) );
+    aDlg.SetTitle( AVMEDIA_RESID( (o_pbLink)
+                ? AVMEDIA_STR_INSERTMEDIA_DLG : AVMEDIA_STR_OPENMEDIA_DLG ) );
 
     getMediaFilters( aFilters );
 
@@ -297,10 +303,36 @@ bool MediaWindow::executeMediaURLDialog( Window* /* pParent */, ::rtl::OUString&
     // add filter for all types
     aDlg.AddFilter( AVMEDIA_RESID( AVMEDIA_STR_ALL_FILES ), String( RTL_CONSTASCII_USTRINGPARAM( "*.*" ) ) );
 
+    uno::Reference<ui::dialogs::XFilePicker> const xFP(aDlg.GetFilePicker());
+    uno::Reference<ui::dialogs::XFilePickerControlAccess> const xCtrlAcc(xFP,
+            uno::UNO_QUERY_THROW);
+    if (o_pbLink)
+    {
+        // for video link should be the default
+        xCtrlAcc->setValue(
+                ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0,
+                uno::makeAny(sal_True) );
+        // disabled for now: TODO: preview?
+        xCtrlAcc->enableControl(
+                ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_PREVIEW,
+                sal_False);
+    }
+
     if( aDlg.Execute() == ERRCODE_NONE )
     {
         const INetURLObject aURL( aDlg.GetPath() );
         rURL = aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
+
+        if (o_pbLink)
+        {
+            uno::Any const any = xCtrlAcc->getValue(
+                ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
+            if (!(any >>= *o_pbLink))
+            {
+                SAL_WARN("avmedia", "invalid link property");
+                *o_pbLink = true;
+            }
+        }
     }
     else if( rURL.getLength() )
         rURL = ::rtl::OUString();
