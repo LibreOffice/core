@@ -829,8 +829,7 @@ com::sun::star::uno::Sequence< Any > parseArray( const rtl::OUString & str ) thr
         }
         i++;
     }
-    ret = Sequence< Any > ( &elements[0] , elements.size() );
-    return ret;
+    return sequence_of_vector(elements);
 }
 
 com::sun::star::uno::Sequence< sal_Int32 > parseIntArray( const ::rtl::OUString & str )
@@ -846,7 +845,7 @@ com::sun::star::uno::Sequence< sal_Int32 > parseIntArray( const ::rtl::OUString 
     }
     vec.push_back( (sal_Int32)rtl_ustr_toInt32( &str.pData->buffer[start], 10 ) );
 //     printf( "found %d\n" , rtl_ustr_toInt32( &str.pData->buffer[start], 10 ));
-    return Sequence< sal_Int32 > ( &vec[0], vec.size() );
+    return sequence_of_vector(vec);
 }
 
 void fillAttnum2attnameMap(
@@ -987,16 +986,44 @@ void fillAttnum2attnameMap(
 com::sun::star::uno::Sequence< sal_Int32 > string2intarray( const ::rtl::OUString & str )
 {
     com::sun::star::uno::Sequence< sal_Int32 > ret;
-    if( str.getLength() > 1 && '{' == str[0] )
+    const sal_Int32 strlen = str.getLength();
+    if( str.getLength() > 1 )
     {
-        std::vector< sal_Int32, Allocator< sal_Int32 > > vec;
         sal_Int32 start = 0;
+        while ( iswspace( str.iterateCodePoints(&start) ) )
+            if ( start == strlen)
+                return ret;
+        if ( str.iterateCodePoints(&start) != L'{' )
+            return ret;
+        while ( iswspace( str.iterateCodePoints(&start) ) )
+            if ( start == strlen)
+                return ret;
+        if ( str.iterateCodePoints(&start, 0) == L'}' )
+            return ret;
+
+        std::vector< sal_Int32, Allocator< sal_Int32 > > vec;
         do
         {
-            start ++;
-            vec.push_back( (sal_Int32)rtl_ustr_toInt32( &str.getStr()[start], 10 ) );
-            start = str.indexOf( ',' , start );
-        } while( start != -1 );
+            ::rtl::OUString digits;
+            sal_Int32 c;
+            while ( isdigit( c = str.iterateCodePoints(&start) ) )
+            {
+                if ( start == strlen)
+                    return ret;
+                digits += OUString(c);
+            }
+            vec.push_back( digits.toInt32() );
+            while ( iswspace( str.iterateCodePoints(&start) ) )
+                if ( start == strlen)
+                    return ret;
+            if ( str.iterateCodePoints(&start, 0) == L'}' )
+                break;
+            if ( str.iterateCodePoints(&start) != L',' )
+                return ret;
+            if ( start == strlen)
+                return ret;
+        } while( true );
+        // vec is guaranteed non-empty
         ret = com::sun::star::uno::Sequence< sal_Int32 > ( &vec[0] , vec.size() );
     }
     return ret;
@@ -1345,6 +1372,5 @@ bool implSetObject(	const Reference< XParameters >& _rxParameters,
 
     return bSuccessfullyReRouted;
 }
-
 
 }

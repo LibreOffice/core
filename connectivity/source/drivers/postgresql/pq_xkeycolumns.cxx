@@ -55,8 +55,6 @@
  *
  ************************************************************************/
 
-#include <vector>
-
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 
@@ -151,7 +149,7 @@ void KeyColumns::refresh()
 
         String2IntMap map;
 
-        std::vector< Any, Allocator< Any> > vec;
+        m_values = Sequence< com::sun::star::uno::Any > ();
         sal_Int32 columnIndex = 0;
         while( rs->next() )
         {
@@ -177,11 +175,14 @@ void KeyColumns::refresh()
                     st.RELATED_COLUMN, makeAny( m_foreignColumnNames[keyindex]) );
             }
 
-            vec.push_back( makeAny( prop ) );
-            map[ name ] = columnIndex;
-            columnIndex ++;
+            {
+                const int currentColumnIndex = columnIndex++;
+                assert(currentColumnIndex  == m_values.getLength());
+                m_values.realloc( columnIndex );
+                m_values[currentColumnIndex] = makeAny( prop );
+                map[ name ] = currentColumnIndex;
+            }
         }
-        m_values = Sequence< com::sun::star::uno::Any > ( & vec[0] , vec.size() );
         m_name2index.swap( map );
     }
     catch ( com::sun::star::sdbc::SQLException & e )

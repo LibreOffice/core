@@ -1250,8 +1250,7 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
         closeable->close();
 
     return new SequenceResultSet(
-        m_refMutex, *this, statics.tablesRowNames,
-        Sequence< Sequence< Any > > ( &vec[0],vec.size() ), m_pSettings->tc );
+        m_refMutex, *this, statics.tablesRowNames, sequence_of_vector(vec), m_pSettings->tc );
 }
 
 struct SortInternalSchemasLastAndPublicFirst
@@ -1325,8 +1324,7 @@ struct SortInternalSchemasLastAndPublicFirst
     if( closeable.is() )
         closeable->close();
     return new SequenceResultSet(
-        m_refMutex, *this, getStatics().schemaNames,
-        Sequence< Sequence< Any > > ( &vec[0], vec.size() ), m_pSettings->tc );
+        m_refMutex, *this, getStatics().schemaNames, sequence_of_vector(vec), m_pSettings->tc );
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getCatalogs(  )
@@ -1670,8 +1668,7 @@ static void columnMetaData2DatabaseTypeDescription(
         closeable->close();
 
     return new SequenceResultSet(
-        m_refMutex, *this, statics.columnRowNames,
-        Sequence< Sequence< Any > > ( &vec[0],vec.size() ), m_pSettings->tc );
+        m_refMutex, *this, statics.columnRowNames, sequence_of_vector(vec), m_pSettings->tc );
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getColumnPrivileges(
@@ -2348,7 +2345,7 @@ static void pgTypeInfo2ResultSet(
         m_refMutex,
         *this,
         getStatics().typeinfoColumnNames,
-        Sequence< Sequence< Any > > ( &vec[0] , vec.size() ),
+        sequence_of_vector(vec),
         m_pSettings->tc,
         &( getStatics().typeInfoMetaData ));
 }
@@ -2494,7 +2491,7 @@ static sal_Int32 seqContains( const Sequence< sal_Int32 > &seq, sal_Int32 value 
     }
     return new SequenceResultSet(
         m_refMutex, *this, getStatics().indexinfoColumnNames,
-        Sequence< Sequence< Any > > ( &vec[0] , vec.size() ),
+        sequence_of_vector(vec),
         m_pSettings->tc );
 }
 

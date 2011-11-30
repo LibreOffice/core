@@ -55,8 +55,6 @@
  *
  ************************************************************************/
 
-#include <vector>
-
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 
@@ -165,7 +163,7 @@ void Indexes::refresh()
 
         Reference< XRow > row( rs, UNO_QUERY );
         String2IntMap map;
-        std::vector< Any, Allocator< Any> > vec;
+        m_values = Sequence< com::sun::star::uno::Any > ();
         sal_Int32 index = 0;
         while( rs->next() )
         {
@@ -205,11 +203,14 @@ void Indexes::refresh()
             pIndex->setPropertyValue_NoBroadcast_public(
                 st.PRIVATE_COLUMN_INDEXES, makeAny( columnNames ));
 
-            vec.push_back( makeAny( prop ) );
-            map[ currentIndexName ] = index;
-            index ++;
+            {
+                const int currentIndex = index++;
+                assert(currentIndex  == m_values.getLength());
+                m_values.realloc( index );
+                m_values[currentIndex] = makeAny( prop );
+                map[ currentIndexName ] = currentIndex;
+            }
         }
-        m_values = Sequence< com::sun::star::uno::Any > ( & vec[0] , vec.size() );
         m_name2index.swap( map );
     }
     catch ( com::sun::star::sdbc::SQLException & e )

@@ -492,6 +492,7 @@ static void properties2arrays( const Sequence< PropertyValue > & args,
     for( int i = 0; i < args.getLength() ; ++i )
     {
         bool append = true;
+        // TODO: rewrite this as a static table of keywords, and a loop over these keywords.
         if( args[i].Name.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "password" ) ) )
         {
             keywords.push_back( "password", SAL_NO_ACQUIRE );

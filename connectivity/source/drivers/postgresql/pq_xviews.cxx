@@ -55,8 +55,6 @@
  *
  ************************************************************************/
 
-#include <vector>
-
 #include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -135,7 +133,7 @@ void Views::refresh()
 
         Reference< XRow > xRow( rs , UNO_QUERY );
 
-        std::vector< Any, Allocator< Any> > vec;
+        m_values = Sequence< com::sun::star::uno::Any > ();
         String2IntMap map;
         sal_Int32 viewIndex = 0;
 
@@ -152,15 +150,17 @@ void Views::refresh()
             pView->setPropertyValue_NoBroadcast_public(st.NAME , makeAny(table) );
             pView->setPropertyValue_NoBroadcast_public(st.SCHEMA_NAME, makeAny(schema) );
             pView->setPropertyValue_NoBroadcast_public(st.COMMAND, makeAny(command) );
-            vec.push_back( makeAny( prop ) );
 
-            OUStringBuffer buf( table.getLength() + schema.getLength() + 1);
-            buf.append( schema ).appendAscii( "." ).append( table );
-            map[ buf.makeStringAndClear() ] = viewIndex;
-            viewIndex ++;
-
+            {
+                const int currentViewIndex = viewIndex++;
+                assert(currentViewIndex  == m_values.getLength());
+                m_values.realloc( viewIndex );
+                m_values[currentViewIndex] = makeAny( prop );
+                OUStringBuffer buf( table.getLength() + schema.getLength() + 1);
+                buf.append( schema ).appendAscii( "." ).append( table );
+                map[ buf.makeStringAndClear() ] = currentViewIndex;
+            }
         }
-        m_values = Sequence< com::sun::star::uno::Any > ( &vec[0], vec.size() );
         m_name2index.swap( map );
     }
     catch ( com::sun::star::sdbc::SQLException & e )

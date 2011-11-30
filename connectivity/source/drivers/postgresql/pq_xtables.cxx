@@ -55,8 +55,6 @@
  *
  ************************************************************************/
 
-#include <vector>
-
 #include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -137,7 +135,7 @@ void Tables::refresh()
 
         String2IntMap map;
 
-        std::vector< Any, Allocator< Any> > vec;
+        m_values = Sequence< com::sun::star::uno::Any > ();
         sal_Int32 tableIndex = 0;
         while( rs->next() )
         {
@@ -170,13 +168,16 @@ void Tables::refresh()
                            com::sun::star::sdbcx::Privilege::REFERENCE |
                            com::sun::star::sdbcx::Privilege::DROP ) ) );
 
-            vec.push_back( makeAny( prop ) );
-            OUStringBuffer buf( name.getLength() + schema.getLength() + 1);
-            buf.append( schema ).appendAscii( "." ).append( name );
-            map[ buf.makeStringAndClear() ] = tableIndex;
-            tableIndex ++;
+            {
+                const int currentTableIndex = tableIndex++;
+                assert(currentTableIndex  == m_values.getLength());
+                m_values.realloc( tableIndex );
+                m_values[currentTableIndex] = makeAny( prop );
+                OUStringBuffer buf( name.getLength() + schema.getLength() + 1);
+                buf.append( schema ).appendAscii( "." ).append( name );
+                map[ buf.makeStringAndClear() ] = currentTableIndex;
+            }
         }
-        m_values = Sequence< com::sun::star::uno::Any > ( & vec[0] , vec.size() );
         m_name2index.swap( map );
     }
     catch ( com::sun::star::sdbc::SQLException & e )

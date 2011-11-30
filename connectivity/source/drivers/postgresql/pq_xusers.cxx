@@ -55,8 +55,6 @@
  *
  ************************************************************************/
 
-#include <vector>
-
 #include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -126,7 +124,7 @@ void Users::refresh()
 
         String2IntMap map;
 
-        std::vector< Any, Allocator< Any> > vec;
+        m_values = Sequence< com::sun::star::uno::Any > ( );
         sal_Int32 tableIndex = 0;
         while( rs->next() )
         {
@@ -138,11 +136,14 @@ void Users::refresh()
             pUser->setPropertyValue_NoBroadcast_public(
                 st.NAME , makeAny(xRow->getString( TABLE_INDEX_CATALOG+1) ) );
 
-            vec.push_back( makeAny(prop ) );
-            map[ name ] = tableIndex;
-            tableIndex ++;
+            {
+                const int currentTableIndex = tableIndex++;
+                assert(currentTableIndex  == m_values.getLength());
+                m_values.realloc( tableIndex );
+                m_values[currentTableIndex] = makeAny( prop );
+                map[ name ] = currentTableIndex;
+            }
         }
-        m_values = Sequence< com::sun::star::uno::Any > ( & vec[0] , vec.size() );
         m_name2index.swap( map );
     }
     catch ( com::sun::star::sdbc::SQLException & e )

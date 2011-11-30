@@ -55,8 +55,6 @@
  *
  ************************************************************************/
 
-#include <vector>
-
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 
@@ -226,8 +224,8 @@ void Keys::refresh()
         Reference< XRow > xRow( rs , UNO_QUERY );
 
         String2IntMap map;
-        std::vector< Any, Allocator< Any> > vec;
-        sal_Int32 keyIndex = 0;
+        m_values = Sequence< com::sun::star::uno::Any > ();
+        int keyIndex = 0;
         while( rs->next() )
         {
             Key * pKey =
@@ -268,11 +266,15 @@ void Keys::refresh()
                         string2intarray( xRow->getString(8) ) ) ) );
             }
 
-            vec.push_back( makeAny( prop ) );
-            map[ xRow->getString( 1 ) ] = keyIndex;
-            keyIndex ++;
+
+            {
+                const int currentKeyIndex = keyIndex++;
+                map[ xRow->getString( 1 ) ] = currentKeyIndex;
+                assert(currentKeyIndex == m_values.getLength());
+                m_values.realloc( keyIndex );
+                m_values[currentKeyIndex] = makeAny( prop );
+            }
         }
-        m_values = Sequence< com::sun::star::uno::Any > ( & vec[0] , vec.size() );
         m_name2index.swap( map );
     }
     catch ( com::sun::star::sdbc::SQLException & e )
