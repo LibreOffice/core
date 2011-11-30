@@ -5411,8 +5411,8 @@ if test "x$enable_ext_postgresql_sdbc" = "xyes" -a "x$enable_extension_integrati
         if test -z "$PGCONFIG"; then
            AC_MSG_ERROR([pg_config needed; set PGCONFIG if not in PATH])
         fi
-        POSTGRESQL_INC=-I$(pg_config --includedir)
-        POSTGRESQL_LIB="-L$(pg_config --libdir)"
+        POSTGRESQL_INC=-I$(${PGCONFIG} --includedir)
+        POSTGRESQL_LIB="-L$(${PGCONFIG} --libdir)"
     else
         SYSTEM_POSTGRESQL=NO
         if test -n "$with_libpq_path"; then
