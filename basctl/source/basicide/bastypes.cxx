@@ -287,7 +287,7 @@ void BreakPointList::transfer(BreakPointList & rList)
     reset();
     for (size_t i = 0; i < rList.size(); ++i)
         maBreakPoints.push_back( rList.at( i ) );
-    rList.reset();
+    rList.clear();
 }
 
 void BreakPointList::InsertSorted( BreakPoint* pNewBrk )
