@@ -1,3 +1,4 @@
+(anonymous namespace)::UpdateInformationProvider::storeCommandInfo(int, com::sun::star::uno::Reference<com::sun::star::ucb::XCommandProcessor> const&)
 (anonymous namespace)::getState(std::__debug::vector<cppcanvas::internal::OutDevState, std::allocator<cppcanvas::internal::OutDevState> > const&)
 (anonymous namespace)::writeInfo(com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&, rtl::OUString const&, rtl::OUString const&)
 AtomDocument::AtomDocument(AtomPubSession*, std::basic_string<char, std::char_traits<char>, std::allocator<char> >)
@@ -79,6 +80,7 @@ CurrencyBox::RemoveValue(long)
 CurrencyField::CurrencyField(Window*, ResId const&)
 CurrencyFormatter::SetCurrencySymbol(String const&)
 CustomToolBarImportHelper::showToolbar(rtl::OUString const&)
+Date::IsValidDate() const
 DateBox::DateBox(Window*, ResId const&)
 DateBox::GetDate(unsigned short) const
 DateBox::GetDatePos(Date const&) const
@@ -1989,7 +1991,6 @@ oox::drawingml::CustomShapeProperties::getValue(std::__debug::vector<oox::drawin
 oox::drawingml::Diagram::getLayoutId() const
 oox::drawingml::DiagramLayout::layout(std::__debug::vector<oox::drawingml::dgm::Point, std::allocator<oox::drawingml::dgm::Point> > const&, com::sun::star::awt::Point const&)
 oox::drawingml::GetPoint2D(com::sun::star::uno::Reference<com::sun::star::xml::sax::XFastAttributeList> const&)
-oox::drawingml::GetShapePresetType(int)
 oox::drawingml::GetTextMargin(rtl::OUString const&)
 oox::drawingml::GetTextVerticalAdjust(int)
 oox::drawingml::GraphicProperties::assignUsed(oox::drawingml::GraphicProperties const&)
@@ -2025,7 +2026,9 @@ oox::dump::TextStreamObjectBase::construct(oox::dump::InputObjectBase const&, un
 oox::dump::XmlStreamObject::XmlStreamObject(oox::dump::OutputObjectBase const&, oox::dump::BinaryInputStreamRef const&)
 oox::dump::biff::BiffObjectBase::dumpRowRange(oox::dump::String const&, bool)
 oox::dump::biff::FormulaObject::dumpCellFormula(oox::dump::String const&, unsigned short)
+oox::formulaimport::XmlStream::AttributeList::attribute(int, unsigned short) const
 oox::formulaimport::XmlStream::AttributeList::hasAttribute(int) const
+oox::formulaimport::XmlStream::skipElement(int)
 oox::ole::VbaHelper::getBasicScriptUrl(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
 oox::ole::VbaProject::hasDialog(rtl::OUString const&) const
 oox::ole::VbaProject::hasModule(rtl::OUString const&) const
