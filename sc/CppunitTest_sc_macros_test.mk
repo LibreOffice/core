@@ -31,7 +31,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,sc_macros_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_macros_test, \
-    sc/qa/unit/macros-test \
+    sc/qa/extras/macros-test \
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,sc_macros_test, \
