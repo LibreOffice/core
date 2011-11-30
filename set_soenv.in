@@ -880,14 +880,10 @@ $ETC                  = $ds."etc";
 $BIN                  = $ds."bin";
 $LIB                  = $ds."lib";
 $LIB64                = $ds."lib";
-$LIB64               .= "64"
-if ($platform =~ m/x86_64-.*-linux/);
-$LIB64               .= "64"
-if (($platform =~ m/powerpc64-.*-linux/) && ('@SIZEOF_LONG@' eq '8'));
-$LIB64               .= "64"
-if (($platform =~ m/s390x-.*-linux/) && ('@SIZEOF_LONG@' eq '8'));
-$LIB64               .= $ds."x64"
-if ($platform =~ m/cygwin/);
+$LIB64               .= "64" if ($platform =~ m/x86_64-.*-linux/);
+$LIB64               .= "64" if (($platform =~ m/powerpc64-.*-linux/) && ('@SIZEOF_LONG@' eq '8'));
+$LIB64               .= "64" if (($platform =~ m/s390x-.*-linux/) && ('@SIZEOF_LONG@' eq '8'));
+$LIB64               .= $ds."x64" if ($platform =~ m/cygwin/);
 $INC                  = $ds."inc";
 $INCLUDE              = $ds."include";
 $DEV                  = $ds."dev";
@@ -972,10 +968,12 @@ $SOLARENVINC          = '$SOLARENV'.$INC;
 $DMAKEROOT            = '$SOLARENVINC'.$ds."startup";
 # Location of JDK classes .zip file.
 # but in jdk 1.2 it is called rt.jar and it lives in jre/lib
-$CLASSPATH            = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$wps.'.';
-# Location of the JDK supported standard classes.zip file.
-# see above for why the change
-$XCLASSPATH           = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$wps.'.';
+$CLASSPATH            = '';
+$CLASSPATH           .= '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar" if (-f $JAVA_HOME.$ds.'jre'.$LIB.$ds."rt.jar");
+$CLASSPATH           .= $wps.'.' if ($CLASSPATH ne '');
+
+# Why do we need XCLASSPATH when it has the exact same value as CLASSPATH?
+$XCLASSPATH           = $CLASSPATH;
 
 # Location of the translations module
 $L10N_MODULE = PathFormat($SRC_ROOT."/translations");
@@ -1248,10 +1246,11 @@ elsif ($platform =~ m/linux|netbsd|aix|freebsd|openbsd|dragonfly/)
    if ( $XLIB ne "/usr/lib" && $XLIB ne "/usr/lib64" && $XLIB ne "no_x_libraries" ) {
       $SOLARLIB       .= $L.$XLIB;
    }
-   $JAVALIB           = $L.'$JAVA_HOME'.$LIB64.
-                        $L.$JRELIBDIR.
-                        $L.$JRETOOLKITDIR.
-                        $L.$JRETHREADDIR;
+   $JAVALIB           = '';
+   $JAVALIB          .= $L.'$JAVA_HOME'.$LIB64 if (-d $JAVA_HOME.$LIB64);
+   $JAVALIB          .= $L.$JRELIBDIR if (-d $JRELIBDIR);
+   $JAVALIB          .= $L.$JRETOOLKITDIR if (-d $JRETOOLKITDIR);
+   $JAVALIB          .= $L.$JRETHREADDIR if (-d $JRETHREADDIR);;
 }
 elsif ($platform =~ m/cygwin|mingw32/)
 {  $SOLARLIB          = $L.$par_dir.$LIB.
@@ -1280,7 +1279,7 @@ $SOLARINC             = $I.$cur_dir.
                         $I.'$SOLARENV'.$INC.
                         $I.'$SRC_ROOT'.$ds."res";
 
-if ($platform =~ m/solaris|linux|freebsd|netbsd|aix|openbsd|dragonfly/)
+if ($platform =~ m/solaris|linux|freebsd|netbsd|aix|openbsd|dragonfly/ && '@CROSS_COMPILING@' ne 'YES')
 {
 if ($platform =~ m/solaris/ && ! $CC =~ "gcc")
 {

@@ -3996,6 +3996,11 @@ fi
 dnl ===================================================================
 dnl Checks for JDK.
 dnl ===================================================================
+
+# Note that JAVA_HOME as for now always means the *build* platform's
+# JAVA_HOME. Whether all the complexity here actually is needed any
+# more or not, no idea.
+
 if test "$SOLAR_JAVA" != ""; then
     _gij_longver=0
     AC_MSG_CHECKING([the installed JDK])
