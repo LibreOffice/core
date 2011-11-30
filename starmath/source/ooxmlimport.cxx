@@ -142,18 +142,19 @@ OUString SmOoxmlImport::readOMathArg()
 OUString SmOoxmlImport::handleAcc()
 {
     stream.ensureOpeningTag( M_TOKEN( acc ));
-    OUString acc;
+    sal_Unicode accChr = 0x302;
     if( XmlStream::Tag accPr = stream.checkOpeningTag( M_TOKEN( accPr )))
     {
         if( XmlStream::Tag chr = stream.checkOpeningTag( M_TOKEN( chr )))
         {
-            acc = chr.attribute( M_TOKEN( val ));
+            accChr = chr.attribute( M_TOKEN( val ), accChr );
             stream.ensureClosingTag( M_TOKEN( chr ));
         }
         stream.ensureClosingTag( M_TOKEN( accPr ));
     }
     // see aTokenTable in parse.cxx
-    switch( acc.isEmpty() ? sal_Unicode( MS_ACUTE ) : acc[ 0 ] )
+    OUString acc;
+    switch( accChr )
     {
         case MS_CHECK:
             acc = STR( "check" );
@@ -193,6 +194,7 @@ OUString SmOoxmlImport::handleAcc()
             break;
         default:
             acc = STR( "acute" );
+            fprintf( stderr, "Unknown m:chr in m:acc '%d'\n", accChr );
             break;
     }
     OUString e = handleE();
