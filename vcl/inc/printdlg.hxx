@@ -212,9 +212,6 @@ namespace vcl
             void setupLayout();
         };
 
-        OKButton                                maOKButton;
-        CancelButton                            maCancelButton;
-        HelpButton                              maHelpButton;
         PrintPreviewWindow                      maPreviewWindow;
         NumericField                            maPageEdit;
         FixedText                               maNumPagesText;
@@ -227,6 +224,10 @@ namespace vcl
         OutputOptPage                           maOptionsPage;
 
         FixedLine                               maButtonLine;
+
+        OKButton                                maOKButton;
+        CancelButton                            maCancelButton;
+        HelpButton                              maHelpButton;
 
         boost::shared_ptr< PrinterController >  maPController;
 
