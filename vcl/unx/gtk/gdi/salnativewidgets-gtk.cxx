@@ -2185,6 +2185,8 @@ sal_Bool GtkSalGraphics::NWPaintGTKComboBox( GdkDrawable* gdkDrawable,
 
     Rectangle        aEditBoxRect( pixmapRect );
     aEditBoxRect.SetSize( Size( pixmapRect.GetWidth() - buttonRect.GetWidth(), aEditBoxRect.GetHeight() ) );
+    if( Application::GetSettings().GetLayoutRTL() )
+        aEditBoxRect.SetPos( Point( x + buttonRect.GetWidth() , y ) );
 
     #define ARROW_EXTENT        0.7
     arrowRect.SetSize( Size( (gint)(MIN_ARROW_SIZE * ARROW_EXTENT),
@@ -2254,8 +2256,11 @@ static Rectangle NWGetComboBoxButtonRect( int nScreen,
     if( nPart == PART_BUTTON_DOWN )
     {
         aButtonRect.SetSize( Size( nButtonWidth, aAreaRect.GetHeight() ) );
-        aButtonRect.SetPos( Point( aAreaRect.Left() + aAreaRect.GetWidth() - nButtonWidth,
-                                   aAreaRect.Top() ) );
+        if( Application::GetSettings().GetLayoutRTL() )
+            aButtonRect.SetPos( Point( aAreaRect.Left(), aAreaRect.Top() ) );
+        else
+            aButtonRect.SetPos( Point( aAreaRect.Left() + aAreaRect.GetWidth() - nButtonWidth,
+                                       aAreaRect.Top() ) );
     }
     else if( nPart == PART_SUB_EDIT )
     {
@@ -2271,6 +2276,8 @@ static Rectangle NWGetComboBoxButtonRect( int nScreen,
         Point aEditPos = aAreaRect.TopLeft();
         aEditPos.X() += adjust_x;
         aEditPos.Y() += adjust_y;
+        if( Application::GetSettings().GetLayoutRTL() )
+            aEditPos.X() += nButtonWidth;
         aButtonRect.SetPos( aEditPos );
     }
 
