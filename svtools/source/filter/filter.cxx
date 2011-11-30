@@ -249,9 +249,14 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
         nStreamLen = rStream.Tell() - nStreamPos;
         rStream.Seek( nStreamPos );
     }
-    // Die ersten 256 Bytes in einen Buffer laden:
-    if( nStreamLen >= 256 )
+    if (!nStreamLen)
+    {
+        return false; // this prevents at least a STL assertion
+    }
+    else if (nStreamLen >= 256)
+    {   // load first 256 bytes into a buffer
         rStream.Read( sFirstBytes, 256 );
+    }
     else
     {
         rStream.Read( sFirstBytes, nStreamLen );
