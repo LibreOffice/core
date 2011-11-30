@@ -84,6 +84,7 @@ $(call gb_Module_get_target,%) :
 
 ifeq ($(strip $(gb_PARTIALBUILD)),)
 check : subsequentcheck
+debugrun :| build
 
 define gb_Module_BUILDHINT
 
@@ -108,6 +109,7 @@ else
 gb_Module_BUILDHINT=
 gb_Module_DEVINSTALLHINT=
 
+debugrun : build
 endif
 
 all : build unitcheck
@@ -142,7 +144,7 @@ check : unitcheck
 	$(call gb_Output_announce_title,all tests checked.)
 	$(call gb_Output_announce_bell)
 	
-debugrun : build
+debugrun :
 	$(call gb_Module_DEBUGRUNCOMMAND)
 
 dev-install :
