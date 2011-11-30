@@ -29,9 +29,6 @@
 
 # CppunitTest class
 
-# in non-product builds, ensure that tools-based assertions do not pop up as message box, but are routed to the shell
-DBGSV_ERROR_OUT := shell
-export DBGSV_ERROR_OUT
 
 UNIT_FAILED_MSG := echo; echo "Error: a unit test failed, please do one of:"; echo; echo "export DEBUGCPPUNIT=TRUE            \# for exception catching"; echo "export GDBCPPUNITTRACE=\"gdb --args\" \# for interactive debugging"; echo "export VALGRIND=memcheck            \# for memory checking" ; echo "and retry."
 
@@ -46,17 +43,16 @@ ifneq ($(strip $(VALGRIND)),)
 gb_CppunitTest_VALGRINDTOOL := valgrind --tool=$(VALGRIND) --num-callers=50
 ifeq ($(strip $(VALGRIND)),memcheck)
 G_SLICE := always-malloc
-export G_SLICE
 GLIBCXX_FORCE_NEW := 1
-export GLIBCXX_FORCE_NEW
 endif
 endif
 
 # defined by platform
 #  gb_CppunitTest_TARGETTYPE
 #  gb_CppunitTest_get_filename
+# DBGSV_ERROR_OUT => in non-product builds, ensure that tools-based assertions do not pop up as message box, but are routed to the shell
 gb_CppunitTest_CPPTESTTARGET := $(call gb_Executable_get_target,cppunit/cppunittester)
-gb_CppunitTest_CPPTESTCOMMAND := $(gb_CppunitTest_CPPTESTPRECOMMAND) STAR_RESOURCEPATH=$(dir $(call gb_ResTarget_get_outdir_target,example)) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_CPPTESTTARGET)
+gb_CppunitTest_CPPTESTCOMMAND := $(gb_CppunitTest_CPPTESTPRECOMMAND) $(if $(G_SLICE),G_SLICE=$(G_SLICE)) $(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) DBGSV_ERROR_OUT=shell STAR_RESOURCEPATH=$(dir $(call gb_ResTarget_get_outdir_target,example)) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_CPPTESTTARGET)
 gb_CppunitTest__get_linktargetname = CppunitTest/$(call gb_CppunitTest_get_filename,$(1))
 
 # TODO: move this to platform under suitable name
