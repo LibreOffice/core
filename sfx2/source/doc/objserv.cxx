@@ -90,7 +90,6 @@
 #include "doc.hrc"
 #include <sfx2/docfac.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <sfx2/filedlghelper.hxx>
 #include "sfx2/sfxhelp.hxx"
 #include <sfx2/msgpool.hxx>
 #include <sfx2/objface.hxx>

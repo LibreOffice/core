@@ -32,7 +32,6 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
-#include <sfx2/filedlghelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/filenotation.hxx>
 #include <sfx2/docfilt.hxx>

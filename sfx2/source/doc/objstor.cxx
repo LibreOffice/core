@@ -124,7 +124,6 @@
 #include <sfx2/dispatch.hxx>
 #include "openflag.hxx"
 #include "helper.hxx"
-#include <sfx2/filedlghelper.hxx>
 #include <sfx2/event.hxx>
 #include "fltoptint.hxx"
 #include <sfx2/viewfrm.hxx>

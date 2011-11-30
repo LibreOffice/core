@@ -31,7 +31,6 @@
 #include <vcl/msgbox.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
-#include <sfx2/filedlghelper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <comphelper/processfactory.hxx>

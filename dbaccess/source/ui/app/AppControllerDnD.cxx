@@ -83,7 +83,6 @@
 #include <svtools/svtreebx.hxx>
 #include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
-#include <sfx2/filedlghelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/docfilt.hxx>
 #include <svtools/fileview.hxx>

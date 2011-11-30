@@ -42,7 +42,6 @@
 #include "localresaccess.hxx"
 #include <osl/process.h>
 #include <vcl/msgbox.hxx>
-#include <sfx2/filedlghelper.hxx>
 #include "dbadmin.hxx"
 #include <comphelper/types.hxx>
 #include <vcl/stdtext.hxx>

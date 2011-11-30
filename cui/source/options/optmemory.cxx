@@ -35,7 +35,6 @@
 #include <svl/szitem.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/filedlghelper.hxx>
 #include <vcl/msgbox.hxx>
 #include <rtl/math.hxx>
 #include <unotools/undoopt.hxx>
