@@ -180,7 +180,8 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
         mnMaxY          (0),
         bIsOkCancelMode ( false ),
         bIsMultiLine    ( false ),
-        bInResize       ( false )
+        bInResize       ( false ),
+        mbIsMultiLine   ( lcl_isExperimentalMode() )
 {
     ScModule*        pScMod  = SC_MOD();
     SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
@@ -518,7 +519,7 @@ void ScInputWindow::Select()
 void ScInputWindow::Resize()
 {
     ToolBox::Resize();
-    if ( lcl_isExperimentalMode() )
+    if ( mbIsMultiLine )
     {
         aTextWindow.Resize();
         Size aSize = GetSizePixel();
@@ -759,7 +760,7 @@ bool ScInputWindow::IsPointerAtResizePos()
 
 void ScInputWindow::MouseMove( const MouseEvent& rMEvt )
 {
-    if ( lcl_isExperimentalMode() )
+    if ( mbIsMultiLine )
     {
         Point aPosPixel = GetPointerPosPixel();
 
@@ -805,7 +806,7 @@ void ScInputWindow::MouseMove( const MouseEvent& rMEvt )
 
 void ScInputWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( lcl_isExperimentalMode() )
+    if ( mbIsMultiLine )
     {
         if ( rMEvt.IsLeft() )
         {
@@ -829,7 +830,7 @@ void ScInputWindow::MouseButtonDown( const MouseEvent& rMEvt )
 }
 void ScInputWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    if ( lcl_isExperimentalMode() )
+    if ( mbIsMultiLine )
     {
         ReleaseMouse();
         if ( rMEvt.IsLeft() )
@@ -1180,17 +1181,19 @@ IMPL_LINK(ScMultiTextWnd, ModifyHdl, EENotify*, pNotify)
 IMPL_LINK(ScMultiTextWnd, NotifyHdl, EENotify*, pNotify)
 {
     // need to process EE_NOTIFY_TEXTVIEWSCROLLED here
-    // sometimes when pasting we don't seem to get EE_NOTIFY_TEXTVIEWSCROLLED
-    // but we always seem to get EE_NOTIFY_TEXTMODIFIED
+    // sometimes we don't seem to get EE_NOTIFY_TEXTVIEWSCROLLED e.g. when
+    // we insert text at the begining of the text so the cursor never moves
+    // down to generate a scroll event
+
     if ( pNotify && ( pNotify->eNotificationType == EE_NOTIFY_TEXTVIEWSCROLLED
-                 ||   pNotify->eNotificationType == EE_NOTIFY_TEXTMODIFIED ) )
+                 ||   pNotify->eNotificationType == EE_NOTIFY_TEXTHEIGHTCHANGED ) )
         SetScrollBarRange();
     return 0;
 }
 
 long ScMultiTextWnd::GetEditEngTxtHeight()
 {
-    return pEditView ? pEditView->GetEditEngine()->GetTextHeight(0) : 0;
+    return pEditView ? pEditView->GetEditEngine()->GetTextHeight() : 0;
 }
 
 void ScMultiTextWnd::SetScrollBarRange()
@@ -1372,40 +1375,8 @@ void ScMultiTextWnd::StopEditEngine( sal_Bool bAll )
 
 void ScMultiTextWnd::SetTextString( const String& rNewString )
 {
-    if ( rNewString != aString )
-    {
-        // #TODO - is it really necessary to do this here, the base
-        // class never seems to have it's own editengine set up
-        long nTextSize = 0;
-        xub_StrLen nDifPos;
-        if (rNewString.Len() > aString.Len())
-            nDifPos = rNewString.Match(aString);
-        else
-            nDifPos = aString.Match(rNewString);
-
-        long nSize1 = GetTextWidth(aString);
-        long nSize2 = GetTextWidth(rNewString);
-        if ( nSize1>0 && nSize2>0 )
-            nTextSize = Max( nSize1, nSize2 );
-        else
-            nTextSize = GetOutputSize().Width();
-
-        if (nDifPos == STRING_MATCH)
-            nDifPos = 0;
-
-        Point aLogicStart = PixelToLogic(Point(nTextStartPos-1,0));
-        long nStartPos = aLogicStart.X();
-        long nInvPos = nStartPos;
-        if (nDifPos)
-            nInvPos += GetTextWidth(aString,0,nDifPos);
-
-        sal_uInt16 nFlags = 0;
-        if ( nDifPos == aString.Len() )         // only new characters appended
-            nFlags = INVALIDATE_NOERASE;        // then background is already clear
-        Invalidate( Rectangle( nInvPos, 0,
-           nStartPos+nTextSize, GetOutputSize().Height()-1 ),
-           nFlags );
-    }
+    if ( pEditView )
+        pEditView->Invalidate();
     ScTextWnd::SetTextString( rNewString );
     SetScrollBarRange();
     DoScroll();

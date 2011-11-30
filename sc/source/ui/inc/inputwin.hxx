@@ -277,6 +277,7 @@ public:
     virtual void    MouseButtonUp( const MouseEvent& rMEvt );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    MouseMove( const MouseEvent& rMEvt );
+    bool            IsMultiLineInput() { return mbIsMultiLine; }
 protected:
     virtual void    SetText( const String& rString );
     virtual String  GetText() const;
@@ -297,6 +298,7 @@ private:
     sal_Bool            bIsOkCancelMode;
     bool            bIsMultiLine;
     bool            bInResize;
+    bool            mbIsMultiLine;
 };
 
 //==================================================================

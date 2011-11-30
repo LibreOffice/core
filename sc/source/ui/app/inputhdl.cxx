@@ -2061,7 +2061,11 @@ IMPL_LINK( ScInputHandler, ModifyHdl, void *, EMPTYARG )
         //  update input line from ModifyHdl for changes that are not
         //  wrapped by DataChanging/DataChanged calls (like Drag&Drop)
 
-        String aText = GetEditText(pEngine);
+        String aText;
+        if ( pInputWin->IsMultiLineInput() )
+            aText = ScEditUtil::GetMultilineString(*pEngine);
+        else
+            aText = GetEditText(pEngine);
         lcl_RemoveTabs(aText);
         pInputWin->SetTextString(aText);
     }
@@ -2109,11 +2113,15 @@ void ScInputHandler::DataChanged( sal_Bool bFromTopNotify )
 
     if (eMode==SC_INPUT_TYPE || eMode==SC_INPUT_TABLE)
     {
-        String aText = GetEditText(pEngine);
+        String aText;
+        if ( pInputWin->IsMultiLineInput() )
+            aText = ScEditUtil::GetMultilineString(*pEngine);
+        else
+            aText = GetEditText(pEngine);
         lcl_RemoveTabs(aText);
 
         if ( pInputWin )
-            pInputWin->SetTextString(aText);
+            pInputWin->SetTextString( aText );
     }
 
         //  wenn der Cursor vor dem Absatzende steht, werden Teile rechts rausgeschoben
@@ -3010,7 +3018,7 @@ sal_Bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, sal_Bool bStartEdit /*
     switch ( nCode )
     {
         case KEY_RETURN:
-            if (bControl && !bShift && !bInputLine)
+            if (bControl && !bShift && ( !bInputLine || pInputWin && pInputWin->IsMultiLineInput() ) )
                 bDoEnter = sal_True;
             else if ( nModi == 0 && nTipVisible && pFormulaData && nAutoPos != SCPOS_INVALID )
             {
@@ -3404,7 +3412,10 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                         if (pData)
                         {
                             pEngine->SetText( *pData );
-                            aString = GetEditText(pEngine);
+                            if ( pInputWin->IsMultiLineInput() )
+                                aString = ScEditUtil::GetMultilineString(*pEngine);
+                            else
+                                aString = GetEditText(pEngine);
                             lcl_RemoveTabs(aString);
                             bTextValid = false;
                             aCurrentText.Erase();
