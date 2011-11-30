@@ -101,7 +101,8 @@ const ScQueryEntry::QueryItemsType& ScQueryEntry::GetQueryItems() const
 void ScQueryEntry::SetQueryByEmpty()
 {
     eOp = SC_EQUAL;
-    Item& rItem = GetQueryItem();
+    maQueryItems.resize(1);
+    Item& rItem = maQueryItems[0];
     rItem.meType = ByEmpty;
     rItem.maString = rtl::OUString();
     rItem.mfVal = SC_EMPTYFIELDS;
@@ -109,11 +110,10 @@ void ScQueryEntry::SetQueryByEmpty()
 
 bool ScQueryEntry::IsQueryByEmpty() const
 {
-    if (maQueryItems.size() > 1)
-        // multi-item query.
+    if (maQueryItems.size() != 1)
         return false;
 
-    const Item& rItem = GetQueryItem();
+    const Item& rItem = maQueryItems[0];
     return eOp == SC_EQUAL &&
         rItem.meType == ByEmpty &&
         rItem.maString.isEmpty() &&
@@ -123,7 +123,8 @@ bool ScQueryEntry::IsQueryByEmpty() const
 void ScQueryEntry::SetQueryByNonEmpty()
 {
     eOp = SC_EQUAL;
-    Item& rItem = GetQueryItem();
+    maQueryItems.resize(1);
+    Item& rItem = maQueryItems[0];
     rItem.meType = ByEmpty;
     rItem.maString = rtl::OUString();
     rItem.mfVal = SC_NONEMPTYFIELDS;
@@ -131,11 +132,10 @@ void ScQueryEntry::SetQueryByNonEmpty()
 
 bool ScQueryEntry::IsQueryByNonEmpty() const
 {
-    if (maQueryItems.size() > 1)
-        // multi-item query.
+    if (maQueryItems.size() != 1)
         return false;
 
-    const Item& rItem = GetQueryItem();
+    const Item& rItem = maQueryItems[0];
     return eOp == SC_EQUAL &&
         rItem.meType == ByEmpty &&
         rItem.maString.isEmpty() &&

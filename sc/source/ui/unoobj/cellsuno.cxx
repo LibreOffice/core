@@ -5683,7 +5683,9 @@ void SAL_CALL ScCellRangeObj::filter( const uno::Reference<sheet::XSheetFilterDe
             {
                 rEntry.nField += nFieldStart;
                 //  Im Dialog wird immer der String angezeigt -> muss zum Wert passen
-                ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+                ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
+                rItems.resize(1);
+                ScQueryEntry::Item& rItem = rItems.front();
                 if (rItem.meType != ScQueryEntry::ByString)
                 {
                     pDocSh->GetDocument()->GetFormatTable()->

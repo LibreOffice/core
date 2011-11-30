@@ -1105,7 +1105,10 @@ uno::Sequence<sheet::TableFilterField> SAL_CALL ScFilterDescriptorBase::getFilte
     for (SCSIZE i=0; i<nCount; i++)
     {
         const ScQueryEntry& rEntry = aParam.GetEntry(i);
-        const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+        if (rEntry.GetQueryItems().empty())
+            continue;
+
+        const ScQueryEntry::Item& rItem = rEntry.GetQueryItems().front();
 
         aField.Connection    = (rEntry.eConnect == SC_AND) ? sheet::FilterConnection_AND :
                                                              sheet::FilterConnection_OR;
@@ -1233,7 +1236,9 @@ void fillQueryParam(
 
         if (pAry[i].Operator != sheet::FilterOperator2::EMPTY && pAry[i].Operator != sheet::FilterOperator2::NOT_EMPTY)
         {
-            ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+            ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
+            rItems.resize(1);
+            ScQueryEntry::Item& rItem = rItems.front();
             rItem.meType    = pAry[i].IsNumeric ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
             rItem.mfVal     = pAry[i].NumericValue;
             rItem.maString  = pAry[i].StringValue;
@@ -1326,9 +1331,9 @@ throw(uno::RuntimeException)
             }
         }
 
-        if (!bByEmpty)
+        if (!bByEmpty && !rEntry.GetQueryItems().empty())
         {
-            const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+            const ScQueryEntry::Item& rItem = rEntry.GetQueryItems().front();
             aField.IsNumeric     = !rItem.meType != ScQueryEntry::ByString;
             aField.StringValue   = rItem.maString;
             aField.NumericValue  = rItem.mfVal;
@@ -1415,7 +1420,9 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields(
     for (i=0; i<nCount; i++)
     {
         ScQueryEntry& rEntry = aParam.GetEntry(i);
-        ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+        ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
+        rItems.resize(1);
+        ScQueryEntry::Item& rItem = rItems.front();
         rEntry.bDoQuery = true;
         rEntry.eConnect = (pAry[i].Connection == sheet::FilterConnection_AND) ? SC_AND : SC_OR;
         rEntry.nField   = pAry[i].Field;

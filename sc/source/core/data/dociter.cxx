@@ -533,7 +533,9 @@ ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(const ScDBQueryDat
     for (i=0; (i<nCount) && (mpParam->GetEntry(i).bDoQuery); i++)
     {
         ScQueryEntry& rEntry = mpParam->GetEntry(i);
-        ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+        ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
+        rItems.resize(1);
+        ScQueryEntry::Item& rItem = rItems.front();
         sal_uInt32 nIndex = 0;
         bool bNumber = mpDoc->GetFormatTable()->IsNumberFormat(
             rItem.maString, nIndex, rItem.mfVal);
