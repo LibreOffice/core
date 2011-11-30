@@ -698,8 +698,9 @@ Statics & getStatics()
                            baseTypeDefs[i].value;
             }
 
-            // LEM TODO: this bears a passing resemblance with the structure of pg_catalog.pg_type
-            // LEM TODO: isSigned (last field) is not initialised
+            // This is the metadata for the columns of the recordset returned
+            // by ::com::sun::star::sdbc::XDatabaseMetaData::getTypeInfo(),
+            // that is what is returned by getTypeInfo().getMetaData()
             DefColumnMetaData defTypeInfoMetaData[] =
                 {
                     { "TYPE_NAME", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::VARCHAR, 0,50,0,0,0,0, false },  // 0
