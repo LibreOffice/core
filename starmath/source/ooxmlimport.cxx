@@ -376,8 +376,8 @@ OUString SmOoxmlImport::handleFunc()
     stream.ensureOpeningTag( M_TOKEN( func ));
     OUString fname = readOMathArgInElement( M_TOKEN( fName ));
     // fix the various functions
-    if( fname.match( STR( "lim {" ), 0 )) // startsWith()
-        fname = STR( "lim from {" ) + fname.copy( 5 );
+    if( fname.match( STR( "lim csub {" ), 0 )) // startsWith()
+        fname = STR( "lim from {" ) + fname.copy( 10 );
     OUString ret = fname + STR( " {" ) + readOMathArgInElement( M_TOKEN( e )) + STR( "}" );
     stream.ensureClosingTag( M_TOKEN( func ));
     return ret;
@@ -390,7 +390,7 @@ OUString SmOoxmlImport::handleLimLowUpp( LimLowUpp_t limlowupp )
     OUString e = readOMathArgInElement( M_TOKEN( e ));
     OUString lim = readOMathArgInElement( M_TOKEN( lim ));
     stream.ensureClosingTag( token );
-    return e + STR( " {" ) + lim + STR( "}" );
+    return e + ( limlowupp == LimLow ? STR( " csub {" ) : STR( " csup {" )) + lim + STR( "}" );
 }
 
 OUString SmOoxmlImport::handleGroupChr()
