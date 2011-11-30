@@ -81,7 +81,9 @@ uno::Reference<sheet::XCellRangesQuery> ScXCellRangesQuery::init()
     const rtl::OUString aFileBase(RTL_CONSTASCII_USTRINGPARAM("xcellrangesquery.ods"));
     createFileURL(aFileBase, aFileURL);
     std::cout << rtl::OUStringToOString(aFileURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-    uno::Reference< lang::XComponent > xComponent = loadFromDesktop(aFileURL);
+    static uno::Reference< lang::XComponent > xComponent;
+    if( !xComponent.is())
+        xComponent = loadFromDesktop(aFileURL);
     uno::Reference< sheet::XSpreadsheetDocument> xDoc (xComponent, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
