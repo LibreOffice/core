@@ -107,7 +107,7 @@ sub add_profile_into_filelist
     $profile{'ismultilingual'} = 0;
     $profile{'sourcepath'} = $completeprofilename;
     $profile{'Name'} = $oneprofile->{'Name'};
-    $profile{'UnixRights'} = "444";
+    $profile{'UnixRights'} = "644";
     $profile{'gid'} = $oneprofile->{'gid'};
     $profile{'Dir'} = $oneprofile->{'Dir'};
     $profile{'destination'} = $oneprofile->{'destination'};
