@@ -84,7 +84,11 @@ $(call gb_Module_get_target,%) :
 
 ifeq ($(strip $(gb_PARTIALBUILD)),)
 check : subsequentcheck
-debugrun :| build
+
+# execute debugrun at the end
+ifneq ($(filter dev-install build all,$(MAKECMDGOALS)),)
+debugrun :| $(filter dev-install build all,$(MAKECMDGOALS))
+endif
 
 define gb_Module_BUILDHINT
 
