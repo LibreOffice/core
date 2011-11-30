@@ -60,8 +60,7 @@ private:
     String                  m_sFilter;
     Link                    m_aDialogClosedLink;
 
-    bool                    m_bMultiSelectionEnabled;
-    sal_Int64               m_nDlgFlags;
+    sal_Int64 const         m_nDlgFlags;
     ErrCode                 m_nError;
 
     sfx2::FileDialogHelper* m_pFileDlg;
@@ -71,7 +70,8 @@ private:
     DECL_LINK(              DialogClosedHdl, sfx2::FileDialogHelper* );
 
 public:
-    DocumentInserter( sal_Int64 _nFlags, const String& _rFactory, bool _bEnableMultiSelection = false );
+    DocumentInserter(const String& rFactory,
+                     bool const bEnableMultiSelection = false);
     ~DocumentInserter();
 
     void                    StartExecuteModal( const Link& _rDialogClosedLink );

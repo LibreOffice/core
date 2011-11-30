@@ -70,11 +70,12 @@ namespace sfx2 {
 // =======================================================================
 
 DocumentInserter::DocumentInserter(
-    sal_Int64 _nFlags, const String& _rFactory, bool _bEnableMultiSelection ) :
+    const String& rFactory, bool const bEnableMultiSelection) :
 
-      m_sDocFactory             ( _rFactory )
-    , m_bMultiSelectionEnabled  ( _bEnableMultiSelection )
-    , m_nDlgFlags               ( _nFlags | SFXWB_INSERT | WB_3DLOOK )
+      m_sDocFactory             ( rFactory )
+    , m_nDlgFlags               ( (bEnableMultiSelection)
+                                    ? (SFXWB_INSERT|SFXWB_MULTISELECTION)
+                                    : SFXWB_INSERT )
     , m_nError                  ( ERRCODE_NONE )
     , m_pFileDlg                ( NULL )
     , m_pItemSet                ( NULL )
@@ -95,9 +96,7 @@ void DocumentInserter::StartExecuteModal( const Link& _rDialogClosedLink )
     DELETEZ( m_pURLList );
     if ( !m_pFileDlg )
     {
-        sal_Int64 nFlags = m_bMultiSelectionEnabled ? ( m_nDlgFlags | SFXWB_MULTISELECTION )
-                                                    : m_nDlgFlags;
-        m_pFileDlg = new FileDialogHelper( nFlags, m_sDocFactory );
+        m_pFileDlg = new FileDialogHelper( m_nDlgFlags, m_sDocFactory );
     }
     m_pFileDlg->StartExecuteModal( LINK( this, DocumentInserter, DialogClosedHdl ) );
 }

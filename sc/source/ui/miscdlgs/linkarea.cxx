@@ -112,7 +112,7 @@ IMPL_LINK( ScLinkedAreaDlg, BrowseHdl, PushButton*, EMPTYARG )
 {
     if ( !pDocInserter )
         pDocInserter = new sfx2::DocumentInserter(
-            0, String::CreateFromAscii( ScDocShell::Factory().GetShortName() ) );
+            String::CreateFromAscii( ScDocShell::Factory().GetShortName() ) );
     pDocInserter->StartExecuteModal( LINK( this, ScLinkedAreaDlg, DialogClosedHdl ) );
     return 0;
 }

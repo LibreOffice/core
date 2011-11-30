@@ -1792,8 +1792,8 @@ void SmViewShell::Execute(SfxRequest& rReq)
             delete pImpl->pRequest;
             pImpl->pRequest = new SfxRequest( rReq );
             delete pImpl->pDocInserter;
-            pImpl->pDocInserter =
-                new ::sfx2::DocumentInserter( 0, GetDoc()->GetFactory().GetFactoryName(), 0 );
+            pImpl->pDocInserter = new ::sfx2::DocumentInserter(
+                        GetDoc()->GetFactory().GetFactoryName(), 0 );
             pImpl->pDocInserter->StartExecuteModal( LINK( this, SmViewShell, DialogClosedHdl ) );
             break;
         }

@@ -315,7 +315,7 @@ IMPL_LINK( ScInsertTableDlg, BrowseHdl_Impl, PushButton*, EMPTYARG )
     if ( pDocInserter )
         delete pDocInserter;
     pDocInserter = new ::sfx2::DocumentInserter(
-            0, String::CreateFromAscii( ScDocShell::Factory().GetShortName() ) );
+            String::CreateFromAscii( ScDocShell::Factory().GetShortName() ) );
     pDocInserter->StartExecuteModal( LINK( this, ScInsertTableDlg, DialogClosedHdl ) );
     return 0;
 }

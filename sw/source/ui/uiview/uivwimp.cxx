@@ -244,7 +244,7 @@ void SwView_Impl::AddTransferable(SwTransferable& rTransferable)
 void SwView_Impl::StartDocumentInserter( const String& rFactory, const Link& rEndDialogHdl )
 {
     delete m_pDocInserter;
-    m_pDocInserter = new ::sfx2::DocumentInserter( 0, rFactory );
+    m_pDocInserter = new ::sfx2::DocumentInserter( rFactory );
     m_pDocInserter->StartExecuteModal( rEndDialogHdl );
 }
 

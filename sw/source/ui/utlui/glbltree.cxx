@@ -729,7 +729,8 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont, const String* pF
         pDefParentWin = Application::GetDefDialogParent();
         Application::SetDefDialogParent( this );
         delete pDocInserter;
-        pDocInserter = new ::sfx2::DocumentInserter( 0, String::CreateFromAscii("swriter"), true );
+        pDocInserter = new ::sfx2::DocumentInserter(
+                String::CreateFromAscii("swriter"), true );
         pDocInserter->StartExecuteModal( LINK( this, SwGlobalTree, DialogClosedHdl ) );
     }
     else if ( pFileName->Len() )
