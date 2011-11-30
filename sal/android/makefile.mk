@@ -38,7 +38,7 @@ EXTERNAL_WARNINGS_NOT_ERRORS = TRUE
 
 .IF "$(OS)" != "ANDROID"
 ALL:
-	@: do nothing
+# do nothing
 .ENDIF
 
 SHL1TARGET = $(TARGET)
