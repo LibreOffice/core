@@ -402,9 +402,12 @@ public:
 class XclExpAutofilter : public XclExpRecord, protected XclExpRoot
 {
 private:
+    enum FilterType { FilterCondition, MultiValue };
+    FilterType              meType;
     sal_uInt16              nCol;
     sal_uInt16              nFlags;
     ExcFilterCondition      aCond[ 2 ];
+    std::vector<rtl::OUString> maMultiValues;
 
     bool                    AddCondition( ScQueryConnect eConn, sal_uInt8 nType,
                                 sal_uInt8 nOp, double fVal, String* pText,
@@ -416,10 +419,11 @@ public:
                             XclExpAutofilter( const XclExpRoot& rRoot, sal_uInt16 nC );
 
     inline sal_uInt16       GetCol() const          { return nCol; }
-    inline bool             HasCondition() const    { return !aCond[ 0 ].IsEmpty(); }
     inline bool             HasTop10() const        { return ::get_flag( nFlags, EXC_AFFLAG_TOP10 ); }
 
+    bool                    HasCondition() const;
     bool                    AddEntry( const ScQueryEntry& rEntry );
+    bool                    AddMultiValueEntry( const ScQueryEntry& rEntry );
 
     virtual void            SaveXml( XclExpXmlStream& rStrm );
 };
