@@ -7,6 +7,7 @@
 ..\%__SRC%\lib\*.a %_DEST%\lib\*.a
 ..\%__SRC%\slb\connectivity*.* %_DEST%\lib\connectivity*.*
 ..\%__SRC%\lib\idbt* %_DEST%\lib\idbt*
+..\%__SRC%\lib\*.oxt %_DEST%\bin\*.oxt
 ..\source\cpool\*.xml %_DEST%\xml\*.xml
 ..\source\drivers\adabas\*.xml %_DEST%\xml\*.xml
 ..\source\drivers\ado\*.xml %_DEST%\xml\*.xml
