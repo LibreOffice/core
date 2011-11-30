@@ -212,16 +212,16 @@ namespace vcl
             void setupLayout();
         };
 
+        TabControl                              maTabCtrl;
+        NUpTabPage                              maNUpPage;
+        JobTabPage                              maJobPage;
+        OutputOptPage                           maOptionsPage;
+
         PrintPreviewWindow                      maPreviewWindow;
         NumericField                            maPageEdit;
         FixedText                               maNumPagesText;
         PushButton                              maBackwardBtn;
         PushButton                              maForwardBtn;
-
-        TabControl                              maTabCtrl;
-        NUpTabPage                              maNUpPage;
-        JobTabPage                              maJobPage;
-        OutputOptPage                           maOptionsPage;
 
         FixedLine                               maButtonLine;
 
