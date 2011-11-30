@@ -116,7 +116,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
 
     if (!pArgs)
     {
-        sfx2::FileDialogHelper      aFileDialog( SFXWB_INSERT | WB_STDMODAL );
+        sfx2::FileDialogHelper      aFileDialog( SFXWB_INSERT );
         Reference< XFilePicker >    xFilePicker( aFileDialog.GetFilePicker(), UNO_QUERY );
         Reference< XFilterManager > xFilterManager( xFilePicker, UNO_QUERY );
         String aOwnCont;

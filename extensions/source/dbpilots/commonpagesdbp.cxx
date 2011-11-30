@@ -198,7 +198,7 @@ namespace dbp
     //---------------------------------------------------------------------
     IMPL_LINK( OTableSelectionPage, OnSearchClicked, PushButton*, /*_pButton*/ )
     {
-        ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK);
+        ::sfx2::FileDialogHelper aFileDlg(0);
         aFileDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
 
         static const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");

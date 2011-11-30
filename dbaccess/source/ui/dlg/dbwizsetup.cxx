@@ -888,7 +888,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     sal_Bool ODbTypeWizDialogSetup::callSaveAsDialog()
     {
         sal_Bool bRet = sal_False;
-        WinBits nBits(WB_STDMODAL|WB_SAVEAS);
+        WinBits nBits(WB_SAVEAS);
         ::sfx2::FileDialogHelper aFileDlg( com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION, static_cast<sal_uInt32>(nBits), this);
         const SfxFilter* pFilter = getStandardDatabaseFilter();
         if ( pFilter )

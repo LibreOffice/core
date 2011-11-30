@@ -2836,7 +2836,7 @@ namespace pcr
     //------------------------------------------------------------------------
     bool FormComponentPropertyHandler::impl_browseForTargetURL_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
-        ::sfx2::FileDialogHelper aFileDlg( WB_3DLOOK );
+        ::sfx2::FileDialogHelper aFileDlg(0);
 
         ::rtl::OUString sURL;
         OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_TARGET_URL ) >>= sURL );
@@ -2889,7 +2889,7 @@ namespace pcr
     //------------------------------------------------------------------------
     bool FormComponentPropertyHandler::impl_browseForDatabaseDocument_throw( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
-        ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK,
+        ::sfx2::FileDialogHelper aFileDlg(0,
                 ::String::CreateFromAscii("sdatabase"));
 
         ::rtl::OUString sDataSource;

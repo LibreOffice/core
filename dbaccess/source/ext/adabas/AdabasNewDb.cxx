@@ -549,7 +549,7 @@ IMPL_LINK( OAdabasNewDbDlg, LoseFocusHdl, Edit *, pEdit )
 //------------------------------------------------------------------------
 IMPL_LINK( OAdabasNewDbDlg, LoadButtonClickHdl, Button *, /*pButton*/ )
 {
-    ::sfx2::FileDialogHelper aLoad(WB_3DLOOK | WB_STDMODAL);
+    ::sfx2::FileDialogHelper aLoad(0);
     if(!m_Backup_File.Len())
         aLoad.SetDisplayDirectory(SvtPathOptions().GetWorkPath());
     else
@@ -573,8 +573,8 @@ IMPL_LINK( OAdabasNewDbDlg, LoadButtonClickHdl, Button *, /*pButton*/ )
 //------------------------------------------------------------------------
 IMPL_LINK( OAdabasNewDbDlg, ButtonClickHdl, Button *, pButton )
 {
-    WinBits nBits(WB_3DLOOK|WB_STDMODAL|WB_SAVEAS);
-    ::sfx2::FileDialogHelper aFileDlg( static_cast<sal_uInt32>(nBits) ); // new FileDialog( this, nBits );
+    WinBits nBits(WB_SAVEAS);
+    ::sfx2::FileDialogHelper aFileDlg( static_cast<sal_uInt32>(nBits) );
 
     String aPath;
     if(pButton == &m_PB_SYSDEVSPACE)

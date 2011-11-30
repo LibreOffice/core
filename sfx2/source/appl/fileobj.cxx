@@ -472,7 +472,7 @@ void SvFileObject::Edit( Window* pParent, sfx2::SvBaseLink* pLink, const Link& r
                 Application::SetDefDialogParent( pParent );
 
                 ::sfx2::FileDialogHelper* pFileDlg =
-                    pLink->GetFileDialog( (SFXWB_INSERT | WB_3DLOOK), String() );
+                    pLink->GetFileDialog( SFXWB_INSERT, String() );
                 pFileDlg->StartExecuteModal( LINK( this, SvFileObject, DialogClosedHdl ) );
             }
             break;
@@ -489,7 +489,7 @@ void SvFileObject::Edit( Window* pParent, sfx2::SvBaseLink* pLink, const Link& r
                     sFactory = pShell->GetFactory().GetFactoryName();
 
                 ::sfx2::FileDialogHelper* pFileDlg =
-                    pLink->GetFileDialog( (SFXWB_INSERT | WB_3DLOOK), sFactory );
+                    pLink->GetFileDialog( SFXWB_INSERT, sFactory );
                 pFileDlg->StartExecuteModal( LINK( this, SvFileObject, DialogClosedHdl ) );
             }
             break;

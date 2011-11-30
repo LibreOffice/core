@@ -1172,7 +1172,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
 
             case ID_BROWSER_SAVEASDOC:
                 {
-                    WinBits nBits(WB_STDMODAL|WB_SAVEAS);
+                    WinBits nBits(WB_SAVEAS);
                     ::rtl::OUString sUrl;
                     if ( m_xModel.is() )
                         sUrl = m_xModel->getURL();
