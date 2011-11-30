@@ -131,6 +131,9 @@ OUString SmOoxmlImport::readOMathArg()
             case OPENING( M_TOKEN( r )):
                 ret += handleR();
                 break;
+            case OPENING( M_TOKEN( rad )):
+                ret += handleRad();
+                break;
             default:
                 stream.handleUnexpectedTag();
                 break;
@@ -536,6 +539,30 @@ OUString SmOoxmlImport::handleR()
     }
     stream.ensureClosingTag( M_TOKEN( r ));
     return text;
+}
+
+OUString SmOoxmlImport::handleRad()
+{
+    stream.ensureOpeningTag( M_TOKEN( rad ));
+    bool degHide = false;
+    if( stream.checkOpeningTag( M_TOKEN( radPr )))
+    {
+        if( XmlStream::Tag degHideTag = stream.checkOpeningTag( M_TOKEN( degHide )))
+        {
+            degHide = degHideTag.attribute( M_TOKEN( val ), degHide );
+            stream.ensureClosingTag( M_TOKEN( degHide ));
+        }
+        stream.ensureClosingTag( M_TOKEN( radPr ));
+    }
+    stream.ensureOpeningTag( M_TOKEN( deg ));
+    OUString deg = readOMathArg();
+    stream.ensureClosingTag( M_TOKEN( deg ));
+    OUString e = handleE();
+    stream.ensureClosingTag( M_TOKEN( rad ));
+    if( degHide )
+        return STR( "sqrt {" ) + e + STR( "}" );
+    else
+        return STR( "nroot {" ) + deg + STR( "}{" ) + e + STR( "}" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

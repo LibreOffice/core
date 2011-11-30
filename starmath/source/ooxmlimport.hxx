@@ -57,6 +57,7 @@ private:
     rtl::OUString handleM();
     rtl::OUString handleNary();
     rtl::OUString handleR();
+    rtl::OUString handleRad();
     rtl::OUString readOMathArg();
     oox::formulaimport::XmlStream& stream;
 };
