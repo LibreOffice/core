@@ -116,7 +116,7 @@ void Proxy::do_dispatch(
     try {
         try {
             do_dispatch_throw(member, returnValue, arguments, exception);
-        } catch (std::exception & e) {
+        } catch (const std::exception & e) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("caught C++ exception: ")) +
@@ -125,7 +125,7 @@ void Proxy::do_dispatch(
                 css::uno::Reference< css::uno::XInterface >());
                 // best-effort string conversion
         }
-    } catch (css::uno::RuntimeException &) {
+    } catch (const css::uno::RuntimeException &) {
         css::uno::Any exc(cppu::getCaughtException());
         uno_copyAndConvertData(
             *exception, &exc,

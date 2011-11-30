@@ -106,7 +106,7 @@ void SAL_CALL Mapping_map_to_uno(
             }
             *ppUnoI = pUnoI;
         }
-        catch (BridgeRuntimeError & err)
+        catch (const BridgeRuntimeError & err)
         {
 #if OSL_DEBUG_LEVEL > 0
             OString cstr_msg(
@@ -118,7 +118,7 @@ void SAL_CALL Mapping_map_to_uno(
             (void) err; // unused
 #endif
         }
-        catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
+        catch (const ::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
         {
             OSL_FAIL(
                 "[jni_uno bridge error] attaching current thread "
@@ -175,7 +175,7 @@ void SAL_CALL Mapping_map_to_java(
             jni->DeleteLocalRef( jlocal );
         }
     }
-    catch (BridgeRuntimeError & err)
+    catch (const BridgeRuntimeError & err)
     {
 #if OSL_DEBUG_LEVEL > 0
         OString cstr_msg(
@@ -187,7 +187,7 @@ void SAL_CALL Mapping_map_to_java(
             (void) err; // unused
 #endif
     }
-    catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
+    catch (const ::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
         OSL_FAIL(
             "[jni_uno bridge error] attaching current thread to java failed!" );
@@ -537,7 +537,7 @@ void SAL_CALL uno_ext_getMapping(
                     (uno_Environment *)pFrom->pExtEnv, pTo, 0 );
             }
         }
-        catch (BridgeRuntimeError & err)
+        catch (const BridgeRuntimeError & err)
         {
 #if OSL_DEBUG_LEVEL > 0
             OString cstr_msg(
@@ -549,7 +549,7 @@ void SAL_CALL uno_ext_getMapping(
             (void) err; // unused
 #endif
         }
-        catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
+        catch (const ::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
         {
             OSL_FAIL(
                 "[jni_uno bridge error] attaching current thread "

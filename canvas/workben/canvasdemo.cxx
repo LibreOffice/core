@@ -678,7 +678,7 @@ void DemoApp::Main()
         if( xFactory.is() )
             ::comphelper::setProcessServiceFactory( xFactory );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
     }
 

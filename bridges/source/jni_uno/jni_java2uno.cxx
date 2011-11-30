@@ -615,7 +615,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
         buf.append( jni.get_stack_trace() );
         throw BridgeRuntimeError( buf.makeStringAndClear() );
     }
-    catch (BridgeRuntimeError & err)
+    catch (const BridgeRuntimeError & err)
     {
         OUStringBuffer buf( 128 );
         buf.appendAscii(
@@ -636,7 +636,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
         }
         return 0;
     }
-    catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
+    catch (const ::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
         OString cstr_msg(
             OString( RTL_CONSTASCII_STRINGPARAM(

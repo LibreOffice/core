@@ -144,10 +144,10 @@ static void s_stub_computeObjectIdentifier(va_list * pParam)
                 ::rtl_uString_acquire( *ppOId = aRet.pData );
             }
         }
-        catch (::com::sun::star::uno::RuntimeException &)
+        catch (const ::com::sun::star::uno::RuntimeException &)
         {
             OSL_FAIL(
-                "### RuntimeException occurred udring queryInterface()!" );
+                "### RuntimeException occurred during queryInterface()!" );
         }
     }
 }

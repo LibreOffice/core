@@ -145,9 +145,9 @@ void Reader::run() {
             }
             block.done();
         }
-    } catch (css::uno::Exception & e) {
+    } catch (const css::uno::Exception & e) {
         SAL_WARN("binaryurp", "caught UNO exception '" << e.Message << '\'');
-    } catch (std::exception & e) {
+    } catch (const std::exception & e) {
         SAL_WARN("binaryurp", "caught C++ exception '" << e.what() << '\'');
     }
     bridge_->terminate();

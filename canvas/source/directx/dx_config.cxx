@@ -89,7 +89,7 @@ namespace dxcanvas
             else
                 maMaxTextureSize.reset();
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             OSL_FAIL( rtl::OUStringToOString(
                             comphelper::anyToString( cppu::getCaughtException() ),
@@ -130,7 +130,7 @@ namespace dxcanvas
             aValue[0] <<= aValues;
             PutProperties( aName, aValue );
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             OSL_FAIL( rtl::OUStringToOString(
                             comphelper::anyToString( cppu::getCaughtException() ),

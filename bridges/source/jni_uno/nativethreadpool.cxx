@@ -84,7 +84,7 @@ static void SAL_CALL executeRequest(void * data) {
         env->CallObjectMethod(job->job, job->pool->execute);
         env->DeleteGlobalRef(job->job);
         delete job;
-    } catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &) {
+    } catch (const jvmaccess::VirtualMachine::AttachGuard::CreationException &) {
         //TODO: DeleteGlobalRef(job->job)
         delete job;
     }
@@ -141,7 +141,7 @@ Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_create(
         return reinterpret_cast< jlong >(new Pool(
             new jvmaccess::VirtualMachine(vm, env->GetVersion(), false, env),
             execute, uno_threadpool_create()));
-    } catch (std::bad_alloc) {
+    } catch (const std::bad_alloc &) {
         throwOutOfMemory(env);
         return 0;
     }

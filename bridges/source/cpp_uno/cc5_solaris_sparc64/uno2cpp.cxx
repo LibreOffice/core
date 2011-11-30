@@ -332,7 +332,7 @@ void call(
         callVirtualMethod(
             (*thisPtr)[slot.index + 2], stack,
             std::max< sal_Int32 >(sp - 6, 0) * sizeof (long));
-    } catch (css::uno::Exception &) {
+    } catch (const css::uno::Exception &) {
         void * exc = __Crun::ex_get();
         char const * name = __Cimpl::ex_name();
         bridges::cpp_uno::cc5_solaris_sparc64::fillUnoException(
