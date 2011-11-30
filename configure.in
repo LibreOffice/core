@@ -5400,7 +5400,7 @@ dnl ===================================================================
 dnl Check for PostgreSQL stuff
 dnl ===================================================================
 
-if test "x$enable_ext_postgresql_sdbc" = "xyes"; then
+if test "x$enable_ext_postgresql_sdbc" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_POSTGRESQL"
 
     AC_MSG_CHECKING([for PostgreSQL prerequisites])
@@ -5412,12 +5412,12 @@ if test "x$enable_ext_postgresql_sdbc" = "xyes"; then
            AC_MSG_ERROR([pg_config needed; set PGCONFIG if not in PATH])
         fi
         POSTGRESQL_INC=-I$(pg_config --includedir)
-        POSTGRESQL_LIB="-L$(pg_config --libdir) -lpq"
+        POSTGRESQL_LIB="-L$(pg_config --libdir)"
     else
         SYSTEM_POSTGRESQL=NO
         if test -n "$with_libpq_path"; then
             AC_MSG_RESULT([external libpq])
-            POSTGRESQL_LIB="-L${with_libpq_path}/lib/ -lpq"
+            POSTGRESQL_LIB="-L${with_libpq_path}/lib/"
             POSTGRESQL_INC=-I"${with_libpq_path}/include/"
         else
             AC_MSG_ERROR([not given. Please specify either --with-system-postgresql or --with-libpq-path])
@@ -5427,8 +5427,8 @@ if test "x$enable_ext_postgresql_sdbc" = "xyes"; then
     save_CFLAGS=$CFLAGS
     save_CPPFLAGS=$CPPFLAGS
     save_LIBS=$LIBS
-    CPPFLAGS="${POSTGRESQL_INC}"
-    LIBS="${POSTGRESQL_LIB}"
+    CPPFLAGS="${CPPFLAGS} ${POSTGRESQL_INC}"
+    LIBS="${LIBS} ${POSTGRESQL_LIB}"
     AC_CHECK_HEADER([libpq-fe.h], [], [AC_MSG_ERROR([libpq-fe.h is needed])], [])
     AC_CHECK_LIB(pq, PQconnectdbParams, [],
         [AC_MSG_ERROR(libpq not found or too old. Need >= 9.0)], [])

@@ -97,14 +97,14 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
 SHL1VERSIONMAP=$(SOLARENV)$/src$/reg-component.map
 
-# use the static version
+# use the static version on Windows?
 # LEM 17/11/2011: removed everything except libpq proper;
 #  as per instructions in libpq documentation.
 #  If it turns out the rest was needed, reenable it.
 .IF "$(GUI)"=="WNT"
-POSTGRESQL_LIB=libpq.lib #wsock32.lib advapi32.lib
+LIBPQ_LINK=libpq.lib #wsock32.lib advapi32.lib
 .ELSE
-POSTGRESQL_LIB=-lpq #-lcrypt
+LIBPQ_LINK=-lpq #-lcrypt
 .ENDIF
 SHL2TARGET=postgresql-sdbc-impl.uno
 LIB2TARGET=$(SLB)$/$(SHL2TARGET).lib
@@ -148,7 +148,8 @@ SHL2STDLIBS= \
         $(CPPUHELPERLIB)	\
         $(SALLIB)		\
         $(SALHELPERLIB)		\
-        $(POSTGRESQL_LIB)
+        $(POSTGRESQL_LIB)	\
+        $(LIBPQ_LINK)
 
 SHL2LIBS=	$(LIB2TARGET)
 SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
