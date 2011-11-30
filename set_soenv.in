@@ -128,6 +128,12 @@ $EPM_FLAGS	= "";
 $CL_X64 = '@CL_X64@';
 $GNUMAKE        = "@GNUMAKE@";
 
+# JAVA_HOME as argument from autoconf.
+$JAVA_HOME = PathFormat('@JAVA_HOME@') ;
+
+if ( $platform =~ m/cygwin/ ) {
+   $JAVA_HOME =~ s/[\s\/]+$//;	# remove trailing \n or \/ if there is any.
+}
 #
 #--------------------------------------------------------------------
 # IV. Initialise the warning container and print a note to the user.
@@ -797,13 +803,6 @@ $SRC_ROOT = PathFormat($SRC_ROOT);
 CheckPathExist( $SRC_ROOT );
 
 
-# 2. Java home directory.
-# JAVA_HOME as argument from autoconf.
-$JAVA_HOME = PathFormat('@JAVA_HOME@') ;
-
-if ( $platform =~ m/cygwin/ ) {
-   $JAVA_HOME =~ s/[\s\/]+$//;	# remove trailing \n or \/ if there is any.
-}
 # 3. bash path.
 $OOO_SHELL = '@BASH@';
 
