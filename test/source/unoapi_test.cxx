@@ -29,7 +29,7 @@
 #include "test/unoapi_test.hxx"
 
 UnoApiTest::UnoApiTest()
-      : m_aBaseString(RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unoapi/testdocuments"))
+      : m_aBaseString(RTL_CONSTASCII_USTRINGPARAM("/sc/qa/extras/testdocuments"))
 {
 }
 

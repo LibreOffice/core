@@ -28,13 +28,13 @@
 # instead of those above.
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_unoapi_xcellrangesquery))
+$(eval $(call gb_CppunitTest_CppunitTest,sc_xcellrangesquery))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_unoapi_xcellrangesquery, \
-    sc/qa/unoapi/xcellrangesquery \
+$(eval $(call gb_CppunitTest_add_exception_objects,sc_xcellrangesquery, \
+    sc/qa/extras/xcellrangesquery \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sc_unoapi_xcellrangesquery, \
+$(eval $(call gb_CppunitTest_add_linked_libs,sc_xcellrangesquery, \
     avmedia \
     basegfx \
     comphelper \
@@ -71,25 +71,25 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sc_unoapi_xcellrangesquery, \
 	$(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sc_unoapi_xcellrangesquery,\
+$(eval $(call gb_CppunitTest_set_include,sc_xcellrangesquery,\
     -I$(realpath $(SRCDIR)/sc/source/ui/inc) \
     -I$(realpath $(SRCDIR)/sc/inc) \
     $$(INCLUDE) \
     -I$(OUTDIR)/inc \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,sc_unoapi_xcellrangesquery,\
+$(eval $(call gb_CppunitTest_add_api,sc_xcellrangesquery,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_uses_ure,sc_unoapi_xcellrangesquery))
+$(eval $(call gb_CppunitTest_uses_ure,sc_xcellrangesquery))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,sc_unoapi_xcellrangesquery,\
+$(eval $(call gb_CppunitTest_add_type_rdbs,sc_xcellrangesquery,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,sc_unoapi_xcellrangesquery,\
+$(eval $(call gb_CppunitTest_add_components,sc_xcellrangesquery,\
     basic/util/sb \
     comphelper/util/comphelp \
     dbaccess/util/dba \
@@ -118,14 +118,14 @@ $(eval $(call gb_CppunitTest_add_components,sc_unoapi_xcellrangesquery,\
     unoxml/source/service/unoxml \
 ))
 
-$(eval $(call gb_CppunitTest_add_old_components,sc_unoapi_xcellrangesquery,\
+$(eval $(call gb_CppunitTest_add_old_components,sc_xcellrangesquery,\
     configmgr \
     ucb1 \
     ucpfile1 \
     ucptdoc1 \
 ))
 
-$(eval $(call gb_CppunitTest_set_args,sc_unoapi_xcellrangesquery,\
+$(eval $(call gb_CppunitTest_set_args,sc_xcellrangesquery,\
     --headless \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
     "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry) module:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry/spool) xcsxcu:$(call gb_CppunitTarget__make_url,$(SRCDIR)/sc/qa/unit/data/registry)" \
@@ -136,6 +136,6 @@ $(eval $(call gb_CppunitTest_set_args,sc_unoapi_xcellrangesquery,\
 # a) explicitly depend on library msword because it is not implied by a link
 #    relation
 # b) explicitly depend on the sc resource files needed at unit-test runtime
-$(call gb_CppunitTest_get_target,sc_unoapi_xcellrangesquery) : $(call gb_Library_get_target,scfilt) $(WORKDIR)/AllLangRes/sc
+$(call gb_CppunitTest_get_target,sc_xcellrangesquery) : $(call gb_Library_get_target,scfilt) $(WORKDIR)/AllLangRes/sc
 
 # vim: set noet sw=4 ts=4:
