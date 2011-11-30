@@ -758,7 +758,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
 
         sal_uIntPtr nErr = sfx2::FileOpenDialog_Impl(
-                SFXWB_MULTISELECTION | SFXWB_SHOWVERSIONS, String(), pURLList,
+                SFXWB_MULTISELECTION, String(), pURLList,
                 aFilter, pSet, &aPath, nDialog, sStandardDir, aBlackList );
 
         if ( nErr == ERRCODE_ABORT )
