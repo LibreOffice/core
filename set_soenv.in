@@ -1281,15 +1281,15 @@ $SOLARINC             = $I.$cur_dir.
 
 if ($platform =~ m/solaris|linux|freebsd|netbsd|aix|openbsd|dragonfly/ && '@CROSS_COMPILING@' ne 'YES')
 {
-if ($platform =~ m/solaris/ && ! $CC =~ "gcc")
-{
-$SOLARINC            .= '/SC5 ';
-}
-# Platform dependent include path at the top of this list of include paths
-if ($platform =~ m/solaris/ && ! $CC =~ "gcc")
-{
-    $SOLARINC         .= $I.$COMPATH.$INCLUDE;
-}
+    if ($platform =~ m/solaris/ && ! $CC =~ "gcc")
+    {
+        $SOLARINC            .= '/SC5 ';
+    }
+    # Platform dependent include path at the top of this list of include paths
+    if ($platform =~ m/solaris/ && ! $CC =~ "gcc")
+    {
+        $SOLARINC         .= $I.$COMPATH.$INCLUDE;
+    }
 
 	# pickup system jpeg over java jpeg on OpenBSD
 	if ($platform =~ m/openbsd/)
