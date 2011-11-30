@@ -486,6 +486,9 @@ OUString SmOoxmlImport::handleNary()
         case MS_COPROD:
             ret = STR( "coprod" );
             break;
+        case MS_SUM:
+            ret = STR( "sum" );
+            break;
         default:
             fprintf( stderr, "Unknown m:nary chr '%d'\n", chr );
             break;
