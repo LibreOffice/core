@@ -48,7 +48,8 @@ endif
 
 gb_BuildplTarget_COMPLETEDTARGETS=
 define gb_BuildplTarget_command
-cd $(SRCDIR)/$(1) && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl $(if $(filter s,$(MAKEFLAGS)),,VERBOSE=T) -P$(BUILD_NCPUS) $(2) -P$(GMAKE_PARALLELISM) gb_MAKETARGET=$(gb_MAKETARGET)
+$(info MAKEFLAGS $(MAKEFLAGS) filter:$(filter s,$(MAKEFLAGS)):)
+cd $(SRCDIR)/$(1) && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl $(if $(findstring s,$(MAKEFLAGS)),,VERBOSE=T) -P$(BUILD_NCPUS) $(2) -P$(GMAKE_PARALLELISM) gb_MAKETARGET=$(gb_MAKETARGET)
 $(eval gb_BuildplTarget_COMPLETEDTARGETS+=$(1))
 endef
 
