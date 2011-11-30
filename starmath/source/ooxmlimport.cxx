@@ -224,7 +224,7 @@ OUString SmOoxmlImport::handleAcc()
     }
     OUString e = readOMathArgInElement( M_TOKEN( e ));
     stream.ensureClosingTag( M_TOKEN( acc ));
-    return acc + STR( " { " ) + e + STR( " }" );
+    return acc + STR( " {" ) + e + STR( "}" );
 }
 
 OUString SmOoxmlImport::handleBar()
@@ -246,9 +246,9 @@ OUString SmOoxmlImport::handleBar()
     OUString e = readOMathArgInElement( M_TOKEN( e ));
     stream.ensureClosingTag( M_TOKEN( bar ));
     if( topbot == top )
-        return STR( "bar { " ) + e + STR( " }" );
+        return STR( "bar {" ) + e + STR( "}" );
     else
-        return STR( "underline { " ) + e + STR( " }" );
+        return STR( "underline {" ) + e + STR( "}" );
 }
 
 OUString SmOoxmlImport::handleBox()
@@ -279,7 +279,7 @@ OUString SmOoxmlImport::handleBorderBox()
     OUString e = readOMathArgInElement( M_TOKEN( e ));
     stream.ensureClosingTag( M_TOKEN( borderBox ));
     if( isStrikeH )
-        return STR( "overstrike { " ) + e + STR( " }" );
+        return STR( "overstrike {" ) + e + STR( "}" );
     // LO does not seem to implement anything for handling the other cases
     return e;
 }
@@ -380,7 +380,7 @@ OUString SmOoxmlImport::handleF()
     else // noBar
     { // TODO we write out stack of 3 items as recursive m:f, so merge here back
       // to 'stack { x # y # z }'
-        return STR( "binom { " ) + num + STR( " } { " ) + den + STR( " }" );
+        return STR( "binom {" ) + num + STR( "} {" ) + den + STR( "}" );
     }
 }
 
@@ -435,13 +435,13 @@ OUString SmOoxmlImport::handleGroupChr()
     OUString e = readOMathArgInElement( M_TOKEN( e ));
     stream.ensureClosingTag( M_TOKEN( groupChr ));
     if( pos == top && chr == sal_Unicode( 0x23de ))
-        return STR( "{ " ) + e + STR( "} overbrace {}" );
+        return STR( "{" ) + e + STR( "} overbrace {}" );
     if( pos == bot && chr == sal_Unicode( 0x23df ))
-        return STR( "{ " ) + e + STR( "} underbrace {}" );
+        return STR( "{" ) + e + STR( "} underbrace {}" );
     if( pos == top )
-        return STR( "{ " ) + e + STR( "} csup {" ) + OUString( chr ) + STR( "}" );
+        return STR( "{" ) + e + STR( "} csup {" ) + OUString( chr ) + STR( "}" );
     else
-        return STR( "{ " ) + e + STR( "} csub {" ) + OUString( chr ) + STR( "}" );
+        return STR( "{" ) + e + STR( "} csub {" ) + OUString( chr ) + STR( "}" );
 }
 
 OUString SmOoxmlImport::handleM()
@@ -591,7 +591,7 @@ OUString SmOoxmlImport::handleRad()
     if( degHide )
         return STR( "sqrt {" ) + e + STR( "}" );
     else
-        return STR( "nroot {" ) + deg + STR( "}{" ) + e + STR( "}" );
+        return STR( "nroot {" ) + deg + STR( "} {" ) + e + STR( "}" );
 }
 
 OUString SmOoxmlImport::handleSpre()
