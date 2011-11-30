@@ -28,13 +28,13 @@
 # instead of those above.
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_filters_test))
+$(eval $(call gb_CppunitTest_CppunitTest,sc_subsequent_filters_test))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_filters_test, \
-    sc/qa/unit/filters-test \
+$(eval $(call gb_CppunitTest_add_exception_objects,sc_subsequent_filters_test, \
+    sc/qa/unit/subsequent_filters-test \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sc_filters_test, \
+$(eval $(call gb_CppunitTest_add_linked_libs,sc_subsequent_filters_test, \
     avmedia \
     basegfx \
     comphelper \
@@ -69,25 +69,25 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sc_filters_test, \
 	$(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sc_filters_test,\
+$(eval $(call gb_CppunitTest_set_include,sc_subsequent_filters_test,\
     -I$(realpath $(SRCDIR)/sc/source/ui/inc) \
     -I$(realpath $(SRCDIR)/sc/inc) \
     $$(INCLUDE) \
     -I$(OUTDIR)/inc \
 ))
 
-$(eval $(call gb_CppunitTest_add_api,sc_filters_test,\
+$(eval $(call gb_CppunitTest_add_api,sc_subsequent_filters_test,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_uses_ure,sc_filters_test))
+$(eval $(call gb_CppunitTest_uses_ure,sc_subsequent_filters_test))
 
-$(eval $(call gb_CppunitTest_add_type_rdbs,sc_filters_test,\
+$(eval $(call gb_CppunitTest_add_type_rdbs,sc_subsequent_filters_test,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_components,sc_filters_test,\
+$(eval $(call gb_CppunitTest_add_components,sc_subsequent_filters_test,\
     chart2/source/controller/chartcontroller \
     chart2/source/tools/charttools \
     chart2/source/model/chartmodel \
@@ -115,9 +115,23 @@ $(eval $(call gb_CppunitTest_add_components,sc_filters_test,\
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
+    xmlsecurity/util/xsec_fw \
+    xmlsecurity/util/xmlsecurity \
 ))
 
-$(eval $(call gb_CppunitTest_add_old_components,sc_filters_test,\
+ifeq ($(ENABLE_XMLSEC),YES)
+ifeq ($(OS),WNT)
+$(eval $(call gb_CppunitTest_add_components,sc_subsequent_filters_test,\
+    xmlsecurity/util/xsec_xmlsec.windows \
+))
+else
+$(eval $(call gb_CppunitTest_add_components,sc_subsequent_filters_test,\
+    xmlsecurity/util/xsec_xmlsec \
+))
+endif
+endif
+
+$(eval $(call gb_CppunitTest_add_old_components,sc_subsequent_filters_test,\
 	embobj \
     configmgr \
     ucb1 \
@@ -125,7 +139,7 @@ $(eval $(call gb_CppunitTest_add_old_components,sc_filters_test,\
     ucptdoc1 \
 ))
 
-$(eval $(call gb_CppunitTest_set_args,sc_filters_test,\
+$(eval $(call gb_CppunitTest_set_args,sc_subsequent_filters_test,\
     --headless \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
     "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry) module:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry/spool)" \
@@ -136,6 +150,6 @@ $(eval $(call gb_CppunitTest_set_args,sc_filters_test,\
 # a) explicitly depend on library msword because it is not implied by a link
 #    relation
 # b) explicitly depend on the sc resource files needed at unit-test runtime
-$(call gb_CppunitTest_get_target,sc_filters_test) : $(call gb_Library_get_target,scfilt) $(WORKDIR)/AllLangRes/sc
+$(call gb_CppunitTest_get_target,sc_subsequent_filters_test) : $(call gb_Library_get_target,scfilt) $(WORKDIR)/AllLangRes/sc
 
 # vim: set noet sw=4 ts=4:
