@@ -864,6 +864,13 @@ OUString UHashMap::getNameFromId(sal_uInt32 nId)
 {
     const UHashMapImpl &rMap = GetUHashImpl();
 
+    // TODO: UHashImpl should rather be a bidirectional hash map than unidirectional;
+    //       This function is linear :-(
+    // See http://www.codeproject.com/KB/stl/bimap.aspx or just use an Object wrapper around two maps.
+    // Ah, better see: http://www.boost.org/doc/libs/1_48_0/libs/multi_index/doc/examples.html#example4
+    // Even better, see http://www.boost.org/doc/libs/1_48_0/libs/bimap/doc/html/index.html
+    // See if there is a hashed variant of that.
+
     for (UHashMapImpl::const_iterator it = rMap.begin(); it != rMap.end(); ++it)
     {
         if (it->second == nId)
