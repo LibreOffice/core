@@ -28,7 +28,7 @@
 
 #ifdef ENABLE_GIO
 File gid_File_Lib_GIO
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(ucpgio1.uno,UNXSUFFIX));
@@ -37,7 +37,7 @@ End
 
 #ifdef ENABLE_GNOMEVFS
 File gid_File_Lib_Gnomevfs
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(ucpgvfs1.uno,UNXSUFFIX));
@@ -55,7 +55,7 @@ End
 
 #ifdef ENABLE_GCONF
 File gid_File_Lib_Gconfbe
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(gconfbe1.uno,UNXSUFFIX));
@@ -65,7 +65,7 @@ End
 #ifdef ENABLE_SYSTRAY_GTK
 File gid_File_Lib_QStart_Gtk
     Name = LIBNAME(qstart_gtk);
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
 End

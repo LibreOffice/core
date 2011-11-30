@@ -30,7 +30,7 @@
 #ifndef DISABLE_PYUNO
 
 File gid_File_Lib_Pyuno
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
   #ifdef UNX
     Name = STRING(CONCAT2(libpyuno,UNXSUFFIX));
   #else
@@ -41,7 +41,7 @@ File gid_File_Lib_Pyuno
 End
 
 File gid_File_Lib_Pythonloader
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
   #ifdef UNX
     Name = STRING(CONCAT2(pythonloader.uno,UNXSUFFIX));
@@ -125,7 +125,7 @@ End
 #ifndef SYSTEM_PYTHON
 #ifndef MACOSX
 File gid_File_Lib_Python_So
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Name = STRING(PY_FULL_DLL_NAME);
     Styles = (PACKED);
@@ -292,7 +292,7 @@ End
 #ifdef UNX
 
 File gid_File_Pyuno
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
 #ifdef MACOSX
     // note: Mac OS X use .dylib, even for python modules
     Name = "pyuno.dylib";

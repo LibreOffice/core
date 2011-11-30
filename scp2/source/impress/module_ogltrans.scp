@@ -37,7 +37,7 @@ Module gid_Module_Optional_OGLTrans
 End
 
 File gid_File_Lib_OpenGLTransitions
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX

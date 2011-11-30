@@ -90,6 +90,9 @@
 #define BIN_FILE_BODY \
         UnixRights   = 755
 
+#define LIB_FILE_BODY \
+        UnixRights   = 755
+
 #define TXT_FILE_BODY \
         UnixRights   = 644
 
@@ -131,12 +134,12 @@
         Styles = (ARCHIVE,SUBSTITUTE,PATCH)
 
 #define PACKED_LIB_FILE_BODY \
-        TXT_FILE_BODY; \
+        LIB_FILE_BODY; \
         Styles = (PACKED); \
         Dir    = SCP2_OOO_BIN_DIR
 
 #define PACKED_LIB_FILE_BODY_PATCH \
-        TXT_FILE_BODY; \
+        LIB_FILE_BODY; \
         Styles = (PACKED,PATCH); \
         Dir    = SCP2_OOO_BIN_DIR
 

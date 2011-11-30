@@ -28,7 +28,7 @@
 
 #ifdef ENABLE_KDE
 File gid_File_Lib_Kdebe
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(kdebe1.uno,UNXSUFFIX));
@@ -37,7 +37,7 @@ End
 
 #ifdef ENABLE_KDE4
 File gid_File_Lib_Kde4be
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(kde4be1.uno,UNXSUFFIX));

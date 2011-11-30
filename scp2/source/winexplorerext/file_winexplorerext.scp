@@ -33,7 +33,7 @@ Directory gid_Dir_Shlxthdl
 End
 
 File gid_File_Lib_OOoFilt
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Shlxthdl;
     Name = "ooofilt.dll";
@@ -42,7 +42,7 @@ End
 #ifdef BUILD_X64
 
 File gid_File_Lib_OOoFilt64
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Shlxthdl;
     Name = "ooofilt_x64.dll";
@@ -52,7 +52,7 @@ End
 #endif
 
 File gid_File_Lib_Shlxthdl
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Shlxthdl;
     Name = "shlxthdl.dll";
@@ -60,7 +60,7 @@ End
 
 #ifdef BUILD_X64
 	File gid_File_Lib_Shlxthdl64
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Shlxthdl;
     Name = "shlxthdl_x64.dll";
@@ -70,7 +70,7 @@ End
 #endif
 
 File gid_File_Lib_PropertyHdl
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Shlxthdl;
     Name = "propertyhdl.dll";
@@ -78,7 +78,7 @@ End
 
 #ifdef BUILD_X64
 	File gid_File_Lib_PropertyHdl64
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Shlxthdl;
     Name = "propertyhdl_x64.dll";
@@ -88,14 +88,14 @@ End
 #endif
 
 File gid_File_Lib_Shlxtmsi
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "shlxtmsi.dll";
 End
 
 File gid_File_Lib_Reg64
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "reg64msi.dll";

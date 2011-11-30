@@ -171,7 +171,7 @@ End
 // Public Dynamic Libraries:
 
 File gid_File_Dl_Cppu
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_UNO_VER("cppu", "3");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -189,7 +189,7 @@ End
 #endif
 
 File gid_File_Dl_Cppuhelper
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_UNO_COMID_VER("cppuhelper", "3");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -207,7 +207,7 @@ End
 #endif
 
 File gid_File_Dl_PurpEnvHelper
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_UNO_COMID_VER("purpenvhelper", "3");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -225,7 +225,7 @@ End
 #endif
 
 File gid_File_Dl_Sal
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_UNO_VER("sal", "3");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -243,14 +243,14 @@ End
 #endif
 
 File gid_File_Dl_Sal_TextEnc
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_NORMAL("sal_textenc");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 End
 
 File gid_File_Dl_Salhelper
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_UNO_COMID_VER("salhelper", "3");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -270,7 +270,7 @@ End
 // Private Dynamic Libraries:
 
 File gid_File_Dl_Profile_Uno
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = PROFILENAME(/ure/uno);
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -278,7 +278,7 @@ File gid_File_Dl_Profile_Uno
 End
 
 File gid_File_Dl_Reg
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_VER("reg", "3");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -298,7 +298,7 @@ End
 
 
 File gid_File_Dl_Store
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_VER("store", "3");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -307,7 +307,7 @@ End
 
 
 File gid_File_Dl_Xmlreader
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_NORMAL("xmlreader");
     Styles = (PACKED);
@@ -326,7 +326,7 @@ End
 #endif
 
 File gid_File_Dl_Jvmaccess
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_COMID_VER("jvmaccess", "3");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -344,7 +344,7 @@ End
 #endif
 
 File gid_File_Dl_Jvmfwk
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_VER("jvmfwk", "3");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -363,7 +363,7 @@ End
 
 #if defined SOLAR_JAVA
 File gid_File_Dl_Sunjavaplugin
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("sunjavaplugin");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -390,7 +390,7 @@ File gid_File_Dl_Profile_Jvmfwk3rc
 End
 
 File gid_File_Dl_ComnameUno
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_NORMAL(STRING(COMNAME) "_uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -399,7 +399,7 @@ End
 
 #if defined SOLAR_JAVA
 File gid_File_Dl_JavaUno
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_NORMAL("java_uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -417,7 +417,7 @@ End
 #endif
 
 File gid_File_Dl_UnsafeUnoUno
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_NORMAL("unsafe_uno_uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -425,7 +425,7 @@ File gid_File_Dl_UnsafeUnoUno
 End
 
 File gid_File_Dl_AffineUnoUno
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_NORMAL("affine_uno_uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -433,7 +433,7 @@ File gid_File_Dl_AffineUnoUno
 End
 
 File gid_File_Dl_LogUnoUno
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_NORMAL("log_uno_uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -441,7 +441,7 @@ End
 
 #if defined WNT && defined _MSC
 File gid_File_Dl_Cli_Uno
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_NORMAL("cli_uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -635,7 +635,7 @@ End
 
 #if defined SOLAR_JAVA
 File gid_File_Dl_Jpipe
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_JDL_NORMAL("jpipe");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -645,7 +645,7 @@ End
 
 #if defined SOLAR_JAVA && defined WNT
 File gid_File_Dl_Jpipx
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_NORMAL("jpipx");
     Styles = (PACKED);
@@ -654,7 +654,7 @@ End
 
 #if defined SOLAR_JAVA
 File gid_File_Dl_Juh
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_NORMAL("juh");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -664,7 +664,7 @@ End
 
 #if defined SOLAR_JAVA
 File gid_File_Dl_Juhx
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_NORMAL("juhx");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -673,7 +673,7 @@ End
 #endif
 
 File gid_File_Dl_Acceptor
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("acceptor.uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -681,14 +681,14 @@ File gid_File_Dl_Acceptor
 End
 
 File gid_File_Dl_Binaryurp
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("binaryurp.uno");
     Styles = (PACKED);
 End
 
 File gid_File_Dl_Bootstrap
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("bootstrap.uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -696,7 +696,7 @@ File gid_File_Dl_Bootstrap
 End
 
 File gid_File_Dl_Connector
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("connector.uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -704,7 +704,7 @@ File gid_File_Dl_Connector
 End
 
 File gid_File_Dl_Introspection
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("introspection.uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -712,7 +712,7 @@ File gid_File_Dl_Introspection
 End
 
 File gid_File_Dl_Invocadapt
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("invocadapt.uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -720,7 +720,7 @@ File gid_File_Dl_Invocadapt
 End
 
 File gid_File_Dl_Invocation
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("invocation.uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -730,7 +730,7 @@ End
 
 #if defined SOLAR_JAVA
 File gid_File_Dl_Javaloader
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("javaloader.uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -740,7 +740,7 @@ End
 
 #if defined SOLAR_JAVA
 File gid_File_Dl_Javavm
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("javavm.uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -749,7 +749,7 @@ End
 #endif
 
 File gid_File_Dl_Namingservice
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("namingservice.uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -757,7 +757,7 @@ File gid_File_Dl_Namingservice
 End
 
 File gid_File_Dl_Stocservices
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("stocservices.uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -765,7 +765,7 @@ File gid_File_Dl_Stocservices
 End
 
 File gid_File_Dl_Proxyfac
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("proxyfac.uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -773,7 +773,7 @@ File gid_File_Dl_Proxyfac
 End
 
 File gid_File_Dl_Reflection
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("reflection.uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -781,7 +781,7 @@ File gid_File_Dl_Reflection
 End
 
 File gid_File_Dl_Streams
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("streams.uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -789,7 +789,7 @@ File gid_File_Dl_Streams
 End
 
 File gid_File_Dl_Textinstream
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("textinstream.uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -797,7 +797,7 @@ File gid_File_Dl_Textinstream
 End
 
 File gid_File_Dl_Textoutstream
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("textoutstream.uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -805,7 +805,7 @@ File gid_File_Dl_Textoutstream
 End
 
 File gid_File_Dl_Uuresolver
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("uuresolver.uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -814,7 +814,7 @@ End
 
 #if !defined SYSTEM_LIBXML
 File gid_File_Dl_Libxml2
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
 #if defined WNT
 #if defined _gcc3
@@ -844,7 +844,7 @@ End
 
 #if defined WITH_STLPORT
 File gid_File_Dl_Stlport
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
 #if defined _gcc3 && defined WNT
 #if defined _DEBUG_RUNTIME
@@ -883,7 +883,7 @@ End
 #if defined _gcc3 && !(defined FREEBSD || defined NETBSD || defined OPENBSD \
 	|| defined MACOSX || defined SYSTEM_STDLIBS || defined(WNT) || defined(DRAGONFLY))
 File gid_File_Dl_GccS
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
 #ifdef AIX
     Name = "libgcc_s.a";
@@ -899,7 +899,7 @@ End
 	|| defined MACOSX || defined SYSTEM_STDLIBS || defined(WNT) || defined(DRAGONFLY))
 File gid_File_Dl_Stdcpp
     Dir = SCP2_URE_DL_DIR;
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
 #ifdef AIX
     Name = "libstdc++.a";
 #else
@@ -915,7 +915,7 @@ End
 #if defined(MINGW_GCCDLL)
 
 File gid_File_Lib_Mingw_GccS_Ure
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = MINGW_GCCDLL;
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -926,7 +926,7 @@ End
 #if defined(MINGW_GXXDLL)
 
 File gid_File_Lib_Mingw_Stdcpp_Ure
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = MINGW_GXXDLL;
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -938,7 +938,7 @@ End
 
 #if defined WNT
 File gid_File_Dl_Uwinapi
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_NORMAL("uwinapi");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);

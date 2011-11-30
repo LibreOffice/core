@@ -30,7 +30,7 @@
 #ifdef WNT
 
 File gid_File_Lib_Xmergesync
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "xmergesync.dll";
@@ -41,7 +41,7 @@ End
 #if defined(WNT) && defined(HAVE_WINDOWS_SDK)
 
 File gid_File_Lib_Jfregca
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "jfregca.dll";

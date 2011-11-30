@@ -28,7 +28,7 @@
 
 #if defined SOLAR_JAVA && defined WNT
 File gid_File_Lib_Accessbridge
-    BIN_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "java_uno_accessbridge.dll";
@@ -42,7 +42,7 @@ STD_LIB_FILE( gid_File_Lib_Ado, ado)
 STD_LIB_FILE( gid_File_Lib_Basctl, basctl)
 
 File gid_File_Lib_Basprov
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -53,7 +53,7 @@ File gid_File_Lib_Basprov
 End
 
 File gid_File_Lib_Vbaevent
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -66,7 +66,7 @@ End
 STD_LIB_FILE( gid_File_Lib_Bib , bib)
 
 File gid_File_Lib_Cached1
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -80,7 +80,7 @@ SPECIAL_COMPONENT_LIB_FILE(gid_File_Lib_Configmgr, configmgr.uno)
 
 #ifdef WITH_LDAP
 File gid_File_Lib_Ldapbe2
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -149,7 +149,7 @@ SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Cmdmail, cmdmail.uno )
 
 
 File gid_File_Lib_Comphelper2
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
   #ifdef UNX
     Name = STRING(CONCAT3(libcomphelp,COMID,UNXSUFFIX));
   #else
@@ -166,7 +166,7 @@ STD_LIB_FILE( gid_File_Lib_Cui, cui)
 #ifndef SYSTEM_CURL
 
 File gid_File_Lib_Curl
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -189,7 +189,7 @@ End
 #ifndef SYSTEM_DB
 
 File gid_File_Lib_Db
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -206,7 +206,7 @@ End
 #ifdef ENABLE_SYSTRAY_GTK
 File gid_File_Lib_QStart_Gtk
     Name = LIBNAME(qstart_gtk);
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
 End
@@ -227,7 +227,7 @@ STD_LIB_FILE( gid_File_Lib_Odbcbase,odbcbase)
 
 
 File gid_File_Lib_Dbpool
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -242,7 +242,7 @@ STD_LIB_FILE( gid_File_Lib_Dbt, dbtools )
 STD_LIB_FILE( gid_File_Lib_Dbaxml, dbaxml )
 
 File gid_File_Lib_Dict_Ja
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
   #ifdef UNX
     Name = STRING(CONCAT2(libdict_ja,UNXSUFFIX));
   #else
@@ -253,7 +253,7 @@ File gid_File_Lib_Dict_Ja
 End
 
 File gid_File_Lib_Dict_Zh
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
   #ifdef UNX
     Name = STRING(CONCAT2(libdict_zh,UNXSUFFIX));
   #else
@@ -264,7 +264,7 @@ File gid_File_Lib_Dict_Zh
 End
 
 File gid_File_Lib_Collator_Data
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
   #ifdef UNX
     Name = STRING(CONCAT2(libcollator_data,UNXSUFFIX));
   #else
@@ -275,7 +275,7 @@ File gid_File_Lib_Collator_Data
 End
 
 File gid_File_Lib_Index_Data
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
   #ifdef UNX
     Name = STRING(CONCAT2(libindex_data,UNXSUFFIX));
   #else
@@ -286,7 +286,7 @@ File gid_File_Lib_Index_Data
 End
 
 File gid_File_Lib_Textconv_Dict
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
   #ifdef UNX
     Name = STRING(CONCAT2(libtextconv_dict,UNXSUFFIX));
   #else
@@ -297,7 +297,7 @@ File gid_File_Lib_Textconv_Dict
 End
 
 File gid_File_Lib_Dlgprov
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -308,7 +308,7 @@ File gid_File_Lib_Dlgprov
 End
 
 File gid_File_Lib_Stringresource
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -319,7 +319,7 @@ File gid_File_Lib_Stringresource
 End
 
 File gid_File_Lib_Vbaobj
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -330,7 +330,7 @@ File gid_File_Lib_Vbaobj
 End
 
 File gid_File_Lib_Vbaswobj
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -341,7 +341,7 @@ File gid_File_Lib_Vbaswobj
 End
 
 File gid_File_Lib_Vbamsforms
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -352,7 +352,7 @@ File gid_File_Lib_Vbamsforms
 End
 
 File gid_File_Lib_Vbahelper
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -366,7 +366,7 @@ End
 #ifdef WNT
 
 File gid_File_Lib_Dnd
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "dnd.dll";
@@ -377,7 +377,7 @@ End
 #ifdef WNT
 
 File gid_File_Lib_Dtrans
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Name = "dtrans.dll";
     Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
@@ -398,7 +398,7 @@ SPECIAL_LIB_FILE(gid_File_Lib_Emboleobj,emboleobj)
 STD_LIB_FILE( gid_File_Lib_Emser, emser )
 
 File gid_File_Lib_Inprocserv
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "inprocserv.dll";
@@ -410,14 +410,14 @@ End
 
 #ifdef ENABLE_KAB
 File gid_File_Lib_Kab_1
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(libkab1,UNXSUFFIX));
 End
 
 File gid_File_Lib_Kab_Drv_1
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(libkabdrv1,UNXSUFFIX));
@@ -427,14 +427,14 @@ End
 
 #ifdef MACOSX
 File gid_File_Lib_Macab_1
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(libmacab1,UNXSUFFIX));
 End
 
 File gid_File_Lib_Macab_Drv_1
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(libmacabdrv1,UNXSUFFIX));
@@ -461,7 +461,7 @@ STD_LIB_FILE( gid_File_Lib_Flat, flat)
 #ifdef WNT
 
 File gid_File_Lib_Fop
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "fop.dll";
@@ -472,7 +472,7 @@ End
 #ifdef WNT
 
 File gid_File_Lib_Fps
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "fps.dll";
@@ -483,7 +483,7 @@ End
 #if defined UNX && ! defined MACOSX
 
 File gid_File_Lib_Desktopbe
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(desktopbe1.uno,UNXSUFFIX));
@@ -492,7 +492,7 @@ End
 #ifdef ENABLE_KDE4
 #ifndef MACOSX
 File gid_File_Lib_Fps_Kde4
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = SPECIAL_COMPONENT_LIB_NAME(fps_kde4.uno);
@@ -502,7 +502,7 @@ End
 #ifdef ENABLE_KDE
 #ifndef MACOSX
 File gid_File_Lib_Fps_Kde
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = SPECIAL_COMPONENT_LIB_NAME(fps_kde.uno);
@@ -519,21 +519,21 @@ End
 
 #ifdef QUARTZ
 File gid_File_Lib_Fps_Aqua
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = SPECIAL_COMPONENT_LIB_NAME(fps_aqua.uno);
 End
 
 File gid_File_Lib_MacOSXSpell
-	TXT_FILE_BODY;
+	LIB_FILE_BODY;
 	Styles = (PACKED);
 	Name = LIBNAME(MacOSXSpell);
 	Dir = SCP2_OOO_BIN_DIR;
 End
 
 File gid_File_Lib_avmediaQuickTime
-	TXT_FILE_BODY;
+	LIB_FILE_BODY;
 	Styles = (PACKED);
 	Name = LIBNAME(avmediaQuickTime);
 	Dir = SCP2_OOO_BIN_DIR;
@@ -551,7 +551,7 @@ SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Fpicker, fpicker.uno )
 #ifndef SYSTEM_CAIRO
 
 File gid_File_Lib_Cairo
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -572,7 +572,7 @@ End
 #ifndef WNT
 
 File gid_File_Lib_Pixman
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -595,7 +595,7 @@ SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Fsstorage, fsstorage.uno )
 #ifdef WNT
 
 File gid_File_Lib_Ftransl
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "ftransl.dll";
@@ -609,7 +609,7 @@ STD_LIB_FILE( gid_File_Lib_Fwi , fwi)
 
 File gid_File_Lib_Fwk
     Name = LIBNAME(fwk);
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
 End
@@ -620,7 +620,7 @@ STD_LIB_FILE( gid_File_Lib_Fwm , fwm)
 
 #ifdef ENABLE_DIRECTX
 File gid_File_Lib_Gdiplus
-    BIN_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "gdiplus.dll";
@@ -632,7 +632,7 @@ SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Hatchwindowfactory, hatchwindowfactory.
 STD_LIB_FILE( gid_File_Lib_Helplinker, helplinker)
 
 File gid_File_Lib_I18npool
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -645,7 +645,7 @@ End
 STD_LIB_FILE( gid_File_I18nregexp, i18nregexp )
 
 File gid_File_Lib_I18nsearch
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -665,7 +665,7 @@ File gid_File_Lib_I18nisolang
 End
 
 File gid_File_Lib_I18nutil
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
   #ifdef UNX
     Name = STRING(CONCAT3(libi18nutil,COMID,UNXSUFFIX));
   #else
@@ -680,7 +680,7 @@ STD_LIB_FILE( gid_File_Lib_I18npaper, i18npaper)
 #ifndef SYSTEM_ICU
 
 File gid_File_Lib_Icudata
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
   #ifdef UNX
     Name = STRING(CONCAT7(libicudata,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO));
   #else
@@ -691,7 +691,7 @@ File gid_File_Lib_Icudata
 End
 
 File gid_File_Lib_Icui18n
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
   #ifdef UNX
     Name = STRING(CONCAT7(libicui18n,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO));
   #else
@@ -702,7 +702,7 @@ File gid_File_Lib_Icui18n
 End
 
 File gid_File_Lib_Icule
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
   #ifdef UNX
     Name = STRING(CONCAT7(libicule,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO));
   #else
@@ -713,7 +713,7 @@ File gid_File_Lib_Icule
 End
 
 File gid_File_Lib_Icuuc
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
   #ifdef UNX
     Name = STRING(CONCAT7(libicuuc,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO));
   #else
@@ -733,7 +733,7 @@ STD_LIB_FILE( gid_File_Lib_Jdbc, jdbc)
 
 #ifdef SOLAR_JAVA
 File gid_File_Lib_Hsqldb_2
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -748,7 +748,7 @@ End
 #ifdef WNT
 
 File gid_File_Lib_Lngpckinsthlp
-    BIN_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED, LANGUAGEPACK, BINARYTABLE, BINARYTABLE_ONLY);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "lngpckinsthlp.dll";
@@ -759,7 +759,7 @@ End
 #if defined(WNT) && defined(HAVE_WINDOWS_SDK)
 
 File gid_File_Lib_sn_tools
-    BIN_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY, DONTRENAMEINPATCH);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "sn_tools.dll";
@@ -770,7 +770,7 @@ End
 #ifdef WNT
 
 File gid_File_Lib_Patchmsi
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Name = "patchmsi.dll";
     Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED,PATCH,PATCH_ONLY,BINARYTABLE,BINARYTABLE_ONLY,DONTRENAMEINPATCH);
@@ -781,7 +781,7 @@ End
 #if defined(WNT) && defined(HAVE_WINDOWS_SDK)
 
 File gid_File_Lib_Rebasemsi
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Name = "rebase.dll";
     Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED,BINARYTABLE,BINARYTABLE_ONLY,DONTRENAMEINPATCH);
@@ -792,7 +792,7 @@ End
 STD_LIB_FILE( gid_File_Lib_Lng, lng)
 
 File gid_File_Lib_Localedata_En
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
   #ifdef UNX
     Name = STRING(CONCAT2(liblocaledata_en,UNXSUFFIX));
   #else
@@ -803,7 +803,7 @@ File gid_File_Lib_Localedata_En
 End
 
 File gid_File_Lib_Localedata_Es
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
   #ifdef UNX
     Name = STRING(CONCAT2(liblocaledata_es,UNXSUFFIX));
   #else
@@ -814,7 +814,7 @@ File gid_File_Lib_Localedata_Es
 End
 
 File gid_File_Lib_Localedata_Euro
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
   #ifdef UNX
     Name = STRING(CONCAT2(liblocaledata_euro,UNXSUFFIX));
   #else
@@ -825,7 +825,7 @@ File gid_File_Lib_Localedata_Euro
 End
 
 File gid_File_Lib_Localedata_Others
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
   #ifdef UNX
     Name = STRING(CONCAT2(liblocaledata_others,UNXSUFFIX));
   #else
@@ -836,7 +836,7 @@ File gid_File_Lib_Localedata_Others
 End
 
 File gid_File_Lib_Mcnttype
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -854,7 +854,7 @@ STD_LIB_FILE(gid_File_Lib_Mozabdrv,mozabdrv)
 #else
 
 File gid_File_Lib_Mozbootstrap
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -902,7 +902,7 @@ STD_LIB_FILE(gid_File_Lib_Officebean, officebean)
 #if defined(WNT) && !defined(DISABLE_ATL)
 
 File gid_File_Lib_Ole
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "oleautobridge.uno.dll";
@@ -933,13 +933,13 @@ STD_LIB_FILE( gid_File_Lib_Pl , pl)
 #if defined(UNX) && ! defined(QUARTZ)
 File gid_File_Lib_Desktop_Detector
     Name = LIBNAME(desktop_detector);
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
 End
 File gid_File_Lib_Vclplug_Gen
     Name = LIBNAME(vclplug_gen);
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
 End
@@ -949,7 +949,7 @@ End
 #ifdef ENABLE_GTK
 File gid_File_Lib_Vclplug_Gtk
     Name = LIBNAME(vclplug_gtk);
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
 End
@@ -957,7 +957,7 @@ End
 #ifdef ENABLE_GTK3
 File gid_File_Lib_Vclplug_Gtk3
     Name = LIBNAME(vclplug_gtk3);
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
 End
@@ -966,7 +966,7 @@ End
 #ifndef MACOSX
 File gid_File_Lib_Vclplug_Kde
     Name = LIBNAME(vclplug_kde);
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
 End
@@ -976,7 +976,7 @@ End
 #ifndef MACOSX
 File gid_File_Lib_Vclplug_Kde4
     Name = LIBNAME(vclplug_kde4);
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
 End
@@ -987,7 +987,7 @@ End
 #if defined(QUARTZ)
 File gid_File_Lib_AppleRemote
     Name = LIBNAME(AppleRemote);
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
 End
@@ -996,7 +996,7 @@ End
 #if defined(QUARTZ)
 File gid_File_Lib_Basebmp
     Name = LIBNAME(basebmp);
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
 End
@@ -1010,7 +1010,7 @@ STD_LIB_FILE( gid_File_Lib_BaseBmp, basebmp )
 #if defined UNX && ! defined MACOSX
 
 File gid_File_Lib_Recentfile
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(librecentfile,UNXSUFFIX));
@@ -1021,14 +1021,14 @@ End
 #if defined(WNT) && defined(HAVE_WINDOWS_SDK)
 
 File gid_File_Lib_Reg4allmsdoc
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "reg4allmsdoc.dll";
 End
 
 File gid_File_Lib_Qslnkmsi
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "qslnkmsi.dll";
@@ -1036,7 +1036,7 @@ End
 
 
 File gid_File_Lib_Sdqsmsi
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "sdqsmsi.dll";
@@ -1046,13 +1046,13 @@ End
 
 File gid_File_Lib_Res
     Name = LIBNAME(res);
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
 End
 
 File gid_File_Lib_Expwrap_Uno
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED,DONT_OVERWRITE);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -1063,7 +1063,7 @@ File gid_File_Lib_Expwrap_Uno
 End
 
 File gid_File_Lib_Fastsax_Uno
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED,DONT_OVERWRITE);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -1082,7 +1082,7 @@ STD_LIB_FILE( gid_File_Lib_Sb , sb)
 STD_LIB_FILE( gid_File_Lib_Scn, scn)
 
 File gid_File_Lib_Scriptframe
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
   #ifdef UNX
     #ifdef MACOSX
        Name = "libscriptframe.dylib";
@@ -1100,7 +1100,7 @@ STD_LIB_FILE( gid_File_Lib_Sd , sd)
 STD_LIB_FILE( gid_File_Lib_Sdui, sdui)
 
 File gid_File_Lib_Slideshow
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -1111,7 +1111,7 @@ File gid_File_Lib_Slideshow
 End
 
 File gid_File_Lib_Sdbc_2
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -1127,7 +1127,7 @@ STD_LIB_FILE( gid_File_Lib_Sf_Prothdlr, protocolhandler )
 
 File gid_File_Lib_Sfx
     Name = LIBNAME(sfx);
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
 End
@@ -1135,7 +1135,7 @@ End
 #ifdef WNT
 
 File gid_File_Lib_Instooofiltmsi
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "instooofiltmsi.dll";
@@ -1146,7 +1146,7 @@ End
 #ifdef WNT
 
 File gid_File_Lib_Smplmail
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "smplmail.uno.dll";
@@ -1160,7 +1160,7 @@ STD_LIB_FILE( gid_File_Lib_Sot, sot )
 
 File gid_File_Lib_Spa
     Name = LIBNAME(spa);
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
 End
@@ -1168,7 +1168,7 @@ End
 #endif
 
 File gid_File_Lib_Spell
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Name = LIBNAME(spell);
     Dir = SCP2_OOO_BIN_DIR;
@@ -1205,7 +1205,7 @@ STD_LIB_FILE( gid_File_Lib_Merged, merged )
 
 #if ! defined UNX
 File gid_File_Lib_Sysdtrans
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "sysdtrans.dll";
@@ -1229,7 +1229,7 @@ STD_LIB_FILE( gid_File_Lib_Acc, acc )
 STD_LIB_FILE( gid_File_Lib_Tools, tl )
 
 File gid_File_Lib_Tvhlp1
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -1240,7 +1240,7 @@ File gid_File_Lib_Tvhlp1
 End
 
 File gid_File_Lib_Ucb1
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -1251,7 +1251,7 @@ File gid_File_Lib_Ucb1
 End
 
 File gid_File_Lib_Ucbhelper
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
   #ifdef UNX
@@ -1262,7 +1262,7 @@ File gid_File_Lib_Ucbhelper
 End
 
 File gid_File_Lib_Ucpchelp1
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
   #ifdef UNX
     Name = STRING(CONCAT2(libucpchelp1,UNXSUFFIX));
   #else
@@ -1300,14 +1300,14 @@ SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpodma1, ucpodma1)
 SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpcmis, ucpcmis1.uno)
 
 File gid_File_Lib_Lnth
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Name = LIBNAME(lnth);
     Dir = SCP2_OOO_BIN_DIR;
 End
 
 File gid_File_Lib_Hyph
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Name = LIBNAME(hyphen);
     Dir = SCP2_OOO_BIN_DIR;
@@ -1321,7 +1321,7 @@ STD_LIB_FILE( gid_File_Lib_BaseGfx, basegfx )
 
 File gid_File_Lib_Vcl
     Name = LIBNAME(vcl);
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
 End
@@ -1332,7 +1332,7 @@ STD_LIB_FILE( gid_File_Lib_Xof , xof)
 
 File gid_File_Lib_Xo
     Name = LIBNAME(xo);
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
 End
@@ -1352,7 +1352,7 @@ STD_JAR_FILE( gid_File_Jar_Xsltvalidate, XSLTValidate )
 
 #ifndef SYSTEM_LIBXSLT
 File gid_File_Lib_Xslt
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -1386,7 +1386,7 @@ SPECIAL_LIB_FILE( gid_File_Lib_AVMediaWin, avmediawin )
 #endif
 
 File gid_File_Lib_XSec_XMLSecurity
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
 	#ifdef UNX
         Name = STRING(CONCAT2(libxmlsecurity,UNXSUFFIX));
     #else
@@ -1397,7 +1397,7 @@ File gid_File_Lib_XSec_XMLSecurity
 End
 
 File gid_File_Lib_XSec_Framework
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
 	#ifdef UNX
         Name = STRING(CONCAT2(libxsec_fw,UNXSUFFIX));
     #else
@@ -1409,7 +1409,7 @@ End
 
 #if defined(ENABLE_XMLSEC)
 File gid_File_Lib_XSec_XmlSec
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     #ifdef UNX
         Name = STRING(CONCAT2(libxsec_xmlsec,UNXSUFFIX));
     #else
@@ -1421,7 +1421,7 @@ End
 
 #ifdef WNT
 File gid_File_Lib_LibXMLSec_xmlseccore
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     #ifdef _gcc3
       Name = "libxmlsec1.dll";
     #else
@@ -1432,7 +1432,7 @@ File gid_File_Lib_LibXMLSec_xmlseccore
 End
 
 File gid_File_Lib_LibXMLSec_xmlsecmscrypto
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
   #ifdef _gcc3
     Name = "libxmlsec1-mscrypto.dll";
   #else
@@ -1445,7 +1445,7 @@ End
 #endif
 
 File gid_File_Lib_Migrationoo2
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -1456,7 +1456,7 @@ File gid_File_Lib_Migrationoo2
 End
 
 File gid_File_Lib_Migrationoo3
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -1468,7 +1468,7 @@ End
 
 #if defined(WNT) && !defined(SYSTEM_LIBEXTTEXTCAT)
 File gid_File_Lib_Libtextcat
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "libexttextcat.dll";
@@ -1483,7 +1483,7 @@ SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Updatefeed , updatefeed.uno )
 
 #ifdef WNT
 File gid_File_Lib_Onlinecheck
-    BIN_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "onlinecheck.dll";
@@ -1492,7 +1492,7 @@ End
 
 #ifndef SYSTEM_OPENSSL
 File gid_File_Lib_Openssl
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef WNT
@@ -1503,7 +1503,7 @@ End
 
 #ifndef SYSTEM_OPENSSL
 File gid_File_Lib_Crypto
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
 
@@ -1514,14 +1514,14 @@ End
 #endif
 
 File gid_File_Lib_Soffice
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_OOO_BIN_DIR;
     Name = SCP2_URE_DL_NORMAL("sofficeapp");
     Styles = (PACKED);
 End
 
 File gid_File_Lib_Unopkgapp
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_OOO_BIN_DIR;
     Name = SCP2_URE_DL_NORMAL("unopkgapp");
     Styles = (PACKED);
@@ -1533,13 +1533,13 @@ STD_LIB_FILE( gid_File_Lib_Oooimprovecore , oooimprovecore)
         // see common_brand.scp gid_Brand_File_Lib_Msvcp80 and
         // gid_Brand_File_Lib_Msvcr80
 File gid_File_Moz_Msvcp80
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_OOO_BIN_DIR;
     Name = SCP2_URE_DL_NORMAL("msvcp80");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 End
 File gid_File_Moz_Msvcr80
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Dir = SCP2_OOO_BIN_DIR;
     Name = SCP2_URE_DL_NORMAL("msvcr80");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
@@ -1554,7 +1554,7 @@ End
 
 #ifndef SYSTEM_REDLAND
 File gid_File_Lib_Raptor
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -1573,7 +1573,7 @@ File gid_File_Lib_Raptor
 End
 
 File gid_File_Lib_Rasqal
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -1592,7 +1592,7 @@ File gid_File_Lib_Rasqal
 End
 
 File gid_File_Lib_Rdf
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -1619,7 +1619,7 @@ STD_LIB_FILE( gid_File_Lib_Forui, forui)
 // RSVG and dependencies
 #if ! defined (SYSTEM_GETTEXT)
 File gid_File_Lib_Intl
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     #ifdef MACOSX
@@ -1632,7 +1632,7 @@ End
 
 #if ! defined SYSTEM_GLIB
 File gid_File_Lib_Glib
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     #ifdef MACOSX
@@ -1642,7 +1642,7 @@ File gid_File_Lib_Glib
     #endif
 End
 File gid_File_Lib_Gthread
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     #ifdef MACOSX
@@ -1652,7 +1652,7 @@ File gid_File_Lib_Gthread
     #endif
 End
 File gid_File_Lib_Gobject
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     #ifdef MACOSX
@@ -1662,7 +1662,7 @@ File gid_File_Lib_Gobject
     #endif
 End
 File gid_File_Lib_Gio
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     #ifdef MACOSX
@@ -1672,7 +1672,7 @@ File gid_File_Lib_Gio
     #endif
 End
 File gid_File_Lib_Gmodule
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     #ifdef MACOSX
@@ -1687,7 +1687,7 @@ End
 
 #if ! defined SYSTEM_GDKPIXBUF
 File gid_File_Lib_Gdkpixbuf
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     #ifdef MACOSX
@@ -1700,7 +1700,7 @@ End
 
 #if ! defined SYSTEM_LIBCROCO
 File gid_File_Lib_Libcroco
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     #ifdef MACOSX
@@ -1713,7 +1713,7 @@ End
 
 #if ! defined SYSTEM_PANGO
 File gid_File_Lib_Libpango
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     #ifdef MACOSX
@@ -1723,7 +1723,7 @@ File gid_File_Lib_Libpango
     #endif
 End
 File gid_File_Lib_Libpangocairo
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     #ifdef MACOSX
@@ -1734,7 +1734,7 @@ File gid_File_Lib_Libpangocairo
 End
 #if defined WNT
 File gid_File_Lib_Libpangowin32
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "pangowin32lo.dll";
@@ -1744,7 +1744,7 @@ End
 
 #if ! defined SYSTEM_LIBGSF
 File gid_File_Lib_Libgsf
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
 #ifdef WNT
@@ -1755,7 +1755,7 @@ End
 
 #if ! defined SYSTEM_LIBRSVG
 File gid_File_Lib_Librsvg
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     #ifdef MACOSX
@@ -1771,7 +1771,7 @@ End
 #if defined(WNT) && defined(HAVE_WINDOWS_SDK)
 
 File gid_File_Lib_sellangmsi
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
     Dir = gid_Brand_Dir_Program;
     Name = "sellangmsi.dll";

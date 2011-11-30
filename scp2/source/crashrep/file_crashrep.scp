@@ -55,7 +55,7 @@ End
 #ifdef WNT
 
 File gid_Brand_File_Lib_Dbghelp
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Name = "dbghelp.dll";
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
