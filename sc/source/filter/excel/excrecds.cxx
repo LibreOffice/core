@@ -657,8 +657,8 @@ XclExpAutofilter::XclExpAutofilter( const XclExpRoot& rRoot, sal_uInt16 nC ) :
 {
 }
 
-sal_Bool XclExpAutofilter::AddCondition( ScQueryConnect eConn, sal_uInt8 nType, sal_uInt8 nOp,
-                                    double fVal, String* pText, sal_Bool bSimple )
+bool XclExpAutofilter::AddCondition( ScQueryConnect eConn, sal_uInt8 nType, sal_uInt8 nOp,
+                                     double fVal, String* pText, bool bSimple )
 {
     if( !aCond[ 1 ].IsEmpty() )
         return false;
@@ -949,11 +949,11 @@ XclExpAutofilter* ExcAutoFilterRecs::GetByCol( SCCOL nCol )
     return xFilter.get();
 }
 
-sal_Bool ExcAutoFilterRecs::IsFiltered( SCCOL nCol )
+bool ExcAutoFilterRecs::IsFiltered( SCCOL nCol )
 {
     for( size_t nPos = 0, nSize = maFilterList.GetSize(); nPos < nSize; ++nPos )
         if( maFilterList.GetRecord( nPos )->GetCol() == static_cast<sal_uInt16>(nCol) )
-            return sal_True;
+            return true;
     return false;
 }
 
