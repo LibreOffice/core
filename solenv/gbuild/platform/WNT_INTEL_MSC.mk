@@ -358,7 +358,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
-		$(if $(filter YES,$(gb_Executable_TARGETGUI)), -SUBSYSTEM:WINDOWS, -SUBSYSTEM:CONSOLE) \
+		$(if $(filter YES,$(TARGETGUI)), -SUBSYSTEM:WINDOWS, -SUBSYSTEM:CONSOLE) \
 		$(T_LDFLAGS) \
 		$(if $(gb_PRODUCT),,-NODEFAULTLIB) \
 		@$${RESPONSEFILE} \
@@ -548,7 +548,6 @@ gb_Executable_EXT := .exe
 gb_Executable_TARGETTYPEFLAGS := $(gb_Windows_PE_TARGETTYPEFLAGS)
 
 gb_Executable_get_rpath :=
-gb_Executable_TARGETGUI := 
 
 define gb_Executable_Executable_platform
 $(call gb_LinkTarget_set_auxtargets,$(2),\
@@ -562,7 +561,8 @@ $(call gb_Executable_get_clean_target,$(1)) : AUXTARGETS := $(call gb_Executable
 $(call gb_Deliver_add_deliverable,$(call gb_Executable_get_target,$(1)).manifest,$(call gb_LinkTarget_get_target,$(2)).manifest,$(1))
 
 $(call gb_LinkTarget_get_target,$(2)) \
-$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile,$(2))
+$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE := $(call gb_LinkTarget_get_pdbfile,$(2))
+$(call gb_LinkTarget_get_target,$(2)) : TARGETGUI :=
 
 endef
 
