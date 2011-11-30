@@ -405,7 +405,7 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
                                         sal::static_int_cast<sal_Int16>(nUnit[year]),
                                         sal::static_int_cast<sal_Int16>(nUnit[month]),
                                         sal::static_int_cast<sal_Int16>(nUnit[day]),
-                                        true) : 0.0);
+                                        true, false) : 0.0);
                             fValue += ((nUnit[hour] * 3600) + (nUnit[minute] * 60) + nUnit[second] + fFraction) / 86400.0;
                         }
                     }
