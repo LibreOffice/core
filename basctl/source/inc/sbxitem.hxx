@@ -33,12 +33,12 @@
 
 enum BasicIDEType
 {
-    Unknown,
-    Shell,
-    Library,
-    Module,
-    Dialog,
-    Method
+    BASICIDE_TYPE_UNKNOWN,
+    BASICIDE_TYPE_SHELL,
+    BASICIDE_TYPE_LIBRARY,
+    BASICIDE_TYPE_MODULE,
+    BASICIDE_TYPE_DIALOG,
+    BASICIDE_TYPE_METHOD
 };
 
 class SbxItem : public SfxPoolItem

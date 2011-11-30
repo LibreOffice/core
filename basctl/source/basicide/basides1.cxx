@@ -615,9 +615,9 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             String aName( rSbxItem.GetName() );
             if ( !m_aCurLibName.Len() || ( aDocument == m_aCurDocument && aLibName == m_aCurLibName ) )
             {
-                if ( rSbxItem.GetType() == BasicIDEType::Module )
+                if ( rSbxItem.GetType() == BASICIDE_TYPE_MODULE )
                     FindBasWin( aDocument, aLibName, aName, sal_True );
-                else if ( rSbxItem.GetType() == BasicIDEType::Dialog )
+                else if ( rSbxItem.GetType() == BASICIDE_TYPE_DIALOG )
                     FindDlgWin( aDocument, aLibName, aName, sal_True );
             }
         }
@@ -641,15 +641,15 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             String aName( rSbxItem.GetName() );
             SetCurLib( aDocument, aLibName );
             IDEBaseWindow* pWin = 0;
-            if ( rSbxItem.GetType() == BasicIDEType::Dialog )
+            if ( rSbxItem.GetType() == BASICIDE_TYPE_DIALOG )
             {
                 pWin = FindDlgWin( aDocument, aLibName, aName, sal_True );
             }
-            else if ( rSbxItem.GetType() == BasicIDEType::Module )
+            else if ( rSbxItem.GetType() == BASICIDE_TYPE_MODULE )
             {
                 pWin = FindBasWin( aDocument, aLibName, aName, sal_True );
             }
-            else if ( rSbxItem.GetType() == BasicIDEType::Method )
+            else if ( rSbxItem.GetType() == BASICIDE_TYPE_METHOD )
             {
                 pWin = FindBasWin( aDocument, aLibName, aName, sal_True );
                 ((ModulWindow*)pWin)->EditMacro( rSbxItem.GetMethodName() );
@@ -1137,7 +1137,7 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, sal_Bool bUpdateTabBar
                 BasicIDEData* pData = BasicIDEGlobals::GetExtraData();
                 if ( pData )
                 {
-                    sal_uInt16 nCurrentType = pCurWin->IsA( TYPE( ModulWindow ) ) ? BasicIDEType::Module : BasicIDEType::Dialog;
+                    sal_uInt16 nCurrentType = pCurWin->IsA( TYPE( ModulWindow ) ) ? BASICIDE_TYPE_MODULE : BASICIDE_TYPE_DIALOG;
                     LibInfoItem* pLibInfoItem = new LibInfoItem( pCurWin->GetDocument(), pCurWin->GetLibName(), pCurWin->GetName(), nCurrentType );
                     pData->GetLibInfos().InsertInfo( pLibInfoItem );
                 }
@@ -1247,14 +1247,14 @@ IDEBaseWindow* BasicIDEShell::FindWindow( const ScriptDocument& rDocument, const
     {
         if ( !pWin->IsSuspended() || bFindSuspended )
         {
-            if ( !rLibName.Len() || !rName.Len() || nType == BasicIDEType::Unknown )
+            if ( !rLibName.Len() || !rName.Len() || nType == BASICIDE_TYPE_UNKNOWN )
             {
                 // return any non-suspended window
                 return pWin;
             }
             else if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName && pWin->GetName() == rName &&
-                      ( ( pWin->IsA( TYPE( ModulWindow ) )  && nType == BasicIDEType::Module ) ||
-                        ( pWin->IsA( TYPE( DialogWindow ) ) && nType == BasicIDEType::Dialog ) ) )
+                      ( ( pWin->IsA( TYPE( ModulWindow ) )  && nType == BASICIDE_TYPE_MODULE ) ||
+                        ( pWin->IsA( TYPE( DialogWindow ) ) && nType == BASICIDE_TYPE_DIALOG ) ) )
             {
                 return pWin;
             }

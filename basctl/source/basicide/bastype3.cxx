@@ -383,27 +383,27 @@ BasicIDEType BasicTreeListBox::ConvertType( BasicEntryType eType )
     {
         case OBJ_TYPE_DOCUMENT:
         {
-            nType = BasicIDEType::Shell;
+            nType = BASICIDE_TYPE_SHELL;
         }
         break;
         case OBJ_TYPE_LIBRARY:
         {
-            nType = BasicIDEType::Library;
+            nType = BASICIDE_TYPE_LIBRARY;
         }
         break;
         case OBJ_TYPE_MODULE:
         {
-            nType = BasicIDEType::Module;
+            nType = BASICIDE_TYPE_MODULE;
         }
         break;
         case OBJ_TYPE_DIALOG:
         {
-            nType = BasicIDEType::Dialog;
+            nType = BASICIDE_TYPE_DIALOG;
         }
         break;
         case OBJ_TYPE_METHOD:
         {
-            nType = BasicIDEType::Method;
+            nType = BASICIDE_TYPE_METHOD;
         }
         break;
         default: ;
