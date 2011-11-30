@@ -189,6 +189,21 @@ void ApiFilterSettings::appendField( bool bAnd, sal_Int32 nOperator, const OUStr
     rFilterField.Values[0].StringValue = rValue;
 }
 
+void ApiFilterSettings::appendField( bool bAnd, const std::vector<rtl::OUString>& rValues )
+{
+    maFilterFields.resize( maFilterFields.size() + 1 );
+    TableFilterField3& rFilterField = maFilterFields.back();
+    rFilterField.Connection = bAnd ? FilterConnection_AND : FilterConnection_OR;
+    rFilterField.Operator = FilterOperator2::EQUAL;
+    size_t n = rValues.size();
+    rFilterField.Values.realloc(n);
+    for (size_t i = 0; i < n; ++i)
+    {
+        rFilterField.Values[i].IsNumeric = false;
+        rFilterField.Values[i].StringValue = rValues[i];
+    }
+}
+
 // ============================================================================
 
 FilterSettingsBase::FilterSettingsBase( const WorkbookHelper& rHelper ) :
@@ -276,8 +291,7 @@ ApiFilterSettings DiscreteFilter::finalizeImport( sal_Int32 nMaxCount )
         aSettings.maFilterFields.reserve( maValues.size() );
 
         // insert all filter values
-        for( FilterValueVector::iterator aIt = maValues.begin(), aEnd = maValues.end(); aIt != aEnd; ++aIt )
-            aSettings.appendField( false, FilterOperator2::EQUAL, *aIt );
+        aSettings.appendField( true, maValues );
 
         // extra field for 'show empty'
         if( mbShowBlank )

@@ -54,8 +54,9 @@ struct ApiFilterSettings
 
     explicit            ApiFilterSettings();
 
-    void                appendField( bool bAnd, sal_Int32 nOperator, double fValue );
-    void                appendField( bool bAnd, sal_Int32 nOperator, const ::rtl::OUString& rValue );
+    void appendField( bool bAnd, sal_Int32 nOperator, double fValue );
+    void appendField( bool bAnd, sal_Int32 nOperator, const ::rtl::OUString& rValue );
+    void appendField( bool bAnd, const std::vector<rtl::OUString>& rValues );
 };
 
 // ============================================================================
