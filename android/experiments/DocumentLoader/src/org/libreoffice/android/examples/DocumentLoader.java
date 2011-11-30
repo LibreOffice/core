@@ -30,13 +30,7 @@ package org.libreoffice.android.examples;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
+import android.util.Log;
 
 import com.sun.star.uno.UnoRuntime;
 
@@ -45,6 +39,8 @@ import org.libreoffice.android.Bootstrap;
 public class DocumentLoader
     extends Activity {
 
+    private static String TAG = "DocumentLoader";
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -52,15 +48,28 @@ public class DocumentLoader
 
         try {
 
-            Thread.sleep(20000);
-
             Bootstrap.setup(this);
 
             Bootstrap.dlopen("libjuh.so");
 
+            // Load more shlibs here explicitly in advance because
+            // that makes debugging work better, sigh
+            Bootstrap.dlopen("libuno_cppu.so");
+            Bootstrap.dlopen("libuno_salhelpergcc3.so");
+            Bootstrap.dlopen("libuno_cppuhelpergcc3.so");
+            Bootstrap.dlopen("libbootstrap.uno.so");
+            Bootstrap.dlopen("libgcc3_uno.so");
+            Bootstrap.dlopen("libjava_uno.so");
+            
+            Bootstrap.putenv("UNO_TYPES=file:///assets/bin/udkapi.rdb file:///assets/bin/types.rdb");
+            Bootstrap.putenv("UNO_SERVICES=file:///assets/xml/ure/services.rdb");
+            // Bootstrap.putenv("INIFILENAME=vnd.sun.star.pathname:/assets/uno.ini");
+
             com.sun.star.uno.XComponentContext xContext = null;
 
             xContext = com.sun.star.comp.helper.Bootstrap.defaultBootstrap_InitialComponentContext();
+
+            Log.i(TAG, "xContext is" + (xContext!=null ? " not" : "") + " null");
 
             com.sun.star.lang.XMultiComponentFactory xMCF =
                 xContext.getServiceManager();
@@ -68,13 +77,20 @@ public class DocumentLoader
             Object oDesktop = xMCF.createInstanceWithContext(
                 "com.sun.star.frame.Desktop", xContext);
 
+            Log.i(TAG, "oDesktop is" + (oDesktop!=null ? " not" : "") + " null");
+
             com.sun.star.frame.XComponentLoader xCompLoader =
                 (com.sun.star.frame.XComponentLoader)
                      UnoRuntime.queryInterface(
                          com.sun.star.frame.XComponentLoader.class, oDesktop);
 
-            // Getting the given starting directory
-            String sUrl = "file:///assets/inputfile.doc";
+            Log.i(TAG, "xCompLoader is" + (xCompLoader!=null ? " not" : "") + " null");
+
+            String input = getIntent().getStringExtra("input");
+            if (input == null)
+                input = "/assets/test1.odt";
+
+            String sUrl = "file://" + input;
 
             // Loading the wanted document
             com.sun.star.beans.PropertyValue propertyValues[] =

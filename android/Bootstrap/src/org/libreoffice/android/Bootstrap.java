@@ -72,6 +72,9 @@ public class Bootstrap extends NativeActivity
     // Wrapper for system()
     public static native void system(String cmdline);
 
+    // Wrapper for putenv()
+    public static native void putenv(String string);
+
     public static void setup(Activity activity)
     {
         String dataDir = null;

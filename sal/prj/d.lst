@@ -31,6 +31,8 @@ symlink: %_DEST%\lib\libuno_sal.dylib.3 %_DEST%\lib\libuno_sal.dylib
 ..\%__SRC%\lib\*.sl %_DEST%\lib\*.sl
 ..\%__SRC%\lib\*.a %_DEST%\lib\*.a
 
+..\%__SRC%\lib\liblo-bootstrap.so %_DEST%\lib\liblo-bootstrap.so
+
 ..\%__SRC%\slb\sal.lib %_DEST%\lib\xsal.lib
 
 ..\%__SRC%\bin\*.dll %_DEST%\bin\*.dll

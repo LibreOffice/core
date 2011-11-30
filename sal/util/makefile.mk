@@ -113,6 +113,10 @@ SHL1STDLIBS+= -z allextract -staticlib=Crun -z defaultextract
 SHL1STDLIBS+=-framework CoreFoundation -framework Carbon
 .ENDIF
 
+.IF "$(OS)" == "ANDROID"
+SHL1STDLIBS+=-llo-bootstrap
+.ENDIF
+
 SHL1LIBS+=$(SLB)$/$(TARGET).lib
 
 .IF "$(linkinc)" != ""

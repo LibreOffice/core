@@ -17,13 +17,9 @@ endef
 
 # The default target just builds.
 
-# lo-bootstrap.jar is used from other LO apps than the test ones we
-# include in the .apk here.
-
 all: build-ant lo-bootstrap.jar
 
-build-ndk:
-	ndk-build V=1
+copy-stuff:
 #
 # Copy shared libraries we need to libs/armeabi-v7a so that ant will
 # include them in the .apk.
@@ -31,16 +27,21 @@ build-ndk:
 # Copy them to obj/local/armeabi-v7a, too, where gdb will look for
 # them.
 #
-# First the cppunittester "program" from here, which as all "program"
+	mkdir -p $(SODEST) $(OBJLOCAL)
+#
+# First the most important one, liblo-bootstrap.so
+	$(call COPY,$(OUTDIR)/lib/liblo-bootstrap.so)
+#
+# Then the cppunittester "program". As all "program"
 # files we build for Android actually is a shared object.
-	$(call COPY,../../$(INPATH)/bin/cppunittester,libcppunittester.so)
+	$(call COPY,$(OUTDIR)/bin/cppunit/cppunittester,libcppunittester.so)
 #
 # The cppunit library
 	$(call COPY,$(OUTDIR)/lib/libcppunit-1.12.so)
 #
 # cppunit "plug-ins", first ones from sal
 #
-	$(call COPY,../../$(INPATH)/lib/*.so)
+	$(call COPY,../../sal/$(INPATH)/lib/*.so)
 #
 # and ones from other modules. Note that depending on when you try
 # this, these might not have been built yet.
@@ -101,26 +102,28 @@ build-ndk:
 		sed -e 's!uri="./!uri="$(APP_DATA_PATH)/lib/!g' <$(SRC_ROOT)/testtools/$(INPATH)/lib/$${F}.rdb >assets/lib/$${F}.rdb; \
 	done
 
-build-ant: build-ndk
+build-ant: copy-stuff
 	unset JAVA_HOME && ant debug
 
-install: build-ndk
+lo-bootstrap.jar: build-ant
+	cd bin/classes && jar cvf ../../lo-bootstrap.jar fi/iki/tml org/libreoffice/android/Bootstrap.class
+
+install: copy-stuff lo-bootstrap.jar
+	cp lo-bootstrap.jar $(OUTDIR)bin
 	unset JAVA_HOME && ant debug install
 	@echo
 	@echo 'Run it with something like what "make run" does (see Makefile)'
 	@echo
 
-lo-bootstrap.jar: build-ant
-	cd bin/classes && jar cvf ../../lo-bootstrap.jar fi/iki/tml org/libreoffice/android/Bootstrap.class
-
-run: install
+run:
 # Note: these are just examples. 
 #
 	adb shell am start -n org.libreoffice.android/.Bootstrap -e lo-main-library libcppunittester -e lo-main-cmdline "$(APP_DATA_PATH)/lib/libqa_sal_types.so"
 #
+	sleep 10
 	adb shell am start -n org.libreoffice.android/.Bootstrap -e lo-main-library libcppunittester -e lo-main-cmdline "$(APP_DATA_PATH)/lib/libtest_i18npool_test_breakiterator.so --protector libunoexceptionprotector.so unoexceptionprotector '-env:UNO_TYPES=file:///assets/bin/udkapi.rdb file:///assets/bin/types.rdb'  '-env:UNO_SERVICES=file:///assets/xml/ure/services.rdb  file:///assets/ComponentTarget/i18npool/util/i18npool.component' -env:LO_LIB_DIR=file://$(APP_DATA_PATH)/lib" 
 #
-	adb shell am start -n org.libreoffice.android/.Bootstrap -e lo-main-library libunoexe -e lo-main-cmdline "-ro /assets/lib/uno_services.rdb -ro /assets/lib/uno_types.rdb -s com.sun.star.test.bridge.BridgeTest -- com.sun.star.test.bridge.CppTestObject" -e lo-main-delay 2
+#	adb shell am start -n org.libreoffice.android/.Bootstrap -e lo-main-library libunoexe -e lo-main-cmdline "-ro /assets/lib/uno_services.rdb -ro /assets/lib/uno_types.rdb -s com.sun.star.test.bridge.BridgeTest -- com.sun.star.test.bridge.CppTestObject" -e lo-main-delay 2
 
 clean:
 	rm -rf bin assets

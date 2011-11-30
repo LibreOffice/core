@@ -43,6 +43,10 @@
 #include <sys/ldr.h>
 #endif
 
+#ifdef ANDROID
+#include <lo-bootstrap.h>
+#endif
+
 /* implemented in file.c */
 extern int UnicodeToText(char *, size_t, const sal_Unicode *, sal_Int32);
 
@@ -96,8 +100,7 @@ static sal_Bool getModulePathFromAddress(void * address, rtl_String ** path) {
     Dl_info dl_info;
 
 #ifdef ANDROID
-    int (*lo_dladdr)(void *, Dl_info *) = dlsym(RTLD_DEFAULT, "lo_dladdr");
-    result = (*lo_dladdr)(address, &dl_info);
+    result = lo_dladdr(address, &dl_info);
 #else
     result = dladdr(address, &dl_info);
 #endif

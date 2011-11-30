@@ -434,6 +434,22 @@ Java_org_libreoffice_android_Bootstrap_system(JNIEnv* env,
     (*env)->ReleaseStringUTFChars(env, cmdline, s);
 }
 
+// public static native void putenv(String string);
+
+void
+Java_org_libreoffice_android_Bootstrap_putenv(JNIEnv* env,
+                                              jobject clazz,
+                                              jstring string)
+{
+    const jbyte *s = (*env)->GetStringUTFChars(env, string, NULL);
+
+    LOGI("putenv(%s)", s);
+
+    putenv(s);
+
+    (*env)->ReleaseStringUTFChars(env, string, s);
+}
+
 char **
 lo_dlneeds(const char *library)
 {

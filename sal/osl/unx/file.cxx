@@ -56,6 +56,10 @@
 
 #endif /* MACOSX */
 
+#ifdef ANDROID
+#include <lo-bootstrap.h>
+#endif
+
 #ifdef DEBUG_OSL_FILE
 #   define OSL_FILE_TRACE osl_trace
 #   define PERROR( a, b ) perror( a ); fprintf( stderr, b )
@@ -917,8 +921,7 @@ SAL_CALL osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uIn
     {
         void *address;
         size_t size;
-        void *(*lo_apkentry)(const char *, size_t *) = (void *(*)(const char *, size_t *)) dlsym(RTLD_DEFAULT, "lo_apkentry");
-        address = (*lo_apkentry)(buffer, &size);
+        address = lo_apkentry(buffer, &size);
         return osl_openMemoryAsFile(address, size, pHandle);
     }
 #endif

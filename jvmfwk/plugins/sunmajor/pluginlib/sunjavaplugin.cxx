@@ -64,6 +64,10 @@
 #include "vendorlist.hxx"
 #include "diagnostics.h"
 
+#ifdef ANDROID
+#include <lo-bootstrap.h>
+#endif
+
 #if defined HAVE_VALGRIND_H
 #include <valgrind.h>
 #else
@@ -758,10 +762,8 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     (void) cOptions;
     // On Android we always have a Java VM as we only expect this code
     // to be run in an Android app anyway.
-    struct JNIInvokeInterface* * (*lo_get_javavm)(void) = (struct JNIInvokeInterface* * (*)(void)) dlsym(RTLD_DEFAULT, "lo_get_javavm");
-    fprintf(stderr, "Got lo_get_javavm = %p", lo_get_javavm);
-    *ppVm = (JavaVM *) (*lo_get_javavm)();
-    fprintf(stderr, "lo_get_javavm returns %p", (*lo_get_javavm)());
+    *ppVm = lo_get_javavm();
+    fprintf(stderr, "lo_get_javavm returns %p", *ppVm);
 #endif
 
    return errcode;

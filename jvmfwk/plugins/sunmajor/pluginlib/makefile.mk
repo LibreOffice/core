@@ -69,6 +69,9 @@ SHL1STDLIBS= \
         $(SALHELPERLIB) \
         $(SALLIB)
         
+.IF "$(OS)" == "ANDROID"
+SHL1STDLIBS+=-llo-bootstrap
+.ENDIF
 
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"!="GCC"
