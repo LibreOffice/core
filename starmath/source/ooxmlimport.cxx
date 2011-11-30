@@ -29,6 +29,7 @@
 
 #include "ooxmlimport.hxx"
 
+#include <comphelper/string.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
 
@@ -81,6 +82,12 @@ OUString SmOoxmlImport::handleStream()
         ret += item;
     }
     stream.ensureClosingTag( M_TOKEN( oMath ));
+    // Placeholders are written out as nothing (i.e. nothing inside e.g. the <e> element),
+    // which will result in "{}" in the formula text. Fix this up.
+    ret = comphelper::string::searchAndReplaceAllAsciiWithAscii( ret, "{}", "<?>" );
+    // And as a result, empty parts of the formula that are not placeholders are written out
+    // as a single space, so fix that up too.
+    ret = comphelper::string::searchAndReplaceAllAsciiWithAscii( ret, "{ }", "{}" );
     fprintf(stderr, "FORMULA: %s\n", rtl::OUStringToOString( ret, RTL_TEXTENCODING_UTF8 ).getStr());
     return ret;
 }
@@ -404,11 +411,11 @@ OUString SmOoxmlImport::handleLimLowUpp( LimLowUpp_t limlowupp )
     OUString e = readOMathArgInElement( M_TOKEN( e ));
     OUString lim = readOMathArgInElement( M_TOKEN( lim ));
     stream.ensureClosingTag( token );
-    // fix up overbrace/underbrace
-    if( limlowupp == LimUpp && e.endsWithAsciiL( RTL_CONSTASCII_STRINGPARAM( " overbrace {}" )))
-        return e.copy( 0, e.getLength() - 1 ) + lim + STR( "}" );
-    if( limlowupp == LimLow && e.endsWithAsciiL( RTL_CONSTASCII_STRINGPARAM( " underbrace {}" )))
-        return e.copy( 0, e.getLength() - 1 ) + lim + STR( "}" );
+    // fix up overbrace/underbrace  (use { }, as {} will be converted to a placeholder)
+    if( limlowupp == LimUpp && e.endsWithAsciiL( RTL_CONSTASCII_STRINGPARAM( " overbrace { }" )))
+        return e.copy( 0, e.getLength() - 2 ) + lim + STR( "}" );
+    if( limlowupp == LimLow && e.endsWithAsciiL( RTL_CONSTASCII_STRINGPARAM( " underbrace { }" )))
+        return e.copy( 0, e.getLength() - 2 ) + lim + STR( "}" );
     return e + ( limlowupp == LimLow ? STR( " csub {" ) : STR( " csup {" )) + lim + STR( "}" );
 }
 
@@ -435,9 +442,9 @@ OUString SmOoxmlImport::handleGroupChr()
     OUString e = readOMathArgInElement( M_TOKEN( e ));
     stream.ensureClosingTag( M_TOKEN( groupChr ));
     if( pos == top && chr == sal_Unicode( 0x23de ))
-        return STR( "{" ) + e + STR( "} overbrace {}" );
+        return STR( "{" ) + e + STR( "} overbrace { }" );
     if( pos == bot && chr == sal_Unicode( 0x23df ))
-        return STR( "{" ) + e + STR( "} underbrace {}" );
+        return STR( "{" ) + e + STR( "} underbrace { }" );
     if( pos == top )
         return STR( "{" ) + e + STR( "} csup {" ) + OUString( chr ) + STR( "}" );
     else
