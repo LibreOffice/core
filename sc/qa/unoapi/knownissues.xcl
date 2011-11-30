@@ -215,3 +215,7 @@ sc.ScDataPilotFieldObj::com::sun::star::sheet::DataPilotField
 
 ### fdo43309 ###
 sc.ScCellRangeObj::com::sun::star::chart::XChartData
+
+### fdo43376 ###
+sc.ScDDELinksObj
+sc.ScDDELinkObj
