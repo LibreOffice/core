@@ -544,7 +544,7 @@ void SmOoxmlExport::HandleSubSupScript( const SmSubSupNode* pNode, int nLevel )
             | ( pNode->GetSubSup( CSUP ) != NULL ? ( 1 << CSUP ) : 0 )
             | ( pNode->GetSubSup( RSUB ) != NULL ? ( 1 << RSUB ) : 0 )
             | ( pNode->GetSubSup( RSUP ) != NULL ? ( 1 << RSUP ) : 0 )
-            | ( pNode->GetSubSup( LSUB ) != NULL ? ( 1 << RSUB ) : 0 )
+            | ( pNode->GetSubSup( LSUB ) != NULL ? ( 1 << LSUB ) : 0 )
             | ( pNode->GetSubSup( LSUP ) != NULL ? ( 1 << LSUP ) : 0 );
     if( flags == 0 ) // none
         return;
@@ -601,7 +601,7 @@ void SmOoxmlExport::HandleSubSupScriptInternal( const SmSubSupNode* pNode, int n
         m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
         HandleNode( pNode->GetBody(), nLevel + 1 );
         m_pSerializer->endElementNS( XML_m, XML_e );
-        m_pSerializer->endElementNS( XML_m, XML_sSubSup );
+        m_pSerializer->endElementNS( XML_m, XML_sPre );
     }
     else
     {
