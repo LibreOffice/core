@@ -85,7 +85,6 @@ OUString SmOoxmlImport::handleStream()
     return ret;
 }
 
-
 OUString SmOoxmlImport::readOMathArg()
 {
     OUString ret;
@@ -139,6 +138,14 @@ OUString SmOoxmlImport::readOMathArg()
                 break;
         }
     }
+    return ret;
+}
+
+OUString SmOoxmlImport::readOMathArgInElement( int token )
+{
+    stream.ensureOpeningTag( token );
+    OUString ret = readOMathArg();
+    stream.ensureClosingTag( token );
     return ret;
 }
 
@@ -200,7 +207,7 @@ OUString SmOoxmlImport::handleAcc()
             fprintf( stderr, "Unknown m:chr in m:acc '%d'\n", accChr );
             break;
     }
-    OUString e = handleE();
+    OUString e = readOMathArgInElement( M_TOKEN( e ));
     stream.ensureClosingTag( M_TOKEN( acc ));
     return acc + STR( " { " ) + e + STR( " }" );
 }
@@ -221,7 +228,7 @@ OUString SmOoxmlImport::handleBar()
         }
         stream.ensureClosingTag( M_TOKEN( barPr ));
     }
-    OUString e = handleE();
+    OUString e = readOMathArgInElement( M_TOKEN( e ));
     stream.ensureClosingTag( M_TOKEN( bar ));
     if( topbot == top )
         return STR( "bar { " ) + e + STR( " }" );
@@ -243,7 +250,7 @@ OUString SmOoxmlImport::handleBorderBox()
         }
         stream.ensureClosingTag( M_TOKEN( borderBoxPr ));
     }
-    OUString e = handleE();
+    OUString e = readOMathArgInElement( M_TOKEN( e ));
     stream.ensureClosingTag( M_TOKEN( borderBox ));
     if( isStrikeH )
         return STR( "overstrike { " ) + e + STR( " }" );
@@ -311,19 +318,11 @@ OUString SmOoxmlImport::handleD()
         if( !first )
             ret.append( separator );
         first = false;
-        ret.append( handleE());
+        ret.append( readOMathArgInElement( M_TOKEN( e )));
     }
     ret.append( closing );
     stream.ensureClosingTag( M_TOKEN( d ));
     return ret.makeStringAndClear();
-}
-
-OUString SmOoxmlImport::handleE()
-{
-    stream.ensureOpeningTag( M_TOKEN( e ));
-    OUString ret = readOMathArg();
-    stream.ensureClosingTag( M_TOKEN( e ));
-    return ret;
 }
 
 OUString SmOoxmlImport::handleF()
@@ -345,12 +344,8 @@ OUString SmOoxmlImport::handleF()
         }
         stream.ensureClosingTag( M_TOKEN( fPr ));
     }
-    stream.ensureOpeningTag( M_TOKEN( num ));
-    OUString num = readOMathArg();
-    stream.ensureClosingTag( M_TOKEN( num ));
-    stream.ensureOpeningTag( M_TOKEN( den ));
-    OUString den = readOMathArg();
-    stream.ensureClosingTag( M_TOKEN( den ));
+    OUString num = readOMathArgInElement( M_TOKEN( num ));
+    OUString den = readOMathArgInElement( M_TOKEN( den ));
     stream.ensureClosingTag( M_TOKEN( f ));
     if( operation == bar )
         return STR( "{" ) + num + STR( "} over {" ) + den + STR( "}" );
@@ -367,13 +362,11 @@ OUString SmOoxmlImport::handleFunc()
 {
 //lim from{x rightarrow 1} x
     stream.ensureOpeningTag( M_TOKEN( func ));
-    stream.ensureOpeningTag( M_TOKEN( fName ));
-    OUString fname = readOMathArg();
-    stream.ensureClosingTag( M_TOKEN( fName ));
+    OUString fname = readOMathArgInElement( M_TOKEN( fName ));
     // fix the various functions
     if( fname.match( STR( "lim {" ), 0 )) // startsWith()
         fname = STR( "lim from {" ) + fname.copy( 5 );
-    OUString ret = fname + STR( " {" ) + handleE() + STR( "}" );
+    OUString ret = fname + STR( " {" ) + readOMathArgInElement( M_TOKEN( e )) + STR( "}" );
     stream.ensureClosingTag( M_TOKEN( func ));
     return ret;
 }
@@ -382,10 +375,8 @@ OUString SmOoxmlImport::handleLimLowUpp( LimLowUpp_t limlowupp )
 {
     int token = limlowupp == LimLow ? M_TOKEN( limLow ) : M_TOKEN( limUpp );
     stream.ensureOpeningTag( token );
-    OUString e = handleE();
-    stream.ensureOpeningTag( M_TOKEN( lim ));
-    OUString lim = readOMathArg();
-    stream.ensureClosingTag( M_TOKEN( lim ));
+    OUString e = readOMathArgInElement( M_TOKEN( e ));
+    OUString lim = readOMathArgInElement( M_TOKEN( lim ));
     stream.ensureClosingTag( token );
     return e + STR( " {" ) + lim + STR( "}" );
 }
@@ -404,7 +395,8 @@ OUString SmOoxmlImport::handleGroupChr()
         }
         stream.ensureClosingTag( M_TOKEN( groupChrPr ));
     }
-    OUString ret = STR( "{ " ) + handleE() + ( pos == top ? STR( "} overbrace" ) : STR( "} underbrace" ));
+    OUString ret = STR( "{ " ) + readOMathArgInElement( M_TOKEN( e ))
+        + ( pos == top ? STR( "} overbrace" ) : STR( "} underbrace" ));
     stream.ensureClosingTag( M_TOKEN( groupChr ));
     return ret;
 }
@@ -421,7 +413,7 @@ OUString SmOoxmlImport::handleM()
         {
             if( !row.isEmpty())
                 row += STR( " # " );
-            row += handleE();
+            row += readOMathArgInElement( M_TOKEN( e ));
         } while( !stream.atEnd() && stream.currentToken() == OPENING( M_TOKEN( e )));
         if( !allrows.isEmpty())
             allrows += STR( " ## " );
@@ -457,13 +449,9 @@ OUString SmOoxmlImport::handleNary()
         }
         stream.ensureClosingTag( M_TOKEN( naryPr ));
     }
-    stream.ensureOpeningTag( M_TOKEN( sub ));
-    OUString sub = readOMathArg();
-    stream.ensureClosingTag( M_TOKEN( sub ));
-    stream.ensureOpeningTag( M_TOKEN( sup ));
-    OUString sup = readOMathArg();
-    stream.ensureClosingTag( M_TOKEN( sup ));
-    OUString e = handleE();
+    OUString sub = readOMathArgInElement( M_TOKEN( sub ));
+    OUString sup = readOMathArgInElement( M_TOKEN( sup ));
+    OUString e = readOMathArgInElement( M_TOKEN( e ));
     OUString ret;
     switch( chr )
     {
@@ -554,10 +542,8 @@ OUString SmOoxmlImport::handleRad()
         }
         stream.ensureClosingTag( M_TOKEN( radPr ));
     }
-    stream.ensureOpeningTag( M_TOKEN( deg ));
-    OUString deg = readOMathArg();
-    stream.ensureClosingTag( M_TOKEN( deg ));
-    OUString e = handleE();
+    OUString deg = readOMathArgInElement( M_TOKEN( deg ));
+    OUString e = readOMathArgInElement( M_TOKEN( e ));
     stream.ensureClosingTag( M_TOKEN( rad ));
     if( degHide )
         return STR( "sqrt {" ) + e + STR( "}" );
