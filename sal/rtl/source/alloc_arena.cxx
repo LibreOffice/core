@@ -30,7 +30,6 @@
 #include "alloc_arena.hxx"
 
 #include "alloc_impl.hxx"
-#include "internal/once.h"
 #include "internal/rtllifecycle.h"
 #include "sal/macros.h"
 #include "osl/diagnose.h"

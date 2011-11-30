@@ -29,7 +29,6 @@
 #include "alloc_cache.hxx"
 #include "alloc_impl.hxx"
 #include "alloc_arena.hxx"
-#include "internal/once.h"
 #include "internal/rtllifecycle.h"
 #include "sal/macros.h"
 #include "osl/diagnose.h"
