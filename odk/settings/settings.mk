@@ -51,7 +51,6 @@ EXE_EXT=.exe
 COPY=copy
 SHAREDLIB_EXT=dll
 SHAREDLIB_OUT=$(OUT_BIN)
-PACKAGE_LIB_DIR=windows.plt
 UNOPKG_PLATFORM=Windows
 
 OSEP=^<
@@ -133,18 +132,15 @@ PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)$(shell /usr/ccs/bin/elf
 
 ifeq "$(PROCTYPE)" "sparc"
 PLATFORM=solsparc
-PACKAGE_LIB_DIR=solaris_sparc.plt
 UNOPKG_PLATFORM=Solaris_SPARC
 JAVA_PROC_TYPE=sparc
 else
 ifeq "$(PROCTYPE)" "sparc64"
 PLATFORM=solsparc
-PACKAGE_LIB_DIR=solaris_sparc64.plt
 UNOPKG_PLATFORM=Solaris_SPARC64
 JAVA_PROC_TYPE=sparcv9
 else
 PLATFORM=solintel
-PACKAGE_LIB_DIR=solaris_x86.plt
 UNOPKG_PLATFORM=Solaris_x86
 JAVA_PROC_TYPE=i386
 endif
@@ -243,24 +239,20 @@ ifneq (,$(findstring linux,$(PLATFORM)))
 PROCTYPE := $(shell $(PRJ)/config.guess | cut -d "-" -f1 | sed -e 's/^i.86$$/i386/')
 PLATFORM=linux
 
-PACKAGE_LIB_DIR=linux_$(PROCTYPE).plt
 UNOPKG_PLATFORM=Linux_$(PROCTYPE)
 JAVA_PROC_TYPE=$(PROCTYPE)
 
 ifeq "$(PROCTYPE)" "i386"
-PACKAGE_LIB_DIR=linux_x86.plt
 UNOPKG_PLATFORM=Linux_x86
 JAVA_PROC_TYPE=i386
 endif
 
 ifeq "$(PROCTYPE)" "powerpc"
-PACKAGE_LIB_DIR=linux_powerpc.plt
 UNOPKG_PLATFORM=Linux_PowerPC
 JAVA_PROC_TYPE=ppc
 endif
 
 ifeq "$(PROCTYPE)" "sparc"
-PACKAGE_LIB_DIR=linux_sparc.plt
 UNOPKG_PLATFORM=Linux_SPARC
 JAVA_PROC_TYPE=sparc
 endif
@@ -376,16 +368,13 @@ PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)
 PLATFORM=macosx
 
 ifeq "$(PROCTYPE)" "i386"
-PACKAGE_LIB_DIR=macosx_x86.plt
 UNOPKG_PLATFORM=MacOSX_x86
 JAVA_PROC_TYPE=x86
 else
 ifeq "$(PROCTYPE)" "x86_64"
-PACKAGE_LIB_DIR=macosx_x86.plt
 UNOPKG_PLATFORM=MacOSX_x86
 JAVA_PROC_TYPE=x86
 else
-PACKAGE_LIB_DIR=macosx_ppc.plt
 UNOPKG_PLATFORM=MacOSX_PowerPC
 JAVA_PROC_TYPE=ppc
 endif
@@ -500,19 +489,15 @@ PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)
 ifeq (kfreebsd,$(findstring kfreebsd,$(PLATFORM)))
 PLATFORM=kfreebsd
 ifeq "$(PROCTYPE)" "x86_64"
-PACKAGE_LIB_DIR=kfreebsd_x86_64.plt
 UNOPKG_PLATFORM=kFreeBSD_x86_64
 else
-PACKAGE_LIB_DIR=kfreebsd_x86.plt
 UNOPKG_PLATFORM=kFreeBSD_x86
 endif
 else
 PLATFORM=freebsd
 ifeq "$(PROCTYPE)" "x86_64"
-PACKAGE_LIB_DIR=freebsd_x86_64.plt
 UNOPKG_PLATFORM=FreeBSD_x86_64
 else
-PACKAGE_LIB_DIR=freebsd_x86.plt
 UNOPKG_PLATFORM=FreeBSD_x86
 endif
 endif
