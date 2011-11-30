@@ -318,7 +318,7 @@ sal_Bool Date::IsLeapYear() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool Date::IsValid() const
+sal_Bool Date::IsValidAndGregorian() const
 {
     sal_uInt16 nDay   = GetDay();
     sal_uInt16 nMonth = GetMonth();

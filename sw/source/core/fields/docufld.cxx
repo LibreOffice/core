@@ -994,7 +994,7 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
             else
                 break;
 
-            if (aDate.IsValid())
+            if (aDate.IsValidAndGregorian())
             {
                 switch (nExtSub & ~DI_SUB_FIXED)
                 {

@@ -148,7 +148,7 @@ SfxItemPresentation SfxDateTimeItem::GetPresentation
 )   const
 {
     DBG_CHKTHIS(SfxDateTimeItem, 0);
-    if (aDateTime.IsValid())
+    if (aDateTime.IsValidAndGregorian())
         if (pIntlWrapper)
         {
             rText = pIntlWrapper->getLocaleData()->getDate(aDateTime);

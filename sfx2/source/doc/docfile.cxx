@@ -2969,7 +2969,7 @@ void SfxMedium::SetExpired_Impl( const DateTime& rDateTime )
 
 sal_Bool SfxMedium::IsExpired() const
 {
-    return pImp->aExpireTime.IsValid() && pImp->aExpireTime < DateTime();
+    return pImp->aExpireTime.IsValidAndGregorian() && pImp->aExpireTime < DateTime();
 }
 //----------------------------------------------------------------
 

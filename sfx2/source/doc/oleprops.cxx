@@ -634,7 +634,7 @@ void SfxOleFileTimeProperty::ImplSave( SvStream& rStrm )
     // invalid time stamp is not converted to UTC
     // heuristic to detect editing durations (which we assume to be < 1 year):
     // check only the year, not the entire date
-    if( aDateTimeUtc.IsValid()
+    if( aDateTimeUtc.IsValidAndGregorian()
         && aDateTimeUtc.GetYear() != TIMESTAMP_INVALID_DATETIME.GetYear() ) {
             aDateTimeUtc.ConvertToUTC();
     }

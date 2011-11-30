@@ -175,7 +175,7 @@ OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotatio
         if (aDate == Date(Date()-1))
             sRet = sRet + String(SdResId(STR_ANNOTATION_YESTERDAY));
         else
-        if (aDate.IsValid() )
+        if (aDate.IsValidAndGregorian() )
             sRet = sRet + rLocalData.getDate(aDate);
 
         Time aTime( aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.HundredthSeconds );

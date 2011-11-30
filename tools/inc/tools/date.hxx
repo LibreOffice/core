@@ -80,7 +80,11 @@ public:
     sal_uInt16          GetDaysInMonth() const;
     sal_uInt16          GetDaysInYear() const { return (IsLeapYear()) ? 366 : 365; }
     sal_Bool            IsLeapYear() const;
-    sal_Bool            IsValid() const;
+    /** If the represented date is valid (1<=month<=12, 1<=day<=(28,29,30,31)
+        depending on month/year) AND is of the Gregorian calendar (1582-10-15
+        <= date) (AND implicitly date <= 9999-12-31 due to internal
+        representation) */
+    sal_Bool            IsValidAndGregorian() const;
 
     sal_Bool            IsBetween( const Date& rFrom, const Date& rTo ) const
                         { return ((nDate >= rFrom.nDate) &&

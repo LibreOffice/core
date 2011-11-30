@@ -1309,7 +1309,7 @@ static sal_Bool ImplDateGetValue( const XubString& rStr, Date& rDate, ExtDateFie
 
     Date aNewDate( nDay, nMonth, nYear );
     DateFormatter::ExpandCentury( aNewDate, utl::MiscCfg().GetYear2000() );
-    if ( aNewDate.IsValid() )
+    if ( aNewDate.IsValidAndGregorian() )
     {
         rDate = aNewDate;
         return sal_True;
