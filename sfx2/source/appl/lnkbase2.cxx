@@ -31,6 +31,7 @@
 #include <sot/exchange.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <vcl/msgbox.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <vcl/svapp.hxx>
@@ -40,6 +41,7 @@
 #include <tools/debug.hxx>
 #include <svl/svdde.hxx>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 namespace sfx2
@@ -526,12 +528,14 @@ void SvBaseLink::Closed()
         xObj->RemoveAllDataAdvise( this );
 }
 
-FileDialogHelper* SvBaseLink::GetFileDialog( sal_uInt32 nFlags, const String& rFactory ) const
+FileDialogHelper & SvBaseLink::GetInsertFileDialog(const String& rFactory) const
 {
     if ( pImpl->m_pFileDlg )
         delete pImpl->m_pFileDlg;
-    pImpl->m_pFileDlg = new FileDialogHelper( nFlags, rFactory );
-    return pImpl->m_pFileDlg;
+    pImpl->m_pFileDlg = new FileDialogHelper(
+            ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+            SFXWB_INSERT, rFactory);
+    return *pImpl->m_pFileDlg;
 }
 
 ImplDdeItem::~ImplDdeItem()

@@ -173,7 +173,7 @@ public:
     void            clearStreamToLoadFrom();
 
     inline sal_Bool         WasLastEditOK() const       { return bWasLastEditOK; }
-    FileDialogHelper*   GetFileDialog( sal_uInt32 nFlags, const String& rFactory ) const;
+    FileDialogHelper & GetInsertFileDialog(const String& rFactory) const;
 };
 
 SV_DECL_IMPL_REF(SvBaseLink);
