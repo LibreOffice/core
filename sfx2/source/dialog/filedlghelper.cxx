@@ -919,7 +919,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mbHasVersions           = sal_False;
     mbHasPreview            = sal_False;
     mbShowPreview           = sal_False;
-    mbHasLink               = sal_False;
+    mbAddGraphicFilter      = SFXWB_GRAPHIC == (nFlags & SFXWB_GRAPHIC);
     mbDeleteMatcher         = sal_False;
     mbInsert                = SFXWB_INSERT == ( nFlags & SFXWB_INSERT );
     mbExport                = SFXWB_EXPORT == ( nFlags & SFXWB_EXPORT );
@@ -1016,7 +1016,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
             case FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE:
                 nTemplateDescription = TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE;
                 mbHasPreview = sal_True;
-                mbHasLink = sal_True;
 
                 // aPreviewTimer
                 maPreViewTimer.SetTimeout( 500 );
@@ -1035,7 +1034,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
             case FILEOPEN_LINK_PREVIEW:
                 nTemplateDescription = TemplateDescription::FILEOPEN_LINK_PREVIEW;
                 mbHasPreview = sal_True;
-                mbHasLink = sal_True;
                 // aPreviewTimer
                 maPreViewTimer.SetTimeout( 500 );
                 maPreViewTimer.SetTimeoutHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
@@ -1105,8 +1103,10 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     if ( nFlags & SFXWB_MULTISELECTION )
         mxFileDlg->setMultiSelectionMode( sal_True );
 
-    if ( mbHasLink )        // generate graphic filter only on demand
+    if (mbAddGraphicFilter) // generate graphic filter only on demand
+    {
         addGraphicFilter();
+    }
 
     // Export dialog
     if ( mbExport )

@@ -96,7 +96,7 @@ namespace sfx2
         sal_Bool                    m_bHaveFilterOptions    : 1;
         sal_Bool                    mbHasVersions           : 1;
         sal_Bool                    mbHasAutoExt            : 1;
-        sal_Bool                    mbHasLink               : 1;
+        sal_Bool                    mbAddGraphicFilter      : 1;
         sal_Bool                    mbHasPreview            : 1;
         sal_Bool                    mbShowPreview           : 1;
         sal_Bool                    mbIsSaveDlg             : 1;
