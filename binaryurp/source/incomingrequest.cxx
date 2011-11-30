@@ -87,7 +87,7 @@ void IncomingRequest::execute() const {
         try {
             try {
                 isExc = !execute_throw(&ret, &outArgs);
-            } catch (std::exception & e) {
+            } catch (const std::exception & e) {
                 throw css::uno::RuntimeException(
                     (rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM("caught C++ exception: ")) +
@@ -96,7 +96,7 @@ void IncomingRequest::execute() const {
                     css::uno::Reference< css::uno::XInterface >());
                     // best-effort string conversion
             }
-        } catch (css::uno::RuntimeException &) {
+        } catch (const css::uno::RuntimeException &) {
             css::uno::Any exc(cppu::getCaughtException());
             ret = bridge_->mapCppToBinaryAny(exc);
             isExc = true;
@@ -104,7 +104,7 @@ void IncomingRequest::execute() const {
         if (resetCc) {
             current_context::set(oldCc);
         }
-    } catch (css::uno::RuntimeException &) {
+    } catch (const css::uno::RuntimeException &) {
         css::uno::Any exc(cppu::getCaughtException());
         ret = bridge_->mapCppToBinaryAny(exc);
         isExc = true;
@@ -115,12 +115,12 @@ void IncomingRequest::execute() const {
             bridge_->getWriter()->queueReply(
                 tid_, member_, setter_, isExc, ret, outArgs, false);
             return;
-        } catch (css::uno::RuntimeException & e) {
+        } catch (const css::uno::RuntimeException & e) {
             OSL_TRACE(
                 OSL_LOG_PREFIX "caught UNO runtime exception '%s'",
                 (rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).
                  getStr()));
-        } catch (std::exception & e) {
+        } catch (const std::exception & e) {
             OSL_TRACE(OSL_LOG_PREFIX "caught C++ exception '%s'", e.what());
         }
         bridge_->terminate();
@@ -162,7 +162,7 @@ bool IncomingRequest::execute_throw(
             if (prov.is()) {
                 try {
                     ifc = prov->getInstance(oid_);
-                } catch (css::container::NoSuchElementException & e) {
+                } catch (const css::container::NoSuchElementException & e) {
                     OSL_TRACE(
                         (OSL_LOG_PREFIX "initial element '%s':"
                          " NoSuchElementException '%s'"),

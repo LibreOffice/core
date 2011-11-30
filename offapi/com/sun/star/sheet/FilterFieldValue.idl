@@ -25,23 +25,28 @@
  * instead of those above.
  */
 
-#ifndef __com_sun_star_sheet_XSelectedSheetsSupplier_idl__
-#define __com_sun_star_sheet_XSelectedSheetsSupplier_idl__
+#ifndef __com_sun_star_sheet_FilterFieldValue_idl__
+#define __com_sun_star_sheet_FilterFieldValue_idl__
 
-#include <com/sun/star/uno/XInterface.idl>
-
-module com { module sun { module star { module sheet {
+module com {  module sun {  module star {  module sheet {
 
 /**
  * @since LibreOffice 3.5
  */
-interface XSelectedSheetsSupplier: com::sun::star::uno::XInterface
+struct FilterFieldValue
 {
-    /**
-       returns the indices of currently selected sheets.  Sheet indices are
-       0-based.
+    /** selects whether the <member>TableFilterFieldValue::NumericValue</member>
+        or the <member>TableFilterFieldValue::StringValue</member> is used.
      */
-    sequence<long> getSelectedSheets();
+    boolean IsNumeric;
+
+    /** specifies a numeric value for the condition.
+     */
+    double NumericValue;
+
+    /** specifies a string value for the condition.
+     */
+    string StringValue;
 };
 
 }; }; }; };

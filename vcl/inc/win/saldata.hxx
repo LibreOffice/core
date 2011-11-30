@@ -245,7 +245,7 @@ bool ImplIsFontAvailable( HDC hDC, const UniString& rName );
 
 // \WIN\SOURCE\APP\SALDATA.CXX
 rtl_TextEncoding ImplSalGetSystemEncoding();
-ByteString ImplSalGetWinAnsiString( const UniString& rStr, sal_Bool bFileName = FALSE );
+rtl::OString ImplSalGetWinAnsiString( const UniString& rStr, sal_Bool bFileName = FALSE );
 UniString ImplSalGetUniString( const sal_Char* pStr, xub_StrLen nLen = STRING_LEN );
 int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 

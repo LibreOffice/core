@@ -927,14 +927,15 @@ sal_Bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
             memset( &rFDesc1, 0, sizeof( FILEDESCRIPTOR ) );
             rFDesc1.dwFlags = FD_LINKUI;
 
-            ByteString aStr( rBmk.GetDescription(), eSysCSet );
-            for( sal_uInt16 nChar = 0; nChar < aStr.Len(); ++nChar )
-                if( strchr( "\\/:*?\"<>|", aStr.GetChar( nChar ) ) )
-                    aStr.Erase( nChar--, 1 );
+            rtl::OStringBuffer aStr(rtl::OUStringToOString(
+                rBmk.GetDescription(), eSysCSet));
+            for( sal_uInt16 nChar = 0; nChar < aStr.getLength(); ++nChar )
+                if( strchr( "\\/:*?\"<>|", aStr[nChar] ) )
+                    aStr.remove(nChar--, 1);
 
-            aStr.Insert( "Shortcut to ", 0 );
-            aStr += ".URL";
-            strcpy( rFDesc1.cFileName, aStr.GetBuffer() );
+            aStr.insert(0, RTL_CONSTASCII_STRINGPARAM("Shortcut to "));
+            aStr.append(RTL_CONSTASCII_STRINGPARAM(".URL"));
+            strcpy( rFDesc1.cFileName, aStr.getStr() );
 
             maAny <<= aSeq;
         }

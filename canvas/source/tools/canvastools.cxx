@@ -916,7 +916,7 @@ namespace canvas
                     o_rxParams[ 1 ] = uno::makeAny( xPropSet->getPropertyValue(
                                                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DeviceHandle") ) ) );
                 }
-                catch( uno::Exception& )
+                catch( const uno::Exception& )
                 {
                     // ignore, but return empty sequence
                 }

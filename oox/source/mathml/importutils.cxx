@@ -31,10 +31,24 @@
 #include <assert.h>
 #include <stdio.h>
 
+#include <oox/token/namespacemap.hxx>
+#include <oox/token/tokenmap.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
+#include <rtl/string.hxx>
+
+// *sigh*
+#define STR( str ) OUString( RTL_CONSTASCII_USTRINGPARAM( str ))
+#define CSTR( str ) ( rtl::OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr())
+
+
+// HACK - TODO convert to the real debug stuff
+#undef SAL_LOG_LEVEL
+#define SAL_LOG_LEVEL 2
+
 
 using namespace com::sun::star;
+using rtl::OUString;
 
 namespace oox
 {
@@ -67,6 +81,40 @@ AttributeListBuilder::AttributeListBuilder( const uno::Reference< xml::sax::XFas
         attrs[ pFastAttr[ i ].Token ] = pFastAttr[ i ].Value;
     }
 }
+
+static OUString tokenToString( int token )
+{
+    OUString tokenname = StaticTokenMap::get().getUnicodeTokenName( token & TOKEN_MASK );
+    if( tokenname.isEmpty())
+        tokenname = STR( "???" );
+    int nmsp = ( token & NMSP_MASK & ~( TAG_OPENING | TAG_CLOSING ));
+#if 0 // this is awfully long
+    OUString namespacename = StaticNamespaceMap::get().count( nmsp ) != 0
+        ? StaticNamespaceMap::get()[ nmsp ] : STR( "???" );
+#else
+    OUString namespacename;
+    // only few are needed actually
+    switch( nmsp )
+    {
+        case NMSP_officeMath:
+            namespacename = STR( "m" );
+            break;
+        case NMSP_doc:
+            namespacename = STR( "w" );
+            break;
+        default:
+            namespacename = STR( "?" );
+            break;
+    }
+#endif
+    if( token == OPENING( token ))
+        return STR( "<" ) + namespacename + STR( ":" ) + tokenname + STR ( ">" );
+    if( token == CLOSING( token ))
+        return STR( "</" ) + namespacename + STR( ":" ) + tokenname + STR ( ">" );
+    // just the name itself, not specified whether opening or closing
+    return namespacename + STR( ":" ) + tokenname;
+}
+
 } // namespace
 
 bool XmlStream::AttributeList::hasAttribute( int token ) const
@@ -93,8 +141,22 @@ bool XmlStream::AttributeList::attribute( int token, bool def ) const
         if( find->second.equalsIgnoreAsciiCaseAscii( "false" ) || find->second.equalsIgnoreAsciiCaseAscii( "off" )
             || find->second.equalsIgnoreAsciiCaseAscii( "f" ) || find->second.equalsIgnoreAsciiCaseAscii( "0" ))
             return false;
-        fprintf( stderr, "Cannot convert \'%s\' to bool.\n",
-            rtl::OUStringToOString( find->second, RTL_TEXTENCODING_UTF8 ).getStr());
+        fprintf( stderr, "Cannot convert \'%s\' to bool.\n", CSTR( find->second ));
+    }
+    return def;
+}
+
+sal_Unicode XmlStream::AttributeList::attribute( int token, sal_Unicode def ) const
+{
+    std::map< int, rtl::OUString >::const_iterator find = attrs.find( token );
+    if( find != attrs.end())
+    {
+        if( find->second.getLength() >= 1 )
+        {
+            if( find->second.getLength() != 1 )
+                fprintf( stderr, "Cannot convert \'%s\' to sal_Unicode, stripping.\n", CSTR( find->second ));
+            return find->second[ 0 ];
+        }
     }
     return def;
 }
@@ -146,23 +208,34 @@ void XmlStream::moveToNextTag()
 
 XmlStream::Tag XmlStream::ensureOpeningTag( int token )
 {
-    return checkTag( OPENING( token ), false, "opening" );
+    return checkTag( OPENING( token ), false );
 }
 
 XmlStream::Tag XmlStream::checkOpeningTag( int token )
 {
-    return checkTag( OPENING( token ), true, "opening" );
+    return checkTag( OPENING( token ), true );
 }
 
 void XmlStream::ensureClosingTag( int token )
 {
-    checkTag( CLOSING( token ), false, "closing" );
+    checkTag( CLOSING( token ), false );
 }
 
-XmlStream::Tag XmlStream::checkTag( int token, bool optional, const char* txt )
+XmlStream::Tag XmlStream::checkTag( int token, bool optional )
 {
     // either it's the following tag, or find it
     int savedPos = pos;
+#if SAL_LOG_LEVEL >= 2
+    if( optional )
+    { // avoid printing debug messages about skipping tags if the optional one
+      // will not be found and the position will be reset back
+        if( currentToken() != token && !recoverAndFindTagInternal( token, true ))
+        {
+            pos = savedPos;
+            return Tag();
+        }
+    }
+#endif
     if( currentToken() == token || recoverAndFindTag( token ))
     {
         Tag ret = currentTag();
@@ -174,11 +247,16 @@ XmlStream::Tag XmlStream::checkTag( int token, bool optional, const char* txt )
         pos = savedPos;
         return Tag();
     }
-    fprintf( stderr, "Expected %s tag %d not found.\n", txt, token );
+    fprintf( stderr, "Expected tag %s not found.\n", CSTR( tokenToString( token )));
     return Tag();
 }
 
 bool XmlStream::recoverAndFindTag( int token )
+{
+    return recoverAndFindTagInternal( token, false );
+}
+
+bool XmlStream::recoverAndFindTagInternal( int token, bool silent )
 {
     int depth = 0;
     for(;
@@ -189,17 +267,20 @@ bool XmlStream::recoverAndFindTag( int token )
         {
             if( currentToken() == OPENING( currentToken()))
             {
-                fprintf( stderr, "Skipping opening tag %d\n", currentToken());
+                if( !silent )
+                    fprintf( stderr, "Skipping tag %s\n", CSTR( tokenToString( currentToken())));
                 ++depth;
             }
             else if( currentToken() == CLOSING( currentToken()))
-            { // TODO debug output without the OPENING/CLOSING bits set
-                fprintf( stderr, "Skipping closing tag %d\n", currentToken());
+            {
+                if( !silent )
+                    fprintf( stderr, "Skipping tag %s\n", CSTR( tokenToString( currentToken())));
                 --depth;
             }
             else
             {
-                fprintf( stderr, "Malformed token %d\n", currentToken());
+                if( !silent )
+                    fprintf( stderr, "Malformed token %d (%s)\n", currentToken(), CSTR( tokenToString( currentToken())));
                 abort();
             }
             continue;
@@ -210,28 +291,40 @@ bool XmlStream::recoverAndFindTag( int token )
             return false; // that would be leaving current element, so not found
         if( currentToken() == OPENING( currentToken()))
         {
-            fprintf( stderr, "Skipping opening tag %d\n", currentToken());
+            if( !silent )
+                fprintf( stderr, "Skipping tag %s\n", CSTR( tokenToString( currentToken())));
             ++depth;
         }
         else
             abort();
     }
-    fprintf( stderr, "Unexpected end of stream reached.\n" );
+    if( !silent )
+        fprintf( stderr, "Unexpected end of stream reached.\n" );
     return false;
 }
 
 void XmlStream::skipElement( int token )
 {
+    return skipElementInternal( token, true ); // no debug about skipping if called from outside
+}
+
+void XmlStream::skipElementInternal( int token, bool silent )
+{
     int closing = ( token & ~TAG_OPENING ) | TAG_CLOSING; // make it a closing tag
     assert( currentToken() == OPENING( token ));
+    if( !silent )
+        fprintf( stderr, "Skipping unexpected element %s\n", CSTR( tokenToString( currentToken())));
     moveToNextTag();
     // and just find the matching closing tag
     if( recoverAndFindTag( closing ))
     {
+        if( !silent )
+            fprintf( stderr, "Skipped unexpected element %s\n", CSTR( tokenToString( token )));
         moveToNextTag(); // and skip it too
         return;
     }
-    fprintf( stderr, "Expected end of element %d not found.\n", token );
+    // this one is an unexpected problem, do not silent it
+    fprintf( stderr, "Expected end of element %s not found.\n", CSTR( tokenToString( token )));
 }
 
 void XmlStream::handleUnexpectedTag()
@@ -240,10 +333,11 @@ void XmlStream::handleUnexpectedTag()
         return;
     if( currentToken() == CLOSING( currentToken()))
     {
+        fprintf( stderr, "Skipping unexpected tag %s\n", CSTR( tokenToString( currentToken())));
         moveToNextTag(); // just skip it
         return;
     }
-    skipElement( currentToken()); // otherwise skip the entire element
+    skipElementInternal( currentToken(), false ); // otherwise skip the entire element
 }
 
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inst:description xmlns:inst="http://update.libreoffice.org/description">
+  <inst:id>LibreOffice_3.4</inst:id>
+  <inst:version>3.4.2</inst:version>
+  <inst:buildid>102</inst:buildid>
+  <inst:os>Linux</inst:os>
+  <inst:arch>x86</inst:arch>
+
+  <inst:update type="text/html" src="http://www.libreoffice.org/download/" />
+</inst:description>

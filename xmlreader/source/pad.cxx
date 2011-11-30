@@ -27,7 +27,9 @@
 ************************************************************************/
 
 #include "sal/config.h"
-#include "osl/diagnose.h"
+
+#include <cassert>
+
 #include "rtl/string.h"
 #include "sal/types.h"
 #include "xmlreader/pad.hxx"
@@ -36,7 +38,7 @@
 namespace xmlreader {
 
 void Pad::add(char const * begin, sal_Int32 length) {
-    OSL_ASSERT(
+    assert(
         begin != 0 && length >= 0 && !(span_.is() && buffer_.getLength() != 0));
     if (length != 0) {
         flushSpan();
@@ -49,7 +51,7 @@ void Pad::add(char const * begin, sal_Int32 length) {
 }
 
 void Pad::addEphemeral(char const * begin, sal_Int32 length) {
-    OSL_ASSERT(
+    assert(
         begin != 0 && length >= 0 && !(span_.is() && buffer_.getLength() != 0));
     if (length != 0) {
         flushSpan();
@@ -58,13 +60,13 @@ void Pad::addEphemeral(char const * begin, sal_Int32 length) {
 }
 
 void Pad::clear() {
-    OSL_ASSERT(!(span_.is() && buffer_.getLength() != 0));
+    assert(!(span_.is() && buffer_.getLength() != 0));
     span_.clear();
     buffer_.setLength(0);
 }
 
 Span Pad::get() const {
-    OSL_ASSERT(!(span_.is() && buffer_.getLength() != 0));
+    assert(!(span_.is() && buffer_.getLength() != 0));
     if (span_.is()) {
         return span_;
     } else if (buffer_.getLength() == 0) {

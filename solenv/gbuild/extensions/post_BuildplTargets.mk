@@ -1,4 +1,4 @@
-#   -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #  
 #   Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #  
@@ -62,7 +62,6 @@ endef
 
 smoketestoo_native: $(WORKDIR)/bootstrap  $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset) | instsetoo_native
 	$(call gb_BuildplTarget_command,$@,$(if $(filter instsetoo_native,$(gb_BuildplTarget_COMPLETEDTARGETS)),--from instsetoo_native,--all))
-	echo $@
 
 instsetoo_native: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset)
 	$(call gb_BuildplTarget_command,$@,--all)
@@ -75,17 +74,18 @@ cross_toolset: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded
 findunusedcode:
 	@which callcatcher > /dev/null 2>&1 || \
 	    (echo "callcatcher not installed" && false)
+	@sed -e s,$(INPATH),callcatcher,g $(SRCDIR)/Env.Host.sh > $(SRCDIR)/Env.callcatcher.sh
 	@mkdir -p $(SRCDIR)/solenv/callcatcher/bin && \
 	    ln -sf $(SRCDIR)/solenv/$(INPATH)/bin/dmake \
 		$(SRCDIR)/solenv/callcatcher/bin/dmake && \
-	    source <(sed -e s,$(INPATH),callcatcher,g $(SRCDIR)/Env.Host.sh) && \
+	    source $(SRCDIR)/Env.callcatcher.sh && \
 	    source $(SRCDIR)/solenv/bin/callcatchEnv.Set.sh && \
 	    $(call gb_BuildplTarget_command,instsetoo_native,--all)
-	@source <(sed -e s,$(INPATH),callcatcher,g $(SRCDIR)/Env.Host.sh) && \
+	@source $(SRCDIR)/Env.callcatcher.sh && \
 	    callanalyse \
-		$(WORKDIR)/LinkTarget/*/* \
-		*/$(OUTPATH)/bin/* \
-		*/$(OUTPATH)/lib/* > unusedcode.all
+		$$WORKDIR/LinkTarget/*/* \
+		*/$$OUTPATH/bin/* \
+		*/$$OUTPATH/lib/* > unusedcode.all
 #because non-c++ symbols could be dlsymed lets make a list of class level
 #unused methods which don't require much effort to determine if they need
 #to be just removed, or put behind appropiate platform or debug level ifdefs
@@ -99,5 +99,4 @@ build: instsetoo_native
 
 endif # gb_PARTIALBUILD
     
-# vim:set shiftwidth=4 softtabstop=4 noexpandtab:
-
+# vim: set noet sw=4:

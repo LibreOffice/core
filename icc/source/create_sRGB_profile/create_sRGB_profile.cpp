@@ -474,6 +474,11 @@ int main(int argc, char* argv[])
         profile.Write(&out);
         out.Close();
 
+        if(FILE *headerfile_exists = fopen(hxx_file_name,"r"))
+        {
+            fclose(headerfile_exists);
+            exit(0);
+        }
         FILE *headerfile = fopen(hxx_file_name,"w");
 
         //print OpenOffice standard file header

@@ -390,9 +390,9 @@ static void cpp_call(
                 pStackStart, ( pStack - pStackStart ),
                 pGPR, nGPR,
                 pFPR, nFPR );
-        } catch (Exception &) {
+        } catch (const Exception &) {
             throw;
-        } catch (std::exception & e) {
+        } catch (const std::exception & e) {
             OUStringBuffer buf;
             buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("C++ code threw "));
             appendCString(buf, typeid(e).name());

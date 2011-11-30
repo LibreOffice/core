@@ -28,6 +28,7 @@
 
 #include "sal/config.h"
 
+#include <cassert>
 #include <climits>
 #include <cstddef>
 
@@ -35,11 +36,12 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "osl/diagnose.h"
 #include "osl/file.h"
+#include "rtl/oustringostreaminserter.hxx"
 #include "rtl/string.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
+#include "sal/log.hxx"
 #include "sal/types.h"
 #include "xmlreader/pad.hxx"
 #include "xmlreader/span.hxx"
@@ -92,7 +94,9 @@ XmlReader::XmlReader(rtl::OUString const & fileUrl)
     if (e != osl_File_E_None) {
         e = osl_closeFile(fileHandle_);
         if (e != osl_File_E_None) {
-            OSL_TRACE("osl_closeFile failed with %ld", static_cast< long >(e));
+            SAL_WARN(
+                "xmlreader",
+                "osl_closeFile of \"" << fileUrl_ << "\" failed with " << +e);
         }
         throw css::uno::RuntimeException(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot mmap ")) +
@@ -113,11 +117,15 @@ XmlReader::XmlReader(rtl::OUString const & fileUrl)
 XmlReader::~XmlReader() {
     oslFileError e = osl_unmapFile(fileAddress_, fileSize_);
     if (e != osl_File_E_None) {
-        OSL_TRACE("osl_unmapFile failed with %ld", static_cast< long >(e));
+        SAL_WARN(
+            "xmlreader",
+            "osl_unmapFile of \"" << fileUrl_ << "\" failed with " << +e);
     }
     e = osl_closeFile(fileHandle_);
     if (e != osl_File_E_None) {
-        OSL_TRACE("osl_closeFile failed with %ld", static_cast< long >(e));
+        SAL_WARN(
+            "xmlreader",
+            "osl_closeFile of \"" << fileUrl_ << "\" failed with " << +e);
     }
 }
 
@@ -165,7 +173,7 @@ XmlReader::Result XmlReader::nextItem(Text reportText, Span * data, int * nsId)
 }
 
 bool XmlReader::nextAttribute(int * nsId, Span * localName) {
-    OSL_ASSERT(nsId != 0 && localName != 0);
+    assert(nsId != 0 && localName != 0);
     if (firstAttribute_) {
         currentAttribute_ = attributes_.begin();
         firstAttribute_ = false;
@@ -403,7 +411,7 @@ Span XmlReader::scanCdataSection() {
 }
 
 bool XmlReader::scanName(char const ** nameColon) {
-    OSL_ASSERT(nameColon != 0 && *nameColon == 0);
+    assert(nameColon != 0 && *nameColon == 0);
     for (char const * begin = pos_;; ++pos_) {
         switch (peek()) {
         case '\0': // i.e., EOF
@@ -425,7 +433,7 @@ bool XmlReader::scanName(char const ** nameColon) {
 }
 
 int XmlReader::scanNamespaceIri(char const * begin, char const * end) {
-    OSL_ASSERT(begin != 0 && begin <= end);
+    assert(begin != 0 && begin <= end);
     Span iri(handleAttributeValue(begin, end, false));
     for (NamespaceIris::size_type i = 0; i < namespaceIris_.size(); ++i) {
         if (namespaceIris_[i].equals(iri)) {
@@ -437,7 +445,7 @@ int XmlReader::scanNamespaceIri(char const * begin, char const * end) {
 
 char const * XmlReader::handleReference(char const * position, char const * end)
 {
-    OSL_ASSERT(position != 0 && *position == '&' && position < end);
+    assert(position != 0 && *position == '&' && position < end);
     ++position;
     if (*position == '#') {
         ++position;
@@ -492,7 +500,7 @@ char const * XmlReader::handleReference(char const * position, char const * end)
                  fileUrl_),
                 css::uno::Reference< css::uno::XInterface >());
         }
-        OSL_ASSERT(val >= 0 && val <= 0x10FFFF);
+        assert(val >= 0 && val <= 0x10FFFF);
         if ((val < 0x20 && val != 0x9 && val != 0xA && val != 0xD) ||
             (val >= 0xD800 && val <= 0xDFFF) || val == 0xFFFE || val == 0xFFFF)
         {
@@ -663,7 +671,7 @@ Span XmlReader::handleAttributeValue(
 }
 
 XmlReader::Result XmlReader::handleStartTag(int * nsId, Span * localName) {
-    OSL_ASSERT(nsId != 0 && localName);
+    assert(nsId != 0 && localName);
     char const * nameBegin = pos_;
     char const * nameColon = 0;
     if (!scanName(&nameColon)) {
@@ -812,7 +820,7 @@ XmlReader::Result XmlReader::handleEndTag() {
 }
 
 void XmlReader::handleElementEnd() {
-    OSL_ASSERT(!elements_.empty());
+    assert(!elements_.empty());
     namespaces_.resize(elements_.top().inheritedNamespaces);
     elements_.pop();
     state_ = elements_.empty() ? STATE_DONE : STATE_CONTENT;
@@ -1047,7 +1055,7 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
 }
 
 int XmlReader::toNamespaceId(NamespaceIris::size_type pos) {
-    OSL_ASSERT(pos <= INT_MAX);
+    assert(pos <= INT_MAX);
     return static_cast< int >(pos);
 }
 

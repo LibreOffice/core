@@ -652,13 +652,14 @@ void ExcFilterCondition::SaveText( XclExpStream& rStrm )
 XclExpAutofilter::XclExpAutofilter( const XclExpRoot& rRoot, sal_uInt16 nC ) :
     XclExpRecord( EXC_ID_AUTOFILTER, 24 ),
     XclExpRoot( rRoot ),
+    meType(FilterCondition),
     nCol( nC ),
     nFlags( 0 )
 {
 }
 
-sal_Bool XclExpAutofilter::AddCondition( ScQueryConnect eConn, sal_uInt8 nType, sal_uInt8 nOp,
-                                    double fVal, String* pText, sal_Bool bSimple )
+bool XclExpAutofilter::AddCondition( ScQueryConnect eConn, sal_uInt8 nType, sal_uInt8 nOp,
+                                     double fVal, String* pText, bool bSimple )
 {
     if( !aCond[ 1 ].IsEmpty() )
         return false;
@@ -674,14 +675,26 @@ sal_Bool XclExpAutofilter::AddCondition( ScQueryConnect eConn, sal_uInt8 nType, 
 
     AddRecSize( aCond[ nInd ].GetTextBytes() );
 
-    return sal_True;
+    return true;
+}
+
+bool XclExpAutofilter::HasCondition() const
+{
+    return !aCond[0].IsEmpty();
 }
 
 bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
 {
+    const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
+    if (rItems.empty())
+        return true;
+
+    if (GetOutput() != EXC_OUTPUT_BINARY && rItems.size() > 1)
+        return AddMultiValueEntry(rEntry);
+
     bool bConflict = false;
     String  sText;
-    const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+    const ScQueryEntry::Item& rItem = rItems[0];
     const rtl::OUString& rQueryStr = rItem.maString;
     if (!rQueryStr.isEmpty())
     {
@@ -785,6 +798,17 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
     return bConflict;
 }
 
+bool XclExpAutofilter::AddMultiValueEntry( const ScQueryEntry& rEntry )
+{
+    meType = MultiValue;
+    const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
+    ScQueryEntry::QueryItemsType::const_iterator itr = rItems.begin(), itrEnd = rItems.end();
+    for (; itr != itrEnd; ++itr)
+        maMultiValues.push_back(itr->maString);
+
+    return false;
+}
+
 void XclExpAutofilter::WriteBody( XclExpStream& rStrm )
 {
     rStrm << nCol << nFlags;
@@ -796,7 +820,7 @@ void XclExpAutofilter::WriteBody( XclExpStream& rStrm )
 
 void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
 {
-    if( !HasCondition() )
+    if (meType == FilterCondition && !HasCondition())
         return;
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
@@ -807,24 +831,43 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_showButton,
             FSEND );
 
-    if( HasTop10() )
+    switch (meType)
     {
-        rWorksheet->singleElement( XML_top10,
-                XML_top,        XclXmlUtils::ToPsz( get_flag( nFlags, EXC_AFFLAG_TOP10TOP ) ),
-                XML_percent,    XclXmlUtils::ToPsz( get_flag( nFlags, EXC_AFFLAG_TOP10PERC ) ),
-                XML_val,        OString::valueOf( (sal_Int32) (nFlags >> 7 ) ).getStr(),
-                // OOXTODO: XML_filterVal,
-                FSEND );
-    }
+        case FilterCondition:
+        {
+            if( HasTop10() )
+            {
+                rWorksheet->singleElement( XML_top10,
+                        XML_top,        XclXmlUtils::ToPsz( get_flag( nFlags, EXC_AFFLAG_TOP10TOP ) ),
+                        XML_percent,    XclXmlUtils::ToPsz( get_flag( nFlags, EXC_AFFLAG_TOP10PERC ) ),
+                        XML_val,        OString::valueOf( (sal_Int32) (nFlags >> 7 ) ).getStr(),
+                        // OOXTODO: XML_filterVal,
+                        FSEND );
+            }
 
-    rWorksheet->startElement( XML_customFilters,
-            XML_and,    XclXmlUtils::ToPsz( (nFlags & EXC_AFFLAG_ANDORMASK) == EXC_AFFLAG_AND ),
-            FSEND );
-    aCond[ 0 ].SaveXml( rStrm );
-    aCond[ 1 ].SaveXml( rStrm );
-    rWorksheet->endElement( XML_customFilters );
-    // OOXTODO: XLM_colorFilter, XML_dynamicFilter,
-    // XML_extLst, XML_filters, XML_iconFilter, XML_top10
+            rWorksheet->startElement( XML_customFilters,
+                    XML_and,    XclXmlUtils::ToPsz( (nFlags & EXC_AFFLAG_ANDORMASK) == EXC_AFFLAG_AND ),
+                    FSEND );
+            aCond[ 0 ].SaveXml( rStrm );
+            aCond[ 1 ].SaveXml( rStrm );
+            rWorksheet->endElement( XML_customFilters );
+            // OOXTODO: XLM_colorFilter, XML_dynamicFilter,
+            // XML_extLst, XML_filters, XML_iconFilter, XML_top10
+        }
+        break;
+        case MultiValue:
+        {
+            rWorksheet->startElement(XML_filters, FSEND);
+            std::vector<rtl::OUString>::const_iterator itr = maMultiValues.begin(), itrEnd = maMultiValues.end();
+            for (; itr != itrEnd; ++itr)
+            {
+                const char* pz = rtl::OUStringToOString(*itr, RTL_TEXTENCODING_UTF8).getStr();
+                rWorksheet->singleElement(XML_filter, XML_val, pz, FSEND);
+            }
+            rWorksheet->endElement(XML_filters);
+        }
+        break;
+    }
     rWorksheet->endElement( XML_filterColumn );
 }
 
@@ -949,11 +992,11 @@ XclExpAutofilter* ExcAutoFilterRecs::GetByCol( SCCOL nCol )
     return xFilter.get();
 }
 
-sal_Bool ExcAutoFilterRecs::IsFiltered( SCCOL nCol )
+bool ExcAutoFilterRecs::IsFiltered( SCCOL nCol )
 {
     for( size_t nPos = 0, nSize = maFilterList.GetSize(); nPos < nSize; ++nPos )
         if( maFilterList.GetRecord( nPos )->GetCol() == static_cast<sal_uInt16>(nCol) )
-            return sal_True;
+            return true;
     return false;
 }
 

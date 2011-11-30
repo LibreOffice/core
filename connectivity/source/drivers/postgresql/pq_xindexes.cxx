@@ -181,6 +181,7 @@ void Indexes::refresh()
                 new Index( m_refMutex, m_origin, m_pSettings,
                            m_schemaName, m_tableName );
 
+            (void) C_SCHEMA; (void) C_TABLENAME;
             sal_Bool isUnique = row->getBoolean( C_IS_UNIQUE );
             sal_Bool isPrimary = row->getBoolean( C_IS_PRIMARY );
             sal_Bool isClusterd = row->getBoolean( C_IS_CLUSTERED );

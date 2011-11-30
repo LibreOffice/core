@@ -41,6 +41,20 @@ bool checkForUpdates(
     const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XUpdateInformationProvider >& rxProvider
 );
 
+// The same as above, that does not read the info from bootstrap
+bool
+checkForUpdates(
+    UpdateInfo& o_rUpdateInfo,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > & rxInteractionHandler,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XUpdateInformationProvider >& rUpdateInfoProvider,
+    const rtl::OUString &rOS,
+    const rtl::OUString &rArch,
+    const ::com::sun::star::uno::Sequence< rtl::OUString > &rRepositoryList,
+    const rtl::OUString &rBuildID,
+    const rtl::OUString &rInstallID
+);
+
 // Returns 'true' if there are updates for any extension
 bool checkForExtensionUpdates(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext

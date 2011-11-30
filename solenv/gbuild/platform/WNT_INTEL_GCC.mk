@@ -173,7 +173,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_CXX) $(strip \
 		$(gb_Executable_TARGETTYPEFLAGS) \
-		$(if $(filter YES,$(gb_Executable_TARGETGUI)), -mwindows, -mconsole) \
+		$(if $(filter YES,$(TARGETGUI)), -mwindows, -mconsole) \
 		$(T_LDFLAGS) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
@@ -393,8 +393,10 @@ gb_StaticLibrary_StaticLibrary_platform =
 gb_Executable_EXT := .exe
 gb_Executable_TARGETTYPEFLAGS :=
 gb_Executable_get_rpath :=
-gb_Executable_Executable_platform =
-gb_Executable_TARGETGUI :=
+
+define gb_Executable_Executable_platform
+$(call gb_LinkTarget_get_target,$(2)) : TARGETGUI :=
+endef
 
 # CppunitTest class
 

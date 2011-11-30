@@ -654,6 +654,7 @@ sal_Bool DatabaseMetaData::supportsTypeConversion(  ) throw (SQLException, Runti
 
 sal_Bool DatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_Int32 toType ) throw (SQLException, RuntimeException)
 {
+    (void) fromType; (void) toType;
     return sal_False;
 }
 
@@ -1128,6 +1129,7 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
     const OUString& schemaPattern,
     const OUString& procedureNamePattern ) throw (SQLException, RuntimeException)
 {
+    (void) catalog; (void) schemaPattern; (void) procedureNamePattern;
 //        1.  PROCEDURE_CAT string =&gt; procedure catalog (may be NULL )
 //        2. PROCEDURE_SCHEM string =&gt; procedure schema (may be NULL )
 //        3. PROCEDURE_NAME string =&gt; procedure name
@@ -1154,6 +1156,7 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
     const OUString& procedureNamePattern,
     const OUString& columnNamePattern ) throw (SQLException, RuntimeException)
 {
+    (void) catalog; (void) schemaPattern; (void) procedureNamePattern; (void) columnNamePattern;
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
 // LEM TODO: implement
@@ -1169,6 +1172,7 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
     const ::com::sun::star::uno::Sequence< OUString >& types )
     throw (SQLException, RuntimeException)
 {
+    (void) catalog; (void) types;
     Statics &statics = getStatics();
 
     MutexGuard guard( m_refMutex->mutex );
@@ -1502,6 +1506,7 @@ static void columnMetaData2DatabaseTypeDescription(
     const OUString& tableNamePattern,
     const OUString& columnNamePattern ) throw (SQLException, RuntimeException)
 {
+    (void) catalog;
     // LEM TODO: review in comparison with JDBC driver
     //           OK, confirmed it does not return consecutive values in ORDINAL_POSITION; needs to be fixed.
     Statics &statics = getStatics();
@@ -1675,6 +1680,7 @@ static void columnMetaData2DatabaseTypeDescription(
     const OUString& table,
     const OUString& columnNamePattern ) throw (SQLException, RuntimeException)
 {
+    (void) catalog; (void) schema; (void) table; (void) columnNamePattern;
     //LEM TODO: implement! See JDBC driver
     // In the meantime, maybe better to throw exception SQLException with
     // SQLState == "IM001"
@@ -1689,6 +1695,7 @@ static void columnMetaData2DatabaseTypeDescription(
     const OUString& schemaPattern,
     const OUString& tableNamePattern ) throw (SQLException, RuntimeException)
 {
+    (void) catalog;
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
 
@@ -1759,6 +1766,7 @@ static void columnMetaData2DatabaseTypeDescription(
     sal_Int32 scope,
     sal_Bool nullable ) throw (SQLException, RuntimeException)
 {
+    (void) catalog; (void) schema; (void) table; (void) scope; (void) nullable;
     //LEM TODO: implement! See JDBC driver
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
@@ -1771,6 +1779,7 @@ static void columnMetaData2DatabaseTypeDescription(
     const OUString& schema,
     const OUString& table ) throw (SQLException, RuntimeException)
 {
+    (void) catalog; (void) schema; (void) table;
     //LEM TODO: implement! See JDBC driver
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
@@ -1783,6 +1792,7 @@ static void columnMetaData2DatabaseTypeDescription(
     const OUString& schema,
     const OUString& table ) throw (SQLException, RuntimeException)
 {
+    (void) catalog;
     //LEM TODO: review
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
@@ -1862,7 +1872,7 @@ static void columnMetaData2DatabaseTypeDescription(
 
     SequenceAnyVector::iterator ii = vec.begin();
     OUString lastTableOid;
-    sal_Int32 index;
+    sal_Int32 index = 0;
     Sequence< Sequence< Any > > ret( vec.size() );
     int elements = 0;
     for( ; ii != vec.end() ; ++ ii )
@@ -2065,10 +2075,10 @@ void DatabaseMetaData::init_getReferences_stmt ()
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getImportedExportedKeys(
-    const Any& primaryCatalog,
+    const Any& /* primaryCatalog */,
     const OUString& primarySchema,
     const OUString& primaryTable,
-    const Any& foreignCatalog,
+    const Any& /* foreignCatalog */,
     const OUString& foreignSchema,
     const OUString& foreignTable ) throw (SQLException, RuntimeException)
 {
@@ -2285,6 +2295,7 @@ static void pgTypeInfo2ResultSet(
         row[MINIMUM_SCALE] <<= ASCII_STR( "0" );      // TODO: what is this ?
         row[MAXIMUM_SCALE] <<= OUString::valueOf( getMaxScale( dataType ) );
         row[NUM_PREC_RADIX] <<= ASCII_STR( "10" );    // TODO: what is this ?
+        (void)FIXED_PREC_SCALE;
         vec.push_back( row );
     }
 
@@ -2364,6 +2375,7 @@ static sal_Int32 seqContains( const Sequence< sal_Int32 > &seq, sal_Int32 value 
     sal_Bool unique,
     sal_Bool approximate ) throw (SQLException, RuntimeException)
 {
+    (void) catalog; (void) approximate;
     //LEM TODO: review
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
@@ -2451,6 +2463,7 @@ static sal_Int32 seqContains( const Sequence< sal_Int32 > &seq, sal_Int32 value 
         OUString currentIndexName = xRow->getString( C_INDEXNAME );
         sal_Bool isNonUnique = ! xRow->getBoolean( C_IS_UNIQUE );
         sal_Bool isPrimary = xRow->getBoolean( C_IS_PRIMARY );
+        (void)isPrimary;
         sal_Int32 indexType =  xRow->getBoolean( C_IS_CLUSTERED ) ?
             com::sun::star::sdbc::IndexType::CLUSTERED :
             com::sun::star::sdbc::IndexType::HASHED;
@@ -2497,52 +2510,53 @@ sal_Bool DatabaseMetaData::supportsResultSetType( sal_Int32 setType )
 sal_Bool DatabaseMetaData::supportsResultSetConcurrency(
     sal_Int32 setType, sal_Int32 concurrency ) throw (SQLException, RuntimeException)
 {
+    (void) concurrency;
     if ( ! supportsResultSetType( setType ) )
         return sal_False;
     else
         return sal_True;
 }
 
-sal_Bool DatabaseMetaData::ownUpdatesAreVisible( sal_Int32 setType ) throw (SQLException, RuntimeException)
+sal_Bool DatabaseMetaData::ownUpdatesAreVisible( sal_Int32 /* setType */ ) throw (SQLException, RuntimeException)
 {
     return sal_True;
 }
 
-sal_Bool DatabaseMetaData::ownDeletesAreVisible( sal_Int32 setType ) throw (SQLException, RuntimeException)
+sal_Bool DatabaseMetaData::ownDeletesAreVisible( sal_Int32 /* setType */ ) throw (SQLException, RuntimeException)
 {
     return sal_True;
 }
 
-sal_Bool DatabaseMetaData::ownInsertsAreVisible( sal_Int32 setType ) throw (SQLException, RuntimeException)
+sal_Bool DatabaseMetaData::ownInsertsAreVisible( sal_Int32 /* setType */ ) throw (SQLException, RuntimeException)
 {
     return sal_True;
 }
 
-sal_Bool DatabaseMetaData::othersUpdatesAreVisible( sal_Int32 setType ) throw (SQLException, RuntimeException)
+sal_Bool DatabaseMetaData::othersUpdatesAreVisible( sal_Int32 /* setType */ ) throw (SQLException, RuntimeException)
 {
     return sal_False;
 }
 
-sal_Bool DatabaseMetaData::othersDeletesAreVisible( sal_Int32 setType ) throw (SQLException, RuntimeException)
+sal_Bool DatabaseMetaData::othersDeletesAreVisible( sal_Int32 /* setType */ ) throw (SQLException, RuntimeException)
 {
     return sal_False;
 }
 
-sal_Bool DatabaseMetaData::othersInsertsAreVisible( sal_Int32 setType ) throw (SQLException, RuntimeException)
+sal_Bool DatabaseMetaData::othersInsertsAreVisible( sal_Int32 /* setType */ ) throw (SQLException, RuntimeException)
 {
     return sal_False;
 }
 
-sal_Bool DatabaseMetaData::updatesAreDetected( sal_Int32 setType ) throw (SQLException, RuntimeException)
+sal_Bool DatabaseMetaData::updatesAreDetected( sal_Int32 /* setType */ ) throw (SQLException, RuntimeException)
 {
     return sal_False;
 }
 
-sal_Bool DatabaseMetaData::deletesAreDetected( sal_Int32 setType ) throw (SQLException, RuntimeException)
+sal_Bool DatabaseMetaData::deletesAreDetected( sal_Int32 /* setType */ ) throw (SQLException, RuntimeException)
 {
     return sal_False;
 }
-sal_Bool DatabaseMetaData::insertsAreDetected( sal_Int32 setType ) throw (SQLException, RuntimeException)
+sal_Bool DatabaseMetaData::insertsAreDetected( sal_Int32 /* setType */ ) throw (SQLException, RuntimeException)
 {
     return sal_False;
 }
@@ -2554,6 +2568,7 @@ sal_Bool DatabaseMetaData::supportsBatchUpdates(  ) throw (SQLException, Runtime
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getUDTs( const ::com::sun::star::uno::Any& catalog, const OUString& schemaPattern, const OUString& typeNamePattern, const ::com::sun::star::uno::Sequence< sal_Int32 >& types ) throw (SQLException, RuntimeException)
 {
+    (void) catalog; (void) schemaPattern; (void) typeNamePattern; (void) types;
     //LEM TODO: implement! See JDBC driver
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();

@@ -93,7 +93,7 @@ double ScInterpreter::GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int1
     Date aDate( nD, nM, nY);
     if (!bStrict)
         aDate += nDay - 1;
-    if (aDate.IsValid())
+    if (aDate.IsValidAndGregorian())
         return (double) (aDate - *(pFormatter->GetNullDate()));
     else
     {

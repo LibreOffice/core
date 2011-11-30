@@ -20,7 +20,7 @@
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 3 or later (the "GPLv3+"), or
 # the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
-# in which case the provisions of the GPLv3+ or the LGPLv3+ are licable
+# in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
 ifeq ($(OS_FOR_BUILD),WNT)

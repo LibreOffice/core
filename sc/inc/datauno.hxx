@@ -37,6 +37,8 @@
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/XSheetFilterDescriptor.hpp>
+#include <com/sun/star/sheet/XSheetFilterDescriptor2.hpp>
+#include <com/sun/star/sheet/XSheetFilterDescriptor3.hpp>
 #include <com/sun/star/sheet/XConsolidationDescriptor.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
@@ -50,7 +52,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
-#include <com/sun/star/sheet/XSheetFilterDescriptor2.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
@@ -342,9 +343,10 @@ public:
 
 //  to uno, all three look the same
 
-class ScFilterDescriptorBase : public cppu::WeakImplHelper4<
+class ScFilterDescriptorBase : public cppu::WeakImplHelper5<
                                     com::sun::star::sheet::XSheetFilterDescriptor,
                                     com::sun::star::sheet::XSheetFilterDescriptor2,
+                                    com::sun::star::sheet::XSheetFilterDescriptor3,
                                     com::sun::star::beans::XPropertySet,
                                     com::sun::star::lang::XServiceInfo >,
                                public SfxListener
@@ -354,10 +356,6 @@ private:
     ScDocShell*             pDocSh;
 
 public:
-    static void fillQueryParam(
-        ScQueryParam& rParam, ScDocument* pDoc,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::TableFilterField2>& aFilterFields);
-
                             ScFilterDescriptorBase(ScDocShell* pDocShell);
     virtual                 ~ScFilterDescriptorBase();
 
@@ -380,6 +378,13 @@ public:
                             getFilterFields2() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setFilterFields2( const ::com::sun::star::uno::Sequence<
                                 ::com::sun::star::sheet::TableFilterField2 >& aFilterFields )
+                                    throw(::com::sun::star::uno::RuntimeException);
+
+                            // XSheetFilterDescriptor3
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::TableFilterField3 > SAL_CALL
+                            getFilterFields3() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setFilterFields3( const ::com::sun::star::uno::Sequence<
+                                ::com::sun::star::sheet::TableFilterField3 >& aFilterFields )
                                     throw(::com::sun::star::uno::RuntimeException);
 
                             // XPropertySet

@@ -203,11 +203,11 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
             ++pCurr;
         }
     }
-    catch (RuntimeException &)
+    catch (const RuntimeException &)
     {
         throw;
     }
-    catch (Exception&)
+    catch (const Exception&)
     {
     }
 
@@ -290,11 +290,11 @@ Reference<XInterface> CanvasFactory::use(
         return m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
             serviceName, args, xContext);
     }
-    catch (RuntimeException &)
+    catch (const RuntimeException &)
     {
         throw;
     }
-    catch (Exception &)
+    catch (const Exception &)
     {
         return Reference<XInterface>();
     }

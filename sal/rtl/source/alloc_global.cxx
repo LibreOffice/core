@@ -29,8 +29,8 @@
 #include "alloc_impl.hxx"
 #include "rtl/alloc.h"
 #include <sal/macros.h>
-#include <osl/diagnose.h>
 
+#include <cassert>
 #include <string.h>
 #include <stdio.h>
 
@@ -41,7 +41,7 @@ AllocMode alloc_mode = AMode_UNSET;
 #if !defined(FORCE_SYSALLOC)
 static void determine_alloc_mode()
 {
-    OSL_ASSERT(alloc_mode == AMode_UNSET);
+    assert(alloc_mode == AMode_UNSET);
     alloc_mode = (getenv("G_SLICE") == NULL ? AMode_CUSTOM : AMode_SYSTEM);
 }
 
@@ -51,7 +51,6 @@ static void determine_alloc_mode()
  *
  * ================================================================= */
 
-#include "internal/once.h"
 #include "sal/macros.h"
 
 /* ================================================================= *
@@ -109,7 +108,7 @@ SAL_CALL rtl_allocateMemory_CUSTOM (sal_Size n) SAL_THROW_EXTERN_C()
         char *     addr;
         sal_Size   size = RTL_MEMORY_ALIGN(n + RTL_MEMALIGN, RTL_MEMALIGN);
 
-        OSL_ASSERT(RTL_MEMALIGN >= sizeof(sal_Size));
+        assert(RTL_MEMALIGN >= sizeof(sal_Size));
         if (n >= SAL_MAX_SIZE - (RTL_MEMALIGN + RTL_MEMALIGN - 1))
         {
             /* requested size too large for roundup alignment */
@@ -199,7 +198,7 @@ void rtl_memory_init()
 #if !defined(FORCE_SYSALLOC)
     {
         /* global memory arena */
-        OSL_ASSERT(gp_alloc_arena == 0);
+        assert(gp_alloc_arena == 0);
 
         gp_alloc_arena = rtl_arena_create (
             "rtl_alloc_arena",
@@ -210,7 +209,7 @@ void rtl_memory_init()
             rtl_arena_free,
             0         /* flags */
         );
-        OSL_ASSERT(gp_alloc_arena != 0);
+        assert(gp_alloc_arena != 0);
     }
     {
         sal_Size size;
@@ -234,7 +233,7 @@ void rtl_memory_init()
         }
     }
 #endif
-    OSL_TRACE("rtl_memory_init completed");
+    // SAL_INFO("sal", "rtl_memory_init completed");
 }
 
 /* ================================================================= */
@@ -264,7 +263,7 @@ void rtl_memory_fini()
         gp_alloc_arena = 0;
     }
 #endif
-    OSL_TRACE("rtl_memory_fini completed");
+    // SAL_INFO("sal", "rtl_memory_fini completed");
 }
 
 /* ================================================================= *

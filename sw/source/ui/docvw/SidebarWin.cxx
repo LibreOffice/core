@@ -415,7 +415,7 @@ void SwSidebarWin::CheckMetaText()
     {
         sMeta = String(SW_RES(STR_POSTIT_YESTERDAY));
     }
-    else if (aDate.IsValid() )
+    else if (aDate.IsValidAndGregorian() )
     {
         sMeta = rLocalData.getDate(aDate);
     }

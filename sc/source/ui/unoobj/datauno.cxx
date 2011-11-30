@@ -1058,67 +1058,6 @@ void SAL_CALL ScConsolidationDescriptor::setInsertLinks( sal_Bool bInsertLinks )
     aParam.bReferenceData = bInsertLinks;
 }
 
-//------------------------------------------------------------------------
-
-void ScFilterDescriptorBase::fillQueryParam(
-    ScQueryParam& rParam, ScDocument* pDoc,
-    const uno::Sequence<sheet::TableFilterField2>& aFilterFields)
-{
-    SCSIZE nCount = static_cast<SCSIZE>(aFilterFields.getLength());
-    rParam.Resize( nCount );
-
-    const sheet::TableFilterField2* pAry = aFilterFields.getConstArray();
-    SCSIZE i;
-    for (i=0; i<nCount; i++)
-    {
-        ScQueryEntry& rEntry = rParam.GetEntry(i);
-        ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-
-        rEntry.bDoQuery = true;
-        rEntry.eConnect = (pAry[i].Connection == sheet::FilterConnection_AND) ? SC_AND : SC_OR;
-        rEntry.nField   = pAry[i].Field;
-        rItem.meType    = pAry[i].IsNumeric ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
-        rItem.mfVal     = pAry[i].NumericValue;
-        rItem.maString  = pAry[i].StringValue;
-
-        if (rItem.meType == ScQueryEntry::ByValue && pDoc)
-            pDoc->GetFormatTable()->GetInputLineString(rItem.mfVal, 0, rItem.maString);
-
-        switch (pAry[i].Operator)           // FilterOperator
-        {
-        case sheet::FilterOperator2::EQUAL:                 rEntry.eOp = SC_EQUAL;              break;
-        case sheet::FilterOperator2::LESS:                  rEntry.eOp = SC_LESS;               break;
-        case sheet::FilterOperator2::GREATER:               rEntry.eOp = SC_GREATER;            break;
-        case sheet::FilterOperator2::LESS_EQUAL:            rEntry.eOp = SC_LESS_EQUAL;         break;
-        case sheet::FilterOperator2::GREATER_EQUAL:         rEntry.eOp = SC_GREATER_EQUAL;      break;
-        case sheet::FilterOperator2::NOT_EQUAL:             rEntry.eOp = SC_NOT_EQUAL;          break;
-        case sheet::FilterOperator2::TOP_VALUES:            rEntry.eOp = SC_TOPVAL;             break;
-        case sheet::FilterOperator2::BOTTOM_VALUES:         rEntry.eOp = SC_BOTVAL;             break;
-        case sheet::FilterOperator2::TOP_PERCENT:           rEntry.eOp = SC_TOPPERC;            break;
-        case sheet::FilterOperator2::BOTTOM_PERCENT:        rEntry.eOp = SC_BOTPERC;            break;
-        case sheet::FilterOperator2::CONTAINS:              rEntry.eOp = SC_CONTAINS;           break;
-        case sheet::FilterOperator2::DOES_NOT_CONTAIN:      rEntry.eOp = SC_DOES_NOT_CONTAIN;   break;
-        case sheet::FilterOperator2::BEGINS_WITH:           rEntry.eOp = SC_BEGINS_WITH;        break;
-        case sheet::FilterOperator2::DOES_NOT_BEGIN_WITH:   rEntry.eOp = SC_DOES_NOT_BEGIN_WITH;break;
-        case sheet::FilterOperator2::ENDS_WITH:             rEntry.eOp = SC_ENDS_WITH;          break;
-        case sheet::FilterOperator2::DOES_NOT_END_WITH:     rEntry.eOp = SC_DOES_NOT_END_WITH;  break;
-        case sheet::FilterOperator2::EMPTY:
-            rEntry.SetQueryByEmpty();
-            break;
-        case sheet::FilterOperator2::NOT_EMPTY:
-            rEntry.SetQueryByNonEmpty();
-            break;
-        default:
-            OSL_FAIL("Falscher Query-enum");
-            rEntry.eOp = SC_EQUAL;
-        }
-    }
-
-    SCSIZE nParamCount = rParam.GetEntryCount();    // Param wird nicht unter 8 resized
-    for (i=nCount; i<nParamCount; i++)
-        rParam.GetEntry(i).bDoQuery = false;        // ueberzaehlige Felder zuruecksetzen
-}
-
 ScFilterDescriptorBase::ScFilterDescriptorBase(ScDocShell* pDocShell) :
     aPropSet( lcl_GetFilterPropertyMap() ),
     pDocSh(pDocShell)
@@ -1166,7 +1105,10 @@ uno::Sequence<sheet::TableFilterField> SAL_CALL ScFilterDescriptorBase::getFilte
     for (SCSIZE i=0; i<nCount; i++)
     {
         const ScQueryEntry& rEntry = aParam.GetEntry(i);
-        const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+        if (rEntry.GetQueryItems().empty())
+            continue;
+
+        const ScQueryEntry::Item& rItem = rEntry.GetQueryItems().front();
 
         aField.Connection    = (rEntry.eConnect == SC_AND) ? sheet::FilterConnection_AND :
                                                              sheet::FilterConnection_OR;
@@ -1210,6 +1152,147 @@ uno::Sequence<sheet::TableFilterField> SAL_CALL ScFilterDescriptorBase::getFilte
     return aSeq;
 }
 
+namespace {
+
+template<typename T>
+void convertQueryEntryToUno(const ScQueryEntry& rEntry, T& rField)
+{
+    rField.Connection = (rEntry.eConnect == SC_AND) ? sheet::FilterConnection_AND : sheet::FilterConnection_OR;
+    rField.Field = rEntry.nField;
+
+    switch (rEntry.eOp)             // ScQueryOp
+    {
+    case SC_EQUAL:                  rField.Operator = sheet::FilterOperator2::EQUAL;                break;
+    case SC_LESS:                   rField.Operator = sheet::FilterOperator2::LESS;                 break;
+    case SC_GREATER:                rField.Operator = sheet::FilterOperator2::GREATER;              break;
+    case SC_LESS_EQUAL:             rField.Operator = sheet::FilterOperator2::LESS_EQUAL;           break;
+    case SC_GREATER_EQUAL:          rField.Operator = sheet::FilterOperator2::GREATER_EQUAL;        break;
+    case SC_NOT_EQUAL:              rField.Operator = sheet::FilterOperator2::NOT_EQUAL;            break;
+    case SC_TOPVAL:                 rField.Operator = sheet::FilterOperator2::TOP_VALUES;           break;
+    case SC_BOTVAL:                 rField.Operator = sheet::FilterOperator2::BOTTOM_VALUES;        break;
+    case SC_TOPPERC:                rField.Operator = sheet::FilterOperator2::TOP_PERCENT;          break;
+    case SC_BOTPERC:                rField.Operator = sheet::FilterOperator2::BOTTOM_PERCENT;       break;
+    case SC_CONTAINS:               rField.Operator = sheet::FilterOperator2::CONTAINS;             break;
+    case SC_DOES_NOT_CONTAIN:       rField.Operator = sheet::FilterOperator2::DOES_NOT_CONTAIN;     break;
+    case SC_BEGINS_WITH:            rField.Operator = sheet::FilterOperator2::BEGINS_WITH;          break;
+    case SC_DOES_NOT_BEGIN_WITH:    rField.Operator = sheet::FilterOperator2::DOES_NOT_BEGIN_WITH;  break;
+    case SC_ENDS_WITH:              rField.Operator = sheet::FilterOperator2::ENDS_WITH;            break;
+    case SC_DOES_NOT_END_WITH:      rField.Operator = sheet::FilterOperator2::DOES_NOT_END_WITH;    break;
+    default:
+        OSL_FAIL("Unknown filter operator value.");
+        rField.Operator = sheet::FilterOperator2::EMPTY;
+    }
+}
+
+template<typename T>
+void convertUnoToQueryEntry(const T& rField, ScQueryEntry& rEntry)
+{
+    rEntry.bDoQuery = true;
+    rEntry.eConnect = (rField.Connection == sheet::FilterConnection_AND) ? SC_AND : SC_OR;
+    rEntry.nField   = rField.Field;
+
+    switch (rField.Operator)           // FilterOperator
+    {
+    case sheet::FilterOperator2::EQUAL:                 rEntry.eOp = SC_EQUAL;              break;
+    case sheet::FilterOperator2::LESS:                  rEntry.eOp = SC_LESS;               break;
+    case sheet::FilterOperator2::GREATER:               rEntry.eOp = SC_GREATER;            break;
+    case sheet::FilterOperator2::LESS_EQUAL:            rEntry.eOp = SC_LESS_EQUAL;         break;
+    case sheet::FilterOperator2::GREATER_EQUAL:         rEntry.eOp = SC_GREATER_EQUAL;      break;
+    case sheet::FilterOperator2::NOT_EQUAL:             rEntry.eOp = SC_NOT_EQUAL;          break;
+    case sheet::FilterOperator2::TOP_VALUES:            rEntry.eOp = SC_TOPVAL;             break;
+    case sheet::FilterOperator2::BOTTOM_VALUES:         rEntry.eOp = SC_BOTVAL;             break;
+    case sheet::FilterOperator2::TOP_PERCENT:           rEntry.eOp = SC_TOPPERC;            break;
+    case sheet::FilterOperator2::BOTTOM_PERCENT:        rEntry.eOp = SC_BOTPERC;            break;
+    case sheet::FilterOperator2::CONTAINS:              rEntry.eOp = SC_CONTAINS;           break;
+    case sheet::FilterOperator2::DOES_NOT_CONTAIN:      rEntry.eOp = SC_DOES_NOT_CONTAIN;   break;
+    case sheet::FilterOperator2::BEGINS_WITH:           rEntry.eOp = SC_BEGINS_WITH;        break;
+    case sheet::FilterOperator2::DOES_NOT_BEGIN_WITH:   rEntry.eOp = SC_DOES_NOT_BEGIN_WITH;break;
+    case sheet::FilterOperator2::ENDS_WITH:             rEntry.eOp = SC_ENDS_WITH;          break;
+    case sheet::FilterOperator2::DOES_NOT_END_WITH:     rEntry.eOp = SC_DOES_NOT_END_WITH;  break;
+    case sheet::FilterOperator2::EMPTY:
+        rEntry.SetQueryByEmpty();
+        break;
+    case sheet::FilterOperator2::NOT_EMPTY:
+        rEntry.SetQueryByNonEmpty();
+        break;
+    default:
+        OSL_FAIL("Unknown filter operator type.");
+        rEntry.eOp = SC_EQUAL;
+    }
+}
+
+void fillQueryParam(
+    ScQueryParam& rParam, ScDocument* pDoc,
+    const uno::Sequence<sheet::TableFilterField2>& aFilterFields)
+{
+    size_t nCount = static_cast<size_t>(aFilterFields.getLength());
+    rParam.Resize(nCount);
+
+    const sheet::TableFilterField2* pAry = aFilterFields.getConstArray();
+    for (size_t i = 0; i < nCount; ++i)
+    {
+        ScQueryEntry& rEntry = rParam.GetEntry(i);
+        convertUnoToQueryEntry(pAry[i], rEntry);
+
+        if (pAry[i].Operator != sheet::FilterOperator2::EMPTY && pAry[i].Operator != sheet::FilterOperator2::NOT_EMPTY)
+        {
+            ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
+            rItems.resize(1);
+            ScQueryEntry::Item& rItem = rItems.front();
+            rItem.meType    = pAry[i].IsNumeric ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
+            rItem.mfVal     = pAry[i].NumericValue;
+            rItem.maString  = pAry[i].StringValue;
+
+            if (rItem.meType == ScQueryEntry::ByValue && pDoc)
+                pDoc->GetFormatTable()->GetInputLineString(rItem.mfVal, 0, rItem.maString);
+        }
+    }
+
+    size_t nParamCount = rParam.GetEntryCount();    // Param wird nicht unter 8 resized
+    for (size_t i = nCount; i < nParamCount; ++i)
+        rParam.GetEntry(i).bDoQuery = false;        // ueberzaehlige Felder zuruecksetzen
+}
+
+void fillQueryParam(
+    ScQueryParam& rParam, ScDocument* pDoc,
+    const uno::Sequence<sheet::TableFilterField3>& aFilterFields)
+{
+    size_t nCount = static_cast<size_t>(aFilterFields.getLength());
+    rParam.Resize(nCount);
+
+    const sheet::TableFilterField3* pAry = aFilterFields.getConstArray();
+    for (size_t i = 0; i < nCount; ++i)
+    {
+        ScQueryEntry& rEntry = rParam.GetEntry(i);
+        convertUnoToQueryEntry(pAry[i], rEntry);
+
+        if (pAry[i].Operator != sheet::FilterOperator2::EMPTY && pAry[i].Operator != sheet::FilterOperator2::NOT_EMPTY)
+        {
+            ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
+            rItems.clear();
+            const uno::Sequence<sheet::FilterFieldValue>& rVals = pAry[i].Values;
+            for (sal_Int32 j = 0, n = rVals.getLength(); j < n; ++j)
+            {
+                ScQueryEntry::Item aItem;
+                aItem.meType   = rVals[j].IsNumeric ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
+                aItem.mfVal    = rVals[j].NumericValue;
+                aItem.maString = rVals[j].StringValue;
+
+                if (aItem.meType == ScQueryEntry::ByValue && pDoc)
+                    pDoc->GetFormatTable()->GetInputLineString(aItem.mfVal, 0, aItem.maString);
+
+                rItems.push_back(aItem);
+            }
+        }
+    }
+
+    size_t nParamCount = rParam.GetEntryCount();    // Param wird nicht unter 8 resized
+    for (size_t i = nCount; i < nParamCount; ++i)
+        rParam.GetEntry(i).bDoQuery = false;        // ueberzaehlige Felder zuruecksetzen
+}
+
+}
+
 uno::Sequence<sheet::TableFilterField2> SAL_CALL ScFilterDescriptorBase::getFilterFields2()
 throw(uno::RuntimeException)
 {
@@ -1229,50 +1312,93 @@ throw(uno::RuntimeException)
     for (SCSIZE i=0; i<nCount; i++)
     {
         const ScQueryEntry& rEntry = aParam.GetEntry(i);
-        const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+        convertQueryEntryToUno(rEntry, aField);
 
-        aField.Connection    = (rEntry.eConnect == SC_AND) ? sheet::FilterConnection_AND : sheet::FilterConnection_OR;
-        aField.Field         = rEntry.nField;
-        aField.IsNumeric     = !rItem.meType != ScQueryEntry::ByString;
-        aField.StringValue   = rItem.maString;
-        aField.NumericValue  = rItem.mfVal;
-
-        switch (rEntry.eOp)             // ScQueryOp
+        bool bByEmpty = false;
+        if (aField.Operator == sheet::FilterOperator2::EQUAL)
         {
-        case SC_EQUAL:
+            if (rEntry.IsQueryByEmpty())
             {
-                aField.Operator = sheet::FilterOperator2::EQUAL;
-                if (rEntry.IsQueryByEmpty())
-                {
-                    aField.Operator = sheet::FilterOperator2::EMPTY;
-                    aField.NumericValue = 0;
-                }
-                else if (rEntry.IsQueryByNonEmpty())
-                {
-                    aField.Operator = sheet::FilterOperator2::NOT_EMPTY;
-                    aField.NumericValue = 0;
-                }
+                aField.Operator = sheet::FilterOperator2::EMPTY;
+                aField.NumericValue = 0;
+                bByEmpty = true;
             }
-            break;
-        case SC_LESS:                   aField.Operator = sheet::FilterOperator2::LESS;                 break;
-        case SC_GREATER:                aField.Operator = sheet::FilterOperator2::GREATER;              break;
-        case SC_LESS_EQUAL:             aField.Operator = sheet::FilterOperator2::LESS_EQUAL;           break;
-        case SC_GREATER_EQUAL:          aField.Operator = sheet::FilterOperator2::GREATER_EQUAL;        break;
-        case SC_NOT_EQUAL:              aField.Operator = sheet::FilterOperator2::NOT_EQUAL;            break;
-        case SC_TOPVAL:                 aField.Operator = sheet::FilterOperator2::TOP_VALUES;           break;
-        case SC_BOTVAL:                 aField.Operator = sheet::FilterOperator2::BOTTOM_VALUES;        break;
-        case SC_TOPPERC:                aField.Operator = sheet::FilterOperator2::TOP_PERCENT;          break;
-        case SC_BOTPERC:                aField.Operator = sheet::FilterOperator2::BOTTOM_PERCENT;       break;
-        case SC_CONTAINS:               aField.Operator = sheet::FilterOperator2::CONTAINS;             break;
-        case SC_DOES_NOT_CONTAIN:       aField.Operator = sheet::FilterOperator2::DOES_NOT_CONTAIN;     break;
-        case SC_BEGINS_WITH:            aField.Operator = sheet::FilterOperator2::BEGINS_WITH;          break;
-        case SC_DOES_NOT_BEGIN_WITH:    aField.Operator = sheet::FilterOperator2::DOES_NOT_BEGIN_WITH;  break;
-        case SC_ENDS_WITH:              aField.Operator = sheet::FilterOperator2::ENDS_WITH;            break;
-        case SC_DOES_NOT_END_WITH:      aField.Operator = sheet::FilterOperator2::DOES_NOT_END_WITH;    break;
-        default:
-            OSL_FAIL("Falscher Filter-enum");
-            aField.Operator = sheet::FilterOperator2::EMPTY;
+            else if (rEntry.IsQueryByNonEmpty())
+            {
+                aField.Operator = sheet::FilterOperator2::NOT_EMPTY;
+                aField.NumericValue = 0;
+                bByEmpty = true;
+            }
         }
+
+        if (!bByEmpty && !rEntry.GetQueryItems().empty())
+        {
+            const ScQueryEntry::Item& rItem = rEntry.GetQueryItems().front();
+            aField.IsNumeric     = !rItem.meType != ScQueryEntry::ByString;
+            aField.StringValue   = rItem.maString;
+            aField.NumericValue  = rItem.mfVal;
+        }
+
+        pAry[i] = aField;
+    }
+    return aSeq;
+}
+
+uno::Sequence<sheet::TableFilterField3> SAL_CALL ScFilterDescriptorBase::getFilterFields3()
+    throw(uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    ScQueryParam aParam;
+    GetData(aParam);
+
+    SCSIZE nEntries = aParam.GetEntryCount();   // allozierte Eintraege im Param
+    SCSIZE nCount = 0;                          // aktive
+    while ( nCount < nEntries &&
+        aParam.GetEntry(nCount).bDoQuery )
+        ++nCount;
+
+    sheet::TableFilterField3 aField;
+    uno::Sequence<sheet::TableFilterField3> aSeq(static_cast<sal_Int32>(nCount));
+    sheet::TableFilterField3* pAry = aSeq.getArray();
+    for (SCSIZE i = 0; i < nCount; ++i)
+    {
+        const ScQueryEntry& rEntry = aParam.GetEntry(i);
+        convertQueryEntryToUno(rEntry, aField);
+
+        bool bByEmpty = false;
+        if (aField.Operator == sheet::FilterOperator2::EQUAL)
+        {
+            if (rEntry.IsQueryByEmpty())
+            {
+                aField.Operator = sheet::FilterOperator2::EMPTY;
+                aField.Values.realloc(1);
+                aField.Values[0].NumericValue = 0;
+                bByEmpty = true;
+            }
+            else if (rEntry.IsQueryByNonEmpty())
+            {
+                aField.Operator = sheet::FilterOperator2::NOT_EMPTY;
+                aField.Values.realloc(1);
+                aField.Values[0].NumericValue = 0;
+                bByEmpty = true;
+            }
+        }
+
+        if (!bByEmpty)
+        {
+            const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
+            size_t nItemCount = rItems.size();
+            aField.Values.realloc(nItemCount);
+            ScQueryEntry::QueryItemsType::const_iterator itr = rItems.begin(), itrEnd = rItems.end();
+            for (size_t j = 0; itr != itrEnd; ++itr, ++j)
+            {
+                aField.Values[j].IsNumeric = itr->meType != ScQueryEntry::ByString;
+                aField.Values[j].StringValue = itr->maString;
+                aField.Values[j].NumericValue = itr->mfVal;
+
+            }
+        }
+
         pAry[i] = aField;
     }
     return aSeq;
@@ -1294,7 +1420,9 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields(
     for (i=0; i<nCount; i++)
     {
         ScQueryEntry& rEntry = aParam.GetEntry(i);
-        ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+        ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
+        rItems.resize(1);
+        ScQueryEntry::Item& rItem = rItems.front();
         rEntry.bDoQuery = true;
         rEntry.eConnect = (pAry[i].Connection == sheet::FilterConnection_AND) ? SC_AND : SC_OR;
         rEntry.nField   = pAry[i].Field;
@@ -1338,6 +1466,17 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields(
 
 void SAL_CALL ScFilterDescriptorBase::setFilterFields2(
     const uno::Sequence<sheet::TableFilterField2>& aFilterFields )
+    throw(uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    ScQueryParam aParam;
+    GetData(aParam);
+    fillQueryParam(aParam, pDocSh->GetDocument(), aFilterFields);
+    PutData(aParam);
+}
+
+void SAL_CALL ScFilterDescriptorBase::setFilterFields3(
+    const uno::Sequence<sheet::TableFilterField3>& aFilterFields )
     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;

@@ -25,23 +25,36 @@
  * instead of those above.
  */
 
-#ifndef __com_sun_star_sheet_XSelectedSheetsSupplier_idl__
-#define __com_sun_star_sheet_XSelectedSheetsSupplier_idl__
+#ifndef __com_sun_star_sheet_TableFilterField3_idl__
+#define __com_sun_star_sheet_TableFilterField3_idl__
 
-#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/sheet/FilterConnection.idl>
+#include <com/sun/star/sheet/FilterOperator2.idl>
+#include <com/sun/star/sheet/FilterFieldValue.idl>
 
-module com { module sun { module star { module sheet {
+module com {  module sun {  module star {  module sheet {
 
 /**
  * @since LibreOffice 3.5
  */
-interface XSelectedSheetsSupplier: com::sun::star::uno::XInterface
+struct TableFilterField3
 {
-    /**
-       returns the indices of currently selected sheets.  Sheet indices are
-       0-based.
+    /** specifies how the condition is connected to the previous condition.
      */
-    sequence<long> getSelectedSheets();
+    FilterConnection Connection;
+
+    /** specifies which field (column) is used for the condition.
+     */
+    long Field;
+
+    /** specifies the type of the condition as defined in
+        <type>FilterOperator2</type>.
+    */
+    long Operator;
+
+    /** specifies values to match against.  Each filter field may have one or
+        more values.*/
+    sequence<FilterFieldValue> Values;
 };
 
 }; }; }; };

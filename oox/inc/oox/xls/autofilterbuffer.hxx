@@ -34,9 +34,9 @@
 #include "oox/xls/workbookhelper.hxx"
 
 namespace com { namespace sun { namespace star {
-    namespace sheet { struct TableFilterField2; }
+    namespace sheet { struct TableFilterField3; }
     namespace sheet { class XDatabaseRange; }
-    namespace sheet { class XSheetFilterDescriptor2; }
+    namespace sheet { class XSheetFilterDescriptor3; }
 } } }
 
 namespace oox {
@@ -47,15 +47,16 @@ namespace xls {
 /** Contains UNO API filter settings for a column in a filtered range. */
 struct ApiFilterSettings
 {
-    typedef ::std::vector< ::com::sun::star::sheet::TableFilterField2 > FilterFieldVector;
+    typedef ::std::vector<com::sun::star::sheet::TableFilterField3> FilterFieldVector;
 
     FilterFieldVector   maFilterFields;     /// List of UNO API filter settings.
     OptValue< bool >    mobNeedsRegExp;     /// If set, requires regular expressions to be enabled/disabled.
 
     explicit            ApiFilterSettings();
 
-    void                appendField( bool bAnd, sal_Int32 nOperator, double fValue );
-    void                appendField( bool bAnd, sal_Int32 nOperator, const ::rtl::OUString& rValue );
+    void appendField( bool bAnd, sal_Int32 nOperator, double fValue );
+    void appendField( bool bAnd, sal_Int32 nOperator, const ::rtl::OUString& rValue );
+    void appendField( bool bAnd, const std::vector<rtl::OUString>& rValues );
 };
 
 // ============================================================================
@@ -236,7 +237,9 @@ public:
     FilterColumn&       createFilterColumn();
 
     /** Applies the filter to the passed filter descriptor. */
-    void                finalizeImport( const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSheetFilterDescriptor2 >& rxFilterDesc );
+    void                finalizeImport(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::sheet::XSheetFilterDescriptor3>& rxFilterDesc );
 
 private:
     typedef RefVector< FilterColumn > FilterColumnVector;

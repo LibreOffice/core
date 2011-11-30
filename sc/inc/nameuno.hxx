@@ -49,6 +49,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase6.hxx>
+#include <rtl/ref.hxx>
 
 class ScDocShell;
 class ScRangeName;
@@ -67,7 +68,7 @@ class ScNamedRangeObj : public ::cppu::WeakImplHelper6<
                         public SfxListener
 {
 private:
-    com::sun::star::uno::Reference< com::sun::star::sheet::XNamedRanges > mxParent;
+    rtl::Reference< ScNamedRangesObj > mxParent;
     ScDocShell*             pDocShell;
     String                  aName;
     com::sun::star::uno::Reference< com::sun::star::container::XNamed > mxSheet;
@@ -81,7 +82,7 @@ private:
     SCTAB                   GetTab_Impl();
 
 public:
-                            ScNamedRangeObj( com::sun::star::uno::Reference< com::sun::star::sheet::XNamedRanges > xParent, ScDocShell* pDocSh, const String& rNm,
+                            ScNamedRangeObj( rtl::Reference< ScNamedRangesObj > xParent, ScDocShell* pDocSh, const String& rNm,
                                     com::sun::star::uno::Reference< com::sun::star::container::XNamed > xSheet = com::sun::star::uno::Reference< com::sun::star::container::XNamed > ());
     virtual                 ~ScNamedRangeObj();
 

@@ -47,10 +47,16 @@ private:
     rtl::OUString handleAcc();
     rtl::OUString handleBar();
     rtl::OUString handleBorderBox();
+    rtl::OUString handleD();
     rtl::OUString handleE();
     rtl::OUString handleF();
+    rtl::OUString handleFunc();
+    enum LimLowUpp_t { LimLow, LimUpp };
+    rtl::OUString handleLimLowUpp( LimLowUpp_t limlowupp );
+    rtl::OUString handleGroupChr();
+    rtl::OUString handleM();
     rtl::OUString handleR();
-    rtl::OUString readOMathArg( int endtoken );
+    rtl::OUString readOMathArg();
     oox::formulaimport::XmlStream& stream;
 };
 

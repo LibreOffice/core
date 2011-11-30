@@ -5396,6 +5396,8 @@ dnl Check for PostgreSQL stuff
 dnl ===================================================================
 
 if test "x$enable_ext_postgresql_sdbc" = "xyes"; then
+    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_POSTGRESQL"
+
     AC_MSG_CHECKING([for PostgreSQL prerequisites])
     if test "$with_system_postgresql" = "yes"; then
         AC_MSG_RESULT([external PostgreSQL])
@@ -8118,7 +8120,7 @@ AC_MSG_CHECKING([for SmART Gallery (Diagram) extension integration])
 DIAGRAM_EXTENSION_PACK=
 if test "x$enable_ext_diagram" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_DIAGRAM"
-    DIAGRAM_EXTENSION_PACK="4a433efb6d385264ebc1d5513782d51c-SmART_0.9.4.oxt"
+    DIAGRAM_EXTENSION_PACK="8d74685d41f8bffe8c3e71fe8deac09d-SmART_0.9.5.oxt"
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])

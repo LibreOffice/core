@@ -30,9 +30,9 @@
 
 #include <com/sun/star/sheet/FilterConnection.hpp>
 #include <com/sun/star/sheet/FilterOperator2.hpp>
-#include <com/sun/star/sheet/TableFilterField2.hpp>
+#include <com/sun/star/sheet/TableFilterField3.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
-#include <com/sun/star/sheet/XSheetFilterDescriptor2.hpp>
+#include <com/sun/star/sheet/XSheetFilterDescriptor3.hpp>
 #include <com/sun/star/table/TableOrientation.hpp>
 #include <rtl/ustrbuf.hxx>
 #include "oox/helper/attributelist.hxx"
@@ -170,21 +170,38 @@ ApiFilterSettings::ApiFilterSettings()
 void ApiFilterSettings::appendField( bool bAnd, sal_Int32 nOperator, double fValue )
 {
     maFilterFields.resize( maFilterFields.size() + 1 );
-    TableFilterField2& rFilterField = maFilterFields.back();
+    TableFilterField3& rFilterField = maFilterFields.back();
     rFilterField.Connection = bAnd ? FilterConnection_AND : FilterConnection_OR;
     rFilterField.Operator = nOperator;
-    rFilterField.IsNumeric = sal_True;
-    rFilterField.NumericValue = fValue;
+    rFilterField.Values.realloc(1);
+    rFilterField.Values[0].IsNumeric = true;
+    rFilterField.Values[0].NumericValue = fValue;
 }
 
 void ApiFilterSettings::appendField( bool bAnd, sal_Int32 nOperator, const OUString& rValue )
 {
     maFilterFields.resize( maFilterFields.size() + 1 );
-    TableFilterField2& rFilterField = maFilterFields.back();
+    TableFilterField3& rFilterField = maFilterFields.back();
     rFilterField.Connection = bAnd ? FilterConnection_AND : FilterConnection_OR;
     rFilterField.Operator = nOperator;
-    rFilterField.IsNumeric = sal_False;
-    rFilterField.StringValue = rValue;
+    rFilterField.Values.realloc(1);
+    rFilterField.Values[0].IsNumeric = false;
+    rFilterField.Values[0].StringValue = rValue;
+}
+
+void ApiFilterSettings::appendField( bool bAnd, const std::vector<rtl::OUString>& rValues )
+{
+    maFilterFields.resize( maFilterFields.size() + 1 );
+    TableFilterField3& rFilterField = maFilterFields.back();
+    rFilterField.Connection = bAnd ? FilterConnection_AND : FilterConnection_OR;
+    rFilterField.Operator = FilterOperator2::EQUAL;
+    size_t n = rValues.size();
+    rFilterField.Values.realloc(n);
+    for (size_t i = 0; i < n; ++i)
+    {
+        rFilterField.Values[i].IsNumeric = false;
+        rFilterField.Values[i].StringValue = rValues[i];
+    }
 }
 
 // ============================================================================
@@ -274,8 +291,7 @@ ApiFilterSettings DiscreteFilter::finalizeImport( sal_Int32 nMaxCount )
         aSettings.maFilterFields.reserve( maValues.size() );
 
         // insert all filter values
-        for( FilterValueVector::iterator aIt = maValues.begin(), aEnd = maValues.end(); aIt != aEnd; ++aIt )
-            aSettings.appendField( false, FilterOperator2::EQUAL, *aIt );
+        aSettings.appendField( true, maValues );
 
         // extra field for 'show empty'
         if( mbShowBlank )
@@ -669,7 +685,7 @@ FilterColumn& AutoFilter::createFilterColumn()
     return *xFilterColumn;
 }
 
-void AutoFilter::finalizeImport( const Reference< XSheetFilterDescriptor2 >& rxFilterDesc )
+void AutoFilter::finalizeImport( const Reference<XSheetFilterDescriptor3>& rxFilterDesc )
 {
     if( rxFilterDesc.is() )
     {
@@ -687,7 +703,7 @@ void AutoFilter::finalizeImport( const Reference< XSheetFilterDescriptor2 >& rxF
         OSL_ENSURE( nMaxCount > 0, "AutoFilter::finalizeImport - invalid maximum filter field count" );
 
         // resulting list of all UNO API filter fields
-        ::std::vector< TableFilterField2 > aFilterFields;
+        ::std::vector<TableFilterField3> aFilterFields;
 
         // track if columns require to enable or disable regular expressions
         OptValue< bool > obNeedsRegExp;
@@ -742,7 +758,7 @@ void AutoFilter::finalizeImport( const Reference< XSheetFilterDescriptor2 >& rxF
 
         // insert all filter fields to the filter descriptor
         if( !aFilterFields.empty() )
-            rxFilterDesc->setFilterFields2( ContainerHelper::vectorToSequence( aFilterFields ) );
+            rxFilterDesc->setFilterFields3( ContainerHelper::vectorToSequence( aFilterFields ) );
 
         // regular expressions
         bool bUseRegExp = obNeedsRegExp.get( false );
@@ -828,7 +844,7 @@ bool AutoFilterBuffer::finalizeImport( const Reference< XDatabaseRange >& rxData
         PropertySet aRangeProps( rxDatabaseRange );
         aRangeProps.setProperty( PROP_AutoFilter, true );
         // convert filter settings using the filter descriptor of the database range
-        Reference< XSheetFilterDescriptor2 > xFilterDesc( rxDatabaseRange->getFilterDescriptor(), UNO_QUERY_THROW );
+        Reference< XSheetFilterDescriptor3 > xFilterDesc( rxDatabaseRange->getFilterDescriptor(), UNO_QUERY_THROW );
         pAutoFilter->finalizeImport( xFilterDesc );
         // return true to indicate enabled autofilter
         return true;

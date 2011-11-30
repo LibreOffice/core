@@ -259,7 +259,7 @@ void Bridge::terminate() {
     }
     try {
         connection_->close();
-    } catch (css::io::IOException & e) {
+    } catch (const css::io::IOException & e) {
         SAL_INFO("binaryurp", "caught IO exception '" << e.Message << '\'');
     }
     assert(w.is());
@@ -289,7 +289,7 @@ void Bridge::terminate() {
             (*i)->disposing(
                 css::lang::EventObject(
                     static_cast< cppu::OWeakObject * >(this)));
-        } catch (css::uno::RuntimeException & e) {
+        } catch (const css::uno::RuntimeException & e) {
             SAL_WARN(
                 "binaryurp", "caught runtime exception '" << e.Message << '\'');
         }
@@ -505,10 +505,10 @@ void Bridge::revokeProxy(Proxy & proxy) {
 void Bridge::freeProxy(Proxy & proxy) {
     try {
         makeReleaseCall(proxy.getOid(), proxy.getType());
-    } catch (css::uno::RuntimeException & e) {
+    } catch (const css::uno::RuntimeException & e) {
         SAL_INFO(
             "binaryurp", "caught runtime exception '" << e.Message << '\'');
-    } catch (std::exception & e) {
+    } catch (const std::exception & e) {
         SAL_WARN("binaryurp", "caught C++ exception '" << e.what() << '\'');
     }
     bool unused;
@@ -660,7 +660,7 @@ void Bridge::handleCommitChangeReply(
     bool ccMode = true;
     try {
         throwException(exception, returnValue);
-    } catch (css::bridge::InvalidProtocolChangeException &) {
+    } catch (const css::bridge::InvalidProtocolChangeException &) {
         ccMode = false;
     }
     if (ccMode) {

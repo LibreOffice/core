@@ -108,7 +108,7 @@ void Test::testTypeOfVoidSequence() {
     try {
         m.readType();
         CPPUNIT_FAIL("exception expected");
-    } catch (css::io::IOException &) {}
+    } catch (const css::io::IOException &) {}
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

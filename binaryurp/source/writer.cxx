@@ -189,11 +189,11 @@ void Writer::run() {
                 }
             }
         }
-    } catch (css::uno::Exception & e) {
+    } catch (const css::uno::Exception & e) {
         OSL_TRACE(
             OSL_LOG_PREFIX "caught UNO exception '%s'",
             rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
-    } catch (std::exception & e) {
+    } catch (const std::exception & e) {
         OSL_TRACE(OSL_LOG_PREFIX "caught C++ exception '%s'", e.what());
     }
     bridge_->terminate();
@@ -447,7 +447,7 @@ void Writer::sendMessage(std::vector< unsigned char > const & buffer) {
         rtl_copyMemory(s.getArray() + s.getLength() - k, p, k);
         try {
             bridge_->getConnection()->write(s);
-        } catch (css::io::IOException & e) {
+        } catch (const css::io::IOException & e) {
             css::uno::Any exc(cppu::getCaughtException());
             throw css::lang::WrappedTargetRuntimeException(
                 (rtl::OUString(

@@ -555,19 +555,19 @@ void UpdateableResultSet::updateTimestamp( sal_Int32 columnIndex, const ::com::s
     updateString( columnIndex, dateTime2String( x ) );
 }
 
-void UpdateableResultSet::updateBinaryStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw (SQLException, RuntimeException)
+void UpdateableResultSet::updateBinaryStream( sal_Int32 /* columnIndex */, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& /* x */, sal_Int32 /* length */ ) throw (SQLException, RuntimeException)
 {
 }
 
-void UpdateableResultSet::updateCharacterStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw (SQLException, RuntimeException)
+void UpdateableResultSet::updateCharacterStream( sal_Int32 /* columnIndex */, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& /* x */, sal_Int32 /* length */ ) throw (SQLException, RuntimeException)
 {
 }
 
-void UpdateableResultSet::updateObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x ) throw (SQLException, RuntimeException)
+void UpdateableResultSet::updateObject( sal_Int32 /* columnIndex */, const ::com::sun::star::uno::Any& /* x */ ) throw (SQLException, RuntimeException)
 {
 }
 
-void UpdateableResultSet::updateNumericObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x, sal_Int32 scale ) throw (SQLException, RuntimeException)
+void UpdateableResultSet::updateNumericObject( sal_Int32 /* columnIndex */, const ::com::sun::star::uno::Any& /* x */, sal_Int32 /* scale */ ) throw (SQLException, RuntimeException)
 {
 }
 

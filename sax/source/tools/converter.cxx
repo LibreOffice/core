@@ -1345,15 +1345,26 @@ bool Converter::convertDateOrDateTime(
 
     const ::rtl::OUString string = rString.trim().toAsciiUpperCase();
     sal_Int32 nPos(0);
-    if ((string.getLength() > nPos) && (sal_Unicode('-') == string[nPos]))
+    if (string.getLength() > nPos)
     {
-        //Negative Number
-        ++nPos;
+        if (sal_Unicode('-') == string[nPos])
+        {
+            //Negative Number
+            ++nPos;
+        }
+        else if (sal_Unicode('+') == string[nPos])
+        {
+            //Positive Number, explicit AD/CE
+            ++nPos;
+        }
     }
 
     sal_Int32 nYear(0);
     {
-        bSuccess = readDateTimeComponent(string, nPos, nYear, 4, false);
+        // While ISO 8601 specifies years with a minimum of 4 digits, be
+        // leninent in what we accept for years < 1000. One digit is acceptable
+        // if the remainders match.
+        bSuccess = readDateTimeComponent(string, nPos, nYear, 1, false);
         bSuccess &= (0 < nYear);
         bSuccess &= (nPos < string.getLength()); // not last token
     }

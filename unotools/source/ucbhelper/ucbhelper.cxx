@@ -493,11 +493,13 @@ bool utl::UCBContentHelper::EqualURLs(
                 RTL_CONSTASCII_USTRINGPARAM("no ucbhelper::ContentBroker")),
             css::uno::Reference<css::uno::XInterface>());
     }
-    return 0 == broker->getContentProviderInterface()->compareContentIds(
-        (broker->getContentIdentifierFactoryInterface()->
-         createContentIdentifier(canonic(url1))),
-        (broker->getContentIdentifierFactoryInterface()->
-         createContentIdentifier(canonic(url2))));
+    return
+        broker->getContentProviderInterface()->compareContentIds(
+            (broker->getContentIdentifierFactoryInterface()->
+             createContentIdentifier(canonic(url1))),
+            (broker->getContentIdentifierFactoryInterface()->
+             createContentIdentifier(canonic(url2))))
+        == 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

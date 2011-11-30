@@ -211,7 +211,7 @@ public:
 
     ModulWindowLayout*  GetLayoutWindow() const { return pModulLayout; }
 
-    IDEBaseWindow*      FindWindow( const ScriptDocument& rDocument, const String& rLibName = String(), const String& rName = String(), sal_uInt16 nType = BASICIDE_TYPE_UNKNOWN, sal_Bool bFindSuspended = sal_False );
+    IDEBaseWindow*      FindWindow( const ScriptDocument& rDocument, const String& rLibName = String(), const String& rName = String(), BasicIDEType nType = BasicIDEType::Unknown, sal_Bool bFindSuspended = sal_False );
     DialogWindow*       FindDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName, sal_Bool bCreateIfNotExist, sal_Bool bFindSuspended = sal_False );
     IDEBaseWindow*      FindApplicationWindow();
     sal_Bool                NextPage( sal_Bool bPrev = sal_False );

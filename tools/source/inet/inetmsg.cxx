@@ -431,7 +431,7 @@ sal_Bool INetRFC822Message::ParseDateField (
         return sal_False;
     }
 
-    return (rDateTime.IsValid() &&
+    return (rDateTime.IsValidAndGregorian() &&
             !((rDateTime.GetSec()  > 59) ||
               (rDateTime.GetMin()  > 59) ||
               (rDateTime.GetHour() > 23)    ));

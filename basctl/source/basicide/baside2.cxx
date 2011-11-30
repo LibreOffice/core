@@ -722,7 +722,7 @@ long ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
     if ( pBrk )
     {
         pBrk->nHitCount++;
-        if ( pBrk->nHitCount < pBrk->nStopAfter && GetBasic()->IsBreak() )
+        if ( pBrk->nHitCount <= pBrk->nStopAfter && GetBasic()->IsBreak() )
             return aStatus.nBasicFlags; // go on...
     }
 

@@ -376,8 +376,8 @@ private:
 class ExcFilterCondition
 {
 private:
-    sal_uInt8                   nType;
-    sal_uInt8                   nOper;
+    sal_uInt8               nType;
+    sal_uInt8               nOper;
     double                  fVal;
     XclExpString*           pText;
 
@@ -386,9 +386,9 @@ public:
                             ExcFilterCondition();
                             ~ExcFilterCondition();
 
-    inline sal_Bool             IsEmpty() const     { return (nType == EXC_AFTYPE_NOTUSED); }
-    inline sal_Bool             HasEqual() const    { return (nOper == EXC_AFOPER_EQUAL); }
-    sal_uLong                   GetTextBytes() const;
+    inline bool             IsEmpty() const     { return (nType == EXC_AFTYPE_NOTUSED); }
+    inline bool             HasEqual() const    { return (nOper == EXC_AFOPER_EQUAL); }
+    sal_uLong               GetTextBytes() const;
 
     void                    SetCondition( sal_uInt8 nTp, sal_uInt8 nOp, double fV, String* pT );
 
@@ -402,25 +402,28 @@ public:
 class XclExpAutofilter : public XclExpRecord, protected XclExpRoot
 {
 private:
-    sal_uInt16                  nCol;
-    sal_uInt16                  nFlags;
+    enum FilterType { FilterCondition, MultiValue };
+    FilterType              meType;
+    sal_uInt16              nCol;
+    sal_uInt16              nFlags;
     ExcFilterCondition      aCond[ 2 ];
+    std::vector<rtl::OUString> maMultiValues;
 
-    sal_Bool                    AddCondition( ScQueryConnect eConn, sal_uInt8 nType,
+    bool                    AddCondition( ScQueryConnect eConn, sal_uInt8 nType,
                                 sal_uInt8 nOp, double fVal, String* pText,
-                                sal_Bool bSimple = false );
+                                bool bSimple = false );
 
     virtual void            WriteBody( XclExpStream& rStrm );
 
-protected:
 public:
                             XclExpAutofilter( const XclExpRoot& rRoot, sal_uInt16 nC );
 
-    inline sal_uInt16           GetCol() const          { return nCol; }
-    inline sal_Bool             HasCondition() const    { return !aCond[ 0 ].IsEmpty(); }
-    inline sal_Bool             HasTop10() const        { return ::get_flag( nFlags, EXC_AFFLAG_TOP10 ); }
+    inline sal_uInt16       GetCol() const          { return nCol; }
+    inline bool             HasTop10() const        { return ::get_flag( nFlags, EXC_AFFLAG_TOP10 ); }
 
+    bool                    HasCondition() const;
     bool                    AddEntry( const ScQueryEntry& rEntry );
+    bool                    AddMultiValueEntry( const ScQueryEntry& rEntry );
 
     virtual void            SaveXml( XclExpXmlStream& rStrm );
 };
@@ -442,7 +445,7 @@ public:
 
 private:
     XclExpAutofilter*   GetByCol( SCCOL nCol ); // always 0-based
-    sal_Bool                IsFiltered( SCCOL nCol );
+    bool                IsFiltered( SCCOL nCol );
 
 private:
     typedef XclExpRecordList< XclExpAutofilter >    XclExpAutofilterList;

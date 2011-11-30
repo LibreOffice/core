@@ -39,7 +39,7 @@ using namespace oox::core;
 static sal_Unicode Convert(sal_Unicode nIn)
 {
     //Find the best match in accepted unicode for our private area symbols
-    static sal_Unicode aStarMathPrivateToUnicode[] =
+    static const sal_Unicode aStarMathPrivateToUnicode[] =
     {
         0x2030, 0xF613, 0xF612, 0x002B, 0x003C, 0x003E, 0xE425, 0xE421, 0xE088, 0x2208,
         0x0192, 0x2026, 0x2192, 0x221A, 0x221A, 0x221A, 0xE090, 0x005E, 0x02C7, 0x02D8,

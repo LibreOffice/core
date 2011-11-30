@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -315,7 +315,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/layout/sectfrm \
     sw/source/core/layout/softpagebreak \
     sw/source/core/layout/sortedobjs \
-    sw/source/core/layout/sortedobjsimpl \
     sw/source/core/layout/ssfrm \
     sw/source/core/layout/swselectionlist \
     sw/source/core/layout/tabfrm \

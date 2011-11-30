@@ -60,7 +60,7 @@ $(call gb_Deliver_add_deliverable,$(call gb_Executable_get_target,$(1)),$(call g
 endef
 
 define gb_Executable_set_targettype_gui
-$(call gb_Executable_get_target,$(1)) : gb_Executable_TARGETGUI := $(2)
+$(call gb_LinkTarget_get_target,Executable/$(1)$(gb_Executable_EXT)) : TARGETGUI := $(2)
 endef
 
 

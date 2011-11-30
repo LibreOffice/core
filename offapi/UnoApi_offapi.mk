@@ -3318,6 +3318,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/sheet,\
 	FillDirection \
 	FillMode \
 	FilterConnection \
+	FilterFieldValue \
 	FilterOperator \
 	FilterOperator2 \
 	FormulaLanguage \
@@ -3350,6 +3351,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/sheet,\
 	SubTotalColumn \
 	TableFilterField \
 	TableFilterField2 \
+	TableFilterField3 \
 	TableOperationMode \
 	TablePageBreakData \
 	TableValidationVisibility \
@@ -3445,6 +3447,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/sheet,\
 	XSheetConditionalEntry \
 	XSheetFilterDescriptor \
 	XSheetFilterDescriptor2 \
+	XSheetFilterDescriptor3 \
 	XSheetFilterable \
 	XSheetFilterableEx \
 	XSheetLinkable \

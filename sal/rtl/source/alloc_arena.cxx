@@ -30,11 +30,11 @@
 #include "alloc_arena.hxx"
 
 #include "alloc_impl.hxx"
-#include "internal/once.h"
 #include "internal/rtllifecycle.h"
 #include "sal/macros.h"
 #include "osl/diagnose.h"
 
+#include <cassert>
 #include <string.h>
 #include <stdio.h>
 
@@ -119,14 +119,11 @@ rtl_arena_segment_constructor (void * obj)
 static void
 rtl_arena_segment_destructor (void * obj)
 {
-#if OSL_DEBUG_LEVEL == 0
-    (void) obj; /* unused */
-#else /* OSL_DEBUG_LEVEL */
-    rtl_arena_segment_type * segment = (rtl_arena_segment_type*)(obj);
-
-    OSL_ASSERT(QUEUE_STARTED_NAMED(segment, s));
-    OSL_ASSERT(QUEUE_STARTED_NAMED(segment, f));
-#endif /* OSL_DEBUG_LEVEL */
+    rtl_arena_segment_type * segment = static_cast< rtl_arena_segment_type * >(
+        obj);
+    assert(QUEUE_STARTED_NAMED(segment, s));
+    assert(QUEUE_STARTED_NAMED(segment, f));
+    (void) segment; // avoid warnings
 }
 
 /* ================================================================= */
@@ -185,7 +182,7 @@ rtl_arena_segment_get (
 {
     rtl_arena_segment_type * head;
 
-    OSL_ASSERT(*ppSegment == 0);
+    assert(*ppSegment == 0);
 
     head = &(arena->m_segment_reserve_head);
     if ((head->m_snext != head) || rtl_arena_segment_populate (arena))
@@ -213,13 +210,13 @@ rtl_arena_segment_put (
 {
     rtl_arena_segment_type * head;
 
-    OSL_ASSERT(QUEUE_STARTED_NAMED((*ppSegment), s));
-    OSL_ASSERT(QUEUE_STARTED_NAMED((*ppSegment), f));
+    assert(QUEUE_STARTED_NAMED((*ppSegment), s));
+    assert(QUEUE_STARTED_NAMED((*ppSegment), f));
 
     (*ppSegment)->m_addr = 0;
     (*ppSegment)->m_size = 0;
 
-    OSL_ASSERT((*ppSegment)->m_type != RTL_ARENA_SEGMENT_TYPE_HEAD);
+    assert((*ppSegment)->m_type != RTL_ARENA_SEGMENT_TYPE_HEAD);
     (*ppSegment)->m_type = 0;
 
     /* keep as reserve */
@@ -275,7 +272,7 @@ rtl_arena_freelist_remove (
         rtl_arena_segment_type * head;
 
         head = segment->m_fprev;
-        OSL_ASSERT(arena->m_freelist_bitmap & head->m_size);
+        assert(arena->m_freelist_bitmap & head->m_size);
         arena->m_freelist_bitmap ^= head->m_size;
     }
     QUEUE_REMOVE_NAMED(segment, f);
@@ -324,16 +321,14 @@ rtl_arena_hash_rescale (
         old_table = arena->m_hash_table;
         old_size  = arena->m_hash_size;
 
-        OSL_TRACE(
-            "rtl_arena_hash_rescale(\"%s\"): "
-            "nseg: %"PRIu64" (ave: %"PRIu64"), frees: %"PRIu64" "
-            "[old_size: %lu, new_size: %lu]",
-            arena->m_name,
-            arena->m_stats.m_alloc - arena->m_stats.m_free,
-            (arena->m_stats.m_alloc - arena->m_stats.m_free) >> arena->m_hash_shift,
-            arena->m_stats.m_free,
-            old_size, new_size
-        );
+        // SAL_INFO(
+        //  "sal",
+        //  "rtl_arena_hash_rescale(" << arena->m_name << "): nseg: "
+        //      << (arena->m_stats.m_alloc - arena->m_stats.m_free) << " (ave: "
+        //      << ((arena->m_stats.m_alloc - arena->m_stats.m_free)
+        //          >> arena->m_hash_shift)
+        //      << "), frees: " << arena->m_stats.m_free << " [old_size: "
+        //      << old_size << ", new_size: " << new_size << ']');
 
         arena->m_hash_table = new_table;
         arena->m_hash_size  = new_size;
@@ -405,10 +400,6 @@ rtl_arena_hash_remove (
     rtl_arena_segment_type *segment, **segpp;
     sal_Size lookups = 0;
 
-#if OSL_DEBUG_LEVEL == 0
-    (void) size; /* unused */
-#endif /* OSL_DEBUG_LEVEL */
-
     segpp = &(arena->m_hash_table[RTL_ARENA_HASH_INDEX(arena, addr)]);
     while ((segment = *segpp) != 0)
     {
@@ -423,10 +414,11 @@ rtl_arena_hash_remove (
         segpp = &(segment->m_fnext);
     }
 
-    OSL_POSTCOND(segment != 0, "rtl_arena_hash_remove(): bad free.");
+    assert(segment != 0); // bad free
     if (segment != 0)
     {
-        OSL_POSTCOND(segment->m_size == size, "rtl_arena_hash_remove(): wrong size.");
+        assert(segment->m_size == size);
+        (void) size; // avoid warnings
 
         arena->m_stats.m_free      += 1;
         arena->m_stats.m_mem_alloc -= segment->m_size;
@@ -471,7 +463,7 @@ rtl_arena_segment_alloc (
 {
     int index = 0;
 
-    OSL_ASSERT(*ppSegment == 0);
+    assert(*ppSegment == 0);
     if (!RTL_MEMORY_ISP2(size))
     {
         int msb = highbit(size);
@@ -505,7 +497,7 @@ rtl_arena_segment_alloc (
 
         head = &(arena->m_freelist_head[index - 1]);
         (*ppSegment) = head->m_fnext;
-        OSL_ASSERT((*ppSegment) != head);
+        assert((*ppSegment) != head);
     }
 
 dequeue_and_leave:
@@ -531,7 +523,7 @@ rtl_arena_segment_create (
     rtl_arena_segment_type ** ppSegment
 )
 {
-    OSL_ASSERT((*ppSegment) == 0);
+    assert((*ppSegment) == 0);
     if (arena->m_source_alloc != 0)
     {
         rtl_arena_segment_get (arena, ppSegment);
@@ -588,14 +580,14 @@ rtl_arena_segment_coalesce (
     rtl_arena_segment_type *next, *prev;
 
     /* mark segment free */
-    OSL_ASSERT(segment->m_type == RTL_ARENA_SEGMENT_TYPE_USED);
+    assert(segment->m_type == RTL_ARENA_SEGMENT_TYPE_USED);
     segment->m_type = RTL_ARENA_SEGMENT_TYPE_FREE;
 
     /* try to merge w/ next segment */
     next = segment->m_snext;
     if (next->m_type == RTL_ARENA_SEGMENT_TYPE_FREE)
     {
-        OSL_ASSERT(segment->m_addr + segment->m_size == next->m_addr);
+        assert(segment->m_addr + segment->m_size == next->m_addr);
         segment->m_size += next->m_size;
 
         /* remove from freelist */
@@ -612,7 +604,7 @@ rtl_arena_segment_coalesce (
     prev = segment->m_sprev;
     if (prev->m_type == RTL_ARENA_SEGMENT_TYPE_FREE)
     {
-        OSL_ASSERT(prev->m_addr + prev->m_size == segment->m_addr);
+        assert(prev->m_addr + prev->m_size == segment->m_addr);
         segment->m_addr  = prev->m_addr;
         segment->m_size += prev->m_size;
 
@@ -680,35 +672,35 @@ rtl_arena_destructor (void * obj)
     rtl_arena_segment_type * head;
     size_t i;
 
-    OSL_ASSERT(QUEUE_STARTED_NAMED(arena, arena_));
+    assert(QUEUE_STARTED_NAMED(arena, arena_));
 
     RTL_MEMORY_LOCK_DESTROY(&(arena->m_lock));
 
     head = &(arena->m_segment_reserve_span_head);
-    OSL_ASSERT(head->m_type == RTL_ARENA_SEGMENT_TYPE_HEAD);
+    assert(head->m_type == RTL_ARENA_SEGMENT_TYPE_HEAD);
     rtl_arena_segment_destructor (head);
 
     head = &(arena->m_segment_reserve_head);
-    OSL_ASSERT(head->m_type == RTL_ARENA_SEGMENT_TYPE_HEAD);
+    assert(head->m_type == RTL_ARENA_SEGMENT_TYPE_HEAD);
     rtl_arena_segment_destructor (head);
 
     head = &(arena->m_segment_head);
-    OSL_ASSERT(head->m_type == RTL_ARENA_SEGMENT_TYPE_HEAD);
+    assert(head->m_type == RTL_ARENA_SEGMENT_TYPE_HEAD);
     rtl_arena_segment_destructor (head);
 
     for (i = 0; i < RTL_ARENA_FREELIST_SIZE; i++)
     {
         head = &(arena->m_freelist_head[i]);
 
-        OSL_ASSERT(head->m_size == (1UL << i));
-        OSL_ASSERT(head->m_type == RTL_ARENA_SEGMENT_TYPE_HEAD);
+        assert(head->m_size == (1UL << i));
+        assert(head->m_type == RTL_ARENA_SEGMENT_TYPE_HEAD);
 
         rtl_arena_segment_destructor (head);
     }
 
-    OSL_ASSERT(arena->m_hash_table == arena->m_hash_table_0);
-    OSL_ASSERT(arena->m_hash_size  == RTL_ARENA_HASH_SIZE);
-    OSL_ASSERT(
+    assert(arena->m_hash_table == arena->m_hash_table_0);
+    assert(arena->m_hash_size  == RTL_ARENA_HASH_SIZE);
+    assert(
         arena->m_hash_shift ==
         sal::static_int_cast< unsigned >(highbit(arena->m_hash_size) - 1));
 }
@@ -728,7 +720,7 @@ rtl_arena_activate (
     void   (SAL_CALL * source_free) (rtl_arena_type *, void *, sal_Size)
 )
 {
-    OSL_ASSERT(arena != 0);
+    assert(arena != 0);
     if (arena != 0)
     {
         (void) snprintf (arena->m_name, sizeof(arena->m_name), "%s", name);
@@ -811,24 +803,22 @@ rtl_arena_deactivate (
     }
 
     /* check for leaked segments */
-    OSL_TRACE(
-        "rtl_arena_deactivate(\"%s\"): "
-        "allocs: %"PRIu64", frees: %"PRIu64"; total: %lu, used: %lu",
-        arena->m_name,
-        arena->m_stats.m_alloc, arena->m_stats.m_free,
-        arena->m_stats.m_mem_total, arena->m_stats.m_mem_alloc
-    );
+    // SAL_INFO(
+    //  "sal",
+    //  "rtl_arena_deactivate(" << arena->m_name << "): allocs: "
+    //      << arena->m_stats.m_alloc << ", frees: " << arena->m_stats.m_free
+    //      << "; total: " << arena->m_stats.m_mem_total << ", used: "
+    //      << arena->m_stats.m_mem_alloc);
     if (arena->m_stats.m_alloc > arena->m_stats.m_free)
     {
         sal_Size i, n;
 
-        OSL_TRACE(
-            "rtl_arena_deactivate(\"%s\"): "
-            "cleaning up %"PRIu64" leaked segment(s) [%lu bytes]",
-            arena->m_name,
-            arena->m_stats.m_alloc - arena->m_stats.m_free,
-            arena->m_stats.m_mem_alloc
-        );
+        // SAL_INFO(
+        //  "sal",
+        //  "rtl_arena_deactivate(" << arena->m_name << "): cleaning up "
+        //      << (arena->m_stats.m_alloc - arena->m_stats.m_free)
+        //      << " leaked segment(s) [" << arena->m_stats.m_mem_alloc
+        //      << " bytes]");
 
         /* cleanup still used segment(s) */
         for (i = 0, n = arena->m_hash_size; i < n; i++)
@@ -872,7 +862,7 @@ rtl_arena_deactivate (
         else
         {
             /* can have only free and span segments here */
-            OSL_ASSERT(segment->m_type == RTL_ARENA_SEGMENT_TYPE_SPAN);
+            assert(segment->m_type == RTL_ARENA_SEGMENT_TYPE_SPAN);
         }
 
         /* remove from segment list */
@@ -895,7 +885,7 @@ rtl_arena_deactivate (
     for (segment = head->m_snext; segment != head; segment = head->m_snext)
     {
         /* can have only span segments here */
-        OSL_ASSERT(segment->m_type == RTL_ARENA_SEGMENT_TYPE_SPAN);
+        assert(segment->m_type == RTL_ARENA_SEGMENT_TYPE_SPAN);
 
         /* remove from segment list */
         QUEUE_REMOVE_NAMED(segment, s);
@@ -937,7 +927,7 @@ try_alloc:
 
         if (!source_arena)
         {
-            OSL_ASSERT(gp_default_arena != 0);
+            assert(gp_default_arena != 0);
             source_arena = gp_default_arena;
         }
 
@@ -1018,11 +1008,11 @@ SAL_CALL rtl_arena_alloc (
                 sal_Size oversize;
 
                 /* mark segment used */
-                OSL_ASSERT(segment->m_type == RTL_ARENA_SEGMENT_TYPE_FREE);
+                assert(segment->m_type == RTL_ARENA_SEGMENT_TYPE_FREE);
                 segment->m_type = RTL_ARENA_SEGMENT_TYPE_USED;
 
                 /* resize */
-                OSL_ASSERT(segment->m_size >= size);
+                assert(segment->m_size >= size);
                 oversize = segment->m_size - size;
                 if (oversize >= SAL_MAX(arena->m_quantum, arena->m_qcache_max))
                 {
@@ -1056,7 +1046,7 @@ SAL_CALL rtl_arena_alloc (
         {
             /* allocate from quantum cache(s) */
             int index = (size >> arena->m_quantum_shift) - 1;
-            OSL_ASSERT (arena->m_qcache_ptr[index] != 0);
+            assert(arena->m_qcache_ptr[index] != 0);
 
             addr = rtl_cache_alloc (arena->m_qcache_ptr[index]);
             if (addr != 0)
@@ -1112,8 +1102,9 @@ SAL_CALL rtl_arena_free (
                     ((next->m_type == RTL_ARENA_SEGMENT_TYPE_SPAN)  ||
                      (next->m_type == RTL_ARENA_SEGMENT_TYPE_HEAD))    )
                 {
-                    OSL_ASSERT((prev->m_addr == segment->m_addr) &&
-                               (prev->m_size == segment->m_size)    );
+                    assert(
+                        prev->m_addr == segment->m_addr
+                        && prev->m_size == segment->m_size);
 
                     if (arena->m_source_free)
                     {
@@ -1151,7 +1142,7 @@ SAL_CALL rtl_arena_free (
         {
             /* free to quantum cache(s) */
             int index = (size >> arena->m_quantum_shift) - 1;
-            OSL_ASSERT (arena->m_qcache_ptr[index] != 0);
+            assert(arena->m_qcache_ptr[index] != 0);
 
             rtl_cache_free (arena->m_qcache_ptr[index], addr);
         }
@@ -1181,7 +1172,7 @@ SAL_CALL rtl_machdep_alloc (
     void *   addr;
     sal_Size size = (*pSize);
 
-    OSL_PRECOND(pArena == gp_machdep_arena, "rtl_machdep_alloc(): invalid argument");
+    assert(pArena == gp_machdep_arena);
 
 #if defined(SOLARIS) && defined(SPARC)
     /* see @ mmap(2) man pages */
@@ -1225,7 +1216,7 @@ SAL_CALL rtl_machdep_free (
     sal_Size         nSize
 )
 {
-    OSL_PRECOND(pArena == gp_machdep_arena, "rtl_machdep_free(): invalid argument");
+    assert(pArena == gp_machdep_arena);
 
     pArena->m_stats.m_free += 1;
     pArena->m_stats.m_mem_total -= nSize;
@@ -1274,7 +1265,7 @@ rtl_arena_init()
         /* machdep (pseudo) arena */
         static rtl_arena_type g_machdep_arena;
 
-        OSL_ASSERT(gp_machdep_arena == 0);
+        assert(gp_machdep_arena == 0);
         VALGRIND_CREATE_MEMPOOL(&g_machdep_arena, 0, 0);
         rtl_arena_constructor (&g_machdep_arena);
 
@@ -1285,13 +1276,13 @@ rtl_arena_init()
             0,       /* no quantum caching */
             0, 0, 0  /* no source */
         );
-        OSL_ASSERT(gp_machdep_arena != 0);
+        assert(gp_machdep_arena != 0);
     }
     {
         /* default arena */
         static rtl_arena_type g_default_arena;
 
-        OSL_ASSERT(gp_default_arena == 0);
+        assert(gp_default_arena == 0);
         VALGRIND_CREATE_MEMPOOL(&g_default_arena, 0, 0);
         rtl_arena_constructor (&g_default_arena);
 
@@ -1304,13 +1295,13 @@ rtl_arena_init()
             rtl_machdep_alloc,
             rtl_machdep_free
         );
-        OSL_ASSERT(gp_default_arena != 0);
+        assert(gp_default_arena != 0);
     }
     {
         /* arena internal arena */
         static rtl_arena_type g_arena_arena;
 
-        OSL_ASSERT(gp_arena_arena == 0);
+        assert(gp_arena_arena == 0);
         VALGRIND_CREATE_MEMPOOL(&g_arena_arena, 0, 0);
         rtl_arena_constructor (&g_arena_arena);
 
@@ -1323,9 +1314,9 @@ rtl_arena_init()
             rtl_arena_alloc,
             rtl_arena_free
         );
-        OSL_ASSERT(gp_arena_arena != 0);
+        assert(gp_arena_arena != 0);
     }
-    OSL_TRACE("rtl_arena_init completed");
+    // SAL_INFO("sal", "rtl_arena_init completed");
 }
 
 /* ================================================================= */
@@ -1342,17 +1333,17 @@ rtl_arena_fini()
 
         for (arena = head->m_arena_next; arena != head; arena = arena->m_arena_next)
         {
-            OSL_TRACE(
-                "rtl_arena_fini(\"%s\"): "
-                "allocs: %"PRIu64", frees: %"PRIu64"; total: %lu, used: %lu",
-                arena->m_name,
-                arena->m_stats.m_alloc, arena->m_stats.m_free,
-                arena->m_stats.m_mem_total, arena->m_stats.m_mem_alloc
-            );
+            // SAL_INFO(
+            //  "sal",
+            //  "rtl_arena_fini(" << arena->m_name << "): allocs: "
+            //      << arena->m_stats.m_alloc << ", frees: "
+            //      << arena->m_stats.m_free << "; total: "
+            //      << arena->m_stats.m_mem_total << ", used: "
+            //      << arena->m_stats.m_mem_alloc);
         }
         RTL_MEMORY_LOCK_RELEASE(&(g_arena_list.m_lock));
     }
-    OSL_TRACE("rtl_arena_fini completed");
+    // SAL_INFO("sal", "rtl_arena_fini completed");
 }
 
 /* ================================================================= */

@@ -1974,7 +1974,7 @@ void Calendar::Select()
 
 void Calendar::SelectDate( const Date& rDate, sal_Bool bSelect )
 {
-    if ( !rDate.IsValid() )
+    if ( !rDate.IsValidAndGregorian() )
         return;
 
     Table* pOldSel;
@@ -2037,7 +2037,7 @@ Date Calendar::GetSelectDate( sal_uLong nIndex ) const
 
 void Calendar::SetCurDate( const Date& rNewDate )
 {
-    if ( !rNewDate.IsValid() )
+    if ( !rNewDate.IsValidAndGregorian() )
         return;
 
     if ( maCurDate != rNewDate )
@@ -2638,9 +2638,9 @@ sal_Bool CalendarField::ShowDropDown( sal_Bool bShow )
         Calendar* pCalendar = GetCalendar();
 
         Date aDate = GetDate();
-        if ( IsEmptyDate() || !aDate.IsValid() )
+        if ( IsEmptyDate() || !aDate.IsValidAndGregorian() )
         {
-            if ( maDefaultDate.IsValid() )
+            if ( maDefaultDate.IsValidAndGregorian() )
                 aDate = maDefaultDate;
             else
                 aDate = Date();

@@ -95,14 +95,14 @@ sal_Bool SequenceResultSetMetaData::isAutoIncrement( sal_Int32 column )
     return m_columnData[column-1].isAutoIncrement;
 }
 
-sal_Bool SequenceResultSetMetaData::isCaseSensitive( sal_Int32 column )
+sal_Bool SequenceResultSetMetaData::isCaseSensitive( sal_Int32 /* column */ )
     throw (SQLException, RuntimeException)
 {
 
     return sal_True; // ??? hmm, numeric types or
 }
 
-sal_Bool SequenceResultSetMetaData::isSearchable( sal_Int32 column ) throw (SQLException, RuntimeException)
+sal_Bool SequenceResultSetMetaData::isSearchable( sal_Int32 /* column */ ) throw (SQLException, RuntimeException)
 {
     return sal_True; // mmm, what types are not searchable ?
 }
@@ -120,13 +120,13 @@ sal_Int32 SequenceResultSetMetaData::isNullable( sal_Int32 column )
     return m_columnData[column-1].isNullable;
 }
 
-sal_Bool SequenceResultSetMetaData::isSigned( sal_Int32 column )
+sal_Bool SequenceResultSetMetaData::isSigned( sal_Int32 /* column */ )
     throw (SQLException, RuntimeException)
 {
-    return sal_True; //
+    return sal_True;
 }
 
-sal_Int32 SequenceResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
+sal_Int32 SequenceResultSetMetaData::getColumnDisplaySize( sal_Int32 /* column */ )
     throw (SQLException, RuntimeException)
 {
     return 50;
@@ -174,7 +174,7 @@ sal_Int32 SequenceResultSetMetaData::getScale( sal_Int32 column )
     return m_columnData[column-1].tableName;
 }
 
-::rtl::OUString SequenceResultSetMetaData::getCatalogName( sal_Int32 column )
+::rtl::OUString SequenceResultSetMetaData::getCatalogName( sal_Int32 /* column */ )
     throw (SQLException, RuntimeException)
 {
     // can do this through XConnection.getCatalog() !
@@ -195,7 +195,7 @@ sal_Int32 SequenceResultSetMetaData::getColumnType( sal_Int32 column )
 }
 
 
-sal_Bool SequenceResultSetMetaData::isReadOnly( sal_Int32 column )
+sal_Bool SequenceResultSetMetaData::isReadOnly( sal_Int32 /* column */ )
     throw (SQLException, RuntimeException)
 {
     return sal_False;
@@ -212,12 +212,11 @@ sal_Bool SequenceResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
 {
     return isWritable(column); // uhh, now it becomes really esoteric ....
 }
-::rtl::OUString SequenceResultSetMetaData::getColumnServiceName( sal_Int32 column )
+::rtl::OUString SequenceResultSetMetaData::getColumnServiceName( sal_Int32 /* column */ )
     throw (SQLException, RuntimeException)
 {
     return OUString();
 }
-
 
 void SequenceResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)

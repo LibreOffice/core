@@ -201,7 +201,7 @@ public:
 
     BasicEntryDescriptor    GetEntryDescriptor( SvLBoxEntry* pEntry );
 
-    sal_uInt16          ConvertType( BasicEntryType eType );
+    BasicIDEType    ConvertType( BasicEntryType eType );
     bool            IsValidEntry( SvLBoxEntry* pEntry );
 
     SvLBoxEntry*    AddEntry( const ::rtl::OUString& rText, const Image& rImage,

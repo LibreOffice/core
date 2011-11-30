@@ -27,9 +27,11 @@
 ************************************************************************/
 
 #include "sal/config.h"
+
+#include <cassert>
+
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "osl/diagnose.h"
 #include "rtl/textcvt.h"
 #include "rtl/textenc.h"
 #include "rtl/ustring.h"
@@ -46,7 +48,7 @@ namespace css = com::sun::star;
 }
 
 rtl::OUString Span::convertFromUtf8() const {
-    OSL_ASSERT(is());
+    assert(is());
     rtl_uString * s = 0;
     if (!rtl_convertStringToUString(
             &s, begin, length, RTL_TEXTENCODING_UTF8,

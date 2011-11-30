@@ -106,13 +106,6 @@ static Sequence< OUString > createStringSequence( const char * name[] )
     return seq;
 }
 
-static Sequence< sal_Int8 > generateImplementationId()
-{
-    Sequence< sal_Int8 > seq( 16 );
-    rtl_createUuid( (sal_uInt8*)seq.getArray(), 0 , sal_False );
-    return seq;
-}
-
 struct PropertyDef
 {
     PropertyDef( const OUString &str, const Type &t )

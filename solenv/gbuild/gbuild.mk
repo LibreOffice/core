@@ -151,7 +151,7 @@ $(eval $(call gb_Helper_collect_libtargets))
 gb_Library_DLLPOSTFIX := lo
 
 # Include platform/cpu/compiler specific config/definitions
-ifneq ($(strip $(OS)),)
+ifeq ($(strip $(gb_MINISOLARENV)),)
 include $(GBUILDDIR)/platform/$(OS)_$(CPUNAME)_$(COM).mk
 endif
 

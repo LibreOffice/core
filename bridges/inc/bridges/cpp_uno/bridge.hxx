@@ -464,9 +464,9 @@ inline void SAL_CALL cppu_cppenv_computeObjectIdentifier(
                 ::rtl_uString_acquire( *ppOId = aRet.pData );
             }
         }
-        catch (::com::sun::star::uno::RuntimeException &)
+        catch (const ::com::sun::star::uno::RuntimeException &)
         {
-            OSL_FAIL( "### RuntimeException occurred udring queryInterface()!" );
+            OSL_FAIL( "### RuntimeException occurred during queryInterface()!" );
         }
     }
 }

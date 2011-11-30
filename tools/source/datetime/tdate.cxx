@@ -60,6 +60,8 @@ inline sal_Bool ImpIsLeapYear( sal_uInt16 nYear )
 
 // -----------------------------------------------------------------------
 
+// All callers must have sanitized or normalized month and year values!
+
 inline sal_uInt16 DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
 {
     if ( nMonth != 2 )
@@ -78,6 +80,8 @@ inline sal_uInt16 DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
 long Date::DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
 {
     long nDays;
+
+    Normalize( nDay, nMonth, nYear);
 
     nDays = ((sal_uIntPtr)nYear-1) * 365;
     nDays += ((nYear-1) / 4) - ((nYear-1) / 100) + ((nYear-1) / 400);
@@ -203,9 +207,13 @@ DayOfWeek Date::GetDayOfWeek() const
 
 sal_uInt16 Date::GetDayOfYear() const
 {
-    sal_uInt16 nDay = GetDay();
-    for( sal_uInt16 i = 1; i < GetMonth(); i++ )
-         nDay = nDay + ::DaysInMonth( i, GetYear() );   // += yields a warning on MSVC, so don't use it
+    sal_uInt16 nDay   = GetDay();
+    sal_uInt16 nMonth = GetMonth();
+    sal_uInt16 nYear  = GetYear();
+    Normalize( nDay, nMonth, nYear);
+
+    for( sal_uInt16 i = 1; i < nMonth; i++ )
+         nDay = nDay + ::DaysInMonth( i, nYear );   // += yields a warning on MSVC, so don't use it
     return nDay;
 }
 
@@ -305,7 +313,12 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
 
 sal_uInt16 Date::GetDaysInMonth() const
 {
-    return DaysInMonth( GetMonth(), GetYear() );
+    sal_uInt16 nDay   = GetDay();
+    sal_uInt16 nMonth = GetMonth();
+    sal_uInt16 nYear  = GetYear();
+    Normalize( nDay, nMonth, nYear);
+
+    return DaysInMonth( nMonth, nYear );
 }
 
 // -----------------------------------------------------------------------
@@ -318,7 +331,7 @@ sal_Bool Date::IsLeapYear() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool Date::IsValid() const
+sal_Bool Date::IsValidAndGregorian() const
 {
     sal_uInt16 nDay   = GetDay();
     sal_uInt16 nMonth = GetMonth();
@@ -339,6 +352,94 @@ sal_Bool Date::IsValid() const
     }
 
     return sal_True;
+}
+
+// -----------------------------------------------------------------------
+
+bool Date::IsValidDate() const
+{
+    return IsValidDate( GetDay(), GetMonth(), GetYear());
+}
+
+// -----------------------------------------------------------------------
+
+//static
+bool Date::IsValidDate( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
+{
+    if ( !nMonth || (nMonth > 12) )
+        return false;
+    if ( !nDay || (nDay > DaysInMonth( nMonth, nYear )) )
+        return false;
+    return true;
+}
+
+// -----------------------------------------------------------------------
+
+bool Date::Normalize()
+{
+    sal_uInt16 nDay   = GetDay();
+    sal_uInt16 nMonth = GetMonth();
+    sal_uInt16 nYear  = GetYear();
+
+    if (!Normalize( nDay, nMonth, nYear))
+        return false;
+
+    SetDay( nDay);
+    SetMonth( nMonth);
+    SetYear( nYear);
+
+    return true;
+}
+
+// -----------------------------------------------------------------------
+
+//static
+bool Date::Normalize( sal_uInt16 & rDay, sal_uInt16 & rMonth, sal_uInt16 & rYear )
+{
+    if (IsValidDate( rDay, rMonth, rYear))
+        return false;
+
+    if (rMonth > 12)
+    {
+        rYear += rMonth / 12;
+        rMonth = rMonth % 12;
+    }
+    if (!rMonth)
+    {
+        if (!rYear)
+        {
+            rYear = 0;
+            rMonth = 1;
+            if (rDay > 31)
+                rDay -= 31;
+            else
+                rDay = 1;
+        }
+        else
+        {
+            --rYear;
+            rMonth = 12;
+        }
+    }
+    sal_uInt16 nDays;
+    while (rDay > (nDays = DaysInMonth( rMonth, rYear)))
+    {
+        rDay -= nDays;
+        if (rMonth < 12)
+            ++rMonth;
+        else
+        {
+            ++rYear;
+            rMonth = 1;
+        }
+    }
+    if (rYear > 9999)
+    {
+        rDay = 31;
+        rMonth = 12;
+        rYear = 9999;
+    }
+    return true;
 }
 
 // -----------------------------------------------------------------------

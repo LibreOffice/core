@@ -27,10 +27,12 @@
  ************************************************************************/
 
 
+#include <comphelper/mediadescriptor.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <com/sun/star/beans/Property.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -208,15 +210,11 @@ private:
         uno::Reference< ucb::XCommandProcessor > const & rxCommandProcessor);
 
     UpdateInformationProvider(const uno::Reference<uno::XComponentContext>& xContext,
-                              const uno::Reference< ucb::XContentIdentifierFactory >& xContentIdFactory,
-                              const uno::Reference< ucb::XContentProvider >& xContentProvider,
                               const uno::Reference< xml::dom::XDocumentBuilder >& xDocumentBuilder,
                               const uno::Reference< xml::xpath::XXPathAPI >& xXPathAPI);
 
     const uno::Reference< uno::XComponentContext> m_xContext;
 
-    const uno::Reference< ucb::XContentIdentifierFactory > m_xContentIdFactory;
-    const uno::Reference< ucb::XContentProvider > m_xContentProvider;
     const uno::Reference< xml::dom::XDocumentBuilder > m_xDocumentBuilder;
     const uno::Reference< xml::xpath::XXPathAPI > m_xXPathAPI;
 
@@ -329,12 +327,10 @@ private:
 
 UpdateInformationProvider::UpdateInformationProvider(
     const uno::Reference<uno::XComponentContext>& xContext,
-    const uno::Reference< ucb::XContentIdentifierFactory >& xContentIdFactory,
-    const uno::Reference< ucb::XContentProvider >& xContentProvider,
     const uno::Reference< xml::dom::XDocumentBuilder >& xDocumentBuilder,
     const uno::Reference< xml::xpath::XXPathAPI >& xXPathAPI
-) : m_xContext(xContext), m_xContentIdFactory(xContentIdFactory),
-    m_xContentProvider(xContentProvider), m_xDocumentBuilder(xDocumentBuilder),
+) : m_xContext(xContext),
+    m_xDocumentBuilder(xDocumentBuilder),
     m_xXPathAPI(xXPathAPI), m_aRequestHeaderList(1)
 {
     uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(
@@ -408,12 +404,6 @@ UpdateInformationProvider::createInstance(const uno::Reference<uno::XComponentCo
             UNISTRING( "unable to obtain service manager from component context" ),
             uno::Reference< uno::XInterface > ());
 
-    uno::Reference< ucb::XContentIdentifierFactory > xContentIdFactory(
-        xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.ucb.UniversalContentBroker" ), xContext ),
-        uno::UNO_QUERY_THROW);
-
-    uno::Reference< ucb::XContentProvider > xContentProvider(xContentIdFactory, uno::UNO_QUERY_THROW);
-
     uno::Reference< xml::dom::XDocumentBuilder > xDocumentBuilder(
         xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.xml.dom.DocumentBuilder" ), xContext ),
         uno::UNO_QUERY_THROW);
@@ -424,7 +414,7 @@ UpdateInformationProvider::createInstance(const uno::Reference<uno::XComponentCo
 
     xXPath->registerNS( UNISTRING("atom"), UNISTRING("http://www.w3.org/2005/Atom") );
 
-    return *new UpdateInformationProvider(xContext, xContentIdFactory, xContentProvider, xDocumentBuilder, xXPath);
+    return *new UpdateInformationProvider(xContext, xDocumentBuilder, xXPath);
 }
 
 //------------------------------------------------------------------------------
@@ -472,49 +462,17 @@ UpdateInformationProvider::storeCommandInfo(
 uno::Reference< io::XInputStream >
 UpdateInformationProvider::load(const rtl::OUString& rURL)
 {
-    uno::Reference< ucb::XContentIdentifier > xId = m_xContentIdFactory->createContentIdentifier(rURL);
+    beans::PropertyValue aURLValue;
+    aURLValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+    aURLValue.Value <<= rURL;
 
-    if( !xId.is() )
-        throw uno::RuntimeException(
-            UNISTRING( "unable to obtain universal content id" ), *this);
+    uno::Sequence< beans::PropertyValue > aValues( 1 );
+    aValues[0] = aURLValue;
 
-    uno::Reference< ucb::XCommandProcessor > xCommandProcessor(m_xContentProvider->queryContent(xId), uno::UNO_QUERY_THROW);
-    rtl::Reference< ActiveDataSink > aSink(new ActiveDataSink());
+    ::comphelper::MediaDescriptor aMediaDesc( aValues );
+    aMediaDesc.addInputStream();
 
-    ucb::OpenCommandArgument2 aOpenArgument;
-    aOpenArgument.Mode = ucb::OpenMode::DOCUMENT;
-    aOpenArgument.Priority = 32768;
-    aOpenArgument.Sink = *aSink;
-
-    ucb::Command aCommand;
-    aCommand.Name = UNISTRING("open");
-    aCommand.Argument = uno::makeAny(aOpenArgument);
-
-    sal_Int32 nCommandId = xCommandProcessor->createCommandIdentifier();
-
-    storeCommandInfo(nCommandId, xCommandProcessor);
-    try
-    {
-        uno::Any aResult = xCommandProcessor->execute(aCommand, nCommandId,
-            static_cast < XCommandEnvironment *> (this));
-    }
-    catch( const uno::Exception & /* e */ )
-    {
-        storeCommandInfo(0, uno::Reference< ucb::XCommandProcessor > ());
-
-        uno::Reference< ucb::XCommandProcessor2 > xCommandProcessor2(xCommandProcessor, uno::UNO_QUERY);
-        if( xCommandProcessor2.is() )
-            xCommandProcessor2->releaseCommandIdentifier(nCommandId);
-
-        throw;
-    }
-    storeCommandInfo(0, uno::Reference< ucb::XCommandProcessor > ());
-
-    uno::Reference< ucb::XCommandProcessor2 > xCommandProcessor2(xCommandProcessor, uno::UNO_QUERY);
-    if( xCommandProcessor2.is() )
-        xCommandProcessor2->releaseCommandIdentifier(nCommandId);
-
-    return INPUT_STREAM(aSink->getInputStream());
+    return aMediaDesc.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_INPUTSTREAM(), uno::Reference< io::XInputStream >() );
 }
 
 //------------------------------------------------------------------------------

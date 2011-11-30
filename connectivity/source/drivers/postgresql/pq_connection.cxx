@@ -296,7 +296,7 @@ void Connection::removeFromWeakMap( const ::rtl::ByteSequence & id )
         m_myStatements.erase( ii );
 }
 
-Reference< XStatement > Connection::createStatement(  ) throw (SQLException, RuntimeException)
+Reference< XStatement > Connection::createStatement() throw (SQLException, RuntimeException)
 {
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
@@ -327,7 +327,7 @@ Reference< XPreparedStatement > Connection::prepareStatement( const ::rtl::OUStr
     return ret;
 }
 
-Reference< XPreparedStatement > Connection::prepareCall( const ::rtl::OUString& sql )
+Reference< XPreparedStatement > Connection::prepareCall( const ::rtl::OUString& )
         throw (SQLException, RuntimeException)
 {
     throw SQLException(
@@ -343,33 +343,33 @@ Reference< XPreparedStatement > Connection::prepareCall( const ::rtl::OUString& 
     return sql;
 }
 
-void Connection::setAutoCommit( sal_Bool autoCommit ) throw (SQLException, RuntimeException)
+void Connection::setAutoCommit( sal_Bool ) throw (SQLException, RuntimeException)
 {
     // UNSUPPORTED
 }
 
-sal_Bool Connection::getAutoCommit(  ) throw (SQLException, RuntimeException)
+sal_Bool Connection::getAutoCommit() throw (SQLException, RuntimeException)
 {
     // UNSUPPORTED
     return sal_True;
 }
 
-void Connection::commit(  ) throw (SQLException, RuntimeException)
+void Connection::commit() throw (SQLException, RuntimeException)
 {
     // UNSUPPORTED
 }
 
-void Connection::rollback(  ) throw (SQLException, RuntimeException)
+void Connection::rollback() throw (SQLException, RuntimeException)
 {
     // UNSUPPORTED
 }
 
-sal_Bool Connection::isClosed(  ) throw (SQLException, RuntimeException)
+sal_Bool Connection::isClosed() throw (SQLException, RuntimeException)
 {
     return m_settings.pConnection == 0;
 }
 
-Reference< XDatabaseMetaData > Connection::getMetaData(  )
+Reference< XDatabaseMetaData > Connection::getMetaData()
         throw (SQLException, RuntimeException)
 {
     MutexGuard guard( m_refMutex->mutex );
@@ -379,25 +379,25 @@ Reference< XDatabaseMetaData > Connection::getMetaData(  )
     return m_meta;
 }
 
-void  Connection::setReadOnly( sal_Bool readOnly ) throw (SQLException, RuntimeException)
+void  Connection::setReadOnly( sal_Bool ) throw (SQLException, RuntimeException)
 {
     // UNSUPPORTED
 
 }
 
-sal_Bool Connection::isReadOnly(  ) throw (SQLException, RuntimeException)
+sal_Bool Connection::isReadOnly() throw (SQLException, RuntimeException)
 {
     // UNSUPPORTED
     return sal_False;
 }
 
-void Connection::setCatalog( const ::rtl::OUString& catalog )
+void Connection::setCatalog( const ::rtl::OUString& )
         throw (SQLException, RuntimeException)
 {
     // UNSUPPORTED
 }
 
-::rtl::OUString Connection::getCatalog(  ) throw (SQLException, RuntimeException)
+::rtl::OUString Connection::getCatalog() throw (SQLException, RuntimeException)
 {
     OUString ret;
     MutexGuard ( m_refMutex->mutex );
@@ -410,19 +410,19 @@ void Connection::setCatalog( const ::rtl::OUString& catalog )
     return OUString( p, strlen(p) ,  m_settings.encoding );
 }
 
-void Connection::setTransactionIsolation( sal_Int32 level )
+void Connection::setTransactionIsolation( sal_Int32 )
         throw (SQLException, RuntimeException)
 {
     // UNSUPPORTED
 }
 
-sal_Int32 Connection::getTransactionIsolation(  ) throw (SQLException, RuntimeException)
+sal_Int32 Connection::getTransactionIsolation() throw (SQLException, RuntimeException)
 {
     // UNSUPPORTED
     return 0;
 }
 
-Reference< XNameAccess > Connection::getTypeMap(  ) throw (SQLException, RuntimeException)
+Reference< XNameAccess > Connection::getTypeMap() throw (SQLException, RuntimeException)
 {
     Reference< XNameAccess > t;
     {
@@ -438,12 +438,12 @@ void Connection::setTypeMap( const Reference< XNameAccess >& typeMap )
     MutexGuard guard( m_refMutex->mutex );
     m_typeMap = typeMap;
 }
-Any Connection::getWarnings(  ) throw (SQLException, RuntimeException)
+Any Connection::getWarnings() throw (SQLException, RuntimeException)
 {
     return Any();
 }
 
-void Connection::clearWarnings(  ) throw (SQLException, RuntimeException)
+void Connection::clearWarnings() throw (SQLException, RuntimeException)
 {
 }
 
@@ -668,7 +668,7 @@ void Connection::checkClosed() throw ( SQLException, RuntimeException )
                             *this, OUString(), 1, Any() );
 }
 
-Reference< XNameAccess > Connection::getTables(  )
+Reference< XNameAccess > Connection::getTables()
     throw (::com::sun::star::uno::RuntimeException)
 {
     if( isLog( &m_settings, LogLevel::INFO ) )
@@ -684,7 +684,7 @@ Reference< XNameAccess > Connection::getTables(  )
     return m_settings.tables;
 }
 
-Reference< XNameAccess > Connection::getViews(  )
+Reference< XNameAccess > Connection::getViews()
     throw (::com::sun::star::uno::RuntimeException)
 {
     if( isLog( &m_settings, LogLevel::INFO ) )
@@ -702,7 +702,7 @@ Reference< XNameAccess > Connection::getViews(  )
 
 
 
-Reference< XNameAccess > Connection::getUsers(  )
+Reference< XNameAccess > Connection::getUsers()
     throw (::com::sun::star::uno::RuntimeException)
 {
     if( isLog( &m_settings, LogLevel::INFO ) )
@@ -786,7 +786,7 @@ extern "C"
 
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }

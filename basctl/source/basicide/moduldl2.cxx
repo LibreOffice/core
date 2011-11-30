@@ -1681,7 +1681,7 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                 if ( !rDocument.createModule( aLibName, aModName, sal_True, sModuleCode ) )
                     throw Exception();
 
-                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, BASICIDE_TYPE_MODULE );
+                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, BasicIDEType::Module );
                 BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
                 SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
                 SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;

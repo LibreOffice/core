@@ -164,7 +164,7 @@ void lcl_insertDateTimeEntry(SvtExtendedMultiLineEdit_Impl* i_pEditWin,
         DateTime( Date( i_rUDT.Day, i_rUDT.Month, i_rUDT.Year ),
                 Time( i_rUDT.Hours, i_rUDT.Minutes,
                       i_rUDT.Seconds, i_rUDT.HundredthSeconds ) );
-    if ( aToolsDT.IsValid() )
+    if ( aToolsDT.IsValidAndGregorian() )
     {
         LocaleDataWrapper aLocaleWrapper(
             ::comphelper::getProcessServiceFactory(),
