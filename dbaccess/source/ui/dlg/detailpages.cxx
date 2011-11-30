@@ -646,7 +646,7 @@ namespace dbaui
         {
         }
 
-        sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
+        const sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         const OSQLMessageBox::MessageType mt = bSuccess ? OSQLMessageBox::Info : OSQLMessageBox::Error;
         OSQLMessageBox aMsg( this, String( ModuleRes( nMessage ) ), String(), WB_OK | WB_DEF_OK, mt );
         aMsg.Execute();
