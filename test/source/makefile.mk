@@ -38,7 +38,8 @@ CDEFS += -DOOO_DLLIMPLEMENTATION_TEST
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 SLOFILES = \
-    $(SLO)/bootstrapfixture.obj
+    $(SLO)/bootstrapfixture.obj \
+    $(SLO)/unoapi_test.obj
 
 .IF "$(CROSS_COMPILING)" == "YES"
 SHL1IMPLIB = $(SHL1TARGET)

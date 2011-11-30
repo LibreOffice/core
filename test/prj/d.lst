@@ -6,6 +6,7 @@ mkdir: %_DEST%\inc\test
 ..\%__SRC%\lib\libtest.dll.a %_DEST%\lib\libtest.dll.a
 ..\inc\test\testdllapi.hxx %_DEST%\inc\test\testdllapi.hxx
 ..\inc\test\bootstrapfixture.hxx %_DEST%\inc\test\bootstrapfixture.hxx
+..\inc\test\unoapi_test.hxx %_DEST%\inc\test\unoapi_test.hxx
 mkdir: %_DEST%\unittest
 mkdir: %_DEST%\unittest\user\
 mkdir: %_DEST%\unittest\user\autocorr
