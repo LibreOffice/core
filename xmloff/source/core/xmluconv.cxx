@@ -436,9 +436,16 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
             aDate += 1;
         }
     }
-    rBuffer.append( sal_Int32( aDate.GetYear()));
+    sal_uInt16 nTemp = aDate.GetYear();
+    if (nTemp < 1000)
+        rBuffer.append( sal_Unicode('0'));
+    if (nTemp < 100)
+        rBuffer.append( sal_Unicode('0'));
+    if (nTemp < 10)
+        rBuffer.append( sal_Unicode('0'));
+    rBuffer.append( sal_Int32( nTemp));
     rBuffer.append( sal_Unicode('-'));
-    sal_uInt16 nTemp = aDate.GetMonth();
+    nTemp = aDate.GetMonth();
     if (nTemp < 10)
         rBuffer.append( sal_Unicode('0'));
     rBuffer.append( sal_Int32( nTemp));
