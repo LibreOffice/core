@@ -886,7 +886,7 @@ LibInfoItem* LibInfos::GetInfo( const LibInfoKey& rKey )
     return pItem;
 }
 
-SbxItem::SbxItem(sal_uInt16 nWhich_, const ScriptDocument& rDocument, const String& aLibName, const String& aName, sal_uInt16 nType )
+SbxItem::SbxItem(sal_uInt16 nWhich_, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aName, sal_uInt16 nType )
     :SfxPoolItem( nWhich_ )
     ,m_aDocument(rDocument)
     ,m_aLibName(aLibName)
@@ -895,7 +895,7 @@ SbxItem::SbxItem(sal_uInt16 nWhich_, const ScriptDocument& rDocument, const Stri
 {
 }
 
-SbxItem::SbxItem(sal_uInt16 nWhich_, const ScriptDocument& rDocument, const String& aLibName, const String& aName, const String& aMethodName, sal_uInt16 nType )
+SbxItem::SbxItem(sal_uInt16 nWhich_, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aName, const ::rtl::OUString& aMethodName, sal_uInt16 nType )
     :SfxPoolItem( nWhich_ )
     ,m_aDocument(rDocument)
     ,m_aLibName(aLibName)
