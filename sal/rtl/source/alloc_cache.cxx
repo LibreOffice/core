@@ -33,13 +33,9 @@
 #include "sal/macros.h"
 #include "osl/diagnose.h"
 
-#ifndef INCLUDED_STRING_H
+#include <cassert>
 #include <string.h>
-#endif
-
-#ifndef INCLUDED_STDIO_H
 #include <stdio.h>
-#endif
 
 extern AllocMode alloc_mode;
 
@@ -133,15 +129,15 @@ rtl_cache_hash_rescale (
         old_table = cache->m_hash_table;
         old_size  = cache->m_hash_size;
 
-        OSL_TRACE(
-            "rtl_cache_hash_rescale(\"%s\"): "
-            "nbuf: % " PRIu64 " (ave: %" PRIu64 "), frees: %" PRIu64 " "
-            "[old_size: %lu, new_size: %lu]",
-            cache->m_name,
-            cache->m_slab_stats.m_alloc - cache->m_slab_stats.m_free,
-            (cache->m_slab_stats.m_alloc - cache->m_slab_stats.m_free) >> cache->m_hash_shift,
-            cache->m_slab_stats.m_free,
-            old_size, new_size);
+        // SAL_INFO(
+        //  "sal",
+        //  "rtl_cache_hash_rescale(" << cache->m_name << "): nbuf: "
+        //      << (cache->m_slab_stats.m_alloc - cache->m_slab_stats.m_free)
+        //      << " (ave: "
+        //      << ((cache->m_slab_stats.m_alloc - cache->m_slab_stats.m_free)
+        //          >> cache->m_hash_shift)
+        //      << "), frees: " << cache->m_slab_stats.m_free << " [old_size: "
+        //      << old_size << ", new_size: " << new_size << ']');
 
         cache->m_hash_table = new_table;
         cache->m_hash_size  = new_size;
@@ -222,7 +218,7 @@ rtl_cache_hash_remove (
         ppHead = &(bufctl->m_next);
     }
 
-    OSL_ASSERT (bufctl != 0); /* bad free */
+    assert(bufctl != 0); // bad free
 
     if (lookups > 1)
     {
@@ -273,17 +269,10 @@ rtl_cache_slab_constructor (void * obj, void *)
 static void
 rtl_cache_slab_destructor (void * obj, void *)
 {
-#if OSL_DEBUG_LEVEL == 0
-    (void) obj; /* unused */
-#else /* OSL_DEBUG_LEVEL */
-    rtl_cache_slab_type * slab = (rtl_cache_slab_type*)(obj);
-
-    /* assure removed from queue(s) */
-    OSL_ASSERT(QUEUE_STARTED_NAMED(slab, slab_));
-
-    /* assure no longer referenced */
-    OSL_ASSERT(slab->m_ntypes == 0);
-#endif /* OSL_DEBUG_LEVEL */
+    rtl_cache_slab_type * slab = static_cast< rtl_cache_slab_type * >(obj);
+    assert(QUEUE_STARTED_NAMED(slab, slab_)); // assure removed from queue(s)
+    assert(slab->m_ntypes == 0); // assure no longer referenced
+    (void) slab; // avoid warnings
 }
 
 
@@ -304,12 +293,12 @@ rtl_cache_slab_create (
     addr = rtl_arena_alloc (cache->m_source, &size);
     if (addr != 0)
     {
-        OSL_ASSERT(size >= cache->m_slab_size);
+        assert(size >= cache->m_slab_size);
 
         if (cache->m_features & RTL_CACHE_FEATURE_HASH)
         {
             /* allocate slab struct from slab cache */
-            OSL_ASSERT (cache != gp_cache_slab_cache);
+            assert(cache != gp_cache_slab_cache);
             slab = (rtl_cache_slab_type*)rtl_cache_alloc (gp_cache_slab_cache);
         }
         else
@@ -362,7 +351,7 @@ rtl_cache_slab_destroy (
             /* return bufctl struct to bufctl cache */
             rtl_cache_free (gp_cache_bufctl_cache, bufctl);
         }
-        OSL_ASSERT(ntypes == 0);
+        assert(ntypes == 0);
 
         /* return slab struct to slab cache */
         rtl_cache_free (gp_cache_slab_cache, slab);
@@ -437,16 +426,16 @@ rtl_cache_slab_alloc (
         rtl_cache_bufctl_type * bufctl;
 
         slab = head->m_slab_next;
-        OSL_ASSERT(slab->m_ntypes < cache->m_ntypes);
+        assert(slab->m_ntypes < cache->m_ntypes);
 
         if (slab->m_sp == 0)
         {
             /* initialize bufctl w/ current 'slab->m_bp' */
-            OSL_ASSERT (slab->m_bp < slab->m_data + cache->m_ntypes * cache->m_type_size + cache->m_ncolor_max);
+            assert(slab->m_bp < slab->m_data + cache->m_ntypes * cache->m_type_size + cache->m_ncolor_max);
             if (cache->m_features & RTL_CACHE_FEATURE_HASH)
             {
                 /* allocate bufctl */
-                OSL_ASSERT (cache != gp_cache_bufctl_cache);
+                assert(cache != gp_cache_bufctl_cache);
                 bufctl = (rtl_cache_bufctl_type*)rtl_cache_alloc (gp_cache_bufctl_cache);
                 if (bufctl == 0)
                 {
@@ -601,17 +590,11 @@ rtl_cache_magazine_constructor (void * obj, void *)
 static void
 rtl_cache_magazine_destructor (void * obj, void *)
 {
-#if OSL_DEBUG_LEVEL == 0
-    (void) obj; /* unused */
-#else /* OSL_DEBUG_LEVEL */
-    rtl_cache_magazine_type * mag = (rtl_cache_magazine_type*)(obj);
-
-    /* assure removed from queue(s) */
-    OSL_ASSERT(mag->m_mag_next == 0);
-
-    /* assure no longer referenced */
-    OSL_ASSERT(mag->m_mag_used == 0);
-#endif /* OSL_DEBUG_LEVEL */
+    rtl_cache_magazine_type * mag = static_cast< rtl_cache_magazine_type * >(
+        obj);
+    assert(mag->m_mag_next == 0); // assure removed from queue(s)
+    assert(mag->m_mag_used == 0); // assure no longer referenced
+    (void) mag; // avoid warnings
 }
 
 
@@ -682,7 +665,7 @@ rtl_cache_depot_dequeue (
     if (depot->m_mag_count > 0)
     {
         /* dequeue magazine */
-        OSL_ASSERT(depot->m_mag_next != 0);
+        assert(depot->m_mag_next != 0);
 
         mag = depot->m_mag_next;
         depot->m_mag_next = mag->m_mag_next;
@@ -712,7 +695,7 @@ rtl_cache_depot_exchange_alloc (
 {
     rtl_cache_magazine_type * full;
 
-    OSL_ASSERT((empty == 0) || (empty->m_mag_used == 0));
+    assert((empty == 0) || (empty->m_mag_used == 0));
 
     /* dequeue full magazine */
     full = rtl_cache_depot_dequeue (&(cache->m_depot_full));
@@ -722,7 +705,7 @@ rtl_cache_depot_exchange_alloc (
         rtl_cache_depot_enqueue (&(cache->m_depot_empty), empty);
     }
 
-    OSL_ASSERT((full == 0) || (full->m_mag_used > 0));
+    assert((full == 0) || (full->m_mag_used > 0));
 
     return (full);
 }
@@ -744,7 +727,7 @@ rtl_cache_depot_exchange_free (
 {
     rtl_cache_magazine_type * empty;
 
-    OSL_ASSERT((full == 0) || (full->m_mag_used > 0));
+    assert((full == 0) || (full->m_mag_used > 0));
 
     /* dequeue empty magazine */
     empty = rtl_cache_depot_dequeue (&(cache->m_depot_empty));
@@ -754,7 +737,7 @@ rtl_cache_depot_exchange_free (
         rtl_cache_depot_enqueue (&(cache->m_depot_full), full);
     }
 
-    OSL_ASSERT((empty == 0) || (empty->m_mag_used == 0));
+    assert((empty == 0) || (empty->m_mag_used == 0));
 
     return (empty);
 }
@@ -828,17 +811,17 @@ rtl_cache_destructor (void * obj)
     rtl_cache_type * cache = (rtl_cache_type*)(obj);
 
     /* linkage */
-    OSL_ASSERT(QUEUE_STARTED_NAMED(cache, cache_));
+    assert(QUEUE_STARTED_NAMED(cache, cache_));
 
     /* slab layer */
     (void)RTL_MEMORY_LOCK_DESTROY(&(cache->m_slab_lock));
 
-    OSL_ASSERT(QUEUE_STARTED_NAMED(&(cache->m_free_head), slab_));
-    OSL_ASSERT(QUEUE_STARTED_NAMED(&(cache->m_used_head), slab_));
+    assert(QUEUE_STARTED_NAMED(&(cache->m_free_head), slab_));
+    assert(QUEUE_STARTED_NAMED(&(cache->m_used_head), slab_));
 
-    OSL_ASSERT(cache->m_hash_table == cache->m_hash_table_0);
-    OSL_ASSERT(cache->m_hash_size  == RTL_CACHE_HASH_SIZE);
-    OSL_ASSERT(cache->m_hash_shift == (sal_Size)(highbit(cache->m_hash_size) - 1));
+    assert(cache->m_hash_table == cache->m_hash_table_0);
+    assert(cache->m_hash_size  == RTL_CACHE_HASH_SIZE);
+    assert(cache->m_hash_shift == (sal_Size)(highbit(cache->m_hash_size) - 1));
 
     /* depot layer */
     (void)RTL_MEMORY_LOCK_DESTROY(&(cache->m_depot_lock));
@@ -862,7 +845,7 @@ rtl_cache_activate (
     int              flags
 )
 {
-    OSL_ASSERT(cache != 0);
+    assert(cache != 0);
     if (cache != 0)
     {
         sal_Size slabsize;
@@ -885,7 +868,7 @@ rtl_cache_activate (
             /* ensure minimum alignment */
             objalign = SAL_MAX(objalign, RTL_MEMORY_ALIGNMENT_4);
         }
-        OSL_ASSERT(RTL_MEMORY_ISP2(objalign));
+        assert(RTL_MEMORY_ISP2(objalign));
 
         cache->m_type_size  = objsize = RTL_MEMORY_P2ROUNDUP(objsize, objalign);
         cache->m_type_align = objalign;
@@ -918,8 +901,8 @@ rtl_cache_activate (
 
         if (cache->m_slab_size > source->m_quantum)
         {
-            OSL_ASSERT(gp_cache_slab_cache != 0);
-            OSL_ASSERT(gp_cache_bufctl_cache != 0);
+            assert(gp_cache_slab_cache != 0);
+            assert(gp_cache_bufctl_cache != 0);
 
             cache->m_features  |= RTL_CACHE_FEATURE_HASH;
             cache->m_ntypes     = cache->m_slab_size / cache->m_type_size;
@@ -932,7 +915,7 @@ rtl_cache_activate (
             cache->m_ncolor_max = (cache->m_slab_size - sizeof(rtl_cache_slab_type)) % cache->m_type_size;
         }
 
-        OSL_ASSERT(cache->m_ntypes > 0);
+        assert(cache->m_ntypes > 0);
         cache->m_ncolor = 0;
 
         if (flags & RTL_CACHE_FLAG_BULKDESTROY)
@@ -944,7 +927,7 @@ rtl_cache_activate (
         /* magazine layer */
         if (!(flags & RTL_CACHE_FLAG_NOMAGAZINE))
         {
-            OSL_ASSERT(gp_cache_magazine_cache != 0);
+            assert(gp_cache_magazine_cache != 0);
             cache->m_magazine_cache = gp_cache_magazine_cache;
         }
 
@@ -971,7 +954,7 @@ rtl_cache_deactivate (
     QUEUE_REMOVE_NAMED(cache, cache_);
     RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
 
-    OSL_PRECOND(active, "rtl_cache_deactivate(): orphaned cache.");
+    assert(active); // orphaned cache
     (void)active;
 
     /* cleanup magazine layer */
@@ -1010,29 +993,28 @@ rtl_cache_deactivate (
         }
     }
 
-    OSL_TRACE(
-        "rtl_cache_deactivate(\"%s\"): "
-        "[slab]: allocs: %"PRIu64", frees: %"PRIu64"; total: %lu, used: %lu; "
-        "[cpu]: allocs: %"PRIu64", frees: %"PRIu64"; "
-        "[total]: allocs: %"PRIu64", frees: %"PRIu64"",
-        cache->m_name,
-        cache->m_slab_stats.m_alloc, cache->m_slab_stats.m_free,
-        cache->m_slab_stats.m_mem_total, cache->m_slab_stats.m_mem_alloc,
-        cache->m_cpu_stats.m_alloc, cache->m_cpu_stats.m_free,
-        cache->m_slab_stats.m_alloc + cache->m_cpu_stats.m_alloc,
-        cache->m_slab_stats.m_free  + cache->m_cpu_stats.m_free
-    );
+    // SAL_INFO(
+    //  "sal",
+    //  "rtl_cache_deactivate(" << cache->m_name << "): [slab]: allocs: "
+    //      << cache->m_slab_stats.m_alloc << ", frees: "
+    //      << cache->m_slab_stats.m_free << "; total: "
+    //      << cache->m_slab_stats.m_mem_total << ", used: "
+    //      << cache->m_slab_stats.m_mem_alloc << "; [cpu]: allocs: "
+    //      << cache->m_cpu_stats.m_alloc << ", frees: "
+    //      << cache->m_cpu_stats.m_free << "; [total]: allocs: "
+    //      << (cache->m_slab_stats.m_alloc + cache->m_cpu_stats.m_alloc)
+    //      << ", frees: "
+    //      << (cache->m_slab_stats.m_free + cache->m_cpu_stats.m_free));
 
     /* cleanup slab layer */
     if (cache->m_slab_stats.m_alloc > cache->m_slab_stats.m_free)
     {
-        OSL_TRACE(
-            "rtl_cache_deactivate(\"%s\"): "
-            "cleaning up %"PRIu64" leaked buffer(s) [%lu bytes] [%lu total]",
-            cache->m_name,
-            cache->m_slab_stats.m_alloc - cache->m_slab_stats.m_free,
-            cache->m_slab_stats.m_mem_alloc, cache->m_slab_stats.m_mem_total
-        );
+        // SAL_INFO(
+        //  "sal",
+        //  "rtl_cache_deactivate(" << cache->m_name << "): cleaning up "
+        //      << (cache->m_slab_stats.m_alloc - cache->m_slab_stats.m_free)
+        //      << " leaked buffer(s) [" << cache->m_slab_stats.m_mem_alloc
+        //      << " bytes] [" << cache->m_slab_stats.m_mem_total << " total]");
 
         if (cache->m_features & RTL_CACHE_FEATURE_HASH)
         {
@@ -1131,7 +1113,7 @@ try_alloc:
         if (!source)
         {
             /* use default arena */
-            OSL_ASSERT(gp_default_arena != 0);
+            assert(gp_default_arena != 0);
             source = gp_default_arena;
         }
 
@@ -1532,18 +1514,16 @@ rtl_cache_wsupdate (
     {
         RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_depot_lock));
 
-        OSL_TRACE(
-            "rtl_cache_wsupdate(\"%s\") "
-            "[depot: count, curr_min, prev_min] "
-            "full: %lu, %lu, %lu; empty: %lu, %lu, %lu",
-            cache->m_name,
-            cache->m_depot_full.m_mag_count,
-            cache->m_depot_full.m_curr_min,
-            cache->m_depot_full.m_prev_min,
-            cache->m_depot_empty.m_mag_count,
-            cache->m_depot_empty.m_curr_min,
-            cache->m_depot_empty.m_prev_min
-        );
+        // SAL_INFO(
+        //  "sal",
+        //  "rtl_cache_wsupdate(" << cache->m_name
+        //      << ") [depot: count, curr_min, prev_min] full: "
+        //      << cache->m_depot_full.m_mag_count << ", "
+        //      << cache->m_depot_full.m_curr_min << ", "
+        //      << cache->m_depot_full.m_prev_min << "; empty: "
+        //      << cache->m_depot_empty.m_mag_count << ", "
+        //      << cache->m_depot_empty.m_curr_min << ", "
+        //      << cache->m_depot_empty.m_prev_min);
 
         rtl_cache_depot_wsupdate (cache, &(cache->m_depot_full));
         rtl_cache_depot_wsupdate (cache, &(cache->m_depot_empty));
@@ -1603,7 +1583,7 @@ rtl_cache_init()
     }
     {
         /* cache: internal arena */
-        OSL_ASSERT(gp_cache_arena == 0);
+        assert(gp_cache_arena == 0);
 
         gp_cache_arena = rtl_arena_create (
             "rtl_cache_internal_arena",
@@ -1614,16 +1594,16 @@ rtl_cache_init()
             rtl_arena_free,
             0     /* flags */
         );
-        OSL_ASSERT(gp_cache_arena != 0);
+        assert(gp_cache_arena != 0);
 
         /* check 'gp_default_arena' initialization */
-        OSL_ASSERT(gp_default_arena != 0);
+        assert(gp_default_arena != 0);
     }
     {
         /* cache: magazine cache */
         static rtl_cache_type g_cache_magazine_cache;
 
-        OSL_ASSERT(gp_cache_magazine_cache == 0);
+        assert(gp_cache_magazine_cache == 0);
         VALGRIND_CREATE_MEMPOOL(&g_cache_magazine_cache, 0, 0);
         (void) rtl_cache_constructor (&g_cache_magazine_cache);
 
@@ -1639,7 +1619,7 @@ rtl_cache_init()
             gp_default_arena, /* source */
             RTL_CACHE_FLAG_NOMAGAZINE /* during bootstrap; activated below */
         );
-        OSL_ASSERT(gp_cache_magazine_cache != 0);
+        assert(gp_cache_magazine_cache != 0);
 
         /* activate magazine layer */
         g_cache_magazine_cache.m_magazine_cache = gp_cache_magazine_cache;
@@ -1648,7 +1628,7 @@ rtl_cache_init()
         /* cache: slab (struct) cache */
         static rtl_cache_type g_cache_slab_cache;
 
-        OSL_ASSERT(gp_cache_slab_cache == 0);
+        assert(gp_cache_slab_cache == 0);
         VALGRIND_CREATE_MEMPOOL(&g_cache_slab_cache, 0, 0);
         (void) rtl_cache_constructor (&g_cache_slab_cache);
 
@@ -1664,13 +1644,13 @@ rtl_cache_init()
             gp_default_arena,            /* source */
             0                            /* flags: none */
         );
-        OSL_ASSERT(gp_cache_slab_cache != 0);
+        assert(gp_cache_slab_cache != 0);
     }
     {
         /* cache: bufctl cache */
         static rtl_cache_type g_cache_bufctl_cache;
 
-        OSL_ASSERT(gp_cache_bufctl_cache == 0);
+        assert(gp_cache_bufctl_cache == 0);
         VALGRIND_CREATE_MEMPOOL(&g_cache_bufctl_cache, 0, 0);
         (void) rtl_cache_constructor (&g_cache_bufctl_cache);
 
@@ -1686,11 +1666,11 @@ rtl_cache_init()
             gp_default_arena, /* source */
             0                 /* flags: none */
         );
-        OSL_ASSERT(gp_cache_bufctl_cache != 0);
+        assert(gp_cache_bufctl_cache != 0);
     }
 
     rtl_cache_wsupdate_init();
-    OSL_TRACE("rtl_cache_init completed");
+    // SAL_INFO("sal", "rtl_cache_init completed");
 }
 
 /* ================================================================= */
@@ -1735,22 +1715,24 @@ rtl_cache_fini()
         head = &(g_cache_list.m_cache_head);
         for (cache = head->m_cache_next; cache != head; cache = cache->m_cache_next)
         {
-            OSL_TRACE(
-                "rtl_cache_fini(\"%s\") "
-                "[slab]: allocs: %"PRIu64", frees: %"PRIu64"; total: %lu, used: %lu; "
-                "[cpu]: allocs: %"PRIu64", frees: %"PRIu64"; "
-                "[total]: allocs: %"PRIu64", frees: %"PRIu64"",
-                cache->m_name,
-                cache->m_slab_stats.m_alloc, cache->m_slab_stats.m_free,
-                cache->m_slab_stats.m_mem_total, cache->m_slab_stats.m_mem_alloc,
-                cache->m_cpu_stats.m_alloc, cache->m_cpu_stats.m_free,
-                cache->m_slab_stats.m_alloc + cache->m_cpu_stats.m_alloc,
-                cache->m_slab_stats.m_free + cache->m_cpu_stats.m_free
-            );
+            // SAL_INFO(
+            //  "sal",
+            //  "rtl_cache_fini(" << cache->m_name << ") [slab]: allocs: "
+            //      << cache->m_slab_stats.m_alloc << ", frees: "
+            //      << cache->m_slab_stats.m_free << "; total: "
+            //      << cache->m_slab_stats.m_mem_total << ", used: "
+            //      << cache->m_slab_stats.m_mem_alloc << "; [cpu]: allocs: "
+            //      << cache->m_cpu_stats.m_alloc << ", frees: "
+            //      << cache->m_cpu_stats.m_free  << "; [total]: allocs: "
+            //      << (cache->m_slab_stats.m_alloc
+            //          + cache->m_cpu_stats.m_alloc)
+            //      << ", frees: "
+            //      << (cache->m_slab_stats.m_free
+            //          + cache->m_cpu_stats.m_free));
         }
         RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
     }
-    OSL_TRACE("rtl_cache_fini completed");
+    // SAL_INFO("sal", "rtl_cache_fini completed");
 }
 
 /* ================================================================= */
