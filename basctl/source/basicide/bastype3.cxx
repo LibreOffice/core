@@ -375,35 +375,35 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
     return BasicEntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, aName, aMethodName, eType );
 }
 
-sal_uInt16 BasicTreeListBox::ConvertType( BasicEntryType eType )
+BasicIDEType BasicTreeListBox::ConvertType( BasicEntryType eType )
 {
-    sal_uInt16 nType = OBJ_TYPE_UNKNOWN;
+    BasicIDEType nType = static_cast<BasicIDEType>(OBJ_TYPE_UNKNOWN);
 
     switch ( eType )
     {
         case OBJ_TYPE_DOCUMENT:
         {
-            nType = BASICIDE_TYPE_SHELL;
+            nType = BasicIDEType::Shell;
         }
         break;
         case OBJ_TYPE_LIBRARY:
         {
-            nType = BASICIDE_TYPE_LIBRARY;
+            nType = BasicIDEType::Library;
         }
         break;
         case OBJ_TYPE_MODULE:
         {
-            nType = BASICIDE_TYPE_MODULE;
+            nType = BasicIDEType::Module;
         }
         break;
         case OBJ_TYPE_DIALOG:
         {
-            nType = BASICIDE_TYPE_DIALOG;
+            nType = BasicIDEType::Dialog;
         }
         break;
         case OBJ_TYPE_METHOD:
         {
-            nType = BASICIDE_TYPE_METHOD;
+            nType = BasicIDEType::Method;
         }
         break;
         default: ;

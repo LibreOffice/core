@@ -131,7 +131,7 @@ public:
         rtl::OUString sModuleName;
         if( mpShell  && ( Event.Accessor >>= sModuleName ) )
         {
-            IDEBaseWindow* pWin = mpShell->FindWindow( mpShell->m_aCurDocument, mpShell->m_aCurLibName, sModuleName, BASICIDE_TYPE_MODULE, sal_True );
+            IDEBaseWindow* pWin = mpShell->FindWindow( mpShell->m_aCurDocument, mpShell->m_aCurLibName, sModuleName, BasicIDEType::Module, sal_True );
             if( pWin )
                 mpShell->RemoveWindow( pWin, sal_True, sal_True );
         }
@@ -804,7 +804,7 @@ void BasicIDEShell::UpdateWindows()
                                 if ( !pWin )
                                     pWin = CreateBasWin( *doc, aLibName, aModName );
                                 if ( !pNextActiveWindow && pLibInfoItem && pLibInfoItem->GetCurrentName() == aModName &&
-                                        pLibInfoItem->GetCurrentType() == BASICIDE_TYPE_MODULE )
+                                     pLibInfoItem->GetCurrentType() == BasicIDEType::Module )
                                 {
                                     pNextActiveWindow = (IDEBaseWindow*)pWin;
                                 }
@@ -835,7 +835,7 @@ void BasicIDEShell::UpdateWindows()
                                 if ( !pWin )
                                     pWin = CreateDlgWin( *doc, aLibName, aDlgName );
                                 if ( !pNextActiveWindow && pLibInfoItem && pLibInfoItem->GetCurrentName() == aDlgName &&
-                                        pLibInfoItem->GetCurrentType() == BASICIDE_TYPE_DIALOG )
+                                     pLibInfoItem->GetCurrentType() == BasicIDEType::Dialog )
                                 {
                                     pNextActiveWindow = (IDEBaseWindow*)pWin;
                                 }

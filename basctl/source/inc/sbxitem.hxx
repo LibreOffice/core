@@ -31,12 +31,15 @@
 #include "scriptdocument.hxx"
 #include <svl/poolitem.hxx>
 
-const sal_uInt16 BASICIDE_TYPE_UNKNOWN  =   0;
-const sal_uInt16 BASICIDE_TYPE_SHELL    =   1;
-const sal_uInt16 BASICIDE_TYPE_LIBRARY  =   2;
-const sal_uInt16 BASICIDE_TYPE_MODULE   =   3;
-const sal_uInt16 BASICIDE_TYPE_DIALOG   =   4;
-const sal_uInt16 BASICIDE_TYPE_METHOD   =   5;
+enum BasicIDEType
+{
+    Unknown,
+    Shell,
+    Library,
+    Module,
+    Dialog,
+    Method
+};
 
 class SbxItem : public SfxPoolItem
 {
@@ -44,12 +47,12 @@ class SbxItem : public SfxPoolItem
     ::rtl::OUString         m_aLibName;
     ::rtl::OUString         m_aName;
     ::rtl::OUString         m_aMethodName;
-    sal_uInt16                  m_nType;
+    BasicIDEType            m_nType;
 
 public:
     TYPEINFO();
-    SbxItem( sal_uInt16 nWhich, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aName, sal_uInt16 nType );
-    SbxItem( sal_uInt16 nWhich, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aName, const ::rtl::OUString& aMethodName, sal_uInt16 nType );
+    SbxItem( sal_uInt16 nWhich, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aName, BasicIDEType nType );
+    SbxItem( sal_uInt16 nWhich, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aName, const ::rtl::OUString& aMethodName, BasicIDEType nType );
     SbxItem( const SbxItem& );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
@@ -68,8 +71,8 @@ public:
     const ::rtl::OUString&  GetMethodName() const { return m_aMethodName; }
     void                    SetMethodName( const ::rtl::OUString& aMethodName ) { m_aMethodName = aMethodName; }
 
-    sal_uInt16                  GetType() const { return m_nType; }
-    void                    SetType( sal_uInt16 nType ) { m_nType = nType; }
+    BasicIDEType            GetType() const { return m_nType; }
+    void                    SetType( BasicIDEType nType ) { m_nType = nType; }
 };
 
 #endif
