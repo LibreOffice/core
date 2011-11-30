@@ -578,7 +578,7 @@ DBG_NAME(OMySQLIntroPageSetup)
         }
 
         sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
-        OSQLMessageBox aMsg( this, String( ModuleRes( nMessage ) ), String() );
+        OSQLMessageBox aMsg( this, String( ModuleRes( nMessage ) ), String(), WB_OK | WB_DEF_OK, OSQLMessageBox::MessageType::Error );
         aMsg.Execute();
         return 0L;
     }
