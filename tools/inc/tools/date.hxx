@@ -70,21 +70,47 @@ public:
     sal_uInt16          GetMonth() const { return (sal_uInt16)((nDate / 100) % 100); }
     sal_uInt16          GetYear() const { return (sal_uInt16)(nDate / 10000); }
 
+    /// Internally normalizes a copy of values.
     DayOfWeek       GetDayOfWeek() const;
+
+    /// Internally normalizes a copy of values.
     sal_uInt16          GetDayOfYear() const;
+
     /** nMinimumNumberOfDaysInWeek: how many days of a week must reside in the
-        first week of a year. */
+        first week of a year.
+        Internally normalizes a copy of values. */
     sal_uInt16          GetWeekOfYear( DayOfWeek eStartDay = MONDAY,
                                    sal_Int16 nMinimumNumberOfDaysInWeek = 4 ) const;
 
+    /// Internally normalizes a copy of values.
     sal_uInt16          GetDaysInMonth() const;
+
     sal_uInt16          GetDaysInYear() const { return (IsLeapYear()) ? 366 : 365; }
     sal_Bool            IsLeapYear() const;
+
     /** If the represented date is valid (1<=month<=12, 1<=day<=(28,29,30,31)
         depending on month/year) AND is of the Gregorian calendar (1582-10-15
         <= date) (AND implicitly date <= 9999-12-31 due to internal
         representation) */
     sal_Bool            IsValidAndGregorian() const;
+
+    /** If the represented date is valid (1<=month<=12, 1<=day<=(28,29,30,31)
+        depending on month/year) */
+    bool            IsValidDate() const;
+
+    /** Normalize date, invalid day or month values are adapted such that they
+        carry over to the next month or/and year, for example 1999-02-32
+        becomes 1999-03-04, 1999-13-01 becomes 2000-01-01, 1999-13-42 becomes
+        2000-02-11. Truncates at 9999-12-31, 0000-00-x will yield the
+        normalized value of 0000-01-max(1,(x-31))
+
+        This may be necessary after Date ctors or if the SetDate(), SetDay(),
+        SetMonth(), SetYear() methods set individual non-matching values.
+        Adding/subtracting to/from dates never produces invalid dates.
+
+        @returns TRUE if the date was normalized, i.e. not valid before.
+     */
+    bool            Normalize();
 
     sal_Bool            IsBetween( const Date& rFrom, const Date& rTo ) const
                         { return ((nDate >= rFrom.nDate) &&
@@ -118,7 +144,12 @@ public:
     TOOLS_DLLPUBLIC friend Date     operator -( const Date& rDate, long nDays );
     TOOLS_DLLPUBLIC friend long     operator -( const Date& rDate1, const Date& rDate2 );
 
+    /// Internally normalizes values.
     static long DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear );
+    /// Semantically identical to IsValidDate() member method.
+    static bool IsValidDate( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear );
+    /// Semantically identical to Normalize() member method.
+    static bool Normalize( sal_uInt16 & rDay, sal_uInt16 & rMonth, sal_uInt16 & rYear );
 
 };
 
