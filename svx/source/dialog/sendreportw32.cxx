@@ -203,9 +203,10 @@ namespace svx{
 
             if ( fp )
             {
-                ByteString  strUTF8( GetUsing(), RTL_TEXTENCODING_UTF8 );
+                rtl::OString strUTF8(rtl::OUStringToOString(GetUsing(),
+                    RTL_TEXTENCODING_UTF8));
 
-                fwrite( strUTF8.GetBuffer(), 1, strUTF8.Len(), fp );
+                fwrite( strUTF8.getStr(), 1, strUTF8.getLength(), fp );
                 fclose( fp );
             }
 
