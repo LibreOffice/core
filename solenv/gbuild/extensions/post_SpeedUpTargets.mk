@@ -45,6 +45,7 @@ $(info wrapped build - skip reading gbuild definitions)
 gb_Module_add_target=
 gb_Module_add_check_target=
 gb_Module_add_subsequentcheck_target=
+gb_Module_add_moduledir=
 gb_FULLDEPS=
 endif
 
