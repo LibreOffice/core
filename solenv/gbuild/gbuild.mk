@@ -331,12 +331,6 @@ gb_PYTHONTARGET := $(OUTDIR)/bin/python
 gb_PYTHON := $(gb_PYTHON_PRECOMMAND) $(gb_PYTHONTARGET)
 endif
 
-export gb_AWK
-export gb_XSLTPROC
-export GBUILDDIR
-# FIXME exporting SRCDIR seems kind of a hack
-export SRCDIR
-
 define gb_HelpMessage
 NAME
        gbuild - GNU make based build system for LibreOffice
