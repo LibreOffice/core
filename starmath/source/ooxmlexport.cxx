@@ -546,18 +546,24 @@ void SmOoxmlExport::HandleSubSupScript( const SmSubSupNode* pNode, int nLevel )
             | ( pNode->GetSubSup( RSUP ) != NULL ? ( 1 << RSUP ) : 0 )
             | ( pNode->GetSubSup( LSUB ) != NULL ? ( 1 << LSUB ) : 0 )
             | ( pNode->GetSubSup( LSUP ) != NULL ? ( 1 << LSUP ) : 0 );
-    if( flags == 0 ) // none
-        return;
     HandleSubSupScriptInternal( pNode, nLevel, flags );
 }
 
 void SmOoxmlExport::HandleSubSupScriptInternal( const SmSubSupNode* pNode, int nLevel, int flags )
 {
-    if( flags == ( 1 << RSUP | 1 << RSUB ))
+// docx supports only a certain combination of sub/super scripts, but LO can have any,
+// so try to merge it using several tags if necessary
+    if( flags == 0 ) // none
+        return;
+    if(( flags & ( 1 << RSUP | 1 << RSUB )) == ( 1 << RSUP | 1 << RSUB ))
     { // m:sSubSup
         m_pSerializer->startElementNS( XML_m, XML_sSubSup, FSEND );
         m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
-        HandleNode( pNode->GetBody(), nLevel + 1 );
+        flags &= ~( 1 << RSUP | 1 << RSUB );
+        if( flags == 0 )
+            HandleNode( pNode->GetBody(), nLevel + 1 );
+        else
+            HandleSubSupScriptInternal( pNode, nLevel, flags );
         m_pSerializer->endElementNS( XML_m, XML_e );
         m_pSerializer->startElementNS( XML_m, XML_sub, FSEND );
         HandleNode( pNode->GetSubSup( RSUB ), nLevel + 1 );
@@ -567,29 +573,37 @@ void SmOoxmlExport::HandleSubSupScriptInternal( const SmSubSupNode* pNode, int n
         m_pSerializer->endElementNS( XML_m, XML_sup );
         m_pSerializer->endElementNS( XML_m, XML_sSubSup );
     }
-    else if( flags == 1 << RSUB )
+    else if(( flags & ( 1 << RSUB )) == 1 << RSUB )
     { // m:sSub
         m_pSerializer->startElementNS( XML_m, XML_sSub, FSEND );
         m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
-        HandleNode( pNode->GetBody(), nLevel + 1 );
+        flags &= ~( 1 << RSUB );
+        if( flags == 0 )
+            HandleNode( pNode->GetBody(), nLevel + 1 );
+        else
+            HandleSubSupScriptInternal( pNode, nLevel, flags );
         m_pSerializer->endElementNS( XML_m, XML_e );
         m_pSerializer->startElementNS( XML_m, XML_sub, FSEND );
         HandleNode( pNode->GetSubSup( RSUB ), nLevel + 1 );
         m_pSerializer->endElementNS( XML_m, XML_sub );
         m_pSerializer->endElementNS( XML_m, XML_sSub );
     }
-    else if( flags == 1 << RSUP )
+    else if(( flags & ( 1 << RSUP )) == 1 << RSUP )
     { // m:sSup
         m_pSerializer->startElementNS( XML_m, XML_sSup, FSEND );
         m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
-        HandleNode( pNode->GetBody(), nLevel + 1 );
+        flags &= ~( 1 << RSUP );
+        if( flags == 0 )
+            HandleNode( pNode->GetBody(), nLevel + 1 );
+        else
+            HandleSubSupScriptInternal( pNode, nLevel, flags );
         m_pSerializer->endElementNS( XML_m, XML_e );
         m_pSerializer->startElementNS( XML_m, XML_sup, FSEND );
         HandleNode( pNode->GetSubSup( RSUP ), nLevel + 1 );
         m_pSerializer->endElementNS( XML_m, XML_sup );
         m_pSerializer->endElementNS( XML_m, XML_sSup );
     }
-    else if( flags == ( 1 << LSUP | 1 << LSUB ))
+    else if(( flags & ( 1 << LSUP | 1 << LSUB )) == ( 1 << LSUP | 1 << LSUB ))
     { // m:sPre
         m_pSerializer->startElementNS( XML_m, XML_sPre, FSEND );
         m_pSerializer->startElementNS( XML_m, XML_sub, FSEND );
@@ -599,14 +613,49 @@ void SmOoxmlExport::HandleSubSupScriptInternal( const SmSubSupNode* pNode, int n
         HandleNode( pNode->GetSubSup( LSUP ), nLevel + 1 );
         m_pSerializer->endElementNS( XML_m, XML_sup );
         m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
-        HandleNode( pNode->GetBody(), nLevel + 1 );
+        flags &= ~( 1 << LSUP | 1 << LSUB );
+        if( flags == 0 )
+            HandleNode( pNode->GetBody(), nLevel + 1 );
+        else
+            HandleSubSupScriptInternal( pNode, nLevel, flags );
         m_pSerializer->endElementNS( XML_m, XML_e );
         m_pSerializer->endElementNS( XML_m, XML_sPre );
+    }
+    else if(( flags & ( 1 << CSUB )) == ( 1 << CSUB ))
+    { // m:limLow looks like a good element for central superscript
+        m_pSerializer->startElementNS( XML_m, XML_limLow, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+        flags &= ~( 1 << CSUB );
+        if( flags == 0 )
+            HandleNode( pNode->GetBody(), nLevel + 1 );
+        else
+            HandleSubSupScriptInternal( pNode, nLevel, flags );
+        m_pSerializer->endElementNS( XML_m, XML_e );
+        m_pSerializer->startElementNS( XML_m, XML_lim, FSEND );
+        HandleNode( pNode->GetSubSup( CSUB ), nLevel + 1 );
+        m_pSerializer->endElementNS( XML_m, XML_lim );
+        m_pSerializer->endElementNS( XML_m, XML_limLow );
+    }
+    else if(( flags & ( 1 << CSUP )) == ( 1 << CSUP ))
+    { // m:limUpp looks like a good element for central superscript
+        m_pSerializer->startElementNS( XML_m, XML_limUpp, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+        flags &= ~( 1 << CSUP );
+        if( flags == 0 )
+            HandleNode( pNode->GetBody(), nLevel + 1 );
+        else
+            HandleSubSupScriptInternal( pNode, nLevel, flags );
+        m_pSerializer->endElementNS( XML_m, XML_e );
+        m_pSerializer->startElementNS( XML_m, XML_lim, FSEND );
+        HandleNode( pNode->GetSubSup( CSUP ), nLevel + 1 );
+        m_pSerializer->endElementNS( XML_m, XML_lim );
+        m_pSerializer->endElementNS( XML_m, XML_limUpp );
     }
     else
     {
         OSL_FAIL( "Unhandled sub/sup combination" );
-        HandleAllSubNodes( pNode, nLevel );
+        // TODO do not do anything, this should be probably an assert()
+        // HandleAllSubNodes( pNode, nLevel );
     }
 }
 
