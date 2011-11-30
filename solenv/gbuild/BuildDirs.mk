@@ -35,15 +35,6 @@ ifeq ($(strip $(SOLARENV)),)
 $(error SOLARENV variable is empty, no environment set, aborting)
 endif
 
-# HACK
-# unixify windoze paths
-ifeq ($(OS_FOR_BUILD),WNT)
-override WORKDIR := $(shell cygpath -u $(WORKDIR))
-override OUTDIR := $(shell cygpath -u $(OUTDIR))
-override OUTDIR_FOR_BUILD := $(shell cygpath -u $(OUTDIR_FOR_BUILD))
-override SRCDIR := $(shell cygpath -u $(SRCDIR))
-endif
-
 REPODIR := $(patsubst %/,%,$(dir $(SRCDIR)))
 
 # vim: set noet sw=4:
