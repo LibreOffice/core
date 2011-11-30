@@ -55,6 +55,7 @@ private:
     rtl::OUString handleLimLowUpp( LimLowUpp_t limlowupp );
     rtl::OUString handleGroupChr();
     rtl::OUString handleM();
+    rtl::OUString handleNary();
     rtl::OUString handleR();
     rtl::OUString readOMathArg();
     oox::formulaimport::XmlStream& stream;

@@ -125,6 +125,9 @@ OUString SmOoxmlImport::readOMathArg()
             case OPENING( M_TOKEN( m )):
                 ret += handleM();
                 break;
+            case OPENING( M_TOKEN( nary )):
+                ret += handleNary();
+                break;
             case OPENING( M_TOKEN( r )):
                 ret += handleR();
                 break;
@@ -422,6 +425,78 @@ OUString SmOoxmlImport::handleM()
     } while( !stream.atEnd() && stream.currentToken() == OPENING( M_TOKEN( mr )));
     stream.ensureClosingTag( M_TOKEN( m ));
     return STR( "matrix {" ) + allrows + STR( "}" );
+}
+
+OUString SmOoxmlImport::handleNary()
+{
+    stream.ensureOpeningTag( M_TOKEN( nary ));
+    sal_Unicode chr = 0x222b;
+    bool subHide = false;
+    bool supHide = false;
+    if( stream.checkOpeningTag( M_TOKEN( naryPr )))
+    {
+        if( XmlStream::Tag chrTag = stream.checkOpeningTag( M_TOKEN( chr )))
+        {
+            chr = chrTag.attribute( M_TOKEN( val ), chr );
+            stream.ensureClosingTag( M_TOKEN( chr ));
+        }
+        if( XmlStream::Tag subHideTag = stream.checkOpeningTag( M_TOKEN( subHide )))
+        {
+            subHide = subHideTag.attribute( M_TOKEN( val ), subHide );
+            stream.ensureClosingTag( M_TOKEN( subHide ));
+        }
+        if( XmlStream::Tag supHideTag = stream.checkOpeningTag( M_TOKEN( supHide )))
+        {
+            supHide = supHideTag.attribute( M_TOKEN( val ), supHide );
+            stream.ensureClosingTag( M_TOKEN( supHide ));
+        }
+        stream.ensureClosingTag( M_TOKEN( naryPr ));
+    }
+    stream.ensureOpeningTag( M_TOKEN( sub ));
+    OUString sub = readOMathArg();
+    stream.ensureClosingTag( M_TOKEN( sub ));
+    stream.ensureOpeningTag( M_TOKEN( sup ));
+    OUString sup = readOMathArg();
+    stream.ensureClosingTag( M_TOKEN( sup ));
+    OUString e = handleE();
+    OUString ret;
+    switch( chr )
+    {
+        case MS_INT:
+            ret = STR( "int" );
+            break;
+        case MS_IINT:
+            ret = STR( "liint" );
+            break;
+        case MS_IIINT:
+            ret = STR( "liiint" );
+            break;
+        case MS_LINT:
+            ret = STR( "lint" );
+            break;
+        case MS_LLINT:
+            ret = STR( "llint" );
+            break;
+        case MS_LLLINT:
+            ret = STR( "lllint" );
+            break;
+        case MS_PROD:
+            ret = STR( "prod" );
+            break;
+        case MS_COPROD:
+            ret = STR( "coprod" );
+            break;
+        default:
+            fprintf( stderr, "Unknown m:nary chr '%d'\n", chr );
+            break;
+    }
+    if( !subHide )
+        ret += STR( " from {" ) + sub + STR( "}" );
+    if( !supHide )
+        ret += STR( " to {" ) + sup + STR( "}" );
+    ret += STR( " {" ) + e + STR( "}" );
+    stream.ensureClosingTag( M_TOKEN( nary ));
+    return ret;
 }
 
 // NOT complete
