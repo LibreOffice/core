@@ -46,6 +46,7 @@ private:
     rtl::OUString handleStream();
     rtl::OUString handleAcc();
     rtl::OUString handleBar();
+    rtl::OUString handleBox();
     rtl::OUString handleBorderBox();
     rtl::OUString handleD();
     rtl::OUString handleE();

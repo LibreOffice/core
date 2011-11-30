@@ -100,6 +100,9 @@ OUString SmOoxmlImport::readOMathArg()
             case OPENING( M_TOKEN( bar )):
                 ret += handleBar();
                 break;
+            case OPENING( M_TOKEN( box )):
+                ret += handleBox();
+                break;
             case OPENING( M_TOKEN( borderBox )):
                 ret += handleBorderBox();
                 break;
@@ -247,6 +250,17 @@ OUString SmOoxmlImport::handleBar()
     else
         return STR( "underline { " ) + e + STR( " }" );
 }
+
+OUString SmOoxmlImport::handleBox()
+{
+    // there does not seem to be functionality in LO to actually implement this
+    // (or is there), but at least read in the contents instead of ignoring them
+    stream.ensureOpeningTag( M_TOKEN( box ));
+    OUString e = readOMathArgInElement( M_TOKEN( e ));
+    stream.ensureClosingTag( M_TOKEN( box ));
+    return e;
+}
+
 
 OUString SmOoxmlImport::handleBorderBox()
 {
