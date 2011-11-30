@@ -404,15 +404,26 @@ OUString SmOoxmlImport::handleLimLowUpp( LimLowUpp_t limlowupp )
     OUString e = readOMathArgInElement( M_TOKEN( e ));
     OUString lim = readOMathArgInElement( M_TOKEN( lim ));
     stream.ensureClosingTag( token );
+    // fix up overbrace/underbrace
+    if( limlowupp == LimUpp && e.endsWithAsciiL( RTL_CONSTASCII_STRINGPARAM( " overbrace {}" )))
+        return e.copy( 0, e.getLength() - 1 ) + lim + STR( "}" );
+    if( limlowupp == LimLow && e.endsWithAsciiL( RTL_CONSTASCII_STRINGPARAM( " underbrace {}" )))
+        return e.copy( 0, e.getLength() - 1 ) + lim + STR( "}" );
     return e + ( limlowupp == LimLow ? STR( " csub {" ) : STR( " csup {" )) + lim + STR( "}" );
 }
 
 OUString SmOoxmlImport::handleGroupChr()
 {
     stream.ensureOpeningTag( M_TOKEN( groupChr ));
+    sal_Unicode chr = 0x23df;
     enum pos_t { top, bot } pos = bot;
     if( stream.checkOpeningTag( M_TOKEN( groupChrPr )))
     {
+        if( XmlStream::Tag chrTag = stream.checkOpeningTag( M_TOKEN( chr )))
+        {
+            chr = chrTag.attribute( M_TOKEN( val ), chr );
+            stream.ensureClosingTag( M_TOKEN( chr ));
+        }
         if( XmlStream::Tag posTag = stream.checkOpeningTag( M_TOKEN( pos )))
         {
             if( posTag.attribute( M_TOKEN( val ), STR( "bot" )) == STR( "top" ))
@@ -421,10 +432,16 @@ OUString SmOoxmlImport::handleGroupChr()
         }
         stream.ensureClosingTag( M_TOKEN( groupChrPr ));
     }
-    OUString ret = STR( "{ " ) + readOMathArgInElement( M_TOKEN( e ))
-        + ( pos == top ? STR( "} overbrace" ) : STR( "} underbrace" ));
+    OUString e = readOMathArgInElement( M_TOKEN( e ));
     stream.ensureClosingTag( M_TOKEN( groupChr ));
-    return ret;
+    if( pos == top && chr == sal_Unicode( 0x23de ))
+        return STR( "{ " ) + e + STR( "} overbrace {}" );
+    if( pos == bot && chr == sal_Unicode( 0x23df ))
+        return STR( "{ " ) + e + STR( "} underbrace {}" );
+    if( pos == top )
+        return STR( "{ " ) + e + STR( "} csup {" ) + OUString( chr ) + STR( "}" );
+    else
+        return STR( "{ " ) + e + STR( "} csub {" ) + OUString( chr ) + STR( "}" );
 }
 
 OUString SmOoxmlImport::handleM()
