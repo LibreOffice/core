@@ -44,6 +44,7 @@
 #include <vcl/waitobj.hxx>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include "DriverSettings.hxx"
@@ -56,6 +57,7 @@
 namespace dbaui
 {
 //.........................................................................
+    using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::beans;
@@ -602,8 +604,9 @@ namespace dbaui
     //-------------------------------------------------------------------------
     IMPL_LINK(OGeneralPage, OnOpenDocument, PushButton*, /*_pBox*/)
     {
-        ::sfx2::FileDialogHelper aFileDlg( 0,
-                ::String::CreateFromAscii("sdatabase") );
+        ::sfx2::FileDialogHelper aFileDlg(
+                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
+                0, ::String::CreateFromAscii("sdatabase") );
         const SfxFilter* pFilter = getStandardDatabaseFilter();
         if ( pFilter )
         {

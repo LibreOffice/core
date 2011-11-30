@@ -53,6 +53,7 @@
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
@@ -116,7 +117,9 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
 
     if (!pArgs)
     {
-        sfx2::FileDialogHelper      aFileDialog( SFXWB_INSERT );
+        sfx2::FileDialogHelper      aFileDialog(
+                ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+                SFXWB_INSERT );
         Reference< XFilePicker >    xFilePicker( aFileDialog.GetFilePicker(), UNO_QUERY );
         Reference< XFilterManager > xFilterManager( xFilePicker, UNO_QUERY );
         String aOwnCont;

@@ -52,6 +52,7 @@
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
@@ -96,7 +97,9 @@ void DocumentInserter::StartExecuteModal( const Link& _rDialogClosedLink )
     DELETEZ( m_pURLList );
     if ( !m_pFileDlg )
     {
-        m_pFileDlg = new FileDialogHelper( m_nDlgFlags, m_sDocFactory );
+        m_pFileDlg = new FileDialogHelper(
+                ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+                m_nDlgFlags, m_sDocFactory );
     }
     m_pFileDlg->StartExecuteModal( LINK( this, DocumentInserter, DialogClosedHdl ) );
 }

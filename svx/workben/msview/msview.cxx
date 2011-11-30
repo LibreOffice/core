@@ -865,7 +865,8 @@ void MSViewerWorkWindow::View( const PPTDocumentPtr& pDocument, int nPane )
 
 PPTDocumentPtr MSViewerWorkWindow::Load()
 {
-    ::sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
+    ::sfx2::FileDialogHelper aDlg(
+        ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
     String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.ppt" ) );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 //  INetURLObject aFile( SvtPathOptions().GetPalettePath() );

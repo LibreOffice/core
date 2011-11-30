@@ -43,6 +43,7 @@
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
@@ -67,6 +68,7 @@
 
 #include "sfx2/sfxresid.hxx"
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
@@ -420,7 +422,9 @@ void ShutdownIcon::StartFileDialog()
     }
 
     if ( !m_pFileDlg )
-        m_pFileDlg = new FileDialogHelper( SFXWB_MULTISELECTION, String() );
+        m_pFileDlg = new FileDialogHelper(
+                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
+                SFXWB_MULTISELECTION, String() );
     m_pFileDlg->StartExecuteModal( STATIC_LINK( this, ShutdownIcon, DialogClosedHdl_Impl ) );
 }
 

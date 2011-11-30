@@ -55,6 +55,7 @@
 #include <svl/filenotation.hxx>
 #include "dbustrings.hrc"
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -87,6 +88,7 @@
 namespace dbaui
 {
 //.........................................................................
+    using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::ucb;
     using namespace ::com::sun::star::ui::dialogs;
@@ -229,9 +231,11 @@ DBG_NAME(OConnectionHelper)
             case  ::dbaccess::DST_CALC:
             {
                 SvtModuleOptions aModule;
-                ::sfx2::FileDialogHelper aFileDlg(0
-                                                ,aModule.GetFactoryEmptyDocumentURL(SvtModuleOptions::E_CALC)
-                                                ,SFX_FILTER_IMPORT);
+                ::sfx2::FileDialogHelper aFileDlg(
+                    ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
+                    0,
+                    aModule.GetFactoryEmptyDocumentURL(SvtModuleOptions::E_CALC)
+                    ,SFX_FILTER_IMPORT);
                 askForFileName(aFileDlg);
             }
             break;
@@ -239,7 +243,9 @@ DBG_NAME(OConnectionHelper)
             {
                 const ::rtl::OUString sExt(RTL_CONSTASCII_USTRINGPARAM("*.mdb"));
                 String sFilterName(ModuleRes (STR_MSACCESS_FILTERNAME));
-                ::sfx2::FileDialogHelper aFileDlg(0);
+                ::sfx2::FileDialogHelper aFileDlg(
+                    ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
+                    0);
                 aFileDlg.AddFilter(sFilterName,sExt);
                 aFileDlg.SetCurrentFilter(sFilterName);
                 askForFileName(aFileDlg);
@@ -249,7 +255,9 @@ DBG_NAME(OConnectionHelper)
             {
                 const ::rtl::OUString sAccdb(RTL_CONSTASCII_USTRINGPARAM("*.accdb"));
                 String sFilterName2(ModuleRes (STR_MSACCESS_2007_FILTERNAME));
-                ::sfx2::FileDialogHelper aFileDlg(0);
+                ::sfx2::FileDialogHelper aFileDlg(
+                    ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
+                    0);
                 aFileDlg.AddFilter(sFilterName2,sAccdb);
                 aFileDlg.SetCurrentFilter(sFilterName2);
                 askForFileName(aFileDlg);

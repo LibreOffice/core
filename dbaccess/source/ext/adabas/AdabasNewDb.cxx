@@ -48,6 +48,7 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <unotools/ucbhelper.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
@@ -59,6 +60,7 @@
 using namespace adabasui;
 using namespace ucbhelper;
 using namespace utl;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -549,7 +551,8 @@ IMPL_LINK( OAdabasNewDbDlg, LoseFocusHdl, Edit *, pEdit )
 //------------------------------------------------------------------------
 IMPL_LINK( OAdabasNewDbDlg, LoadButtonClickHdl, Button *, /*pButton*/ )
 {
-    ::sfx2::FileDialogHelper aLoad(0);
+    ::sfx2::FileDialogHelper aLoad(
+            ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, 0);
     if(!m_Backup_File.Len())
         aLoad.SetDisplayDirectory(SvtPathOptions().GetWorkPath());
     else
@@ -573,8 +576,8 @@ IMPL_LINK( OAdabasNewDbDlg, LoadButtonClickHdl, Button *, /*pButton*/ )
 //------------------------------------------------------------------------
 IMPL_LINK( OAdabasNewDbDlg, ButtonClickHdl, Button *, pButton )
 {
-    WinBits nBits(WB_SAVEAS);
-    ::sfx2::FileDialogHelper aFileDlg( static_cast<sal_uInt32>(nBits) );
+    ::sfx2::FileDialogHelper aFileDlg(
+        ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0);
 
     String aPath;
     if(pButton == &m_PB_SYSDEVSPACE)

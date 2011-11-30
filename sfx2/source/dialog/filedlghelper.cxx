@@ -2216,47 +2216,6 @@ void FileDialogHelper_Impl::SetContext( FileDialogHelper::Context _eNewContext )
 // ------------------------------------------------------------------------
 
 FileDialogHelper::FileDialogHelper(
-    sal_Int64 nFlags,
-    const String& rFact,
-    SfxFilterFlags nMust,
-    SfxFilterFlags nDont )
-{
-    mpImp = new FileDialogHelper_Impl( this, getDialogType( nFlags ), nFlags );
-    mxImp = mpImp;
-
-    // create the list of filters
-    mpImp->addFilters(
-            SfxObjectShell::GetServiceNameFromFactory(rFact), nMust, nDont );
-}
-
-FileDialogHelper::FileDialogHelper(
-    sal_Int64 nFlags,
-    const String& rFact,
-    sal_Int16 nDialog,
-    SfxFilterFlags nMust,
-    SfxFilterFlags nDont,
-    const String& rStandardDir,
-    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList)
-{
-    mpImp = new FileDialogHelper_Impl( this, getDialogType( nFlags ), nFlags, nDialog, NULL , rStandardDir, rBlackList );
-    mxImp = mpImp;
-
-    // create the list of filters
-    mpImp->addFilters(
-            SfxObjectShell::GetServiceNameFromFactory(rFact), nMust, nDont );
-}
-
-// ------------------------------------------------------------------------
-FileDialogHelper::FileDialogHelper( sal_Int64 nFlags )
-{
-    sal_Int16 nDialogType = getDialogType( nFlags );
-
-    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags );
-    mxImp = mpImp;
-}
-
-// ------------------------------------------------------------------------
-FileDialogHelper::FileDialogHelper(
     sal_Int16 nDialogType,
     sal_Int64 nFlags,
     const String& rFact,
@@ -2634,31 +2593,6 @@ uno::Reference < XFilePicker > FileDialogHelper::GetFilePicker() const
 }
 
 // ------------------------------------------------------------------------
-sal_Int16 FileDialogHelper::getDialogType( sal_Int64 nFlags ) const
-{
-    sal_Int16 nDialogType = FILEOPEN_SIMPLE;
-
-    if ( nFlags & WB_SAVEAS )
-    {
-        if ( nFlags & SFXWB_PASSWORD )
-            nDialogType = FILESAVE_AUTOEXTENSION_PASSWORD;
-        else
-            nDialogType = FILESAVE_SIMPLE;
-    }
-    else if ( nFlags & SFXWB_GRAPHIC )
-    {
-        if ( nFlags & SFXWB_SHOWSTYLES )
-            nDialogType = FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE;
-        else
-            nDialogType = FILEOPEN_LINK_PREVIEW;
-    }
-    else if ( SFXWB_INSERT != ( nFlags & SFXWB_INSERT ) )
-        nDialogType = FILEOPEN_READONLY_VERSION;
-
-    return nDialogType;
-}
-
-// ------------------------------------------------------------------------
 // XFilePickerListener Methods
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper::FileSelectionChanged( const FilePickerEvent& aEvent )
@@ -2700,7 +2634,8 @@ void SAL_CALL FileDialogHelper::DialogClosed( const DialogClosedEvent& _rEvent )
 
 // ------------------------------------------------------------------------
 
-ErrCode FileOpenDialog_Impl( sal_Int64 nFlags,
+ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
+                             sal_Int64 nFlags,
                              const String& rFact,
                              SvStringsDtor *& rpURLList,
                              String& rFilter,
@@ -2711,7 +2646,8 @@ ErrCode FileOpenDialog_Impl( sal_Int64 nFlags,
                              const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList )
 {
     ErrCode nRet;
-    FileDialogHelper aDialog( nFlags, rFact, nDialog, 0, 0, rStandardDir, rBlackList );
+    FileDialogHelper aDialog( nDialogType, nFlags,
+            rFact, nDialog, 0, 0, rStandardDir, rBlackList );
 
     String aPath;
     if ( pPath )

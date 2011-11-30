@@ -37,6 +37,7 @@
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <tools/debug.hxx>
 #include <svtools/localresaccess.hxx>
 #include <comphelper/interaction.hxx>
@@ -52,6 +53,7 @@ namespace dbp
 {
 //.........................................................................
 
+    using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
@@ -198,7 +200,8 @@ namespace dbp
     //---------------------------------------------------------------------
     IMPL_LINK( OTableSelectionPage, OnSearchClicked, PushButton*, /*_pButton*/ )
     {
-        ::sfx2::FileDialogHelper aFileDlg(0);
+        ::sfx2::FileDialogHelper aFileDlg(
+                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, 0);
         aFileDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
 
         static const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");

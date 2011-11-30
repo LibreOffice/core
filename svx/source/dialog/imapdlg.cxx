@@ -494,7 +494,7 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
 
 void SvxIMapDlg::DoOpen()
 {
-       ::sfx2::FileDialogHelper aDlg(
+    ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
 
     ImageMap        aLoadIMap;
@@ -535,7 +535,7 @@ void SvxIMapDlg::DoOpen()
 
 sal_Bool SvxIMapDlg::DoSave()
 {
-       ::sfx2::FileDialogHelper aDlg(
+    ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
 
     const String    aBinFilter( DEFINE_CONST_UNICODE( IMAP_BINARY_FILTER ) );

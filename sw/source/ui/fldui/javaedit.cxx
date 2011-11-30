@@ -34,6 +34,7 @@
 // include ---------------------------------------------------------------
 
 
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #define _JAVAEDIT_CXX
 #include <hintids.hxx>
@@ -54,6 +55,9 @@
 
 #include <fldui.hrc>
 #include <javaedit.hrc>
+
+
+using namespace ::com::sun::star;
 
 // static ----------------------------------------------------------------
 
@@ -279,7 +283,8 @@ IMPL_LINK( SwJavaEditDialog, InsertFileHdl, PushButton *, pBtn )
         Application::SetDefDialogParent( pBtn );
 
         pFileDlg = new ::sfx2::FileDialogHelper(
-            (SFXWB_INSERT | WB_3DLOOK), String::CreateFromAscii("swriter") );
+            ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+            SFXWB_INSERT, String::CreateFromAscii("swriter") );
     }
 
     pFileDlg->StartExecuteModal( LINK( this, SwJavaEditDialog, DlgClosedHdl ) );

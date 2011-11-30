@@ -28,6 +28,9 @@
 
 #include "doclinkdialog.hxx"
 #include "doclinkdialog.hrc"
+
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+
 #include <cuires.hrc>
 #include <tools/debug.hxx>
 #include <svl/filenotation.hxx>
@@ -42,6 +45,7 @@ namespace svx
 {
 //......................................................................
 
+    using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::ucb;
     using namespace ::svt;
@@ -166,7 +170,8 @@ namespace svx
     //------------------------------------------------------------------
     IMPL_LINK( ODocumentLinkDialog, OnBrowseFile, void*, EMPTYARG )
     {
-        ::sfx2::FileDialogHelper aFileDlg(0);
+        ::sfx2::FileDialogHelper aFileDlg(
+                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, 0);
         static const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");
         const SfxFilter* pFilter = SfxFilter::GetFilterByName( s_sDatabaseType);
         if ( pFilter )

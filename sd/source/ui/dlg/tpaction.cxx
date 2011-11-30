@@ -41,6 +41,7 @@
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/embed/VerbAttributes.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include "sdattr.hxx"
 #include <sfx2/sfxresid.hxx>
@@ -470,7 +471,8 @@ void SdTPAction::OpenFileDialog()
         }
         else
         {
-            sfx2::FileDialogHelper aFileDialog(0);
+            sfx2::FileDialogHelper aFileDialog(
+                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, 0);
 
             if (bDocument && !aFile.Len())
                 aFile = SvtPathOptions().GetWorkPath();

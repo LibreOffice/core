@@ -1172,14 +1172,15 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
 
             case ID_BROWSER_SAVEASDOC:
                 {
-                    WinBits nBits(WB_SAVEAS);
                     ::rtl::OUString sUrl;
                     if ( m_xModel.is() )
                         sUrl = m_xModel->getURL();
                     if ( !sUrl.getLength() )
                         sUrl = SvtPathOptions().GetWorkPath();
 
-                    ::sfx2::FileDialogHelper aFileDlg( com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,static_cast<sal_uInt32>(nBits) ,getView());
+                    ::sfx2::FileDialogHelper aFileDlg(
+                        ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
+                        0, getView());
                     aFileDlg.SetDisplayDirectory( sUrl );
 
                     const SfxFilter* pFilter = getStandardDatabaseFilter();

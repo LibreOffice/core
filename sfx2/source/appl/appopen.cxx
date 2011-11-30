@@ -49,6 +49,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustring.hxx>
@@ -758,6 +759,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
 
         sal_uIntPtr nErr = sfx2::FileOpenDialog_Impl(
+                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
                 SFXWB_MULTISELECTION, String(), pURLList,
                 aFilter, pSet, &aPath, nDialog, sStandardDir, aBlackList );
 

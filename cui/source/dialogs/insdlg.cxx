@@ -1032,7 +1032,8 @@ IMPL_STATIC_LINK( SfxInsertFloatingFrameDialog, OpenHdl, PushButton*, EMPTYARG )
     Application::SetDefDialogParent( pThis );
 
     // create the file dialog
-    sfx2::FileDialogHelper aFileDlg( SFXWB_PASSWORD, String() );
+    sfx2::FileDialogHelper aFileDlg(
+            ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0, String() );
 
     // set the title
     aFileDlg.SetTitle( OUString( String( CUI_RES( MD_INSERT_OBJECT_IFRAME ) ) ) );

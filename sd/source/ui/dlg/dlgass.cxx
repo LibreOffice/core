@@ -62,6 +62,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <unotools/historyoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
@@ -1879,8 +1880,9 @@ IMPL_LINK( AssistentDlg, FinishHdl, OKButton *, EMPTYARG )
         String aFileToOpen = GetDocPath();
         if(aFileToOpen.Len() == 0)
         {
-            sfx2::FileDialogHelper aFileDlg( 0,
-                    ::String::CreateFromAscii("simpress") );
+            sfx2::FileDialogHelper aFileDlg(
+                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, 0,
+                ::String::CreateFromAscii("simpress") );
 
             if ( aFileDlg.Execute() == ERRCODE_NONE )
                 aFileToOpen = aFileDlg.GetPath();

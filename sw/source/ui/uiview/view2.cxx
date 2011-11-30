@@ -34,6 +34,7 @@
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #define _SVSTDARR_STRINGSSORTDTOR
 #include <svl/svstdarr.hxx>
@@ -259,7 +260,9 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     SwDocShell* pDocShell = GetDocShell();
     sal_uInt16 nHtmlMode = ::GetHtmlMode(pDocShell);
     // im HTML-Mode nur verknuepft einfuegen
-    FileDialogHelper* pFileDlg = new FileDialogHelper( SFXWB_GRAPHIC | SFXWB_SHOWSTYLES );
+    FileDialogHelper* pFileDlg = new FileDialogHelper(
+        ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE,
+        SFXWB_GRAPHIC );
     pFileDlg->SetTitle(SW_RESSTR(STR_INSERT_GRAPHIC ));
     pFileDlg->SetContext( FileDialogHelper::SW_INSERT_GRAPHIC );
     uno::Reference < XFilePicker > xFP = pFileDlg->GetFilePicker();

@@ -72,20 +72,12 @@ class SvStringsDtor;
 class Window;
 
 //-----------------------------------------------------------------------------
-/*
-#define WB_OPEN                 0x00200000L
-#define WB_SAVEAS               0x00400000L
-#define WB_PASSWORD             0x01000000L
-*/
 
-#define SFXWB_INSERT            ( 0x04000000L | WB_OPEN )   // ((WinBits)0x00200000)
-#define SFXWB_PASSWORD          WB_PASSWORD                 // ((WinBits)0x01000000)
+// the SFXWB constants are for the nFlags parameter of the constructor
+#define SFXWB_INSERT            0x04000000L     // turn Open into Insert dialog
+#define SFXWB_EXPORT            0x40000000L     // turn Save into Export dialog
 #define SFXWB_MULTISELECTION    0x20000000L
-
-#define SFXWB_GRAPHIC           0x00800000L     // FileOpen with link and preview box
-#define SFXWB_SHOWSTYLES        0x01000000L     // FileOpen with link and preview box and styles
-
-#define SFXWB_EXPORT            ( 0x040000000L | WB_SAVEAS )    // Export dialog
+#define SFXWB_GRAPHIC           0x00800000L     // register graphic formats
 
 #define FILEDIALOG_FILTER_ALL   "*.*"
 
@@ -127,42 +119,25 @@ private:
     FileDialogHelper_Impl   *mpImp;
 
 
-    SAL_DLLPRIVATE sal_Int16 getDialogType( sal_Int64 nFlags ) const;
-
 public:
-                            FileDialogHelper( sal_Int64 nFlags,
-                                              const String& rFact,
-                                              sal_Int16 nDialog,
-                                              SfxFilterFlags nMust,
-                                              SfxFilterFlags nDont,
-                                              const String& rStandardDir,
-                                              const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList);
-
-                            FileDialogHelper( sal_Int64 nFlags,
-                                              const String& rFactory,
-                                              SfxFilterFlags nMust = 0,
-                                              SfxFilterFlags nDont = 0 );
-
-                            FileDialogHelper( sal_Int16 nDialogType,
-                                              sal_Int64 nFlags,
-                                              const String& rFactory,
-                                              SfxFilterFlags nMust = 0,
-                                              SfxFilterFlags nDont = 0 );
-
-                            FileDialogHelper( sal_Int16 nDialogType,
-                                              sal_Int64 nFlags,
-                                              const String& rFactory,
-                                              sal_Int16 nDialog,
-                                              SfxFilterFlags nMust,
-                                              SfxFilterFlags nDont,
-                                              const String& rStandardDir,
-                                              const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList);
-
-                            FileDialogHelper( sal_Int64 nFlags );
-
                             FileDialogHelper( sal_Int16 nDialogType,
                                               sal_Int64 nFlags,
                                               Window* _pPreferredParent = NULL );
+
+                            FileDialogHelper( sal_Int16 nDialogType,
+                                              sal_Int64 nFlags,
+                                              const String& rFactory,
+                                              SfxFilterFlags nMust = 0,
+                                              SfxFilterFlags nDont = 0 );
+
+                            FileDialogHelper( sal_Int16 nDialogType,
+                                              sal_Int64 nFlags,
+                                              const String& rFactory,
+                                              sal_Int16 nDialog,
+                                              SfxFilterFlags nMust,
+                                              SfxFilterFlags nDont,
+                                              const String& rStandardDir,
+                                              const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList);
 
                             FileDialogHelper( sal_Int16 nDialogType,
                                               sal_Int64 nFlags,
@@ -286,7 +261,8 @@ public:
 #define SFX2_IMPL_DIALOG_SYSTEM 1
 #define SFX2_IMPL_DIALOG_OOO 2
 
-ErrCode FileOpenDialog_Impl( sal_Int64 nFlags,
+ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
+                             sal_Int64 nFlags,
                              const String& rFact,
                              SvStringsDtor *& rpURLList,
                              String& rFilter,

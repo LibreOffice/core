@@ -95,8 +95,9 @@ struct SvxOpenGrf_Impl
 };
 
 
-SvxOpenGrf_Impl::SvxOpenGrf_Impl() :
-    aFileDlg(SFXWB_GRAPHIC)
+SvxOpenGrf_Impl::SvxOpenGrf_Impl()
+    : aFileDlg(ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
+            SFXWB_GRAPHIC)
 {
     uno::Reference < XFilePicker > xFP = aFileDlg.GetFilePicker();
     xCtrlAcc = uno::Reference < XFilePickerControlAccess >(xFP, UNO_QUERY);

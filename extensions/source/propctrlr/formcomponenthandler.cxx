@@ -63,6 +63,7 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/awt/XTabControllerModel.hpp>
 #include <com/sun/star/form/FormSubmitEncoding.hpp>
@@ -2779,7 +2780,9 @@ namespace pcr
         bool bIsLink = true;// reflect the legacy behavior
         ::rtl::OUString aStrTrans = m_pInfoService->getPropertyTranslation( PROPERTY_ID_IMAGE_URL );
 
-        ::sfx2::FileDialogHelper aFileDlg(SFXWB_GRAPHIC);
+        ::sfx2::FileDialogHelper aFileDlg(
+                ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
+                SFXWB_GRAPHIC);
 
         aFileDlg.SetTitle(aStrTrans);
         // non-linked images ( e.g. those located in the document
@@ -2836,7 +2839,8 @@ namespace pcr
     //------------------------------------------------------------------------
     bool FormComponentPropertyHandler::impl_browseForTargetURL_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
-        ::sfx2::FileDialogHelper aFileDlg(0);
+        ::sfx2::FileDialogHelper aFileDlg(
+                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, 0);
 
         ::rtl::OUString sURL;
         OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_TARGET_URL ) >>= sURL );
@@ -2889,7 +2893,8 @@ namespace pcr
     //------------------------------------------------------------------------
     bool FormComponentPropertyHandler::impl_browseForDatabaseDocument_throw( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
-        ::sfx2::FileDialogHelper aFileDlg(0,
+        ::sfx2::FileDialogHelper aFileDlg(
+                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, 0,
                 ::String::CreateFromAscii("sdatabase"));
 
         ::rtl::OUString sDataSource;

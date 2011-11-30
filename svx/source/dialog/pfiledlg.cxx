@@ -31,6 +31,7 @@
 #include <sfx2/docfile.hxx>
 #include <com/sun/star/plugin/PluginDescription.hpp>
 #include <com/sun/star/plugin/XPluginManager.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include <comphelper/processfactory.hxx>
 
@@ -58,8 +59,8 @@ String SvxPluginFileDlg::GetPath() const
     return maFileDlg.GetPath();
 }
 
-SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind ) :
-    maFileDlg(SFXWB_INSERT)
+SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind )
+    : maFileDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, SFXWB_INSERT)
 {
     // set title of the dialogwindow
     switch (nKind)

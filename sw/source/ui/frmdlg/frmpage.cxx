@@ -2467,7 +2467,9 @@ IMPL_LINK( SwGrfExtPage, BrowseHdl, Button *, EMPTYARG )
 {
     if(!pGrfDlg)
     {
-        pGrfDlg = new FileDialogHelper( SFXWB_GRAPHIC );
+        pGrfDlg = new FileDialogHelper(
+                ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
+                SFXWB_GRAPHIC );
         pGrfDlg->SetTitle(SW_RESSTR(STR_EDIT_GRF ));
     }
     pGrfDlg->SetDisplayDirectory( aConnectED.GetText() );
