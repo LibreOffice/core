@@ -27,13 +27,25 @@
 
 
 # speed up if no target need to parse all modules
+gb_SpeedUpTargets_WRAPPEDBUILD:=
 ifneq ($(strip $(MAKECMDGOALS)),)
-ifeq ($(filter-out id tags docs distro-pack-install fetch help debugrun Env.Host.sh,$(MAKECMDGOALS)),)
+ifeq ($(filter-out id tags docs distro-pack-install fetch help debugrun $(SRCDIR)/Env.Host.sh,$(MAKECMDGOALS)),)
+gb_SpeedUpTargets_WRAPPEDBUILD:=T
+endif
+endif
+
+ifeq ($(strip $(gb_PARTIALBUILD)),)
+ifeq ($(filter-out clean subsequentcheck unitcheck build dev-install smoketestoo_native instsetoo_native cross_toolset findunusedcode,$(MAKECMDGOALS)),)
+gb_SpeedUpTargets_WRAPPEDBUILD:=T
+endif
+endif
+
+ifneq ($(strip $(gb_SpeedUpTargets_WRAPPEDBUILD)),)
+$(info wrapped build - skip reading gbuild definitions)
 gb_Module_add_target=
 gb_Module_add_check_target=
 gb_Module_add_subsequentcheck_target=
 gb_FULLDEPS=
-endif
 endif
 
 # vim:set shiftwidth=4 softtabstop=4 noexpandtab:

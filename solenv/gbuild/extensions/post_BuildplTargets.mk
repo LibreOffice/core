@@ -27,12 +27,6 @@
 
 ifeq ($(strip $(gb_PARTIALBUILD)),)
 
-gb_Module_add_target=
-gb_Module_add_moduledir=
-gb_Module_add_check_target=
-gb_Module_add_subsequentcheck_target=
-gb_FULLDEPS=
-
 clean: clean-host clean-build
 
 subsequentcheck: smoketestoo_native
