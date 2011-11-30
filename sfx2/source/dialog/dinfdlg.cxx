@@ -1374,7 +1374,8 @@ IMPL_LINK( SfxInternetPage, ClickHdlForward, Control*, pCtrl )
 IMPL_LINK( SfxInternetPage, ClickHdlBrowseURL, PushButton*, EMPTYARG )
 {
     if ( !pFileDlg )
-        pFileDlg = new sfx2::FileDialogHelper( TemplateDescription::FILEOPEN_SIMPLE, WB_OPEN );
+        pFileDlg = new sfx2::FileDialogHelper(
+                        TemplateDescription::FILEOPEN_SIMPLE, 0 );
     pFileDlg->SetDisplayDirectory( aEDForwardURL.GetText() );
     pFileDlg->StartExecuteModal( LINK( this, SfxInternetPage, DialogClosedHdl ) );
 

@@ -2221,7 +2221,7 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AddFiles_Impl, Button *, pButton )
     (void)pButton; //unused
     if ( pFileDlg )
         delete pFileDlg;
-    pFileDlg = new sfx2::FileDialogHelper( WB_OPEN, String() );
+    pFileDlg = new sfx2::FileDialogHelper( 0, String() );
 
     // add config and basic filter
     static String sOpenBracket( DEFINE_CONST_UNICODE( " (" ) );

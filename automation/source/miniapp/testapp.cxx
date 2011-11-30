@@ -73,7 +73,7 @@ IMPL_LINK(MainWindow,MenuSelectHdl,MenuBar*,aMenu)
 
 void MainWindow::FileOpen()
 {
-    FileDialog Dlg(this,WB_OPEN );
+    FileDialog Dlg(this, 0);
 
     Dlg.AddFilter(CUniString("Alle Dateien"), CUniString("*.*"));
     Dlg.SetCurFilter (CUniString("*.*"));

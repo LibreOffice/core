@@ -166,7 +166,7 @@ namespace svx
     //------------------------------------------------------------------
     IMPL_LINK( ODocumentLinkDialog, OnBrowseFile, void*, EMPTYARG )
     {
-        ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK | WB_STDMODAL | WB_OPEN);
+        ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK | WB_STDMODAL);
         static const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");
         const SfxFilter* pFilter = SfxFilter::GetFilterByName( s_sDatabaseType);
         if ( pFilter )

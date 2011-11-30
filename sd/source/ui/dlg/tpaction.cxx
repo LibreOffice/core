@@ -470,7 +470,7 @@ void SdTPAction::OpenFileDialog()
         }
         else
         {
-            sfx2::FileDialogHelper aFileDialog(WB_OPEN | WB_3DLOOK | WB_STDMODAL );
+            sfx2::FileDialogHelper aFileDialog(WB_3DLOOK | WB_STDMODAL);
 
             if (bDocument && !aFile.Len())
                 aFile = SvtPathOptions().GetWorkPath();

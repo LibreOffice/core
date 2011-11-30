@@ -549,7 +549,7 @@ IMPL_LINK( OAdabasNewDbDlg, LoseFocusHdl, Edit *, pEdit )
 //------------------------------------------------------------------------
 IMPL_LINK( OAdabasNewDbDlg, LoadButtonClickHdl, Button *, /*pButton*/ )
 {
-    ::sfx2::FileDialogHelper aLoad(WB_3DLOOK | WB_STDMODAL | WB_OPEN);
+    ::sfx2::FileDialogHelper aLoad(WB_3DLOOK | WB_STDMODAL);
     if(!m_Backup_File.Len())
         aLoad.SetDisplayDirectory(SvtPathOptions().GetWorkPath());
     else

@@ -112,8 +112,7 @@ namespace sfx2
         sal_Bool                    mbSelectionFltrEnabled  : 1;
 
     private:
-        void                    addFilters( sal_Int64 nFlags,
-                                            const String& rFactory,
+        void                    addFilters( const String& rFactory,
                                             SfxFilterFlags nMust,
                                             SfxFilterFlags nDont );
         void                    addFilter( const ::rtl::OUString& rFilterName,

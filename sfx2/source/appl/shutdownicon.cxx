@@ -420,7 +420,7 @@ void ShutdownIcon::StartFileDialog()
     }
 
     if ( !m_pFileDlg )
-        m_pFileDlg = new FileDialogHelper( WB_OPEN | SFXWB_MULTISELECTION, String() );
+        m_pFileDlg = new FileDialogHelper( SFXWB_MULTISELECTION, String() );
     m_pFileDlg->StartExecuteModal( STATIC_LINK( this, ShutdownIcon, DialogClosedHdl_Impl ) );
 }
 

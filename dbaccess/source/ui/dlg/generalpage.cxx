@@ -602,7 +602,8 @@ namespace dbaui
     //-------------------------------------------------------------------------
     IMPL_LINK(OGeneralPage, OnOpenDocument, PushButton*, /*_pBox*/)
     {
-        ::sfx2::FileDialogHelper aFileDlg( WB_OPEN, ::String::CreateFromAscii("sdatabase") );
+        ::sfx2::FileDialogHelper aFileDlg( 0,
+                ::String::CreateFromAscii("sdatabase") );
         const SfxFilter* pFilter = getStandardDatabaseFilter();
         if ( pFilter )
         {

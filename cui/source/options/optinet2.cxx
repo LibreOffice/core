@@ -1440,7 +1440,7 @@ IMPL_LINK(  SvxEMailTabPage, FileDialogHdl_Impl, PushButton*, pButton )
     {
         FileDialogHelper aHelper(
             com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-            WB_OPEN );
+            0 );
         String sPath = aMailerURLED.GetText();
         if ( !sPath.Len() )
             sPath.AppendAscii("/usr/bin");

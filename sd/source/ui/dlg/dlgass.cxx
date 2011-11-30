@@ -1879,7 +1879,8 @@ IMPL_LINK( AssistentDlg, FinishHdl, OKButton *, EMPTYARG )
         String aFileToOpen = GetDocPath();
         if(aFileToOpen.Len() == 0)
         {
-            sfx2::FileDialogHelper aFileDlg( WB_OPEN, ::String::CreateFromAscii("simpress") );
+            sfx2::FileDialogHelper aFileDlg( 0,
+                    ::String::CreateFromAscii("simpress") );
 
             if ( aFileDlg.Execute() == ERRCODE_NONE )
                 aFileToOpen = aFileDlg.GetPath();

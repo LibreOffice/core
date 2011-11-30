@@ -2889,7 +2889,8 @@ namespace pcr
     //------------------------------------------------------------------------
     bool FormComponentPropertyHandler::impl_browseForDatabaseDocument_throw( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
-        ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK|WB_OPEN,::String::CreateFromAscii("sdatabase"));
+        ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK,
+                ::String::CreateFromAscii("sdatabase"));
 
         ::rtl::OUString sDataSource;
         OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_DATASOURCE ) >>= sDataSource );

@@ -856,6 +856,29 @@ static bool lcl_isSystemFilePicker( const uno::Reference< XFilePicker >& _rxFP )
     return false;
 }
 
+enum open_or_save_t {OPEN, SAVE};
+static open_or_save_t lcl_OpenOrSave(sal_Int16 const nDialogType)
+{
+    switch (nDialogType)
+    {
+        case FILEOPEN_SIMPLE:
+        case FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE:
+        case FILEOPEN_PLAY:
+        case FILEOPEN_READONLY_VERSION:
+        case FILEOPEN_LINK_PREVIEW:
+            return OPEN;
+        case FILESAVE_SIMPLE:
+        case FILESAVE_AUTOEXTENSION_PASSWORD:
+        case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
+        case FILESAVE_AUTOEXTENSION_SELECTION:
+        case FILESAVE_AUTOEXTENSION_TEMPLATE:
+        case FILESAVE_AUTOEXTENSION:
+            return SAVE;
+        default:
+            assert(false); // invalid dialog type
+    }
+}
+
 // ------------------------------------------------------------------------
 // -----------      FileDialogHelper_Impl       ---------------------------
 // ------------------------------------------------------------------------
@@ -909,7 +932,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
 
     // default settings
     m_nDontFlags = SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG | SFX_FILTER_NOTINSTALLED;
-    if( WB_OPEN == ( nFlags & WB_OPEN ) )
+    if (OPEN == lcl_OpenOrSave(m_nDialogType))
         m_nMustFlags = SFX_FILTER_IMPORT;
     else
         m_nMustFlags = SFX_FILTER_EXPORT;
@@ -1697,8 +1720,7 @@ void FileDialogHelper_Impl::createMatcher( const String& rFactory )
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper_Impl::addFilters( sal_Int64 nFlags,
-                                        const String& rFactory,
+void FileDialogHelper_Impl::addFilters( const String& rFactory,
                                         SfxFilterFlags nMust,
                                         SfxFilterFlags nDont )
 {
@@ -1757,7 +1779,7 @@ void FileDialogHelper_Impl::addFilters( sal_Int64 nFlags,
 
     // append the filters
     ::rtl::OUString sFirstFilter;
-    if ( WB_OPEN == ( nFlags & WB_OPEN ) )
+    if (OPEN == lcl_OpenOrSave(m_nDialogType))
         ::sfx2::appendFiltersForOpen( aIter, xFltMgr, sFirstFilter, *this );
     else if ( mbExport )
         ::sfx2::appendExportFilters( aIter, xFltMgr, sFirstFilter, *this );
@@ -2203,7 +2225,8 @@ FileDialogHelper::FileDialogHelper(
     mxImp = mpImp;
 
     // create the list of filters
-    mpImp->addFilters( nFlags, SfxObjectShell::GetServiceNameFromFactory(rFact), nMust, nDont );
+    mpImp->addFilters(
+            SfxObjectShell::GetServiceNameFromFactory(rFact), nMust, nDont );
 }
 
 FileDialogHelper::FileDialogHelper(
@@ -2219,7 +2242,8 @@ FileDialogHelper::FileDialogHelper(
     mxImp = mpImp;
 
     // create the list of filters
-    mpImp->addFilters( nFlags, SfxObjectShell::GetServiceNameFromFactory(rFact), nMust, nDont );
+    mpImp->addFilters(
+            SfxObjectShell::GetServiceNameFromFactory(rFact), nMust, nDont );
 }
 
 // ------------------------------------------------------------------------
@@ -2243,7 +2267,8 @@ FileDialogHelper::FileDialogHelper(
     mxImp = mpImp;
 
     // create the list of filters
-    mpImp->addFilters( nFlags, SfxObjectShell::GetServiceNameFromFactory(rFact), nMust, nDont );
+    mpImp->addFilters(
+            SfxObjectShell::GetServiceNameFromFactory(rFact), nMust, nDont );
 }
 
 // ------------------------------------------------------------------------
@@ -2261,7 +2286,8 @@ FileDialogHelper::FileDialogHelper(
     mxImp = mpImp;
 
     // create the list of filters
-    mpImp->addFilters( nFlags, SfxObjectShell::GetServiceNameFromFactory(rFact), nMust, nDont );
+    mpImp->addFilters(
+            SfxObjectShell::GetServiceNameFromFactory(rFact), nMust, nDont );
 }
 
 // ------------------------------------------------------------------------
@@ -2299,8 +2325,8 @@ FileDialogHelper::FileDialogHelper(
 
     aWildcard += aExtName;
 
-    ::rtl::OUString aUIString =
-        ::sfx2::addExtension( aFilterUIName, aWildcard, ( WB_OPEN == ( nFlags & WB_OPEN ) ), *mpImp );
+    ::rtl::OUString const aUIString = ::sfx2::addExtension( aFilterUIName,
+            aWildcard, (OPEN == lcl_OpenOrSave(mpImp->m_nDialogType)), *mpImp);
     AddFilter( aUIString, aWildcard );
 }
 

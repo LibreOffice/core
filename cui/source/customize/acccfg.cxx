@@ -1034,7 +1034,7 @@ void SfxAcceleratorConfigPage::ResetConfig()
 IMPL_LINK( SfxAcceleratorConfigPage, Load, Button*, EMPTYARG )
 {
     // ask for filename, where we should load the new config data from
-    StartFileDialog( WB_OPEN | WB_STDMODAL | WB_3DLOOK, aLoadAccelConfigStr );
+    StartFileDialog( WB_STDMODAL | WB_3DLOOK, aLoadAccelConfigStr );
     return 0;
 }
 
