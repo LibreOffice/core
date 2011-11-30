@@ -168,9 +168,6 @@ define gb_Helper_execute
 $(call gb_Helper_set_ld_path) $(OUTDIR_FOR_BUILD)/bin/$(1)
 endef
 
-export gb_Helper_set_ld_path
-export gb_Helper_execute
-
 # gb_Helper_OUTDIRLIBDIR is set by the platform to the path the dynamic linker need to use
 # for libraries from the OUTDIR
 
