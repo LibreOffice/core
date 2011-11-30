@@ -58,6 +58,10 @@ private:
     rtl::OUString handleNary();
     rtl::OUString handleR();
     rtl::OUString handleRad();
+    rtl::OUString handleSpre();
+    rtl::OUString handleSsub();
+    rtl::OUString handleSsubsup();
+    rtl::OUString handleSsup();
     rtl::OUString readOMathArg();
     rtl::OUString readOMathArgInElement( int token );
     oox::formulaimport::XmlStream& stream;

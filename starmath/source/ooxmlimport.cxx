@@ -133,6 +133,18 @@ OUString SmOoxmlImport::readOMathArg()
             case OPENING( M_TOKEN( rad )):
                 ret += handleRad();
                 break;
+            case OPENING( M_TOKEN( sPre )):
+                ret += handleSpre();
+                break;
+            case OPENING( M_TOKEN( sSub )):
+                ret += handleSsub();
+                break;
+            case OPENING( M_TOKEN( sSubSup )):
+                ret += handleSsubsup();
+                break;
+            case OPENING( M_TOKEN( sSup )):
+                ret += handleSsup();
+                break;
             default:
                 stream.handleUnexpectedTag();
                 break;
@@ -549,6 +561,44 @@ OUString SmOoxmlImport::handleRad()
         return STR( "sqrt {" ) + e + STR( "}" );
     else
         return STR( "nroot {" ) + deg + STR( "}{" ) + e + STR( "}" );
+}
+
+OUString SmOoxmlImport::handleSpre()
+{
+    stream.ensureOpeningTag( M_TOKEN( sPre ));
+    OUString sub = readOMathArgInElement( M_TOKEN( sub ));
+    OUString sup = readOMathArgInElement( M_TOKEN( sup ));
+    OUString e = readOMathArgInElement( M_TOKEN( e ));
+    stream.ensureClosingTag( M_TOKEN( sPre ));
+    return STR( "{" ) + e + STR( "} lsub {" ) + sub + STR( "} lsup {" ) + sup + STR( "}" );
+}
+
+OUString SmOoxmlImport::handleSsub()
+{
+    stream.ensureOpeningTag( M_TOKEN( sSub ));
+    OUString e = readOMathArgInElement( M_TOKEN( e ));
+    OUString sub = readOMathArgInElement( M_TOKEN( sub ));
+    stream.ensureClosingTag( M_TOKEN( sSub ));
+    return STR( "{" ) + e + STR( "} rsub {" ) + sub + STR( "}" );
+}
+
+OUString SmOoxmlImport::handleSsubsup()
+{
+    stream.ensureOpeningTag( M_TOKEN( sSubSup ));
+    OUString e = readOMathArgInElement( M_TOKEN( e ));
+    OUString sub = readOMathArgInElement( M_TOKEN( sub ));
+    OUString sup = readOMathArgInElement( M_TOKEN( sup ));
+    stream.ensureClosingTag( M_TOKEN( sSubSup ));
+    return STR( "{" ) + e + STR( "} rsub {" ) + sub + STR( "} rsup {" ) + sup + STR( "}" );
+}
+
+OUString SmOoxmlImport::handleSsup()
+{
+    stream.ensureOpeningTag( M_TOKEN( sSup ));
+    OUString e = readOMathArgInElement( M_TOKEN( e ));
+    OUString sup = readOMathArgInElement( M_TOKEN( sup ));
+    stream.ensureClosingTag( M_TOKEN( sSup ));
+    return STR( "{" ) + e + STR( "} ^ {" ) + sup + STR( "}" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
