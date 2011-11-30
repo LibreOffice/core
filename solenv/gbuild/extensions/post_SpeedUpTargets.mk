@@ -35,7 +35,7 @@ endif
 endif
 
 ifeq ($(strip $(gb_PARTIALBUILD)),)
-ifeq ($(filter-out clean subsequentcheck unitcheck build dev-install smoketestoo_native instsetoo_native cross_toolset findunusedcode,$(MAKECMDGOALS)),)
+ifeq ($(filter-out clean distclean subsequentcheck unitcheck build dev-install smoketestoo_native instsetoo_native cross_toolset findunusedcode,$(MAKECMDGOALS)),)
 gb_SpeedUpTargets_WRAPPEDBUILD:=T
 endif
 endif
