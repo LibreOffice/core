@@ -52,6 +52,8 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#include "gtkprintwrapper.hxx"
+
 GtkHookedYieldMutex::GtkHookedYieldMutex()
 {
 }
@@ -627,6 +629,14 @@ bool GtkInstance::AnyInput( sal_uInt16 nType )
 GenPspGraphics *GtkInstance::CreatePrintGraphics()
 {
     return new GenPspGraphics();
+}
+
+boost::shared_ptr<vcl::unx::GtkPrintWrapper>
+GtkInstance::getPrintWrapper() const
+{
+    if (!m_pPrintWrapper)
+        m_pPrintWrapper.reset(new vcl::unx::GtkPrintWrapper);
+    return m_pPrintWrapper;
 }
 
 #if GTK_CHECK_VERSION(3,0,0)

@@ -29,10 +29,20 @@
 #ifndef _VCL_GTKINST_HXX
 #define _VCL_GTKINST_HXX
 
+#include <boost/shared_ptr.hpp>
+
 #include <unx/salinst.h>
 #include <generic/gensys.h>
 #include <headless/svpinst.hxx>
 #include <gtk/gtk.h>
+
+namespace vcl
+{
+namespace unx
+{
+class GtkPrintWrapper;
+}
+}
 
 class GenPspGraphics;
 class GtkYieldMutex : public SalYieldMutex
@@ -125,6 +135,8 @@ public:
     // for managing a mirror of the in-flight un-dispatched gdk event queue
     void                        addEvent( sal_uInt16 nMask );
     void                        subtractEvent( sal_uInt16 nMask );
+
+    boost::shared_ptr<vcl::unx::GtkPrintWrapper> getPrintWrapper() const;
   private:
     std::vector<GtkSalTimer *>  m_aTimers;
     bool                        IsTimerExpired();
@@ -132,6 +144,7 @@ public:
     // count of in-flight un-dispatched gdk events of a given input type
     sal_uInt32                  m_nAnyInput[16];
     void                        resetEvents();
+    mutable boost::shared_ptr<vcl::unx::GtkPrintWrapper> m_pPrintWrapper;
 };
 
 #endif // _VCL_GTKINST_HXX

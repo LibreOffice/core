@@ -33,6 +33,7 @@ $(eval $(call gb_Library_set_include,vclplug_gtk,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/unx \
+    -I$(SRCDIR)/vcl/unx/gtk/inc \
     -I$(SRCDIR)/solenv/inc \
     -I$(OUTDIR)/inc \
 	$(shell pkg-config --cflags gtk+-unix-print-2.0) \
@@ -104,6 +105,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk,\
     vcl/unx/gtk/app/gtkdata \
     vcl/unx/gtk/app/gtkinst \
     vcl/unx/gtk/app/gtksys \
+    vcl/unx/gtk/gdi/gtkprintwrapper \
     vcl/unx/gtk/gdi/salnativewidgets-gtk \
     vcl/unx/gtk/gdi/salprn-gtk \
     vcl/unx/gtk/window/gtkframe \
