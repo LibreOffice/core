@@ -328,8 +328,6 @@ namespace chelp {
         com::sun::star::uno::Sequence< rtl::OUString > m_aImagesZipPaths;
         rtl::OString           m_aImagesZipFileURL;
         sal_Int16              m_nSymbolsStyle;
-        rtl::OUString          m_aInstallDirectoryWithoutEncoding; // a work around for a Sablot bug.
-        rtl::OUString          m_aInstallDirectoryAsSystemPath;    // Installation directory
 
         std::vector< rtl::OUString >    m_avModules;
 

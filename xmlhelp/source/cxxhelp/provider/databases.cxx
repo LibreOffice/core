@@ -399,7 +399,7 @@ rtl::OUString Databases::getInstallPathAsURL()
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-      return m_aInstallDirectory;
+    return m_aInstallDirectory;
 }
 
 const std::vector< rtl::OUString >& Databases::getModuleList( const rtl::OUString& Language )
@@ -1400,10 +1400,6 @@ void Databases::setInstallPath( const rtl::OUString& aInstDir )
 
     if( m_aInstallDirectory.lastIndexOf( sal_Unicode( '/' ) ) != m_aInstallDirectory.getLength() - 1 )
         m_aInstallDirectory += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ));
-
-    m_aInstallDirectoryWithoutEncoding = rtl::Uri::decode( m_aInstallDirectory,
-                                                           rtl_UriDecodeWithCharset,
-                                                           RTL_TEXTENCODING_UTF8 );
 }
 
 
