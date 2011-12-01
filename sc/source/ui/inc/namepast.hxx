@@ -46,10 +46,10 @@ class ScNamePasteDlg : public ModalDialog
     DECL_LINK( ButtonHdl, Button * );
 
 private:
+    PushButton      maBtnPasteAll;
+    PushButton      maBtnPaste;
     HelpButton      maHelpButton;
     PushButton      maBtnClose;
-    PushButton      maBtnPaste;
-    PushButton      maBtnPasteAll;
     FixedLine       maFlDiv;
 
     ScRangeManagerCtrl maCtrl;
