@@ -3018,7 +3018,7 @@ sal_Bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, sal_Bool bStartEdit /*
     switch ( nCode )
     {
         case KEY_RETURN:
-            if (bControl && !bShift && ( !bInputLine || pInputWin && pInputWin->IsMultiLineInput() ) )
+            if (bControl && !bShift && ( !bInputLine || ( pInputWin && pInputWin->IsMultiLineInput() ) ) )
                 bDoEnter = sal_True;
             else if ( nModi == 0 && nTipVisible && pFormulaData && nAutoPos != SCPOS_INVALID )
             {
