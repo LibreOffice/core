@@ -66,7 +66,7 @@
 #include <fmtcnct.hxx>
 #include <frmfmt.hxx>
 #include <txtflcnt.hxx>
-#include <docfld.hxx>   // fuer Expression-Felder
+#include <docfld.hxx>       // for ExpressionFields
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <ndnotxt.hxx>
@@ -85,7 +85,7 @@
 #include <flypos.hxx>
 #include <UndoInsert.hxx>
 #include <expfld.hxx>       // InsertLabel
-#include <poolfmt.hxx>      // PoolVorlagen-Id's
+#include <poolfmt.hxx>      // PoolTemplate Ids
 #include <docary.hxx>
 #include <swtable.hxx>
 #include <tblsel.hxx>
@@ -96,7 +96,7 @@
 #include <ftninfo.hxx>
 #include <pagedesc.hxx>
 #include <PostItMgr.hxx>
-#include <comcore.hrc>      // STR-ResId's
+#include <comcore.hrc>      // STR ResIds
 
 #include <unoframe.hxx>
 
@@ -107,7 +107,7 @@
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-#define DEF_FLY_WIDTH    2268   //Defaultbreite fuer FlyFrms    (2268 == 4cm)
+#define DEF_FLY_WIDTH    2268   // Default width for FlyFrms (2268 == 4cm)
 
 
 static bool lcl_IsItemSet(const SwCntntNode & rNode, sal_uInt16 which)
@@ -124,11 +124,10 @@ static bool lcl_IsItemSet(const SwCntntNode & rNode, sal_uInt16 which)
 |*
 |*  SwDoc::MakeLayoutFmt()
 |*
-|*  Beschreibung        Erzeugt ein neues Format das in seinen Einstellungen
-|*      Defaultmaessig zu dem Request passt. Das Format wird in das
-|*      entsprechende Formate-Array gestellt.
-|*      Wenn bereits ein passendes Format existiert, so wird dies
-|*      zurueckgeliefert.
+|*  Description: Create a new format whose settings fit to the Request by
+|*  default.
+|*  The format is put into the respective format array.
+|*  If there already is a fitting format, it is returned instead.
 |*************************************************************************/
 SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
 {
@@ -143,7 +142,7 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
     case RND_STD_HEADERR:
         {
             bHeader = sal_True;
-            // kein break, es geht unten weiter
+            // no break, we continue further down
         }
     case RND_STD_FOOTER:
     case RND_STD_FOOTERL:
@@ -172,11 +171,11 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
                                      ) ) );
             pFmt->SetFmtAttr( SwFmtCntnt( pSttNd ));
 
-            if( pSet )      // noch ein paar Attribute setzen ?
+            if( pSet )      // Set a few more attributes
                 pFmt->SetFmtAttr( *pSet );
 
-            // JP: warum zuruecksetzen ???  Doc. ist doch veraendert ???
-            // bei den Fly auf jedenfall verkehrt !!
+            // Why set it back?  Doc has changed, or not?
+            // In any case, wrong for the FlyFrames!
             if ( !bMod )
                 ResetModified();
         }
@@ -185,7 +184,7 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
     case RND_DRAW_OBJECT:
         {
             pFmt = MakeDrawFrmFmt( aEmptyStr, GetDfltFrmFmt() );
-            if( pSet )      // noch ein paar Attribute setzen ?
+            if( pSet )      // Set a few more attributes
                 pFmt->SetFmtAttr( *pSet );
 
             if (GetIDocumentUndoRedo().DoesUndo())
@@ -208,7 +207,7 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
 
     default:
         OSL_ENSURE( !this,
-                "Layoutformat mit ungueltigem Request angefordert." );
+                "LayoutFormat was requested with an invalid Request." );
 
     }
     return pFmt;
@@ -218,15 +217,13 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
 |*
 |*  SwDoc::DelLayoutFmt()
 |*
-|*  Beschreibung        Loescht das angegebene Format, der Inhalt wird mit
-|*      geloescht.
+|*  Description: Deletes the denoted format and its content.
 |*
 |*************************************************************************/
 void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
 {
-    //Verkettung von Rahmen muss ggf. zusammengefuehrt werden.
-    //Bevor die Frames vernichtet werden, damit die Inhalte der Rahmen
-    //ggf. entsprechend gerichtet werden.
+    // A chain of frames needs to be merged, if necessary,
+    // so that the Frame's contents are adjusted accordingly before we destroy the Frames.
     const SwFmtChain &rChain = pFmt->GetChain();
     if ( rChain.GetPrev() )
     {
@@ -244,12 +241,12 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
     const SwNodeIndex* pCntIdx = pFmt->GetCntnt().GetCntntIdx();
     if (pCntIdx && !GetIDocumentUndoRedo().DoesUndo())
     {
-        //Verbindung abbauen, falls es sich um ein OLE-Objekt handelt.
+        // Disconnect if it's an OLE object
         SwOLENode* pOLENd = GetNodes()[ pCntIdx->GetIndex()+1 ]->GetOLENode();
         if( pOLENd && pOLENd->GetOLEObj().IsOleRef() )
         {
 
-            // TODO/MBA: the old object closed the object, cleared all references to it, but didn't remove it from the container.
+            // TODO: the old object closed the object and cleared all references to it, but didn't remove it from the container.
             // I have no idea, why, nobody could explain it - so I do my very best to mimic this behavior
             //uno::Reference < util::XCloseable > xClose( pOLENd->GetOLEObj().GetOleRef(), uno::UNO_QUERY );
             //if ( xClose.is() )
@@ -266,10 +263,10 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
         }
     }
 
-    //Frms vernichten.
+    // Destroy Frames
     pFmt->DelFrms();
 
-    // erstmal sind nur Fly's Undofaehig
+    // Only FlyFrames are undoable at first
     const sal_uInt16 nWh = pFmt->Which();
     if (GetIDocumentUndoRedo().DoesUndo() &&
         (RES_FLYFRMFMT == nWh || RES_DRAWFRMFMT == nWh))
@@ -314,7 +311,7 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
             }
         }
 
-        //Inhalt Loeschen.
+        // Delete content
         if( pCntIdx )
         {
             SwNode *pNode = &pCntIdx->GetNode();
@@ -322,7 +319,7 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
             DeleteSection( pNode );
         }
 
-        // ggfs. bei Zeichengebundenen Flys das Zeichen loeschen
+        // Delete the character for character-bound FlyFrames (if necessary)
         const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
         if ((FLY_AS_CHAR == rAnchor.GetAnchorId()) && rAnchor.GetCntntAnchor())
         {
@@ -354,13 +351,11 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
 |*
 |*  SwDoc::CopyLayoutFmt()
 |*
-|*  Beschreibung        Kopiert das angegebene Format pSrc in pDest und
-|*                      returnt pDest. Wenn es noch kein pDest gibt, wird
-|*                      eins angelegt.
-|*                      JP: steht das Source Format in einem anderen
-|*                          Dokument, so kopiere auch dann noch richtig !!
-|*                          Vom chaos::Anchor-Attribut wird die Position immer
-|*                          auf 0 gesetzt !!!
+|*  Description: Copies the stated format (pSrc) to pDest and returns pDest.
+|*  If there's no pDest, it is created.
+|*  If the source format is located in another document, also copy correctly
+|*  in this case.
+|*  The chaos::Anchor attribute's position is always set 0!
 |*
 |*************************************************************************/
 SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
@@ -417,23 +412,23 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
     else
         pDest = MakeDrawFrmFmt( aEmptyStr, pDest );
 
-    // alle anderen/neue Attribute kopieren.
+    // Copy all other or new attributes
     pDest->CopyAttrs( rSource );
 
-    //Chains werden nicht kopiert.
+    // Do not copy chains
     pDest->ResetFmtAttr( RES_CHAIN );
 
     if( bFly )
     {
-        //Der Inhalt wird dupliziert.
+        // Duplicate the content.
         const SwNode& rCSttNd = rSource.GetCntnt().GetCntntIdx()->GetNode();
         SwNodeRange aRg( rCSttNd, 1, *rCSttNd.EndOfSectionNode() );
 
         SwNodeIndex aIdx( GetNodes().GetEndOfAutotext() );
         SwStartNode* pSttNd = GetNodes().MakeEmptySection( aIdx, SwFlyStartNode );
 
-        // erst den chaos::Anchor/CntntIndex setzen, innerhalb des Kopierens
-        // auf die Werte zugegriffen werden kann (DrawFmt in Kopf-/Fusszeilen)
+        // Set the chaos::Anchor/CntntIndex first.
+        // Within the copying part, we can access the values (DrawFmt in Headers and Footers)
         aIdx = *pSttNd;
         SwFmtCntnt aAttr( rSource.GetCntnt() );
         aAttr.SetNewCntntIdx( &aIdx );
@@ -446,13 +441,12 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
                 pDest->SetName( aEmptyStr );
             else
             {
-                // Teste erstmal ob der Name schon vergeben ist.
-                // Wenn ja -> neuen generieren
+                // Test first if the name is already taken, if so generate a new one.
                 sal_Int8 nNdTyp = aRg.aStart.GetNode().GetNodeType();
 
                 String sOld( pDest->GetName() );
                 pDest->SetName( aEmptyStr );
-                if( FindFlyByName( sOld, nNdTyp ) )     // einen gefunden
+                if( FindFlyByName( sOld, nNdTyp ) )     // found one
                     switch( nNdTyp )
                     {
                     case ND_GRFNODE:    sOld = GetUniqueGrfName();      break;
@@ -469,7 +463,7 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
             GetIDocumentUndoRedo().AppendUndo(new SwUndoInsLayFmt(pDest,0,0));
         }
 
-        // sorge dafuer das auch Fly's in Fly's kopiert werden
+        // Make sure that FlyFrames in FlyFrames are copied
         aIdx = *pSttNd->EndOfSectionNode();
 
         //fdo#36631 disable (scoped) any undo operations associated with the
@@ -480,7 +474,7 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
     }
     else
     {
-        OSL_ENSURE( RES_DRAWFRMFMT == rSource.Which(), "Weder Fly noch Draw." );
+        OSL_ENSURE( RES_DRAWFRMFMT == rSource.Which(), "Neither Fly nor Draw." );
         // #i52780# - Note: moving object to visible layer not needed.
         SwDrawContact* pSourceContact = (SwDrawContact *)rSource.FindContactObj();
 
@@ -542,7 +536,7 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, sal_Bool bMoveWithinDoc,
     SdrObject *pObj = rObj.Clone();
     if( bMoveWithinDoc && FmFormInventor == pObj->GetObjInventor() )
     {
-        // bei Controls muss der Name erhalten bleiben
+        // We need to preserve the Name for Controls
         uno::Reference< awt::XControlModel >  xModel = ((SdrUnoObj*)pObj)->GetUnoControlModel();
         uno::Any aVal;
         uno::Reference< beans::XPropertySet >  xSet(xModel, uno::UNO_QUERY);
@@ -593,8 +587,8 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
         }
     SwFlyFrmFmt* pFmt = MakeFlyFrmFmt( sName, pFrmFmt );
 
-    //Inhalt erzeugen und mit dem Format verbinden.
-    //CntntNode erzeugen und in die Autotextsection stellen
+    // Create content and connect to the format.
+    // Create CntntNode and put it into the autotext selection.
     SwNodeRange aRange( GetNodes().GetEndOfAutotext(), -1,
                         GetNodes().GetEndOfAutotext() );
     GetNodes().SectionDown( &aRange, SwFlyStartNode );
@@ -617,7 +611,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
             pFmt->SetFmtAttr( *pFlySet );
     }
 
-    // Anker noch nicht gesetzt ?
+    // Anchor not yet set?
     RndStdIds eAnchorId = pAnchor ? pAnchor->GetAnchorId()
                                   : pFmt->GetAnchor().GetAnchorId();
     // #i107811# Assure that at-page anchored fly frames have a page num or a
@@ -629,7 +623,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
            !pAnchor->GetCntntAnchor() &&
            pAnchor->GetPageNum() == 0 ) )
     {
-        // dann setze ihn, wird im Undo gebraucht
+        // set it again, needed for Undo
         SwFmtAnchor aAnch( pFmt->GetAnchor() );
         if (pAnchor && (FLY_AT_FLY == pAnchor->GetAnchorId()))
         {
@@ -679,7 +673,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
         const SwNoTxtNode* pNoTxtNode = rNode.GetNoTxtNode();
         if( pNoTxtNode )
         {
-            //Groesse einstellen.
+            // Set size
              Size aSize( pNoTxtNode->GetTwipSize() );
             if( MINFLY > aSize.Width() )
                 aSize.Width() = DEF_FLY_WIDTH;
@@ -693,7 +687,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
         pFmt->SetFmtAttr( aFmtSize );
     }
 
-    // Frames anlegen
+    // Set up frames
     if( GetCurrentViewShell() )
         pFmt->MakeFrms();           // ???  //swmod 071108//swmod 071225
 
@@ -743,10 +737,8 @@ SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
         sal_uInt16 nCollId = static_cast<sal_uInt16>(
             get(IDocumentSettingAccess::HTML_MODE) ? RES_POOLCOLL_TEXT : RES_POOLCOLL_FRAME );
 
-        /* If there exists no adjust item in the paragraph
-            style for the content node of the new fly section
-            propagate an existing adjust item at the anchor to the new
-            content node. */
+        /* If there is no adjust item in the paragraph style for the content node of the new fly section
+           propagate an existing adjust item at the anchor to the new content node. */
         SwCntntNode * pNewTxtNd = GetNodes().MakeTxtNode
             (SwNodeIndex( GetNodes().GetEndOfAutotext()),
              GetTxtCollFromPool( nCollId ));
@@ -776,30 +768,28 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
     SwFlyFrmFmt* pFmt = MakeFlySection( rAnch.GetAnchorId(), rPam.GetPoint(),
                                         &rSet, pParent );
 
-    // Wenn Inhalt selektiert ist, so wird dieser jetzt zum Inhalt des
-    // neuen Rahmen. Sprich er wird in die entspr. Sektion des NodesArr
-    //gemoved.
+    // If content is selected, it becomes the new frame's content.
+    // Namely, it is moved into the NodeArray's appropriate section.
 
     if( pFmt )
     {
         do {        // middle check loop
             const SwFmtCntnt &rCntnt = pFmt->GetCntnt();
-            OSL_ENSURE( rCntnt.GetCntntIdx(), "Kein Inhalt vorbereitet." );
+            OSL_ENSURE( rCntnt.GetCntntIdx(), "No content prepared." );
             SwNodeIndex aIndex( *(rCntnt.GetCntntIdx()), 1 );
             SwCntntNode *pNode = aIndex.GetNode().GetCntntNode();
 
-            // ACHTUNG: nicht einen Index auf dem Stack erzeugen, sonst
-            //          kann der CntntnNode am Ende nicht geloscht werden !!
+            // Attention: Do not create an index on the stack, or we
+            // cannot delete CntntNode in the end!
             SwPosition aPos( aIndex );
             aPos.nContent.Assign( pNode, 0 );
 
             if( pSelBoxes && !pSelBoxes->empty() )
             {
-                // Tabellenselection
-                // kopiere Teile aus einer Tabelle: lege eine Tabelle mit der
-                // Breite der Originalen an und move (kopiere/loesche) die
-                // selektierten Boxen. Die Groessen werden prozentual
-                // korrigiert.
+                // Table selection
+                // Copy parts of a table: create a table with the same width as the
+                // original one and move (copy and delete) the selected boxes.
+                // The size is corrected on a percentage basis.
 
                 const SwTableNode* pTblNd = pSelBoxes->begin()->second->GetSttNd()->FindTableNode();
                 if( !pTblNd )
@@ -807,15 +797,15 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
 
                 const SwTable& rTbl = pTblNd->GetTable();
 
-                // ist die gesamte Tabelle selektiert ?
+                // Did we select the whole table?
                 if( pSelBoxes->size() == rTbl.GetTabSortBoxes().Count() )
                 {
-                    // verschiebe die gesamte Tabelle
+                    // move the whole table
                     SwNodeRange aRg( *pTblNd, 0, *pTblNd->EndOfSectionNode(), 1 );
 
-                    // wird die gesamte Tabelle verschoben und steht diese
-                    // in einem FlyFrame, dann erzeuge dahinter einen neuen
-                    // TextNode. Dadurch bleibt dieser Fly erhalten !
+                    // If we move the whole table and it is located within a
+                    // FlyFrame, the we create a TextNode after it.
+                    // So that this FlyFrame is preserved.
                     if( aRg.aEnd.GetNode().IsEndNode() )
                         GetNodes().MakeTxtNode( aRg.aStart,
                                     (SwTxtFmtColl*)GetDfltTxtFmtColl() );
@@ -830,15 +820,14 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                     //rTbl.DeleteSel( this, *pSelBoxes, 0, 0, sal_True, sal_True );
                 }
 
-                // wenn Tabelle im Rahmen, dann ohne nachfolgenden TextNode
+                // If the table is within the frame, then copy without the following TextNode
                 aIndex = rCntnt.GetCntntIdx()->GetNode().EndOfSectionIndex() - 1;
                 OSL_ENSURE( aIndex.GetNode().GetTxtNode(),
-                        "hier sollte ein TextNode stehen" );
-                aPos.nContent.Assign( 0, 0 );       // Index abmelden !!
+                        "a TextNode should be here" );
+                aPos.nContent.Assign( 0, 0 );       // Deregister index!
                 GetNodes().Delete( aIndex, 1 );
 
-//JP erstmal ein Hack, solange keine Flys/Headers/Footers Undofaehig sind
-// werden erstmal alle Undo - Objecte geloescht.
+// This is a hack: whilst FlyFrames/Headers/Footers are not undoable we delete all Undo objects
 if( GetIDocumentUndoRedo().DoesUndo() )
 {
     GetIDocumentUndoRedo().DelAllUndoObj();
@@ -884,8 +873,8 @@ if( GetIDocumentUndoRedo().DoesUndo() )
     return pFmt;
 }
 
-// Einfuegen eines DrawObjectes. Das Object muss bereits im DrawModel
-// angemeldet sein.
+// Insert a DrawObject.
+// The Object has to be already registered in the DrawModel.
 SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
                              SdrObject& rDrawObj,
                              const SfxItemSet* pFlyAttrSet,
@@ -905,8 +894,8 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
     RndStdIds eAnchorId = pAnchor ? pAnchor->GetAnchorId()
                                   : pFmt->GetAnchor().GetAnchorId();
 
-    // Anker noch nicht gesetzt ?
-    // DrawObjecte duerfen niemals in Kopf-/Fusszeilen landen.
+    // Didn't set the Anchor yet?
+    // DrawObjecte must never end up in the Header/Footer!
     const bool bIsAtCntnt = (FLY_AT_PAGE != eAnchorId);
 
     const SwNodeIndex* pChkIdx = 0;
@@ -931,7 +920,7 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
     }
     else if( !pAnchor || (bIsAtCntnt && !pAnchor->GetCntntAnchor() ))
     {
-        // dann setze ihn, wird im Undo gebraucht
+        // then set it, we need this in the Undo
         SwFmtAnchor aAnch( pAnchor ? *pAnchor : pFmt->GetAnchor() );
         eAnchorId = aAnch.GetAnchorId();
         if( FLY_AT_FLY == eAnchorId )
@@ -952,7 +941,7 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
         pFmt->SetFmtAttr( aAnch );
     }
 
-    // bei als Zeichen gebundenen Draws das Attribut im Absatz setzen
+    // For character-bound Draws we set the attribute in the paragraph
     if ( FLY_AS_CHAR == eAnchorId )
     {
         xub_StrLen nStt = rRg.GetPoint()->nContent.GetIndex();
@@ -963,7 +952,7 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
 
     SwDrawContact* pContact = new SwDrawContact( pFmt, &rDrawObj );
 
-    // ggfs. Frames anlegen
+    // Create Frames if necessary
     if( GetCurrentViewShell() )
     {
         pFmt->MakeFrms();
@@ -988,7 +977,7 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
 /* ---------------------------------------------------------------------------
     paragraph frames - o.k. if the PaM includes the paragraph from the beginning
                        to the beginning of the next paragraph at least
-    frames at character - o.k. if the pam start at least at the same position
+    frames at character - o.k. if the PaM starts at least at the same position
                          as the frame
  ---------------------------------------------------------------------------*/
 sal_Bool TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
@@ -1032,7 +1021,7 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
     SwPosFlyFrm *pFPos = 0;
     SwFrmFmt *pFly;
 
-    // erstmal alle Absatzgebundenen einsammeln
+    // collect all paragraph-bound
     for( sal_uInt16 n = 0; n < GetSpzFrmFmts()->Count(); ++n )
     {
         pFly = (*GetSpzFrmFmts())[ n ];
@@ -1050,15 +1039,15 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
             {
                 if( pCmpRange &&
                     !TstFlyRange( pCmpRange, pAPos, rAnchor.GetAnchorId() ))
-                        continue;       // kein gueltiger FlyFrame
+                        continue;       // not a valid FlyFrame
                 pFPos = new SwPosFlyFrm( pAPos->nNode, pFly, rPosFlyFmts.Count() );
                 rPosFlyFmts.Insert( pFPos );
             }
         }
     }
 
-    // kein Layout oder nur ein Teil, dann wars das
-    // Seitenbezogen Flys nur, wenn vollstaendig "gewuenscht" wird !
+    // No Layout or just a part, then it was the page-bound FlyFrames only if we
+    // "wish" something is done completely.
     if( !GetCurrentViewShell() || pCmpRange )   //swmod 071108//swmod 071225
         return;
 
@@ -1087,9 +1076,9 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
                     const SwCntntFrm * pCntntFrm = pPage->FindFirstBodyCntnt();
                     if ( !pCntntFrm )
                     {
-                        //Oops! Eine leere Seite. Damit der Rahmen nicht ganz
-                        //verlorengeht (RTF) suchen wir schnell den letzen
-                        //Cntnt der vor der Seite steht.
+                        // Oops! An empty page.
+                        // In order not to loose the whole frame (RTF) we look for the
+                        // last Cntnt before the page.
                         SwPageFrm *pPrv = (SwPageFrm*)pPage->GetPrev();
                         while ( !pCntntFrm && pPrv )
                         {
@@ -1127,7 +1116,7 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
 
    If the old item set contains the item by inheritance and the new set
    contains the item, too:
-      If the two items differ copy the item from the old set to the new set.
+   If the two items differ copy the item from the old set to the new set.
 
    Otherwise the new set will not be changed.
 */
@@ -1171,10 +1160,9 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
 {
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
-    sal_Bool bTable = sal_False;    //Um etwas Code zu sparen.
+    sal_Bool bTable = sal_False;    // To save some code.
 
-    //Erstmal das Feld bauen, weil ueber den Namen die TxtColl besorgt werden
-    //muss
+    // Because we get by the TxtColl's name, we need to create the field first.
     OSL_ENSURE( nId == USHRT_MAX  || nId < rDoc.GetFldTypes()->Count(),
             "FldType index out of bounds." );
     SwFieldType *pType = (nId != USHRT_MAX) ? (*rDoc.GetFldTypes())[nId] : NULL;
@@ -1206,13 +1194,13 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     {
         case LTYPE_TABLE:
             bTable = sal_True;
-            /* Kein Break hier */
+            // no break here
         case LTYPE_FLY:
-            //Am Anfang/Ende der Fly-Section den entsprechenden Node mit Feld
-            //einfuegen (Frame wird automatisch erzeugt).
+            // At the FlySection's Beginning/End insert the corresponding Node with it's Field.
+            // The Frame is created automatically.
             {
                 SwStartNode *pSttNd = rDoc.GetNodes()[nNdIdx]->GetStartNode();
-                OSL_ENSURE( pSttNd, "Kein StartNode in InsertLabel." );
+                OSL_ENSURE( pSttNd, "No StartNode in InsertLabel." );
                 sal_uLong nNode;
                 if( bBefore )
                 {
@@ -1230,7 +1218,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 if( pUndo )
                     pUndo->SetNodePos( nNode );
 
-                //Node fuer Beschriftungsabsatz erzeugen.
+                // Create Node for labeling paragraph.
                 SwNodeIndex aIdx( rDoc.GetNodes(), nNode );
                 pNew = rDoc.GetNodes().MakeTxtNode( aIdx, pColl );
             }
@@ -1238,14 +1226,15 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
 
         case LTYPE_OBJECT:
             {
-                //Rahmen zerstoeren, neuen Rahmen einfuegen, entsprechenden
-                // Node mit Feld in den neuen Rahmen, den alten Rahmen mit
-                // dem Object (Grafik/Ole) absatzgebunden in den neuen Rahmen,
-                // Frames erzeugen.
+                // Destroy Frame,
+                // insert new Frame,
+                // insert the corresponding Node with Field into the new Frame,
+                // insert the old Frame with the Object (Picture/OLE) paragraph-bound into the new Frame,
+                // create Frames.
 
-                //Erstmal das Format zum Fly besorgen und das Layout entkoppeln.
+                // Get the FlyFrame's Format and decouple the Layout.
                 SwFrmFmt *pOldFmt = rDoc.GetNodes()[nNdIdx]->GetFlyFmt();
-                OSL_ENSURE( pOldFmt, "Format des Fly nicht gefunden." );
+                OSL_ENSURE( pOldFmt, "Couldn't find the Format's Fly." );
                 // #i115719#
                 // <title> and <description> attributes are lost when calling <DelFrms()>.
                 // Thus, keep them and restore them after the calling <MakeFrms()>
@@ -1266,8 +1255,8 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 SfxItemSet* pNewSet = pNewFmt->GetAttrSet().Clone( sal_True );
 
 
-                //Diejenigen Attribute uebertragen die auch gesetzt sind,
-                //andere sollen weiterhin aus den Vorlagen gueltig werden.
+                // Copy only the set attributes.
+                // The others should apply from the Templates.
                 lcl_CpyAttr( *pNewSet, pOldFmt->GetAttrSet(), RES_PRINT );
                 lcl_CpyAttr( *pNewSet, pOldFmt->GetAttrSet(), RES_OPAQUE );
                 lcl_CpyAttr( *pNewSet, pOldFmt->GetAttrSet(), RES_PROTECT );
@@ -1279,11 +1268,8 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 lcl_CpyAttr( *pNewSet, pOldFmt->GetAttrSet(), RES_BACKGROUND );
                 if( bCpyBrd )
                 {
-                    // JP 07.07.99: Bug 67029 - if at Grafik no BoxItem but
-                    //              in the new Format is any, then set the
-                    //              default item in the new Set. Because
-                    //              the Size of the Grafik have never been
-                    //              changed!
+                    // If there's no BoxItem at graphic, but the new Format has one, then set the
+                    // default item in the new Set. Because the graphic's size has never changed!
                     const SfxPoolItem *pItem;
                     if( SFX_ITEM_SET == pOldFmt->GetAttrSet().
                             GetItemState( RES_BOX, sal_True, &pItem ))
@@ -1301,18 +1287,17 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 }
                 else
                 {
-                    //Die Attribute hart setzen, weil sie sonst aus der
-                    // Vorlage kommen koenten und dann passt die
-                    // Grossenberechnung nicht mehr.
+                    // Hard-set the attributes, because they could come from the Template
+                    // and then size calculations could not be correct anymore.
                     pNewSet->Put( SvxBoxItem(RES_BOX) );
                     pNewSet->Put( SvxShadowItem(RES_SHADOW) );
 
                 }
 
-                //Anker immer uebertragen, ist sowieso ein hartes Attribut.
+                // Always transfer the anchor, which is a hard attribute anyways.
                 pNewSet->Put( pOldFmt->GetAnchor() );
 
-                //In der Hoehe soll der neue Varabel sein!
+                // The new one should be changeable in it's height.
                 SwFmtFrmSize aFrmSize( pOldFmt->GetFrmSize() );
                 aFrmSize.SetHeightSizeType( ATT_MIN_SIZE );
                 pNewSet->Put( aFrmSize );
@@ -1324,10 +1309,10 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
 
                 pNewFmt->SetFmtAttr( *pNewSet );
 
-                //Bei InCntnt's wird es spannend: Das TxtAttribut muss
-                //vernichtet werden. Leider reisst dies neben den Frms auch
-                //noch das Format mit in sein Grab. Um dass zu unterbinden
-                //loesen wir vorher die Verbindung zwischen Attribut und Format.
+                // InCntnts need to be treated in a special way:
+                // The TxtAttribute needs to be destroyed.
+                // Unfortunately, this also destroys the Format next to the Frames.
+                // To avoid this, we disconnect the attribute from the Format.
 
                 const SwFmtAnchor& rAnchor = pNewFmt->GetAnchor();
                 if ( FLY_AS_CHAR == rAnchor.GetAnchorId() )
@@ -1349,10 +1334,9 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 }
 
 
-                //Der Alte soll keinen Umlauf haben, und er soll oben/mittig
-                //ausgerichtet sein.
-                //Ausserdem soll die Breite 100% betragen und bei Aenderungen
-                //Die Hoehe mit anpassen.
+                // The old one should not have a flow and it should be adjusted to above and
+                // middle.
+                // Also, the width should be 100% and it should also adjust the hight, if changed.
                 pNewSet->ClearItem();
 
                 pNewSet->Put( SwFmtSurround( SURROUND_NONE ) );
@@ -1365,8 +1349,8 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 aFrmSize.SetHeightPercent( 255 );
                 pNewSet->Put( aFrmSize );
 
-                //Die Attribute setzen wir hart, weil sie sonst aus der Vorlage
-                //kommen koenten und dann passt die Grossenberechnung nicht mehr.
+                // Hard-set the attributes, because they could come from the Template
+                // and then size calculations could not be correct anymore.
                 if( bCpyBrd )
                 {
                     pNewSet->Put( SvxBoxItem(RES_BOX) );
@@ -1375,7 +1359,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 pNewSet->Put( SvxLRSpaceItem(RES_LR_SPACE) );
                 pNewSet->Put( SvxULSpaceItem(RES_UL_SPACE) );
 
-                //Der Alte ist absatzgebunden, und zwar am Absatz im neuen.
+                // The old one is paragraph-bound to the paragraph in the new one.
                 SwFmtAnchor aAnch( FLY_AT_PARA );
                 SwNodeIndex aAnchIdx( *pNewFmt->GetCntnt().GetCntntIdx(), 1 );
                 pNew = aAnchIdx.GetNode().GetTxtNode();
@@ -1390,8 +1374,8 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
 
                 delete pNewSet;
 
-                //Nun nur noch die Flys erzeugen lassen. Das ueberlassen
-                //wir vorhanden Methoden (insb. fuer InCntFlys etwas aufwendig).
+                // Have only the FlyFrames created.
+                // We leave this to established methods (especially for InCntFlys).
                 pNewFmt->MakeFrms();
                 // #i115719#
                 if ( bIsSwFlyFrmFmtInstance )
@@ -1408,9 +1392,9 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     OSL_ENSURE( pNew, "No Label inserted" );
     if( pNew )
     {
-        //#i61007# order of captions
+        // #i61007# order of captions
         sal_Bool bOrderNumberingFirst = SW_MOD()->GetModuleConfig()->IsCaptionOrderNumberingFirst();
-        //String aufbereiten
+        // Work up string
         String aTxt;
         if( bOrderNumberingFirst )
         {
@@ -1430,12 +1414,11 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
         xub_StrLen nSepIdx = aTxt.Len();
         aTxt += rTxt;
 
-        //String einfuegen
+        // Insert string
         SwIndex aIdx( pNew, 0 );
         pNew->InsertText( aTxt, aIdx );
 
-        //
-        //Feld einfuegen
+        // Insert field
         if(pType)
         {
             SwSetExpField aFld( (SwSetExpFieldType*)pType, aEmptyStr, SVX_NUM_ARABIC);
@@ -1535,8 +1518,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
     ::sw::DrawUndoGuard const drawUndoGuard(rDoc.GetIDocumentUndoRedo());
 
-    // Erstmal das Feld bauen, weil ueber den Namen die TxtColl besorgt
-    // werden muss
+    // Because we get by the TxtColl's name, we need to create the field first.
     OSL_ENSURE( nId == USHRT_MAX  || nId < rDoc.GetFldTypes()->Count(),
             "FldType index out of bounds" );
     SwFieldType *pType = nId != USHRT_MAX ? (*rDoc.GetFldTypes())[nId] : 0;
@@ -1564,10 +1546,11 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     SwTxtNode* pNew = NULL;
     SwFlyFrmFmt* pNewFmt = NULL;
 
-    // Rahmen zerstoeren, neuen Rahmen einfuegen, entsprechenden
-    // Node mit Feld in den neuen Rahmen, den alten Rahmen mit
-    // dem Object (Grafik/Ole) absatzgebunden in den neuen Rahmen,
-    // Frames erzeugen.
+    // Destroy Frame,
+    // insert new Frame,
+    // insert the corresponding Node with Field into the new Frame,
+    // insert the old Frame with the Object (Picture/OLE) paragraph-bound into the new Frame,
+    // create Frames.
 
     // Keep layer ID of drawing object before removing
     // its frames.
@@ -1577,13 +1560,13 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
 
     pOldFmt->DelFrms();
 
-    //Bei InCntnt's wird es spannend: Das TxtAttribut muss
-    //vernichtet werden. Leider reisst dies neben den Frms auch
-    //noch das Format mit in sein Grab. Um dass zu unterbinden
-    //loesen wir vorher die Verbindung zwischen Attribut und Format.
+    // InCntnts need to be treated in a special way:
+    // The TxtAttribute needs to be destroyed.
+    // Unfortunately, this also destroys the Format next to the Frames.
+    // To avoid this, we disconnect the attribute from the Format.
     SfxItemSet* pNewSet = pOldFmt->GetAttrSet().Clone( sal_False );
 
-    // Ggf. Groesse und Position des Rahmens schuetzen
+    // Protect the Frame's size and position
     if ( rSdrObj.IsMoveProtect() || rSdrObj.IsResizeProtect() )
     {
         SvxProtectItem aProtect(RES_PROTECT);
@@ -1593,11 +1576,11 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
         pNewSet->Put( aProtect );
     }
 
-    // Umlauf uebernehmen
+    // Take over the text wrap
     lcl_CpyAttr( *pNewSet, pOldFmt->GetAttrSet(), RES_SURROUND );
 
-    // Den Rahmen ggf. in den Hintergrund schicken.
-    // Consider 'invisible' hell layer.
+    // Send the frame to the back, if needed.
+    // Consider the 'invisible' hell layer.
     if ( rDoc.GetHellId() != nLayerId &&
          rDoc.GetInvisibleHellId() != nLayerId )
     {
@@ -1606,24 +1589,20 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
         pNewSet->Put( aOpaque );
     }
 
-    // Position uebernehmen
-    // #i26791# - use directly the positioning attributes of
-    // the drawing object.
+    // Take over position
+    // #i26791# - use directly drawing object's positioning attributes
     pNewSet->Put( pOldFmt->GetHoriOrient() );
     pNewSet->Put( pOldFmt->GetVertOrient() );
 
     pNewSet->Put( pOldFmt->GetAnchor() );
 
-    //In der Hoehe soll der neue Varabel sein!
+    // The new one should be variable in it's height!
      Size aSz( rSdrObj.GetCurrentBoundRect().GetSize() );
     SwFmtFrmSize aFrmSize( ATT_MIN_SIZE, aSz.Width(), aSz.Height() );
     pNewSet->Put( aFrmSize );
 
-    // Abstaende auf den neuen Rahmen uebertragen. Eine Umrandung
-    // gibt es beu Zeichen-Objekten nicht, also muss sie geloescht
-    // werden.
-    // MA: Falsch sie wird nicht gesetzt, denn die aus der Vorlage
-    // soll ruhig wirksam werden
+    // Apply the margin to the new Frame.
+    // Don't set a border, use the one from the Template.
     pNewSet->Put( pOldFmt->GetLRSpace() );
     pNewSet->Put( pOldFmt->GetULSpace() );
 
@@ -1635,8 +1614,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     pNewFmt = rDoc.MakeFlyFrmFmt( rDoc.GetUniqueFrameName(),
                  rDoc.GetFrmFmtFromPool( RES_POOLFRM_FRAME ) );
 
-    // JP 28.10.99: Bug 69487 - set border and shadow to default if the
-    //              template contains any.
+    // Set border and shadow to default if the template contains any.
     if( SFX_ITEM_SET == pNewFmt->GetAttrSet().GetItemState( RES_BOX, sal_True ))
         pNewSet->Put( *GetDfltAttr( RES_BOX ) );
 
@@ -1667,14 +1645,14 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     }
 
 
-    //Der Alte soll keinen Umlauf haben, und er soll oben/mittig
-    //ausgerichtet sein.
+    // The old one should not have a flow
+    // and it should be adjusted to above and middle.
     pNewSet->ClearItem();
 
     pNewSet->Put( SwFmtSurround( SURROUND_NONE ) );
     if (nLayerId == rDoc.GetHellId())
     {
-    // Consider drawing objects in 'invisible' hell layer
+    // Consider drawing objects in the 'invisible' hell layer
         rSdrObj.SetLayer( rDoc.GetHeavenId() );
     }
     else if (nLayerId == rDoc.GetInvisibleHellId())
@@ -1688,7 +1666,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     pNewSet->Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ) );
     pNewSet->Put( SwFmtHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ) );
 
-    //Der Alte ist absatzgebunden, und zwar am Absatz im neuen.
+    // The old one is paragraph-bound to the new one's paragraph.
     SwFmtAnchor aAnch( FLY_AT_PARA );
     SwNodeIndex aAnchIdx( *pNewFmt->GetCntnt().GetCntntIdx(), 1 );
     pNew = aAnchIdx.GetNode().GetTxtNode();
@@ -1707,8 +1685,8 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
 
     delete pNewSet;
 
-    //Nun nur noch die Flys erzeugen lassen. Das ueberlassen
-    //wir vorhanden Methoden (insb. fuer InCntFlys etwas aufwendig).
+    // Have only the FlyFrames created.
+    // We leave this to established methods (especially for InCntFlys).
     pNewFmt->MakeFrms();
 
     OSL_ENSURE( pNew, "No Label inserted" );
@@ -1815,7 +1793,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel(
 
 /*************************************************************************
 |*
-|*  IDocumentTimerAccess-methods
+|*  IDocumentTimerAccess methods
 |*
 |*************************************************************************/
 void SwDoc::StartIdling()
@@ -1901,11 +1879,11 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
                 GetUpdtFlds().IsFieldsDirty() &&
                 !GetUpdtFlds().IsInUpdateFlds() &&
                 !IsExpFldsLocked()
-                // das umschalten der Feldname fuehrt zu keinem Update der
-                // Felder, also der "Hintergrund-Update" immer erfolgen
+                // If we switch the field name the Fields are not updated.
+                // So the "backgorund update" should always be carried out
                 /* && !pStartSh->GetViewOptions()->IsFldName()*/ )
         {
-            // chaos::Action-Klammerung!
+            // chaos::Action brackets!
             GetUpdtFlds().SetInUpdateFlds( sal_True );
 
             pTmpRoot->StartAllAction();
@@ -1914,10 +1892,10 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
             const sal_Bool bOldLockView = pStartSh->IsViewLocked();
             pStartSh->LockView( sal_True );
 
-            GetSysFldType( RES_CHAPTERFLD )->ModifyNotification( 0, 0 );    // KapitelFld
-            UpdateExpFlds( 0, sal_False );      // Expression-Felder Updaten
-            UpdateTblFlds(NULL);                // Tabellen
-            UpdateRefFlds(NULL);                // Referenzen
+            GetSysFldType( RES_CHAPTERFLD )->ModifyNotification( 0, 0 );    // ChapterField
+            UpdateExpFlds( 0, sal_False );      // Updates ExpressionFields
+            UpdateTblFlds(NULL);                // Tables
+            UpdateRefFlds(NULL);                // References
 
             pTmpRoot->EndAllAction();
 
@@ -1944,7 +1922,7 @@ IMPL_STATIC_LINK( SwDoc, BackgroundDone, SvxBrushItem*, EMPTYARG )
         do {
             if( pSh->GetWin() )
             {
-                //Fuer Repaint mir virtuellen Device sorgen.
+                // Make sure to repaint with virtual device
                 pSh->LockPaint();
                 pSh->UnlockPaint( sal_True );
             }
@@ -1973,19 +1951,19 @@ static String lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
         if( RES_FLYFRMFMT == pFlyFmt->Which() &&
             pFlyFmt->GetName().Match( aName ) == nNmLen )
         {
-            // Nummer bestimmen und das Flag setzen
+            // Only get and set the Flag
             nNum = static_cast< sal_uInt16 >( pFlyFmt->GetName().Copy( nNmLen ).ToInt32() );
             if( nNum-- && nNum < rFmts.Count() )
                 pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
         }
     }
 
-    // alle Nummern entsprechend geflag, also bestimme die richtige Nummer
+    // All numbers are flagged accordingly, so determine the right one
     nNum = rFmts.Count();
     for( n = 0; n < nFlagSize; ++n )
         if( 0xff != ( nTmp = pSetFlags[ n ] ))
         {
-            // also die Nummer bestimmen
+            // so determine the number
             nNum = n * 8;
             while( nTmp & 1 )
                 ++nNum, nTmp >>= 1;
@@ -2024,7 +2002,7 @@ const SwFlyFrmFmt* SwDoc::FindFlyByName( const String& rName, sal_Int8 nNdTyp ) 
         {
             if( nNdTyp )
             {
-                // dann noch auf den richtigen Node-Typ abfragen
+                // query for the right NodeType
                 const SwNode* pNd = GetNodes()[ pIdx->GetIndex()+1 ];
                 if( nNdTyp == ND_TEXTNODE
                         ? !pNd->IsNoTxtNode()
@@ -2072,7 +2050,7 @@ void SwDoc::SetAllUniqueFlyNames()
         n = 255;
     SwSpzFrmFmts aArr( (sal_Int8)n, 10 );
     SwFrmFmtPtr pFlyFmt;
-    sal_Bool bLoadedFlag = sal_True;            // noch etwas fuers Layout
+    sal_Bool bLoadedFlag = sal_True;            // something for the Layout
 
     for( n = GetSpzFrmFmts()->Count(); n; )
     {
@@ -2094,7 +2072,7 @@ void SwDoc::SetAllUniqueFlyNames()
                     *pNum = nLen;
             }
             else
-                // das wollen wir nachher setzen
+                // we want to set that afterwards
                 aArr.Insert( pFlyFmt, aArr.Count() );
 
         }
@@ -2103,7 +2081,7 @@ void SwDoc::SetAllUniqueFlyNames()
             const SwFmtAnchor& rAnchor = pFlyFmt->GetAnchor();
             if (((FLY_AT_PAGE == rAnchor.GetAnchorId()) &&
                  rAnchor.GetCntntAnchor()) ||
-                // oder werden DrawObjecte rel. zu irgendetwas ausgerichtet?
+                // Or are DrawObjects adjusted relatively to something?
                 ( RES_DRAWFRMFMT == pFlyFmt->Which() && (
                     SFX_ITEM_SET == pFlyFmt->GetItemState(
                                         RES_VERT_ORIENT )||
@@ -2145,10 +2123,9 @@ void SwDoc::SetAllUniqueFlyNames()
     if( GetFtnIdxs().Count() )
     {
         SwTxtFtn::SetUniqueSeqRefNo( *this );
-        // #i52775# Chapter footnotes did not
-        // get updated correctly. Calling UpdateAllFtn() instead of
-        // UpdateFtn() solves this problem, but I do not dare to
-        // call UpdateAllFtn() in all cases: Safety first.
+        // #i52775# Chapter footnotes did not get updated correctly.
+        // Calling UpdateAllFtn() instead of UpdateFtn() solves this problem,
+        // but I do not dare to call UpdateAllFtn() in all cases: Safety first.
         if ( FTNNUM_CHAPTER == GetFtnInfo().eNum )
         {
             GetFtnIdxs().UpdateAllFtn();
@@ -2160,20 +2137,20 @@ void SwDoc::SetAllUniqueFlyNames()
         }
     }
 
-    // neues Document und keine seitengebundenen Rahmen/DrawObjecte gefunden,
-    // die an einem Node verankert sind.
+    // Found a new document, but not a page-bound Frame/DrawObjects
+    // that are anchored to another Node.
     if( bLoadedFlag )
         SetLoaded( sal_True );
 }
 
 sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
 {
-    // gibt es ein Layout, dann ueber das laufen!!
-    //  (Das kann dann auch Fly in Fly in Kopfzeile !)
-    // MIB 9.2.98: Wird auch vom sw3io benutzt, um festzustellen, ob sich
-    // ein Redline-Objekt in einer Kopf- oder Fusszeile befindet. Da
-    // Redlines auch an Start- und Endnodes haengen, muss der Index nicht
-    // unbedingt der eines Content-Nodes sein.
+    // If there's a Layout, use it!
+    // That can also be a Fly in a Fly in the Header.
+    // Is also used by sw3io, to determine if a Redline object is
+    // in the Header or Footer.
+    // Because Redlines are also attached to Start and EndNoden,
+    // the Index must not necessarily be from a ContentNode.
     SwNode* pNd = &rIdx.GetNode();
     if( pNd->IsCntntNode() && pCurrentView )//swmod 071029//swmod 071225
     {
@@ -2198,7 +2175,7 @@ sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
     const SwNode* pFlyNd = pNd->FindFlyStartNode();
     while( pFlyNd )
     {
-        // dann ueber den Anker nach oben "hangeln"
+        // get up by using the Anchor
         sal_uInt16 n;
         for( n = 0; n < GetSpzFrmFmts()->Count(); ++n )
         {
@@ -2220,7 +2197,7 @@ sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
         }
         if( n >= GetSpzFrmFmts()->Count() )
         {
-            OSL_ENSURE( mbInReading, "Fly-Section aber kein Format gefunden" );
+            OSL_ENSURE( mbInReading, "Found a FlySection but not a Format!" );
             return sal_False;
         }
     }
@@ -2246,7 +2223,7 @@ short SwDoc::GetTextDirection( const SwPosition& rPos,
         const SvxFrameDirectionItem* pItem = 0;
         if( pNd )
         {
-            // in a flyframe? Then look at that for the correct attribute
+            // Are we in a FlyFrame? Then look at that for the correct attribute
             const SwFrmFmt* pFlyFmt = pNd->GetFlyFmt();
             while( pFlyFmt )
             {
@@ -2317,8 +2294,10 @@ const ViewShell *SwDoc::GetCurrentViewShell() const
 ViewShell *SwDoc::GetCurrentViewShell()
 {
     return pCurrentView;
-}   //swmod 080219 It must be able to communicate to a ViewShell.This is going to be removedd later.
+}
 
+//swmod 080219
+// It must be able to communicate to a ViewShell. This is going to be removed later.
 const SwRootFrm *SwDoc::GetCurrentLayout() const
 {
     if(GetCurrentViewShell())

@@ -121,14 +121,13 @@ sal_Bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
         {
             SwDoc* pGDoc = rBlock.GetDoc();
 
-            // alle FixFelder aktualisieren. Dann aber auch mit der
-            // richtigen DocInfo!
+            // Update all fixed fields, with the right DocInfo.
             // FIXME: UGLY: Because we cannot limit the range in which to do
             // field updates, we must update the fixed fields at the glossary
             // entry document.
             // To be able to do this, we copy the document properties of the
             // target document to the glossary document
-//            OSL_ENSURE(GetDocShell(), "no SwDocShell"); // may be clipboard!
+            // OSL_ENSURE(GetDocShell(), "no SwDocShell"); // may be clipboard!
             OSL_ENSURE(pGDoc->GetDocShell(), "no SwDocShell at glossary");
             if (GetDocShell() && pGDoc->GetDocShell()) {
                 uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
@@ -143,7 +142,7 @@ sal_Bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
         }
             pGDoc->SetFixFields(false, NULL);
 
-            //StartAllAction();
+            // StartAllAction();
             LockExpFlds();
 
             SwNodeIndex aStt( pGDoc->GetNodes().GetEndOfExtras(), 1 );
@@ -152,7 +151,7 @@ sal_Bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
             SwPaM aCpyPam( pTblNd ? *(SwNode*)pTblNd : *(SwNode*)pCntntNd );
             aCpyPam.SetMark();
 
-            // dann bis zum Ende vom Nodes Array
+            // till the nodes array's end
             aCpyPam.GetPoint()->nNode = pGDoc->GetNodes().GetEndOfContent().GetIndex()-1;
             pCntntNd = aCpyPam.GetCntntNode();
             aCpyPam.GetPoint()->nContent.Assign( pCntntNd, pCntntNd->Len() );
@@ -169,8 +168,8 @@ sal_Bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
                                       pBoxSttNd->GetIndex() &&
                     aCpyPam.GetPoint()->nNode != aCpyPam.GetMark()->nNode )
                 {
-                    // es wird mehr als 1 Node in die akt. Box kopiert.
-                    // Dann muessen die BoxAttribute aber entfernt werden.
+                    // We copy more than one Node to the current Box.
+                    // However, we have to remove the BoxAttributes then.
                     ClearBoxNumAttrs( rInsPos.nNode );
                 }
 

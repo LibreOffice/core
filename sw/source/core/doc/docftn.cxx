@@ -174,7 +174,7 @@ SwCharFmt* SwEndNoteInfo::GetCharFmt(SwDoc &rDoc) const
 
 void SwEndNoteInfo::SetCharFmt( SwCharFmt* pChFmt )
 {
-    OSL_ENSURE(pChFmt, "kein CharFmt?");
+    OSL_ENSURE(pChFmt, "no CharFmt?");
     pChFmt->Add( &((SwClient&)aCharFmtDep) );
 }
 
@@ -191,7 +191,7 @@ SwCharFmt* SwEndNoteInfo::GetAnchorCharFmt(SwDoc &rDoc) const
 
 void SwEndNoteInfo::SetAnchorCharFmt( SwCharFmt* pChFmt )
 {
-    OSL_ENSURE(pChFmt, "kein CharFmt?");
+    OSL_ENSURE(pChFmt, "no CharFmt?");
     pChFmt->Add( &((SwClient&)aAnchorCharFmtDep) );
 }
 
@@ -306,8 +306,8 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
                     std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), sal_False));//swmod 080304
                 if ( bExtra )
                 {
-                    //Fuer die Benachrichtung bezueglich ErgoSum usw. sparen wir uns
-                    //extra-Code und nutzen die vorhandenen Wege.
+                    // For messages regarding ErgoSum etc. we save the extra code and use the
+                    // available methods.
                     SwFtnIdxs& rFtnIdxs = GetFtnIdxs();
                     for( sal_uInt16 nPos = 0; nPos < rFtnIdxs.Count(); ++nPos )
                     {
@@ -376,8 +376,8 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
             }
             if ( bExtra )
             {
-                //Fuer die Benachrichtung bezueglich ErgoSum usw. sparen wir uns
-                //extra-Code und nutzen die vorhandenen Wege.
+                // For messages regarding ErgoSum etc. we save the extra code and use the
+                // available methods.
                 SwFtnIdxs& rFtnIdxs = GetFtnIdxs();
                 for( sal_uInt16 nPos = 0; nPos < rFtnIdxs.Count(); ++nPos )
                 {
@@ -433,7 +433,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
     sal_uLong nIdx;
     sal_Bool bChg = sal_False;
     sal_Bool bTypeChgd = sal_False;
-    sal_uInt16 n = nPos;        // sichern
+    sal_uInt16 n = nPos;        // save
     while( nPos < rFtnArr.Count() &&
             (( nIdx = _SwTxtFtn_GetIndex((pTxtFtn = rFtnArr[ nPos++ ] )))
                 < nEndNd || ( nIdx == nEndNd &&
@@ -464,7 +464,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
             }
         }
 
-    nPos = n;       // nach vorne gibt es auch noch welche !
+    nPos = n;       // There are more in the front!
     while( nPos &&
             (( nIdx = _SwTxtFtn_GetIndex((pTxtFtn = rFtnArr[ --nPos ] )))
                 > nSttNd || ( nIdx == nSttNd &&
@@ -492,7 +492,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
             }
         }
 
-    // wer muss angestossen werden ??
+    // Who needs to be triggered?
     if( bChg )
     {
         if( pUndo )
