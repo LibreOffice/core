@@ -210,11 +210,15 @@ private:
         uno::Reference< ucb::XCommandProcessor > const & rxCommandProcessor);
 
     UpdateInformationProvider(const uno::Reference<uno::XComponentContext>& xContext,
+                              const uno::Reference< ucb::XContentIdentifierFactory >& xContentIdFactory,
+                              const uno::Reference< ucb::XContentProvider >& xContentProvider,
                               const uno::Reference< xml::dom::XDocumentBuilder >& xDocumentBuilder,
                               const uno::Reference< xml::xpath::XXPathAPI >& xXPathAPI);
 
     const uno::Reference< uno::XComponentContext> m_xContext;
 
+    const uno::Reference< ucb::XContentIdentifierFactory > m_xContentIdFactory;
+    const uno::Reference< ucb::XContentProvider > m_xContentProvider;
     const uno::Reference< xml::dom::XDocumentBuilder > m_xDocumentBuilder;
     const uno::Reference< xml::xpath::XXPathAPI > m_xXPathAPI;
 
@@ -327,10 +331,12 @@ private:
 
 UpdateInformationProvider::UpdateInformationProvider(
     const uno::Reference<uno::XComponentContext>& xContext,
+    const uno::Reference< ucb::XContentIdentifierFactory >& xContentIdFactory,
+    const uno::Reference< ucb::XContentProvider >& xContentProvider,
     const uno::Reference< xml::dom::XDocumentBuilder >& xDocumentBuilder,
     const uno::Reference< xml::xpath::XXPathAPI >& xXPathAPI
-) : m_xContext(xContext),
-    m_xDocumentBuilder(xDocumentBuilder),
+) : m_xContext(xContext), m_xContentIdFactory(xContentIdFactory),
+    m_xContentProvider(xContentProvider), m_xDocumentBuilder(xDocumentBuilder),
     m_xXPathAPI(xXPathAPI), m_aRequestHeaderList(1)
 {
     uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(
@@ -404,6 +410,12 @@ UpdateInformationProvider::createInstance(const uno::Reference<uno::XComponentCo
             UNISTRING( "unable to obtain service manager from component context" ),
             uno::Reference< uno::XInterface > ());
 
+    uno::Reference< ucb::XContentIdentifierFactory > xContentIdFactory(
+        xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.ucb.UniversalContentBroker" ), xContext ),
+        uno::UNO_QUERY_THROW);
+
+    uno::Reference< ucb::XContentProvider > xContentProvider(xContentIdFactory, uno::UNO_QUERY_THROW);
+
     uno::Reference< xml::dom::XDocumentBuilder > xDocumentBuilder(
         xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.xml.dom.DocumentBuilder" ), xContext ),
         uno::UNO_QUERY_THROW);
@@ -414,7 +426,7 @@ UpdateInformationProvider::createInstance(const uno::Reference<uno::XComponentCo
 
     xXPath->registerNS( UNISTRING("atom"), UNISTRING("http://www.w3.org/2005/Atom") );
 
-    return *new UpdateInformationProvider(xContext, xDocumentBuilder, xXPath);
+    return *new UpdateInformationProvider(xContext, xContentIdFactory, xContentProvider, xDocumentBuilder, xXPath);
 }
 
 //------------------------------------------------------------------------------
