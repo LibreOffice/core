@@ -116,7 +116,7 @@ else
 gb_Module_BUILDHINT=
 gb_Module_DEVINSTALLHINT=
 
-debugrun : build
+debugrun :| build
 endif
 
 all : build unitcheck
