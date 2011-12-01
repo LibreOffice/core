@@ -44,6 +44,8 @@ library that corresponds to cppunittester program. Then through helper
 functions in liblo-bootstrap it calls a named function in that
 "program".
 
-This Android-specific code is for now in sal/osl/android.
+This Android-specific native code (the lo-bootstrap library) is for
+now in sal/android, and the Java code in the android "module"
+(subdirectory right here).
 
 --Tor Lillqvist <tml@iki.fi>
