@@ -377,7 +377,7 @@ int SfxDocumentInfoItem::operator==( const SfxPoolItem& rItem) const
 void SfxDocumentInfoItem::resetUserData(const ::rtl::OUString & i_rAuthor)
 {
     setAuthor(i_rAuthor);
-    DateTime now;
+    DateTime now( DateTime::SYSTEM );
     setCreationDate( util::DateTime(
         now.Get100Sec(), now.GetSec(), now.GetMin(), now.GetHour(),
         now.GetDay(), now.GetMonth(), now.GetYear() ) );
@@ -884,7 +884,7 @@ IMPL_LINK( SfxDocumentPage, DeleteHdl, PushButton*, EMPTYARG )
     if ( bEnableUseUserData && aUseUserDataCB.IsChecked() )
         aName = SvtUserOptions().GetFullName();
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-    DateTime now;
+    DateTime now( DateTime::SYSTEM );
     util::DateTime uDT(
         now.Get100Sec(), now.GetSec(), now.GetMin(), now.GetHour(),
         now.GetDay(), now.GetMonth(), now.GetYear() );

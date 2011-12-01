@@ -75,6 +75,7 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeActionLinkEntry, nMemPoolChangeActionLinkEntry
 ScChangeAction::ScChangeAction( ScChangeActionType eTypeP, const ScRange& rRange )
         :
         aBigRange( rRange ),
+        aDateTime( DateTime::SYSTEM ),
         pNext( NULL ),
         pPrev( NULL ),
         pLinkAny( NULL ),
@@ -115,6 +116,7 @@ ScChangeAction::ScChangeAction( ScChangeActionType eTypeP, const ScBigRange& rRa
                         const sal_uLong nTempAction)
         :
         aBigRange( rRange ),
+        aDateTime( DateTime::SYSTEM ),
         pNext( NULL ),
         pPrev( NULL ),
         pLinkAny( NULL ),
@@ -2051,6 +2053,7 @@ SCROW ScChangeTrack::InitContentRowsPerSlot()
 
 
 ScChangeTrack::ScChangeTrack( ScDocument* pDocP ) :
+        aFixDateTime( DateTime::SYSTEM ),
         pDoc( pDocP )
 {
     Init();
@@ -2062,6 +2065,7 @@ ScChangeTrack::ScChangeTrack( ScDocument* pDocP ) :
 
 ScChangeTrack::ScChangeTrack( ScDocument* pDocP, const ScStrCollection& aTempUserCollection) :
         aUserCollection(aTempUserCollection),
+        aFixDateTime( DateTime::SYSTEM ),
         pDoc( pDocP )
 {
     Init();

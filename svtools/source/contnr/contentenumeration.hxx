@@ -84,6 +84,7 @@ namespace svt
     };
 
     inline SortingData_Impl::SortingData_Impl() :
+        maModDate       ( DateTime::EMPTY ),
         maSize          ( 0 ),
         mbIsFolder      ( sal_False ),
         mbIsVolume      ( sal_False ),

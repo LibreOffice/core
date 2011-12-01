@@ -48,7 +48,8 @@ namespace ScDPGroupBy = ::com::sun::star::sheet::DataPilotFieldGroupBy;
 // ============================================================================
 
 XclPCItem::XclPCItem() :
-    meType( EXC_PCITEM_INVALID )
+    meType( EXC_PCITEM_INVALID ),
+    maDateTime( DateTime::EMPTY )
 {
 }
 

@@ -382,9 +382,9 @@ ByteString Export::GetTimeStamp()
 {
 //  return "xx.xx.xx";
     char buf[20];
-    Time aTime;
+    Time aTime( Time::SYSTEM );
 
-    snprintf(buf, sizeof(buf), "%8d %02d:%02d:%02d", int(Date().GetDate()),
+    snprintf(buf, sizeof(buf), "%8d %02d:%02d:%02d", int(Date( Date::SYSTEM).GetDate()),
         int(aTime.GetHour()), int(aTime.GetMin()), int(aTime.GetSec()));
     return ByteString(buf);
 }

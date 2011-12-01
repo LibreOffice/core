@@ -340,7 +340,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     pAntiImpl( pAntiImplP ),
     nFileVersion( 0 ),
     pOrigFilter( 0 ),
-    aExpireTime( Date() + 10, Time() ),
+    aExpireTime( Date( Date::SYSTEM ) + 10, Time( Time::SYSTEM ) ),
     pTempFile( NULL ),
     nLastStorageError( 0 ),
     m_bRemoveBackup( sal_False ),
@@ -2969,7 +2969,7 @@ void SfxMedium::SetExpired_Impl( const DateTime& rDateTime )
 
 sal_Bool SfxMedium::IsExpired() const
 {
-    return pImp->aExpireTime.IsValidAndGregorian() && pImp->aExpireTime < DateTime();
+    return pImp->aExpireTime.IsValidAndGregorian() && pImp->aExpireTime < DateTime( DateTime::SYSTEM );
 }
 //----------------------------------------------------------------
 

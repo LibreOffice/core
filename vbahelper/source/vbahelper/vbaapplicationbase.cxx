@@ -86,8 +86,8 @@ public:
 
     static double GetNow()
     {
-        Date aDateNow;
-        Time aTimeNow;
+        Date aDateNow( Date::SYSTEM );
+        Time aTimeNow( Time::SYSTEM );
          Date aRefDate( 1,1,1900 );
         long nDiffDays = (long)(aDateNow - aRefDate);
         nDiffDays += 2; // Change VisualBasic: 1.Jan.1900 == 2

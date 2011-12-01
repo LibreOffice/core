@@ -728,7 +728,7 @@ SwRedlineData* XMLRedlineImportHelper::ConvertRedline(
         pDoc->InsertRedlineAuthor( pRedlineInfo->sAuthor );
 
     // 2) util::DateTime -> DateTime
-    DateTime aDT;
+    DateTime aDT( DateTime::EMPTY );
     aDT.SetYear(    pRedlineInfo->aDateTime.Year );
     aDT.SetMonth(   pRedlineInfo->aDateTime.Month );
     aDT.SetDay(     pRedlineInfo->aDateTime.Day );

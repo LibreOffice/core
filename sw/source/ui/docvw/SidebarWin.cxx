@@ -406,12 +406,13 @@ void SwSidebarWin::CheckMetaText()
         mpMetadataAuthor->SetText(sMeta);
     }
 
+    Date aSysDate( Date::SYSTEM );
     Date aDate = GetDate();
-    if (aDate==Date())
+    if (aDate==aSysDate)
     {
         sMeta = String(SW_RES(STR_POSTIT_TODAY));
     }
-    else if (aDate == Date(Date()-1))
+    else if (aDate == Date(aSysDate-1))
     {
         sMeta = String(SW_RES(STR_POSTIT_YESTERDAY));
     }

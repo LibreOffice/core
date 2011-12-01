@@ -42,6 +42,7 @@
 
 CommunicationManagerClientViaSocketTT::CommunicationManagerClientViaSocketTT()
 : CommunicationManagerClientViaSocket( sal_True )
+, aFirstRetryCall( Time::EMPTY )
 , aAppPath()
 , aAppParams()
 , pProcess( NULL )
@@ -82,7 +83,7 @@ sal_Bool CommunicationManagerClientViaSocketTT::RetryConnect()
 
             if ( bSucc )
             {
-                aFirstRetryCall = Time() + Time( 0, 1 );
+                aFirstRetryCall = Time( Time::SYSTEM ) + Time( 0, 1 );
                 for ( int i = 10 ; i-- ; )
                     GetpApp()->Reschedule();
             }
@@ -92,7 +93,7 @@ sal_Bool CommunicationManagerClientViaSocketTT::RetryConnect()
     }
     else
     {
-        if ( aFirstRetryCall > Time() )
+        if ( aFirstRetryCall > Time( Time::SYSTEM ) )
         {
             Timer aWait;
             aWait.SetTimeout( 500 );

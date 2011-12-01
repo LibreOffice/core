@@ -1399,7 +1399,7 @@ void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
 
     // get the Author / TimeStamp from the "other" document info
     sal_uInt16 nAuthor = rDoc.GetRedlineAuthor();
-    DateTime aTimeStamp;
+    DateTime aTimeStamp( DateTime::SYSTEM );
     SwDocShell *pDocShell(rDoc.GetDocShell());
     OSL_ENSURE(pDocShell, "no SwDocShell");
     if (pDocShell) {

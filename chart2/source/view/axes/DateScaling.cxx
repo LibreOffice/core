@@ -168,7 +168,7 @@ double SAL_CALL InverseDateScaling::doScaling( double value )
                     else
                         value -= 0.5;
                 }
-                Date aDate;
+                Date aDate( Date::EMPTY );
                 double fYear = ::rtl::math::approxFloor(value/lcl_fNumberOfMonths);
                 double fMonth = ::rtl::math::approxFloor(value-(fYear*lcl_fNumberOfMonths));
                 if( fMonth==0.0 )

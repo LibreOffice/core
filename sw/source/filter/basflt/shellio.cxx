@@ -441,7 +441,11 @@ SwReader::SwReader( const uno::Reference < embed::XStorage > &rStg, const String
 }
 
 Reader::Reader()
-    : pTemplate(0), pStrm(0), pMedium(0), bInsertMode(0),
+    : pTemplate(0),
+    aDStamp( Date::EMPTY ),
+    aTStamp( Time::EMPTY ),
+    aChkDateTime( DateTime::EMPTY ),
+    pStrm(0), pMedium(0), bInsertMode(0),
     bTmplBrowseMode(0), bReadUTF8(0), bBlockMode(0), bOrganizerMode(0),
     bHasAskTemplateName(0), bIgnoreHTMLComments(0)
 {
@@ -473,15 +477,15 @@ SwDoc* Reader::GetTemplateDoc()
         INetURLObject aTDir( aTemplateNm );
         String aFileName = aTDir.GetMainURL( INetURLObject::NO_DECODE );
         OSL_ENSURE( !aTDir.HasError(), "No absolute path for template name!" );
-        DateTime aCurrDateTime;
+        DateTime aCurrDateTime( DateTime::SYSTEM );
         sal_Bool bLoad = sal_False;
 
         // Wenn das Template schon mal geladen wurde, nur einmal pro
         // Minute nachschauen, ob es geaendert wurde.
         if( !pTemplate || aCurrDateTime >= aChkDateTime )
         {
-            Date aTstDate;
-            Time aTstTime;
+            Date aTstDate( Date::EMPTY );
+            Time aTstTime( Time::EMPTY );
             if( FStatHelper::GetModifiedDateTimeOfFile(
                             aTDir.GetMainURL( INetURLObject::NO_DECODE ),
                             &aTstDate, &aTstTime ) &&

@@ -175,8 +175,8 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     maIssuedToFI.SetSizePixel( aNewSize );
     maIssuedByFI.SetSizePixel( aNewSize );
 
-    DateTime aDateTimeStart;
-    DateTime aDateTimeEnd;
+    DateTime aDateTimeStart( DateTime::EMPTY );
+    DateTime aDateTimeEnd( DateTime::EMPTY );
     utl::typeConvert( xCert->getNotValidBefore(), aDateTimeStart );
     utl::typeConvert( xCert->getNotValidAfter(), aDateTimeEnd );
     String sText = maValidDateFI.GetText();
@@ -290,7 +290,7 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     aDetails = pairIssuer.second;
     InsertElement( String( XMLSEC_RES( STR_ISSUER ) ), aLBEntry, aDetails );
 
-    DateTime aDateTime;
+    DateTime aDateTime( DateTime::EMPTY );
     utl::typeConvert( xCert->getNotValidBefore(), aDateTime );
     aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( aDateTime.GetDate() );
     aLBEntry += String::CreateFromAscii( " " );

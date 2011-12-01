@@ -2123,7 +2123,7 @@ const ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
         // document already loaded.
 
         SfxObjectShell* p = itr->second.maShell;
-        itr->second.maLastAccess = Time();
+        itr->second.maLastAccess = Time( Time::SYSTEM );
         return static_cast<ScDocShell*>(p)->GetDocument();
     }
 
@@ -2604,7 +2604,7 @@ void ScExternalRefManager::purgeStaleSrcDocument(sal_Int32 nTimeOut)
     for (; itr != itrEnd; ++itr)
     {
         // in 100th of a second.
-        sal_Int32 nSinceLastAccess = (Time() - itr->second.maLastAccess).GetTime();
+        sal_Int32 nSinceLastAccess = (Time( Time::SYSTEM ) - itr->second.maLastAccess).GetTime();
         if (nSinceLastAccess < nTimeOut)
             aNewDocShells.insert(*itr);
         else

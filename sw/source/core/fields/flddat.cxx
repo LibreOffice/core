@@ -69,7 +69,7 @@ SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, sal_uInt16 nSub
     }
     if (IsFixed())
     {
-        DateTime aDateTime;
+        DateTime aDateTime( DateTime::SYSTEM );
         SetDateTime(aDateTime);
     }
 }
@@ -80,7 +80,7 @@ String SwDateTimeField::Expand() const
 
     if (!(IsFixed()))
     {
-        DateTime aDateTime;
+        DateTime aDateTime( DateTime::SYSTEM );
         fVal = GetDateTime(GetDoc(), aDateTime);
     }
     else
@@ -148,7 +148,7 @@ double SwDateTimeField::GetValue() const
     if (IsFixed())
         return SwValueField::GetValue();
     else
-        return GetDateTime(GetDoc(), DateTime());
+        return GetDateTime(GetDoc(), DateTime( DateTime::SYSTEM ));
 }
 
 Date SwDateTimeField::GetDate(sal_Bool bUseOffset) const
@@ -248,7 +248,7 @@ bool SwDateTimeField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
             util::DateTime aDateTimeValue;
             if(!(rVal >>= aDateTimeValue))
                 return sal_False;
-            DateTime aDateTime;
+            DateTime aDateTime( DateTime::EMPTY );
             aDateTime.Set100Sec(aDateTimeValue.HundredthSeconds);
             aDateTime.SetSec(aDateTimeValue.Seconds);
             aDateTime.SetMin(aDateTimeValue.Minutes);

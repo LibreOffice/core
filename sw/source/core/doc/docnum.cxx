@@ -2225,8 +2225,8 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, sal_Bool bAutoNum ) c
     String aName;
     if( bAutoNum )
     {
-        long n = Time().GetTime();
-        n += Date().GetDate();
+        long n = Time( Time::SYSTEM ).GetTime();
+        n += Date( Date::SYSTEM ).GetDate();
         aName = String::CreateFromInt32( n );
         if( pChkStr && !pChkStr->Len() )
             pChkStr = 0;
@@ -2611,8 +2611,8 @@ namespace listfunc
     {
         // #i92478#
         String aNewListId = String::CreateFromAscii( "list" );
-        sal_Int64 n = Time().GetTime();
-        n += Date().GetDate();
+        sal_Int64 n = Time( Time::SYSTEM ).GetTime();
+        n += Date( Date::SYSTEM ).GetDate();
         n += rand();
         // #i92478#
         aNewListId += String::CreateFromInt64( n );

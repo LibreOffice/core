@@ -686,7 +686,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             aConfidentialEntry += ' ';
             aConfidentialEntry += ScGlobal::GetRscString( STR_HF_CONFIDENTIAL );
             aWndLeft.GetEditEngine()->SetText(aConfidentialEntry);
-            aWndCenter.InsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR), EE_FEATURE_FIELD) );
+            aWndCenter.InsertField( SvxFieldItem(SvxDateField(Date( Date::SYSTEM ),SVXDATETYPE_VAR), EE_FEATURE_FIELD) );
             String aPageEntry(ScGlobal::GetRscString( STR_PAGE ) );
             aPageEntry += ' ';
             aWndRight.GetEditEngine()->SetText(aPageEntry);
@@ -792,7 +792,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             aPageEntry += ' ';
             aWndCenter.GetEditEngine()->SetText(aPageEntry);
             aWndCenter.InsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD) );
-            aWndRight.InsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR), EE_FEATURE_FIELD) );
+            aWndRight.InsertField( SvxFieldItem(SvxDateField(Date( Date::SYSTEM ),SVXDATETYPE_VAR), EE_FEATURE_FIELD) );
             if(!bTravelling)
                 aWndRight.GrabFocus();
         }
@@ -807,7 +807,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             aCreatedByEntry += ' ';
             aCreatedByEntry += (String)aUserOpt.GetLastName();
             aWndLeft.GetEditEngine()->SetText(aCreatedByEntry);
-            aWndCenter.InsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR), EE_FEATURE_FIELD) );
+            aWndCenter.InsertField( SvxFieldItem(SvxDateField(Date( Date::SYSTEM ),SVXDATETYPE_VAR), EE_FEATURE_FIELD) );
             String aPageEntry(ScGlobal::GetRscString( STR_PAGE ) );
             aPageEntry += ' ';
             aWndRight.GetEditEngine()->SetText(aPageEntry);
@@ -874,7 +874,7 @@ IMPL_LINK( ScHFEditPage, ClickHdl, ImageButton*, pBtn )
         else if ( pBtn == &aBtnLastPage )
             pActiveEdWnd->InsertField( SvxFieldItem(SvxPagesField(), EE_FEATURE_FIELD) );
         else if ( pBtn == &aBtnDate )
-            pActiveEdWnd->InsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR), EE_FEATURE_FIELD) );
+            pActiveEdWnd->InsertField( SvxFieldItem(SvxDateField(Date( Date::SYSTEM ),SVXDATETYPE_VAR), EE_FEATURE_FIELD) );
         else if ( pBtn == &aBtnTime )
             pActiveEdWnd->InsertField( SvxFieldItem(SvxTimeField(), EE_FEATURE_FIELD) );
         else if ( pBtn == &aBtnFile )

@@ -1035,7 +1035,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     else
         aFieldData.nTotalPages = nTotalPages;
 
-    SetDateTime( Date(), Time() );
+    SetDateTime( Date( Date::SYSTEM ), Time( Time::SYSTEM ) );
 
     aFieldData.aTitle       = pDocShell->GetTitle();
     const INetURLObject& rURLObj = pDocShell->GetMedium()->GetURLObject();

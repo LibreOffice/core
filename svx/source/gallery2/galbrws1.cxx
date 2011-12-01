@@ -236,7 +236,7 @@ void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeDa
     {
         ::ucbhelper::Content aCnt( pThm->GetThmURL().GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
         util::DateTime  aDateTimeModified;
-        DateTime        aDateTime;
+        DateTime        aDateTime( DateTime::EMPTY );
 
         aCnt.getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "DateModified" )) ) >>= aDateTimeModified;
         ::utl::typeConvert( aDateTimeModified, aDateTime );

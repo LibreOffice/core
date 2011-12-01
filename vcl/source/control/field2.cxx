@@ -1253,7 +1253,7 @@ static sal_Bool ImplDateGetValue( const XubString& rStr, Date& rDate, ExtDateFie
         if ( ( nSepPos == STRING_NOTFOUND ) || ( nSepPos == (aStr.Len()-1) ) )
         {
             bYear = sal_False;
-            nYear = Date().GetYear();
+            nYear = Date( Date::SYSTEM ).GetYear();
         }
 
         const sal_Unicode* pBuf = aStr.GetBuffer();
@@ -1336,11 +1336,11 @@ sal_Bool DateFormatter::ImplDateReformat( const XubString& rStr, XubString& rOut
         maCorrectedDate = aTempDate;
         if( !GetErrorHdl().Call( this ) )
         {
-            maCorrectedDate = Date();
+            maCorrectedDate = Date( Date::SYSTEM );
             return sal_False;
         }
         else
-            maCorrectedDate = Date();
+            maCorrectedDate = Date( Date::SYSTEM );
     }
 
     rOutStr = ImplGetDateAsText( aTempDate, rSettings );
@@ -1635,6 +1635,7 @@ DateFormatter::DateFormatter() :
     maLastDate( 0 ),
     maMin( 1, 1, 1900 ),
     maMax( 31, 12, 2200 ),
+    maCorrectedDate( Date::SYSTEM ),
     mbEnforceValidValue( sal_True )
 {
     ImplInit();
@@ -1922,7 +1923,7 @@ Date DateFormatter::GetDate() const
                 if ( maLastDate.GetDate() )
                     aDate = maLastDate;
                 else if ( !IsEmptyFieldValueEnabled() )
-                    aDate = Date();
+                    aDate = Date( Date::SYSTEM );
             }
             else
                 aDate = GetInvalidDate();
@@ -1972,7 +1973,7 @@ sal_Bool DateFormatter::IsEmptyDate() const
         }
         else if ( !maLastDate.GetDate() )
         {
-            Date aDate;
+            Date aDate( Date::EMPTY );
             bEmpty = !ImplDateGetValue( GetField()->GetText(), aDate, GetExtDateFormat(sal_True), ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() );
         }
     }
@@ -2016,7 +2017,7 @@ void DateFormatter::Reformat()
         if ( maLastDate.GetDate() )
             SetDate( maLastDate );
         else if ( !IsEmptyFieldValueEnabled() )
-            SetDate( Date() );
+            SetDate( Date( Date::SYSTEM ) );
         else
         {
             ImplSetText( ImplGetSVEmptyStr() );
@@ -2665,11 +2666,11 @@ sal_Bool TimeFormatter::ImplTimeReformat( const XubString& rStr, XubString& rOut
         maCorrectedTime = aTempTime;
         if ( !GetErrorHdl().Call( this ) )
         {
-            maCorrectedTime = Time();
+            maCorrectedTime = Time( Time::SYSTEM );
             return sal_False;
         }
         else
-            maCorrectedTime = Time();
+            maCorrectedTime = Time( Time::SYSTEM );
     }
 
     sal_Bool bSecond = sal_False;
@@ -2803,6 +2804,7 @@ TimeFormatter::TimeFormatter() :
     maLastTime( 0, 0 ),
     maMin( 0, 0 ),
     maMax( 23, 59, 59, 99 ),
+    maCorrectedTime( Time::SYSTEM ),
     mbEnforceValidValue( sal_True ),
     maFieldTime( 0, 0 )
 {

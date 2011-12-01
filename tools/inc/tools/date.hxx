@@ -50,7 +50,20 @@ private:
     sal_uInt32      nDate;
 
 public:
-                    Date();
+
+    enum DateInitSystem
+    {
+        SYSTEM
+    };
+    // temporary until all uses are inspected and resolved
+    enum DateInitEmpty
+    {
+        EMPTY
+    };
+
+                    Date( DateInitEmpty)
+                        { nDate = 0; }
+                    Date( DateInitSystem );
                     Date( const ResId & rResId );
                     Date( sal_uInt32 _nDate ) { Date::nDate = _nDate; }
                     Date( const Date& rDate )

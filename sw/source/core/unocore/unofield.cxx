@@ -1049,6 +1049,7 @@ struct SwFieldProperties_Impl
     sal_Bool        bBool4;
 
     SwFieldProperties_Impl():
+        aDate( Date::EMPTY ),
         fDouble(0.),
         pDateTime(0),
         nSubType(0),
@@ -1231,7 +1232,7 @@ void SwXTextField::attachToRange(
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_POSTITFLD);
 
-                DateTime aDateTime;
+                DateTime aDateTime( DateTime::EMPTY );
                 if (m_pProps->pDateTime)
                 {
                     aDateTime.SetYear(m_pProps->pDateTime->Year);
@@ -2233,7 +2234,7 @@ void SwXTextField::update(  ) throw (uno::RuntimeException)
         switch(pFld->Which())
         {
             case RES_DATETIMEFLD:
-            ((SwDateTimeField*)pFld)->SetDateTime( ::DateTime() );
+            ((SwDateTimeField*)pFld)->SetDateTime( ::DateTime( ::DateTime::SYSTEM ) );
             break;
 
             case RES_EXTUSERFLD:

@@ -1645,7 +1645,7 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFi
            sShareDirFile( sUserDirFile );
     SvxAutoCorrectLanguageListsPtr pLists = 0;
 
-    Time nMinTime( 0, 2 ), nAktTime, nLastCheckTime;
+    Time nMinTime( 0, 2 ), nAktTime( Time::SYSTEM ), nLastCheckTime( Time::EMPTY );
     sal_uLong nFndPos;
     if( TABLE_ENTRY_NOTFOUND !=
                     pLastFileTable->SearchKey( sal_uLong( eLang ), &nFndPos ) &&
@@ -1986,6 +1986,9 @@ SvxAutoCorrectLanguageLists::SvxAutoCorrectLanguageLists(
                 LanguageType eLang)
 :   sShareAutoCorrFile( rShareAutoCorrectFile ),
     sUserAutoCorrFile( rUserAutoCorrectFile ),
+    aModifiedDate( Date::EMPTY ),
+    aModifiedTime( Time::EMPTY ),
+    aLastCheckTime( Time::EMPTY ),
     eLanguage(eLang),
     pCplStt_ExcptLst( 0 ),
     pWrdStt_ExcptLst( 0 ),
@@ -2008,11 +2011,11 @@ sal_Bool SvxAutoCorrectLanguageLists::IsFileChanged_Imp()
     sal_Bool bRet = sal_False;
 
     Time nMinTime( 0, 2 );
-    Time nAktTime;
+    Time nAktTime( Time::SYSTEM );
     if( aLastCheckTime > nAktTime ||                    // overflow?
         ( nAktTime -= aLastCheckTime ) > nMinTime )     // min time past
     {
-        Date aTstDate; Time aTstTime;
+        Date aTstDate( Date::EMPTY ); Time aTstTime( Time::EMPTY );
         if( FStatHelper::GetModifiedDateTimeOfFile( sShareAutoCorrFile,
                                             &aTstDate, &aTstTime ) &&
             ( aModifiedDate != aTstDate || aModifiedTime != aTstTime ))
@@ -2027,7 +2030,7 @@ sal_Bool SvxAutoCorrectLanguageLists::IsFileChanged_Imp()
                 delete pAutocorr_List, pAutocorr_List = 0;
             nFlags &= ~(CplSttLstLoad | WrdSttLstLoad | ChgWordLstLoad );
         }
-        aLastCheckTime = Time();
+        aLastCheckTime = Time( Time::SYSTEM );
     }
     return bRet;
 }
@@ -2114,7 +2117,7 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
         // Set time stamp
         FStatHelper::GetModifiedDateTimeOfFile( sShareAutoCorrFile,
                                         &aModifiedDate, &aModifiedTime );
-        aLastCheckTime = Time();
+        aLastCheckTime = Time( Time::SYSTEM );
     }
 
 }
@@ -2230,7 +2233,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
     // Set time stamp
     FStatHelper::GetModifiedDateTimeOfFile( sShareAutoCorrFile,
                                     &aModifiedDate, &aModifiedTime );
-    aLastCheckTime = Time();
+    aLastCheckTime = Time( Time::SYSTEM );
 
     return pAutocorr_List;
 }
@@ -2276,7 +2279,7 @@ sal_Bool SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const String& rNew)
         // Set time stamp
         FStatHelper::GetModifiedDateTimeOfFile( sUserAutoCorrFile,
                                             &aModifiedDate, &aModifiedTime );
-        aLastCheckTime = Time();
+        aLastCheckTime = Time( Time::SYSTEM );
     }
     else
         delete pNew, pNew = 0;
@@ -2298,7 +2301,7 @@ sal_Bool SvxAutoCorrectLanguageLists::AddToWrdSttExceptList(const String& rNew)
         // Set time stamp
         FStatHelper::GetModifiedDateTimeOfFile( sUserAutoCorrFile,
                                             &aModifiedDate, &aModifiedTime );
-        aLastCheckTime = Time();
+        aLastCheckTime = Time( Time::SYSTEM );
     }
     else
         delete pNew, pNew = 0;
@@ -2327,7 +2330,7 @@ void SvxAutoCorrectLanguageLists::SaveCplSttExceptList()
     // Set time stamp
     FStatHelper::GetModifiedDateTimeOfFile( sUserAutoCorrFile,
                                             &aModifiedDate, &aModifiedTime );
-    aLastCheckTime = Time();
+    aLastCheckTime = Time( Time::SYSTEM );
 }
 
 void SvxAutoCorrectLanguageLists::SetCplSttExceptList( SvStringsISortDtor* pList )
@@ -2364,7 +2367,7 @@ void SvxAutoCorrectLanguageLists::SaveWrdSttExceptList()
     // Set time stamp
     FStatHelper::GetModifiedDateTimeOfFile( sUserAutoCorrFile,
                                             &aModifiedDate, &aModifiedTime );
-    aLastCheckTime = Time();
+    aLastCheckTime = Time( Time::SYSTEM );
 }
 
 void SvxAutoCorrectLanguageLists::SetWrdSttExceptList( SvStringsISortDtor* pList )

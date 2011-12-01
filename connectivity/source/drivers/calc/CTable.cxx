@@ -551,6 +551,7 @@ OCalcTable::OCalcTable(sdbcx::OCollection* _pTables,OCalcConnection* _pConnectio
                 ,m_nDataCols(0)
                 ,m_nDataRows(0)
                 ,m_bHasHeaders(sal_False)
+                ,m_aNullDate(::Date::EMPTY)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::OCalcTable" );
 }

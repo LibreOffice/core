@@ -2987,7 +2987,9 @@ int SwRedlineExtraData_Format::operator == ( const SwRedlineExtraData& rCmp ) co
 }
 
 SwRedlineData::SwRedlineData( RedlineType_t eT, sal_uInt16 nAut )
-    : pNext( 0 ), pExtraData( 0 ), eType( eT ), nAuthor( nAut ), nSeqNo( 0 )
+    : pNext( 0 ), pExtraData( 0 ),
+    aStamp( DateTime::SYSTEM ),
+    eType( eT ), nAuthor( nAut ), nSeqNo( 0 )
 {
     aStamp.SetSec( 0 );
     aStamp.Set100Sec( 0 );

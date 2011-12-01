@@ -50,6 +50,8 @@ struct ProfileSnapshot
     SysdepProfileSnapshot *pSysdepProfileSnapshot;
     sal_uLong nProcessTicks;
     sal_uLong nSystemTicks;
+
+    ProfileSnapshot() : aTime( Time::EMPTY ) {}
 };
 
 

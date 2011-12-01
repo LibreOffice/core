@@ -202,7 +202,7 @@ SV_IMPL_PERSIST1( SvxDateField, SvxFieldData );
 
 SvxDateField::SvxDateField()
 {
-    nFixDate = Date().GetDate();
+    nFixDate = Date( Date::SYSTEM ).GetDate();
     eType = SVXDATETYPE_VAR;
     eFormat = SVXDATEFORMAT_STDSMALL;
 }
@@ -263,9 +263,11 @@ void SvxDateField::Save( SvPersistStream & rStm )
 
 String SvxDateField::GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLang ) const
 {
-    Date aDate; // current date
+    Date aDate( Date::EMPTY );
     if ( eType == SVXDATETYPE_FIX )
         aDate.SetDate( nFixDate );
+    else
+        aDate = Date( Date::SYSTEM ); // current date
 
     return GetFormatted( aDate, eFormat, rFormatter, eLang );
 }
@@ -551,7 +553,7 @@ SV_IMPL_PERSIST1( SvxExtTimeField, SvxFieldData );
 
 SvxExtTimeField::SvxExtTimeField()
 {
-    nFixTime = Time().GetTime();
+    nFixTime = Time( Time::SYSTEM ).GetTime();
     eType = SVXTIMETYPE_VAR;
     eFormat = SVXTIMEFORMAT_STANDARD;
 }
@@ -612,9 +614,11 @@ void SvxExtTimeField::Save( SvPersistStream & rStm )
 
 String SvxExtTimeField::GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLang ) const
 {
-    Time aTime; // current time
+    Time aTime( Time::EMPTY );
     if ( eType == SVXTIMETYPE_FIX )
         aTime.SetTime( nFixTime );
+    else
+        aTime = Time( Time::SYSTEM ); // current time
     return GetFormatted( aTime, eFormat, rFormatter, eLang );
 }
 

@@ -291,6 +291,8 @@ public:
     Environment *pChildEnv;     // Environment Variables for child Process
 
     HttpRequest *pHttpRequest;  // used for sending HTTP requests
+
+    ImplTestToolObj() : aServerTimeout( Time::EMPTY ) {}
 };
 
 

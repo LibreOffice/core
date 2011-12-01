@@ -464,7 +464,7 @@ private:
 };
 
 AxisUsage::AxisUsage()
-    : aScaleAutomatism(AxisHelper::createDefaultScale(),Date())
+    : aScaleAutomatism(AxisHelper::createDefaultScale(),Date( Date::SYSTEM ))
 {
 }
 

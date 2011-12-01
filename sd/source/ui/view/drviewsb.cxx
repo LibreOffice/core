@@ -500,7 +500,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
             {
                 case SID_INSERT_FLD_DATE_FIX:
                     pFieldItem = new SvxFieldItem(
-                        SvxDateField( Date(), SVXDATETYPE_FIX ), EE_FEATURE_FIELD );
+                        SvxDateField( Date( Date::SYSTEM ), SVXDATETYPE_FIX ), EE_FEATURE_FIELD );
                 break;
 
                 case SID_INSERT_FLD_DATE_VAR:
@@ -509,7 +509,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
 
                 case SID_INSERT_FLD_TIME_FIX:
                     pFieldItem = new SvxFieldItem(
-                        SvxExtTimeField( Time(), SVXTIMETYPE_FIX ), EE_FEATURE_FIELD );
+                        SvxExtTimeField( Time( Time::SYSTEM ), SVXTIMETYPE_FIX ), EE_FEATURE_FIELD );
                 break;
 
                 case SID_INSERT_FLD_TIME_VAR:

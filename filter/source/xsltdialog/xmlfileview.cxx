@@ -866,7 +866,7 @@ void XMLFileWindow::ImpDoHighlight( const String& rSource, sal_uInt16 nLineOff )
 
 IMPL_LINK( XMLFileWindow, SyntaxTimerHdl, Timer *, pTimer )
 {
-    Time aSyntaxCheckStart;
+    Time aSyntaxCheckStart( Time::SYSTEM );
     DBG_ASSERT( pTextView, "Noch keine View, aber Syntax-Highlight ?!" );
     pTextEngine->SetUpdateMode( sal_False );
 
@@ -891,7 +891,7 @@ IMPL_LINK( XMLFileWindow, SyntaxTimerHdl, Timer *, pTimer )
                 nCount++;
                 if(!aSyntaxLineTable.Count())
                     break;
-                if((Time().GetTime() - aSyntaxCheckStart.GetTime()) > MAX_HIGHLIGHTTIME )
+                if((Time( Time::SYSTEM ).GetTime() - aSyntaxCheckStart.GetTime()) > MAX_HIGHLIGHTTIME )
                 {
                     pTimer->SetTimeout( 2 * SYNTAX_HIGHLIGHT_TIMEOUT );
                     break;
@@ -909,7 +909,7 @@ IMPL_LINK( XMLFileWindow, SyntaxTimerHdl, Timer *, pTimer )
         p = aSyntaxLineTable.Next();
         aSyntaxLineTable.Remove(nC);
         nCount ++;
-        if(Time().GetTime() - aSyntaxCheckStart.GetTime() > MAX_HIGHLIGHTTIME)
+        if(Time( Time::SYSTEM ).GetTime() - aSyntaxCheckStart.GetTime() > MAX_HIGHLIGHTTIME)
         {
             pTimer->SetTimeout( 2 * SYNTAX_HIGHLIGHT_TIMEOUT );
             break;

@@ -68,7 +68,9 @@ private:
 
 public:
 
-                        ScChangeViewSettings()
+                        ScChangeViewSettings() :
+                            aFirstDateTime( DateTime::EMPTY ),
+                            aLastDateTime( DateTime::EMPTY )
                         {
                             pCommentSearcher=NULL;
                             bIsDate=false;

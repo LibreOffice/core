@@ -1490,7 +1490,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                     // if not transferred as a parameter, get it from user settings
                     aInfo.Author = SvtUserOptions().GetFullName();
 
-                DateTime aTime;
+                DateTime aTime( DateTime::SYSTEM );
                 aInfo.TimeStamp.Day = aTime.GetDay();
                 aInfo.TimeStamp.Month = aTime.GetMonth();
                 aInfo.TimeStamp.Year = aTime.GetYear();

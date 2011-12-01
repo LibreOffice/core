@@ -1883,7 +1883,7 @@ SfxDocumentMetaData::resetUserData(const ::rtl::OUString & the_value)
 
     bool bModified( false );
     bModified |= setMetaText("meta:initial-creator", the_value);
-    ::DateTime now = DateTime();
+    ::DateTime now( ::DateTime::SYSTEM );
     css::util::DateTime uDT(now.Get100Sec(), now.GetSec(), now.GetMin(),
         now.GetHour(), now.GetDay(), now.GetMonth(), now.GetYear());
     bModified |= setMetaText("meta:creation-date", dateTimeToText(uDT));

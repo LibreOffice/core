@@ -115,6 +115,7 @@ TYPEINIT1(ImpSdrObjTextLinkUserData,SdrObjUserData);
 ImpSdrObjTextLinkUserData::ImpSdrObjTextLinkUserData(SdrTextObj* pObj1):
     SdrObjUserData(SdrInventor,SDRUSERDATA_OBJTEXTLINK,0),
     pObj(pObj1),
+    aFileDate0( DateTime::EMPTY ),
     pLink(NULL),
     eCharSet(RTL_TEXTENCODING_DONTKNOW)
 {
@@ -175,7 +176,7 @@ bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
     if( pData )
     {
         ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
-        DateTime                    aFileDT;
+        DateTime                    aFileDT( DateTime::EMPTY );
         sal_Bool                        bExists = sal_False, bLoad = sal_False;
 
         if( pBroker )

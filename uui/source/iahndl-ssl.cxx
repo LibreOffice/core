@@ -118,8 +118,8 @@ getLocalizedDatTimeStr(
     util::DateTime const & rDateTime )
 {
     rtl::OUString aDateTimeStr;
-    Date  aDate;
-    Time  aTime;
+    Date  aDate( Date::EMPTY );
+    Time  aTime( Time::EMPTY );
 
     aDate = Date( rDateTime.Day, rDateTime.Month, rDateTime.Year );
     aTime = Time( rDateTime.Hours, rDateTime.Minutes, rDateTime.Seconds );

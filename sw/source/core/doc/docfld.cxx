@@ -1996,8 +1996,8 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
     }
     else
     {
-        nDate = Date().GetDate();
-        nTime = Time().GetTime();
+        nDate = Date( Date::SYSTEM ).GetDate();
+        nTime = Time( Time::SYSTEM ).GetTime();
     }
 
     sal_uInt16 aTypes[5] = {

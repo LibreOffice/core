@@ -404,6 +404,8 @@ private:
     {
         SfxObjectShellRef   maShell;
         Time                maLastAccess;
+
+        SrcShell() : maLastAccess( Time::SYSTEM ) {}
     };
 
     typedef ::boost::unordered_map<sal_uInt16, SrcShell>           DocShellMap;

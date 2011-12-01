@@ -540,7 +540,7 @@ ScPostIt* ScPostIt::Clone( const ScAddress& rOwnPos, ScDocument& rDestDoc, const
 
 void ScPostIt::AutoStamp()
 {
-    maNoteData.maDate = ScGlobal::pLocaleData->getDate( Date() );
+    maNoteData.maDate = ScGlobal::pLocaleData->getDate( Date( Date::SYSTEM ) );
     maNoteData.maAuthor = SvtUserOptions().GetID();
 }
 

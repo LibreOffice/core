@@ -239,8 +239,8 @@ const ::rtl::OUString& XMLTextListsHelper::GetListStyleOfLastProcessedList() con
 {
     // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
     ::rtl::OUString sTmpStr( RTL_CONSTASCII_USTRINGPARAM( "list" ) );
-    sal_Int64 n = Time().GetTime();
-    n += Date().GetDate();
+    sal_Int64 n = Time( Time::SYSTEM ).GetTime();
+    n += Date( Date::SYSTEM ).GetDate();
     n += rand();
     // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
     sTmpStr += ::rtl::OUString::valueOf( n );

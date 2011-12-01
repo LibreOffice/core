@@ -134,7 +134,7 @@ namespace pcr
         {
             case NUMBERFORMAT_DATE:
                 {
-                    Date aCurrentDate;
+                    Date aCurrentDate( Date::SYSTEM );
                     static ::com::sun::star::util::Date STANDARD_DB_DATE(30,12,1899);
                     nValue = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(static_cast<sal_Int32>(aCurrentDate.GetDate())),STANDARD_DB_DATE);
                 }
@@ -142,7 +142,7 @@ namespace pcr
             case NUMBERFORMAT_TIME:
             case NUMBERFORMAT_DATETIME:
                 {
-                    Time aCurrentTime;
+                    Time aCurrentTime( Time::SYSTEM );
                     nValue = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(aCurrentTime.GetTime()));
                 }
                 break;

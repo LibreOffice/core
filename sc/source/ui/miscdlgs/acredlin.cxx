@@ -795,7 +795,6 @@ long ScAcceptChgDlg::PreNotify( NotifyEvent& rNEvt )
 void ScAcceptChgDlg::UpdateView()
 {
     bNeedsUpdate=false;
-    DateTime aDateTime;
     SvLBoxEntry* pParent=NULL;
     ScChangeTrack* pChanges=NULL;
     const ScChangeAction* pScChangeAction=NULL;
@@ -1464,7 +1463,6 @@ void ScAcceptChgDlg::AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartActio
 {
     if(pChanges!=NULL)
     {
-        DateTime aDateTime;
         SvLBoxEntry* pParent=NULL;
         const ScChangeAction* pScChangeAction=NULL;
         bAcceptEnableFlag=true;

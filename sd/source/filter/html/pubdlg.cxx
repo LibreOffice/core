@@ -1457,7 +1457,7 @@ void SdPublishingDlg::SetDesign( SdPublishingDesign* pDesign )
     pPage2_ChgDefault->Check( !pDesign->m_bAutoSlide );
     pPage2_ChgAuto->Check( pDesign->m_bAutoSlide );
 
-    Time aTime;
+    Time aTime( Time::EMPTY );
     aTime.MakeTimeFromMS( pDesign->m_nSlideDuration * 1000 );
     pPage2_Duration->SetTime( aTime );
 

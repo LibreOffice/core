@@ -53,7 +53,9 @@ CommunicationLink::CommunicationLink( CommunicationManager *pMan )
 , pServiceData(NULL)
 , nServiceProtocol( 0 )
 , bIsInsideCallback( sal_False )
+, aStart( DateTime::EMPTY )
 , nTotalBytes( 0 )
+, aLastAccess( DateTime::EMPTY )
 , maApplication("Undefined")
 #if OSL_DEBUG_LEVEL > 1
 , bFlag( sal_False )
@@ -123,7 +125,7 @@ sal_Bool CommunicationLink::DoTransferDataStream( SvStream *pDataStream, CMProto
 
 sal_Bool CommunicationLink::TransferDataStream( SvStream *pDataStream, CMProtocol nProtocol )
 {
-    aLastAccess = DateTime();
+    aLastAccess = DateTime( DateTime::SYSTEM );
     nTotalBytes += pDataStream->Seek( STREAM_SEEK_TO_END );
     return DoTransferDataStream( pDataStream, nProtocol );
 }
@@ -375,7 +377,7 @@ ByteString CommunicationManager::GetMyName( CM_NameType )
 void CommunicationManager::CallConnectionOpened( CommunicationLink* pCL )
 {
     pCL->StartCallback();       // This should already have been called.
-    pCL->aStart = DateTime();
+    pCL->aStart = DateTime( DateTime::SYSTEM );
     pCL->aLastAccess = pCL->aStart;
     bIsCommunicationRunning = sal_True;
     pCL->SetApplication( GetApplication() );
@@ -392,7 +394,7 @@ void CommunicationManager::CallConnectionOpened( CommunicationLink* pCL )
 void CommunicationManager::CallConnectionClosed( CommunicationLink* pCL )
 {
     pCL->StartCallback();       // This should already have been called.
-    pCL->aLastAccess = DateTime();
+    pCL->aLastAccess = DateTime( DateTime::SYSTEM );
 
     INFO_MSG( CByteString("C-:").Append( pCL->GetCommunicationPartner( CM_FQDN ) ),
         CByteString("Connection broken: ").Append( pCL->GetCommunicationPartner( CM_FQDN ) ),
@@ -409,7 +411,7 @@ void CommunicationManager::CallConnectionClosed( CommunicationLink* pCL )
 void CommunicationManager::CallDataReceived( CommunicationLink* pCL )
 {
     pCL->StartCallback();       // Should have already been called
-    pCL->aLastAccess = DateTime();
+    pCL->aLastAccess = DateTime( DateTime::SYSTEM );
     CommunicationLinkRef rHold(pCL);    // Keep the pointer for a bit.
 
     // should be impossible but happens for mysterious reasons

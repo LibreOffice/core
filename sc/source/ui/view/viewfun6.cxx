@@ -293,9 +293,9 @@ void ScViewFunc::InsertCurrentTime(short nCellFmt, const OUString& rUndoStr)
     ScDocument* pDoc = pDocSh->GetDocument();
     ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-    Date aActDate;
+    Date aActDate( Date::SYSTEM );
     double fDate = aActDate - *pFormatter->GetNullDate();
-    Time aActTime;
+    Time aActTime( Time::SYSTEM );
     double fTime =
         aActTime.Get100Sec() / 100.0 + aActTime.GetSec() +
         (aActTime.GetMin() * 60.0) + (aActTime.GetHour() * 3600.0);

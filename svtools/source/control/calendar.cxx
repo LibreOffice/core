@@ -291,6 +291,7 @@ Calendar::Calendar( Window* pParent, WinBits nWinStyle ) :
     maOldFormatLastDate( 0, 0, 1900 ),
     maFirstDate( 0, 0, 1900 ),
     maOldFirstDate( 0, 0, 1900 ),
+    maCurDate( Date::SYSTEM ),
     maOldCurDate( 0, 0, 1900 ),
     maAnchorDate( maCurDate ),
     maDropDate( 0, 0, 1900 )
@@ -867,7 +868,7 @@ void Calendar::ImplDrawDate( long nX, long nY,
     if ( nToday )
         aTodayDate.SetDate( nToday );
     else
-        aTodayDate = Date();
+        aTodayDate = Date( Date::SYSTEM );
     if ( (nDay   == aTodayDate.GetDay()) &&
          (nMonth == aTodayDate.GetMonth()) &&
          (nYear  == aTodayDate.GetYear()) )
@@ -932,7 +933,7 @@ void Calendar::ImplDraw( sal_Bool bPaint )
     long        nDeltaY;
     long        nDayX;
     long        nDayY;
-    sal_uLong       nToday = Date().GetDate();
+    sal_uLong       nToday = Date( Date::SYSTEM ).GetDate();
     sal_uInt16      nDay;
     sal_uInt16      nMonth;
     sal_uInt16      nYear;
@@ -2590,7 +2591,7 @@ IMPL_LINK( CalendarField, ImplClickHdl, PushButton*, pBtn )
 
     if ( pBtn == mpTodayBtn )
     {
-        Date aToday;
+        Date aToday( Date::SYSTEM );
         if ( (aToday != GetDate()) || IsEmptyDate() )
         {
             SetDate( aToday );
@@ -2643,7 +2644,7 @@ sal_Bool CalendarField::ShowDropDown( sal_Bool bShow )
             if ( maDefaultDate.IsValidAndGregorian() )
                 aDate = maDefaultDate;
             else
-                aDate = Date();
+                aDate = Date( Date::SYSTEM );
         }
         if ( pCalendar->GetStyle() & (WB_RANGESELECT | WB_MULTISELECT) )
         {

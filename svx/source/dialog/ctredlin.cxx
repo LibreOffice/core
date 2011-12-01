@@ -65,6 +65,8 @@ static long nStaticTabs[]=
 #define CALC_DATE       3
 
 RedlinData::RedlinData()
+    :
+        aDateTime( DateTime::EMPTY )
 {
     bDisabled=sal_False;
     pData=NULL;
@@ -146,7 +148,11 @@ void SvLBoxColorString::Paint( const Point& rPos, SvLBox& rDev,
 //----------------------------------------------------------------------------
 
 SvxRedlinTable::SvxRedlinTable(SvxSimpleTableContainer& rParent,WinBits nBits)
-    : SvxSimpleTable(rParent,nBits)
+    : SvxSimpleTable(rParent,nBits),
+    aDaTiFirst( DateTime::EMPTY ),
+    aDaTiLast( DateTime::EMPTY ),
+    aDaTiFilterFirst( DateTime::EMPTY ),
+    aDaTiFilterLast( DateTime::EMPTY )
 {
     bAuthor=sal_False;
     bDate=sal_False;
@@ -158,7 +164,11 @@ SvxRedlinTable::SvxRedlinTable(SvxSimpleTableContainer& rParent,WinBits nBits)
 }
 
 SvxRedlinTable::SvxRedlinTable(SvxSimpleTableContainer& rParent,const ResId& rResId)
-    : SvxSimpleTable(rParent,rResId)
+    : SvxSimpleTable(rParent,rResId),
+    aDaTiFirst( DateTime::EMPTY ),
+    aDaTiLast( DateTime::EMPTY ),
+    aDaTiFilterFirst( DateTime::EMPTY ),
+    aDaTiFilterLast( DateTime::EMPTY )
 {
     bAuthor=sal_False;
     bDate=sal_False;
@@ -232,7 +242,7 @@ void SvxRedlinTable::SetCalcView(sal_Bool bFlag)
 
 void SvxRedlinTable::UpdateFilterTest()
 {
-    Date aDateMax;
+    Date aDateMax( Date::SYSTEM );
     sal_uInt16 nYEAR=aDateMax.GetYear()+100;
     aDateMax.SetYear(nYEAR);
     Date aDateMin(1,1,1989);
@@ -797,8 +807,8 @@ SvxTPFilter::SvxTPFilter( Window * pParent)
     RowEnableHdl(&aCbRange);
     RowEnableHdl(&aCbComment);
 
-    Date aDate;
-    Time aTime;
+    Date aDate( Date::SYSTEM );
+    Time aTime( Time::SYSTEM );
     aDfDate.SetDate(aDate);
     aTfDate.SetTime(aTime);
     aDfDate2.SetDate(aDate);
@@ -1177,8 +1187,8 @@ IMPL_LINK( SvxTPFilter, RowEnableHdl, CheckBox*, pCB )
 
 IMPL_LINK( SvxTPFilter, TimeHdl, ImageButton*,pIB )
 {
-    Date aDate;
-    Time aTime;
+    Date aDate( Date::SYSTEM );
+    Time aTime( Time::SYSTEM );
     if(pIB==&aIbClock)
     {
         aDfDate.SetDate(aDate);
@@ -1275,7 +1285,7 @@ void SvxTPFilter::Disable( bool bChild)
 IMPL_LINK( SvxTPFilter, ModifyDate, void*,pTF)
 {
 
-    Date aDate;
+    Date aDate( Date::SYSTEM );
     Time aTime(0);
     if(&aDfDate==pTF)
     {

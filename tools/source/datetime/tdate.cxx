@@ -137,7 +137,7 @@ static void DaysToDate( long nDays,
 
 // =======================================================================
 
-Date::Date()
+Date::Date( DateInitSystem )
 {
 #if defined WNT
     SYSTEMTIME aDateTime;

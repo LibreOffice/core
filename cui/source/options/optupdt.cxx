@@ -133,8 +133,8 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
         TimeValue   lastCheckedTV;
         oslDateTime lastCheckedDT;
 
-        Date  aDate;
-        Time  aTime;
+        Date  aDate( Date::EMPTY );
+        Time  aTime( Time::EMPTY );
 
         lastCheckedTV.Seconds = (sal_uInt32) lastChecked;
         osl_getLocalTimeFromSystemTime( &lastCheckedTV, &lastCheckedTV );

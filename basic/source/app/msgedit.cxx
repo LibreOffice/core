@@ -136,8 +136,8 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
                     {
                         SvtSysLocale aLocale;
                         LogMsg->aDebugData.aMsg = GEN_RES_STR2( S_PROG_START,
-                                aLocale.GetLocaleData().getDate(Date()),
-                                aLocale.GetLocaleData().getTime(Time()) );
+                                aLocale.GetLocaleData().getDate(Date( Date::SYSTEM)),
+                                aLocale.GetLocaleData().getTime(Time( Time::SYSTEM)) );
                         aUILogMsg = pBasicFrame->GenRealString( LogMsg->aDebugData.aMsg );
                     }
                     AddRun( aUILogMsg, LogMsg->aDebugData ); break;

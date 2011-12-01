@@ -76,7 +76,7 @@ typedef vector< OUString* > StringList_Impl;
 void AppendDateTime_Impl( const util::DateTime rDT,
                           String& rRow, const LocaleDataWrapper& rWrapper )
 {
-    DateTime aDT;
+    DateTime aDT( DateTime::EMPTY );
     CONVERT_DATETIME( rDT, aDT );
     String aDateStr = rWrapper.getDate( aDT );
     aDateStr += String::CreateFromAscii( ", " );

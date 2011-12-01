@@ -218,6 +218,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
 }
 
 SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal_Bool bLoadRefCounts):
+    aReadDate( DateTime::EMPTY ),
     maMaPag(1024,32,32),
     maPages(1024,32,32)
 {
@@ -230,6 +231,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal
 }
 
 SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal_Bool bLoadRefCounts):
+    aReadDate( DateTime::EMPTY ),
     maMaPag(1024,32,32),
     maPages(1024,32,32),
     aTablePath(rPath)
@@ -243,6 +245,7 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbed
 }
 
 SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, sal_Bool bLoadRefCounts):
+    aReadDate( DateTime::EMPTY ),
     maMaPag(1024,32,32),
     maPages(1024,32,32)
 {
@@ -255,6 +258,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, boo
 }
 
 SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, sal_Bool bLoadRefCounts):
+    aReadDate( DateTime::EMPTY ),
     maMaPag(1024,32,32),
     maPages(1024,32,32),
     aTablePath(rPath)
@@ -270,6 +274,7 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbed
 SdrModel::SdrModel(const SdrModel& /*rSrcModel*/):
     SfxBroadcaster(),
     tools::WeakBase< SdrModel >(),
+    aReadDate( DateTime::EMPTY ),
     maMaPag(1024,32,32),
     maPages(1024,32,32)
 {

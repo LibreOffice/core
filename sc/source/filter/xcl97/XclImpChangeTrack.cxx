@@ -318,7 +318,7 @@ void XclImpChangeTrack::ReadChTrInfo()
     pStrm->Seek( 148 );
     if( !pStrm->IsValid() ) return;
 
-    DateTime aDateTime;
+    DateTime aDateTime( DateTime::EMPTY );
     ReadDateTime( aDateTime );
     if( pStrm->IsValid() )
         pChangeTrack->SetFixDateTimeLocal( aDateTime );

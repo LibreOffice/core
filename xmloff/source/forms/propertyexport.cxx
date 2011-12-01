@@ -595,7 +595,7 @@ namespace xmloff
                 ::com::sun::star::util::DateTime aDateTime;
                 if (_rValue >>= aDate)
                 {
-                    Date aToolsDate;
+                    Date aToolsDate( Date::EMPTY );
                     ::utl::typeConvert(aDate, aToolsDate);
                     fValue = aToolsDate.GetDate();
                 }
@@ -606,7 +606,7 @@ namespace xmloff
                 }
                 else if (_rValue >>= aDateTime)
                 {
-                    DateTime aToolsDateTime;
+                    DateTime aToolsDateTime( DateTime::EMPTY );
                     ::utl::typeConvert(aDateTime, aToolsDateTime);
                     // the time part (the digits behind the comma)
                     fValue = ((aDateTime.Hours * 60 + aDateTime.Minutes) * 60 + aDateTime.Seconds) * 100 + aDateTime.HundredthSeconds;

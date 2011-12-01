@@ -6285,10 +6285,10 @@ void PPTFieldEntry::SetDateTime( sal_uInt32 nVal )
     SvxTimeFormat eTimeFormat;
     GetDateTime( nVal, eDateFormat, eTimeFormat );
     if ( eDateFormat != SVXDATEFORMAT_APPDEFAULT )
-        pField1 = new SvxFieldItem( SvxDateField( Date(), SVXDATETYPE_VAR, eDateFormat ), EE_FEATURE_FIELD );
+        pField1 = new SvxFieldItem( SvxDateField( Date( Date::SYSTEM ), SVXDATETYPE_VAR, eDateFormat ), EE_FEATURE_FIELD );
     if ( eTimeFormat != SVXTIMEFORMAT_APPDEFAULT )
     {
-        SvxFieldItem* pFieldItem = new SvxFieldItem( SvxExtTimeField( Time(), SVXTIMETYPE_VAR, eTimeFormat ), EE_FEATURE_FIELD );
+        SvxFieldItem* pFieldItem = new SvxFieldItem( SvxExtTimeField( Time( Time::SYSTEM ), SVXTIMETYPE_VAR, eTimeFormat ), EE_FEATURE_FIELD );
         if ( pField1 )
             pField2 = pFieldItem;
         else
@@ -6680,7 +6680,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                     if ( pEntry->pString == NULL )
                                                     {
                                                         // Handle as previously
-                                                        pEntry->pField1 = new SvxFieldItem( SvxDateField( Date(), SVXDATETYPE_FIX ), EE_FEATURE_FIELD );
+                                                        pEntry->pField1 = new SvxFieldItem( SvxDateField( Date( Date::SYSTEM ), SVXDATETYPE_FIX ), EE_FEATURE_FIELD );
                                                     }
                                                 }
                                             }

@@ -1909,6 +1909,8 @@ void WW8_WrPlcFtnEdn::Append( WW8_CP nCp, const SwFmtFtn& rFtn )
 }
 
 WW8_Annotation::WW8_Annotation(const SwPostItField* pPostIt)
+    :
+        maDateTime( DateTime::EMPTY )
 {
     mpRichText = pPostIt->GetTextObject();
     if (!mpRichText)
@@ -1917,7 +1919,10 @@ WW8_Annotation::WW8_Annotation(const SwPostItField* pPostIt)
     maDateTime = DateTime(pPostIt->GetDate(), pPostIt->GetTime());
 }
 
-WW8_Annotation::WW8_Annotation(const SwRedlineData* pRedline) : mpRichText(0)
+WW8_Annotation::WW8_Annotation(const SwRedlineData* pRedline)
+    :
+        mpRichText(0),
+        maDateTime( DateTime::EMPTY )
 {
     msSimpleText = pRedline->GetComment();
     msOwner = SW_MOD()->GetRedlineAuthor(pRedline->GetAuthor());

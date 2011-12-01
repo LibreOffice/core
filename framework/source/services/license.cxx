@@ -239,7 +239,7 @@ static sal_Bool _parseDateTime(const ::rtl::OUString& aString, DateTime& aDateTi
 static ::rtl::OUString _getCurrentDateString()
 {
     ::rtl::OUString aString;
-    return _makeDateTimeString(DateTime());
+    return _makeDateTimeString(DateTime( DateTime::SYSTEM));
 }
 
 // execution of license check...
@@ -328,7 +328,7 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
 
             // compare dates
             DateTime aLicenseDateTime = _oslDateTimeToDateTime(aDateTimeVal);
-            DateTime aAcceptDateTime;
+            DateTime aAcceptDateTime( DateTime::EMPTY);
             if (!_parseDateTime(aAcceptDate, aAcceptDateTime))
                 return makeAny(sal_False);
 

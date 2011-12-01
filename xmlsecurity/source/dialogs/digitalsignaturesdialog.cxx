@@ -469,7 +469,7 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
                 maSignatureHelper.AddForSigning( nSecurityId, aElements[n], aElements[n], bBinaryMode );
             }
 
-            maSignatureHelper.SetDateTime( nSecurityId, Date(), Time() );
+            maSignatureHelper.SetDateTime( nSecurityId, Date( Date::SYSTEM ), Time( Time::SYSTEM ) );
 
             // We open a signature stream in which the existing and the new
             //signature is written. ImplGetSignatureInformation (later in this function) will

@@ -1063,12 +1063,12 @@ void TestToolObj::WaitForAnswer ()
     }
     else
     {
-        Time Ende;
+        Time Ende( Time::SYSTEM );
 
         Ende += pImpl->aServerTimeout;
         SvStream *pTemp = NULL;
 
-        while ( !bReturnOK && Ende > Time() )
+        while ( !bReturnOK && Ende > Time( Time::SYSTEM ) )
         {
             if ( pTemp )
             {

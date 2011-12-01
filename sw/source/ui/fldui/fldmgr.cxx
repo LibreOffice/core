@@ -869,7 +869,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
         case TYP_POSTITFLD:
         {
             SwPostItFieldType* pType = (SwPostItFieldType*)pCurShell->GetFldType(0, RES_POSTITFLD);
-            pFld = new SwPostItField(pType, rData.sPar1, rData.sPar2, DateTime());
+            pFld = new SwPostItField(pType, rData.sPar1, rData.sPar2, DateTime( DateTime::SYSTEM ));
             break;
         }
         case TYP_SCRIPTFLD:
@@ -1716,12 +1716,12 @@ sal_uLong SwFldMgr::GetDefaultFormat(sal_uInt16 nTypeId, sal_Bool bIsText, SvNum
         case TYP_TIMEFLD:
         case TYP_DATEFLD:
         {
-            Date aDate;
+            Date aDate( Date::SYSTEM );
             Date* pNullDate = pFormatter->GetNullDate();
 
             fValue = aDate - *pNullDate;
 
-            Time aTime;
+            Time aTime( Time::SYSTEM );
 
             sal_uLong nNumFmtTime = (sal_uLong)aTime.GetSec() + (sal_uLong)aTime.GetMin() * 60L +
                           (sal_uLong)aTime.GetHour() * 3600L;

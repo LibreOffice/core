@@ -263,7 +263,7 @@ ORowSetValue OOp_CurDate::operate(const ::std::vector<ORowSetValue>& lhs) const
     if ( !lhs.empty() )
         return ORowSetValue();
 
-    Date aCurDate;
+    Date aCurDate( Date::SYSTEM );
     return ::com::sun::star::util::Date(aCurDate.GetDay(),aCurDate.GetMonth(),aCurDate.GetYear());
 }
 //------------------------------------------------------------------
@@ -272,7 +272,7 @@ ORowSetValue OOp_CurTime::operate(const ::std::vector<ORowSetValue>& lhs) const
     if ( !lhs.empty() )
         return ORowSetValue();
 
-    Time aCurTime;
+    Time aCurTime( Time::SYSTEM );
     return ::com::sun::star::util::Time(aCurTime.Get100Sec(),aCurTime.GetSec(),aCurTime.GetMin(),aCurTime.GetHour());
 }
 //------------------------------------------------------------------
@@ -281,7 +281,7 @@ ORowSetValue OOp_Now::operate(const ::std::vector<ORowSetValue>& lhs) const
     if ( !lhs.empty() )
         return ORowSetValue();
 
-    DateTime aCurTime;
+    DateTime aCurTime( DateTime::SYSTEM );
     return ::com::sun::star::util::DateTime(aCurTime.Get100Sec(),aCurTime.GetSec(),aCurTime.GetMin(),aCurTime.GetHour(),
                                             aCurTime.GetDay(),aCurTime.GetMonth(),aCurTime.GetYear());
 }

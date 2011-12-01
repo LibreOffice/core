@@ -287,7 +287,7 @@ void xforms_nowFunction(xmlXPathParserContextPtr ctxt, int /*nargs*/)
     be omitted or, if present, the time zone must be Coordinated Universal Time (UTC)
     indicated by a "Z".
     */
-    DateTime aDateTime;
+    DateTime aDateTime( DateTime::SYSTEM );
     ::rtl::OString aDateTimeString = makeDateTimeString(aDateTime);
     xmlChar *pString = static_cast<xmlChar*>(xmlMalloc(aDateTimeString.getLength()+1));
     strncpy((char*)pString, (char*)aDateTimeString.getStr(), aDateTimeString.getLength());
@@ -347,7 +347,7 @@ void xforms_daysFromDateFunction(xmlXPathParserContextPtr ctxt, int nargs)
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
     ::rtl::OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
 
-    DateTime aDateTime;
+    DateTime aDateTime( DateTime::EMPTY );
     if (parseDateTime(aString, aDateTime))
     {
         Date aReferenceDate(1, 1, 1970);
@@ -370,7 +370,7 @@ void xforms_secondsFromDateTimeFunction(xmlXPathParserContextPtr ctxt, int nargs
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
     ::rtl::OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
 
-    DateTime aDateTime;
+    DateTime aDateTime( DateTime::EMPTY );
 
     if (parseDateTime(aString, aDateTime))
     {

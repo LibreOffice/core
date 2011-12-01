@@ -491,9 +491,9 @@ void SpaPrinterController::printPage( int ) const
     aPrintText.appendAscii( "\n: " );
     aPrintText.append( aInfo.m_aComment );
     aPrintText.appendAscii( "\n: " );
-    aPrintText.append( rLocaleWrapper.getDate( Date() ) );
+    aPrintText.append( rLocaleWrapper.getDate( Date( Date::SYSTEM ) ) );
     aPrintText.appendAscii( "\n: " );
-    aPrintText.append( rLocaleWrapper.getTime( Time() ) );
+    aPrintText.append( rLocaleWrapper.getTime( Time( Time::SYSTEM ) ) );
 
     pPrinter->DrawText( Rectangle( Point( 1100 + nMaxWidth, 1000 ),
                                     Size( aPaperSize.Width() - 2100 - nMaxWidth,

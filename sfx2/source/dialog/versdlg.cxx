@@ -66,6 +66,7 @@ struct SfxVersionInfo
 
                             SfxVersionInfo();
                             SfxVersionInfo( const SfxVersionInfo& rInfo )
+                                : aCreationDate( DateTime::EMPTY )
                             { *this = rInfo; }
 
     SfxVersionInfo&         operator=( const SfxVersionInfo &rInfo )
@@ -142,6 +143,7 @@ SfxVersionTableDtor& SfxVersionTableDtor::operator=( const SfxVersionTableDtor& 
 
 //----------------------------------------------------------------
 SfxVersionInfo::SfxVersionInfo()
+    : aCreationDate( DateTime::EMPTY )
 {
 }
 
@@ -325,7 +327,7 @@ void SfxVersionDialog::Open_Impl()
 void SfxVersionDialog::RecalcDateColumn()
 {
     // recalculate the datetime column width
-    DateTime aNow;
+    DateTime aNow( DateTime::SYSTEM );
     mpLocaleWrapper = new LocaleDataWrapper(
         ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
     String sDateTime = ConvertDateTime_Impl( aNow, *mpLocaleWrapper );

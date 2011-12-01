@@ -150,7 +150,7 @@ void TTProfiler::EndProfileInterval()
 
 void TTProfiler::GetProfileSnapshot( ProfileSnapshot *pProfileSnapshot )
 {
-    pProfileSnapshot->aTime = Time();
+    pProfileSnapshot->aTime = Time( Time::SYSTEM );
     pProfileSnapshot->nProcessTicks = Time::GetProcessTicks();
     pProfileSnapshot->nSystemTicks = Time::GetSystemTicks();
 }

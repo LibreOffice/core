@@ -575,8 +575,8 @@ void HeaderFooterTabPage::FillFormatList( int eFormat )
 
     maCBDateTimeFormat.Clear();
 
-    Date aDate;
-    Time aTime;
+    Date aDate( Date::SYSTEM );
+    Time aTime( Time::SYSTEM );
 
     int nFormat;
     for( nFormat = 0; nFormat < nDateTimeFormatsCount; nFormat++ )

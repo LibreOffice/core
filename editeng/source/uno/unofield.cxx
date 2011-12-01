@@ -339,7 +339,7 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
                     sal_Bool bFixed = ((SvxDateField*)pData)->GetType() == SVXDATETYPE_FIX;
                     mpImpl->maDateTime = getDate( bFixed ?
                                             ((SvxDateField*)pData)->GetFixDate() :
-                                            Date().GetDate() );
+                                            Date( Date::SYSTEM ).GetDate() );
                     mpImpl->mnInt32 = ((SvxDateField*)pData)->GetFormat();
                     mpImpl->mbBoolean1 = bFixed;
                 }

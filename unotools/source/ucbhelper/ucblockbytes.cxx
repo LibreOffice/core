@@ -1241,7 +1241,8 @@ static sal_Bool _UCBOpenContentSync(
 
 //----------------------------------------------------------------------------
 UcbLockBytes::UcbLockBytes( UcbLockBytesHandler* pHandler )
-    : m_xInputStream (NULL)
+    : m_aExpireDate( DateTime::EMPTY )
+    , m_xInputStream (NULL)
     , m_pCommandThread( NULL )
     , m_xHandler( pHandler )
     , m_nError( ERRCODE_NONE )

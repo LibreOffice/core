@@ -201,7 +201,7 @@ sal_Bool TaskStatusBar::ImplUpdateClock()
 {
     if ( mnFieldFlags & TASKSTATUSFIELD_CLOCK )
     {
-        Time aTime;
+        Time aTime( Time::SYSTEM );
         maTimer.SetTimeout( ((long)60000)-((aTime.GetSec()*1000)+(aTime.Get100Sec()*10)) );
         if ( (aTime.GetMin()  != maTime.GetMin()) ||
              (aTime.GetHour() != maTime.GetHour()) )
@@ -457,7 +457,7 @@ void TaskStatusBar::RequestHelp( const HelpEvent& rHEvt )
                 const LocaleDataWrapper& rLDW = aSL.GetLocaleData();
                 CalendarWrapper aCal( rLDW.getServiceFactory());
                 aCal.loadDefaultCalendar( rLDW.getLoadedLocale());
-                XubString aStr = rLDW.getLongDate( Date(), aCal );
+                XubString aStr = rLDW.getLongDate( Date( Date::SYSTEM), aCal );
                 if ( rHEvt.GetMode() & HELPMODE_BALLOON )
                     Help::ShowBalloon( this, aItemRect.Center(), aItemRect, aStr );
                 else

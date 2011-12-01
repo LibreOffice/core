@@ -135,7 +135,7 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
     else
     {
         LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-        aDateStr = aLocaleWrapper.getDate( Date() );
+        aDateStr = aLocaleWrapper.getDate( Date( Date::SYSTEM ) );
     }
 
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_TEXT );
@@ -218,8 +218,8 @@ IMPL_LINK_INLINE_END( SvxPostItDialog, NextHdl, Button *, EMPTYARG )
 
 IMPL_LINK( SvxPostItDialog, Stamp, Button *, EMPTYARG )
 {
-    Date aDate;
-    Time aTime;
+    Date aDate( Date::SYSTEM );
+    Time aTime( Time::SYSTEM );
     String aTmp( SvtUserOptions().GetID() );
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
     String aStr( aEditED.GetText() );
@@ -251,7 +251,7 @@ IMPL_LINK( SvxPostItDialog, OKHdl, Button *, EMPTYARG )
     pOutSet = new SfxItemSet( rSet );
     pOutSet->Put( SvxPostItAuthorItem( SvtUserOptions().GetID(),
                                          rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_AUTHOR ) ) );
-    pOutSet->Put( SvxPostItDateItem( aLocaleWrapper.getDate( Date() ),
+    pOutSet->Put( SvxPostItDateItem( aLocaleWrapper.getDate( Date( Date::SYSTEM ) ),
                                      rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_DATE ) ) );
     pOutSet->Put( SvxPostItTextItem( aEditED.GetText(),
                                      rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_TEXT ) ) );

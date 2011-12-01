@@ -1500,12 +1500,12 @@ private:
             // Collect some frequently used data.
             if (mpOptions->IsDate())
             {
-                aInfo.msTimeDate += GetSdrGlobalData().GetLocaleData()->getDate( Date() );
+                aInfo.msTimeDate += GetSdrGlobalData().GetLocaleData()->getDate( Date( Date::SYSTEM ) );
                 aInfo.msTimeDate += ::rtl::OUString((sal_Unicode)' ');
             }
 
             if (mpOptions->IsTime())
-                aInfo.msTimeDate += GetSdrGlobalData().GetLocaleData()->getTime( Time(), sal_False, sal_False );
+                aInfo.msTimeDate += GetSdrGlobalData().GetLocaleData()->getTime( Time( Time::SYSTEM ), sal_False, sal_False );
             aInfo.maPrintSize = aInfo.mpPrinter->GetOutputSize();
             maPrintSize = awt::Size(
                 aInfo.mpPrinter->GetPaperSize().Width(),

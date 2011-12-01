@@ -46,6 +46,8 @@ struct AutoTextGroup
     String      sLongNames;   // by 0x0A seperated long names
     String      sShortNames;  // by 0x0A seperated short names
     DateTime    aDateModified;
+
+    AutoTextGroup() : aDateModified( DateTime::EMPTY ) {}
 };
 
 

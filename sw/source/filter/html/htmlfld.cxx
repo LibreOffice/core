@@ -339,7 +339,7 @@ void SwHTMLParser::NewField()
     case RES_TIMEFLD:
         {
             sal_uLong nNumFmt = 0;
-            sal_uLong nTime = Time().GetTime(), nDate = Date().GetDate();
+            sal_uLong nTime = Time( Time::SYSTEM ).GetTime(), nDate = Date( Date::SYSTEM ).GetDate();
             sal_uInt16 nSub = 0;
             sal_Bool bValidFmt = sal_False;
             HTMLNumFmtTblEntry * pFmtTbl;
@@ -659,7 +659,7 @@ void SwHTMLParser::InsertComment( const String& rComment, const sal_Char *pTag )
 
     SwPostItField aPostItFld(
                     (SwPostItFieldType*)pDoc->GetSysFldType( RES_POSTITFLD ),
-                    aEmptyStr, aComment, DateTime() );
+                    aEmptyStr, aComment, DateTime( DateTime::SYSTEM ) );
     InsertAttr( SwFmtFld( aPostItFld ) );
 
     if( bMoveFwd )

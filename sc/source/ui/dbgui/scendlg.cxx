@@ -107,9 +107,9 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, sal_Bo
     aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ", " ));
     aComment += String( ScResId( STR_ON ) );
     aComment += ' ';
-    aComment += ScGlobal::GetpLocaleData()->getDate( Date() );
+    aComment += ScGlobal::GetpLocaleData()->getDate( Date( Date::SYSTEM ) );
     aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ", " ));
-    aComment += ScGlobal::GetpLocaleData()->getTime( Time() );
+    aComment += ScGlobal::GetpLocaleData()->getTime( Time( Time::SYSTEM ) );
 
     aEdComment  .SetText( aComment );
     aEdName     .SetText( rName );

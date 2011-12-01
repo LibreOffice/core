@@ -294,7 +294,7 @@ namespace pcr
             util::DateTime aUNODateTime;
             OSL_VERIFY( _rValue >>= aUNODateTime );
 
-            ::DateTime aDateTime;
+            ::DateTime aDateTime( ::DateTime::EMPTY );
             ::utl::typeConvert( aUNODateTime, aDateTime );
 
             double nValue = aDateTime - ::DateTime( *getTypedControlWindow()->GetFormatter()->GetNullDate() );

@@ -43,6 +43,9 @@ ScChangeViewSettings::~ScChangeViewSettings()
 }
 
 ScChangeViewSettings::ScChangeViewSettings( const ScChangeViewSettings& r )
+    :
+        aFirstDateTime( DateTime::EMPTY ),
+        aLastDateTime( DateTime::EMPTY )
 {
     SetTheComment(r.aComment);
 
@@ -155,7 +158,7 @@ void ScChangeViewSettings::AdjustDateMode( const ScDocument& rDoc )
                 aFirstDateTime.SetDate( 18990101 );
                 aFirstDateTime.SetTime( 0 );
             }
-            aLastDateTime = Date();
+            aLastDateTime = Date( Date::SYSTEM );
             aLastDateTime.SetYear( aLastDateTime.GetYear() + 100 );
         }
         break;

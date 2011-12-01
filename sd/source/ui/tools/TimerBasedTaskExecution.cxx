@@ -147,14 +147,14 @@ IMPL_LINK(TimerBasedTaskExecution,TimerCallback, Timer*,EMPTYARG)
             // Execute as many steps as fit into the time span of length
             // mnMaxTimePerStep.  Note that the last step may take longer
             // than allowed.
-            sal_uInt32 nStartTime (Time().GetMSFromTime());
+            sal_uInt32 nStartTime (Time( Time::SYSTEM ).GetMSFromTime());
 #ifdef VERBOSE
             OSL_TRACE("starting TimerBasedTaskExecution at %d", nStartTime);
 #endif
             do
             {
                 mpTask->RunNextStep();
-                sal_uInt32 nDuration (Time().GetMSFromTime()-nStartTime);
+                sal_uInt32 nDuration (Time( Time::SYSTEM ).GetMSFromTime()-nStartTime);
 #ifdef VERBOSE
             OSL_TRACE("executed step in %d", nDuration);
 #endif

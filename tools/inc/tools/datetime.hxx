@@ -40,7 +40,19 @@
 class TOOLS_DLLPUBLIC DateTime : public Date, public Time
 {
 public:
-                    DateTime() : Date(), Time() {}
+
+    enum DateTimeInitSystem
+    {
+        SYSTEM
+    };
+    // temporary until all uses are inspected and resolved
+    enum DateTimeInitEmpty
+    {
+        EMPTY
+    };
+
+                    DateTime( DateTimeInitEmpty ) : Date( Date::EMPTY ), Time( Time::EMPTY ) {}
+                    DateTime( DateTimeInitSystem ) : Date( Date::SYSTEM ), Time( Time::SYSTEM ) {}
                     DateTime( const DateTime& rDateTime ) :
                         Date( rDateTime ), Time( rDateTime ) {}
                     DateTime( const Date& rDate ) : Date( rDate ), Time(0) {}

@@ -562,7 +562,7 @@ void JobData::disableJob()
     {
         // Convert and write the user timestamp to the configuration.
         css::uno::Any aValue;
-        aValue <<= Converter::convert_DateTime2ISO8601(DateTime());
+        aValue <<= Converter::convert_DateTime2ISO8601(DateTime( DateTime::SYSTEM));
         xPropSet->setPropertyValue(::rtl::OUString::createFromAscii(EVENTCFG_PROP_USERTIME), aValue);
     }
 

@@ -398,7 +398,7 @@ sal_Bool INetRFC822Message::ParseDateField (
                 sal_uInt16 nOffset = ParseNumber (aDateField, nIndex);
                 if (nOffset > 0)
                 {
-                    Time aDiff;
+                    Time aDiff( Time::EMPTY );
                     aDiff.SetHour   (nOffset / 100);
                     aDiff.SetMin    (nOffset % 100);
                     aDiff.SetSec    (0);
@@ -418,7 +418,7 @@ sal_Bool INetRFC822Message::ParseDateField (
         Time aDelta (0);
         aDelta.SetTime (aDateField.toInt32() * 100);
 
-        DateTime aNow;
+        DateTime aNow( DateTime::SYSTEM );
         aNow += aDelta;
         aNow.ConvertToUTC();
 
@@ -1112,7 +1112,7 @@ sal_Bool INetMIMEMessage::EnableAttachChild (INetMessageContainerType eType)
     {
         // Generate a unique boundary from current time.
         sal_Char sTail[16 + 1];
-        Time aCurTime;
+        Time aCurTime( Time::SYSTEM );
         sal_uInt64 nThis = reinterpret_cast< sal_uIntPtr >( this ); // we can be on a 64bit architecture
         nThis = ( ( nThis >> 32 ) ^ nThis ) & SAL_MAX_UINT32;
         sprintf (sTail, "%08X%08X",

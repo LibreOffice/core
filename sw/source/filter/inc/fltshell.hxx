@@ -232,7 +232,9 @@ public:
                  RedlineType_t   eTypePrev_    = nsRedlineType_t::REDLINE_INSERT,
                  sal_uInt16          nAutorNoPrev_ = USHRT_MAX,
                  const DateTime* pStampPrev_   = 0)
-        : SfxPoolItem(RES_FLTR_REDLINE), aStamp(rStamp_), eType(eType_),
+        : SfxPoolItem(RES_FLTR_REDLINE), aStamp(rStamp_),
+        aStampPrev( DateTime::EMPTY ),
+        eType(eType_),
         eTypePrev(eTypePrev_), nAutorNo(nAutorNo_), nAutorNoPrev(nAutorNoPrev_)
     {
             if( pStampPrev_ )

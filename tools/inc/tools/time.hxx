@@ -49,7 +49,20 @@ private:
     sal_Int32           nTime;
 
 public:
-                    Time();
+
+    enum TimeInitSystem
+    {
+        SYSTEM
+    };
+    // temporary until all uses are inspected and resolved
+    enum TimeInitEmpty
+    {
+        EMPTY
+    };
+
+                    Time( TimeInitEmpty )
+                        { nTime = 0; }
+                    Time( TimeInitSystem );
                     Time( const ResId & rResId );
                     Time( sal_Int32 _nTime ) { Time::nTime = _nTime; }
                     Time( const Time& rTime );

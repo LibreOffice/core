@@ -206,7 +206,7 @@ void SfxObjectShell::UpdateDocInfoForSave()
         else
         {
             // update ModificationAuthor, revision and editing time
-            ::DateTime now;
+            ::DateTime now( ::DateTime::SYSTEM );
             xDocProps->setModificationDate( util::DateTime(
                 now.Get100Sec(), now.GetSec(), now.GetMin(),
                 now.GetHour(), now.GetDay(), now.GetMonth(),
@@ -241,7 +241,7 @@ void SfxObjectShell::UpdateTime_Impl(
             secs/3600, (secs%3600)/60, secs%60, 0);
 
     // Initialize some local member! Its neccessary for wollow operations!
-    DateTime    aNow                    ;   // Date and time at current moment
+    DateTime    aNow( DateTime::SYSTEM );   // Date and time at current moment
     Time        n24Time     (24,0,0,0)  ;   // Time-value for 24 hours - see follow calculation
     sal_uIntPtr     nDays       = 0         ;   // Count of days between now and last editing
     Time        nAddTime    (0)         ;   // Value to add on aOldTime
@@ -1009,7 +1009,7 @@ void SfxObjectShell::ResetFromTemplate( const String& rTemplateName, const Strin
                 xDocProps->setTemplateURL( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );
                 xDocProps->setTemplateName( rTemplateName );
 
-                ::DateTime now;
+                ::DateTime now( ::DateTime::SYSTEM );
                 xDocProps->setTemplateDate( util::DateTime(
                     now.Get100Sec(), now.GetSec(), now.GetMin(),
                     now.GetHour(), now.GetDay(), now.GetMonth(),

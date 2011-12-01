@@ -2151,8 +2151,8 @@ RTLFUNC(Second)
 
 double Now_Impl()
 {
-    Date aDate;
-    Time aTime;
+    Date aDate( Date::SYSTEM );
+    Time aTime( Time::SYSTEM );
     double aSerial = (double)GetDayDiff( aDate );
     long nSeconds = aTime.GetHour();
     nSeconds *= 3600;
@@ -2180,7 +2180,7 @@ RTLFUNC(Time)
 
     if ( !bWrite )
     {
-        Time aTime;
+        Time aTime( Time::SYSTEM );
         SbxVariable* pMeth = rPar.Get( 0 );
         String aRes;
         if( pMeth->IsFixed() )
@@ -2232,7 +2232,7 @@ RTLFUNC(Timer)
     (void)pBasic;
     (void)bWrite;
 
-    Time aTime;
+    Time aTime( Time::SYSTEM );
     long nSeconds = aTime.GetHour();
     nSeconds *= 3600;
     nSeconds += aTime.GetMin() * 60;
@@ -2248,7 +2248,7 @@ RTLFUNC(Date)
 
     if ( !bWrite )
     {
-        Date aToday;
+        Date aToday( Date::SYSTEM );
         double nDays = (double)GetDayDiff( aToday );
         SbxVariable* pMeth = rPar.Get( 0 );
         if( pMeth->IsString() )
@@ -2922,8 +2922,8 @@ RTLFUNC(FileDateTime)
     else
     {
         String aPath = rPar.Get(1)->GetString();
-        Time aTime;
-        Date aDate;
+        Time aTime( Time::EMPTY );
+        Date aDate( Date::EMPTY );
         if( hasUno() )
         {
             com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();

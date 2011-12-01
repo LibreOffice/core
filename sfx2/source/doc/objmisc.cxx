@@ -1673,7 +1673,7 @@ void SfxHeaderAttributes_Impl::SetAttribute( const SvKeyValue& rKV )
     }
     else if( rKV.GetKey().CompareIgnoreCaseToAscii( "expires" ) == COMPARE_EQUAL )
     {
-        DateTime aDateTime;
+        DateTime aDateTime( DateTime::EMPTY );
         if( INetRFC822Message::ParseDateField( rKV.GetValue(), aDateTime ) )
         {
             aDateTime.ConvertToLocalTime();

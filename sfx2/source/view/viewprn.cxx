@@ -320,7 +320,7 @@ void SfxPrinterController::jobStarted()
         xDocProps->setPrintedBy( mpObjectShell->IsUseUserData()
             ? ::rtl::OUString( SvtUserOptions().GetFullName() )
             : ::rtl::OUString() );
-        ::DateTime now;
+        ::DateTime now( ::DateTime::SYSTEM );
 
         xDocProps->setPrintDate( util::DateTime(
             now.Get100Sec(), now.GetSec(), now.GetMin(), now.GetHour(),

@@ -780,7 +780,7 @@ bool lcl_ConvertFields(EditEngine& rEng, const String* pCommands)
         while ((nPos = aStr.Search(pCommands[2])) != STRING_NOTFOUND)
         {
             ESelection aSel( nPar,nPos, nPar,nPos+pCommands[2].Len() );
-            rEng.QuickInsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR), EE_FEATURE_FIELD), aSel );
+            rEng.QuickInsertField( SvxFieldItem(SvxDateField(Date( Date::SYSTEM ),SVXDATETYPE_VAR), EE_FEATURE_FIELD), aSel );
             lcl_SetSpace(aStr, aSel ); bChange = true;
         }
         while ((nPos = aStr.Search(pCommands[3])) != STRING_NOTFOUND)

@@ -101,7 +101,10 @@ short SwImpBlocks::GetFileType( const String& rFile )
 
 
 SwImpBlocks::SwImpBlocks( const String& rFile, sal_Bool )
-    : aFile( rFile ), pDoc( 0 ), nCur( (sal_uInt16)-1 ),
+    : aFile( rFile ),
+    aDateModified( Date::EMPTY ),
+    aTimeModified( Time::EMPTY ),
+    pDoc( 0 ), nCur( (sal_uInt16)-1 ),
     bReadOnly( sal_True ), bInPutMuchBlocks( sal_False )
 {
     FStatHelper::GetModifiedDateTimeOfFile( rFile,

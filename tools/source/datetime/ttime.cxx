@@ -86,7 +86,7 @@ static Time Sec100ToTime( sal_Int32 nSec100 )
 
 // =======================================================================
 
-Time::Time()
+Time::Time( TimeInitSystem )
 {
 #if defined( WNT )
     SYSTEMTIME aDateTime;

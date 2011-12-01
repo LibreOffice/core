@@ -990,7 +990,7 @@ sal_Bool StatementList::CheckWindowWait()
 {
     static Time StartTime = Time(0L);   // cancel if window doesn't want to close at all
     if ( StartTime == Time(0L) )
-        StartTime = Time();
+        StartTime = Time( Time::SYSTEM );
 
     if ( pWindowWaitPointer )
     {
@@ -1005,7 +1005,7 @@ sal_Bool StatementList::CheckWindowWait()
 #endif
 
 
-            if ( StartTime + Time(0,0,10) < Time() )
+            if ( StartTime + Time(0,0,10) < Time( Time::SYSTEM ) )
             {
 #if OSL_DEBUG_LEVEL > 1
                 m_pDbgWin->AddText( "Close timed out. Going on!! " );

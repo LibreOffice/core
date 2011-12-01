@@ -389,8 +389,8 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                         }
                         else
                         {
-                            Date aDate;
-                            Time aTime;
+                            Date aDate( Date::SYSTEM );
+                            Time aTime( Time::SYSTEM );
                             LanguageType eLang = pInfo->GetOutliner()->GetLanguage( pInfo->GetPara(), pInfo->GetPos() );
                             aRepresentation = SvxDateTimeField::GetFormatted( aDate, aTime, (SvxDateFormat)rSettings.meDateTimeFormat, *GetNumberFormatter(), eLang );
                         }

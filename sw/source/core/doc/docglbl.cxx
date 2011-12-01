@@ -244,7 +244,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
     utl::TempFile aTemp(sLeading,&sExt,&sPath );
     aTemp.EnableKillingFile();
 
-    DateTime aTmplDate;
+    DateTime aTmplDate( DateTime::SYSTEM );
     {
         Time a2Min( 0 ); a2Min.SetMin( 2 );
         aTmplDate += a2Min;

@@ -1202,6 +1202,7 @@ DisplayHidWin::DisplayHidWin()
 , pShow2( NULL )
 , pLastMouseMoveWin( NULL )
 , bOldShift( 0 )
+, aLatest( Time::SYSTEM )
 , nShiftCount( 0 )
 {
     SetOutStyle( TOOLBOX_STYLE_HANDPOINTER | TOOLBOX_STYLE_FLAT );
@@ -1332,17 +1333,17 @@ long DisplayHidWin::VCLEventHook( NotifyEvent& rEvt )
 
         if ( (  pMEvt->IsShift() && !bOldShift ) )    // Shift pressed
         {
-            if ( aLatest < Time() )
+            if ( aLatest < Time( Time::SYSTEM ) )
             {
                 nShiftCount = 0;
-                aLatest = Time()+Time( 0, 0, 0, 50 );
+                aLatest = Time( Time::SYSTEM )+Time( 0, 0, 0, 50 );
             }
             nShiftCount++;
         }
         if ( ( !pMEvt->IsShift() &&  bOldShift ) )    // Shift released
         {
             nShiftCount++;
-            if ( nShiftCount == 4 && aLatest > Time() )
+            if ( nShiftCount == 4 && aLatest > Time( Time::SYSTEM ) )
             {
                 bIsPermanentDraging = sal_False;
                 SetDraging( sal_False );
@@ -2246,10 +2247,10 @@ sal_Bool StatementCommand::Execute()
         case RC_AppDelay:
             if ( !bBool1 )
             {
-                nLNr1_and_Pointer.nLNr1 = Time().GetTime() + nNr1/10;
+                nLNr1_and_Pointer.nLNr1 = Time( Time::SYSTEM ).GetTime() + nNr1/10;
                 bBool1 = sal_True;
             }
-            if ( Time().GetTime() < sal_Int32(nLNr1_and_Pointer.nLNr1) )
+            if ( Time( Time::SYSTEM ).GetTime() < sal_Int32(nLNr1_and_Pointer.nLNr1) )
                 return sal_False;
             break;
         case RC_DisplayHid:
@@ -2455,10 +2456,10 @@ sal_Bool StatementCommand::Execute()
                 // E.g.: Floating toolbars on a Task which was hidden by another Task before
                 if ( !bBool2 )
                 {
-                    nLNr1_and_Pointer.nLNr1 = Time().GetTime() + 100; // 100 = 1 Second
+                    nLNr1_and_Pointer.nLNr1 = Time( Time::SYSTEM ).GetTime() + 100; // 100 = 1 Second
                     bBool2 = sal_True;
                 }
-                if ( Time().GetTime() < sal_Int32(nLNr1_and_Pointer.nLNr1) )
+                if ( Time( Time::SYSTEM ).GetTime() < sal_Int32(nLNr1_and_Pointer.nLNr1) )
                     return sal_False;
                 else
                     pRet->GenReturn ( RET_Value, nMethodId, aString1);
@@ -2470,7 +2471,7 @@ sal_Bool StatementCommand::Execute()
                     nNr1 = 1000;    // defaults to 1000 = 1 Sec.
                 if ( !bBool1 )
                 {
-                    nLNr1_and_Pointer.nLNr1 = Time().GetTime() + nNr1/10;
+                    nLNr1_and_Pointer.nLNr1 = Time( Time::SYSTEM ).GetTime() + nNr1/10;
                     bBool1 = sal_True;
                 }
 
@@ -2478,7 +2479,7 @@ sal_Bool StatementCommand::Execute()
                     pRet->GenReturn ( RET_Value, nMethodId, comm_UINT16(CONST_WSFinished) );
                 else
                 {
-                    if ( Time().GetTime() < sal_Int32(nLNr1_and_Pointer.nLNr1) )
+                    if ( Time( Time::SYSTEM ).GetTime() < sal_Int32(nLNr1_and_Pointer.nLNr1) )
                         return sal_False;
                     pRet->GenReturn ( RET_Value, nMethodId, comm_UINT16(CONST_WSTimeout) );
                 }
@@ -4051,7 +4052,7 @@ sal_Bool StatementControl::HandleCommonMethods( Window *pControl )
                 pDlg->SetText(UniString("Schlie�en", RTL_TEXTENCODING_ISO_8859_1));
                 pDlg->Show();
                 pMyEd->Show();
-                sal_uLong nTime = Time().GetTime();
+                sal_uLong nTime = Time( Time::SYSTEM ).GetTime();
 
                 while (pDlg->IsVisible())
                 {
@@ -4060,9 +4061,10 @@ sal_Bool StatementControl::HandleCommonMethods( Window *pControl )
                         SafeReschedule();
                     Point Pos = pControl->GetPointerPosPixel();
                     Size Siz=pControl->GetOutputSizePixel();
-                    if ( Time().GetTime() - nTime > 10 )
+                    Time aSysTime( Time::SYSTEM );
+                    if ( aSysTime.GetTime() - nTime > 10 )
                     {
-                        nTime = Time().GetTime();
+                        nTime = aSysTime.GetTime();
                         pMyEd->SetText(UniString::CreateFromInt32(Pos.X()*100/Siz.Width()).AppendAscii("%x").Append( UniString::CreateFromInt32(Pos.Y()*100/Siz.Height()) ).Append('%'));
                     }
                 }
@@ -4391,7 +4393,7 @@ sal_Bool StatementControl::Execute()
     {
         case M_Exists:
         case M_NotExists:
-            Time aT;
+            Time aT( Time::SYSTEM );
             sal_uInt16 aSeconds = aT.GetMin()*60+aT.GetSec();
             if ( !bBool2 )          // has been set to sal_False in the constructor
             {
@@ -5148,8 +5150,8 @@ sal_Bool StatementControl::Execute()
                                         // Wait for the window to open.
                                         StatementList::bExecuting = sal_True;
                                         {
-                                            Time aDelay;
-                                            while ( !pWin && ( (pWin = GetPopupFloatingWin()) == NULL ) && ( Time() - aDelay ).GetSec() < 15 )
+                                            Time aDelay( Time::SYSTEM );
+                                            while ( !pWin && ( (pWin = GetPopupFloatingWin()) == NULL ) && ( Time( Time::SYSTEM ) - aDelay ).GetSec() < 15 )
                                                 SafeReschedule();
                                         }
                                         StatementList::bExecuting = sal_False;
