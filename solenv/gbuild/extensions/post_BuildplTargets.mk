@@ -29,6 +29,69 @@
 
 ifeq ($(gb_SourceEnvAndRecurse_STAGE),buildpl)
 
+.DEFAULT_GOAL=all
+#include $(GBUILDDIR)/Module.mk
+
+.PHONY: build all
+
+all: build
+	@true
+        
+# fake targets -- whatever is requested from gbuild requires a full build before (dev-install for JunitTests)
+$(call gb_Package_get_target,%): build
+	@true
+
+$(call gb_Executable_get_target,%): build
+	@true
+
+$(call gb_Extension_get_target,%): build
+	@true
+
+$(call gb_ComponentsTarget_get_target,%): build
+	@true
+
+$(call gb_Jar_get_target,%): build
+	@true
+
+$(call gb_RdbTarget_get_target,%): build
+	@true
+
+$(call gb_Pyuno_get_target,%): build
+	@true
+
+$(call gb_WinResTarget_get_target,%): build
+	@true
+ 
+$(call gb_CppunitTest_get_target,%): build
+	@true
+
+$(call gb_Configuration_get_target,%): build
+	@true
+
+#$(call gb_StaticLibrary_get_target,%): build
+#	@true
+
+$(call gb_AllLangResTarget_get_target,%): build
+	@true
+
+$(call gb_ExternalLib_get_target,%): build
+	@true
+
+#$(call gb_Library_get_target,%): build
+#	@true
+
+$(call gb_Package_get_target,%): build
+	@true
+
+$(call gb_UnoApiTarget_get_target,%): build
+	@true
+
+$(call gb_Zip_get_target,%): build
+	@true
+
+$(call gb_JunitTest_get_target,%): dev-install
+	@true
+
 gb_MAKETARGET=all
 # if we have only build as target use build instead of all
 ifneq ($(strip $(MAKECMDGOALS)),)
@@ -39,7 +102,7 @@ endif
 
 gb_BuildplTarget_COMPLETEDTARGETS=
 define gb_BuildplTarget_command
-cd $(SRCDIR)/$(1) && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl $(if $(findstring s,$(MAKEFLAGS)),,VERBOSE=T) -P$(BUILD_NCPUS) $(2) -P$(GMAKE_PARALLELISM) gb_MAKETARGET=$(gb_MAKETARGET)
+cd $(SRCDIR)/$(1) && unset MAKEFLAGS && export gb_SourceEnvAndRecurse_STAGE=gbuild && $(SOLARENV)/bin/build.pl $(if $(findstring s,$(MAKEFLAGS)),,VERBOSE=T) -P$(BUILD_NCPUS) $(2) -- -P$(GMAKE_PARALLELISM) gb_MAKETARGET=$(gb_MAKETARGET)
 $(eval gb_BuildplTarget_COMPLETEDTARGETS+=$(1))
 endef
 
@@ -74,10 +137,21 @@ findunusedcode:
 #to be just removed, or put behind appropiate platform or debug level ifdefs
 	@grep ::.*\( unusedcode.all | grep -v ^cppu:: > unusedcode.easy
 
+subsequentcheck: dev-install
+
+clean:
+	@true
+
+check: subsequentcheck
+	@true
+
+unitcheck: build
+	@true
 
 endif # gb_SourceEnvAndRecurse_STAGE=buildpl
     
 ifeq ($(gb_SourceEnvAndRecurse_STAGE),gbuild)
+
 clean: clean-host clean-build
 
 dev-install: $(WORKDIR)/bootstrap  $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset) | build
@@ -90,6 +164,5 @@ findunusedcode:
 
 endif
 
-all: build
 
 # vim: set noet sw=4:

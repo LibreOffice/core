@@ -35,8 +35,10 @@ endif
 endif
 
 ifeq ($(strip $(gb_PARTIALBUILD)),)
-ifeq ($(filter-out clean distclean subsequentcheck unitcheck build dev-install smoketestoo_native instsetoo_native cross_toolset findunusedcode debugrun,$(MAKECMDGOALS)),)
+ifneq ($(strip $(MAKECMDGOALS)),)
+ifeq ($(filter-out clean distclean id tags docs distro-pack-install fetch help debugrun $(SRCDIR)/Env.Host.sh,$(MAKECMDGOALS)),)
 gb_SpeedUpTargets_WRAPPEDBUILD:=T
+endif
 endif
 endif
 
