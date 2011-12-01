@@ -41,9 +41,8 @@
 #include "vcl/unohelp.hxx"
 #include "vcl/window.hxx"
 
-#include <gtk/gtkprinter.h>
-#include <gtk/gtkprintsettings.h>
-#include <gtk/gtkprintunixdialog.h>
+#include <gtk/gtk.h>
+#include <gtk/gtkunixprint.h>
 
 #include <comphelper/processfactory.hxx>
 
@@ -388,6 +387,26 @@ lcl_extractHelpTextsOrIds(
     }
 }
 
+GtkWidget*
+lcl_combo_box_text_new()
+{
+#if GTK_CHECK_VERSION(3,0,0)
+    return gtk_combo_box_text_new();
+#else
+    return gtk_combo_box_new_text();
+#endif
+}
+
+void
+lcl_combo_box_text_append(GtkWidget* const pWidget, gchar const* const pText)
+{
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(pWidget), pText);
+#else
+    gtk_combo_box_append_text(GTK_COMBO_BOX(pWidget), pText);
+#endif
+}
+
 }
 
 GtkPrintDialog::GtkPrintDialog(vcl::PrinterController& io_rController)
@@ -615,11 +634,11 @@ GtkPrintDialog::impl_initCustomTab()
 
                 if (aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("List")))
                 {
-                   pWidget = gtk_combo_box_new_text();
+                   pWidget = lcl_combo_box_text_new();
 
                    for (sal_Int32 m = 0; m != aChoices.getLength(); m++)
                    {
-                       gtk_combo_box_append_text(GTK_COMBO_BOX(pWidget),
+                       lcl_combo_box_text_append(pWidget,
                            rtl::OUStringToOString(aChoices[m], RTL_TEXTENCODING_UTF8).getStr());
                    }
 

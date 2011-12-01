@@ -37,6 +37,8 @@ namespace vcl
 namespace unx
 {
 
+#if !GTK_CHECK_VERSION(3,0,0)
+
 GtkPrintWrapper::GtkPrintWrapper()
     : m_page_setup_new(0)
     , m_print_job_new(0)
@@ -63,9 +65,19 @@ GtkPrintWrapper::GtkPrintWrapper()
     impl_load();
 }
 
+#else
+
+GtkPrintWrapper::GtkPrintWrapper()
+{
+}
+
+#endif
+
 GtkPrintWrapper::~GtkPrintWrapper()
 {
 }
+
+#if !GTK_CHECK_VERSION(3,0,0)
 
 void GtkPrintWrapper::impl_load()
 {
@@ -98,8 +110,11 @@ void GtkPrintWrapper::impl_load()
     m_print_unix_dialog_set_has_selection = reinterpret_cast<print_unix_dialog_set_has_selection_t>(m_aModule.getFunctionSymbol("gtk_print_unix_dialog_set_has_selection"));
 }
 
+#endif
+
 bool GtkPrintWrapper::supportsPrinting() const
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     return
         m_page_setup_new
         && m_print_job_new
@@ -119,10 +134,14 @@ bool GtkPrintWrapper::supportsPrinting() const
         && m_print_unix_dialog_get_settings
         && m_print_unix_dialog_set_settings
         ;
+#else
+    return true;
+#endif
 }
 
 bool GtkPrintWrapper::supportsPrintSelection() const
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     return
         supportsPrinting()
         && m_print_operation_set_support_selection
@@ -130,132 +149,219 @@ bool GtkPrintWrapper::supportsPrintSelection() const
         && m_print_unix_dialog_set_support_selection
         && m_print_unix_dialog_set_has_selection
         ;
+#else
+    return true;
+#endif
 }
 
 GtkPageSetup* GtkPrintWrapper::page_setup_new() const
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     assert(m_page_setup_new);
     return (*m_page_setup_new)();
+#else
+    return gtk_page_setup_new();
+#endif
 }
 
 GtkPrintJob* GtkPrintWrapper::print_job_new(const gchar* title, GtkPrinter* printer, GtkPrintSettings* settings, GtkPageSetup* page_setup) const
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     assert(m_print_job_new);
     return (*m_print_job_new)(title, printer, settings, page_setup);
+#else
+    return gtk_print_job_new(title, printer, settings, page_setup);
+#endif
 }
 
 void GtkPrintWrapper::print_job_send(GtkPrintJob* job, GtkPrintJobCompleteFunc callback, gpointer user_data, GDestroyNotify dnotify) const
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     assert(m_print_job_send);
     (*m_print_job_send)(job, callback, user_data, dnotify);
+#else
+    gtk_print_job_send(job, callback, user_data, dnotify);
+#endif
 }
 
 gboolean GtkPrintWrapper::print_job_set_source_file(GtkPrintJob* job, const gchar* filename, GError** error) const
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     assert(m_print_job_set_source_file);
     return (*m_print_job_set_source_file)(job, filename, error);
+#else
+    return gtk_print_job_set_source_file(job, filename, error);
+#endif
 }
 
 const gchar* GtkPrintWrapper::print_settings_get(GtkPrintSettings* settings, const gchar* key) const
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     assert(m_print_settings_get);
     return (*m_print_settings_get)(settings, key);
+#else
+    return gtk_print_settings_get(settings, key);
+#endif
 }
 
 gboolean GtkPrintWrapper::print_settings_get_collate(GtkPrintSettings* settings) const
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     assert(m_print_settings_get_collate);
     return (*m_print_settings_get_collate)(settings);
+#else
+    return gtk_print_settings_get_collate(settings);
+#endif
 }
 
 void GtkPrintWrapper::print_settings_set_collate(GtkPrintSettings* settings, gboolean collate) const
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     assert(m_print_settings_set_collate);
     (*m_print_settings_set_collate)(settings, collate);
+#else
+    gtk_print_settings_set_collate(settings, collate);
+#endif
 }
 
 gint GtkPrintWrapper::print_settings_get_n_copies(GtkPrintSettings* settings) const
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     assert(m_print_settings_get_n_copies);
     return (*m_print_settings_get_n_copies)(settings);
+#else
+    return gtk_print_settings_get_n_copies(settings);
+#endif
 }
 
 void GtkPrintWrapper::print_settings_set_n_copies(GtkPrintSettings* settings, gint num_copies) const
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     assert(m_print_settings_set_n_copies);
     (*m_print_settings_set_n_copies)(settings, num_copies);
+#else
+    gtk_print_settings_set_n_copies(settings, num_copies);
+#endif
 }
 
 GtkPageRange* GtkPrintWrapper::print_settings_get_page_ranges(GtkPrintSettings* settings, gint* num_ranges) const
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     assert(m_print_settings_get_page_ranges);
     return (*m_print_settings_get_page_ranges)(settings, num_ranges);
+#else
+    return gtk_print_settings_get_page_ranges(settings, num_ranges);
+#endif
 }
 
 void GtkPrintWrapper::print_settings_set_print_pages(GtkPrintSettings* settings, GtkPrintPages pages) const
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     assert(m_print_settings_set_print_pages);
     (*m_print_settings_set_print_pages)(settings, pages);
+#else
+    gtk_print_settings_set_print_pages(settings, pages);
+#endif
 }
 
 GtkWidget* GtkPrintWrapper::print_unix_dialog_new(const gchar* title, GtkWindow* parent) const
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     assert(m_print_unix_dialog_new);
     return (*m_print_unix_dialog_new)(title, parent);
+#else
+    return gtk_print_unix_dialog_new(title, parent);
+#endif
 }
 
 void GtkPrintWrapper::print_unix_dialog_add_custom_tab(GtkPrintUnixDialog* dialog, GtkWidget* child, GtkWidget* tab_label) const
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     assert(m_print_unix_dialog_add_custom_tab);
     (*m_print_unix_dialog_add_custom_tab)(dialog, child, tab_label);
+#else
+    gtk_print_unix_dialog_add_custom_tab(dialog, child, tab_label);
+#endif
 }
 
 GtkPrinter* GtkPrintWrapper::print_unix_dialog_get_selected_printer(GtkPrintUnixDialog* dialog) const
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     assert(m_print_unix_dialog_get_selected_printer);
     return (*m_print_unix_dialog_get_selected_printer)(dialog);
+#else
+    return gtk_print_unix_dialog_get_selected_printer(dialog);
+#endif
 }
 
 void GtkPrintWrapper::print_unix_dialog_set_manual_capabilities(GtkPrintUnixDialog* dialog, GtkPrintCapabilities capabilities) const
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     assert(m_print_unix_dialog_set_manual_capabilities);
     (*m_print_unix_dialog_set_manual_capabilities)(dialog, capabilities);
+#else
+    gtk_print_unix_dialog_set_manual_capabilities(dialog, capabilities);
+#endif
 }
 
 GtkPrintSettings* GtkPrintWrapper::print_unix_dialog_get_settings(GtkPrintUnixDialog* dialog) const
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     assert(m_print_unix_dialog_get_settings);
     return (*m_print_unix_dialog_get_settings)(dialog);
+#else
+    return gtk_print_unix_dialog_get_settings(dialog);
+#endif
 }
 
 void GtkPrintWrapper::print_unix_dialog_set_settings(GtkPrintUnixDialog* dialog, GtkPrintSettings* settings) const
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     assert(m_print_unix_dialog_set_settings);
     (*m_print_unix_dialog_set_settings)(dialog, settings);
+#else
+    gtk_print_unix_dialog_set_settings(dialog, settings);
+#endif
 }
 
 void GtkPrintWrapper::print_operation_set_support_selection(GtkPrintOperation* op, gboolean support_selection) const
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     assert(m_print_operation_set_support_selection);
     (*m_print_operation_set_support_selection)(op, support_selection);
+#else
+    gtk_print_operation_set_support_selection(op, support_selection);
+#endif
 }
 
 void GtkPrintWrapper::print_operation_set_has_selection(GtkPrintOperation* op, gboolean has_selection) const
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     assert(m_print_operation_set_has_selection);
     (*m_print_operation_set_has_selection)(op, has_selection);
+#else
+    gtk_print_operation_set_has_selection(op, has_selection);
+#endif
 }
 
 void GtkPrintWrapper::print_unix_dialog_set_support_selection(GtkPrintUnixDialog* dialog, gboolean support_selection) const
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     assert(m_print_unix_dialog_set_support_selection);
     (*m_print_unix_dialog_set_support_selection)(dialog, support_selection);
+#else
+    gtk_print_unix_dialog_set_support_selection(dialog, support_selection);
+#endif
 }
 
 void GtkPrintWrapper::print_unix_dialog_set_has_selection(GtkPrintUnixDialog* dialog, gboolean has_selection) const
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     assert(m_print_unix_dialog_set_has_selection);
     (*m_print_unix_dialog_set_has_selection)(dialog, has_selection);
+#else
+    gtk_print_unix_dialog_set_has_selection(dialog, has_selection);
+#endif
 }
 
 }

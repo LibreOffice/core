@@ -32,8 +32,10 @@ $(eval $(call gb_Library_set_include,vclplug_gtk3,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/unx \
+    -I$(SRCDIR)/vcl/unx/gtk3/inc \
     -I$(SRCDIR)/solenv/inc \
     -I$(OUTDIR)/inc \
+	$(shell pkg-config --cflags gtk+-unix-print-3.0) \
 ))
 
 $(eval $(call gb_Library_add_cxxflags,vclplug_gtk3,\
@@ -105,7 +107,9 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3,\
     vcl/unx/gtk3/app/gtk3gtkinst \
     vcl/unx/gtk3/app/gtk3gtksys \
     vcl/unx/gtk3/app/gtk3fpicker \
+    vcl/unx/gtk3/gdi/gtk3gtkprintwrapper \
     vcl/unx/gtk3/gdi/gtk3salnativewidgets-gtk \
+    vcl/unx/gtk3/gdi/gtk3salprn-gtk \
     vcl/unx/gtk3/window/gtk3gtkframe \
     vcl/unx/gtk3/window/gtk3gtkobject \
     vcl/headless/svpbmp \

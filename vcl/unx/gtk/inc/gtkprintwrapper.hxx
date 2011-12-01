@@ -78,6 +78,7 @@ public:
     void print_unix_dialog_set_support_selection(GtkPrintUnixDialog* dialog, gboolean support_selection) const;
     void print_unix_dialog_set_has_selection(GtkPrintUnixDialog* dialog, gboolean has_selection) const;
 
+#if !GTK_CHECK_VERSION(3,0,0)
 private:
     void impl_load();
 
@@ -131,6 +132,7 @@ private:
     print_operation_set_has_selection_t m_print_operation_set_has_selection;
     print_unix_dialog_set_support_selection_t m_print_unix_dialog_set_support_selection;
     print_unix_dialog_set_has_selection_t m_print_unix_dialog_set_has_selection;
+#endif
 };
 
 }
