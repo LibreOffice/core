@@ -354,7 +354,7 @@ void XmlStreamBuilder::appendClosingTag( int token )
 void XmlStreamBuilder::appendCharacters( const rtl::OUString& chars )
 {
     assert( !tags.empty());
-    tags.back().text = chars;
+    tags.back().text += chars;
 }
 
 } // namespace
