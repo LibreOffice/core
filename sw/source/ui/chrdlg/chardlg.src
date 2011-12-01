@@ -36,6 +36,7 @@ TabDialog DLG_CHAR
     SVLook = TRUE ;
     Text [ en-US ] = "Character" ;
     Moveable = TRUE ;
+    Sizeable = TRUE ;
     TabControl 1
     {
         OutputSize = TRUE ;
