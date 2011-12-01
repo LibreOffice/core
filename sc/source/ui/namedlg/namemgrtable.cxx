@@ -95,6 +95,8 @@ ScRangeManagerTable::ScRangeManagerTable( Window* pWindow, boost::ptr_map<rtl::O
         CheckForFormulaString();
     }
     SetScrolledHdl( LINK( this, ScRangeManagerTable, ScrollHdl ) );
+    void* pNull = NULL;
+    HeaderEndDragHdl(pNull);
 }
 
 ScRangeManagerTable::~ScRangeManagerTable()
