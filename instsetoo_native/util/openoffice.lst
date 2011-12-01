@@ -39,7 +39,6 @@ Globals
 			OOODOWNLOADNAME 1
 			STARTCENTER_LAYOUT_STYLE 0
 			BUILDIDCWS {buildidcws}
-            OPENSOURCE 1
 		}
 	}
 }
@@ -75,7 +74,6 @@ LibreOffice
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			SPELLCHECKERFILE spellchecker_selection.txt
-			OPENSOURCE 1
 			SETSTATICPATH 1
 			OOODOWNLOADNAME 1
 			XPDINSTALLER 0
@@ -136,7 +134,6 @@ LibreOffice_wJRE
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			SPELLCHECKERFILE spellchecker_selection.txt
-			OPENSOURCE 1
 			SETSTATICPATH 1
 			OOODOWNLOADNAME 1
 			XPDINSTALLER 1
@@ -200,7 +197,6 @@ LibreOffice_Dev
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			SPELLCHECKERFILE spellchecker_selection.txt
-			OPENSOURCE 1
 			SETSTATICPATH 1
 			OOODOWNLOADNAME 1
 			XPDINSTALLER 0
@@ -501,7 +497,6 @@ OxygenOffice
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			SPELLCHECKERFILE spellchecker_selection.txt
-			OPENSOURCE 1
 			SETSTATICPATH 1
 			OOODOWNLOADNAME 1
 			XPDINSTALLER 0
@@ -567,7 +562,6 @@ OxygenOffice_wJRE
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			SPELLCHECKERFILE spellchecker_selection.txt
-			OPENSOURCE 1
 			SETSTATICPATH 1
 			OOODOWNLOADNAME 1
 			XPDINSTALLER 1

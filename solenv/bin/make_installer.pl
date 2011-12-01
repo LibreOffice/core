@@ -641,9 +641,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         $installer::globals::addsystemintegration = 0;
         $installer::globals::makejds = 0;
         $installer::globals::addlicensefile = 0;
-
-        if ( $allvariableshashref->{'OPENSOURCE'} ) { $installer::globals::makedownload = 1; }
-        else { $installer::globals::makedownload = 0; }
+        $installer::globals::makedownload = 1;
     }
 
     if ( $installer::globals::helppack )
@@ -652,9 +650,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         $installer::globals::addsystemintegration = 0;
         $installer::globals::makejds = 0;
         $installer::globals::addlicensefile = 0;
-
-        if ( $allvariableshashref->{'OPENSOURCE'} ) { $installer::globals::makedownload = 1; }
-        else { $installer::globals::makedownload = 0; }
+        $installer::globals::makedownload = 1;
     }
 
     ############################################################
@@ -1549,7 +1545,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                         $filesinpackage = installer::worker::prepare_linuxlinkfiles($filesinpackage);
                         $linksinpackage = installer::worker::prepare_forced_linuxlinkfiles($linksinpackage);
                         $installer::globals::makelinuxlinkrpm = 1;
-                        if ( $allvariableshashref->{'OPENSOURCE'} ) { $installer::globals::add_required_package = $packagename . "u"; }
+                        $installer::globals::add_required_package = $packagename . "u";
                         if ( $installer::globals::patch ) { $installer::globals::call_epm = 0; }     # no packing of core module in patch
                         $shellscriptsfilename = ""; # shell scripts only need to be included into the link rpm
                         $run = 1;

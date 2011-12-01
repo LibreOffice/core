@@ -269,7 +269,6 @@ BEGIN
     %alllcuniquefilenames = ();
     %uniquefilenamesequence = ();
     %dependfilenames = ();
-    $isopensourceproduct = 1;
     $manufacturer = "";
     $longmanufacturer = "";
     $sundirname = "Oracle";

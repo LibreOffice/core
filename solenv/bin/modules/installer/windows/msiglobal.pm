@@ -1882,9 +1882,6 @@ sub set_global_code_variables
 
     my $codefile = installer::files::read_file($installer::globals::codefilename);
 
-    my $isopensource = 0;
-    if ( $allvariableshashref->{'OPENSOURCE'} ) { $isopensource = $allvariableshashref->{'OPENSOURCE'}; }
-
     my $onelanguage = "";
 
     if ( $#{$languagesref} > 0 )    # more than one language

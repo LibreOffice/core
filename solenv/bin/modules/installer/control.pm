@@ -257,15 +257,7 @@ sub check_makecab_version
     {
         if ( $makecabversion < $installer::globals::controlledmakecabversion )
         {
-            # warning for OOo, error for inhouse products
-            if ( $installer::globals::isopensourceproduct )
-            {
-                installer::logger::print_warning("Old version of makecab.exe. Found version: \"$makecabversion\", tested version: \"$installer::globals::controlledmakecabversion\"!\n");
-            }
-            else
-            {
-                installer::exiter::exit_program("makecab.exe too old. Found version: \"$makecabversion\", required version: \"$installer::globals::controlledmakecabversion\"!", "check_makecab_version");
-            }
+            installer::exiter::exit_program("makecab.exe too old. Found version: \"$makecabversion\", required version: \"$installer::globals::controlledmakecabversion\"!", "check_makecab_version");
         }
     }
     else
