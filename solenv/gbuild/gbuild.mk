@@ -248,35 +248,6 @@ $(eval $(call gb_Deliver_init))
 
 include $(SOLARENV)/inc/minor.mk
 
-ifeq ($(gb_SourceEnvAndRecurse_STAGE),buildpl)
-
-gb_ComponentTarget_ComponentTarget = $(call gb_ComponentTarget_get_target,$(1)): build
-gb_ComponentsTarget_ComponentsTarget = $(call gb_ComponentsTarget_get_target,$(1)): build
-gb_AllLangResTarget_AllLangResTarget = $(call gb_AllLangResTarget_get_target,$(1)): build
-gb_WinResTarget_WinResTarget = $(call gb_WinResTarget_get_target,$(1)): build
-gb_LinkTarget_LinkTarget = $(call gb_LinkTarget_get_target,$(1)): build
-gb_Library_Library = $(call gb_Library_get_target,$(1)): build
-gb_StaticLibrary_StaticLibrary = $(call gb_StaticLibrary_get_target,$(1)): build
-gb_Executable_Executable = $(call gb_Executable_get_target,$(1)): build
-gb_SdiTarget_SdiTarget = $(call gb_SdiTarget_get_target,$(1)): build
-gb_Package_Package = $(call gb_Package_get_target,$(1)): build
-gb_CustomTarget_CustomTarget = $(call gb_CustomTarget_get_target,$(1)): build
-gb_ExternalLib_ExternalLib = $(call gb_ExternalLib_get_target,$(1)): build
-gb_Pyuno_Pyuno = $(call gb_Pyuno_get_target,$(1)): build
-gb_RdbTarget_RdbTarget = $(call gb_RdbTarget_get_target,$(1)): build
-gb_CppunitTest_CppunitTest = $(call gb_CppunitTest_get_target,$(1)): build
-gb_Jar_Jar = $(call gb_Jar_get_target,$(1)): build
-gb_JavaClassSet_JavaClassSet = $(call gb_JavaClassSet_get_target,$(1)): build
-gb_JunitTest_JunitTest = $(call gb_JunitTest_get_target,$(1)): dev-install
-gb_UnoApiTarget_UnoApiTarget = $(call gb_UnoApiTarget_get_target,$(1)): build
-gb_Zip_Zip = $(call gb_Zip_get_target,$(1)): build
-gb_Configuration_Configuration = $(call gb_Configuration_get_target,$(1)): build
-gb_Extension_Extension = $(call gb_Extension_get_target,$(1)): build
-
-include $(GBUILDDIR)/Module.mk
-
-endif
-
 # We are using a set of scopes that we might as well call classes.
 
 # It is important to include them in the right order as that is
