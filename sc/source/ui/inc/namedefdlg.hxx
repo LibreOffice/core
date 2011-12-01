@@ -43,25 +43,26 @@ class ScViewData;
 class ScNameDefDlg : public ScAnyRefDlg
 {
 private:
-    PushButton maBtnAdd;
-    PushButton maBtnCancel;
-    DisclosureButton maBtnMore;
-    FixedText maFtInfo;
-    FixedText maFtName;
-    FixedText maFtRange;
-    FixedText maFtScope;
-    FixedLine maFlDiv;
-
     Edit maEdName;
+
     formula::RefEdit maEdRange;
     formula::RefButton maRbRange;
 
     ListBox maLbScope;
 
+    DisclosureButton maBtnMore;
     CheckBox maBtnRowHeader;
     CheckBox maBtnColHeader;
     CheckBox maBtnPrintArea;
     CheckBox maBtnCriteria;
+
+    PushButton maBtnAdd;
+    PushButton maBtnCancel;
+    FixedText maFtInfo;
+    FixedText maFtName;
+    FixedText maFtRange;
+    FixedText maFtScope;
+    FixedLine maFlDiv;
 
 
     bool mbUndo; //if true we need to add an undo action after creating a range name
