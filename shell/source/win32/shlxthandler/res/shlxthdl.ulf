@@ -1,3 +1,4 @@
+﻿
 /**************************************************************
  * 
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,7 +20,7 @@
  * 
  *************************************************************/
 
-﻿[%TITLE%]
+[%TITLE%]
 en-US = "Title"
 
 [%TITLE_COLON%]
