@@ -58,8 +58,7 @@ SvPasteObjectDialog::SvPasteObjectDialog( Window* pParent )
     aLbInsertList( this, CUI_RES( LB_INSERT_LIST ) ),
     aOKButton1( this, CUI_RES( 1 ) ),
     aCancelButton1( this, CUI_RES( 1 ) ),
-    aHelpButton1( this, CUI_RES( 1 ) ),
-    aSObject( CUI_RES( S_OBJECT ) )
+    aHelpButton1( this, CUI_RES( 1 ) )
 {
     FreeResource();
     SetHelpId( HID_PASTE_DLG );

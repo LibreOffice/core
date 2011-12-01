@@ -60,7 +60,6 @@ class SvPasteObjectDialog : public ModalDialog
     OKButton aOKButton1;
     CancelButton aCancelButton1;
     HelpButton aHelpButton1;
-    String aSObject;
     Table           aSupplementTable;
     SvGlobalName    aObjClassName;
     String          aObjName;
@@ -72,7 +71,6 @@ class SvPasteObjectDialog : public ModalDialog
     RadioButton&    PasteLink()     { return aRbPasteLink; }
     CheckBox&       AsIconBox()     { return aCbDisplayAsIcon; }
 
-    const String&   GetObjString()  { return aSObject; }
     void            SelectObject();
     DECL_LINK( SelectHdl, ListBox * );
     DECL_LINK( DoubleClickHdl, ListBox * );
