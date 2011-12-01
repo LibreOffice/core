@@ -26,23 +26,21 @@
  *
  ************************************************************************/
 
-
-
-#include <ide_pch.hxx>
-
-
 #define _BASIDE_POPUPWINDOWTBX
-#include <tbxctl.hxx>
+
+#include "tbxctl.hrc"
 #include <svx/svxids.hrc>
-#include <iderid.hxx>
-#include <tbxctl.hrc>
-#include <idetemp.hxx>
+
+#include "idetemp.hxx"
+#include "tbxctl.hxx"
+
+#include <sfx2/dispatch.hxx>
 #include <sfx2/imagemgr.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svl/aeitem.hxx>
 #include <vcl/toolbox.hxx>
 
 using namespace ::com::sun::star::uno;
-
 
 static ::rtl::OUString aSubToolBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertcontrolsbar" ) );
 
