@@ -26,24 +26,23 @@
  *
  ************************************************************************/
 
-
 #include "basidesh.hxx"
 #include "basobj.hxx"
-#include "dlgresid.hrc"
 #include "iderdll.hxx"
 #include "iderid.hxx"
 #include "localizationmgr.hxx"
 #include "managelang.hxx"
 
-#include "managelang.hrc"
+#include "dlgresid.hrc"
 #include "helpid.hrc"
+#include "managelang.hrc"
 
-#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <comphelper/string.hxx>
 #include <editeng/unolingu.hxx>
 #include <sfx2/bindings.hxx>
 #include <svtools/langtab.hxx>
+#include <svx/langbox.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>

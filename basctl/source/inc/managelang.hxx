@@ -29,13 +29,13 @@
 #ifndef _BASCTL_MANAGELANG_HXX
 #define _BASCTL_MANAGELANG_HXX
 
-#include <svx/langbox.hxx>
 #include <svx/checklbx.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 
 class LocalizationMgr;
+class SvxLanguageBox;
 
 struct LanguageEntry
 {
