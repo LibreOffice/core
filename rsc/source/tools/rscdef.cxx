@@ -679,7 +679,7 @@ RscFileTab :: ~RscFileTab(){
 |*    RscFileTab::Find()
 |*
 *************************************************************************/
-sal_uLong  RscFileTab :: Find( const ByteString & rName )
+sal_uLong  RscFileTab :: Find( const rtl::OString& rName )
 {
     RscFile * pFName;
 
@@ -876,8 +876,8 @@ sal_uLong  RscFileTab :: NewCodeFile( const rtl::OString& rName )
 |*    RscFileTab::NewIncFile()
 |*
 *************************************************************************/
-sal_uLong  RscFileTab :: NewIncFile( const ByteString & rName,
-                                 const ByteString & rPath )
+sal_uLong  RscFileTab :: NewIncFile(const rtl::OString& rName,
+    const rtl::OString& rPath)
 {
     sal_uLong         lKey;
     RscFile * pFName;

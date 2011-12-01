@@ -177,7 +177,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                     ;
                 if( *pEqual )
                 {
-                    const ByteString    aSPath( pEqual + 1 );
+                    const rtl::OString aSPath( pEqual + 1 );
                     DirEntry            aSDir( String( aSPath, RTL_TEXTENCODING_ASCII_US ) );
 
                     m_aReplacements.push_back( std::pair< OString, OString >( OString( (*ppStr)+4, pEqual - *ppStr - 4 ),
@@ -221,10 +221,10 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "lip=", 4 ) )
             {  // additional language specific include for system dependent files
-                const ByteString    aSysSearchDir( (*ppStr)+5 );
+                const rtl::OString aSysSearchDir( (*ppStr)+5 );
 
                 // ignore empty -lip= arguments that we get lots of these days
-                if (aSysSearchDir.Len())
+                if (aSysSearchDir.getLength())
                 {
                     DirEntry aSysDir( String( aSysSearchDir, RTL_TEXTENCODING_ASCII_US ) );
                     m_aOutputFiles.back().aSysSearchDirs.push_back(
@@ -298,7 +298,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
         else
         {
             // Eingabedatei
-            aInputList.push_back( new ByteString( *ppStr ) );
+            aInputList.push_back( new rtl::OString(*ppStr) );
         }
         ppStr++;
         i++;
@@ -483,7 +483,7 @@ ERRTYPE RscCompiler::Start()
         pFName = pTC->aFileTab.First();
         while( pFName )
         {
-            pTC->pEH->StdOut( pFName->aFileName.GetBuffer() );
+            pTC->pEH->StdOut( pFName->aFileName.getStr() );
             pTC->pEH->StdOut( " " );
             pFName = pTC->aFileTab.Next();
         };
@@ -621,12 +621,12 @@ ERRTYPE RscCompiler :: IncludeParser( sal_uLong lFileKey )
         aError = ERR_ERROR;
     else if( !pFName->bScanned )
     {
-        finput = fopen( pFName->aPathName.GetBuffer(), "r" );
+        finput = fopen( pFName->aPathName.getStr(), "r" );
         if( !finput )
         {
             aError = ERR_OPENFILE;
             pTC->pEH->Error( aError, NULL, RscId(),
-                             pFName->aPathName.GetBuffer() );
+                             pFName->aPathName.getStr() );
         }
         else
         {
@@ -704,7 +704,7 @@ ERRTYPE RscCompiler :: ParseOneFile( sal_uLong lFileKey,
         else
         {
             String      aTmpName( ::GetTmpFileName(), RTL_TEXTENCODING_ASCII_US );
-            DirEntry    aTmpPath( aTmpName ), aSrsPath( String( pFName->aPathName.GetBuffer(), RTL_TEXTENCODING_ASCII_US ) );
+            DirEntry    aTmpPath( aTmpName ), aSrsPath(rtl::OStringToOUString(pFName->aPathName, RTL_TEXTENCODING_ASCII_US));
 
             aTmpPath.ToAbs();
             aSrsPath.ToAbs();
@@ -720,7 +720,7 @@ ERRTYPE RscCompiler :: ParseOneFile( sal_uLong lFileKey,
 
             if( !finput )
             {
-                pTC->pEH->Error( ERR_OPENFILE, NULL, RscId(), pFName->aPathName.GetBuffer() );
+                pTC->pEH->Error( ERR_OPENFILE, NULL, RscId(), pFName->aPathName.getStr() );
                 aError = ERR_OPENFILE;
             }
             else
@@ -1238,7 +1238,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                             aOStm.WriteLine( aLine );
                     }
 
-                    aOStm.WriteLine( "FileList = {" );
+                    aOStm.WriteLine(rtl::OString(RTL_CONSTASCII_STRINGPARAM("FileList = {")));
 
                     for( sal_uInt32 i = 0; i < aEntryVector.size(); ++i )
                     {
@@ -1253,7 +1253,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                         aOStm.WriteLine(aEntryString.makeStringAndClear());
                     }
 
-                    aOStm.WriteLine( "};" );
+                    aOStm.WriteLine(rtl::OString(RTL_CONSTASCII_STRINGPARAM("};")));
                 }
                 else
                     aOStm.WriteLine( aLine );

@@ -28,10 +28,9 @@
 
 #include <unotools/componentresmodule.hxx>
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 #include <tools/resmgr.hxx>
 #include <osl/diagnose.h>
+#include <rtl/strbuf.hxx>
 
 //........................................................................
 namespace utl
@@ -96,9 +95,9 @@ namespace utl
 
             m_pRessources = ResMgr::CreateResMgr( aMgrName.GetBuffer() );
             OSL_ENSURE( m_pRessources,
-                    ( ByteString( "OModuleImpl::getResManager: could not create the resource manager (file name: " )
-                +=  aMgrName
-                +=  ByteString( ")!" ) ).GetBuffer() );
+                    rtl::OStringBuffer( "OModuleImpl::getResManager: could not create the resource manager (file name: " )
+                .append(aMgrName)
+                .append(")!").getStr() );
 
             m_bInitialized = sal_True;
         }

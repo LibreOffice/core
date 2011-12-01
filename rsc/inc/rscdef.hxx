@@ -206,8 +206,8 @@ public:
     sal_Bool            bLoaded;    // Ist die Datei geladen
     sal_Bool            bScanned;   // Wurde Datei nach Inclide abgesucht
     sal_Bool            bDirty;     // Dirty-Flag
-    ByteString      aFileName;  // Name der Datei
-    ByteString      aPathName;  // Pfad und Name der Datei
+    rtl::OString aFileName;  // Name der Datei
+    rtl::OString aPathName;  // Pfad und Name der Datei
     RscDefineList   aDefLst;    // Liste der Defines
     RscDependList   aDepLst;    // List of Depend
 
@@ -234,15 +234,19 @@ public:
     void        Remove( RscDefine * pDef );
 };
 
-class RscFileTab : public RscSubFileTab {
+class RscFileTab : public RscSubFileTab
+{
     RscDefTree aDefTree;
-    sal_uLong       Find( const ByteString & rName );
+    sal_uLong       Find(const rtl::OString& rName);
 public:
                 RscFileTab();
                 ~RscFileTab();
 
     RscDefine * FindDef( const char * );
-    RscDefine * FindDef( const ByteString& rStr ) { return FindDef( rStr.GetBuffer() ); }
+    RscDefine * FindDef(const rtl::OString& rStr)
+    {
+        return FindDef(rStr.getStr());
+    }
 
     sal_Bool        Depend( sal_uLong lDepend, sal_uLong lFree );
     sal_Bool        TestDef( sal_uLong lFileKey, size_t lPos,
@@ -257,8 +261,8 @@ public:
 
            // Alle Defines die in dieser Datei Definiert sind loeschen
     void   DeleteFileContext( sal_uLong lKey );
-    sal_uLong  NewCodeFile( const rtl::OString& rName );
-    sal_uLong  NewIncFile( const ByteString & rName, const ByteString & rPath );
+    sal_uLong  NewCodeFile(const rtl::OString& rName);
+    sal_uLong  NewIncFile(const rtl::OString& rName, const rtl::OString& rPath);
     RscFile * GetFile( sal_uLong lFileKey ){ return Get( lFileKey ); }
 };
 

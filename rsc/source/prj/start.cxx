@@ -167,7 +167,7 @@ static sal_Bool CallRsc2( RscStrList * pInputList,
                       RscPtrPtr * pCmdLine )
 {
     int nRet;
-    ByteString*  pString;
+    rtl::OString*  pString;
     RscVerbosity eVerbosity = RscVerbosityNormal;
 
     RscPtrPtr aNewCmdL;
@@ -205,7 +205,7 @@ static sal_Bool CallRsc2( RscStrList * pInputList,
     for ( size_t i = 0, n = pInputList->size(); i < n; ++i )
     {
         pString = (*pInputList)[ i ];
-        aNewCmdL.Append( rsc_strdup( pString->GetBuffer() ) );
+        aNewCmdL.Append( rsc_strdup( pString->getStr() ) );
     };
 
     if ( eVerbosity >= RscVerbosityVerbose )
@@ -244,7 +244,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     char **         ppStr;
     RscPtrPtr       aCmdLine;       // Kommandozeile
     sal_uInt32      i;
-    ByteString*     pString;
+    rtl::OString*   pString;
 
     pStr = ::ResponseFile( &aCmdLine, argv, argc );
     if( pStr )
@@ -287,7 +287,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         else
         {
             // Eingabedatei
-            aInputList.push_back( new ByteString( *ppStr ) );
+            aInputList.push_back( new rtl::OString(*ppStr) );
         }
         ppStr++;
         i++;
@@ -321,7 +321,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 bError = sal_True;
                 break;
             }
-            aTmpList.push_back( new ByteString( aTmpName ) );
+            aTmpList.push_back( new rtl::OString(aTmpName) );
         };
     };
 
@@ -338,7 +338,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     };
 
     for ( size_t k = 0, n = aTmpList.size(); k < n; ++k )
-        unlink( aTmpList[ k ]->GetBuffer() );
+        unlink( aTmpList[ k ]->getStr() );
 
     return( bError );
 }

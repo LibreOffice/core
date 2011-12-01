@@ -490,9 +490,9 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
                 }
             }
 
-            ByteString aStr( "Nicht gefunden : " );
-            aStr += pTok->GetString();
-            OSL_FAIL( aStr.GetBuffer() );
+            rtl::OStringBuffer aStr("Nicht gefunden : ");
+            aStr.append(pTok->GetString());
+            OSL_FAIL(aStr.getStr());
         }
     }
 

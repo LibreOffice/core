@@ -843,10 +843,10 @@ sal_Bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
         }
         else
         {
-            ByteString aStr( "attribute " );
-            aStr += pAttr->GetName();
-            aStr += " is method or variable but not a slot";
-            rBase.SetError( aStr, rInStm.GetToken() );
+            rtl::OStringBuffer aStr( "attribute " );
+            aStr.append(pAttr->GetName());
+            aStr.append(" is method or variable but not a slot");
+            rBase.SetError( aStr.makeStringAndClear(), rInStm.GetToken() );
             rBase.WriteError( rInStm );
             bOk = sal_False;
         }
@@ -876,10 +876,10 @@ sal_Bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
             }
             else
             {
-                ByteString aStr( "attribute " );
-                aStr += pAttr2->GetName();
-                aStr += " is method or variable but not a slot";
-                rBase.SetError( aStr, rInStm.GetToken() );
+                rtl::OStringBuffer aStr("attribute ");
+                aStr.append(pAttr2->GetName());
+                aStr.append(" is method or variable but not a slot");
+                rBase.SetError( aStr.makeStringAndClear(), rInStm.GetToken() );
                 rBase.WriteError( rInStm );
                 bOk = sal_False;
             }
@@ -1084,9 +1084,9 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
 
 static ByteString MakeSlotName( SvStringHashEntry * pEntry )
 {
-    ByteString aName( "SFX_SLOT_" );
-    aName += pEntry->GetName();
-    return aName.ToUpperAscii();
+    rtl::OStringBuffer aName(RTL_CONSTASCII_STRINGPARAM("SFX_SLOT_"));
+    aName.append(pEntry->GetName());
+    return aName.makeStringAndClear().toAsciiUpperCase();
 };
 
 void SvMetaSlot::WriteSlotStubs( const ByteString & rShellName,

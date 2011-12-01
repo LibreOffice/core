@@ -63,7 +63,7 @@ char* rsc_strdup( const char* );
 
 /****************** C L A S S E S ****************************************/
 
-typedef ::std::vector< ByteString* > RscStrList;
+typedef ::std::vector< rtl::OString* > RscStrList;
 
 /*********** R s c C h a r ***********************************************/
 class RscChar

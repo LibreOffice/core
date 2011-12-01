@@ -403,7 +403,7 @@ void RscError::ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
 
     if( pFI && pTC ){
         StdLstErr( ": \"" );
-        StdLstErr( pTC->aFileTab.Get( pFI->GetFileIndex() )->aFileName.GetBuffer() );
+        StdLstErr( pTC->aFileTab.Get( pFI->GetFileIndex() )->aFileName.getStr() );
         StdLstErr( "\", line " );
         sprintf( buf, "%u", (unsigned int)pFI->GetLineNo() );
         StdLstErr( buf );

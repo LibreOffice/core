@@ -377,7 +377,7 @@ void RscTypCont :: WriteInc( FILE * fOutput, sal_uLong lFileKey )
             {
                 fprintf( fOutput, "#include " );
                 fprintf( fOutput, "\"%s\"\n",
-                                  pFName->aFileName.GetBuffer() );
+                                  pFName->aFileName.getStr() );
             }
             pFName = aFileTab.Next();
         }
@@ -400,7 +400,7 @@ void RscTypCont :: WriteInc( FILE * fOutput, sal_uLong lFileKey )
                     {
                         fprintf( fOutput, "#include " );
                         fprintf( fOutput, "\"%s\"\n",
-                                 pFile->aFileName.GetBuffer() );
+                                 pFile->aFileName.getStr() );
                     }
                 }
             };
