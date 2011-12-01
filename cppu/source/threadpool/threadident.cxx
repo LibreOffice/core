@@ -51,8 +51,11 @@ using namespace ::cppu;
 static inline void createLocalId( sal_Sequence **ppThreadId )
 {
     rtl_byte_sequence_constructNoDefault( ppThreadId , 4 + 16 );
-    *((sal_Int32*) ((*ppThreadId)->elements)) = osl_getThreadIdentifier(0);
-
+    sal_uInt32 id = osl_getThreadIdentifier(0);
+    (*ppThreadId)->elements[0] = id & 0xFF;
+    (*ppThreadId)->elements[1] = (id >> 8) & 0xFF;
+    (*ppThreadId)->elements[2] = (id >> 16) & 0xFF;
+    (*ppThreadId)->elements[3] = (id >> 24) & 0xFF;
     rtl_getGlobalProcessId( (sal_uInt8 * ) &( (*ppThreadId)->elements[4]) );
 }
 
