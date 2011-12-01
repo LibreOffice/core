@@ -160,11 +160,6 @@ public:
     virtual void setUp();
     virtual void tearDown();
 
-    /**
-     * Ensure CVEs remain unbroken
-     */
-    void testCVEs();
-
     //ods, xls, xlsx filter tests
     void testRangeName();
     void testFunctions();
@@ -179,7 +174,6 @@ public:
     void testPassword();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
-    CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST(testRangeName);
     CPPUNIT_TEST(testFunctions);
     CPPUNIT_TEST(testDatabaseRanges);
@@ -257,18 +251,6 @@ void ScFiltersTest::createCSVPath(const rtl::OUString& aFileBase, rtl::OUString&
     aBuffer.append(m_aBaseString).append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/contentCSV/")));
     aBuffer.append(aFileBase).append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("csv")));
     rCSVPath = aBuffer.makeStringAndClear();
-}
-
-void ScFiltersTest::testCVEs()
-{
-    testDir(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
-        getURLFromSrc("/sc/qa/unit/data/qpro/"), rtl::OUString());
-
-    //warning, the current "sylk filter" in sc (docsh.cxx) automatically
-    //chains on failure on trying as csv, rtf, etc. so "success" may
-    //not indicate that it imported as .slk.
-    testDir(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYLK")),
-        getURLFromSrc("/sc/qa/unit/data/slk/"), rtl::OUString());
 }
 
 namespace {
