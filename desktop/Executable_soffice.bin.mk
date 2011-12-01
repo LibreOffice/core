@@ -58,7 +58,6 @@ ifeq ($(COM),MSC)
 
 $(eval $(call gb_Executable_add_ldflags,$(sofficebin),\
     /STACK:10000000 \
-    /SUBSYSTEM:WINDOWS \
 ))
 
 endif
