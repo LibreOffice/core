@@ -25,18 +25,9 @@
 #   in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 #   instead of those above.
 
-ifeq ($(strip $(gb_PARTIALBUILD)),)
+.PHONY: cross-build-toolset dev-install build findunusedcode
 
-clean: clean-host clean-build
-
-subsequentcheck: smoketestoo_native
-	@$(MAKE) -f $(realpath $(firstword $(MAKEFILE_LIST))) $@ gb_PARTIALBUILD=T
-
-# instsetoo_native via build.pl already runs unittests
-unitcheck: instsetoo_native
-	@true
-
-all:
+ifeq ($(gb_SourceEnvAndRecurse_STAGE),buildpl)
 
 gb_MAKETARGET=all
 # if we have only build as target use build instead of all
@@ -52,13 +43,11 @@ cd $(SRCDIR)/$(1) && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl $(if $(findstri
 $(eval gb_BuildplTarget_COMPLETEDTARGETS+=$(1))
 endef
 
-.PHONY: smoketestoo_native instsetoo_native cross-build-toolset dev-install all build findunusedcode
+dev-install: $(WORKDIR)/bootstrap  $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset) | build
+	$(call gb_BuildplTarget_command,smoketestoo_native,$(if $(filter instsetoo_native,$(gb_BuildplTarget_COMPLETEDTARGETS)),--from instsetoo_native,--all))
 
-smoketestoo_native: $(WORKDIR)/bootstrap  $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset) | instsetoo_native
-	$(call gb_BuildplTarget_command,$@,$(if $(filter instsetoo_native,$(gb_BuildplTarget_COMPLETEDTARGETS)),--from instsetoo_native,--all))
-
-instsetoo_native: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset)
-	$(call gb_BuildplTarget_command,$@,--all)
+build: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset)
+	$(call gb_BuildplTarget_command,instsetoo_native,--all)
 
 cross_toolset: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded
 	source $(SRCDIR)/Env.Build.sh && $(call gb_BuildplTarget_command,$@,--all)
@@ -85,12 +74,22 @@ findunusedcode:
 #to be just removed, or put behind appropiate platform or debug level ifdefs
 	@grep ::.*\( unusedcode.all | grep -v ^cppu:: > unusedcode.easy
 
-dev-install: smoketestoo_native
 
-all: instsetoo_native
-
-build: instsetoo_native
-
-endif # gb_PARTIALBUILD
+endif # gb_SourceEnvAndRecurse_STAGE=buildpl
     
+ifeq ($(gb_SourceEnvAndRecurse_STAGE),gbuild)
+clean: clean-host clean-build
+
+dev-install: $(WORKDIR)/bootstrap  $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset) | build
+
+build: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset)
+
+cross_toolset: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded
+
+findunusedcode:
+
+endif
+
+all: build
+
 # vim: set noet sw=4:
