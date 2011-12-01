@@ -518,7 +518,7 @@ public:
         If for whatever reason you have to use both, SetHybridDouble() and
         SetHybridString() or SetHybridFormula(), use SetHybridDouble() first
         for performance reasons.*/
-    void            SetHybridString( const String& r )
+    void            SetHybridString( const rtl::OUString& r )
                         { aResult.SetHybridString( r); }
     /** For import only: set a temporary formula string to be compiled later.
         If for whatever reason you have to use both, SetHybridDouble() and

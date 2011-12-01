@@ -200,7 +200,7 @@ public:
     /** Should only be used by import filters, best in the order
         SetHybridDouble(), SetHybridString()/SetHybridFormula(), or only
         SetHybridFormula() for formula string to be compiled later. */
-    inline  void                SetHybridString( const String & rStr );
+    inline  void                SetHybridString( const rtl::OUString & rStr );
 
     /** Should only be used by import filters, best in the order
         SetHybridDouble(), SetHybridString()/SetHybridFormula(), or only
@@ -572,7 +572,7 @@ inline void ScFormulaResult::SetHybridDouble( double f )
 }
 
 
-inline void ScFormulaResult::SetHybridString( const String & rStr )
+inline void ScFormulaResult::SetHybridString( const rtl::OUString & rStr )
 {
     // Obtain values before changing anything.
     double f = GetDouble();
