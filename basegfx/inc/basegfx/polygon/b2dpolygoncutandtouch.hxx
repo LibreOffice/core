@@ -63,7 +63,7 @@ namespace basegfx
         BASEGFX_DLLPUBLIC B2DPolyPolygon addPointsAtCuts(const B2DPolyPolygon& rCandidate, const B2DPoint& rStart, const B2DPoint& rEnd);
 
         // look for intersections of rCandidate with the mask Polygon and add extra points there.
-        // The mask polygon is assumed to be closed, even when it's not explicitely.
+        // The mask polygon is assumed to be closed, even when it's not explicitly.
         BASEGFX_DLLPUBLIC B2DPolygon addPointsAtCuts(const B2DPolygon& rCandidate, const B2DPolyPolygon& rMask);
         BASEGFX_DLLPUBLIC B2DPolyPolygon addPointsAtCuts(const B2DPolyPolygon& rCandidate, const B2DPolyPolygon& rMask);
 

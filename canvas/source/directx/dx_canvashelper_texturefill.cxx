@@ -395,7 +395,7 @@ namespace dxcanvas
                                                         &rStops[0],
                                                         rStops.size() );
 
-                // explicitely setup center point. Since the center of GDI+
+                // explicitly setup center point. Since the center of GDI+
                 // gradients are by default the _centroid_ of the path
                 // (i.e. the weighted sum of edge points), it will not
                 // necessarily coincide with our notion of center.

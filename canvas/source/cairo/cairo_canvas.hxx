@@ -85,7 +85,7 @@ namespace cairocanvas
         template args, and furthermore, don't want to derive
         ::canvas::CanvasBase directly from
         SurfaceProvider (because derivees of
-        ::canvas::CanvasBase have to explicitely forward the
+        ::canvas::CanvasBase have to explicitly forward the
         XInterface methods (e.g. via DECLARE_UNO3_AGG_DEFAULTS)
         anyway).
      */

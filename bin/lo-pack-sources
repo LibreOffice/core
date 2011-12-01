@@ -528,7 +528,7 @@ if (@pieces > 1 && $is_lo_build_dir == 0 ) {
     die "Error: \"$source_dir\" is not a valid libreoffice-core directory\n";
 }
 
-# just a single piece tarball can be generated from piece directory; version must be explicitely set in this case
+# just a single piece tarball can be generated from piece directory; version must be explicitly set in this case
 if (@pieces == 1  &&  $is_lo_build_dir == 0  &&  ! defined $set_version ) {
     die "Error: version must be set using the --set-version=<version> option\n" unless (defined $set_version);
 }

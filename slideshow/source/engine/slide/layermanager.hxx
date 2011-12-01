@@ -62,7 +62,7 @@ namespace slideshow
             the layer manager keeps track of this and also handles
             starting/stopping of Shape animations. Note that none of
             the methods actually perform a screen update, this is
-            always delayed until the ActivitiesQueue explicitely
+            always delayed until the ActivitiesQueue explicitly
             performs it.
 
             @see Layer

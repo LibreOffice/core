@@ -42,7 +42,7 @@ namespace idl
 {
 
 
-/** A namespace for ->Type s, as they are explicitely written in code.
+/** A namespace for ->Type s, as they are explicitly written in code.
 
     The search/identification string is usually the local name of
     the Type. But for templated structs, the search string has this

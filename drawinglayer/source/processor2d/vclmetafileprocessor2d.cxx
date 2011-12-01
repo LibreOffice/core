@@ -687,7 +687,7 @@ namespace drawinglayer
             PRNSPOOL_TRANSPARENTBITMAP_BEGIN, PRNSPOOL_TRANSPARENTBITMAP_END
             VCL usage when printing PL -> THB. Okay, THB confirms that it is only used as
             a fix (hack) while VCL printing. It is needed to not downscale a bitmap which
-            was explicitely created for the printer already again to some default maximum
+            was explicitly created for the printer already again to some default maximum
             bitmap sizes.
             Nothing to do here for the primitive renderer.
 

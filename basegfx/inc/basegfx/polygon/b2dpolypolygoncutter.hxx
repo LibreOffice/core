@@ -44,7 +44,7 @@ namespace basegfx
         // of the contained polygons in not changed but used as topological information.
         // Self crossovers of the contained sub-polygons are implicitely handled, but to not lose
         // the topological information, it may be necessary to remove self-intersections of the
-        // contained sub-polygons in a preparing step and to explicitely correct their orientations.
+        // contained sub-polygons in a preparing step and to explicitly correct their orientations.
         BASEGFX_DLLPUBLIC B2DPolyPolygon solveCrossovers(const B2DPolyPolygon& rCandidate);
 
         // Version for single polygons. This is for solving self-intersections. Result will be free of

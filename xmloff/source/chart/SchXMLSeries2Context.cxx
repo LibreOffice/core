@@ -1011,7 +1011,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
 
                 try
                 {
-                    //need to set this explicitely here for old files as the new api does not support this property fully anymore
+                    //need to set this explicitly here for old files as the new api does not support this property fully anymore
                     if( bSwitchOffLinesForScatter )
                         xPointProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Lines")),uno::makeAny(sal_False));
                 }

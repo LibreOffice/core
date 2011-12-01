@@ -78,7 +78,7 @@ namespace nullcanvas
         template args, and furthermore, don't want to derive
         ::canvas::SpriteCanvasBase directly from
         ::canvas::SpriteSurface (because derivees of
-        ::canvas::SpriteCanvasBase have to explicitely forward the
+        ::canvas::SpriteCanvasBase have to explicitly forward the
         XInterface methods (e.g. via DECLARE_UNO3_AGG_DEFAULTS)
         anyway). Basically, ::canvas::CanvasCustomSpriteBase should
         remain a base class that provides implementation, not to

@@ -327,7 +327,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
         VirtualDevice* pOldAlphaVDev = mpAlphaVDev;
 
         // #110958# Disable alpha VDev, we perform the necessary
-        // operation explicitely further below.
+        // operation explicitly further below.
         if( mpAlphaVDev )
             mpAlphaVDev = NULL;
 

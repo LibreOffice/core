@@ -149,7 +149,7 @@ public:
         // disables it).
         //
         // NOTE: this is only a problem for animation
-        // nodes that explicitely call
+        // nodes that explicitly call
         // disableSubsetShape(). Independent shape subsets
         // (like those created for ParagraphTargets)
         // solely rely on the ShapeSubset destructor to

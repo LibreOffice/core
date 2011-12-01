@@ -2097,7 +2097,7 @@ void EffectSequenceHelper::implRebuild()
         }
         else
         {
-            // empty sequence, set duration to 0.0 explicitely
+            // empty sequence, set duration to 0.0 explicitly
             // (otherwise, this sequence will never end)
             mxSequenceRoot->setDuration( makeAny((double)0.0) );
         }
@@ -3325,7 +3325,7 @@ void MainSequence::createMainSequence()
                 mxSequenceRoot->setUserData( aUserData );
 
                 // empty sequence until now, set duration to 0.0
-                // explicitely (otherwise, this sequence will never
+                // explicitly (otherwise, this sequence will never
                 // end)
                 mxSequenceRoot->setDuration( makeAny((double)0.0) );
 

@@ -71,7 +71,7 @@ namespace vclcanvas
         template args, and furthermore, don't want to derive
         ::canvas::CanvasCustomSpriteBase directly from
         ::canvas::Sprite (because derivees of
-        ::canvas::CanvasCustomSpriteBase have to explicitely forward
+        ::canvas::CanvasCustomSpriteBase have to explicitly forward
         the XInterface methods (e.g. via DECLARE_UNO3_AGG_DEFAULTS)
         anyway). Basically, ::canvas::CanvasCustomSpriteBase should
         remain a base class that provides implementation, not to

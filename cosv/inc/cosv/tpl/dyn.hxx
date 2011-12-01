@@ -45,7 +45,7 @@ namespace csv
 
     Dyn forbids the CopyC'tor and operator=(). So you can't incidentally
     run into problems with compiler defined CopyC'tor or operator=() of the
-    owning class. If you need those, you have to define them explicitely - as
+    owning class. If you need those, you have to define them explicitly - as
     you should do anyway with all classes, that own members on the heap.
 
     Dyn also works with incomplete types.

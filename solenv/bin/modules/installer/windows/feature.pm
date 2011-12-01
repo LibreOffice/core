@@ -140,7 +140,7 @@ sub get_feature_level
 
     if ( $onefeature->{'Default'} ) { $localdefault = $onefeature->{'Default'}; }
 
-    if ( $localdefault eq "NO" )    # explicitely set Default = "NO"
+    if ( $localdefault eq "NO" )    # explicitly set Default = "NO"
     {
         $level = "200";             # deselected in default installation, base is 100
         if ( $installer::globals::patch ) { $level = "20"; }

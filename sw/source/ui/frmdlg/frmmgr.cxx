@@ -191,7 +191,7 @@ sal_Bool SwFlyFrmAttrMgr::InsertFlyFrm()
 
 /*------------------------------------------------------------------------
  Description:   Insert frames of type eAnchorType. Position and size are
-                being set explicitely.
+                being set explicitly.
                 Not-allowed values of the enumeration type get corrected.
 ------------------------------------------------------------------------*/
 void SwFlyFrmAttrMgr::InsertFlyFrm(RndStdIds    eAnchorType,

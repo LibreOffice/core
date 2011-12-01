@@ -396,7 +396,7 @@ namespace drawinglayer
 #else
             // for non-WIN32 systems things are easier since these accept a Font creation
             // with initially nWidth != nHeight for FontScaling. Despite that, use zero for
-            // FontWidth when no scaling is used to explicitely have that zero when e.g. the
+            // FontWidth when no scaling is used to explicitly have that zero when e.g. the
             // Font would be recorded in a MetaFile (The MetaFile FontAction WILL record a
             // set FontWidth; import that in a WIN32 system, and trouble is there)
             Font aRetval(

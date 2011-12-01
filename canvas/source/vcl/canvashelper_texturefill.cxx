@@ -215,7 +215,7 @@ namespace vclcanvas
             basegfx::tools::KeyStopLerp aLerper(rValues.maStops);
 
             // only iterate nStepCount-1 steps, as the last strip is
-            // explicitely painted below
+            // explicitly painted below
             for( unsigned int i=0; i<nStepCount-1; ++i )
             {
                 std::ptrdiff_t nIndex;
@@ -407,7 +407,7 @@ namespace vclcanvas
                             basegfx::fround( fT*rInnerPoint.getY() + (1-fT)*rOuterPoint.getY() ) );
                     }
 
-                    // close polygon explicitely
+                    // close polygon explicitly
                     aTempPoly[(sal_uInt16)p] = aTempPoly[0];
 
                     // TODO(P1): compare with vcl/source/gdi/outdev4.cxx,
@@ -471,7 +471,7 @@ namespace vclcanvas
                             basegfx::fround( fT*rInnerPoint.getY() + (1-fT)*rOuterPoint.getY() ) );
                     }
 
-                    // close polygon explicitely
+                    // close polygon explicitly
                     aTempPoly[(sal_uInt16)p] = aTempPoly[0];
 
                     // swap inner and outer polygon

@@ -385,7 +385,7 @@ double SlideChangeBase::getUnderlyingValue() const
 {
     return 0.0;     // though this should be used in concert with
                     // ActivitiesFactory::createSimpleActivity, better
-                    // explicitely name our start value.
+                    // explicitly name our start value.
                     // Permissible range for operator() above is [0,1]
 }
 

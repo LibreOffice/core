@@ -73,7 +73,7 @@ namespace slideshow
 
                 Call this method to reduce the timeout show(), and
                 getInitialSlideBitmap() need to complete. If
-                prefetch() is not called explicitely, the named
+                prefetch() is not called explicitly, the named
                 methods will call it implicitely.
              */
             virtual bool prefetch() = 0;

@@ -178,7 +178,7 @@ Content* Content::create(
         sal_Int32 nLastSlash = aURL.lastIndexOf( '/' );
         if ( ( nLastSlash + 1 ) == aURL.getLength() )
         {
-            // Client explicitely requested a folder!
+            // Client explicitly requested a folder!
             if ( !aProps.bIsFolder )
                 return 0;
         }

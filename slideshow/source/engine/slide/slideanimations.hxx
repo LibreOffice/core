@@ -96,7 +96,7 @@ namespace slideshow
                 This method creates the network of events and
                 activities for all animations. The events and
                 activities are inserted into the constructor-provided
-                queues. These queues are not explicitely cleared, if
+                queues. These queues are not explicitly cleared, if
                 you rely on this object's effects to run without
                 interference, you should clear the queues by yourself.
 

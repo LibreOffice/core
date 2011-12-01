@@ -2063,7 +2063,7 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
                 }
 
                 // #110958# Disable alpha VDev, we're doing the necessary
-                // stuff explicitely furher below
+                // stuff explicitly furher below
                 if( mpAlphaVDev )
                     mpAlphaVDev = NULL;
 

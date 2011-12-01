@@ -1672,7 +1672,7 @@ void PSWriter::ImplPolyLine( const Polygon & rPoly )
                 }
             }
 
-            // #104645# explicitely close path if polygon is closed
+            // #104645# explicitly close path if polygon is closed
             if( rPoly[ 0 ] == rPoly[ nPointCount-1 ] )
                 ImplClosePathDraw( PS_RET );
             else

@@ -943,7 +943,7 @@ public class OOoBean
             a Java class which implements all interfaces which the service
         <type scope="com::sun::star::frame">Frame</a> implements.
         Thus, methods can be called directly without queryInterface.
-        This feature might be implemented by UNO or explicitely coded.
+        This feature might be implemented by UNO or explicitly coded.
 
         @throws NoConnectionException
             if the connection is not established.
@@ -969,7 +969,7 @@ public class OOoBean
             a Java class which implements all interfaces which the service
         <type scope="com::sun::star::frame">Controller</a> implements.
         Thus, methods can be called directly without queryInterface.
-        This feature might be implemented by UNO or explicitely coded.
+        This feature might be implemented by UNO or explicitly coded.
 
         @throws NoConnectionException
             if the connection is not established.
@@ -998,7 +998,7 @@ public class OOoBean
         <type scope="com::sun::star::document">OfficeDocument</a>
         implements.
         Thus, methods can be called directly without queryInterface.
-        This feature might be implemented by UNO or explicitely coded.
+        This feature might be implemented by UNO or explicitly coded.
 
         @throws NoConnectionException
             if the connection is not established.

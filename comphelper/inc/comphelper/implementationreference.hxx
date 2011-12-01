@@ -172,7 +172,7 @@ namespace comphelper
             C++ pointer.
 
             This is a static version of the constructor which creates
-            an instance of an implementation type which is explicitely
+            an instance of an implementation type which is explicitly
             queried for the ImplementationReference's
             template-parameterized UNO type.
 

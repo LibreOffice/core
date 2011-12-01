@@ -678,7 +678,7 @@ sal_Bool JPEGWriter::Write( const Graphic& rGraphic )
 
     pAcc = aGraphicBmp.AcquireReadAccess();
 
-    if ( !bGreys )  // bitmap was not explicitely converted into greyscale,
+    if ( !bGreys )  // bitmap was not explicitly converted into greyscale,
     {               // check if source is greyscale only
 
         sal_Bool bIsGrey = sal_True;

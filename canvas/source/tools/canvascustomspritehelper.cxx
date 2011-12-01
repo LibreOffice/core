@@ -326,7 +326,7 @@ namespace canvas
     void CanvasCustomSpriteHelper::clip( const Sprite::Reference&                           rSprite,
                                          const uno::Reference< rendering::XPolyPolygon2D >& xClip )
     {
-        // NULL xClip explicitely allowed here (to clear clipping)
+        // NULL xClip explicitly allowed here (to clear clipping)
 
         // retrieve bounds before and after clip change.
         const ::basegfx::B2DRectangle& rPrevBounds( getUpdateArea() );

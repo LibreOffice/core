@@ -190,7 +190,7 @@ namespace canvas
 
         virtual void SAL_CALL clip( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& aClip ) throw (::com::sun::star::uno::RuntimeException)
         {
-            // NULL xClip explicitely allowed here (to clear clipping)
+            // NULL xClip explicitly allowed here (to clear clipping)
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 

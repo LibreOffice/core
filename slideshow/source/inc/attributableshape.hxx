@@ -70,12 +70,12 @@ namespace slideshow
 
                 Please note that the attribute layers do <em>not</em>
                 contain the underlying XShape's attributes as
-                default. Instead, attributes not explicitely set by
+                default. Instead, attributes not explicitly set by
                 animations remain in invalid state, allowing the
                 shape's paint method to determine whether they have to
                 override the underlying graphical shape
                 representation. XShape attributes must be passed
-                explicitely to animations which need them (e.g. 'by'
+                explicitly to animations which need them (e.g. 'by'
                 animations).
 
                 @return the new layer
@@ -107,12 +107,12 @@ namespace slideshow
 
                 Please note that the attribute layers do <em>not</em>
                 contain the underlying XShape's attributes as
-                default. Instead, attributes not explicitely set by
+                default. Instead, attributes not explicitly set by
                 animations remain in invalid state, allowing the
                 shape's paint method to determine whether they have to
                 override the underlying graphical shape
                 representation. XShape attributes must be passed
-                explicitely to animations which need them (e.g. 'by'
+                explicitly to animations which need them (e.g. 'by'
                 animations).
 
                 @return the topmost layer
@@ -161,7 +161,7 @@ namespace slideshow
 
                 This method returns a clone of this Shape, which
                 renders only the selected subset of itself, but only
-                if such a subset has been explicitely created before.
+                if such a subset has been explicitly created before.
 
                 @param rTreeNode
                 A DocTreeNode instance queried from this Shape, which

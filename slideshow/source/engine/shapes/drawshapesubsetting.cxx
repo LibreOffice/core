@@ -165,7 +165,7 @@ namespace slideshow
                         // fallthrough intended
                     default:
                         // comment action and all actions not
-                        // explicitely handled here:
+                        // explicitly handled here:
                         nActionIndex += getNextActionOffset(pCurrAct);
                         break;
                 }

@@ -346,7 +346,7 @@ void SAL_CALL EventMultiplexerListener::disposing(
 {
     // there's no real point in acting on this message - after all,
     // the event sources are the XSlideShowViews, which must be
-    // explicitely removed from the slideshow via
+    // explicitly removed from the slideshow via
     // XSlideShow::removeView(). thus, if a XSlideShowView has
     // properly removed itself from the slideshow, it will not be
     // found here. and if it hasn't, there'll be other references at

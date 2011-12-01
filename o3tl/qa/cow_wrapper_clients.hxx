@@ -66,7 +66,7 @@ private:
 
 class cow_wrapper_client2_impl;
 
-/** test opaque impl type - need to explicitely declare lifetime
+/** test opaque impl type - need to explicitly declare lifetime
     methods
  */
 class cow_wrapper_client2

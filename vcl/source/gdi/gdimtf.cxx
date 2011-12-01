@@ -428,7 +428,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
 
         // #i23407# Set backwards-compatible text language and layout mode
         // This is necessary, since old metafiles don't even know of these
-        // recent add-ons. Newer metafiles must of course explicitely set
+        // recent add-ons. Newer metafiles must of course explicitly set
         // those states.
         pOut->Push( PUSH_TEXTLAYOUTMODE|PUSH_TEXTLANGUAGE );
         pOut->SetLayoutMode( 0 );
@@ -678,7 +678,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
 
         // #i23407# Set backwards-compatible text language and layout mode
         // This is necessary, since old metafiles don't even know of these
-        // recent add-ons. Newer metafiles must of course explicitely set
+        // recent add-ons. Newer metafiles must of course explicitly set
         // those states.
         pOut->SetLayoutMode( 0 );
         pOut->SetDigitLanguage( 0 );

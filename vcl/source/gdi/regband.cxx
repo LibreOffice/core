@@ -600,7 +600,7 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
     // #i46602# Reworked rectangle Xor
     //
     // In general, we can distinguish 11 cases of intersection
-    // (details below). The old implementation explicitely handled 7
+    // (details below). The old implementation explicitly handled 7
     // cases (numbered in the order of appearance, use CVS to get your
     // hands on the old version), therefore, I've sticked to that
     // order, and added four more cases. The code below references
