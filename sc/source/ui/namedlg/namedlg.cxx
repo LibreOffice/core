@@ -460,7 +460,7 @@ void ScNameDlg::SelectionChanged()
         maBtnDelete.Enable();
         maEdName.Enable();
         maEdAssign.Enable();
-        aRbAssign.Disable();
+        aRbAssign.Enable();
         maLbScope.Enable();
         maBtnSelect.Enable();
         maBtnRowHeader.Enable();
