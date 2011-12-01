@@ -72,13 +72,6 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ en-US ] = "Cancel" ;
         TabStop = TRUE ;
     };
-    PushButton BTN_SELECT
-    {
-        Pos = MAP_APPFONT ( 128 , 200 ) ;
-        Size = MAP_APPFONT ( 90 , 15 ) ;
-        Text [ en-US ] = "Select Range" ;
-        TabStop = TRUE ;
-    };
 
     FixedText FT_SCOPE
     {

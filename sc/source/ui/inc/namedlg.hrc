@@ -33,7 +33,6 @@
 #define BTN_DELETE      57
 #define BTN_NAME_OK     62
 #define BTN_NAME_CANCEL      73
-#define BTN_SELECT      74
 
 #define FT_SCOPE        7
 #define FT_RANGE        58

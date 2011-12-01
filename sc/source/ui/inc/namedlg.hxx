@@ -68,7 +68,6 @@ private:
 
     PushButton      maBtnAdd;
     PushButton      maBtnDelete;
-    PushButton      maBtnSelect;
     HelpButton      maBtnHelp;
     PushButton      maBtnOk;
     PushButton      maBtnCancel;

@@ -85,7 +85,6 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     //
     maBtnAdd         ( this, ScResId( BTN_ADD ) ),
     maBtnDelete      ( this, ScResId( BTN_DELETE ) ),
-    maBtnSelect      ( this, ScResId( BTN_SELECT ) ),
     maBtnHelp        ( this, ScResId( BTN_HELP ) ),
     maBtnOk          ( this, ScResId( BTN_NAME_OK ) ),
     maBtnCancel      ( this, ScResId( BTN_NAME_CANCEL ) ),
@@ -180,8 +179,6 @@ void ScNameDlg::Init()
 
     //TODO: fix the Add Button
     maBtnAdd.Disable();
-    //TODO: discuss the Select Range button with UX
-    maBtnSelect.Disable();
 }
 
 sal_Bool ScNameDlg::IsRefInputMode() const
@@ -442,7 +439,6 @@ void ScNameDlg::SelectionChanged()
         maEdAssign.Disable();
         aRbAssign.Disable();
         maLbScope.Disable();
-        maBtnSelect.Disable();
         maBtnRowHeader.Disable();
         maBtnColHeader.Disable();
         maBtnPrintArea.Disable();
@@ -461,7 +457,6 @@ void ScNameDlg::SelectionChanged()
         maEdAssign.Enable();
         aRbAssign.Enable();
         maLbScope.Enable();
-        maBtnSelect.Enable();
         maBtnRowHeader.Enable();
         maBtnColHeader.Enable();
         maBtnPrintArea.Enable();
@@ -513,7 +508,6 @@ void ScNameDlg::MorePushed()
     MoveWindow(maBtnHelp, nPixel);
     MoveWindow(maBtnOk, nPixel);
     MoveWindow(maBtnCancel, nPixel);
-    MoveWindow(maBtnSelect, nPixel);
     MoveWindow(maFlDiv, nPixel);
 }
 
