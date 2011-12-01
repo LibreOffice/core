@@ -100,10 +100,9 @@ ManageLanguageDialog::ManageLanguageDialog( Window* pParent, LocalizationMgr* _p
     m_aHelpBtn          ( this, IDEResId( PB_HELP ) ),
     m_aCloseBtn         ( this, IDEResId( PB_CLOSE ) ),
     m_pLocalizationMgr  ( _pLMgr ),
-    m_sDefLangStr       (       IDEResId( STR_DEF_LANG ) ),
-    m_sDeleteStr        (       IDEResId( STR_DELETE ) ),
-    m_sCreateLangStr    (       IDEResId( STR_CREATE_LANG ) )
-
+    m_sDefLangStr       (ResId::toString(IDEResId(STR_DEF_LANG))),
+    m_sDeleteStr        (ResId::toString(IDEResId(STR_DELETE))),
+    m_sCreateLangStr    (ResId::toString(IDEResId(STR_CREATE_LANG)))
 {
     FreeResource();
 

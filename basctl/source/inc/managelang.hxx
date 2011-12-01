@@ -39,11 +39,11 @@ class LocalizationMgr;
 
 struct LanguageEntry
 {
-    String                          m_sLanguage;
+    ::rtl::OUString                 m_sLanguage;
     ::com::sun::star::lang::Locale  m_aLocale;
     bool                            m_bIsDefault;
 
-    LanguageEntry( const String& _rLanguage,
+    LanguageEntry( const ::rtl::OUString& _rLanguage,
                    const ::com::sun::star::lang::Locale& _rLocale,
                    bool _bIsDefault ) :
         m_sLanguage( _rLanguage ),
@@ -70,9 +70,9 @@ private:
 
     LocalizationMgr*    m_pLocalizationMgr;
 
-    String              m_sDefLangStr;
-    String              m_sDeleteStr;
-    String              m_sCreateLangStr;
+    ::rtl::OUString     m_sDefLangStr;
+    ::rtl::OUString     m_sDeleteStr;
+    ::rtl::OUString     m_sCreateLangStr;
 
     void                Init();
     void                CalcInfoSize();
