@@ -32,10 +32,9 @@ $(eval $(call gb_Library_add_package_headers,tl,tools_inc))
 $(eval $(call gb_Library_add_package_headers,tl,tools_reversemap))
 
 $(eval $(call gb_Library_set_include,tl,\
-    $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/tools/inc) \
-    -I$(SRCDIR)/solenv/inc \
     -I$(WORKDIR)/CustomTarget/tools/source/reversemap \
+    $$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_add_defs,tl,\
@@ -128,8 +127,8 @@ $(eval $(call gb_Library_use_external,tl,zlib))
 ifeq ($(OS),WNT)
 
 $(eval $(call gb_Library_set_include,tl,\
-    $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/tools/win/inc) \
+    $$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,tl,\

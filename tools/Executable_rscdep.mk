@@ -29,9 +29,9 @@
 $(eval $(call gb_Executable_Executable,rscdep))
 
 $(eval $(call gb_Executable_set_include,rscdep,\
-    $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/tools/inc) \
     -I$(realpath $(SRCDIR)/tools/bootstrp) \
+    -I$(realpath $(SRCDIR)/tools/inc) \
+    $$(INCLUDE) \
 ))
 
 $(eval $(call gb_Executable_add_defs,rscdep,\
