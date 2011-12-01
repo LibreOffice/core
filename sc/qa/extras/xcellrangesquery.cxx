@@ -47,8 +47,6 @@ public:
 
     uno::Reference<sheet::XCellRangesQuery> init();
 
-    void setRowVisible(bool bVisible);
-
     //Testcases
     void testQueryColumnDifference();
     void testQueryContentDifference();
@@ -158,18 +156,12 @@ void ScXCellRangesQuery::testQueryRowDifference()
 
 void ScXCellRangesQuery::testQueryVisibleCells()
 {
-    setRowVisible(false);
     rtl::OUString aExpected(RTL_CONSTASCII_USTRINGPARAM("Sheet1.A2"));
     uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery = init();
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryVisibleCells();
     rtl::OUString aResult = xRanges->getRangeAddressesAsString();
     std::cout << "testQueryVisibleCells: Result: " << rtl::OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
     CPPUNIT_ASSERT_MESSAGE("testQueryFormulaCells", aResult == aExpected);
-}
-
-void ScXCellRangesQuery::setRowVisible(bool bVisible)
-{
-
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScXCellRangesQuery);
