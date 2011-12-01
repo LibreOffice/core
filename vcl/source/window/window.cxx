@@ -36,6 +36,7 @@
 #include "unotools/confignode.hxx"
 
 #include "vcl/unohelp.hxx"
+#include "vcl/layout.hxx"
 #include "vcl/salgtype.hxx"
 #include "vcl/event.hxx"
 #include "vcl/help.hxx"
@@ -9575,14 +9576,25 @@ Selection Window::GetSurroundingTextSelection() const
 //size, get parent dialog and call resize on it
 void Window::queueResize()
 {
-    fprintf(stderr, "Window::queueResize called\n");
     Dialog *pParent = GetParentDialog();
-    fprintf(stderr, "parent dialog is %p\n", pParent);
-    if (pParent && pParent->IsReallyShown() && pParent->isLayoutEnabled())
+    if (pParent && pParent->isLayoutEnabled())
     {
         //To-Do: integrate with mpWindowImpl->mpFrameData->maResizeTimer.SetTimeout( 50 );
-        fprintf(stderr, "suitable, so call resize\n");
-        pParent->Resize();
+        if (pParent->IsReallyShown())
+        {
+            pParent->Resize();
+        }
+        else
+        {
+            //resize dialog to fit requisition
+            //To-Do: honour explicit sizes ?
+            const Box *pContainer = dynamic_cast<const Box*>(pParent->GetChild(0));
+            Size aSize = pContainer->GetOptimalSize(WINDOWSIZE_PREFERRED);
+            aSize.Width(), aSize.Height();
+            pParent->SetMinOutputSizePixel(aSize);
+            pParent->SetSizePixel(aSize);
+            pParent->Resize();
+        }
     }
 }
 
