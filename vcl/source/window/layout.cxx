@@ -318,5 +318,29 @@ void ButtonBox::setAllocation(const Size &rAllocation)
     }
 }
 
+Size getLegacyBestSizeForChildren(const Window &rWindow)
+{
+    Rectangle aBounds;
+
+    for (Window* pChild = rWindow.GetWindow(WINDOW_FIRSTCHILD); pChild;
+        pChild = pChild->GetWindow(WINDOW_NEXT))
+    {
+        if (!pChild->IsVisible())
+            continue;
+
+        Rectangle aChildBounds(pChild->GetPosPixel(), pChild->GetSizePixel());
+        aBounds.Union(aChildBounds);
+    }
+
+    if (aBounds.IsEmpty())
+        return rWindow.GetSizePixel();
+
+    Size aRet(aBounds.GetSize());
+    Point aTopLeft(aBounds.TopLeft());
+    aRet.Width() += aTopLeft.X()*2;
+    aRet.Height() += aTopLeft.Y()*2;
+
+    return aRet;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

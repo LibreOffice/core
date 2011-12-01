@@ -248,6 +248,10 @@ protected:
     }
 };
 
+//Get a Size which is large enough to contain all children with
+//an equal amount of space at top left and bottom right
+Size getLegacyBestSizeForChildren(const Window &rWindow);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
