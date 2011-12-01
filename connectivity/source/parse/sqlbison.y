@@ -4529,15 +4529,15 @@ const double fMilliSecondsPerDay = 86400000.0;
 		
 		for (sal_Int32 i = 0; i < nLen; i++)
 		{
-			const sal_Unicode c = aMatchStr.charAt(i);
-			if (c == sSearch.charAt(0) || c == sSearch.charAt(1))
+			const sal_Unicode c = aMatchStr[i];
+			if (c == sSearch[0] || c == sSearch[1])
 			{
-				if (i > 0 && aMatchStr.charAt(i-1) == cEscape)
+				if (i > 0 && aMatchStr[i - 1] == cEscape)
 					continue;
 				else
 				{
-					const sal_Unicode cCharacter = sReplace.charAt( (c == sSearch.charAt(0)) ? 0 : 1);
-					aMatchStr.setCharAt(i , cCharacter);
+				        const sal_Unicode cCharacter = sReplace[(c == sSearch[0] ? 0 : 1)];
+					aMatchStr[i] = cCharacter;
 				}
 			}
 		}

@@ -680,95 +680,6 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_setLength(
 //    return ( res );
 }
 //------------------------------------------------------------------------
-// testing the method charAt( sal_Int32 index )
-//------------------------------------------------------------------------
-
-extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_charAt(
-                                              hTestResult hRtlTestResult)
-{
-    c_rtl_tres_state_start( hRtlTestResult, "charAt");
-    sal_Char methName[MAXBUFLENGTH];
-    sal_Char* pMeth = methName;
-
-    OUString arrOUS[4]={OUString( aUStr1 ), // "Sun Microsystems";
-                        OUString( aUStr27), // "s";
-                        OUString( aUStr28), // "\50\3\5\7\11\13\15\17sun";
-                        OUString( )};
-
-    typedef struct TestCase
-    {
-        sal_Char*       comments;
-        sal_Unicode         expVal;
-        OUStringBuffer*         input1;
-        sal_Int32               input2;
-        ~TestCase()             { delete input1;}
-    } TestCase;
-
-    TestCase arrTestCase[]={
-
-    {"return the first character of OUStringBuffer(aUStr1)",
-                83, new OUStringBuffer(arrOUS[0]), 0 },
-    {"return the middle character of OUStringBuffer(aUStr1)",
-                32, new OUStringBuffer(arrOUS[0]), 3 },
-        {"return the last character of OUStringBuffer(aUStr1)",
-                115, new OUStringBuffer(arrOUS[0]), 15 },
-    {"return the only character of OUStringBuffer(aUStr27)",
-                115, new OUStringBuffer(arrOUS[1]), 0},
-    {"return the first of OUStringBuffer(aUStr28) with special character",
-                40, new OUStringBuffer(arrOUS[2]), 0},
-    /*
-{"return the mid of OUStringBuffer(aUStr28) with special character",
-                11, new OUStringBuffer(arrOUS[2]), 5},
-*/
-/*
-        {"invalid character of OUStringBuffer()",
-                0, new OUStringBuffer(arrOUS[3]), 0},
-*/
-/*
-        {"invalid character of OUStringBuffer()",
-                0, new OUStringBuffer(arrOUS[3]), -2}
-*/
-
-    };
-
-
-    sal_Bool res = sal_True;
-    sal_uInt32 i;
-
-    for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
-    {
-        sal_Bool lastRes =
-            ( arrTestCase[i].input1->charAt(arrTestCase[i].input2) ==
-              arrTestCase[i].expVal );
-        // LLA: last case removed, due to the fact of complexity of the test code :-(
-        // LLA: if(i<=7)
-        // LLA: {
-        c_rtl_tres_state
-            (
-                hRtlTestResult,
-                lastRes,
-                arrTestCase[i].comments,
-                createName( pMeth, "charAt", i )
-
-                );
-        // LLA: }
-        // LLA: else
-        // LLA: {
-        // LLA:     c_rtl_tres_state
-        // LLA:     (
-        // LLA:         hRtlTestResult,
-        // LLA:         sal_True,
-        // LLA:         arrTestCase[i].comments,
-        // LLA:         createName( pMeth, "charAt", i )
-        // LLA:
-        // LLA:     );
-        // LLA: }
-    res &= lastRes;
-    }
-    c_rtl_tres_state_end( hRtlTestResult, "charAt");
-//    return ( res );
-}
-//------------------------------------------------------------------------
 // testing the operator const sal_Unicode * (csuc for short)
 //------------------------------------------------------------------------
 extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_csuc(
@@ -876,87 +787,6 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_getStr(
        );
     }
     c_rtl_tres_state_end( hRtlTestResult, "getStr");
-//    return ( res );
-}
-//------------------------------------------------------------------------
-// testing the method setCharAt(sal_Int32 index, sal_Unicode ch)
-//------------------------------------------------------------------------
-
-extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_setCharAt(
-                                              hTestResult hRtlTestResult)
-{
-    c_rtl_tres_state_start( hRtlTestResult, "setCharAt");
-    sal_Char methName[MAXBUFLENGTH];
-    sal_Char* pMeth = methName;
-
-    OUString arrOUS[4]={OUString( aUStr1 ),
-                        OUString( aUStr27),
-                        OUString( aUStr28),
-                        OUString( )};
-
-    typedef struct TestCase
-    {
-    sal_Char*       comments;
-    OUString*               expVal;
-        OUStringBuffer*         input1;
-        sal_Int32               input2;
-        sal_Unicode             input3;
-        ~TestCase()             { delete input1; delete expVal; }
-    } TestCase;
-
-    TestCase arrTestCase[]={
-
-    {"set the first character of OUStringBuffer(aUStr1) with s",
-                new OUString(aUStr31),
-                new OUStringBuffer(arrOUS[0]), 0, 115 },
-    {"set the middle character of OUStringBuffer(aUStr1) with m",
-                new OUString(aUStr3),
-                new OUStringBuffer(arrOUS[0]), 4, 109 },
-        {"set the last character of OUStringBuffer(aUStr1) with ' '",
-                new OUString(aUStr32),
-                new OUStringBuffer(arrOUS[0]), 15, 32 },
-    {"set the only character of OUStringBuffer(aUStr27) with ' '",
-                new OUString(aUStr33),
-                new OUStringBuffer(arrOUS[1]), 0, 32},
-    {"set the only of OUStringBuffer(aUStr28) with special character",
-                new OUString(aUStr34),
-                new OUStringBuffer(arrOUS[2]), 1, 5},
-    };
-
-
-    sal_Bool res = sal_True;
-    sal_uInt32 i;
-
-    for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
-    {
-        sal_Bool lastRes =
-            ( (arrTestCase[i].input1->setCharAt(arrTestCase[i].input2,
-                arrTestCase[i].input3)).getStr() == *(arrTestCase[i].expVal) );
-        if(i<=4)
-        {
-            c_rtl_tres_state
-            (
-                hRtlTestResult,
-                lastRes,
-                arrTestCase[i].comments,
-                createName( pMeth, "setCharAt", i )
-
-            );
-        }
-        else
-        {
-            c_rtl_tres_state
-            (
-                hRtlTestResult,
-                sal_True,
-                arrTestCase[i].comments,
-                createName( pMeth, "setCharAt", i )
-
-            );
-        }
-    res &= lastRes;
-    }
-    c_rtl_tres_state_end( hRtlTestResult, "setCharAt");
 //    return ( res );
 }
 //------------------------------------------------------------------------
@@ -1708,10 +1538,8 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer( hTestResult hRt
     test_rtl_OUStringBuffer_getCapacity( hRtlTestResult );
     test_rtl_OUStringBuffer_ensureCapacity( hRtlTestResult );
     test_rtl_OUStringBuffer_setLength( hRtlTestResult );
-    test_rtl_OUStringBuffer_charAt( hRtlTestResult );
     test_rtl_OUStringBuffer_csuc( hRtlTestResult );
     test_rtl_OUStringBuffer_getStr( hRtlTestResult );
-    test_rtl_OUStringBuffer_setCharAt( hRtlTestResult );
     test_rtl_OUStringBuffer_appends( hRtlTestResult );
     test_rtl_OUStringBuffer_appendAsciis( hRtlTestResult );
 
