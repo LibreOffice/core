@@ -133,7 +133,8 @@ void ScDocument::UpdateAllCharts()
 
     size_t nDataCount = pChartCollection->size();
 
-    for (SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()); nTab++)
+    SCTAB nSize = static_cast<SCTAB>(maTabs.size());
+    for (SCTAB nTab=0; nTab< nSize; nTab++)
     {
         if (maTabs[nTab])
         {
@@ -247,7 +248,8 @@ uno::Reference< chart2::XChartDocument > ScDocument::GetChartByName( const rtl::
     if (pDrawLayer)
     {
         sal_uInt16 nCount = pDrawLayer->GetPageCount();
-        for (sal_uInt16 nTab=0; nTab<nCount&& nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
+        SCTAB nSize = static_cast<SCTAB>(maTabs.size());
+        for (sal_uInt16 nTab=0; nTab<nCount && nTab < nSize; nTab++)
         {
             SdrPage* pPage = pDrawLayer->GetPage(nTab);
             OSL_ENSURE(pPage,"Page ?");

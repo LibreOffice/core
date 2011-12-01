@@ -656,7 +656,8 @@ bool ScDocument::HasSheetEventScript( SCTAB nTab, sal_Int32 nEvent, bool bWithVb
 
 bool ScDocument::HasAnySheetEventScript( sal_Int32 nEvent, bool bWithVbaEvents ) const
 {
-    for (SCTAB nTab = 0; nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
+    SCTAB nSize = static_cast<SCTAB>(maTabs.size());
+    for (SCTAB nTab = 0; nTab < nSize; nTab++)
         if (HasSheetEventScript( nTab, nEvent, bWithVbaEvents ))
             return true;
     return false;
@@ -664,7 +665,8 @@ bool ScDocument::HasAnySheetEventScript( sal_Int32 nEvent, bool bWithVbaEvents )
 
 bool ScDocument::HasAnyCalcNotification() const
 {
-    for (SCTAB nTab = 0; nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
+    SCTAB nSize = static_cast<SCTAB>(maTabs.size());
+    for (SCTAB nTab = 0; nTab < nSize; nTab++)
         if (maTabs[nTab] && maTabs[nTab]->GetCalcNotification())
             return true;
     return false;
@@ -686,7 +688,8 @@ void ScDocument::SetCalcNotification( SCTAB nTab )
 
 void ScDocument::ResetCalcNotifications()
 {
-    for (SCTAB nTab = 0; nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
+    SCTAB nSize = static_cast<SCTAB>(maTabs.size());
+    for (SCTAB nTab = 0; nTab < nSize; nTab++)
         if (maTabs[nTab] && maTabs[nTab]->GetCalcNotification())
             maTabs[nTab]->SetCalcNotification(false);
 }
