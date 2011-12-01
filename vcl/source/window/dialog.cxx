@@ -168,11 +168,26 @@ void ImplWindowAutoMnemonic( Window* pWindow )
     }
 }
 
+static Window* getActionAreaButtonList(Dialog *pDialog)
+{
+    Window* pChild;
+    if (pDialog->isLayoutEnabled())
+    {
+        Box *pBox = dynamic_cast<Box*>(pDialog->GetWindow(WINDOW_FIRSTCHILD));
+        HButtonBox *pButtonBox = pBox ?
+            dynamic_cast<HButtonBox*>(pBox->GetWindow(WINDOW_LASTCHILD)) : 0;
+        pChild = pButtonBox ? pButtonBox->GetWindow(WINDOW_FIRSTCHILD) : 0;
+    }
+    else
+        pChild = pDialog->GetWindow( WINDOW_FIRSTCHILD );
+    return pChild;
+}
+
 // =======================================================================
 
 static PushButton* ImplGetDefaultButton( Dialog* pDialog )
 {
-    Window* pChild = pDialog->GetWindow( WINDOW_FIRSTCHILD );
+    Window* pChild = getActionAreaButtonList(pDialog);
     while ( pChild )
     {
         if ( pChild->ImplIsPushButton() )
@@ -192,7 +207,7 @@ static PushButton* ImplGetDefaultButton( Dialog* pDialog )
 
 static PushButton* ImplGetOKButton( Dialog* pDialog )
 {
-    Window* pChild = pDialog->GetWindow( WINDOW_FIRSTCHILD );
+    Window* pChild = getActionAreaButtonList(pDialog);
     while ( pChild )
     {
         if ( pChild->GetType() == WINDOW_OKBUTTON )
@@ -208,7 +223,8 @@ static PushButton* ImplGetOKButton( Dialog* pDialog )
 
 static PushButton* ImplGetCancelButton( Dialog* pDialog )
 {
-    Window* pChild = pDialog->GetWindow( WINDOW_FIRSTCHILD );
+    Window* pChild = getActionAreaButtonList(pDialog);
+
     while ( pChild )
     {
         if ( pChild->GetType() == WINDOW_CANCELBUTTON )
@@ -963,7 +979,6 @@ Size Dialog::GetOptimalSize(WindowSizeType eType) const
 
 void Dialog::Resize()
 {
-    fprintf(stderr, "Dialog::Resize\n");
     if (isLayoutEnabled())
     {
         Size aSize = GetSizePixel();
