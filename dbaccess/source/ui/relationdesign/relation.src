@@ -79,5 +79,5 @@ String STR_QUERY_REL_DELETE_WINDOW
 
 String STR_QUERY_REL_COULD_NOT_CREATE
 {
-    Text [ en-US ] = "The database could not create the relation. May be foreign keys for this kind of table aren't supported.\nPlease check your documentation of the database.";
+    Text [ en-US ] = "The database could not create the relation. Maybe foreign keys for this kind of table aren't supported.\nPlease check your documentation of the database.";
 };
