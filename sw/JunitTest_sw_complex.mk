@@ -63,9 +63,7 @@ $(eval $(call gb_JunitTest_add_classes,sw_complex,\
     complex.writer.CheckFlies \
     complex.writer.CheckIndexedPropertyValues \
     complex.writer.CheckNamedPropertyValues \
+    complex.writer.TextPortionEnumerationTest \
 ))
-# fd#35657 test disabled - reenable if fixed
-#    complex.writer.TextPortionEnumerationTest \
-
 
 # vim: set noet sw=4 ts=4:
