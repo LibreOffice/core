@@ -82,7 +82,11 @@ Directory gid_Test_Brand_Dir_Share_Test
 End
 
 Directory gid_Test_Dir_Common_Ure
+#if defined MACOSX
+    ParentID = gid_Test_Dir_Bundle_Contents;
+#else
     ParentID = gid_Test_Dir_Brand_Root;
+#endif
     HostName = "ure";
     Styles = (UREDIRECTORY);
 End
