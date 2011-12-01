@@ -376,7 +376,7 @@ public:
     void                    SetParaStyleName( const ::rtl::OUString& rSet ) { m_sParaStyleName = rSet;}
     const ::rtl::OUString&  GetParaStyleName() const { return m_sParaStyleName;}
 
-
+    void ResetFrameProperties();
 };
 typedef boost::shared_ptr<ParagraphProperties>  ParagraphPropertiesPtr;
 /*-------------------------------------------------------------------------

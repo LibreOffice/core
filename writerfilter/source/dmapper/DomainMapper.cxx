@@ -1220,7 +1220,8 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_sprm::LN_PDxaFromText:
         case NS_sprm::LN_PDyaFromText:
         {
-            ParagraphProperties* pParaProperties = dynamic_cast< ParagraphProperties*>(m_pImpl->GetTopContext().get());
+            ParagraphProperties* pParaProperties = dynamic_cast< ParagraphProperties*>(
+                    m_pImpl->GetTopContextOfType( CONTEXT_PARAGRAPH ).get() );
             if( pParaProperties )
             {
                 switch( nName )
@@ -3206,6 +3207,8 @@ void DomainMapper::lcl_startSectionGroup()
 
 void DomainMapper::lcl_endSectionGroup()
 {
+    m_pImpl->CheckUnregisteredFrameConversion();
+    m_pImpl->ExecuteFrameConversion();
     PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_SECTION);
     SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
     OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
@@ -3233,7 +3236,6 @@ void DomainMapper::lcl_startParagraphGroup()
 
 void DomainMapper::lcl_endParagraphGroup()
 {
-    m_pImpl->CheckUnregisteredFrameConversion();
     m_pImpl->PopProperties(CONTEXT_PARAGRAPH);
     m_pImpl->getTableManager().endParagraphGroup();
     //frame conversion has to be executed after table conversion

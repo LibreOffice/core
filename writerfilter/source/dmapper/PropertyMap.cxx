@@ -1142,6 +1142,29 @@ int ParagraphProperties::operator==(const ParagraphProperties& rCompare)
         m_bAnchorLock== rCompare.m_bAnchorLock;
 }
 
+void ParagraphProperties::ResetFrameProperties()
+{
+    m_bFrameMode = false;
+    m_nDropCap = NS_ooxml::LN_Value_wordprocessingml_ST_DropCap_none;
+    m_nLines = 0;
+    m_w = -1;
+    m_h = -1;
+    m_nWrap = -1;
+    m_hAnchor = -1;
+    m_vAnchor = text::RelOrientation::FRAME;
+    m_x = -1;
+    m_bxValid = false;
+    m_y = -1;
+    m_byValid = false;
+    m_hSpace = -1;
+    m_vSpace = -1;
+    m_hRule = -1;
+    m_xAlign = -1;
+    m_yAlign = -1;
+    m_bAnchorLock = false;
+    m_nDropCapLength = 0;
+}
+
 
 ParagraphPropertyMap::ParagraphPropertyMap()
 {

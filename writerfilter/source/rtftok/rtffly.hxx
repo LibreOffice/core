@@ -49,6 +49,44 @@ namespace writerfilter {
                     return Value.Flags.nRelOrient;
                 }
 
+                sal_Int32 GetAlign() const
+                {
+                    sal_Int32 nAlign = 0;
+                    switch( GetOrient( ) )
+                    {
+                        case text::VertOrientation::CENTER:
+                            nAlign = NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_center;
+                            break;
+                        case text::VertOrientation::TOP:
+                            nAlign = NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_top;
+                            break;
+                        case text::VertOrientation::BOTTOM:
+                            nAlign = NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_bottom;
+                            break;
+                    }
+
+                    return nAlign;
+                }
+
+                sal_Int32 GetAnchor() const
+                {
+                    sal_Int32 nAnchor = 0;
+                    switch( GetRelation( ) )
+                    {
+                        case text::RelOrientation::FRAME:
+                            nAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_VAnchor_text;
+                            break;
+                        case text::RelOrientation::PAGE_FRAME:
+                            nAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_VAnchor_page;
+                            break;
+                        case text::RelOrientation::PAGE_PRINT_AREA:
+                            nAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_VAnchor_margin;
+                            break;
+                    }
+
+                    return nAnchor;
+                }
+
                 sal_uInt16 GetValue() const
                 {
                     return Value.nVal;
@@ -83,6 +121,50 @@ namespace writerfilter {
                 sal_uInt16 GetRelation() const
                 {
                     return Value.Flags.nRelOrient;
+                }
+
+                sal_Int32 GetAlign() const
+                {
+                    sal_Int32 nAlign = 0;
+                    switch( GetOrient( ) )
+                    {
+                        case text::HoriOrientation::CENTER:
+                            nAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_center;
+                            break;
+                        case text::HoriOrientation::RIGHT:
+                            nAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_right;
+                            break;
+                        case text::HoriOrientation::LEFT:
+                            nAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_left;
+                            break;
+                        case text::HoriOrientation::INSIDE:
+                            nAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_inside;
+                            break;
+                        case text::HoriOrientation::OUTSIDE:
+                            nAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_outside;
+                            break;
+                    }
+
+                    return nAlign;
+                }
+
+                sal_Int32 GetAnchor() const
+                {
+                    sal_Int32 nAnchor = 0;
+                    switch( GetRelation( ) )
+                    {
+                        case text::RelOrientation::FRAME:
+                            nAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_HAnchor_text;
+                            break;
+                        case text::RelOrientation::PAGE_FRAME:
+                            nAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_HAnchor_page;
+                            break;
+                        case text::RelOrientation::PAGE_PRINT_AREA:
+                            nAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_HAnchor_margin;
+                            break;
+                    }
+
+                    return nAnchor;
                 }
 
                 sal_uInt16 GetValue() const

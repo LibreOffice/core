@@ -695,17 +695,17 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 {
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
     TextAppendContext& rAppendContext = m_aTextAppendStack.top();
-    if( rAppendContext.pLastParagraphProperties.get() )
+    if( rAppendContext.pLastParagraphProperties.get() && rAppendContext.pLastParagraphProperties->IsFrameMode() )
     {
         try
         {
             StyleSheetEntryPtr pParaStyle =
-                m_pStyleSheetTable->FindStyleSheetByConvertedStyleName(rAppendContext.pLastParagraphProperties->GetParaStyleName());
+                GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(rAppendContext.pLastParagraphProperties->GetParaStyleName());
 
-            uno::Sequence< beans::PropertyValue > aFrameProperties(pParaStyle ? 15: 0);
+            uno::Sequence< beans::PropertyValue > aFrameProperties(pParaStyle ? 15: 9);
+
             if ( pParaStyle.get( ) )
             {
-                const ParagraphProperties* pStyleProperties = dynamic_cast<const ParagraphProperties*>( pParaStyle->pProperties.get() );
                 beans::PropertyValue* pFrameProperties = aFrameProperties.getArray();
                 pFrameProperties[0].Name = rPropNameSupplier.GetName(PROP_WIDTH);
                 pFrameProperties[1].Name = rPropNameSupplier.GetName(PROP_HEIGHT);
@@ -722,6 +722,8 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 pFrameProperties[12].Name = rPropNameSupplier.GetName(PROP_RIGHT_MARGIN);
                 pFrameProperties[13].Name = rPropNameSupplier.GetName(PROP_TOP_MARGIN);
                 pFrameProperties[14].Name = rPropNameSupplier.GetName(PROP_BOTTOM_MARGIN);
+
+                const ParagraphProperties* pStyleProperties = dynamic_cast<const ParagraphProperties*>( pParaStyle->pProperties.get() );
                 sal_Int32 nWidth =
                     rAppendContext.pLastParagraphProperties->Getw() > 0 ?
                         rAppendContext.pLastParagraphProperties->Getw() :
@@ -730,10 +732,12 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 if( bAutoWidth )
                     nWidth = DEFAULT_FRAME_MIN_WIDTH;
                 pFrameProperties[0].Value <<= nWidth;
+
                 pFrameProperties[1].Value <<=
                     rAppendContext.pLastParagraphProperties->Geth() > 0 ?
                         rAppendContext.pLastParagraphProperties->Geth() :
                         pStyleProperties->Geth();
+
                 pFrameProperties[2].Value <<= sal_Int16(
                     rAppendContext.pLastParagraphProperties->GethRule() >= 0 ?
                         rAppendContext.pLastParagraphProperties->GethRule() :
@@ -795,6 +799,118 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                     rAppendContext.pLastParagraphProperties->GetStartingRange(),
                     rAppendContext.pLastParagraphProperties->GetEndingRange());
             }
+            else
+            {
+                beans::PropertyValue* pFrameProperties = aFrameProperties.getArray();
+                pFrameProperties[0].Name = rPropNameSupplier.GetName(PROP_WIDTH);
+                pFrameProperties[1].Name = rPropNameSupplier.GetName(PROP_SIZE_TYPE);
+                pFrameProperties[2].Name = rPropNameSupplier.GetName(PROP_WIDTH_TYPE);
+                pFrameProperties[3].Name = rPropNameSupplier.GetName(PROP_HORI_ORIENT);
+                pFrameProperties[4].Name = rPropNameSupplier.GetName(PROP_VERT_ORIENT);
+                pFrameProperties[5].Name = rPropNameSupplier.GetName(PROP_LEFT_MARGIN);
+                pFrameProperties[6].Name = rPropNameSupplier.GetName(PROP_RIGHT_MARGIN);
+                pFrameProperties[7].Name = rPropNameSupplier.GetName(PROP_TOP_MARGIN);
+                pFrameProperties[8].Name = rPropNameSupplier.GetName(PROP_BOTTOM_MARGIN);
+
+                sal_Int32 nWidth = rAppendContext.pLastParagraphProperties->Getw();
+                bool bAutoWidth = nWidth < 1;
+                if( bAutoWidth )
+                    nWidth = DEFAULT_FRAME_MIN_WIDTH;
+                pFrameProperties[0].Value <<= nWidth;
+
+                pFrameProperties[1].Value <<= sal_Int16(
+                    rAppendContext.pLastParagraphProperties->GethRule() >= 0 ?
+                        rAppendContext.pLastParagraphProperties->GethRule() :
+                        text::SizeType::VARIABLE);
+
+                pFrameProperties[2].Value <<= bAutoWidth ?  text::SizeType::MIN : text::SizeType::FIX;
+
+                sal_Int16 nHoriOrient = sal_Int16(
+                    rAppendContext.pLastParagraphProperties->GetxAlign() >= 0 ?
+                        rAppendContext.pLastParagraphProperties->GetxAlign() :
+                        text::HoriOrientation::NONE );
+                pFrameProperties[3].Value <<= nHoriOrient;
+
+                sal_Int16 nVertOrient = sal_Int16(
+                    rAppendContext.pLastParagraphProperties->GetyAlign() >= 0 ?
+                        rAppendContext.pLastParagraphProperties->GetyAlign() :
+                        text::VertOrientation::NONE );
+                pFrameProperties[4].Value <<= nVertOrient;
+
+                sal_Int32 nVertDist = rAppendContext.pLastParagraphProperties->GethSpace();
+                if( nVertDist < 0 )
+                    nVertDist = 0;
+                pFrameProperties[5].Value <<= nVertOrient == text::VertOrientation::TOP ? 0 : nVertDist;
+                pFrameProperties[6].Value <<= nVertOrient == text::VertOrientation::BOTTOM ? 0 : nVertDist;
+
+                sal_Int32 nHoriDist = rAppendContext.pLastParagraphProperties->GetvSpace();
+                if( nHoriDist < 0 )
+                    nHoriDist = 0;
+                pFrameProperties[7].Value <<= nHoriOrient == text::HoriOrientation::LEFT ? 0 : nHoriDist;
+                pFrameProperties[8].Value <<= nHoriOrient == text::HoriOrientation::RIGHT ? 0 : nHoriDist;
+
+                if( rAppendContext.pLastParagraphProperties->Geth() > 0 )
+                {
+                    sal_Int32 nOldSize = aFrameProperties.getLength();
+                    aFrameProperties.realloc( nOldSize + 1 );
+                    pFrameProperties = aFrameProperties.getArray();
+                    pFrameProperties[nOldSize].Name = rPropNameSupplier.GetName(PROP_HEIGHT);
+                    pFrameProperties[nOldSize].Value <<= rAppendContext.pLastParagraphProperties->Geth();
+                }
+
+                if( rAppendContext.pLastParagraphProperties->IsxValid() )
+                {
+                    sal_Int32 nOldSize = aFrameProperties.getLength();
+                    aFrameProperties.realloc( nOldSize + 1 );
+                    pFrameProperties = aFrameProperties.getArray();
+                    pFrameProperties[nOldSize].Name = rPropNameSupplier.GetName(PROP_HORI_ORIENT_POSITION);
+                    pFrameProperties[nOldSize].Value <<= rAppendContext.pLastParagraphProperties->Getx();
+                }
+
+                if( rAppendContext.pLastParagraphProperties->GethAnchor() >= 0 )
+                {
+                    sal_Int32 nOldSize = aFrameProperties.getLength();
+                    aFrameProperties.realloc( nOldSize + 1 );
+                    pFrameProperties = aFrameProperties.getArray();
+                    pFrameProperties[nOldSize].Name = rPropNameSupplier.GetName(PROP_HORI_ORIENT_RELATION);
+                    pFrameProperties[nOldSize].Value <<= sal_Int16(
+                        rAppendContext.pLastParagraphProperties->GethAnchor() );
+                }
+
+                if( rAppendContext.pLastParagraphProperties->IsyValid() )
+                {
+                    sal_Int32 nOldSize = aFrameProperties.getLength();
+                    aFrameProperties.realloc( nOldSize + 1 );
+                    pFrameProperties = aFrameProperties.getArray();
+                    pFrameProperties[nOldSize].Name = rPropNameSupplier.GetName(PROP_VERT_ORIENT_POSITION);
+                    pFrameProperties[nOldSize].Value <<= rAppendContext.pLastParagraphProperties->Gety();
+                }
+
+                if( rAppendContext.pLastParagraphProperties->GetvAnchor() >= 0 )
+                {
+                    sal_Int32 nOldSize = aFrameProperties.getLength();
+                    aFrameProperties.realloc( nOldSize + 1 );
+                    pFrameProperties = aFrameProperties.getArray();
+                    pFrameProperties[nOldSize].Name = rPropNameSupplier.GetName(PROP_VERT_ORIENT_RELATION);
+                    pFrameProperties[nOldSize].Value <<= sal_Int16(
+                        rAppendContext.pLastParagraphProperties->GetvAnchor() );
+                }
+
+                if( rAppendContext.pLastParagraphProperties->GetWrap() >= 0 )
+                {
+                    sal_Int32 nOldSize = aFrameProperties.getLength();
+                    aFrameProperties.realloc( nOldSize + 1 );
+                    pFrameProperties = aFrameProperties.getArray();
+                    pFrameProperties[nOldSize].Name = rPropNameSupplier.GetName(PROP_SURROUND);
+                    pFrameProperties[nOldSize].Value <<= text::WrapTextMode(
+                        rAppendContext.pLastParagraphProperties->GetWrap() );
+                }
+
+                lcl_MoveBorderPropertiesToFrame(aFrameProperties,
+                    rAppendContext.pLastParagraphProperties->GetStartingRange(),
+                    rAppendContext.pLastParagraphProperties->GetEndingRange());
+            }
+
             //frame conversion has to be executed after table conversion
             RegisterFrameConversion(
                 rAppendContext.pLastParagraphProperties->GetStartingRange(),
@@ -949,6 +1065,9 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 
                 m_bIsLastParaInSection = false;
                 m_bParaChanged = false;
+
+                // Reset the frame properties for the next paragraph
+                pParaContext->ResetFrameProperties();
             }
             if( !bKeepLastParagraphProperties )
                 rAppendContext.pLastParagraphProperties = pToBeSavedProperties;
@@ -3276,6 +3395,10 @@ bool DomainMapper_Impl::ExecuteFrameConversion()
         }
         catch( const uno::Exception& rEx)
         {
+#if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "Exception caught when converting to frame: %s\n",
+                    rtl::OUStringToOString( rEx.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+#endif
             (void)rEx;
             bRet = false;
         }

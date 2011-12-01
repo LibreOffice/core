@@ -191,10 +191,13 @@ namespace writerfilter {
             public:
                 RTFFrame();
                 sal_Int32 nX, nY, nW, nH;
-                sal_Int32 nLeftMargin, nRightMargin, nTopMargin, nBottomMargin;
-                sal_Int16 nHoriOrient, nHoriOrientRelation, nVertOrient, nVertOrientRelation;
+                sal_Int32 nHoriPadding, nVertPadding;
+                sal_Int32 nHoriAlign, nHoriAnchor, nVertAlign, nVertAnchor;
                 sal_Int16 nAnchorType;
-                sal_Bool bPositionToggle;
+
+                /// Convert the stored properties to Sprms
+                RTFSprms getSprms();
+                bool hasProperties();
         };
 
         /// State of the parser, which gets saved / restored when changing groups.
@@ -340,7 +343,6 @@ namespace writerfilter {
                 void replayBuffer(RTFBuffer_t& rBuffer);
                 /// If we got tokens indicating we're in a frame.
                 bool inFrame();
-                void checkChangedFrame();
                 /// If we have some unicode characters to send.
                 void checkUnicode();
 
@@ -429,7 +431,6 @@ namespace writerfilter {
                 bool m_bIsInFrame;
                 // Unicode characters are collected here so we don't have to send them one by one.
                 rtl::OUStringBuffer m_aUnicodeBuffer;
-
         };
     } // namespace rtftok
 } // namespace writerfilter
