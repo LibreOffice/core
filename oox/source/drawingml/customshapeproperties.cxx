@@ -97,6 +97,56 @@ sal_Int32 CustomShapeProperties::GetCustomShapeGuideValue( const std::vector< Cu
 
 CustomShapeProperties::PresetsMap CustomShapeProperties::maPresetsMap;
 
+static OUString GetConnectorShapeType( sal_Int32 nType )
+{
+    OSL_TRACE("GetConnectorShapeType preset: %d %d", nType, XML_straightConnector1);
+
+    OUString sType;
+    switch( nType )
+    {
+        case XML_straightConnector1: {
+            static const OUString sStraightConnector1 = CREATE_OUSTRING( "mso-spt32" );
+            sType = sStraightConnector1;
+            } break;
+        case XML_bentConnector2: {
+            static const OUString sBentConnector2 = CREATE_OUSTRING( "mso-spt33" );
+            sType = sBentConnector2;
+            } break;
+        case XML_bentConnector3: {
+            static const OUString sBentConnector3 = CREATE_OUSTRING( "mso-spt34" );
+            sType = sBentConnector3;
+            } break;
+        case XML_bentConnector4: {
+            static const OUString sBentConnector4 = CREATE_OUSTRING( "mso-spt35" );
+            sType = sBentConnector4;
+            } break;
+        case XML_bentConnector5: {
+            static const OUString sBentConnector5 = CREATE_OUSTRING( "mso-spt36" );
+            sType = sBentConnector5;
+            } break;
+        case XML_curvedConnector2: {
+            static const OUString sCurvedConnector2 = CREATE_OUSTRING( "mso-spt37" );
+            sType = sCurvedConnector2;
+            } break;
+        case XML_curvedConnector3: {
+            static const OUString sCurvedConnector3 = CREATE_OUSTRING( "mso-spt38" );
+            sType = sCurvedConnector3;
+            } break;
+        case XML_curvedConnector4: {
+            static const OUString sCurvedConnector4 = CREATE_OUSTRING( "mso-spt39" );
+            sType = sCurvedConnector4;
+            } break;
+        case XML_curvedConnector5: {
+            static const OUString sCurvedConnector5 = CREATE_OUSTRING( "mso-spt40" );
+            sType = sCurvedConnector5;
+            } break;
+        default:
+            break;
+    }
+    return sType;
+}
+
+
 void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFilterBase */,
     const Reference < XPropertySet >& xPropSet, const Reference < XShape > & xShape )
 {
@@ -110,20 +160,24 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         PropertyMap aPropertyMap;
         PropertySet aPropSet( xPropSet );
 
-        if (maPresetsMap.find(mnShapePresetType) != maPresetsMap.end()) {
+        OUString sConnectorShapeType = GetConnectorShapeType( mnShapePresetType );
+
+        if (sConnectorShapeType.getLength() > 0)
+        {
+            OSL_TRACE("connector shape: %s (%d)", USS(sConnectorShapeType), mnShapePresetType);
+            //const uno::Reference < drawing::XShape > xShape( xPropSet, UNO_QUERY );
+            Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( xShape, UNO_QUERY );
+            if( xDefaulter.is() )
+                xDefaulter->createCustomShapeDefaults( sConnectorShapeType );
+        }
+        else if (maPresetsMap.find(mnShapePresetType) != maPresetsMap.end())
+        {
             OSL_TRACE("found property map for preset: %s (%d)", USS(getShapePresetTypeName()), mnShapePresetType);
 
             aPropertyMap = maPresetsMap[ mnShapePresetType ];
 #ifdef DEBUG
             aPropertyMap.dumpCode();
 #endif
-        }
-        else
-        {
-            //const uno::Reference < drawing::XShape > xShape( xPropSet, UNO_QUERY );
-            Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( xShape, UNO_QUERY );
-            if( xDefaulter.is() )
-                xDefaulter->createCustomShapeDefaults( getShapePresetTypeName() );
         }
 
         aPropertyMap[ PROP_MirroredX ] <<= Any( mbMirroredX );
