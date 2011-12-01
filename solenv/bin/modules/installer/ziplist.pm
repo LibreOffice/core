@@ -632,12 +632,19 @@ sub list_all_files_from_include_path
 sub set_manufacturer
 {
     my ($allvariables) = @_;
+    my $manufacturer;
 
-    my $openofficeproductname = "LibreOffice";
-    my $sunname = "";
+    if ( $ENV{'OOO_VENDOR'} ne "" )
+    {
+        $manufacturer = $ENV{'OOO_VENDOR'};
+    }
+    else
+    {
+        $manufacturer = $ENV{'USERNAME'};
+    }
 
-    $installer::globals::manufacturer = $openofficeproductname;
-    $installer::globals::longmanufacturer = $openofficeproductname;
+    $installer::globals::manufacturer = $manufacturer;
+    $installer::globals::longmanufacturer = $manufacturer;
 
     $allvariables->{'MANUFACTURER'} = $installer::globals::manufacturer;
 }
