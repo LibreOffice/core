@@ -72,33 +72,32 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
 :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_NAMES ),
     //
-    maFtScope( this, ScResId(FT_SCOPE) ),
-    maFtRange( this, ScResId(FT_RANGE) ),
-    maFtName( this,  ScResId(FT_NAME) ),
+    maEdName         ( this, ScResId( ED_NAME2 ) ),
+    maEdAssign       ( this, this, ScResId( ED_ASSIGN ) ),
+    aRbAssign       ( this, ScResId( RB_ASSIGN ), &maEdAssign, this ),
     maLbScope( this, ScResId(LB_SCOPE) ),
     //
-    maEdAssign       ( this, this, ScResId( ED_ASSIGN ) ),
-    maEdName         ( this, ScResId( ED_NAME2 ) ),
-    aRbAssign       ( this, ScResId( RB_ASSIGN ), &maEdAssign, this ),
-    //
-    maFlDiv          ( this, ScResId( FL_DIV ) ),
+    maBtnMore        ( this, ScResId( BTN_MORE ) ),
     maBtnPrintArea   ( this, ScResId( BTN_PRINTAREA ) ),
     maBtnColHeader   ( this, ScResId( BTN_COLHEADER ) ),
     maBtnCriteria    ( this, ScResId( BTN_CRITERIA ) ),
     maBtnRowHeader   ( this, ScResId( BTN_ROWHEADER ) ),
     //
-    maNameMgrCtrl   ( this, ScResId( CTRL_MANAGENAMES ) ),
-    //
-    maBtnHelp        ( this, ScResId( BTN_HELP ) ),
     maBtnAdd         ( this, ScResId( BTN_ADD ) ),
     maBtnDelete      ( this, ScResId( BTN_DELETE ) ),
     maBtnSelect      ( this, ScResId( BTN_SELECT ) ),
+    maBtnHelp        ( this, ScResId( BTN_HELP ) ),
     maBtnOk          ( this, ScResId( BTN_NAME_OK ) ),
     maBtnCancel      ( this, ScResId( BTN_NAME_CANCEL ) ),
-    maBtnMore        ( this, ScResId( BTN_MORE ) ),
+    //
+    maFtScope( this, ScResId(FT_SCOPE) ),
+    maFtRange( this, ScResId(FT_RANGE) ),
+    maFtName( this,  ScResId(FT_NAME) ),
+    maFlDiv          ( this, ScResId( FL_DIV ) ),
     maFtInfo         ( this, ScResId( FT_INFO ) ),
     //
-    mErrMsgInvalidSym( ScResId( STR_INVALIDSYMBOL ) ),
+    maNameMgrCtrl   ( this, ScResId( CTRL_MANAGENAMES ) ),
+    //
     maErrMsgModifiedFailed( ResId::toString(ScResId( STR_MODIFYFAILED ) ) ),
     maGlobalNameStr  ( ScGlobal::GetRscString(STR_GLOBAL_SCOPE) ),
     maErrInvalidNameStr( ResId::toString(ScResId(STR_ERR_NAME_INVALID))),

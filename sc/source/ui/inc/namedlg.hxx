@@ -55,36 +55,35 @@ class ScDocument;
 class ScNameDlg : public ScAnyRefDlg
 {
 private:
-    FixedText       maFtScope;
-    FixedText       maFtRange;
-    FixedText       maFtName;
+    Edit            maEdName;
+    formula::RefEdit        maEdAssign;
+    formula::RefButton      aRbAssign;
     ListBox         maLbScope;
 
-    formula::RefEdit        maEdAssign;
-    Edit            maEdName;
-    formula::RefButton      aRbAssign;
-
-    FixedLine       maFlDiv;
+    DisclosureButton maBtnMore;
     CheckBox        maBtnPrintArea;
     CheckBox        maBtnColHeader;
     CheckBox        maBtnCriteria;
     CheckBox        maBtnRowHeader;
 
-    ScRangeManagerCtrl maNameMgrCtrl;
-    ScRangeManagerTable* mpRangeManagerTable;
-
-    HelpButton      maBtnHelp;
     PushButton      maBtnAdd;
     PushButton      maBtnDelete;
     PushButton      maBtnSelect;
+    HelpButton      maBtnHelp;
     PushButton      maBtnOk;
     PushButton      maBtnCancel;
-    DisclosureButton maBtnMore;
+
+    FixedText       maFtScope;
+    FixedText       maFtRange;
+    FixedText       maFtName;
+    FixedLine       maFlDiv;
     FixedText       maFtInfo;
 
-    const String    mErrMsgInvalidSym;
+    ScRangeManagerCtrl maNameMgrCtrl;
+    ScRangeManagerTable* mpRangeManagerTable;
+
     const rtl::OUString maErrMsgModifiedFailed;
-    const ::rtl::OUString maGlobalNameStr;
+    const rtl::OUString maGlobalNameStr;
     const rtl::OUString maErrInvalidNameStr;
     const rtl::OUString maErrNameInUse;
     const rtl::OUString maStrInfoDefault;
