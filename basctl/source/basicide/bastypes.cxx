@@ -26,29 +26,24 @@
  *
  ************************************************************************/
 
-#include <vcl/msgbox.hxx>
+#include "baside2.hrc"
+#include "basidesh.hrc"
+#include "helpid.hrc"
 
-#include <ide_pch.hxx>
+#include "baside2.hxx" // unfortunately pModulWindow is needed partly...
+#include "baside3.hxx"
+#include "basobj.hxx"
+#include "iderdll.hxx"
 
-#include <basic/sbx.hxx>
-#include <helpid.hrc>
-#include <basidesh.hrc>
-#include <bastypes.hxx>
-#include <bastype2.hxx>
-#include <baside2.hxx>  // unfortunately pModulWindow is needed partly...
-#include <baside3.hxx>
-#include <baside2.hrc>
-#include <svtools/textview.hxx>
-#include <svtools/texteng.hxx>
-#include <basobj.hxx>
-#include <sbxitem.hxx>
-#include <iderdll.hxx>
-
-#include <sfx2/passwd.hxx>
-
-#include <com/sun/star/script/XLibraryContainer2.hpp>
-#include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <basic/basmgr.hxx>
 #include <com/sun/star/script/ModuleType.hpp>
+#include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/passwd.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
+#include <vcl/msgbox.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
