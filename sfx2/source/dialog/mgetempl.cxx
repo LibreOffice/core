@@ -63,7 +63,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
     aDescFt     ( this, SfxResId( FT_DESC ) ),
     aDescED     ( this, SfxResId( ED_DESC ) ),
 
-    pStyle( &( (SfxStyleDialog*)pParent->GetParent() )->GetStyleSheet() ),
+    pStyle( &( (SfxStyleDialog*)GetParentDialog() )->GetStyleSheet() ),
 
     pItem       ( 0 ),
     bModified   ( sal_False ),
