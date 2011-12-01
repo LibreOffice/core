@@ -215,13 +215,11 @@ void ConverterTest::testDateTime()
     doTest( util::DateTime(0, 0, 0, 24, 1, 1, 333)
                 /*(0, 0, 0, 0, 2, 1, 333)*/,
             "0333-01-01T24:00:00"/*, "0333-01-02T00:00:00"*/ );
-    // A leading ^+ is NOT invalid, ISO 8601 specifies this for explicit AD/CE.
-    doTest( util::DateTime(0, 0, 0, 0, 1, 1, 1),
-            "+0001-01-01T00:00:00", "0001-01-01T00:00:00" );
-    // While ISO 8601 specifies a minimum of 4 year digits we are lenient in
-    // what we accept.
+    // While W3C XMLSchema specifies a minimum of 4 year digits we are lenient
+    // in what we accept.
     doTest( util::DateTime(0, 0, 0, 0, 1, 1, 1),
             "1-01-01T00:00:00", "0001-01-01T00:00:00" );
+    doTestDateTimeF( "+0001-01-01T00:00:00" ); // invalid: ^+
     doTestDateTimeF( "0001-1-01T00:00:00" ); // invalid: < 2 M
     doTestDateTimeF( "0001-01-1T00:00:00" ); // invalid: < 2 D
     doTestDateTimeF( "0001-01-01T0:00:00" ); // invalid: < 2 H

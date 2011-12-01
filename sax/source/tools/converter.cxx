@@ -1352,16 +1352,11 @@ bool Converter::convertDateOrDateTime(
             //Negative Number
             ++nPos;
         }
-        else if (sal_Unicode('+') == string[nPos])
-        {
-            //Positive Number, explicit AD/CE
-            ++nPos;
-        }
     }
 
     sal_Int32 nYear(0);
     {
-        // While ISO 8601 specifies years with a minimum of 4 digits, be
+        // While W3C XMLSchema specifies years with a minimum of 4 digits, be
         // leninent in what we accept for years < 1000. One digit is acceptable
         // if the remainders match.
         bSuccess = readDateTimeComponent(string, nPos, nYear, 1, false);
