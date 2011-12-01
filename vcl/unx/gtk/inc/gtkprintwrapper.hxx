@@ -32,9 +32,15 @@
 #include <boost/noncopyable.hpp>
 
 #include <gtk/gtk.h>
+
+#if defined ENABLE_GTK_PRINT || GTK_CHECK_VERSION(3,0,0)
 #include <gtk/gtkunixprint.h>
 
+#if !GTK_CHECK_VERSION(3,0,0)
 #include <osl/module.hxx>
+#endif
+
+#endif
 
 namespace vcl
 {
@@ -43,6 +49,7 @@ namespace unx
 
 class GtkPrintWrapper : private boost::noncopyable
 {
+#if defined ENABLE_GTK_PRINT || GTK_CHECK_VERSION(3,0,0)
 public:
     GtkPrintWrapper();
     ~GtkPrintWrapper();
@@ -132,6 +139,7 @@ private:
     print_operation_set_has_selection_t m_print_operation_set_has_selection;
     print_unix_dialog_set_support_selection_t m_print_unix_dialog_set_support_selection;
     print_unix_dialog_set_has_selection_t m_print_unix_dialog_set_has_selection;
+#endif
 #endif
 };
 

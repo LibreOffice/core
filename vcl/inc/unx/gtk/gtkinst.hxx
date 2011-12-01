@@ -97,6 +97,11 @@ class GtkInstance : public SvpSalInstance
 class GtkInstance : public X11SalInstance
 #endif
 {
+#if GTK_CHECK_VERSION(3,0,0)
+    typedef SvpSalInstance Superclass_t;
+#else
+    typedef X11SalInstance Superclass_t;
+#endif
 public:
             GtkInstance( SalYieldMutex* pMutex );
     virtual ~GtkInstance();
@@ -137,6 +142,7 @@ public:
     void                        subtractEvent( sal_uInt16 nMask );
 
     boost::shared_ptr<vcl::unx::GtkPrintWrapper> getPrintWrapper() const;
+
   private:
     std::vector<GtkSalTimer *>  m_aTimers;
     bool                        IsTimerExpired();

@@ -645,6 +645,19 @@ $(call gb_LinkTarget_set_include,$(1),\
 
 $(call gb_LinkTarget_add_libs,$(1),$(GTK_LIBS))
 
+ifeq ($(ENABLE_GTK_PRINT),TRUE)
+
+$(call gb_LinkTarget_add_defs,$(1),-DENABLE_GTK_PRINT)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(GTK_PRINT_CFLAGS) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),$(GTK_PRINT_LIBS))
+
+endif
+
 endef
 
 define gb_LinkTarget__use_gthread

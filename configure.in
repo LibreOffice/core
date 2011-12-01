@@ -7007,7 +7007,7 @@ if test "x$enable_gtk3" = "xyes"; then
     if test "$with_system_cairo" != yes; then
         echo "System cairo required for gtk3 support, please use --with-system-cairo"
     fi
-    PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.2 cairo, ENABLE_GTK3="TRUE", ENABLE_GTK3="")
+    PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.2 gtk+-unix-print-3.0 cairo, ENABLE_GTK3="TRUE", ENABLE_GTK3="")
     if test "x$ENABLE_GTK3" = "xTRUE"; then
         R="gtk3"
     else
@@ -7099,6 +7099,11 @@ if test  "$test_gtk" = "yes"; then
                             [ ENABLE_SYSTRAY_GTK="" ])
         fi
 
+        AC_MSG_CHECKING([whether to enable Gtk print dialog support])
+        PKG_CHECK_MODULES([GTK_PRINT], [gtk+-unix-print-2.0 >= 2.10.0],
+                          [ENABLE_GTK_PRINT="TRUE"],
+                          [ENABLE_GTK_PRINT=""])
+
         AC_MSG_CHECKING([whether to enable DBUS support])
         if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_dbus" = "yes"; then
             ENABLE_DBUS="TRUE"
@@ -7130,6 +7135,9 @@ AC_SUBST(GTHREAD_CFLAGS)
 AC_SUBST(GTHREAD_LIBS)
 AC_SUBST(DBUS_CFLAGS)
 AC_SUBST(DBUS_LIBS)
+AC_SUBST([ENABLE_GTK_PRINT])
+AC_SUBST([GTK_PRINT_CFLAGS])
+AC_SUBST([GTK_PRINT_LIBS])
 
 PKG_CHECK_MODULES( LIBPNG, libpng, ENABLE_QUICKSTART_LIBPNG="TRUE", ENABLE_QUICKSTART_LIBPNG="" )
 AC_SUBST(LIBPNG_LIBS)
