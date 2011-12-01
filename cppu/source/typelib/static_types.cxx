@@ -578,7 +578,7 @@ void SAL_CALL typelib_static_enum_type_init(
                 OSL_ASSERT( *ppRef == pReg->pWeakRef );
             }
             // another static ref:
-            ++(*(sal_Int32 *)&(*ppRef)->pReserved);
+            ++((*ppRef)->nStaticRefCount);
         }
     }
 }
