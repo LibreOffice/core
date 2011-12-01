@@ -35,6 +35,8 @@ SvStream& operator>>( SvStream& rIn, DffRecordHeader& rRec )
     rRec.nRecInstance = nTmp >> 4;
     rIn >> rRec.nRecType;
     rIn >> rRec.nRecLen;
+    if ( rRec.nRecLen > ( SAL_MAX_UINT32 - rRec.nFilePos ) )    // preserving overflow, optimal would be to check
+        rIn.SetError( SVSTREAM_FILEFORMAT_ERROR );              // the record size against the parent header
     return rIn;
 }
 

@@ -3225,7 +3225,7 @@ sal_Bool SvxMSDffManager::SeekToShape( SvStream& rSt, void* /* pClientData */, s
                 rSt >> aEscherF002Hd;
                 sal_uLong nEscherF002End = aEscherF002Hd.GetRecEndFilePos();
                 DffRecordHeader aEscherObjListHd;
-                while ( rSt.Tell() < nEscherF002End )
+                while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < nEscherF002End ) )
                 {
                     rSt >> aEscherObjListHd;
                     if ( aEscherObjListHd.nRecVer != 0xf )
@@ -3257,11 +3257,20 @@ sal_Bool SvxMSDffManager::SeekToShape( SvStream& rSt, void* /* pClientData */, s
 FASTBOOL SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd, sal_uLong nSkipCount ) const
 {
     FASTBOOL bRet = sal_False;
-    sal_uLong nFPosMerk = rSt.Tell(); // FilePos merken fuer ggf. spaetere Restauration
+    sal_uLong nFPosMerk = rSt.Tell(); // store FilePos to restore it later if necessary
     DffRecordHeader aHd;
     do
     {
         rSt >> aHd;
+
+        // check potential error reading and if seeking to the end of record is possible at all.
+        // It is probably cheaper instead of doing the file seek operation
+        if ( rSt.GetError() || ( aHd.GetRecEndFilePos() >  nMaxFilePos ) )
+        {
+            bRet= sal_False;
+            break;
+        }
+
         if ( aHd.nRecType == nRecId )
         {
             if ( nSkipCount )
@@ -3280,7 +3289,7 @@ FASTBOOL SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong
     }
     while ( rSt.GetError() == 0 && rSt.Tell() < nMaxFilePos && !bRet );
     if ( !bRet )
-        rSt.Seek( nFPosMerk );  // FilePos restaurieren
+        rSt.Seek( nFPosMerk );  // restore orginal FilePos
     return bRet;
 }
 
@@ -5678,11 +5687,14 @@ void SvxMSDffManager::GetFidclData( long nOffsDggL )
             {
                 if ( aDggAtomHd.nRecLen == ( mnIdClusters * sizeof( FIDCL ) + 16 ) )
                 {
-                    mpFidcls = new FIDCL[ mnIdClusters ];
-                    for ( sal_uInt32 i = 0; i < mnIdClusters; i++ )
-                    {
-                        rStCtrl >> mpFidcls[ i ].dgid
-                                >> mpFidcls[ i ].cspidCur;
+                    //mpFidcls = new FIDCL[ mnIdClusters ];
+                    mpFidcls = new (std::nothrow) FIDCL[ mnIdClusters ];
+                    if ( mpFidcls ) {
+                        for ( sal_uInt32 i = 0; i < mnIdClusters; i++ )
+                        {
+                            rStCtrl >> mpFidcls[ i ].dgid
+                                    >> mpFidcls[ i ].cspidCur;
+                        }
                     }
                 }
             }
@@ -5809,7 +5821,7 @@ void SvxMSDffManager::GetCtrlData( long nOffsDgg_ )
 
             if( !bOk )
             {
-                nPos++;
+                nPos++;             // ????????? TODO: trying to get an one-hit wonder, this code code should be rewritten...
                 rStCtrl.Seek( nPos );
                 bOk = ReadCommonRecordHeader( rStCtrl, nVer, nInst, nFbt, nLength )
                         && ( DFF_msofbtDgContainer == nFbt );
@@ -5825,7 +5837,7 @@ void SvxMSDffManager::GetCtrlData( long nOffsDgg_ )
             ++nDrawingContainerId;
             // <--
         }
-        while( nPos < nMaxStrPos && bOk );
+        while( ( rStCtrl.GetError() == 0 ) && ( nPos < nMaxStrPos ) && bOk );
     }
 }
 
@@ -6553,6 +6565,8 @@ sal_Bool SvxMSDffManager::ReadCommonRecordHeader( SvStream& rSt,
     rSt >> nTmp >> rFbt >> rLength;
     rVer = sal::static_int_cast< sal_uInt8 >(nTmp & 15);
     rInst = nTmp >> 4;
+    if ( rLength > ( SAL_MAX_UINT32 - rSt.Tell() ) )    // preserving overflow, optimal would be to check
+        rSt.SetError( SVSTREAM_FILEFORMAT_ERROR );      // the record size against the parent header
     return rSt.GetError() == 0;
 }
 
@@ -6564,7 +6578,7 @@ sal_Bool SvxMSDffManager::ProcessClientAnchor(SvStream& rStData, sal_uLong nDatL
 {
     if( nDatLen )
     {
-        rpBuff = new char[ nDatLen ];
+        rpBuff = new (std::nothrow) char[ nDatLen ];
         rBuffLen = nDatLen;
         rStData.Read( rpBuff, nDatLen );
     }
@@ -6576,9 +6590,12 @@ sal_Bool SvxMSDffManager::ProcessClientData(SvStream& rStData, sal_uLong nDatLen
 {
     if( nDatLen )
     {
-        rpBuff = new char[ nDatLen ];
-        rBuffLen = nDatLen;
-        rStData.Read( rpBuff, nDatLen );
+        rpBuff = new (std::nothrow) char[ nDatLen ];
+        if ( rpBuff )
+        {
+            rBuffLen = nDatLen;
+            rStData.Read( rpBuff, nDatLen );
+        }
     }
     return sal_True;
 }
