@@ -395,35 +395,12 @@ void Databases::replaceName( rtl::OUString& oustring ) const
     }
 }
 
-
-
-
-rtl::OUString Databases::getInstallPathAsSystemPath()
-{
-    osl::MutexGuard aGuard( m_aMutex );
-
-    if( ! m_aInstallDirectoryAsSystemPath.getLength() )
-    {
-#ifdef DBG_UTIL
-        bool bla =
-            osl::FileBase::E_None ==
-            osl::FileBase::getSystemPathFromFileURL( m_aInstallDirectory,m_aInstallDirectoryAsSystemPath );
-        OSL_ENSURE( bla,"HelpProvider, no installpath" );
-#else
-        osl::FileBase::getSystemPathFromFileURL( m_aInstallDirectory,m_aInstallDirectoryAsSystemPath );
-#endif
-    }
-
-    return m_aInstallDirectoryAsSystemPath;
-}
-
 rtl::OUString Databases::getInstallPathAsURL()
 {
     osl::MutexGuard aGuard( m_aMutex );
 
       return m_aInstallDirectory;
 }
-
 
 const std::vector< rtl::OUString >& Databases::getModuleList( const rtl::OUString& Language )
 {

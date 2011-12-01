@@ -197,8 +197,6 @@ namespace chelp {
 
         rtl::OString getImagesZipFileURL();
 
-        rtl::OUString getInstallPathAsSystemPath();
-
         rtl::OUString getInstallPathAsURL();
 
         const std::vector< rtl::OUString >& getModuleList( const rtl::OUString& Language );
