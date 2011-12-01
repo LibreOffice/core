@@ -189,7 +189,7 @@ void LngParser::ReadLine( const ByteString &sLine_in , ByteStringHashMap &rText_
 {
    rtl::OString sLang = getToken(sLine_in, 0, '=');
    sLang = comphelper::string::stripStart(sLang, ' ');
-   sLang = comphelper::string::stripStart(sLang, ' ');
+   sLang = comphelper::string::stripEnd(sLang, ' ');
    rtl::OString sText = getToken(getToken(sLine_in, 1, '\"'), 0, '\"');
    if (!sLang.isEmpty())
        rText_inout[ sLang ] = sText;
