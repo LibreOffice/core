@@ -40,7 +40,7 @@ MAJOR_VER=9.1
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=$(EXT_PROJECT_NAME)
-TARFILE_MD5=0981bda6548a8c8233ffce2b6e4b2a23
+TARFILE_MD5=061a9f17323117c9358ed60f33ecff78
 
 
 # distro-specific builds want to link against a particular mysql library
