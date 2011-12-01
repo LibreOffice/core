@@ -51,28 +51,27 @@ class SbxItem : public SfxPoolItem
 
 public:
     TYPEINFO();
-    SbxItem( sal_uInt16 nWhich, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aName, BasicIDEType nType );
-    SbxItem( sal_uInt16 nWhich, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aName, const ::rtl::OUString& aMethodName, BasicIDEType nType );
-    SbxItem( const SbxItem& );
+    SbxItem(sal_uInt16 nWhich, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aName, BasicIDEType nType);
+    SbxItem(sal_uInt16 nWhich, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aName, const ::rtl::OUString& aMethodName, BasicIDEType nType);
+    SbxItem(const SbxItem&);
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem* Clone(SfxItemPool *pPool = 0) const;
+    virtual int operator==(const SfxPoolItem&) const;
 
-    const ScriptDocument&
-                            GetDocument() const { return m_aDocument; }
-    void                    SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
+    const ScriptDocument& GetDocument() const;
+    void SetDocument(const ScriptDocument& rDocument);
 
-    const ::rtl::OUString&  GetLibName() const { return m_aLibName; }
-    void                    SetLibName( const ::rtl::OUString& aLibName ) { m_aLibName = aLibName; }
+    const ::rtl::OUString& GetLibName() const;
+    void SetLibName(const ::rtl::OUString& aLibName);
 
-    const ::rtl::OUString&  GetName() const { return m_aName; }
-    void                    SetName( const ::rtl::OUString& aName ) { m_aName = aName; }
+    const ::rtl::OUString& GetName() const;
+    void SetName(const ::rtl::OUString& aName);
 
-    const ::rtl::OUString&  GetMethodName() const { return m_aMethodName; }
-    void                    SetMethodName( const ::rtl::OUString& aMethodName ) { m_aMethodName = aMethodName; }
+    const ::rtl::OUString& GetMethodName() const;
+    void SetMethodName(const ::rtl::OUString& aMethodName);
 
-    BasicIDEType            GetType() const { return m_nType; }
-    void                    SetType( BasicIDEType nType ) { m_nType = nType; }
+    BasicIDEType GetType() const;
+    void SetType(BasicIDEType nType);
 };
 
 #endif

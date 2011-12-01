@@ -26,13 +26,9 @@
  *
  ************************************************************************/
 
-
 #include <vcl/msgbox.hxx>
-#include <vector>
-#include <algorithm>
 
 #include <ide_pch.hxx>
-
 
 #include <basic/sbx.hxx>
 #include <helpid.hrc>
@@ -884,50 +880,6 @@ LibInfoItem* LibInfos::GetInfo( const LibInfoKey& rKey )
     if ( it != m_aLibInfoMap.end() )
         pItem = it->second;
     return pItem;
-}
-
-SbxItem::SbxItem(sal_uInt16 nWhich_, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aName, BasicIDEType nType )
-    :SfxPoolItem( nWhich_ )
-    ,m_aDocument(rDocument)
-    ,m_aLibName(aLibName)
-    ,m_aName(aName)
-    ,m_nType(nType)
-{
-}
-
-SbxItem::SbxItem(sal_uInt16 nWhich_, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aName, const ::rtl::OUString& aMethodName, BasicIDEType nType )
-    :SfxPoolItem( nWhich_ )
-    ,m_aDocument(rDocument)
-    ,m_aLibName(aLibName)
-    ,m_aName(aName)
-    ,m_aMethodName(aMethodName)
-    ,m_nType(nType)
-{
-}
-
-SbxItem::SbxItem(const SbxItem& rCopy)
-    :SfxPoolItem( rCopy )
-    ,m_aDocument( rCopy.m_aDocument )
-{
-    m_aLibName = rCopy.m_aLibName;
-    m_aName = rCopy.m_aName;
-    m_aMethodName = rCopy.m_aMethodName;
-    m_nType = rCopy.m_nType;
-}
-
-int SbxItem::operator==( const SfxPoolItem& rCmp) const
-{
-    DBG_ASSERT( rCmp.ISA( SbxItem ), "==: Kein SbxItem!" );
-    return ( SfxPoolItem::operator==( rCmp ) && ( m_aDocument == ((const SbxItem&)rCmp).m_aDocument )
-                                             && ( m_aLibName == ((const SbxItem&)rCmp).m_aLibName )
-                                             && ( m_aName == ((const SbxItem&)rCmp).m_aName )
-                                             && ( m_aMethodName == ((const SbxItem&)rCmp).m_aMethodName )
-                                             && ( m_nType == ((const SbxItem&)rCmp).m_nType ) );
-}
-
-SfxPoolItem *SbxItem::Clone( SfxItemPool* ) const
-{
-    return new SbxItem(*this);
 }
 
 sal_Bool QueryDel( const String& rName, const ResId& rId, Window* pParent )

@@ -97,6 +97,7 @@ $(eval $(call gb_Library_add_exception_objects,basctl,\
 	basctl/source/basicide/moduldlg \
 	basctl/source/basicide/objdlg \
 	basctl/source/basicide/register \
+	basctl/source/basicide/sbxitem \
 	basctl/source/basicide/scriptdocument \
 	basctl/source/basicide/tbxctl \
 	basctl/source/basicide/unomodel \
