@@ -192,12 +192,12 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         CurPos = 0 ;
         StringList [ en-US ] =
         {
-            < "1, 2, 3, ... " ;                 4/*SVX_NUM_ARABIC              */; > ;
-            < "A, B, C, ... " ;                 0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "1, 2, 3, ..." ;                 4/*SVX_NUM_ARABIC              */; > ;
+            < "A, B, C, ..." ;                 0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
             < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-            < "I, II, III, ... " ;          2/*SVX_NUM_ROMAN_UPPER         */; > ;
-            < "i, ii, iii, ... " ;          3/*SVX_NUM_ROMAN_LOWER         */; > ;
-            < "A, .., AA, .., AAA, ... " ;  9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "I, II, III, ..." ;          2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "i, ii, iii, ..." ;          3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "A, .., AA, .., AAA, ..." ;  9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
             < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
             < "Bullet" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
             < "Graphics" ;                  8/*SVX_NUM_BITMAP              */; > ;

@@ -450,7 +450,7 @@ String RID_SVXSTR_GALLERYPROPS_OBJECT
 };
 String RID_SVXSTR_GALLERY_READONLY
 {
-    Text [ en-US ] = " (read-only)" ;
+    Text [ en-US ] = "(read-only)" ;
 };
 String RID_SVXSTR_GALLERY_ALLFILES
 {

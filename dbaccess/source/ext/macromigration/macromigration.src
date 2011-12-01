@@ -438,7 +438,7 @@ String STR_WARNINGS
 
 String STR_EXCEPTION
 {
-    Text [ en-US ] = "caught exception: ";
+    Text [ en-US ] = "caught exception:";
 };
 
 
