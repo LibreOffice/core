@@ -1,0 +1,81 @@
+#*************************************************************************
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# Copyright 2008 by Sun Microsystems, Inc.
+#
+# OpenOffice.org - a multi-platform office productivity suite
+#
+# This file is part of OpenOffice.org.
+#
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
+#
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
+
+PRJ=.
+
+PRJNAME=postgresql
+TARGET=so_postgresql
+
+EXT_PROJECT_NAME=postgresql-9.1.1
+MAJOR_VER=9.1
+
+# --- Settings -----------------------------------------------------
+
+.INCLUDE :	settings.mk
+
+# --- Files --------------------------------------------------------
+
+TARFILE_NAME=$(EXT_PROJECT_NAME)
+TARFILE_MD5=0981bda6548a8c8233ffce2b6e4b2a23
+
+
+# distro-specific builds want to link against a particular mysql library
+# then they do not require mysql-devel package at runtime
+# So put mysql-connector-cpp/driver/nativeapi/binding_config.h into separate patch
+# and enable/disable MYSQLCLIENT_STATIC_BINDING according to the used mysql library
+.IF "$(SYSTEM_POSTGRESQL)" == "YES"
+@all:
+    @echo "Using system postgresql..."
+.ENDIF
+
+
+BUILD_DIR=.
+# TODO:
+# --datarootdir changes where libpq expects internationalisation of its messages
+#               (which we don't install anyway for now...)
+# --sysconfdir: config files. Ideally, we would like that to be "the same as the platform default",
+#               but that's quite some guessing work.
+.IF "$(VERBOSE)"==""
+MAKE_SILENT=-s
+.ENDIF
+BUILD_ACTION = \
+            ./configure   --sysconfdir=/etc/postgresql-common \
+			  --datarootdir=/usr/share/ \
+			  --datadir=/usr/share/postgresql/$(MAJOR_VER) \
+			  --bindir=/usr/lib/postgresql/$(MAJOR_VER)/bin \
+			  --libdir=/usr/lib/ \
+			  --includedir=/usr/include/postgresql/ \
+	 && make -C src/backend ../../src/include/utils/errcodes.h ../../src/include/utils/fmgroids.h \
+	 && make -C src/include DESTDIR="../../../../../" install \
+	 && make $(MAKE_SILENT) -j$(GMAKE_MODULE_PARALLELISM) -C src/interfaces/libpq DESTDIR="../../../../../../" install
+
+# --- Targets ------------------------------------------------------
+
+.INCLUDE : set_ext.mk
+.INCLUDE : target.mk
+.INCLUDE : tg_ext.mk
+

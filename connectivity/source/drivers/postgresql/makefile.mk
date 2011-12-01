@@ -101,11 +101,18 @@ SHL1VERSIONMAP=$(SOLARENV)$/src$/reg-component.map
 # LEM 17/11/2011: removed everything except libpq proper;
 #  as per instructions in libpq documentation.
 #  If it turns out the rest was needed, reenable it.
+.IF "$(SYSTEM_POSTGRESQL)"=="YES"
 .IF "$(GUI)"=="WNT"
 LIBPQ_LINK=libpq.lib #wsock32.lib advapi32.lib
 .ELSE
 LIBPQ_LINK=-lpq #-lcrypt
 .ENDIF
+.ELSE #SYSTEM_POSTGRESQL==NO
+LIBPQ_LINK=$(OUTDIR_FOR_BUILD)/lib/libpq.a
+POSTGRESQL_INC=-I$(OUTDIR_FOR_BUILD)/inc/postgresql
+POSTGRESQL_LIB=
+.ENDIF
+
 SHL2TARGET=postgresql-sdbc-impl.uno
 LIB2TARGET=$(SLB)$/$(SHL2TARGET).lib
 LIB2OBJFILES= \

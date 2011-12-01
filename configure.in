@@ -5403,7 +5403,7 @@ dnl ===================================================================
 if test "x$enable_ext_postgresql_sdbc" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_POSTGRESQL"
 
-    AC_MSG_CHECKING([for PostgreSQL prerequisites])
+    AC_MSG_CHECKING([PostgreSQL C interface])
     if test "$with_system_postgresql" = "yes"; then
         AC_MSG_RESULT([external PostgreSQL])
         SYSTEM_POSTGRESQL=YES
@@ -5420,27 +5420,33 @@ if test "x$enable_ext_postgresql_sdbc" = "xyes" -a "x$enable_extension_integrati
         POSTGRESQL_INC=-I$(${PGCONFIG} --includedir)
         POSTGRESQL_LIB="-L$(${PGCONFIG} --libdir)"
     else
-        SYSTEM_POSTGRESQL=NO
         if test -n "$with_libpq_path"; then
+            SYSTEM_POSTGRESQL=YES
             AC_MSG_RESULT([external libpq])
             POSTGRESQL_LIB="-L${with_libpq_path}/lib/"
             POSTGRESQL_INC=-I"${with_libpq_path}/include/"
         else
-            AC_MSG_ERROR([not given. Please specify either --with-system-postgresql or --with-libpq-path])
+            SYSTEM_POSTGRESQL=NO
+            AC_MSG_RESULT([internal])
+            POSTGRESQL_LIB=""
+            POSTGRESQL_INC="@@OVERRIDE_ME@@"
+            BUILD_TYPE="$BUILD_TYPE POSTGRESQL"
         fi
     fi
-    AC_MSG_CHECKING([for PostgreSQL C interface])
-    save_CFLAGS=$CFLAGS
-    save_CPPFLAGS=$CPPFLAGS
-    save_LIBS=$LIBS
-    CPPFLAGS="${CPPFLAGS} ${POSTGRESQL_INC}"
-    LIBS="${LIBS} ${POSTGRESQL_LIB}"
-    AC_CHECK_HEADER([libpq-fe.h], [], [AC_MSG_ERROR([libpq-fe.h is needed])], [])
-    AC_CHECK_LIB(pq, PQconnectdbParams, [],
-        [AC_MSG_ERROR(libpq not found or too old. Need >= 9.0)], [])
-    CFLAGS=$save_CFLAGS
-    CPPFLAGS=$save_CPPFLAGS
-    LIBS=$save_LIBS
+    if test "${SYSTEM_POSTGRESQL}" = "YES"; then
+        AC_MSG_NOTICE([checking system PostgreSQL prerequisites])
+        save_CFLAGS=$CFLAGS
+        save_CPPFLAGS=$CPPFLAGS
+        save_LIBS=$LIBS
+        CPPFLAGS="${CPPFLAGS} ${POSTGRESQL_INC}"
+        LIBS="${LIBS} ${POSTGRESQL_LIB}"
+        AC_CHECK_HEADER([libpq-fe.h], [], [AC_MSG_ERROR([libpq-fe.h is needed])], [])
+        AC_CHECK_LIB(pq, PQconnectdbParams, [],
+            [AC_MSG_ERROR(libpq not found or too old. Need >= 9.0)], [])
+        CFLAGS=$save_CFLAGS
+        CPPFLAGS=$save_CPPFLAGS
+        LIBS=$save_LIBS
+    fi
     BUILD_POSTGRESQL_SDBC=YES
 fi
 AC_SUBST(BUILD_POSTGRESQL_SDBC)
