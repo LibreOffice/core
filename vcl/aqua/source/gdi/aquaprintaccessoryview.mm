@@ -774,7 +774,7 @@ static void linebreakCell( NSCell* pBtn, const rtl::OUString& i_rText )
         if( nIndex < nLen )
         {
             rtl::OUStringBuffer aBuf( i_rText );
-            aBuf.setCharAt( nIndex, '\n' );
+            aBuf[nIndex] = '\n';
             pText = CreateNSString( aBuf.makeStringAndClear() );
             [pBtn setTitle: pText];
             [pText release];
