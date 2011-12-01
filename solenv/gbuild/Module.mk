@@ -105,8 +105,11 @@ define gb_Module_DEVINSTALLHINT
 
 Developer installation finished, you can now execute:
 
-make debugrun # on Linux
-dopen $(SRCDIR)/install/LibreOffice.app # on OSX
+on Linux:
+make debugrun
+
+on Mac OS X:
+open install/LibreOffice.app
 
 endef
 else
