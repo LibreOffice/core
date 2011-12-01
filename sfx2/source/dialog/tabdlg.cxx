@@ -384,22 +384,25 @@ void SfxTabPage::AddItemConnection( sfx::ItemConnectionBase* pConnection )
 }
 
 #define INI_LIST(ItemSetPtr) \
-    aTabCtrl    ( this, ResId(ID_TABCONTROL,*rResId.GetResMgr() ) ),\
-    aOKBtn      ( this ),\
-    pUserBtn    ( pUserButtonText? new PushButton(this): 0 ),\
-    aCancelBtn  ( this ),\
-    aHelpBtn    ( this ),\
-    aResetBtn   ( this ),\
-    aBaseFmtBtn ( this ),\
-    pSet        ( ItemSetPtr ),\
-    pOutSet     ( 0 ),\
-    pImpl       ( new TabDlg_Impl( (sal_uInt8)aTabCtrl.GetPageCount() ) ), \
-    pRanges     ( 0 ), \
-    nResId      ( rResId.GetId() ), \
-    nAppPageId  ( USHRT_MAX ), \
-    bItemsReset ( sal_False ),\
-    bFmt        ( bEditFmt ),\
-    pExampleSet ( 0 )
+      vbox(this, false, 7) \
+    , content_area(&vbox) \
+    , aTabCtrl(&content_area, ResId(ID_TABCONTROL,*rResId.GetResMgr())) \
+    , action_area(&vbox) \
+    , aOKBtn(&action_area) \
+    , pUserBtn(pUserButtonText? new PushButton(&action_area): 0) \
+    , aCancelBtn(&action_area) \
+    , aHelpBtn(&action_area) \
+    , aResetBtn(&action_area) \
+    , aBaseFmtBtn(&action_area) \
+    , pSet(ItemSetPtr) \
+    , pOutSet(0) \
+    , pImpl(new TabDlg_Impl( (sal_uInt8)aTabCtrl.GetPageCount() )) \
+    , pRanges(0) \
+    , nResId(rResId.GetId()) \
+    , nAppPageId(USHRT_MAX) \
+    , bItemsReset(sal_False) \
+    , bFmt(bEditFmt)\
+    , pExampleSet(0)
 
 // -----------------------------------------------------------------------
 
@@ -420,10 +423,10 @@ SfxTabDialog::SfxTabDialog
                                   // when yes -> additional Button for standard
     const String* pUserButtonText // Text for UserButton;
                                   // if != 0, the UserButton is created
-) :
-    TabDialog( pParent, rResId ),
-    pFrame( pViewFrame ),
-    INI_LIST(pItemSet)
+)
+    : TabDialog(pParent, rResId)
+    , pFrame(pViewFrame)
+    , INI_LIST(pItemSet)
 {
     Init_Impl( bFmt, pUserButtonText );
 }
@@ -446,10 +449,10 @@ SfxTabDialog::SfxTabDialog
                                   // when yes -> additional Button for standard
     const String* pUserButtonText // Text for UserButton;
                                   // if != 0, the UserButton is created
-) :
-    TabDialog( pParent, rResId ),
-    pFrame( 0 ),
-    INI_LIST(pItemSet)
+)
+    : TabDialog(pParent, rResId)
+    , pFrame(0)
+    , INI_LIST(pItemSet)
 {
     Init_Impl( bFmt, pUserButtonText );
     DBG_WARNING( "Please use the Construtor with the ViewFrame" );
@@ -505,6 +508,25 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText )
 */
 
 {
+    rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
+    rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
+    rtl::OString sPackType(RTL_CONSTASCII_STRINGPARAM("pack-type"));
+    rtl::OString sBorderWidth(RTL_CONSTASCII_STRINGPARAM("border-width"));
+
+    vbox.setChildProperty(sFill, true);
+    //TO-DO, when vcontent_area belongs to dialog via builder, this becomes
+    //content-area-border on the dialog
+    vbox.setChildProperty(sBorderWidth, sal_Int32(7));
+
+    action_area.setChildProperty(sFill, true);
+
+    content_area.setChildProperty(sFill, true);
+    content_area.setChildProperty(sExpand, true);
+
+    aTabCtrl.setChildProperty(sFill, true);
+    aTabCtrl.setChildProperty(sExpand, true);
+    aTabCtrl.SetControlBackground(Color(0xff, 0x00, 0x00));
+
     aOKBtn.SetClickHdl( LINK( this, SfxTabDialog, OkHdl ) );
     aCancelBtn.SetClickHdl( LINK( this, SfxTabDialog, CancelHdl ) );
     aResetBtn.SetClickHdl( LINK( this, SfxTabDialog, ResetHdl ) );

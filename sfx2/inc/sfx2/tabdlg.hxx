@@ -22,9 +22,10 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
-#include <vcl/tabdlg.hxx>
 #include <vcl/button.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/tabctrl.hxx>
+#include <vcl/tabdlg.hxx>
 #include <vcl/tabpage.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
@@ -64,13 +65,17 @@ friend class SfxTabDialogController;
 
     SfxViewFrame*   pFrame;
 
-    TabControl      aTabCtrl;
-    OKButton        aOKBtn;
-    PushButton*     pUserBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
-    PushButton      aResetBtn;
-    PushButton      aBaseFmtBtn;
+    VBox vbox;
+    VBox content_area;
+    TabControl aTabCtrl;
+
+    HButtonBox action_area;
+    OKButton aOKBtn;
+    PushButton* pUserBtn;
+    CancelButton aCancelBtn;
+    HelpButton aHelpBtn;
+    PushButton aResetBtn;
+    PushButton aBaseFmtBtn;
 
     const SfxItemSet*   pSet;
     SfxItemSet*         pOutSet;
