@@ -61,6 +61,7 @@ LibreOffice
 			ABOUTBOXPRODUCTVERSION 3.5.0
 			BASEPRODUCTVERSION 3.5
             PCPFILENAME libreoffice.pcp
+			UPDATEURL http://update.libreoffice.org/check.php
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
@@ -120,6 +121,7 @@ LibreOffice_wJRE
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.5.0
 			BASEPRODUCTVERSION 3.5
+			UPDATEURL http://update.libreoffice.org/check.php
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
@@ -186,6 +188,7 @@ LibreOffice_Dev
 			SOLSUREPACKAGEPREFIX lodev
 			REGISTRYLAYERNAME LayerDev
 			SERVICETAG_URN urn:uuid:1680b00d-e45c-11de-82d6-080020a9ed93
+			UPDATEURL http://update.libreoffice.org/check.php
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
 			EVAL
 			FILEFORMATNAME OpenOffice.org
@@ -483,6 +486,7 @@ OxygenOffice
 			ABOUTBOXPRODUCTVERSION 3.5.0
 			BASEPRODUCTVERSION 3.5
             PCPFILENAME openoffice.pcp
+			UPDATEURL http://update.libreoffice.org/check.php
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
@@ -547,6 +551,7 @@ OxygenOffice_wJRE
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.5.0
 			BASEPRODUCTVERSION 3.5
+			UPDATEURL http://update.libreoffice.org/check.php
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
