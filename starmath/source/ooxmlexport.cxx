@@ -268,7 +268,7 @@ void SmOoxmlExport::HandleText( const SmNode* pNode, int /*nLevel*/)
         *pS << sal_uInt8(nFace+128); //typeface
 #endif
         sal_uInt16 nChar = pTemp->GetText().GetChar(i);
-        m_pSerializer->write( rtl::OUString( Convert(nChar)));
+        m_pSerializer->writeEscaped( rtl::OUString( Convert(nChar)));
 
 #if 0
         //Mathtype can only have these sort of character
