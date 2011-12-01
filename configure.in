@@ -5407,7 +5407,13 @@ if test "x$enable_ext_postgresql_sdbc" = "xyes" -a "x$enable_extension_integrati
     if test "$with_system_postgresql" = "yes"; then
         AC_MSG_RESULT([external PostgreSQL])
         SYSTEM_POSTGRESQL=YES
-        AC_PATH_PROG(PGCONFIG, pg_config)
+        if test "$_os" = Darwin; then
+           supp_path=''
+           for d in /Library/PostgreSQL/9.*/bin; do
+            pg_supp_path="$PATH_SEPARATOR$d$pg_supp_path"
+           done
+        fi
+        AC_PATH_PROG(PGCONFIG, pg_config, ,$PATH$pg_supp_path)
         if test -z "$PGCONFIG"; then
            AC_MSG_ERROR([pg_config needed; set PGCONFIG if not in PATH])
         fi
