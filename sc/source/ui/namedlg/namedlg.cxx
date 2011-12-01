@@ -98,10 +98,9 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     //
     maNameMgrCtrl   ( this, ScResId( CTRL_MANAGENAMES ) ),
     //
-    maErrMsgModifiedFailed( ResId::toString(ScResId( STR_MODIFYFAILED ) ) ),
     maGlobalNameStr  ( ScGlobal::GetRscString(STR_GLOBAL_SCOPE) ),
-    maErrInvalidNameStr( ResId::toString(ScResId(STR_ERR_NAME_INVALID))),
-    maErrNameInUse   ( ResId::toString(ScResId(STR_ERR_NAME_EXISTS))),
+    maErrInvalidNameStr( ScGlobal::GetRscString(STR_ERR_NAME_INVALID)),
+    maErrNameInUse   ( ScGlobal::GetRscString(STR_ERR_NAME_EXISTS)),
     maStrInfoDefault ( ResId::toString(ScResId(STR_DEFAULT_INFO))),
     maStrMultiSelect ( ResId::toString(ScResId(STR_MULTI_SELECT))),
     //

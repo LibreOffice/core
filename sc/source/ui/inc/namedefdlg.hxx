@@ -70,8 +70,6 @@ private:
     ScDocShell* mpDocShell;
 
     ScAddress maCursorPos;
-    const String    mErrMsgInvalidSym;
-    const rtl::OUString maErrMsgModifiedFailed;
     const rtl::OUString maGlobalNameStr;
     const rtl::OUString maErrInvalidNameStr;
     const rtl::OUString maErrNameInUse;

@@ -72,10 +72,9 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParen
     mpDocShell ( pViewData->GetDocShell() ),
     maCursorPos( aCursorPos ),
 
-    mErrMsgInvalidSym( ScResId( STR_INVALIDSYMBOL ) ),
     maGlobalNameStr  ( ScGlobal::GetRscString(STR_GLOBAL_SCOPE) ),
-    maErrInvalidNameStr( ResId::toString(ScResId(STR_ERR_NAME_INVALID))),
-    maErrNameInUse   ( ResId::toString(ScResId(STR_ERR_NAME_EXISTS))),
+    maErrInvalidNameStr( ScGlobal::GetRscString(STR_ERR_NAME_INVALID)),
+    maErrNameInUse   ( ScGlobal::GetRscString(STR_ERR_NAME_EXISTS)),
     maStrInfoDefault ( ResId::toString(ScResId(STR_DEFAULT_INFO))),
     maRangeMap( aRangeMap )
 {
@@ -262,7 +261,6 @@ void ScNameDefDlg::AddPushed()
             else
             {
                 delete pNewEntry;
-                ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),ResId::toString(ScResId(STR_INVALIDSYMBOL))).Execute();
                 Selection aCurSel = Selection( 0, SELECTION_MAX );
                 maEdRange.GrabFocus();
                 maEdRange.SetSelection( aCurSel );

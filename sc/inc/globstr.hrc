@@ -596,8 +596,11 @@
 #define STR_HEADER_RANGE            460
 #define STR_HEADER_SCOPE            461
 #define STR_GLOBAL_SCOPE            462
+#define STR_ERR_NAME_EXISTS         463
+#define STR_ERR_NAME_INVALID        464
 
-#define STR_COUNT                   463
+
+#define STR_COUNT                   465
 
 
 #endif

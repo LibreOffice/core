@@ -147,23 +147,9 @@ ModelessDialog RID_SCDLG_NAMES_DEFINE
         Pos = MAP_APPFONT( 0, 95 );
         Size = MAP_APPFONT(200, 3 );
     };
-
-    String STR_INVALIDSYMBOL
-    {
-        Text [ en-US ] = "Invalid expression" ;
-    };
-    String STR_ERR_NAME_EXISTS
-    {
-        Text [ en-US ] = "Invalid name. Already in use for the selected scope.";
-    };
-    String STR_ERR_NAME_INVALID
-    {
-        Text [ en-US ] = "Invalid name. Only use letters, numbers and underscore.";
-    };
     String STR_DEFAULT_INFO
     {
         Text [en-US] = "Define the name and range or formula expression.";
-    };
-};
+    };};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

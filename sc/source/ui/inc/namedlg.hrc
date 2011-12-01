@@ -44,17 +44,12 @@
 #define ED_ASSIGN       15
 #define RB_ASSIGN       16
 
-#define STR_INVALIDSYMBOL 23
-#define STR_MODIFYFAILED 72
-
 #define BTN_CRITERIA    31
 #define BTN_PRINTAREA   32
 #define BTN_COLHEADER   33
 #define BTN_ROWHEADER   34
 
 #define CTRL_MANAGENAMES    66
-#define STR_ERR_NAME_EXISTS 73
-#define STR_ERR_NAME_INVALID 74
 #define STR_DEFAULT_INFO    75
 #define STR_MULTI_SELECT    76
 

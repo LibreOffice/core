@@ -82,7 +82,6 @@ private:
     ScRangeManagerCtrl maNameMgrCtrl;
     ScRangeManagerTable* mpRangeManagerTable;
 
-    const rtl::OUString maErrMsgModifiedFailed;
     const rtl::OUString maGlobalNameStr;
     const rtl::OUString maErrInvalidNameStr;
     const rtl::OUString maErrNameInUse;
