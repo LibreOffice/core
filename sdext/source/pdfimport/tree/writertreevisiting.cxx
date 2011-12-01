@@ -759,7 +759,7 @@ void WriterXmlOptimizer::optimizeTextElements(Element& rParent)
                 if( !bRotatedFrame
                     && ! rCurGC.isRotatedOrSkewed()
                     && ! rNextGC.isRotatedOrSkewed()
-                    && pNext->Text.gerLength() > 0
+                    && pNext->Text.getLength() > 0
                     && pNext->Text[0] != sal_Unicode(' ')
                     && pCur->Text.getLength() >  0
                     && pCur->Text[pCur->Text.getLength() - 1] != sal_Unicode(' ')
