@@ -344,7 +344,9 @@ const char* ImplDbgCheckWindow( const void* pObj );
 #endif
 
 class BitmapEx; // FIXME: really the SetBackgroundBitmap belongs in a toplevel 'window'
+class Dialog;
 class WindowImpl;
+
 class VCL_DLLPUBLIC Window : public OutputDevice
 {
     friend class Cursor;

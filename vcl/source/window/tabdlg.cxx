@@ -47,6 +47,9 @@ void TabDialog::ImplInitTabDialogData()
 
 void TabDialog::ImplPosControls()
 {
+    if (isLayoutEnabled())
+        return;
+
     Size        aCtrlSize( IMPL_MINSIZE_BUTTON_WIDTH, IMPL_MINSIZE_BUTTON_HEIGHT );
     long        nDownCtrl = 0;
     long        nOffY = 0;
@@ -241,16 +244,6 @@ TabDialog::~TabDialog()
 
 // -----------------------------------------------------------------------
 
-void TabDialog::Resize()
-{
-// !!! In the future the controls should be automaticly rearrange
-// !!! if the window is resized
-// !!! if ( !IsRollUp() )
-// !!!      ImplPosControls();
-}
-
-// -----------------------------------------------------------------------
-
 void TabDialog::StateChanged( StateChangedType nType )
 {
     if ( nType == STATE_CHANGE_INITSHOW )
@@ -267,6 +260,7 @@ void TabDialog::StateChanged( StateChangedType nType )
 void TabDialog::AdjustLayout()
 {
     ImplPosControls();
+    queueResize();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

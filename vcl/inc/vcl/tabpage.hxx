@@ -44,6 +44,8 @@ private:
     SAL_DLLPRIVATE void ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void ImplInitSettings();
 
+    bool isLayoutEnabled() const;
+
 public:
                     TabPage( Window* pParent, WinBits nStyle = 0 );
                     TabPage( Window* pParent, const ResId& rResId );
@@ -56,6 +58,9 @@ public:
 
     virtual void    ActivatePage();
     virtual void    DeactivatePage();
+
+    virtual Size    GetOptimalSize(WindowSizeType eType) const;
+    virtual void    Resize();
 };
 
 #endif  // _SV_TABPAGE_HXX

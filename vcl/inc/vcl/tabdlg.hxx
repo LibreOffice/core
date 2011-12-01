@@ -48,7 +48,6 @@ public:
                         TabDialog( Window* pParent, const ResId& rResId );
                         ~TabDialog();
 
-    virtual void        Resize();
     virtual void        StateChanged( StateChangedType nStateChange );
 
     void                AdjustLayout();

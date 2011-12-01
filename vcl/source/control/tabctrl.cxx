@@ -1911,11 +1911,15 @@ void TabControl::SetTabPage( sal_uInt16 nPageId, TabPage* pTabPage )
 
             // Erst hier setzen, damit Resize nicht TabPage umpositioniert
             pItem->mpTabPage = pTabPage;
+            queueResize();
             if ( pItem->mnId == mnCurPageId )
                 ImplChangeTabPage( pItem->mnId, 0 );
         }
         else
+        {
             pItem->mpTabPage = NULL;
+            queueResize();
+        }
     }
 }
 
@@ -2126,8 +2130,39 @@ Size TabControl::GetOptimalSize(WindowSizeType eType) const
     switch (eType) {
     case WINDOWSIZE_MINIMUM:
         return mpTabCtrlData ? mpTabCtrlData->maMinSize : Size();
+
     default:
-        return Control::GetOptimalSize( eType );
+    {
+        Size aOptimalPageSize(0, 0);
+        Size aOptimalTabSize(0, 0);
+
+        for( std::vector< ImplTabItem >::const_iterator it = mpTabCtrlData->maItemList.begin();
+             it != mpTabCtrlData->maItemList.end(); ++it )
+        {
+            const TabPage *pPage = it->mpTabPage;
+            if (!pPage)
+            {
+                fprintf(stderr, "nuisance, page not inserted yet :-(\n");
+                continue;
+            }
+            Size aPageSize(pPage->GetOptimalSize(eType));
+            if (aPageSize.Width() > aOptimalPageSize.Width())
+                aOptimalPageSize.Width() = aPageSize.Width();
+            if (aPageSize.Height() > aOptimalPageSize.Height())
+                aOptimalPageSize.Height() = aPageSize.Height();
+
+            ImplTabItem* pItem = const_cast<ImplTabItem*>(&(*it));
+            TabControl* pThis = const_cast<TabControl*>(this);
+            Size aTabSize = pThis->ImplGetItemSize(pItem, LONG_MAX);
+            if (aTabSize.Height() > aOptimalTabSize.Height())
+                aOptimalTabSize.Height() = aTabSize.Height();
+        }
+
+        Size aOptimalSize(aOptimalPageSize);
+        aOptimalSize.Height() += aOptimalTabSize.Height();
+
+        return aOptimalSize;
+    }
     }
 }
 

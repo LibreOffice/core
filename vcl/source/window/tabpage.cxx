@@ -29,8 +29,9 @@
 
 #include <tools/rc.h>
 
-#include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
+#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/bitmapex.hxx>
@@ -97,6 +98,7 @@ TabPage::TabPage( Window* pParent, const ResId& rResId ) :
     rResId.SetRT( RSC_TABPAGE );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
+
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE) )
@@ -199,6 +201,30 @@ void TabPage::ActivatePage()
 
 void TabPage::DeactivatePage()
 {
+}
+
+bool TabPage::isLayoutEnabled() const
+{
+    //Has one child, and that child is a container => we're layout enabled
+    return (GetChildCount() == 1 && dynamic_cast<const Box*>(GetChild(0)));
+}
+
+Size TabPage::GetOptimalSize(WindowSizeType eType) const
+{
+    if (eType == WINDOWSIZE_MAXIMUM)
+        return Window::GetOptimalSize(eType);
+    Size aSize;
+    if (isLayoutEnabled())
+        aSize = GetChild(0)->GetOptimalSize(eType);
+    else
+        aSize = getLegacyBestSizeForChildren(*this);
+    return Window::CalcWindowSize(aSize);
+}
+
+void TabPage::Resize()
+{
+    if (isLayoutEnabled())
+        GetChild(0)->SetPosSizePixel(Point(0,0), GetSizePixel());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
