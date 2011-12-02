@@ -109,6 +109,19 @@ namespace {
         rtl::Reference<PresenterController> mpPresenterController;
     };
 
+    class SwitchMonitorCommand : public Command
+    {
+    public:
+        SwitchMonitorCommand (
+            const rtl::Reference<PresenterController>& rpPresenterController);
+        virtual ~SwitchMonitorCommand (void) {}
+        virtual void Execute (void);
+        virtual bool IsEnabled (void) const;
+        virtual Any GetState (void) const;
+    private:
+        rtl::Reference<PresenterController> mpPresenterController;
+    };
+
     class SetNotesViewCommand : public Command
     {
     public:
@@ -426,76 +439,31 @@ Command* PresenterProtocolHandler::Dispatch::CreateCommand (
 {
     if (rsURLPath.getLength() <= 5)
         return NULL;
-    switch (rsURLPath[0])
-    {
-        case  sal_Char('C') :
-            switch (rsURLPath[5])
-            {
-                case sal_Char('N'):
-                    if (rsURLPath == A2S("CloseNotes"))
-                        return new SetNotesViewCommand(false, rpPresenterController);
-                    break;
-                case sal_Char('S'):
-                    if (rsURLPath == A2S("CloseSlideSorter"))
-                        return new SetSlideSorterCommand(false, rpPresenterController);
-                    break;
-                case sal_Char('H'):
-                    if (rsURLPath == A2S("CloseHelp"))
-                        return new SetHelpViewCommand(false, rpPresenterController);
-                    break;
-            }
-            break;
-        case  sal_Char('G') :
-            if (rsURLPath == A2S("GrowNotesFont"))
-                return new NotesFontSizeCommand(rpPresenterController, +1);
-            break;
 
-        case sal_Char('N') :
-            switch (rsURLPath[4])
-            {
-                case sal_Char('E'):
-                    if (rsURLPath == A2S("NextEffect"))
-                        return new GotoNextEffectCommand(rpPresenterController);
-                case sal_Char('S'):
-                    if (rsURLPath == A2S("NextSlide"))
-                        return new GotoNextSlideCommand(rpPresenterController);
-                    break;
-            }
-            break;
-
-        case sal_Char('P') :
-            if (rsURLPath == A2S("PrevSlide"))
-                return new GotoPreviousSlideCommand(rpPresenterController);
-            break;
-
-        case  sal_Char('S') :
-            switch (rsURLPath[4])
-            {
-                case sal_Char('N'):
-                    if (rsURLPath == A2S("ShowNotes"))
-                        return new SetNotesViewCommand(true, rpPresenterController);
-                    break;
-
-                case sal_Char('S'):
-                    if (rsURLPath == A2S("ShowSlideSorter"))
-                        return new SetSlideSorterCommand(true, rpPresenterController);
-                    break;
-
-                case sal_Char('H'):
-                    if (rsURLPath == A2S("ShowHelp"))
-                        return new SetHelpViewCommand(true, rpPresenterController);
-                    break;
-
-                case sal_Char('n'):
-                    if (rsURLPath == A2S("ShrinkNotesFont"))
-                        return new NotesFontSizeCommand(rpPresenterController, -1);
-                    break;
-            }
-            break;
-
-        default:
-            break;
-    }
+    if (rsURLPath == A2S("CloseNotes"))
+        return new SetNotesViewCommand(false, rpPresenterController);
+    if (rsURLPath == A2S("CloseSlideSorter"))
+        return new SetSlideSorterCommand(false, rpPresenterController);
+    if (rsURLPath == A2S("CloseHelp"))
+        return new SetHelpViewCommand(false, rpPresenterController);
+    if (rsURLPath == A2S("GrowNotesFont"))
+        return new NotesFontSizeCommand(rpPresenterController, +1);
+    if (rsURLPath == A2S("NextEffect"))
+        return new GotoNextEffectCommand(rpPresenterController);
+    if (rsURLPath == A2S("NextSlide"))
+        return new GotoNextSlideCommand(rpPresenterController);
+    if (rsURLPath == A2S("PrevSlide"))
+        return new GotoPreviousSlideCommand(rpPresenterController);
+    if (rsURLPath == A2S("SwitchMonitor"))
+        return new SwitchMonitorCommand(rpPresenterController);
+    if (rsURLPath == A2S("ShowNotes"))
+        return new SetNotesViewCommand(true, rpPresenterController);
+    if (rsURLPath == A2S("ShowSlideSorter"))
+        return new SetSlideSorterCommand(true, rpPresenterController);
+    if (rsURLPath == A2S("ShowHelp"))
+        return new SetHelpViewCommand(true, rpPresenterController);
+    if (rsURLPath == A2S("ShrinkNotesFont"))
+        return new NotesFontSizeCommand(rpPresenterController, -1);
 
     return NULL;
 }
@@ -686,7 +654,6 @@ Any GotoPreviousSlideCommand::GetState (void) const
 
 
 
-
 //===== GotoNextEffect ========================================================
 
 GotoNextEffectCommand::GotoNextEffectCommand (
@@ -771,6 +738,29 @@ Any GotoNextSlideCommand::GetState (void) const
 }
 
 
+//===== SwitchMonitorCommand ==============================================
+
+SwitchMonitorCommand::SwitchMonitorCommand (
+    const rtl::Reference<PresenterController>& rpPresenterController)
+    : mpPresenterController(rpPresenterController)
+{
+}
+
+void SwitchMonitorCommand::Execute (void)
+{
+    fprintf (stderr, "Switch monitor !\n");
+}
+
+bool SwitchMonitorCommand::IsEnabled (void) const
+{
+    fprintf (stderr, "FIXME - check me !\n");
+    return true;
+}
+
+Any SwitchMonitorCommand::GetState (void) const
+{
+    return Any(sal_False);
+}
 
 
 //===== SetNotesViewCommand ===================================================

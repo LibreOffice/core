@@ -190,6 +190,8 @@ COMPONENT_BITMAPS=												\
     $(ZIP1DIR)$/bitmaps$/ButtonNotesMouseOver.png				\
     $(ZIP1DIR)$/bitmaps$/ButtonNotesSelected.png				\
     $(ZIP1DIR)$/bitmaps$/ButtonNotesDisabled.png				\
+    $(ZIP1DIR)$/bitmaps$/ButtonSwitchMonitorNormal.png				\
+    $(ZIP1DIR)$/bitmaps$/ButtonSwitchMonitorMouseOver.png			\
     $(ZIP1DIR)$/bitmaps$/ButtonSlideSorterNormal.png			\
     $(ZIP1DIR)$/bitmaps$/ButtonSlideSorterMouseOver.png			\
     $(ZIP1DIR)$/bitmaps$/ButtonSlideSorterSelected.png			\
