@@ -35,6 +35,7 @@
 #include <vcl/salbtype.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <svl/style.hxx>
@@ -71,6 +72,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <osl/thread.hxx>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
@@ -1220,12 +1222,13 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
         {
             if( pGraphic->HasUserData() )
             {
-                SdrDocumentStreamInfo aStreamInfo;
+                ::comphelper::LifecycleProxy proxy;
+                uno::Reference<io::XInputStream> const xStream(
+                    pModel->GetDocumentStream(pGraphic->GetUserData(), proxy));
 
-                aStreamInfo.mbDeleteAfterUse = sal_False;
-                aStreamInfo.maUserData = pGraphic->GetUserData();
-
-                SvStream* pStream = pModel->GetDocumentStream( aStreamInfo );
+                ::boost::scoped_ptr<SvStream> const pStream( (xStream.is())
+                        ? ::utl::UcbStreamHelper::CreateStream(xStream)
+                        : 0 );
 
                 if( pStream != NULL )
                 {
@@ -1251,7 +1254,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                     }
 
                     if( !GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic,
-                                                                          aStreamInfo.maUserData,
+                                                                          pGraphic->GetUserData(),
                                                                           *pStream,
                                                                           GRFILTER_FORMAT_DONTKNOW,
                                                                           NULL, 0, pFilterData ) )
@@ -1267,17 +1270,6 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                     delete pFilterData;
 
                     pStream->ResetError();
-
-                    if( aStreamInfo.mbDeleteAfterUse || aStreamInfo.mxStorageRef.is() )
-                    {
-                        if ( aStreamInfo.mxStorageRef.is() )
-                        {
-                            aStreamInfo.mxStorageRef->dispose();
-                            aStreamInfo.mxStorageRef = 0;
-                        }
-
-                        delete pStream;
-                    }
                 }
             }
             else if( !ImpUpdateGraphicLink( sal_False ) )
@@ -1316,15 +1308,9 @@ Reference< XInputStream > SdrGrafObj::getInputStream()
         // kann aus dem original Doc-Stream nachgeladen werden...
         if( pGraphic->HasUserData() )
         {
-            SdrDocumentStreamInfo aStreamInfo;
-
-            aStreamInfo.mbDeleteAfterUse = sal_False;
-            aStreamInfo.maUserData = pGraphic->GetUserData();
-
-            SvStream* pStream = pModel->GetDocumentStream( aStreamInfo );
-
-            if( pStream )
-                xStream.set( new utl::OInputStreamWrapper( pStream, sal_True ) );
+            ::comphelper::LifecycleProxy proxy;
+            xStream.set(
+                pModel->GetDocumentStream(pGraphic->GetUserData(), proxy));
         }
         else if( pGraphic && GetGraphic().IsLink() )
         {

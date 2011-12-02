@@ -29,11 +29,16 @@
 
 #include <svx/svdmodel.hxx>
 
-#include <com/sun/star/lang/XComponent.hpp>
+#include <math.h>
+
 #include <osl/endian.h>
 #include <rtl/logfile.hxx>
 #include <rtl/strbuf.hxx>
-#include <math.h>
+
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
@@ -82,6 +87,7 @@
 #include <svl/zforlist.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/storagehelper.hxx>
 
 #include <tools/tenccvt.hxx>
 #include <unotools/syslocale.hxx>
@@ -886,9 +892,43 @@ void SdrModel::ImpReformatAllEdgeObjects()
     }
 }
 
-SvStream* SdrModel::GetDocumentStream(SdrDocumentStreamInfo& /*rStreamInfo*/) const
+uno::Reference<embed::XStorage> SdrModel::GetDocumentStorage() const
 {
-    return NULL;
+    uno::Reference<document::XStorageBasedDocument> const xSBD(
+            const_cast<SdrModel*>(this)->getUnoModel(), uno::UNO_QUERY);
+    if (!xSBD.is())
+    {
+        SAL_WARN("svx", "no UNO model");
+        return 0;
+    }
+    return xSBD->getDocumentStorage();
+}
+
+uno::Reference<io::XInputStream>
+SdrModel::GetDocumentStream( ::rtl::OUString const& rURL,
+                ::comphelper::LifecycleProxy & rProxy) const
+{
+    uno::Reference<embed::XStorage> const xStorage(GetDocumentStorage());
+    if (!xStorage.is())
+    {
+        SAL_WARN("svx", "no storage?");
+        return 0;
+    }
+    try {
+        uno::Reference<io::XStream> const xStream(
+            ::comphelper::OStorageHelper::GetStreamAtPackageURL(
+                xStorage, rURL, embed::ElementModes::READ, rProxy));
+        return (xStream.is()) ? xStream->getInputStream() : 0;
+    }
+    catch (container::NoSuchElementException const&)
+    {
+        SAL_INFO("svx", "not found");
+    }
+    catch (uno::Exception const&)
+    {
+        SAL_WARN("svx", "exception");
+    }
+    return 0;
 }
 
 // convert template attributes from the string into "hard" attributes

@@ -47,9 +47,8 @@ public:
 
     virtual SdrPage* AllocPage(bool bMasterPage);
 
-
-    // For "load on demand" of graphics in DrawingLayer.
-    virtual SvStream* GetDocumentStream( SdrDocumentStreamInfo& rInfo ) const;
+    virtual ::com::sun::star::uno::Reference<
+                ::com::sun::star::embed::XStorage> GetDocumentStorage() const;
 
     // For saving of rectangles as control-replacement for versions < 5.0.
     virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const;

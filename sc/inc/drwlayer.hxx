@@ -115,7 +115,6 @@ public:
     virtual void    SetChanged( sal_Bool bFlg = sal_True );
 
     virtual Window* GetCurDocViewWin();
-    virtual SvStream* GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const;
 
     virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const;
 

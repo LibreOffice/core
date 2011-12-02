@@ -229,7 +229,6 @@ public:
     virtual void        DisposeLoadedModels();
     virtual bool    IsReadOnly() const;
     virtual void        SetChanged(sal_Bool bFlag = sal_True);
-    virtual SvStream*   GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const;
 
     SfxItemPool&        GetPool() { return( *pItemPool ); }
 

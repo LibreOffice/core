@@ -161,45 +161,9 @@ SdrPage* SwDrawDocument::AllocPage(bool bMasterPage)
     return pPage;
 }
 
-
-SvStream* SwDrawDocument::GetDocumentStream( SdrDocumentStreamInfo& rInfo ) const
+uno::Reference<embed::XStorage> SwDrawDocument::GetDocumentStorage() const
 {
-    SvStream* pRet = NULL;
-    uno::Reference < embed::XStorage > xRoot( pDoc->GetDocStorage() );
-    if( xRoot.is() )
-    {
-        if( rInfo.maUserData.Len() &&
-            ( rInfo.maUserData.GetToken( 0, ':' ) ==
-              String( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package" ) ) ) )
-        {
-            const String aPicturePath( rInfo.maUserData.GetToken( 1, ':' ) );
-
-            // graphic from picture stream in picture storage in XML package
-            if( aPicturePath.GetTokenCount( '/' ) == 2 )
-            {
-                const String    aPictureStorageName( aPicturePath.GetToken( 0, '/' ) );
-                const String    aPictureStreamName( aPicturePath.GetToken( 1, '/' ) );
-
-                try
-                {
-                    uno::Reference < embed::XStorage > xPictureStorage = xRoot->openStorageElement(
-                            aPictureStorageName, embed::ElementModes::READ );
-                    uno::Reference < io::XStream > xStream = xPictureStorage->openStreamElement(
-                            aPictureStreamName, embed::ElementModes::READ );
-                    pRet = utl::UcbStreamHelper::CreateStream( xStream );
-                    if( pRet )
-                    {
-                        rInfo.mbDeleteAfterUse = sal_True;
-                        rInfo.mxStorageRef = xPictureStorage;
-                    }
-                }
-                catch ( uno::Exception& )
-                {
-                }
-            }
-        }
-    }
-    return pRet;
+    return pDoc->GetDocStorage();
 }
 
 SdrLayerID SwDrawDocument::GetControlExportLayerId( const SdrObject & ) const

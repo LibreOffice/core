@@ -47,7 +47,6 @@ class SdDrawDocument;
 class SvxItemFactory;
 class SdPage;
 class SfxPrinter;
-struct SdrDocumentStreamInfo;
 struct SpellCallbackInfo;
 class AbstractSvxNameDialog;
 class SfxUndoManager;

@@ -91,10 +91,13 @@ class SotStorage;
 class SdrOutlinerCache;
 class SotStorageRef;
 class SdrUndoFactory;
-namespace comphelper{
+namespace comphelper
+{
     class IEmbeddedHelper;
+    class LifecycleProxy;
 }
-namespace sfx2{
+namespace sfx2
+{
     class LinkManager;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -155,13 +158,6 @@ public:
 // Flag um nach dem Laden des Pools Aufzuraeumen (d.h. die RefCounts
 // neu zu bestimmen und unbenutztes wegzuwerfen). sal_False == aktiv
 #define LOADREFCOUNTS (false)
-
-struct SdrDocumentStreamInfo
-{
-    bool            mbDeleteAfterUse;
-    String          maUserData;
-    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxStorageRef;
-};
 
 struct SdrModelImpl;
 
@@ -330,7 +326,12 @@ public:
     // Datei angelegt.
     // Geliefert werden muss der Stream, aus dem das Model geladen wurde
     // bzw. in den es zuletzt gespeichert wurde.
-    virtual SvStream* GetDocumentStream( SdrDocumentStreamInfo& rStreamInfo ) const;
+    virtual ::com::sun::star::uno::Reference<
+                ::com::sun::star::embed::XStorage> GetDocumentStorage() const;
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::io::XInputStream >
+        GetDocumentStream(::rtl::OUString const& rURL,
+                ::comphelper::LifecycleProxy & rProxy) const;
     // Die Vorlagenattribute der Zeichenobjekte in harte Attribute verwandeln.
     void BurnInStyleSheetAttributes();
     // Wer sich von SdrPage ableitet muss sich auch von SdrModel ableiten

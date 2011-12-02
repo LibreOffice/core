@@ -1904,59 +1904,6 @@ void ScDrawLayer::SetChanged( sal_Bool bFlg /* = sal_True */ )
     FmFormModel::SetChanged( bFlg );
 }
 
-SvStream* ScDrawLayer::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const
-{
-    OSL_ENSURE( pDoc, "ScDrawLayer::GetDocumentStream without document" );
-    if ( !pDoc )
-        return NULL;
-
-    uno::Reference< embed::XStorage > xStorage = pDoc->GetDocumentShell() ?
-                                                        pDoc->GetDocumentShell()->GetStorage() :
-                                                        NULL;
-    SvStream*   pRet = NULL;
-
-    if( xStorage.is() )
-    {
-        if( rStreamInfo.maUserData.Len() &&
-            ( rStreamInfo.maUserData.GetToken( 0, ':' ) ==
-              String( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package" ) ) ) )
-        {
-            const String aPicturePath( rStreamInfo.maUserData.GetToken( 1, ':' ) );
-
-            // graphic from picture stream in picture storage in XML package
-            if( aPicturePath.GetTokenCount( '/' ) == 2 )
-            {
-                const String aPictureStreamName( aPicturePath.GetToken( 1, '/' ) );
-                const String aPictureStorageName( aPicturePath.GetToken( 0, '/' ) );
-
-                try {
-                    if ( xStorage->isStorageElement( aPictureStorageName ) )
-                    {
-                        uno::Reference< embed::XStorage > xPictureStorage =
-                                    xStorage->openStorageElement( aPictureStorageName, embed::ElementModes::READ );
-
-                        if( xPictureStorage.is() &&
-                            xPictureStorage->isStreamElement( aPictureStreamName ) )
-                        {
-                            uno::Reference< io::XStream > xStream =
-                                xPictureStorage->openStreamElement( aPictureStreamName, embed::ElementModes::READ );
-                            if ( xStream.is() )
-                                pRet = ::utl::UcbStreamHelper::CreateStream( xStream );
-                        }
-                    }
-                }
-                catch( uno::Exception& )
-                {
-                    // TODO: error handling
-                }
-            }
-        }
-        rStreamInfo.mbDeleteAfterUse = ( pRet != NULL );
-    }
-
-    return pRet;
-}
-
 SdrLayerID ScDrawLayer::GetControlExportLayerId( const SdrObject & ) const
 {
     //  Layer fuer Export von Form-Controls in Versionen vor 5.0 - immer SC_LAYER_FRONT
