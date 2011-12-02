@@ -88,7 +88,7 @@ OUString SmOoxmlImport::handleStream()
     // And as a result, empty parts of the formula that are not placeholders are written out
     // as a single space, so fix that up too.
     ret = comphelper::string::searchAndReplaceAllAsciiWithAscii( ret, "{ }", "{}" );
-    fprintf(stderr, "FORMULA: %s\n", rtl::OUStringToOString( ret, RTL_TEXTENCODING_UTF8 ).getStr());
+//    fprintf(stderr, "FORMULA: %s\n", rtl::OUStringToOString( ret, RTL_TEXTENCODING_UTF8 ).getStr());
     return ret;
 }
 
@@ -226,7 +226,7 @@ OUString SmOoxmlImport::handleAcc()
             break;
         default:
             acc = STR( "acute" );
-            fprintf( stderr, "Unknown m:chr in m:acc '%d'\n", accChr );
+//            fprintf( stderr, "Unknown m:chr in m:acc '%d'\n", accChr );
             break;
     }
     OUString e = readOMathArgInElement( M_TOKEN( e ));
@@ -533,7 +533,7 @@ OUString SmOoxmlImport::handleNary()
             ret = STR( "sum" );
             break;
         default:
-            fprintf( stderr, "Unknown m:nary chr '%d'\n", chr );
+//            fprintf( stderr, "Unknown m:nary chr '%d'\n", chr );
             break;
     }
     if( !subHide )

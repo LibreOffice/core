@@ -82,6 +82,7 @@ AttributeListBuilder::AttributeListBuilder( const uno::Reference< xml::sax::XFas
     }
 }
 
+#if 0
 static OUString tokenToString( int token )
 {
     OUString tokenname = StaticTokenMap::get().getUnicodeTokenName( token & TOKEN_MASK );
@@ -114,6 +115,7 @@ static OUString tokenToString( int token )
     // just the name itself, not specified whether opening or closing
     return namespacename + STR( ":" ) + tokenname;
 }
+#endif
 
 } // namespace
 
@@ -141,7 +143,7 @@ bool XmlStream::AttributeList::attribute( int token, bool def ) const
         if( find->second.equalsIgnoreAsciiCaseAscii( "false" ) || find->second.equalsIgnoreAsciiCaseAscii( "off" )
             || find->second.equalsIgnoreAsciiCaseAscii( "f" ) || find->second.equalsIgnoreAsciiCaseAscii( "0" ))
             return false;
-        fprintf( stderr, "Cannot convert \'%s\' to bool.\n", CSTR( find->second ));
+//        fprintf( stderr, "Cannot convert \'%s\' to bool.\n", CSTR( find->second ));
     }
     return def;
 }
@@ -153,8 +155,8 @@ sal_Unicode XmlStream::AttributeList::attribute( int token, sal_Unicode def ) co
     {
         if( find->second.getLength() >= 1 )
         {
-            if( find->second.getLength() != 1 )
-                fprintf( stderr, "Cannot convert \'%s\' to sal_Unicode, stripping.\n", CSTR( find->second ));
+//            if( find->second.getLength() != 1 )
+//                fprintf( stderr, "Cannot convert \'%s\' to sal_Unicode, stripping.\n", CSTR( find->second ));
             return find->second[ 0 ];
         }
     }
@@ -247,7 +249,7 @@ XmlStream::Tag XmlStream::checkTag( int token, bool optional )
         pos = savedPos;
         return Tag();
     }
-    fprintf( stderr, "Expected tag %s not found.\n", CSTR( tokenToString( token )));
+//    fprintf( stderr, "Expected tag %s not found.\n", CSTR( tokenToString( token )));
     return Tag();
 }
 
@@ -256,7 +258,7 @@ bool XmlStream::recoverAndFindTag( int token )
     return recoverAndFindTagInternal( token, false );
 }
 
-bool XmlStream::recoverAndFindTagInternal( int token, bool silent )
+bool XmlStream::recoverAndFindTagInternal( int token, bool /*silent*/ )
 {
     int depth = 0;
     for(;
@@ -267,20 +269,20 @@ bool XmlStream::recoverAndFindTagInternal( int token, bool silent )
         {
             if( currentToken() == OPENING( currentToken()))
             {
-                if( !silent )
-                    fprintf( stderr, "Skipping tag %s\n", CSTR( tokenToString( currentToken())));
+//                if( !silent )
+//                    fprintf( stderr, "Skipping tag %s\n", CSTR( tokenToString( currentToken())));
                 ++depth;
             }
             else if( currentToken() == CLOSING( currentToken()))
             {
-                if( !silent )
-                    fprintf( stderr, "Skipping tag %s\n", CSTR( tokenToString( currentToken())));
+//                if( !silent )
+//                    fprintf( stderr, "Skipping tag %s\n", CSTR( tokenToString( currentToken())));
                 --depth;
             }
             else
             {
-                if( !silent )
-                    fprintf( stderr, "Malformed token %d (%s)\n", currentToken(), CSTR( tokenToString( currentToken())));
+//                if( !silent )
+//                    fprintf( stderr, "Malformed token %d (%s)\n", currentToken(), CSTR( tokenToString( currentToken())));
                 abort();
             }
             continue;
@@ -291,15 +293,15 @@ bool XmlStream::recoverAndFindTagInternal( int token, bool silent )
             return false; // that would be leaving current element, so not found
         if( currentToken() == OPENING( currentToken()))
         {
-            if( !silent )
-                fprintf( stderr, "Skipping tag %s\n", CSTR( tokenToString( currentToken())));
+//            if( !silent )
+//                fprintf( stderr, "Skipping tag %s\n", CSTR( tokenToString( currentToken())));
             ++depth;
         }
         else
             abort();
     }
-    if( !silent )
-        fprintf( stderr, "Unexpected end of stream reached.\n" );
+//    if( !silent )
+//        fprintf( stderr, "Unexpected end of stream reached.\n" );
     return false;
 }
 
@@ -308,23 +310,23 @@ void XmlStream::skipElement( int token )
     return skipElementInternal( token, true ); // no debug about skipping if called from outside
 }
 
-void XmlStream::skipElementInternal( int token, bool silent )
+void XmlStream::skipElementInternal( int token, bool /*silent*/ )
 {
     int closing = ( token & ~TAG_OPENING ) | TAG_CLOSING; // make it a closing tag
     assert( currentToken() == OPENING( token ));
-    if( !silent )
-        fprintf( stderr, "Skipping unexpected element %s\n", CSTR( tokenToString( currentToken())));
+//    if( !silent )
+//        fprintf( stderr, "Skipping unexpected element %s\n", CSTR( tokenToString( currentToken())));
     moveToNextTag();
     // and just find the matching closing tag
     if( recoverAndFindTag( closing ))
     {
-        if( !silent )
-            fprintf( stderr, "Skipped unexpected element %s\n", CSTR( tokenToString( token )));
+//        if( !silent )
+//            fprintf( stderr, "Skipped unexpected element %s\n", CSTR( tokenToString( token )));
         moveToNextTag(); // and skip it too
         return;
     }
     // this one is an unexpected problem, do not silent it
-    fprintf( stderr, "Expected end of element %s not found.\n", CSTR( tokenToString( token )));
+//    fprintf( stderr, "Expected end of element %s not found.\n", CSTR( tokenToString( token )));
 }
 
 void XmlStream::handleUnexpectedTag()
@@ -333,7 +335,7 @@ void XmlStream::handleUnexpectedTag()
         return;
     if( currentToken() == CLOSING( currentToken()))
     {
-        fprintf( stderr, "Skipping unexpected tag %s\n", CSTR( tokenToString( currentToken())));
+//        fprintf( stderr, "Skipping unexpected tag %s\n", CSTR( tokenToString( currentToken())));
         moveToNextTag(); // just skip it
         return;
     }
