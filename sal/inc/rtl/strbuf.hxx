@@ -281,6 +281,7 @@ public:
         @param      index   the index of the desired character.
         @return     the character at the specified index of this string buffer.
     */
+    SAL_DEPRECATED("use rtl::OStringBuffer::operator [] instead")
     sal_Char charAt( sal_Int32 index )
     {
         assert(index >= 0 && index < pData->length);
@@ -297,6 +298,7 @@ public:
         @param      index   the index of the character to modify.
         @param      ch      the new character.
      */
+    SAL_DEPRECATED("use rtl::OStringBuffer::operator [] instead")
     OStringBuffer & setCharAt(sal_Int32 index, sal_Char ch)
     {
         assert(index >= 0 && index < pData->length);

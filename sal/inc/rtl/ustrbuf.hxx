@@ -260,6 +260,7 @@ public:
         @param      index   the index of the desired character.
         @return     the character at the specified index of this string buffer.
      */
+    SAL_DEPRECATED("use rtl::OUStringBuffer::operator [] instead")
     sal_Unicode charAt( sal_Int32 index ) const
     {
         assert(index >= 0 && index < pData->length);
@@ -276,6 +277,7 @@ public:
         @param      index   the index of the character to modify.
         @param      ch      the new character.
      */
+    SAL_DEPRECATED("use rtl::OUStringBuffer::operator [] instead")
     OUStringBuffer & setCharAt(sal_Int32 index, sal_Unicode ch)
     {
         assert(index >= 0 && index < pData->length);
