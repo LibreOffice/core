@@ -211,12 +211,10 @@ endef
 # why shouldn't it be.
 
 define gb_Module_add_check_target
-$(if $(filter-out IOS,$(OS)),\
 $(call gb_Module__read_targetfile,$(1),$(2),check target)
 
 $(call gb_Module_get_check_target,$(1)) : $$(gb_Module_CURRENTTARGET)
 $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
-)
 
 endef
 
