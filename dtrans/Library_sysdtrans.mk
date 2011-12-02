@@ -66,8 +66,8 @@ $(eval $(call gb_Library_add_exception_objects,sysdtrans,\
 	dtrans/source/win32/clipb/WinClipbImpl \
 	dtrans/source/win32/clipb/WinClipboard \
 	dtrans/source/win32/clipb/wcbentry \
+	dtrans/source/win32/clipb/MtaOleClipb \
 	dtrans/source/win32/misc/ImplHelper \
-	dtrans/source/win32/mtaole/MtaOleClipb \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -47,7 +47,7 @@
 //#define UNICODE
 #include <osl/diagnose.h>
 
-#include "../../inc/MtaOleClipb.hxx"
+#include "MtaOleClipb.hxx"
 #include <osl/conditn.hxx>
 
 #include <wchar.h>
