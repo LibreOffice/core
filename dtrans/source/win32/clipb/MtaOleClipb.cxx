@@ -277,7 +277,7 @@ CMtaOleClipboard::CMtaOleClipboard( ) :
     m_MtaOleReqWndClassAtom( 0 ),
     m_hwndNextClipViewer( NULL ),
     m_pfncClipViewerCallback( NULL ),
-    m_bRunClipboardNotifierThread( sal_True ),
+    m_bRunClipboardNotifierThread( true ),
     m_hClipboardChangedEvent( m_hClipboardChangedNotifierEvents[0] ),
     m_hTerminateClipboardChangedNotifierEvent( m_hClipboardChangedNotifierEvents[1] ),
     m_ClipboardChangedEventCount( 0 )
@@ -321,7 +321,7 @@ CMtaOleClipboard::~CMtaOleClipboard( )
         ResetEvent( m_hEvtThrdReady );
 
     // terminate the clipboard changed notifier thread
-    m_bRunClipboardNotifierThread = sal_False;
+    m_bRunClipboardNotifierThread = false;
     SetEvent( m_hTerminateClipboardChangedNotifierEvent );
 
     sal_uInt32 dwResult = WaitForSingleObject(
@@ -474,15 +474,15 @@ HRESULT CMtaOleClipboard::setClipboard( IDataObject* pIDataObject )
 // register a clipboard viewer
 //--------------------------------------------------------------------
 
-sal_Bool CMtaOleClipboard::registerClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipViewerCallback )
+bool CMtaOleClipboard::registerClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipViewerCallback )
 {
     if ( !WaitForThreadReady( ) )
     {
         OSL_FAIL( "clipboard sta thread not ready" );
-        return sal_False;
+        return false;
     }
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     OSL_ENSURE( GetCurrentThreadId( ) != m_uOleThreadId, "registerClipViewer from within the OleThread called" );
 
@@ -501,9 +501,9 @@ sal_Bool CMtaOleClipboard::registerClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncC
 // register a clipboard viewer
 //--------------------------------------------------------------------
 
-sal_Bool CMtaOleClipboard::onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipViewerCallback )
+bool CMtaOleClipboard::onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipViewerCallback )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     // we need exclusive access because the clipboard changed notifier
     // thread also accesses this variable
@@ -514,13 +514,13 @@ sal_Bool CMtaOleClipboard::onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfn
     {
         // SetClipboardViewer sends a WM_DRAWCLIPBOARD message we ignore
         // this message if we register ourself as clip viewer
-        m_bInRegisterClipViewer = sal_True;
+        m_bInRegisterClipViewer = true;
         m_hwndNextClipViewer = SetClipboardViewer( m_hwndMtaOleReqWnd );
-        m_bInRegisterClipViewer = sal_False;
+        m_bInRegisterClipViewer = false;
 
         // if there is no other cb-viewer the
         // return value is NULL!!!
-        bRet = IsWindow( m_hwndNextClipViewer ) ? sal_True : sal_False;
+        bRet = IsWindow( m_hwndNextClipViewer ) ? true : false;
 
         // save the new callback function
         m_pfncClipViewerCallback = pfncClipViewerCallback;
@@ -651,9 +651,9 @@ LRESULT CMtaOleClipboard::sendMessage( UINT msg, WPARAM wParam, LPARAM lParam )
 // something to our wrapped window
 //--------------------------------------------------------------------
 
-sal_Bool CMtaOleClipboard::postMessage( UINT msg, WPARAM wParam, LPARAM lParam )
+bool CMtaOleClipboard::postMessage( UINT msg, WPARAM wParam, LPARAM lParam )
 {
-    return PostMessageA( m_hwndMtaOleReqWnd, msg, wParam, lParam ) ? sal_True : sal_False;
+    return PostMessageA( m_hwndMtaOleReqWnd, msg, wParam, lParam ) ? true : false;
 }
 
 
@@ -875,9 +875,9 @@ unsigned int WINAPI CMtaOleClipboard::clipboardChangedNotifierThreadProc( LPVOID
 //--------------------------------------------------------------------
 
 inline
-sal_Bool CMtaOleClipboard::WaitForThreadReady( ) const
+bool CMtaOleClipboard::WaitForThreadReady( ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if ( NULL != m_hEvtThrdReady )
     {

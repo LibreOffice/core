@@ -68,28 +68,28 @@ public:
     // a clipboard viewer
     // returns true on success else false; use GetLastError( ) in
     // false case
-    sal_Bool registerClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipViewerCallback );
+    bool registerClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipViewerCallback );
 
 private:
     unsigned int run( );
 
-    // create a hidden windows which serves as an request
-    // target; so we guarantee synchronization
+    // create a hidden window which serves as an request target; so we
+    // guarantee synchronization
     void createMtaOleReqWnd( );
 
     // message support
-    sal_Bool postMessage( UINT msg, WPARAM wParam = 0, LPARAM lParam = 0 );
+    bool     postMessage( UINT msg, WPARAM wParam = 0, LPARAM lParam = 0 );
     LRESULT  sendMessage( UINT msg, WPARAM wParam = 0, LPARAM lParam = 0 );
 
     //---------------------------------------------------------------
-    // message handler functions; remeber these functions are called
+    // message handler functions; remember these functions are called
     // from a different thread context!
     //---------------------------------------------------------------
 
     LRESULT  onSetClipboard( IDataObject* pIDataObject );
     LRESULT  onGetClipboard( LPSTREAM* ppStream );
     LRESULT  onFlushClipboard( );
-    sal_Bool onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipViewerCallback );
+    bool     onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipViewerCallback );
 
     // win32 clipboard-viewer support
     LRESULT onChangeCBChain( HWND hWndRemove, HWND hWndNext );
@@ -100,7 +100,7 @@ private:
 
     static unsigned int WINAPI clipboardChangedNotifierThreadProc( LPVOID pParam );
 
-    sal_Bool WaitForThreadReady( ) const;
+    bool WaitForThreadReady( ) const;
 
 private:
     HANDLE                      m_hOleThread;
@@ -110,9 +110,9 @@ private:
     ATOM                        m_MtaOleReqWndClassAtom;
     HWND                        m_hwndNextClipViewer;
     LPFNC_CLIPVIEWER_CALLBACK_t m_pfncClipViewerCallback;
-    sal_Bool                    m_bInRegisterClipViewer;
+    bool                        m_bInRegisterClipViewer;
 
-    sal_Bool                    m_bRunClipboardNotifierThread;
+    bool                        m_bRunClipboardNotifierThread;
     HANDLE                      m_hClipboardChangedNotifierThread;
     HANDLE                      m_hClipboardChangedNotifierEvents[2];
     HANDLE&                     m_hClipboardChangedEvent;
