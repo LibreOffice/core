@@ -2694,11 +2694,11 @@ void Test::testCopyPaste()
     m_pDoc->CopyFromClip(aRange, aMarkData2, nFlags, NULL, pClipDoc);
 
     //check values after copying
-    String aString;
+    rtl::OUString aString;
     m_pDoc->GetValue(1,1,1, aValue);
     CPPUNIT_ASSERT_MESSAGE("copied formula should return 2", aValue == 2);
     m_pDoc->GetFormula(1,1,1, aString);
-    CPPUNIT_ASSERT_MESSAGE("formula string was not copied correctly", rtl::OUString(aString) == aFormulaString);
+    CPPUNIT_ASSERT_MESSAGE("formula string was not copied correctly", aString == aFormulaString);
     m_pDoc->GetValue(0,1,1, aValue);
     CPPUNIT_ASSERT_MESSAGE("copied value should be 1", aValue == 1);
 
@@ -2717,15 +2717,15 @@ void Test::testCopyPaste()
     m_pDoc->GetValue(1,1,1, aValue);
     CPPUNIT_ASSERT_MESSAGE("after undo formula should return nothing", aValue == 0);
     m_pDoc->GetString(2,1,1, aString);
-    CPPUNIT_ASSERT_MESSAGE("after undo string should be removed", rtl::OUString(aString) == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")));
+    CPPUNIT_ASSERT_MESSAGE("after undo string should be removed", aString.equalsAscii(""));
 
     pUndo->Redo();
     m_pDoc->GetValue(1,1,1, aValue);
     CPPUNIT_ASSERT_MESSAGE("formula should return 2 after redo", aValue == 2);
     m_pDoc->GetString(2,1,1, aString);
-    CPPUNIT_ASSERT_MESSAGE("Cell Sheet2.C2 should contain: test", rtl::OUString(aString) == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test")));
+    CPPUNIT_ASSERT_MESSAGE("Cell Sheet2.C2 should contain: test", aString.equalsAscii("test"));
     m_pDoc->GetFormula(1,1,1, aString);
-    CPPUNIT_ASSERT_MESSAGE("Formula should be correct again", rtl::OUString(aString) == aFormulaString);
+    CPPUNIT_ASSERT_MESSAGE("Formula should be correct again", aString == aFormulaString);
 
     //clear all variables
     delete pClipDoc;
