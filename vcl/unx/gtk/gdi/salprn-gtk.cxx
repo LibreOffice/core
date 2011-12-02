@@ -641,6 +641,14 @@ GtkPrintDialog::impl_initCustomTab()
             continue;
         else
         {
+            // change handlers for all the controls set up in this block
+            // should be set _after_ the control has been made (in)active,
+            // because:
+            // 1. value of the property is _known_--we are using it to
+            //    _set_ the control, right?--no need to change it back .-)
+            // 2. it may cause warning because the widget may not
+            //    have been placed in m_aControlToPropertyMap yet
+
             GtkWidget* pWidget = NULL;
             beans::PropertyValue* pVal = NULL;
             if (aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Bool")) && pCurParent)
@@ -649,7 +657,6 @@ GtkPrintDialog::impl_initCustomTab()
                     rtl::OUStringToOString(aText, RTL_TEXTENCODING_UTF8).getStr());
                 lcl_setHelpText(pWidget, aHelpTexts, 0);
                 m_aControlToPropertyMap[pWidget] = aPropertyName;
-                g_signal_connect(pWidget, "toggled", G_CALLBACK(GtkPrintDialog::UIOption_CheckHdl), this);
 
                 sal_Bool bVal = sal_False;
                 pVal = m_rController.getValue(aPropertyName);
@@ -658,6 +665,7 @@ GtkPrintDialog::impl_initCustomTab()
                 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pWidget), bVal);
                 gtk_widget_set_sensitive(pWidget,
                     m_rController.isUIOptionEnabled(aPropertyName) && pVal != NULL);
+                g_signal_connect(pWidget, "toggled", G_CALLBACK(GtkPrintDialog::UIOption_CheckHdl), this);
             }
             else if (aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Radio")) && pCurParent)
             {
@@ -684,11 +692,11 @@ GtkPrintDialog::impl_initCustomTab()
                     gtk_box_pack_start(GTK_BOX(pVbox), pRow, FALSE, FALSE, 0);
                     gtk_box_pack_start(GTK_BOX(pRow), pWidget, FALSE, FALSE, 0);
                     aPropertyToDependencyRowMap[aPropertyName + rtl::OUString::valueOf(m)] = pRow;
-                    g_signal_connect(pWidget, "toggled",
-                            G_CALLBACK(GtkPrintDialog::UIOption_RadioHdl), this);
                     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pWidget), m == nSelectVal);
                     gtk_widget_set_sensitive(pWidget,
                         m_rController.isUIOptionEnabled(aPropertyName) && pVal != NULL);
+                    g_signal_connect(pWidget, "toggled",
+                            G_CALLBACK(GtkPrintDialog::UIOption_RadioHdl), this);
                 }
 
                 if (pGroup)
@@ -718,11 +726,6 @@ GtkPrintDialog::impl_initCustomTab()
                    pVal = m_rController.getValue(aPropertyName);
                    if (pVal && pVal->Value.hasValue())
                        pVal->Value >>= nSelectVal;
-                   // set active value before attaching the change handler, because:
-                   // 1. value of the property is _known_--we are using it to
-                   //    _set_ the control, right?--no need to change it back .-)
-                   // 2. it would cause assertion because the widget has not
-                   //    been placed in m_aControlToPropertyMap yet
                    gtk_combo_box_set_active(GTK_COMBO_BOX(pWidget), nSelectVal);
                    g_signal_connect(pWidget, "changed", G_CALLBACK(GtkPrintDialog::UIOption_SelectHdl), this);
                 }
