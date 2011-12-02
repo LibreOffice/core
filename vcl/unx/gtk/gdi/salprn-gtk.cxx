@@ -59,6 +59,8 @@
 #include <com/sun/star/view/PrintableState.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
+#include <rtl/oustringostreaminserter.hxx>
+
 #include <unotools/streamwrap.hxx>
 
 #include <cstring>
@@ -227,10 +229,10 @@ GtkSalPrinter::StartJob(
         ImplJobSetup* io_pSetupData,
         vcl::PrinterController& io_rController)
 {
-    OSL_PRECOND(!m_pImpl, "there is a job running already");
-
     if (!vcl::useSystemPrintDialog())
         return impl_doJob(i_pFileName, i_rJobName, i_rAppName, io_pSetupData, 1, false, io_rController);
+
+    assert(!m_pImpl);
 
     m_pImpl.reset(new GtkSalPrinter_Impl());
     m_pImpl->m_sJobName = i_rJobName;
@@ -281,13 +283,14 @@ GtkSalPrinter::StartJob(
 sal_Bool
 GtkSalPrinter::EndJob()
 {
-    OSL_PRECOND(m_pImpl, "there is no job running");
     sal_Bool bRet = PspSalPrinter::EndJob();
 
     if (!vcl::useSystemPrintDialog())
         return bRet;
 
-    if (!bRet || !m_pImpl || m_pImpl->m_sSpoolFile.isEmpty())
+    assert(m_pImpl);
+
+    if (!bRet || m_pImpl->m_sSpoolFile.isEmpty())
         return bRet;
 
     boost::shared_ptr<GtkPrintWrapper> const pWrapper(lcl_getGtkSalInstance().getPrintWrapper());
@@ -540,8 +543,7 @@ GtkPrintDialog::impl_initCustomTab()
             }
             else
             {
-                OSL_TRACE("unhandled UI option entry: %s",
-                        rtl::OUStringToOString(rEntry.Name, RTL_TEXTENCODING_UTF8).getStr());
+                SAL_INFO("vcl.gtk", "unhandled UI option entry: " << rEntry.Name);
             }
         }
 
@@ -696,7 +698,7 @@ GtkPrintDialog::impl_initCustomTab()
 
             }
             else
-                OSL_TRACE("unhandled option type: %s\n", rtl::OUStringToOString(aCtrlType, RTL_TEXTENCODING_UTF8).getStr());
+                SAL_INFO("vcl.gtk", "unhandled option type: " << aCtrlType);
 
             GtkWidget* pRow = NULL;
             if (pWidget)
@@ -785,11 +787,11 @@ GtkPrintDialog::impl_queryPropertyValue(GtkWidget* const i_pWidget) const
     if (aIt != m_aControlToPropertyMap.end())
     {
         pVal = m_rController.getValue(aIt->second);
-        OSL_ENSURE(pVal, "property value not found");
+        SAL_WARN_IF(!pVal, "vcl.gtk", "property value not found");
     }
     else
     {
-        OSL_FAIL("changed control not in property map");
+        SAL_WARN("vcl.gtk", "changed control not in property map");
     }
     return pVal;
 }
@@ -1016,7 +1018,7 @@ GtkPrintDialog::updateControllerPrintRange()
         beans::PropertyValue* pVal = m_rController.getValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PrintRange")));
         if (!pVal)
             pVal = m_rController.getValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PrintContent")));
-        OSL_ENSURE(pVal, "Nothing to map standard print options to!");
+        SAL_WARN_IF(!pVal, "vcl.gtk", "Nothing to map standard print options to!");
         if (pVal)
         {
             sal_Int32 nVal = 0;
@@ -1031,7 +1033,7 @@ GtkPrintDialog::updateControllerPrintRange()
             if (nVal == 1)
             {
                 pVal = m_rController.getValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageRange")));
-                OSL_ENSURE(pVal, "PageRange doesn't exist!");
+                SAL_WARN_IF(!pVal, "vcl.gtk", "PageRange doesn't exist!");
                 if (pVal)
                 {
                     rtl::OUStringBuffer sBuf;
