@@ -646,11 +646,11 @@ class OOXMLFastContextHandlerMath: public OOXMLFastContextHandlerProperties
 {
 public:
     explicit OOXMLFastContextHandlerMath(OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFastContextHandlerMath();
-
     virtual string getType() const { return "Math"; }
 
 protected:
+    virtual void process();
+
     virtual void lcl_startFastElement(Token_t Element, const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
@@ -664,6 +664,7 @@ protected:
 
 private:
     oox::formulaimport::XmlStreamBuilder buffer;
+    int depthCount;
 };
 
 
