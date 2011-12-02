@@ -42,10 +42,10 @@
     steps taken while executing some protocol) should use the facilities
     provided by sal/log.hxx.
 
-    Because the assertion macros (DBG_ASSERTWARNING, DBG_ASSERT, DBG_BF_ASSERT)
-    have been used for true assertions as well as for logged warnings, they map
-    to SAL_WARN instead of standard assert.  The warning and error macros
-    (DBG_WARNING, DBG_WARNING1, ..., DBG_WARNING5, DBG_WARNINGFILE,
+    Because the assertion macros (DBG_ASSERT, DBG_BF_ASSERT) have been used for
+    true assertions as well as to log warnings, they map to SAL_WARN instead of
+    standard assert.  The warning and error macros (DBG_ASSERTWARNING,
+    DBG_WARNING, DBG_WARNING1, ..., DBG_WARNING5, DBG_WARNINGFILE,
     DBG_ERRORFILE) all map to SAL_INFO.
 */
 
@@ -467,7 +467,7 @@ public:
              (const void*)pObj, (DbgUsr)fTest )
 
 #define DBG_ASSERTWARNING( sCon, aWarning ) \
-    SAL_DETAIL_WARN_IF_FORMAT(!(sCon), "legacy.tools", aWarning)
+    SAL_DETAIL_INFO_IF_FORMAT(!(sCon), "legacy.tools", aWarning)
 
 #define DBG_ASSERT( sCon, aError ) \
     SAL_DETAIL_WARN_IF_FORMAT(!(sCon), "legacy.tools", aError)
