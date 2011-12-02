@@ -3047,6 +3047,20 @@ void SdXMLPluginShapeContext::StartElement( const ::com::sun::star::uno::Referen
     }
 }
 
+static ::rtl::OUString
+lcl_GetMediaReference(SvXMLImport const& rImport, ::rtl::OUString const& rURL)
+{
+    if (rImport.IsPackageURL(rURL))
+    {
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "vnd.sun.star.Package:")) + rURL;
+    }
+    else
+    {
+        return rImport.GetAbsoluteReference(rURL);
+    }
+}
+
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLPluginShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
 {
@@ -3062,7 +3076,7 @@ void SdXMLPluginShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl:
     case XML_NAMESPACE_XLINK:
         if( IsXMLToken( rLocalName, XML_HREF ) )
         {
-            maHref = GetImport().GetAbsoluteReference(rValue);
+            maHref = lcl_GetMediaReference(GetImport(), rValue);
             return;
         }
         break;
@@ -3116,18 +3130,9 @@ void SdXMLPluginShapeContext::EndElement()
         else
         {
             // in case we have a media object
-
-            OUString sTempRef;
-
-            // check for package URL
-            if( GetImport().IsPackageURL( maHref ) )
-            {
-                sTempRef = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) );
-            }
-
-            sTempRef += maHref;
-
-            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaURL" ) ), uno::makeAny( sTempRef ) );
+            xProps->setPropertyValue(
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("MediaURL")),
+                    uno::makeAny(maHref));
 
             for( sal_Int32 nParam = 0; nParam < maParams.getLength(); ++nParam )
             {

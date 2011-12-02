@@ -35,7 +35,10 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/media/ZoomLevel.hpp>
 
 #include <sax/tools/converter.hxx>
@@ -1944,6 +1947,93 @@ void XMLShapeExport::ImpExportPluginShape(
 
 //////////////////////////////////////////////////////////////////////////////
 
+/** split a uri hierarchy into first segment and rest */
+static bool
+splitPath(::rtl::OUString const & i_rPath,
+    ::rtl::OUString & o_rDir, ::rtl::OUString& o_rRest)
+{
+    const sal_Int32 idx(i_rPath.indexOf(static_cast<sal_Unicode>('/')));
+    if (idx < 0 || idx >= i_rPath.getLength()) {
+        o_rDir = ::rtl::OUString();
+        o_rRest = i_rPath;
+        return true;
+    } else if (idx == 0 || idx == i_rPath.getLength() - 1) {
+        // input must not start or end with '/'
+        return false;
+    } else {
+        o_rDir  = (i_rPath.copy(0, idx));
+        o_rRest = (i_rPath.copy(idx+1));
+        return true;
+    }
+}
+
+static void lcl_CopyStream(
+        uno::Reference<embed::XStorage> const& xSource,
+        uno::Reference<embed::XStorage> const& xTarget,
+         ::rtl::OUString const& rPath)
+{
+    ::rtl::OUString dir;
+    ::rtl::OUString rest;
+    if (!splitPath(rPath, dir, rest)) throw uno::RuntimeException();
+    if (0 == dir.getLength())
+    {
+        xSource->copyElementTo(rPath, xTarget, rPath);
+    }
+    else
+    {
+        uno::Reference<embed::XStorage> const xSubSource(
+            xSource->openStorageElement(dir, embed::ElementModes::READ));
+        uno::Reference<embed::XStorage> const xSubTarget(
+            xTarget->openStorageElement(dir, embed::ElementModes::WRITE));
+        lcl_CopyStream(xSubSource, xSubTarget, rest);
+    }
+    uno::Reference<embed::XTransactedObject> const xTransaction(xTarget,
+            uno::UNO_QUERY);
+    if (xTransaction.is())
+    {
+        xTransaction->commit();
+    }
+}
+
+static char const s_PkgScheme[] = "vnd.sun.star.Package:";
+
+static ::rtl::OUString
+lcl_StoreMediaAndGetURL(SvXMLExport & rExport, ::rtl::OUString const& rURL)
+{
+    if (0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
+                rURL.getStr(), rURL.getLength(),
+                s_PkgScheme, SAL_N_ELEMENTS(s_PkgScheme) - 1))
+    {
+        try // video is embedded
+        {
+            // copy the media stream from document storage to target storage
+            // (not sure if this is the best way to store these?)
+            uno::Reference<document::XStorageBasedDocument> const xSBD(
+                    rExport.GetModel(), uno::UNO_QUERY_THROW);
+            uno::Reference<embed::XStorage> const xSource(
+                    xSBD->getDocumentStorage(), uno::UNO_QUERY_THROW);
+            uno::Reference<embed::XStorage> const xTarget(
+                    rExport.GetTargetStorage(), uno::UNO_QUERY_THROW);
+
+            ::rtl::OUString const urlPath(
+                    rURL.copy(SAL_N_ELEMENTS(s_PkgScheme)-1));
+
+            lcl_CopyStream(xSource, xTarget, urlPath);
+
+            return urlPath;
+        }
+        catch (uno::Exception const& e)
+        {
+            SAL_INFO("xmloff", "exception while storing embedded media");
+        }
+        return ::rtl::OUString();
+    }
+    else
+    {
+        return rExport.GetRelativeReference(rURL); // linked
+    }
+}
+
 void XMLShapeExport::ImpExportMediaShape(
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures, com::sun::star::awt::Point* pRefPoint)
@@ -1964,7 +2054,9 @@ void XMLShapeExport::ImpExportMediaShape(
         // export media url
         OUString aMediaURL;
         xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaURL" ) ) ) >>= aMediaURL;
-        mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference( aMediaURL ) );
+        OUString const persistentURL =
+            lcl_StoreMediaAndGetURL(GetExport(), aMediaURL);
+        mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, persistentURL );
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
