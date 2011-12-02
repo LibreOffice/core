@@ -25,8 +25,9 @@
 
 all : reversemap.hxx
 
-reversemap.hxx : $(OUTDIR_FOR_BUILD)/bin/bestreversemap
-	$(gb_Helper_execute)bestreversemap > $@
+include $(GBUILDDIR)/gbuild_simple.mk
 
-.PHONY : all
+reversemap.hxx : $(OUTDIR_FOR_BUILD)/bin/bestreversemap
+	$(call gb_Helper_execute,bestreversemap > $@)
+
 # vim: set noet sw=4 ts=4:
