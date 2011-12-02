@@ -47,7 +47,9 @@ SHL1USE_EXPORTS = name
 DEF1NAME = $(SHL1TARGET)
 
 .INCLUDE: target.mk
+.IF "$(RUN_SMOKETEST)" == "YES"
 .INCLUDE: installationtest.mk
+.END
 
 .IF "$(depend)" == "" && "$(RUN_SMOKETEST)" == "YES"
 # disable smoketest when cross-compiling for now; we can use wine at some stage (?)
