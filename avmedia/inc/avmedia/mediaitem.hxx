@@ -34,6 +34,7 @@
 #include <tools/rtti.hxx>
 #include <svl/poolitem.hxx>
 #include <com/sun/star/media/ZoomLevel.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <avmedia/avmediadllapi.h>
 
 #define AVMEDIA_SETMASK_NONE        ((sal_uInt32)(0x00000000))
@@ -123,6 +124,12 @@ private:
 };
 
 typedef ::avmedia::MediaItem avmedia_MediaItem;
+
+bool AVMEDIA_DLLPUBLIC EmbedMedia(
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>
+            const& xModel,
+        ::rtl::OUString const& rSourceURL,
+        ::rtl::OUString & o_rEmbeddedURL);
 
 }
 

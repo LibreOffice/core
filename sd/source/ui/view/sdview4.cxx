@@ -284,8 +284,22 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 // -----------------------------------------------------------------------------
 
 SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAction,
-                                   const Point& rPos, const Size& rSize )
+                                   const Point& rPos, const Size& rSize,
+                                   bool const bLink )
 {
+    ::rtl::OUString realURL;
+    if (bLink)
+    {
+        realURL = rMediaURL;
+    }
+    else
+    {
+        uno::Reference<frame::XModel> const xModel(
+                GetDoc()->GetObjectShell()->GetModel());
+        bool const bRet = ::avmedia::EmbedMedia(xModel, rMediaURL, realURL);
+        if (!bRet) { return 0; }
+    }
+
     SdrEndTextEdit();
     mnAction = rAction;
 
@@ -308,7 +322,7 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
     if( mnAction == DND_ACTION_LINK && pPickObj && pPV && pPickObj->ISA( SdrMediaObj ) )
     {
         pNewMediaObj = static_cast< SdrMediaObj* >( pPickObj->Clone() );
-        pNewMediaObj->setURL( rMediaURL );
+        pNewMediaObj->setURL( realURL );
 
         BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
         ReplaceObjectAtView(pPickObj, *pPV, pNewMediaObj);
@@ -339,7 +353,7 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
         else
             InsertObjectAtView( pNewMediaObj, *pPV, SDRINSERT_SETDEFLAYER );
 
-        pNewMediaObj->setURL( rMediaURL );
+        pNewMediaObj->setURL( realURL );
 
         if( pPickObj )
         {
@@ -461,7 +475,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
                 else
                     aPrefSize  = Size( 5000, 5000 );
 
-                InsertMediaURL( aCurrentDropFile, mnAction, maDropPos, aPrefSize ) ;
+                InsertMediaURL( aCurrentDropFile, mnAction, maDropPos, aPrefSize, true ) ;
             }
             else if( mnAction & DND_ACTION_LINK )
                 static_cast< DrawViewShell* >( mpViewSh )->InsertURLButton( aCurrentDropFile, aCurrentDropFile, String(), &maDropPos );

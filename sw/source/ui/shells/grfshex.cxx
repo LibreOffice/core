@@ -41,6 +41,7 @@
 #include <svl/svstdarr.hxx>
 #include <svtools/filter.hxx>
 #include <svx/htmlmode.hxx>
+#include <doc.hxx>
 #include <docsh.hxx>
 #include <frmfmt.hxx>
 #include <frmmgr.hxx>
@@ -66,6 +67,7 @@
 #include <comcore.hrc>
 // <- #111827#
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::sfx2;
@@ -134,9 +136,22 @@ bool SwTextShell::InsertMediaDlg( SfxRequest& rReq )
             else
                 aSize = Size( 2835, 2835 );
 
+            ::rtl::OUString realURL;
+            if (bLink)
+            {
+                realURL = aURL;
+            }
+            else
+            {
+                uno::Reference<frame::XModel> const xModel(
+                        rSh.GetDoc()->GetDocShell()->GetModel());
+                bRet = ::avmedia::EmbedMedia(xModel, aURL, realURL);
+                if (!bRet) { return bRet; }
+            }
+
             SdrMediaObj* pObj = new SdrMediaObj( Rectangle( aPos, aSize ) );
 
-            pObj->setURL( aURL );
+            pObj->setURL( realURL );
             rSh.EnterStdMode();
             rSh.SwFEShell::InsertDrawObj( *pObj, aPos );
             bRet = true;

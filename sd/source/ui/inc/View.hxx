@@ -152,7 +152,8 @@ public:
                                            sal_Int8& rAction, const Point& rPos,
                                            SdrObject* pSelectedObj, ImageMap* pImageMap );
     SdrMediaObj*            InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAction,
-                                            const Point& rPos, const Size& rSize );
+                                            const Point& rPos, const Size& rSize,
+                                            bool const bLink );
 
     bool PasteRTFTable( SotStorageStreamRef xStm, SdrPage* pPage, sal_uLong nPasteOptions );
 

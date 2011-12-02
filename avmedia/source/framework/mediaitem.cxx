@@ -29,6 +29,22 @@
 #include <avmedia/mediaitem.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/uri/XUriReference.hpp>
+#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+
+#include <rtl/ustrbuf.hxx>
+
+#include <ucbhelper/content.hxx>
+
+#include <comphelper/processfactory.hxx>
+#include <comphelper/storagehelper.hxx>
+
 using namespace ::com::sun::star;
 
 namespace avmedia
@@ -340,6 +356,137 @@ void MediaItem::setZoom( ::com::sun::star::media::ZoomLevel eZoom )
 ::com::sun::star::media::ZoomLevel MediaItem::getZoom() const
 {
     return m_pImpl->m_eZoom;
+}
+
+//------------------------------------------------------------------------
+
+static ::rtl::OUString lcl_GetFilename(::rtl::OUString const& rSourceURL)
+{
+    uno::Reference<uri::XUriReferenceFactory> const xUriFactory(
+        ::comphelper::createProcessComponent(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.uri.UriReferenceFactory"))),
+        uno::UNO_QUERY_THROW);
+
+    uno::Reference<uri::XUriReference> const xSourceURI(
+        xUriFactory->parse(rSourceURL), uno::UNO_SET_THROW);
+
+    ::rtl::OUString filename;
+    {
+        sal_Int32 const nSegments(xSourceURI->getPathSegmentCount());
+        if (0 < nSegments)
+        {
+            filename = xSourceURI->getPathSegment(nSegments - 1);
+        }
+    }
+    if (!::comphelper::OStorageHelper::IsValidZipEntryFileName(
+                filename, false) || !filename.getLength())
+    {
+        filename = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("media"));
+    }
+    return filename;
+}
+
+static uno::Reference<io::XStream>
+lcl_CreateStream(uno::Reference<embed::XStorage> const& xStorage,
+        ::rtl::OUString const& rFilename)
+{
+    ::rtl::OUString filename(rFilename);
+
+    if (xStorage->hasByName(filename))
+    {
+        ::rtl::OUString basename;
+        ::rtl::OUString suffix;
+        sal_Int32 const nIndex(rFilename.lastIndexOf(sal_Unicode('.')));
+        if (0 < nIndex)
+        {
+            basename = rFilename.copy(0, nIndex);
+            suffix = rFilename.copy(nIndex);
+        }
+        int count(0); // sigh... try to generate non-existent name
+        do
+        {
+            ++count;
+            filename = basename + ::rtl::OUString::valueOf(count) + suffix;
+        }
+        while (xStorage->hasByName(filename));
+    }
+
+    uno::Reference<io::XStream> const xStream(
+        xStorage->openStreamElement(filename,
+            embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE),
+        uno::UNO_SET_THROW);
+    uno::Reference< beans::XPropertySet > const xStreamProps(xStream,
+        uno::UNO_QUERY);
+    if (xStreamProps.is()) { // this is NOT supported in FileSystemStorage
+        xStreamProps->setPropertyValue(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")),
+            uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            //FIXME how to detect real media type?
+            //but currently xmloff has this one hardcoded anyway...
+                    "application/vnd.sun.star.media"))));
+        xStreamProps->setPropertyValue( // turn off compression
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed")),
+            uno::makeAny(sal_False));
+    }
+    return xStream;
+}
+
+bool EmbedMedia(uno::Reference<frame::XModel> const& xModel,
+        ::rtl::OUString const& rSourceURL, ::rtl::OUString & o_rEmbeddedURL)
+{
+    try
+    {
+        ::ucbhelper::Content sourceContent(rSourceURL,
+                uno::Reference<ucb::XCommandEnvironment>());
+
+        uno::Reference<document::XStorageBasedDocument> const xSBD(xModel,
+                uno::UNO_QUERY_THROW);
+        uno::Reference<embed::XStorage> const xStorage(
+                xSBD->getDocumentStorage(), uno::UNO_QUERY_THROW);
+
+        ::rtl::OUString const media(RTL_CONSTASCII_USTRINGPARAM("Media"));
+        uno::Reference<embed::XStorage> const xSubStorage(
+            xStorage->openStorageElement(media, embed::ElementModes::WRITE));
+
+        ::rtl::OUString filename(lcl_GetFilename(rSourceURL));
+
+        uno::Reference<io::XStream> const xStream(
+            lcl_CreateStream(xSubStorage, filename), uno::UNO_SET_THROW);
+        uno::Reference<io::XOutputStream> const xOutStream(
+            xStream->getOutputStream(), uno::UNO_SET_THROW);
+
+        if (!sourceContent.openStream(xOutStream)) // copy file to storage
+        {
+            SAL_INFO("avmedia", "openStream to storage failed");
+            return false;
+        }
+
+        uno::Reference<embed::XTransactedObject> const xSubTransaction(
+            xSubStorage, uno::UNO_QUERY);
+        if (xSubTransaction.is()) {
+            xSubTransaction->commit();
+        }
+        uno::Reference<embed::XTransactedObject> const xTransaction(
+            xStorage, uno::UNO_QUERY);
+        if (xTransaction.is()) {
+            xTransaction->commit();
+        }
+
+        ::rtl::OUStringBuffer buf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "vnd.sun.star.Package:")));
+        buf.append(media);
+        buf.append(sal_Unicode('/'));
+        buf.append(filename);
+        o_rEmbeddedURL = buf.makeStringAndClear();
+        return true;
+    }
+    catch (uno::Exception const& e)
+    {
+        SAL_WARN("avmedia",
+                "Exception while trying to embed media");
+    }
+    return false;
 }
 
 }

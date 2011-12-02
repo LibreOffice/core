@@ -49,6 +49,7 @@ $(eval $(call gb_Library_add_defs,avmedia,\
 
 $(eval $(call gb_Library_add_linked_libs,avmedia,\
 	comphelper \
+	ucbhelper \
 	cppu \
 	cppuhelper \
 	sal \

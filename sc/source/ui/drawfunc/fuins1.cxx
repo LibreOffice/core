@@ -51,6 +51,9 @@
 #include "progress.hxx"
 #include "sc.hrc"
 
+
+using namespace ::com::sun::star;
+
 //------------------------------------------------------------------------
 
 void SC_DLLPUBLIC ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
@@ -160,7 +163,7 @@ void lcl_InsertGraphic( const Graphic& rGraphic,
 
 void lcl_InsertMedia( const ::rtl::OUString& rMediaURL, bool bApi,
                       ScTabViewShell* pViewSh, Window* pWindow, SdrView* pView,
-                      const Size& rPrefSize )
+                      const Size& rPrefSize, bool const bLink )
 {
     SdrPageView*    pPV  = pView->GetSdrPageView();
     SdrPage*        pPage = pPV->GetPage();
@@ -183,9 +186,22 @@ void lcl_InsertMedia( const ::rtl::OUString& rMediaURL, bool bApi,
     if( pData->GetDocument()->IsNegativePage( pData->GetTabNo() ) )
         aInsertPos.X() -= aSize.Width();
 
+    ::rtl::OUString realURL;
+    if (bLink)
+    {
+        realURL = rMediaURL;
+    }
+    else
+    {
+        uno::Reference<frame::XModel> const xModel(
+                pData->GetDocument()->GetDocumentShell()->GetModel());
+        bool const bRet = ::avmedia::EmbedMedia(xModel, rMediaURL, realURL);
+        if (!bRet) { return; }
+    }
+
     SdrMediaObj* pObj = new SdrMediaObj( Rectangle( aInsertPos, aSize ) );
 
-    pObj->setURL( rMediaURL );
+    pObj->setURL( realURL );
     pView->InsertObjectAtView( pObj, *pPV, bApi ? SDRINSERT_DONTMARK : 0 );
 }
 
@@ -345,7 +361,8 @@ FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
         }
         else
         {
-            lcl_InsertMedia( aURL, bAPI, pViewSh, pWindow, pView, aPrefSize );
+            lcl_InsertMedia( aURL, bAPI, pViewSh, pWindow, pView, aPrefSize,
+                    bLink );
 
             if( pWin )
                 pWin->LeaveWait();

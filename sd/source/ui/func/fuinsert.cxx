@@ -768,7 +768,7 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
                 aPos.Y() -= aSize.Height() >> 1;
             }
 
-            mpView->InsertMediaURL( aURL, nAction, aPos, aSize ) ;
+            mpView->InsertMediaURL( aURL, nAction, aPos, aSize, bLink ) ;
 
             if( mpWindow )
                 mpWindow->LeaveWait();
