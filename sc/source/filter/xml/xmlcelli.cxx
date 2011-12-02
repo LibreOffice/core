@@ -1078,16 +1078,66 @@ void ScXMLTableRowCellContext::EndElement()
                         if (!bIsMatrix)
                         {
                             LockSolarMutex();
-                            ScCellObj* pCellObj =
-                                static_cast<ScCellObj*>(ScCellRangesBase::getImplementation(
-                                            xCell));
-                            if (pCellObj)
+
+                            ScAddress aScAddress;
+                            ScUnoConversion::FillScAddress( aScAddress, aCellPos );
+
+                            ScDocument* pDoc = rXMLImport.GetDocument();
+
+                            rtl::OUString aText = pOUFormula->first;
+                            rtl::OUString aFormulaNmsp = pOUFormula->second;
+
+                            ::boost::scoped_ptr<ScExternalRefManager::ApiGuard> pExtRefGuard;
+                            pExtRefGuard.reset(new ScExternalRefManager::ApiGuard(pDoc));
+
+                            ScBaseCell* pNewCell = NULL;
+
+                            if ( !aText.isEmpty() )
                             {
-                                pCellObj->SetFormulaWithGrammar( pOUFormula->first, pOUFormula->second, eGrammar);
-                                if (bFormulaTextResult && pOUTextValue && pOUTextValue->getLength())
-                                    pCellObj->SetFormulaResultString( *pOUTextValue);
+                                if ( aText[0] == '=' && aText.getLength() > 1 )
+                                {
+                                    // temporary formula string as string tokens
+                                    ScTokenArray* pCode = new ScTokenArray;
+                                    pCode->AddStringXML( aText );
+                                    if( (eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) && (aFormulaNmsp.getLength() > 0) )
+                                        pCode->AddStringXML( aFormulaNmsp );
+
+                                    pDoc->IncXMLImportedFormulaCount( aText.getLength() );
+                                    pNewCell = new ScFormulaCell( pDoc, aScAddress, pCode, eGrammar, MM_NONE );
+                                    delete pCode;
+                                }
+                                else if ( aText[0] == '\'' )
+                                {
+                                    //  for bEnglish, "'" at the beginning is always interpreted as text
+                                    //  marker and stripped
+                                    pNewCell = ScBaseCell::CreateTextCell( aText.copy( 1 ), pDoc );
+                                }
                                 else
-                                    pCellObj->SetFormulaResultDouble( fValue);
+                                {
+                                    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                                    sal_uInt32 nEnglish = pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US);
+                                    double fVal;
+                                    if ( pFormatter->IsNumberFormat( aText, nEnglish, fVal ) )
+                                    {
+                                        pNewCell = new ScValueCell( fVal );
+                                    }
+                                    else
+                                        pNewCell = ScBaseCell::CreateTextCell( aText, pDoc );
+                                    //  das (englische) Zahlformat wird nicht gesetzt
+                                    //! passendes lokales Format suchen und setzen???
+                                }
+
+                                if (pNewCell)
+                                    pDoc->PutCell( aScAddress, pNewCell );
+
+                                ScBaseCell* pCell = rXMLImport.GetDocument()->GetCell( aScAddress );
+                                if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
+                                {
+                                    if (bFormulaTextResult && pOUTextValue && pOUTextValue->getLength())
+                                        static_cast<ScFormulaCell*>(pCell)->SetHybridString( *pOUTextValue );
+                                    else
+                                        static_cast<ScFormulaCell*>(pCell)->SetHybridDouble( fValue );
+                                }
                             }
                         }
                         else
