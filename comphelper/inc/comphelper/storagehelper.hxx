@@ -187,6 +187,10 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetStreamAtPath(
         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > &xStorage,
         const ::rtl::OUString& aPath, sal_uInt32 nOpenMode, LifecycleProxy &rNastiness );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetStreamAtPackageURL(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > &xStorage,
+        const ::rtl::OUString& rURL, sal_uInt32 const nOpenMode,
+        LifecycleProxy & rNastiness );
 };
 
 }

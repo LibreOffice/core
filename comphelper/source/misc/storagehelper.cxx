@@ -598,6 +598,22 @@ uno::Reference< io::XStream > OStorageHelper::GetStreamAtPath(
     return xStorage->openStreamElement( aName, nOpenMode );
 }
 
+uno::Reference< io::XStream > OStorageHelper::GetStreamAtPackageURL(
+        uno::Reference< embed::XStorage > const& xParentStorage,
+        const ::rtl::OUString& rURL, sal_uInt32 const nOpenMode,
+        OStorageHelper::LifecycleProxy & rNastiness)
+{
+    static char const s_PkgScheme[] = "vnd.sun.star.Package:";
+    if (0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
+                rURL.getStr(), rURL.getLength(),
+                s_PkgScheme, SAL_N_ELEMENTS(s_PkgScheme) - 1))
+    {
+        ::rtl::OUString const path(rURL.copy(SAL_N_ELEMENTS(s_PkgScheme)-1));
+        return GetStreamAtPath(xParentStorage, path, nOpenMode, rNastiness);
+    }
+    return 0;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
