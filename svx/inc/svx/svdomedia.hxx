@@ -69,7 +69,9 @@ public:
 
 public:
 
-        void                        setURL( const ::rtl::OUString& rURL );
+        void                        setURL( const ::rtl::OUString& rURL,
+                ::com::sun::star::uno::Reference<
+                    ::com::sun::star::frame::XModel> const& xModel = 0);
         const ::rtl::OUString&      getURL() const;
 
         void                        setMediaProperties( const ::avmedia::MediaItem& rState );

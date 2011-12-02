@@ -73,7 +73,7 @@ MediaWindow::~MediaWindow()
 void MediaWindow::setURL( const ::rtl::OUString& rURL )
 {
     if( mpImpl )
-        mpImpl->setURL( rURL );
+        mpImpl->setURL( rURL, uno::Reference<frame::XModel>() );
 }
 
 // -------------------------------------------------------------------------

@@ -506,7 +506,7 @@ IMPL_LINK( MediaControl, implSelectHdl, ToolBox*, p )
                         ::avmedia::MediaWindow::executeFormatErrorBox( this );
                     else
                     {
-                        aExecItem.setURL( aURL );
+                        aExecItem.setURL( aURL, 0 );
                         aExecItem.setState( MEDIASTATE_PLAY );
                     }
                 }

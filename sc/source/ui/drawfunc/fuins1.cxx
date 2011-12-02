@@ -186,6 +186,8 @@ void lcl_InsertMedia( const ::rtl::OUString& rMediaURL, bool bApi,
     if( pData->GetDocument()->IsNegativePage( pData->GetTabNo() ) )
         aInsertPos.X() -= aSize.Width();
 
+    uno::Reference<frame::XModel> const xModel(
+            pData->GetDocument()->GetDocumentShell()->GetModel());
     ::rtl::OUString realURL;
     if (bLink)
     {
@@ -193,15 +195,13 @@ void lcl_InsertMedia( const ::rtl::OUString& rMediaURL, bool bApi,
     }
     else
     {
-        uno::Reference<frame::XModel> const xModel(
-                pData->GetDocument()->GetDocumentShell()->GetModel());
         bool const bRet = ::avmedia::EmbedMedia(xModel, rMediaURL, realURL);
         if (!bRet) { return; }
     }
 
     SdrMediaObj* pObj = new SdrMediaObj( Rectangle( aInsertPos, aSize ) );
 
-    pObj->setURL( realURL );
+    pObj->setURL( realURL, (bLink) ? 0 : xModel );
     pView->InsertObjectAtView( pObj, *pPV, bApi ? SDRINSERT_DONTMARK : 0 );
 }
 

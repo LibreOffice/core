@@ -26,12 +26,18 @@
  *
  ************************************************************************/
 
-#ifndef _AVMEDIA_MEDIAWINDOWBASE_IMPL_HXX
-#define _AVMEDIA_MEDIAWINDOWBASE_IMPL_HXX
+#ifndef AVMEDIA_MEDIAWINDOWBASE_IMPL_HXX
+#define AVMEDIA_MEDIAWINDOWBASE_IMPL_HXX
 
 #include <avmedia/mediawindow.hxx>
+
 #include <com/sun/star/media/XPlayer.hpp>
 #include <com/sun/star/media/XPlayerWindow.hpp>
+
+
+namespace com { namespace sun { namespace star {
+    namespace frame { class XModel; }
+}}} // namespace com::sun::star
 
 namespace avmedia
 {
@@ -64,9 +70,10 @@ namespace avmedia
 
             static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const ::rtl::OUString& rURL);
 
-        public:
+            void    setURL( const ::rtl::OUString& rURL,
+                            ::com::sun::star::uno::Reference<
+                                ::com::sun::star::frame::XModel> const& wModel);
 
-            void    setURL( const ::rtl::OUString& rURL );
             const ::rtl::OUString&  getURL() const;
 
             bool    isValid() const;
@@ -121,8 +128,13 @@ namespace avmedia
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow > getPlayerWindow() const;
 
         private:
+            void    cleanupTempFile();
+            bool    initPackageURL( const ::rtl::OUString& rPath,
+                            ::com::sun::star::uno::Reference<
+                                ::com::sun::star::frame::XModel> const& wModel);
 
             ::rtl::OUString                                                             maFileURL;
+            ::rtl::OUString * mpTempFileURL;
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >        mxPlayer;
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow >  mxPlayerWindow;
             MediaWindow*                                                                mpMediaWindow;

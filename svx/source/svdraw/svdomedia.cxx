@@ -35,6 +35,9 @@
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <avmedia/mediawindow.hxx>
 
+
+using namespace ::com::sun::star;
+
 // ---------------
 // - SdrMediaObj -
 // ---------------
@@ -198,11 +201,12 @@ void SdrMediaObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly /
 
 // ------------------------------------------------------------------------------
 
-void SdrMediaObj::setURL( const ::rtl::OUString& rURL )
+void SdrMediaObj::setURL( const ::rtl::OUString& rURL,
+        uno::Reference<frame::XModel> const& xModel )
 {
     ::avmedia::MediaItem aURLItem;
 
-    aURLItem.setURL( rURL );
+    aURLItem.setURL( rURL, xModel );
     setMediaProperties( aURLItem );
 }
 
@@ -253,7 +257,8 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
         ( rNewProperties.getURL() != getURL() ) )
     {
         setGraphic();
-        maMediaProperties.setURL( rNewProperties.getURL() );
+        maMediaProperties.setURL(rNewProperties.getURL(),
+                rNewProperties.getModel());
     }
 
     if( AVMEDIA_SETMASK_LOOP & nMaskSet )

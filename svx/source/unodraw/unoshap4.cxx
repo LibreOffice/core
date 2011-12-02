@@ -878,7 +878,9 @@ bool SvxMediaShape::setPropertyValueImpl( const ::rtl::OUString& rName, const Sf
             if( rValue >>= aURL )
             {
                 bOk = true;
-                aItem.setURL( aURL );
+                uno::Reference<frame::XModel> const xModel(
+                        mpModel->getUnoModel(), uno::UNO_QUERY_THROW);
+                aItem.setURL( aURL, xModel);
             }
         }
         break;

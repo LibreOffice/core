@@ -27,6 +27,8 @@
  ************************************************************************/
 
 #include <avmedia/mediaitem.hxx>
+
+#include <cppuhelper/weakref.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -59,6 +61,8 @@ TYPEINIT1_AUTOFACTORY( MediaItem, ::SfxPoolItem );
 struct MediaItem::Impl
 {
     ::rtl::OUString         m_URL;
+    // store a weak ref to the model so we can get at embedded media
+    uno::WeakReference<frame::XModel> m_wModel;
     sal_uInt32              m_nMaskSet;
     MediaState              m_eState;
     double                  m_fTime;
@@ -81,6 +85,7 @@ struct MediaItem::Impl
     }
     Impl(Impl const& rOther)
         : m_URL( rOther.m_URL )
+        , m_wModel( rOther.m_wModel )
         , m_nMaskSet( rOther.m_nMaskSet )
         , m_eState( rOther.m_eState )
         , m_fTime( rOther.m_fTime )
@@ -207,7 +212,7 @@ void MediaItem::merge( const MediaItem& rMediaItem )
     const sal_uInt32 nMaskSet = rMediaItem.getMaskSet();
 
     if( AVMEDIA_SETMASK_URL & nMaskSet )
-        setURL( rMediaItem.getURL() );
+        setURL( rMediaItem.getURL(), rMediaItem.getModel() );
 
     if( AVMEDIA_SETMASK_STATE & nMaskSet )
         setState( rMediaItem.getState() );
@@ -240,10 +245,15 @@ sal_uInt32 MediaItem::getMaskSet() const
 
 //------------------------------------------------------------------------
 
-void MediaItem::setURL( const ::rtl::OUString& rURL )
+void MediaItem::setURL( const ::rtl::OUString& rURL,
+        uno::Reference<frame::XModel> const & xModel)
 {
     m_pImpl->m_URL = rURL;
     m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_URL;
+    if (xModel.is())
+    {
+        m_pImpl->m_wModel = xModel;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -251,6 +261,11 @@ void MediaItem::setURL( const ::rtl::OUString& rURL )
 const ::rtl::OUString& MediaItem::getURL() const
 {
     return m_pImpl->m_URL;
+}
+
+uno::Reference<frame::XModel> MediaItem::getModel() const
+{
+    return m_pImpl->m_wModel;
 }
 
 //------------------------------------------------------------------------
