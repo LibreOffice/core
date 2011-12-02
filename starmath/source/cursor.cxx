@@ -977,7 +977,8 @@ void SmCursor::InsertFraction() {
     PatchLineList(pLineList, it);
 
     //Finish editing
-    FinishEdit(pLineList, pLineParent, nParentIndex, SmCaretPos(pDenom, 1));
+    SmNode *pSelectedNode = bEmptyFraction ? pNum : pDenom;
+    FinishEdit(pLineList, pLineParent, nParentIndex, SmCaretPos(pSelectedNode, 1));
 }
 
 void SmCursor::InsertText(XubString aString){
