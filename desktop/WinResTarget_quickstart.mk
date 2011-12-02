@@ -32,7 +32,7 @@ $(eval $(call gb_WinResTarget_set_include,quickstart/src,\
 ))
 
 $(eval $(call gb_WinResTarget_add_dependency,quickstart/src,\
-    sysui/desktop/icons/ooo3_main_app.ico \
+    sysui/desktop/icons/main_app.ico \
 ))
 
 $(eval $(call gb_WinResTarget_add_file,quickstart/src,desktop/win32/source/QuickStart/OOQuickStart))

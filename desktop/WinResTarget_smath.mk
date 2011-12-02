@@ -33,12 +33,12 @@ $(eval $(call gb_WinResTarget_set_include,smath/src,\
 $(eval $(call gb_WinResTarget_set_defs,smath/src,\
     $$(DEFS) \
     -DRES_APP_NAME=smath \
-    -DRES_APP_ICON=icons/ooo3_math_app.ico \
+    -DRES_APP_ICON=icons/math_app.ico \
     -DVERVARIANT=$(BUILD) \
 ))
 
 $(eval $(call gb_WinResTarget_add_dependency,smath/src,\
-    sysui/desktop/icons/ooo3_math_app.ico \
+    sysui/desktop/icons/math_app.ico \
 ))
 
 $(eval $(call gb_WinResTarget_add_file,smath/src,desktop/win32/source/applauncher/launcher))

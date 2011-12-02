@@ -33,12 +33,12 @@ $(eval $(call gb_WinResTarget_set_include,sweb/src,\
 $(eval $(call gb_WinResTarget_set_defs,sweb/src,\
     $$(DEFS) \
     -DRES_APP_NAME=sweb \
-    -DRES_APP_ICON=icons/ooo3_writer_app.ico \
+    -DRES_APP_ICON=icons/writer_app.ico \
     -DVERVARIANT=$(BUILD) \
 ))
 
 $(eval $(call gb_WinResTarget_add_dependency,sweb/src,\
-    sysui/desktop/icons/ooo3_writer_app.ico \
+    sysui/desktop/icons/writer_app.ico \
 ))
 
 $(eval $(call gb_WinResTarget_add_file,sweb/src,desktop/win32/source/applauncher/launcher))

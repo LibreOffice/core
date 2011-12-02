@@ -33,12 +33,12 @@ $(eval $(call gb_WinResTarget_set_include,sbase/src,\
 $(eval $(call gb_WinResTarget_set_defs,sbase/src,\
     $$(DEFS) \
     -DRES_APP_NAME=sbase \
-    -DRES_APP_ICON=icons/ooo3_base_app.ico \
+    -DRES_APP_ICON=icons/base_app.ico \
     -DVERVARIANT=$(BUILD) \
 ))
 
 $(eval $(call gb_WinResTarget_add_dependency,sbase/src,\
-    sysui/desktop/icons/ooo3_base_app.ico \
+    sysui/desktop/icons/base_app.ico \
 ))
 
 $(eval $(call gb_WinResTarget_add_file,sbase/src,desktop/win32/source/applauncher/launcher))

@@ -33,12 +33,12 @@ $(eval $(call gb_WinResTarget_set_include,simpress/src,\
 $(eval $(call gb_WinResTarget_set_defs,simpress/src,\
     $$(DEFS) \
     -DRES_APP_NAME=simpress \
-    -DRES_APP_ICON=icons/ooo3_impress_app.ico \
+    -DRES_APP_ICON=icons/impress_app.ico \
     -DVERVARIANT=$(BUILD) \
 ))
 
 $(eval $(call gb_WinResTarget_add_dependency,simpress/src,\
-    sysui/desktop/icons/ooo3_impress_app.ico \
+    sysui/desktop/icons/impress_app.ico \
 ))
 
 $(eval $(call gb_WinResTarget_add_file,simpress/src,desktop/win32/source/applauncher/launcher))

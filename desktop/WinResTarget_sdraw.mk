@@ -33,12 +33,12 @@ $(eval $(call gb_WinResTarget_set_include,sdraw/src,\
 $(eval $(call gb_WinResTarget_set_defs,sdraw/src,\
     $$(DEFS) \
     -DRES_APP_NAME=sdraw \
-    -DRES_APP_ICON=icons/ooo3_draw_app.ico \
+    -DRES_APP_ICON=icons/draw_app.ico \
     -DVERVARIANT=$(BUILD) \
 ))
 
 $(eval $(call gb_WinResTarget_add_dependency,sdraw/src,\
-    sysui/desktop/icons/ooo3_draw_app.ico \
+    sysui/desktop/icons/draw_app.ico \
 ))
 
 $(eval $(call gb_WinResTarget_add_file,sdraw/src,desktop/win32/source/applauncher/launcher))

@@ -33,12 +33,12 @@ $(eval $(call gb_WinResTarget_set_include,scalc/src,\
 $(eval $(call gb_WinResTarget_set_defs,scalc/src,\
     $$(DEFS) \
     -DRES_APP_NAME=scalc \
-    -DRES_APP_ICON=icons/ooo3_calc_app.ico \
+    -DRES_APP_ICON=icons/calc_app.ico \
     -DVERVARIANT=$(BUILD) \
 ))
 
 $(eval $(call gb_WinResTarget_add_dependency,scalc/src,\
-    sysui/desktop/icons/ooo3_calc_app.ico \
+    sysui/desktop/icons/calc_app.ico \
 ))
 
 $(eval $(call gb_WinResTarget_add_file,scalc/src,desktop/win32/source/applauncher/launcher))

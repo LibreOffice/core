@@ -16,7 +16,7 @@ mkdir: %_DEST%\bin\desktop-integration\pkg
 
 ..\%__SRC%\bin\*.dll %_DEST%\bin\*.dll
 
-..\%__SRC%\misc\ooo3_main_app.ico %_DEST%\bin\soffice.ico
+..\%__SRC%\misc\main_app.ico %_DEST%\bin\soffice.ico
 
 ..\%__SRC%\misc\desktopshare\*.desktop %_DEST%\pck\*.desktop
 ..\%__SRC%\misc\PkgInfo %_DEST%\pck\PkgInfo
