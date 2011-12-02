@@ -39,25 +39,25 @@ data/dict_%.cxx : data/dict_%_invis.cxx
 
 data/dict_%_invis.cxx : $(realpath $(SRC_ROOT)/i18npool/source/breakiterator/data)/%.dic data
 ifeq ($(OS_FOR_BUILD),WNT)
-	$(gb_Helper_execute)gendict `cygpath -m $<` $@
+	$(call gb_Helper_execute,gendict `cygpath -m $<` $@)
 else
-	$(gb_Helper_execute)gendict $< $@
+	$(call gb_Helper_execute,gendict $< $@)
 endif
 
 ifeq ($(SYSTEM_GENBRK),)
-GENBRK := $(gb_Helper_execute)genbrk
+GENBRK := $(call gb_Helper_execute,genbrk)
 else
 GENBRK := $(SYSTEM_GENBRK)
 endif
 
 ifeq ($(SYSTEM_GENCCODE),)
-GENCCODE := $(gb_Helper_execute)genccode
+GENCCODE := $(call gb_Helper_execute,genccode)
 else
 GENCCODE := $(SYSTEM_GENCCODE)
 endif
 
 ifeq ($(SYSTEM_GENCMN),)
-GENCMN := $(gb_Helper_execute)gencmn
+GENCMN := $(call gb_Helper_execute,gencmn)
 else
 GENCMN := $(SYSTEM_GENCMN)
 endif

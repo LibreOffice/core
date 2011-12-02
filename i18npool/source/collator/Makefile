@@ -37,9 +37,9 @@ collator_%.cxx : collator_%_invis.cxx
 
 collator_%_invis.cxx : $(realpath $(SRC_ROOT)/i18npool/source/collator/data)/%.txt
 ifeq ($(OS_FOR_BUILD),WNT)
-	$(gb_Helper_execute)gencoll_rule `cygpath -m $<` $@ $*
+	$(call gb_Helper_execute,gencoll_rule `cygpath -m $<` $@ $*)
 else
-	$(gb_Helper_execute)gencoll_rule $< $@ $*
+	$(call gb_Helper_execute,gencoll_rule $< $@ $*)
 endif
 
 lrl_include.hxx : $(txtlist)
