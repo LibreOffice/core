@@ -55,7 +55,9 @@ Directory gid_Test_Dir_Brand_Root
   #endif
     Styles = (OFFICEDIRECTORY,ISINSTALLLOCATION,CREATE);
 End
+#endif
 
+#if MACOSX
 Directory gid_Test_Dir_Bundle
     ParentID = PD_PROGDIR;
     HostName = "%PRODUCTNAME.app";
