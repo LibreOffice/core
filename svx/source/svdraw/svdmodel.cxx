@@ -164,7 +164,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     bTransparentTextFrames=sal_False;
     bStarDrawPreviewMode = sal_False;
     nStarDrawPreviewMasterPageNum = SDRPAGE_NOTFOUND;
-    pModelStorage = NULL;
     mpForbiddenCharactersTable = NULL;
     mbModelLocked = false;
     mpOutlinerCache = NULL;

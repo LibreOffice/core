@@ -161,7 +161,6 @@ struct SdrDocumentStreamInfo
     bool            mbDeleteAfterUse;
     String          maUserData;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxStorageRef;
-    sal_Bool            mbDummy1 : 1;
 };
 
 struct SdrModelImpl;
@@ -253,8 +252,6 @@ public:
     void SetAllowShapePropertyChangeListener( bool bAllow );
 
     sal_uInt16          nStarDrawPreviewMasterPageNum;
-    // Reserven fuer kompatible Erweiterungen
-    SotStorage*     pModelStorage;
     SvxForbiddenCharactersTable* mpForbiddenCharactersTable;
     sal_uIntPtr         nSwapGraphicsMode;
 
@@ -644,9 +641,6 @@ public:
 
     void    SetStarDrawPreviewMode(sal_Bool bPreview);
     sal_Bool    IsStarDrawPreviewMode() { return bStarDrawPreviewMode; }
-
-    SotStorage* GetModelStorage() const { return pModelStorage; }
-    void        SetModelStorage( SotStorage* pStor ) { pModelStorage = pStor; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoModel();
     void setUnoModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xModel );
