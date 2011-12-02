@@ -292,13 +292,13 @@ gb_Library_PLAINLIBS_NONE += \
 gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):OOO) \
-	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):URELIB) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_RTLIBS),$(lib):OOO) \
-	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):OOO) \
-	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):URELIB) \
+	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):URELIB) \
 	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOO) \
-	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
 
 gb_Library_FILENAMES :=\
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_OOOEXT)) \
