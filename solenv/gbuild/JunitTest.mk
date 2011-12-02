@@ -58,7 +58,7 @@ $(call gb_JunitTest_get_target,%) :
 		&& echo "see full error log at $@.log" \
 		&& echo "to rerun just this failed test without all others, run:" \
 		&& echo && echo "    make $@" && echo \
-		&& echo "add \"-f $(SRCDIR)/GNUmakefile.mk\" if you are not in the module dir" \
+		&& echo "cd into the module dir if you do not want a full dev-install run" \
 		&& echo "Or to do interactive debugging, run two shells with (Linux only):" \
 		&& echo \
 		&& echo "    make debugrun" \
