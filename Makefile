@@ -26,23 +26,18 @@
 #
 #*************************************************************************
 
-gb_SOURCEANDRERUN:=
-SRCDIR:=$(realpath $(dir $(realpath $(firstword $(MAKEFILE_LIST)))))
-ifeq ($(strip $(SOLARENV)),)
-ifneq ($(MAKECMDGOALS),$(SRCDIR)/Env.Host.sh)
-gb_SOURCEANDRERUN:=T
-gb_MINISOLARENV:=
-else
-SOLARENV:=$(SRCDIR)/solenv
-gb_MINISOLARENV:=T
-endif
+SRCDIR:=$(patsubst %/,%,$(dir $(realpath $(firstword $(MAKEFILE_LIST)))))
+
+ifeq ($(strip $(gb_SourceEnvAndRecurse_STAGE)),)
+include $(SRCDIR)/solenv/gbuild/source_and_rerun.mk
 endif
 
-ifneq ($(gb_SOURCEANDRERUN),)
-include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/solenv/gbuild/source_and_rerun.mk
-else
+ifeq ($(gb_SourceEnvAndRecurse_STAGE),reconfigure)
+SOLARENV:=$(SRCDIR)/solenv
+endif
+
+ifneq ($(filter reconfigure gbuild buildpl,$(gb_SourceEnvAndRecurse_STAGE)),)
 include $(SOLARENV)/gbuild/gbuild.mk
 $(eval $(call gb_Module_make_global_targets,$(wildcard $(SRCDIR)/RepositoryModule_*.mk)))
 endif
-
 # vim: set noet sw=4 ts=4:
