@@ -2026,8 +2026,11 @@ sal_Bool GtkSalGraphics::NWPaintGTKSpinBox( ControlType nType, ControlPart nPart
     {
         // Draw an edit field for SpinBoxes and ComboBoxes
         Rectangle aEditBoxRect( pixmapRect );
-        aEditBoxRect.SetSize( Size( upBtnRect.Left() - pixmapRect.Left(), aEditBoxRect.GetHeight() ) );
-        aEditBoxRect.setX( 0 );
+        aEditBoxRect.SetSize( Size( pixmapRect.GetWidth() - upBtnRect.GetWidth(), aEditBoxRect.GetHeight() ) );
+        if( Application::GetSettings().GetLayoutRTL() )
+            aEditBoxRect.setX( upBtnRect.GetWidth() );
+        else
+            aEditBoxRect.setX( 0 );
         aEditBoxRect.setY( 0 );
 
         NWPaintOneEditBox( m_nScreen, pixmap, NULL, nType, nPart, aEditBoxRect, nState, aValue, rCaption );
@@ -2080,7 +2083,10 @@ static Rectangle NWGetSpinButtonRect( int nScreen,
     buttonSize -= buttonSize % 2 - 1; /* force odd */
     buttonRect.SetSize( Size( buttonSize + 2 * gWidgetData[nScreen].gSpinButtonWidget->style->xthickness,
                               buttonRect.GetHeight() ) );
-    buttonRect.setX( aAreaRect.Left() + (aAreaRect.GetWidth() - buttonRect.GetWidth()) );
+    if( Application::GetSettings().GetLayoutRTL() )
+        buttonRect.setX( aAreaRect.Left() );
+    else
+        buttonRect.setX( aAreaRect.Left() + (aAreaRect.GetWidth() - buttonRect.GetWidth()) );
     if ( nPart == PART_BUTTON_UP )
     {
         buttonRect.setY( aAreaRect.Top() );
@@ -2093,8 +2099,14 @@ static Rectangle NWGetSpinButtonRect( int nScreen,
     }
     else
     {
-        buttonRect.Right()  = buttonRect.Left()-1;
-        buttonRect.Left()   = aAreaRect.Left();
+        if( Application::GetSettings().GetLayoutRTL() ) {
+            buttonRect.Left()   = buttonRect.Right()+1;
+            buttonRect.Right()  = aAreaRect.Right();
+        } else {
+            printf("%ld\n", buttonRect.GetWidth());
+            buttonRect.Right()  = buttonRect.Left()-1;
+            buttonRect.Left()   = aAreaRect.Left();
+        }
         buttonRect.Top()    = aAreaRect.Top();
         buttonRect.Bottom() = aAreaRect.Bottom();
     }
