@@ -179,6 +179,76 @@ lcl_getGtkSalInstance()
     return *static_cast<GtkInstance*>(GetGtkSalData()->m_pInstance);
 }
 
+bool
+lcl_enableExperimentalFeatures()
+{
+    bool bEnable = true;
+    try
+    {
+        // get service provider
+        uno::Reference<lang::XMultiServiceFactory> const xSMgr(vcl::unohelper::GetMultiServiceFactory());
+        // create configuration hierachical access name
+        if (xSMgr.is())
+        {
+            try
+            {
+                uno::Reference<lang::XMultiServiceFactory> const xConfigProvider(
+                   uno::Reference<lang::XMultiServiceFactory>(
+                        xSMgr->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "com.sun.star.configuration.ConfigurationProvider"))),
+                        UNO_QUERY))
+                    ;
+                if (xConfigProvider.is())
+                {
+                    uno::Sequence<uno::Any> aArgs(1);
+                    beans::PropertyValue aVal;
+                    aVal.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
+                    aVal.Value <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Common/Misc"));
+                    aArgs.getArray()[0] <<= aVal;
+                    uno::Reference<container::XNameAccess> const xConfigAccess(
+                        uno::Reference<container::XNameAccess>(
+                            xConfigProvider->createInstanceWithArguments(
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
+                                aArgs),
+                            UNO_QUERY))
+                        ;
+                    if (xConfigAccess.is())
+                    {
+                        try
+                        {
+                            sal_Bool bValue = sal_False;
+                            uno::Any const aAny(xConfigAccess->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ExperimentalMode"))));
+                            if (aAny >>= bValue)
+                                bEnable = bValue;
+                        }
+                        catch (container::NoSuchElementException const&)
+                        {
+                        }
+                        catch (lang::WrappedTargetException const&)
+                        {
+                        }
+                    }
+                }
+            }
+            catch (uno::Exception const&)
+            {
+            }
+        }
+    }
+    catch (lang::WrappedTargetException const&)
+    {
+    }
+
+    return bEnable;
+}
+
+bool
+lcl_useSystemPrintDialog()
+{
+    return vcl::useSystemPrintDialog() && lcl_enableExperimentalFeatures()
+        && lcl_getGtkSalInstance().getPrintWrapper()->supportsPrinting();
+}
+
 }
 
 GtkSalPrinter::GtkSalPrinter(SalInfoPrinter* const i_pInfoPrinter)
@@ -229,7 +299,7 @@ GtkSalPrinter::StartJob(
         ImplJobSetup* io_pSetupData,
         vcl::PrinterController& io_rController)
 {
-    if (!vcl::useSystemPrintDialog())
+    if (!lcl_useSystemPrintDialog())
         return impl_doJob(i_pFileName, i_rJobName, i_rAppName, io_pSetupData, 1, false, io_rController);
 
     assert(!m_pImpl);
@@ -285,7 +355,7 @@ GtkSalPrinter::EndJob()
 {
     sal_Bool bRet = PspSalPrinter::EndJob();
 
-    if (!vcl::useSystemPrintDialog())
+    if (!lcl_useSystemPrintDialog())
         return bRet;
 
     assert(m_pImpl);
@@ -416,6 +486,7 @@ GtkPrintDialog::GtkPrintDialog(vcl::PrinterController& io_rController)
     : m_rController(io_rController)
     , m_pWrapper(lcl_getGtkSalInstance().getPrintWrapper())
 {
+    assert(m_pWrapper->supportsPrinting());
     impl_initDialog();
     impl_initCustomTab();
     impl_initPrintRange();
@@ -453,7 +524,6 @@ GtkPrintDialog::impl_initDialog()
 void
 GtkPrintDialog::impl_initCustomTab()
 {
-#if GTK_CHECK_VERSION(2,10,0)
     typedef std::map<rtl::OUString, GtkWidget*> DependencyMap_t;
     typedef std::vector<std::pair<GtkWidget*, rtl::OUString> > CustomTabs_t;
 
@@ -737,14 +807,15 @@ GtkPrintDialog::impl_initCustomTab()
         m_pWrapper->print_unix_dialog_add_custom_tab(GTK_PRINT_UNIX_DIALOG(m_pDialog), aI->first,
             gtk_label_new(rtl::OUStringToOString(aI->second, RTL_TEXTENCODING_UTF8).getStr()));
     }
-#endif
 }
 
 
 void
 GtkPrintDialog::impl_initPrintRange()
 {
-#if GTK_CHECK_VERSION(2,17,5)
+    if (!m_pWrapper->supportsPrintSelection())
+        return;
+
     beans::PropertyValue* const pPrintContent(
             m_rController.getValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PrintContent"))));
 
@@ -764,7 +835,6 @@ GtkPrintDialog::impl_initPrintRange()
             g_object_unref(G_OBJECT(pSettings));
         }
     }
-#endif
 }
 
 
@@ -1131,7 +1201,7 @@ GtkSalInfoPrinter::GetCapabilities(
         const ImplJobSetup* const i_pSetupData,
         const sal_uInt16 i_nType)
 {
-    if (i_nType == PRINTER_CAPABILITIES_EXTERNALDIALOG && vcl::useSystemPrintDialog())
+    if (i_nType == PRINTER_CAPABILITIES_EXTERNALDIALOG && lcl_useSystemPrintDialog())
         return 1;
     return PspSalInfoPrinter::GetCapabilities(i_pSetupData, i_nType);
 }
