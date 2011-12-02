@@ -228,7 +228,6 @@ ure_%{$(PKGFORMAT:^".")} :
         -msilanguage $(MISC)$/win_ulffiles
 .ENDIF
 
-$(foreach,i,$(alllangiso)) : $$@{$(PKGFORMAT:^".")}
 .IF "$(MAKETARGETS)"!=""
 .IF "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)"
 $(MAKETARGETS) : $$@{$(PKGFORMAT:^".")}
@@ -243,7 +242,7 @@ openoffice:
 .ENDIF			# "$(alllangiso)"!=""
 
 .IF "$(LOCALPYFILES)"!=""
-$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".") .archive} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} broffice_$i{$(PKGFORMAT:^".")} brofficewithjre_$i{$(PKGFORMAT:^".")} brofficedev_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES)
+$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".") .archive} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES)
 .ENDIF			# "$(LOCALPYFILES)"!=""
 
 $(BIN)$/%.py : $(SOLARSHAREDBIN)$/pyuno$/%.py
@@ -253,18 +252,6 @@ $(BIN)$/intro.zip : $(SOLARCOMMONPCKDIR)$/openoffice_nologo$/intro.zip
     $(COPY) $< $@
 
 $(BIN)$/dev$/intro.zip : $(SOLARCOMMONPCKDIR)$/openoffice_dev_nologo$/intro.zip
-    @-$(MKDIR) $(@:d)
-    $(COPY) $< $@
-
-$(BIN)$/broffice_dev$/intro.zip : $(SOLARCOMMONPCKDIR)$/broffice_dev_nologo$/intro.zip
-    @-$(MKDIR) $(@:d)
-    $(COPY) $< $@
-
-$(BIN)$/broffice$/intro.zip : $(SOLARCOMMONPCKDIR)$/broffice_nologo$/intro.zip
-    @-$(MKDIR) $(@:d)
-    $(COPY) $< $@
-
-$(BIN)$/broffice$/images_brand.zip : $(SOLARCOMMONBINDIR)$/broffice_nologo$/images_brand.zip
     @-$(MKDIR) $(@:d)
     $(COPY) $< $@
 
