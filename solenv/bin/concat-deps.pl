@@ -2,7 +2,7 @@
 
 # reads a list of dependency files from a file, opens and
 # concatenates them, while eliding duplicate nop rules.
-use Cwd 'fast_abs_path';
+use File::Spec;
 
 sub read_depfiles($)
 {
@@ -33,7 +33,7 @@ sub canonicalize_path($)
     my $path = $2;
     my $post =$3;
     if (length($path) > 0 && index($path,$ENV{SRCDIR}) == 0) {
-        $path = Cwd::fast_abs_path($2);
+        $path = File::Spec->rel2abs($2);
         $path = "\$(SRCDIR)" . substr($path, length($ENV{SRCDIR}));
     }
     #print "## $pre$path$post";
