@@ -66,8 +66,8 @@ namespace {
     public:
         virtual ~Command() {}
         virtual void Execute (void) = 0;
-        virtual bool IsEnabled (void) const = 0;
-        virtual Any GetState (void) const = 0;
+        virtual bool IsEnabled (void) const { return true; }
+        virtual Any GetState (void) const { return Any(sal_False); }
     };
 
     class GotoPreviousSlideCommand : public Command
@@ -78,7 +78,6 @@ namespace {
         virtual ~GotoPreviousSlideCommand (void) {}
         virtual void Execute (void);
         virtual bool IsEnabled (void) const;
-        virtual Any GetState (void) const;
     private:
         rtl::Reference<PresenterController> mpPresenterController;
     };
@@ -90,8 +89,10 @@ namespace {
             const rtl::Reference<PresenterController>& rpPresenterController);
         virtual ~GotoNextSlideCommand (void) {}
         virtual void Execute (void);
-        virtual bool IsEnabled (void) const;
-        virtual Any GetState (void) const;
+        // The next slide command is always enabled, even when the current slide
+        // is the last slide:  from the last slide it goes to the pause slide,
+        // and from there it ends the slide show.
+        virtual bool IsEnabled (void) const { return true; }
     private:
         rtl::Reference<PresenterController> mpPresenterController;
     };
@@ -103,8 +104,6 @@ namespace {
             const rtl::Reference<PresenterController>& rpPresenterController);
         virtual ~GotoNextEffectCommand (void) {}
         virtual void Execute (void);
-        virtual bool IsEnabled (void) const;
-        virtual Any GetState (void) const;
     private:
         rtl::Reference<PresenterController> mpPresenterController;
     };
@@ -116,8 +115,6 @@ namespace {
             const rtl::Reference<PresenterController>& rpPresenterController);
         virtual ~SwitchMonitorCommand (void) {}
         virtual void Execute (void);
-        virtual bool IsEnabled (void) const;
-        virtual Any GetState (void) const;
     private:
         rtl::Reference<PresenterController> mpPresenterController;
     };
@@ -130,7 +127,6 @@ namespace {
             const rtl::Reference<PresenterController>& rpPresenterController);
         virtual ~SetNotesViewCommand (void) {}
         virtual void Execute (void);
-        virtual bool IsEnabled (void) const;
         virtual Any GetState (void) const;
     private:
         bool mbOn;
@@ -146,7 +142,6 @@ namespace {
             const rtl::Reference<PresenterController>& rpPresenterController);
         virtual ~SetSlideSorterCommand (void) {}
         virtual void Execute (void);
-        virtual bool IsEnabled (void) const;
         virtual Any GetState (void) const;
     private:
         bool mbOn;
@@ -161,7 +156,6 @@ namespace {
             const rtl::Reference<PresenterController>& rpPresenterController);
         virtual ~SetHelpViewCommand (void) {}
         virtual void Execute (void);
-        virtual bool IsEnabled (void) const;
         virtual Any GetState (void) const;
     private:
         bool mbOn;
@@ -176,7 +170,6 @@ namespace {
             const sal_Int32 nSizeChange);
         virtual ~NotesFontSizeCommand (void) {}
         virtual void Execute (void);
-        virtual bool IsEnabled (void) const;
         virtual Any GetState (void) const;
     protected:
         ::rtl::Reference<PresenterNotesView> GetNotesView (void) const;
@@ -259,9 +252,6 @@ private:
     void ThrowIfDisposed (void) const throw (css::lang::DisposedException);
 };
 
-
-
-
 //----- Service ---------------------------------------------------------------
 
 OUString PresenterProtocolHandler::getImplementationName_static (void)
@@ -269,17 +259,11 @@ OUString PresenterProtocolHandler::getImplementationName_static (void)
     return A2S("vnd.sun.star.sdext.presenter.PresenterProtocolHandler");
 }
 
-
-
-
 Sequence<OUString> PresenterProtocolHandler::getSupportedServiceNames_static (void)
 {
     static const ::rtl::OUString sServiceName(A2S("com.sun.star.frame.ProtocolHandler"));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
-
-
-
 
 Reference<XInterface> PresenterProtocolHandler::Create (
     const Reference<uno::XComponentContext>& rxContext)
@@ -289,10 +273,7 @@ Reference<XInterface> PresenterProtocolHandler::Create (
 }
 
 
-
-
 //===== PresenterProtocolHandler =========================================================
-
 
 PresenterProtocolHandler::PresenterProtocolHandler (const Reference<XComponentContext>& rxContext)
     : PresenterProtocolHandlerInterfaceBase(m_aMutex)
@@ -300,22 +281,13 @@ PresenterProtocolHandler::PresenterProtocolHandler (const Reference<XComponentCo
     (void)rxContext;
 }
 
-
-
-
 PresenterProtocolHandler::~PresenterProtocolHandler (void)
 {
 }
 
-
-
-
 void SAL_CALL PresenterProtocolHandler::disposing (void)
 {
 }
-
-
-
 
 //----- XInitialize -----------------------------------------------------------
 
@@ -340,9 +312,6 @@ void SAL_CALL PresenterProtocolHandler::initialize (const Sequence<Any>& aArgume
     }
 }
 
-
-
-
 //----- XDispatchProvider -----------------------------------------------------
 
 Reference<frame::XDispatch> SAL_CALL PresenterProtocolHandler::queryDispatch (
@@ -365,9 +334,6 @@ Reference<frame::XDispatch> SAL_CALL PresenterProtocolHandler::queryDispatch (
     return xDispatch;
 }
 
-
-
-
 Sequence<Reference<frame::XDispatch> > SAL_CALL PresenterProtocolHandler::queryDispatches(
     const Sequence<frame::DispatchDescriptor>& rDescriptors)
     throw(RuntimeException)
@@ -376,8 +342,6 @@ Sequence<Reference<frame::XDispatch> > SAL_CALL PresenterProtocolHandler::queryD
     ThrowIfDisposed();
     return Sequence<Reference<frame::XDispatch> >();
 }
-
-
 
 
 //-----------------------------------------------------------------------------
@@ -394,9 +358,6 @@ void PresenterProtocolHandler::ThrowIfDisposed (void) const
     }
 }
 
-
-
-
 //===== PresenterProtocolHandler::Dispatch ====================================
 
 Reference<frame::XDispatch> PresenterProtocolHandler::Dispatch::Create (
@@ -409,9 +370,6 @@ Reference<frame::XDispatch> PresenterProtocolHandler::Dispatch::Create (
     else
         return NULL;
 }
-
-
-
 
 PresenterProtocolHandler::Dispatch::Dispatch (
     const OUString& rsURLPath,
@@ -429,9 +387,6 @@ PresenterProtocolHandler::Dispatch::Dispatch (
         mbIsListeningToWindowManager = true;
     }
 }
-
-
-
 
 Command* PresenterProtocolHandler::Dispatch::CreateCommand (
     const OUString& rsURLPath,
@@ -468,15 +423,9 @@ Command* PresenterProtocolHandler::Dispatch::CreateCommand (
     return NULL;
 }
 
-
-
-
 PresenterProtocolHandler::Dispatch::~Dispatch (void)
 {
 }
-
-
-
 
 void PresenterProtocolHandler::Dispatch::disposing (void)
 {
@@ -490,9 +439,6 @@ void PresenterProtocolHandler::Dispatch::disposing (void)
     msURLPath = OUString();
     mpCommand.reset();
 }
-
-
-
 
 //----- XDispatch -------------------------------------------------------------
 
@@ -517,9 +463,6 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::dispatch(
     }
 }
 
-
-
-
 void SAL_CALL PresenterProtocolHandler::Dispatch::addStatusListener(
     const css::uno::Reference<css::frame::XStatusListener>& rxListener,
     const css::util::URL& rURL)
@@ -540,9 +483,6 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::addStatusListener(
         throw RuntimeException();
 }
 
-
-
-
 void SAL_CALL PresenterProtocolHandler::Dispatch::removeStatusListener (
     const css::uno::Reference<css::frame::XStatusListener>& rxListener,
     const css::util::URL& rURL)
@@ -562,11 +502,6 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::removeStatusListener (
         throw RuntimeException();
 }
 
-
-
-
-//-----------------------------------------------------------------------------
-
 void PresenterProtocolHandler::Dispatch::ThrowIfDisposed (void) const
     throw (::com::sun::star::lang::DisposedException)
 {
@@ -579,9 +514,6 @@ void PresenterProtocolHandler::Dispatch::ThrowIfDisposed (void) const
     }
 }
 
-
-
-
 //----- document::XEventListener ----------------------------------------------
 
 void SAL_CALL PresenterProtocolHandler::Dispatch::notifyEvent (
@@ -593,9 +525,6 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::notifyEvent (
     mpCommand->GetState();
 }
 
-
-
-
 //----- lang::XEventListener --------------------------------------------------
 
 void SAL_CALL PresenterProtocolHandler::Dispatch::disposing (const css::lang::EventObject& rEvent)
@@ -606,9 +535,6 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::disposing (const css::lang::Ev
 }
 
 
-
-
-
 //===== GotoPreviousSlideCommand ==============================================
 
 GotoPreviousSlideCommand::GotoPreviousSlideCommand (
@@ -616,8 +542,6 @@ GotoPreviousSlideCommand::GotoPreviousSlideCommand (
     : mpPresenterController(rpPresenterController)
 {
 }
-
-
 
 void GotoPreviousSlideCommand::Execute (void)
 {
@@ -630,9 +554,6 @@ void GotoPreviousSlideCommand::Execute (void)
     mpPresenterController->GetSlideShowController()->gotoPreviousSlide();
 }
 
-
-
-
 bool GotoPreviousSlideCommand::IsEnabled (void) const
 {
     if ( ! mpPresenterController.is())
@@ -644,16 +565,6 @@ bool GotoPreviousSlideCommand::IsEnabled (void) const
     return mpPresenterController->GetSlideShowController()->getCurrentSlideIndex()>0;
 }
 
-
-
-
-Any GotoPreviousSlideCommand::GetState (void) const
-{
-    return Any(sal_False);
-}
-
-
-
 //===== GotoNextEffect ========================================================
 
 GotoNextEffectCommand::GotoNextEffectCommand (
@@ -661,8 +572,6 @@ GotoNextEffectCommand::GotoNextEffectCommand (
     : mpPresenterController(rpPresenterController)
 {
 }
-
-
 
 void GotoNextEffectCommand::Execute (void)
 {
@@ -675,28 +584,6 @@ void GotoNextEffectCommand::Execute (void)
     mpPresenterController->GetSlideShowController()->gotoNextEffect();
 }
 
-
-
-
-bool GotoNextEffectCommand::IsEnabled (void) const
-{
-    // The next slide command is always enabled, even when the current slide
-    // is the last slide:  from the last slide it goes to the pause slide,
-    // and from there it ends the slide show.
-    return true;
-}
-
-
-
-
-Any GotoNextEffectCommand::GetState (void) const
-{
-    return Any(sal_False);
-}
-
-
-
-
 //===== GotoNextSlide =========================================================
 
 GotoNextSlideCommand::GotoNextSlideCommand (
@@ -704,8 +591,6 @@ GotoNextSlideCommand::GotoNextSlideCommand (
     : mpPresenterController(rpPresenterController)
 {
 }
-
-
 
 void GotoNextSlideCommand::Execute (void)
 {
@@ -717,26 +602,6 @@ void GotoNextSlideCommand::Execute (void)
 
     mpPresenterController->GetSlideShowController()->gotoNextSlide();
 }
-
-
-
-
-bool GotoNextSlideCommand::IsEnabled (void) const
-{
-    // The next slide command is always enabled, even when the current slide
-    // is the last slide:  from the last slide it goes to the pause slide,
-    // and from there it ends the slide show.
-    return true;
-}
-
-
-
-
-Any GotoNextSlideCommand::GetState (void) const
-{
-    return Any(sal_False);
-}
-
 
 //===== SwitchMonitorCommand ==============================================
 
@@ -751,18 +616,6 @@ void SwitchMonitorCommand::Execute (void)
     fprintf (stderr, "Switch monitor !\n");
 }
 
-bool SwitchMonitorCommand::IsEnabled (void) const
-{
-    fprintf (stderr, "FIXME - check me !\n");
-    return true;
-}
-
-Any SwitchMonitorCommand::GetState (void) const
-{
-    return Any(sal_False);
-}
-
-
 //===== SetNotesViewCommand ===================================================
 
 SetNotesViewCommand::SetNotesViewCommand (
@@ -772,9 +625,6 @@ SetNotesViewCommand::SetNotesViewCommand (
       mpPresenterController(rpPresenterController)
 {
 }
-
-
-
 
 void SetNotesViewCommand::Execute (void)
 {
@@ -792,17 +642,6 @@ void SetNotesViewCommand::Execute (void)
         pWindowManager->SetViewMode(PresenterWindowManager::VM_Standard);
 }
 
-
-
-
-bool SetNotesViewCommand::IsEnabled (void) const
-{
-    return true;
-}
-
-
-
-
 Any SetNotesViewCommand::GetState (void) const
 {
     if ( ! mpPresenterController.is())
@@ -816,17 +655,11 @@ Any SetNotesViewCommand::GetState (void) const
     return Any(IsActive(pWindowManager));
 }
 
-
-
-
 bool SetNotesViewCommand::IsActive (
     const ::rtl::Reference<PresenterWindowManager>& rpWindowManager) const
 {
     return rpWindowManager->GetViewMode() == PresenterWindowManager::VM_Notes;
 }
-
-
-
 
 //===== SetSlideSorterCommand =================================================
 
@@ -837,9 +670,6 @@ SetSlideSorterCommand::SetSlideSorterCommand (
       mpPresenterController(rpPresenterController)
 {
 }
-
-
-
 
 void SetSlideSorterCommand::Execute (void)
 {
@@ -854,17 +684,6 @@ void SetSlideSorterCommand::Execute (void)
     pWindowManager->SetSlideSorterState(mbOn);
 }
 
-
-
-
-bool SetSlideSorterCommand::IsEnabled (void) const
-{
-    return true;
-}
-
-
-
-
 Any SetSlideSorterCommand::GetState (void) const
 {
     if ( ! mpPresenterController.is())
@@ -878,9 +697,6 @@ Any SetSlideSorterCommand::GetState (void) const
     return Any(pWindowManager->GetViewMode()==PresenterWindowManager::VM_SlideOverview);
 }
 
-
-
-
 //===== SetHelpViewCommand ===================================================
 
 SetHelpViewCommand::SetHelpViewCommand (
@@ -890,9 +706,6 @@ SetHelpViewCommand::SetHelpViewCommand (
       mpPresenterController(rpPresenterController)
 {
 }
-
-
-
 
 void SetHelpViewCommand::Execute (void)
 {
@@ -907,17 +720,6 @@ void SetHelpViewCommand::Execute (void)
     pWindowManager->SetHelpViewState(mbOn);
 }
 
-
-
-
-bool SetHelpViewCommand::IsEnabled (void) const
-{
-    return true;
-}
-
-
-
-
 Any SetHelpViewCommand::GetState (void) const
 {
     if ( ! mpPresenterController.is())
@@ -931,9 +733,6 @@ Any SetHelpViewCommand::GetState (void) const
     return Any(pWindowManager->GetViewMode()==PresenterWindowManager::VM_Help);
 }
 
-
-
-
 //===== NotesFontSizeCommand ==================================================
 
 NotesFontSizeCommand::NotesFontSizeCommand(
@@ -943,9 +742,6 @@ NotesFontSizeCommand::NotesFontSizeCommand(
       mnSizeChange(nSizeChange)
 {
 }
-
-
-
 
 ::rtl::Reference<PresenterNotesView> NotesFontSizeCommand::GetNotesView (void) const
 {
@@ -961,26 +757,12 @@ NotesFontSizeCommand::NotesFontSizeCommand(
     return dynamic_cast<PresenterNotesView*>(pDescriptor->mxView.get());
 }
 
-
-
-
 void NotesFontSizeCommand::Execute (void)
 {
     ::rtl::Reference<PresenterNotesView> pView (GetNotesView());
     if (pView.is())
         pView->ChangeFontSize(mnSizeChange);
 }
-
-
-
-
-bool NotesFontSizeCommand::IsEnabled (void) const
-{
-    return true;
-}
-
-
-
 
 Any NotesFontSizeCommand::GetState (void) const
 {
