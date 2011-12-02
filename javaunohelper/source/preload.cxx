@@ -32,6 +32,10 @@
 #include "rtl/ustring.hxx"
 #include "osl/module.h"
 
+// In retrospect, the reason to create a juh wrapper around the juhx library was
+// probably because java.lang.System.loadLibrary uses RTLD_LOCAL, so uniqueness
+// of GCC RTTI symbols needed for exception handling would not be guaranteed.
+
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 #if ! defined SAL_DLLPREFIX
