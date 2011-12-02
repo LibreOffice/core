@@ -2378,7 +2378,7 @@ OOXMLFastContextHandlerMath::~OOXMLFastContextHandlerMath()
 {
     SvGlobalName name( SO3_SM_CLASSID );
     comphelper::EmbeddedObjectContainer container;
-    rtl::OUString aName; // TODO?
+    rtl::OUString aName;
     uno::Reference< embed::XEmbeddedObject > ref = container.CreateEmbeddedObject( name.GetByteSequence(), aName );
     uno::Reference< uno::XInterface > component( ref->getComponent(), uno::UNO_QUERY );
     if( oox::FormulaImportBase* import = dynamic_cast< oox::FormulaImportBase* >( component.get()))
