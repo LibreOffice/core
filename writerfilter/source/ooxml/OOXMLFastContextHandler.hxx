@@ -641,15 +641,37 @@ private:
     OOXMLFastContextHandler * getFastContextHandler() const;
 };
 
+/**
+ A class that converts from XFastParser/XFastContextHandler usage to a liner XML stream of data.
 
-class OOXMLFastContextHandlerMath: public OOXMLFastContextHandlerProperties
+ The purpose of this class is to convert the rather complex XFastContextHandler-based XML
+ processing that requires context subclasses, callbacks, etc. into a linear stream of XML tokens
+ that can be handled simply by reading the tokens one by one and directly processing them.
+ See the oox::formulaimport::XmlStream class documentation for more information.
+
+ Usage: Create a subclass of OOXMLFastContextHandlerLinear, reimplemented getType() to provide
+ type of the subclass and process() to actually process the XML stream. Also make sure to
+ add a line like the following to model.xml (for class OOXMLFastContextHandlerMath):
+
+ <resource name="CT_OMath" resource="Math"/>
+
+ @since 3.5
+*/
+class OOXMLFastContextHandlerLinear: public OOXMLFastContextHandlerProperties
 {
 public:
-    explicit OOXMLFastContextHandlerMath(OOXMLFastContextHandler * pContext);
-    virtual string getType() const { return "Math"; }
+    explicit OOXMLFastContextHandlerLinear(OOXMLFastContextHandler * pContext);
+    /**
+     Return the type of the class, as written in model.xml .
+     */
+    virtual string getType() const = 0;
 
 protected:
-    virtual void process();
+    /**
+     Called when the tokens for the element, its content and sub-elements have been linearized
+     and should be processed. The data member @ref buffer contains the converted data.
+    */
+    virtual void process() = 0;
 
     virtual void lcl_startFastElement(Token_t Element, const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
@@ -662,11 +684,21 @@ protected:
 
     virtual void lcl_characters(const ::rtl::OUString & aChars) throw (uno::RuntimeException, xml::sax::SAXException);
 
-private:
+    // should be private, but not much point in making deep copies of it
     oox::formulaimport::XmlStreamBuilder buffer;
+
+private:
     int depthCount;
 };
 
+class OOXMLFastContextHandlerMath: public OOXMLFastContextHandlerLinear
+{
+public:
+    explicit OOXMLFastContextHandlerMath(OOXMLFastContextHandler * pContext);
+    virtual string getType() const { return "Math"; }
+protected:
+    virtual void process();
+};
 
 }}
 #endif // INCLUDED_OOXML_FAST_CONTEXT_HANDLER_HXX

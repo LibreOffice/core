@@ -44,8 +44,8 @@ The primary internal data structure for the formula is the text representation
 */
 
 #define M_TOKEN( token ) OOX_TOKEN( officeMath, token )
-#define OPENING_TAG( token ) OPENING( token )
-#define CLOSING_TAG( token ) CLOSING( token )
+#define OPENING( token ) XML_STREAM_OPENING( token )
+#define CLOSING( token ) XML_STREAM_CLOSING( token )
 
 // *sigh*
 #define STR( str ) OUString( RTL_CONSTASCII_USTRINGPARAM( str ))
