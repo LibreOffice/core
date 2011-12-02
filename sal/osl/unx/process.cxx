@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <cassert>
 
 /*
  *   ToDo:
@@ -60,14 +63,16 @@
 #include <osl/file.h>
 #include <osl/signal.h>
 #include <rtl/alloc.h>
+#include <sal/log.hxx>
 
 #include <grp.h>
 
+#include "createfilehandlefromfd.hxx"
+#include "file_url.h"
 #include "procimpl.h"
 #include "readwrite_helper.h"
 #include "sockimpl.h"
 #include "secimpl.h"
-
 
 #define MAX_ARGS        255
 #define MAX_ENVS        255
@@ -75,10 +80,6 @@
 #if defined(MACOSX) || defined(IOS) || defined(IORESOURCE_TRANSFER_BSD) || defined(AIX)
 #define CONTROLLEN (sizeof(struct cmsghdr) + sizeof(int))
 #endif
-
-/* implemented in file.c */
-extern oslFileError FileURLToPath( char *, size_t, rtl_uString* );
-extern oslFileHandle osl_createFileHandleFromFD( int fd );
 
 /******************************************************************************
  *
@@ -106,12 +107,6 @@ typedef struct {
     oslFileHandle    *m_pOutputRead;
     oslFileHandle    *m_pErrorRead;
 } ProcessData;
-
-typedef struct _oslPipeImpl {
-    int      m_Socket;
-    sal_Char m_Name[PATH_MAX + 1];
-} oslPipeImpl;
-
 
 /******************************************************************************
  *
@@ -443,7 +438,7 @@ static void ChildStatusProc(void *pData)
 {
     pid_t pid = -1;
     int   status = 0;
-    int   channel[2];
+    int   channel[2] = { -1, -1 };
     ProcessData  data;
     ProcessData *pdata;
     int     stdOutput[2] = { -1, -1 }, stdInput[2] = { -1, -1 }, stdError[2] = { -1, -1 };
@@ -459,23 +454,35 @@ static void ChildStatusProc(void *pData)
 #define fork() (errno = EINVAL, -1)
 #endif
     if (socketpair(AF_UNIX, SOCK_STREAM, 0, channel) == -1)
+    {
         status = errno;
+        SAL_WARN("sal", "executeProcess socketpair() errno " << status);
+    }
 
     fcntl(channel[0], F_SETFD, FD_CLOEXEC);
     fcntl(channel[1], F_SETFD, FD_CLOEXEC);
 
     /* Create redirected IO pipes */
-    if ( status == 0 && data.m_pInputWrite )
-        if (pipe( stdInput ) == -1)
-            status = errno;
+    if ( status == 0 && data.m_pInputWrite && pipe( stdInput ) == -1 )
+    {
+        status = errno;
+        assert(status != 0);
+        SAL_WARN("sal", "executeProcess pipe(stdInput) errno " << status);
+    }
 
-    if ( status == 0 && data.m_pOutputRead )
-        if (pipe( stdOutput ) == -1)
-            status = errno;
+    if ( status == 0 && data.m_pOutputRead && pipe( stdOutput ) == -1 )
+    {
+        status = errno;
+        assert(status != 0);
+        SAL_WARN("sal", "executeProcess pipe(stdOutput) errno " << status);
+    }
 
-    if ( status == 0 && data.m_pErrorRead )
-        if (pipe( stdError ) == -1)
-            status = errno;
+    if ( status == 0 && data.m_pErrorRead && pipe( stdError ) == -1 )
+    {
+        status = errno;
+        assert(status != 0);
+        SAL_WARN("sal", "executeProcess pipe(stdError) errno " << status);
+    }
 
     if ( (status == 0) && ((pid = fork()) == 0) )
     {
@@ -601,13 +608,13 @@ static void ChildStatusProc(void *pData)
             /* Store used pipe ends in data structure */
 
             if ( pdata->m_pInputWrite )
-                *(pdata->m_pInputWrite) = osl_createFileHandleFromFD( stdInput[1] );
+                *(pdata->m_pInputWrite) = osl::detail::createFileHandleFromFD( stdInput[1] );
 
             if ( pdata->m_pOutputRead )
-                *(pdata->m_pOutputRead) = osl_createFileHandleFromFD( stdOutput[0] );
+                *(pdata->m_pOutputRead) = osl::detail::createFileHandleFromFD( stdOutput[0] );
 
             if ( pdata->m_pErrorRead )
-                *(pdata->m_pErrorRead) = osl_createFileHandleFromFD( stdError[0] );
+                *(pdata->m_pErrorRead) = osl::detail::createFileHandleFromFD( stdError[0] );
 
             osl_releaseMutex(ChildListMutex);
 

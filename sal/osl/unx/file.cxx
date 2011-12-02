@@ -33,6 +33,7 @@
 #include "rtl/alloc.h"
 
 #include "system.h"
+#include "createfilehandlefromfd.hxx"
 #include "file_error_transl.h"
 #include "file_url.h"
 
@@ -762,10 +763,7 @@ oslFileError FileHandle_Impl::syncFile()
     return (result);
 }
 
-/****************************************************************************
- *  osl_createFileHandleFromFD
- ***************************************************************************/
-extern "C" oslFileHandle osl_createFileHandleFromFD( int fd )
+oslFileHandle osl::detail::createFileHandleFromFD( int fd )
 {
     if (-1 == fd)
         return 0; // EINVAL
@@ -791,7 +789,7 @@ extern "C" oslFileHandle osl_createFileHandleFromFD( int fd )
         pImpl->m_size = sal::static_int_cast< sal_uInt64 >(aFileStat.st_size);
     }
 
-    OSL_FILE_TRACE("osl_createFileHandleFromFD(%d, writeable) => %s",
+    OSL_FILE_TRACE("osl::detail::createFileHandleFromFD(%d, writeable) => %s",
                    pImpl->m_fd, rtl_string_getStr(pImpl->m_strFilePath));
     return (oslFileHandle)(pImpl);
 }
