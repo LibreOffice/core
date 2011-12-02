@@ -1040,7 +1040,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
             SmToken token;
             token.eType = TMINUS;
             token.cMathChar = MS_MINUS;
-            token.nGroup = MS_PLUS;
+            token.nGroup = TGUNOPER | TGSUM;
             token.nLevel = 5;
             token.aText.AssignAscii("-");
             pNewNode = new SmMathSymbolNode(token);
