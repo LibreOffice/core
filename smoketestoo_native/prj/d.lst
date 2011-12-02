@@ -1,3 +1,0 @@
-..\losmoketest %_DEST%\bin\losmoketest
-..\%__SRC%\bin\smoketestdoc.sxw %_DEST%\bin\smoketestdoc.sxw
-..\%__SRC%\lib\libsmoketest.* %_DEST%\lib\libsmoketest.*

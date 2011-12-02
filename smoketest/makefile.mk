@@ -27,32 +27,23 @@ PRJ = .
 PRJNAME = smoketestoo_native
 TARGET = smoketest
 
+ENABLE_EXCEPTIONS = TRUE
+VISIBILITY_HIDDEN = TRUE
+
+ABORT_ON_ASSERTION = TRUE
+
 .INCLUDE: settings.mk
 
-.INCLUDE: target.mk
-.INCLUDE: installationtest.mk
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
-.IF "$(depend)" == ""
-# disable smoketest when cross-compiling for now; we can use wine at some stage (?)
-.IF "$(CROSS_COMPILING)" != "YES"
-ALLTAR : cpptest
-.ELSE
-ALLTAR : 
-.END
-.END
+SLOFILES = $(SHL1OBJS)
 
-TEST_ARGUMENTS = smoketest.doc=$(OUTDIR)/bin/smoketestdoc.sxw
-CPPTEST_LIBRARY = $(OUTDIR)/lib/$(DLLPRE)smoketest$(DLLPOST)
+SHL1IMPLIB = i$(SHL1TARGET)
+SHL1TARGET = smoketest
+SHL1OBJS = $(SLO)/smoketest.obj
+SHL1RPATH = NONE
+SHL1STDLIBS = $(CPPUHELPERLIB) $(CPPULIB) $(CPPUNITLIB) $(SALLIB) $(UNOTESTLIB)
+SHL1USE_EXPORTS = name
+DEF1NAME = $(SHL1TARGET)
 
-.IF "$(OS)" != "WNT" || "$(CROSS_COMPILING)" == "YES"
-.IF "$(DISABLE_LINKOO)" == "TRUE"
-my_linkoo =
-.ELSE
-my_linkoo = -l
-.END
-localinstall :
-    $(RM) -r $(installationtest_instpath)
-    $(MKDIRHIER) $(installationtest_instpath)
-    ooinstall $(my_linkoo) $(installationtest_instpath)/opt
-cpptest : localinstall
-.END
+ALLTAR : $(SHL1TARGETN)
