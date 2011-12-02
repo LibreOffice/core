@@ -1113,7 +1113,6 @@ void SmCursor::InsertSpecial(XubString aString) {
     Delete();
 
     aString = comphelper::string::strip(aString, ' ');
-    aString = comphelper::string::stripStart(aString, '%');
 
     //Create instance of special node
     SmToken token;
@@ -1121,7 +1120,7 @@ void SmCursor::InsertSpecial(XubString aString) {
     token.cMathChar = '\0';
     token.nGroup = 0;
     token.nLevel = 5;
-    token.aText = aString; //Don't know if leading "%" should  be removed
+    token.aText = aString;
     SmSpecialNode* pSpecial = new SmSpecialNode(token);
 
     //Prepare the special node
