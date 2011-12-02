@@ -20,7 +20,7 @@ gb_SourceEnvAndRecurse_buildpl=$(call gb_SourceEnvAndRecurse_recurse,$(MAKECMDGO
 endif
 
 source-env-and-recurse:
-	$(gb_SourceEnvAndRecurse_reconfigure) && \
+	@$(gb_SourceEnvAndRecurse_reconfigure) && \
 	if test -f $(SRCDIR)/config.mk ; then . $(SRCDIR)/config.mk; fi && \
 	if test -f $(SRCDIR)/Env.Host.sh; then . $(SRCDIR)/Env.Host.sh; fi && \
 	if test -z "$${SOLARENV}"; then echo "no configuration found and could not create one" && exit 1; fi && \
