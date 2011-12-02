@@ -43,13 +43,11 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/util/XURLTransformer.hpp>
-//shizhoubo for ToolbarController Visiable
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-//end
 
 #include <boost/unordered_map.hpp>
 
@@ -70,7 +68,7 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
                           public ::cppu::OWeakObject
 {
     private:
-        sal_Bool  m_bSupportVisiable; //shizhoubo
+        sal_Bool  m_bSupportVisible; //shizhoubo
     public:
         ToolboxController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
@@ -133,7 +131,7 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
 
     protected:
         bool getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox );
-        void setSupportVisiableProperty(sal_Bool bValue); //shizhoubo
+        void setSupportVisibleProperty(sal_Bool bValue); //shizhoubo
         struct Listener
         {
             Listener( const ::com::sun::star::util::URL& rURL, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& rDispatch ) :

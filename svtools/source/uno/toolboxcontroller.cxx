@@ -40,8 +40,8 @@
 #include <vcl/toolbox.hxx>
 //shizhobo
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-const int TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIABLE  = 1;
-const rtl::OUString TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIABLE( RTL_CONSTASCII_USTRINGPARAM( "SupportsVisiable" ));
+const int TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE  = 1;
+const rtl::OUString TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE( RTL_CONSTASCII_USTRINGPARAM( "SupportsVisible" ));
 //end
 
 using ::rtl::OUString;
@@ -97,8 +97,8 @@ ToolboxController::ToolboxController(
     ,   m_aListenerContainer( m_aMutex )
 {
     //registger Propertyh by shizhoubo
-    registerProperty(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIABLE, TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIABLE, com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY,
-        &m_bSupportVisiable, getCppuType(&m_bSupportVisiable));
+    registerProperty(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE, TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE, com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY,
+        &m_bSupportVisible, getCppuType(&m_bSupportVisible));
 
     m_pImpl = new ToolboxController_Impl;
 
@@ -121,8 +121,8 @@ ToolboxController::ToolboxController() :
     ,   m_aListenerContainer( m_aMutex )
 {
     //registger Propertyh by shizhoubo
-    registerProperty(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIABLE, TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIABLE, com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY,
-        &m_bSupportVisiable, getCppuType(&m_bSupportVisiable));
+    registerProperty(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE, TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE, com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY,
+        &m_bSupportVisible, getCppuType(&m_bSupportVisible));
 
     m_pImpl = new ToolboxController_Impl;
 }
@@ -220,7 +220,7 @@ throw ( Exception, RuntimeException )
         SolarMutexGuard aSolarMutexGuard;
         m_bInitialized = sal_True;
         //shizhoubo add
-        m_bSupportVisiable = sal_False;
+        m_bSupportVisible = sal_False;
         PropertyValue aPropValue;
         for ( int i = 0; i < aArguments.getLength(); i++ )
         {
@@ -771,9 +771,9 @@ com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >  SAL_C
         return new ::cppu::OPropertyArrayHelper(aProps);
 }
 //shizhoubo for supportsvisiable
-void ToolboxController::setSupportVisiableProperty(sal_Bool bValue)
+void ToolboxController::setSupportVisibleProperty(sal_Bool bValue)
 {
-    m_bSupportVisiable = bValue;
+    m_bSupportVisible = bValue;
 }
 //OPropertySetHelper by shizhoubo
 sal_Bool SAL_CALL ToolboxController::convertFastPropertyValue( com::sun::star::uno::Any&    aConvertedValue ,
@@ -783,14 +783,14 @@ sal_Bool SAL_CALL ToolboxController::convertFastPropertyValue( com::sun::star::u
 {
     switch (nHandle)
     {
-        case TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIABLE:
+        case TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE:
         {
             sal_Bool aNewValue(sal_False);
             aValue >>= aNewValue;
-            if (aNewValue != m_bSupportVisiable)
+            if (aNewValue != m_bSupportVisible)
             {
                 aConvertedValue <<= aNewValue;
-                aOldValue <<= m_bSupportVisiable;
+                aOldValue <<= m_bSupportVisible;
                 return sal_True;
             }
             return sal_False;
@@ -805,11 +805,11 @@ void SAL_CALL ToolboxController::setFastPropertyValue_NoBroadcast(
 throw( com::sun::star::uno::Exception)
 {
     OPropertyContainer::setFastPropertyValue_NoBroadcast(nHandle, aValue);
-    if (TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIABLE == nHandle)
+    if (TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE == nHandle)
     {
         sal_Bool rValue(sal_False);
         if (( aValue >>= rValue ) && m_bInitialized)
-            this->setSupportVisiableProperty( rValue );
+            this->setSupportVisibleProperty( rValue );
     }
 }
 

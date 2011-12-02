@@ -1122,10 +1122,10 @@ void ToolBarManager::CreateControllers()
         {
             try
             {
-                sal_Bool bSupportVisiable = sal_True;
-                Any a( xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SupportsVisiable" ))) );
-                a >>= bSupportVisiable;
-                if ( bSupportVisiable )
+                sal_Bool bSupportVisible = sal_True;
+                Any a( xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SupportsVisible" ))) );
+                a >>= bSupportVisible;
+                if (bSupportVisible)
                 {
                     Reference< XToolbarController > xTbxController( xController, UNO_QUERY );
                     UpdateController(xTbxController);
