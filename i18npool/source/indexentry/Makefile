@@ -36,9 +36,9 @@ include $(GBUILDDIR)/gbuild_simple.mk
 
 %_invis.cxx : $(realpath $(SRC_ROOT)/i18npool/source/indexentry/data)/%.txt
 ifeq ($(OS_FOR_BUILD),WNT)
-	$(gb_Helper_execute)genindex_data `cygpath -m $<` $@ $*
+	$(call gb_Helper_execute,genindex_data `cygpath -m $<` $@ $*)
 else
-	$(gb_Helper_execute)genindex_data $< $@ $*
+	$(call gb_Helper_execute,genindex_data $< $@ $*)
 endif
 
 .PHONY: all

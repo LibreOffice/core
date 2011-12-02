@@ -36,9 +36,9 @@ include $(GBUILDDIR)/gbuild_simple.mk
 
 %_invis.cxx : $(realpath $(SRC_ROOT)/i18npool/source/textconversion/data)/%.dic
 ifeq ($(OS_FOR_BUILD),WNT)
-	$(gb_Helper_execute)genconv_dict $* `cygpath -m $<` $@
+	$(call gb_Helper_execute,genconv_dict $* `cygpath -m $<` $@)
 else
-	$(gb_Helper_execute)genconv_dict $* $< $@
+	$(call gb_Helper_execute,genconv_dict $* $< $@)
 endif
 
 
