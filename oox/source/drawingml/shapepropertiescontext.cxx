@@ -81,10 +81,17 @@ Reference< XFastContextHandler > ShapePropertiesContext::createFastChildContext(
     case A_TOKEN( prstGeom ):   // preset geometry "CT_PresetGeometry2D"
         {
             sal_Int32 nToken = xAttribs->getOptionalValueToken( XML_prst, 0 );
+            // TODO: Move the following checks to a separate place or as a separate function
             if ( nToken == XML_line )
             {
                 static const OUString sLineShape( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.LineShape" ) );
                 mrShape.getServiceName() = sLineShape;
+            }
+            if( ( nToken >= XML_bentConnector2 && nToken <= XML_bentConnector5 ) ||
+                  nToken == XML_straightConnector1 )
+            {
+                static const OUString sCustomShape( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.CustomShape" ) );
+                mrShape.getServiceName() = sCustomShape;
             }
             xRet.set( new PresetShapeGeometryContext( *this, xAttribs, *(mrShape.getCustomShapeProperties()) ) );
         }
