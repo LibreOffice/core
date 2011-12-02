@@ -502,6 +502,11 @@ public:
 
     virtual void  GetAccessibleText( String &rText ) const;
     void Accept(SmVisitor* pVisitor);
+    /**
+      Converts the character from StarMath's private area symbols to a matching Unicode
+      character, if necessary. To be used when converting GetText() to a normal text.
+    */
+    static sal_Unicode ConvertSymbolToUnicode(sal_Unicode nIn);
 };
 
 
