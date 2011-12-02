@@ -39,44 +39,57 @@ namespace avmedia
 // -------------
 
 TYPEINIT1_AUTOFACTORY( MediaItem, ::SfxPoolItem );
-    ::rtl::OUString         maURL;
-    sal_uInt32              mnMaskSet;
-    MediaState              meState;
-    double                  mfTime;
-    double                  mfDuration;
-    sal_Int16               mnVolumeDB;
-    sal_Bool                mbLoop;
-    sal_Bool                mbMute;
-    ::com::sun::star::media::ZoomLevel meZoom;
+
+struct MediaItem::Impl
+{
+    ::rtl::OUString         m_URL;
+    sal_uInt32              m_nMaskSet;
+    MediaState              m_eState;
+    double                  m_fTime;
+    double                  m_fDuration;
+    sal_Int16               m_nVolumeDB;
+    sal_Bool                m_bLoop;
+    sal_Bool                m_bMute;
+    ::com::sun::star::media::ZoomLevel m_eZoom;
+
+    Impl(sal_uInt32 const nMaskSet)
+        : m_nMaskSet( nMaskSet )
+        , m_eState( MEDIASTATE_STOP )
+        , m_fTime( 0.0 )
+        , m_fDuration( 0.0 )
+        , m_nVolumeDB( 0 )
+        , m_bLoop( false )
+        , m_bMute( false )
+        , m_eZoom( ::com::sun::star::media::ZoomLevel_NOT_AVAILABLE )
+    {
+    }
+    Impl(Impl const& rOther)
+        : m_URL( rOther.m_URL )
+        , m_nMaskSet( rOther.m_nMaskSet )
+        , m_eState( rOther.m_eState )
+        , m_fTime( rOther.m_fTime )
+        , m_fDuration( rOther.m_fDuration )
+        , m_nVolumeDB( rOther.m_nVolumeDB )
+        , m_bLoop( rOther.m_bLoop )
+        , m_bMute( rOther.m_bMute )
+        , m_eZoom( rOther.m_eZoom )
+    {
+    }
+};
 
 // ------------------------------------------------------------------------------
 
-MediaItem::MediaItem( sal_uInt16 _nWhich, sal_uInt32 nMaskSet ) :
-    SfxPoolItem( _nWhich ),
-    mnMaskSet( nMaskSet ),
-    meState( MEDIASTATE_STOP ),
-    mfTime( 0.0 ),
-    mfDuration( 0.0 ),
-    mnVolumeDB( 0 ),
-    mbLoop( false ),
-    mbMute( false ),
-    meZoom( ::com::sun::star::media::ZoomLevel_NOT_AVAILABLE )
+MediaItem::MediaItem( sal_uInt16 const i_nWhich, sal_uInt32 const nMaskSet )
+    : SfxPoolItem( i_nWhich )
+    , m_pImpl( new Impl(nMaskSet) )
 {
 }
 
 // ------------------------------------------------------------------------------
 
-MediaItem::MediaItem( const MediaItem& rItem ) :
-    SfxPoolItem( rItem ),
-    maURL( rItem.maURL ),
-    mnMaskSet( rItem.mnMaskSet ),
-    meState( rItem.meState ),
-    mfTime( rItem.mfTime ),
-    mfDuration( rItem.mfDuration ),
-    mnVolumeDB( rItem.mnVolumeDB ),
-    mbLoop( rItem.mbLoop ),
-    mbMute( rItem.mbMute ),
-    meZoom( rItem.meZoom )
+MediaItem::MediaItem( const MediaItem& rItem )
+    : SfxPoolItem( rItem )
+    , m_pImpl( new Impl(*rItem.m_pImpl) )
 {
 }
 
@@ -90,16 +103,17 @@ MediaItem::~MediaItem()
 
 int MediaItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rItem), "unequal types" );
-    return( mnMaskSet == static_cast< const MediaItem& >( rItem ).mnMaskSet &&
-            maURL == static_cast< const MediaItem& >( rItem ).maURL &&
-            meState == static_cast< const MediaItem& >( rItem ).meState &&
-            mfDuration == static_cast< const MediaItem& >( rItem ).mfDuration &&
-            mfTime == static_cast< const MediaItem& >( rItem ).mfTime &&
-            mnVolumeDB == static_cast< const MediaItem& >( rItem ).mnVolumeDB &&
-            mbLoop == static_cast< const MediaItem& >( rItem ).mbLoop &&
-            mbMute == static_cast< const MediaItem& >( rItem ).mbMute &&
-            meZoom == static_cast< const MediaItem& >( rItem ).meZoom );
+    assert( SfxPoolItem::operator==(rItem));
+    MediaItem const& rOther(static_cast< const MediaItem& >(rItem));
+    return m_pImpl->m_nMaskSet == rOther.m_pImpl->m_nMaskSet
+        && m_pImpl->m_URL == rOther.m_pImpl->m_URL
+        && m_pImpl->m_eState == rOther.m_pImpl->m_eState
+        && m_pImpl->m_fDuration == rOther.m_pImpl->m_fDuration
+        && m_pImpl->m_fTime == rOther.m_pImpl->m_fTime
+        && m_pImpl->m_nVolumeDB == rOther.m_pImpl->m_nVolumeDB
+        && m_pImpl->m_bLoop == rOther.m_pImpl->m_bLoop
+        && m_pImpl->m_bMute == rOther.m_pImpl->m_bMute
+        && m_pImpl->m_eZoom == rOther.m_pImpl->m_eZoom;
 }
 
 // ------------------------------------------------------------------------------
@@ -127,15 +141,15 @@ bool MediaItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
 {
     uno::Sequence< uno::Any > aSeq( 9 );
 
-    aSeq[ 0 ] <<= maURL;
-    aSeq[ 1 ] <<= mnMaskSet;
-    aSeq[ 2 ] <<= static_cast< sal_Int32 >( meState );
-    aSeq[ 3 ] <<= mfTime;
-    aSeq[ 4 ] <<= mfDuration;
-    aSeq[ 5 ] <<= mnVolumeDB;
-    aSeq[ 6 ] <<= mbLoop;
-    aSeq[ 7 ] <<= mbMute;
-    aSeq[ 8 ] <<= meZoom;
+    aSeq[ 0 ] <<= m_pImpl->m_URL;
+    aSeq[ 1 ] <<= m_pImpl->m_nMaskSet;
+    aSeq[ 2 ] <<= static_cast< sal_Int32 >( m_pImpl->m_eState );
+    aSeq[ 3 ] <<= m_pImpl->m_fTime;
+    aSeq[ 4 ] <<= m_pImpl->m_fDuration;
+    aSeq[ 5 ] <<= m_pImpl->m_nVolumeDB;
+    aSeq[ 6 ] <<= m_pImpl->m_bLoop;
+    aSeq[ 7 ] <<= m_pImpl->m_bMute;
+    aSeq[ 8 ] <<= m_pImpl->m_eZoom;
 
     rVal <<= aSeq;
 
@@ -153,15 +167,16 @@ bool MediaItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
     {
         sal_Int32 nInt32 = 0;
 
-        aSeq[ 0 ] >>= maURL;
-        aSeq[ 1 ] >>= mnMaskSet;
-        aSeq[ 2 ] >>= nInt32; meState = static_cast< MediaState >( nInt32 );
-        aSeq[ 3 ] >>= mfTime;
-        aSeq[ 4 ] >>= mfDuration;
-        aSeq[ 5 ] >>= mnVolumeDB;
-        aSeq[ 6 ] >>= mbLoop;
-        aSeq[ 7 ] >>= mbMute;
-        aSeq[ 8 ] >>= meZoom;
+        aSeq[ 0 ] >>= m_pImpl->m_URL;
+        aSeq[ 1 ] >>= m_pImpl->m_nMaskSet;
+        aSeq[ 2 ] >>= nInt32;
+        m_pImpl->m_eState = static_cast< MediaState >( nInt32 );
+        aSeq[ 3 ] >>= m_pImpl->m_fTime;
+        aSeq[ 4 ] >>= m_pImpl->m_fDuration;
+        aSeq[ 5 ] >>= m_pImpl->m_nVolumeDB;
+        aSeq[ 6 ] >>= m_pImpl->m_bLoop;
+        aSeq[ 7 ] >>= m_pImpl->m_bMute;
+        aSeq[ 8 ] >>= m_pImpl->m_eZoom;
 
         bRet = true;
     }
@@ -204,127 +219,127 @@ void MediaItem::merge( const MediaItem& rMediaItem )
 
 sal_uInt32 MediaItem::getMaskSet() const
 {
-    return mnMaskSet;
+    return m_pImpl->m_nMaskSet;
 }
 
 //------------------------------------------------------------------------
 
 void MediaItem::setURL( const ::rtl::OUString& rURL )
 {
-    maURL = rURL;
-    mnMaskSet |= AVMEDIA_SETMASK_URL;
+    m_pImpl->m_URL = rURL;
+    m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_URL;
 }
 
 //------------------------------------------------------------------------
 
 const ::rtl::OUString& MediaItem::getURL() const
 {
-    return maURL;
+    return m_pImpl->m_URL;
 }
 
 //------------------------------------------------------------------------
 
 void MediaItem::setState( MediaState eState )
 {
-    meState = eState;
-    mnMaskSet |= AVMEDIA_SETMASK_STATE;
+    m_pImpl->m_eState = eState;
+    m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_STATE;
 }
 
 //------------------------------------------------------------------------
 
 MediaState MediaItem::getState() const
 {
-    return meState;
+    return m_pImpl->m_eState;
 }
 
 //------------------------------------------------------------------------
 
 void MediaItem::setDuration( double fDuration )
 {
-    mfDuration = fDuration;
-    mnMaskSet |= AVMEDIA_SETMASK_DURATION;
+    m_pImpl->m_fDuration = fDuration;
+    m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_DURATION;
 }
 
 //------------------------------------------------------------------------
 
 double MediaItem::getDuration() const
 {
-    return mfDuration;
+    return m_pImpl->m_fDuration;
 }
 
 //------------------------------------------------------------------------
 
 void MediaItem::setTime( double fTime )
 {
-    mfTime = fTime;
-    mnMaskSet |= AVMEDIA_SETMASK_TIME;
+    m_pImpl->m_fTime = fTime;
+    m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_TIME;
 }
 
 //------------------------------------------------------------------------
 
 double MediaItem::getTime() const
 {
-    return mfTime;
+    return m_pImpl->m_fTime;
 }
 
 //------------------------------------------------------------------------
 
 void MediaItem::setLoop( sal_Bool bLoop )
 {
-    mbLoop = bLoop;
-    mnMaskSet |= AVMEDIA_SETMASK_LOOP;
+    m_pImpl->m_bLoop = bLoop;
+    m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_LOOP;
 }
 
 //------------------------------------------------------------------------
 
 sal_Bool MediaItem::isLoop() const
 {
-    return mbLoop;
+    return m_pImpl->m_bLoop;
 }
 
 //------------------------------------------------------------------------
 
 void MediaItem::setMute( sal_Bool bMute )
 {
-    mbMute = bMute;
-    mnMaskSet |= AVMEDIA_SETMASK_MUTE;
+    m_pImpl->m_bMute = bMute;
+    m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_MUTE;
 }
 
 //------------------------------------------------------------------------
 
 sal_Bool MediaItem::isMute() const
 {
-    return mbMute;
+    return m_pImpl->m_bMute;
 }
 
 //------------------------------------------------------------------------
 
 void MediaItem::setVolumeDB( sal_Int16 nDB )
 {
-    mnVolumeDB = nDB;
-    mnMaskSet |= AVMEDIA_SETMASK_VOLUMEDB;
+    m_pImpl->m_nVolumeDB = nDB;
+    m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_VOLUMEDB;
 }
 
 //------------------------------------------------------------------------
 
 sal_Int16 MediaItem::getVolumeDB() const
 {
-    return mnVolumeDB;
+    return m_pImpl->m_nVolumeDB;
 }
 
 //------------------------------------------------------------------------
 
 void MediaItem::setZoom( ::com::sun::star::media::ZoomLevel eZoom )
 {
-    meZoom = eZoom;
-    mnMaskSet |= AVMEDIA_SETMASK_ZOOM;
+    m_pImpl->m_eZoom = eZoom;
+    m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_ZOOM;
 }
 
 //------------------------------------------------------------------------
 
 ::com::sun::star::media::ZoomLevel MediaItem::getZoom() const
 {
-    return meZoom;
+    return m_pImpl->m_eZoom;
 }
 
 }

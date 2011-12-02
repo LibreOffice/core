@@ -26,8 +26,10 @@
  *
  ************************************************************************/
 
-#ifndef _AVMEDIA_MEDIAITEM_HXX
-#define _AVMEDIA_MEDIAITEM_HXX
+#ifndef AVMEDIA_MEDIAITEM_HXX
+#define AVMEDIA_MEDIAITEM_HXX
+
+#include <boost/scoped_ptr.hpp>
 
 #include <tools/rtti.hxx>
 #include <svl/poolitem.hxx>
@@ -71,7 +73,8 @@ class AVMEDIA_DLLPUBLIC MediaItem : public SfxPoolItem
 public:
                             TYPEINFO();
 
-                            MediaItem( sal_uInt16 nWhich = 0, sal_uInt32 nMaskSet = AVMEDIA_SETMASK_NONE );
+                            MediaItem( sal_uInt16 const i_nWhich = 0,
+                            sal_uInt32 const nMaskSet = AVMEDIA_SETMASK_NONE );
                             MediaItem( const MediaItem& rMediaItem );
     virtual                 ~MediaItem();
 
@@ -115,15 +118,8 @@ public:
 
 private:
 
-    ::rtl::OUString         maURL;
-    sal_uInt32              mnMaskSet;
-    MediaState              meState;
-    double                  mfTime;
-    double                  mfDuration;
-    sal_Int16               mnVolumeDB;
-    sal_Bool                mbLoop;
-    sal_Bool                mbMute;
-    ::com::sun::star::media::ZoomLevel meZoom;
+    struct Impl;
+    ::boost::scoped_ptr<Impl> m_pImpl;
 };
 
 typedef ::avmedia::MediaItem avmedia_MediaItem;
