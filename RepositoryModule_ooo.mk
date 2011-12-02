@@ -30,6 +30,7 @@ $(eval $(call gb_Module_Module,ooo))
 
 $(eval $(call gb_Module_add_moduledirs,ooo,\
     animations \
+    automation \
     basctl \
     basebmp \
     basegfx \
@@ -47,6 +48,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     editeng \
     eventattacher \
     fileaccess \
+    filter \
     forms \
     formula \
     framework \
@@ -63,6 +65,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     offapi \
     oovbaapi \
     oox \
+    package \
     padmin \
     psprint_config \
     qadevOOo \
@@ -73,6 +76,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     sc \
     scaddins \
     sccomp \
+    scripting \
     sd \
     sfx2 \
     slideshow \
@@ -91,12 +95,14 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     unixODBC \
     unotools \
     unoxml \
+    uui \
     vbahelper \
     vcl \
     wizards \
     writerfilter \
     writerperfect \
     xmerge \
+    xmlsecurity \
     xml2cmp \
     xmloff \
     xmlreader \
