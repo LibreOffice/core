@@ -162,7 +162,7 @@ OString makeTempName(const OString& prefix)
     int nDescriptor = mkstemp(tmpFilePattern);
     if( -1 == nDescriptor )
     {
-        fprintf( stderr,"idlc: couldn't create temporary file\n" );
+        fprintf( stderr,"idlc: couldn't create temporary file %s\n", tmpFilePattern );
         exit( 1 );
     }
     // the file shall later be reopened by stdio functions
@@ -180,12 +180,10 @@ sal_Bool copyFile(const OString* source, const OString& target)
     sal_Bool bRet = sal_True;
 
     FILE* pSource = source == 0 ? stdin : fopen(source->getStr(), "rb");
-
     if ( !pSource )
         return sal_False;
 
     FILE* pTarget = fopen(target.getStr(), "wb");
-
     if ( !pTarget )
     {
         fclose(pSource);
@@ -237,19 +235,24 @@ sal_Int32 compileFile(const OString * pathname)
 
     if ( !copyFile(pathname, tmpFile) )
     {
-          fprintf(stderr, "%s: could not copy %s%s to %s\n",
+        fprintf(stderr, "%s: could not copy %s%s to %s\n",
                 idlc()->getOptions()->getProgramName().getStr(),
                 pathname == 0 ? "" : "file ", fileName.getStr(),
                 tmpFile.getStr());
-          exit(99);
+        exit(99);
     }
 
     idlc()->setFileName(fileName);
     idlc()->setMainFileName(fileName);
     idlc()->setRealFileName(tmpFile);
 
-    OStringBuffer cppArgs(512);
-    cppArgs.append("-DIDL -Xi -Xc -+ -I.");
+    ::std::vector< ::rtl::OUString > lCppArgs;
+    lCppArgs.push_back(OUString(RTL_CONSTASCII_USTRINGPARAM("-DIDL")));
+    lCppArgs.push_back(OUString(RTL_CONSTASCII_USTRINGPARAM("-C")));
+    lCppArgs.push_back(OUString(RTL_CONSTASCII_USTRINGPARAM("-zI")));
+    lCppArgs.push_back(OUString(RTL_CONSTASCII_USTRINGPARAM("-I.")));
+
+    OStringBuffer cppArgs(256);
     Options* pOptions = idlc()->getOptions();
 
     OString filePath;
@@ -261,58 +264,49 @@ sal_Int32 compileFile(const OString * pathname)
 
         if ( filePath.getLength() )
         {
-            cppArgs.append(" -I\"");
+            cppArgs.append("-I");
             cppArgs.append(filePath);
-            cppArgs.append("\"");
+            lCppArgs.push_back(OStringToOUString(cppArgs.makeStringAndClear().replace('\\', '/'), RTL_TEXTENCODING_UTF8));
         }
     }
 
     if ( pOptions->isValid("-D") )
     {
-        cppArgs.append(" ");
-        cppArgs.append(pOptions->getOption("-D"));
+        OString dOpt = pOptions->getOption("-D");
+        OString token;
+        sal_Int32 nIndex = 0;
+        do
+        {
+            token = dOpt.getToken( 0, ' ', nIndex );
+            if (token.getLength())
+            {
+                lCppArgs.push_back(OStringToOUString(token, RTL_TEXTENCODING_UTF8));
+            }
+        } while( nIndex != -1 );
     }
+
     if ( pOptions->isValid("-I") )
     {
-        cppArgs.append(" ");
-        cppArgs.append(pOptions->getOption("-I"));
+        OString incOpt = pOptions->getOption("-I");
+        OString token;
+        sal_Int32 nIndex = 0;
+        do
+        {
+            token = incOpt.getToken( 0, ' ', nIndex );
+            if (token.getLength())
+            {
+                lCppArgs.push_back(OStringToOUString(token, RTL_TEXTENCODING_UTF8));
+            }
+        } while( nIndex != -1 );
     }
 
-    cppArgs.append(" \"");
-    cppArgs.append(tmpFile);
-    cppArgs.append("\" \"");
+    lCppArgs.push_back(OUString(RTL_CONSTASCII_USTRINGPARAM("-o")));
+
     cppArgs.append(preprocFile);
-    cppArgs.append("\"");
+    lCppArgs.push_back(OStringToOUString(cppArgs.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
 
-    OString cmdFileName = makeTempName(OString("idlc_"));
-    FILE* pCmdFile = fopen(cmdFileName, "w");
-
-    if ( !pCmdFile )
-    {
-          fprintf(stderr, "%s: couldn't open temporary file for preprocessor commands: %s\n",
-            idlc()->getOptions()->getProgramName().getStr(), cmdFileName.getStr());
-          exit(99);
-    }
-#ifdef SAL_OS2_00
-      char* tok = strtok( (char*)cppArgs.getStr(), " \t\n\r");
-      while( tok) {
-         if (tok[strlen(tok)-1] == '\"')
-            tok[strlen(tok)-1] = '\0';
-         if (*tok == '\"')
-            memcpy( tok, tok+1, strlen(tok));
-         if (strlen(tok)>0) {
-            fputs(tok, pCmdFile);
-            fputc('\n', pCmdFile);
-         }
-         tok = strtok( NULL, " \t\n\r");
-      }
-#else
-    fprintf(pCmdFile, "%s", cppArgs.getStr());
-#endif
-    fclose(pCmdFile);
-
-    OUString cmdArg(RTL_CONSTASCII_USTRINGPARAM("@"));
-    cmdArg += OStringToOUString(cmdFileName, RTL_TEXTENCODING_UTF8);
+    cppArgs.append(tmpFile);
+    lCppArgs.push_back(OStringToOUString(cppArgs.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
 
     OUString cpp;
     OUString startDir;
@@ -324,15 +318,27 @@ sal_Int32 compileFile(const OString * pathname)
      cpp = cpp.copy(0, idx);
 
 #if defined(SAL_W32) || defined(SAL_OS2)
-     cpp += OUString( RTL_CONSTASCII_USTRINGPARAM("idlcpp.exe"));
+     cpp += OUString( RTL_CONSTASCII_USTRINGPARAM("ucpp.exe"));
 #else
-    cpp += OUString( RTL_CONSTASCII_USTRINGPARAM("idlcpp"));
+    cpp += OUString( RTL_CONSTASCII_USTRINGPARAM("ucpp"));
 #endif
 
     oslProcess      hProcess = NULL;
     oslProcessError procError = osl_Process_E_None;
 
-    procError = osl_executeProcess(cpp.pData, &cmdArg.pData, 1, osl_Process_WAIT,
+    const int nCmdArgs = lCppArgs.size();
+    rtl_uString** pCmdArgs = 0;
+    pCmdArgs = (rtl_uString**)rtl_allocateZeroMemory(nCmdArgs * sizeof(rtl_uString*));
+
+    ::std::vector< ::rtl::OUString >::iterator iter = lCppArgs.begin();
+    ::std::vector< ::rtl::OUString >::iterator end = lCppArgs.end();
+    int i = 0;
+    while ( iter != end ) {
+        pCmdArgs[i++] = (*iter).pData;
+        ++iter;
+    }
+
+    procError = osl_executeProcess(cpp.pData, pCmdArgs, nCmdArgs, osl_Process_WAIT,
                                    0, startDir.pData, 0, 0, &hProcess);
 
     oslProcessInfo hInfo;
@@ -352,26 +358,20 @@ sal_Int32 compileFile(const OString * pathname)
                     pOptions->getProgramName().getStr(),
                     pathname == 0 ? "" : "file ", fileName.getStr());
 
-        unlink(tmpFile.getStr());
-        unlink(preprocFile.getStr());
-        unlink(cmdFileName.getStr());
+        // unlink(tmpFile.getStr());
+        // unlink(preprocFile.getStr());
+        // unlink(cmdFileName.getStr());
         osl_freeProcessHandle(hProcess);
+        rtl_freeMemory(pCmdArgs);
         exit(hInfo.Code ? hInfo.Code : 99);
     }
     osl_freeProcessHandle(hProcess);
+    rtl_freeMemory(pCmdArgs);
 
     if (unlink(tmpFile.getStr()) != 0)
     {
         fprintf(stderr, "%s: Could not remove cpp input file %s\n",
                  pOptions->getProgramName().getStr(), tmpFile.getStr());
-        exit(99);
-    }
-
-    if (unlink(cmdFileName.getStr()) != 0)
-    {
-        fprintf(stderr, "%s: Could not remove unocpp command file %s\n",
-                   pOptions->getProgramName().getStr(), cmdFileName.getStr());
-
         exit(99);
     }
 

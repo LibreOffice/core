@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -25,51 +25,30 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+PRJ=.
 
-PRJNAME=idlc
-TARGET=idlcpp
-TARGETTYPE=CUI
+PRJNAME=ucpp
+TARGET=ucpp
 
 # --- Settings -----------------------------------------------------
 
-NO_DEFAULT_STL=TRUE
-LIBSALCPPRT=$(0)
-
-.INCLUDE :  settings.mk
+.INCLUDE :	settings.mk
 
 # --- Files --------------------------------------------------------
 
-OBJFILES=   \
-            $(OBJ)$/cpp.obj	\
-            $(OBJ)$/eval.obj	\
-            $(OBJ)$/include.obj	\
-            $(OBJ)$/lex.obj	\
-            $(OBJ)$/macro.obj	\
-            $(OBJ)$/nlist.obj	\
-            $(OBJ)$/tokens.obj	\
-            $(OBJ)$/unix.obj
+TARFILE_NAME=ucpp-1.3.2
+TARFILE_ROOTDIR=ucpp
+TARFILE_MD5=0168229624cfac409e766913506961a8
+PATCH_FILES=ucpp.patch
 
-# --- CPP -------------------------------------------------------
+ADDITIONAL_FILES=makefile.mk
 
-APP1TARGET= $(TARGET)
-APP1RPATH=SDK
-
-.IF "$(GUI)" != "UNX"
-.IF "$(COM)" != "GCC"
-APP1OBJS=$(OBJ)$/cpp.obj
-.ENDIF
-.ENDIF
-
-APP1LIBS= $(LB)$/idlcpp.lib
-
-.IF "$(HAVE_GETOPT)" != "YES"
-.IF "$(GUI)" == "WNT"
-APP1STDLIBS=gnu_getopt.lib
-.ENDIF
-.ENDIF
+#BUILD_DIR=
+BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 
 # --- Targets ------------------------------------------------------
 
-.INCLUDE :  target.mk
+.INCLUDE : set_ext.mk
+.INCLUDE : target.mk
+.INCLUDE : tg_ext.mk
 

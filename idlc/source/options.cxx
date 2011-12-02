@@ -43,7 +43,7 @@ using rtl::OStringBuffer;
 #endif
 
 Options::Options(char const * progname)
-  : m_program(progname), m_stdin(false), m_verbose(false), m_quiet(false)
+    : m_program(progname), m_stdin(false), m_verbose(false), m_quiet(false)
 {
 }
 
@@ -54,54 +54,54 @@ Options::~Options()
 // static
 bool Options::checkArgument (std::vector< std::string > & rArgs, char const * arg, size_t len)
 {
-  bool result = ((arg != 0) && (len > 0));
-  OSL_PRECOND(result, "idlc::Options::checkArgument(): invalid arguments");
-  if (result)
-  {
-    switch(arg[0])
+    bool result = ((arg != 0) && (len > 0));
+    OSL_PRECOND(result, "idlc::Options::checkArgument(): invalid arguments");
+    if (result)
     {
-    case '@':
-      if ((result = (len > 1)) == true)
-      {
-        // "@<cmdfile>"
-        result = Options::checkCommandFile (rArgs, &(arg[1]));
-      }
-      break;
-    case '-':
-      if ((result = (len > 1)) == true)
-      {
-        // "-<option>"
-        switch (arg[1])
+        switch(arg[0])
         {
-        case 'O':
-        case 'I':
-        case 'D':
-          {
-            // "-<option>[<param>]
-            std::string option(&(arg[0]), 2);
-            rArgs.push_back(option);
-            if (len > 2)
+        case '@':
+            if ((result = (len > 1)) == true)
             {
-              // "-<option><param>"
-              std::string param(&(arg[2]), len - 2);
-              rArgs.push_back(param);
+                // "@<cmdfile>"
+                result = Options::checkCommandFile (rArgs, &(arg[1]));
             }
             break;
-          }
+        case '-':
+            if ((result = (len > 1)) == true)
+            {
+                // "-<option>"
+                switch (arg[1])
+                {
+                case 'O':
+                case 'I':
+                case 'D':
+                {
+                    // "-<option>[<param>]
+                    std::string option(&(arg[0]), 2);
+                    rArgs.push_back(option);
+                    if (len > 2)
+                    {
+                        // "-<option><param>"
+                        std::string param(&(arg[2]), len - 2);
+                        rArgs.push_back(param);
+                    }
+                    break;
+                }
+                default:
+                    // "-<option>" ([long] option, w/o param)
+                    rArgs.push_back(std::string(arg, len));
+                    break;
+                }
+            }
+            break;
         default:
-          // "-<option>" ([long] option, w/o param)
-          rArgs.push_back(std::string(arg, len));
-          break;
+            // "<param>"
+            rArgs.push_back(std::string(arg, len));
+            break;
         }
-      }
-      break;
-    default:
-      // "<param>"
-      rArgs.push_back(std::string(arg, len));
-      break;
     }
-  }
-  return (result);
+    return (result);
 }
 
 // static
@@ -124,30 +124,30 @@ bool Options::checkCommandFile (std::vector< std::string > & rArgs, char const *
         switch(c)
         {
         case '\"':
-          quoted = !quoted;
-          break;
+            quoted = !quoted;
+            break;
         case ' ':
         case '\t':
         case '\r':
         case '\n':
-          if (!quoted)
-          {
-              if (!buffer.empty())
-              {
-                  // append current argument.
-                  if (!Options::checkArgument(rArgs, buffer.c_str(), buffer.size()))
-                  {
-                      (void) fclose(fp);
-                      return (false);
-                  }
-                  buffer.clear();
-              }
-              break;
-          }
+            if (!quoted)
+            {
+                if (!buffer.empty())
+                {
+                    // append current argument.
+                    if (!Options::checkArgument(rArgs, buffer.c_str(), buffer.size()))
+                    {
+                        (void) fclose(fp);
+                        return (false);
+                    }
+                    buffer.clear();
+                }
+                break;
+            }
         default:
-          // quoted white-space fall through
-          buffer.push_back(sal::static_int_cast<char>(c));
-          break;
+            // quoted white-space fall through
+            buffer.push_back(sal::static_int_cast<char>(c));
+            break;
         }
     }
     if (!buffer.empty())
@@ -165,175 +165,174 @@ bool Options::checkCommandFile (std::vector< std::string > & rArgs, char const *
 
 bool Options::badOption(char const * reason, std::string const & rArg) throw(IllegalArgument)
 {
-  OStringBuffer message;
-  if (reason != 0)
-  {
-    message.append(reason); message.append(" option '"); message.append(rArg.c_str()); message.append("'");
-    throw IllegalArgument(message.makeStringAndClear());
-  }
-  return false;
+    OStringBuffer message;
+    if (reason != 0)
+    {
+        message.append(reason); message.append(" option '"); message.append(rArg.c_str()); message.append("'");
+        throw IllegalArgument(message.makeStringAndClear());
+    }
+    return false;
 }
 
 bool Options::setOption(char const * option, std::string const & rArg)
 {
-  bool result = (0 == strcmp(option, rArg.c_str()));
-  if (result)
-    m_options[rArg.c_str()] = OString(rArg.c_str(), rArg.size());
-  return (result);
+    bool result = (0 == strcmp(option, rArg.c_str()));
+    if (result)
+        m_options[rArg.c_str()] = OString(rArg.c_str(), rArg.size());
+    return (result);
 }
 
 bool Options::initOptions(std::vector< std::string > & rArgs) throw(IllegalArgument)
 {
-  std::vector< std::string >::const_iterator first = rArgs.begin(), last = rArgs.end();
-  for (; first != last; ++first)
-  {
-    if ((*first)[0] != '-')
+    std::vector< std::string >::const_iterator first = rArgs.begin(), last = rArgs.end();
+    for (; first != last; ++first)
     {
-      OString filename((*first).c_str(), (*first).size());
-      OString tmp(filename.toAsciiLowerCase());
-      if (tmp.lastIndexOf(".idl") != (tmp.getLength() - 4))
-      {
-        throw IllegalArgument("'" + filename + "' is not a valid input file, only '*.idl' files will be accepted");
-      }
-      m_inputFiles.push_back(filename);
-      continue;
-    }
+        if ((*first)[0] != '-')
+        {
+            OString filename((*first).c_str(), (*first).size());
+            OString tmp(filename.toAsciiLowerCase());
+            if (tmp.lastIndexOf(".idl") != (tmp.getLength() - 4))
+            {
+                throw IllegalArgument("'" + filename + "' is not a valid input file, only '*.idl' files will be accepted");
+            }
+            m_inputFiles.push_back(filename);
+            continue;
+        }
 
-    std::string const option(*first);
-    switch((*first)[1])
-    {
-    case 'O':
-      {
-        if (!((++first != last) && ((*first)[0] != '-')))
+        std::string const option(*first);
+        switch((*first)[1])
         {
-          return badOption("invalid", option);
-        }
-        OString param((*first).c_str(), (*first).size());
-        m_options["-O"] = param;
-        break;
-      }
-    case 'I':
-      {
-        if (!((++first != last) && ((*first)[0] != '-')))
+        case 'O':
         {
-          return badOption("invalid", option);
+            if (!((++first != last) && ((*first)[0] != '-')))
+            {
+                return badOption("invalid", option);
+            }
+            OString param((*first).c_str(), (*first).size());
+            m_options["-O"] = param;
+            break;
         }
-        OString param((*first).c_str(), (*first).size());
+        case 'I':
         {
-          // quote param token(s).
-          OStringBuffer buffer;
-          sal_Int32 k = 0;
-          do
-          {
-            OStringBuffer token; token.append("-I\""); token.append(param.getToken(0, ';', k)); token.append("\"");
-            if (buffer.getLength() > 0)
-              buffer.append(' ');
-            buffer.append(token);
-          } while (k != -1);
-          param = buffer.makeStringAndClear();
+            if (!((++first != last) && ((*first)[0] != '-')))
+            {
+                return badOption("invalid", option);
+            }
+            OString param((*first).c_str(), (*first).size());
+            {
+                // quote param token(s).
+                OStringBuffer buffer;
+                sal_Int32 k = 0;
+                do
+                {
+                    OStringBuffer token; token.append("-I"); token.append(param.getToken(0, ';', k));
+                    if (buffer.getLength() > 0)
+                        buffer.append(' ');
+                    buffer.append(token);
+                } while (k != -1);
+                param = buffer.makeStringAndClear();
+            }
+            if (m_options.count("-I") > 0)
+            {
+                // append param.
+                OStringBuffer buffer(m_options["-I"]);
+                buffer.append(' '); buffer.append(param);
+                param = buffer.makeStringAndClear();
+            }
+            m_options["-I"] = param;
+            break;
         }
-        if (m_options.count("-I") > 0)
+        case 'D':
         {
-          // append param.
-          OStringBuffer buffer(m_options["-I"]);
-          buffer.append(' '); buffer.append(param);
-          param = buffer.makeStringAndClear();
+            if (!((++first != last) && ((*first)[0] != '-')))
+            {
+                return badOption("invalid", option);
+            }
+            OString param("-D"); param += OString((*first).c_str(), (*first).size());
+            if (m_options.count("-D") > 0)
+            {
+                OStringBuffer buffer(m_options["-D"]);
+                buffer.append(' '); buffer.append(param);
+                param = buffer.makeStringAndClear();
+            }
+            m_options["-D"] = param;
+            break;
         }
-        m_options["-I"] = param;
-        break;
-      }
-    case 'D':
-      {
-        if (!((++first != last) && ((*first)[0] != '-')))
+        case 'C':
         {
-          return badOption("invalid", option);
+            if (!setOption("-C", option))
+            {
+                return badOption("invalid", option);
+            }
+            break;
         }
-        OString param("-D"); param += OString((*first).c_str(), (*first).size());
-        if (m_options.count("-D") > 0)
+        case 'c':
         {
-          OStringBuffer buffer(m_options["-D"]);
-          buffer.append(' '); buffer.append(param);
-          param = buffer.makeStringAndClear();
+            if (!setOption("-cid", option))
+            {
+                return badOption("invalid", option);
+            }
+            break;
         }
-        m_options["-D"] = param;
-        break;
-      }
-    case 'C':
-      {
-        if (!setOption("-C", option))
+        case 'q':
         {
-          return badOption("invalid", option);
+            if (!setOption("-quiet", option))
+            {
+                return badOption("invalid", option);
+            }
+            m_quiet = true;
+            break;
         }
-        break;
-      }
-    case 'c':
-      {
-        if (!setOption("-cid", option))
+        case 'v':
         {
-          return badOption("invalid", option);
+            if (!setOption("-verbose", option))
+            {
+                return badOption("invalid", option);
+            }
+            m_verbose = true;
+            break;
         }
-        break;
-      }
-    case 'q':
-      {
-        if (!setOption("-quiet", option))
+        case 'w':
         {
-          return badOption("invalid", option);
+            if (!(setOption("-w", option) || setOption("-we", option)))
+            {
+                return badOption("invalid", option);
+            }
+            break;
         }
-        m_quiet = true;
-        break;
-      }
-    case 'v':
-      {
-        if (!setOption("-verbose", option))
+        case 'h':
+        case '?':
         {
-          return badOption("invalid", option);
+            if (!(setOption("-h", option) || setOption("-?", option)))
+            {
+                return badOption("invalid", option);
+            }
+            {
+                (void) fprintf(stdout, "%s", prepareHelp().getStr());
+                return (false);
+            }
+            // break; // Unreachable
         }
-        m_verbose = true;
-        break;
-      }
-    case 'w':
-      {
-        if (!(setOption("-w", option) || setOption("-we", option)))
+        case 's':
         {
-          return badOption("invalid", option);
+            if (!setOption("-stdin", option))
+            {
+                return badOption("invalid", option);
+            }
+            m_stdin = true;
+            break;
         }
-        break;
-      }
-    case 'h':
-    case '?':
-      {
-        if (!(setOption("-h", option) || setOption("-?", option)))
-        {
-          return badOption("invalid", option);
+        default:
+            return badOption("unknown", option);
         }
-        {
-          (void) fprintf(stdout, "%s", prepareHelp().getStr());
-          return (false);
-        }
-        // break; // Unreachable
-      }
-    case 's':
-      {
-        if (!setOption("-stdin", option))
-        {
-          return badOption("invalid", option);
-        }
-        m_stdin = true;
-        break;
-      }
-    default:
-      return badOption("unknown", option);
     }
-  }
-  return (true);
+    return (true);
 }
 
 OString Options::prepareHelp()
 {
     OString help("\nusing: ");
-    help += m_program
-        + " [-options] <file_1> ... <file_n> | @<filename> | -stdin\n";
+    help += m_program + " [-options] <file_1> ... <file_n> | @<filename> | -stdin\n";
     help += "    <file_n>    = file_n specifies one or more idl files.\n";
     help += "                  Only files with the extension '.idl' are valid.\n";
     help += "    @<filename> = filename specifies the name of a command file.\n";

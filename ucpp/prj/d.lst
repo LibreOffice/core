@@ -1,0 +1,4 @@
+..\%__SRC%\bin\ucpp.exe %_DEST%\bin%_EXT%\ucpp.exe
+..\%__SRC%\bin\ucpp.pdb %_DEST%\bin%_EXT%\ucpp.pdb
+
+..\%__SRC%\bin\ucpp %_DEST%\bin%_EXT%\ucpp
