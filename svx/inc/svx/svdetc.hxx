@@ -132,7 +132,6 @@ public:
     sal_uInt16 GetObject(sal_uIntPtr nPos)                       const { return sal_uInt16(sal_uIntPtr(aArr.GetObject(nPos))); }
     sal_uIntPtr  GetPos(sal_uInt16 nElem)                        const { return aArr.GetPos((void*)(sal_uIntPtr)nElem); }
     sal_uIntPtr  GetCount()                                  const { return aArr.Count(); }
-    void   Sort();
 };
 
 class ContainerSorter {

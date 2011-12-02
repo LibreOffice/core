@@ -295,12 +295,6 @@ int ImpUShortContainerSorter::Compare(const void* pElem1, const void* pElem2) co
     return n1<n2 ? -1 : n1>n2 ? 1 : 0;
 }
 
-void UShortCont::Sort()
-{
-    ImpUShortContainerSorter aSorter(aArr);
-    aSorter.DoSort();
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrLinkList::Clear()
