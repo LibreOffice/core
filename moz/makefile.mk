@@ -424,3 +424,15 @@ $(OUT)$/zipped$/$(OS)$(COM)UBruntime.zip : zipped$/$(OS)$(COM)Pruntime.zip zippe
 .ENDIF # $(GUIBASE)=="aqua"
 
 .INCLUDE : extractfiles.mk
+
+# This is a hack to build on a Linux 3.0 system.  Between unpacking
+# the archive and building it, the existing Linux2.6.mk makefile is
+# copied to Linux3.0.mk, which otherwise would be missing and break
+# the build.  See nss module for a similar hack.
+# If someone finds a better solution then please change this.
+.IF "$(OS)"=="LINUX"
+BUILD_ACTION:= pwd&&$(COPY) \
+    ../../mozilla/security/coreconf/Linux2.6.mk \
+    ../../mozilla/security/coreconf/Linux3.0.mk \
+    && $(BUILD_ACTION)
+.ENDIF

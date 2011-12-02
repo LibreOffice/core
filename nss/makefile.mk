@@ -154,16 +154,16 @@ BUILD_ACTION= PATH="$(moz_build)/msys/bin:$(moz_build)/moztools/bin:$(PATH)" && 
     -c "cd $(NSS_BUILD_DIR) && make nss_build_all"
 
 OUT2LIB= \
-     mozilla$/dist$/out$/lib$/nspr4.lib \
-     mozilla$/dist$/out$/lib$/nss3.lib \
-     mozilla$/dist$/out$/lib$/nssdbm3.lib \
-     mozilla$/dist$/out$/lib$/nssutil3.lib \
-     mozilla$/dist$/out$/lib$/plc4.lib \
-     mozilla$/dist$/out$/lib$/plds4.lib \
-     mozilla$/dist$/out$/lib$/smime3.lib \
-     mozilla$/dist$/out$/lib$/softokn3.lib \
-     mozilla$/dist$/out$/lib$/sqlite3.lib \
-     mozilla$/dist$/out$/lib$/ssl3.lib
+    mozilla$/dist$/out$/lib$/nspr4.lib \
+    mozilla$/dist$/out$/lib$/nss3.lib \
+    mozilla$/dist$/out$/lib$/nssdbm3.lib \
+    mozilla$/dist$/out$/lib$/nssutil3.lib \
+    mozilla$/dist$/out$/lib$/plc4.lib \
+    mozilla$/dist$/out$/lib$/plds4.lib \
+    mozilla$/dist$/out$/lib$/smime3.lib \
+    mozilla$/dist$/out$/lib$/softokn3.lib \
+    mozilla$/dist$/out$/lib$/sqlite3.lib \
+    mozilla$/dist$/out$/lib$/ssl3.lib
 
 .ENDIF			# "$(COM)"=="GCC"
 
@@ -179,4 +179,14 @@ OUTDIR2INC=mozilla$/dist$/public$/nss mozilla$/dist$/out$/include
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
 
-
+# This is a hack to build on a Linux 3.0 system.  Between unpacking
+# the archive and building it, the existing Linux2.6.mk makefile is
+# copied to Linux3.0.mk, which otherwise would be missing and break
+# the build.  See moz module for a similar hack.
+# If someone finds a better solution then please change this.
+.IF "$(OS)"=="LINUX"
+BUILD_ACTION:= $(COPY) \
+    ../../../mozilla/security/coreconf/Linux2.6.mk \
+    ../../../mozilla/security/coreconf/Linux3.0.mk \
+    && $(BUILD_ACTION)
+.ENDIF
