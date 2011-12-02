@@ -545,10 +545,11 @@ sal_Bool OStorageHelper::PathHasSegment( const ::rtl::OUString& aPath, const ::r
     return bResult;
 }
 
-class OStorageHelper::LifecycleProxyImpl : public std::vector< uno::Reference< embed::XStorage > > {};
-OStorageHelper::LifecycleProxy::LifecycleProxy() :
-        pBadness( new OStorageHelper::LifecycleProxyImpl() ) { }
-OStorageHelper::LifecycleProxy::~LifecycleProxy() { delete pBadness; }
+class LifecycleProxy::Impl
+    : public std::vector< uno::Reference< embed::XStorage > > {};
+LifecycleProxy::LifecycleProxy()
+    : m_pBadness( new Impl() ) { }
+LifecycleProxy::~LifecycleProxy() { }
 
 static void splitPath( std::vector<rtl::OUString> &rElems,
                        const ::rtl::OUString& rPath )
@@ -560,14 +561,14 @@ static void splitPath( std::vector<rtl::OUString> &rElems,
 static uno::Reference< embed::XStorage > LookupStorageAtPath(
         const uno::Reference< embed::XStorage > &xParentStorage,
         std::vector<rtl::OUString> &rElems, sal_uInt32 nOpenMode,
-        OStorageHelper::LifecycleProxy &rNastiness )
+        LifecycleProxy &rNastiness )
 {
     uno::Reference< embed::XStorage > xStorage( xParentStorage );
-    rNastiness.pBadness->push_back( xStorage );
+    rNastiness.m_pBadness->push_back( xStorage );
     for( size_t i = 0; i < rElems.size() && xStorage.is(); i++ )
     {
         xStorage = xStorage->openStorageElement( rElems[i], nOpenMode );
-        rNastiness.pBadness->push_back( xStorage );
+        rNastiness.m_pBadness->push_back( xStorage );
     }
     return xStorage;
 }
@@ -575,7 +576,7 @@ static uno::Reference< embed::XStorage > LookupStorageAtPath(
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageAtPath(
         const uno::Reference< embed::XStorage > &xStorage,
         const ::rtl::OUString& rPath, sal_uInt32 nOpenMode,
-        OStorageHelper::LifecycleProxy &rNastiness )
+        LifecycleProxy &rNastiness )
 {
     std::vector<rtl::OUString> aElems;
     splitPath( aElems, rPath );
@@ -585,7 +586,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageAtPath(
 uno::Reference< io::XStream > OStorageHelper::GetStreamAtPath(
         const uno::Reference< embed::XStorage > &xParentStorage,
         const ::rtl::OUString& rPath, sal_uInt32 nOpenMode,
-        OStorageHelper::LifecycleProxy &rNastiness )
+        LifecycleProxy &rNastiness )
 {
     std::vector<rtl::OUString> aElems;
     splitPath( aElems, rPath );
@@ -601,7 +602,7 @@ uno::Reference< io::XStream > OStorageHelper::GetStreamAtPath(
 uno::Reference< io::XStream > OStorageHelper::GetStreamAtPackageURL(
         uno::Reference< embed::XStorage > const& xParentStorage,
         const ::rtl::OUString& rURL, sal_uInt32 const nOpenMode,
-        OStorageHelper::LifecycleProxy & rNastiness)
+        LifecycleProxy & rNastiness)
 {
     static char const s_PkgScheme[] = "vnd.sun.star.Package:";
     if (0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(

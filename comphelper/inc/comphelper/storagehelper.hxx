@@ -25,8 +25,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _COMPHELPER_STORAGEHELPER_HXX
-#define _COMPHELPER_STORAGEHELPER_HXX
+#ifndef COMPHELPER_STORAGEHELPER_HXX
+#define COMPHELPER_STORAGEHELPER_HXX
+
+#include <boost/scoped_ptr.hpp>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -50,6 +52,20 @@
 #define PACKAGE_ENCRYPTIONDATA_SHA1MS1252 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PackageSHA1MS1252EncryptionKey" ) )
 
 namespace comphelper {
+
+// Unfortunately - the impl.s of XStorage like to invalidate all
+// their sub streams and storages when you release references, so
+// it is necessary to keep references to all storages down the
+// path - this is 'beautiful' (TM). So we need this ugly hack:
+class COMPHELPER_DLLPUBLIC LifecycleProxy
+{
+private:
+    class Impl;
+public:
+    ::boost::scoped_ptr<Impl> m_pBadness;
+    LifecycleProxy();
+    ~LifecycleProxy();
+};
 
 class COMPHELPER_DLLPUBLIC OStorageHelper
 {
@@ -170,17 +186,6 @@ public:
 
     // Methods to allow easy use of hierachical names inside storages
 
-    // Unfortunately - the impl.s of XStorage like to invalidate all
-    // their sub streams and storages when you release references, so
-    // it is necessary to keep references to all storages down the
-    // path - this is 'beautiful' (TM). So we need this ugly hack:
-    class LifecycleProxyImpl;
-    class COMPHELPER_DLLPUBLIC LifecycleProxy {
-    public:
-        LifecycleProxyImpl *pBadness;
-        LifecycleProxy();
-        ~LifecycleProxy();
-    };
     static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetStorageAtPath(
         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > &xStorage,
         const ::rtl::OUString& aPath, sal_uInt32 nOpenMode, LifecycleProxy &rNastiness );

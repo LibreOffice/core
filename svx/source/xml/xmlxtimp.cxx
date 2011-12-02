@@ -403,7 +403,7 @@ bool SvxXMLXTableImport::load( const rtl::OUString &rPath,
         uno::Reference< xml::sax::XParser > xParser( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" ) ) ), uno::UNO_QUERY_THROW );
 
         xml::sax::InputSource aParserInput;
-        comphelper::OStorageHelper::LifecycleProxy aNasty;
+        comphelper::LifecycleProxy aNasty;
 
         if( !bUseStorage || !xStorage.is() )
         {
