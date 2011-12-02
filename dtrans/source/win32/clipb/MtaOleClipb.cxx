@@ -874,7 +874,6 @@ unsigned int WINAPI CMtaOleClipboard::clipboardChangedNotifierThreadProc( LPVOID
 //
 //--------------------------------------------------------------------
 
-inline
 bool CMtaOleClipboard::WaitForThreadReady( ) const
 {
     bool bRet = false;
