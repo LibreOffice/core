@@ -2371,10 +2371,11 @@ Token_t OOXMLFastContextHandlerWrapper::getToken() const
 
 OOXMLFastContextHandlerMath::OOXMLFastContextHandlerMath(OOXMLFastContextHandler* pContext)
     : OOXMLFastContextHandlerProperties(pContext)
+    , depthCount( 0 )
 {
 }
 
-OOXMLFastContextHandlerMath::~OOXMLFastContextHandlerMath()
+void OOXMLFastContextHandlerMath::process()
 {
     SvGlobalName name( SO3_SM_CLASSID );
     comphelper::EmbeddedObjectContainer container;
@@ -2398,12 +2399,15 @@ void OOXMLFastContextHandlerMath::lcl_startFastElement(Token_t Element,
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     buffer.appendOpeningTag( Element, Attribs );
+    ++depthCount;
 }
 
 void OOXMLFastContextHandlerMath::lcl_endFastElement(Token_t Element)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     buffer.appendClosingTag( Element );
+    if( --depthCount == 0 )
+        process();
 }
 
 uno::Reference< xml::sax::XFastContextHandler >
