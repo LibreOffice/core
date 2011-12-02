@@ -384,11 +384,12 @@ IMPL_LINK( TextEditImp, SyntaxTimerHdl, Timer *, EMPTYARG )
     else
         pTextEngine->SetUpdateMode( sal_True );             // ! With VDev
 
-    // SetUpdateMode( sal_True ) soll kein Modify setzen
+    // SetUpdateMode (sal_True ) shouldn't set Modify
     pTextEngine->SetModified( bWasModified );
 
-    // SyntaxTimerHdl wird gerufen, wenn Text-Aenderung
-    // => gute Gelegenheit, Textbreite zu ermitteln!
+    // SyntaxTimerHdl will be called when the text changes
+    // => Good opportunity to get the text width
+
     bHighlightning = sal_False;
 
     if ( aSyntaxLineTable.First() )
