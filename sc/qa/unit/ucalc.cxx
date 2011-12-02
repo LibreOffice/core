@@ -2466,6 +2466,10 @@ void Test::testPostIts()
     CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNote(rAddr) == pNote);
 
     m_pDoc->DeleteTab(0);
+    rAddr.IncTab(-1);
+    CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNote(rAddr) == pNote);
+
+    m_pDoc->DeleteTab(0);
 }
 
 void Test::testToggleRefFlag()
