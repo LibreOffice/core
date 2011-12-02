@@ -41,15 +41,15 @@ namespace oox
 namespace formulaimport
 {
 
+// used to differentiate between tags that opening or closing
 const int TAG_OPENING = 1 << 29;
 const int TAG_CLOSING = 1 << 30;
 
-// used to differentiate between tags that open or close
-// TODO
-//inline int OPENING( int token ) { return TAG_OPENING | token; }
-//inline int CLOSING( int token ) { return TAG_CLOSING | token; }
-#define OPENING( token ) ( TAG_OPENING | token )
-#define CLOSING( token ) ( TAG_CLOSING | token )
+// you probably want to #define these to something shorter in the .cxx file,
+// but they must be done as macros, otherwise they wouldn't be usable for case values,
+// and macros cannot be namespaced
+#define XML_STREAM_OPENING( token ) ( TAG_OPENING | token )
+#define XML_STREAM_CLOSING( token ) ( TAG_CLOSING | token )
 
 /**
  Class for storing a stream of xml tokens.
@@ -59,7 +59,55 @@ const int TAG_CLOSING = 1 << 30;
  files, unlike the usual LO way of using callbacks, context handlers and similar needlesly
  complicated stuff (YMMV).
 
- @since 3.5.0
+ The advantages of this approach is easy to read and debug code (as it is just functions
+ reading tokens one by one and calling other functions, compared to having to use callbacks
+ and temporary storage). The disadvantage is that the XML structure needs to be handled
+ manually by the code.
+
+ Note that tag identifiers are simply int values and the API does not care besides matching
+ their values to XML stream contents and requiring that the values are not as high as TAG_OPENING.
+ Be prepared for the fact that some of the functions may throw exceptions if the input
+ stream does not match the required token (TBD).
+
+ The API tries to make the common idioms as simple as possible, see the following examples.
+
+ Parse <tagone attr="value"><tagtwo>text</tagtwo></tagone> , where tagtwo is optional:
+ @code
+XmlStream::Tag tagoneTag = stream.ensureOpeningTag( tagone );
+if( attributeTag.hasAttribute( attr ))
+    ... = attributeTag.attribute( attr, defaultValueOfTheRightType );
+if( XmlStream::Tag tagtwoTag = stream.checkOpeningTag( tagtwo ))
+{
+    ... = tagtwoTag.text;
+    stream.ensureClosingTag( tagtwo );
+}
+stream.ensureClosingTag( tagone );
+ @endcode
+
+ Parse an element that may contain several sub-elements of different types in random order:
+ @code
+stream.ensureOpeningTag( element );
+while( !stream.atEnd() && stream.currentToken() != CLOSING( element ))
+    {
+    switch( stream.currentToken())
+    {
+        case OPENING( subelement1 ):
+            handleSubElement1();
+            break;
+        case OPENING( subelement2 ):
+            ... process subelement2;
+            break;
+        default:
+            stream.handleUnexpectedTag();
+            break;
+    }
+stream.ensureClosingTag( element );
+ @endcode
+
+ If there may be just a one type of sub-element, handle it directly without the switch statement.
+ If there may not be a zero number of sub-elements, use a helper bool variable or use a do-while loop.
+
+ @since 3.5
 */
 class OOX_DLLPUBLIC XmlStream
 {

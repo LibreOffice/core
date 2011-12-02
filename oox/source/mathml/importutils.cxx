@@ -41,6 +41,8 @@
 #define STR( str ) OUString( RTL_CONSTASCII_USTRINGPARAM( str ))
 #define CSTR( str ) ( rtl::OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr())
 
+#define OPENING( token ) XML_STREAM_OPENING( token )
+#define CLOSING( token ) XML_STREAM_CLOSING( token )
 
 // HACK - TODO convert to the real debug stuff
 #undef SAL_LOG_LEVEL

@@ -2366,12 +2366,53 @@ Token_t OOXMLFastContextHandlerWrapper::getToken() const
 
 
 /*
-  class OOXMLFastContextHandlerMath
+  class OOXMLFastContextHandlerLinear
+ */
+
+OOXMLFastContextHandlerLinear::OOXMLFastContextHandlerLinear(OOXMLFastContextHandler* pContext)
+    : OOXMLFastContextHandlerProperties(pContext)
+    , depthCount( 0 )
+{
+}
+
+void OOXMLFastContextHandlerLinear::lcl_startFastElement(Token_t Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& Attribs)
+    throw (uno::RuntimeException, xml::sax::SAXException)
+{
+    buffer.appendOpeningTag( Element, Attribs );
+    ++depthCount;
+}
+
+void OOXMLFastContextHandlerLinear::lcl_endFastElement(Token_t Element)
+    throw (uno::RuntimeException, xml::sax::SAXException)
+{
+    buffer.appendClosingTag( Element );
+    if( --depthCount == 0 )
+        process();
+}
+
+uno::Reference< xml::sax::XFastContextHandler >
+OOXMLFastContextHandlerLinear::lcl_createFastChildContext(Token_t,
+    const uno::Reference< xml::sax::XFastAttributeList >&)
+    throw (uno::RuntimeException, xml::sax::SAXException)
+{
+    uno::Reference< xml::sax::XFastContextHandler > xContextHandler;
+    xContextHandler.set( this );
+    return xContextHandler;
+}
+
+void OOXMLFastContextHandlerLinear::lcl_characters(const ::rtl::OUString& aChars)
+    throw (uno::RuntimeException, xml::sax::SAXException)
+{
+    buffer.appendCharacters( aChars );
+}
+
+/*
+  class OOXMLFastContextHandlerLinear
  */
 
 OOXMLFastContextHandlerMath::OOXMLFastContextHandlerMath(OOXMLFastContextHandler* pContext)
-    : OOXMLFastContextHandlerProperties(pContext)
-    , depthCount( 0 )
+    : OOXMLFastContextHandlerLinear(pContext)
 {
 }
 
@@ -2393,39 +2434,6 @@ void OOXMLFastContextHandlerMath::process()
         mpStream->props( writerfilter::Reference< Properties >::Pointer_t( pProps ));
     }
 }
-
-void OOXMLFastContextHandlerMath::lcl_startFastElement(Token_t Element,
-    const uno::Reference< xml::sax::XFastAttributeList >& Attribs)
-    throw (uno::RuntimeException, xml::sax::SAXException)
-{
-    buffer.appendOpeningTag( Element, Attribs );
-    ++depthCount;
-}
-
-void OOXMLFastContextHandlerMath::lcl_endFastElement(Token_t Element)
-    throw (uno::RuntimeException, xml::sax::SAXException)
-{
-    buffer.appendClosingTag( Element );
-    if( --depthCount == 0 )
-        process();
-}
-
-uno::Reference< xml::sax::XFastContextHandler >
-OOXMLFastContextHandlerMath::lcl_createFastChildContext(Token_t,
-    const uno::Reference< xml::sax::XFastAttributeList >&)
-    throw (uno::RuntimeException, xml::sax::SAXException)
-{
-    uno::Reference< xml::sax::XFastContextHandler > xContextHandler;
-    xContextHandler.set( this );
-    return xContextHandler;
-}
-
-void OOXMLFastContextHandlerMath::lcl_characters(const ::rtl::OUString& aChars)
-    throw (uno::RuntimeException, xml::sax::SAXException)
-{
-    buffer.appendCharacters( aChars );
-}
-
 
 }}
 
