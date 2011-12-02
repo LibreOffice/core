@@ -38,7 +38,11 @@ if test -n "$DMAKE_URL" -a  ! -x "$SOLARENV/$OUTPATH/bin/dmake$EXEEXT"; then
     mkdir -p "$tmp_build_dir"
     cd "$tmp_build_dir" || exit
 
-    dmake_full_package_name="$TARFILE_LOCATION/$dmake_package_name"
+    dmake_full_package_name=$(find $TARFILE_LOCATION -type f -name "*-$dmake_package_name")
+    if [ -z "$dmake_full_package_name" ]; then
+        echo "can not find the dmake package"
+        exit
+    fi
     if test "$GUI" = "WNT"; then
         dmake_full_package_name=`cygpath -u "$dmake_full_package_name"`
     fi

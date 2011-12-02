@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,6 +25,8 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
+
+file_list_name=$1
 
 if [ -z "$TARFILE_LOCATION" ]; then
     echo "ERROR: no destination defined! please set TARFILE_LOCATION!"
@@ -63,7 +65,7 @@ else
     if [ $ret -eq 0 ]; then
         fetch_bin=$wg
         fetch_args="-nv -N"
-        echo found wget: $fetch_bin
+        echo found wget at `which $fetch_bin`
         break 2
     fi
   done
@@ -76,7 +78,7 @@ else
         if [ -x $c ]; then
             fetch_bin=$c
             fetch_args="$file_date_check -O"
-            echo found curl: $fetch_bin
+            echo found curl at `which $fetch_bin`
             break 2
         fi
     done
@@ -99,7 +101,7 @@ for i in md5 md5sum /usr/local/bin/md5sum gmd5sum /usr/sfw/bin/md5sum /opt/sfw/b
     ret=$?
     if [ $ret -eq 0 ]; then
         md5sum=$i
-        echo found md5sum: $md5sum
+        echo found md5sum at `which $md5sum`
         break 2
     fi
 done
@@ -120,114 +122,116 @@ date >> $logfile
 mkdir -p $TARFILE_LOCATION/tmp
 cd $TARFILE_LOCATION/tmp
 
-if [ -n "$DMAKE_URL" -a ! -x "$SOLARENV/$OUTPATH/bin/dmake$EXEEXT" ]; then
-    # Determine the name of the downloaded file.
-    dmake_package_name=`echo $DMAKE_URL | sed "s/^\(.*\/\)//"`
 
-    if [ ! -f "../$dmake_package_name" ]; then
-        # Fetch the dmake source
-        echo fetching $DMAKE_URL to $TARFILE_LOCATION/tmp
-        $fetch_bin $fetch_args $DMAKE_URL 2>&1 | tee -a $logfile
-        wret=$?
+function basename ()
+{
+    echo $1 | sed "s/^\(.*\/\)//"
+}
 
-        # When the download failed then remove the remains, otherwise
-        # move the downloaded file up to TARFILE_LOCATION
-        if [ $wret -ne 0 ]; then
-            echo "download failed. removing $dmake_package_name"
-            rm "$dmake_package_name"
-            failed="$failed $i"
-            wret=0
+
+#
+# Download a file from a URL and add its md5 checksum to its name.
+#
+function download ()
+{
+    local URL=$1
+
+    if [ -n "$URL" ]; then
+        local basename=$(basename $URL)
+        local candidate=$(find "$TARFILE_LOCATION" -type f -name "*-$basename")
+        if [ -n "$candidate" ]; then
+            echo "$basename is already present ($candidate)"
         else
-            mv "$dmake_package_name" ..
-            echo "successfully downloaded $dmake_package_name"
-        fi
-    else
-        echo "found $dmake_package_name, no need to download it again"
-    fi
-fi
+            echo fetching $basename
+            $fetch_bin $fetch_args $URL 2>&1 | tee -a $logfile
 
-
-#Special handling of epm
-if [ -n "$EPM_URL" -a ! -x "$SOLARENV/$OUTPATH/bin/epm$EXEEXT" ]; then
-    # Determine the name of the downloaded file.
-    epm_package_name=`echo $EPM_URL | sed "s/^\(.*\/\)//"`
-    epm_package=`echo $epm_package_name | sed "s/-source//"`
-    epm_wildcard_package_name="*-$epm_package"
-
-    epmtest=$(find .. -type f -name "$epm_wildcard_package_name")
-
-    # check with wildcard for the renamed package, md5
-    if [ -z "$epmtest" ]; then
-        # Fetch the epm source
-          echo fetching $EPM_URL to $TARFILE_LOCATION/tmp
-          $fetch_bin $fetch_args $EPM_URL 2>&1 | tee -a $logfile
-
-        wret=$?
-
-        # When the download failed then remove the remains, otherwise
-        # move the downloaded file up to TARFILE_LOCATION and rename it
-    # according our naing convention for external tar balls.
-        if [ $wret -ne 0 ]; then
-            echo "download failed. removing $epm_package_name"
-            rm "$epm_package_name"
-            failed="$failed $i"
-            wret=0
-        else
-            #mv "$epm_package_name" ..
-        epm_md5_sum=`$md5sum $md5special $epm_package_name | sed "s/ .*//"`
-        epm_md5_package_name="$epm_md5_sum-$epm_package"
-
-        rm -f ../$epm_md5_package_name && \
-        cp -pRP $epm_package_name ../$epm_md5_package_name && \
-        rm -rf $epm_package_name
-            echo "successfully downloaded $epm_package_name and renamed to $epm_md5_package_name"
-        fi
-    else
-        echo "found $epmtest, no need to download it again"
-    fi
-fi
-# end special
-
-
-cd $TARFILE_LOCATION/tmp
-filelist=`cat $1`
-echo $$ > fetch-running
-for i in $filelist ; do
-#    echo $i
-    if [ "$i" != `echo $i | sed "s/^http:\///"` ]; then
-        tarurl=$i
-    # TODO: check for comment
-    else
-        if [ "$tarurl" != "" ]; then
-            if [ ! -f "../$i" ]; then
-                echo $i
-        echo fetching $i
-        $fetch_bin $fetch_args $tarurl/$i 2>&1 | tee -a $logfile
-                wret=$?
-                if [ $wret -ne 0 ]; then
-                    mv $i ${i}_broken
-                    failed="$failed $i"
-                    wret=0
-                fi
-                if [ -f $i -a -n "$md5sum" ]; then
-                    sum=`$md5sum $md5special $i | sed "s/ .*//"`
-                    sum2=`echo $i | sed "s/-.*//"`
-                    if [ "$sum" != "$sum2" ]; then
-                        echo checksum failure for $i 2>&1 | tee -a $logfile
-                        failed="$failed $i"
-                        mv $i ${i}_broken
-                    else
-                        mv $i ..
-                    fi
-                else
-                    mv $i ..
-                fi
+            if [ $? -ne 0 ]; then
+                echo "download failed"
+                mv $basename ${basename}_broken
+                failed="$failed $i"
+            elif [ -f "$basename" -a -n "$md5sum" ]; then
+                local sum=`$md5sum $md5special $basename | sed "s/ .*//"`
+                mv $basename "$TARFILE_LOCATION/$sum-$basename"
+                echo "added md5 sum $sum"
             fi
         fi
     fi
-done
-rm $TARFILE_LOCATION/tmp/*-*
-cd $start_dir
+}
+
+#
+# Download a file from a URL and check its md5 sum to the one that is part of its name.
+#
+function download_and_check ()
+{
+    local URL=$1
+
+    if [ -n "$URL" ]; then
+        local basename=$(basename $URL)
+        if [ -f "$TARFILE_LOCATION/$basename" ]; then
+            echo "$basename is already present"
+        else
+            echo "fetching $basename"
+            $fetch_bin $fetch_args $URL 2>&1 | tee -a $logfile
+
+            if [ $? -ne 0 ]; then
+                echo "download failed"
+                mv $basename ${basename}_broken
+                failed="$failed $i"
+            elif [ -f "$basename" -a -n "$md5sum" ]; then
+                local sum=`$md5sum $md5special $basename | sed "s/ .*//"`
+                local sum_in_name=`echo $basename | sed "s/-.*//"`
+                if [ "$sum" != "$sum_in_name" ]; then
+                    echo checksum failure for $basename 2>&1 | tee -a $logfile
+                    failed="$failed $basename"
+                    mv $basename ${basename}_broken
+                fi
+                mv $basename "$TARFILE_LOCATION/$basename"
+            fi
+        fi
+    fi
+}
+
+echo "downloading tar balls to $TARFILE_LOCATION"
+
+while read line ; do
+    # Remove leading and trailing space and comments
+    line=`echo $line | sed 's/^[[:space:]]*//;s/[[:space:]]*$//;s/[[:space:]]*#.*$//'`
+    case $line in
+        # Ignore empty lines.
+        '')
+            ;;
+
+        # When a URL ends in a / then it is taken as a partial URL
+        # to which the following lines will be appended.
+        ftp:\/\/*\/ | http:\/\/*\/)
+            UrlHead=$line
+            echo $UrlHead
+            ;;
+
+        # A full URL represents a single file which is downloaded.
+        ftp:\/\/* | http:\/\/*)
+            download $line
+            ;;
+
+        # Any other line is interpreted as the second part of a partial URL.
+        # It is appended to UrlHead and then downloaded.
+        *)
+            download_and_check $UrlHead$line
+            ;;
+    esac
+done < "$file_list_name"
+
+
+# Special handling of dmake
+if [ -n "$DMAKE_URL" -a ! -x "$SOLARENV/$OUTPATH/bin/dmake$EXEEXT" ]; then
+    download $DMAKE_URL
+fi
+
+# Special handling of epm
+if [ -n "$EPM_URL" -a ! -x "$SOLARENV/$OUTPATH/bin/epm$EXEEXT" ]; then
+    download $EPM_URL
+fi
+
 
 if [ ! -z "$failed" ]; then
     echo
