@@ -55,6 +55,19 @@ Directory gid_Test_Dir_Brand_Root
   #endif
     Styles = (OFFICEDIRECTORY,ISINSTALLLOCATION,CREATE);
 End
+
+Directory gid_Test_Dir_Bundle
+    ParentID = PD_PROGDIR;
+    HostName = "%PRODUCTNAME.app";
+    LangPackHostName = "%PRODUCTNAME Language Pack.app";
+    PatchHostName = "%PRODUCTNAME Patch.app";
+End
+
+Directory gid_Test_Dir_Bundle_Contents
+    ParentID = gid_Test_Dir_Bundle;
+    HostName = "Contents";
+    Styles = (OFFICEDIRECTORY);
+End
 #endif
 
 Directory gid_Test_Brand_Dir_Program
