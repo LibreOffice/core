@@ -3240,7 +3240,10 @@ static Rectangle NWGetListBoxButtonRect( int nScreen,
 
         case PART_SUB_EDIT:
             aPartSize.Width() = aAreaRect.GetWidth() - nButtonAreaWidth - xthickness;
-            aPartPos.X() = aAreaRect.Left() + xthickness;
+            if( Application::GetSettings().GetLayoutRTL() )
+                aPartPos.X() = aAreaRect.Left() + nButtonAreaWidth;
+            else
+                aPartPos.X() = aAreaRect.Left() + xthickness;
             break;
 
         default:
@@ -3274,6 +3277,7 @@ static Rectangle NWGetListBoxIndicatorRect( int nScreen,
     gint            width = 13;    // GTK+ default
     gint            height = 13;    // GTK+ default
     gint            right = 5;    // GTK+ default
+    gint            x;
 
     NWEnsureGTKOptionMenu( nScreen );
 
@@ -3291,8 +3295,11 @@ static Rectangle NWGetListBoxIndicatorRect( int nScreen,
         right = pIndicatorSpacing->right;
 
     aIndicatorRect.SetSize( Size( width, height ) );
-    aIndicatorRect.SetPos( Point( aAreaRect.Left() + aAreaRect.GetWidth() - width - right - gWidgetData[nScreen].gOptionMenuWidget->style->xthickness,
-                                  aAreaRect.Top() + ((aAreaRect.GetHeight() - height) / 2) ) );
+    if( Application::GetSettings().GetLayoutRTL() )
+        x = aAreaRect.Left() + right;
+    else
+        x = aAreaRect.Left() + aAreaRect.GetWidth() - width - right - gWidgetData[nScreen].gOptionMenuWidget->style->xthickness;
+    aIndicatorRect.SetPos( Point( x, aAreaRect.Top() + ((aAreaRect.GetHeight() - height) / 2) ) );
 
     // If height is odd, move the indicator down 1 pixel
     if ( aIndicatorRect.GetHeight() % 2 )
