@@ -89,6 +89,7 @@ ToolboxController::ToolboxController(
     const ::rtl::OUString& aCommandURL ) :
     OPropertyContainer(GetBroadcastHelper())
     ,   OWeakObject()
+    ,   m_bSupportVisible(sal_False)
     ,   m_bInitialized( sal_False )
     ,   m_bDisposed( sal_False )
     ,   m_xFrame(xFrame)
@@ -116,6 +117,7 @@ ToolboxController::ToolboxController(
 ToolboxController::ToolboxController() :
     OPropertyContainer(GetBroadcastHelper())
     ,   OWeakObject()
+    ,   m_bSupportVisible(sal_False)
     ,   m_bInitialized( sal_False )
     ,   m_bDisposed( sal_False )
     ,   m_aListenerContainer( m_aMutex )
