@@ -700,15 +700,14 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
         it = FindPositionInLineList(pLineList, position->CaretPos);
 
     //If there's no selected nodes, create a place node
+    SmNode *pBodyNode;
     SmCaretPos PosAfterInsert;
     if(pSelectedNodesList->size() == 0) {
-        SmNode* pPlace = new SmPlaceNode();
-        PosAfterInsert = SmCaretPos(pPlace, 1);
-        pSelectedNodesList->push_front(pPlace);
-    }
+        pBodyNode = new SmPlaceNode();
+        PosAfterInsert = SmCaretPos(pBodyNode, 1);
+    } else
+        pBodyNode = SmNodeListParser().Parse(pSelectedNodesList);
 
-    //Parse body nodes
-    SmNode *pBodyNode = SmNodeListParser().Parse(pSelectedNodesList);
     delete pSelectedNodesList;
 
     //Create SmBraceNode
@@ -959,10 +958,11 @@ void SmCursor::InsertFraction() {
         it = FindPositionInLineList(pLineList, position->CaretPos);
 
     //Create pNum, and pDenom
-    if(pSelectedNodesList->size() == 0)
-        pSelectedNodesList->push_front(new SmPlaceNode());
-    SmNode *pNum   = SmNodeListParser().Parse(pSelectedNodesList),
-           *pDenom = new SmPlaceNode();
+    bool bEmptyFraction = pSelectedNodesList->empty();
+    SmNode *pNum = bEmptyFraction
+        ? new SmPlaceNode()
+        : SmNodeListParser().Parse(pSelectedNodesList);
+    SmNode *pDenom = new SmPlaceNode();
     delete pSelectedNodesList;
     pSelectedNodesList = NULL;
 
