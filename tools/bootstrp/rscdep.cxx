@@ -93,7 +93,9 @@ int main( int argc, char** argv )
         strcpy( aBuf, (const char *)argv[i] );
         const sal_Int32 nLength (strlen(aBuf));
 
+#ifdef DEBUG
         printf("option %d is [%s] and has length %d\n", i, aBuf, (int)nLength);
+#endif
 
         if (nLength == 0)
         {
@@ -263,7 +265,10 @@ int main( int argc, char** argv )
 
         for (sal_Int32 nIndex=0; nIndex<=nLastNonOption; ++nIndex)
         {
+
+#ifdef DEBUG
             printf("option at %d is [%s]\n", (int)nIndex, argv[nIndex]);
+#endif
             if (!bSource )
             {
                 aString += ByteString(" " );
