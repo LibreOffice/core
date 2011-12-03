@@ -454,7 +454,7 @@ class Chart2Positioner
 
 public:
     Chart2Positioner(ScDocument* pDoc, const vector<ScTokenRef>& rRefTokens) :
-        mpRefTokens(new vector<ScTokenRef>(rRefTokens)),
+        mrRefTokens(rRefTokens),
         mpPositionMap(NULL),
         meGlue(GLUETYPE_NA),
         mpDoc(pDoc),
@@ -491,7 +491,7 @@ private:
     void createPositionMap();
 
 private:
-    shared_ptr< vector<ScTokenRef> >  mpRefTokens;
+    const vector<ScTokenRef>& mrRefTokens;
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     auto_ptr<Chart2PositionMap>             mpPositionMap;
     SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -516,9 +516,9 @@ void Chart2Positioner::glueState()
         return;
 
     mbDummyUpperLeft = false;
-    if (mpRefTokens->size() <= 1)
+    if (mrRefTokens.size() <= 1)
     {
-        const ScTokenRef& p = mpRefTokens->front();
+        const ScTokenRef& p = mrRefTokens.front();
         ScComplexRefData aData;
         if (ScRefTokenHelper::getDoubleRefDataFromToken(aData, p))
         {
@@ -539,13 +539,13 @@ void Chart2Positioner::glueState()
     }
 
     ScComplexRefData aData;
-    ScRefTokenHelper::getDoubleRefDataFromToken(aData, mpRefTokens->front());
+    ScRefTokenHelper::getDoubleRefDataFromToken(aData, mrRefTokens.front());
     mnStartCol = aData.Ref1.nCol;
     mnStartRow = aData.Ref1.nRow;
 
     SCCOL nMaxCols = 0, nEndCol = 0;
     SCROW nMaxRows = 0, nEndRow = 0;
-    for (vector<ScTokenRef>::const_iterator itr = mpRefTokens->begin(), itrEnd = mpRefTokens->end()
+    for (vector<ScTokenRef>::const_iterator itr = mrRefTokens.begin(), itrEnd = mrRefTokens.end()
          ; itr != itrEnd; ++itr)
     {
         ScRefTokenHelper::getDoubleRefDataFromToken(aData, *itr);
@@ -609,7 +609,7 @@ void Chart2Positioner::glueState()
     const sal_uInt8 nGlue = 3;
 
     vector<sal_uInt8> aCellStates(nCR);
-    for (vector<ScTokenRef>::const_iterator itr = mpRefTokens->begin(), itrEnd = mpRefTokens->end();
+    for (vector<ScTokenRef>::const_iterator itr = mrRefTokens.begin(), itrEnd = mrRefTokens.end();
           itr != itrEnd; ++itr)
     {
         ScRefTokenHelper::getDoubleRefDataFromToken(aData, *itr);
@@ -713,7 +713,7 @@ void Chart2Positioner::createPositionMap()
     SAL_WNODEPRECATED_DECLARATIONS_POP
     Table* pCol = NULL;
     SCROW nNoGlueRow = 0;
-    for (vector<ScTokenRef>::const_iterator itr = mpRefTokens->begin(), itrEnd = mpRefTokens->end();
+    for (vector<ScTokenRef>::const_iterator itr = mrRefTokens.begin(), itrEnd = mrRefTokens.end();
           itr != itrEnd; ++itr)
     {
         const ScTokenRef& pToken = *itr;
