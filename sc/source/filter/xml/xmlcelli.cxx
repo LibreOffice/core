@@ -1106,7 +1106,7 @@ void ScXMLTableRowCellContext::EndElement()
                                     pNewCell = new ScFormulaCell( pDoc, aScAddress, pCode, eGrammar, MM_NONE );
                                     delete pCode;
                                 }
-                                else if ( aText[0] == '\'' )
+                                else if ( aText[0] == '\'' && aText.getLength() > 1 )
                                 {
                                     //  for bEnglish, "'" at the beginning is always interpreted as text
                                     //  marker and stripped
