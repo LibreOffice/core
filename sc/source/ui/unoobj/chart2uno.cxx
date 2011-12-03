@@ -443,7 +443,7 @@ vector<ScTokenRef>* Chart2PositionMap::getDataRowRanges(SCROW nRow) const
  * Designed to be a drop-in replacement for ScChartPositioner, in order to
  * handle external references.
  */
-class Chart2Positioner
+class Chart2Positioner : boost::noncopyable
 {
     enum GlueType
     {
