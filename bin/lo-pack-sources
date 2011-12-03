@@ -27,44 +27,6 @@ sub get_config_version($)
     return $version;
 }
 
-# set libreoffice-build version in the given libreoffice-build sources
-sub set_config_version($$)
-{
-    my ($lo_build_dir, $version) = @_;
-    my $configure = "$lo_build_dir/configure.in";
-
-    open (CONFIGURE, "$configure") ||
-        die "can't open \"$configure\" for reading: $!\n";
-
-    my ( $tmp_fh, $tmp_filename ) = tempfile( "$configure.XXXXXX" );
-    if ( !defined $tmp_fh ) {
-        close (CONFIGURE);
-        die "Error: can't create temporary file: \"$configure.XXXXXX\"\n";
-    }
-
-    while (my $line = <CONFIGURE>) {
-        chomp $line;
-
-        if ($line =~ /^(\s*AC_INIT\s*\(\s*libreoffice-build\s*,\s*)([\w\.]*)(\s*\)\s*)$/) {
-            print ${tmp_fh} "$1$version$3\n";
-        } else {
-            print ${tmp_fh} "$line\n";
-        }
-    }
-    close (CONFIGURE);
-    close (${tmp_fh});
-
-    # preserve permissions on target file by applying them to temp file
-    my ( $mode, $uid, $gid ) = ( stat($configure) )[ 2, 4, 5 ];
-    $mode = $mode & 07777;
-
-    chmod $mode, $tmp_filename;
-    chown $uid, $gid, $tmp_filename;
-
-    rename ($tmp_filename, $configure) ||
-        die "Can't rename \"$tmp_filename\" to \"$configure\": $!\n";
-}
-
 # increment the version for a test build:
 #        + add 'a' if the version ended with a number
 #       + bump the letter otherwise
