@@ -179,6 +179,36 @@ $(call gb_LinkTarget__use_expat,$(1),expat_xmlparse)
 endef
 
 
+ifeq ($(SYSTEM_HUNSPELL),YES)
+
+define gb_LinkTarget__use_hunspell
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(HUNSPELL_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(HUNSPELL_LIBS))
+
+endef
+
+else # !SYSTEM_HUNSPELL
+
+define gb_LinkTarget__use_hunspell
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DHUNSPELL_STATIC \
+)
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	-I$(OUTDIR)/inc/hunspell \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(if $(filter WNT,$(OS)),libhunspell.lib,-lhunspell-1.3) \
+)
+
+endef
+
+endif # SYSTEM_HUNSPELL
+
+
 ifeq ($(SYSTEM_LIBXML),YES)
 
 define gb_LinkTarget__use_libxml2
