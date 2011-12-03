@@ -42,11 +42,6 @@ MAJOR_VER=9.1
 TARFILE_NAME=$(EXT_PROJECT_NAME)
 TARFILE_MD5=061a9f17323117c9358ed60f33ecff78
 
-
-# distro-specific builds want to link against a particular mysql library
-# then they do not require mysql-devel package at runtime
-# So put mysql-connector-cpp/driver/nativeapi/binding_config.h into separate patch
-# and enable/disable MYSQLCLIENT_STATIC_BINDING according to the used mysql library
 .IF "$(SYSTEM_POSTGRESQL)" == "YES"
 @all:
     @echo "Using system postgresql..."
