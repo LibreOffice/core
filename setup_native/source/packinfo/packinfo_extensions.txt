@@ -279,7 +279,7 @@ solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01 (Name="C
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-postgresql-sdbc"
 requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01,%BASISPACKAGEPREFIX%PRODUCTVERSION-core02,%BASISPACKAGEPREFIX%PRODUCTVERSION-core03,%BASISPACKAGEPREFIX%PRODUCTVERSION-core04,%BASISPACKAGEPREFIX%PRODUCTVERSION-core05,%BASISPACKAGEPREFIX%PRODUCTVERSION-core06,%BASISPACKAGEPREFIX%PRODUCTVERSION-core07"
 linuxpatchrequires = ""
-copyright = "2008 by Sun Mcrosystems, Inc."
+copyright = "2000-2008 by Sun Microsystems, Inc.; 2011 by Lionel Elie Mamane and other LibreOffice contributors"
 solariscopyright = "solariscopyrightfile"
 vendor = "The Document Foundation"
 description = "PostgreSQL Connector extension for %PRODUCTNAME %PRODUCTVERSION"
