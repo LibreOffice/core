@@ -75,6 +75,10 @@ private:
     const rtl::OUString maErrNameInUse;
     const rtl::OUString maStrInfoDefault;
 
+    //hack to call this dialog from Manage Names
+    rtl::OUString maName;
+    rtl::OUString maScope;
+
     std::map<rtl::OUString, ScRangeName*> maRangeMap;
 
     void CancelPushed();
@@ -106,6 +110,8 @@ public:
 
     virtual void    SetActive();
     virtual sal_Bool    Close();
+
+    void GetNewData( rtl::OUString& rName, rtl::OUString& rScope );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

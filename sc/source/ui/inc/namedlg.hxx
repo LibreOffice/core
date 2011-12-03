@@ -94,6 +94,8 @@ private:
 
     bool mbNeedUpdate;
     bool mbDataChanged;
+    //ugly hack to call DefineNames from ManageNames
+    bool mbCloseWithoutUndo;
 
     typedef boost::ptr_map<rtl::OUString, ScRangeName> RangeNameContainer;
 
@@ -141,7 +143,7 @@ protected:
 public:
                     ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                                ScViewData*      ptrViewData,
-                               const ScAddress& aCursorPos );
+                               const ScAddress& aCursorPos, boost::ptr_map<rtl::OUString, ScRangeName>* pRangeMap = NULL );
     virtual         ~ScNameDlg();
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
@@ -149,6 +151,9 @@ public:
 
     virtual void    SetActive();
     virtual sal_Bool    Close();
+
+    void GetRangeNames(boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap);
+    void SetEntry(const rtl::OUString& rName, const rtl::OUString& rScope);
 
 };
 

@@ -69,6 +69,7 @@
 #include "funcdesc.hxx"
 #include "dpobject.hxx"
 #include "markdata.hxx"
+#include "reffact.hxx"
 
 #include <iostream>
 
@@ -79,6 +80,37 @@ void ScTabViewShell::SetCurRefDlgId( sal_uInt16 nNew )
     //  CurRefDlgId is stored in ScModule to find if a ref dialog is open,
     //  and in the view to identify the view that has opened the dialog
     nCurRefDlgId = nNew;
+}
+
+//ugly hack to call Define Name from Manage Names
+void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialog* pDialog)
+{
+   sal_uInt16 nSlotId = SC_MOD()->GetCurRefDlgId();
+   if (nSlotId == FID_DEFINE_NAME)
+   {
+        mbInSwitch = true;
+        static_cast<ScNameDlg*>(pDialog)->GetRangeNames(maRangeMap);
+        static_cast<ScNameDlg*>(pDialog)->Close();
+        sal_uInt16 nId  = ScNameDefDlgWrapper::GetChildWindowId();
+        SfxViewFrame* pViewFrm = GetViewFrame();
+        SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+
+        SC_MOD()->SetRefDialog( nId, pWnd ? false : sal_True );
+   }
+   else if( nSlotId == FID_ADD_NAME )
+   {
+        static_cast<ScNameDefDlg*>(pDialog)->GetNewData(maName, maScope);
+        static_cast<ScNameDlg*>(pDialog)->Close();
+        sal_uInt16 nId  = ScNameDlgWrapper::GetChildWindowId();
+        SfxViewFrame* pViewFrm = GetViewFrame();
+        SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+
+        SC_MOD()->SetRefDialog( nId, pWnd ? false : sal_True );
+   }
+   else
+   {
+
+   }
 }
 
 SfxModelessDialog* ScTabViewShell::CreateRefDialog(
@@ -110,21 +142,50 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
     switch( nSlotId )
     {
         case FID_DEFINE_NAME:
-        pResult = new ScNameDlg( pB, pCW, pParent, GetViewData(),
-                             ScAddress( GetViewData()->GetCurX(),
-                                        GetViewData()->GetCurY(),
-                                        GetViewData()->GetTabNo() ) );
+        {
+            if (!mbInSwitch)
+            {
+                pResult = new ScNameDlg( pB, pCW, pParent, GetViewData(),
+                                     ScAddress( GetViewData()->GetCurX(),
+                                                GetViewData()->GetCurY(),
+                                                GetViewData()->GetTabNo() ) );
+            }
+            else
+            {
+                pResult = new ScNameDlg( pB, pCW, pParent, GetViewData(),
+                                     ScAddress( GetViewData()->GetCurX(),
+                                                GetViewData()->GetCurY(),
+                                                GetViewData()->GetTabNo() ), &maRangeMap);
+                static_cast<ScNameDlg*>(pResult)->SetEntry( maName, maScope);
+                mbInSwitch = false;
+            }
+        }
         break;
 
         case FID_ADD_NAME:
         {
-            std::cout << "tabvwsh" << std::endl;
-            std::map<rtl::OUString, ScRangeName*> aRangeMap;
-            pDoc->GetRangeNameMap(aRangeMap);
-            pResult = new ScNameDefDlg( pB, pCW, pParent, GetViewData(), aRangeMap,
-                            ScAddress( GetViewData()->GetCurX(),
-                                        GetViewData()->GetCurY(),
-                                        GetViewData()->GetTabNo() ), true );
+            if (!mbInSwitch)
+            {
+                std::map<rtl::OUString, ScRangeName*> aRangeMap;
+                pDoc->GetRangeNameMap(aRangeMap);
+                pResult = new ScNameDefDlg( pB, pCW, pParent, GetViewData(), aRangeMap,
+                                ScAddress( GetViewData()->GetCurX(),
+                                            GetViewData()->GetCurY(),
+                                            GetViewData()->GetTabNo() ), true );
+            }
+            else
+            {
+                std::map<rtl::OUString, ScRangeName*> aRangeMap;
+                for (boost::ptr_map<rtl::OUString, ScRangeName>::iterator itr = maRangeMap.begin();
+                        itr != maRangeMap.end(); ++itr)
+                {
+                    aRangeMap.insert(std::pair<rtl::OUString, ScRangeName*>(itr->first, itr->second));
+                }
+                pResult = new ScNameDefDlg( pB, pCW, pParent, GetViewData(), aRangeMap,
+                                ScAddress( GetViewData()->GetCurX(),
+                                            GetViewData()->GetCurY(),
+                                            GetViewData()->GetTabNo() ), false );
+            }
         }
         break;
 

@@ -40,6 +40,8 @@
 #include "shellids.hxx"
 #include "tabprotection.hxx" // for ScPasswordHash
 
+#include <boost/ptr_container/ptr_map.hpp>
+
 class FmFormShell;
 class SbxObject;
 class SdrOle2Obj;
@@ -66,6 +68,7 @@ class ScChartShell;
 class ScPageBreakShell;
 class ScDPObject;
 class ScNavigatorSettings;
+class ScRangeName;
 
 struct ScHeaderFieldData;
 
@@ -181,6 +184,12 @@ private:
 
     static const int        MASTERENUMCOMMANDS = 6;
     String                  aCurrShapeEnumCommand[ MASTERENUMCOMMANDS ];
+
+    // ugly hack for Add button in ScNameDlg
+    boost::ptr_map<rtl::OUString, ScRangeName> maRangeMap;
+    bool    mbInSwitch;
+    rtl::OUString   maName;
+    rtl::OUString   maScope;
 
 private:
     void    Construct( sal_uInt8 nForceDesignMode = SC_FORCEMODE_NONE );
@@ -416,6 +425,9 @@ public:
     bool    ExecuteRetypePassDlg(ScPasswordHash eDesiredHash);
 
     using ScTabView::ShowCursor;
+
+    // ugly hack to call Define Names from Manage Names
+    void    SwitchBetweenRefDialogs(SfxModelessDialog* pDialog);
 };
 
 //==================================================================

@@ -37,6 +37,7 @@
 #include "rangenam.hxx"
 #include "reffact.hxx"
 #include "undorangename.hxx"
+#include "tabvwsh.hxx"
 
 // defines -------------------------------------------------------------------
 
@@ -121,7 +122,13 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParen
 
 void ScNameDefDlg::CancelPushed()
 {
-    Close();
+    if (mbUndo)
+        Close();
+    else
+    {
+        ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
+        pViewSh->SwitchBetweenRefDialogs(this);
+    }
 }
 
 bool ScNameDefDlg::IsFormulaValid()
@@ -254,9 +261,16 @@ void ScNameDefDlg::AddPushed()
                     // call invalidates the stream
                     if (nTab != -1)
                         mpDoc->SetStreamValid(nTab, false);
+                    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
+                    Close();
                 }
-                SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
-                Close();
+                else
+                {
+                    maName = aName;
+                    maScope = aScope;
+                    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
+                    pViewSh->SwitchBetweenRefDialogs(this);
+                }
             }
             else
             {
@@ -267,6 +281,12 @@ void ScNameDefDlg::AddPushed()
             }
         }
     }
+}
+
+void ScNameDefDlg::GetNewData(rtl::OUString& rName, rtl::OUString& rScope)
+{
+    rName = maName;
+    rScope = maScope;
 }
 
 sal_Bool ScNameDefDlg::IsRefInputMode() const

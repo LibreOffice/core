@@ -42,6 +42,7 @@
 #include "namedlg.hrc"
 #include "namedlg.hxx"
 #include "viewdata.hxx"
+#include "tabvwsh.hxx"
 
 #include "globalnames.hxx"
 
@@ -68,7 +69,7 @@
 
 ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         ScViewData*       ptrViewData,
-        const ScAddress&  aCursorPos )
+        const ScAddress&  aCursorPos, boost::ptr_map<rtl::OUString, ScRangeName>* pRangeMap  )
 
 :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_NAMES ),
     //
@@ -107,8 +108,24 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     mpDoc            ( ptrViewData->GetDocument() ),
     maCursorPos      ( aCursorPos ),
     mbNeedUpdate     ( true ),
-    mbDataChanged    ( false )
+    mbDataChanged    ( false ),
+    mbCloseWithoutUndo( false )
 {
+    if (!pRangeMap)
+    {
+        std::map<rtl::OUString, ScRangeName*> aRangeMap;
+        mpDoc->GetRangeNameMap(aRangeMap);
+        std::map<rtl::OUString, ScRangeName*>::iterator itr = aRangeMap.begin(), itrEnd = aRangeMap.end();
+        for (; itr != itrEnd; ++itr)
+        {
+            rtl::OUString aTemp(itr->first);
+            maRangeMap.insert(aTemp, new ScRangeName(*itr->second));
+        }
+    }
+    else
+    {
+        maRangeMap.swap(*pRangeMap);
+    }
     Init();
     FreeResource();
 }
@@ -125,14 +142,7 @@ void ScNameDlg::Init()
     OSL_ENSURE( mpViewData && mpDoc, "ViewData oder Document nicht gefunden!" );
 
     //init UI
-    std::map<rtl::OUString, ScRangeName*> aRangeMap;
-    mpDoc->GetRangeNameMap(aRangeMap);
-    std::map<rtl::OUString, ScRangeName*>::iterator itr = aRangeMap.begin(), itrEnd = aRangeMap.end();
-    for (; itr != itrEnd; ++itr)
-    {
-        rtl::OUString aTemp(itr->first);
-        maRangeMap.insert(aTemp, new ScRangeName(*itr->second));
-    }
+
 
     mpRangeManagerTable = new ScRangeManagerTable(&maNameMgrCtrl, maRangeMap);
     mpRangeManagerTable->SetSelectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
@@ -178,7 +188,7 @@ void ScNameDlg::Init()
     CheckForEmptyTable();
 
     //TODO: fix the Add Button
-    maBtnAdd.Disable();
+    //maBtnAdd.Disable();
 }
 
 sal_Bool ScNameDlg::IsRefInputMode() const
@@ -207,7 +217,7 @@ void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 sal_Bool ScNameDlg::Close()
 {
-    if (mbDataChanged)
+    if (mbDataChanged && !mbCloseWithoutUndo)
     {
         ScDocFunc aFunc(*mpViewData->GetDocShell());
         aFunc.ModifyAllRangeNames(maRangeMap);
@@ -345,7 +355,16 @@ void ScNameDlg::ShowOptions(const ScRangeNameLine& rLine)
 
 bool ScNameDlg::AddPushed()
 {
+    mbCloseWithoutUndo = true;
+    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
+    pViewSh->SwitchBetweenRefDialogs(this);
     return false;
+}
+
+void ScNameDlg::SetEntry(const rtl::OUString& rName, const rtl::OUString& rScope)
+{
+    if (!rName.isEmpty())
+        mbDataChanged = true;
 }
 
 void ScNameDlg::RemovePushed()
@@ -509,6 +528,11 @@ void ScNameDlg::MorePushed()
     MoveWindow(maBtnOk, nPixel);
     MoveWindow(maBtnCancel, nPixel);
     MoveWindow(maFlDiv, nPixel);
+}
+
+void ScNameDlg::GetRangeNames(boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap)
+{
+    maRangeMap.swap(rRangeMap);
 }
 
 IMPL_LINK( ScNameDlg, OkBtnHdl, void *, EMPTYARG )
