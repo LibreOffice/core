@@ -209,6 +209,18 @@ std::vector<ScRangeNameLine> ScRangeManagerTable::GetSelectedEntries()
     return aSelectedEntries;
 }
 
+void ScRangeManagerTable::SetEntry(const ScRangeNameLine& rLine)
+{
+    for (SvLBoxEntry* pEntry = First(); pEntry; pEntry = Next(pEntry))
+    {
+        if (rLine.aName == rtl::OUString(GetEntryText(pEntry, 0))
+                && rLine.aScope == rtl::OUString(GetEntryText(pEntry, 2)))
+        {
+            SetCurEntry(pEntry);
+        }
+    }
+}
+
 namespace {
 
 //ensure that the minimum column size is respected

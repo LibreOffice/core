@@ -364,7 +364,13 @@ bool ScNameDlg::AddPushed()
 void ScNameDlg::SetEntry(const rtl::OUString& rName, const rtl::OUString& rScope)
 {
     if (!rName.isEmpty())
+    {
         mbDataChanged = true;
+        ScRangeNameLine aLine;
+        aLine.aName = rName;
+        aLine.aScope = rScope;
+        mpRangeManagerTable->SetEntry(aLine);
+    }
 }
 
 void ScNameDlg::RemovePushed()

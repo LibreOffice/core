@@ -83,6 +83,7 @@ public:
 
     void addEntry( const ScRangeNameLine& rLine );
     void DeleteSelectedEntries();
+    void SetEntry( const ScRangeNameLine& rLine );
 
     void GetCurrentLine(ScRangeNameLine& rLine);
     bool IsMultiSelection();
