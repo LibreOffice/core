@@ -3037,14 +3037,6 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                 case SID_RECORDMACRO :
                 {
                     SvtMiscOptions aMiscOptions;
-                    const char* pName = GetObjectShell()->GetFactory().GetShortName();
-                    if ( !aMiscOptions.IsExperimentalMode() ||
-                         ( strcmp(pName,"swriter") && strcmp(pName,"scalc") ) )
-                    {
-                        rSet.DisableItem( nWhich );
-                        rSet.Put(SfxVisibilityItem(nWhich, sal_False));
-                        break;
-                    }
 
                     ::rtl::OUString sProperty(RTL_CONSTASCII_USTRINGPARAM("DispatchRecorderSupplier"));
                     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
@@ -3063,13 +3055,6 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                 case SID_STOP_RECORDING :
                 {
                     SvtMiscOptions aMiscOptions;
-                    const char* pName = GetObjectShell()->GetFactory().GetShortName();
-                    if ( !aMiscOptions.IsExperimentalMode() ||
-                         ( strcmp(pName,"swriter") && strcmp(pName,"scalc") ) )
-                    {
-                        rSet.DisableItem( nWhich );
-                        break;
-                    }
 
                     ::rtl::OUString sProperty(RTL_CONSTASCII_USTRINGPARAM("DispatchRecorderSupplier"));
                     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
