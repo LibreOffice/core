@@ -59,6 +59,8 @@
 #include <list>
 #include <rtl/math.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 SC_SIMPLE_SERVICE_INFO( ScChart2DataProvider, "ScChart2DataProvider",
         "com.sun.star.chart2.data.DataProvider")
 SC_SIMPLE_SERVICE_INFO( ScChart2DataSource, "ScChart2DataSource",
@@ -492,9 +494,7 @@ private:
 
 private:
     const vector<ScTokenRef>& mrRefTokens;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    auto_ptr<Chart2PositionMap>             mpPositionMap;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    boost::scoped_ptr<Chart2PositionMap> mpPositionMap;
     GlueType    meGlue;
     SCCOL       mnStartCol;
     SCROW       mnStartRow;
