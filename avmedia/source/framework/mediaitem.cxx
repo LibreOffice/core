@@ -422,7 +422,7 @@ lcl_CreateStream(uno::Reference<embed::XStorage> const& xStorage,
         do
         {
             ++count;
-            filename = basename + ::rtl::OUString::valueOf(count) + suffix;
+            filename = basename + ::rtl::OUString::valueOf(static_cast<sal_Int32>(count)) + suffix;
         }
         while (xStorage->hasByName(filename));
     }
@@ -496,7 +496,7 @@ bool EmbedMedia(uno::Reference<frame::XModel> const& xModel,
         o_rEmbeddedURL = buf.makeStringAndClear();
         return true;
     }
-    catch (uno::Exception const& e)
+    catch (uno::Exception const&)
     {
         SAL_WARN("avmedia",
                 "Exception while trying to embed media");
