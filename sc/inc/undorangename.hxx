@@ -54,7 +54,7 @@ public:
     virtual String GetComment() const;
 
 private:
-    void DoChange(const boost::ptr_map<rtl::OUString, ScRangeName*>& rNames);
+    void DoChange(const boost::ptr_map<rtl::OUString, ScRangeName>& rNames);
 
 private:
     boost::ptr_map<rtl::OUString, ScRangeName> maOldNames;

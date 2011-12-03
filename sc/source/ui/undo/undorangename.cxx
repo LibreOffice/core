@@ -92,7 +92,7 @@ String ScUndoAllRangeNames::GetComment() const
     return ScGlobal::GetRscString(STR_UNDO_RANGENAMES);
 }
 
-void ScUndoAllRangeNames::DoChange(const boost::ptr_map<rtl::OUString, ScRangeName*>& rNames)
+void ScUndoAllRangeNames::DoChange(const boost::ptr_map<rtl::OUString, ScRangeName>& rNames)
 {
     ScDocument& rDoc = *pDocShell->GetDocument();
 
