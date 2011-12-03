@@ -209,6 +209,45 @@ endef
 endif # SYSTEM_HUNSPELL
 
 
+ifeq ($(SYSTEM_LIBEXTTEXTCAT),YES)
+
+define gb_LinkTarget__use_libexttextcat
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(LIBEXTTEXTCAT_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(LIBEXTTEXTCAT_LIBS))
+
+endef
+
+else # !SYSTEM_LIBEXTTEXTCAT
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
+	exttextcat \
+))
+else
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
+	exttextcat \
+))
+endif
+
+define gb_LinkTarget__use_libexttextcat
+ifeq ($(OS),WNT)
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	exttextcat \
+)
+else
+$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+	exttextcat \
+)
+endif
+
+endef
+
+endif # SYSTEM_LIBEXTTEXTCAT
+
+
 ifeq ($(SYSTEM_LIBXML),YES)
 
 define gb_LinkTarget__use_libxml2

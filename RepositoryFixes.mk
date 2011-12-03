@@ -49,6 +49,7 @@ gb_Library_DLLFILENAMES := $(patsubst ucb:libucb%,ucb:libucb1%,$(gb_Library_DLLF
 gb_Library_DLLFILENAMES := $(patsubst ucpfile:libucpfile%,ucpfile:libucpfile1%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
 
+gb_Library_FILENAMES := $(patsubst exttextcat:libexttextcat%,exttextcat:libilibexttextcat%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst sb:isb%,sb:basic%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst sfx:isfx%,sfx:sfx%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst svt:isvt%,svt:svtool%,$(gb_Library_FILENAMES))
