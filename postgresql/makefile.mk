@@ -64,9 +64,10 @@ BUILD_ACTION = \
 			  --bindir=/usr/lib/postgresql/$(MAJOR_VER)/bin \
 			  --libdir=/usr/lib/ \
 			  --includedir=/usr/include/postgresql/ \
-	 && make -C src/backend ../../src/include/utils/errcodes.h ../../src/include/utils/fmgroids.h \
-	 && make -C src/include DESTDIR="../../../../../" install \
-	 && make $(MAKE_SILENT) -j$(GMAKE_MODULE_PARALLELISM) -C src/interfaces/libpq DESTDIR="../../../../../../" install
+	 && DESTDIR="$(SRC_ROOT)/$(PRJNAME)/$(INPATH)/" \
+	 && export DESTDIR \
+	 && make $(MAKE_SILENT) -j$(GMAKE_MODULE_PARALLELISM) -C src/interfaces/libpq install \
+	 && ./config/install-sh -c -m 644 src/include/postgres_ext.h "$${{DESTDIR}}/usr/include/postgresql/"
 
 # --- Targets ------------------------------------------------------
 
