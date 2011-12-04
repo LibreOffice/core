@@ -32,6 +32,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,sc_cellrangesbase))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_cellrangesbase, \
     sc/qa/extras/xcellrangesquery \
+    sc/qa/extras/cellproperties \
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,sc_cellrangesbase, \
