@@ -35,6 +35,6 @@ $(eval $(call gb_WinResTarget_add_dependency,quickstart/src,\
     sysui/desktop/icons/main_app.ico \
 ))
 
-$(eval $(call gb_WinResTarget_add_file,quickstart/src,desktop/win32/source/QuickStart/OOQuickStart))
+$(eval $(call gb_WinResTarget_add_file,quickstart/src,desktop/win32/source/QuickStart/QuickStart))
 
 # vim: set ts=4 sw=4 et:
