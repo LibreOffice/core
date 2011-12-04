@@ -2058,7 +2058,7 @@ sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& r
     {
         // the shutdown icon sits in the systray and allows the user to keep
         // the office instance running for quicker restart
-        // this will only be activated if -quickstart was specified on cmdline
+        // this will only be activated if --quickstart was specified on cmdline
         RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) createInstance com.sun.star.office.Quickstart" );
 
         sal_Bool bQuickstart = shouldLaunchQuickstart();

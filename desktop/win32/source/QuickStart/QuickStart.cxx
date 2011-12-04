@@ -48,7 +48,6 @@ bool launchSoffice( )
 {
     if ( !SofficeRuns() )
     {
-        // UINT ret = WinExec( "h:\\office60.630b\\program\\swriter.exe -bean", SW_SHOW );
         char filename[_MAX_PATH + 1];
 
         filename[_MAX_PATH] = 0;
@@ -62,7 +61,7 @@ bool launchSoffice( )
         char imagename[_MAX_PATH + 1];
 
         imagename[_MAX_PATH] = 0;
-        _snprintf(imagename, _MAX_PATH, "\"%s\" -quickstart", filename );
+        _snprintf(imagename, _MAX_PATH, "\"%s\" --quickstart", filename );
 
         UINT ret = WinExec( imagename, SW_SHOW );
         if ( ret < 32 )
@@ -124,11 +123,11 @@ int APIENTRY WinMain(HINSTANCE /*hInstance*/,
                      LPSTR     /*lpCmdLine*/,
                      int       /*nCmdShow*/)
 {
-    // Look for -killtray argument
+    // Look for --killtray argument
 
     for ( int i = 1; i < __argc; i++ )
     {
-        if ( 0 == strcmp( __argv[i], "-killtray" ) )
+        if ( 0 == strcmp( __argv[i], "--killtray" ) )
         {
             HWND    hwndTray = FindWindow( LISTENER_WINDOWCLASS, NULL );
 
