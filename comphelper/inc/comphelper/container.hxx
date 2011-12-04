@@ -41,7 +41,7 @@ namespace comphelper
 //========================================================================
 //= IndexAccessIterator
 //========================================================================
-/** ein Iterator, der von einem XIndexAccess ausgehend alle Elemente durchiteriert (pre-order)
+/** an iterator that iterates through all elements, starting from an XIndexAccess (pre-order)
 */
 class COMPHELPER_DLLPUBLIC IndexAccessIterator
 {
@@ -49,13 +49,12 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>    m_xStartingPoint;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>    m_xCurrentObject;
-        // The actual object
+        // The current object
     ::std::vector<sal_Int32>        m_arrChildIndizies;
 
-        // Actually, as I move through this tree, there are elements but NO
-        // GetNextSibling, so I have to remember where each child
-        // is in relation to it's parent.  This is the path from the
-        // root node to m_xCurrentObject
+        // I'm moving through a tree, but its elements have no GetNextSibling,
+        // so I have to remember where each child is in relation to its parent.
+        // That is the path from the root node to m_xCurrentObject
 
     ::rtl::OUString     m_ustrProperty;
         // The Name of the requested property
@@ -72,11 +71,11 @@ public:
 protected:
     virtual sal_Bool ShouldHandleElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& /*rElement*/) { return sal_True; }
 
-        // So we can exclude certain elements, which are expected
-        // if this returns sal_True. If so, this element will be returned,
-        // which also allows us to return additional information.
+        // This can be used to exclude certain elements; elements for which
+        // this function returns sal_True will be simply skipped.
+        // If this element is returned from Next(), then one can get
+        // here get a little more information on the element.
         // That's why this method is not const.
-
     virtual sal_Bool ShouldStepInto(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& /*xContainer*/) const { return sal_True; }
 };
 
