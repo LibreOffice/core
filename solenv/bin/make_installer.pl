@@ -2199,7 +2199,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         }
 
         # Creating transforms, if the installation set has more than one language
-        # renaming the msi database and generating the setup.ini file
+        # renaming the msi database
 
         my $defaultlanguage = installer::languages::get_default_language($languagesarrayref);
 

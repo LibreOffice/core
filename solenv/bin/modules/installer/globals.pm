@@ -223,7 +223,6 @@ BEGIN
     @linuxlinks = ();
     @linkrpms = ();
     $archiveformat = "";
-    $minorupgradekey = "";
     $updatelastsequence = 0;
     $updatesequencecounter = 0;
     $updatedatabase = 0;
