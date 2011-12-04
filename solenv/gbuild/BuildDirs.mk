@@ -35,8 +35,17 @@ ifeq ($(strip $(SOLARENV)),)
 $(error SOLARENV variable is empty, no environment set, aborting)
 endif
 
-# HACK
-# unixify windoze paths
+# The entire gbuild operates in unix paths, and then when calling the
+# native tools, converts them back to the Windows native paths.
+#
+# The path overwriting below is EVIL, because after the recent changes when
+# every module (even build.pl-based) is routed through gbuild, the modules
+# using build.pl-based build will get OUTDIR in the cygwin format.
+#
+# To undo this, we explicitly set these vars to native Windows paths in
+# build.pl again, otherwise we would have potentially different behavior in
+# build.pl-based modules when you build them from the toplevel (using make
+# all), and from the module itself (using cd module ; build )
 ifeq ($(OS_FOR_BUILD),WNT)
 override WORKDIR := $(shell cygpath -u $(WORKDIR))
 override OUTDIR := $(shell cygpath -u $(OUTDIR))
