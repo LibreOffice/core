@@ -524,7 +524,6 @@ void SAL_CALL ODatabaseMetaDataResultSet::afterLast(  ) throw(SQLException, Runt
 
     if(last())
         next();
-    m_bEOF = sal_True;
 }
 // -------------------------------------------------------------------------
 
@@ -546,6 +545,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::first(  ) throw(SQLException, Runt
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
 
+    m_bEOF = sal_False;
 
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_FIRST,0);
     OTools::ThrowException(m_pConnection,m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
@@ -565,7 +565,10 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::last(  ) throw(SQLException, Runti
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_LAST,0);
     OTools::ThrowException(m_pConnection,m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     // here I know definitely that I stand on the last record
-    return (m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO);
+    sal_Bool bRet = ( m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO );
+    if( bRet )
+        m_bEOF = sal_True;
+    return bRet;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
@@ -574,6 +577,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 row ) throw(SQ
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
 
+    m_bEOF = sal_False;
 
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_ABSOLUTE,row);
     OTools::ThrowException(m_pConnection,m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
@@ -589,6 +593,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::relative( sal_Int32 row ) throw(SQ
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
 
+    m_bEOF = sal_False;
 
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_RELATIVE,row);
     OTools::ThrowException(m_pConnection,m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
@@ -604,12 +609,15 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::previous(  ) throw(SQLException, R
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
 
+    m_bEOF = sal_False;
 
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_PRIOR,0);
     OTools::ThrowException(m_pConnection,m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     sal_Bool bRet = m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
     if(bRet)
         --m_nRowPos;
+    else if ( m_nCurrentFetchState == SQL_NO_DATA )
+        m_nRowPos = 0;
     return bRet;
 }
 // -------------------------------------------------------------------------
@@ -666,11 +674,16 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::next(  ) throw(SQLException, Runti
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
 
+    m_bEOF = sal_False;
 
+    SQLRETURN nOldFetchStatus = m_nCurrentFetchState;
     //  m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_NEXT,0);
     m_nCurrentFetchState = N3SQLFetch(m_aStatementHandle);
     OTools::ThrowException(m_pConnection,m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
-    return m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
+    sal_Bool bRet = m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
+    if(bRet || ( m_nCurrentFetchState == SQL_NO_DATA && nOldFetchStatus != SQL_NO_DATA ) )
+        ++m_nRowPos;
+    return bRet;
 }
 // -------------------------------------------------------------------------
 
