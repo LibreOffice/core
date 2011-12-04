@@ -76,12 +76,9 @@ class OutputDevice;
 #define BUTTON_DRAW_DISABLED                ((sal_uInt16)0x0080)
 #define BUTTON_DRAW_HIGHLIGHT               ((sal_uInt16)0x0100)
 #define BUTTON_DRAW_FLAT                    ((sal_uInt16)0x0200)
-#define BUTTON_DRAW_NOTOPLIGHTBORDER        ((sal_uInt16)0x0400)
-#define BUTTON_DRAW_NOBOTTOMSHADOWBORDER    ((sal_uInt16)0x0800)
 #define BUTTON_DRAW_NOLEFTLIGHTBORDER       ((sal_uInt16)0x1000)
 #define BUTTON_DRAW_NOTEXT                  ((sal_uInt16)0x2000)
-#define BUTTON_DRAW_NOIMAGE             ((sal_uInt16)0x4000)
-#define BUTTON_DRAW_NODRAW                  ((sal_uInt16)0x8000)
+#define BUTTON_DRAW_NOIMAGE                 ((sal_uInt16)0x4000)
 
 // ------------------
 // - DecorationView -

@@ -589,22 +589,6 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
         }
         else
         {
-            if ( nStyle & BUTTON_DRAW_NOTOPLIGHTBORDER )
-            {
-                pDev->SetLineColor( rStyleSettings.GetLightBorderColor() );
-                pDev->DrawLine( Point( aFillRect.Left(), aFillRect.Top()),
-                                Point( aFillRect.Right(), aFillRect.Top() ) );
-                ++aFillRect.Top();
-            }
-            if ( (( (nStyle & BUTTON_DRAW_NOBOTTOMSHADOWBORDER) | BUTTON_DRAW_FLAT) == (BUTTON_DRAW_NOBOTTOMSHADOWBORDER | BUTTON_DRAW_FLAT)) &&
-                    !(nStyle & BUTTON_DRAW_HIGHLIGHT) )
-            {
-                pDev->SetLineColor( rStyleSettings.GetDarkShadowColor() );
-                pDev->DrawLine( Point( aFillRect.Left(), aFillRect.Bottom() ),
-                                Point( aFillRect.Right(), aFillRect.Bottom() ) );
-                --aFillRect.Bottom();
-            }
-
             if ( nStyle & BUTTON_DRAW_NOLIGHTBORDER )
                 aColor1 = rStyleSettings.GetLightBorderColor();
             else
@@ -1024,14 +1008,11 @@ Rectangle DecorationView::DrawButton( const Rectangle& rRect, sal_uInt16 nStyle 
         mpOutDev->EnableMapMode( false );
     }
 
-    if ( !(nStyle & BUTTON_DRAW_NODRAW) )
-    {
-        const Color maOldLineColor = mpOutDev->GetLineColor();
-        const Color maOldFillColor = mpOutDev->GetFillColor();
-        ImplDrawButton( mpOutDev, aRect, nStyle );
-        mpOutDev->SetLineColor( maOldLineColor );
-        mpOutDev->SetFillColor( maOldFillColor );
-    }
+    const Color maOldLineColor = mpOutDev->GetLineColor();
+    const Color maOldFillColor = mpOutDev->GetFillColor();
+    ImplDrawButton( mpOutDev, aRect, nStyle );
+    mpOutDev->SetLineColor( maOldLineColor );
+    mpOutDev->SetFillColor( maOldFillColor );
 
     // Ein Border freilassen, der jedoch bei Default-Darstellung
     // mitbenutzt wird
