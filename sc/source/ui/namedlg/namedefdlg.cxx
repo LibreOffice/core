@@ -164,14 +164,17 @@ bool ScNameDefDlg::IsNameValid()
         pRangeName = maRangeMap.find(aScope)->second;
     }
 
+    maFtInfo.SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
     if (!ScRangeData::IsNameValid( aName, mpDoc ))
     {
+        maFtInfo.SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
         maFtInfo.SetText(maErrInvalidNameStr);
         maBtnAdd.Disable();
         return false;
     }
     else if (pRangeName->findByUpperName(ScGlobal::pCharClass->upper(aName)))
     {
+        maFtInfo.SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
         maFtInfo.SetText(maErrNameInUse);
         maBtnAdd.Disable();
         return false;
@@ -179,6 +182,7 @@ bool ScNameDefDlg::IsNameValid()
 
     if (!IsFormulaValid())
     {
+        maFtInfo.SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
         maBtnAdd.Disable();
         return false;
     }

@@ -142,7 +142,7 @@ void ScNameDlg::Init()
     OSL_ENSURE( mpViewData && mpDoc, "ViewData oder Document nicht gefunden!" );
 
     //init UI
-
+    maFtInfo.SetStyle(WB_VCENTER);
 
     mpRangeManagerTable = new ScRangeManagerTable(&maNameMgrCtrl, maRangeMap);
     mpRangeManagerTable->SetSelectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
@@ -288,17 +288,16 @@ bool ScNameDlg::IsNameValid()
 
     if (!ScRangeData::IsNameValid( aName, mpDoc ))
     {
-        maEdName.SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
+        maFtInfo.SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
         maFtInfo.SetText(maErrInvalidNameStr);
         return false;
     }
     else if (pRangeName && pRangeName->findByUpperName(ScGlobal::pCharClass->upper(aName)))
     {
-        maEdName.SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
+        maFtInfo.SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
         maFtInfo.SetText(maErrNameInUse);
         return false;
     }
-    maEdName.SetControlBackground(GetSettings().GetStyleSettings().GetFieldColor());
     maFtInfo.SetText( maStrInfoDefault );
     return true;
 }
@@ -310,6 +309,7 @@ bool ScNameDlg::IsFormulaValid()
     ScTokenArray* pCode = aComp.CompileString(maEdAssign.GetText());
     if (pCode->GetCodeError())
     {
+        maFtInfo.SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
         delete pCode;
         return false;
     }
@@ -393,21 +393,22 @@ void ScNameDlg::RemovePushed()
 
 void ScNameDlg::NameModified()
 {
-    if (!IsFormulaValid())
-    {
-        //TODO: implement an info text
-        return;
-    }
-
     ScRangeNameLine aLine;
     mpRangeManagerTable->GetCurrentLine(aLine);
     rtl::OUString aOldName = aLine.aName;
     rtl::OUString aNewName = maEdName.GetText();
     aNewName = aNewName.trim();
+    maFtInfo.SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
     if (aNewName != aOldName)
     {
         if (!IsNameValid())
             return;
+    }
+
+    if (!IsFormulaValid())
+    {
+        //TODO: implement an info text
+        return;
     }
 
     rtl::OUString aOldScope = aLine.aScope;

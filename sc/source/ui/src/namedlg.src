@@ -171,8 +171,8 @@ ModelessDialog RID_SCDLG_NAMES
 
     FixedText FT_INFO
     {
-        Pos = MAP_APPFONT( 5, 127 );
-        Size = MAP_APPFONT( 210, 15 );
+        Pos = MAP_APPFONT( 5, 125 );
+        Size = MAP_APPFONT( 210, 12 );
         TabStop = FALSE;
     };
 
