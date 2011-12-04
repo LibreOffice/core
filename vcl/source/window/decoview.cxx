@@ -481,6 +481,18 @@ void ImplDrawDPILineRect( OutputDevice *const pDev, Rectangle& rRect,
 }
 
 
+void ImplDraw2ColorFrame( OutputDevice *const pDev, const Rectangle& rRect,
+                          const Color& rLeftTopColor, const Color& rRightBottomColor )
+{
+    pDev->SetFillColor( rLeftTopColor );
+    pDev->DrawRect( Rectangle( rRect.TopLeft(), Point( rRect.Left(), rRect.Bottom()-1 ) ) );
+    pDev->DrawRect( Rectangle( rRect.TopLeft(), Point( rRect.Right()-1, rRect.Top() ) ) );
+    pDev->SetFillColor( rRightBottomColor );
+    pDev->DrawRect( Rectangle( rRect.BottomLeft(), rRect.BottomRight() ) );
+    pDev->DrawRect( Rectangle( rRect.TopRight(), rRect.BottomRight() ) );
+}
+
+
 void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
                      const sal_uInt16 nStyle )
 {
@@ -599,7 +611,7 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
 
         pDev->SetLineColor();
 
-        pDev->ImplDraw2ColorFrame( aFillRect, aColor1, aColor2 );
+        ImplDraw2ColorFrame( pDev, aFillRect, aColor1, aColor2 );
         ++aFillRect.Left();
         ++aFillRect.Top();
         --aFillRect.Right();
@@ -620,7 +632,7 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
                     aColor1 = rStyleSettings.GetLightBorderColor();
                 aColor2 = rStyleSettings.GetShadowColor();
             }
-            pDev->ImplDraw2ColorFrame( aFillRect, aColor1, aColor2 );
+            ImplDraw2ColorFrame( pDev, aFillRect, aColor1, aColor2 );
             ++aFillRect.Left();
             ++aFillRect.Top();
             --aFillRect.Right();
@@ -698,7 +710,7 @@ void DecorationView::DrawFrame( const Rectangle& rRect,
     sal_Bool        bOldMapMode     = mpOutDev->IsMapModeEnabled();
     mpOutDev->EnableMapMode( sal_False );
     mpOutDev->SetLineColor();
-    mpOutDev->ImplDraw2ColorFrame( aRect, rLeftTopColor, rRightBottomColor );
+    ImplDraw2ColorFrame( mpOutDev, aRect, rLeftTopColor, rRightBottomColor );
     mpOutDev->SetLineColor( aOldLineColor );
     mpOutDev->SetFillColor( aOldFillColor );
     mpOutDev->EnableMapMode( bOldMapMode );
@@ -903,15 +915,15 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
                 {
                     if ( nFrameStyle == FRAME_DRAW_IN )
                     {
-                        pDev->ImplDraw2ColorFrame( rRect,
-                                                   rStyleSettings.GetShadowColor(),
-                                                   rStyleSettings.GetLightColor() );
+                        ImplDraw2ColorFrame( pDev, rRect,
+                                             rStyleSettings.GetShadowColor(),
+                                             rStyleSettings.GetLightColor() );
                     }
                     else
                     {
-                        pDev->ImplDraw2ColorFrame( rRect,
-                                                   rStyleSettings.GetLightColor(),
-                                                   rStyleSettings.GetShadowColor() );
+                        ImplDraw2ColorFrame( pDev, rRect,
+                                             rStyleSettings.GetLightColor(),
+                                             rStyleSettings.GetShadowColor() );
                     }
 
                     rRect.Left()++;
@@ -924,26 +936,26 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
                     if ( nFrameStyle == FRAME_DRAW_DOUBLEIN )
                     {
                         if( bFlatBorders ) // no 3d effect
-                            pDev->ImplDraw2ColorFrame( rRect,
-                                                    rStyleSettings.GetShadowColor(),
-                                                    rStyleSettings.GetShadowColor() );
+                            ImplDraw2ColorFrame( pDev, rRect,
+                                                 rStyleSettings.GetShadowColor(),
+                                                 rStyleSettings.GetShadowColor() );
                         else
-                            pDev->ImplDraw2ColorFrame( rRect,
-                                                    rStyleSettings.GetShadowColor(),
-                                                    rStyleSettings.GetLightColor() );
+                            ImplDraw2ColorFrame( pDev, rRect,
+                                                 rStyleSettings.GetShadowColor(),
+                                                 rStyleSettings.GetLightColor() );
                     }
                     else
                     {
                         if( bMenuStyle )
-                            pDev->ImplDraw2ColorFrame( rRect,
-                                                   rStyleSettings.GetMenuBorderColor(),
-                                                   rStyleSettings.GetDarkShadowColor() );
+                            ImplDraw2ColorFrame( pDev, rRect,
+                                                 rStyleSettings.GetMenuBorderColor(),
+                                                 rStyleSettings.GetDarkShadowColor() );
                         else
-                            pDev->ImplDraw2ColorFrame( rRect,
-                                                   bFlatBorders ? // no 3d effect
-                                                   rStyleSettings.GetDarkShadowColor() :
-                                                   rStyleSettings.GetLightBorderColor(),
-                                                   rStyleSettings.GetDarkShadowColor() );
+                            ImplDraw2ColorFrame( pDev, rRect,
+                                                 bFlatBorders ? // no 3d effect
+                                                 rStyleSettings.GetDarkShadowColor() :
+                                                 rStyleSettings.GetLightBorderColor(),
+                                                 rStyleSettings.GetDarkShadowColor() );
 
                     }
 
@@ -956,21 +968,21 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
                     if ( nFrameStyle == FRAME_DRAW_DOUBLEIN )
                     {
                         if( bFlatBorders ) // no 3d effect
-                            pDev->ImplDraw2ColorFrame( rRect,
-                                                    rStyleSettings.GetFaceColor(),
-                                                    rStyleSettings.GetFaceColor() );
+                            ImplDraw2ColorFrame( pDev, rRect,
+                                                 rStyleSettings.GetFaceColor(),
+                                                 rStyleSettings.GetFaceColor() );
                         else
-                            pDev->ImplDraw2ColorFrame( rRect,
-                                                    rStyleSettings.GetDarkShadowColor(),
-                                                    rStyleSettings.GetLightBorderColor() );
+                            ImplDraw2ColorFrame( pDev, rRect,
+                                                 rStyleSettings.GetDarkShadowColor(),
+                                                 rStyleSettings.GetLightBorderColor() );
                     }
                     else
                     {
                         // flat menues have no shadow border
                         if( !bMenuStyle || !rStyleSettings.GetUseFlatMenues() )
-                            pDev->ImplDraw2ColorFrame( rRect,
-                                                    rStyleSettings.GetLightColor(),
-                                                    rStyleSettings.GetShadowColor() );
+                            ImplDraw2ColorFrame( pDev, rRect,
+                                                 rStyleSettings.GetLightColor(),
+                                                 rStyleSettings.GetShadowColor() );
                         else
                             bDrawn = sal_False;
                     }

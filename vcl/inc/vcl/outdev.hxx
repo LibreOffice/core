@@ -489,7 +489,6 @@ public:
     SAL_DLLPRIVATE void         ImplDrawColorWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
     SAL_DLLPRIVATE void         ImplDrawBitmapWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
     SAL_DLLPRIVATE void         ImplDrawGradientWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
-    SAL_DLLPRIVATE void         ImplDraw2ColorFrame( const Rectangle& rRect, const Color& rLeftTopColor, const Color& rRightBottomColor );
 
     SAL_DLLPRIVATE void         ImplDrawOutDevDirect( const OutputDevice* pSrcDev, void* pPosAry );
     SAL_DLLPRIVATE void         ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,

@@ -1170,20 +1170,6 @@ void OutputDevice::Erase()
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::ImplDraw2ColorFrame( const Rectangle& rRect,
-                                        const Color& rLeftTopColor,
-                                        const Color& rRightBottomColor )
-{
-    SetFillColor( rLeftTopColor );
-    DrawRect( Rectangle( rRect.TopLeft(), Point( rRect.Left(), rRect.Bottom()-1 ) ) );
-    DrawRect( Rectangle( rRect.TopLeft(), Point( rRect.Right()-1, rRect.Top() ) ) );
-    SetFillColor( rRightBottomColor );
-    DrawRect( Rectangle( rRect.BottomLeft(), rRect.BottomRight() ) );
-    DrawRect( Rectangle( rRect.TopRight(), rRect.BottomRight() ) );
-}
-
-// -----------------------------------------------------------------------
-
 bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
                             const GfxLink& rGfxLink, GDIMetaFile* pSubst )
 {
