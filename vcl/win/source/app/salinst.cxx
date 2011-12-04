@@ -541,7 +541,6 @@ SalInstance* CreateSalInstance()
         aWndClassEx.hbrBackground   = 0;
         aWndClassEx.lpszMenuName    = 0;
         aWndClassEx.lpszClassName   = SAL_FRAME_CLASSNAMEW;
-        ImplLoadSalIcon( SAL_RESID_ICON_DEFAULT, aWndClassEx.hIcon, aWndClassEx.hIconSm );
         if ( !RegisterClassExW( &aWndClassEx ) )
             return NULL;
 

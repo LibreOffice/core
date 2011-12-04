@@ -117,6 +117,4 @@ SAL_RESID_POINTER_PAINTBRUSH            CURSOR          pntbrsh.cur
 
 SAL_RESID_BITMAP_50                     BITMAP          "50.bmp"
 
-SAL_RESID_ICON_DEFAULT                  ICON            sd.ico
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
