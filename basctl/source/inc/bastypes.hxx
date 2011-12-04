@@ -53,14 +53,16 @@ sal_Int32 searchEOL( const ::rtl::OUString& rStr, sal_Int32 fromIndex );
 
 struct BasicStatus
 {
-    sal_Bool    bIsRunning      : 1;
-    sal_Bool    bError          : 1;
-    sal_Bool    bIsInReschedule : 1;
-    sal_uInt16  nBasicFlags;
+    bool bIsRunning : 1;
+    bool bError : 1;
+    bool bIsInReschedule : 1;
+    sal_uInt16 nBasicFlags;
 
-    BasicStatus()   {
-            bIsRunning = sal_False; bError = sal_False;
-            nBasicFlags = 0; bIsInReschedule = sal_False; }
+    BasicStatus():
+        bIsRunning(false),
+        bError(false),
+        bIsInReschedule(false),
+        nBasicFlags(0) { }
 };
 
 struct BreakPoint
