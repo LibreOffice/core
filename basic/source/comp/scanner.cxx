@@ -240,7 +240,7 @@ bool SbiScanner::NextSym()
         {   pLine++;
             goto eoln;  }
         bSymbol = true;
-        short n = nCol;
+        sal_uInt16 n = nCol;
         for ( ; (theBasicCharClass::get().isAlphaNumeric( *pLine, bCompatible ) || ( *pLine == '_' ) ); pLine++ )
             nCol++;
         aSym = aLine.copy( n, nCol - n );
@@ -424,7 +424,7 @@ bool SbiScanner::NextSym()
         sal_Unicode cSep = *pLine;
         if( cSep == '[' )
             bSymbol = true, cSep = ']';
-        short n = nCol+1;
+        sal_uInt16 n = nCol + 1;
         while( *pLine )
         {
             do pLine++, nCol++;
@@ -460,7 +460,7 @@ bool SbiScanner::NextSym()
     // other groups:
     else
     {
-        short n = 1;
+        sal_uInt8 n = 1;
         switch( *pLine++ )
         {
             case '<': if( *pLine == '>' || *pLine == '=' ) n = 2; break;
