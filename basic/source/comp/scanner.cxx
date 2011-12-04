@@ -152,7 +152,7 @@ static SbxDataType GetSuffixType( sal_Unicode c )
 
 void SbiScanner::scanGoto()
 {
-    short nTestCol = nCol;
+    sal_uInt16 nTestCol = nCol;
     while(nTestCol < aLine.getLength() && theBasicCharClass::get().isWhitespace(aLine[nTestCol]))
         nTestCol++;
 
@@ -162,7 +162,7 @@ void SbiScanner::scanGoto()
         if(aTestSym.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("to")))
         {
             aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("goto"));
-            pLine += (nTestCol - nCol) + 2;
+            pLine += nTestCol + 2 - nCol;
             nCol = nTestCol + 2;
         }
     }
