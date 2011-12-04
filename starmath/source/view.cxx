@@ -421,8 +421,17 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
             ScrollableWindow::KeyInput(rKEvt);
         return;
     }
-    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
+
     SmCursor& rCursor = pViewShell->GetDoc()->GetCursor();
+    KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
+    if (eFunc == KEYFUNC_COPY)
+        rCursor.Copy();
+    else if (eFunc == KEYFUNC_CUT)
+        rCursor.Cut();
+    else if (eFunc == KEYFUNC_PASTE)
+        rCursor.Paste();
+    else {
+    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
     switch(nCode)
     {
         case KEY_LEFT:
@@ -491,15 +500,6 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
         case KEY_EQUAL:
             rCursor.InsertElement(EqualElement);
             break;
-        case KEY_COPY:
-            rCursor.Copy();
-            break;
-        case KEY_CUT:
-            rCursor.Cut();
-            break;
-        case KEY_PASTE:
-            rCursor.Paste();
-            break;
         default:
         {
             sal_Unicode code = rKEvt.GetCharCode();
@@ -507,12 +507,6 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
 
             if(code == ' ') {
                 rCursor.InsertElement(BlankElement);
-            }else if(code == 'c' && rKEvt.GetKeyCode().IsMod1()) {
-                rCursor.Copy();
-            }else if(code == 'x' && rKEvt.GetKeyCode().IsMod1()) {
-                rCursor.Cut();
-            }else if(code == 'v' && rKEvt.GetKeyCode().IsMod1()) {
-                rCursor.Paste();
             }else if(code == '^') {
                 rCursor.InsertSubSup(RSUP);
             }else if(code == '(') {
@@ -538,6 +532,7 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
                     ScrollableWindow::KeyInput(rKEvt);
             }
         }
+    }
     }
     CaretBlinkStop();
     CaretBlinkStart();
