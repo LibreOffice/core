@@ -2391,52 +2391,6 @@ sub create_packages_without_epm
 
         # It might be necessary to save uncompressed Solaris packages
 
-        if ( $allvariables->{'JDSBUILD'} )
-        {
-            if ( ! $installer::globals::jds_language_controlled )
-            {
-                my $correct_language = installer::worker::check_jds_language($allvariables, $languagestringref);
-                $installer::globals::correct_jds_language = $correct_language;
-                $installer::globals::jds_language_controlled = 1;
-            }
-
-            if ( $installer::globals::correct_jds_language )
-            {
-                if ( $installer::globals::saved_packages_path eq "" )
-                {
-                    $packagestempdir = installer::systemactions::create_directories("jds", $languagestringref);
-                    $installer::globals::saved_packages_path = $packagestempdir;
-                    push(@installer::globals::jdsremovedirs, $packagestempdir);
-                }
-
-                $systemcall = "cd $destinationdir; cp -p -R $packagename $installer::globals::saved_packages_path;";
-                 make_systemcall($systemcall);
-                installer::logger::print_message( "... $systemcall ...\n" );
-
-                # Setting unix rights to "775" for all created directories inside the package,
-                # that is saved in temp directory
-
-                $systemcall = "cd $packagestempdir; find $packagename -type d | xargs -i chmod 775 \{\} \;";
-                installer::logger::print_message( "... $systemcall ...\n" );
-
-                $returnvalue = system($systemcall);
-
-                $infoline = "Systemcall: $systemcall\n";
-                push( @installer::globals::logfileinfo, $infoline);
-
-                if ($returnvalue)
-                {
-                    $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-                    push( @installer::globals::logfileinfo, $infoline);
-                }
-                else
-                {
-                    $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-                    push( @installer::globals::logfileinfo, $infoline);
-                }
-            }
-        }
-
         # compressing packages
 
         if ( ! $installer::globals::solarisdontcompress )

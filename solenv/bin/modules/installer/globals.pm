@@ -176,7 +176,6 @@ BEGIN
     $globaltempdirname = "ooopackaging";
     $cyg_temppath = "";
     $temppathdefined = 0;
-    $jdstemppathdefined = 0;
     $packageversion = 1;
     $packagerevision = 1;
     $rpm = "";
@@ -314,10 +313,6 @@ BEGIN
     $addsystemintegration = 0;
     $added_directories = 0;
     $makedownload = 1;
-    $makejds = 1;
-    $jdsexcludefilename = "";
-    $jds_language_controlled = 0;
-    $correct_jds_language = 0;
     @installsetfiles = ();
     @binarytableonlyfiles = ();
     @allscpactions = ();
@@ -489,7 +484,6 @@ BEGIN
     @forced_properties = ("SERVICETAG_PRODUCTNAME", "SERVICETAG_PRODUCTVERSION", "SERVICETAG_PARENTNAME", "SERVICETAG_SOURCE", "SERVICETAG_URN");
 
     @removedirs = ();
-    @jdsremovedirs = ();
     @emptypackages = ();
     %fontpackageexists = ();
 

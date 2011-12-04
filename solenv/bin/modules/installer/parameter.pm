@@ -168,7 +168,6 @@ sub getparameter
             $installer::globals::simple = 1;
             $installer::globals::call_epm = 0;
             $installer::globals::makedownload = 0;
-            $installer::globals::makejds = 0;
             $installer::globals::strip = 0;
             my $path = shift(@ARGV);
             $path =~ s/^\Q$installer::globals::destdir\E//;
@@ -413,21 +412,6 @@ sub setglobalvariables
         installer::systemactions::create_directory($installer::globals::unpackpath);
     }
 
-    # setting jds exclude file list
-
-    if ( $installer::globals::isrpmbuild )
-    {
-        $installer::globals::jdsexcludefilename = "jds_excludefiles_linux.txt";
-    }
-    if ( $installer::globals::issolarissparcbuild )
-    {
-        $installer::globals::jdsexcludefilename = "jds_excludefiles_solaris_sparc.txt";
-    }
-    if ( $installer::globals::issolarisx86build )
-    {
-        $installer::globals::jdsexcludefilename = "jds_excludefiles_solaris_intel.txt";
-    }
-
     # setting and creating the temppath
 
     if (( $ENV{'TMP'} ) || ( $ENV{'TEMP'} ) || ( $ENV{'TMPDIR'} ))
@@ -451,9 +435,6 @@ sub setglobalvariables
 
         if ( ! -d $installer::globals::temppath ) { installer::exiter::exit_program("ERROR: Failed to create directory $installer::globals::temppath ! Possible reason: Wrong privileges in directory $dirsave .", "setglobalvariables"); }
 
-        $installer::globals::jdstemppath = $installer::globals::temppath;
-        $installer::globals::jdstemppath =~ s/i_/j_/;
-        push(@installer::globals::jdsremovedirs, $installer::globals::jdstemppath);
         $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::productextension;
         installer::systemactions::create_directory($installer::globals::temppath);
         if ( $^O =~ /cygwin/i )
@@ -463,12 +444,10 @@ sub setglobalvariables
             chomp( $installer::globals::cyg_temppath = qx{cygpath -w "$installer::globals::cyg_temppath"} );
         }
         $installer::globals::temppathdefined = 1;
-        $installer::globals::jdstemppathdefined = 1;
     }
     else
     {
         $installer::globals::temppathdefined = 0;
-        $installer::globals::jdstemppathdefined = 0;
     }
 
     # only one cab file, if Windows msp patches shall be prepared

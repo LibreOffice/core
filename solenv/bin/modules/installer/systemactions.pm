@@ -226,14 +226,6 @@ sub create_directories
         $path =~ s/\Q$installer::globals::separator\E\s*$//;    # removing ending slashes and backslashes
         $path = $path . $installer::globals::separator;
     }
-    elsif ( ( $newdirectory eq "jds" ) )
-    {
-        if ( $installer::globals::jdstemppathdefined ) { $path = $installer::globals::jdstemppath; }
-        else { $path = $installer::globals::unpackpath; }
-        $path =~ s/\Q$installer::globals::separator\E\s*$//;    # removing ending slashes and backslashes
-        $path = $path . $installer::globals::separator;
-        installer::systemactions::create_directory($path);
-    }
     else
     {
         $path = $installer::globals::unpackpath . $installer::globals::separator;
