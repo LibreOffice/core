@@ -481,15 +481,21 @@ void ImplDrawDPILineRect( OutputDevice *const pDev, Rectangle& rRect,
 }
 
 
-void ImplDraw2ColorFrame( OutputDevice *const pDev, const Rectangle& rRect,
+void ImplDraw2ColorFrame( OutputDevice *const pDev, Rectangle& rRect,
                           const Color& rLeftTopColor, const Color& rRightBottomColor )
 {
-    pDev->SetFillColor( rLeftTopColor );
-    pDev->DrawRect( Rectangle( rRect.TopLeft(), Point( rRect.Left(), rRect.Bottom()-1 ) ) );
-    pDev->DrawRect( Rectangle( rRect.TopLeft(), Point( rRect.Right()-1, rRect.Top() ) ) );
-    pDev->SetFillColor( rRightBottomColor );
-    pDev->DrawRect( Rectangle( rRect.BottomLeft(), rRect.BottomRight() ) );
-    pDev->DrawRect( Rectangle( rRect.TopRight(), rRect.BottomRight() ) );
+    pDev->SetLineColor( rLeftTopColor );
+    pDev->DrawLine( rRect.TopLeft(), rRect.BottomLeft() );
+    pDev->DrawLine( rRect.TopLeft(), rRect.TopRight() );
+    pDev->SetLineColor( rRightBottomColor );
+    pDev->DrawLine( rRect.BottomLeft(), rRect.BottomRight() );
+    pDev->DrawLine( rRect.TopRight(), rRect.BottomRight() );
+
+    // reduce drawing area
+    ++rRect.Left();
+    ++rRect.Top();
+    --rRect.Right();
+    --rRect.Bottom();
 }
 
 
@@ -609,13 +615,7 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
                 aColor2 = rStyleSettings.GetDarkShadowColor();
         }
 
-        pDev->SetLineColor();
-
         ImplDraw2ColorFrame( pDev, aFillRect, aColor1, aColor2 );
-        ++aFillRect.Left();
-        ++aFillRect.Top();
-        --aFillRect.Right();
-        --aFillRect.Bottom();
 
         if ( !((nStyle & BUTTON_DRAW_FLATTEST) == BUTTON_DRAW_FLAT) )
         {
@@ -633,14 +633,11 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
                 aColor2 = rStyleSettings.GetShadowColor();
             }
             ImplDraw2ColorFrame( pDev, aFillRect, aColor1, aColor2 );
-            ++aFillRect.Left();
-            ++aFillRect.Top();
-            --aFillRect.Right();
-            --aFillRect.Bottom();
         }
 
         if ( !(nStyle & BUTTON_DRAW_NOFILL) )
         {
+            pDev->SetLineColor();
             if ( nStyle & (BUTTON_DRAW_CHECKED | BUTTON_DRAW_DONTKNOW) )
                 pDev->SetFillColor( rStyleSettings.GetCheckedColor() );
             else
@@ -704,15 +701,12 @@ void DecorationView::DrawFrame( const Rectangle& rRect,
                                 const Color& rLeftTopColor,
                                 const Color& rRightBottomColor )
 {
-    Rectangle   aRect           = mpOutDev->LogicToPixel( rRect );
-    Color       aOldLineColor   = mpOutDev->GetLineColor();
-    Color       aOldFillColor   = mpOutDev->GetFillColor();
-    sal_Bool        bOldMapMode     = mpOutDev->IsMapModeEnabled();
-    mpOutDev->EnableMapMode( sal_False );
-    mpOutDev->SetLineColor();
+    Rectangle   aRect         = mpOutDev->LogicToPixel( rRect );
+    const Color aOldLineColor = mpOutDev->GetLineColor();
+    const bool  bOldMapMode   = mpOutDev->IsMapModeEnabled();
+    mpOutDev->EnableMapMode( false );
     ImplDraw2ColorFrame( mpOutDev, aRect, rLeftTopColor, rRightBottomColor );
     mpOutDev->SetLineColor( aOldLineColor );
-    mpOutDev->SetFillColor( aOldFillColor );
     mpOutDev->EnableMapMode( bOldMapMode );
 }
 
@@ -908,8 +902,6 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
             }
             else
             {
-                pDev->SetLineColor();
-
                 if ( (nFrameStyle == FRAME_DRAW_IN) ||
                      (nFrameStyle == FRAME_DRAW_OUT) )
                 {
@@ -925,11 +917,6 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
                                              rStyleSettings.GetLightColor(),
                                              rStyleSettings.GetShadowColor() );
                     }
-
-                    rRect.Left()++;
-                    rRect.Top()++;
-                    rRect.Right()--;
-                    rRect.Bottom()--;
                 }
                 else // FRAME_DRAW_DOUBLEIN || FRAME_DRAW_DOUBLEOUT
                 {
@@ -959,12 +946,6 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
 
                     }
 
-                    rRect.Left()++;
-                    rRect.Top()++;
-                    rRect.Right()--;
-                    rRect.Bottom()--;
-
-                    sal_Bool bDrawn = sal_True;
                     if ( nFrameStyle == FRAME_DRAW_DOUBLEIN )
                     {
                         if( bFlatBorders ) // no 3d effect
@@ -983,15 +964,6 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
                             ImplDraw2ColorFrame( pDev, rRect,
                                                  rStyleSettings.GetLightColor(),
                                                  rStyleSettings.GetShadowColor() );
-                        else
-                            bDrawn = sal_False;
-                    }
-                    if( bDrawn )
-                    {
-                        rRect.Left()++;
-                        rRect.Top()++;
-                        rRect.Right()--;
-                        rRect.Bottom()--;
                     }
                 }
             }
