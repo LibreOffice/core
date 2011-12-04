@@ -103,6 +103,7 @@ public:
 
     // Window
     virtual void    MouseButtonDown(const MouseEvent &rMEvt);
+    virtual void    MouseMove(const MouseEvent &rMEvt);
     virtual void    GetFocus();
     virtual void    LoseFocus();
 

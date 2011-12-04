@@ -182,9 +182,7 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
             return;
 
         if (IsInlineEditEnabled()) {
-            // if it was clicked inside the formula then get the appropriate node
-            if (pTree->OrientedDist(aPos) <= 0)
-                pViewShell->GetDoc()->GetCursor().MoveTo(this, aPos, !rMEvt.IsShift());
+            pViewShell->GetDoc()->GetCursor().MoveTo(this, aPos, !rMEvt.IsShift());
             return;
         }
         const SmNode *pNode = 0;
@@ -211,6 +209,22 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
             //! implicitly synchronize the cursor position mark in this window
             pEdit->GrabFocus();
         }
+    }
+}
+
+void SmGraphicWindow::MouseMove(const MouseEvent &rMEvt)
+{
+    ScrollableWindow::MouseMove(rMEvt);
+
+    if (rMEvt.IsLeft() && IsInlineEditEnabled())
+    {
+        Point aPos(PixelToLogic(rMEvt.GetPosPixel()) - GetFormulaDrawPos());
+        pViewShell->GetDoc()->GetCursor().MoveTo(this, aPos, false);
+
+        CaretBlinkStop();
+        SetIsCursorVisible(true);
+        CaretBlinkStart();
+        RepaintViewShellDoc();
     }
 }
 
