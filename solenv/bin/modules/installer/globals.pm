@@ -99,7 +99,7 @@ BEGIN
     );
     @items_at_modules = ("Files", "Dirs", "Unixlinks");
     @asianlanguages = ("ja", "ko", "zh-CN", "zh-TW");
-    @bidilanguages = ("ar", "he");
+    @bidilanguages = ("ar", "fa", "he", "ug");
 
     $ziplistname = "";
     $pathfilename = "";
