@@ -38,7 +38,7 @@
 using namespace com::sun::star;
 
 
-namespace ScCellRangeObj {
+namespace ScCellRangeBase {
 
 class ScXCellRangesQuery : public UnoApiTest
 {

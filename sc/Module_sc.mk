@@ -41,7 +41,7 @@ $(eval $(call gb_Module_add_check_targets,sc,\
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
     CppunitTest_sc_macros_test \
-    CppunitTest_sc_xcellrangesquery \
+    CppunitTest_sc_cellrangesbase \
     CppunitTest_sc_subsequent_filters_test \
     CppunitTest_sc_tableautoformatfield \
     JunitTest_sc_complex \
