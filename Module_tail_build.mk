@@ -38,6 +38,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     forms \
     formula \
     hwpfilter \
+    lingucomponent \
     lotuswordpro \
     MathMLDTD \
     Mesa \
