@@ -430,6 +430,214 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
     }
 }
 
+
+void ImplDrawDPILineRect( OutputDevice *const pDev, Rectangle& rRect,
+                          const Color *const pColor, const bool bRound = false )
+{
+    long nLineWidth = pDev->ImplGetDPIX()/300;
+    long nLineHeight = pDev->ImplGetDPIY()/300;
+    if ( !nLineWidth )
+        nLineWidth = 1;
+    if ( !nLineHeight )
+        nLineHeight = 1;
+
+    if ( pColor )
+    {
+        if ( (nLineWidth == 1) && (nLineHeight == 1) )
+        {
+            pDev->SetLineColor( *pColor );
+            if( bRound )
+            {
+                pDev->DrawLine( Point( rRect.Left()+1, rRect.Top()), Point( rRect.Right()-1, rRect.Top()) );
+                pDev->DrawLine( Point( rRect.Left()+1, rRect.Bottom()), Point( rRect.Right()-1, rRect.Bottom()) );
+                pDev->DrawLine( Point( rRect.Left(), rRect.Top()+1), Point( rRect.Left(), rRect.Bottom()-1) );
+                pDev->DrawLine( Point( rRect.Right(), rRect.Top()+1), Point( rRect.Right(), rRect.Bottom()-1) );
+            }
+            else
+            {
+                pDev->SetFillColor();
+                pDev->DrawRect( rRect );
+            }
+        }
+        else
+        {
+            const long nWidth = rRect.GetWidth();
+            const long nHeight = rRect.GetHeight();
+            pDev->SetLineColor();
+            pDev->SetFillColor( *pColor );
+            pDev->DrawRect( Rectangle( rRect.TopLeft(), Size( nWidth, nLineHeight ) ) );
+            pDev->DrawRect( Rectangle( rRect.TopLeft(), Size( nLineWidth, nHeight ) ) );
+            pDev->DrawRect( Rectangle( Point( rRect.Left(), rRect.Bottom()-nLineHeight ),
+                                       Size( nWidth, nLineHeight ) ) );
+            pDev->DrawRect( Rectangle( Point( rRect.Right()-nLineWidth, rRect.Top() ),
+                                       Size( nLineWidth, nHeight ) ) );
+        }
+    }
+
+    rRect.Left()   += nLineWidth;
+    rRect.Top()    += nLineHeight;
+    rRect.Right()  -= nLineWidth;
+    rRect.Bottom() -= nLineHeight;
+}
+
+
+void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
+                     const sal_uInt16 nStyle )
+{
+    const StyleSettings& rStyleSettings = pDev->GetSettings().GetStyleSettings();
+
+    if ( (nStyle & BUTTON_DRAW_MONO) ||
+         (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+    {
+        const Color aBlackColor( COL_BLACK );
+
+        if ( nStyle & BUTTON_DRAW_DEFAULT )
+        {
+            // default selection shows a wider border
+            ImplDrawDPILineRect( pDev, aFillRect, &aBlackColor );
+        }
+
+        ImplDrawDPILineRect( pDev, aFillRect, &aBlackColor );
+
+        Size aBrdSize( 1, 1 );
+        if ( pDev->GetOutDevType() == OUTDEV_PRINTER )
+        {
+            aBrdSize = pDev->LogicToPixel( Size( 20, 20 ), MapMode(MAP_100TH_MM) );
+            if ( !aBrdSize.Width() )
+                aBrdSize.Width() = 1;
+            if ( !aBrdSize.Height() )
+                aBrdSize.Height() = 1;
+        }
+
+        pDev->SetLineColor();
+        pDev->SetFillColor( aBlackColor );
+        const Rectangle aOrigFillRect(aFillRect);
+        if ( nStyle & (BUTTON_DRAW_PRESSED | BUTTON_DRAW_CHECKED) )
+        {
+            // shrink fill rect
+            aFillRect.Left() += aBrdSize.Width();
+            aFillRect.Top()  += aBrdSize.Height();
+            // draw top and left borders (aOrigFillRect-aFillRect)
+            pDev->DrawRect( Rectangle( aOrigFillRect.Left(), aOrigFillRect.Top(),
+                                       aOrigFillRect.Right(), aFillRect.Top()-1 ) );
+            pDev->DrawRect( Rectangle( aOrigFillRect.Left(), aOrigFillRect.Top(),
+                                       aFillRect.Left()-1, aOrigFillRect.Bottom() ) );
+        }
+        else
+        {
+            // shrink fill rect
+            aFillRect.Right()  -= aBrdSize.Width();
+            aFillRect.Bottom() -= aBrdSize.Height();
+            // draw bottom and right borders (aOrigFillRect-aFillRect)
+            pDev->DrawRect( Rectangle( aOrigFillRect.Left(), aFillRect.Bottom()+1,
+                                       aOrigFillRect.Right(), aOrigFillRect.Bottom() ) );
+            pDev->DrawRect( Rectangle( aFillRect.Right()+1, aOrigFillRect.Top(),
+                                       aOrigFillRect.Right(), aOrigFillRect.Bottom() ) );
+        }
+
+        if ( !(nStyle & BUTTON_DRAW_NOFILL) )
+        {
+            // Hack: Auf Druckern wollen wir im MonoChrom-Modus trotzdem
+            // erstmal graue Buttons haben
+            if ( pDev->GetOutDevType() == OUTDEV_PRINTER )
+                pDev->SetFillColor( Color( COL_LIGHTGRAY ) );
+            else
+                pDev->SetFillColor( Color( COL_WHITE ) );
+            pDev->DrawRect( aFillRect );
+        }
+    }
+    else
+    {
+        if ( nStyle & BUTTON_DRAW_DEFAULT )
+        {
+            const Color aDefBtnColor = rStyleSettings.GetDarkShadowColor();
+            ImplDrawDPILineRect( pDev, aFillRect, &aDefBtnColor );
+        }
+
+        if ( nStyle & BUTTON_DRAW_NOLEFTLIGHTBORDER )
+        {
+            pDev->SetLineColor( rStyleSettings.GetLightBorderColor() );
+            pDev->DrawLine( Point( aFillRect.Left(), aFillRect.Top() ),
+                            Point( aFillRect.Left(), aFillRect.Bottom() ) );
+            ++aFillRect.Left();
+        }
+
+        Color aColor1;
+        Color aColor2;
+        if ( nStyle & (BUTTON_DRAW_PRESSED | BUTTON_DRAW_CHECKED) )
+        {
+            aColor1 = rStyleSettings.GetDarkShadowColor();
+            aColor2 = rStyleSettings.GetLightColor();
+        }
+        else
+        {
+            if ( nStyle & BUTTON_DRAW_NOTOPLIGHTBORDER )
+            {
+                pDev->SetLineColor( rStyleSettings.GetLightBorderColor() );
+                pDev->DrawLine( Point( aFillRect.Left(), aFillRect.Top()),
+                                Point( aFillRect.Right(), aFillRect.Top() ) );
+                ++aFillRect.Top();
+            }
+            if ( (( (nStyle & BUTTON_DRAW_NOBOTTOMSHADOWBORDER) | BUTTON_DRAW_FLAT) == (BUTTON_DRAW_NOBOTTOMSHADOWBORDER | BUTTON_DRAW_FLAT)) &&
+                    !(nStyle & BUTTON_DRAW_HIGHLIGHT) )
+            {
+                pDev->SetLineColor( rStyleSettings.GetDarkShadowColor() );
+                pDev->DrawLine( Point( aFillRect.Left(), aFillRect.Bottom() ),
+                                Point( aFillRect.Right(), aFillRect.Bottom() ) );
+                --aFillRect.Bottom();
+            }
+
+            if ( nStyle & BUTTON_DRAW_NOLIGHTBORDER )
+                aColor1 = rStyleSettings.GetLightBorderColor();
+            else
+                aColor1 = rStyleSettings.GetLightColor();
+            if ( (nStyle & BUTTON_DRAW_FLATTEST) == BUTTON_DRAW_FLAT )
+                aColor2 = rStyleSettings.GetShadowColor();
+            else
+                aColor2 = rStyleSettings.GetDarkShadowColor();
+        }
+
+        pDev->SetLineColor();
+
+        pDev->ImplDraw2ColorFrame( aFillRect, aColor1, aColor2 );
+        ++aFillRect.Left();
+        ++aFillRect.Top();
+        --aFillRect.Right();
+        --aFillRect.Bottom();
+
+        if ( !((nStyle & BUTTON_DRAW_FLATTEST) == BUTTON_DRAW_FLAT) )
+        {
+            if ( nStyle & (BUTTON_DRAW_PRESSED | BUTTON_DRAW_CHECKED) )
+            {
+                aColor1 = rStyleSettings.GetShadowColor();
+                aColor2 = rStyleSettings.GetLightBorderColor();
+            }
+            else
+            {
+                if ( nStyle & BUTTON_DRAW_NOLIGHTBORDER )
+                    aColor1 = rStyleSettings.GetLightColor();
+                else
+                    aColor1 = rStyleSettings.GetLightBorderColor();
+                aColor2 = rStyleSettings.GetShadowColor();
+            }
+            pDev->ImplDraw2ColorFrame( aFillRect, aColor1, aColor2 );
+            ++aFillRect.Left();
+            ++aFillRect.Top();
+            --aFillRect.Right();
+            --aFillRect.Bottom();
+        }
+
+        if ( !(nStyle & BUTTON_DRAW_NOFILL) )
+        {
+            if ( nStyle & (BUTTON_DRAW_CHECKED | BUTTON_DRAW_DONTKNOW) )
+                pDev->SetFillColor( rStyleSettings.GetCheckedColor() );
+            else
+                pDev->SetFillColor( rStyleSettings.GetFaceColor() );
+            pDev->DrawRect( aFillRect );
+        }
+    }
+}
+
 }
 
 
@@ -544,55 +752,6 @@ void DecorationView::DrawHighlightFrame( const Rectangle& rRect,
     }
 
     DrawFrame( rRect, aLightColor, aShadowColor );
-}
-
-// =======================================================================
-
-static void ImplDrawDPILineRect( OutputDevice* pDev, Rectangle& rRect,
-                                 const Color* pColor, sal_Bool bRound = sal_False )
-{
-    long nLineWidth = pDev->ImplGetDPIX()/300;
-    long nLineHeight = pDev->ImplGetDPIY()/300;
-    if ( !nLineWidth )
-        nLineWidth = 1;
-    if ( !nLineHeight )
-        nLineHeight = 1;
-
-    if ( pColor )
-    {
-        if ( (nLineWidth == 1) && (nLineHeight == 1) )
-        {
-            pDev->SetLineColor( *pColor );
-            pDev->SetFillColor();
-            if( bRound )
-            {
-                pDev->DrawLine( Point( rRect.Left()+1, rRect.Top()), Point( rRect.Right()-1, rRect.Top()) );
-                pDev->DrawLine( Point( rRect.Left()+1, rRect.Bottom()), Point( rRect.Right()-1, rRect.Bottom()) );
-                pDev->DrawLine( Point( rRect.Left(), rRect.Top()+1), Point( rRect.Left(), rRect.Bottom()-1) );
-                pDev->DrawLine( Point( rRect.Right(), rRect.Top()+1), Point( rRect.Right(), rRect.Bottom()-1) );
-            }
-            else
-                pDev->DrawRect( rRect );
-        }
-        else
-        {
-            long nWidth = rRect.GetWidth();
-            long nHeight = rRect.GetHeight();
-            pDev->SetLineColor();
-            pDev->SetFillColor( *pColor );
-            pDev->DrawRect( Rectangle( rRect.TopLeft(), Size( nWidth, nLineHeight ) ) );
-            pDev->DrawRect( Rectangle( rRect.TopLeft(), Size( nLineWidth, nHeight ) ) );
-            pDev->DrawRect( Rectangle( Point( rRect.Left(), rRect.Bottom()-nLineHeight ),
-                                       Size( nWidth, nLineHeight ) ) );
-            pDev->DrawRect( Rectangle( Point( rRect.Right()-nLineWidth, rRect.Top() ),
-                                       Size( nLineWidth, nHeight ) ) );
-        }
-    }
-
-    rRect.Left()    += nLineWidth;
-    rRect.Top()     += nLineHeight;
-    rRect.Right()   -= nLineWidth;
-    rRect.Bottom()  -= nLineHeight;
 }
 
 // =======================================================================
@@ -865,247 +1024,78 @@ Rectangle DecorationView::DrawFrame( const Rectangle& rRect, sal_uInt16 nStyle )
 
 // =======================================================================
 
-static void ImplDrawButton( OutputDevice* pDev, Rectangle& rRect,
-                            const StyleSettings& rStyleSettings, sal_uInt16 nStyle )
+Rectangle DecorationView::DrawButton( const Rectangle& rRect, sal_uInt16 nStyle )
 {
-    Rectangle aFillRect = rRect;
-
-    if ( nStyle & BUTTON_DRAW_MONO )
+    if ( rRect.IsEmpty() )
     {
-        if ( !(nStyle & BUTTON_DRAW_NODRAW) )
-        {
-            Color aBlackColor( COL_BLACK );
-
-            if ( nStyle & BUTTON_DRAW_DEFAULT )
-                ImplDrawDPILineRect( pDev, aFillRect, &aBlackColor );
-
-            ImplDrawDPILineRect( pDev, aFillRect, &aBlackColor );
-
-            Size aBrdSize( 1, 1 );
-            if ( pDev->GetOutDevType() == OUTDEV_PRINTER )
-            {
-                MapMode aResMapMode( MAP_100TH_MM );
-                aBrdSize = pDev->LogicToPixel( Size( 20, 20 ), aResMapMode );
-                if ( !aBrdSize.Width() )
-                    aBrdSize.Width() = 1;
-                if ( !aBrdSize.Height() )
-                    aBrdSize.Height() = 1;
-            }
-            pDev->SetLineColor();
-            pDev->SetFillColor( aBlackColor );
-            Rectangle aRect1;
-            Rectangle aRect2;
-            aRect1.Left()   = aFillRect.Left();
-            aRect1.Right()  = aFillRect.Right(),
-            aRect2.Top()    = aFillRect.Top();
-            aRect2.Bottom() = aFillRect.Bottom();
-            if ( nStyle & (BUTTON_DRAW_PRESSED | BUTTON_DRAW_CHECKED) )
-            {
-                aRect1.Top()    = aFillRect.Top();
-                aRect1.Bottom() = aBrdSize.Height()-1;
-                aRect2.Left()   = aFillRect.Left();
-                aRect2.Right()  = aFillRect.Left()+aBrdSize.Width()-1;
-                aFillRect.Left() += aBrdSize.Width();
-                aFillRect.Top()  += aBrdSize.Height();
-            }
-            else
-            {
-                aRect1.Top()    = aFillRect.Bottom()-aBrdSize.Height()+1;
-                aRect1.Bottom() = aFillRect.Bottom();
-                aRect2.Left()   = aFillRect.Right()-aBrdSize.Width()+1;
-                aRect2.Right()  = aFillRect.Right(),
-                aFillRect.Right()  -= aBrdSize.Width();
-                aFillRect.Bottom() -= aBrdSize.Height();
-            }
-            pDev->DrawRect( aRect1 );
-            pDev->DrawRect( aRect2 );
-        }
-    }
-    else
-    {
-        if ( !(nStyle & BUTTON_DRAW_NODRAW) )
-        {
-            if ( nStyle & BUTTON_DRAW_DEFAULT )
-            {
-                Color aDefBtnColor = rStyleSettings.GetDarkShadowColor();
-                ImplDrawDPILineRect( pDev, aFillRect, &aDefBtnColor );
-            }
-        }
-
-        if ( !(nStyle & BUTTON_DRAW_NODRAW) )
-        {
-            pDev->SetLineColor();
-            if ( nStyle & BUTTON_DRAW_NOLEFTLIGHTBORDER )
-            {
-                pDev->SetFillColor( rStyleSettings.GetLightBorderColor() );
-                pDev->DrawRect( Rectangle( aFillRect.Left(), aFillRect.Top(),
-                                           aFillRect.Left(), aFillRect.Bottom() ) );
-                aFillRect.Left()++;
-            }
-            if ( (nStyle & BUTTON_DRAW_NOTOPLIGHTBORDER) &&
-                 !(nStyle & (BUTTON_DRAW_PRESSED | BUTTON_DRAW_CHECKED)) )
-            {
-                pDev->SetFillColor( rStyleSettings.GetLightBorderColor() );
-                pDev->DrawRect( Rectangle( aFillRect.Left(), aFillRect.Top(),
-                                           aFillRect.Right(), aFillRect.Top() ) );
-                aFillRect.Top()++;
-            }
-            if ( (( (nStyle & BUTTON_DRAW_NOBOTTOMSHADOWBORDER) | BUTTON_DRAW_FLAT) == (BUTTON_DRAW_NOBOTTOMSHADOWBORDER | BUTTON_DRAW_FLAT)) &&
-                 !(nStyle & (BUTTON_DRAW_PRESSED | BUTTON_DRAW_CHECKED | BUTTON_DRAW_HIGHLIGHT)) )
-            {
-                pDev->SetFillColor( rStyleSettings.GetDarkShadowColor() );
-                pDev->DrawRect( Rectangle( aFillRect.Left(), aFillRect.Bottom(),
-                                           aFillRect.Right(), aFillRect.Bottom() ) );
-                aFillRect.Bottom()--;
-            }
-
-            Color aColor1;
-            Color aColor2;
-            if ( nStyle & (BUTTON_DRAW_PRESSED | BUTTON_DRAW_CHECKED) )
-            {
-                aColor1 = rStyleSettings.GetDarkShadowColor();
-                aColor2 = rStyleSettings.GetLightColor();
-            }
-            else
-            {
-                if ( nStyle & BUTTON_DRAW_NOLIGHTBORDER )
-                    aColor1 = rStyleSettings.GetLightBorderColor();
-                else
-                    aColor1 = rStyleSettings.GetLightColor();
-                if ( (nStyle & BUTTON_DRAW_FLATTEST) == BUTTON_DRAW_FLAT )
-                    aColor2 = rStyleSettings.GetShadowColor();
-                else
-                    aColor2 = rStyleSettings.GetDarkShadowColor();
-            }
-            pDev->ImplDraw2ColorFrame( aFillRect, aColor1, aColor2 );
-            aFillRect.Left()++;
-            aFillRect.Top()++;
-            aFillRect.Right()--;
-            aFillRect.Bottom()--;
-
-            if ( !((nStyle & BUTTON_DRAW_FLATTEST) == BUTTON_DRAW_FLAT) )
-            {
-                if ( nStyle & (BUTTON_DRAW_PRESSED | BUTTON_DRAW_CHECKED) )
-                {
-                    aColor1 = rStyleSettings.GetShadowColor();
-                    aColor2 = rStyleSettings.GetLightBorderColor();
-                }
-                else
-                {
-                    if ( nStyle & BUTTON_DRAW_NOLIGHTBORDER )
-                        aColor1 = rStyleSettings.GetLightColor();
-                    else
-                        aColor1 = rStyleSettings.GetLightBorderColor();
-                    aColor2 = rStyleSettings.GetShadowColor();
-                }
-                pDev->ImplDraw2ColorFrame( aFillRect, aColor1, aColor2 );
-                aFillRect.Left()++;
-                aFillRect.Top()++;
-                aFillRect.Right()--;
-                aFillRect.Bottom()--;
-            }
-        }
+        return rRect;
     }
 
-    if ( !(nStyle & (BUTTON_DRAW_NOFILL | BUTTON_DRAW_NODRAW)) )
+    Rectangle aRect = rRect;
+    const bool bOldMap = mpOutDev->IsMapModeEnabled();
+
+    if ( bOldMap )
     {
-        pDev->SetLineColor();
-        if ( nStyle & BUTTON_DRAW_MONO )
-        {
-            // Hack: Auf Druckern wollen wir im MonoChrom-Modus trotzdem
-            // erstmal graue Buttons haben
-            if ( pDev->GetOutDevType() == OUTDEV_PRINTER )
-                pDev->SetFillColor( Color( COL_LIGHTGRAY ) );
-            else
-                pDev->SetFillColor( Color( COL_WHITE ) );
-        }
-        else
-        {
-            if ( nStyle & (BUTTON_DRAW_CHECKED | BUTTON_DRAW_DONTKNOW) )
-                pDev->SetFillColor( rStyleSettings.GetCheckedColor() );
-            else
-                pDev->SetFillColor( rStyleSettings.GetFaceColor() );
-        }
-        pDev->DrawRect( aFillRect );
+        aRect = mpOutDev->LogicToPixel( aRect );
+        mpOutDev->EnableMapMode( false );
+    }
+
+    if ( !(nStyle & BUTTON_DRAW_NODRAW) )
+    {
+        const Color maOldLineColor = mpOutDev->GetLineColor();
+        const Color maOldFillColor = mpOutDev->GetFillColor();
+        ImplDrawButton( mpOutDev, aRect, nStyle );
+        mpOutDev->SetLineColor( maOldLineColor );
+        mpOutDev->SetFillColor( maOldFillColor );
     }
 
     // Ein Border freilassen, der jedoch bei Default-Darstellung
     // mitbenutzt wird
-    rRect.Left()++;
-    rRect.Top()++;
-    rRect.Right()--;
-    rRect.Bottom()--;
+    ++aRect.Left();
+    ++aRect.Top();
+    --aRect.Right();
+    --aRect.Bottom();
 
     if ( nStyle & BUTTON_DRAW_NOLIGHTBORDER )
     {
-        rRect.Left()++;
-        rRect.Top()++;
+        ++aRect.Left();
+        ++aRect.Top();
     }
     else if ( nStyle & BUTTON_DRAW_NOLEFTLIGHTBORDER )
-        rRect.Left()++;
+    {
+        ++aRect.Left();
+    }
 
     if ( nStyle & BUTTON_DRAW_PRESSED )
     {
-        if ( (rRect.GetHeight() > 10) && (rRect.GetWidth() > 10) )
+        if ( (aRect.GetHeight() > 10) && (aRect.GetWidth() > 10) )
         {
-            rRect.Left()    += 4;
-            rRect.Top()     += 4;
-            rRect.Right()   -= 1;
-            rRect.Bottom()  -= 1;
+            aRect.Left()   += 4;
+            aRect.Top()    += 4;
+            aRect.Right()  -= 1;
+            aRect.Bottom() -= 1;
         }
         else
         {
-            rRect.Left()    += 3;
-            rRect.Top()     += 3;
-            rRect.Right()   -= 2;
-            rRect.Bottom()  -= 2;
+            aRect.Left()   += 3;
+            aRect.Top()    += 3;
+            aRect.Right()  -= 2;
+            aRect.Bottom() -= 2;
         }
     }
     else if ( nStyle & BUTTON_DRAW_CHECKED )
     {
-        rRect.Left()    += 3;
-        rRect.Top()     += 3;
-        rRect.Right()   -= 2;
-        rRect.Bottom()  -= 2;
+        aRect.Left()   += 3;
+        aRect.Top()    += 3;
+        aRect.Right()  -= 2;
+        aRect.Bottom() -= 2;
     }
     else
     {
-        rRect.Left()    += 2;
-        rRect.Top()     += 2;
-        rRect.Right()   -= 3;
-        rRect.Bottom()  -= 3;
-    }
-}
-
-// -----------------------------------------------------------------------
-
-Rectangle DecorationView::DrawButton( const Rectangle& rRect, sal_uInt16 nStyle )
-{
-    Rectangle   aRect = rRect;
-    sal_Bool        bOldMap = mpOutDev->IsMapModeEnabled();
-    if ( bOldMap )
-    {
-        aRect = mpOutDev->LogicToPixel( aRect );
-        mpOutDev->EnableMapMode( sal_False );
-    }
-
-    if ( !rRect.IsEmpty() )
-    {
-        const StyleSettings& rStyleSettings = mpOutDev->GetSettings().GetStyleSettings();
-
-        if ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO )
-            nStyle |= BUTTON_DRAW_MONO;
-
-        if ( nStyle & BUTTON_DRAW_NODRAW )
-             ImplDrawButton( mpOutDev, aRect, rStyleSettings, nStyle );
-        else
-        {
-             Color maOldLineColor  = mpOutDev->GetLineColor();
-             Color maOldFillColor  = mpOutDev->GetFillColor();
-             ImplDrawButton( mpOutDev, aRect, rStyleSettings, nStyle );
-             mpOutDev->SetLineColor( maOldLineColor );
-             mpOutDev->SetFillColor( maOldFillColor );
-        }
+        aRect.Left()   += 2;
+        aRect.Top()    += 2;
+        aRect.Right()  -= 3;
+        aRect.Bottom() -= 3;
     }
 
     if ( bOldMap )
