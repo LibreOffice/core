@@ -2311,7 +2311,14 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         if ( $is_success ) { installer::followme::save_followme_info($finalinstalldir, $includepatharrayref, $allvariableshashref, $$downloadname, $languagestringref, $languagesarrayref, $current_install_number, $loggingdir, $installlogdir); }
 
         if ( $$downloadname ne "" ) { $create_download = 1; }
-        if ( $installer::globals::iswindowsbuild ) { $create_download = 0; }
+        if ( $installer::globals::iswindowsbuild )
+        {
+            $create_download = 0;
+            if ( $allvariableshashref->{'OOODOWNLOADNAME'} ) { $$downloadname = installer::download::set_download_filename($languagestringref, $allvariableshashref); }
+            else { $$downloadname = installer::download::resolve_variables_in_downloadname($allvariableshashref, $$downloadname, $languagestringref); }
+	    installer::systemactions::rename_one_file( $finalinstalldir . $installer::globals::separator . $installer::globals::shortmsidatabasename, $finalinstalldir . $installer::globals::separator . $$downloadname . ".msi" );
+
+        }
         if (( $is_success ) && ( $create_download ) && ( $ENV{'ENABLE_DOWNLOADSETS'} ))
         {
             my $downloaddir = installer::download::create_download_sets($finalinstalldir, $includepatharrayref, $allvariableshashref, $$downloadname, $languagestringref, $languagesarrayref);

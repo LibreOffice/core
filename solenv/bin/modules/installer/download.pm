@@ -423,58 +423,11 @@ sub get_download_version
 
     my $version = "";
 
-    my $devproduct = 0;
-    if (( $allvariables->{'DEVELOPMENTPRODUCT'} ) && ( $allvariables->{'DEVELOPMENTPRODUCT'} == 1 )) { $devproduct = 1; }
-
-    if ( $devproduct )  # use "DEV300m75"
-    {
-        my $source = uc($installer::globals::build); # DEV300
-        my $localminor = "";
-        if ( $installer::globals::minor ne "" ) { $localminor = $installer::globals::minor; }
-        else { $localminor = $installer::globals::lastminor; }
-        $version = $source . $localminor;
-    }
-    else  # use 3.2.0rc1
-    {
-        $version = $allvariables->{'PRODUCTVERSION'};
-        if (( $allvariables->{'ABOUTBOXPRODUCTVERSION'} ) && ( $allvariables->{'ABOUTBOXPRODUCTVERSION'} ne "" )) { $version = $allvariables->{'ABOUTBOXPRODUCTVERSION'}; }
-        if (( $allvariables->{'SHORT_PRODUCTEXTENSION'} ) && ( $allvariables->{'SHORT_PRODUCTEXTENSION'} ne "" )) { $version = $version . $allvariables->{'SHORT_PRODUCTEXTENSION'}; }
-    }
+    $version = $allvariables->{'PRODUCTVERSION'};
+    if (( $allvariables->{'ABOUTBOXPRODUCTVERSION'} ) && ( $allvariables->{'ABOUTBOXPRODUCTVERSION'} ne "" )) { $version = $allvariables->{'ABOUTBOXPRODUCTVERSION'}; }
+    if (( $allvariables->{'SHORT_PRODUCTEXTENSION'} ) && ( $allvariables->{'SHORT_PRODUCTEXTENSION'} ne "" )) { $version = $version . $allvariables->{'SHORT_PRODUCTEXTENSION'}; }
 
     return $version;
-}
-
-###############################################################
-# Set date string, format: yymmdd
-###############################################################
-
-sub set_date_string
-{
-    my ($allvariables) = @_;
-
-    my $datestring = "";
-
-    my $devproduct = 0;
-    if (( $allvariables->{'DEVELOPMENTPRODUCT'} ) && ( $allvariables->{'DEVELOPMENTPRODUCT'} == 1 )) { $devproduct = 1; }
-
-    my $releasebuild = 1;
-    if (( $allvariables->{'SHORT_PRODUCTEXTENSION'} ) && ( $allvariables->{'SHORT_PRODUCTEXTENSION'} ne "" )) { $releasebuild = 0; }
-
-    if (( ! $devproduct ) && ( ! $releasebuild ))
-    {
-        my @timearray = localtime(time);
-
-        my $day = $timearray[3];
-        my $month = $timearray[4] + 1;
-        my $year = $timearray[5] + 1900;
-
-        if ( $month < 10 ) { $month = "0" . $month; }
-        if ( $day < 10 ) { $day = "0" . $day; }
-
-        $datestring = $year . $month . $day;
-    }
-
-    return $datestring;
 }
 
 #################################################################
