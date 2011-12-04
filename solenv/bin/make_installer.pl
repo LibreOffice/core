@@ -2211,8 +2211,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             }
 
             installer::windows::msiglobal::rename_msi_database_in_installset($defaultlanguage, $installdir, $allvariableshashref);
-
-            if ( $allvariableshashref->{'ADDLANGUAGEINDATABASENAME'} ) { installer::windows::msiglobal::add_language_to_msi_database($defaultlanguage, $installdir, $allvariableshashref); }
         }
 
         # Analyzing the ScpActions and copying the files into the installation set

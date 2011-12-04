@@ -1170,29 +1170,6 @@ sub rename_msi_database_in_installset
     $installer::globals::msidatabasename = $newdatabasename;
 }
 
-#########################################################################
-# Adding the language to the name of the msi databasename,
-# if this is required (ADDLANGUAGEINDATABASENAME)
-#########################################################################
-
-sub add_language_to_msi_database
-{
-    my ($defaultlanguage, $installdir, $allvariables) = @_;
-
-    my $languagestring = $defaultlanguage;
-    if ( $allvariables->{'USELANGUAGECODE'} ) { $languagestring = installer::windows::language::get_windows_language($defaultlanguage); }
-    my $newdatabasename = $installer::globals::shortmsidatabasename;
-    $newdatabasename =~ s/\.msi\s*$/_$languagestring\.msi/;
-    $installer::globals::shortmsidatabasename = $newdatabasename;
-    $newdatabasename = $installdir . $installer::globals::separator . $newdatabasename;
-
-    my $olddatabasename = $installer::globals::msidatabasename;
-
-    installer::systemactions::rename_one_file($olddatabasename, $newdatabasename);
-
-    $installer::globals::msidatabasename = $newdatabasename;
-}
-
 ##########################################################################
 # Writing the databasename into the setup.ini.
 ##########################################################################
