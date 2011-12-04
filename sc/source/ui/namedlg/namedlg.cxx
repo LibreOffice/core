@@ -404,6 +404,10 @@ void ScNameDlg::NameModified()
         if (!IsNameValid())
             return;
     }
+    else
+    {
+        maFtInfo.SetText( maStrInfoDefault );
+    }
 
     if (!IsFormulaValid())
     {
