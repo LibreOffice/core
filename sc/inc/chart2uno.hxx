@@ -56,11 +56,13 @@
 #include <rtl/ustring.hxx>
 #include <svl/itemprop.hxx>
 
-#include <boost/unordered_set.hpp>
 #include <list>
 #include <vector>
 #include <memory>
 #include <boost/shared_ptr.hpp>
+#include <boost/unordered_set.hpp>
+#include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #define USE_CHART2_EMPTYDATASEQUENCE 0
 
@@ -246,9 +248,9 @@ class ScChart2DataSequence : public
                     ::com::sun::star::util::XCloneable,
                     ::com::sun::star::util::XModifyBroadcaster,
                     ::com::sun::star::beans::XPropertySet,
-//                     ::com::sun::star::lang::XUnoTunnel,
                     ::com::sun::star::lang::XServiceInfo>,
-                SfxListener
+                SfxListener,
+                boost::noncopyable
 {
 public:
     explicit ScChart2DataSequence( ScDocument* pDoc,
@@ -448,11 +450,9 @@ private:
     sal_Bool                    m_bIncludeHiddenCells;
 
     // internals
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    typedef ::std::auto_ptr< ::std::vector<ScTokenRef> >  TokenListPtr;
-    typedef ::std::auto_ptr< ::std::vector<sal_uInt32> >        RangeIndexMapPtr;
-    typedef ::std::auto_ptr<ExternalRefListener>                ExtRefListenerPtr;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    typedef boost::scoped_ptr<std::vector<ScTokenRef> >  TokenListPtr;
+    typedef boost::scoped_ptr<std::vector<sal_uInt32> >  RangeIndexMapPtr;
+    typedef boost::scoped_ptr<ExternalRefListener>       ExtRefListenerPtr;
 
     sal_Int64                   m_nObjectId;
     ScDocument*                 m_pDocument;
@@ -462,9 +462,8 @@ private:
     com::sun::star::uno::Reference < com::sun::star::chart2::data::XDataProvider > m_xDataProvider;
     SfxItemPropertySet          m_aPropSet;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<HiddenRangeListener> m_pHiddenListener;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    boost::scoped_ptr<HiddenRangeListener> m_pHiddenListener;
+
     ScLinkListener*             m_pValueListener;
     XModifyListenerArr_Impl     m_aValueListeners;
 

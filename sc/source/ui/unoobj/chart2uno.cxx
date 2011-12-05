@@ -55,11 +55,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <vector>
-#include <list>
 #include <rtl/math.hxx>
-
-#include <boost/scoped_ptr.hpp>
 
 SC_SIMPLE_SERVICE_INFO( ScChart2DataProvider, "ScChart2DataProvider",
         "com.sun.star.chart2.data.DataProvider")
