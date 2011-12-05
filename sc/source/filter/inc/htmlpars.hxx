@@ -32,6 +32,7 @@
 #include <tools/stack.hxx>
 
 #include <memory>
+#include <stack>
 #include <vector>
 #include <list>
 #include <map>
@@ -144,7 +145,7 @@ struct ScHTMLTableStackEntry
                             {}
                         ~ScHTMLTableStackEntry() {}
 };
-DECLARE_STACK( ScHTMLTableStack, ScHTMLTableStackEntry* )
+typedef ::std::stack< ScHTMLTableStackEntry* > ScHTMLTableStack;
 
 struct ScHTMLAdjustStackEntry
 {

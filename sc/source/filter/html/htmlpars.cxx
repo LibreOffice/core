@@ -255,9 +255,11 @@ ScHTMLLayoutParser::ScHTMLLayoutParser(
 
 ScHTMLLayoutParser::~ScHTMLLayoutParser()
 {
-    ScHTMLTableStackEntry* pS;
-    while ( (pS = aTableStack.Pop()) != 0 )
+    while ( !aTableStack.empty() )
     {
+        ScHTMLTableStackEntry* pS = aTableStack.top();
+        aTableStack.pop();
+
         bool found = false;
         for ( size_t i = 0, nListSize = maList.size(); i < nListSize; ++i )
         {
@@ -1092,7 +1094,7 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
     {   // Table in Table
         sal_uInt16 nTmpColOffset = nColOffset;  // wird in Colonize noch angepasst
         Colonize( pActEntry );
-        aTableStack.Push( new ScHTMLTableStackEntry(
+        aTableStack.push( new ScHTMLTableStackEntry(
             pActEntry, xLockedList, pLocalColOffset, nFirstTableCell,
             nColCnt, nRowCnt, nColCntStart, nMaxCol, nTable,
             nTableWidth, nColOffset, nColOffsetStart,
@@ -1154,7 +1156,7 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
             CloseEntry( pInfo );
             NextRow( pInfo );
         }
-        aTableStack.Push( new ScHTMLTableStackEntry(
+        aTableStack.push( new ScHTMLTableStackEntry(
             pActEntry, xLockedList, pLocalColOffset, nFirstTableCell,
             nColCnt, nRowCnt, nColCntStart, nMaxCol, nTable,
             nTableWidth, nColOffset, nColOffsetStart,
@@ -1208,9 +1210,11 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
     }
     if ( --nTableLevel > 0 )
     {   // Table in Table beendet
-        ScHTMLTableStackEntry* pS = aTableStack.Pop();
-        if ( pS )
+        if ( !aTableStack.empty() )
         {
+            ScHTMLTableStackEntry* pS = aTableStack.top();
+            aTableStack.pop();
+
             ScEEParseEntry* pE = pS->pCellEntry;
             SCROW nRows = nRowCnt - pS->nRowCnt;
             if ( nRows > 1 )
@@ -1344,11 +1348,12 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
     else
     {   // einfache Table beendet
         SetWidths();
-        ScHTMLTableStackEntry* pS = aTableStack.Pop();
         nMaxCol = 0;
         nTable = 0;
-        if ( pS )
+        if ( !aTableStack.empty() )
         {
+            ScHTMLTableStackEntry* pS = aTableStack.top();
+            aTableStack.pop();
             if ( pLocalColOffset )
                 delete pLocalColOffset;
             pLocalColOffset = pS->pLocalColOffset;
