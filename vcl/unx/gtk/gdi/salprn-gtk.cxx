@@ -809,7 +809,7 @@ GtkPrintDialog::impl_initCustomTab()
                     gtk_box_pack_start(GTK_BOX(pCurParent), pRow, FALSE, FALSE, 0);
                 }
                 if (!pGroup)
-                    aPropertyToDependencyRowMap[aPropertyName + rtl::OUString::valueOf(0)] = pRow;
+                    aPropertyToDependencyRowMap[aPropertyName + rtl::OUString::valueOf(sal_Int32(0))] = pRow;
                 gtk_box_pack_start(GTK_BOX(pRow), pWidget, FALSE, FALSE, 0);
             }
         }
@@ -1153,11 +1153,11 @@ GtkPrintDialog::updateControllerPrintRange()
                     const GtkPageRange* const pRanges = m_pWrapper->print_settings_get_page_ranges(pSettings, &num_ranges);
                     for (gint i = 0; i != num_ranges && pRanges; ++i)
                     {
-                        sBuf.append(pRanges[i].start+1);
+                        sBuf.append(sal_Int32(pRanges[i].start+1));
                         if (pRanges[i].start != pRanges[i].end)
                         {
                             sBuf.append(sal_Unicode('-'));
-                            sBuf.append(pRanges[i].end+1);
+                            sBuf.append(sal_Int32(pRanges[i].end+1));
                         }
 
                         if (i != num_ranges-1)
@@ -1225,7 +1225,7 @@ const
     const rtl::OUString aPrintDialogStr(RTL_CONSTASCII_USTRINGPARAM("PrintDialog"));
     pItem->setValue(aPrintDialogStr,
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CopyCount")),
-            rtl::OUString::valueOf(m_pWrapper->print_settings_get_n_copies(pSettings)));
+            rtl::OUString::valueOf(sal_Int32(m_pWrapper->print_settings_get_n_copies(pSettings))));
     pItem->setValue(aPrintDialogStr,
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Collate")),
             m_pWrapper->print_settings_get_collate(pSettings)
