@@ -434,6 +434,8 @@ oslSocket osl_receiveResourcePipe(oslPipe pPipe)
  *
  *****************************************************************************/
 
+extern "C" {
+
 static void ChildStatusProc(void *pData)
 {
     pid_t pid = -1;
@@ -701,6 +703,8 @@ static void ChildStatusProc(void *pData)
             osl_setCondition(pdata->m_started);
         }
     }
+}
+
 }
 
 /**********************************************
