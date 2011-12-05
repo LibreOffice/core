@@ -1248,6 +1248,8 @@ void SvXMLExport::ImplExportContent()
                       GetXMLToken( XML_TRUE ) );
                 eClass = XML_TEXT;
             }
+            if ( XML_GRAPHICS == eClass )
+                eClass = XML_DRAWING;
             // <office:body ...>
             SetBodyAttributes();
             SvXMLElementExport aElem( *this, meClass != XML_TOKEN_INVALID,
