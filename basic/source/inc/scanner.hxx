@@ -46,6 +46,7 @@ class SbiScanner
     const sal_Unicode* pLine;
     const sal_Unicode* pSaveLine;
 
+    void scanAlphanumeric();
     void scanGoto();
 protected:
     ::rtl::OUString aSym;

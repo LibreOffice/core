@@ -150,6 +150,17 @@ static SbxDataType GetSuffixType( sal_Unicode c )
 // return value is sal_False at EOF or errors
 #define BUF_SIZE 80
 
+void SbiScanner::scanAlphanumeric()
+{
+    sal_uInt16 n = nCol;
+    while(theBasicCharClass::get().isAlphaNumeric(*pLine, bCompatible) || *pLine == '_')
+    {
+        pLine++;
+        nCol++;
+    }
+    aSym = aLine.copy(n, nCol - n);
+}
+
 void SbiScanner::scanGoto()
 {
     sal_uInt16 nTestCol = nCol;
@@ -240,10 +251,8 @@ bool SbiScanner::NextSym()
         {   pLine++;
             goto eoln;  }
         bSymbol = true;
-        sal_uInt16 n = nCol;
-        for ( ; (theBasicCharClass::get().isAlphaNumeric( *pLine, bCompatible ) || ( *pLine == '_' ) ); pLine++ )
-            nCol++;
-        aSym = aLine.copy( n, nCol - n );
+
+        scanAlphanumeric();
 
         // Special handling for "go to"
         if( bCompatible && *pLine && aSym.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("go") ) )
