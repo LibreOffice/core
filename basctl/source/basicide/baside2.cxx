@@ -82,7 +82,7 @@ DBG_NAME( ModulWindow )
 
 TYPEINIT1( ModulWindow , IDEBaseWindow );
 
-void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage, const String& rTitle, bool bOutput )
+void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage, const ::rtl::OUString& rTitle, bool bOutput )
 {
     short nLeftMargin   = LMARGPRN;
     Size aSz = pPrinter->GetOutputSize();
@@ -122,16 +122,19 @@ void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage,
     {
         aFont.SetWeight( WEIGHT_NORMAL );
         pPrinter->SetFont( aFont );
-        String aPageStr( RTL_CONSTASCII_USTRINGPARAM( " [" ) );
-        aPageStr += String( IDEResId( RID_STR_PAGE ) );
-        aPageStr += ' ';
-        aPageStr += String::CreateFromInt32( nCurPage );
-        aPageStr += ']';
         aPos.X() += pPrinter->GetTextWidth( rTitle );
-        if( bOutput )
-            pPrinter->DrawText( aPos, aPageStr );
-    }
 
+        if( bOutput )
+        {
+            ::rtl::OUStringBuffer aPageStr;
+            aPageStr.appendAscii( RTL_CONSTASCII_STRINGPARAM( " [" ) );
+            aPageStr.append(ResId::toString( IDEResId( RID_STR_PAGE ) ));
+            aPageStr.append(' ');
+            aPageStr.append( nCurPage );
+            aPageStr.append(']');
+            pPrinter->DrawText( aPos, aPageStr.makeStringAndClear() );
+        }
+    }
 
     nY = TMARGPRN-nBorder;
 
@@ -164,7 +167,6 @@ void lcl_ConvertTabsToSpaces( String& rLine )
         }
     }
 }
-
 
 ModulWindow::ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, String aLibName,
                           String aName, ::rtl::OUString& aModule )
