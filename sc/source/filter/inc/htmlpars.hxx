@@ -29,8 +29,6 @@
 #ifndef SC_HTMLPARS_HXX
 #define SC_HTMLPARS_HXX
 
-#include <tools/stack.hxx>
-
 #include <memory>
 #include <stack>
 #include <vector>
@@ -158,7 +156,7 @@ struct ScHTMLAdjustStackEntry
                             nCurRow( nCRow )
                             {}
 };
-DECLARE_STACK( ScHTMLAdjustStack, ScHTMLAdjustStackEntry* )
+typedef ::std::stack< ScHTMLAdjustStackEntry* > ScHTMLAdjustStack;
 
 
 // ============================================================================

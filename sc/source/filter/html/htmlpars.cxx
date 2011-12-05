@@ -544,8 +544,11 @@ void ScHTMLLayoutParser::Adjust()
         ScEEParseEntry* pE = maList[ i ];
         if ( pE->nTab < nTab )
         {   // Table beendet
-            if ( (pS = aStack.Pop()) != 0 )
+            if ( !aStack.empty() )
             {
+                pS = aStack.top();
+                aStack.pop();
+
                 nLastCol = pS->nLastCol;
                 nNextRow = pS->nNextRow;
                 nCurRow = pS->nCurRow;
@@ -573,7 +576,7 @@ void ScHTMLLayoutParser::Adjust()
         nLastCol = pE->nCol;    // eingelesene Col
         if ( pE->nTab > nTab )
         {   // neue Table
-            aStack.Push( new ScHTMLAdjustStackEntry(
+            aStack.push( new ScHTMLAdjustStackEntry(
                 nLastCol, nNextRow, nCurRow ) );
             nTab = pE->nTab;
             pTab = (pTables ? (Table*) pTables->Get( nTab ) : NULL);
@@ -642,8 +645,11 @@ void ScHTMLLayoutParser::Adjust()
         if ( nRowMax < nRowTmp )
             nRowMax = nRowTmp;
     }
-    while ( (pS = aStack.Pop()) != 0 )
-        delete pS;
+    while ( !aStack.empty() )
+    {
+        delete aStack.top();
+        aStack.pop();
+    }
 }
 
 
