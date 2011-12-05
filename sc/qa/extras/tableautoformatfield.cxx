@@ -64,7 +64,7 @@ void ScTableAutoFormatField::testRotateReference()
     uno::Reference< beans::XPropertySet > xTableAutoFormatField = init();
     rtl::OUString aRotateReference(RTL_CONSTASCII_USTRINGPARAM("RotateReference"));
     uno::Any aOldRotateReference = xTableAutoFormatField->getPropertyValue(aRotateReference);
-    sal_Int32 aValue;
+    sal_Int32 aValue = 0;
     CPPUNIT_ASSERT(aOldRotateReference >>= aValue);
     std::cout << "Old RotateReferene Value: " << aValue << std::endl;
 
@@ -82,7 +82,7 @@ void ScTableAutoFormatField::testVertJustify()
     uno::Reference< beans::XPropertySet > xTableAutoFormatField = init();
     rtl::OUString aVertJustify(RTL_CONSTASCII_USTRINGPARAM("VertJustify"));
     uno::Any aOldVertJustify = xTableAutoFormatField->getPropertyValue(aVertJustify);
-    sal_Int32 aValue;
+    sal_Int32 aValue = 0;
     CPPUNIT_ASSERT(aOldVertJustify >>= aValue);
     std::cout << "Old VertJustify value: " << aValue << std::endl;
 

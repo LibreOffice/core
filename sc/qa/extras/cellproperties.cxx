@@ -53,7 +53,7 @@ void ScCellProperties::testVertJustify()
     uno::Reference< beans::XPropertySet > xCellRangeBase = init();
     rtl::OUString aVertJustify(RTL_CONSTASCII_USTRINGPARAM("VertJustify"));
     uno::Any aOldVertJustify = xCellRangeBase->getPropertyValue(aVertJustify);
-    sal_Int32 aValue;
+    sal_Int32 aValue = 0;
     CPPUNIT_ASSERT(aOldVertJustify >>= aValue);
     std::cout << "Old VertJustify value: " << aValue << std::endl;
 
@@ -71,7 +71,7 @@ void ScCellProperties::testRotateReference()
     uno::Reference< beans::XPropertySet > xCellRangeBase = init();
     rtl::OUString aRotateReference(RTL_CONSTASCII_USTRINGPARAM("RotateReference"));
     uno::Any aOldRotateReference = xCellRangeBase->getPropertyValue(aRotateReference);
-    sal_Int32 aValue;
+    sal_Int32 aValue = 0;
     CPPUNIT_ASSERT(aOldRotateReference >>= aValue);
     std::cout << "Old RotateReference Value: " << aValue << std::endl;
 
