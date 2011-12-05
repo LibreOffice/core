@@ -36,7 +36,6 @@
 #include <com/sun/star/sheet/FilterOperator.hpp>
 #include <com/sun/star/sheet/FilterOperator2.hpp>
 #include <com/sun/star/sheet/TableFilterField2.hpp>
-#include <tools/stack.hxx>
 
 #include "xmldrani.hxx"
 #include "xmldpimp.hxx"
@@ -228,7 +227,7 @@ class ScXMLDPFilterContext : public SvXMLImportContext
     bool        bConnectionOr;
     bool        bNextConnectionOr;
     bool        bConditionSourceRange;
-    Stack       aConnectionOrStack;
+    ::std::stack<bool>  aConnectionOrStack;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -252,10 +251,23 @@ public:
 
     void SetIsCaseSensitive(const bool bTemp) { bIsCaseSensitive = bTemp; }
     void SetUseRegularExpressions(const bool bTemp) { if (!bUseRegularExpressions) bUseRegularExpressions = bTemp;}
-    void OpenConnection(const bool bTemp) { bool* pTemp = new bool; *pTemp = bConnectionOr;
-                            bConnectionOr = bNextConnectionOr; bNextConnectionOr = bTemp;
-                            aConnectionOrStack.Push(pTemp);}
-    void CloseConnection() { bool* pTemp = static_cast <bool*> (aConnectionOrStack.Pop()); bConnectionOr = *pTemp; bNextConnectionOr = *pTemp; delete pTemp;}
+
+    void OpenConnection(const bool bVal)
+    {
+        bool bTemp = bConnectionOr;
+        bConnectionOr = bNextConnectionOr;
+        bNextConnectionOr = bVal;
+        aConnectionOrStack.push(bTemp);
+    }
+
+    void CloseConnection()
+    {
+        bool bTemp = aConnectionOrStack.top();
+        aConnectionOrStack.pop();
+        bConnectionOr = bTemp;
+        bNextConnectionOr = bTemp;
+    }
+
     bool GetConnection() { bool bTemp = bConnectionOr; bConnectionOr = bNextConnectionOr; return bTemp; }
     void AddFilterField (const ScQueryEntry& aFilterField);
 };
