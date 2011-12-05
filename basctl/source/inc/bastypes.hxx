@@ -262,10 +262,10 @@ class LibInfoKey
 {
 private:
     ScriptDocument      m_aDocument;
-    String              m_aLibName;
+    ::rtl::OUString m_aLibName;
 
 public:
-    LibInfoKey( const ScriptDocument& rDocument, const String& rLibName );
+    LibInfoKey( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName );
     ~LibInfoKey();
 
     LibInfoKey( const LibInfoKey& rKey );
@@ -275,19 +275,19 @@ public:
 
     const ScriptDocument&
                     GetDocument() const { return m_aDocument; }
-    const String&   GetLibName() const { return m_aLibName; }
+    const ::rtl::OUString& GetLibName() const { return m_aLibName; }
 };
 
 class LibInfoItem
 {
 private:
     ScriptDocument      m_aDocument;
-    String              m_aLibName;
-    String              m_aCurrentName;
+    ::rtl::OUString m_aLibName;
+    ::rtl::OUString m_aCurrentName;
     sal_uInt16              m_nCurrentType;
 
 public:
-    LibInfoItem( const ScriptDocument& rDocument, const String& rLibName, const String& rCurrentName, sal_uInt16 nCurrentType );
+    LibInfoItem( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rCurrentName, sal_uInt16 nCurrentType );
     ~LibInfoItem();
 
     LibInfoItem( const LibInfoItem& rItem );
@@ -295,8 +295,8 @@ public:
 
     const ScriptDocument&
                     GetDocument() const { return m_aDocument; }
-    const String&   GetLibName() const { return m_aLibName; }
-    const String&   GetCurrentName() const { return m_aCurrentName; }
+    const ::rtl::OUString& GetLibName() const { return m_aLibName; }
+    const ::rtl::OUString& GetCurrentName() const { return m_aCurrentName; }
     sal_uInt16          GetCurrentType() const { return m_nCurrentType; }
 };
 

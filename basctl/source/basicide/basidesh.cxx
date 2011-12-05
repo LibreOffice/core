@@ -799,7 +799,7 @@ void BasicIDEShell::UpdateWindows()
 
                             for ( sal_Int32 j = 0 ; j < nModCount ; j++ )
                             {
-                                String aModName = pModNames[ j ];
+                                ::rtl::OUString aModName = pModNames[ j ];
                                 ModulWindow* pWin = FindBasWin( *doc, aLibName, aModName, sal_False );
                                 if ( !pWin )
                                     pWin = CreateBasWin( *doc, aLibName, aModName );
@@ -828,7 +828,7 @@ void BasicIDEShell::UpdateWindows()
 
                             for ( sal_Int32 j = 0 ; j < nDlgCount ; j++ )
                             {
-                                String aDlgName = pDlgNames[ j ];
+                                ::rtl::OUString aDlgName = pDlgNames[ j ];
                                 // this find only looks for non-suspended windows;
                                 // suspended windows are handled in CreateDlgWin
                                 DialogWindow* pWin = FindDlgWin( *doc, aLibName, aDlgName, sal_False );

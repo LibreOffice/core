@@ -760,7 +760,7 @@ sal_uLong CalcLineCount( SvStream& rStream )
     return nCRs;
 }
 
-LibInfoKey::LibInfoKey( const ScriptDocument& rDocument, const String& rLibName )
+LibInfoKey::LibInfoKey( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName )
     :m_aDocument( rDocument )
     ,m_aLibName( rLibName )
 {
@@ -791,7 +791,7 @@ bool LibInfoKey::operator==( const LibInfoKey& rKey ) const
     return bRet;
 }
 
-LibInfoItem::LibInfoItem( const ScriptDocument& rDocument, const String& rLibName, const String& rCurrentName, sal_uInt16 nCurrentType )
+LibInfoItem::LibInfoItem( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rCurrentName, sal_uInt16 nCurrentType )
     :m_aDocument( rDocument )
     ,m_aLibName( rLibName )
     ,m_aCurrentName( rCurrentName )
