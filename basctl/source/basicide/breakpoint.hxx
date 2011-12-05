@@ -28,6 +28,7 @@
 #ifndef _BREAKPOINT_HXX
 #define _BREAKPOINT_HXX
 
+#include <cstddef>
 #include <vector>
 
 class SbModule;
