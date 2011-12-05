@@ -603,12 +603,9 @@ void Chart2Positioner::calcGlueState(SCCOL nCols, SCROW nRows)
 {
     sal_uInt32 nCR = static_cast<sal_uInt32>(nCols*nRows);
 
-    const sal_uInt8 nHole = 0;
-    const sal_uInt8 nOccu = 1;
-    const sal_uInt8 nFree = 2;
-    const sal_uInt8 nGlue = 3;
+    enum State { Hole = 0, Occupied = 1, Free = 2, Glue = 3 };
 
-    vector<sal_uInt8> aCellStates(nCR);
+    vector<State> aCellStates(nCR, Hole);
     for (vector<ScTokenRef>::const_iterator itr = mrRefTokens.begin(), itrEnd = mrRefTokens.end();
           itr != itrEnd; ++itr)
     {
@@ -622,7 +619,7 @@ void Chart2Positioner::calcGlueState(SCCOL nCols, SCROW nRows)
             for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
             {
                 size_t i = nCol*nRows + nRow;
-                aCellStates[i] = nOccu;
+                aCellStates[i] = Occupied;
             }
     }
     bool bGlue = true;
@@ -634,7 +631,7 @@ void Chart2Positioner::calcGlueState(SCCOL nCols, SCROW nRows)
         for (SCROW nRow = 0; bGlue && nRow < nRows; ++nRow)
         {
             i = nCol*nRows + nRow;
-            if (aCellStates[i] == nOccu)
+            if (aCellStates[i] == Occupied)
             {
                 if (nCol > 0 && nRow > 0)
                     bGlue = false;
@@ -642,12 +639,12 @@ void Chart2Positioner::calcGlueState(SCCOL nCols, SCROW nRows)
                     nRow = nRows;
             }
             else
-                aCellStates[i] = nFree;
+                aCellStates[i] = Free;
         }
         i = (nCol+1)*nRows - 1; // index for the last cell in the column.
-        if (bGlue && (aCellStates[i] == nFree))
+        if (bGlue && (aCellStates[i] == Free))
         {
-            aCellStates[i] = nGlue;
+            aCellStates[i] = Glue;
             bGlueCols = true;
         }
     }
@@ -658,7 +655,7 @@ void Chart2Positioner::calcGlueState(SCCOL nCols, SCROW nRows)
         i = nRow;
         for (SCCOL nCol = 0; bGlue && nCol < nCols; ++nCol, i += nRows)
         {
-            if (aCellStates[i] == nOccu)
+            if (aCellStates[i] == Occupied)
             {
                 if (nCol > 0 && nRow > 0)
                     bGlue = false;
@@ -666,19 +663,19 @@ void Chart2Positioner::calcGlueState(SCCOL nCols, SCROW nRows)
                     nCol = nCols;
             }
             else
-                aCellStates[i] = nFree;
+                aCellStates[i] = Free;
         }
         i = (nCols-1)*nRows + nRow; // index for the row position in the last column.
-        if (bGlue && aCellStates[i] == nFree)
+        if (bGlue && aCellStates[i] == Free)
         {
-            aCellStates[i] = nGlue;
+            aCellStates[i] = Glue;
             bGlueRows = true;
         }
     }
 
     i = 1;
     for (sal_uInt32 n = 1; bGlue && n < nCR; ++n, ++i)
-        if (aCellStates[i] == nHole)
+        if (aCellStates[i] == Hole)
             bGlue = false;
 
     if (bGlue)
@@ -689,7 +686,7 @@ void Chart2Positioner::calcGlueState(SCCOL nCols, SCROW nRows)
             meGlue = GLUETYPE_ROWS;
         else
             meGlue = GLUETYPE_COLS;
-        if (aCellStates.front() != nOccu)
+        if (aCellStates.front() != Occupied)
             mbDummyUpperLeft = true;
     }
     else
