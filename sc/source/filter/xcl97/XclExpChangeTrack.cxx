@@ -1325,21 +1325,6 @@ void XclExpChTr0x014A::SaveXml( XclExpXmlStream& rStrm )
 
 //___________________________________________________________________
 
-XclExpChTrActionStack::~XclExpChTrActionStack()
-{
-    while( XclExpChTrAction* pRec = Pop() )
-        delete pRec;
-}
-
-void XclExpChTrActionStack::Push( XclExpChTrAction* pNewRec )
-{
-    OSL_ENSURE( pNewRec, "XclExpChTrActionStack::Push - NULL pointer" );
-    if( pNewRec )
-        Stack::Push( pNewRec );
-}
-
-//___________________________________________________________________
-
 class ExcXmlRecord : public ExcRecord
 {
 public:
@@ -1479,8 +1464,11 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
     DateTime aLastDateTime( DateTime::EMPTY );
     sal_uInt32 nIndex = 1;
     sal_Int32 nLogNumber = 1;
-    while( XclExpChTrAction* pAction = aActionStack.Pop() )
+    while( !aActionStack.empty() )
     {
+        XclExpChTrAction* pAction = aActionStack.top();
+        aActionStack.pop();
+
         if( (nIndex == 1) || pAction->ForceInfoRecord() ||
             (pAction->GetUsername() != sLastUsername) ||
             (pAction->GetDateTime() != aLastDateTime) )
@@ -1525,6 +1513,12 @@ XclExpChangeTrack::~XclExpChangeTrack()
     std::vector<XclExpChTrTabIdBuffer*>::iterator pIter;
     for ( pIter = maBuffers.begin(); pIter != maBuffers.end(); ++pIter )
         delete *pIter;
+
+    while( !aActionStack.empty() )
+    {
+        delete aActionStack.top();
+        aActionStack.pop();
+    }
 
     if( pTempDoc )
         delete pTempDoc;
@@ -1592,7 +1586,7 @@ void XclExpChangeTrack::PushActionRecord( const ScChangeAction& rAction )
         default:;
     }
     if( pXclAction )
-        aActionStack.Push( pXclAction );
+        aActionStack.push( pXclAction );
 }
 
 sal_Bool XclExpChangeTrack::WriteUserNamesStream()

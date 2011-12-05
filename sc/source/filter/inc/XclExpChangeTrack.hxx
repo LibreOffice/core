@@ -29,8 +29,8 @@
 #ifndef SC_XCLEXPCHANGETRACK_HXX
 #define SC_XCLEXPCHANGETRACK_HXX
 
+#include <stack>
 #include <tools/datetime.hxx>
-#include <tools/stack.hxx>
 #include <rtl/uuid.h>
 #include "bigrange.hxx"
 #include "chgtrack.hxx"
@@ -601,29 +601,14 @@ public:
 };
 
 //___________________________________________________________________
-// XclExpChTrActionStack - temporary action stack
-
-class XclExpChTrActionStack : private Stack
-{
-public:
-    virtual                     ~XclExpChTrActionStack();
-
-    void                        Push( XclExpChTrAction* pNewRec );
-    inline XclExpChTrAction*    Pop()   { return (XclExpChTrAction*) Stack::Pop(); }
-
-private:
-    using                       Stack::Push;
-};
-
-//___________________________________________________________________
 // XclExpChangeTrack - exports the "Revision Log" stream
 
 class XclExpChangeTrack : protected XclExpRoot
 {
 private:
-    std::vector<ExcRecord*>     aRecList;           // list of "Revision Log" stream records
-    XclExpChTrActionStack       aActionStack;
-    XclExpChTrTabIdBuffer*      pTabIdBuffer;
+    std::vector<ExcRecord*>       aRecList;           // list of "Revision Log" stream records
+    std::stack<XclExpChTrAction*> aActionStack;
+    XclExpChTrTabIdBuffer*        pTabIdBuffer;
     std::vector<XclExpChTrTabIdBuffer*> maBuffers;
 
     ScDocument*                 pTempDoc;           // empty document
