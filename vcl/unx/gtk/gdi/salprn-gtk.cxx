@@ -122,7 +122,7 @@ private:
 
     void impl_initDialog();
     void impl_initCustomTab();
-    void impl_initPrintRange();
+    void impl_initPrintContent(uno::Sequence<sal_Bool> const& i_rDisabled);
 
     void impl_readFromSettings();
     void impl_storeToSettings() const;
@@ -489,7 +489,6 @@ GtkPrintDialog::GtkPrintDialog(vcl::PrinterController& io_rController)
     assert(m_pWrapper->supportsPrinting());
     impl_initDialog();
     impl_initCustomTab();
-    impl_initPrintRange();
     impl_readFromSettings();
 }
 
@@ -544,6 +543,7 @@ GtkPrintDialog::impl_initCustomTab()
         rtl::OUString aText;
         rtl::OUString aPropertyName;
         uno::Sequence<rtl::OUString> aChoices;
+        uno::Sequence<sal_Bool> aChoicesDisabled;
         uno::Sequence<rtl::OUString> aHelpTexts;
         sal_Int64 nMinValue = 0, nMaxValue = 0;
         sal_Int32 nCurHelpText = 0;
@@ -552,6 +552,7 @@ GtkPrintDialog::impl_initCustomTab()
         sal_Bool bUseDependencyRow = sal_False;
         sal_Bool bIgnore = sal_False;
         GtkWidget* pGroup = NULL;
+        bool bGtkInternal = false;
 
         for (int n = 0; n != aOptProp.getLength(); n++)
         {
@@ -566,6 +567,8 @@ GtkPrintDialog::impl_initCustomTab()
                 rEntry.Value >>= aCtrlType;
             else if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Choices")))
                 rEntry.Value >>= aChoices;
+            else if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ChoicesDisabled")))
+                rEntry.Value >>= aChoicesDisabled;
             else if (rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Property")))
             {
                 beans::PropertyValue aVal;
@@ -617,6 +620,9 @@ GtkPrintDialog::impl_initCustomTab()
             }
         }
 
+        if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PrintContent")))
+            bGtkInternal = true;
+
         if (aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Group")) || !pCurParent)
         {
             pCurTabPage = gtk_vbox_new(FALSE, 12);
@@ -636,6 +642,15 @@ GtkPrintDialog::impl_initCustomTab()
 
             pCurSubGroup = lcl_makeFrame(pCurParent, aText, aHelpTexts, NULL);
             gtk_box_pack_start(GTK_BOX(pCurTabPage), pCurSubGroup, FALSE, FALSE, 0);
+        }
+        // special case: we need to map these to controls of the gtk print dialog
+        else if (bGtkInternal)
+        {
+            if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PrintContent")))
+            {
+                // What to print? And, more importantly, is there a selection?
+                impl_initPrintContent(aChoicesDisabled);
+            }
         }
         else if (bIgnoreSubgroup || bIgnore)
             continue;
@@ -814,10 +829,23 @@ GtkPrintDialog::impl_initCustomTab()
 
 
 void
-GtkPrintDialog::impl_initPrintRange()
+GtkPrintDialog::impl_initPrintContent(uno::Sequence<sal_Bool> const& i_rDisabled)
 {
-    if (!m_pWrapper->supportsPrintSelection())
+    SAL_WARN_IF(i_rDisabled.getLength() != 3, "vcl.gtk", "there is more choices than we expected");
+    if (i_rDisabled.getLength() != 3)
         return;
+
+    GtkPrintUnixDialog* const pDialog(GTK_PRINT_UNIX_DIALOG(m_pDialog));
+
+    // XXX: This is a hack that depends on the number and the ordering of
+    // the controls in the rDisabled sequence (cf. the intialization of
+    // the "PrintContent" UI option in SwPrintUIOptions::SwPrintUIOptions,
+    // sw/source/core/view/printdata.cxx)
+    if (m_pWrapper->supportsPrintSelection() && !i_rDisabled[2])
+    {
+        m_pWrapper->print_unix_dialog_set_support_selection(pDialog, TRUE);
+        m_pWrapper->print_unix_dialog_set_has_selection(pDialog, TRUE);
+    }
 
     beans::PropertyValue* const pPrintContent(
             m_rController.getValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PrintContent"))));
@@ -826,17 +854,28 @@ GtkPrintDialog::impl_initPrintRange()
     {
         sal_Int32 nSelectionType(0);
         pPrintContent->Value >>= nSelectionType;
-        if (nSelectionType == 2)
+        GtkPrintSettings* const pSettings(getSettings());
+        GtkPrintPages ePrintPages(GTK_PRINT_PAGES_ALL);
+        switch (nSelectionType)
         {
-            GtkPrintUnixDialog* const pDialog(GTK_PRINT_UNIX_DIALOG(m_pDialog));
-            m_pWrapper->print_unix_dialog_set_support_selection(pDialog, TRUE);
-            m_pWrapper->print_unix_dialog_set_has_selection(pDialog, TRUE);
-
-            GtkPrintSettings* const pSettings(getSettings());
-            m_pWrapper->print_settings_set_print_pages(pSettings, GTK_PRINT_PAGES_SELECTION);
-            m_pWrapper->print_unix_dialog_set_settings(pDialog, pSettings);
-            g_object_unref(G_OBJECT(pSettings));
+            case 0:
+                ePrintPages = GTK_PRINT_PAGES_ALL;
+                break;
+            case 1:
+                ePrintPages = GTK_PRINT_PAGES_RANGES;
+                break;
+            case 2:
+                if (m_pWrapper->supportsPrintSelection())
+                    ePrintPages = GTK_PRINT_PAGES_SELECTION;
+                else
+                    SAL_INFO("vcl.gtk", "the application wants to print a selection, but the present gtk version does not support it");
+                break;
+            default:
+                SAL_WARN("vcl.gtk", "unexpected selection type: " << nSelectionType);
         }
+        m_pWrapper->print_settings_set_print_pages(pSettings, ePrintPages);
+        m_pWrapper->print_unix_dialog_set_settings(pDialog, pSettings);
+        g_object_unref(G_OBJECT(pSettings));
     }
 }
 
