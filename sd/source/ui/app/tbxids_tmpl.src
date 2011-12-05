@@ -501,14 +501,6 @@
         AutoCheck = TRUE ; \
     };
 
-#define TBI_BIG_HANDLES \
-    ToolBoxItem\
-    {\
-        Identifier = SID_BIG_HANDLES ; \
-        HelpID = SID_BIG_HANDLES ; \
-        AutoCheck = TRUE ; \
-    };
-
 #define TBI_SOLID_CREATE \
     ToolBoxItem\
     {\

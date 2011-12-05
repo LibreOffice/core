@@ -408,16 +408,6 @@
         </info>
         <value>true</value>
       </prop>
-      <prop oor:name="BigHandles" oor:type="xs:boolean">
-        <!-- OldPath: Impress/Other -->
-        <!-- OldLocation: soffice.cfg -->
-        <!-- UIHints: Optionbar -->
-        <info>
-          <desc>Indicates whether to show big (true) or small (false) handles.</desc>
-          <label>Big Handles</label>
-        </info>
-        <value>true</value>
-      </prop>
       <prop oor:name="ModifyWithAttributes" oor:type="xs:boolean">
         <!-- OldPath: Impress/Other -->
         <!-- OldLocation: soffice.cfg -->

@@ -130,7 +130,6 @@ Gitterlinien sym:sc:CheckBox:RID_SCPAGE_CONTENT:CB_GRID
 Farbe sym:sc:ListBox:RID_SCPAGE_CONTENT:LB_COLOR
 Seitenumbruch sym:sc:CheckBox:RID_SCPAGE_CONTENT:CB_PAGEBREAKS
 Hilfslinien sym:sc:CheckBox:RID_SCPAGE_CONTENT:CB_GUIDELINE
-GrosseGriffe sym:sc:CheckBox:RID_SCPAGE_CONTENT:CB_BIGHANDLES
 ZeilenUndSpaltenkoepfe sym:sc:CheckBox:RID_SCPAGE_CONTENT:CB_ROWCOLHEADER
 HorizontalerBildaufbau sym:sc:CheckBox:RID_SCPAGE_CONTENT:CB_HSCROLL
 VertikalerBildaufbau sym:sc:CheckBox:RID_SCPAGE_CONTENT:CB_VSCROLL
@@ -151,8 +150,6 @@ Zeichnungen sym:sw:CheckBox:TP_CONTENT_OPT:CB_DRWFAST
 Feldnamen sym:sw:CheckBox:TP_CONTENT_OPT:CB_FIELD
 Notizen sym:sw:CheckBox:TP_CONTENT_OPT:CB_POSTIT
 Hilfslinien sym:sw:CheckBox:TP_CONTENT_OPT:CB_CROSS
-FarbigeHandles sym:sw:CheckBox:TP_CONTENT_OPT:CB_HANDLE
-GrosseHandles sym:sw:CheckBox:TP_CONTENT_OPT:CB_BIGHANDLE
 HorizontaleBildlaufleiste sym:sw:CheckBox:TP_CONTENT_OPT:CB_HSCROLL
 VertikaleBildlaufleiste sym:sw:CheckBox:TP_CONTENT_OPT:CB_VSCROLL
 HorizontalesLineal sym:sw:CheckBox:TP_CONTENT_OPT:CB_HRULER
@@ -171,8 +168,6 @@ Zeichnungen sym:sw:CheckBox:TP_CONTENT_OPT:CB_DRWFAST
 Feldname sym:sw:CheckBox:TP_CONTENT_OPT:CB_FIELD
 Notizen sym:sw:CheckBox:TP_CONTENT_OPT:CB_POSTIT
 Hilfslinien sym:sw:CheckBox:TP_CONTENT_OPT:CB_CROSS
-FarbigeHandles sym:sw:CheckBox:TP_CONTENT_OPT:CB_HANDLE
-GrosseHandles sym:sw:CheckBox:TP_CONTENT_OPT:CB_BIGHANDLE
 HorizontaleBildlaufleiste sym:sw:CheckBox:TP_CONTENT_OPT:CB_HSCROLL
 VertikaleBildlaufleiste sym:sw:CheckBox:TP_CONTENT_OPT:CB_VSCROLL
 HorizontalesLineal sym:sw:CheckBox:TP_CONTENT_OPT:CB_HRULER

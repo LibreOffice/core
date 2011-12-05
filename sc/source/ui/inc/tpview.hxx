@@ -53,7 +53,6 @@ class ScTpContentOptions : public SfxTabPage
     ColorListBox    aColorLB;
     CheckBox        aBreakCB;
     CheckBox        aGuideLineCB;
-    CheckBox        aBigHandleCB;
 
     FixedLine       aSeparator1FL;
 

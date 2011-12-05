@@ -40,7 +40,6 @@
 #define CMD_SID_MOREBACK                            ".uno:Backward"
 #define CMD_SID_BEFORE_OBJ                          ".uno:BeforeObject"
 #define CMD_SID_BEHIND_OBJ                          ".uno:BehindObject"
-#define CMD_SID_BIG_HANDLES                         ".uno:BigHandles"
 #define CMD_SID_BREAK                               ".uno:Break"
 #define CMD_SID_CAPTUREPOINT                        ".uno:CapturePoint"
 #define CMD_SID_CHANGEBEZIER                        ".uno:ChangeBezier"

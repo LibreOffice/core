@@ -1977,9 +1977,8 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         Fraction aSnGrWdtY(rSz.Height(), rOpt.GetDivisionY() + 1);
         pDView->SetSnapGridWidth( aSnGrWdtX, aSnGrWdtY );
 
-            // it's a JOE interface !
-        if ( pOpt->IsBigMarkHdl() != rOpt.IsBigMarkHdl() )
-            pDView->SetMarkHdlSizePixel(rOpt.IsBigMarkHdl() ? 9 : 7);
+            // set handle size to 9 pixels, always
+            pDView->SetMarkHdlSizePixel(9);
     }
 
     sal_Bool bOnlineSpellChgd = pOpt->IsOnlineSpell() != rOpt.IsOnlineSpell();

@@ -70,7 +70,6 @@ using namespace com::sun::star;
 // -----------------------------------------------------------------------
 
 #define SC_HANDLESIZE_BIG       9
-#define SC_HANDLESIZE_SMALL     7
 
 // -----------------------------------------------------------------------
 
@@ -552,10 +551,8 @@ void ScDrawView::UpdateUserViewOptions()
         const ScViewOptions&    rOpt = pViewData->GetOptions();
         const ScGridOptions&    rGrid = rOpt.GetGridOptions();
 
-        sal_Bool bBigHdl = rOpt.GetOption( VOPT_BIGHANDLES );
-
         SetDragStripes( rOpt.GetOption( VOPT_HELPLINES ) );
-        SetMarkHdlSizePixel( bBigHdl ? SC_HANDLESIZE_BIG : SC_HANDLESIZE_SMALL );
+        SetMarkHdlSizePixel( SC_HANDLESIZE_BIG );
 
         SetGridVisible( rGrid.GetGridVisible() );
         SetSnapEnabled( rGrid.GetUseGridSnap() );

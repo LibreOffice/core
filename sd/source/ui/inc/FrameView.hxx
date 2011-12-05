@@ -135,9 +135,6 @@ public:
                  { mbQuickEdit = bQEdit; }
     sal_Bool IsQuickEdit() const { return mbQuickEdit; }
 
-    void        SetBigHandles( sal_Bool bOn = sal_True ) { mbBigHandles = bOn; }
-    sal_Bool    IsBigHandles() const { return mbBigHandles; }
-
     void        SetDoubleClickTextEdit( sal_Bool bOn = sal_True ) { mbDoubleClickTextEdit = bOn; }
     sal_Bool    IsDoubleClickTextEdit() const { return mbDoubleClickTextEdit; }
 
@@ -209,7 +206,6 @@ private:
     EditMode        meEditModeOnLoad;
     sal_Bool            mbLayerMode;       // Layer an/aus
     sal_Bool            mbQuickEdit;       // QuickEdit an/aus
-    sal_Bool            mbBigHandles;      // Grosse Handles
     sal_Bool            mbDoubleClickTextEdit; // Textmodus nach Doppelklick
     sal_Bool            mbClickChangeRotation; // Einfachklick wechselt Selektions-/Rotationsmodus
     sal_uInt16          mnPresViewShellId;  // ViewShell aus der die Pres. gestartet wurde

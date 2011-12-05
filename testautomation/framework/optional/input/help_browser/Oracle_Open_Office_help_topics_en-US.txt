@@ -1677,7 +1677,6 @@ Oracle Open Office Calc : gutter
 Oracle Open Office Calc : handles
 Oracle Open Office Calc : handles;displaying (Writer)
 Oracle Open Office Calc : handles;scaling
-Oracle Open Office Calc : handles;showing simple/large handles (Calc)
 Oracle Open Office Calc : Hangul/Hanja
 Oracle Open Office Calc : HARMEAN function
 Oracle Open Office Calc : hatching
@@ -2014,7 +2013,6 @@ Oracle Open Office Calc : languages;setting options
 Oracle Open Office Calc : languages;spellcheck
 Oracle Open Office Calc : languages;spellchecking and formatting
 Oracle Open Office Calc : LARGE function
-Oracle Open Office Calc : large handles (Writer)
 Oracle Open Office Calc : large icons
 Oracle Open Office Calc : layer arrangement
 Oracle Open Office Calc : layout
@@ -4965,10 +4963,7 @@ Oracle Open Office Impress : half-spheres
 Oracle Open Office Impress : hand icon for moving slides
 Oracle Open Office Impress : handles
 Oracle Open Office Impress : handles;displaying (Writer)
-Oracle Open Office Impress : handles;large
 Oracle Open Office Impress : handles;scaling
-Oracle Open Office Impress : handles;showing simple/large handles (Calc)
-Oracle Open Office Impress : handles;simple
 Oracle Open Office Impress : handout printing
 Oracle Open Office Impress : Hangul/Hanja
 Oracle Open Office Impress : hatching
@@ -5219,7 +5214,6 @@ Oracle Open Office Impress : languages;selecting for text
 Oracle Open Office Impress : languages;setting options
 Oracle Open Office Impress : languages;spellcheck
 Oracle Open Office Impress : languages;spellchecking and formatting
-Oracle Open Office Impress : large handles (Writer)
 Oracle Open Office Impress : large icons
 Oracle Open Office Impress : layer arrangement
 Oracle Open Office Impress : layers
@@ -7536,7 +7530,6 @@ Oracle Open Office Chart : gutter
 Oracle Open Office Chart : handles
 Oracle Open Office Chart : handles;displaying (Writer)
 Oracle Open Office Chart : handles;scaling
-Oracle Open Office Chart : handles;showing simple/large handles (Calc)
 Oracle Open Office Chart : Hangul/Hanja
 Oracle Open Office Chart : hatching
 Oracle Open Office Chart : headers
@@ -7737,7 +7730,6 @@ Oracle Open Office Chart : languages;selecting for text
 Oracle Open Office Chart : languages;setting options
 Oracle Open Office Chart : languages;spellcheck
 Oracle Open Office Chart : languages;spellchecking and formatting
-Oracle Open Office Chart : large handles (Writer)
 Oracle Open Office Chart : large icons
 Oracle Open Office Chart : layer arrangement
 Oracle Open Office Chart : layout
@@ -9774,7 +9766,6 @@ Oracle Open Office Base : gutter
 Oracle Open Office Base : handles
 Oracle Open Office Base : handles;displaying (Writer)
 Oracle Open Office Base : handles;scaling
-Oracle Open Office Base : handles;showing simple/large handles (Calc)
 Oracle Open Office Base : Hangul/Hanja
 Oracle Open Office Base : hatching
 Oracle Open Office Base : headers
@@ -9970,7 +9961,6 @@ Oracle Open Office Base : languages;selecting for text
 Oracle Open Office Base : languages;setting options
 Oracle Open Office Base : languages;spellcheck
 Oracle Open Office Base : languages;spellchecking and formatting
-Oracle Open Office Base : large handles (Writer)
 Oracle Open Office Base : large icons
 Oracle Open Office Base : layer arrangement
 Oracle Open Office Base : layout
@@ -12139,7 +12129,6 @@ Oracle Open Office Basic : gutter
 Oracle Open Office Basic : handles
 Oracle Open Office Basic : handles;displaying (Writer)
 Oracle Open Office Basic : handles;scaling
-Oracle Open Office Basic : handles;showing simple/large handles (Calc)
 Oracle Open Office Basic : Hangul/Hanja
 Oracle Open Office Basic : HasUnoInterfaces function
 Oracle Open Office Basic : hatching
@@ -12366,7 +12355,6 @@ Oracle Open Office Basic : languages;selecting for text
 Oracle Open Office Basic : languages;setting options
 Oracle Open Office Basic : languages;spellcheck
 Oracle Open Office Basic : languages;spellchecking and formatting
-Oracle Open Office Basic : large handles (Writer)
 Oracle Open Office Basic : large icons
 Oracle Open Office Basic : layer arrangement
 Oracle Open Office Basic : layout
@@ -14697,7 +14685,6 @@ Oracle Open Office Math : h-bar symbol
 Oracle Open Office Math : handles
 Oracle Open Office Math : handles;displaying (Writer)
 Oracle Open Office Math : handles;scaling
-Oracle Open Office Math : handles;showing simple/large handles (Calc)
 Oracle Open Office Math : Hangul/Hanja
 Oracle Open Office Math : hatching
 Oracle Open Office Math : headers
@@ -14919,7 +14906,6 @@ Oracle Open Office Math : languages;selecting for text
 Oracle Open Office Math : languages;setting options
 Oracle Open Office Math : languages;spellcheck
 Oracle Open Office Math : languages;spellchecking and formatting
-Oracle Open Office Math : large handles (Writer)
 Oracle Open Office Math : large icons
 Oracle Open Office Math : layer arrangement
 Oracle Open Office Math : layout
@@ -17429,7 +17415,6 @@ Oracle Open Office Writer : gutter
 Oracle Open Office Writer : handles
 Oracle Open Office Writer : handles;displaying (Writer)
 Oracle Open Office Writer : handles;scaling
-Oracle Open Office Writer : handles;showing simple/large handles (Calc)
 Oracle Open Office Writer : hanging indents in paragraphs
 Oracle Open Office Writer : Hangul/Hanja
 Oracle Open Office Writer : hard returns in pasted text
@@ -17725,7 +17710,6 @@ Oracle Open Office Writer : languages;selecting for text
 Oracle Open Office Writer : languages;setting options
 Oracle Open Office Writer : languages;spellcheck
 Oracle Open Office Writer : languages;spellchecking and formatting
-Oracle Open Office Writer : large handles (Writer)
 Oracle Open Office Writer : large icons
 Oracle Open Office Writer : layer arrangement
 Oracle Open Office Writer : layout
@@ -20483,10 +20467,7 @@ Oracle Open Office Draw : half-spheres
 Oracle Open Office Draw : hand icon for moving slides
 Oracle Open Office Draw : handles
 Oracle Open Office Draw : handles;displaying (Writer)
-Oracle Open Office Draw : handles;large
 Oracle Open Office Draw : handles;scaling
-Oracle Open Office Draw : handles;showing simple/large handles (Calc)
-Oracle Open Office Draw : handles;simple
 Oracle Open Office Draw : handout printing
 Oracle Open Office Draw : Hangul/Hanja
 Oracle Open Office Draw : hatching
@@ -20737,7 +20718,6 @@ Oracle Open Office Draw : languages;selecting for text
 Oracle Open Office Draw : languages;setting options
 Oracle Open Office Draw : languages;spellcheck
 Oracle Open Office Draw : languages;spellchecking and formatting
-Oracle Open Office Draw : large handles (Writer)
 Oracle Open Office Draw : large icons
 Oracle Open Office Draw : layer arrangement
 Oracle Open Office Draw : layers

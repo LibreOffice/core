@@ -37,7 +37,6 @@
 							<config:config-item config:name="PageKind" config:type="short">0</config:config-item>
 							<config:config-item config:name="SelectedPage" config:type="short">0</config:config-item>
 							<config:config-item config:name="IsLayerMode" config:type="boolean">false</config:config-item>
-							<config:config-item config:name="IsBigHandles" config:type="boolean">false</config:config-item>
 							<config:config-item config:name="IsDoubleClickTextEdit" config:type="boolean">true</config:config-item>
 							<config:config-item config:name="IsClickChangeRotation" config:type="boolean">false</config:config-item>
 							<config:config-item config:name="SlidesPerRow" config:type="short">4</config:config-item>

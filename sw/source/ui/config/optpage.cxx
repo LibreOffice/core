@@ -90,7 +90,6 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
     SfxTabPage( pParent, SW_RES( TP_CONTENT_OPT ), rCoreSet ),
     aLineFL       ( this,   SW_RES( FL_LINE     ) ),
     aCrossCB      ( this,   SW_RES( CB_CROSS     ) ),
-    aBigHandleCB  ( this,   SW_RES( CB_BIGHANDLE) ),
 
     aWindowFL     ( this,   SW_RES( FL_WINDOW   ) ),
     aHScrollBox   ( this,   SW_RES( CB_HSCROLL   ) ),
@@ -215,7 +214,6 @@ void SwContentOptPage::Reset(const SfxItemSet& rSet)
         aFldNameCB  .Check  (pElemAttr->bFieldName            );
         aPostItCB   .Check  (pElemAttr->bNotes                );
         aCrossCB   .Check( pElemAttr->bCrosshair        );
-        aBigHandleCB.Check(pElemAttr->bBigHandles       );
         aHScrollBox.Check( pElemAttr->bHorzScrollbar     );
         aVScrollBox.Check( pElemAttr->bVertScrollbar     );
         aAnyRulerCB.Check( pElemAttr->bAnyRuler );
@@ -245,7 +243,6 @@ sal_Bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     aElem.bFieldName            = aFldNameCB    .IsChecked();
     aElem.bNotes                = aPostItCB     .IsChecked();
     aElem.bCrosshair     = aCrossCB   .IsChecked();
-    aElem.bBigHandles    = aBigHandleCB.IsChecked();
     aElem.bHorzScrollbar = aHScrollBox.IsChecked();
     aElem.bVertScrollbar = aVScrollBox.IsChecked();
     aElem.bAnyRuler = aAnyRulerCB.IsChecked();

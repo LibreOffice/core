@@ -497,13 +497,6 @@ TabPage RID_SCPAGE_CONTENT
         Size = MAP_APPFONT ( 112 , 10 ) ;
         Text [ en-US ] = "Helplines ~While Moving";
     };
-    CheckBox CB_BIGHANDLES
-    {
-        HelpID = "sc:CheckBox:RID_SCPAGE_CONTENT:CB_BIGHANDLES";
-        Pos = MAP_APPFONT ( 12 , 84 ) ;
-        Size = MAP_APPFONT ( 112 , 10 ) ;
-        Text [ en-US ] = "~Large handles";
-    };
     FixedLine FL_SEPARATOR1
     {
         Pos = MAP_APPFONT ( 130 , 14 ) ;
@@ -566,20 +559,20 @@ TabPage RID_SCPAGE_CONTENT
     };
     FixedLine GB_OBJECT
     {
-        Pos = MAP_APPFONT ( 6 , 100 ) ;
+        Pos = MAP_APPFONT ( 6 , 72 ) ;
         Size = MAP_APPFONT ( 121 , 8 ) ;
         Text [ en-US ] = "Objects" ;
     };
     FixedText FT_OBJGRF
     {
-        Pos = MAP_APPFONT ( 12 , 113 ) ;
+        Pos = MAP_APPFONT ( 12 , 85 ) ;
         Size = MAP_APPFONT ( 68 , 8 ) ;
         Text [ en-US ] = "Ob~jects/Graphics" ;
     };
     ListBox LB_OBJGRF
     {
         HelpID = "sc:ListBox:RID_SCPAGE_CONTENT:LB_OBJGRF";
-        Pos = MAP_APPFONT ( 84 , 111 ) ;
+        Pos = MAP_APPFONT ( 84 , 83 ) ;
         Size = MAP_APPFONT ( 40 , 46 ) ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -591,14 +584,14 @@ TabPage RID_SCPAGE_CONTENT
     };
     FixedText FT_DIAGRAM
     {
-        Pos = MAP_APPFONT ( 12 , 129 ) ;
+        Pos = MAP_APPFONT ( 12 , 101 ) ;
         Size = MAP_APPFONT ( 68 , 8 ) ;
         Text [ en-US ] = "Cha~rts" ;
     };
     ListBox LB_DIAGRAM
     {
         HelpID = "sc:ListBox:RID_SCPAGE_CONTENT:LB_DIAGRAM";
-        Pos = MAP_APPFONT ( 84 , 127 ) ;
+        Pos = MAP_APPFONT ( 84 , 99 ) ;
         Size = MAP_APPFONT ( 40 , 46 ) ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -611,14 +604,14 @@ TabPage RID_SCPAGE_CONTENT
     };
     FixedText FT_DRAW
     {
-        Pos = MAP_APPFONT ( 12 , 145 ) ;
+        Pos = MAP_APPFONT ( 12 , 117 ) ;
         Size = MAP_APPFONT ( 68 , 8 ) ;
         Text [ en-US ] = "~Drawing objects" ;
     };
     ListBox LB_DRAW
     {
         HelpID = "sc:ListBox:RID_SCPAGE_CONTENT:LB_DRAW";
-        Pos = MAP_APPFONT ( 84 , 143 ) ;
+        Pos = MAP_APPFONT ( 84 , 115 ) ;
         Size = MAP_APPFONT ( 40 , 46 ) ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -631,14 +624,14 @@ TabPage RID_SCPAGE_CONTENT
     };
     FixedLine GB_ZOOM
     {
-        Pos = MAP_APPFONT ( 6 , 160 ) ;
+        Pos = MAP_APPFONT ( 6 , 132 ) ;
         Size = MAP_APPFONT ( 121 , 8 ) ;
         Text [ en-US ] = "Zoom";
     };
     CheckBox CB_SYNCZOOM
     {
         HelpID = "sc:CheckBox:RID_SCPAGE_CONTENT:CB_SYNCZOOM";
-        Pos = MAP_APPFONT ( 12 , 171 ) ;
+        Pos = MAP_APPFONT ( 12 , 143 ) ;
         Size = MAP_APPFONT ( 112 , 10 ) ;
         Text [ en-US ] = "S~ynchronize sheets" ;
     };

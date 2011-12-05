@@ -152,7 +152,6 @@ void ScViewOptions::SetDefaults()
     aOptArr[ VOPT_SYNTAX      ] =
     aOptArr[ VOPT_HELPLINES   ] =
     aOptArr[ VOPT_GRID_ONTOP  ] =
-    aOptArr[ VOPT_BIGHANDLES  ] = false;
     aOptArr[ VOPT_NOTES       ] =
     aOptArr[ VOPT_NULLVALS    ] =
     aOptArr[ VOPT_VSCROLL     ] =
@@ -299,8 +298,6 @@ SfxPoolItem* ScTpViewItem::Clone( SfxItemPool * ) const
 #define SCLAYOUTOPT_GRIDCOLOR       1
 #define SCLAYOUTOPT_PAGEBREAK       2
 #define SCLAYOUTOPT_GUIDE           3
-#define SCLAYOUTOPT_SIMPLECONT      4
-#define SCLAYOUTOPT_LARGECONT       5
 #define SCLAYOUTOPT_COLROWHDR       6
 #define SCLAYOUTOPT_HORISCROLL      7
 #define SCLAYOUTOPT_VERTSCROLL      8
@@ -345,8 +342,6 @@ Sequence<OUString> ScViewCfg::GetLayoutPropertyNames()
         "Line/GridLineColor",       // SCLAYOUTOPT_GRIDCOLOR
         "Line/PageBreak",           // SCLAYOUTOPT_PAGEBREAK
         "Line/Guide",               // SCLAYOUTOPT_GUIDE
-        "Line/SimpleControlPoint",  // SCLAYOUTOPT_SIMPLECONT
-        "Line/LargeControlPoint",   // SCLAYOUTOPT_LARGECONT
         "Window/ColumnRowHeader",   // SCLAYOUTOPT_COLROWHDR
         "Window/HorizontalScroll",  // SCLAYOUTOPT_HORISCROLL
         "Window/VerticalScroll",    // SCLAYOUTOPT_VERTSCROLL
@@ -453,9 +448,6 @@ ScViewCfg::ScViewCfg() :
                         break;
                     case SCLAYOUTOPT_GUIDE:
                         SetOption( VOPT_HELPLINES, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
-                        break;
-                    case SCLAYOUTOPT_LARGECONT:
-                        SetOption( VOPT_BIGHANDLES, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
                     case SCLAYOUTOPT_COLROWHDR:
                         SetOption( VOPT_HEADER, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
@@ -620,9 +612,6 @@ IMPL_LINK( ScViewCfg, LayoutCommitHdl, void *, EMPTYARG )
                 break;
             case SCLAYOUTOPT_GUIDE:
                 ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetOption( VOPT_HELPLINES ) );
-                break;
-            case SCLAYOUTOPT_LARGECONT:
-                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetOption( VOPT_BIGHANDLES ) );
                 break;
             case SCLAYOUTOPT_COLROWHDR:
                 ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetOption( VOPT_HEADER ) );

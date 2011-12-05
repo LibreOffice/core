@@ -263,14 +263,9 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     if (mpDrawView->IsMasterPagePaintCaching() != pView->IsMasterPagePaintCaching())
         mpDrawView->SetMasterPagePaintCaching( pView->IsMasterPagePaintCaching() );
 
-    // Definition:
-    //  grosse Handles: 9
-    //  kleine Handles: 7
+    // handle size: 9 pixels
     sal_uInt16 nTmp = mpDrawView->GetMarkHdlSizePixel();
-    //DBG_ASSERT(nTmp != 7, "HandleSize != 7 oder 9");
-    if( nTmp == 9 && !pView->IsBigHandles() )
-        mpDrawView->SetMarkHdlSizePixel( 7 );
-    else if( nTmp == 7 && pView->IsBigHandles() )
+    if( nTmp != 9 )
         mpDrawView->SetMarkHdlSizePixel( 9 );
 
 

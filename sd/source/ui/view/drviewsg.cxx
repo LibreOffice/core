@@ -201,12 +201,6 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
         }
         break;
 
-        case SID_BIG_HANDLES:
-        {
-            pOptions->SetBigHandles( !mpFrameView->IsBigHandles() );
-        }
-        break;
-
         case SID_DOUBLECLICK_TEXTEDIT:
         {
             pOptions->SetDoubleClickTextEdit( !mpFrameView->IsDoubleClickTextEdit() );
@@ -265,7 +259,6 @@ void DrawViewShell::GetOptionsBarState( SfxItemSet& rSet )
     rSet.Put( SfxBoolItem( SID_PICK_THROUGH, (sal_Bool)
                 mpDrawView->GetModel()->IsPickThroughTransparentTextFrames() ) );
 
-    rSet.Put( SfxBoolItem( SID_BIG_HANDLES, mpFrameView->IsBigHandles() ) );
     rSet.Put( SfxBoolItem( SID_DOUBLECLICK_TEXTEDIT, mpFrameView->IsDoubleClickTextEdit() ) );
     rSet.Put( SfxBoolItem( SID_CLICK_CHANGE_ROTATION, mpFrameView->IsClickChangeRotation() ) );
 }

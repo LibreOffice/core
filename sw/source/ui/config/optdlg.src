@@ -61,20 +61,6 @@ TabPage TP_CONTENT_OPT
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text [ en-US ] = "Helplines ~While Moving";
     };
-    CheckBox CB_HANDLE
-    {
-        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_HANDLE";
-        Pos = MAP_APPFONT ( 12 , 27 ) ;
-        Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ en-US ] = "Sim~ple handles";
-    };
-    CheckBox CB_BIGHANDLE
-    {
-        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_BIGHANDLE";
-        Pos = MAP_APPFONT ( 12 , 40 ) ;
-        Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ en-US ] = "Large handles";
-    };
     FixedLine FL_WINDOW
     {
         Pos = MAP_APPFONT ( 130 , 3 ) ;
@@ -147,7 +133,7 @@ TabPage TP_CONTENT_OPT
     };
     FixedLine FL_DISP
     {
-        Pos = MAP_APPFONT ( 6 , 56 ) ;
+        Pos = MAP_APPFONT ( 6 , 30 ) ;
         Size = MAP_APPFONT ( 118 , 8 ) ;
         Text [ en-US ] = "Display" ;
         Group = TRUE ;
@@ -155,7 +141,7 @@ TabPage TP_CONTENT_OPT
     CheckBox CB_GRF
     {
         HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_GRF";
-        Pos = MAP_APPFONT ( 12 , 67 ) ;
+        Pos = MAP_APPFONT ( 12 , 41 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ en-US ] = "~Graphics and objects" ;
         TabStop = TRUE ;
@@ -164,28 +150,28 @@ TabPage TP_CONTENT_OPT
     CheckBox CB_TBL
     {
         HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_TBL";
-        Pos = MAP_APPFONT ( 12 , 80 ) ;
+        Pos = MAP_APPFONT ( 12 , 54 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ en-US ] = "~Tables " ;
     };
     CheckBox CB_DRWFAST
     {
         HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_DRWFAST";
-        Pos = MAP_APPFONT ( 12 , 93 ) ;
+        Pos = MAP_APPFONT ( 12 , 67 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ en-US ] = "Dra~wings and controls" ;
     };
     CheckBox CB_FIELD
     {
         HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_FIELD";
-        Pos = MAP_APPFONT ( 12 , 106 ) ;
+        Pos = MAP_APPFONT ( 12 , 80 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ en-US ] = "~Field codes" ;
     };
     CheckBox CB_POSTIT
     {
         HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_POSTIT";
-        Pos = MAP_APPFONT ( 12 , 119 ) ;
+        Pos = MAP_APPFONT ( 12 , 103 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ en-US ] = "~Comments" ;
     };

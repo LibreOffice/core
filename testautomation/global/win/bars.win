@@ -894,7 +894,6 @@ FangenAnSeitenraendern .uno:SnapBorder
 FanglinieBenutzen .uno:HelplinesUse
 FanglinieSichtbar .uno:HelplinesVisible
 FremdgrafikenAndeuten .uno:GraphicDraft
-GrosseHandles .uno:BigHandles
 HilfslinienBeimVerschiebenAnzeigen .uno:HelplinesMove
 KeineFuellungen .uno:FillDraft
 GluePoints .uno:GlueEditMode

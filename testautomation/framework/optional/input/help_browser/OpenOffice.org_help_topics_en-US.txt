@@ -979,7 +979,6 @@ OpenOffice.org Chart : gutter
 OpenOffice.org Chart : handles
 OpenOffice.org Chart : handles;displaying (Writer)
 OpenOffice.org Chart : handles;scaling
-OpenOffice.org Chart : handles;showing simple/large handles (Calc)
 OpenOffice.org Chart : Hangul/Hanja
 OpenOffice.org Chart : hatching
 OpenOffice.org Chart : headers
@@ -1172,7 +1171,6 @@ OpenOffice.org Chart : languages;selecting for text
 OpenOffice.org Chart : languages;setting options
 OpenOffice.org Chart : languages;spellcheck
 OpenOffice.org Chart : languages;spellchecking and formatting
-OpenOffice.org Chart : large handles (Writer)
 OpenOffice.org Chart : large icons
 OpenOffice.org Chart : layer arrangement
 OpenOffice.org Chart : layout
@@ -3382,7 +3380,6 @@ OpenOffice.org Basic : gutter
 OpenOffice.org Basic : handles
 OpenOffice.org Basic : handles;displaying (Writer)
 OpenOffice.org Basic : handles;scaling
-OpenOffice.org Basic : handles;showing simple/large handles (Calc)
 OpenOffice.org Basic : Hangul/Hanja
 OpenOffice.org Basic : HasUnoInterfaces function
 OpenOffice.org Basic : hatching
@@ -3601,7 +3598,6 @@ OpenOffice.org Basic : languages;selecting for text
 OpenOffice.org Basic : languages;setting options
 OpenOffice.org Basic : languages;spellcheck
 OpenOffice.org Basic : languages;spellchecking and formatting
-OpenOffice.org Basic : large handles (Writer)
 OpenOffice.org Basic : large icons
 OpenOffice.org Basic : layer arrangement
 OpenOffice.org Basic : layout
@@ -6505,7 +6501,6 @@ OpenOffice.org Calc : gutter
 OpenOffice.org Calc : handles
 OpenOffice.org Calc : handles;displaying (Writer)
 OpenOffice.org Calc : handles;scaling
-OpenOffice.org Calc : handles;showing simple/large handles (Calc)
 OpenOffice.org Calc : Hangul/Hanja
 OpenOffice.org Calc : HARMEAN function
 OpenOffice.org Calc : hatching
@@ -6835,7 +6830,6 @@ OpenOffice.org Calc : languages;setting options
 OpenOffice.org Calc : languages;spellcheck
 OpenOffice.org Calc : languages;spellchecking and formatting
 OpenOffice.org Calc : LARGE function
-OpenOffice.org Calc : large handles (Writer)
 OpenOffice.org Calc : large icons
 OpenOffice.org Calc : layer arrangement
 OpenOffice.org Calc : layout
@@ -9519,7 +9513,6 @@ OpenOffice.org Base : gutter
 OpenOffice.org Base : handles
 OpenOffice.org Base : handles;displaying (Writer)
 OpenOffice.org Base : handles;scaling
-OpenOffice.org Base : handles;showing simple/large handles (Calc)
 OpenOffice.org Base : Hangul/Hanja
 OpenOffice.org Base : hatching
 OpenOffice.org Base : headers
@@ -9707,7 +9700,6 @@ OpenOffice.org Base : languages;selecting for text
 OpenOffice.org Base : languages;setting options
 OpenOffice.org Base : languages;spellcheck
 OpenOffice.org Base : languages;spellchecking and formatting
-OpenOffice.org Base : large handles (Writer)
 OpenOffice.org Base : large icons
 OpenOffice.org Base : layer arrangement
 OpenOffice.org Base : layout
@@ -11961,10 +11953,7 @@ OpenOffice.org Draw : half-spheres
 OpenOffice.org Draw : hand icon for moving slides
 OpenOffice.org Draw : handles
 OpenOffice.org Draw : handles;displaying (Writer)
-OpenOffice.org Draw : handles;large
 OpenOffice.org Draw : handles;scaling
-OpenOffice.org Draw : handles;showing simple/large handles (Calc)
-OpenOffice.org Draw : handles;simple
 OpenOffice.org Draw : handout printing
 OpenOffice.org Draw : Hangul/Hanja
 OpenOffice.org Draw : hatching
@@ -12206,7 +12195,6 @@ OpenOffice.org Draw : languages;selecting for text
 OpenOffice.org Draw : languages;setting options
 OpenOffice.org Draw : languages;spellcheck
 OpenOffice.org Draw : languages;spellchecking and formatting
-OpenOffice.org Draw : large handles (Writer)
 OpenOffice.org Draw : large icons
 OpenOffice.org Draw : layer arrangement
 OpenOffice.org Draw : layers
@@ -14791,7 +14779,6 @@ OpenOffice.org Writer : gutter
 OpenOffice.org Writer : handles
 OpenOffice.org Writer : handles;displaying (Writer)
 OpenOffice.org Writer : handles;scaling
-OpenOffice.org Writer : handles;showing simple/large handles (Calc)
 OpenOffice.org Writer : hanging indents in paragraphs
 OpenOffice.org Writer : Hangul/Hanja
 OpenOffice.org Writer : hard returns in pasted text
@@ -15077,7 +15064,6 @@ OpenOffice.org Writer : languages;selecting for text
 OpenOffice.org Writer : languages;setting options
 OpenOffice.org Writer : languages;spellcheck
 OpenOffice.org Writer : languages;spellchecking and formatting
-OpenOffice.org Writer : large handles (Writer)
 OpenOffice.org Writer : large icons
 OpenOffice.org Writer : layer arrangement
 OpenOffice.org Writer : layout
@@ -17732,7 +17718,6 @@ OpenOffice.org Math : h-bar symbol
 OpenOffice.org Math : handles
 OpenOffice.org Math : handles;displaying (Writer)
 OpenOffice.org Math : handles;scaling
-OpenOffice.org Math : handles;showing simple/large handles (Calc)
 OpenOffice.org Math : Hangul/Hanja
 OpenOffice.org Math : hatching
 OpenOffice.org Math : headers
@@ -17946,7 +17931,6 @@ OpenOffice.org Math : languages;selecting for text
 OpenOffice.org Math : languages;setting options
 OpenOffice.org Math : languages;spellcheck
 OpenOffice.org Math : languages;spellchecking and formatting
-OpenOffice.org Math : large handles (Writer)
 OpenOffice.org Math : large icons
 OpenOffice.org Math : layer arrangement
 OpenOffice.org Math : layout
@@ -20376,10 +20360,7 @@ OpenOffice.org Impress : half-spheres
 OpenOffice.org Impress : hand icon for moving slides
 OpenOffice.org Impress : handles
 OpenOffice.org Impress : handles;displaying (Writer)
-OpenOffice.org Impress : handles;large
 OpenOffice.org Impress : handles;scaling
-OpenOffice.org Impress : handles;showing simple/large handles (Calc)
-OpenOffice.org Impress : handles;simple
 OpenOffice.org Impress : handout printing
 OpenOffice.org Impress : Hangul/Hanja
 OpenOffice.org Impress : hatching
@@ -20621,7 +20602,6 @@ OpenOffice.org Impress : languages;selecting for text
 OpenOffice.org Impress : languages;setting options
 OpenOffice.org Impress : languages;spellcheck
 OpenOffice.org Impress : languages;spellchecking and formatting
-OpenOffice.org Impress : large handles (Writer)
 OpenOffice.org Impress : large icons
 OpenOffice.org Impress : layer arrangement
 OpenOffice.org Impress : layers

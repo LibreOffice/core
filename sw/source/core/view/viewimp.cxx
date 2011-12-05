@@ -92,8 +92,8 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
 
     pDrawView->SetUseIncompatiblePathCreateInterface( sal_False );
 
-    // it's a JOE interface !
-    pDrawView->SetMarkHdlSizePixel(pNewOpt->IsBigMarkHdl() ? 9 : 7);
+    // set handle size to 9 pixels, always
+    pDrawView->SetMarkHdlSizePixel(9);
 }
 
 SwViewImp::SwViewImp( ViewShell *pParent ) :

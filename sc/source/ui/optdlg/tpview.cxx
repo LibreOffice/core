@@ -66,7 +66,6 @@ ScTpContentOptions::ScTpContentOptions( Window*         pParent,
     aColorLB( this,         ScResId(LB_COLOR            )),
     aBreakCB( this,         ScResId(CB_PAGEBREAKS       )),
     aGuideLineCB( this,     ScResId(CB_GUIDELINE        )),
-    aBigHandleCB( this,     ScResId(CB_BIGHANDLES       )),
 
     aSeparator1FL    (this, ScResId(FL_SEPARATOR1 )),
     aDisplayGB( this,   ScResId(GB_DISPLAY)),
@@ -122,7 +121,6 @@ ScTpContentOptions::ScTpContentOptions( Window*         pParent,
     aOutlineCB  .SetClickHdl(aCBHdl);
     aBreakCB    .SetClickHdl(aCBHdl);
     aGuideLineCB.SetClickHdl(aCBHdl);
-    aBigHandleCB.SetClickHdl(aCBHdl);
     aRowColHeaderCB.SetClickHdl(aCBHdl);
 
 }
@@ -158,8 +156,7 @@ sal_Bool    ScTpContentOptions::FillItemSet( SfxItemSet& rCoreSet )
         aOutlineCB      .GetSavedValue() != aOutlineCB     .IsChecked() ||
         aColorLB        .GetSavedValue() != aColorLB       .GetSelectEntryPos() ||
         aBreakCB        .GetSavedValue() != aBreakCB       .IsChecked() ||
-        aGuideLineCB    .GetSavedValue() != aGuideLineCB   .IsChecked() ||
-        aBigHandleCB    .GetSavedValue() != aBigHandleCB   .IsChecked())
+        aGuideLineCB    .GetSavedValue() != aGuideLineCB   .IsChecked())
     {
         pLocalOptions->SetGridColor( aColorLB.GetSelectEntryColor(),
                                      aColorLB.GetSelectEntry() );
@@ -210,7 +207,6 @@ void    ScTpContentOptions::Reset( const SfxItemSet& rCoreSet )
 
     aBreakCB.Check( pLocalOptions->GetOption(VOPT_PAGEBREAKS) );
     aGuideLineCB.Check( pLocalOptions->GetOption(VOPT_HELPLINES) );
-    aBigHandleCB.Check( pLocalOptions->GetOption(VOPT_BIGHANDLES) );
 
     if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SC_INPUT_RANGEFINDER, false, &pItem))
         aRangeFindCB.Check(((const SfxBoolItem*)pItem)->GetValue());
@@ -238,7 +234,6 @@ void    ScTpContentOptions::Reset( const SfxItemSet& rCoreSet )
     aColorLB        .SaveValue();
     aBreakCB        .SaveValue();
     aGuideLineCB    .SaveValue();
-    aBigHandleCB    .SaveValue();
 }
 
 void ScTpContentOptions::ActivatePage( const SfxItemSet& rSet)
@@ -288,7 +283,6 @@ IMPL_LINK( ScTpContentOptions, CBHdl, CheckBox*, pBtn )
     else if ( &aOutlineCB       == pBtn )   eOption = VOPT_OUTLINER;
     else if ( &aBreakCB         == pBtn )   eOption = VOPT_PAGEBREAKS;
     else if ( &aGuideLineCB     == pBtn )   eOption = VOPT_HELPLINES;
-    else if ( &aBigHandleCB     == pBtn )   eOption = VOPT_BIGHANDLES;
     else if ( &aRowColHeaderCB  == pBtn )   eOption = VOPT_HEADER;
 
     pLocalOptions->SetOption( eOption, bChecked );

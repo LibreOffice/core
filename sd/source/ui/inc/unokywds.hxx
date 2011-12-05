@@ -156,7 +156,6 @@ SD_CONSTASCII_ACTION( sUNO_View_PageKind,                       "PageKind" );
 SD_CONSTASCII_ACTION( sUNO_View_SelectedPage,                   "SelectedPage" );
 SD_CONSTASCII_ACTION( sUNO_View_IsLayerMode,                    "IsLayerMode" );
 SD_CONSTASCII_ACTION( sUNO_View_IsQuickEdit,                    "IsQuickEdit" );
-SD_CONSTASCII_ACTION( sUNO_View_IsBigHandles,                   "IsBigHandles" );
 SD_CONSTASCII_ACTION( sUNO_View_IsDoubleClickTextEdit,          "IsDoubleClickTextEdit" );
 SD_CONSTASCII_ACTION( sUNO_View_IsClickChangeRotation,          "IsClickChangeRotation" );
 SD_CONSTASCII_ACTION( sUNO_View_IsDragWithCopy,                 "IsDragWithCopy" );

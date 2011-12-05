@@ -208,7 +208,6 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         SetMasterPagePaintCaching( pFrameView->IsMasterPagePaintCaching() );
 
         SetDragWithCopy( pFrameView->IsDragWithCopy() );
-        mbBigHandles         = pFrameView->IsBigHandles();
         mbDoubleClickTextEdit = pFrameView->IsDoubleClickTextEdit();
         mbClickChangeRotation = pFrameView->IsClickChangeRotation();
         mnSlidesPerRow = pFrameView->GetSlidesPerRow();
@@ -241,7 +240,6 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         SetViewShEditModeOnLoad(EM_PAGE);
         mbLayerMode = sal_False;
         SetEliminatePolyPoints(sal_False);
-        mbBigHandles = sal_False;
         mbDoubleClickTextEdit = sal_False;
         mbClickChangeRotation = sal_False;
         mnSlidesPerRow = 4;
@@ -360,7 +358,6 @@ void FrameView::Update(SdOptions* pOptions)
         SetMasterPagePaintCaching( pOptions->IsMasterPagePaintCaching() );
 
         SetDragWithCopy(pOptions->IsDragWithCopy());
-        SetBigHandles( pOptions->IsBigHandles() );
         SetDoubleClickTextEdit( pOptions->IsDoubleClickTextEdit() );
         SetClickChangeRotation( pOptions->IsClickChangeRotation() );
     }
@@ -515,7 +512,6 @@ void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com:
     aUserData.addValue( sUNO_View_SelectedPage, makeAny( (sal_Int16)GetSelectedPage() ) );
     aUserData.addValue( sUNO_View_IsLayerMode, makeAny( (sal_Bool)IsLayerMode() ) );
 
-    aUserData.addValue( sUNO_View_IsBigHandles, makeAny( (sal_Bool)IsBigHandles() ) );
     aUserData.addValue( sUNO_View_IsDoubleClickTextEdit,  makeAny( (sal_Bool)IsDoubleClickTextEdit() ) );
     aUserData.addValue( sUNO_View_IsClickChangeRotation, makeAny( (sal_Bool)IsClickChangeRotation() ) );
 
@@ -706,13 +702,6 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                 if( pValue->Value >>= bBool )
                 {
                     SetLayerMode( bBool );
-                }
-            }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsBigHandles ) ) )
-            {
-                if( pValue->Value >>= bBool )
-                {
-                    SetBigHandles( bBool );
                 }
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsDoubleClickTextEdit ) ) )

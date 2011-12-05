@@ -133,16 +133,16 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
         default:
         {
             OSL_FAIL( "Unknown kind of marker." );
-            // no break here, return Rect_7x7 as default
+            // no break here, return Rect_9x9 as default
         }
-        case Rect_7x7:
-        {
-            return impGetOrCreateTargetBitmap((0 * INDEX_COUNT) + nInd, Rectangle(Point(0, nYPos), Size(7, 7)));
-        }
-
         case Rect_9x9:
         {
             return impGetOrCreateTargetBitmap((1 * INDEX_COUNT) + nInd, Rectangle(Point(7, nYPos), Size(9, 9)));
+        }
+
+        case Rect_7x7:
+        {
+            return impGetOrCreateTargetBitmap((0 * INDEX_COUNT) + nInd, Rectangle(Point(0, nYPos), Size(7, 7)));
         }
 
         case Rect_11x11:

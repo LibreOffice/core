@@ -56,8 +56,7 @@ enum ScViewOption
     VOPT_HELPLINES,
     VOPT_ANCHOR,
     VOPT_PAGEBREAKS,
-    VOPT_CLIPMARKS,
-    VOPT_BIGHANDLES
+    VOPT_CLIPMARKS
 };
 
 enum ScVObjType
@@ -67,7 +66,7 @@ enum ScVObjType
     VOBJ_TYPE_DRAW
 };
 
-#define MAX_OPT             (sal_uInt16)VOPT_BIGHANDLES+1
+#define MAX_OPT             (sal_uInt16)VOPT_CLIPMARKS+1
 #define MAX_TYPE            (sal_uInt16)VOBJ_TYPE_DRAW+1
 
 #define SC_STD_GRIDCOLOR    COL_LIGHTGRAY

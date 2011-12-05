@@ -1989,11 +1989,6 @@ interface DrawView
         ExecMethod = ExecOptionsBar ;
         StateMethod = GetOptionsBarState ;
     ]
-    SID_BIG_HANDLES // ole : ?, status : ?
-    [
-        ExecMethod = ExecOptionsBar ;
-        StateMethod = GetOptionsBarState ;
-    ]
     SID_DOUBLECLICK_TEXTEDIT // ole : ?, status : ?
     [
         ExecMethod = ExecOptionsBar ;

@@ -104,7 +104,6 @@ class SW_DLLPUBLIC SwElemItem : public SfxPoolItem
     //visual aids
     sal_Bool bCrosshair     :1;
     sal_Bool bHandles       :1;
-    sal_Bool bBigHandles    :1;
     //display
     sal_Bool bTable             :1;
     sal_Bool bGraphic           :1;

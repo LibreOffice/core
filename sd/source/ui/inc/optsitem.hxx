@@ -260,7 +260,6 @@ private:
     sal_Bool    bMasterPageCache        : 1;    // Misc/BackgroundCache
     sal_Bool    bDragWithCopy           : 1;    // Misc/CopyWhileMoving
     sal_Bool    bPickThrough            : 1;    // Misc/TextObject/Selectable
-    sal_Bool    bBigHandles             : 1;    // Misc/BigHandles
     sal_Bool    bDoubleClickTextEdit    : 1;    // Misc/DclickTextedit
     sal_Bool    bClickChangeRotation    : 1;    // Misc/RotateClick
     sal_Bool    bStartWithActualPage    : 1;    // Misc/Start/CurrentPage
@@ -309,7 +308,6 @@ public:
     sal_Bool    IsMasterPagePaintCaching() const { Init(); return (sal_Bool) bMasterPageCache; }
     sal_Bool    IsDragWithCopy() const { Init(); return (sal_Bool) bDragWithCopy; }
     sal_Bool    IsPickThrough() const { Init(); return (sal_Bool) bPickThrough; }
-    sal_Bool    IsBigHandles() const { Init(); return (sal_Bool) bBigHandles; }
     sal_Bool    IsDoubleClickTextEdit() const { Init(); return (sal_Bool) bDoubleClickTextEdit; }
     sal_Bool    IsClickChangeRotation() const { Init(); return (sal_Bool) bClickChangeRotation; }
     sal_Bool    IsStartWithActualPage() const { Init(); return (sal_Bool) bStartWithActualPage; }
@@ -348,7 +346,6 @@ public:
     void    SetMasterPagePaintCaching( sal_Bool bOn = sal_True ) { if( bMasterPageCache != bOn ) { OptionsChanged(); bMasterPageCache = bOn; } }
     void    SetDragWithCopy( sal_Bool bOn = sal_True ) { if( bDragWithCopy != bOn ) { OptionsChanged(); bDragWithCopy = bOn; } }
     void    SetPickThrough( sal_Bool bOn = sal_True ) { if( bPickThrough != bOn ) { OptionsChanged(); bPickThrough = bOn; } }
-    void    SetBigHandles( sal_Bool bOn = sal_True ) { if( bBigHandles != bOn ) { OptionsChanged(); bBigHandles = bOn; } }
     void    SetDoubleClickTextEdit( sal_Bool bOn = sal_True ) { if( bDoubleClickTextEdit != bOn ) { OptionsChanged(); bDoubleClickTextEdit = bOn; } }
     void    SetClickChangeRotation( sal_Bool bOn = sal_True ) { if( bClickChangeRotation != bOn ) { OptionsChanged(); bClickChangeRotation = bOn; } }
     void    SetStartWithActualPage( sal_Bool bOn = sal_True ) { if( bStartWithActualPage != bOn ) { OptionsChanged(); bStartWithActualPage = bOn; } }

@@ -288,33 +288,6 @@ SfxVoidItem BehindObject SID_BEHIND_OBJ
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem BigHandles SID_BIG_HANDLES
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_OPTIONS;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem Break SID_BREAK
 ()
 [

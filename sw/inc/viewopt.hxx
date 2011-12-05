@@ -75,7 +75,6 @@ namespace svtools{ class ColorConfig;}
 #define VIEWOPT_CORE2_CRSR_IN_PROT      0x00000008L
 #define VIEWOPT_CORE2_PDF_EXPORT        0x00000010L
 #define VIEWOPT_CORE2_PRINTING          0x00000020L
-#define VIEWOPT_CORE2_BIGMARKHDL        0x00000040L
 
 #define VIEWOPT_2_UNUSED1           0x00000100L
 #define VIEWOPT_2_UNUSED2           0x00000200L
@@ -289,11 +288,6 @@ public:
         { return nCoreOptions & VIEWOPT_1_PAGEBACK ? sal_True : sal_False; }
     inline void SetPageBack( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_PAGEBACK) : ( nCoreOptions &= ~VIEWOPT_1_PAGEBACK); }
-
-    inline sal_Bool IsBigMarkHdl() const
-        { return nCore2Options & VIEWOPT_CORE2_BIGMARKHDL ? sal_True : sal_False;}
-    inline void SetBigMarkHdl(sal_Bool b)
-        { (b != 0) ? (nCore2Options |=  VIEWOPT_CORE2_BIGMARKHDL ) : (nCore2Options &=  ~VIEWOPT_CORE2_BIGMARKHDL);}
 
     inline sal_Bool IsTable() const
         { return nCoreOptions & VIEWOPT_1_TABLE ? sal_True : sal_False; }

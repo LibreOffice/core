@@ -232,7 +232,6 @@
 #define SID_CONVERT_TO_8BIT_GRAYS           (SID_SD_START+165)
 #define SID_CONVERT_TO_8BIT_COLORS          (SID_SD_START+166)
 #define SID_CONVERT_TO_24BIT                (SID_SD_START+167)
-#define SID_BIG_HANDLES                     (SID_SD_START+168)
 #define SID_DOUBLECLICK_TEXTEDIT            (SID_SD_START+169)
 #define SID_CLICK_CHANGE_ROTATION           (SID_SD_START+170)
 
