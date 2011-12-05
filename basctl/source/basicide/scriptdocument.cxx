@@ -26,27 +26,19 @@
  *
  ************************************************************************/
 
-
 #include "scriptdocument.hxx"
 #include "basobj.hxx"
 #include "basidesh.hrc"
 #include "iderid.hxx"
 #include "dlgeddef.hxx"
-#include "localizationmgr.hxx"
 #include "doceventnotifier.hxx"
 #include "documentenumeration.hxx"
 
 /** === begin UNO includes === **/
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/script/XLibraryContainer2.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
-#include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
@@ -89,10 +81,7 @@
 #include <osl/process.h>
 #include <osl/file.hxx>
 
-#include <algorithm>
-#include <functional>
 #include <set>
-
 
 namespace basctl
 {
