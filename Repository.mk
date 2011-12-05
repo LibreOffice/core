@@ -53,7 +53,6 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Helper_register_executables,OOO,\
 	guiloader \
 	guistdio \
-	loader2 \
 	odbcconfig \
 	officeloader \
 	quickstart \
