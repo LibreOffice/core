@@ -29,7 +29,6 @@
 
 #include <algorithm>
 #include <string.h>
-#include <tools/stack.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <vcl/virdev.hxx>
@@ -530,7 +529,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     }
 
     LineInfo            aLineInfo( LINE_NONE, 0 );
-    Stack               aLIStack;
+    ::std::stack< LineInfo* > aLIStack;
     VirtualDevice       aFontVDev;
     rtl_TextEncoding    eActualCharSet = osl_getThreadTextEncoding();
     sal_Bool                bFatLine = sal_False;
@@ -1145,7 +1144,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 case( GDI_PUSH_ACTION ):
                 {
-                    aLIStack.Push( new LineInfo( aLineInfo ) );
+                    aLIStack.push( new LineInfo( aLineInfo ) );
                     rMtf.AddAction( new MetaPushAction( PUSH_ALL ) );
 
                     // #106172# Track font relevant data in shadow VDev
@@ -1156,7 +1155,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 case( GDI_POP_ACTION ):
                 {
 
-                    LineInfo* pLineInfo = (LineInfo*) aLIStack.Pop();
+                    LineInfo* pLineInfo = aLIStack.top();
+                    aLIStack.pop();
 
                     // restore line info
                     if( pLineInfo )
@@ -1353,11 +1353,14 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     rIStm.SeekRel( nActionSize - 4L );
                 break;
             }
-                }
+        }
 
-        // cleanup push-pop stack if neccessary
-        for( void* pLineInfo = aLIStack.Pop(); pLineInfo; pLineInfo = aLIStack.Pop() )
-            delete (LineInfo*) pLineInfo;
+    // cleanup push-pop stack if neccessary
+    while( !aLIStack.empty() )
+    {
+        delete aLIStack.top();
+        aLIStack.pop();
+    }
 
     rIStm.SetNumberFormatInt( nOldFormat );
 }
