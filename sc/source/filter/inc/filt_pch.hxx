@@ -219,7 +219,6 @@
 #include <com/sun/star/lang/WrappedTargetException.hdl>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <sfx2/shell.hxx>
-#include <tools/stack.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XComponent.hdl>
 #include <editeng/svxenum.hxx>
