@@ -2,6 +2,7 @@
 
 import uno
 import unohelper
+import traceback
 
 from com.sun.star.task import XJobExecutor
 from wizards.fax.FaxWizardDialogImpl import FaxWizardDialogImpl
