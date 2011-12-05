@@ -29,7 +29,6 @@
 #include <test/unoapi_test.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/table/CellVertJustify.hpp>
 
 #include <iostream>
 
@@ -43,10 +42,8 @@ public:
     void testVertJustify();
 
     CPPUNIT_TEST_SUITE(ScTableAutoFormatField);
-    // both tests are broken
-    // related to: 7da57d17b6179e71c8b6d7549ad89eaf3a4a28c6
-    //CPPUNIT_TEST(testRotateReference);
-    //CPPUNIT_TEST(testVertJustify);
+    CPPUNIT_TEST(testRotateReference);
+    CPPUNIT_TEST(testVertJustify);
     CPPUNIT_TEST_SUITE_END();
 
 };
@@ -72,12 +69,12 @@ void ScTableAutoFormatField::testRotateReference()
     std::cout << "Old RotateReferene Value: " << aValue << std::endl;
 
     uno::Any aNewRotateReference;
-    aNewRotateReference <<= table::CellVertJustify_BOTTOM;
+    aNewRotateReference <<= static_cast<sal_Int32>(3);
     xTableAutoFormatField->setPropertyValue(aRotateReference, aNewRotateReference);
     uno::Any aRotateReferenceControllValue = xTableAutoFormatField->getPropertyValue(aRotateReference);
     CPPUNIT_ASSERT(aRotateReferenceControllValue >>= aValue);
     std::cout << "New VertJustify value: " << aValue << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("value has not been changed", aValue == table::CellVertJustify_BOTTOM);
+    CPPUNIT_ASSERT_MESSAGE("value has not been changed", aValue == 3);
 }
 
 void ScTableAutoFormatField::testVertJustify()
@@ -90,12 +87,12 @@ void ScTableAutoFormatField::testVertJustify()
     std::cout << "Old VertJustify value: " << aValue << std::endl;
 
     uno::Any aNewVertJustify;
-    aNewVertJustify <<= table::CellVertJustify_BOTTOM;
+    aNewVertJustify <<= static_cast<sal_Int32>(3);
     xTableAutoFormatField->setPropertyValue(aVertJustify, aNewVertJustify);
     uno::Any aVertJustifyControllValue = xTableAutoFormatField->getPropertyValue(aVertJustify);
     CPPUNIT_ASSERT(aVertJustifyControllValue >>= aValue);
     std::cout << "New VertJustify value: " << aValue << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("value has not been changed", aValue == table::CellVertJustify_BOTTOM);
+    CPPUNIT_ASSERT_MESSAGE("value has not been changed", aValue == 3);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScTableAutoFormatField);

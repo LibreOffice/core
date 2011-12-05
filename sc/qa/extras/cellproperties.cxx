@@ -43,9 +43,8 @@ class ScCellProperties : public UnoApiTest
     void testVertJustify();
     void testRotateReference();
     CPPUNIT_TEST_SUITE(ScCellProperties);
-    //enable as soon as fixed
-    //CPPUNIT_TEST(testVertJustify);
-    //CPPUNIT_TEST(testRotateReference);
+    CPPUNIT_TEST(testVertJustify);
+    CPPUNIT_TEST(testRotateReference);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -59,12 +58,12 @@ void ScCellProperties::testVertJustify()
     std::cout << "Old VertJustify value: " << aValue << std::endl;
 
     uno::Any aNewVertJustify;
-    aNewVertJustify <<= table::CellVertJustify_BOTTOM;
+    aNewVertJustify <<= static_cast<sal_Int32>(3);
     xCellRangeBase->setPropertyValue(aVertJustify, aNewVertJustify);
     uno::Any aVertJustifyControllValue = xCellRangeBase->getPropertyValue(aVertJustify);
     CPPUNIT_ASSERT(aVertJustifyControllValue >>= aValue);
     std::cout << "New VertJustify value: " << aValue << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("value has not been changed", aValue == table::CellVertJustify_BOTTOM);
+    CPPUNIT_ASSERT_MESSAGE("value has not been changed", aValue == 3);
 }
 
 void ScCellProperties::testRotateReference()
@@ -77,12 +76,12 @@ void ScCellProperties::testRotateReference()
     std::cout << "Old RotateReference Value: " << aValue << std::endl;
 
     uno::Any aNewRotateReference;
-    aNewRotateReference <<= table::CellVertJustify_BOTTOM;
+    aNewRotateReference <<= static_cast<sal_Int32>(3);
     xCellRangeBase->setPropertyValue(aRotateReference, aNewRotateReference);
     uno::Any aRotateReferenceControllValue = xCellRangeBase->getPropertyValue(aRotateReference);
     CPPUNIT_ASSERT(aRotateReferenceControllValue >>= aValue);
     std::cout << "New RotateReference value: " << aValue << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("value has not been changed", aValue == table::CellVertJustify_BOTTOM);
+    CPPUNIT_ASSERT_MESSAGE("value has not been changed", aValue == 3);
 }
 
 uno::Reference< beans::XPropertySet > ScCellProperties::init()
