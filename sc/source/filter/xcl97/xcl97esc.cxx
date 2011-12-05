@@ -115,7 +115,7 @@ XclEscherEx::XclEscherEx( const XclExpRoot& rRoot, XclExpObjectManager& rObjMgr,
 
 XclEscherEx::~XclEscherEx()
 {
-    OSL_ENSURE( !aStack.Count(), "~XclEscherEx: stack not empty" );
+    OSL_ENSURE( !aStack.empty(), "~XclEscherEx: stack not empty" );
     DeleteCurrAppData();
     delete pTheClientData;
 }
@@ -207,8 +207,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
             UpdateDffFragmentEnd();
         }
     }
-    aStack.Push( pCurrXclObj );
-    aStack.Push( pCurrAppData );
+    aStack.push( std::make_pair( pCurrXclObj, pCurrAppData ) );
     pCurrAppData = new XclEscherHostAppData;
     SdrObject* pObj = GetSdrObjectFromXShape( rxShape );
     if ( !pObj )
@@ -347,8 +346,9 @@ void XclEscherEx::EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID )
 
     // get next object from stack
     DeleteCurrAppData();
-    pCurrAppData = static_cast< XclEscherHostAppData* >( aStack.Pop() );
-    pCurrXclObj = static_cast< XclObj* >( aStack.Pop() );
+    pCurrXclObj = aStack.top().first;
+    pCurrAppData = aStack.top().second;
+    aStack.pop();
     if( nAdditionalText == 3 )
         nAdditionalText = 0;
 }

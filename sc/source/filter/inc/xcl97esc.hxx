@@ -30,8 +30,8 @@
 #define SC_XCL97ESC_HXX
 
 #include <memory>
+#include <stack>
 #include <tools/table.hxx>
-#include <tools/stack.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include "xlescher.hxx"
 #include "xeroot.hxx"
@@ -149,7 +149,7 @@ private:
 
 private:
     XclExpObjectManager& mrObjMgr;
-        Stack               aStack;
+        std::stack< std::pair< XclObj*, XclEscherHostAppData* > > aStack;
         XclObj*             pCurrXclObj;
         XclEscherHostAppData*   pCurrAppData;
         XclEscherClientData*    pTheClientData; // always the same
