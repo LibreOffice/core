@@ -252,7 +252,13 @@ public:
     const SvXMLTokenMap &GetColorTokenMap();
 
     SmNodeStack & GetNodeStack()    { return aNodeStack; }
-    SmNode *GetTree()               { return aNodeStack.Pop(); }
+    SmNode *GetTree()
+    {
+        SmNode* result = aNodeStack.top();
+        aNodeStack.pop();
+        return result;
+    }
+
     sal_Bool GetSuccess()           { return bSuccess; }
     String &GetText()               { return aText; }
 

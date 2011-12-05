@@ -30,7 +30,6 @@
 
 
 #include <vcl/svapp.hxx>
-#include <tools/stack.hxx>
 #include <tools/string.hxx>
 
 #include <set>
@@ -167,7 +166,7 @@ struct SmErrorDesc
 };
 
 
-DECLARE_STACK(SmNodeStack,  SmNode *)
+typedef ::std::stack< SmNode* > SmNodeStack;
 typedef ::std::vector< SmErrorDesc* > SmErrDescList;
 
 /**************************************************************************/

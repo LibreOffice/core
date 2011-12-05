@@ -747,8 +747,9 @@ void SmXMLContext_Helper::ApplyAttrs()
                 aToken.eType = TNBOLD;
             SmStructureNode *pFontNode = static_cast<SmStructureNode *>
                 (new SmFontNode(aToken));
-            pFontNode->SetSubNodes(0,rNodeStack.Pop());
-            rNodeStack.Push(pFontNode);
+            pFontNode->SetSubNodes(0,rNodeStack.top());
+            rNodeStack.pop();
+            rNodeStack.push(pFontNode);
         }
         if (nIsItalic != -1)
         {
@@ -758,8 +759,9 @@ void SmXMLContext_Helper::ApplyAttrs()
                 aToken.eType = TNITALIC;
             SmStructureNode *pFontNode = static_cast<SmStructureNode *>
                 (new SmFontNode(aToken));
-            pFontNode->SetSubNodes(0,rNodeStack.Pop());
-            rNodeStack.Push(pFontNode);
+            pFontNode->SetSubNodes(0,rNodeStack.top());
+            rNodeStack.pop();
+            rNodeStack.push(pFontNode);
         }
         if (nFontSize != 0.0)
         {
@@ -779,8 +781,9 @@ void SmXMLContext_Helper::ApplyAttrs()
             else
                 pFontNode->SetSizeParameter(Fraction(nFontSize),FNTSIZ_ABSOLUT);
 
-            pFontNode->SetSubNodes(0,rNodeStack.Pop());
-            rNodeStack.Push(pFontNode);
+            pFontNode->SetSubNodes(0,rNodeStack.top());
+            rNodeStack.pop();
+            rNodeStack.push(pFontNode);
         }
         if (sFontFamily.getLength())
         {
@@ -798,8 +801,9 @@ void SmXMLContext_Helper::ApplyAttrs()
 
             aToken.aText = sFontFamily;
             SmFontNode *pFontNode = new SmFontNode(aToken);
-            pFontNode->SetSubNodes(0,rNodeStack.Pop());
-            rNodeStack.Push(pFontNode);
+            pFontNode->SetSubNodes(0,rNodeStack.top());
+            rNodeStack.pop();
+            rNodeStack.push(pFontNode);
         }
         if (sColor.getLength())
         {
@@ -812,8 +816,9 @@ void SmXMLContext_Helper::ApplyAttrs()
             if (aToken.eType != -1)
             {
                 SmFontNode *pFontNode = new SmFontNode(aToken);
-                pFontNode->SetSubNodes(0,rNodeStack.Pop());
-                rNodeStack.Push(pFontNode);
+                pFontNode->SetSubNodes(0,rNodeStack.top());
+                rNodeStack.pop();
+                rNodeStack.push(pFontNode);
             }
         }
 
@@ -846,7 +851,7 @@ public:
     SmXMLRowContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
         : SmXMLDocContext_Impl(rImport,nPrefix,rLName)
-        { nElementCount = GetSmImport().GetNodeStack().Count(); }
+        { nElementCount = GetSmImport().GetNodeStack().size(); }
 
     virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &xAttrList);
 
@@ -925,7 +930,7 @@ void SmXMLStyleContext_Impl::EndElement()
     arguments
     */
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    if (rNodeStack.Count() - nElementCount > 1)
+    if (rNodeStack.size() - nElementCount > 1)
         SmXMLRowContext_Impl::EndElement();
     aStyleHelper.ApplyAttrs();
 }
@@ -950,7 +955,7 @@ void SmXMLPaddedContext_Impl::EndElement()
     contents are treated as a single "inferred <mrow>" containing its
     arguments
     */
-    if (GetSmImport().GetNodeStack().Count() - nElementCount > 1)
+    if (GetSmImport().GetNodeStack().size() - nElementCount > 1)
         SmXMLRowContext_Impl::EndElement();
 }
 
@@ -974,7 +979,7 @@ void SmXMLPhantomContext_Impl::EndElement()
     contents are treated as a single "inferred <mrow>" containing its
     arguments
     */
-    if (GetSmImport().GetNodeStack().Count() - nElementCount > 1)
+    if (GetSmImport().GetNodeStack().size() - nElementCount > 1)
         SmXMLRowContext_Impl::EndElement();
 
     SmToken aToken;
@@ -986,8 +991,9 @@ void SmXMLPhantomContext_Impl::EndElement()
     SmStructureNode *pPhantom = static_cast<SmStructureNode *>
         (new SmFontNode(aToken));
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    pPhantom->SetSubNodes(0,rNodeStack.Pop());
-    rNodeStack.Push(pPhantom);
+    pPhantom->SetSubNodes(0,rNodeStack.top());
+    rNodeStack.pop();
+    rNodeStack.push(pPhantom);
 }
 
 ////////////////////////////////////////////////////////////
@@ -1064,14 +1070,15 @@ void SmXMLFencedContext_Impl::EndElement()
     aToken.aText = ',';
     aToken.eType = TIDENT;
 
-    sal_uLong i = rNodeStack.Count() - nElementCount;
-    if (rNodeStack.Count() - nElementCount > 1)
-        i += rNodeStack.Count() - 1 - nElementCount;
+    sal_uLong i = rNodeStack.size() - nElementCount;
+    if (rNodeStack.size() - nElementCount > 1)
+        i += rNodeStack.size() - 1 - nElementCount;
     aRelationArray.resize(i);
-    while (rNodeStack.Count() > nElementCount)
+    while (rNodeStack.size() > nElementCount)
     {
-        aRelationArray[--i] = rNodeStack.Pop();
-        if (i > 1 && rNodeStack.Count() > 1)
+        aRelationArray[--i] = rNodeStack.top();
+        rNodeStack.pop();
+        if (i > 1 && rNodeStack.size() > 1)
             aRelationArray[--i] = new SmGlyphSpecialNode(aToken);
     }
 
@@ -1082,7 +1089,7 @@ void SmXMLFencedContext_Impl::EndElement()
 
     pSNode->SetSubNodes(pLeft,pBody,pRight);
     pSNode->SetScaleMode(SCALE_HEIGHT);
-    GetSmImport().GetNodeStack().Push(pSNode);
+    GetSmImport().GetNodeStack().push(pSNode);
 }
 
 
@@ -1108,10 +1115,10 @@ void SmXMLErrorContext_Impl::EndElement()
      of something. For now just throw them all away.
      */
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    while (rNodeStack.Count() > nElementCount)
+    while (rNodeStack.size() > nElementCount)
     {
-        SmNode *pNode = rNodeStack.Pop();
-        delete pNode;
+        delete rNodeStack.top();
+        rNodeStack.pop();
     }
 }
 
@@ -1145,7 +1152,7 @@ void SmXMLNumberContext_Impl::TCharacters(const OUString &rChars)
 
 void SmXMLNumberContext_Impl::EndElement()
 {
-    GetSmImport().GetNodeStack().Push(new SmTextNode(aToken,FNT_NUMBER));
+    GetSmImport().GetNodeStack().push(new SmTextNode(aToken,FNT_NUMBER));
 }
 
 ////////////////////////////////////////////////////////////
@@ -1226,7 +1233,7 @@ void SmXMLTextContext_Impl::TCharacters(const OUString &rChars)
 
 void SmXMLTextContext_Impl::EndElement()
 {
-    GetSmImport().GetNodeStack().Push(new SmTextNode(aToken,FNT_TEXT));
+    GetSmImport().GetNodeStack().push(new SmTextNode(aToken,FNT_TEXT));
 }
 
 ////////////////////////////////////////////////////////////
@@ -1272,7 +1279,7 @@ void SmXMLStringContext_Impl::TCharacters(const OUString &rChars)
 
 void SmXMLStringContext_Impl::EndElement()
 {
-    GetSmImport().GetNodeStack().Push(new SmTextNode(aToken,FNT_FIXED));
+    GetSmImport().GetNodeStack().push(new SmTextNode(aToken,FNT_FIXED));
 }
 
 ////////////////////////////////////////////////////////////
@@ -1332,7 +1339,7 @@ void SmXMLIdentifierContext_Impl::EndElement()
         aStyleHelper.bFontNodeNeeded=sal_False;
     if (aStyleHelper.bFontNodeNeeded)
         aStyleHelper.ApplyAttrs();
-    GetSmImport().GetNodeStack().Push(pNode);
+    GetSmImport().GetNodeStack().push(pNode);
 }
 
 void SmXMLIdentifierContext_Impl::TCharacters(const OUString &rChars)
@@ -1377,7 +1384,7 @@ void SmXMLOperatorContext_Impl::EndElement()
     //to scale the operator to the height of the expression itself
     if (bIsStretchy)
         pNode->SetScaleMode(SCALE_HEIGHT);
-    GetSmImport().GetNodeStack().Push(pNode);
+    GetSmImport().GetNodeStack().push(pNode);
 }
 
 
@@ -1431,7 +1438,7 @@ void SmXMLSpaceContext_Impl::StartElement(
     aToken.nLevel = 5;
     SmBlankNode *pBlank = new SmBlankNode(aToken);
     pBlank->IncreaseBy(aToken);
-    GetSmImport().GetNodeStack().Push(pBlank);
+    GetSmImport().GetNodeStack().push(pBlank);
 }
 
 ////////////////////////////////////////////////////////////
@@ -1456,7 +1463,7 @@ public:
 void SmXMLSubContext_Impl::GenericEndElement(SmTokenType eType, SmSubSup eSubSup)
 {
     /*The <msub> element requires exactly 2 arguments.*/
-    const bool bNodeCheck = GetSmImport().GetNodeStack().Count() - nElementCount == 2;
+    const bool bNodeCheck = GetSmImport().GetNodeStack().size() - nElementCount == 2;
     OSL_ENSURE( bNodeCheck, "Sub has not two arguments" );
     if (!bNodeCheck)
         return;
@@ -1475,10 +1482,12 @@ void SmXMLSubContext_Impl::GenericEndElement(SmTokenType eType, SmSubSup eSubSup
     for (sal_uLong i = 1;  i < aSubNodes.size();  i++)
         aSubNodes[i] = NULL;
 
-    aSubNodes[eSubSup+1] = rNodeStack.Pop();
-    aSubNodes[0] = rNodeStack.Pop();
+    aSubNodes[eSubSup+1] = rNodeStack.top();
+    rNodeStack.pop();
+    aSubNodes[0] = rNodeStack.top();
+    rNodeStack.pop();
     pNode->SetSubNodes(aSubNodes);
-    rNodeStack.Push(pNode);
+    rNodeStack.push(pNode);
 }
 
 ////////////////////////////////////////////////////////////
@@ -1518,7 +1527,7 @@ void SmXMLSubSupContext_Impl::GenericEndElement(SmTokenType eType,
         SmSubSup aSub,SmSubSup aSup)
 {
     /*The <msub> element requires exactly 3 arguments.*/
-    const bool bNodeCheck = GetSmImport().GetNodeStack().Count() - nElementCount == 3;
+    const bool bNodeCheck = GetSmImport().GetNodeStack().size() - nElementCount == 3;
     OSL_ENSURE( bNodeCheck, "SubSup has not three arguments" );
     if (!bNodeCheck)
         return;
@@ -1537,11 +1546,14 @@ void SmXMLSubSupContext_Impl::GenericEndElement(SmTokenType eType,
     for (sal_uLong i = 1;  i < aSubNodes.size();  i++)
         aSubNodes[i] = NULL;
 
-    aSubNodes[aSup+1] = rNodeStack.Pop();
-    aSubNodes[aSub+1] = rNodeStack.Pop();
-    aSubNodes[0] =  rNodeStack.Pop();
+    aSubNodes[aSup+1] = rNodeStack.top();
+    rNodeStack.pop();
+    aSubNodes[aSub+1] = rNodeStack.top();
+    rNodeStack.pop();
+    aSubNodes[0] =  rNodeStack.top();
+    rNodeStack.pop();
     pNode->SetSubNodes(aSubNodes);
-    rNodeStack.Push(pNode);
+    rNodeStack.push(pNode);
 }
 
 ////////////////////////////////////////////////////////////
@@ -1569,14 +1581,15 @@ void SmXMLUnderContext_Impl::StartElement(const uno::Reference<
 
 void SmXMLUnderContext_Impl::HandleAccent()
 {
-    const bool bNodeCheck = GetSmImport().GetNodeStack().Count() - nElementCount == 2;
+    const bool bNodeCheck = GetSmImport().GetNodeStack().size() - nElementCount == 2;
     OSL_ENSURE( bNodeCheck, "Sub has not two arguments" );
     if (!bNodeCheck)
         return;
 
     /*Just one special case for the underline thing*/
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    SmNode *pTest = rNodeStack.Pop();
+    SmNode *pTest = rNodeStack.top();
+    rNodeStack.pop();
     SmToken aToken;
     aToken.cMathChar = '\0';
     aToken.nGroup = 0;
@@ -1596,10 +1609,11 @@ void SmXMLUnderContext_Impl::HandleAccent()
     else
         aSubNodes[0] = pTest;
 
-    aSubNodes[1] = rNodeStack.Pop();
+    aSubNodes[1] = rNodeStack.top();
+    rNodeStack.pop();
     pNode->SetSubNodes(aSubNodes);
     pNode->SetScaleMode(SCALE_WIDTH);
-    rNodeStack.Push(pNode);
+    rNodeStack.push(pNode);
 }
 
 
@@ -1647,7 +1661,7 @@ void SmXMLOverContext_Impl::EndElement()
 
 void SmXMLOverContext_Impl::HandleAccent()
 {
-    const bool bNodeCheck = GetSmImport().GetNodeStack().Count() - nElementCount == 2;
+    const bool bNodeCheck = GetSmImport().GetNodeStack().size() - nElementCount == 2;
     OSL_ENSURE (bNodeCheck, "Sub has not two arguments");
     if (!bNodeCheck)
         return;
@@ -1663,11 +1677,13 @@ void SmXMLOverContext_Impl::HandleAccent()
 
     SmNodeArray aSubNodes;
     aSubNodes.resize(2);
-    aSubNodes[0] = rNodeStack.Pop();
-    aSubNodes[1] = rNodeStack.Pop();
+    aSubNodes[0] = rNodeStack.top();
+    rNodeStack.pop();
+    aSubNodes[1] = rNodeStack.top();
+    rNodeStack.pop();
     pNode->SetSubNodes(aSubNodes);
     pNode->SetScaleMode(SCALE_WIDTH);
-    rNodeStack.Push(pNode);
+    rNodeStack.push(pNode);
 
 }
 
@@ -1727,7 +1743,7 @@ void SmXMLNoneContext_Impl::EndElement(void)
     aToken.aText.Erase();
     aToken.nLevel = 5;
     aToken.eType = TIDENT;
-    GetSmImport().GetNodeStack().Push(
+    GetSmImport().GetNodeStack().push(
         new SmTextNode(aToken,FNT_VARIABLE));
 }
 
@@ -2179,27 +2195,33 @@ void SmXMLDocContext_Impl::EndElement()
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
 
     for (sal_uLong i=0;i< 1;i++)
-        ContextArray[i] = rNodeStack.Pop();
+    {
+        ContextArray[i] = rNodeStack.top();
+        rNodeStack.pop();
+    }
 
     SmToken aDummy;
     SmStructureNode *pSNode = new SmLineNode(aDummy);
     pSNode->SetSubNodes(ContextArray);
-    rNodeStack.Push(pSNode);
+    rNodeStack.push(pSNode);
 
     SmNodeArray  LineArray;
-    sal_uLong n = rNodeStack.Count();
+    sal_uLong n = rNodeStack.size();
     LineArray.resize(n);
     for (sal_uLong j = 0; j < n; j++)
-        LineArray[n - (j + 1)] = rNodeStack.Pop();
+    {
+        LineArray[n - (j + 1)] = rNodeStack.top();
+        rNodeStack.pop();
+    }
     SmStructureNode *pSNode2 = new SmTableNode(aDummy);
     pSNode2->SetSubNodes(LineArray);
-    rNodeStack.Push(pSNode2);
+    rNodeStack.push(pSNode2);
 }
 
 void SmXMLFracContext_Impl::EndElement()
 {
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    const bool bNodeCheck = rNodeStack.Count() - nElementCount == 2;
+    const bool bNodeCheck = rNodeStack.size() - nElementCount == 2;
     OSL_ENSURE( bNodeCheck, "Fraction (mfrac) tag is missing component" );
     if (!bNodeCheck)
         return;
@@ -2211,16 +2233,18 @@ void SmXMLFracContext_Impl::EndElement()
     aToken.eType = TOVER;
     SmStructureNode *pSNode = new SmBinVerNode(aToken);
     SmNode *pOper = new SmRectangleNode(aToken);
-    SmNode *pSecond = rNodeStack.Pop();
-    SmNode *pFirst = rNodeStack.Pop();
+    SmNode *pSecond = rNodeStack.top();
+    rNodeStack.pop();
+    SmNode *pFirst = rNodeStack.top();
+    rNodeStack.pop();
     pSNode->SetSubNodes(pFirst,pOper,pSecond);
-    rNodeStack.Push(pSNode);
+    rNodeStack.push(pSNode);
 }
 
 void SmXMLRootContext_Impl::EndElement()
 {
     /*The <mroot> element requires exactly 2 arguments.*/
-    const bool bNodeCheck = GetSmImport().GetNodeStack().Count() - nElementCount == 2;
+    const bool bNodeCheck = GetSmImport().GetNodeStack().size() - nElementCount == 2;
     OSL_ENSURE( bNodeCheck, "Root tag is missing component");
     if (!bNodeCheck)
         return;
@@ -2233,10 +2257,12 @@ void SmXMLRootContext_Impl::EndElement()
     SmStructureNode *pSNode = new SmRootNode(aToken);
     SmNode *pOper = new SmRootSymbolNode(aToken);
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    SmNode *pIndex = rNodeStack.Pop();
-    SmNode *pBase = rNodeStack.Pop();
+    SmNode *pIndex = rNodeStack.top();
+    rNodeStack.pop();
+    SmNode *pBase = rNodeStack.top();
+    rNodeStack.pop();
     pSNode->SetSubNodes(pIndex,pOper,pBase);
-    rNodeStack.Push(pSNode);
+    rNodeStack.push(pSNode);
 }
 
 void SmXMLSqrtContext_Impl::EndElement()
@@ -2246,7 +2272,7 @@ void SmXMLSqrtContext_Impl::EndElement()
     contents are treated as a single "inferred <mrow>" containing its
     arguments
     */
-    if (GetSmImport().GetNodeStack().Count() - nElementCount > 1)
+    if (GetSmImport().GetNodeStack().size() - nElementCount > 1)
         SmXMLRowContext_Impl::EndElement();
 
     SmToken aToken;
@@ -2257,22 +2283,25 @@ void SmXMLSqrtContext_Impl::EndElement()
     SmStructureNode *pSNode = new SmRootNode(aToken);
     SmNode *pOper = new SmRootSymbolNode(aToken);
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    pSNode->SetSubNodes(0,pOper,rNodeStack.Pop());
-    rNodeStack.Push(pSNode);
+    pSNode->SetSubNodes(0,pOper,rNodeStack.top());
+    rNodeStack.pop();
+    rNodeStack.push(pSNode);
 }
 
 void SmXMLRowContext_Impl::EndElement()
 {
     SmNodeArray aRelationArray;
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    sal_uLong nSize = rNodeStack.Count()-nElementCount;
+    sal_uLong nSize = rNodeStack.size()-nElementCount;
 
     if (nSize > 0)
     {
         aRelationArray.resize(nSize);
-        for (sal_uLong j=rNodeStack.Count()-nElementCount;j > 0;j--)
-            aRelationArray[j-1] = rNodeStack.Pop();
-
+        for (sal_uLong j=rNodeStack.size()-nElementCount;j > 0;j--)
+        {
+            aRelationArray[j-1] = rNodeStack.top();
+            rNodeStack.pop();
+        }
 
         //If the first or last element is an operator with stretchyness
         //set then we must create a brace node here from those elements,
@@ -2332,7 +2361,7 @@ void SmXMLRowContext_Impl::EndElement()
 
             pSNode->SetSubNodes(pLeft,pBody,pRight);
             pSNode->SetScaleMode(SCALE_HEIGHT);
-            rNodeStack.Push(pSNode);
+            rNodeStack.push(pSNode);
             return;
         }
     }
@@ -2350,7 +2379,7 @@ void SmXMLRowContext_Impl::EndElement()
     SmToken aDummy;
     SmStructureNode *pSNode = new SmExpressionNode(aDummy);
     pSNode->SetSubNodes(aRelationArray);
-    rNodeStack.Push(pSNode);
+    rNodeStack.push(pSNode);
 }
 
 
@@ -2461,10 +2490,10 @@ void SmXMLMultiScriptsContext_Impl::ProcessSubSupPairs(bool bIsPrescript)
 {
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
 
-    if (rNodeStack.Count() <= nElementCount)
+    if (rNodeStack.size() <= nElementCount)
         return;
 
-    sal_uLong nCount = rNodeStack.Count() - nElementCount - 1;
+    sal_uLong nCount = rNodeStack.size() - nElementCount - 1;
     if (nCount == 0)
         return;
 
@@ -2478,7 +2507,10 @@ void SmXMLMultiScriptsContext_Impl::ProcessSubSupPairs(bool bIsPrescript)
 
         SmNodeStack aReverseStack;
         for (sal_uLong i = 0; i < nCount + 1; i++)
-            aReverseStack.Push(rNodeStack.Pop());
+        {
+            aReverseStack.push(rNodeStack.top());
+            rNodeStack.pop();
+        }
 
         SmSubSup eSub = bIsPrescript ? LSUB : RSUB;
         SmSubSup eSup = bIsPrescript ? LSUP : RSUP;
@@ -2493,28 +2525,35 @@ void SmXMLMultiScriptsContext_Impl::ProcessSubSupPairs(bool bIsPrescript)
             /*On each loop the base and its sub sup pair becomes the
              base for the next loop to which the next sub sup pair is
              attached, i.e. wheels within wheels*/
-            aSubNodes[0] = aReverseStack.Pop();
+            aSubNodes[0] = aReverseStack.top();
+            aReverseStack.pop();
 
-            SmNode *pScriptNode = aReverseStack.Pop();
+            SmNode *pScriptNode = aReverseStack.top();
+            aReverseStack.pop();
 
             if (pScriptNode && ((pScriptNode->GetToken().eType != TIDENT) ||
                 (pScriptNode->GetToken().aText.Len())))
                 aSubNodes[eSub+1] = pScriptNode;
-            pScriptNode = aReverseStack.Pop();
+            pScriptNode = aReverseStack.top();
+            aReverseStack.pop();
             if (pScriptNode && ((pScriptNode->GetToken().eType != TIDENT) ||
                 (pScriptNode->GetToken().aText.Len())))
                 aSubNodes[eSup+1] = pScriptNode;
 
             pNode->SetSubNodes(aSubNodes);
-            aReverseStack.Push(pNode);
+            aReverseStack.push(pNode);
         }
-        rNodeStack.Push(aReverseStack.Pop());
+        rNodeStack.push(aReverseStack.top());
+        aReverseStack.pop();
     }
     else
     {
         // Ignore odd number of elements.
         for (sal_uLong i = 0; i < nCount; i++)
-            delete rNodeStack.Pop();
+        {
+            delete rNodeStack.top();
+            rNodeStack.pop();
+        }
     }
 }
 
@@ -2524,15 +2563,16 @@ void SmXMLTableContext_Impl::EndElement()
     SmNodeArray aExpressionArray;
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
     SmNodeStack aReverseStack;
-    aExpressionArray.resize(rNodeStack.Count()-nElementCount);
+    aExpressionArray.resize(rNodeStack.size()-nElementCount);
 
-    sal_uLong nRows = rNodeStack.Count()-nElementCount;
+    sal_uLong nRows = rNodeStack.size()-nElementCount;
     sal_uInt16 nCols = 0;
 
     SmStructureNode *pArray;
-    for (sal_uLong i=rNodeStack.Count()-nElementCount;i > 0;i--)
+    for (sal_uLong i=rNodeStack.size()-nElementCount;i > 0;i--)
     {
-        pArray = (SmStructureNode *)rNodeStack.Pop();
+        pArray = (SmStructureNode *)rNodeStack.top();
+        rNodeStack.pop();
         if (pArray->GetNumSubNodes() == 0)
         {
             //This is a little tricky, it is possible that there was
@@ -2553,13 +2593,14 @@ void SmXMLTableContext_Impl::EndElement()
 
         if (pArray->GetNumSubNodes() > nCols)
             nCols = pArray->GetNumSubNodes();
-        aReverseStack.Push(pArray);
+        aReverseStack.push(pArray);
     }
     aExpressionArray.resize(nCols*nRows);
     sal_uLong j=0;
-    while (aReverseStack.Count())
+    while ( !aReverseStack.empty() )
     {
-        pArray = (SmStructureNode *)aReverseStack.Pop();
+        pArray = (SmStructureNode *)aReverseStack.top();
+        aReverseStack.pop();
         for (sal_uInt16 i=0;i<pArray->GetNumSubNodes();i++)
             aExpressionArray[j++] = pArray->GetSubNode(i);
     }
@@ -2572,7 +2613,7 @@ void SmXMLTableContext_Impl::EndElement()
     SmMatrixNode *pSNode = new SmMatrixNode(aToken);
     pSNode->SetSubNodes(aExpressionArray);
     pSNode->SetRowCol(static_cast<sal_uInt16>(nRows),nCols);
-    rNodeStack.Push(pSNode);
+    rNodeStack.push(pSNode);
 }
 
 SvXMLImportContext *SmXMLTableRowContext_Impl::CreateChildContext(
@@ -2634,9 +2675,10 @@ void SmXMLActionContext_Impl::EndElement()
      first pushed one*/
 
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    for (sal_uLong i=rNodeStack.Count()-nElementCount;i > 1;i--)
+    for (sal_uLong i=rNodeStack.size()-nElementCount;i > 1;i--)
     {
-        delete rNodeStack.Pop();
+        delete rNodeStack.top();
+        rNodeStack.pop();
     }
 }
 

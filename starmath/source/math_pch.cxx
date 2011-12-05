@@ -141,7 +141,6 @@
 #include <tools/datetime.hxx>
 #include <tools/wldcrd.hxx>
 #include <parse.hxx>
-#include <tools/stack.hxx>
 #include <types.hxx>
 #include <config.hxx>
 #include <svtools/confitem.hxx>
