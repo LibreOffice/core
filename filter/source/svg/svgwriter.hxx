@@ -29,13 +29,13 @@
 #ifndef SVGWRITER_HXX
 #define SVGWRITER_HXX
 
+#include <stack>
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/stack.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
@@ -164,7 +164,7 @@ private:
     sal_Int32                                   mnCurGradientId;
     sal_Int32                                   mnCurMaskId;
     sal_Int32                                   mnCurPatternId;
-    Stack                                       maContextStack;
+    ::std::stack< SVGAttributeWriter* >         maContextStack;
     ::std::auto_ptr< SVGShapeDescriptor >       mapCurShape;
     SVGExport&                                  mrExport;
     SVGFontExport&                              mrFontExport;
@@ -179,8 +179,17 @@ private:
     sal_Bool                                    mbIsPlacehlolderShape;
 
 
-    SVGAttributeWriter*     ImplAcquireContext() { maContextStack.Push( mpContext = new SVGAttributeWriter( mrExport, mrFontExport ) ); return mpContext; }
-    void                    ImplReleaseContext() { delete (SVGAttributeWriter*)    maContextStack.Pop(); mpContext = (SVGAttributeWriter*) maContextStack.Top(); }
+    SVGAttributeWriter*     ImplAcquireContext()
+    {
+        maContextStack.push( mpContext = new SVGAttributeWriter( mrExport, mrFontExport ) );
+        return mpContext;
+    }
+    void                    ImplReleaseContext()
+    {
+        delete maContextStack.top();
+        maContextStack.pop();
+        mpContext = maContextStack.top();
+    }
 
     long                    ImplMap( sal_Int32 nVal ) const;
     Point&                  ImplMap( const Point& rPt, Point& rDstPt ) const;
