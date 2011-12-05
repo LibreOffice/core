@@ -115,4 +115,6 @@
 
 #define SAL_RESID_BITMAP_50                                             11000
 
+#define SAL_RESID_ICON_DEFAULT                      1
+
 #endif // _SV_SALIDS_HRC
