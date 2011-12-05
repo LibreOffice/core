@@ -482,6 +482,7 @@ private:
 
     void invalidateGlue();
     void glueState();
+    void calcGlueState(SCCOL nCols, SCROW nRows);
     void createPositionMap();
 
 private:
@@ -594,7 +595,13 @@ void Chart2Positioner::glueState()
         mnStartRow = 0;
         return;
     }
-    sal_uInt32 nCR = static_cast<sal_uInt32>(nC*nR);
+
+    calcGlueState(nC, nR);
+}
+
+void Chart2Positioner::calcGlueState(SCCOL nCols, SCROW nRows)
+{
+    sal_uInt32 nCR = static_cast<sal_uInt32>(nCols*nRows);
 
     const sal_uInt8 nHole = 0;
     const sal_uInt8 nOccu = 1;
@@ -605,6 +612,7 @@ void Chart2Positioner::glueState()
     for (vector<ScTokenRef>::const_iterator itr = mrRefTokens.begin(), itrEnd = mrRefTokens.end();
           itr != itrEnd; ++itr)
     {
+        ScComplexRefData aData;
         ScRefTokenHelper::getDoubleRefDataFromToken(aData, *itr);
         SCCOL nCol1 = static_cast<SCCOL>(aData.Ref1.nCol) - mnStartCol;
         SCCOL nCol2 = static_cast<SCCOL>(aData.Ref2.nCol) - mnStartCol;
@@ -613,7 +621,7 @@ void Chart2Positioner::glueState()
         for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
             for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
             {
-                size_t i = nCol*nR + nRow;
+                size_t i = nCol*nRows + nRow;
                 aCellStates[i] = nOccu;
             }
     }
@@ -621,22 +629,22 @@ void Chart2Positioner::glueState()
 
     size_t i = 0;
     bool bGlueCols = false;
-    for (SCCOL nCol = 0; bGlue && nCol < nC; ++nCol)
+    for (SCCOL nCol = 0; bGlue && nCol < nCols; ++nCol)
     {
-        for (SCROW nRow = 0; bGlue && nRow < nR; ++nRow)
+        for (SCROW nRow = 0; bGlue && nRow < nRows; ++nRow)
         {
-            i = nCol*nR + nRow;
+            i = nCol*nRows + nRow;
             if (aCellStates[i] == nOccu)
             {
                 if (nCol > 0 && nRow > 0)
                     bGlue = false;
                 else
-                    nRow = nR;
+                    nRow = nRows;
             }
             else
                 aCellStates[i] = nFree;
         }
-        i = (nCol+1)*nR - 1; // index for the last cell in the column.
+        i = (nCol+1)*nRows - 1; // index for the last cell in the column.
         if (bGlue && (aCellStates[i] == nFree))
         {
             aCellStates[i] = nGlue;
@@ -645,22 +653,22 @@ void Chart2Positioner::glueState()
     }
 
     bool bGlueRows = false;
-    for (SCROW nRow = 0; bGlue && nRow < nR; ++nRow)
+    for (SCROW nRow = 0; bGlue && nRow < nRows; ++nRow)
     {
         i = nRow;
-        for (SCCOL nCol = 0; bGlue && nCol < nC; ++nCol, i += nR)
+        for (SCCOL nCol = 0; bGlue && nCol < nCols; ++nCol, i += nRows)
         {
             if (aCellStates[i] == nOccu)
             {
                 if (nCol > 0 && nRow > 0)
                     bGlue = false;
                 else
-                    nCol = nC;
+                    nCol = nCols;
             }
             else
                 aCellStates[i] = nFree;
         }
-        i = (nC-1)*nR + nRow; // index for the row position in the last column.
+        i = (nCols-1)*nRows + nRow; // index for the row position in the last column.
         if (bGlue && aCellStates[i] == nFree)
         {
             aCellStates[i] = nGlue;
