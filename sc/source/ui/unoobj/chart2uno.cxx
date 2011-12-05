@@ -149,7 +149,7 @@ uno::Reference< sheet::XSpreadsheetDocument > lcl_GetSpreadSheetDocument( ScDocu
     return uno::Reference< sheet::XSpreadsheetDocument >( lcl_GetXModel( pDoc ), uno::UNO_QUERY );
 }
 
-struct TokenTable
+struct TokenTable : boost::noncopyable
 {
     SCROW mnRowCount;
     SCCOL mnColCount;
@@ -510,6 +510,7 @@ void Chart2Positioner::glueState()
     mbDummyUpperLeft = false;
     if (mrRefTokens.size() <= 1)
     {
+        // Source data consists of only one data range.
         const ScTokenRef& p = mrRefTokens.front();
         ScComplexRefData aData;
         if (ScRefTokenHelper::getDoubleRefDataFromToken(aData, p))
@@ -535,8 +536,8 @@ void Chart2Positioner::glueState()
     mnStartCol = aData.Ref1.nCol;
     mnStartRow = aData.Ref1.nRow;
 
-    SCCOL nMaxCols = 0, nEndCol = 0;
-    SCROW nMaxRows = 0, nEndRow = 0;
+    SCCOL nEndCol = 0;
+    SCROW nEndRow = 0;
     for (vector<ScTokenRef>::const_iterator itr = mrRefTokens.begin(), itrEnd = mrRefTokens.end()
          ; itr != itrEnd; ++itr)
     {
@@ -547,13 +548,10 @@ void Chart2Positioner::glueState()
             n1 = MAXCOL;
         if (n2 > MAXCOL)
             n2 = MAXCOL;
-        SCCOLROW nTmp = n2 - n1 + 1;
         if (n1 < mnStartCol)
             mnStartCol = static_cast<SCCOL>(n1);
         if (n2 > nEndCol)
             nEndCol = static_cast<SCCOL>(n2);
-        if (nTmp > nMaxCols)
-            nMaxCols = static_cast<SCCOL>(nTmp);
 
         n1 = aData.Ref1.nRow;
         n2 = aData.Ref2.nRow;
@@ -561,30 +559,33 @@ void Chart2Positioner::glueState()
             n1 = MAXROW;
         if (n2 > MAXROW)
             n2 = MAXROW;
-        nTmp = n2 - n1 + 1;
 
         if (n1 < mnStartRow)
             mnStartRow = static_cast<SCROW>(n1);
         if (n2 > nEndRow)
             nEndRow = static_cast<SCROW>(n2);
-        if (nTmp > nMaxRows)
-            nMaxRows = static_cast<SCROW>(nTmp);
     }
 
-    // total column size ?
-    SCCOL nC = nEndCol - mnStartCol + 1;
-    if (nC == 1)
+    if (mnStartCol == nEndCol)
     {
+        // All source data is in a single column.
         meGlue = GLUETYPE_ROWS;
         return;
     }
-    // total row size ?
-    SCROW nR = nEndRow - mnStartRow + 1;
-    if (nR == 1)
+
+    if (mnStartRow == nEndRow)
     {
+        // All source data is in a single row.
         meGlue = GLUETYPE_COLS;
         return;
     }
+
+    // total column size
+    SCCOL nC = nEndCol - mnStartCol + 1;
+
+    // total row size
+    SCROW nR = nEndRow - mnStartRow + 1;
+
     // #i103540# prevent invalid vector size
     if ((nC <= 0) || (nR <= 0))
     {
