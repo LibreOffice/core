@@ -26,17 +26,16 @@
  *
  ************************************************************************/
 
-
-#include <limits>
-
 #include <vcl/sound.hxx>
 
 #define _SVX_NOIDERESIDS
-#include <brkdlg.hxx>
-#include <brkdlg.hrc>
-#include <basidesh.hxx>
-#include <basidesh.hrc>
-#include <iderdll.hxx>
+#include "breakpoint.hxx"
+#include "brkdlg.hxx"
+#include "brkdlg.hrc"
+#include "basidesh.hxx"
+#include "basidesh.hrc"
+#include "iderdll.hxx"
+
 #include <comphelper/string.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>

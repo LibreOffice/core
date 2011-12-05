@@ -85,6 +85,7 @@ $(eval $(call gb_Library_add_exception_objects,basctl,\
 	basctl/source/basicide/bastype2 \
 	basctl/source/basicide/bastype3 \
 	basctl/source/basicide/bastypes \
+	basctl/source/basicide/breakpoint \
 	basctl/source/basicide/brkdlg \
 	basctl/source/basicide/doceventnotifier \
 	basctl/source/basicide/docsignature \

@@ -51,6 +51,7 @@ class SvxSearchItem;
 #include <sfx2/progress.hxx>
 #include <svtools/syntaxhighlight.hxx>
 
+#include "breakpoint.hxx"
 #include "linenumberwindow.hxx"
 
 DBG_NAMEEX( ModulWindow )

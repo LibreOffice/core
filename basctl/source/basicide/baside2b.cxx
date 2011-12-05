@@ -26,14 +26,12 @@
  *
  ************************************************************************/
 
-
 #define _BASIC_TEXTPORTIONS
 
 #include "helpid.hrc"
 #include "baside2.hrc"
 
 #include "baside2.hxx"
-#include "basobj.hxx"
 #include "brkdlg.hxx"
 #include "iderdll.hxx"
 #include "iderdll2.hxx"

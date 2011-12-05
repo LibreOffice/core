@@ -65,17 +65,6 @@ struct BasicStatus
         nBasicFlags(0) { }
 };
 
-struct BreakPoint
-{
-    bool    bEnabled;
-    bool    bTemp;
-    size_t  nLine;
-    size_t  nStopAfter;
-    size_t  nHitCount;
-
-    BreakPoint( size_t nL ) { nLine = nL; nStopAfter = 0; nHitCount = 0; bEnabled = true; bTemp = false; }
-};
-
 class BasicDockingWindow : public DockingWindow
 {
     Rectangle       aFloatingPosAndSize;
@@ -89,52 +78,6 @@ protected:
 
 public:
     BasicDockingWindow( Window* pParent );
-};
-
-class BreakPointList
-{
-private:
-    void operator =(BreakPointList); // not implemented
-    ::std::vector< BreakPoint* > maBreakPoints;
-
-public:
-    BreakPointList();
-
-    BreakPointList(BreakPointList const & rList);
-
-    ~BreakPointList();
-
-    void reset();
-
-    void transfer(BreakPointList & rList);
-
-    void        InsertSorted( BreakPoint* pBrk );
-    BreakPoint* FindBreakPoint( size_t nLine );
-    void        AdjustBreakPoints( size_t nLine, bool bInserted );
-    void        SetBreakPointsInBasic( SbModule* pModule );
-    void        ResetHitCount();
-
-    size_t size() const
-    {
-        return maBreakPoints.size();
-    }
-    BreakPoint* at( size_t i )
-    {
-        return i < maBreakPoints.size() ? maBreakPoints[ i ] : NULL;
-    }
-    const BreakPoint* at( size_t i ) const
-    {
-        return i < maBreakPoints.size() ? maBreakPoints[ i ] : NULL;
-    }
-    void push_back( BreakPoint* item )
-    {
-        maBreakPoints.push_back( item );
-    }
-    void clear()
-    {
-        maBreakPoints.clear();
-    }
-    BreakPoint* remove( BreakPoint* ptr );
 };
 
 // helper class for sorting TabBar
