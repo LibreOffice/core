@@ -72,7 +72,6 @@ ifeq ($(OS),WNT)
 
 $(eval $(call gb_Module_add_targets,desktop,\
     Executable_crashrep.com \
-    Executable_loader2 \
     Executable_quickstart \
     Executable_sbase \
     Executable_scalc \
@@ -85,7 +84,6 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Executable_unoinfo \
     Executable_unopkg \
     Executable_unopkg.com \
-    Package_rcfile \
     WinResTarget_quickstart \
     WinResTarget_sbase \
     WinResTarget_scalc \
