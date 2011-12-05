@@ -43,12 +43,15 @@
 
 #include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/awt/Size.hpp"
+#include "com/sun/star/uno/Sequence.hpp"
 
 #include <algorithm>
 
 using namespace vcl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
+
+namespace uno = com::sun::star::uno;
 
 using ::rtl::OUString;
 using ::rtl::OStringToOUString;
@@ -366,7 +369,7 @@ void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
 static Size getPageSize( vcl::PrinterController& i_rController, sal_Int32 i_nPage )
 {
     Size aPageSize;
-    Sequence< PropertyValue > aPageParms( i_rController.getPageParameters( i_nPage ) );
+    uno::Sequence< PropertyValue > aPageParms( i_rController.getPageParameters( i_nPage ) );
     for( sal_Int32 nProperty = 0, nPropertyCount = aPageParms.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
         if( aPageParms[ nProperty ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PageSize" ) ) )
@@ -515,7 +518,7 @@ sal_Bool AquaSalInfoPrinter::StartJob( const rtl::OUString* i_pFileName,
             if( pPrintOperation )
             {
                 NSObject* pReleaseAfterUse = nil;
-                bool bShowPanel = (! i_rController.isDirectPrint() && getUseNativeDialog() && i_rController.isShowDialogs() );
+                bool bShowPanel = (! i_rController.isDirectPrint() && useSystemPrintDialog() && i_rController.isShowDialogs() );
                 [pPrintOperation setShowsPrintPanel: bShowPanel ? YES : NO ];
                 [pPrintOperation setShowsProgressPanel: bShowProgressPanel ? YES : NO];
 
