@@ -170,12 +170,12 @@ LibreOffice_Dev
 	{
 		variables
 		{
-			PRODUCTNAME LibO-dev
+			PRODUCTNAME LOdev
 			PRODUCTVERSION 3.5
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
 			SHORT_PRODUCTEXTENSION beta0
-			UNIXBASISROOTNAME lo-dev
+			UNIXBASISROOTNAME lodev3.5
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
 			BRANDPACKAGEVERSION 3.5
@@ -183,13 +183,14 @@ LibreOffice_Dev
 			ABOUTBOXPRODUCTVERSION 3.5.0
 			BASEPRODUCTVERSION 3.5
 			DEVELOPMENTPRODUCT 1
-			BASISPACKAGEPREFIX libobasis-dev
+			BASISPACKAGEPREFIX lodevbasis
 			UREPACKAGEPREFIX lodev
 			SOLSUREPACKAGEPREFIX lodev
 			REGISTRYLAYERNAME LayerDev
 			SERVICETAG_URN urn:uuid:1680b00d-e45c-11de-82d6-080020a9ed93
 			UPDATEURL http://update.libreoffice.org/check.php
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
+			ADDSYSTEMINTEGRATION 1
 			EVAL
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
@@ -227,7 +228,7 @@ LibreOffice_Dev
 		downloadname	LibO-dev_{productversion}_{os}_install_{languages}
 		langpackdownloadname	LibO_{productversion}_languagepack_{os}_install_{languages}
 		helppackdownloadname	LibO_{productversion}_helppack_{os}_install_{languages}
-		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin/dev,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice_dev,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
+		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin/dev,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice_dev,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 	}
 }
 
@@ -325,18 +326,18 @@ LibreOffice_Dev_SDK
         downloadname OOo-Dev-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
-            PRODUCTNAME LibO-dev
+            PRODUCTNAME LOdev
             PRODUCTVERSION 3.5
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
             SHORT_PRODUCTEXTENSION beta0
-            UNIXBASISROOTNAME lo-dev
+            UNIXBASISROOTNAME lodev3.5
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
             BRANDPACKAGEVERSION 3.5
             PACKAGEVERSION 3.5.0
             PACKAGEREVISION {buildid}
-            BASISPACKAGEPREFIX libobasis-dev
+            BASISPACKAGEPREFIX lodevbasis
             UREPACKAGEPREFIX lodev
             SOLSUREPACKAGEPREFIX lodev
             REGISTRYLAYERNAME LayerDev
@@ -423,18 +424,18 @@ LibreOffice_Dev_Test
         downloadname LO-Dev-Test_{packageversion}_{os}_install_{languages}
         variables
         {
-            PRODUCTNAME LibO-dev
+            PRODUCTNAME LOdev
             PRODUCTVERSION 3.5
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
             SHORT_PRODUCTEXTENSION alpha0
-            UNIXBASISROOTNAME lo-dev
+            UNIXBASISROOTNAME lodev3.5
             POSTVERSIONEXTENSION TEST
             POSTVERSIONEXTENSIONUNIX test
             BRANDPACKAGEVERSION 3.5
             PACKAGEVERSION 3.5.0
             PACKAGEREVISION {buildid}
-            BASISPACKAGEPREFIX libobasis-dev
+            BASISPACKAGEPREFIX lodevbasis
             UREPACKAGEPREFIX lodev
             SOLSUREPACKAGEPREFIX lodev
             REGISTRYLAYERNAME LayerDev
