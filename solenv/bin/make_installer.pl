@@ -2017,8 +2017,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         {
             my $onelanguage = ${$languagesarrayref}[$m];
 
-            my $is_bidi = 0;
-            if ( installer::existence::exists_in_array($onelanguage, \@installer::globals::bidilanguages) ) { $is_bidi = 1; }
+            my $is_rtl = 0;
+            if ( installer::existence::exists_in_array($onelanguage, \@installer::globals::rtllanguages) ) { $is_rtl = 1; }
 
             my $languageidtdir = $idtdirbase . $installer::globals::separator . $onelanguage;
             if ( -d $languageidtdir ) { installer::systemactions::remove_complete_directory($languageidtdir, 1); }
@@ -2091,7 +2091,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             # setting bidi attributes, if required
 
-            if ( $is_bidi ) { installer::windows::idtglobal::setbidiattributes($languageidtdir, $onelanguage); }
+            if ( $is_rtl ) { installer::windows::idtglobal::setbidiattributes($languageidtdir, $onelanguage); }
 
             # setting the encoding in every table (replacing WINDOWSENCODINGTEMPLATE)
             installer::windows::idtglobal::set_multilanguageonly_condition($languageidtdir);

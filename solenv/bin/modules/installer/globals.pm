@@ -98,7 +98,7 @@ BEGIN
         "tk"
     );
     @items_at_modules = ("Files", "Dirs", "Unixlinks");
-    @bidilanguages = ("ar", "fa", "he", "ug");
+    @rtllanguages = ("ar", "fa", "he", "ug");
 
     $ziplistname = "";
     $pathfilename = "";
