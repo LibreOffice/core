@@ -5409,7 +5409,7 @@ if test "x$enable_ext_postgresql_sdbc" = "xyes" -a "x$enable_extension_integrati
         SYSTEM_POSTGRESQL=YES
         if test "$_os" = Darwin; then
            supp_path=''
-           for d in /Library/PostgreSQL/9.*/bin; do
+           for d in /Library/PostgreSQL/9.*/bin /sw/opt/postgresql/9.*/bin /opt/local/lib/postgresql9*/bin; do
             pg_supp_path="$PATH_SEPARATOR$d$pg_supp_path"
            done
         fi
