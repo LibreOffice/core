@@ -174,6 +174,7 @@ public class ScDatabaseRangeObj extends TestCase {
             dbRanges.removeByName("dbRange");
         }
 
+
         //CellRangeAddress aRange = new CellRangeAddress((short)0, 0, 0, 0, 13);
         CellRangeAddress aRange = null;
 
@@ -183,11 +184,12 @@ public class ScDatabaseRangeObj extends TestCase {
         XNamed xNamed = null;
 
         try {
-            String[] dbNames = dbrNA.getElementNames();
+            // we need to add it
+            dbRanges.addNewByName("dbRanges",new CellRangeAddress((short)0, 0, 0, 0, 5));
+
             xNamed = (XNamed) UnoRuntime.queryInterface(XNamed.class,
                                                         dbrNA.getByName(
-                                                                dbNames[0]));
-            xNamed.setName("dbRange");
+                                                                "dbRange"));
 
             XCellRangeReferrer aReferrer = (XCellRangeReferrer) UnoRuntime.queryInterface(
                                                    XCellRangeReferrer.class,
