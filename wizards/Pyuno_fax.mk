@@ -23,9 +23,9 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Pyuno_Pyuno,fax,$(SRCDIR)/wizards/com/sun/star/wizards/fax))
+$(eval $(call gb_Pyuno_Pyuno,pyfax,$(SRCDIR)/wizards/com/sun/star/wizards/fax))
 
-$(eval $(call gb_Pyuno_add_files,fax,\
+$(eval $(call gb_Pyuno_add_files,pyfax,\
     __init__.py \
     CallWizard.py \
     CGFax.py \
@@ -36,6 +36,6 @@ $(eval $(call gb_Pyuno_add_files,fax,\
     FaxWizardDialog.py \
     FaxWizardDialogResources.py \
 ))
-$(eval $(call gb_Pyuno_set_componentfile_full,fax,wizards/com/sun/star/wizards/fax/fax,vnd.sun.star.expand:\dLO_LIB_DIR/wizards/fax/CallWizard,.py))
+$(eval $(call gb_Pyuno_set_componentfile_full,pyfax,wizards/com/sun/star/wizards/fax/pyfax,vnd.sun.star.expand:\dLO_LIB_DIR/wizards/fax/CallWizard,.py))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
