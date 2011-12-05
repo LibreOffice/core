@@ -91,7 +91,7 @@ void SbiScanner::GenError( SbError code )
         {
             // in case of EXPECTED or UNEXPECTED it always refers
             // to the last token, so take the Col1 over
-            sal_uInt16 nc = nColLock ? nSavedCol1 : nCol1;
+            sal_Int32 nc = nColLock ? nSavedCol1 : nCol1;
             switch( code )
             {
                 case SbERR_EXPECTED:
@@ -152,7 +152,7 @@ static SbxDataType GetSuffixType( sal_Unicode c )
 
 void SbiScanner::scanAlphanumeric()
 {
-    sal_uInt16 n = nCol;
+    sal_Int32 n = nCol;
     while(theBasicCharClass::get().isAlphaNumeric(*pLine, bCompatible) || *pLine == '_')
     {
         pLine++;
@@ -163,7 +163,7 @@ void SbiScanner::scanAlphanumeric()
 
 void SbiScanner::scanGoto()
 {
-    sal_uInt16 nTestCol = nCol;
+    sal_Int32 nTestCol = nCol;
     while(nTestCol < aLine.getLength() && theBasicCharClass::get().isWhitespace(aLine[nTestCol]))
         nTestCol++;
 
@@ -182,9 +182,9 @@ void SbiScanner::scanGoto()
 bool SbiScanner::NextSym()
 {
     // memorize for the EOLN-case
-    sal_uInt16 nOldLine = nLine;
-    sal_uInt16 nOldCol1 = nCol1;
-    sal_uInt16 nOldCol2 = nCol2;
+    sal_Int32 nOldLine = nLine;
+    sal_Int32 nOldCol1 = nCol1;
+    sal_Int32 nOldCol2 = nCol2;
     sal_Unicode buf[ BUF_SIZE ], *p = buf;
     bHash = false;
 
@@ -433,7 +433,7 @@ bool SbiScanner::NextSym()
         sal_Unicode cSep = *pLine;
         if( cSep == '[' )
             bSymbol = true, cSep = ']';
-        sal_uInt16 n = nCol + 1;
+        sal_Int32 n = nCol + 1;
         while( *pLine )
         {
             do pLine++, nCol++;
@@ -469,7 +469,7 @@ bool SbiScanner::NextSym()
     // other groups:
     else
     {
-        sal_uInt8 n = 1;
+        sal_Int32 n = 1;
         switch( *pLine++ )
         {
             case '<': if( *pLine == '>' || *pLine == '=' ) n = 2; break;
@@ -489,7 +489,7 @@ PrevLineCommentLbl:
     {
         bPrevLineExtentsComment = false;
         aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REM"));
-        sal_uInt16 nLen = String( pLine ).Len();
+        sal_Int32 nLen = String( pLine ).Len();
         if( bCompatible && pLine[ nLen - 1 ] == '_' && pLine[ nLen - 2 ] == ' ' )
             bPrevLineExtentsComment = true;
         nCol2 = nCol2 + nLen;

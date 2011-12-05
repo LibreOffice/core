@@ -54,14 +54,14 @@ protected:
     SbxDataType eScanType;
     StarBASIC* pBasic;                  // instance for error callbacks
     double nVal;                        // numeric value
-    short  nCurCol1;
-    short  nSavedCol1;
-    short  nCol;
-    short  nErrors;
-    short  nColLock;                    // lock counter for Col1
-    sal_Int32  nBufPos;
-    sal_uInt16 nLine;
-    sal_uInt16 nCol1, nCol2;
+    sal_Int32 nCurCol1;
+    sal_Int32 nSavedCol1;
+    sal_Int32 nCol;
+    sal_Int32 nErrors;
+    sal_Int32 nColLock;                    // lock counter for Col1
+    sal_Int32 nBufPos;
+    sal_Int32 nLine;
+    sal_Int32 nCol1, nCol2;
     bool   bSymbol;                     // sal_True: symbol scanned
     bool   bNumber;                     // sal_True: number scanned
     bool   bSpaces;                     // sal_True: whitespace before token
@@ -86,11 +86,11 @@ public:
     bool  IsVBASupportOn()          { return bVBASupportOn; }
     void  SetVBASupportOn( bool b ) { bVBASupportOn = b; }
     bool  WhiteSpace()              { return bSpaces; }
-    short GetErrors()               { return nErrors; }
-    short GetLine()                 { return nLine;   }
-    short GetCol1()                 { return nCol1;   }
-    short GetCol2()                 { return nCol2;   }
-    void  SetCol1( short n )        { nCol1 = n;      }
+    sal_Int32 GetErrors()           { return nErrors; }
+    sal_Int32 GetLine()             { return nLine;   }
+    sal_Int32 GetCol1()             { return nCol1;   }
+    sal_Int32 GetCol2()             { return nCol2;   }
+    void  SetCol1( sal_Int32 n )    { nCol1 = n;      }
     StarBASIC* GetBasic()           { return pBasic;  }
     void  SaveLine(void)            { pSaveLine = pLine; }
     void  RestoreLine(void)         { pLine = pSaveLine; }
