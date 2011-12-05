@@ -150,8 +150,9 @@ SfxChildWinInfo ScInputWindowWrapper::GetInfo() const
 #define IMAGE(id) pImgMgr->SeekImage(id)
 bool lcl_isExperimentalMode()
 {
-    SvtMiscOptions aMiscOptions;
-    return aMiscOptions.IsExperimentalMode();
+    // make inputbar feature on by default, leave the switch for the
+    // moment in case we need to back it out easily
+    return true;
 }
 
 //==================================================================
