@@ -333,7 +333,7 @@ def _uno_struct__setattr__(self,name,value):
 # private, referenced from the pyuno shared library
 def _uno_struct__repr__(self):
     return repr(self.__dict__["value"])
-    
+
 def _uno_struct__str__(self):
     return str(self.__dict__["value"])
 
@@ -363,7 +363,7 @@ def _uno_extract_printable_stacktrace( trace ):
         ret = "Couldn't import traceback module"
     return ret
 
-# hook into the __import__ chain    
+# hook into the __import__ chain
 __builtin__.__dict__["__import__"] = _uno_import
-        
+
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

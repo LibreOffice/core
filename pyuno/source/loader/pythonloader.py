@@ -111,7 +111,8 @@ class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
                     g_loadedComponents[url] = mod
                 return mod
             elif "vnd.openoffice.pymodule" == protocol:
-                print ("here")
+                # the failure is on symbol lookup later in the parent ...
+                print ("Warning: Python module loading is almost certainly pre-broken")
                 nSlash = dependent.rfind('/')
                 if -1 != nSlash:
                     path = unohelper.fileUrlToSystemPath( dependent[0:nSlash] )
@@ -127,7 +128,8 @@ class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
                                          protocol + " in url " +url, self )
         except Exception as e:
             if DEBUG:
-                print ("Python import error " + str(e) + " args " + str(e.args));
+                print ("Python import exception " + str(type(e)) +
+                       " message " + str(e) + " args " + str(e.args));
             raise RuntimeException( "Couldn't load " + url + " for reason " + str(e), None )
         return None
 

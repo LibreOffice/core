@@ -1008,6 +1008,10 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
         }
         RuntimeException e;
         e.Message = buf.makeStringAndClear();
+#if OSL_DEBUG_LEVEL > 0
+        fprintf( stderr, "Python exception: %s\n",
+                 rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr() );
+#endif
         ret = com::sun::star::uno::makeAny( e );
     }
     return ret;
