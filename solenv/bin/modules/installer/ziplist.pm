@@ -638,11 +638,11 @@ sub set_manufacturer
     {
         $manufacturer = $ENV{'OOO_VENDOR'};
     }
-    if( defined $ENV{'USERNAME'} && $ENV{'USERNAME'} ne "" )
+    elsif( defined $ENV{'USERNAME'} && $ENV{'USERNAME'} ne "" )
     {
         $manufacturer = $ENV{'USERNAME'};
     }
-    if( defined $ENV{'USER'} && $ENV{'USER'} ne "" )
+    elsif( defined $ENV{'USER'} && $ENV{'USER'} ne "" )
     {
         $manufacturer = $ENV{'USER'};
     }
