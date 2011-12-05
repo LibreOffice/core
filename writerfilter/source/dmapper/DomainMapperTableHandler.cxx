@@ -730,9 +730,8 @@ void DomainMapperTableHandler::endTable()
         catch ( uno::Exception &e )
         {
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
-            dmapper_logger->startElement("exception");
-            dmapper_logger->chars(rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ));
-            dmapper_logger->endElement();
+            fprintf( stderr, "Exception during table creation: %s\n",
+                    rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ) );
 #else
             (void) e;
 #endif
@@ -812,7 +811,6 @@ void DomainMapperTableHandler::endCell(const Handle_t & end)
     dmapper_logger->chars(toString(end));
     dmapper_logger->endElement();
     dmapper_logger->endElement();
-    clog << "</table.cell>" << endl;
 #endif
 
     if (!end.get())

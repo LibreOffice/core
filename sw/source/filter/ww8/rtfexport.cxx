@@ -63,6 +63,10 @@
 #include <svtools/rtfkeywd.hxx>
 #include <unotools/configmgr.hxx>
 
+#if OSL_DEBUG_LEVEL > 1
+#include <iostream>
+#endif
+
 using ::editeng::SvxBorderLine;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
