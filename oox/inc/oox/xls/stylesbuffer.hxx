@@ -32,7 +32,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/table/CellHoriJustify.hpp>
 #include <com/sun/star/table/CellOrientation.hpp>
-#include <com/sun/star/table/CellVertJustify.hpp>
+#include <com/sun/star/table/CellVertJustify2.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/util/CellProtection.hpp>
 #include "oox/drawingml/color.hxx"
@@ -809,8 +809,7 @@ private:
     XfModel             maModel;            /// Cell XF or style XF model data.
     Alignment           maAlignment;        /// Cell alignment data.
     Protection          maProtection;       /// Cell protection data.
-    ::com::sun::star::table::CellVertJustify
-                        meRotationRef;      /// Rotation reference dependent on border.
+    sal_Int32           meRotationRef;      /// Rotation reference dependent on border.
 };
 
 typedef ::boost::shared_ptr< Xf > XfRef;

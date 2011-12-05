@@ -2267,7 +2267,7 @@ Xf::Xf( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
     maAlignment( rHelper ),
     maProtection( rHelper ),
-    meRotationRef( ::com::sun::star::table::CellVertJustify_STANDARD )
+    meRotationRef( ::com::sun::star::table::CellVertJustify2::STANDARD )
 {
 }
 
@@ -2488,7 +2488,7 @@ void Xf::finalizeImport()
         sal_Int32 nBorderId = maModel.mbBorderUsed ? maModel.mnBorderId : (pStyleXf ? pStyleXf->maModel.mnBorderId : -1);
         if( const Border* pBorder = rStyles.getBorder( nBorderId ).get() )
             if( (pAlignment->getApiData().mnRotation != 0) && pBorder->getApiData().hasAnyOuterBorder() )
-                meRotationRef = ::com::sun::star::table::CellVertJustify_BOTTOM;
+                meRotationRef = ::com::sun::star::table::CellVertJustify2::BOTTOM;
     }
 }
 
@@ -2527,9 +2527,9 @@ void Xf::writeToPropertyMap( PropertyMap& rPropMap ) const
     if( maModel.mbAlignUsed || maModel.mbBorderUsed )
         rPropMap[ PROP_RotateReference ] <<= meRotationRef;
 
-    ::com::sun::star::table::CellVertJustify eRotRef = ::com::sun::star::table::CellVertJustify_STANDARD;
+    sal_Int32 eRotRef = ::com::sun::star::table::CellVertJustify2::STANDARD;
     if (maModel.mbBorderUsed && rStyles.hasBorder(maModel.mnBorderId) && maAlignment.getApiData().mnRotation)
-        eRotRef = ::com::sun::star::table::CellVertJustify_BOTTOM;
+        eRotRef = ::com::sun::star::table::CellVertJustify2::BOTTOM;
     rPropMap[ PROP_RotateReference ] <<= eRotRef;
 }
 
