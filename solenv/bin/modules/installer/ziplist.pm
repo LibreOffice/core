@@ -634,13 +634,21 @@ sub set_manufacturer
     my ($allvariables) = @_;
     my $manufacturer;
 
-    if ( $ENV{'OOO_VENDOR'} ne "" )
+    if( defined $ENV{'OOO_VENDOR'} && $ENV{'OOO_VENDOR'} ne "" )
     {
         $manufacturer = $ENV{'OOO_VENDOR'};
     }
-    else
+    if( defined $ENV{'USERNAME'} && $ENV{'USERNAME'} ne "" )
     {
         $manufacturer = $ENV{'USERNAME'};
+    }
+    if( defined $ENV{'USER'} && $ENV{'USER'} ne "" )
+    {
+        $manufacturer = $ENV{'USER'};
+    }
+    else
+    {
+        $manufacturer = "default";
     }
 
     $installer::globals::manufacturer = $manufacturer;
