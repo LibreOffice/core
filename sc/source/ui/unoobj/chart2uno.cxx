@@ -599,13 +599,15 @@ void Chart2Positioner::glueState()
     calcGlueState(nC, nR);
 }
 
-void Chart2Positioner::calcGlueState(SCCOL nCols, SCROW nRows)
+void Chart2Positioner::calcGlueState(SCCOL nColSize, SCROW nRowSize)
 {
-    sal_uInt32 nCR = static_cast<sal_uInt32>(nCols*nRows);
+    sal_uInt32 nCR = static_cast<sal_uInt32>(nColSize*nRowSize);
 
     enum State { Hole = 0, Occupied = 1, Free = 2, Glue = 3 };
 
     vector<State> aCellStates(nCR, Hole);
+
+    // Mark all referenced cells "occupied".
     for (vector<ScTokenRef>::const_iterator itr = mrRefTokens.begin(), itrEnd = mrRefTokens.end();
           itr != itrEnd; ++itr)
     {
@@ -618,62 +620,69 @@ void Chart2Positioner::calcGlueState(SCCOL nCols, SCROW nRows)
         for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
             for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
             {
-                size_t i = nCol*nRows + nRow;
+                size_t i = nCol*nRowSize + nRow;
                 aCellStates[i] = Occupied;
             }
     }
-    bool bGlue = true;
 
-    size_t i = 0;
+    // If at least one cell in either the first column or first row is empty,
+    // we don't glue at all unless the whole column or row is empty; we expect
+    // all cells in the first column / row to be fully populated.  If we have
+    // empty column or row, then we do glue by the column or row,
+    // respectively.
+
+    bool bGlue = true;
     bool bGlueCols = false;
-    for (SCCOL nCol = 0; bGlue && nCol < nCols; ++nCol)
+    for (SCCOL nCol = 0; bGlue && nCol < nColSize; ++nCol)
     {
-        for (SCROW nRow = 0; bGlue && nRow < nRows; ++nRow)
+        for (SCROW nRow = 0; bGlue && nRow < nRowSize; ++nRow)
         {
-            i = nCol*nRows + nRow;
+            size_t i = nCol*nRowSize + nRow;
             if (aCellStates[i] == Occupied)
             {
-                if (nCol > 0 && nRow > 0)
-                    bGlue = false;
-                else
-                    nRow = nRows;
+                if (nCol == 0 || nRow == 0)
+                    break;
+
+                bGlue = false;
             }
             else
                 aCellStates[i] = Free;
         }
-        i = (nCol+1)*nRows - 1; // index for the last cell in the column.
-        if (bGlue && (aCellStates[i] == Free))
+        size_t nLast = (nCol+1)*nRowSize - 1; // index for the last cell in the column.
+        if (bGlue && aCellStates[nLast] == Free)
         {
-            aCellStates[i] = Glue;
+            // Whole column is empty.
+            aCellStates[nLast] = Glue;
             bGlueCols = true;
         }
     }
 
     bool bGlueRows = false;
-    for (SCROW nRow = 0; bGlue && nRow < nRows; ++nRow)
+    for (SCROW nRow = 0; bGlue && nRow < nRowSize; ++nRow)
     {
-        i = nRow;
-        for (SCCOL nCol = 0; bGlue && nCol < nCols; ++nCol, i += nRows)
+        size_t i = nRow;
+        for (SCCOL nCol = 0; bGlue && nCol < nColSize; ++nCol, i += nRowSize)
         {
             if (aCellStates[i] == Occupied)
             {
-                if (nCol > 0 && nRow > 0)
-                    bGlue = false;
-                else
-                    nCol = nCols;
+                if (nCol == 0 || nRow == 0)
+                    break;
+
+                bGlue = false;
             }
             else
                 aCellStates[i] = Free;
         }
-        i = (nCols-1)*nRows + nRow; // index for the row position in the last column.
+        i = (nColSize-1)*nRowSize + nRow; // index for the row position in the last column.
         if (bGlue && aCellStates[i] == Free)
         {
+            // Whole row is empty.
             aCellStates[i] = Glue;
             bGlueRows = true;
         }
     }
 
-    i = 1;
+    size_t i = 1;
     for (sal_uInt32 n = 1; bGlue && n < nCR; ++n, ++i)
         if (aCellStates[i] == Hole)
             bGlue = false;
