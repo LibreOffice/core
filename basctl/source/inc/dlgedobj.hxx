@@ -29,6 +29,7 @@
 #ifndef _BASCTL_DLGEDOBJ_HXX
 #define _BASCTL_DLGEDOBJ_HXX
 
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <comphelper/processfactory.hxx>
@@ -131,6 +132,7 @@ public:
     virtual void SAL_CALL _elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
 
     virtual void SetLayer(SdrLayerID nLayer);
+    bool MakeDataAware( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
 };
 
 

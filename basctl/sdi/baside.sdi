@@ -470,6 +470,48 @@ shell BasicIDEShell
     [
         StateMethod = GetState;
     ]
+
+    SID_INSERT_RADIO
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+
+    SID_INSERT_CHECK
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+
+    SID_INSERT_LIST
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+
+    SID_INSERT_COMBO
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+
+    SID_INSERT_VSCROLL
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+
+    SID_INSERT_HSCROLL
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+
+    SID_INSERT_SPIN
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
 }
 
 interface BasicIDEDocument

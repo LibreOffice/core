@@ -35,6 +35,7 @@ $(eval $(call gb_Package_add_file,basctl_xml,xml/uiconfig/modules/BasicIDE/toolb
 $(eval $(call gb_Package_add_file,basctl_xml,xml/uiconfig/modules/BasicIDE/toolbar/findbar.xml,uiconfig/basicide/toolbar/findbar.xml))
 $(eval $(call gb_Package_add_file,basctl_xml,xml/uiconfig/modules/BasicIDE/toolbar/fullscreenbar.xml,uiconfig/basicide/toolbar/fullscreenbar.xml))
 $(eval $(call gb_Package_add_file,basctl_xml,xml/uiconfig/modules/BasicIDE/toolbar/insertcontrolsbar.xml,uiconfig/basicide/toolbar/insertcontrolsbar.xml))
+$(eval $(call gb_Package_add_file,basctl_xml,xml/uiconfig/modules/BasicIDE/toolbar/formcontrolsbar.xml,uiconfig/basicide/toolbar/formcontrolsbar.xml))
 $(eval $(call gb_Package_add_file,basctl_xml,xml/uiconfig/modules/BasicIDE/toolbar/macrobar.xml,uiconfig/basicide/toolbar/macrobar.xml))
 $(eval $(call gb_Package_add_file,basctl_xml,xml/uiconfig/modules/BasicIDE/toolbar/standardbar.xml,uiconfig/basicide/toolbar/standardbar.xml))
 $(eval $(call gb_Package_add_file,basctl_xml,xml/uiconfig/modules/BasicIDE/toolbar/translationbar.xml,uiconfig/basicide/toolbar/translationbar.xml))

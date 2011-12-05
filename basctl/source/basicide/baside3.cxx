@@ -272,6 +272,18 @@ void DialogWindow::DoScroll( ScrollBar* pCurScrollBar )
 void DialogWindow::GetState( SfxItemSet& rSet )
 {
     SfxWhichIter aIter(rSet);
+    bool bIsCalc = false;
+    if ( GetDocument().isDocument() )
+    {
+        Reference< frame::XModel > xModel= GetDocument().getDocument();
+        if ( xModel.is() )
+        {
+            Reference< lang::XServiceInfo > xServiceInfo ( xModel, UNO_QUERY );
+            if ( xServiceInfo.is() && xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument") ) ) )
+                bIsCalc = true;
+        }
+    }
+
     for ( sal_uInt16 nWh = aIter.FirstWhich(); 0 != nWh; nWh = aIter.NextWhich() )
     {
         switch ( nWh )
@@ -390,6 +402,18 @@ void DialogWindow::GetState( SfxItemSet& rSet )
                     rSet.DisableItem( nWh );
             }
             break;
+            case SID_INSERT_RADIO:
+            case SID_INSERT_CHECK:
+            case SID_INSERT_LIST:
+            case SID_INSERT_COMBO:
+            case SID_INSERT_VSCROLL:
+            case SID_INSERT_HSCROLL:
+            case SID_INSERT_SPIN:
+            {
+                if ( !bIsCalc || IsReadOnly() )
+                    rSet.DisableItem( nWh );
+            }
+            break;
         }
     }
 }
@@ -429,6 +453,34 @@ void DialogWindow::ExecuteCommand( SfxRequest& rReq )
                 if ( pBindings )
                     pBindings->Invalidate( SID_DOC_MODIFIED );
             }
+            break;
+        case SID_INSERT_RADIO:
+            GetEditor()->SetMode( DLGED_INSERT );
+            GetEditor()->SetInsertObj( OBJ_DLG_FORMRADIO );
+            break;
+        case SID_INSERT_CHECK:
+            GetEditor()->SetMode( DLGED_INSERT );
+            GetEditor()->SetInsertObj( OBJ_DLG_FORMCHECK );
+            break;
+        case SID_INSERT_LIST:
+            GetEditor()->SetMode( DLGED_INSERT );
+            GetEditor()->SetInsertObj( OBJ_DLG_FORMLIST );
+            break;
+        case SID_INSERT_COMBO:
+            GetEditor()->SetMode( DLGED_INSERT );
+            GetEditor()->SetInsertObj( OBJ_DLG_FORMCOMBO );
+            break;
+        case SID_INSERT_SPIN:
+            GetEditor()->SetMode( DLGED_INSERT );
+            GetEditor()->SetInsertObj( OBJ_DLG_FORMSPIN );
+            break;
+        case SID_INSERT_VSCROLL:
+            GetEditor()->SetMode( DLGED_INSERT );
+            GetEditor()->SetInsertObj( OBJ_DLG_FORMVSCROLL );
+            break;
+        case SID_INSERT_HSCROLL:
+            GetEditor()->SetMode( DLGED_INSERT );
+            GetEditor()->SetInsertObj( OBJ_DLG_FORMHSCROLL );
             break;
         case SID_CHOOSE_CONTROLS:
         {

@@ -38,6 +38,9 @@
 
 #include "dlgresid.hrc"
 
+#include <com/sun/star/form/binding/XBindableValue.hpp>
+#include <com/sun/star/form/binding/XValueBinding.hpp>
+#include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <com/sun/star/awt/XUnoControlContainer.hpp>
 #include <com/sun/star/awt/XVclContainerPeer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -1856,7 +1859,33 @@ awt::DeviceInfo DlgEdForm::getDeviceInfo() const
 
     return aDeviceInfo;
 }
-
+bool DlgEdObj::MakeDataAware( const Reference< frame::XModel >& xModel )
+{
+    bool bRes = false;
+    // Need to flesh this out, currently we will only support data-aware controls for calc
+    // and only handle a subset of functionality e.g. linked-cell and cell range data source. Of course later
+    // we need to disambiguate for writer ( and others ? ) and also support the generic form (db) bindings
+    // we need some more work in xmlscript to be able to handle that
+    Reference< lang::XMultiServiceFactory > xFac( xModel, UNO_QUERY );
+    Reference< form::binding::XBindableValue > xBindable( GetUnoControlModel(), UNO_QUERY );
+    Reference< form::binding::XListEntrySink  > xListEntrySink( GetUnoControlModel(), UNO_QUERY );
+    if ( xFac.is() )
+    {
+        if ( xBindable.is() )
+        {
+            Reference< form::binding::XValueBinding > xBinding( xFac->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.table.CellValueBinding" ) ) ), UNO_QUERY );
+            xBindable->setValueBinding( xBinding );
+        }
+        if ( xListEntrySink.is() )
+        {
+            Reference< form::binding::XListEntrySource > xSource( xFac->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.table.CellRangeListSource" ) ) ), UNO_QUERY );
+            xListEntrySink->setListEntrySource( xSource );
+        }
+        if ( xListEntrySink.is() || xBindable.is() )
+            bRes = true;
+    }
+    return bRes;
+}
 //----------------------------------------------------------------------------
 
 

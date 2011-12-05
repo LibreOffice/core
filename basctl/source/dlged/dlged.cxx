@@ -218,7 +218,7 @@ DlgEditor::DlgEditor( const ::com::sun::star::uno::Reference< ::com::sun::star::
     pDlgEdPage = new DlgEdPage( *pDlgEdModel );
     pDlgEdModel->InsertPage( pDlgEdPage );
 
-    pObjFac = new DlgEdFactory();
+    pObjFac = new DlgEdFactory(xModel);
 
     pFunc = new DlgEdFuncSelect( this );
 

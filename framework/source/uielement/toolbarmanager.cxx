@@ -456,7 +456,9 @@ void ToolBarManager::UpdateImageOrientation()
                     m_pToolBar->SetItemImageAngle( nId, m_lImageRotation );
                 }
                 if ( pIter->second.bMirrored )
+                {
                     m_pToolBar->SetItemImageMirrorMode( nId, m_bImageMirrored );
+                }
             }
         }
     }

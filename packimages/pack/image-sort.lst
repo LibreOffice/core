@@ -73,6 +73,7 @@ uiconfig/modules/sdraw/menubar/menubar.xml
 #
 uiconfig/modules/BasicIDE/toolbar/fullscreenbar.xml
 uiconfig/modules/BasicIDE/toolbar/insertcontrolsbar.xml
+uiconfig/modules/BasicIDE/toolbar/formcontrolsbar.xml
 uiconfig/modules/BasicIDE/toolbar/macrobar.xml
 uiconfig/modules/BasicIDE/toolbar/standardbar.xml
 uiconfig/modules/dbapp/toolbar/formobjectbar.xml

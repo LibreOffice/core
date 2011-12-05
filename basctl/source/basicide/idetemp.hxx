@@ -57,7 +57,7 @@ enum SvxChooseControlEnum
     SVX_SNAP_FORMATTEDFIELD,
     SVX_SNAP_PATTERNFIELD,
     SVX_SNAP_FILECONTROL,
-    SVX_SNAP_TREECONTROL
+    SVX_SNAP_TREECONTROL,
 };
 
 #define SvxChooseControlItem SfxAllEnumItem

@@ -63,6 +63,14 @@ const sal_uInt32 DlgInventor = sal_uInt32('D')*0x00000001+
 #define OBJ_DLG_TREECONTROL     ((sal_uInt16)24)
 #define OBJ_DLG_SPINBUTTON      ((sal_uInt16)25)
 
+#define OBJ_DLG_FORMRADIO       ((sal_uInt16)26)
+#define OBJ_DLG_FORMCHECK       ((sal_uInt16)27)
+#define OBJ_DLG_FORMLIST        ((sal_uInt16)28)
+#define OBJ_DLG_FORMCOMBO       ((sal_uInt16)29)
+#define OBJ_DLG_FORMSPIN        ((sal_uInt16)30)
+#define OBJ_DLG_FORMVSCROLL     ((sal_uInt16)31)
+#define OBJ_DLG_FORMHSCROLL     ((sal_uInt16)32)
+
 // control properties
 #define DLGED_PROP_BACKGROUNDCOLOR      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BackgroundColor" ) )
 #define DLGED_PROP_DROPDOWN             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Dropdown" ) )

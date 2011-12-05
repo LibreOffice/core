@@ -31,6 +31,7 @@
 #define _BASCTL_DLGEDFAC_HXX
 
 #include <svx/svdobj.hxx>
+#include <com/sun/star/frame/XModel.hpp>
 
 //============================================================================
 // DlgEdFactory
@@ -38,8 +39,9 @@
 
 class DlgEdFactory
 {
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxModel;
 public:
-    DlgEdFactory();
+    DlgEdFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
     ~DlgEdFactory();
 
     DECL_LINK( MakeObject, SdrObjFactory * );

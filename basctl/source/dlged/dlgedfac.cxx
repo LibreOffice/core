@@ -39,7 +39,7 @@
 using namespace ::com::sun::star;
 
 
-DlgEdFactory::DlgEdFactory()
+DlgEdFactory::DlgEdFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel ) : mxModel( xModel )
 {
     SdrObjFactory::InsertMakeObjectHdl( LINK(this, DlgEdFactory, MakeObject) );
 }
@@ -70,25 +70,52 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
 
     if( (pObjFactory->nInventor == DlgInventor) &&
         (pObjFactory->nIdentifier >= OBJ_DLG_PUSHBUTTON) &&
-        (pObjFactory->nIdentifier <= OBJ_DLG_SPINBUTTON)    )
+        (pObjFactory->nIdentifier <= OBJ_DLG_FORMHSCROLL)    )
     {
         switch( pObjFactory->nIdentifier )
         {
             case OBJ_DLG_PUSHBUTTON:
                  pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlButtonModel" )) , xDialogSFact );
                   break;
+            case OBJ_DLG_FORMRADIO:
             case OBJ_DLG_RADIOBUTTON:
-                 pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlRadioButtonModel" )) , xDialogSFact );
+                 if ( pObjFactory->nIdentifier == OBJ_DLG_RADIOBUTTON )
+                     pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlRadioButtonModel" )) , xDialogSFact );
+                 else
+                 {
+                     pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.RadioButton" )) , xDialogSFact );
+                     static_cast< DlgEdObj* >( pObjFactory->pNewObj )->MakeDataAware( mxModel );
+                 }
                  break;
+            case OBJ_DLG_FORMCHECK:
             case OBJ_DLG_CHECKBOX:
-                 pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlCheckBoxModel" )) , xDialogSFact );
+                 if ( pObjFactory->nIdentifier == OBJ_DLG_CHECKBOX )
+                     pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlCheckBoxModel" )) , xDialogSFact );
+                 else
+                     pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.CheckBox" )) , xDialogSFact );
+                     static_cast< DlgEdObj* >( pObjFactory->pNewObj )->MakeDataAware( mxModel );
                  break;
+            case OBJ_DLG_FORMLIST:
             case OBJ_DLG_LISTBOX:
-                 pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlListBoxModel" )) , xDialogSFact );
+                 if ( pObjFactory->nIdentifier == OBJ_DLG_LISTBOX )
+                     pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlListBoxModel" )) , xDialogSFact );
+                 else
+                 {
+                     pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.ListBox" )) , xDialogSFact );
+                     static_cast< DlgEdObj* >( pObjFactory->pNewObj )->MakeDataAware( mxModel );
+                 }
                  break;
+            case OBJ_DLG_FORMCOMBO:
             case OBJ_DLG_COMBOBOX:
             {
-                 DlgEdObj* pNew = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlComboBoxModel" )) , xDialogSFact );
+                 DlgEdObj* pNew = NULL;
+                 if ( pObjFactory->nIdentifier == OBJ_DLG_COMBOBOX )
+                     pNew = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlComboBoxModel" )) , xDialogSFact );
+                 else
+                 {
+                     pNew = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.ComboBox" )) , xDialogSFact );
+                     static_cast< DlgEdObj* >( pNew )->MakeDataAware( mxModel );
+                 }
                  pObjFactory->pNewObj = pNew;
                  try
                  {
@@ -118,12 +145,27 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
             case OBJ_DLG_PROGRESSBAR:
                  pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlProgressBarModel" )) , xDialogSFact );
                  break;
+            case OBJ_DLG_FORMHSCROLL:
             case OBJ_DLG_HSCROLLBAR:
-                 pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlScrollBarModel" )) , xDialogSFact );
+                 if ( pObjFactory->nIdentifier == OBJ_DLG_HSCROLLBAR )
+                     pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlScrollBarModel" )) , xDialogSFact );
+                 else
+                 {
+                     pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.ScrollBar" )) , xDialogSFact );
+                     static_cast< DlgEdObj* >( pObjFactory->pNewObj )->MakeDataAware( mxModel );
+                 }
                  break;
+            case OBJ_DLG_FORMVSCROLL:
             case OBJ_DLG_VSCROLLBAR:
             {
-                 DlgEdObj* pNew = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlScrollBarModel" )) , xDialogSFact );
+                 DlgEdObj* pNew = NULL;
+                 if ( pObjFactory->nIdentifier ==  OBJ_DLG_VSCROLLBAR )
+                     pNew = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlScrollBarModel" )) , xDialogSFact );
+                 else
+                 {
+                     pNew = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.ScrollBar" )) , xDialogSFact );
+                     static_cast< DlgEdObj* >( pNew )->MakeDataAware( mxModel );
+                 }
                  pObjFactory->pNewObj = pNew;
                  // set vertical orientation
                  try
@@ -183,8 +225,15 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
             case OBJ_DLG_FILECONTROL:
                  pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlFileControlModel" )) , xDialogSFact );
                  break;
+            case OBJ_DLG_FORMSPIN:
             case OBJ_DLG_SPINBUTTON:
-                 pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlSpinButtonModel") , xDialogSFact );
+                 if ( pObjFactory->nIdentifier == OBJ_DLG_SPINBUTTON )
+                     pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlSpinButtonModel") , xDialogSFact );
+                 else
+                 {
+                     pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.form.component.SpinButton") , xDialogSFact );
+                     static_cast< DlgEdObj* >( pObjFactory->pNewObj )->MakeDataAware( mxModel );
+                 }
                  break;
             case OBJ_DLG_TREECONTROL:
                  DlgEdObj* pNew = new DlgEdObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.tree.TreeControlModel" )) , xDialogSFact );

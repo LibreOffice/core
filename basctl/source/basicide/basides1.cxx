@@ -917,6 +917,13 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
             break;
             case SID_CHOOSE_CONTROLS:
             case SID_DIALOG_TESTMODE:
+            case SID_INSERT_RADIO:
+            case SID_INSERT_CHECK:
+            case SID_INSERT_LIST:
+            case SID_INSERT_COMBO:
+            case SID_INSERT_VSCROLL:
+            case SID_INSERT_HSCROLL:
+            case SID_INSERT_SPIN:
             {
                 if( !pCurWin || !pCurWin->IsA( TYPE( DialogWindow ) ) )
                     rSet.DisableItem( nWh );
@@ -1201,6 +1208,7 @@ void BasicIDEShell::ManageToolbars()
     static ::rtl::OUString aMacroBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/macrobar" ));
     static ::rtl::OUString aDialogBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/dialogbar" ));
     static ::rtl::OUString aInsertControlsBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertcontrolsbar" ));
+    static ::rtl::OUString aFormControlsBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/formcontrolsbar" ));
     (void)aInsertControlsBarResName;
 
     if( !pCurWin )
@@ -1222,11 +1230,13 @@ void BasicIDEShell::ManageToolbars()
 
                 xLayoutManager->requestElement( aDialogBarResName );
                 xLayoutManager->requestElement( aInsertControlsBarResName );
+                xLayoutManager->requestElement( aFormControlsBarResName );
             }
             else
             {
                 xLayoutManager->destroyElement( aDialogBarResName );
                 xLayoutManager->destroyElement( aInsertControlsBarResName );
+                xLayoutManager->destroyElement( aFormControlsBarResName );
 
                 xLayoutManager->requestElement( aMacroBarResName );
             }
