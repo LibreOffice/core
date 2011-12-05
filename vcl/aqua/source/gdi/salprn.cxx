@@ -43,7 +43,7 @@
 
 #include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/awt/Size.hpp"
-#include "com/sun/star/uno/Sequence.hpp"
+#include "com/sun/star/uno/Sequence.hxx"
 
 #include <algorithm>
 
