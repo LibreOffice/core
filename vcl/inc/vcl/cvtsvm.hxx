@@ -29,6 +29,7 @@
 #ifndef _SV_CVTMTF_HXX
 #define _SV_CVTMTF_HXX
 
+#include <stack>
 #include <vcl/dllapi.h>
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
@@ -91,8 +92,6 @@
 // - SVMConverter -
 // ----------------
 
-class Stack;
-
 class VCL_PLUGIN_PUBLIC SVMConverter
 {
 private:
@@ -100,7 +99,7 @@ private:
     SAL_DLLPRIVATE void             ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf );
     SAL_DLLPRIVATE sal_uLong            ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                                           VirtualDevice& rSaveVDev, sal_Bool& rRop_0_1,
-                                          Color& rLineCol, Stack& rLineColStack,
+                                          Color& rLineCol, ::std::stack<Color*>& rLineColStack,
                                           rtl_TextEncoding& rActualCharSet );
 
 public:

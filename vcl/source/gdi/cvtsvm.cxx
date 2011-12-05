@@ -1374,7 +1374,7 @@ void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
     sal_Bool                bRop_0_1 = sal_False;
     VirtualDevice       aSaveVDev;
     Color               aLineCol( COL_BLACK );
-    Stack               aLineColStack;
+    ::std::stack< Color* >  aLineColStack;
 
     rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
@@ -1399,15 +1399,18 @@ void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
     rOStm.SetNumberFormatInt( nOldFormat );
 
     // cleanup push-pop stack if neccessary
-    for( void* pCol = aLineColStack.Pop(); pCol; pCol = aLineColStack.Pop() )
-        delete (Color*) pCol;
+    while ( !aLineColStack.empty() )
+    {
+        delete aLineColStack.top();
+        aLineColStack.pop();
+    }
 }
 
 // ------------------------------------------------------------------------
 
 sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                                       VirtualDevice& rSaveVDev, sal_Bool& rRop_0_1,
-                                      Color& rLineCol, Stack& rLineColStack,
+                                      Color& rLineCol, ::std::stack< Color* >& rLineColStack,
                                       rtl_TextEncoding& rActualCharSet )
 {
     sal_uLong nCount = 0;
@@ -2054,7 +2057,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             case( META_PUSH_ACTION ):
             {
                 ImplWritePushAction( rOStm );
-                rLineColStack.Push( new Color( rLineCol ) );
+                rLineColStack.push( new Color( rLineCol ) );
                 rSaveVDev.Push();
                 nCount++;
             }
@@ -2062,7 +2065,8 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_POP_ACTION ):
             {
-                Color* pCol = (Color*) rLineColStack.Pop();
+                Color* pCol = rLineColStack.top();
+                rLineColStack.pop();
 
                 if( pCol )
                 {
