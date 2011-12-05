@@ -11,6 +11,18 @@
  * ===============================================
  */
 
+#ifdef __APPLE__
+#ifdef __x86_64__
+#define CORE_BIG_ENDIAN 0
+#define CORE_LITTLE_ENDIAN 1
+#define USE_MEMORY_ALIGNMENT 64 /* big value -> no alignment */
+#else
+#define CORE_BIG_ENDIAN 1
+#define CORE_LITTLE_ENDIAN 0
+#define USE_MEMORY_ALIGNMENT 4
+#endif
+
+#endif
 #ifdef _AIX
 #define CORE_BIG_ENDIAN 1
 #define CORE_LITTLE_ENDIAN 0
