@@ -73,8 +73,9 @@ void SwCache::Check()
     }
     OSL_ENSURE( bFirstFound, "First not Found." );
     OSL_ENSURE( (nCnt + aFreePositions.size()) == Count(), "Lost Chain." );
-    if ( Count() == nCurMax )
-        OSL_ENSURE( (nCurMax - nCnt) == aFreePositions.size(), "Lost FreePositions." );
+    OSL_ENSURE(
+        Count() != nCurMax || nCurMax == aFreePositions.size() + nCnt,
+        "Lost FreePositions." );
 }
 #endif
 
