@@ -1352,6 +1352,9 @@ elsif ($platform =~ m/darwin/ && $platform !~ m/^arm/)
 elsif ($platform =~ m/^arm-apple/)
 {
 }
+elsif ($platform =~ m/linux-androideabi$/)
+{
+}
 else
 {  AddWarning( "set_soenv", "$platform not configured for system dependant include dir" );
 }
