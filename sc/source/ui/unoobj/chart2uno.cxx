@@ -740,9 +740,12 @@ void Chart2Positioner::createPositionMap()
 
         for (SCTAB nTab = nTab1; nTab <= nTab2; ++nTab)
         {
-            // What's this for ???
+            // columns on secondary sheets are appended; we treat them as if
+            // all columns are on the same sheet.  TODO: We can't assume that
+            // the column range is 16-bit; remove that restriction.
             sal_uInt32 nInsCol = (static_cast<sal_uInt32>(nTab) << 16) |
                 (bNoGlue ? 0 : static_cast<sal_uInt32>(nCol1));
+
             for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol, ++nInsCol)
             {
                 if (bNoGlue || meGlue == GLUETYPE_ROWS)
