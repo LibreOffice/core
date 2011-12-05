@@ -823,12 +823,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles10b.log", $filesinproductlanguageresolvedarrayref); }
     }
 
-    $filesinproductlanguageresolvedarrayref = installer::scriptitems::remove_onlyasialanguage_files_from_productlists($filesinproductlanguageresolvedarrayref);
-    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles10d.log", $filesinproductlanguageresolvedarrayref); }
-
-    $filesinproductlanguageresolvedarrayref = installer::scriptitems::remove_onlywesternlanguage_files_from_productlists($filesinproductlanguageresolvedarrayref);
-    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles10e.log", $filesinproductlanguageresolvedarrayref); }
-
     installer::scriptitems::make_filename_language_specific($filesinproductlanguageresolvedarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles10f.log", $filesinproductlanguageresolvedarrayref); }
 
