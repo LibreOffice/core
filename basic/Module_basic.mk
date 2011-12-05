@@ -30,10 +30,8 @@ $(eval $(call gb_Module_Module,basic))
 
 $(eval $(call gb_Module_add_targets,basic,\
 	AllLangResTarget_sb \
-	AllLangResTarget_stt \
 	Library_sb \
 	Package_inc \
-	StaticLibrary_app \
 	StaticLibrary_sample \
 ))
 

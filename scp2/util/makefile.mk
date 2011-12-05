@@ -79,8 +79,6 @@ SCP1FILES  = installation_ooo.par          \
              module_extensions_lightproof.par   \
              directory_extensions.par                     \
              file_extensions.par           \
-             module_testtool.par           \
-             file_testtool.par             \
              module_xsltfilter.par         \
              file_xsltfilter.par           \
              module_python.par             \

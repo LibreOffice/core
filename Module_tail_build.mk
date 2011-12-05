@@ -26,7 +26,6 @@ $(eval $(call gb_Module_Module,tail_end))
 
 $(eval $(call gb_Module_add_moduledirs,tail_end,\
     animations \
-    automation \
     basctl \
     bean \
     chart2 \
@@ -54,7 +53,6 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     starmath \
     sw \
     swext \
-    testautomation \
     unoxml \
     uui \
     vbahelper \

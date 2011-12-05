@@ -46,7 +46,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 
 $(eval $(call gb_Helper_register_executables,OOO, \
     spadmin.bin \
-    testtool \
 ))
 
 ifeq ($(OS),WNT)
@@ -367,7 +366,6 @@ $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	app \
 	basegfx_s \
     dtobj \
     libeay32 \

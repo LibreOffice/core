@@ -83,7 +83,6 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     svx \
     sw \
     swext \
-    testautomation \
     twain \
     toolkit \
     tools \
