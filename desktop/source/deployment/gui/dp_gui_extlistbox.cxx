@@ -96,8 +96,8 @@ Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
         else if ( eState == NOT_REGISTERED )
             checkDependencies();
     }
-    catch (deployment::ExtensionRemovedException &) {}
-    catch (uno::RuntimeException &) {}
+    catch (const deployment::ExtensionRemovedException &) {}
+    catch (const uno::RuntimeException &) {}
 }
 
 //------------------------------------------------------------------------------
@@ -129,7 +129,7 @@ void Entry_Impl::checkDependencies()
     try {
         m_xPackage->checkDependencies( uno::Reference< ucb::XCommandEnvironment >() );
     }
-    catch ( deployment::DeploymentException &e )
+    catch ( const deployment::DeploymentException &e )
     {
         deployment::DependencyException depExc;
         if ( e.Cause >>= depExc )

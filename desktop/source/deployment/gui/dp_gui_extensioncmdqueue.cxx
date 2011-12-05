@@ -805,7 +805,7 @@ void ExtensionCmdQueue::Thread::execute()
                     break;
                 }
             }
-            catch ( ucb::CommandAbortedException & )
+            catch ( const ucb::CommandAbortedException & )
             {
                 //This exception is thrown when the user clicks cancel on the progressbar.
                 //Then we cancel the installation of all extensions and remove them from
@@ -817,7 +817,7 @@ void ExtensionCmdQueue::Thread::execute()
                 }
                 break;
             }
-            catch ( ucb::CommandFailedException & )
+            catch ( const ucb::CommandFailedException & )
             {
                 //This exception is thrown when a user clicked cancel in the messagebox which was
                 //startet by the interaction handler. For example the user will be asked if he/she
@@ -826,7 +826,7 @@ void ExtensionCmdQueue::Thread::execute()
                 //with installing the remaining extensions.
                 continue;
             }
-            catch ( uno::Exception & )
+            catch ( const uno::Exception & )
             {
                 //Todo display the user an error
                 //see also DialogImpl::SyncPushButton::Click()
@@ -884,7 +884,7 @@ void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv 
     {
         anyTitle = ::ucbhelper::Content( rPackageURL, rCmdEnv.get() ).getPropertyValue( OUSTR("Title") );
     }
-    catch ( uno::Exception & )
+    catch ( const uno::Exception & )
     {
         return;
     }
@@ -907,12 +907,12 @@ void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv 
         xExtMgr->addExtension(rPackageURL, uno::Sequence<beans::NamedValue>(),
                               rRepository, xAbortChannel, rCmdEnv.get() );
     }
-    catch ( ucb::CommandFailedException & )
+    catch ( const ucb::CommandFailedException & )
     {
         // When the extension is already installed we'll get a dialog asking if we want to overwrite. If we then press
         // cancel this exception is thrown.
     }
-    catch ( ucb::CommandAbortedException & )
+    catch ( const ucb::CommandAbortedException & )
     {
         // User clicked the cancel button
         // TODO: handle cancel
@@ -934,11 +934,11 @@ void ExtensionCmdQueue::Thread::_removeExtension( ::rtl::Reference< ProgressCmdE
     {
         xExtMgr->removeExtension( id, xPackage->getName(), xPackage->getRepositoryName(), xAbortChannel, rCmdEnv.get() );
     }
-    catch ( deployment::DeploymentException & )
+    catch ( const deployment::DeploymentException & )
     {}
-    catch ( ucb::CommandFailedException & )
+    catch ( const ucb::CommandFailedException & )
     {}
-    catch ( ucb::CommandAbortedException & )
+    catch ( const ucb::CommandAbortedException & )
     {}
 
     // Check, if there are still updates to be notified via menu bar icon
@@ -1018,7 +1018,7 @@ void ExtensionCmdQueue::Thread::_enableExtension( ::rtl::Reference< ProgressCmdE
         if ( m_pDialogHelper )
             m_pDialogHelper->updatePackageInfo( xPackage );
     }
-    catch ( ::ucb::CommandAbortedException & )
+    catch ( const ::ucb::CommandAbortedException & )
     {}
 }
 
@@ -1040,7 +1040,7 @@ void ExtensionCmdQueue::Thread::_disableExtension( ::rtl::Reference< ProgressCmd
         if ( m_pDialogHelper )
             m_pDialogHelper->updatePackageInfo( xPackage );
     }
-    catch ( ::ucb::CommandAbortedException & )
+    catch ( const ::ucb::CommandAbortedException & )
     {}
 }
 
@@ -1062,7 +1062,7 @@ void ExtensionCmdQueue::Thread::_acceptLicense( ::rtl::Reference< ProgressCmdEnv
         if ( m_pDialogHelper )
             m_pDialogHelper->updatePackageInfo( xPackage );
     }
-    catch ( ::ucb::CommandAbortedException & )
+    catch ( const ::ucb::CommandAbortedException & )
     {}
 }
 

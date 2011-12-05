@@ -522,7 +522,7 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
                 return (*iPos)->bindPackage( url, mediaType, bRemoved,
                     identifier, xCmdEnv );
             }
-            catch (lang::IllegalArgumentException &) {
+            catch (const lang::IllegalArgumentException &) {
             }
         }
         throw lang::IllegalArgumentException(

@@ -91,11 +91,11 @@ void HelpBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
             save();
         }
     }
-    catch (css::deployment::DeploymentException& )
+    catch ( const css::deployment::DeploymentException& )
     {
         throw;
     }
-    catch(css::uno::Exception &)
+    catch(const css::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -122,11 +122,11 @@ HelpBackendDb::getEntry(::rtl::OUString const & url)
         }
         return ::boost::optional<Data>(retData);
     }
-    catch (css::deployment::DeploymentException& )
+    catch ( const css::deployment::DeploymentException& )
     {
         throw;
     }
-    catch(css::uno::Exception &)
+    catch(const css::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(

@@ -95,7 +95,7 @@ TheExtensionManager::TheExtensionManager( Window *pParent,
         uno::Any value = xNameAccessRepositories->getByName( OUSTR( "WebsiteLink" ) );
         m_sGetExtensionsURL = value.get< OUString > ();
      }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {}
 
     if ( dp_misc::office_is_running() )
@@ -210,13 +210,13 @@ bool TheExtensionManager::checkUpdates( bool /* bShowUpdateOnly */, bool /*bPare
     try {
         xAllPackages = m_xExtensionManager->getAllExtensions( uno::Reference< task::XAbortChannel >(),
                                                               uno::Reference< ucb::XCommandEnvironment >() );
-    } catch ( deployment::DeploymentException & ) {
+    } catch ( const deployment::DeploymentException & ) {
         return false;
-    } catch ( ucb::CommandFailedException & ) {
+    } catch ( const ucb::CommandFailedException & ) {
         return false;
-    } catch ( ucb::CommandAbortedException & ) {
+    } catch ( const ucb::CommandAbortedException & ) {
         return false;
-    } catch ( lang::IllegalArgumentException & e ) {
+    } catch ( const lang::IllegalArgumentException & e ) {
         throw uno::RuntimeException( e.Message, e.Context );
     }
 
@@ -292,13 +292,13 @@ void TheExtensionManager::createPackageList()
     try {
         xAllPackages = m_xExtensionManager->getAllExtensions( uno::Reference< task::XAbortChannel >(),
                                                               uno::Reference< ucb::XCommandEnvironment >() );
-    } catch ( deployment::DeploymentException & ) {
+    } catch ( const deployment::DeploymentException & ) {
         return;
-    } catch ( ucb::CommandFailedException & ) {
+    } catch ( const ucb::CommandFailedException & ) {
         return;
-    } catch ( ucb::CommandAbortedException & ) {
+    } catch ( const ucb::CommandAbortedException & ) {
         return;
-    } catch ( lang::IllegalArgumentException & e ) {
+    } catch ( const lang::IllegalArgumentException & e ) {
         throw uno::RuntimeException( e.Message, e.Context );
     }
 
@@ -352,10 +352,10 @@ PackageState TheExtensionManager::getPackageState( const uno::Reference< deploym
         else
             return NOT_AVAILABLE;
     }
-    catch ( uno::RuntimeException & ) {
+    catch ( const uno::RuntimeException & ) {
         throw;
     }
-    catch ( uno::Exception & exc) {
+    catch (const uno::Exception & exc) {
         (void) exc;
         OSL_FAIL( ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         return NOT_AVAILABLE;

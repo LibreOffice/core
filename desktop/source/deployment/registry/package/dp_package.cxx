@@ -594,7 +594,7 @@ OUString BackendImpl::PackageImpl::getTextFromURL(
         return OUString( reinterpret_cast<sal_Char const *>(
             seq.getConstArray()), seq.getLength(), RTL_TEXTENCODING_UTF8);
     }
-    catch (css::uno::Exception&)
+    catch (const css::uno::Exception&)
     {
         Any exc( ::cppu::getCaughtException() );
             throw css::deployment::DeploymentException(
@@ -721,15 +721,15 @@ bool BackendImpl::PackageImpl::checkDependencies(
                 return false;
         }
         return true;
-    } catch (css::ucb::CommandFailedException&) {
+    } catch (const css::ucb::CommandFailedException&) {
         throw;
-    } catch (css::ucb::CommandAbortedException&) {
+    } catch (const css::ucb::CommandAbortedException&) {
         throw;
-    } catch (css::deployment::DeploymentException&) {
+    } catch (const css::deployment::DeploymentException&) {
         throw;
-    } catch (css::uno::RuntimeException&) {
+    } catch (const css::uno::RuntimeException&) {
         throw;
-    } catch (css::uno::Exception&) {
+    } catch (const css::uno::Exception&) {
         Any anyExc = cppu::getCaughtException();
         throw css::deployment::DeploymentException(OUSTR("Unexpected exception"), 0, anyExc);
     }
@@ -879,7 +879,7 @@ void BackendImpl::PackageImpl::processPackage_(
             try {
                 xPackage->registerPackage( startup, xSubAbortChannel, xCmdEnv );
             }
-            catch (Exception &)
+            catch (const Exception &)
             {
                //We even try a rollback if the user cancelled the action (CommandAbortedException)
                 //in order to prevent invalid database entries.
@@ -913,7 +913,7 @@ void BackendImpl::PackageImpl::processPackage_(
                             bundle[ pos ]->revokePackage(
                                 xSubAbortChannel, xCmdEnv );
                         }
-                        catch (Exception &)
+                        catch (const Exception &)
                         {
                             OSL_FAIL( ::rtl::OUStringToOString(
                                             ::comphelper::anyToString(
@@ -954,13 +954,13 @@ void BackendImpl::PackageImpl::processPackage_(
             try {
                 bundle[ pos ]->revokePackage( xSubAbortChannel, xCmdEnv );
             }
-            catch (RuntimeException &) {
+            catch (const RuntimeException &) {
                 throw;
             }
-            catch (ucb::CommandAbortedException &) {
+            catch (const ucb::CommandAbortedException &) {
                 throw;
             }
-            catch (Exception &) {
+            catch (const Exception &) {
                 // CommandFailedException, DeploymentException:
                 Any exc( ::cppu::getCaughtException() );
                 // try to handle exception, notify:
@@ -1004,7 +1004,7 @@ OUString BackendImpl::PackageImpl::getDescription()
         {
             sDescription = getTextFromURL( css::uno::Reference< css::ucb::XCommandEnvironment >(), sURL );
         }
-        catch ( css::deployment::DeploymentException& )
+        catch ( const css::deployment::DeploymentException& )
         {
             OSL_FAIL( ::rtl::OUStringToOString( ::comphelper::anyToString( ::cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 ).getStr() );
         }
@@ -1133,13 +1133,13 @@ void BackendImpl::PackageImpl::exportTo(
             bundle = getBundle( Reference<task::XAbortChannel>(), xCmdEnv );
         }
         // xxx todo: think about exception specs:
-        catch (deployment::DeploymentException &) {
+        catch (const deployment::DeploymentException &) {
             OSL_FAIL( ::rtl::OUStringToOString(
                             ::comphelper::anyToString(
                                 ::cppu::getCaughtException() ),
                             RTL_TEXTENCODING_UTF8 ).getStr() );
         }
-        catch (lang::IllegalArgumentException & exc) {
+        catch (const lang::IllegalArgumentException & exc) {
             (void) exc;
             OSL_FAIL( ::rtl::OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -1225,7 +1225,7 @@ void BackendImpl::PackageImpl::exportTo(
     try {
         destFolderContent.executeCommand( OUSTR("flush"), Any() );
     }
-    catch (ucb::UnsupportedCommandException &) {
+    catch (const ucb::UnsupportedCommandException &) {
     }
 }
 
@@ -1290,19 +1290,19 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
                 }
 
             }
-            catch (RuntimeException &) {
+            catch (const RuntimeException &) {
                 throw;
             }
-            catch (ucb::CommandFailedException &) {
+            catch (const ucb::CommandFailedException &) {
                 throw;
             }
-            catch (ucb::CommandAbortedException &) {
+            catch (const ucb::CommandAbortedException &) {
                 throw;
             }
-            catch (deployment::DeploymentException &) {
+            catch (const deployment::DeploymentException &) {
                 throw;
             }
-            catch (Exception &) {
+            catch (const Exception &) {
                 Any exc( ::cppu::getCaughtException() );
                 throw deployment::DeploymentException(
                     OUSTR("error scanning bundle: ") + getURL(),
@@ -1388,13 +1388,13 @@ Reference<deployment::XPackage> BackendImpl::PackageImpl::bindBundleItem(
                           url, mediaType, bRemoved, identifier, xCmdEnv ) );
         OSL_ASSERT( xPackage.is() );
     }
-    catch (RuntimeException &) {
+    catch (const RuntimeException &) {
         throw;
     }
-    catch (ucb::CommandFailedException &) {
+    catch (const ucb::CommandFailedException &) {
         // ignore already handled error
     }
-    catch (Exception &) {
+    catch (const Exception &) {
         const Any exc( ::cppu::getCaughtException() );
         if (notifyDetectionError ||
             !exc.isExtractableTo(

@@ -165,7 +165,7 @@ void BackendDb::removeElement(::rtl::OUString const & sXPathExpression)
         OSL_ASSERT(! nextNode.is());
 #endif
     }
-    catch(css::uno::Exception &)
+    catch(const css::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -200,7 +200,7 @@ void BackendDb::revokeEntry(::rtl::OUString const & url)
             save();
         }
     }
-    catch(css::uno::Exception &)
+    catch(const css::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -224,7 +224,7 @@ bool BackendDb::activateEntry(::rtl::OUString const & url)
         }
         return ret;
     }
-    catch(css::uno::Exception &)
+    catch(const css::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -248,7 +248,7 @@ bool BackendDb::hasActiveEntry(::rtl::OUString const & url)
         return ret;
 
     }
-    catch(css::uno::Exception &)
+    catch(const css::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -277,7 +277,7 @@ Reference<css::xml::dom::XNode> BackendDb::getKeyElement(
         const Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
         return xpathApi->selectSingleNode(root, sExpression.makeStringAndClear());
     }
-    catch(css::uno::Exception &)
+    catch(const css::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -349,7 +349,7 @@ void BackendDb::writeVectorOfPair(
                     secondTextNode, css::uno::UNO_QUERY_THROW));
         }
     }
-    catch(css::uno::Exception &)
+    catch(const css::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -395,7 +395,7 @@ BackendDb::readVectorOfPair(
         }
         return retVector;
     }
-    catch(css::uno::Exception &)
+    catch(const css::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -440,7 +440,7 @@ void BackendDb::writeSimpleList(
             memberNode->appendChild(textNode);
         }
     }
-    catch(css::uno::Exception &)
+    catch(const css::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -471,7 +471,7 @@ void BackendDb::writeSimpleElement(
             doc->createTextNode(value), UNO_QUERY_THROW);
         dataNode->appendChild(dataValue);
     }
-    catch(css::uno::Exception &)
+    catch(const css::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -523,7 +523,7 @@ Reference<css::xml::dom::XNode> BackendDb::writeKeyElement(
         root->appendChild(keyNode);
         return keyNode;
     }
-    catch(css::uno::Exception &)
+    catch(const css::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -546,7 +546,7 @@ OUString BackendDb::readSimpleElement(
             return val->getNodeValue();
         return OUString();
     }
-    catch(css::uno::Exception &)
+    catch(const css::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -580,7 +580,7 @@ OUString BackendDb::readSimpleElement(
         }
         return retList;
     }
-    catch(css::uno::Exception &)
+    catch(const css::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -621,11 +621,11 @@ OUString BackendDb::readSimpleElement(
         }
         return listRet;
     }
-    catch (css::deployment::DeploymentException& )
+    catch ( const css::deployment::DeploymentException& )
     {
         throw;
     }
-    catch(css::uno::Exception &)
+    catch(const css::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -673,7 +673,7 @@ void RegisteredDb::addEntry(::rtl::OUString const & url)
             save();
         }
     }
-    catch(css::uno::Exception &)
+    catch(const css::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -699,7 +699,7 @@ bool RegisteredDb::getEntry(::rtl::OUString const & url)
 
         return aNode.is();
     }
-    catch(css::uno::Exception &)
+    catch(const css::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(

@@ -95,7 +95,7 @@ bool singleton_entries(
         xKey->setStringValue( serviceDecl.getSupportedServiceNames()[0] );
         return true;
     }
-    catch (registry::InvalidRegistryException & exc) {
+    catch (const registry::InvalidRegistryException & exc) {
         (void) exc; // avoid warnings
         OSL_FAIL( ::rtl::OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );

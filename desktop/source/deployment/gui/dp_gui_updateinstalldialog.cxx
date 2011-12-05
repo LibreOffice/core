@@ -367,7 +367,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
         try
         {
             dp_misc::create_folder(0, destFolder, m_updateCmdEnv.get(), true );
-        } catch (cssu::Exception & e)
+        } catch (const cssu::Exception & e)
         {
             throw cssu::Exception(e.Message + OUSTR(" No extensions will be installed."), 0);
         }
@@ -446,7 +446,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
 
         }
     }
-    catch (cssu::Exception & e)
+    catch (const cssu::Exception & e)
     {
         SolarMutexGuard g;
         if (m_stop) {

@@ -303,7 +303,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
                          "active_native_singleton")))),
             css::uno::UNO_SET_THROW)->
             setStringValue(Dispatch::static_getImplementationName());
-    } catch (css::uno::Exception & e) {
+    } catch (const css::uno::Exception & e) {
         (void) e;
         OSL_TRACE(
             "active_native component_writeInfo exception: %s",

@@ -169,10 +169,10 @@ void BackendImpl::disposing()
 
         PackageRegistryBackend::disposing();
     }
-    catch (RuntimeException &) {
+    catch (const RuntimeException &) {
         throw;
     }
-    catch (Exception &) {
+    catch (const Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(
             OUSTR("caught unexpected exception while disposing..."),
@@ -798,7 +798,7 @@ void BackendImpl::PackageImpl::processPackage_(
                     xCmdEnv ).executeCommand(
                         OUSTR("delete"), Any( true /* delete physically */ ) );
             }
-            catch(Exception&)
+            catch(const Exception&)
             {
                 OSL_ASSERT(0);
             }

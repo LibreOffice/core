@@ -159,7 +159,7 @@ bool LanguageSelection::prepareLanguage()
         xLocaleProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Locale"))) >>= usLocale;
             setDefaultLanguage(usLocale);
     }
-    catch (Exception&)
+    catch (const Exception&)
     {
         m_eStatus = LS_STATUS_CONFIGURATIONACCESS_BROKEN;
     }
@@ -246,11 +246,11 @@ bool LanguageSelection::prepareLanguage()
 
             bSuccess = sal_True;
         }
-        catch ( PropertyVetoException& )
+        catch ( const PropertyVetoException& )
         {
             // we are not allowed to change this
         }
-        catch (Exception& e)
+        catch (const Exception& e)
         {
             OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
             OSL_FAIL(aMsg.getStr());
@@ -373,7 +373,7 @@ Reference< XNameAccess > LanguageSelection::getConfigAccess(const sal_Char* pPat
         xNameAccess = Reference< XNameAccess > (
             theConfigProvider->createInstanceWithArguments(
                 sAccessSrvc, theArgs ), UNO_QUERY_THROW );
-    } catch (com::sun::star::uno::Exception& e)
+    } catch (const com::sun::star::uno::Exception& e)
     {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
         OSL_FAIL(aMsg.getStr());
@@ -519,11 +519,11 @@ void LanguageSelection::resetUserLanguage()
         xProp->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("UILocale")), makeAny(OUString()));
         Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
     }
-    catch ( PropertyVetoException& )
+    catch ( const PropertyVetoException& )
     {
         // we are not allowed to change this
     }
-    catch ( Exception& e)
+    catch (const Exception& e)
     {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
         OSL_FAIL(aMsg.getStr());

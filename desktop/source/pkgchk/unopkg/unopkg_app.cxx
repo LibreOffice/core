@@ -213,7 +213,7 @@ void disposeBridges(Reference<css::uno::XComponentContext> ctx)
                 try {
                     comp->dispose();
                 }
-                catch (css::lang::DisposedException& )
+                catch ( const css::lang::DisposedException& )
                 {
                 }
             }
@@ -461,7 +461,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
                             cmdPackage, cmdPackage, repository,
                             Reference<task::XAbortChannel>(), xCmdEnv );
                     }
-                    catch (lang::IllegalArgumentException &)
+                    catch (const lang::IllegalArgumentException &)
                     {
                         Reference<deployment::XPackage> p(
                              findPackage(repository,
@@ -535,7 +535,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
                         extension = xExtensionManager->getDeployedExtension(
                             repository, cmdPackages[ pos ], cmdPackages[ pos ], xCmdEnv );
                     }
-                    catch (lang::IllegalArgumentException &)
+                    catch (const lang::IllegalArgumentException &)
                     {
                         extension = findPackage(repository,
                             xExtensionManager, xCmdEnv, cmdPackages[ pos ] );
@@ -587,7 +587,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
                     extension = xExtensionManager->getDeployedExtension(
                         repository, cmdPackages[ pos ], cmdPackages[ pos ], xCmdEnv );
                 }
-                catch (lang::IllegalArgumentException &)
+                catch (const lang::IllegalArgumentException &)
                 {
                     extension = findPackage(
                         repository, xExtensionManager, xCmdEnv, cmdPackages[ pos ] );
@@ -656,16 +656,16 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
         disposeBridges(xLocalComponentContext);
         return 0;
     }
-    catch (ucb::CommandFailedException &e)
+    catch (const ucb::CommandFailedException &e)
     {
         dp_misc::writeConsoleError(e.Message + OUSTR("\n"));
         bNoOtherErrorMsg = true;
     }
-    catch (ucb::CommandAbortedException &)
+    catch (const ucb::CommandAbortedException &)
     {
         dp_misc::writeConsoleError("\n"APP_NAME" aborted!\n");
     }
-    catch (deployment::DeploymentException & exc)
+    catch (const deployment::DeploymentException & exc)
     {
         OUString cause;
         if (option_verbose)
@@ -685,13 +685,13 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
             dp_misc::writeConsoleError(
                 OUSTR("       Cause: ") + cause + OUSTR("\n"));
     }
-    catch (LockFileException & e)
+    catch (const LockFileException & e)
     {
         if (!subcmd_gui)
             dp_misc::writeConsoleError(e.Message);
         bNoOtherErrorMsg = true;
     }
-    catch (::com::sun::star::uno::Exception & e ) {
+    catch (const ::com::sun::star::uno::Exception & e ) {
         Any exc( ::cppu::getCaughtException() );
 
         dp_misc::writeConsoleError(

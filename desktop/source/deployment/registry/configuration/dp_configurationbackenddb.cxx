@@ -92,11 +92,11 @@ void ConfigurationBackendDb::addEntry(::rtl::OUString const & url, Data const & 
             save();
         }
     }
-    catch (css::deployment::DeploymentException& )
+    catch ( const css::deployment::DeploymentException& )
     {
         throw;
     }
-    catch(css::uno::Exception &)
+    catch(const css::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -124,11 +124,11 @@ ConfigurationBackendDb::getEntry(::rtl::OUString const & url)
         }
         return ::boost::optional<Data>(retData);
     }
-    catch (css::deployment::DeploymentException& )
+    catch ( const css::deployment::DeploymentException& )
     {
         throw;
     }
-    catch(css::uno::Exception &)
+    catch(const css::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -159,11 +159,11 @@ ConfigurationBackendDb::getEntry(::rtl::OUString const & url)
         }
         return listRet;
     }
-    catch (css::deployment::DeploymentException& )
+    catch ( const css::deployment::DeploymentException& )
     {
         throw;
     }
-    catch(css::uno::Exception &)
+    catch(const css::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(

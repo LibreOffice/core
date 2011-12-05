@@ -106,7 +106,7 @@ css::uno::Reference< css::xml::dom::XNode > EmptyNodeList::item(::sal_Int32)
     OSL_ASSERT(node.is());
     try {
         return node->getNodeValue();
-    } catch (css::xml::dom::DOMException & e) {
+    } catch (const css::xml::dom::DOMException & e) {
         throw css::uno::RuntimeException(
             (::rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
@@ -209,7 +209,7 @@ ExtensionDescription::ExtensionDescription(
         {   //throws com.sun.star.ucb.InteractiveAugmentedIOException
             xIn = descContent.openStream();
         }
-        catch (css::uno::Exception& )
+        catch ( const css::uno::Exception& )
         {
             if ( ! static_cast<FileDoesNotExistFilter*>(xFilter.get())->exist())
                 throw NoDescriptionException();
@@ -265,11 +265,11 @@ ExtensionDescription::ExtensionDescription(
         {
             throw css::uno::Exception(sDescriptionUri + OUSTR(" contains a root element with an unsupported namespace. "), 0);
         }
-    } catch (css::uno::RuntimeException &) {
+    } catch (const css::uno::RuntimeException &) {
         throw;
-    } catch (css::deployment::DeploymentException &) {
+    } catch (const css::deployment::DeploymentException &) {
         throw;
-    } catch (css::uno::Exception & e) {
+    } catch (const css::uno::Exception & e) {
         css::uno::Any a(cppu::getCaughtException());
         throw css::deployment::DeploymentException(
             e.Message, Reference< css::uno::XInterface >(), a);
@@ -349,8 +349,8 @@ DescriptionInfoset getDescriptionInfoset(OUString const & sExtensionFolderURL)
                 context, sExtensionFolderURL,
                 Reference< css::ucb::XCommandEnvironment >()).
             getRootElement();
-    } catch (NoDescriptionException &) {
-    } catch (css::deployment::DeploymentException & e) {
+    } catch (const NoDescriptionException &) {
+    } catch (const css::deployment::DeploymentException & e) {
         throw css::uno::RuntimeException(
             (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
@@ -398,7 +398,7 @@ DescriptionInfoset::~DescriptionInfoset() {}
     if (m_element.is()) {
         try {
             n = m_xpath->selectSingleNode(m_element, expression);
-        } catch (css::xml::xpath::XPathException &) {
+        } catch (const css::xml::xpath::XPathException &) {
             // ignore
         }
     }
@@ -456,7 +456,7 @@ DescriptionInfoset::getDependencies() const {
         try {
             return m_xpath->selectNodeList(m_element, ::rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM("desc:dependencies/*")));
-        } catch (css::xml::xpath::XPathException &) {
+        } catch (const css::xml::xpath::XPathException &) {
             // ignore
         }
     }
@@ -517,7 +517,7 @@ DescriptionInfoset::getUpdateDownloadUrls() const
     if (m_element.is()) {
         try {
             n = m_xpath->selectSingleNode(m_element, expression);
-        } catch (css::xml::xpath::XPathException &) {
+        } catch (const css::xml::xpath::XPathException &) {
             // ignore
         }
     }
@@ -533,7 +533,7 @@ css::uno::Sequence< ::rtl::OUString > DescriptionInfoset::getUrls(
     if (m_element.is()) {
         try {
             ns = m_xpath->selectNodeList(m_element, expression);
-        } catch (css::xml::xpath::XPathException &) {
+        } catch (const css::xml::xpath::XPathException &) {
             // ignore
         }
     }
@@ -557,7 +557,7 @@ css::uno::Sequence< ::rtl::OUString > DescriptionInfoset::getUrls(
         css::uno::Reference< css::xml::dom::XNode > xPathName;
         try {
             xPathName = m_xpath->selectSingleNode(node, exp1);
-        } catch (css::xml::xpath::XPathException &) {
+        } catch (const css::xml::xpath::XPathException &) {
             // ignore
         }
         OSL_ASSERT(xPathName.is());
@@ -568,7 +568,7 @@ css::uno::Sequence< ::rtl::OUString > DescriptionInfoset::getUrls(
         css::uno::Reference< css::xml::dom::XNode > xURL;
         try {
             xURL = m_xpath->selectSingleNode(node, exp2);
-        } catch (css::xml::xpath::XPathException &) {
+        } catch (const css::xml::xpath::XPathException &) {
             // ignore
         }
         OSL_ASSERT(xURL.is());
@@ -594,7 +594,7 @@ css::uno::Sequence< ::rtl::OUString > DescriptionInfoset::getUrls(
         css::uno::Reference< css::xml::dom::XNode > xtext;
         try {
             xtext = m_xpath->selectSingleNode(node, exp);
-        } catch (css::xml::xpath::XPathException &) {
+        } catch (const css::xml::xpath::XPathException &) {
             // ignore
         }
         if (xtext.is())
@@ -620,7 +620,7 @@ DescriptionInfoset::getSimpleLicenseAttributes() const
             n = m_xpath->selectSingleNode(m_element,
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "/desc:description/desc:registration/desc:simple-license/@accept-by")));
-        } catch (css::xml::xpath::XPathException &) {
+        } catch (const css::xml::xpath::XPathException &) {
             // ignore
         }
         if (n.is())
@@ -669,7 +669,7 @@ DescriptionInfoset::getLocalizedChild( const ::rtl::OUString & sParent) const
     css::uno::Reference< css::xml::dom::XNode > xParent;
     try {
         xParent = m_xpath->selectSingleNode(m_element, sParent);
-    } catch (css::xml::xpath::XPathException &) {
+    } catch (const css::xml::xpath::XPathException &) {
         // ignore
     }
     css::uno::Reference<css::xml::dom::XNode> nodeMatch;
@@ -706,7 +706,7 @@ DescriptionInfoset::matchFullLocale(css::uno::Reference< css::xml::dom::XNode >
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"]")));
     try {
         return m_xpath->selectSingleNode(xParent, exp1);
-    } catch (css::xml::xpath::XPathException &) {
+    } catch (const css::xml::xpath::XPathException &) {
         // ignore
         return 0;
     }
@@ -731,7 +731,7 @@ DescriptionInfoset::matchCountryAndLanguage(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"]")));
         try {
             nodeMatch = m_xpath->selectSingleNode(xParent, exp1);
-        } catch (css::xml::xpath::XPathException &) {
+        } catch (const css::xml::xpath::XPathException &) {
             // ignore
         }
 
@@ -745,7 +745,7 @@ DescriptionInfoset::matchCountryAndLanguage(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-\")]")));
             try {
                 nodeMatch = m_xpath->selectSingleNode(xParent, exp2);
-            } catch (css::xml::xpath::XPathException &) {
+            } catch (const css::xml::xpath::XPathException &) {
                 // ignore
             }
         }
@@ -769,7 +769,7 @@ DescriptionInfoset::matchLanguage(
         + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"]")));
     try {
         nodeMatch = m_xpath->selectSingleNode(xParent, exp1);
-    } catch (css::xml::xpath::XPathException &) {
+    } catch (const css::xml::xpath::XPathException &) {
         // ignore
     }
 
@@ -783,7 +783,7 @@ DescriptionInfoset::matchLanguage(
             + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-\")]")));
         try {
             nodeMatch = m_xpath->selectSingleNode(xParent, exp2);
-        } catch (css::xml::xpath::XPathException &) {
+        } catch (const css::xml::xpath::XPathException &) {
             // ignore
         }
     }
@@ -801,7 +801,7 @@ DescriptionInfoset::getChildWithDefaultLocale(css::uno::Reference< css::xml::dom
         try {
             nodeDefault = m_xpath->selectSingleNode(xParent, ::rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("@default-license-id")));
-        } catch (css::xml::xpath::XPathException &) {
+        } catch (const css::xml::xpath::XPathException &) {
             // ignore
         }
         if (nodeDefault.is())
@@ -813,7 +813,7 @@ DescriptionInfoset::getChildWithDefaultLocale(css::uno::Reference< css::xml::dom
                 + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"]")));
             try {
                 return m_xpath->selectSingleNode(xParent, exp1);
-            } catch (css::xml::xpath::XPathException &) {
+            } catch (const css::xml::xpath::XPathException &) {
                 // ignore
             }
         }
@@ -822,7 +822,7 @@ DescriptionInfoset::getChildWithDefaultLocale(css::uno::Reference< css::xml::dom
     const ::rtl::OUString exp2(RTL_CONSTASCII_USTRINGPARAM("*[1]"));
     try {
         return m_xpath->selectSingleNode(xParent, exp2);
-    } catch (css::xml::xpath::XPathException &) {
+    } catch (const css::xml::xpath::XPathException &) {
         // ignore
         return 0;
     }
@@ -844,7 +844,7 @@ DescriptionInfoset::getChildWithDefaultLocale(css::uno::Reference< css::xml::dom
         css::uno::Reference< css::xml::dom::XNode > xURL;
         try {
             xURL = m_xpath->selectSingleNode(node, exp);
-        } catch (css::xml::xpath::XPathException &) {
+        } catch (const css::xml::xpath::XPathException &) {
             // ignore
         }
         OSL_ASSERT(xURL.is());

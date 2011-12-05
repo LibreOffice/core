@@ -424,7 +424,7 @@ void BackendImpl::implProcessHelp(
                                 rtl::OUString(
                                     RTL_CONSTASCII_USTRINGPARAM("com.sun.star.help.HelpIndexer" )), xContext ) , UNO_QUERY );
                     }
-                    catch (Exception &)
+                    catch (const Exception &)
                     {
                         // i98680: Survive missing lucene
                     }

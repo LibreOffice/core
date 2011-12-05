@@ -258,10 +258,10 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
         xAllPackages = xExtensionManager->getAllExtensions( uno::Reference< task::XAbortChannel >(),
                                                             uno::Reference< ucb::XCommandEnvironment >() );
     }
-    catch ( deployment::DeploymentException & ) { return true; }
-    catch ( ucb::CommandFailedException & ) { return true; }
-    catch ( ucb::CommandAbortedException & ) { return true; }
-    catch ( lang::IllegalArgumentException & e ) {
+    catch ( const deployment::DeploymentException & ) { return true; }
+    catch ( const ucb::CommandFailedException & ) { return true; }
+    catch ( const ucb::CommandAbortedException & ) { return true; }
+    catch ( const lang::IllegalArgumentException & e ) {
         throw uno::RuntimeException( e.Message, e.Context );
     }
 
@@ -294,8 +294,8 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
                     else
                         bRegistered = false;
                 }
-                catch ( uno::RuntimeException & ) { throw; }
-                catch ( uno::Exception & exc) {
+                catch ( const uno::RuntimeException & ) { throw; }
+                catch (const uno::Exception & exc) {
                     (void) exc;
                     OSL_FAIL( ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
@@ -306,7 +306,7 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
                     try {
                         bDependenciesValid = xPackage->checkDependencies( uno::Reference< ucb::XCommandEnvironment >() );
                     }
-                    catch ( deployment::DeploymentException & ) {}
+                    catch ( const deployment::DeploymentException & ) {}
                     if ( ! bDependenciesValid )
                     {
                         return false;

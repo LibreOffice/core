@@ -85,7 +85,7 @@ void Desktop::DoRestartActionsIfNecessary( sal_Bool bQuickStart )
                 xQuickstart->initialize( aSeq );
             }
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             // this is no critical operation so it should not prevent office from starting
         }
@@ -101,7 +101,7 @@ void Desktop::SetRestartState()
         xPSet->setPropertyValue( sPropName, makeAny( sal_True ) );
         Reference< util::XChangesBatch >( xPSet, UNO_QUERY_THROW )->commitChanges();
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         // this is no critical operation, ignore the exception
     }

@@ -139,7 +139,7 @@ CommandEnvironmentImpl::~CommandEnvironmentImpl()
         if (xComp.is())
             xComp->dispose();
     }
-    catch (RuntimeException & exc) {
+    catch (const RuntimeException & exc) {
         (void) exc;
         OSL_FAIL( ::rtl::OUStringToOString(
                         exc.Message, osl_getThreadTextEncoding() ).getStr() );

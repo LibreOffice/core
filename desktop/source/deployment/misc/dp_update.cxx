@@ -77,12 +77,12 @@ getUpdateInformation( Reference<deployment::XUpdateInformationProvider > const &
 {
     try {
         return updateInformation->getUpdateInformation(urls, identifier);
-    } catch (uno::RuntimeException &) {
+    } catch (const uno::RuntimeException &) {
         throw;
-    } catch (ucb::CommandFailedException & e) {
+    } catch (const ucb::CommandFailedException & e) {
         out_error = e.Reason;
-    } catch (ucb::CommandAbortedException &) {
-    } catch (uno::Exception & e) {
+    } catch (const ucb::CommandAbortedException &) {
+    } catch (const uno::Exception & e) {
         out_error = uno::makeAny(e);
     }
     return

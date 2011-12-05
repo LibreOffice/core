@@ -348,10 +348,10 @@ void UpdateDialog::Thread::execute()
             extensions = extMgr->getExtensionsWithSameIdentifier(
                 dp_misc::getIdentifier(info.extension), info.extension->getName(),
                 uno::Reference<ucb::XCommandEnvironment>());
-        } catch (lang::IllegalArgumentException& ) {
+        } catch ( const lang::IllegalArgumentException& ) {
             OSL_ASSERT(0);
             continue;
-        } catch (css::ucb::CommandFailedException& ) {
+        } catch ( const css::ucb::CommandFailedException& ) {
             OSL_ASSERT(0);
             continue;
         }
@@ -573,9 +573,9 @@ UpdateDialog::UpdateDialog(
                      RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Toolkit")),
                  m_context)),
             uno::UNO_QUERY_THROW);
-    } catch (uno::RuntimeException &) {
+    } catch (const uno::RuntimeException &) {
         throw;
-    } catch (uno::Exception & e) {
+    } catch (const uno::Exception & e) {
         throw uno::RuntimeException(e.Message, e.Context);
     }
     m_updates.SetSelectHdl(LINK(this, UpdateDialog, selectionHandler));
@@ -1427,7 +1427,7 @@ IMPL_LINK( UpdateDialog, hyperlink_clicked, svt::FixedHyperlink*, pHyperlink )
         xSystemShellExecute->execute(
                                      sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::DEFAULTS);
     }
-    catch (uno::Exception& )
+    catch ( const uno::Exception& )
     {
     }
 

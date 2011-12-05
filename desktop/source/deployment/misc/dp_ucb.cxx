@@ -79,10 +79,10 @@ bool create_ucb_content(
         }
         return true;
     }
-    catch (RuntimeException &) {
+    catch (const RuntimeException &) {
         throw;
     }
-    catch (Exception &) {
+    catch (const Exception &) {
         if (throw_exc)
             throw;
     }
@@ -154,14 +154,14 @@ bool create_folder(
                     return true;
                 }
             }
-            catch (RuntimeException &) {
+            catch (const RuntimeException &) {
                 throw;
             }
-            catch (CommandFailedException &) {
+            catch (const CommandFailedException &) {
                 // Interaction Handler already handled the error
                 // that has occurred...
             }
-            catch (Exception &) {
+            catch (const Exception &) {
                 if (throw_exc)
                     throw;
                 return false;
@@ -187,10 +187,10 @@ bool erase_path( OUString const & url,
             ucb_content.executeCommand(
                 OUSTR("delete"), Any( true /* delete physically */ ) );
         }
-        catch (RuntimeException &) {
+        catch (const RuntimeException &) {
             throw;
         }
-        catch (Exception &) {
+        catch (const Exception &) {
             if (throw_exc)
                 throw;
             return false;

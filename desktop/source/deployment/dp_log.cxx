@@ -85,7 +85,7 @@ void ProgressLogImpl::disposing()
             m_xLogFile.clear();
         }
     }
-    catch (Exception & exc) {
+    catch (const Exception & exc) {
         (void) exc;
         OSL_FAIL( OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -149,7 +149,7 @@ void ProgressLogImpl::log_write( OString const & text )
                     text.getLength() ) );
         }
     }
-    catch (io::IOException & exc) {
+    catch (const io::IOException & exc) {
         (void) exc;
         OSL_FAIL( OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );

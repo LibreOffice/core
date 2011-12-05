@@ -94,7 +94,7 @@ void ExtensionBackendDb::addEntry(::rtl::OUString const & url, Data const & data
             save();
         }
     }
-    catch(css::uno::Exception &)
+    catch(const css::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
@@ -122,7 +122,7 @@ ExtensionBackendDb::Data ExtensionBackendDb::getEntry(::rtl::OUString const & ur
         }
         return retData;
     }
-    catch(css::uno::Exception &)
+    catch(const css::uno::Exception &)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(

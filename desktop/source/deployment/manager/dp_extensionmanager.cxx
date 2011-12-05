@@ -301,7 +301,7 @@ void ExtensionManager::addExtensionsToMap(
             xPackage = lRepos[i]->getDeployedPackage(
                 identifier, fileName, Reference<ucb::XCommandEnvironment>());
         }
-        catch(lang::IllegalArgumentException &)
+        catch(const lang::IllegalArgumentException &)
         {
             // thrown if the extension does not exist in this repository
         }
@@ -343,15 +343,15 @@ ExtensionManager::getExtensionsWithSameIdentifier(
             ::std::list<Reference<deploy::XPackage> >
             > (listExtensions);
     }
-    catch (deploy::DeploymentException & )
+    catch ( const deploy::DeploymentException & )
     {
         throw;
     }
-    catch ( ucb::CommandFailedException & )
+    catch ( const ucb::CommandFailedException & )
     {
         throw;
     }
-    catch (lang::IllegalArgumentException &)
+    catch (const lang::IllegalArgumentException &)
     {
         throw;
     }
@@ -371,7 +371,7 @@ bool ExtensionManager::isUserDisabled(
 
     try {
         listExtensions = getExtensionsWithSameId(identifier, fileName);
-    } catch (lang::IllegalArgumentException & ) {
+    } catch ( const lang::IllegalArgumentException & ) {
     }
     OSL_ASSERT(listExtensions.size() == 3);
 
@@ -426,7 +426,7 @@ void ExtensionManager::activateExtension(
     ::std::list<Reference<deploy::XPackage> > listExtensions;
     try {
         listExtensions = getExtensionsWithSameId(identifier, fileName);
-    } catch (lang::IllegalArgumentException &) {
+    } catch (const lang::IllegalArgumentException &) {
     }
     OSL_ASSERT(listExtensions.size() == 3);
 
@@ -558,7 +558,7 @@ bool ExtensionManager::doChecksForAddExtension(
                 sIdentifier, sFileName, xCmdEnv);
             out_existingExtension = xOldExtension;
         }
-        catch (lang::IllegalArgumentException &)
+        catch (const lang::IllegalArgumentException &)
         {
         }
         bool bCanInstall = false;
@@ -605,17 +605,17 @@ bool ExtensionManager::doChecksForAddExtension(
 
         return bCanInstall;
     }
-    catch (deploy::DeploymentException& ) {
+    catch ( const deploy::DeploymentException& ) {
         throw;
-    } catch (ucb::CommandFailedException & ) {
+    } catch ( const ucb::CommandFailedException & ) {
         throw;
-    } catch (ucb::CommandAbortedException & ) {
+    } catch ( const ucb::CommandAbortedException & ) {
         throw;
-    } catch (lang::IllegalArgumentException &) {
+    } catch (const lang::IllegalArgumentException &) {
         throw;
-    } catch (uno::RuntimeException &) {
+    } catch (const uno::RuntimeException &) {
         throw;
-    } catch (uno::Exception &) {
+    } catch (const uno::Exception &) {
         uno::Any excOccurred = ::cppu::getCaughtException();
         deploy::DeploymentException exc(
             OUSTR("Extension Manager: exception in doChecksForAddExtension"),
@@ -713,7 +713,7 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
                         xTmpExtension = xExtensionBackup;
                         OSL_ASSERT(xTmpExtension.is());
                     }
-                    catch (lang::DisposedException &)
+                    catch (const lang::DisposedException &)
                     {
                         //Another thread might have removed the extension meanwhile
                     }
@@ -761,15 +761,15 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
                             static_cast<OWeakObject*>(this), uno::Any());
                 }
             }
-            catch (deploy::DeploymentException& ) {
+            catch ( const deploy::DeploymentException& ) {
                 excOccurred2 = ::cppu::getCaughtException();
-            } catch (ucb::CommandFailedException & ) {
+            } catch ( const ucb::CommandFailedException & ) {
                 excOccurred2 = ::cppu::getCaughtException();
-            } catch (ucb::CommandAbortedException & ) {
+            } catch ( const ucb::CommandAbortedException & ) {
                 excOccurred2 = ::cppu::getCaughtException();
-            } catch (lang::IllegalArgumentException &) {
+            } catch (const lang::IllegalArgumentException &) {
                 excOccurred2 = ::cppu::getCaughtException();
-            } catch (uno::RuntimeException &) {
+            } catch (const uno::RuntimeException &) {
                 excOccurred2 = ::cppu::getCaughtException();
             } catch (...) {
                 excOccurred2 = ::cppu::getCaughtException();
@@ -811,17 +811,17 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
     {
         fireModified();
 
-    }catch (deploy::DeploymentException& ) {
+    }catch ( const deploy::DeploymentException& ) {
         throw;
-    } catch (ucb::CommandFailedException & ) {
+    } catch ( const ucb::CommandFailedException & ) {
         throw;
-    } catch (ucb::CommandAbortedException & ) {
+    } catch ( const ucb::CommandAbortedException & ) {
         throw;
-    } catch (lang::IllegalArgumentException &) {
+    } catch (const lang::IllegalArgumentException &) {
         throw;
-    } catch (uno::RuntimeException &) {
+    } catch (const uno::RuntimeException &) {
         throw;
-    } catch (uno::Exception &) {
+    } catch (const uno::Exception &) {
         uno::Any excOccurred = ::cppu::getCaughtException();
         deploy::DeploymentException exc(
             OUSTR("Extension Manager: exception in doChecksForAddExtension"),
@@ -881,15 +881,15 @@ void ExtensionManager::removeExtension(
                           xAbortChannel, xCmdEnv);
         fireModified();
     }
-    catch (deploy::DeploymentException& ) {
+    catch ( const deploy::DeploymentException& ) {
         excOccurred1 = ::cppu::getCaughtException();
-    } catch (ucb::CommandFailedException & ) {
+    } catch ( const ucb::CommandFailedException & ) {
         excOccurred1 = ::cppu::getCaughtException();
-    } catch (ucb::CommandAbortedException & ) {
+    } catch ( const ucb::CommandAbortedException & ) {
         excOccurred1 = ::cppu::getCaughtException();
-    } catch (lang::IllegalArgumentException &) {
+    } catch (const lang::IllegalArgumentException &) {
         excOccurred1 = ::cppu::getCaughtException();
-    } catch (uno::RuntimeException &) {
+    } catch (const uno::RuntimeException &) {
         excOccurred1 = ::cppu::getCaughtException();
     } catch (...) {
         excOccurred1 = ::cppu::getCaughtException();
@@ -967,15 +967,15 @@ void ExtensionManager::enableExtension(
                           extension->getName(), false, false,
                           xAbortChannel, xCmdEnv);
     }
-    catch (deploy::DeploymentException& ) {
+    catch ( const deploy::DeploymentException& ) {
         excOccurred = ::cppu::getCaughtException();
-    } catch (ucb::CommandFailedException & ) {
+    } catch ( const ucb::CommandFailedException & ) {
         excOccurred = ::cppu::getCaughtException();
-    } catch (ucb::CommandAbortedException & ) {
+    } catch ( const ucb::CommandAbortedException & ) {
         excOccurred = ::cppu::getCaughtException();
-    } catch (lang::IllegalArgumentException &) {
+    } catch (const lang::IllegalArgumentException &) {
         excOccurred = ::cppu::getCaughtException();
-    } catch (uno::RuntimeException &) {
+    } catch (const uno::RuntimeException &) {
         excOccurred = ::cppu::getCaughtException();
     } catch (...) {
         excOccurred = ::cppu::getCaughtException();
@@ -1032,15 +1032,15 @@ sal_Int32 ExtensionManager::checkPrerequisitesAndEnable(
                           xAbortChannel, xCmdEnv);
         return ret;
     }
-    catch (deploy::DeploymentException& ) {
+    catch ( const deploy::DeploymentException& ) {
         throw;
-    } catch (ucb::CommandFailedException & ) {
+    } catch ( const ucb::CommandFailedException & ) {
         throw;
-    } catch (ucb::CommandAbortedException & ) {
+    } catch ( const ucb::CommandAbortedException & ) {
         throw;
-    } catch (lang::IllegalArgumentException &) {
+    } catch (const lang::IllegalArgumentException &) {
         throw;
-    } catch (uno::RuntimeException &) {
+    } catch (const uno::RuntimeException &) {
         throw;
     } catch (...) {
         uno::Any excOccurred = ::cppu::getCaughtException();
@@ -1080,15 +1080,15 @@ void ExtensionManager::disableExtension(
         activateExtension(id, extension->getName(), true, false,
                           xAbortChannel, xCmdEnv);
     }
-    catch (deploy::DeploymentException& ) {
+    catch ( const deploy::DeploymentException& ) {
         excOccurred = ::cppu::getCaughtException();
-    } catch (ucb::CommandFailedException & ) {
+    } catch ( const ucb::CommandFailedException & ) {
         excOccurred = ::cppu::getCaughtException();
-    } catch (ucb::CommandAbortedException & ) {
+    } catch ( const ucb::CommandAbortedException & ) {
         excOccurred = ::cppu::getCaughtException();
-    } catch (lang::IllegalArgumentException &) {
+    } catch (const lang::IllegalArgumentException &) {
         excOccurred = ::cppu::getCaughtException();
-    } catch (uno::RuntimeException &) {
+    } catch (const uno::RuntimeException &) {
         excOccurred = ::cppu::getCaughtException();
     } catch (...) {
         excOccurred = ::cppu::getCaughtException();
@@ -1187,15 +1187,15 @@ uno::Sequence< uno::Sequence<Reference<deploy::XPackage> > >
         }
         return seqSeq;
 
-    } catch (deploy::DeploymentException& ) {
+    } catch ( const deploy::DeploymentException& ) {
         throw;
-    } catch (ucb::CommandFailedException & ) {
+    } catch ( const ucb::CommandFailedException & ) {
         throw;
-    } catch (ucb::CommandAbortedException & ) {
+    } catch ( const ucb::CommandAbortedException & ) {
         throw;
-    } catch (lang::IllegalArgumentException &) {
+    } catch (const lang::IllegalArgumentException &) {
         throw;
-    } catch (uno::RuntimeException &) {
+    } catch (const uno::RuntimeException &) {
         throw;
     } catch (...) {
         uno::Any exc = ::cppu::getCaughtException();
@@ -1236,19 +1236,19 @@ void ExtensionManager::reinstallDeployedExtensions(
                 OSL_ASSERT(id.getLength());
                 activateExtension(id, fileName, false, true, xAbortChannel, xCmdEnv );
             }
-            catch (lang::DisposedException &)
+            catch (const lang::DisposedException &)
             {
             }
         }
-    } catch (deploy::DeploymentException& ) {
+    } catch ( const deploy::DeploymentException& ) {
         throw;
-    } catch (ucb::CommandFailedException & ) {
+    } catch ( const ucb::CommandFailedException & ) {
         throw;
-    } catch (ucb::CommandAbortedException & ) {
+    } catch ( const ucb::CommandAbortedException & ) {
         throw;
-    } catch (lang::IllegalArgumentException &) {
+    } catch (const lang::IllegalArgumentException &) {
         throw;
-    } catch (uno::RuntimeException &) {
+    } catch (const uno::RuntimeException &) {
         throw;
     } catch (...) {
         uno::Any exc = ::cppu::getCaughtException();
@@ -1298,15 +1298,15 @@ void ExtensionManager::synchronizeBundledPrereg(
                                      "$BUNDLED_EXTENSIONS_PREREG/lastsynchronized"));
         writeLastModified(lastSyncBundled, xCmdEnv);
 
-    } catch (deploy::DeploymentException& ) {
+    } catch ( const deploy::DeploymentException& ) {
         throw;
-    } catch (ucb::CommandFailedException & ) {
+    } catch ( const ucb::CommandFailedException & ) {
         throw;
-    } catch (ucb::CommandAbortedException & ) {
+    } catch ( const ucb::CommandAbortedException & ) {
         throw;
-    } catch (lang::IllegalArgumentException &) {
+    } catch (const lang::IllegalArgumentException &) {
         throw;
-    } catch (uno::RuntimeException &) {
+    } catch (const uno::RuntimeException &) {
         throw;
     } catch (...) {
         uno::Any exc = ::cppu::getCaughtException();
@@ -1375,15 +1375,15 @@ sal_Bool ExtensionManager::synchronize(
                                     "$SHARED_EXTENSIONS_USER/lastsynchronized"));
         writeLastModified(lastSyncShared, xCmdEnv);
         return bModified;
-    } catch (deploy::DeploymentException& ) {
+    } catch ( const deploy::DeploymentException& ) {
         throw;
-    } catch (ucb::CommandFailedException & ) {
+    } catch ( const ucb::CommandFailedException & ) {
         throw;
-    } catch (ucb::CommandAbortedException & ) {
+    } catch ( const ucb::CommandAbortedException & ) {
         throw;
-    } catch (lang::IllegalArgumentException &) {
+    } catch (const lang::IllegalArgumentException &) {
         throw;
-    } catch (uno::RuntimeException &) {
+    } catch (const uno::RuntimeException &) {
         throw;
     } catch (...) {
         uno::Any exc = ::cppu::getCaughtException();
@@ -1520,7 +1520,7 @@ bool singleton_entries(
         xKey->setStringValue( serviceDecl.getSupportedServiceNames()[0] );
         return true;
     }
-    catch (registry::InvalidRegistryException & exc) {
+    catch (const registry::InvalidRegistryException & exc) {
         (void) exc; // avoid warnings
         OSL_FAIL( ::rtl::OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );

@@ -428,7 +428,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
                 that->m_readOnly = false;
                 erase_path( stampURL, xCmdEnv );
             }
-            catch (RuntimeException &) {
+            catch (const RuntimeException &) {
                 try {
                     erase_path( stampURL, xCmdEnv );
                 } catch (...)
@@ -436,7 +436,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
                 }
                 throw;
             }
-            catch (Exception &) {
+            catch (const Exception &) {
                 that->m_readOnly = true;
             }
         }
@@ -460,10 +460,10 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         return xPackageManager;
 
     }
-    catch (RuntimeException &) {
+    catch (const RuntimeException &) {
         throw;
     }
-    catch (Exception &) {
+    catch (const Exception &) {
         Any exc( ::cppu::getCaughtException() );
         ::rtl::OUStringBuffer buf;
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[context=\"") );
@@ -508,10 +508,10 @@ void PackageManagerImpl::disposing()
         t_pm_helper::disposing();
 
     }
-    catch (RuntimeException &) {
+    catch (const RuntimeException &) {
         throw;
     }
-    catch (Exception &) {
+    catch (const Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(
             OUSTR("caught unexpected exception while disposing..."),
@@ -599,7 +599,7 @@ OUString PackageManagerImpl::detectMediaType(
         try {
             ucbContent.getPropertyValue( OUSTR("MediaType") ) >>= mediaType;
         }
-        catch (beans::UnknownPropertyException &) {
+        catch (const beans::UnknownPropertyException &) {
         }
         OSL_ENSURE( mediaType.getLength() > 0, "### no media-type?!" );
     }
@@ -615,7 +615,7 @@ OUString PackageManagerImpl::detectMediaType(
             if (xPackageType.is())
                 mediaType = xPackageType->getMediaType();
         }
-        catch (lang::IllegalArgumentException & exc) {
+        catch (const lang::IllegalArgumentException & exc) {
             if (throw_exc)
                 throw;
             (void) exc;
@@ -813,7 +813,7 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
             try {
                 docFolderContent.executeCommand( OUSTR("flush"), Any() );
             }
-            catch (UnsupportedCommandException &) {
+            catch (const UnsupportedCommandException &) {
             }
         }
         ActivePackages::Data dbData;
@@ -861,22 +861,22 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
         }
         return xPackage;
     }
-    catch (RuntimeException &) {
+    catch (const RuntimeException &) {
         throw;
     }
-    catch (CommandFailedException & exc) {
+    catch (const CommandFailedException & exc) {
         logIntern( Any(exc) );
         throw;
     }
-    catch (CommandAbortedException & exc) {
+    catch (const CommandAbortedException & exc) {
         logIntern( Any(exc) );
         throw;
     }
-    catch (deployment::DeploymentException & exc) {
+    catch (const deployment::DeploymentException & exc) {
         logIntern( Any(exc) );
         throw;
     }
-    catch (Exception &) {
+    catch (const Exception &) {
         Any exc( ::cppu::getCaughtException() );
         logIntern( exc );
         throw deployment::DeploymentException(
@@ -964,25 +964,25 @@ void PackageManagerImpl::removePackage(
 
         fireModified();
     }
-    catch (RuntimeException &) {
+    catch (const RuntimeException &) {
         throw;
     }
-    catch (lang::IllegalArgumentException &) {
+    catch (const lang::IllegalArgumentException &) {
         throw;
     }
-    catch (CommandFailedException & exc) {
+    catch (const CommandFailedException & exc) {
         logIntern( Any(exc) );
         throw;
     }
-    catch (CommandAbortedException & exc) {
+    catch (const CommandAbortedException & exc) {
         logIntern( Any(exc) );
         throw;
     }
-    catch (deployment::DeploymentException & exc) {
+    catch (const deployment::DeploymentException & exc) {
         logIntern( Any(exc) );
         throw;
     }
-    catch (Exception &) {
+    catch (const Exception &) {
         Any exc( ::cppu::getCaughtException() );
         logIntern( exc );
         throw deployment::DeploymentException(
@@ -1056,7 +1056,7 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage_(
                 getDeployPath( data ), data.mediaType, false, OUString(), xCmdEnv );
         }
     }
-    catch (deployment::InvalidRemovedParameterException& e)
+    catch (const deployment::InvalidRemovedParameterException& e)
     {
         xExtension = e.Extension;
     }
@@ -1083,13 +1083,13 @@ PackageManagerImpl::getDeployedPackages_(
                     true /* xxx todo: think of GUI:
                             ignore other platforms than the current one */ ) );
         }
-        catch (lang::IllegalArgumentException & exc) {
+        catch (const lang::IllegalArgumentException & exc) {
             // ignore
             (void) exc; // avoid warnings
             OSL_FAIL( ::rtl::OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
-        catch (deployment::DeploymentException& exc) {
+        catch (const deployment::DeploymentException& exc) {
             // ignore
             (void) exc; // avoid warnings
             OSL_FAIL( ::rtl::OUStringToOString(
@@ -1117,22 +1117,22 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage(
         const ::osl::MutexGuard guard( getMutex() );
         return getDeployedPackage_( id, fileName, xCmdEnv );
     }
-    catch (RuntimeException &) {
+    catch (const RuntimeException &) {
         throw;
     }
-    catch (CommandFailedException & exc) {
+    catch (const CommandFailedException & exc) {
         logIntern( Any(exc) );
         throw;
     }
-    catch (lang::IllegalArgumentException & exc) {
+    catch (const lang::IllegalArgumentException & exc) {
         logIntern( Any(exc) );
         throw;
     }
-    catch (deployment::DeploymentException & exc) {
+    catch (const deployment::DeploymentException & exc) {
         logIntern( Any(exc) );
         throw;
     }
-    catch (Exception &) {
+    catch (const Exception &) {
         Any exc( ::cppu::getCaughtException() );
         logIntern( exc );
         throw deployment::DeploymentException(
@@ -1162,22 +1162,22 @@ PackageManagerImpl::getDeployedPackages(
         const ::osl::MutexGuard guard( getMutex() );
         return getDeployedPackages_( xCmdEnv );
     }
-    catch (RuntimeException &) {
+    catch (const RuntimeException &) {
         throw;
     }
-    catch (CommandFailedException & exc) {
+    catch (const CommandFailedException & exc) {
         logIntern( Any(exc) );
         throw;
     }
-    catch (CommandAbortedException & exc) {
+    catch (const CommandAbortedException & exc) {
         logIntern( Any(exc) );
         throw;
     }
-    catch (deployment::DeploymentException & exc) {
+    catch (const deployment::DeploymentException & exc) {
         logIntern( Any(exc) );
         throw;
     }
-    catch (Exception &) {
+    catch (const Exception &) {
         Any exc( ::cppu::getCaughtException() );
         logIntern( exc );
         throw deployment::DeploymentException(
@@ -1226,22 +1226,22 @@ void PackageManagerImpl::reinstallDeployedPackages(
 
         //registering is done by the ExtensionManager service.
     }
-    catch (RuntimeException &) {
+    catch (const RuntimeException &) {
         throw;
     }
-    catch (CommandFailedException & exc) {
+    catch (const CommandFailedException & exc) {
         logIntern( Any(exc) );
         throw;
     }
-    catch (CommandAbortedException & exc) {
+    catch (const CommandAbortedException & exc) {
         logIntern( Any(exc) );
         throw;
     }
-    catch (deployment::DeploymentException & exc) {
+    catch (const deployment::DeploymentException & exc) {
         logIntern( Any(exc) );
         throw;
     }
-    catch (Exception &) {
+    catch (const Exception &) {
         Any exc( ::cppu::getCaughtException() );
         logIntern( exc );
         throw deployment::DeploymentException(
@@ -1338,7 +1338,7 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
                 bModified |= true;
             }
         }
-        catch( uno::Exception & )
+        catch( const uno::Exception & )
         {
             OSL_ASSERT(0);
         }
@@ -1467,7 +1467,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
                 }
             }
         }
-        catch (uno::Exception &)
+        catch (const uno::Exception &)
         {
             OSL_ASSERT(0);
         }
@@ -1533,11 +1533,11 @@ Sequence< Reference<deployment::XPackage> > PackageManagerImpl::getExtensionsWit
         }
         return ::comphelper::containerToSequence(vec);
     }
-    catch (deployment::DeploymentException &)
+    catch (const deployment::DeploymentException &)
     {
         throw;
     }
-    catch (RuntimeException&)
+    catch (const RuntimeException&)
     {
         throw;
     }
@@ -1597,15 +1597,15 @@ sal_Int32 PackageManagerImpl::checkPrerequisites(
         }
         return 0;
     }
-    catch (deployment::DeploymentException& ) {
+    catch ( const deployment::DeploymentException& ) {
         throw;
-    } catch (ucb::CommandFailedException & ) {
+    } catch ( const ucb::CommandFailedException & ) {
         throw;
-    } catch (ucb::CommandAbortedException & ) {
+    } catch ( const ucb::CommandAbortedException & ) {
         throw;
-    } catch (lang::IllegalArgumentException &) {
+    } catch (const lang::IllegalArgumentException &) {
         throw;
-    } catch (uno::RuntimeException &) {
+    } catch (const uno::RuntimeException &) {
         throw;
     } catch (...) {
         uno::Any excOccurred = ::cppu::getCaughtException();

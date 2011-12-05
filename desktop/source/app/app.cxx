@@ -774,7 +774,7 @@ void Desktop::DeInit()
         OfficeIPCThread::DisableOfficeIPCThread();
         if( pSignalHandler )
             osl_removeSignalHandler( pSignalHandler );
-    } catch (RuntimeException&) {
+    } catch (const RuntimeException&) {
         // someone threw an exception during shutdown
         // this will leave some garbage behind..
     }
@@ -790,7 +790,7 @@ sal_Bool Desktop::QueryExit()
         utl::ConfigManager::storeConfigItems();
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
     }
-    catch ( RuntimeException& )
+    catch ( const RuntimeException& )
     {
     }
 
@@ -826,7 +826,7 @@ sal_Bool Desktop::QueryExit()
             // it also looks to be threadsafe
             OfficeIPCThread::DisableOfficeIPCThread();
         }
-        catch ( RuntimeException& )
+        catch ( const RuntimeException& )
         {
         }
 
@@ -1788,14 +1788,14 @@ int Desktop::Main()
             }
         }
     }
-    catch ( com::sun::star::lang::WrappedTargetException& wte )
+    catch ( const com::sun::star::lang::WrappedTargetException& wte )
     {
         com::sun::star::uno::Exception te;
         wte.TargetException >>= te;
         FatalError( MakeStartupConfigAccessErrorMessage(wte.Message + te.Message) );
         return EXIT_FAILURE;
     }
-    catch ( com::sun::star::uno::Exception& e )
+    catch ( const com::sun::star::uno::Exception& e )
     {
         FatalError( MakeStartupErrorMessage(e.Message) );
         return EXIT_FAILURE;
@@ -1835,7 +1835,7 @@ int Desktop::Main()
                 xDesktop->addTerminateListener( new OfficeIPCThreadController );
             SetSplashScreenProgress(100);
         }
-        catch ( com::sun::star::uno::Exception& e )
+        catch ( const com::sun::star::uno::Exception& e )
         {
             FatalError( MakeStartupErrorMessage(e.Message) );
             return EXIT_FAILURE;
@@ -1971,23 +1971,23 @@ bool Desktop::InitializeConfiguration()
             comphelper::getProcessComponentContext() );
         return true;
     }
-    catch( ::com::sun::star::lang::ServiceNotRegisteredException& )
+    catch( const ::com::sun::star::lang::ServiceNotRegisteredException& )
     {
         this->HandleBootstrapErrors( Desktop::BE_UNO_SERVICE_CONFIG_MISSING );
     }
-    catch( ::com::sun::star::configuration::MissingBootstrapFileException& e )
+    catch( const ::com::sun::star::configuration::MissingBootstrapFileException& e )
     {
         OUString aMsg( CreateErrorMsgString( utl::Bootstrap::MISSING_BOOTSTRAP_FILE,
                                                 e.BootstrapFileURL ));
         HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_USER_INSTALL, aMsg );
     }
-    catch( ::com::sun::star::configuration::InvalidBootstrapFileException& e )
+    catch( const ::com::sun::star::configuration::InvalidBootstrapFileException& e )
     {
         OUString aMsg( CreateErrorMsgString( utl::Bootstrap::INVALID_BOOTSTRAP_FILE_ENTRY,
                                                 e.BootstrapFileURL ));
         HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_BASE_INSTALL, aMsg );
     }
-    catch( ::com::sun::star::configuration::InstallationIncompleteException& )
+    catch( const ::com::sun::star::configuration::InstallationIncompleteException& )
     {
         OUString aVersionFileURL;
         OUString aMsg;
@@ -1999,27 +1999,27 @@ bool Desktop::InitializeConfiguration()
 
         HandleBootstrapPathErrors( ::utl::Bootstrap::MISSING_USER_INSTALL, aMsg );
     }
-    catch ( com::sun::star::configuration::backend::BackendAccessException& exception)
+    catch ( const com::sun::star::configuration::backend::BackendAccessException& exception)
     {
         // [cm122549] It is assumed in this case that the message
         // coming from InitConfiguration (in fact CreateApplicationConf...)
         // is suitable for display directly.
         FatalError( MakeStartupErrorMessage( exception.Message ) );
     }
-    catch ( com::sun::star::configuration::backend::BackendSetupException& exception)
+    catch ( const com::sun::star::configuration::backend::BackendSetupException& exception)
     {
         // [cm122549] It is assumed in this case that the message
         // coming from InitConfiguration (in fact CreateApplicationConf...)
         // is suitable for display directly.
         FatalError( MakeStartupErrorMessage( exception.Message ) );
     }
-    catch ( ::com::sun::star::configuration::CannotLoadConfigurationException& )
+    catch ( const ::com::sun::star::configuration::CannotLoadConfigurationException& )
     {
         OUString aMsg( CreateErrorMsgString( utl::Bootstrap::INVALID_BOOTSTRAP_DATA,
                                                 OUString() ));
         HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_BASE_INSTALL, aMsg );
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( const ::com::sun::star::uno::Exception& )
     {
         OUString aMsg( CreateErrorMsgString( utl::Bootstrap::INVALID_BOOTSTRAP_DATA,
                                                 OUString() ));
@@ -2082,7 +2082,7 @@ sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& r
         }
         return sal_True;
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( const ::com::sun::star::uno::Exception& )
     {
         return sal_False;
     }
@@ -2215,7 +2215,7 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
-        catch ( com::sun::star::uno::Exception& )
+        catch ( const com::sun::star::uno::Exception& )
         {
         }
     }
@@ -2227,7 +2227,7 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
-        catch ( com::sun::star::uno::Exception& )
+        catch ( const com::sun::star::uno::Exception& )
         {
         }
     }
@@ -2239,7 +2239,7 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
-        catch ( com::sun::star::uno::Exception& )
+        catch ( const com::sun::star::uno::Exception& )
         {
         }
     }
@@ -2251,7 +2251,7 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
-        catch ( com::sun::star::uno::Exception& )
+        catch ( const com::sun::star::uno::Exception& )
         {
         }
     }
@@ -2284,7 +2284,7 @@ void Desktop::PreloadConfigurationData()
                 xCmdAccess->getByName( DEFINE_CONST_UNICODE( ".uno:EditGlossary" ));
             }
         }
-        catch ( ::com::sun::star::uno::Exception& )
+        catch ( const ::com::sun::star::uno::Exception& )
         {
         }
 
@@ -2295,7 +2295,7 @@ void Desktop::PreloadConfigurationData()
             if ( xCmdAccess.is() )
                 xCmdAccess->getByName( DEFINE_CONST_UNICODE( ".uno:InsertObjectStarMath" ));
         }
-        catch ( ::com::sun::star::uno::Exception& )
+        catch ( const ::com::sun::star::uno::Exception& )
         {
         }
 
@@ -2307,7 +2307,7 @@ void Desktop::PreloadConfigurationData()
             if ( xCmdAccess.is() )
                 xCmdAccess->getByName( DEFINE_CONST_UNICODE( ".uno:Polygon" ));
         }
-        catch ( ::com::sun::star::uno::Exception& )
+        catch ( const ::com::sun::star::uno::Exception& )
         {
         }
     }
@@ -2326,7 +2326,7 @@ void Desktop::PreloadConfigurationData()
             if ( xWindowAccess.is() )
                 xWindowAccess->getByName( DEFINE_CONST_UNICODE( "private:resource/toolbar/standardbar" ));
         }
-        catch ( ::com::sun::star::uno::Exception& )
+        catch ( const ::com::sun::star::uno::Exception& )
         {
         }
         try
@@ -2336,7 +2336,7 @@ void Desktop::PreloadConfigurationData()
             if ( xWindowAccess.is() )
                 xWindowAccess->getByName( DEFINE_CONST_UNICODE( "private:resource/toolbar/standardbar" ));
         }
-        catch ( ::com::sun::star::uno::Exception& )
+        catch ( const ::com::sun::star::uno::Exception& )
         {
         }
         try
@@ -2346,7 +2346,7 @@ void Desktop::PreloadConfigurationData()
             if ( xWindowAccess.is() )
                 xWindowAccess->getByName( DEFINE_CONST_UNICODE( "private:resource/toolbar/standardbar" ));
         }
-        catch ( ::com::sun::star::uno::Exception& )
+        catch ( const ::com::sun::star::uno::Exception& )
         {
         }
         try
@@ -2356,7 +2356,7 @@ void Desktop::PreloadConfigurationData()
             if ( xWindowAccess.is() )
                 xWindowAccess->getByName( DEFINE_CONST_UNICODE( "private:resource/toolbar/standardbar" ));
         }
-        catch ( ::com::sun::star::uno::Exception& )
+        catch ( const ::com::sun::star::uno::Exception& )
         {
         }
     }
@@ -2373,7 +2373,7 @@ void Desktop::PreloadConfigurationData()
         {
             aSeqSeqPropValue = xUIElementFactory->getRegisteredFactories();
         }
-        catch ( ::com::sun::star::uno::Exception& )
+        catch ( const ::com::sun::star::uno::Exception& )
         {
         }
     }
@@ -2392,7 +2392,7 @@ void Desktop::PreloadConfigurationData()
                         DEFINE_CONST_UNICODE( ".uno:CharFontName" ),
                         OUString() );
         }
-        catch ( ::com::sun::star::uno::Exception& )
+        catch ( const ::com::sun::star::uno::Exception& )
         {
         }
     }
@@ -2407,7 +2407,7 @@ void Desktop::PreloadConfigurationData()
         {
              aSeq = xNameAccess->getElementNames();
         }
-        catch ( ::com::sun::star::uno::Exception& )
+        catch ( const ::com::sun::star::uno::Exception& )
         {
         }
     }
@@ -2421,7 +2421,7 @@ void Desktop::PreloadConfigurationData()
         {
              aSeq = xNameAccess->getElementNames();
         }
-        catch ( ::com::sun::star::uno::Exception& )
+        catch ( const ::com::sun::star::uno::Exception& )
         {
         }
     }

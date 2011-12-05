@@ -142,7 +142,7 @@ void SAL_CALL Acceptor::run()
                 rtl::OUString() ,m_aProtocol ,rConnection ,rInstanceProvider );
             osl::MutexGuard g(m_aMutex);
             m_bridges.add(rBridge);
-        } catch (Exception&) {
+        } catch (const Exception&) {
             // connection failed...
             // something went wrong during connection setup.
             // just wait for a new connection to accept
@@ -241,7 +241,7 @@ Reference< XInterface > Acceptor::impl_getInstance( const Reference< XMultiServi
 {
     try {
         return (XComponent*) new Acceptor( aFactory );
-    } catch ( Exception& ) {
+    } catch ( const Exception& ) {
         return (XComponent*) NULL;
     }
 }

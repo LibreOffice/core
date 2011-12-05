@@ -478,7 +478,7 @@ Reference<XInterface> resolveUnoURL(
         try {
             return xUnoUrlResolver->resolve( connectString );
         }
-        catch (connection::NoConnectException &) {
+        catch (const connection::NoConnectException &) {
             TimeValue tv = { 0 /* secs */, 500000000 /* nanosecs */ };
             ::osl::Thread::wait( tv );
         }

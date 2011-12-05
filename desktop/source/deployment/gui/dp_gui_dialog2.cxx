@@ -636,7 +636,7 @@ void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle
         //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
         xSystemShellExecute->execute( sURL, OUString(),  SystemShellExecuteFlags::DEFAULTS );
     }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {
         uno::Any exc( ::cppu::getCaughtException() );
         OUString msg( ::comphelper::anyToString( exc ) );
@@ -976,7 +976,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
         try {
             xFilterManager->appendFilter( iPos->first, iPos->second );
         }
-        catch (lang::IllegalArgumentException & exc) {
+        catch (const lang::IllegalArgumentException & exc) {
             OSL_FAIL( ::rtl::OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
             (void) exc;
@@ -1002,7 +1002,7 @@ IMPL_LINK( ExtMgrDialog, HandleCancelBtn, void*, EMPTYARG )
         {
             m_xAbortChannel->sendAbort();
         }
-        catch ( uno::RuntimeException & )
+        catch ( const uno::RuntimeException & )
         {
             OSL_FAIL( "### unexpected RuntimeException!" );
         }
@@ -1451,7 +1451,7 @@ IMPL_LINK( UpdateRequiredDialog, HandleCancelBtn, void*, EMPTYARG )
         {
             m_xAbortChannel->sendAbort();
         }
-        catch ( uno::RuntimeException & )
+        catch ( const uno::RuntimeException & )
         {
             OSL_FAIL( "### unexpected RuntimeException!" );
         }
@@ -1758,8 +1758,8 @@ bool UpdateRequiredDialog::isEnabled( const uno::Reference< deployment::XPackage
         else
             bRegistered = false;
     }
-    catch ( uno::RuntimeException & ) { throw; }
-    catch ( uno::Exception & exc) {
+    catch ( const uno::RuntimeException & ) { throw; }
+    catch (const uno::Exception & exc) {
         (void) exc;
         OSL_FAIL( ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         bRegistered = false;
@@ -1777,7 +1777,7 @@ bool UpdateRequiredDialog::checkDependencies( const uno::Reference< deployment::
         try {
             bDependenciesValid = xPackage->checkDependencies( uno::Reference< ucb::XCommandEnvironment >() );
         }
-        catch ( deployment::DeploymentException & ) {}
+        catch ( const deployment::DeploymentException & ) {}
         if ( ! bDependenciesValid )
         {
             return false;

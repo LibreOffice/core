@@ -272,10 +272,10 @@ bool OO3ExtensionMigration::scanDescriptionXml( const ::rtl::OUString& sDescript
                             if ( xNode.is() )
                                 aExtIdentifier = xNode->getNodeValue();
                         }
-                        catch ( xml::xpath::XPathException& )
+                        catch ( const xml::xpath::XPathException& )
                         {
                         }
-                        catch ( xml::dom::DOMException& )
+                        catch ( const xml::dom::DOMException& )
                         {
                         }
                     }
@@ -297,10 +297,10 @@ bool OO3ExtensionMigration::scanDescriptionXml( const ::rtl::OUString& sDescript
                 }
             }
         }
-        catch ( ucb::CommandAbortedException& )
+        catch ( const ucb::CommandAbortedException& )
         {
         }
-        catch ( uno::RuntimeException& )
+        catch ( const uno::RuntimeException& )
         {
         }
 
@@ -334,8 +334,8 @@ bool OO3ExtensionMigration::migrateExtension( const ::rtl::OUString& sSourceDir 
         {
             m_xExtensionManager = deployment::ExtensionManager::get( m_ctx );
         }
-        catch ( ucb::CommandFailedException & ){}
-        catch ( uno::RuntimeException & ) {}
+        catch ( const ucb::CommandFailedException & ){}
+        catch ( const uno::RuntimeException & ) {}
     }
 
     if ( m_xExtensionManager.is() )
@@ -355,13 +355,13 @@ bool OO3ExtensionMigration::migrateExtension( const ::rtl::OUString& sSourceDir 
             if ( xPackage.is() )
                 return true;
         }
-        catch ( ucb::CommandFailedException& )
+        catch ( const ucb::CommandFailedException& )
         {
         }
-        catch ( ucb::CommandAbortedException& )
+        catch ( const ucb::CommandAbortedException& )
         {
         }
-        catch ( lang::IllegalArgumentException& )
+        catch ( const lang::IllegalArgumentException& )
         {
         }
     }

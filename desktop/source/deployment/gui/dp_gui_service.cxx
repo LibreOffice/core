@@ -171,11 +171,11 @@ ServiceImpl::ServiceImpl( Sequence<Any> const& args,
     try {
         comphelper::unwrapArgs( args, m_parent, m_view, m_unopkg );
         return;
-    } catch (css::lang::IllegalArgumentException & ) {
+    } catch ( const css::lang::IllegalArgumentException & ) {
     }
     try {
         comphelper::unwrapArgs( args, m_extensionURL);
-    } catch (css::lang::IllegalArgumentException & ) {
+    } catch ( const css::lang::IllegalArgumentException & ) {
     }
 
     ResHookProc pProc = ResMgr::GetReadStringHook();
@@ -216,7 +216,7 @@ void ServiceImpl::startExecuteModal(
         try {
             bOfficePipePresent = dp_misc::office_is_running();
         }
-        catch (Exception & exc) {
+        catch (const Exception & exc) {
             if (bAppUp) {
                 const SolarMutexGuard guard;
                 std::auto_ptr<ErrorBox> box(

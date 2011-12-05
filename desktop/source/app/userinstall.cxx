@@ -267,11 +267,11 @@ namespace desktop {
             hpset->setHierarchicalPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Office/ooSetupInstCompleted")), makeAny(sal_True));
             Reference< XChangesBatch >(hpset, UNO_QUERY_THROW)->commitChanges();
         }
-        catch ( PropertyVetoException& )
+        catch ( const PropertyVetoException& )
         {
             // we are not allowed to change this
         }
-        catch (Exception& e)
+        catch (const Exception& e)
         {
             OString aMsg("create_user_install(): ");
             aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);

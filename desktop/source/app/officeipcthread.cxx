@@ -699,7 +699,7 @@ void SAL_CALL OfficeIPCThread::run()
                 Parser p( aArguments );
                 aCmdLineArgs.reset( new CommandLineArgs( p ) );
             }
-            catch ( CommandLineArgs::Supplier::Exception & )
+            catch ( const CommandLineArgs::Supplier::Exception & )
             {
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
                 fprintf( stderr, "Error in received command line arguments\n" );

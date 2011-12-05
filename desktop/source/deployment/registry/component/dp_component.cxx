@@ -473,10 +473,10 @@ void BackendImpl::disposing()
 
         PackageRegistryBackend::disposing();
     }
-    catch (RuntimeException &) {
+    catch (const RuntimeException &) {
         throw;
     }
-    catch (Exception &) {
+    catch (const Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(
             OUSTR("caught unexpected exception while disposing..."),
@@ -1277,7 +1277,7 @@ void BackendImpl::componentLiveInsertion(
     {
         try {
             set->insert(css::uno::Any(*factory++));
-        } catch (container::ElementExistException &) {
+        } catch (const container::ElementExistException &) {
             OSL_TRACE(
                 "implementation %s already registered",
                 rtl::OUStringToOString(*i, RTL_TEXTENCODING_UTF8).getStr());
@@ -1301,14 +1301,14 @@ void BackendImpl::componentLiveInsertion(
                         name +
                         rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM("/arguments")));
-                } catch (container::NoSuchElementException &) {}
+                } catch (const container::NoSuchElementException &) {}
                 try {
                     rootContext->insertByName(
                         (name +
                          rtl::OUString(
                              RTL_CONSTASCII_USTRINGPARAM("/service"))),
                         css::uno::Any(i->second));
-                } catch (container::ElementExistException &) {
+                } catch (const container::ElementExistException &) {
                     rootContext->replaceByName(
                         (name +
                          rtl::OUString(
@@ -1317,7 +1317,7 @@ void BackendImpl::componentLiveInsertion(
                 }
                 try {
                     rootContext->insertByName(name, css::uno::Any());
-                } catch (container::ElementExistException &) {
+                } catch (const container::ElementExistException &) {
                     OSL_TRACE(
                         "singleton %s already registered",
                         rtl::OUStringToOString(
@@ -1337,7 +1337,7 @@ void BackendImpl::componentLiveRemoval(ComponentBackendDb::Data const & data) {
     {
         try {
             set->remove(css::uno::Any(*i));
-        } catch (css::container::NoSuchElementException &) {
+        } catch (const css::container::NoSuchElementException &) {
             // ignore if factory has not been live deployed
         }
     }
@@ -1362,7 +1362,7 @@ void BackendImpl::componentLiveRemoval(ComponentBackendDb::Data const & data) {
                         name +
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/service")));
                     rootContext->removeByName(name);
-                } catch (container::NoSuchElementException &) {}
+                } catch (const container::NoSuchElementException &) {}
             }
         }
     }

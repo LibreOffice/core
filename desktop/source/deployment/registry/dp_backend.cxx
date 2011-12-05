@@ -132,10 +132,10 @@ void PackageRegistryBackend::disposing()
         m_xComponentContext.clear();
         WeakComponentImplHelperBase::disposing();
     }
-    catch (RuntimeException &) {
+    catch (const RuntimeException &) {
         throw;
     }
-    catch (Exception &) {
+    catch (const Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(
             OUSTR("caught unexpected exception while disposing!"),
@@ -182,19 +182,19 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
         xNewPackage = bindPackage_( url, mediaType, bRemoved,
             identifier, xCmdEnv );
     }
-    catch (RuntimeException &) {
+    catch (const RuntimeException &) {
         throw;
     }
-    catch (lang::IllegalArgumentException &) {
+    catch (const lang::IllegalArgumentException &) {
         throw;
     }
-    catch (CommandFailedException &) {
+    catch (const CommandFailedException &) {
         throw;
     }
-    catch (deployment::DeploymentException &) {
+    catch (const deployment::DeploymentException &) {
         throw;
     }
-    catch (Exception &) {
+    catch (const Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw deployment::DeploymentException(
             OUSTR("Error binding package: ") + url,
@@ -304,7 +304,7 @@ void PackageRegistryBackend::deleteUnusedFolders(
             }
         }
     }
-    catch (ucb::InteractiveAugmentedIOException& e)
+    catch (const ucb::InteractiveAugmentedIOException& e)
     {
         //In case the folder containing all the data folder does not
         //exist yet, we ignore the exception
@@ -622,19 +622,19 @@ beans::Optional< beans::Ambiguous<sal_Bool> > Package::isRegistered(
                               AbortChannel::get(xAbortChannel),
                               xCmdEnv );
     }
-    catch (RuntimeException &) {
+    catch (const RuntimeException &) {
         throw;
     }
-    catch (CommandFailedException &) {
+    catch (const CommandFailedException &) {
         throw;
     }
-    catch (CommandAbortedException &) {
+    catch (const CommandAbortedException &) {
         throw;
     }
-    catch (deployment::DeploymentException &) {
+    catch (const deployment::DeploymentException &) {
         throw;
     }
-    catch (Exception &) {
+    catch (const Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw deployment::DeploymentException(
             OUSTR("unexpected exception occurred!"),
@@ -678,21 +678,21 @@ void Package::processPackage_impl(
                                  xCmdEnv );
             }
         }
-        catch (RuntimeException &e) {
+        catch (const RuntimeException &e) {
             SAL_WARN(
                 "basic", "unexpected RuntimeException \"" << e.Message << '"');
             throw;
         }
-        catch (CommandFailedException &) {
+        catch (const CommandFailedException &) {
             throw;
         }
-        catch (CommandAbortedException &) {
+        catch (const CommandAbortedException &) {
             throw;
         }
-        catch (deployment::DeploymentException &) {
+        catch (const deployment::DeploymentException &) {
             throw;
         }
-        catch (Exception &) {
+        catch (const Exception &) {
             Any exc( ::cppu::getCaughtException() );
             throw deployment::DeploymentException(
                 (doRegisterPackage
