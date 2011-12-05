@@ -92,7 +92,7 @@ End
 
 Directory gid_Dir_Wizards
     Styles = (CREATE);
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
     DosName = "wizards";
 End
 

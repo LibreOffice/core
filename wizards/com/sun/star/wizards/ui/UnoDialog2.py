@@ -1,3 +1,4 @@
+from wizards.ui.UIConsts import *
 from wizards.ui.UnoDialog import *
 from wizards.ui.event.CommonListener import *
 from wizards.common.Desktop import Desktop

@@ -104,6 +104,7 @@ gb_ObjCObject_get_target = $(WORKDIR)/ObjCObject/$(1).o
 gb_Package_get_preparation_target = $(WORKDIR)/Package/prepared/$(1)
 gb_Package_get_target = $(WORKDIR)/Package/$(1)
 gb_Pyuno_get_target = $(WORKDIR)/Pyuno/$(1)
+gb_Pyuno_get_target_zip = $(OUTDIR)/bin/$(1).zip
 gb_RdbTarget_get_target = $(WORKDIR)/RdbTarget/$(1).rdb
 gb_ResTarget_get_imagelist_target = $(WORKDIR)/ResTarget/$(1).ilst
 gb_ResTarget_get_target = $(WORKDIR)/ResTarget/$(1).res

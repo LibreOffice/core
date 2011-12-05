@@ -35,7 +35,7 @@ from com.sun.star.loader import XImplementationLoader
 from com.sun.star.lang import XServiceInfo
 
 MODULE_PROTOCOL = "vnd.openoffice.pymodule:"
-DEBUG = 0
+DEBUG = 1
 
 g_supportedServices  = "com.sun.star.loader.Python",      # referenced by the native C++ loader !
 g_implementationName = "org.openoffice.comp.pyuno.Loader" # referenced by the native C++ loader !
@@ -98,6 +98,7 @@ class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
 
                     # read the file
                     filename = unohelper.fileUrlToSystemPath( url )
+
                     fileHandle = file( filename )
                     src = fileHandle.read().replace("\r","")
                     if not src.endswith( "\n" ):
@@ -110,11 +111,23 @@ class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
                     g_loadedComponents[url] = mod
                 return mod
             elif "vnd.openoffice.pymodule" == protocol:
-                return  __import__( dependent )
+                print ("here")
+                nSlash = dependent.rfind('/')
+                if -1 != nSlash:
+                    path = unohelper.fileUrlToSystemPath( dependent[0:nSlash] )
+                    dependent = dependent[nSlash+1:len(dependent)]
+                    if not path in sys.path:
+                        sys.path.append( path )
+                var =  __import__( dependent )
+                return var
             else:
+                if DEBUG:
+                    print("Unknown protocol '" + protocol + "'");
                 raise RuntimeException( "PythonLoader: Unknown protocol " +
                                          protocol + " in url " +url, self )
-        except ImportError as e:
+        except Exception as e:
+            if DEBUG:
+                print ("Python import error " + str(e) + " args " + str(e.args));
             raise RuntimeException( "Couldn't load " + url + " for reason " + str(e), None )
         return None
 
@@ -124,6 +137,9 @@ class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
 
         mod = self.getModuleFromUrl( locationUrl )
         implHelper = mod.__dict__.get( "g_ImplementationHelper" , None )
+        print ("dump stuff")
+        if DEBUG:
+            print ("Fetched ImplHelper as " + str(implHelper))
         if implHelper == None:
             return mod.getComponentFactory( implementationName, self.ctx.ServiceManager, regKey )
         else:

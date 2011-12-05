@@ -14,8 +14,13 @@ class CallWizard(unohelper.Base, XJobExecutor):
         self.ctx = ctx
 
     def trigger(self, args):
-        fw = FaxWizardDialogImpl(self.ctx.ServiceManager)
-        fx.startWizard()
+        try:
+            fw = FaxWizardDialogImpl(self.ctx.ServiceManager)
+            fw.startWizard(self.ctx.ServiceManager)
+        except Exception as e:
+            print ("Wizard failure exception " + str(type(e)) +
+                   " message " + str(e) + " args " + str(e.args) +
+                   traceback.format_exc());
 
 # pythonloader looks for a static g_ImplementationHelper variable
 g_ImplementationHelper = unohelper.ImplementationHelper()

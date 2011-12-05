@@ -93,13 +93,14 @@ my_components = \
     component/scaddins/source/analysis/analysis \
     component/scaddins/source/datefunc/date \
     component/sccomp/source/solver/solver \
-	component/scripting/source/basprov/basprov \
-	component/scripting/source/dlgprov/dlgprov \
-	component/scripting/source/protocolhandler/protocolhandler \
+    component/scripting/source/basprov/basprov \
+    component/scripting/source/dlgprov/dlgprov \
+    component/scripting/source/protocolhandler/protocolhandler \
     component/scripting/source/pyprov/mailmerge \
-	component/scripting/source/stringresource/stringresource \
-	component/scripting/source/vbaevents/vbaevents \
-	component/scripting/util/scriptframe \
+    component/wizards/com/sun/star/wizards/fax/fax \
+    component/scripting/source/stringresource/stringresource \
+    component/scripting/source/vbaevents/vbaevents \
+    component/scripting/util/scriptframe \
     component/sd/util/sd \
     component/sd/util/sdd \
     component/sd/util/sdfilt \
@@ -196,7 +197,7 @@ my_components += pythonloader
 .IF "$(OS)" != "WNT" && "$(OS)" != "MACOSX" && "$(OS)" != "IOS" && "$(OS)" != "ANDROID"
 my_components += component/desktop/unx/splash/splash
 .ENDIF
-    
+
 .IF "$(DISABLE_ATL)" == ""
 my_components += emboleobj
 .END
@@ -356,8 +357,6 @@ my_components += evoab
 .IF "$(OS)" != "WNT" && "$(ENABLE_GSTREAMER)" != ""
 my_components += component/avmedia/source/gstreamer/avmediagstreamer
 .END
-
-my_ooo_components = mailmerge component/wizards/com/sun/star/wizards/fax/fax
 
 .INCLUDE: target.mk
 

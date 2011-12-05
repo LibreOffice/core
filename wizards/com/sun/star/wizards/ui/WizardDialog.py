@@ -1,3 +1,4 @@
+import wizards.ui.UIConsts
 from wizards.ui.UnoDialog2 import *
 from abc import ABCMeta, abstractmethod
 from wizards.common.Resource import Resource
