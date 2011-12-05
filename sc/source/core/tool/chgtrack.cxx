@@ -29,7 +29,6 @@
 
 
 #include <tools/shl.hxx>        // SHL_CALC
-#include <tools/stack.hxx>
 #include <tools/rtti.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/itemset.hxx>
@@ -53,12 +52,8 @@
 
 #include "globstr.hrc"
 
-#include <stack>
-
 #define SC_CHGTRACK_CXX
 #include "chgtrack.hxx"
-
-DECLARE_STACK( ScChangeActionStack, ScChangeAction* )
 
 const sal_uInt16 nMemPoolChangeActionCellListEntry = (0x2000 - 64) / sizeof(ScChangeActionCellListEntry);
 IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeActionCellListEntry, nMemPoolChangeActionCellListEntry, nMemPoolChangeActionCellListEntry )
@@ -1520,7 +1515,7 @@ sal_Bool ScChangeActionContent::Reject( ScDocument* pDoc )
 
 
 sal_Bool ScChangeActionContent::Select( ScDocument* pDoc, ScChangeTrack* pTrack,
-        sal_Bool bOldest, Stack* pRejectActions )
+        sal_Bool bOldest, ::std::stack<ScChangeActionContent*>* pRejectActions )
 {
     if ( !aBigRange.IsValid( pDoc ) )
         return false;
@@ -1565,7 +1560,7 @@ sal_Bool ScChangeActionContent::Select( ScDocument* pDoc, ScChangeTrack* pTrack,
         pNew->SetRejectAction( bOldest ? GetActionNumber() : pEnd->GetActionNumber() );
         pNew->SetState( SC_CAS_ACCEPTED );
         if ( pRejectActions )
-            pRejectActions->Push( pNew );
+            pRejectActions->push( pNew );
         else
         {
             pNew->SetNewValue( pDoc->GetCell( rPos ), pDoc );
@@ -2147,11 +2142,16 @@ void ScChangeTrack::ClearMsgQueue()
         delete pBlockModifyMsg;
         pBlockModifyMsg = NULL;
     }
-    ScChangeTrackMsgInfo* pMsgInfo;
-    while ( ( pMsgInfo = aMsgStackTmp.Pop() ) != NULL )
-        delete pMsgInfo;
-    while ( ( pMsgInfo = aMsgStackFinal.Pop() ) != NULL )
-        delete pMsgInfo;
+    while ( !aMsgStackTmp.empty() )
+    {
+        delete aMsgStackTmp.top();
+        aMsgStackTmp.pop();
+    }
+    while ( !aMsgStackFinal.empty() )
+    {
+        delete aMsgStackFinal.top();
+        aMsgStackFinal.pop();
+    }
 
     ScChangeTrackMsgQueue::iterator itQueue;
     for ( itQueue = aMsgQueue.begin(); itQueue != aMsgQueue.end(); ++itQueue)
@@ -2218,7 +2218,7 @@ void ScChangeTrack::StartBlockModify( ScChangeTrackMsgType eMsgType,
     if ( aModifiedLink.IsSet() )
     {
         if ( pBlockModifyMsg )
-            aMsgStackTmp.Push( pBlockModifyMsg );   // Block im Block
+            aMsgStackTmp.push( pBlockModifyMsg );   // Block im Block
         pBlockModifyMsg = new ScChangeTrackMsgInfo;
         pBlockModifyMsg->eMsgType = eMsgType;
         pBlockModifyMsg->nStartAction = nStartAction;
@@ -2236,19 +2236,20 @@ void ScChangeTrack::EndBlockModify( sal_uLong nEndAction )
             {
                 pBlockModifyMsg->nEndAction = nEndAction;
                 // Blocks in Blocks aufgeloest
-                aMsgStackFinal.Push( pBlockModifyMsg );
+                aMsgStackFinal.push( pBlockModifyMsg );
             }
             else
                 delete pBlockModifyMsg;
-            pBlockModifyMsg = aMsgStackTmp.Pop();   // evtl. Block im Block
+            pBlockModifyMsg = aMsgStackTmp.top();   // evtl. Block im Block
+            aMsgStackTmp.pop();
         }
         if ( !pBlockModifyMsg )
         {
             sal_Bool bNew = false;
-            ScChangeTrackMsgInfo* pMsg;
-            while ( ( pMsg = aMsgStackFinal.Pop() ) != NULL )
+            while ( !aMsgStackFinal.empty() )
             {
-                aMsgQueue.push_back( pMsg );
+                aMsgQueue.push_back( aMsgStackFinal.top() );
+                aMsgStackFinal.pop();
                 bNew = sal_True;
             }
             if ( bNew )
@@ -3850,10 +3851,15 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
     sal_Bool bIsDelete = pAct->IsDeleteType();
     sal_Bool bIsMasterDelete = ( bListMasterDelete && pAct->IsMasterDelete() );
 
-    const ScChangeAction* pCur = pAct;
-    ScChangeActionStack* pStack = new ScChangeActionStack;
-    do
+    const ScChangeAction* pCur = NULL;
+    ::std::stack<ScChangeAction*> cStack;
+    cStack.push(pAct);
+
+    while ( !cStack.empty() )
     {
+        pCur = cStack.top();
+        cStack.pop();
+
         if ( pCur->IsInsertType() )
         {
             const ScChangeActionLinkEntry* pL = pCur->GetFirstDependentEntry();
@@ -3867,7 +3873,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                         sal_uLong n = p->GetActionNumber();
                         if ( !IsGenerated( n ) && rTable.Insert( n, p ) )
                             if ( p->HasDependent() )
-                                pStack->Push( p );
+                                cStack.push( p );
                     }
                     else
                     {
@@ -3915,7 +3921,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                                 if ( !IsGenerated( n ) && rTable.Insert( n, p ) )
                                     if ( p->HasDeleted() ||
                                             p->GetType() == SC_CAT_CONTENT )
-                                        pStack->Push( p );
+                                        cStack.push( p );
                             }
                             else
                             {
@@ -3946,7 +3952,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                     // nur ein TopContent einer Kette ist in LinkDeleted
                     if ( bAllFlat && (p->HasDeleted() ||
                             p->GetType() == SC_CAT_CONTENT) )
-                        pStack->Push( p );
+                        cStack.push( p );
                 }
                 pL = pL->GetNext();
             }
@@ -3963,7 +3969,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                         sal_uLong n = p->GetActionNumber();
                         if ( !IsGenerated( n ) && rTable.Insert( n, p ) )
                             if ( p->HasDependent() || p->HasDeleted() )
-                                pStack->Push( p );
+                                cStack.push( p );
                     }
                     else
                     {
@@ -4007,7 +4013,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                         sal_uLong n = p->GetActionNumber();
                         if ( !IsGenerated( n ) && rTable.Insert( n, p ) )
                             if ( p->HasDependent() )
-                                pStack->Push( p );
+                                cStack.push( p );
                     }
                     else
                         rTable.Insert( p->GetActionNumber(), p );
@@ -4022,11 +4028,10 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                 ScChangeAction* p = GetAction(
                         ((ScChangeActionReject*)pCur)->GetRejectAction() );
                 if ( p != pAct && !rTable.Get( p->GetActionNumber() ) )
-                    pStack->Push( p );
+                    cStack.push( p );
             }
         }
-    } while ( ( pCur = pStack->Pop() ) != NULL );
-    delete pStack;
+    }
 }
 
 
@@ -4071,7 +4076,7 @@ sal_Bool ScChangeTrack::SelectContent( ScChangeAction* pAct, sal_Bool bOldest )
     if ( pContent->HasDependent() )
     {
         sal_Bool bOk = sal_True;
-        Stack aRejectActions;
+        ::std::stack<ScChangeActionContent*> aRejectActions;
         const ScChangeActionLinkEntry* pL = pContent->GetFirstDependentEntry();
         while ( pL )
         {
@@ -4096,8 +4101,10 @@ sal_Bool ScChangeTrack::SelectContent( ScChangeAction* pAct, sal_Bool bOldest )
         // now the matrix is inserted and new content values are ready
 
         ScChangeActionContent* pNew;
-        while ( ( pNew = (ScChangeActionContent*) aRejectActions.Pop() ) != NULL )
+        while ( !aRejectActions.empty() )
         {
+            pNew = aRejectActions.top();
+            aRejectActions.pop();
             ScAddress aPos( pNew->GetBigRange().aStart.MakeAddress() );
             pNew->SetNewValue( pDoc->GetCell( aPos ), pDoc );
             Append( pNew );

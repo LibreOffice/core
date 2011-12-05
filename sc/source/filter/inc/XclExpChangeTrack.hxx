@@ -30,6 +30,7 @@
 #define SC_XCLEXPCHANGETRACK_HXX
 
 #include <tools/datetime.hxx>
+#include <tools/stack.hxx>
 #include <rtl/uuid.h>
 #include "bigrange.hxx"
 #include "chgtrack.hxx"

@@ -30,11 +30,11 @@
 #define SC_CHGTRACK_HXX
 
 #include <deque>
+#include <stack>
 
 #include <tools/string.hxx>
 #include <tools/datetime.hxx>
 #include <tools/table.hxx>
-#include <tools/stack.hxx>
 #include <tools/mempool.hxx>
 #include <tools/link.hxx>
 #include <unotools/options.hxx>
@@ -689,8 +689,6 @@ enum ScChangeActionContentCellType
     SC_CACCT_MATREF
 };
 
-class Stack;
-
 class ScChangeActionContent : public ScChangeAction
 {
     friend class ScChangeTrack;
@@ -779,7 +777,7 @@ class ScChangeActionContent : public ScChangeAction
                                 // pRejectActions!=NULL: reject actions get
                                 // stacked, no SetNewValue, no Append
             sal_Bool                Select( ScDocument*, ScChangeTrack*,
-                                    sal_Bool bOldest, Stack* pRejectActions );
+                                    sal_Bool bOldest, ::std::stack<ScChangeActionContent*>* pRejectActions );
 
             void                PutValueToDoc( ScBaseCell*, const String&,
                                     ScDocument*, SCsCOL nDx, SCsROW nDy ) const;
@@ -901,8 +899,6 @@ public:
 
 // --- ScChangeActionReject -------------------------------------------------
 
-class Stack;
-
 class ScChangeActionReject : public ScChangeAction
 {
     friend class ScChangeTrack;
@@ -955,7 +951,7 @@ struct ScChangeTrackMsgInfo
 
 // MsgQueue for notification via ModifiedLink
 typedef std::deque<ScChangeTrackMsgInfo*> ScChangeTrackMsgQueue;
-DECLARE_STACK( ScChangeTrackMsgStack, ScChangeTrackMsgInfo* )
+typedef std::stack<ScChangeTrackMsgInfo*> ScChangeTrackMsgStack;
 
 enum ScChangeTrackMergeState
 {
