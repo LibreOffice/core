@@ -51,8 +51,6 @@ using namespace vcl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 
-namespace uno = com::sun::star::uno;
-
 using ::rtl::OUString;
 using ::rtl::OStringToOUString;
 
