@@ -613,7 +613,7 @@ SwitchMonitorCommand::SwitchMonitorCommand (
 
 void SwitchMonitorCommand::Execute (void)
 {
-    fprintf (stderr, "Switch monitor !\n");
+//    fprintf (stderr, "Switch monitor !\n");
 }
 
 //===== SetNotesViewCommand ===================================================
