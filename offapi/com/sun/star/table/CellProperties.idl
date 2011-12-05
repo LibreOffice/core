@@ -89,8 +89,12 @@ published service CellProperties
     //-------------------------------------------------------------------------
 
     /** contains the vertical alignment of the cell contents.
+
+        changed from com::sun::star::table::CellVertJustify to long in LibO 3.5
+
+        @see com::sun::star::table::CellVertJustify2
      */
-    [property] com::sun::star::table::CellVertJustify VertJustify;
+    [property] long VertJustify;
 
     //-------------------------------------------------------------------------
 
@@ -123,8 +127,12 @@ published service CellProperties
     //-------------------------------------------------------------------------
 
     /** defines at which edge rotated cells are aligned.
+
+        changed from com::sun::star::table::CellVertJustify to long in LibO 3.5
+
+        @see com::sun::star::table::CellVertJustify2
      */
-    [property] com::sun::star::table::CellVertJustify RotateReference;
+    [property] long RotateReference;
 
     //-------------------------------------------------------------------------
 

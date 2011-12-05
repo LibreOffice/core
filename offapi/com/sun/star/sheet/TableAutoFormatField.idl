@@ -228,8 +228,12 @@ published service TableAutoFormatField
     //-------------------------------------------------------------------------
 
     /** specifies the vertical alignment of the cell contents.
+
+        changed from com::sun::star::table::CellVertJustify to long in LibO 3.5
+
+        @see com::sun::star::table::CellVertJustify2
      */
-    [optional, property] com::sun::star::table::CellVertJustify VertJustify;
+    [optional, property] long VertJustify;
 
     //-------------------------------------------------------------------------
 
@@ -253,8 +257,12 @@ published service TableAutoFormatField
     //-------------------------------------------------------------------------
 
     /** contains the reference edge of the cell rotation.
+
+        changed from com::sun::star::table::CellVertJustify to long in LibO 3.5
+
+        @see com::sun::star::table::CellVertJustify2
      */
-    [optional, property] com::sun::star::table::CellVertJustify RotateReference;
+    [optional, property] long RotateReference;
 
     //-------------------------------------------------------------------------
 
