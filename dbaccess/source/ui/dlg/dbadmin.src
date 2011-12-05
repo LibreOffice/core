@@ -692,7 +692,7 @@ TabPage PAGE_LDAP
     {
         Pos = MAP_APPFONT ( 6 , 2*UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT) ;
         Size = MAP_APPFONT ( PAGE_X - 12 , CHECKBOX_HEIGHT ) ;
-        Text [ en-US ] = "Use secure connection(SSL)";
+        Text [ en-US ] = "Use secure connection (SSL)";
         HelpId = HID_DSADMIN_USESSL_LDAP;
     };
 
