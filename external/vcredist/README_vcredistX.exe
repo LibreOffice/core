@@ -1,2 +1,0 @@
-Put into this directory the vcredist_x86.exe and vcredist_x64.exe
-correspoding to the runtime your Visual Studio version links with.

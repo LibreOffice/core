@@ -45,9 +45,6 @@ mkdir: %_DEST%\inc\external\wine
 
 ..\unowinreg\unowinreg.dll %_DEST%\bin\unowinreg.dll
 
-..\vcredist\vcredist_x86.exe %_DEST%\bin\vcredist_x86.exe
-..\vcredist\vcredist_x64.exe %_DEST%\bin\vcredist_x64.exe
-
 ..\%__SRC%\bin\*.dll %_DEST%\bin\*.dll
 
 ..\%__SRC%\lib\libmsvcrt*.* %_DEST%\lib\lib*.*

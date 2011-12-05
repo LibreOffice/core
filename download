@@ -178,17 +178,6 @@ done
 if [ "$COM" = "MSC" ]; then
     downloaditem "http://download.microsoft.com/download/platformsdk/Redist/5.0.2195.1/W9XNT4/EN-US/" "dbghinst.EXE" "096f1d53d9ba09cde27d6f7c2ea6cc47"
     downloaditem "http://download.microsoft.com/download/a/b/c/abc45517-97a0-4cee-a362-1957be2f24e1/" "WindowsXP-KB975337-x86-ENU.exe" "946d00d87e4094f3a6e425e2d538eadd"
-
-    msvcver=`$SRC_ROOT/oowintool --msvc-ver`
-    case "$msvcver" in
-        9.0)
-          downloaditem "http://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/" "vcredist_x86.exe" "35da2bf2befd998980a495b6f4f55e60"
-          downloaditem "http://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/" "vcredist_x64.exe" "e2ada570911edaaae7d1b3c979345fce"
-        ;;
-    *)
-        ;;
-    esac
-
 fi
 
 if [ -f $start_dir/bootstrap.ver -a ! -d $start_dir/.git ] ; then
@@ -262,12 +251,6 @@ if [ "$COM" = "MSC" -a -n "$md5sum" ]; then
 	else
 	    echo "WindowsXP-KB975337-x86-ENU.exe did not unpack the expected $gdiplus_dll_path"
         fi
-    fi
-    if [ ! -f ./external/vcredist/vcredist_x86.exe -a -f $TARFILE_LOCATION/vcredist_x86.exe ]; then
-        cp $TARFILE_LOCATION/vcredist_x86.exe ./external/vcredist/vcredist_x86.exe
-    fi
-    if [ ! -f ./external/vcredist/vcredist_x64.exe -a -f $TARFILE_LOCATION/vcredist_x64.exe ]; then
-        cp $TARFILE_LOCATION/vcredist_x64.exe ./external/vcredist/vcredist_x64.exe
     fi
 fi
 

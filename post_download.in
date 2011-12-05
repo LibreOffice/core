@@ -70,25 +70,3 @@ You may have to search Microsoft's website. Last time it was seen at:
 <http://www.microsoft.com/downloads/details.aspx?familyid=6A63AB9C-DF12-4D41-933C-BE590FEAA05A&displaylang=en>.])
    fi
 fi
-
-dnl ===================================================================
-dnl Windows builds need vcredist_x86.exe and vcredist_x64.exe in external/vcredist/
-dnl ===================================================================
-if test "$COM" = "MSC"; then
-   AC_MSG_CHECKING([for vcredist_x86.exe])
-   if test -e ./external/vcredist/vcredist_x86.exe; then
-      AC_MSG_RESULT([found])
-   else
-      AC_MSG_ERROR([vcredist_x86.exe is missing in external/vcredist/.
-Get the version corresponding to your Visual Studio from the Microsoft site
-and put it into external/vcredist.])
-   fi
-   AC_MSG_CHECKING([for vcredist_x64.exe])
-   if test -e ./external/vcredist/vcredist_x64.exe; then
-      AC_MSG_RESULT([found])
-   else
-      AC_MSG_ERROR([vcredist_x64.exe is missing in external/vcredist/.
-Get the version corresponding to your Visual Studio from the Microsoft site
-and put it into external/vcredist.])
-   fi
-fi
