@@ -30,8 +30,8 @@
 #define __com_sun_star_webtop_Logger_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
-#include <XLogger.idl>
-#include <XLoggerRemote.idl>
+#include <com/sun/star/util/logging/XLogger.idl>
+#include <com/sun/star/util/logging/XLoggerRemote.idl>
 
 //=============================================================================
 
