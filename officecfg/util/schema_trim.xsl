@@ -77,8 +77,8 @@
 <!-- copy all other values with content -->
 	<xsl:template match="value">
 		<xsl:copy>
-			<xsl:apply-templates select="*|@*"/>
-			<xsl:value-of select="."/>
+			<xsl:apply-templates select="@*"/>
+			<xsl:copy-of select="node()"/>
 		</xsl:copy>		
 	</xsl:template>
 
