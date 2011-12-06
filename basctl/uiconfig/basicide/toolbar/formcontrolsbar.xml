@@ -2,15 +2,15 @@
 <!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:InsertFormRadio" toolbar:helpid="helpid:10146"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:InsertFormCheck" toolbar:helpid="helpid:10146"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:RadioBUTTON" toolbar:helpid="helpid:10147"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:CheckBOX" toolbar:helpid="helpid:10148"  toolbar:style="radio" />
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:InsertFormList" toolbar:helpid="helpid:10146"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:InsertFormCombo" toolbar:helpid="helpid:10146"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertListBOX" toolbar:helpid="helpid:10191"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ComboBOX" toolbar:helpid="helpid:10192"  toolbar:style="radio" />
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:InsertFormVScroll" toolbar:helpid="helpid:10146"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:InsertFormHScroll" toolbar:helpid="helpid:10146"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:VScrollBAR" toolbar:helpid="helpid:10195"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:HScrollBAR" toolbar:helpid="helpid:10194"  toolbar:style="radio" />
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:InsertFormSpin" toolbar:helpid="helpid:10146"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:SpinBUTTON" toolbar:helpid="helpid:10769"  toolbar:style="radio" />
  <toolbar:toolbarbreak/>
 </toolbar:toolbar>

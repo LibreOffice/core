@@ -13,57 +13,57 @@
                      <value xml:lang="en-US">Line Numbers</value>
                  </prop>
             </node>
-            <node oor:name=".uno:InsertFormRadio" oor:op="replace">
+            <node oor:name=".uno:RadioBUTTON" oor:op="replace">
                  <prop oor:name="Label" oor:type="xs:string">
-                     <value xml:lang="en-US">Option Button</value>
+                     <value xml:lang="en-US">Form Option Button</value>
                  </prop>
                  <prop oor:name="Properties" oor:type="xs:int">
                      <value>1</value>
                  </prop>
             </node>
-            <node oor:name=".uno:InsertFormCheck" oor:op="replace">
+            <node oor:name=".uno:CheckBOX" oor:op="replace">
                  <prop oor:name="Label" oor:type="xs:string">
-                     <value xml:lang="en-US">Check Box</value>
+                     <value xml:lang="en-US">Form Check Box</value>
                  </prop>
                  <prop oor:name="Properties" oor:type="xs:int">
                      <value>1</value>
                  </prop>
             </node>
-            <node oor:name=".uno:InsertFormList" oor:op="replace">
+            <node oor:name=".uno:InsertListBOX" oor:op="replace">
                  <prop oor:name="Label" oor:type="xs:string">
-                     <value xml:lang="en-US">List Box</value>
+                     <value xml:lang="en-US">Form List Box</value>
                  </prop>
                  <prop oor:name="Properties" oor:type="xs:int">
                      <value>1</value>
                  </prop>
             </node>
-            <node oor:name=".uno:InsertFormCombo" oor:op="replace">
+            <node oor:name=".uno:ComboBOX" oor:op="replace">
                  <prop oor:name="Label" oor:type="xs:string">
-                     <value xml:lang="en-US">Combo Box</value>
+                     <value xml:lang="en-US">Form Combo Box</value>
                  </prop>
                  <prop oor:name="Properties" oor:type="xs:int">
                      <value>1</value>
                  </prop>
             </node>
-            <node oor:name=".uno:InsertFormVScroll" oor:op="replace">
+            <node oor:name=".uno:VScrollBAR" oor:op="replace">
                  <prop oor:name="Label" oor:type="xs:string">
-                     <value xml:lang="en-US">Vertical Scroll Bar</value>
+                     <value xml:lang="en-US">Form Vertical Scroll Bar</value>
                  </prop>
                  <prop oor:name="Properties" oor:type="xs:int">
                      <value>1</value>
                  </prop>
             </node>
-            <node oor:name=".uno:InsertFormHScroll" oor:op="replace">
+            <node oor:name=".uno:HScrollBAR" oor:op="replace">
                  <prop oor:name="Label" oor:type="xs:string">
-                     <value xml:lang="en-US">Horizonal Scroll Bar</value>
+                     <value xml:lang="en-US">Form Horizonal Scroll Bar</value>
                  </prop>
                  <prop oor:name="Properties" oor:type="xs:int">
                      <value>1</value>
                  </prop>
             </node>
-            <node oor:name=".uno:InsertFormSpin" oor:op="replace">
+            <node oor:name=".uno:SpinBUTTON" oor:op="replace">
                  <prop oor:name="Label" oor:type="xs:string">
-                     <value xml:lang="en-US">Spin Button</value>
+                     <value xml:lang="en-US">Form Spin Button</value>
                  </prop>
                  <prop oor:name="Properties" oor:type="xs:int">
                      <value>1</value>
