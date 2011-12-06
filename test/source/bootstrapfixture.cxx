@@ -103,7 +103,7 @@ void test::BootstrapFixture::setUp()
 
 void test::BootstrapFixture::tearDown()
 {
-    ucbhelper::ContentBroker::get()->deinitialize();
+    ucbhelper::ContentBroker::deinitialize();
     test::BootstrapFixtureBase::tearDown();
 }
 
