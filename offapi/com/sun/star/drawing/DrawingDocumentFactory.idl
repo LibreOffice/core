@@ -26,7 +26,7 @@
  **************************************************************
 **********/
 #ifndef __com_sun_star_drawing_DrawingDocumentFactory_idl__
-#define __com::sun::star::drawing_DrawingDocumentFactory_idl__
+#define __com_sun_star_drawing_DrawingDocumentFactory_idl__
 
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
 
