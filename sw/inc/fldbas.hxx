@@ -129,8 +129,8 @@ enum SwFldTypesEnum
     TYP_GETREFPAGEFLD,
     TYP_INTERNETFLD,
     TYP_JUMPEDITFLD,
-    TYP_SCRIPTFLD,              // 40
-    TYP_AUTHORITY,
+    TYP_SCRIPTFLD,
+    TYP_AUTHORITY,              // 40
     TYP_COMBINED_CHARS,
     TYP_DROPDOWN,
     TYP_END
