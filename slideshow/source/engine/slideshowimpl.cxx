@@ -2025,10 +2025,14 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
         //    that have zero delay.  While the timer is stopped these events
         //    are processed in the same run.
         {
+            //Get a shared-ptr that outlives the scope-guard which will
+            //ensure that the pointed-to-item exists in the case of a
+            //::dispose clearing mpPresTimer
+            boost::shared_ptr<canvas::tools::ElapsedTime> xTimer(mpPresTimer);
             comphelper::ScopeGuard scopeGuard(
                 boost::bind( &canvas::tools::ElapsedTime::releaseTimer,
-                             boost::cref(mpPresTimer) ) );
-            mpPresTimer->holdTimer();
+                             boost::cref(xTimer) ) );
+            xTimer->holdTimer();
 
             // process queues
             maEventQueue.process();
