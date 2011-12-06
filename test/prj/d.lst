@@ -8,6 +8,7 @@ mkdir: %_DEST%\inc\test
 ..\inc\test\bootstrapfixture.hxx %_DEST%\inc\test\bootstrapfixture.hxx
 ..\inc\test\unoapi_test.hxx %_DEST%\inc\test\unoapi_test.hxx
 mkdir: %_DEST%\unittest
+mkdir: %_DEST%\unittest\registry
 mkdir: %_DEST%\unittest\user\
 mkdir: %_DEST%\unittest\user\autocorr
 mkdir: %_DEST%\unittest\user\autotext
@@ -201,6 +202,7 @@ mkdir: %_DEST%\unittest\user\xslt\import\common
 mkdir: %_DEST%\unittest\user\xslt\import\spreadsheetml
 mkdir: %_DEST%\unittest\user\xslt\import\uof
 mkdir: %_DEST%\unittest\user\xslt\import\wordml
+..\user-template\registry\modifications.xcd %_DEST%\unittest\registry\modifications.xcd
 ..\user-template\user\*  %_DEST%\unittest\user\*
 ..\user-template\user\autocorr\*  %_DEST%\unittest\user\autocorr\*
 ..\user-template\user\autotext\*  %_DEST%\unittest\user\autotext\*
