@@ -1648,7 +1648,8 @@ void SwFieldType::_GetFldName()
         STR_SCRIPTFLD,
         STR_AUTHORITY,
         STR_COMBINED_CHARS,
-        STR_DROPDOWN
+        STR_DROPDOWN,
+        STR_CUSTOM
     };
 
     // insert infos for fields
