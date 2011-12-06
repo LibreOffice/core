@@ -153,7 +153,7 @@ static SfxDispatcher* getDispatcher( ViewShellBase& rBase )
 
 com::sun::star::util::DateTime getCurrentDateTime()
 {
-    DateTime aCurrentDate;
+    DateTime aCurrentDate( DateTime::SYSTEM );
     return com::sun::star::util::DateTime( 0, aCurrentDate.GetSec(), aCurrentDate.GetMin(), aCurrentDate.GetHour(), aCurrentDate.GetDay(), aCurrentDate.GetMonth(), aCurrentDate.GetYear() );
 }
 
