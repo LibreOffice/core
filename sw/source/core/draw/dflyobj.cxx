@@ -582,7 +582,7 @@ const Rectangle& SwVirtFlyDrawObj::GetLastBoundRect() const
 }
 
 
-void SwVirtFlyDrawObj::RecalcBoundRect(bool)
+void SwVirtFlyDrawObj::RecalcBoundRect()
 {
     SetRect();
 }
