@@ -671,7 +671,7 @@ AC_ARG_ENABLE(unix-qstart-libpng,
         [On UNIX systems, we have a faster splash app, that can use libpng to
          render its splash, if we can safely link to the system libpng then
          enabling this is a good idea (ie. for Linux Distro packaging).]),
-,enable_unix_libpng=yes)
+,enable_unix_qstart_libpng=yes)
 
 AC_ARG_ENABLE(binfilter,
     AS_HELP_STRING([--enable-binfilter],
@@ -7144,7 +7144,7 @@ AC_SUBST(LIBPNG_LIBS)
 AC_SUBST(LIBPNG_CFLAGS)
 
 AC_MSG_CHECKING([whether to enable libpng linking in quickstarter])
-if test "x$unix_qstart_libpng" != "xno"; then
+if test "x$enable_unix_qstart_libpng" != "xno"; then
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
