@@ -43,11 +43,7 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/decoview.hxx>
-
-#ifdef DBG_UTIL
 #include <vcl/msgbox.hxx>
-#endif
-
 #include <vcl/unowrap.hxx>
 
 
