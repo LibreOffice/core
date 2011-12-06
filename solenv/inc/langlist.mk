@@ -121,7 +121,6 @@ ta \
 te \
 tg \
 th \
-tk \
 tn \
 tr \
 ts \
