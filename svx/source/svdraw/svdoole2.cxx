@@ -1760,7 +1760,7 @@ void SdrOle2Obj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     }
 
     SdrRectObj::NbcResize(rRef,xFact,yFact);
-    if (aGeo.nShearWink!=0 || aGeo.nDrehWink!=0) { // little correctures
+    if (aGeo.nShearWink!=0 || aGeo.nDrehWink!=0) { // little corrections
         if (aGeo.nDrehWink>=9000 && aGeo.nDrehWink<27000) {
             aRect.Move(aRect.Left()-aRect.Right(),aRect.Top()-aRect.Bottom());
         }

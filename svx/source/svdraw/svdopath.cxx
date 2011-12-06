@@ -102,7 +102,7 @@ struct ImpSdrPathDragData  : public SdrDragStatUserData
     bool                        bValid;         // FALSE = too few points
     bool                        bClosed;        // closed object?
     sal_uInt16                      nPoly;          // number of the polygon in the PolyPolygon
-    sal_uInt16                      nPnt;           // number of point in the upper polygon
+    sal_uInt16                      nPnt;           // number of point in the above polygon
     sal_uInt16                      nPntAnz;        // number of points of the polygon
     sal_uInt16                      nPntMax;        // maximum index
     bool                        bBegPnt;        // dragged point is first point of a Polyline
@@ -167,7 +167,7 @@ ImpSdrPathDragData::ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl
         bValid=sal_False;
         bClosed=rPO.IsClosed();          // closed object?
         nPoly=(sal_uInt16)rHdl.GetPolyNum();            // number of the polygon in the PolyPolygon
-        nPnt=(sal_uInt16)rHdl.GetPointNum();            // number of points in the upper polygon
+        nPnt=(sal_uInt16)rHdl.GetPointNum();            // number of points in the above polygon
         const XPolygon aTmpXP(rPO.GetPathPoly().getB2DPolygon(nPoly));
         nPntAnz=aTmpXP.GetPointCount();        // number of point of the polygon
         if (nPntAnz==0 || (bClosed && nPntAnz==1)) return; // minimum of 1 points for Lines, minimum of 2 points for Polygon
@@ -666,7 +666,7 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
 
         // copy certain data locally to use less code and have faster access times
         bool bClosed           =mpSdrPathDragData->bClosed       ; // closed object?
-        sal_uInt16   nPnt          =mpSdrPathDragData->nPnt          ; // number of point in the upper polygon
+        sal_uInt16   nPnt          =mpSdrPathDragData->nPnt          ; // number of point in the above polygon
         bool bBegPnt           =mpSdrPathDragData->bBegPnt       ; // dragged point is first point of a Polyline
         bool bEndPnt           =mpSdrPathDragData->bEndPnt       ; // dragged point is last point of a Polyline
         sal_uInt16   nPrevPnt      =mpSdrPathDragData->nPrevPnt      ; // index of previous point
@@ -753,7 +753,7 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
         }
         rDrag.SetActionRect(Rectangle(rDrag.GetNow(),rDrag.GetNow()));
 
-        // spacially for IBM: Eliminate points, if both adjoining lines form near 180 degrees angle anyway
+        // specially for IBM: Eliminate points if both adjoining lines form near 180 degrees angle anyway
         if (!bControl && rDrag.GetView()!=NULL && rDrag.GetView()->IsEliminatePolyPoints() &&
             !bBegPnt && !bEndPnt && !bPrevIsControl && !bNextIsControl)
         {

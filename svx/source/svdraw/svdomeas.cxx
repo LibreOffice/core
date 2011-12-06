@@ -656,9 +656,9 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
     long nArr1Len=aMPol.nArrow1Len;
     long nArr2Len=aMPol.nArrow2Len;
     if (aMPol.bBreakedLine) {
-        // In the case of a dashed line and Outside, the text shouldn't be
-        // placed next to the line at the arrowhead insetead of directly at the
-        // arrowhead.
+        // In the case of a dashed line and Outside, the text should be
+        // placed next to the line at the arrowhead instead of directly
+        // at the arrowhead.
         nArr1Len=aMPol.nShortLineLen+aMPol.nArrow1Wdt/4;
         nArr2Len=aMPol.nShortLineLen+aMPol.nArrow2Wdt/4;
     }
