@@ -64,6 +64,7 @@ BUILD_ACTION = \
 			  --bindir=/usr/lib/postgresql/$(MAJOR_VER)/bin \
 			  --libdir=/usr/lib/ \
 			  --includedir=/usr/include/postgresql/ \
+			  --without-readline \
 	 && DESTDIR="$(SRC_ROOT)/$(PRJNAME)/$(INPATH)/" \
 	 && export DESTDIR \
 	 && make $(MAKE_SILENT) -j$(GMAKE_MODULE_PARALLELISM) -C src/interfaces/libpq install \
