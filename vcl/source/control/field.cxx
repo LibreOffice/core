@@ -2383,23 +2383,6 @@ CurrencyBox::CurrencyBox( Window* pParent, WinBits nWinStyle ) :
 
 // -----------------------------------------------------------------------
 
-CurrencyBox::CurrencyBox( Window* pParent, const ResId& rResId ) :
-    ComboBox( WINDOW_CURRENCYBOX )
-{
-    rResId.SetRT( RSC_CURRENCYBOX );
-    WinBits nStyle = ImplInitRes( rResId );
-    ComboBox::ImplInit( pParent, nStyle );
-    CurrencyFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
-    SetField( this );
-    ComboBox::ImplLoadRes( rResId );
-    Reformat();
-
-    if ( !(nStyle & WB_HIDE ) )
-        Show();
-}
-
-// -----------------------------------------------------------------------
-
 CurrencyBox::~CurrencyBox()
 {
 }
@@ -2474,20 +2457,6 @@ void CurrencyBox::ReformatAll()
     }
     CurrencyFormatter::Reformat();
     SetUpdateMode( sal_True );
-}
-
-// -----------------------------------------------------------------------
-
-void CurrencyBox::InsertValue( sal_Int64 nValue, sal_uInt16 nPos )
-{
-    ComboBox::InsertEntry( CreateFieldText( nValue ), nPos );
-}
-
-// -----------------------------------------------------------------------
-
-void CurrencyBox::RemoveValue( sal_Int64 nValue )
-{
-    ComboBox::RemoveEntry( CreateFieldText( nValue ) );
 }
 
 // -----------------------------------------------------------------------
