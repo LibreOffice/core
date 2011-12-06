@@ -1115,10 +1115,10 @@ void SmParser::Line()
 void SmParser::Expression()
 {
     bool bUseExtraSpaces = true;
-    SmNode *pNode = m_aNodeStack.top();
-    m_aNodeStack.pop();
-    if (pNode)
+    if (!m_aNodeStack.empty())
     {
+        SmNode *pNode = m_aNodeStack.top();
+        m_aNodeStack.pop();
         if (pNode->GetToken().eType == TNOSPACE)
             bUseExtraSpaces = false;
         else
