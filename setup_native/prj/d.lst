@@ -23,9 +23,6 @@ mkdir: %_DEST%\bin\osolsmf
 ..\source\win32\patchlist.txt %_DEST%\bin\patchlist.txt
 ..\source\win32\desktophelper.txt %_DEST%\bin\desktophelper.txt
 ..\source\win32\get_retval.bat %_DEST%\bin\get_retval.bat
-..\source\win32\nsis\downloadtemplate.nsi %_DEST%\bin\downloadtemplate.nsi
-..\source\win32\nsis\*.ico %_DEST%\bin\*.ico
-..\source\win32\nsis\*.bmp %_DEST%\bin\*.bmp
 ..\source\linux\*.dat %_DEST%\bin\*.dat
 ..\source\mac\*.icns %_DEST%\bin\*.icns
 ..\source\mac\Info.plist.langpack %_DEST%\bin\Info.plist.langpack

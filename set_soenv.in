@@ -65,7 +65,7 @@ my ( $COM, $ARCH, $CPU, $CPUNAME, $GUI, $GUIBASE,
 my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV, $SOLVER, $CONFIG, $DEFIMGS,
      $USR_BIN, $USR_LIB, $USR_LOCAL, $USR_CCS, $JAVA_BIN, $JAVA_LIB, $JAVA_INCLUDE,
      $SOLARENVINC, $USR_DT, $USR_OPENWIN, $XLIB, $XINC,
-     $CYGWIN_PATH, $language, @languages, $ASM_PATH, $NSIS_PATH, $PERL_PATH, $CL_X64 );
+     $CYGWIN_PATH, $language, @languages, $ASM_PATH, $PERL_PATH, $CL_X64 );
 
 # Environment variables.
 my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
@@ -1140,12 +1140,6 @@ elsif ($platform =~ m/cygwin/)
    if ( "$PATH:$oldPATH" !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
       $PATH          .= $ps.$tmppath;
    }
-   # makensis directory
-   $NSIS_PATH = PathFormat('@NSIS_PATH@');
-   $tmppath = CygFormat($NSIS_PATH);
-   if ( "$PATH:$oldPATH" !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
-       $PATH          .= $ps.$tmppath;
-   }
    # path to sn.exe (signing) for Windows users.
    my $sn_path = PathFormat('@DOTNET_FRAMEWORK_HOME@/bin');
    $tmppath = CygFormat($sn_path);
@@ -1191,12 +1185,6 @@ elsif ($platform =~ m/mingw32/)
                         $ps.CygFormat($SOLARENV).$ds."bin".
                         $ps.CygFormat($SOLARENV).$ds.$OUTPATH.$BIN;
 
-   # makensis directory
-   $NSIS_PATH = PathFormat('@NSIS_PATH@');
-   $tmppath = CygFormat($NSIS_PATH);
-   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
-       $PATH          .= $ps.$tmppath;
-   }
    $PATH              .= $ps.$oldPATH;
 }
 elsif ($platform =~ m/darwin/)
@@ -1620,7 +1608,6 @@ if ( $platform =~ m/cygwin/ )
    ToFile( "ATL_INCLUDE",       $ATL_INCLUDE,       "e" );
    ToFile( "MFC_LIB",           $MFC_LIB,         "e" );
    ToFile( "MFC_INCLUDE",       $MFC_INCLUDE,       "e" );
-   ToFile( "NSIS_PATH",         $NSIS_PATH,         "e" );
    ToFile( "DISABLE_ACTIVEX",   "@DISABLE_ACTIVEX@","e" );
    ToFile( "DISABLE_ATL",   "@DISABLE_ATL@","e" );
    ToFile( "INCLUDE",           "",                 "e" );
@@ -1647,8 +1634,7 @@ if ( $platform =~ m/cygwin/ )
    }
 }
 elsif ( $platform =~ m/mingw32/ )
-{  ToFile( "NSIS_PATH",         $NSIS_PATH,         "e" );
-   ToFile( "DISABLE_ACTIVEX",   "@DISABLE_ACTIVEX@","e" );
+{  ToFile( "DISABLE_ACTIVEX",   "@DISABLE_ACTIVEX@","e" );
    ToFile( "DISABLE_ATL",       "@DISABLE_ATL@",    "e" );
    ToFile( "MINGW_CLIB_DIR",    "@MINGW_CLIB_DIR@", "e" );
    ToFile( "MINGW_SHARED_GCCLIB", "@MINGW_SHARED_GCCLIB@", "e" );

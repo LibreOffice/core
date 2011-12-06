@@ -45,12 +45,10 @@ ULFFILES = \
     LaunchCo.ulf \
     Property.ulf \
     RadioBut.ulf \
-    Nsis.ulf     \
     SIS.ulf      \
     UIText.ulf 
     
 MLFFILES = $(foreach,i,$(ULFFILES) $(MISC)$/$(TARGET)$/$(i:b).mlf)
-UULFFILES = $(MISC)$/$(TARGET)$/Nsis.uulf
 
 # --- Targets ------------------------------------------------------
 
@@ -58,6 +56,6 @@ UULFFILES = $(MISC)$/$(TARGET)$/Nsis.uulf
 
 .IF "$(GUI)"=="WNT"
 
-ALLTAR : $(MLFFILES) $(UULFFILES)
+ALLTAR : $(MLFFILES)
 
 .ENDIF

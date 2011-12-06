@@ -84,9 +84,6 @@ LibreOffice
 			USE_FILEVERSION 1
 			LIBRARYVERSION 9.4.0
 			PATCHCODEFILE ooo_patchcodes.txt
-			DOWNLOADBANNER	ooobanner.bmp
-			DOWNLOADBITMAP	ooobitmap.bmp
-			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL http://www.libreoffice.org/
@@ -146,9 +143,6 @@ LibreOffice_wJRE
 			LIBRARYVERSION 9.4.0
 			PATCHCODEFILE ooo_patchcodes.txt
 			JAVAPRODUCT 1
-			DOWNLOADBANNER	ooobanner.bmp
-			DOWNLOADBITMAP	ooobitmap.bmp
-			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL http://www.libreoffice.org/
@@ -211,9 +205,6 @@ LibreOffice_Dev
 			LIBRARYVERSION 9.4.0
 			PATCHCODEFILE ooodev_patchcodes.txt
 			CODEFILENAME codes_ooodev.txt
-			DOWNLOADBANNER	ooobanner.bmp
-			DOWNLOADBITMAP	ooobitmap.bmp
-			DOWNLOADSETUPICO	ooosetup.ico
 			LOCALUSERDIR $ORIGIN/..
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
@@ -253,9 +244,6 @@ URE
             PCPFILENAME ure.pcp
             POOLPRODUCT 0
             GLOBALFILEGID gid_File_Dl_Cppu
-            DOWNLOADBANNER urebanner.bmp
-            DOWNLOADBITMAP urebitmap.bmp
-            DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
@@ -301,9 +289,6 @@ LibreOffice_SDK
             NOSPACEINDIRECTORYNAME 1
             NOSHORTDIRECTORYNAMES 1
             CHANGETARGETDIR 1
-            DOWNLOADBANNER ooosdkbanner.bmp
-            DOWNLOADBITMAP ooosdkbitmap.bmp
-            DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
@@ -353,9 +338,6 @@ LibreOffice_Dev_SDK
             NOSPACEINDIRECTORYNAME 1
             NOSHORTDIRECTORYNAMES 1
             CHANGETARGETDIR 1
-            DOWNLOADBANNER ooosdkbanner.bmp
-            DOWNLOADBITMAP ooosdkbitmap.bmp
-            DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
@@ -399,9 +381,6 @@ LibreOffice_Test
             NOSPACEINDIRECTORYNAME 1
             NOSHORTDIRECTORYNAMES 1
             CHANGETARGETDIR 1
-            DOWNLOADBANNER ooobanner.bmp
-	    DOWNLOADBITMAP ooobitmap.bmp
-	    DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
@@ -451,9 +430,6 @@ LibreOffice_Dev_Test
             NOSPACEINDIRECTORYNAME 1
             NOSHORTDIRECTORYNAMES 1
             CHANGETARGETDIR 1
-            DOWNLOADBANNER ooobanner.bmp
-	    DOWNLOADBITMAP ooobitmap.bmp
-            DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
@@ -511,13 +487,10 @@ OxygenOffice
 			USE_FILEVERSION 1
 			LIBRARYVERSION 9.4.0
 			PATCHCODEFILE ooo_patchcodes.txt
-			DOWNLOADBANNER	ooobanner_ooop.bmp
-			DOWNLOADBITMAP	ooobitmap_ooop.bmp
 			PROGRESSBARCOLOR 126,170,23
 			PROGRESSSIZE 430,5
 			PROGRESSPOSITION 5,230
 			PROGRESSFRAMECOLOR 207,208,211
-			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL http://www.libreoffice.org/
@@ -578,9 +551,6 @@ OxygenOffice_wJRE
 			LIBRARYVERSION 9.4.0
 			PATCHCODEFILE ooo_patchcodes.txt
 			JAVAPRODUCT 1
-			DOWNLOADBANNER	ooobanner_ooop.bmp
-			DOWNLOADBITMAP	ooobitmap_ooop.bmp
-			DOWNLOADSETUPICO	ooosetup.ico
 			PROGRESSBARCOLOR 126,170,23
 			PROGRESSSIZE 430,5
 			PROGRESSPOSITION 5,230

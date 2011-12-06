@@ -455,11 +455,7 @@ BEGIN
     @helppackfeature =();
     @featurecollector =();
     $msiassemblyfiles = "";
-    $nsisfilename = "Nsis";
     $macinstallfilename = "macinstall.ulf";
-    $nsis204 = 0;
-    $nsis231 = 0;
-    $unicodensis = 0;
     $linuxlinkrpms = "";
     $extensioninstalldir = "gid_Dir_Share_Extension_Install";
     @languagenames = ();

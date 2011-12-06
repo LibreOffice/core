@@ -1516,17 +1516,6 @@ AC_ARG_WITH(csc-path,
     ],
 ,)
 
-AC_ARG_WITH(nsis-path,
-    AS_HELP_STRING([--with-nsis-path],
-        [For Windows builds, please supply the directory where makensis
-         is located. If makensis is found in PATH or this option is
-         properly supplied a self-contained executable installer for
-         LibreOffice will be created.])
-    [
-                          Usage:     --with-nsis-path=<path to directory containing makensis>
-    ],
-,)
-
 AC_ARG_WITH(dotnet-framework-home,
     AS_HELP_STRING([--with-dotnet-framework-home],
         [For Microsoft compiler users, please supply the path pointing to
@@ -6796,48 +6785,6 @@ if test -n "$ENABLE_DIRECTX" -a "$_os" = "WINNT"; then
 fi
 AC_SUBST(DIRECTXSDK_HOME)
 AC_SUBST(DIRECTXSDK_LIB)
-
-dnl ============================================
-dnl Check for Nullsoft Scriptable Install System
-dnl ============================================
-NSIS_PATH=""
-if test "$_os" = "WINNT" ; then
-    if test -z "$with_nsis_path"; then
-        AC_PATH_PROG(NSIS_PATH, makensis)
-        if test -n "$NSIS_PATH"; then
-            NSIS_PATH=`dirname "$NSIS_PATH"`
-        elif test "$build_os" = "cygwin"; then
-            AC_MSG_CHECKING([for NSIS])
-            nsistest=`./oowintool --nsis-dir`;
-            nsistest=`cygpath -d -m "$nsistest"`
-            nsistest=`cygpath -u "$nsistest"`
-            if test -x "$nsistest/nsis.exe"; then
-                NSIS_PATH="$nsistest"
-                AC_MSG_RESULT([found ($NSIS_PATH)])
-            else
-                AC_MSG_RESULT([no, no self-contained installer will be built.])
-            fi
-        fi
-    else
-        AC_MSG_CHECKING([for NSIS])
-        if test "$build_os" = "cygwin"; then
-            with_nsis_path=`cygpath -u "$with_nsis_path"`
-        fi
-        if test -e "$with_nsis_path/makensis$EXEEXT_FOR_BUILD"; then
-            NSIS_PATH="$with_nsis_path"
-        fi
-        if test -z "$NSIS_PATH"; then
-            AC_MSG_RESULT([no, no self-contained installer will be built.])
-        else
-            if test "$build_os" = "cygwin"; then
-                NSIS_PATH=`cygpath -d "$NSIS_PATH"`
-                NSIS_PATH=`cygpath -u "$NSIS_PATH"`
-            fi
-            AC_MSG_RESULT([found ($NSIS_PATH)])
-        fi
-    fi
-fi
-AC_SUBST(NSIS_PATH)
 
 dnl ***************************************
 dnl Checking for bison and flex
