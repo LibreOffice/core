@@ -64,10 +64,11 @@ namespace
   const static rtl::OUString goto_(RTL_CONSTASCII_USTRINGPARAM("goto"));
   const static rtl::OUString excl(RTL_CONSTASCII_USTRINGPARAM("!"));
 
-  std::vector<Symbol> getSymbols(const rtl::OUString& source, bool bCompatible = false)
+  std::vector<Symbol> getSymbols(const rtl::OUString& source, sal_Int32& errors, bool bCompatible = false)
   {
     std::vector<Symbol> symbols;
     SbiScanner scanner(source);
+    scanner.EnableErrors();
     scanner.SetCompatible(bCompatible);
     while(scanner.NextSym())
     {
@@ -80,7 +81,14 @@ namespace
       symbol.type = scanner.GetType();
       symbols.push_back(symbol);
     }
+    errors = scanner.GetErrors();
     return symbols;
+  }
+
+  std::vector<Symbol> getSymbols(const rtl::OUString& source, bool bCompatible = false)
+  {
+    sal_Int32 i;
+    return getSymbols(source, i, bCompatible);
   }
 
   void ScannerTest::testBlankLines()
@@ -539,60 +547,141 @@ namespace
     const rtl::OUString source8(RTL_CONSTASCII_USTRINGPARAM("-0.0"));
     const rtl::OUString source9(RTL_CONSTASCII_USTRINGPARAM("12dE3"));
     const rtl::OUString source10(RTL_CONSTASCII_USTRINGPARAM("12e3"));
+    const rtl::OUString source11(RTL_CONSTASCII_USTRINGPARAM("12D+3"));
+    const rtl::OUString source12(RTL_CONSTASCII_USTRINGPARAM("12e++3"));
+    const rtl::OUString source13(RTL_CONSTASCII_USTRINGPARAM("12e-3"));
+    const rtl::OUString source14(RTL_CONSTASCII_USTRINGPARAM("12e-3+"));
+    const rtl::OUString source15(RTL_CONSTASCII_USTRINGPARAM("1,2,3"));
+    const rtl::OUString source16(RTL_CONSTASCII_USTRINGPARAM("1.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"));
 
     std::vector<Symbol> symbols;
+    sal_Int32 errors;
 
-    symbols = getSymbols(source1);
+    symbols = getSymbols(source1, errors);
     CPPUNIT_ASSERT(symbols.size() == 2);
     CPPUNIT_ASSERT(symbols[0].number == 12345);
+    CPPUNIT_ASSERT(symbols[0].type == SbxINTEGER);
     CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(errors == 0);
 
-    symbols = getSymbols(source2);
+    symbols = getSymbols(source2, errors);
     CPPUNIT_ASSERT(symbols.size() == 2);
     CPPUNIT_ASSERT(symbols[0].number == 1.23);
+    CPPUNIT_ASSERT(symbols[0].type == SbxDOUBLE);
     CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(errors == 1);
 
-    symbols = getSymbols(source3);
+    symbols = getSymbols(source3, errors);
     CPPUNIT_ASSERT(symbols.size() == 2);
-    CPPUNIT_ASSERT(symbols[0].number = 123.4);
+    CPPUNIT_ASSERT(symbols[0].number == 123.4);
+    CPPUNIT_ASSERT(symbols[0].type == SbxDOUBLE);
     CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(errors == 0);
 
-    symbols = getSymbols(source4);
+    symbols = getSymbols(source4, errors);
     CPPUNIT_ASSERT(symbols.size() == 2);
     CPPUNIT_ASSERT(symbols[0].number == .5);
+    CPPUNIT_ASSERT(symbols[0].type == SbxDOUBLE);
     CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(errors == 0);
 
-    symbols = getSymbols(source5);
+    symbols = getSymbols(source5, errors);
     CPPUNIT_ASSERT(symbols.size() == 2);
     CPPUNIT_ASSERT(symbols[0].number == 5);
+    CPPUNIT_ASSERT(symbols[0].type == SbxDOUBLE);
     CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(errors == 0);
 
-    symbols = getSymbols(source6);
+    symbols = getSymbols(source6, errors);
     CPPUNIT_ASSERT(symbols.size() == 2);
     CPPUNIT_ASSERT(symbols[0].number == 0);
+    CPPUNIT_ASSERT(symbols[0].type == SbxDOUBLE);
     CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(errors == 0);
 
-    symbols = getSymbols(source7);
+    symbols = getSymbols(source7, errors);
     CPPUNIT_ASSERT(symbols.size() == 3);
     CPPUNIT_ASSERT(symbols[0].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-")));
     CPPUNIT_ASSERT(symbols[1].number == 3);
+    CPPUNIT_ASSERT(symbols[1].type == SbxINTEGER);
     CPPUNIT_ASSERT(symbols[2].text == cr);
+    CPPUNIT_ASSERT(errors == 0);
 
-    symbols = getSymbols(source8);
+    symbols = getSymbols(source8, errors);
     CPPUNIT_ASSERT(symbols.size() == 3);
     CPPUNIT_ASSERT(symbols[0].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-")));
     CPPUNIT_ASSERT(symbols[1].number == 0);
+    CPPUNIT_ASSERT(symbols[1].type == SbxDOUBLE);
     CPPUNIT_ASSERT(symbols[2].text == cr);
+    CPPUNIT_ASSERT(errors == 0);
 
-    symbols = getSymbols(source9);
+    symbols = getSymbols(source9, errors);
     CPPUNIT_ASSERT(symbols.size() == 2);
     CPPUNIT_ASSERT(symbols[0].number == 12000);
+    CPPUNIT_ASSERT(symbols[0].type == SbxDOUBLE);
     CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(errors == 1);
 
-    symbols = getSymbols(source10);
+    symbols = getSymbols(source10, errors);
     CPPUNIT_ASSERT(symbols.size() == 2);
     CPPUNIT_ASSERT(symbols[0].number == 12000);
+    CPPUNIT_ASSERT(symbols[0].type == SbxDOUBLE);
     CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(errors == 0);
+
+    symbols = getSymbols(source11, errors);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].number == 12000);
+    CPPUNIT_ASSERT(symbols[0].type == SbxDOUBLE);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(errors == 0);
+
+    symbols = getSymbols(source12, errors);
+    CPPUNIT_ASSERT(symbols.size() == 4);
+    CPPUNIT_ASSERT(symbols[0].number == 12);
+    CPPUNIT_ASSERT(symbols[0].type == SbxDOUBLE);
+    CPPUNIT_ASSERT(symbols[1].text == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("+")));
+    CPPUNIT_ASSERT(symbols[2].number == 3);
+    CPPUNIT_ASSERT(symbols[2].type == SbxINTEGER);
+    CPPUNIT_ASSERT(symbols[3].text == cr);
+    CPPUNIT_ASSERT(errors == 0);
+
+    symbols = getSymbols(source13, errors);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].number == .012);
+    CPPUNIT_ASSERT(symbols[0].type == SbxDOUBLE);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(errors == 0);
+
+    symbols = getSymbols(source14, errors);
+    CPPUNIT_ASSERT(symbols.size() == 3);
+    CPPUNIT_ASSERT(symbols[0].number == .012);
+    CPPUNIT_ASSERT(symbols[0].type == SbxDOUBLE);
+    CPPUNIT_ASSERT(symbols[1].text == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("+")));
+    CPPUNIT_ASSERT(symbols[2].text == cr);
+    CPPUNIT_ASSERT(errors == 0);
+
+    symbols = getSymbols(source15, errors);
+    CPPUNIT_ASSERT(symbols.size() == 6);
+    CPPUNIT_ASSERT(symbols[0].number == 1);
+    CPPUNIT_ASSERT(symbols[0].type == SbxINTEGER);
+    CPPUNIT_ASSERT(symbols[1].text == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(",")));
+    CPPUNIT_ASSERT(symbols[2].number == 2);
+    CPPUNIT_ASSERT(symbols[2].type == SbxINTEGER);
+    CPPUNIT_ASSERT(symbols[3].text == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(",")));
+    CPPUNIT_ASSERT(symbols[4].number == 3);
+    CPPUNIT_ASSERT(symbols[4].type == SbxINTEGER);
+    CPPUNIT_ASSERT(symbols[5].text == cr);
+    CPPUNIT_ASSERT(errors == 0);
+
+    symbols = getSymbols(source16, errors);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].number == 1);
+    CPPUNIT_ASSERT(symbols[0].type == SbxDOUBLE);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    // This error is from a "buffer overflow" which is stupid because
+    // the buffer is artificially constrained by the scanner.
+    CPPUNIT_ASSERT(errors == 1); // HACK
   }
 
   void ScannerTest::testDataType()
