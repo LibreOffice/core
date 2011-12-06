@@ -26,241 +26,243 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
 
-#include <svl/asiancfg.hxx>
-#include <svl/svarray.hxx>
-#include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <tools/debug.hxx>
+#include <cassert>
 
-//-----------------------------------------------------------------------------
-using namespace utl;
-using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::lang;
+#include "boost/noncopyable.hpp"
+#include "com/sun/star/beans/NamedValue.hpp"
+#include "com/sun/star/beans/XPropertySet.hpp"
+#include "com/sun/star/container/ElementExistException.hpp"
+#include "com/sun/star/container/NoSuchElementException.hpp"
+#include "com/sun/star/container/XNameContainer.hpp"
+#include "com/sun/star/lang/Locale.hpp"
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/lang/XSingleServiceFactory.hpp"
+#include "com/sun/star/uno/Any.hxx"
+#include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/Sequence.hxx"
+#include "com/sun/star/util/XChangesBatch.hpp"
+#include "comphelper/processfactory.hxx"
+#include "rtl/oustringostreaminserter.hxx"
+#include "rtl/ustrbuf.hxx"
+#include "rtl/ustring.h"
+#include "rtl/ustring.hxx"
+#include "sal/log.hxx"
+#include "sal/types.h"
+#include "svl/asiancfg.hxx"
 
-using ::rtl::OUString;
+namespace {
 
-#define C2U(cChar) OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
+namespace css = com::sun::star;
 
-//-----------------------------------------------------------------------------
-struct SvxForbiddenStruct_Impl
-{
-    Locale      aLocale;
-    OUString    sStartChars;
-    OUString    sEndChars;
-};
-//-----------------------------------------------------------------------------
-typedef SvxForbiddenStruct_Impl* SvxForbiddenStruct_ImplPtr;
-SV_DECL_PTRARR_DEL(SvxForbiddenStructArr, SvxForbiddenStruct_ImplPtr, 2, 2)
-SV_IMPL_PTRARR(SvxForbiddenStructArr, SvxForbiddenStruct_ImplPtr);
-//-----------------------------------------------------------------------------
-struct SvxAsianConfig_Impl
-{
-    sal_Bool    bKerningWesternTextOnly;
-    sal_Int16   nCharDistanceCompression;
-
-    SvxForbiddenStructArr   aForbiddenArr;
-
-    SvxAsianConfig_Impl() :
-        bKerningWesternTextOnly(sal_True),
-        nCharDistanceCompression(0) {}
-};
-
-Sequence<OUString> lcl_GetPropertyNames()
-{
-    Sequence<OUString> aNames(2);
-    OUString* pNames = aNames.getArray();
-    pNames[0] = C2U("IsKerningWesternTextOnly");
-    pNames[1] = C2U("CompressCharacterDistance");
-    return aNames;;
-}
-// ---------------------------------------------------------------------------
-SvxAsianConfig::SvxAsianConfig(sal_Bool bEnableNotify) :
-    utl::ConfigItem(C2U("Office.Common/AsianLayout")),
-    pImpl(new SvxAsianConfig_Impl)
-{
-    if(bEnableNotify)
-        EnableNotification(lcl_GetPropertyNames());
-    Load();
+css::uno::Reference< css::beans::XPropertySet >
+obtainPropertySet() {
+    css::uno::Sequence< css::uno::Any > args(1);
+    args[0] <<= css::beans::NamedValue(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
+        css::uno::makeAny(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "/org.openoffice.Office.Common/AsianLayout"))));
+    return css::uno::Reference< css::beans::XPropertySet >(
+        (css::uno::Reference< css::lang::XMultiServiceFactory >(
+            (css::uno::Reference< css::lang::XMultiServiceFactory >(
+                comphelper::getProcessServiceFactory(),
+                css::uno::UNO_SET_THROW)->
+             createInstance(
+                 rtl::OUString(
+                     RTL_CONSTASCII_USTRINGPARAM(
+                         "com.sun.star.configuration.ConfigurationProvider")))),
+            css::uno::UNO_QUERY_THROW)->
+         createInstanceWithArguments(
+             rtl::OUString(
+                 RTL_CONSTASCII_USTRINGPARAM(
+                     "com.sun.star.configuration.ConfigurationUpdateAccess")),
+             args)),
+        css::uno::UNO_QUERY_THROW);
 }
 
-SvxAsianConfig::~SvxAsianConfig()
-{
-    delete pImpl;
-}
-
-void SvxAsianConfig::Load()
-{
-    Sequence<Any> aValues = GetProperties(lcl_GetPropertyNames());
-    const Any* pValues = aValues.getConstArray();
-    if(pValues[0].hasValue())
-        pImpl->bKerningWesternTextOnly = *(sal_Bool*) pValues[0].getValue();
-    pValues[1] >>= pImpl->nCharDistanceCompression;
-
-    pImpl->aForbiddenArr.DeleteAndDestroy(0, pImpl->aForbiddenArr.Count());
-    OUString sPropPrefix(C2U("StartEndCharacters"));
-    Sequence<OUString> aNodes = GetNodeNames(sPropPrefix);
-
-    Sequence<OUString> aPropNames(aNodes.getLength() * 2);
-    OUString* pNames = aPropNames.getArray();
-    sal_Int32 nName = 0;
-    sPropPrefix += C2U("/");
-    sal_Int32 nNode;
-    const OUString* pNodes = aNodes.getConstArray();
-    for(nNode = 0; nNode < aNodes.getLength(); nNode++)
-    {
-        OUString sStart(sPropPrefix);
-        sStart += pNodes[nNode];
-        sStart += C2U("/");
-        pNames[nName] = sStart;     pNames[nName++] += C2U("StartCharacters");
-        pNames[nName] = sStart;     pNames[nName++] += C2U("EndCharacters");
-    }
-    Sequence<Any> aNodeValues = GetProperties(aPropNames);
-    const Any* pNodeValues = aNodeValues.getConstArray();
-    nName = 0;
-    for(nNode = 0; nNode < aNodes.getLength(); nNode++)
-    {
-        SvxForbiddenStruct_ImplPtr pInsert = new SvxForbiddenStruct_Impl;
-        pInsert->aLocale.Language = pNodes[nNode].copy(0, 2);
-        DBG_ASSERT(pInsert->aLocale.Language.getLength(), "illegal language");
-        pInsert->aLocale.Country = pNodes[nNode].copy(3, 2);
-
-        pNodeValues[nName++] >>= pInsert->sStartChars;
-        pNodeValues[nName++] >>= pInsert->sEndChars;
-        pImpl->aForbiddenArr.Insert(pInsert, pImpl->aForbiddenArr.Count());
-    }
-}
-
-void    SvxAsianConfig::Notify( const Sequence<OUString>& )
-{
-    Load();
-}
-
-void SvxAsianConfig::Commit()
-{
-    Sequence<Any> aValues(2);
-    Any* pValues = aValues.getArray();
-    pValues[0].setValue(&pImpl->bKerningWesternTextOnly, ::getBooleanCppuType());
-    pValues[1] <<= pImpl->nCharDistanceCompression;
-    PutProperties(lcl_GetPropertyNames(), aValues);
-
-
-    OUString sNode(C2U("StartEndCharacters"));
-    if(!pImpl->aForbiddenArr.Count())
-        ClearNodeSet(sNode);
-    else
-    {
-        Sequence<PropertyValue> aSetValues(2 * pImpl->aForbiddenArr.Count());
-        PropertyValue* pSetValues = aSetValues.getArray();
-        sal_Int32 nSetValue = 0;
-        const OUString sStartChars(C2U("StartCharacters"));
-        const OUString sEndChars(C2U("EndCharacters"));
-        for(sal_uInt16 i = 0; i < pImpl->aForbiddenArr.Count(); i++)
-        {
-            OUString sPrefix(sNode);
-            sPrefix += C2U("/");
-            sPrefix += pImpl->aForbiddenArr[i]->aLocale.Language;
-            DBG_ASSERT(pImpl->aForbiddenArr[i]->aLocale.Language.getLength(), "illegal language");
-            sPrefix += C2U("-");
-            sPrefix += pImpl->aForbiddenArr[i]->aLocale.Country;
-            sPrefix += C2U("/");
-            pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sStartChars;
-            pSetValues[nSetValue++].Value <<= pImpl->aForbiddenArr[i]->sStartChars;
-            pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sEndChars;
-            pSetValues[nSetValue++].Value <<= pImpl->aForbiddenArr[i]->sEndChars;
-        }
-        ReplaceSetProperties(sNode, aSetValues);
-    }
-}
-
-sal_Bool    SvxAsianConfig::IsKerningWesternTextOnly() const
-{
-    return pImpl->bKerningWesternTextOnly;
-}
-
-void        SvxAsianConfig::SetKerningWesternTextOnly(sal_Bool bSet)
-{
-    pImpl->bKerningWesternTextOnly = bSet;
-    SetModified();
-}
-
-sal_Int16   SvxAsianConfig::GetCharDistanceCompression() const
-{
-    return pImpl->nCharDistanceCompression;
-}
-
-void        SvxAsianConfig::SetCharDistanceCompression(sal_Int16 nSet)
-{
-    DBG_ASSERT(nSet >= 0 && nSet < 3, "compression value illegal");
-    SetModified();
-    pImpl->nCharDistanceCompression = nSet;
-}
-
-uno::Sequence<lang::Locale> SvxAsianConfig::GetStartEndCharLocales()
-{
-    Sequence<Locale> aRet(pImpl->aForbiddenArr.Count());
-    Locale* pRet = aRet.getArray();
-    for(sal_uInt16 i = 0; i < pImpl->aForbiddenArr.Count(); i++)
-    {
-        pRet[i] = pImpl->aForbiddenArr[i]->aLocale;
-    }
-    return aRet;
-}
-
-sal_Bool    SvxAsianConfig::GetStartEndChars( const Locale& rLocale,
-                                    OUString& rStartChars,
-                                    OUString& rEndChars )
-{
-    for(sal_uInt16 i = 0; i < pImpl->aForbiddenArr.Count(); i++)
-    {
-        if(rLocale.Language == pImpl->aForbiddenArr[i]->aLocale.Language &&
-            rLocale.Country == pImpl->aForbiddenArr[i]->aLocale.Country)
-        {
-            rStartChars = pImpl->aForbiddenArr[i]->sStartChars;
-            rEndChars = pImpl->aForbiddenArr[i]->sEndChars;
-            return sal_True;
+rtl::OUString toString(css::lang::Locale const & locale) {
+    SAL_WARN_IF(
+        locale.Language.indexOf('-') != -1, "svl",
+        "Locale language \"" << locale.Language << "\" contains \"-\"");
+    rtl::OUStringBuffer buf(locale.Language);
+    SAL_WARN_IF(
+        locale.Country.isEmpty() && !locale.Variant.isEmpty(), "svl",
+        "Locale has empty country but non-empty variant \"" << locale.Variant
+            << '"');
+    if (!locale.Country.isEmpty()) {
+        buf.append('-');
+        SAL_WARN_IF(
+            locale.Country.indexOf('-') != -1, "svl",
+            "Locale country \"" << locale.Country << "\" contains \"-\"");
+        buf.append(locale.Country);
+        if (!locale.Variant.isEmpty()) {
+            buf.append('-');
+            buf.append(locale.Variant);
         }
     }
-    return sal_False;
+    return buf.makeStringAndClear();
 }
 
-void SvxAsianConfig::SetStartEndChars( const Locale& rLocale,
-                                    const OUString* pStartChars,
-                                    const OUString* pEndChars )
+}
+
+class SvxAsianConfig::Impl: private boost::noncopyable {
+public:
+    Impl(): propertySet_(obtainPropertySet()) {}
+
+    css::uno::Reference< css::beans::XPropertySet > getPropertySet() const
+    { return propertySet_; }
+
+    css::uno::Reference< css::container::XNameContainer >
+    getStartEndCharacters() const;
+
+private:
+    css::uno::Reference< css::beans::XPropertySet > propertySet_;
+};
+
+css::uno::Reference< css::container::XNameContainer >
+SvxAsianConfig::Impl::getStartEndCharacters() const {
+    return
+        css::uno::Reference< css::container::XNameContainer >(
+            (propertySet_->getPropertyValue(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("StartEndCharacters"))).
+             get< css::uno::Reference< css::container::XNameContainer > >()),
+            css::uno::UNO_SET_THROW);
+}
+
+SvxAsianConfig::SvxAsianConfig(): impl_(new Impl) {}
+
+SvxAsianConfig::~SvxAsianConfig() {}
+
+void SvxAsianConfig::Commit() {
+    css::uno::Reference< css::util::XChangesBatch >(
+        impl_->getPropertySet(), css::uno::UNO_QUERY_THROW)->commitChanges();
+}
+
+bool SvxAsianConfig::IsKerningWesternTextOnly() const {
+    return
+        impl_->getPropertySet()->getPropertyValue(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("IsKerningWesternTextOnly"))).
+        get< bool >();
+}
+
+void SvxAsianConfig::SetKerningWesternTextOnly(bool value) {
+    impl_->getPropertySet()->setPropertyValue(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsKerningWesternTextOnly")),
+        css::uno::makeAny(value));
+}
+
+sal_Int16 SvxAsianConfig::GetCharDistanceCompression() const {
+    return
+        impl_->getPropertySet()->getPropertyValue(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("CompressCharacterDistance"))).
+        get< sal_Int16 >();
+}
+
+void SvxAsianConfig::SetCharDistanceCompression(sal_Int16 value) {
+    assert(value >= 0 && value <= 2);
+    impl_->getPropertySet()->setPropertyValue(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CompressCharacterDistance")),
+        css::uno::makeAny(value));
+}
+
+css::uno::Sequence< css::lang::Locale > SvxAsianConfig::GetStartEndCharLocales()
+    const
 {
-    sal_Bool bFound = sal_False;
-    for(sal_uInt16 i = 0; i < pImpl->aForbiddenArr.Count(); i++)
-    {
-        if(rLocale.Language == pImpl->aForbiddenArr[i]->aLocale.Language &&
-            rLocale.Country == pImpl->aForbiddenArr[i]->aLocale.Country)
-        {
-            if(pStartChars && pEndChars)
-            {
-                pImpl->aForbiddenArr[i]->sStartChars = *pStartChars;
-                pImpl->aForbiddenArr[i]->sEndChars = *pEndChars;
+    css::uno::Sequence< rtl::OUString > ns(
+        impl_->getStartEndCharacters()->getElementNames());
+    css::uno::Sequence< css::lang::Locale > ls(ns.getLength());
+    for (sal_Int32 i = 0; i < ns.getLength(); ++i) {
+        sal_Int32 n = 0;
+        ls[i].Language = ns[i].getToken(0, '-', n);
+        ls[i].Country = ns[i].getToken(0, '-', n);
+        ls[i].Variant = ns[i].getToken(0, '-', n);
+    }
+    return ls;
+}
+
+bool SvxAsianConfig::GetStartEndChars(
+    css::lang::Locale const & locale, rtl::OUString & startChars,
+    rtl::OUString & endChars) const
+{
+    css::uno::Reference< css::container::XNameContainer > set(
+        impl_->getStartEndCharacters());
+    css::uno::Any v;
+    try {
+        v = set->getByName(toString(locale));
+    } catch (css::container::NoSuchElementException &) {
+        return false;
+    }
+    css::uno::Reference< css::beans::XPropertySet > el(
+        v.get< css::uno::Reference< css::beans::XPropertySet > >(),
+        css::uno::UNO_SET_THROW);
+    startChars =
+        el->getPropertyValue(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartCharacters"))).
+        get< rtl::OUString >();
+    endChars =
+        el->getPropertyValue(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EndCharacters"))).
+        get< rtl::OUString >();
+    return true;
+}
+
+void SvxAsianConfig::SetStartEndChars(
+    css::lang::Locale const & locale, rtl::OUString const * startChars,
+    rtl::OUString const * endChars)
+{
+    assert((startChars == 0) == (endChars == 0));
+    css::uno::Reference< css::container::XNameContainer > set(
+        impl_->getStartEndCharacters());
+    rtl::OUString name(toString(locale));
+    if (startChars == 0) {
+        try {
+            set->removeByName(name);
+        } catch (css::container::NoSuchElementException &) {}
+    } else {
+        bool found;
+        css::uno::Any v;
+        try {
+            v = set->getByName(name);
+            found = true;
+        } catch (css::container::NoSuchElementException &) {
+            found = false;
+        }
+        if (found) {
+            css::uno::Reference< css::beans::XPropertySet > el(
+                v.get< css::uno::Reference< css::beans::XPropertySet > >(),
+                css::uno::UNO_SET_THROW);
+            el->setPropertyValue(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartCharacters")),
+                css::uno::makeAny(*startChars));
+            el->setPropertyValue(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EndCharacters")),
+                css::uno::makeAny(*endChars));
+        } else {
+            css::uno::Reference< css::beans::XPropertySet > el(
+                (css::uno::Reference< css::lang::XSingleServiceFactory >(
+                    set, css::uno::UNO_QUERY_THROW)->
+                 createInstance()),
+                css::uno::UNO_QUERY_THROW);
+            el->setPropertyValue(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartCharacters")),
+                css::uno::makeAny(*startChars));
+            el->setPropertyValue(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EndCharacters")),
+                css::uno::makeAny(*endChars));
+            css::uno::Any v2(css::uno::makeAny(el));
+            try {
+                set->insertByName(name, v2);
+            } catch (css::container::ElementExistException &) {
+                SAL_INFO("svl", "Concurrent update race for \"" << name << '"');
             }
-            else
-                pImpl->aForbiddenArr.DeleteAndDestroy(i, 1);
-            bFound = sal_True;
         }
     }
-    if(!bFound && pStartChars && pEndChars)
-    {
-        SvxForbiddenStruct_ImplPtr pInsert = new SvxForbiddenStruct_Impl;
-        pInsert->aLocale = rLocale;
-        pInsert->sStartChars = *pStartChars;
-        pInsert->sEndChars = *pEndChars;
-        pImpl->aForbiddenArr.Insert(pInsert, pImpl->aForbiddenArr.Count());
-    }
-#ifdef DBG_UTIL
-    else if(!bFound)
-        OSL_FAIL("attempt to clear unavailable data");
-#endif
-    SetModified();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

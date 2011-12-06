@@ -149,7 +149,7 @@ void ScDocShell::InitItems()
             !aDocument.IsValidAsianCompression() || !aDocument.IsValidAsianKerning() )
     {
         //  get settings from SvxAsianConfig
-        SvxAsianConfig aAsian( false );
+        SvxAsianConfig aAsian;
 
         if ( !aDocument.GetForbiddenCharacters().is() )
         {
