@@ -237,7 +237,7 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
         // Headless mode for FAT Office
         bHeadlessMode   = rCmdLine.IsHeadless();
         if ( bHeadlessMode )
-            Application::EnableHeadlessMode();
+            Application::EnableHeadlessMode(false);
 
         if ( conDcp.getLength() > 0 )
         {

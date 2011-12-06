@@ -42,6 +42,7 @@
 
 #include "vcl/vclevent.hxx"
 #include "vcl/sv.h"
+#include "vcl/svapp.hxx"
 #include "vcl/dllapi.h"
 
 #include "unotools/options.hxx"
@@ -167,9 +168,9 @@ struct ImplSVAppData
     sal_Bool                    mbInAppExecute;                 // is Application::Execute() on stack
     sal_Bool                    mbAppQuit;                      // is Application::Quit() called
     sal_Bool                    mbSettingsInit;                 // sal_True: Settings are initialized
-    sal_Bool                    mbDialogCancel;                 // sal_True: Alle Dialog::Execute()-Aufrufe werden mit return sal_False sofort beendet
     sal_Bool                    mbNoYield;                      // Application::Yield will not wait for events if the queue is empty
                                                             // essentially that makes it the same as Application::Reschedule
+    Application::DialogCancelMode meDialogCancel;               // sal_True: Alle Dialog::Execute()-Aufrufe werden mit return sal_False sofort beendet
     long                    mnDefaultLayoutBorder;          // default value in pixel for layout distances used
                                                             // in window arrangers
 

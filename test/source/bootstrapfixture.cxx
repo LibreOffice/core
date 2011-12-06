@@ -96,6 +96,9 @@ void test::BootstrapFixture::setUp()
     aLocalOptions.SetUILocaleConfigString( aLangISO );
 
     InitVCL(m_xSFactory);
+    if (Application::IsHeadlessModeRequested()) {
+        Application::EnableHeadlessMode(true);
+    }
 
     if( m_bAssertOnDialog )
         ErrorHandler::RegisterDisplay( aBasicErrorFunc );

@@ -1887,10 +1887,9 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     //      (a) Do it after stopWindowListening(). May that force some active/deactive
     //          notifications which we doesn't need here realy.
     //      (b) Don't forget to save the old value of IsDialogCancelEnabled() to
-    //          restore it afterwards. We cannot call EnableDialogCancel( sal_False )
-    //          as we would kill the headless mode!
-    sal_Bool bCancelDialogs( Application::IsDialogCancelEnabled() );
-    Application::EnableDialogCancel( sal_True );
+    //          restore it afterwards (to not kill headless mode).
+    Application::DialogCancelMode old = Application::GetDialogCancelMode();
+    Application::SetDialogCancelMode( Application::DIALOG_CANCEL_SILENT );
 
     // We should be alone for ever and further dispose calls are rejected by lines before ...
     // I hope it :-)
@@ -1969,7 +1968,7 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
 
     // Don't forget it restore old value -
     // otherwhise no dialogs can be shown anymore in other frames.
-    Application::EnableDialogCancel( bCancelDialogs );
+    Application::SetDialogCancelMode( old );
 }
 
 /*-****************************************************************************************************//**
