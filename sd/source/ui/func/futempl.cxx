@@ -48,6 +48,7 @@
 #include <editeng/lrspitem.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svditer.hxx>
+#include <svx/sdr/properties/properties.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <svx/xlndsit.hxx>
@@ -470,6 +471,8 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         }
 
                         SfxItemSet& rAttr = pStyleSheet->GetItemSet();
+
+                        sdr::properties::CleanupFillProperties( rAttr );
 
                         // check for unique names of named items for xml
                         if( rAttr.GetItemState( XATTR_FILLBITMAP ) == SFX_ITEM_SET )

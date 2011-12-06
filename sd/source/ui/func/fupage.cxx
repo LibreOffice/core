@@ -52,6 +52,7 @@
 #include <svl/itempool.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
+#include <svx/sdr/properties/properties.hxx>
 
 #include "glob.hrc"
 #include <editeng/shaditem.hxx>
@@ -386,7 +387,11 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                     if(!mpPage->IsMasterPage())
                     {
                         // on normal pages, switch off fill attribute usage
-                        mpPage->getSdrPageProperties().PutItem(XFillStyleItem(XFILL_NONE));
+                        SdrPageProperties& rPageProperties = mpPage->getSdrPageProperties();
+                        rPageProperties.ClearItem( XATTR_FILLBITMAP );
+                        rPageProperties.ClearItem( XATTR_FILLGRADIENT );
+                        rPageProperties.ClearItem( XATTR_FILLHATCH );
+                        rPageProperties.PutItem(XFillStyleItem(XFILL_NONE));
                     }
                 }
             }
@@ -402,6 +407,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                 StyleSheetUndoAction* pAction = new StyleSheetUndoAction(mpDoc, (SfxStyleSheet*)pStyleSheet, &(*pTempSet.get()));
                 mpDocSh->GetUndoManager()->AddUndoAction(pAction);
                 pStyleSheet->GetItemSet().Put( *(pTempSet.get()) );
+                sdr::properties::CleanupFillProperties( pStyleSheet->GetItemSet() );
                 pStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
             }
             else if( bSetToAllPages )
@@ -423,6 +429,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                         new StyleSheetUndoAction(mpDoc, (SfxStyleSheet*)pStyle, &(*pTempSet.get()));
                     pUndoGroup->AddAction(pAction);
                     pStyle->GetItemSet().Put( *(pTempSet.get()) );
+                    sdr::properties::CleanupFillProperties( pStyleSheet->GetItemSet() );
                     pStyle->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
                 }
 
@@ -437,7 +444,13 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                     {
                         SdBackgroundObjUndoAction *pBackgroundObjUndoAction = new SdBackgroundObjUndoAction(*mpDoc, *pPage, rFillAttributes);
                         pUndoGroup->AddAction(pBackgroundObjUndoAction);
-                        pPage->getSdrPageProperties().PutItem(XFillStyleItem(XFILL_NONE));
+
+                        SdrPageProperties& rPageProperties = pPage->getSdrPageProperties();
+                        rPageProperties.ClearItem( XATTR_FILLBITMAP );
+                        rPageProperties.ClearItem( XATTR_FILLGRADIENT );
+                        rPageProperties.ClearItem( XATTR_FILLHATCH );
+                        rPageProperties.PutItem(XFillStyleItem(XFILL_NONE));
+
                         pPage->ActionChanged();
                     }
                 }
@@ -599,8 +612,10 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
             delete mpBackgroundObjUndoAction;
             mpBackgroundObjUndoAction = new SdBackgroundObjUndoAction(
                 *mpDoc, *mpPage, mpPage->getSdrPageProperties().GetItemSet());
+            SfxItemSet aSet( *pArgs );
+            sdr::properties::CleanupFillProperties(aSet);
             mpPage->getSdrPageProperties().ClearItem();
-            mpPage->getSdrPageProperties().PutItemSet(*pArgs);
+            mpPage->getSdrPageProperties().PutItemSet(aSet);
         }
     }
 
