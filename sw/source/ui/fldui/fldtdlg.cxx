@@ -87,6 +87,7 @@ SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
     GetCancelButton().SetText(String(SW_RES(STR_FLD_CLOSE)));
     GetCancelButton().SetHelpId(HID_FIELD_CLOSE);
     GetCancelButton().SetHelpText(aEmptyStr);   // so that generated help text is used
+    GetCancelButton().SetClickHdl(LINK(this, SwFldDlg, CancelHdl));
 
     FreeResource();
 
@@ -222,6 +223,13 @@ IMPL_LINK( SwFldDlg, OKHdl, Button *, EMPTYARG )
 
     return 0;
 }
+
+IMPL_LINK( SwFldDlg, CancelHdl, Button *, EMPTYARG )
+{
+    Close();
+    return 0;
+}
+
 
 /*--------------------------------------------------------------------
     Description: newly initialise dialog after Doc-Switch
