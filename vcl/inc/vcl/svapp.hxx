@@ -29,6 +29,10 @@
 #ifndef _SV_SVAPP_HXX
 #define _SV_SVAPP_HXX
 
+#include <sal/config.h>
+
+#include <stdexcept>
+
 #include <osl/thread.hxx>
 #include <osl/mutex.hxx>
 #include <tools/string.hxx>
@@ -140,6 +144,23 @@ public:
 class VCL_DLLPUBLIC Application
 {
 public:
+    enum DialogCancelMode {
+        DIALOG_CANCEL_OFF, ///< do not automatically cancel dialogs
+        DIALOG_CANCEL_SILENT, ///< silently cancel any dialogs
+        DIALOG_CANCEL_FATAL
+            ///< cancel any dialogs by throwing a DialogCancelledException
+    };
+
+    class VCL_DLLPUBLIC DialogCancelledException:
+        virtual public std::runtime_error
+    {
+    public:
+        explicit DialogCancelledException(char const * what_arg):
+            runtime_error(what_arg) {}
+
+        virtual ~DialogCancelledException() throw ();
+    };
+
                                 Application();
     virtual                     ~Application();
 
@@ -302,7 +323,8 @@ public:
     static void                 SetDefDialogParent( Window* pWindow );
     static Window*              GetDefDialogParent();
 
-    static void                 EnableDialogCancel( sal_Bool bDialogCancel = sal_True );
+    static DialogCancelMode GetDialogCancelMode();
+    static void SetDialogCancelMode( DialogCancelMode mode );
     static sal_Bool                 IsDialogCancelEnabled();
 
     static void                 SetSystemWindowMode( sal_uInt16 nMode );
@@ -320,8 +342,11 @@ public:
     static void                 SetFilterHdl( const Link& rLink );
     static const Link&          GetFilterHdl();
 
-    static void                 EnableHeadlessMode( sal_Bool bEnable = sal_True );
+    static void                 EnableHeadlessMode( bool dialogsAreFatal );
     static sal_Bool                 IsHeadlessModeEnabled();
+
+    static bool IsHeadlessModeRequested();
+        ///< check command line arguments for --headless
 
     static void                 ShowNativeErrorBox(const String& sTitle  ,
                                                    const String& sMessage);

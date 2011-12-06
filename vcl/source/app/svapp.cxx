@@ -37,7 +37,7 @@
 
 #include "rtl/tencinfo.h"
 #include "rtl/instance.hxx"
-
+#include "rtl/process.h"
 
 #include "tools/tools.h"
 #include "tools/debug.hxx"
@@ -1539,16 +1539,21 @@ Window* Application::GetDefDialogParent()
 
 // -----------------------------------------------------------------------
 
-void Application::EnableDialogCancel( sal_Bool bDialogCancel )
+Application::DialogCancelMode Application::GetDialogCancelMode()
 {
-    ImplGetSVData()->maAppData.mbDialogCancel = bDialogCancel;
+    return ImplGetSVData()->maAppData.meDialogCancel;
+}
+
+void Application::SetDialogCancelMode( DialogCancelMode mode )
+{
+    ImplGetSVData()->maAppData.meDialogCancel = mode;
 }
 
 // -----------------------------------------------------------------------
 
 sal_Bool Application::IsDialogCancelEnabled()
 {
-    return ImplGetSVData()->maAppData.mbDialogCancel;
+    return ImplGetSVData()->maAppData.meDialogCancel != DIALOG_CANCEL_OFF;
 }
 
 // -----------------------------------------------------------------------
@@ -1765,9 +1770,10 @@ const LocaleDataWrapper& Application::GetAppLocaleDataWrapper()
 
 // -----------------------------------------------------------------------
 
-void Application::EnableHeadlessMode( sal_Bool bEnable )
+void Application::EnableHeadlessMode( bool dialogsAreFatal )
 {
-    EnableDialogCancel( bEnable );
+    SetDialogCancelMode(
+        dialogsAreFatal ? DIALOG_CANCEL_FATAL : DIALOG_CANCEL_SILENT );
 }
 
 // -----------------------------------------------------------------------
@@ -1775,6 +1781,19 @@ void Application::EnableHeadlessMode( sal_Bool bEnable )
 sal_Bool Application::IsHeadlessModeEnabled()
 {
     return IsDialogCancelEnabled();
+}
+
+bool Application::IsHeadlessModeRequested()
+{
+    sal_uInt32 n = rtl_getAppCommandArgCount();
+    for (sal_uInt32 i = 0; i < n; ++i) {
+        rtl::OUString arg;
+        rtl_getAppCommandArg(i, &arg.pData);
+        if (arg.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("--headless"))) {
+            return true;
+        }
+    }
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -1901,5 +1920,7 @@ Application::createFolderPicker( const Reference< uno::XComponentContext >& xSM 
     ImplSVData* pSVData = ImplGetSVData();
     return pSVData->mpDefInst->createFolderPicker( xSM );
 }
+
+Application::DialogCancelledException::~DialogCancelledException() throw () {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,6 +34,7 @@
 #include <brdwin.hxx>
 
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
@@ -53,8 +54,6 @@
 
 // =======================================================================
 
-#ifdef DBG_UTIL
-
 static rtl::OString ImplGetDialogText( Dialog* pDialog )
 {
     rtl::OStringBuffer aErrorStr(rtl::OUStringToOString(
@@ -71,8 +70,6 @@ static rtl::OString ImplGetDialogText( Dialog* pDialog )
     }
     return aErrorStr.makeStringAndClear();
 }
-
-#endif
 
 // =======================================================================
 
@@ -610,15 +607,22 @@ sal_Bool Dialog::ImplStartExecuteModal()
         return sal_False;
     }
 
-    if ( Application::IsDialogCancelEnabled() )
+    switch ( Application::GetDialogCancelMode() )
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aErrorStr;
-        aErrorStr.append(RTL_CONSTASCII_STRINGPARAM("Dialog::StartExecuteModal() is called in a none UI application: "));
-        aErrorStr.append(ImplGetDialogText(this));
-        OSL_FAIL(aErrorStr.getStr());
-#endif
+    case Application::DIALOG_CANCEL_OFF:
+        break;
+    case Application::DIALOG_CANCEL_SILENT:
+        SAL_INFO(
+            "vcl",
+            "Dialog \"" << ImplGetDialogText(this).getStr()
+                << "\"cancelled in silent mode");
         return sal_False;
+    default:
+        assert(false); // this cannot happen
+        // fall through
+    case Application::DIALOG_CANCEL_FATAL:
+        throw Application::DialogCancelledException(
+            ImplGetDialogText(this).getStr());
     }
 
 #ifdef DBG_UTIL

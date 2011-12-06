@@ -33,10 +33,11 @@
 #include <X11/Xatom.h>
 #include <tools/postx.h>
 
+#include "rtl/process.h"
 #include "rtl/ustrbuf.hxx"
 #include "osl/module.h"
-#include "osl/process.h"
 #include "osl/thread.h"
+#include "vcl/svapp.hxx"
 
 #include "vclpluginapi.h"
 
@@ -251,22 +252,17 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
 
     const char* pUsePlugin = getenv( "SAL_USE_VCLPLUGIN" );
 
-    if (pUsePlugin && (strcmp(pUsePlugin, "svp") == 0))
+    if ((pUsePlugin && (strcmp(pUsePlugin, "svp") == 0))
+        || Application::IsHeadlessModeRequested())
         pDisplayStr = NULL;
     else
     {
-        int nParams = osl_getCommandArgCount();
+        int nParams = rtl_getAppCommandArgCount();
         OUString aParam;
         OString aBParm;
         for( int i = 0; i < nParams; i++ )
         {
-            osl_getCommandArg( i, &aParam.pData );
-            if( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-headless" ) ) ||
-                aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--headless" ) ) )
-            {
-                pDisplayStr = NULL;
-                break;
-            }
+            rtl_getAppCommandArg( i, &aParam.pData );
             if( i < nParams-1 && (aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-display" ) ) || aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--display" ) )) )
             {
                 osl_getCommandArg( i+1, &aParam.pData );
