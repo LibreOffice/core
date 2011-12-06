@@ -660,29 +660,6 @@ endif
 
 endef
 
-define gb_LinkTarget__use_gtk3
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	$(GTK3_CFLAGS) \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),$(GTK3_LIBS))
-
-ifeq ($(ENABLE_GTK3_PRINT),TRUE)
-
-$(call gb_LinkTarget_add_defs,$(1),-DENABLE_GTK3_PRINT)
-
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	$(GTK3_PRINT_CFLAGS) \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),$(GTK3_PRINT_LIBS))
-
-endif
-
-endef
-
 define gb_LinkTarget__use_gthread
 $(call gb_LinkTarget_add_libs,$(1),$(GTHREAD_LIBS))
 
