@@ -31,7 +31,7 @@ $(call gb_Pyuno_get_target,%) :
 	mkdir -p $(dir $@) && touch $@
 
 $(call gb_Pyuno_get_target_zip,%) : $(call gb_Package_get_target,%_pyuno)
-	$(call gb_Output_announce,$*,$(true),PYZIP,3)
+	$(call gb_Output_announce,$*,$(true),PZP,3)
 	cd $(gb_Helper_OUTDIRLIBDIR)/pyuno && \
 	$(gb_Pyuno_ZIPCOMMAND) -rX --filesync \
 		$(call gb_Pyuno_get_target_zip,$*) \
