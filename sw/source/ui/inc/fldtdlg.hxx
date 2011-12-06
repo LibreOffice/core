@@ -54,6 +54,7 @@ public:
     virtual ~SwFldDlg();
 
     DECL_LINK( OKHdl, Button * );
+    DECL_LINK( CancelHdl, Button * );
 
     void                Initialize(SfxChildWinInfo *pInfo);
     void                ReInitDlg();
