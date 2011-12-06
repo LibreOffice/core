@@ -1772,7 +1772,6 @@ OKButton::OKButton( Window* pParent, const ResId& rResId ) :
 
 void OKButton::Click()
 {
-    SAL_WARN_IF(!GetClickHdl(), "vcl", "No handler installed for OKButton");
     // Ist kein Link gesetzt, dann schliesse Parent
     if ( !GetClickHdl() )
     {
@@ -1839,7 +1838,6 @@ CancelButton::CancelButton( Window* pParent, const ResId& rResId ) :
 
 void CancelButton::Click()
 {
-    SAL_WARN_IF(!GetClickHdl(), "vcl", "No handler installed for CancelButton");
     // Ist kein Link gesetzt, dann schliesse Parent
     if ( !GetClickHdl() )
     {
@@ -1906,7 +1904,6 @@ HelpButton::HelpButton( Window* pParent, const ResId& rResId ) :
 
 void HelpButton::Click()
 {
-    SAL_WARN_IF(!GetClickHdl(), "vcl", "No handler installed for HelpButton");
     // Ist kein Link gesetzt, loese Hilfe aus
     if ( !GetClickHdl() )
     {
