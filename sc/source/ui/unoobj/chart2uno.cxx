@@ -599,6 +599,8 @@ void Chart2Positioner::glueState()
     calcGlueState(nC, nR);
 }
 
+enum State { Hole = 0, Occupied = 1, Free = 2, Glue = 3 };
+
 void Chart2Positioner::calcGlueState(SCCOL nColSize, SCROW nRowSize)
 {
     // TODO: This code can use some space optimization.  Using an array to
@@ -606,8 +608,6 @@ void Chart2Positioner::calcGlueState(SCCOL nColSize, SCROW nRowSize)
     // data ranges; let's use flat_segment_tree to reduce memory usage here.
 
     sal_uInt32 nCR = static_cast<sal_uInt32>(nColSize*nRowSize);
-
-    enum State { Hole = 0, Occupied = 1, Free = 2, Glue = 3 };
 
     vector<State> aCellStates(nCR, Hole);
 
