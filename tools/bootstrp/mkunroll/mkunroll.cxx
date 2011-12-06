@@ -38,26 +38,26 @@ protected:
     FILE            *pIn, *pOut;
     virtual void    Filter();
 public:
-                    TextFilter( ByteString aInFile = "stdin",
-                        ByteString aOutFile = "stdout" );
+                    TextFilter( rtl::OString aInFile = "stdin",
+                        rtl::OString aOutFile = "stdout" );
     virtual         ~TextFilter();
 
     virtual void    Execute();
 };
 
-TextFilter::TextFilter( ByteString aInFile, ByteString aOutFile )
+TextFilter::TextFilter( rtl::OString aInFile, rtl::OString aOutFile )
 {
     if ( aInFile == "stdin" )
         pIn = stdin;
     else
-        if (( pIn = fopen( aInFile.GetBuffer(), "r" )) == NULL )
-            printf( "Can't read %s\n", aInFile.GetBuffer() );
+        if (( pIn = fopen( aInFile.getStr(), "r" )) == NULL )
+            printf( "Can't read %s\n", aInFile.getStr() );
 
     if ( aOutFile == "stdout" )
         pOut = stdout;
     else
-        if (( pOut = fopen( aOutFile.GetBuffer(), "w" )) == NULL )
-            printf( "Can't write %s\n", aOutFile.GetBuffer() );
+        if (( pOut = fopen( aOutFile.getStr(), "w" )) == NULL )
+            printf( "Can't write %s\n", aOutFile.getStr() );
 }
 
 TextFilter::~TextFilter()
@@ -110,11 +110,11 @@ class MkFilter : public TextFilter
 protected:
     virtual void    Filter();
 public:
-                    MkFilter( ByteString aInFile = "stdin", ByteString aOutFile = "stdout");
+                    MkFilter( rtl::OString aInFile = "stdin", rtl::OString aOutFile = "stdout");
                     ~MkFilter();
 };
 
-MkFilter::MkFilter( ByteString aInFile, ByteString aOutFile ) :
+MkFilter::MkFilter( rtl::OString aInFile, rtl::OString aOutFile ) :
     TextFilter( aInFile, aOutFile )
 {
     pLst = new ByteStringList;

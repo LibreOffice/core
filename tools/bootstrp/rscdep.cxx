@@ -85,7 +85,7 @@ int main( int argc, char** argv )
     char pSrsFileName[255];
     String aSrsBaseName;
     sal_Bool bSource = sal_False;
-    ByteString aRespArg;
+    rtl::OStringBuffer aRespArg;
 //  who needs anything but '/' ?
     sal_Char cDelim = '/';
 
@@ -155,8 +155,7 @@ int main( int argc, char** argv )
                 if (( aBuf2[0] != '-' ) && ( aBuf2[0] != '@' ))
                 {
                     pDep->AddSource( &aBuf2[0] );
-                    aRespArg += " ";
-                    aRespArg += &aBuf2[0];
+                    aRespArg.append(' ').append(&aBuf2[0]);
                     bSource = sal_True;
                 }
             }
@@ -239,7 +238,7 @@ int main( int argc, char** argv )
             }
         }
     }
-    aString.append(aRespArg);
+    aString.append(aRespArg.makeStringAndClear());
     pDep->Execute();
     std::vector<rtl::OString>& rLst = pDep->GetDepList();
     size_t nCount = rLst.size();

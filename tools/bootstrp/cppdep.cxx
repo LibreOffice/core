@@ -67,17 +67,17 @@ sal_Bool CppDep::AddSource( const char* pSource )
     return sal_False;
 }
 
-sal_Bool CppDep::Search( ByteString aFileName )
+sal_Bool CppDep::Search(const rtl::OString &rFileName)
 {
 #ifdef DEBUG_VERBOSE
-    fprintf( stderr, "SEARCH : %s\n", aFileName.GetBuffer());
+    fprintf( stderr, "SEARCH : %s\n", rFileName.getStr());
 #endif
     sal_Bool bRet = sal_False;
 
     SvFileStream aFile;
     rtl::OString aReadLine;
 
-    UniString suFileName(aFileName, osl_getThreadTextEncoding());
+    UniString suFileName(rtl::OStringToOUString(rFileName, osl_getThreadTextEncoding()));
 
     aFile.Open( suFileName, STREAM_READ );
     while ( aFile.ReadLine( aReadLine ))
@@ -90,13 +90,13 @@ sal_Bool CppDep::Search( ByteString aFileName )
 #ifdef DEBUG_VERBOSE
             fprintf( stderr, "found : %d %s\n", nPos, aReadLine.getStr() );
 #endif
-            ByteString aResult = IsIncludeStatement( aReadLine );
+            rtl::OString aResult = IsIncludeStatement( aReadLine );
 #ifdef DEBUG_VERBOSE
-            fprintf( stderr, "Result : %s\n", aResult.GetBuffer() );
+            fprintf( stderr, "Result : %s\n", aResult.getStr() );
 #endif
 
             rtl::OString aNewFile;
-            if ( aResult !="")
+            if (!aResult.isEmpty())
             if ( (aNewFile = Exists( aResult )).getLength() )
             {
                 sal_Bool bFound = sal_False;
@@ -126,12 +126,12 @@ sal_Bool CppDep::Search( ByteString aFileName )
     return bRet;
 }
 
-rtl::OString CppDep::Exists( rtl::OString aFileName )
+rtl::OString CppDep::Exists(const rtl::OString &rFileName)
 {
     char pFullName[1023];
 
 #ifdef DEBUG_VERBOSE
-    fprintf( stderr, "Searching %s \n", aFileName.getStr() );
+    fprintf( stderr, "Searching %s \n", rFileName.getStr() );
 #endif
 
     size_t nCount = m_aSearchPath.size();
@@ -142,7 +142,7 @@ rtl::OString CppDep::Exists( rtl::OString aFileName )
 
         strcpy( pFullName, rPathName.getStr());
         strcat( pFullName, DIR_SEP );
-        strcat( pFullName, aFileName.getStr());
+        strcat( pFullName, rFileName.getStr());
 
 #ifdef DEBUG_VERBOSE
         fprintf( stderr, "looking for %s\t ", pFullName );

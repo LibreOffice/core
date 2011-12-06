@@ -39,8 +39,8 @@ protected:
     std::vector<rtl::OString> m_aFileList;
     std::vector<rtl::OString> m_aSources;
 
-    sal_Bool            Search( ByteString aFileName );
-    rtl::OString Exists( rtl::OString aFileName );
+    sal_Bool            Search(const rtl::OString& rFileName);
+    rtl::OString Exists(const rtl::OString& rFileName);
 
     rtl::OString IsIncludeStatement(rtl::OString aLine);
 public:
