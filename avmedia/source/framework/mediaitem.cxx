@@ -413,11 +413,11 @@ lcl_CreateStream(uno::Reference<embed::XStorage> const& xStorage,
             basename = rFilename.copy(0, nIndex);
             suffix = rFilename.copy(nIndex);
         }
-        int count(0); // sigh... try to generate non-existent name
+        sal_Int32 count(0); // sigh... try to generate non-existent name
         do
         {
             ++count;
-            filename = basename + ::rtl::OUString::valueOf(static_cast<sal_Int32>(count)) + suffix;
+            filename = basename + ::rtl::OUString::valueOf(count) + suffix;
         }
         while (xStorage->hasByName(filename));
     }
