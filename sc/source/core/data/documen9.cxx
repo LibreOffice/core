@@ -198,6 +198,7 @@ void ScDocument::UpdateDrawDefaults()
     {
         SfxItemPool& rDrawPool = pDrawLayer->GetItemPool();
         rDrawPool.SetPoolDefaultItem( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
+        pDrawLayer->SetDrawingLayerPoolDefaults();
     }
 }
 

@@ -693,6 +693,7 @@ public:
         also during the runtime of the Undo() and Redo() methods. */
     bool IsUndoEnabled() const;
 
+    void SetDrawingLayerPoolDefaults();
 };
 
 typedef tools::WeakReference< SdrModel > SdrModelWeakRef;

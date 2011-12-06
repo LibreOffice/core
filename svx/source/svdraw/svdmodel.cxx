@@ -74,6 +74,9 @@
 #include "svx/svdstr.hrc"   // object's name
 #include "svdoutlinercache.hxx"
 
+#include "svx/xflclit.hxx"
+#include "svx/xflhtit.hxx"
+#include "svx/xlnclit.hxx"
 
 #include <svl/asiancfg.hxx>
 #include "editeng/fontitem.hxx"
@@ -2052,6 +2055,18 @@ namespace
 const ::com::sun::star::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelImplementationId()
 {
     return theSdrModelUnoTunnelImplementationId::get().getSeq();
+}
+
+void SdrModel::SetDrawingLayerPoolDefaults()
+{
+    const String aNullStr;
+    const Color aNullLineCol(COL_DEFAULT_SHAPE_STROKE);
+    const Color aNullFillCol(COL_DEFAULT_SHAPE_FILLING);
+    const XHatch aNullHatch(aNullLineCol);
+
+    pItemPool->SetPoolDefaultItem( XFillColorItem(aNullStr,aNullFillCol) );
+    pItemPool->SetPoolDefaultItem( XFillHatchItem(pItemPool,aNullHatch) );
+    pItemPool->SetPoolDefaultItem( XLineColorItem(aNullStr,aNullLineCol) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -591,6 +591,8 @@ private:
 
     sal_Bool    mbStartIdleTimer;               // idle timer mode start/stop
 
+    bool        mbSetDrawDefaults;             // set draw pool defaults for freshly created documents
+
     static SwAutoCompleteWord *pACmpltWords;    // List of all words for AutoComplete
 
     //---------------- private methods ------------------------------
@@ -2043,6 +2045,13 @@ public:
      */
     void dumpAsXml( xmlTextWriterPtr writer = NULL );
 #endif
+
+    /// must be called only in SwDocShell::InitNew, causes UpdateDrawDefaults to be called when drawing layer is created
+    void SetDrawDefaults();
+
+private:
+    /// method to set new graphics pool defaults, must only be called by SetDrawDefaults!
+    void UpdateDrawDefaults();
 };
 
 // This method is called in Dtor of SwDoc and deletes cache of ContourObjects.

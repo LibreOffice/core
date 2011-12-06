@@ -279,7 +279,8 @@ SwDoc::SwDoc()
     mbLastBrowseMode( false ),
     n32DummyCompatabilityOptions1(0),
     n32DummyCompatabilityOptions2(0),
-    mbStartIdleTimer(sal_False)
+    mbStartIdleTimer(sal_False),
+    mbSetDrawDefaults(false)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::SwDoc" );
 
