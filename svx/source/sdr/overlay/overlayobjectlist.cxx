@@ -82,7 +82,7 @@ namespace sdr
 
         bool OverlayObjectList::isHitLogic(const basegfx::B2DPoint& rLogicPosition, double fLogicTolerance) const
         {
-            if(maVector.size())
+            if(!maVector.empty())
             {
                 OverlayObjectVector::const_iterator aStart(maVector.begin());
                 sdr::overlay::OverlayObject* pFirst = *aStart;
@@ -133,7 +133,7 @@ namespace sdr
 
         bool OverlayObjectList::isHitPixel(const Point& rDiscretePosition, sal_uInt32 nDiscreteTolerance) const
         {
-            if(maVector.size())
+            if(!maVector.empty())
             {
                 OverlayObjectVector::const_iterator aStart(maVector.begin());
                 sdr::overlay::OverlayObject* pCandidate = *aStart;
@@ -163,7 +163,7 @@ namespace sdr
         {
             basegfx::B2DRange aRetval;
 
-            if(maVector.size())
+            if(!maVector.empty())
             {
                 OverlayObjectVector::const_iterator aStart(maVector.begin());
 

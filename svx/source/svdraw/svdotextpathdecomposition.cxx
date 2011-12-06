@@ -199,7 +199,7 @@ namespace
             mrOutliner.SetDrawPortionHdl(LINK(this, impTextBreakupHandler, decompositionPathTextPrimitive));
             mrOutliner.StripPortions();
 
-            if(maPathTextPortions.size())
+            if(!maPathTextPortions.empty())
             {
                 // sort portions by paragraph, x and y
                 ::std::sort(maPathTextPortions.begin(), maPathTextPortions.end());
@@ -626,7 +626,7 @@ namespace
                 // get text outlines and their object transformation
                 pTextCandidate->getTextOutlinesAndTransformation(aB2DPolyPolyVector, aPolygonTransform);
 
-                if(aB2DPolyPolyVector.size())
+                if(!aB2DPolyPolyVector.empty())
                 {
                     // create stroke primitives
                     std::vector< drawinglayer::primitive2d::BasePrimitive2D* > aStrokePrimitives;
@@ -711,7 +711,7 @@ void SdrTextObj::impDecomposePathTextPrimitive(
     impTextBreakupHandler aConverter(rOutliner);
     const ::std::vector< impPathTextPortion > rPathTextPortions = aConverter.decompositionPathTextPrimitive();
 
-    if(rPathTextPortions.size())
+    if(!rPathTextPortions.empty())
     {
         // get FormText and polygon values
         const drawinglayer::attribute::SdrFormTextAttribute& rFormTextAttribute = rSdrPathTextPrimitive.getSdrFormTextAttribute();
@@ -752,7 +752,7 @@ void SdrTextObj::impDecomposePathTextPrimitive(
                 }
 
                 // handle data pair polygon/ParagraphTextPortions
-                if(aParagraphTextPortions.size())
+                if(!aParagraphTextPortions.empty())
                 {
                     aPolygonParagraphHandler.HandlePair(rPathPolyPolygon.getB2DPolygon(a), aParagraphTextPortions);
                 }

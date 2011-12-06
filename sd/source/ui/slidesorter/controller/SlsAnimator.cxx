@@ -273,7 +273,7 @@ IMPL_LINK(Animator, TimeoutHandler, Timer*, EMPTYARG)
     // Unlock the draw lock.  This should lead to a repaint.
     mpDrawLock.reset();
 
-    if (maAnimations.size() > 0)
+    if (!maAnimations.empty())
         RequestNextFrame();
 
     return 0;

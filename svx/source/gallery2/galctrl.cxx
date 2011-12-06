@@ -401,7 +401,7 @@ void GalleryIconView::UserDraw( const UserDrawEvent& rUDEvt )
                 aGraphic.Draw( pDev, aPos, aSize );
             }
 
-            SetItemText( nId, GalleryBrowser2::GetItemText( *mpTheme, *pObj, GALLERY_ITEM_THEMENAME | GALLERY_ITEM_TITLE | GALLERY_ITEM_PATH ) );
+            SetItemText( nId, GalleryBrowser2::GetItemText( *mpTheme, *pObj, GALLERY_ITEM_TITLE) );
             mpTheme->ReleaseObject( pObj );
         }
     }

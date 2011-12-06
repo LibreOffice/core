@@ -326,16 +326,19 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
 
             if( xContentAccess.is() )
             {
+                static const ::rtl::OUString s_sTitle(RTL_CONSTASCII_USTRINGPARAM("Title"));
+                static const ::rtl::OUString s_sIsReadOnly(RTL_CONSTASCII_USTRINGPARAM("IsReadOnly"));
+                static const ::rtl::OUString s_sSDG_EXT(RTL_CONSTASCII_USTRINGPARAM("sdg"));
+                static const ::rtl::OUString s_sSDV_EXT(RTL_CONSTASCII_USTRINGPARAM("sdv"));
+
                 while( xResultSet->next() )
                 {
                     INetURLObject aThmURL( xContentAccess->queryContentIdentifierString() );
 
                     if(aThmURL.GetExtension().equalsIgnoreAsciiCaseAscii("thm"))
                     {
-                        INetURLObject   aSdgURL( aThmURL); aSdgURL.SetExtension( OUString(RTL_CONSTASCII_USTRINGPARAM("sdg")) );
-                        INetURLObject   aSdvURL( aThmURL ); aSdvURL.SetExtension( OUString(RTL_CONSTASCII_USTRINGPARAM("sdv")) );
-                        const OUString aTitleProp( RTL_CONSTASCII_USTRINGPARAM("Title") );
-                        const OUString aReadOnlyProp( RTL_CONSTASCII_USTRINGPARAM("IsReadOnly") );
+                        INetURLObject   aSdgURL( aThmURL); aSdgURL.SetExtension( s_sSDG_EXT );
+                        INetURLObject   aSdvURL( aThmURL ); aSdvURL.SetExtension( s_sSDV_EXT );
                         OUString        aTitle;
                         sal_Bool        bReadOnly = sal_False;
 
@@ -347,7 +350,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
 
                             try
                             {
-                                aThmCnt.getPropertyValue( aTitleProp ) >>= aTitle;
+                                aThmCnt.getPropertyValue( s_sTitle ) >>= aTitle;
                             }
                             catch( const uno::RuntimeException& )
                             {
@@ -360,7 +363,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
                             {
                                 try
                                 {
-                                    aThmCnt.getPropertyValue( aReadOnlyProp ) >>= bReadOnly;
+                                    aThmCnt.getPropertyValue( s_sIsReadOnly ) >>= bReadOnly;
                                 }
                                 catch( const uno::RuntimeException& )
                                 {
@@ -373,7 +376,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
                                 {
                                     try
                                     {
-                                        aSdgCnt.getPropertyValue( aTitleProp ) >>= aTitle;
+                                        aSdgCnt.getPropertyValue( s_sTitle ) >>= aTitle;
                                     }
                                     catch( const ::com::sun::star::uno::RuntimeException& )
                                     {
@@ -386,7 +389,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
                                     {
                                         try
                                         {
-                                            aSdgCnt.getPropertyValue( aReadOnlyProp ) >>= bReadOnly;
+                                            aSdgCnt.getPropertyValue( s_sIsReadOnly ) >>= bReadOnly;
                                         }
                                         catch( const uno::RuntimeException& )
                                         {
@@ -401,7 +404,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
                                 {
                                     try
                                     {
-                                        aSdvCnt.getPropertyValue( aTitleProp ) >>= aTitle;
+                                        aSdvCnt.getPropertyValue( s_sTitle ) >>= aTitle;
                                     }
                                     catch( const ::com::sun::star::uno::RuntimeException& )
                                     {
@@ -414,7 +417,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
                                     {
                                         try
                                         {
-                                            aSdvCnt.getPropertyValue( aReadOnlyProp ) >>= bReadOnly;
+                                            aSdvCnt.getPropertyValue( s_sIsReadOnly ) >>= bReadOnly;
                                         }
                                         catch( const uno::RuntimeException& )
                                         {

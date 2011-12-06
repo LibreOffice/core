@@ -809,7 +809,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
             bRet = false;
     }
 
-    if( bRet && aShapes.size() )
+    if( bRet && !aShapes.empty() )
     {
         // special treatment for only one SdrGrafObj that has text
         sal_Bool bSingleGraphic = sal_False;

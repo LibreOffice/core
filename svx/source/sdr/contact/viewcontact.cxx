@@ -81,7 +81,7 @@ namespace sdr
             std::vector< ViewObjectContact* > aLocalVOCList(maViewObjectContactVector);
             maViewObjectContactVector.clear();
 
-            while(aLocalVOCList.size())
+            while(!aLocalVOCList.empty())
             {
                 ViewObjectContact* pCandidate = aLocalVOCList.back();
                 aLocalVOCList.pop_back();
@@ -146,7 +146,7 @@ namespace sdr
             {
                 maViewObjectContactVector.erase(aFindResult);
 
-                if(0 == maViewObjectContactVector.size())
+                if(maViewObjectContactVector.empty())
                 {
                     // This may need to get asynchron later since it eventually triggers
                     // deletes of OCs where the VOC is still added.

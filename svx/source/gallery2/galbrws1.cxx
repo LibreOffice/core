@@ -256,9 +256,8 @@ void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeDa
 
 // -----------------------------------------------------------------------------
 
-::std::vector< sal_uInt16 > GalleryBrowser1::ImplGetExecuteVector()
+void GalleryBrowser1::ImplGetExecuteVector(::std::vector< sal_uInt16 >& o_aExec)
 {
-    ::std::vector< sal_uInt16 > aExecVector;
     GalleryTheme*           pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
 
     if( pTheme )
@@ -282,23 +281,21 @@ void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeDa
             bUpdateAllowed = bRenameAllowed = bRemoveAllowed = sal_True;
 
         if( bUpdateAllowed && pTheme->GetObjectCount() )
-            aExecVector.push_back( MN_ACTUALIZE );
+            o_aExec.push_back( MN_ACTUALIZE );
 
         if( bRenameAllowed )
-            aExecVector.push_back( MN_RENAME );
+            o_aExec.push_back( MN_RENAME );
 
         if( bRemoveAllowed )
-            aExecVector.push_back( MN_DELETE );
+            o_aExec.push_back( MN_DELETE );
 
         if( bIdDialog && !pTheme->IsReadOnly() && !pTheme->IsImported() )
-            aExecVector.push_back( MN_ASSIGN_ID );
+            o_aExec.push_back( MN_ASSIGN_ID );
 
-        aExecVector.push_back( MN_PROPERTIES );
+        o_aExec.push_back( MN_PROPERTIES );
 
         mpGallery->ReleaseTheme( pTheme, *this );
     }
-
-    return aExecVector;
 }
 
 // -----------------------------------------------------------------------------
@@ -585,7 +582,8 @@ sal_Bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
 
     if( !bRet )
     {
-        ::std::vector< sal_uInt16 > aExecVector( ImplGetExecuteVector() );
+        ::std::vector< sal_uInt16 > aExecVector;
+        ImplGetExecuteVector(aExecVector);
         sal_uInt16                  nExecuteId = 0;
         sal_Bool                    bMod1 = rKEvt.GetKeyCode().IsMod1();
 
@@ -649,9 +647,10 @@ sal_Bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
 
 IMPL_LINK( GalleryBrowser1, ShowContextMenuHdl, void*, EMPTYARG )
 {
-    ::std::vector< sal_uInt16 > aExecVector( ImplGetExecuteVector() );
+    ::std::vector< sal_uInt16 > aExecVector;
+    ImplGetExecuteVector(aExecVector);
 
-    if( aExecVector.size() )
+    if( !aExecVector.empty() )
     {
         PopupMenu aMenu( GAL_RESID( RID_SVXMN_GALLERY1 ) );
 

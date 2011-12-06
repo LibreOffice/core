@@ -1191,18 +1191,13 @@ sal_Bool GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, s
             uno::Sequence< OUString > aProps( 1 );
             aProps.getArray()[ 0 ] = OUString(RTL_CONSTASCII_USTRINGPARAM("Url"));
             uno::Reference< sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
-
-            if( xResultSet.is() )
+            uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
+            if( xContentAccess.is() )
             {
-                uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
-
-                if( xContentAccess.is() )
+                while( xResultSet->next() )
                 {
-                    while( xResultSet->next() )
-                    {
-                        aURL.SetSmartURL( xContentAccess->queryContentIdentifierString() );
-                        aURLVector.push_back( aURL );
-                    }
+                    aURL.SetSmartURL( xContentAccess->queryContentIdentifierString() );
+                    aURLVector.push_back( aURL );
                 }
             }
         }
