@@ -33,7 +33,7 @@
 
 #include <gtk/gtk.h>
 
-#if defined ENABLE_GTK_PRINT || GTK_CHECK_VERSION(3,0,0)
+#if defined ENABLE_GTK_PRINT || defined ENABLE_GTK3_PRINT
 #include <gtk/gtkunixprint.h>
 
 #if !GTK_CHECK_VERSION(3,0,0)
@@ -49,7 +49,7 @@ namespace unx
 
 class GtkPrintWrapper : private boost::noncopyable
 {
-#if defined ENABLE_GTK_PRINT || GTK_CHECK_VERSION(3,0,0)
+#if defined ENABLE_GTK_PRINT || defined ENABLE_GTK3_PRINT
 public:
     GtkPrintWrapper();
     ~GtkPrintWrapper();

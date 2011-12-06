@@ -82,6 +82,7 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_gtk3,\
 
 $(eval $(call gb_Library_use_externals,vclplug_gtk3,\
 	dbus \
+	gtk3 \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3,\
@@ -106,9 +107,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3,\
     vcl/unx/gtk3/app/gtk3gtkinst \
     vcl/unx/gtk3/app/gtk3gtksys \
     vcl/unx/gtk3/app/gtk3fpicker \
-    vcl/unx/gtk3/gdi/gtk3gtkprintwrapper \
     vcl/unx/gtk3/gdi/gtk3salnativewidgets-gtk \
-    vcl/unx/gtk3/gdi/gtk3salprn-gtk \
     vcl/unx/gtk3/window/gtk3gtkframe \
     vcl/unx/gtk3/window/gtk3gtkobject \
     vcl/headless/svpbmp \
@@ -119,6 +118,13 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3,\
     vcl/headless/svptext \
     vcl/headless/svpvd \
 ))
+
+ifeq ($(ENABLE_GTK3_PRINT),TRUE)
+$(eval $(call gb_Library_add_exception_objects,vclplug_gtk3,\
+    vcl/unx/gtk3/gdi/gtk3gtkprintwrapper \
+    vcl/unx/gtk3/gdi/gtk3salprn-gtk \
+))
+endif
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_linked_libs,vclplug_gtk3,\

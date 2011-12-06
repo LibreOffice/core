@@ -7003,20 +7003,32 @@ R=""
 GTK3_CFLAGS=""
 GTK3_LIBS=""
 ENABLE_GTK3=""
+GTK3_PRINT_CFLAGS=""
+GTK3_PRINT_LIBS=""
+ENABLE_GTK3_PRINT=""
 if test "x$enable_gtk3" = "xyes"; then
     if test "$with_system_cairo" != yes; then
         echo "System cairo required for gtk3 support, please use --with-system-cairo"
     fi
     PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.2 gtk+-unix-print-3.0 cairo, ENABLE_GTK3="TRUE", ENABLE_GTK3="")
+
     if test "x$ENABLE_GTK3" = "xTRUE"; then
         R="gtk3"
     else
         AC_MSG_ERROR([gtk3 libraries of the correct versions, not found])
     fi
+
+    AC_MSG_CHECKING([whether to enable Gtk3 print dialog support])
+    PKG_CHECK_MODULES([GTK3_PRINT], [gtk+-unix-print-3.0 >= 3.2.0],
+                      [ENABLE_GTK3_PRINT="TRUE"],
+                      [ENABLE_GTK3_PRINT=""])
 fi
 AC_SUBST(GTK3_LIBS)
 AC_SUBST(GTK3_CFLAGS)
 AC_SUBST(ENABLE_GTK3)
+AC_SUBST(GTK3_PRINT_CFLAGS)
+AC_SUBST(GTK3_PRINT_LIBS)
+AC_SUBST(ENABLE_GTK3_PRINT)
 
 AC_MSG_CHECKING([which VCLplugs shall be built])
 ENABLE_GTK=""

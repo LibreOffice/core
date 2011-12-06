@@ -401,7 +401,7 @@ void GtkInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const r
 SalInfoPrinter* GtkInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
     ImplJobSetup* pSetupData )
 {
-#if defined ENABLE_GTK_PRINT || GTK_CHECK_VERSION(3,0,0)
+#if defined ENABLE_GTK_PRINT || defined ENABLE_GTK3_PRINT
     mbPrinterInit = true;
     // create and initialize SalInfoPrinter
     PspSalInfoPrinter* pPrinter = new GtkSalInfoPrinter;
@@ -414,7 +414,7 @@ SalInfoPrinter* GtkInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
 
 SalPrinter* GtkInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
 {
-#if defined ENABLE_GTK_PRINT || GTK_CHECK_VERSION(3,0,0)
+#if defined ENABLE_GTK_PRINT || defined ENABLE_GTK3_PRINT
     mbPrinterInit = true;
     fprintf(stderr, "gtk printer\n");
     return new GtkSalPrinter( pInfoPrinter );
