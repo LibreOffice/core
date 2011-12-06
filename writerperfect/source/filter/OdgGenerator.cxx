@@ -964,7 +964,10 @@ void OdgGenerator::drawGraphicObject(const ::WPXPropertyList &propList, const ::
         pDrawFrameElement->addAttribute("svg:width", propList["svg:width"]->getStr());
     mpImpl->mBodyElements.push_back(pDrawFrameElement);
 
-    mpImpl->mBodyElements.push_back(new TagOpenElement("draw:image"));
+    if (propList["libwpg:mime-type"]->getStr() == "object/ole")
+        mpImpl->mBodyElements.push_back(new TagOpenElement("draw:object-ole"));
+    else
+        mpImpl->mBodyElements.push_back(new TagOpenElement("draw:image"));
 
     mpImpl->mBodyElements.push_back(new TagOpenElement("office:binary-data"));
 
@@ -973,7 +976,10 @@ void OdgGenerator::drawGraphicObject(const ::WPXPropertyList &propList, const ::
 
     mpImpl->mBodyElements.push_back(new TagCloseElement("office:binary-data"));
 
-    mpImpl->mBodyElements.push_back(new TagCloseElement("draw:image"));
+    if (propList["libwpg:mime-type"]->getStr() == "object/ole")
+        mpImpl->mBodyElements.push_back(new TagCloseElement("draw:object-ole"));
+    else
+        mpImpl->mBodyElements.push_back(new TagCloseElement("draw:image"));
 
     mpImpl->mBodyElements.push_back(new TagCloseElement("draw:frame"));
 }
