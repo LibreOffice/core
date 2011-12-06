@@ -601,6 +601,10 @@ void Chart2Positioner::glueState()
 
 void Chart2Positioner::calcGlueState(SCCOL nColSize, SCROW nRowSize)
 {
+    // TODO: This code can use some space optimization.  Using an array to
+    // store individual cell's states is terribly inefficient esp for large
+    // data ranges; let's use flat_segment_tree to reduce memory usage here.
+
     sal_uInt32 nCR = static_cast<sal_uInt32>(nColSize*nRowSize);
 
     enum State { Hole = 0, Occupied = 1, Free = 2, Glue = 3 };
@@ -1386,6 +1390,53 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
     return true;
 }
 
+class ShrinkRefTokenToDataRange : std::unary_function<ScTokenRef, void>
+{
+    ScDocument* mpDoc;
+public:
+    ShrinkRefTokenToDataRange(ScDocument* pDoc) : mpDoc(pDoc) {}
+    void operator() (ScTokenRef& rRef)
+    {
+        if (ScRefTokenHelper::isExternalRef(rRef))
+            return;
+
+        ScComplexRefData& rData = rRef->GetDoubleRef();
+        ScSingleRefData& s = rData.Ref1;
+        ScSingleRefData& e = rData.Ref2;
+
+        SCCOL nMinCol = MAXCOL, nMaxCol = 0;
+        SCROW nMinRow = MAXROW, nMaxRow = 0;
+
+        // Determine the smallest range that encompasses the data ranges of all sheets.
+        SCTAB nTab1 = s.nTab, nTab2 = e.nTab;
+        for (SCTAB nTab = nTab1; nTab <= nTab2; ++nTab)
+        {
+            SCCOL nCol1 = 0, nCol2 = MAXCOL;
+            SCROW nRow1 = 0, nRow2 = MAXROW;
+            mpDoc->ShrinkToDataArea(nTab, nCol1, nRow1, nCol2, nRow2);
+            nMinCol = std::min(nMinCol, nCol1);
+            nMinRow = std::min(nMinRow, nRow1);
+            nMaxCol = std::max(nMaxCol, nCol2);
+            nMaxRow = std::max(nMaxRow, nRow2);
+        }
+
+        // Shrink range to the data range if applicable.
+        if (s.nCol < nMinCol)
+            s.nCol = nMinCol;
+        if (s.nRow < nMinRow)
+            s.nRow = nMinRow;
+        if (e.nCol > nMaxCol)
+            e.nCol = nMaxCol;
+        if (e.nRow > nMaxRow)
+            e.nRow = nMaxRow;
+    }
+};
+
+void shrinkToDataRange(ScDocument* pDoc, vector<ScTokenRef>& rRefTokens)
+{
+    std::for_each(rRefTokens.begin(), rRefTokens.end(), ShrinkRefTokenToDataRange(pDoc));
+}
+
 }
 
 uno::Reference< chart2::data::XDataSource> SAL_CALL
@@ -1442,6 +1493,8 @@ ScChart2DataProvider::createDataSource(
     if (aRefTokens.empty())
         // Invalid range representation.  Bail out.
         throw lang::IllegalArgumentException();
+
+    shrinkToDataRange(m_pDocument, aRefTokens);
 
     if (bLabel)
         lcl_addUpperLeftCornerIfMissing(aRefTokens); //#i90669#
@@ -2027,6 +2080,8 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL
         aRefTokens, aRangeRepresentation, m_pDocument, ';', FormulaGrammar::GRAM_ENGLISH);
     if (aRefTokens.empty())
         return xResult;
+
+    shrinkToDataRange(m_pDocument, aRefTokens);
 
     // ScChart2DataSequence manages the life cycle of pRefTokens.
     vector<ScTokenRef>* pRefTokens = new vector<ScTokenRef>();
