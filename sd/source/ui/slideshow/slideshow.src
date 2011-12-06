@@ -74,7 +74,7 @@ Menu RID_SLIDESHOW_CONTEXTMENU
         MenuItem
         {
             Identifier = CM_PEN_MODE;
-            Text [ en-US ] = "Mouse pointer as ~pen";
+            Text [ en-US ] = "Mouse Pointer as ~Pen";
         };
         MenuItem
         {
@@ -115,12 +115,12 @@ Menu RID_SLIDESHOW_CONTEXTMENU
         MenuItem
         {
             Identifier = CM_COLOR_PEN ;
-            Text [ en-US ] = "~Change Pen Color..." ;
+            Text [ en-US ] = "~Change pen Color..." ;
         };
         MenuItem
         {
             Identifier = CM_ERASE_ALLINK ;
-            Text [ en-US ] = "~Erase All Ink On Slide" ;
+            Text [ en-US ] = "~Erase all ink on Slide" ;
         };
         MenuItem
         {
