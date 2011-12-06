@@ -100,14 +100,12 @@ gb_MAKETARGET=build
 endif
 endif
 
-gb_BuildplTarget_COMPLETEDTARGETS=
 define gb_BuildplTarget_command
 cd $(SRCDIR)/$(1) && unset MAKEFLAGS && export gb_SourceEnvAndRecurse_STAGE=gbuild && $(SOLARENV)/bin/build.pl $(if $(findstring s,$(MAKEFLAGS)),,VERBOSE=T) -P$(BUILD_NCPUS) $(2) -- -P$(GMAKE_PARALLELISM) gb_MAKETARGET=$(gb_MAKETARGET)
-$(eval gb_BuildplTarget_COMPLETEDTARGETS+=$(1))
 endef
 
-dev-install: $(WORKDIR)/bootstrap  $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset) | build
-	$(call gb_BuildplTarget_command,smoketestoo_native,$(if $(filter instsetoo_native,$(gb_BuildplTarget_COMPLETEDTARGETS)),--from instsetoo_native,--all))
+dev-install: $(WORKDIR)/bootstrap  $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset) | $(filter build,$(MAKECMDGOALS))
+	$(call gb_BuildplTarget_command,smoketestoo_native,--from instsetoo_native)
 
 build: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset)
 	$(call gb_BuildplTarget_command,instsetoo_native,--all)
@@ -154,7 +152,7 @@ ifeq ($(gb_SourceEnvAndRecurse_STAGE),gbuild)
 
 clean: clean-host clean-build
 
-dev-install: $(WORKDIR)/bootstrap  $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset) | build
+dev-install: $(WORKDIR)/bootstrap  $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset) | $(filter build,$(MAKECMDGOALS))
 
 build: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset)
 
