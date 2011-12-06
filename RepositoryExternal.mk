@@ -804,7 +804,35 @@ endef
 
 endif # !SYSTEM_LIBPNG
 
-# MacOSX-only frameworks
+
+ifeq ($(SYSTEM_CURL),YES)
+
+define gb_LinkTarget__use_curl
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(CURL_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(CURL_LIBS))
+
+endef
+
+else # !SYSTEM_CURL
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	curl \
+))
+
+define gb_LinkTarget__use_curl
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	curl \
+)
+
+endef
+
+endif # SYSTEM_CURL
+
+
+# MacOSX-only frameworks ############################################
 # (in alphabetical order)
 
 define gb_LinkTarget__use_carbon

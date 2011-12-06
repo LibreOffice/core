@@ -40,12 +40,13 @@ $(eval $(call gb_CppunitTest_add_exception_objects,extensions_test_update, \
 $(eval $(call gb_CppunitTest_add_linked_libs,extensions_test_update, \
 	cppu \
 	cppuhelper \
-	curl \
 	sal \
 	test \
 	unotest \
 	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_use_external,extensions_test_update,curl))
 
 $(eval $(call gb_CppunitTest_set_include,extensions_test_update,\
 	$$(INCLUDE) \
