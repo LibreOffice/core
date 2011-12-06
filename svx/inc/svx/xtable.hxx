@@ -44,7 +44,6 @@
 
 #include <cppuhelper/weak.hxx>
 
-#include <tools/table.hxx>
 #include "svx/svxdllapi.h"
 #include <com/sun/star/embed/XStorage.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>

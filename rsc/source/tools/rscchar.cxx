@@ -31,8 +31,6 @@
 #include <string.h>
 #include <ctype.h>
 
-#include <tools/table.hxx>
-
 // Solar Definitionen
 #include <tools/solar.h>
 #include <rsctools.hxx>

@@ -28,7 +28,6 @@
 #ifndef _HINTS_HXX
 #define _HINTS_HXX
 
-#include <tools/table.hxx>
 #include <swatrset.hxx>
 
 class SwFmt;

@@ -41,7 +41,6 @@
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
-#include <tools/table.hxx>
 
 #include <linguistic/misc.hxx>
 #include <linguistic/lngprophelp.hxx>

@@ -35,7 +35,6 @@
 #include <tools/table.hxx>
 #include <svtools/xtextedt.hxx>
 #include <vcl/timer.hxx>
-#include <tools/table.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/button.hxx>

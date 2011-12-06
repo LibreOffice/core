@@ -47,8 +47,6 @@
 #include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 
-#include <tools/table.hxx>
-
 #include <unotools/charclass.hxx>
 
 #include <lingutil.hxx>
