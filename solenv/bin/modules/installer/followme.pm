@@ -94,7 +94,6 @@ sub save_followme_info
     push(@filecontent, "globals:product: $installer::globals::product\n");
     push(@filecontent, "globals:minor: $installer::globals::minor\n");
     push(@filecontent, "globals:lastminor: $installer::globals::lastminor\n");
-    push(@filecontent, "globals:nsisfilename: $installer::globals::nsisfilename\n");
 
     # Saving file
     installer::files::save_file($downloadinfodir . $installer::globals::separator . $downloadinfofilename, \@filecontent);
@@ -197,7 +196,6 @@ sub read_followme_info
             if ( $name eq "product" ) { $installer::globals::product = $value; }
             if ( $name eq "minor" ) { $installer::globals::minor = $value; }
             if ( $name eq "lastminor" ) { $installer::globals::lastminor = $value; }
-            if ( $name eq "nsisfilename" ) { $installer::globals::nsisfilename = $value; }
         }
     }
 

@@ -54,7 +54,6 @@ sub print_syntax()
     print "   --csc-compilerdir       - print .NET SDK compiler path\n";
     print "   --windows-sdk-home      - print Windows SDK install dir\n";
     print "   --jdk-home              - print the jdk install dir\n";
-    print "   --nsis-dir              - print NSIS path\n";
     print "   --help                  - print this message\n";
 }
 
@@ -235,12 +234,6 @@ sub print_jdk_dir()
     print cygpath($dir, 'w', $output_format); 
 }
 
-sub print_nsis_dir()
-{
-    my $dir = reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/NSIS/@");
-    print cygpath ($dir, 'w', $output_format) if defined $dir;
-}
-
 sub copy_dll($$$)
 {
     my ($src, $fname, $dest) = @_;
@@ -354,8 +347,6 @@ while (@commands) {
 	print_windows_sdk_home();
     } elsif ($opt eq '--jdk-home') {
 	print_jdk_dir();
-    } elsif ($opt eq '--nsis-dir') {
-	print_nsis_dir();
     } elsif ($opt eq '--help' || $opt eq '/?') {
 	print_syntax();
     } else {
