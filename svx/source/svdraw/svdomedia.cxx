@@ -27,13 +27,23 @@
  ************************************************************************/
 
 
+#include <svx/svdomedia.hxx>
+
+#include <rtl/oustringostreaminserter.hxx>
+
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+
+#include <comphelper/storagehelper.hxx>
+
 #include <vcl/svapp.hxx>
 
-#include <svx/svdomedia.hxx>
+#include <svx/svdmodel.hxx>
 #include "svx/svdglob.hxx"
 #include "svx/svdstr.hrc"
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <avmedia/mediawindow.hxx>
+
 
 
 using namespace ::com::sun::star;
@@ -75,6 +85,56 @@ bool SdrMediaObj::HasTextEdit() const
 sdr::contact::ViewContact* SdrMediaObj::CreateObjectSpecificViewContact()
 {
     return new ::sdr::contact::ViewContactOfSdrMediaObj( *this );
+}
+
+// ------------------------------------------------------------------------------
+
+void SdrMediaObj::SetModel(SdrModel *const pNewModel)
+{
+    SdrModel *const pOldModel(GetModel());
+    SdrRectObj::SetModel(pNewModel);
+    if (pOldModel && pNewModel && (pNewModel != pOldModel)) // copy/paste
+    {
+        try
+        {
+            ::rtl::OUString const& url(getURL());
+            // overwrite the model reference: it should point to the target doc
+            uno::Reference<frame::XModel> const xTarget(
+                    pNewModel->getUnoModel(), uno::UNO_QUERY);
+            setURL(url, xTarget);
+            // try to copy the media to target document
+            uno::Reference<embed::XStorage> const xTargetStorage(
+                    pNewModel->GetDocumentStorage());
+            if (!xTargetStorage.is())
+            {
+                SAL_INFO("svx", "no target storage");
+                return;
+            }
+            ::comphelper::LifecycleProxy sourceProxy;
+            uno::Reference<io::XInputStream> const xInStream(
+                    pOldModel->GetDocumentStream(url, sourceProxy));
+            if (!xInStream.is())
+            {
+                SAL_INFO("svx", "no stream");
+                return; // for linked media we should return here
+            }
+            ::comphelper::LifecycleProxy targetProxy;
+            uno::Reference<io::XStream> const xStream(
+                ::comphelper::OStorageHelper::GetStreamAtPackageURL(
+                    xTargetStorage, url, embed::ElementModes::WRITE,
+                    targetProxy));
+            uno::Reference<io::XOutputStream> const xOutStream(
+                    (xStream.is()) ? xStream->getOutputStream() : 0);
+            ::comphelper::OStorageHelper::CopyInputToOutput(
+                    xInStream, xOutStream);
+            xOutStream->closeOutput();
+            targetProxy.commitStorages();
+        }
+        catch (uno::Exception const& e)
+        {
+            SAL_WARN("svx", "exception: '" << e.Message << "'");
+        }
+    }
 }
 
 // ------------------------------------------------------------------------------

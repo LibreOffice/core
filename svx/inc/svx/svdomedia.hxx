@@ -54,6 +54,8 @@ public:
 
         virtual                     ~SdrMediaObj();
 
+        virtual void SetModel(SdrModel* pNewModel);
+
         virtual bool                HasTextEdit() const;
 
         virtual void                TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;

@@ -250,10 +250,7 @@ void MediaItem::setURL( const ::rtl::OUString& rURL,
 {
     m_pImpl->m_URL = rURL;
     m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_URL;
-    if (xModel.is())
-    {
-        m_pImpl->m_wModel = xModel;
-    }
+    m_pImpl->m_wModel = xModel;
 }
 
 //------------------------------------------------------------------------

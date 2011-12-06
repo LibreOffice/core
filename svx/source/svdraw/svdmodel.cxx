@@ -34,6 +34,7 @@
 #include <osl/endian.h>
 #include <rtl/logfile.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/oustringostreaminserter.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
@@ -924,9 +925,9 @@ SdrModel::GetDocumentStream( ::rtl::OUString const& rURL,
     {
         SAL_INFO("svx", "not found");
     }
-    catch (uno::Exception const&)
+    catch (uno::Exception const& e)
     {
-        SAL_WARN("svx", "exception");
+        SAL_WARN("svx", "exception: '" << e.Message << "'");
     }
     return 0;
 }
