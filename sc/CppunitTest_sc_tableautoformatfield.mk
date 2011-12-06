@@ -128,7 +128,7 @@ $(eval $(call gb_CppunitTest_add_old_components,sc_tableautoformatfield,\
 $(eval $(call gb_CppunitTest_set_args,sc_tableautoformatfield,\
     --headless \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
-    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry) module:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry/spool) xcsxcu:$(call gb_CppunitTarget__make_url,$(SRCDIR)/sc/qa/unit/data/registry)" \
+    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry) module:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry/spool) xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/unittest/registry)" \
 ))
     # .../spool is required for the (somewhat strange) filter configuration
 
