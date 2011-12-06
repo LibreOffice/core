@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Version: MPL 1.1 / GPLv3+ / LGPLv3+
  *
@@ -12,7 +13,8 @@
  * License.
  *
  * Major Contributor(s):
- * Copyright (C) 2011 David Tardon, Red Hat Inc. <dtardon@redhat.com> (initial developer)
+ * Copyright (C) 2011 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+ *  (initial developer)
  *
  * All Rights Reserved.
  *

@@ -1,3 +1,4 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -11,7 +12,8 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2011 David Tardon, Red Hat Inc. <dtardon@redhat.com> (initial developer)
+# Copyright (C) 2011 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+#  (initial developer)
 #
 # All Rights Reserved.
 #
@@ -22,7 +24,6 @@
 # the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
-
 
 gb_PARTIALBUILD:=T
 include $(GBUILDDIR)/gbuild_simple.mk

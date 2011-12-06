@@ -13,8 +13,9 @@
  * License.
  *
  * Major Contributor(s):
- * Copyright (C) 2011 Caolán McNamara, Red Hat Inc. <caolan@redhat.com> (initial developer)
- * Copyright (C) 2011 David Tardon, Red Hat Inc. <dtardon@redhat.com
+ * Copyright (C) 2011 Red Hat, Inc., Caolán McNamara <caolanm@redhat.com>
+ *  (initial developer)
+ * Copyright (C) 2011 Red Hat, Inc., David Tardon <dtardon@redhat.com> ]
  *
  * All Rights Reserved.
  *

@@ -11,13 +11,12 @@
 # for the specific language governing rights and limitations under the
 # License.
 #
-# The Initial Developer of the Original Code is
-#       David Tardon, Red Hat Inc. <dtardon@redhat.com>
-# Portions created by the Initial Developer are Copyright (C) 2010 the
-# Initial Developer. All Rights Reserved.
+# Major Contributor(s):
+# Copyright (C) 2010 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+#  (initial developer)
 #
-# Major Contributor(s): 
-# 
+# All Rights Reserved.
+#
 # For minor contributions see the git repository.
 #
 # Alternatively, the contents of this file may be used under the terms of

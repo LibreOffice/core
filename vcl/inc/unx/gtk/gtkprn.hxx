@@ -13,8 +13,9 @@
  * License.
  *
  * Major Contributor(s):
- * Copyright (C) 2011 Caolán McNamara, Red Hat Inc. <caolan@redhat.com> (initial developer)
- * Copyright (C) 2011 David Tardon, Red Hat Inc. <dtardon@redhat.com
+ * Copyright (C) 2011 Red Hat, Inc., Caolán McNamara <caolanm@redhat.com>
+ *  (initial developer)
+ * Copyright (C) 2011 Red Hat, Inc., David Tardon <dtardon@redhat.com> ]
  *
  * All Rights Reserved.
  *
@@ -26,6 +27,7 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
+
 
 #ifndef UNX_GTK_GTKPRN_HXX_INCLUDED
 #define UNX_GTK_GTKPRN_HXX_INCLUDED

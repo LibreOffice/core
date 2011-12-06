@@ -12,12 +12,11 @@
 # for the specific language governing rights and limitations under the
 # License.
 #
-# The Initial Developer of the Original Code is
-#       Caolán McNamara, Red Hat, Inc. <caolanm@redhat.com>
-# Portions created by the Initial Developer are Copyright (C) 2011 the
-# Initial Developer. All Rights Reserved.
-#
 # Major Contributor(s):
+# Copyright (C) 2011 Red Hat, Inc., Stephan Bergmann <sbergman@redhat.com>
+#  (initial developer)
+#
+# All Rights Reserved.
 #
 # For minor contributions see the git repository.
 #

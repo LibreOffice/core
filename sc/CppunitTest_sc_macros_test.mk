@@ -1,5 +1,4 @@
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
-#*************************************************************************
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -12,12 +11,11 @@
 # for the specific language governing rights and limitations under the
 # License.
 #
-# The Initial Developer of the Original Code is
-#       Caolán McNamara, Red Hat, Inc. <caolanm@redhat.com>
-# Portions created by the Initial Developer are Copyright (C) 2011 the
-# Initial Developer. All Rights Reserved.
-#
 # Major Contributor(s):
+# Copyright (C) 2011 Red Hat, Inc., Caolán McNamara <caolanm@redhat.com>
+#  (initial developer)
+#
+# All Rights Reserved.
 #
 # For minor contributions see the git repository.
 #
@@ -26,7 +24,6 @@
 # the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
-#*************************************************************************
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_macros_test))
 
