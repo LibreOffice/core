@@ -1,4 +1,4 @@
-#
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -12,8 +12,8 @@
 # License.
 #
 # Major Contributor(s):
-# [ Copyright (C) 2011 Stephan Bergmann, Red Hat <sbergman@redhat.com> (initial
-#   developer) ]
+# Copyright (C) 2011 Red Hat, Inc., Stephan Bergmann <sbergman@redhat.com>
+#  (initial developer)
 #
 # All Rights Reserved.
 #
@@ -24,7 +24,6 @@
 # the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
-#
 
 # Create a .components file bundling multiple .component files:
 
@@ -75,3 +74,5 @@ $(call gb_ComponentsTarget_get_clean_target,%).input:
 	$(call gb_Output_announce,$*,$(false),CPI,1)
 	$(call gb_Helper_abbreviate_dirs_native, \
             rm -f $(call gb_ComponentsTarget_get_target,$*).input)
+
+# vim: set noet sw=4:

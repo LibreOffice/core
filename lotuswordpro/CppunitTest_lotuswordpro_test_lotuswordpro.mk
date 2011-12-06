@@ -1,5 +1,4 @@
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
-#*************************************************************************
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -28,7 +27,6 @@
 # the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
-#*************************************************************************
 
 $(eval $(call gb_CppunitTest_CppunitTest,lotuswordpro_test_lotuswordpro))
 

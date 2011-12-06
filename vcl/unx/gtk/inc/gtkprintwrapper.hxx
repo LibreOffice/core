@@ -13,7 +13,8 @@
  * License.
  *
  * Major Contributor(s):
- * Copyright (C) 2011 David Tardon, Red Hat Inc. <dtardon@redhat.com> (initial developer)
+ * Copyright (C) 2011 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+ *  (initial developer)
  *
  * All Rights Reserved.
  *

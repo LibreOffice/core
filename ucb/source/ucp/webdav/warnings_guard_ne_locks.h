@@ -13,7 +13,8 @@
  * License.
  *
  * Major Contributor(s):
- * [ Copyright (C) 2011 Eike Rathke <erack@redhat.com> (initial developer) ]
+ * Copyright (C) 2011 Red Hat, Inc., Eike Rathke <erack@redhat.com>
+ *  (initial developer)
  *
  * All Rights Reserved.
  *

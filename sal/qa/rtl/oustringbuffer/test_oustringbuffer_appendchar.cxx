@@ -13,8 +13,8 @@
  * License.
  *
  * Major Contributor(s):
- * [ Copyright (C) 2011 Stephan Bergmann, Red Hat <sbergman@redhat.com> (initial
- *   developer) ]
+ * Copyright (C) 2011 Red Hat, Inc., Stephan Bergmann <sbergman@redhat.com>
+ *  (initial developer)
  *
  * All Rights Reserved.
  *
