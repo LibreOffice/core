@@ -65,6 +65,8 @@ public:
     ::boost::scoped_ptr<Impl> m_pBadness;
     LifecycleProxy();
     ~LifecycleProxy();
+    // commit the storages: necessary for writes to streams to take effect!
+    void commitStorages();
 };
 
 class COMPHELPER_DLLPUBLIC OStorageHelper

@@ -28,6 +28,7 @@
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -550,6 +551,20 @@ class LifecycleProxy::Impl
 LifecycleProxy::LifecycleProxy()
     : m_pBadness( new Impl() ) { }
 LifecycleProxy::~LifecycleProxy() { }
+
+void LifecycleProxy::commitStorages()
+{
+    for (Impl::reverse_iterator iter = m_pBadness->rbegin();
+            iter != m_pBadness->rend(); ++iter) // reverse order (outwards)
+    {
+        uno::Reference<embed::XTransactedObject> const xTransaction(*iter,
+                uno::UNO_QUERY);
+        if (xTransaction.is())
+        {
+            xTransaction->commit();
+        }
+    }
+}
 
 static void splitPath( std::vector<rtl::OUString> &rElems,
                        const ::rtl::OUString& rPath )
