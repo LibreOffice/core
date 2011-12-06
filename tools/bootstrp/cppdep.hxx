@@ -33,7 +33,6 @@
 
 class CppDep
 {
-    ByteString          aSourceFile;
     std::vector<rtl::OString> m_aSearchPath;
 
 protected:
