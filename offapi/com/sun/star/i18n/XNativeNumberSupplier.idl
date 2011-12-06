@@ -29,7 +29,7 @@
 #define __com_sun_star_i18n_XNativeNumberSupplier_idl__
 
 #include <com/sun/star/lang/Locale.idl>
-#include <NativeNumberXmlAttributes.idl>
+#include <com/sun/star/i18n/NativeNumberXmlAttributes.idl>
 
 //=============================================================================
 
