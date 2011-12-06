@@ -1264,10 +1264,10 @@ void OdtGenerator::insertBinaryObject(const WPXPropertyList &propList, const WPX
     else
         // assuming we have a binary image or a object_ole that we can just insert as it is
     {
-        std::string dataType = "draw:image";
-        if (propList["libwpd:mimetype"]->getStr() == "object/ole")
-            dataType = "draw:object-ole";
-        mpImpl->mpCurrentContentElements->push_back(new TagOpenElement(dataType.c_str()));
+        if (propList["libwpg:mime-type"]->getStr() == "object/ole")
+            mpImpl->mpCurrentContentElements->push_back(new TagOpenElement("draw:object-ole"));
+        else
+            mpImpl->mpCurrentContentElements->push_back(new TagOpenElement("draw:image"));
 
         mpImpl->mpCurrentContentElements->push_back(new TagOpenElement("office:binary-data"));
 
@@ -1277,7 +1277,10 @@ void OdtGenerator::insertBinaryObject(const WPXPropertyList &propList, const WPX
 
         mpImpl->mpCurrentContentElements->push_back(new TagCloseElement("office:binary-data"));
 
-        mpImpl->mpCurrentContentElements->push_back(new TagCloseElement(dataType.c_str()));
+        if (propList["libwpg:mime-type"]->getStr() == "object/ole")
+            mpImpl->mpCurrentContentElements->push_back(new TagCloseElement("draw:object-ole"));
+        else
+            mpImpl->mpCurrentContentElements->push_back(new TagCloseElement("draw:image"));
     }
 }
 
