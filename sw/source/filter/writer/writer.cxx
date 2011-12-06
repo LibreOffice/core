@@ -31,6 +31,7 @@
 
 #define _SVSTDARR_STRINGSSORTDTOR
 #include <svl/svstdarr.hxx>
+#include <tools/table.hxx>
 
 #include <sot/storage.hxx>
 #include <sfx2/docfile.hxx>

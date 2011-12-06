@@ -27,7 +27,6 @@
  ************************************************************************/
 
 
-#include <tools/table.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/asynclink.hxx>
 
