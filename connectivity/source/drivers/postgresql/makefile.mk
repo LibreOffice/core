@@ -211,7 +211,7 @@ $(DLLDEST)$/META-INF$/manifest.xml : manifest.xml
     +cp $? $@
 
 $(DLLDEST)$/description.xml : description.xml
-    +sed -s -e 's/@EXTENSION_VERSION@/$(PQ_SDBC_VERSION)/' < $? > $@
+    +sed -e 's/@EXTENSION_VERSION@/$(PQ_SDBC_VERSION)/' < $? > $@
 
 $(DLLDEST)$/postgresql.xcu : postgresql.xcu
     rm -f $@
