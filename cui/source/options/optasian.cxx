@@ -77,8 +77,7 @@ public:
 struct SvxAsianLayoutPage_Impl
 {
     SvxAsianConfig  aConfig;
-        SvxAsianLayoutPage_Impl() :
-            aConfig(sal_False){}
+        SvxAsianLayoutPage_Impl() {}
 
     Reference< XForbiddenCharacters >   xForbidden;
     Reference< XPropertySet >           xPrSet;
@@ -205,8 +204,7 @@ sal_Bool SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
             pImpl->xPrSet->setPropertyValue(sCompress, aVal);
         }
     }
-    if(pImpl->aConfig.IsModified())
-        pImpl->aConfig.Commit();
+    pImpl->aConfig.Commit();
     if(pImpl->xForbidden.is())
     {
         try

@@ -25,46 +25,54 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SVX_ASIANCFG_HXX
-#define _SVX_ASIANCFG_HXX
 
-#include <unotools/configitem.hxx>
-#include <com/sun/star/uno/Sequence.h>
-#include <svl/svldllapi.h>
+#ifndef INCLUDED_SVL_ASIANCFG_HXX
+#define INCLUDED_SVL_ASIANCFG_HXX
 
-namespace com{namespace sun{namespace star{
-namespace lang{
+#include "sal/config.h"
+
+#include "boost/noncopyable.hpp"
+#include "boost/scoped_ptr.hpp"
+#include "com/sun/star/uno/Sequence.hxx"
+#include "sal/types.h"
+#include "svl/svldllapi.h"
+
+namespace com { namespace sun { namespace star { namespace lang {
     struct Locale;
-}}}}
-//-----------------------------------------------------------------------------
-struct SvxAsianConfig_Impl;
-class SVL_DLLPUBLIC SvxAsianConfig : public utl::ConfigItem
-{
-    SvxAsianConfig_Impl* pImpl;
+} } } }
+namespace rtl { class OUString; }
 
+class SVL_DLLPUBLIC SvxAsianConfig: private boost::noncopyable {
 public:
-    SvxAsianConfig(sal_Bool bEnableNotify = sal_True);
-    virtual ~SvxAsianConfig();
+    SvxAsianConfig();
 
-    void            Load();
-    virtual void    Commit();
-    virtual void    Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+    ~SvxAsianConfig();
 
-    sal_Bool    IsKerningWesternTextOnly() const;
-    void        SetKerningWesternTextOnly(sal_Bool bSet);
+    void Commit();
 
-    sal_Int16   GetCharDistanceCompression() const;
-    void        SetCharDistanceCompression(sal_Int16 nSet);
+    bool IsKerningWesternTextOnly() const;
 
-    com::sun::star::uno::Sequence<com::sun::star::lang::Locale>
-                GetStartEndCharLocales();
+    void SetKerningWesternTextOnly(bool value);
 
-    sal_Bool    GetStartEndChars( const com::sun::star::lang::Locale& rLocale,
-                                    rtl::OUString& rStartChars,
-                                    rtl::OUString& rEndChars );
-    void        SetStartEndChars( const com::sun::star::lang::Locale& rLocale,
-                                    const rtl::OUString* pStartChars,
-                                    const rtl::OUString* pEndChars );
+    sal_Int16 GetCharDistanceCompression() const;
+
+    void SetCharDistanceCompression(sal_Int16 value);
+
+    com::sun::star::uno::Sequence< com::sun::star::lang::Locale >
+    GetStartEndCharLocales() const;
+
+    bool GetStartEndChars(
+        com::sun::star::lang::Locale const & locale, rtl::OUString & startChars,
+        rtl::OUString & endChars) const;
+
+    void SetStartEndChars(
+        com::sun::star::lang::Locale const & locale,
+        rtl::OUString const * startChars, rtl::OUString const * endChars);
+
+private:
+    class Impl;
+
+    boost::scoped_ptr< Impl > impl_;
 };
 
 #endif
