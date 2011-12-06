@@ -32,6 +32,7 @@
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <svx/unoshape.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/svdopath.hxx>
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include <CustomAnimationPreset.hxx>
@@ -1317,6 +1318,30 @@ OUString EffectMigration::GetSoundFile( SvxShape* pShape )
 sal_Bool EffectMigration::GetSoundOn( SvxShape* pShape )
 {
     return GetSoundFile( pShape ).getLength() != 0;
+}
+
+// --------------------------------------------------------------------
+
+void EffectMigration::SetAnimationPath( SvxShape* pShape, SdrPathObj* pPathObj )
+{
+    if( pShape && pPathObj )
+    {
+        SdrObject* pObj = pShape->GetSdrObject();
+
+        if( pObj )
+        {
+            sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
+
+            const Reference< XShape > xShape( pShape );
+            SdPage* pPage = dynamic_cast< SdPage* >( pPathObj ? pPathObj->GetPage() : 0 );
+            if( pPage )
+            {
+                boost::shared_ptr< sd::MainSequence > pMainSequence( pPage->getMainSequence() );
+                if( pMainSequence.get() )
+                    CustomAnimationEffectPtr pCreated( pMainSequence->append( *pPathObj, makeAny( xShape ), -1.0 ) );
+            }
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

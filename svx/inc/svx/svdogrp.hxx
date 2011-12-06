@@ -80,6 +80,9 @@ public:
     virtual const Rectangle& GetCurrentBoundRect() const;
     virtual const Rectangle& GetSnapRect() const;
 
+    // If bForced is true, the boundrect is also calculated when the model is locked
+    virtual void RecalcBoundRect(bool bForced = false);
+
     virtual SdrObjGroup* Clone() const;
     SdrObjGroup& operator=(const SdrObjGroup& rObj);
 

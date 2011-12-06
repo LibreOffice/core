@@ -644,7 +644,17 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                         }
                     }
                     break;
-// TODO: WID_ANIMPATH
+                case WID_ANIMPATH:
+                {
+                    uno::Reference< drawing::XShape > xShape( aValue, uno::UNO_QUERY );
+                    SdrPathObj* pObj = xShape.is() ? dynamic_cast< SdrPathObj* >( GetSdrObjectFromXShape( xShape ) ) : NULL;
+
+                    if( pObj == NULL )
+                        throw lang::IllegalArgumentException();
+
+                    EffectMigration::SetAnimationPath( mpShape, pObj );
+                    break;
+                }
                 case WID_IMAGEMAP:
                 {
                     SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
