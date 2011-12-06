@@ -239,6 +239,9 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
 {
     SvXMLNamespaceMap *pRewindMap = 0;
 
+    bool bRect = rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "presentation:show-shape" ) );
+    (void)bRect;
+
     // Process namespace attributes. This must happen before creating the
     // context, because namespace decaration apply to the element name itself.
     XMLMutableAttributeList *pMutableAttrList = 0;
@@ -882,6 +885,14 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                         bRename = sal_True;
                     }
                     break;
+                case XML_ATACTION_SHAPEID:
+                {
+                    OUString sNewValue( RTL_CONSTASCII_USTRINGPARAM( "shape" ) );
+                    sNewValue += rAttrValue;
+                    pMutableAttrList->SetValueByIndex( i, sNewValue );
+                    break;
+                }
+
                 default:
                     OSL_ENSURE( !this, "unknown action" );
                     break;

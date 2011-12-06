@@ -135,6 +135,7 @@ enum XMLAttrTransformerAction
     XML_ATACTION_GAMMA_OOO,              // converts double value to percentage
     XML_ATACTION_DECODE_ID,              // converts strings with non numeric characters to only numeric character ids
     XML_ATACTION_OPACITY_FIX,            // converts transparency to opacity and back
+    XML_ATACTION_SHAPEID,                // convert shape id
     XML_ATACTION_USER_DEFINED=0x40000000,// user defined actions start here
     XML_ATACTION_END=XML_TACTION_END
 };
