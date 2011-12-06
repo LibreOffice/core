@@ -74,8 +74,6 @@ Control::GetLineCount() const
 CurrencyBox::CurrencyBox(Window*, ResId const&)
 CurrencyBox::GetValue(unsigned short) const
 CurrencyBox::GetValuePos(long) const
-CurrencyBox::InsertValue(long, unsigned short)
-CurrencyBox::RemoveValue(long)
 CurrencyField::CurrencyField(Window*, ResId const&)
 CurrencyFormatter::SetCurrencySymbol(String const&)
 CustomToolBarImportHelper::showToolbar(rtl::OUString const&)

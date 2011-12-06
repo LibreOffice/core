@@ -819,8 +819,6 @@ public:
 
     virtual void            ReformatAll();
 
-    void                    InsertValue( sal_Int64 nValue, sal_uInt16 nPos = COMBOBOX_APPEND );
-    void                    RemoveValue( sal_Int64 nValue );
     sal_Int64               GetValue( sal_uInt16 nPos ) const;
     sal_uInt16                  GetValuePos( sal_Int64 nValue ) const;
 
