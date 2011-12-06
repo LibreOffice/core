@@ -115,11 +115,10 @@ public:
     ::com::sun::star::media::ZoomLevel  getZoom() const;
 
     void                    setURL( const ::rtl::OUString& rURL,
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>
-            const& xModel);
+                                    ::rtl::OUString const*const pTempURL);
     const ::rtl::OUString&  getURL() const;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>
-            getModel() const;
+
+    const ::rtl::OUString&  getTempURL() const;
 
 private:
 

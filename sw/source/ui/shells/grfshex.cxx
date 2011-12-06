@@ -136,8 +136,6 @@ bool SwTextShell::InsertMediaDlg( SfxRequest& rReq )
             else
                 aSize = Size( 2835, 2835 );
 
-            uno::Reference<frame::XModel> const xModel(
-                    rSh.GetDoc()->GetDocShell()->GetModel());
             ::rtl::OUString realURL;
             if (bLink)
             {
@@ -145,13 +143,16 @@ bool SwTextShell::InsertMediaDlg( SfxRequest& rReq )
             }
             else
             {
+                uno::Reference<frame::XModel> const xModel(
+                        rSh.GetDoc()->GetDocShell()->GetModel());
                 bRet = ::avmedia::EmbedMedia(xModel, aURL, realURL);
                 if (!bRet) { return bRet; }
             }
 
             SdrMediaObj* pObj = new SdrMediaObj( Rectangle( aPos, aSize ) );
 
-            pObj->setURL( realURL, (bLink) ? 0 : xModel );
+            pObj->SetModel(rSh.GetDoc()->GetDrawModel()); // set before setURL
+            pObj->setURL( realURL );
             rSh.EnterStdMode();
             rSh.SwFEShell::InsertDrawObj( *pObj, aPos );
             bRet = true;

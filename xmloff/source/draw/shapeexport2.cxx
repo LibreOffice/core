@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
+#include <rtl/oustringostreaminserter.hxx>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -35,13 +36,14 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/media/ZoomLevel.hpp>
 
 #include <sax/tools/converter.hxx>
+
+#include <comphelper/storagehelper.hxx>
 
 #include "anim.hxx"
 
@@ -1947,58 +1949,47 @@ void XMLShapeExport::ImpExportPluginShape(
 
 //////////////////////////////////////////////////////////////////////////////
 
-/** split a uri hierarchy into first segment and rest */
-static bool
-splitPath(::rtl::OUString const & i_rPath,
-    ::rtl::OUString & o_rDir, ::rtl::OUString& o_rRest)
-{
-    const sal_Int32 idx(i_rPath.indexOf(static_cast<sal_Unicode>('/')));
-    if (idx < 0 || idx >= i_rPath.getLength()) {
-        o_rDir = ::rtl::OUString();
-        o_rRest = i_rPath;
-        return true;
-    } else if (idx == 0 || idx == i_rPath.getLength() - 1) {
-        // input must not start or end with '/'
-        return false;
-    } else {
-        o_rDir  = (i_rPath.copy(0, idx));
-        o_rRest = (i_rPath.copy(idx+1));
-        return true;
-    }
-}
-
 static void lcl_CopyStream(
-        uno::Reference<embed::XStorage> const& xSource,
+        uno::Reference<io::XInputStream> const& xInStream,
         uno::Reference<embed::XStorage> const& xTarget,
-         ::rtl::OUString const& rPath)
+        ::rtl::OUString const& rPath)
 {
-    ::rtl::OUString dir;
-    ::rtl::OUString rest;
-    if (!splitPath(rPath, dir, rest)) throw uno::RuntimeException();
-    if (0 == dir.getLength())
+    ::comphelper::LifecycleProxy proxy;
+    uno::Reference<io::XStream> const xStream(
+        ::comphelper::OStorageHelper::GetStreamAtPackageURL(xTarget, rPath,
+            embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE, proxy));
+    uno::Reference<io::XOutputStream> const xOutStream(
+            (xStream.is()) ? xStream->getOutputStream() : 0);
+    if (!xOutStream.is())
     {
-        xSource->copyElementTo(rPath, xTarget, rPath);
+        SAL_WARN("xmloff", "no output stream");
+        throw uno::Exception(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("no output stream")),0);
     }
-    else
-    {
-        uno::Reference<embed::XStorage> const xSubSource(
-            xSource->openStorageElement(dir, embed::ElementModes::READ));
-        uno::Reference<embed::XStorage> const xSubTarget(
-            xTarget->openStorageElement(dir, embed::ElementModes::WRITE));
-        lcl_CopyStream(xSubSource, xSubTarget, rest);
+    uno::Reference< beans::XPropertySet > const xStreamProps(xStream,
+        uno::UNO_QUERY);
+    if (xStreamProps.is()) { // this is NOT supported in FileSystemStorage
+        xStreamProps->setPropertyValue(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")),
+            uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            //FIXME how to detect real media type?
+            //but currently xmloff has this one hardcoded anyway...
+                    "application/vnd.sun.star.media"))));
+        xStreamProps->setPropertyValue( // turn off compression
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed")),
+            uno::makeAny(sal_False));
     }
-    uno::Reference<embed::XTransactedObject> const xTransaction(xTarget,
-            uno::UNO_QUERY);
-    if (xTransaction.is())
-    {
-        xTransaction->commit();
-    }
+    ::comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream);
+    xOutStream->closeOutput();
+    proxy.commitStorages();
 }
 
 static char const s_PkgScheme[] = "vnd.sun.star.Package:";
 
 static ::rtl::OUString
-lcl_StoreMediaAndGetURL(SvXMLExport & rExport, ::rtl::OUString const& rURL)
+lcl_StoreMediaAndGetURL(SvXMLExport & rExport,
+    uno::Reference<beans::XPropertySet> const& xPropSet,
+    ::rtl::OUString const& rURL)
 {
     if (0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
                 rURL.getStr(), rURL.getLength(),
@@ -2006,25 +1997,30 @@ lcl_StoreMediaAndGetURL(SvXMLExport & rExport, ::rtl::OUString const& rURL)
     {
         try // video is embedded
         {
-            // copy the media stream from document storage to target storage
-            // (not sure if this is the best way to store these?)
-            uno::Reference<document::XStorageBasedDocument> const xSBD(
-                    rExport.GetModel(), uno::UNO_QUERY_THROW);
-            uno::Reference<embed::XStorage> const xSource(
-                    xSBD->getDocumentStorage(), uno::UNO_QUERY_THROW);
             uno::Reference<embed::XStorage> const xTarget(
                     rExport.GetTargetStorage(), uno::UNO_QUERY_THROW);
+            uno::Reference<io::XInputStream> xInStream;
+            xPropSet->getPropertyValue(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PrivateStream")))
+                    >>= xInStream;
+
+            if (!xInStream.is())
+            {
+                SAL_WARN("xmloff", "no input stream");
+                return ::rtl::OUString();
+            }
 
             ::rtl::OUString const urlPath(
                     rURL.copy(SAL_N_ELEMENTS(s_PkgScheme)-1));
 
-            lcl_CopyStream(xSource, xTarget, urlPath);
+            lcl_CopyStream(xInStream, xTarget, rURL);
 
             return urlPath;
         }
         catch (uno::Exception const& e)
         {
-            SAL_INFO("xmloff", "exception while storing embedded media");
+            SAL_INFO("xmloff", "exception while storing embedded media: '"
+                        << e.Message << "'");
         }
         return ::rtl::OUString();
     }
@@ -2055,7 +2051,7 @@ void XMLShapeExport::ImpExportMediaShape(
         OUString aMediaURL;
         xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaURL" ) ) ) >>= aMediaURL;
         OUString const persistentURL =
-            lcl_StoreMediaAndGetURL(GetExport(), aMediaURL);
+            lcl_StoreMediaAndGetURL(GetExport(), xPropSet, aMediaURL);
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, persistentURL );
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );

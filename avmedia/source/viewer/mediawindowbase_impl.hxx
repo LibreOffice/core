@@ -35,10 +35,6 @@
 #include <com/sun/star/media/XPlayerWindow.hpp>
 
 
-namespace com { namespace sun { namespace star {
-    namespace frame { class XModel; }
-}}} // namespace com::sun::star
-
 namespace avmedia
 {
     namespace priv
@@ -70,9 +66,7 @@ namespace avmedia
 
             static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const ::rtl::OUString& rURL);
 
-            void    setURL( const ::rtl::OUString& rURL,
-                            ::com::sun::star::uno::Reference<
-                                ::com::sun::star::frame::XModel> const& wModel);
+            void    setURL( const ::rtl::OUString& rURL, ::rtl::OUString const& rTempURL );
 
             const ::rtl::OUString&  getURL() const;
 
@@ -128,13 +122,8 @@ namespace avmedia
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow > getPlayerWindow() const;
 
         private:
-            void    cleanupTempFile();
-            bool    initPackageURL( const ::rtl::OUString& rPath,
-                            ::com::sun::star::uno::Reference<
-                                ::com::sun::star::frame::XModel> const& wModel);
-
             ::rtl::OUString                                                             maFileURL;
-            ::rtl::OUString * mpTempFileURL;
+            ::rtl::OUString mTempFileURL;
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >        mxPlayer;
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow >  mxPlayerWindow;
             MediaWindow*                                                                mpMediaWindow;

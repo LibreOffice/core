@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _SVDOMEDIA_HXX
-#define _SVDOMEDIA_HXX
+#ifndef SVDOMEDIA_HXX
+#define SVDOMEDIA_HXX
 
 #include <svx/svdorect.hxx>
 #include <avmedia/mediaitem.hxx>
@@ -54,8 +54,6 @@ public:
 
         virtual                     ~SdrMediaObj();
 
-        virtual void SetModel(SdrModel* pNewModel);
-
         virtual bool                HasTextEdit() const;
 
         virtual void                TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
@@ -71,9 +69,7 @@ public:
 
 public:
 
-        void                        setURL( const ::rtl::OUString& rURL,
-                ::com::sun::star::uno::Reference<
-                    ::com::sun::star::frame::XModel> const& xModel = 0);
+        void                        setURL( const ::rtl::OUString& rURL );
         const ::rtl::OUString&      getURL() const;
 
         void                        setMediaProperties( const ::avmedia::MediaItem& rState );
@@ -82,6 +78,8 @@ public:
         Size                        getPreferredSize() const;
 
         void                        setGraphic( const Graphic* pGraphic = NULL );
+        ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>
+            GetInputStream();
 
 protected:
 
@@ -89,11 +87,10 @@ protected:
         virtual ::sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
 private:
-
-        ::avmedia::MediaItem        maMediaProperties;
-        ::std::auto_ptr< Graphic >  mapGraphic;
+        struct Impl;
+        ::boost::scoped_ptr<Impl> m_pImpl;
 };
 
-#endif //_SVDOMEDIA_HXX
+#endif // SVDOMEDIA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

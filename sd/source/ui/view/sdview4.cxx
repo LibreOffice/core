@@ -287,8 +287,6 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
                                    const Point& rPos, const Size& rSize,
                                    bool const bLink )
 {
-    uno::Reference<frame::XModel> const xModel(
-            GetDoc()->GetObjectShell()->GetModel());
     ::rtl::OUString realURL;
     if (bLink)
     {
@@ -296,6 +294,8 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
     }
     else
     {
+        uno::Reference<frame::XModel> const xModel(
+                GetDoc()->GetObjectShell()->GetModel());
         bool const bRet = ::avmedia::EmbedMedia(xModel, rMediaURL, realURL);
         if (!bRet) { return 0; }
     }
@@ -322,7 +322,7 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
     if( mnAction == DND_ACTION_LINK && pPickObj && pPV && pPickObj->ISA( SdrMediaObj ) )
     {
         pNewMediaObj = static_cast< SdrMediaObj* >( pPickObj->Clone() );
-        pNewMediaObj->setURL( realURL, (bLink) ? 0 : xModel );
+        pNewMediaObj->setURL( realURL );
 
         BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
         ReplaceObjectAtView(pPickObj, *pPV, pNewMediaObj);
@@ -353,7 +353,7 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
         else
             InsertObjectAtView( pNewMediaObj, *pPV, SDRINSERT_SETDEFLAYER );
 
-        pNewMediaObj->setURL( realURL, (bLink) ? 0 : xModel );
+        pNewMediaObj->setURL( realURL );
 
         if( pPickObj )
         {

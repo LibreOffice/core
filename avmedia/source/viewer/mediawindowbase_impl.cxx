@@ -32,16 +32,11 @@
 #include "mediawindow.hrc"
 #include <rtl/oustringostreaminserter.hxx>
 #include <sal/log.hxx>
-#include <osl/file.hxx>
 #include <tools/urlobj.hxx>
-#include <ucbhelper/content.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/storagehelper.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hdl>
 #include <com/sun/star/media/XManager.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/document/XStorageBasedDocument.hpp>
 
 #define MEDIA_TIMER_TIMEOUT 100
 
@@ -55,8 +50,7 @@ namespace avmedia { namespace priv {
 
 
 MediaWindowBaseImpl::MediaWindowBaseImpl( MediaWindow* pMediaWindow )
-    : mpTempFileURL(0)
-    , mpMediaWindow( pMediaWindow )
+    : mpMediaWindow( pMediaWindow )
 {
 }
 
@@ -106,88 +100,8 @@ uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl:
     return xPlayer;
 }
 
-// ---------------------------------------------------------------------
-void MediaWindowBaseImpl::cleanupTempFile()
-{
-    if (mpTempFileURL)
-    {
-        ::osl::File::remove(*mpTempFileURL);
-        delete mpTempFileURL;
-        mpTempFileURL = 0;
-    }
-}
-
-bool
-MediaWindowBaseImpl::initPackageURL(::rtl::OUString const & rURL,
-        uno::Reference<frame::XModel> const& xModel)
-{
-    uno::Reference<document::XStorageBasedDocument> const xSBD(
-            xModel, uno::UNO_QUERY);
-    if (!xSBD.is())
-    {
-        SAL_WARN("avmedia", "cannot get model");
-        return false;
-    }
-    uno::Reference<embed::XStorage> const xStorage(
-        xSBD->getDocumentStorage());
-    if (!xStorage.is())
-    {
-        SAL_WARN("avmedia", "cannot get storage");
-        return false;
-    }
-    ::comphelper::LifecycleProxy proxy;
-    uno::Reference<io::XInputStream> xInStream;
-    try {
-        uno::Reference<io::XStream> const xStream(
-            ::comphelper::OStorageHelper::GetStreamAtPackageURL(
-                xStorage, rURL, embed::ElementModes::READ, proxy));
-        xInStream = (xStream.is()) ? xStream->getInputStream() : 0;
-    }
-    catch (container::NoSuchElementException const&)
-    {
-        SAL_INFO("avmedia", "not found: '" << ::rtl::OUString(rURL) << "'");
-        return false;
-    }
-    catch (uno::Exception const& e)
-    {
-        SAL_WARN("avmedia", "exception: '" << e.Message << "'");
-        return false;
-    }
-    if (!xInStream.is())
-    {
-        SAL_WARN("avmedia", "no stream?");
-        return false;
-    }
-
-    mpTempFileURL = new ::rtl::OUString;
-    ::osl::FileBase::RC const err =
-        ::osl::FileBase::createTempFile(0, 0, mpTempFileURL);
-    if (::osl::FileBase::E_None != err)
-    {
-        SAL_INFO("avmedia", "cannot create temp file");
-        delete mpTempFileURL;
-        mpTempFileURL = 0;
-        return false;
-    }
-
-    try
-    {
-        ::ucbhelper::Content tempContent(*mpTempFileURL,
-                uno::Reference<ucb::XCommandEnvironment>());
-        tempContent.writeStream(xInStream, true); // copy stream to file
-    }
-    catch (uno::Exception const& e)
-    {
-        SAL_WARN("avmedia", "exception: '" << e.Message << "'");
-        return false;
-    }
-    return true;
-}
-
-static char const s_PkgScheme[] = "vnd.sun.star.Package:";
-
 void MediaWindowBaseImpl::setURL( const ::rtl::OUString& rURL,
-        uno::Reference<frame::XModel> const& xModel )
+        ::rtl::OUString const& rTempURL)
 {
     if( rURL != getURL() )
     {
@@ -201,16 +115,12 @@ void MediaWindowBaseImpl::setURL( const ::rtl::OUString& rURL,
         }
 
         mxPlayer.clear();
-        cleanupTempFile();
+        mTempFileURL = ::rtl::OUString();
 
-        bool bSuccess(true);
-        if (0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
-                rURL.getStr(), rURL.getLength(),
-                s_PkgScheme, SAL_N_ELEMENTS(s_PkgScheme) - 1))
+        if (rTempURL.getLength())
         {
-            bSuccess = initPackageURL(rURL, xModel);
-
-            maFileURL = (bSuccess) ? rURL : ::rtl::OUString();
+            maFileURL = rURL;
+            mTempFileURL = rTempURL;
         }
         else
         {
@@ -222,11 +132,8 @@ void MediaWindowBaseImpl::setURL( const ::rtl::OUString& rURL,
                 maFileURL = rURL;
         }
 
-        if (bSuccess)
-        {
-            mxPlayer = createPlayer(
-                    (mpTempFileURL) ? *mpTempFileURL : maFileURL );
-        }
+        mxPlayer = createPlayer(
+                (mTempFileURL.getLength()) ? mTempFileURL : maFileURL );
         onURLChanged();
     }
 }
@@ -304,7 +211,6 @@ void MediaWindowBaseImpl::cleanUp()
 
         mxPlayer.clear();
     }
-    cleanupTempFile();
 
     mpMediaWindow = NULL;
 }
@@ -481,7 +387,7 @@ void MediaWindowBaseImpl::updateMediaItem( MediaItem& rItem ) const
     rItem.setMute( isMute() );
     rItem.setVolumeDB( getVolumeDB() );
     rItem.setZoom( getZoom() );
-    rItem.setURL( getURL(), 0 );
+    rItem.setURL( getURL(), &mTempFileURL );
 }
 
 // -------------------------------------------------------------------------
@@ -492,7 +398,7 @@ void MediaWindowBaseImpl::executeMediaItem( const MediaItem& rItem )
 
     // set URL first
     if( nMaskSet & AVMEDIA_SETMASK_URL )
-        setURL( rItem.getURL(), rItem.getModel() );
+        setURL( rItem.getURL(), rItem.getTempURL() );
 
     // set different states next
     if( nMaskSet & AVMEDIA_SETMASK_TIME )

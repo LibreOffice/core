@@ -878,9 +878,7 @@ bool SvxMediaShape::setPropertyValueImpl( const ::rtl::OUString& rName, const Sf
             if( rValue >>= aURL )
             {
                 bOk = true;
-                uno::Reference<frame::XModel> const xModel(
-                        mpModel->getUnoModel(), uno::UNO_QUERY_THROW);
-                aItem.setURL( aURL, xModel);
+                aItem.setURL( aURL, 0 );
             }
         }
         break;
@@ -955,7 +953,9 @@ bool SvxMediaShape::setPropertyValueImpl( const ::rtl::OUString& rName, const Sf
 
 bool SvxMediaShape::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    if( ( pProperty->nWID >= OWN_ATTR_MEDIA_URL ) && ( pProperty->nWID <= OWN_ATTR_MEDIA_ZOOM ) )
+    if (   ((pProperty->nWID >= OWN_ATTR_MEDIA_URL) &&
+            (pProperty->nWID <= OWN_ATTR_MEDIA_ZOOM))
+        || (pProperty->nWID == OWN_ATTR_GRAPHIC_STREAM))
     {
         SdrMediaObj* pMedia = static_cast< SdrMediaObj* >( mpObj.get() );
         const ::avmedia::MediaItem aItem( pMedia->getMediaProperties() );
@@ -980,6 +980,10 @@ bool SvxMediaShape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sf
 
             case( OWN_ATTR_MEDIA_ZOOM ):
                 rValue <<= aItem.getZoom();
+                break;
+
+            case OWN_ATTR_GRAPHIC_STREAM:
+                rValue <<= pMedia->GetInputStream();
                 break;
 
             default:
