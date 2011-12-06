@@ -184,6 +184,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
             }
         }
 
+        GetParentWindow()->GrabFocus();
         if( pPickObj )
             mpView->ReplaceObjectAtView(pPickObj, *pPV, pObj, sal_True );
         else
@@ -191,6 +192,10 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
 
         Invalidate(SID_DRAWTBX_INSERT);
         rReq.Ignore();
+        SfxViewShell* pViewShell = GetViewShell();
+        OSL_ASSERT (pViewShell!=NULL);
+        SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
+        rBindings.Invalidate( SID_INSERT_TABLE, sal_True, sal_False );
         break;
     }
     case SID_TABLEDESIGN:
