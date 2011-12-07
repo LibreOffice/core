@@ -34,7 +34,6 @@
 
 #define USE_SVXFONT
 
-#include <svl/ctloptions.hxx>
 #include <svtools/ctrltool.hxx>
 
 #include <editeng/svxfont.hxx>

@@ -54,7 +54,6 @@
 #include <sfx2/objsh.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
-#include <svl/ctloptions.hxx>
 #include <svtools/langtab.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/configmgr.hxx>
