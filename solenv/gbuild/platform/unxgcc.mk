@@ -150,8 +150,6 @@ endif
 ifneq ($(gb_SYMBOL),$(true))
 ifeq ($(gb_STRIP),$(true))
 gb_LinkTarget_LDFLAGS += -Wl,--strip-all
-else
-gb_LinkTarget_LDFLAGS += -Wl,--strip-debug
 endif
 endif
 
