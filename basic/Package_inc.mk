@@ -53,11 +53,6 @@ $(eval $(call gb_Package_add_file,basic_inc,inc/basic/sbxobj.hxx,basic/sbxobj.hx
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/sbxprop.hxx,basic/sbxprop.hxx))
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/sbxvar.hxx,basic/sbxvar.hxx))
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/svtmsg.hrc,basic/svtmsg.hrc))
-$(eval $(call gb_Package_add_file,basic_inc,inc/basic/testtool.hrc,basic/testtool.hrc))
-$(eval $(call gb_Package_add_file,basic_inc,inc/basic/testtool.hxx,basic/testtool.hxx))
-$(eval $(call gb_Package_add_file,basic_inc,inc/basic/ttglobal.hrc,basic/ttglobal.hrc))
-$(eval $(call gb_Package_add_file,basic_inc,inc/basic/ttmsg.hrc,basic/ttmsg.hrc))
-$(eval $(call gb_Package_add_file,basic_inc,inc/basic/ttstrhlp.hxx,basic/ttstrhlp.hxx))
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/vbahelper.hxx,basic/vbahelper.hxx))
 
 # vim: set noet sw=4 ts=4:
