@@ -1658,7 +1658,7 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
                 if( bStartTimer )
                     pWindow->ImplGetWindowImpl()->mpFrameData->maResizeTimer.Start();
                 else
-                    pWindow->ImplCallResize(); // otherwise menues cannot be positioned
+                    pWindow->ImplCallResize(); // otherwise menus cannot be positioned
             }
             else
                 pWindow->ImplGetWindowImpl()->mbCallResize = sal_True;

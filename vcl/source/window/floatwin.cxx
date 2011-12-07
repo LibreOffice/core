@@ -732,7 +732,7 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, sal_uLong nFlags )
     pSVData->maWinData.mpFirstFloat = this;
     if( nFlags & FLOATWIN_POPUPMODE_GRABFOCUS )
     {
-        // force key input even without focus (useful for menues)
+        // force key input even without focus (useful for menus)
         mbGrabFocus = sal_True;
     }
     Show( sal_True, SHOW_NOACTIVATE );

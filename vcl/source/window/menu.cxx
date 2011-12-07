@@ -3695,7 +3695,7 @@ sal_uInt16 PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, sal_uLong
             nMenuFlags &= ~MENU_FLAG_HIDEDISABLEDENTRIES;
     }
     else
-        // #102790# context menues shall never show disabled entries
+        // #102790# context menus shall never show disabled entries
         nMenuFlags |= MENU_FLAG_HIDEDISABLEDENTRIES;
 
 
@@ -4441,7 +4441,7 @@ void MenuFloatingWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     // TH creates a ToTop on this window, but the active popup
     // should stay on top...
-    // due to focus change this would close all menues -> don't do it (#94123)
+    // due to focus change this would close all menus -> don't do it (#94123)
     //if ( pActivePopup && pActivePopup->ImplGetWindow() && !pActivePopup->ImplGetFloatingWindow()->pActivePopup )
     //    pActivePopup->ImplGetFloatingWindow()->ToTop( TOTOP_NOGRABFOCUS );
 

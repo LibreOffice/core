@@ -6421,7 +6421,7 @@ void Window::Show( sal_Bool bVisible, sal_uInt16 nFlags )
     // #107575#, if a floating windows is shown that grabs the focus, we have to notify the toolkit about it
     // ImplGrabFocus() is not called in this case
     // Because this might lead to problems the task will be shifted to 6.y
-    // Note: top-level context menues are registered at the access bridge after being shown,
+    // Note: top-level context menus are registered at the access bridge after being shown,
     // so this will probably not help here....
     /*
     if( mpWindowImpl->mbFloatWin && ((FloatingWindow*) this )->GrabsFocus() )
@@ -8499,7 +8499,7 @@ sal_Bool Window::ImplIsAccessibleCandidate() const
     if( !mpWindowImpl->mbBorderWin )
         return sal_True;
     else
-        // #101741 do not check for WB_CLOSEABLE because undecorated floaters (like menues!) are closeable
+        // #101741 do not check for WB_CLOSEABLE because undecorated floaters (like menus!) are closeable
         if( mpWindowImpl->mbFrame && mpWindowImpl->mnStyle & (WB_MOVEABLE | WB_SIZEABLE) )
             return sal_True;
         else
@@ -8509,7 +8509,7 @@ sal_Bool Window::ImplIsAccessibleCandidate() const
 sal_Bool Window::ImplIsAccessibleNativeFrame() const
 {
     if( mpWindowImpl->mbFrame )
-        // #101741 do not check for WB_CLOSEABLE because undecorated floaters (like menues!) are closeable
+        // #101741 do not check for WB_CLOSEABLE because undecorated floaters (like menus!) are closeable
         if( (mpWindowImpl->mnStyle & (WB_MOVEABLE | WB_SIZEABLE)) )
             return sal_True;
         else
@@ -8822,7 +8822,7 @@ sal_uInt16 Window::GetAccessibleRole() const
                 else if( IsScrollable() )
                     nRole = accessibility::AccessibleRole::SCROLL_PANE;
                 else if( ((Window*)this)->ImplGetWindow()->IsMenuFloatingWindow() )
-                    nRole = accessibility::AccessibleRole::WINDOW;      // #106002#, contextmenues are windows (i.e. toplevel)
+                    nRole = accessibility::AccessibleRole::WINDOW;      // #106002#, contextmenus are windows (i.e. toplevel)
                 else
                     // #104051# WINDOW seems to be a bad default role, use LAYEREDPANE instead
                     // a WINDOW is interpreted as a top-level window, which is typically not the case

@@ -260,7 +260,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
             m_nScriptType, m_aCurLang, m_aKeyboardLang, m_aGuessedTextLang );
 
     // now add menu entries
-    // the different menues purpose will be handled by the different string
+    // the different menus purpose will be handled by the different string
     // for aCmd_Dialog and aCmd_Language
 
     sal_Int16 nItemId = 1;  // in this control the item id is not important for executing the command

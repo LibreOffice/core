@@ -286,7 +286,7 @@
 // free
 
 //========================================================================
-// menues
+// menus
 
 #define MENU_TABLETREE_POPUP            RID_MENU_START +  0
 #define MENU_DATASOURCELIST_POPUP       RID_MENU_START +  1

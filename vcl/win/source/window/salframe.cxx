@@ -1205,12 +1205,12 @@ static void ImplSalShow( HWND hWnd, sal_Bool bVisible, sal_Bool bNoActivate )
             HDC dc = GetDC( hWnd );
             RECT aRect;
             GetClientRect( hWnd, &aRect );
-            FillRect( dc, &aRect, (HBRUSH) (COLOR_MENU+1) ); // choose the menucolor, because its mostly noticeable for menues
+            FillRect( dc, &aRect, (HBRUSH) (COLOR_MENU+1) ); // choose the menucolor, because its mostly noticeable for menus
             ReleaseDC( hWnd, dc );
         }
 
         // #i4715, matrox centerpopup might have changed our position
-        // reposition popups without caption (menues, dropdowns, tooltips)
+        // reposition popups without caption (menus, dropdowns, tooltips)
         GetWindowRect( hWnd, &aRectPostMatrox );
         if( (GetWindowStyle( hWnd ) & WS_POPUP) &&
             !pFrame->mbCaption &&
@@ -4941,8 +4941,8 @@ static int ImplHandleMenuActivate( HWND hWnd, WPARAM wParam, LPARAM )
     // WORD nPos = LOWORD (lParam);
     // sal_Bool bWindowMenu = (sal_Bool) HIWORD(lParam);
 
-    // Send activate and deactivate together, so we have not keep track of opened menues
-    // this will be enough to have the menues updated correctly
+    // Send activate and deactivate together, so we have not keep track of opened menus
+    // this will be enough to have the menus updated correctly
     SalMenuEvent aMenuEvt;
     WinSalMenuItem *pSalMenuItem = ImplGetSalMenuItem( hMenu, 0 );
     if( pSalMenuItem )

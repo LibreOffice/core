@@ -152,7 +152,7 @@ private:
     XubString           aTitleText;         // PopupMenu-Text
 
     sal_uLong               nEventId;
-    sal_uInt16              mnHighlightedItemPos; // for native menues: keeps track of the highlighted item
+    sal_uInt16              mnHighlightedItemPos; // for native menus: keeps track of the highlighted item
     sal_uInt16              nMenuFlags;
     sal_uInt16              nDefaultItem;       // Id vom Default-Item
     sal_uInt16              nSelectedId;
@@ -339,7 +339,7 @@ public:
     // Fuer Menu-'Funktionen'
     MenuItemList*       GetItemList() const                     { return pItemList; }
 
-    // returns the system's menu handle if native menues are supported
+    // returns the system's menu handle if native menus are supported
     // pData must point to a SystemMenuData structure
     sal_Bool                GetSystemMenuData( SystemMenuData* pData ) const;
 

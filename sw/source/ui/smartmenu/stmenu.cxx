@@ -95,7 +95,7 @@ SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
         const rtl::OUString aSmartTagType = xAction->getSmartTagName( nSmartTagIndex );
         const rtl::OUString aSmartTagCaption = xAction->getSmartTagCaption( nSmartTagIndex, aLocale );
 
-        // no sub-menues if there's only one smart tag type listed:
+        // no sub-menus if there's only one smart tag type listed:
         PopupMenu* pSbMenu = this;
         if ( 1 < aActionComponentsSequence.getLength() )
         {
