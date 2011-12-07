@@ -201,11 +201,11 @@ int macxp_resolveAlias(char *path, int buflen)
 
 #endif /* NO_PTHREAD_RTL */
 
-#if defined(LINUX) && defined (__GLIBC__) && __GLIBC__ == 2 || __GLIBC_MINOR__ < 4
+#if defined(LINUX) && defined (__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ < 4
 /* The linux kernel 2.4 getpid implemention always return the pid of the
    thread subprocess and not of the main process, the NPTL implementation
    with a Linux kernel 2.6 kernel return the pid. So when possibly
-   their is the wrong implementation of getpid, we save the pid at startup.
+   there is the wrong implementation of getpid, we save the pid at startup.
    FIXME: when our Linux base-line is above:
         + Linux kernel version 2.6 or higher; -> clone() for NTPL
         + glibc2 version 2.4 or higher; -> No longer LinuxThreads, only NPTL
