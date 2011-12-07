@@ -44,8 +44,4 @@ $(eval $(call gb_Executable_add_noexception_objects,officeloader,\
     desktop/unx/source/officeloader/officeloader \
 ))
 
-$(eval $(call gb_Executable_add_cobjects,officeloader,\
-    desktop/source/app/copyright_ascii_ooo \
-))
-
 # vim: set ts=4 sw=4 et:
