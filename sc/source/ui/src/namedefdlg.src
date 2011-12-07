@@ -55,7 +55,7 @@ ModelessDialog RID_SCDLG_NAMES_DEFINE
     CheckBox BTN_MORE
     {
         Pos = MAP_APPFONT( 5, 82 );
-        Size = MAP_APPFONT( 60, 15 );
+        Size = MAP_APPFONT( 80, 15 );
         Text [en-US] = "Range Options";
     };
     FixedText FT_INFO

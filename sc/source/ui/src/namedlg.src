@@ -128,7 +128,7 @@ ModelessDialog RID_SCDLG_NAMES
     {
         HelpID = "sc:MoreButton:RID_SCDLG_NAMES:BTN_MORE";
         Pos = MAP_APPFONT ( 5 , 185 ) ;
-        Size = MAP_APPFONT ( 50 , 15 ) ;
+        Size = MAP_APPFONT ( 80 , 15 ) ;
         Text [en-US] = "Range Options";
     };
     FixedLine FL_DIV
