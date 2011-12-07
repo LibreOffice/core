@@ -67,7 +67,7 @@ clean-host:
 clean-build:
 	if [ -f $(SRCDIR)/dmake/Makefile ] ; then $(GNUMAKE) -C $(SRCDIR)/dmake clean; fi
 	rm -f solenv/*/bin/dmake*
-	$(if $(filter-out $(INPATH),$(INPATH_FOR_BUILD),)rm -rf $(SRCDIR)/*/$(INPATH_FOR_BUILD))
+	$(if $(filter-out $(INPATH),$(INPATH_FOR_BUILD)),rm -rf $(SRCDIR)/*/$(INPATH_FOR_BUILD))
 
 distclean: clean
 	if [ -f $(SRCDIR)/dmake/Makefile ] ; then $(GNUMAKE) -C $(SRCDIR)/dmake clean; fi
