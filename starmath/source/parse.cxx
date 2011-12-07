@@ -51,6 +51,18 @@ using namespace ::com::sun::star::i18n;
 
 ///////////////////////////////////////////////////////////////////////////
 
+namespace {
+template < typename T >
+T* lcl_popOrZero( ::std::stack<T*> & rStack )
+{
+    if (rStack.empty())
+        return 0;
+    T* pTmp = rStack.top();
+    rStack.pop();
+    return pTmp;
+}
+}
+
 static inline bool strnccmp(const String &u1, xub_StrLen nIdx,
                               const sal_Char *s2, xub_StrLen nLen)
 {
@@ -1066,8 +1078,7 @@ void SmParser::Align()
 
     if (pSNode)
     {
-        pSNode->SetSubNodes(m_aNodeStack.top(), 0);
-        m_aNodeStack.pop();
+        pSNode->SetSubNodes(lcl_popOrZero(m_aNodeStack), 0);
         m_aNodeStack.push(pSNode);
     }
 }
@@ -1086,8 +1097,7 @@ void SmParser::Line()
     if (m_aCurToken.eType != TEND  &&  m_aCurToken.eType != TNEWLINE)
     {   Align();
         ExpressionArray.resize(++n);
-        ExpressionArray[n - 1] = m_aNodeStack.top();
-        m_aNodeStack.pop();
+        ExpressionArray[n - 1] = lcl_popOrZero(m_aNodeStack);
     }
 
     while (m_aCurToken.eType != TEND  &&  m_aCurToken.eType != TNEWLINE)
@@ -1096,8 +1106,7 @@ void SmParser::Line()
         else
             Align();
         ExpressionArray.resize(++n);
-        ExpressionArray[n - 1] = m_aNodeStack.top();
-        m_aNodeStack.pop();
+        ExpressionArray[n - 1] = lcl_popOrZero(m_aNodeStack);
     }
 
     //If there's no expression, add an empty one.
@@ -1132,14 +1141,12 @@ void SmParser::Expression()
 
     Relation();
     RelationArray.resize(++n);
-    RelationArray[n - 1] = m_aNodeStack.top();
-    m_aNodeStack.pop();
+    RelationArray[n - 1] = lcl_popOrZero(m_aNodeStack);
 
     while (m_aCurToken.nLevel >= 4)
     {   Relation();
         RelationArray.resize(++n);
-        RelationArray[n - 1] = m_aNodeStack.top();
-        m_aNodeStack.pop();
+        RelationArray[n - 1] = lcl_popOrZero(m_aNodeStack);
     }
 
     SmExpressionNode *pSNode = new SmExpressionNode(m_aCurToken);
@@ -1155,17 +1162,14 @@ void SmParser::Relation()
     while (TokenInGroup(TGRELATION))
     {
         SmStructureNode *pSNode  = new SmBinHorNode(m_aCurToken);
-        SmNode *pFirst = m_aNodeStack.top();
-        m_aNodeStack.pop();
+        SmNode *pFirst = lcl_popOrZero(m_aNodeStack);
 
         OpSubSup();
-        SmNode *pSecond = m_aNodeStack.top();
-        m_aNodeStack.pop();
+        SmNode *pSecond = lcl_popOrZero(m_aNodeStack);
 
         Sum();
 
-        pSNode->SetSubNodes(pFirst, pSecond, m_aNodeStack.top());
-        m_aNodeStack.pop();
+        pSNode->SetSubNodes(pFirst, pSecond, lcl_popOrZero(m_aNodeStack));
         m_aNodeStack.push(pSNode);
     }
 }
@@ -1177,17 +1181,14 @@ void SmParser::Sum()
     while (TokenInGroup(TGSUM))
     {
         SmStructureNode *pSNode  = new SmBinHorNode(m_aCurToken);
-        SmNode *pFirst = m_aNodeStack.top();
-        m_aNodeStack.pop();
+        SmNode *pFirst = lcl_popOrZero(m_aNodeStack);
 
         OpSubSup();
-        SmNode *pSecond = m_aNodeStack.top();
-        m_aNodeStack.pop();
+        SmNode *pSecond = lcl_popOrZero(m_aNodeStack);
 
         Product();
 
-        pSNode->SetSubNodes(pFirst, pSecond, m_aNodeStack.top());
-        m_aNodeStack.pop();
+        pSNode->SetSubNodes(pFirst, pSecond, lcl_popOrZero(m_aNodeStack));
         m_aNodeStack.push(pSNode);
     }
 }
@@ -1199,9 +1200,8 @@ void SmParser::Product()
 
     while (TokenInGroup(TGPRODUCT))
     {   SmStructureNode *pSNode;
-        SmNode *pFirst = m_aNodeStack.top(),
+        SmNode *pFirst = lcl_popOrZero(m_aNodeStack),
                *pOper;
-        m_aNodeStack.pop();
         bool bSwitchArgs = false;
 
         SmTokenType eType = m_aCurToken.eType;
@@ -1223,8 +1223,7 @@ void SmParser::Product()
                 m_aCurToken.nGroup = TGPRODUCT;
 
                 GlyphSpecial();
-                pOper = m_aNodeStack.top();
-                m_aNodeStack.pop();
+                pOper = lcl_popOrZero(m_aNodeStack);
                 break;
 
             case TOVERBRACE :
@@ -1253,8 +1252,7 @@ void SmParser::Product()
                 pSNode = new SmBinHorNode(m_aCurToken);
 
                 OpSubSup();
-                pOper = m_aNodeStack.top();
-                m_aNodeStack.pop();
+                pOper = lcl_popOrZero(m_aNodeStack);
         }
 
         Power();
@@ -1262,13 +1260,11 @@ void SmParser::Product()
         if (bSwitchArgs)
         {
             //! vgl siehe SmBinDiagonalNode::Arrange
-            pSNode->SetSubNodes(pFirst, m_aNodeStack.top(), pOper);
-            m_aNodeStack.pop();
+            pSNode->SetSubNodes(pFirst, lcl_popOrZero(m_aNodeStack), pOper);
         }
         else
         {
-            pSNode->SetSubNodes(pFirst, pOper, m_aNodeStack.top());
-            m_aNodeStack.pop();
+            pSNode->SetSubNodes(pFirst, pOper, lcl_popOrZero(m_aNodeStack));
         }
         m_aNodeStack.push(pSNode);
     }
@@ -1295,8 +1291,7 @@ void SmParser::SubSup(sal_uLong nActiveGroup)
     // initialize subnodes array
     SmNodeArray  aSubNodes;
     aSubNodes.resize(1 + SUBSUP_NUM_ENTRIES);
-    aSubNodes[0] = m_aNodeStack.top();
-    m_aNodeStack.pop();
+    aSubNodes[0] = lcl_popOrZero(m_aNodeStack);
     for (sal_uInt16 i = 1;  i < aSubNodes.size();  i++)
         aSubNodes[i] = NULL;
 
@@ -1336,8 +1331,7 @@ void SmParser::SubSup(sal_uLong nActiveGroup)
         // set sub-/supscript if not already done
         if (aSubNodes[nIndex] != NULL)
             Error(PE_DOUBLE_SUBSUPSCRIPT);
-        aSubNodes[nIndex] = m_aNodeStack.top();
-        m_aNodeStack.pop();
+        aSubNodes[nIndex] = lcl_popOrZero(m_aNodeStack);
     }
 
     pNode->SetSubNodes(aSubNodes);
@@ -1544,18 +1538,18 @@ void SmParser::Term()
                     else
                         FontAttribut();
 
-                    // check if casting in following line is ok
-                    OSL_ENSURE(!m_aNodeStack.top()->IsVisible(), "Sm : Ooops...");
+                    SmNode* pTmp = lcl_popOrZero(m_aNodeStack);
 
-                    aArray[n] = (SmStructureNode *) m_aNodeStack.top();
-                    m_aNodeStack.pop();
+                    // check if casting in following line is ok
+                    OSL_ENSURE(pTmp && !pTmp->IsVisible(), "Sm : Ooops...");
+
+                    aArray[n] = (SmStructureNode *) pTmp;
                     n++;
                 }
 
                 Power();
 
-                SmNode *pFirstNode = m_aNodeStack.top();
-                m_aNodeStack.pop();
+                SmNode *pFirstNode = lcl_popOrZero(m_aNodeStack);
                 while (n > 0)
                 {   aArray[n - 1]->SetSubNodes(0, pFirstNode);
                     pFirstNode = aArray[n - 1];
@@ -1577,8 +1571,7 @@ void SmParser::Term()
                     //
                     Function();
 
-                    SmNode *pFunc = m_aNodeStack.top();
-                    m_aNodeStack.pop();
+                    SmNode *pFunc = lcl_popOrZero(m_aNodeStack);
 
                     if (m_aCurToken.eType == TLPARENT)
                     {   Term();
@@ -1591,8 +1584,7 @@ void SmParser::Term()
                     Insert('}', GetTokenIndex());
 
                     SmStructureNode *pSNode = new SmExpressionNode(pFunc->GetToken());
-                    pSNode->SetSubNodes(pFunc, m_aNodeStack.top());
-                    m_aNodeStack.pop();
+                    pSNode->SetSubNodes(pFunc, lcl_popOrZero(m_aNodeStack));
                     m_aNodeStack.push(pSNode);
                 }
             }
@@ -1650,14 +1642,12 @@ void SmParser::Operator()
 
         if (TokenInGroup(TGLIMIT) || TokenInGroup(TGPOWER))
             SubSup(m_aCurToken.nGroup);
-        SmNode *pOperator = m_aNodeStack.top();
-        m_aNodeStack.pop();
+        SmNode *pOperator = lcl_popOrZero(m_aNodeStack);
 
         // get argument
         Power();
 
-        pSNode->SetSubNodes(pOperator, m_aNodeStack.top());
-        m_aNodeStack.pop();
+        pSNode->SetSubNodes(pOperator, lcl_popOrZero(m_aNodeStack));
         m_aNodeStack.push(pSNode);
     }
 }
@@ -1745,8 +1735,7 @@ void SmParser::UnOper()
         case TNROOT :
             NextToken();
             Power();
-            pExtra = m_aNodeStack.top();
-            m_aNodeStack.pop();
+            pExtra = lcl_popOrZero(m_aNodeStack);
             break;
 
         case TUOPER :
@@ -1755,8 +1744,7 @@ void SmParser::UnOper()
             m_aCurToken.eType = TUOPER;
             m_aCurToken.nGroup = TGUNOPER;
             GlyphSpecial();
-            pOper = m_aNodeStack.top();
-            m_aNodeStack.pop();
+            pOper = lcl_popOrZero(m_aNodeStack);
             break;
 
         case TPLUS :
@@ -1766,8 +1754,7 @@ void SmParser::UnOper()
         case TNEG :
         case TFACT :
             OpSubSup();
-            pOper = m_aNodeStack.top();
-            m_aNodeStack.pop();
+            pOper = lcl_popOrZero(m_aNodeStack);
             break;
 
         default :
@@ -1776,8 +1763,7 @@ void SmParser::UnOper()
 
     // get argument
     Power();
-    pArg = m_aNodeStack.top();
-    m_aNodeStack.pop();
+    pArg = lcl_popOrZero(m_aNodeStack);
 
     if (eType == TABS)
     {   pSNode = new SmBraceNode(aNodeToken);
@@ -2041,8 +2027,7 @@ void SmParser::Brace()
 
             NextToken();
             Bracebody(true);
-            pBody = m_aNodeStack.top();
-            m_aNodeStack.pop();
+            pBody = lcl_popOrZero(m_aNodeStack);
 
             if (m_aCurToken.eType == TRIGHT)
             {   NextToken();
@@ -2070,8 +2055,7 @@ void SmParser::Brace()
 
             NextToken();
             Bracebody(false);
-            pBody = m_aNodeStack.top();
-            m_aNodeStack.pop();
+            pBody = lcl_popOrZero(m_aNodeStack);
 
             SmTokenType  eExpectedType = TUNKNOWN;
             switch (pLeft->GetToken().eType)
@@ -2168,8 +2152,7 @@ void SmParser::Bracebody(bool bIsLeftRight)
     aNodes.resize(nNum);
     for (sal_uInt16 i = 0;  i < nNum;  i++)
     {
-        aNodes[nNum - 1 - i] = m_aNodeStack.top();
-        m_aNodeStack.pop();
+        aNodes[nNum - 1 - i] = lcl_popOrZero(m_aNodeStack);
     }
 
     pBody->SetSubNodes(aNodes);
@@ -2229,8 +2212,7 @@ void SmParser::Binom()
 
     for (int i = 0;  i < 2;  i++)
     {
-        ExpressionArray[2 - (i + 1)] = m_aNodeStack.top();
-        m_aNodeStack.pop();
+        ExpressionArray[2 - (i + 1)] = lcl_popOrZero(m_aNodeStack);
     }
 
     pSNode->SetSubNodes(ExpressionArray);
@@ -2258,8 +2240,7 @@ void SmParser::Stack()
 
         for (sal_uInt16 i = 0; i < n; i++)
         {
-            ExpressionArray[n - (i + 1)] = m_aNodeStack.top();
-            m_aNodeStack.pop();
+            ExpressionArray[n - (i + 1)] = lcl_popOrZero(m_aNodeStack);
         }
 
         if (m_aCurToken.eType != TRGROUP)
@@ -2325,8 +2306,7 @@ void SmParser::Matrix()
 
         for (sal_uInt16 i = 0; i < (nRC); i++)
         {
-            ExpressionArray[(nRC) - (i + 1)] = m_aNodeStack.top();
-            m_aNodeStack.pop();
+            ExpressionArray[(nRC) - (i + 1)] = lcl_popOrZero(m_aNodeStack);
         }
 
         if (m_aCurToken.eType != TRGROUP)
@@ -2482,8 +2462,7 @@ SmNode *SmParser::Parse(const String &rBuffer)
     NextToken();
     Table();
 
-    SmNode* result = m_aNodeStack.top();
-    m_aNodeStack.pop();
+    SmNode* result = lcl_popOrZero(m_aNodeStack);
     return result;
 }
 
@@ -2508,8 +2487,7 @@ SmNode *SmParser::ParseExpression(const String &rBuffer)
     NextToken();
     Expression();
 
-    SmNode* result = m_aNodeStack.top();
-    m_aNodeStack.pop();
+    SmNode* result = lcl_popOrZero(m_aNodeStack);
     return result;
 }
 

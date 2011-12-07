@@ -262,8 +262,14 @@ public:
 
     void CloseConnection()
     {
-        bool bTemp = aConnectionOrStack.top();
-        aConnectionOrStack.pop();
+        bool bTemp;
+        if (aConnectionOrStack.empty())
+            bTemp = false;
+        else
+        {
+            bTemp = aConnectionOrStack.top();
+            aConnectionOrStack.pop();
+        }
         bConnectionOr = bTemp;
         bNextConnectionOr = bTemp;
     }

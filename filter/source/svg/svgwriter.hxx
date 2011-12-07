@@ -186,9 +186,12 @@ private:
     }
     void                    ImplReleaseContext()
     {
-        delete maContextStack.top();
-        maContextStack.pop();
-        mpContext = maContextStack.top();
+        if (!maContextStack.empty())
+        {
+            delete maContextStack.top();
+            maContextStack.pop();
+        }
+        mpContext = (maContextStack.empty() ? NULL : maContextStack.top());
     }
 
     long                    ImplMap( sal_Int32 nVal ) const;

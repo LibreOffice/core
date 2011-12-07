@@ -1155,8 +1155,14 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 case( GDI_POP_ACTION ):
                 {
 
-                    LineInfo* pLineInfo = aLIStack.top();
-                    aLIStack.pop();
+                    LineInfo* pLineInfo;
+                    if (aLIStack.empty())
+                        pLineInfo = NULL;
+                    else
+                    {
+                        pLineInfo = aLIStack.top();
+                        aLIStack.pop();
+                    }
 
                     // restore line info
                     if( pLineInfo )
@@ -2068,8 +2074,14 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_POP_ACTION ):
             {
-                Color* pCol = rLineColStack.top();
-                rLineColStack.pop();
+                Color* pCol;
+                if (rLineColStack.empty())
+                    pCol = NULL;
+                else
+                {
+                    pCol = rLineColStack.top();
+                    rLineColStack.pop();
+                }
 
                 if( pCol )
                 {
