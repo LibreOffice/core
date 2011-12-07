@@ -58,13 +58,6 @@ File gid_File_Py_Unohelper
     Styles = (PACKED);
 End
 
-File gid_File_Py_Officehelper
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "officehelper.py";
-    Styles = (PACKED);
-End
-
 File gid_File_Py_Uno
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
