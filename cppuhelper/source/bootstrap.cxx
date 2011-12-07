@@ -289,6 +289,13 @@ Reference< registry::XSimpleRegistry > readRdbDirectory(
                  url),
                 css::uno::Reference< css::uno::XInterface >());
         }
+        rtl::OUString aName = stat.getFileName();
+
+        // Ignore backup files - to allow people to edit their
+        // services/ without extremely confusing behaviour
+        if (aName.toChar() == '.' || aName.endsWithAsciiL("~", 1))
+            continue;
+
         if (stat.getFileType() != osl::FileStatus::Directory) { //TODO: symlinks
             last = readRdbFile(
                 stat.getFileURL(), fatalErrors, last, simpleRegistryFactory,
