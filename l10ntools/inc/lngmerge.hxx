@@ -47,23 +47,28 @@ class LngParser
 private:
     sal_uInt16 nError;
     LngLineList *pLines;
-    ByteString sSource;
+    rtl::OString sSource;
     sal_Bool bDBIsUTF8;
     sal_Bool bULF;
     bool bQuiet;
     std::vector<ByteString> aLanguages;
 
     bool isNextGroup(  ByteString &sGroup_out , ByteString &sLine_in);
-    void ReadLine( const ByteString &sLine_in , ByteStringHashMap &rText_inout );
-    void WriteSDF( SvFileStream &aSDFStream , ByteStringHashMap &rText_inout ,
-                    const ByteString &rPrj ,
-                    const ByteString &rRoot , const ByteString &sActFileName , const ByteString &sID );
+    void ReadLine(const rtl::OString &rLine_in,
+        ByteStringHashMap &rText_inout);
+    void WriteSDF(SvFileStream &aSDFStream, ByteStringHashMap &rText_inout,
+        const rtl::OString &rPrj, const rtl::OString &rRoot,
+        const rtl::OString &rActFileName, const rtl::OString &rID);
 public:
-    LngParser( const ByteString &rLngFile, sal_Bool bUTF8, sal_Bool bULFFormat );
+    LngParser(const rtl::OString &rLngFile, sal_Bool bUTF8,
+        sal_Bool bULFFormat);
     ~LngParser();
 
-    sal_Bool CreateSDF( const ByteString &rSDFFile, const ByteString &rPrj, const ByteString &rRoot );
-    sal_Bool Merge( const ByteString &rSDFFile, const ByteString &rDestinationFile , const ByteString &rPrj );
+    sal_Bool CreateSDF(const rtl::OString &rSDFFile,
+        const rtl::OString &rPrj,
+        const rtl::OString &rRoot);
+    sal_Bool Merge(const rtl::OString &rSDFFile,
+        const rtl::OString &rDestinationFile);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

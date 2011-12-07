@@ -707,15 +707,18 @@ CfgMerge::CfgMerge(
                 sFilename( rFilename ),
                 bEnglish( sal_False )
 {
-    if ( rMergeSource.Len()){
+    if (rMergeSource.Len())
+    {
         pMergeDataFile = new MergeDataFile(
         rMergeSource, sInputFileName, bErrorLog, true );
-        if( Export::sLanguages.EqualsIgnoreCaseAscii("ALL") ){
+        if (Export::sLanguages.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("ALL")))
+        {
             Export::SetLanguages( pMergeDataFile->GetLanguages() );
             aLanguages = pMergeDataFile->GetLanguages();
         }
         else aLanguages = Export::GetLanguages();
-    }else
+    }
+    else
         aLanguages = Export::GetLanguages();
 }
 

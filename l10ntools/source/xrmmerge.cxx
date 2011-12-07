@@ -638,11 +638,13 @@ XRMResMerge::XRMResMerge(
     if ( rMergeSource.Len())
         pMergeDataFile = new MergeDataFile(
             rMergeSource, sInputFileName, bErrorLog);
-    if( Export::sLanguages.EqualsIgnoreCaseAscii("ALL") ){
+    if( Export::sLanguages.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("ALL")))
+    {
         Export::SetLanguages( pMergeDataFile->GetLanguages() );
         aLanguages = pMergeDataFile->GetLanguages();
     }
-    else aLanguages = Export::GetLanguages();
+    else
+        aLanguages = Export::GetLanguages();
 }
 
 /*****************************************************************************/

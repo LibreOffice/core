@@ -56,7 +56,7 @@ ByteString PFormEntrys::Dump()
 {
     ByteString sRet( "PFormEntrys\n" );
     ByteString a("sText");
-    if(sText.size())
+    if (sText.size())
         Export::DumpMap(a , sText);
     return sRet;
 }

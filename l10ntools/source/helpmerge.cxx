@@ -231,7 +231,7 @@ ByteString HelpParser::makeAbsolutePath( const ByteString& sHelpFile , const Byt
 }
 
 bool HelpParser::Merge( const ByteString &rSDFFile, const ByteString &rDestinationFile  ,
-        ByteString& sLanguage , MergeDataFile& aMergeDataFile )
+    const rtl::OString& rLanguage , MergeDataFile& aMergeDataFile )
 {
 
     (void) rSDFFile;
@@ -261,7 +261,7 @@ bool HelpParser::Merge( const ByteString &rSDFFile, const ByteString &rDestinati
 
     XMLFile* xmlfile = ( aParser.Execute( aFile.GetFull() , sOUHelpFile, new XMLFile( '0' ) ) );
     printf("Dest file %s\n",rDestinationFile.GetBuffer());
-    hasNoError = MergeSingleFile( xmlfile , aMergeDataFile , sLanguage , rDestinationFile );
+    hasNoError = MergeSingleFile( xmlfile , aMergeDataFile , rLanguage , rDestinationFile );
     delete xmlfile;
     if( !sUsedTempFile.EqualsIgnoreCaseAscii( "" ) ){
         DirEntry aTempFile( sUsedTempFile );
@@ -281,16 +281,15 @@ void HelpParser::parse_languages( std::vector<ByteString>& aLanguages , MergeDat
     std::vector<ByteString> aTmp;
 
     const ByteString ENUS   ("en-US");
-    static const ByteString ALL( "ALL" );
 
     Export::InitLanguages( false );
 
-    if( Export::sLanguages.EqualsIgnoreCaseAscii( ALL ) )
+    if (Export::sLanguages.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("ALL")))
     {
         aLanguages = aMergeDataFile.GetLanguages();
         aLanguages.push_back( ENUS );
 
-        if( !Export::sForcedLanguages.Equals("") )
+        if( !Export::sForcedLanguages.isEmpty() )
         {
             std::vector<ByteString> aFL = Export::GetForcedLanguages();
             std::copy( aFL.begin() ,

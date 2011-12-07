@@ -167,7 +167,8 @@ int _cdecl main( int argc, char *argv[] )
 #endif
 /*****************************************************************************/
 {
-    if ( !ParseCommandLine( argc, argv )) {
+    if ( !ParseCommandLine( argc, argv ))
+    {
         Help();
         return 1;
     }
@@ -175,7 +176,7 @@ int _cdecl main( int argc, char *argv[] )
     if ( sOutputFile.Len()) {
         LngParser aParser( sInputFile, bUTF8, bULF );
         if ( bMergeMode )
-            aParser.Merge( sMergeSrc, sOutputFile , sPrj );
+            aParser.Merge(sMergeSrc, sOutputFile);
         else
             aParser.CreateSDF( sOutputFile, sPrj, sPrjRoot );
     }
