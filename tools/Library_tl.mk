@@ -112,7 +112,6 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/string/tstring \
     tools/source/string/tustring \
     tools/source/string/reversemap \
-    tools/source/testtoolloader/testtoolloader \
     tools/source/zcodec/zcodec \
 ))
 
@@ -145,5 +144,5 @@ $(eval $(call gb_Library_add_linked_libs,tl,\
 endif
 
 # no -DTOOLS_DLLIMPLEMENTATION on toolsdll
-# -DEXCEPTIONS_OFF -fno-exceptions on datetime tdate ttime bigint color config fract gen line link poly2 svborder toolsin inetmime inetmsg inetstrm contnr mempool multisel table unqidx cachestr stream strmsys vcompat tenccvt tstring tustring testtoolloader
+# -DEXCEPTIONS_OFF -fno-exceptions on datetime tdate ttime bigint color config fract gen line link poly2 svborder toolsin inetmime inetmsg inetstrm contnr mempool multisel table unqidx cachestr stream strmsys vcompat tenccvt tstring tustring
 # vim: set noet sw=4 ts=4:

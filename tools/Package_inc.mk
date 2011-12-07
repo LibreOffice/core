@@ -86,7 +86,6 @@ $(eval $(call gb_Package_add_file,tools_inc,inc/tools/svlibrary.hxx,tools/svlibr
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/table.hxx,tools/table.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/tempfile.hxx,tools/tempfile.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/tenccvt.hxx,tools/tenccvt.hxx))
-$(eval $(call gb_Package_add_file,tools_inc,inc/tools/testtoolloader.hxx,tools/testtoolloader.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/time.hxx,tools/time.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/tools.h,tools/tools.h))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/toolsdllapi.h,tools/toolsdllapi.h))

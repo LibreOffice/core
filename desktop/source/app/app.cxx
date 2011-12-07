@@ -96,7 +96,6 @@
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
 
 #include <com/sun/star/java/XJavaVM.hpp>
-#include <tools/testtoolloader.hxx>
 #include <tools/solar.h>
 #include <toolkit/unohlp.hxx>
 #include <osl/security.hxx>
@@ -1680,11 +1679,6 @@ int Desktop::Main()
         */
         Application::GetDefaultDevice();
 
-        // initialize test-tool library (if available)
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ tools::InitTestToolLib" );
-        tools::InitTestToolLib();
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "} tools::InitTestToolLib" );
-
         // Check if bundled or shared extensions were added /removed
         // and process those extensions (has to be done before checking
         // the extension dependencies!
@@ -1930,7 +1924,6 @@ int Desktop::doShutdown()
     sal_uLong nAcquireCount = Application::ReleaseSolarMutex();
     DeregisterServices();
     Application::AcquireSolarMutex(nAcquireCount);
-    tools::DeInitTestToolLib();
     // be sure that path/language options gets destroyed before
     // UCB is deinitialized
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "-> dispose path/language options" );

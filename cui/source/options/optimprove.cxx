@@ -46,7 +46,6 @@
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/uieventslogger.hxx>
-#include <tools/testtoolloader.hxx>
 
 namespace lang  = ::com::sun::star::lang;
 namespace uno   = ::com::sun::star::uno;
@@ -190,7 +189,6 @@ IMPL_LINK( SvxImprovementDialog, HandleOK, OKButton*, EMPTYARG )
             ::comphelper::ConfigurationHelper::E_STANDARD );
         // TODO: refactor
         ::comphelper::UiEventsLogger::reinit();
-        ::tools::InitTestToolLib();
     }
     EndDialog( RET_OK );
     return 0;

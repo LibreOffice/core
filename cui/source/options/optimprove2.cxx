@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// include ---------------------------------------------------------------
-
 #define _SVX_OPTIMPROVE_CXX
 
 #include <optimprove.hxx>
@@ -49,7 +47,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/synchronousdispatch.hxx>
 #include <comphelper/uieventslogger.hxx>
-#include <tools/testtoolloader.hxx>
 #include <osl/file.hxx>
 
 #define C2S(s)  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
@@ -185,7 +182,6 @@ sal_Bool SvxImprovementOptionsPage::FillItemSet( SfxItemSet& /*rSet*/ )
         ::comphelper::ConfigurationHelper::flush( xConfig );
         // TODO: refactor
         ::comphelper::UiEventsLogger::reinit();
-        ::tools::InitTestToolLib();
     }
     catch( uno::Exception& )
     {

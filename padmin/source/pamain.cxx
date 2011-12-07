@@ -29,8 +29,6 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include "tools/testtoolloader.hxx"
-
 #include "vcl/svapp.hxx"
 #include "vcl/wrkwin.hxx"
 #include "vcl/unowrap.hxx"
@@ -55,8 +53,6 @@ using namespace com::sun::star::lang;
 using namespace comphelper;
 
 using ::rtl::OUString;
-
-// -----------------------------------------------------------------------
 
 class MyApp : public Application
 {
@@ -152,9 +148,6 @@ int MyApp::Main()
                 return EXIT_FAILURE;
     }
 
-    // initialize test-tool library (if available)
-    tools::InitTestToolLib();
-
     ResMgr::SetReadStringHook( MyApp::ReadStringHook );
 
     pPADialog = PADialog::Create( NULL , sal_False );
@@ -162,8 +155,6 @@ int MyApp::Main()
     pPADialog->SetIcon(501);
     pPADialog->Execute();
     delete pPADialog;
-
-    tools::DeInitTestToolLib();
 
     /*
      *  clean up UCB

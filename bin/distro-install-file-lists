@@ -123,7 +123,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
             merge_flists gid_Module_Optional_Javafilter        $FILELISTSDIR/common_list.txt
             merge_flists gid_Module_Optional_Pymailmerge       $FILELISTSDIR/pyuno_list.txt
             merge_flists gid_Module_Optional_Pyuno             $FILELISTSDIR/pyuno_list.txt
-            merge_flists gid_Module_Optional_Testtool          $FILELISTSDIR/testtool_list.txt
             merge_flists gid_Module_Optional_Xsltfiltersamples $FILELISTSDIR/common_list.txt
         else
             merge_flists gid_Module_Optional_Binfilter         $FILELISTSDIR/filters_list.txt
@@ -132,7 +131,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
             merge_flists gid_Module_Optional_Javafilter        $FILELISTSDIR/filters_list.txt
             merge_flists gid_Module_Optional_Pymailmerge       $FILELISTSDIR/mailmerge_list.txt
             merge_flists gid_Module_Optional_Pyuno             $FILELISTSDIR/pyuno_list.txt
-            merge_flists gid_Module_Optional_Testtool          $FILELISTSDIR/testtool_list.txt
             merge_flists gid_Module_Optional_Xsltfiltersamples $FILELISTSDIR/filters_list.txt
         fi
     else
@@ -143,7 +141,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         merge_flists gid_Module_Optional_Javafilter        $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Optional_Pymailmerge       $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Optional_Pyuno             $FILELISTSDIR/common_list.txt
-        merge_flists gid_Module_Optional_Testtool          $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Optional_Xsltfiltersamples $FILELISTSDIR/common_list.txt
     fi
 
@@ -420,7 +417,6 @@ else
     create_package_directory gid_Module_Root_Files_5                pkg/libreoffice-common
     create_package_directory gid_Module_Root_Files_6                pkg/libreoffice-common
     create_package_directory gid_Module_Root_Files_7                pkg/libreoffice-common
-    create_package_directory gid_Module_Optional_Testtool           pkg/libreoffice-qa-tools
     if [ -e gid_Module_Optional_Pymailmerge ]; then
         create_package_directory gid_Module_Optional_Pymailmerge    pkg/libreoffice-emailmerge
     else # post m26
