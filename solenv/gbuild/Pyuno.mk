@@ -25,40 +25,26 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-gb_Pyuno_ZIPCOMMAND := zip $(if $(findstring s,$(MAKEFLAGS)),-q)
-gb_Pyuno__get_outdir_path = $(patsubst $(OUTDIR)/%,%,$(gb_Helper_OUTDIRLIBDIR))/pyuno/$(1)
-
 $(call gb_Pyuno_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),PYU,3)
 	mkdir -p $(dir $@) && touch $@
 
-$(call gb_Pyuno_get_target_zip,%) : $(call gb_Package_get_target,%_pyuno)
-	$(call gb_Output_announce,$*,$(true),PZP,3)
-	cd $(gb_Helper_OUTDIRLIBDIR)/pyuno && \
-	$(gb_Pyuno_ZIPCOMMAND) -rX --filesync \
-		$(call gb_Pyuno_get_target_zip,$*) \
-		$(PYZFILES)
-
 .PHONY : $(call gb_Pyuno_get_clean_target,%)
 $(call gb_Pyuno_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),PYU,3)
-	rm -f $@ $(gb_Pyuno_get_target_zip,$*)
+	rm -f $(call gb_Pyuno_get_target,$*) $(call gb_Pyuno_get_outdir_target,$*)
 
 define gb_Pyuno_Pyuno
-$(call gb_Pyuno_get_target_zip,$(1)) : PYZFILES :=
-$(call gb_Package_Package,$(1)_pyuno,$(2))
+$(call gb_Zip_Zip,Pyuno/$(1),$(2))
 $$(eval $$(call gb_Module_register_target,$(call gb_Pyuno_get_target,$(1)),$(call gb_Pyuno_get_clean_target,$(1))))
-$(call gb_Pyuno_get_target,$(1)) : \
-	$(call gb_Package_get_target,$(1)_pyuno) \
-	$(call gb_Pyuno_get_target_zip,$(1))
-$(call gb_Pyuno_get_clean_target,$(1)) : \
-	$(call gb_Package_get_clean_target,$(1)_pyuno)
+$(call gb_Pyuno_get_target,$(1)) : $(call gb_Pyuno_get_outdir_target,$(1))
+$(call gb_Pyuno_get_outdir_target,$(1)) : $(call gb_Zip_get_target,Pyuno/$(1))
+$(call gb_Pyuno_get_clean_target,$(1)) : $(call gb_Zip_get_clean_target,Pyuno/$(1))
 
 endef
 
 define gb_Pyuno_add_file
-$(call gb_Pyuno_get_target_zip,$(1)) : PYZFILES += $(2)
-$(call gb_Package_add_file,$(1)_pyuno,$(call gb_Pyuno__get_outdir_path,$(2)),$(2))
+$(call gb_Zip_add_file,Pyuno/$(1),$(2))
 
 endef
 
