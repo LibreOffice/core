@@ -71,10 +71,7 @@ INSTALLDIR=$(OUT)
 LOCALPYFILES= \
     $(BIN)$/uno.py \
     $(BIN)$/unohelper.py \
-    $(BIN)$/pythonloader.py \
-    $(BIN)$/officehelper.py \
-    $(BIN)$/mailmerge.py \
-    $(BIN)$/msgbox.py
+    $(BIN)$/pythonloader.py
 .ENDIF
 
 help_exist:=$(shell @find $(L10N_MODULE)/source/ -type d -name "helpcontent2" 2>/dev/null | sed -e "s|/helpcontent2||" -e "s|^.*/||" ) en-US qtz
