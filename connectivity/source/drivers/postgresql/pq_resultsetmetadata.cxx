@@ -181,14 +181,6 @@ ResultSetMetaData::ResultSetMetaData(
     }
 }
 
-// typedef std::hash_map<
-//     Oid,
-//     rtl::OUString,
-//     std::hash< Oid >,
-//     std::equal_to< Oid >,
-//     Allocator < std::pair< Oid, rtl::OUString > > >  PqTypeMap;
-
-
 void ResultSetMetaData::checkForTypes()
 {
     if( ! m_checkedForTypes )

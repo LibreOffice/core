@@ -183,7 +183,7 @@ typedef ::boost::unordered_map
 <
     const sal_Int32,
     rtl::OUString,
-    ::std::hash< sal_Int32 >,
+    ::boost::hash< sal_Int32 >,
     ::std::equal_to< sal_Int32 >,
     Allocator< ::std::pair< sal_Int32, ::rtl::OUString > >
 > Int2StringMap;
