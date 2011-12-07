@@ -171,6 +171,13 @@ void ScCellKeywordTranslator::transKeyword(String& rName, const Locale* pLocale,
     lclMatchKeyword(rName, spInstance->maStringNameMap, eOpCode, pLocale);
 }
 
+void ScCellKeywordTranslator::transKeyword(rtl::OUString& rName, const Locale* pLocale, OpCode eOpCode)
+{
+    String aName = rName;
+    transKeyword(aName, pLocale, eOpCode);
+    rName = aName;
+}
+
 ScCellKeywordTranslator::ScCellKeywordTranslator() :
     maTransWrapper( ::comphelper::getProcessServiceFactory(),
                     i18n::TransliterationModules_LOWERCASE_UPPERCASE )
