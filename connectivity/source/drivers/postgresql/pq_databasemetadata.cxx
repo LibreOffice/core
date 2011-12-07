@@ -1455,7 +1455,7 @@ typedef ::boost::unordered_map
 <
     sal_Int32,
     DatabaseTypeDescription,
-    ::std::hash< sal_Int32 >,
+    ::boost::hash< sal_Int32 >,
     ::std::equal_to< sal_Int32 >,
     Allocator< ::std::pair< sal_Int32, DatabaseTypeDescription > >
 > Oid2DatabaseTypeDescriptionMap;
