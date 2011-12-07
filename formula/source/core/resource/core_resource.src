@@ -192,7 +192,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_ST_DEV_A { Text = "STDEVA" ; };
     String SC_OPCODE_ST_DEV_P { Text = "STDEVP" ; };
     String SC_OPCODE_ST_DEV_P_A { Text = "STDEVPA" ; };
-    String SC_OPCODE_B { Text = "B" ; };
+    String SC_OPCODE_B { Text = "BINOM.DIST.RANGE" ; };
     String SC_OPCODE_NORM_DIST { Text = "NORMDIST" ; };
     String SC_OPCODE_EXP_DIST { Text = "EXPONDIST" ; };
     String SC_OPCODE_BINOM_DIST { Text = "BINOMDIST" ; };
@@ -273,7 +273,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_BACK_SOLVER { Text = "GOALSEEK" ; };
     String SC_OPCODE_HYP_GEOM_DIST { Text = "HYPGEOMDIST" ; };
     String SC_OPCODE_LOG_NORM_DIST { Text = "LOGNORMDIST" ; };
-    String SC_OPCODE_T_DIST { Text = "TDIST" ; };
+    String SC_OPCODE_T_DIST { Text = "LEGACY.TDIST" ; };
     String SC_OPCODE_F_DIST { Text = "LEGACY.FDIST" ; };
     String SC_OPCODE_CHI_DIST { Text = "LEGACY.CHIDIST" ; };
     String SC_OPCODE_WEIBULL { Text = "WEIBULL" ; };
@@ -325,7 +325,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_BETA_DIST { Text = "BETADIST" ; };
     String SC_OPCODE_BETA_INV { Text = "BETAINV" ; };
     String SC_OPCODE_WEEK { Text = "ISOWEEKNUM" ; };
-    String SC_OPCODE_EASTERSUNDAY { Text = "EASTERSUNDAY" ; };
+    String SC_OPCODE_EASTERSUNDAY { Text = "ORG.OPENOFFICE.EASTERSUNDAY" ; };
     String SC_OPCODE_GET_DAY_OF_WEEK { Text = "WEEKDAY" ; };
     String SC_OPCODE_NO_NAME { Text = "#NAME!" ; };
     String SC_OPCODE_STYLE { Text = "ORG.OPENOFFICE.STYLE" ; };
