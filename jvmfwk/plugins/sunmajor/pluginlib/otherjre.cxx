@@ -87,11 +87,9 @@ char const* const* OtherInfo::getRuntimePaths(int * size)
 char const* const* OtherInfo::getLibraryPaths(int* size)
 {
 
-#ifdef UNX
+#if defined(UNX) && !defined(MACOSX)
+    //mac version does not have a ld library path anymore
     static char const * ar[] = {
-#ifdef MACOSX
-        //mac version does not have a ld library path anymore
-#else
         "/bin",
         "/jre/bin",
         "/bin/classic",
@@ -102,13 +100,12 @@ char const* const* OtherInfo::getLibraryPaths(int* size)
         "/lib/" JFW_PLUGIN_ARCH "/jrockit",
         "/lib/" JFW_PLUGIN_ARCH "/native_threads",
         "/lib/" JFW_PLUGIN_ARCH
-#endif
     };
 
     *size = sizeof(ar) / sizeof (char*);
     return ar;
 #else
-    size = 0;
+    *size = 0;
     return NULL;
 #endif
 }
