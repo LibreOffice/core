@@ -148,7 +148,7 @@ class ResData
 {
 public:
     ~ResData();
-    sal_Bool SetId( const ByteString &rId, sal_uInt16 nLevel );
+    sal_Bool SetId(const rtl::OString &rId, sal_uInt16 nLevel);
 
     sal_uInt16 nWidth;
     sal_uInt16 nChildIndex;
@@ -318,8 +318,8 @@ private:
 
 public:
     ParserQueue* pParseQueue; // public ?
-    static ByteString sLanguages; // public ?
-    static ByteString sForcedLanguages; // public ?
+    static rtl::OString sLanguages; // public ?
+    static rtl::OString sForcedLanguages; // public ?
 
 
     static bool skipProject( ByteString sPrj ) ;
@@ -352,8 +352,10 @@ public:
     static ByteString GetNativeFile( ByteString sSource );
     static DirEntry GetTempFile();
 
-    static void DumpExportList( ByteString& sListName , ExportList& aList );
-    static ByteString DumpMap( ByteString& sMapName , ByteStringHashMap& aMap );
+    static void DumpExportList(const rtl::OString& rListName,
+        ExportList& aList);
+    static ByteString DumpMap(const rtl::OString& rMapName,
+        ByteStringHashMap& aMap);
 
 private:
     static std::vector<ByteString> aLanguages;

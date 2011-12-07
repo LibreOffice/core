@@ -38,15 +38,13 @@ using comphelper::string::getToken;
 //
 // class LngParser
 //
-/*****************************************************************************/
-LngParser::LngParser( const ByteString &rLngFile, sal_Bool bUTF8, sal_Bool bULFFormat )
-/*****************************************************************************/
-                :
-                nError( LNG_OK ),
-                pLines( NULL ),
-                sSource( rLngFile ),
-                bDBIsUTF8( bUTF8 ),
-                bULF( bULFFormat )
+LngParser::LngParser(const rtl::OString &rLngFile, sal_Bool bUTF8,
+    sal_Bool bULFFormat)
+    : nError( LNG_OK )
+    , pLines( NULL )
+    , sSource( rLngFile )
+    , bDBIsUTF8( bUTF8 )
+    , bULF( bULFFormat )
 {
     pLines = new LngLineList();
     DirEntry aEntry( String( sSource, RTL_TEXTENCODING_ASCII_US ));
@@ -78,9 +76,7 @@ LngParser::LngParser( const ByteString &rLngFile, sal_Bool bUTF8, sal_Bool bULFF
         nError = LNG_FILE_NOTFOUND;
 }
 
-/*****************************************************************************/
 LngParser::~LngParser()
-/*****************************************************************************/
 {
     for ( size_t i = 0, n = pLines->size(); i < n; i++ )
         delete (*pLines)[ i ];
@@ -88,11 +84,8 @@ LngParser::~LngParser()
     delete pLines;
 }
 
-/*****************************************************************************/
-sal_Bool LngParser::CreateSDF(
-    const ByteString &rSDFFile, const ByteString &rPrj,
-    const ByteString &rRoot )
-/*****************************************************************************/
+sal_Bool LngParser::CreateSDF(const rtl::OString &rSDFFile,
+    const rtl::OString &rPrj, const rtl::OString &rRoot)
 {
 
     Export::InitLanguages( false );
@@ -141,9 +134,10 @@ sal_Bool LngParser::CreateSDF(
     return true;
 }
 
-void LngParser::WriteSDF( SvFileStream &aSDFStream , ByteStringHashMap &rText_inout ,
-    const ByteString &rPrj , const ByteString &rRoot ,
-    const ByteString &sActFileName , const ByteString &sID )
+void LngParser::WriteSDF(SvFileStream &aSDFStream,
+    ByteStringHashMap &rText_inout, const rtl::OString &rPrj,
+    const rtl::OString &rRoot, const rtl::OString &rActFileName,
+    const rtl::OString &rID)
 {
 
    sal_Bool bExport = true;
@@ -157,11 +151,11 @@ void LngParser::WriteSDF( SvFileStream &aSDFStream , ByteStringHashMap &rText_in
                sAct = rText_inout[ ByteString("en-US") ];
 
            ByteString sOutput( rPrj ); sOutput += "\t";
-           if ( rRoot.Len())
-               sOutput += sActFileName;
+           if (rRoot.getLength())
+               sOutput += rActFileName;
            sOutput += "\t0\t";
            sOutput += "LngText\t";
-           sOutput += sID; sOutput += "\t\t\t\t0\t";
+           sOutput += rID; sOutput += "\t\t\t\t0\t";
            sOutput += sCur; sOutput += "\t";
            sOutput += sAct; sOutput += "\t\t\t\t";
            sOutput += sTimeStamp;
@@ -185,22 +179,21 @@ bool LngParser::isNextGroup( ByteString &sGroup_out , ByteString &sLine_in )
     return false;
 }
 
-void LngParser::ReadLine( const ByteString &sLine_in , ByteStringHashMap &rText_inout)
+void LngParser::ReadLine(const rtl::OString &rLine_in,
+        ByteStringHashMap &rText_inout)
 {
-   rtl::OString sLang = getToken(sLine_in, 0, '=');
+   rtl::OString sLang = getToken(rLine_in, 0, '=');
    sLang = comphelper::string::stripStart(sLang, ' ');
    sLang = comphelper::string::stripEnd(sLang, ' ');
-   rtl::OString sText = getToken(getToken(sLine_in, 1, '\"'), 0, '\"');
+   rtl::OString sText = getToken(getToken(rLine_in, 1, '\"'), 0, '\"');
    if (!sLang.isEmpty())
        rText_inout[ sLang ] = sText;
 }
 
-/*****************************************************************************/
 sal_Bool LngParser::Merge(
-    const ByteString &rSDFFile, const ByteString &rDestinationFile , const ByteString& rPrj )
-/*****************************************************************************/
+    const rtl::OString &rSDFFile,
+    const rtl::OString &rDestinationFile)
 {
-    (void) rPrj;
     Export::InitLanguages( true );
     SvFileStream aDestination(
         String( rDestinationFile, RTL_TEXTENCODING_ASCII_US ),

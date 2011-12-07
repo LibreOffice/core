@@ -64,13 +64,13 @@ sal_Bool bErrorLog;
 sal_Bool bBreakWhenHelpText;
 sal_Bool bUnmerge;
 sal_Bool bUTF8;
-ByteString sPrj;
-ByteString sPrjRoot;
-ByteString sActFileName;
-ByteString sOutputFile;
-ByteString sMergeSrc;
-ByteString sTempFile;
-ByteString sFile;
+rtl::OString sPrj;
+rtl::OString sPrjRoot;
+rtl::OString sActFileName;
+rtl::OString sOutputFile;
+rtl::OString sMergeSrc;
+rtl::OString sTempFile;
+rtl::OString sFile;
 MergeDataFile *pMergeDataFile;
 FILE *pTempFile;
 
@@ -145,35 +145,36 @@ extern char *GetOutputFile( int argc, char* argv[])
                 }
                 break;
                 case STATE_OUTPUT: {
-                    sOutputFile = ByteString( argv[ i ]); // the dest. file
+                    sOutputFile = rtl::OString(argv[i]); // the dest. file
                 }
                 break;
                 case STATE_PRJ: {
-                    sPrj = ByteString( argv[ i ]);
+                    sPrj = rtl::OString(argv[i]);
                 }
                 break;
                 case STATE_ROOT: {
-                    sPrjRoot = ByteString( argv[ i ]); // path to project root
+                    sPrjRoot = rtl::OString(argv[i]); // path to project root
                 }
                 break;
                 case STATE_MERGESRC: {
-                    sMergeSrc = ByteString( argv[ i ]);
+                    sMergeSrc = rtl::OString(argv[i]);
                     bMergeMode = sal_True; // activate merge mode, cause merge database found
                 }
                 break;
                 case STATE_LANGUAGES: {
-                    Export::sLanguages = ByteString( argv[ i ]);
+                    Export::sLanguages = rtl::OString(argv[i]);
                 }
                 break;
             }
         }
     }
-    if( bUnmerge ) sMergeSrc = ByteString();
+    if( bUnmerge )
+        sMergeSrc = rtl::OString();
     if ( bInput ) {
         // command line is valid
         bEnableExport = sal_True;
-        char *pReturn = new char[ sOutputFile.Len() + 1 ];
-        strcpy( pReturn, sOutputFile.GetBuffer());  // #100211# - checked
+        char *pReturn = new char[ sOutputFile.getLength() + 1 ];
+        strcpy( pReturn, sOutputFile.getStr());  // #100211# - checked
         return pReturn;
     }
 
@@ -185,16 +186,21 @@ int InitExport( char *pOutput , char* pFilename )
 /*****************************************************************************/
 {
     // instanciate Export
-    ByteString sOutput( pOutput );
-    ByteString sFilename( pFilename );
+    rtl::OString sOutput( pOutput );
+    rtl::OString sFilename( pFilename );
 
-    if ( bMergeMode && !bUnmerge ) {
+    if ( bMergeMode && !bUnmerge )
+    {
         // merge mode enabled, so read database
-        pExport = new Export(sOutput, bEnableExport, sPrj, sPrjRoot, sMergeSrc , sFilename );
+        pExport = new Export(sOutput, bEnableExport, sPrj, sPrjRoot,
+            sMergeSrc , sFilename );
     }
     else
+    {
         // no merge mode, only export
-        pExport = new Export( sOutput, bEnableExport, sPrj, sPrjRoot , sFilename );
+        pExport = new Export(sOutput, bEnableExport, sPrj, sPrjRoot,
+            sFilename );
+    }
     return 1;
 }
 
@@ -215,17 +221,20 @@ extern FILE *GetNextFile()
 /*****************************************************************************/
 {
     // look for next valid filename in input file list
-    if ( sTempFile.Len()) {
+    if ( sTempFile.getLength())
+    {
         fclose( pTempFile );
-        String sTemp( sTempFile, RTL_TEXTENCODING_ASCII_US );
+        String sTemp(rtl::OStringToOUString(sTempFile,
+            RTL_TEXTENCODING_ASCII_US));
         DirEntry aTemp( sTemp );
         aTemp.Kill();
     }
 
-    while ( !aInputFileList.empty() ) {
+    while ( !aInputFileList.empty() )
+    {
         ByteString sFileName( *(aInputFileList[ 0 ]) );
 
-        ByteString sOrigFile( sFileName );
+        rtl::OString sOrigFile( sFileName );
 
         sFileName = Export::GetNativeFile( sFileName );
         delete aInputFileList[ 0 ];
@@ -233,7 +242,7 @@ extern FILE *GetNextFile()
 
         if ( sFileName == "" ) {
             fprintf( stderr, "ERROR: Could not precompile File %s\n",
-                sOrigFile.GetBuffer());
+                sOrigFile.getStr());
             return GetNextFile();
         }
 
@@ -250,7 +259,8 @@ extern FILE *GetNextFile()
 
             // this is a valid file which can be opened, so
             // create path to project root
-            DirEntry aEntry( String( sOrigFile, RTL_TEXTENCODING_ASCII_US ));
+            DirEntry aEntry(rtl::OStringToOUString(sOrigFile,
+                RTL_TEXTENCODING_ASCII_US));
             aEntry.ToAbs();
             rtl::OString sFullEntry(rtl::OUStringToOString(aEntry.GetFull(),
                 RTL_TEXTENCODING_ASCII_US));
@@ -264,7 +274,7 @@ extern FILE *GetNextFile()
             sActFileName = sFullEntry.copy(sPrjEntry.getLength() + 1);
 
 
-            sActFileName.SearchAndReplaceAll( "/", "\\" );
+            sActFileName = sActFileName.replace('/', '\\');
             sFile = sActFileName;
 
             if ( pExport ) {
@@ -329,12 +339,12 @@ void ResData::Dump(){
     printf("sPForm = %s , sResTyp = %s , sId = %s , sGId = %s , sHelpId = %s\n",sPForm.GetBuffer()
         ,sResTyp.GetBuffer(),sId.GetBuffer(),sGId.GetBuffer(),sHelpId.GetBuffer());
 
-    ByteString a("*pStringList");
-    ByteString b("*pUIEntries");
-    ByteString c("*pFilterList");
-    ByteString d("*pItemList");
-    ByteString e("*pPairedList");
-    ByteString f("sText");
+    rtl::OString a("*pStringList");
+    rtl::OString b("*pUIEntries");
+    rtl::OString c("*pFilterList");
+    rtl::OString d("*pItemList");
+    rtl::OString e("*pPairedList");
+    rtl::OString f("sText");
 
     Export::DumpMap( f , sText );
 
@@ -347,7 +357,7 @@ void ResData::Dump(){
 }
 
 /*****************************************************************************/
-sal_Bool ResData::SetId( const ByteString &rId, sal_uInt16 nLevel )
+sal_Bool ResData::SetId( const rtl::OString& rId, sal_uInt16 nLevel )
 /*****************************************************************************/
 {
     if ( nLevel > nIdLevel )
@@ -380,10 +390,9 @@ sal_Bool ResData::SetId( const ByteString &rId, sal_uInt16 nLevel )
 // class Export
 //
 
-/*****************************************************************************/
-Export::Export( const ByteString &rOutput, sal_Bool bWrite,
-                const ByteString &rPrj, const ByteString &rPrjRoot , const ByteString& rFile )
-/*****************************************************************************/
+Export::Export(const ByteString &rOutput, sal_Bool bWrite,
+    const ByteString &rPrj, const ByteString &rPrjRoot,
+    const ByteString& rFile)
                 :
                 pWordTransformer( NULL ),
                 bDefine( sal_False ),
@@ -644,8 +653,8 @@ int Export::Execute( int nToken, const char * pToken )
             sToken = comphelper::string::remove(sToken, '{');
             while( sToken.SearchAndReplace( "\t", " " ) != STRING_NOTFOUND ) {};
             sToken = comphelper::string::stripEnd(sToken, ' ');
-            ByteString sT = getToken(sToken, 0, ' ');
-            pResData->sResTyp = sT.ToLowerAscii();
+            rtl::OString sTLower = getToken(sToken, 0, ' ').toAsciiLowerCase();
+            pResData->sResTyp = sTLower;
             ByteString sId( sToken.Copy( pResData->sResTyp.Len() + 1 ));
             ByteString sCondition;
             if ( sId.Search( "#" ) != STRING_NOTFOUND )
@@ -1316,11 +1325,9 @@ sal_Bool Export::WriteExportList( ResData *pResData, ExportList *pExportList,
 
     ByteString sTimeStamp( Export::GetTimeStamp());
     ByteString sCur;
-    for ( size_t i = 0; pExportList != NULL && i < pExportList->size(); i++ ) {
+    for ( size_t i = 0; pExportList != NULL && i < pExportList->size(); i++ )
+    {
         ExportListEntry *pEntry = (*pExportList)[  i ];
-        // mandatory for export: german and eng. and/or enus
-        // ByteString a("Export::WriteExportList::pEntry");
-        // Export::DumpMap( a,  *pEntry );
 
         ByteString sLID(rtl::OString::valueOf(static_cast<sal_Int64>(i + 1)));
         for (unsigned int n = 0; n < aLanguages.size(); ++n)

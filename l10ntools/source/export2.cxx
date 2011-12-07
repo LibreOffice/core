@@ -89,12 +89,13 @@ ResData::~ResData()
 //
 
 /*****************************************************************************/
-ByteString Export::sLanguages;
-ByteString Export::sForcedLanguages;
+rtl::OString Export::sLanguages;
+rtl::OString Export::sForcedLanguages;
 /*****************************************************************************/
 
-void Export::DumpExportList( ByteString& sListName , ExportList& aList ){
-    printf( "%s\n", sListName.GetBuffer() );
+void Export::DumpExportList(const rtl::OString& rListName, ExportList& aList)
+{
+    printf( "%s\n", rListName.getStr() );
     ByteString l("");
     ExportListEntry* aEntry;
     for( unsigned int x = 0; x < aList.size() ; x++ ){
@@ -103,12 +104,15 @@ void Export::DumpExportList( ByteString& sListName , ExportList& aList ){
     }
     printf("\n");
 }
-ByteString Export::DumpMap( ByteString& sMapName , ByteStringHashMap& aMap ){
+
+ByteString Export::DumpMap(const rtl::OString& rMapName,
+    ByteStringHashMap& aMap)
+{
     ByteStringHashMap::const_iterator idbg;
     ByteString sReturn;
 
-    if( sMapName.Len() )
-        printf("MapName %s\n", sMapName.GetBuffer());
+    if( rMapName.getLength() )
+        printf("MapName %s\n", rMapName.getStr());
     if( aMap.size() < 1 ) return ByteString();
     for( idbg = aMap.begin() ; idbg != aMap.end(); ++idbg ){
         ByteString a( idbg->first );
@@ -119,6 +123,7 @@ ByteString Export::DumpMap( ByteString& sMapName , ByteStringHashMap& aMap ){
     printf("\n");
     return sReturn;
 }
+
 /*****************************************************************************/
 void Export::SetLanguages( std::vector<ByteString> val ){
 /*****************************************************************************/
@@ -347,17 +352,24 @@ bool Export::isInitialized = false;
 /*****************************************************************************/
 void Export::InitLanguages( bool bMergeMode ){
 /*****************************************************************************/
-    if( !isInitialized ){
+    if( !isInitialized )
+    {
         ByteString sTmp;
         ByteStringBoolHashMap aEnvLangs;
-        for ( sal_uInt16 x = 0; x < sLanguages.GetTokenCount( ',' ); x++ ){
-            sTmp = getToken(getToken(sLanguages, x, ','), 0, '=');
+
+        sal_Int32 nIndex = 0;
+        do
+        {
+            rtl::OString aToken = sLanguages.getToken(0, ',', nIndex);
+            sTmp = getToken(aToken, 0, '=');
             sTmp = comphelper::string::strip(sTmp, ' ');
             if( bMergeMode && !isAllowed( sTmp ) ){}
             else if( !( (sTmp.GetChar(0)=='x' || sTmp.GetChar(0)=='X') && sTmp.GetChar(1)=='-' ) ){
                 aLanguages.push_back( sTmp );
             }
         }
+        while ( nIndex >= 0 );
+
         InitForcedLanguages( bMergeMode );
         isInitialized = true;
     }
@@ -367,13 +379,19 @@ void Export::InitForcedLanguages( bool bMergeMode ){
 /*****************************************************************************/
     ByteString sTmp;
     ByteStringBoolHashMap aEnvLangs;
-    for ( sal_uInt16 x = 0; x < sForcedLanguages.GetTokenCount( ',' ); x++ ){
-        sTmp = getToken(getToken(sForcedLanguages, x, ','), 0, '=');
+
+    sal_Int32 nIndex = 0;
+    do
+    {
+        rtl::OString aToken = sForcedLanguages.getToken(0, ',', nIndex);
+
+        sTmp = getToken(aToken, 0, '=');
         sTmp = comphelper::string::strip(sTmp, ' ');
         if( bMergeMode && isAllowed( sTmp ) ){}
         else if( !( (sTmp.GetChar(0)=='x' || sTmp.GetChar(0)=='X') && sTmp.GetChar(1)=='-' ) )
             aForcedLanguages.push_back( sTmp );
     }
+    while ( nIndex >= 0 );
 }
 
 /*****************************************************************************/

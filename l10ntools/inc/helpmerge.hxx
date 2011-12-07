@@ -64,7 +64,8 @@ public:
 
 /// Method merges the String from the SDFfile into XMLfile. Both Strings must
 /// point to existing files.
-    bool Merge( const ByteString &rSDFFile_in, const ByteString &rDestinationFile_in , ByteString& sLanguage , MergeDataFile& aMergeDataFile );
+    bool Merge( const ByteString &rSDFFile_in, const ByteString &rDestinationFile_in ,
+        const rtl::OString& sLanguage , MergeDataFile& aMergeDataFile );
     bool Merge( const ByteString &rSDFFile, const ByteString &rPathX , const ByteString &rPathY , bool bISO
         , const std::vector<ByteString>& aLanguages , MergeDataFile& aMergeDataFile , bool bCreateDir );
 
