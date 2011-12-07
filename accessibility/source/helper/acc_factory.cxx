@@ -26,9 +26,9 @@
  *
  ************************************************************************/
 
-#include <accessibility/helper/acc_factory.hxx>
-
 #include <toolkit/awt/vclxwindows.hxx>
+#include <toolkit/helper/accessiblefactory.hxx>
+#include <svtools/accessiblefactory.hxx>
 #include <accessibility/standard/vclxaccessiblebutton.hxx>
 #include <accessibility/standard/vclxaccessiblecheckbox.hxx>
 #include <accessibility/standard/vclxaccessibledropdowncombobox.hxx>
@@ -536,18 +536,37 @@ inline bool hasFloatingChild(Window *pWindow)
 //........................................................................
 
 //========================================================================
-extern "C" void* SAL_CALL getStandardAccessibleFactory()
+
+/** this is the entry point to retrieve a factory for the toolkit-level Accessible/Contexts supplied
+    by this library
+
+    This function implements the factory function needed in toolkit
+    (of type GetStandardAccComponentFactory).
+*/
+extern "C"
 {
-    ::toolkit::IAccessibleFactory* pFactory = new ::accessibility::AccessibleFactory;
-    pFactory->acquire();
-    return pFactory;
+    SAL_DLLPUBLIC_EXPORT void* SAL_CALL getStandardAccessibleFactory()
+    {
+        ::toolkit::IAccessibleFactory* pFactory = new ::accessibility::AccessibleFactory;
+        pFactory->acquire();
+        return pFactory;
+    }
 }
 
-extern "C" void* SAL_CALL getSvtAccessibilityComponentFactory()
+/** this is the entry point to retrieve a factory for the svtools-level Accessible/Contexts supplied
+    by this library
+
+    This function implements the factory function needed in svtools
+    (of type GetSvtAccessibilityComponentFactory).
+*/
+extern "C"
 {
-    ::svt::IAccessibleFactory* pFactory = new ::accessibility::AccessibleFactory;
-    pFactory->acquire();
-    return pFactory;
+    SAL_DLLPUBLIC_EXPORT void* SAL_CALL getSvtAccessibilityComponentFactory()
+    {
+        ::svt::IAccessibleFactory* pFactory = new ::accessibility::AccessibleFactory;
+        pFactory->acquire();
+        return pFactory;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
