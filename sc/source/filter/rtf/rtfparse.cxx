@@ -57,7 +57,7 @@ SV_IMPL_VARARR_SORT( ScRTFColTwips, sal_uLong );
 
 ScRTFParser::ScRTFParser( EditEngine* pEditP ) :
         ScEEParser( pEditP ),
-        pDefaultList( new ScRTFDefaultList ),
+        mnCurPos(0),
         pColTwips( new ScRTFColTwips ),
         pActDefault( NULL ),
         pDefMerge( NULL ),
@@ -77,8 +77,7 @@ ScRTFParser::~ScRTFParser()
 {
     delete pInsDefault;
     delete pColTwips;
-    pDefaultList->clear();
-    delete pDefaultList;
+    maDefaultList.clear();
 }
 
 
@@ -234,17 +233,16 @@ void ScRTFParser::NewCellRow( ImportInfo* /*pInfo*/ )
 {
     if ( bNewDef )
     {
-        ScRTFCellDefault* pD;
         bNewDef = false;
         // rechts nicht buendig? => neue Tabelle
-        if ( nLastWidth && !pDefaultList->empty() )
+        if ( nLastWidth && !maDefaultList.empty() )
         {
-            pD = &(pDefaultList->back());
-            if (pD->nTwips != nLastWidth )
+            const ScRTFCellDefault& rD = maDefaultList.back();
+            if (rD.nTwips != nLastWidth)
             {
                 SCCOL n1, n2;
                 if ( !(  SeekTwips( nLastWidth, &n1 )
-                      && SeekTwips( pD->nTwips, &n2 )
+                      && SeekTwips( rD.nTwips, &n2 )
                       && n1 == n2
                       )
                 )
@@ -254,16 +252,17 @@ void ScRTFParser::NewCellRow( ImportInfo* /*pInfo*/ )
             }
         }
         // TwipCols aufbauen, erst nach nLastWidth Vergleich!
-        for ( size_t i = 0, nListSize = pDefaultList->size(); i < nListSize; ++i )
+        for ( size_t i = 0, n = maDefaultList.size(); i < n; ++i )
         {
-            pD = &( pDefaultList->at( i ) );
-            SCCOL n;
-            if ( !SeekTwips( pD->nTwips, &n ) )
-                pColTwips->Insert( pD->nTwips );
+            const ScRTFCellDefault& rD = maDefaultList[i];
+            SCCOL nCol;
+            if ( !SeekTwips(rD.nTwips, &nCol) )
+                pColTwips->Insert( rD.nTwips );
         }
     }
     pDefMerge = NULL;
-    pActDefault = &(pDefaultList->front());
+    pActDefault = maDefaultList.empty() ? NULL : &maDefaultList[0];
+    mnCurPos = 0;
     OSL_ENSURE( pActDefault, "NewCellRow: pActDefault==0" );
 }
 
@@ -297,18 +296,19 @@ void ScRTFParser::NewCellRow( ImportInfo* /*pInfo*/ )
 
 void ScRTFParser::ProcToken( ImportInfo* pInfo )
 {
-    ScRTFCellDefault* pD;
     ScEEParseEntry* pE;
     switch ( pInfo->nToken )
     {
         case RTF_TROWD:         // denotes table row defauls, before RTF_CELLX
         {
-            if ( !pDefaultList->empty() && (pD = &(pDefaultList->back())) != 0 )
-                nLastWidth = pD->nTwips;
+            if (!maDefaultList.empty())
+                nLastWidth = maDefaultList.back().nTwips;
+
             nColCnt = 0;
-            pDefaultList->clear();
+            maDefaultList.clear();
             pDefMerge = NULL;
             nLastToken = pInfo->nToken;
+            mnCurPos = 0;
         }
         break;
         case RTF_CLMGF:         // The first cell of cells to be merged
@@ -319,10 +319,11 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
         break;
         case RTF_CLMRG:         // A cell to be merged with the preceding cell
         {
-            if ( !pDefMerge
-               && !(pDefaultList->empty())
-               )
-                pDefMerge = &( pDefaultList->back() );
+            if (!pDefMerge && !maDefaultList.empty())
+            {
+                pDefMerge = &maDefaultList.back();
+                mnCurPos = maDefaultList.size() - 1;
+            }
             OSL_ENSURE( pDefMerge, "RTF_CLMRG: pDefMerge==0" );
             if ( pDefMerge )        // sonst rottes RTF
                 pDefMerge->nColOverlap++;   // mehrere nacheinander moeglich
@@ -335,7 +336,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
             bNewDef = sal_True;
             pInsDefault->nCol = nColCnt;
             pInsDefault->nTwips = pInfo->nTokenValue;   // rechter Zellenrand
-            pDefaultList->push_back( pInsDefault );
+            maDefaultList.push_back( pInsDefault );
             // neuer freifliegender pInsDefault
             pInsDefault = new ScRTFCellDefault( pPool );
             if ( ++nColCnt > nColMax )
@@ -387,10 +388,11 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
                 // Paragraph -1 wg. Textaufbruch in EditEngine waehrend Parse
                 pActEntry->aSel.nStartPara = pInfo->aSelection.nEndPara - 1;
             }
-            if ( pDefaultList->empty() )
-                pActDefault = NULL;
-            else
-                pActDefault = &( pDefaultList->back() );
+
+            pActDefault = NULL;
+            if (!maDefaultList.empty() && (mnCurPos+1) < maDefaultList.size())
+                pActDefault = &maDefaultList[++mnCurPos];
+
             nLastToken = pInfo->nToken;
         }
         break;
