@@ -672,6 +672,43 @@ void testFuncMATCH(ScDocument* pDoc)
     }
 }
 
+void testFuncCELL(ScDocument* pDoc)
+{
+    clearRange(pDoc, ScRange(0, 0, 0, 2, 20, 0)); // Clear A1:C21.
+
+    {
+        const char* pContent = "Some random text";
+        pDoc->SetString(2, 9, 0, rtl::OUString::createFromAscii(pContent)); // Set this value to C10.
+        double val = 1.2;
+        pDoc->SetValue(2, 0, 0, val); // Set numeric value to C1;
+
+        // We don't test: FILENAME, FORMAT, WIDTH, PROTECT, PREFIX
+        StrStrCheck aChecks[] = {
+            { "=CELL(\"COL\";C10)",           "3" },
+            { "=CELL(\"ROW\";C10)",          "10" },
+            { "=CELL(\"SHEET\";C10)",         "1" },
+            { "=CELL(\"ADDRESS\";C10)",   "$C$10" },
+            { "=CELL(\"CONTENTS\";C10)", pContent },
+            { "=CELL(\"COLOR\";C10)",         "0" },
+            { "=CELL(\"TYPE\";C9)",           "b" },
+            { "=CELL(\"TYPE\";C10)",          "l" },
+            { "=CELL(\"TYPE\";C1)",           "v" },
+            { "=CELL(\"PARENTHESES\";C10)",   "0" }
+        };
+
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+            pDoc->SetString(0, i, 0, rtl::OUString::createFromAscii(aChecks[i].pVal));
+        pDoc->CalcAll();
+
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        {
+            rtl::OUString aVal = pDoc->GetString(0, i, 0);
+            cout << "CELL: " << aVal << endl;
+            CPPUNIT_ASSERT_MESSAGE("Unexpected result for CELL", aVal.equalsAscii(aChecks[i].pRes));
+        }
+    }
+}
+
 void Test::testCellFunctions()
 {
     rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("foo"));
@@ -684,6 +721,7 @@ void Test::testCellFunctions()
     testFuncCOUNTIF(m_pDoc);
     testFuncVLOOKUP(m_pDoc);
     testFuncMATCH(m_pDoc);
+    testFuncCELL(m_pDoc);
 
     m_pDoc->DeleteTab(0);
 }

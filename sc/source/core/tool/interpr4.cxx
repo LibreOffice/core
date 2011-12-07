@@ -1442,34 +1442,40 @@ void ScInterpreter::PopExternalSingleRef(sal_uInt16& rFileId, String& rTabName, 
 
 void ScInterpreter::PopExternalSingleRef(ScExternalRefCache::TokenRef& rToken, ScExternalRefCache::CellFormat* pFmt)
 {
-
     sal_uInt16 nFileId;
     String aTabName;
     ScSingleRefData aData;
-    PopExternalSingleRef(nFileId, aTabName, aData);
+    PopExternalSingleRef(nFileId, aTabName, aData, rToken, pFmt);
+}
+
+void ScInterpreter::PopExternalSingleRef(
+    sal_uInt16& rFileId, String& rTabName, ScSingleRefData& rRef,
+    ScExternalRefCache::TokenRef& rToken, ScExternalRefCache::CellFormat* pFmt)
+{
+    PopExternalSingleRef(rFileId, rTabName, rRef);
     if (nGlobalError)
         return;
 
     ScExternalRefManager* pRefMgr = pDok->GetExternalRefManager();
-    const OUString* pFile = pRefMgr->getExternalFileName(nFileId);
+    const OUString* pFile = pRefMgr->getExternalFileName(rFileId);
     if (!pFile)
     {
         SetError(errNoName);
         return;
     }
 
-    if (aData.IsTabRel())
+    if (rRef.IsTabRel())
     {
         OSL_FAIL("ScCompiler::GetToken: external single reference must have an absolute table reference!");
         SetError(errNoRef);
         return;
     }
 
-    aData.CalcAbsIfRel(aPos);
-    ScAddress aAddr(aData.nCol, aData.nRow, aData.nTab);
+    rRef.CalcAbsIfRel(aPos);
+    ScAddress aAddr(rRef.nCol, rRef.nRow, rRef.nTab);
     ScExternalRefCache::CellFormat aFmt;
     ScExternalRefCache::TokenRef xNew = pRefMgr->getSingleRefToken(
-        nFileId, aTabName, aAddr, &aPos, NULL, &aFmt);
+        rFileId, rTabName, aAddr, &aPos, NULL, &aFmt);
 
     if (!xNew)
     {

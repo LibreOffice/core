@@ -287,6 +287,8 @@ void PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
                           bool bDontCheckForTableOp = false );
 void PopExternalSingleRef(sal_uInt16& rFileId, String& rTabName, ScSingleRefData& rRef);
 void PopExternalSingleRef(ScExternalRefCache::TokenRef& rToken, ScExternalRefCache::CellFormat* pFmt = NULL);
+void PopExternalSingleRef(sal_uInt16& rFileId, String& rTabName, ScSingleRefData& rRef,
+                          ScExternalRefCache::TokenRef& rToken, ScExternalRefCache::CellFormat* pFmt = NULL);
 void PopExternalDoubleRef(sal_uInt16& rFileId, String& rTabName, ScComplexRefData& rRef);
 void PopExternalDoubleRef(ScExternalRefCache::TokenArrayRef& rArray);
 void PopExternalDoubleRef(ScMatrixRef& rMat);
@@ -427,6 +429,7 @@ void ScIsNonString();
 void ScIsLogical();
 void ScType();
 void ScCell();
+void ScCellExternal();
 void ScIsRef();
 void ScIsValue();
 void ScIsFormula();

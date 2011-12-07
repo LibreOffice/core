@@ -2064,7 +2064,21 @@ void ScInterpreter::ScCell()
         ScAddress aCellPos( aPos );
         bool bError = false;
         if( nParamCount == 2 )
+        {
+            switch (GetStackType())
+            {
+                case svExternalSingleRef:
+                case svExternalDoubleRef:
+                {
+                    // Let's handle external reference separately...
+                    ScCellExternal();
+                    return;
+                }
+                default:
+                    ;
+            }
             bError = !PopDoubleRefOrSingleRef( aCellPos );
+        }
         String aInfoType( GetString() );
         if( bError || nGlobalError )
             PushIllegalParameter();
@@ -2268,6 +2282,41 @@ void ScInterpreter::ScCell()
     }
 }
 
+void ScInterpreter::ScCellExternal()
+{
+    sal_uInt16 nFileId;
+    String aTabName;
+    ScSingleRefData aRef;
+    ScExternalRefCache::TokenRef pToken;
+    ScExternalRefCache::CellFormat aFmt;
+    PopExternalSingleRef(nFileId, aTabName, aRef, pToken, &aFmt);
+    if (nGlobalError)
+    {
+        PushIllegalParameter();
+        return;
+    }
+
+    rtl::OUString aInfoType = GetString();
+    if (nGlobalError)
+    {
+        PushIllegalParameter();
+        return;
+    }
+
+    SCCOL nCol;
+    SCROW nRow;
+    SCTAB nTab;
+    SingleRefToVars(aRef, nCol, nRow, nTab);
+
+    ScCellKeywordTranslator::transKeyword(aInfoType, ScGlobal::GetLocale(), ocCell);
+
+    if (aInfoType.equalsAscii("COL"))
+        PushInt(nCol + 1);
+    else if (aInfoType.equalsAscii("ROW"))
+        PushInt(nRow + 1);
+    else
+        PushIllegalParameter();
+}
 
 void ScInterpreter::ScIsRef()
 {
