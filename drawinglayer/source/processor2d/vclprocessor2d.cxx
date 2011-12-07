@@ -52,14 +52,14 @@
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
-#include <svl/ctloptions.hxx>
-#include <vcl/svapp.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/metric.hxx>
 #include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 #include <vcl/rendergraphicrasterizer.hxx>
+
+#include "getdigitlanguage.hxx"
 
 //////////////////////////////////////////////////////////////////////////////
 // control support
@@ -1566,23 +1566,7 @@ namespace drawinglayer
         {
             // set digit language, derived from SvtCTLOptions to have the correct
             // number display for arabic/hindi numerals
-            const SvtCTLOptions aSvtCTLOptions;
-            LanguageType eLang(LANGUAGE_SYSTEM);
-
-            if(SvtCTLOptions::NUMERALS_HINDI == aSvtCTLOptions.GetCTLTextNumerals())
-            {
-                eLang = LANGUAGE_ARABIC_SAUDI_ARABIA;
-            }
-            else if(SvtCTLOptions::NUMERALS_ARABIC == aSvtCTLOptions.GetCTLTextNumerals())
-            {
-                eLang = LANGUAGE_ENGLISH;
-            }
-            else
-            {
-                eLang = (LanguageType)Application::GetSettings().GetLanguage();
-            }
-
-            rOutDev.SetDigitLanguage(eLang);
+            rOutDev.SetDigitLanguage(drawinglayer::detail::getDigitLanguage());
         }
 
         VclProcessor2D::~VclProcessor2D()

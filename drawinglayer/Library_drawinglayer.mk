@@ -153,6 +153,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/processor2d/baseprocessor2d \
     drawinglayer/source/processor2d/canvasprocessor \
     drawinglayer/source/processor2d/contourextractor2d \
+    drawinglayer/source/processor2d/getdigitlanguage \
     drawinglayer/source/processor2d/helperchartrenderer \
     drawinglayer/source/processor2d/helperwrongspellrenderer \
     drawinglayer/source/processor2d/hittestprocessor2d \

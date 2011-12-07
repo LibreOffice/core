@@ -36,8 +36,6 @@
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <canvas/canvastools.hxx>
-#include <svl/ctloptions.hxx>
-#include <vcl/svapp.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
@@ -68,6 +66,8 @@
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <helperwrongspellrenderer.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+
+#include "getdigitlanguage.hxx"
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -969,29 +969,14 @@ namespace drawinglayer
             maBColorModifierStack(),
             maDrawinglayerOpt(),
             maClipPolyPolygon(),
-            meLang(LANGUAGE_SYSTEM)
+            meLang(drawinglayer::detail::getDigitLanguage())
         {
-            const SvtCTLOptions aSvtCTLOptions;
-
             canvas::tools::initViewState(maViewState);
             canvas::tools::initRenderState(maRenderState);
             canvas::tools::setViewStateTransform(maViewState, getViewInformation2D().getViewTransformation());
 
             // set digit language, derived from SvtCTLOptions to have the correct
             // number display for arabic/hindi numerals
-            if(SvtCTLOptions::NUMERALS_HINDI == aSvtCTLOptions.GetCTLTextNumerals())
-            {
-                meLang = LANGUAGE_ARABIC_SAUDI_ARABIA;
-            }
-            else if(SvtCTLOptions::NUMERALS_ARABIC == aSvtCTLOptions.GetCTLTextNumerals())
-            {
-                meLang = LANGUAGE_ENGLISH;
-            }
-            else
-            {
-                meLang = (LanguageType)Application::GetSettings().GetLanguage();
-            }
-
             rOutDev.SetDigitLanguage(meLang);
 
             // prepare output directly to pixels
