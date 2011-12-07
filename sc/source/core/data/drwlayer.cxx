@@ -435,16 +435,32 @@ void ScDrawLayer::ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos, sal_Bool b
 
     if (pOldPage && pNewPage)
     {
+        SCTAB nOldTab = static_cast<SCTAB>(nOldPos);
+        SCTAB nNewTab = static_cast<SCTAB>(nNewPos);
+
         SdrObjListIter aIter( *pOldPage, IM_FLAT );
         SdrObject* pOldObject = aIter.Next();
         while (pOldObject)
         {
+            ScDrawObjData* pOldData = GetObjData(pOldObject);
+            if (pOldData)
+            {
+                pOldData->maStart.SetTab(nOldTab);
+                pOldData->maEnd.SetTab(nOldTab);
+            }
             SdrObject* pNewObject = pOldObject->Clone();
             pNewObject->SetModel(this);
             pNewObject->SetPage(pNewPage);
 
             pNewObject->NbcMove(Size(0,0));
             pNewPage->InsertObject( pNewObject );
+            ScDrawObjData* pNewData = GetObjData(pNewObject);
+            if (pNewData)
+            {
+                pNewData->maStart.SetTab(nNewTab);
+                pNewData->maEnd.SetTab(nNewTab);
+            }
+
             if (bRecording)
                 AddCalcUndo( new SdrUndoInsertObj( *pNewObject ) );
 
@@ -454,6 +470,27 @@ void ScDrawLayer::ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos, sal_Bool b
 
     if (bAlloc)
         InsertPage(pNewPage, nNewPos);
+}
+
+void ScDrawLayer::ResetTab( SCTAB nStart, SCTAB nEnd )
+{
+    for (SCTAB i = nStart; i <= nEnd; ++i)
+    {
+        SdrPage* pPage = GetPage(static_cast<sal_uInt16>(i));
+        if (!pPage)
+            continue;
+
+        SdrObjListIter aIter(*pPage, IM_FLAT);
+        for (SdrObject* pObj = aIter.Next(); pObj; pObj = aIter.Next())
+        {
+            ScDrawObjData* pData = GetObjData(pObj);
+            if (!pData)
+                continue;
+
+            pData->maStart.SetTab(i);
+            pData->maEnd.SetTab(i);
+        }
+    }
 }
 
 inline sal_Bool IsInBlock( const ScAddress& rPos, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2 )

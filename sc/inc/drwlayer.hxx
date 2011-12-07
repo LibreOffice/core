@@ -126,6 +126,7 @@ public:
     void            ScMovePage( sal_uInt16 nOldPos, sal_uInt16 nNewPos );
                     // incl. content, bAlloc=FALSE -> only content
     void            ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos, sal_Bool bAlloc );
+    void            ResetTab( SCTAB nStart, SCTAB nEnd );
 
     ScDocument*     GetDocument() const { return pDoc; }
 
