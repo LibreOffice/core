@@ -5,6 +5,7 @@ AtomFolder::AtomFolder(AtomPubSession*, std::basic_string<char, std::char_traits
 AtomPubSession::getCollectionUrl(Collection::Type)
 AtomPubSession::~AtomPubSession()
 BitmapWriteAccess::DrawPolygon(Polygon const&)
+BreakPointList::push_back(BreakPoint*)
 BufferNode::childAt(int) const
 ByteString::Assign(char const*, unsigned short)
 ByteString::Assign(char)
@@ -71,7 +72,6 @@ CommunicationLinkList::Insert(CommunicationLink const**, unsigned short)
 CommunicationLinkList::Insert(CommunicationLinkList const*, unsigned short, unsigned short)
 CommunicationLinkList::Remove(CommunicationLink const*&, unsigned short)
 Control::GetLineCount() const
-CurrencyBox::CurrencyBox(Window*, ResId const&)
 CurrencyBox::GetValue(unsigned short) const
 CurrencyBox::GetValuePos(long) const
 CurrencyField::CurrencyField(Window*, ResId const&)
@@ -345,6 +345,9 @@ ScAddInDocs::Remove(ScDocument* const&, unsigned short)
 ScAreaLinkSaveCollection::clear()
 ScAttrArray::HasLines(int, int, Rectangle&, bool, bool) const
 ScCellMergeOption::ScCellMergeOption()
+ScCellObj::SetFormulaResultDouble(double)
+ScCellObj::SetFormulaResultString(rtl::OUString const&)
+ScCellObj::SetFormulaWithGrammar(rtl::OUString const&, rtl::OUString const&, formula::FormulaGrammar::Grammar)
 ScChangeActionContent::SetNewValue(String const&, ScDocument*)
 ScCompressedArray<int, unsigned char>::GetEntryCount() const
 ScCompressedArray<int, unsigned short>::CopyFrom(ScCompressedArray<int, unsigned short> const&, int, int, long)
@@ -2281,6 +2284,8 @@ vcl::PDFWriterImpl::drawPolyPolygon(PolyPolygon const&, int, bool)
 vcl::PrintDialog::getCopyCount()
 vcl::RowOrColumn::remove(Window*)
 vcl::RowOrColumn::remove(boost::shared_ptr<vcl::WindowArranger> const&)
+vcl::unx::GtkPrintWrapper::print_operation_set_has_selection(_GtkPrintOperation*, int) const
+vcl::unx::GtkPrintWrapper::print_operation_set_support_selection(_GtkPrintOperation*, int) const
 void ScCompressedArrayIterator<int, unsigned short>::Follow<unsigned char>(ScCompressedArrayIterator<int, unsigned char> const&)
 writerfilter::TagLogger::attribute(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, com::sun::star::uno::Any)
 writerfilter::TagLogger::attribute(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned int)
