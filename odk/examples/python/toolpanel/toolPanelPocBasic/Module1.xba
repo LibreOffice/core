@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Module1" script:language="StarBasic">
+global theDialog
+
+
+Sub dialogOnLoad(event)
+
+	theDialog = event.source
+		
+End Sub
+
+sub buttonClick(event)
+
+
+	theButton = theDialog.getControl(&quot;CommandButton1&quot;)
+	theTextField = theDialog.getControl(&quot;TextInfo&quot;)
+
+	colors = Array(rgb(255,0,0),rgb(0,255,0),rgb(0,0,255)) 
+	rank = getSystemTicks() mod 3
+
+	theDialog.Model.BackgroundColor = colors(rank)
+	theTextField.text =  cstr(Now) + chr(10)+&quot;Color &quot; + cstr(rank) + &quot; randomly applied&quot;
+	
+	theButton.label = &quot;Click Me to change color&quot;
+	
+
+end sub
+</script:module>
