@@ -46,7 +46,6 @@ $(eval $(call gb_Executable_add_linked_libs,$(sofficebin),\
 ))
 
 $(eval $(call gb_Executable_add_cobjects,$(sofficebin),\
-    desktop/source/app/copyright_ascii_ooo \
     desktop/source/app/main \
 ))
 

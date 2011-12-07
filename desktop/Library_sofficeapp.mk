@@ -89,7 +89,6 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 ))
 
 $(eval $(call gb_Library_add_cobjects,sofficeapp,\
-    desktop/source/app/copyright_ascii_ooo \
     desktop/source/app/main \
 ))
 
