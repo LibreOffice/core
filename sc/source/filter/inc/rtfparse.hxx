@@ -44,7 +44,6 @@ struct ScRTFCellDefault
                         ScRTFCellDefault( SfxItemPool* pPool ) :
                             aItemSet( *pPool ), nColOverlap(1) {}
 };
-typedef boost::ptr_vector< ScRTFCellDefault > ScRTFDefaultList;
 
 // deswegen ULONG, typedef bringt's auch nicht :-(
 SV_DECL_VARARR_SORT( ScRTFColTwips, sal_uLong, 16, 4)
@@ -63,7 +62,11 @@ class EditEngine;
 class ScRTFParser : public ScEEParser
 {
 private:
-    ScRTFDefaultList*   pDefaultList;
+    typedef boost::ptr_vector<ScRTFCellDefault> DefaultList;
+
+    DefaultList maDefaultList;
+    size_t mnCurPos;
+
     ScRTFColTwips*      pColTwips;
     ScRTFCellDefault*   pInsDefault;
     ScRTFCellDefault*   pActDefault;
