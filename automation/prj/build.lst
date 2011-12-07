@@ -1,3 +1,0 @@
-au	automation	:	basic fpicker NULL
-au	automation								usr1	-	all	au_mkout NULL
-au	automation\prj							nmake	-	all	au_prj NULL
